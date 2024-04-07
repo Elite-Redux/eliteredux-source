@@ -10079,7 +10079,7 @@ bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget)
     if (gBattleMons[battlerTarget].status1 & !STATUS1_ANY && IsMyceliumMightActive(battlerAttacker))
         return TRUE;
 
-    if (CanGetStatus(battlerTarget)) return FALSE;
+    if (!CanGetStatus(battlerTarget)) return FALSE;
         
     if (!(CanPoisonType(battlerAttacker, battlerTarget))
      || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_IMMUNITY, ability))
@@ -10094,7 +10094,7 @@ bool32 CanBeBurned(u8 battlerId)
     if (gBattleMons[battlerId].status1 & !STATUS1_ANY && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
 
-    if (CanGetStatus(battlerId)) return FALSE;
+    if (!CanGetStatus(battlerId)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FIRE)
       || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_WATER_VEIL, ability)
@@ -10110,7 +10110,7 @@ bool32 CanBeParalyzed(u8 battlerAttacker, u8 battlerTarget)
     if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
-    if (CanGetStatus(battlerTarget)) return FALSE;
+    if (!CanGetStatus(battlerTarget)) return FALSE;
 
     if (!CanParalyzeType(battlerAttacker, battlerTarget)
         || !CanBeParalyzedIgnoreType(battlerAttacker, battlerTarget))
@@ -10125,7 +10125,7 @@ bool32 CanBeParalyzedIgnoreType(u8 battlerAttacker, u8 battlerTarget)
     if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
     if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
-    if (CanGetStatus(battlerTarget)) return FALSE;
+    if (!CanGetStatus(battlerTarget)) return FALSE;
 
     if (BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_LIMBER, ability)
       || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_JUGGERNAUT, ability))
@@ -10137,7 +10137,7 @@ bool32 CanBeFrozen(u8 battlerId)
 {
     u16 ability = GetBattlerAbility(battlerId);
 
-    if (CanGetStatus(battlerId)) return FALSE;
+    if (!CanGetStatus(battlerId)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)
       || IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY)
@@ -10151,7 +10151,7 @@ bool32 CanGetFrostbite(u8 battlerId)
     if (gBattleMons[battlerId].status1 & !STATUS1_ANY && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
 
-    if (CanGetStatus(battlerId)) return FALSE;
+    if (!CanGetStatus(battlerId)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)
       || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_SAFEGUARD)
@@ -10164,7 +10164,7 @@ bool32 CanBleed(u8 battlerId)
     if (gBattleMons[battlerId].status1 & !STATUS1_ANY && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
 
-    if (CanGetStatus(battlerId)) return FALSE;
+    if (!CanGetStatus(battlerId)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK)
         || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
