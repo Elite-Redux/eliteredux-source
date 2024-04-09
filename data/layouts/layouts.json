@@ -5200,6 +5200,106 @@
       "secondary_tileset": "gTileset_FuchsiaCity",
       "border_filepath": "data/layouts/FuchsiaCity/border.bin",
       "blockdata_filepath": "data/layouts/FuchsiaCity/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE_18_EAST_ENTRANCE",
+      "name": "Route_18_EastEntrance_Layout",
+      "width": 13,
+      "height": 12,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/Route_18_EastEntrance/border.bin",
+      "blockdata_filepath": "data/layouts/Route_18_EastEntrance/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE_15",
+      "name": "Route_15_Layout",
+      "width": 72,
+      "height": 20,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_FuchsiaCity",
+      "border_filepath": "data/layouts/Route_15/border.bin",
+      "blockdata_filepath": "data/layouts/Route_15/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE_14",
+      "name": "Route_14_Layout",
+      "width": 24,
+      "height": 60,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_LavenderTown",
+      "border_filepath": "data/layouts/Route_14/border.bin",
+      "blockdata_filepath": "data/layouts/Route_14/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE_13",
+      "name": "Route_13_Layout",
+      "width": 72,
+      "height": 20,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_LavenderTown",
+      "border_filepath": "data/layouts/Route_13/border.bin",
+      "blockdata_filepath": "data/layouts/Route_13/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE_15_WEAST_ENTRANCE_1F",
+      "name": "Route_15_WeastEntrance_1F_Layout",
+      "width": 13,
+      "height": 12,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/Route_15_WeastEntrance_1F/border.bin",
+      "blockdata_filepath": "data/layouts/Route_15_WeastEntrance_1F/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE_19",
+      "name": "Route_19_Layout",
+      "width": 24,
+      "height": 60,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_FuchsiaCity",
+      "border_filepath": "data/layouts/Route_19/border.bin",
+      "blockdata_filepath": "data/layouts/Route_19/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE_20",
+      "name": "Route_20_Layout",
+      "width": 120,
+      "height": 20,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_CinnabarIsland",
+      "border_filepath": "data/layouts/Route_20/border.bin",
+      "blockdata_filepath": "data/layouts/Route_20/map.bin"
+    },
+    {
+      "id": "LAYOUT_CINNABAR_ISLAND",
+      "name": "CinnabarIsland_Layout",
+      "width": 24,
+      "height": 20,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_CinnabarIsland",
+      "border_filepath": "data/layouts/CinnabarIsland/border.bin",
+      "blockdata_filepath": "data/layouts/CinnabarIsland/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE_21",
+      "name": "Route_21_Layout",
+      "width": 24,
+      "height": 50,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_CinnabarIsland",
+      "border_filepath": "data/layouts/Route_21/border.bin",
+      "blockdata_filepath": "data/layouts/Route_21/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE_21_NORTH",
+      "name": "Route_21_North_Layout",
+      "width": 24,
+      "height": 50,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_PalletTown",
+      "border_filepath": "data/layouts/Route_21_North/border.bin",
+      "blockdata_filepath": "data/layouts/Route_21_North/map.bin"
     }
   ]
 }

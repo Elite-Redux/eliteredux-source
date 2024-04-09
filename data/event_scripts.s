@@ -1218,3 +1218,23 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/Route_18/scripts.inc"
 
 	.include "data/maps/FuchsiaCity/scripts.inc"
+
+	.include "data/maps/Route_18_EastEntrance/scripts.inc"
+
+	.include "data/maps/Route_15/scripts.inc"
+
+	.include "data/maps/Route_14/scripts.inc"
+
+	.include "data/maps/Route_13/scripts.inc"
+
+	.include "data/maps/Route_15_WeastEntrance_1F/scripts.inc"
+
+	.include "data/maps/Route_19/scripts.inc"
+
+	.include "data/maps/Route_20/scripts.inc"
+
+	.include "data/maps/CinnabarIsland/scripts.inc"
+
+	.include "data/maps/Route_21/scripts.inc"
+
+	.include "data/maps/Route_21_North/scripts.inc"

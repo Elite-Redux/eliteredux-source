@@ -125,6 +125,16 @@
 #define MAP_ROUTE_16_NORTH_ENTRANCE_1F            (56 | (1 << 8))
 #define MAP_ROUTE_18                              (57 | (1 << 8))
 #define MAP_FUCHSIA_CITY                          (58 | (1 << 8))
+#define MAP_ROUTE_18_EAST_ENTRANCE                (59 | (1 << 8))
+#define MAP_ROUTE_15                              (60 | (1 << 8))
+#define MAP_ROUTE_14                              (61 | (1 << 8))
+#define MAP_ROUTE_13                              (62 | (1 << 8))
+#define MAP_ROUTE_15_WEAST_ENTRANCE_1F            (63 | (1 << 8))
+#define MAP_ROUTE_19                              (64 | (1 << 8))
+#define MAP_ROUTE_20                              (65 | (1 << 8))
+#define MAP_CINNABAR_ISLAND                       (66 | (1 << 8))
+#define MAP_ROUTE_21                              (67 | (1 << 8))
+#define MAP_ROUTE_21_NORTH                        (68 | (1 << 8))
 
 // gMapGroup_IndoorOldale
 #define MAP_OLDALE_TOWN_HOUSE1            (0 | (2 << 8))

@@ -156,7 +156,17 @@
     "Route_17",
     "Route_16_NorthEntrance_1F",
     "Route_18",
-    "FuchsiaCity"
+    "FuchsiaCity",
+    "Route_18_EastEntrance",
+    "Route_15",
+    "Route_14",
+    "Route_13",
+    "Route_15_WeastEntrance_1F",
+    "Route_19",
+    "Route_20",
+    "CinnabarIsland",
+    "Route_21",
+    "Route_21_North"
   ],
   "gMapGroup_IndoorOldale": [
     "OldaleTown_House1",

@@ -1050,3 +1050,14 @@ gTileset_FuchsiaCity::
 	.4byte gMetatiles_FuchsiaCity
 	.4byte gMetatileAttributes_FuchsiaCity
 	.4byte NULL
+
+	.align 2
+gTileset_CinnabarIsland::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_CinnabarIsland
+	.4byte gTilesetPalettes_CinnabarIsland
+	.4byte gMetatiles_CinnabarIsland
+	.4byte gMetatileAttributes_CinnabarIsland
+	.4byte NULL

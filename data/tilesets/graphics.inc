@@ -2129,3 +2129,23 @@ gTilesetPalettes_FuchsiaCity::
 	.align 2
 gTilesetTiles_FuchsiaCity::
 	.incbin "data/tilesets/secondary/fuchsiacity/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_CinnabarIsland::
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/cinnabarisland/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_CinnabarIsland::
+	.incbin "data/tilesets/secondary/cinnabarisland/tiles.4bpp.lz"

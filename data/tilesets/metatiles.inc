@@ -703,3 +703,10 @@ gMetatiles_FuchsiaCity::
 	.align 1
 gMetatileAttributes_FuchsiaCity::
 	.incbin "data/tilesets/secondary/fuchsiacity/metatile_attributes.bin"
+	.align 1
+gMetatiles_CinnabarIsland::
+	.incbin "data/tilesets/secondary/cinnabarisland/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_CinnabarIsland::
+	.incbin "data/tilesets/secondary/cinnabarisland/metatile_attributes.bin"
