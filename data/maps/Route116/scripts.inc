@@ -665,58 +665,31 @@ Route116_EventScript_MegaNidos_Battle_8:
 
 
 Route116_EventScript_LegendaryNPC_Text_0:
-	.string "Sage: Despite your young age, you\n"
-	.string "appear to be someone who seeks a\l"
-	.string "profound significance in everyday\l"
-	.string "matters... Am I right?$"
+	.string "Sage: Despite your young age, you appear to be someone who seeks a profound significance in everyday matters... Am I right?$"
 
 Route116_EventScript_LegendaryNPC_Text_1:
-	.string "Of course... young trainer, I sense your\n"
-	.string "curiosity for the extraordinary. But\l"
-	.string "beware, for you tread on sacred\l"
-	.string "grounds. The presence of the legendary\l"
-	.string "Creation Trio looms over this place.\l"
-	.string "They seek a guardian who can commune\l"
-	.string "with their power, but you don't seem\l"
-	.string "ready yet. Come back once you've\l"
-	.string "accomplished an exceptional feat in\l"
-	.string "the Pokémon League.$"
+	.string "Of course... young trainer, I sense your curiosity for the extraordinary. But beware, for you tread on sacred grounds. The presence of the legendary Creation Trio looms over this place. They seek a guardian who can commune with their power, but you don't seem ready yet. Come back once you've accomplished an exceptional feat in the Pokémon League.$"
 
 Route116_EventScript_LegendaryNPC_Text_2:
-	.string "Ah, young trainer, your potential shines\n"
-	.string "through the shadows like a glimmering\l"
-	.string "light. I can sense it: the Creation Trio\l"
-	.string "has deemed you worthy of their time.\l"
-	.string "Use your DexNav to meet them.$"
+	.string "Ah, young trainer, your potential shines through the shadows like a glimmering light. I can sense it: the Creation Trio has deemed you worthy of their time. Use your DexNav to meet them.$"
 
 Route116_EventScript_LegendaryNPC_Text_3:
-	.string "You are almost worthy. Defeat all\n"
-	.string "remaining trainers to prove your might\l"
-	.string "once and for all!$"
+	.string "You are almost worthy. Defeat all remaining trainers to prove your might once and for all!$"
 
 Route116_EventScript_LegendaryNPC_Text_4:
-	.string "You had so much potential... how\n"
-	.string "disappointing.$"
+	.string "You had so much potential... how disappointing.$"
 
 Route116_EventScript_Gen8_NPC_Text_0:
-	.string "Take this Pokémon from Galar. You can\n"
-	.string "have as many of them as you like!$"
+	.string "Take this Pokémon from Galar. You can have as many of them as you like!$"
 
 Route116_EventScript_Gen8_NPC_Text_1:
-	.string "{PLAYER} got a {COLOR BLUE}Galarian Farfetch'd{COLOR DARK_GRAY} as\n"
-	.string "a gift for defeating every trainer\l"
-	.string "here!$"
+	.string "{PLAYER} got a {COLOR BLUE}Galarian Farfetch'd{COLOR DARK_GRAY} as a gift for defeating every trainer here!$"
 
 Route116_EventScript_Gen8_NPC_Text_2:
-	.string "If you can beat all trainers here, I will\n"
-	.string "give you an exotic Pokémon from the\l"
-	.string "Galar region: a valiant wielder of\l"
-	.string "longswords!$"
+	.string "If you can beat all trainers here, I will give you an exotic Pokémon from the Galar region: a valiant wielder of longswords!$"
 
 Route116_EventScript_MegaNidos_Battle_Text_0:
-	.string "Hah! Look at you. Hey, pleb. I'm bored, so\n"
-	.string "have a battle with me. I'll even give\l"
-	.string "you a reward if you do!$"
+	.string "Hah! Look at you. Hey, pleb. I'm bored, so have a battle with me. I'll even give you a reward if you do!$"
 
 Route116_EventScript_MegaNidos_Battle_Text_1:
 	.string "Then let us begin.$"
@@ -725,21 +698,16 @@ Route116_EventScript_MegaNidos_Battle_Text_2:
 	.string "What? How?$"
 
 Route116_EventScript_MegaNidos_Battle_Text_3:
-	.string "Unbelievable. Me, losing to the likes of\n"
-	.string "you? Well, a promise is a promise. Take\l"
-	.string "these stones and get out of my sight.$"
+	.string "Unbelievable. Me, losing to the likes of you? Well, a promise is a promise. Take these stones and get out of my sight.$"
 
 Route116_EventScript_MegaNidos_Battle_Text_4:
-	.string "No? Tsk. I should've expected as much\n"
-	.string "from someone like you.$"
+	.string "No? Tsk. I should've expected as much from someone like you.$"
 
 Route116_EventScript_MegaNidos_Battle_Text_5:
 	.string "Didn't I tell you to get out of my sight?$"
 
 Route116_EventScript_MegaNidos_Battle_Text_6:
-	.string "You aren't worthy enough to talk to me.\n"
-	.string "A peasant like you who hasn't even\l"
-	.string "beat Winona has no business here.$"
+	.string "You aren't worthy enough to talk to me. A peasant like you who hasn't even beat Winona has no business here.$"
 
 Route116_EventScript_Text_Got_Aggron::
 	.string "{PLAYER} got an {COLOR BLUE}Aggron{COLOR DARK_GRAY} as a gift!$"

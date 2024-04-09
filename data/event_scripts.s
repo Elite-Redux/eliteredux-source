@@ -1208,3 +1208,13 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/UndergroundPath_EastWestTunnel/scripts.inc"
 
 	.include "data/maps/UndergroundPath_EastEntrance/scripts.inc"
+
+	.include "data/maps/Route_16/scripts.inc"
+
+	.include "data/maps/Route_17/scripts.inc"
+
+	.include "data/maps/Route_16_NorthEntrance_1F/scripts.inc"
+
+	.include "data/maps/Route_18/scripts.inc"
+
+	.include "data/maps/FuchsiaCity/scripts.inc"

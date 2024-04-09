@@ -696,3 +696,10 @@ gMetatiles_UnderGround_Entrance::
 	.align 1
 gMetatileAttributes_UnderGround_Entrance::
 	.incbin "data/tilesets/secondary/underground_entrance/metatile_attributes.bin"
+	.align 1
+gMetatiles_FuchsiaCity::
+	.incbin "data/tilesets/secondary/fuchsiacity/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_FuchsiaCity::
+	.incbin "data/tilesets/secondary/fuchsiacity/metatile_attributes.bin"

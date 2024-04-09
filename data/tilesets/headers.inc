@@ -1039,3 +1039,14 @@ gTileset_UnderGround_Entrance::
 	.4byte gMetatiles_UnderGround_Entrance
 	.4byte gMetatileAttributes_UnderGround_Entrance
 	.4byte NULL
+
+	.align 2
+gTileset_FuchsiaCity::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_FuchsiaCity
+	.4byte gTilesetPalettes_FuchsiaCity
+	.4byte gMetatiles_FuchsiaCity
+	.4byte gMetatileAttributes_FuchsiaCity
+	.4byte NULL

@@ -120,6 +120,11 @@
 #define MAP_UNDERGROUND_PATH_WEST_ENTRANCE        (51 | (1 << 8))
 #define MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL     (52 | (1 << 8))
 #define MAP_UNDERGROUND_PATH_EAST_ENTRANCE        (53 | (1 << 8))
+#define MAP_ROUTE_16                              (54 | (1 << 8))
+#define MAP_ROUTE_17                              (55 | (1 << 8))
+#define MAP_ROUTE_16_NORTH_ENTRANCE_1F            (56 | (1 << 8))
+#define MAP_ROUTE_18                              (57 | (1 << 8))
+#define MAP_FUCHSIA_CITY                          (58 | (1 << 8))
 
 // gMapGroup_IndoorOldale
 #define MAP_OLDALE_TOWN_HOUSE1            (0 | (2 << 8))

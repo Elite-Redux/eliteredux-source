@@ -2109,3 +2109,23 @@ gTilesetPalettes_UnderGround_Entrance::
 	.align 2
 gTilesetTiles_UnderGround_Entrance::
 	.incbin "data/tilesets/secondary/underground_entrance/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_FuchsiaCity::
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/fuchsiacity/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_FuchsiaCity::
+	.incbin "data/tilesets/secondary/fuchsiacity/tiles.4bpp.lz"
