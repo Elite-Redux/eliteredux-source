@@ -4938,9 +4938,7 @@ u16 GetChosenMove(u32 battlerId)
 
 u16 IsMyceliumMightActive(u32 battlerId)
 {
-    u16 ability = gBattleMons[battlerId].ability;
-
-    if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_MYCELIUM_MIGHT, ability)) {
+    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_MYCELIUM_MIGHT)) {
         const struct BattleMove *move = &gBattleMoves[GetChosenMove(battlerId)];
         return move->split == SPLIT_STATUS && move->target & !MOVE_TARGET_USER;
     }

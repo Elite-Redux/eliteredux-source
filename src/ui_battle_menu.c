@@ -2160,9 +2160,10 @@ const u8 sText_Title_Status_Coiled_Up_Description[]         = _("The next biting
                                                                 "increased priority.");
 const u8 sText_Title_Status_Quark_Drive[]                   = _("Quark Drive");
 const u8 sText_Title_Status_Protosynthesis[]                = _("Protosynthesis");
-const u8 sText_Title_Status_Paradox_Boost_Description[]     = _("This Pokémon's highest stat\n"
-                                                                "is boosted by 30%. If speed\n"
-                                                                "+50% instead.");
+const u8 sText_Title_Status_Paradox_Boost_Description[]     = _("This Pokémon's {STR_VAR_2}\n"
+                                                                "is boosted by {STR_VAR_3}%.");
+const u8 sText_Paradox_Speed_Value[] = _("50");
+const u8 sText_Paradox_Other_Value[] = _("30");
 const u8 sText_Title_Status_Ghastly_Echo[]                  = _("Ghastly Echo");
 const u8 sText_Title_Status_Ghastly_Echo_Description[]      = _("This Pokémon's next attack\n"
                                                                 "is boosted by 50%.");
@@ -2717,7 +2718,12 @@ static void PrintStatusTab(void){
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
                 
                 //Description
-                StringCopy(gStringVar1, sText_Title_Status_Paradox_Boost_Description);
+                {
+                u8 stat = GetAbilityStateAs(sMenuDataPtr->battlerId, ABILITY_PROTOSYNTHESIS).paradoxBoost.statId;
+                StringCopy(gStringVar2, gStatNamesTable[stat]);
+                StringCopy(gStringVar3, stat == STAT_SPEED ? sText_Paradox_Speed_Value : sText_Paradox_Other_Value);
+                }
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_Paradox_Boost_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;
@@ -2726,7 +2732,12 @@ static void PrintStatusTab(void){
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
                 
                 //Description
-                StringCopy(gStringVar1, sText_Title_Status_Paradox_Boost_Description);
+                {
+                u8 stat = GetAbilityStateAs(sMenuDataPtr->battlerId, ABILITY_QUARK_DRIVE).paradoxBoost.statId;
+                StringCopy(gStringVar2, gStatNamesTable[stat]);
+                StringCopy(gStringVar3, stat == STAT_SPEED ? sText_Paradox_Speed_Value : sText_Paradox_Other_Value);
+                }
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_Paradox_Boost_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;
