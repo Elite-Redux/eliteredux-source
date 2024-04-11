@@ -9832,6 +9832,13 @@ bool8 BattlerIgnoresAbility(u8 sBattlerAttacker, u8 sBattlerTarget, u16 ability)
             return TRUE;
         break;
     }
+
+    if (abilityAtk == ABILITY_MYCELIUM_MIGHT || SpeciesHasInnate(species, ABILITY_MYCELIUM_MIGHT, level, personality, isEnemyMon, isEnemyMon))
+    {
+        u16 move = GetChosenMove(sBattlerAttacker);
+        if (IS_MOVE_STATUS(move) && gBattleMoves[move].target != MOVE_TARGET_USER)
+            return TRUE;
+    }
     
     return FALSE;
 }
