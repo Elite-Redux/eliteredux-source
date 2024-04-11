@@ -321,17 +321,6 @@
 #define FLAG_WEATHER_BASED                          (1 << 30)
 #define FLAG_FIELD_BASED                            (1 << 31)
 
-// Battle move Flags 2
-#define FLAG_AIR_BASED                              (1 << 0)
-#define FLAG_HORN_BASED                             (1 << 1)
-#define FLAG_ALWAYS_CRIT                            (1 << 2)
-#define FLAG_HAMMER_BASED                           (1 << 3)
-#define FLAG_ARROW_BASED                            (1 << 4)
-#define FLAG_HITS_SPDEF                             (1 << 5)
-#define FLAG_HITS_PHYSICAL_DEF                      (1 << 6)
-#define FLAG_THROWING                               (1 << 7)
-#define FLAG_DOUBLE_DAMAGE_TO_MEGA                  (1 << 8)
-
 // Split defines.
 #define SPLIT_PHYSICAL  0x0
 #define SPLIT_SPECIAL   0x1

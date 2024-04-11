@@ -7043,7 +7043,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			if(BATTLER_HAS_ABILITY(battler, ABILITY_FLASH_FIRE)){
                 if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE) && B_FLASH_FIRE_FROZEN <= GEN_4))
                 {
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_FLASH_FIRE;
+                    SetActiveAbilityPopupOverride(ABILITY_FLASH_FIRE);
 				    gLastUsedAbility = ABILITY_FLASH_FIRE;
 
                     if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
@@ -7099,7 +7099,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			}
 
             if (BATTLER_HAS_ABILITY(battler, ABILITY_WIND_RIDER)){
-                if (gBattleMoves[move].flags2 & FLAG_AIR_BASED){
+                if (gBattleMoves[move].airBased){
                     gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_WIND_RIDER;
                     effect = 2;
                     statId = GetHighestAttackingStatId(battler, TRUE);
@@ -7117,6 +7117,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
             if (effect == 1) // Drain Hp ability.
             {
+                SetActiveAbilityPopupOverride(gBattleScripting.abilityPopupOverwrite);
                 if (BATTLER_MAX_HP(battler) || BATTLER_HEALING_BLOCKED(battler))
                 {
                     if ((gRoundStructs[gBattlerAttacker].notFirstStrike))
@@ -7389,7 +7390,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         //Furnace
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_WIND_POWER)){
             if (ShouldApplyOnHitAffect(battler)
-             && gBattleMoves[move].flags2 & FLAG_AIR_BASED
+             && gBattleMoves[move].airBased
              && !(gStatuses3[gBattlerTarget] & STATUS3_CHARGED_UP))
             {
                 gStatuses3[gBattlerTarget] |= STATUS3_CHARGED_UP; 
@@ -8076,7 +8077,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Spike Armor
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_VOODOO_POWER)){
             if(ShouldApplyOnHitAffect(gBattlerAttacker)
-			 && (IS_MOVE_SPECIAL(move) || gBattleMoves[move].flags2 & FLAG_HITS_SPDEF)
+			 && (IS_MOVE_SPECIAL(move) || gBattleMoves[move].hitsSpDef)
              && gBattleMoves[move].effect != EFFECT_PSYSHOCK
              && CanBleed(gBattlerAttacker)
              && (Random() % 100) < 30){
@@ -8303,7 +8304,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         // Hardened Sheath
 		if (BATTLER_HAS_ABILITY(battler, ABILITY_HARDENED_SHEATH)){
-			if (ShouldApplyOnHitAffect(battler) && (gBattleMoves[move].flags2 & FLAG_HORN_BASED)
+			if (ShouldApplyOnHitAffect(battler) && (gBattleMoves[move].hornBased)
 				 && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
 				{
 					gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_HARDENED_SHEATH;
@@ -12530,7 +12531,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_NIKA) && IS_IRON_FIST(battlerAtk, move))
         MulModifier(&modifier, UQ_4_12(1.3));
 
-	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].flags2 & FLAG_ARROW_BASED)
+	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
         MulModifier(&modifier, UQ_4_12(1.3));
 	
 	// Striker
@@ -12549,19 +12550,19 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 
 	// Mighty Horn & Hunter's Horn
 	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MIGHTY_HORN) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HUNTERS_HORN)){
-		if (gBattleMoves[move].flags2 & FLAG_HORN_BASED)
+		if (gBattleMoves[move].hornBased)
            MulModifier(&modifier, UQ_4_12(1.3));
     }
     
     // Super Slammer
     if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SUPER_SLAMMER)){
-		if (gBattleMoves[move].flags2 & FLAG_HAMMER_BASED)
+		if (gBattleMoves[move].hammerBased)
            MulModifier(&modifier, UQ_4_12(1.3));
     }
     
     // Archer
     if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ARCHER)){
-		if (gBattleMoves[move].flags2 & FLAG_ARROW_BASED)
+		if (gBattleMoves[move].arrowBased)
            MulModifier(&modifier, UQ_4_12(1.3));
     }
 	
@@ -12573,7 +12574,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 
     // Giant Wings
 	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GIANT_WINGS)){
-        if (gBattleMoves[move].flags2 & FLAG_AIR_BASED)
+        if (gBattleMoves[move].airBased)
            MulModifier(&modifier, UQ_4_12(1.25));
     }
 	
@@ -12985,7 +12986,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
             MulModifier(&modifier, UQ_4_12(0.8));
     }
 
-    if (gBattleMoves[move].flags2 & FLAG_DOUBLE_DAMAGE_TO_MEGA
+    if (gBattleMoves[move].doubleDamageVsMega
         && (gBattleStruct->mega.evolvedSpecies[battlerDef]
             || gBattleStruct->mega.primalRevertedSpecies[battlerDef]))
     {
@@ -13383,6 +13384,10 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             atkStatToUse = STAT_SPEED;
         }
         else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MIND_CRUSH) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        {
+            atkStatToUse = STAT_SPATK;
+        }
+        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
         {
             atkStatToUse = STAT_SPATK;
         }
@@ -13995,7 +14000,7 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
 	}
 	// Rocky Payload
 	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ROCKY_PAYLOAD)){
-		if (moveType == TYPE_ROCK || gBattleMoves[move].flags2 & FLAG_THROWING)
+		if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased)
         {
             MulModifier(&modifier, UQ_4_12(1.5));
         }
@@ -14154,7 +14159,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     u8 isUnaware = BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CONTEMPT);
     u16 modifier;
 
-    if ((gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move) || (gBattleMoves[move].flags2 & FLAG_HITS_PHYSICAL_DEF)) && !(gBattleMoves[move].flags2 & FLAG_HITS_SPDEF)) // uses defense stat instead of sp.def
+    if ((gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move) || gBattleMoves[move].hitsDef) && !gBattleMoves[move].hitsSpDef) // uses defense stat instead of sp.def
     {
         defStatToUse = STAT_DEF;
     }
@@ -14168,7 +14173,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         defStatToUse = STAT_SPDEF;
     }
 
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].flags2 & FLAG_ARROW_BASED)
+    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
     {
         defStatToUse = STAT_SPDEF;
     }

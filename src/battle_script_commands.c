@@ -1398,7 +1398,7 @@ static bool32 TryAegiFormChange(void)
         newSpecies = SPECIES_AEGISLASH;
         break;
     case SPECIES_AEGISLASH_BLADE_REDUX: // Special -> Physical
-        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL){
+        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased){
             gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
             newSpecies = SPECIES_AEGISLASH_REDUX;
         }
@@ -1406,7 +1406,7 @@ static bool32 TryAegiFormChange(void)
             return FALSE;
         break;
     case SPECIES_AEGISLASH_REDUX: // Physical -> Special
-        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL){
+        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased){
             gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
             newSpecies = SPECIES_AEGISLASH_BLADE_REDUX;
         }
@@ -2208,7 +2208,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
     //Always Critical
     else if (gStatuses3[battlerAtk] & STATUS3_LASER_FOCUS
              || gBattleMoves[move].effect == EFFECT_ALWAYS_CRIT
-             || (gBattleMoves[move].flags2 & FLAG_ALWAYS_CRIT)
+             || (gBattleMoves[move].alwaysCrit)
              || (gBattleMoves[move].effect == EFFECT_FLAIL && gBattleMons[battlerAtk].hp <= gBattleMons[battlerAtk].maxHP / 2)
              || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MERCILESS)  &&
              (( gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY)                   ||
