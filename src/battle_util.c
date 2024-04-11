@@ -8880,7 +8880,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
             //Frostbite
-            else if (moveType == TYPE_ICE && CanBeFrozen(gBattlerTarget))
+            else if (moveType == TYPE_ICE && CanGetFrostbite(gBattlerTarget))
             {
                 gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE;
                 PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
@@ -10060,8 +10060,12 @@ bool32 CanSleep(u8 battlerId)
 {
     u16 ability = GetBattlerAbility(battlerId);
 
-    if (gBattleMons[battlerId].status1 & !STATUS1_ANY && IsMyceliumMightActive(gBattlerAttacker))
+    MGBA_PRINT_DEBUG("Battler %d status %d mycelium active %d", battlerId, gBattleMons[battlerId].status1, IsMyceliumMightActive(gBattlerAttacker))
+
+    if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
+
+    MGBA_PRINT_DEBUG("Can get status %d", CanGetStatus(battlerId))
 
     if (CanGetStatus(battlerId)) return FALSE;
 
@@ -10077,7 +10081,7 @@ bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget)
 {
     u16 ability = GetBattlerAbility(battlerTarget);
 
-    if (gBattleMons[battlerTarget].status1 & !STATUS1_ANY && IsMyceliumMightActive(battlerAttacker))
+    if (!(gBattleMons[battlerTarget].status1 & STATUS1_ANY) && IsMyceliumMightActive(battlerAttacker))
         return TRUE;
 
     if (!CanGetStatus(battlerTarget)) return FALSE;
@@ -10092,7 +10096,7 @@ bool32 CanBeBurned(u8 battlerId)
 {
     u16 ability = GetBattlerAbility(battlerId);
 
-    if (gBattleMons[battlerId].status1 & !STATUS1_ANY && IsMyceliumMightActive(gBattlerAttacker))
+    if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
 
     if (!CanGetStatus(battlerId)) return FALSE;
@@ -10149,20 +10153,20 @@ bool32 CanBeFrozen(u8 battlerId)
 
 bool32 CanGetFrostbite(u8 battlerId)
 {
-    if (gBattleMons[battlerId].status1 & !STATUS1_ANY && IsMyceliumMightActive(gBattlerAttacker))
+    if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
 
     if (!CanGetStatus(battlerId)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)
-      || gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_SAFEGUARD)
+      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_MAGMA_ARMOR, battlerId))
         return FALSE;
     return TRUE;
 }
 
 bool32 CanBleed(u8 battlerId)
 {
-    if (gBattleMons[battlerId].status1 & !STATUS1_ANY && IsMyceliumMightActive(gBattlerAttacker))
+    if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
 
     if (!CanGetStatus(battlerId)) return FALSE;
@@ -10175,7 +10179,7 @@ bool32 CanBleed(u8 battlerId)
 
 bool32 CanBeConfused(u8 battlerId)
 {
-    if (gBattleMons[battlerId].status2 & !STATUS2_CONFUSION && IsMyceliumMightActive(gBattlerAttacker))
+    if (!(gBattleMons[battlerId].status2 & STATUS2_CONFUSION) && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
 
     if (BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_OWN_TEMPO)

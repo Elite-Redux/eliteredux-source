@@ -3440,20 +3440,8 @@ BattleScript_EffectSleep::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpifstatus BS_TARGET, STATUS1_SLEEP, BattleScript_AlreadyAsleep
-	jumpifcantmakeasleep BattleScript_CantMakeAsleep
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_LeafGuardProtects
-	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifability BS_TARGET_SIDE, ABILITY_SWEET_VEIL, BattleScript_SweetVeilProtects
-	jumpifleafguardprotected BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_ELECTRIC_TERRAIN, BattleScript_ElectricTerrainPrevents
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_MistyTerrainPrevents
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_SLEEP
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_SLEEP
@@ -3464,18 +3452,8 @@ BattleScript_EffectBleed::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpiftype BS_TARGET, TYPE_ROCK,  BattleScript_NotAffected
-	jumpiftype BS_TARGET, TYPE_GHOST, BattleScript_NotAffected
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_LeafGuardProtects
-	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifleafguardprotected BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_MistyTerrainPrevents
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_BLEED
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_BLEED
@@ -3486,16 +3464,7 @@ BattleScript_EffectFrostbite::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpiftype BS_TARGET, TYPE_ICE, BattleScript_NotAffected
-	jumpifability BS_TARGET, ABILITY_MAGMA_ARMOR, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_LeafGuardProtects
-	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifleafguardprotected BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_MistyTerrainPrevents
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_FROSTBITE
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
@@ -3505,27 +3474,7 @@ BattleScript_EffectFrostbite::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectFreeze::
-	attackcanceler
-	attackstring
-	ppreduce
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpifcantmakeasleep BattleScript_CantMakeAsleep
-	jumpiftype BS_TARGET, TYPE_ICE, BattleScript_NotAffected
-	jumpifability BS_TARGET, ABILITY_MAGMA_ARMOR, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_LeafGuardProtects
-	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifleafguardprotected BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_MistyTerrainPrevents
-	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsafeguard BattleScript_SafeguardProtected
-	attackanimation
-	waitanimation
-	setmoveeffect MOVE_EFFECT_FREEZE
-	seteffectprimary
-	goto BattleScript_MoveEnd
+	goto BattleScript_EffectPlaceholder
 	
 BattleScript_TerrainPreventsEnd2::
 	pause B_WAIT_TIME_SHORT
@@ -3609,7 +3558,7 @@ BattleScript_LeafGuardProtectsRet::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-BattleScript_LeafGuardProtects:
+BattleScript_LeafGuardProtects::
 	call BattleScript_LeafGuardProtectsRet
 	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
 	goto BattleScript_MoveEnd
@@ -4277,20 +4226,8 @@ BattleScript_EffectToxic::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifability BS_TARGET, ABILITY_IMMUNITY, BattleScript_ImmunityProtected
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET_SIDE, ABILITY_PASTEL_VEIL, BattleScript_PastelVeilProtects
-	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifleafguardprotected BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpifstatus BS_TARGET, STATUS1_POISON | STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_MistyTerrainPrevents
-	trypoisontype BS_ATTACKER, BS_TARGET, BattleScript_NotAffected
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_TOXIC
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_TOXIC
@@ -4653,21 +4590,8 @@ BattleScript_EffectPoison::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifability BS_TARGET, ABILITY_IMMUNITY, BattleScript_ImmunityProtected
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET_SIDE, ABILITY_PASTEL_VEIL, BattleScript_PastelVeilProtects
-	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifleafguardprotected BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpifstatus BS_TARGET, STATUS1_POISON, BattleScript_AlreadyPoisoned
-	jumpifstatus BS_TARGET, STATUS1_TOXIC_POISON, BattleScript_AlreadyPoisoned
-	trypoisontype BS_ATTACKER, BS_TARGET, BattleScript_NotAffected
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_MistyTerrainPrevents
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_POISON
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_POISON
@@ -4680,22 +4604,12 @@ BattleScript_EffectParalyzeIgnoreType:
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifability BS_TARGET, ABILITY_LIMBER, BattleScript_LimberProtected
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_LeafGuardProtects
-	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifleafguardprotected BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifsubstituteblocks BattleScript_ButItFailed
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES
 	jumpifmove MOVE_GLARE, BattleScript_BattleScript_EffectParalyzeNoTypeCalc
 	typecalc
 BattleScript_BattleScript_EffectParalyzeNoTypeCalc:
-	jumpifmovehadnoeffect BattleScript_ButItFailed
-	jumpifstatus BS_TARGET, STATUS1_PARALYSIS, BattleScript_AlreadyParalyzed
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_MistyTerrainPrevents
+	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsafeguard BattleScript_SafeguardProtected
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	attackanimation
 	waitanimation
@@ -4709,22 +4623,10 @@ BattleScript_EffectParalyze:
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifability BS_TARGET, ABILITY_LIMBER, BattleScript_LimberProtected
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_LeafGuardProtects
-	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_LeafGuardProtects
-	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifleafguardprotected BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifsubstituteblocks BattleScript_ButItFailed
 	typecalc
-	jumpifmovehadnoeffect BattleScript_ButItFailed
-	jumpifstatus BS_TARGET, STATUS1_PARALYSIS, BattleScript_AlreadyParalyzed
-	tryparalyzetype BS_ATTACKER, BS_TARGET, BattleScript_NotAffected
-	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
-	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_MistyTerrainPrevents
-	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
-	jumpifsafeguard BattleScript_SafeguardProtected
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	attackanimation
 	waitanimation
 	setmoveeffect MOVE_EFFECT_PARALYSIS
@@ -5050,6 +4952,7 @@ BattleScript_EffectEncore::
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
+	@ requirecandoeffect BS_TARGET, MOVE_EFFECT_ENCORE
 	jumpifability BS_TARGET_SIDE, ABILITY_AROMA_VEIL, BattleScript_AromaVeilProtects
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_LeafGuardProtects
 	trysetencore BattleScript_ButItFailed
@@ -6704,17 +6607,8 @@ BattleScript_EffectYawn::
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifability BS_TARGET, ABILITY_VITAL_SPIRIT, BattleScript_PrintBankAbilityMadeIneffective
-	jumpifability BS_TARGET, ABILITY_INSOMNIA, BattleScript_PrintBankAbilityMadeIneffective
-	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_PrintBankAbilityMadeIneffective
-	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_PrintBankAbilityMadeIneffective
-	jumpifflowerveil BattleScript_FlowerVeilProtects
-	jumpifleafguardprotected BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifshieldsdown BS_TARGET, BattleScript_LeafGuardProtects
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpifsafeguard BattleScript_SafeguardProtected
-	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
-	jumpifcantmakeasleep BattleScript_ButItFailed
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_SLEEP
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	setyawn BattleScript_ButItFailed
 	attackanimation
 	waitanimation

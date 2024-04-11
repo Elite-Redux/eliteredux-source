@@ -2301,6 +2301,11 @@
 	.4byte \ptr
 	.endm
 
+	.macro requirecandoeffect battler:req, effect:req
+	various \battler, VARIOUS_REQUIRE_CAN_DO_EFFECT
+	.2byte \effect
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd
