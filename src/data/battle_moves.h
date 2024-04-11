@@ -8678,9 +8678,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_AURA_WHEEL] =
     {
-        .effect = EFFECT_AURA_WHEEL,
+        .effect = EFFECT_HIT,
         .power = 110,
         .type = TYPE_ELECTRIC,
+        .type2 = TYPE_DARK,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 100,
