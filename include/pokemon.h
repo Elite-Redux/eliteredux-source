@@ -202,22 +202,30 @@ struct BaseStats
 #include "constants/battle_config.h"
 struct BattleMove
 {
+    u32 flags;
     u16 effect;
+    u16 target;
+    u16 argument;
     u8 power;
     u8 type;
     u8 type2;
     u8 accuracy;
     u8 pp;
     u8 secondaryEffectChance;
-    u16 target;
     s8 priority;
-    u32 flags;
     u8 split;
-    u16 argument;
-    u32 flags2;
     u8 parentalBondBanned:1;
     u8 twoTurnMove:1;
     u8 arrowBased:1;
+    u8 hornBased:1;
+    u8 airBased:1;
+    u8 alwaysCrit:1;
+    u8 hammerBased:1;
+    u8 hitsSpDef:1;
+    u8 hitsDef:1;
+    u8 throwingBased:1;
+    u8 doubleDamageVsMega:1;
+    // This struct is defined twice, please update the other one if you update this one.
 };
 
 struct SpindaSpot
