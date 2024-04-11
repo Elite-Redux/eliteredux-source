@@ -225,7 +225,6 @@ struct BattleMove
     u8 hitsDef:1;
     u8 throwingBased:1;
     u8 doubleDamageVsMega:1;
-    // This struct is defined twice, please update the other one if you update this one.
 };
 
 struct SpindaSpot
