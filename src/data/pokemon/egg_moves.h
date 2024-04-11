@@ -4440,7 +4440,8 @@ const u16 gEggMoves[] = {
         MOVE_RECYCLE,
         MOVE_CREEPING_THORNS,
         MOVE_FLUTTERING_LEAF,
-        MOVE_DRAGON_CHEER),
+        MOVE_DRAGON_CHEER,
+        MOVE_APPLE_ACID),
 
     egg_moves(SILICOBRA,
         MOVE_DRAGON_RUSH,
