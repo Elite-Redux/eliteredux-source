@@ -15684,6 +15684,9 @@ void TryRestoreStolenItems(void)
 bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item)
 {
     u8 stealerSide = GetBattlerSide(battlerStealing);
+
+    if (!item) return FALSE;
+    if (gBattleMons[battlerStealing].item) return FALSE;
     
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_HILL)
         return FALSE;
@@ -15715,7 +15718,7 @@ bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item)
     }
     
     if (!CanBattlerGetOrLoseItem(battlerItem, item)      // Battler with item cannot have it stolen
-      ||!CanBattlerGetOrLoseItem(battlerStealing, item)) // Stealer cannot take the item
+      || !CanBattlerGetOrLoseItem(battlerStealing, item)) // Stealer cannot take the item
         return FALSE;
     
     return TRUE;
