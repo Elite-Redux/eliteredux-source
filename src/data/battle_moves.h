@@ -4023,8 +4023,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_MUDDY_WATER] =
     {
         .effect = EFFECT_ACCURACY_DOWN_HIT,
-        .power = 90,
+        .power = 70,
         .type = TYPE_GROUND,
+        .type2 = TYPE_WATER,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 30,
@@ -8678,7 +8679,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_AURA_WHEEL] =
     {
-        .effect = EFFECT_HIT,
+        .effect = EFFECT_SPEED_UP_HIT,
         .power = 110,
         .type = TYPE_ELECTRIC,
         .type2 = TYPE_DARK,
