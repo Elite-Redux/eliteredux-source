@@ -36456,12 +36456,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_DECIDUEYE_HISUIAN] =
     {
-    .baseHP        = 98,
-    .baseAttack    =  112,
-    .baseDefense   = 100,
-    .baseSpeed     =  60,
-    .baseSpAttack  = 60,
-    .baseSpDefense = 100,
+    .baseHP         = 90,
+    .baseAttack     = 112,
+    .baseDefense    = 90,
+    .baseSpeed      = 50,
+    .baseSpAttack   = 90,
+    .baseSpDefense  = 98,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_FIGHTING,
     .catchRate = 45,
@@ -36474,7 +36474,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_FLYING,
     .eggGroup2 = EGG_GROUP_FLYING,
 	.abilities = {ABILITY_ARCHER, ABILITY_SCRAPPY, ABILITY_OPPORTUNIST},
-	.innates = {ABILITY_OVERGROW, ABILITY_STRIKER, ABILITY_AERODYNAMICS},
+    .innates        = {ABILITY_OVERGROW, ABILITY_SNIPER, ABILITY_AERODYNAMICS},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
     },
