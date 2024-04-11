@@ -7043,7 +7043,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			if(BATTLER_HAS_ABILITY(battler, ABILITY_FLASH_FIRE)){
                 if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE) && B_FLASH_FIRE_FROZEN <= GEN_4))
                 {
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_FLASH_FIRE;
+                    SetActiveAbilityPopupOverride(ABILITY_FLASH_FIRE);
 				    gLastUsedAbility = ABILITY_FLASH_FIRE;
 
                     if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
@@ -7117,6 +7117,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
             if (effect == 1) // Drain Hp ability.
             {
+                SetActiveAbilityPopupOverride(gBattleScripting.abilityPopupOverwrite);
                 if (BATTLER_MAX_HP(battler) || BATTLER_HEALING_BLOCKED(battler))
                 {
                     if ((gRoundStructs[gBattlerAttacker].notFirstStrike))
