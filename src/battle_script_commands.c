@@ -1398,7 +1398,7 @@ static bool32 TryAegiFormChange(void)
         newSpecies = SPECIES_AEGISLASH;
         break;
     case SPECIES_AEGISLASH_BLADE_REDUX: // Special -> Physical
-        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].split & FLAG_ARROW_BASED){
+        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased){
             gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
             newSpecies = SPECIES_AEGISLASH_REDUX;
         }
@@ -1406,7 +1406,7 @@ static bool32 TryAegiFormChange(void)
             return FALSE;
         break;
     case SPECIES_AEGISLASH_REDUX: // Physical -> Special
-        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].split & FLAG_ARROW_BASED){
+        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased){
             gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
             newSpecies = SPECIES_AEGISLASH_BLADE_REDUX;
         }
