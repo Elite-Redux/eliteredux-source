@@ -261,7 +261,7 @@
               {
                 "min_level": 3,
                 "max_level": 3,
-                "species": "SPECIES_CUBCHOO"
+                "species": "SPECIES_CETODDLE"
               }
             ]
           },
@@ -445,7 +445,7 @@
               {
                 "min_level": 4,
                 "max_level": 4,
-                "species": "SPECIES_BLITZLE"
+                "species": "SPECIES_DUSKULL"
               },
               {
                 "min_level": 3,
@@ -649,7 +649,7 @@
               {
                 "min_level": 5,
                 "max_level": 7,
-                "species": "SPECIES_BUNNELBY"
+                "species": "SPECIES_DWEBBLE"
               },
               {
                 "min_level": 5,
@@ -13002,7 +13002,7 @@
               {
                 "min_level": 41,
                 "max_level": 43,
-                "species": "SPECIES_PINSIR"
+                "species": "SPECIES_GROWLITHE_HISUIAN"
               },
               {
                 "min_level": 41,
@@ -13022,7 +13022,7 @@
               {
                 "min_level": 41,
                 "max_level": 43,
-                "species": "SPECIES_TRUMBEAK"
+                "species": "SPECIES_PINSIR"
               },
               {
                 "min_level": 41,
