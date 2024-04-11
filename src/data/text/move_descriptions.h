@@ -2839,8 +2839,8 @@ static const u8 sMoveTwoLineDescription_MoveBehemothBash[] = _(
     "2x damage to Dynamaxed foes.");
 
 static const u8 sMoveTwoLineDescription_MoveAuraWheel[] = _(
-    "Raises Speed to attack. The\n"
-    "Type is based on its form.");
+    "Raises Speed to attack. Both\n"
+    "Electric- and Dark-type.");
 
 static const u8 sMoveTwoLineDescription_MoveBreakingSwipe[] = _(
     "Swings its tail to attack.\n"
@@ -5013,7 +5013,7 @@ static const u8 sMoveFourLineDescription_MoveExtrasensory[] = _("The user attack
 static const u8 sMoveFourLineDescription_MoveSkyUppercut[] = _("The user attacks\nwith an uppercut\nthrown skywards.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveSandTomb[] = _("The foe is trapped\ninside a painful\nsandstorm for four\nor five turns.");
 static const u8 sMoveFourLineDescription_MoveSheerCold[] = _("This move is super\neffective on Water.\n20% frostbite chance.");
-static const u8 sMoveFourLineDescription_MoveMuddyWater[] = _("The user attacks\nwith muddy water.\n30% chance to\nlower foe's accuracy.");
+static const u8 sMoveFourLineDescription_MoveMuddyWater[] = _("Ground- and Water-\ntype at the same\ntime. 30% chance to\nlower foe's accuracy.");
 static const u8 sMoveFourLineDescription_MoveBulletSeed[] = _("The user shoots\nseeds at the foe.\nTwo to five seeds\nare shot at once.");
 static const u8 sMoveFourLineDescription_MoveAerialAce[] = _("An extremely fast\nattack. It can't\nbe evaded.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveIcicleSpear[] = _("Sharp icicles are\nfired at the foe.\nIt strikes two to\nfive times.");
@@ -5394,7 +5394,7 @@ static const u8 sMoveFourLineDescription_MoveSnapTrap[] = _("The user snares the
 static const u8 sMoveFourLineDescription_MovePyroBall[] = _("The user launches a\nfiery ball at the\nfoe. 10% chance\nto burn the foe.");
 static const u8 sMoveFourLineDescription_MoveBehemothBlade[] = _("The user strikes as\na sword, dealing\ndouble the damage\nto Dynamaxed foes.");
 static const u8 sMoveFourLineDescription_MoveBehemothBash[] = _("The user strikes as\na shield, dealing\ndouble the damage\nto Dynamaxed foes.");
-static const u8 sMoveFourLineDescription_MoveAuraWheel[] = _("The user attacks to\nup its Speed. The\nuser's form changes\nthis move's type.");
+static const u8 sMoveFourLineDescription_MoveAuraWheel[] = _("Electric- and Dark-\ntype at the same\ntime.\nRaises Speed.");
 static const u8 sMoveFourLineDescription_MoveBreakingSwipe[] = _("The user swings at\nboth foes with its\ntail, lowering the\nfoes' Attack stat.");
 static const u8 sMoveFourLineDescription_MoveBranchPoke[] = _("The user attacks\nthe foe by poking\nit with a sharply\npointed branch.");
 static const u8 sMoveFourLineDescription_MoveOverdrive[] = _("The user twangs its\nguitar to attack\nboth foes with a\nhuge, echoing boom.");

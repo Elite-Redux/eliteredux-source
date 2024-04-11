@@ -1888,6 +1888,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         return 101;
     else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GRIP_PINCER) && gBattleMons[battlerDef].status2 & STATUS2_WRAPPED)
         return 101;
+    else if (IsMyceliumMightActive(battlerAtk))
+        return 101;
 
     if ((gStatuses3[battlerDef] & STATUS3_PHANTOM_FORCE)
         || (!(gBattleMoves[move].flags & FLAG_DMG_IN_AIR) && gStatuses3[battlerDef] & STATUS3_ON_AIR)
@@ -3191,18 +3193,17 @@ void SetMoveEffect(bool32 primary, u32 certain)
         {
         case STATUS1_SLEEP:
             // check active uproar
+            MGBA_PRINT_DEBUG("Trying to sleep %d", gEffectBattler)
             if (!IsSoundproof(gActiveBattler))
             {
-                for (gActiveBattler = 0;
-                    gActiveBattler < gBattlersCount && !(gBattleMons[gActiveBattler].status2 & STATUS2_UPROAR);
-                    gActiveBattler++)
-                    ;
+                for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
+                    if (gBattleMons[gActiveBattler].status2 & STATUS2_UPROAR) break;
+                
+                if (gActiveBattler != gBattlersCount) break;
             }
-            else
-                gActiveBattler = gBattlersCount;
 
-            if (gActiveBattler != gBattlersCount)
-                break;
+            MGBA_PRINT_DEBUG("Can sleep %d", CanSleep(gEffectBattler))
+            
             if (!CanSleep(gEffectBattler))
                 break;
 
@@ -8528,13 +8529,13 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
 
 u32 IsFlowerVeilProtected(u32 battler)
 {
-    bool8 isFlowerVeilProtected = FALSE;
+    u16 isFlowerVeilProtected = FALSE;
     if (IsAbilityOnSide(battler, ABILITY_FLOWER_VEIL))
-        isFlowerVeilProtected = TRUE;
+        isFlowerVeilProtected = ABILITY_FLOWER_VEIL;
     else if ( IsAbilityOnSide(battler, ABILITY_JUNGLES_GUARD))
-        isFlowerVeilProtected = TRUE;
+        isFlowerVeilProtected = ABILITY_JUNGLES_GUARD;
 
-    if (IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))
+    if (isFlowerVeilProtected && IS_BATTLER_OF_TYPE(battler, TYPE_GRASS))
         return isFlowerVeilProtected;
     else
         return FALSE;
@@ -8542,14 +8543,15 @@ u32 IsFlowerVeilProtected(u32 battler)
 
 u32 IsLeafGuardProtected(u32 battler)
 {
-    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) &&
-        (BATTLER_HAS_ABILITY(battler, ABILITY_LEAF_GUARD) ||
-        BATTLER_HAS_ABILITY(battler, ABILITY_BIG_LEAVES) ||
-        BATTLER_HAS_ABILITY(battler, ABILITY_JUNGLES_GUARD) ||
-        BATTLER_HAS_ABILITY(battler, ABILITY_LEAF_GUARD_CLONE)))
-        return TRUE;
-    else
-        return FALSE;
+    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
+    {
+        if (BATTLER_HAS_ABILITY(battler, ABILITY_LEAF_GUARD)) return ABILITY_LEAF_GUARD;
+        if (BATTLER_HAS_ABILITY(battler, ABILITY_BIG_LEAVES)) return ABILITY_BIG_LEAVES;
+        if (BATTLER_HAS_ABILITY(battler, ABILITY_JUNGLES_GUARD)) return ABILITY_JUNGLES_GUARD;
+        if (BATTLER_HAS_ABILITY(battler, ABILITY_LEAF_GUARD_CLONE)) return ABILITY_LEAF_GUARD_CLONE;
+    }
+    
+    return FALSE;
 }
 
 u32 IsDesertCloakProtected(u32 battler)
@@ -8564,6 +8566,7 @@ u32 IsDesertCloakProtected(u32 battler)
 bool32 IsShieldsDownProtected(u32 battler)
 {
     switch(gBattleMons[battler].species){
+        case SPECIES_MINIOR:
         case SPECIES_MINIOR_METEOR_ORANGE:
         case SPECIES_MINIOR_METEOR_YELLOW:
         case SPECIES_MINIOR_METEOR_GREEN:
@@ -8571,7 +8574,7 @@ bool32 IsShieldsDownProtected(u32 battler)
         case SPECIES_MINIOR_METEOR_INDIGO:
         case SPECIES_MINIOR_METEOR_VIOLET:
         if(BATTLER_HAS_ABILITY(battler, ABILITY_SHIELDS_DOWN)) // Minior is not in core form
-            return TRUE;
+            return ABILITY_SHIELDS_DOWN;
         break;
     }
     return FALSE;
@@ -8579,27 +8582,31 @@ bool32 IsShieldsDownProtected(u32 battler)
 
 u32 IsAbilityStatusProtected(u32 battler)
 {
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_SHIELDS_DOWN))
-    {
-        switch (gBattleMons[battler].species)
-        {
-            case SPECIES_MINIOR:
-            case SPECIES_MINIOR_METEOR_BLUE:
-            case SPECIES_MINIOR_METEOR_GREEN:
-            case SPECIES_MINIOR_METEOR_INDIGO:
-            case SPECIES_MINIOR_METEOR_ORANGE:
-            case SPECIES_MINIOR_METEOR_VIOLET:
-            case SPECIES_MINIOR_METEOR_YELLOW:
-                return TRUE;
-        }
-    }
+    u16 ability;
+    if ((ability = IsFlowerVeilProtected(battler))) return ability;
+    if ((ability = IsLeafGuardProtected(battler))) return ability;
+    if (IsDesertCloakProtected(battler)) return ABILITY_DESERT_CLOAK;
+    if (IsShieldsDownProtected(battler)) return ABILITY_SHIELDS_DOWN;
+    if (BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE)) return ABILITY_COMATOSE;
+    if (BATTLER_HAS_ABILITY(battler, ABILITY_PURIFYING_SALT)) return ABILITY_PURIFYING_SALT;
+    return FALSE;
+}
 
-    return IsFlowerVeilProtected(battler)
-        || IsLeafGuardProtected(battler)
-        || IsDesertCloakProtected(battler)
-        || IsShieldsDownProtected(battler)
-        || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE)
-        || BATTLER_HAS_ABILITY(battler, ABILITY_PURIFYING_SALT);
+u32 JumpIfStandardStatusBlocking(u32 battler)
+{
+    u16 ability;
+    if (gBattleMons[gActiveBattler].status1) gBattlescriptCurrInstr = BattleScript_ButItFailed;
+    else if (DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) gBattlescriptCurrInstr = BattleScript_ButItFailed;
+    else if ((ability = IsAbilityStatusProtected(gActiveBattler)))
+    {
+        if (!BATTLER_HAS_ABILITY(gActiveBattler, ability)) gBattleScripting.battlerPopupOverwrite = BATTLE_PARTNER(gActiveBattler);
+        SetActiveAbilityPopupOverride(ability);
+        gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+    }
+    else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN)) gBattlescriptCurrInstr = BattleScript_MistyTerrainPrevents;
+    else if (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SAFEGUARD) gBattlescriptCurrInstr = BattleScript_SafeguardProtected;
+    else return FALSE;
+    return TRUE;
 }
 
 static void RecalcBattlerStats(u32 battler, struct Pokemon *mon)
@@ -9930,7 +9937,7 @@ static void Cmd_various(void)
         {
             SetActiveMultistringChooser(B_MSG_PKMNFELLASLEEP);
         }
-        else if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_FROSTBITE) && CanBeFrozen(gBattlerTarget)){
+        else if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_FROSTBITE) && CanGetFrostbite(gBattlerTarget)){
             SetActiveMultistringChooser(B_MSG_PKMNGOTFROSTBITE);
         }
         else if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_BLEED) && CanBleed(gBattlerTarget)){
@@ -11054,6 +11061,96 @@ static void Cmd_various(void)
         }
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         return;
+    case VARIOUS_REQUIRE_CAN_DO_EFFECT:
+        {
+        u16 ability;
+        switch (/* move effect */ T1_READ_16(gBattlescriptCurrInstr + 3))
+        {
+            default:
+                gBattlescriptCurrInstr += 5;
+                return;
+            
+            case MOVE_EFFECT_SLEEP:
+                if (CanSleep(gActiveBattler)) gBattlescriptCurrInstr += 5;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (UproarWakeUpCheck(gActiveBattler)) gBattlescriptCurrInstr = BattleScript_CantMakeAsleep;
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_INSOMNIA))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_INSOMNIA);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_VITAL_SPIRIT))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_VITAL_SPIRIT);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN)) gBattlescriptCurrInstr = BattleScript_ElectricTerrainPrevents;
+                else if ((ability = IsAbilityOnSide(gActiveBattler, ABILITY_SWEET_VEIL)))
+                {
+                    if (gActiveBattler != ability - 1) gBattleScripting.battlerPopupOverwrite = BATTLE_PARTNER(gActiveBattler);
+                    SetActiveAbilityPopupOverride(ABILITY_SWEET_VEIL);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                else gBattlescriptCurrInstr += 5;
+                return;
+            case MOVE_EFFECT_BLEED:
+                if (CanBleed(gActiveBattler)) gBattlescriptCurrInstr += 5;
+                else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ROCK)) gBattlescriptCurrInstr = BattleScript_NotAffected;
+                else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)) gBattlescriptCurrInstr = BattleScript_NotAffected;
+                else JumpIfStandardStatusBlocking(gActiveBattler);
+                return;
+            case MOVE_EFFECT_FROSTBITE:
+                if (CanGetFrostbite(gActiveBattler)) gBattlescriptCurrInstr += 5;
+                else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ICE)) gBattlescriptCurrInstr = BattleScript_NotAffected;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MAGMA_ARMOR))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_MAGMA_ARMOR);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                return;
+            case MOVE_EFFECT_TOXIC:
+            case MOVE_EFFECT_POISON:
+                if (CanBePoisoned(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr += 5;
+                else if (!CanPoisonType(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr = BattleScript_NotAffected;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_IMMUNITY))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_IMMUNITY);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                return;
+            case (MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES):
+                if (CanBeParalyzedIgnoreType(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr += 5;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LIMBER))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_LIMBER);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_JUGGERNAUT))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_JUGGERNAUT);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                return;
+            case MOVE_EFFECT_PARALYSIS:
+                if (CanBeParalyzedIgnoreType(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr += 5;
+                else if (!CanParalyzeType(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr = BattleScript_NotAffected;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LIMBER))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_LIMBER);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_JUGGERNAUT))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_JUGGERNAUT);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                return;
+        }
+        }
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
@@ -11562,10 +11659,11 @@ bool8 UproarWakeUpCheck(u8 battlerId)
 {
     s32 i;
 
+    if (IsSoundproof(battlerId)) return FALSE;
+
     for (i = 0; i < gBattlersCount; i++)
     {
-        if (!(gBattleMons[i].status2 & STATUS2_UPROAR) ||
-            IsSoundproof(i))
+        if (!(gBattleMons[i].status2 & STATUS2_UPROAR))
             continue;
 
         gBattleScripting.battler = i;
@@ -11577,13 +11675,10 @@ bool8 UproarWakeUpCheck(u8 battlerId)
         else
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_UPROAR_KEPT_AWAKE;
 
-        break;
+        return TRUE;
     }
 
-    if (i == gBattlersCount)
-        return FALSE;
-    else
-        return TRUE;
+    return FALSE;
 }
 
 static void Cmd_jumpifcantmakeasleep(void)

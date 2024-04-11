@@ -4939,8 +4939,8 @@ u16 GetChosenMove(u32 battlerId)
 u16 IsMyceliumMightActive(u32 battlerId)
 {
     if (BATTLER_HAS_ABILITY(battlerId, ABILITY_MYCELIUM_MIGHT)) {
-        const struct BattleMove *move = &gBattleMoves[GetChosenMove(battlerId)];
-        return move->split == SPLIT_STATUS && move->target & !MOVE_TARGET_USER;
+        u16 move = GetChosenMove(battlerId);
+        return IS_MOVE_STATUS(move) && gBattleMoves[move].target != MOVE_TARGET_USER;
     }
     
     return FALSE;
@@ -5047,7 +5047,7 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
     return priority;
 }
 
-#define MYCELIUM_MIGHT_AFFECTED(battler, move) (BATTLER_HAS_ABILITY(battler, ABILITY_MYCELIUM_MIGHT) && gBattleMoves[move].split == SPLIT_STATUS && gBattleMoves[move].target & !MOVE_TARGET_USER)
+#define MYCELIUM_MIGHT_AFFECTED(battler, move) (BATTLER_HAS_ABILITY(battler, ABILITY_MYCELIUM_MIGHT) && IS_MOVE_STATUS(move) && gBattleMoves[move].target != MOVE_TARGET_USER)
 
 u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
 {
