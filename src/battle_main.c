@@ -3971,7 +3971,10 @@ static void TryDoEventsBeforeFirstTurn(void)
         return;
 
     if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0))
+    {
+        BattleScriptExecute(gBattlescriptCurrInstr);
         return;
+    }
     
     // Check all switch in abilities happening from the fastest mon to slowest.
     while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount)
