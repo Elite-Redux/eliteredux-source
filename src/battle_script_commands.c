@@ -2646,8 +2646,16 @@ static void Cmd_datahpupdate(void)
         }
         else if (DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
         {
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MIMIKYU_BUSTED);
-            gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
+            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE))
+            {
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MIMIKYU_BUSTED);
+                gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
+            }
+            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ICE_FACE))
+            {
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_EISCUE_NOICE_FACE);
+                gBattleMons[gActiveBattler].species = SPECIES_EISCUE_NOICE_FACE;
+            }
             BattleScriptPush(gBattlescriptCurrInstr + 2);
             gBattlescriptCurrInstr = BattleScript_TargetFormChange;
         }
@@ -15669,8 +15677,16 @@ u16 GetNoDamageAbility(u8 batter)
 
 bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
 {
-    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_DISGUISE)){
-        if(gBattleMons[battlerDef].species == SPECIES_MIMIKYU       &&
+    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DISGUISE)){
+        if (gBattleMons[battlerDef].species == SPECIES_MIMIKYU       &&
+           !(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED) &&
+           !IS_MOVE_STATUS(move) &&
+           !((gHitMarker & HITMARKER_IGNORE_DISGUISE) && move != MOVE_SUCKER_PUNCH)){
+            return TRUE;
+        }
+    }
+    else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_ICE_FACE)){
+        if(gBattleMons[battlerDef].species == SPECIES_EISCUE       &&
            !(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED) &&
            !IS_MOVE_STATUS(move) &&
            !((gHitMarker & HITMARKER_IGNORE_DISGUISE) && move != MOVE_SUCKER_PUNCH)){
