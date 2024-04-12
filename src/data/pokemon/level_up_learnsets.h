@@ -26570,6 +26570,7 @@ static const struct LevelUpMove sGoodraHisuianLevelUpLearnset[] = {
     LEVEL_UP_MOVE(45, MOVE_MUDDY_WATER),
     LEVEL_UP_MOVE(60, MOVE_DRAGON_RUSH),
     LEVEL_UP_MOVE(60, MOVE_STEEL_BEAM),
+    LEVEL_UP_MOVE(72, MOVE_RECOVER),
     LEVEL_UP_END
 };
 
