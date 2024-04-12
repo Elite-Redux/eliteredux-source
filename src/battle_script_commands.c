@@ -9823,7 +9823,7 @@ static void Cmd_various(void)
             {
                 gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
                     .attacker = gActiveBattler,
-                    .target = gBattlerTarget,
+                    .target = GetMoveTarget(gLastMoves[gActiveBattler], 0),
                     .move = gLastMoves[gActiveBattler],
                     .movePos = i,
                 };

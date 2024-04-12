@@ -456,7 +456,11 @@ void HandleAction_UseMove(void)
     }
     else
     {
-        if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability)
+        if (gProcessingExtraAttacks && !IsBattlerAlive(gBattlerTarget))
+        {
+            gCurrentActionFuncId = B_ACTION_TRY_FINISH;
+        }
+        else if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability)
         {
             gBattleScripting.abilityPopupOverwrite = gQueuedExtraAttackData[0].ability;
             gBattlescriptCurrInstr = BattleScript_AttackerUsedAnExtraMove;
@@ -9412,7 +9416,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (target == MOVE_TARGET_BOTH || target == MOVE_TARGET_FOES_AND_ALLY)
                 {
                     // Move doesn't matter, just pick a single target move
-                    gBattlerTarget = GetMoveTarget(MOVE_WEATHER_BALL, 0);
+                    gBattlerTarget = GetMoveTarget(MOVE_WEATHER_BALL, MOVE_TARGET_SELECTED + 1);
                     if (GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker)) break;
                 }
             }

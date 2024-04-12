@@ -1745,8 +1745,8 @@
 	.4byte \ptr
 	.endm
 
-	.macro tryinstruct ptr:req
-	various BS_ATTACKER_PARTNER, VARIOUS_TRY_INSTRUCT
+	.macro tryinstruct battler:req, ptr:req
+	various \battler, VARIOUS_TRY_INSTRUCT
 	.4byte \ptr
 	.endm
 

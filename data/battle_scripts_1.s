@@ -2090,7 +2090,7 @@ BattleScript_EffectInstruct:
 	attackcanceler
 	attackstring
 	ppreduce
-	tryinstruct BattleScript_ButItFailed
+	tryinstruct BS_TARGET, BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	printstring STRINGID_USEDINSTRUCTEDMOVE
