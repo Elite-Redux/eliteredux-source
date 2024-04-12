@@ -3702,9 +3702,9 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_ACC_PLUS_2:
             case MOVE_EFFECT_EVS_PLUS_2:
                 if (!NoAliveMonsForEitherParty()
-                    && !ChangeStatBuffsImplicit(StatBuffValue(2),
-                                    gBattleScripting.moveEffect - MOVE_EFFECT_ATK_PLUS_2 + 1,
-                                    affectsUser | STAT_BUFF_UPDATE_MOVE_EFFECT, 0))
+                    && ChangeStatBuffsImplicit(StatBuffValue(2),
+                        gBattleScripting.moveEffect - MOVE_EFFECT_ATK_PLUS_2 + 1,
+                        affectsUser | STAT_BUFF_UPDATE_MOVE_EFFECT, 0))
                 {
                     gBattleScripting.animArg1 = gBattleScripting.moveEffect & ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                     gBattleScripting.animArg2 = 0;
