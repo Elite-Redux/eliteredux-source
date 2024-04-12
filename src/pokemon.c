@@ -10165,6 +10165,17 @@ const u8 gSpeciesNameLongFurfrouMatron[] = _("Furfrou Matron");
 const u8 gSpeciesNameLongFurfrouPharaoh[] = _("Furfrou Pharaoh");
 const u8 gSpeciesNameLongFurfrouStar[] = _("Furfrou Star");
 
+const u8 gSpeciesNameLongNecrozmaDawnWings[] = _("Dawn Wings");
+const u8 gSpeciesNameLongNecrozmaDuskMane[] = _("Dusk Mane");
+
+const u8 gSpeciesNameLongMiniorRed[] = _("Minior Red");
+const u8 gSpeciesNameLongMiniorOrange[] = _("Minior Orange");
+const u8 gSpeciesNameLongMiniorYellow[] = _("Minior Yellow");
+const u8 gSpeciesNameLongMiniorGreen[] = _("Minior Green");
+const u8 gSpeciesNameLongMiniorBlue[] = _("Minior Blue");
+const u8 gSpeciesNameLongMiniorIndigo[] = _("Minior Indigo");
+const u8 gSpeciesNameLongMiniorViolet[] = _("Minior Violet");
+
 const u8* GetSpeciesLongName(u16 species)
 {
     switch (species)
@@ -10242,6 +10253,26 @@ const u8* GetSpeciesLongName(u16 species)
             return gSpeciesNameLongFurfrouPharaoh;
         case SPECIES_FURFROU_STAR_TRIM:
             return gSpeciesNameLongFurfrouStar;
+
+        case SPECIES_NECROZMA_DAWN_WINGS:
+            return gSpeciesNameLongNecrozmaDawnWings;
+        case SPECIES_NECROZMA_DUSK_MANE:
+            return gSpeciesNameLongNecrozmaDuskMane;
+        
+        case SPECIES_MINIOR:
+            return gSpeciesNameLongMiniorRed;
+        case SPECIES_MINIOR_METEOR_ORANGE:
+            return gSpeciesNameLongMiniorOrange;
+        case SPECIES_MINIOR_METEOR_YELLOW:
+            return gSpeciesNameLongMiniorYellow;
+        case SPECIES_MINIOR_METEOR_GREEN:
+            return gSpeciesNameLongMiniorGreen;
+        case SPECIES_MINIOR_METEOR_BLUE:
+            return gSpeciesNameLongMiniorBlue;
+        case SPECIES_MINIOR_METEOR_INDIGO:
+            return gSpeciesNameLongMiniorIndigo;
+        case SPECIES_MINIOR_METEOR_VIOLET:
+            return gSpeciesNameLongMiniorViolet;
 
         default:
             return NULL;

@@ -4379,6 +4379,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
     {
         if (GetBattlerAbility(battler) == sHpTransformations[i][0] || BattlerHasInnate(battler, sHpTransformations[i][0]))
         {
+            if (sHpTransformations[i][0] == ABILITY_SCHOOLING && gBattleMons[battler].level < 20) continue;
             if (gBattleMons[battler].species == sHpTransformations[i][2]
                 && gBattleMons[battler].hp > gBattleMons[battler].maxHP / sHpTransformations[i][3])
             {

@@ -2641,6 +2641,8 @@ static u8 DisplaySelectionWindow(u8 windowType)
     u8 fontAttribute;
     u8 i, j, k;
     u8 font = FONT_SMALL_NARROW;
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
 
     switch (windowType)
     {
@@ -2684,8 +2686,6 @@ static u8 DisplaySelectionWindow(u8 windowType)
 
 
         if(sPartyMenuInternal->actions[i] == MENU_MEGA_STONE || sPartyMenuInternal->actions[i] == MENU_MEGA_STONE_2){
-            struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
-            u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
             u16 megaEvoItem = ITEM_NONE;
 
             for (k = 0; k < EVOS_PER_MON; k++)
@@ -2704,20 +2704,18 @@ static u8 DisplaySelectionWindow(u8 windowType)
             AddTextPrinterParameterized4(sPartyMenuInternal->windowId[0], font, cursorDimension, (i * 16) + 1, fontAttribute, 0, sFontColorTable[fontColorsId], 0xFF, ItemId_GetName(megaEvoItem));
         }
         else if(sPartyMenuInternal->actions[i] >= MENU_FORM_CHANGE){
-            struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
             u8 j = (sPartyMenuInternal->actions[i] - MENU_FORM_CHANGE);
             u16 targetspecies = GetFormChangeForMon(mon, j);
 
             AddTextPrinterParameterized4(sPartyMenuInternal->windowId[0], font, cursorDimension, (i * 16) + 1, fontAttribute, 0, sFontColorTable[fontColorsId], 0, SaveSpeciesWithSurname(targetspecies));
         }
         else if(sPartyMenuInternal->actions[i] >= MENU_EVOLUTIONS){
-            struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
             u8 j = (sPartyMenuInternal->actions[i] - MENU_EVOLUTIONS);
             u16 targetspecies = GetEvolutionForMon(mon, j);
 
             AddTextPrinterParameterized4(sPartyMenuInternal->windowId[0], font, cursorDimension, (i * 16) + 1, fontAttribute, 0, sFontColorTable[fontColorsId], 0, SaveSpeciesWithSurname(targetspecies));
         }
-        else if(IsEeveelution(GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES)) && sPartyMenuInternal->actions[i] == MENU_SUB_EVOLUTION){
+        else if((IsEeveelution(species) || species == SPECIES_NECROZMA_DUSK_MANE || species == SPECIES_NECROZMA_DAWN_WINGS) && sPartyMenuInternal->actions[i] == MENU_SUB_EVOLUTION){
             AddTextPrinterParameterized4(sPartyMenuInternal->windowId[0], font, cursorDimension, (i * 16) + 1, fontAttribute, 0, sFontColorTable[fontColorsId], 0, gText_De_Evolution);
         }
         else
@@ -6622,6 +6620,8 @@ static u16 GetEvolutionForMon(struct Pokemon *mon, u8 num){
     //Eevee is handled similar to evolution but will be handled separately, I need to add an special animation for de-evolution
     if(IsEeveelution(species) && num == 0)
         return SPECIES_EEVEE;
+
+    if ((species == SPECIES_NECROZMA_DUSK_MANE || species == SPECIES_NECROZMA_DAWN_WINGS) && num == 0) return SPECIES_NECROZMA;
 	
     switch(gEvolutionTable[species][i].method)
     {

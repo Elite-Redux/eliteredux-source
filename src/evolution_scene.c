@@ -35,6 +35,7 @@
 #include "constants/songs.h"
 #include "constants/rgb.h"
 #include "constants/items.h"
+#include "constants/species.h"
 
 struct EvoInfo
 {
@@ -678,7 +679,7 @@ static void Task_EvolutionScene(u8 taskId)
     case EVOSTATE_INTRO_MSG:
         if (!gPaletteFade.active)
         {
-            if(IsEeveelution(species))
+            if(gTasks[taskId].tPostEvoSpecies == SPECIES_EEVEE || gTasks[taskId].tPostEvoSpecies == SPECIES_NECROZMA)
                 StringExpandPlaceholders(gStringVar4, gText_PkmnIsDeEvolving);
             else
                 StringExpandPlaceholders(gStringVar4, gText_PkmnIsEvolving);
@@ -778,7 +779,7 @@ static void Task_EvolutionScene(u8 taskId)
     case EVOSTATE_SET_MON_EVOLVED:
         if (IsCryFinished())
         {
-            if(IsEeveelution(species))
+            if(gTasks[taskId].tPostEvoSpecies == SPECIES_EEVEE || gTasks[taskId].tPostEvoSpecies == SPECIES_NECROZMA)
                 StringExpandPlaceholders(gStringVar4, gText_CongratsPkmnDeEvolved);
             else
                 StringExpandPlaceholders(gStringVar4, gText_CongratsPkmnEvolved);
@@ -867,7 +868,7 @@ static void Task_EvolutionScene(u8 taskId)
             if (gTasks[taskId].tEvoWasStopped) //FRLG leftovers can be removed or expanded
                 StringExpandPlaceholders(gStringVar4, gText_EllipsisQuestionMark);
             else{
-                if(IsEeveelution(species))
+                if(gTasks[taskId].tPostEvoSpecies == SPECIES_EEVEE || gTasks[taskId].tPostEvoSpecies == SPECIES_NECROZMA)
                     StringExpandPlaceholders(gStringVar4, gText_PkmnStoppedDeEvolving);
                 else
                     StringExpandPlaceholders(gStringVar4, gText_PkmnStoppedEvolving);
