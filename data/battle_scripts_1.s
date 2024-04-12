@@ -7888,6 +7888,7 @@ BattleScript_GulpMissileGorging::
 	getbattlerfainted BS_ATTACKER
 	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_GulpMissileNoSecondEffectGorging
 BattleScript_GulpMissileNoDmgGorging:
+	jumpifabsent BS_TARGET, BattleScript_Return
 	handleformchange BS_TARGET, 0
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
@@ -7922,6 +7923,7 @@ BattleScript_GulpMissileGulping::
 	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_GulpMissileNoSecondEffectGulping
 	jumpifflowerveilattacker BattleScript_GulpMissileNoSecondEffectGulping
 BattleScript_GulpMissileNoDmgGulping:
+	jumpifabsent BS_TARGET, BattleScript_Return
 	handleformchange BS_TARGET, 0
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
@@ -12219,11 +12221,13 @@ BattleScript_EffectDragonCheer::
 	waitmessage B_WAIT_TIME_LONG
 	setdragoncheer BS_ATTACKER_PARTNER, BattleScript_MoveEnd
 BattleScript_EffectDragonCheer_DoPartner:
+	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_MoveEnd
 	getbattler BS_ATTACKER_PARTNER
 	printfromtable gFocusEnergyUsedStringIds
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 BattleScript_EffectDragonCheer_PartnerOnly:
+	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_ButItFailed
 	setdragoncheer BS_ATTACKER_PARTNER, BattleScript_ButItFailed
 	attackanimation
 	waitanimation
@@ -12234,17 +12238,37 @@ BattleScript_EffectShelter::
 	attackstring
 	ppreduce
 	jumpifstat BS_ATTACKER, CMP_NOT_EQUAL, STAT_DEF, MAX_STAT_STAGE, BattleScript_EffectShelter_Works
+	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_ButItFailed
 	jumpifstat BS_ATTACKER_PARTNER, CMP_EQUAL, STAT_DEF, MAX_STAT_STAGE, BattleScript_ButItFailed
-BattleScript_EffectShelter_Works:
+BattleScript_EffectShelter_Works:	
 	attackanimation
 	waitanimation
-	setmoveeffect MOVE_EFFECT_DEF_PLUS_2 | MOVE_EFFECT_AFFECTS_USER
-	seteffectprimary
+	setstatchanger STAT_DEF, 2, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_ShelterPrintString
+	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_ShelterDoAnim
+	pause B_WAIT_TIME_SHORT
+	goto BattleScript_ShelterPrintString
+BattleScript_ShelterDoAnim::
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+BattleScript_ShelterPrintString::
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_ShelterPartner:
+	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_MoveEnd
 	savetargettostack4
 	getbattler BS_ATTACKER_PARTNER
 	copybyte gBattlerTarget, sBATTLER
-	setmoveeffect MOVE_EFFECT_DEF_PLUS_2
-	seteffectprimary
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_ShelterPrintStringParnter
+	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_ShelterDoAnimPartner
+	pause B_WAIT_TIME_SHORT
+	goto BattleScript_ShelterPrintString
+BattleScript_ShelterDoAnimPartner::
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+BattleScript_ShelterPrintStringParnter::
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
 	readtargetfromstack4
 	goto BattleScript_MoveEnd
 

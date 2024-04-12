@@ -7237,7 +7237,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_GULP_MISSILE))
         {
             u16 species = gBattleMons[gBattlerTarget].species;
-            if (ShouldApplyOnHitAffect(battler) && (species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING))
+            if (ShouldApplyOnHitAffect(gBattlerAttacker) && (species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING))
             {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_GULP_MISSILE;
                 gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = species;
