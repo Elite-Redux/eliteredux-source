@@ -35028,6 +35028,7 @@ const struct BaseStats gBaseStats[] =
         .innates = { ABILITY_STICKY_HOLD, ABILITY_SHELL_ARMOR, ABILITY_AROMA_VEIL},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
+        .flags = F_THREE_HEADED,
     },
 
     [SPECIES_POLTCHAGEIST] =
