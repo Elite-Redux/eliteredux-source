@@ -17743,7 +17743,7 @@ static const struct TrainerMonItemCustomMoves sParty_Flannery1Insane[] = {
     .ability = 1,
     .evs = {252, 0, 0, 252, 0, 4},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_ICE_FANG, MOVE_FIRE_FANG, MOVE_EXTREME_SPEED, MOVE_THUNDER_FANG
+    .moves = MOVE_ICE_FANG, MOVE_SACRED_FIRE, MOVE_EXTREME_SPEED, MOVE_THUNDER_FANG
     },
     {
     .lvl = 0,
