@@ -15231,7 +15231,7 @@ bool32 CanMegaEvolve(u8 battlerId)
 void UndoMegaEvolution(u32 monId)
 {
     u16 species = GetMonData(&gPlayerParty[monId], MON_DATA_SPECIES);
-    u16 baseSpecies = getBaseSpeciesFromMega(species);
+    u16 baseSpecies = gBattleStruct->mega.playerBaseSpecies[monId];
     bool8 multibattle = VarGet(VAR_0x8004) == SPECIAL_BATTLE_MULTI;
 
     if(gSaveBlock2Ptr->permanentMegaMode && species != SPECIES_ZYGARDE_COMPLETE)

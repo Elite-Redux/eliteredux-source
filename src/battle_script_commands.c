@@ -9593,6 +9593,10 @@ static void Cmd_various(void)
         {
             u16 megaSpecies;
             gBattleStruct->mega.evolvedSpecies[gActiveBattler] = gBattleMons[gActiveBattler].species;
+            if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+            {
+                gBattleStruct->mega.playerBaseSpecies[gBattlerPartyIndexes[gActiveBattler]] = gBattleMons[gActiveBattler].species;
+            }
             if (GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_LEFT
                 || (GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_RIGHT && !(gBattleTypeFlags & (BATTLE_TYPE_MULTI | BATTLE_TYPE_INGAME_PARTNER))))
             {
@@ -9644,6 +9648,10 @@ static void Cmd_various(void)
         {
             u16 primalSpecies;
             gBattleStruct->mega.primalRevertedSpecies[gActiveBattler] = gBattleMons[gActiveBattler].species;
+            if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+            {
+                gBattleStruct->mega.playerBaseSpecies[gBattlerPartyIndexes[gActiveBattler]] = gBattleMons[gActiveBattler].species;
+            }
 
             if (GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_LEFT
                 || (GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_RIGHT && !(gBattleTypeFlags & (BATTLE_TYPE_MULTI | BATTLE_TYPE_INGAME_PARTNER))))

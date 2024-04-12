@@ -887,6 +887,13 @@ u16 getHallofFameSpecies(u8 num){
                     return SPECIES_RAYQUAZA_MEGA;
             }
         break;
+        case SPECIES_NECROZMA_DAWN_WINGS:
+        case SPECIES_NECROZMA_DUSK_MANE:
+            for(i = 0; i < MAX_MON_MOVES; i++){
+                if(GetMonData(&gPlayerParty[num], MON_DATA_MOVE1 + i) == MOVE_PHOTON_GEYSER)
+                    return SPECIES_NECROZMA_ULTRA;
+            }
+            break;
         case SPECIES_DARMANITAN_GALARIAN:
         case SPECIES_DARMANITAN:
             if(GetAbilityBySpecies(species, GetMonData(&gPlayerParty[num], MON_DATA_ABILITY_NUM)) == ABILITY_ZEN_MODE ||
