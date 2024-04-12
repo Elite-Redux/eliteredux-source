@@ -10459,7 +10459,7 @@ BattleScript_StickyHoldActivates::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNSXMADEYINEFFECTIVE
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_ColorChangeActivates::
 	sethword sABILITY_OVERWRITE, ABILITY_COLOR_CHANGE

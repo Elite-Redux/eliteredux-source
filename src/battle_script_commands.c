@@ -14808,9 +14808,11 @@ static void Cmd_tryswapitems(void) // trick
         // check if ability prevents swapping
         else if ((GetBattlerAbility(gBattlerTarget) == ABILITY_STICKY_HOLD || BattlerHasInnate(gBattlerTarget, ABILITY_STICKY_HOLD)))
         {
-            gBattlescriptCurrInstr = BattleScript_StickyHoldActivates;
             gLastUsedAbility = gBattleMons[gBattlerTarget].ability;
             RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
+            gBattlescriptCurrInstr = BattleScript_MoveEnd;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_StickyHoldActivates;
         }
         // took a while, but all checks passed and items can be safely swapped
         else
