@@ -3193,7 +3193,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
         {
         case STATUS1_SLEEP:
             // check active uproar
-            MGBA_PRINT_DEBUG("Trying to sleep %d", gEffectBattler)
             if (!IsSoundproof(gActiveBattler))
             {
                 for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
@@ -3201,8 +3200,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 
                 if (gActiveBattler != gBattlersCount) break;
             }
-
-            MGBA_PRINT_DEBUG("Can sleep %d", CanSleep(gEffectBattler))
             
             if (!CanSleep(gEffectBattler))
                 break;
@@ -3621,7 +3618,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 }
                 break;
             case MOVE_EFFECT_WRAP:
-                if (!gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED)
+                if (!(gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED))
                 {
                     bool8 hasGrappler = BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_GRAPPLER);
                     bool8 hasGripClaw = GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_GRIP_CLAW;
@@ -3638,9 +3635,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gBattleStruct->wrappedMove[gEffectBattler] = gCurrentMove;
                     gBattleStruct->wrappedBy[gEffectBattler] = gBattlerAttacker;
 
-                    BattleScriptPush(gBattlescriptCurrInstr);
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
-
                     for (gBattleCommunication[MULTISTRING_CHOOSER] = 0; ; gBattleCommunication[MULTISTRING_CHOOSER]++)
                     {
                         if (gBattleCommunication[MULTISTRING_CHOOSER] > ARRAY_COUNT(sTrappingMoves) - 1)
@@ -3648,6 +3642,9 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         if (sTrappingMoves[gBattleCommunication[MULTISTRING_CHOOSER]] == gCurrentMove)
                             break;
                     }
+
+                    BattleScriptPush(gBattlescriptCurrInstr);
+                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
                 }
                 break;
             case MOVE_EFFECT_ATK_PLUS_1:

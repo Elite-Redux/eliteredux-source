@@ -168,6 +168,7 @@ enum
     STATUS_INFO_READIED_ACTION,
     STATUS_INFO_SHOWDOWN_MODE,
     STATUS_INFO_DRAGON_CHEER,
+    STATUS_INFO_WRAPPED,
     NUM_STATUS_INFO,
 };
 
@@ -853,6 +854,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 break;
                 case STATUS_INFO_SHOWDOWN_MODE:
                     if (gVolatileStructs[j].showdownMode)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_WRAPPED:
+                    if (gBattleMons[j].status2 & STATUS2_WRAPPED)
                         isExtraInfoShown = TRUE;
                 break;
             }
@@ -2039,7 +2044,7 @@ const u8 sText_Title_Status_Bide_Description[]             = _("Will be unable t
                                                                "twice the damage it receives.");
 const u8 sText_Title_Status_Infuation[]                    = _("Infuated with {STR_VAR_1}");
 const u8 sText_Title_Status_Infuation_Description[]        = _("Reduces the dmg done to the target\n"
-                                                               "of it's infuation, it will end\n"
+                                                               "of its infuation, it will end\n"
                                                                "when any of the two gets switched.");
 const u8 sText_Title_Status_Focus_Energy[]                 = _("Focus Energy");
 const u8 sText_Title_Status_Focus_Energy_Description[]     = _("Increases critical hit rate by two\n"
@@ -2074,7 +2079,7 @@ const u8 sText_Title_Status_Torment_Description[]          = _("Is prevented fro
                                                                "move twice in a row, the effect\n"
                                                                "lasts until the Pokémon leaves.");
 const u8 sText_Title_Status_Leech_Seed_Target[]             = _("Seeded by {STR_VAR_1}");
-const u8 sText_Title_Status_Leech_Seed_Target_Description[] = _("Some of it's HP get's stolen\n"
+const u8 sText_Title_Status_Leech_Seed_Target_Description[] = _("Some of its HP gets stolen\n"
                                                                 "every turn, the effect lasts\n"
                                                                 "until the Pokémon leaves.");
 const u8 sText_Title_Status_Leech_Seed_User[]              = _("Seeded {STR_VAR_1}");
@@ -2094,7 +2099,7 @@ const u8 sText_Title_Status_Charge_Description[]           = _("The user's next 
                                                                "move will deal twice the usual\n"
                                                                "amount of damage.");
 const u8 sText_Title_Status_Rooted[]                       = _("Rooted");
-const u8 sText_Title_Status_Rooted_Description[]           = _("It will restore 1/16 of it's max\n"
+const u8 sText_Title_Status_Rooted_Description[]           = _("It will restore 1/16 of its max\n"
                                                                "HP at the end of every turn, it is\n"
                                                                "unable to escape or switch out.");
 const u8 sText_Title_Status_Yawn[]                         = _("Drowsy");
@@ -2121,7 +2126,7 @@ const u8 sText_Title_Status_Gastro_Acid_Description[]      = _("The Ability for 
 #endif
 const u8 sText_Title_Status_Embargo[]                      = _("Held Effect Negated");
 const u8 sText_Title_Status_Embargo_Description[]          = _("This Pokémon will be unable to\n"
-                                                               "use it's held item for some\n"
+                                                               "use its held item for some\n"
                                                                "turns.");
 const u8 sText_Title_Status_Smack_Down[]                   = _("Grounded");
 const u8 sText_Title_Status_Smack_Down_Description[]       = _("Ground moves will hit this\n"
@@ -2185,6 +2190,10 @@ const u8 sText_Title_Status_Showdown_Mode[]                 = _("Showdown Mode")
 const u8 sText_Title_Status_Showdown_Mode_Description[]     = _("This Pokémon's gets +50%\n"
                                                                 "Speed, +20% Attack, and always\n"
                                                                 "crits for one turn.");
+const u8 sText_Title_Status_Trapped[]                       = _("Trapped");
+const u8 sText_Title_Status_Trapped_Description[]           = _("This Pokémon can't swap and\n"
+                                                                "takes 1/8 of their maximum HP\n"
+                                                                "in damage for some turns.");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
 #define MAX_DESCRIPTION_LINES 3
@@ -2792,6 +2801,14 @@ static void PrintStatusTab(void){
                 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Status_Showdown_Mode_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            case STATUS_INFO_WRAPPED:
+                StringCopy(gStringVar1, sText_Title_Status_Trapped);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                StringCopy(gStringVar1, sText_Title_Status_Trapped_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;

@@ -10067,12 +10067,8 @@ bool32 CanSleep(u8 battlerId)
 {
     u16 ability = GetBattlerAbility(battlerId);
 
-    MGBA_PRINT_DEBUG("Battler %d status %d mycelium active %d", battlerId, gBattleMons[battlerId].status1, IsMyceliumMightActive(gBattlerAttacker))
-
     if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
-
-    MGBA_PRINT_DEBUG("Can get status %d", CanGetStatus(battlerId))
 
     if (CanGetStatus(battlerId)) return FALSE;
 
