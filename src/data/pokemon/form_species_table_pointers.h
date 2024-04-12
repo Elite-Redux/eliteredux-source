@@ -785,12 +785,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_TATSUGIRI_STRETCHY] = sTatsugiriFormSpeciesIdTable,
     [SPECIES_TATSUGIRI_DROOPY] = sTatsugiriFormSpeciesIdTable,
 
-    [SPECIES_SQUAWKABILLY_BLUE_PLUMAGE] = sSquawkabilly_Green_PlumageFormSpeciesIdTable,
-
-    [SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE] = sSquawkabilly_Green_PlumageFormSpeciesIdTable,
-
-    [SPECIES_SQUAWKABILLY_WHITE_PLUMAGE] = sSquawkabilly_Green_PlumageFormSpeciesIdTable,
-
     [SPECIES_OGERPON_WELLSPRING_MASK] = sOgerponFormSpeciesIdTable,
 
     [SPECIES_OGERPON_CORNERSTONE_MASK] = sOgerponFormSpeciesIdTable,
@@ -819,5 +813,10 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_WOOPER_PALDEAN] = sWooperFormSpeciesIdTable,
 
     [SPECIES_ZOROARK_HISUIAN] = sZoroarkFormSpeciesIdTable,
+
+    [SPECIES_SQUAWKABILLY] = sSquawkabillyFormSpeciesIdTable,
+    [SPECIES_SQUAWKABILLY_BLUE_PLUMAGE] = sSquawkabillyFormSpeciesIdTable,
+    [SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE] = sSquawkabillyFormSpeciesIdTable,
+    [SPECIES_SQUAWKABILLY_WHITE_PLUMAGE] = sSquawkabillyFormSpeciesIdTable,
 
 };

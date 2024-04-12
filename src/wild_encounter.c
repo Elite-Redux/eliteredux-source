@@ -493,47 +493,71 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
     species = MaybeFindSpecialMon(area);
     if (!species) species = wildMonInfo->wildPokemon[wildMonIndex].species;
 
-    if (species == SPECIES_MINIOR)
+    switch (species)
     {
-        switch (Random() % 7)
-        {
-            case 0:
-                break;
-            case 1:
-                species = SPECIES_MINIOR_METEOR_ORANGE;
-                break;
-            case 2:
-                species = SPECIES_MINIOR_METEOR_YELLOW;
-                break;
-            case 3:
-                species = SPECIES_MINIOR_METEOR_GREEN;
-                break;
-            case 4:
-                species = SPECIES_MINIOR_METEOR_BLUE;
-                break;
-            case 5:
-                species = SPECIES_MINIOR_METEOR_INDIGO;
-                break;
-            case 6:
-                species = SPECIES_MINIOR_METEOR_VIOLET;
-                break;
-        }
-    }
+        case SPECIES_MINIOR:
+            switch (Random() % 7)
+            {
+                case 0:
+                    break;
+                case 1:
+                    species = SPECIES_MINIOR_METEOR_ORANGE;
+                    break;
+                case 2:
+                    species = SPECIES_MINIOR_METEOR_YELLOW;
+                    break;
+                case 3:
+                    species = SPECIES_MINIOR_METEOR_GREEN;
+                    break;
+                case 4:
+                    species = SPECIES_MINIOR_METEOR_BLUE;
+                    break;
+                case 5:
+                    species = SPECIES_MINIOR_METEOR_INDIGO;
+                    break;
+                case 6:
+                    species = SPECIES_MINIOR_METEOR_VIOLET;
+                    break;
+            }
+            break;
+        case SPECIES_TATSUGIRI:
+            switch (Random() % 3)
+            {
+                case 0:
+                    species = SPECIES_TATSUGIRI_CURLY;
+                    break;
+                case 1:
+                    species = SPECIES_TATSUGIRI_DROOPY;
+                    break;
+                case 2:
+                    species = SPECIES_TATSUGIRI_STRETCHY;
+                    break;
+            }
+            break;
+        case SPECIES_SHELLOS:
+            if (Random() % 2) species == SPECIES_SHELLOS_EAST_SEA;
+            break;
+        case SPECIES_GASTRODON:
+            if (Random() % 2) species == SPECIES_GASTRODON_EAST_SEA;
+            break;
+        case SPECIES_SQUAWKABILLY:
+            switch (Random() % 4)
+            {
+                case 0:
+                    species = SPECIES_SQUAWKABILLY;
+                    break;
+                case 1:
+                    species = SPECIES_SQUAWKABILLY_BLUE_PLUMAGE;
+                    break;
+                case 2:
+                    species = SPECIES_SQUAWKABILLY_WHITE_PLUMAGE;
+                    break;
+                case 3:
+                    species = SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE;
+                    break;
+            }
+            break;
 
-    else if (species == SPECIES_TATSUGIRI)
-    {
-        switch (Random() % 3)
-        {
-            case 0:
-                species = SPECIES_TATSUGIRI_CURLY;
-                break;
-            case 1:
-                species = SPECIES_TATSUGIRI_DROOPY;
-                break;
-            case 2:
-                species = SPECIES_TATSUGIRI_STRETCHY;
-                break;
-        }
     }
 
     CreateWildMon(species, level);

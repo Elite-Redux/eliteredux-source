@@ -798,4 +798,15 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                         {EVO_FORM_SHIFT, 1, SPECIES_MINIOR_METEOR_ORANGE},
                         {EVO_FORM_SHIFT, 1, SPECIES_MINIOR_METEOR_VIOLET},
                         {EVO_FORM_SHIFT, 1, SPECIES_MINIOR_METEOR_YELLOW},},
+
+    [SPECIES_SHELLOS] = {{EVO_FORM_SHIFT, 1, SPECIES_SHELLOS},
+                            {EVO_FORM_SHIFT, 1, SPECIES_SHELLOS_EAST_SEA},},
+                        
+    [SPECIES_GASTRODON] = {{EVO_FORM_SHIFT, 1, SPECIES_GASTRODON},
+                            {EVO_FORM_SHIFT, 1, SPECIES_GASTRODON_EAST_SEA},},
+                            
+    [SPECIES_SQUAWKABILLY] = {{EVO_FORM_SHIFT, 1, SPECIES_SQUAWKABILLY},
+                                {EVO_FORM_SHIFT, 1, SPECIES_SQUAWKABILLY_BLUE_PLUMAGE},
+                                {EVO_FORM_SHIFT, 1, SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE},
+                                {EVO_FORM_SHIFT, 1, SPECIES_SQUAWKABILLY_WHITE_PLUMAGE},},
 };

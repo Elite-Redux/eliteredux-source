@@ -6903,10 +6903,6 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
     u16 upperPersonality = personality >> 16;
     u8 holdEffect;
     u16 currentMap;
-    u16 actualSpecies = species;
-    u16 formSpecies = GetFormShiftSpecies(species);
-
-    if (formSpecies) species = formSpecies;
 
     if (heldItem == ITEM_ENIGMA_BERRY){
         #ifndef FREE_ENIGMA_BERRY
@@ -7127,7 +7123,6 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
             case EVO_ITEM:
                 if (gEvolutionTable[species][i].param == evolutionItem)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
-                if (targetSpecies == actualSpecies) continue;
                 break;
             case EVO_ITEM_FEMALE:
                 if (GetMonGender(mon) == MON_FEMALE && gEvolutionTable[species][i].param == evolutionItem)
@@ -10176,6 +10171,16 @@ const u8 gSpeciesNameLongMiniorBlue[] = _("Minior Blue");
 const u8 gSpeciesNameLongMiniorIndigo[] = _("Minior Indigo");
 const u8 gSpeciesNameLongMiniorViolet[] = _("Minior Violet");
 
+const u8 gSpeciesNameLongShellosEast[] = _("East Shellos");
+const u8 gSpeciesNameLongShellosWest[] = _("West Shellos");
+const u8 gSpeciesNameLongGastrodonEast[] = _("East Gastrodon");
+const u8 gSpeciesNameLongGastrodonWest[] = _("West Gastrodon");
+
+const u8 gSpeciesNameLongSquawkabillyGreen[] = _("Squawk Green");
+const u8 gSpeciesNameLongSquawkabillyBlue[] = _("Squawk Blue");
+const u8 gSpeciesNameLongSquawkabillyYellow[] = _("Squawk Yellow");
+const u8 gSpeciesNameLongSquawkabillyWhite[] = _("Squawk White");
+
 const u8* GetSpeciesLongName(u16 species)
 {
     switch (species)
@@ -10273,6 +10278,24 @@ const u8* GetSpeciesLongName(u16 species)
             return gSpeciesNameLongMiniorIndigo;
         case SPECIES_MINIOR_METEOR_VIOLET:
             return gSpeciesNameLongMiniorViolet;
+        
+        case SPECIES_SHELLOS:
+            return gSpeciesNameLongShellosWest;
+        case SPECIES_SHELLOS_EAST_SEA:
+            return gSpeciesNameLongShellosEast;
+        case SPECIES_GASTRODON:
+            return gSpeciesNameLongGastrodonWest;
+        case SPECIES_GASTRODON_EAST_SEA:
+            return gSpeciesNameLongGastrodonEast;
+
+        case SPECIES_SQUAWKABILLY:
+            return gSpeciesNameLongSquawkabillyGreen;
+        case SPECIES_SQUAWKABILLY_BLUE_PLUMAGE:
+            return gSpeciesNameLongSquawkabillyBlue;
+        case SPECIES_SQUAWKABILLY_WHITE_PLUMAGE:
+            return gSpeciesNameLongSquawkabillyWhite;
+        case SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE:
+            return gSpeciesNameLongSquawkabillyYellow;
 
         default:
             return NULL;

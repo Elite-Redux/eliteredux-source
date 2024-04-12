@@ -6610,10 +6610,6 @@ static u16 GetEvolutionForMon(struct Pokemon *mon, u8 num){
     u8 beauty = GetMonData(mon, MON_DATA_BEAUTY, 0);
     u16 *targetFormId;
     u16 targetSpecies, currentMap;
-    u16 actualSpecies = species;
-    u16 formShiftSpecies = GetFormShiftSpecies(species);
-    
-    if (formShiftSpecies) species = formShiftSpecies;
 
     i = num;
 
