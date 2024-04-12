@@ -3193,7 +3193,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
         {
         case STATUS1_SLEEP:
             // check active uproar
-            if (!IsSoundproof(gActiveBattler))
+            if (!IsSoundproof(gEffectBattler))
             {
                 for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
                     if (gBattleMons[gActiveBattler].status2 & STATUS2_UPROAR) break;

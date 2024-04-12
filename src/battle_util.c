@@ -10070,7 +10070,7 @@ bool32 CanSleep(u8 battlerId)
     if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
 
-    if (CanGetStatus(battlerId)) return FALSE;
+    if (!CanGetStatus(battlerId)) return FALSE;
 
     if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_INSOMNIA, ability)
       || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_VITAL_SPIRIT, ability)
