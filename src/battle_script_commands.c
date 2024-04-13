@@ -15270,10 +15270,7 @@ static void Cmd_switchoutabilities(void)
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     gRoundStructs[gActiveBattler].protectedThisTurn = FALSE;
 
-    count = GetSingleUseAbilityCounter(gActiveBattler, ABILITY_ZERO_TO_HERO);
-    if (count == 0) {
-        SetSingleUseAbilityCounter(gActiveBattler, ABILITY_ZERO_TO_HERO, TRUE);
-    }
+    SetSingleUseAbilityCounter(gActiveBattler, ABILITY_ZERO_TO_HERO, TRUE);
 
     if (gBattleMons[gActiveBattler].ability == ABILITY_NEUTRALIZING_GAS || (BattlerHasInnate(gActiveBattler, ABILITY_NEUTRALIZING_GAS) && gBattleMons[gActiveBattler].ability != ABILITY_NONE))
     {

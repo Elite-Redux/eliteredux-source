@@ -4502,19 +4502,6 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 		}
 	}
 
-    if (gBattleMons[battler].species == SPECIES_PALAFIN && 
-	          BATTLER_HAS_ABILITY(battler, ABILITY_ZERO_TO_HERO) &&
-		      gBattleMons[battler].hp != 0 &&
-		      GetSingleUseAbilityCounter(battler, ABILITY_ZERO_TO_HERO)){
-        {
-            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ZERO_TO_HERO;
-            gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_PALAFIN_HERO);
-            gBattleMons[battler].species = SPECIES_PALAFIN_HERO;
-			return TRUE;
-		}
-	}
-
     return FALSE;
 }
 
@@ -5156,6 +5143,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         break;
     case ABILITYEFFECT_ON_SWITCHIN: // 0
         gBattleScripting.battler = battler;
+
+        if (GetSingleUseAbilityCounter(battler, ABILITY_ZERO_TO_HERO)
+            && gBattleMons[battler].species == SPECIES_PALAFIN)
+        {
+            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_PALAFIN_HERO);
+            gBattleMons[battler].species = SPECIES_PALAFIN_HERO;
+            BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+            effect++;
+        }
 
         if (CheckAndSetSwitchInAbility(battler, ABILITY_ANTICIPATION))
         {
@@ -9212,7 +9208,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     case ABILITYEFFECT_FORECAST: // 6
         for (battler = 0; battler < gBattlersCount; battler++)
         {
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_FORECAST) || BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT) || BATTLER_HAS_ABILITY(battler, ABILITY_ZERO_TO_HERO))
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_FORECAST) || BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT))
             {
                 if (ShouldChangeFormHpBased(battler))
                 {
