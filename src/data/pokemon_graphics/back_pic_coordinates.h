@@ -5564,7 +5564,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_PALAFIN_HERO] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  1
     },
     [SPECIES_URSALUNA_BLOODMOON] =
     {
