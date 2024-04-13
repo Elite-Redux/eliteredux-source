@@ -6064,7 +6064,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_NIDOKING_MEGA] =
     {
         .size = 0x87,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_NIDOQUEEN_MEGA] =
     {
