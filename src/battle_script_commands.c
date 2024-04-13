@@ -12919,7 +12919,7 @@ static void Cmd_jumpifabilityonside(void) // King's wrath + intimidate
     u32 ability = T2_READ_16(gBattlescriptCurrInstr + 2);
     u32 abilityBattlerId = 0;
 
-    abilityBattlerId = IsAbilityOnSide(gBattlerAttacker, ability);
+    abilityBattlerId = IsAbilityOnSide(battlerId, ability);
     if (abilityBattlerId)
     {
         abilityBattlerId--;
@@ -12928,7 +12928,7 @@ static void Cmd_jumpifabilityonside(void) // King's wrath + intimidate
 
     if (hasAbility)
     {
-        gLastUsedAbility = ability;
+        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ability;
         gBattlescriptCurrInstr = T2_READ_PTR(gBattlescriptCurrInstr + 4);
         RecordAbilityBattle(abilityBattlerId, gLastUsedAbility);
         gBattlerAbility = abilityBattlerId;
