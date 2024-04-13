@@ -2313,3 +2313,33 @@
 twoturnmoveacceleratecheck_\@:
 	setbyte sACCELERATED_TWO_TURN, 1
 	.endm
+
+	.macro checkstatbuffonlowered
+	jumpifability BS_TARGET, ABILITY_COMPETITIVE,           checkstatbuffonlowered_competitive_\@
+	jumpifability BS_TARGET, ABILITY_DEFIANT,               checkstatbuffonlowered_defiant_\@
+	jumpifability BS_TARGET, ABILITY_CONTEMPT,              checkstatbuffonlowered_defiant_\@
+	jumpifability BS_TARGET, ABILITY_FORT_KNOX,             checkstatbuffonlowered_fortknox_\@
+	jumpifability BS_TARGET, ABILITY_RUN_AWAY,              checkstatbuffonlowered_runaway_\@
+	jumpifabilityonside BS_TARGET, ABILITY_KINGS_WRATH,     checkstatbuffonlowered_kingswrath_\@
+	jumpifabilityonside BS_TARGET, ABILITY_QUEENS_MOURNING, checkstatbuffonlowered_queensmourning_\@
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_competitive_\@:
+	call BattleScript_CompetitiveActivates
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_defiant_\@:
+	call BattleScript_DefiantActivates
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_fortknox_\@:
+	call BattleScript_FortKnoxActivates
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_runaway_\@:
+	call BattleScript_RunAwayActivates
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_kingswrath_\@:
+	call BattleScript_KingsWrathActivated
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_queensmourning_\@:
+	call BattleScript_QueensMourningActivated
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_none_\@:
+	.endm

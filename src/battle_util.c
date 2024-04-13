@@ -1387,6 +1387,7 @@ void PrepareStringBattle(u16 stringId, u8 battler)
 {
     bool8 hasContrary = BATTLER_HAS_ABILITY(battler, ABILITY_CONTRARY);
     bool8 targetHasContrary = BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_CONTRARY);
+    u8 abilityBattler;
 
     //Overwrite
     if(VarGet(VAR_TEMP_BATTLE_STRING_OVERWRITE_1) != 0){
@@ -1424,15 +1425,14 @@ void PrepareStringBattle(u16 stringId, u8 battler)
     else if (stringId == STRINGID_PKMNCUTSSTATWITHINTIMIDATECLONE3 && (targetHasContrary || BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_GUARD_DOG)))
         stringId = STRINGID_PKMNRAISESSTATWITHINTIMIDATECLONE3;
     else if((stringId == STRINGID_DEFENDERSSTATFELL) &&
-            (GetBattlerAbility(gBattlerTarget) == ABILITY_KINGS_WRATH                 || BattlerHasInnate(gBattlerTarget, ABILITY_KINGS_WRATH) || 
-             GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)) == ABILITY_KINGS_WRATH || BattlerHasInnate(BATTLE_PARTNER(gBattlerTarget), ABILITY_KINGS_WRATH)) &&
-             gTurnStructs[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget) &&
-             gTurnStructs[gBattlerTarget].changedStatsBattlerId != gBattlerTarget){
+            (abilityBattler = IsAbilityOnSide(gBattlerTarget, ABILITY_KINGS_WRATH)) &&
+            gTurnStructs[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget) &&
+            gTurnStructs[gBattlerTarget].changedStatsBattlerId != gBattlerTarget){
             
             //Overwrites the Popout
 			gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_KINGS_WRATH;
             //Overwrites where it's written
-            if(GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)) == ABILITY_KINGS_WRATH || BattlerHasInnate(BATTLE_PARTNER(gBattlerTarget), ABILITY_KINGS_WRATH)){
+            if(abilityBattler - 1 != gBattlerTarget){
                 gBattleScripting.battlerPopupOverwrite = BATTLE_PARTNER(gBattlerTarget);
                 gBattlerAbility = BATTLE_PARTNER(gBattlerTarget);
             }
@@ -1443,15 +1443,14 @@ void PrepareStringBattle(u16 stringId, u8 battler)
             gBattlescriptCurrInstr = BattleScript_KingsWrathActivated;
     }
     else if((stringId == STRINGID_DEFENDERSSTATFELL) &&
-            (GetBattlerAbility(gBattlerTarget) == ABILITY_QUEENS_MOURNING                 || BattlerHasInnate(gBattlerTarget, ABILITY_QUEENS_MOURNING) || 
-             GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)) == ABILITY_QUEENS_MOURNING || BattlerHasInnate(BATTLE_PARTNER(gBattlerTarget), ABILITY_QUEENS_MOURNING)) &&
-             gTurnStructs[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget) &&
-             gTurnStructs[gBattlerTarget].changedStatsBattlerId != gBattlerTarget){
+            (abilityBattler = IsAbilityOnSide(gBattlerTarget, ABILITY_QUEENS_MOURNING)) &&
+            gTurnStructs[gBattlerTarget].changedStatsBattlerId != BATTLE_PARTNER(gBattlerTarget) &&
+            gTurnStructs[gBattlerTarget].changedStatsBattlerId != gBattlerTarget){
             
             //Overwrites the Popout
 			gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_QUEENS_MOURNING;
             //Overwrites where it's written
-            if(GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)) == ABILITY_QUEENS_MOURNING || BattlerHasInnate(BATTLE_PARTNER(gBattlerTarget), ABILITY_QUEENS_MOURNING)){
+            if(abilityBattler - 1 != gBattlerTarget){
                 gBattleScripting.battlerPopupOverwrite = BATTLE_PARTNER(gBattlerTarget);
                 gBattlerAbility = BATTLE_PARTNER(gBattlerTarget);
             }
@@ -2756,7 +2755,7 @@ u8 DoBattlerEndTurnEffects(void)
     u32 ability, i, effect = 0;
 
     if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0))
-        return;
+        return TRUE;
 
     gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_SKIP_DMG_TRACK);
     while (gBattleStruct->turnEffectsBattlerId < gBattlersCount && gBattleStruct->turnEffectsTracker <= ENDTURN_BATTLER_COUNT)
@@ -4575,7 +4574,7 @@ bool32 TryPrimalReversion(u8 battlerId)
     return FALSE;
 }
 
-void DisableSwitchInAbility(battlerId, ability)
+void DisableSwitchInAbility(u8 battlerId, u16 ability)
 {
     switch (BattlerHasInnateOrAbility(battlerId, ability))
     {
@@ -9855,13 +9854,9 @@ bool8 BattlerAbilityWasRemoved(u8 battlerId, u32 ability)
 
 u32 IsAbilityOnSide(u32 battlerId, u32 ability)
 {
-    if (IsBattlerAlive(battlerId) && GetBattlerAbility(battlerId) == ability)
+    if (BATTLER_HAS_ABILITY(battlerId, ability))
         return battlerId + 1;
-	else if (IsBattlerAlive(battlerId) && BattlerHasInnate(battlerId, ability))
-        return battlerId + 1;
-    else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && GetBattlerAbility(BATTLE_PARTNER(battlerId)) == ability)
-        return BATTLE_PARTNER(battlerId) + 1;
-	else if (IsBattlerAlive(BATTLE_PARTNER(battlerId)) && BattlerHasInnate(BATTLE_PARTNER(battlerId), ability))
+    else if (BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerId), ability))
         return BATTLE_PARTNER(battlerId) + 1;
     else
         return 0;

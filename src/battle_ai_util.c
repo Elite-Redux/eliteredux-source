@@ -1735,32 +1735,31 @@ u32 CountNegativeStatStages(u8 battlerId)
     return count;
 }
 
+bool32 LoweringStatsPointlessOrBad(u8 battlerDef, u16 defAbility)
+{
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_CONTRARY, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_CLEAR_BODY, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_WHITE_SMOKE, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_FULL_METAL_BODY, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_FORT_KNOX, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_RUN_AWAY, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_CONTEMPT, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_DEFIANT, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_COMPETITIVE, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_KINGS_WRATH, defAbility)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_QUEENS_MOURNING, defAbility)) return TRUE;
+    if (GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_CLEAR_AMULET) return TRUE;
+    return FALSE;
+}
+
 bool32 ShouldLowerAttack(u8 battlerAtk, u8 battlerDef, u16 defAbility)
 {
     if (IsAiFaster(AI_CHECK_FASTER) && (AI_THINKING_STRUCT->aiFlags & AI_FLAG_TRY_TO_FAINT) && CanAIFaintTarget(battlerAtk, battlerDef, 0))
         return FALSE; // Don't bother lowering stats if can kill enemy.
 
     if (gBattleMons[battlerDef].statStages[STAT_ATK] > 4
-      && HasMoveWithSplit(battlerDef, SPLIT_PHYSICAL)
-      && defAbility != ABILITY_CONTRARY
-      && !BattlerHasInnate(battlerDef, ABILITY_CONTRARY)
-      && defAbility != ABILITY_CLEAR_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_CLEAR_BODY)
-      && defAbility != ABILITY_WHITE_SMOKE
-      && !BattlerHasInnate(battlerDef, ABILITY_WHITE_SMOKE)
-      && defAbility != ABILITY_FULL_METAL_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_FULL_METAL_BODY)
-      && defAbility != ABILITY_FORT_KNOX
-      && !BattlerHasInnate(battlerDef, ABILITY_FORT_KNOX)
-      && defAbility != ABILITY_RUN_AWAY
-      && !BattlerHasInnate(battlerDef, ABILITY_RUN_AWAY)
-      && defAbility != ABILITY_KINGS_WRATH
-      && !BattlerHasInnate(battlerDef, ABILITY_KINGS_WRATH)
-      && defAbility != ABILITY_QUEENS_MOURNING
-      && !BattlerHasInnate(battlerDef, ABILITY_QUEENS_MOURNING)
-      && defAbility != ABILITY_HYPER_CUTTER
-      && !BattlerHasInnate(battlerDef, ABILITY_HYPER_CUTTER)
-      && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
+      && !LoweringStatsPointlessOrBad(battlerDef, defAbility)
+      && !BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_HYPER_CUTTER, defAbility))
         return TRUE;
     return FALSE;
 }
@@ -1771,24 +1770,7 @@ bool32 ShouldLowerDefense(u8 battlerAtk, u8 battlerDef, u16 defAbility)
         return FALSE; // Don't bother lowering stats if can kill enemy.
 
     if (gBattleMons[battlerDef].statStages[STAT_DEF] > 4
-      && HasMoveWithSplit(battlerAtk, SPLIT_PHYSICAL)
-      && defAbility != ABILITY_CONTRARY
-      && !BattlerHasInnate(battlerDef, ABILITY_CONTRARY)
-      && defAbility != ABILITY_CLEAR_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_CLEAR_BODY)
-      && defAbility != ABILITY_WHITE_SMOKE
-      && !BattlerHasInnate(battlerDef, ABILITY_WHITE_SMOKE)
-      && defAbility != ABILITY_FORT_KNOX
-      && !BattlerHasInnate(battlerDef, ABILITY_FORT_KNOX)
-      && defAbility != ABILITY_RUN_AWAY
-      && !BattlerHasInnate(battlerDef, ABILITY_RUN_AWAY)
-      && defAbility != ABILITY_KINGS_WRATH
-      && !BattlerHasInnate(battlerDef, ABILITY_KINGS_WRATH)
-      && defAbility != ABILITY_QUEENS_MOURNING
-      && !BattlerHasInnate(battlerDef, ABILITY_QUEENS_MOURNING)
-      && defAbility != ABILITY_FULL_METAL_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_FULL_METAL_BODY)
-      && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
+      && !LoweringStatsPointlessOrBad(battlerDef, defAbility))
         return TRUE;
     return FALSE;
 }
@@ -1799,23 +1781,7 @@ bool32 ShouldLowerSpeed(u8 battlerAtk, u8 battlerDef, u16 defAbility)
         return FALSE; // Don't bother lowering stats if can kill enemy.
 
     if (IsAiFaster(AI_CHECK_SLOWER)
-      && defAbility != ABILITY_CONTRARY
-      && !BattlerHasInnate(battlerDef, ABILITY_CONTRARY)
-      && defAbility != ABILITY_CLEAR_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_CLEAR_BODY)
-      && defAbility != ABILITY_WHITE_SMOKE
-      && !BattlerHasInnate(battlerDef, ABILITY_WHITE_SMOKE)
-      && defAbility != ABILITY_FORT_KNOX
-      && !BattlerHasInnate(battlerDef, ABILITY_FORT_KNOX)
-      && defAbility != ABILITY_RUN_AWAY
-      && !BattlerHasInnate(battlerDef, ABILITY_RUN_AWAY)
-      && defAbility != ABILITY_KINGS_WRATH
-      && !BattlerHasInnate(battlerDef, ABILITY_KINGS_WRATH)
-      && defAbility != ABILITY_QUEENS_MOURNING
-      && !BattlerHasInnate(battlerDef, ABILITY_QUEENS_MOURNING)
-      && defAbility != ABILITY_FULL_METAL_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_FULL_METAL_BODY)
-      && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
+      && !LoweringStatsPointlessOrBad(battlerDef, defAbility))
         return TRUE;
     return FALSE;
 }
@@ -1826,24 +1792,7 @@ bool32 ShouldLowerSpAtk(u8 battlerAtk, u8 battlerDef, u16 defAbility)
         return FALSE; // Don't bother lowering stats if can kill enemy.
 
     if (gBattleMons[battlerDef].statStages[STAT_SPATK] > 4
-      && HasMoveWithSplit(battlerDef, SPLIT_SPECIAL)
-      && defAbility != ABILITY_CONTRARY
-      && !BattlerHasInnate(battlerDef, ABILITY_CONTRARY)
-      && defAbility != ABILITY_CLEAR_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_CLEAR_BODY)
-      && defAbility != ABILITY_WHITE_SMOKE
-      && !BattlerHasInnate(battlerDef, ABILITY_WHITE_SMOKE)
-      && defAbility != ABILITY_FORT_KNOX
-      && !BattlerHasInnate(battlerDef, ABILITY_FORT_KNOX)
-      && defAbility != ABILITY_RUN_AWAY
-      && !BattlerHasInnate(battlerDef, ABILITY_RUN_AWAY)
-      && defAbility != ABILITY_KINGS_WRATH
-      && !BattlerHasInnate(battlerDef, ABILITY_KINGS_WRATH)
-      && defAbility != ABILITY_QUEENS_MOURNING
-      && !BattlerHasInnate(battlerDef, ABILITY_QUEENS_MOURNING)
-      && defAbility != ABILITY_FULL_METAL_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_FULL_METAL_BODY)
-      && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
+      && !LoweringStatsPointlessOrBad(battlerDef, defAbility))
         return TRUE;
     return FALSE;
 }
@@ -1854,24 +1803,7 @@ bool32 ShouldLowerSpDef(u8 battlerAtk, u8 battlerDef, u16 defAbility)
         return FALSE; // Don't bother lowering stats if can kill enemy.
 
     if (gBattleMons[battlerDef].statStages[STAT_SPDEF] > 4
-      && HasMoveWithSplit(battlerAtk, SPLIT_SPECIAL)
-      && defAbility != ABILITY_CONTRARY
-      && !BattlerHasInnate(battlerDef, ABILITY_CONTRARY)
-      && defAbility != ABILITY_CLEAR_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_CLEAR_BODY)
-      && defAbility != ABILITY_WHITE_SMOKE
-      && !BattlerHasInnate(battlerDef, ABILITY_WHITE_SMOKE)
-      && defAbility != ABILITY_FORT_KNOX
-      && !BattlerHasInnate(battlerDef, ABILITY_FORT_KNOX)
-      && defAbility != ABILITY_RUN_AWAY
-      && !BattlerHasInnate(battlerDef, ABILITY_RUN_AWAY)
-      && defAbility != ABILITY_KINGS_WRATH
-      && !BattlerHasInnate(battlerDef, ABILITY_KINGS_WRATH)
-      && defAbility != ABILITY_QUEENS_MOURNING
-      && !BattlerHasInnate(battlerDef, ABILITY_QUEENS_MOURNING)
-      && defAbility != ABILITY_FULL_METAL_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_FULL_METAL_BODY)
-      && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
+      && !LoweringStatsPointlessOrBad(battlerDef, defAbility))
         return TRUE;
     return FALSE;
 }
@@ -1881,23 +1813,7 @@ bool32 ShouldLowerAccuracy(u8 battlerAtk, u8 battlerDef, u16 defAbility)
     if (IsAiFaster(AI_CHECK_FASTER) && (AI_THINKING_STRUCT->aiFlags & AI_FLAG_TRY_TO_FAINT) && CanAIFaintTarget(battlerAtk, battlerDef, 0))
         return FALSE; // Don't bother lowering stats if can kill enemy.
 
-    if (defAbility != ABILITY_CONTRARY
-      && !BattlerHasInnate(battlerDef, ABILITY_CONTRARY)
-      && defAbility != ABILITY_CLEAR_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_CLEAR_BODY)
-      && defAbility != ABILITY_WHITE_SMOKE
-      && !BattlerHasInnate(battlerDef, ABILITY_WHITE_SMOKE)
-      && defAbility != ABILITY_FORT_KNOX
-      && !BattlerHasInnate(battlerDef, ABILITY_FORT_KNOX)
-      && defAbility != ABILITY_RUN_AWAY
-      && !BattlerHasInnate(battlerDef, ABILITY_RUN_AWAY)
-      && defAbility != ABILITY_KINGS_WRATH
-      && !BattlerHasInnate(battlerDef, ABILITY_KINGS_WRATH)
-      && defAbility != ABILITY_QUEENS_MOURNING
-      && !BattlerHasInnate(battlerDef, ABILITY_QUEENS_MOURNING)
-      && defAbility != ABILITY_FULL_METAL_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_FULL_METAL_BODY)
-      && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
+    if (!LoweringStatsPointlessOrBad(battlerDef, defAbility))
         return TRUE;
     return FALSE;
 }
@@ -1908,23 +1824,7 @@ bool32 ShouldLowerEvasion(u8 battlerAtk, u8 battlerDef, u16 defAbility)
         return FALSE; // Don't bother lowering stats if can kill enemy.
 
     if (gBattleMons[battlerDef].statStages[STAT_EVASION] > DEFAULT_STAT_STAGE
-      && defAbility != ABILITY_CONTRARY
-      && !BattlerHasInnate(battlerDef, ABILITY_CONTRARY)
-      && defAbility != ABILITY_CLEAR_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_CLEAR_BODY)
-      && defAbility != ABILITY_WHITE_SMOKE
-      && !BattlerHasInnate(battlerDef, ABILITY_WHITE_SMOKE)
-      && defAbility != ABILITY_FORT_KNOX
-      && !BattlerHasInnate(battlerDef, ABILITY_FORT_KNOX)
-      && defAbility != ABILITY_RUN_AWAY
-      && !BattlerHasInnate(battlerDef, ABILITY_RUN_AWAY)
-      && defAbility != ABILITY_KINGS_WRATH
-      && !BattlerHasInnate(battlerDef, ABILITY_KINGS_WRATH)
-      && defAbility != ABILITY_QUEENS_MOURNING
-      && !BattlerHasInnate(battlerDef, ABILITY_QUEENS_MOURNING)
-      && defAbility != ABILITY_FULL_METAL_BODY
-      && !BattlerHasInnate(battlerDef, ABILITY_FULL_METAL_BODY)
-      && GetBattlerHoldEffect(battlerDef, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
+      && !LoweringStatsPointlessOrBad(battlerDef, defAbility))
         return TRUE;
     return FALSE;
 }
