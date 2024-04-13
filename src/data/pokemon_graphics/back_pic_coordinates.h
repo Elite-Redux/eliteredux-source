@@ -4718,7 +4718,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SIMISEAR_REDUX] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  7
     },
     [SPECIES_PANSEAR_REDUX] =
     {
