@@ -28277,11 +28277,12 @@ General_StrongWinds::
 General_PrimalReversion::
 	launchtask AnimTask_PrimalReversion 0x5 0x0
 	jumpargeq 0x0, ITEM_RED_ORB, General_PrimalReversion_Omega
-	jumpargeq 0x1, ITEM_BLUE_ORB, General_PrimalReversion_Alpha
+	jumpargeq 0x0, ITEM_BLUE_ORB, General_PrimalReversion_Alpha
+	jumpargeq 0x0, ITEM_PURPLE_ORB, General_PrimalReversion_Cascoon
 General_PrimalReversion_Alpha:
-	loadspritegfx ANIM_TAG_ALPHA_STONE
+	loadspritegfx ANIM_TAG_OMEGA_STONE
 	loadspritegfx ANIM_TAG_PRIMAL_PARTICLES
-	loadspritegfx ANIM_TAG_ALPHA_SYMBOL
+	loadspritegfx ANIM_TAG_OMEGA_SYMBOL
 	monbg ANIM_ATTACKER
 	setalpha 12, 8
 	loopsewithpan SE_M_MEGA_KICK, SOUND_PAN_ATTACKER, 13, 3
@@ -28326,6 +28327,32 @@ General_PrimalReversion_Omega:
 	createvisualtask AnimTask_HorizontalShake, 5, 1, 5, 14
 	waitforvisualfinish
 	createsprite gOmegaSymbolSpriteTemplate ANIM_ATTACKER, 2
+	waitforvisualfinish
+	clearmonbg ANIM_ATK_PARTNER
+	blendoff
+	end
+General_PrimalReversion_Cascoon:
+	loadspritegfx ANIM_TAG_CASCOON_STONE
+	loadspritegfx ANIM_TAG_PRIMAL_PARTICLES
+	loadspritegfx ANIM_TAG_CASCOON_SYMBOL
+	monbg ANIM_ATTACKER
+	setalpha 12, 8
+	loopsewithpan SE_M_MEGA_KICK, SOUND_PAN_ATTACKER, 13, 3
+	createvisualtask AnimTask_BlendColorCycle, 2, 2, 0, 6, 0, 11, RGB(31, 31, 11)
+	call PrimalReversionParticles
+	call PrimalReversionParticles
+	call PrimalReversionParticles
+	waitforvisualfinish
+	playsewithpan SE_M_SOLAR_BEAM, SOUND_PAN_ATTACKER
+	createsprite gCascoonStoneSpriteTemplate, ANIM_ATTACKER, 41, 0, 0, 0, 0
+	delay 20
+	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 0, 16, RGB_WHITEALPHA
+	waitforvisualfinish
+	createvisualtask AnimTask_TransformMon, 2, 0, 1
+	createvisualtask AnimTask_BlendBattleAnimPalExclude, 5, 5, 2, 16, 0, RGB_WHITEALPHA
+	createvisualtask AnimTask_HorizontalShake, 5, 1, 5, 14
+	waitforvisualfinish
+	createsprite gCascoonSymbolSpriteTemplate ANIM_ATTACKER, 2
 	waitforvisualfinish
 	clearmonbg ANIM_ATK_PARTNER
 	blendoff

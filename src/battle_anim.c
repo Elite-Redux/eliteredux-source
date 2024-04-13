@@ -1585,6 +1585,8 @@ const struct CompressedSpriteSheet gBattleAnimPicTable[] =
     {gBattleAnimSpriteGfx_DragonEnergy, 0x0180, ANIM_TAG_DRAGON_ENERGY},
     {gBattleAnimSpriteGfx_SpiritFrostBoltArrow, 0x200, ANIM_TAG_FROST_BOLT_ARROW},
     {gBattleAnimSpriteGfx_Thorns, 0x0080, ANIM_TAG_THORNS},
+    {gBattleAnimSpriteGfx_CascoonStone, 0x800, ANIM_TAG_CASCOON_STONE},
+    {gBattleAnimSpriteGfx_CascoonSymbol, 0x0200, ANIM_TAG_CASCOON_SYMBOL},
 };
 
 const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
@@ -2048,6 +2050,8 @@ const struct CompressedSpritePalette gBattleAnimPaletteTable[] =
     {gBattleAnimSpritePal_MagentaHeart, ANIM_TAG_CUPID_SHOT},
     {gBattleAnimSpritePal_DragonEnergy, ANIM_TAG_DRAGON_ENERGY},
     {gBattleAnimSpritePal_SpiritFrostBoltArrow, ANIM_TAG_FROST_BOLT_ARROW},
+    [ANIM_TAG_CASCOON_STONE - ANIM_SPRITES_START] = {gBattleAnimSpritePal_CascoonStone, ANIM_TAG_CASCOON_STONE},
+    {gBattleAnimSpritePal_CascoonSymbol, ANIM_TAG_CASCOON_SYMBOL},
 };
 
 const struct BattleAnimBackground gBattleAnimBackgroundTable[] =

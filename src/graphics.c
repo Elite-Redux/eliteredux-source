@@ -39,6 +39,9 @@ const u32 gBattleAnimSpritePal_MegaSymbol[] = INCBIN_U32("graphics/battle_anims/
 const u32 gBattleAnimSpriteGfx_AlphaSymbol[] = INCBIN_U32("graphics/battle_anims/sprites/alpha_symbol.4bpp.lz");
 const u32 gBattleAnimSpritePal_AlphaSymbol[] = INCBIN_U32("graphics/battle_anims/sprites/alpha_symbol.gbapal.lz");
 
+const u32 gBattleAnimSpriteGfx_CascoonSymbol[] = INCBIN_U32("graphics/battle_anims/sprites/new/cascoon_symbol.4bpp.lz");
+const u32 gBattleAnimSpritePal_CascoonSymbol[] = INCBIN_U32("graphics/battle_anims/sprites/new/cascoon_symbol.gbapal.lz");
+
 const u32 gBattleAnimSpriteGfx_OmegaSymbol[] = INCBIN_U32("graphics/battle_anims/sprites/omega_symbol.4bpp.lz");
 const u32 gBattleAnimSpritePal_OmegaSymbol[] = INCBIN_U32("graphics/battle_anims/sprites/omega_symbol.gbapal.lz");
 
@@ -62,6 +65,9 @@ const u32 gBattleAnimSpritePal_AcupressureFinger[] = INCBIN_U32("graphics/battle
 
 const u32 gBattleAnimSpriteGfx_AlphaStone[] = INCBIN_U32("graphics/battle_anims/sprites/new/alpha_stone.4bpp.lz");
 const u32 gBattleAnimSpritePal_AlphaStone[] = INCBIN_U32("graphics/battle_anims/sprites/new/alpha_stone.gbapal.lz");
+
+const u32 gBattleAnimSpriteGfx_CascoonStone[] = INCBIN_U32("graphics/battle_anims/sprites/new/cascoon_stone.4bpp.lz");
+const u32 gBattleAnimSpritePal_CascoonStone[] = INCBIN_U32("graphics/battle_anims/sprites/new/cascoon_stone.gbapal.lz");
 
 const u32 gBattleAnimSpriteGfx_Anchor[] = INCBIN_U32("graphics/battle_anims/sprites/new/anchor.4bpp.lz");
 

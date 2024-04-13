@@ -8595,10 +8595,7 @@ static void SpriteCB_TwinkleOnBattler(struct Sprite *sprite)
 
 void AnimTask_PrimalReversion(u8 taskId)
 {
-    if (ItemId_GetId(gBattleMons[gBattleAnimAttacker].item) == ITEM_RED_ORB)
-        gBattleAnimArgs[0] = ItemId_GetId(gBattleMons[gBattleAnimAttacker].item);
-    else
-        gBattleAnimArgs[0] = 0;
+    gBattleAnimArgs[0] = ItemId_GetId(gBattleMons[gBattleAnimAttacker].item);
     DestroyAnimVisualTask(taskId);
 }
 

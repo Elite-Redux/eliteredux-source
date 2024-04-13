@@ -1240,6 +1240,17 @@ const struct SpriteTemplate gAlphaStoneSpriteTemplate =
     .callback = AnimSpriteOnMonPos,
 };
 
+const struct SpriteTemplate gCascoonStoneSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_CASCOON_STONE,
+    .paletteTag = ANIM_TAG_CASCOON_STONE,
+    .oam = &gOamData_AffineDouble_ObjBlend_64x64,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gAffineAnims_LusterPurgeCircle,
+    .callback = AnimSpriteOnMonPos,
+};
+
 const struct SpriteTemplate gOmegaStoneSpriteTemplate =
 {
     .tileTag = ANIM_TAG_OMEGA_STONE,
@@ -1266,6 +1277,17 @@ const struct SpriteTemplate gAlphaSymbolSpriteTemplate =
 {
     .tileTag = ANIM_TAG_ALPHA_SYMBOL,
     .paletteTag = ANIM_TAG_ALPHA_SYMBOL,
+    .oam = &gOamData_AffineOff_ObjBlend_32x32,
+    .anims = gDummySpriteAnimTable,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimGhostStatusSprite,
+};
+
+const struct SpriteTemplate gCascoonSymbolSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_CASCOON_SYMBOL,
+    .paletteTag = ANIM_TAG_CASCOON_SYMBOL,
     .oam = &gOamData_AffineOff_ObjBlend_32x32,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
