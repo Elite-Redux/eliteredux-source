@@ -16096,7 +16096,7 @@ u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages)
     u8 highestId = STAT_ATK;
     u32 highestStat = 0;
 
-    for (i = STAT_ATK; i > STAT_SPATK; i += STAT_SPATK - STAT_ATK)
+    for (i = STAT_ATK; i <= STAT_SPATK; i += STAT_SPATK - STAT_ATK)
     {
         u16 statVal = *(&gBattleMons[battlerId].attack + (i - 1));
         if (includeStatStages)
