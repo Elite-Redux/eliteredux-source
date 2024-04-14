@@ -10990,18 +10990,22 @@ BattleScript_BerryConfuseHealRet_Anim:
 	return
 
 BattleScript_BerryStatRaiseEnd2::
-	jumpifability BS_ATTACKER, ABILITY_RIPEN, BattleScript_BerryStatRaiseEnd2_AbilityPopup
+	jumpifability BS_STACK_1, ABILITY_RIPEN, BattleScript_BerryStatRaiseEnd2_AbilityPopup
 	goto BattleScript_BerryStatRaiseEnd2_Anim
 BattleScript_BerryStatRaiseEnd2_AbilityPopup:
 	call BattleScript_AbilityPopUp
 BattleScript_BerryStatRaiseEnd2_Anim:
+	savetargettostack4
+	copybyte gBattlerTarget, gStackBattler1
+	copybyte gEffectBattler, gStackBattler1
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_BerryStatRaiseEnd2_End
 	setgraphicalstatchangevalues
-	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, sB_ANIM_ARG1
+	playanimation BS_STACK_1, B_ANIM_HELD_ITEM_EFFECT, sB_ANIM_ARG1
 	setbyte cMULTISTRING_CHOOSER, B_MSG_STAT_ROSE_ITEM
 	call BattleScript_StatUp
-	removeitem BS_ATTACKER
+	removeitem BS_STACK_1
 BattleScript_BerryStatRaiseEnd2_End::
+	readtargetfromstack4
 	end2
 
 BattleScript_BerryStatRaiseRet::
@@ -11012,6 +11016,7 @@ BattleScript_BerryStatRaiseRet_AbilityPopup:
 BattleScript_BerryStatRaiseRet_Anim:
 	savetargettostack4
 	copybyte gBattlerTarget, gStackBattler1
+	copybyte gEffectBattler, gStackBattler1
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_BerryStatRaiseRet_End
 	setgraphicalstatchangevalues
 	playanimation BS_STACK_1, B_ANIM_HELD_ITEM_EFFECT, sB_ANIM_ARG1
