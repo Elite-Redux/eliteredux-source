@@ -699,3 +699,9 @@ script Route119_EventScript_Gen8_NPC{
     release
     end
 }
+
+script Route119_EventScript_MimicClubSign{
+	msgbox("Mimic club ahead.")
+	release
+	end
+}

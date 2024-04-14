@@ -815,7 +815,7 @@
       "y": 106,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "Route119_EventScript_MimicClubSign"
     }
   ]
 }
