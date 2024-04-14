@@ -6430,6 +6430,7 @@ static void Cmd_moveend(void)
                 gBattleScripting.moveendState = 0;
                 gTurnStructs[gBattlerAttacker].multiHitOn = FALSE;
                 MoveValuesCleanUp();
+                gBattleScripting.usingExtraMove = TRUE;
 
                 gBattlescriptCurrInstr = BattleScript_AttackerUsedAnExtraMove;
                 return;

@@ -3304,6 +3304,7 @@ static void BattleStartClearSetData(void)
     gBattleScripting.expOnCatch = (B_EXP_CATCH >= GEN_6);
     gBattleScripting.monCaught = FALSE;
     gBattleScripting.acceleratedTwoTurn = FALSE;
+    gBattleScripting.usingExtraMove = FALSE;
 
     gBattleOutcome = 0;
     gBattleControllerExecFlags = 0;

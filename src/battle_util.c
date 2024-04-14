@@ -234,6 +234,7 @@ void HandleAction_UseMove(void)
         gCurrMovePos = gQueuedExtraAttackData[0].movePos;
         if (gCurrMovePos == MAX_MON_MOVES) gHitMarker |= HITMARKER_NO_PPDEDUCT;
         gBattlerTarget = gQueuedExtraAttackData[0].target;
+        gBattleScripting.usingExtraMove = TRUE;
     }
     else if (gRoundStructs[gBattlerAttacker].noValidMoves)
     {
@@ -879,6 +880,7 @@ void ClearMiscTurnFlags() {
     gBattleScripting.multihitMoveEffect = 0;
     gBattleResources->battleScriptsStack->size = 0;
     gBattleScripting.acceleratedTwoTurn = 0;
+    gBattleScripting.usingExtraMove = FALSE;
 }
 
 void HandleAction_TryFinish(void)

@@ -776,6 +776,7 @@ struct BattleScripting
     u8 replaceEndWithEnd3;
     u8 checkStatStatus;
     u8 acceleratedTwoTurn;
+    u8 usingExtraMove;
 };
 
 // rom_80A5C6C

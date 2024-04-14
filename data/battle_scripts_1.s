@@ -3789,8 +3789,10 @@ BattleScript_EffectExplosion::
 	attackcanceler
 	attackstring
 	ppreduce
+	jumpifbyte CMP_EQUAL, sUSING_EXTRA_MOVE, TRUE, BattleScript_ExplosionNoFaint
 	faintifabilitynotdamp
 	setatkhptozero
+BattleScript_ExplosionNoFaint:
 	waitstate
 	jumpifbyte CMP_NO_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_MISSED, BattleScript_ExplosionDoAnimStartLoop
 	call BattleScript_PreserveMissedBitDoMoveAnim
