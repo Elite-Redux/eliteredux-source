@@ -321,6 +321,7 @@ static void BufferEggMemo(void);
 static void PrintSkillsPage(void);
 static void PrintConditionPage(void);
 static void PrintBattleMoves(void);
+static void PrintBattleMovesFromReplaceMenu(void);
 static void PrintMoveNameAndPP(u8 a);
 static void PrintContestMoves(void);
 static void PrintAbilityAndInnates(void);
@@ -1041,6 +1042,7 @@ const u8 sText_TitleIVs[] = _("Pokémon IVs");
 const u8 sText_TitleEVs[] = _("Pokémon EVs");
 const u8 sText_TitlePage[] = _("{DPAD_LEFTRIGHT}Page");
 const u8 sText_TitlePageDetail[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Detail {R_BUTTON}Replace");
+const u8 sText_TitlePageDetail_Boxmon[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Detail");
 const u8 sText_TitlePickSwitch[] = _("{DPAD_UPDOWN}Pick {A_BUTTON}Switch {L_BUTTON}Details");
 const u8 sText_TitlePickSwitchContest[] = _("{DPAD_UPDOWN}Pick {A_BUTTON}Switch");
 const u8 sText_TitlePageIVs[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Modify");
@@ -2114,7 +2116,7 @@ static void Task_HandleInput(u8 taskId)
         }
 		else if (gMain.newKeys & R_BUTTON)
 		{
-            if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES){
+            if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && !sMonSummaryScreen->isBoxMon){
                 PlaySE(SE_SELECT);
                 SwitchToMoveReplaceMenu(taskId);
             }
@@ -3174,11 +3176,13 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
     else if(gMain.newKeys & A_BUTTON){
         u8 moveToReplace = sMonSummaryScreen->moveReplaceMoveNum;
         u16 moveToLearn  = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+        u8 ppBonuses, movetype, ppNum;
         bool8 reload = TRUE;
         bool8 cancel = FALSE;
 
         if(sMonSummaryScreen->replaceMoveMode){
             if(sMonSummaryScreen->moveReplaceMoveNum == MAX_MON_MOVES){
+                //Cancel
                 sMonSummaryScreen->moveReplaceMoveNum = 0;
                 sMonSummaryScreen->replaceMoveMode = FALSE;
                 PrintMoveReplaceTab();
@@ -3187,8 +3191,18 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
             }
             else{
+                //Teach Move
                 SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
                 SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                summary->moves[moveToReplace] = moveToLearn;
+
+                //Restore PP
+                ppBonuses = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES);
+                ppNum = CalculatePPWithBonus(moveToLearn, ppBonuses, moveToReplace);
+                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_PP1 + moveToReplace, &ppNum);
+                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP1 + moveToReplace, &ppNum);
+                summary->pp[moveToReplace] = ppNum;
+
                 PlaySE(SE_SELECT);
                 
                 sMonSummaryScreen->replaceMoveMode = FALSE;
@@ -3216,9 +3230,18 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             }
 
             if(learnedMove && !hasMonMove){
-                PlaySE(SE_SELECT);
+                //Teach Move
                 SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
                 SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                summary->moves[moveToReplace] = moveToLearn;
+                //Restore PP
+                ppBonuses = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES);
+                ppNum = CalculatePPWithBonus(moveToLearn, ppBonuses, moveToReplace);
+                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_PP1 + moveToReplace, &ppNum);
+                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP1 + moveToReplace, &ppNum);
+                summary->pp[moveToReplace] = ppNum;
+
+                PlaySE(SE_SELECT);
             }
             else if(!hasMonMove){
                 PlaySE(SE_SELECT);
@@ -3564,9 +3587,25 @@ static void CloseMoveReplaceMode(u8 taskId)
 static void Task_SwitchFromMoveReplaceMenu(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
+    u8 i;
+    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+
     switch (data[0])
     {
         case 0:
+            SetMoveTypeIcons();
+            for (i = 0; i < MAX_MON_MOVES; i++){
+                if (summary->moves[i] != MOVE_NONE)
+                    SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 2 + i, FALSE);
+            }
+            
+            LZDecompressWram(gSummaryScreenPageMovesTilemap, sMonSummaryScreen->bgTilemapBufferPage);
+            SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBufferPage);
+            PrintBattleMovesFromReplaceMenu();
+            data[0]++;
+            break;
+        case 1:
             DestroyMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1);
             PrintMoveDetails(0, FALSE);
             SetSpriteInvisibility(SPRITE_ARR_ID_TYPE, TRUE);
@@ -3577,31 +3616,32 @@ static void Task_SwitchFromMoveReplaceMenu(u8 taskId)
             #endif
             data[0]++;
             break;
-        case 1:
+        case 2:
             ChangeBgX(1, 0x10000, 0);
             data[1] = 0;
             data[0]++;
             break;
-        case 2:
+        case 3:
             sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &data[1]);
             gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].callback = SpriteCallbackDummy;
             if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] != SPRITE_NONE)
                 data[0]++;
             break;
-        case 3:
+        case 4:
             PutWindowTilemap(PSS_LABEL_PANE_LEFT_TOP);
             PutWindowTilemap(PSS_LABEL_PANE_LEFT_BOTTOM);
             PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
 
             if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HELD_ITEM))
                 SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, FALSE);
+            SetSpriteInvisibility(SPRITE_ARR_ID_STATUS,   FALSE);
             CreateSetStatusSprite();
             sMonSummaryScreen->markingsSprite->x = 57;
             sMonSummaryScreen->markingsSprite->y = 132;
             PrintInfoBar(sMonSummaryScreen->currPageIndex, FALSE);
             data[0]++;
             break;
-        case 4:
+        case 5:
             ScheduleBgCopyTilemapToVram(0);
             ScheduleBgCopyTilemapToVram(1);
             ScheduleBgCopyTilemapToVram(2);
@@ -4951,6 +4991,20 @@ static void PrintBattleMoves(void)
         PrintMoveNameAndPP(i);
 
     PrintNewMoveDetailsOrCancelText();
+
+    ScheduleBgCopyTilemapToVram(0);
+    PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
+}
+
+static void PrintBattleMovesFromReplaceMenu(void)
+{
+    u32 i;
+
+    FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
+
+    for (i = 0; i < MAX_MON_MOVES; i++){
+        PrintMoveNameAndPP(i);
+    }
 
     ScheduleBgCopyTilemapToVram(0);
     PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
@@ -7049,8 +7103,12 @@ static void PrintInfoBar(u8 pageIndex, bool8 detailsShown)
             StringCopy(gStringVar1, sText_TitleBattleMoves);
             if (detailsShown)
                 StringCopy(gStringVar2, sText_TitlePickSwitch);
-            else
-                StringCopy(gStringVar2, sText_TitlePageDetail);
+            else{
+                if(!sMonSummaryScreen->isBoxMon)
+                    StringCopy(gStringVar2, sText_TitlePageDetail);
+                else
+                    StringCopy(gStringVar2, sText_TitlePageDetail_Boxmon);
+            }
             break;
         case PSS_PAGE_CONDITION:
             StringCopy(gStringVar1, sText_TitleCondition);
