@@ -1663,7 +1663,7 @@ static void Cmd_attackcanceler(void)
 
     if (((GetBattlerAbility(gBattlerTarget) == ABILITY_COLOR_CHANGE) || BattlerHasInnate(gBattlerTarget, ABILITY_COLOR_CHANGE) ||
          (GetBattlerAbility(gBattlerTarget) == ABILITY_PRISMATIC_FUR) || BattlerHasInnate(gBattlerTarget, ABILITY_PRISMATIC_FUR))
-        && gRoundStructs[gBattlerAttacker].extraMoveUsed != TRUE
+        && gTurnStructs[gBattlerAttacker].extraMoveUsed != TRUE
         && (gBattlerAttacker != gBattlerTarget)) {
         u32 currentType;
         u32 bestType = gBattleMons[gBattlerTarget].type1;
@@ -2278,7 +2278,7 @@ static void Cmd_damagecalc(void)
 {
     u8 moveType;
     u8 movePower = 0;
-    bool8 isExtraMove = gRoundStructs[gBattlerAttacker].extraMoveUsed;
+    bool8 isExtraMove = gTurnStructs[gBattlerAttacker].extraMoveUsed;
 
     if(isExtraMove){
         movePower = VarGet(VAR_EXTRA_MOVE_DAMAGE);
@@ -4051,7 +4051,7 @@ static void Cmd_seteffectwithchance(void)
     
     moveEffect = gBattleScripting.moveEffect & 0xFF;
 
-    if(gRoundStructs[gBattlerAttacker].extraMoveUsed){
+    if(gTurnStructs[gBattlerAttacker].extraMoveUsed){
         if(VarGet(VAR_TEMP_MOVEEFECT_CHANCE) != 0){
             percentChance = VarGet(VAR_TEMP_MOVEEFECT_CHANCE);
             VarSet(VAR_TEMP_MOVEEFECT_CHANCE, 0);
@@ -9838,11 +9838,17 @@ static void Cmd_various(void)
                 gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
             else
             {
-                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraActionStruct)
+                {
+                    .type = EXTRA_INSTRUCT,
                     .attacker = gActiveBattler,
                     .target = GetMoveTarget(gLastMoves[gActiveBattler], 0),
-                    .move = gLastMoves[gActiveBattler],
-                    .movePos = i,
+                    .data = {
+                        .attackInfo = {
+                            .move = gLastMoves[gActiveBattler],
+                            .movePos = i,
+                        }
+                    }
                 };
                 gBattlescriptCurrInstr += 7;
             }
@@ -11165,6 +11171,36 @@ static void Cmd_various(void)
                 return;
         }
         }
+    case VARIOUS_SCHEDULE_MOVE_SWITCH:
+        {
+        u8 target = GetBattlerForBattleScript(T1_READ_8(gBattlescriptCurrInstr + 3));
+        u8 random = T1_READ_8(gBattlescriptCurrInstr + 4);
+        u8 playAnim = T1_READ_8(gBattlescriptCurrInstr + 5);
+        gBattlescriptCurrInstr += 6;
+
+        for (i = 1; i <= gQueuedAttackCount; i++)
+        {
+            struct ExtraActionStruct action = gQueuedExtraAttackData[i];
+            if (action.type == EXTRA_SWITCH_MOVE
+                && action.attacker == gActiveBattler
+                && action.target == target)
+                return;
+        }
+
+        gQueuedExtraAttackData[gQueuedAttackCount++] = (struct ExtraActionStruct) {
+            .type = EXTRA_SWITCH_MOVE,
+            .attacker = gActiveBattler,
+            .target = target,
+            .data = {
+                .switchInfo = {
+                    .source.move = gCurrentMove,
+                    .random = random,
+                    .playAnim = playAnim,
+                }
+            }
+        };
+        }
+        return;
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
@@ -14202,7 +14238,7 @@ static void Cmd_setsafeguard(void)
 
 static void Cmd_magnitudedamagecalculation(void)
 {
-    bool8 isExtraMove = gRoundStructs[gBattlerAttacker].extraMoveUsed;
+    bool8 isExtraMove = gTurnStructs[gBattlerAttacker].extraMoveUsed;
     u8 maxRoll = 100;
     u32 magnitude;
 

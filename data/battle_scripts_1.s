@@ -1648,8 +1648,6 @@ BattleScript_EffectPartingShotTrySpAtk:
 	printfromtable gStatDownStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_EffectPartingShotSwitch:
-	moveendto MOVEEND_ATTACKER_VISIBLE
-	moveendfrom MOVEEND_TARGET_VISIBLE
 	goto BattleScript_MoveSwitch
 
 BattleScript_EffectSpAtkUpHit:
@@ -2170,11 +2168,9 @@ BattleScript_EffectHitSwitchTarget:
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	tryfaintmon BS_TARGET, FALSE, NULL
-	jumpifability BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_AbilityPreventsPhasingOut
-	jumpifability BS_TARGET, ABILITY_GUARD_DOG, BattleScript_AbilityPreventsPhasingOut
-	jumpifstatus3 BS_TARGET, STATUS3_ROOTED, BattleScript_PrintMonIsRooted
-	jumpifstatus4 BS_TARGET, STATUS4_COMMANDED, BattleScript_PrintCommanderCantSwitch
-	tryhitswitchtarget BattleScript_EffectHitSwitchTargetMoveEnd
+	jumpifnodamage BattleScript_EffectHitSwitchTargetMoveEnd
+	jumpifmovehadnoeffect BattleScript_EffectHitSwitchTargetMoveEnd
+	schedulemoveswitch BS_ATTACKER, BS_TARGET, TRUE, FALSE
 BattleScript_EffectHitSwitchTargetMoveEnd:
 	moveendall
 	end
@@ -3217,58 +3213,12 @@ BattleScript_EffectHitEscape:
 	waitmessage B_WAIT_TIME_LONG
 	jumpifmovehadnoeffect BattleScript_MoveEnd
 	tryfaintmon BS_TARGET, FALSE, NULL
-	moveendto MOVEEND_ATTACKER_VISIBLE
-	moveendfrom MOVEEND_TARGET_VISIBLE
-	goto BattleScript_MoveSwitch
+	schedulemoveswitch BS_ATTACKER, BS_ATTACKER, FALSE, FALSE
+	goto BattleScript_MoveEnd
 
 
 BattleScript_EffectGhastlyEcho:
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	critcalc
-	damagecalc
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage B_WAIT_TIME_LONG
-	resultmessage
-	waitmessage B_WAIT_TIME_LONG
-	jumpifmovehadnoeffect BattleScript_MoveEnd
-	tryfaintmon BS_TARGET, FALSE, NULL
-	moveendto MOVEEND_ATTACKER_VISIBLE
-	moveendfrom MOVEEND_TARGET_VISIBLE
-	jumpifbattleend BattleScript_MoveEnd
-	jumpifbyte CMP_NOT_EQUAL gBattleOutcome 0, BattleScript_MoveEnd
-	jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_MoveEnd
-	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_MoveEnd
-	printstring STRINGID_PKMNWENTBACK
-	waitmessage B_WAIT_TIME_SHORT
-	openpartyscreen BS_ATTACKER, BattleScript_MoveEnd
-	saveattackerandtargetto34
-	switchoutabilities BS_ATTACKER
-	waitstate
-	switchhandleorder BS_ATTACKER, 2
-	returntoball BS_ATTACKER
-	getswitchedmondata BS_ATTACKER
-	switchindataupdate BS_ATTACKER
-	hpthresholds BS_ATTACKER
-	trytoclearprimalweather
-	printstring STRINGID_EMPTYSTRING3
-	waitmessage 1
-	printstring STRINGID_SWITCHINMON
-	switchinanim BS_ATTACKER, TRUE
-	waitstate
-	setghastlyecho BS_ATTACKER
-	switchineffects BS_ATTACKER
-	end
+	goto BattleScript_EffectHitEscape
 
 BattleScript_AnnounceGhastlyEcho::
 	printstring STRINGID_GHASTLY_ECHO
@@ -4055,6 +4005,9 @@ BattleScript_EffectRoar::
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
 	accuracycheck BattleScript_MoveMissedPause, ACC_CURR_MOVE
 	jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_ButItFailed
+	schedulemoveswitch BS_ATTACKER, BS_TARGET, TRUE, TRUE
+	goto BattleScript_MoveEnd
+
 BattleScript_ForceRandomSwitch::
 	saveattackerandtargetto34
 	forcerandomswitch BattleScript_ButItFailed
@@ -5553,26 +5506,7 @@ BattleScript_EffectBatonPass::
 BattleScript_SwitchOrFail:
 	jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_ButItFailed
 	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_ButItFailed
-	attackanimation
-	waitanimation
-	printstring STRINGID_PKMNWENTBACK
-	waitmessage B_WAIT_TIME_SHORT
-	openpartyscreen BS_ATTACKER, BattleScript_ButItFailed
-	saveattackerandtargetto34
-	switchoutabilities BS_ATTACKER
-	waitstate
-	switchhandleorder BS_ATTACKER, 2
-	returntoball BS_ATTACKER
-	getswitchedmondata BS_ATTACKER
-	switchindataupdate BS_ATTACKER
-	hpthresholds BS_ATTACKER
-	trytoclearprimalweather
-	printstring STRINGID_EMPTYSTRING3
-	waitmessage 1
-	printstring STRINGID_SWITCHINMON
-	switchinanim BS_ATTACKER, TRUE
-	waitstate
-	switchineffects BS_ATTACKER
+	schedulemoveswitch BS_ATTACKER, BS_ATTACKER, FALSE, TRUE
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectChillyReception::
@@ -5623,20 +5557,21 @@ BattleScript_EffectShedTail::
 	waitanimation
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	printstring STRINGID_SHEDITSTAIL
-	waitmessage B_WAIT_TIME_LONG
-	moveendto MOVEEND_ATTACKER_VISIBLE
-	moveendfrom MOVEEND_TARGET_VISIBLE
-	goto BattleScript_MoveSwitchOpenPartyScreen
+	schedulemoveswitch BS_ATTACKER, BS_ATTACKER, FALSE, FALSE
+	goto BattleScript_MoveEndTryFaintTarget
 
 BattleScript_MoveSwitch:
-	jumpifbattleend BattleScript_MoveSwitchEnd
-	jumpifbyte CMP_NOT_EQUAL gBattleOutcome 0, BattleScript_MoveSwitchEnd
-	jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_MoveSwitchEnd
-	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_MoveSwitchEnd
-	printstring STRINGID_PKMNWENTBACK
+	jumpifbattleend BattleScript_MoveEnd
+	jumpifbyte CMP_NOT_EQUAL gBattleOutcome 0, BattleScript_MoveEnd
+	jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_MoveEnd
+	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_MoveEnd
+	schedulemoveswitch BS_ATTACKER, BS_ATTACKER, FALSE, FALSE
+	goto BattleScript_MoveEnd
+
+BattleScript_MoveSwitchOpenPartyScreen:	
+	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_MoveEnd
+	printfromtable gSwitchAnnouncementStrings
 	waitmessage B_WAIT_TIME_SHORT
-BattleScript_MoveSwitchOpenPartyScreen:
 	openpartyscreen BS_ATTACKER, BattleScript_MoveSwitchEnd
 	saveattackerandtargetto34
 	switchoutabilities BS_ATTACKER
@@ -5652,9 +5587,12 @@ BattleScript_MoveSwitchOpenPartyScreen:
 	printstring STRINGID_SWITCHINMON
 	switchinanim BS_ATTACKER, TRUE
 	waitstate
+	jumpifnotmove MOVE_GHASTLY_ECHO, BattleScript_MoveSwitchNotGhastlyEcho
+	setghastlyecho BS_ATTACKER
+BattleScript_MoveSwitchNotGhastlyEcho:
 	switchineffects BS_ATTACKER
 BattleScript_MoveSwitchEnd:
-	end
+	end2
 
 BattleScript_EffectRapidSpin::
 .if B_SPEED_BUFFING_RAPID_SPIN == GEN_8
@@ -7654,7 +7592,7 @@ BattleScript_RoarSuccessSwitch::
 	switchineffects BS_TARGET
 	jumpifbyte CMP_EQUAL, sSWITCH_CASE, B_SWITCH_RED_CARD, BattleScript_RedCardSuccessSwitch_Ret
 	setbyte sSWITCH_CASE, B_SWITCH_NORMAL
-	goto BattleScript_MoveEnd
+	end2
 
 BattleScript_RoarSuccessEndBattle::
 	call BattleScript_RoarSuccessRet
@@ -8291,7 +8229,7 @@ BattleScript_PrintCommanderCantSwitch::
 	pause B_WAIT_TIME_SHORT
 	printstring STRINGID_COMMANDER_CANT_SWITCH
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	end2
 
 BattleScript_AtkDefDown::
 	setbyte sSTAT_ANIM_PLAYED, FALSE
@@ -9498,22 +9436,22 @@ BattleScript_EmergencyExitPopupNoPause::
 	call BattleScript_AbilityPopUp
 	pause B_WAIT_TIME_LONG
 BattleScript_EmergencyExitNoPopUp::
-	playanimation BS_STACK_1, B_ANIM_SLIDE_OFFSCREEN, NULL
+	playanimation BS_ATTACKER, B_ANIM_SLIDE_OFFSCREEN, NULL
 	waitanimation
-	openpartyscreen BS_STACK_1, BattleScript_EmergencyExitRet
+	openpartyscreen BS_ATTACKER, BattleScript_EmergencyExitRet
 	saveattackerandtargetto34
-	switchoutabilities BS_STACK_1
+	switchoutabilities BS_ATTACKER
 	waitstate
-	switchhandleorder BS_STACK_1, 2
-	returntoball BS_STACK_1
-	getswitchedmondata BS_STACK_1
-	switchindataupdate BS_STACK_1
-	hpthresholds BS_STACK_1
-	getbattler BS_STACK_1
+	switchhandleorder BS_ATTACKER, 2
+	returntoball BS_ATTACKER
+	getswitchedmondata BS_ATTACKER
+	switchindataupdate BS_ATTACKER
+	hpthresholds BS_ATTACKER
+	getbattler BS_ATTACKER
 	printstring STRINGID_SWITCHINMON
-	switchinanim BS_STACK_1, TRUE
+	switchinanim BS_ATTACKER, TRUE
 	waitstate
-	switchineffects BS_STACK_1
+	switchineffects BS_ATTACKER
 BattleScript_EmergencyExitRet:
 	return
 	
@@ -11291,72 +11229,62 @@ BattleScript_StickyBarbTransfer::
 	return
 
 BattleScript_RedCardActivates::
-	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_EFFECT, NULL
+	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
 	printstring STRINGID_REDCARDACTIVATE
 	waitmessage B_WAIT_TIME_LONG
-	saveattackerandtargetto34
-	copybyte gBattlerTarget, gBattlerAttacker
-	copybyte gBattlerAttacker, gStackBattler1
 	jumpifstatus3 BS_TARGET, STATUS3_ROOTED, BattleScript_RedCardIngrain
 	jumpifability BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_RedCardSuctionCups
 	jumpifability BS_TARGET, ABILITY_GUARD_DOG, BattleScript_RedCardSuctionCups
 	jumpifstatus4 BS_TARGET, STATUS4_COMMANDED, BattleScript_PrintCommanderCantSwitch
 	setbyte sSWITCH_CASE, B_SWITCH_RED_CARD
-	savetarget
 	forcerandomswitch BattleScript_RedCardEnd
-	@ changes the current battle script. the rest happens in BattleScript_RoarSuccessSwitch_Ret, if switch is successful
 BattleScript_RedCardEnd:
-	restoreattackerandtargetfrom34
-	return
+	end2
 BattleScript_RedCardIngrain:
 	printstring STRINGID_PKMNANCHOREDITSELF
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
-	restoreattackerandtargetfrom34
-	return
+	end2
 BattleScript_RedCardSuctionCups:
 	printstring STRINGID_PKMNANCHORSITSELFWITH	
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
-	restoreattackerandtargetfrom34
-	return
+	end2
 BattleScript_RedCardCommander:
 	printstring STRINGID_COMMANDER_CANT_SWITCH
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
-	restoreattackerandtargetfrom34
-	return
+	end2
 
 BattleScript_RedCardSuccessSwitch_Ret:
-	@ BS_TARGET restored via switchineffects inclusion of restoreattackerandtargetfrom34
-	removeitem BS_STACK_1
+	removeitem BS_ATTACKER
 	setbyte sSWITCH_CASE, B_SWITCH_NORMAL
 	return
 
 BattleScript_EjectButtonActivates::
 	makevisible BS_ATTACKER
-	playanimation BS_STACK_1, B_ANIM_HELD_ITEM_EFFECT, NULL
+	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
 	printstring STRINGID_EJECTBUTTONACTIVATE
 	waitmessage B_WAIT_TIME_LONG
-	removeitem BS_STACK_1
-	makeinvisible BS_STACK_1
-	openpartyscreen BS_STACK_1, BattleScript_EjectButtonEnd
+	removeitem BS_ATTACKER
+	makeinvisible BS_ATTACKER
+	openpartyscreen BS_ATTACKER, BattleScript_EjectButtonEnd
 	saveattackerandtargetto34
-	switchoutabilities BS_STACK_1
+	switchoutabilities BS_ATTACKER
 	waitstate
-	switchhandleorder BS_STACK_1 0x2
-	returntoball BS_STACK_1
-	getswitchedmondata BS_STACK_1
-	switchindataupdate BS_STACK_1
-	hpthresholds BS_STACK_1
+	switchhandleorder BS_ATTACKER 0x2
+	returntoball BS_ATTACKER
+	getswitchedmondata BS_ATTACKER
+	switchindataupdate BS_ATTACKER
+	hpthresholds BS_ATTACKER
 	trytoclearprimalweather
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
-	getbattler BS_STACK_1
+	getbattler BS_ATTACKER
 	printstring 0x3
-	switchinanim BS_STACK_1 0x1
+	switchinanim BS_ATTACKER 0x1
 	waitstate
-	switchineffects BS_STACK_1
+	switchineffects BS_ATTACKER
 BattleScript_EjectButtonEnd:
 	return
 

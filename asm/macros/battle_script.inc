@@ -2306,6 +2306,13 @@
 	.2byte \effect
 	.endm
 
+	.macro schedulemoveswitch battler:req, target:req, random:req, delayedanim:req
+	various \battler, VARIOUS_SCHEDULE_MOVE_SWITCH
+	.byte \target
+	.byte \random
+	.byte \delayedanim
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

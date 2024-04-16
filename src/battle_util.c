@@ -230,8 +230,8 @@ void HandleAction_UseMove(void)
     // choose move
     if (gProcessingExtraAttacks)
     {
-        gCurrentMove = gChosenMove = gQueuedExtraAttackData[0].move;
-        gCurrMovePos = gQueuedExtraAttackData[0].movePos;
+        gCurrentMove = gChosenMove = gQueuedExtraAttackData[0].data.attackInfo.move;
+        gCurrMovePos = gQueuedExtraAttackData[0].data.attackInfo.movePos;
         if (gCurrMovePos == MAX_MON_MOVES) gHitMarker |= HITMARKER_NO_PPDEDUCT;
         gBattlerTarget = gQueuedExtraAttackData[0].target;
         gBattleScripting.usingExtraMove = TRUE;
@@ -461,9 +461,9 @@ void HandleAction_UseMove(void)
         {
             gCurrentActionFuncId = B_ACTION_TRY_FINISH;
         }
-        else if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability)
+        else if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].data.attackInfo.ability)
         {
-            gBattleScripting.abilityPopupOverwrite = gQueuedExtraAttackData[0].ability;
+            gBattleScripting.abilityPopupOverwrite = gQueuedExtraAttackData[0].data.attackInfo.ability;
             gBattlescriptCurrInstr = BattleScript_AttackerUsedAnExtraMove;
         }
         else
@@ -494,7 +494,7 @@ void HandleAction_UseMove(void)
 
 void HandleAction_Switch(void)
 {
-    gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
+    gBattlerAttacker = GetTurnBattler();
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
     gActionSelectionCursor[gBattlerAttacker] = 0;
@@ -505,6 +505,34 @@ void HandleAction_Switch(void)
     gBattleScripting.battler = gBattlerAttacker;
     gBattlescriptCurrInstr = BattleScript_ActionSwitch;
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+
+    if (gBattleResults.playerSwitchesCounter < 255)
+        gBattleResults.playerSwitchesCounter++;
+
+    UndoFormChange(gBattlerPartyIndexes[gBattlerAttacker], GetBattlerSide(gBattlerAttacker), TRUE);
+}
+
+void HandleAction_SwitchExtra(void)
+{
+    struct ExtraActionStruct data = gQueuedExtraAttackData[0];
+    gBattlerAttacker = data.attacker;
+    gBattlerTarget = data.target;
+    gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+    gBattleScripting.battler = gBattlerAttacker;
+    
+    switch (data.type)
+    {
+        case EXTRA_SWITCH_ITEM:
+            return;
+    }
+    gBattle_BG0_X = 0;
+    gBattle_BG0_Y = 0;
+    gActionSelectionCursor[gBattlerAttacker] = 0;
+    gMoveSelectionCursor[gBattlerAttacker] = 0;
+
+    PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, gBattlerAttacker, *(gBattleStruct->battlerPartyIndexes + gBattlerAttacker))
+    
+    gBattlescriptCurrInstr = BattleScript_ActionSwitch;
 
     if (gBattleResults.playerSwitchesCounter < 255)
         gBattleResults.playerSwitchesCounter++;
@@ -887,11 +915,36 @@ void HandleAction_TryFinish(void)
 {
     if (gQueuedAttackCount)
     {
+        u32 type = 100;
+        u32 position = 0;
+        u32 i;
         ClearMiscTurnFlags();
-        gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];
+        for (i = gQueuedAttackCount; i > 0; i--)
+        {
+            if (gQueuedExtraAttackData[i].type < type)
+            {
+                type = gQueuedExtraAttackData[i].type;
+                position = i;
+            }
+            else if (gQueuedExtraAttackData[i].type == type)
+            {
+                if (type == EXTRA_DANCER
+                    || type == EXTRA_ENTRY
+                    || type == EXTRA_SWITCH_ITEM
+                    || type == EXTRA_SWITCH_ABILITY)
+                    position = i;
+            }
+        }
+        gQueuedExtraAttackData[0] = gQueuedExtraAttackData[position];
+        for (i = position; i < gQueuedAttackCount; i++) gQueuedExtraAttackData[i] = gQueuedExtraAttackData[i+1];
+        gQueuedAttackCount--;
         if (!IsBattlerAlive(gQueuedExtraAttackData[0].attacker)) return;
         gProcessingExtraAttacks = TRUE;
-        gCurrentActionFuncId = B_ACTION_USE_MOVE;
+        if (type == EXTRA_SWITCH_ABILITY
+            || type == EXTRA_SWITCH_ITEM
+            || type == EXTRA_SWITCH_MOVE)
+            gCurrentActionFuncId = B_ACTION_SWITCH_EXTRA;
+        else gCurrentActionFuncId = B_ACTION_USE_MOVE;
         return;
     }
     
@@ -916,7 +969,6 @@ void HandleAction_ActionFinished(void)
     RecalculateMoveOrder(++gCurrentTurnActionNumber + (gAfterYouBattlers ? gAfterYouBattlers-- : 0), gBattlersCount - (gQuashedBattlers ? gQuashedBattlers-- : 0));
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     TurnStructsClear();
-    gRoundStructs[gBattlerAttacker].extraMoveUsed = 0;
     gLastLandedMoves[gBattlerAttacker] = 0;
     gLastHitByType[gBattlerAttacker] = 0;
     ClearMiscTurnFlags();
@@ -4327,13 +4379,18 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePo
     // Set bit and save Dancer mon's original target
     gTurnStructs[battler].dancerUsedMove = TRUE;
 
-    gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct)
+    gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraActionStruct)
     {
-        .ability = ability,
-        .move = move,
+        .type = EXTRA_DANCER,
         .attacker = battler,
         .target = target,
-        .movePower = movePower,
+        .data = {
+            .attackInfo = {
+                .ability = ability,
+                .move = move,
+                .movePower = movePower,
+            }
+        }
     };
 
     return TRUE;
@@ -4711,7 +4768,7 @@ static bool8 UseEntryMove(u8 battler, u16 ability, u8 *effect, u16 extraMove, u8
         gTempMove = gCurrentMove;
         gCurrentMove = extraMove;
         gTurnStructs[battler].multiHitCounter = 0;
-        gRoundStructs[battler].extraMoveUsed = TRUE;
+        gTurnStructs[battler].extraMoveUsed = TRUE;
 
         //Move Effect
         VarSet(VAR_EXTRA_MOVE_DAMAGE,     movePower);
@@ -4761,7 +4818,7 @@ static u16 UseAttackerFollowUpMove(u8 battler, u16 ability, u16 extraMove, u8 mo
     gTempMove = gCurrentMove;
     gCurrentMove = extraMove;
     VarSet(VAR_EXTRA_MOVE_DAMAGE, movePower);
-    gRoundStructs[battler].extraMoveUsed = TRUE;
+    gTurnStructs[battler].extraMoveUsed = TRUE;
 
     //Move Effect
     VarSet(VAR_TEMP_MOVEEFECT_CHANCE, moveEffectPercentChance);
@@ -11931,7 +11988,7 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return FALSE;
     else if (gRoundStructs[battlerId].protected)
         return TRUE;
-    else if (gRoundStructs[battlerId].protectedThisTurn && gRoundStructs[gBattlerAttacker].extraMoveUsed != TRUE)
+    else if (gRoundStructs[battlerId].protectedThisTurn && !gTurnStructs[gBattlerAttacker].extraMoveUsed)
         return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_WIDE_GUARD
              && GetBattlerBattleMoveTargetFlags(move, battlerId) & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))

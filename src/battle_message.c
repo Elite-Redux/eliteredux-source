@@ -2289,6 +2289,12 @@ const u16 gPrimalEvolutionAnnouncement[] =
     [B_MSG_CROWNED_REVERSION] = STRINGID_CROWNED_REVERSION,
 };
 
+const u16 gSwitchAnnouncementStrings[] = 
+{
+    [B_MSG_PKMNWENTBACK] = STRINGID_PKMNWENTBACK,
+    [B_MSG_SHEDITSTAIL] = STRINGID_SHEDITSTAIL,
+};
+
 // END OF GENERATED
 
 const u16 gBallEscapeStringIds[] =

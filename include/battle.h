@@ -39,6 +39,7 @@
 #define B_ACTION_NOTHING_FAINTED        13 // when choosing an action
 #define B_ACTION_DEBUG                  20
 #define B_ACTION_THROW_BALL             21 // R to throw last used ball
+#define B_ACTION_SWITCH_EXTRA           22
 #define B_ACTION_NONE                   0xFF
 
 #define MAX_TRAINER_ITEMS 4
@@ -175,7 +176,6 @@ struct RoundStruct
     u32 statFell:1;
     u32 quickDraw:1;
     u32 beakBlastCharge:1;
-    u32 extraMoveUsed:1;
     u32 angelsWrathProtected:1;
     u8 glaiveRush:1;
     u8 silkTrapped:1;
@@ -222,6 +222,7 @@ struct TurnStruct
     u8 mirrorHerbStat:4;
     u8 multiHitCounter:4;
     u8 shouldTriggerSwitchItem:1;
+    u32 extraMoveUsed:1;
 };
 
 struct SideTimer
@@ -541,14 +542,51 @@ typedef enum
     STAT_STAGE_CHECK_IN_PROGRESS = 2,
 } StatStageCheckState;
 
+typedef enum
+{
+    EXTRA_INSTRUCT,
+    EXTRA_RETALIATION,
+    EXTRA_MULTI_HIT,
+    EXTRA_ADDITIONAL_TARGETS,
+    EXTRA_SWITCH_MOVE,
+    EXTRA_ENTRY,
+    EXTRA_DANCER,
+    EXTRA_FOLLOW_UP,
+    EXTRA_SWITCH_ITEM,
+    EXTRA_SWITCH_ABILITY,
+} ExtraActionType;
+
 struct ExtraAttackActionStruct
 {
-    u8 attacker:2;
-    u8 target:2;
-    u8 movePos:3;
     u16 ability;
     u16 move;
     u8 movePower;
+    u8 movePos:3;
+    u8 remainingAttacks:4;
+    u8 initialAttackCount:4;
+};
+
+struct ExtraSwitchActionStruct
+{
+    union ExtraSwitchActionSource {
+        u16 ability;
+        u16 item;
+        u16 move;
+    } source;
+    u8 random:1;
+    u8 playAnim:1;
+};
+
+struct ExtraActionStruct
+{
+    union ExtraAttackOrSwitchActionStruct
+    {
+        struct ExtraAttackActionStruct attackInfo;
+        struct ExtraSwitchActionStruct switchInfo;
+    } data;
+    u8 type:4;
+    u8 attacker:2;
+    u8 target:2;
 };
 
 struct BattleStruct
@@ -985,7 +1023,9 @@ extern struct BattleScripting gBattleScripting;
 extern struct BattleScripting gSavedBattleScripting;
 extern struct BattleStruct *gBattleStruct;
 extern u8 gQueuedAttackCount;
-extern struct ExtraAttackActionStruct gQueuedExtraAttackData[MAX_BATTLERS_COUNT + 1];
+// 1 active move, 1 retaliation, 3 out-of-turn, 1 follow-up, 1 move switch, 4 item switch, 4 ability switch, 1 initial queue
+#define EXTRA_ACTION_MAX_COUNT (1 + 1 + 3 + 1 + 1 + 4 + 4 + 1)
+extern struct ExtraActionStruct gQueuedExtraAttackData[EXTRA_ACTION_MAX_COUNT];
 extern bool8 gProcessingExtraAttacks;
 extern u8 *gLinkBattleSendBuffer;
 extern u8 *gLinkBattleRecvBuffer;

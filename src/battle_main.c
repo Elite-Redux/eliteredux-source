@@ -172,7 +172,7 @@ EWRAM_DATA u8 gCurrentTurnActionNumber = 0;
 EWRAM_DATA bool8 gProcessingExtraAttacks = FALSE;
 EWRAM_DATA u8 gQueuedAttackCount = 0;
 // Position 0 is active attack
-EWRAM_DATA struct ExtraAttackActionStruct gQueuedExtraAttackData[MAX_BATTLERS_COUNT + 1] = {0};
+EWRAM_DATA struct ExtraActionStruct gQueuedExtraAttackData[EXTRA_ACTION_MAX_COUNT] = {0};
 EWRAM_DATA u8 gCurrentActionFuncId = 0;
 EWRAM_DATA struct BattlePokemon gBattleMons[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT] = {0};
@@ -507,6 +507,7 @@ static void (* const sTurnActionsFuncsTable[])(void) =
     [B_ACTION_FINISHED] = HandleAction_ActionFinished,
     [B_ACTION_NOTHING_FAINTED] = HandleAction_NothingIsFainted,
     [B_ACTION_THROW_BALL] = HandleAction_ThrowBall,
+    [B_ACTION_SWITCH_EXTRA] = HandleAction_SwitchExtra,
 };
 
 static void (* const sEndTurnFuncsTable[])(void) =
@@ -3426,7 +3427,13 @@ void SwitchInClearSetData(void)
         gQueuedAttackCount = 0;
         for (i = 1; i <= previousQueuedAttackCount; i++)
         {
-            if (gQueuedExtraAttackData[i].attacker == gActiveBattler) continue;
+            struct ExtraActionStruct action = gQueuedExtraAttackData[i];
+            if (action.attacker == gActiveBattler) continue;
+            if (action.target == gActiveBattler &&
+                (action.type == EXTRA_SWITCH_ABILITY
+                || action.type == EXTRA_SWITCH_ITEM
+                || action.type == EXTRA_SWITCH_MOVE
+                || action.type == EXTRA_RETALIATION)) continue;
             gQueuedAttackCount++;
             if (gQueuedAttackCount != i)
             {
@@ -4933,7 +4940,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
 u16 GetChosenMove(u32 battlerId)
 {
     if (gProcessingExtraAttacks)
-        return gQueuedExtraAttackData[0].move;
+        return gQueuedExtraAttackData[0].data.attackInfo.move;
     if (gRoundStructs[battlerId].noValidMoves)
         return MOVE_STRUGGLE;
     else
