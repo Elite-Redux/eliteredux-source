@@ -2302,7 +2302,7 @@ const u8 gText_Chance[]                 = _("Chance");
 const u8 gText_Contact[]                = _("Contact");
 const u8 gText_Target[]                 = _("Target");
 const u8 gText_Priority[]               = _("Priority");
-const u8 gText_Critical[]               = _("High Critical");
+const u8 gText_Critical[]               = _("Critical");
 const u8 gText_Effect_None[]            = _("---");
 
 //Summary Screen Move Effects

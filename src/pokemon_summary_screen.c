@@ -130,6 +130,7 @@ enum
 
 #define POWER_AND_ACCURACY_Y    33
 #define POWER_AND_ACCURACY_Y_2  POWER_AND_ACCURACY_Y + 16
+#define MAX_RELEARNER_MOVES (MAX_LEVEL_UP_MOVES > 25 ? MAX_LEVEL_UP_MOVES : 25)
 
 static EWRAM_DATA struct PokemonSummaryScreenData
 {
@@ -214,6 +215,13 @@ static EWRAM_DATA struct PokemonSummaryScreenData
     u8 spriteIds[SPRITE_ARR_ID_COUNT];
     bool8 unk40EF;
     s16 switchCounter; // Used for various switch statement cases that decompress/load graphics or pokemon data
+    u16 moveReplaceFirstMove;
+    u8 moveReplaceCurrentIdx;
+    u8 moveReplaceTabNum;
+    u8 moveReplaceMoveNum;
+    u16 moveReplaceList[MAX_RELEARNER_MOVES];
+    u8  numMenuChoices;
+    bool8 replaceMoveMode;
 } *sMonSummaryScreen = NULL;
 
 //Ability, Evs and Ability Modifiers inside the summary screen
@@ -259,13 +267,22 @@ static bool8 IsValidToViewInMulti(struct Pokemon* mon);
 static void ChangePage(u8 taskId, s8 a);
 static void ChangePageTask(u8 taskId);
 static void SwitchToMoveSelection(u8 taskId);
+static void SwitchToMoveReplaceMenu(u8 taskId);
 static void Task_SwitchToMoveDetails(u8 taskId);
+static void Task_SwitchToReplaceMove(u8 taskId);
+static void PrintMoveReplaceTab(void);
+static void PrintMoveInfo(u16 move, u8 tabNum);
+static void SetTypeSpritePosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId);
+static void PrintTextOnWindow(u8 windowId, const u8 *string, u8 x, u8 y, u8 lineSpacing, u8 colorId);
 static void Task_HandleInput_MoveSelect(u8 taskId);
+static void Task_HandleInput_ReplaceMoves(u8 taskId);
 static void Task_SwitchPageInMoveSelect(u8 taskId);
 static bool8 HasMoreThanOneMove(void);
 static void ChangeSelectedMove(s16 *taskData, s8 direction, u8 *moveIndexPtr);
 static void CloseMoveSelectMode(u8 taskId);
+static void CloseMoveReplaceMode(u8 taskId);
 static void Task_SwitchFromMoveDetails(u8 taskId);
+static void Task_SwitchFromMoveReplaceMenu(u8 taskId);
 static void SwitchToMovePositionSwitchMode(u8 a);
 static void Task_HandleInput_MovePositionSwitch(u8 taskId);
 static void ExitMovePositionSwitchMode(u8 taskId, bool8 swapMoves);
@@ -310,7 +327,7 @@ static void PrintAbilityAndInnates(void);
 static void BufferMonPokemonAbilityAndInnates(void);
 static void PrintEvolutionData(void);
 static void BufferMonPokemonEvolutionData(void);
-static void PrintMoveDetails(u16 a);
+static void PrintMoveDetails(u16 move);
 static void PrintNewMoveDetailsOrCancelText(void);
 static void SwapMovesNamesPP(u8 moveIndex1, u8 moveIndex2);
 static void ResetSpriteIds(void);
@@ -428,7 +445,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .paletteNum = 2,
         .baseBlock = 418,
     },
-    [PSS_LABEL_PANE_RIGHT] = {//asdf
+    [PSS_LABEL_PANE_RIGHT] = {
         .bg = 0,
         .tilemapLeft = 11,
         .tilemapTop = 2,
@@ -1023,7 +1040,7 @@ const u8 sText_TitleRibbons[] = _("Ribbons");
 const u8 sText_TitleIVs[] = _("Pokémon IVs");
 const u8 sText_TitleEVs[] = _("Pokémon EVs");
 const u8 sText_TitlePage[] = _("{DPAD_LEFTRIGHT}Page");
-const u8 sText_TitlePageDetail[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Detail");
+const u8 sText_TitlePageDetail[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Detail {R_BUTTON}Replace");
 const u8 sText_TitlePickSwitch[] = _("{DPAD_UPDOWN}Pick {A_BUTTON}Switch {L_BUTTON}Details");
 const u8 sText_TitlePickSwitchContest[] = _("{DPAD_UPDOWN}Pick {A_BUTTON}Switch");
 const u8 sText_TitlePageIVs[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Modify");
@@ -2097,8 +2114,13 @@ static void Task_HandleInput(u8 taskId)
         }
 		else if (gMain.newKeys & R_BUTTON)
 		{
-			if(!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-				ChangePage(taskId, 1);
+            if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES){
+                PlaySE(SE_SELECT);
+                SwitchToMoveReplaceMenu(taskId);
+            }
+			else if(!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES){
+                ChangePage(taskId, 1);
+            }
 			else if((CurrentEv != MAX_PER_STAT_EVS && 
                      TotalEvs < MAX_TOTAL_EVS && 
                      gSaveBlock2Ptr->enableEvs && 
@@ -2683,6 +2705,483 @@ static void SwitchToMoveSelection(u8 taskId)
     SetTaskFuncWithFollowupFunc(taskId, Task_SwitchToMoveDetails, gTasks[taskId].func);
 }
 
+//Move Replace Functions
+
+enum{
+    MOVE_REPLACE_TAB_LEVEL,
+    MOVE_REPLACE_TAB_TMHM,
+    MOVE_REPLACE_TAB_TUTOR,
+    MOVE_REPLACE_TAB_EGG,
+    NUM_MOVE_REPLACE_TABS,
+};
+
+static void GenerateMoveReplaceList(){
+    struct Pokemon *mon = sMonSummaryScreen->monList.mons;
+    u16 species = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_SPECIES, 0);
+    u32 personality = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_PERSONALITY, 0);
+    u8 level = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_LEVEL, 0);
+    u16 eggMoveBuffer[EGG_MOVES_ARRAY_COUNT];
+    u16 firsStage = GetEggSpecies(species);
+    u16 numEggMoves = GetEggMovesSpecies(firsStage, eggMoveBuffer);
+    u32 i, j;
+
+    sMonSummaryScreen->numMenuChoices = 0;
+    
+    for(i = 0; i < MAX_LEVEL_UP_MOVES; i++){
+        sMonSummaryScreen->moveReplaceList[i] = MOVE_NONE;
+    }
+
+    switch(sMonSummaryScreen->moveReplaceTabNum){
+        case MOVE_REPLACE_TAB_LEVEL:
+            for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
+            {
+                if (gLevelUpLearnsets[species][i].move == LEVEL_UP_END){
+                    break;
+                }
+                else{
+                    sMonSummaryScreen->moveReplaceList[i] = gLevelUpLearnsets[species][i].move;
+                    sMonSummaryScreen->numMenuChoices++;
+
+                    MgbaOpen();
+                    MgbaPrintf(MGBA_LOG_WARN, "SwitchToMoveReplaceMenu Move %d Num %d", sMonSummaryScreen->moveReplaceList[i], sMonSummaryScreen->numMenuChoices);
+                    MgbaClose();
+                }
+            }
+        break;
+        case MOVE_REPLACE_TAB_TMHM:
+            for (i = 0; i < TM_COUNT; i++)
+            {
+                if(CanSpeciesLearnTMHM(species, i))
+                {
+                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(GetTmMove(i), species, personality);
+                    sMonSummaryScreen->numMenuChoices++;
+                }
+            }
+        break;
+        case MOVE_REPLACE_TAB_TUTOR:
+            for (i = 0; i < TUTOR_COUNT; i++)
+            {
+                if (CanLearnTutorMove(species, i) && 
+                    gBattleMoves[GetTutorMove(i)].effect != EFFECT_PLACEHOLDER)
+                {
+                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(GetTutorMove(i), species, personality);
+                    sMonSummaryScreen->numMenuChoices++;
+                }
+            }
+        break;
+        case MOVE_REPLACE_TAB_EGG:
+            firsStage = GetEggSpecies(species);
+            numEggMoves = GetEggMovesSpecies(firsStage, eggMoveBuffer);
+            for (i = 0; i < numEggMoves; i++)
+            {
+                sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(eggMoveBuffer[i], firsStage, personality);
+                sMonSummaryScreen->numMenuChoices++;
+            }
+        default:
+            for (i = 0; i < TM_COUNT; i++)
+            {
+                if(CanSpeciesLearnTMHM(species, i))
+                {
+                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(GetTmMove(i), species, personality);
+                    sMonSummaryScreen->numMenuChoices++;
+                }
+            }
+        break;
+    }
+}
+
+static void SwitchToMoveReplaceMenu(u8 taskId)
+{
+    struct Pokemon *mon = sMonSummaryScreen->monList.mons;
+    u16 species = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_SPECIES, 0);
+    u8 level = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_LEVEL, 0);
+    s16 *data = gTasks[taskId].data;
+
+    sMonSummaryScreen->moveReplaceTabNum = MOVE_REPLACE_TAB_LEVEL;
+
+    sMonSummaryScreen->moveReplaceFirstMove = 0;
+    sMonSummaryScreen->moveReplaceCurrentIdx = 0;
+    sMonSummaryScreen->moveReplaceMoveNum = 0;
+    sMonSummaryScreen->replaceMoveMode = 0;
+
+    GenerateMoveReplaceList();
+
+    gTasks[taskId].func = Task_HandleInput_ReplaceMoves;
+    SetTaskFuncWithFollowupFunc(taskId, Task_SwitchToReplaceMove, gTasks[taskId].func);
+}
+
+const u32 gSummaryScreenPageMoveDetailsReplaceTilemap[] = INCBIN_U32("graphics/summary_screen/page_moves_replace_selected.bin.lz");
+const u32 gSummaryScreenPageMoveReplaceTilemap[]        = INCBIN_U32("graphics/summary_screen/page_moves_replace.bin.lz");
+
+static void Task_SwitchToReplaceMove(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+    u8 i = 0;
+
+    switch (data[0])
+    {
+        case 0:
+            DestroySpriteAndFreeResources(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]]);
+            SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, TRUE);
+            SetSpriteInvisibility(SPRITE_ARR_ID_STATUS, TRUE);
+            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 2, TRUE);
+            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 3, TRUE);
+            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 4, TRUE);
+            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 5, TRUE);
+            StopPokemonAnimations();
+            sMonSummaryScreen->markingsSprite->x = 257;
+            sMonSummaryScreen->markingsSprite->y = 332;
+            ClearWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
+
+            LZDecompressWram(gSummaryScreenPageMoveReplaceTilemap, sMonSummaryScreen->bgTilemapBufferPage);
+            //LZDecompressWram(gSummaryScreenPageMoveDetailsReplaceTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+
+            SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBufferPage);
+            //SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
+            ScheduleBgCopyTilemapToVram(1);
+            ScheduleBgCopyTilemapToVram(2);
+            data[0]++;
+            break;
+        case 1:
+            SetNewMoveTypeIcon();
+            PrintInfoBar(sMonSummaryScreen->currPageIndex, TRUE);
+            data[0]++;
+            break;
+        case 2:
+            ChangeBgX(1, 0, 0);
+            PrintMoveReplaceTab();
+            data[0]++;
+            break;
+        case 3:
+            PrintMoveDetails(sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx]);
+            PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
+            data[0]++;
+            break;
+        case 4:
+            data[0] = 0;
+            SwitchTaskToFollowupFunc(taskId);
+            break;
+    }
+}
+
+const u8 sText_Move_Power[]        = _("BP");
+const u8 sText_Move_Accuracy[]      = _("Acc");
+const u8 sText_Move_Type_Level[]    = _("Level");
+const u8 sText_Move_Type_Egg[]      = _("Egg");
+const u8 sText_Move_Type_TMHM[]     = _("TMHM");
+const u8 sText_Move_Type_Tutor[]    = _("Tutor");
+const u8 sText_MoveToReplace[]      = _("Move to Replace");
+const u8 sText_MoveLearned[]        = _("Learned");
+static const u8 sMoveCursor[]       = INCBIN_U8("graphics/summary_screen/new/move_cursor.4bpp");
+static const u8 sMoveTabCursor[]    = INCBIN_U8("graphics/summary_screen/new/move_tab_cursor.4bpp");
+static const u8 sSummary_R_Button[] = INCBIN_U8("graphics/summary_screen/new/r_button.4bpp");
+static const u8 sSummary_L_Button[] = INCBIN_U8("graphics/summary_screen/new/l_button.4bpp");
+static const u8 sSummary_R_Arrow[]  = INCBIN_U8("graphics/summary_screen/new/r_arrow.4bpp");
+static const u8 sSummary_L_Arrow[]  = INCBIN_U8("graphics/summary_screen/new/l_arrow.4bpp");
+
+#define MAX_MOVE_REPLACE_MOVES 7
+#define MAX_MOVE_TABS 3
+#define SPACE_BETWEEN_MOVES_AND_BPACC (10 * 8)
+#define SPACE_BETWEEN_MOVES_AND_BPACC_2 (2 * 8) + 3
+
+static void PrintMoveInfoFromReplaceTab(void){
+    u16 CurrentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+    ScheduleBgCopyTilemapToVram(1);
+    ScheduleBgCopyTilemapToVram(2);
+    PrintMoveDetails(CurrentMove);
+}
+
+static void PrintMoveReplaceTab(void)
+{
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    u8 numMoves = sMonSummaryScreen->numMenuChoices;
+    u8 i, j, windowId, PosX, PosY;
+    u16 moveNum;
+    u8 tabNum;
+    u8 type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
+    u8 type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
+    bool8 hasMonMove = FALSE;
+    u16 CurrentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+
+    SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, FALSE);
+    SetTypeSpritePosAndPal(type1, 41, 45, SPRITE_ARR_ID_TYPE);
+
+    if (type1 != type2)
+    {
+        SetTypeSpritePosAndPal(type2, 75, 45, SPRITE_ARR_ID_TYPE + 1);
+        SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, FALSE);
+    }
+    else
+    {
+        SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);
+    }
+
+    //Move List
+    windowId = PSS_LABEL_PANE_RIGHT;
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
+
+    if(numMoves > MAX_MOVE_REPLACE_MOVES)
+        numMoves = MAX_MOVE_REPLACE_MOVES;
+
+    //Icons
+    PosX = 1;
+    PosY = 1;
+    BlitBitmapToWindow(windowId, sSummary_L_Arrow,  (PosX * 8) - 1,   (PosY * 8), 8,  8);
+    BlitBitmapToWindow(windowId, sSummary_L_Button, ((PosX + 1) * 8), (PosY * 8), 16, 8);
+    
+    PosX = 16;
+    BlitBitmapToWindow(windowId, sSummary_R_Button, (PosX * 8) - 1,   (PosY * 8), 16, 8);
+    BlitBitmapToWindow(windowId, sSummary_R_Arrow,  ((PosX + 2) * 8), (PosY * 8), 8,  8);
+
+    //Tab Name
+    PosX = 4;
+    PosY = 1;
+
+    for(i = 0; i < MAX_MOVE_TABS; i++){
+        tabNum = (NUM_MOVE_REPLACE_TABS - 1 + (sMonSummaryScreen->moveReplaceTabNum + i)) % NUM_MOVE_REPLACE_TABS;
+
+        switch(tabNum){
+            case MOVE_REPLACE_TAB_LEVEL:
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Level);
+            break;
+            case MOVE_REPLACE_TAB_TMHM:
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_TMHM);
+            break;
+            case MOVE_REPLACE_TAB_TUTOR:
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Tutor);
+            break;
+            case MOVE_REPLACE_TAB_EGG:
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Egg);
+            break;
+        }
+
+        if(i == 1)
+            BlitBitmapToWindow(windowId, sMoveTabCursor, (PosX * 8) - 4, (PosY * 8) - 1, 32, 16);
+
+        PosX = PosX + 4;
+    }
+
+    //Move List
+    PosX = 4;
+    PosY = 3;
+    for(i = 0; i < numMoves; i++){
+        hasMonMove = FALSE;
+        if(sMonSummaryScreen->moveReplaceFirstMove + i == sMonSummaryScreen->moveReplaceCurrentIdx)
+            BlitBitmapToWindow(windowId, sMoveCursor, ((PosX - 1) * 8), (PosY * 8), 8, 16);
+
+        moveNum = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceFirstMove + i];
+        AddTextPrinterParameterized4(windowId, FONT_NARROW, (PosX * 8), (PosY * 8), 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, gMoveNamesLong[moveNum]);
+
+        for (j = 0; j < MAX_MON_MOVES; j++){
+            if(moveNum == GetMonData(mon, MON_DATA_MOVE1 + j, 0))
+                hasMonMove = TRUE;
+        }
+
+        if(hasMonMove){
+            AddTextPrinterParameterized4(windowId, FONT_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC, (PosY * 8), 0, 0, sTextColors[PSS_COLOR_MALE_GENDER_SYMBOL], 0xFF, sText_MoveLearned);
+        }
+        else{
+            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveNum].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC, (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, sText_Move_Power);
+            AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC + SPACE_BETWEEN_MOVES_AND_BPACC_2, (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, gStringVar1);
+            
+            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveNum].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC, (PosY * 8) - 4 + 8, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, sText_Move_Accuracy);
+            AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC + SPACE_BETWEEN_MOVES_AND_BPACC_2, (PosY * 8) - 4 + 8, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, gStringVar1);
+        }
+        PosY = PosY + 2;
+    }
+
+    PutWindowTilemap(windowId);
+    CopyWindowToVram(windowId, 3);
+}
+
+enum
+{
+    MOVE_INFO_DESCRIPTION,
+    MOVE_INFO_EFFECT,
+    MOVE_INFO_EFFECT_2,
+    MOVE_INFO_BOOSTS,
+    NUM_MOVE_INFO_TABS,
+};
+
+
+#define LEFTRIGHT_ITEM_NUMBER_CHANGE 5 5
+#define NUM_OF_POSSIBLE_OPTIONS_THAT_FIT_ON_SCREEN 7
+
+static void PressedDownButton_ReplaceMoves(){
+    u8 halfScreen = ((MAX_MOVE_REPLACE_MOVES) - 1) / 2;
+    u8 finalhalfScreen = sMonSummaryScreen->numMenuChoices - halfScreen;
+
+    if(sMonSummaryScreen->moveReplaceCurrentIdx < halfScreen){
+        sMonSummaryScreen->moveReplaceCurrentIdx++;
+    }
+	else if(sMonSummaryScreen->moveReplaceCurrentIdx >= (sMonSummaryScreen->numMenuChoices - 1)){ //If you are in the last option go to the first one
+		sMonSummaryScreen->moveReplaceCurrentIdx = 0;
+		sMonSummaryScreen->moveReplaceFirstMove = 0;
+    }
+    else if(sMonSummaryScreen->moveReplaceCurrentIdx >= (finalhalfScreen - 1)){
+        sMonSummaryScreen->moveReplaceCurrentIdx++;
+    }
+	else{
+        sMonSummaryScreen->moveReplaceCurrentIdx++;
+        sMonSummaryScreen->moveReplaceFirstMove++;
+    }
+}
+
+static void PressedUpButton_ReplaceMoves(){
+    u8 halfScreen = ((MAX_MOVE_REPLACE_MOVES) - 1) / 2;
+    u8 finalhalfScreen = sMonSummaryScreen->numMenuChoices - halfScreen;
+
+    if(sMonSummaryScreen->moveReplaceCurrentIdx > halfScreen && sMonSummaryScreen->moveReplaceCurrentIdx <= (finalhalfScreen - 1)){
+        sMonSummaryScreen->moveReplaceCurrentIdx--;
+        sMonSummaryScreen->moveReplaceFirstMove--;
+    }
+	else if(sMonSummaryScreen->moveReplaceCurrentIdx == 0){ //If you are in the first option go to the last one
+		sMonSummaryScreen->moveReplaceCurrentIdx = sMonSummaryScreen->numMenuChoices - 1;
+		sMonSummaryScreen->moveReplaceFirstMove = sMonSummaryScreen->numMenuChoices - MAX_MOVE_REPLACE_MOVES;
+    }
+    else{
+        sMonSummaryScreen->moveReplaceCurrentIdx--;
+    }
+}
+
+static void Task_HandleInput_ReplaceMoves(u8 taskId)
+{
+    u8 i, j;
+    s16 *data = gTasks[taskId].data;
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    u16 learnedMoves[MAX_MON_MOVES];
+    bool8 hasMonMove = FALSE;
+
+    if (JOY_NEW(DPAD_UP))
+    {
+        if(sMonSummaryScreen->replaceMoveMode){
+            if(sMonSummaryScreen->moveReplaceMoveNum != 0)
+                sMonSummaryScreen->moveReplaceMoveNum--;
+            else
+                sMonSummaryScreen->moveReplaceMoveNum = MAX_MON_MOVES - 1;
+        }
+        else
+            PressedUpButton_ReplaceMoves();
+        PrintMoveReplaceTab();
+        PrintMoveInfoFromReplaceTab();
+    }
+    else if (JOY_NEW(DPAD_DOWN))
+    {
+        if(sMonSummaryScreen->replaceMoveMode){
+            if(sMonSummaryScreen->moveReplaceMoveNum < MAX_MON_MOVES - 1)
+                sMonSummaryScreen->moveReplaceMoveNum++;
+            else
+                sMonSummaryScreen->moveReplaceMoveNum = 0;
+        }
+        else
+            PressedDownButton_ReplaceMoves();
+        PrintMoveReplaceTab();
+        PrintMoveInfoFromReplaceTab();
+    }
+    else if (JOY_NEW(DPAD_LEFT))
+    {
+        if(!sMonSummaryScreen->replaceMoveMode){
+            if(sMonSummaryScreen->moveReplaceTabNum > 0)
+                sMonSummaryScreen->moveReplaceTabNum--;
+            else
+                sMonSummaryScreen->moveReplaceTabNum = NUM_MOVE_REPLACE_TABS - 1;
+            sMonSummaryScreen->moveReplaceFirstMove = 0;
+            sMonSummaryScreen->moveReplaceCurrentIdx = 0;
+            sMonSummaryScreen->moveReplaceMoveNum = 0;
+            GenerateMoveReplaceList();
+            PrintMoveReplaceTab();
+            PrintMoveInfoFromReplaceTab();
+        }
+    }
+    else if (JOY_NEW(DPAD_RIGHT))
+    {
+        if(!sMonSummaryScreen->replaceMoveMode){
+            if(sMonSummaryScreen->moveReplaceTabNum < NUM_MOVE_REPLACE_TABS - 1)
+                sMonSummaryScreen->moveReplaceTabNum++;
+            else
+                sMonSummaryScreen->moveReplaceTabNum = 0;
+            sMonSummaryScreen->moveReplaceFirstMove = 0;
+            sMonSummaryScreen->moveReplaceCurrentIdx = 0;
+            sMonSummaryScreen->moveReplaceMoveNum = 0;
+            GenerateMoveReplaceList();
+            PrintMoveReplaceTab();
+            PrintMoveInfoFromReplaceTab();
+        }
+    }
+    else if(gMain.newKeys & L_BUTTON){
+        if(gCurrentModifyIndex > 0)
+            gCurrentModifyIndex--;
+        else
+            gCurrentModifyIndex = NUM_MOVE_INFO_TABS - 1;
+        PrintMoveReplaceTab();
+        PrintMoveInfoFromReplaceTab();
+    }
+    else if(gMain.newKeys & R_BUTTON){
+        if(gCurrentModifyIndex < NUM_MOVE_INFO_TABS - 1)
+            gCurrentModifyIndex++;
+        else
+            gCurrentModifyIndex = 0;
+        PrintMoveReplaceTab();
+        PrintMoveInfoFromReplaceTab();
+    }
+    else if(gMain.newKeys & A_BUTTON){
+        if(sMonSummaryScreen->replaceMoveMode){
+            u16 move = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+            u8 moveToReplace = sMonSummaryScreen->moveReplaceMoveNum;
+
+            for (i = 0; i < MAX_MON_MOVES; i++){
+                if(move == GetMonData(mon, MON_DATA_MOVE1 + i, 0))
+                    hasMonMove = TRUE;
+            }
+
+            for (i = 0; i < MAX_MON_MOVES; i++){
+                if(move == MOVE_NONE){
+                    moveToReplace = i;
+                    break;
+                }
+            }
+
+            if (!hasMonMove)
+            {
+                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &move);
+                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MOVE1 + moveToReplace, &move);
+                PlaySE(SE_SELECT);
+                PrintMoveReplaceTab();
+            }
+            else
+            {
+                PlaySE(SE_FAILURE);
+            }
+            sMonSummaryScreen->replaceMoveMode = FALSE;
+            sMonSummaryScreen->moveReplaceMoveNum = 0;
+        }
+        else{
+            sMonSummaryScreen->moveReplaceMoveNum = 0;
+            sMonSummaryScreen->replaceMoveMode = TRUE;
+        }
+        PrintMoveReplaceTab();
+        PrintMoveInfoFromReplaceTab();
+    }
+    else if(gMain.newKeys & B_BUTTON){
+        if(sMonSummaryScreen->replaceMoveMode){
+            sMonSummaryScreen->moveReplaceMoveNum = 0;
+            sMonSummaryScreen->replaceMoveMode = FALSE;
+            PrintMoveReplaceTab();
+            PrintMoveInfoFromReplaceTab();
+        }
+        else{
+            PlaySE(SE_SELECT);
+            CloseMoveReplaceMode(taskId);
+        }
+    }
+}
+
+//--------------------------------------------
+
 static void Task_SwitchToMoveDetails(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
@@ -2719,7 +3218,8 @@ static void Task_SwitchToMoveDetails(u8 taskId)
     }
 }
 
-#define NUM_MOVE_DESCRIPTION_PAGES 3
+#define MOVE_EFFECT_TEXT_Y 8
+#define MOVE_EFFECT_Y 70
 
 static void Task_HandleInput_MoveSelect(u8 taskId)
 {
@@ -2775,18 +3275,24 @@ static void Task_HandleInput_MoveSelect(u8 taskId)
             PlaySE(SE_SELECT);
             CloseMoveSelectMode(taskId);
         }
-		else if (gMain.newKeys & L_BUTTON)
-		{
-			PlaySE(SE_SELECT);
-			//Move between move description modes
-			gCurrentModifyIndex++;
-			
-			if(gCurrentModifyIndex >= NUM_MOVE_DESCRIPTION_PAGES)
-				gCurrentModifyIndex = 0;
-			
-			data[0] = 4;
+        else if(gMain.newKeys & L_BUTTON){
+            PlaySE(SE_SELECT);
+            if(gCurrentModifyIndex > 0)
+                gCurrentModifyIndex--;
+            else
+                gCurrentModifyIndex = NUM_MOVE_INFO_TABS - 1;
+            data[0] = 4;
             ChangeSelectedMove(data, 0, &sMonSummaryScreen->firstMoveIndex);
-		}
+        }
+        else if(gMain.newKeys & R_BUTTON){
+            PlaySE(SE_SELECT);
+            if(gCurrentModifyIndex < NUM_MOVE_INFO_TABS - 1)
+                gCurrentModifyIndex++;
+            else
+                gCurrentModifyIndex = 0;
+            data[0] = 4;
+            ChangeSelectedMove(data, 0, &sMonSummaryScreen->firstMoveIndex);
+        }
     }
 }
 
@@ -2923,6 +3429,66 @@ static void CloseMoveSelectMode(u8 taskId)
 }
 
 static void Task_SwitchFromMoveDetails(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+    switch (data[0])
+    {
+        case 0:
+            DestroyMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1);
+            PrintMoveDetails(0);
+            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE, TRUE);
+            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);
+            SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, TRUE);
+            #if CONFIG_PHYSICAL_SPECIAL_SPLIT || CONFIG_SHOW_ICONS_FOR_OLD_SPLIT
+            DestroySplitIcon();
+            #endif
+            data[0]++;
+            break;
+        case 1:
+            ChangeBgX(1, 0x10000, 0);
+            data[1] = 0;
+            data[0]++;
+            break;
+        case 2:
+            sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] = LoadMonGfxAndSprite(&sMonSummaryScreen->currentMon, &data[1]);
+            gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON]].callback = SpriteCallbackDummy;
+            if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MON] != SPRITE_NONE)
+                data[0]++;
+            break;
+        case 3:
+            PutWindowTilemap(PSS_LABEL_PANE_LEFT_TOP);
+            PutWindowTilemap(PSS_LABEL_PANE_LEFT_BOTTOM);
+            PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
+
+            if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HELD_ITEM))
+                SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, FALSE);
+            CreateSetStatusSprite();
+            sMonSummaryScreen->markingsSprite->x = 57;
+            sMonSummaryScreen->markingsSprite->y = 132;
+            PrintInfoBar(sMonSummaryScreen->currPageIndex, FALSE);
+            data[0]++;
+            break;
+        case 4:
+            ScheduleBgCopyTilemapToVram(0);
+            ScheduleBgCopyTilemapToVram(1);
+            ScheduleBgCopyTilemapToVram(2);
+            data[0] = 0;
+            SwitchTaskToFollowupFunc(taskId);
+            break;
+    }
+}
+
+static void CloseMoveReplaceMode(u8 taskId)
+{
+    u32 i;
+    s16 *data = gTasks[taskId].data;
+    data[0] = 0;
+
+    gTasks[taskId].func = Task_HandleInput;
+    SetTaskFuncWithFollowupFunc(taskId, Task_SwitchFromMoveReplaceMenu, gTasks[taskId].func);
+}
+
+static void Task_SwitchFromMoveReplaceMenu(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
     switch (data[0])
@@ -5149,13 +5715,316 @@ static u8 GetBattleMoveCategory(u16 move)
     }
 }
 
-#define MOVE_EFFECT_TEXT_Y 8
-#define MOVE_EFFECT_Y 70
+static void MoveEffectIntoStringVar1(u16 move){
+    switch(gBattleMoves[move].effect){
+		case EFFECT_BURN_HIT:
+		case EFFECT_SCALD:
+			StringCopy(gStringVar1, gText_Effect_Burn_Hit);
+		break;
+		case EFFECT_POISON_HIT:
+        case EFFECT_SLUDGE:
+			StringCopy(gStringVar1, gText_Effect_Poison_Hit);
+		break;
+		case EFFECT_PARALYZE_HIT:
+			StringCopy(gStringVar1, gText_Effect_Paralyze_Hit);
+		break;
+		case EFFECT_FREEZE_HIT:
+			StringCopy(gStringVar1, gText_Effect_Freeze_Hit);
+		break;
+		case EFFECT_CONFUSE_HIT:
+			StringCopy(gStringVar1, gText_Effect_Confuse_Hit);
+		break;
+		case EFFECT_FLINCH_HIT:
+			StringCopy(gStringVar1, gText_Effect_Flinch);
+		break;
+		//All Stats Up
+		case EFFECT_ALL_STATS_UP_HIT:
+			StringCopy(gStringVar1, gText_Effect_All_Stats_Up);
+		break;
+		//Attack
+		case EFFECT_ATTACK_UP_HIT:
+		case EFFECT_ATTACK_UP:
+		case EFFECT_ATTACK_UP_2:
+        case EFFECT_HOWL:
+			StringCopy(gStringVar1, gText_Effect_Attack_Up);
+		break;
+		case EFFECT_ATTACK_DOWN_HIT:
+		case EFFECT_ATTACK_DOWN:
+			StringCopy(gStringVar1, gText_Effect_Attack_Down);
+		break;
+		//Defense
+		case EFFECT_DEFENSE_UP_HIT:
+		case EFFECT_DEFENSE_UP:
+		case EFFECT_DEFENSE_UP_2: 
+			StringCopy(gStringVar1, gText_Effect_Defense_Up);
+		break;
+		case EFFECT_DEFENSE_DOWN_HIT:
+		case EFFECT_DEFENSE_DOWN:
+			StringCopy(gStringVar1, gText_Effect_Defense_Down);
+		break;
+		//Special Attack
+		case EFFECT_SP_ATTACK_UP_HIT:
+		case EFFECT_SPECIAL_ATTACK_UP:
+		case EFFECT_SPECIAL_ATTACK_UP_2:
+		case EFFECT_SPECIAL_ATTACK_UP_3:
+			StringCopy(gStringVar1, gText_Effect_Sp_Attack_Up);
+		break;
+		case EFFECT_SPECIAL_ATTACK_DOWN_HIT:
+		case EFFECT_SPECIAL_ATTACK_DOWN:
+			StringCopy(gStringVar1, gText_Effect_Sp_Attack_Down);
+		break;
+		//Special Defense
+		//case EFFECT_SPECIAL_DEFENSE_UP:
+		case EFFECT_SPECIAL_DEFENSE_UP_2:
+			StringCopy(gStringVar1, gText_Effect_Sp_Defense_Up);
+		break;
+		case EFFECT_SPECIAL_DEFENSE_DOWN_HIT:
+		case EFFECT_SPECIAL_DEFENSE_DOWN:
+			StringCopy(gStringVar1, gText_Effect_Sp_Defense_Down);
+		break;
+		//Speed
+		case EFFECT_SPEED_UP_HIT:
+		case EFFECT_SPEED_UP_2:
+			StringCopy(gStringVar1, gText_Effect_Speed_Up);
+		break;
+		case EFFECT_SPEED_DOWN_HIT:
+		case EFFECT_SPEED_DOWN:
+			StringCopy(gStringVar1, gText_Effect_Speed_Down);
+		break;
+		//Accuracy
+		/*/case EFFECT_ACCURACY_U:
+			StringCopy(gStringVar1, gText_Effect_Accuracy_Up);
+		break;/*/
+		case EFFECT_ACCURACY_DOWN_HIT:
+		case EFFECT_ACCURACY_DOWN:
+			StringCopy(gStringVar1, gText_Effect_Accuracy_Down);
+		break;
+		//Other
+		case EFFECT_RECOIL_50:
+		case EFFECT_RECOIL_33:
+		case EFFECT_RECOIL_25:
+			StringCopy(gStringVar1, gText_Effect_Recoil);
+		break;
+		case EFFECT_ALWAYS_CRIT:
+			StringCopy(gStringVar1, gText_Effect_Always_Crit);
+		//Multi Hit Moves
+		case EFFECT_MULTI_HIT:
+			StringCopy(gStringVar1, gText_Effect_Multi_Hit);
+		break;
+		case EFFECT_TRIPLE_KICK:
+			StringCopy(gStringVar1, gText_Effect_Three_Hits);
+		break;
+		case EFFECT_ABSORB:
+		case EFFECT_LEECH_SEED:
+			StringCopy(gStringVar1, gText_Effect_HP_Drain);
+			break;
+		case EFFECT_RESTORE_HP:
+		case EFFECT_JUNGLE_HEALING:
+		case EFFECT_SHORE_UP:
+			StringCopy(gStringVar1, gText_Effect_Heal_HP);
+		break;
+		case EFFECT_HEAL_BELL:
+			StringCopy(gStringVar1, gText_Effect_Heal);
+		break;
+		case EFFECT_PROTECT:
+			StringCopy(gStringVar1, gText_Effect_Protect);
+		break;
+		case EFFECT_HIT:
+			StringCopy(gStringVar1, gText_Effect_Hit);
+		break;
+	}
+}
+
+const u8 gText_Effect_Hit_Number[]          = _("Max Hits");
+const u8 gText_Effect_Boost_Type[]          = _("Boost Type");
+const u8 gText_Effect_Based_Type[]          = _("Based on");
+const u8 gText_Effect_Boost_Type_Weather[]  = _("Weather");
+const u8 gText_Effect_Boost_Type_Fist[]     = _("Fist");
+const u8 gText_Effect_Boost_Type_Kick[]     = _("Kick");
+const u8 gText_Effect_Boost_Type_Sound[]    = _("Sound");
+const u8 gText_Effect_Boost_Type_Cannon[]   = _("Cannon");
+const u8 gText_Effect_Boost_Type_Dance[]    = _("Dance");
+const u8 gText_Effect_Boost_Type_Field[]    = _("Field");
+const u8 gText_Effect_Boost_Type_Bone[]     = _("Bone");
+const u8 gText_Effect_Boost_Type_Slash[]    = _("Slash");
+const u8 gText_Effect_Boost_Type_Bite[]     = _("Bite");
+const u8 gText_Effect_Boost_Type_Reckless[] = _("Reckless");
+const u8 gText_Effect_Critical_High[]       = _("High");
+const u8 gText_Effect_Critical_Always[]     = _("Always");
+const u8 gText_Effect_Sheer_Force_Boosted[] = _("Sheer Force");
+const u8 gText_Effect_Ignores_Ability[]     = _("Ign. Ability");
+const u8 gText_Effect_Ignores_Stats[]       = _("Ign. Stats");
+
+static void PrintMoveInfo(u16 move, u8 tabNum)
+{
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    u8 windowId = PSS_LABEL_PANE_LEFT_MOVE;
+	u8 PosX = 64;
+    u8 numHits = 1;
+    u8 numBoosts = 0;
+
+    if (gBattleMoves[move].power < 2)
+        StringCopy(gStringVar1, gText_ThreeDashes);
+    else
+        ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
+
+    PrintNarrowTextOnWindow(windowId, gStringVar1, 84, POWER_AND_ACCURACY_Y, 0, 0);
+    PrintNarrowTextOnWindow(windowId, sText_Accuracy, 8, POWER_AND_ACCURACY_Y_2, 0, 1);
+
+    if (gBattleMoves[move].accuracy == 0)
+        StringCopy(gStringVar1, gText_ThreeDashes);
+    else
+        ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
+
+    PrintNarrowTextOnWindow(windowId, gStringVar1, 84, POWER_AND_ACCURACY_Y_2, 0, 0);
+    PrintNarrowTextOnWindow(windowId, sText_Power, 8, POWER_AND_ACCURACY_Y, 0, 1);
+
+    switch(tabNum){
+        case MOVE_INFO_DESCRIPTION:
+			PrintNarrowTextOnWindow(windowId, gMoveFourLineDescriptionPointers[move - 1], 2, PosX, 0, 0);
+        break;
+        case MOVE_INFO_EFFECT:
+			PrintSmallTextOnWindow(windowId, gText_Effect, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+			StringCopy(gStringVar1, gText_Effect_Hit);
+				
+			if(gBattleMoves[move].target == MOVE_TARGET_USER || gBattleMoves[move].target == MOVE_TARGET_ALL_BATTLERS)
+				StringCopy(gStringVar1, gText_Effect_Misc);
+
+			//Status Effects
+            MoveEffectIntoStringVar1(move);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+			
+			// Chance -------------------------------------------------------------------------------------------
+			PosX = PosX + 16;
+			PrintSmallTextOnWindow(windowId, gText_Chance, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+			ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].secondaryEffectChance, STR_CONV_MODE_LEFT_ALIGN, 3);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+
+			// Priority -------------------------------------------------------------------------------------------
+			PosX = PosX + 16;
+			PrintSmallTextOnWindow(windowId, gText_Priority, MOVE_EFFECT_TEXT_Y,   PosX, 0, 0);
+			ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y,  PosX, 0, 0);
+
+			// Contact -------------------------------------------------------------------------------------------
+			PosX = PosX + 16;
+			PrintSmallTextOnWindow(windowId, gText_Contact, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+
+			if(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+				PrintSmallTextOnWindow(windowId, gText_Effect_ContactYes, MOVE_EFFECT_Y, PosX, 0, 0);
+			else
+				PrintSmallTextOnWindow(windowId, gText_Effect_ContactNo, MOVE_EFFECT_Y, PosX, 0, 0);
+        break;
+        case MOVE_INFO_EFFECT_2:
+            // Target -------------------------------------------------------------------------------------------
+			PrintSmallTextOnWindow(windowId, gText_Target, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+			if(gBattleMoves[move].target == MOVE_TARGET_FOES_AND_ALLY)
+				PrintSmallTextOnWindow(windowId, gText_Effect_FoeAndAlly, MOVE_EFFECT_Y,  PosX, 0, 0);
+			else if(gBattleMoves[move].target == MOVE_TARGET_BOTH)
+				PrintSmallTextOnWindow(windowId, gText_Effect_BothFoes, MOVE_EFFECT_Y,  PosX, 0, 0);
+			else if(gBattleMoves[move].target == MOVE_TARGET_USER)
+			    PrintSmallTextOnWindow(windowId, gText_Effect_Self, MOVE_EFFECT_Y,  PosX, 0, 0);
+			else if(gBattleMoves[move].target == MOVE_TARGET_ALL_BATTLERS)
+				PrintSmallTextOnWindow(windowId, gText_Effect_Field, MOVE_EFFECT_Y,  PosX, 0, 0);
+			else
+				PrintSmallTextOnWindow(windowId, gText_Effect_OneFoe, MOVE_EFFECT_Y,  PosX, 0, 0);
+			
+			// Critical -------------------------------------------------------------------------------------------
+			PosX = PosX + 16;
+			PrintSmallTextOnWindow(windowId, gText_Critical, MOVE_EFFECT_TEXT_Y,  PosX, 0, 0);
+
+			if(gBattleMoves[move].flags & FLAG_HIGH_CRIT)
+				PrintSmallTextOnWindow(windowId, gText_Effect_Critical_High, MOVE_EFFECT_Y, PosX, 0, 0);
+            else if(gBattleMoves[move].alwaysCrit == TRUE)
+                PrintSmallTextOnWindow(windowId, gText_Effect_Critical_Always, MOVE_EFFECT_Y, PosX, 0, 0);
+			else
+				PrintSmallTextOnWindow(windowId, gText_ThreeDashes, MOVE_EFFECT_Y, PosX, 0, 0);
+
+			// Max Hit Num -------------------------------------------------------------------------------------------
+			PosX = PosX + 16;
+			PrintSmallTextOnWindow(windowId, gText_Effect_Hit_Number, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+            
+            // For Twineedle 
+            if(gBattleMoves[move].flags & FLAG_TWO_STRIKES)
+                numHits = 2;
+
+			ConvertIntToDecimalStringN(gStringVar1, numHits, STR_CONV_MODE_LEFT_ALIGN, 2);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+
+			// Sheer Force -------------------------------------------------------------------------------------------
+			PosX = PosX + 16;
+			PrintSmallTextOnWindow(windowId, gText_Effect_Sheer_Force_Boosted, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+            if((gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST))
+			    StringCopy(gStringVar1, gText_Effect_ContactYes);
+            else
+			    StringCopy(gStringVar1, gText_Effect_ContactNo);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+        break;
+        case MOVE_INFO_BOOSTS:
+			// Boosted -------------------------------------------------------------------------------------------
+			PrintSmallTextOnWindow(windowId, gText_Effect_Boost_Type, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+            if((gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Fist);
+            else if((gBattleMoves[move].flags & FLAG_STRIKER_BOOST))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Kick);
+            else if((gBattleMoves[move].flags & FLAG_BONE_BASED))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Bone);
+            else if((gBattleMoves[move].flags & FLAG_BALLISTIC))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Cannon);
+            else if((gBattleMoves[move].flags & FLAG_DANCE))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Dance);
+            else if((gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Slash);
+            else if((gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Bite);
+            else if((gBattleMoves[move].flags & FLAG_RECKLESS_BOOST))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Reckless);
+            else
+			    StringCopy(gStringVar1, gText_ThreeDashes);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+
+			// Based -------------------------------------------------------------------------------------------
+			PosX = PosX + 16;
+			PrintSmallTextOnWindow(windowId, gText_Effect_Based_Type, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+            if((gBattleMoves[move].flags & FLAG_WEATHER_BASED))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Weather);
+            else if((gBattleMoves[move].flags & FLAG_FIELD_BASED))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Field);
+            else if((gBattleMoves[move].flags & FLAG_BONE_BASED))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Bone);
+            else if((gBattleMoves[move].flags & FLAG_SOUND))
+			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Sound);
+            else
+			    StringCopy(gStringVar1, gText_ThreeDashes);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+
+			// Ignores Ability -------------------------------------------------------------------------------------------
+			PosX = PosX + 16;
+			PrintSmallTextOnWindow(windowId, gText_Effect_Ignores_Ability, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+            if((gBattleMoves[move].flags & FLAG_TARGET_ABILITY_IGNORED))
+			    StringCopy(gStringVar1, gText_Effect_ContactYes);
+            else
+			    StringCopy(gStringVar1, gText_Effect_ContactNo);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+
+			// Ignores Stats -------------------------------------------------------------------------------------------
+			PosX = PosX + 16;
+			PrintSmallTextOnWindow(windowId, gText_Effect_Ignores_Stats, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+            if((gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED))
+			    StringCopy(gStringVar1, gText_Effect_ContactYes);
+            else
+			    StringCopy(gStringVar1, gText_Effect_ContactNo);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+        break;
+    }
+    ShowSplitIcon(GetBattleMoveSplit(move));
+}
 
 static void PrintMoveDetails(u16 move)
 {
     u32 heartRow1, heartRow2;
-	u8 PosX;
+	u8 PosX, PosY, i, j;
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
     u8 type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
@@ -5181,214 +6050,29 @@ static void PrintMoveDetails(u16 move)
         SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);
     }
 
-    if (move != MOVE_NONE)
-    {
+    if(sMonSummaryScreen->replaceMoveMode){
+        u16 currentMove = MOVE_NONE;
+        PosX = MOVE_EFFECT_TEXT_Y + 8;
+        PosY = 64;
+
+        for(i = 0; i < MAX_MON_MOVES; i++){
+            currentMove = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
+            if(i == sMonSummaryScreen->moveReplaceMoveNum)
+                BlitBitmapToWindow(PSS_LABEL_PANE_LEFT_MOVE, sMoveCursor, PosX - 8, PosY, 8, 16);
+
+            if(currentMove != MOVE_NONE)
+                StringCopy(gStringVar1, gMoveNamesLong[currentMove]);
+            else
+                StringCopy(gStringVar1, gText_ThreeDashes);
+
+            PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, PosX, PosY, 0, 0);
+            PosY = PosY + 16;
+        }
+    }
+    else if(move != MOVE_NONE){
         if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
         {
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, sText_Power, 8, POWER_AND_ACCURACY_Y, 0, 1);
-
-            if (gBattleMoves[move].power < 2)
-                StringCopy(gStringVar1, gText_ThreeDashes);
-            else
-                ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
-
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, 84, POWER_AND_ACCURACY_Y, 0, 0);
-
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, sText_Accuracy, 8, POWER_AND_ACCURACY_Y_2, 0, 1);
-
-            if (gBattleMoves[move].accuracy == 0)
-            {
-                StringCopy(gStringVar1, gText_ThreeDashes);
-            }
-            else
-                ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
-
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, 84, POWER_AND_ACCURACY_Y_2, 0, 0);
-
-			if(gCurrentModifyIndex == 0)
-				PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gMoveFourLineDescriptionPointers[move - 1], 2, 64, 0, 0);
-			else if(gCurrentModifyIndex == 1){
-				// Effect -------------------------------------------------------------------------------------------
-				PosX = 64;
-				PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-				
-				StringCopy(gStringVar1, gText_Effect_Hit);
-				
-				if(gBattleMoves[move].target == MOVE_TARGET_USER ||
-				   gBattleMoves[move].target == MOVE_TARGET_ALL_BATTLERS)
-					StringCopy(gStringVar1, gText_Effect_Misc);
-				
-				switch(gBattleMoves[move].effect){
-					//Status Effects
-					case EFFECT_BURN_HIT:
-					case EFFECT_SCALD:
-						StringCopy(gStringVar1, gText_Effect_Burn_Hit);
-					break;
-					case EFFECT_POISON_HIT:
-						StringCopy(gStringVar1, gText_Effect_Poison_Hit);
-					break;
-					case EFFECT_PARALYZE_HIT:
-						StringCopy(gStringVar1, gText_Effect_Paralyze_Hit);
-					break;
-					case EFFECT_FREEZE_HIT:
-						StringCopy(gStringVar1, gText_Effect_Freeze_Hit);
-					break;
-					case EFFECT_CONFUSE_HIT:
-						StringCopy(gStringVar1, gText_Effect_Confuse_Hit);
-					break;
-					case EFFECT_FLINCH_HIT:
-						StringCopy(gStringVar1, gText_Effect_Flinch);
-					break;
-					//All Stats Up
-					case EFFECT_ALL_STATS_UP_HIT:
-						StringCopy(gStringVar1, gText_Effect_All_Stats_Up);
-					break;
-					//Attack
-					case EFFECT_ATTACK_UP_HIT:
-					case EFFECT_ATTACK_UP:
-					case EFFECT_ATTACK_UP_2:
-                    case EFFECT_HOWL:
-						StringCopy(gStringVar1, gText_Effect_Attack_Up);
-					break;
-					case EFFECT_ATTACK_DOWN_HIT:
-					case EFFECT_ATTACK_DOWN:
-						StringCopy(gStringVar1, gText_Effect_Attack_Down);
-					break;
-					//Defense
-					case EFFECT_DEFENSE_UP_HIT:
-					case EFFECT_DEFENSE_UP:
-					case EFFECT_DEFENSE_UP_2: 
-						StringCopy(gStringVar1, gText_Effect_Defense_Up);
-					break;
-					case EFFECT_DEFENSE_DOWN_HIT:
-					case EFFECT_DEFENSE_DOWN:
-						StringCopy(gStringVar1, gText_Effect_Defense_Down);
-					break;
-					//Special Attack
-					case EFFECT_SP_ATTACK_UP_HIT:
-					case EFFECT_SPECIAL_ATTACK_UP:
-					case EFFECT_SPECIAL_ATTACK_UP_2:
-					case EFFECT_SPECIAL_ATTACK_UP_3:
-						StringCopy(gStringVar1, gText_Effect_Sp_Attack_Up);
-					break;
-					case EFFECT_SPECIAL_ATTACK_DOWN_HIT:
-					case EFFECT_SPECIAL_ATTACK_DOWN:
-						StringCopy(gStringVar1, gText_Effect_Sp_Attack_Down);
-					break;
-					//Special Defense
-					//case EFFECT_SPECIAL_DEFENSE_UP:
-					case EFFECT_SPECIAL_DEFENSE_UP_2:
-						StringCopy(gStringVar1, gText_Effect_Sp_Defense_Up);
-					break;
-					case EFFECT_SPECIAL_DEFENSE_DOWN_HIT:
-					case EFFECT_SPECIAL_DEFENSE_DOWN:
-						StringCopy(gStringVar1, gText_Effect_Sp_Defense_Down);
-					break;
-					//Speed
-					case EFFECT_SPEED_UP_HIT:
-					case EFFECT_SPEED_UP_2:
-						StringCopy(gStringVar1, gText_Effect_Speed_Up);
-					break;
-					case EFFECT_SPEED_DOWN_HIT:
-					case EFFECT_SPEED_DOWN:
-						StringCopy(gStringVar1, gText_Effect_Speed_Down);
-					break;
-					//Accuracy
-					/*/case EFFECT_ACCURACY_U:
-						StringCopy(gStringVar1, gText_Effect_Accuracy_Up);
-					break;/*/
-					case EFFECT_ACCURACY_DOWN_HIT:
-					case EFFECT_ACCURACY_DOWN:
-						StringCopy(gStringVar1, gText_Effect_Accuracy_Down);
-					break;
-					//Other
-					case EFFECT_RECOIL_50:
-					case EFFECT_RECOIL_33:
-					case EFFECT_RECOIL_25:
-						StringCopy(gStringVar1, gText_Effect_Recoil);
-					break;
-					case EFFECT_ALWAYS_CRIT:
-						StringCopy(gStringVar1, gText_Effect_Always_Crit);
-					//Multi Hit Moves
-					case EFFECT_MULTI_HIT:
-						StringCopy(gStringVar1, gText_Effect_Multi_Hit);
-					break;
-					case EFFECT_TRIPLE_KICK:
-						StringCopy(gStringVar1, gText_Effect_Three_Hits);
-					break;
-					case EFFECT_ABSORB:
-					case EFFECT_LEECH_SEED:
-						StringCopy(gStringVar1, gText_Effect_HP_Drain);
-					break;
-					case EFFECT_RESTORE_HP:
-					case EFFECT_JUNGLE_HEALING:
-					case EFFECT_SHORE_UP:
-						StringCopy(gStringVar1, gText_Effect_Heal_HP);
-					break;
-					case EFFECT_HEAL_BELL:
-						StringCopy(gStringVar1, gText_Effect_Heal);
-					break;
-					case EFFECT_PROTECT:
-						StringCopy(gStringVar1, gText_Effect_Protect);
-					break;
-					case EFFECT_HIT:
-						StringCopy(gStringVar1, gText_Effect_Hit);
-					break;
-				}
-				
-				if(gBattleMoves[move].flags & FLAG_TWO_STRIKES) // For Twineedle
-					StringCopy(gStringVar1, gText_Effect_Two_Hits);
-				
-				PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1,   MOVE_EFFECT_Y,  PosX, 0, 0);
-				// Chance -------------------------------------------------------------------------------------------
-				PosX = 80;
-				PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Chance, MOVE_EFFECT_TEXT_Y,   PosX, 0, 0);
-				ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].secondaryEffectChance, STR_CONV_MODE_LEFT_ALIGN, 3);
-				PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1,         MOVE_EFFECT_Y,  PosX, 0, 0);
-				
-				// Contact -------------------------------------------------------------------------------------------
-				PosX = 96;
-				PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Contact, MOVE_EFFECT_TEXT_Y,   PosX, 0, 0);
-				if(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-					PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect_ContactYes,   MOVE_EFFECT_Y, PosX, 0, 0);
-				else
-					PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect_ContactNo,   MOVE_EFFECT_Y, PosX, 0, 0);
-			}
-			else{
-				// Priority -------------------------------------------------------------------------------------------
-				PosX = 64;
-				PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Priority,      MOVE_EFFECT_TEXT_Y,   PosX, 0, 0);
-				ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
-				PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1,   MOVE_EFFECT_Y,  PosX, 0, 0);
-				
-				// Critical -------------------------------------------------------------------------------------------
-				PosX = 80;
-				PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Critical,      MOVE_EFFECT_TEXT_Y,  PosX, 0, 0);
-				if(gBattleMoves[move].flags & FLAG_HIGH_CRIT)
-					PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect_ContactYes,   MOVE_EFFECT_Y, PosX, 0, 0);
-				else
-					PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect_ContactNo,   MOVE_EFFECT_Y, PosX, 0, 0);
-				
-				// Target -------------------------------------------------------------------------------------------
-				PosX = 96;
-				PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Target, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-				if(gBattleMoves[move].target == MOVE_TARGET_FOES_AND_ALLY)
-					PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect_FoeAndAlly,   MOVE_EFFECT_Y,  PosX, 0, 0);
-				else if(gBattleMoves[move].target == MOVE_TARGET_BOTH)
-					PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect_BothFoes,   MOVE_EFFECT_Y,  PosX, 0, 0);
-				else if(gBattleMoves[move].target == MOVE_TARGET_USER)
-					PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect_Self,   MOVE_EFFECT_Y,  PosX, 0, 0);
-				else if(gBattleMoves[move].target == MOVE_TARGET_ALL_BATTLERS)
-					PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect_Field,   MOVE_EFFECT_Y,  PosX, 0, 0);
-				else
-					PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gText_Effect_OneFoe,   MOVE_EFFECT_Y,  PosX, 0, 0);
-			}
-			
-            #if CONFIG_PHYSICAL_SPECIAL_SPLIT
-            ShowSplitIcon(GetBattleMoveSplit(move));
-            #elif CONFIG_SHOW_ICONS_FOR_OLD_SPLIT
-            ShowSplitIcon(GetBattleMoveCategory(move));
-            #endif
+			PrintMoveInfo(move, gCurrentModifyIndex);
         }
         else
         {
@@ -5429,8 +6113,7 @@ static void PrintMoveDetails(u16 move)
 
         PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
-    else
-    {
+    else{
         if (sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES)
         {
             FillBgTilemapBufferRect(1, 109, 9, 8, 4, 4, 3);

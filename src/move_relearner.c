@@ -884,7 +884,7 @@ static void CreateLearnableMovesList(void)
 
 	switch(VarGet(VAR_PARTY_MENU_TUTOR_STATE)){
 		case MOVE_TUTOR_LEVEL_UP_MOVES:
-			sMoveRelearnerStruct->numMenuChoices = GetMoveRelearnerMoves(&gPlayerParty[sMoveRelearnerStruct->partyMon], sMoveRelearnerStruct->movesToLearn);
+			sMoveRelearnerStruct->numMenuChoices = GetMoveRelearnerMoves(&gPlayerParty[sMoveRelearnerStruct->partyMon], sMoveRelearnerStruct->movesToLearn, TRUE);
 		break;
 		case MOVE_TUTOR_EGG_MOVES:
 			sMoveRelearnerStruct->numMenuChoices = GetEggMoveTutorMoves(&gPlayerParty[sMoveRelearnerStruct->partyMon], sMoveRelearnerStruct->movesToLearn);
