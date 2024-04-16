@@ -2047,6 +2047,7 @@ static const struct LevelUpMove sGolemLevelUpLearnset[] = {
     LEVEL_UP_MOVE(36, MOVE_EXPLOSION),
     LEVEL_UP_MOVE(40, MOVE_DOUBLE_EDGE),
     LEVEL_UP_MOVE(42, MOVE_STONE_EDGE),
+    LEVEL_UP_MOVE(45, MOVE_HEADLONG_RUSH),
     LEVEL_UP_MOVE(60, MOVE_HEAVY_SLAM),
     LEVEL_UP_MOVE(64, MOVE_HEAD_SMASH),
     LEVEL_UP_END
@@ -7580,7 +7581,6 @@ static const struct LevelUpMove sMakuhitaLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sHariyamaLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(0, MOVE_BRINE),
     LEVEL_UP_MOVE(1, MOVE_ARM_THRUST),
     LEVEL_UP_MOVE(1, MOVE_BODY_PRESS),
     LEVEL_UP_MOVE(1, MOVE_FOCUS_ENERGY),
@@ -7598,6 +7598,7 @@ static const struct LevelUpMove sHariyamaLevelUpLearnset[] = {
     LEVEL_UP_MOVE(34, MOVE_WAKE_UP_SLAP),
     LEVEL_UP_MOVE(37, MOVE_ENDURE),
     LEVEL_UP_MOVE(40, MOVE_CLOSE_COMBAT),
+    LEVEL_UP_MOVE(40, MOVE_HEADLONG_RUSH),
     LEVEL_UP_MOVE(43, MOVE_REVERSAL),
     LEVEL_UP_MOVE(46, MOVE_HEAVY_SLAM),
     LEVEL_UP_END
@@ -9799,10 +9800,10 @@ static const struct LevelUpMove sGrotleLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sTorterraLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(0, MOVE_EARTHQUAKE),
-    LEVEL_UP_MOVE(0, MOVE_EARTH_POWER),
-    LEVEL_UP_MOVE(0, MOVE_FISSURE),
-    LEVEL_UP_MOVE(0, MOVE_GRAV_APPLE),
+    LEVEL_UP_MOVE(0, MOVE_HEADLONG_RUSH),
+    LEVEL_UP_MOVE(1, MOVE_EARTHQUAKE),
+    LEVEL_UP_MOVE(1, MOVE_FISSURE),
+    LEVEL_UP_MOVE(1, MOVE_EARTH_POWER),
     LEVEL_UP_MOVE(1, MOVE_SLEEP_POWDER),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
     LEVEL_UP_MOVE(1, MOVE_WITHDRAW),
@@ -9818,6 +9819,7 @@ static const struct LevelUpMove sTorterraLevelUpLearnset[] = {
     LEVEL_UP_MOVE(36, MOVE_GIGA_DRAIN),
     LEVEL_UP_MOVE(38, MOVE_BODY_PRESS),
     LEVEL_UP_MOVE(40, MOVE_LEAF_STORM),
+    LEVEL_UP_MOVE(46, MOVE_GRAV_APPLE),
     LEVEL_UP_MOVE(53, MOVE_HEAD_SMASH),
     LEVEL_UP_MOVE(56, MOVE_WOOD_HAMMER),
     LEVEL_UP_MOVE(60, MOVE_SHELL_SMASH),
@@ -23101,7 +23103,8 @@ static const struct LevelUpMove sKleavorLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sUrsalunaLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(0, MOVE_HAMMER_ARM),
+    LEVEL_UP_MOVE(0, MOVE_HEADLONG_RUSH),
+    LEVEL_UP_MOVE(1, MOVE_HAMMER_ARM),
     LEVEL_UP_MOVE(1, MOVE_BABY_DOLL_EYES),
     LEVEL_UP_MOVE(1, MOVE_COVET),
     LEVEL_UP_MOVE(1, MOVE_FAKE_TEARS),

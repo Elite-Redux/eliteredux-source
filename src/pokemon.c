@@ -7762,7 +7762,7 @@ u32 CanSpeciesLearnTMHM(u16 species, u8 tm)
     return gTMHMLearnsets[species].bits[tm / 32] & (1 << (tm % 32));
 }
 
-u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
+u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves, bool8 disableLearned)
 {
     u16 learnedMoves[4];
     u8 numMoves = 0;
@@ -7771,8 +7771,10 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
     int i, j, k;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
-        learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
+    if(disableLearned){
+        for (i = 0; i < MAX_MON_MOVES; i++)
+            learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
+    }
 
     for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
     {
@@ -7785,8 +7787,10 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
 
         if (moveLevel <= level)
         {
-            for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != gLevelUpLearnsets[species][i].move; j++)
-                ;
+            if(disableLearned){
+                for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != gLevelUpLearnsets[species][i].move; j++)
+                    ;
+            }
 
             if (j == MAX_MON_MOVES)
             {
