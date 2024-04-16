@@ -271,7 +271,7 @@ static void SwitchToMoveReplaceMenu(u8 taskId);
 static void Task_SwitchToMoveDetails(u8 taskId);
 static void Task_SwitchToReplaceMove(u8 taskId);
 static void PrintMoveReplaceTab(void);
-static void PrintMoveInfo(u16 move, u8 tabNum);
+static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode);
 static void SetTypeSpritePosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId);
 static void PrintTextOnWindow(u8 windowId, const u8 *string, u8 x, u8 y, u8 lineSpacing, u8 colorId);
 static void Task_HandleInput_MoveSelect(u8 taskId);
@@ -327,7 +327,7 @@ static void PrintAbilityAndInnates(void);
 static void BufferMonPokemonAbilityAndInnates(void);
 static void PrintEvolutionData(void);
 static void BufferMonPokemonEvolutionData(void);
-static void PrintMoveDetails(u16 move);
+static void PrintMoveDetails(u16 move, bool8 moveReplaceMode);
 static void PrintNewMoveDetailsOrCancelText(void);
 static void SwapMovesNamesPP(u8 moveIndex1, u8 moveIndex2);
 static void ResetSpriteIds(void);
@@ -1424,7 +1424,7 @@ static bool8 LoadGraphics(void)
             ScheduleBgCopyTilemapToVram(2);
             DoScheduledBgTilemapCopiesToVram();
             PrintInfoBar(sMonSummaryScreen->currPageIndex, TRUE);
-            PrintMoveDetails(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]);
+            PrintMoveDetails(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex], FALSE);
             ChangeBgX(1, 0, 0);
             CreateTask(Task_SetHandleReplaceMoveInput, 0);
         }
@@ -2715,7 +2715,12 @@ enum{
     NUM_MOVE_REPLACE_TABS,
 };
 
-static void GenerateMoveReplaceList(){
+enum{
+    MOVE_REPLACE_LIST_RIGHT,
+    MOVE_REPLACE_LIST_LEFT,
+};
+
+static void GenerateMoveReplaceList(u8 keyPress){
     struct Pokemon *mon = sMonSummaryScreen->monList.mons;
     u16 species = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_SPECIES, 0);
     u32 personality = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_PERSONALITY, 0);
@@ -2725,11 +2730,9 @@ static void GenerateMoveReplaceList(){
     u16 numEggMoves = GetEggMovesSpecies(firsStage, eggMoveBuffer);
     u32 i, j;
 
-    sMonSummaryScreen->numMenuChoices = 0;
-    
-    for(i = 0; i < MAX_LEVEL_UP_MOVES; i++){
+    for(i = 0; i < MAX_LEVEL_UP_MOVES; i++)
         sMonSummaryScreen->moveReplaceList[i] = MOVE_NONE;
-    }
+    sMonSummaryScreen->numMenuChoices = 0;
 
     switch(sMonSummaryScreen->moveReplaceTabNum){
         case MOVE_REPLACE_TAB_LEVEL:
@@ -2741,10 +2744,6 @@ static void GenerateMoveReplaceList(){
                 else{
                     sMonSummaryScreen->moveReplaceList[i] = gLevelUpLearnsets[species][i].move;
                     sMonSummaryScreen->numMenuChoices++;
-
-                    MgbaOpen();
-                    MgbaPrintf(MGBA_LOG_WARN, "SwitchToMoveReplaceMenu Move %d Num %d", sMonSummaryScreen->moveReplaceList[i], sMonSummaryScreen->numMenuChoices);
-                    MgbaClose();
                 }
             }
         break;
@@ -2774,19 +2773,31 @@ static void GenerateMoveReplaceList(){
             numEggMoves = GetEggMovesSpecies(firsStage, eggMoveBuffer);
             for (i = 0; i < numEggMoves; i++)
             {
+                if(eggMoveBuffer[i] == MOVE_NONE)
+                    break;
                 sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(eggMoveBuffer[i], firsStage, personality);
                 sMonSummaryScreen->numMenuChoices++;
             }
-        default:
-            for (i = 0; i < TM_COUNT; i++)
-            {
-                if(CanSpeciesLearnTMHM(species, i))
-                {
-                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(GetTmMove(i), species, personality);
-                    sMonSummaryScreen->numMenuChoices++;
-                }
-            }
         break;
+    }
+
+    //In case that there are no moves on that list
+    if(sMonSummaryScreen->numMenuChoices == 0){
+        switch(keyPress){
+            case MOVE_REPLACE_LIST_LEFT:
+                if(sMonSummaryScreen->moveReplaceTabNum > 0)
+                    sMonSummaryScreen->moveReplaceTabNum--;
+                else
+                    sMonSummaryScreen->moveReplaceTabNum = NUM_MOVE_REPLACE_TABS - 1;
+            break;
+            case MOVE_REPLACE_LIST_RIGHT:
+                if(sMonSummaryScreen->moveReplaceTabNum < NUM_MOVE_REPLACE_TABS - 1)
+                    sMonSummaryScreen->moveReplaceTabNum++;
+                else
+                    sMonSummaryScreen->moveReplaceTabNum = 0;
+            break;
+        }
+        GenerateMoveReplaceList(keyPress);
     }
 }
 
@@ -2804,7 +2815,7 @@ static void SwitchToMoveReplaceMenu(u8 taskId)
     sMonSummaryScreen->moveReplaceMoveNum = 0;
     sMonSummaryScreen->replaceMoveMode = 0;
 
-    GenerateMoveReplaceList();
+    GenerateMoveReplaceList(MOVE_REPLACE_LIST_RIGHT);
 
     gTasks[taskId].func = Task_HandleInput_ReplaceMoves;
     SetTaskFuncWithFollowupFunc(taskId, Task_SwitchToReplaceMove, gTasks[taskId].func);
@@ -2853,7 +2864,7 @@ static void Task_SwitchToReplaceMove(u8 taskId)
             data[0]++;
             break;
         case 3:
-            PrintMoveDetails(sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx]);
+            PrintMoveDetails(sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx], TRUE);
             PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
             data[0]++;
             break;
@@ -2873,6 +2884,7 @@ const u8 sText_Move_Type_Tutor[]    = _("Tutor");
 const u8 sText_MoveToReplace[]      = _("Move to Replace");
 const u8 sText_MoveLearned[]        = _("Learned");
 static const u8 sMoveCursor[]       = INCBIN_U8("graphics/summary_screen/new/move_cursor.4bpp");
+static const u8 sMoveCursorDark[]   = INCBIN_U8("graphics/summary_screen/new/move_cursor_dark.4bpp");
 static const u8 sMoveTabCursor[]    = INCBIN_U8("graphics/summary_screen/new/move_tab_cursor.4bpp");
 static const u8 sSummary_R_Button[] = INCBIN_U8("graphics/summary_screen/new/r_button.4bpp");
 static const u8 sSummary_L_Button[] = INCBIN_U8("graphics/summary_screen/new/l_button.4bpp");
@@ -2888,7 +2900,7 @@ static void PrintMoveInfoFromReplaceTab(void){
     u16 CurrentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
     ScheduleBgCopyTilemapToVram(1);
     ScheduleBgCopyTilemapToVram(2);
-    PrintMoveDetails(CurrentMove);
+    PrintMoveDetails(CurrentMove, TRUE);
 }
 
 static void PrintMoveReplaceTab(void)
@@ -2982,11 +2994,18 @@ static void PrintMoveReplaceTab(void)
             AddTextPrinterParameterized4(windowId, FONT_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC, (PosY * 8), 0, 0, sTextColors[PSS_COLOR_MALE_GENDER_SYMBOL], 0xFF, sText_MoveLearned);
         }
         else{
-            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveNum].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            if(gBattleMoves[moveNum].power >= 10)
+                ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveNum].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            else
+                StringCopy(gStringVar1, gText_ThreeDashes);
+
             AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC, (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, sText_Move_Power);
             AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC + SPACE_BETWEEN_MOVES_AND_BPACC_2, (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, gStringVar1);
             
-            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveNum].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            if(gBattleMoves[moveNum].accuracy >= 10)
+                ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveNum].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            else
+                StringCopy(gStringVar1, gText_ThreeDashes);
             AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC, (PosY * 8) - 4 + 8, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, sText_Move_Accuracy);
             AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC + SPACE_BETWEEN_MOVES_AND_BPACC_2, (PosY * 8) - 4 + 8, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, gStringVar1);
         }
@@ -3013,37 +3032,61 @@ enum
 static void PressedDownButton_ReplaceMoves(){
     u8 halfScreen = ((MAX_MOVE_REPLACE_MOVES) - 1) / 2;
     u8 finalhalfScreen = sMonSummaryScreen->numMenuChoices - halfScreen;
+    u8 numMoves = sMonSummaryScreen->numMenuChoices;
 
-    if(sMonSummaryScreen->moveReplaceCurrentIdx < halfScreen){
-        sMonSummaryScreen->moveReplaceCurrentIdx++;
+    if(numMoves < MAX_MOVE_REPLACE_MOVES){
+        //Disables Scrolling if there are less moves than the screen can show
+        if(sMonSummaryScreen->moveReplaceCurrentIdx >= numMoves - 1)
+            sMonSummaryScreen->moveReplaceCurrentIdx = 0;
+        else
+            sMonSummaryScreen->moveReplaceCurrentIdx++;
+
+        sMonSummaryScreen->moveReplaceFirstMove = 0;
     }
-	else if(sMonSummaryScreen->moveReplaceCurrentIdx >= (sMonSummaryScreen->numMenuChoices - 1)){ //If you are in the last option go to the first one
-		sMonSummaryScreen->moveReplaceCurrentIdx = 0;
-		sMonSummaryScreen->moveReplaceFirstMove = 0;
-    }
-    else if(sMonSummaryScreen->moveReplaceCurrentIdx >= (finalhalfScreen - 1)){
-        sMonSummaryScreen->moveReplaceCurrentIdx++;
-    }
-	else{
-        sMonSummaryScreen->moveReplaceCurrentIdx++;
-        sMonSummaryScreen->moveReplaceFirstMove++;
+    else{
+        if(sMonSummaryScreen->moveReplaceCurrentIdx < halfScreen){
+            sMonSummaryScreen->moveReplaceCurrentIdx++;
+        }
+        else if(sMonSummaryScreen->moveReplaceCurrentIdx >= (numMoves - 1)){ //If you are in the last option go to the first one
+            sMonSummaryScreen->moveReplaceCurrentIdx = 0;
+            sMonSummaryScreen->moveReplaceFirstMove = 0;
+        }
+        else if(sMonSummaryScreen->moveReplaceCurrentIdx >= (finalhalfScreen - 1)){
+            sMonSummaryScreen->moveReplaceCurrentIdx++;
+        }
+        else{
+            sMonSummaryScreen->moveReplaceCurrentIdx++;
+            sMonSummaryScreen->moveReplaceFirstMove++;
+        }
     }
 }
 
 static void PressedUpButton_ReplaceMoves(){
     u8 halfScreen = ((MAX_MOVE_REPLACE_MOVES) - 1) / 2;
     u8 finalhalfScreen = sMonSummaryScreen->numMenuChoices - halfScreen;
+    u8 numMoves = sMonSummaryScreen->numMenuChoices;
 
-    if(sMonSummaryScreen->moveReplaceCurrentIdx > halfScreen && sMonSummaryScreen->moveReplaceCurrentIdx <= (finalhalfScreen - 1)){
-        sMonSummaryScreen->moveReplaceCurrentIdx--;
-        sMonSummaryScreen->moveReplaceFirstMove--;
-    }
-	else if(sMonSummaryScreen->moveReplaceCurrentIdx == 0){ //If you are in the first option go to the last one
-		sMonSummaryScreen->moveReplaceCurrentIdx = sMonSummaryScreen->numMenuChoices - 1;
-		sMonSummaryScreen->moveReplaceFirstMove = sMonSummaryScreen->numMenuChoices - MAX_MOVE_REPLACE_MOVES;
+    if(numMoves < MAX_MOVE_REPLACE_MOVES){
+        //Disables Scrolling if there are less moves than the screen can show
+        if(sMonSummaryScreen->moveReplaceCurrentIdx == 0)
+            sMonSummaryScreen->moveReplaceCurrentIdx = numMoves - 1;
+        else
+            sMonSummaryScreen->moveReplaceCurrentIdx--;
+
+        sMonSummaryScreen->moveReplaceFirstMove = 0;
     }
     else{
-        sMonSummaryScreen->moveReplaceCurrentIdx--;
+        if(sMonSummaryScreen->moveReplaceCurrentIdx > halfScreen && sMonSummaryScreen->moveReplaceCurrentIdx <= (finalhalfScreen - 1)){
+            sMonSummaryScreen->moveReplaceCurrentIdx--;
+            sMonSummaryScreen->moveReplaceFirstMove--;
+        }
+        else if(sMonSummaryScreen->moveReplaceCurrentIdx == 0){ //If you are in the first option go to the last one
+            sMonSummaryScreen->moveReplaceCurrentIdx = sMonSummaryScreen->numMenuChoices - 1;
+            sMonSummaryScreen->moveReplaceFirstMove = sMonSummaryScreen->numMenuChoices - MAX_MOVE_REPLACE_MOVES;
+        }
+        else{
+            sMonSummaryScreen->moveReplaceCurrentIdx--;
+        }
     }
 }
 
@@ -3062,7 +3105,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             if(sMonSummaryScreen->moveReplaceMoveNum != 0)
                 sMonSummaryScreen->moveReplaceMoveNum--;
             else
-                sMonSummaryScreen->moveReplaceMoveNum = MAX_MON_MOVES - 1;
+                sMonSummaryScreen->moveReplaceMoveNum = MAX_MON_MOVES;
         }
         else
             PressedUpButton_ReplaceMoves();
@@ -3072,7 +3115,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
     else if (JOY_NEW(DPAD_DOWN))
     {
         if(sMonSummaryScreen->replaceMoveMode){
-            if(sMonSummaryScreen->moveReplaceMoveNum < MAX_MON_MOVES - 1)
+            if(sMonSummaryScreen->moveReplaceMoveNum < MAX_MON_MOVES)
                 sMonSummaryScreen->moveReplaceMoveNum++;
             else
                 sMonSummaryScreen->moveReplaceMoveNum = 0;
@@ -3092,7 +3135,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             sMonSummaryScreen->moveReplaceFirstMove = 0;
             sMonSummaryScreen->moveReplaceCurrentIdx = 0;
             sMonSummaryScreen->moveReplaceMoveNum = 0;
-            GenerateMoveReplaceList();
+            GenerateMoveReplaceList(MOVE_REPLACE_LIST_LEFT);
             PrintMoveReplaceTab();
             PrintMoveInfoFromReplaceTab();
         }
@@ -3107,7 +3150,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             sMonSummaryScreen->moveReplaceFirstMove = 0;
             sMonSummaryScreen->moveReplaceCurrentIdx = 0;
             sMonSummaryScreen->moveReplaceMoveNum = 0;
-            GenerateMoveReplaceList();
+            GenerateMoveReplaceList(MOVE_REPLACE_LIST_RIGHT);
             PrintMoveReplaceTab();
             PrintMoveInfoFromReplaceTab();
         }
@@ -3129,42 +3172,70 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
         PrintMoveInfoFromReplaceTab();
     }
     else if(gMain.newKeys & A_BUTTON){
+        u8 moveToReplace = sMonSummaryScreen->moveReplaceMoveNum;
+        u16 moveToLearn  = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+        bool8 reload = TRUE;
+        bool8 cancel = FALSE;
+
         if(sMonSummaryScreen->replaceMoveMode){
-            u16 move = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
-            u8 moveToReplace = sMonSummaryScreen->moveReplaceMoveNum;
-
-            for (i = 0; i < MAX_MON_MOVES; i++){
-                if(move == GetMonData(mon, MON_DATA_MOVE1 + i, 0))
-                    hasMonMove = TRUE;
+            if(sMonSummaryScreen->moveReplaceMoveNum == MAX_MON_MOVES){
+                sMonSummaryScreen->moveReplaceMoveNum = 0;
+                sMonSummaryScreen->replaceMoveMode = FALSE;
+                PrintMoveReplaceTab();
+                PrintMoveInfoFromReplaceTab();
+                LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+                SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
             }
+            else{
+                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                PlaySE(SE_SELECT);
+                
+                sMonSummaryScreen->replaceMoveMode = FALSE;
+                sMonSummaryScreen->moveReplaceMoveNum = 0;
+                LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+                SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
+            }
+        }
+        else{
+            u8 learnedMove = FALSE;
 
             for (i = 0; i < MAX_MON_MOVES; i++){
-                if(move == MOVE_NONE){
-                    moveToReplace = i;
+                if(moveToLearn == GetMonData(mon, MON_DATA_MOVE1 + i, 0)){
+                    hasMonMove = TRUE;
                     break;
                 }
             }
 
-            if (!hasMonMove)
-            {
-                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &move);
-                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MOVE1 + moveToReplace, &move);
+            for (i = 0; i < MAX_MON_MOVES; i++){
+                if(GetMonData(mon, MON_DATA_MOVE1 + i, 0) == MOVE_NONE){
+                    moveToReplace = i;
+                    learnedMove = TRUE;
+                    break;
+                }
+            }
+
+            if(learnedMove && !hasMonMove){
                 PlaySE(SE_SELECT);
-                PrintMoveReplaceTab();
+                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
             }
-            else
-            {
+            else if(!hasMonMove){
+                PlaySE(SE_SELECT);
+                sMonSummaryScreen->moveReplaceMoveNum = 0;
+                sMonSummaryScreen->replaceMoveMode = TRUE;
+            }
+            else{
                 PlaySE(SE_FAILURE);
+                reload = FALSE;
             }
-            sMonSummaryScreen->replaceMoveMode = FALSE;
-            sMonSummaryScreen->moveReplaceMoveNum = 0;
         }
-        else{
-            sMonSummaryScreen->moveReplaceMoveNum = 0;
-            sMonSummaryScreen->replaceMoveMode = TRUE;
+
+        if (reload)
+        {
+            PrintMoveReplaceTab();
+            PrintMoveInfoFromReplaceTab();
         }
-        PrintMoveReplaceTab();
-        PrintMoveInfoFromReplaceTab();
     }
     else if(gMain.newKeys & B_BUTTON){
         if(sMonSummaryScreen->replaceMoveMode){
@@ -3172,6 +3243,8 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             sMonSummaryScreen->replaceMoveMode = FALSE;
             PrintMoveReplaceTab();
             PrintMoveInfoFromReplaceTab();
+            LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+            SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
         }
         else{
             PlaySE(SE_SELECT);
@@ -3207,7 +3280,7 @@ static void Task_SwitchToMoveDetails(u8 taskId)
             break;
         case 2:
             ChangeBgX(1, 0, 0);
-            PrintMoveDetails(data[1]);
+            PrintMoveDetails(data[1], FALSE);
             PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
             data[0]++;
             break;
@@ -3219,7 +3292,7 @@ static void Task_SwitchToMoveDetails(u8 taskId)
 }
 
 #define MOVE_EFFECT_TEXT_Y 8
-#define MOVE_EFFECT_Y 70
+#define MOVE_EFFECT_Y 68
 
 static void Task_HandleInput_MoveSelect(u8 taskId)
 {
@@ -3347,9 +3420,9 @@ void Task_SwitchPageInMoveSelect(u8 taskId)
             break;
         case 4:
             if (sMonSummaryScreen->firstMoveIndex == MAX_MON_MOVES)
-                PrintMoveDetails(sMonSummaryScreen->newMove);
+                PrintMoveDetails(sMonSummaryScreen->newMove, FALSE);
             else
-                PrintMoveDetails(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]);
+                PrintMoveDetails(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex], FALSE);
             PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
             data[0]++;
             break;
@@ -3397,7 +3470,7 @@ static void ChangeSelectedMove(s16 *taskData, s8 direction, u8 *moveIndexPtr)
     }
     ScheduleBgCopyTilemapToVram(1);
     ScheduleBgCopyTilemapToVram(2);
-    PrintMoveDetails(move);
+    PrintMoveDetails(move, FALSE);
 
     if ((*moveIndexPtr == MAX_MON_MOVES && sMonSummaryScreen->newMove == MOVE_NONE) || taskData[1] == 1)
         ScheduleBgCopyTilemapToVram(0);
@@ -3435,7 +3508,7 @@ static void Task_SwitchFromMoveDetails(u8 taskId)
     {
         case 0:
             DestroyMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1);
-            PrintMoveDetails(0);
+            PrintMoveDetails(0, FALSE);
             SetSpriteInvisibility(SPRITE_ARR_ID_TYPE, TRUE);
             SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);
             SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, TRUE);
@@ -3495,7 +3568,7 @@ static void Task_SwitchFromMoveReplaceMenu(u8 taskId)
     {
         case 0:
             DestroyMoveSelectorSprites(SPRITE_ARR_ID_MOVE_SELECTOR1);
-            PrintMoveDetails(0);
+            PrintMoveDetails(0, FALSE);
             SetSpriteInvisibility(SPRITE_ARR_ID_TYPE, TRUE);
             SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);
             SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, TRUE);
@@ -3603,7 +3676,7 @@ static void ExitMovePositionSwitchMode(u8 taskId, bool8 swapMoves)
     }
 
     move = sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex];
-    PrintMoveDetails(move);
+    PrintMoveDetails(move, FALSE);
     ScheduleBgCopyTilemapToVram(1);
     ScheduleBgCopyTilemapToVram(2);
     gTasks[taskId].func = Task_HandleInput_MoveSelect;
@@ -3799,9 +3872,9 @@ static void Task_SwitchPageInReplaceMove(u8 taskId)
             break;
         case 4:
             if (sMonSummaryScreen->firstMoveIndex == MAX_MON_MOVES)
-                PrintMoveDetails(sMonSummaryScreen->newMove);
+                PrintMoveDetails(sMonSummaryScreen->newMove, FALSE);
             else
-                PrintMoveDetails(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]);
+                PrintMoveDetails(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex], FALSE);
             PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
             data[0]++;
             break;
@@ -5855,7 +5928,7 @@ const u8 gText_Effect_Sheer_Force_Boosted[] = _("Sheer Force");
 const u8 gText_Effect_Ignores_Ability[]     = _("Ign. Ability");
 const u8 gText_Effect_Ignores_Stats[]       = _("Ign. Stats");
 
-static void PrintMoveInfo(u16 move, u8 tabNum)
+static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 {
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
@@ -5885,6 +5958,15 @@ static void PrintMoveInfo(u16 move, u8 tabNum)
 			PrintNarrowTextOnWindow(windowId, gMoveFourLineDescriptionPointers[move - 1], 2, PosX, 0, 0);
         break;
         case MOVE_INFO_EFFECT:
+            // Type -------------------------------------------------------------------------------------------
+            if(moveReplaceMode){
+                PrintSmallTextOnWindow(windowId, sText_Type, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+				StringCopy(gStringVar1, gTypeNames[gBattleMoves[move].type]);
+                PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+			    PosX = PosX + 16;
+            }
+
+            // Move Effect -------------------------------------------------------------------------------------------
 			PrintSmallTextOnWindow(windowId, gText_Effect, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
 			StringCopy(gStringVar1, gText_Effect_Hit);
 				
@@ -5909,12 +5991,12 @@ static void PrintMoveInfo(u16 move, u8 tabNum)
 
 			// Contact -------------------------------------------------------------------------------------------
 			PosX = PosX + 16;
-			PrintSmallTextOnWindow(windowId, gText_Contact, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
+            PrintSmallTextOnWindow(windowId, gText_Contact, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
 
-			if(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-				PrintSmallTextOnWindow(windowId, gText_Effect_ContactYes, MOVE_EFFECT_Y, PosX, 0, 0);
-			else
-				PrintSmallTextOnWindow(windowId, gText_Effect_ContactNo, MOVE_EFFECT_Y, PosX, 0, 0);
+            if(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+                PrintSmallTextOnWindow(windowId, gText_Effect_ContactYes, MOVE_EFFECT_Y, PosX, 0, 0);
+            else
+                PrintSmallTextOnWindow(windowId, gText_Effect_ContactNo, MOVE_EFFECT_Y, PosX, 0, 0);
         break;
         case MOVE_INFO_EFFECT_2:
             // Target -------------------------------------------------------------------------------------------
@@ -6020,8 +6102,9 @@ static void PrintMoveInfo(u16 move, u8 tabNum)
     }
     ShowSplitIcon(GetBattleMoveSplit(move));
 }
+const u8 gText_ReplaceWhatMove[] = _("Chose a move to replace\nwith {STR_VAR_1}");
 
-static void PrintMoveDetails(u16 move)
+static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
 {
     u32 heartRow1, heartRow2;
 	u8 PosX, PosY, i, j;
@@ -6051,14 +6134,24 @@ static void PrintMoveDetails(u16 move)
     }
 
     if(sMonSummaryScreen->replaceMoveMode){
-        u16 currentMove = MOVE_NONE;
-        PosX = MOVE_EFFECT_TEXT_Y + 8;
-        PosY = 64;
+        u16 currentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+        LZDecompressWram(gSummaryScreenPageMoveDetailsReplaceTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+        SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
+        
+        PosX = 2;
+        PosY = POWER_AND_ACCURACY_Y - 5;
+        StringCopy(gStringVar1, gMoveNamesLong[currentMove]);
+        StringExpandPlaceholders(gStringVar4, gText_ReplaceWhatMove);
+        PrintSmallTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar4, PosX, PosY, 0, 1);
 
+        PosX = MOVE_EFFECT_TEXT_Y + 8;
+        PosY = 64 - 16;
+
+        //Moves
         for(i = 0; i < MAX_MON_MOVES; i++){
             currentMove = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
             if(i == sMonSummaryScreen->moveReplaceMoveNum)
-                BlitBitmapToWindow(PSS_LABEL_PANE_LEFT_MOVE, sMoveCursor, PosX - 8, PosY, 8, 16);
+                BlitBitmapToWindow(PSS_LABEL_PANE_LEFT_MOVE, sMoveCursorDark, PosX - 12, PosY, 8, 16);
 
             if(currentMove != MOVE_NONE)
                 StringCopy(gStringVar1, gMoveNamesLong[currentMove]);
@@ -6068,11 +6161,20 @@ static void PrintMoveDetails(u16 move)
             PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, PosX, PosY, 0, 0);
             PosY = PosY + 16;
         }
+
+        //Cancel
+        if(sMonSummaryScreen->moveReplaceMoveNum == MAX_MON_MOVES)
+            BlitBitmapToWindow(PSS_LABEL_PANE_LEFT_MOVE, sMoveCursorDark, PosX - 12, PosY, 8, 16);
+
+        StringCopy(gStringVar1, gText_Cancel);
+        PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, PosX, PosY, 0, 0);
+
+        PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
     else if(move != MOVE_NONE){
         if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
         {
-			PrintMoveInfo(move, gCurrentModifyIndex);
+			PrintMoveInfo(move, gCurrentModifyIndex, moveReplaceMode);
         }
         else
         {
