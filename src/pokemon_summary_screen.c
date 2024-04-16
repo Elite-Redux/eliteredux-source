@@ -2942,10 +2942,10 @@ static void PrintMoveReplaceTab(void)
     PosX = 1;
     PosY = 1;
     BlitBitmapToWindow(windowId, sSummary_L_Arrow,  (PosX * 8) - 1,   (PosY * 8), 8,  8);
-    BlitBitmapToWindow(windowId, sSummary_L_Button, ((PosX + 1) * 8), (PosY * 8), 16, 8);
+    //BlitBitmapToWindow(windowId, sSummary_L_Button, ((PosX + 1) * 8), (PosY * 8), 16, 8);
     
     PosX = 16;
-    BlitBitmapToWindow(windowId, sSummary_R_Button, (PosX * 8) - 1,   (PosY * 8), 16, 8);
+    //BlitBitmapToWindow(windowId, sSummary_R_Button, (PosX * 8) - 1,   (PosY * 8), 16, 8);
     BlitBitmapToWindow(windowId, sSummary_R_Arrow,  ((PosX + 2) * 8), (PosY * 8), 8,  8);
 
     //Tab Name
@@ -5981,6 +5981,7 @@ const u8 gText_Effect_Critical_Always[]     = _("Always");
 const u8 gText_Effect_Sheer_Force_Boosted[] = _("Sheer Force");
 const u8 gText_Effect_Ignores_Ability[]     = _("Ign. Ability");
 const u8 gText_Effect_Ignores_Stats[]       = _("Ign. Stats");
+const u8 gText_Priority_Negative[]          = _("Negative");
 
 static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 {
@@ -6040,7 +6041,10 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			// Priority -------------------------------------------------------------------------------------------
 			PosX = PosX + 16;
 			PrintSmallTextOnWindow(windowId, gText_Priority, MOVE_EFFECT_TEXT_Y,   PosX, 0, 0);
-			ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
+            if(gBattleMoves[move].priority < 0)
+                StringCopy(gStringVar1, gText_Priority_Negative);
+            else
+			    ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
 			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y,  PosX, 0, 0);
 
 			// Contact -------------------------------------------------------------------------------------------
@@ -6078,7 +6082,9 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 				PrintSmallTextOnWindow(windowId, gText_ThreeDashes, MOVE_EFFECT_Y, PosX, 0, 0);
 
 			// Max Hit Num -------------------------------------------------------------------------------------------
-			PosX = PosX + 16;
+			/*
+            //ToDo: Implement this
+            PosX = PosX + 16;
 			PrintSmallTextOnWindow(windowId, gText_Effect_Hit_Number, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
             
             // For Twineedle 
@@ -6086,7 +6092,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
                 numHits = 2;
 
 			ConvertIntToDecimalStringN(gStringVar1, numHits, STR_CONV_MODE_LEFT_ALIGN, 2);
-			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
+			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);*/
 
 			// Sheer Force -------------------------------------------------------------------------------------------
 			PosX = PosX + 16;

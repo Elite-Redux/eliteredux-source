@@ -3095,6 +3095,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     u8 level                = GetMonData(&mons[slotId], MON_DATA_LEVEL,          NULL);
     u8 levelCap = GetLevelCap();
     u16 targetSpecies;
+    bool8 DisableLearnMoveActions = TRUE;
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
@@ -3108,7 +3109,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
         else
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_ITEM);
 
-        if(GetMonData(&mons[slotId], MON_DATA_SPECIES) && enablePokemonChanges() && 
+        if(GetMonData(&mons[slotId], MON_DATA_SPECIES) && enablePokemonChanges() && !DisableLearnMoveActions &&
           (GetNumberOfRelearnableMoves(&mons[slotId]) || GetNumberOfEggMoves(&mons[slotId]) || GetNumberOfTMMoves(&mons[slotId]) || GetNumberOfTutorMoves(&mons[slotId])))
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUB_MOVES);
 
