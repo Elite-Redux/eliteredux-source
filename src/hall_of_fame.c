@@ -853,6 +853,14 @@ u16 getHallofFameSpecies(u8 num){
             if(item == ITEM_SKARMORITE_R)
                 return SPECIES_SKARMORY_MEGA_REDUX;
         break;
+        /*case SPECIES_ARCANINE_REDUX:
+            if(item == ITEM_ARCANITE_R)
+                return SPECIES_ARCANINE_MEGA_REDUX;
+        break;*/
+        case SPECIES_TYRANITAR_REDUX:
+            if(item == ITEM_TYRANITARITE_R)
+                return SPECIES_TYRANITAR_MEGA_REDUX;
+        break;
         case SPECIES_GARCHOMP_REDUX:
             if(item == ITEM_GARCHOMPITE_R)
                 return SPECIES_GARCHOMP_MEGA_REDUX;

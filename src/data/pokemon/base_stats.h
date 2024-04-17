@@ -29,7 +29,6 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_OVERGROW, ABILITY_THICK_FAT, ABILITY_POISON_ABSORB},
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
-    .shopPrice = 5,
     },
 
 [SPECIES_IVYSAUR] =
@@ -133,7 +132,6 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_BLAZE, ABILITY_IMMOLATE, ABILITY_SOLAR_POWER},
     .bodyColor = BODY_COLOR_RED,
     .noFlip = FALSE,
-    .shopPrice = 5,
     },
 
 [SPECIES_CHARMELEON] =
@@ -260,7 +258,6 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_TORRENT, ABILITY_SHELL_ARMOR, ABILITY_WATER_VEIL},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .shopPrice = 5,
     },
 
 [SPECIES_WARTORTLE] =
@@ -672,6 +669,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_GUTS, ABILITY_RUN_AWAY, ABILITY_NONE},
     .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = FALSE,
+    .shopPrice = 5,
     },
 
 [SPECIES_RATTATA_ALOLAN] =
@@ -930,6 +928,7 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
     .flags = F_ALOLAN_FORM,
+    .shopPrice = 230,
     },
 
 [SPECIES_SANDSHREW] =
@@ -956,6 +955,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_LETS_ROLL, ABILITY_SAND_RUSH, ABILITY_BATTLE_ARMOR},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
+    .shopPrice = 10,
     },
 
 [SPECIES_SANDSHREW_ALOLAN] =
@@ -1342,6 +1342,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_QUICK_FEET, ABILITY_IMMOLATE, ABILITY_NONE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
+    .shopPrice = 10,
     },
 
 [SPECIES_VULPIX_ALOLAN] =
@@ -1736,6 +1737,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_SAND_RUSH, ABILITY_NONE, ABILITY_NONE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
+    .shopPrice = 10,
     },
 
 [SPECIES_DIGLETT_ALOLAN] =
@@ -1844,6 +1846,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_PERFECTIONIST, ABILITY_TECHNICIAN, ABILITY_OPPORTUNIST},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
+    .shopPrice = 10,
     },
 
 [SPECIES_MEOWTH_ALOLAN] =
@@ -3219,6 +3222,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_LIQUIFIED, ABILITY_STENCH, ABILITY_STICKY_HOLD},
     .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = FALSE,
+    .shopPrice = 10,
     },
 
 [SPECIES_GRIMER_ALOLAN] =
@@ -3790,6 +3794,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_BONE_ZONE, ABILITY_BATTLE_ARMOR, ABILITY_ROCK_HEAD},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
+    .shopPrice = 25,
     },
 
 [SPECIES_MAROWAK_ALOLAN] =
@@ -4837,6 +4842,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_ANALYTIC, ABILITY_NONE, ABILITY_NONE},
     .bodyColor = BODY_COLOR_PINK,
     .noFlip = FALSE,
+    .shopPrice = 30,
     },
 
 [SPECIES_OMANYTE] =
@@ -14678,6 +14684,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_IMMUNITY, ABILITY_THICK_FAT, ABILITY_GLUTTONY},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = FALSE,
+    .shopPrice = 30,
     },
 
 [SPECIES_RIOLU] =
@@ -30706,6 +30713,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_LEVITATE, ABILITY_MALICIOUS, ABILITY_DARK_AURA},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
+    .shopPrice = 200,
     },
 
 [SPECIES_MESPRIT_REDUX] =
@@ -30733,6 +30741,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_LEVITATE, ABILITY_DARK_AURA, ABILITY_MALICIOUS},
     .bodyColor = BODY_COLOR_PINK,
     .noFlip = FALSE,
+    .shopPrice = 200,
     },
 
 [SPECIES_AZELF_REDUX] =
@@ -30759,6 +30768,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_LEVITATE, ABILITY_DARK_AURA, ABILITY_MALICIOUS},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
+    .shopPrice = 200,
     },
 
 [SPECIES_BUIZEL_REDUX] =

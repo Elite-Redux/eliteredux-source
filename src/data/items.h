@@ -8184,6 +8184,30 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
+    [ITEM_ARCANITE_R] =
+    {
+        .name = _("Arcanite R"),
+        .itemId = ITEM_ARCANITE_R,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sArcaniteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+
+    [ITEM_TYRANITARITE_R] = 
+    {
+        .name = _("Tyranitarite R"),
+        .itemId = ITEM_TYRANITARITE_R,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sTyranitariteRDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+
     [ITEM_SABLENITE_R] =
     {
         .name = _("Sablenite R"),
