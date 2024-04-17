@@ -35867,11 +35867,11 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_WEEZING_GALARIAN] =
     {
     .baseHP         = 65,
-    .baseAttack     = 90,
+    .baseAttack     = 70,
     .baseDefense    = 120,
-    .baseSpeed      = 95,
-    .baseSpAttack   = 70,
-    .baseSpDefense  = 60,
+    .baseSpeed      = 60,
+    .baseSpAttack   = 95,
+    .baseSpDefense  = 90,
     .type1 = TYPE_POISON,
     .type2 = TYPE_FAIRY,
     .catchRate = 255,
