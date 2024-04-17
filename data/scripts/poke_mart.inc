@@ -244,3 +244,4 @@ PokeMart_Mind_Badge::
 	.2byte ITEM_NONE
 	release
 	end
+

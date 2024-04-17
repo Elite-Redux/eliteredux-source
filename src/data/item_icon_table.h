@@ -653,6 +653,8 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_MAWILITE_R]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Mawilite_R},
     [ITEM_SABLENITE_R]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Sablenite_R},
     [ITEM_URSALUNITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Ursalunite},
+    [ITEM_ARCANITE_R]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Arcanite_R},
+    [ITEM_TYRANITARITE_R]  = {gItemIcon_GenericMegaStone, gItemIconPalette_Tyranitarite_R},
 
     [ITEM_MEGA_BRACELET] = {gItemIcon_MegaBracelet, gItemIconPalette_MegaBracelet},
     [ITEM_ABILITY_CAPSULE] = {gItemIcon_AbilityCapsule, gItemIconPalette_AbilityCapsule},

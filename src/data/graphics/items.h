@@ -1587,6 +1587,8 @@ const u32 gItemIconPalette_Torterranite[]   = INCBIN_U32("graphics/items/icon_pa
 const u32 gItemIconPalette_Touncannonite[]  = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
 const u32 gItemIconPalette_Typhlosionite[]  = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
 const u32 gItemIconPalette_Ursalunite[]     = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Arcanite_R[]     = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Tyranitarite_R[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
 
 // Gen 7 Items
 

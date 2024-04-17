@@ -43,7 +43,7 @@ script OldaleTown_Mart_EventScript_Clerk{
 		setvar(VAR_SHOP_MONEY_TYPE, 1)
 		message(gText_HowMayIServeYou)
 		waitmessage
-		pokemart(OldaleMartMons)
+		pokemart(0)
 		setvar(VAR_SHOP_MONEY_TYPE, 0)
 	}
 	else{
@@ -51,14 +51,6 @@ script OldaleTown_Mart_EventScript_Clerk{
 	}
 	release
 	end
-}
-
-mart OldaleMartMons {
-	SPECIES_BULBASAUR
-	SPECIES_CHARMANDER
-	SPECIES_SQUIRTLE
-	SPECIES_CATERPIE
-	SPECIES_PIDGEY
 }
 
 script General_Adoption_Center_Script{
@@ -71,9 +63,218 @@ script General_Adoption_Center_Script{
 		waitmessage
 		pokemart(0)
 		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
 	}
 	else{
 		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartGrassStarters {
+	SPECIES_BULBASAUR
+	SPECIES_CHIKORITA
+	SPECIES_TREECKO
+	SPECIES_TURTWIG
+	SPECIES_SNIVY
+	SPECIES_CHESPIN
+	SPECIES_ROWLET
+	SPECIES_GROOKEY
+	SPECIES_SPRIGATITO
+}
+
+script General_Adoption_Center_Starters_Grass_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		if(flag(FLAG_BADGE04_GET)){
+			setvar(VAR_SHOP_TYPE, 3)
+			setvar(VAR_SHOP_MONEY_TYPE, 1)
+			message(gText_HowMayIServeYou)
+			waitmessage
+			pokemart(MartGrassStarters)
+			msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+			setvar(VAR_SHOP_MONEY_TYPE, 0)
+		}
+		else{
+			msgbox(format("I will get some rare Grass mons to sell later, make sure to come back to check them."), MSGBOX_DEFAULT)
+		}
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartFireStarters {
+	SPECIES_CHARMANDER
+	SPECIES_CYNDAQUIL
+	SPECIES_TORCHIC
+	SPECIES_CHIMCHAR
+	SPECIES_TEPIG
+	SPECIES_FENNEKIN
+	SPECIES_LITTEN
+	SPECIES_SCORBUNNY
+	SPECIES_FUECOCO
+}
+
+script General_Adoption_Center_Starters_Fire_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		if(flag(FLAG_BADGE04_GET)){
+			setvar(VAR_SHOP_TYPE, 3)
+			setvar(VAR_SHOP_MONEY_TYPE, 1)
+			message(gText_HowMayIServeYou)
+			waitmessage
+			pokemart(MartFireStarters)
+			msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+			setvar(VAR_SHOP_MONEY_TYPE, 0)
+		}
+		else{
+			msgbox(format("I will get some rare Fire mons to sell later, make sure to come back to check them."), MSGBOX_DEFAULT)
+		}
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartWaterStarters {
+	SPECIES_SQUIRTLE
+	SPECIES_TOTODILE
+	SPECIES_MUDKIP
+	SPECIES_PIPLUP
+	SPECIES_OSHAWOTT
+	SPECIES_FROAKIE
+	SPECIES_POPPLIO
+	SPECIES_SOBBLE
+	SPECIES_QUAXLY
+}
+
+script General_Adoption_Center_Starters_Water_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		if(flag(FLAG_BADGE04_GET)){
+			setvar(VAR_SHOP_TYPE, 3)
+			setvar(VAR_SHOP_MONEY_TYPE, 1)
+			message(gText_HowMayIServeYou)
+			waitmessage
+			pokemart(MartWaterStarters)
+			msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+			setvar(VAR_SHOP_MONEY_TYPE, 0)
+		}
+		else{
+			msgbox(format("I will get some rare Water mons to sell later, make sure to come back to check them."), MSGBOX_DEFAULT)
+		}
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartCasinoMons {
+	SPECIES_PORYGON
+	SPECIES_MUNCHLAX
+	SPECIES_VULPIX
+	SPECIES_SANDSHREW
+	SPECIES_RATTATA
+	SPECIES_MEOWTH
+	SPECIES_GRIMER
+	SPECIES_DIGLETT
+	SPECIES_GEODUDE
+	SPECIES_MAROWAK
+	SPECIES_EXEGGUTOR
+}
+
+script General_Adoption_Center_Casino_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		setvar(VAR_SHOP_TYPE, 3)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		message(gText_HowMayIServeYou)
+		waitmessage
+		pokemart(MartCasinoMons)
+		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartElectricMons {
+	SPECIES_PICHU
+	SPECIES_MINUN
+	SPECIES_PLUSLE
+	SPECIES_PACHIRISU
+	SPECIES_EMOLGA
+	SPECIES_DEDENNE
+	SPECIES_TOGEDEMARU
+	SPECIES_MORPEKO
+	SPECIES_PAWMI
+	SPECIES_RAICHU_ALOLAN
+}
+
+script General_Adoption_Center_Pikaclones_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		setvar(VAR_SHOP_TYPE, 3)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		message(gText_HowMayIServeYou)
+		waitmessage
+		pokemart(MartElectricMons)
+		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart AdoptionCenter_Mega_Stones {
+	ITEM_HOUNDOOMINITE_R
+	ITEM_SABLENITE_R
+	ITEM_GARCHOMPITE_R
+	ITEM_ARCANITE_R
+	ITEM_SKARMORITE_R
+	ITEM_MACHAMPITE_R
+	ITEM_BEEDRILLITE_R
+	ITEM_TYRANITARITE_R
+	ITEM_ALAKAZITE_R
+	ITEM_SCRAFTITE
+	ITEM_FROSLASSITE
+	ITEM_RIBOMBITE
+	ITEM_URSALUNITE
+}
+
+script General_Adoption_Center_Mega_Stones_Script{
+	lock
+	faceplayer
+	checkitem(ITEM_MEGA_BRACELET, 1)
+	if(var(VAR_RESULT) == 0){
+		msgbox(format("Sorry, I can't sell you any item if you don't have a Mega Braclet"), MSGBOX_DEFAULT)
+	}
+	else{
+		message(gText_HowMayIServeYou)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		waitmessage
+		pokemart(AdoptionCenter_Mega_Stones)
+		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
 	}
 	release
 	end
