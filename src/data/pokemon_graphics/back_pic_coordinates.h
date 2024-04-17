@@ -4653,7 +4653,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_REUNICLUS_REDUX] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  6
     },
     [SPECIES_SKARMORY_REDUX] =
     {
