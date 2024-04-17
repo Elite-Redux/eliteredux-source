@@ -348,20 +348,6 @@ void HandleAction_UseMove(void)
                         break;
                 }
             }
-
-            if (!IsBattlerAlive(gBattlerTarget) || GetAbilityState(gBattlerTarget, ABILITY_COMMANDER))
-            {
-                if (GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget))
-                {
-                    gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerTarget) ^ BIT_FLANK);
-                }
-                else
-                {
-                    gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerAttacker) ^ BIT_SIDE);
-                    if (!IsBattlerAlive(gBattlerTarget))
-                        gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerTarget) ^ BIT_FLANK);
-                }
-            }
         }
         else
         {
@@ -474,6 +460,14 @@ void HandleAction_UseMove(void)
 
     if (gBattleTypeFlags & BATTLE_TYPE_ARENA)
         BattleArena_AddMindPoints(gBattlerAttacker);
+    
+    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE
+            && IsBattlerAlive(gBattlerTarget)
+            && GetBattlerSide(gBattlerTarget) != GetBattlerSide(gBattlerAttacker)
+            && GetAbilityState(gBattlerTarget, ABILITY_COMMANDER) >= COMMANDER_ACTIVE)
+    {
+        gBattlerTarget = GetBattlerAtPosition(GetBattlerPosition(gBattlerTarget) ^ BIT_FLANK);
+    }
 
     // Record HP of each battler
     for (i = 0; i < gBattlersCount; i++)
