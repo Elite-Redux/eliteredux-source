@@ -3297,7 +3297,6 @@ static void BattleStartClearSetData(void)
         gHitMarker |= HITMARKER_NO_ANIMATIONS;
     }
 
-    gBattleScripting.battleStyle = gSaveBlock2Ptr->optionsBattleStyle;
     gBattleScripting.battlerPopupOverwrite = MAX_BATTLERS_COUNT;
     gBattleScripting.forceFalseSwipeEffect = 0;
     gBattleScripting.switchInBattlerOverwrite = MAX_BATTLERS_COUNT;

@@ -22,8 +22,7 @@
 #define sSTATCHANGER                 sB_ANIM_TARGETS_HIT + 1
 #define sSTAT_ANIM_PLAYED            sSTATCHANGER + 1
 #define sGIVEEXP_STATE               sSTAT_ANIM_PLAYED + 1
-#define sBATTLE_STYLE                sGIVEEXP_STATE + 1
-#define sLVLBOX_STATE                sBATTLE_STYLE + 1
+#define sLVLBOX_STATE                sGIVEEXP_STATE + 1
 #define sLEARNMOVE_STATE             sLVLBOX_STATE + 1
 #define sRESHOW_MAIN_STATE           sLEARNMOVE_STATE + 1
 #define sRESHOW_HELPER_STATE         sRESHOW_MAIN_STATE + 1

@@ -755,7 +755,6 @@ struct BattleScripting
     u8 statChanger;
     bool8 statAnimPlayed;
     u8 getexpState;
-    u8 battleStyle;
     u8 drawlvlupboxState;
     u8 learnMoveState;
     u8 reshowMainState;
