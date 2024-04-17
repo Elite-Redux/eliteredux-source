@@ -48,26 +48,6 @@ Route104_PrettyPetalFlowerShop_EventScript_DontExplainBerries:: @ 822A3DB
 	msgbox Route104_PrettyPetalFlowerShop_Text_FlowersBringHappiness, MSGBOX_DEFAULT
 	return
 
-Route104_PrettyPetalFlowerShop_EventScript_SellDecorations:: @ 822A3E4
-	message gText_PlayerWhatCanIDoForYou
-	waitmessage
-	pokemartdecoration2 Route104_PrettyPetalFlowerShop_Pokemart_Plants
-	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-Route104_PrettyPetalFlowerShop_Pokemart_Plants: @ 822A3FC
-	.2byte DECOR_RED_PLANT
-	.2byte DECOR_TROPICAL_PLANT
-	.2byte DECOR_PRETTY_FLOWERS
-	.2byte DECOR_COLORFUL_PLANT
-	.2byte DECOR_BIG_PLANT
-	.2byte DECOR_GORGEOUS_PLANT
-	.2byte DECOR_NONE
-	release
-	end
-
 Route104_PrettyPetalFlowerShop_EventScript_WailmerPailGirl:: @ 822A40C
 	lock
 	faceplayer

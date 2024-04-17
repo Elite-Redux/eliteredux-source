@@ -841,6 +841,7 @@ const u8 sText_BuyMenuPrintPriceInList_BattlePoints[] = _("{STR_VAR_1}");
 #define DEFAULT_POKEMON_PRICE    20
 #define DEFAULT_ITEM_PRICE       50
 #define DEFAULT_MEGA_STONE_PRICE 50
+#define DEFAULT_DECORATION_PRICE 25
 static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
 {
     u8 x;
@@ -879,11 +880,19 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
             break;
             case MART_TYPE_DECOR:
             case MART_TYPE_DECOR2:
-                ConvertIntToDecimalStringN(gStringVar1, gDecorations[itemId].price, STR_CONV_MODE_LEFT_ALIGN, 5);
-                if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_NORMAL)
-                    StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
-                else
+                if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS){
+                    u16 price = gDecorations[itemId].bpPrice;
+                    if(price == 0)
+                        price = DEFAULT_DECORATION_PRICE;
+                    
+                    ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 5);
                     StringExpandPlaceholders(gStringVar4, sText_BuyMenuPrintPriceInList_BattlePoints);
+                }
+                else{
+                    u16 price = gDecorations[itemId].price;
+                    ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 5);
+                    StringExpandPlaceholders(gStringVar4, sText_BuyMenuPrintPriceInList_BattlePoints);
+                }
             break;
             case MART_TYPE_MONS:{
                 u8 price = gBaseStats[itemId].shopPrice;
@@ -1317,7 +1326,17 @@ static void Task_BuyMenu(u8 taskId)
                 }
             }
             else if(sMartInfo.martType == MART_TYPE_DECOR || sMartInfo.martType == MART_TYPE_DECOR2){
-                sShopData->totalCost = gDecorations[itemId].price;
+                if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS){
+                    u8 price = gBaseStats[itemId].shopPrice;
+
+                    if(price == 0)
+                        price = DEFAULT_DECORATION_PRICE;
+
+                    sShopData->totalCost = price;
+                }
+                else{
+                    sShopData->totalCost = gDecorations[itemId].price;
+                }
             }
             else// if(sMartInfo.martType == MART_TYPE_MONS){
             {
@@ -1411,8 +1430,13 @@ static void Task_BuyMenu(u8 taskId)
 
                         BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
                     }
-                    else{
+                    else{ 
+                        //Decorations
+                        StringCopy(gStringVar1, gDecorations[itemId].name);
+                        ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
+                        StringExpandPlaceholders(gStringVar4, gText_Var1IsItThatllBeVar2BP);
 
+                        BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
                     }
                 }
             }

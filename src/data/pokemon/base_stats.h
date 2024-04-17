@@ -132,7 +132,6 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_BLAZE, ABILITY_IMMOLATE, ABILITY_SOLAR_POWER},
     .bodyColor = BODY_COLOR_RED,
     .noFlip = FALSE,
-    .shopPrice = 5,
     },
 
 [SPECIES_CHARMELEON] =
@@ -259,7 +258,6 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_TORRENT, ABILITY_SHELL_ARMOR, ABILITY_WATER_VEIL},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
-    .shopPrice = 5,
     },
 
 [SPECIES_WARTORTLE] =

@@ -1772,8 +1772,20 @@ bool8 ScrCmd_removemoney(struct ScriptContext *ctx)
     u32 amount = VarGet(ScriptReadWord(ctx));
     u8 ignore = ScriptReadByte(ctx);
 
-    if (!ignore)
-        RemoveMoney(&gSaveBlock1Ptr->money, amount);
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            if (!ignore)
+                RemoveMoney(&gSaveBlock1Ptr->money, amount);
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            if (!ignore)
+                gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - amount;
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            if (!ignore)
+                gSaveBlock1Ptr->coins = gSaveBlock1Ptr->coins - amount;
+        break;
+    }
     return FALSE;
 }
 
@@ -1782,8 +1794,21 @@ bool8 ScrCmd_checkmoney(struct ScriptContext *ctx)
     u32 amount = VarGet(ScriptReadWord(ctx));
     u8 ignore = ScriptReadByte(ctx);
 
-    if (!ignore)
-        gSpecialVar_Result = IsEnoughMoney(&gSaveBlock1Ptr->money, amount);
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            if (!ignore)
+                gSpecialVar_Result = IsEnoughMoney(&gSaveBlock1Ptr->money, amount);
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            if (!ignore)
+                gSpecialVar_Result = gSaveBlock2Ptr->frontier.battlePoints >= amount;
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            if (!ignore)
+                gSpecialVar_Result = gSaveBlock1Ptr->coins >= amount;
+        break;
+    }
+    
     return FALSE;
 }
 
@@ -1793,8 +1818,21 @@ bool8 ScrCmd_showmoneybox(struct ScriptContext *ctx)
     u8 y = ScriptReadByte(ctx);
     u8 ignore = ScriptReadByte(ctx);
 
-    if (!ignore)
-        DrawMoneyBox(GetMoney(&gSaveBlock1Ptr->money), x, y);
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            if (!ignore)
+                DrawMoneyBox(GetMoney(&gSaveBlock1Ptr->money), x, y);
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            if (!ignore)
+                DrawMoneyBox(gSaveBlock2Ptr->frontier.battlePoints, x, y);
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            if (!ignore)
+                DrawMoneyBox(gSaveBlock1Ptr->coins, x, y);
+        break;
+    }
+
     return FALSE;
 }
 
@@ -1813,8 +1851,20 @@ bool8 ScrCmd_updatemoneybox(struct ScriptContext *ctx)
     u8 y = ScriptReadByte(ctx);
     u8 ignore = ScriptReadByte(ctx);
 
-    if (!ignore)
-        ChangeAmountInMoneyBox(GetMoney(&gSaveBlock1Ptr->money));
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            if (!ignore)
+                ChangeAmountInMoneyBox(GetMoney(&gSaveBlock1Ptr->money));
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            if (!ignore)
+                ChangeAmountInMoneyBox(gSaveBlock2Ptr->frontier.battlePoints);
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            if (!ignore)
+                ChangeAmountInMoneyBox(gSaveBlock1Ptr->coins);
+        break;
+    }
     return FALSE;
 }
 
