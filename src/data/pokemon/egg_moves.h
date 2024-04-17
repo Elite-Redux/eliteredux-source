@@ -5266,11 +5266,11 @@ const u16 gEggMoves[] = {
         MOVE_SMART_STRIKE),
 
     egg_moves(GROWLITHE_REDUX,
-        MOVE_IRON_FANGS, // new
-        MOVE_JAGGED_FANGS, // new
-        MOVE_SHADOW_FANGS, // new
-        MOVE_LOVELY_BITE, // new
-        MOVE_RAGING_FURY, // new
+        MOVE_IRON_FANGS,
+        MOVE_JAGGED_FANGS,
+        MOVE_SHADOW_FANGS,
+        MOVE_LOVELY_BITE,
+        MOVE_RAGING_FURY,
         MOVE_BODY_SLAM,
         MOVE_CRUNCH,
         MOVE_THRASH,
@@ -5284,7 +5284,8 @@ const u16 gEggMoves[] = {
         MOVE_IRON_TAIL,
         MOVE_DOUBLE_KICK,
         MOVE_CLOSE_COMBAT,
-        MOVE_BURN_UP),
+        MOVE_BURN_UP,
+        MOVE_BURNING_BULWARK),
 
     egg_moves(WHISMUR_REDUX,
         MOVE_TAKE_DOWN,
