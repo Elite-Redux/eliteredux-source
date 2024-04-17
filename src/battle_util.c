@@ -519,7 +519,7 @@ void HandleAction_SwitchExtra(void)
     gBattlerTarget = data.target;
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
     gBattleScripting.battler = gBattlerAttacker;
-    
+
     switch (data.type)
     {
         case EXTRA_SWITCH_ITEM:
@@ -3512,7 +3512,7 @@ bool8 HandleWishPerishSongOnTurnEnd(void)
 
                 gBattlerTarget = gActiveBattler;
                 gBattlerAttacker = gWishFutureKnock.futureSightAttacker[gActiveBattler];
-                gTurnStructs[gBattlerTarget].dmg = 0xFFFF;
+                gActionStructs[gBattlerTarget].dmg = 0xFFFF;
                 gCurrentMove = gWishFutureKnock.futureSightMove[gActiveBattler];
                 SetTypeBeforeUsingMove(gCurrentMove, gActiveBattler);
                 BattleScriptExecute(BattleScript_MonTookFutureAttack);
@@ -7318,23 +7318,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
         }
-
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_EMERGENCY_EXIT) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_WIMP_OUT)) {
-            if (ShouldApplyOnHitAffect(battler)
-                // Had more than half of hp before, now has less
-                && gBattleStruct->hpBefore[battler] > gBattleMons[battler].maxHP / 2
-                && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2
-                && (gTurnStructs[gBattlerAttacker].multiHitCounter == 0 || gTurnStructs[gBattlerAttacker].multiHitCounter == 1)
-                && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
-                && (CanBattlerSwitch(battler) || !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
-                && !(gBattleTypeFlags & BATTLE_TYPE_ARENA)
-                && CountUsablePartyMons(battler) > 0)
-            {
-                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = BattlerHasAbility(battler, gBattlerAttacker, ABILITY_EMERGENCY_EXIT) ? ABILITY_EMERGENCY_EXIT : ABILITY_WIMP_OUT;
-                gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_EMERGENCY_EXIT;
-                effect++;
-            }
-        }
 		
 		// Thermal Exchange
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_THERMAL_EXCHANGE)){
@@ -7734,7 +7717,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
             {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_INNARDS_OUT;
-                gBattleMoveDamage = gTurnStructs[gBattlerTarget].dmg;
+                gBattleMoveDamage = gActionStructs[gBattlerTarget].dmg;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_AftermathDmg;
                 effect++;
@@ -8401,7 +8384,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
              && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
             {
                 gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = ABILITY_ELECTRIC_BURST;
-                gBattleMoveDamage = gTurnStructs[gBattlerTarget].dmg / 10;
+                gBattleMoveDamage = gActionStructs[gBattlerTarget].dmg / 10;
                 if (gBattleMoveDamage == 0)
                     gBattleMoveDamage = 1;
                 else if(gBattleMoveDamage >= gBattleMons[gBattlerAttacker].hp) //Make it unable to faint the user to avoid crashes
@@ -8421,7 +8404,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
              && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
             {
                 gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = ABILITY_INFERNAL_RAGE;
-                gBattleMoveDamage = gTurnStructs[gBattlerTarget].dmg / 10;
+                gBattleMoveDamage = gActionStructs[gBattlerTarget].dmg / 10;
                 if (gBattleMoveDamage == 0)
                     gBattleMoveDamage = 1;
                 else if(gBattleMoveDamage >= gBattleMons[gBattlerAttacker].hp) //Make it unable to faint the user to avoid crashes
@@ -11369,17 +11352,17 @@ case ITEMEFFECT_KINGSROCK:
             if (gTurnStructs[gBattlerAttacker].damagedMons
                 && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                 && gBattlerAttacker != gBattlerTarget
-                && gTurnStructs[gBattlerTarget].dmg != 0
+                && gActionStructs[gBattlerTarget].dmg != 0
                 && gBattleMons[gBattlerAttacker].hp != gBattleMons[gBattlerAttacker].maxHP
                 && gBattleMons[gBattlerAttacker].hp != 0)
             {
                 gLastUsedItem = atkItem;
                 gPotentialItemEffectBattler = gBattlerAttacker;
                 gBattleScripting.battler = gBattlerAttacker;
-                gBattleMoveDamage = (gTurnStructs[gBattlerTarget].dmg / 4) * -1;
+                gBattleMoveDamage = (gActionStructs[gBattlerTarget].dmg / 4) * -1;
                 if (gBattleMoveDamage == 0)
                     gBattleMoveDamage = -1;
-                gTurnStructs[gBattlerTarget].dmg = 0;
+                gActionStructs[gBattlerTarget].dmg = 0;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ItemHealHP_Ret;
                 effect = ITEM_HP_CHANGE;
@@ -11427,13 +11410,6 @@ case ITEMEFFECT_KINGSROCK:
             GET_MOVE_TYPE(gCurrentMove, moveType);
             switch (battlerHoldEffect)
             {
-            case HOLD_EFFECT_RED_CARD:
-            case HOLD_EFFECT_EJECT_BUTTON:
-                if (TARGET_TURN_DAMAGED)
-                {
-                    gTurnStructs[battlerId].shouldTriggerSwitchItem = TRUE;
-                }
-                break;
             case HOLD_EFFECT_AIR_BALLOON:
                 if (TARGET_TURN_DAMAGED)
                 {
@@ -16289,4 +16265,31 @@ u8 GetTurnBattler()
         return gQueuedExtraAttackData[0].attacker;
     else
         return gBattlerByTurnOrder[gCurrentTurnActionNumber];
+}
+
+void ScheduleSwitch(u8 type, u16 source, u8 attacker, u8 target, u8 random, u8 playAnimation)
+{
+    u8 i;
+    struct ExtraActionStruct data = {
+        .type = type,
+        .attacker = attacker,
+        .target = target,
+        .data = {
+            .switchInfo = {
+                .source = source,
+                .random = random,
+                .playAnim = playAnimation,
+            }
+        }
+    };
+    for (i = 1; i <= gQueuedAttackCount; i++)
+    {
+        struct ExtraActionStruct current = gQueuedExtraAttackData[i];
+        if (current.type == type && current.attacker == attacker)
+        {
+            gQueuedExtraAttackData[i] = data;
+            return;
+        }
+    }
+    gQueuedExtraAttackData[++gQueuedAttackCount] = data;
 }

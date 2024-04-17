@@ -185,45 +185,47 @@ struct RoundStruct
 
 struct TurnStruct
 {
-    s32 dmg;
-    s32 physicalDmg;
-    s32 specialDmg;
-    s32 savedDmg;
-    u16 parentalBondTrigger; // Ability that triggered parental bond
+    s32 totalDamage;
+    // s32 savedDmg;
+    // u16 parentalBondTrigger; // Ability that triggered parental bond
     u16 flungItem;
     bool8 turnAbilityTriggers[NUM_INNATE_PER_SPECIES + 1];
     u8 gemParam;
-    u8 physicalBattlerId;
-    u8 specialBattlerId;
     u8 changedStatsBattlerId; // Battler that was responsible for the latest stat change. Can be self.
-    u8 statLowered:1;
-    u8 lightningRodRedirected:1;
     u8 restoredBattlerSprite: 1;
     u8 intimidatedMon:1;
     u8 scaredMon:1;
     u8 traced:1;
     u8 flag40:1;
-    u8 focusBanded:1; //8
-    u8 focusSashed:1;
-    u8 sturdied:1;
-    u8 stormDrainRedirected:1;
     u8 switchInItemDone:1;
     u8 berryReduced:1;
     u8 gemBoost:1;
     u8 rototillerAffected:1;  // to be affected by rototiller
-    u8 parentalBondOn:3;
-    u8 parentalBondInitialCount:3;
-    u8 multiHitOn:1;
-    u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
+    // u8 parentalBondOn:3;
+    // u8 parentalBondInitialCount:3;
+    // u8 multiHitOn:1;
+    // u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
     u8 dancerUsedMove:1;
     u8 announceNeutralizingGas:1;   // See Cmd_switchineffects
     u8 neutralizingGasRemoved:1;    // See VARIOUS_TRY_END_NEUTRALIZING_GAS
     u32 pranksterElevated:1;
     u8 mirrorHerbStat:4;
     u8 multiHitCounter:4;
-    u8 shouldTriggerSwitchItem:1;
     u32 extraMoveUsed:1;
 };
+
+struct ActionStruct
+{
+    s32 dmg;
+    u8 damagedBy:2;
+    u8 wasDamaged:1;
+    u8 focusBanded:1; //8
+    u8 focusSashed:1;
+    u8 sturdied:1;
+    u8 stormDrainRedirected:1;
+    u8 statLowered:1;
+    u8 lightningRodRedirected:1;
+}
 
 struct SideTimer
 {
@@ -568,11 +570,7 @@ struct ExtraAttackActionStruct
 
 struct ExtraSwitchActionStruct
 {
-    union ExtraSwitchActionSource {
-        u16 ability;
-        u16 item;
-        u16 move;
-    } source;
+    u16 source;
     u8 random:1;
     u8 playAnim:1;
 };
@@ -737,8 +735,8 @@ struct BattleStruct
 #define IS_MOVE_STATUS(move)(gBattleMoves[move].split == SPLIT_STATUS)
 
 #define BATTLER_MAX_HP(battlerId)(gBattleMons[battlerId].hp == gBattleMons[battlerId].maxHP)
-#define TARGET_TURN_DAMAGED ((gTurnStructs[gBattlerTarget].physicalDmg != 0 || gTurnStructs[gBattlerTarget].specialDmg != 0))
-#define BATTLER_DAMAGED(battlerId) ((gTurnStructs[battlerId].physicalDmg != 0 || gTurnStructs[battlerId].specialDmg != 0))
+#define TARGET_TURN_DAMAGED (gActionStructs[gBattlerTarget].wasDamaged && gActionStructs[gBattlerTarget].damagedBy == gBattlerAttacker)
+#define BATTLER_DAMAGED(battlerId) (gActionStructs[battlerId].wasDamaged)
 
 #define IS_BATTLER_OF_TYPE(battlerId, type)((gBattleMons[battlerId].type1 == type || gBattleMons[battlerId].type2 == type || gBattleMons[battlerId].type3 == type))
 #define SET_BATTLER_TYPE(battlerId, type)           \
@@ -1013,6 +1011,7 @@ extern u8 gBattleCommunication[BATTLE_COMMUNICATION_ENTRIES_COUNT];
 extern u8 gBattleOutcome;
 extern struct RoundStruct gRoundStructs[MAX_BATTLERS_COUNT];
 extern struct TurnStruct gTurnStructs[MAX_BATTLERS_COUNT];
+extern struct ActionStruct gActionStructs[MAX_BATTLERS_COUNT];
 extern u16 gBattleWeather;
 extern struct WishFutureKnock gWishFutureKnock;
 extern u16 gIntroSlideFlags;

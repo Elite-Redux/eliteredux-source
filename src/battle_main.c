@@ -225,6 +225,7 @@ EWRAM_DATA u8 gBattleCommunication[BATTLE_COMMUNICATION_ENTRIES_COUNT] = {0};
 EWRAM_DATA u8 gBattleOutcome = 0;
 EWRAM_DATA struct RoundStruct gRoundStructs[MAX_BATTLERS_COUNT] = {0}; // Cleared at end of round
 EWRAM_DATA struct TurnStruct gTurnStructs[MAX_BATTLERS_COUNT] = {0}; // Cleared after each battler's turn
+EWRAM_DATA struct ActionStruct gActionStructs[MAX_BATTLERS_COUNT] = {0}; // Cleared after each action
 EWRAM_DATA u16 gBattleWeather = 0;
 EWRAM_DATA struct WishFutureKnock gWishFutureKnock = {0};
 EWRAM_DATA u16 gIntroSlideFlags = 0;

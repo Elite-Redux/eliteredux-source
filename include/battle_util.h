@@ -211,6 +211,7 @@ u32 GetBattlerHoldEffectParam(u8 battlerId);
 bool32 IsMoveMakingContact(u16 move, u8 battlerAtk);
 bool32 IsBattlerGrounded(u8 battlerId);
 bool32 IsBattlerAlive(u8 battlerId);
+void ScheduleSwitch(u8 type, u16 source, u8 attacker, u8 target, u8 random, u8 playAnimation);
 u8 GetBattleMonMoveSlot(struct BattlePokemon *battleMon, u16 move);
 u32 GetBattlerWeight(u8 battlerId);
 s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
