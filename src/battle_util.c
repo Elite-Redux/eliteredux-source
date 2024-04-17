@@ -368,9 +368,9 @@ void HandleAction_UseMove(void)
             gActiveBattler = gBattlerByTurnOrder[var];
             RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
             if (GetBattlerAbility(gActiveBattler) == ABILITY_LIGHTNING_ROD    || BattlerHasInnate(gActiveBattler, ABILITY_LIGHTNING_ROD)) 
-                gTurnStructs[gActiveBattler].lightningRodRedirected = TRUE;
+                gActionStructs[gActiveBattler].lightningRodRedirected = TRUE;
             else if (GetBattlerAbility(gActiveBattler) == ABILITY_STORM_DRAIN || BattlerHasInnate(gActiveBattler, ABILITY_STORM_DRAIN))
-                gTurnStructs[gActiveBattler].stormDrainRedirected = TRUE;
+                gActionStructs[gActiveBattler].stormDrainRedirected = TRUE;
             gBattlerTarget = gActiveBattler;
         }
     }
@@ -11349,10 +11349,9 @@ case ITEMEFFECT_KINGSROCK:
         switch (atkHoldEffect)
         {
         case HOLD_EFFECT_SHELL_BELL:
-            if (gTurnStructs[gBattlerAttacker].damagedMons
+            if (gTurnStructs[gBattlerAttacker].totalDamage
                 && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                 && gBattlerAttacker != gBattlerTarget
-                && gActionStructs[gBattlerTarget].dmg != 0
                 && gBattleMons[gBattlerAttacker].hp != gBattleMons[gBattlerAttacker].maxHP
                 && gBattleMons[gBattlerAttacker].hp != 0)
             {
@@ -11369,7 +11368,7 @@ case ITEMEFFECT_KINGSROCK:
             }
             break;
         case HOLD_EFFECT_LIFE_ORB:
-            if (gTurnStructs[gBattlerAttacker].damagedMons
+            if (gTurnStructs[gBattlerAttacker].totalDamage
                 && !gProcessingExtraAttacks
                 && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                 && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)
@@ -11684,7 +11683,7 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
             {
                 targetBattler ^= BIT_FLANK;
                 RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
-                gTurnStructs[targetBattler].lightningRodRedirected = TRUE;
+                gActionStructs[targetBattler].lightningRodRedirected = TRUE;
             }
             else if (gBattleMoves[move].type == TYPE_WATER
                 && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN)
@@ -11692,7 +11691,7 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
             {
                 targetBattler ^= BIT_FLANK;
                 RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
-                gTurnStructs[targetBattler].stormDrainRedirected = TRUE;
+                gActionStructs[targetBattler].stormDrainRedirected = TRUE;
             }
         }
         break;
@@ -12243,9 +12242,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
     u32 i;
     u16 basePower = gBattleMoves[move].power;
     u32 weight, hpFraction, speed;
+    struct ExtraAttackActionStruct multiHitInfo = GetMultiHitInfo();
 
-    if (gTurnStructs[battlerAtk].parentalBondTrigger == ABILITY_MINION_CONTROL
-        && gTurnStructs[battlerAtk].parentalBondOn < gTurnStructs[battlerAtk].parentalBondInitialCount)
+    if (multiHitInfo.ability == ABILITY_MINION_CONTROL
+        && multiHitInfo.remainingAttacks < multiHitInfo.initialAttackCount)
         return 10;
 
     switch (gBattleMoves[move].effect)
@@ -14316,6 +14316,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
     u32 defSide = GET_BATTLER_SIDE(battlerDef);
     u16 finalModifier = UQ_4_12(1.0);
     u16 itemDef = gBattleMons[battlerDef].item;
+    struct ExtraAttackActionStruct multiHitInfo;
 
     // check multiple targets in double battle
     if (GetMoveTargetCount(move, battlerAtk, battlerDef) >= 2)
@@ -14406,28 +14407,30 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         else
             MulModifier(&finalModifier, UQ_4_12(0.5));
     }
+
+    multiHitInfo = GetMultiHitInfo();
     
-    switch (gTurnStructs[gBattlerAttacker].parentalBondTrigger) {
+    switch (multiHitInfo.ability) {
         case ABILITY_HYPER_AGGRESSIVE:
         case ABILITY_PARENTAL_BOND:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
+            if (multiHitInfo.remainingAttacks == 1)
                 MulModifier(&finalModifier, UQ_4_12(0.25));
             break;
         case ABILITY_MULTI_HEADED:
             if(gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_TWO_HEADED){
-                if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
+                if (multiHitInfo.remainingAttacks == 1)
                     MulModifier(&finalModifier, UQ_4_12(0.25));
             } else {
-                if(gTurnStructs[gBattlerAttacker].parentalBondOn == 2)
+                if(multiHitInfo.remainingAttacks == 2)
                     MulModifier(&finalModifier, UQ_4_12(0.2));
-                else if(gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
+                else if(multiHitInfo.remainingAttacks == 1)
                     MulModifier(&finalModifier, UQ_4_12(0.15));
             }
             break;
         case ABILITY_PRIMAL_MAW:
         case ABILITY_DEVOURER:
         case ABILITY_RAGING_BOXER:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
+            if (multiHitInfo.remainingAttacks == 1)
                 MulModifier(&finalModifier, UQ_4_12(0.5));
             break;
         case ABILITY_DUAL_WIELD:
@@ -16292,4 +16295,45 @@ void ScheduleSwitch(u8 type, u16 source, u8 attacker, u8 target, u8 random, u8 p
         }
     }
     gQueuedExtraAttackData[++gQueuedAttackCount] = data;
+}
+
+void ScheduleExtraAttack(u8 type, u16 move, u16 ability, u8 attacker, u8 target, u8 movePos, u8 initialAttackCount, u8 remainingAttackCount)
+{
+    u8 i;
+    struct ExtraActionStruct data = {
+        .type = type,
+        .attacker = attacker,
+        .target = target,
+        .data = {
+            .attackInfo = {
+                .ability = ability,
+                .move = move,
+                .movePos = movePos,
+                .initialAttackCount = initialAttackCount,
+                .remainingAttacks = remainingAttackCount,
+            }
+        }
+    }
+    for (i = 1; i <= gQueuedAttackCount; i++)
+    {
+        struct ExtraActionStruct current = gQueuedExtraAttackData[i];
+        if (current.type == type && current.attacker == attacker)
+        {
+            gQueuedExtraAttackData[i] = data;
+            return;
+        }
+    }
+    gQueuedExtraAttackData[++gQueuedAttackCount] = data;
+}
+
+struct ExtraAttackActionStruct GetMultiHitInfo()
+{
+    u8 i;
+    if (gProcessingExtraAttacks && gQueuedExtraAttackData[0].type == EXTRA_MULTI_HIT) return gQueuedExtraAttackData[0].data.attackInfo;
+    for (i = 1; i <= gQueuedAttackCount; i++)
+    {
+        struct ExtraActionStruct data = gQueuedExtraAttackData[i];
+        if (data.type == EXTRA_MULTI_HIT && data.attacker == gBattlerAttacker) return data.data.attackInfo;
+    }
+    return {0};
 }

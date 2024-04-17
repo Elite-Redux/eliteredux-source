@@ -304,6 +304,8 @@ void SetActiveStackBattler(u8 battler, u8 number);
 u16 GetInnateInSlot(u16 species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 ability, u16 move);
+void ScheduleExtraAttack(u8 type, u16 move, u16 ability, u8 attacker, u8 target, u8 movePos, u8 initialAttackCount, u8 remainingAttackCount);
+struct ExtraAttackActionStruct GetMultiHitInfo();
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);

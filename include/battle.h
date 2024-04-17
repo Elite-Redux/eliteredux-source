@@ -183,16 +183,24 @@ struct RoundStruct
     u8 burningBulwark:1;
 };
 
+typedef enum
+{
+    DELAY_NONE = 0,
+    DELAY_MULTI_HITS = 1,
+    DELAY_TARGETS = 2,
+    DELAY_ALL = 1 | 2,
+} EffectDelayTrigger;
+
 struct TurnStruct
 {
     s32 totalDamage;
-    // s32 savedDmg;
-    // u16 parentalBondTrigger; // Ability that triggered parental bond
     u16 flungItem;
+    u16 delayedMoveEffect;
     bool8 turnAbilityTriggers[NUM_INNATE_PER_SPECIES + 1];
     u8 gemParam;
     u8 changedStatsBattlerId; // Battler that was responsible for the latest stat change. Can be self.
-    u8 restoredBattlerSprite: 1;
+    EffectDelayTrigger delayType:2;
+    u8 restoredBattlerSprite:1;
     u8 intimidatedMon:1;
     u8 scaredMon:1;
     u8 traced:1;
@@ -201,10 +209,6 @@ struct TurnStruct
     u8 berryReduced:1;
     u8 gemBoost:1;
     u8 rototillerAffected:1;  // to be affected by rototiller
-    // u8 parentalBondOn:3;
-    // u8 parentalBondInitialCount:3;
-    // u8 multiHitOn:1;
-    // u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
     u8 dancerUsedMove:1;
     u8 announceNeutralizingGas:1;   // See Cmd_switchineffects
     u8 neutralizingGasRemoved:1;    // See VARIOUS_TRY_END_NEUTRALIZING_GAS
@@ -212,6 +216,7 @@ struct TurnStruct
     u8 mirrorHerbStat:4;
     u8 multiHitCounter:4;
     u32 extraMoveUsed:1;
+    u8 statLowered:1;
 };
 
 struct ActionStruct
@@ -223,7 +228,6 @@ struct ActionStruct
     u8 focusSashed:1;
     u8 sturdied:1;
     u8 stormDrainRedirected:1;
-    u8 statLowered:1;
     u8 lightningRodRedirected:1;
 }
 
