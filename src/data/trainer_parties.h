@@ -35139,12 +35139,12 @@ static const struct TrainerMonItemCustomMoves sParty_GlaciaInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WEAVILE,
-    .heldItem = ITEM_FOCUS_SASH,
+    .species = SPECIES_BEEDRILL_REDUX,
+    .heldItem = ITEM_BEEDRILLITE_R,
     .ability = 0,
-    .evs = {4, 252, 0, 0, 0, 252},
+    .evs = {8, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_TRIPLE_AXEL, MOVE_WICKED_BLOW, MOVE_ICE_SHARD, MOVE_POWER_UP_PUNCH
+    .moves = MOVE_ICICLE_SPEAR, MOVE_TOXIC_NEEDLES, MOVE_TWINEEDLE, MOVE_ICE_SHARD
     },
     {
     .lvl = 0,
@@ -35245,12 +35245,12 @@ static const struct TrainerMonItemCustomMoves sParty_DrakeInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_KOMMO_O,
-    .heldItem = ITEM_ASSAULT_VEST,
-    .ability = 0,
-    .evs = {0, 4, 0, 252, 0, 252},
-    .nature = NATURE_NAIVE,
-    .moves = MOVE_CLOSE_COMBAT, MOVE_CLANGING_SCALES, MOVE_FLAMETHROWER, MOVE_POISON_JAB
+    .species = SPECIES_HAXORUS,
+    .heldItem = ITEM_HAXORUSITE,
+    .ability = 1,
+    .evs = {8, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_EXCALIBUR, MOVE_GUILLOTINE, MOVE_DUAL_CHOP, MOVE_DRAGON_DANCE
     },
     {
     .lvl = 0,
@@ -35272,12 +35272,12 @@ static const struct TrainerMonItemCustomMoves sParty_DrakeInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_LUGIA,
-    .heldItem = ITEM_LEFTOVERS,
+    .species = SPECIES_KORAIDON,
+    .heldItem = ITEM_ASSAULT_VEST,
     .ability = 2,
-    .evs = {252, 0, 160, 0, 96, 0},
-    .nature = NATURE_BOLD,
-    .moves = MOVE_AEROBLAST, MOVE_PSYSHOCK, MOVE_RECOVER, MOVE_WHIRLWIND
+    .evs = {8, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_CLOSE_COMBAT, MOVE_DRAGON_RUSH, MOVE_COLLISION_COURSE, MOVE_FIRE_PUNCH
     },
     {
     .lvl = 0,
