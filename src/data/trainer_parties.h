@@ -2308,7 +2308,7 @@ static const struct TrainerMonItemCustomMoves sParty_Calvin1[] = {
     .species = SPECIES_TANDEMAUS,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2,
-    .evs = {4, 252, 0, 0, 0, 252, 508},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_QUICK_ATTACK, MOVE_POPULATION_BOMB, MOVE_BABY_DOLL_EYES, MOVE_PURSUIT
     },
@@ -2326,7 +2326,7 @@ static const struct TrainerMonItemCustomMoves sParty_Calvin1[] = {
     .species = SPECIES_SEEL,
     .heldItem = ITEM_EVIOLITE,
     .ability = 0,
-    .evs = {252, 0, 4, 252, 0, 0, 504},
+    .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_BOLD,
     .moves = MOVE_FAKE_OUT, MOVE_ICE_BEAM, MOVE_SLACK_OFF, MOVE_SCALD
     }
@@ -2720,7 +2720,7 @@ static const struct TrainerMonItemCustomMoves sParty_Darian[] = {
     .species = SPECIES_FINIZEN,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
-    .evs = {4, 252, 0, 0, 0, 252, 504},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_ADAMANT,
     .moves = MOVE_AQUA_JET, MOVE_ACROBATICS, MOVE_ICE_SPINNER, MOVE_DRAIN_PUNCH
     },
@@ -2980,7 +2980,7 @@ static const struct TrainerMonItemCustomMoves sParty_Winston1[] = {
     .species = SPECIES_LECHONK,
     .heldItem = ITEM_SITRUS_BERRY,
     .ability = 2,
-    .evs = {4, 0, 252, 0, 252, 0, 504},
+    .evs = {4, 0, 252, 0, 252, 0},
     .nature = NATURE_IMPISH,
     .moves = MOVE_SLACK_OFF, MOVE_HYPER_FANG, MOVE_BERRY_SMASH, MOVE_STUFF_CHEEKS
     }
@@ -3714,7 +3714,7 @@ static const struct TrainerMonItemCustomMoves sParty_James1[] = {
     .species = SPECIES_NYMBLE,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2,
-    .evs = {4, 252, 0, 0, 0, 252, 504},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_LEECH_LIFE, MOVE_SUCKER_PUNCH, MOVE_FIRST_IMPRESSION, MOVE_TRAILBLAZE
     }
