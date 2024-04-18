@@ -321,12 +321,6 @@
 #define FLAG_WEATHER_BASED                          (1 << 30)
 #define FLAG_FIELD_BASED                            (1 << 31)
 
-// Battle move Flags 2
-
-// Battle move Flags 2
-
-// Battle move Flags 2
-
 // Split defines.
 #define SPLIT_PHYSICAL  0x0
 #define SPLIT_SPECIAL   0x1
