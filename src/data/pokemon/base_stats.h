@@ -4940,7 +4940,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_WATER_1,
     .eggGroup2 = EGG_GROUP_WATER_3,
     .abilities = {ABILITY_SWIFT_SWIM, ABILITY_HYPER_CUTTER, ABILITY_PERFECTIONIST},
-    .innates = {ABILITY_FOSSILIZED, ABILITY_BATTLE_ARMOR, ABILITY_KEEN_EDGE},
+    .innates        = {ABILITY_FOSSILIZED, ABILITY_BATTLE_ARMOR, ABILITY_DUAL_WIELD},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
     },
