@@ -247,8 +247,8 @@ enum battler_TabIds
 enum field_TabsIds
 {
     TAB_PARTY,
-    TAB_FIELD,
     TAB_SPEED,
+    TAB_FIELD,
     TAB_PLAYER_SIDE,
     TAB_ENEMY_SIDE,
     NUM_FIELD_TABS,
@@ -3309,6 +3309,8 @@ const u8 sText_Title_Field_Ion_Deluge[]                     = _("Ion Deluge");
 const u8 sText_Title_Field_Ion_Deluge_Description[]         = _("Causes all the Normal-type moves to\n"
                                                                 "become Electric-type instad,\n"
                                                                 "including status moves.");
+const u8 sText_Title_Field_No_Effect[]                      = _("Field has no effect");
+const u8 sText_Title_Field_No_Effect_Description[]          = _("The field has no special effect.");
 static void PrintFieldTab(void)
 {
     u8 i, j;
@@ -3587,6 +3589,16 @@ static void PrintFieldTab(void)
             y = y + MAX_DESCRIPTION_LINES + 2;
     }
 
+    if(sMenuDataPtr->numFields == 0){
+        StringCopy(gStringVar1, sText_Title_Field_No_Effect);
+        AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+        //Description
+        StringCopy(gStringVar1, sText_Title_Field_No_Effect_Description);
+        AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+    }
+
+
     /*//Nature Power
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_Title_Field_Nature_Power);
     StringCopy(gStringVar1, gMoveNamesLong[MOVE_THUNDERBOLT]);
@@ -3667,6 +3679,8 @@ const u8 sText_Title_Side_Swamp[]                           = _("Swamp");
 const u8 sText_Title_Side_Swamp_Description[]               = _("A deep swamp reduces the speed\n"
                                                                "stat of Pokémon on this side\n"
                                                                "by 75%.");
+const u8 sText_Title_Side_No_Effect[]                       = _("No Effect");
+const u8 sText_Title_Side_No_Effect_Description[]           = _("This side has no special effect.");
 
 static void PrintSideTab(u8 side){
     u8 i, j;
@@ -3954,6 +3968,15 @@ static void PrintSideTab(u8 side){
 
         if(printedInfo)
             y = y + MAX_DESCRIPTION_LINES + 2;
+    }
+
+    if(maxLines == 0){
+        StringCopy(gStringVar1, sText_Title_Side_No_Effect);
+        AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+        //Description
+        StringCopy(gStringVar1, sText_Title_Side_No_Effect_Description);
+        AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
     }
 
     PutWindowTilemap(windowId);
