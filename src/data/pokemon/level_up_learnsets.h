@@ -25901,34 +25901,6 @@ static const struct LevelUpMove sOgerponLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sSquawkabillyWhitePlumageLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_TACKLE),
-    LEVEL_UP_MOVE(5, MOVE_GROWL),
-    LEVEL_UP_MOVE(10, MOVE_EMBER),
-    LEVEL_UP_END
-};
-
-static const struct LevelUpMove sSquawkabillyYellowPlumageLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_TACKLE),
-    LEVEL_UP_MOVE(5, MOVE_GROWL),
-    LEVEL_UP_MOVE(10, MOVE_EMBER),
-    LEVEL_UP_END
-};
-
-static const struct LevelUpMove sSquawkabillyBluePlumageLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_TACKLE),
-    LEVEL_UP_MOVE(5, MOVE_GROWL),
-    LEVEL_UP_MOVE(10, MOVE_EMBER),
-    LEVEL_UP_END
-};
-
-static const struct LevelUpMove sSquawkabillyGreenPlumageLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_TACKLE),
-    LEVEL_UP_MOVE(5, MOVE_GROWL),
-    LEVEL_UP_MOVE(10, MOVE_EMBER),
-    LEVEL_UP_END
-};
-
 static const struct LevelUpMove sMausholdFourLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
     LEVEL_UP_MOVE(5, MOVE_GROWL),
