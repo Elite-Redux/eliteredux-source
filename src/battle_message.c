@@ -821,6 +821,7 @@ static const u8 sText_FogWasBlownAway[] = _("The fog was blown away\nby Defog!")
 static const u8 sText_PkmnFrostbittenBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s ability\ngave {B_EFF_NAME_WITH_PREFIX} frostbite!");
 static const u8 sText_PkmnBledBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s ability\nmade {B_EFF_NAME_WITH_PREFIX} bleed!");
 static const u8 sText_ThunderCage[] = _("{B_DEF_NAME_WITH_PREFIX} was trapped by\nThunder Cage!");
+static const u8 sText_SnapTrap[] = _("{B_DEF_NAME_WITH_PREFIX} was trapped by\na Snap Trap!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1743,6 +1744,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PKMNFROSTBITTENBY - 12] = sText_PkmnFrostbittenBy,
     [STRINGID_PKMNBLEDBY - 12] = sText_PkmnBledBy,
     [STRINGID_THUNDER_CAGE - 12] = sText_ThunderCage,
+    [STRINGID_SNAP_TRAP - 12] = sText_SnapTrap,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2003,6 +2005,7 @@ const u16 gWrappedStringIds[] =
     [B_MSG_TRAPPEDBYSWIRLINGMAGMA] = STRINGID_TRAPPEDBYSWIRLINGMAGMA,
     [B_MSG_INFESTATION] = STRINGID_INFESTATION,
     [B_MSG_THUNDER_CAGE] = STRINGID_THUNDER_CAGE,
+    [B_MSG_SNAP_TRAP] = STRINGID_SNAP_TRAP,
 };
 
 const u16 gMistUsedStringIds[] = 
