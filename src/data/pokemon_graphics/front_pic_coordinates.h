@@ -5452,7 +5452,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_SCIZOR_MEGA_REDUX] =
+    [SPECIES_IRON_EXO] =
     {
         .size = 0,
         .y_offset =  0

@@ -51,7 +51,7 @@ static const union AnimCmd sAnim_SCIZOR_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_SCIZOR_MEGA_REDUX_1[] =
+static const union AnimCmd sAnim_IRON_EXO_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -137,9 +137,9 @@ static const union AnimCmd *const sAnims_SCIZOR_REDUX[] ={
     sAnim_SCIZOR_REDUX_1,
 };
 
-static const union AnimCmd *const sAnims_SCIZOR_MEGA_REDUX[] ={
+static const union AnimCmd *const sAnims_IRON_EXO[] ={
     sAnim_GeneralFrame0,
-    sAnim_SCIZOR_MEGA_REDUX_1,
+    sAnim_IRON_EXO_1,
 };
 
 static const union AnimCmd *const sAnims_URSALUNA_MEGA[] ={
@@ -19558,7 +19558,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(BASCULIN_WHITESTRIPED),
     ANIM_CMD(ZOROARK_HISUIAN),
     ANIM_CMD(WOOPER_PALDEAN),
-    ANIM_CMD(SCIZOR_MEGA_REDUX),
+    ANIM_CMD(IRON_EXO),
     ANIM_CMD(URSALUNA_MEGA),
     ANIM_CMD(TYRANITAR_MEGA_REDUX),
     ANIM_CMD(TYRANITAR_REDUX),

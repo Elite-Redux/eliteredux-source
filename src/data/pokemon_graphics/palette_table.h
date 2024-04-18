@@ -1089,7 +1089,7 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(ZOROARK_HISUIAN, gMonPalette_Zoroark_Hisuian),
     SPECIES_PAL(WOOPER_PALDEAN, gMonPalette_Wooper_Paldean),
     SPECIES_PAL(SCIZOR_REDUX, gMonPalette_Scizor_Redux),
-    SPECIES_PAL(SCIZOR_MEGA_REDUX, gMonPalette_Scizor_Mega_Redux),
+    SPECIES_PAL(IRON_EXO, gMonPalette_Iron_Exo),
     SPECIES_PAL(URSALUNA_MEGA, gMonPalette_Ursaluna_Mega),
     SPECIES_PAL(TYRANITAR_MEGA_REDUX, gMonPalette_Tyranitar_Mega_Redux),
     SPECIES_PAL(TYRANITAR_REDUX, gMonPalette_Tyranitar_Redux),

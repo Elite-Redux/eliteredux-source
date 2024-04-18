@@ -1142,7 +1142,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_ZOROARK_HISUIAN] = gMonIcon_Zoroark_Hisuian,
     [SPECIES_WOOPER_PALDEAN] = gMonIcon_Wooper_Paldean,
     [SPECIES_SCIZOR_REDUX] = gMonIcon_Scizor_Redux,
-    [SPECIES_SCIZOR_MEGA_REDUX] = gMonIcon_Scizor_Mega_Redux,
+    [SPECIES_IRON_EXO] = gMonIcon_Iron_Exo,
     [SPECIES_URSALUNA_MEGA] = gMonIcon_Ursaluna_Mega,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
@@ -3037,7 +3037,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_HYDRAPPLE] = 1,
     [SPECIES_WOOPER_PALDEAN] = 2,
     [SPECIES_SCIZOR_REDUX] = 1,
-    [SPECIES_SCIZOR_MEGA_REDUX] = 1,
+    [SPECIES_IRON_EXO] = 1,
     [SPECIES_CASTFORM_SANDY] = 1,
 
     [SPECIES_LARVITAR_REDUX] = 0,

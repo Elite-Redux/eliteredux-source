@@ -328,8 +328,6 @@ static const u16 sSteelixFormSpeciesIdTable[] = {
 
 static const u16 sScizorFormSpeciesIdTable[] = {
     SPECIES_SCIZOR,
-    SPECIES_SCIZOR_REDUX,
-    SPECIES_SCIZOR_MEGA_REDUX,
     SPECIES_SCIZOR_MEGA,
     FORM_SPECIES_END,
 };
