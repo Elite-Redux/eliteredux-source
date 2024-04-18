@@ -5299,7 +5299,10 @@ const u16 gEggMoves[] = {
         MOVE_CIRCLE_THROW,
         MOVE_DISARMING_VOICE,
         MOVE_WHIRLWIND,
-        MOVE_REQUIEM),
+        MOVE_REQUIEM,
+        MOVE_PARTING_SHOT,
+        MOVE_THUNDER_CAGE,
+        MOVE_THUNDERCLAP),
 
     egg_moves(GIBLE_REDUX,
         MOVE_SEISMIC_FIST,
