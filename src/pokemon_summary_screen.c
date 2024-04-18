@@ -6228,7 +6228,7 @@ static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
             BlitBitmapToWindow(PSS_LABEL_PANE_LEFT_MOVE, sMoveCursorDark, PosX - 12, PosY, 8, 16);
 
         StringCopy(gStringVar1, gText_Cancel);
-        PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, PosX, PosY, 0, 0);
+        PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, PosX, PosY, 0, PSS_COLOR_FEMALE_GENDER_SYMBOL);
 
         PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
