@@ -4624,7 +4624,7 @@ static const struct TrainerMonItemCustomMoves sParty_Mike2[] = { // Actually the
     .species = SPECIES_ANNIHILAPE,
     .heldItem = ITEM_TACTICAL_VEST,
     .ability = 1,
-    .evs = {252, 228, 0, 0, 0, 28, 508},
+    .evs = {252, 228, 0, 0, 0, 28},
     .nature = NATURE_ADAMANT,
     .moves = MOVE_CLOSE_COMBAT, MOVE_RAGE_FIST, MOVE_POWER_UP_PUNCH, MOVE_SEISMIC_FIST
     },
@@ -9922,7 +9922,7 @@ static const struct TrainerMonItemCustomMoves sParty_Wade[] = {
     .species = SPECIES_VELUZA,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
-    .evs = {4, 252, 0, 0, 0, 252, 508},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_FROST_BRAND, MOVE_PSYCHO_CUT, MOVE_FILLET_AWAY, MOVE_AQUA_CUTTER
     }
@@ -11505,7 +11505,7 @@ static const struct TrainerMonItemCustomMoves sParty_Tyron[] = { // potential do
     .species = SPECIES_AVALUGG_HISUIAN,
     .heldItem = ITEM_CHOPLE_BERRY,
     .ability = 2,
-    .evs = {252, 208, 0, 0, 48, 0, 508},
+    .evs = {252, 208, 0, 0, 48, 0},
     .nature = NATURE_IMPISH,
     .moves = MOVE_RECOVER, MOVE_ACCELEROCK, MOVE_JAGGED_FANGS, MOVE_ICE_FANG
     }
@@ -11593,7 +11593,7 @@ static const struct TrainerMonItemCustomMoves sParty_Hayden[] = { // potential d
     .species = SPECIES_CLODSIRE,
     .heldItem = ITEM_BLACK_SLUDGE,
     .ability = 1,
-    .evs = {252, 0, 4, 252, 0, 0, 504},
+    .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
     .moves = MOVE_BANEFUL_BUNKER, MOVE_KARMA, MOVE_MUDDY_WATER, MOVE_SLUDGE_BOMB
     },
@@ -11979,7 +11979,7 @@ static const struct TrainerMonItemCustomMoves sParty_Wilton1[] = {
     .species = SPECIES_ANNIHILAPE,
     .heldItem = ITEM_CHOICE_SCARF,
     .ability = 0,
-    .evs = {4, 252, 0, 0, 0, 252, 508},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_ADAMANT,
     .moves = MOVE_SEISMIC_FIST, MOVE_RAGE_FIST, MOVE_DRAIN_PUNCH, MOVE_POWER_UP_PUNCH
     },
@@ -12267,7 +12267,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brooke1[] = {
     .species = SPECIES_TINKATON,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 1,
-    .evs = {252, 252, 0, 0, 0, 4, 504},
+    .evs = {252, 252, 0, 0, 0, 4},
     .nature = NATURE_JOLLY,
     .moves = MOVE_GIGATON_HAMMER, MOVE_ICE_HAMMER, MOVE_DRAGON_HAMMER, MOVE_PLAY_ROUGH
     },
@@ -12285,7 +12285,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brooke1[] = {
     .species = SPECIES_MAMOSWINE,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 1,
-    .evs = {4, 252, 0, 0, 0, 252, 504},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_ICE_FANG, MOVE_TECTONIC_FANGS, MOVE_ICE_SHARD, MOVE_JAGGED_FANGS
     }
@@ -13034,7 +13034,7 @@ static const struct TrainerMonItemCustomMoves sParty_Vivian[] = { // potential d
     .species = SPECIES_ORICORIO_POM_POM,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2,
-    .evs = {4, 0, 0, 252, 0, 252, 504},
+    .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
     .moves = MOVE_AIR_SLASH, MOVE_QUIVER_DANCE, MOVE_REVELATION_DANCE, MOVE_ROOST
     }
@@ -13073,7 +13073,7 @@ static const struct TrainerMonItemCustomMoves sParty_Kirk[] = { // potential dou
     .species = SPECIES_BOLTUND,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 0,
-    .evs = {4, 252, 0, 0, 0, 252, 504},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_LOVELY_BITE, MOVE_THUNDER_FANG, MOVE_CRUNCH, MOVE_ICE_FANG
     }
@@ -13190,7 +13190,7 @@ static const struct TrainerMonItemCustomMoves sParty_Shawn[] = { // potential do
     .species = SPECIES_ROTOM_FROST,
     .heldItem = ITEM_WISE_GLASSES,
     .ability = 1,
-    .evs = {4, 0, 0, 252, 0, 252, 504},
+    .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
     .moves = MOVE_THUNDERBOLT, MOVE_FLASH_FREEZE, MOVE_ICE_BEAM, MOVE_HEX
     },
@@ -14326,7 +14326,7 @@ static const struct TrainerMonItemCustomMoves sParty_Lao1[] = {
     .species = SPECIES_KINGAMBIT,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 1,
-    .evs = {252, 252, 0, 0, 0, 4, 508},
+    .evs = {252, 252, 0, 0, 0, 4},
     .nature = NATURE_ADAMANT,
     .moves = MOVE_KOWTOW_CLEAVE, MOVE_SUCKER_PUNCH, MOVE_EXCALIBUR, MOVE_LEECH_BLADE
     }
@@ -14664,7 +14664,7 @@ static const struct TrainerMonItemCustomMoves sParty_Charlotte[] = { // potentia
     .species = SPECIES_CENTISKORCH,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
-    .evs = {4, 252, 0, 0, 0, 252, 504},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_FIRE_FANG, MOVE_LEECH_LIFE, MOVE_JAGGED_FANGS, MOVE_COIL
     },
@@ -14886,7 +14886,7 @@ static const struct TrainerMonItemCustomMoves sParty_Shane[] = {
     .species = SPECIES_GRAFAIAI,
     .heldItem = ITEM_NORMAL_GEM,
     .ability = 1,
-    .evs = {4, 252, 0, 0, 0, 252, 504},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_FAKE_OUT, MOVE_CROSS_POISON, MOVE_PARTING_SHOT, MOVE_SKETCH
     }
@@ -18275,7 +18275,7 @@ static const struct TrainerMonItemCustomMoves sParty_Alannah[] = { // potential 
     .species = SPECIES_BRAMBLEGHAST,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
-    .evs = {4, 252, 0, 0, 0, 252, 504},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_TAILWIND, MOVE_HORN_LEECH, MOVE_SHADOW_CLAW, MOVE_SHADOW_SNEAK
     }
