@@ -5494,7 +5494,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_PALKIA_ORIGIN] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  3
     },
     [SPECIES_DIALGA_ORIGIN] =
     {
