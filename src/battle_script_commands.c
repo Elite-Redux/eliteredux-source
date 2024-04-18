@@ -4055,7 +4055,7 @@ static void Cmd_seteffectwithchance(void)
         if(VarGet(VAR_TEMP_MOVEEFECT_CHANCE) != 0){
             percentChance = VarGet(VAR_TEMP_MOVEEFECT_CHANCE);
             VarSet(VAR_TEMP_MOVEEFECT_CHANCE, 0);
-                    }
+        }
 
         if(VarGet(VAR_TEMP_MOVEEFFECT) != 0){
             gBattleScripting.moveEffect = VarGet(VAR_TEMP_MOVEEFFECT);
@@ -4102,6 +4102,20 @@ static void Cmd_seteffectwithchance(void)
         switch(gCurrentMove){
         case MOVE_POISON_STING:
             percentChance = 100;
+            break;
+        }
+    }
+
+    //Parental Bond
+    if(gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount){
+        //These moves don't trigger flinch after the first hit
+        switch(moveEffect){
+            case EFFECT_FLINCH_HIT:
+            case EFFECT_FLINCH_MINIMIZE_HIT:
+            case EFFECT_FLINCH_STATUS:
+            case EFFECT_FLINCH_RECOIL_25:
+            case EFFECT_FLINCH_RECOIL_50:
+                percentChance = 0;
             break;
         }
     }
