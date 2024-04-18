@@ -3101,6 +3101,16 @@ static const u8 sUrsaluniteDesc[] = _(
     "Ursaring to Mega\n"
     "Evolve in battle.");
 
+static const u8 sArcaniteDesc[] = _(
+    "This stone enables\n"
+    "Arcanine R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sTyranitariteRDesc[] = _(
+    "This stone enables\n"
+    "Tyranitar R to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sKingambititeDesc[] = _(
     "This stone enables\n"
     "Kingambit to Mega\n"

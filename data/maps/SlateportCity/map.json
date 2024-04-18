@@ -473,7 +473,7 @@
       "flag": "FLAG_HIDE_SLATEPORT_CITY_SCOTT"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_POKEFAN_M",
+      "graphics_id": "OBJ_EVENT_GFX_ROOFTOP_SALE_WOMAN",
       "x": 11,
       "y": 51,
       "elevation": 3,
@@ -482,7 +482,7 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "SlateportCity_EventScript_PowerItems",
+      "script": "General_Adoption_Center_Starters_Water_Script",
       "flag": "0"
     },
     {

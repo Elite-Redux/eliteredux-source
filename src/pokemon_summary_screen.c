@@ -2732,7 +2732,7 @@ static void GenerateMoveReplaceList(u8 keyPress){
     u16 numEggMoves = GetEggMovesSpecies(firsStage, eggMoveBuffer);
     u32 i, j;
 
-    for(i = 0; i < MAX_LEVEL_UP_MOVES; i++)
+    for(i = 0; i < MAX_RELEARNER_MOVES; i++)
         sMonSummaryScreen->moveReplaceList[i] = MOVE_NONE;
     sMonSummaryScreen->numMenuChoices = 0;
 
@@ -2740,9 +2740,10 @@ static void GenerateMoveReplaceList(u8 keyPress){
         case MOVE_REPLACE_TAB_LEVEL:
             for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
             {
-                if (gLevelUpLearnsets[species][i].move == LEVEL_UP_END){
+                if (gLevelUpLearnsets[species][i].move == LEVEL_UP_END)
                     break;
-                }
+                else if(gLevelUpLearnsets[species][i].level > level)
+                    break;
                 else{
                     sMonSummaryScreen->moveReplaceList[i] = gLevelUpLearnsets[species][i].move;
                     sMonSummaryScreen->numMenuChoices++;

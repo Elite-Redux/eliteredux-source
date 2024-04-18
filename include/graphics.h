@@ -9570,6 +9570,8 @@ extern const u32 gItemIconPalette_Relicanthite[];
 extern const u32 gItemIconPalette_Ribombeenite[];
 extern const u32 gItemIconPalette_Sablenite_R[];
 extern const u32 gItemIconPalette_Ursalunite[];
+extern const u32 gItemIconPalette_Arcanite_R[];
+extern const u32 gItemIconPalette_Tyranitarite_R[];
 extern const u32 gItemIconPalette_Sandslashite[];
 extern const u32 gItemIconPalette_Scraftynite[];
 extern const u32 gItemIconPalette_Shedinjanite[];
