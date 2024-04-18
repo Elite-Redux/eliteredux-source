@@ -1568,6 +1568,11 @@ static const u8 sBlueOrbDesc[] = _(
     "said to contain an\n"
     "ancient power.");
 
+static const u8 sPurpleOrbDesc[] = _(
+    "A purple, glowing orb\n"
+    "said to contain an\n"
+    "ancient power.");
+
 static const u8 sScannerDesc[] = _(
     "A device found\n"
     "inside the\n"
@@ -2492,19 +2497,19 @@ static const u8 sOddKeystoneDesc[] = _(
     "occasionally.");
 
 static const u8 sAdamantOrbDesc[] = _(
-    "Boosts the power of\n"
-    "Dialga's Dragon and\n"
-    "Steel-type moves.");
+    "This orb enables\n"
+    "Dialgo to revert to\n"
+    "its origin in battle.");
 
 static const u8 sLustrousOrbDesc[] = _(
-    "Boosts the power of\n"
-    "Palkia's Dragon and\n"
-    "Water-type moves.");
+    "This orb enables\n"
+    "Palkia to revert to\n"
+    "its origin in battle.");
 
 static const u8 sGriseousOrbDesc[] = _(
-    "Powers up Giratina's\n"
-    "Dragon and Ghost-\n"
-    "type moves.");
+    "This orb enables\n"
+    "Giratina to revert\n"
+    "to origin in battle.");
 
 static const u8 sGracideaDesc[] = _(
     "Bouquets made with\n"
