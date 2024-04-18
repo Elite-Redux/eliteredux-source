@@ -5519,22 +5519,22 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SQUAWKABILLY_WHITE_PLUMAGE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  4
     },
     [SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  4
     },
     [SPECIES_SQUAWKABILLY_BLUE_PLUMAGE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  4
     },
     [SPECIES_SQUAWKABILLY_GREEN_PLUMAGE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  4
     },
     [SPECIES_TATSUGIRI_DROOPY] =
     {
