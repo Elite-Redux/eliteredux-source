@@ -6817,7 +6817,7 @@ static const struct TrainerMonItemCustomMoves sParty_Kaleb[] = { // potential do
     .species = SPECIES_BELLIBOLT,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 2,
-    .evs = {252, 0, 0, 252, 0, 4, 508},
+    .evs = {252, 0, 0, 252, 0, 4},
     .nature = NATURE_CALM,
     .moves = MOVE_MUDDY_WATER, MOVE_PARABOLIC_CHARGE, MOVE_SLACK_OFF, MOVE_SCALD
     }
@@ -6857,7 +6857,7 @@ static const struct TrainerMonItemCustomMoves sParty_Timmy[] = {
     .species = SPECIES_THIEVUL,
     .heldItem = ITEM_CHESTO_BERRY,
     .ability = 0,
-    .evs = {4, 0, 0, 252, 0, 252, 508},
+    .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
     .moves = MOVE_SNARL, MOVE_FROST_BREATH, MOVE_NIGHT_DAZE, MOVE_MUD_SHOT
     }
@@ -7144,7 +7144,7 @@ static const struct TrainerMonItemCustomMoves sParty_Edward[] = { // potential d
     .species = SPECIES_ORBEETLE,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2,
-    .evs = {4, 0, 0, 252, 0, 252, 504},
+    .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
     .moves = MOVE_HYPNOSIS, MOVE_QUIVER_DANCE, MOVE_BUG_BUZZ, MOVE_RECOVER
     }
