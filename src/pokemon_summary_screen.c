@@ -31,6 +31,7 @@
 #include "palette.h"
 #include "pokeball.h"
 #include "pokemon.h"
+#include "pokemon_debug.h"
 #include "pokemon_icon.h"
 #include "pokemon_storage_system.h"
 #include "pokemon_summary_screen.h"
@@ -2408,7 +2409,7 @@ static void Task_HandleInput(u8 taskId)
                 PlaySE(SE_SELECT);
             }
         }
-        #if P_ENABLE_DEBUG == TRUE
+        #if DEBUG_POKEMON_MENU == TRUE
         else if (JOY_NEW(SELECT_BUTTON) && !gMain.inBattle)
         {
             sMonSummaryScreen->callback = CB2_Debug_Pokemon;
@@ -2416,7 +2417,7 @@ static void Task_HandleInput(u8 taskId)
             PlaySE(SE_SELECT);
             CloseSummaryScreen(taskId);
         }
-        #endif
+    #endif
     }
 }
 

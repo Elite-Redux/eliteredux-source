@@ -46,7 +46,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SLOWKING] = sSlowkingFormSpeciesIdTable,
     [SPECIES_UNOWN] = sUnownFormSpeciesIdTable,
     [SPECIES_STEELIX] = sSteelixFormSpeciesIdTable,
-    [SPECIES_IRON_EXO] = sScizorFormSpeciesIdTable,
     [SPECIES_HERACROSS] = sHeracrossFormSpeciesIdTable,
     [SPECIES_CORSOLA] = sCorsolaFormSpeciesIdTable,
     [SPECIES_TYRANITAR] = sTyranitarFormSpeciesIdTable,
