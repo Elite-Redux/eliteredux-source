@@ -1019,6 +1019,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_PHANTOWL] = _("Phantowl"),
     [SPECIES_DUELUMBER] = _("Duelumber"),
     [SPECIES_ESCARGINITE] = _("Escarginite"),
+    [SPECIES_RAGING_BOLT] = _("Raging Bolt"),
     [SPECIES_ESCARGINITE_REDUX] = _("Escarginite"),
     [SPECIES_HYDRAPPLE] = _("Hydrapple"),
     [SPECIES_BASCULIN_WHITESTRIPED] = _("Basculin"),

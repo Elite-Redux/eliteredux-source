@@ -48,6 +48,18 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
+    [NATIONAL_DEX_RAGING_BOLT] =
+    {
+        .categoryName = _("Raging Bolt"),
+        .height = 10,
+        .weight = 100,
+        .description = gRaging_BoltPokedexText,
+        .pokemonScale = 255,
+        .pokemonOffset = 0,
+        .trainerScale = 255,
+        .trainerOffset = 0,
+    },
+
     [NATIONAL_DEX_HYDRAPPLE] =
     {
         .categoryName = _("Hydrapple"),
