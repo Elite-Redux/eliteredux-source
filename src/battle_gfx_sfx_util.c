@@ -713,6 +713,12 @@ void BattleLoadAllHealthBoxesGfxAtOnce(void)
         LoadCompressedSpriteSheet(&sSpriteSheets_HealthBar[gBattlerPositions[i]]);
 }
 
+// For Pokemon Debug Menu
+void LoadHealthBoxesPalette(void)
+{
+    LoadSpritePalette(&sSpritePalettes_HealthBoxHealthBar[0]);
+}
+
 bool8 BattleLoadAllHealthBoxesGfx(u8 state)
 {
     bool8 retVal = FALSE;

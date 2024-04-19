@@ -48,6 +48,90 @@ const struct PokedexEntry gPokedexEntries[] =
         .trainerOffset = 0,
     },
 
+    [NATIONAL_DEX_ARCHALUDON] =
+    {
+        .categoryName = _("Archaludon"),
+        .height = 10,
+        .weight = 100,
+        .description = gArchaludonPokedexText,
+        .pokemonScale = 255,
+        .pokemonOffset = 0,
+        .trainerScale = 255,
+        .trainerOffset = 0,
+    },
+
+    [NATIONAL_DEX_GOUGING_FIRE] =
+    {
+        .categoryName = _("Gouging Fire"),
+        .height = 10,
+        .weight = 100,
+        .description = gGouging_FirePokedexText,
+        .pokemonScale = 255,
+        .pokemonOffset = 0,
+        .trainerScale = 255,
+        .trainerOffset = 0,
+    },
+
+    [NATIONAL_DEX_IRON_BOULDER] =
+    {
+        .categoryName = _("Iron Boulder"),
+        .height = 10,
+        .weight = 100,
+        .description = gIron_BoulderPokedexText,
+        .pokemonScale = 255,
+        .pokemonOffset = 0,
+        .trainerScale = 255,
+        .trainerOffset = 0,
+    },
+
+    [NATIONAL_DEX_IRON_CROWN] =
+    {
+        .categoryName = _("Iron Crown"),
+        .height = 10,
+        .weight = 100,
+        .description = gIron_CrownPokedexText,
+        .pokemonScale = 255,
+        .pokemonOffset = 0,
+        .trainerScale = 255,
+        .trainerOffset = 0,
+    },
+
+    [NATIONAL_DEX_PECHARUNT] =
+    {
+        .categoryName = _("Pecharunt"),
+        .height = 10,
+        .weight = 100,
+        .description = gPecharuntPokedexText,
+        .pokemonScale = 255,
+        .pokemonOffset = 0,
+        .trainerScale = 255,
+        .trainerOffset = 0,
+    },
+
+    [NATIONAL_DEX_TERAPAGOS] =
+    {
+        .categoryName = _("Terapagos"),
+        .height = 10,
+        .weight = 100,
+        .description = gTerapagosPokedexText,
+        .pokemonScale = 255,
+        .pokemonOffset = 0,
+        .trainerScale = 255,
+        .trainerOffset = 0,
+    },
+
+    [NATIONAL_DEX_RAGING_BOLT] =
+    {
+        .categoryName = _("Raging Bolt"),
+        .height = 10,
+        .weight = 100,
+        .description = gRaging_BoltPokedexText,
+        .pokemonScale = 255,
+        .pokemonOffset = 0,
+        .trainerScale = 255,
+        .trainerOffset = 0,
+    },
+
     [NATIONAL_DEX_HYDRAPPLE] =
     {
         .categoryName = _("Hydrapple"),

@@ -317,7 +317,6 @@ static void PrintMonHeight(u16 height, u8 left, u8 top);
 static void PrintMonWeight(u16 weight, u8 left, u8 top);
 static void ResetOtherVideoRegisters(u16);
 static u8 PrintCryScreenSpeciesName(u8, u16, u8, u8);
-static void PrintFootprint(u8 windowId, u16 dexNum);
 static u16 CreateSizeScreenTrainerPic(u16, s16, s16, s8);
 static u16 GetNextPosition(u8, u16, u16, u16);
 static u8 LoadSearchMenu(void);
@@ -1239,8 +1238,6 @@ static const struct WindowTemplate sNewEntryInfoScreen_WindowTemplates[] =
 };
 
 static const u8 sText_TenDashes2[] = _("----------");
-
-#include "data/pokemon_graphics/footprint_table.h"
 
 // First character in range followed by number of characters in range for upper and lowercase
 static const u8 sLetterSearchRanges[][4] =
@@ -3592,7 +3589,6 @@ static void Task_LoadInfoScreen(u8 taskId)
         FillWindowPixelBuffer(WIN_INFO, PIXEL_FILL(0));
         PutWindowTilemap(WIN_INFO);
         PutWindowTilemap(WIN_FOOTPRINT);
-        PrintFootprint(WIN_FOOTPRINT, sPokedexListItem->dexNum);
         CopyWindowToVram(WIN_FOOTPRINT, 2);
         gMain.state++;
         break;
@@ -4341,7 +4337,6 @@ static void Task_DisplayCaughtMonDexPage(u8 taskId)
         FillWindowPixelBuffer(WIN_INFO, PIXEL_FILL(0));
         PutWindowTilemap(WIN_INFO);
         PutWindowTilemap(WIN_FOOTPRINT);
-        PrintFootprint(WIN_FOOTPRINT, dexNum);
         CopyWindowToVram(WIN_FOOTPRINT, 2);
         ResetPaletteFade();
         LoadPokedexBgPalette(FALSE);
@@ -5012,30 +5007,6 @@ static void UnusedPrintDecimalNum(u8 windowId, u16 b, u8 left, u8 top)
     str[4] = CHAR_0 + ((b % 1000) % 100) % 10;
     str[5] = EOS;
     PrintInfoSubMenuText(windowId, str, left, top);
-}
-
-static void PrintFootprint(u8 windowId, u16 dexNum)
-{
-    u8 image[32 * 4] = {0};
-    const u8 * r12 = gMonFootprintTable[NationalPokedexNumToSpecies(dexNum)];
-    u32 i, j, r5 = 0;
-
-    if (r12 != NULL)
-    {
-        for (i = 0; i < 32; i++)
-        {
-            u8 r3 = r12[i];
-            for (j = 0; j < 4; j++)
-            {
-                u8 value = ((r3 >> (2 * j)) & 1 ? 2 : 0);
-                if ((2 << (2 * j)) & r3)
-                    value |= 0x20;
-                image[r5] = value;
-                r5++;
-            }
-        }
-    }
-    CopyToWindowPixelBuffer(windowId, image, sizeof(image), 0);
 }
 
 // Unused

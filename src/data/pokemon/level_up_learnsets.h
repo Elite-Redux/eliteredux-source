@@ -26877,6 +26877,62 @@ static const struct LevelUpMove sEscarginiteLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sArchaludonLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sGouging_FireLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sIron_BoulderLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sIron_CrownLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sPecharuntLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sTerapagosLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sTerapagos_StellarLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sRaging_BoltLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sEscarginite_ReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SHELL_SMASH),
     LEVEL_UP_MOVE(1, MOVE_INGRAIN),
@@ -27010,7 +27066,7 @@ static const struct LevelUpMove sScizor_ReduxLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sScizor_Mega_ReduxLevelUpLearnset[] = {
+static const struct LevelUpMove sIron_ExoLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
     LEVEL_UP_MOVE(5, MOVE_GROWL),
     LEVEL_UP_MOVE(10, MOVE_EMBER),

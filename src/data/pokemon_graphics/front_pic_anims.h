@@ -21,6 +21,46 @@ static const union AnimCmd sAnim_ESCARGINITE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_ARCHALUDON_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_GOUGING_FIRE_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_IRON_BOULDER_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_IRON_CROWN_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_PECHARUNT_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TERAPAGOS_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TERAPAGOS_STELLAR_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_RAGING_BOLT_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_ESCARGINITE_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -51,7 +91,7 @@ static const union AnimCmd sAnim_SCIZOR_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_SCIZOR_MEGA_REDUX_1[] =
+static const union AnimCmd sAnim_IRON_EXO_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -107,6 +147,46 @@ static const union AnimCmd *const sAnims_ESCARGINITE[] ={
     sAnim_ESCARGINITE_1,
 };
 
+static const union AnimCmd *const sAnims_ARCHALUDON[] ={
+    sAnim_GeneralFrame0,
+    sAnim_ARCHALUDON_1,
+};
+
+static const union AnimCmd *const sAnims_GOUGING_FIRE[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GOUGING_FIRE_1,
+};
+
+static const union AnimCmd *const sAnims_IRON_BOULDER[] ={
+    sAnim_GeneralFrame0,
+    sAnim_IRON_BOULDER_1,
+};
+
+static const union AnimCmd *const sAnims_IRON_CROWN[] ={
+    sAnim_GeneralFrame0,
+    sAnim_IRON_CROWN_1,
+};
+
+static const union AnimCmd *const sAnims_PECHARUNT[] ={
+    sAnim_GeneralFrame0,
+    sAnim_PECHARUNT_1,
+};
+
+static const union AnimCmd *const sAnims_TERAPAGOS[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TERAPAGOS_1,
+};
+
+static const union AnimCmd *const sAnims_TERAPAGOS_STELLAR[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TERAPAGOS_STELLAR_1,
+};
+
+static const union AnimCmd *const sAnims_RAGING_BOLT[] ={
+    sAnim_GeneralFrame0,
+    sAnim_RAGING_BOLT_1,
+};
+
 static const union AnimCmd *const sAnims_ESCARGINITE_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_ESCARGINITE_REDUX_1,
@@ -137,9 +217,9 @@ static const union AnimCmd *const sAnims_SCIZOR_REDUX[] ={
     sAnim_SCIZOR_REDUX_1,
 };
 
-static const union AnimCmd *const sAnims_SCIZOR_MEGA_REDUX[] ={
+static const union AnimCmd *const sAnims_IRON_EXO[] ={
     sAnim_GeneralFrame0,
-    sAnim_SCIZOR_MEGA_REDUX_1,
+    sAnim_IRON_EXO_1,
 };
 
 static const union AnimCmd *const sAnims_URSALUNA_MEGA[] ={
@@ -19553,12 +19633,20 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(SCIZOR_REDUX),
+    ANIM_CMD(ARCHALUDON),
+    ANIM_CMD(RAGING_BOLT),
+    ANIM_CMD(GOUGING_FIRE),
     ANIM_CMD(ESCARGINITE_REDUX),
+    ANIM_CMD(IRON_BOULDER),
     ANIM_CMD(HYDRAPPLE),
+    ANIM_CMD(IRON_CROWN),
     ANIM_CMD(BASCULIN_WHITESTRIPED),
+    ANIM_CMD(PECHARUNT),
     ANIM_CMD(ZOROARK_HISUIAN),
+    ANIM_CMD(TERAPAGOS),
     ANIM_CMD(WOOPER_PALDEAN),
-    ANIM_CMD(SCIZOR_MEGA_REDUX),
+    ANIM_CMD(TERAPAGOS_STELLAR),
+    ANIM_CMD(IRON_EXO),
     ANIM_CMD(URSALUNA_MEGA),
     ANIM_CMD(TYRANITAR_MEGA_REDUX),
     ANIM_CMD(TYRANITAR_REDUX),

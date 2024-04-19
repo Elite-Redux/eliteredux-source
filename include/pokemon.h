@@ -493,5 +493,7 @@ u16 getBaseSpeciesFromMega(u16 species);
 u16 GetFormShiftSpecies(u16 species);
 const u8* GetSpeciesLongName(u16 species);
 u16 GetRandomSpeciesFromPool(u8 id);
+const u16 *GetFormSpeciesTable(u16 speciesId);
+bool8 SpeciesHasDifferentForms(u16 speciesId);
 
 #endif // GUARD_POKEMON_H

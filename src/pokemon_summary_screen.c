@@ -31,6 +31,7 @@
 #include "palette.h"
 #include "pokeball.h"
 #include "pokemon.h"
+#include "pokemon_debug.h"
 #include "pokemon_icon.h"
 #include "pokemon_storage_system.h"
 #include "pokemon_summary_screen.h"
@@ -121,7 +122,8 @@ enum
     SPRITE_ARR_ID_MOVE_SELECTOR1 = SPRITE_ARR_ID_TYPE + 7,
     SPRITE_ARR_ID_MOVE_SELECTOR2 = SPRITE_ARR_ID_MOVE_SELECTOR1 + MOVE_SELECTOR_SPRITES_COUNT,
     SPRITE_ARR_ID_SPLIT = SPRITE_ARR_ID_MOVE_SELECTOR2 + MOVE_SELECTOR_SPRITES_COUNT,
-    SPRITE_ARR_ID_COUNT = SPRITE_ARR_ID_SPLIT + 1
+    SPRITE_ARR_ID_MOVE_TYPE = SPRITE_ARR_ID_SPLIT + 1,
+    SPRITE_ARR_ID_COUNT = SPRITE_ARR_ID_MOVE_TYPE + 1
 };
 
 #define TILE_EMPTY_HEART  109
@@ -368,6 +370,9 @@ static void PrintInfoBar(u8 pageIndex, bool8 detailsShown);
 static u8 WhatRegionWasMonCaughtIn(struct Pokemon *mon);
 static u8 *GetMapNameHoennKanto(u8 *dest, u16 mapSecId);
 static u8 *GetMapNameOrre(u8 *dest, u16 mapSecId, bool8 isXD);
+static void DestroyMoveTypeIcon(void);
+static void UpdateTypeIcon(u16 move);
+static u8 ShowMoveTypeIcon(u16 move);
 
 // const rom data
 #include "data/text/move_descriptions.h"
@@ -1203,6 +1208,41 @@ static void DestroySplitIcon(void)
     sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_SPLIT] = 0xFF;
 }
 #endif
+
+#define SPRITE_ARR_ID_MOVE_TYPE_X 58 - 16 + 4
+#define SPRITE_ARR_ID_MOVE_TYPE_Y 74 + 6
+
+static u8 ShowMoveTypeIcon(u16 move)
+{
+    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    u8 type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
+    u8 type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
+
+    if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_TYPE] == 0xFF)
+        sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_TYPE] = CreateSprite(&sSpriteTemplate_MoveTypes, SPRITE_ARR_ID_MOVE_TYPE_X, SPRITE_ARR_ID_MOVE_TYPE_Y, 0);
+
+    gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_TYPE]].invisible = FALSE;
+    return sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_TYPE];
+}
+
+static void UpdateTypeIcon(u16 move)
+{
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+    bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
+    u8 movetype = GetMonMoveType(move, mon, isEnemyMon);
+
+    if (move == MOVE_NONE)
+        gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_TYPE]].invisible = TRUE;
+
+    SetTypeSpritePosAndPal(movetype, SPRITE_ARR_ID_MOVE_TYPE_X, SPRITE_ARR_ID_MOVE_TYPE_Y, SPRITE_ARR_ID_MOVE_TYPE);
+}
+
+static void DestroyMoveTypeIcon(void)
+{
+    if (sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_TYPE] != 0xFF)
+        DestroySprite(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_TYPE]]);
+    sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_TYPE] = 0xFF;
+}
 
 // code
 void ShowPokemonSummaryScreen(u8 mode, void *mons, u8 monIndex, u8 maxMonIndex, void (*callback)(void))
@@ -2369,7 +2409,7 @@ static void Task_HandleInput(u8 taskId)
                 PlaySE(SE_SELECT);
             }
         }
-        #if P_ENABLE_DEBUG == TRUE
+        #if DEBUG_POKEMON_MENU == TRUE
         else if (JOY_NEW(SELECT_BUTTON) && !gMain.inBattle)
         {
             sMonSummaryScreen->callback = CB2_Debug_Pokemon;
@@ -2377,7 +2417,7 @@ static void Task_HandleInput(u8 taskId)
             PlaySE(SE_SELECT);
             CloseSummaryScreen(taskId);
         }
-        #endif
+    #endif
     }
 }
 
@@ -3210,6 +3250,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 sMonSummaryScreen->moveReplaceMoveNum = 0;
                 LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
                 SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
+                DestroyMoveTypeIcon();
             }
         }
         else{
@@ -3243,11 +3284,13 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 summary->pp[moveToReplace] = ppNum;
 
                 PlaySE(SE_SELECT);
+                DestroyMoveTypeIcon();
             }
             else if(!hasMonMove){
                 PlaySE(SE_SELECT);
                 sMonSummaryScreen->moveReplaceMoveNum = 0;
                 sMonSummaryScreen->replaceMoveMode = TRUE;
+                DestroyMoveTypeIcon();
             }
             else{
                 PlaySE(SE_FAILURE);
@@ -3403,6 +3446,7 @@ void Task_SwitchPageInMoveSelect(u8 taskId)
             ClearWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
             #if CONFIG_PHYSICAL_SPECIAL_SPLIT || CONFIG_SHOW_ICONS_FOR_OLD_SPLIT
             DestroySplitIcon();
+            DestroyMoveTypeIcon();
             #endif
             ScheduleBgCopyTilemapToVram(0);
             data[0]++;
@@ -3503,6 +3547,7 @@ static void ChangeSelectedMove(s16 *taskData, s8 direction, u8 *moveIndexPtr)
     {
         #if CONFIG_PHYSICAL_SPECIAL_SPLIT || CONFIG_SHOW_ICONS_FOR_OLD_SPLIT
         DestroySplitIcon();
+        DestroyMoveTypeIcon();
         #endif
         ScheduleBgCopyTilemapToVram(0);
     }
@@ -3538,6 +3583,7 @@ static void Task_SwitchFromMoveDetails(u8 taskId)
             SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, TRUE);
             #if CONFIG_PHYSICAL_SPECIAL_SPLIT || CONFIG_SHOW_ICONS_FOR_OLD_SPLIT
             DestroySplitIcon();
+            DestroyMoveTypeIcon();
             #endif
             data[0]++;
             break;
@@ -3614,6 +3660,7 @@ static void Task_SwitchFromMoveReplaceMenu(u8 taskId)
             SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, TRUE);
             #if CONFIG_PHYSICAL_SPECIAL_SPLIT || CONFIG_SHOW_ICONS_FOR_OLD_SPLIT
             DestroySplitIcon();
+            DestroyMoveTypeIcon();
             #endif
             data[0]++;
             break;
@@ -3872,6 +3919,7 @@ static void Task_SwitchPageInReplaceMove(u8 taskId)
             ClearWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
             #if CONFIG_PHYSICAL_SPECIAL_SPLIT || CONFIG_SHOW_ICONS_FOR_OLD_SPLIT
             DestroySplitIcon();
+            DestroyMoveTypeIcon();
             #endif
             ScheduleBgCopyTilemapToVram(0);
             data[0]++;
@@ -5993,35 +6041,34 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
     u8 numHits = 1;
     u8 numBoosts = 0;
 
+    if(moveReplaceMode){
+        PrintSmallTextOnWindow(windowId, sText_Power,    4, POWER_AND_ACCURACY_Y,   0, 1);
+        PrintSmallTextOnWindow(windowId, sText_Accuracy, 4, POWER_AND_ACCURACY_Y_2, 0, 1);
+    }
+    else{
+        PrintNarrowTextOnWindow(windowId, sText_Power,    8, POWER_AND_ACCURACY_Y,   0, 1);
+        PrintNarrowTextOnWindow(windowId, sText_Accuracy, 8, POWER_AND_ACCURACY_Y_2, 0, 1);
+    }
+
     if (gBattleMoves[move].power < 2)
         StringCopy(gStringVar1, gText_ThreeDashes);
     else
         ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
 
-    PrintNarrowTextOnWindow(windowId, gStringVar1, 84, POWER_AND_ACCURACY_Y, 0, 0);
-    PrintNarrowTextOnWindow(windowId, sText_Accuracy, 8, POWER_AND_ACCURACY_Y_2, 0, 1);
+    PrintNarrowTextOnWindow(windowId, gStringVar1, 84 + 2, POWER_AND_ACCURACY_Y, 0, 0);
 
     if (gBattleMoves[move].accuracy == 0)
         StringCopy(gStringVar1, gText_ThreeDashes);
     else
         ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
 
-    PrintNarrowTextOnWindow(windowId, gStringVar1, 84, POWER_AND_ACCURACY_Y_2, 0, 0);
-    PrintNarrowTextOnWindow(windowId, sText_Power, 8, POWER_AND_ACCURACY_Y, 0, 1);
+    PrintNarrowTextOnWindow(windowId, gStringVar1, 84 + 2, POWER_AND_ACCURACY_Y_2, 0, 0);
 
     switch(tabNum){
         case MOVE_INFO_DESCRIPTION:
 			PrintNarrowTextOnWindow(windowId, gMoveFourLineDescriptionPointers[move - 1], 2, PosX, 0, 0);
         break;
         case MOVE_INFO_EFFECT:
-            // Type -------------------------------------------------------------------------------------------
-            if(moveReplaceMode){
-                PrintSmallTextOnWindow(windowId, sText_Type, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-				StringCopy(gStringVar1, gTypeNames[gBattleMoves[move].type]);
-                PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
-			    PosX = PosX + 16;
-            }
-
             // Move Effect -------------------------------------------------------------------------------------------
 			PrintSmallTextOnWindow(windowId, gText_Effect, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
 			StringCopy(gStringVar1, gText_Effect_Hit);
@@ -6162,8 +6209,14 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
         break;
     }
     ShowSplitIcon(GetBattleMoveSplit(move));
+
+    if(moveReplaceMode){
+        // Move Type Icon
+        ShowMoveTypeIcon(move);
+        UpdateTypeIcon(move);
+    }
 }
-const u8 gText_ReplaceWhatMove[] = _("Chose a move to replace\nwith {STR_VAR_1}");
+const u8 gText_ReplaceWhatMove[] = _("Chose a move to replace\nwith {COLOR 3}{SHADOW 4}{STR_VAR_1}");
 
 static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
 {

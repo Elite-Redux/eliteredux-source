@@ -1339,16 +1339,17 @@ const u16 gSpeciesToNationalPokedexNum[NUM_SPECIES] = // Assigns all species to 
     SPECIES_TO_NATIONAL(FEZANDIPITI),
     SPECIES_TO_NATIONAL(OGERPON),
     SPECIES_TO_NATIONAL(ARCHALUDON),
-    SPECIES_TO_NATIONAL(HYDRAPPLE),
     SPECIES_TO_NATIONAL(GOUGING_FIRE),
+    SPECIES_TO_NATIONAL(IRON_CROWN),
+    SPECIES_TO_NATIONAL(PECHARUNT),
+    SPECIES_TO_NATIONAL(TERAPAGOS),
+    SPECIES_TO_NATIONAL(HYDRAPPLE),
     SPECIES_TO_NATIONAL(RAGING_BOLT),
     SPECIES_TO_NATIONAL(IRON_BOULDER),
-    SPECIES_TO_NATIONAL(IRON_CROWN),
-    SPECIES_TO_NATIONAL(TERAPAGOS),
-    SPECIES_TO_NATIONAL(PECHARUNT),
     SPECIES_TO_NATIONAL(PHANTOWL),
     SPECIES_TO_NATIONAL(DUELUMBER),
     SPECIES_TO_NATIONAL(ESCARGINITE),
+    //Please check the order at some point I'm rushing this lol
 
     // Megas
     [SPECIES_VENUSAUR_MEGA - 1] = NATIONAL_DEX_VENUSAUR,
@@ -1878,7 +1879,7 @@ const u16 gSpeciesToNationalPokedexNum[NUM_SPECIES] = // Assigns all species to 
     [SPECIES_TYRANITAR_REDUX - 1]         = NATIONAL_DEX_TYRANITAR,
     [SPECIES_TYRANITAR_MEGA_REDUX - 1]    = NATIONAL_DEX_TYRANITAR,
     [SPECIES_URSALUNA_MEGA - 1]           = NATIONAL_DEX_URSALUNA,
-    [SPECIES_SCIZOR_MEGA_REDUX - 1]       = NATIONAL_DEX_SCIZOR,
+    [SPECIES_IRON_EXO - 1]       = NATIONAL_DEX_SCIZOR,
     [SPECIES_SCIZOR_REDUX - 1]            = NATIONAL_DEX_SCIZOR,
     [SPECIES_WOOPER_PALDEAN - 1]          = NATIONAL_DEX_WOOPER,
     [SPECIES_BASCULIN_WHITESTRIPED - 1]   = NATIONAL_DEX_BASCULIN,
@@ -3185,13 +3186,21 @@ static const u8 sMonFrontAnimIdsTable[NUM_SPECIES - 1] =
     [SPECIES_PHANTOWL - 1]      = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_DUELUMBER - 1]     = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_ESCARGINITE - 1]   = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_ARCHALUDON - 1]    = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_GOUGING_FIRE - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_IRON_BOULDER - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_IRON_CROWN - 1]    = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_PECHARUNT - 1]     = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_TERAPAGOS - 1]     = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_TERAPAGOS_STELLAR - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_RAGING_BOLT - 1]   = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_ESCARGINITE_REDUX - 1] = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_HYDRAPPLE - 1]     = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_BASCULIN_WHITESTRIPED - 1] = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_ZOROARK_HISUIAN - 1] = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_WOOPER_PALDEAN - 1] = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_SCIZOR_REDUX - 1]   = ANIM_V_SQUISH_AND_BOUNCE,
-    [SPECIES_SCIZOR_MEGA_REDUX - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_IRON_EXO - 1] = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_URSALUNA_MEGA - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_TYRANITAR_MEGA_REDUX - 1] = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_TYRANITAR_REDUX - 1] = ANIM_V_SQUISH_AND_BOUNCE,
@@ -8225,6 +8234,9 @@ const struct CompressedSpritePalette *GetMonSpritePalStruct(struct Pokemon *mon)
 
 const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u16 species, u32 personality, bool8 isShiny)
 {
+    if(isSpeciesPlaceholderMon(species))
+        species = PLACEHOLDER_SPECIES;
+
     if (isShiny)
     {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
@@ -8835,6 +8847,19 @@ u16 GetFormSpeciesId(u16 speciesId, u8 formId)
         return gFormSpeciesIdTables[speciesId][formId];
     else
         return speciesId;
+}
+
+const u16 *GetFormSpeciesTable(u16 speciesId)
+{
+    if (gFormSpeciesIdTables[speciesId] != NULL)
+        return gFormSpeciesIdTables[speciesId];
+    else
+        return gFormSpeciesIdTables[SPECIES_NONE];
+}
+
+bool8 SpeciesHasDifferentForms(u16 speciesId)
+{
+    return gFormSpeciesIdTables[speciesId] != NULL;
 }
 
 u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId)
@@ -9926,6 +9951,13 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
 }
 
 bool8 isSpeciesPlaceholderMon(u16 species){
+    //Special Cases
+    switch(species){
+        case SPECIES_SCIZOR_REDUX:
+            return TRUE;
+        break;
+    }
+
     if(species == SPECIES_NONE)
         return FALSE;
     else if(species < LAST_VALID_SPECIES + 1)

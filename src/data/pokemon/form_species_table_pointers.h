@@ -46,7 +46,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SLOWKING] = sSlowkingFormSpeciesIdTable,
     [SPECIES_UNOWN] = sUnownFormSpeciesIdTable,
     [SPECIES_STEELIX] = sSteelixFormSpeciesIdTable,
-    [SPECIES_SCIZOR_MEGA_REDUX] = sScizorFormSpeciesIdTable,
     [SPECIES_HERACROSS] = sHeracrossFormSpeciesIdTable,
     [SPECIES_CORSOLA] = sCorsolaFormSpeciesIdTable,
     [SPECIES_TYRANITAR] = sTyranitarFormSpeciesIdTable,
@@ -818,5 +817,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SQUAWKABILLY_BLUE_PLUMAGE] = sSquawkabillyFormSpeciesIdTable,
     [SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE] = sSquawkabillyFormSpeciesIdTable,
     [SPECIES_SQUAWKABILLY_WHITE_PLUMAGE] = sSquawkabillyFormSpeciesIdTable,
+
+    [SPECIES_TERAPAGOS_STELLAR] = sTerapagosFormSpeciesIdTable,
 
 };
