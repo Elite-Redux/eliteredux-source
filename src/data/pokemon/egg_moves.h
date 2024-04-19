@@ -4692,7 +4692,8 @@ const u16 gEggMoves[] = {
         MOVE_BELCH,
         MOVE_BELLY_DRUM,
         MOVE_BLOCK,
-        MOVE_STOMP),
+        MOVE_STOMP,
+        MOVE_FUTURE_SIGHT),
 
     egg_moves(FARFETCHD_GALARIAN,
         MOVE_DUAL_WINGBEAT, // new
@@ -5419,7 +5420,8 @@ const u16 gEggMoves[] = {
         MOVE_SPLASH,
         MOVE_FIRE_PUNCH,
         MOVE_ICE_PUNCH,
-        MOVE_THUNDER_PUNCH),
+        MOVE_THUNDER_PUNCH,
+        MOVE_DRAGON_CHEER),
 
     EGG_MOVES_TERMINATOR
 };
