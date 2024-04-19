@@ -5416,6 +5416,41 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_ARCHALUDON] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_GOUGING_FIRE] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_IRON_BOULDER] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_IRON_CROWN] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_PECHARUNT] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_TERAPAGOS] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_TERAPAGOS_STELLAR] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_RAGING_BOLT] =
     {
         .size = 0,

@@ -1586,3 +1586,8 @@ static const u16 sZoroarkFormSpeciesIdTable[] = {
     SPECIES_ZOROARK_HISUIAN,
     FORM_SPECIES_END,
 };
+static const u16 sTerapagosFormSpeciesIdTable[] = {
+    SPECIES_TERAPAGOS,
+    SPECIES_TERAPAGOS_STELLAR,
+    FORM_SPECIES_END,
+};

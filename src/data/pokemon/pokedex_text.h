@@ -22,6 +22,42 @@ const u8 gEscarginitePokedexText[] = _(
     "Dont ask me why potato. Maybe because\n"
     "I like potatos.");
 
+const u8 gArchaludonPokedexText[] = _(
+    "This is not a actually Pokemon.\n"
+    "It's really just a potato\n"
+    "Dont ask me why potato. Maybe because\n"
+    "I like potatos.");
+
+const u8 gGouging_FirePokedexText[] = _(
+    "This is not a actually Pokemon.\n"
+    "It's really just a potato\n"
+    "Dont ask me why potato. Maybe because\n"
+    "I like potatos.");
+
+const u8 gIron_BoulderPokedexText[] = _(
+    "This is not a actually Pokemon.\n"
+    "It's really just a potato\n"
+    "Dont ask me why potato. Maybe because\n"
+    "I like potatos.");
+
+const u8 gIron_CrownPokedexText[] = _(
+    "This is not a actually Pokemon.\n"
+    "It's really just a potato\n"
+    "Dont ask me why potato. Maybe because\n"
+    "I like potatos.");
+
+const u8 gPecharuntPokedexText[] = _(
+    "This is not a actually Pokemon.\n"
+    "It's really just a potato\n"
+    "Dont ask me why potato. Maybe because\n"
+    "I like potatos.");
+
+const u8 gTerapagosPokedexText[] = _(
+    "This is not a actually Pokemon.\n"
+    "It's really just a potato\n"
+    "Dont ask me why potato. Maybe because\n"
+    "I like potatos.");
+
 const u8 gRaging_BoltPokedexText[] = _(
     "This is not a actually Pokemon.\n"
     "It's really just a potato\n"

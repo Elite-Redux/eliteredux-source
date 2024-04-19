@@ -818,4 +818,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE] = sSquawkabillyFormSpeciesIdTable,
     [SPECIES_SQUAWKABILLY_WHITE_PLUMAGE] = sSquawkabillyFormSpeciesIdTable,
 
+    [SPECIES_TERAPAGOS_STELLAR] = sTerapagosFormSpeciesIdTable,
+
 };
