@@ -186,7 +186,7 @@ static const struct WindowTemplate sPyramidFloorWindowTemplate_1 = {0, 1, 1, 0xC
 
 
 static const u8 gText_MenuDebug[] = _("Debug");
-static const u8 gText_UiTestMenu[] = _("Test Menu");
+static const u8 gText_UiTestMenu[] = _("Dev Menu");
 static const u8 sText_QuestMenu[] = _("Quests");
 
 static const struct MenuAction sStartMenuItems[] =
