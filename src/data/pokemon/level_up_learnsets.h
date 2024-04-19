@@ -19642,6 +19642,7 @@ static const struct LevelUpMove sLunalaLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sNihilegoLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(1, MOVE_GEM_MISSILE),
     LEVEL_UP_MOVE(1, MOVE_ACID),
     LEVEL_UP_MOVE(1, MOVE_CONSTRICT),
     LEVEL_UP_MOVE(1, MOVE_GUARD_SPLIT),
