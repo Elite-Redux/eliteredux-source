@@ -3007,3 +3007,5 @@
 
 // Zarude
 #define SPECIES_ZARUDE_DADA                  FORMS_START + 306
+
+#define PLACEHOLDER_SPECIES                  SPECIES_NONE

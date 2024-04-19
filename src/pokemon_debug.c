@@ -2,6 +2,7 @@
 #include "global.h"
 #include "battle.h"
 #include "battle_anim.h"
+#include "battle_bg.h"
 #include "battle_gfx_sfx_util.h"
 #include "bg.h"
 #include "constants/rgb.h"
@@ -43,7 +44,6 @@
 extern const struct BattleBackground sBattleTerrainTable[];
 extern const struct CompressedSpriteSheet gSpriteSheet_EnemyShadow;
 extern const struct SpriteTemplate gSpriteTemplate_EnemyShadow;
-//extern const struct SpritePalette sSpritePalettes_HealthBoxHealthBar[2];
 //extern const struct UCoords8 sBattlerCoords[][MAX_BATTLERS_COUNT] ;
 static const u16 sBgColor[] = {RGB_WHITE};
 
@@ -409,8 +409,6 @@ static void UNUSED PadString(const u8 *src, u8 *dst)
 
 static void PrintInstructionsOnWindow(struct PokemonDebugMenu *data)
 {
-    bool8 hasGenderDifferences = FALSE; //SpeciesHasGenderDifferences(species)
-    bool8 hasForms = FALSE; //GetSpeciesFormTable(data->currentmonId) != NULL
     u8 fontId = 0;
     u8 x = 2;
     u8 textInstructions[] = _("{START_BUTTON} Shiny\n{B_BUTTON} Exit  {A_BUTTON} Submenu 1$");
@@ -419,6 +417,8 @@ static void PrintInstructionsOnWindow(struct PokemonDebugMenu *data)
     u8 textInstructionsSubmenuOneGender[] = _("{START_BUTTON} Shiny {SELECT_BUTTON} Gender\n{B_BUTTON} Back  {A_BUTTON} Submenu 2$");
     u8 textInstructionsSubmenuTwo[] = _("{START_BUTTON} Shiny\n{B_BUTTON} Back$");
     u8 textInstructionsSubmenuTwoGender[] = _("{START_BUTTON} Shiny {SELECT_BUTTON} Gender\n{B_BUTTON} Back$");
+    bool8 hasGenderDifferences = SpeciesHasGenderDifference[data->currentmonId];
+    bool8 hasForms = SpeciesHasDifferentForms(data->currentmonId);
 
 
     u8 textBottom[] = _("BACK:\nFRONT:\nBG:$");
@@ -494,7 +494,11 @@ static void PrintDigitChars(struct PokemonDebugMenu *data)
     s32 i;
     u16 species = data->modifyArrows.currValue;
     u8 text[MODIFY_DIGITS_MAX + POKEMON_NAME_LENGTH + 8];
-    bool8 hasGenderDifferences = FALSE; //SpeciesHasGenderDifferences(species)
+    bool8 hasGenderDifferences = SpeciesHasGenderDifference[species];
+    bool8 isPlaceHolderMon = isSpeciesPlaceholderMon(species);
+
+    if(isPlaceHolderMon)
+        species = PLACEHOLDER_SPECIES;
 
     for (i = 0; i < data->modifyArrows.maxDigits; i++)
         text[i] = data->modifyArrows.charDigits[i];
@@ -512,7 +516,10 @@ static void PrintDigitChars(struct PokemonDebugMenu *data)
     }
 
     text[i++] = CHAR_SPACE;
-    StringCopy(&text[i], gSpeciesNames[species]);
+    if(isPlaceHolderMon)
+        StringCopy(&text[i], gSpeciesNames[SPECIES_NONE]);
+    else
+        StringCopy(&text[i], gSpeciesNames[species]);
 
     FillWindowPixelBuffer(WIN_NAME_NUMBERS, 0x11);
     AddTextPrinterParameterized(WIN_NAME_NUMBERS, FONT_NORMAL, text, 6, 0, 0, NULL);
@@ -592,7 +599,7 @@ static void SetUpModifyArrows(struct PokemonDebugMenu *data)
     gSprites[data->modifyArrows.arrowSpriteId[1]].animNum = 1;
 
     data->modifyArrows.minValue = 1;
-    data->modifyArrows.maxValue = NUM_SPECIES - 1;
+    data->modifyArrows.maxValue = SPECIES_EGG;
     data->modifyArrows.maxDigits = 4;
     data->modifyArrows.modifiedValPtr = &data->currentmonId;
     data->modifyArrows.typeOfVal = VAL_U16;
@@ -675,6 +682,24 @@ static bool32 TryMoveDigit(struct PokemonDebugModifyArrows *modArrows, bool32 mo
     }
 
     newValue = CharDigitsToValue(charDigits, modArrows->maxDigits);
+
+    if(moveUp){
+        if(isSpeciesPlaceholderMon(newValue)){
+            do{
+                newValue++;
+                }
+                while(isSpeciesPlaceholderMon(newValue) && newValue <= modArrows->maxValue);
+        }
+    }
+    else{
+        if(isSpeciesPlaceholderMon(newValue)){
+            do{
+                newValue--;
+            }
+            while(isSpeciesPlaceholderMon(newValue) && newValue != SPECIES_NONE);
+        }
+    }
+
     if (newValue > modArrows->maxValue || newValue < modArrows->minValue)
     {
         return FALSE;
@@ -701,6 +726,9 @@ static void UpdateBattlerValue(struct PokemonDebugMenu *data)
 //Sprite functions
 static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, bool8 isShiny)
 {
+    if(isSpeciesPlaceholderMon(species))
+        species = PLACEHOLDER_SPECIES;
+
     if (isShiny)
     {
         if (SpeciesHasGenderDifference[species] && isFemale)
@@ -721,6 +749,9 @@ static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, bo
 {
     const void *lzPaletteData;
     u16 paletteOffset = 0x100 + battlerId * 16;;
+
+    if(isSpeciesPlaceholderMon(species))
+        species = PLACEHOLDER_SPECIES;
 
     if (isShiny)
     {
@@ -761,7 +792,9 @@ static u8 GetBattlerSpriteFinal_YCustom(u16 species, s8 offset_picCoords, s8 off
 {
     u16 offset;
     u8 y;
-    //species = SanitizeSpecies(species);
+
+    if (isSpeciesPlaceholderMon(species))
+        species = SPECIES_NONE;
 
     //FrontPicCoords
     offset = gMonFrontPicCoords[species].y_offset + offset_picCoords;
@@ -799,11 +832,14 @@ static void LoadAndCreateEnemyShadowSpriteCustom(struct PokemonDebugMenu *data, 
 {
     u8 x, y;
     bool8 invisible = FALSE;
-    //species = SanitizeSpecies(species);
+
+    if (isSpeciesPlaceholderMon(species))
+        species = SPECIES_NONE;
+    
     if (gEnemyMonElevation[species] == 0)
         invisible = TRUE;
     LoadCompressedSpriteSheet(&gSpriteSheet_EnemyShadow);
-    //LoadSpritePalette(&sSpritePalettes_HealthBoxHealthBar[0]); //ToDo: Load the correct palette
+    LoadHealthBoxesPalette();
     x = sBattlerCoordsDebug[0][1].x;
     y = sBattlerCoordsDebug[0][1].y;
 
@@ -815,88 +851,6 @@ static void LoadAndCreateEnemyShadowSpriteCustom(struct PokemonDebugMenu *data, 
     gSprites[data->frontShadowSpriteId].invisible = invisible;
 }
 
-//Battle background functions
-static void LoadBattleBg(u8 battleBgType, u8 battleTerrain)
-{
-    switch (battleBgType)
-    {
-    default:
-    case MAP_BATTLE_SCENE_NORMAL:
-        LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Building, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_BuildingGym, 0x20, 0x60);
-        //ToDo: Load the correct battle background
-        //LZDecompressVram(gBattleTerrainTable[gBattleTerrain].tileset, (void*)(BG_CHAR_ADDR(2)));
-        //LZDecompressVram(gBattleTerrainTable[gBattleTerrain].tilemap, (void*)(BG_SCREEN_ADDR(26)));
-        //LoadCompressedPalette(gBattleTerrainTable[gBattleTerrain].palette, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_GYM:
-        LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Building, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_BuildingGym, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_MAGMA:
-        LZDecompressVram(gBattleTerrainTiles_Stadium, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Stadium, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_StadiumMagma, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_AQUA:
-        LZDecompressVram(gBattleTerrainTiles_Stadium, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Stadium, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_StadiumAqua, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_SIDNEY:
-        LZDecompressVram(gBattleTerrainTiles_Stadium, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Stadium, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_StadiumSidney, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_PHOEBE:
-        LZDecompressVram(gBattleTerrainTiles_Stadium, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Stadium, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_StadiumPhoebe, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_GLACIA:
-        LZDecompressVram(gBattleTerrainTiles_Stadium, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Stadium, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_StadiumGlacia, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_DRAKE:
-        LZDecompressVram(gBattleTerrainTiles_Stadium, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Stadium, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_StadiumDrake, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_FRONTIER:
-        LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Building, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_Frontier, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_LEADER:
-        LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Building, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_BuildingLeader, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_WALLACE:
-        LZDecompressVram(gBattleTerrainTiles_Stadium, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Stadium, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_StadiumWallace, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_GROUDON:
-        LZDecompressVram(gBattleTerrainTiles_Cave, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Cave, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_Groudon, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_KYOGRE:
-        LZDecompressVram(gBattleTerrainTiles_Water, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Water, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_Kyogre, 0x20, 0x60);
-        break;
-    case MAP_BATTLE_SCENE_RAYQUAZA:
-        LZDecompressVram(gBattleTerrainTiles_Rayquaza, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTilemap_Rayquaza, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainPalette_Rayquaza, 0x20, 0x60);
-        break;
-    }
-}
 static void PrintBattleBgName(u8 taskId)
 {
     struct PokemonDebugMenu *data = GetStructPtr(taskId);
@@ -1257,7 +1211,7 @@ static void UpdateSubmenuOneOptionValue(u8 taskId, bool8 increment)
     struct PokemonDebugMenu *data = GetStructPtr(taskId);
     u8 option = data->submenuYpos[1];
     u8 animation = 0; //To Do sMonFrontAnimIdsTable[data->currentmonId];
-    bool8 hasForms = FALSE; //GetSpeciesFormTable(data->currentmonId) != NULL
+    bool8 hasForms = SpeciesHasDifferentForms(data->currentmonId);
 
     switch (option)
     {
@@ -1301,12 +1255,12 @@ static void UpdateSubmenuOneOptionValue(u8 taskId, bool8 increment)
     case 3:
         if (hasForms)
         {
-            /*struct PokemonDebugModifyArrows *modArrows = &data->modifyArrows;
+            struct PokemonDebugModifyArrows *modArrows = &data->modifyArrows;
             u8 formId = GetFormIdFromFormSpeciesId(data->currentmonId);
-            const u16 *formTable = gFormSpeciesIdTables[data->currentmonId];
+            const u16 *formTable = GetFormSpeciesTable(data->currentmonId);
             if (increment)
             {
-                if (formTable[formId + 1] != FORM_SPECIES_END)
+                if (!isSpeciesPlaceholderMon(formTable[formId + 1]))
                     modArrows->currValue = GetFormSpeciesId(data->currentmonId, formId + 1);
                 else
                     modArrows->currValue = formTable[0];
@@ -1316,9 +1270,9 @@ static void UpdateSubmenuOneOptionValue(u8 taskId, bool8 increment)
                 if (formTable[formId] == formTable[0])
                 {
                     u8 lastForm;
-                    for (lastForm = 0; formTable[lastForm] != FORM_SPECIES_END; lastForm++)
+                    for (lastForm = 0; !isSpeciesPlaceholderMon(formTable[formId + 1]); lastForm++)
                     {
-                        if (formTable[lastForm + 1] == FORM_SPECIES_END)
+                        if (isSpeciesPlaceholderMon(formTable[formId + 1]))
                             break;
                     }
                     modArrows->currValue = formTable[lastForm];
@@ -1334,7 +1288,7 @@ static void UpdateSubmenuOneOptionValue(u8 taskId, bool8 increment)
             UpdateBattlerValue(data);
             ReloadPokemonSprites(data);
             VBlankIntrWait();
-            PlaySE(SE_DEX_SCROLL);*/
+            PlaySE(SE_DEX_SCROLL);
         }
         break;
     default:
@@ -1447,8 +1401,8 @@ static void Handle_Input_Debug_Pokemon(u8 taskId)
     struct Sprite *Backsprite = &gSprites[data->backspriteId];
     u8 delay = 0; //ToDo gSpeciesInfo[data->currentmonId].frontAnimDelay
     u8 animation = 0; //To Do sMonFrontAnimIdsTable[data->currentmonId];
-    bool8 hasGenderDifferences = FALSE; //SpeciesHasGenderDifferences(data->currentmonId)
-    bool8 hasForms = FALSE; //GetSpeciesFormTable(data->currentmonId) != NULL
+    bool8 hasGenderDifferences = SpeciesHasGenderDifference[data->currentmonId];
+    bool8 hasForms = SpeciesHasDifferentForms(data->currentmonId);
 
     if (JOY_NEW(L_BUTTON)  && (Backsprite->callback == SpriteCallbackDummy))
     {
@@ -1668,6 +1622,9 @@ static void ReloadPokemonSprites(struct PokemonDebugMenu *data)
     s16 offset_y;
     u8 front_x = sBattlerCoordsDebug[0][1].x;
     u8 front_y;
+
+    if(isSpeciesPlaceholderMon(species))
+        species = PLACEHOLDER_SPECIES;
 
     DestroySprite(&gSprites[data->frontspriteId]);
     DestroySprite(&gSprites[data->backspriteId]);

@@ -8225,6 +8225,9 @@ const struct CompressedSpritePalette *GetMonSpritePalStruct(struct Pokemon *mon)
 
 const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u16 species, u32 personality, bool8 isShiny)
 {
+    if(isSpeciesPlaceholderMon(species))
+        species = PLACEHOLDER_SPECIES;
+
     if (isShiny)
     {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
@@ -8835,6 +8838,19 @@ u16 GetFormSpeciesId(u16 speciesId, u8 formId)
         return gFormSpeciesIdTables[speciesId][formId];
     else
         return speciesId;
+}
+
+const u16 *GetFormSpeciesTable(u16 speciesId)
+{
+    if (gFormSpeciesIdTables[speciesId] != NULL)
+        return gFormSpeciesIdTables[speciesId];
+    else
+        return gFormSpeciesIdTables[SPECIES_NONE];
+}
+
+bool8 SpeciesHasDifferentForms(u16 speciesId)
+{
+    return gFormSpeciesIdTables[speciesId] != NULL;
 }
 
 u8 GetFormIdFromFormSpeciesId(u16 formSpeciesId)
@@ -9926,6 +9942,20 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
 }
 
 bool8 isSpeciesPlaceholderMon(u16 species){
+    //Special Cases
+    switch(species){
+        case SPECIES_GOUGING_FIRE:
+        case SPECIES_ARCHALUDON:
+        case SPECIES_RAGING_BOLT:
+        case SPECIES_IRON_BOULDER:
+        case SPECIES_IRON_CROWN:
+        case SPECIES_TERAPAGOS:
+        case SPECIES_PECHARUNT:
+        case SPECIES_SCIZOR_REDUX:
+            return TRUE;
+        break;
+    }
+
     if(species == SPECIES_NONE)
         return FALSE;
     else if(species < LAST_VALID_SPECIES + 1)
