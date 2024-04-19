@@ -892,9 +892,9 @@ void LoadBattleBg(u8 battleBgType, u8 battleTerrain)
     {
     default:
     case MAP_BATTLE_SCENE_NORMAL:
-        LZDecompressVram(gBattleTerrainTable[gBattleTerrain].tileset, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTable[gBattleTerrain].tilemap, (void*)(BG_SCREEN_ADDR(26)));
-        LoadCompressedPalette(gBattleTerrainTable[gBattleTerrain].palette, 0x20, 0x60);
+        LZDecompressVram(gBattleTerrainTable[battleTerrain].tileset, (void*)(BG_CHAR_ADDR(2)));
+        LZDecompressVram(gBattleTerrainTable[battleTerrain].tilemap, (void*)(BG_SCREEN_ADDR(26)));
+        LoadCompressedPalette(gBattleTerrainTable[battleTerrain].palette, 0x20, 0x60);
         break;
     case MAP_BATTLE_SCENE_GYM:
         LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_CHAR_ADDR(2)));
@@ -903,12 +903,12 @@ void LoadBattleBg(u8 battleBgType, u8 battleTerrain)
         break;
     case MAP_BATTLE_SCENE_MAGMA:
         LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_SCREEN_ADDR(26)));
+        LZDecompressVram(gBattleTerrainTilemap_Building, (void*)(BG_SCREEN_ADDR(26)));
         LoadCompressedPalette(gBattleTerrainPalette_BuildingMagma, 0x20, 0x60);
         break;
     case MAP_BATTLE_SCENE_AQUA:
         LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTiles_Building, (void*)(BG_SCREEN_ADDR(26)));
+        LZDecompressVram(gBattleTerrainTilemap_Building, (void*)(BG_SCREEN_ADDR(26)));
         LoadCompressedPalette(gBattleTerrainPalette_BuildingAqua, 0x20, 0x60);
         break;
     case MAP_BATTLE_SCENE_SIDNEY:
@@ -938,7 +938,7 @@ void LoadBattleBg(u8 battleBgType, u8 battleTerrain)
         break;
     case MAP_BATTLE_SCENE_LEADER:
         LZDecompressVram(gBattleTerrainTiles_Stadium, (void*)(BG_CHAR_ADDR(2)));
-        LZDecompressVram(gBattleTerrainTiles_Stadium, (void*)(BG_SCREEN_ADDR(26)));
+        LZDecompressVram(gBattleTerrainTilemap_Stadium, (void*)(BG_SCREEN_ADDR(26)));
         LoadCompressedPalette(gBattleTerrainPalette_StadiumLeader, 0x20, 0x60);
         break;
     case MAP_BATTLE_SCENE_WALLACE:
