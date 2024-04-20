@@ -3122,11 +3122,11 @@ static u8 CreateContestantSprite(u16 species, u32 otId, u32 personality, u32 ind
 {
     u8 spriteId;
     bool8 isShiny = FALSE;
-    bool8 isAplha = FALSE;
+    bool8 isAlpha = FALSE;
     species = SanitizeSpecies(species);
 
     HandleLoadSpecialPokePic(&gMonBackPicTable[species], gMonSpritesGfxPtr->sprites.ptr[0], species, personality);
-    LoadHueShiftedMonPalette(GetMonSpritePal(species, personality, isShiny), 0x120, 0x20, personality, isAplha);
+    LoadHueShiftedMonPalette(GetMonSpritePal(species, personality, isShiny), 0x120, 0x20, personality, isAlpha);
     SetMultiuseSpriteTemplateToPokemon(species, 0);
 
     spriteId = CreateSprite(&gMultiuseSpriteTemplate, 0x70, GetBattlerSpriteFinal_Y(2, species, FALSE), 30);

@@ -36,7 +36,7 @@ struct BoxPokemon
     u32 move2:10;
     u32 move3:10;
     u32 language:3;
-    u32 isAplha:1;
+    u32 isAlpha:1;
     u32 friendship:8;
 
     u32 species:16;
