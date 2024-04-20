@@ -5419,17 +5419,17 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_ARCHALUDON] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  7
     },
     [SPECIES_GOUGING_FIRE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  6
     },
     [SPECIES_IRON_BOULDER] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  12
     },
     [SPECIES_IRON_CROWN] =
     {
@@ -5439,7 +5439,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_PECHARUNT] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  5
     },
     [SPECIES_TERAPAGOS] =
     {
