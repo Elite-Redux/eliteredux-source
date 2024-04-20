@@ -101,6 +101,7 @@ script Route132_EventScript_Gyarados{
         setvar(VAR_TOTEM_POKEMON_EVASION_BOOST,  0)
         setvar(VAR_TOTEM_MESSAGE, TOTEM_FIGHT_GYARADOS)
         setflag(FLAG_SHINY_CREATION)
+		setflag(FLAG_ALPHA_CREATION)
         setwildbattlewithcustommoves(SPECIES_GYARADOS, 0, ITEM_GYARADOSITE_Y, MOVE_BOOMBURST, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_HURRICANE, 0, NATURE_TIMID, 252, 252, 252, 252, 252, 252)
         setflag(FLAG_SYS_CTRL_OBJ_DELETE)
         dowildbattle
@@ -140,7 +141,9 @@ script Route132_EventScript_Gyarados_Join{
     msgbox(format("Gyarados seems to want to join your team, will you let this Gyarados join you?"), MSGBOX_YESNO)
 	if(var(VAR_RESULT) == 1){
 		setflag(FLAG_OBTAINED_ROUTE132_GYARADOS)
+		setflag(FLAG_ALPHA_CREATION)
 		givecustommon(SPECIES_GYARADOS, 50, ITEM_NONE, ITEM_CHERISH_BALL, NATURE_TIMID, 0, 252, 0, 0, 4, 252, 0, 0, 0, 0, 0, 0, 0, MOVE_BOOMBURST, MOVE_HYDRO_PUMP, MOVE_ICE_BEAM, MOVE_HURRICANE, TRUE)
+		clearflag(FLAG_ALPHA_CREATION)
         playfanfare(MUS_OBTAIN_ITEM)
         message(format("{PLAYER} received a Gyarados!"))
         waitfanfare

@@ -28,6 +28,7 @@
 #include "pokemon.h"
 #include "pokemon_icon.h"
 #include "pokedex.h"
+#include "random.h"
 #include "scanline_effect.h"
 #include "script_pokemon_util.h"
 #include "script.h"
@@ -1583,7 +1584,11 @@ static void BuyMenuTryMakePurchase(u8 taskId)
         break;
         case MART_TYPE_MONS:
         {
-            bool8 couldGiveMon = ScriptGiveMon(tItemId, level, ITEM_NONE, 0, 0, 0);
+            bool8 couldGiveMon = FALSE;
+            if (Random() < ALPHA_ODDS && GetNumberOfBadges() >= 6)
+                FlagSet(FLAG_ALPHA_CREATION);
+            
+            couldGiveMon = ScriptGiveMon(tItemId, level, ITEM_NONE, 0, 0, 0);
             if(couldGiveMon < 2){
                 BuyMenuDisplayMessage(taskId, gText_HereYouGoThankYou, BuyMenuSubtractMoney);
                 RecordItemPurchase(taskId);

@@ -264,6 +264,7 @@ script Route114_EventScript_Feraligatr{
 	setvar(VAR_TOTEM_POKEMON_EVASION_BOOST,  0)
 	setvar(VAR_TOTEM_MESSAGE, TOTEM_FIGHT_FERALIGATR)
 	//setflag(FLAG_SHINY_CREATION)
+	setflag(FLAG_ALPHA_CREATION)
 	setwildbattlewithcustommoves(SPECIES_FERALIGATR, 0, ITEM_FERALIGATRITE_Y, MOVE_HYDRO_CANNON, MOVE_HYPER_BEAM, MOVE_BLIZZARD, MOVE_HYPER_VOICE, 0, NATURE_MODEST, 252, 252, 252, 252, 252, 252)
 	setflag(FLAG_SYS_CTRL_OBJ_DELETE)
 	dowildbattle
@@ -304,7 +305,9 @@ script Route114_EventScript_Feraligatr_Join{
     msgbox(format("Feraligatr seems to want to join your team, will you let this Feraligatr join you?"), MSGBOX_YESNO)
 	if(var(VAR_RESULT) == 1){
 		setflag(FLAG_OBTAINED_ROUTE114_FERALIGATR)
+		setflag(FLAG_ALPHA_CREATION)
 		givecustommon(SPECIES_FERALIGATR, 50, ITEM_NONE, ITEM_CHERISH_BALL, NATURE_MODEST, 0, 252, 0, 0, 0, 252, 4, 0, 0, 0, 0, 0, 0, MOVE_HYDRO_CANNON, MOVE_HYPER_BEAM, MOVE_BLIZZARD, MOVE_HYPER_VOICE, FALSE)
+		clearflag(FLAG_ALPHA_CREATION)
 		playfanfare(MUS_OBTAIN_ITEM)
 		message(format("{PLAYER} received a Feraligatr!"))
 		waitfanfare
