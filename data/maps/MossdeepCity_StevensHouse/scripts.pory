@@ -5,7 +5,6 @@ raw `
 MossdeepCity_StevensHouse_MapScripts:: @ 8222784
 	map_script MAP_SCRIPT_ON_LOAD, MossdeepCity_StevensHouse_OnLoad
 	map_script MAP_SCRIPT_ON_TRANSITION, MossdeepCity_StevensHouse_OnTransition
-	map_script MAP_SCRIPT_ON_FRAME_TABLE, MossdeepCity_StevensHouse_OnFrame
 	.byte 0
 
 MossdeepCity_StevensHouse_OnLoad: @ 8222794
@@ -26,10 +25,12 @@ MossdeepCity_StevensHouse_EventScript_SetStevenPos:: @ 82227B4
 	setobjectmovementtype LOCALID_STEVEN, MOVEMENT_TYPE_FACE_UP
 	return
 
+@ unused displaced the dive donation to the space center
 MossdeepCity_StevensHouse_OnFrame: @ 82227C0
 	map_script_2 VAR_STEVENS_HOUSE_STATE, 1, MossdeepCity_StevensHouse_EventScript_StevenGivesDive
 	.2byte 0
 
+@ unused displaced the dive donation to the space center
 MossdeepCity_StevensHouse_EventScript_StevenGivesDive:: @ 82227CA
 	lockall
 	applymovement LOCALID_STEVEN, Common_Movement_WalkInPlaceFastestLeft
