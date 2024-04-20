@@ -459,3 +459,22 @@ MossdeepCity_Text_HaveTM96:
 	.string "… … … … … … … … … … … … … … … …\p"
 	.string "(Seems he has nothing to say…)$"
 `
+
+script MossdeepCity_EventScript_BlowUp {
+    lock
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 16)
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 14)
+    release
+}
+
+movement MossdeepCity_EventScript_BlowUpSpin{
+    face_down
+    face_left
+    face_up
+    face_right
+}
+
