@@ -4670,6 +4670,16 @@
       "secondary_tileset": "gTileset_SecretDungeons",
       "border_filepath": "data/layouts/Secret_Dungeon/border.bin",
       "blockdata_filepath": "data/layouts/Secret_Dungeon/map.bin"
+    },
+    {
+      "id": "LAYOUT_LILYCOVE_CITY_MOSS_DEEP_CITY_TELEPORTER",
+      "name": "LilycoveCity_MossDeepCityTeleporter_Layout",
+      "width": 10,
+      "height": 9,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_GenericBuilding",
+      "border_filepath": "data/layouts/LilycoveCity_MossDeepCityTeleporter/border.bin",
+      "blockdata_filepath": "data/layouts/LilycoveCity_MossDeepCityTeleporter/map.bin"
     }
   ]
 }
