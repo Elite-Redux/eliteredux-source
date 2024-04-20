@@ -218,7 +218,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         return TRUE;
     }
     
-	if (input->pressedRButton && TryStartDexnavSearch())
+	if (input->pressedRButton && !input->tookStep && !input->heldDirection && TryStartDexnavSearch())
         return TRUE;
 	
 	#if B_ENABLE_DEBUG == TRUE && TX_DEBUG_SYSTEM_IN_MENU == FALSE
