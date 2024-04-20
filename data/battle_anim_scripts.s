@@ -28288,9 +28288,9 @@ General_PrimalReversion::
 	jumpargeq 0x0, ITEM_BLUE_ORB, General_PrimalReversion_Alpha
 	jumpargeq 0x0, ITEM_PURPLE_ORB, General_PrimalReversion_Cascoon
 General_PrimalReversion_Alpha:
-	loadspritegfx ANIM_TAG_OMEGA_STONE
+	loadspritegfx ANIM_TAG_ALPHA_STONE
 	loadspritegfx ANIM_TAG_PRIMAL_PARTICLES
-	loadspritegfx ANIM_TAG_OMEGA_SYMBOL
+	loadspritegfx ANIM_TAG_ALPHA_SYMBOL
 	monbg ANIM_ATTACKER
 	setalpha 12, 8
 	loopsewithpan SE_M_MEGA_KICK, SOUND_PAN_ATTACKER, 13, 3
