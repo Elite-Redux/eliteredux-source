@@ -822,6 +822,7 @@ static const u8 sText_PkmnFrostbittenBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s
 static const u8 sText_PkmnBledBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s ability\nmade {B_EFF_NAME_WITH_PREFIX} bleed!");
 static const u8 sText_ThunderCage[] = _("{B_DEF_NAME_WITH_PREFIX} was trapped by\nThunder Cage!");
 static const u8 sText_SnapTrap[] = _("{B_DEF_NAME_WITH_PREFIX} was trapped by\na Snap Trap!");
+static const u8 sText_ElectroShot[] = _("{B_ATK_NAME_WITH_PREFIX} absorbed\nelectricity!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1745,6 +1746,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PKMNBLEDBY - 12] = sText_PkmnBledBy,
     [STRINGID_THUNDER_CAGE - 12] = sText_ThunderCage,
     [STRINGID_SNAP_TRAP - 12] = sText_SnapTrap,
+    [STRINGID_ELECTRO_SHOT - 12] = sText_ElectroShot,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -1992,6 +1994,7 @@ const u16 gFirstTurnOfTwoStringIds[] =
     [B_MSG_TURN1_GEOMANCY] = STRINGID_PKNMABSORBINGPOWER,
     [B_MSG_TURN1_FREEZE_SHOCK] = STRINGID_CLOAKEDINAFREEZINGLIGHT,
     [B_MSG_TURN1_METEOR_BEAM] = STRINGID_OVERFLOWINGWITHSPACEPOWER,
+    [B_MSG_TURN1_ELECTRO_SHOT] = STRINGID_ELECTRO_SHOT,
 };
 
 const u16 gWrappedStringIds[] = 

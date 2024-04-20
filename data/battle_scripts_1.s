@@ -469,6 +469,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectShelter				  @ EFFECT_SHELTER
 	.4byte BattleScript_EffectArgumentHitIfStatUp	  @ EFFECT_ARGUMENT_HIT_IF_STAT_UP
 	.4byte BattleScript_EffectUpperHand				  @ EFFECT_UPPER_HAND
+	.4byte BattleScript_EffectElectroShot			  @ EFFECT_ELECTRO_SHOT
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -4693,7 +4694,6 @@ BattleScript_EffectTwoTurnSecondary::
 	argumenttomoveeffect
 	seteffectprimary
 	setmoveeffect 0
-	goto BattleScript_EffectTwoTurnsAttackCheckSkipCharge
 	twoturnmoveacceleratecheck
 BattleScript_EffectTwoTurnSecondarySecondTurn:
 	attackcanceler
@@ -6017,6 +6017,17 @@ BattleScript_SolarbeamOnFirstTurn::
 	seteffectprimary
 	ppreduce
 	goto BattleScript_TwoTurnMovesSecondTurn
+
+BattleScript_EffectElectroShot::
+	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_EffectTwoTurnSecondarySecondTurn
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_ELECTRO_SHOT
+	call BattleScriptFirstChargingTurn
+	setmoveeffect MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
+	seteffectprimary
+	setmoveeffect 0
+	jumpifweatheraffected BS_ATTACKER, WEATHER_SUN_ANY, BattleScript_EffectTwoTurnSecondarySecondTurn
+	twoturnmoveacceleratecheck
+	goto BattleScript_EffectTwoTurnSecondarySecondTurn
 
 BattleScript_EffectThunder:
 	setmoveeffect MOVE_EFFECT_PARALYSIS
