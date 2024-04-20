@@ -7314,21 +7314,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
-
-        //Furnace
-        if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FURNACE)){
-            if (ShouldApplyOnHitAffect(battler)
-             && moveType == TYPE_ROCK
-             && CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
-            {
-                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FURNACE;
-                SET_STATCHANGER(STAT_SPEED, 2, FALSE);
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseOnMoveEnd;
-                effect++;
-            }
-        }
-
         //Evaporate
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_EVAPORATE)){
             if (ShouldApplyOnHitAffect(battler)
