@@ -5774,105 +5774,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
         
-        // Aquatic
-        if(CheckAndSetOncePerTurnAbility(battler, ABILITY_AQUATIC)){
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_WATER))
-            {
-                gBattleMons[battler].type3 = TYPE_WATER;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                effect++;
-            }
-        }
-        
-        // Grounded
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_GROUNDED)){
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_GROUND))
-            {
-                gBattleMons[battler].type3 = TYPE_GROUND;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                effect++;
-            }
-        }
-
-        // Fairy Tale
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_FAIRY_TALE)){
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_FAIRY))
-            {
-                gBattleMons[battler].type3 = TYPE_FAIRY;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                effect++;
-            }
-        }
-        
-        // Ice Age
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_ICE_AGE)){
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_ICE))
-            {
-                gBattleMons[battler].type3 = TYPE_ICE;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                effect++;
-            }
-        }
-        
-        // Half Drake
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_HALF_DRAKE)){
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_DRAGON))
-            {
-                gBattleMons[battler].type3 = TYPE_DRAGON;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                effect++;
-            }
-        }
-        
-        // Metallic
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_METALLIC)){
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
-            {
-                gBattleMons[battler].type3 = TYPE_STEEL;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                effect++;
-            }
-        }
-        
-        // Dragonfly
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_DRAGONFLY)){
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_DRAGON))
-            {
-                gBattleMons[battler].type3 = TYPE_DRAGON;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                effect++;
-            }
-        }
-        
-        // Teravolt
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_TERAVOLT)){
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_ELECTRIC))
-            {
-                gBattleMons[battler].type3 = TYPE_ELECTRIC;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                effect++;
-            }
-        }
-        
-        // Turboblaze
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_TURBOBLAZE)){
-            if (!IS_BATTLER_OF_TYPE(battler, TYPE_FIRE)) 
-            {
-                gBattleMons[battler].type3 = TYPE_FIRE;
-                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
-                effect++;
-            }
-        }
-        
         // Coiled Up
         if(CheckAndSetSwitchInAbility(battler, ABILITY_COIL_UP)){
             if (!(gStatuses4[battler] & STATUS4_COILED))
@@ -5903,14 +5804,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             gSideTimers[GetBattlerSide(battler)].safeguardBattlerId = gBattlerAttacker;
             gSideTimers[GetBattlerSide(battler)].safeguardTimer = 5;
             BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivated);
-            effect++;
-        }
-
-        // Phantom
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_PHANTOM)){
-            gBattleMons[battler].type3 = TYPE_GHOST;
-            PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
-            BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
             effect++;
         }
         
@@ -6354,6 +6247,114 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             VarSet(VAR_TOTEM_POKEMON_ACCURACY_BOOST, 0);
             VarSet(VAR_TOTEM_POKEMON_EVASION_BOOST,  0);
             VarSet(VAR_TOTEM_MESSAGE,                0);
+        }
+        
+        // Do these last to prevent buffer clobbering
+        // Phantom
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_PHANTOM)){
+            gBattleMons[battler].type3 = TYPE_GHOST;
+            PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+            BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+            effect++;
+        }
+        
+        // Aquatic
+        if(CheckAndSetOncePerTurnAbility(battler, ABILITY_AQUATIC)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_WATER))
+            {
+                gBattleMons[battler].type3 = TYPE_WATER;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
+        }
+        
+        // Grounded
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_GROUNDED)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_GROUND))
+            {
+                gBattleMons[battler].type3 = TYPE_GROUND;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
+        }
+
+        // Fairy Tale
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_FAIRY_TALE)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_FAIRY))
+            {
+                gBattleMons[battler].type3 = TYPE_FAIRY;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
+        }
+        
+        // Ice Age
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_ICE_AGE)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_ICE))
+            {
+                gBattleMons[battler].type3 = TYPE_ICE;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
+        }
+        
+        // Half Drake
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_HALF_DRAKE)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_DRAGON))
+            {
+                gBattleMons[battler].type3 = TYPE_DRAGON;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
+        }
+        
+        // Metallic
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_METALLIC)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_STEEL))
+            {
+                gBattleMons[battler].type3 = TYPE_STEEL;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
+        }
+        
+        // Dragonfly
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_DRAGONFLY)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_DRAGON))
+            {
+                gBattleMons[battler].type3 = TYPE_DRAGON;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
+        }
+        
+        // Teravolt
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_TERAVOLT)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_ELECTRIC))
+            {
+                gBattleMons[battler].type3 = TYPE_ELECTRIC;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
+        }
+        
+        // Turboblaze
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_TURBOBLAZE)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_FIRE)) 
+            {
+                gBattleMons[battler].type3 = TYPE_FIRE;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
         }
         //abilityEffect End
         break;
