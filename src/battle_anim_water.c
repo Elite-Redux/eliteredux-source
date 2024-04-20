@@ -166,6 +166,28 @@ const struct SpriteTemplate gAuroraBeamRingSpriteTemplate =
     .callback = AnimAuroraBeamRings,
 };
 
+static const union AnimCmd sAnimCmdAnimatedSpark2[] = {
+	ANIMCMD_FRAME((8 * 8) / (16 * 16) * 0, 8),
+	ANIMCMD_FRAME((8 * 8) / (16 * 16) * 1, 8),
+	ANIMCMD_FRAME((8 * 8) / (16 * 16) * 2, 8),
+	ANIMCMD_JUMP(0)
+};
+
+static const union AnimCmd *const sAnimCmdTable_AnimatedSpark2[] = {
+	sAnimCmdAnimatedSpark2,
+};
+
+const struct SpriteTemplate gSparkBeamSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SPARK_2,
+    .paletteTag = ANIM_TAG_SPARK_2,
+    .oam = &gOamData_AffineOff_ObjNormal_16x16,
+    .anims = sAnimCmdTable_AnimatedSpark2,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimToTargetInSinWave,
+};
+
 static const union AnimCmd sAnim_WaterMudOrb[] =
 {
     ANIMCMD_FRAME(0, 1),

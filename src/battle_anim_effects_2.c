@@ -3863,3 +3863,21 @@ void AnimTask_GetFuryCutterHitCount(u8 taskId)
     gBattleAnimArgs[ARG_RET_ID] = gAnimVolatileStructPtr->furyCutterCounter;
     DestroyAnimVisualTask(taskId);
 }
+
+const union AffineAnimCmd gShrinkAndGrowAffineAnimCmds[] =
+{
+    AFFINEANIMCMD_FRAME(4, 5, 0, 12),
+    AFFINEANIMCMD_FRAME(0, 0, 0, 24),
+    AFFINEANIMCMD_FRAME(-4, -5, 0, 6),
+    AFFINEANIMCMD_END,
+};
+
+// Shrinks, pauses, then grows the attacking mon.
+// No args.
+void AnimTask_ShrinkAndGrow(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+    u8 spriteId = GetAnimBattlerSpriteId(ANIM_ATTACKER);
+    PrepareAffineAnimInTaskData(task, spriteId, gShrinkAndGrowAffineAnimCmds);
+    task->func = AnimTask_GrowAndShrink_Step;
+}
