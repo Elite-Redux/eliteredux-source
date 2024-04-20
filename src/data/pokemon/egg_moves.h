@@ -4563,7 +4563,9 @@ const u16 gEggMoves[] = {
         MOVE_SLASH,
         MOVE_NIGHT_SLASH,
         MOVE_MIRROR_COAT,
-        MOVE_DRAGON_CHEER),
+        MOVE_DRAGON_CHEER,
+        MOVE_METAL_CLAW,
+        MOVE_THUNDER_CAGE),
 
     egg_moves(DREEPY,
         MOVE_SHADOW_FANGS,
@@ -5421,7 +5423,8 @@ const u16 gEggMoves[] = {
         MOVE_FIRE_PUNCH,
         MOVE_ICE_PUNCH,
         MOVE_THUNDER_PUNCH,
-        MOVE_DRAGON_CHEER),
+        MOVE_DRAGON_CHEER,
+        MOVE_THUNDER_CAGE),
 
     EGG_MOVES_TERMINATOR
 };

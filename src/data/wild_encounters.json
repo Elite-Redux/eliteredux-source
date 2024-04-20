@@ -9183,62 +9183,62 @@
               {
                 "min_level": 40,
                 "max_level": 40,
-                "species": "SPECIES_EXPLOUD"
+                "species": "SPECIES_OKIDOGI"
               },
               {
                 "min_level": 40,
                 "max_level": 40,
-                "species": "SPECIES_STEELIX"
+                "species": "SPECIES_FEZANDIPITI"
               },
               {
                 "min_level": 40,
                 "max_level": 40,
-                "species": "SPECIES_ZWEILOUS"
+                "species": "SPECIES_MUNKIDORI"
               },
               {
                 "min_level": 40,
                 "max_level": 40,
-                "species": "SPECIES_CARBINK"
+                "species": "SPECIES_ROARING_MOON"
               },
               {
                 "min_level": 42,
                 "max_level": 42,
-                "species": "SPECIES_AGGRON"
+                "species": "SPECIES_IRON_VALIANT"
               },
               {
                 "min_level": 42,
                 "max_level": 42,
-                "species": "SPECIES_DONPHAN"
+                "species": "SPECIES_IRON_EXO"
               },
               {
                 "min_level": 44,
                 "max_level": 44,
-                "species": "SPECIES_ZWEILOUS"
+                "species": "SPECIES_IRON_LEAVES"
               },
               {
                 "min_level": 44,
                 "max_level": 44,
-                "species": "SPECIES_AVALUGG_HISUIAN"
+                "species": "SPECIES_IRON_BOULDER"
               },
               {
                 "min_level": 42,
                 "max_level": 42,
-                "species": "SPECIES_GABITE"
+                "species": "SPECIES_IRON_CROWN"
               },
               {
                 "min_level": 42,
                 "max_level": 42,
-                "species": "SPECIES_GABITE"
+                "species": "SPECIES_GOUGING_FIRE"
               },
               {
                 "min_level": 44,
                 "max_level": 44,
-                "species": "SPECIES_GABITE"
+                "species": "SPECIES_RAGING_BOLT"
               },
               {
                 "min_level": 44,
                 "max_level": 44,
-                "species": "SPECIES_GABITE"
+                "species": "SPECIES_WALKING_WAKE"
               }
             ]
           },
@@ -13805,7 +13805,7 @@
               {
                 "min_level": 12,
                 "max_level": 14,
-                "species": "SPECIES_MIME_JR"
+                "species": "SPECIES_POLTCHAGEIST"
               },
               {
                 "min_level": 12,
