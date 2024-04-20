@@ -460,15 +460,49 @@ MossdeepCity_Text_HaveTM96:
 	.string "(Seems he has nothing to say…)$"
 `
 
-script MossdeepCity_EventScript_BlowUp {
+script MossdeepCity_EventScript_ScientistThrowPlayerRoute126 {
     lock
+    faceplayer
+    if (flag(FLAG_DEFEATED_MAGMA_SPACE_CENTER) == TRUE){
+        msgbox(format("Save the rocket fuel please aaauuurrgh."), MSGBOX_DEFAULT)
+        release
+        end
+    }
+    msgbox(format("thanks for saving the rocket fuel, We still have some fuel to spare, would you like to go to Sootopolis City?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT) != 1) {
+        msgbox(format("It's wise, have a great day."), MSGBOX_DEFAULT)
+        release
+        end
+    }
+    msgbox(format("Rocket science babyyyyy!"), MSGBOX_DEFAULT)
+    goto(MossdeepCity_EventScript_ThrowPlayerRoute126)
+}
+
+script MossdeepCity_EventScript_ThrowPlayerRoute126 {
+    lock
+    playse(SE_M_FLAMETHROWER)
     applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
     waitmovement(OBJ_EVENT_ID_PLAYER)
     setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 16)
     applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
     waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 15)
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
     setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 14)
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 13)
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 12)
+    playse(SE_M_COSMIC_POWER)
+    delay(60)
+    warp(MAP_ROUTE126, 255, 43, 67)
+    waitstate
+    waitse
     release
+    end
 }
 
 movement MossdeepCity_EventScript_BlowUpSpin{
