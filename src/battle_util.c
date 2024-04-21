@@ -13182,6 +13182,12 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                     statBase /= 2;
 
             HANDLE_STAT_CALC_ATK_OR_SPATK:
+            // Big Leaves/Solar Power
+            if ((BATTLER_HAS_ABILITY(battler, ABILITY_BIG_LEAVES) || BATTLER_HAS_ABILITY(battler, ABILITY_SOLAR_POWER))
+                && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)
+                && GetHighestAttackingStatId(battler, TRUE) == statEnum)
+                    statBase = statBase * 3 / 2;
+            
             // Supreme Overlord
             if (BATTLER_HAS_ABILITY(battler, ABILITY_SUPREME_OVERLORD))
                 statBase = statBase * (10 + max(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
@@ -13210,11 +13216,6 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if (BATTLER_HAS_ABILITY(battler, ABILITY_HADRON_ENGINE)
                 && TERRAIN_HAS_EFFECT && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
                     statBase = statBase * 4 / 3;
-                    
-            // Big Leaves/Solar Power
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_BIG_LEAVES) || BATTLER_HAS_ABILITY(battler, ABILITY_SOLAR_POWER))
-                && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
-                    statBase = statBase * 3 / 2;
                 
             // Frostbite
             if ((gBattleMons[battler].status1 & STATUS1_FROSTBITE)

@@ -98,7 +98,7 @@
 #define ABILITY_ADAPTABILITY 91 // Increases STAB bonus from 50% to 100%.
 #define ABILITY_SKILL_LINK 92 // Multi-hit moves hit 5 times.
 #define ABILITY_HYDRATION 93 // Cures status in rain.
-#define ABILITY_SOLAR_POWER 94 // Powers up SpAtk by 50% in sunshine.
+#define ABILITY_SOLAR_POWER 94 // Powers up highest attacking stat by 50% in sunshine.
 #define ABILITY_QUICK_FEET 95 // Ups Speed by 50% if suffering.
 #define ABILITY_NORMALIZE 96 // Moves become Normal-type, get a 10% boost, and ignore resists.
 #define ABILITY_SNIPER 97 // Critical hits do 225% instead of 150% damage.
