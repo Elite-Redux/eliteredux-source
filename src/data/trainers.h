@@ -12466,7 +12466,7 @@ const struct Trainer gTrainers[] = {
         .trainerFlag = FLAG_TRAINER_STEVEN_ROUTE118,
     },
 
-    [TRAINER_YDA_MTPYRE] =
+    [TRAINER_CREW_MTPYRE] =
     {
         .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
         .trainerClass = TRAINER_CLASS_COOLTRAINER_2,
