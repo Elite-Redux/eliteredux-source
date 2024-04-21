@@ -1110,8 +1110,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_LOUDRED_REDUX] = _("Loudred"),
     [SPECIES_EXPLOUD_REDUX] = _("Exploud"),
 
-    [SPECIES_GROWLITHE_REDUX] = _("Growlithe"),
-    [SPECIES_ARCANINE_REDUX] = _("Arcanine"),
+    [SPECIES_GROWLITHE_REDUX]     = _("Growlithe"),
+    [SPECIES_ARCANINE_REDUX]      = _("Arcanine"),
     [SPECIES_ARCANINE_MEGA_REDUX] = _("Arcanine"),
 
     [SPECIES_MACHOP_REDUX] = _("Machop"),
