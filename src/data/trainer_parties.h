@@ -13585,22 +13585,20 @@ static const struct TrainerMonItemCustomMoves sParty_Larry[] = {
 static const struct TrainerMonItemCustomMoves sParty_Carol[] = {
     {
     .lvl = 0,
-    .species = SPECIES_NOCTOWL, // Def Wall, Tinted Lens, Reflect
+    .species = SPECIES_NOCTOWL,
     .heldItem = ITEM_LEFTOVERS,
-    .ability = 0, // ABILITY_TINTED_LENS, ABILITY_AERILATE, ABILITY_AIR_BLOWER},
-    // .innates = {ABILITY_NOCTURNAL, ABILITY_INSOMNIA, ABILITY_MAJESTIC_BIRD},
-    .evs = {252, 0, 252, 0, 4, 0},      // HP, Atk, Def, SpA, SpD, Spe
-	.nature = NATURE_BOLD,
-    .moves = MOVE_HYPNOSIS, MOVE_DREAM_EATER, MOVE_ROOST, MOVE_REFLECT
+    .ability = 2,
+    .evs = {252, 0, 252, 0, 4, 0},
+    .nature = NATURE_BOLD,
+    .moves = MOVE_HYPNOSIS, MOVE_DREAM_EATER, MOVE_ROOST, MOVE_HURRICANE
     },
     {
     .lvl = 0,
     .species = SPECIES_VILEPLUME,
     .heldItem = ITEM_BLACK_SLUDGE,
-    .ability = 2, // ABILITY_POISON_ABSORB, ABILITY_CHLOROPLAST, ABILITY_SWEET_VEIL},
-    // .innates = {ABILITY_REGENERATOR, ABILITY_GRASS_PELT, ABILITY_NATURAL_CURE},
-    .evs = {252, 0, 252, 0, 4, 0},      // HP, Atk, Def, SpA, SpD, Spe
-	.nature = NATURE_BOLD,
+    .ability = 2,
+    .evs = {252, 0, 252, 0, 4, 0},
+    .nature = NATURE_BOLD,
     .moves = MOVE_GIGA_DRAIN, MOVE_SLEEP_POWDER, MOVE_MOONBLAST, MOVE_MOONLIGHT
     }
 };
