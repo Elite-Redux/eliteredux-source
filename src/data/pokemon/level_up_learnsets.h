@@ -17282,6 +17282,7 @@ static const struct LevelUpMove sClawitzerReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(49, MOVE_SMITE),
     LEVEL_UP_MOVE(57, MOVE_HYDRO_PUMP),
     LEVEL_UP_MOVE(65, MOVE_SEARING_SHOT),
+    LEVEL_UP_MOVE(80, MOVE_ERUPTION),
     LEVEL_UP_END
 };
 
