@@ -2156,7 +2156,7 @@ static void Task_HandleInput(u8 taskId)
         }
 		else if (gMain.newKeys & R_BUTTON)
 		{
-            if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && !sMonSummaryScreen->isBoxMon){
+            if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && !sMonSummaryScreen->isBoxMon && !FlagGet(FLAG_SYS_LOCKED_MODE)){
                 PlaySE(SE_SELECT);
                 SwitchToMoveReplaceMenu(taskId);
             }
@@ -2785,15 +2785,18 @@ static void GenerateMoveReplaceList(u8 keyPress){
                 else if(gLevelUpLearnsets[species][i].level > level)
                     break;
                 else{
-                    sMonSummaryScreen->moveReplaceList[i] = gLevelUpLearnsets[species][i].move;
-                    sMonSummaryScreen->numMenuChoices++;
+                    if(gBattleMoves[gLevelUpLearnsets[species][i].move].effect != EFFECT_PLACEHOLDER){
+                        sMonSummaryScreen->moveReplaceList[i] = gLevelUpLearnsets[species][i].move;
+                        sMonSummaryScreen->numMenuChoices++;
+                    }
                 }
             }
         break;
         case MOVE_REPLACE_TAB_TMHM:
             for (i = 0; i < TM_COUNT; i++)
             {
-                if(CanSpeciesLearnTMHM(species, i))
+                if(CanSpeciesLearnTMHM(species, i) && 
+                    gBattleMoves[GetTmMove(i)].effect != EFFECT_PLACEHOLDER)
                 {
                     sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(GetTmMove(i), species, personality);
                     sMonSummaryScreen->numMenuChoices++;
@@ -2818,8 +2821,10 @@ static void GenerateMoveReplaceList(u8 keyPress){
             {
                 if(eggMoveBuffer[i] == MOVE_NONE)
                     break;
-                sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(eggMoveBuffer[i], firsStage, personality);
-                sMonSummaryScreen->numMenuChoices++;
+                if(gBattleMoves[eggMoveBuffer[i]].effect != EFFECT_PLACEHOLDER){
+                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(eggMoveBuffer[i], firsStage, personality);
+                    sMonSummaryScreen->numMenuChoices++;
+                }
             }
         break;
     }
@@ -7164,7 +7169,7 @@ static void PrintInfoBar(u8 pageIndex, bool8 detailsShown)
             if (detailsShown)
                 StringCopy(gStringVar2, sText_TitlePickSwitch);
             else{
-                if(!sMonSummaryScreen->isBoxMon)
+                if(!sMonSummaryScreen->isBoxMon && !FlagGet(FLAG_SYS_LOCKED_MODE))
                     StringCopy(gStringVar2, sText_TitlePageDetail);
                 else
                     StringCopy(gStringVar2, sText_TitlePageDetail_Boxmon);

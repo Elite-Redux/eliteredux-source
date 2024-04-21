@@ -5084,7 +5084,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_RABSCA] =
     {
         .size = 0,
-        .y_offset =  9
+        .y_offset =  0
     },
     [SPECIES_FLITTLE] =
     {
@@ -5119,7 +5119,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_WUGTRIO] =
     {
         .size = 0,
-        .y_offset =  14
+        .y_offset =  11
     },
     [SPECIES_BOMBIRDIER] =
     {
@@ -5254,7 +5254,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SLITHER_WING] =
     {
         .size = 0,
-        .y_offset =  5
+        .y_offset =  0
     },
     [SPECIES_SANDY_SHOCKS] =
     {
@@ -5309,7 +5309,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_GIMMIGHOUL] =
     {
         .size = 0,
-        .y_offset =  2
+        .y_offset =  0
     },
     [SPECIES_GHOLDENGO] =
     {
@@ -5419,17 +5419,17 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_ARCHALUDON] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  7
     },
     [SPECIES_GOUGING_FIRE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  6
     },
     [SPECIES_IRON_BOULDER] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  12
     },
     [SPECIES_IRON_CROWN] =
     {
@@ -5439,7 +5439,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_PECHARUNT] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  5
     },
     [SPECIES_TERAPAGOS] =
     {
@@ -6854,7 +6854,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_KYUREM_WHITE] =
     {
         .size = 0x66,
-        .y_offset = 3,
+        .y_offset = 0,
     },
     [SPECIES_KYUREM_BLACK] =
     {

@@ -99,6 +99,7 @@
 #define SHINY_ODDS   64   // Actual probability is SHINY_ODDS/65536  -> 1/1024
 #define SHINY_ODDS_1 512   // Actual probability is SHINY_ODDS/65536 -> 1/128
 #define SHINY_ODDS_2 13107 // Actual probability is SHINY_ODDS/65536 -> 1/5
+#define ALPHA_ODDS   4
 
 // Flags for Get(Box)MonData / Set(Box)MonData
 #define MON_DATA_PERSONALITY        0
@@ -439,5 +440,11 @@
 #define TOTEM_FIGHT_SANDSLASH     4
 #define TOTEM_FIGHT_FERALIGATR    5
 #define TOTEM_FIGHT_GYARADOS      6
+
+//Shiny types
+#define SHINY_TYPE_NONE           0
+#define SHINY_TYPE_STARS          1
+#define SHINY_TYPE_SQUARES        2
+#define SHINY_TYPE_SPECIAL        3 // New Palette Swaps for Shinies
 
 #endif // GUARD_CONSTANTS_POKEMON_H

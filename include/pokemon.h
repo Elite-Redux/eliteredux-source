@@ -30,13 +30,13 @@ struct BoxPokemon
     // Word 6: Species + Experience points (used to derive level)
     u32 move1:10;
     u32 experience:21;
-    u32 filler2:1;
+    u32 attackDown:1;
 
     // Words 7 & 8: moves, language, gender, friendship, Pokérus, ppBonuses
     u32 move2:10;
     u32 move3:10;
     u32 language:3;
-    u32 isAplha:1;
+    u32 isAlpha:1;
     u32 friendship:8;
 
     u32 species:16;
@@ -58,10 +58,8 @@ struct BoxPokemon
     u32 isEgg:1;
     u32 metLevel:7;
     u32 pokeball:5; //31 balls
-    u32 otGender:1;
-    u32 speedDown:1;
+    u32 isShiny:3;
     u32 filler:1;
-    u32 attackDown:1;
 
     // Words 13 & 14: Trainer name + met location
     u8 metLocation;
@@ -70,7 +68,8 @@ struct BoxPokemon
     #ifdef REMOVE_RIBBONS
         u8 markings:4;
         u8 abilityNum:2;
-        u8 isShiny:2;
+        u8 speedDown:1;
+        u8 otGender:1;
 	#else
         // Word 16: ribbons and markings
         u32 coolRibbon:3;

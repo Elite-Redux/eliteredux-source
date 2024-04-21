@@ -5113,7 +5113,7 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         retVal = boxMon->isEgg;
         break;
     case MON_DATA_IS_ALPHA:
-        retVal = boxMon->isAplha;
+        retVal = boxMon->isAlpha;
         break;
     case MON_DATA_HP_TYPE:
         retVal = boxMon->hpType;
@@ -5448,7 +5448,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         SET8(boxMon->isEgg);
         break;
     case MON_DATA_IS_ALPHA:
-        SET32(boxMon->isAplha);
+        SET32(boxMon->isAlpha);
         break;
     case MON_DATA_HP_TYPE:
         SET32(boxMon->hpType);

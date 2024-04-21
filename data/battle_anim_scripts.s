@@ -931,7 +931,7 @@ gBattleAnims_Moves::
 	.4byte Move_ALLURING_VOICE
 	.4byte Move_NONE @ MOVE_MIGHTY_CLEAVE
 	.4byte Move_TEMPER_FLARE
-	.4byte Move_NONE @ MOVE_SUPERCELL_SLAM
+	.4byte Move_SMITE @MOVE_SUPERCELL_SLAM
 	.4byte Move_PSYCHIC_NOISE
 	.4byte Move_UPPER_HAND
 	.4byte Move_NONE @ MOVE_MALIGNANT_CHAIN
