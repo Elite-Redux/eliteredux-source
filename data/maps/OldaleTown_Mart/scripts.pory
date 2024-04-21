@@ -259,6 +259,7 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_FROSLASSITE
 	ITEM_RIBOMBITE
 	ITEM_URSALUNITE
+	ITEM_MAWILITE_R
 }
 
 script General_Adoption_Center_Mega_Stones_Script{
