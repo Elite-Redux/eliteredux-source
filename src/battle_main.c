@@ -4551,6 +4551,11 @@ static void HandleTurnActionSelectionState(void)
                             gBattleStruct->selectionScriptFinished[gActiveBattler] = FALSE;
                             gBattleResources->bufferB[gActiveBattler][1] = B_ACTION_USE_MOVE;
                             gBattleStruct->stateIdAfterSelScript[gActiveBattler] = STATE_WAIT_ACTION_CHOSEN;
+                            if (IsBattlerAIControlled(gActiveBattler)) {
+                                // Recompute because AI didn't know the move couldn't be used
+                                AI_DATA->moveLimitations[gActiveBattler] = CheckMoveLimitations(gActiveBattler, 0, 0xFF);
+                                gBattleStruct->aiMoveOrAction[gActiveBattler] = ComputeBattleAiScores(gActiveBattler);
+                            }
                             return;
                         }
                         else
@@ -4668,9 +4673,9 @@ static void HandleTurnActionSelectionState(void)
             }
             break;
         case STATE_SELECTION_SCRIPT:
-            if (*(gBattleStruct->selectionScriptFinished + gActiveBattler))
+            if (gBattleStruct->selectionScriptFinished[gActiveBattler])
             {
-                gBattleCommunication[gActiveBattler] = *(gBattleStruct->stateIdAfterSelScript + gActiveBattler);
+                gBattleCommunication[gActiveBattler] = gBattleStruct->stateIdAfterSelScript[gActiveBattler];
             }
             else
             {
