@@ -579,6 +579,7 @@ static const u8 sAbilityFlourishDescription[] = _("Boosts Grass moves by 50% in\
 static const u8 sAbilityDesertSpiritDescription[] = _("Summons sand on entry. Ground\nmoves hit airborne in sand.");
 static const u8 sAbilityContemptDescription[] = _("Ignores opposing stat changes.\nBoosts Attack when stat lowered.");
 static const u8 sAbilityAerialistDescription[] = _("Levitate + Flock.");
+static const u8 sAbilityTeraShellDescription[] = _("All hits will be not very effective\nwhile at full HP.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1189,6 +1190,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DESERT_SPIRIT] = _("Desert Spirit"),
     [ABILITY_CONTEMPT] = _("Contempt"),
     [ABILITY_AERIALIST] = _("Aerialist"),
+    [ABILITY_TERA_SHELL] = _("Tera Shell"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1800,4 +1802,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DESERT_SPIRIT] = sAbilityDesertSpiritDescription,
     [ABILITY_CONTEMPT] = sAbilityContemptDescription,
     [ABILITY_AERIALIST] = sAbilityAerialistDescription,
+    [ABILITY_TERA_SHELL] = sAbilityTeraShellDescription,
 };

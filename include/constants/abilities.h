@@ -626,8 +626,9 @@
 #define ABILITY_DESERT_SPIRIT 604 // Summons sand on entry. Ground moves hit airborne in sand.
 #define ABILITY_CONTEMPT 605 // Ignores opposing stat changes. Boosts Attack when stat lowered.
 #define ABILITY_AERIALIST 606 // Levitate + Flock.
+#define ABILITY_TERA_SHELL 607 // All hits will be not very effective while at full HP.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_AERIALIST + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_TERA_SHELL + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

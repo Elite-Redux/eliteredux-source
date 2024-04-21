@@ -14461,12 +14461,6 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
 		if (typeEffectivenessModifier <= UQ_4_12(0.5))
             MulModifier(&finalModifier, UQ_4_12(2.0));
     }
-	
-	// Bone Zone
-	if(BattlerHasInnate(battlerAtk, ABILITY_BONE_ZONE)){
-        if (typeEffectivenessModifier <= UQ_4_12(0.5) && (gBattleMoves[move].flags & FLAG_BONE_BASED))
-            MulModifier(&finalModifier, UQ_4_12(2.0));
-	}
 
     // target's abilities
     switch (abilityDef)
@@ -14938,6 +14932,11 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     {
         modifier = UQ_4_12(1.0);
     }
+
+    if (modifier > UQ_4_12(0.5)
+        && gBattleMons[battlerDef].hp == gBattleMons[battlerDef].maxHP
+        && BATTLER_HAS_ABILITY(battlerDef, ABILITY_TERA_SHELL))
+        modifier = UQ_4_12(0.5);
 
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_WONDER_GUARD) && modifier <= UQ_4_12(1.0) && gBattleMoves[move].power)
     {
