@@ -5223,6 +5223,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
         }
+        
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_ICE_FACE)
+            && gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE
+            && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
+        {
+            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
+            gBattleMons[battler].species == SPECIES_EISCUE;
+            BattleScriptPush(gBattlescriptCurrInstr);
+            gBattlescriptCurrInstr = BattleScript_AttackerFormChangeEnd3;
+        }
 
         if (CheckAndSetSwitchInAbility(battler, ABILITY_IMPOSTER)
             && IsBattlerAlive(BATTLE_OPPOSITE(battler))

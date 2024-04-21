@@ -10682,6 +10682,17 @@ static void Cmd_various(void)
                 gBattlescriptCurrInstr = BattleScript_ParadoxBoostActivatesRet;
             }
         }
+
+        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ICE_FACE)
+            && gBattleMons[gActiveBattler].species == SPECIES_EISCUE_NOICE_FACE
+            && IsBattlerWeatherAffected(gActiveBattler, WEATHER_HAIL_ANY))
+        {
+            gBattleScripting.abilityPopupOverwrite = ABILITY_ICE_FACE;
+            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_EISCUE);
+            gBattleMons[gActiveBattler].species == SPECIES_EISCUE;
+            BattleScriptPush(gBattlescriptCurrInstr);
+            gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
+        }
         return;
     case VARIOUS_HANDLE_TERRAIN_CHANGE:
         gBattlescriptCurrInstr += 3;
