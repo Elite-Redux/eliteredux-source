@@ -154,7 +154,7 @@ SlateportCity_OceanicMuseum_1F_EventScript_FamiliarGrunt:: @ 820AEF8
 	applymovement LOCALID_FAMILIAR_GRUNT, Common_Movement_Delay48
 	waitmovement 0
 	msgbox SlateportCity_OceanicMuseum_1F_Text_RememberMeTakeThis, MSGBOX_DEFAULT
-	givecustommon SPECIES_CLAUNCHER, 20, ITEM_CHOICE_SCARF, ITEM_DIVE_BALL, NATURE_MODEST, 0, 0, 0, 4, 252, 252, 0, 0, 0, 0, 0, 0, 0, MOVE_U_TURN, MOVE_WATER_PULSE, MOVE_DARK_PULSE, MOVE_AURA_SPHERE, TRUE
+	givecustommon SPECIES_CLAUNCHER, 20, ITEM_CHOICE_SCARF, ITEM_DIVE_BALL, NATURE_MODEST, 0, 0, 0, 4, 252, 252, 0, 0, 0, 0, 0, 0, 0, MOVE_U_TURN, MOVE_WATER_PULSE, MOVE_DARK_PULSE, MOVE_AURA_SPHERE, FALSE
 	playfanfare MUS_OBTAIN_ITEM
 	message SlateportCity_OceanicMuseum_1F_Text_Got_Clauncher
 	waitfanfare
