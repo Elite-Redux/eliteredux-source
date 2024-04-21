@@ -8186,7 +8186,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_GULP_MISSILE))
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_GULP_MISSILE))
         {
             if (((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED)
                 || gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER
@@ -8205,14 +8205,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         // Hydro Circuit
-	    if(BATTLER_HAS_ABILITY(battler, ABILITY_HYDRO_CIRCUIT)){
-            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-             && !gRoundStructs[gBattlerAttacker].confusionSelfDmg
+	    if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_HYDRO_CIRCUIT)){
+            if (ShouldApplyOnHitAffect(battler)
              && !BATTLER_MAX_HP(gBattlerAttacker) 
              && !BATTLER_HEALING_BLOCKED(gBattlerAttacker)
-             && IsBattlerAlive(gBattlerAttacker)
-             && gBattleMoves[move].type == TYPE_WATER
-             && TARGET_TURN_DAMAGED) // Need to actually hit the target
+             && gBattleMoves[move].type == TYPE_WATER)
             {
                 //Attacker
 				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_HYDRO_CIRCUIT;
@@ -8223,14 +8220,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         // Hydro Circuit
-	    if(BATTLER_HAS_ABILITY(battler, ABILITY_PURE_LOVE)){
-            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-             && !gRoundStructs[gBattlerAttacker].confusionSelfDmg
+	    if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PURE_LOVE)){
+            if (ShouldApplyOnHitAffect(battler)
              && !BATTLER_MAX_HP(gBattlerAttacker) 
              && !BATTLER_HEALING_BLOCKED(gBattlerAttacker)
-             && IsBattlerAlive(gBattlerAttacker)
-             && gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION
-             && TARGET_TURN_DAMAGED) // Need to actually hit the target
+             && gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
             {
                 //Attacker
 				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_PURE_LOVE;
@@ -8241,7 +8235,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 		
 		// Growing Tooth
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_GROWING_TOOTH)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_GROWING_TOOTH)){
 			if (ShouldApplyOnHitAffect(battler)
 				 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
 				 && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
@@ -8258,7 +8252,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		}
 
         //Spinning Top
-        if(BATTLER_HAS_ABILITY(battler, ABILITY_SPINNING_TOP)){
+        if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SPINNING_TOP)){
             bool8 activateAbilty = FALSE;
             u16 abilityToCheck = ABILITY_SPINNING_TOP; //For easier copypaste
 
@@ -8295,7 +8289,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         // Hardened Sheath
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_HARDENED_SHEATH)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_HARDENED_SHEATH)){
 			if (ShouldApplyOnHitAffect(battler) && (gBattleMoves[move].hornBased)
 				 && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
 				{
@@ -8309,7 +8303,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				}
 		}
 		// Loud Bang
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_LOUD_BANG)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_LOUD_BANG)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
 				 && CanBeConfused(gBattlerTarget)
 				 && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
@@ -8325,10 +8319,26 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 					effect++;
 				}
 		}
+
+		// Toxic Chain
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_TOXIC_CHAIN)){
+			if (ShouldApplyOnHitAffect(gBattlerTarget)
+				 && CanBePoisoned(battler, gBattlerTarget)
+				 && (Random() % 100) < 30)
+				{
+					gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_TOXIC_CHAIN;
+					gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
+					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+					effect++;
+				}
+		}
 		
 		//Electric Burst
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_ELECTRIC_BURST)){
-			if (DidMoveHit()
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ELECTRIC_BURST)){
+			if (ShouldApplyOnHitAffect(battler)
 			 && gBattleMoves[move].type == TYPE_ELECTRIC //Electric Type Moves
              && gBattleMons[gBattlerAttacker].hp > 1
              && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
@@ -8348,7 +8358,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         // Infernal Rage
 		if (BATTLER_HAS_ABILITY(battler, ABILITY_INFERNAL_RAGE)){
-			if (DidMoveHit()
+			if (ShouldApplyOnHitAffect(battler)
 			 && gBattleMoves[move].type == TYPE_FIRE //Fire Type Moves
              && gBattleMons[gBattlerAttacker].hp > 1
              && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
@@ -8367,7 +8377,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		}
 
         //Archmage
-        if(BATTLER_HAS_ABILITY(battler, ABILITY_ARCHMAGE)){
+        if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ARCHMAGE)){
             bool8 activateAbilty = FALSE;
             u16 abilityToCheck = ABILITY_ARCHMAGE; //For easier copypaste
 
@@ -8505,7 +8515,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                     case TYPE_FIGHTING: // 30% chance to boost the users Special Attack by 1.
                     {
-                        if(CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)){
+                        if(IsBattlerAlive(battler) && CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)){
 
                             gBattleScripting.moveEffect = MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER;
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
@@ -8515,7 +8525,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }  
                     break;
                     case TYPE_FLYING: // 30% chance to raise the users Speed by 1.
-                        if(CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN)){
+                        if(IsBattlerAlive(battler) && CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN)){
 
                             gBattleScripting.moveEffect = MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER;
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
@@ -8536,7 +8546,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         }
                     break;
                     case TYPE_GROUND: // 30% chance to trap.
-                        if(!(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION)){
+                        if(IsBattlerAlive(battler) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION)){
 
                             gBattleScripting.moveEffect = MOVE_EFFECT_PREVENT_ESCAPE;
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
@@ -8545,7 +8555,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         }
                     break;
                     case TYPE_STEEL: // 30% chance to increase the user's defense.
-                        if(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN)){
+                        if(IsBattlerAlive(battler) && CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN)){
 
                             gBattleScripting.moveEffect = MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER;
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
@@ -8558,7 +8568,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
 		//Solenoglyphs
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_SOLENOGLYPHS)) {
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SOLENOGLYPHS)) {
 		    if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBePoisoned(gBattlerAttacker, gBattlerTarget)
 			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
@@ -8576,7 +8586,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
 		//Flaming Jaws
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_FLAMING_JAWS)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMING_JAWS)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBeBurned(gBattlerTarget)
 			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
@@ -8592,7 +8602,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_RADIO_JAM))
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RADIO_JAM))
         {
             if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBeDisabled(gBattlerTarget)
@@ -8608,7 +8618,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         //Fearmonger Paralyze Chance
-		if(BATTLER_HAS_ABILITY(battler, ABILITY_FEARMONGER)){
+		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FEARMONGER)){
             if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBeParalyzed(gBattlerAttacker, gBattlerTarget)
              && IsMoveMakingContact(move, gBattlerAttacker) //Does it need to be a contact move?
@@ -8645,7 +8655,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         //Shocking Jaws
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_SHOCKING_JAWS)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SHOCKING_JAWS)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBeParalyzed(gBattlerAttacker, gBattlerTarget)
 			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
@@ -8663,7 +8673,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         //Molten Blades
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_MOLTEN_BLADES)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_MOLTEN_BLADES)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBeBurned(gBattlerTarget)
 			 && (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) //Keen Edge
@@ -8680,7 +8690,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         //Molten Blades
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_DEAD_POWER)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DEAD_POWER)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
              && !(gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)
              && IsMoveMakingContact(move, battler)
@@ -8697,7 +8707,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
 		// Spectral Shroud
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_SPECTRAL_SHROUD)){
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SPECTRAL_SHROUD)){
             u8 moveType;
 
             GET_MOVE_TYPE(move, moveType);
@@ -8720,7 +8730,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		}
 
 		// Damp (Attacker)
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_DAMP)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DAMP)){
             if (ShouldApplyOnHitAffect(gBattlerTarget)
              && IsMoveMakingContact(move, gBattlerAttacker)
              && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_WATER))
@@ -8845,7 +8855,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         // Elemental Charge
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_ELEMENTAL_CHARGE)
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ELEMENTAL_CHARGE)
             && ShouldApplyOnHitAffect(gBattlerTarget)
             && Random() % 5 == 0){
             u8 moveType;
@@ -8884,7 +8894,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		}
 	
 		// Stench
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_STENCH)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_STENCH)){
             if (ShouldApplyOnHitAffect(gBattlerTarget)
              && (Random() % 100) < 10
              && CanMoveHaveExtraFlinchChance(move))
@@ -8899,7 +8909,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		}
 	
 		// Stench
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_HAUNTING_FRENZY)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_HAUNTING_FRENZY)){
             if (ShouldApplyOnHitAffect(gBattlerTarget)
              && (Random() % 100) < 20
              && !(gBattleMons[gBattlerTarget].status2 & STATUS2_FLINCHED)
@@ -8915,7 +8925,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		}
 
 		// Absorbant
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_ABSORBANT)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ABSORBANT)){
             if (ShouldApplyOnHitAffect(gBattlerTarget)
              && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)
              && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED)
@@ -8931,7 +8941,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		}
 
         // Fungal Infection
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_FUNGAL_INFECTION)){
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FUNGAL_INFECTION)){
             if (ShouldApplyOnHitAffect(gBattlerTarget)
              && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)
              && IsMoveMakingContact(move, gBattlerAttacker)

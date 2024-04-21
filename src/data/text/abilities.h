@@ -580,6 +580,7 @@ static const u8 sAbilityDesertSpiritDescription[] = _("Summons sand on entry. Gr
 static const u8 sAbilityContemptDescription[] = _("Ignores opposing stat changes.\nBoosts Attack when stat lowered.");
 static const u8 sAbilityAerialistDescription[] = _("Levitate + Flock.");
 static const u8 sAbilityTeraShellDescription[] = _("All hits will be not very effective\nwhile at full HP.");
+static const u8 sAbilityToxicChainDescription[] = _("Moves have a 30% chance to\nbadly poison the foe.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1191,6 +1192,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_CONTEMPT] = _("Contempt"),
     [ABILITY_AERIALIST] = _("Aerialist"),
     [ABILITY_TERA_SHELL] = _("Tera Shell"),
+    [ABILITY_TOXIC_CHAIN] = _("Toxic Chain"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1803,4 +1805,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_CONTEMPT] = sAbilityContemptDescription,
     [ABILITY_AERIALIST] = sAbilityAerialistDescription,
     [ABILITY_TERA_SHELL] = sAbilityTeraShellDescription,
+    [ABILITY_TOXIC_CHAIN] = sAbilityToxicChainDescription,
 };

@@ -627,8 +627,9 @@
 #define ABILITY_CONTEMPT 605 // Ignores opposing stat changes. Boosts Attack when stat lowered.
 #define ABILITY_AERIALIST 606 // Levitate + Flock.
 #define ABILITY_TERA_SHELL 607 // All hits will be not very effective while at full HP.
+#define ABILITY_TOXIC_CHAIN 608 // Moves have a 30% chance to badly poison the foe.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_TERA_SHELL + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_TOXIC_CHAIN + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
