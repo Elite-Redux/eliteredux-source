@@ -876,7 +876,7 @@
 #define TRAINER_CALVIN_E4                              872
 #define TRAINER_BANEFUL_PETALBURG_WOODS                873
 #define TRAINER_STEVEN_ROUTE118                        874
-#define TRAINER_CREW_MTPYRE                             875
+#define TRAINER_CREW_MTPYRE                            875
 #define TRAINER_WALLACE_2                              876
 #define TRAINER_WALLACE_3                              877
 #define TRAINER_WALLACE_4                              878
