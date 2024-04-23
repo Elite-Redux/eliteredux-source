@@ -475,11 +475,10 @@ script MossdeepCity_EventScript_ScientistThrowPlayerRoute126 {
         end
     }
     msgbox(format("Rocket science babyyyyy!"), MSGBOX_DEFAULT)
-    goto(MossdeepCity_EventScript_ThrowPlayerRoute126)
+    goto(MossdeepCity_EventScript_RocketPlayer)
 }
 
-script MossdeepCity_EventScript_ThrowPlayerRoute126 {
-    lock
+script MossdeepCity_EventScript_RocketPlayer{
     playse(SE_M_FLAMETHROWER)
     applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
     waitmovement(OBJ_EVENT_ID_PLAYER)
@@ -497,11 +496,27 @@ script MossdeepCity_EventScript_ThrowPlayerRoute126 {
     waitmovement(OBJ_EVENT_ID_PLAYER)
     setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 12)
     playse(SE_M_COSMIC_POWER)
-    delay(60)
+    delay(40)
+    if (defeated(TRAINER_GRUNT_SPACE_CENTER_1) && defeated(TRAINER_GRUNT_SPACE_CENTER_2) && defeated(TRAINER_GRUNT_SPACE_CENTER_3) && defeated(TRAINER_GRUNT_SPACE_CENTER_4)){
+        goto(MossdeepCity_EventScript_ThrowPlayerCitySootopolis)
+    } else {
+        goto(MossdeepCity_EventScript_ThrowPlayerRoute126)
+    }
+    release
+    end
+}
+
+script MossdeepCity_EventScript_ThrowPlayerCitySootopolis {
+    warp(MAP_SOOTOPOLIS_CITY, 255, 28, 54)
+    waitstate
+    waitse
+    end
+}
+
+script MossdeepCity_EventScript_ThrowPlayerRoute126 {
     warp(MAP_ROUTE126, 255, 43, 67)
     waitstate
     waitse
-    release
     end
 }
 
