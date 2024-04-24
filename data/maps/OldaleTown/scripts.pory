@@ -361,12 +361,13 @@ OldaleTown_Text_IWorkAtPokemonMart: @ 81E91C0
 
 OldaleTown_Text_ThisIsAPokemonMart:
 	.string "This is a Pokémon Mart.\n"
-	.string "Just look for our blue roof.\p"
-	.string "We sell a variety of consumable items\n"
-	.string "that Pokémon can hold in battle, as\l"
-	.string "well as items like evolution stones.\p"
-	.string "Here, I'd like you to have this as\n"
-	.string "a promotional item.$"
+	.string "Just look for our yellow roof.\p"
+	.string "We now only sell Pokémons\n"
+	.string "in exchange for some Battle Points.\p"
+	.string "BPs (Battle Points) are won after\n"
+	.string "a successful trainer battle.\p"
+	.string "Here, I'd like you to have\n"
+	.string "this as a promotional item.$"
 
 OldaleTown_Text_PotionExplanation: @ 81E92AF
 	.string "If you're after healing items like\n"
