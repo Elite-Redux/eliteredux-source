@@ -460,7 +460,8 @@
     "DewfordManor_1F",
     "MeteorFalls_HaxorusRoom",
     "PetalburgWoods_BreloomRoom",
-    "Secret_Dungeon"
+    "Secret_Dungeon",
+    "GraniteCave_PuzzleOut"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",

@@ -1114,3 +1114,5 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/Secret_Dungeon/scripts.inc"
 
 	.include "data/maps/LilycoveCity_MossDeepCityTeleporter/scripts.inc"
+
+	.include "data/maps/GraniteCave_PuzzleOut/scripts.inc"

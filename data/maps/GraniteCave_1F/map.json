@@ -56,12 +56,26 @@
       "elevation": 3,
       "dest_map": "MAP_GRANITE_CAVE_STEVENS_ROOM",
       "dest_warp_id": 0
+    },
+    {
+      "x": 12,
+      "y": 6,
+      "elevation": 0,
+      "dest_map": "MAP_GRANITE_CAVE_PUZZLE_OUT",
+      "dest_warp_id": 0
     }
   ],
   "coord_events": [
 
   ],
   "bg_events": [
-
+    {
+      "type": "sign",
+      "x": 11,
+      "y": 6,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "GraniteCave_1F_EventScript_Sign_JustAnExitAhead"
+    }
   ]
 }

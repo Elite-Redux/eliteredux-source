@@ -4680,6 +4680,16 @@
       "secondary_tileset": "gTileset_GenericBuilding",
       "border_filepath": "data/layouts/LilycoveCity_MossDeepCityTeleporter/border.bin",
       "blockdata_filepath": "data/layouts/LilycoveCity_MossDeepCityTeleporter/map.bin"
+    },
+    {
+      "id": "LAYOUT_GRANITE_CAVE_PUZZLE_OUT",
+      "name": "GraniteCave_PuzzleOut_Layout",
+      "width": 22,
+      "height": 22,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/GraniteCave_PuzzleOut/border.bin",
+      "blockdata_filepath": "data/layouts/GraniteCave_PuzzleOut/map.bin"
     }
   ]
 }

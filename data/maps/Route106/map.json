@@ -150,6 +150,13 @@
       "elevation": 0,
       "dest_map": "MAP_GRANITE_CAVE_1F",
       "dest_warp_id": 0
+    },
+    {
+      "x": 41,
+      "y": 11,
+      "elevation": 0,
+      "dest_map": "MAP_GRANITE_CAVE_PUZZLE_OUT",
+      "dest_warp_id": 1
     }
   ],
   "coord_events": [
