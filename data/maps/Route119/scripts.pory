@@ -706,3 +706,12 @@ script Route119_EventScript_MimicClubSign{
 	release
 	end
 }
+
+script Route119_EventScript_ErdoSign{
+    lock
+	msgbox(format("Hereis the erdo water,\n"
+	              "named from a legend where a stuffull whom after suffered all the hardship 'i the world,"
+	              "cried till a river has been formed."))
+	release
+	end
+}
