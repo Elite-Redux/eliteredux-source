@@ -180,6 +180,7 @@ void NewGameInitData(void)
     ClearSecretBases();
     ClearBerryTrees();
     SetMoney(&gSaveBlock1Ptr->money, 999900);
+    gSaveBlock2Ptr->frontier.battlePoints = 20;
     SetCoins(0);
     ResetLinkContestBoolean();
     ResetGameStats();
