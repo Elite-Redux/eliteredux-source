@@ -267,8 +267,9 @@
 #define OBJ_EVENT_GFX_DEWGONG                    263
 #define OBJ_EVENT_GFX_FERALIGATR                 264
 #define OBJ_EVENT_GFX_BANEFUL                    265
+#define OBJ_EVENT_GFX_HOODED                     266
 
-#define NUM_OBJ_EVENT_GFX                        266
+#define NUM_OBJ_EVENT_GFX                        267
 
 
 // These are dynamic object gfx ids.

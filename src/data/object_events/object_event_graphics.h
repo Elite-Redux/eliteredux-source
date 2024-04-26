@@ -426,3 +426,5 @@ const u16 gObjectEventPaletteFeraligatr[]     = INCBIN_U16("graphics/object_even
 
 const u32 gFieldEffectObjectPic_CaveDust[] = INCBIN_U32("graphics/field_effects/pics/cave_dust.4bpp");
 const u16 gFieldEffectObjectPalette_CaveDust[] = INCBIN_U16("graphics/field_effects/palettes/cave_dust.gbapal");
+// Newly added content Redux
+const u32 gObjectEventPic_Hooded[] = INCBIN_U32("graphics/object_events/pics/people/hooded.4bpp");

@@ -2372,3 +2372,15 @@ static const struct SpriteFrameImage sPicTable_Feraligatr[] = {
     overworld_frame(gObjectEventPic_Feraligatr, 4, 4, 2),
     overworld_frame(gObjectEventPic_Feraligatr, 4, 4, 2),
 };
+
+static const struct SpriteFrameImage sPicTable_Hooded[] = {
+    overworld_frame(gObjectEventPic_Hooded, 2, 4, 0),
+    overworld_frame(gObjectEventPic_Hooded, 2, 4, 1),
+    overworld_frame(gObjectEventPic_Hooded, 2, 4, 2),
+    overworld_frame(gObjectEventPic_Hooded, 2, 4, 3),
+    overworld_frame(gObjectEventPic_Hooded, 2, 4, 4),
+    overworld_frame(gObjectEventPic_Hooded, 2, 4, 5),
+    overworld_frame(gObjectEventPic_Hooded, 2, 4, 6),
+    overworld_frame(gObjectEventPic_Hooded, 2, 4, 7),
+    overworld_frame(gObjectEventPic_Hooded, 2, 4, 8),
+};
