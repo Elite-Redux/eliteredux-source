@@ -7003,6 +7003,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_CURSE)
         TM(MOVE_FLY)
         TM(MOVE_FLASH)
+        TM(MOVE_DARK_PULSE)
         TMHM_LEARNSET_END
 
     [SPECIES_NOCTOWL] = TMHM_LEARNSET
@@ -7035,6 +7036,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_CURSE)
         TM(MOVE_FLY)
         TM(MOVE_FLASH)
+        TM(MOVE_DARK_PULSE)
         TMHM_LEARNSET_END
 
     [SPECIES_LEDYBA] = TMHM_LEARNSET
@@ -42085,6 +42087,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_CURSE)
         TM(MOVE_FLY)
         TM(MOVE_FLASH)
+        TM(MOVE_DARK_PULSE)
         TMHM_LEARNSET_END
 
     [SPECIES_DUELUMBER] = TMHM_LEARNSET
