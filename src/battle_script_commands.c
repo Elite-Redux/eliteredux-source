@@ -7697,7 +7697,13 @@ static u32 GetTrainerMoneyToGive(u16 trainerId)
 static void Cmd_getmoneyreward(void)
 {
     if(VarGet(VAR_TRAINER_PRIZE_BP) == 0){
-        VarSet(VAR_TRAINER_PRIZE_BP, DEFAULT_BP_GAIN_PER_TRAINER);
+        // if the battle is lost, the reward is 0, don't try to skip the reward, the game don't like that at all
+        if (gBattleOutcome & (B_OUTCOME_FORFEITED | B_OUTCOME_LOST)) {
+            VarSet(VAR_TRAINER_PRIZE_BP, 0);
+        } else {
+            VarSet(VAR_TRAINER_PRIZE_BP, DEFAULT_BP_GAIN_PER_TRAINER);
+        }
+        
         gSpecialVar_0x8004 = VarGet(VAR_TRAINER_PRIZE_BP);
     }
     GiveFrontierBattlePoints();
