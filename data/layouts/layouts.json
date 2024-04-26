@@ -4690,6 +4690,16 @@
       "secondary_tileset": "gTileset_Cave",
       "border_filepath": "data/layouts/GraniteCave_PuzzleOut/border.bin",
       "blockdata_filepath": "data/layouts/GraniteCave_PuzzleOut/map.bin"
+    },
+    {
+      "id": "LAYOUT_SEAFLOOR_CAVERN_SHORTCUT",
+      "name": "SeafloorCavernShortcut_Layout",
+      "width": 40,
+      "height": 40,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/SeafloorCavernShortcut/border.bin",
+      "blockdata_filepath": "data/layouts/SeafloorCavernShortcut/map.bin"
     }
   ]
 }

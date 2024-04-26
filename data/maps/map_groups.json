@@ -461,7 +461,8 @@
     "MeteorFalls_HaxorusRoom",
     "PetalburgWoods_BreloomRoom",
     "Secret_Dungeon",
-    "GraniteCave_PuzzleOut"
+    "GraniteCave_PuzzleOut",
+    "SeafloorCavernShortcut"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",

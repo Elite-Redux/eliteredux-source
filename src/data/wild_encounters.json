@@ -10619,7 +10619,7 @@
             "encounter_rate": 4,
             "mons": [
               {
-                "min_level": 0,
+                "min_level": 1,
                 "max_level": 35,
                 "species": "SPECIES_CORSOLA"
               },
