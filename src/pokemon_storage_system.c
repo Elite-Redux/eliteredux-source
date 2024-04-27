@@ -77,6 +77,7 @@ enum {
     MSG_WAS_DEPOSITED,
     MSG_BOX_IS_FULL,
     MSG_RELEASE_POKE,
+    MSG_LEVEL_UP_POKE,
     MSG_WAS_RELEASED,
     MSG_BYE_BYE,
     MSG_MARK_POKE,
@@ -104,8 +105,8 @@ enum {
 enum {
     MSG_VAR_NONE,
     MSG_VAR_MON_NAME_1,
-    MSG_VAR_MON_NAME_2, // Unused
-    MSG_VAR_MON_NAME_3, // Unused
+    MSG_VAR_MON_NAME_2,    // Unused
+    MSG_VAR_MON_NAME_3,    // Unused
     MSG_VAR_RELEASE_MON_1,
     MSG_VAR_RELEASE_MON_2, // Unused
     MSG_VAR_RELEASE_MON_3,
@@ -118,6 +119,7 @@ enum {
     MENU_STORE,
     MENU_WITHDRAW,
     MENU_MOVE,
+    MENU_LEVEL_UP,
     MENU_SHIFT,
     MENU_PLACE,
     MENU_SUMMARY,
@@ -399,6 +401,8 @@ struct ItemIcon
     bool8 active;
 };
 
+#define MAX_NUM_POKEMON_STORAGE_ITEMS 7
+
 struct PokemonStorageSystemData
 {
     u8 state;
@@ -461,6 +465,7 @@ struct PokemonStorageSystemData
     u16 numIconsPerSpecies[MAX_MON_ICONS];
     u16 iconSpeciesList[MAX_MON_ICONS];
     u16 boxSpecies[IN_BOX_COUNT];
+    u8  boxLevel[IN_BOX_COUNT];
     u32 boxPersonalities[IN_BOX_COUNT];
     u8 incomingBoxId;
     u8 shiftTimer;
@@ -474,7 +479,7 @@ struct PokemonStorageSystemData
     u8 iconScrollState;
     u8 iconScrollToBoxId; // Unnecessary duplicate of scrollToBoxId
     struct WindowTemplate menuWindow;
-    struct StorageMenu menuItems[7];
+    struct StorageMenu menuItems[MAX_NUM_POKEMON_STORAGE_ITEMS];
     u8 menuItemsCount;
     u8 menuWidth;
     u8 menuUnusedField; // Never read.
@@ -601,6 +606,7 @@ static void Task_TakeItemForMoving(u8);
 static void Task_ShowMarkMenu(u8);
 static void Task_ShowMonSummary(u8);
 static void Task_ReleaseMon(u8);
+static void Task_LevelUpMon(u8);
 static void Task_ReshowPokeStorage(u8);
 static void Task_PokeStorageMain(u8);
 static void Task_JumpBox(u8);
@@ -852,6 +858,7 @@ static bool8 DoShowPartyMenu(void);
 static bool8 HidePartyMenu(void);
 static bool8 IsDisplayMosaicActive(void);
 static void ShowYesNoWindow(s8);
+static void ShowLevelUpWindow(s8);
 static void UpdateCloseBoxButtonTilemap(bool8);
 static void PrintMessage(u8 id);
 static void LoadDisplayMonGfx(u16, u32);
@@ -881,16 +888,19 @@ static void UnkUtil_Run(void);
 static void UnkUtil_CpuRun(struct UnkUtilData *);
 static void UnkUtil_DmaRun(struct UnkUtilData *);
 
+const u8 gPCText_LevelUp[] = _("Level Up");
+const u8 gText_MoveLevelUpDescription[] = _("Level Up to what level?");
+
 struct {
     const u8 *text;
     const u8 *desc;
 } static const sMainMenuTexts[OPTIONS_COUNT] =
 {
-    [OPTION_WITHDRAW]   = {gText_WithdrawPokemon, gText_WithdrawMonDescription},
-    [OPTION_DEPOSIT]    = {gText_DepositPokemon,  gText_DepositMonDescription},
-    [OPTION_MOVE_MONS]  = {gText_MovePokemon,     gText_MoveMonDescription},
-    [OPTION_MOVE_ITEMS] = {gText_MoveItems,       gText_MoveItemsDescription},
-    [OPTION_EXIT]       = {gText_SeeYa,           gText_SeeYaDescription}
+    [OPTION_WITHDRAW]      = {gText_WithdrawPokemon, gText_WithdrawMonDescription},
+    [OPTION_DEPOSIT]       = {gText_DepositPokemon,  gText_DepositMonDescription},
+    [OPTION_MOVE_MONS]     = {gText_MovePokemon,     gText_MoveMonDescription},
+    [OPTION_MOVE_ITEMS]    = {gText_MoveItems,       gText_MoveItemsDescription},
+    [OPTION_EXIT]          = {gText_SeeYa,           gText_SeeYaDescription}
 };
 
 static const struct WindowTemplate sWindowTemplate_MainMenu =
@@ -1097,6 +1107,7 @@ static const struct StorageMessage sMessages[] =
     [MSG_WAS_DEPOSITED]        = {gText_PkmnWasDeposited,        MSG_VAR_MON_NAME_1},
     [MSG_BOX_IS_FULL]          = {gText_BoxIsFull2,              MSG_VAR_NONE},
     [MSG_RELEASE_POKE]         = {gText_ReleaseThisPokemon,      MSG_VAR_NONE},
+    [MSG_LEVEL_UP_POKE]        = {gText_MoveLevelUpDescription,  MSG_VAR_NONE},
     [MSG_WAS_RELEASED]         = {gText_PkmnWasReleased,         MSG_VAR_RELEASE_MON_1},
     [MSG_BYE_BYE]              = {gText_ByeByePkmn,              MSG_VAR_RELEASE_MON_3},
     [MSG_MARK_POKE]            = {gText_MarkYourPkmn,            MSG_VAR_NONE},
@@ -1127,6 +1138,18 @@ static const struct WindowTemplate sYesNoWindowTemplate =
     .tilemapTop = 11,
     .width = 5,
     .height = 4,
+    .paletteNum = 15,
+    .baseBlock = 0x5C,
+};
+
+#define MAX_LEVEL_UP_OPTIONS 6
+static const struct WindowTemplate sLevelUpWindowTemplate =
+{
+    .bg = 0,
+    .tilemapLeft = 20,
+    .tilemapTop = 3,
+    .width = 9,
+    .height = MAX_LEVEL_UP_OPTIONS * 2,
     .paletteNum = 15,
     .baseBlock = 0x5C,
 };
@@ -2656,6 +2679,10 @@ static void Task_OnSelectedMon(u8 taskId)
                 ClearBottomWindow();
                 SetPokeStorageTask(Task_MoveMon);
             }
+            break;
+        case MENU_LEVEL_UP:
+                PlaySE(SE_SELECT);
+                SetPokeStorageTask(Task_LevelUpMon);
             break;
         case MENU_PLACE:
             PlaySE(SE_SELECT);
@@ -4360,6 +4387,108 @@ static void ShowYesNoWindow(s8 cursorPos)
     Menu_MoveCursorNoWrapAround(cursorPos);
 }
 
+static void Task_LevelUpMon(u8 taskId)
+{
+    u8 newLevel;
+    u8 pos = GetCursorPosition();
+    u8 boxId = StorageGetCurrentBox();
+    u32 experience = 0;
+
+    switch (sStorage->state)
+    {
+    case 0:
+        PrintMessage(MSG_LEVEL_UP_POKE);
+        ShowLevelUpWindow(0);
+        sStorage->state++;
+        break;
+    case 1:
+        switch (Menu_ProcessInputNoWrapClearOnChoose())
+        {
+        case MENU_B_PRESSED:
+            ClearBottomWindow();
+            SetPokeStorageTask(Task_PokeStorageMain);
+            break;
+        case  0:
+        case  1:
+        case  2:
+        case  3:
+        case  4:
+        case  5:
+            if(Menu_ProcessInputNoWrapClearOnChoose() != 0)
+                newLevel = sStorage->displayMonLevel + Menu_ProcessInputNoWrapClearOnChoose();
+            else
+                newLevel = GetLevelCap(); // Level Cap
+
+            if(newLevel > 100)
+                newLevel = 100;
+
+            experience = gExperienceTables[gBaseStats[sStorage->displayMonSpecies].growthRate][newLevel];
+
+            if (sInPartyMenu){
+                SetMonData(&gPlayerParty[pos], MON_DATA_EXP,   &experience);
+                SetMonData(&gPlayerParty[pos], MON_DATA_LEVEL, &newLevel);
+                CalculateMonStats(&gPlayerParty[pos]);
+            }
+            else{
+                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_EXP, &experience);
+                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_LEVEL, &newLevel);
+            }
+
+            RefreshDisplayMon();
+            PrintDisplayMonInfo();
+            PlayFanfareByFanfareNum(FANFARE_LEVEL_UP);
+            ClearBottomWindow();
+            SetPokeStorageTask(Task_PokeStorageMain);
+            break;
+        }
+        break;
+    }
+}
+
+void CreateLevelUpMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 paletteNum, u8 initialCursorPos)
+{
+    u8 nextlevel, numlevels, i, levelcap, windowId;
+    struct TextPrinterTemplate printer;
+    const u8 gText_YesNo123[] = _("");
+	static const u8 sText_levelCap[] =  _("Level Cap$");
+    u8 monlevel = sStorage->displayMonLevel;
+
+    levelcap = GetLevelCap();
+
+    windowId = setYesNoWindowId(AddWindow(window));
+    DrawStdFrameWithCustomTileAndPalette(windowId, TRUE, baseTileNum, paletteNum);
+
+    if(levelcap >= 100) //MAX_LEVEL
+        levelcap = 100;
+
+    numlevels = levelcap - monlevel;
+
+    if(numlevels >= MAX_LEVEL_UP_OPTIONS)
+        numlevels = MAX_LEVEL_UP_OPTIONS;
+
+    nextlevel = monlevel;
+
+    for(i = 0; i < MAX_LEVEL_UP_OPTIONS; i++)
+    {
+        if(i == 0){
+            StringCopy(gStringVar1, sText_levelCap);
+        }
+        else{
+            nextlevel++;
+            ConvertIntToDecimalStringN(gStringVar1, nextlevel, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        }
+        AddTextPrinterParameterized(windowId, FONT_NORMAL, gStringVar1, 8, (i * 16) + 1, TEXT_SPEED_FF, NULL);
+    }
+
+    InitMenuInUpperLeftCornerPlaySoundWhenAPressed(windowId, MAX_LEVEL_UP_OPTIONS, initialCursorPos);
+}
+
+static void ShowLevelUpWindow(s8 cursorPos)
+{
+    CreateLevelUpMenu(&sLevelUpWindowTemplate, 11, 14, 0);
+    Menu_MoveCursorNoWrapAround(cursorPos);
+}
+
 static void ClearBottomWindow(void)
 {
     ClearStdWindowAndFrameToTransparent(1, FALSE);
@@ -4754,6 +4883,7 @@ static void GetIncomingBoxMonData(u8 boxId)
         for (j = 0; j < IN_BOX_COLUMNS; j++)
         {
             sStorage->boxSpecies[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_SPECIES2);
+            sStorage->boxLevel[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_LEVEL);
             if (sStorage->boxSpecies[boxPosition] != SPECIES_NONE)
                 sStorage->boxPersonalities[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_PERSONALITY);
             boxPosition++;
@@ -7312,6 +7442,7 @@ static u8 InBoxInput_Normal(void)
                 case MENU_WITHDRAW:
                     return INPUT_WITHDRAW;
                 case MENU_MOVE:
+                case MENU_LEVEL_UP:
                     return INPUT_MOVE_MON;
                 case MENU_SHIFT:
                     return INPUT_SHIFT_MON;
@@ -7593,6 +7724,7 @@ static u8 HandleInput_InParty(void)
                 case MENU_WITHDRAW:
                     return INPUT_WITHDRAW;
                 case MENU_MOVE:
+                case MENU_LEVEL_UP:
                     return INPUT_MOVE_MON;
                 case MENU_SHIFT:
                     return INPUT_SHIFT_MON;
@@ -7875,6 +8007,8 @@ static bool8 SetMenuTexts_Mon(void)
             SetMenuText(MENU_STORE);
     }
 
+    if (species != SPECIES_NONE)
+        SetMenuText(MENU_LEVEL_UP);
     SetMenuText(MENU_MARK);
     SetMenuText(MENU_RELEASE);
     SetMenuText(MENU_CANCEL);
@@ -8146,6 +8280,7 @@ static const u8 *const sMenuTexts[] =
     [MENU_STORE]      = gPCText_Store,
     [MENU_WITHDRAW]   = gPCText_Withdraw,
     [MENU_MOVE]       = gPCText_Move,
+    [MENU_LEVEL_UP]   = gPCText_LevelUp,
     [MENU_SHIFT]      = gPCText_Shift,
     [MENU_PLACE]      = gPCText_Place,
     [MENU_SUMMARY]    = gPCText_Summary,

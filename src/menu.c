@@ -1664,6 +1664,17 @@ void CreateYesNoMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 pa
     InitMenuInUpperLeftCornerPlaySoundWhenAPressed(sYesNoWindowId, 2, initialCursorPos);
 }
 
+u8 getYesNoWindowId(void)
+{
+    return sYesNoWindowId;
+}
+
+u8 setYesNoWindowId(u8 id)
+{
+    sYesNoWindowId = id;
+    return sYesNoWindowId;
+}
+
 void PrintMenuGridTable(u8 windowId, u8 optionWidth, u8 columns, u8 rows, const struct MenuAction *menuActions)
 {
     u32 i, j;
