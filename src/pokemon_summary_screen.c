@@ -2770,25 +2770,26 @@ static void GenerateMoveReplaceList(u8 keyPress){
     u16 eggMoveBuffer[EGG_MOVES_ARRAY_COUNT];
     u16 firsStage = GetEggSpecies(species);
     u16 numEggMoves = GetEggMovesSpecies(firsStage, eggMoveBuffer);
-    u32 i, j;
+    u32 i, j, moveLevel;
+    u16 newMove = MOVE_NONE;
 
-    for(i = 0; i < MAX_RELEARNER_MOVES; i++)
+    for(i = 0; i < MAX_LEVEL_UP_MOVES; i++)
         sMonSummaryScreen->moveReplaceList[i] = MOVE_NONE;
     sMonSummaryScreen->numMenuChoices = 0;
 
     switch(sMonSummaryScreen->moveReplaceTabNum){
         case MOVE_REPLACE_TAB_LEVEL:
-            for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
-            {
-                if (gLevelUpLearnsets[species][i].move == LEVEL_UP_END)
+            for (i = 0; i < MAX_LEVEL_UP_MOVES; i++){
+                newMove   = gLevelUpLearnsets[species][i].move;
+                moveLevel = gLevelUpLearnsets[species][i].level;
+
+                if (newMove == LEVEL_UP_END)
                     break;
-                else if(gLevelUpLearnsets[species][i].level > level)
+                else if(moveLevel >= level)
                     break;
-                else{
-                    if(gBattleMoves[gLevelUpLearnsets[species][i].move].effect != EFFECT_PLACEHOLDER){
-                        sMonSummaryScreen->moveReplaceList[i] = gLevelUpLearnsets[species][i].move;
-                        sMonSummaryScreen->numMenuChoices++;
-                    }
+                else if(gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE){
+                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = newMove;
+                    sMonSummaryScreen->numMenuChoices++;
                 }
             }
         break;
