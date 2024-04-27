@@ -2156,7 +2156,7 @@ static void Task_HandleInput(u8 taskId)
         }
 		else if (gMain.newKeys & R_BUTTON)
 		{
-            if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && !sMonSummaryScreen->isBoxMon && !FlagGet(FLAG_SYS_LOCKED_MODE)){
+            if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && !sMonSummaryScreen->isBoxMon && !FlagGet(FLAG_SYS_LOCKED_MODE) && !gMain.inBattle){
                 PlaySE(SE_SELECT);
                 SwitchToMoveReplaceMenu(taskId);
             }
@@ -7170,7 +7170,7 @@ static void PrintInfoBar(u8 pageIndex, bool8 detailsShown)
             if (detailsShown)
                 StringCopy(gStringVar2, sText_TitlePickSwitch);
             else{
-                if(!sMonSummaryScreen->isBoxMon && !FlagGet(FLAG_SYS_LOCKED_MODE))
+                if(!sMonSummaryScreen->isBoxMon && !FlagGet(FLAG_SYS_LOCKED_MODE) && !gMain.inBattle)
                     StringCopy(gStringVar2, sText_TitlePageDetail);
                 else
                     StringCopy(gStringVar2, sText_TitlePageDetail_Boxmon);
