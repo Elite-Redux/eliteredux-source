@@ -3299,7 +3299,7 @@ static const u8 sMoveTwoLineDescription_MoveSpecialAquaJet[] = _(
     "+1 priority.");
 
 static const u8 sMoveTwoLineDescription_MoveLeechBlade[] = _(
-    "Heal 50% damage done.");
+    "Heals 50% damage done.");
 
 static const u8 sMoveTwoLineDescription_MoveYggdrasilForce[] = _(
     "Lowers user's Atk and Def.");
@@ -5519,11 +5519,11 @@ static const u8 sMoveFourLineDescription_MoveFireHydroSteam[] = _("Deals damage.
 static const u8 sMoveFourLineDescription_MoveTripleArrows[] = _("50% chance to drop\nDef. 30% chance to\nflinch. High crit.\nArrow-based.");
 static const u8 sMoveFourLineDescription_MoveDoubleLariat[] = _("Hits both targets.\nSilences hit targets.");
 static const u8 sMoveFourLineDescription_MoveSpecialAquaJet[] = _("+1 priority.");
-static const u8 sMoveFourLineDescription_MoveLeechBlade[] = _("Heal 50% damage\ndone.\nKeen edge.");
+static const u8 sMoveFourLineDescription_MoveLeechBlade[] = _("Heals 50% of damage \ndone to the foe.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveYggdrasilForce[] = _("Lowers user's Atk\nand Def.");
 static const u8 sMoveFourLineDescription_MoveDrainBrain[] = _("Lowers targets SpDef.\nHeals that much HP.");
 static const u8 sMoveFourLineDescription_MovePsychokineticSlam[] = _("Deals damage.\n33% recoil damage.");
-static const u8 sMoveFourLineDescription_MoveEsperWing[] = _("Deals damage.\nRaises speed.\nAir-based.");
+static const u8 sMoveFourLineDescription_MoveEsperWing[] = _("Deals damage.\nRaises Speed.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveMortalSpin[] = _("The user spins and\nremoves all hazards.\nThis also poisons\nthe foe.");
 static const u8 sMoveFourLineDescription_MoveGemMissile[] = _("+1 priority.");
 static const u8 sMoveFourLineDescription_MoveRiderKick[] = _("Can't miss.\nIgnores target ability.\nStriker boost.");
@@ -5555,7 +5555,7 @@ static const u8 sMoveFourLineDescription_MoveCombatTorque[] = _("30% chance to\n
 static const u8 sMoveFourLineDescription_MoveKowtowCleave[] = _("Can't miss.\nHigh-crit.\nKeen edge boost.");
 static const u8 sMoveFourLineDescription_MoveFlowerTrick[] = _("The user throws a\nbouquet at the foe.\nThis move always hits\nand lands a crit hit.");
 static const u8 sMoveFourLineDescription_MoveAquaStep[] = _("The user attacks the\nfoe with light and\nfluid dance steps.\nRaises user's Speed.");
-static const u8 sMoveFourLineDescription_MoveTorchSong[] = _("The user blows fire\nas if singing a song.\nRaises SpAtk\nSound based.");
+static const u8 sMoveFourLineDescription_MoveTorchSong[] = _("The user blows fire\nas if singing a song.\nRaises SpAtk by +1.\nSound based.");
 static const u8 sMoveFourLineDescription_MoveGlaiveRush[] = _("The user recklessly\ncharges at the foe.\nThe foe's next move\ndeals double damage.");
 static const u8 sMoveFourLineDescription_MoveSilkTrap[] = _("The user protects\nitself with a silken\ntrap. Contact by the\nfoe lowers its Speed.");
 static const u8 sMoveFourLineDescription_MoveLastRespects[] = _("The user attacks to\navenge its allies.\nMore fainted allies,\ngreater the power.");

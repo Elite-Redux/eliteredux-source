@@ -267,7 +267,7 @@ script General_Adoption_Center_Mega_Stones_Script{
 	faceplayer
 	checkitem(ITEM_MEGA_BRACELET, 1)
 	if(var(VAR_RESULT) == 0){
-		msgbox(format("Sorry, I can't sell you any item if you don't have a Mega Braclet"), MSGBOX_DEFAULT)
+		msgbox(format("Sorry, I can't sell you any item if you don't have a Mega Bracelet."), MSGBOX_DEFAULT)
 	}
 	else{
 		message(gText_HowMayIServeYou)
