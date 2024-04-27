@@ -71,6 +71,7 @@ PlayersHouse_2F_EventScript_WallClock::
 	checkplayergender
 	compare VAR_RESULT, MALE
 	call_if_eq PlayersHouse_2F_EventScript_MomComesUpstairsMale
+	checkplayergender
 	compare VAR_RESULT, FEMALE
 	call_if_eq PlayersHouse_2F_EventScript_MomComesUpstairsFemale
 	playse SE_EXIT
@@ -85,10 +86,18 @@ PlayersHouse_2F_EventScript_MomComesUpstairsMale::
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestRight
 	waitmovement 0
-	msgbox PlayersHouse_2F_Text_HowDoYouLikeYourRoom, MSGBOX_DEFAULT
+	@ start of picking starter region skip
+	msgbox RivalsHouse_2F_Text_MayWhoAreYou, MSGBOX_DEFAULT
+	call LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
+	msgbox RivalsHouse_1F_Text_MayCatchYouLater, MSGBOX_DEFAULT
 	closemessage
 	applymovement VAR_0x8008, PlayersHouse_2F_Movement_MomExitsMale
 	waitmovement 0
+	setvar VAR_LITTLEROOT_RIVAL_STATE, 3
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_2F_POKE_BALL
+	clearflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM
+	setvar VAR_LITTLEROOT_TOWN_STATE, 1
+	@ end of picking starter region skip
 	return
 
 PlayersHouse_2F_EventScript_MomComesUpstairsFemale::
@@ -98,10 +107,18 @@ PlayersHouse_2F_EventScript_MomComesUpstairsFemale::
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestLeft
 	waitmovement 0
-	msgbox PlayersHouse_2F_Text_HowDoYouLikeYourRoom, MSGBOX_DEFAULT
+	@ start of picking starter region skip
+	msgbox RivalsHouse_2F_Text_BrendanWhoAreYou, MSGBOX_DEFAULT
+	call LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	msgbox RivalsHouse_1F_Text_BrendanSomeOtherTime, MSGBOX_DEFAULT
 	closemessage
 	applymovement VAR_0x8008, PlayersHouse_2F_Movement_MomExitsFemale
 	waitmovement 0
+	setvar VAR_LITTLEROOT_RIVAL_STATE, 3
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F_POKE_BALL
+	clearflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_BEDROOM
+	setvar VAR_LITTLEROOT_TOWN_STATE, 1
+	@ end of picking starter region skip
 	return
 
 PlayersHouse_2F_EventScript_CheckWallClock::
