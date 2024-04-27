@@ -91,7 +91,8 @@ LittlerootTown_BrendansHouse_1F_EventScript_PetalburgGymReport:: @ 81F784D
 	lockall
 	setvar VAR_0x8004, MALE
 	setvar VAR_0x8005, LOCALID_MOM
-	goto PlayersHouse_1F_EventScript_PetalburgGymReportMale
+	@ goto PlayersHouse_1F_EventScript_PetalburgGymReportMale
+	setvar VAR_LITTLEROOT_INTRO_STATE, 7
 	end
 
 LittlerootTown_BrendansHouse_1F_EventScript_YoureNewNeighbor:: @ 81F785E

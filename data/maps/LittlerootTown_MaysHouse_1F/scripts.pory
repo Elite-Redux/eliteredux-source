@@ -90,7 +90,8 @@ LittlerootTown_MaysHouse_1F_EventScript_PetalburgGymReport:: @ 81F899D
 	lockall
 	setvar VAR_0x8004, FEMALE
 	setvar VAR_0x8005, LOCALID_MOM
-	goto PlayersHouse_1F_EventScript_PetalburgGymReportFemale
+	@ goto PlayersHouse_1F_EventScript_PetalburgGymReportFemale
+	setvar VAR_LITTLEROOT_INTRO_STATE, 7
 	end
 
 LittlerootTown_MaysHouse_1F_EventScript_YoureNewNeighbor:: @ 81F89AE
