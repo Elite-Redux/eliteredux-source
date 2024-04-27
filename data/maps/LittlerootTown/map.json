@@ -88,7 +88,7 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_TRUCK",
       "x": 11,
-      "y": 10,
+      "y": 13,
       "elevation": 4,
       "movement_type": "MOVEMENT_TYPE_FACE_RIGHT",
       "movement_range_x": 0,
@@ -208,7 +208,7 @@
       "y": 9,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
+      "var_value": "2",
       "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger4"
     },
     {
@@ -217,7 +217,7 @@
       "y": 9,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
+      "var_value": "2",
       "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger5"
     },
     {
@@ -226,7 +226,7 @@
       "y": 9,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
+      "var_value": "2",
       "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger2"
     },
     {
@@ -235,7 +235,7 @@
       "y": 9,
       "elevation": 3,
       "var": "VAR_LITTLEROOT_TOWN_STATE",
-      "var_value": "3",
+      "var_value": "2",
       "script": "LittlerootTown_EventScript_GiveRunningShoesTrigger3"
     },
     {

@@ -821,6 +821,16 @@ LittlerootTown_ProfessorBirchsLab_Text_HeardYouBeatRivalTakePokedex: @ 81FAB22
 	.string "research, but I think you should have\l"
 	.string "this Pokédex.$"
 
+LittlerootTown_ProfessorBirchsLab_Text_ThanksForSavingTakePokedex: @ 81FAB22
+	.string "Prof. Birch: {PLAYER}{KUN}!\p"
+	.string "{RIVAL}'s been helping with my research\n"
+	.string "for a long time.\p"
+	.string "{RIVAL} has an extensive history as\n"
+	.string "a Trainer already.\p"
+	.string "Here, {PLAYER}{KUN}, I ordered this for my\n"
+	.string "research, but I think you should have\l"
+	.string "this Pokédex.$"
+
 LittlerootTown_ProfessorBirchsLab_Text_ReceivedPokedex: @ 81FAC32
 	.string "{PLAYER} received the National Pokédex!$"
 
