@@ -549,3 +549,59 @@ PlayersHouse_1F_Text_StillUnknownPokemon: @ 81F83A1
 text PlayersHouse_1F_Text_Which_Region{
 	"Hmm. Which region was it again?"
 }
+
+const MOM_LOCAL_ID = 1
+script LittlerootTown_BrendansHouse_1F_EventScript_MomGivesStuff0{
+    lock
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff0)
+    waitmovement(0)
+    call(LittlerootTown_EventScript_GiveRunningShoes)
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomBackTV0)
+    waitmovement(0)
+    release
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff0{
+    walk_right * 3
+    walk_up   
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomBackTV0{
+    walk_down
+    walk_left * 3
+    face_up
+}
+script LittlerootTown_BrendansHouse_1F_EventScript_MomGivesStuff1{
+    lock
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff1)
+    waitmovement(0)
+    call(LittlerootTown_EventScript_GiveRunningShoes)
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomBackTV1)
+    waitmovement(0)
+    release
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff1{
+    walk_right * 4
+    face_up
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomBackTV1{
+    face_down
+    walk_left * 4
+    face_up
+}
+script LittlerootTown_BrendansHouse_1F_EventScript_MomGivesStuff2{
+    lock
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff2)
+    waitmovement(0)
+    call(LittlerootTown_EventScript_GiveRunningShoes)
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomBackTV2)
+    waitmovement(0)
+    release
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff2{
+    walk_right * 5
+    walk_up
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomBackTV2{
+    walk_down
+    walk_left * 5
+    face_up
+}

@@ -566,3 +566,59 @@ text RivalsHouse_1F_Text_SureAboutRegion{
 text RivalsHouse_1F_Text_Which_Region{
 	"Oh, darn. Which region was it again?"
 }
+
+
+const MON_LOCAL_ID = 1
+script LittlerootTown_MaysHouse_1F_EventScript_MomGivesStuff0{
+    lock
+    applymovement(MON_LOCAL_ID,LittlerootTown_MaysHouse_1F_Movement_MomGivesStuff0)
+    waitmovement(0)
+    call(LittlerootTown_EventScript_GiveRunningShoes)
+    applymovement(MON_LOCAL_ID,LittlerootTown_MaysHouse_1F_Movement_MomBackTV0)
+    waitmovement(0)
+    release
+}
+movement LittlerootTown_MaysHouse_1F_Movement_MomGivesStuff0{
+    walk_left * 3
+    walk_up   
+}
+movement LittlerootTown_MaysHouse_1F_Movement_MomBackTV0{
+    walk_down
+    walk_right * 3
+    face_up
+}
+script LittlerootTown_MaysHouse_1F_EventScript_MomGivesStuff1{
+    lock
+    applymovement(MON_LOCAL_ID,LittlerootTown_MaysHouse_1F_Movement_MomGivesStuff1)
+    waitmovement(0)
+    call(LittlerootTown_EventScript_GiveRunningShoes)
+    applymovement(MON_LOCAL_ID,LittlerootTown_MaysHouse_1F_Movement_MomBackTV1)
+    waitmovement(0)
+    release
+}
+movement LittlerootTown_MaysHouse_1F_Movement_MomGivesStuff1{
+    walk_left * 4
+    face_up
+}
+movement LittlerootTown_MaysHouse_1F_Movement_MomBackTV1{
+    walk_right * 4
+    face_up
+}
+script LittlerootTown_MaysHouse_1F_EventScript_MomGivesStuff2{
+    lock
+    applymovement(MON_LOCAL_ID,LittlerootTown_MaysHouse_1F_Movement_MomGivesStuff2)
+    waitmovement(0)
+    call(LittlerootTown_EventScript_GiveRunningShoes)
+    applymovement(MON_LOCAL_ID,LittlerootTown_MaysHouse_1F_Movement_MomBackTV2)
+    waitmovement(0)
+    release
+}
+movement LittlerootTown_MaysHouse_1F_Movement_MomGivesStuff2{
+    walk_left * 5
+    walk_up
+}
+movement LittlerootTown_MaysHouse_1F_Movement_MomBackTV2{
+    walk_down
+    walk_right * 5
+    face_up
+}
