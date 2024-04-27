@@ -70,16 +70,17 @@ PlayersHouse_2F_EventScript_WallClock::
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_PLAYERS_HOUSE_VIGOROTH_2
 	checkplayergender
 	compare VAR_RESULT, MALE
-	call_if_eq PlayersHouse_2F_EventScript_MomComesUpstairsMale
+	call_if_eq PlayersHouse_2F_EventScript_RivalComesUpstairsMale
 	checkplayergender
 	compare VAR_RESULT, FEMALE
-	call_if_eq PlayersHouse_2F_EventScript_MomComesUpstairsFemale
+	call_if_eq PlayersHouse_2F_EventScript_RivalComesUpstairsFemale
 	playse SE_EXIT
 	removeobject VAR_0x8008
 	releaseall
 	end
 
-PlayersHouse_2F_EventScript_MomComesUpstairsMale::
+PlayersHouse_2F_EventScript_RivalComesUpstairsMale::
+    @ beware it's not mom anymore but your rival
 	setvar VAR_0x8008, LOCALID_MOM_2F
 	addobject VAR_0x8008
 	applymovement VAR_0x8008, PlayersHouse_2F_Movement_MomEntersMale
@@ -97,10 +98,13 @@ PlayersHouse_2F_EventScript_MomComesUpstairsMale::
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_2F_POKE_BALL
 	clearflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM
 	setvar VAR_LITTLEROOT_TOWN_STATE, 1
+	setflag FLAG_MET_RIVAL_MOM
+	setvar VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 2
 	@ end of picking starter region skip
 	return
 
-PlayersHouse_2F_EventScript_MomComesUpstairsFemale::
+PlayersHouse_2F_EventScript_RivalComesUpstairsFemale::
+    @ beware it's not mom anymore but your rival
 	setvar VAR_0x8008, LOCALID_MOM_2F
 	addobject VAR_0x8008
 	applymovement VAR_0x8008, PlayersHouse_2F_Movement_MomEntersFemale
@@ -118,6 +122,8 @@ PlayersHouse_2F_EventScript_MomComesUpstairsFemale::
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F_POKE_BALL
 	clearflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_BEDROOM
 	setvar VAR_LITTLEROOT_TOWN_STATE, 1
+	setflag FLAG_MET_RIVAL_MOM
+	setvar VAR_LITTLEROOT_HOUSES_STATE_MAY, 2
 	@ end of picking starter region skip
 	return
 
