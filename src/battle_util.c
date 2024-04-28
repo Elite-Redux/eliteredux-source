@@ -7964,7 +7964,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				ChangeStatBuffs(battler, StatBuffValue(1), STAT_SPATK, MOVE_EFFECT_AFFECTS_USER, NULL);
 				gBattleScripting.animArg1 = 14 + STAT_SPATK;
 				gBattleScripting.animArg2 = 0;
-				BattleScriptPushCursorAndCallback(BattleScript_AngerPointsLightBoostActivates);
+				BattleScriptPushCursorAndCallback(BattleScript_TippingPointsLightBoostActivates);
 				effect++;
 			}
 		}
