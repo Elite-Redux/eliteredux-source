@@ -665,7 +665,7 @@
       "y": 3,
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": ""
+      "script": "Route120_EventScript_RouteSignFortree"
     },
     {
       "type": "sign",
