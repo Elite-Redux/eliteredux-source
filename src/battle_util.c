@@ -14966,6 +14966,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     
     if (recordAbilities && immunityAbility && !modifier)
     {
+        SetActiveAbilityPopupOverride(immunityAbility);
         gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = immunityAbility;
         gMoveResultFlags |= (MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE);
         gLastLandedMoves[battlerDef] = 0;
