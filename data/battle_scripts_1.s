@@ -660,7 +660,7 @@ BattleScript_BeakBlastSetUp::
 	end2
 
 BattleScript_BeakBlastBurn::
-	checkburn
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_BURN
 	setmoveeffect MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER
 	seteffectprimary
 BattleScript_BeakBlastBurnReturn:
@@ -4281,7 +4281,7 @@ BattleScript_EffectRest::
 	ppreduce
 	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_RestIsAlreadyAsleep
 	jumpifability BS_ATTACKER, ABILITY_COMATOSE, BattleScript_RestIsAlreadyAsleep
-	jumpifcantmakeasleep BattleScript_RestCantSleep
+	requirecandoeffect BS_ATTACKER, MOVE_EFFECT_SLEEP | MOVE_EFFECT_AFFECTS_USER
 	trysetrest BattleScript_AlreadyAtFullHp
 	pause B_WAIT_TIME_SHORT
 	printfromtable gRestUsedStringIds
@@ -6319,7 +6319,7 @@ BattleScript_EffectWillOWisp::
 	attackstring
 	ppreduce
 	jumpifsubstituteblocks BattleScript_ButItFailed
-	checkburn
+	requirecandoeffect BS_TARGET, MOVE_EFFECT_BURN
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	jumpifsafeguard BattleScript_SafeguardProtected
 	attackanimation

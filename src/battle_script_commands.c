@@ -8626,11 +8626,11 @@ u32 IsAbilityStatusProtected(u32 battler)
     return FALSE;
 }
 
-u32 JumpIfStandardStatusBlocking(u32 battler)
+u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser)
 {
     u16 ability;
     if (gBattleMons[gActiveBattler].status1) gBattlescriptCurrInstr = BattleScript_ButItFailed;
-    else if (DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) gBattlescriptCurrInstr = BattleScript_ButItFailed;
+    else if (!affectsUser && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) gBattlescriptCurrInstr = BattleScript_ButItFailed;
     else if ((ability = IsAbilityStatusProtected(gActiveBattler)))
     {
         if (!BATTLER_HAS_ABILITY(gActiveBattler, ability)) gBattleScripting.battlerPopupOverwrite = BATTLE_PARTNER(gActiveBattler);
@@ -8638,7 +8638,7 @@ u32 JumpIfStandardStatusBlocking(u32 battler)
         gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
     }
     else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_MISTY_TERRAIN)) gBattlescriptCurrInstr = BattleScript_MistyTerrainPrevents;
-    else if (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SAFEGUARD) gBattlescriptCurrInstr = BattleScript_SafeguardProtected;
+    else if (!affectsUser && gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SAFEGUARD) gBattlescriptCurrInstr = BattleScript_SafeguardProtected;
     else return FALSE;
     return TRUE;
 }
@@ -11117,15 +11117,18 @@ static void Cmd_various(void)
     case VARIOUS_REQUIRE_CAN_DO_EFFECT:
         {
         u16 ability;
-        switch (/* move effect */ T1_READ_16(gBattlescriptCurrInstr + 3))
+        u16 effect = T1_READ_16(gBattlescriptCurrInstr + 3);
+        u16 affectsUser = effect & MOVE_EFFECT_AFFECTS_USER;
+        effect &= ~MOVE_EFFECT_AFFECTS_USER;
+        switch (effect)
         {
             default:
                 gBattlescriptCurrInstr += 5;
                 return;
-            
+
             case MOVE_EFFECT_SLEEP:
                 if (CanSleep(gActiveBattler)) gBattlescriptCurrInstr += 5;
-                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser)) return;
                 else if (UproarWakeUpCheck(gActiveBattler)) gBattlescriptCurrInstr = BattleScript_CantMakeAsleep;
                 else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_INSOMNIA))
                 {
@@ -11150,12 +11153,12 @@ static void Cmd_various(void)
                 if (CanBleed(gActiveBattler)) gBattlescriptCurrInstr += 5;
                 else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ROCK)) gBattlescriptCurrInstr = BattleScript_NotAffected;
                 else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)) gBattlescriptCurrInstr = BattleScript_NotAffected;
-                else JumpIfStandardStatusBlocking(gActiveBattler);
+                else JumpIfStandardStatusBlocking(gActiveBattler, affectsUser);
                 return;
             case MOVE_EFFECT_FROSTBITE:
                 if (CanGetFrostbite(gActiveBattler)) gBattlescriptCurrInstr += 5;
                 else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_ICE)) gBattlescriptCurrInstr = BattleScript_NotAffected;
-                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser)) return;
                 else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MAGMA_ARMOR))
                 {
                     SetActiveAbilityPopupOverride(ABILITY_MAGMA_ARMOR);
@@ -11166,7 +11169,7 @@ static void Cmd_various(void)
             case MOVE_EFFECT_POISON:
                 if (CanBePoisoned(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr += 5;
                 else if (!CanPoisonType(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr = BattleScript_NotAffected;
-                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser)) return;
                 else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_IMMUNITY))
                 {
                     SetActiveAbilityPopupOverride(ABILITY_IMMUNITY);
@@ -11175,7 +11178,7 @@ static void Cmd_various(void)
                 return;
             case (MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES):
                 if (CanBeParalyzedIgnoreType(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr += 5;
-                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser)) return;
                 else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LIMBER))
                 {
                     SetActiveAbilityPopupOverride(ABILITY_LIMBER);
@@ -11190,7 +11193,7 @@ static void Cmd_various(void)
             case MOVE_EFFECT_PARALYSIS:
                 if (CanBeParalyzedIgnoreType(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr += 5;
                 else if (!CanParalyzeType(gBattlerAttacker, gActiveBattler)) gBattlescriptCurrInstr = BattleScript_NotAffected;
-                else if (JumpIfStandardStatusBlocking(gActiveBattler)) return;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser)) return;
                 else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LIMBER))
                 {
                     SetActiveAbilityPopupOverride(ABILITY_LIMBER);
@@ -11199,6 +11202,30 @@ static void Cmd_various(void)
                 else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_JUGGERNAUT))
                 {
                     SetActiveAbilityPopupOverride(ABILITY_JUGGERNAUT);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                return;
+            case MOVE_EFFECT_BURN:
+                if (CanBeBurned(gActiveBattler)) gBattlescriptCurrInstr += 5;
+                else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser)) return;
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_WATER_VEIL))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_WATER_VEIL);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_WATER_BUBBLE))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_WATER_BUBBLE);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PURIFYING_WATERS))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_PURIFYING_WATERS);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
+                else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_THERMAL_EXCHANGE))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_THERMAL_EXCHANGE);
                     gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
                 }
                 return;
