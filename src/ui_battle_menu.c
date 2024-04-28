@@ -2803,6 +2803,7 @@ static void PrintStatusTab(void){
                 StringCopy(gStringVar1, sText_Title_Status_Showdown_Mode_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
+            break;
             case STATUS_INFO_WRAPPED:
                 StringCopy(gStringVar1, sText_Title_Status_Trapped);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
