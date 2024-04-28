@@ -2072,10 +2072,9 @@ static void Cmd_accuracycheck(void)
         || (gTurnStructs[gBattlerAttacker].multiHitOn &&
             (!(gBattleMoves[move].effect == EFFECT_TRIPLE_KICK ||
                gBattleMoves[move].effect == EFFECT_TEN_HITS)
-        || BattlerHasInnate(gBattlerAttacker, ABILITY_KUNOICHI_BLADE)
-		|| GetBattlerAbility(gBattlerAttacker) == ABILITY_KUNOICHI_BLADE
-		|| BattlerHasInnate(gBattlerAttacker, ABILITY_SKILL_LINK)
-		|| GetBattlerAbility(gBattlerAttacker) == ABILITY_SKILL_LINK)
+        || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_KUNOICHI_BLADE)
+		|| BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SKILL_LINK)
+        || GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LOADED_DICE)
         )
         )
     {
