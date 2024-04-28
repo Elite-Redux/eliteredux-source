@@ -292,41 +292,43 @@
 
 // cases for Cmd_moveend
 #define MOVEEND_SUM_DAMAGE                        0
-#define MOVEEND_PROTECT_LIKE_EFFECT               1
-#define MOVEEND_RAGE                              2
-#define MOVEEND_SYNCHRONIZE_TARGET                3
-#define MOVEEND_DANCER                            4
-#define MOVEEND_ABILITIES                         5
-#define MOVEEND_ABILITIES_ATTACKER                6
-#define MOVEEND_STATUS_IMMUNITY_ABILITIES         7
-#define MOVEEND_SYNCHRONIZE_ATTACKER              8
-#define MOVEEND_CHOICE_MOVE                       9
-#define MOVEEND_ATTACKER_INVISIBLE                10
-#define MOVEEND_ATTACKER_VISIBLE                  11
-#define MOVEEND_TARGET_VISIBLE                    12
-#define MOVEEND_ITEM_EFFECTS_TARGET               13
-#define MOVEEND_ITEM_EFFECTS_ALL                  14
-#define MOVEEND_KINGSROCK                         15
-#define MOVEEND_SUBSTITUTE                        16
-#define MOVEEND_UPDATE_LAST_MOVES                 17
-#define MOVEEND_MIRROR_MOVE                       18
-#define MOVEEND_NEXT_TARGET                       19    // Everything up until here is handled for each strike of a multi-hit move
-#define MOVEEND_MULTIHIT_MOVE                     20
-#define MOVEEND_MOVE_EFFECTS2                     21
-#define MOVEEND_RECOIL                            22
-#define MOVEEND_CHARGE                            23
-#define MOVEEND_ATTACKER_FOLLOWUP_MOVE            24
-#define MOVEEND_ABILITIES_AFTER_RECOIL            25
-#define MOVEEND_EJECT_BUTTON                      26
-#define MOVEEND_RED_CARD                          27
-#define MOVEEND_EJECT_PACK                        28
-#define MOVEEND_LIFEORB_SHELLBELL                 29
-#define MOVEEND_CHANGED_ITEMS                     30
-#define MOVEEND_DEFROST                           31
-#define MOVEEND_PICKPOCKET                        32
-#define MOVEEND_EMERGENCY_EXIT                    33
-#define MOVEEND_CLEAR_BITS                        34
-#define MOVEEND_COUNT                             35
+#define MOVEEND_PROTECT_LIKE_EFFECT               MOVEEND_SUM_DAMAGE + 1
+#define MOVEEND_RAGE                              MOVEEND_PROTECT_LIKE_EFFECT + 1
+#define MOVEEND_SYNCHRONIZE_TARGET                MOVEEND_RAGE + 1
+#define MOVEEND_DANCER                            MOVEEND_SYNCHRONIZE_TARGET + 1
+#define MOVEEND_ABILITIES                         MOVEEND_DANCER + 1
+#define MOVEEND_ABILITIES_EITHER                  MOVEEND_ABILITIES + 1
+#define MOVEEND_ABILITIES_ATTACKER                MOVEEND_ABILITIES_EITHER + 1
+#define MOVEEND_ABILITIES_ATTACKER_EITHER         MOVEEND_ABILITIES_ATTACKER + 1
+#define MOVEEND_STATUS_IMMUNITY_ABILITIES         MOVEEND_ABILITIES_ATTACKER_EITHER + 1
+#define MOVEEND_SYNCHRONIZE_ATTACKER              MOVEEND_STATUS_IMMUNITY_ABILITIES + 1
+#define MOVEEND_CHOICE_MOVE                       MOVEEND_SYNCHRONIZE_ATTACKER + 1
+#define MOVEEND_ATTACKER_INVISIBLE                MOVEEND_CHOICE_MOVE + 1
+#define MOVEEND_ATTACKER_VISIBLE                  MOVEEND_ATTACKER_INVISIBLE + 1
+#define MOVEEND_TARGET_VISIBLE                    MOVEEND_ATTACKER_VISIBLE + 1
+#define MOVEEND_ITEM_EFFECTS_TARGET               MOVEEND_TARGET_VISIBLE + 1
+#define MOVEEND_ITEM_EFFECTS_ALL                  MOVEEND_ITEM_EFFECTS_TARGET + 1
+#define MOVEEND_KINGSROCK                         MOVEEND_ITEM_EFFECTS_ALL + 1
+#define MOVEEND_SUBSTITUTE                        MOVEEND_KINGSROCK + 1
+#define MOVEEND_UPDATE_LAST_MOVES                 MOVEEND_SUBSTITUTE + 1
+#define MOVEEND_MIRROR_MOVE                       MOVEEND_UPDATE_LAST_MOVES + 1
+#define MOVEEND_NEXT_TARGET                       MOVEEND_MIRROR_MOVE + 1    // Everything up until here is handled for each strike of a multi-hit move
+#define MOVEEND_MULTIHIT_MOVE                     MOVEEND_NEXT_TARGET + 1
+#define MOVEEND_MOVE_EFFECTS2                     MOVEEND_MULTIHIT_MOVE + 1
+#define MOVEEND_RECOIL                            MOVEEND_MOVE_EFFECTS2 + 1
+#define MOVEEND_CHARGE                            MOVEEND_RECOIL + 1
+#define MOVEEND_ATTACKER_FOLLOWUP_MOVE            MOVEEND_CHARGE + 1
+#define MOVEEND_ABILITIES_AFTER_RECOIL            MOVEEND_ATTACKER_FOLLOWUP_MOVE + 1
+#define MOVEEND_EJECT_BUTTON                      MOVEEND_ABILITIES_AFTER_RECOIL + 1
+#define MOVEEND_RED_CARD                          MOVEEND_EJECT_BUTTON + 1
+#define MOVEEND_EJECT_PACK                        MOVEEND_RED_CARD + 1
+#define MOVEEND_LIFEORB_SHELLBELL                 MOVEEND_EJECT_PACK + 1
+#define MOVEEND_CHANGED_ITEMS                     MOVEEND_LIFEORB_SHELLBELL + 1
+#define MOVEEND_DEFROST                           MOVEEND_CHANGED_ITEMS + 1
+#define MOVEEND_PICKPOCKET                        MOVEEND_DEFROST + 1
+#define MOVEEND_EMERGENCY_EXIT                    MOVEEND_PICKPOCKET + 1
+#define MOVEEND_CLEAR_BITS                        MOVEEND_EMERGENCY_EXIT + 1
+#define MOVEEND_COUNT                             MOVEEND_CLEAR_BITS + 1
 
 // switch cases
 #define B_SWITCH_NORMAL     0
