@@ -516,6 +516,8 @@ SootopolisCity_EventScript_StartRayquazaScene:: @ 81E5BFE
 	setvar VAR_SOOTOPOLIS_CITY_STATE, 5
 	setvar VAR_SKY_PILLAR_STATE, 1
 	@ end of skypillar skip
+	@ make the aqua guy disappear which at this time have an ID of 19
+	removeobject 19
 	special StorePlayerCoordsInVars
 	compare VAR_0x8004, 43
 	goto_if_ne SootopolisCity_EventScript_RayquazaSceneFromDive
@@ -1804,3 +1806,37 @@ SootopolisCity_Text_DazzledByMentor: @ 81E7CBC
 	.string "dazzled by my mentor's breathtakingly\l"
 	.string "elegant battle style.$"
 `
+const LOCALID_AQUA_GUY = 19
+script SootopolisCity_EventScript_AquaGuyCaveTP{
+    lock
+    faceplayer
+    msgbox(format("Oh you're that kid."))
+    closemessage
+    applymovement(LOCALID_AQUA_GUY, Common_Movement_FaceOriginalDirection)
+    waitmovement(0)
+    delay(20)
+    msgbox(format(  "Listen, I don't hate you, Team Aqua is not what I believed it to be.\p"
+                    "I know what you're looking for, I also gave this information to a strong gray haired guy.\p"
+                    "But for you I can directly bring you up there right now."))
+    closemessage
+    faceplayer
+    waitmovement(0)
+    msgbox(format(  "So what's your call? i don't plan to stay here forever."), MSGBOX_YESNO)
+    if (var(VAR_RESULT) != 1) { //refused
+        msgbox(format("Understandable, don't mind if i take my leave then."))
+        closemessage
+        fadescreen(FADE_TO_BLACK)
+        removeobject(LOCALID_AQUA_GUY)
+        fadescreen(FADE_FROM_BLACK)
+        release
+        return
+    }
+    msgbox(format("No time to waste."))
+    closemessage
+    setflag(FLAG_HIDE_AQUA_GUY_SOOTOPOLIS)
+    warp(MAP_UNDERWATER_SEAFLOOR_CAVERN, 255, 6, 7)
+    waitstate
+    
+    release
+}
+

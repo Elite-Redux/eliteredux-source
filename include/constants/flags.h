@@ -1501,6 +1501,7 @@
 #define FLAG_BATTLE_MENU_COMING_FROM_SUMMARY_SCREEN                 3060
 #define FLAG_LEVEL_UP_FROM_PARTY_SCREEN                             3061
 #define FLAG_HIDE_MAWOOTAD                                          3062
+#define FLAG_HIDE_AQUA_GUY_SOOTOPOLIS                               3063
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 
