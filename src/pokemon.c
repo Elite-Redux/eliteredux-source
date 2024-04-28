@@ -10275,3 +10275,234 @@ u16 GetRandomSpeciesFromPool(u8 id){
         break;
     }
 }
+
+u16 GetFormChangeForMon(struct Pokemon *mon, u8 num){
+    u8 i, j;
+	u16 species 		    = GetMonData(mon, MON_DATA_SPECIES, NULL);
+	u8 level 			    = GetMonData(mon, MON_DATA_LEVEL, NULL);
+	u8 friendship 		    = GetMonData(mon, MON_DATA_FRIENDSHIP, NULL);
+    u16 heldItem 		    = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
+    u32 personality         = GetMonData(mon, MON_DATA_PERSONALITY, 0);
+    u16 upperPersonality    = personality >> 16;
+    u8 beauty = GetMonData(mon, MON_DATA_BEAUTY, 0);
+    u16 *targetFormId;
+    u16 targetSpecies, currentMap;
+    u16 actualSpecies = species;
+    u16 formShiftSpecies = GetFormShiftSpecies(species);
+    bool8 canMegaEvolve = gSaveBlock2Ptr->permanentMegaMode && CheckBagHasItem(ITEM_MEGA_BRACELET, 1) && FlagGet(FLAG_SYS_RECEIVED_KEYSTONE); //Check if the player has the Mega Bracelet and the Keystone
+    u16 notMegaSpecies = getBaseSpeciesFromMega(species);
+    
+    if (formShiftSpecies) species = formShiftSpecies;
+
+    i = num;
+
+    //if(!FlagGet(FLAG_BADGE02_GET))
+	//    return SPECIES_NONE;
+	
+    switch(gFormChangeTable[species][i].method)
+    {
+        case EVO_FORM_SHIFT:
+            if (gFormChangeTable[species][i].targetSpecies != actualSpecies)
+                return gFormChangeTable[species][i].targetSpecies;
+        break;
+        case EVO_FORM_SHIFT_GENDER:
+            if (gFormChangeTable[species][i].targetSpecies != actualSpecies && GetMonGender(mon) == gFormChangeTable[species][i].param)
+                return gFormChangeTable[species][i].targetSpecies;
+        break;
+    }
+
+    if(canMegaEvolve && notMegaSpecies == SPECIES_NONE) //Permanent mega mode only
+    {
+        switch(gEvolutionTable[species][i].method)
+        {
+        case EVO_MEGA_EVOLUTION:
+        case EVO_PRIMAL_REVERSION:
+            if (gEvolutionTable[species][i].param == heldItem || CheckBagHasItem(gEvolutionTable[species][i].param, 1)) //Check if the mon holds the evolution item or the player has it in the bag
+                return gEvolutionTable[species][i].targetSpecies;
+        break;
+        case EVO_MOVE_MEGA_EVOLUTION:{
+            u16 move1 = GetMonData(mon, MON_DATA_MOVE1, 0);
+            u16 move2 = GetMonData(mon, MON_DATA_MOVE2, 0);
+            u16 move3 = GetMonData(mon, MON_DATA_MOVE3, 0);
+            u16 move4 = GetMonData(mon, MON_DATA_MOVE4, 0);
+
+            if (gEvolutionTable[species][i].param == move1 ||
+                gEvolutionTable[species][i].param == move2 ||
+                gEvolutionTable[species][i].param == move3 ||
+                gEvolutionTable[species][i].param == move4) //Check if the mon has the evolution move
+                return gEvolutionTable[species][i].targetSpecies;
+            }
+        break;
+        }
+    }
+    else if(num == 0 && notMegaSpecies != SPECIES_NONE)
+        return notMegaSpecies;
+
+	return SPECIES_NONE;
+}
+
+u8 getNumofAvailableEvos(struct Pokemon *mon){
+    u8 i;
+    u8 count = 0;
+
+    for(i = 0; i < EVOS_PER_MON; i++){
+        if(GetEvolutionForMon(mon, i) != SPECIES_NONE)
+            count++;
+    }
+
+    return count;
+}
+
+u16 GetEvolutionForMon(struct Pokemon *mon, u8 num){
+    u8 i, j;
+	u16 species 		    = GetMonData(mon, MON_DATA_SPECIES, NULL);
+	u8 level 			    = GetMonData(mon, MON_DATA_LEVEL, NULL);
+	u8 friendship 		    = GetMonData(mon, MON_DATA_FRIENDSHIP, NULL);
+    u16 heldItem 		    = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
+    u32 personality         = GetMonData(mon, MON_DATA_PERSONALITY, 0);
+    u16 upperPersonality    = personality >> 16;
+    u8 beauty = GetMonData(mon, MON_DATA_BEAUTY, 0);
+    u16 *targetFormId;
+    u16 targetSpecies, currentMap;
+
+    i = num;
+
+    //Eevee is handled similar to evolution but will be handled separately, I need to add an special animation for de-evolution
+    if(IsEeveelution(species) && num == 0)
+        return SPECIES_EEVEE;
+
+    if ((species == SPECIES_NECROZMA_DUSK_MANE || species == SPECIES_NECROZMA_DAWN_WINGS) && num == 0) return SPECIES_NECROZMA;
+	
+    switch(gEvolutionTable[species][i].method)
+    {
+    case EVO_FRIENDSHIP:
+        if (friendship >= 220)
+            return gEvolutionTable[species][i].targetSpecies;
+    break;
+    case EVO_FRIENDSHIP_DAY:
+        RtcCalcLocalTime();
+        if (IsCurrentlyDay() && friendship >= 220)
+            return gEvolutionTable[species][i].targetSpecies;
+    break;
+    case EVO_LEVEL_DUSK:
+        RtcCalcLocalTime();
+        if(IsCurrentlyDusk() && gEvolutionTable[species][i].param <= level)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_LEVEL_DAY:
+        RtcCalcLocalTime();
+        if (IsCurrentlyDay() && gEvolutionTable[species][i].param <= level && !(IsCurrentlyDusk() && species == SPECIES_ROCKRUFF))
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+        break;
+    case EVO_LEVEL_NIGHT:
+        RtcCalcLocalTime();
+        if (!IsCurrentlyDay() && gEvolutionTable[species][i].param <= level && !(IsCurrentlyDusk() && species == SPECIES_ROCKRUFF))
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_FRIENDSHIP_NIGHT:
+        RtcCalcLocalTime();
+        if (!IsCurrentlyDay() && friendship >= 220)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_ITEM_HOLD_NIGHT:
+        RtcCalcLocalTime();
+        if (!IsCurrentlyDay() && heldItem == gEvolutionTable[species][i].param)
+        {
+            heldItem = 0;
+            SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+        }
+    break;
+    case EVO_ITEM_HOLD_DAY:
+        RtcCalcLocalTime();
+        if (IsCurrentlyDay() && heldItem == gEvolutionTable[species][i].param)
+        {
+            heldItem = 0;
+            SetMonData(mon, MON_DATA_HELD_ITEM, &heldItem);
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+        }
+    break;
+    case EVO_LEVEL:
+        if (gEvolutionTable[species][i].param <= level)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+        break;
+    case EVO_LEVEL_FEMALE:
+        if (gEvolutionTable[species][i].param <= level && GetMonGender(mon) == MON_FEMALE)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_LEVEL_MALE:
+        if (gEvolutionTable[species][i].param <= level && GetMonGender(mon) == MON_MALE)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_LEVEL_ATK_GT_DEF:
+        if (gEvolutionTable[species][i].param <= level && (GetMonData(mon, MON_DATA_ATK, 0) > GetMonData(mon, MON_DATA_DEF, 0)))
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_LEVEL_ATK_EQ_DEF:
+        if (gEvolutionTable[species][i].param <= level && GetMonData(mon, MON_DATA_ATK, 0) == GetMonData(mon, MON_DATA_DEF, 0))
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_LEVEL_ATK_LT_DEF:
+        if (gEvolutionTable[species][i].param <= level && GetMonData(mon, MON_DATA_ATK, 0) < GetMonData(mon, MON_DATA_DEF, 0))
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_LEVEL_SILCOON:
+        if (gEvolutionTable[species][i].param <= level && (upperPersonality % 10) <= 4)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+     break;
+    case EVO_LEVEL_CASCOON:
+        if (gEvolutionTable[species][i].param <= level && (upperPersonality % 10) > 4)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_LEVEL_NINJASK:
+        if (gEvolutionTable[species][i].param <= level)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_BEAUTY:
+        if (gEvolutionTable[species][i].param <= beauty)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_MOVE:
+        if (MonKnowsMove(mon, gEvolutionTable[species][i].param))
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_MOVE_TYPE:
+        for (j = 0; j < 4; j++)
+        {
+            if (gBattleMoves[GetMonData(mon, MON_DATA_MOVE1 + j, NULL)].type == gEvolutionTable[species][i].param)
+                return gEvolutionTable[species][i].targetSpecies; // Get base species
+        }
+    break;
+    case EVO_SPECIFIC_MON_IN_PARTY:
+        for (j = 0; j < PARTY_SIZE; j++)
+        {
+            if (GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL) == gEvolutionTable[species][i].param)
+                return gEvolutionTable[species][i].targetSpecies; // Get base species
+        }
+    break;
+    case EVO_LEVEL_DARK_TYPE_MON_IN_PARTY:
+        if (gEvolutionTable[species][i].param <= level)
+        {
+            for (j = 0; j < PARTY_SIZE; j++)
+            {
+                u16 partyspecies = GetMonData(&gPlayerParty[j], MON_DATA_SPECIES, NULL);
+                if (gBaseStats[partyspecies].type1 == TYPE_DARK
+                    || gBaseStats[partyspecies].type2 == TYPE_DARK)
+                return gEvolutionTable[species][i].targetSpecies; // Get base species
+            }
+        }
+    break;
+    case EVO_LEVEL_RAIN:
+        j = GetCurrentWeather();
+        if (j == WEATHER_RAIN || j == WEATHER_RAIN_THUNDERSTORM || j == WEATHER_DOWNPOUR)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+    case EVO_SPECIFIC_MAP:
+        currentMap = ((gSaveBlock1Ptr->location.mapGroup) << 8 | gSaveBlock1Ptr->location.mapNum);
+        if (currentMap == gEvolutionTable[species][i].param)
+            return gEvolutionTable[species][i].targetSpecies; // Get base species
+    break;
+	}
+
+	return SPECIES_NONE;
+}

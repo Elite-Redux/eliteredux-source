@@ -495,4 +495,8 @@ u16 GetRandomSpeciesFromPool(u8 id);
 const u16 *GetFormSpeciesTable(u16 speciesId);
 bool8 SpeciesHasDifferentForms(u16 speciesId);
 
+u16 GetEvolutionForMon(struct Pokemon *mon, u8 num);
+u16 GetFormChangeForMon(struct Pokemon *mon, u8 num);
+u8 getNumofAvailableEvos(struct Pokemon *mon);
+
 #endif // GUARD_POKEMON_H
