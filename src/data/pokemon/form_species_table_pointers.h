@@ -820,4 +820,43 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_TERAPAGOS_STELLAR] = sTerapagosFormSpeciesIdTable,
 
+    [SPECIES_FLYGON] = sFlygonFormSpeciesIdTable,
+    [SPECIES_FLYGON_MEGA] = sFlygonFormSpeciesIdTable,
+
+    [SPECIES_TORTERRA] = sTorterraFormSpeciesIdTable,
+    [SPECIES_TORTERRA_MEGA] = sTorterraFormSpeciesIdTable,
+
+    [SPECIES_EMPOLEON] = sEmpoleonFormSpeciesIdTable,
+    [SPECIES_EMPOLEON_MEGA] = sEmpoleonFormSpeciesIdTable,
+
+    [SPECIES_INFERNAPE] = sInfernapeFormSpeciesIdTable,
+    [SPECIES_INFERNAPE_MEGA] = sInfernapeFormSpeciesIdTable,
+
+    [SPECIES_DRAGONITE] = sDragoniteFormSpeciesIdTable,
+    [SPECIES_DRAGONITE_MEGA] = sDragoniteFormSpeciesIdTable,
+
+    [SPECIES_BUTTERFREE] = sButterfreeFormSpeciesIdTable,
+    [SPECIES_BUTTERFREE_MEGA] = sButterfreeFormSpeciesIdTable,
+
+    [SPECIES_KINGLER] = sKinglerFormSpeciesIdTable,
+    [SPECIES_KINGLER_MEGA] = sKinglerFormSpeciesIdTable,
+
+    [SPECIES_HITMONTOP] = sHitmontopFormSpeciesIdTable,
+    [SPECIES_HITMONTOP_MEGA] = sHitmontopFormSpeciesIdTable,
+
+    [SPECIES_BRUXISH] = sBruxishFormSpeciesIdTable,
+    [SPECIES_BRUXISH_MEGA] = sBruxishFormSpeciesIdTable,
+
+    [SPECIES_TOUCANNON] = sToucannonFormSpeciesIdTable,
+    [SPECIES_TOUCANNON_MEGA] = sToucannonFormSpeciesIdTable,
+
+    [SPECIES_BRELOOM] = sBreloomFormSpeciesIdTable,
+    [SPECIES_BRELOOM_MEGA] = sBreloomFormSpeciesIdTable,
+
+    [SPECIES_JELLICENT] = sJellicentFormSpeciesIdTable,
+    [SPECIES_JELLICENT_MEGA] = sJellicentFormSpeciesIdTable,
+
+    [SPECIES_QUAGSIRE] = sQuagsireFormSpeciesIdTable,
+    [SPECIES_QUAGSIRE_MEGA] = sQuagsireFormSpeciesIdTable,
+
 };

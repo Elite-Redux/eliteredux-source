@@ -1321,10 +1321,9 @@ static const u16 sMachokeFormSpeciesIdTable[] = {
 };
 static const u16 sMachampFormSpeciesIdTable[] = {
     SPECIES_MACHAMP,
-    SPECIES_MACHAMP_MEGA_REDUX,
     SPECIES_MACHAMP_MEGA,
-
     SPECIES_MACHAMP_REDUX,
+    SPECIES_MACHAMP_MEGA_REDUX,
     FORM_SPECIES_END,
 };
 static const u16 sSolosisFormSpeciesIdTable[] = {
@@ -1589,5 +1588,75 @@ static const u16 sZoroarkFormSpeciesIdTable[] = {
 static const u16 sTerapagosFormSpeciesIdTable[] = {
     SPECIES_TERAPAGOS,
     SPECIES_TERAPAGOS_STELLAR,
+    FORM_SPECIES_END,
+};
+static const u16 sFlygonFormSpeciesIdTable[] = {
+    SPECIES_FLYGON,
+    SPECIES_FLYGON_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sInfernapeFormSpeciesIdTable[] = {
+    SPECIES_INFERNAPE,
+    SPECIES_INFERNAPE_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sDragoniteFormSpeciesIdTable[] = {
+    SPECIES_DRAGONITE,
+    SPECIES_DRAGONITE_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sEmpoleonFormSpeciesIdTable[] = {
+    SPECIES_EMPOLEON,
+    SPECIES_EMPOLEON_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sTorterraFormSpeciesIdTable[] = {
+    SPECIES_TORTERRA,
+    SPECIES_TORTERRA_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sMiloticFormSpeciesIdTable[] = {
+    SPECIES_MILOTIC,
+    SPECIES_MILOTIC_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sButterfreeFormSpeciesIdTable[] = {
+    SPECIES_BUTTERFREE,
+    SPECIES_BUTTERFREE_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sKinglerFormSpeciesIdTable[] = {
+    SPECIES_KINGLER,
+    SPECIES_KINGLER_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sHitmontopFormSpeciesIdTable[] = {
+    SPECIES_HITMONTOP,
+    SPECIES_HITMONTOP_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sBruxishFormSpeciesIdTable[] = {
+    SPECIES_BRUXISH,
+    SPECIES_BRUXISH_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sToucannonFormSpeciesIdTable[] = {
+    SPECIES_TOUCANNON,
+    SPECIES_TOUCANNON_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sBreloomFormSpeciesIdTable[] = {
+    SPECIES_BRELOOM,
+    SPECIES_BRELOOM_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sJellicentFormSpeciesIdTable[] = {
+    SPECIES_JELLICENT,
+    SPECIES_JELLICENT_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sQuagsireFormSpeciesIdTable[] = {
+    SPECIES_QUAGSIRE,
+    SPECIES_QUAGSIRE_MEGA,
     FORM_SPECIES_END,
 };
