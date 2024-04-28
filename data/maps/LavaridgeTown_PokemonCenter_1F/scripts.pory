@@ -1,6 +1,6 @@
 raw `
 .set LOCALID_NURSE, 1
-.set LOCALID_LUCY, 8
+.set LOCALID_LUCY, 7
 
 LavaridgeTown_PokemonCenter_1F_MapScripts:: @ 81FFAFA
 	map_script MAP_SCRIPT_ON_TRANSITION, LavaridgeTown_PokemonCenter_1F_OnTransition
