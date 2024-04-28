@@ -6025,7 +6025,7 @@ BattleScript_EffectElectroShot::
 	setmoveeffect MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
 	seteffectprimary
 	setmoveeffect 0
-	jumpifweatheraffected BS_ATTACKER, WEATHER_SUN_ANY, BattleScript_EffectTwoTurnSecondarySecondTurn
+	jumpifweatheraffected BS_ATTACKER, WEATHER_RAIN_ANY, BattleScript_EffectTwoTurnSecondarySecondTurn
 	twoturnmoveacceleratecheck
 	goto BattleScript_EffectTwoTurnSecondarySecondTurn
 
