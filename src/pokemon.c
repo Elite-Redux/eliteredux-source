@@ -9999,34 +9999,35 @@ bool8 IsEeveelution(u16 species)
 u16 getBaseSpeciesFromMega(u16 species){
     u16 baseSpecies = GetFormSpeciesId(species, 0);
 
+    switch (species)
+    {
+        #define HANDLE_REDUX_MEGA(redux) case redux##_MEGA_REDUX: return redux##_REDUX;
+        HANDLE_REDUX_MEGA(SPECIES_ALAKAZAM)
+        HANDLE_REDUX_MEGA(SPECIES_BEEDRILL)
+        HANDLE_REDUX_MEGA(SPECIES_MACHAMP)
+        HANDLE_REDUX_MEGA(SPECIES_SKARMORY)
+        HANDLE_REDUX_MEGA(SPECIES_GARCHOMP)
+        HANDLE_REDUX_MEGA(SPECIES_MAWILE)
+        HANDLE_REDUX_MEGA(SPECIES_SABLEYE)
+        HANDLE_REDUX_MEGA(SPECIES_HOUNDOOM)
+        // HANDLE_REDUX_MEGA(SPECIES_KINGAMBIT)
+        #undef HANDLE_REDUX_MEGA
+    }
+
     if ((species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA)
         || (species >= FORMS_START && species <= SPECIES_GROUDON_PRIMAL))
     {
-        switch (species)
-        {
-            default:
-                return baseSpecies;
-            #define HANDLE_REDUX_MEGA(redux) case redux##_REDUX: return redux##_MEGA_REDUX;
-            HANDLE_REDUX_MEGA(SPECIES_ALAKAZAM)
-            HANDLE_REDUX_MEGA(SPECIES_BEEDRILL)
-            HANDLE_REDUX_MEGA(SPECIES_MACHAMP)
-            HANDLE_REDUX_MEGA(SPECIES_SKARMORY)
-            HANDLE_REDUX_MEGA(SPECIES_GARCHOMP)
-            HANDLE_REDUX_MEGA(SPECIES_MAWILE)
-            HANDLE_REDUX_MEGA(SPECIES_SABLEYE)
-            HANDLE_REDUX_MEGA(SPECIES_HOUNDOOM)
-            // HANDLE_REDUX_MEGA(SPECIES_KINGAMBIT)
-            #undef HANDLE_REDUX_MEGA
-        }
+        return baseSpecies;
     }
 
     // Special cases
     switch(species){
-        case SPECIES_GIRATINA_ORIGIN: return SPECIES_GIRATINA;
-        case SPECIES_DIALGA_ORIGIN: return SPECIES_DIALGA;
-        case SPECIES_PALKIA_ORIGIN: return SPECIES_PALKIA;
-        case SPECIES_ZAMAZENTA_CROWNED_SHIELD: return SPECIES_ZAMAZENTA;
-        case SPECIES_ZACIAN_CROWNED_SWORD: return SPECIES_ZACIAN;
+        case SPECIES_GIRATINA_ORIGIN:
+        case SPECIES_DIALGA_ORIGIN:
+        case SPECIES_PALKIA_ORIGIN:
+        case SPECIES_ZAMAZENTA_CROWNED_SHIELD:
+        case SPECIES_ZACIAN_CROWNED_SWORD:
+            return baseSpecies;
     }
 
     return SPECIES_NONE;
