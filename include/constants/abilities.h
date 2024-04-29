@@ -273,7 +273,7 @@
 #define ABILITY_WANDERING_SPIRIT 254 // Trade abilities on contact.
 #define ABILITY_GORILLA_TACTICS 255 // Ups Attack by 50% and locks move.
 #define ABILITY_NEUTRALIZING_GAS 256 // All Abilities are nullified. Innates still work.
-#define ABILITY_PASTEL_VEIL 257 // Sets up safeguard upon entry  for 5 turns.
+#define ABILITY_PASTEL_VEIL 257 // Sets up safeguard upon entry for 5 turns.
 #define ABILITY_HUNGER_SWITCH 258 // Changes form each turn.
 #define ABILITY_QUICK_DRAW 259 // Moves first occasionally.
 #define ABILITY_UNSEEN_FIST 260 // Contact evades protection.
@@ -464,8 +464,8 @@
 #define ABILITY_FAE_HUNTER 442 // Does 50% more damage to Fairy-types.
 #define ABILITY_GRAVITY_WELL 443 // Sets Gravity on entry for 5 turns.
 #define ABILITY_EVAPORATE 444 // Takes no damage and sets Mist if hit by water
-#define ABILITY_LUMBERJACK 445 // 1.5x damage to GRASS types.
-#define ABILITY_WELL_BAKED_BODY 446 // Halves damage and +2 defense when hit by a FIRE type move.
+#define ABILITY_LUMBERJACK 445 // 1.5x damage to Grass types.
+#define ABILITY_WELL_BAKED_BODY 446 // Halves damage and +2 defense when hit by a Fire type move.
 #define ABILITY_FURNACE 447 // User gains +2 Speed when when hit by rocks.
 #define ABILITY_ELECTROMORPHOSIS 448 // Charges up when getting hit.
 #define ABILITY_ROCKY_PAYLOAD 449 // Ups Rock and throwing moves by 50%.
@@ -477,14 +477,14 @@
 #define ABILITY_ARCHMAGE 455 // 30% chance of adding a type related effect to each move.
 #define ABILITY_CRYOMANCY 456 // Ice moves inflict frostbite 5x more often.
 #define ABILITY_PHANTOM_PAIN 457 // Ghost type moves can hit normal type pokemon for neutral damage.
-#define ABILITY_PURGATORY 458 // Ups GHOST moves by 30%,  80% when at 1/3 HP.
-#define ABILITY_EMANATE 459 // Normal moves become PSYCHIC  and get a 10% boost.
+#define ABILITY_PURGATORY 458 // Ups Ghost moves by 30%, 80% when at 1/3 HP.
+#define ABILITY_EMANATE 459 // Normal moves become Psychic and get a 10% boost.
 #define ABILITY_KUNOICHI_BLADE 460 // Boost weaker moves and increases the frequency of multi-hit moves
 #define ABILITY_MONKEY_BUSINESS 461 // Uses Tickle on-entry.
 #define ABILITY_COMBAT_SPECIALIST 462 // Boosts punching and kicking moves by 30%.
 #define ABILITY_JUNGLES_GUARD 463 // Ally Grass types and Itself are protected from status conditions and lowering stats.
-#define ABILITY_HUNTERS_HORN 464 // Boost Horn moves and Heals  1/4 HP when defeating an enemy.
-#define ABILITY_PIXIE_POWER 465 // Boosts Fairy moves by 33%  and 1.2x accuracy.
+#define ABILITY_HUNTERS_HORN 464 // Boost Horn moves and Heals 1/4 HP when defeating an enemy.
+#define ABILITY_PIXIE_POWER 465 // Boosts Fairy moves by 33% and 1.2x accuracy.
 #define ABILITY_PLASMA_LAMP 466 // Boost accuracy and Fire & Electric type moves by 1.2x
 #define ABILITY_MAGMA_EATER 467 // Predator + Molten Down.
 #define ABILITY_SUPER_HOT_GOO 468 // Inflicts burn and lower the speed on contact.
