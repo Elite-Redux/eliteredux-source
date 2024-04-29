@@ -11035,6 +11035,12 @@ static void Cmd_various(void)
             const u8 *failInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
             u8 side = GetBattlerSide(gBattlerAttacker);
 
+            if (GetFirstFaintedPartyIndex(gActiveBattler) == PARTY_SIZE)
+            {
+                gBattlescriptCurrInstr = failInstr;
+                return;
+            }
+
             // Battler selected! Revive and go to next instruction.
             if (gSelectedMonPartyId < PARTY_SIZE)
             {
