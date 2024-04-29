@@ -2848,10 +2848,6 @@ static void GenerateMoveReplaceList(u8 keyPress){
         }
         GenerateMoveReplaceList(keyPress);
     }
-
-    MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "GenerateMoveReplaceList step 3 ");
-    MgbaClose();
 }
 
 static void SwitchToMoveReplaceMenu(u8 taskId)
