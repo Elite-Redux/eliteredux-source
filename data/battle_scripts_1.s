@@ -11394,8 +11394,6 @@ BattleScript_NeutralizingGasExitsLoop:
 	restoretarget
 	return
 
-BattleScript_NaturalRecoveryExits::
-	tryhealpercenthealth BS_ATTACKER, 33, BattleScript_NaturalCureExits
 BattleScript_NaturalCureExits::
 	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_NaturalRecoveryExits_HasStatus
 	return
