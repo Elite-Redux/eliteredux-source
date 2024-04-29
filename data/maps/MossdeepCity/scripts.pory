@@ -463,7 +463,7 @@ MossdeepCity_Text_HaveTM96:
 script MossdeepCity_EventScript_ScientistThrowPlayerRoute126 {
     lock
     faceplayer
-    if (flag(FLAG_DEFEATED_MAGMA_SPACE_CENTER) == FALSE){
+    if (flag(FLAG_HIDE_MOSSDEEP_CITY_TEAM_MAGMA) == FALSE){
         msgbox(format("Save the rocket fuel please aaauuurrgh."), MSGBOX_DEFAULT)
         release
         end
