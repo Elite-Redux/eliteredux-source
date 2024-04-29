@@ -5077,7 +5077,6 @@ BattleScript_EffectEerieSpell::
 	ppreduce
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	attackstring
-	ppreduce
 	critcalc
 	damagecalc
 	adjustdamage
