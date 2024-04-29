@@ -80,6 +80,10 @@ Route114_EventScript_FossilManiacsHouseSign:: @ 81F262E
 Route114_EventScript_LanettesHouseSign:: @ 81F2637
 	msgbox Route114_Text_LanettesHouse, MSGBOX_SIGN
 	end
+	
+Route114_EventScript_AnnualFishingContestSign::
+	msgbox Route114_Text_AnnualFishingContestSign, MSGBOX_SIGN
+	end
 
 Route114_EventScript_Lenny:: @ 81F2640
 	trainerbattle_single TRAINER_LENNY, Route114_Text_LennyIntro, Route114_Text_LennyDefeat
@@ -201,6 +205,10 @@ Route114_Text_FossilManiacsHouseSign: @ 81F28DB
 
 Route114_Text_LanettesHouse: @ 81F2910
 	.string "Lanette's House$"
+	
+Route114_Text_AnnualFishingContestSign: @ 81F2910
+    .string "Fishing contest!\n"
+	.string "Make those fishing reel turn!$"
 
 `
 script Route114_EventScript_LegendaryNPC{
