@@ -3624,6 +3624,14 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gRoundStructs[gEffectBattler].chargingTurn = TRUE;
                 }
                 break;
+            case MOVE_EFFECT_CURSE:
+                if (!(gBattleMons[gEffectBattler].status2 & STATUS2_CURSED))
+                {
+                    gBattleMons[gEffectBattler].status2 |= STATUS2_CURSED;
+                    BattleScriptPush(gBattlescriptCurrInstr);
+                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+                }
+                break;
             case MOVE_EFFECT_WRAP:
                 if (!(gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED))
                 {

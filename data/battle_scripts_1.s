@@ -3707,17 +3707,14 @@ BattleScript_MoveEffectAttract::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectCurseHit::
-	call BattleScript_EffectHit_Return
-	trytoapplymoveeffect BattleScript_MoveEffectCurse
-	goto BattleScript_MoveEnd
+	setmoveeffect MOVE_EFFECT_CURSE
+	goto BattleScript_EffectHit
 
 BattleScript_MoveEffectCurse::
 	statusanimation BS_EFFECT_BATTLER
 	printstring STRINGID_TARGETGOTCURSED
 	waitmessage B_WAIT_TIME_LONG
-	updatestatusicon BS_EFFECT_BATTLER
-	waitstate
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_EffectStealthRockHit::
 	call BattleScript_EffectHit_Return
