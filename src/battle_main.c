@@ -3352,6 +3352,8 @@ static void BattleStartClearSetData(void)
         gBattleStruct->opposingOriginalItems[i] = GetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM);
     }
 
+    gChosenMove = gCurrentMove = MOVE_NONE;
+
     gSwapDamageCategory = FALSE; // Photon Geyser, Shell Side Arm, Light That Burns the Sky
 }
 
