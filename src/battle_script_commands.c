@@ -7050,7 +7050,7 @@ static void Cmd_openpartyscreen(void)
             return;
         }
 
-        if (hitmarkerFaintBits == BS_CHOOSE_FAINTED_MON && GetFirstFaintedPartyIndex(gBattlerAttacker) >= PARTY_SIZE)
+        if (hitmarkerFaintBits == PARTY_ACTION_CHOOSE_FAINTED_MON && GetFirstFaintedPartyIndex(gBattlerAttacker) >= PARTY_SIZE)
         {
             gBattlescriptCurrInstr = jumpPtr;
             return;
