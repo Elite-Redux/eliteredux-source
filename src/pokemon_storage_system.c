@@ -4477,7 +4477,7 @@ static void Task_EvolveMon(u8 taskId)
             //BeginEvolutionScene(&pokemon, targetSpecies, FALSE, pos);
             RefreshDisplayMon();
             PrintDisplayMonInfo();
-            PlayFanfareByFanfareNum(FANFARE_LEVEL_UP);
+            //PlayFanfareByFanfareNum(FANFARE_LEVEL_UP);
             ClearBottomWindow();
             SetPokeStorageTask(Task_PokeStorageMain);
             break;
@@ -4535,7 +4535,7 @@ static void Task_LevelUpMon(u8 taskId)
 
             RefreshDisplayMon();
             PrintDisplayMonInfo();
-            PlayFanfareByFanfareNum(FANFARE_LEVEL_UP);
+            //PlayFanfareByFanfareNum(FANFARE_LEVEL_UP);
             ClearBottomWindow();
             SetPokeStorageTask(Task_PokeStorageMain);
             break;
