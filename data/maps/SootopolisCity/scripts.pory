@@ -1816,7 +1816,7 @@ script SootopolisCity_EventScript_AquaGuyCaveTP{
     waitmovement(0)
     delay(20)
     msgbox(format(  "Listen, I don't hate you, Team Aqua is not what I believed it to be.\p"
-                    "I know what you're looking for, I also gave this information to a strong gray haired guy.\p"
+                    "I know what you're looking for, I also gave this information to a powerful gray haired guy.\p"
                     "But for you I can directly bring you up there right now."))
     closemessage
     faceplayer
@@ -1836,7 +1836,28 @@ script SootopolisCity_EventScript_AquaGuyCaveTP{
     setflag(FLAG_HIDE_AQUA_GUY_SOOTOPOLIS)
     warp(MAP_UNDERWATER_SEAFLOOR_CAVERN, 255, 6, 7)
     waitstate
-    
     release
 }
-
+const LOCALID_RIVAL = 20
+script SootopolisCity_EventScript_RivalTP{
+    // Teleport player to EverGrande City with the rival
+    lock
+    faceplayer
+    msgbox(format(  "Hey, {PLAYER}, what's up."
+                    "I see that I missed the spectacle."
+                    "How about going to EverGrande city"
+                    "while we talk about these recent events?"
+                    "I kinda need to look for some stuff there."), MSGBOX_YESNO)
+    closemessage
+    if (var(VAR_RESULT) != 1){
+        msgbox(format(  "I suppose i'm going with my Pokémons"))
+        release
+        return
+    }
+    msgbox(format(  "Nice, let's head up there."))
+    closemessage
+    setflag(FLAG_RIVAL_EVERGRANDE_ESCORT)
+    warp(MAP_EVER_GRANDE_CITY, 255, 19, 55)
+    waitstate
+    release
+}
