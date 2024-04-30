@@ -6581,7 +6581,7 @@ static void Cmd_switchindataupdate(void)
         gBattleMons[gActiveBattler].item = 0;
     }
 
-    if (gBattleMoves[gCurrentMove].effect == EFFECT_BATON_PASS)
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_BATON_PASS || gBattleMoves[gCurrentMove].effect == EFFECT_SHED_TAIL)
     {
         for (i = 0; i < NUM_BATTLE_STATS; i++)
         {
