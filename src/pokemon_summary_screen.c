@@ -2156,7 +2156,7 @@ static void Task_HandleInput(u8 taskId)
         }
 		else if (gMain.newKeys & R_BUTTON)
 		{
-            if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && !sMonSummaryScreen->isBoxMon && !FlagGet(FLAG_SYS_LOCKED_MODE) && !gMain.inBattle){
+            if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && enablePokemonChanges() && !gMain.inBattle){
                 PlaySE(SE_SELECT);
                 SwitchToMoveReplaceMenu(taskId);
             }
@@ -2763,19 +2763,19 @@ enum{
 };
 
 static void GenerateMoveReplaceList(u8 keyPress){
-    struct Pokemon *mon = sMonSummaryScreen->monList.mons;
-    u16 species = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_SPECIES, 0);
-    u32 personality = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_PERSONALITY, 0);
-    u8 level = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_LEVEL, 0);
+    u32 personality;
+    u16 firsStage, species, numEggMoves, newMove, i, j;
+    u8  level, moveLevel;
     u16 eggMoveBuffer[EGG_MOVES_ARRAY_COUNT];
-    u16 firsStage = GetEggSpecies(species);
-    u16 numEggMoves = GetEggMovesSpecies(firsStage, eggMoveBuffer);
-    u32 i, j, moveLevel;
-    u16 newMove = MOVE_NONE;
 
     for(i = 0; i < MAX_LEVEL_UP_MOVES; i++)
         sMonSummaryScreen->moveReplaceList[i] = MOVE_NONE;
     sMonSummaryScreen->numMenuChoices = 0;
+    newMove = MOVE_NONE;
+
+    species     = sMonSummaryScreen->summary.species2;
+    level       = sMonSummaryScreen->summary.level;
+    personality = sMonSummaryScreen->summary.pid;
 
     switch(sMonSummaryScreen->moveReplaceTabNum){
         case MOVE_REPLACE_TAB_LEVEL:
@@ -2796,10 +2796,10 @@ static void GenerateMoveReplaceList(u8 keyPress){
         case MOVE_REPLACE_TAB_TMHM:
             for (i = 0; i < TM_COUNT; i++)
             {
-                if(CanSpeciesLearnTMHM(species, i) && 
-                    gBattleMoves[GetTmMove(i)].effect != EFFECT_PLACEHOLDER)
+                newMove = GetTmMove(i);
+                if(CanSpeciesLearnTMHM(species, i) && gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE)
                 {
-                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(GetTmMove(i), species, personality);
+                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(newMove, species, personality);
                     sMonSummaryScreen->numMenuChoices++;
                 }
             }
@@ -2807,10 +2807,10 @@ static void GenerateMoveReplaceList(u8 keyPress){
         case MOVE_REPLACE_TAB_TUTOR:
             for (i = 0; i < TUTOR_COUNT; i++)
             {
-                if (CanLearnTutorMove(species, i) && 
-                    gBattleMoves[GetTutorMove(i)].effect != EFFECT_PLACEHOLDER)
+                newMove = GetTutorMove(i);
+                if (CanLearnTutorMove(species, i) && gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE)
                 {
-                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(GetTutorMove(i), species, personality);
+                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(newMove, species, personality);
                     sMonSummaryScreen->numMenuChoices++;
                 }
             }
@@ -2852,9 +2852,6 @@ static void GenerateMoveReplaceList(u8 keyPress){
 
 static void SwitchToMoveReplaceMenu(u8 taskId)
 {
-    struct Pokemon *mon = sMonSummaryScreen->monList.mons;
-    u16 species = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_SPECIES, 0);
-    u8 level = GetMonData(&mon[sMonSummaryScreen->curMonIndex], MON_DATA_LEVEL, 0);
     s16 *data = gTasks[taskId].data;
 
     sMonSummaryScreen->moveReplaceTabNum = MOVE_REPLACE_TAB_LEVEL;
@@ -3239,14 +3236,23 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             }
             else{
                 //Teach Move
-                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                if (!sMonSummaryScreen->isBoxMon){
+                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                }
+                else{
+                    struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
+                    SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                }
                 SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
                 summary->moves[moveToReplace] = moveToLearn;
 
                 //Restore PP
                 ppBonuses = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES);
                 ppNum = CalculatePPWithBonus(moveToLearn, ppBonuses, moveToReplace);
-                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_PP1 + moveToReplace, &ppNum);
+
+                if (!sMonSummaryScreen->isBoxMon)
+                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_PP1 + moveToReplace, &ppNum);
+
                 SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP1 + moveToReplace, &ppNum);
                 summary->pp[moveToReplace] = ppNum;
 
@@ -3262,30 +3268,60 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
         else{
             u8 learnedMove = FALSE;
 
-            for (i = 0; i < MAX_MON_MOVES; i++){
-                if(moveToLearn == GetMonData(mon, MON_DATA_MOVE1 + i, 0)){
-                    hasMonMove = TRUE;
-                    break;
+            if (!sMonSummaryScreen->isBoxMon){
+                for (i = 0; i < MAX_MON_MOVES; i++){
+                    if(moveToLearn == GetMonData(mon, MON_DATA_MOVE1 + i, 0)){
+                        hasMonMove = TRUE;
+                        break;
+                    }
+                }
+
+                for (i = 0; i < MAX_MON_MOVES; i++){
+                    if(GetMonData(mon, MON_DATA_MOVE1 + i, 0) == MOVE_NONE){
+                        moveToReplace = i;
+                        learnedMove = TRUE;
+                        break;
+                    }
                 }
             }
+            else{
+                struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
+                for (i = 0; i < MAX_MON_MOVES; i++){
+                    if(moveToLearn == GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + i, 0)){
+                        hasMonMove = TRUE;
+                        break;
+                    }
+                }
 
-            for (i = 0; i < MAX_MON_MOVES; i++){
-                if(GetMonData(mon, MON_DATA_MOVE1 + i, 0) == MOVE_NONE){
-                    moveToReplace = i;
-                    learnedMove = TRUE;
-                    break;
+                for (i = 0; i < MAX_MON_MOVES; i++){
+                    if(GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + i, 0) == MOVE_NONE){
+                        moveToReplace = i;
+                        learnedMove = TRUE;
+                        break;
+                    }
                 }
             }
 
             if(learnedMove && !hasMonMove){
                 //Teach Move
-                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                if (!sMonSummaryScreen->isBoxMon){
+                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                }
+                else{
+                    struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
+                    SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
+                }
+
                 SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
                 summary->moves[moveToReplace] = moveToLearn;
+
                 //Restore PP
                 ppBonuses = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP_BONUSES);
                 ppNum = CalculatePPWithBonus(moveToLearn, ppBonuses, moveToReplace);
-                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_PP1 + moveToReplace, &ppNum);
+
+                if (!sMonSummaryScreen->isBoxMon)
+                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_PP1 + moveToReplace, &ppNum);
+
                 SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_PP1 + moveToReplace, &ppNum);
                 summary->pp[moveToReplace] = ppNum;
 
@@ -7170,7 +7206,7 @@ static void PrintInfoBar(u8 pageIndex, bool8 detailsShown)
             if (detailsShown)
                 StringCopy(gStringVar2, sText_TitlePickSwitch);
             else{
-                if(!sMonSummaryScreen->isBoxMon && !FlagGet(FLAG_SYS_LOCKED_MODE) && !gMain.inBattle)
+                if(enablePokemonChanges() && !gMain.inBattle)
                     StringCopy(gStringVar2, sText_TitlePageDetail);
                 else
                     StringCopy(gStringVar2, sText_TitlePageDetail_Boxmon);

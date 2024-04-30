@@ -1502,6 +1502,8 @@
 #define FLAG_LEVEL_UP_FROM_PARTY_SCREEN                             3061
 #define FLAG_HIDE_MAWOOTAD                                          3062
 #define FLAG_HIDE_AQUA_GUY_SOOTOPOLIS                               3063
+#define FLAG_HIDE_RIVAL_SOOTOPOLIS_EVERGRANDE                       3064
+#define FLAG_RIVAL_EVERGRANDE_ESCORT                                3065
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 
