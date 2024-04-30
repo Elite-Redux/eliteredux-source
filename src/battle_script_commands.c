@@ -10798,10 +10798,10 @@ static void Cmd_various(void)
             return;
         }
 
-        gActiveBattler = IsAbilityOnField(ABILITY_SHARING_IS_CARING) - 1;
-        if ((s8)gActiveBattler >= 0)
+        gEffectBattler = IsAbilityOnField(ABILITY_SHARING_IS_CARING) - 1;
+        if ((s8)gEffectBattler >= 0)
         {
-            struct StatCopyState state = GetAbilityStateAs(gActiveBattler, ABILITY_SHARING_IS_CARING).statCopyState;
+            struct StatCopyState state = GetAbilityStateAs(gEffectBattler, ABILITY_SHARING_IS_CARING).statCopyState;
             if (state.inProgress)
             {
                 for (; state.battler < gBattlersCount; state.battler++)
@@ -10819,7 +10819,7 @@ static void Cmd_various(void)
                         }
                         if (change)
                         {
-                            if (ChangeStatBuffs(gActiveBattler, StatBuffValue(change), state.stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+                            if (ChangeStatBuffs(state.battler, StatBuffValue(change), state.stat, MOVE_EFFECT_AFFECTS_USER, NULL))
                             {
                                 gBattlerAttacker = state.battler;
                                 SetStatChanger(state.stat, change);
@@ -10827,13 +10827,13 @@ static void Cmd_various(void)
                                 gBattlescriptCurrInstr = change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown;
                                 if (!state.announced)
                                 {
-                                    gBattlerAbility = gActiveBattler;
+                                    gBattlerAbility = gEffectBattler;
                                     gBattleScripting.abilityPopupOverwrite = ABILITY_SHARING_IS_CARING;
                                     BattleScriptPushCursor();
                                     gBattlescriptCurrInstr = BattleScript_AbilityPopUpAndWait;
                                     state.announced = TRUE;
                                 }
-                                SetAbilityStateAs(gActiveBattler, ABILITY_SHARING_IS_CARING, (union AbilityStates) { .statCopyState = state });
+                                SetAbilityStateAs(gEffectBattler, ABILITY_SHARING_IS_CARING, (union AbilityStates) { .statCopyState = state });
                                 return;
                             }
                         }
@@ -10842,46 +10842,46 @@ static void Cmd_various(void)
                     if (state.stat >= NUM_BATTLE_STATS) state.stat = 0;
                 }
                 if (state.battler >= gBattlersCount) state = (struct StatCopyState) {0};
-                SetAbilityStateAs(gActiveBattler, ABILITY_SHARING_IS_CARING, (union AbilityStates) { .statCopyState = state });
+                SetAbilityStateAs(gEffectBattler, ABILITY_SHARING_IS_CARING, (union AbilityStates) { .statCopyState = state });
                 return;
             }
         }
-        for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
+        for (gEffectBattler = 0; gEffectBattler < gBattlersCount; gEffectBattler++)
         {
             u8 stat;
-            if (!IsBattlerAlive(gActiveBattler)) continue;
-            if (!gTurnStructs[gActiveBattler].mirrorHerbStat && GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_MIRROR_HERB) continue;
+            if (!IsBattlerAlive(gEffectBattler)) continue;
+            if (!gTurnStructs[gEffectBattler].mirrorHerbStat && GetBattlerHoldEffect(gEffectBattler, TRUE) != HOLD_EFFECT_MIRROR_HERB) continue;
             
-            for (stat = max(gTurnStructs[gActiveBattler].mirrorHerbStat, STAT_ATK); stat < NUM_BATTLE_STATS; stat++)
+            for (stat = max(gTurnStructs[gEffectBattler].mirrorHerbStat, STAT_ATK); stat < NUM_BATTLE_STATS; stat++)
             {
                 s8 change = 0;
                 for (i = 0; i < gBattlersCount; i++)
                 {
-                    if (GetBattlerSide(i) == GetBattlerSide(gActiveBattler)) continue;
+                    if (GetBattlerSide(i) == GetBattlerSide(gEffectBattler)) continue;
                     if (gBattleStruct->statChangesToCheck[i][stat - 1] > 0)
                         change += gBattleStruct->statChangesToCheck[i][stat - 1];
                 }
                 if (change)
                 {
-                    if (ChangeStatBuffs(gActiveBattler, StatBuffValue(change), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+                    if (ChangeStatBuffs(gEffectBattler, StatBuffValue(change), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
                     {
-                        gBattlerAttacker = gActiveBattler;
+                        gBattlerAttacker = gEffectBattler;
                         SetStatChanger(stat, change);
                         BattleScriptPushCursor();
                         gBattlescriptCurrInstr = change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown;
-                        if (!gTurnStructs[gActiveBattler].mirrorHerbStat)
+                        if (!gTurnStructs[gEffectBattler].mirrorHerbStat)
                         {
                             BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AttackerAteItem;
                         }
-                        gTurnStructs[gActiveBattler].mirrorHerbStat = stat + 1;
+                        gTurnStructs[gEffectBattler].mirrorHerbStat = stat + 1;
                         return;
                     }
                 }
             }
-            gTurnStructs[gActiveBattler].mirrorHerbStat = 0;
+            gTurnStructs[gEffectBattler].mirrorHerbStat = 0;
         }
-        memset(gBattleStruct->statChangesToCheck, 0, sizeof(gBattleStruct->statChangesToCheck));
+        memset(&gBattleStruct->statChangesToCheck, 0, sizeof(gBattleStruct->statChangesToCheck));
         gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_NOT_NEEDED;
         break;
     case VARIOUS_TRY_LOSE_PERCENT_HP:
