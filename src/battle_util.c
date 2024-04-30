@@ -5233,8 +5233,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         {
             UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
             gBattleMons[battler].species == SPECIES_EISCUE;
-            BattleScriptPush(gBattlescriptCurrInstr);
-            gBattlescriptCurrInstr = BattleScript_AttackerFormChangeEnd3;
+            BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+            effect++;
         }
 
         if (CheckAndSetSwitchInAbility(battler, ABILITY_IMPOSTER)
