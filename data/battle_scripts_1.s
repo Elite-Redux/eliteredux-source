@@ -3671,7 +3671,7 @@ BattleScript_EffectMatchaGotcha::
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	setmoveeffect MOVE_EFFECT_BURN
-	seteffectsecondary
+	seteffectwithchance
 goto BattleScript_AbsorbHeal
 
 BattleScript_AnnounceStatus::
