@@ -2005,6 +2005,9 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_KEEN_EYE, atkAbility))
         calc = (calc * 120) / 100; // 1.2 keen eye boost
 
+    if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_RADIANCE, atkAbility))
+        calc = (calc * 120) / 100; // 1.2 keen eye boost
+
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_SAND_VEIL, defAbility) && gBattleWeather & WEATHER_SANDSTORM_ANY && WEATHER_HAS_EFFECT)
         calc = (calc * 80) / 100; // 1.2 sand veil loss
 
