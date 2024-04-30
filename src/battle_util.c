@@ -6034,7 +6034,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         if (CheckAndSetSwitchInAbility(battler, ABILITY_QUARK_DRIVE))
         {
-            if (IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN))
+            if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
             {
                 struct ParadoxBoost boost = { .statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
                 SetAbilityStateAs(battler, ABILITY_QUARK_DRIVE, (union AbilityStates) { .paradoxBoost = boost });
