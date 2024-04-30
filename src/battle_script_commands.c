@@ -4080,13 +4080,13 @@ static void Cmd_seteffectwithchance(void)
     //Pyromancy boost
     if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_PYROMANCY || BattlerHasInnate(gBattlerAttacker, ABILITY_PYROMANCY))
              && moveType == TYPE_FIRE
-             && moveEffect == EFFECT_BURN_HIT)
+             && moveEffect == MOVE_EFFECT_BURN)
         percentChance = percentChance * 5;
 
     //Cryomancy boost
     if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_CRYOMANCY || BattlerHasInnate(gBattlerAttacker, ABILITY_CRYOMANCY))
              && moveType == TYPE_ICE
-             && moveEffect == EFFECT_FROSTBITE_HIT)
+             && moveEffect == MOVE_EFFECT_FROSTBITE)
         percentChance = percentChance * 5;
 
     //Shocking Jaws boost - not in use this way
@@ -4101,7 +4101,7 @@ static void Cmd_seteffectwithchance(void)
         percentChance = percentChance * 2;
 
     //Frostbite are more likely to occour during Hail
-    if (moveEffect == EFFECT_FROSTBITE_HIT && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_HAIL_ANY))
+    if (moveEffect == MOVE_EFFECT_FROSTBITE && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_HAIL_ANY))
         percentChance = percentChance * 3;
 
     //Angel's Wrath
@@ -4117,11 +4117,7 @@ static void Cmd_seteffectwithchance(void)
     if(gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount){
         //These moves don't trigger flinch after the first hit
         switch(moveEffect){
-            case EFFECT_FLINCH_HIT:
-            case EFFECT_FLINCH_MINIMIZE_HIT:
-            case EFFECT_FLINCH_STATUS:
-            case EFFECT_FLINCH_RECOIL_25:
-            case EFFECT_FLINCH_RECOIL_50:
+            case MOVE_EFFECT_FLINCH:
                 percentChance = 0;
             break;
         }
