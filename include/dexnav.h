@@ -59,11 +59,13 @@
 #define SEARCHLEVEL100_THREESTAR        12
 
 // GUI Info
-#define ROW_WATER       0
-#define ROW_LAND_TOP    1
-#define ROW_LAND_BOT    2
-#define ROW_HIDDEN      3
-#define ROWS_COUNT      4
+#define ROW_LAND_TOP    0
+#define ROW_WATER       1
+#define ROW_FISHING     2
+#define ROW_ROCK_SMASH  3
+#define ROW_HONEY       4
+#define ROW_HIDDEN      5
+#define ROWS_COUNT      6
 
 #define ROW_WATER_ICON_X        30
 #define ROW_WATER_ICON_Y        35
