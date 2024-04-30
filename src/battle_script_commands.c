@@ -10752,6 +10752,7 @@ static void Cmd_various(void)
         break;
     case VARIOUS_DO_COPY_STAT_CHANGE:
         if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NOT_NEEDED) break;
+        gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_IN_PROGRESS;
         for (i = 0; i < gBattlersCount; i++)
         {
             u8 battler = gBattlerAttacker = gBattlerByTurnOrder[i];
