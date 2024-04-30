@@ -4623,6 +4623,8 @@ void GiveBoxMonInitialMoveset(struct BoxPokemon *boxMon)
     u32 personality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY, NULL);
     s32 i;
 
+    species = getBaseSpeciesFromMega(species);
+
     for (i = 0; gLevelUpLearnsets[species][i].move != LEVEL_UP_END; i++)
     {
         if (gLevelUpLearnsets[species][i].level > level)
@@ -4639,6 +4641,8 @@ u16 MonTryLearningNewMove(struct Pokemon *mon, bool8 firstMove)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
+
+    species = getBaseSpeciesFromMega(species);
 
     // since you can learn more than one move per level
     // the game needs to know whether you decided to
@@ -4670,6 +4674,8 @@ u16 MonTryLearningNewEvolutionMove(struct Pokemon *mon, bool8 firstMove)
 {
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+
+    species = getBaseSpeciesFromMega(species);
 
     // since you can learn more than one move per level
     // the game needs to know whether you decided to
@@ -7757,6 +7763,8 @@ u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
     {
         return 0;
     }
+
+    species = getBaseSpeciesFromMega(species);
     
     return gTMHMLearnsets[species].bits[tm / 32] & (1 << (tm % 32));
 }
@@ -7767,6 +7775,8 @@ u32 CanSpeciesLearnTMHM(u16 species, u8 tm)
     {
         return 0;
     }
+
+    species = getBaseSpeciesFromMega(species);
 
     return gTMHMLearnsets[species].bits[tm / 32] & (1 << (tm % 32));
 }
@@ -7779,6 +7789,8 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves, bool8 disableLearned)
     u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
     int i, j, k;
+
+    species = getBaseSpeciesFromMega(species);
 
     if(disableLearned){
         for (i = 0; i < MAX_MON_MOVES; i++)
@@ -7820,6 +7832,8 @@ u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
     u8 numMoves = 0;
     int i;
 
+    species = getBaseSpeciesFromMega(species);
+
     for (i = 0; i < MAX_LEVEL_UP_MOVES && gLevelUpLearnsets[species][i].move != LEVEL_UP_END; i++)
          moves[numMoves++] = gLevelUpLearnsets[species][i].move;
 
@@ -7837,6 +7851,8 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 
     if (species == SPECIES_EGG)
         return 0;
+
+    species = getBaseSpeciesFromMega(species);
 
     for (i = 0; i < MAX_MON_MOVES; i++)
         learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
