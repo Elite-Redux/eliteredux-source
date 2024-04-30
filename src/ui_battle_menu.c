@@ -4079,7 +4079,7 @@ static void PrintSpeedTab(void)
             x = 13;
             y++;
             //Total Stats 9 x 8
-            ConvertIntToDecimalStringN(gStringVar1, speed, STR_CONV_MODE_LEFT_ALIGN, 3);
+            ConvertIntToDecimalStringN(gStringVar1, speed, STR_CONV_MODE_LEFT_ALIGN, 4);
             AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (8 * 8) + 4, (10 * 8) - 4 + (SPEED_POKEMON_SPACE * i), 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gStringVar1);
             y = y + 2;
 
