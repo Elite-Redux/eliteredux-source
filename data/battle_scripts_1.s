@@ -11529,23 +11529,19 @@ BattleScript_PerformCopyStatEffects::
 	return
 
 BattleScript_PerformStatDown::
-	statbuffchange STAT_BUFF_ALLOW_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_PerformStatDownNoResult
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	printfromtable gStatDownStringIds
 	waitmessage B_WAIT_TIME_SHORT
-BattleScript_PerformStatDownNoResult:
 	return
 
 BattleScript_PerformStatUp::
-	statbuffchange STAT_BUFF_ALLOW_PTR | MOVE_EFFECT_AFFECTS_USER, BattleScript_PerformStatUpNoResult
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_SHORT
-BattleScript_PerformStatUpNoResult:
 	return
 
 BattleScript_AbilityPopUpAndWait::

@@ -10774,20 +10774,21 @@ static void Cmd_various(void)
                 }
                 if (change)
                 {
-                    if (!state.announced)
+                    if (ChangeStatBuffs(battler, StatBuffValue(change), state.stat, MOVE_EFFECT_AFFECTS_USER, NULL))
                     {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_EGOIST;
-                        gBattlerAbility = battler;
+                        SetStatChanger(state.stat, change);
                         BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_AbilityPopUpAndWait;
-                        state.announced = TRUE;
-                        state.stat--;
+                        gBattlescriptCurrInstr = BattleScript_PerformStatUp;
+                        if (!state.announced)
+                        {
+                            gBattleScripting.abilityPopupOverwrite = ABILITY_EGOIST;
+                            gBattlerAbility = battler;
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_AbilityPopUpAndWait;
+                            state.announced = TRUE;
+                        }
                         break;
                     }
-                    SetStatChanger(state.stat, change);
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_PerformStatUp;
-                    break;
                 }
             }
 
@@ -10818,30 +10819,23 @@ static void Cmd_various(void)
                         }
                         if (change)
                         {
-                            if (!state.announced)
+                            if (ChangeStatBuffs(gActiveBattler, StatBuffValue(change), state.stat, MOVE_EFFECT_AFFECTS_USER, NULL))
                             {
-                                gBattlerAbility = gActiveBattler;
-                                gBattleScripting.abilityPopupOverwrite = ABILITY_SHARING_IS_CARING;
+                                gBattlerAttacker = state.battler;
+                                SetStatChanger(state.stat, change);
                                 BattleScriptPushCursor();
-                                gBattlescriptCurrInstr = BattleScript_AbilityPopUpAndWait;
-                                state.announced = TRUE;
-                                state.stat--;
+                                gBattlescriptCurrInstr = change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown;
+                                if (!state.announced)
+                                {
+                                    gBattlerAbility = gActiveBattler;
+                                    gBattleScripting.abilityPopupOverwrite = ABILITY_SHARING_IS_CARING;
+                                    BattleScriptPushCursor();
+                                    gBattlescriptCurrInstr = BattleScript_AbilityPopUpAndWait;
+                                    state.announced = TRUE;
+                                }
                                 SetAbilityStateAs(gActiveBattler, ABILITY_SHARING_IS_CARING, (union AbilityStates) { .statCopyState = state });
                                 return;
                             }
-                            gBattlerAttacker = state.battler;
-                            SetStatChanger(state.stat, change);
-                            BattleScriptPushCursor();
-                            if (change > 0)
-                            {
-                                gBattlescriptCurrInstr = BattleScript_PerformStatUp;
-                            }
-                            else
-                            {
-                                gBattlescriptCurrInstr = BattleScript_PerformStatDown;
-                            }
-                            SetAbilityStateAs(gActiveBattler, ABILITY_SHARING_IS_CARING, (union AbilityStates) { .statCopyState = state });
-                            return;
                         }
                     }
 
@@ -10864,32 +10858,25 @@ static void Cmd_various(void)
                 for (i = 0; i < gBattlersCount; i++)
                 {
                     if (GetBattlerSide(i) == GetBattlerSide(gActiveBattler)) continue;
-                    change += gBattleStruct->statChangesToCheck[i][stat - 1];
+                    if (gBattleStruct->statChangesToCheck[i][stat - 1] > 0)
+                        change += gBattleStruct->statChangesToCheck[i][stat - 1];
                 }
-                if (change > 0)
+                if (change)
                 {
-                    gBattlerAttacker = gActiveBattler;
-                    if (gTurnStructs[gActiveBattler].mirrorHerbStat)
+                    if (ChangeStatBuffs(gActiveBattler, StatBuffValue(change), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
                     {
+                        gBattlerAttacker = gActiveBattler;
                         SetStatChanger(stat, change);
                         BattleScriptPushCursor();
-                        if (change > 0)
+                        gBattlescriptCurrInstr = change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown;
+                        if (!gTurnStructs[gActiveBattler].mirrorHerbStat)
                         {
-                            gBattlescriptCurrInstr = BattleScript_PerformStatUp;
-                        }
-                        else
-                        {
-                            gBattlescriptCurrInstr = BattleScript_PerformStatDown;
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_AttackerAteItem;
                         }
                         gTurnStructs[gActiveBattler].mirrorHerbStat = stat + 1;
+                        return;
                     }
-                    else
-                    {
-                        BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_AttackerAteItem;
-                        gTurnStructs[gActiveBattler].mirrorHerbStat = stat;
-                    }
-                    return;
                 }
             }
             gTurnStructs[gActiveBattler].mirrorHerbStat = 0;
