@@ -13264,7 +13264,7 @@ static void Cmd_setsubstitute(void)
     damage = max(damage, 1);
     hp = max(hp, 1);
 
-    if (gBattleMons[gBattlerAttacker].hp <= hp)
+    if (gBattleMons[gBattlerAttacker].hp <= damage)
     {
         gBattleMoveDamage = 0;
         SetActiveMultistringChooser(B_MSG_SUBSTITUTE_FAILED);
