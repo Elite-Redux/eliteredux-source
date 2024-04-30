@@ -9725,12 +9725,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_LOUDRED] =
     {
-    .baseHP        = 84,
-    .baseAttack    = 71,
-    .baseDefense   = 43,
-    .baseSpeed     = 48,
-    .baseSpAttack  = 71,
-    .baseSpDefense = 43,
+    .baseHP         = 84,
+    .baseAttack     = 71,
+    .baseDefense    = 53,
+    .baseSpeed      = 58,
+    .baseSpAttack   = 101,
+    .baseSpDefense  = 53,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_NORMAL,
     .catchRate = 120,
@@ -38397,12 +38397,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_EISCUE_NOICE_FACE] =
     {
-    .baseHP        =   75,
-    .baseAttack    =  90,
-    .baseDefense   =   110,
-    .baseSpeed     =   50,
-    .baseSpAttack  =   65,
-    .baseSpDefense =   90,
+    .baseHP         = 75,
+    .baseAttack     = 90,
+    .baseDefense    = 70,
+    .baseSpeed      = 130,
+    .baseSpAttack   = 65,
+    .baseSpDefense  = 50,
     .type1 = TYPE_ICE,
     .type2 = TYPE_ICE,
     .catchRate = 255,
