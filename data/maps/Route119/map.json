@@ -35,7 +35,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "BERRY_TREE_ROUTE_119_POMEG_1",
-      "script": "BerryTreeScript",
+      "script": "Route119_EventScript_WeatherInstituteSign",
       "flag": "0"
     },
     {
@@ -494,7 +494,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_VAR_1",
+      "graphics_id": "OBJ_EVENT_GFX_VAR_2",
       "x": 12,
       "y": 81,
       "elevation": 3,
@@ -504,46 +504,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "NULL",
-      "flag": "0"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_BRENDAN_NORMAL",
-      "x": 22,
-      "y": 82,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_INVISIBLE",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "NULL",
-      "flag": "FLAG_HIDE_TRIGGER_RIVAL_HELPING_WATERFALL_ROUTE_119"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_BRENDAN_NORMAL",
-      "x": 21,
-      "y": 82,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_INVISIBLE",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "NULL",
-      "flag": "FLAG_HIDE_TRIGGER_RIVAL_HELPING_WATERFALL_ROUTE_119"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_BRENDAN_NORMAL",
-      "x": 23,
-      "y": 82,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_INVISIBLE",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "NULL",
-      "flag": "FLAG_HIDE_TRIGGER_RIVAL_HELPING_WATERFALL_ROUTE_119"
+      "flag": "FLAG_HIDE_RIVAL_HELPING_WATERFALL_ROUTE_119"
     }
   ],
   "warp_events": [
@@ -566,6 +527,13 @@
       "y": 2,
       "elevation": 0,
       "dest_map": "MAP_SECRET_DUNGEON",
+      "dest_warp_id": 0
+    },
+    {
+      "x": 21,
+      "y": 96,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE119",
       "dest_warp_id": 0
     }
   ],
@@ -734,6 +702,33 @@
       "y": 13,
       "elevation": 3,
       "weather": "COORD_EVENT_WEATHER_ROUTE119_CYCLE"
+    },
+    {
+      "type": "trigger",
+      "x": 22,
+      "y": 83,
+      "elevation": 0,
+      "var": "VAR_TEMP_2",
+      "var_value": "0",
+      "script": "Route119_EventScript_RivalHelpWaterfall"
+    },
+    {
+      "type": "trigger",
+      "x": 23,
+      "y": 83,
+      "elevation": 0,
+      "var": "VAR_TEMP_2",
+      "var_value": "0",
+      "script": "Route119_EventScript_RivalHelpWaterfall"
+    },
+    {
+      "type": "trigger",
+      "x": 21,
+      "y": 83,
+      "elevation": 0,
+      "var": "VAR_TEMP_2",
+      "var_value": "0",
+      "script": "Route119_EventScript_RivalHelpWaterfall"
     }
   ],
   "bg_events": [
@@ -743,7 +738,7 @@
       "y": 33,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "Route119_EventScript_WeatherInstituteSign"
+      "script": ""
     },
     {
       "type": "sign",
