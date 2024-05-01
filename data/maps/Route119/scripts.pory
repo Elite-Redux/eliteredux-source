@@ -706,3 +706,10 @@ script Route119_EventScript_MimicClubSign{
 	release
 	end
 }
+
+script Route119_EventScript_RivalHelpWaterfall{
+    lock
+    msgbox("seems to be working fine init")
+    release
+    end
+}

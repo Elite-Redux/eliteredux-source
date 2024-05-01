@@ -581,6 +581,7 @@ gStdScripts_End::
 	.include "data/scripts/new_game.inc"
 	.include "data/scripts/hall_of_fame.inc"
 	.include "data/scripts/debug.inc"
+	.include "data/scripts/update_version_flags.inc"
 
 EventScript_WhiteOut:: @ 8271857
 	call EverGrandeCity_HallOfFame_EventScript_ResetEliteFour

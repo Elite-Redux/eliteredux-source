@@ -50,6 +50,7 @@
 #include "constants/trainers.h"
 #include "constants/rgb.h"
 #include "constants/vars.h"
+#include "script.h"
 
 /*
  * Main menu state machine
@@ -699,6 +700,7 @@ static u32 InitMainMenu(bool8 returningFromOptionsMenu)
 
 #define tArrowTaskIsScrolled data[15]   // For scroll indicator arrow task
 
+extern const u8 EventScript_UpdateVersionFlags[];
 const u8 gText_FutureSave[] = _("The save file cannot be loaded since\nits from a future version of this game.");
 static void Task_MainMenuCheckSaveFile(u8 taskId)
 {
@@ -730,6 +732,8 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
 					timesUpdated++;
 					VarSet(VAR_UPDATED_TIMES, timesUpdated);
 					VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
+                    //Settings the new flags to their defaults
+                    ScriptContext2_RunNewScript(EventScript_UpdateVersionFlags);
 				}
                 tMenuType = HAS_SAVED_GAME;
                 if (IsMysteryGiftEnabled())
