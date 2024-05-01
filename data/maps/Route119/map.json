@@ -494,7 +494,7 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_VAR_2",
+      "graphics_id": "OBJ_EVENT_GFX_VAR_0",
       "x": 12,
       "y": 81,
       "elevation": 3,
@@ -710,7 +710,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_2",
       "var_value": "0",
-      "script": "Route119_EventScript_RivalHelpWaterfall"
+      "script": "Route119_EventScript_RivalHelpWaterfall1"
     },
     {
       "type": "trigger",
@@ -719,7 +719,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_2",
       "var_value": "0",
-      "script": "Route119_EventScript_RivalHelpWaterfall"
+      "script": "Route119_EventScript_RivalHelpWaterfall2"
     },
     {
       "type": "trigger",
@@ -728,7 +728,7 @@
       "elevation": 0,
       "var": "VAR_TEMP_2",
       "var_value": "0",
-      "script": "Route119_EventScript_RivalHelpWaterfall"
+      "script": "Route119_EventScript_RivalHelpWaterfall0"
     }
   ],
   "bg_events": [

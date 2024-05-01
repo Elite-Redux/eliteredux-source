@@ -709,53 +709,107 @@ script Route119_EventScript_MimicClubSign{
 }
 const LOCALID_RIVAL_HELPING = 37
 // hidden secret that will skip a bunch of trainers.
+script Route119_EventScript_RivalApproachWaterfall{
+    addobject(LOCALID_RIVAL_HELPING)
+    applymovement(LOCALID_RIVAL_HELPING, Route119_Movement_RivalGoingTowardsWaterFall)
+    waitmovement(0)
+    return
+}
 script Route119_EventScript_RivalHelpWaterfall{
+    msgbox(format("I tried, but you cannot swim these without the 8th badge."
+                  "However I still have a rope in my backpack, wanna some help?"), MSGBOX_YESNO)
+    closemessage
+    if (var(VAR_RESULT) != 1){
+        msgbox(format("Alright, Have fun."))
+        closemessage
+        applymovement(LOCALID_RIVAL_HELPING, Route119_Movement_RivalLeavingAfterHavingRefused)
+        waitmovement(0)
+        setflag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)
+        removeobject(LOCALID_RIVAL_HELPING)
+        release
+        end
+    }
+    msgbox(format("Alright, grab this."))
+    closemessage
+    fadescreen(FADE_TO_BLACK)
+    playse(SE_M_STRING_SHOT)
+    setobjectxy(LOCALID_RIVAL_HELPING, 15, 81)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 16, 81)
+    waitse
+    fadescreen(FADE_FROM_BLACK)
+    special(SpawnCameraObject)
+    applymovement(OBJ_EVENT_ID_CAMERA, Route119_Movement_CameraFollowUp)
+    waitmovement(0)
+    special(RemoveCameraObject)
+    msgbox(format("Would have loved to chat more, but I forgot my bike and I need to get it back soon."
+                  "See you later."))
+    closemessage
+    applymovement(LOCALID_RIVAL_HELPING, Route119_Movement_RivalLeavingYouAloneWithYourPokemonInTheWildernessWithNoRealFriends)
+    waitmovement(0)
+    removeobject(LOCALID_RIVAL_HELPING)
+    setflag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)
+    release
+}
+script Route119_EventScript_RivalHelpWaterfall0{
     lock
     setvar(VAR_TEMP_2, 1)
-    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE){   
-        addobject(LOCALID_RIVAL_HELPING)
-        applymovement(LOCALID_RIVAL_HELPING, Route119_Movement_RivalGoingTowardsWaterFall)
-        waitmovement(0)
-        msgbox(format("I tried, but you cannot swim these without the 8th badge."
-                      "I still have a rope in my backpack, wanna some help?"), MSGBOX_YESNO)
-        closemessage
-        if (var(VAR_RESULT) != 1){
-            msgbox(format("Alright, Have fun."))
-            closemessage
-            removeobject(LOCALID_RIVAL_HELPING)
-            release
-            end
-        }
-        msgbox(format("Alright, grab this."))
-        closemessage
-        fadescreen(FADE_TO_BLACK)
-        playse(SE_M_STRING_SHOT)
-        setobjectxy(LOCALID_RIVAL_HELPING, 15, 81)
-        setobjectxy(OBJ_EVENT_ID_PLAYER, 16, 81)
-        waitse
-        fadescreen(FADE_FROM_BLACK)
-        special(SpawnCameraObject)
-	    applymovement(OBJ_EVENT_ID_CAMERA, Route119_Movement_CameraFollowUp)
-	    waitmovement(0)
-	    special(RemoveCameraObject)
-        msgbox(format("Would have loved to chat more, but I forgot my bike and I need to get it back soon."
-                      "See you later."))
-        closemessage
-        applymovement(LOCALID_RIVAL_HELPING, Route119_Movement_RivalLeavingYouAloneWithYourPokemonInTheWildernessWithNoRealFriends)
-        waitmovement(0)
-        removeobject(LOCALID_RIVAL_HELPING)
+    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)){
+        release
+        end
     }
-    release
+    call(Route119_EventScript_RivalApproachWaterfall)
+    applymovement(OBJ_EVENT_ID_PLAYER, Route119_Movement_RivalHelpWaterfall0)
+    waitmovement(0)
+    goto(Route119_EventScript_RivalHelpWaterfall)
+}
+movement Route119_Movement_RivalHelpWaterfall0{
+    face_left
+}
+script Route119_EventScript_RivalHelpWaterfall1{
+    lock
+    setvar(VAR_TEMP_2, 1)
+    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)){
+        release
+        end
+    }
+    call(Route119_EventScript_RivalApproachWaterfall)
+    applymovement(OBJ_EVENT_ID_PLAYER, Route119_Movement_RivalHelpWaterfall1)
+    waitmovement(0)
+    goto(Route119_EventScript_RivalHelpWaterfall)
+}
+movement Route119_Movement_RivalHelpWaterfall1{
+    walk_left
+}
+script Route119_EventScript_RivalHelpWaterfall2{
+    lock
+    setvar(VAR_TEMP_2, 1)
+    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)){
+        release
+        end
+    }
+    call(Route119_EventScript_RivalApproachWaterfall)
+    applymovement(OBJ_EVENT_ID_PLAYER, Route119_Movement_RivalHelpWaterfall2)
+    waitmovement(0)
+    goto(Route119_EventScript_RivalHelpWaterfall)
+}
+movement Route119_Movement_RivalHelpWaterfall2{
+    walk_left * 2
 }
 movement Route119_Movement_RivalGoingTowardsWaterFall{
     walk_right * 6
 }
 movement Route119_Movement_CameraFollowUp{
     walk_left * 5
-    walk_up * 3
+    walk_up * 2
+}
+movement Route119_Movement_RivalLeavingAfterHavingRefused{
+    walk_left * 6
+    walk_down
+    walk_left * 2
 }
 movement Route119_Movement_RivalLeavingYouAloneWithYourPokemonInTheWildernessWithNoRealFriends{
     walk_left * 3
     walk_down
     walk_left * 4
 }
+
