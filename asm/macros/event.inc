@@ -2108,3 +2108,8 @@
 	callnative ScriptMenu_ScrollingMultichoice2
 	waitstate
 	.endm
+
+	@ I used that so i could TP the player back to the land from the water
+	.macro setavataronfoot
+	.byte 0xef
+	.endm

@@ -55,6 +55,8 @@
 #include "constants/battle_frontier.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "global.fieldmap.h"
+#include "field_player_avatar.h"
 
 typedef u16 (*SpecialFunc)(void);
 typedef void (*NativeFunc)(void);
@@ -2987,4 +2989,10 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
     }
     gSpecialVar_Result = num;
     return FALSE;
+}
+
+
+bool8 ScrCmd_setavataronfoot(struct ScriptContext *ctx)
+{
+    SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_ON_FOOT);
 }
