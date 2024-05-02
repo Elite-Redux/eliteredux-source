@@ -333,3 +333,34 @@ script Route114_EventScript_Feraligatr_Join{
 	release
 	end
 }
+const LOCALID_ROCK_0 = 9
+const LOCALID_ROCK_1 = 16
+const LOCALID_ROCK_2 = 17
+const LOCALID_ROCK_3 = 18
+const LOCALID_ROCK_4 = 19
+const LOCALID_ROCK_5 = 29
+
+script Route114_EventScript_RockSmashSign{
+    lock
+    msgbox(format("It's a button, press it?"), MSGBOX_YESNO)
+    closemessage
+    if (var(VAR_RESULT) != 1){
+        release
+        end
+    }
+    playse(SE_M_ROCK_THROW)
+    applymovement(LOCALID_ROCK_0, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_1, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_2, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_3, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_4, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_5, Movement_SmashRock)
+	waitmovement(0)
+	removeobject(LOCALID_ROCK_0)
+	removeobject(LOCALID_ROCK_1)
+	removeobject(LOCALID_ROCK_2)
+	removeobject(LOCALID_ROCK_3)
+	removeobject(LOCALID_ROCK_4)
+	removeobject(LOCALID_ROCK_5)
+	waitse
+}

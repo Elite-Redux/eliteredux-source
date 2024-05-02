@@ -1504,6 +1504,9 @@
 #define FLAG_HIDE_AQUA_GUY_SOOTOPOLIS                               3063
 #define FLAG_HIDE_RIVAL_SOOTOPOLIS_EVERGRANDE                       3064
 #define FLAG_RIVAL_EVERGRANDE_ESCORT                                3065
+#define FLAG_HIDE_RIVAL_HELPING_WATERFALL_ROUTE_119                 3066
+#define FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119                       3067
+#define FLAG_HIDE_SCOTT_ROUTE_118                                   3068
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 

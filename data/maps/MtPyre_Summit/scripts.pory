@@ -672,3 +672,18 @@ MtPyre_Summit_Text_HoennTrioTale: @ 823325D
 	.string "flew off into the wild blue yonder…$"
 
 `
+const LOCALID_BOULDER_0 = 10
+const LOCALID_BOULDER_1 = 11
+
+script MtPyre_Summit_EventScript_RemoveBoulders{
+    // prevent boulders fromt being pushed to the top, not great but the best solution so far
+    removeobject(LOCALID_BOULDER_0)
+    removeobject(LOCALID_BOULDER_1)
+    setvar(VAR_TEMP_0, 1)
+}
+script MtPyre_Summit_EventScript_ReAddBoulders{
+    // actually it does not re add them, but the var set prevent a trick to bypass the protection
+    addobject(LOCALID_BOULDER_0)
+    addobject(LOCALID_BOULDER_1)
+    setvar(VAR_TEMP_0, 0)
+}
