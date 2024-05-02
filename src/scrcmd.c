@@ -57,6 +57,7 @@
 #include "mgba_printf/mini_printf.h"
 #include "global.fieldmap.h"
 #include "field_player_avatar.h"
+#include "field_effect_helpers.h"
 
 typedef u16 (*SpecialFunc)(void);
 typedef void (*NativeFunc)(void);
@@ -2994,6 +2995,12 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
 
 bool8 ScrCmd_setavataronfoot(struct ScriptContext *ctx)
 {
-    SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_ON_FOOT);
+    struct ObjectEvent *playerObjectEvent;
+    playerObjectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    // make the player normal
+    PlayerAvatarTransition_Normal(playerObjectEvent);
+    // destry the blob
+    DestroySprite(&gSprites[playerObjectEvent->fieldEffectSpriteId]);
+    
     return FALSE;
 }
