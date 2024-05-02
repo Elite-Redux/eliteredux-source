@@ -2988,3 +2988,14 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
     gSpecialVar_Result = num;
     return FALSE;
 }
+
+bool8 ScrCmd_changemovement(struct ScriptContext *ctx)
+{
+    u16 localId = VarGet(ScriptReadHalfword(ctx));
+    u8 movement = VarGet(ScriptReadByte(ctx));
+    struct ObjectEvent *objectEvent;
+    objectEvent = &gObjectEvents[localId];
+    
+    SetTrainerMovementType(objectEvent, movement);
+    return FALSE;
+}
