@@ -736,7 +736,7 @@ script Route119_EventScript_RivalHelpWaterfall{
     setobjectxy(LOCALID_RIVAL_HELPING, 15, 81)
     setobjectxy(OBJ_EVENT_ID_PLAYER, 16, 81)
     waitse
-    setavataronfoot
+    callnative(setPlayerOnFoot)
     fadescreen(FADE_FROM_BLACK)
     special(SpawnCameraObject)
     applymovement(OBJ_EVENT_ID_CAMERA, Route119_Movement_CameraFollowUp)

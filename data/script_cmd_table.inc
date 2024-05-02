@@ -238,7 +238,6 @@ gScriptCmdTable::
 	.4byte ScrCmd_checkpartyfortypeornumber    @ 0xeb
 	.4byte ScrCmd_questmenu 				   @ 0xec
 	.4byte ScrCmd_getobjecteventextraid        @ 0xed
-	.4byte ScrCmd_setavataronfoot              @ 0xee
 
 gScriptCmdTableEnd::
 	.4byte ScrCmd_nop

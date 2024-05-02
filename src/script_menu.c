@@ -19,6 +19,9 @@
 #include "constants/script_menu.h"
 #include "constants/songs.h"
 #include "data/script_menu.h"
+#include "global.fieldmap.h"
+#include "field_player_avatar.h"
+#include "field_effect_helpers.h"
 
 static EWRAM_DATA u8 sProcessInputDelay = 0;
 
@@ -1071,4 +1074,14 @@ static void Task_ScrollingMultichoiceInput(u8 taskId)
         EnableBothScriptContexts();
         DestroyTask(taskId);
     }
+}
+
+void setPlayerOnFoot()
+{
+    struct ObjectEvent *playerObjectEvent;
+    playerObjectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+    // make the player normal
+    PlayerAvatarTransition_Normal(playerObjectEvent);
+    // destry the blob
+    DestroySprite(&gSprites[playerObjectEvent->fieldEffectSpriteId]);
 }
