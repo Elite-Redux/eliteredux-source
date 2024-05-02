@@ -518,14 +518,14 @@ script Route118_EventScript_Scott{
 
 script Route118_EventScript_ScottUnbotheredByReporters{
     msgbox(format("Hi {PLAYER}, I see we meet again."
-                  "Today, i take a little breathe at the sea, as i can't go to Route109."
+                  "Today, I take a little break at the sea, as I can't go to Route109.\p"
                   "Why? I can't stop being bothered by those reporters."))
 }
 
 script Route118_EventScript_ScottBotheredByReporters{
     msgbox(format("Hey, {PLAYER}, I'm sorry but i must not stay longer here."
                   "Those reporters are trying to pass me as a children stalker."
-                  "It's obviously wrong but whatever."
+                  "It's obviously wrong but whatever.\p"
                   "I'll take some time in the jungle, at least there is no camera there."))
     switch(var(VAR_FACING)){
         case DIR_WEST:
@@ -535,6 +535,7 @@ script Route118_EventScript_ScottBotheredByReporters{
     applymovement(LOCALID_SCOTT, Route118_Movement_ScottLeaveBotheredByReporters)
     waitmovement(0)
     setflag(FLAG_HIDE_SCOTT_ROUTE_118)
+    removeobject(LOCALID_SCOTT)
 }
 movement Route118_Movement_PlayerLetScottLeaveBotheredByReporters{
     walk_up
