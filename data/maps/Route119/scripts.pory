@@ -747,9 +747,9 @@ script Route119_EventScript_RivalHelpWaterfall{
     closemessage
     applymovement(LOCALID_RIVAL_HELPING, Route119_Movement_RivalLeavingYouAloneWithYourPokemonInTheWildernessWithNoRealFriends)
     waitmovement(0)
-    removeobject(LOCALID_RIVAL_HELPING)
     setflag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)
     setflag(FLAG_HIDE_RIVAL_HELPING_WATERFALL_ROUTE_119)
+    removeobject(LOCALID_RIVAL_HELPING)
     release
 }
 script Route119_EventScript_RivalHelpWaterfall0{
