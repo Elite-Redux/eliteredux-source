@@ -507,7 +507,8 @@ const LOCALID_SCOTT = 24
 
 script Route118_EventScript_Scott{
     lock
-    if(flag(FLAG_HIDE_ROUTE_118_GABBY_AND_TY_3) != TRUE){
+    faceplayer
+    if(flag(FLAG_HIDE_ROUTE_118_GABBY_AND_TY_3) == TRUE){
         call(Route118_EventScript_ScottUnbotheredByReporters)
     } else {
         call(Route118_EventScript_ScottBotheredByReporters)
@@ -524,7 +525,8 @@ script Route118_EventScript_ScottUnbotheredByReporters{
 script Route118_EventScript_ScottBotheredByReporters{
     msgbox(format("Hey, {PLAYER}, I'm sorry but i must not stay longer here."
                   "Those reporters are trying to pass me as a children stalker."
-                  "It's obviously wrong but, i'll take some time in the jungle, at least there is no camera there."))
+                  "It's obviously wrong but whatever."
+                  "I'll take some time in the jungle, at least there is no camera there."))
     switch(var(VAR_FACING)){
         case DIR_WEST:
            applymovement(OBJ_EVENT_ID_PLAYER, Route118_Movement_PlayerLetScottLeaveBotheredByReporters)
