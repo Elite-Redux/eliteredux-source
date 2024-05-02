@@ -714,4 +714,3 @@ movement Route120_EventScript_MawootadNPCTrainerCatchUp{
     walk_down
     walk_right
 }
-

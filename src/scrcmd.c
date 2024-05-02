@@ -2995,7 +2995,9 @@ bool8 ScrCmd_changemovement(struct ScriptContext *ctx)
     u8 movement = VarGet(ScriptReadByte(ctx));
     struct ObjectEvent *objectEvent;
     objectEvent = &gObjectEvents[localId];
-    
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "Tryingstuff, %d = %d", localId, movement);
+    MgbaClose();
     SetTrainerMovementType(objectEvent, movement);
     return FALSE;
 }
