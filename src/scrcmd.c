@@ -2995,4 +2995,5 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
 bool8 ScrCmd_setavataronfoot(struct ScriptContext *ctx)
 {
     SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_ON_FOOT);
+    return FALSE;
 }
