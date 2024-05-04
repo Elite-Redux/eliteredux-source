@@ -875,6 +875,7 @@ void ClearMiscTurnFlags() {
     gBattleResources->battleScriptsStack->size = 0;
     gBattleScripting.acceleratedTwoTurn = 0;
     gBattleScripting.usingExtraMove = FALSE;
+    gChosenMove = MOVE_NONE;
 }
 
 void HandleAction_TryFinish(void)
