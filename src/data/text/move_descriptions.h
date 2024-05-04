@@ -324,7 +324,7 @@ static const u8 sMoveTwoLineDescription_MoveStringShot[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveDragonRage[] = _(
     "Launches shock waves that\n"
-    "always inflict 40 HP damage.");
+    "can damage Fairy mons.");
 
 static const u8 sMoveTwoLineDescription_MoveFireSpin[] = _(
     "Traps the foe in a ring of\n"
@@ -4765,7 +4765,7 @@ static const u8 sMoveFourLineDescription_MoveStunSpore[] = _("Paralyzing dust is
 static const u8 sMoveFourLineDescription_MoveSleepPowder[] = _("A sleep-inducing\ndust is scattered\nin high volume\naround a foe.");
 static const u8 sMoveFourLineDescription_MovePetalDance[] = _("The user attacks\nwith petals for two\nto three turns,\nthen gets confused.");
 static const u8 sMoveFourLineDescription_MoveStringShot[] = _("The foe is bound\nwith strings shot\nfrom the mouth to\nreduce its Speed.");
-static const u8 sMoveFourLineDescription_MoveDragonRage[] = _("The foe is hit with\na shock wave that\nalways inflicts 40-\nHP damage.");
+static const u8 sMoveFourLineDescription_MoveDragonRage[] = _("The foe is hit with\na shock wave that\ncan damage Fairy\nPokémon.");
 static const u8 sMoveFourLineDescription_MoveFireSpin[] = _("The foe is trapped\nin an intense spiral\nof fire that rages\nfour or five turns.");
 static const u8 sMoveFourLineDescription_MoveThunderShock[] = _("An electric shock\nattack with a 10%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveThunderbolt[] = _("A strong electrical\nattack with a\n10% paralyze\nchance.");
