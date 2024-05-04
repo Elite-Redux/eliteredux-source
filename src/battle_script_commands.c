@@ -5088,11 +5088,7 @@ static void Cmd_copyarray(void)
     const u8* src = T2_READ_PTR(gBattlescriptCurrInstr + 5);
     s32 size = gBattlescriptCurrInstr[9];
 
-    s32 i;
-    for (i = 0; i < size; i++)
-    {
-        dest[i] = src[i];
-    }
+    memcpy(dest, src, size);
 
     gBattlescriptCurrInstr += 10;
 }
@@ -5104,11 +5100,7 @@ static void Cmd_copyarraywithindex(void)
     const u8* index = T2_READ_PTR(gBattlescriptCurrInstr + 9);
     s32 size = gBattlescriptCurrInstr[13];
 
-    s32 i;
-    for (i = 0; i < size; i++)
-    {
-        dest[i] = src[i + *index];
-    }
+    memcpy(dest, &src[*index], size);
 
     gBattlescriptCurrInstr += 14;
 }
@@ -6552,19 +6544,13 @@ static void Cmd_switchindataupdate(void)
 {
     struct BattlePokemon oldData;
     s32 i;
-    u8 *monData;
 
     if (gBattleControllerExecFlags)
         return;
 
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     oldData = gBattleMons[gActiveBattler];
-    monData = (u8*)(&gBattleMons[gActiveBattler]);
-
-    for (i = 0; i < sizeof(struct BattlePokemon); i++)
-    {
-        monData[i] = gBattleResources->bufferB[gActiveBattler][4 + i];
-    }
+    memcpy(&gBattleMons[gActiveBattler], &gBattleResources->bufferB[gActiveBattler][4], sizeof(gBattleMons[gActiveBattler]));
 
     gBattleMons[gActiveBattler].type1 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type1, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
     gBattleMons[gActiveBattler].type2 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
@@ -6583,10 +6569,7 @@ static void Cmd_switchindataupdate(void)
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_BATON_PASS || gBattleMoves[gCurrentMove].effect == EFFECT_SHED_TAIL)
     {
-        for (i = 0; i < NUM_BATTLE_STATS; i++)
-        {
-            gBattleMons[gActiveBattler].statStages[i] = oldData.statStages[i];
-        }
+        ARRAY_COPY(gBattleMons[gActiveBattler].statStages, oldData.statStages)
         gBattleMons[gActiveBattler].status2 = oldData.status2;
     }
 
@@ -7742,11 +7725,8 @@ static void Cmd_unknown_5E(void)
          {
             s32 i;
             struct BattlePokemon *bufferPoke = (struct BattlePokemon*) &gBattleResources->bufferB[gActiveBattler][4];
-            for (i = 0; i < MAX_MON_MOVES; i++)
-            {
-                gBattleMons[gActiveBattler].moves[i] = bufferPoke->moves[i];
-                gBattleMons[gActiveBattler].pp[i] = bufferPoke->pp[i];
-            }
+            ARRAY_COPY(gBattleMons[gActiveBattler].moves, bufferPoke->moves)
+            ARRAY_COPY(gBattleMons[gActiveBattler].pp, bufferPoke->pp)
             gBattlescriptCurrInstr += 2;
          }
          break;
@@ -10887,7 +10867,7 @@ static void Cmd_various(void)
             }
             gTurnStructs[gEffectBattler].mirrorHerbStat = 0;
         }
-        memset(&gBattleStruct->statChangesToCheck, 0, sizeof(gBattleStruct->statChangesToCheck));
+        ZERO(gBattleStruct->statChangesToCheck)
         gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_NOT_NEEDED;
         break;
     case VARIOUS_TRY_LOSE_PERCENT_HP:

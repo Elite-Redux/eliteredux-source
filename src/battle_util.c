@@ -9407,7 +9407,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             else
             {
-                memset(gBattleStruct->statChangesToCheck, 0, sizeof(gBattleStruct->statChangesToCheck));
+                ZERO(gBattleStruct->statChangesToCheck)
                 gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_NOT_NEEDED;
             }
         }
@@ -15430,7 +15430,7 @@ struct Pokemon *GetIllusionMonPtr(u32 battlerId)
 
 void ClearIllusionMon(u32 battlerId)
 {
-    memset(&gBattleStruct->illusion[battlerId], 0, sizeof(gBattleStruct->illusion[battlerId]));
+    ZERO(gBattleStruct->illusion[battlerId])
 }
 
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId)
@@ -16221,14 +16221,14 @@ void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[])
             if (newAbilities[i] == oldAbilities[j]) break;
         }
         if (j >= NUM_INNATE_PER_SPECIES + 1) continue;
-        switchInAbilityDone[i] = gVolatileStructs[battler].switchInAbilityDone[i];
-        turnAbilityTriggers[i] = gTurnStructs[battler].turnAbilityTriggers[i];
-        abilityState[i] = gVolatileStructs[battler].abilityState[i];
+        switchInAbilityDone[i] = gVolatileStructs[battler].switchInAbilityDone[j];
+        turnAbilityTriggers[i] = gTurnStructs[battler].turnAbilityTriggers[j];
+        abilityState[i] = gVolatileStructs[battler].abilityState[j];
     }
 
-    memcpy(&gVolatileStructs[battler].switchInAbilityDone, &switchInAbilityDone, sizeof(gVolatileStructs[battler].switchInAbilityDone));
-    memcpy(&gTurnStructs[battler].turnAbilityTriggers, &turnAbilityTriggers, sizeof(gTurnStructs[battler].turnAbilityTriggers));
-    memcpy(&gVolatileStructs[battler].abilityState, &abilityState, sizeof(gVolatileStructs[battler].abilityState));
+    ARRAY_COPY(gVolatileStructs[battler].switchInAbilityDone, switchInAbilityDone)
+    ARRAY_COPY(gTurnStructs[battler].turnAbilityTriggers, turnAbilityTriggers);
+    ARRAY_COPY(gVolatileStructs[battler].abilityState, abilityState);
 }
 
 u16 IsSoundproof(u8 battler)
