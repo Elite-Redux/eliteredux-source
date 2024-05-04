@@ -1663,6 +1663,8 @@ bool32 IsHealBlockPreventingMove(u8 battler, u32 move)
     case EFFECT_SOFTBOILED:
     case EFFECT_SYNTHESIS:
     case EFFECT_SHORE_UP:
+    case EFFECT_JUNGLE_HEALING:
+    case EFFECT_HEAL_PULSE:
         return TRUE;
     default:
         return FALSE;

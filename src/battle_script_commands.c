@@ -10307,6 +10307,8 @@ static void Cmd_various(void)
 
         if (gBattleMons[gActiveBattler].hp == gBattleMons[gActiveBattler].maxHP)
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 4);    // fail
+        else if (BATTLER_HEALING_BLOCKED(gActiveBattler))
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 4);    // fail
         else
             gBattlescriptCurrInstr += 8;   // can heal
         return;
@@ -11449,7 +11451,7 @@ static void Cmd_tryhealhalfhealth(void)
     if (gBattlescriptCurrInstr[5] == BS_ATTACKER)
         gBattlerTarget = gBattlerAttacker;
 
-    if (gBattleMons[gBattlerTarget].status1 & STATUS1_BLEED) {
+    if (BATTLER_HEALING_BLOCKED(gBattlerTarget)) {
         gBattleMoveDamage = 0;
         gBattlescriptCurrInstr += 6;
         return;
