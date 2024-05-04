@@ -36,6 +36,9 @@
 #endif // IDE support
 
 #define ARRAY_COUNT(array) (size_t)(sizeof(array) / sizeof((array)[0]))
+#define STATIC_ASSERT(condition, name) typedef char static_assertion_##name [2 * (condition) - 1];
+#define ARRAY_COPY(to, from) { STATIC_ASSERT(sizeof(to) == sizeof(from), ARRAY_COPY); memcpy(&to, &from, sizeof(to)); }
+#define ZERO(arr) memset(&arr, 0, sizeof(arr));
 
 // GameFreak used a macro called "NELEMS", as evidenced by
 // AgbAssert calls.
@@ -168,10 +171,6 @@
 #define NUM_FLAG_BYTES (ROUND_BITS_TO_BYTES(FLAGS_COUNT))
 
 #define POKEMON_SPECIES_NAME_LENGTH 12
-
-#define STATIC_ASSERT(condition) { typedef char static_assertion_typedef[2 * (condition) - 1]; }
-#define ARRAY_COPY(to, from) STATIC_ASSERT(sizeof(to) == sizeof(from)) memcpy(&to, &from, sizeof(to));
-#define ZERO(arr) memset(&arr, 0, sizeof(arr));
 
 struct Coords8
 {

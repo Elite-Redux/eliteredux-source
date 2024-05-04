@@ -27,6 +27,9 @@
 #define asm_unified(x) asm(".syntax unified\n" x "\n.syntax divided\n")
 
 #define ARRAY_COUNT(array) (sizeof(array) / sizeof((array)[0]))
+#define STATIC_ASSERT(condition, name) typedef char static_assertion_##name [2 * (condition) - 1];
+#define ARRAY_COPY(to, from) { STATIC_ASSERT(sizeof(to) == sizeof(from), ARRAY_COPY); memcpy(&to, &from, sizeof(to)); }
+#define ZERO(arr) memset(&arr, 0, sizeof(arr));
 
 
 #define POKEMON_SLOTS_NUMBER 412

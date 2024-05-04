@@ -741,12 +741,10 @@ static void SetPlayerBerryDataInBattleStruct(void)
     if (IsEnigmaBerryValid() == TRUE)
     {
         #ifndef FREE_ENIGMA_BERRY
-        for (i = 0; i < BERRY_NAME_LENGTH; i++)
-            battleBerry->name[i] = gSaveBlock1Ptr->enigmaBerry.berry.name[i];
-        battleBerry->name[i] = EOS;
+        ARRAY_COPY(battleBerry->name, enigmaBerry.berry.name)
+        battleBerry->name[BERRY_NAME_LENGTH] = EOS;
 
-        for (i = 0; i < BERRY_ITEM_EFFECT_COUNT; i++)
-            battleBerry->itemEffect[i] = gSaveBlock1Ptr->enigmaBerry.itemEffect[i];
+        ARRAY_COPY(battleBerry->itemEffect, gSaveBlock1Ptr->enigmaBerry.itemEffect)
 
         #ifndef FREE_ENIGMA_BERRY
         battleBerry->holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
@@ -760,12 +758,10 @@ static void SetPlayerBerryDataInBattleStruct(void)
     {
         const struct Berry *berryData = GetBerryInfo(ItemIdToBerryType(ITEM_ENIGMA_BERRY));
 
-        for (i = 0; i < BERRY_NAME_LENGTH; i++)
-            battleBerry->name[i] = berryData->name[i];
-        battleBerry->name[i] = EOS;
+        ARRAY_COPY(battleBerry->name, berryData->name)
+        battleBerry->name[BERRY_NAME_LENGTH] = EOS;
 
-        for (i = 0; i < BERRY_ITEM_EFFECT_COUNT; i++)
-            battleBerry->itemEffect[i] = 0;
+        ZERO(battleBerry->itemEffect)
 
         battleBerry->holdEffect = HOLD_EFFECT_NONE;
         battleBerry->holdEffectParam = 0;
@@ -782,19 +778,13 @@ static void SetAllPlayersBerryData(void)
         if (IsEnigmaBerryValid() == TRUE)
         {
             #ifndef FREE_ENIGMA_BERRY
-            for (i = 0; i < BERRY_NAME_LENGTH; i++)
-            {
-                gEnigmaBerries[0].name[i] = gSaveBlock1Ptr->enigmaBerry.berry.name[i];
-                gEnigmaBerries[2].name[i] = gSaveBlock1Ptr->enigmaBerry.berry.name[i];
-            }
-            gEnigmaBerries[0].name[i] = EOS;
-            gEnigmaBerries[2].name[i] = EOS;
+            ARRAY_COPY(gEnigmaBerries[0].name, gSaveBlock1Ptr->enigmaBerry.berry.name)
+            ARRAY_COPY(gEnigmaBerries[2].name, gSaveBlock1Ptr->enigmaBerry.berry.name)
+            gEnigmaBerries[0].name[BERRY_NAME_LENGTH] = EOS;
+            gEnigmaBerries[2].name[BERRY_NAME_LENGTH] = EOS;
 
-            for (i = 0; i < BERRY_ITEM_EFFECT_COUNT; i++)
-            {
-                gEnigmaBerries[0].itemEffect[i] = gSaveBlock1Ptr->enigmaBerry.itemEffect[i];
-                gEnigmaBerries[2].itemEffect[i] = gSaveBlock1Ptr->enigmaBerry.itemEffect[i];
-            }
+            ARRAY_COPY(gEnigmaBerries[0].itemEffect, gSaveBlock1Ptr->enigmaBerry.itemEffect)
+            ARRAY_COPY(gEnigmaBerries[2].itemEffect, gSaveBlock1Ptr->enigmaBerry.itemEffect)
 
             gEnigmaBerries[0].holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
             gEnigmaBerries[2].holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
@@ -806,19 +796,13 @@ static void SetAllPlayersBerryData(void)
         {
             const struct Berry *berryData = GetBerryInfo(ItemIdToBerryType(ITEM_ENIGMA_BERRY));
 
-            for (i = 0; i < BERRY_NAME_LENGTH; i++)
-            {
-                gEnigmaBerries[0].name[i] = berryData->name[i];
-                gEnigmaBerries[2].name[i] = berryData->name[i];
-            }
-            gEnigmaBerries[0].name[i] = EOS;
-            gEnigmaBerries[2].name[i] = EOS;
+            ARRAY_COPY(gEnigmaBerries[0].name, berryData->name)
+            ARRAY_COPY(gEnigmaBerries[2].name, berryData->name)
+            gEnigmaBerries[0].name[BERRY_NAME_LENGTH] = EOS;
+            gEnigmaBerries[2].name[BERRY_NAME_LENGTH] = EOS;
 
-            for (i = 0; i < BERRY_ITEM_EFFECT_COUNT; i++)
-            {
-                gEnigmaBerries[0].itemEffect[i] = 0;
-                gEnigmaBerries[2].itemEffect[i] = 0;
-            }
+            ZERO(gEnigmaBerries[0].itemEffect)
+            ZERO(gEnigmaBerries[2].itemEffect)
 
             gEnigmaBerries[0].holdEffect = 0;
             gEnigmaBerries[2].holdEffect = 0;
@@ -844,12 +828,10 @@ static void SetAllPlayersBerryData(void)
                 src = (struct BattleEnigmaBerry *)(gBlockRecvBuffer[i] + 2);
                 battlerId = gLinkPlayers[i].id;
 
-                for (j = 0; j < BERRY_NAME_LENGTH; j++)
-                    gEnigmaBerries[battlerId].name[j] = src->name[j];
-                gEnigmaBerries[battlerId].name[j] = EOS;
+                ARRAY_COPY(gEnigmaBerries[battlerId].name, src->name)
+                gEnigmaBerries[battlerId].name[BERRY_NAME_LENGTH] = EOS;
 
-                for (j = 0; j < BERRY_ITEM_EFFECT_COUNT; j++)
-                    gEnigmaBerries[battlerId].itemEffect[j] = src->itemEffect[j];
+                ARRAY_COPY(gEnigmaBerries[battlerId].itemEffect, src->itemEffect)
 
                 gEnigmaBerries[battlerId].holdEffect = src->holdEffect;
                 gEnigmaBerries[battlerId].holdEffectParam = src->holdEffectParam;
@@ -861,19 +843,13 @@ static void SetAllPlayersBerryData(void)
             {
                 src = (struct BattleEnigmaBerry *)(gBlockRecvBuffer[i] + 2);
 
-                for (j = 0; j < BERRY_NAME_LENGTH; j++)
-                {
-                    gEnigmaBerries[i].name[j] = src->name[j];
-                    gEnigmaBerries[i + 2].name[j] = src->name[j];
-                }
-                gEnigmaBerries[i].name[j] = EOS;
-                gEnigmaBerries[i + 2].name[j] = EOS;
+                ARRAY_COPY(gEnigmaBerries[i].name, src->name)
+                ARRAY_COPY(gEnigmaBerries[i + 2].name, src->name)
+                gEnigmaBerries[i].name[BERRY_NAME_LENGTH] = EOS;
+                gEnigmaBerries[i + 2].name[BERRY_NAME_LENGTH] = EOS;
 
-                for (j = 0; j < BERRY_ITEM_EFFECT_COUNT; j++)
-                {
-                    gEnigmaBerries[i].itemEffect[j] = src->itemEffect[j];
-                    gEnigmaBerries[i + 2].itemEffect[j] = src->itemEffect[j];
-                }
+                ARRAY_COPY(gEnigmaBerries[i].itemEffect, src->itemEffect)
+                ARRAY_COPY(gEnigmaBerries[i + 2].itemEffect, src->itemEffect)
 
                 gEnigmaBerries[i].holdEffect = src->holdEffect;
                 gEnigmaBerries[i + 2].holdEffect = src->holdEffect;
@@ -3242,37 +3218,34 @@ static void BattleStartClearSetData(void)
     TurnValuesCleanUp(FALSE);
     TurnStructsClear();
 
-    memset(&gVolatileStructs, 0, sizeof(gVolatileStructs));
-    memset(&gFieldTimers, 0, sizeof(gFieldTimers));
-    memset(&gSideStatuses, 0, sizeof(gSideStatuses));
-    memset(&gFaintedMonCount, 0, sizeof(gFaintedMonCount));
-    memset(&gSideTimers, 0, sizeof(gSideTimers));
-    memset(&gWishFutureKnock, 0, sizeof(gWishFutureKnock));
-    memset(&gBattleResults, 0, sizeof(gBattleResults));
+    ZERO(gVolatileStructs)
+    ZERO(gFieldTimers)
+    ZERO(gSideStatuses)
+    ZERO(gFaintedMonCount)
+    ZERO(gSideTimers)
+    ZERO(gWishFutureKnock)
+    ZERO(gBattleResults)
+    ZERO(gLastChosenMove)
+    ZERO(gStatuses3)
+    ZERO(gStatuses4)
+    ZERO(gLastMoves)
+    ZERO(gLastLandedMoves)
+    ZERO(gLastHitByType)
+    ZERO(gLastResultingMoves)
+    ZERO(gLockedMoves)
+    ZERO(gLastPrintedMoves)
+    ZERO(gBattleResources->flags->flags)
+    ZERO(gPalaceSelectionBattleScripts)
+    ZERO(gBattleStruct->lastTakenMove)
+    ZERO(gBattleStruct->choicedMove)
+    ZERO(gBattleStruct->changedItems)
+    ZERO(gBattleStruct->lastTakenMoveFrom)
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
     {
-        gLastChosenMove[i] = 0;
-        gStatuses3[i] = 0;
-        gStatuses4[i] = 0;
         gVolatileStructs[i].isFirstTurn = 2;
         gVolatileStructs[i].hasBeenOnBattle = FALSE;
-        gLastMoves[i] = 0;
-        gLastLandedMoves[i] = 0;
-        gLastHitByType[i] = 0;
-        gLastResultingMoves[i] = 0;
         gLastHitBy[i] = 0xFF;
-        gLockedMoves[i] = 0;
-        gLastPrintedMoves[i] = 0;
-        gBattleResources->flags->flags[i] = 0;
-        gPalaceSelectionBattleScripts[i] = 0;
-        gBattleStruct->lastTakenMove[i] = 0;
-        gBattleStruct->choicedMove[i] = 0;
-        gBattleStruct->changedItems[i] = 0;
-        gBattleStruct->lastTakenMoveFrom[i][0] = 0;
-        gBattleStruct->lastTakenMoveFrom[i][1] = 0;
-        gBattleStruct->lastTakenMoveFrom[i][2] = 0;
-        gBattleStruct->lastTakenMoveFrom[i][3] = 0;
         gBattleStruct->AI_monToSwitchIntoId[i] = PARTY_SIZE;
     }
 
@@ -3439,7 +3412,7 @@ void SwitchInClearSetData(void)
     gActionSelectionCursor[gActiveBattler] = 0;
     gMoveSelectionCursor[gActiveBattler] = 0;
 
-    memset(&gVolatileStructs[gActiveBattler], 0, sizeof(struct VolatileStruct));
+    ZERO(gVolatileStructs[gActiveBattler])
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_BATON_PASS)
     {
@@ -3523,8 +3496,8 @@ void FaintClearSetData(void)
     gActionSelectionCursor[gActiveBattler] = 0;
     gMoveSelectionCursor[gActiveBattler] = 0;
 
-    memset(&gVolatileStructs[gActiveBattler], 0, sizeof(struct VolatileStruct));
-    memset(&gRoundStructs[gActiveBattler], 0, sizeof(struct RoundStruct));
+    ZERO(gVolatileStructs[gActiveBattler])
+    ZERO(gRoundStructs[gActiveBattler])
 
     if (IsBattlerAlive(BATTLE_PARTNER(gActiveBattler)))
     {
@@ -3629,11 +3602,11 @@ static void DoBattleIntro(void)
         {
             if ((gBattleTypeFlags & BATTLE_TYPE_SAFARI) && GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
             {
-                memset(&gBattleMons[gActiveBattler], 0, sizeof(struct BattlePokemon));
+                ZERO(gBattleMons[gActiveBattler])
             }
             else
             {
-                memcpy(&gBattleMons[gActiveBattler], &gBattleResources->bufferB[gActiveBattler][4], sizeof(struct BattlePokemon));
+                memcpy(&gBattleMons[gActiveBattler], &gBattleResources->bufferB[gActiveBattler][4], sizeof(gBattleMons[gActiveBattler]));
                 gBattleMons[gActiveBattler].type1 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type1, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
                 gBattleMons[gActiveBattler].type2 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
                 gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
@@ -3966,7 +3939,7 @@ static void TryDoEventsBeforeFirstTurn(void)
             return;
         }
     }
-    memset(gTotemBoosts, 0, sizeof(gTotemBoosts));  // erase all totem boosts just to be safe
+    ZERO(gTotemBoosts)
 
     // Check neutralizing gas
     if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, 0, 0) != 0)
@@ -4339,10 +4312,11 @@ static void HandleTurnActionSelectionState(void)
                         moveInfo.monType2 = gBattleMons[gActiveBattler].type2;
                         moveInfo.monType3 = gBattleMons[gActiveBattler].type3;
 
+                        ARRAY_COPY(moveInfo.moves, gBattleMons[gActiveBattler].moves)
+                        ARRAY_COPY(moveInfo.currentPp, gBattleMons[gActiveBattler].pp)
+
                         for (i = 0; i < MAX_MON_MOVES; i++)
                         {
-                            moveInfo.moves[i] = gBattleMons[gActiveBattler].moves[i];
-                            moveInfo.currentPp[i] = gBattleMons[gActiveBattler].pp[i];
                             moveInfo.maxPp[i] = CalculatePPWithBonus(
                                                             gBattleMons[gActiveBattler].moves[i],
                                                             gBattleMons[gActiveBattler].ppBonuses,
@@ -5277,7 +5251,7 @@ static void TurnValuesCleanUp(bool8 clearRoundStruts)
     {
         if (!clearRoundStruts)
         {
-            memset(&gRoundStructs[gActiveBattler], 0, sizeof(struct RoundStruct));
+            ZERO(gRoundStructs[gActiveBattler])
 
             if (gVolatileStructs[gActiveBattler].isFirstTurn)
             {
@@ -5313,7 +5287,7 @@ static void TurnValuesCleanUp(bool8 clearRoundStruts)
 
 void TurnStructsClear(void)
 {
-    memset(&gTurnStructs, 0, sizeof(gTurnStructs));
+    ZERO(gTurnStructs)
 }
 
 static void CheckMegaEvolutionBeforeTurn(void)
