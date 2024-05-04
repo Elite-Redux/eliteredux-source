@@ -2347,7 +2347,7 @@ static const u8 sMoveTwoLineDescription_MoveFairyLock[] = _(
     "preventing escape next turn.");
 
 static const u8 sMoveTwoLineDescription_MoveKingsShield[] = _(
-    "Evades damage, and sharply\n"
+    "Evades damage, and\n"
     "reduces Attack if struck.");
 
 static const u8 sMoveTwoLineDescription_MovePlayNice[] = _(
@@ -5271,7 +5271,7 @@ static const u8 sMoveFourLineDescription_MoveFairyWind[] = _("A quick moving clo
 static const u8 sMoveFourLineDescription_MoveMoonblast[] = _("The power of the\nmoon strikes the\nfoe. 30% chance to\nlower foe's SpAtk.");
 static const u8 sMoveFourLineDescription_MoveBoomburst[] = _("An explosively loud\nsound is let out,\nhitting all that\nsurrounds it.");
 static const u8 sMoveFourLineDescription_MoveFairyLock[] = _("For 1 turn, the\nuser locks down\nthe battlefield and\nprevents fleeing.");
-static const u8 sMoveFourLineDescription_MoveKingsShield[] = _("A protective stance\nis assumed. Contact\nby the foe harshly\nlowers its Attack.");
+static const u8 sMoveFourLineDescription_MoveKingsShield[] = _("A protective stance\nis assumed. Contact\nby the foe lowers\nits Attack.");
 static const u8 sMoveFourLineDescription_MovePlayNice[] = _("Play Nice lowers the\ntarget's Attack by 1 stage.\nThis move always hits.");
 static const u8 sMoveFourLineDescription_MoveConfide[] = _("The foe's Sp. Atk\ndrops after being\ntold a secret by\nthe user.");
 static const u8 sMoveFourLineDescription_MoveDiamondStorm[] = _("A storm of diamonds\npelts the foes.\n50% chance to up\nuser's Defense.");
