@@ -3145,7 +3145,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
     u16 learnedMoves[MAX_MON_MOVES];
     bool8 hasMonMove = FALSE;
 
-    if (JOY_NEW(DPAD_UP))
+    if (JOY_NEW(DPAD_UP) || (JOY_REPEAT(DPAD_UP) && !sMonSummaryScreen->replaceMoveMode))
     {
         if(sMonSummaryScreen->replaceMoveMode){
             if(sMonSummaryScreen->moveReplaceMoveNum != 0)
@@ -3158,7 +3158,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
         PrintMoveReplaceTab();
         PrintMoveInfoFromReplaceTab();
     }
-    else if (JOY_NEW(DPAD_DOWN))
+    if (JOY_NEW(DPAD_DOWN) || (JOY_REPEAT(DPAD_DOWN) && !sMonSummaryScreen->replaceMoveMode))
     {
         if(sMonSummaryScreen->replaceMoveMode){
             if(sMonSummaryScreen->moveReplaceMoveNum < MAX_MON_MOVES)
