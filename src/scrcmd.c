@@ -55,9 +55,6 @@
 #include "constants/battle_frontier.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
-#include "global.fieldmap.h"
-#include "field_player_avatar.h"
-#include "field_effect_helpers.h"
 
 typedef u16 (*SpecialFunc)(void);
 typedef void (*NativeFunc)(void);
@@ -2992,15 +2989,12 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
     return FALSE;
 }
 
-
-bool8 ScrCmd_setavataronfoot(struct ScriptContext *ctx)
+bool8 ScrCmd_changemovement(struct ScriptContext *ctx)
 {
-    struct ObjectEvent *playerObjectEvent;
-    playerObjectEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
-    // make the player normal
-    PlayerAvatarTransition_Normal(playerObjectEvent);
-    // destry the blob
-    DestroySprite(&gSprites[playerObjectEvent->fieldEffectSpriteId]);
-    
+    u16 localId = VarGet(ScriptReadHalfword(ctx));
+    u8 movement = VarGet(ScriptReadByte(ctx));
+    struct ObjectEvent *objectEvent;
+    objectEvent = &gObjectEvents[localId];
+    SetTrainerMovementType(objectEvent, movement);
     return FALSE;
 }

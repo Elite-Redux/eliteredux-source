@@ -619,10 +619,3 @@ script Route104_PrettyPetalFlowerShop_EventScript_SellDecorations{
 	release
 	end
 }
-
-script LilycoveCity_DepartmentStoreRooftop_EventScript_VendingMachine{
-	lockall
-	message(format("It seems like the Vending Machine is broken, I can't sell you any drinks right now."))
-	waitmessage
-	end
-}

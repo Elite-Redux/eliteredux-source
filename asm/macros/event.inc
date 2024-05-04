@@ -2109,7 +2109,9 @@
 	waitstate
 	.endm
 
-	@ I used that so i could TP the player back to the land from the water
-	.macro setavataronfoot
+	@ change the movement of an object event with the id
+	.macro changemovement objectid:req, movementid:req
 	.byte 0xee
+	.2byte \objectid
+	.byte \movementid
 	.endm

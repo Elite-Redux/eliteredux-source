@@ -736,7 +736,7 @@ script Route119_EventScript_RivalHelpWaterfall{
     setobjectxy(LOCALID_RIVAL_HELPING, 15, 81)
     setobjectxy(OBJ_EVENT_ID_PLAYER, 16, 81)
     waitse
-    setavataronfoot
+    callnative(setPlayerOnFoot)
     fadescreen(FADE_FROM_BLACK)
     special(SpawnCameraObject)
     applymovement(OBJ_EVENT_ID_CAMERA, Route119_Movement_CameraFollowUp)
@@ -747,9 +747,9 @@ script Route119_EventScript_RivalHelpWaterfall{
     closemessage
     applymovement(LOCALID_RIVAL_HELPING, Route119_Movement_RivalLeavingYouAloneWithYourPokemonInTheWildernessWithNoRealFriends)
     waitmovement(0)
-    removeobject(LOCALID_RIVAL_HELPING)
     setflag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)
     setflag(FLAG_HIDE_RIVAL_HELPING_WATERFALL_ROUTE_119)
+    removeobject(LOCALID_RIVAL_HELPING)
     release
 }
 script Route119_EventScript_RivalHelpWaterfall0{
