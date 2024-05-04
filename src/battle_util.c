@@ -14172,7 +14172,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     u8 defStatToUse = 0;
     u32 defStat;
     u8 noPositiveStatStages = isCrit || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GRIP_PINCER));
-    u8 isUnaware = BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CONTEMPT);
+    u8 isUnaware = BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CONTEMPT) || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED;
     u16 modifier;
 
     if ((gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move) || gBattleMoves[move].hitsDef) && !gBattleMoves[move].hitsSpDef) // uses defense stat instead of sp.def
