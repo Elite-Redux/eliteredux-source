@@ -199,7 +199,7 @@ static const u8 sMoveTwoLineDescription_MoveDisable[] = _(
     "the foe's moves.");
 
 static const u8 sMoveTwoLineDescription_MoveAcid[] = _(
-    "Sprays a hide-melting acid.\n"
+    "Super effective vs Steel.\n"
     "May lower Defense.");
 
 static const u8 sMoveTwoLineDescription_MoveEmber[] = _(
@@ -491,8 +491,8 @@ static const u8 sMoveTwoLineDescription_MoveSmog[] = _(
     "that may also poison.");
 
 static const u8 sMoveTwoLineDescription_MoveSludge[] = _(
-    "Sludge is hurled to inflict\n"
-    "damage. May also poison.");
+    "Super effective vs Water.\n"
+    "May poison foes.");
 
 static const u8 sMoveTwoLineDescription_MoveBoneClub[] = _(
     "Clubs the foe with a bone.\n"
@@ -551,7 +551,7 @@ static const u8 sMoveTwoLineDescription_MoveDreamEater[] = _(
     "inflicted on a sleeping foe.");
 
 static const u8 sMoveTwoLineDescription_MovePoisonGas[] = _(
-    "Envelops the foe in a toxic\n"
+    "Super effective vs Flying.\n"
     "gas that may poison.");
 
 static const u8 sMoveTwoLineDescription_MoveBarrage[] = _(
@@ -3383,7 +3383,7 @@ static const u8 sMoveTwoLineDescription_MoveSoilDrain[] = _(
     "Heals 50% damage done.");
 
 static const u8 sMoveTwoLineDescription_MoveGigatonHammer[] = _(
-    "Deals damage.\n"
+    "Super effective vs Steel.\n"
     "Can't be used twice in a row.");
 
 static const u8 sMoveTwoLineDescription_MoveTripleDive[] = _(
@@ -4734,7 +4734,7 @@ static const u8 sMoveFourLineDescription_MoveSing[] = _("A soothing song\nin a c
 static const u8 sMoveFourLineDescription_MoveSupersonic[] = _("The user generates\nodd sound waves.\nIt confuses the\nfoe.");
 static const u8 sMoveFourLineDescription_MoveSonicBoom[] = _("The foe is hit with\na shock wave that\nalways inflicts 20-\nHP damage.");
 static const u8 sMoveFourLineDescription_MoveDisable[] = _("For a few turns,\nit prevents the foe\nfrom using the move\nit last used.");
-static const u8 sMoveFourLineDescription_MoveAcid[] = _("A harsh acid\nhits both foes.\n10% chance to\nlower SpDef.");
+static const u8 sMoveFourLineDescription_MoveAcid[] = _("Super effective vs\nSteel. Hits both foes.\n30% chance to\nlower SpDef.");
 static const u8 sMoveFourLineDescription_MoveEmber[] = _("The foe is attacked\nwith small flames.\n100% burn chance.");
 static const u8 sMoveFourLineDescription_MoveFlamethrower[] = _("The foe is scorched\nwith intense flames.\n10% burn chance.");
 static const u8 sMoveFourLineDescription_MoveMist[] = _("The ally party is\nprotected by a\nmist that prevents\nstat reductions.");
@@ -4807,7 +4807,7 @@ static const u8 sMoveFourLineDescription_MoveSelfDestruct[] = _("The user blows 
 static const u8 sMoveFourLineDescription_MoveEggBomb[] = _("A large egg is\nhurled with great\nforce. 10%\nburn chance.");
 static const u8 sMoveFourLineDescription_MoveLick[] = _("The foe is licked\nand hit with a long\ntongue. 30%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveSmog[] = _("The foe is attacked\nwith exhaust gases.\n50% poison\nchance.");
-static const u8 sMoveFourLineDescription_MoveSludge[] = _("Toxic sludge is\nhurled at the foe.\n30% poison\nchance.");
+static const u8 sMoveFourLineDescription_MoveSludge[] = _("Super effective vs\nWater. 30% chance\nto poison.");
 static const u8 sMoveFourLineDescription_MoveBoneClub[] = _("The foe is clubbed\nwith a bone.\n30% flinch chance.");
 static const u8 sMoveFourLineDescription_MoveFireBlast[] = _("The foe is hit with\nan intense flame.\nIt has a 20%\nburn chance.");
 static const u8 sMoveFourLineDescription_MoveWaterfall[] = _("A powerful charge\nattack. 20%\nflinch chance.\nField-based.");
@@ -4822,7 +4822,7 @@ static const u8 sMoveFourLineDescription_MoveSoftBoiled[] = _("Heals the user by
 static const u8 sMoveFourLineDescription_MoveHighJumpKick[] = _("A strong jumping\nknee kick.\nHurts on miss.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveGlare[] = _("The user intimidates\nthe foe with the\ndesign on its belly\nto cause paralysis.");
 static const u8 sMoveFourLineDescription_MoveDreamEater[] = _("Absorbs half the\ndamage it inflicted\non a sleeping foe\nto restore HP.");
-static const u8 sMoveFourLineDescription_MovePoisonGas[] = _("Sprays with a cloud\nof toxic gas that\npoisons all foes.");
+static const u8 sMoveFourLineDescription_MovePoisonGas[] = _("Super effective vs\nFlying. Hits both\nfoes. 30% chance to\npoison.");
 static const u8 sMoveFourLineDescription_MoveBarrage[] = _("Round objects are\nhurled at the foe\nto strike two to\nfive times.");
 static const u8 sMoveFourLineDescription_MoveLeechLife[] = _("An attack that\nabsorbs half the\ndamage it inflicted.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveLovelyKiss[] = _("The user forces a\nkiss on the foe\nwith a scary face\nthat induces sleep.");
@@ -5543,7 +5543,7 @@ static const u8 sMoveFourLineDescription_MoveRequiem[] = _("10% chance to curse.
 static const u8 sMoveFourLineDescription_MoveArmorCannon[] = _("The user shoots its\nown armor. This\nlowers its defs.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveBitterBlade[] = _("The user forces its\nbitter feelings into\na slashing attack\nand restores health.");
 static const u8 sMoveFourLineDescription_MoveSoilDrain[] = _("Heals 50% damage\ndone.");
-static const u8 sMoveFourLineDescription_MoveGigatonHammer[] = _("Deals damage. Can't\nbe used twice in a\nrow.\nHammer-based.");
+static const u8 sMoveFourLineDescription_MoveGigatonHammer[] = _("Super effective vs\nSteel. Can't be used\ntwice in a row.\nHammer-based.");
 static const u8 sMoveFourLineDescription_MoveTripleDive[] = _("Hits 3 times.");
 static const u8 sMoveFourLineDescription_MoveJetPunch[] = _("An aquatic punch.\nAlways goes first.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveRageFist[] = _("+20 base power per\ntime damaged.\nMax. +60 power.\nIron fist boost.");
