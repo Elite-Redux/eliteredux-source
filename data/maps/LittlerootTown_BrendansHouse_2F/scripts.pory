@@ -7,6 +7,7 @@ LittlerootTown_BrendansHouse_2F_MapScripts:: @ 81F83E3
 	.byte 0
 
 LittlerootTown_BrendansHouse_2F_OnTransition: @ 81F83EE
+	clearflag FLAG_SYS_LOCKED_MODE
 	compare VAR_LITTLEROOT_RIVAL_STATE, 2
 	call_if_lt LittlerootTown_BrendansHouse_2F_EventScript_CheckSetReadyToMeetBrendan
 	compare VAR_LITTLEROOT_RIVAL_STATE, 3
