@@ -57,13 +57,7 @@ enum
 #define SECTOR_SIGNATURE_OFFSET offsetof(struct SaveSector, security) // signature
 #define SECTOR_COUNTER_OFFSET   offsetof(struct SaveSector, counter)
 
-#define SECTOR_ID_SAVEBLOCK2_START    0 
-#define SECTOR_ID_SAVEBLOCK2_END      4
-#define SECTOR_ID_SAVEBLOCK1_START    5
-#define SECTOR_ID_SAVEBLOCK1_END     13
-#define SECTOR_ID_PKMN_STORAGE_START 14
-#define SECTOR_ID_PKMN_STORAGE_END   27
-#define NUM_SECTORS_PER_SLOT 28
+#define SLOT_SECTORS 27
 #define SECTOR_ID_HOF_1 28
 #define SECTOR_ID_HOF_2 29
 #define SECTOR_ID_TRAINER_HILL 30

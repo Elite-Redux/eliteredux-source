@@ -49,14 +49,14 @@ static u8 HandleWriteSector(u16 a1, const struct SaveSectionLocation *location);
     min(sizeof(structure) - chunkNum * SECTOR_DATA_SIZE, SECTOR_DATA_SIZE)  \
 }                                                                           \
 
-static const struct SaveSectionOffsets sSaveSectionOffsets[NUM_SECTORS_PER_SLOT] =
+static const struct SaveSectionOffsets sSaveSectionOffsets[] =
 {
-    SAVEBLOCK_CHUNK(struct SaveBlock2, 0), // SECTOR_ID_SAVEBLOCK2_START
+    #define SECTOR_ID_SAVEBLOCK2_START 0
+    SAVEBLOCK_CHUNK(struct SaveBlock2, 0),
     SAVEBLOCK_CHUNK(struct SaveBlock2, 1),
-    SAVEBLOCK_CHUNK(struct SaveBlock2, 2),
-    SAVEBLOCK_CHUNK(struct SaveBlock2, 3),
-    SAVEBLOCK_CHUNK(struct SaveBlock2, 4), // SECTOR_ID_SAVEBLOCK2_END
+    #define SECTOR_ID_SAVEBLOCK2_END 1
 
+    #define SECTOR_ID_SAVEBLOCK1_START (SECTOR_ID_SAVEBLOCK2_END + 1)
     SAVEBLOCK_CHUNK(struct SaveBlock1,  0), // SECTOR_ID_SAVEBLOCK1_START
     SAVEBLOCK_CHUNK(struct SaveBlock1,  1),
     SAVEBLOCK_CHUNK(struct SaveBlock1,  2),
@@ -65,13 +65,9 @@ static const struct SaveSectionOffsets sSaveSectionOffsets[NUM_SECTORS_PER_SLOT]
     SAVEBLOCK_CHUNK(struct SaveBlock1,  5),
     SAVEBLOCK_CHUNK(struct SaveBlock1,  6),
     SAVEBLOCK_CHUNK(struct SaveBlock1,  7),
-    SAVEBLOCK_CHUNK(struct SaveBlock1,  8),
-    SAVEBLOCK_CHUNK(struct SaveBlock1,  9),
-    SAVEBLOCK_CHUNK(struct SaveBlock1, 10),
-    SAVEBLOCK_CHUNK(struct SaveBlock1, 11),
-    SAVEBLOCK_CHUNK(struct SaveBlock1, 12),
-    SAVEBLOCK_CHUNK(struct SaveBlock1, 13), // SECTOR_ID_SAVEBLOCK1_END
+    #define SECTOR_ID_SAVEBLOCK1_END (SECTOR_ID_SAVEBLOCK1_START + 7)
 
+    #define SECTOR_ID_PKMN_STORAGE_START (SECTOR_ID_SAVEBLOCK1_END + 1)
     SAVEBLOCK_CHUNK(struct PokemonStorage, 0), // SECTOR_ID_PKMN_STORAGE_START
     SAVEBLOCK_CHUNK(struct PokemonStorage, 1),
     SAVEBLOCK_CHUNK(struct PokemonStorage, 2),
@@ -80,7 +76,21 @@ static const struct SaveSectionOffsets sSaveSectionOffsets[NUM_SECTORS_PER_SLOT]
     SAVEBLOCK_CHUNK(struct PokemonStorage, 5),
     SAVEBLOCK_CHUNK(struct PokemonStorage, 6),
     SAVEBLOCK_CHUNK(struct PokemonStorage, 7),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 8),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 9),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 10),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 11),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 12),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 13),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 14),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 15),
+    SAVEBLOCK_CHUNK(struct PokemonStorage, 16),
+    #define SECTOR_ID_PKMN_STORAGE_END (SECTOR_ID_PKMN_STORAGE_START + 16)
 };
+
+#define NUM_SECTORS_PER_SLOT ARRAY_COUNT(sSaveSectionOffsets)
+
+STATIC_ASSERT(SLOT_SECTORS == NUM_SECTORS_PER_SLOT, sSaveSectionOffetsSize)
 
 // These will produce an error if a save struct is larger than the space
 // alloted for it in the flash.
