@@ -107,7 +107,7 @@ void MoveSaveBlocks_ResetHeap(void)
     saveBlock1Copy = (struct SaveBlock1 *)(gHeap + sizeof(struct SaveBlock2));
     pokemonStorageCopy = (struct PokemonStorage *)(gHeap + sizeof(struct SaveBlock2) + sizeof(struct SaveBlock1));
 
-    STATIC_ASSERT(HEAP_SIZE >= sizeof(struct SaveBlock1) + sizeof(struct SaveBlock2) + sizeof(struct PokemonStorage), heapCannotStoreSaveBlock)
+    { STATIC_ASSERT(HEAP_SIZE >= sizeof(struct SaveBlock1) + sizeof(struct SaveBlock2) + sizeof(struct PokemonStorage), heapCannotStoreSaveBlock) }
 
     // change saveblocks' pointers
     // argument is a sum of the individual trainerId bytes
