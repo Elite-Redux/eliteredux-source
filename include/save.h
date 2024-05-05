@@ -32,7 +32,6 @@ struct SaveSectionOffsets
 {
     u16 toAdd;
     u16 size;
-    u8 sector;
 };
 
 // SetDamagedSectorBits states
