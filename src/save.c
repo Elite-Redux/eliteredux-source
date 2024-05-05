@@ -520,7 +520,6 @@ static u8 CopySaveSlotData(u16 sectorId, const struct SaveSectionLocation *locat
 
     for (i = 0; i < SLOT_SECTORS; i++)
     {
-        MGBA_PRINT_DEBUG("Loading sector %d to %d with size %d", i, location[i].data, location[i].size)
         ReadFlashSector(i, gReadWriteSector);
         id = gReadWriteSector->id;
         if (id == 0)
@@ -540,10 +539,8 @@ static u8 GetSaveValidStatus(const struct SaveSectionLocation *location)
 {
     u16 i;
     u16 checksum;
-    u32 saveSlotCounter = 0;
-    u32 validSectorFlags = 0;
+    u32 validSectorFlags = TRUE;
     bool8 signatureValid = FALSE;
-    u8 saveSlotStatus;
 
     for (i = 0; i < SLOT_SECTORS; i++)
     {
@@ -552,17 +549,16 @@ static u8 GetSaveValidStatus(const struct SaveSectionLocation *location)
         {
             signatureValid = TRUE;
             checksum = CalculateChecksum(gReadWriteSector->data, location[gReadWriteSector->id].size);
-            if (gReadWriteSector->checksum == checksum)
+            if (gReadWriteSector->checksum != checksum && location[gReadWriteSector->id].size)
             {
-                saveSlotCounter = gReadWriteSector->counter;
-                validSectorFlags |= 1 << gReadWriteSector->id;
+                validSectorFlags = FALSE;
             }
         }
     }
 
     if (signatureValid)
     {
-        if (validSectorFlags == (1 << SLOT_SECTORS) - 1)
+        if (validSectorFlags)
             return SAVE_STATUS_OK;
         else
             return SAVE_STATUS_ERROR;
