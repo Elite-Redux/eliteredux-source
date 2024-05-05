@@ -94,16 +94,19 @@ enum {
     PP_MANY
 };
 // Text Windows
-#define PSS_LABEL_PANE_LEFT_TOP                     0
-#define PSS_LABEL_PANE_LEFT_BOTTOM                  (PSS_LABEL_PANE_LEFT_TOP + 1)
-#define PSS_LABEL_PANE_LEFT_MOVE                    (PSS_LABEL_PANE_LEFT_BOTTOM + 1)
-#define PSS_LABEL_PANE_RIGHT                        (PSS_LABEL_PANE_LEFT_MOVE + 1)
-#define PSS_LABEL_PANE_RIGHT_HP                     (PSS_LABEL_PANE_RIGHT + 1)
-#define PSS_LABEL_PANE_RIGHT_SMALL                  (PSS_LABEL_PANE_RIGHT_HP + 1)
-#define PSS_LABEL_PANE_RIGHT_BOTTOM                 (PSS_LABEL_PANE_RIGHT_SMALL + 1)
-#define PSS_LABEL_PANE_TITLE                        (PSS_LABEL_PANE_RIGHT_BOTTOM + 1)
-
-#define PSS_LABEL_WINDOW_END                        (PSS_LABEL_PANE_TITLE + 1)
+enum {
+    PSS_LABEL_PANE_LEFT_TOP,
+    PSS_LABEL_PANE_LEFT_BOTTOM,
+    PSS_LABEL_PANE_LEFT_MOVE,
+    PSS_LABEL_PANE_RIGHT,
+    PSS_LABEL_PANE_RIGHT_HP,
+    PSS_LABEL_PANE_RIGHT_SMALL,
+    PSS_LABEL_PANE_RIGHT_BOTTOM,
+    PSS_LABEL_PANE_TITLE,
+    PSS_LABEL_PANE_RIGHT_BASE,
+    PSS_LABEL_PANE_LEFT_MOVE_BASE,
+    PSS_LABEL_WINDOW_END
+};
 
 #define MOVE_SELECTOR_SPRITES_COUNT 4
 #define HP_BAR_SPRITES_COUNT        11
@@ -272,6 +275,7 @@ static void SwitchToMoveSelection(u8 taskId);
 static void SwitchToMoveReplaceMenu(u8 taskId);
 static void Task_SwitchToMoveDetails(u8 taskId);
 static void Task_SwitchToReplaceMove(u8 taskId);
+static void RedrawMoveTypeMenu();
 static void PrintMoveReplaceTab(void);
 static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode);
 static void SetTypeSpritePosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId);
@@ -451,7 +455,25 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .paletteNum = 2,
         .baseBlock = 418,
     },
+    [PSS_LABEL_PANE_LEFT_MOVE_BASE] = {
+        .bg = 0,
+        .tilemapLeft = 0,
+        .tilemapTop = 4,
+        .width = 14,
+        .height = 16,
+        .paletteNum = 2,
+        .baseBlock = 418,
+    },
     [PSS_LABEL_PANE_RIGHT] = {
+        .bg = 0,
+        .tilemapLeft = 11,
+        .tilemapTop = 2,
+        .width = 19,
+        .height = 20,
+        .paletteNum = 2,
+        .baseBlock = 1,
+    },
+    [PSS_LABEL_PANE_RIGHT_BASE] = {
         .bg = 0,
         .tilemapLeft = 11,
         .tilemapTop = 2,
@@ -2906,6 +2928,7 @@ static void Task_SwitchToReplaceMove(u8 taskId)
             break;
         case 2:
             ChangeBgX(1, 0, 0);
+            RedrawMoveTypeMenu();
             PrintMoveReplaceTab();
             data[0]++;
             break;
@@ -2949,18 +2972,10 @@ static void PrintMoveInfoFromReplaceTab(void){
     PrintMoveDetails(CurrentMove, TRUE);
 }
 
-static void PrintMoveReplaceTab(void)
+static void RedrawMoveTypeMenu()
 {
-    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
-    struct PokeSummary *summary = &sMonSummaryScreen->summary;
-    u8 numMoves = sMonSummaryScreen->numMenuChoices;
-    u8 i, j, windowId, PosX, PosY;
-    u16 moveNum;
-    u8 tabNum;
-    u8 type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
-    u8 type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
-    bool8 hasMonMove = FALSE;
-    u16 CurrentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+    int i, windowId, type1, type2, PosX, PosY, tabNum;
+
 
     SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, FALSE);
     SetTypeSpritePosAndPal(type1, 41, 45, SPRITE_ARR_ID_TYPE);
@@ -2976,11 +2991,8 @@ static void PrintMoveReplaceTab(void)
     }
 
     //Move List
-    windowId = PSS_LABEL_PANE_RIGHT;
+    windowId = PSS_LABEL_PANE_RIGHT_BASE;
     FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
-
-    if(numMoves > MAX_MOVE_REPLACE_MOVES)
-        numMoves = MAX_MOVE_REPLACE_MOVES;
 
     //Icons
     PosX = 1;
@@ -3019,6 +3031,24 @@ static void PrintMoveReplaceTab(void)
 
         PosX = PosX + 4;
     }
+
+}
+
+static void PrintMoveReplaceTab(void)
+{
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    u8 numMoves = sMonSummaryScreen->numMenuChoices;
+    u8 i, j, windowId, PosX, PosY;
+    u16 moveNum;
+    bool8 hasMonMove = FALSE;
+
+    windowId = PSS_LABEL_PANE_RIGHT;
+
+    CopyWindowToWindow(PSS_LABEL_PANE_RIGHT_BASE, windowId);
+
+    if(numMoves > MAX_MOVE_REPLACE_MOVES)
+        numMoves = MAX_MOVE_REPLACE_MOVES;
 
     //Move List
     PosX = 4;
@@ -3154,8 +3184,10 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 sMonSummaryScreen->moveReplaceMoveNum = MAX_MON_MOVES;
         }
         else
+        {
             PressedUpButton_ReplaceMoves();
-        PrintMoveReplaceTab();
+            PrintMoveReplaceTab();
+        }
         PrintMoveInfoFromReplaceTab();
     }
     if (JOY_NEW(DPAD_DOWN) || (JOY_REPEAT(DPAD_DOWN) && !sMonSummaryScreen->replaceMoveMode))
@@ -3167,8 +3199,10 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 sMonSummaryScreen->moveReplaceMoveNum = 0;
         }
         else
+        {
             PressedDownButton_ReplaceMoves();
-        PrintMoveReplaceTab();
+            PrintMoveReplaceTab();
+        }
         PrintMoveInfoFromReplaceTab();
     }
     else if (JOY_NEW(DPAD_LEFT))
@@ -3182,6 +3216,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             sMonSummaryScreen->moveReplaceCurrentIdx = 0;
             sMonSummaryScreen->moveReplaceMoveNum = 0;
             GenerateMoveReplaceList(MOVE_REPLACE_LIST_LEFT);
+            RedrawMoveTypeMenu();
             PrintMoveReplaceTab();
             PrintMoveInfoFromReplaceTab();
         }
@@ -3197,27 +3232,26 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             sMonSummaryScreen->moveReplaceCurrentIdx = 0;
             sMonSummaryScreen->moveReplaceMoveNum = 0;
             GenerateMoveReplaceList(MOVE_REPLACE_LIST_RIGHT);
+            RedrawMoveTypeMenu();
             PrintMoveReplaceTab();
             PrintMoveInfoFromReplaceTab();
         }
     }
-    else if(gMain.newKeys & L_BUTTON){
+    else if(JOY_NEW(L_BUTTON) && !sMonSummaryScreen->replaceMoveMode){
         if(gCurrentModifyIndex > 0)
             gCurrentModifyIndex--;
         else
             gCurrentModifyIndex = NUM_MOVE_INFO_TABS - 1;
-        PrintMoveReplaceTab();
         PrintMoveInfoFromReplaceTab();
     }
-    else if(gMain.newKeys & R_BUTTON){
+    else if(JOY_NEW(R_BUTTON) && !sMonSummaryScreen->replaceMoveMode){
         if(gCurrentModifyIndex < NUM_MOVE_INFO_TABS - 1)
             gCurrentModifyIndex++;
         else
             gCurrentModifyIndex = 0;
-        PrintMoveReplaceTab();
         PrintMoveInfoFromReplaceTab();
     }
-    else if(gMain.newKeys & A_BUTTON){
+    else if(JOY_NEW(A_BUTTON)){
         u8 moveToReplace = sMonSummaryScreen->moveReplaceMoveNum;
         u16 moveToLearn  = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
         u8 ppBonuses, movetype, ppNum;
@@ -3346,11 +3380,10 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             PrintMoveInfoFromReplaceTab();
         }
     }
-    else if(gMain.newKeys & B_BUTTON){
+    else if(JOY_NEW(B_BUTTON)){
         if(sMonSummaryScreen->replaceMoveMode){
             sMonSummaryScreen->moveReplaceMoveNum = 0;
             sMonSummaryScreen->replaceMoveMode = FALSE;
-            PrintMoveReplaceTab();
             PrintMoveInfoFromReplaceTab();
             LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
             SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
@@ -4138,33 +4171,33 @@ static void PrintNotEggInfo(void)
     bool8 isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA);
 
     GetMonNickname(mon, gStringVar1);
-    PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
+    PrintNarrowTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
     StringCopy(gStringVar1, gText_LevelSymbol);
     ConvertIntToDecimalStringN(gStringVar2, summary->level, STR_CONV_MODE_LEFT_ALIGN, 3);
     StringAppend(gStringVar1, gStringVar2);
-    PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 6, 18, 0, 0);
+    PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 6, 18, 0, 0);
 
     if (summary->species2 != SPECIES_NIDORAN_M && summary->species2 != SPECIES_NIDORAN_F)
     {
         switch (GetMonGender(mon))
         {
         case MON_MALE:
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gText_MaleSymbol, 71, 19, 0, PSS_COLOR_MALE_GENDER_SYMBOL);
+            PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gText_MaleSymbol, 71, 19, 0, PSS_COLOR_MALE_GENDER_SYMBOL);
             break;
         case MON_FEMALE:
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gText_FemaleSymbol, 71, 19, 0, PSS_COLOR_FEMALE_GENDER_SYMBOL);
+            PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gText_FemaleSymbol, 71, 19, 0, PSS_COLOR_FEMALE_GENDER_SYMBOL);
             break;
         }
     }
 
     if (IsMonShiny(mon))
-        PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Shiny, 62, 18, 0, PSS_COLOR_SHINY_STARS);
+        PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, sText_Shiny, 62, 18, 0, PSS_COLOR_SHINY_STARS);
     
     #if CONFIG_FATEFUL_ENCOUNTER_MARK
     if (summary->isEventMon)
-        PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Fateful, 52, 18, 0, PSS_COLOR_FATEFUL_TRIANGLE);
+        PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, sText_Fateful, 52, 18, 0, PSS_COLOR_FATEFUL_TRIANGLE);
     if(isAlpha)
-        PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 43, 18, 0, PSS_COLOR_SHINY_STARS);
+        PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 43, 18, 0, PSS_COLOR_SHINY_STARS);
     #else
     if(isAlpha)
         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 52, 18, 0, PSS_COLOR_SHINY_STARS);
@@ -4176,7 +4209,7 @@ static void PrintNotEggInfo(void)
         CopyItemName(sMonSummaryScreen->summary.item, gStringVar1);
 
     x = GetStringCenterAlignXOffset(0, gStringVar1, 84);
-    AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, 33, 7, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0, sText_HeldItem);
+    AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, 33, 7, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], TEXT_SPEED_FF, sText_HeldItem);
     AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, x, 19, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0, gStringVar1);
 }
 
@@ -4185,13 +4218,13 @@ static void PrintEggInfo(void)
     u8 x;
 
     GetMonNickname(&sMonSummaryScreen->currentMon, gStringVar1);
-    PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
+    PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
     if (sMonSummaryScreen->summary.item == ITEM_NONE)
         StringCopy(gStringVar1, sText_None);
     else
         CopyItemName(sMonSummaryScreen->summary.item, gStringVar1);
     x = GetStringCenterAlignXOffset(0, gStringVar1, 60);
-    AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, 9, 7, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0, sText_HeldItem);
+    AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, 9, 7, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], TEXT_SPEED_FF, sText_HeldItem);
     AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, x, 19, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0, gStringVar1);
 }
 
@@ -6260,6 +6293,122 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 }
 const u8 gText_ReplaceWhatMove[] = _("Chose a move to replace\nwith {COLOR 3}{SHADOW 4}{STR_VAR_1}");
 
+static void RedrawMoveDetailsBase(bool8 moveReplaceMode)
+{
+    int windowId = PSS_LABEL_PANE_LEFT_MOVE_BASE;
+    int PosX, PosY, i, j;
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    int type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
+    int type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
+
+    SetSpriteInvisibility(SPRITE_ARR_ID_MON, TRUE);
+    SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, TRUE);
+    SetSpriteInvisibility(SPRITE_ARR_ID_STATUS, TRUE);
+    sMonSummaryScreen->markingsSprite->x = 257;
+    sMonSummaryScreen->markingsSprite->y = 332;
+    FillWindowPixelBuffer(PSS_LABEL_PANE_LEFT_MOVE, PIXEL_FILL(0));
+
+    SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, FALSE);
+    SetTypeSpritePosAndPal(type1, 41, 45, SPRITE_ARR_ID_TYPE);
+
+    if (type1 != type2)
+    {
+        SetTypeSpritePosAndPal(type2, 75, 45, SPRITE_ARR_ID_TYPE + 1);
+        SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, FALSE);
+    }
+    else
+    {
+        SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);
+    }
+
+    if(sMonSummaryScreen->replaceMoveMode){
+        int currentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+        LZDecompressWram(gSummaryScreenPageMoveDetailsReplaceTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+        SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
+        
+        PosX = 2;
+        PosY = POWER_AND_ACCURACY_Y - 5;
+        StringCopy(gStringVar1, gMoveNamesLong[currentMove]);
+        StringExpandPlaceholders(gStringVar4, gText_ReplaceWhatMove);
+        PrintSmallTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar4, PosX, PosY, 0, 1);
+
+        PosX = MOVE_EFFECT_TEXT_Y + 8;
+        PosY = 64 - 16;
+
+        //Moves
+        for(i = 0; i < MAX_MON_MOVES; i++){
+            currentMove = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
+
+            if(currentMove != MOVE_NONE)
+                StringCopy(gStringVar1, gMoveNamesLong[currentMove]);
+            else
+                StringCopy(gStringVar1, gText_ThreeDashes);
+
+            PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, PosX, PosY, 0, 0);
+            PosY = PosY + 16;
+        }
+
+        StringCopy(gStringVar1, gText_Cancel);
+        PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, PosX, PosY, 0, PSS_COLOR_FEMALE_GENDER_SYMBOL);
+
+        PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
+    }
+    // else if(move != MOVE_NONE){
+    //     if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
+    //     {
+	// 		PrintMoveInfo(move, gCurrentModifyIndex, moveReplaceMode);
+    //     }
+    //     else
+    //     {
+    //         FillBgTilemapBufferRect(1, TILE_EMPTY_HEART, 9, 8, 4, 4, 3);
+
+    //         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, sText_Appeal, 8, POWER_AND_ACCURACY_Y, 0, 1);
+    //         if (gContestEffects[gContestMoves[move].effect].appeal / 10 > 4)
+    //         {
+    //             heartRow1 = 4;
+    //             heartRow2 = gContestEffects[gContestMoves[move].effect].appeal / 10 - 4;
+    //         }
+    //         else
+    //         {
+    //             heartRow1 = gContestEffects[gContestMoves[move].effect].appeal / 10;
+    //             heartRow2 = 0;
+    //         }
+    //         FillBgTilemapBufferRect(1, TILE_FILLED_APPEAL_HEART, 9, 8, heartRow1, 1, 3);
+    //         FillBgTilemapBufferRect(1, TILE_FILLED_APPEAL_HEART, 9, 9, heartRow2, 1, 3);
+
+    //         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, sText_Jam, 8, POWER_AND_ACCURACY_Y_2, 0, 1);
+
+    //         if (gContestEffects[gContestMoves[move].effect].jam / 10 > 4)
+    //         {
+    //             heartRow1 = 4;
+    //             heartRow2 = gContestEffects[gContestMoves[move].effect].jam / 10 - 4;
+    //         }
+    //         else
+    //         {
+    //             heartRow1 = gContestEffects[gContestMoves[move].effect].jam / 10;
+    //             heartRow2 = 0;
+    //         }
+    //         FillBgTilemapBufferRect(1, TILE_FILLED_JAM_HEART, 9, 10, heartRow1, 1, 3);
+    //         FillBgTilemapBufferRect(1, TILE_FILLED_JAM_HEART, 9, 11, heartRow2, 1, 3);
+    //         CopyBgTilemapBufferToVram(1);
+
+    //         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gContestEffectFourLineDescriptionPointers[gContestMoves[move].effect], 8, 64, 0, 0);
+    //     }
+
+    //     PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
+    // }
+    // else{
+    //     if (sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES)
+    //     {
+    //         FillBgTilemapBufferRect(1, 109, 9, 8, 4, 4, 3);
+    //         CopyBgTilemapBufferToVram(1);
+    //     }
+
+    //     ClearWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
+    // }
+}
+
 static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
 {
     u32 heartRow1, heartRow2;
@@ -7230,7 +7379,7 @@ static void PrintInfoBar(u8 pageIndex, bool8 detailsShown)
     }
 
     //PrintTextOnWindow(PSS_LABEL_PANE_TITLE, gStringVar1, 3, 0, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-    AddTextPrinterParameterized4(PSS_LABEL_PANE_TITLE, 0, 3, 0, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0, gStringVar1);
+    AddTextPrinterParameterized4(PSS_LABEL_PANE_TITLE, 0, 3, 0, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], TEXT_SPEED_FF, gStringVar1);
     x = GetStringRightAlignXOffset(0, gStringVar2, 150);
     AddTextPrinterParameterized4(PSS_LABEL_PANE_TITLE, 0, x, 0, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0, gStringVar2);
     PutWindowTilemap(PSS_LABEL_PANE_TITLE);
