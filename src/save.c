@@ -54,14 +54,14 @@ static const struct SaveSectionOffsets sSaveSectionOffsets[] =
     // Save blocks can be stored out of order, just need a little bit of code to specify which sectors go where
     #define SECTOR_ID_SAVEBLOCK2_START 0
     SAVEBLOCK_CHUNK(struct SaveBlock2, 0),
-    #define SECTOR_ID_SAVEBLOCK2_END 1
+    #define SECTOR_ID_SAVEBLOCK2_END 0
 
     #define SECTOR_ID_SAVEBLOCK1_START (SECTOR_ID_SAVEBLOCK2_END + 1)
     SAVEBLOCK_CHUNK(struct SaveBlock1,  0), // SECTOR_ID_SAVEBLOCK1_START
     SAVEBLOCK_CHUNK(struct SaveBlock1,  1),
     SAVEBLOCK_CHUNK(struct SaveBlock1,  2),
     SAVEBLOCK_CHUNK(struct SaveBlock1,  3),
-    #define SECTOR_ID_SAVEBLOCK1_END (SECTOR_ID_SAVEBLOCK1_START + 7)
+    #define SECTOR_ID_SAVEBLOCK1_END (SECTOR_ID_SAVEBLOCK1_START + 3)
 
     #define SECTOR_ID_PKMN_STORAGE_START (SECTOR_ID_SAVEBLOCK1_END + 1)
     SAVEBLOCK_CHUNK(struct PokemonStorage, 0), // SECTOR_ID_PKMN_STORAGE_START
@@ -82,6 +82,7 @@ static const struct SaveSectionOffsets sSaveSectionOffsets[] =
 #define NUM_SECTORS_PER_SLOT ARRAY_COUNT(sSaveSectionOffsets)
 
 STATIC_ASSERT(SLOT_SECTORS >= NUM_SECTORS_PER_SLOT, sSaveSectionOffetsSize)
+STATIC_ASSERT(SECTOR_ID_PKMN_STORAGE_END + 1 == NUM_SECTORS_PER_SLOT, saveSectorsAlign)
 
 // These will produce an error if a save struct is larger than the space
 // alloted for it in the flash.
@@ -611,7 +612,7 @@ static void UpdateSaveAddresses(void)
         gRamSaveSectionLocations[i].size = sSaveSectionOffsets[i].size;
     }
 
-    for (; i <= SECTOR_ID_PKMN_STORAGE_END; i++) //setting i to SECTOR_ID_PKMN_STORAGE_START does not match
+    for (SECTOR_ID_PKMN_STORAGE_START; i <= SECTOR_ID_PKMN_STORAGE_END; i++)
     {
         gRamSaveSectionLocations[i].data = (void*)(gPokemonStoragePtr) + sSaveSectionOffsets[i].toAdd;
         gRamSaveSectionLocations[i].size = sSaveSectionOffsets[i].size;
