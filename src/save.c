@@ -46,7 +46,7 @@ static u8 HandleWriteSector(u16 a1, const struct SaveSectionLocation *location);
 #define SAVEBLOCK_CHUNK(structure, chunkNum)                                \
 {                                                                           \
     chunkNum * SECTOR_DATA_SIZE,                                            \
-    min(sizeof(structure) - chunkNum * SECTOR_DATA_SIZE, SECTOR_DATA_SIZE)  \
+    min(sizeof(structure) - min(chunkNum * SECTOR_DATA_SIZE, sizeof(structure)), SECTOR_DATA_SIZE)  \
 }                                                                           \
 
 static const struct SaveSectionOffsets sSaveSectionOffsets[] =
@@ -54,6 +54,8 @@ static const struct SaveSectionOffsets sSaveSectionOffsets[] =
     #define SECTOR_ID_SAVEBLOCK2_START 0
     SAVEBLOCK_CHUNK(struct SaveBlock2, 0),
     SAVEBLOCK_CHUNK(struct SaveBlock2, 1),
+    SAVEBLOCK_CHUNK(struct SaveBlock2, 3),
+    SAVEBLOCK_CHUNK(struct SaveBlock2, 4),
     #define SECTOR_ID_SAVEBLOCK2_END 1
 
     #define SECTOR_ID_SAVEBLOCK1_START (SECTOR_ID_SAVEBLOCK2_END + 1)
@@ -61,7 +63,11 @@ static const struct SaveSectionOffsets sSaveSectionOffsets[] =
     SAVEBLOCK_CHUNK(struct SaveBlock1,  1),
     SAVEBLOCK_CHUNK(struct SaveBlock1,  2),
     SAVEBLOCK_CHUNK(struct SaveBlock1,  3),
-    #define SECTOR_ID_SAVEBLOCK1_END (SECTOR_ID_SAVEBLOCK1_START + 3)
+    SAVEBLOCK_CHUNK(struct SaveBlock1,  4),
+    SAVEBLOCK_CHUNK(struct SaveBlock1,  5),
+    SAVEBLOCK_CHUNK(struct SaveBlock1,  6),
+    SAVEBLOCK_CHUNK(struct SaveBlock1,  7),
+    #define SECTOR_ID_SAVEBLOCK1_END (SECTOR_ID_SAVEBLOCK1_START + 7)
 
     #define SECTOR_ID_PKMN_STORAGE_START (SECTOR_ID_SAVEBLOCK1_END + 1)
     SAVEBLOCK_CHUNK(struct PokemonStorage, 0), // SECTOR_ID_PKMN_STORAGE_START
@@ -504,9 +510,7 @@ static u8 CopySaveSlotData(u16 sectorId, const struct SaveSectionLocation *locat
         if (gReadWriteSector->security == SECTOR_SIGNATURE
          && gReadWriteSector->checksum == checksum)
         {
-            u16 j;
-            for (j = 0; j < location[id].size; j++)
-                ((u8 *)location[id].data)[j] = gReadWriteSector->data[j];
+            memcpy(location[id].data, &gReadWriteSector->data, location[id].size);
         }
     }
 
