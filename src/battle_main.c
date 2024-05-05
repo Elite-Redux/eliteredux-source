@@ -4065,6 +4065,7 @@ void BattleTurnPassed(void)
     if (HandleWishPerishSongOnTurnEnd())
         return;
 
+    ClearMiscTurnFlags();
     TurnValuesCleanUp(FALSE);
     gHitMarker &= ~(HITMARKER_NO_ATTACKSTRING);
     gHitMarker &= ~(HITMARKER_UNABLE_TO_USE_MOVE);
