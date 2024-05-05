@@ -221,15 +221,13 @@ static u8 HandleWriteSector(u16 sectorId, const struct SaveSectionLocation *loca
     if (size <= 0) return SAVE_STATUS_OK;
 
     // clear save section.
-    for (i = 0; i < sizeof(struct SaveSector); i++)
-        ((char *)gReadWriteSector)[i] = 0;
+    ZERO(gReadWriteSector)
 
     gReadWriteSector->id = sectorId;
     gReadWriteSector->security = SECTOR_SIGNATURE;
     gReadWriteSector->counter = gSaveCounter;
 
-    for (i = 0; i < size; i++)
-        gReadWriteSector->data[i] = data[i];
+    memcpy(&gReadWriteSector->data, data, size);
 
     gReadWriteSector->checksum = CalculateChecksum(data, size);
     return TryWriteSector(sector, gReadWriteSector->data);
