@@ -61,11 +61,7 @@ static const struct SaveSectionOffsets sSaveSectionOffsets[] =
     SAVEBLOCK_CHUNK(struct SaveBlock1,  1),
     SAVEBLOCK_CHUNK(struct SaveBlock1,  2),
     SAVEBLOCK_CHUNK(struct SaveBlock1,  3),
-    SAVEBLOCK_CHUNK(struct SaveBlock1,  4),
-    SAVEBLOCK_CHUNK(struct SaveBlock1,  5),
-    SAVEBLOCK_CHUNK(struct SaveBlock1,  6),
-    SAVEBLOCK_CHUNK(struct SaveBlock1,  7),
-    #define SECTOR_ID_SAVEBLOCK1_END (SECTOR_ID_SAVEBLOCK1_START + 7)
+    #define SECTOR_ID_SAVEBLOCK1_END (SECTOR_ID_SAVEBLOCK1_START + 3)
 
     #define SECTOR_ID_PKMN_STORAGE_START (SECTOR_ID_SAVEBLOCK1_END + 1)
     SAVEBLOCK_CHUNK(struct PokemonStorage, 0), // SECTOR_ID_PKMN_STORAGE_START
@@ -80,12 +76,7 @@ static const struct SaveSectionOffsets sSaveSectionOffsets[] =
     SAVEBLOCK_CHUNK(struct PokemonStorage, 9),
     SAVEBLOCK_CHUNK(struct PokemonStorage, 10),
     SAVEBLOCK_CHUNK(struct PokemonStorage, 11),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 12),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 13),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 14),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 15),
-    SAVEBLOCK_CHUNK(struct PokemonStorage, 16),
-    #define SECTOR_ID_PKMN_STORAGE_END (SECTOR_ID_PKMN_STORAGE_START + 16)
+    #define SECTOR_ID_PKMN_STORAGE_END (SECTOR_ID_PKMN_STORAGE_START + 11)
 };
 
 #define NUM_SECTORS_PER_SLOT ARRAY_COUNT(sSaveSectionOffsets)
