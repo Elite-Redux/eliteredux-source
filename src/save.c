@@ -58,8 +58,10 @@ enum {
     SECTOR_ID_SaveBlock1_1,
     SECTOR_ID_SaveBlock1_2,
     SECTOR_ID_SaveBlock1_3,
-    // 8-13 unused
-    SECTOR_ID_PokemonStorage_0 = 14,
+    SECTOR_ID_PokemonStorage_8,
+    SECTOR_ID_PokemonStorage_9,
+    // 13-19 unused
+    SECTOR_ID_PokemonStorage_0 = 19,
     SECTOR_ID_PokemonStorage_1,
     SECTOR_ID_PokemonStorage_2,
     SECTOR_ID_PokemonStorage_3,
@@ -67,10 +69,6 @@ enum {
     SECTOR_ID_PokemonStorage_5,
     SECTOR_ID_PokemonStorage_6,
     SECTOR_ID_PokemonStorage_7,
-    SECTOR_ID_PokemonStorage_8,
-    SECTOR_ID_PokemonStorage_9,
-    SECTOR_ID_PokemonStorage_10,
-    SECTOR_ID_PokemonStorage_11,
     SECTOR_ID_END,
 };
 
@@ -98,9 +96,7 @@ static const struct SaveSectionOffsets sSaveSectionOffsets[] =
     SAVEBLOCK_CHUNK(PokemonStorage, 7),
     SAVEBLOCK_CHUNK(PokemonStorage, 8),
     SAVEBLOCK_CHUNK(PokemonStorage, 9),
-    SAVEBLOCK_CHUNK(PokemonStorage, 10),
-    SAVEBLOCK_CHUNK(PokemonStorage, 11),
-    #define SECTOR_ID_PKMN_STORAGE_END (SECTOR_ID_PKMN_STORAGE_START + 11)
+    #define SECTOR_ID_PKMN_STORAGE_END (SECTOR_ID_PKMN_STORAGE_START + 9)
 };
 
 #define NUM_USED_SECTORS ARRAY_COUNT(sSaveSectionOffsets)
@@ -353,8 +349,6 @@ static u8 HandleReplaceSector(u16 sectorId, const struct SaveSectionLocation *lo
     data = location[sectorId].data;
     size = location[sectorId].size;
 
-    if (size == 0) return SAVE_STATUS_OK;
-
     // Clear temp save sector.
     for (i = 0; i < sizeof(struct SaveSector); i++)
         ((char *)gReadWriteSector)[i] = 0;
@@ -526,7 +520,6 @@ static u8 CopySaveSlotData(u16 sectorId, const struct SaveSectionLocation *locat
 
     for (i = 0; i < SLOT_SECTORS; i++)
     {
-        if (location[i].size == 0) continue;
         MGBA_PRINT_DEBUG("Loading sector %d to %d with size %d", i, location[i].data, location[i].size)
         ReadFlashSector(i, gReadWriteSector);
         id = gReadWriteSector->id;
@@ -554,11 +547,6 @@ static u8 GetSaveValidStatus(const struct SaveSectionLocation *location)
 
     for (i = 0; i < SLOT_SECTORS; i++)
     {
-        if (location[i].size == 0)
-        {
-            validSectorFlags |= 1 << i;
-            continue;
-        }
         ReadFlashSector(i, gReadWriteSector);
         if (gReadWriteSector->security == SECTOR_SIGNATURE)
         {
