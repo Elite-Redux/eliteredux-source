@@ -91,6 +91,12 @@ enum{
     DEXNAV_SPRITE_TYPE_ICON_1 = NUM_POKEMON_ICONS,
     DEXNAV_SPRITE_TYPE_ICON_2,
     DEXNAV_SPRITE_CURSOR,
+    DEXNAV_FIELD_ICON_LAND,
+    DEXNAV_FIELD_ICON_WATER,
+    DEXNAV_FIELD_ICON_FISHING,
+    DEXNAV_FIELD_ICON_HEADBUTT,
+    DEXNAV_FIELD_ICON_HIDDEN,
+    DEXNAV_FIELD_ICON_HONEY,
     NUM_DEXNAV_SPRITES,
 };
 
@@ -454,6 +460,165 @@ static const struct CompressedSpriteSheet sPotentialStarSpriteSheet = {sPotentia
 //static const struct CompressedSpriteSheet sSightSpriteSheet = {sEyeGfx, (16 * 8 * 3) / 2, SIGHT_TAG};
 static const struct CompressedSpriteSheet sOwnedIconSpriteSheet = {sOwnedIconGfx, (8 * 8) / 2, OWNED_ICON_TAG};
 static const struct CompressedSpriteSheet sHiddenMonIconSpriteSheet = {sHiddenMonIconGfx, (8 * 8) / 2, HIDDEN_MON_ICON_TAG};
+
+#define PAL_HONEY_FIELD_ICON    10
+#define PAL_HIDDEN_FIELD_ICON   11
+#define PAL_HEADBUTT_FIELD_ICON 12
+#define PAL_FISHING_FIELD_ICON  13
+#define PAL_WATER_FIELD_ICON    14
+#define PAL_FOREST_FIELD_ICON   15
+
+static const u32 gDexnavFieldIcon_Forest_Gfx[]   = INCBIN_U32("graphics/ui_menus/dexnav/fields/forest.4bpp.lz");
+static const u16 gDexnavFieldIcon_Forest_Pal[]   = INCBIN_U16("graphics/ui_menus/dexnav/fields/forest.gbapal");
+
+static const u32 gDexnavFieldIcon_Water_Gfx[]    = INCBIN_U32("graphics/ui_menus/dexnav/fields/water.4bpp.lz");
+static const u16 gDexnavFieldIcon_Water_Pal[]    = INCBIN_U16("graphics/ui_menus/dexnav/fields/water.gbapal");
+
+static const u32 gDexnavFieldIcon_Fishing_Gfx[]  = INCBIN_U32("graphics/ui_menus/dexnav/fields/fishing.4bpp.lz");
+static const u16 gDexnavFieldIcon_Fishing_Pal[]  = INCBIN_U16("graphics/ui_menus/dexnav/fields/fishing.gbapal");
+
+static const u32 gDexnavFieldIcon_Headbutt_Gfx[] = INCBIN_U32("graphics/ui_menus/dexnav/fields/headbutt.4bpp.lz");
+static const u16 gDexnavFieldIcon_Headbutt_Pal[] = INCBIN_U16("graphics/ui_menus/dexnav/fields/headbutt.gbapal");
+
+static const u32 gDexnavFieldIcon_Hidden_Gfx[]   = INCBIN_U32("graphics/ui_menus/dexnav/fields/hidden.4bpp.lz");
+static const u16 gDexnavFieldIcon_Hidden_Pal[]   = INCBIN_U16("graphics/ui_menus/dexnav/fields/hidden.gbapal");
+
+static const u32 gDexnavFieldIcon_Honey_Gfx[]    = INCBIN_U32("graphics/ui_menus/dexnav/fields/honey.4bpp.lz");
+static const u16 gDexnavFieldIcon_Honey_Pal[]    = INCBIN_U16("graphics/ui_menus/dexnav/fields/honey.gbapal");
+
+static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Forest[]   = {gDexnavFieldIcon_Forest_Pal,   PAL_FOREST_FIELD_ICON};
+static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Water[]    = {gDexnavFieldIcon_Water_Pal,    PAL_WATER_FIELD_ICON};
+static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Fishing[]  = {gDexnavFieldIcon_Fishing_Pal,  PAL_FISHING_FIELD_ICON};
+static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Headbutt[] = {gDexnavFieldIcon_Headbutt_Pal, PAL_HEADBUTT_FIELD_ICON};
+static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Hidden[]   = {gDexnavFieldIcon_Hidden_Pal,   PAL_HIDDEN_FIELD_ICON};
+static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Honey[]    = {gDexnavFieldIcon_Honey_Pal,    PAL_HONEY_FIELD_ICON};
+
+#define DEXNAV_DEFAULT_ROW 2
+static void SpriteCB_DexnavFieldSelector(struct Sprite *sprite)
+{
+    u8 row = sprite->data[0];
+    u8 currentCursorRow = sDexNavUiDataPtr->currentEnviorment;
+    u8 spaceBetweenRows;
+    u8 place;
+    bool8 turnInvisible = FALSE;
+
+    if(currentCursorRow == row){
+        //The current row is the one that is selected meaning it should be in the second slot(the default row)
+        place = DEXNAV_DEFAULT_ROW;
+    }
+    else if(row < currentCursorRow){
+        //The current row is above the selected row
+        spaceBetweenRows = (currentCursorRow + 1) - row;
+        if(spaceBetweenRows == 0)
+            turnInvisible = TRUE;
+        else
+            place = spaceBetweenRows - 1;
+    }
+    else{
+        //The current row is below the selected row
+        turnInvisible = TRUE;
+    }
+
+    if(turnInvisible)
+        sprite->invisible = TRUE;
+    else
+        sprite->invisible = FALSE;
+
+    sprite->y2 = place * 32;
+}
+
+//Field Icon
+void FreeDexnavFieldSprite(u8 field)
+{
+    u8 *spriteId = &sDexNavUiDataPtr->DexnavSprites[field];
+
+    if (*spriteId != SPRITE_NONE)
+    {
+        FreeSpriteTilesByTag(DEXNAV_FIELD_ICON_LAND);
+        FreeSpritePaletteByTag(DEXNAV_FIELD_ICON_LAND);
+        FreeSpriteOamMatrix(&gSprites[*spriteId]);
+        DestroySprite(&gSprites[*spriteId]);
+        *spriteId = SPRITE_NONE;
+        sDexNavUiDataPtr->DexnavSprites[DEXNAV_FIELD_ICON_LAND] = SPRITE_NONE;
+    }
+}
+
+static void ShowDexnavFieldIcon(u8 row)
+{
+    u8 spriteId, SpriteTag;
+    struct SpriteTemplate TempSpriteTemplate = gDummySpriteTemplate;
+    u8 field = DEXNAV_FIELD_ICON_LAND + row;
+
+    SpriteTag = field;
+
+    TempSpriteTemplate.tileTag  = SpriteTag;
+    TempSpriteTemplate.callback = SpriteCB_DexnavFieldSelector;
+
+    switch(field)
+    {
+        case DEXNAV_FIELD_ICON_LAND:
+        {
+            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Forest_Gfx, 0x0800, field};
+
+            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
+            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Forest);
+            TempSpriteTemplate.paletteTag = PAL_FOREST_FIELD_ICON;
+        }
+        break;
+        case DEXNAV_FIELD_ICON_WATER:
+        {
+            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Water_Gfx, 0x0800, field};
+
+            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
+            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Water);
+            TempSpriteTemplate.paletteTag = PAL_WATER_FIELD_ICON;
+        }
+        break;
+        case DEXNAV_FIELD_ICON_FISHING:
+        {
+            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Fishing_Gfx, 0x0800, field};
+
+            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
+            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Fishing);
+            TempSpriteTemplate.paletteTag = PAL_FISHING_FIELD_ICON;
+        }
+        break;
+        case DEXNAV_FIELD_ICON_HEADBUTT:
+        {
+            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Headbutt_Gfx, 0x0800, field};
+
+            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
+            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Headbutt);
+            TempSpriteTemplate.paletteTag = PAL_HEADBUTT_FIELD_ICON;
+        }
+        break;
+        case DEXNAV_FIELD_ICON_HIDDEN:
+        {
+            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Hidden_Gfx, 0x0800, field};
+
+            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
+            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Hidden);
+            TempSpriteTemplate.paletteTag = PAL_HIDDEN_FIELD_ICON;
+        }
+        break;
+        case DEXNAV_FIELD_ICON_HONEY:
+        {
+            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Honey_Gfx, 0x0800, field};
+
+            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
+            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Honey);
+            TempSpriteTemplate.paletteTag = PAL_HONEY_FIELD_ICON;
+        }
+        break;
+    }
+
+    sDexNavUiDataPtr->DexnavSprites[field] = CreateSprite(&TempSpriteTemplate, 4, 4, 0);
+
+    gSprites[sDexNavUiDataPtr->DexnavSprites[field]].oam.shape    = SPRITE_SHAPE(64x32);
+    gSprites[sDexNavUiDataPtr->DexnavSprites[field]].oam.size     = SPRITE_SIZE(64x32);
+    gSprites[sDexNavUiDataPtr->DexnavSprites[field]].oam.priority = 1;
+    gSprites[sDexNavUiDataPtr->DexnavSprites[field]].data[0]      = row;
+}
 
 //// functions
 ///////////////////////
@@ -1094,7 +1259,6 @@ static void Task_RevealHiddenMon(u8 taskId)
         DestroySprite(&gSprites[sDexNavSearchDataPtr->exclamationSpriteId]);
         sDexNavSearchDataPtr->exclamationSpriteId = 0xFF;
     }
-    
     
     if (species == SPECIES_NONE)
     {
@@ -2446,6 +2610,14 @@ static bool8 DexNav_DoGfxSetup(void)
         gMain.state++;
         break;
     case 10:
+        //ShowDexnavFieldIcon(ROW_LAND_TOP);
+        //ShowDexnavFieldIcon(ROW_WATER);
+
+        for(i = 0; i < ROWS_COUNT; i++){
+            if(sDexNavUiDataPtr->routeSpeciesNum[i] != 0)
+                ShowDexnavFieldIcon(i);
+        }
+
         DrawSpeciesIcons();
         CreateSelectionCursor();
         DexNavLoadCapturedAllSymbols();
@@ -2510,6 +2682,7 @@ static void Task_DexNavMain(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
     u16 species;
+    bool8 windowChanged = FALSE;
     
     if (IsSEPlaying())
         return;
@@ -2522,60 +2695,75 @@ static void Task_DexNavMain(u8 taskId)
     }
     else if (JOY_NEW(DPAD_UP))
     {
-        if(sDexNavUiDataPtr->cursorRow > 0)
-            sDexNavUiDataPtr->cursorRow--;
-        else{
-            do{
+        do{
+            if(sDexNavUiDataPtr->cursorRow > 0)
+                sDexNavUiDataPtr->cursorRow--;
+            else{
                 if(sDexNavUiDataPtr->currentEnviorment == 0)
                     sDexNavUiDataPtr->currentEnviorment = ROWS_COUNT - 1;
                 else
                     sDexNavUiDataPtr->currentEnviorment--;
+
+                if(DexNavGetSpecies() == SPECIES_NONE)
+                    sDexNavUiDataPtr->cursorRow = 0;
+
+                windowChanged = TRUE;
             }
-            while(sDexNavUiDataPtr->routeSpeciesNum[sDexNavUiDataPtr->currentEnviorment] == 0);
-            
-            sDexNavUiDataPtr->cursorRow = DEXNAV_NUM_SPECIES_ROWS - 1;
-            HideSpeciesIcons();
         }
+        while(sDexNavUiDataPtr->routeSpeciesNum[sDexNavUiDataPtr->currentEnviorment] == 0 || DexNavGetSpecies() == SPECIES_NONE);
+
+        if(windowChanged)
+            HideSpeciesIcons();
 
         PlaySE(SE_RG_BAG_CURSOR);
         UpdateCursorPosition();
     }
     else if (JOY_NEW(DPAD_DOWN))
     {
-        if(sDexNavUiDataPtr->cursorRow < DEXNAV_NUM_SPECIES_ROWS - 1)
-            sDexNavUiDataPtr->cursorRow++;
-        else{
-            do{
+        do{
+            if(sDexNavUiDataPtr->cursorRow < DEXNAV_NUM_SPECIES_ROWS - 1)
+                sDexNavUiDataPtr->cursorRow++;
+            else{
                 if(sDexNavUiDataPtr->currentEnviorment < ROWS_COUNT - 1)
                     sDexNavUiDataPtr->currentEnviorment++;
                 else
                     sDexNavUiDataPtr->currentEnviorment = 0;
+
+                sDexNavUiDataPtr->cursorRow = 0;
+                windowChanged = TRUE;
             }
-            while(sDexNavUiDataPtr->routeSpeciesNum[sDexNavUiDataPtr->currentEnviorment] == 0);
-            
-            sDexNavUiDataPtr->cursorRow = 0;
-            HideSpeciesIcons();
         }
+        while(sDexNavUiDataPtr->routeSpeciesNum[sDexNavUiDataPtr->currentEnviorment] == 0 || DexNavGetSpecies() == SPECIES_NONE);
+
+        if(windowChanged)
+            HideSpeciesIcons();
         
         PlaySE(SE_RG_BAG_CURSOR);
         UpdateCursorPosition();
     }
     else if (JOY_NEW(DPAD_LEFT))
     {
-        if(sDexNavUiDataPtr->cursorCol > 0)
-            sDexNavUiDataPtr->cursorCol--;
-        else
-            sDexNavUiDataPtr->cursorCol = DEXNAV_NUM_SPECIES_PER_ROW - 1;
+        
+        do{
+            if(sDexNavUiDataPtr->cursorCol > 0)
+                sDexNavUiDataPtr->cursorCol--;
+            else
+                sDexNavUiDataPtr->cursorCol = DEXNAV_NUM_SPECIES_PER_ROW - 1;
+        }
+        while(DexNavGetSpecies() == SPECIES_NONE);
         
         PlaySE(SE_RG_BAG_CURSOR);
         UpdateCursorPosition();
     }
     else if (JOY_NEW(DPAD_RIGHT))
     {
-        if(sDexNavUiDataPtr->cursorCol < DEXNAV_NUM_SPECIES_PER_ROW - 1)
-            sDexNavUiDataPtr->cursorCol++;
-        else
-            sDexNavUiDataPtr->cursorCol = 0;
+        do{
+            if(sDexNavUiDataPtr->cursorCol < DEXNAV_NUM_SPECIES_PER_ROW - 1)
+                sDexNavUiDataPtr->cursorCol++;
+            else
+                sDexNavUiDataPtr->cursorCol = 0;
+        }
+        while(DexNavGetSpecies() == SPECIES_NONE);
         
         PlaySE(SE_RG_BAG_CURSOR);
         UpdateCursorPosition();
