@@ -2181,7 +2181,7 @@ const u8 sText_Title_Status_Violent_Rush_Description[]      = _("This Pokémon's
                                                                 "is boosted by 20% for one turn.");
 const u8 sText_Title_Status_Rapid_Response[]                = _("Rapid Response");
 const u8 sText_Title_Status_Rapid_Response_Description[]    = _("This Pokémon's Speed is\n"
-                                                                "boosted by 50% and its Attack\n"
+                                                                "boosted by 50% and its Sp.Atk\n"
                                                                 "is boosted by 20% for one turn.");
 const u8 sText_Title_Status_Readied_Action[]                = _("Readied Action");
 const u8 sText_Title_Status_Readied_Action_Description[]    = _("This Pokémon's Attack is\n"

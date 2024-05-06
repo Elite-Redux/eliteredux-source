@@ -875,6 +875,7 @@ void ClearMiscTurnFlags() {
     gBattleResources->battleScriptsStack->size = 0;
     gBattleScripting.acceleratedTwoTurn = 0;
     gBattleScripting.usingExtraMove = FALSE;
+    gChosenMove = MOVE_NONE;
 }
 
 void HandleAction_TryFinish(void)
@@ -1662,6 +1663,8 @@ bool32 IsHealBlockPreventingMove(u8 battler, u32 move)
     case EFFECT_SOFTBOILED:
     case EFFECT_SYNTHESIS:
     case EFFECT_SHORE_UP:
+    case EFFECT_JUNGLE_HEALING:
+    case EFFECT_HEAL_PULSE:
         return TRUE;
     default:
         return FALSE;
@@ -7058,7 +7061,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                     if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
                     {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_FLASH_FIRE_BOOST;
+                        SetActiveMultistringChooser(B_MSG_FLASH_FIRE_BOOST);
                         if (gRoundStructs[gBattlerAttacker].notFirstStrike)
                             gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
                         else
@@ -7070,7 +7073,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     }
                     else
                     {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_FLASH_FIRE_NO_BOOST;
+                        SetActiveMultistringChooser(B_MSG_FLASH_FIRE_NO_BOOST);
                         if (gRoundStructs[gBattlerAttacker].notFirstStrike)
                             gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
                         else
@@ -7610,25 +7613,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 		}
 		
-		// Aftermath
-		if(BattlerHasAbility(battler, gBattlerAbility, ABILITY_AFTERMATH)){
-            if (!IsAbilityOnField(ABILITY_DAMP)
-             && ShouldApplyOnHitAffect(gBattlerAttacker)
-             && gBattleMons[gBattlerTarget].hp == 0
-             && IsMoveMakingContact(move, gBattlerAttacker)
-             && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
-            {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_AFTERMATH;
-				gLastUsedAbility = ABILITY_AFTERMATH;
-                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
-                if (gBattleMoveDamage == 0)
-                    gBattleMoveDamage = 1;
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_AftermathDmg;
-                effect++;
-            }
-        }
-		
 		// Guilt Trip
 		if(BattlerHasAbility(battler, gBattlerAbility, ABILITY_GUILT_TRIP)){
             if (ShouldApplyOnHitAffect(gBattlerAttacker)
@@ -7804,25 +7788,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerAttacker].type3);
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_AttackerBecameTheType;
-				effect++;
-            }
-		}
-		
-		//Damp
-		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DAMP)){
-            if (IsBattlerAlive(gBattlerAttacker)
-             && IsMoveMakingContact(move, gBattlerAttacker)
-             && TARGET_TURN_DAMAGED
-			 && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_WATER))
-            {
-                u8 newtype = TYPE_WATER;
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_DAMP;
-				gBattleMons[gBattlerAttacker].type1 = newtype;
-				gBattleMons[gBattlerAttacker].type2 = newtype;
-				gBattleMons[gBattlerAttacker].type3 = TYPE_MYSTERY;
-				PREPARE_TYPE_BUFFER(gBattleTextBuff1, newtype);
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_AttackerBecameTheTypeFull;
 				effect++;
             }
 		}
@@ -8732,24 +8697,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 		}
 
-		// Damp (Attacker)
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DAMP)){
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && IsMoveMakingContact(move, gBattlerAttacker)
-             && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_WATER))
-            {
-                u8 newtype = TYPE_WATER;
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_DAMP;
-				gBattleMons[gBattlerTarget].type1 = newtype;
-				gBattleMons[gBattlerTarget].type2 = newtype;
-				gBattleMons[gBattlerTarget].type3 = TYPE_MYSTERY;
-				PREPARE_TYPE_BUFFER(gBattleTextBuff1, newtype);
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_DefenderBecameTheTypeFull;
-				effect++;
-            }
-		}
-
         if(BATTLER_HAS_ABILITY(battler, ABILITY_ANGELS_WRATH)){
             bool8 effectActivated = FALSE;
             gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ANGELS_WRATH;
@@ -9404,7 +9351,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             else
             {
-                memset(gBattleStruct->statChangesToCheck, 0, sizeof(gBattleStruct->statChangesToCheck));
+                ZERO(gBattleStruct->statChangesToCheck)
                 gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_NOT_NEEDED;
             }
         }
@@ -9530,6 +9477,24 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_LINKER;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_AttackerSoulLinker;
+                    effect++;
+                }
+            }
+
+            // Damp
+            if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DAMP)){
+                if (ShouldApplyOnHitAffect(opponent)
+                && IsMoveMakingContact(move, gBattlerAttacker)
+                && !IS_BATTLER_OF_TYPE(opponent, TYPE_WATER))
+                {
+                    u8 newtype = TYPE_WATER;
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_DAMP;
+                    gBattleMons[opponent].type1 = newtype;
+                    gBattleMons[opponent].type2 = newtype;
+                    gBattleMons[opponent].type3 = TYPE_MYSTERY;
+                    PREPARE_TYPE_BUFFER(gBattleTextBuff1, newtype);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = opponent == gBattlerAttacker ? BattleScript_AttackerBecameTheTypeFull : BattleScript_DefenderBecameTheTypeFull;
                     effect++;
                 }
             }
@@ -14169,7 +14134,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     u8 defStatToUse = 0;
     u32 defStat;
     u8 noPositiveStatStages = isCrit || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GRIP_PINCER));
-    u8 isUnaware = BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CONTEMPT);
+    u8 isUnaware = BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CONTEMPT) || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED;
     u16 modifier;
 
     if ((gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move) || gBattleMoves[move].hitsDef) && !gBattleMoves[move].hitsSpDef) // uses defense stat instead of sp.def
@@ -15427,7 +15392,7 @@ struct Pokemon *GetIllusionMonPtr(u32 battlerId)
 
 void ClearIllusionMon(u32 battlerId)
 {
-    memset(&gBattleStruct->illusion[battlerId], 0, sizeof(gBattleStruct->illusion[battlerId]));
+    ZERO(gBattleStruct->illusion[battlerId])
 }
 
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId)
@@ -16218,14 +16183,14 @@ void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[])
             if (newAbilities[i] == oldAbilities[j]) break;
         }
         if (j >= NUM_INNATE_PER_SPECIES + 1) continue;
-        switchInAbilityDone[i] = gVolatileStructs[battler].switchInAbilityDone[i];
-        turnAbilityTriggers[i] = gTurnStructs[battler].turnAbilityTriggers[i];
-        abilityState[i] = gVolatileStructs[battler].abilityState[i];
+        switchInAbilityDone[i] = gVolatileStructs[battler].switchInAbilityDone[j];
+        turnAbilityTriggers[i] = gTurnStructs[battler].turnAbilityTriggers[j];
+        abilityState[i] = gVolatileStructs[battler].abilityState[j];
     }
 
-    memcpy(&gVolatileStructs[battler].switchInAbilityDone, &switchInAbilityDone, sizeof(gVolatileStructs[battler].switchInAbilityDone));
-    memcpy(&gTurnStructs[battler].turnAbilityTriggers, &turnAbilityTriggers, sizeof(gTurnStructs[battler].turnAbilityTriggers));
-    memcpy(&gVolatileStructs[battler].abilityState, &abilityState, sizeof(gVolatileStructs[battler].abilityState));
+    ARRAY_COPY(gVolatileStructs[battler].switchInAbilityDone, switchInAbilityDone)
+    ARRAY_COPY(gTurnStructs[battler].turnAbilityTriggers, turnAbilityTriggers);
+    ARRAY_COPY(gVolatileStructs[battler].abilityState, abilityState);
 }
 
 u16 IsSoundproof(u8 battler)

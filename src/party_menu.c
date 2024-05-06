@@ -5525,8 +5525,12 @@ static void ShowLevelUpSelectWindow(u8 slot)
     u8 levelcap = GetLevelCap();
 	static const u8 sText_levelCap[]    =  _("Level Cap$");
 
-    if(levelcap >= MAX_LEVEL)
+    if(levelcap >= MAX_LEVEL){
         levelcap = MAX_LEVEL;
+        StringCopy(gStringVar1, sText_levelCap);
+        AddTextPrinterParameterized(windowId, fontId, gStringVar1, 8, (i * 16) + 1, TEXT_SPEED_FF, NULL);
+    }
+        
 
     numlevels = levelcap - level;
 
@@ -6053,7 +6057,7 @@ void ItemUseCB_CandyBox(u8 taskId, TaskFunc task)
         gPartyMenuUseExitCallback = FALSE;
         DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
         ScheduleBgCopyTilemapToVram(2);
-        gTasks[taskId].func = task;
+        gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
     }
     else
     {

@@ -2108,3 +2108,10 @@
 	callnative ScriptMenu_ScrollingMultichoice2
 	waitstate
 	.endm
+
+	@ change the movement of an object event with the id
+	.macro changemovement objectid:req, movementid:req
+	.byte 0xee
+	.2byte \objectid
+	.byte \movementid
+	.endm

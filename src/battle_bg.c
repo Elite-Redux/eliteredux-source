@@ -26,15 +26,6 @@
 #include "constants/trainers.h"
 #include "constants/battle_anim.h"
 
-struct BattleBackground
-{
-    const void *tileset;
-    const void *tilemap;
-    const void *entryTileset;
-    const void *entryTilemap;
-    const void *palette;
-};
-
 // .rodata
 static const u16 sUnrefArray[] = {0x0300, 0x0000}; //OamData?
 

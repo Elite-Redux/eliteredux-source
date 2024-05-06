@@ -224,3 +224,13 @@ LilycoveCity_DepartmentStoreRooftop_Text_HaveTM90:
 	.string "own lives to the utmost!\p"
 	.string "I hope you'll get that way, too!$"
 `
+
+
+script LilycoveCity_DepartmentStoreRooftop_EventScript_VendingMachine{
+	lockall
+	message(format("It seems like the Vending Machine is broken, I can't sell you any drinks right now."))
+	waitmessage
+	releaseall
+	end
+}
+

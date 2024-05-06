@@ -7,7 +7,7 @@
 #define ABILITY_SPEED_BOOST 3 // Gradually boosts Speed.
 #define ABILITY_BATTLE_ARMOR 4 // Blocks critical hits. Takes 20% less damage.
 #define ABILITY_STURDY 5 // Negates 1-hit KO attacks.
-#define ABILITY_DAMP 6 // Prevents self-destruction.
+#define ABILITY_DAMP 6 // Makes foes Water-type on contact.
 #define ABILITY_LIMBER 7 // Prevents paralysis. Takes 50% less recoil damage.
 #define ABILITY_SAND_VEIL 8 // Ups evasion in a sandstorm.
 #define ABILITY_STATIC 9 // 30% chance to paralyze on contact. Works on offense too.
@@ -39,7 +39,7 @@
 #define ABILITY_ILLUMINATE 35 // 1.2x accuracy boost.
 #define ABILITY_TRACE 36 // Copies foe's ability. Does not copy Innates.
 #define ABILITY_HUGE_POWER 37 // Doubles Attack.
-#define ABILITY_POISON_POINT 38 // 30% chance to get poisoned on contact.
+#define ABILITY_POISON_POINT 38 // 30% chance to poison on contact.
 #define ABILITY_INNER_FOCUS 39 // Prevents flinching. Focus Blast has 90% acc.
 #define ABILITY_MAGMA_ARMOR 40 // Prevents freezing. Takes 30% less damage from Water and Ice.
 #define ABILITY_WATER_VEIL 41 // No burns. Aqua Ring on entry. Recovers 1/16 HP a turn.
@@ -150,7 +150,7 @@
 #define ABILITY_TELEPATHY 140 // Can't be damaged by an ally.
 #define ABILITY_MOODY 141 // Every turn, a random stat goes -1 and another one goes +2.
 #define ABILITY_OVERCOAT 142 // Blocks weather and powder. 20% less dmg from Special moves.
-#define ABILITY_POISON_TOUCH 143 // 30% chance to get poisoned on contact.
+#define ABILITY_POISON_TOUCH 143 // 30% chance to poison on contact.
 #define ABILITY_REGENERATOR 144 // Heals 1/3 HP upon switching out.
 #define ABILITY_BIG_PECKS 145 // Boosts contact moves by 30%.
 #define ABILITY_SAND_RUSH 146 // 1.5x Speed in a sandstorm.

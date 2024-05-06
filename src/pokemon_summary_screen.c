@@ -8,8 +8,6 @@
 #include "battle_tent.h"
 #include "battle_factory.h"
 #include "bg.h"
-#include "contest.h"
-#include "contest_effect.h"
 #include "data.h"
 #include "daycare.h"
 #include "decompress.h"
@@ -81,7 +79,6 @@ enum {
     PSS_PAGE_SKILLS,
     PSS_PAGE_BATTLE_MOVES,
     //PSS_PAGE_CONDITION,       moved temporarily
-    PSS_PAGE_CONTEST_MOVES,
     PSS_PAGE_EVOLUTION,
     PSS_PAGE_CONDITION,
     PSS_PAGE_COUNT,
@@ -94,16 +91,19 @@ enum {
     PP_MANY
 };
 // Text Windows
-#define PSS_LABEL_PANE_LEFT_TOP                     0
-#define PSS_LABEL_PANE_LEFT_BOTTOM                  (PSS_LABEL_PANE_LEFT_TOP + 1)
-#define PSS_LABEL_PANE_LEFT_MOVE                    (PSS_LABEL_PANE_LEFT_BOTTOM + 1)
-#define PSS_LABEL_PANE_RIGHT                        (PSS_LABEL_PANE_LEFT_MOVE + 1)
-#define PSS_LABEL_PANE_RIGHT_HP                     (PSS_LABEL_PANE_RIGHT + 1)
-#define PSS_LABEL_PANE_RIGHT_SMALL                  (PSS_LABEL_PANE_RIGHT_HP + 1)
-#define PSS_LABEL_PANE_RIGHT_BOTTOM                 (PSS_LABEL_PANE_RIGHT_SMALL + 1)
-#define PSS_LABEL_PANE_TITLE                        (PSS_LABEL_PANE_RIGHT_BOTTOM + 1)
-
-#define PSS_LABEL_WINDOW_END                        (PSS_LABEL_PANE_TITLE + 1)
+enum {
+    PSS_LABEL_PANE_LEFT_TOP,
+    PSS_LABEL_PANE_LEFT_BOTTOM,
+    PSS_LABEL_PANE_LEFT_MOVE,
+    PSS_LABEL_PANE_RIGHT,
+    PSS_LABEL_PANE_RIGHT_HP,
+    PSS_LABEL_PANE_RIGHT_SMALL,
+    PSS_LABEL_PANE_RIGHT_BOTTOM,
+    PSS_LABEL_PANE_TITLE,
+    PSS_LABEL_PANE_RIGHT_BASE,
+    PSS_LABEL_PANE_LEFT_MOVE_BASE,
+    PSS_LABEL_WINDOW_END
+};
 
 #define MOVE_SELECTOR_SPRITES_COUNT 4
 #define HP_BAR_SPRITES_COUNT        11
@@ -272,6 +272,7 @@ static void SwitchToMoveSelection(u8 taskId);
 static void SwitchToMoveReplaceMenu(u8 taskId);
 static void Task_SwitchToMoveDetails(u8 taskId);
 static void Task_SwitchToReplaceMove(u8 taskId);
+static void RedrawMoveTypeMenu();
 static void PrintMoveReplaceTab(void);
 static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode);
 static void SetTypeSpritePosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId);
@@ -325,7 +326,6 @@ static void PrintConditionPage(void);
 static void PrintBattleMoves(void);
 static void PrintBattleMovesFromReplaceMenu(void);
 static void PrintMoveNameAndPP(u8 a);
-static void PrintContestMoves(void);
 static void PrintAbilityAndInnates(void);
 static void BufferMonPokemonAbilityAndInnates(void);
 static void PrintEvolutionData(void);
@@ -340,7 +340,6 @@ static void SetTypeIcons(void);
 static void CreateMoveTypeIcons(void);
 static void SetMonTypeIcons(void);
 static void SetMoveTypeIcons(void);
-static void SetContestMoveTypeIcons(void);
 static void SetNewMoveTypeIcon(void);
 static void SwapMovesTypeSprites(u8 moveIndex1, u8 moveIndex2);
 static u8 LoadMonGfxAndSprite(struct Pokemon *a, s16 *b);
@@ -451,7 +450,25 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .paletteNum = 2,
         .baseBlock = 418,
     },
+    [PSS_LABEL_PANE_LEFT_MOVE_BASE] = {
+        .bg = 0,
+        .tilemapLeft = 0,
+        .tilemapTop = 4,
+        .width = 14,
+        .height = 16,
+        .paletteNum = 2,
+        .baseBlock = 418,
+    },
     [PSS_LABEL_PANE_RIGHT] = {
+        .bg = 0,
+        .tilemapLeft = 11,
+        .tilemapTop = 2,
+        .width = 19,
+        .height = 20,
+        .paletteNum = 2,
+        .baseBlock = 1,
+    },
+    [PSS_LABEL_PANE_RIGHT_BASE] = {
         .bg = 0,
         .tilemapLeft = 11,
         .tilemapTop = 2,
@@ -543,7 +560,6 @@ static void (*const sTextPrinterFunctions[])(void) =
     [PSS_PAGE_SKILLS] = PrintSkillsPage,
     [PSS_PAGE_BATTLE_MOVES] = PrintBattleMoves,
     [PSS_PAGE_CONDITION] = PrintConditionPage,
-    [PSS_PAGE_CONTEST_MOVES] = PrintContestMoves,
     [PSS_PAGE_EVOLUTION] = PrintEvolutionData
 };
 
@@ -652,27 +668,7 @@ static const union AnimCmd sSpriteAnim_TypeFairy[] = {
     ANIMCMD_FRAME(TYPE_FAIRY * 8, 0, FALSE, FALSE),
     ANIMCMD_END
 };
-static const union AnimCmd sSpriteAnim_CategoryCool[] = {
-    ANIMCMD_FRAME((CONTEST_CATEGORY_COOL + NUMBER_OF_MON_TYPES) * 8, 0, FALSE, FALSE),
-    ANIMCMD_END
-};
-static const union AnimCmd sSpriteAnim_CategoryBeauty[] = {
-    ANIMCMD_FRAME((CONTEST_CATEGORY_BEAUTY + NUMBER_OF_MON_TYPES) * 8, 0, FALSE, FALSE),
-    ANIMCMD_END
-};
-static const union AnimCmd sSpriteAnim_CategoryCute[] = {
-    ANIMCMD_FRAME((CONTEST_CATEGORY_CUTE + NUMBER_OF_MON_TYPES) * 8, 0, FALSE, FALSE),
-    ANIMCMD_END
-};
-static const union AnimCmd sSpriteAnim_CategorySmart[] = {
-    ANIMCMD_FRAME((CONTEST_CATEGORY_SMART + NUMBER_OF_MON_TYPES) * 8, 0, FALSE, FALSE),
-    ANIMCMD_END
-};
-static const union AnimCmd sSpriteAnim_CategoryTough[] = {
-    ANIMCMD_FRAME((CONTEST_CATEGORY_TOUGH + NUMBER_OF_MON_TYPES) * 8, 0, FALSE, FALSE),
-    ANIMCMD_END
-};
-static const union AnimCmd *const sSpriteAnimTable_MoveTypes[NUMBER_OF_MON_TYPES + CONTEST_CATEGORIES_COUNT] = {
+static const union AnimCmd *const sSpriteAnimTable_MoveTypes[NUMBER_OF_MON_TYPES] = {
     sSpriteAnim_TypeNormal,
     sSpriteAnim_TypeFighting,
     sSpriteAnim_TypeFlying,
@@ -692,17 +688,12 @@ static const union AnimCmd *const sSpriteAnimTable_MoveTypes[NUMBER_OF_MON_TYPES
     sSpriteAnim_TypeDragon,
     sSpriteAnim_TypeDark,
     sSpriteAnim_TypeFairy,
-    sSpriteAnim_CategoryCool,
-    sSpriteAnim_CategoryBeauty,
-    sSpriteAnim_CategoryCute,
-    sSpriteAnim_CategorySmart,
-    sSpriteAnim_CategoryTough,
 };
 
 const struct CompressedSpriteSheet sSpriteSheet_MoveTypes =
 {
     .data = gMoveTypes_Gfx,
-    .size = (NUMBER_OF_MON_TYPES + CONTEST_CATEGORIES_COUNT) * 0x100,
+    .size = (NUMBER_OF_MON_TYPES) * 0x100,
     .tag = TAG_MOVE_TYPES
 };
 const struct SpriteTemplate sSpriteTemplate_MoveTypes =
@@ -715,7 +706,7 @@ const struct SpriteTemplate sSpriteTemplate_MoveTypes =
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallbackDummy
 };
-static const u8 sMoveTypeToOamPaletteNum[NUMBER_OF_MON_TYPES + CONTEST_CATEGORIES_COUNT] =
+static const u8 sMoveTypeToOamPaletteNum[NUMBER_OF_MON_TYPES] =
 {
     [TYPE_NORMAL] = 13,
     [TYPE_FIGHTING] = 13,
@@ -736,11 +727,6 @@ static const u8 sMoveTypeToOamPaletteNum[NUMBER_OF_MON_TYPES + CONTEST_CATEGORIE
     [TYPE_DRAGON] = 15,
     [TYPE_DARK] = 13,
     [TYPE_FAIRY] = 14,
-    [NUMBER_OF_MON_TYPES + CONTEST_CATEGORY_COOL] = 13,
-    [NUMBER_OF_MON_TYPES + CONTEST_CATEGORY_BEAUTY] = 14,
-    [NUMBER_OF_MON_TYPES + CONTEST_CATEGORY_CUTE] = 14,
-    [NUMBER_OF_MON_TYPES + CONTEST_CATEGORY_SMART] = 15,
-    [NUMBER_OF_MON_TYPES + CONTEST_CATEGORY_TOUGH] = 13,
 };
 static const struct OamData sOamData_MoveSelector =
 {
@@ -1020,7 +1006,6 @@ static const u32 * const sPageTilemaps[] =
     gSummaryScreenPageSkillsTilemap,
     gSummaryScreenPageMovesTilemap,
     //gSummaryScreenPageConditionTilemap,
-    gSummaryScreenPageContestMovesTilemap,
     gSummaryScreenPageEvolutionTilemap,
     gSummaryScreenPageConditionTilemap
 };
@@ -1041,7 +1026,6 @@ const u8 sText_TitleAbilities[] = _("Abilities");
 const u8 sText_TitleSkills[] = _("Pokémon Stats");
 const u8 sText_TitleBattleMoves[] = _("Moves");
 const u8 sText_TitleCondition[] = _("Condition");
-const u8 sText_TitleContestMoves[] = _("Contest Moves");
 const u8 sText_TitleRibbons[] = _("Ribbons");
 const u8 sText_TitleIVs[] = _("Pokémon IVs");
 const u8 sText_TitleEVs[] = _("Pokémon EVs");
@@ -1049,7 +1033,6 @@ const u8 sText_TitlePage[] = _("{DPAD_LEFTRIGHT}Page");
 const u8 sText_TitlePageDetail[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Detail {R_BUTTON}Replace");
 const u8 sText_TitlePageDetail_Boxmon[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Detail");
 const u8 sText_TitlePickSwitch[] = _("{DPAD_UPDOWN}Pick {A_BUTTON}Switch {L_BUTTON}Details");
-const u8 sText_TitlePickSwitchContest[] = _("{DPAD_UPDOWN}Pick {A_BUTTON}Switch");
 const u8 sText_TitlePageIVs[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Modify");
 const u8 sText_TitlePageEVs[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}EVs");
 const u8 sText_TitlePageStats[] = _("{DPAD_LEFTRIGHT}Page {A_BUTTON}Stats");
@@ -1061,7 +1044,6 @@ const u8 sText_TitleMemo[] = _("TRAINER MEMO");
 const u8 sText_TitleSkills[] = _("POKéMON STATS");
 const u8 sText_TitleBattleMoves[] = _("BATTLE MOVES");
 const u8 sText_TitleCondition[] = _("CONDITION");
-const u8 sText_TitleContestMoves[] = _("CONTEST MOVES");
 const u8 sText_TitleRibbons[] = _("RIBBONS");
 const u8 sText_TitleIVs[] = _("POKéMON IVs");
 const u8 sText_TitleEVs[] = _("POKéMON EVS");
@@ -2346,7 +2328,7 @@ static void Task_HandleInput(u8 taskId)
 		}
         else if (JOY_NEW(A_BUTTON))
         {
-            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES)
+            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
             {
                 PlaySE(SE_SELECT);
                 SwitchToMoveSelection(taskId);
@@ -2684,10 +2666,7 @@ static void ChangePage(u8 taskId, s8 delta)
     else
         sMonSummaryScreen->currPageIndex += delta;
 	
-	if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-        LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
-    else
-        LZDecompressWram(gSummaryScreenPageContestMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+	LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
 
     LZDecompressWram(sPageTilemaps[sMonSummaryScreen->currPageIndex], sMonSummaryScreen->bgTilemapBufferPage);
     PlaySE(SE_SELECT);
@@ -2906,6 +2885,7 @@ static void Task_SwitchToReplaceMove(u8 taskId)
             break;
         case 2:
             ChangeBgX(1, 0, 0);
+            RedrawMoveTypeMenu();
             PrintMoveReplaceTab();
             data[0]++;
             break;
@@ -2949,18 +2929,10 @@ static void PrintMoveInfoFromReplaceTab(void){
     PrintMoveDetails(CurrentMove, TRUE);
 }
 
-static void PrintMoveReplaceTab(void)
+static void RedrawMoveTypeMenu()
 {
-    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
-    struct PokeSummary *summary = &sMonSummaryScreen->summary;
-    u8 numMoves = sMonSummaryScreen->numMenuChoices;
-    u8 i, j, windowId, PosX, PosY;
-    u16 moveNum;
-    u8 tabNum;
-    u8 type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
-    u8 type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
-    bool8 hasMonMove = FALSE;
-    u16 CurrentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+    int i, windowId, type1, type2, PosX, PosY, tabNum;
+
 
     SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, FALSE);
     SetTypeSpritePosAndPal(type1, 41, 45, SPRITE_ARR_ID_TYPE);
@@ -2976,11 +2948,8 @@ static void PrintMoveReplaceTab(void)
     }
 
     //Move List
-    windowId = PSS_LABEL_PANE_RIGHT;
+    windowId = PSS_LABEL_PANE_RIGHT_BASE;
     FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
-
-    if(numMoves > MAX_MOVE_REPLACE_MOVES)
-        numMoves = MAX_MOVE_REPLACE_MOVES;
 
     //Icons
     PosX = 1;
@@ -3019,6 +2988,24 @@ static void PrintMoveReplaceTab(void)
 
         PosX = PosX + 4;
     }
+
+}
+
+static void PrintMoveReplaceTab(void)
+{
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    u8 numMoves = sMonSummaryScreen->numMenuChoices;
+    u8 i, j, windowId, PosX, PosY;
+    u16 moveNum;
+    bool8 hasMonMove = FALSE;
+
+    windowId = PSS_LABEL_PANE_RIGHT;
+
+    CopyWindowToWindow(PSS_LABEL_PANE_RIGHT_BASE, windowId);
+
+    if(numMoves > MAX_MOVE_REPLACE_MOVES)
+        numMoves = MAX_MOVE_REPLACE_MOVES;
 
     //Move List
     PosX = 4;
@@ -3145,7 +3132,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
     u16 learnedMoves[MAX_MON_MOVES];
     bool8 hasMonMove = FALSE;
 
-    if (JOY_NEW(DPAD_UP))
+    if (JOY_NEW(DPAD_UP) || (JOY_REPEAT(DPAD_UP) && !sMonSummaryScreen->replaceMoveMode))
     {
         if(sMonSummaryScreen->replaceMoveMode){
             if(sMonSummaryScreen->moveReplaceMoveNum != 0)
@@ -3154,11 +3141,13 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 sMonSummaryScreen->moveReplaceMoveNum = MAX_MON_MOVES;
         }
         else
+        {
             PressedUpButton_ReplaceMoves();
-        PrintMoveReplaceTab();
+            PrintMoveReplaceTab();
+        }
         PrintMoveInfoFromReplaceTab();
     }
-    else if (JOY_NEW(DPAD_DOWN))
+    if (JOY_NEW(DPAD_DOWN) || (JOY_REPEAT(DPAD_DOWN) && !sMonSummaryScreen->replaceMoveMode))
     {
         if(sMonSummaryScreen->replaceMoveMode){
             if(sMonSummaryScreen->moveReplaceMoveNum < MAX_MON_MOVES)
@@ -3167,8 +3156,10 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 sMonSummaryScreen->moveReplaceMoveNum = 0;
         }
         else
+        {
             PressedDownButton_ReplaceMoves();
-        PrintMoveReplaceTab();
+            PrintMoveReplaceTab();
+        }
         PrintMoveInfoFromReplaceTab();
     }
     else if (JOY_NEW(DPAD_LEFT))
@@ -3182,6 +3173,7 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             sMonSummaryScreen->moveReplaceCurrentIdx = 0;
             sMonSummaryScreen->moveReplaceMoveNum = 0;
             GenerateMoveReplaceList(MOVE_REPLACE_LIST_LEFT);
+            RedrawMoveTypeMenu();
             PrintMoveReplaceTab();
             PrintMoveInfoFromReplaceTab();
         }
@@ -3197,27 +3189,26 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             sMonSummaryScreen->moveReplaceCurrentIdx = 0;
             sMonSummaryScreen->moveReplaceMoveNum = 0;
             GenerateMoveReplaceList(MOVE_REPLACE_LIST_RIGHT);
+            RedrawMoveTypeMenu();
             PrintMoveReplaceTab();
             PrintMoveInfoFromReplaceTab();
         }
     }
-    else if(gMain.newKeys & L_BUTTON){
+    else if(JOY_NEW(L_BUTTON) && !sMonSummaryScreen->replaceMoveMode){
         if(gCurrentModifyIndex > 0)
             gCurrentModifyIndex--;
         else
             gCurrentModifyIndex = NUM_MOVE_INFO_TABS - 1;
-        PrintMoveReplaceTab();
         PrintMoveInfoFromReplaceTab();
     }
-    else if(gMain.newKeys & R_BUTTON){
+    else if(JOY_NEW(R_BUTTON) && !sMonSummaryScreen->replaceMoveMode){
         if(gCurrentModifyIndex < NUM_MOVE_INFO_TABS - 1)
             gCurrentModifyIndex++;
         else
             gCurrentModifyIndex = 0;
-        PrintMoveReplaceTab();
         PrintMoveInfoFromReplaceTab();
     }
-    else if(gMain.newKeys & A_BUTTON){
+    else if(JOY_NEW(A_BUTTON)){
         u8 moveToReplace = sMonSummaryScreen->moveReplaceMoveNum;
         u16 moveToLearn  = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
         u8 ppBonuses, movetype, ppNum;
@@ -3346,11 +3337,10 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             PrintMoveInfoFromReplaceTab();
         }
     }
-    else if(gMain.newKeys & B_BUTTON){
+    else if(JOY_NEW(B_BUTTON)){
         if(sMonSummaryScreen->replaceMoveMode){
             sMonSummaryScreen->moveReplaceMoveNum = 0;
             sMonSummaryScreen->replaceMoveMode = FALSE;
-            PrintMoveReplaceTab();
             PrintMoveInfoFromReplaceTab();
             LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
             SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
@@ -3419,21 +3409,6 @@ static void Task_HandleInput_MoveSelect(u8 taskId)
             data[0] = 4;
             ChangeSelectedMove(data, 1, &sMonSummaryScreen->firstMoveIndex);
         }
-        else if (CONFIG_CAN_SWITCH_PAGES_WHILE_DETAILS_ARE_UP && (JOY_NEW(DPAD_LEFT) || GetLRKeysPressed() == MENU_L_PRESSED || JOY_NEW(DPAD_RIGHT) || GetLRKeysPressed() == MENU_R_PRESSED))
-        {
-            if (sMonSummaryScreen->maxPageIndex > PSS_PAGE_BATTLE_MOVES)
-            {
-                if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-                    sMonSummaryScreen->currPageIndex = PSS_PAGE_CONTEST_MOVES;
-                else
-                    sMonSummaryScreen->currPageIndex = PSS_PAGE_BATTLE_MOVES;
-
-                LZDecompressWram(sPageTilemaps[sMonSummaryScreen->currPageIndex], sMonSummaryScreen->bgTilemapBufferPage);
-                PlaySE(SE_SELECT);
-                data[0] = 0;
-                gTasks[taskId].func = Task_SwitchPageInMoveSelect;
-            }
-        }
         else if (JOY_NEW(A_BUTTON))
         {
             if (sMonSummaryScreen->lockMovesFlag == TRUE
@@ -3494,22 +3469,11 @@ void Task_SwitchPageInMoveSelect(u8 taskId)
             data[0]++;
             break;
         case 1:
-            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-            {
-                if (sMonSummaryScreen->newMove != MOVE_NONE)
-                    LZDecompressWram(gSummaryScreenPageNewMoveTilemap, sMonSummaryScreen->bgTilemapBufferPage);
-                else
-                    LZDecompressWram(gSummaryScreenPageMovesTilemap, sMonSummaryScreen->bgTilemapBufferPage);
-                LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
-            }
+            if (sMonSummaryScreen->newMove != MOVE_NONE)
+                LZDecompressWram(gSummaryScreenPageNewMoveTilemap, sMonSummaryScreen->bgTilemapBufferPage);
             else
-            {
-                if (sMonSummaryScreen->newMove != MOVE_NONE)
-                    LZDecompressWram(gSummaryScreenPageContestNewMoveTilemap, sMonSummaryScreen->bgTilemapBufferPage);
-                else
-                    LZDecompressWram(gSummaryScreenPageContestMovesTilemap, sMonSummaryScreen->bgTilemapBufferPage);
-                LZDecompressWram(gSummaryScreenPageContestMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
-            }
+                LZDecompressWram(gSummaryScreenPageMovesTilemap, sMonSummaryScreen->bgTilemapBufferPage);
+            LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
             SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBufferPage);
             SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
             ScheduleBgCopyTilemapToVram(1);
@@ -3517,10 +3481,7 @@ void Task_SwitchPageInMoveSelect(u8 taskId)
             data[0]++;
             break;
         case 2:
-            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-                PrintBattleMoves();
-            else
-                PrintContestMoves();
+            PrintBattleMoves();
             data[0]++;
             break;
         case 3:
@@ -3907,21 +3868,6 @@ static void Task_HandleReplaceMoveInput(u8 taskId)
                 data[0] = 4;
                 ChangeSelectedMove(data, 1, &sMonSummaryScreen->firstMoveIndex);
             }
-            else if (CONFIG_CAN_SWITCH_PAGES_WHILE_DETAILS_ARE_UP && (JOY_NEW(DPAD_LEFT) || GetLRKeysPressed() == MENU_L_PRESSED || JOY_NEW(DPAD_RIGHT) || GetLRKeysPressed() == MENU_R_PRESSED))
-            {
-                if (sMonSummaryScreen->maxPageIndex > PSS_PAGE_BATTLE_MOVES)
-                {
-                    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-                        sMonSummaryScreen->currPageIndex = PSS_PAGE_CONTEST_MOVES;
-                    else
-                        sMonSummaryScreen->currPageIndex = PSS_PAGE_BATTLE_MOVES;
-
-                    LZDecompressWram(sPageTilemaps[sMonSummaryScreen->currPageIndex], sMonSummaryScreen->bgTilemapBufferPage);
-                    PlaySE(SE_SELECT);
-                    data[0] = 0;
-                    gTasks[taskId].func = Task_SwitchPageInReplaceMove;
-                }
-            }
             else if (JOY_NEW(A_BUTTON))
             {
                 if (CanReplaceMove() == TRUE)
@@ -3967,22 +3913,11 @@ static void Task_SwitchPageInReplaceMove(u8 taskId)
             data[0]++;
             break;
         case 1:
-            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-            {
-                if (sMonSummaryScreen->newMove != MOVE_NONE)
-                    LZDecompressWram(gSummaryScreenPageNewMoveTilemap, sMonSummaryScreen->bgTilemapBufferPage);
-                else
-                    LZDecompressWram(gSummaryScreenPageMovesTilemap, sMonSummaryScreen->bgTilemapBufferPage);
-                LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
-            }
+            if (sMonSummaryScreen->newMove != MOVE_NONE)
+                LZDecompressWram(gSummaryScreenPageNewMoveTilemap, sMonSummaryScreen->bgTilemapBufferPage);
             else
-            {
-                if (sMonSummaryScreen->newMove != MOVE_NONE)
-                    LZDecompressWram(gSummaryScreenPageContestNewMoveTilemap, sMonSummaryScreen->bgTilemapBufferPage);
-                else
-                    LZDecompressWram(gSummaryScreenPageContestMovesTilemap, sMonSummaryScreen->bgTilemapBufferPage);
-                LZDecompressWram(gSummaryScreenPageContestMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
-            }
+                LZDecompressWram(gSummaryScreenPageMovesTilemap, sMonSummaryScreen->bgTilemapBufferPage);
+            LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
             SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBufferPage);
             SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
             ScheduleBgCopyTilemapToVram(1);
@@ -3990,10 +3925,7 @@ static void Task_SwitchPageInReplaceMove(u8 taskId)
             data[0]++;
             break;
         case 2:
-            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-                PrintBattleMoves();
-            else
-                PrintContestMoves();
+            PrintBattleMoves();
             data[0]++;
             break;
         case 3:
@@ -4138,33 +4070,33 @@ static void PrintNotEggInfo(void)
     bool8 isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA);
 
     GetMonNickname(mon, gStringVar1);
-    PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
+    PrintNarrowTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
     StringCopy(gStringVar1, gText_LevelSymbol);
     ConvertIntToDecimalStringN(gStringVar2, summary->level, STR_CONV_MODE_LEFT_ALIGN, 3);
     StringAppend(gStringVar1, gStringVar2);
-    PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 6, 18, 0, 0);
+    PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 6, 18, 0, 0);
 
     if (summary->species2 != SPECIES_NIDORAN_M && summary->species2 != SPECIES_NIDORAN_F)
     {
         switch (GetMonGender(mon))
         {
         case MON_MALE:
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gText_MaleSymbol, 71, 19, 0, PSS_COLOR_MALE_GENDER_SYMBOL);
+            PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gText_MaleSymbol, 71, 19, 0, PSS_COLOR_MALE_GENDER_SYMBOL);
             break;
         case MON_FEMALE:
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gText_FemaleSymbol, 71, 19, 0, PSS_COLOR_FEMALE_GENDER_SYMBOL);
+            PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gText_FemaleSymbol, 71, 19, 0, PSS_COLOR_FEMALE_GENDER_SYMBOL);
             break;
         }
     }
 
     if (IsMonShiny(mon))
-        PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Shiny, 62, 18, 0, PSS_COLOR_SHINY_STARS);
+        PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, sText_Shiny, 62, 18, 0, PSS_COLOR_SHINY_STARS);
     
     #if CONFIG_FATEFUL_ENCOUNTER_MARK
     if (summary->isEventMon)
-        PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Fateful, 52, 18, 0, PSS_COLOR_FATEFUL_TRIANGLE);
+        PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, sText_Fateful, 52, 18, 0, PSS_COLOR_FATEFUL_TRIANGLE);
     if(isAlpha)
-        PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 43, 18, 0, PSS_COLOR_SHINY_STARS);
+        PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 43, 18, 0, PSS_COLOR_SHINY_STARS);
     #else
     if(isAlpha)
         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 52, 18, 0, PSS_COLOR_SHINY_STARS);
@@ -4176,7 +4108,7 @@ static void PrintNotEggInfo(void)
         CopyItemName(sMonSummaryScreen->summary.item, gStringVar1);
 
     x = GetStringCenterAlignXOffset(0, gStringVar1, 84);
-    AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, 33, 7, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0, sText_HeldItem);
+    AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, 33, 7, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], TEXT_SPEED_FF, sText_HeldItem);
     AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, x, 19, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0, gStringVar1);
 }
 
@@ -4185,13 +4117,13 @@ static void PrintEggInfo(void)
     u8 x;
 
     GetMonNickname(&sMonSummaryScreen->currentMon, gStringVar1);
-    PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
+    PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
     if (sMonSummaryScreen->summary.item == ITEM_NONE)
         StringCopy(gStringVar1, sText_None);
     else
         CopyItemName(sMonSummaryScreen->summary.item, gStringVar1);
     x = GetStringCenterAlignXOffset(0, gStringVar1, 60);
-    AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, 9, 7, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0, sText_HeldItem);
+    AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, 9, 7, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], TEXT_SPEED_FF, sText_HeldItem);
     AddTextPrinterParameterized4(PSS_LABEL_PANE_LEFT_BOTTOM, 0, x, 19, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0, gStringVar1);
 }
 
@@ -5140,19 +5072,6 @@ static void PrintMoveNameAndPP(u8 moveIndex)
         x = GetStringCenterAlignXOffset(FONT_NORMAL, gText_TwoDashes, 32) + 113;
         PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, gText_TwoDashes, x, moveIndex * 29 + 13, 0, PSS_COLOR_BLACK_GRAY_SHADOW);
     }
-}
-
-static void PrintContestMoves(void)
-{
-    u32 i;
-
-    FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
-
-    for (i = 0; i < MAX_MON_MOVES; i++)
-        PrintMoveNameAndPP(i);
-
-    ScheduleBgCopyTilemapToVram(0);
-    PutWindowTilemap(PSS_LABEL_PANE_RIGHT);
 }
 
 static void PrintAbilityAndInnates(void)
@@ -6260,6 +6179,122 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 }
 const u8 gText_ReplaceWhatMove[] = _("Chose a move to replace\nwith {COLOR 3}{SHADOW 4}{STR_VAR_1}");
 
+static void RedrawMoveDetailsBase(bool8 moveReplaceMode)
+{
+    int windowId = PSS_LABEL_PANE_LEFT_MOVE_BASE;
+    int PosX, PosY, i, j;
+    struct Pokemon *mon = &sMonSummaryScreen->currentMon;
+    struct PokeSummary *summary = &sMonSummaryScreen->summary;
+    int type1 = RandomizeType(gBaseStats[summary->species].type1, summary->species, summary->pid, TRUE);
+    int type2 = RandomizeType(gBaseStats[summary->species].type2, summary->species, summary->pid, FALSE);
+
+    SetSpriteInvisibility(SPRITE_ARR_ID_MON, TRUE);
+    SetSpriteInvisibility(SPRITE_ARR_ID_ITEM, TRUE);
+    SetSpriteInvisibility(SPRITE_ARR_ID_STATUS, TRUE);
+    sMonSummaryScreen->markingsSprite->x = 257;
+    sMonSummaryScreen->markingsSprite->y = 332;
+    FillWindowPixelBuffer(PSS_LABEL_PANE_LEFT_MOVE, PIXEL_FILL(0));
+
+    SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, FALSE);
+    SetTypeSpritePosAndPal(type1, 41, 45, SPRITE_ARR_ID_TYPE);
+
+    if (type1 != type2)
+    {
+        SetTypeSpritePosAndPal(type2, 75, 45, SPRITE_ARR_ID_TYPE + 1);
+        SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, FALSE);
+    }
+    else
+    {
+        SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);
+    }
+
+    if(sMonSummaryScreen->replaceMoveMode){
+        int currentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
+        LZDecompressWram(gSummaryScreenPageMoveDetailsReplaceTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+        SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
+        
+        PosX = 2;
+        PosY = POWER_AND_ACCURACY_Y - 5;
+        StringCopy(gStringVar1, gMoveNamesLong[currentMove]);
+        StringExpandPlaceholders(gStringVar4, gText_ReplaceWhatMove);
+        PrintSmallTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar4, PosX, PosY, 0, 1);
+
+        PosX = MOVE_EFFECT_TEXT_Y + 8;
+        PosY = 64 - 16;
+
+        //Moves
+        for(i = 0; i < MAX_MON_MOVES; i++){
+            currentMove = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
+
+            if(currentMove != MOVE_NONE)
+                StringCopy(gStringVar1, gMoveNamesLong[currentMove]);
+            else
+                StringCopy(gStringVar1, gText_ThreeDashes);
+
+            PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, PosX, PosY, 0, 0);
+            PosY = PosY + 16;
+        }
+
+        StringCopy(gStringVar1, gText_Cancel);
+        PrintNarrowTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gStringVar1, PosX, PosY, 0, PSS_COLOR_FEMALE_GENDER_SYMBOL);
+
+        PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
+    }
+    // else if(move != MOVE_NONE){
+    //     if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
+    //     {
+	// 		PrintMoveInfo(move, gCurrentModifyIndex, moveReplaceMode);
+    //     }
+    //     else
+    //     {
+    //         FillBgTilemapBufferRect(1, TILE_EMPTY_HEART, 9, 8, 4, 4, 3);
+
+    //         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, sText_Appeal, 8, POWER_AND_ACCURACY_Y, 0, 1);
+    //         if (gContestEffects[gContestMoves[move].effect].appeal / 10 > 4)
+    //         {
+    //             heartRow1 = 4;
+    //             heartRow2 = gContestEffects[gContestMoves[move].effect].appeal / 10 - 4;
+    //         }
+    //         else
+    //         {
+    //             heartRow1 = gContestEffects[gContestMoves[move].effect].appeal / 10;
+    //             heartRow2 = 0;
+    //         }
+    //         FillBgTilemapBufferRect(1, TILE_FILLED_APPEAL_HEART, 9, 8, heartRow1, 1, 3);
+    //         FillBgTilemapBufferRect(1, TILE_FILLED_APPEAL_HEART, 9, 9, heartRow2, 1, 3);
+
+    //         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, sText_Jam, 8, POWER_AND_ACCURACY_Y_2, 0, 1);
+
+    //         if (gContestEffects[gContestMoves[move].effect].jam / 10 > 4)
+    //         {
+    //             heartRow1 = 4;
+    //             heartRow2 = gContestEffects[gContestMoves[move].effect].jam / 10 - 4;
+    //         }
+    //         else
+    //         {
+    //             heartRow1 = gContestEffects[gContestMoves[move].effect].jam / 10;
+    //             heartRow2 = 0;
+    //         }
+    //         FillBgTilemapBufferRect(1, TILE_FILLED_JAM_HEART, 9, 10, heartRow1, 1, 3);
+    //         FillBgTilemapBufferRect(1, TILE_FILLED_JAM_HEART, 9, 11, heartRow2, 1, 3);
+    //         CopyBgTilemapBufferToVram(1);
+
+    //         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gContestEffectFourLineDescriptionPointers[gContestMoves[move].effect], 8, 64, 0, 0);
+    //     }
+
+    //     PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
+    // }
+    // else{
+    //     if (sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES)
+    //     {
+    //         FillBgTilemapBufferRect(1, 109, 9, 8, 4, 4, 3);
+    //         CopyBgTilemapBufferToVram(1);
+    //     }
+
+    //     ClearWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
+    // }
+}
+
 static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
 {
     u32 heartRow1, heartRow2;
@@ -6328,56 +6363,10 @@ static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
         PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
     else if(move != MOVE_NONE){
-        if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-        {
-			PrintMoveInfo(move, gCurrentModifyIndex, moveReplaceMode);
-        }
-        else
-        {
-            FillBgTilemapBufferRect(1, TILE_EMPTY_HEART, 9, 8, 4, 4, 3);
-
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, sText_Appeal, 8, POWER_AND_ACCURACY_Y, 0, 1);
-            if (gContestEffects[gContestMoves[move].effect].appeal / 10 > 4)
-            {
-                heartRow1 = 4;
-                heartRow2 = gContestEffects[gContestMoves[move].effect].appeal / 10 - 4;
-            }
-            else
-            {
-                heartRow1 = gContestEffects[gContestMoves[move].effect].appeal / 10;
-                heartRow2 = 0;
-            }
-            FillBgTilemapBufferRect(1, TILE_FILLED_APPEAL_HEART, 9, 8, heartRow1, 1, 3);
-            FillBgTilemapBufferRect(1, TILE_FILLED_APPEAL_HEART, 9, 9, heartRow2, 1, 3);
-
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, sText_Jam, 8, POWER_AND_ACCURACY_Y_2, 0, 1);
-
-            if (gContestEffects[gContestMoves[move].effect].jam / 10 > 4)
-            {
-                heartRow1 = 4;
-                heartRow2 = gContestEffects[gContestMoves[move].effect].jam / 10 - 4;
-            }
-            else
-            {
-                heartRow1 = gContestEffects[gContestMoves[move].effect].jam / 10;
-                heartRow2 = 0;
-            }
-            FillBgTilemapBufferRect(1, TILE_FILLED_JAM_HEART, 9, 10, heartRow1, 1, 3);
-            FillBgTilemapBufferRect(1, TILE_FILLED_JAM_HEART, 9, 11, heartRow2, 1, 3);
-            CopyBgTilemapBufferToVram(1);
-
-            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_MOVE, gContestEffectFourLineDescriptionPointers[gContestMoves[move].effect], 8, 64, 0, 0);
-        }
-
+        PrintMoveInfo(move, gCurrentModifyIndex, moveReplaceMode);
         PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
     else{
-        if (sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES)
-        {
-            FillBgTilemapBufferRect(1, 109, 9, 8, 4, 4, 3);
-            CopyBgTilemapBufferToVram(1);
-        }
-
         ClearWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
 
@@ -6467,10 +6456,6 @@ static void SetTypeIcons(void)
         SetMoveTypeIcons();
         SetNewMoveTypeIcon();
         break;
-    case PSS_PAGE_CONTEST_MOVES:
-        SetContestMoveTypeIcons();
-        SetNewMoveTypeIcon();
-        break;
     }
 }
 
@@ -6528,19 +6513,6 @@ static void SetMoveTypeIcons(void)
     }
 }
 
-static void SetContestMoveTypeIcons(void)
-{
-    u8 i;
-    struct PokeSummary *summary = &sMonSummaryScreen->summary;
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        if (summary->moves[i] != MOVE_NONE)
-            SetTypeSpritePosAndPal(NUMBER_OF_MON_TYPES + gContestMoves[summary->moves[i]].contestCategory, 116, i * 29 + 20, SPRITE_ARR_ID_TYPE + 2 + i);
-        else
-            SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 2 + i, TRUE);
-    }
-}
-
 static void SetNewMoveTypeIcon(void)
 {
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
@@ -6553,15 +6525,8 @@ static void SetNewMoveTypeIcon(void)
     }
     else
     {
-        if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
-        {
-            u8 movetype = GetMonMoveType(sMonSummaryScreen->newMove, mon, isEnemyMon);
-            SetTypeSpritePosAndPal(movetype, 116, 136, SPRITE_ARR_ID_TYPE + 6);
-        }
-        else
-        {
-            SetTypeSpritePosAndPal(NUMBER_OF_MON_TYPES + gContestMoves[sMonSummaryScreen->newMove].contestCategory, 116, 136, SPRITE_ARR_ID_TYPE + 6);
-        }
+        u8 movetype = GetMonMoveType(sMonSummaryScreen->newMove, mon, isEnemyMon);
+        SetTypeSpritePosAndPal(movetype, 116, 136, SPRITE_ARR_ID_TYPE + 6);
     }
 }
 
@@ -6789,7 +6754,7 @@ static void CreateMoveSelectorSprites(u8 idArrayStart)
     u8 i;
     u8 *spriteIds = &sMonSummaryScreen->spriteIds[idArrayStart];
 
-    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES || sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES)
+    if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
     {
         u8 subpriority = 1;
         if (idArrayStart == SPRITE_ARR_ID_MOVE_SELECTOR1)
@@ -7220,17 +7185,10 @@ static void PrintInfoBar(u8 pageIndex, bool8 detailsShown)
             StringCopy(gStringVar1, sText_TitleEvolutionData);
             StringCopy(gStringVar2, sText_TitlePage);
             break;
-        case PSS_PAGE_CONTEST_MOVES:
-            StringCopy(gStringVar1, sText_TitleContestMoves);
-            if (detailsShown)
-                StringCopy(gStringVar2, sText_TitlePickSwitchContest);
-            else
-                StringCopy(gStringVar2, sText_TitlePageDetail);
-            break;
     }
 
     //PrintTextOnWindow(PSS_LABEL_PANE_TITLE, gStringVar1, 3, 0, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
-    AddTextPrinterParameterized4(PSS_LABEL_PANE_TITLE, 0, 3, 0, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0, gStringVar1);
+    AddTextPrinterParameterized4(PSS_LABEL_PANE_TITLE, 0, 3, 0, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], TEXT_SPEED_FF, gStringVar1);
     x = GetStringRightAlignXOffset(0, gStringVar2, 150);
     AddTextPrinterParameterized4(PSS_LABEL_PANE_TITLE, 0, x, 0, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0, gStringVar2);
     PutWindowTilemap(PSS_LABEL_PANE_TITLE);
