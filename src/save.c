@@ -201,7 +201,7 @@ static u8 HandleWriteSector(u16 sectorId, const struct SaveSectionLocation *loca
     size = location[sectorId].size;
 
     // clear save section.
-    ZERO(gReadWriteSector)
+    ZERO(*gReadWriteSector)
 
     gReadWriteSector->id = sectorId;
     gReadWriteSector->security = SECTOR_SIGNATURE;
