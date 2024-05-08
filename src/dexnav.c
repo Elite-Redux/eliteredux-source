@@ -110,7 +110,6 @@ struct DexNavSearch
     u8 searchLevel;
     u8 monLevel;
     u8 proximity;
-    u8 environment;
     s16 tileX;
     s16 tileY;
     u8 fldEffSpriteId;
@@ -139,7 +138,6 @@ struct DexNavGUI
     u8 currentMessage;
     u8 cursorRow;
     u8 cursorCol;
-    u8 environment;
     u8 potential;
     u8 starSpriteIds[3];
     u8 DexnavSprites[NUM_DEXNAV_SPRITES];
@@ -494,13 +492,13 @@ static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Hidden[]   =
 static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Honey[]    = {gDexnavFieldIcon_Honey_Pal,    PAL_HONEY_FIELD_ICON};
 
 #define DEXNAV_DEFAULT_ROW 2
+#define DEXNAV_MAX_SHOWN_ROWS 5
 static void SpriteCB_DexnavFieldSelector(struct Sprite *sprite)
 {
     u8 row = sprite->data[0];
     u8 currentCursorRow = sDexNavUiDataPtr->currentEnviorment;
     u8 spaceBetweenRows;
     u8 place;
-    bool8 turnInvisible = FALSE;
 
     if(currentCursorRow == row){
         //The current row is the one that is selected meaning it should be in the second slot(the default row)
@@ -508,23 +506,24 @@ static void SpriteCB_DexnavFieldSelector(struct Sprite *sprite)
     }
     else if(row < currentCursorRow){
         //The current row is above the selected row
-        spaceBetweenRows = (currentCursorRow + 1) - row;
-        if(spaceBetweenRows == 0)
-            turnInvisible = TRUE;
-        else
-            place = spaceBetweenRows - 1;
+        spaceBetweenRows = currentCursorRow - row;
+        place = DEXNAV_DEFAULT_ROW + spaceBetweenRows;
     }
     else{
+        spaceBetweenRows = row - currentCursorRow;
         //The current row is below the selected row
-        turnInvisible = TRUE;
+        if(DEXNAV_MAX_SHOWN_ROWS < spaceBetweenRows)
+            place = DEXNAV_MAX_SHOWN_ROWS;
+        else
+            place = DEXNAV_DEFAULT_ROW - spaceBetweenRows;
     }
 
-    if(turnInvisible)
+    /*if(place >= DEXNAV_MAX_SHOWN_ROWS)
         sprite->invisible = TRUE;
     else
-        sprite->invisible = FALSE;
+        sprite->invisible = FALSE;*/
 
-    sprite->y2 = place * 32;
+    sprite->y2 = (place * 32);
 }
 
 //Field Icon
@@ -795,14 +794,16 @@ static bool8 DexnavIsTileUsable(u8 environment){
 
     PlayerGetDestCoords(&posX, &posY);
     tileBehaviour = MapGridGetMetatileBehaviorAt(posX, posY);
-
     switch (environment)
     {
-        case ENCOUNTER_TYPE_LAND:
+        case ROW_LAND_TOP:
+        case ROW_ROCK_SMASH:
+        case ROW_HONEY:
             if (MetatileBehavior_IsLandWildEncounter(tileBehaviour))
                 return TRUE;
         break;
-        case ENCOUNTER_TYPE_WATER:
+        case ROW_WATER:
+        case ROW_FISHING:
             if (MetatileBehavior_IsSurfableWaterOrUnderwater(tileBehaviour))
                 return TRUE;
         break;
@@ -1028,7 +1029,7 @@ static void Task_SetUpDexNavSearch(u8 taskId)
     struct Task *task = &gTasks[taskId];
     
     u16 species = sDexNavSearchDataPtr->species;
-    u8 environment = sDexNavSearchDataPtr->environment;
+    u8 environment = sDexNavUiDataPtr->currentEnviorment;
     u8 searchLevel = GLOBAL_DEXNAV_SEARCH_LEVEL;
     
     // init sprites
@@ -1071,16 +1072,23 @@ static void Task_InitDexNavSearch(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
     u8 searchLevel;
-    u16 species = task->tSpecies;
+    u16 species    = task->tSpecies;
     u8 environment = task->tEnvironment;
+
+    //sDexNavUiDataPtr->currentEnviorment
     
     sDexNavSearchDataPtr = AllocZeroed(sizeof(struct DexNavSearch));
     
     // assign non-objects to struct
     sDexNavSearchDataPtr->species = species;
-    sDexNavSearchDataPtr->environment = environment;  //updated in DexNavTryGenerateMonLevel if hidden mon
+    sDexNavUiDataPtr->currentEnviorment = environment;  //updated in DexNavTryGenerateMonLevel if hidden mon
     sDexNavSearchDataPtr->isHiddenMon = (environment == ENCOUNTER_TYPE_HIDDEN) ? TRUE : FALSE;
     sDexNavSearchDataPtr->monLevel = DexNavTryGenerateMonLevel(species, environment);
+
+    // mgba
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "Task_InitDexNavSearch environment %d sDexNavUiDataPtr->currentEnviorment %d", environment, sDexNavUiDataPtr->currentEnviorment);
+    MgbaClose();
     
     if (gSaveBlock1Ptr->flashLevel > 0)
     {
@@ -1090,7 +1098,7 @@ static void Task_InitDexNavSearch(u8 taskId)
         DestroyTask(taskId);
         return;
     }
-    else if (sDexNavSearchDataPtr->monLevel == MON_LEVEL_NONEXISTENT || !DexnavIsTileUsable(sDexNavSearchDataPtr->environment))// || !TryStartHiddenMonFieldEffect(sDexNavSearchDataPtr->environment, 12, 12, FALSE)
+    else if (sDexNavSearchDataPtr->monLevel == MON_LEVEL_NONEXISTENT || !DexnavIsTileUsable(sDexNavUiDataPtr->currentEnviorment))
     {
         Free(sDexNavSearchDataPtr);
         FreeMonIconPalettes();
@@ -1201,16 +1209,17 @@ static void DexNavDrawIcons(void)
 bool8 TryStartDexnavSearch(void)
 {
     u8 taskId;
-    u16 val = VarGet(VAR_DEXNAV_SPECIES);
+    u16 species    = VarGet(VAR_DEXNAV_SPECIES);
+    u16 enviorment = VarGet(VAR_DEXNAV_ENVIORMENT);
     
-    if (FlagGet(FLAG_SYS_DEXNAV_SEARCH) || (val & MASK_SPECIES) == SPECIES_NONE)
+    if (FlagGet(FLAG_SYS_DEXNAV_SEARCH) || species == SPECIES_NONE)
         return FALSE;
     
     HideMapNamePopUpWindow();
     ChangeBgY_ScreenOff(0, 0, 0);
     taskId = CreateTask(Task_InitDexNavSearch, 0);
-    gTasks[taskId].tSpecies = val & MASK_SPECIES;
-    gTasks[taskId].tEnvironment = val >> 14;
+    gTasks[taskId].tSpecies     = species;
+    gTasks[taskId].tEnvironment = enviorment;
     PlaySE(SE_DEX_SEARCH);
     return FALSE;   //we dont actually want to enable the script context
 }
@@ -1359,7 +1368,7 @@ static void Task_DexNavSearch(u8 taskId)
     }
 
     /*/Caves and water the pokemon moves around
-    if ((sDexNavSearchDataPtr->environment == ENCOUNTER_TYPE_WATER || GetCurrentMapType() == MAP_TYPE_UNDERGROUND)
+    if ((sDexNavUiDataPtr->currentEnviorment == ENCOUNTER_TYPE_WATER || GetCurrentMapType() == MAP_TYPE_UNDERGROUND)
         && sDexNavSearchDataPtr->proximity < GetMovementProximityBySearchLevel() && sDexNavSearchDataPtr->movementCount < 2
         && task->tRevealed)
     {
@@ -1367,7 +1376,7 @@ static void Task_DexNavSearch(u8 taskId)
         
         FieldEffectStop(&gSprites[sDexNavSearchDataPtr->fldEffSpriteId], sDexNavSearchDataPtr->fldEffId);
         while (1) {
-            if (TryStartHiddenMonFieldEffect(sDexNavSearchDataPtr->environment, 10, 10, TRUE))
+            if (TryStartHiddenMonFieldEffect(sDexNavUiDataPtr->currentEnviorment, 10, 10, TRUE))
                 break;
         }
         
@@ -1770,16 +1779,19 @@ static u8 DexNavGeneratePotential(u8 searchLevel)
 static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
 {
     u16 headerId = GetCurrentMapWildMonHeaderId();
-    const struct WildPokemonInfo *landMonsInfo = gWildMonHeaders[headerId].landMonsInfo;
-    const struct WildPokemonInfo *waterMonsInfo = gWildMonHeaders[headerId].waterMonsInfo;
-    const struct WildPokemonInfo *hiddenMonsInfo = gWildMonHeaders[headerId].hiddenMonsInfo;
+    const struct WildPokemonInfo *landMonsInfo      = gWildMonHeaders[headerId].landMonsInfo;
+    const struct WildPokemonInfo *waterMonsInfo     = gWildMonHeaders[headerId].waterMonsInfo;
+    const struct WildPokemonInfo *hiddenMonsInfo    = gWildMonHeaders[headerId].hiddenMonsInfo;
+    const struct WildPokemonInfo* honeyMonsInfo     = gWildMonHeaders[headerId].honeyMonsInfo;
+    const struct WildPokemonInfo* rockSmashMonsInfo = gWildMonHeaders[headerId].rockSmashMonsInfo;
+    const struct WildPokemonInfo* fishingMonsInfo   = gWildMonHeaders[headerId].fishingMonsInfo;
     u8 min = 100;
     u8 max = 0;
     u8 i;
     
     switch (environment)
     {
-    case ENCOUNTER_TYPE_LAND:    // grass
+    case ROW_LAND_TOP:    // grass
         if (landMonsInfo == NULL)
             return MON_LEVEL_NONEXISTENT; //Hidden pokemon should only appear on walkable tiles or surf tiles
 
@@ -1792,7 +1804,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
             }
         }
         break;
-    case ENCOUNTER_TYPE_WATER:    //water
+    case ROW_WATER:    //water
         if (waterMonsInfo == NULL)
             return MON_LEVEL_NONEXISTENT; //Hidden pokemon should only appear on walkable tiles or surf tiles
 
@@ -1805,7 +1817,49 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
             }
         }
         break;
-    case ENCOUNTER_TYPE_HIDDEN:
+    case ROW_FISHING:
+        // Fishing mons
+        if (fishingMonsInfo == NULL)
+            return MON_LEVEL_NONEXISTENT; //Hidden pokemon should only appear on walkable tiles or surf tiles
+
+        for (i = 0; i < LAND_WILD_COUNT; i++)
+        {
+            if (fishingMonsInfo->wildPokemon[i].species == species)
+            {
+                min = (min < fishingMonsInfo->wildPokemon[i].minLevel) ? min : fishingMonsInfo->wildPokemon[i].minLevel;
+                max = (max > fishingMonsInfo->wildPokemon[i].maxLevel) ? max : fishingMonsInfo->wildPokemon[i].maxLevel;
+            }
+        }
+        break;
+    case ROW_ROCK_SMASH:
+        // Rock Smash mons
+        if (rockSmashMonsInfo == NULL)
+            return MON_LEVEL_NONEXISTENT; //Hidden pokemon should only appear on walkable tiles or surf tiles
+
+        for (i = 0; i < LAND_WILD_COUNT; i++)
+        {
+            if (rockSmashMonsInfo->wildPokemon[i].species == species)
+            {
+                min = (min < rockSmashMonsInfo->wildPokemon[i].minLevel) ? min : rockSmashMonsInfo->wildPokemon[i].minLevel;
+                max = (max > rockSmashMonsInfo->wildPokemon[i].maxLevel) ? max : rockSmashMonsInfo->wildPokemon[i].maxLevel;
+            }
+        }
+        break;
+    case ROW_HONEY:
+        // Honey mons
+        if (honeyMonsInfo == NULL)
+            return MON_LEVEL_NONEXISTENT; //Hidden pokemon should only appear on walkable tiles or surf tiles
+
+        for (i = 0; i < LAND_WILD_COUNT; i++)
+        {
+            if (honeyMonsInfo->wildPokemon[i].species == species)
+            {
+                min = (min < honeyMonsInfo->wildPokemon[i].minLevel) ? min : honeyMonsInfo->wildPokemon[i].minLevel;
+                max = (max > honeyMonsInfo->wildPokemon[i].maxLevel) ? max : honeyMonsInfo->wildPokemon[i].maxLevel;
+            }
+        }
+        break;
+    case ROW_HIDDEN:
         if (hiddenMonsInfo == NULL)
             return MON_LEVEL_NONEXISTENT;
         
@@ -1820,9 +1874,9 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
         
         // use encounter rate to signify is hidden pokemon are on land or in water
         if (hiddenMonsInfo->encounterRate == 1)
-            sDexNavSearchDataPtr->environment = ENCOUNTER_TYPE_WATER;
+            sDexNavUiDataPtr->currentEnviorment = ROW_WATER;
         else
-            sDexNavSearchDataPtr->environment = ENCOUNTER_TYPE_LAND;
+            sDexNavUiDataPtr->currentEnviorment = ROW_LAND_TOP;
         break;
     default:
         return MON_LEVEL_NONEXISTENT;
@@ -2586,18 +2640,17 @@ static bool8 DexNav_DoGfxSetup(void)
         DexNav_InitWindows();
         sDexNavUiDataPtr->currentEnviorment = ROW_LAND_TOP;
         sDexNavUiDataPtr->cursorCol = 0;
-        sDexNavUiDataPtr->environment = ENCOUNTER_TYPE_LAND;
         gMain.state++;
         break;
     case 7:
-        PrintSearchableSpecies(VarGet(VAR_DEXNAV_SPECIES) & MASK_SPECIES);
+        PrintSearchableSpecies(VarGet(VAR_DEXNAV_SPECIES));
         DexNavLoadEncounterData();
         gMain.state++;
         break;
     case 8:
         taskId = CreateTask(Task_DexNavWaitFadeIn, 0);
         gTasks[taskId].tSpecies = 0;
-        gTasks[taskId].tEnvironment = sDexNavUiDataPtr->environment;
+        gTasks[taskId].tEnvironment = sDexNavUiDataPtr->currentEnviorment;
         gMain.state++;
         break;
     case 9:
@@ -2613,10 +2666,10 @@ static bool8 DexNav_DoGfxSetup(void)
         //ShowDexnavFieldIcon(ROW_LAND_TOP);
         //ShowDexnavFieldIcon(ROW_WATER);
 
-        for(i = 0; i < ROWS_COUNT; i++){
+        /*for(i = 0; i < ROWS_COUNT; i++){
             if(sDexNavUiDataPtr->routeSpeciesNum[i] != 0)
                 ShowDexnavFieldIcon(i);
-        }
+        }*/
 
         DrawSpeciesIcons();
         CreateSelectionCursor();
@@ -2780,10 +2833,11 @@ static void Task_DexNavMain(u8 taskId)
             //PlayCry(species, 0); ToDo
             
             // create value to store in a var
-            VarSet(VAR_DEXNAV_SPECIES, ((sDexNavUiDataPtr->environment << 14) | species));
+            VarSet(VAR_DEXNAV_SPECIES, species);
+            VarSet(VAR_DEXNAV_ENVIORMENT, sDexNavUiDataPtr->currentEnviorment);
 
             gSpecialVar_0x8000 = species;
-            gSpecialVar_0x8001 = sDexNavUiDataPtr->environment;
+            gSpecialVar_0x8001 = sDexNavUiDataPtr->currentEnviorment;
             gSpecialVar_0x8002 = (sDexNavUiDataPtr->cursorRow == ROW_HIDDEN) ? TRUE : FALSE;
             PlaySE(SE_DEX_SEARCH);
             BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
@@ -2892,7 +2946,7 @@ bool8 TryFindHiddenPokemon(void)
         sDexNavSearchDataPtr->isHiddenMon = isHiddenMon;
         sDexNavSearchDataPtr->species = species;
         sDexNavSearchDataPtr->hiddenSearch = TRUE;
-        sDexNavSearchDataPtr->environment = environment;  //updated in DexNavTryGenerateMonLevel if hidden mon
+        sDexNavUiDataPtr->currentEnviorment = environment;  //updated in DexNavTryGenerateMonLevel if hidden mon
         sDexNavSearchDataPtr->monLevel = DexNavTryGenerateMonLevel(species, environment);
         if (sDexNavSearchDataPtr->monLevel == MON_LEVEL_NONEXISTENT)
         {
@@ -2902,7 +2956,7 @@ bool8 TryFindHiddenPokemon(void)
 
         // find tile for hidden mon and start effect if possible
         while (1) {
-            if (TryStartHiddenMonFieldEffect(sDexNavSearchDataPtr->environment, 8, 8, TRUE))
+            if (TryStartHiddenMonFieldEffect(sDexNavUiDataPtr->currentEnviorment, 8, 8, TRUE))
                 break;
             if (++attempts > 20)
                 return FALSE;   //cannot find suitable tile
@@ -2919,7 +2973,7 @@ bool8 TryFindHiddenPokemon(void)
         //PlayCry_Script(species, 0);
         taskId = CreateTask(Task_SetUpDexNavSearch, 0);
         gTasks[taskId].tSpecies = sDexNavSearchDataPtr->species;
-        gTasks[taskId].tEnvironment = sDexNavSearchDataPtr->environment;
+        gTasks[taskId].tEnvironment = sDexNavUiDataPtr->currentEnviorment;
         gTasks[taskId].tRevealed = FALSE;
         HideMapNamePopUpWindow();
         ChangeBgY_ScreenOff(0, 0, 0);
