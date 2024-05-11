@@ -188,6 +188,7 @@ static void EndDexNavSearchSetupScript(const u8 *script, u8 taskId);
 static void DexNavDrawHiddenIcons(void);
 static void DrawHiddenSearchWindow(u8 width);
 bool8 CanFindHiddenPokemon(void);
+bool8 hasAllMonsInEnviorment(void);
 
 //// Const Data
 // gui image data
@@ -2431,10 +2432,13 @@ static void SetTypeIconPosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId)
     SetSpriteInvisibility(spriteArrayId, FALSE);
 }
 
-static const u8 sText_DexNav_Species[] = _("Species");
-static const u8 sText_DexNav_Type[] = _("Type");
-static const u8 sText_DexNav_MapName[] = _("{STR_VAR_1} - {STR_VAR_3}");
-static const u8 sText_DexNav_Innates[] = _("Innates");
+static const u8 sText_DexNav_Species[]         = _("Species");
+static const u8 sText_DexNav_Type[]            = _("Type");
+static const u8 sText_DexNav_MapName[]         = _("{STR_VAR_1} - {STR_VAR_3}{STR_VAR_2}");
+static const u8 sText_DexNav_SpeciesName[]     = _("{STR_VAR_1}{STR_VAR_2}");
+static const u8 sText_DexNav_Caught_Type_No[]  = _("");
+static const u8 sText_DexNav_Caught_Type_Yes[] = _("{POKEBALL_ICON}");
+static const u8 sText_DexNav_Innates[]         = _("Innates");
 
 static const u8 sText_DexNav_Land[]     = _("Land");
 static const u8 sText_DexNav_Land_2[]   = _("Land 2");
@@ -2459,7 +2463,9 @@ enum{
 
 static const u8 sText_DexNav_Plus_Title[]           = _("Pokémon Elite Redux Dexnav+");
 static const u8 sText_DexNav_Title[]                = _("Pokémon Elite Redux Dexnav");
-static const u8 sText_DexNav_Plus_Message_Default[] = _("Welcome to the Dexnav+! {R_BUTTON} Search\n{A_BUTTON} Buy {START_BUTTON} Buy All {SELECT_BUTTON} Buy New");
+static const u8 sText_DexNav_Plus_Message_Default[] = _("Welcome to the Dexnav+! {R_BUTTON} Search\n{A_BUTTON} Buy {START_BUTTON} Buy All {STR_VAR_1}");
+static const u8 sText_DexNav_Plus_Message_1[]       = _("{SELECT_BUTTON} Buy New");
+static const u8 sText_DexNav_Plus_Message_2[]       = _("{B_BUTTON} Exit");
 static const u8 sText_DexNav_Message_Default[]      = _("Welcome to the Dexnav!\n{R_BUTTON} Search {B_BUTTON} Exit");
 static const u8 sText_DexNav_Message_Buy[]          = _("Do you want to buy {STR_VAR_1}\nfor {STR_VAR_2} BP? {A_BUTTON} Buy {B_BUTTON} Cancel");
 static const u8 sText_DexNav_Message_Buy_All[]      = _("Buy all the {STR_VAR_3} Pokémon on the\nroute for {STR_VAR_1} BP? {A_BUTTON} Buy {B_BUTTON} Cancel");
@@ -2523,6 +2529,7 @@ static void PrintCurrentSpeciesInfo(void)
     u8 type1, type2;
     u8 price = getMonPrice(species);
     u8 font = FONT_SMALL_NARROW;
+    bool8 isEverythingCaught = hasAllMonsInEnviorment();
 
     // Clear windows
     FillWindowPixelBuffer(WINDOW_INFO, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
@@ -2563,7 +2570,7 @@ static void PrintCurrentSpeciesInfo(void)
         AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8), sFontColor_White, TEXT_SKIP_DRAW, sText_DexNav_Plus_Title);
 
     // Map Name
-    x = 9;
+    x = 8;
     y = 3;
     GetMapName(gStringVar1, GetCurrentRegionMapSectionId(), 0);
 
@@ -2589,6 +2596,11 @@ static void PrintCurrentSpeciesInfo(void)
         break;
     }
 
+    if(isEverythingCaught)
+        StringCopy(gStringVar2, sText_DexNav_Caught_Type_Yes);
+    else
+        StringCopy(gStringVar2, sText_DexNav_Caught_Type_No);
+
     StringExpandPlaceholders(gStringVar4, sText_DexNav_MapName);
 
     AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_White, 0, gStringVar4);
@@ -2605,10 +2617,21 @@ static void PrintCurrentSpeciesInfo(void)
     y++;
     AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_Species);
     y++;
-    if (species == SPECIES_NONE)
-        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_NoInfo);
-    else
-        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gSpeciesNames[species]);
+    if (species == SPECIES_NONE){
+        StringCopy(gStringVar1, sText_DexNav_NoInfo);
+        StringCopy(gStringVar2, sText_DexNav_Caught_Type_No);
+    }
+    else{
+        StringCopy(gStringVar1, gSpeciesNames[species]);
+        if(GetSetPokedexFlag(species, FLAG_GET_CAUGHT))
+            StringCopy(gStringVar2, sText_DexNav_Caught_Type_Yes);
+        else
+            StringCopy(gStringVar2, sText_DexNav_Caught_Type_No);
+    }
+
+    StringExpandPlaceholders(gStringVar4, sText_DexNav_SpeciesName);
+    AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
+        
     
     //Price
     y++;
@@ -2658,10 +2681,17 @@ static void PrintCurrentSpeciesInfo(void)
     switch(sDexNavUiDataPtr->currentMessage)
     {
         default:
-            if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) == TRUE)
-                AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_Plus_Message_Default);
+            if(!isEverythingCaught)
+                StringCopy(gStringVar1, sText_DexNav_Plus_Message_1);
             else
-                AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_Message_Default);
+                StringCopy(gStringVar1, sText_DexNav_Plus_Message_2);
+
+            if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) == TRUE)
+                StringExpandPlaceholders(gStringVar4, sText_DexNav_Plus_Message_Default);
+            else
+                StringExpandPlaceholders(gStringVar4, sText_DexNav_Message_Default);
+
+            AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
         break;
         case DEXNAV_MESSAGE_BUY_ALL_NOT_OWNED:
             price = 0;
@@ -2986,7 +3016,7 @@ static void Task_DexNavMain(u8 taskId)
                 UpdateCursorPosition();
             }
         }
-        else if(JOY_NEW(SELECT_BUTTON) && FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
+        else if(JOY_NEW(SELECT_BUTTON) && FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !hasAllMonsInEnviorment()){
             if(sDexNavUiDataPtr->currentMessage == DEXNAV_MESSAGE_NONE){
                 sDexNavUiDataPtr->currentMessage = DEXNAV_MESSAGE_BUY_ALL_NOT_OWNED;
                 UpdateCursorPosition();
@@ -3709,6 +3739,18 @@ bool8 CanFindHiddenPokemon(void)
         CanFindHiddenMon = FALSE;
 
     return CanFindHiddenMon;
+}
+
+bool8 hasAllMonsInEnviorment(void){
+    u8 i, j;
+    u8 enviorment = sDexNavUiDataPtr->currentEnviorment;
+    u16 species;
+    for(i = 0; i < NUM_POKEMON_ICONS; i++){
+        species = sDexNavUiDataPtr->routeSpecies[enviorment][i];
+        if(species != SPECIES_NONE && !GetSetPokedexFlag(species, FLAG_GET_CAUGHT))
+            return  FALSE;
+    }
+    return TRUE;
 }
 
 bool8 canOpenDexnav(void){
