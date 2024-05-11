@@ -59,13 +59,13 @@
 #define SEARCHLEVEL100_THREESTAR        12
 
 // GUI Info
-#define ROW_LAND_TOP    0
-#define ROW_WATER       1
-#define ROW_FISHING     2
-#define ROW_ROCK_SMASH  3
-#define ROW_HONEY       4
-#define ROW_HIDDEN      5
-#define ROWS_COUNT      6
+#define ROW_LAND_TOP      0
+#define ROW_WATER         1
+#define ROW_FISHING       2
+#define ROW_ROCK_SMASH    3
+#define ROW_HONEY         4
+#define ROW_HIDDEN        5
+#define DEXNAV_ROWS_COUNT 6
 
 #define ROW_WATER_ICON_X        30
 #define ROW_WATER_ICON_Y        35
@@ -130,6 +130,7 @@ void ResetDexNavSearch(void);
 bool8 TryFindHiddenPokemon(void);
 bool8 DexNavTryMakeShinyMon(void);
 void IncrementDexNavChain(void);
+bool8 canOpenDexnav(void);
 
 //ewram
 extern u8 gCurrentDexNavChain;

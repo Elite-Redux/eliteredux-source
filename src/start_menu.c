@@ -184,7 +184,6 @@ static const u8* const sPyramidFloorNames[] =
 static const struct WindowTemplate sPyramidFloorWindowTemplate_2 = {0, 1, 1, 0xA, 4, 0xF, 8};
 static const struct WindowTemplate sPyramidFloorWindowTemplate_1 = {0, 1, 1, 0xC, 4, 0xF, 8};
 
-
 static const u8 gText_MenuDebug[] = _("Debug");
 static const u8 gText_UiTestMenu[] = _("Dev Menu");
 static const u8 sText_QuestMenu[] = _("Quests");
@@ -347,7 +346,7 @@ static void BuildNormalStartMenu(void)
         AddStartMenuAction(MENU_ACTION_POKEMON);
     }
 	
-	if (FlagGet(FLAG_SYS_DEXNAV_GET))
+	if (FlagGet(FLAG_SYS_DEXNAV_GET) && canOpenDexnav())
         AddStartMenuAction(MENU_ACTION_DEXNAV);
 
     AddStartMenuAction(MENU_ACTION_BAG);
@@ -1619,7 +1618,7 @@ static bool8 StartMenuDexNavCallback(void)
 
 static void ShowGameVersionWindow(void)
 {
-	static const u8 sText_cantSave[]    =  _("You can't save here$");
+	static const u8 sText_cantSave[]        =  _("You can't save here$");
 	static const u8 sText_GameVersion[]     =  _("{STR_VAR_1}\nGame Version {STR_VAR_2}$");
 	static const u8 sText_Message_Save[]    =  _("{COLOR GREEN}Press SELECT to save{COLOR DARK_GRAY}\nLevel Cap: {STR_VAR_1}\nWins: {STR_VAR_2} Losses: {STR_VAR_3}$");
     static const u8 sText_Message_No_Save[] =  _("You can't save here\nLevel Cap: {STR_VAR_1}\nWins: {STR_VAR_2} Losses: {STR_VAR_3}$");
