@@ -4074,29 +4074,29 @@ static void PrintNotEggInfo(void)
     StringCopy(gStringVar1, gText_LevelSymbol);
     ConvertIntToDecimalStringN(gStringVar2, summary->level, STR_CONV_MODE_LEFT_ALIGN, 3);
     StringAppend(gStringVar1, gStringVar2);
-    PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 6, 18, 0, 0);
+    PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 6, 18, 0, 0);
 
     if (summary->species2 != SPECIES_NIDORAN_M && summary->species2 != SPECIES_NIDORAN_F)
     {
         switch (GetMonGender(mon))
         {
         case MON_MALE:
-            PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gText_MaleSymbol, 71, 19, 0, PSS_COLOR_MALE_GENDER_SYMBOL);
+            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gText_MaleSymbol, 71, 19, 0, PSS_COLOR_MALE_GENDER_SYMBOL);
             break;
         case MON_FEMALE:
-            PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gText_FemaleSymbol, 71, 19, 0, PSS_COLOR_FEMALE_GENDER_SYMBOL);
+            PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gText_FemaleSymbol, 71, 19, 0, PSS_COLOR_FEMALE_GENDER_SYMBOL);
             break;
         }
     }
 
     if (IsMonShiny(mon))
-        PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, sText_Shiny, 62, 18, 0, PSS_COLOR_SHINY_STARS);
+        PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Shiny, 62, 18, 0, PSS_COLOR_SHINY_STARS);
     
     #if CONFIG_FATEFUL_ENCOUNTER_MARK
     if (summary->isEventMon)
-        PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, sText_Fateful, 52, 18, 0, PSS_COLOR_FATEFUL_TRIANGLE);
+        PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Fateful, 52, 18, 0, PSS_COLOR_FATEFUL_TRIANGLE);
     if(isAlpha)
-        PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 43, 18, 0, PSS_COLOR_SHINY_STARS);
+        PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 43, 18, 0, PSS_COLOR_SHINY_STARS);
     #else
     if(isAlpha)
         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 52, 18, 0, PSS_COLOR_SHINY_STARS);
@@ -4117,7 +4117,7 @@ static void PrintEggInfo(void)
     u8 x;
 
     GetMonNickname(&sMonSummaryScreen->currentMon, gStringVar1);
-    PrintTextOnWindowNoRender(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
+    PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, gStringVar1, 20, 2, 0, 1);
     if (sMonSummaryScreen->summary.item == ITEM_NONE)
         StringCopy(gStringVar1, sText_None);
     else
