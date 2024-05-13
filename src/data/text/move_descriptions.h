@@ -2899,8 +2899,8 @@ static const u8 sMoveTwoLineDescription_MoveExpandingForce[] = _(
     "all foes on Psychic Terrain.");
 
 static const u8 sMoveTwoLineDescription_MoveSteelRoller[] = _(
-    "Destroys terrain. Fails if\n"
-    "ground isn't terrain.");
+    "Rolls over the opponent\n"
+    "while destroying terrain.");
 
 static const u8 sMoveTwoLineDescription_MoveScaleShot[] = _(
     "Shoots scales 2 to 5 times.\n"
@@ -5409,7 +5409,7 @@ static const u8 sMoveFourLineDescription_MoveMeteorAssault[] = _("Attacks wildly
 static const u8 sMoveFourLineDescription_MoveEternabeam[] = _("Eternatus's most\npowerful move. On\nthe next turn, the\nuser must rest.");
 static const u8 sMoveFourLineDescription_MoveSteelBeam[] = _("Fires a powerful\nbeam of steel.\n50% recoil damage.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveExpandingForce[] = _("This move's power\ngoes up and damages\nall foes while on\nPsychic Terrain.");
-static const u8 sMoveFourLineDescription_MoveSteelRoller[] = _("It destroys the\ncurrent terrain.\nFails if the ground\nisn't a terrain.");
+static const u8 sMoveFourLineDescription_MoveSteelRoller[] = _("Rolls over the\nopponent while\ndestroying terrain.");
 static const u8 sMoveFourLineDescription_MoveScaleShot[] = _("Hits 2 to 5 times.\nBoosts Speed, but\nlowers Defense.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveMeteorBeam[] = _("A 2-turn move that\ngathers space power\nraising Sp. Attack\nbefore attacking.");
 static const u8 sMoveFourLineDescription_MoveShellSideArm[] = _("Physical or special\ndamage, whichever\nis more effective\nMay poison the foe.");
