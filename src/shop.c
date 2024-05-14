@@ -839,10 +839,6 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, s
 
 const u8 sText_BuyMenuPrintPriceInList_BattlePoints[] = _("{STR_VAR_1}");
 
-#define DEFAULT_POKEMON_PRICE    20
-#define DEFAULT_ITEM_PRICE       50
-#define DEFAULT_MEGA_STONE_PRICE 50
-#define DEFAULT_DECORATION_PRICE 25
 static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
 {
     u8 x;

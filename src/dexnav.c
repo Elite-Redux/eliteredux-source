@@ -71,14 +71,13 @@
 #define DEXNAV_MAX_SHOWN_ROWS 5
 
 //Config
-#define DEFAULT_DEXNAV_MON_PRICE         1
-#define DEXNAV_MON_FREE                  TRUE
-#define DEXNAV_BUY_ALL_DISCOUNT          50 //In Percent
 #define DEXNAV_PLUS_UNLOCK_FLAG          FLAG_RESCUED_BIRCH
 #define DEXNAV_HONEY_MONS_UNLOCK_FLAG    FLAG_RESCUED_BIRCH
 #define DEXNAV_HEADBUTT_MONS_UNLOCK_FLAG FLAG_RESCUED_BIRCH
 #define DEXNAV_FISHING_MONS_UNLOCK_FLAG  FLAG_BADGE02_GET
 #define DEXNAV_WATER_MONS_UNLOCK_FLAG    FLAG_BADGE02_GET
+
+#define DEXNAV_ENABLE_ROUTE_115_FLAG FLAG_BADGE02_GET
 
 // Defines
 enum WindowIds
@@ -2287,7 +2286,7 @@ static const u8 sText_DexNav_SpeciesName[]      = _("{NO}{STR_VAR_2} {STR_VAR_3}
 static const u8 sText_DexNav_SpeciesName_None[] = _("---");
 static const u8 sText_DexNav_Caught_Type_No[]   = _("");
 static const u8 sText_DexNav_Caught_Type_Yes[]  = _("{POKEBALL_ICON}");
-static const u8 sText_DexNav_Innates[]          = _("Innates");
+static const u8 sText_DexNav_Innates[]          = _("Innates:");
 
 static const u8 sText_DexNav_Land[]     = _("Land");
 static const u8 sText_DexNav_Land_2[]   = _("Land 2");
@@ -3654,6 +3653,37 @@ bool8 hasAllMonsInEnviorment(void){
     return TRUE;
 }
 
+bool8 IsRouteDexnavLocked(){
+    bool8 disableDexnav = FALSE;
+    switch(gSaveBlock1Ptr->location.mapNum){
+		case MAP_NUM(ROUTE115):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE115) && !FlagGet(DEXNAV_ENABLE_ROUTE_115_FLAG))
+				disableDexnav = TRUE;
+		break;
+    }
+
+    return disableDexnav;
+}
+
+bool8 MapHasMons(void){
+	u16 i;
+
+    for (i = 0; ; i++)
+    {
+        const struct WildPokemonHeader *wildHeader = &gWildMonHeaders[i];
+        if (wildHeader->mapGroup == 0xFF)
+            break;
+
+        if (gWildMonHeaders[i].mapGroup == gSaveBlock1Ptr->location.mapGroup &&
+            gWildMonHeaders[i].mapNum == gSaveBlock1Ptr->location.mapNum)
+        {
+			return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 bool8 canOpenDexnav(void){
     u16 headerId = GetCurrentMapWildMonHeaderId();
     u8 i;
@@ -3664,36 +3694,49 @@ bool8 canOpenDexnav(void){
     const struct WildPokemonInfo* rockSmashMonsInfo = gWildMonHeaders[headerId].rockSmashMonsInfo;
     const struct WildPokemonInfo* fishingMonsInfo   = gWildMonHeaders[headerId].fishingMonsInfo;
 
+    if(IsRouteDexnavLocked() || !MapHasMons())
+        return FALSE;
+
     for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
         switch(i){
             case ROW_LAND_TOP:    
                 // Land Encounters
-                if (landMonsInfo != NULL)
+                if (landMonsInfo != NULL && landMonsInfo->encounterRate != 0){
                     return TRUE;
+                }
             break;
             case ROW_WATER:
                 // Water Encounters
-                if (waterMonsInfo != NULL && FlagGet(DEXNAV_WATER_MONS_UNLOCK_FLAG))
+                if (waterMonsInfo != NULL && 
+                    waterMonsInfo->encounterRate != 0 && 
+                    FlagGet(DEXNAV_WATER_MONS_UNLOCK_FLAG))
                     return TRUE;
             break;
             case ROW_FISHING:
                 // Fishing Encounters
-                if (fishingMonsInfo != NULL && FlagGet(DEXNAV_FISHING_MONS_UNLOCK_FLAG))
+                if (fishingMonsInfo != NULL && 
+                    fishingMonsInfo->encounterRate != 0 && 
+                    FlagGet(DEXNAV_FISHING_MONS_UNLOCK_FLAG))
                     return TRUE;
             break;
             case ROW_ROCK_SMASH:
                 // Rock Smash Encounters
-                if (rockSmashMonsInfo != NULL && FlagGet(DEXNAV_HEADBUTT_MONS_UNLOCK_FLAG))
+                if (rockSmashMonsInfo != NULL && 
+                    rockSmashMonsInfo->encounterRate != 0 && 
+                    FlagGet(DEXNAV_HEADBUTT_MONS_UNLOCK_FLAG))
                     return TRUE;
             break;
             case ROW_HONEY:
                 // Honey Encounters
-                if (honeyMonsInfo != NULL && FlagGet(DEXNAV_HONEY_MONS_UNLOCK_FLAG))
+                if (honeyMonsInfo != NULL && 
+                    honeyMonsInfo->encounterRate != 0 && 
+                    FlagGet(DEXNAV_HONEY_MONS_UNLOCK_FLAG))
                     return TRUE;
             break;
             case ROW_HIDDEN:
                 // Hidden Encounters
-                if (hiddenMonsInfo != NULL && CanFindHiddenPokemon())
+                if (hiddenMonsInfo != NULL && 
+                    CanFindHiddenPokemon())
                     return TRUE;
             break;
         }
