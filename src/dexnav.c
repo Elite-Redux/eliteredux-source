@@ -71,8 +71,8 @@
 #define DEXNAV_MAX_SHOWN_ROWS 5
 
 //Config
-#define DEFAULT_DEXNAV_MON_PRICE         5
-#define DEXNAV_BUY_ALL_DISCOUNT          30 //In Percent
+#define DEFAULT_DEXNAV_MON_PRICE         1
+#define DEXNAV_BUY_ALL_DISCOUNT          90 //In Percent
 #define DEXNAV_PLUS_UNLOCK_FLAG          FLAG_RESCUED_BIRCH
 #define DEXNAV_HONEY_MONS_UNLOCK_FLAG    FLAG_RESCUED_BIRCH
 #define DEXNAV_HEADBUTT_MONS_UNLOCK_FLAG FLAG_RESCUED_BIRCH
@@ -2309,18 +2309,18 @@ enum{
     NUM_DEXNAV_MESSAGES,
 };
 
-static const u8 sText_DexNav_Plus_Title[]           = _("Pokémon Elite Redux Dexnav+");
-static const u8 sText_DexNav_Title[]                = _("Pokémon Elite Redux Dexnav");
-static const u8 sText_DexNav_Plus_Message_Default[] = _("Welcome to the Dexnav+! {R_BUTTON} Search\n{A_BUTTON} Buy {START_BUTTON} Buy All {STR_VAR_1}");
+static const u8 sText_DexNav_Plus_Title[]           = _("Pokémon Elite Redux DexNav+");
+static const u8 sText_DexNav_Title[]                = _("Pokémon Elite Redux DexNav");
+static const u8 sText_DexNav_Plus_Message_Default[] = _("Welcome to the DexNav+! {R_BUTTON} Search\n{A_BUTTON} Get {START_BUTTON} Get All {STR_VAR_1}");
 static const u8 sText_DexNav_Plus_Message_1[]       = _("{SELECT_BUTTON} Buy New");
 static const u8 sText_DexNav_Plus_Message_2[]       = _("{B_BUTTON} Exit");
 static const u8 sText_DexNav_Message_Default[]      = _("Welcome to the Dexnav!\n{R_BUTTON} Search {B_BUTTON} Exit");
-static const u8 sText_DexNav_Message_Buy[]          = _("Do you want to buy {STR_VAR_1}\nfor {STR_VAR_2} BP? {A_BUTTON} Buy {B_BUTTON} Cancel");
-static const u8 sText_DexNav_Message_Buy_All[]      = _("Buy all the {STR_VAR_3} Pokémon on the\nroute for {STR_VAR_1} BP? {A_BUTTON} Buy {B_BUTTON} Cancel");
-static const u8 sText_DexNav_Message_Search[]       = _("Do you want to Search {STR_VAR_1}?\n{A_BUTTON} Buy {B_BUTTON} Cancel");
+static const u8 sText_DexNav_Message_Buy[]          = _("Do you want to get {STR_VAR_1}\nfor {STR_VAR_2} BP? {A_BUTTON} Get {B_BUTTON} Cancel");
+static const u8 sText_DexNav_Message_Buy_All[]      = _("Get all the {STR_VAR_3} Pokémon on the\nroute for {STR_VAR_1} BP? {A_BUTTON} Get {B_BUTTON} Cancel");
+static const u8 sText_DexNav_Message_Search[]       = _("Do you want to search {STR_VAR_1}?\n{A_BUTTON} Get {B_BUTTON} Cancel");
 static const u8 sText_DexNav_CouldNotGiveMon[]      = _("You don't have enough space for\nthis Pokemon {A_BUTTON} Continue.");
 static const u8 sText_DexNav_CouldNotEnoughFunds[]  = _("You don't have enough Battle\n Points for this! {A_BUTTON} Continue.");
-static const u8 sText_DexNav_ThanksForPurchase[]    = _("Thank you for your purchase!\n{A_BUTTON} Continue.");
+static const u8 sText_DexNav_ThanksForPurchase[]    = _("Enjoy your new Pokémon!\n{A_BUTTON} Continue.");
 static const u8 sText_DexNav_CurrentBP[]            = _("Current BP: {STR_VAR_1}");
 static const u8 sText_DexNav_Price[]                = _("Price: {STR_VAR_1}");
 
