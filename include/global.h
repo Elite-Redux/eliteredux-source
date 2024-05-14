@@ -1159,18 +1159,4 @@ struct MapPosition
     s8 height;
 };
 
-//BP Gain Config
-#define DEFAULT_BP_GAIN_PER_TRAINER 3
-
-//Shop Config
-#define DEFAULT_POKEMON_PRICE    20
-#define DEFAULT_ITEM_PRICE       50
-#define DEFAULT_MEGA_STONE_PRICE 50
-#define DEFAULT_DECORATION_PRICE 25
-
-//Dexnav
-#define DEFAULT_DEXNAV_MON_PRICE 1
-#define DEXNAV_BUY_ALL_DISCOUNT  50 //In Percent
-#define DEXNAV_MON_FREE          TRUE
-
 #endif // GUARD_GLOBAL_H

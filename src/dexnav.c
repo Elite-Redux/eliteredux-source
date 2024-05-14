@@ -3701,7 +3701,8 @@ bool8 canOpenDexnav(void){
         switch(i){
             case ROW_LAND_TOP:    
                 // Land Encounters
-                if (landMonsInfo != NULL && landMonsInfo->encounterRate != 0){
+                if (landMonsInfo != NULL && 
+                    landMonsInfo->encounterRate != 0){
                     return TRUE;
                 }
             break;
