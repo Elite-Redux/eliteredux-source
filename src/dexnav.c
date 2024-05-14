@@ -72,6 +72,7 @@
 
 //Config
 #define DEFAULT_DEXNAV_MON_PRICE         1
+#define DEXNAV_MON_FREE                  TRUE
 #define DEXNAV_BUY_ALL_DISCOUNT          90 //In Percent
 #define DEXNAV_PLUS_UNLOCK_FLAG          FLAG_RESCUED_BIRCH
 #define DEXNAV_HONEY_MONS_UNLOCK_FLAG    FLAG_RESCUED_BIRCH
@@ -2304,25 +2305,28 @@ enum{
     DEXNAV_MESSAGE_BUY_ALL,
     DEXNAV_MESSAGE_BUY_ALL_NOT_OWNED,
     DEXNAV_THANKS_FOR_PURCHASE,
+    DEXNAV_THANKS_FOR_PURCHASE_SHINY,
     DEXNAV_COULD_NOT_GIVE_MON,
     DEXNAV_COULD_NOT_ENOUGH_FUNDS,
     NUM_DEXNAV_MESSAGES,
 };
 
-static const u8 sText_DexNav_Plus_Title[]           = _("Pokémon Elite Redux DexNav+");
-static const u8 sText_DexNav_Title[]                = _("Pokémon Elite Redux DexNav");
-static const u8 sText_DexNav_Plus_Message_Default[] = _("Welcome to the DexNav+! {R_BUTTON} Search\n{A_BUTTON} Get {START_BUTTON} Get All {STR_VAR_1}");
-static const u8 sText_DexNav_Plus_Message_1[]       = _("{SELECT_BUTTON} Buy New");
-static const u8 sText_DexNav_Plus_Message_2[]       = _("{B_BUTTON} Exit");
-static const u8 sText_DexNav_Message_Default[]      = _("Welcome to the Dexnav!\n{R_BUTTON} Search {B_BUTTON} Exit");
-static const u8 sText_DexNav_Message_Buy[]          = _("Do you want to get {STR_VAR_1}\nfor {STR_VAR_2} BP? {A_BUTTON} Get {B_BUTTON} Cancel");
-static const u8 sText_DexNav_Message_Buy_All[]      = _("Get all the {STR_VAR_3} Pokémon on the\nroute for {STR_VAR_1} BP? {A_BUTTON} Get {B_BUTTON} Cancel");
-static const u8 sText_DexNav_Message_Search[]       = _("Do you want to search {STR_VAR_1}?\n{A_BUTTON} Get {B_BUTTON} Cancel");
-static const u8 sText_DexNav_CouldNotGiveMon[]      = _("You don't have enough space for\nthis Pokemon {A_BUTTON} Continue.");
-static const u8 sText_DexNav_CouldNotEnoughFunds[]  = _("You don't have enough Battle\n Points for this! {A_BUTTON} Continue.");
-static const u8 sText_DexNav_ThanksForPurchase[]    = _("Enjoy your new Pokémon!\n{A_BUTTON} Continue.");
-static const u8 sText_DexNav_CurrentBP[]            = _("Current BP: {STR_VAR_1}");
-static const u8 sText_DexNav_Price[]                = _("Price: {STR_VAR_1}");
+static const u8 sText_DexNav_Plus_Title[]              = _("Pokémon Elite Redux DexNav+");
+static const u8 sText_DexNav_Title[]                   = _("Pokémon Elite Redux DexNav");
+static const u8 sText_DexNav_Plus_Message_Default[]    = _("Welcome to the DexNav+! {R_BUTTON} Search\n{A_BUTTON} Get {START_BUTTON} Get All {STR_VAR_1}");
+static const u8 sText_DexNav_Plus_Message_1[]          = _("{SELECT_BUTTON} Get New");
+static const u8 sText_DexNav_Plus_Message_2[]          = _("{B_BUTTON} Exit");
+static const u8 sText_DexNav_Message_Default[]         = _("Welcome to the Dexnav!\n{R_BUTTON} Search {B_BUTTON} Exit");
+static const u8 sText_DexNav_Message_Buy[]             = _("Do you want to get {STR_VAR_1}?\n{A_BUTTON} Get {B_BUTTON} Cancel");
+//static const u8 sText_DexNav_Message_Buy[]           = _("Do you want to get {STR_VAR_1}\nfor {STR_VAR_2} BP? {A_BUTTON} Get {B_BUTTON} Cancel");
+static const u8 sText_DexNav_Message_Buy_All[]         = _("Get all the {STR_VAR_3} Pokémon on the\nroute? {A_BUTTON} Get {B_BUTTON} Cancel");
+static const u8 sText_DexNav_Message_Search[]          = _("Do you want to search {STR_VAR_1}?\n{A_BUTTON} Get {B_BUTTON} Cancel");
+static const u8 sText_DexNav_CouldNotGiveMon[]         = _("You don't have enough space for\nthis Pokemon {A_BUTTON} Continue.");
+static const u8 sText_DexNav_CouldNotEnoughFunds[]     = _("You don't have enough Battle\n Points for this! {A_BUTTON} Continue.");
+static const u8 sText_DexNav_ThanksForPurchase[]       = _("Enjoy your new Pokémon!\n{A_BUTTON} Continue.");
+static const u8 sText_DexNav_ThanksForPurchase_Shiny[] = _("Enjoy your new Pokémon{SUM_SHINY}\n{A_BUTTON} Continue.");
+static const u8 sText_DexNav_CurrentBP[]               = _("Current BP: {STR_VAR_1}");
+static const u8 sText_DexNav_Price[]                   = _("Price: {STR_VAR_1}");
 
 static const u8  gDexnavFieldIcon_Forest[]   = INCBIN_U8("graphics/ui_menus/dexnav/fields/forest.4bpp");
 static const u8  gDexnavFieldIcon_Water[]    = INCBIN_U8("graphics/ui_menus/dexnav/fields/water.4bpp");
@@ -2465,7 +2469,7 @@ static void PrintCurrentSpeciesInfo(void)
 
     // BP
     x = 21;
-    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
+    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !DEXNAV_MON_FREE){
         ConvertIntToDecimalStringN(gStringVar1, gSaveBlock2Ptr->frontier.battlePoints, STR_CONV_MODE_LEFT_ALIGN, 3);
         StringExpandPlaceholders(gStringVar4, sText_DexNav_CurrentBP);
         AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_White, 0, gStringVar4);
@@ -2499,12 +2503,12 @@ static void PrintCurrentSpeciesInfo(void)
         
     //Price
     y++;
-    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
+    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !DEXNAV_MON_FREE){
         ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 3);
         StringExpandPlaceholders(gStringVar4, sText_DexNav_Price);
     }
     else{
-        StringCopy(gStringVar1, sText_DexNav_Type);
+        StringCopy(gStringVar4, sText_DexNav_Type);
     }
 
     offset = GetStringCenterAlignXOffset(font, gStringVar4, 68);
@@ -2596,6 +2600,9 @@ static void PrintCurrentSpeciesInfo(void)
         case DEXNAV_THANKS_FOR_PURCHASE:
             AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_ThanksForPurchase);
         break;
+        case DEXNAV_THANKS_FOR_PURCHASE_SHINY:
+            AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_ThanksForPurchase_Shiny);
+            break;
         case DEXNAV_COULD_NOT_ENOUGH_FUNDS:
             AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_CouldNotEnoughFunds);
         break;
@@ -2888,6 +2895,9 @@ static void Task_DexNavMain(u8 taskId)
     }
     else if (JOY_NEW(A_BUTTON))
     {   
+        bool8 gotShiny = FALSE;
+        u8 level = GetLevelCap();
+
         if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
             switch(sDexNavUiDataPtr->currentMessage){
                 default:
@@ -2899,22 +2909,29 @@ static void Task_DexNavMain(u8 taskId)
                     UpdateCursorPosition();
                 break;
                 case DEXNAV_MESSAGE_BUY:
-                    if (gSaveBlock2Ptr->frontier.battlePoints < DEFAULT_DEXNAV_MON_PRICE){
+                    species = DexNavGetSpecies();
+                    if (gSaveBlock2Ptr->frontier.battlePoints < getMonPrice(species) && !DEXNAV_MON_FREE){
                         sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_ENOUGH_FUNDS;
                         UpdateCursorPosition();
                     }
                     else{
                         bool8 couldGiveMon = FALSE;
-                        u8 level = GetLevelCap();
-                        species = DexNavGetSpecies();
-
                         if(level >= MAX_LEVEL)
                             level = MAX_LEVEL;
                         
+                        VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                         couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
                         if(couldGiveMon < 2){
-                            gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - DEFAULT_DEXNAV_MON_PRICE;
-                            sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
+                            if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
+                                gotShiny = TRUE;
+                            VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
+
+                            if(!DEXNAV_MON_FREE)
+                                gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - getMonPrice(species);
+                            if(gotShiny)
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE_SHINY;
+                            else
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
                         }
                         else
                             sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_GIVE_MON;
@@ -2932,13 +2949,12 @@ static void Task_DexNavMain(u8 taskId)
                     }
                     price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
 
-                    if (gSaveBlock2Ptr->frontier.battlePoints < price){
+                    if (gSaveBlock2Ptr->frontier.battlePoints < price && !DEXNAV_MON_FREE){
                         sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_ENOUGH_FUNDS;
                         UpdateCursorPosition();
                     }
                     else{
                         bool8 couldGiveMon = FALSE;
-                        u8 level = GetLevelCap();
                         price = 0;
 
                         if(level >= MAX_LEVEL)
@@ -2950,15 +2966,26 @@ static void Task_DexNavMain(u8 taskId)
                             species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
                             if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT)){
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
-                                if(couldGiveMon < 2)
+                                if(couldGiveMon < 2){
+                                    VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                                     price += getMonPrice(species);
+                                    if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
+                                        gotShiny = TRUE;
+                                    VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
+                                }
                             }
                         }
 
                         if(price != 0){
-                            price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
+                            if(!DEXNAV_MON_FREE)
+                                price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
+                            else
+                                price = 0;
                             gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - price;
-                            sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
+                            if(gotShiny)
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE_SHINY;
+                            else
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
                         }
                         else
                             sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_GIVE_MON;
@@ -2977,7 +3004,7 @@ static void Task_DexNavMain(u8 taskId)
                     }
                     price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
 
-                    if (gSaveBlock2Ptr->frontier.battlePoints < price){
+                    if (gSaveBlock2Ptr->frontier.battlePoints < price && !DEXNAV_MON_FREE){
                         sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_ENOUGH_FUNDS;
                         UpdateCursorPosition();
                     }
@@ -2994,16 +3021,27 @@ static void Task_DexNavMain(u8 taskId)
                             couldGiveMon = FALSE;
                             species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
                             if(species != SPECIES_NONE){
+                                VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
-                                if(couldGiveMon < 2)
+                                if(couldGiveMon < 2){
                                     price += getMonPrice(species);
+                                    if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
+                                        gotShiny = TRUE;
+                                    VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
+                                }
                             }
                         }
 
                         if(price != 0){
-                            price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
+                            if(!DEXNAV_MON_FREE)
+                                price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
+                            else
+                                price = 0;
                             gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - price;
-                            sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
+                            if(gotShiny)
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE_SHINY;
+                            else
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
                         }
                         else
                             sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_GIVE_MON;
