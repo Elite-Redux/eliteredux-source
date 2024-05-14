@@ -3251,27 +3251,27 @@
               {
                 "min_level": 38,
                 "max_level": 38,
-                "species": "SPECIES_SABLEYE"
+                "species": "SPECIES_OGERPON"
               },
               {
                 "min_level": 38,
                 "max_level": 38,
-                "species": "SPECIES_GABITE"
+                "species": "SPECIES_OGERPON_CORNERSTONE_MASK"
               },
               {
                 "min_level": 36,
                 "max_level": 36,
-                "species": "SPECIES_SNEASLER"
+                "species": "SPECIES_OGERPON_HEARTHFLAME_MASK"
               },
               {
                 "min_level": 36,
                 "max_level": 36,
-                "species": "SPECIES_DONPHAN"
+                "species": "SPECIES_OGERPON_WELLSPRING_MASK"
               },
               {
                 "min_level": 36,
                 "max_level": 36,
-                "species": "SPECIES_AGGRON"
+                "species": "SPECIES_PECHARUNT"
               },
               {
                 "min_level": 36,
