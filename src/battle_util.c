@@ -5455,6 +5455,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect++;
         }
         
+        // Wind Rider
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_WIND_RIDER)) {
+            if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) {
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityHighestAttackingStatRaiseOnSwitchIn);
+                effect++;
+            }
+        }
+        
         // Download
         if(CheckAndSetSwitchInAbility(battler, ABILITY_DOWNLOAD)){
             u32 statId, opposingBattler;
@@ -5916,16 +5924,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetSwitchInAbility(battler, ABILITY_CLOUD_NINE)){
             BattleScriptPushCursorAndCallback(BattleScript_AnnounceAirLockCloudNine);
             effect++;
-        }
-        
-        // Wind Rider
-        if (CheckAndSetSwitchInAbility(battler, ABILITY_WIND_RIDER)) {
-            if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND) {
-                SET_STATCHANGER(GetHighestAttackingStatId(battler, TRUE), 1, FALSE);
-
-                BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-                effect++;
-            }
         }
         
         // Purifying Waters

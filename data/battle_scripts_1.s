@@ -10234,6 +10234,16 @@ BattleScript_TargetsStatWasMaxedOut::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_BattlerAbilityHighestAttackingStatRaiseOnSwitchIn::
+	raisehighestattackingstat BS_ATTACKER, 1, BattleScript_End3
+	call BattleScript_AbilityPopUp
+	showabilitypopup BS_ABILITY_BATTLER
+	setgraphicalstatchangevalues
+	playanimation BS_ABILITY_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printstring STRINGID_BATTLERABILITYRAISEDSTAT
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
 BattleScript_BattlerAbilityStatRaiseOnSwitchIn::
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
