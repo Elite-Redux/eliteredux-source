@@ -5985,6 +5985,11 @@ const u8 gText_Effect_Boost_Type_Field[]    = _("Field");
 const u8 gText_Effect_Boost_Type_Bone[]     = _("Bone");
 const u8 gText_Effect_Boost_Type_Slash[]    = _("Slash");
 const u8 gText_Effect_Boost_Type_Bite[]     = _("Bite");
+const u8 gText_Effect_Boost_Type_Arrow[]    = _("Arrow");
+const u8 gText_Effect_Boost_Type_Hammer[]   = _("Hammer");
+const u8 gText_Effect_Boost_Type_Air[]      = _("Air");
+const u8 gText_Effect_Boost_Type_Horn[]     = _("Horn");
+const u8 gText_Effect_Boost_Type_Throw[]    = _("Throwing");
 const u8 gText_Effect_Boost_Type_Reckless[] = _("Reckless");
 const u8 gText_Effect_Critical_High[]       = _("High");
 const u8 gText_Effect_Critical_Always[]     = _("Always");
@@ -6129,6 +6134,16 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Slash);
             else if((gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Bite);
+            else if (gBattleMoves[move].airBased)
+                StringCopy(gStringVar1, gText_Effect_Boost_Type_Air);
+            else if (gBattleMoves[move].hornBased)
+                StringCopy(gStringVar1, gText_Effect_Boost_Type_Horn);
+            else if (gBattleMoves[move].hammerBased)
+                StringCopy(gStringVar1, gText_Effect_Boost_Type_Hammer);
+            else if (gBattleMoves[move].arrowBased)
+                StringCopy(gStringVar1, gText_Effect_Boost_Type_Arrow);
+            else if (gBattleMoves[move].throwingBased)
+                StringCopy(gStringVar1, gText_Effect_Boost_Type_Throw);
             else if((gBattleMoves[move].flags & FLAG_RECKLESS_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Reckless);
             else
