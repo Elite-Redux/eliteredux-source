@@ -50,7 +50,7 @@ LavaridgeTown_Gym_1F_EventScript_EndCheckBuryTrainers:: @ 81FE78B
 	return
 
 LavaridgeTown_Gym_1F_EventScript_Flannery:: @ 81FE78C
-	call LavaridgeTown_Gym_EventScript_CheckTrainers
+	//call LavaridgeTown_Gym_EventScript_CheckTrainers
 	//goto_if_set FLAG_DAILY_REMATCH_FLANNERY, LavaridgeTown_Gym_1F_EventScript_AlreadyRematched
 	goto_if_set FLAG_SYS_GAME_CLEAR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch
 	setvar VAR_0x8004, 15
