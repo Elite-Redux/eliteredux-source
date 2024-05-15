@@ -5945,9 +5945,6 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
             ){
         return ateType;
     }
-
-    else if (move == MOVE_AURA_WHEEL && species == SPECIES_MORPEKO_HANGRY)
-        return TYPE_DARK;
 	
 	//Crystallize
 	if(HAS_ABILITY(ABILITY_CRYSTALLIZE)){
@@ -6117,8 +6114,6 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
         return TYPE_WATER;
     else if (gStatuses4[battlerAtk] & STATUS4_PLASMA_FISTS && moveType == TYPE_NORMAL)
         return TYPE_ELECTRIC;
-    else if (move == MOVE_AURA_WHEEL && gBattleMons[battlerAtk].species == SPECIES_MORPEKO_HANGRY)
-        return TYPE_DARK;
 
     return gBattleMoves[move].type;
 }
@@ -6286,10 +6281,6 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     else if (gStatuses4[battlerAtk] & STATUS4_PLASMA_FISTS && moveType == TYPE_NORMAL)
     {
         gBattleStruct->dynamicMoveType = 0x80 | TYPE_ELECTRIC;
-    }
-    else if (move == MOVE_AURA_WHEEL && gBattleMons[battlerAtk].species == SPECIES_MORPEKO_HANGRY)
-    {
-        gBattleStruct->dynamicMoveType = 0x80 | TYPE_DARK;
     }
 
     // Check if a gem should activate.

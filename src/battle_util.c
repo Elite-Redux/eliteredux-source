@@ -61,6 +61,7 @@ functions instead of at the top of the file with the other declarations.
 static bool32 TryRemoveScreens(u8 battler);
 static bool32 IsUnnerveAbilityOnOpposingSide(u8 battlerId);
 static bool8 DoesMoveBoostStats(u16 move);
+static void UpdateMoveResultFlags(u16 modifier);
 
 extern const u8 *const gBattleScriptsForMoveEffects[];
 extern const u8 *const gBattlescriptsForBallThrow[];
@@ -14637,14 +14638,17 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType
     if (gBattleMoves[move].type2 && gBattleMoves[move].type2 != *moveType && gBattleMoves[move].type2 != TYPE_MYSTERY)
     {
         u8 type2 = gBattleMoves[move].type2;
-        u16 typeEffectivenessModifier2 = CalcTypeEffectivenessMultiplier(move, type2, battlerAtk, battlerDef, updateFlags);
-        s32 dmg2 = DoMoveDamageCalcInternal(move, battlerAtk, battlerDef, type2, fixedBasePower, isCrit, updateFlags, typeEffectivenessModifier2);
+        u16 typeEffectivenessModifier2 = CalcTypeEffectivenessMultiplier(move, type2, battlerAtk, battlerDef, FALSE);
+        s32 dmg2 = DoMoveDamageCalcInternal(move, battlerAtk, battlerDef, type2, fixedBasePower, isCrit, FALSE, typeEffectivenessModifier2);
+
+        MGBA_PRINT_DEBUG("Checking type2 on move %d dmg1 %d dmg2 %d eff1 %d eff2 %d", move, dmg, dmg2, *typeEffectivenessModifier, typeEffectivenessModifier2)
 
         if (dmg2 > dmg)
         {
             *typeEffectivenessModifier = typeEffectivenessModifier2;
             dmg = dmg2;
             *moveType = type2;
+            if (updateFlags) UpdateMoveResultFlags(typeEffectivenessModifier2);
         }
     }
 
