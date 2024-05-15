@@ -11281,7 +11281,8 @@ case ITEMEFFECT_KINGSROCK:
                 && gBattlerAttacker != gBattlerTarget
                 && gTurnStructs[gBattlerTarget].dmg != 0
                 && gBattleMons[gBattlerAttacker].hp != gBattleMons[gBattlerAttacker].maxHP
-                && gBattleMons[gBattlerAttacker].hp != 0)
+                && gBattleMons[gBattlerAttacker].hp != 0
+                && !BATTLER_HEALING_BLOCKED(gBattlerAttacker))
             {
                 gLastUsedItem = atkItem;
                 gPotentialItemEffectBattler = gBattlerAttacker;
