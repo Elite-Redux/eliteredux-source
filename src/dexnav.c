@@ -68,15 +68,16 @@
 #define HIDDEN_WILD_COUNT 3
 #define TEXT_SKIP_DRAW 0xFF
 #define NUM_POKEMON_ICONS 12
+#define DEXNAV_MAX_SHOWN_ROWS 5
 
 //Config
-#define DEFAULT_DEXNAV_MON_PRICE         5
-#define DEXNAV_BUY_ALL_DISCOUNT          30 //In Percent
 #define DEXNAV_PLUS_UNLOCK_FLAG          FLAG_RESCUED_BIRCH
 #define DEXNAV_HONEY_MONS_UNLOCK_FLAG    FLAG_RESCUED_BIRCH
 #define DEXNAV_HEADBUTT_MONS_UNLOCK_FLAG FLAG_RESCUED_BIRCH
-#define DEXNAV_FISHING_MONS_UNLOCK_FLAG  FLAG_RESCUED_BIRCH
-#define DEXNAV_WATER_MONS_UNLOCK_FLAG    FLAG_RESCUED_BIRCH
+#define DEXNAV_FISHING_MONS_UNLOCK_FLAG  FLAG_BADGE02_GET
+#define DEXNAV_WATER_MONS_UNLOCK_FLAG    FLAG_BADGE02_GET
+
+#define DEXNAV_ENABLE_ROUTE_115_FLAG FLAG_BADGE02_GET
 
 // Defines
 enum WindowIds
@@ -458,166 +459,6 @@ static const struct CompressedSpriteSheet sPotentialStarSpriteSheet = {sPotentia
 //static const struct CompressedSpriteSheet sSightSpriteSheet = {sEyeGfx, (16 * 8 * 3) / 2, SIGHT_TAG};
 static const struct CompressedSpriteSheet sOwnedIconSpriteSheet = {sOwnedIconGfx, (8 * 8) / 2, OWNED_ICON_TAG};
 static const struct CompressedSpriteSheet sHiddenMonIconSpriteSheet = {sHiddenMonIconGfx, (8 * 8) / 2, HIDDEN_MON_ICON_TAG};
-
-#define PAL_HONEY_FIELD_ICON    10
-#define PAL_HIDDEN_FIELD_ICON   11
-#define PAL_HEADBUTT_FIELD_ICON 12
-#define PAL_FISHING_FIELD_ICON  13
-#define PAL_WATER_FIELD_ICON    14
-#define PAL_FOREST_FIELD_ICON   15
-
-static const u32 gDexnavFieldIcon_Forest_Gfx[]   = INCBIN_U32("graphics/ui_menus/dexnav/fields/test.4bpp.lz");
-static const u16 gDexnavFieldIcon_Forest_Pal[]   = INCBIN_U16("graphics/ui_menus/dexnav/fields/test.gbapal");
-
-static const u32 gDexnavFieldIcon_Water_Gfx[]    = INCBIN_U32("graphics/ui_menus/dexnav/fields/test.4bpp.lz");
-static const u16 gDexnavFieldIcon_Water_Pal[]    = INCBIN_U16("graphics/ui_menus/dexnav/fields/test.gbapal");
-
-static const u32 gDexnavFieldIcon_Fishing_Gfx[]  = INCBIN_U32("graphics/ui_menus/dexnav/fields/test.4bpp.lz");
-static const u16 gDexnavFieldIcon_Fishing_Pal[]  = INCBIN_U16("graphics/ui_menus/dexnav/fields/test.gbapal");
-
-static const u32 gDexnavFieldIcon_Headbutt_Gfx[] = INCBIN_U32("graphics/ui_menus/dexnav/fields/test.4bpp.lz");
-static const u16 gDexnavFieldIcon_Headbutt_Pal[] = INCBIN_U16("graphics/ui_menus/dexnav/fields/test.gbapal");
-
-static const u32 gDexnavFieldIcon_Hidden_Gfx[]   = INCBIN_U32("graphics/ui_menus/dexnav/fields/test.4bpp.lz");
-static const u16 gDexnavFieldIcon_Hidden_Pal[]   = INCBIN_U16("graphics/ui_menus/dexnav/fields/test.gbapal");
-
-static const u32 gDexnavFieldIcon_Honey_Gfx[]    = INCBIN_U32("graphics/ui_menus/dexnav/fields/test.4bpp.lz");
-static const u16 gDexnavFieldIcon_Honey_Pal[]    = INCBIN_U16("graphics/ui_menus/dexnav/fields/test.gbapal");
-
-static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Forest[]   = {gDexnavFieldIcon_Forest_Pal,   PAL_FOREST_FIELD_ICON};
-static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Water[]    = {gDexnavFieldIcon_Water_Pal,    PAL_WATER_FIELD_ICON};
-static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Fishing[]  = {gDexnavFieldIcon_Fishing_Pal,  PAL_FISHING_FIELD_ICON};
-static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Headbutt[] = {gDexnavFieldIcon_Headbutt_Pal, PAL_HEADBUTT_FIELD_ICON};
-static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Hidden[]   = {gDexnavFieldIcon_Hidden_Pal,   PAL_HIDDEN_FIELD_ICON};
-static const struct SpritePalette sBattleMenuFieldIconSpritePalette_Honey[]    = {gDexnavFieldIcon_Honey_Pal,    PAL_HONEY_FIELD_ICON};
-
-#define DEXNAV_DEFAULT_ROW 2
-#define DEXNAV_MAX_SHOWN_ROWS 5
-static void SpriteCB_DexnavFieldSelector(struct Sprite *sprite)
-{
-    u8 row = sprite->data[0];
-    u8 currentCursorRow = sDexNavUiDataPtr->currentEnviorment;
-    u8 spaceBetweenRows;
-    u8 place;
-
-    if(currentCursorRow == row){
-        //The current row is the one that is selected meaning it should be in the second slot(the default row)
-        place = DEXNAV_DEFAULT_ROW;
-    }
-    else if(row < currentCursorRow){
-        //The current row is above the selected row
-        spaceBetweenRows = currentCursorRow - row;
-        place = DEXNAV_DEFAULT_ROW + spaceBetweenRows;
-    }
-    else{
-        spaceBetweenRows = row - currentCursorRow;
-        //The current row is below the selected row
-        if(DEXNAV_MAX_SHOWN_ROWS < spaceBetweenRows)
-            place = DEXNAV_MAX_SHOWN_ROWS;
-        else
-            place = DEXNAV_DEFAULT_ROW - spaceBetweenRows;
-    }
-
-    /*if(place >= DEXNAV_MAX_SHOWN_ROWS)
-        sprite->invisible = TRUE;
-    else
-        sprite->invisible = FALSE;*/
-
-    sprite->y2 = (place * 32);
-}
-
-//Field Icon
-void FreeDexnavFieldSprite(u8 field)
-{
-    u8 *spriteId = &sDexNavUiDataPtr->DexnavSprites[field];
-
-    if (*spriteId != SPRITE_NONE)
-    {
-        FreeSpriteTilesByTag(DEXNAV_FIELD_ICON_LAND);
-        FreeSpritePaletteByTag(DEXNAV_FIELD_ICON_LAND);
-        FreeSpriteOamMatrix(&gSprites[*spriteId]);
-        DestroySprite(&gSprites[*spriteId]);
-        *spriteId = SPRITE_NONE;
-        sDexNavUiDataPtr->DexnavSprites[DEXNAV_FIELD_ICON_LAND] = SPRITE_NONE;
-    }
-}
-
-static void ShowDexnavFieldIcon(u8 row)
-{
-    u8 spriteId, SpriteTag;
-    struct SpriteTemplate TempSpriteTemplate = gDummySpriteTemplate;
-    u8 field = DEXNAV_FIELD_ICON_LAND + row;
-
-    SpriteTag = field;
-
-    TempSpriteTemplate.tileTag  = SpriteTag;
-    TempSpriteTemplate.callback = SpriteCB_DexnavFieldSelector;
-
-    switch(field)
-    {
-        case DEXNAV_FIELD_ICON_LAND:
-        {
-            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Forest_Gfx, 0x0800, field};
-
-            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
-            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Forest);
-            TempSpriteTemplate.paletteTag = PAL_FOREST_FIELD_ICON;
-        }
-        break;
-        case DEXNAV_FIELD_ICON_WATER:
-        {
-            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Water_Gfx, 0x0800, field};
-
-            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
-            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Water);
-            TempSpriteTemplate.paletteTag = PAL_WATER_FIELD_ICON;
-        }
-        break;
-        case DEXNAV_FIELD_ICON_FISHING:
-        {
-            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Fishing_Gfx, 0x0800, field};
-
-            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
-            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Fishing);
-            TempSpriteTemplate.paletteTag = PAL_FISHING_FIELD_ICON;
-        }
-        break;
-        case DEXNAV_FIELD_ICON_HEADBUTT:
-        {
-            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Headbutt_Gfx, 0x0800, field};
-
-            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
-            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Headbutt);
-            TempSpriteTemplate.paletteTag = PAL_HEADBUTT_FIELD_ICON;
-        }
-        break;
-        case DEXNAV_FIELD_ICON_HIDDEN:
-        {
-            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Hidden_Gfx, 0x0800, field};
-
-            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
-            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Hidden);
-            TempSpriteTemplate.paletteTag = PAL_HIDDEN_FIELD_ICON;
-        }
-        break;
-        case DEXNAV_FIELD_ICON_HONEY:
-        {
-            struct CompressedSpriteSheet sSpriteSheet_FieldIcon = {gDexnavFieldIcon_Honey_Gfx, 0x0800, field};
-
-            LoadCompressedSpriteSheet(&sSpriteSheet_FieldIcon);
-            LoadSpritePalette(sBattleMenuFieldIconSpritePalette_Honey);
-            TempSpriteTemplate.paletteTag = PAL_HONEY_FIELD_ICON;
-        }
-        break;
-    }
-
-    sDexNavUiDataPtr->DexnavSprites[field] = CreateSprite(&TempSpriteTemplate, 4, 4, 0);
-
-    gSprites[sDexNavUiDataPtr->DexnavSprites[field]].oam.shape    = SPRITE_SHAPE(64x32);
-    gSprites[sDexNavUiDataPtr->DexnavSprites[field]].oam.size     = SPRITE_SIZE(64x32);
-    gSprites[sDexNavUiDataPtr->DexnavSprites[field]].oam.priority = 1;
-    gSprites[sDexNavUiDataPtr->DexnavSprites[field]].data[0]      = row;
-}
 
 //// functions
 ///////////////////////
@@ -1074,8 +915,6 @@ static void Task_InitDexNavSearch(u8 taskId)
     u8 searchLevel;
     u16 species    = task->tSpecies;
     u8 environment = task->tEnvironment;
-
-    //sDexNavUiDataPtr->currentEnviorment
     
     sDexNavSearchDataPtr = AllocZeroed(sizeof(struct DexNavSearch));
     
@@ -2191,6 +2030,7 @@ static void DexNavLoadEncounterData(void)
     u16 species;
     u32 i, j;
     u16 headerId = GetCurrentMapWildMonHeaderId();
+    u8 newEnviorment = DEXNAV_ROWS_COUNT;
     const struct WildPokemonInfo* landMonsInfo      = gWildMonHeaders[headerId].landMonsInfo;
     const struct WildPokemonInfo* waterMonsInfo     = gWildMonHeaders[headerId].waterMonsInfo;
     const struct WildPokemonInfo* hiddenMonsInfo    = gWildMonHeaders[headerId].hiddenMonsInfo;
@@ -2216,6 +2056,7 @@ static void DexNavLoadEncounterData(void)
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
+                    newEnviorment = i;
                 }
             break;
             case ROW_WATER:
@@ -2228,6 +2069,9 @@ static void DexNavLoadEncounterData(void)
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
+
+                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                        newEnviorment = i;
                 }
             break;
             case ROW_FISHING:
@@ -2240,6 +2084,9 @@ static void DexNavLoadEncounterData(void)
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
+
+                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                        newEnviorment = i;
                 }
             break;
             case ROW_ROCK_SMASH:
@@ -2252,6 +2099,9 @@ static void DexNavLoadEncounterData(void)
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
+                    
+                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                        newEnviorment = i;
                 }
             break;
             case ROW_HONEY:
@@ -2264,6 +2114,9 @@ static void DexNavLoadEncounterData(void)
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
+                    
+                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                        newEnviorment = i;
                 }
             break;
             case ROW_HIDDEN:
@@ -2276,6 +2129,9 @@ static void DexNavLoadEncounterData(void)
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
+                    
+                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                        newEnviorment = i;
                 }
             break;
         }
@@ -2288,6 +2144,7 @@ static void DexNavLoadEncounterData(void)
         
         sDexNavUiDataPtr->routeSpeciesNum[i] = index;
     }
+    sDexNavUiDataPtr->currentEnviorment = newEnviorment;
 }
 
 #define TAG_DEXNAV_POKEMON_ICON 4135
@@ -2295,9 +2152,6 @@ static void FreeDexnavSpeciesIconSprite(u8 row, u8 num)
 {
     if (sDexNavUiDataPtr->DexnavSpeciesIconsSprites[row][DEXNAV_SPRITE_ICON + num] != 0xFF)
     {
-        //FreeSpriteTilesByTag(TAG_DEXNAV_POKEMON_ICON + num);
-        //FreeSpritePaletteByTag(TAG_DEXNAV_POKEMON_ICON + num);
-
         FreeSpriteOamMatrix(&gSprites[sDexNavUiDataPtr->DexnavSpeciesIconsSprites[row][DEXNAV_SPRITE_ICON + num]]);
         DestroySprite(&gSprites[sDexNavUiDataPtr->DexnavSpeciesIconsSprites[row][DEXNAV_SPRITE_ICON + num]]);
 
@@ -2315,13 +2169,6 @@ static void DestroyAllMonIcons(void)
            sDexNavUiDataPtr->DexnavSpeciesIconsSprites[i][j] = 0xFF;
         }
     }
-    
-    /*for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
-        for (j = 0; j < NUM_POKEMON_ICONS; j++)
-        {
-            FreeDexnavSpeciesIconSprite(i, j);
-        }
-    }*/
 }
 
 static u8 TryDrawIconInSlot(u8 enviorment, u8 num, s16 x, s16 y)
@@ -2330,7 +2177,7 @@ static u8 TryDrawIconInSlot(u8 enviorment, u8 num, s16 x, s16 y)
 
     if(sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num] != 0xFF) //Already created
         return sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num];
-    else if (species == SPECIES_NONE || species > NUM_SPECIES)
+    else if (species == SPECIES_NONE || species > NUM_SPECIES || sDexNavUiDataPtr->routeSpeciesNum[enviorment] == 0) //No species or enviorment locked
         return 0xFF;
 
 	LoadMonIconPalette(species);
@@ -2432,13 +2279,14 @@ static void SetTypeIconPosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId)
     SetSpriteInvisibility(spriteArrayId, FALSE);
 }
 
-static const u8 sText_DexNav_Species[]         = _("Species");
-static const u8 sText_DexNav_Type[]            = _("Type");
-static const u8 sText_DexNav_MapName[]         = _("{STR_VAR_1} - {STR_VAR_3}{STR_VAR_2}");
-static const u8 sText_DexNav_SpeciesName[]     = _("{STR_VAR_1}{STR_VAR_2}");
-static const u8 sText_DexNav_Caught_Type_No[]  = _("");
-static const u8 sText_DexNav_Caught_Type_Yes[] = _("{POKEBALL_ICON}");
-static const u8 sText_DexNav_Innates[]         = _("Innates");
+static const u8 sText_DexNav_Species[]          = _("Species");
+static const u8 sText_DexNav_Type[]             = _("Type");
+static const u8 sText_DexNav_MapName[]          = _("{STR_VAR_1} - {STR_VAR_3}{STR_VAR_2}");
+static const u8 sText_DexNav_SpeciesName[]      = _("{NO}{STR_VAR_2} {STR_VAR_3}");
+static const u8 sText_DexNav_SpeciesName_None[] = _("---");
+static const u8 sText_DexNav_Caught_Type_No[]   = _("");
+static const u8 sText_DexNav_Caught_Type_Yes[]  = _("{POKEBALL_ICON}");
+static const u8 sText_DexNav_Innates[]          = _("Innates:");
 
 static const u8 sText_DexNav_Land[]     = _("Land");
 static const u8 sText_DexNav_Land_2[]   = _("Land 2");
@@ -2456,25 +2304,28 @@ enum{
     DEXNAV_MESSAGE_BUY_ALL,
     DEXNAV_MESSAGE_BUY_ALL_NOT_OWNED,
     DEXNAV_THANKS_FOR_PURCHASE,
+    DEXNAV_THANKS_FOR_PURCHASE_SHINY,
     DEXNAV_COULD_NOT_GIVE_MON,
     DEXNAV_COULD_NOT_ENOUGH_FUNDS,
     NUM_DEXNAV_MESSAGES,
 };
 
-static const u8 sText_DexNav_Plus_Title[]           = _("Pokémon Elite Redux Dexnav+");
-static const u8 sText_DexNav_Title[]                = _("Pokémon Elite Redux Dexnav");
-static const u8 sText_DexNav_Plus_Message_Default[] = _("Welcome to the Dexnav+! {R_BUTTON} Search\n{A_BUTTON} Buy {START_BUTTON} Buy All {STR_VAR_1}");
-static const u8 sText_DexNav_Plus_Message_1[]       = _("{SELECT_BUTTON} Buy New");
-static const u8 sText_DexNav_Plus_Message_2[]       = _("{B_BUTTON} Exit");
-static const u8 sText_DexNav_Message_Default[]      = _("Welcome to the Dexnav!\n{R_BUTTON} Search {B_BUTTON} Exit");
-static const u8 sText_DexNav_Message_Buy[]          = _("Do you want to buy {STR_VAR_1}\nfor {STR_VAR_2} BP? {A_BUTTON} Buy {B_BUTTON} Cancel");
-static const u8 sText_DexNav_Message_Buy_All[]      = _("Buy all the {STR_VAR_3} Pokémon on the\nroute for {STR_VAR_1} BP? {A_BUTTON} Buy {B_BUTTON} Cancel");
-static const u8 sText_DexNav_Message_Search[]       = _("Do you want to Search {STR_VAR_1}?\n{A_BUTTON} Buy {B_BUTTON} Cancel");
-static const u8 sText_DexNav_CouldNotGiveMon[]      = _("You don't have enough space for\nthis Pokemon {A_BUTTON} Continue.");
-static const u8 sText_DexNav_CouldNotEnoughFunds[]  = _("You don't have enough Battle\n Points for this! {A_BUTTON} Continue.");
-static const u8 sText_DexNav_ThanksForPurchase[]    = _("Thank you for your purchase!\n{A_BUTTON} Continue.");
-static const u8 sText_DexNav_CurrentBP[]            = _("Current BP: {STR_VAR_1}");
-static const u8 sText_DexNav_Price[]                = _("Price: {STR_VAR_1}");
+static const u8 sText_DexNav_Plus_Title[]              = _("Pokémon Elite Redux DexNav+");
+static const u8 sText_DexNav_Title[]                   = _("Pokémon Elite Redux DexNav");
+static const u8 sText_DexNav_Plus_Message_Default[]    = _("Welcome to the DexNav+! {R_BUTTON} Search\n{A_BUTTON} Get {START_BUTTON} Get All {STR_VAR_1}");
+static const u8 sText_DexNav_Plus_Message_1[]          = _("{SELECT_BUTTON} Get New");
+static const u8 sText_DexNav_Plus_Message_2[]          = _("{B_BUTTON} Exit");
+static const u8 sText_DexNav_Message_Default[]         = _("Welcome to the Dexnav!\n{R_BUTTON} Search {B_BUTTON} Exit");
+static const u8 sText_DexNav_Message_Buy[]             = _("Do you want to get {STR_VAR_1}?\n{A_BUTTON} Get {B_BUTTON} Cancel");
+//static const u8 sText_DexNav_Message_Buy[]           = _("Do you want to get {STR_VAR_1}\nfor {STR_VAR_2} BP? {A_BUTTON} Get {B_BUTTON} Cancel");
+static const u8 sText_DexNav_Message_Buy_All[]         = _("Get all the {STR_VAR_3} Pokémon on the\nroute? {A_BUTTON} Get {B_BUTTON} Cancel");
+static const u8 sText_DexNav_Message_Search[]          = _("Do you want to search {STR_VAR_1}?\n{A_BUTTON} Get {B_BUTTON} Cancel");
+static const u8 sText_DexNav_CouldNotGiveMon[]         = _("You don't have enough space for\nthis Pokemon {A_BUTTON} Continue.");
+static const u8 sText_DexNav_CouldNotEnoughFunds[]     = _("You don't have enough Battle\n Points for this! {A_BUTTON} Continue.");
+static const u8 sText_DexNav_ThanksForPurchase[]       = _("Enjoy your new Pokémon!\n{A_BUTTON} Continue.");
+static const u8 sText_DexNav_ThanksForPurchase_Shiny[] = _("Enjoy your new Pokémon{SUM_SHINY}\n{A_BUTTON} Continue.");
+static const u8 sText_DexNav_CurrentBP[]               = _("Current BP: {STR_VAR_1}");
+static const u8 sText_DexNav_Price[]                   = _("Price: {STR_VAR_1}");
 
 static const u8  gDexnavFieldIcon_Forest[]   = INCBIN_U8("graphics/ui_menus/dexnav/fields/forest.4bpp");
 static const u8  gDexnavFieldIcon_Water[]    = INCBIN_U8("graphics/ui_menus/dexnav/fields/water.4bpp");
@@ -2519,63 +2370,10 @@ u8 getMonPrice(u16 species)
     //To be expanded in the future
     return DEFAULT_DEXNAV_MON_PRICE;
 }
-    
-static void PrintCurrentSpeciesInfo(void)
-{
-    u8 searchLevelBonus = 0;
-    u16 species = GetRandomPokemonFromSpecies(DexNavGetSpecies());
-    u32 i, j, x, y;
-    u16 dexNum = SpeciesToNationalPokedexNum(species);
-    u8 type1, type2;
-    u8 price = getMonPrice(species);
-    u8 font = FONT_SMALL_NARROW;
-    bool8 isEverythingCaught = hasAllMonsInEnviorment();
 
-    // Clear windows
-    FillWindowPixelBuffer(WINDOW_INFO, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
-    
-    for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
-        j = getEnviormentAt(i);
-        switch(j){
-            case ROW_LAND_TOP:
-                BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Forest, 0, (i * 32), 48, 32);
-            break;
-            case ROW_WATER:
-                BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Water, 0, (i * 32), 48, 32);
-            break;
-            case ROW_HIDDEN:
-                BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Hidden, 0, (i * 32), 48, 32);
-            break;
-            case ROW_FISHING:
-                BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Fishing, 0, (i * 32), 48, 32);
-            break;
-            case ROW_ROCK_SMASH:
-                BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Headbutt, 0, (i * 32), 48, 32);
-            break;
-            case ROW_HONEY:
-                BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Honey, 0, (i * 32), 48, 32);
-            break;
-        }
-
-        if(i == DEFAULT_DEXNAV_ROW)
-            BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Selector, 0, (i * 32), 48, 32);
-    }
-
-    //Title
-    x = 9;
-    y = 0;
-    if(!FlagGet(DEXNAV_PLUS_UNLOCK_FLAG))
-        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8), sFontColor_White, TEXT_SKIP_DRAW, sText_DexNav_Title);
-    else
-        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8), sFontColor_White, TEXT_SKIP_DRAW, sText_DexNav_Plus_Title);
-
-    // Map Name
-    x = 8;
-    y = 3;
-    GetMapName(gStringVar1, GetCurrentRegionMapSectionId(), 0);
-
-    switch(sDexNavUiDataPtr->currentEnviorment)
-    {
+static void EnviormentToStringVar(u8 enviorment){
+    //This only copies to gStringVar3
+    switch(enviorment){
         case ROW_LAND_TOP:
             StringCopy(gStringVar3, sText_DexNav_Land);
         break;
@@ -2596,6 +2394,69 @@ static void PrintCurrentSpeciesInfo(void)
         break;
     }
 
+}
+    
+static void PrintCurrentSpeciesInfo(void)
+{
+    u8 searchLevelBonus = 0;
+    u16 species = GetRandomPokemonFromSpecies(DexNavGetSpecies());
+    u32 i, j, x, y;
+    u16 dexNum = SpeciesToNationalPokedexNum(species);
+    u8 type1, type2, offset;
+    u8 price = getMonPrice(species);
+    u8 font = FONT_SMALL_NARROW;
+    u8 numRows = sDexNavUiDataPtr->rowNum;
+    bool8 isEverythingCaught = hasAllMonsInEnviorment();
+
+    // Clear windows
+    FillWindowPixelBuffer(WINDOW_INFO, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+    
+    for(i = 0; i < DEXNAV_MAX_SHOWN_ROWS; i++){
+        j = getEnviormentAt(i);
+
+        if((numRows < 5 && (i == 0 || i == DEXNAV_MAX_SHOWN_ROWS - 1)) || (numRows == 1 && i != DEFAULT_DEXNAV_ROW))
+            j++; //This does nothing
+        else{
+            switch(j){
+                case ROW_LAND_TOP:
+                    BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Forest, 0, (i * 32), 48, 32);
+                break;
+                case ROW_WATER:
+                    BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Water, 0, (i * 32), 48, 32);
+                break;
+                case ROW_HIDDEN:
+                    BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Hidden, 0, (i * 32), 48, 32);
+                break;
+                case ROW_FISHING:
+                    BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Fishing, 0, (i * 32), 48, 32);
+                break;
+                case ROW_ROCK_SMASH:
+                    BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Headbutt, 0, (i * 32), 48, 32);
+                break;
+                case ROW_HONEY:
+                    BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Honey, 0, (i * 32), 48, 32);
+                break;
+            }
+
+            if(i == DEFAULT_DEXNAV_ROW)
+                BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Selector, 0, (i * 32), 48, 32);
+        }
+    }
+
+    //Title
+    x = 9;
+    y = 0;
+    if(!FlagGet(DEXNAV_PLUS_UNLOCK_FLAG))
+        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8), sFontColor_White, TEXT_SKIP_DRAW, sText_DexNav_Title);
+    else
+        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8), sFontColor_White, TEXT_SKIP_DRAW, sText_DexNav_Plus_Title);
+
+    // Map Name
+    x = 8;
+    y = 3;
+    GetMapName(gStringVar1, GetCurrentRegionMapSectionId(), 0);
+    EnviormentToStringVar(sDexNavUiDataPtr->currentEnviorment);
+
     if(isEverythingCaught)
         StringCopy(gStringVar2, sText_DexNav_Caught_Type_Yes);
     else
@@ -2607,7 +2468,7 @@ static void PrintCurrentSpeciesInfo(void)
 
     // BP
     x = 21;
-    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
+    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !DEXNAV_MON_FREE){
         ConvertIntToDecimalStringN(gStringVar1, gSaveBlock2Ptr->frontier.battlePoints, STR_CONV_MODE_LEFT_ALIGN, 3);
         StringExpandPlaceholders(gStringVar4, sText_DexNav_CurrentBP);
         AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_White, 0, gStringVar4);
@@ -2615,34 +2476,42 @@ static void PrintCurrentSpeciesInfo(void)
     
     // Species name
     y++;
-    AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_Species);
+    if (species == SPECIES_NONE)
+        StringCopy(gStringVar1, sText_DexNav_SpeciesName_None);
+    else
+        StringCopy(gStringVar1, gSpeciesNames[species]);
+
+    offset = GetStringCenterAlignXOffset(font, gStringVar1, 68);
+    AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8) - 4 + offset, (y * 8) - 4, sFontColor_Black, 0, gStringVar1);
+
     y++;
-    if (species == SPECIES_NONE){
-        StringCopy(gStringVar1, sText_DexNav_NoInfo);
-        StringCopy(gStringVar2, sText_DexNav_Caught_Type_No);
-    }
+    if (species == SPECIES_NONE)
+        StringCopy(gStringVar4, sText_DexNav_SpeciesName_None);
     else{
         StringCopy(gStringVar1, gSpeciesNames[species]);
         if(GetSetPokedexFlag(species, FLAG_GET_CAUGHT))
-            StringCopy(gStringVar2, sText_DexNav_Caught_Type_Yes);
+            StringCopy(gStringVar3, sText_DexNav_Caught_Type_Yes);
         else
-            StringCopy(gStringVar2, sText_DexNav_Caught_Type_No);
+            StringCopy(gStringVar3, sText_DexNav_Caught_Type_No);
+        ConvertIntToDecimalStringN(gStringVar2, SpeciesToNationalPokedexNum(species), STR_CONV_MODE_LEFT_ALIGN, 3);
+        StringExpandPlaceholders(gStringVar4, sText_DexNav_SpeciesName);
     }
 
-    StringExpandPlaceholders(gStringVar4, sText_DexNav_SpeciesName);
-    AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
+    offset = GetStringCenterAlignXOffset(font, gStringVar4, 68);
+    AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8) - 4 + offset, (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
         
-    
     //Price
     y++;
-    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
+    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !DEXNAV_MON_FREE){
         ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 3);
         StringExpandPlaceholders(gStringVar4, sText_DexNav_Price);
-        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
     }
     else{
-        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_Type);
+        StringCopy(gStringVar4, sText_DexNav_Type);
     }
+
+    offset = GetStringCenterAlignXOffset(font, gStringVar4, 68);
+    AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8) - 4 + offset, (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
 
     // Type icon(s)
     type1 = gBaseStats[species].type1;
@@ -2652,25 +2521,29 @@ static void PrintCurrentSpeciesInfo(void)
     
     if (type1 == type2)
     {
-        SetTypeIconPosAndPal(type1, 168, DEXNAV_TYPE_ICON_Y, 0);
+        SetTypeIconPosAndPal(type1, 160 + 22, DEXNAV_TYPE_ICON_Y, 0);
         SetSpriteInvisibility(1, TRUE);
     }
     else
     {
-        SetTypeIconPosAndPal(type1, 168, DEXNAV_TYPE_ICON_Y, 0);
-        SetTypeIconPosAndPal(type2, 168 + 33, DEXNAV_TYPE_ICON_Y, 1);
+        SetTypeIconPosAndPal(type1, 165, DEXNAV_TYPE_ICON_Y, 0);
+        SetTypeIconPosAndPal(type2, 166 + 33, DEXNAV_TYPE_ICON_Y, 1);
     }
 
     // Innates
     y = y + 4;
-    AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_Innates);
+    StringCopy(gStringVar1, sText_DexNav_Innates);
+    offset = GetStringCenterAlignXOffset(font, gStringVar1, 68);
+    AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8) - 4 + offset, (y * 8) - 4, sFontColor_Black, 0, gStringVar1);
     y++;
     for (i = 0; i < NUM_ABILITY_SLOTS; i++)
     {
         if (gBaseStats[species].innates[i] == ABILITY_NONE)
             break;
-        
-        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gAbilityNames[gBaseStats[species].innates[i]]);
+
+        StringCopy(gStringVar1, gAbilityNames[gBaseStats[species].innates[i]]);
+        offset = GetStringCenterAlignXOffset(font, gStringVar1, 68);
+        AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8) - 4 + offset, (y * 8) - 4, sFontColor_Black, 0, gStringVar1);
         y++;
     }
 
@@ -2704,7 +2577,8 @@ static void PrintCurrentSpeciesInfo(void)
 
             price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
             ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 3);
-            StringExpandPlaceholders(gStringVar4, sText_DexNav_Message_Buy_All); //gStringVar3 is defined above
+            EnviormentToStringVar(sDexNavUiDataPtr->currentEnviorment);
+            StringExpandPlaceholders(gStringVar4, sText_DexNav_Message_Buy_All);
             AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
         break;
         case DEXNAV_MESSAGE_BUY_ALL:
@@ -2718,12 +2592,16 @@ static void PrintCurrentSpeciesInfo(void)
 
             price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
             ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 3);
-            StringExpandPlaceholders(gStringVar4, sText_DexNav_Message_Buy_All); //gStringVar3 is defined above
+            EnviormentToStringVar(sDexNavUiDataPtr->currentEnviorment);
+            StringExpandPlaceholders(gStringVar4, sText_DexNav_Message_Buy_All);
             AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, gStringVar4);
             break;
         case DEXNAV_THANKS_FOR_PURCHASE:
             AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_ThanksForPurchase);
         break;
+        case DEXNAV_THANKS_FOR_PURCHASE_SHINY:
+            AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_ThanksForPurchase_Shiny);
+            break;
         case DEXNAV_COULD_NOT_ENOUGH_FUNDS:
             AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_Black, 0, sText_DexNav_CouldNotEnoughFunds);
         break;
@@ -2830,17 +2708,8 @@ static bool8 DexNav_DoGfxSetup(void)
         gMain.state++;
         break;
     case 10:
-        //ShowDexnavFieldIcon(ROW_LAND_TOP);
-        //ShowDexnavFieldIcon(ROW_WATER);
-
-        /*for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
-            if(sDexNavUiDataPtr->routeSpeciesNum[i] != 0)
-                ShowDexnavFieldIcon(i);
-        }*/
-
         DrawSpeciesIcons();
         CreateSelectionCursor();
-        //DexNavLoadCapturedAllSymbols();
         gMain.state++;
         break;
     case 11:
@@ -3025,6 +2894,9 @@ static void Task_DexNavMain(u8 taskId)
     }
     else if (JOY_NEW(A_BUTTON))
     {   
+        bool8 gotShiny = FALSE;
+        u8 level = GetLevelCap();
+
         if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
             switch(sDexNavUiDataPtr->currentMessage){
                 default:
@@ -3036,22 +2908,29 @@ static void Task_DexNavMain(u8 taskId)
                     UpdateCursorPosition();
                 break;
                 case DEXNAV_MESSAGE_BUY:
-                    if (gSaveBlock2Ptr->frontier.battlePoints < DEFAULT_DEXNAV_MON_PRICE){
+                    species = DexNavGetSpecies();
+                    if (gSaveBlock2Ptr->frontier.battlePoints < getMonPrice(species) && !DEXNAV_MON_FREE){
                         sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_ENOUGH_FUNDS;
                         UpdateCursorPosition();
                     }
                     else{
                         bool8 couldGiveMon = FALSE;
-                        u8 level = GetLevelCap();
-                        species = DexNavGetSpecies();
-
                         if(level >= MAX_LEVEL)
                             level = MAX_LEVEL;
                         
+                        VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                         couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
                         if(couldGiveMon < 2){
-                            gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - DEFAULT_DEXNAV_MON_PRICE;
-                            sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
+                            if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
+                                gotShiny = TRUE;
+                            VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
+
+                            if(!DEXNAV_MON_FREE)
+                                gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - getMonPrice(species);
+                            if(gotShiny)
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE_SHINY;
+                            else
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
                         }
                         else
                             sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_GIVE_MON;
@@ -3069,13 +2948,12 @@ static void Task_DexNavMain(u8 taskId)
                     }
                     price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
 
-                    if (gSaveBlock2Ptr->frontier.battlePoints < price){
+                    if (gSaveBlock2Ptr->frontier.battlePoints < price && !DEXNAV_MON_FREE){
                         sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_ENOUGH_FUNDS;
                         UpdateCursorPosition();
                     }
                     else{
                         bool8 couldGiveMon = FALSE;
-                        u8 level = GetLevelCap();
                         price = 0;
 
                         if(level >= MAX_LEVEL)
@@ -3087,15 +2965,26 @@ static void Task_DexNavMain(u8 taskId)
                             species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
                             if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT)){
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
-                                if(couldGiveMon < 2)
+                                if(couldGiveMon < 2){
+                                    VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                                     price += getMonPrice(species);
+                                    if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
+                                        gotShiny = TRUE;
+                                    VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
+                                }
                             }
                         }
 
                         if(price != 0){
-                            price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
+                            if(!DEXNAV_MON_FREE)
+                                price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
+                            else
+                                price = 0;
                             gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - price;
-                            sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
+                            if(gotShiny)
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE_SHINY;
+                            else
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
                         }
                         else
                             sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_GIVE_MON;
@@ -3114,7 +3003,7 @@ static void Task_DexNavMain(u8 taskId)
                     }
                     price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
 
-                    if (gSaveBlock2Ptr->frontier.battlePoints < price){
+                    if (gSaveBlock2Ptr->frontier.battlePoints < price && !DEXNAV_MON_FREE){
                         sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_ENOUGH_FUNDS;
                         UpdateCursorPosition();
                     }
@@ -3131,16 +3020,27 @@ static void Task_DexNavMain(u8 taskId)
                             couldGiveMon = FALSE;
                             species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
                             if(species != SPECIES_NONE){
+                                VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
-                                if(couldGiveMon < 2)
+                                if(couldGiveMon < 2){
                                     price += getMonPrice(species);
+                                    if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
+                                        gotShiny = TRUE;
+                                    VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
+                                }
                             }
                         }
 
                         if(price != 0){
-                            price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
+                            if(!DEXNAV_MON_FREE)
+                                price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
+                            else
+                                price = 0;
                             gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - price;
-                            sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
+                            if(gotShiny)
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE_SHINY;
+                            else
+                                sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
                         }
                         else
                             sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_GIVE_MON;
@@ -3753,6 +3653,37 @@ bool8 hasAllMonsInEnviorment(void){
     return TRUE;
 }
 
+bool8 IsRouteDexnavLocked(){
+    bool8 disableDexnav = FALSE;
+    switch(gSaveBlock1Ptr->location.mapNum){
+		case MAP_NUM(ROUTE115):
+			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE115) && !FlagGet(DEXNAV_ENABLE_ROUTE_115_FLAG))
+				disableDexnav = TRUE;
+		break;
+    }
+
+    return disableDexnav;
+}
+
+bool8 MapHasMons(void){
+	u16 i;
+
+    for (i = 0; ; i++)
+    {
+        const struct WildPokemonHeader *wildHeader = &gWildMonHeaders[i];
+        if (wildHeader->mapGroup == 0xFF)
+            break;
+
+        if (gWildMonHeaders[i].mapGroup == gSaveBlock1Ptr->location.mapGroup &&
+            gWildMonHeaders[i].mapNum == gSaveBlock1Ptr->location.mapNum)
+        {
+			return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 bool8 canOpenDexnav(void){
     u16 headerId = GetCurrentMapWildMonHeaderId();
     u8 i;
@@ -3763,36 +3694,50 @@ bool8 canOpenDexnav(void){
     const struct WildPokemonInfo* rockSmashMonsInfo = gWildMonHeaders[headerId].rockSmashMonsInfo;
     const struct WildPokemonInfo* fishingMonsInfo   = gWildMonHeaders[headerId].fishingMonsInfo;
 
+    if(IsRouteDexnavLocked() || !MapHasMons())
+        return FALSE;
+
     for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
         switch(i){
             case ROW_LAND_TOP:    
                 // Land Encounters
-                if (landMonsInfo != NULL)
+                if (landMonsInfo != NULL && 
+                    landMonsInfo->encounterRate != 0){
                     return TRUE;
+                }
             break;
             case ROW_WATER:
                 // Water Encounters
-                if (waterMonsInfo != NULL && FlagGet(DEXNAV_WATER_MONS_UNLOCK_FLAG))
+                if (waterMonsInfo != NULL && 
+                    waterMonsInfo->encounterRate != 0 && 
+                    FlagGet(DEXNAV_WATER_MONS_UNLOCK_FLAG))
                     return TRUE;
             break;
             case ROW_FISHING:
                 // Fishing Encounters
-                if (fishingMonsInfo != NULL && FlagGet(DEXNAV_FISHING_MONS_UNLOCK_FLAG))
+                if (fishingMonsInfo != NULL && 
+                    fishingMonsInfo->encounterRate != 0 && 
+                    FlagGet(DEXNAV_FISHING_MONS_UNLOCK_FLAG))
                     return TRUE;
             break;
             case ROW_ROCK_SMASH:
                 // Rock Smash Encounters
-                if (rockSmashMonsInfo != NULL && FlagGet(DEXNAV_HEADBUTT_MONS_UNLOCK_FLAG))
+                if (rockSmashMonsInfo != NULL && 
+                    rockSmashMonsInfo->encounterRate != 0 && 
+                    FlagGet(DEXNAV_HEADBUTT_MONS_UNLOCK_FLAG))
                     return TRUE;
             break;
             case ROW_HONEY:
                 // Honey Encounters
-                if (honeyMonsInfo != NULL && FlagGet(DEXNAV_HONEY_MONS_UNLOCK_FLAG))
+                if (honeyMonsInfo != NULL && 
+                    honeyMonsInfo->encounterRate != 0 && 
+                    FlagGet(DEXNAV_HONEY_MONS_UNLOCK_FLAG))
                     return TRUE;
             break;
             case ROW_HIDDEN:
                 // Hidden Encounters
-                if (hiddenMonsInfo != NULL && CanFindHiddenPokemon())
+                if (hiddenMonsInfo != NULL && 
+                    CanFindHiddenPokemon())
                     return TRUE;
             break;
         }

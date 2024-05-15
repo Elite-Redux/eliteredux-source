@@ -4,8 +4,6 @@ raw `
 LilycoveCity_MoveDeletersHouse_MapScripts:: @ 821EA0A
 	.byte 0
 
-.set BALL_SWAP_PRICE,  	100
-
 LilycoveCity_Text_BallSwapperChoosePokemon:
 	.string "Which Pokémon's Ball would you like\n"
 	.string "to swap?$"

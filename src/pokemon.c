@@ -3894,6 +3894,9 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     SetBoxMonData(boxMon, MON_DATA_IS_SHINY, &isShiny);
     SetBoxMonData(boxMon, MON_DATA_IS_ALPHA, &isAlpha);
 
+    if(isShiny && VarGet(VAR_DEXNAV_SHINY_FLAG) == 1)
+        VarSet(VAR_DEXNAV_SHINY_FLAG, 2);
+
     if (fixedIV < USE_RANDOM_IVS)
     {
         SetBoxMonData(boxMon, MON_DATA_HP_IV, &fixedIV);

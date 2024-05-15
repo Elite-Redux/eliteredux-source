@@ -269,8 +269,8 @@
 #define VAR_BATTLE_MENU_MON_ID_X             0x40FA // New Var
 #define VAR_BATTLE_MENU_MON_ID_Y             0x40FB // New Var
 #define VAR_DEXNAV_ENVIORMENT                0x40FC // Registered dexnav enviorment
-#define VAR_UNUSED_0x40FD                    0x40FD // Unused Var
-#define VAR_UNUSED_0x40FE                    0x40FE // Unused Var
+#define VAR_DEXNAV_SHINY_FLAG                0x40FD
+#define VAR_DEXNAV_ALPHA_FLAG                0x40FE
 #define VAR_UNUSED_0x40FF                    0x40FF // Unused Var
 
 #define VARS_END                             0x40FF

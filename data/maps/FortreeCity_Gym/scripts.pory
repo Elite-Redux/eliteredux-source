@@ -17,7 +17,7 @@ FortreeCity_Gym_EventScript_InitRotatingGates:: @ 82165C4
 	end
 
 FortreeCity_Gym_EventScript_Winona:: @ 82165C8
-	call FortreeCity_Gym_EventScript_CheckTrainers
+	//call FortreeCity_Gym_EventScript_CheckTrainers
 	//goto_if_set FLAG_DAILY_REMATCH_WINONA, FortreeCity_Gym_EventScript_AlreadyRematched
 	goto_if_set FLAG_SYS_GAME_CLEAR, FortreeCity_Gym_EventScript_WinonaRematch
 	setvar VAR_0x8004, 15
