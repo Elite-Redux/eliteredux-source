@@ -2493,7 +2493,7 @@ static void PrintCurrentSpeciesInfo(void)
             StringCopy(gStringVar3, sText_DexNav_Caught_Type_Yes);
         else
             StringCopy(gStringVar3, sText_DexNav_Caught_Type_No);
-        ConvertIntToDecimalStringN(gStringVar2, SpeciesToNationalPokedexNum(species), STR_CONV_MODE_LEFT_ALIGN, 3);
+        ConvertIntToDecimalStringN(gStringVar2, SpeciesToNationalPokedexNum(species), STR_CONV_MODE_LEFT_ALIGN, 4);
         StringExpandPlaceholders(gStringVar4, sText_DexNav_SpeciesName);
     }
 
