@@ -5996,7 +5996,6 @@ const u8 gText_Effect_Critical_Always[]     = _("Always");
 const u8 gText_Effect_Sheer_Force_Boosted[] = _("Sheer Force");
 const u8 gText_Effect_Ignores_Ability[]     = _("Ign. Ability");
 const u8 gText_Effect_Ignores_Stats[]       = _("Ign. Stats");
-const u8 gText_Priority_Negative[]          = _("Negative");
 
 static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 {
@@ -6056,7 +6055,11 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			PosX = PosX + 16;
 			PrintSmallTextOnWindow(windowId, gText_Priority, MOVE_EFFECT_TEXT_Y,   PosX, 0, 0);
             if(gBattleMoves[move].priority < 0)
-                StringCopy(gStringVar1, gText_Priority_Negative);
+            {
+                StringCopy(gStringVar1, gText_Stats_Minus);
+			    ConvertIntToDecimalStringN(gStringVar2, -gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
+                StringAppend(gStringVar1, gStringVar2);
+            }
             else
 			    ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
 			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y,  PosX, 0, 0);
