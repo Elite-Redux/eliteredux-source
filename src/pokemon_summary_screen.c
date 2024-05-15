@@ -2764,7 +2764,7 @@ static void GenerateMoveReplaceList(u8 keyPress){
 
                 if (newMove == LEVEL_UP_END)
                     break;
-                else if(moveLevel >= level)
+                else if(moveLevel > level)
                     break;
                 else if(gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE){
                     sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = newMove;
