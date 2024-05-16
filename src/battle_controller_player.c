@@ -3777,9 +3777,9 @@ static void PlayerHandleChooseAction(void)
     BattleTv_ClearExplosionFaintCause();
 
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        BattlePutTextOnWindow(gText_BattleMenuTrainer, 2);
+        BattlePutTextOnWindow(gText_BattleMenuTrainer, B_WIN_ACTION_MENU);
     else
-        BattlePutTextOnWindow(gText_BattleMenu, 2);
+        BattlePutTextOnWindow(gText_BattleMenu, B_WIN_ACTION_MENU);
 
     for (i = 0; i < 4; i++)
         ActionSelectionDestroyCursorAt(i);
@@ -3797,7 +3797,7 @@ static void PlayerHandleYesNoBox(void)
     if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
     {
         HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
-        BattlePutTextOnWindow(gText_BattleYesNoChoice, 12);
+        BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
         gMultiUsePlayerCursor = 1;
         BattleCreateYesNoCursorAt(1);
         gBattlerControllerFuncs[gActiveBattler] = PlayerHandleYesNoInput;
