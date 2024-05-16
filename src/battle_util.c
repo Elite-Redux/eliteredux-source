@@ -924,7 +924,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
 {
     [ABILITY_BATTLE_ARMOR] = 1,
     [ABILITY_CLEAR_BODY] = 1,
-    [ABILITY_DAMP] = 1,
+    // [ABILITY_DAMP] = 1,
     [ABILITY_DRY_SKIN] = 1,
     [ABILITY_FILTER] = 1,
     [ABILITY_FLASH_FIRE] = 1,
