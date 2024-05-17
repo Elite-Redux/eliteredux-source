@@ -2254,11 +2254,23 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
 
                 if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_JUSTIFIED, moveNum))
                     abilityNullifiesDamage = TRUE;
+                    
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_GIFTED_MIND, moveNum)){
+                    abilityNullifiesDamage = TRUE;
+                }
             break;
             case TYPE_GHOST:
                 if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_PURIFYING_SALT, moveNum))
                     MulModifier(&mod, UQ_4_12(0.5));
+
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_GIFTED_MIND, moveNum)){
+                    abilityNullifiesDamage = TRUE;
+                }
             break;
+            case TYPE_BUG:
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_GIFTED_MIND, moveNum)){
+                    abilityNullifiesDamage = TRUE;
+                }
 
         }
         if(gBattleMons[userId].ability == ABILITY_LUMBERJACK || BattlerHasInnate(userId, ABILITY_LUMBERJACK)){
