@@ -6129,7 +6129,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Kick);
             else if((gBattleMoves[move].flags & FLAG_BONE_BASED))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Bone);
-            else if((gBattleMoves[move].flags & FLAG_BALLISTIC))
+            else if((gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Cannon);
             else if((gBattleMoves[move].flags & FLAG_DANCE))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Dance);

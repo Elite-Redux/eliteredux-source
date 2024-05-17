@@ -4081,13 +4081,13 @@ static void Cmd_seteffectwithchance(void)
         percentChance = percentChance * 2;
 
     //Pyromancy boost
-    if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_PYROMANCY || BattlerHasInnate(gBattlerAttacker, ABILITY_PYROMANCY))
+    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PYROMANCY)
              && moveType == TYPE_FIRE
              && moveEffect == MOVE_EFFECT_BURN)
         percentChance = percentChance * 5;
 
     //Cryomancy boost
-    if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_CRYOMANCY || BattlerHasInnate(gBattlerAttacker, ABILITY_CRYOMANCY))
+    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CRYOMANCY)
              && moveType == TYPE_ICE
              && moveEffect == MOVE_EFFECT_FROSTBITE)
         percentChance = percentChance * 5;
@@ -4099,7 +4099,7 @@ static void Cmd_seteffectwithchance(void)
         //percentChance = percentChance * 5;
 
     //Precise fist boosts
-    if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_PRECISE_FIST || BattlerHasInnate(gBattlerAttacker, ABILITY_PRECISE_FIST))
+    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRECISE_FIST)
              && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
         percentChance = percentChance * 2;
 
