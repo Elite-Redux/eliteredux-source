@@ -1550,7 +1550,7 @@ static void OpponentHandlePrintString(void)
     gBattle_BG0_Y = 0;
     stringId = (u16*)(&gBattleResources->bufferA[gActiveBattler][2]);
     BufferStringBattle(*stringId);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 0);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MSG);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnInactiveTextPrinter;
     BattleArena_DeductMindPoints(gActiveBattler, *stringId);
 }

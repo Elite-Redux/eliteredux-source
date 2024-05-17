@@ -837,7 +837,7 @@ static void HandleInputChooseMove(void)
                 gMultiUsePlayerCursor = gMoveSelectionCursor[gActiveBattler] + 1;
 
             MoveSelectionCreateCursorAt(gMultiUsePlayerCursor, 27);
-            BattlePutTextOnWindow(gText_BattleSwitchWhich, 0xB);
+            BattlePutTextOnWindow(gText_BattleSwitchWhich, B_WIN_SWITCH_PROMPT);
             gBattlerControllerFuncs[gActiveBattler] = HandleMoveSwitching;
         }
     }
@@ -1712,7 +1712,7 @@ static void MoveSelectionDisplayMoveNames(void)
     {
         MoveSelectionDestroyCursorAt(i);
         StringCopy(gDisplayedStringBattle, gMoveNames[moveInfo->moves[i]]);
-        BattlePutTextOnWindow(gDisplayedStringBattle, i + 3);
+        BattlePutTextOnWindow(gDisplayedStringBattle, i + B_WIN_MOVE_NAME_1);
         if (moveInfo->moves[i] != MOVE_NONE)
             gNumberOfMovesToChoose++;
     }
@@ -1721,7 +1721,7 @@ static void MoveSelectionDisplayMoveNames(void)
 static void MoveSelectionDisplayPpString(void)
 {
     StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 7);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP);
 }
 
 static void MoveSelectionDisplayPpNumber(void)
@@ -1738,7 +1738,7 @@ static void MoveSelectionDisplayPpNumber(void)
     *(txtPtr)++ = CHAR_SLASH;
     ConvertIntToDecimalStringN(txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
 
-    BattlePutTextOnWindow(gDisplayedStringBattle, 9);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP_REMAINING);
 }
 
 static void MulModifier(u16 *modifier, u16 val)
@@ -2625,7 +2625,7 @@ static void MoveSelectionDisplayMoveTypeDoubles(u8 targetId)
         break;
     }
     BattlePutTextOnWindow(gStringVar4, WindowID);
-    PutWindowTilemap(WindowID );
+    PutWindowTilemap(WindowID);
 	CopyWindowToVram(WindowID , 3);
 
     //BattlePutTextOnWindow(gDisplayedStringBattle, TypeEffectiveness(moveInfo, 1));
@@ -2755,7 +2755,7 @@ static void PrintLinkStandbyMsg(void)
     {
         gBattle_BG0_X = 0;
         gBattle_BG0_Y = 0;
-        BattlePutTextOnWindow(gText_LinkStandby, 0);
+        BattlePutTextOnWindow(gText_LinkStandby, B_WIN_MSG);
     }
 }
 
@@ -3745,7 +3745,7 @@ static void PlayerHandlePrintString(void)
     gBattle_BG0_Y = 0;
     stringId = (u16*)(&gBattleResources->bufferA[gActiveBattler][2]);
     BufferStringBattle(*stringId);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 0);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MSG);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnInactiveTextPrinter2;
     BattleTv_SetDataBasedOnString(*stringId);
     BattleArena_DeductMindPoints(gActiveBattler, *stringId);
@@ -3777,9 +3777,9 @@ static void PlayerHandleChooseAction(void)
     BattleTv_ClearExplosionFaintCause();
 
     if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        BattlePutTextOnWindow(gText_BattleMenuTrainer, 2);
+        BattlePutTextOnWindow(gText_BattleMenuTrainer, B_WIN_ACTION_MENU);
     else
-        BattlePutTextOnWindow(gText_BattleMenu, 2);
+        BattlePutTextOnWindow(gText_BattleMenu, B_WIN_ACTION_MENU);
 
     for (i = 0; i < 4; i++)
         ActionSelectionDestroyCursorAt(i);
@@ -3789,7 +3789,7 @@ static void PlayerHandleChooseAction(void)
     TryToAddEnemyInfoWindow();
     ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
     BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 1);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_ACTION_PROMPT);
 }
 
 static void PlayerHandleYesNoBox(void)
@@ -3797,7 +3797,7 @@ static void PlayerHandleYesNoBox(void)
     if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
     {
         HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
-        BattlePutTextOnWindow(gText_BattleYesNoChoice, 12);
+        BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
         gMultiUsePlayerCursor = 1;
         BattleCreateYesNoCursorAt(1);
         gBattlerControllerFuncs[gActiveBattler] = PlayerHandleYesNoInput;

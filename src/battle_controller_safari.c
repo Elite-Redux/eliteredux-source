@@ -20,6 +20,7 @@
 #include "text.h"
 #include "util.h"
 #include "window.h"
+#include "constants/battle.h"
 #include "constants/battle_anim.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
@@ -427,7 +428,7 @@ static void SafariHandlePrintString(void)
     gBattle_BG0_Y = 0;
     stringId = (u16*)(&gBattleResources->bufferA[gActiveBattler][2]);
     BufferStringBattle(*stringId);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 0);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MSG);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnInactiveTextPrinter;
 }
 
@@ -454,14 +455,14 @@ static void SafariHandleChooseAction(void)
     s32 i;
 
     gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3;
-    BattlePutTextOnWindow(gText_SafariZoneMenu, 2);
+    BattlePutTextOnWindow(gText_SafariZoneMenu, B_WIN_ACTION_MENU);
 
     for (i = 0; i < 4; i++)
         ActionSelectionDestroyCursorAt(i);
 
     ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
     BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo2);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 1);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_ACTION_PROMPT);
 }
 
 static void SafariHandleYesNoBox(void)
