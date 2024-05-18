@@ -976,7 +976,7 @@ void LoadBattleBg(u8 battleBgType, u8 battleTerrain)
     }
 }
 const u32 gBattleTextboxPalette_1[] = INCBIN_U32("graphics/battle_interface/textbox_0.gbapal.lz");
-const u32 gBattleTextboxPalette_2[] = INCBIN_U32("graphics/battle_interface/textbox_1.gbapal.lz");
+const u32 gBattleTextboxPalette_2[] = INCBIN_U32("graphics/battle_interface/textbox_0.gbapal.lz");
 
 //Testo
 void LoadBattleTextboxAndBackground(void)
