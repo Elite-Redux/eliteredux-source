@@ -8690,7 +8690,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 10,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MAKES_CONTACT,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_BREAKING_SWIPE] =
@@ -9870,7 +9870,6 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_PHYSICAL,
-        //.argument = TYPE_BUG,
     },
     [MOVE_DRAKE_MISSILE] =
     {
@@ -10583,7 +10582,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 10,
         .secondaryEffectChance = 10,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_MAKES_CONTACT,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_BLAZING_TORQUE] =
@@ -10595,7 +10594,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 20,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_MAKES_CONTACT,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_NOXIOUS_TORQUE] =
@@ -10607,7 +10606,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 20,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_MAKES_CONTACT,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_MAGICAL_TORQUE] =
@@ -10619,7 +10618,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 20,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_MAKES_CONTACT,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_COMBAT_TORQUE] =
@@ -10631,7 +10630,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 20,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_MAKES_CONTACT,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_KOWTOW_CLEAVE] =
