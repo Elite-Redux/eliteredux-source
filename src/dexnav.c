@@ -2180,7 +2180,7 @@ static u8 TryDrawIconInSlot(u8 enviorment, u8 num, s16 x, s16 y)
     else if (species == SPECIES_NONE || species > NUM_SPECIES || sDexNavUiDataPtr->routeSpeciesNum[enviorment] == 0) //No species or enviorment locked
         return 0xFF;
 
-	LoadMonIconPalette(species);
+	LoadGenderedMonIconPalette(species, 0);
     sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num] = CreateMonIcon(species, SpriteCB_MonIcon, x, y, 0, 0);
     
     gSprites[sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num]].invisible = TRUE;
