@@ -11188,6 +11188,7 @@ static void Cmd_various(void)
                 return;
             case MOVE_EFFECT_BURN:
                 if (CanBeBurned(gActiveBattler)) gBattlescriptCurrInstr += 5;
+                else if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FIRE)) gBattlescriptCurrInstr = BattleScript_NotAffected;
                 else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser)) return;
                 else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_WATER_VEIL))
                 {
