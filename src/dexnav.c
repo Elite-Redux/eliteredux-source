@@ -79,6 +79,28 @@
 
 #define DEXNAV_ENABLE_ROUTE_115_FLAG FLAG_BADGE02_GET
 
+#define DEXNAV_ENABLE_ROUTE_118_FLAG FLAG_BADGE05_GET
+#define DEXNAV_ENABLE_ROUTE_111_FLAG FLAG_BADGE04_GET
+
+#define IF_ROUTE_DISABLED(route) if (!FlagGet(DEXNAV_ENABLE_ROUTE_##route##_FLAG) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE##route))
+
+int IsDisabledForRoute(int row)
+{
+    IF_ROUTE_DISABLED(115) return TRUE;
+    IF_ROUTE_DISABLED(111) return row == ROW_LAND_TOP;
+    IF_ROUTE_DISABLED(118) {
+        switch (row) {
+            case ROW_LAND_TOP:
+            case ROW_ROCK_SMASH:
+            case ROW_HONEY:
+                return TRUE;
+            default:
+                return FALSE;
+        }
+    }
+    return FALSE;
+}
+
 // Defines
 enum WindowIds
 {
@@ -1622,6 +1644,8 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
     u8 min = 100;
     u8 max = 0;
     u8 i;
+
+    if (IsDisabledForRoute(environment)) return MON_LEVEL_NONEXISTENT;
     
     switch (environment)
     {
@@ -1718,6 +1742,8 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
 
     if (max == 0)
         return MON_LEVEL_NONEXISTENT;
+
+    #undef DISABLE_FOR_ROUTE
 
     return RandRange(min, max);
 }
@@ -2044,6 +2070,8 @@ static void DexNavLoadEncounterData(void)
     for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
         index = 0;
         sDexNavUiDataPtr->routeSpeciesNum[i] = 0;
+
+        if (IsDisabledForRoute(i)) continue;
 
         switch(i){
             case ROW_LAND_TOP:
@@ -3698,6 +3726,7 @@ bool8 canOpenDexnav(void){
         return FALSE;
 
     for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
+        if (IsDisabledForRoute(i)) continue;
         switch(i){
             case ROW_LAND_TOP:    
                 // Land Encounters
