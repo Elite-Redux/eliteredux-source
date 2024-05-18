@@ -13340,10 +13340,6 @@ static void Cmd_calculatesetdamage(void)
         break;
     }
 
-    //Failsafe
-    if (baseDamage == 0)
-        baseDamage = 1;
-
     gBattleMoveDamage = baseDamage;
 
     //Multiplies depending on the ability and the hit number
@@ -13363,7 +13359,7 @@ static void Cmd_calculatesetdamage(void)
 
     if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL
         && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
-            gBattleMoveDamage /= 10;
+            gBattleMoveDamage = baseDamage / 10;
 
     if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MULTI_HEADED) {
         if (IS_THREE_HEADED(gBattlerAttacker)) {
@@ -13383,6 +13379,10 @@ static void Cmd_calculatesetdamage(void)
         gBattleMoveDamage = baseDamage * 3 / 4; // .75
     else if(gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_RAGING_MOTH)
         gBattleMoveDamage = baseDamage * 3 / 4; // .75
+
+    //Failsafe
+    if (gBattleMoveDamage == 0)
+        gBattleMoveDamage = 1;
 
     gBattlescriptCurrInstr++;
 }

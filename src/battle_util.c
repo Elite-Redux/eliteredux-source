@@ -10021,6 +10021,7 @@ bool8 CanBeDisabled(u8 battlerId)
 
 bool32 CanGetStatus(u8 battlerId)
 {
+    if (!IsBattlerAlive(battlerId)) return FALSE;
     if (gBattleMons[battlerId].status1) return FALSE;
     if (IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN)) return FALSE;
     if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_SAFEGUARD) return FALSE;
@@ -12178,10 +12179,6 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
     u32 i;
     u16 basePower = gBattleMoves[move].power;
     u32 weight, hpFraction, speed;
-
-    if (gTurnStructs[battlerAtk].parentalBondTrigger == ABILITY_MINION_CONTROL
-        && gTurnStructs[battlerAtk].parentalBondOn < gTurnStructs[battlerAtk].parentalBondInitialCount)
-        return 10;
 
     switch (gBattleMoves[move].effect)
     {
@@ -14363,6 +14360,10 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
                 else if(gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
                     MulModifier(&finalModifier, UQ_4_12(0.15));
             }
+            break;
+        case ABILITY_MINION_CONTROL:
+            if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
+                MulModifier(&finalModifier, UQ_4_12(0.1));
             break;
         case ABILITY_PRIMAL_MAW:
         case ABILITY_DEVOURER:
