@@ -2438,11 +2438,12 @@ static const u16 sGrammarMoveUsedTable[] =
 
 static const u8 sDummyWeirdStatusString[] = {EOS, EOS, EOS, EOS, EOS, EOS, EOS, EOS, 0, 0};
 
+//Testo
 static const struct BattleWindowText sTextOnWindowsInfo_Normal[] =
 {
     // The corresponding WindowTemplate is gStandardBattleWindowTemplates[] within src/battle_bg.c
     [B_WIN_MSG] = {
-        .fillValue = PIXEL_FILL(0xF),
+        .fillValue = PIXEL_FILL(0x4),
         .fontId = FONT_NORMAL,
         .x = 0,
         .y = 1,
@@ -2452,7 +2453,7 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] =
         .shadowColor = 6,
     },
     [B_WIN_ACTION_PROMPT] = {
-        .fillValue = PIXEL_FILL(0xF),
+        .fillValue = PIXEL_FILL(0x4),
         .fontId = FONT_NORMAL,
         .x = 1,
         .y = 1,
@@ -2709,7 +2710,7 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] =
 static const struct BattleWindowText sTextOnWindowsInfo_Arena[] =
 {
     [B_WIN_MSG] = {
-        .fillValue = PIXEL_FILL(0xF),
+        .fillValue = PIXEL_FILL(0x4),
         .fontId = FONT_NORMAL,
         .x = 0,
         .y = 1,
@@ -2719,7 +2720,7 @@ static const struct BattleWindowText sTextOnWindowsInfo_Arena[] =
         .shadowColor = 6,
     },
     [B_WIN_ACTION_PROMPT] = {
-        .fillValue = PIXEL_FILL(0xF),
+        .fillValue = PIXEL_FILL(0x4),
         .fontId = FONT_NORMAL,
         .x = 1,
         .y = 1,
@@ -4187,19 +4188,19 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
         copyToVram = TRUE;
     }
 
-    printerTemplate.currentChar = text;
-    printerTemplate.windowId = windowId;
-    printerTemplate.fontId = textInfo[windowId].fontId;
-    printerTemplate.x = textInfo[windowId].x;
-    printerTemplate.y = textInfo[windowId].y;
-    printerTemplate.currentX = printerTemplate.x;
-    printerTemplate.currentY = printerTemplate.y;
+    printerTemplate.currentChar   = text;
+    printerTemplate.windowId      = windowId;
+    printerTemplate.fontId        = textInfo[windowId].fontId;
+    printerTemplate.x             = textInfo[windowId].x;
+    printerTemplate.y             = textInfo[windowId].y;
+    printerTemplate.currentX      = printerTemplate.x;
+    printerTemplate.currentY      = printerTemplate.y;
     printerTemplate.letterSpacing = textInfo[windowId].letterSpacing;
-    printerTemplate.lineSpacing = textInfo[windowId].lineSpacing;
-    printerTemplate.unk = 0;
-    printerTemplate.fgColor = textInfo[windowId].fgColor;
-    printerTemplate.bgColor = textInfo[windowId].bgColor;
-    printerTemplate.shadowColor = textInfo[windowId].shadowColor;
+    printerTemplate.lineSpacing   = textInfo[windowId].lineSpacing;
+    printerTemplate.unk           = 0;
+    printerTemplate.fgColor       = textInfo[windowId].fgColor;
+    printerTemplate.bgColor       = textInfo[windowId].bgColor;
+    printerTemplate.shadowColor   = textInfo[windowId].shadowColor;
 
     if (printerTemplate.x == 0xFF)
     {

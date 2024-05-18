@@ -152,7 +152,7 @@ EWRAM_DATA u32 gUnusedFirstBattleVar1 = 0; // Never read
 EWRAM_DATA struct UnknownPokemonStruct4 gMultiPartnerParty[MULTI_PARTY_SIZE] = {0};
 EWRAM_DATA static struct UnknownPokemonStruct4* sMultiPartnerPartyBuffer = NULL;
 EWRAM_DATA u8 *gUnknown_0202305C = NULL;
-EWRAM_DATA u8 *gUnknown_02023060 = NULL;
+EWRAM_DATA u8 *gBattleAnimBgTilemapBuffer = NULL;
 EWRAM_DATA u8 gActiveBattler = 0;
 EWRAM_DATA u8 gStackBattler1 = 0;
 EWRAM_DATA u8 gStackBattler2 = 0;
@@ -285,7 +285,7 @@ static const struct ScanlineEffectParams sIntroScanlineParams32Bit =
     (void *)REG_ADDR_BG3HOFS, SCANLINE_EFFECT_DMACNT_32BIT, 1
 };
 
-const struct SpriteTemplate gUnknown_0831AC88 =
+const struct SpriteTemplate gUnusedBattleInitSprite =
 {
     .tileTag = 0,
     .paletteTag = 0,

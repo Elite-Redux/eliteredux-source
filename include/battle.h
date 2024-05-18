@@ -907,7 +907,7 @@ extern u32 gBattleTypeFlags;
 extern u8 gBattleTerrain;
 extern u32 gUnusedFirstBattleVar1;
 extern u8 *gUnknown_0202305C;
-extern u8 *gUnknown_02023060;
+extern u8 *gBattleAnimBgTilemapBuffer;
 extern u8 gActiveBattler;
 extern u8 gStackBattler1;
 extern u8 gStackBattler2;

@@ -18,6 +18,7 @@
 #include "item_menu.h"
 #include "link.h"
 #include "main.h"
+#include "menu.h"
 #include "m4a.h"
 #include "palette.h"
 #include "party_menu.h"
@@ -207,6 +208,115 @@ static const u8 sUnused[] = {0x48, 0x48, 0x20, 0x5a, 0x50, 0x50, 0x50, 0x58};
 
 void BattleControllerDummy(void)
 {
+    // dummy function
+}
+
+const u8 sText_BattleMenu_Action_Fight[]   = _("Fight");
+const u8 sText_BattleMenu_Action_Bag[]     = _("Bag");
+const u8 sText_BattleMenu_Action_Pokemon[] = _("Pokémon");
+const u8 sText_BattleMenu_Action_Forfeit[] = _("Forfeit");
+const u8 sText_BattleMenu_Action_Run[]     = _("Run");
+const u8 sText_BattleMenu_Action_Info[]    = _("Info");
+const u8 sText_BattleMenu_Action_Catch[]   = _("Catch");
+const u8 sText_BattleMenu_Action_What_Will_X_Do[] = _("What will\n{B_ACTIVE_NAME2}\ndo?");
+//const u8 sText_BattleMenu_Action_What_Will_X_Do[] = _("What will\nCrabominable\ndo?");
+
+enum Colors
+{
+    FONT_BLACK,
+    FONT_BLACK_2,
+    FONT_WHITE,
+    FONT_WHITE_2,
+    FONT_RED,
+    FONT_BLUE,
+};
+
+static const u8 sMenuWindowFontColors[][3] = 
+{
+    [FONT_BLACK]   = {TEXT_COLOR_TRANSPARENT,  1,  2},
+    [FONT_BLACK_2] = {TEXT_COLOR_TRANSPARENT,  1,  TEXT_COLOR_TRANSPARENT},
+    [FONT_WHITE]   = {TEXT_COLOR_TRANSPARENT,  4,  2},
+    [FONT_WHITE_2] = {TEXT_COLOR_TRANSPARENT,  4,  TEXT_COLOR_TRANSPARENT},
+    [FONT_RED]     = {TEXT_COLOR_TRANSPARENT,  8,  9},
+    [FONT_BLUE]    = {TEXT_COLOR_TRANSPARENT,  14, 15},
+};
+
+enum optionsButtonMode
+{
+    BATTLE_ACTION_FIGHT,
+    BATTLE_ACTION_BAG,
+    BATTLE_ACTION_POKEMON,
+    BATTLE_ACTION_RUN,
+    BATTLE_ACTION_INFO,
+};
+
+static const u8 sBattleSelector1x[] = INCBIN_U8("graphics/ui_menus/battle_interface/selector.4bpp");
+
+//Testo
+void PrintBattleWindow_ActionPromt(void)
+{
+    u8 i, x, y, x2, y2;
+    //const struct BattleWindowText *textInfo = sBattleTextOnWindowsInfo[gBattleScripting.windowsType];
+    u8 windowId = B_WIN_ACTION_PROMPT;
+    u8 font = FONT_SMALL_NARROW;
+    u8 fontColor = FONT_BLACK;
+    bool32 copyToVram;
+    struct TextPrinterTemplate printerTemplate;
+    u8 speed;
+
+    //Fill the window with the fill value
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+    copyToVram = TRUE;
+
+    x  = 1;
+    y  = 1;
+    x2 = 3;
+    y2 = 0;
+    //What Will X Do?
+    BattleStringExpandPlaceholdersToDisplayedString(sText_BattleMenu_Action_What_Will_X_Do);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gDisplayedStringBattle);
+
+    // Print Text
+    // Fight / Pokémon / Bag / Run Text
+    fontColor = FONT_BLACK_2;
+    x  = 12;
+    y  = 2;
+    x2 = 0;
+    y2 = 0;
+    // Fight
+    AddTextPrinterParameterized4(windowId, FONT_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_BattleMenu_Action_Fight);
+    /*if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_BAG)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8) + x2, (y * 8) + y2, 48, 16);*/
+    y  = 1;
+    x = x + 6;
+    // Info
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_BattleMenu_Action_Info);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8) + x2, (y * 8) + y2, 48, 16);
+    x = x + 6;
+    // Bag
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_BattleMenu_Action_Bag);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_BAG)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8) + x2, (y * 8) + y2, 48, 16);
+    x  = 18;
+    y  = y + 2;
+    // Pokemon
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_BattleMenu_Action_Pokemon);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8) + x2, (y * 8) + y2, 48, 16);
+    x = x + 6;
+    // Run
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_BattleMenu_Action_Run);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8) + x2, (y * 8) + y2, 48, 16);
+
+    //gActionSelectionCursor[gActiveBattler]
+
+    if (copyToVram)
+    {
+        PutWindowTilemap(windowId);
+        CopyWindowToVram(windowId, 3);
+    }
 }
 
 void SetControllerToPlayer(void)
@@ -251,6 +361,7 @@ static void CompleteOnBankSpritePosX_0(void)
 
 static void HandleInputChooseAction(void)
 {
+    u8 windowId = B_WIN_ACTION_PROMPT;
     u8 value = 0;    
     
     if (VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 1)
@@ -284,6 +395,8 @@ static void HandleInputChooseAction(void)
         }
         else if (JOY_NEW(A_BUTTON))
         {
+            FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+
             PlaySE(SE_SELECT);
             TryHideLastUsedBall();
             TryToHideEnemyInfoWindow();
@@ -321,7 +434,6 @@ static void HandleInputChooseAction(void)
                 PlaySE(SE_SELECT);
                 ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
                 gActionSelectionCursor[gActiveBattler] ^= 1;
-                ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
             }
         }
         else if (JOY_NEW(DPAD_RIGHT))
@@ -331,7 +443,6 @@ static void HandleInputChooseAction(void)
                 PlaySE(SE_SELECT);
                 ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
                 gActionSelectionCursor[gActiveBattler] ^= 1;
-                ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
             }
         }
         else if (JOY_NEW(DPAD_UP))
@@ -341,7 +452,6 @@ static void HandleInputChooseAction(void)
                 PlaySE(SE_SELECT);
                 ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
                 gActionSelectionCursor[gActiveBattler] ^= 2;
-                ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
             }
         }
         else if (JOY_NEW(DPAD_DOWN))
@@ -351,11 +461,12 @@ static void HandleInputChooseAction(void)
                 PlaySE(SE_SELECT);
                 ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
                 gActionSelectionCursor[gActiveBattler] ^= 2;
-                ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
             }
         }
         else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
         {
+            FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+            
             if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
              && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_RIGHT
              && !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)])
@@ -394,6 +505,8 @@ static void HandleInputChooseAction(void)
         }
         #endif
     }
+
+    PrintBattleWindow_ActionPromt();
 }
 
 static void UnusedEndBounceEffect(void)
@@ -3781,19 +3894,24 @@ static void HandleChooseActionAfterDma3(void)
     }
 }
 
+static const u8 sBattleAction_Bag_Gfs[]     = INCBIN_U8("graphics/ui_menus/battle_interface/bag.4bpp");
+static const u8 sBattleAction_Fight_Gfs[]   = INCBIN_U8("graphics/ui_menus/battle_interface/fight.4bpp");
+static const u8 sBattleAction_Forfeit_Gfs[] = INCBIN_U8("graphics/ui_menus/battle_interface/forfeit.4bpp");
+static const u8 sBattleAction_Pokemon_Gfs[] = INCBIN_U8("graphics/ui_menus/battle_interface/pokemon.4bpp");
+static const u8 sBattleAction_Run_Gfs[]     = INCBIN_U8("graphics/ui_menus/battle_interface/run.4bpp");
+static const u8 sBattleAction_Info_Gfs[]    = INCBIN_U8("graphics/ui_menus/battle_interface/info.4bpp");
+//Testo
 static void PlayerHandleChooseAction(void)
 {
+    // "What will {x} do?" + "Fight/Pokémon/Bag/Run" menu
     s32 i;
 
     gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3;
     BattleTv_ClearExplosionFaintCause();
 
-    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        BattlePutTextOnWindow(gText_BattleMenuTrainer, B_WIN_ACTION_MENU);
-    else
-        BattlePutTextOnWindow(gText_BattleMenu, B_WIN_ACTION_MENU);
+    PrintBattleWindow_ActionPromt();
 
-    for (i = 0; i < 4; i++)
+    /*for (i = 0; i < 4; i++)
         ActionSelectionDestroyCursorAt(i);
 
     TryToHideMoveInfoWindow();
@@ -3801,7 +3919,7 @@ static void PlayerHandleChooseAction(void)
     TryToAddEnemyInfoWindow();
     ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
     BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo);
-    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_ACTION_PROMPT);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_ACTION_PROMPT);*/
 }
 
 static void PlayerHandleYesNoBox(void)

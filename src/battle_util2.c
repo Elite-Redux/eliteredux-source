@@ -33,7 +33,7 @@ void AllocateBattleResources(void)
     gLinkBattleRecvBuffer = AllocZeroed(BATTLE_BUFFER_LINK_SIZE);
 
     gUnknown_0202305C = AllocZeroed(0x2000);
-    gUnknown_02023060 = AllocZeroed(0x1000);
+    gBattleAnimBgTilemapBuffer = AllocZeroed(0x1000);
 
     if (gBattleTypeFlags & BATTLE_TYPE_SECRET_BASE)
     {
@@ -66,7 +66,7 @@ void FreeBattleResources(void)
         FREE_AND_SET_NULL(gLinkBattleRecvBuffer);
 
         FREE_AND_SET_NULL(gUnknown_0202305C);
-        FREE_AND_SET_NULL(gUnknown_02023060);
+        FREE_AND_SET_NULL(gBattleAnimBgTilemapBuffer);
     }
 }
 
