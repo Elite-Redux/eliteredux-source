@@ -5158,7 +5158,7 @@ const u16 gEggMoves[] = {
         MOVE_ROCK_CLIMB,
         MOVE_SWEET_KISS),
 
-    egg_moves(PANPOUR,
+    egg_moves(PANPOUR_REDUX,
         MOVE_COVET,
         MOVE_LOW_KICK,
         MOVE_TICKLE,
