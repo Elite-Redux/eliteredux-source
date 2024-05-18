@@ -5544,17 +5544,17 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_OGERPON_HEARTHFLAME_MASK] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset = 16
     },
     [SPECIES_OGERPON_CORNERSTONE_MASK] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset = 16
     },
     [SPECIES_OGERPON_WELLSPRING_MASK] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset = 16
     },
     [SPECIES_SQUAWKABILLY_WHITE_PLUMAGE] =
     {
