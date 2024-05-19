@@ -349,14 +349,14 @@ static u8 PickWildMonNature(void)
     return Random() % NUM_NATURES;
 }
 
-void CreateWildMon(u16 species, u8 level)
+void CreateWildMon(u16 species, u8 level, int useRandomizer)
 {
     bool32 checkCuteCharm;
 
     ZeroEnemyPartyMons();
     checkCuteCharm = TRUE;
 
-    species = GetRandomPokemonFromSpecies(species);
+    if (useRandomizer) species = GetRandomPokemonFromSpecies(species);
 
     switch (gBaseStats[species].genderRatio)
     {
@@ -560,7 +560,7 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
 
     }
 
-    CreateWildMon(species, level);
+    CreateWildMon(species, level, TRUE);
     return TRUE;
 }
 
@@ -571,7 +571,7 @@ static u16 GenerateFishingWildMon(const struct WildPokemonInfo *wildMonInfo, u8 
 
     if (!species) species = wildMonInfo->wildPokemon[ChooseWildMonIndex_Fishing(rod)].species;
 
-    CreateWildMon(species, level);
+    CreateWildMon(species, level, TRUE);
     return species;
 }
 
@@ -582,7 +582,7 @@ static bool8 SetUpMassOutbreakEncounter(u8 flags)
     if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(gSaveBlock1Ptr->outbreakPokemonLevel))
         return FALSE;
 
-    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel);
+    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel, TRUE);
     for (i = 0; i < 4; i++)
         SetMonMoveSlot(&gEnemyParty[0], gSaveBlock1Ptr->outbreakPokemonMoves[i], i);
 
@@ -936,7 +936,7 @@ void FishingWildEncounter(u8 rod)
         u8 level = ChooseWildMonLevel();
 
         species = gWildFeebasRoute119Data.species;
-        CreateWildMon(species, level);
+        CreateWildMon(species, level, TRUE);
     }
     else
     {

@@ -486,6 +486,11 @@ static const struct CompressedSpriteSheet sHiddenMonIconSpriteSheet = {sHiddenMo
 ///////////////////////
 //// DEXNAV SEARCH ////
 ///////////////////////
+static inline int GetSpecies(const struct WildPokemonInfo* info, int index)
+{
+    return GetRandomPokemonFromSpecies(info->wildPokemon[index].species);
+}
+
 static s16 GetSearchWindowY(void)
 {
     return (GetWindowAttribute(sDexNavSearchDataPtr->windowId, WINDOW_TILEMAP_TOP) * 8);
@@ -1043,7 +1048,7 @@ static void DexNavUpdateDirectionArrow(void)
 static void DexNavDrawIcons(void)
 {
     u8 searchLevel = sDexNavSearchDataPtr->searchLevel;
-    u16 species = GetRandomPokemonFromSpecies(sDexNavSearchDataPtr->species);
+    u16 species = sDexNavSearchDataPtr->species;
     
     // init sprite ids
     /*sDexNavSearchDataPtr->iconSpriteId = 0xFF;
@@ -1109,7 +1114,7 @@ static u8 GetMovementProximityBySearchLevel(void)
 static void Task_RevealHiddenMon(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
-    u16 species = GetRandomPokemonFromSpecies(sDexNavSearchDataPtr->species);
+    u16 species = sDexNavSearchDataPtr->species;
     
     // remove owned icon if it exists
     if (sDexNavSearchDataPtr->ownedIconSpriteId != 0xFF)
@@ -1263,7 +1268,7 @@ static void Task_DexNavSearch(u8 taskId)
 static void DexNavUpdateSearchWindow(u8 proximity, u8 searchLevel)
 {
     bool8 hideName = FALSE;
-    u16 species = GetRandomPokemonFromSpecies(sDexNavSearchDataPtr->species);
+    u16 species = sDexNavSearchDataPtr->species;
 
     if (species == SPECIES_NONE)
         hideName = TRUE;    //if a detector mode hidden search and player hasn't seen the mon, hide info
@@ -1319,7 +1324,7 @@ static void CreateDexNavWildMon(u16 species, u8 potential, u8 level, u8 abilityN
     if (DexNavTryMakeShinyMon())
         FlagSet(FLAG_SHINY_CREATION); // just easier this way
     
-    CreateWildMon(species, level);  // shiny rate bonus handled in CreateBoxMon
+    CreateWildMon(species, level, FALSE);  // shiny rate bonus handled in CreateBoxMon
     
     // Pick random, unique IVs to set to 31. The number of perfect IVs that are assigned is equal to the potential
     iv[0] = Random() % NUM_STATS;               // choose 1st perfect stat
@@ -1426,7 +1431,7 @@ static void DexNavGenerateMoveset(u16 species, u8 searchLevel, u8 encounterLevel
     }
 
     // Generate a wild mon just to get the initial moveset (later overwritten by CreateDexNavWildMon)
-    CreateWildMon(species, encounterLevel);
+    CreateWildMon(species, encounterLevel, FALSE);
 
     // Store generated mon moves into Dex Nav Struct
     for (i = 0; i < MAX_MON_MOVES; i++)
@@ -1655,7 +1660,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
 
         for (i = 0; i < LAND_WILD_COUNT; i++)
         {
-            if (landMonsInfo->wildPokemon[i].species == species)
+            if (GetSpecies(landMonsInfo, i) == species)
             {
                 min = (min < landMonsInfo->wildPokemon[i].minLevel) ? min : landMonsInfo->wildPokemon[i].minLevel;
                 max = (max > landMonsInfo->wildPokemon[i].maxLevel) ? max : landMonsInfo->wildPokemon[i].maxLevel;
@@ -1668,7 +1673,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
 
         for (i = 0; i < WATER_WILD_COUNT; i++)
         {
-            if (waterMonsInfo->wildPokemon[i].species == species)
+            if (GetSpecies(waterMonsInfo, i) == species)
             {
                 min = (min < waterMonsInfo->wildPokemon[i].minLevel) ? min : waterMonsInfo->wildPokemon[i].minLevel;
                 max = (max > waterMonsInfo->wildPokemon[i].maxLevel) ? max : waterMonsInfo->wildPokemon[i].maxLevel;
@@ -1682,7 +1687,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
 
         for (i = 0; i < LAND_WILD_COUNT; i++)
         {
-            if (fishingMonsInfo->wildPokemon[i].species == species)
+            if (GetSpecies(fishingMonsInfo, i) == species)
             {
                 min = (min < fishingMonsInfo->wildPokemon[i].minLevel) ? min : fishingMonsInfo->wildPokemon[i].minLevel;
                 max = (max > fishingMonsInfo->wildPokemon[i].maxLevel) ? max : fishingMonsInfo->wildPokemon[i].maxLevel;
@@ -1696,7 +1701,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
 
         for (i = 0; i < LAND_WILD_COUNT; i++)
         {
-            if (rockSmashMonsInfo->wildPokemon[i].species == species)
+            if (GetSpecies(rockSmashMonsInfo, i) == species)
             {
                 min = (min < rockSmashMonsInfo->wildPokemon[i].minLevel) ? min : rockSmashMonsInfo->wildPokemon[i].minLevel;
                 max = (max > rockSmashMonsInfo->wildPokemon[i].maxLevel) ? max : rockSmashMonsInfo->wildPokemon[i].maxLevel;
@@ -1710,7 +1715,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
 
         for (i = 0; i < LAND_WILD_COUNT; i++)
         {
-            if (honeyMonsInfo->wildPokemon[i].species == species)
+            if (GetSpecies(honeyMonsInfo, i) == species)
             {
                 min = (min < honeyMonsInfo->wildPokemon[i].minLevel) ? min : honeyMonsInfo->wildPokemon[i].minLevel;
                 max = (max > honeyMonsInfo->wildPokemon[i].maxLevel) ? max : honeyMonsInfo->wildPokemon[i].maxLevel;
@@ -1723,7 +1728,7 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
         
         for (i = 0; i < HIDDEN_WILD_COUNT; i++)
         {
-            if (hiddenMonsInfo->wildPokemon[i].species == species)
+            if (GetSpecies(hiddenMonsInfo, i) == species)
             {
                 min = (min < hiddenMonsInfo->wildPokemon[i].minLevel) ? min : hiddenMonsInfo->wildPokemon[i].minLevel;
                 max = (max > hiddenMonsInfo->wildPokemon[i].maxLevel) ? max : hiddenMonsInfo->wildPokemon[i].maxLevel;
@@ -1874,7 +1879,7 @@ static bool8 CapturedAllLandMons(u16 headerId)
     {        
         for (i = 0; i < LAND_WILD_COUNT; ++i)
         {
-            species = landMonsInfo->wildPokemon[i].species;
+            species = GetSpecies(landMonsInfo, i);
             if (species != SPECIES_NONE)
             {
                 if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
@@ -1907,7 +1912,7 @@ static bool8 CapturedAllWaterMons(u16 headerId)
     {
         for (i = 0; i < WATER_WILD_COUNT; ++i)
         {
-            species = waterMonsInfo->wildPokemon[i].species;
+            species = GetSpecies(waterMonsInfo, i);
             if (species != SPECIES_NONE)
             {
                 count++;
@@ -1938,7 +1943,7 @@ static bool8 CapturedAllHiddenMons(u16 headerId)
     {
         for (i = 0; i < HIDDEN_WILD_COUNT; ++i)
         {
-            species = hiddenMonsInfo->wildPokemon[i].species;
+            species = GetSpecies(hiddenMonsInfo, i);
             if (species != SPECIES_NONE)
             {
                 count++;
@@ -2080,7 +2085,7 @@ static void DexNavLoadEncounterData(void)
                 {
                     for (j = 0; j < LAND_WILD_COUNT; j++)
                     {
-                        species = landMonsInfo->wildPokemon[j].species;
+                        species = GetSpecies(landMonsInfo, j);
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
@@ -2093,7 +2098,7 @@ static void DexNavLoadEncounterData(void)
                 {
                     for (j = 0; j < WATER_WILD_COUNT; j++)
                     {
-                        species = waterMonsInfo->wildPokemon[j].species;
+                        species = GetSpecies(waterMonsInfo, j);
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
@@ -2108,7 +2113,7 @@ static void DexNavLoadEncounterData(void)
                 {
                     for (j = 0; j < FISH_WILD_COUNT; j++)
                     {
-                        species = fishingMonsInfo->wildPokemon[j].species;
+                        species = GetSpecies(fishingMonsInfo, j);
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
@@ -2123,7 +2128,7 @@ static void DexNavLoadEncounterData(void)
                 {
                     for (j = 0; j < ROCK_WILD_COUNT; j++)
                     {
-                        species = rockSmashMonsInfo->wildPokemon[j].species;
+                        species = GetSpecies(rockSmashMonsInfo, j);
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
@@ -2138,7 +2143,7 @@ static void DexNavLoadEncounterData(void)
                 {
                     for (j = 0; j < HONEY_WILD_COUNT; j++)
                     {
-                        species = honeyMonsInfo->wildPokemon[j].species;
+                        species = GetSpecies(honeyMonsInfo, j);
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
@@ -2153,7 +2158,7 @@ static void DexNavLoadEncounterData(void)
                 {
                     for (j = 0; j < HIDDEN_WILD_COUNT; j++)
                     {
-                        species = hiddenMonsInfo->wildPokemon[j].species;
+                        species = GetSpecies(hiddenMonsInfo, j);
                         if (species != SPECIES_NONE && !SpeciesInArray(species, i))
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
@@ -2201,7 +2206,7 @@ static void DestroyAllMonIcons(void)
 
 static u8 TryDrawIconInSlot(u8 enviorment, u8 num, s16 x, s16 y)
 {
-    u16 species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[enviorment][num]);
+    u16 species = sDexNavUiDataPtr->routeSpecies[enviorment][num];
 
     if(sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num] != 0xFF) //Already created
         return sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num];
@@ -2427,7 +2432,7 @@ static void EnviormentToStringVar(u8 enviorment){
 static void PrintCurrentSpeciesInfo(void)
 {
     u8 searchLevelBonus = 0;
-    u16 species = GetRandomPokemonFromSpecies(DexNavGetSpecies());
+    u16 species = DexNavGetSpecies();
     u32 i, j, x, y;
     u16 dexNum = SpeciesToNationalPokedexNum(species);
     u8 type1, type2, offset;
@@ -2598,7 +2603,7 @@ static void PrintCurrentSpeciesInfo(void)
             price = 0;
             for(i = 0; i < NUM_POKEMON_ICONS; i++)
             {
-                species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
+                species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
                 if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
                     price += getMonPrice(species);
             }
@@ -2613,7 +2618,7 @@ static void PrintCurrentSpeciesInfo(void)
             price = 0;
             for(i = 0; i < NUM_POKEMON_ICONS; i++)
             {
-                species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
+                species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
                 if(species != SPECIES_NONE)
                     price += getMonPrice(species);
             }
@@ -2970,7 +2975,7 @@ static void Task_DexNavMain(u8 taskId)
                     u8 i;
                     for(i = 0; i < NUM_POKEMON_ICONS; i++)
                     {
-                        species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
+                        species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
                         if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
                             price += getMonPrice(species);
                     }
@@ -2990,7 +2995,7 @@ static void Task_DexNavMain(u8 taskId)
                         for(i = 0; i < NUM_POKEMON_ICONS; i++)
                         {
                             couldGiveMon = FALSE;
-                            species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
+                            species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
                             if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT)){
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
                                 if(couldGiveMon < 2){
@@ -3025,7 +3030,7 @@ static void Task_DexNavMain(u8 taskId)
                     u8 i;
                     for(i = 0; i < NUM_POKEMON_ICONS; i++)
                     {
-                        species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
+                        species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
                         if(species != SPECIES_NONE)
                             price += getMonPrice(species);
                     }
@@ -3046,7 +3051,7 @@ static void Task_DexNavMain(u8 taskId)
                         for(i = 0; i < NUM_POKEMON_ICONS; i++)
                         {
                             couldGiveMon = FALSE;
-                            species = GetRandomPokemonFromSpecies(sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i]);
+                            species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
                             if(species != SPECIES_NONE){
                                 VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
