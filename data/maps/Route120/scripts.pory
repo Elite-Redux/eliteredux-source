@@ -623,6 +623,7 @@ script Route120_EventScript_MawootadNPCWrongAnswer{
     applymovement(MAWOOTAD_NPC, Route120_EventScript_MawootadNPCWalkAway)
     waitmovement(0)
     setflag(FLAG_HIDE_MAWOOTAD)
+	removeobject(MAWOOTAD_NPC)
     return
 }
 script Route120_EventScript_MawootadNPCRightAnswer{
