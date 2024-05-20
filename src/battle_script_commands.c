@@ -8614,7 +8614,7 @@ u32 IsAbilityStatusProtected(u32 battler)
 u32 JumpIfStandardStatusBlocking(u32 battler, bool32 affectsUser)
 {
     u16 ability;
-    if (gBattleMons[gActiveBattler].status1) gBattlescriptCurrInstr = BattleScript_ButItFailed;
+    if (!affectsUser && gBattleMons[gActiveBattler].status1) gBattlescriptCurrInstr = BattleScript_ButItFailed;
     else if (!affectsUser && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) gBattlescriptCurrInstr = BattleScript_ButItFailed;
     else if ((ability = IsAbilityStatusProtected(gActiveBattler)))
     {
@@ -11110,6 +11110,7 @@ static void Cmd_various(void)
             case MOVE_EFFECT_SLEEP:
                 if (CanSleep(gActiveBattler)) gBattlescriptCurrInstr += 5;
                 else if (JumpIfStandardStatusBlocking(gActiveBattler, affectsUser)) return;
+                else if (affectsUser && gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP) gBattlescriptCurrInstr = BattleScript_RestIsAlreadyAsleep;
                 else if (UproarWakeUpCheck(gActiveBattler)) gBattlescriptCurrInstr = BattleScript_CantMakeAsleep;
                 else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_INSOMNIA))
                 {
