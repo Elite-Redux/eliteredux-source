@@ -1471,7 +1471,6 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_DEPENDS,
-        .priority = -5,
         .split = SPLIT_STATUS,
     },
     [MOVE_SELF_DESTRUCT] =
@@ -2975,6 +2974,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_DEPENDS,
+        .priority = -5,
         .flags = FLAG_PROTECT_AFFECTED,
         .split = SPLIT_SPECIAL,
     },
