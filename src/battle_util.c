@@ -2758,7 +2758,10 @@ u8 DoBattlerEndTurnEffects(void)
     u32 ability, i, effect = 0;
 
     if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0))
+    {
+        BattleScriptExecute(gBattlescriptCurrInstr);
         return TRUE;
+    }
 
     gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_SKIP_DMG_TRACK);
     while (gBattleStruct->turnEffectsBattlerId < gBattlersCount && gBattleStruct->turnEffectsTracker <= ENDTURN_BATTLER_COUNT)
