@@ -2693,7 +2693,7 @@ static u8 DisplaySelectionWindow(u8 windowType)
                 else
                     j = k;
 
-                if (gEvolutionTable[species][j].method == EVO_MEGA_EVOLUTION){
+                if (gEvolutionTable[species][j].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][j].method == EVO_PRIMAL_REVERSION){
                     megaEvoItem = gEvolutionTable[species][j].param;
                     break;
                 }
@@ -2940,7 +2940,7 @@ static void SetPartyMonHeldItemSelectionActions(struct Pokemon *mons, u8 slotId)
 
     for (i = 0; i < EVOS_PER_MON; i++)
     {
-        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION){
+        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][j].method == EVO_PRIMAL_REVERSION){
             canMegaEvolve = TRUE;
             megaEvoItem = gEvolutionTable[species][i].param;
             break;
@@ -2955,7 +2955,7 @@ static void SetPartyMonHeldItemSelectionActions(struct Pokemon *mons, u8 slotId)
     {
         j = EVOS_PER_MON - i - 1;
 
-        if (gEvolutionTable[species][j].method == EVO_MEGA_EVOLUTION){
+        if (gEvolutionTable[species][j].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][j].method == EVO_PRIMAL_REVERSION){
             canMegaEvolve2 = TRUE;
             megaEvoItem2 = gEvolutionTable[species][j].param;
             break;
@@ -3663,7 +3663,7 @@ static void CursorCb_GiveMegaStone(u8 taskId)
 
     for (i = 0; i < EVOS_PER_MON; i++)
     {
-        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION){
+        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION){
             megaEvoItem = gEvolutionTable[species][i].param;
             break;
         }
@@ -3693,7 +3693,7 @@ static void CursorCb_GiveMegaStone2(u8 taskId)
     {
         j = EVOS_PER_MON - i;
 
-        if (gEvolutionTable[species][j].method == EVO_MEGA_EVOLUTION){
+        if (gEvolutionTable[species][j].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][j].method == EVO_PRIMAL_REVERSION){
             megaEvoItem = gEvolutionTable[species][j].param;
             break;
         }
