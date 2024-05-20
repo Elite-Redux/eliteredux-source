@@ -3973,7 +3973,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         // TODO: Refactor switch-in moves to use a proper full action
         ClearMiscTurnFlags();
         // Primal Reversion
-        if (TryPrimalReversion(gBattlerAttacker))
+        if (TryPrimalReversion(gBattlerAttacker, FALSE))
         {
             gBattleStruct->switchInAbilitiesCounter--;
             return;

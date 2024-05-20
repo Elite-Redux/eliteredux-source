@@ -269,7 +269,7 @@ bool8 IsInverseRoomActive(void);
 bool8 IsGravityActive(void);
 bool8 isMagicRoomActive(void);
 bool8 isWonderRoomActive(void);
-bool32 TryPrimalReversion(u8 battlerId);
+bool32 TryPrimalReversion(u8 battlerId, int useReturn);
 bool8 HasAnyLoweredStat(u8 battler);
 u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isAttack, bool8 isCrit, bool8 isUnaware, bool8 calculatingSecondary);
 bool8 CheckAndSetSwitchInAbility(u8 battlerId, u16 ability);

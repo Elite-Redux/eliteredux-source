@@ -4568,13 +4568,21 @@ static u8 ForewarnChooseMove(u32 battler)
     free(data);
 }
 
-bool32 TryPrimalReversion(u8 battlerId)
+bool32 TryPrimalReversion(u8 battlerId, int useReturn)
 {
     if (GetBattlerHoldEffect(battlerId, FALSE) == HOLD_EFFECT_PRIMAL_ORB
      && GetPrimalReversionSpecies(gBattleMons[battlerId].species, gBattleMons[battlerId].item) != SPECIES_NONE)
     {
         gBattlerAttacker = battlerId;
-        BattleScriptExecute(BattleScript_PrimalReversion);
+        if (useReturn)
+        {
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_PrimalReversionRet;
+        }
+        else
+        {
+            BattleScriptExecute(BattleScript_PrimalReversion);
+        }
         return TRUE;
     }
     return FALSE;
