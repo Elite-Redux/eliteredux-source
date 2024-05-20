@@ -710,3 +710,10 @@ gMetatiles_CinnabarIsland::
 	.align 1
 gMetatileAttributes_CinnabarIsland::
 	.incbin "data/tilesets/secondary/cinnabarisland/metatile_attributes.bin"
+	.align 1
+gMetatiles_SeafoamIslands::
+	.incbin "data/tilesets/secondary/seafoamislands/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_SeafoamIslands::
+	.incbin "data/tilesets/secondary/seafoamislands/metatile_attributes.bin"

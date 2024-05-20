@@ -95,7 +95,8 @@
     "Underwater_Route129",
     "Underwater_Route105",
     "Underwater_Route125",
-    "Route1"
+    "Route1",
+    "SeafoamIslands_B3F"
   ],
   "gMapGroup_IndoorLittleroot": [
     "LittlerootTown_BrendansHouse_1F",
@@ -166,7 +167,11 @@
     "Route_20",
     "CinnabarIsland",
     "Route_21",
-    "Route_21_North"
+    "Route_21_North",
+    "SeafoamIslands",
+    "SeafoamIslands_B1F",
+    "SeafoamIslands_B2F",
+    "SeafoamIslands_B4F"
   ],
   "gMapGroup_IndoorOldale": [
     "OldaleTown_House1",

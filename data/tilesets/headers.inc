@@ -1061,3 +1061,14 @@ gTileset_CinnabarIsland::
 	.4byte gMetatiles_CinnabarIsland
 	.4byte gMetatileAttributes_CinnabarIsland
 	.4byte NULL
+
+	.align 2
+gTileset_SeafoamIslands::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_SeafoamIslands
+	.4byte gTilesetPalettes_SeafoamIslands
+	.4byte gMetatiles_SeafoamIslands
+	.4byte gMetatileAttributes_SeafoamIslands
+	.4byte NULL

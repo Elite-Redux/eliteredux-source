@@ -2149,3 +2149,23 @@ gTilesetPalettes_CinnabarIsland::
 	.align 2
 gTilesetTiles_CinnabarIsland::
 	.incbin "data/tilesets/secondary/cinnabarisland/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_SeafoamIslands::
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/seafoamislands/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_SeafoamIslands::
+	.incbin "data/tilesets/secondary/seafoamislands/tiles.4bpp.lz"

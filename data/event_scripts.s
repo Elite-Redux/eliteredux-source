@@ -1238,3 +1238,13 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/Route_21/scripts.inc"
 
 	.include "data/maps/Route_21_North/scripts.inc"
+
+	.include "data/maps/SeafoamIslands/scripts.inc"
+
+	.include "data/maps/SeafoamIslands_B1F/scripts.inc"
+
+	.include "data/maps/SeafoamIslands_B2F/scripts.inc"
+
+	.include "data/maps/SeafoamIslands_B3F/scripts.inc"
+
+	.include "data/maps/SeafoamIslands_B4F/scripts.inc"

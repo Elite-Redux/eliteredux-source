@@ -64,6 +64,7 @@
 #define MAP_UNDERWATER_ROUTE105 (55 | (0 << 8))
 #define MAP_UNDERWATER_ROUTE125 (56 | (0 << 8))
 #define MAP_ROUTE1              (57 | (0 << 8))
+#define MAP_SEAFOAM_ISLANDS_B3F (58 | (0 << 8))
 
 // gMapGroup_IndoorLittleroot
 #define MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F     (0 | (1 << 8))
@@ -135,6 +136,10 @@
 #define MAP_CINNABAR_ISLAND                       (66 | (1 << 8))
 #define MAP_ROUTE_21                              (67 | (1 << 8))
 #define MAP_ROUTE_21_NORTH                        (68 | (1 << 8))
+#define MAP_SEAFOAM_ISLANDS                       (69 | (1 << 8))
+#define MAP_SEAFOAM_ISLANDS_B1F                   (70 | (1 << 8))
+#define MAP_SEAFOAM_ISLANDS_B2F                   (71 | (1 << 8))
+#define MAP_SEAFOAM_ISLANDS_B4F                   (72 | (1 << 8))
 
 // gMapGroup_IndoorOldale
 #define MAP_OLDALE_TOWN_HOUSE1            (0 | (2 << 8))
