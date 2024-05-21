@@ -2169,3 +2169,23 @@ gTilesetPalettes_SeafoamIslands::
 	.align 2
 gTilesetTiles_SeafoamIslands::
 	.incbin "data/tilesets/secondary/seafoamislands/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_PokemonMansion::
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/pokemonmansion/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_PokemonMansion::
+	.incbin "data/tilesets/secondary/pokemonmansion/tiles.4bpp.lz"

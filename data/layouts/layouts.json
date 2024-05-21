@@ -5350,6 +5350,16 @@
       "secondary_tileset": "gTileset_SeafoamIslands",
       "border_filepath": "data/layouts/SeafoamIslands_B4F/border.bin",
       "blockdata_filepath": "data/layouts/SeafoamIslands_B4F/map.bin"
+    },
+    {
+      "id": "LAYOUT_POKEMON_MANSION_1F",
+      "name": "PokemonMansion_1F_Layout",
+      "width": 38,
+      "height": 35,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_PokemonMansion",
+      "border_filepath": "data/layouts/PokemonMansion_1F/border.bin",
+      "blockdata_filepath": "data/layouts/PokemonMansion_1F/map.bin"
     }
   ]
 }

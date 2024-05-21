@@ -717,3 +717,10 @@ gMetatiles_SeafoamIslands::
 	.align 1
 gMetatileAttributes_SeafoamIslands::
 	.incbin "data/tilesets/secondary/seafoamislands/metatile_attributes.bin"
+	.align 1
+gMetatiles_PokemonMansion::
+	.incbin "data/tilesets/secondary/pokemonmansion/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_PokemonMansion::
+	.incbin "data/tilesets/secondary/pokemonmansion/metatile_attributes.bin"

@@ -140,6 +140,7 @@
 #define MAP_SEAFOAM_ISLANDS_B1F                   (70 | (1 << 8))
 #define MAP_SEAFOAM_ISLANDS_B2F                   (71 | (1 << 8))
 #define MAP_SEAFOAM_ISLANDS_B4F                   (72 | (1 << 8))
+#define MAP_POKEMON_MANSION_1F                    (73 | (1 << 8))
 
 // gMapGroup_IndoorOldale
 #define MAP_OLDALE_TOWN_HOUSE1            (0 | (2 << 8))
