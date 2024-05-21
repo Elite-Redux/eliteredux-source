@@ -963,7 +963,7 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
     .flags = F_ALOLAN_FORM,
-    .shopPrice = 230,
+    .shopPrice = 25,
     .tier = 0,
     },
 
