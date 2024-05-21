@@ -172,7 +172,7 @@ const struct BgTemplate gBattleBgTemplates[] =
 #define B_WIN_DEFAULT_BG_1       1
 #define B_WIN_DEFAULT_BG_2       2
 
-static const struct WindowTemplate gStandardBattleWindowTemplates[] =
+const struct WindowTemplate gStandardBattleWindowTemplates[] =
 {
     [B_WIN_MSG] = {
         .bg = B_WIN_DEFAULT_BG,
@@ -186,7 +186,7 @@ static const struct WindowTemplate gStandardBattleWindowTemplates[] =
     [B_WIN_ACTION_PROMPT] = {
         .bg = B_WIN_DEFAULT_BG_1,
         .tilemapLeft = 0,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP - 1,
+        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_1 - 1,
         .width = BATTLE_WINDOW_MAX_WIDTH,
         .height = BATTLE_WINDOW_MAX_HEIGHT,
         .paletteNum = 0,
@@ -200,78 +200,6 @@ static const struct WindowTemplate gStandardBattleWindowTemplates[] =
         .height = 4,
         .paletteNum = 5,
         .baseBlock = 0x0190,
-    },
-    [B_WIN_MOVE_NAME_1] = {
-        .bg = B_WIN_DEFAULT_BG,
-        .tilemapLeft = 2,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0300,
-    },
-    [B_WIN_MOVE_NAME_2] = {
-        .bg = B_WIN_DEFAULT_BG,
-        .tilemapLeft = 11,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0310,
-    },
-    [B_WIN_MOVE_NAME_3] = {
-        .bg = B_WIN_DEFAULT_BG,
-        .tilemapLeft = 2,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3 + 2,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0320,
-    },
-    [B_WIN_MOVE_NAME_4] = {
-        .bg = B_WIN_DEFAULT_BG,
-        .tilemapLeft = 11,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3 + 2,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0330,
-    },
-    [B_WIN_PP] = {
-        .bg = B_WIN_DEFAULT_BG,
-        .tilemapLeft = 23,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 2,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0290,
-    },
-    [B_WIN_DUMMY] = {
-        .bg = B_WIN_DEFAULT_BG,
-        .tilemapLeft = 21,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 2,
-        .height = 2,
-        .paletteNum = 10,
-        .baseBlock = 0x0294,
-    },
-    [B_WIN_PP_REMAINING] = {
-        .bg = B_WIN_DEFAULT_BG,
-        .tilemapLeft = 25,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 4,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0298,
-    },
-    [B_WIN_MOVE_TYPE] = {
-        .bg = B_WIN_DEFAULT_BG,
-        .tilemapLeft = 21,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3 + 2,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x02a0,
     },
     [B_WIN_SWITCH_PROMPT] = {
         .bg = B_WIN_DEFAULT_BG,
@@ -449,78 +377,6 @@ static const struct WindowTemplate gBattleArenaWindowTemplates[] =
         .paletteNum = 5,
         .baseBlock = 0x0190,
     },
-    [B_WIN_MOVE_NAME_1] = {
-        .bg = 0,
-        .tilemapLeft = 2,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0300,
-    },
-    [B_WIN_MOVE_NAME_2] = {
-        .bg = 0,
-        .tilemapLeft = 11,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0310,
-    },
-    [B_WIN_MOVE_NAME_3] = {
-        .bg = 0,
-        .tilemapLeft = 2,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3 + 2,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0320,
-    },
-    [B_WIN_MOVE_NAME_4] = {
-        .bg = 0,
-        .tilemapLeft = 11,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3 + 2,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0330,
-    },
-    [B_WIN_PP] = {
-        .bg = 0,
-        .tilemapLeft = 23,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 2,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0290,
-    },
-    [B_WIN_DUMMY] = {
-        .bg = 0,
-        .tilemapLeft = 21,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 2,
-        .height = 2,
-        .paletteNum = 10,
-        .baseBlock = 0x0294,
-    },
-    [B_WIN_PP_REMAINING] = {
-        .bg = 0,
-        .tilemapLeft = 25,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3,
-        .width = 4,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x0298,
-    },
-    [B_WIN_MOVE_TYPE] = {
-        .bg = 0,
-        .tilemapLeft = 21,
-        .tilemapTop = BATTLE_WINDOW_DEFAULT_TOP_3 + 2,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 5,
-        .baseBlock = 0x02a0,
-    },
     [B_WIN_SWITCH_PROMPT] = {
         .bg = 0,
         .tilemapLeft = 21,
@@ -631,6 +487,30 @@ static const struct WindowTemplate gBattleArenaWindowTemplates[] =
     },
     DUMMY_WIN_TEMPLATE
 };
+
+void MoveIntoBattleBgWindow(u8 window){
+    /*u8 bgNum      = B_WIN_DEFAULT_BG_1; //gStandardBattleWindowTemplates[window].bg;
+    u8 tilemapTop = gStandardBattleWindowTemplates[window].tilemapTop;
+
+    switch(window){
+        case B_WIN_ACTION_PROMPT:
+            ChangeBgX(bgNum, 0, 0);
+        break;
+        case B_WIN_MOVE_SELECTION:
+            ChangeBgX(bgNum, 0, 240);
+        break;
+    }*/
+
+    /*switch(tilemapTop){
+        case BATTLE_WINDOW_DEFAULT_TOP_1 - 1:
+        break;
+        case BATTLE_WINDOW_DEFAULT_TOP_2 - 1:
+        break;
+        case BATTLE_WINDOW_DEFAULT_TOP_3 - 1:
+            ChangeBgY(bgNum, 0, 240);
+        break;
+    }*/
+}
 
 const struct WindowTemplate * const gBattleWindowTemplates[] =
 {
@@ -975,8 +855,8 @@ void LoadBattleBg(u8 battleBgType, u8 battleTerrain)
         break;
     }
 }
-const u32 gBattleTextboxPalette_1[] = INCBIN_U32("graphics/battle_interface/textbox_0.gbapal.lz");
-const u32 gBattleTextboxPalette_2[] = INCBIN_U32("graphics/battle_interface/textbox_0.gbapal.lz");
+const u32 gBattleTextboxPalette_1[] = INCBIN_U32("graphics/ui_menus/battle_interface/palette.gbapal.lz");
+const u32 gBattleTextboxPalette_2[] = INCBIN_U32("graphics/ui_menus/battle_interface/palette.gbapal.lz");
 
 //Testo
 void LoadBattleTextboxAndBackground(void)

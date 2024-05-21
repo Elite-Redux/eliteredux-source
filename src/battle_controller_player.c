@@ -227,8 +227,8 @@ static const u8 sMenuWindowFontColors[][3] =
 {
     [FONT_BLACK]   = {TEXT_COLOR_TRANSPARENT,  1,  2},
     [FONT_BLACK_2] = {TEXT_COLOR_TRANSPARENT,  1,  TEXT_COLOR_TRANSPARENT},
-    [FONT_WHITE]   = {TEXT_COLOR_TRANSPARENT,  4,  2},
-    [FONT_WHITE_2] = {TEXT_COLOR_TRANSPARENT,  4,  TEXT_COLOR_TRANSPARENT},
+    [FONT_WHITE]   = {TEXT_COLOR_TRANSPARENT,  5,  4},
+    [FONT_WHITE_2] = {TEXT_COLOR_TRANSPARENT,  5,  TEXT_COLOR_TRANSPARENT},
     [FONT_RED]     = {TEXT_COLOR_TRANSPARENT,  8,  9},
     [FONT_BLUE]    = {TEXT_COLOR_TRANSPARENT,  14, 15},
 };
@@ -265,12 +265,13 @@ void PrintBattleWindow_ActionPromt(void)
     u8 i, x, y, x2, y2;
     u8 windowId = B_WIN_ACTION_PROMPT;
     u8 font = FONT_SMALL_NARROW;
-    u8 fontColor = FONT_BLACK;
+    u8 fontColor = FONT_BLACK_2;
     bool32 copyToVram;
     struct TextPrinterTemplate printerTemplate;
     u8 speed;
 
     //Fill the window with the fill value
+    MoveIntoBattleBgWindow(windowId);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     copyToVram = TRUE;
 
@@ -295,56 +296,157 @@ void PrintBattleWindow_ActionPromt(void)
     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
     // Print Fight / Pokémon / Bag / Run Text
-    fontColor = FONT_BLACK_2;
+    fontColor = FONT_WHITE_2;
     x  = 12;
     y  = 1;
     // Pokemon
     StringCopy(gStringVar1, sText_BattleMenu_Action_Pokemon);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
     x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
-    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
-        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
     
     y  = y + 2;
     // Bag
     StringCopy(gStringVar1, sText_BattleMenu_Action_Bag);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_BAG)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
     x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
-    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_BAG)
-        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
     
     y = 2;
     x = x + 6;
     // Fight
     font = FONT_NARROW;
     StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
+        BlitBitmapToWindow(windowId, sBattleSelector2x, ((x - 1) * 8), ((y - 1) * 8) + y2, 48, 32);
     x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
-    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
-        BlitBitmapToWindow(windowId, sBattleSelector2x, ((x - 1) * 8), ((y - 1) * 8) + y2, 48, 32);
 
     x = x + 6;
     y = 1;
     // Info
     font = FONT_SMALL_NARROW;
     StringCopy(gStringVar1, sText_BattleMenu_Action_Info);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
     x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
     
-    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
-        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
     
     y  = y + 2;
     // Run
     StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
     x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
+
+    PutWindowTilemap(windowId);
+    CopyWindowToVram(windowId, 3);
+}
+
+void PrintBattleWindow_MoveSelection(void)
+{
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
+    u8 i, x, y, x2, y2, speed;
+    u16 move;
+    u8 windowId = B_WIN_ACTION_PROMPT;
+    u8 font = FONT_SMALL_NARROW;
+    u8 fontColor = FONT_WHITE_2;
+    bool32 copyToVram;
+    struct TextPrinterTemplate printerTemplate;
+
+    //Fill the window with the fill value
+    MoveIntoBattleBgWindow(windowId);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+    copyToVram = TRUE;
+
+    x  = 2;
+    y  = 0;
+    y2 = 4;
+    x2 = 0;
+
+    //Move Selection
+    for(i = 0; i < MAX_MON_MOVES; i++){
+        move = moveInfo->moves[i];
+        StringCopy(gStringVar1, gMoveNames[move]);
+        AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        y++;
+    }
+
+    /*//What Will X Do?
+    //First Part
+    StringCopy(gStringVar1, sText_BattleMenu_Action_What_Will_X_Do_1);
+    x2 = 4 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+    y++;
+    //Part two
+    BattleStringExpandPlaceholdersToDisplayedString(sText_BattleMenu_Action_What_Will_X_Do_2);
+    x2 = 4 + GetStringCenterAlignXOffset(font, gDisplayedStringBattle, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gDisplayedStringBattle);
+    y++;
+    //Part three
+    StringCopy(gStringVar1, sText_BattleMenu_Action_What_Will_X_Do_3);
+    x2 = 4 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+    // Print Fight / Pokémon / Bag / Run Text
+    fontColor = FONT_WHITE_2;
+    x  = 12;
+    y  = 1;
+    // Pokemon
+    StringCopy(gStringVar1, sText_BattleMenu_Action_Pokemon);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
+    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+    
+    y  = y + 2;
+    // Bag
+    StringCopy(gStringVar1, sText_BattleMenu_Action_Bag);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_BAG)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
+    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+    
+    y = 2;
+    x = x + 6;
+    // Fight
+    font = FONT_NARROW;
+    StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
+        BlitBitmapToWindow(windowId, sBattleSelector2x, ((x - 1) * 8), ((y - 1) * 8) + y2, 48, 32);
+    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+
+    x = x + 6;
+    y = 1;
+    // Info
+    font = FONT_SMALL_NARROW;
+    StringCopy(gStringVar1, sText_BattleMenu_Action_Info);
+    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
+        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
+    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+    
+    
+    y  = y + 2;
+    // Run
+    StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
     if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
         BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
+    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);*/
+
 
     PutWindowTilemap(windowId);
     CopyWindowToVram(windowId, 3);
@@ -355,7 +457,6 @@ void PrintBattleWindow_ActionPromt(void)
 static void HandleInputChooseAction(void)
 {
     u16 itemId = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
-    u8 windowId = B_WIN_ACTION_PROMPT;
     u8 value = 0;
 
     DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
@@ -368,7 +469,6 @@ static void HandleInputChooseAction(void)
 
     if (JOY_NEW(A_BUTTON))
     {
-        FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
         PlaySE(SE_SELECT);
         TryHideLastUsedBall();
         TryToHideEnemyInfoWindow();
@@ -400,8 +500,6 @@ static void HandleInputChooseAction(void)
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
-        FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
-            
         if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
          && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_RIGHT
          && !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)])
@@ -815,7 +913,23 @@ static void HandleInputChooseMove(void)
     u32 canSelectTarget = 0;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
 
-    if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+
+
+    //ChooseMove Testo
+    PrintBattleWindow_MoveSelection();
+
+    if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
+    {
+        PlaySE(SE_SELECT);
+        gBattleStruct->mega.playerSelect = FALSE;
+        BtlController_EmitTwoReturnValues(1, 10, 0xFFFF);
+        HideMegaTriggerSprite();
+        PlayerBufferExecCompleted();
+        FlagClear(FLAG_SYS_MOVE_INFO);
+        TryToHideMoveInfoWindow();
+    }
+
+    /*if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
         gPlayerDpadHoldFrames++;
     else
         gPlayerDpadHoldFrames = 0;
@@ -1018,7 +1132,7 @@ static void HandleInputChooseMove(void)
             ChangeMegaTriggerSprite(gBattleStruct->mega.triggerSpriteId, gBattleStruct->mega.playerSelect);
             PlaySE(SE_SELECT);
         }
-    }
+    }*/
 }
 
 static u32 HandleMoveInputUnused(void)
@@ -1873,7 +1987,7 @@ static void PlayerHandleYesNoInput(void)
 
 static void MoveSelectionDisplayMoveNames(void)
 {
-    s32 i;
+    /*s32 i;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
     gNumberOfMovesToChoose = 0;
 
@@ -1881,21 +1995,21 @@ static void MoveSelectionDisplayMoveNames(void)
     {
         MoveSelectionDestroyCursorAt(i);
         StringCopy(gDisplayedStringBattle, gMoveNames[moveInfo->moves[i]]);
-        BattlePutTextOnWindow(gDisplayedStringBattle, i + B_WIN_MOVE_NAME_1);
+        BattlePutTextOnWindow(gDisplayedStringBattle, i + B_WIN_MOVE_SELECTION);
         if (moveInfo->moves[i] != MOVE_NONE)
             gNumberOfMovesToChoose++;
-    }
+    }*/
 }
 
 static void MoveSelectionDisplayPpString(void)
 {
-    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
-    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP);
+    /*StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP);*/
 }
 
 static void MoveSelectionDisplayPpNumber(void)
 {
-    u8 *txtPtr;
+    /*u8 *txtPtr;
     struct ChooseMoveStruct *moveInfo;
 
     if (gBattleResources->bufferA[gActiveBattler][2] == TRUE) // check if we didn't want to display pp number
@@ -1907,7 +2021,7 @@ static void MoveSelectionDisplayPpNumber(void)
     *(txtPtr)++ = CHAR_SLASH;
     ConvertIntToDecimalStringN(txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
 
-    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP_REMAINING);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP_REMAINING);*/
 }
 
 static void MulModifier(u16 *modifier, u16 val)
@@ -2787,7 +2901,7 @@ static void MoveSelectionDisplayMoveTypeDoubles(u8 targetId)
     if(!IsBattlerAlive(targetId))
         targetId = BATTLE_PARTNER(targetId);
     
-    switch(GetMoveTypeEffectiveness(move, targetId, gActiveBattler)){
+    /*switch(GetMoveTypeEffectiveness(move, targetId, gActiveBattler)){
         case MOVE_EFFECTIVENESS_NONE:
             StringExpandPlaceholders(gStringVar4, gEffectivenessNoDamage);
             WindowID = B_WIN_NO_EFFECT;
@@ -2804,7 +2918,7 @@ static void MoveSelectionDisplayMoveTypeDoubles(u8 targetId)
             StringExpandPlaceholders(gStringVar4, gEffectivenessNormalDamage);
             WindowID = B_WIN_MOVE_TYPE;
         break;
-    }
+    }*/
     BattlePutTextOnWindow(gStringVar4, WindowID);
     PutWindowTilemap(WindowID);
 	CopyWindowToVram(WindowID , 3);
@@ -2842,7 +2956,7 @@ static void MoveSelectionDisplayMoveType(void)
     if(!IsBattlerAlive(targetId))
         targetId = BATTLE_PARTNER(targetId);
     
-    switch(GetMoveTypeEffectiveness(move, targetId, gActiveBattler)){
+    /*switch(GetMoveTypeEffectiveness(move, targetId, gActiveBattler)){
         case MOVE_EFFECTIVENESS_NONE:
             StringExpandPlaceholders(gStringVar4, gEffectivenessNoDamage);
             WindowID = B_WIN_NO_EFFECT;
@@ -2859,7 +2973,7 @@ static void MoveSelectionDisplayMoveType(void)
             StringExpandPlaceholders(gStringVar4, gEffectivenessNormalDamage);
             WindowID = B_WIN_MOVE_TYPE;
         break;
-    }
+    }*/
     BattlePutTextOnWindow(gStringVar4, WindowID);
     PutWindowTilemap(WindowID);
 	CopyWindowToVram(WindowID ,3);
@@ -4558,7 +4672,7 @@ static void PlayerCmdEnd(void)
 }
 
 static void ChangeMoveDisplayMode(){
-    static const u8 gPowerText[] =  _("Power: {STR_VAR_1}");
+    /*static const u8 gPowerText[] =  _("Power: {STR_VAR_1}");
     static const u8 gAccuracyText[] =  _("Acc: {STR_VAR_1}");
     static const u8 gContactText[] =  _("Contact");
     static const u8 gNoContactText[] =  _("No Contact");
@@ -4572,9 +4686,9 @@ static void ChangeMoveDisplayMode(){
     move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
     StringCopy(gDisplayedStringBattle, gMoveNames[move]);
 
-    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_NAME_1);
-    PutWindowTilemap(B_WIN_MOVE_NAME_1 );
-	CopyWindowToVram(B_WIN_MOVE_NAME_1 , 3);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_SELECTION);
+    PutWindowTilemap(B_WIN_MOVE_SELECTION );
+	CopyWindowToVram(B_WIN_MOVE_SELECTION , 3);
 
     //Move Power
     power = gBattleMoves[move].power;
@@ -4600,11 +4714,11 @@ static void ChangeMoveDisplayMode(){
 
     BattlePutTextOnWindow(gStringVar4, B_WIN_MOVE_NAME_2);
     PutWindowTilemap(B_WIN_MOVE_NAME_2 );
-	CopyWindowToVram(B_WIN_MOVE_NAME_2 , 3);
+	CopyWindowToVram(B_WIN_MOVE_NAME_2 , 3);*/
 }
 
 static void MoveSelectionDisplaySplitIcon(void){
-	static const u16 sSplitIcons_Pal[] = INCBIN_U16("graphics/interface/split_icons_battle.gbapal");
+	/*static const u16 sSplitIcons_Pal[] = INCBIN_U16("graphics/interface/split_icons_battle.gbapal");
 	static const u8 sSplitIcons_Gfx[] = INCBIN_U8("graphics/interface/split_icons_battle.4bpp");
 	struct ChooseMoveStruct *moveInfo;
 	int icon;
@@ -4614,5 +4728,5 @@ static void MoveSelectionDisplaySplitIcon(void){
 	LoadPalette(sSplitIcons_Pal, 10 * 0x10, 0x20);
 	BlitBitmapToWindow(B_WIN_DUMMY, sSplitIcons_Gfx + 0x80 * icon, 0, 0, 16, 16);
 	PutWindowTilemap(B_WIN_DUMMY);
-	CopyWindowToVram(B_WIN_DUMMY, 3);
+	CopyWindowToVram(B_WIN_DUMMY, 3);*/
 }
