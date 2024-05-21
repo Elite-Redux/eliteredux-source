@@ -192,11 +192,17 @@ static void LoadOptionsData()
 {
     sMenuDataPtr->temporal_settings[SETTING_DIFFICULTY] = gSaveBlock2Ptr->gameDifficulty;
     sMenuDataPtr->temporal_settings[SETTING_LEVEL_CAP] = gSaveBlock2Ptr->levelCaps;
-    if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE){
-        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = gSaveBlock2Ptr->encounterRandomizedMode;
+    if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE && gSaveBlock2Ptr->encounterRandomizedMode == TRUE){
+        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 1;
+    }
+    else if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == TRUE && gSaveBlock2Ptr->encounterRandomizedMode == TRUE){
+        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 2;
+    }
+    else if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE && gSaveBlock2Ptr->encounterRandomizedMode == FALSE){
+        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 0;
     }
     else{
-        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 2;
+        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 3;
     }
     sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_INNATE_MODE]  = gSaveBlock2Ptr->innaterandomizedMode;
     sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_ABILITY_MODE] = gSaveBlock2Ptr->abilityRandomizedMode;

@@ -9708,6 +9708,9 @@ u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
     u8 i, j = 0;
     u32 tags = 0;
     u32 mask = getMask(loc, locG);
+    if (mask == 0){
+        return gAllFirstStage_species[rndseed % 568];
+    }
     for(i = 0; i < 21; i++){
         if((mask >> i) & 1){
             tags = (tags << 5) + i;
@@ -9716,9 +9719,6 @@ u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
     }
     u8 tag;
     tag = (tags >> ((rndseed % j) * 5)) & 31;
-    if (mask == 0){
-        tag = rndseed % 21;
-    }
     switch(tag) {
         case 0:
             return gForest_species[rndseed % 104];
@@ -9770,7 +9770,7 @@ u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
 
 u16 GetRandomPokemonFromSpecies(u16 basespecies){
 	u16 species = basespecies;
-    u16 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
+    u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     u16 i = 0;
     u16 loc = gSaveBlock1Ptr->location.mapNum;
     u16 locG = gSaveBlock1Ptr->location.mapGroup;
@@ -9794,9 +9794,10 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
         rndSeed = rndSeed ^ basespecies;
         if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE){
             //Legendary Mons Enabled
+
             do{
-                rndSeed = ISO_RANDOMIZE1(rndSeed);
-                species = rndSeed % SPECIES_CALYREX;
+                rndSeed = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, rndSeed);
+                species = rndSeed;
             }
             while(species == SPECIES_NONE                     ||
                 //Sub-Legendary
@@ -9897,70 +9898,17 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_ZAMAZENTA_CROWNED_SHIELD   || //Unfinished
                 species == SPECIES_ETERNATUS_ETERNAMAX        || //Unfinished
                 species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Unfinished
-                species == SPECIES_ZARUDE_DADA                || //Unfinished
-                //Unfinished Mons
-                species == SPECIES_SKWOVET                    ||
-                species == SPECIES_GREEDENT                   ||
-                species == SPECIES_BLIPBUG                    ||
-                species == SPECIES_DOTTLER                    ||
-                species == SPECIES_ORBEETLE                   ||
-                species == SPECIES_NICKIT                     ||
-                species == SPECIES_THIEVUL                    ||
-                species == SPECIES_GOSSIFLEUR                 ||
-                species == SPECIES_ELDEGOSS                   ||
-                species == SPECIES_WOOLOO                     ||
-                species == SPECIES_DUBWOOL                    ||
-                species == SPECIES_CHEWTLE                    ||
-                species == SPECIES_DREDNAW                    ||
-                species == SPECIES_SILICOBRA                  ||
-                species == SPECIES_SANDACONDA                 ||
-                species == SPECIES_CRAMORANT                  ||
-                species == SPECIES_ARROKUDA                   ||
-                species == SPECIES_BARRASKEWDA                ||
-                species == SPECIES_CLOBBOPUS                  ||
-                species == SPECIES_GRAPPLOCT                  ||
-                species == SPECIES_CURSOLA                    ||
-                species == SPECIES_MR_RIME                    ||
-                species == SPECIES_MILCERY                    ||
-                species == SPECIES_ALCREMIE                   ||
-                species == SPECIES_FALINKS                    ||
-                species == SPECIES_PINCURCHIN                 ||
-                species == SPECIES_SNOM                       ||
-                species == SPECIES_FROSMOTH                   ||
-                species == SPECIES_STONJOURNER                ||
-                species == SPECIES_EISCUE                     ||
-                species == SPECIES_INDEEDEE                   ||
-                species == SPECIES_MORPEKO                    ||
-                species == SPECIES_CUFANT                     ||
-                species == SPECIES_COPPERAJAH                 ||
-                species == SPECIES_DURALUDON                  ||
-                species == SPECIES_SLOWPOKE_GALARIAN          ||
-                species == SPECIES_WEEZING_GALARIAN           ||
-                species == SPECIES_MR_MIME_GALARIAN           ||
-                species == SPECIES_SLOWKING_GALARIAN          ||
-                species == SPECIES_CORSOLA_GALARIAN           ||
-                species == SPECIES_STUNFISK_GALARIAN          ||
-                species == SPECIES_CRAMORANT_GULPING          ||
-                species == SPECIES_CRAMORANT_GORGING          ||
-                species == SPECIES_SINISTEA_ANTIQUE           ||
-                species == SPECIES_POLTEAGEIST_ANTIQUE        ||
-                species == SPECIES_ALCREMIE_RUBY_CREAM        ||
-                species == SPECIES_ALCREMIE_MATCHA_CREAM      ||
-                species == SPECIES_ALCREMIE_MINT_CREAM        ||
-                species == SPECIES_ALCREMIE_LEMON_CREAM       ||
-                species == SPECIES_ALCREMIE_SALTED_CREAM      ||
-                species == SPECIES_ALCREMIE_RUBY_SWIRL        ||
-                species == SPECIES_ALCREMIE_CARAMEL_SWIRL     ||
-                species == SPECIES_ALCREMIE_RAINBOW_SWIRL     ||
-                species == SPECIES_EISCUE_NOICE_FACE          ||
-                species == SPECIES_INDEEDEE_FEMALE            ||
-                species == SPECIES_MORPEKO_HANGRY);
+                species == SPECIES_ZARUDE_DADA                || //Unfinished|
+                (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
+                (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
+                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_DEWLEON) 
+                );
         }
         else{
             //Legendary Mons Disabled
             do{
-                rndSeed = ISO_RANDOMIZE1(rndSeed);
-                species = rndSeed % SPECIES_CALYREX;
+                rndSeed = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, rndSeed);
+                species = rndSeed;
             }
             while(species == SPECIES_NONE                     ||
                 species == SPECIES_ZACIAN                     || //Legendary
@@ -10035,7 +9983,11 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_ALCREMIE_RAINBOW_SWIRL     ||
                 species == SPECIES_EISCUE_NOICE_FACE          ||
                 species == SPECIES_INDEEDEE_FEMALE            ||
-                species == SPECIES_MORPEKO_HANGRY);
+                species == SPECIES_MORPEKO_HANGRY             ||
+                (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
+                (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
+                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_DEWLEON) 
+                );
         }
     }
     

@@ -20,5 +20,8 @@ u16 Random2(void);
 void SeedRng(u16 seed);
 void SeedRng2(u16 seed);
 u16 RandRange(u16 min, u16 max);
+u16 RandRangeDeterministic(u16 min, u16 max, u16 seed);
+u16 Random16(u16 x);
+u16 Random16ModReduced(u16 x, u16 mod);
 
 #endif // GUARD_RANDOM_H
