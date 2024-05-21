@@ -895,6 +895,7 @@ static bool8 StartMenuDebugCallback(void)
 
 static bool8 StartMenuIntroOptionMenuCallback(void)
 {
+    FlagSet(FLAG_SYS_DEBUG_MENU_OPENED);
     CreateTask(Task_OpenIntroOptionMenuFromStartMenu, 0);
     return TRUE;
 }

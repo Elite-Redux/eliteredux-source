@@ -163,7 +163,6 @@ void Task_OpenIntroOptionMenuFromStartMenu(u8 taskId)
     }
 }
 
-
 static void SaveOptionsData()
 {
     gSaveBlock2Ptr->gameDifficulty          = sMenuDataPtr->temporal_settings[SETTING_DIFFICULTY];
@@ -329,6 +328,7 @@ static bool8 Menu_DoGfxSetup(void)
 
 static void Menu_FreeResources(void)
 {
+    FlagClear(FLAG_SYS_DEBUG_MENU_OPENED);
     try_free(sMenuDataPtr);
     try_free(sBg1TilemapBuffer);
     FreeAllWindowBuffers();
@@ -658,8 +658,10 @@ static void Task_MenuTurnOff(u8 taskId)
 
     if (!gPaletteFade.active)
     {
-        //SetMainCallback2(sMenuDataPtr->savedCallback);
-        DoNamingScreen(0, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, sMenuDataPtr->savedCallback);
+        if(FlagGet(FLAG_SYS_DEBUG_MENU_OPENED))
+            SetMainCallback2(sMenuDataPtr->savedCallback);
+        else
+            DoNamingScreen(0, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, sMenuDataPtr->savedCallback);
         Menu_FreeResources();
         DestroyTask(taskId);
     }
