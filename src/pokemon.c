@@ -9706,16 +9706,16 @@ bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon){
 }
 u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
     u8 i, j = 0;
-    u8 tags[4];
+    u32 tags = 0;
     u32 mask = getMask(loc, locG);
     for(i = 0; i < 21; i++){
         if((mask >> i) & 1){
-            tags[j] = i;
+            tags = (tags << 5) + i;
             j++;
         } 
     }
     u8 tag;
-    tag = tags[rndseed % j];
+    tag = (tags >> ((rndseed % j) * 5)) & 31;
     if (mask == 0){
         tag = rndseed % 21;
     }
