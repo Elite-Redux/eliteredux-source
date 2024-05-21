@@ -9708,6 +9708,7 @@ u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
     u8 i, j = 0;
     u32 tags = 0;
     u32 mask = getMask(loc, locG);
+    u8 tag;
     if (mask == 0){
         return gAllFirstStage_species[rndseed % 568];
     }
@@ -9717,7 +9718,6 @@ u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
             j++;
         } 
     }
-    u8 tag;
     tag = (tags >> ((rndseed % j) * 5)) & 31;
     switch(tag) {
         case 0:
