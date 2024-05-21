@@ -196,6 +196,7 @@ struct BaseStats
             u8 flags;
  /* 0x16 */ u16 innates[NUM_INNATE_PER_SPECIES];
  /* 0x15 */ u16 shopPrice;
+            u8 tier;
 };
 
 #include "constants/battle_config.h"
@@ -482,7 +483,10 @@ u8 GetSpeciesInnateNum(u16 species, u16 ability, u8 level, u32 personality, bool
 void CreateShinyMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 nature);
 u16 getNumberOfUniqueDefeatedTrainers(void);
 bool8 enablePokemonChanges(void);
+u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG);
 u16 GetRandomPokemonFromSpecies(u16 basespecies);
+u8 getTier(s8 loc);
+u32 getMask(s8 loc, s8 locG);
 bool8 isMonNicknamed(struct Pokemon *mon);
 bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon);
 bool8 CheckBoxMonForBadChecksum(u8 box, u8 slot);

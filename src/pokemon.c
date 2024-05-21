@@ -2152,7 +2152,7 @@ const s8 gNatureStatTable[NUM_NATURES][NUM_NATURE_STATS] =
 #include "data/pokemon/form_species_table_pointers.h"
 #include "data/pokemon/form_change_tables.h"
 #include "data/pokemon/form_change_table_pointers.h"
-
+#include "data/randomizer.h"
 // SPECIES_NONE are ignored in the following two tables, so decrement before accessing these arrays to get the right result
 
 static const u8 sMonFrontAnimIdsTable[NUM_SPECIES - 1] =
@@ -9704,19 +9704,92 @@ bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon){
     
     return nicknamed;
 }
+u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
+    u8 i, j = 0;
+    u8 tags[4];
+    u32 mask = getMask(loc, locG);
+    for(i = 0; i < 21; i++){
+        if((mask >> i) & 1){
+            tags[j] = i;
+            j++;
+        } 
+    }
+    u8 tag;
+    tag = tags[rndseed % j];
+    if (mask == 0){
+        tag = rndseed % 21;
+    }
+    switch(tag) {
+        case 0:
+            return gForest_species[rndseed % 104];
+        case 1:
+            return gField_species[rndseed % 162];
+        case 2:
+            return gAquatic_species[rndseed % 61];
+        case 3:
+            return gCave_species[rndseed % 79];
+        case 4:
+            return gCold_species[rndseed % 27];
+        case 5:
+            return gHot_species[rndseed % 29];
+        case 6:
+            return gDark_species[rndseed % 5];
+        case 7:
+            return gDeep_species[rndseed % 24];
+        case 8:
+            return gFossil_species[rndseed % 15];
+        case 9:
+            return gAsh_species[rndseed % 12];
+        case 10:
+            return gHaunted_species[rndseed % 35];
+        case 11:
+            return gTropical_species[rndseed % 60];
+        case 12:
+            return gDesert_species[rndseed % 29];
+        case 13:
+            return gTown_species[rndseed % 80];
+        case 14:
+            return gVolcano_species[rndseed % 21];
+        case 15:
+            return gMountain_species[rndseed % 39];
+        case 16:
+            return gSpace_species[rndseed % 21];
+        case 17:
+            return gMonster_species[rndseed % 8];
+        case 18:
+            return gMineral_species[rndseed % 7];
+        case 19:
+            return gHumanlike_species[rndseed % 11];
+        case 20:
+            return gBeach_species[rndseed % 12];
+    }
+    return SPECIES_NONE;
+}
+
+
 
 u16 GetRandomPokemonFromSpecies(u16 basespecies){
 	u16 species = basespecies;
     u16 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     u16 i = 0;
-
+    u16 loc = gSaveBlock1Ptr->location.mapNum;
+    u16 locG = gSaveBlock1Ptr->location.mapGroup;
+    u8 map_tier = getTier(loc);
     if(VarGet(VAR_RANDOMIZED_SEED) == 0){
         u16 newseed = Random();
         VarSet(VAR_RANDOMIZED_SEED, newseed);
         rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     }
     /*encounterRandomizedLegendaryMode*/
-
+    if(!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode && basespecies != SPECIES_NONE){
+        rndSeed = rndSeed ^ basespecies;
+            do{
+                rndSeed = ISO_RANDOMIZE1(rndSeed);
+                species = GetRandomPokemonFromTag(rndSeed, loc, locG);
+            }
+            while(species == SPECIES_NONE || gBaseStats[species].tier != map_tier);
+        return species;
+    }
     if(gSaveBlock2Ptr->encounterRandomizedMode == TRUE && basespecies != SPECIES_NONE){
         rndSeed = rndSeed ^ basespecies;
         if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE){
@@ -9968,7 +10041,443 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
     
 	return species;
 }
+u8 getTier(s8 loc){
+    if(loc == MAP_NUM(PETALBURG_CITY) ||
+        loc == MAP_NUM(SLATEPORT_CITY) ||
+        loc == MAP_NUM(RUSTBORO_CITY) ||
+        loc == MAP_NUM(LITTLEROOT_TOWN) ||
+        loc == MAP_NUM(OLDALE_TOWN) ||
+        loc == MAP_NUM(DEWFORD_TOWN) ||
+        loc == MAP_NUM(ROUTE101) ||
+        loc == MAP_NUM(ROUTE102) ||
+        loc == MAP_NUM(ROUTE103) ||
+        loc == MAP_NUM(ROUTE104) ||
+        loc == MAP_NUM(ROUTE106) ||
+        loc == MAP_NUM(ROUTE107) ||
+        loc == MAP_NUM(ROUTE109) ||
+        loc == MAP_NUM(ROUTE110) ||
+        loc == MAP_NUM(ROUTE116) ||
+        loc == MAP_NUM(RUSTURF_TUNNEL) ||
+        loc == MAP_NUM(GRANITE_CAVE_1F) ||
+        loc == MAP_NUM(GRANITE_CAVE_B1F) ||
+        loc == MAP_NUM(GRANITE_CAVE_B2F) ||
+        loc == MAP_NUM(GRANITE_CAVE_STEVENS_ROOM) ||
+        loc == MAP_NUM(PETALBURG_WOODS) ||
+        loc == MAP_NUM(PETALBURG_WOODS_2) ||
+        loc == MAP_NUM(PETALBURG_WOODS_3) ||
+        loc == MAP_NUM(SEASPRAY_CAVE) ||
+        loc == MAP_NUM(SEASPRAY_CAVE_B1F) ||
+        loc == MAP_NUM(DEWFORD_MEADOW) ||
+        loc == MAP_NUM(DEWFORD_MANOR_1F)){
+            return 1;
+        }
+    if(loc == MAP_NUM(MAUVILLE_CITY) ||
+        loc == MAP_NUM(FALLARBOR_TOWN) ||
+        loc == MAP_NUM(VERDANTURF_TOWN) ||
+        loc == MAP_NUM(ROUTE111) ||
+        loc == MAP_NUM(ROUTE112) ||
+        loc == MAP_NUM(ROUTE113) ||
+        loc == MAP_NUM(ROUTE114) ||
+        loc == MAP_NUM(ROUTE117) ||
+        loc == MAP_NUM(METEOR_FALLS_1F_1R) ||
+        loc == MAP_NUM(METEOR_FALLS_1F_2R) ||
+        loc == MAP_NUM(DESERT_RUINS) ||
+        loc == MAP_NUM(MT_CHIMNEY) ||
+        loc == MAP_NUM(JAGGED_PASS) ||
+        loc == MAP_NUM(FIERY_PATH) ||
+        loc == MAP_NUM(EMBER_PATH) ||
+        loc == MAP_NUM(ASHEN_WOODS) ||
+        loc == MAP_NUM(VERDANTURF_MEADOW)){
+            return 2;
+        }
+    if(loc == MAP_NUM(FORTREE_CITY) ||
+        loc == MAP_NUM(LILYCOVE_CITY) ||
+        loc == MAP_NUM(LAVARIDGE_TOWN) ||
+        loc == MAP_NUM(ROUTE105) ||
+        loc == MAP_NUM(ROUTE108) ||
+        loc == MAP_NUM(ROUTE115) ||
+        loc == MAP_NUM(ROUTE118) ||
+        loc == MAP_NUM(ROUTE119) ||
+        loc == MAP_NUM(ROUTE120) ||
+        loc == MAP_NUM(ROUTE121) ||
+        loc == MAP_NUM(ROUTE122) ||
+        loc == MAP_NUM(ROUTE123) ||
+        loc == MAP_NUM(MT_PYRE_1F) ||
+        loc == MAP_NUM(MT_PYRE_2F) ||
+        loc == MAP_NUM(MT_PYRE_3F) ||
+        loc == MAP_NUM(MT_PYRE_4F) ||
+        loc == MAP_NUM(MT_PYRE_5F) ||
+        loc == MAP_NUM(MT_PYRE_6F) ||
+        loc == MAP_NUM(MT_PYRE_EXTERIOR) ||
+        loc == MAP_NUM(MT_PYRE_SUMMIT) ||
+        loc == MAP_NUM(SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM) ||
+        loc == MAP_NUM(SHOAL_CAVE_LOW_TIDE_INNER_ROOM) ||
+        loc == MAP_NUM(SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM) ||
+        loc == MAP_NUM(SHOAL_CAVE_LOW_TIDE_LOWER_ROOM) ||
+        loc == MAP_NUM(SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM) ||
+        loc == MAP_NUM(SHOAL_CAVE_HIGH_TIDE_INNER_ROOM) ||
+        loc == MAP_NUM(NEW_MAUVILLE_ENTRANCE) ||
+        loc == MAP_NUM(NEW_MAUVILLE_INSIDE) ||
+        loc == MAP_NUM(ABANDONED_SHIP_ROOMS_1F) ||
+        loc == MAP_NUM(ABANDONED_SHIP_CORRIDORS_B1F) ||
+        loc == MAP_NUM(ABANDONED_SHIP_UNDERWATER1) ||
+        loc == MAP_NUM(MIRAGE_TOWER_1F) ||
+        loc == MAP_NUM(MIRAGE_TOWER_2F) ||
+        loc == MAP_NUM(MIRAGE_TOWER_3F) ||
+        loc == MAP_NUM(MIRAGE_TOWER_4F) ||
+        loc == MAP_NUM(MIRAGE_TOWER_B1F) ||
+        loc == MAP_NUM(DESERT_UNDERPASS) ||
+        loc == MAP_NUM(SANDSTREWN_RUINS) ||
+        loc == MAP_NUM(SANDSTREWN_RUINS_B1F) ||
+        loc == MAP_NUM(ROUTE111_RUINS_EXTERIOR) ||
+        loc == MAP_NUM(SANDSTREWN_RUINS_2F) ||
+        loc == MAP_NUM(SANDSTREWN_RUINS_3F)){
+            return 3;
+        }
+    if(loc == MAP_NUM(MOSSDEEP_CITY) ||
+        loc == MAP_NUM(SOOTOPOLIS_CITY) ||
+        loc == MAP_NUM(ROUTE124) ||
+        loc == MAP_NUM(ROUTE125) ||
+        loc == MAP_NUM(ROUTE126) ||
+        loc == MAP_NUM(ROUTE127) ||
+        loc == MAP_NUM(ROUTE128) ||
+        loc == MAP_NUM(ROUTE129) ||
+        loc == MAP_NUM(ROUTE130) ||
+        loc == MAP_NUM(ROUTE131) ||
+        loc == MAP_NUM(ROUTE132) ||
+        loc == MAP_NUM(ROUTE133) ||
+        loc == MAP_NUM(ROUTE134) ||
+        loc == MAP_NUM(UNDERWATER_ROUTE124) ||
+        loc == MAP_NUM(UNDERWATER_ROUTE126) ||
+        loc == MAP_NUM(UNDERWATER_ROUTE127) ||
+        loc == MAP_NUM(UNDERWATER_ROUTE128) ||
+        loc == MAP_NUM(UNDERWATER_ROUTE129) ||
+        loc == MAP_NUM(UNDERWATER_ROUTE105) ||
+        loc == MAP_NUM(UNDERWATER_ROUTE125) ||
+        loc == MAP_NUM(UNDERWATER_SOOTOPOLIS_CITY) ||
+        loc == MAP_NUM(AQUA_HIDEOUT_1F) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ENTRANCE) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ROOM1) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ROOM2) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ROOM3) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ROOM4) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ROOM5) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ROOM6) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ROOM7) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ROOM8) ||
+        loc == MAP_NUM(SEAFLOOR_CAVERN_ROOM9) ||
+        loc == MAP_NUM(UNDERWATER_ROUTE134) ||
+        loc == MAP_NUM(SCORCHED_SLAB) ||
+        loc == MAP_NUM(SHOAL_CAVE_LOW_TIDE_ICE_ROOM) ||
+        loc == MAP_NUM(MAGMA_HIDEOUT_1F) ||
+        loc == MAP_NUM(MAGMA_HIDEOUT_2F_1R) ||
+        loc == MAP_NUM(MAGMA_HIDEOUT_2F_2R) ||
+        loc == MAP_NUM(MAGMA_HIDEOUT_3F_1R) ||
+        loc == MAP_NUM(MAGMA_HIDEOUT_3F_2R) ||
+        loc == MAP_NUM(MAGMA_HIDEOUT_4F) ||
+        loc == MAP_NUM(MAGMA_HIDEOUT_3F_3R) ||
+        loc == MAP_NUM(MAGMA_HIDEOUT_2F_3R) ||
+        loc == MAP_NUM(SCORCHED_SLAB_B1F) ||
+        loc == MAP_NUM(SCORCHED_SLAB_B2F) ||
+        loc == MAP_NUM(SCORCHED_SLAB_HEATRANS_ROOM)){
+            return 4;
+        }
+    if(loc == MAP_NUM(EVER_GRANDE_CITY) ||
+        loc == MAP_NUM(PACIFIDLOG_TOWN) ||
+        loc == MAP_NUM(METEOR_FALLS_B1F_1R) ||
+        loc == MAP_NUM(METEOR_FALLS_B1F_2R) ||
+        loc == MAP_NUM(CAVE_OF_ORIGIN_ENTRANCE) ||
+        loc == MAP_NUM(CAVE_OF_ORIGIN_1F) ||
+        loc == MAP_NUM(CAVE_OF_ORIGIN_B1F) ||
+        loc == MAP_NUM(VICTORY_ROAD_1F) ||
+        loc == MAP_NUM(VICTORY_ROAD_B1F) ||
+        loc == MAP_NUM(VICTORY_ROAD_B2F) ||
+        loc == MAP_NUM(SKY_PILLAR_1F) ||
+        loc == MAP_NUM(SKY_PILLAR_2F) ||
+        loc == MAP_NUM(SKY_PILLAR_3F) ||
+        loc == MAP_NUM(SKY_PILLAR_4F) ||
+        loc == MAP_NUM(SKY_PILLAR_5F) ||
+        loc == MAP_NUM(ARTISAN_CAVE_B1F) ||
+        loc == MAP_NUM(ARTISAN_CAVE_1F) ||
+        loc == MAP_NUM(ALTERING_CAVE) ||
+        loc == MAP_NUM(METEOR_FALLS_STEVENS_CAVE) ||
+        loc == MAP_NUM(CAVE_OF_ORIGIN_DIANCIES_ROOM) ||
+        loc == MAP_NUM(METEOR_FALLS_JIRACHIS_ROOM) ||
+        loc == MAP_NUM(ALTERING_CAVE_1F) ||
+        loc == MAP_NUM(ALTERING_CAVE_B1F)){
+            return 5;
+        }
+    return 0;
+}
+u32 getMask(s8 loc, s8 locG){
+    if( (MAP_NUM(PETALBURG_CITY) == loc && MAP_GROUP(PETALBURG_CITY) == locG) ||
+	    (MAP_NUM(NEW_MAUVILLE_ENTRANCE) == loc && MAP_GROUP(NEW_MAUVILLE_ENTRANCE) == locG) ||
+	    (MAP_NUM(NEW_MAUVILLE_INSIDE) == loc && MAP_GROUP(NEW_MAUVILLE_INSIDE) == locG)){
+	    return 532480;
+    }
+    if(MAP_NUM(SLATEPORT_CITY) == loc && MAP_GROUP(SLATEPORT_CITY) == locG){
+        return 1581056;
+    }
+    if(MAP_NUM(RUSTBORO_CITY) == loc && MAP_GROUP(RUSTBORO_CITY) == locG){
+        return 794624;
+    }
+    if(	(MAP_NUM(LITTLEROOT_TOWN) == loc && MAP_GROUP(LITTLEROOT_TOWN) == locG) ||
+        (MAP_NUM(OLDALE_TOWN) == loc && MAP_GROUP(OLDALE_TOWN) == locG) ||
+        (MAP_NUM(MAUVILLE_CITY) == loc && MAP_GROUP(MAUVILLE_CITY) == locG) ||
+        (MAP_NUM(FALLARBOR_TOWN) == loc && MAP_GROUP(FALLARBOR_TOWN) == locG) ||
+        (MAP_NUM(VERDANTURF_TOWN) == loc && MAP_GROUP(VERDANTURF_TOWN) == locG) ||
+        (MAP_NUM(FORTREE_CITY) == loc && MAP_GROUP(FORTREE_CITY) == locG) ||
+        (MAP_NUM(LILYCOVE_CITY) == loc && MAP_GROUP(LILYCOVE_CITY) == locG) ||
+        (MAP_NUM(LAVARIDGE_TOWN) == loc && MAP_GROUP(LAVARIDGE_TOWN) == locG) ||
+        (MAP_NUM(EVER_GRANDE_CITY) == loc && MAP_GROUP(EVER_GRANDE_CITY) == locG)){
+        return 8192;
+    }
+    if(MAP_NUM(DEWFORD_TOWN) == loc && MAP_GROUP(DEWFORD_TOWN) == locG){
+        return 1058816;
+    }
+    if(	(MAP_NUM(ROUTE101) == loc && MAP_GROUP(ROUTE101) == locG) ||
+        (MAP_NUM(ROUTE102) == loc && MAP_GROUP(ROUTE102) == locG) ||
+        (MAP_NUM(ROUTE103) == loc && MAP_GROUP(ROUTE103) == locG) ||
+        (MAP_NUM(ROUTE121) == loc && MAP_GROUP(ROUTE121) == locG)){
+        return 2;
+    }
+    if(MAP_NUM(ROUTE104) == loc && MAP_GROUP(ROUTE104) == locG){
+        return 3;
+    }
+    if(	(MAP_NUM(ROUTE106) == loc && MAP_GROUP(ROUTE106) == locG) ||
+        (MAP_NUM(ROUTE109) == loc && MAP_GROUP(ROUTE109) == locG)){
+        return 1050628;
+    }
+    if(	(MAP_NUM(ROUTE107) == loc && MAP_GROUP(ROUTE107) == locG) ||
+        (MAP_NUM(ROUTE108) == loc && MAP_GROUP(ROUTE108) == locG) ||
+        (MAP_NUM(ROUTE124) == loc && MAP_GROUP(ROUTE124) == locG) ||
+        (MAP_NUM(ROUTE125) == loc && MAP_GROUP(ROUTE125) == locG) ||
+        (MAP_NUM(ROUTE126) == loc && MAP_GROUP(ROUTE126) == locG) ||
+        (MAP_NUM(ROUTE127) == loc && MAP_GROUP(ROUTE127) == locG) ||
+        (MAP_NUM(ROUTE128) == loc && MAP_GROUP(ROUTE128) == locG) ||
+        (MAP_NUM(ROUTE129) == loc && MAP_GROUP(ROUTE129) == locG) ||
+        (MAP_NUM(ROUTE130) == loc && MAP_GROUP(ROUTE130) == locG) ||
+        (MAP_NUM(ROUTE131) == loc && MAP_GROUP(ROUTE131) == locG) ||
+        (MAP_NUM(ROUTE132) == loc && MAP_GROUP(ROUTE132) == locG) ||
+        (MAP_NUM(ROUTE133) == loc && MAP_GROUP(ROUTE133) == locG) ||
+        (MAP_NUM(ROUTE134) == loc && MAP_GROUP(ROUTE134) == locG)){
+        return 4;
+    }
+    if(MAP_NUM(ROUTE110) == loc && MAP_GROUP(ROUTE110) == locG){
+        return 8194;
+    }
+    if(MAP_NUM(ROUTE116) == loc && MAP_GROUP(ROUTE116) == locG){
+        return 32769;
+    }
+    if(	(MAP_NUM(RUSTURF_TUNNEL) == loc && MAP_GROUP(RUSTURF_TUNNEL) == locG) ||
+        (MAP_NUM(VICTORY_ROAD_1F) == loc && MAP_GROUP(VICTORY_ROAD_1F) == locG) ||
+        (MAP_NUM(VICTORY_ROAD_B1F) == loc && MAP_GROUP(VICTORY_ROAD_B1F) == locG) ||
+        (MAP_NUM(VICTORY_ROAD_B2F) == loc && MAP_GROUP(VICTORY_ROAD_B2F) == locG)){
+        return 72;
+    }
+    if(MAP_NUM(GRANITE_CAVE_1F) == loc && MAP_GROUP(GRANITE_CAVE_1F) == locG){
+        return 8;
+    }
+    if(	(MAP_NUM(GRANITE_CAVE_B1F) == loc && MAP_GROUP(GRANITE_CAVE_B1F) == locG) ||
+        (MAP_NUM(GRANITE_CAVE_B2F) == loc && MAP_GROUP(GRANITE_CAVE_B2F) == locG)){
+        return 328;
+    }
+    if(MAP_NUM(GRANITE_CAVE_STEVENS_ROOM) == loc && MAP_GROUP(GRANITE_CAVE_STEVENS_ROOM) == locG){
+        return 264;
+    }
+    if(	(MAP_NUM(PETALBURG_WOODS) == loc && MAP_GROUP(PETALBURG_WOODS) == locG) ||
+        (MAP_NUM(PETALBURG_WOODS_2) == loc && MAP_GROUP(PETALBURG_WOODS_2) == locG)){
+        return 1;
+    }
+    if(MAP_NUM(PETALBURG_WOODS_3) == loc && MAP_GROUP(PETALBURG_WOODS_3) == locG){
+        return 65;
+    }
+    if(MAP_NUM(SEASPRAY_CAVE) == loc && MAP_GROUP(SEASPRAY_CAVE) == locG){
+        return 12;
+    }
+    if(MAP_NUM(SEASPRAY_CAVE_B1F) == loc && MAP_GROUP(SEASPRAY_CAVE_B1F) == locG){
+        return 24;
+    }
+    if(MAP_NUM(DEWFORD_MEADOW) == loc && MAP_GROUP(DEWFORD_MEADOW) == locG){
+        return 1050626;
+    }
+    if(MAP_NUM(DEWFORD_MANOR_1F) == loc && MAP_GROUP(DEWFORD_MANOR_1F) == locG){
+        return 1024;
+    }
+    if(MAP_NUM(ROUTE111) == loc && MAP_GROUP(ROUTE111) == locG){
+        return 36864;
+    }
+    if(MAP_NUM(ROUTE112) == loc && MAP_GROUP(ROUTE112) == locG){
+        return 34;
+    }
+    if(MAP_NUM(ROUTE113) == loc && MAP_GROUP(ROUTE113) == locG){
+        return 546;
+    }
+    if(MAP_NUM(ROUTE114) == loc && MAP_GROUP(ROUTE114) == locG){
+        return 32770;
+    }
+    if(	(MAP_NUM(ROUTE117) == loc && MAP_GROUP(ROUTE117) == locG) ||
+        (MAP_NUM(ROUTE119) == loc && MAP_GROUP(ROUTE119) == locG) ||
+        (MAP_NUM(ROUTE120) == loc && MAP_GROUP(ROUTE120) == locG) ||
+        (MAP_NUM(ROUTE123) == loc && MAP_GROUP(ROUTE123) == locG)){
+        return 2050;
+    }
+    if(	(MAP_NUM(METEOR_FALLS_1F_1R) == loc && MAP_GROUP(METEOR_FALLS_1F_1R) == locG) ||
+        (MAP_NUM(METEOR_FALLS_1F_2R) == loc && MAP_GROUP(METEOR_FALLS_1F_2R) == locG) ||
+        (MAP_NUM(METEOR_FALLS_B1F_1R) == loc && MAP_GROUP(METEOR_FALLS_B1F_1R) == locG) ||
+        (MAP_NUM(METEOR_FALLS_B1F_2R) == loc && MAP_GROUP(METEOR_FALLS_B1F_2R) == locG) ||
+        (MAP_NUM(METEOR_FALLS_STEVENS_CAVE) == loc && MAP_GROUP(METEOR_FALLS_STEVENS_CAVE) == locG) ||
+        (MAP_NUM(METEOR_FALLS_JIRACHIS_ROOM) == loc && MAP_GROUP(METEOR_FALLS_JIRACHIS_ROOM) == locG)){
+        return 98312;
+    }
+    if(MAP_NUM(DESERT_RUINS) == loc && MAP_GROUP(DESERT_RUINS) == locG){
+        return 69920;
+    }
+    if(	(MAP_NUM(MT_CHIMNEY) == loc && MAP_GROUP(MT_CHIMNEY) == locG) ||
+        (MAP_NUM(JAGGED_PASS) == loc && MAP_GROUP(JAGGED_PASS) == locG)){
+        return 33312;
+    }
+    if(	(MAP_NUM(FIERY_PATH) == loc && MAP_GROUP(FIERY_PATH) == locG) ||
+        (MAP_NUM(SCORCHED_SLAB) == loc && MAP_GROUP(SCORCHED_SLAB) == locG) ||
+        (MAP_NUM(SCORCHED_SLAB_B1F) == loc && MAP_GROUP(SCORCHED_SLAB_B1F) == locG) ||
+        (MAP_NUM(SCORCHED_SLAB_B2F) == loc && MAP_GROUP(SCORCHED_SLAB_B2F) == locG) ||
+        (MAP_NUM(SCORCHED_SLAB_HEATRANS_ROOM) == loc && MAP_GROUP(SCORCHED_SLAB_HEATRANS_ROOM) == locG)){
+        return 40;
+    }
+    if(	(MAP_NUM(EMBER_PATH) == loc && MAP_GROUP(EMBER_PATH) == locG) ||
+        (MAP_NUM(SANDSTREWN_RUINS) == loc && MAP_GROUP(SANDSTREWN_RUINS) == locG) ||
+        (MAP_NUM(SANDSTREWN_RUINS_B1F) == loc && MAP_GROUP(SANDSTREWN_RUINS_B1F) == locG) ||
+        (MAP_NUM(SANDSTREWN_RUINS_2F) == loc && MAP_GROUP(SANDSTREWN_RUINS_2F) == locG) ||
+        (MAP_NUM(SANDSTREWN_RUINS_3F) == loc && MAP_GROUP(SANDSTREWN_RUINS_3F) == locG) ||
+        (MAP_NUM(SEAFLOOR_CAVERN_ROOM1) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ROOM1) == locG) ||
+        (MAP_NUM(SEAFLOOR_CAVERN_ROOM2) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ROOM2) == locG) ||
+        (MAP_NUM(SEAFLOOR_CAVERN_ROOM3) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ROOM3) == locG) ||
+        (MAP_NUM(SEAFLOOR_CAVERN_ROOM4) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ROOM4) == locG) ||
+        (MAP_NUM(SEAFLOOR_CAVERN_ROOM5) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ROOM5) == locG) ||
+        (MAP_NUM(SEAFLOOR_CAVERN_ROOM6) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ROOM6) == locG) ||
+        (MAP_NUM(SEAFLOOR_CAVERN_ROOM7) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ROOM7) == locG) ||
+        (MAP_NUM(SEAFLOOR_CAVERN_ROOM8) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ROOM8) == locG) ||
+        (MAP_NUM(SEAFLOOR_CAVERN_ROOM9) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ROOM9) == locG) ||
+        (MAP_NUM(ARTISAN_CAVE_B1F) == loc && MAP_GROUP(ARTISAN_CAVE_B1F) == locG) ||
+        (MAP_NUM(ARTISAN_CAVE_1F) == loc && MAP_GROUP(ARTISAN_CAVE_1F) == locG) ||
+        (MAP_NUM(ALTERING_CAVE) == loc && MAP_GROUP(ALTERING_CAVE) == locG) ||
+        (MAP_NUM(ALTERING_CAVE_1F) == loc && MAP_GROUP(ALTERING_CAVE_1F) == locG) ||
+        (MAP_NUM(ALTERING_CAVE_B1F) == loc && MAP_GROUP(ALTERING_CAVE_B1F) == locG)){
+        return 0;
+    }
+    if(MAP_NUM(ASHEN_WOODS) == loc && MAP_GROUP(ASHEN_WOODS) == locG){
+        return 33313;
+    }
+    if(MAP_NUM(VERDANTURF_MEADOW) == loc && MAP_GROUP(VERDANTURF_MEADOW) == locG){
+        return 10242;
+    }
+    if(	(MAP_NUM(ROUTE105) == loc && MAP_GROUP(ROUTE105) == locG) ||
+        (MAP_NUM(ROUTE118) == loc && MAP_GROUP(ROUTE118) == locG)){
+        return 1048580;
+    }
+    if(MAP_NUM(ROUTE115) == loc && MAP_GROUP(ROUTE115) == locG){
+        return 1081346;
+    }
+    if(MAP_NUM(ROUTE122) == loc && MAP_GROUP(ROUTE122) == locG){
+        return 1028;
+    }
+    if(	(MAP_NUM(MT_PYRE_1F) == loc && MAP_GROUP(MT_PYRE_1F) == locG) ||
+        (MAP_NUM(MT_PYRE_2F) == loc && MAP_GROUP(MT_PYRE_2F) == locG) ||
+        (MAP_NUM(MT_PYRE_3F) == loc && MAP_GROUP(MT_PYRE_3F) == locG) ||
+        (MAP_NUM(MT_PYRE_4F) == loc && MAP_GROUP(MT_PYRE_4F) == locG) ||
+        (MAP_NUM(MT_PYRE_5F) == loc && MAP_GROUP(MT_PYRE_5F) == locG) ||
+        (MAP_NUM(MT_PYRE_6F) == loc && MAP_GROUP(MT_PYRE_6F) == locG)){
+        return 1088;
+    }
+    if(	(MAP_NUM(MT_PYRE_EXTERIOR) == loc && MAP_GROUP(MT_PYRE_EXTERIOR) == locG) ||
+        (MAP_NUM(MT_PYRE_SUMMIT) == loc && MAP_GROUP(MT_PYRE_SUMMIT) == locG)){
+        return 33792;
+    }
+    if(	(MAP_NUM(SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM) == locG) ||
+        (MAP_NUM(SHOAL_CAVE_LOW_TIDE_INNER_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_INNER_ROOM) == locG) ||
+        (MAP_NUM(SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM) == locG) ||
+        (MAP_NUM(SHOAL_CAVE_LOW_TIDE_LOWER_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_LOWER_ROOM) == locG)){
+        return 1048600;
+    }
+    if(	(MAP_NUM(SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM) == locG) ||
+        (MAP_NUM(SHOAL_CAVE_HIGH_TIDE_INNER_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_HIGH_TIDE_INNER_ROOM) == locG)){
+        return 28;
+    }
+    if(	(MAP_NUM(ABANDONED_SHIP_ROOMS_1F) == loc && MAP_GROUP(ABANDONED_SHIP_ROOMS_1F) == locG) ||
+        (MAP_NUM(ABANDONED_SHIP_CORRIDORS_B1F) == loc && MAP_GROUP(ABANDONED_SHIP_CORRIDORS_B1F) == locG) ||
+        (MAP_NUM(ABANDONED_SHIP_UNDERWATER1) == loc && MAP_GROUP(ABANDONED_SHIP_UNDERWATER1) == locG)){
+        return 1152;
+    }
+    if(	(MAP_NUM(MIRAGE_TOWER_1F) == loc && MAP_GROUP(MIRAGE_TOWER_1F) == locG) ||
+        (MAP_NUM(MIRAGE_TOWER_2F) == loc && MAP_GROUP(MIRAGE_TOWER_2F) == locG) ||
+        (MAP_NUM(MIRAGE_TOWER_3F) == loc && MAP_GROUP(MIRAGE_TOWER_3F) == locG) ||
+        (MAP_NUM(MIRAGE_TOWER_4F) == loc && MAP_GROUP(MIRAGE_TOWER_4F) == locG) ||
+        (MAP_NUM(MIRAGE_TOWER_B1F) == loc && MAP_GROUP(MIRAGE_TOWER_B1F) == locG)){
+        return 5376;
+    }
+    if(MAP_NUM(DESERT_UNDERPASS) == loc && MAP_GROUP(DESERT_UNDERPASS) == locG){
+        return 4104;
+    }
+    if(MAP_NUM(ROUTE111_RUINS_EXTERIOR) == loc && MAP_GROUP(ROUTE111_RUINS_EXTERIOR) == locG){
+        return 6144;
+    }
+    if(MAP_NUM(MOSSDEEP_CITY) == loc && MAP_GROUP(MOSSDEEP_CITY) == locG){
+        return 73732;
+    }
+    if(MAP_NUM(SOOTOPOLIS_CITY) == loc && MAP_GROUP(SOOTOPOLIS_CITY) == locG){
+        return 8324;
+    }
+    if(	(MAP_NUM(UNDERWATER_ROUTE124) == loc && MAP_GROUP(UNDERWATER_ROUTE124) == locG) ||
+        (MAP_NUM(UNDERWATER_ROUTE126) == loc && MAP_GROUP(UNDERWATER_ROUTE126) == locG) ||
+        (MAP_NUM(UNDERWATER_ROUTE127) == loc && MAP_GROUP(UNDERWATER_ROUTE127) == locG) ||
+        (MAP_NUM(UNDERWATER_ROUTE128) == loc && MAP_GROUP(UNDERWATER_ROUTE128) == locG) ||
+        (MAP_NUM(UNDERWATER_ROUTE129) == loc && MAP_GROUP(UNDERWATER_ROUTE129) == locG) ||
+        (MAP_NUM(UNDERWATER_ROUTE105) == loc && MAP_GROUP(UNDERWATER_ROUTE105) == locG) ||
+        (MAP_NUM(UNDERWATER_ROUTE125) == loc && MAP_GROUP(UNDERWATER_ROUTE125) == locG) ||
+        (MAP_NUM(UNDERWATER_SOOTOPOLIS_CITY) == loc && MAP_GROUP(UNDERWATER_SOOTOPOLIS_CITY) == locG) ||
+        (MAP_NUM(UNDERWATER_ROUTE134) == loc && MAP_GROUP(UNDERWATER_ROUTE134) == locG)){
+        return 128;
+    }
+    if(MAP_NUM(AQUA_HIDEOUT_1F) == loc && MAP_GROUP(AQUA_HIDEOUT_1F) == locG){
+        return 524292;
+    }
+    if(MAP_NUM(SEAFLOOR_CAVERN_ENTRANCE) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ENTRANCE) == locG){
+        return 140;
+    }
+    if(MAP_NUM(SHOAL_CAVE_LOW_TIDE_ICE_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_ICE_ROOM) == locG){
+        return 16;
+    }
+    if(	(MAP_NUM(MAGMA_HIDEOUT_1F) == loc && MAP_GROUP(MAGMA_HIDEOUT_1F) == locG) ||
+        (MAP_NUM(MAGMA_HIDEOUT_2F_1R) == loc && MAP_GROUP(MAGMA_HIDEOUT_2F_1R) == locG) ||
+        (MAP_NUM(MAGMA_HIDEOUT_2F_2R) == loc && MAP_GROUP(MAGMA_HIDEOUT_2F_2R) == locG) ||
+        (MAP_NUM(MAGMA_HIDEOUT_3F_1R) == loc && MAP_GROUP(MAGMA_HIDEOUT_3F_1R) == locG) ||
+        (MAP_NUM(MAGMA_HIDEOUT_3F_2R) == loc && MAP_GROUP(MAGMA_HIDEOUT_3F_2R) == locG) ||
+        (MAP_NUM(MAGMA_HIDEOUT_4F) == loc && MAP_GROUP(MAGMA_HIDEOUT_4F) == locG) ||
+        (MAP_NUM(MAGMA_HIDEOUT_3F_3R) == loc && MAP_GROUP(MAGMA_HIDEOUT_3F_3R) == locG) ||
+        (MAP_NUM(MAGMA_HIDEOUT_2F_3R) == loc && MAP_GROUP(MAGMA_HIDEOUT_2F_3R) == locG)){
+        return 104;
+    }
+    if(MAP_NUM(PACIFIDLOG_TOWN) == loc && MAP_GROUP(PACIFIDLOG_TOWN) == locG){
+        return 8196;
+    }
+    if(	(MAP_NUM(CAVE_OF_ORIGIN_ENTRANCE) == loc && MAP_GROUP(CAVE_OF_ORIGIN_ENTRANCE) == locG) ||
+        (MAP_NUM(CAVE_OF_ORIGIN_1F) == loc && MAP_GROUP(CAVE_OF_ORIGIN_1F) == locG) ||
+        (MAP_NUM(CAVE_OF_ORIGIN_B1F) == loc && MAP_GROUP(CAVE_OF_ORIGIN_B1F) == locG)){
+        return 65864;
+    }
+    if(	(MAP_NUM(SKY_PILLAR_1F) == loc && MAP_GROUP(SKY_PILLAR_1F) == locG) ||
+        (MAP_NUM(SKY_PILLAR_2F) == loc && MAP_GROUP(SKY_PILLAR_2F) == locG) ||
+        (MAP_NUM(SKY_PILLAR_3F) == loc && MAP_GROUP(SKY_PILLAR_3F) == locG) ||
+        (MAP_NUM(SKY_PILLAR_4F) == loc && MAP_GROUP(SKY_PILLAR_4F) == locG) ||
+        (MAP_NUM(SKY_PILLAR_5F) == loc && MAP_GROUP(SKY_PILLAR_5F) == locG)){
+        return 525320;
+    }
+    if(MAP_NUM(CAVE_OF_ORIGIN_DIANCIES_ROOM) == loc && MAP_GROUP(CAVE_OF_ORIGIN_DIANCIES_ROOM) == locG){
+        return 65800;
+    }
 
+    return 0;
+}
 bool8 isSpeciesPlaceholderMon(u16 species){
     //Special Cases
     switch(species){
