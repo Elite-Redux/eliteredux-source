@@ -172,8 +172,12 @@ static void SaveOptionsData()
         gSaveBlock2Ptr->encounterRandomizedMode = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE];
         gSaveBlock2Ptr->encounterRandomizedLegendaryMode = FALSE;
     }
-    else{
+    else if(sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] == 2){
         gSaveBlock2Ptr->encounterRandomizedMode = TRUE;
+        gSaveBlock2Ptr->encounterRandomizedLegendaryMode = TRUE;
+    }
+    else{
+        gSaveBlock2Ptr->encounterRandomizedMode = FALSE;
         gSaveBlock2Ptr->encounterRandomizedLegendaryMode = TRUE;
     }
     gSaveBlock2Ptr->innaterandomizedMode    = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_INNATE_MODE];
@@ -498,13 +502,15 @@ const struct OptionData Intro_Options[NUM_INTRO_OPTIONS] = {
             _("Disabled"),
             _("Normal"),
             _("Legendary"),
+            _("Scaled")
             },
         .optionDescription = { 
             _("No changes to the encounters."),
             _("Wild Encounters will be fully randomized.\nThis doesn't affect static encounters,\nlike Gift or Legendary Pokémon."),
             _("Wild Encounters will be fully randomized.\nYou may encounter legendary Pokémon here,\nIt only affects normal encounters."),
+            _("Wild Encounters will have a weighted\nrandomization. You will encounter Pokémon\nbased on the area you are in.")
             },
-        .numOptions = 3,
+        .numOptions = 4,
     },
     [SETTING_RANDOMIZER_ABILITY_MODE] =
     {
