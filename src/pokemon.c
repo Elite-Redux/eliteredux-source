@@ -9782,22 +9782,21 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
     }
     /*encounterRandomizedLegendaryMode*/
     if(!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode && basespecies != SPECIES_NONE){
-        rndSeed = rndSeed ^ basespecies;
+        rndSeed ^= basespecies;
             do{
                 rndSeed = ISO_RANDOMIZE1(rndSeed);
-                species = GetRandomPokemonFromTag(rndSeed, loc, locG);
+                species = GetRandomPokemonFromTag(rndSeed >> 16, loc, locG);
             }
             while(species == SPECIES_NONE || gBaseStats[species].tier != map_tier);
         return species;
     }
     if(gSaveBlock2Ptr->encounterRandomizedMode == TRUE && basespecies != SPECIES_NONE){
-        rndSeed = rndSeed ^ basespecies;
+        rndSeed ^= basespecies;
         if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE){
             //Legendary Mons Enabled
 
             do{
-                rndSeed = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, rndSeed);
-                species = rndSeed;
+                species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
             }
             while(species == SPECIES_NONE                     ||
                 //Sub-Legendary
@@ -9907,8 +9906,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
         else{
             //Legendary Mons Disabled
             do{
-                rndSeed = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, rndSeed);
-                species = rndSeed;
+                species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
             }
             while(species == SPECIES_NONE                     ||
                 species == SPECIES_ZACIAN                     || //Legendary
