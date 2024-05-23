@@ -1683,7 +1683,7 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
        gSaveBlock2Ptr->innaterandomizedMode){
 
         //Encounter Randomizer
-        if(gSaveBlock2Ptr->encounterRandomizedMode){
+        if(gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
             StringCopy(gStringVar1, encounterRandomizerModeText);
             numModes++;
         }
@@ -1721,7 +1721,7 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
         }                
 
         if(numModes == 1){
-            if(gSaveBlock2Ptr->encounterRandomizedMode){
+            if(gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
                 StringCopy(gStringVar1, encounterRandomizerModeTextNo);
             }
             else if(gSaveBlock2Ptr->typeRandomizedMode){
@@ -1732,7 +1732,7 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
             StringCopy(gStringVar2, typeRandomizerModeTextNo);
         }
             
-        if(gSaveBlock2Ptr->encounterRandomizedMode &&
+        if((gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode) &&
            gSaveBlock2Ptr->typeRandomizedMode      &&
            gSaveBlock2Ptr->abilityRandomizedMode   &&
            gSaveBlock2Ptr->innaterandomizedMode)

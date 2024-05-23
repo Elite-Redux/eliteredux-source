@@ -9719,6 +9719,39 @@ u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
         } 
     }
     tag = (tags >> ((rndseed % j) * 5)) & 31;
+    mask = rndseed;
+    if(RandRangeDeterministic(0, 10, &mask) == 0){
+        return GetRandomPokemonFromDiffTag(rndseed, tags, j, getTier(loc));
+    }
+    else{
+        return tagSwitch(tag, rndseed);
+    }
+}
+
+u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier){
+    u32 rand = rndseed;
+    bool8 valid = FALSE;
+    u8 tag, cur, i = 0;
+    u16 mon;
+    do {
+        tag = RandRangeDeterministic(0, 21, &rand);
+        for(i = 0; i < total; i++){
+            cur = tags >> (i * 5);
+            if(cur == tag){
+                continue;
+            }
+        }
+        mon = tagSwitch(tag, rand >> 16);
+    } while (gBaseStats[mon].tier != tier);
+    
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_DEBUG, "Tag: %d, Mon: %d", tag, mon);
+    MgbaClose();
+    return mon;
+
+}
+
+u16 tagSwitch(u8 tag, u16 rndseed) {
     switch(tag) {
         case 0:
             return gForest_species[rndseed % 104];
@@ -9763,9 +9796,7 @@ u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
         case 20:
             return gBeach_species[rndseed % 12];
     }
-    return SPECIES_NONE;
 }
-
 
 
 u16 GetRandomPokemonFromSpecies(u16 basespecies){
