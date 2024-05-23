@@ -218,7 +218,7 @@
 #define ABILITY_SLUSH_RUSH 202 // 1.5x Speed in hail.
 #define ABILITY_LONG_REACH 203 // Never makes contact and boost damage of non-contact 20%.
 #define ABILITY_LIQUID_VOICE 204 // Makes sound moves Water and get a 20% boost.
-#define ABILITY_TRIAGE 205 // Healing moves have +1 priority.
+#define ABILITY_TRIAGE 205 // Healing moves have +3 priority.
 #define ABILITY_GALVANIZE 206 // Normal moves turn Electric and get a 10% boost.
 #define ABILITY_SURGE_SURFER 207 // 1.5x Speed on Electric Terrain. Works while levitating.
 #define ABILITY_SCHOOLING 208 // Forms a school when over 25% HP. Needs level 20 or higher.
