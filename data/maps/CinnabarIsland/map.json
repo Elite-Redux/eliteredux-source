@@ -29,17 +29,10 @@
   ],
   "warp_events": [
     {
-      "x": 12,
-      "y": 10,
-      "elevation": 0,
-      "dest_map": "MAP_CINNABAR_ISLAND",
-      "dest_warp_id": 0
-    },
-    {
       "x": 8,
       "y": 3,
       "elevation": 0,
-      "dest_map": "MAP_CINNABAR_ISLAND",
+      "dest_map": "MAP_POKEMON_MANSION_1F",
       "dest_warp_id": 0
     }
   ],

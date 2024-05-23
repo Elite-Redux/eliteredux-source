@@ -172,7 +172,11 @@
     "SeafoamIslands_B1F",
     "SeafoamIslands_B2F",
     "SeafoamIslands_B4F",
-    "PokemonMansion_1F"
+    "PokemonMansion_1F",
+    "PokemonMansion_2F",
+    "PokemonMansion_3F",
+    "NewMap2",
+    "NewMap3"
   ],
   "gMapGroup_IndoorOldale": [
     "OldaleTown_House1",

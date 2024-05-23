@@ -1250,3 +1250,11 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/SeafoamIslands_B4F/scripts.inc"
 
 	.include "data/maps/PokemonMansion_1F/scripts.inc"
+
+	.include "data/maps/PokemonMansion_2F/scripts.inc"
+
+	.include "data/maps/PokemonMansion_3F/scripts.inc"
+
+	.include "data/maps/NewMap2/scripts.inc"
+
+	.include "data/maps/NewMap3/scripts.inc"

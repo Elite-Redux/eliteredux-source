@@ -5360,6 +5360,46 @@
       "secondary_tileset": "gTileset_PokemonMansion",
       "border_filepath": "data/layouts/PokemonMansion_1F/border.bin",
       "blockdata_filepath": "data/layouts/PokemonMansion_1F/map.bin"
+    },
+    {
+      "id": "LAYOUT_POKEMON_MANSION_2F",
+      "name": "PokemonMansion_2F_Layout",
+      "width": 38,
+      "height": 38,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_PokemonMansion",
+      "border_filepath": "data/layouts/PokemonMansion_2F/border.bin",
+      "blockdata_filepath": "data/layouts/PokemonMansion_2F/map.bin"
+    },
+    {
+      "id": "LAYOUT_POKEMON_MANSION_3F",
+      "name": "PokemonMansion_3F_Layout",
+      "width": 38,
+      "height": 38,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_PokemonMansion",
+      "border_filepath": "data/layouts/PokemonMansion_3F/border.bin",
+      "blockdata_filepath": "data/layouts/PokemonMansion_3F/map.bin"
+    },
+    {
+      "id": "LAYOUT_NEW_MAP2",
+      "name": "NewMap2_Layout",
+      "width": 38,
+      "height": 35,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_PokemonMansion",
+      "border_filepath": "data/layouts/NewMap2/border.bin",
+      "blockdata_filepath": "data/layouts/NewMap2/map.bin"
+    },
+    {
+      "id": "LAYOUT_NEW_MAP3",
+      "name": "NewMap3_Layout",
+      "width": 38,
+      "height": 35,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_PokemonMansion",
+      "border_filepath": "data/layouts/NewMap3/border.bin",
+      "blockdata_filepath": "data/layouts/NewMap3/map.bin"
     }
   ]
 }
