@@ -5278,13 +5278,13 @@ const u8* SaveSpeciesWithSurname(u16 species){
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA){ //Custom Mega
-        StringCopy(gStringVar1, gText_Mega);
+    else if(species == SPECIES_KYOGRE_PRIMAL || species == SPECIES_GROUDON_PRIMAL || species == SPECIES_CASCOON_PRIMAL){ //Primals
+        StringCopy(gStringVar1, gText_Primal);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species == SPECIES_KYOGRE_PRIMAL || species == SPECIES_GROUDON_PRIMAL){ //Primals
-        StringCopy(gStringVar1, gText_Primal);
+    else if(species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA){ //Custom Mega
+        StringCopy(gStringVar1, gText_Mega);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }

@@ -816,4 +816,12 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                                 {EVO_FORM_SHIFT, 1, SPECIES_OGERPON_CORNERSTONE_MASK},
                                 {EVO_FORM_SHIFT, 1, SPECIES_OGERPON_HEARTHFLAME_MASK},
                                 {EVO_FORM_SHIFT, 1, SPECIES_OGERPON_WELLSPRING_MASK},},
+
+    [SPECIES_BURMY] = {{EVO_FORM_SHIFT, 1, SPECIES_BURMY},
+                            {EVO_FORM_SHIFT, 1, SPECIES_BURMY_TRASH_CLOAK},
+                            {EVO_FORM_SHIFT, 1, SPECIES_BURMY_SANDY_CLOAK},},
+
+    [SPECIES_WORMADAM] = {{EVO_FORM_SHIFT, 1, SPECIES_WORMADAM},
+                            {EVO_FORM_SHIFT, 1, SPECIES_WORMADAM_TRASH_CLOAK},
+                            {EVO_FORM_SHIFT, 1, SPECIES_WORMADAM_SANDY_CLOAK},},
 };

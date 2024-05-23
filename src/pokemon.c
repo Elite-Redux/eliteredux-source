@@ -10607,6 +10607,14 @@ const u8 gSpeciesNameLongSquawkabillyBlue[] = _("Squawk Blue");
 const u8 gSpeciesNameLongSquawkabillyYellow[] = _("Squawk Yellow");
 const u8 gSpeciesNameLongSquawkabillyWhite[] = _("Squawk White");
 
+const u8 gSpeciesNameLongBurmyGrass[] = _("Burmy Grass");
+const u8 gSpeciesNameLongBurmySand[] = _("Burmy Sand");
+const u8 gSpeciesNameLongBurmyTrash[] = _("Burmy Trash");
+
+const u8 gSpeciesNameLongWormadamGrass[] = _("Wormadam Grass");
+const u8 gSpeciesNameLongWormadamSand[] = _("Wormadam Sand");
+const u8 gSpeciesNameLongWormadamTrash[] = _("Wormadam Trash");
+
 const u8* GetSpeciesLongName(u16 species)
 {
     switch (species)
@@ -10722,6 +10730,20 @@ const u8* GetSpeciesLongName(u16 species)
             return gSpeciesNameLongSquawkabillyWhite;
         case SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE:
             return gSpeciesNameLongSquawkabillyYellow;
+        
+        case SPECIES_BURMY:
+            return gSpeciesNameLongBurmyGrass;
+        case SPECIES_BURMY_SANDY_CLOAK:
+            return gSpeciesNameLongBurmySand;
+        case SPECIES_BURMY_TRASH_CLOAK:
+            return gSpeciesNameLongBurmyTrash;
+        
+        case SPECIES_WORMADAM:
+            return gSpeciesNameLongWormadamGrass;
+        case SPECIES_WORMADAM_SANDY_CLOAK:
+            return gSpeciesNameLongWormadamSand;
+        case SPECIES_WORMADAM_TRASH_CLOAK:
+            return gSpeciesNameLongWormadamTrash;
 
         default:
             return NULL;
