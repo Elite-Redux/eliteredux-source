@@ -508,7 +508,7 @@ const LOCALID_SCOTT = 24
 script Route118_EventScript_Scott{
     lock
     faceplayer
-    if(flag(FLAG_HIDE_ROUTE_118_GABBY_AND_TY_3) == TRUE){
+    if(flag(FLAG_HIDE_ROUTE_118_GABBY_AND_TY_1) == TRUE){
         call(Route118_EventScript_ScottUnbotheredByReporters)
     } else {
         call(Route118_EventScript_ScottBotheredByReporters)
