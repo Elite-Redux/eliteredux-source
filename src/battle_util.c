@@ -1651,25 +1651,7 @@ bool32 IsHealBlockPreventingMove(u8 battler, u32 move)
     if (!(gStatuses3[battler] & STATUS3_HEAL_BLOCK) && !IsAbilityOnOpposingSide(battler, ABILITY_PERMANENCE))
         return FALSE;
     
-    switch (gBattleMoves[move].effect)
-    {
-    case EFFECT_MORNING_SUN:
-    case EFFECT_MOONLIGHT:
-    case EFFECT_RESTORE_HP:
-    case EFFECT_REST:
-    case EFFECT_ROOST:
-    case EFFECT_WISH:
-    case EFFECT_HEALING_WISH:
-    case EFFECT_REVIVAL_BLESSING:
-    case EFFECT_SOFTBOILED:
-    case EFFECT_SYNTHESIS:
-    case EFFECT_SHORE_UP:
-    case EFFECT_JUNGLE_HEALING:
-    case EFFECT_HEAL_PULSE:
-        return TRUE;
-    default:
-        return FALSE;
-    }
+    return IsHealingMoveEffect(gBattleMoves[move].effect) && gBattleMoves[move].split == SPLIT_STATUS;
 }
 
 static bool32 IsBelchPreventingMove(u32 battler, u32 move)
@@ -16222,4 +16204,29 @@ u8 GetTurnBattler()
         return gQueuedExtraAttackData[0].attacker;
     else
         return gBattlerByTurnOrder[gCurrentTurnActionNumber];
+}
+
+bool32 IsHealingMoveEffect(u16 effect)
+{
+    switch (effect)
+    {
+    case EFFECT_ABSORB:
+    case EFFECT_MORNING_SUN:
+    case EFFECT_MOONLIGHT:
+    case EFFECT_RESTORE_HP:
+    case EFFECT_REST:
+    case EFFECT_ROOST:
+    case EFFECT_WISH:
+    case EFFECT_HEALING_WISH:
+    case EFFECT_REVIVAL_BLESSING:
+    case EFFECT_SOFTBOILED:
+    case EFFECT_SYNTHESIS:
+    case EFFECT_SHORE_UP:
+    case EFFECT_JUNGLE_HEALING:
+    case EFFECT_HEAL_PULSE:
+    case EFFECT_MATCHA_GOTCHA:
+        return TRUE;
+    default:
+        return FALSE;
+    }
 }

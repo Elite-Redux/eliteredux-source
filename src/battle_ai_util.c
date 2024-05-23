@@ -1986,28 +1986,6 @@ bool32 HasSleepMoveWithLowAccuracy(u8 battlerAtk, u8 battlerDef)
     return FALSE;
 }
 
-bool32 IsHealingMoveEffect(u16 effect)
-{
-    switch (effect)
-    {
-    case EFFECT_ABSORB:
-    case EFFECT_RESTORE_HP:
-    case EFFECT_MORNING_SUN:
-    case EFFECT_SYNTHESIS:
-    case EFFECT_MOONLIGHT:
-    case EFFECT_SOFTBOILED:
-    case EFFECT_ROOST:
-    case EFFECT_SWALLOW:
-    case EFFECT_WISH:
-    case EFFECT_HEALING_WISH:
-    case EFFECT_HEAL_PULSE:
-    case EFFECT_REST:
-        return TRUE;
-    default:
-        return FALSE;
-    }
-}
-
 bool32 HasHealingEffect(u32 battlerId)
 {
     s32 i;

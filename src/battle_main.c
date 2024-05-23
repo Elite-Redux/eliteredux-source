@@ -5005,24 +5005,7 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
     
 	if ((GetBattlerAbility(battlerId) == ABILITY_TRIAGE || BattlerHasInnate(battlerId, ABILITY_TRIAGE)))
     {
-        switch (gBattleMoves[move].effect)
-        {
-        case EFFECT_RESTORE_HP:
-        case EFFECT_REST:
-        case EFFECT_MORNING_SUN:
-        case EFFECT_MOONLIGHT:
-        case EFFECT_SYNTHESIS:
-        case EFFECT_HEAL_PULSE:
-        case EFFECT_HEALING_WISH:
-        case EFFECT_SWALLOW:
-        case EFFECT_WISH:
-        case EFFECT_SOFTBOILED:
-        case EFFECT_ABSORB:
-        case EFFECT_ROOST:
-        case EFFECT_STRENGTH_SAP:
-            priority += 3;
-            break;
-        }
+        if (IsHealingMoveEffect(gBattleMoves[move].effect)) priority += 3;
     }
     
 	if ((GetBattlerAbility(battlerId) == ABILITY_BLITZ_BOXER || BattlerHasInnate(battlerId, ABILITY_BLITZ_BOXER))

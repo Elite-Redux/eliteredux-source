@@ -302,6 +302,7 @@ void SetActiveStackBattler(u8 battler, u8 number);
 u16 GetInnateInSlot(u16 species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 ability, u16 move);
+bool32 IsHealingMoveEffect(u16 effect);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
