@@ -13500,12 +13500,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             MulModifier(&modifier, UQ_4_12(1.3));
         }
         break;
-	case ABILITY_AMPHIBIOUS:
-        if (moveType == TYPE_WATER)
-        {
-            MulModifier(&modifier, UQ_4_12(1.5));
-        }
-        break;
 	case ABILITY_ELECTROCYTES:
         if (moveType == TYPE_ELECTRIC)
         {
@@ -13847,13 +13841,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
 		if (moveType == TYPE_FLYING || moveType == TYPE_ICE)
         {
             MulModifier(&modifier, UQ_4_12(1.3));
-        }
-	}
-	// Amphibious
-	if(BattlerHasInnate(battlerAtk, ABILITY_AMPHIBIOUS)){
-		if (moveType == TYPE_WATER)
-        {
-            MulModifier(&modifier, UQ_4_12(1.5));
         }
 	}
 	// Steelworker
@@ -14245,7 +14232,8 @@ u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 ability, u16 move)
         || (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_LUNAR_ECLIPSE, ability) && (moveType == TYPE_FAIRY || moveType == TYPE_DARK))
         || (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MOON_SPIRIT, ability) && (moveType == TYPE_FAIRY || moveType == TYPE_DARK))
         || (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_SOLAR_FLARE, ability) && moveType == TYPE_FIRE)
-		|| (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_AURORA_BOREALIS, ability) && moveType == TYPE_ICE))
+		|| (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_AURORA_BOREALIS, ability) && moveType == TYPE_ICE)
+        || (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_AMPHIBIOUS, ability) && moveType == TYPE_WATER))
     {
         if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_ADAPTABILITY, ability))
             return 4;
