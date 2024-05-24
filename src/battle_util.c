@@ -14634,8 +14634,6 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType
         u16 typeEffectivenessModifier2 = CalcTypeEffectivenessMultiplier(move, type2, battlerAtk, battlerDef, FALSE);
         s32 dmg2 = DoMoveDamageCalcInternal(move, battlerAtk, battlerDef, type2, fixedBasePower, isCrit, FALSE, typeEffectivenessModifier2);
 
-        MGBA_PRINT_DEBUG("Checking type2 on move %d dmg1 %d dmg2 %d eff1 %d eff2 %d", move, dmg, dmg2, *typeEffectivenessModifier, typeEffectivenessModifier2)
-
         if (dmg2 > dmg)
         {
             *typeEffectivenessModifier = typeEffectivenessModifier2;
