@@ -866,4 +866,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_QUAGSIRE] = sQuagsireFormSpeciesIdTable,
     [SPECIES_QUAGSIRE_MEGA] = sQuagsireFormSpeciesIdTable,
 
+    [SPECIES_MILOTIC] = sMiloticFormSpeciesIdTable,
+    [SPECIES_MILOTIC_MEGA] = sMiloticFormSpeciesIdTable,
+
 };
