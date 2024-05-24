@@ -9743,10 +9743,6 @@ u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier){
         }
         mon = tagSwitch(tag, rand >> 16);
     } while (gBaseStats[mon].tier != tier);
-    
-    MgbaOpen();
-    MgbaPrintf(MGBA_LOG_DEBUG, "Tag: %d, Mon: %d", tag, mon);
-    MgbaClose();
     return mon;
 
 }
