@@ -487,7 +487,7 @@ u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG);
 u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier);
 u16 tagSwitch(u8 tag, u16 rndseed);
 u16 GetRandomPokemonFromSpecies(u16 basespecies);
-u8 getTier(s8 loc);
+u8 getTier(s8 loc, s8 locG);
 u32 getMask(s8 loc, s8 locG);
 bool8 isMonNicknamed(struct Pokemon *mon);
 bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon);
