@@ -13237,10 +13237,10 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if (BATTLER_HAS_ABILITY(battler, ABILITY_GRASS_PELT)
                 && GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN)
                     statBase = statBase * 3 / 2;
-            
-            // Sandstorm
-            if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
-                && gBattleWeather & B_WEATHER_SANDSTORM && WEATHER_HAS_EFFECT)
+                    
+            // Hail
+            if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
+                && IsBattlerWeatherAffected(WEATHER_HAIL_ANY))
                     statBase = statBase * 3 / 2;
             break;
         case STAT_SPDEF:
@@ -13260,10 +13260,10 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                 && gBattleMons[BATTLE_PARTNER(battler)].species == SPECIES_CHERRIM
                 && IsBattlerWeatherAffected(BATTLE_PARTNER(battler), WEATHER_SUN_ANY))
                     statBase = statBase * 3 / 2;
-                    
-            // Hail
-            if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
-                && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_HAIL_ANY)
+            
+            // Sandstorm
+            if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
+                && IsBattlerWeatherAffected(WEATHER_SANDSTORM_ANY))
                     statBase = statBase * 3 / 2;
             break;
         case STAT_SPEED:
