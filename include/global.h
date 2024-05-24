@@ -39,6 +39,7 @@
 #define STATIC_ASSERT(condition, name) typedef char static_assertion_##name [2 * (condition) - 1];
 #define ARRAY_COPY(to, from) { STATIC_ASSERT(sizeof(to) == sizeof(from), ARRAY_COPY); memcpy(&to, &from, sizeof(to)); }
 #define ZERO(arr) memset(&arr, 0, sizeof(arr));
+#define ARRAY_MODULO(array, index) (array)[(index) % ARRAY_COUNT(array)]
 
 // GameFreak used a macro called "NELEMS", as evidenced by
 // AgbAssert calls.

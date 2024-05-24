@@ -8354,6 +8354,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     case TYPE_POISON: // 30% chance to badly poison.
                         if(IsBattlerAlive(gBattlerTarget) && CanBePoisoned(gBattlerAttacker, gBattlerTarget)){
                             gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8362,6 +8363,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     case TYPE_ICE: // 30% chance to inflict frostbite.
                         if(IsBattlerAlive(gBattlerTarget) && CanGetFrostbite(gBattlerTarget)){
                             gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8370,6 +8372,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     case TYPE_WATER: // 30% chance to confuse.
                         if(IsBattlerAlive(gBattlerTarget) && CanBeConfused(gBattlerTarget)){
                             gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8378,6 +8381,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     case TYPE_FIRE: // 30% chance to burn.
                         if(IsBattlerAlive(gBattlerTarget) && CanBeBurned(gBattlerTarget)){
                             gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8385,6 +8389,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                     case TYPE_ELECTRIC: // 30% chance to set up Electric Terrain.
                         if(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer)){
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_Archmage_Effect_Type_Electric;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8392,6 +8397,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                     case TYPE_PSYCHIC: // 30% chance to set up Psychic Terrain.
                         if(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer)){
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_Archmage_Effect_Type_Psychic;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8399,6 +8405,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                     case TYPE_FAIRY: // 30% chance to set up Misty Terrain.
                         if(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer)){
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_Archmage_Effect_Type_Fairy;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8406,6 +8413,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     break;
                     case TYPE_GRASS: // 30% chance to set up Grassy Terrain.
                         if(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer)){
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_Archmage_Effect_Type_Grass;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8439,6 +8447,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             gVolatileStructs[gBattlerTarget].encoreTimer = 3;
                             gVolatileStructs[gBattlerTarget].encoreTimerStartValue = gVolatileStructs[gBattlerTarget].encoreTimer;
 
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_Archmage_Effect_Type_Normal;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8449,6 +8458,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         if(!(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK)){
                             gSideStatuses[GetBattlerSide(gBattlerTarget)] |= (SIDE_STATUS_STEALTH_ROCK);
                             gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType= TYPE_ROCK;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_Archmage_Effect_Type_Rock;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8459,6 +8469,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         if (IsBattlerAlive(gBattlerTarget) && CanBeDisabled(gBattlerTarget)){
                             gBattleScripting.moveEffect = MOVE_EFFECT_DISABLE;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8468,6 +8479,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     case TYPE_DARK: // 30% chance to inflict bleed.
                         if(IsBattlerAlive(gBattlerTarget) && CanBleed(gBattlerTarget)){
                             gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8478,6 +8490,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         if(IsBattlerAlive(battler) && CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)){
 
                             gBattleScripting.moveEffect = MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8488,6 +8501,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         if(IsBattlerAlive(battler) && CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN)){
 
                             gBattleScripting.moveEffect = MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8500,6 +8514,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         if(IsBattlerAlive(gBattlerTarget) && CompareStat(gBattlerTarget, STAT_ATK, MIN_STAT_STAGE, CMP_GREATER_THAN)){
 
                             gBattleScripting.moveEffect = MOVE_EFFECT_ATK_MINUS_1;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8509,6 +8524,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         if(IsBattlerAlive(battler) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION)){
 
                             gBattleScripting.moveEffect = MOVE_EFFECT_PREVENT_ESCAPE;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -8518,6 +8534,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         if(IsBattlerAlive(battler) && CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN)){
 
                             gBattleScripting.moveEffect = MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER;
+                            BattleScriptPushCursor();
                             gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                             gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                             effect++;
@@ -13220,10 +13237,10 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if (BATTLER_HAS_ABILITY(battler, ABILITY_GRASS_PELT)
                 && GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN)
                     statBase = statBase * 3 / 2;
-            
-            // Sandstorm
-            if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
-                && gBattleWeather & B_WEATHER_SANDSTORM && WEATHER_HAS_EFFECT)
+                    
+            // Hail
+            if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
+                && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
                     statBase = statBase * 3 / 2;
             break;
         case STAT_SPDEF:
@@ -13243,10 +13260,10 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                 && gBattleMons[BATTLE_PARTNER(battler)].species == SPECIES_CHERRIM
                 && IsBattlerWeatherAffected(BATTLE_PARTNER(battler), WEATHER_SUN_ANY))
                     statBase = statBase * 3 / 2;
-                    
-            // Hail
-            if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
-                && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_HAIL_ANY)
+            
+            // Sandstorm
+            if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
+                && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
                     statBase = statBase * 3 / 2;
             break;
         case STAT_SPEED:
@@ -13481,12 +13498,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         if (moveType == TYPE_FLYING || moveType == TYPE_ICE)
         {
             MulModifier(&modifier, UQ_4_12(1.3));
-        }
-        break;
-	case ABILITY_AMPHIBIOUS:
-        if (moveType == TYPE_WATER)
-        {
-            MulModifier(&modifier, UQ_4_12(1.5));
         }
         break;
 	case ABILITY_ELECTROCYTES:
@@ -13830,13 +13841,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
 		if (moveType == TYPE_FLYING || moveType == TYPE_ICE)
         {
             MulModifier(&modifier, UQ_4_12(1.3));
-        }
-	}
-	// Amphibious
-	if(BattlerHasInnate(battlerAtk, ABILITY_AMPHIBIOUS)){
-		if (moveType == TYPE_WATER)
-        {
-            MulModifier(&modifier, UQ_4_12(1.5));
         }
 	}
 	// Steelworker
@@ -14228,7 +14232,8 @@ u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 ability, u16 move)
         || (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_LUNAR_ECLIPSE, ability) && (moveType == TYPE_FAIRY || moveType == TYPE_DARK))
         || (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MOON_SPIRIT, ability) && (moveType == TYPE_FAIRY || moveType == TYPE_DARK))
         || (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_SOLAR_FLARE, ability) && moveType == TYPE_FIRE)
-		|| (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_AURORA_BOREALIS, ability) && moveType == TYPE_ICE))
+		|| (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_AURORA_BOREALIS, ability) && moveType == TYPE_ICE)
+        || (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_AMPHIBIOUS, ability) && moveType == TYPE_WATER))
     {
         if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_ADAPTABILITY, ability))
             return 4;
@@ -14633,8 +14638,6 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType
         u8 type2 = gBattleMoves[move].type2;
         u16 typeEffectivenessModifier2 = CalcTypeEffectivenessMultiplier(move, type2, battlerAtk, battlerDef, FALSE);
         s32 dmg2 = DoMoveDamageCalcInternal(move, battlerAtk, battlerDef, type2, fixedBasePower, isCrit, FALSE, typeEffectivenessModifier2);
-
-        MGBA_PRINT_DEBUG("Checking type2 on move %d dmg1 %d dmg2 %d eff1 %d eff2 %d", move, dmg, dmg2, *typeEffectivenessModifier, typeEffectivenessModifier2)
 
         if (dmg2 > dmg)
         {

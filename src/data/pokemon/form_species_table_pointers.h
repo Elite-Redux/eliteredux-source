@@ -515,6 +515,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_CROBAT_MEGA]           = sCrobatFormSpeciesIdTable,
     [SPECIES_DEWGONG]               = sDewgongFormSpeciesIdTable,
     [SPECIES_DEWGONG_MEGA]          = sDewgongFormSpeciesIdTable,
+    [SPECIES_DEWLEON]               = sDewgongFormSpeciesIdTable,
     [SPECIES_HITMONCHAN]            = sHitmonchanFormSpeciesIdTable,
     [SPECIES_HITMONCHAN_MEGA]       = sHitmonchanFormSpeciesIdTable,
     [SPECIES_SKARMORY_MEGA]         = sSkarmoryFormSpeciesIdTable,
@@ -570,6 +571,12 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_LAPRAS_MEGA]           = sLaprasFormSpeciesIdTable,
 
     [SPECIES_RIBOMBEE_MEGA]         = sRibombeeFormSpeciesIdTable,
+
+    [SPECIES_NOIBAT] = sNoibatFormSpeciesIdTable,
+    [SPECIES_NOIBAT_REDUX] = sNoibatFormSpeciesIdTable,
+
+    [SPECIES_NOIVERN] = sNoivernFormSpeciesIdTable,
+    [SPECIES_NOIVERN_REDUX] = sNoivernFormSpeciesIdTable,
     
     [SPECIES_CLAWITZER_REDUX]       = sClawitzerFormSpeciesIdTable,
     [SPECIES_CLAWITZER]             = sClawitzerFormSpeciesIdTable,
@@ -858,5 +865,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_QUAGSIRE] = sQuagsireFormSpeciesIdTable,
     [SPECIES_QUAGSIRE_MEGA] = sQuagsireFormSpeciesIdTable,
+
+    [SPECIES_MILOTIC] = sMiloticFormSpeciesIdTable,
+    [SPECIES_MILOTIC_MEGA] = sMiloticFormSpeciesIdTable,
 
 };

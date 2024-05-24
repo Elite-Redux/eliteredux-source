@@ -9710,7 +9710,7 @@ u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
     u32 mask = getMask(loc, locG);
     u8 tag;
     if (mask == 0){
-        return gAllFirstStage_species[rndseed % 568];
+        return ARRAY_MODULO(gAllFirstStage_species, rndseed);
     }
     for(i = 0; i < 21; i++){
         if((mask >> i) & 1){
@@ -9750,47 +9750,47 @@ u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier){
 u16 tagSwitch(u8 tag, u16 rndseed) {
     switch(tag) {
         case 0:
-            return gForest_species[rndseed % 104];
+            return ARRAY_MODULO(gForest_species, rndseed);
         case 1:
-            return gField_species[rndseed % 162];
+            return ARRAY_MODULO(gField_species, rndseed);
         case 2:
-            return gAquatic_species[rndseed % 61];
+            return ARRAY_MODULO(gAquatic_species, rndseed);
         case 3:
-            return gCave_species[rndseed % 79];
+            return ARRAY_MODULO(gCave_species, rndseed);
         case 4:
-            return gCold_species[rndseed % 27];
+            return ARRAY_MODULO(gCold_species, rndseed);
         case 5:
-            return gHot_species[rndseed % 29];
+            return ARRAY_MODULO(gHot_species, rndseed);
         case 6:
-            return gDark_species[rndseed % 5];
+            return ARRAY_MODULO(gDark_species, rndseed);
         case 7:
-            return gDeep_species[rndseed % 24];
+            return ARRAY_MODULO(gDeep_species, rndseed);
         case 8:
-            return gFossil_species[rndseed % 15];
+            return ARRAY_MODULO(gFossil_species, rndseed);
         case 9:
-            return gAsh_species[rndseed % 12];
+            return ARRAY_MODULO(gAsh_species, rndseed);
         case 10:
-            return gHaunted_species[rndseed % 35];
+            return ARRAY_MODULO(gHaunted_species, rndseed);
         case 11:
-            return gTropical_species[rndseed % 60];
+            return ARRAY_MODULO(gTropical_species, rndseed);
         case 12:
-            return gDesert_species[rndseed % 29];
+            return ARRAY_MODULO(gDesert_species, rndseed);
         case 13:
-            return gTown_species[rndseed % 80];
+            return ARRAY_MODULO(gTown_species, rndseed);
         case 14:
-            return gVolcano_species[rndseed % 21];
+            return ARRAY_MODULO(gVolcano_species, rndseed);
         case 15:
-            return gMountain_species[rndseed % 39];
+            return ARRAY_MODULO(gMountain_species, rndseed);
         case 16:
-            return gSpace_species[rndseed % 21];
+            return ARRAY_MODULO(gSpace_species, rndseed);
         case 17:
-            return gMonster_species[rndseed % 8];
+            return ARRAY_MODULO(gMonster_species, rndseed);
         case 18:
-            return gMineral_species[rndseed % 7];
+            return ARRAY_MODULO(gMineral_species, rndseed);
         case 19:
-            return gHumanlike_species[rndseed % 11];
+            return ARRAY_MODULO(gHumanlike_species, rndseed);
         case 20:
-            return gBeach_species[rndseed % 12];
+            return ARRAY_MODULO(gBeach_species, rndseed);
     }
 }
 

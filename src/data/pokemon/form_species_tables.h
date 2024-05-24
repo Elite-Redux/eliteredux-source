@@ -1065,6 +1065,7 @@ static const u16 sCrobatFormSpeciesIdTable[] = {
 static const u16 sDewgongFormSpeciesIdTable[] = {
     SPECIES_DEWGONG,
     SPECIES_DEWGONG_MEGA,
+    SPECIES_DEWLEON,
     FORM_SPECIES_END,
 };
 
@@ -1658,5 +1659,15 @@ static const u16 sJellicentFormSpeciesIdTable[] = {
 static const u16 sQuagsireFormSpeciesIdTable[] = {
     SPECIES_QUAGSIRE,
     SPECIES_QUAGSIRE_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sNoibatFormSpeciesIdTable[] = {
+    SPECIES_NOIBAT,
+    SPECIES_NOIBAT_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sNoivernFormSpeciesIdTable[] = {
+    SPECIES_NOIVERN,
+    SPECIES_NOIVERN_REDUX,
     FORM_SPECIES_END,
 };
