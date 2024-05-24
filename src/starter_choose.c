@@ -412,10 +412,14 @@ static const struct SpriteTemplate sSpriteTemplate_StarterCircle =
 // .text
 u16 GetStarterPokemon(u16 chosenStarterId)
 {
-    if (chosenStarterId > STARTER_MON_COUNT)
+    if (chosenStarterId > STARTER_MON_COUNT){
         chosenStarterId = 0;
+    }
     if (GetBoxMonDataAt(TOTAL_BOXES_COUNT-1, IN_BOX_COUNT-1, MON_DATA_SMART) != 1)
     {
+        if(gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
+            return GetRandomStarter(gSpecialVar_0x800A, gSaveBlock2Ptr->encounterRandomizedMode, gSaveBlock2Ptr->encounterRandomizedLegendaryMode, chosenStarterId);
+        }
         switch (gSpecialVar_0x800A)
         {
         case 0:

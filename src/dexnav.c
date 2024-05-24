@@ -1657,7 +1657,6 @@ static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
     case ROW_LAND_TOP:    // grass
         if (landMonsInfo == NULL)
             return MON_LEVEL_NONEXISTENT; //Hidden pokemon should only appear on walkable tiles or surf tiles
-
         for (i = 0; i < LAND_WILD_COUNT; i++)
         {
             if (GetSpecies(landMonsInfo, i) == species)
@@ -2083,12 +2082,23 @@ static void DexNavLoadEncounterData(void)
                 // Land mons
                 if (landMonsInfo != NULL && landMonsInfo->encounterRate != 0)
                 {
-                    for (j = 0; j < LAND_WILD_COUNT; j++)
-                    {
-                        species = GetSpecies(landMonsInfo, j);
-                        if (species != SPECIES_NONE && !SpeciesInArray(species, i))
-                            sDexNavUiDataPtr->routeSpecies[i][index++] = species;
+                    if(!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
+                        for (j = 0; j < LAND_WILD_COUNT / 2; j++)
+                        {
+                            species = GetSpecies(landMonsInfo, j);
+                            if (species != SPECIES_NONE && !SpeciesInArray(species, i))
+                                sDexNavUiDataPtr->routeSpecies[i][index++] = species;
+                        }
                     }
+                    else{
+                        for (j = 0; j < LAND_WILD_COUNT; j++)
+                        {
+                            species = GetSpecies(landMonsInfo, j);
+                            if (species != SPECIES_NONE && !SpeciesInArray(species, i))
+                                sDexNavUiDataPtr->routeSpecies[i][index++] = species;
+                        }
+                    }
+                    
                     newEnviorment = i;
                 }
             break;

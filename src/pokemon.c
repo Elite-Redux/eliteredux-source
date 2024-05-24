@@ -9704,6 +9704,10 @@ bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon){
     
     return nicknamed;
 }
+
+
+
+
 u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
     u8 i, j = 0;
     u32 tags = 0;
@@ -9793,8 +9797,174 @@ u16 tagSwitch(u8 tag, u16 rndseed) {
             return ARRAY_MODULO(gBeach_species, rndseed);
     }
 }
+u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID){
+    u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
+    u16 min, max = 0;
+    u16 species;
+    if(rndSeed == 0){
+        u16 newseed = Random();
+        VarSet(VAR_RANDOMIZED_SEED, newseed);
+        rndSeed = VarGet(VAR_RANDOMIZED_SEED);
+    }
+    rndSeed ^= starterID;
+    getGenRange(gen, &min, &max);
+    if(!enc && leg){
+        do{
+            species = RandRangeDeterministic(min, max, &rndSeed);
+        }
+        while(gBaseStats[species].tier != 3);
+    }
+    else if(enc && leg){
+        return RandRangeDeterministic(min, max, &rndSeed);
+    }
+    else{
+        do{
+            species = RandRangeDeterministic(min, max, &rndSeed);
+        }
+        while(species == SPECIES_ARTICUNO                   || 
+                species == SPECIES_ZAPDOS                     || 
+                species == SPECIES_MOLTRES                    || 
+                species == SPECIES_RAIKOU                     || 
+                species == SPECIES_ENTEI                      || 
+                species == SPECIES_SUICUNE                    || 
+                species == SPECIES_REGICE                     || 
+                species == SPECIES_REGIROCK                   || 
+                species == SPECIES_REGISTEEL                  || 
+                species == SPECIES_LATIAS                     || 
+                species == SPECIES_LATIOS                     ||
+                species == SPECIES_UXIE                       ||
+                species == SPECIES_MESPRIT                    ||
+                species == SPECIES_AZELF                      ||
+                species == SPECIES_HEATRAN                    ||
+                species == SPECIES_REGIGIGAS                  ||
+                species == SPECIES_CRESSELIA                  ||
+                species == SPECIES_COBALION                   ||
+                species == SPECIES_TERRAKION                  ||
+                species == SPECIES_VIRIZION                   ||
+                species == SPECIES_TORNADUS                   ||
+                species == SPECIES_THUNDURUS                  ||
+                species == SPECIES_TYPE_NULL                  ||
+                species == SPECIES_SILVALLY                   ||
+                species == SPECIES_TAPU_KOKO                  ||
+                species == SPECIES_TAPU_LELE                  ||
+                species == SPECIES_TAPU_BULU                  ||
+                species == SPECIES_TAPU_FINI                  ||
+                species == SPECIES_NIHILEGO                   ||
+                species == SPECIES_BUZZWOLE                   ||
+                species == SPECIES_PHEROMOSA                  ||
+                species == SPECIES_XURKITREE                  ||
+                species == SPECIES_CELESTEELA                 ||
+                species == SPECIES_KARTANA                    ||
+                species == SPECIES_GUZZLORD                   ||
+                species == SPECIES_POIPOLE                    ||
+                species == SPECIES_NAGANADEL                  ||
+                species == SPECIES_STAKATAKA                  ||
+                species == SPECIES_BLACEPHALON                ||
+                //Legendary
+                species == SPECIES_MEWTWO                     ||
+                species == SPECIES_LUGIA                      || 
+                species == SPECIES_HO_OH                      || 
+                species == SPECIES_KYOGRE                     || 
+                species == SPECIES_GROUDON                    || 
+                species == SPECIES_RAYQUAZA                   || 
+                species == SPECIES_DIALGA                     || 
+                species == SPECIES_PALKIA                     || 
+                species == SPECIES_GIRATINA                   || 
+                species == SPECIES_RESHIRAM                   || 
+                species == SPECIES_ZEKROM                     || 
+                species == SPECIES_KYUREM                     || 
+                species == SPECIES_XERNEAS                    || 
+                species == SPECIES_YVELTAL                    || 
+                species == SPECIES_ZYGARDE                    || 
+                species == SPECIES_COSMOG                     || 
+                species == SPECIES_COSMOEM                    || 
+                species == SPECIES_SOLGALEO                   || 
+                species == SPECIES_LUNALA                     || 
+                species == SPECIES_NECROZMA                   || 
+                //Mythical
+                species == SPECIES_MEW                        || 
+                species == SPECIES_CELEBI                     || 
+                species == SPECIES_JIRACHI                    || 
+                species == SPECIES_DEOXYS                     || 
+                species == SPECIES_PHIONE                     || 
+                species == SPECIES_MANAPHY                    || 
+                species == SPECIES_DARKRAI                    || 
+                species == SPECIES_SHAYMIN                    || 
+                species == SPECIES_ARCEUS                     || 
+                species == SPECIES_VICTINI                    || 
+                species == SPECIES_KELDEO                     || 
+                species == SPECIES_MELOETTA                   || 
+                species == SPECIES_GENESECT                   || 
+                species == SPECIES_DIANCIE                    || 
+                species == SPECIES_HOOPA                      || 
+                species == SPECIES_VOLCANION                  || 
+                species == SPECIES_MAGEARNA                   || 
+                species == SPECIES_MARSHADOW                  || 
+                species == SPECIES_ZERAORA                    || 
+                species == SPECIES_MELTAN                     || 
+                species == SPECIES_MELMETAL                   ||
+                species == SPECIES_ZACIAN                     || //Unfinished
+                species == SPECIES_ZAMAZENTA                  || //Unfinished
+                species == SPECIES_ETERNATUS                  || //Unfinished
+                species == SPECIES_KUBFU                      || //Unfinished
+                species == SPECIES_URSHIFU                    || //Unfinished
+                species == SPECIES_ZARUDE                     || //Unfinished
+                species == SPECIES_REGIELEKI                  || //Unfinished
+                species == SPECIES_REGIDRAGO                  || //Unfinished
+                species == SPECIES_GLASTRIER                  || //Unfinished
+                species == SPECIES_SPECTRIER                  || //Unfinished
+                species == SPECIES_CALYREX                    || //Unfinished
+                species == SPECIES_ZACIAN_CROWNED_SWORD       || //Unfinished
+                species == SPECIES_ZAMAZENTA_CROWNED_SHIELD   || //Unfinished
+                species == SPECIES_ETERNATUS_ETERNAMAX        || //Unfinished
+                species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Unfinished
+                species == SPECIES_ZARUDE_DADA);
+    }
+    return species;
+}
 
-
+void getGenRange(u8 gen, u16* min, u16* max){
+    switch(gen){
+        case 0:
+        case 3:
+            *min = GEN3_START;
+            *max = GEN4_START;
+            break;
+        case 1:
+            *min = GEN1_START;
+            *max = GEN2_START;
+            break;
+        case 2:
+            *min = GEN2_START;
+            *max = GEN3_START;
+            break;
+        case 4:
+            *min = GEN4_START;
+            *max = GEN5_START;
+            break;
+        case 5:
+            *min = GEN5_START;
+            *max = GEN6_START;
+            break;
+        case 6:
+            *min = GEN6_START;
+            *max = GEN7_START;
+            break;
+        case 7:
+            *min = GEN7_START;
+            *max = GEN8_START;
+            break;
+        case 8:
+            *min = GEN8_START;
+            *max = GEN9_START;
+            break;
+        case 9:
+            *min = GEN9_START;
+            *max = LAST_VALID_SPECIES + 1;
+            break;
+    }
+    *max-=2;
+}
 u16 GetRandomPokemonFromSpecies(u16 basespecies){
 	u16 species = basespecies;
     u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
