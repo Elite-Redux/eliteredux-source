@@ -13240,7 +13240,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                     
             // Hail
             if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
-                && IsBattlerWeatherAffected(WEATHER_HAIL_ANY))
+                && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
                     statBase = statBase * 3 / 2;
             break;
         case STAT_SPDEF:
@@ -13263,7 +13263,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             
             // Sandstorm
             if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
-                && IsBattlerWeatherAffected(WEATHER_SANDSTORM_ANY))
+                && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
                     statBase = statBase * 3 / 2;
             break;
         case STAT_SPEED:
