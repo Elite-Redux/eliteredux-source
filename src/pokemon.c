@@ -9111,7 +9111,7 @@ u16 getRandomSpecies(void)
             {SPECIES_BLACEPHALON},
             {SPECIES_ZERAORA},
         };
-
+        
         static const u16 ObtLegends[][1] = {
             {SPECIES_ARTICUNO},
             {SPECIES_ZAPDOS},
@@ -9977,6 +9977,11 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
         VarSet(VAR_RANDOMIZED_SEED, newseed);
         rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     }
+
+    
+
+
+
     rndSeed ^= basespecies;
     rndSeed = ISO_RANDOMIZE1(rndSeed) >> 16;
     if(rndSeed % 10 == 0 && map_tier < 5){
