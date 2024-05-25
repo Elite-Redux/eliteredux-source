@@ -14,6 +14,7 @@
 #include "roamer.h"
 #include "tv.h"
 #include "link.h"
+#include "load_save.h"
 #include "script.h"
 #include "battle_debug.h"
 #include "battle_pike.h"
@@ -651,6 +652,22 @@ static bool8 DoWildEncounterRateTest(u32 encounterRate, bool8 ignoreAbility)
     }
     if (encounterRate > 2880)
         encounterRate = 2880;
+    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+    // {
+    //     return DoWildEncounterRateDiceRoll(0);
+    // }
+    // else if(!IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures){
+    //     if(DoWildEncounterRateDiceRoll(encounterRate)){
+    //         MarkRouteAsEncountered(loc, locG);
+    //         return TRUE;
+    //     }
+    //     else{
+    //         return FALSE;
+    //     }
+    // }
+    // else{
+    //     return DoWildEncounterRateDiceRoll(encounterRate);
+    // }
     return DoWildEncounterRateDiceRoll(encounterRate);
 }
 
@@ -675,6 +692,8 @@ static bool8 AreLegendariesInSootopolisPreventingEncounters(void)
 
 bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavior)
 {
+    u16 loc = gSaveBlock1Ptr->location.mapNum;
+    u16 locG = gSaveBlock1Ptr->location.mapGroup;
     u16 headerId;
     struct Roamer *roamer;
 
@@ -727,6 +746,13 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
 
             if (TryStartRoamerEncounter() == TRUE)
             {
+                if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    {
+                        return FALSE;
+                    }
+                    else{
+                        MarkRouteAsEncountered(loc, locG);
+                }
                 roamer = &gSaveBlock1Ptr->roamer;
                 if (!IsWildLevelAllowedByRepel(roamer->level))
                     return FALSE;
@@ -745,6 +771,13 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                 // try a regular wild land encounter
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
+                    if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    {
+                        return FALSE;
+                    }
+                    else{
+                        MarkRouteAsEncountered(loc, locG);
+                    }
                     if (TryDoDoubleWildBattle())
                     {
                         struct Pokemon mon1 = gEnemyParty[0];
