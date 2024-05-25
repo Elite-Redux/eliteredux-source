@@ -19,6 +19,7 @@
 #include "graphics.h"
 #include "item.h"
 #include "international_string_util.h"
+#include "load_save.h"
 #include "m4a.h"
 #include "map_name_popup.h"
 #include "main.h"
@@ -2939,7 +2940,8 @@ static void Task_DexNavMain(u8 taskId)
     {   
         bool8 gotShiny = FALSE;
         u8 level = GetLevelCap();
-
+        u16 loc = gSaveBlock1Ptr->location.mapNum;
+        u16 locG = gSaveBlock1Ptr->location.mapGroup;
         if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
             switch(sDexNavUiDataPtr->currentMessage){
                 default:
@@ -2962,8 +2964,14 @@ static void Task_DexNavMain(u8 taskId)
                             level = MAX_LEVEL;
                         
                         VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
-                        couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
+                        if(!IsRouteEncountered(loc, locG) || !gSaveBlock2Ptr->nuzlockeCaptures){
+                            couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
+                        }
+                        else {
+                            couldGiveMon = 3;
+                        }
                         if(couldGiveMon < 2){
+                            MarkRouteAsEncountered(loc, locG);
                             if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
                                 gotShiny = TRUE;
                             VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
@@ -3698,13 +3706,17 @@ bool8 hasAllMonsInEnviorment(void){
 
 bool8 IsRouteDexnavLocked(){
     bool8 disableDexnav = FALSE;
+    u16 loc = gSaveBlock1Ptr->location.mapNum;
+    u16 locG = gSaveBlock1Ptr->location.mapGroup;
     switch(gSaveBlock1Ptr->location.mapNum){
 		case MAP_NUM(ROUTE115):
 			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE115) && !FlagGet(DEXNAV_ENABLE_ROUTE_115_FLAG))
 				disableDexnav = TRUE;
 		break;
     }
-
+    if(IsRouteEncountered(loc, locG)){
+        disableDexnav = TRUE;
+    }
     return disableDexnav;
 }
 

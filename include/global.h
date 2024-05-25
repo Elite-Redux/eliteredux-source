@@ -585,6 +585,12 @@ struct SaveBlock2
     //u8 unlockedQuests[SIDE_QUEST_FLAGS_COUNT];
     //u8 completedQuests[SIDE_QUEST_FLAGS_COUNT];
     u8 activeQuest;
+    u16 nuzlockeCaptures:1;
+    u32 encounteredroutes1;
+    u32 encounteredroutes2;
+    u32 encounteredroutes3;
+    u32 encounteredroutes4;
+    u32 encounteredroutes5;
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;

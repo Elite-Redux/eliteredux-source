@@ -59,6 +59,7 @@ enum{
     SETTING_RANDOMIZER_TYPE_MODE,
     SETTING_INDIVIDUAL_COLORS,
     SETTING_PERMANENT_MEGA_MODE,
+    SETTING_NUZLOCKE_CAPTURES,
     NUM_INTRO_OPTIONS,
 };
 
@@ -185,6 +186,7 @@ static void SaveOptionsData()
     gSaveBlock2Ptr->moveRandomizedMode      = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MOVE_MODE];
     gSaveBlock2Ptr->typeRandomizedMode      = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_TYPE_MODE];
     gSaveBlock2Ptr->permanentMegaMode       = sMenuDataPtr->temporal_settings[SETTING_PERMANENT_MEGA_MODE];
+    gSaveBlock2Ptr->nuzlockeCaptures        = sMenuDataPtr->temporal_settings[SETTING_NUZLOCKE_CAPTURES];
 }
 
 static void LoadOptionsData()
@@ -209,6 +211,7 @@ static void LoadOptionsData()
     sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MOVE_MODE]    = gSaveBlock2Ptr->moveRandomizedMode;
     sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_TYPE_MODE]    = gSaveBlock2Ptr->typeRandomizedMode;
     sMenuDataPtr->temporal_settings[SETTING_PERMANENT_MEGA_MODE]     = gSaveBlock2Ptr->permanentMegaMode;
+    sMenuDataPtr->temporal_settings[SETTING_NUZLOCKE_CAPTURES]       = gSaveBlock2Ptr->nuzlockeCaptures;
 }
 
 // This is our main initialization function if you want to call the menu from elsewhere
@@ -592,7 +595,20 @@ const struct OptionData Intro_Options[NUM_INTRO_OPTIONS] = {
             },
         .optionDescription = { 
             _("Normal Mega Evolution."),
-            _("Pokémon can evolve into their Mega\nEvolutions as if they were a\nnormal evolution."),
+            _("Pokémon can evolve into their Mega\nEvolutions as if they were a normal\nevolution."),
+            },
+        .numOptions = 2,
+    },
+    [SETTING_NUZLOCKE_CAPTURES] =
+    {
+        .title = _("Nuzlocke Captures"),
+        .options = { 
+            _("Disabled"),
+            _("Enabled"),
+            },
+        .optionDescription = { 
+            _("Normal captures."),
+            _("Nuzlocke rules: only one encounter\nper area. Dexnav and wild\nencounters disable per route."),
             },
         .numOptions = 2,
     },
