@@ -15,6 +15,8 @@
 #include "agb_flash.h"
 #include "constants/map_groups.h"
 #include "constants/maps.h"
+#include "mgba_printf/mgba.h"
+#include "mgba_printf/mini_printf.h"
 
 static void ApplyNewEncryptionKeyToAllEncryptedData(u32 encryptionKey);
 
@@ -771,7 +773,7 @@ bool8 IsRouteEncountered(s8 loc, s8 locG){
             mask = gSaveBlock2Ptr->encounteredroutes5;
             break;
     }
-    return mask & (1 << bitIndex);
+    return (mask >> bitIndex) & 1;
 }
 
 void MarkRouteAsEncountered(s8 loc, s8 locG){
@@ -795,6 +797,7 @@ void MarkRouteAsEncountered(s8 loc, s8 locG){
             gSaveBlock2Ptr->encounteredroutes5 |= (1 << bitIndex);
             break;
     }
+    
 }
 
 

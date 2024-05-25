@@ -27,6 +27,7 @@
 #include "constants/maps.h"
 #include "constants/weather.h"
 #include "constants/species.h"
+#include "item.h"
 
 extern const u8 EventScript_RepelWoreOff[];
 
@@ -747,11 +748,15 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
             if (TryStartRoamerEncounter() == TRUE)
             {
                 if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                {
+                    return FALSE;
+                }
+                else 
+                {
+                    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
                     {
-                        return FALSE;
-                    }
-                    else{
                         MarkRouteAsEncountered(loc, locG);
+                    }
                 }
                 roamer = &gSaveBlock1Ptr->roamer;
                 if (!IsWildLevelAllowedByRepel(roamer->level))
@@ -775,8 +780,12 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                     {
                         return FALSE;
                     }
-                    else{
-                        MarkRouteAsEncountered(loc, locG);
+                    else 
+                    {
+                        if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                        {
+                            MarkRouteAsEncountered(loc, locG);
+                        }
                     }
                     if (TryDoDoubleWildBattle())
                     {
@@ -809,6 +818,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
 
             if (TryStartRoamerEncounter() == TRUE)
             {
+                if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                {
+                    return FALSE;
+                }
+                else 
+                {
+                    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    {
+                        MarkRouteAsEncountered(loc, locG);
+                    }
+                }
                 roamer = &gSaveBlock1Ptr->roamer;
                 if (!IsWildLevelAllowedByRepel(roamer->level))
                     return FALSE;
@@ -820,6 +840,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
             {
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].waterMonsInfo, WILD_AREA_WATER, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
+                    if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    {
+                        return FALSE;
+                    }
+                    else 
+                    {
+                        if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                        {
+                            MarkRouteAsEncountered(loc, locG);
+                        }
+                    }
                     gIsSurfingEncounter = TRUE;
                     if (TryDoDoubleWildBattle())
                     {
