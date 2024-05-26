@@ -10375,7 +10375,7 @@ u8 getTier(s8 loc, s8 locG){
         (loc == MAP_NUM(ALTERING_CAVE_B1F) && locG == MAP_GROUP(ALTERING_CAVE_B1F))){
             return 5;
         }
-    return 0;
+    return 1;
 }
 u32 getMask(s8 loc, s8 locG){
     if( (MAP_NUM(PETALBURG_CITY) == loc && MAP_GROUP(PETALBURG_CITY) == locG) ||
