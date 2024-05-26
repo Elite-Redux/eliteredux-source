@@ -1678,7 +1678,7 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
     AddTextPrinterParameterized3(0, FONT_SMALL_NARROW, GetStringCenterAlignXOffset(1, gStringVar4, 0xD0), 0, sMonInfoTextColors, 0, gStringVar4);
     
     if(gSaveBlock2Ptr->encounterRandomizedMode ||
-       gSaveBlock1Ptr->encounterRandomizedLegendaryMode ||
+       gSaveBlock2Ptr->encounterRandomizedLegendaryMode ||
        gSaveBlock2Ptr->typeRandomizedMode      ||
        gSaveBlock2Ptr->abilityRandomizedMode   ||
        gSaveBlock2Ptr->innaterandomizedMode){
