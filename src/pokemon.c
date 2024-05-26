@@ -9737,6 +9737,7 @@ u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier){
     bool8 valid = FALSE;
     u8 tag, cur, i = 0;
     u16 mon;
+    u8 mon_tier;
     do {
         tag = RandRangeDeterministic(0, 21, &rand);
         for(i = 0; i < total; i++){
@@ -9746,9 +9747,15 @@ u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier){
             }
         }
         mon = tagSwitch(tag, rand >> 16);
-    } while (gBaseStats[mon].tier != tier);
+        mon_tier = gBaseStats[mon].tier;
+        if(tier == 2 && mon_tier == 1){
+            mon_tier = 2;
+        }
+        if(tier == 1 && mon_tier == 2){
+            mon_tier = 1;
+        }
+    } while (mon_tier != tier);
     return mon;
-
 }
 
 u16 tagSwitch(u8 tag, u16 rndseed) {
@@ -9812,7 +9819,7 @@ u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID){
         do{
             species = RandRangeDeterministic(min, max, &rndSeed);
         }
-        while(gBaseStats[species].tier != 3);
+        while(gBaseStats[species].tier != 3 && gBaseStats[species].tier != 4);
     }
     else if(enc && leg){
         return RandRangeDeterministic(min, max, &rndSeed);
@@ -9972,12 +9979,18 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
     u16 loc = gSaveBlock1Ptr->location.mapNum;
     u16 locG = gSaveBlock1Ptr->location.mapGroup;
     u8 map_tier = getTier(loc, locG);
+    u8 map_tier_extra = map_tier;
     if(VarGet(VAR_RANDOMIZED_SEED) == 0){
         u16 newseed = Random();
         VarSet(VAR_RANDOMIZED_SEED, newseed);
         rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     }
-
+    if(map_tier == 2){
+        map_tier_extra = 1;
+    }
+    if(map_tier == 1){
+        map_tier_extra = 2;
+    }
     
 
 
@@ -9992,7 +10005,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 rndSeed = ISO_RANDOMIZE1(rndSeed);
                 species = GetRandomPokemonFromTag(rndSeed >> 16, loc, locG);
             }
-            while(species == SPECIES_NONE || gBaseStats[species].tier != map_tier);
+            while(species == SPECIES_NONE || (gBaseStats[species].tier != map_tier && gBaseStats[species].tier != map_tier_extra));
         return species;
     }
     if(gSaveBlock2Ptr->encounterRandomizedMode == TRUE && basespecies != SPECIES_NONE){
