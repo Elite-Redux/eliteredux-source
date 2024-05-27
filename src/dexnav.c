@@ -3714,7 +3714,7 @@ bool8 IsRouteDexnavLocked(){
 				disableDexnav = TRUE;
 		break;
     }
-    if(IsRouteEncountered(loc, locG)){
+    if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures){
         disableDexnav = TRUE;
     }
     return disableDexnav;
