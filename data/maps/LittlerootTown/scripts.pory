@@ -454,8 +454,8 @@ LittlerootTown_EventScript_GiveRunningShoesTrigger0:: @ 81E81BB
 	lockall
 	setvar VAR_0x8008, 0
 	setobjectxy LOCALID_MOM, 10, 9
-	goto LittlerootTown_EventScript_GiveRunningShoesTrigger
 	setvar VAR_LITTLEROOT_TOWN_STATE, 4
+	goto LittlerootTown_EventScript_GiveRunningShoesTrigger
 	end
 
 LittlerootTown_EventScript_GiveRunningShoesTrigger1:: @ 81E81CE
