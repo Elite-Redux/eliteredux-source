@@ -77,6 +77,7 @@ enum { // Main
     DEBUG_MENU_ITEM_CANCEL
 };
 enum { // Util
+    DEBUG_UTIL_MENU_RESET_RANDOMIZE_FLAGS,
     DEBUG_UTIL_MENU_RESET_PC_PARTY,
     DEBUG_UTIL_MENU_ITEM_HEAL_PARTY,
     DEBUG_UTIL_MENU_ITEM_FLY,
@@ -309,6 +310,7 @@ static void DebugTask_HandleMenuInput_Give(u8 taskId);
 static void DebugTask_HandleMenuInput_Fill(u8 taskId);
 static void DebugTask_HandleMenuInput_Sound(u8 taskId);
 
+static void DebugAction_Util_ResetRandomizeFlags(u8 taskId);
 static void DebugAction_Util_ResetParty(u8 taskId);
 static void DebugAction_Util_HealParty(u8 taskId);
 static void DebugAction_Util_Fly(u8 taskId);
@@ -438,6 +440,7 @@ static const u8 sDebugText_Util_Script_6[] =               _("Script 6");
 static const u8 sDebugText_Util_Script_7[] =               _("Script 7");
 static const u8 sDebugText_Util_Script_8[] =               _("Script 8");
 // Util Menu
+static const u8 sDebugText_Util_ResetRandomizeFlags[] =     _("Reset Randomize Flags");
 static const u8 sDebugText_Util_ResetParty[] =              _("Reset Party and Boxes");
 static const u8 sDebugText_Util_HealParty[] =               _("Heal Party");
 static const u8 sDebugText_Util_Fly[] =                     _("Fly to map…{CLEAR_TO 110}{RIGHT_ARROW}");
@@ -624,6 +627,7 @@ static const struct ListMenuItem sDebugMenu_Items_Main[] =
 };
 static const struct ListMenuItem sDebugMenu_Items_Utilities[] =
 {
+    [DEBUG_UTIL_MENU_RESET_RANDOMIZE_FLAGS]    = {sDebugText_Util_ResetRandomizeFlags, DEBUG_UTIL_MENU_RESET_RANDOMIZE_FLAGS},
     [DEBUG_UTIL_MENU_RESET_PC_PARTY]           = {sDebugText_Util_ResetParty,          DEBUG_UTIL_MENU_RESET_PC_PARTY},
     [DEBUG_UTIL_MENU_ITEM_HEAL_PARTY]          = {sDebugText_Util_HealParty,           DEBUG_UTIL_MENU_ITEM_HEAL_PARTY},
     [DEBUG_UTIL_MENU_ITEM_FLY]                 = {sDebugText_Util_Fly,                 DEBUG_UTIL_MENU_ITEM_FLY},
@@ -767,6 +771,7 @@ static void (*const sDebugMenu_Actions_Main[])(u8) =
 };
 static void (*const sDebugMenu_Actions_Utilities[])(u8) =
 {
+    [DEBUG_UTIL_MENU_RESET_RANDOMIZE_FLAGS]     = DebugAction_Util_ResetRandomizeFlags,
     [DEBUG_UTIL_MENU_RESET_PC_PARTY]            = DebugAction_Util_ResetParty,
     [DEBUG_UTIL_MENU_ITEM_HEAL_PARTY]           = DebugAction_Util_HealParty,
     [DEBUG_UTIL_MENU_ITEM_FLY]                  = DebugAction_Util_Fly,
@@ -1653,6 +1658,15 @@ static void DebugAction_Util_HealParty(u8 taskId)
 {
     PlaySE(SE_USE_ITEM);
     HealPlayerParty();
+    EnableBothScriptContexts();
+    Debug_DestroyMenu_Full(taskId);
+}
+
+static void DebugAction_Util_ResetRandomizeFlags(u8 taskId)
+{
+    u16 newseed = Random();
+    PlaySE(SE_SELECT);
+    VarSet(VAR_RANDOMIZED_SEED, newseed);
     EnableBothScriptContexts();
     Debug_DestroyMenu_Full(taskId);
 }
