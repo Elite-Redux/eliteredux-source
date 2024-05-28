@@ -304,7 +304,6 @@ static void PrintStatsTab(void);
 static void PrintAbilityTab(void);
 static void PrintStatusTab(void);
 static void PrintDamageCalulatorTab(void);
-static void PrintDamageCalculation(u8 battler, u8 target, u8 moveidx);
 static void Task_MenuWaitFadeIn(u8 taskId);
 static void Task_MenuMain(u8 taskId);
 static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx);
@@ -2912,6 +2911,8 @@ const u8 gText_SmogonDamageCalculator_FifthPart_Guaranteed[] = _("{STR_VAR_1} {S
 const u8 gText_SmogonDamageCalculator_SixthPart[] = _("{STR_VAR_1} {STR_VAR_2}HKO");
 const u8 gText_SmogonDamageCalculator_SixthPart_OHKO[] = _("{STR_VAR_1} OHKO");
 //{STR_VAR_1} = Fifth Part {STR_VAR_2} = 2HKO or 3HKO
+const u8 gText_SmogonDamageCalculator_FastPart[]            = _("{STR_VAR_1}% Chances to {STR_VAR_2}HKO");
+const u8 gText_SmogonDamageCalculator_FastPart_Guaranteed[] = _("Guaranteed {STR_VAR_2}HKO");
 
 #define MAX_DAMAGE_FACTOR 0
 #define MIN_DAMAGE_FACTOR 16
@@ -3046,7 +3047,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex){
     }
 }
 
-static void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx){
+void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx){
     u32 minDamage, maxDamage, midDamage, tempdamage;
     s32 dmg, critDmg, critChance, tempchance;
     double minHits2KOChance;
@@ -3157,6 +3158,82 @@ static void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx){
     }
     else
         StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_SixthPart_OHKO);
+}
+
+void PrintDamageCalculationExported(u8 battler, u8 target, u8 moveIdx){
+    u32 minDamage, maxDamage, midDamage, tempdamage;
+    s32 dmg, critDmg, critChance, tempchance;
+    double minHits2KOChance;
+    u16 hits2KO, hits2KOmin, percentage, chance2KO;
+    u8 chance, moveType;
+    u8 natureAtk, natureDef;
+    u8 statUpAtk, statUpDef;
+    u8 statDownAtk, statDownDef;
+    u8 i, j;
+    u16 targetCurrentHp = gBattleMons[target].hp;
+    bool8 isCrit = FALSE;
+    u16 typeEffectivenessModifier;
+    const s8 *natureMod;
+    u16 move = gBattleMons[battler].moves[moveIdx];
+    struct DamageCalculation *damageCalculation;
+    u8 *DamageCalculationText;
+
+    //Sets move type depending on the mon ability/stats
+    SetTypeBeforeUsingMove(move, battler);
+    GET_MOVE_TYPE(move, moveType);
+    
+    typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(move, moveType, battler, target, FALSE);
+
+    /*if (sMenuDataPtr->damageCalculation[battler][target][moveIdx].noDamage){
+        StringCopy(gStringVar4, gText_Target_Nothing);
+        return;
+    }*/
+
+    CalculateDamage(battler, target, moveIdx);
+    damageCalculation = &sMenuDataPtr->damageCalculation[battler][target][moveIdx];
+
+    for(i = 0; i < MIN_DAMAGE_FACTOR; i++){
+        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i);
+        tempchance = (targetCurrentHp / tempdamage);
+
+        if(tempchance == hits2KO){
+            percentage = (MIN_DAMAGE_FACTOR - i);
+            break;
+        }
+    }
+    
+    //Chances To KO
+    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR);
+    hits2KO = (targetCurrentHp / maxDamage);
+    
+    minHits2KOChance = (percentage * (MAX_PERCENT_2 / MIN_DAMAGE_FACTOR));
+    chance2KO = minHits2KOChance / MAX_PERCENT;
+
+    //252+ SpA Abomasnow Blizzard vs. 168 HP / 0 SpD Abomasnow: 178-211 (49 - 58.1%) -- 97.7% chance to 2HKO
+    //97.7% chance to 2HKO
+    //gText_SmogonDamageCalculator_FastPart[] = _("{STR_VAR_1}% Chances to {STR_VAR_2}HKO");
+    //gText_SmogonDamageCalculator_FastPart_Guaranteed
+
+    //Damage Calculation
+    minDamage = damageCalculation->minDamage;
+    maxDamage = damageCalculation->maxDamage;
+    
+    ConvertIntToDecimalStringN(gStringVar1, chance2KO,     STR_CONV_MODE_LEFT_ALIGN, 3);
+    ConvertIntToDecimalStringN(gStringVar2, (hits2KO + 1), STR_CONV_MODE_LEFT_ALIGN, 3);
+    if(damageCalculation->hits2KO > 0){
+        //More than 1 hit
+        if(chance2KO >= 100)
+            StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FastPart_Guaranteed);
+        else
+            StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FastPart);
+    }
+    else{
+        //OHKO
+        if(hits2KO >= 100)
+            StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FastPart_Guaranteed);
+        else
+            StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FastPart);
+    }
 }
 
 #define NUM_PARTY_ICONS_SHOWN  6

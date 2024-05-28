@@ -141,6 +141,7 @@ static void EndDrawPartyStatusSummary(void);
 static void ChangeMoveDisplayMode();
 static void MoveSelectionDisplaySplitIcon(void);
 static void PlayerBufferExecCompleted(void);
+static u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId);
 static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId);
 
 static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
@@ -220,7 +221,10 @@ enum Colors
     FONT_WHITE,
     FONT_WHITE_2,
     FONT_RED,
+    FONT_RED_2,
     FONT_BLUE,
+    FONT_BLUE_2,
+    FONT_GRAY_2,
 };
 
 static const u8 sMenuWindowFontColors[][3] = 
@@ -230,7 +234,10 @@ static const u8 sMenuWindowFontColors[][3] =
     [FONT_WHITE]   = {TEXT_COLOR_TRANSPARENT,  5,  4},
     [FONT_WHITE_2] = {TEXT_COLOR_TRANSPARENT,  5,  TEXT_COLOR_TRANSPARENT},
     [FONT_RED]     = {TEXT_COLOR_TRANSPARENT,  8,  9},
-    [FONT_BLUE]    = {TEXT_COLOR_TRANSPARENT,  14, 15},
+    [FONT_RED_2]   = {TEXT_COLOR_TRANSPARENT,  8,  TEXT_COLOR_TRANSPARENT},
+    [FONT_BLUE]    = {TEXT_COLOR_TRANSPARENT,  6, 7},
+    [FONT_BLUE_2]  = {TEXT_COLOR_TRANSPARENT,  7, TEXT_COLOR_TRANSPARENT},
+    [FONT_GRAY_2]  = {TEXT_COLOR_TRANSPARENT,  4, TEXT_COLOR_TRANSPARENT},
 };
 
 enum optionsButtonMode
@@ -254,8 +261,9 @@ const u8 sText_BattleMenu_Action_What_Will_X_Do_2[] = _("{B_ACTIVE_NAME2}");
 const u8 sText_BattleMenu_Action_What_Will_X_Do_3[] = _("do?");
 //const u8 sText_BattleMenu_Action_What_Will_X_Do[] = _("What will\nCrabominable\ndo?");
 
-static const u8 sBattleSelector1x[] = INCBIN_U8("graphics/ui_menus/battle_interface/selector.4bpp");
-static const u8 sBattleSelector2x[] = INCBIN_U8("graphics/ui_menus/battle_interface/selector_2x.4bpp");
+static const u8 sBattleSelector1x[]   = INCBIN_U8("graphics/ui_menus/battle_interface/selector.4bpp");
+static const u8 sBattleSelector2x[]   = INCBIN_U8("graphics/ui_menus/battle_interface/selector_2x.4bpp");
+static const u8 sBattleMoveSelector[] = INCBIN_U8("graphics/ui_menus/battle_interface/move_selector.4bpp");
 #define BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE 56
 #define BATTLE_WINDOW_SQUARE_SIZE (4 * 8)
 #define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT 0
@@ -351,16 +359,95 @@ void PrintBattleWindow_ActionPromt(void)
     CopyWindowToVram(windowId, 3);
 }
 
+enum{
+    MOVE_INFO_DESCRIPTION,
+    MOVE_INFO_POWER_ACC_PRIO_TYPE,
+    MOVE_INFO_POWER_ACC_PRIO_TYPE_2,
+    MOVE_INFO_DAMAGE_CALCULATION,
+    NUM_MOVE_INFO_TYPES,
+};
+
+#define SPACE_BETWEEN_MOVE_NAME_AND_PP             (10 * 8)
+#define SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION    SPACE_BETWEEN_MOVE_NAME_AND_PP + (5 * 8) + 4
+static const u8 sText_PP[] = _("{STR_VAR_1}/{STR_VAR_2}");
+const u8 sText_MoveInfo_Power[]       = _("Power: {STR_VAR_1}");
+const u8 sText_MoveInfo_True_Power[]  = _("True Power: {STR_VAR_1}");
+const u8 sText_MoveInfo_Accuracy[]    = _("Accuracy: {STR_VAR_1}");
+const u8 sText_MoveInfo_Priority[]    = _("Priority: {STR_VAR_1}");
+const u8 sText_MoveInfo_Type[]        = _("Type: {STR_VAR_1}{STR_VAR_2}");
+const u8 sText_MoveInfo_Type_Double[] = _("Type: {STR_VAR_1} & {STR_VAR_3} {STR_VAR_2}");
+const u8 sText_MoveInfo_Chance[]      = _("Chance: {STR_VAR_1}");
+const u8 sText_MoveInfo_Contact[]     = _("Contact: {STR_VAR_1}");
+const u8 sText_MoveInfo_Boost[]       = _("Boost Type: {STR_VAR_1}");
+const u8 sText_Effect_Based_Type[]    = _("Based on: {STR_VAR_1}");
+const u8 sText_Target_Nothing[]       = _("---");
+static const u8 gStabIcon[]           =  _("{PLUS}");
+static const u8 gNoStabIcon[]         =  _(" ");
+static const u8 sText_Yes[]           = _("Yes");
+static const u8 sText_No[]            = _("No");
+
+const u8 sText_Effect_Hit_Number[]          = _("Max Hits");
+const u8 sText_Effect_Boost_Type_Weather[]  = _("Weather");
+const u8 sText_Effect_Boost_Type_Fist[]     = _("Fist");
+const u8 sText_Effect_Boost_Type_Kick[]     = _("Kick");
+const u8 sText_Effect_Boost_Type_Sound[]    = _("Sound");
+const u8 sText_Effect_Boost_Type_Cannon[]   = _("Cannon");
+const u8 sText_Effect_Boost_Type_Dance[]    = _("Dance");
+const u8 sText_Effect_Boost_Type_Field[]    = _("Field");
+const u8 sText_Effect_Boost_Type_Bone[]     = _("Bone");
+const u8 sText_Effect_Boost_Type_Slash[]    = _("Slash");
+const u8 sText_Effect_Boost_Type_Bite[]     = _("Bite");
+const u8 sText_Effect_Boost_Type_Arrow[]    = _("Arrow");
+const u8 sText_Effect_Boost_Type_Hammer[]   = _("Hammer");
+const u8 sText_Effect_Boost_Type_Air[]      = _("Air");
+const u8 sText_Effect_Boost_Type_Horn[]     = _("Horn");
+const u8 sText_Effect_Boost_Type_Throw[]    = _("Throwing");
+const u8 sText_Effect_Boost_Type_Reckless[] = _("Reckless");
+const u8 sText_Effect_Critical_High[]       = _("High");
+const u8 sText_Effect_Critical_Always[]     = _("Always");
+const u8 sText_Effect_Sheer_Force_Boosted[] = _("Sheer Force");
+const u8 sText_Effect_Ignores_Ability[]     = _("Ign. Ability");
+const u8 sText_Effect_Ignores_Stats[]       = _("Ign. Stats");
+/*
+const u8 gText_MoveInfo_Split[]    = _("Split: {STR_VAR_1}");
+const u8 gText_MoveInfo_STAB[]     = _("STAB: {STR_VAR_1}");
+
+const u8 gText_Split_Physical[] = _("Physical");
+const u8 gText_Split_Special[]  = _("Special");
+const u8 gText_Split_Status[]   = _("Status");
+
+const u8 gText_MoveInfo_Target1[] = _("Target 1: {STR_VAR_1}");
+const u8 gText_MoveInfo_Target2[] = _("Target 2: {STR_VAR_1}");
+
+const u8 gText_MoveInfo_Damage[] = _("Damage");
+
+const u8 gText_Target_Nothing[]   = _("---");
+const u8 sText_Title_Controllers_Move[]      = _("{DPAD_UPDOWN}Switch {DPAD_LEFTRIGHT}Page {A_BUTTON}Mode");*/
+
+enum{
+    MOVE_EFFECTIVENESS_NONE,
+    MOVE_EFFECTIVENESS_HALF,
+    MOVE_EFFECTIVENESS_NORMAL,
+    MOVE_EFFECTIVENESS_DOUBLE,
+    MOVE_EFFECTIVENESS_STATUS,
+};
+
 void PrintBattleWindow_MoveSelection(void)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
-    u8 i, x, y, x2, y2, speed;
-    u16 move;
+    u8 i, x, y, x2, y2, speed, moveType, effectiveness;
+    u16 move, movePower;
     u8 windowId = B_WIN_ACTION_PROMPT;
     u8 font = FONT_SMALL_NARROW;
     u8 fontColor = FONT_WHITE_2;
+    u8 moveInfoType = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
+    u8 target = BATTLE_OPPOSITE(gActiveBattler);
     bool32 copyToVram;
+    bool8 isStatusMove;
     struct TextPrinterTemplate printerTemplate;
+    
+    if(!IsBattlerAlive(target))
+        target = BATTLE_PARTNER(target);
 
     //Fill the window with the fill value
     MoveIntoBattleBgWindow(windowId);
@@ -375,77 +462,169 @@ void PrintBattleWindow_MoveSelection(void)
     //Move Selection
     for(i = 0; i < MAX_MON_MOVES; i++){
         move = moveInfo->moves[i];
-        StringCopy(gStringVar1, gMoveNames[move]);
+        StringCopy(gStringVar1, gMoveNamesLong[move]);
         AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        //PP
+        ConvertIntToDecimalStringN(gStringVar1, gBattleMons[gActiveBattler].pp[i], STR_CONV_MODE_LEFT_ALIGN, 3); //Current PP
+        ConvertIntToDecimalStringN(gStringVar2, gBattleMoves[move].pp, STR_CONV_MODE_LEFT_ALIGN, 3);             //Max PP, ToFix
+        StringExpandPlaceholders(gStringVar4, sText_PP);
+        AddTextPrinterParameterized4(windowId, font, (x * 8) + SPACE_BETWEEN_MOVE_NAME_AND_PP, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+
+        if(gMoveSelectionCursor[gActiveBattler] == i)
+            BlitBitmapToWindow(windowId, sBattleMoveSelector, ((x - 1) * 8), (y * 8) + y2 + 4, 8, 8);
+
         y++;
     }
 
-    /*//What Will X Do?
-    //First Part
-    StringCopy(gStringVar1, sText_BattleMenu_Action_What_Will_X_Do_1);
-    x2 = 4 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
-    y++;
-    //Part two
-    BattleStringExpandPlaceholdersToDisplayedString(sText_BattleMenu_Action_What_Will_X_Do_2);
-    x2 = 4 + GetStringCenterAlignXOffset(font, gDisplayedStringBattle, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gDisplayedStringBattle);
-    y++;
-    //Part three
-    StringCopy(gStringVar1, sText_BattleMenu_Action_What_Will_X_Do_3);
-    x2 = 4 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+    //Move Description
+    x  = 2;
+    y  = 0;
+    y2 = 4;
+    x2 = 0;
 
-    // Print Fight / Pokémon / Bag / Run Text
-    fontColor = FONT_WHITE_2;
-    x  = 12;
-    y  = 1;
-    // Pokemon
-    StringCopy(gStringVar1, sText_BattleMenu_Action_Pokemon);
-    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
-        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
-    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+    move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
+    switch(moveInfoType){
+        case MOVE_INFO_DESCRIPTION:
+            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 2;
+            StringCopy(gStringVar4, gMoveFourLineDescriptionPointers[move - 1]);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+        case MOVE_INFO_POWER_ACC_PRIO_TYPE:
+            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
+            isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
+            moveType  = gBattleMoves[move].type;
+            movePower = gBattleMoves[move].power;
+            SetTypeBeforeUsingMove(move, gActiveBattler);
+            GET_MOVE_TYPE(move, moveType);
+            //Move Power
+            if(!isStatusMove)
+                ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);
+            else
+                StringCopy(gStringVar1, sText_Target_Nothing);
+            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Power);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            y++;
+            //Move Accuracy
+            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].accuracy, STR_CONV_MODE_LEFT_ALIGN, 3);
+            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Accuracy);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            y++;
+            //Move Priority
+            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
+            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Priority);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            y++;
+            //Move Type
+            StringCopy(gStringVar1, gTypeNames[moveType]);
+            if(IS_BATTLER_OF_TYPE(gActiveBattler, moveType))
+                StringCopy(gStringVar2, gStabIcon);
+            else
+                StringCopy(gStringVar2, gNoStabIcon);
 
-    
-    y  = y + 2;
-    // Bag
-    StringCopy(gStringVar1, sText_BattleMenu_Action_Bag);
-    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_BAG)
-        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
-    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
-
-    
-    y = 2;
-    x = x + 6;
-    // Fight
-    font = FONT_NARROW;
-    StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
-    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
-        BlitBitmapToWindow(windowId, sBattleSelector2x, ((x - 1) * 8), ((y - 1) * 8) + y2, 48, 32);
-    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
-
-
-    x = x + 6;
-    y = 1;
-    // Info
-    font = FONT_SMALL_NARROW;
-    StringCopy(gStringVar1, sText_BattleMenu_Action_Info);
-    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
-        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
-    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
-    
-    
-    y  = y + 2;
-    // Run
-    StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
-    if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
-        BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
-    x2 = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);*/
+            effectiveness = GetMoveTypeEffectiveness(move, target, gActiveBattler);
+            if(effectiveness == MOVE_EFFECTIVENESS_NONE)
+                fontColor = FONT_GRAY_2;
+            else if(effectiveness == MOVE_EFFECTIVENESS_DOUBLE)
+                fontColor = FONT_BLUE_2;
+            else if (effectiveness == MOVE_EFFECTIVENESS_HALF)
+                fontColor = FONT_RED_2;
+            else
+                fontColor = FONT_WHITE_2;
+            
+            if(gBattleMoves[move].type != gBattleMoves[move].type2 && gBattleMoves[move].type2 != TYPE_NORMAL){
+                StringCopy(gStringVar3, gTypeNames[gBattleMoves[move].type2]);
+                StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type_Double);
+            }
+            else{
+                StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type);
+            }
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+        case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
+            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
+            isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
+            moveType  = gBattleMoves[move].type;
+            SetTypeBeforeUsingMove(move, gActiveBattler);
+            GET_MOVE_TYPE(move, moveType);
+            movePower = CalcMoveBasePowerAfterModifiers(move, 0, gActiveBattler, target, moveType, FALSE);
+            //Move Power
+            if(!isStatusMove)
+                ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);
+            else
+                StringCopy(gStringVar1, sText_Target_Nothing);
+            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_True_Power);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            y++;
+            //Boost Type
+            if((gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Fist);
+            else if((gBattleMoves[move].flags & FLAG_STRIKER_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Kick);
+            else if((gBattleMoves[move].flags & FLAG_BONE_BASED))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Bone);
+            else if((gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Cannon);
+            else if((gBattleMoves[move].flags & FLAG_DANCE))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Dance);
+            else if((gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Slash);
+            else if((gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Bite);
+            else if (gBattleMoves[move].airBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Air);
+            else if (gBattleMoves[move].hornBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Horn);
+            else if (gBattleMoves[move].hammerBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Hammer);
+            else if (gBattleMoves[move].arrowBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Arrow);
+            else if (gBattleMoves[move].throwingBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Throw);
+            else if((gBattleMoves[move].flags & FLAG_RECKLESS_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Reckless);
+            else
+			    StringCopy(gStringVar1, sText_Target_Nothing);
+            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Boost);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            y++;
+            //Based 
+            if((gBattleMoves[move].flags & FLAG_WEATHER_BASED))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Weather);
+            else if((gBattleMoves[move].flags & FLAG_FIELD_BASED))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Field);
+            else if((gBattleMoves[move].flags & FLAG_BONE_BASED))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Bone);
+            else if((gBattleMoves[move].flags & FLAG_SOUND))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Sound);
+            else
+			    StringCopy(gStringVar1, sText_Target_Nothing);
+            StringExpandPlaceholders(gStringVar4, sText_Effect_Based_Type);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            y++;
+            //Contact
+            if(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+                StringCopy(gStringVar1, sText_Yes);
+            else
+                StringCopy(gStringVar1, sText_No);
+            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Contact);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            y++;
+            //Chance
+            /*ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].secondaryEffectChance, STR_CONV_MODE_LEFT_ALIGN, 3);
+            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Chance);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            y++;*/
+        break;
+        case MOVE_INFO_DAMAGE_CALCULATION:
+            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION - 8;
+            effectiveness = GetMoveTypeEffectiveness(move, target, gActiveBattler);
+            if(effectiveness == MOVE_EFFECTIVENESS_NONE)
+                StringCopy(gStringVar4, sText_Target_Nothing);
+            else
+                PrintDamageCalculationExported(gActiveBattler, target, gMoveSelectionCursor[gActiveBattler]);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+    }
 
 
     PutWindowTilemap(windowId);
@@ -588,10 +767,10 @@ static void HandleInputChooseAction(void)
         PlaySE(SE_SELECT);
         switch(gActionSelectionCursor[gActiveBattler]){
             case BATTLE_ACTION_BAG:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                 gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_POKEMON;
             break;
             case BATTLE_ACTION_POKEMON:
-                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                     gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_BAG;
             break;
             case BATTLE_ACTION_RUN:
@@ -705,6 +884,7 @@ static void HandleInputChooseTarget(void)
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
         PlaySE(SE_SELECT);
+        PrintBattleWindow_MoveSelection();
         gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_HideAsMoveTarget;
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
@@ -862,6 +1042,7 @@ static void HandleInputShowEntireFieldTargets(void)
     {
         PlaySE(SE_SELECT);
         HideAllTargets();
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
         DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
@@ -892,6 +1073,7 @@ static void HandleInputShowTargets(void)
     {
         PlaySE(SE_SELECT);
         HideShownTargets();
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
         DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
@@ -911,30 +1093,12 @@ static void HandleInputChooseMove(void)
 {
     u16 moveTarget;
     u32 canSelectTarget = 0;
+    u8 windowMode = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
 
-
-
     //ChooseMove Testo
-    PrintBattleWindow_MoveSelection();
 
-    if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
-    {
-        PlaySE(SE_SELECT);
-        gBattleStruct->mega.playerSelect = FALSE;
-        BtlController_EmitTwoReturnValues(1, 10, 0xFFFF);
-        HideMegaTriggerSprite();
-        PlayerBufferExecCompleted();
-        FlagClear(FLAG_SYS_MOVE_INFO);
-        TryToHideMoveInfoWindow();
-    }
-
-    /*if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
-        gPlayerDpadHoldFrames++;
-    else
-        gPlayerDpadHoldFrames = 0;
-
-    if (gMain.newKeys & A_BUTTON)
+    if(gMain.newKeys & A_BUTTON)
     {
         TryToHideMoveInfoWindow();
         FlagClear(FLAG_SYS_MOVE_INFO);
@@ -1033,6 +1197,60 @@ static void HandleInputChooseMove(void)
             break;
         }
     }
+    else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
+    {
+        PlaySE(SE_SELECT);
+        gBattleStruct->mega.playerSelect = FALSE;
+        BtlController_EmitTwoReturnValues(1, 10, 0xFFFF);
+        HideMegaTriggerSprite();
+        PlayerBufferExecCompleted();
+        FlagClear(FLAG_SYS_MOVE_INFO);
+        TryToHideMoveInfoWindow();
+    }
+    else if (JOY_NEW(DPAD_UP))
+    {
+        if(gMoveSelectionCursor[gActiveBattler] != 0)
+            gMoveSelectionCursor[gActiveBattler]--;
+        else
+            gMoveSelectionCursor[gActiveBattler] = MAX_MON_MOVES - 1;
+        PlaySE(SE_SELECT);
+        PrintBattleWindow_MoveSelection();
+    }
+    else if (JOY_NEW(DPAD_DOWN))
+    {
+        if(gMoveSelectionCursor[gActiveBattler] < MAX_MON_MOVES - 1)
+            gMoveSelectionCursor[gActiveBattler]++;
+        else
+            gMoveSelectionCursor[gActiveBattler] = 0;
+        PlaySE(SE_SELECT);
+        PrintBattleWindow_MoveSelection();
+    }
+    else if (JOY_NEW(R_BUTTON))
+    {
+        if(windowMode >= NUM_MOVE_INFO_TYPES - 1)
+            windowMode = 0;
+        else
+            windowMode++;
+        VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
+        PrintBattleWindow_MoveSelection();
+    }
+    else if (JOY_NEW(L_BUTTON))
+    {
+        if(windowMode == 0)
+            windowMode = NUM_MOVE_INFO_TYPES - 1;
+        else
+            windowMode--;
+        VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
+        PrintBattleWindow_MoveSelection();
+    }
+
+    /*if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;
+
+    if (gMain.newKeys & A_BUTTON)
+    
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
         PlaySE(SE_SELECT);
@@ -1278,6 +1496,7 @@ static void HandleMoveSwitching(void)
             }
         }
 
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         gMoveSelectionCursor[gActiveBattler] = gMultiUsePlayerCursor;
         MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
@@ -1290,6 +1509,7 @@ static void HandleMoveSwitching(void)
         PlaySE(SE_SELECT);
         MoveSelectionDestroyCursorAt(gMultiUsePlayerCursor);
         MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         MoveSelectionDisplayPpString();
         MoveSelectionDisplayPpNumber();
@@ -2146,14 +2366,6 @@ u8 TypeEffectiveness(struct ChooseMoveStruct *moveInfo, u8 targetId)
 	}
 }
 
-enum{
-    MOVE_EFFECTIVENESS_NONE,
-    MOVE_EFFECTIVENESS_HALF,
-    MOVE_EFFECTIVENESS_NORMAL,
-    MOVE_EFFECTIVENESS_DOUBLE,
-    MOVE_EFFECTIVENESS_STATUS,
-};
-
 bool8 DoesTargetHaveAbilityOrInnate(u8 targetId, u8 userId, u16 ability, u16 moveNum) {
     return (gBattleMons[targetId].ability == ability || BattlerHasInnate(targetId, ability)) && !DoesBattlerIgnoreAbilityChecks(userId, targetId, moveNum);
 }
@@ -2884,8 +3096,6 @@ static void MoveSelectionDisplayMoveTypeDoubles(u8 targetId)
     static const u8 gEffectivenessDown[]         =  _("{COLOR 12}{SHADOW 11}{STR_VAR_1} {COLOR 6}{DOWN_ARROW_2} {COLOR 12}{STR_VAR_2}");
     static const u8 gEffectivenessNoDamage[]     =  _("{COLOR 12}{SHADOW 11}{STR_VAR_1} {COLOR 7}{BIG_MULT_X} {COLOR 12}{STR_VAR_2}");
     static const u8 gEffectivenessNormalDamage[] =  _("{STR_VAR_1} {STR_VAR_2}");
-    static const u8 gStabIcon[]   =  _("{PLUS}");
-    static const u8 gNoStabIcon[] =  _(" ");
 
 	struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
     //Move Name
@@ -2984,22 +3194,22 @@ static void MoveSelectionDisplayMoveType(void)
 
 static void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)
 {
-    u16 src[2];
+    /*u16 src[2];
     src[0] = arg1 + 1;
     src[1] = arg1 + 2;
 
     CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
-    CopyBgTilemapBufferToVram(0);
+    CopyBgTilemapBufferToVram(0);*/
 }
 
 static void MoveSelectionDestroyCursorAt(u8 cursorPosition)
 {
-    u16 src[2];
+    /*u16 src[2];
     src[0] = 0x1016;
     src[1] = 0x1016;
 
     CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
-    CopyBgTilemapBufferToVram(0);
+    CopyBgTilemapBufferToVram(0);*/
 }
 
 void ActionSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)
@@ -4114,6 +4324,7 @@ static void HandleChooseMoveAfterDma3(void)
     {
         gBattle_BG0_X = 0;
         gBattle_BG0_Y = DISPLAY_HEIGHT * 2;
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
     }
 }
