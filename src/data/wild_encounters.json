@@ -12859,12 +12859,12 @@
               {
                 "min_level": 10,
                 "max_level": 12,
-                "species": "SPECIES_VANILLITE"
+                "species": "SPECIES_VULPIX_ALOLAN"
               },
               {
                 "min_level": 10,
                 "max_level": 12,
-                "species": "SPECIES_SPHEAL"
+                "species": "SPECIES_SANDSHREW_ALOLAN"
               },
               {
                 "min_level": 10,

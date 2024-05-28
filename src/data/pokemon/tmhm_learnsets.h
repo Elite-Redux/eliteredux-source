@@ -40317,7 +40317,6 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_REFLECT)
         TM(MOVE_LIGHT_SCREEN)
         TM(MOVE_THUNDER_WAVE)
-        TM(MOVE_CALM_MIND)
         TM(MOVE_SECRET_POWER)
         TMHM_LEARNSET_END
 
