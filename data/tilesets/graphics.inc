@@ -2189,3 +2189,23 @@ gTilesetPalettes_PokemonMansion::
 	.align 2
 gTilesetTiles_PokemonMansion::
 	.incbin "data/tilesets/secondary/pokemonmansion/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_Museum::
+	.incbin "data/tilesets/secondary/museum/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/museum/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_Museum::
+	.incbin "data/tilesets/secondary/museum/tiles.4bpp.lz"

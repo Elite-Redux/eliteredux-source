@@ -5400,6 +5400,16 @@
       "secondary_tileset": "gTileset_PokemonMansion",
       "border_filepath": "data/layouts/NewMap3/border.bin",
       "blockdata_filepath": "data/layouts/NewMap3/map.bin"
+    },
+    {
+      "id": "LAYOUT_PEWTER_CITY_MUSEUM_1F",
+      "name": "PewterCity_Museum_1F_Layout",
+      "width": 28,
+      "height": 11,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Museum",
+      "border_filepath": "data/layouts/PewterCity_Museum_1F/border.bin",
+      "blockdata_filepath": "data/layouts/PewterCity_Museum_1F/map.bin"
     }
   ]
 }

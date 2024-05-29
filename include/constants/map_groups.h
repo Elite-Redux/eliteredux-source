@@ -145,6 +145,7 @@
 #define MAP_POKEMON_MANSION_3F                    (75 | (1 << 8))
 #define MAP_NEW_MAP2                              (76 | (1 << 8))
 #define MAP_NEW_MAP3                              (77 | (1 << 8))
+#define MAP_PEWTER_CITY_MUSEUM_1F                 (78 | (1 << 8))
 
 // gMapGroup_IndoorOldale
 #define MAP_OLDALE_TOWN_HOUSE1            (0 | (2 << 8))

@@ -1083,3 +1083,14 @@ gTileset_PokemonMansion::
 	.4byte gMetatiles_PokemonMansion
 	.4byte gMetatileAttributes_PokemonMansion
 	.4byte NULL
+
+	.align 2
+gTileset_Museum::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_Museum
+	.4byte gTilesetPalettes_Museum
+	.4byte gMetatiles_Museum
+	.4byte gMetatileAttributes_Museum
+	.4byte NULL
