@@ -557,6 +557,9 @@ StarterRegionStringGalar:
 
 StarterRegionStringPaldea:
 	.string "Paldea$"
+
+StarterRegionStringAlt:
+	.string "Alternate$"
 `
 
 text RivalsHouse_1F_Text_SureAboutRegion{

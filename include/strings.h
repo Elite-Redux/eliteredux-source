@@ -3554,6 +3554,11 @@ extern const u8 gText_Kalos[];
 extern const u8 gText_Alola[];
 extern const u8 gText_Galar[];
 extern const u8 gText_Paldea[];
+extern const u8 gText_Alt1[];
+extern const u8 gText_Alt2[];
+extern const u8 gText_Alt3[];
+extern const u8 gText_Alt4[];
+extern const u8 gText_Alt5[];
 
 extern const u8 gText_TakeOne[];
 extern const u8 gText_TakeOneDozen[];

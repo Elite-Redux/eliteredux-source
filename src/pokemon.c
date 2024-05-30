@@ -9969,6 +9969,10 @@ void getGenRange(u8 gen, u16* min, u16* max){
             *min = GEN9_START;
             *max = LAST_VALID_SPECIES + 1;
             break;
+        default:
+            *min = GEN1_START;
+            *max = LAST_VALID_SPECIES + 1;
+            break;
     }
     *max-=2;
 }

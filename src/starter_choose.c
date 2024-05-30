@@ -179,6 +179,37 @@ static const u16 sStarterMonPaldea[STARTER_MON_COUNT] =
     SPECIES_QUAXLY,
 };
 
+static const u16 sStarterMonAlt1[STARTER_MON_COUNT] =
+{
+    SPECIES_LITWICK,
+    SPECIES_MACHOP,
+    SPECIES_SANDILE,
+};
+static const u16 sStarterMonAlt2[STARTER_MON_COUNT] =
+{
+    SPECIES_ZUBAT,
+    SPECIES_DIGLETT,
+    SPECIES_ELEKID,
+};
+static const u16 sStarterMonAlt3[STARTER_MON_COUNT] =
+{
+    SPECIES_TRAPINCH,
+    SPECIES_GASTLY,
+    SPECIES_TOGEPI,
+};
+static const u16 sStarterMonAlt4[STARTER_MON_COUNT] =
+{
+    SPECIES_ABRA,
+    SPECIES_GEODUDE_ALOLAN,
+    SPECIES_PIKIPEK,
+};
+static const u16 sStarterMonAlt5[STARTER_MON_COUNT] =
+{
+    SPECIES_VULPIX_ALOLAN,
+    SPECIES_BAGON,
+    SPECIES_BELDUM,
+};
+
 static const struct BgTemplate sBgTemplates[3] =
 {
     {
@@ -442,6 +473,16 @@ u16 GetStarterPokemon(u16 chosenStarterId)
             return sStarterMonGalar[chosenStarterId];
         case 9:
             return sStarterMonPaldea[chosenStarterId];
+        case 10:
+            return sStarterMonAlt1[chosenStarterId];
+        case 11:
+            return sStarterMonAlt2[chosenStarterId];
+        case 12:
+            return sStarterMonAlt3[chosenStarterId];
+        case 13:
+            return sStarterMonAlt4[chosenStarterId];
+        case 14:
+            return sStarterMonAlt5[chosenStarterId];
         default:
             return sStarterMonHoenn[chosenStarterId];
         }

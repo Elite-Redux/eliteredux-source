@@ -163,6 +163,11 @@ LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet::
 	case 6, LittlerootTown_MaysHouse_2F_EventScript_Alola
 	case 7, LittlerootTown_MaysHouse_2F_EventScript_Galar
 	case 8, LittlerootTown_MaysHouse_2F_EventScript_Paldea
+	case 9, LittlerootTown_MaysHouse_2F_EventScript_Alt1
+	case 10, LittlerootTown_MaysHouse_2F_EventScript_Alt2
+	case 11, LittlerootTown_MaysHouse_2F_EventScript_Alt3
+	case 12, LittlerootTown_MaysHouse_2F_EventScript_Alt4
+	case 13, LittlerootTown_MaysHouse_2F_EventScript_Alt5
 	goto LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
 	end
 
@@ -236,6 +241,46 @@ LittlerootTown_MaysHouse_2F_EventScript_Paldea::
 	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
 	setvar VAR_STARTER_GEN, 9
 	bufferstring 1, StarterRegionStringPaldea
+	return
+
+LittlerootTown_MaysHouse_2F_EventScript_Alt1::
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 10
+	bufferstring 1, StarterRegionStringAlt
+	return
+
+LittlerootTown_MaysHouse_2F_EventScript_Alt2::
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 11
+	bufferstring 1, StarterRegionStringAlt
+	return
+
+LittlerootTown_MaysHouse_2F_EventScript_Alt3::
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 12
+	bufferstring 1, StarterRegionStringAlt
+	return
+
+LittlerootTown_MaysHouse_2F_EventScript_Alt4::
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 13
+	bufferstring 1, StarterRegionStringAlt
+	return
+
+LittlerootTown_MaysHouse_2F_EventScript_Alt5::
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 14
+	bufferstring 1, StarterRegionStringAlt
 	return
 
 LittlerootTown_MaysHouse_2F_Movement_MayEnters: @ 81F946F

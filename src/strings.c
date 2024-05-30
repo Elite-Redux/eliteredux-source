@@ -1685,7 +1685,7 @@ const u8 gText_SavingEasyMode[] = _("Easy Mode");
 const u8 gText_SavingAceMode[] = _("Ace Mode");
 const u8 gText_SavingEliteMode[] = _("Elite Mode");
 const u8 gText_SavingNormalMode[] = _("Normal Mode"); // not used
-const u8 gText_SavingVersionNum[] = _("v2.0-b2d");
+const u8 gText_SavingVersionNum[] = _("v2.0-b7d");
 const u8 gText_WirelessCommStatus[] = _("Wireless Communication Status");
 const u8 gText_PeopleTrading[] = _("People trading:");
 const u8 gText_PeopleBattling[] = _("People battling:");
@@ -2136,6 +2136,11 @@ const u8 gText_Kalos[] =    _("Kalos");
 const u8 gText_Alola[] =    _("Alola");
 const u8 gText_Galar[] =    _("Galar");
 const u8 gText_Paldea[] =    _("Paldea");
+const u8 gText_Alt1[] =    _("Alt1");
+const u8 gText_Alt2[] =    _("Alt2");
+const u8 gText_Alt3[] =    _("Alt3");
+const u8 gText_Alt4[] =    _("Alt4");
+const u8 gText_Alt5[] =    _("Alt5");
 
 // Moomoo Milk options
 const u8 gText_TakeOne[] =      _("I'll take one.");
