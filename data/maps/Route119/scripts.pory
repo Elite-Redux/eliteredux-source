@@ -755,7 +755,7 @@ script Route119_EventScript_RivalHelpWaterfall{
 script Route119_EventScript_RivalHelpWaterfall0{
     lock
     setvar(VAR_TEMP_2, 1)
-    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119) || flag(FLAG_HIDE_ROUTE_104_RIVAL)){
+    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)){
         release
         end
     }
