@@ -261,9 +261,12 @@ const u8 sText_BattleMenu_Action_What_Will_X_Do_2[] = _("{B_ACTIVE_NAME2}");
 const u8 sText_BattleMenu_Action_What_Will_X_Do_3[] = _("do?");
 //const u8 sText_BattleMenu_Action_What_Will_X_Do[] = _("What will\nCrabominable\ndo?");
 
-static const u8 sBattleSelector1x[]   = INCBIN_U8("graphics/ui_menus/battle_interface/selector.4bpp");
-static const u8 sBattleSelector2x[]   = INCBIN_U8("graphics/ui_menus/battle_interface/selector_2x.4bpp");
-static const u8 sBattleMoveSelector[] = INCBIN_U8("graphics/ui_menus/battle_interface/move_selector.4bpp");
+static const u8 sBattleSelector1x[]     = INCBIN_U8("graphics/ui_menus/battle_interface/selector.4bpp");
+static const u8 sBattleSelector2x[]     = INCBIN_U8("graphics/ui_menus/battle_interface/selector_2x.4bpp");
+static const u8 sBattleMoveSelector[]   = INCBIN_U8("graphics/ui_menus/battle_interface/move_selector.4bpp");
+static const u8 sPokeball_Sane_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/pokeball_sane.4bpp");
+static const u8 sPokeball_Status_Gfx[]  = INCBIN_U8("graphics/ui_menus/battle_interface/pokeball_status.4bpp");
+static const u8 sPokeball_Fainted_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/pokeball_fainted.4bpp");
 #define BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE 56
 #define BATTLE_WINDOW_SQUARE_SIZE (4 * 8)
 #define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT 0
@@ -282,6 +285,23 @@ void PrintBattleWindow_ActionPromt(void)
     MoveIntoBattleBgWindow(windowId);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     copyToVram = TRUE;
+
+    //Pokeball Icons
+    x  = 17;
+    y  = 0;
+    y2 = 0;
+    x2 = 0;
+    for(i = 0; i < PARTY_SIZE; i++){
+        if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE){
+            if(GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL) == 0) //Fainted
+                BlitBitmapToWindow(windowId, sPokeball_Fainted_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+            else if(GetMonData(&gPlayerParty[i], MON_DATA_STATUS, NULL) != STATUS1_NONE) //Status
+                BlitBitmapToWindow(windowId, sPokeball_Status_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+            else //Sane
+                BlitBitmapToWindow(windowId, sPokeball_Sane_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+        }
+        x++;
+    }
 
     x  = 4;
     y  = 1;
