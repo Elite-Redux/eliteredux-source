@@ -273,7 +273,7 @@ void PrintBattleWindow_ActionPromt(void)
     u8 i, x, y, x2, y2;
     u8 windowId = B_WIN_ACTION_PROMPT;
     u8 font = FONT_SMALL_NARROW;
-    u8 fontColor = FONT_BLACK_2;
+    u8 fontColor = FONT_WHITE_2;
     bool32 copyToVram;
     struct TextPrinterTemplate printerTemplate;
     u8 speed;
@@ -283,7 +283,7 @@ void PrintBattleWindow_ActionPromt(void)
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     copyToVram = TRUE;
 
-    x  = 1;
+    x  = 4;
     y  = 1;
     y2 = 0;
 
@@ -432,6 +432,8 @@ enum{
     MOVE_EFFECTIVENESS_STATUS,
 };
 
+#define NEGATIVE_MOVE_X 2
+
 void PrintBattleWindow_MoveSelection(void)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
@@ -463,15 +465,15 @@ void PrintBattleWindow_MoveSelection(void)
     for(i = 0; i < MAX_MON_MOVES; i++){
         move = moveInfo->moves[i];
         StringCopy(gStringVar1, gMoveNamesLong[move]);
-        AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
         //PP
         ConvertIntToDecimalStringN(gStringVar1, gBattleMons[gActiveBattler].pp[i], STR_CONV_MODE_LEFT_ALIGN, 3); //Current PP
         ConvertIntToDecimalStringN(gStringVar2, gBattleMoves[move].pp, STR_CONV_MODE_LEFT_ALIGN, 3);             //Max PP, ToFix
         StringExpandPlaceholders(gStringVar4, sText_PP);
-        AddTextPrinterParameterized4(windowId, font, (x * 8) + SPACE_BETWEEN_MOVE_NAME_AND_PP, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        AddTextPrinterParameterized4(windowId, font, (x * 8) + SPACE_BETWEEN_MOVE_NAME_AND_PP - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
 
         if(gMoveSelectionCursor[gActiveBattler] == i)
-            BlitBitmapToWindow(windowId, sBattleMoveSelector, ((x - 1) * 8), (y * 8) + y2 + 4, 8, 8);
+            BlitBitmapToWindow(windowId, sBattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
 
         y++;
     }
@@ -485,7 +487,7 @@ void PrintBattleWindow_MoveSelection(void)
     move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
     switch(moveInfoType){
         case MOVE_INFO_DESCRIPTION:
-            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 2;
+            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION;
             StringCopy(gStringVar4, gMoveFourLineDescriptionPointers[move - 1]);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
         break;
@@ -621,7 +623,8 @@ void PrintBattleWindow_MoveSelection(void)
             if(effectiveness == MOVE_EFFECTIVENESS_NONE)
                 StringCopy(gStringVar4, sText_Target_Nothing);
             else
-                PrintDamageCalculationExported(gActiveBattler, target, gMoveSelectionCursor[gActiveBattler]);
+                StringCopy(gStringVar4, sText_Target_Nothing);
+                //PrintDamageCalculationExported(gActiveBattler, target, gMoveSelectionCursor[gActiveBattler]);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
         break;
     }
@@ -649,8 +652,8 @@ static void HandleInputChooseAction(void)
     if (JOY_NEW(A_BUTTON))
     {
         PlaySE(SE_SELECT);
-        TryHideLastUsedBall();
-        TryToHideEnemyInfoWindow();
+        //TryHideLastUsedBall();
+        //TryToHideEnemyInfoWindow();
 
         switch (gActionSelectionCursor[gActiveBattler])
         {
@@ -795,8 +798,8 @@ static void HandleInputChooseAction(void)
     else if (JOY_NEW(B_LAST_USED_BALL_BUTTON) && CanThrowLastUsedBall())
     {
         PlaySE(SE_SELECT);
-        TryHideLastUsedBall();
-        TryToHideEnemyInfoWindow();
+        //TryHideLastUsedBall();
+        //TryToHideEnemyInfoWindow();
         BtlController_EmitTwoReturnValues(1, B_ACTION_THROW_BALL, 0);
         PlayerBufferExecCompleted();
     }
@@ -876,9 +879,9 @@ static void HandleInputChooseTarget(void)
         else
             BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
         EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
-        TryHideLastUsedBall();
-        TryToHideEnemyInfoWindow();
-        HideMegaTriggerSprite();
+        //TryHideLastUsedBall();
+        //TryToHideEnemyInfoWindow();
+        //HideMegaTriggerSprite();
         PlayerBufferExecCompleted();
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
@@ -1064,8 +1067,8 @@ static void HandleInputShowTargets(void)
             BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
         else
             BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
-        HideMegaTriggerSprite();
-        TryHideLastUsedBall();
+        //HideMegaTriggerSprite();
+        //TryHideLastUsedBall();
         TryToHideEnemyInfoWindow();
         PlayerBufferExecCompleted();
     }
@@ -1095,8 +1098,6 @@ static void HandleInputChooseMove(void)
     u32 canSelectTarget = 0;
     u8 windowMode = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
-
-    //ChooseMove Testo
 
     if(gMain.newKeys & A_BUTTON)
     {
@@ -1173,8 +1174,8 @@ static void HandleInputChooseMove(void)
             else
                 BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
             HideMegaTriggerSprite();
-            TryHideLastUsedBall();
-            TryToHideEnemyInfoWindow();
+            //TryHideLastUsedBall();
+            //TryToHideEnemyInfoWindow();
             PlayerBufferExecCompleted();
             break;
         case 1:
@@ -1196,6 +1197,10 @@ static void HandleInputChooseMove(void)
             gBattlerControllerFuncs[gActiveBattler] = HandleInputShowEntireFieldTargets;
             break;
         }
+        //testo
+        gBattle_BG1_X = 240;
+        gBattle_BG1_Y = 240;
+        //HideBg(1);
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
@@ -1225,7 +1230,7 @@ static void HandleInputChooseMove(void)
         PlaySE(SE_SELECT);
         PrintBattleWindow_MoveSelection();
     }
-    else if (JOY_NEW(R_BUTTON))
+    else if (JOY_NEW(R_BUTTON) || JOY_NEW(DPAD_RIGHT))
     {
         if(windowMode >= NUM_MOVE_INFO_TYPES - 1)
             windowMode = 0;
@@ -1234,7 +1239,7 @@ static void HandleInputChooseMove(void)
         VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
         PrintBattleWindow_MoveSelection();
     }
-    else if (JOY_NEW(L_BUTTON))
+    else if (JOY_NEW(L_BUTTON) || JOY_NEW(DPAD_LEFT))
     {
         if(windowMode == 0)
             windowMode = NUM_MOVE_INFO_TYPES - 1;
@@ -4285,6 +4290,11 @@ static void PlayerHandleChooseAction(void)
 {
     // "What will {x} do?" + "Fight/Pokémon/Bag/Run" menu
     s32 i;
+    
+	//Reshow Bg
+    gBattle_BG1_X = 0;
+    gBattle_BG1_Y = 0;
+    ShowBg(1);
 
     gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3;
     BattleTv_ClearExplosionFaintCause();

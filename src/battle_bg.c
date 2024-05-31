@@ -181,6 +181,9 @@ const struct WindowTemplate gStandardBattleWindowTemplates[] =
         .width = 26,
         .height = 4,
         .paletteNum = 0,
+        //.fgColor = 1,
+        //.bgColor = 1,
+        //.shadowColor = 1,
         .baseBlock = 0x0090,
     },
     [B_WIN_ACTION_PROMPT] = {

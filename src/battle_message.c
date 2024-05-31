@@ -1,5 +1,6 @@
 #include "global.h"
 #include "battle.h"
+#include "bg.h"
 #include "battle_anim.h"
 #include "battle_controllers.h"
 #include "battle_message.h"
@@ -2447,10 +2448,10 @@ static const struct BattleWindowText sTextOnWindowsInfo_Normal[] =
         .fontId = FONT_NORMAL,
         .x = 0,
         .y = 1,
-        .speed = 1,
-        .fgColor = 1,
-        .bgColor = 15,
-        .shadowColor = 6,
+        .speed = 0,
+        .fgColor = 5,
+        .bgColor = 4,
+        .shadowColor = 2,
     },
     [B_WIN_ACTION_PROMPT] = {
         .fillValue = PIXEL_FILL(0x4),

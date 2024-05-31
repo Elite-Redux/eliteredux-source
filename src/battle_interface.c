@@ -3661,7 +3661,7 @@ bool32 CanThrowLastUsedBall(void)
 
 void TryAddLastUsedBallItemSprites(void)
 {
-    #if B_LAST_USED_BALL == TRUE
+    /*#if B_LAST_USED_BALL == TRUE
     if (gLastThrownBall == 0
       || (gLastThrownBall != 0 && !CheckBagHasItem(gLastThrownBall, 1)))
     {
@@ -3699,12 +3699,12 @@ void TryAddLastUsedBallItemSprites(void)
         gSprites[gBattleStruct->ballSpriteIds[0]].sHide  = FALSE;  // restore
         gSprites[gBattleStruct->moveInfoSpriteId].sHide  = TRUE;   // restore
     }
-    #endif
+    #endif*/
 }
 
 void TryToAddMoveInfoWindow(void)
 {
-    u8 x2 = 32;
+    /*u8 x2 = 32;
 
     if(IsDoubleBattle())
         x2 = 24;
@@ -3720,26 +3720,25 @@ void TryToAddMoveInfoWindow(void)
            LAST_BALL_WIN_X_0,
            LAST_USED_WIN_Y + x2, 6);
         gSprites[gBattleStruct->moveInfoSpriteId].sHide = FALSE;   // restore
-    }
+    }*/
 }
 
 void TryToHideMoveInfoWindow(void)
 {
-    gSprites[gBattleStruct->moveInfoSpriteId].sHide = TRUE;   // Hide
+    /*gSprites[gBattleStruct->moveInfoSpriteId].sHide = TRUE;   // Hide*/
 }
 
 static void DestroyMoveInfoWinGfx(struct Sprite *sprite)
 {
-    FreeSpriteTilesByTag(ENEMY_INFO_WINDOW_TAG);
+    /*FreeSpriteTilesByTag(ENEMY_INFO_WINDOW_TAG);
     FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
     DestroySprite(sprite);
-    gBattleStruct->moveInfoSpriteId = MAX_SPRITES;
+    gBattleStruct->moveInfoSpriteId = MAX_SPRITES;*/
 }
 
-//
 void TryToAddEnemyInfoWindow(void)
 {
-    u8 x2 = 32;
+    /*u8 x2 = 32;
 
     if((gBattleTypeFlags & BATTLE_TYPE_TRAINER))
         return;
@@ -3758,44 +3757,44 @@ void TryToAddEnemyInfoWindow(void)
            LAST_BALL_WIN_X_0,
            LAST_USED_WIN_Y + x2, 6);
         gSprites[gBattleStruct->enemyInfoSpriteId].sHide = FALSE;   // restore
-    }
+    }*/
 }
 
 void TryToHideEnemyInfoWindow(void)
 {
-    gSprites[gBattleStruct->enemyInfoSpriteId].sHide = TRUE;   // Hide
+    //gSprites[gBattleStruct->enemyInfoSpriteId].sHide = TRUE;   // Hide*/
 }
 
 static void DestroyBattleInfoWinGfx(struct Sprite *sprite)
 {
-    FreeSpriteTilesByTag(ENEMY_INFO_WINDOW_TAG);
+    /*FreeSpriteTilesByTag(ENEMY_INFO_WINDOW_TAG);
     FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
     DestroySprite(sprite);
-    gBattleStruct->enemyInfoSpriteId = MAX_SPRITES;
+    gBattleStruct->enemyInfoSpriteId = MAX_SPRITES;*/
 }
 
 static void DestroyEnemyInfoWinGfx(struct Sprite *sprite)
 {
-    FreeSpriteTilesByTag(ENEMY_INFO_WINDOW_TAG);
+    /*FreeSpriteTilesByTag(ENEMY_INFO_WINDOW_TAG);
     FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
     DestroySprite(sprite);
-    gBattleStruct->enemyInfoSpriteId = MAX_SPRITES;
+    gBattleStruct->enemyInfoSpriteId = MAX_SPRITES;*/
 }
 
 static void DestroyLastUsedBallWinGfx(struct Sprite *sprite)
 {
-    FreeSpriteTilesByTag(LAST_BALL_WINDOW_TAG);
+    /*FreeSpriteTilesByTag(LAST_BALL_WINDOW_TAG);
     FreeSpritePaletteByTag(ABILITY_POP_UP_TAG);
     DestroySprite(sprite);
-    gBattleStruct->ballSpriteIds[1] = MAX_SPRITES;
+    gBattleStruct->ballSpriteIds[1] = MAX_SPRITES;*/
 }
 
 static void DestroyLastUsedBallGfx(struct Sprite *sprite)
 {
-    FreeSpriteTilesByTag(102);
+    /*FreeSpriteTilesByTag(102);
     FreeSpritePaletteByTag(102);
     DestroySprite(sprite);
-    gBattleStruct->ballSpriteIds[0] = MAX_SPRITES;
+    gBattleStruct->ballSpriteIds[0] = MAX_SPRITES;*/
 }
 
 static void SpriteCB_LastUsedBallWin(struct Sprite *sprite)
@@ -3868,7 +3867,7 @@ static void SpriteCB_LastUsedBall(struct Sprite *sprite)
 
 static void TryHideOrRestoreLastUsedBall(u8 caseId)
 {
-    #if B_LAST_USED_BALL == TRUE
+    /*#if B_LAST_USED_BALL == TRUE
     if (gBattleStruct->ballSpriteIds[0] == MAX_SPRITES)
         return;
 
@@ -3887,23 +3886,23 @@ static void TryHideOrRestoreLastUsedBall(u8 caseId)
             gSprites[gBattleStruct->ballSpriteIds[1]].sHide = FALSE;   // restore
         break;
     }
-    #endif
+    #endif*/
 }
 
 void TryHideLastUsedBall(void)
 {
-    #if B_LAST_USED_BALL == TRUE
+    /*#if B_LAST_USED_BALL == TRUE
     TryHideOrRestoreLastUsedBall(0);
-    #endif
+    #endif*/
 }
 
 void TryRestoreLastUsedBall(void)
 {
-    #if B_LAST_USED_BALL == TRUE
+    /*#if B_LAST_USED_BALL == TRUE
     if (gBattleStruct->ballSpriteIds[0] != MAX_SPRITES)
         TryHideOrRestoreLastUsedBall(1);
     else
         TryAddLastUsedBallItemSprites();
-    #endif
+    #endif*/
 }
 
