@@ -1260,3 +1260,9 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/NewMap3/scripts.inc"
 
 	.include "data/maps/PewterCity_Museum_1F/scripts.inc"
+
+	.include "data/maps/PewterCity_Museum_2F/scripts.inc"
+
+	.include "data/maps/PewterCity_House2/scripts.inc"
+
+	.include "data/maps/PewterCity_Gym/scripts.inc"

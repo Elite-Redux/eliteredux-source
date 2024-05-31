@@ -731,3 +731,10 @@ gMetatiles_Museum::
 	.align 1
 gMetatileAttributes_Museum::
 	.incbin "data/tilesets/secondary/museum/metatile_attributes.bin"
+	.align 1
+gMetatiles_PewterGym::
+	.incbin "data/tilesets/secondary/pewtergym/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_PewterGym::
+	.incbin "data/tilesets/secondary/pewtergym/metatile_attributes.bin"

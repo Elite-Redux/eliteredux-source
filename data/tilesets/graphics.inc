@@ -2209,3 +2209,23 @@ gTilesetPalettes_Museum::
 	.align 2
 gTilesetTiles_Museum::
 	.incbin "data/tilesets/secondary/museum/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_PewterGym::
+	.incbin "data/tilesets/secondary/pewtergym/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/pewtergym/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_PewterGym::
+	.incbin "data/tilesets/secondary/pewtergym/tiles.4bpp.lz"

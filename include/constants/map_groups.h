@@ -146,6 +146,9 @@
 #define MAP_NEW_MAP2                              (76 | (1 << 8))
 #define MAP_NEW_MAP3                              (77 | (1 << 8))
 #define MAP_PEWTER_CITY_MUSEUM_1F                 (78 | (1 << 8))
+#define MAP_PEWTER_CITY_MUSEUM_2F                 (79 | (1 << 8))
+#define MAP_PEWTER_CITY_HOUSE2                    (80 | (1 << 8))
+#define MAP_PEWTER_CITY_GYM                       (81 | (1 << 8))
 
 // gMapGroup_IndoorOldale
 #define MAP_OLDALE_TOWN_HOUSE1            (0 | (2 << 8))

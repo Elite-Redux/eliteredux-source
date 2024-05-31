@@ -1094,3 +1094,14 @@ gTileset_Museum::
 	.4byte gMetatiles_Museum
 	.4byte gMetatileAttributes_Museum
 	.4byte NULL
+
+	.align 2
+gTileset_PewterGym::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_PewterGym
+	.4byte gTilesetPalettes_PewterGym
+	.4byte gMetatiles_PewterGym
+	.4byte gMetatileAttributes_PewterGym
+	.4byte NULL

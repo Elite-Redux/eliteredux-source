@@ -177,7 +177,10 @@
     "PokemonMansion_3F",
     "NewMap2",
     "NewMap3",
-    "PewterCity_Museum_1F"
+    "PewterCity_Museum_1F",
+    "PewterCity_Museum_2F",
+    "PewterCity_House2",
+    "PewterCity_Gym"
   ],
   "gMapGroup_IndoorOldale": [
     "OldaleTown_House1",
