@@ -603,7 +603,8 @@ SlateportCity_EventScript_Greta::
 	checkflag FLAG_DEFEATED_SLATEPORT_GRETA
 	goto_if_eq SlateportCity_EventScript_GretaDefeated
 	msgbox SlateportCity_Text_GretaHowdy, MSGBOX_DEFAULT
-	goto_if_unset FLAG_HIDE_LAVARIDGE_POKECENTER_LUCY, SlateportCity_EventScript_GretaNotStrongEnough
+	compare VAR_LAVARIDGE_LUCY_STATE, 2
+	goto_if_ne SlateportCity_EventScript_GretaNotStrongEnough
 	goto_if_unset FLAG_HIDE_FORTREE_POKECENTER_SPENSER, SlateportCity_EventScript_GretaNotStrongEnough
 	msgbox SlateportCity_Text_GretaReadyForBattle, MSGBOX_YESNO
 	compare VAR_RESULT, NO

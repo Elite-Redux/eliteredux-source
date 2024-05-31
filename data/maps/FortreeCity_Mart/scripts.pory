@@ -1,5 +1,5 @@
 raw `
-.set LOCALID_SPENSER, 5
+.set LOCALID_SPENSER, 6
 
 FortreeCity_Mart_MapScripts:: @ 8217665
 	.byte 0
@@ -45,6 +45,10 @@ FortreeCity_Mart_EventScript_Spenser::
 	faceplayer
 	compare VAR_LAVARIDGE_LUCY_STATE, 2
 	goto_if_eq FortreeCity_Mart_EventScript_SpenserBeatLucy
+	msgbox FortreeCity_Mart_Text_SpenserIntro, MSGBOX_DEFAULT
+	release
+	end
+
 FortreeCity_Mart_EventScript_SpenserBattle::
 	msgbox FortreeCity_Mart_Text_SpenserBeforeBattle, MSGBOX_DEFAULT
 	trainerbattle_no_intro TRAINER_SPENSER_FORTREE, FortreeCity_Mart_Text_SpenserDefeat
@@ -86,7 +90,10 @@ FortreeCity_Mart_Text_SpenserBeatLucy:
 
 FortreeCity_Mart_Text_SpenserIntro:
 	.string "Hm? You're the youngster Scott's\n"
-	.string "always talking about!$"
+	.string "always talking about!\p"
+	.string "Listen, child. If you manage to\n"
+	.string "defeat my colleague in Lavaridge\l"
+	.string "Town, please come back afterwards.$"
 
 FortreeCity_Mart_Text_SpenserBeforeBattle:
 	.string "I'd like to see your skills for myself.\p"
