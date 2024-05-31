@@ -1644,7 +1644,7 @@
     {
       "id": "LAYOUT_VICTORY_ROAD_1F",
       "name": "VictoryRoad_1F_Layout",
-      "width": 46,
+      "width": 55,
       "height": 45,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Cave",
@@ -4700,6 +4700,16 @@
       "secondary_tileset": "gTileset_Cave",
       "border_filepath": "data/layouts/SeafloorCavernShortcut/border.bin",
       "blockdata_filepath": "data/layouts/SeafloorCavernShortcut/map.bin"
+    },
+    {
+      "id": "LAYOUT_EVERGRANDE_CITY_MONO_CHAMP_ROOM_1",
+      "name": "EvergrandeCity_MonoChampRoom_1_Layout",
+      "width": 35,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/EvergrandeCity_MonoChampRoom_1/border.bin",
+      "blockdata_filepath": "data/layouts/EvergrandeCity_MonoChampRoom_1/map.bin"
     }
   ]
 }
