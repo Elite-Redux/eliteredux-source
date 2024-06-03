@@ -870,9 +870,15 @@ void UI_Battle_Menu_Init(MainCallback callback)
     }
 
     if(FlagGet(FLAG_BATTLE_MENU_COMING_FROM_SUMMARY_SCREEN)){
-        sMenuDataPtr->partyMenuSelectorID_X = VarGet(VAR_BATTLE_MENU_MON_ID_X);
-        sMenuDataPtr->partyMenuSelectorID_Y = VarGet(VAR_BATTLE_MENU_MON_ID_Y);
-        sMenuDataPtr->partySelectorMode = TRUE;
+        if(VarGet(VAR_BATTLE_MENU_MON_ID_X) >= 0xFF){
+           sMenuDataPtr->modeId = VarGet(VAR_BATTLE_MENU_MON_ID_Y);
+           sMenuDataPtr->tabId  = VarGet(VAR_BATTLE_MENU_MON_ID_X) - 0xFF;
+        }
+        else{
+            sMenuDataPtr->partyMenuSelectorID_X = VarGet(VAR_BATTLE_MENU_MON_ID_X);
+            sMenuDataPtr->partyMenuSelectorID_Y = VarGet(VAR_BATTLE_MENU_MON_ID_Y);
+            sMenuDataPtr->partySelectorMode = TRUE;
+        }
     }
 
     //Reset the flags
@@ -4842,6 +4848,53 @@ static void StartSummaryScreen(u8 taskId)
     }
 }
 
+static void StartSummaryScreenForSpecificMon(u8 taskId)
+{
+    u8 battler = sMenuDataPtr->battlerId;
+    u8 currMonId = gBattlerPartyIndexes[battler];
+    u16 species;
+    u8 partyCount = 0;
+    u8 value = 2;
+    bool8 isEnemyMon = FALSE;
+
+    //Save State
+    VarSet(VAR_BATTLE_MENU_MON_ID_X, 0xFF + sMenuDataPtr->tabId);
+    VarSet(VAR_BATTLE_MENU_MON_ID_Y, sMenuDataPtr->modeId);
+    FlagSet(FLAG_BATTLE_MENU_COMING_FROM_SUMMARY_SCREEN);
+
+    //Check if the mon is from the enemy party or the player party
+    if (GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_PLAYER){
+        //Player Party
+        species = GetMonData(&gPlayerParty[currMonId], MON_DATA_SPECIES, NULL);
+    }
+    else{
+        //Enemy Party
+        species = GetMonData(&gEnemyParty[currMonId], MON_DATA_SPECIES, NULL);
+        currMonId = currMonId;
+        isEnemyMon = TRUE;
+    }
+
+    if(species != SPECIES_NONE){
+        VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
+        BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
+        FreeAllWindowBuffers();
+        DestroyTask(taskId);
+        tempsavedCallback = sMenuDataPtr->savedCallback;
+        Menu_FreeResources();
+        if(!isEnemyMon)
+            ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, gPlayerParty, currMonId, partyCount, CB2_SetUpReshowBattleMenuAfterSummaryScreen);
+        else
+            ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, gEnemyParty,  currMonId, partyCount, CB2_SetUpReshowBattleMenuAfterSummaryScreen);
+    }
+    else{
+        //There is no pokemon in that slot
+        PlaySE(SE_BOO);
+        FlagClear(FLAG_BATTLE_MENU_COMING_FROM_SUMMARY_SCREEN);
+        VarSet(VAR_BATTLE_MENU_MON_ID_X, 0);
+        VarSet(VAR_BATTLE_MENU_MON_ID_Y, 0);
+    }
+}
+
 void ReshowBattleMenuAfterSummaryScreen(void)
 {
     UI_Battle_Menu_Init(tempsavedCallback);
@@ -4896,9 +4949,7 @@ static void Task_MenuMain(u8 taskId)
                     PrintStatusTab();
                 break;
                 default:
-                    PlaySE(SE_PC_OFF);
-                    BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
-                    gTasks[taskId].func = Task_MenuTurnOff;
+                    StartSummaryScreenForSpecificMon(taskId);
                 break;
             }
         }
