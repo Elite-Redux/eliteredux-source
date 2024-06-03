@@ -129,7 +129,7 @@ const struct BgTemplate gBattleBgTemplates[] =
         .mapBaseIndex = 24,
         .screenSize = 2,
         .paletteMode = 0,
-        .priority = 2,
+        .priority = 1,
         .baseTile = 0
     },
     {
@@ -138,7 +138,7 @@ const struct BgTemplate gBattleBgTemplates[] =
         .mapBaseIndex = 28,
         .screenSize = 2,
         .paletteMode = 0,
-        .priority = 1,
+        .priority = 0,
         .baseTile = 0
     },
     {
@@ -865,9 +865,14 @@ const u32 gBattleTextboxPalette_2[] = INCBIN_U32("graphics/ui_menus/battle_inter
 void LoadBattleTextboxAndBackground(void)
 {
     //Loads Tiles and Tilemap for the Battle Textbox
+    bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
 
     LZDecompressVram(gBattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
-    CopyToBgTilemapBuffer(BG_TEXTBOX, gBattleTextboxTilemap, 0, 0);
+    if(!isTrainerBattle)
+        CopyToBgTilemapBuffer(BG_TEXTBOX, gBattleTextboxTilemap, 0, 0);
+    else
+        CopyToBgTilemapBuffer(BG_TEXTBOX, gBattleTextboxTrainerTilemap, 0, 0);
+
     CopyBgTilemapBufferToVram(BG_TEXTBOX);
     ShowBg(1);
 

@@ -286,4 +286,6 @@ void SetControllerToLinkOpponent(void);
 // link partner
 void SetControllerToLinkPartner(void);
 
+void ReshowNewBattleMenuAfterMenu(void);
+
 #endif // GUARD_BATTLE_CONTROLLERS_H
