@@ -1266,3 +1266,15 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/PewterCity_House2/scripts.inc"
 
 	.include "data/maps/PewterCity_Gym/scripts.inc"
+
+	.include "data/maps/ViridianCity_Gym/scripts.inc"
+
+	.include "data/maps/ViridianCity_House/scripts.inc"
+
+	.include "data/maps/ViridianCity_School/scripts.inc"
+
+	.include "data/maps/DiglettsCave_NorthEntrance/scripts.inc"
+
+	.include "data/maps/DiglettsCave_B1F/scripts.inc"
+
+	.include "data/maps/DiglettsCave_SouthEntrance/scripts.inc"

@@ -5440,6 +5440,66 @@
       "secondary_tileset": "gTileset_PewterGym",
       "border_filepath": "data/layouts/PewterCity_Gym/border.bin",
       "blockdata_filepath": "data/layouts/PewterCity_Gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_VIRIDIAN_CITY_GYM",
+      "name": "ViridianCity_Gym_Layout",
+      "width": 20,
+      "height": 24,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_ViridianGym",
+      "border_filepath": "data/layouts/ViridianCity_Gym/border.bin",
+      "blockdata_filepath": "data/layouts/ViridianCity_Gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_VIRIDIAN_CITY_HOUSE",
+      "name": "ViridianCity_House_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/ViridianCity_House/border.bin",
+      "blockdata_filepath": "data/layouts/ViridianCity_House/map.bin"
+    },
+    {
+      "id": "LAYOUT_VIRIDIAN_CITY_SCHOOL",
+      "name": "ViridianCity_School_Layout",
+      "width": 10,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_School",
+      "border_filepath": "data/layouts/ViridianCity_School/border.bin",
+      "blockdata_filepath": "data/layouts/ViridianCity_School/map.bin"
+    },
+    {
+      "id": "LAYOUT_DIGLETTS_CAVE_NORTH_ENTRANCE",
+      "name": "DiglettsCave_NorthEntrance_Layout",
+      "width": 10,
+      "height": 8,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_DiglettsCave",
+      "border_filepath": "data/layouts/DiglettsCave_NorthEntrance/border.bin",
+      "blockdata_filepath": "data/layouts/DiglettsCave_NorthEntrance/map.bin"
+    },
+    {
+      "id": "LAYOUT_DIGLETTS_CAVE_B1F",
+      "name": "DiglettsCave_B1F_Layout",
+      "width": 85,
+      "height": 80,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_DiglettsCave",
+      "border_filepath": "data/layouts/DiglettsCave_B1F/border.bin",
+      "blockdata_filepath": "data/layouts/DiglettsCave_B1F/map.bin"
+    },
+    {
+      "id": "LAYOUT_DIGLETTS_CAVE_SOUTH_ENTRANCE",
+      "name": "DiglettsCave_SouthEntrance_Layout",
+      "width": 10,
+      "height": 8,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_DiglettsCave",
+      "border_filepath": "data/layouts/DiglettsCave_SouthEntrance/border.bin",
+      "blockdata_filepath": "data/layouts/DiglettsCave_SouthEntrance/map.bin"
     }
   ]
 }

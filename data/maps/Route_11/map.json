@@ -41,6 +41,13 @@
       "elevation": 0,
       "dest_map": "MAP_ROUTE_11_EAST_ENTRANCE_1F",
       "dest_warp_id": 2
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_DIGLETTS_CAVE_SOUTH_ENTRANCE",
+      "dest_warp_id": 1
     }
   ],
   "coord_events": [

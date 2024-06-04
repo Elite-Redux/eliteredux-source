@@ -180,7 +180,13 @@
     "PewterCity_Museum_1F",
     "PewterCity_Museum_2F",
     "PewterCity_House2",
-    "PewterCity_Gym"
+    "PewterCity_Gym",
+    "ViridianCity_Gym",
+    "ViridianCity_House",
+    "ViridianCity_School",
+    "DiglettsCave_NorthEntrance",
+    "DiglettsCave_B1F",
+    "DiglettsCave_SouthEntrance"
   ],
   "gMapGroup_IndoorOldale": [
     "OldaleTown_House1",

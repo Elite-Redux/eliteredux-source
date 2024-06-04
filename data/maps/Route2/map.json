@@ -90,6 +90,13 @@
       "elevation": 0,
       "dest_map": "MAP_ROUTE2_EAST_BUILDING",
       "dest_warp_id": 1
+    },
+    {
+      "x": 17,
+      "y": 11,
+      "elevation": 0,
+      "dest_map": "MAP_DIGLETTS_CAVE_NORTH_ENTRANCE",
+      "dest_warp_id": 1
     }
   ],
   "coord_events": [

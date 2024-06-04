@@ -1105,3 +1105,36 @@ gTileset_PewterGym::
 	.4byte gMetatiles_PewterGym
 	.4byte gMetatileAttributes_PewterGym
 	.4byte NULL
+
+	.align 2
+gTileset_ViridianGym::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_ViridianGym
+	.4byte gTilesetPalettes_ViridianGym
+	.4byte gMetatiles_ViridianGym
+	.4byte gMetatileAttributes_ViridianGym
+	.4byte NULL
+
+	.align 2
+gTileset_School::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_School
+	.4byte gTilesetPalettes_School
+	.4byte gMetatiles_School
+	.4byte gMetatileAttributes_School
+	.4byte NULL
+
+	.align 2
+gTileset_DiglettsCave::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_DiglettsCave
+	.4byte gTilesetPalettes_DiglettsCave
+	.4byte gMetatiles_DiglettsCave
+	.4byte gMetatileAttributes_DiglettsCave
+	.4byte NULL

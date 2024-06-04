@@ -149,6 +149,12 @@
 #define MAP_PEWTER_CITY_MUSEUM_2F                 (79 | (1 << 8))
 #define MAP_PEWTER_CITY_HOUSE2                    (80 | (1 << 8))
 #define MAP_PEWTER_CITY_GYM                       (81 | (1 << 8))
+#define MAP_VIRIDIAN_CITY_GYM                     (82 | (1 << 8))
+#define MAP_VIRIDIAN_CITY_HOUSE                   (83 | (1 << 8))
+#define MAP_VIRIDIAN_CITY_SCHOOL                  (84 | (1 << 8))
+#define MAP_DIGLETTS_CAVE_NORTH_ENTRANCE          (85 | (1 << 8))
+#define MAP_DIGLETTS_CAVE_B1F                     (86 | (1 << 8))
+#define MAP_DIGLETTS_CAVE_SOUTH_ENTRANCE          (87 | (1 << 8))
 
 // gMapGroup_IndoorOldale
 #define MAP_OLDALE_TOWN_HOUSE1            (0 | (2 << 8))

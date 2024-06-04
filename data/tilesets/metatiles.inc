@@ -738,3 +738,24 @@ gMetatiles_PewterGym::
 	.align 1
 gMetatileAttributes_PewterGym::
 	.incbin "data/tilesets/secondary/pewtergym/metatile_attributes.bin"
+	.align 1
+gMetatiles_ViridianGym::
+	.incbin "data/tilesets/secondary/viridiangym/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_ViridianGym::
+	.incbin "data/tilesets/secondary/viridiangym/metatile_attributes.bin"
+	.align 1
+gMetatiles_School::
+	.incbin "data/tilesets/secondary/school/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_School::
+	.incbin "data/tilesets/secondary/school/metatile_attributes.bin"
+	.align 1
+gMetatiles_DiglettsCave::
+	.incbin "data/tilesets/secondary/diglettscave/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_DiglettsCave::
+	.incbin "data/tilesets/secondary/diglettscave/metatile_attributes.bin"

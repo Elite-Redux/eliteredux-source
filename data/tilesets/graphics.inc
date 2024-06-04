@@ -2229,3 +2229,63 @@ gTilesetPalettes_PewterGym::
 	.align 2
 gTilesetTiles_PewterGym::
 	.incbin "data/tilesets/secondary/pewtergym/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_ViridianGym::
+	.incbin "data/tilesets/secondary/viridiangym/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/viridiangym/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_ViridianGym::
+	.incbin "data/tilesets/secondary/viridiangym/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_School::
+	.incbin "data/tilesets/secondary/school/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/school/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_School::
+	.incbin "data/tilesets/secondary/school/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_DiglettsCave::
+	.incbin "data/tilesets/secondary/diglettscave/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/diglettscave/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_DiglettsCave::
+	.incbin "data/tilesets/secondary/diglettscave/tiles.4bpp.lz"
