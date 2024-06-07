@@ -437,6 +437,7 @@ enum{
     MOVE_INFO_DESCRIPTION,
     MOVE_INFO_POWER_ACC_PRIO_TYPE,
     MOVE_INFO_POWER_ACC_PRIO_TYPE_2,
+    MOVE_SPEED_CALCULATION,
     MOVE_INFO_DAMAGE_CALCULATION,
     NUM_MOVE_INFO_TYPES,
 };
@@ -497,8 +498,12 @@ const u8 gText_MoveInfo_Damage[] = _("Damage");
 
 const u8 gText_Target_Nothing[]   = _("---");
 const u8 sText_Title_Controllers_Move[]      = _("{DPAD_UPDOWN}Switch {DPAD_LEFTRIGHT}Page {A_BUTTON}Mode");*/
-const u8 sText_Effect_DamageDone[]               = _("Calculated Damage\nRange: {STR_VAR_1}% - {STR_VAR_2}%\nof {STR_VAR_3}\nCurrent Health.");
-const u8 sText_Effect_DamageDone_Guaranteed_KO[] = _("Guaranteeed to KO\n{STR_VAR_3}\nin the next hit.");
+const u8 sText_Effect_DamageDone[]                  = _("Calculated Damage\nRange: {STR_VAR_1}% - {STR_VAR_2}%\nof {STR_VAR_3}\nCurrent Health.");
+const u8 sText_Effect_DamageDone_Guaranteed_KO[]    = _("Guaranteeed to KO\n{STR_VAR_3}\nin the next hit.");
+const u8 sText_Effect_Speed_Calculation_Singles[]   = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}");
+const u8 sText_Effect_Speed_Calculation_Priority2[] = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}{PLUS}");
+const u8 sText_Effect_Speed_Calculation[]           = _("{STR_VAR_1} Spd: {STR_VAR_2}");
+const u8 sText_Effect_Speed_CalculationPriority[]   = _("{STR_VAR_1} Spd: {STR_VAR_2}{PLUS}");
 
 enum{
     MOVE_EFFECTIVENESS_NONE,
@@ -514,10 +519,22 @@ enum{
 #define MAX_PERCENT 100
 #define MAX_PERCENT_2 10000
 
+static bool8 HasPriorityMove(u8 battler)
+{
+    u8 i;
+    for(i = 0; i < MAX_MON_MOVES; i++){
+        if(gBattleMons[battler].moves[i] == MOVE_NONE)
+            return FALSE;
+        else if(gBattleMoves[gBattleMons[battler].moves[i]].priority > 0)
+            return TRUE;
+    }
+    return FALSE;
+}
+
 void PrintBattleWindow_MoveSelection(void)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
-    u8 i, x, y, x2, y2, speed, moveType, effectiveness;
+    u8 i, j, x, y, x2, y2, speed, moveType, effectiveness;
     u16 move, movePower;
     u8 windowId = B_WIN_ACTION_PROMPT;
     u8 font = FONT_SMALL_NARROW;
@@ -544,6 +561,8 @@ void PrintBattleWindow_MoveSelection(void)
     //Move Selection
     for(i = 0; i < MAX_MON_MOVES; i++){
         move = moveInfo->moves[i];
+        if(move == MOVE_NONE)
+            break;
         StringCopy(gStringVar1, gMoveNamesLong[move]);
         AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
         //PP
@@ -694,6 +713,55 @@ void PrintBattleWindow_MoveSelection(void)
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
             y++;*/
         break;
+        case MOVE_SPEED_CALCULATION:{
+            u16 battlertoCheck, monSpeed;
+            u8 sBattlerByTurnOrder[gBattlersCount];
+            u8 numMons = 2;
+
+            for (i = 0; i < gBattlersCount; i++)
+                sBattlerByTurnOrder[i] = i;
+
+            for (i = 0; i < gBattlersCount - 1; i++)
+            {
+                for (j = i + 1; j < gBattlersCount; j++)
+                {
+                    if (GetWhoStrikesFirst(sBattlerByTurnOrder[i], sBattlerByTurnOrder[j], TRUE) != 0)
+                    {
+                        u8 temp = sBattlerByTurnOrder[i];
+                        sBattlerByTurnOrder[i] = sBattlerByTurnOrder[j];
+                        sBattlerByTurnOrder[j] = temp;
+                    }
+                }
+            }
+
+            //First Mon
+            battlertoCheck = sBattlerByTurnOrder[0];
+            StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battlertoCheck].species]);
+            monSpeed = gBattleMons[battlertoCheck].speed;
+            ConvertIntToDecimalStringN(gStringVar2, monSpeed, STR_CONV_MODE_LEFT_ALIGN, 3);
+            if(HasPriorityMove(battlertoCheck))
+                StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_CalculationPriority);
+            else
+                StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_Calculation);
+
+            for (i = 1; i < gBattlersCount; i++)
+            {
+                StringCopy(gStringVar3, gStringVar4);
+                battlertoCheck = sBattlerByTurnOrder[i];
+                if(IsBattlerAlive(battlertoCheck)){
+                    StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battlertoCheck].species]);
+                    monSpeed = gBattleMons[battlertoCheck].speed;
+                    ConvertIntToDecimalStringN(gStringVar2, monSpeed, STR_CONV_MODE_LEFT_ALIGN, 3);
+                    if(HasPriorityMove(battlertoCheck))
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_Calculation_Priority2);
+                    else
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_Calculation_Singles);
+                }
+            }
+
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        }
+        break;
         case MOVE_INFO_DAMAGE_CALCULATION:
             if(!isStatusMove && move != MOVE_NONE){
                 s16 percentage;
@@ -703,24 +771,17 @@ void PrintBattleWindow_MoveSelection(void)
                 u8 moveIndex = gMoveSelectionCursor[gActiveBattler];
                 x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
                 StringCopy(gStringVar3, gSpeciesNames[gBattleMons[target].species]);
+                /*MgbaOpen();
+                MgbaPrintf(MGBA_LOG_WARN, "Min Damage %d", percentage);
+                MgbaClose();*/
                 if(targetCurrentHp > minDamage){
                     //Min Damage Percentage
-                    MgbaPrintf(MGBA_LOG_WARN, "targetCurrentHp %d", targetCurrentHp);
-                    MgbaPrintf(MGBA_LOG_WARN, "Min Damage 1 %d", minDamage);
-
                     percentage = (minDamage * MAX_PERCENT_2) / targetCurrentHp; 
-                    
-                    MgbaPrintf(MGBA_LOG_WARN, "Min Damage 2 %d", percentage);
                     percentage = (percentage / MAX_PERCENT);
-
-                    
-                    MgbaPrintf(MGBA_LOG_WARN, "Min Damage 3 %d", percentage);
                     if(percentage >= MAX_PERCENT)
                         percentage = MAX_PERCENT;
                     ConvertIntToDecimalStringN(gStringVar1, percentage, STR_CONV_MODE_LEFT_ALIGN, 3);
 
-                    MgbaPrintf(MGBA_LOG_WARN, "Min Damage %d", percentage);
-                    MgbaClose();
 
                     //Max Damage Percentage
                     percentage = (maxDamage * MAX_PERCENT_2)/ targetCurrentHp; 
@@ -1308,6 +1369,15 @@ static void TryShowAsTarget(u32 battlerId)
         gSprites[gBattlerSpriteIds[battlerId]].callback = SpriteCb_ShowAsMoveTarget;
     }
 }
+static u8 getNumMoves(u8 battler){
+    u8 i, numMoves = 0;
+    for(i = 0; i < MAX_MON_MOVES; i++){
+        if(gBattleMons[battler].moves[i] != MOVE_NONE)
+            numMoves++;
+    }
+    return numMoves;
+
+}
 
 static void HandleInputChooseMove(void)
 {
@@ -1432,13 +1502,13 @@ static void HandleInputChooseMove(void)
         if(gMoveSelectionCursor[gActiveBattler] != 0)
             gMoveSelectionCursor[gActiveBattler]--;
         else
-            gMoveSelectionCursor[gActiveBattler] = MAX_MON_MOVES - 1;
+            gMoveSelectionCursor[gActiveBattler] = getNumMoves(gActiveBattler) - 1;
         PlaySE(SE_SELECT);
         PrintBattleWindow_MoveSelection();
     }
     else if (JOY_NEW(DPAD_DOWN))
     {
-        if(gMoveSelectionCursor[gActiveBattler] < MAX_MON_MOVES - 1)
+        if(gMoveSelectionCursor[gActiveBattler] < getNumMoves(gActiveBattler) - 1)
             gMoveSelectionCursor[gActiveBattler]++;
         else
             gMoveSelectionCursor[gActiveBattler] = 0;
