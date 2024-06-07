@@ -3184,56 +3184,15 @@ void PrintDamageCalculationExported(u8 battler, u8 target, u8 moveIdx){
     
     typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(move, moveType, battler, target, FALSE);
 
-    /*if (sMenuDataPtr->damageCalculation[battler][target][moveIdx].noDamage){
-        StringCopy(gStringVar4, gText_Target_Nothing);
-        return;
-    }*/
-
     CalculateDamage(battler, target, moveIdx);
     damageCalculation = &sMenuDataPtr->damageCalculation[battler][target][moveIdx];
 
-    for(i = 0; i < MIN_DAMAGE_FACTOR; i++){
-        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i);
-        tempchance = (targetCurrentHp / tempdamage);
-
-        if(tempchance == hits2KO){
-            percentage = (MIN_DAMAGE_FACTOR - i);
-            break;
-        }
-    }
-    
-    //Chances To KO
-    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR);
-    hits2KO = (targetCurrentHp / maxDamage);
-    
-    minHits2KOChance = (percentage * (MAX_PERCENT_2 / MIN_DAMAGE_FACTOR));
-    chance2KO = minHits2KOChance / MAX_PERCENT;
-
-    //252+ SpA Abomasnow Blizzard vs. 168 HP / 0 SpD Abomasnow: 178-211 (49 - 58.1%) -- 97.7% chance to 2HKO
-    //97.7% chance to 2HKO
-    //gText_SmogonDamageCalculator_FastPart[] = _("{STR_VAR_1}% Chances to {STR_VAR_2}HKO");
-    //gText_SmogonDamageCalculator_FastPart_Guaranteed
-
     //Damage Calculation
-    minDamage = damageCalculation->minDamage;
-    maxDamage = damageCalculation->maxDamage;
-    
-    ConvertIntToDecimalStringN(gStringVar1, chance2KO,     STR_CONV_MODE_LEFT_ALIGN, 3);
-    ConvertIntToDecimalStringN(gStringVar2, (hits2KO + 1), STR_CONV_MODE_LEFT_ALIGN, 3);
-    if(damageCalculation->hits2KO > 0){
-        //More than 1 hit
-        if(chance2KO >= 100)
-            StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FastPart_Guaranteed);
-        else
-            StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FastPart);
-    }
-    else{
-        //OHKO
-        if(hits2KO >= 100)
-            StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FastPart_Guaranteed);
-        else
-            StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FastPart);
-    }
+    minDamage = damageCalculation->minDamagePercentage;
+    maxDamage = damageCalculation->maxDamagePercentage;
+
+    ConvertIntToDecimalStringN(gStringVar1, minDamage, STR_CONV_MODE_LEFT_ALIGN, 3);
+    ConvertIntToDecimalStringN(gStringVar2, maxDamage, STR_CONV_MODE_LEFT_ALIGN, 3);
 }
 
 #define NUM_PARTY_ICONS_SHOWN  6

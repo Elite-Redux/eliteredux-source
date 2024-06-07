@@ -497,6 +497,8 @@ const u8 gText_MoveInfo_Damage[] = _("Damage");
 
 const u8 gText_Target_Nothing[]   = _("---");
 const u8 sText_Title_Controllers_Move[]      = _("{DPAD_UPDOWN}Switch {DPAD_LEFTRIGHT}Page {A_BUTTON}Mode");*/
+const u8 sText_Effect_DamageDone[]               = _("Calculated Damage\nRange: {STR_VAR_1}% - {STR_VAR_2}%\nof {STR_VAR_3}\nCurrent Health.");
+const u8 sText_Effect_DamageDone_Guaranteed_KO[] = _("Guaranteeed to KO\n{STR_VAR_3}\nin the next hit.");
 
 enum{
     MOVE_EFFECTIVENESS_NONE,
@@ -507,6 +509,10 @@ enum{
 };
 
 #define NEGATIVE_MOVE_X 2
+#define MAX_DAMAGE_FACTOR 0
+#define MIN_DAMAGE_FACTOR 16
+#define MAX_PERCENT 100
+#define MAX_PERCENT_2 10000
 
 void PrintBattleWindow_MoveSelection(void)
 {
@@ -559,19 +565,20 @@ void PrintBattleWindow_MoveSelection(void)
     x2 = 0;
 
     move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
+    movePower = gBattleMoves[move].power;
+    isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
+    moveType  = gBattleMoves[move].type;
+    SetTypeBeforeUsingMove(move, gActiveBattler);
+    GET_MOVE_TYPE(move, moveType);
+    x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION; //Default
+
     switch(moveInfoType){
         case MOVE_INFO_DESCRIPTION:
-            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION;
             StringCopy(gStringVar4, gMoveFourLineDescriptionPointers[move - 1]);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
         break;
         case MOVE_INFO_POWER_ACC_PRIO_TYPE:
             x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
-            isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
-            moveType  = gBattleMoves[move].type;
-            movePower = gBattleMoves[move].power;
-            SetTypeBeforeUsingMove(move, gActiveBattler);
-            GET_MOVE_TYPE(move, moveType);
             //Move Power
             if(!isStatusMove)
                 ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -618,10 +625,6 @@ void PrintBattleWindow_MoveSelection(void)
         break;
         case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
             x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
-            isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
-            moveType  = gBattleMoves[move].type;
-            SetTypeBeforeUsingMove(move, gActiveBattler);
-            GET_MOVE_TYPE(move, moveType);
             movePower = CalcMoveBasePowerAfterModifiers(move, 0, gActiveBattler, target, moveType, FALSE);
             //Move Power
             if(!isStatusMove)
@@ -692,14 +695,51 @@ void PrintBattleWindow_MoveSelection(void)
             y++;*/
         break;
         case MOVE_INFO_DAMAGE_CALCULATION:
-            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION - 8;
-            effectiveness = GetMoveTypeEffectiveness(move, target, gActiveBattler);
-            if(effectiveness == MOVE_EFFECTIVENESS_NONE)
-                StringCopy(gStringVar4, sText_Target_Nothing);
-            else
-                StringCopy(gStringVar4, sText_Target_Nothing);
-                //PrintDamageCalculationExported(gActiveBattler, target, gMoveSelectionCursor[gActiveBattler]);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            if(!isStatusMove && move != MOVE_NONE){
+                s16 percentage;
+                u16 targetCurrentHp = gBattleMons[target].hp;
+                u16 minDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR);
+                u16 maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR);
+                u8 moveIndex = gMoveSelectionCursor[gActiveBattler];
+                x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
+                StringCopy(gStringVar3, gSpeciesNames[gBattleMons[target].species]);
+                if(targetCurrentHp > minDamage){
+                    //Min Damage Percentage
+                    MgbaPrintf(MGBA_LOG_WARN, "targetCurrentHp %d", targetCurrentHp);
+                    MgbaPrintf(MGBA_LOG_WARN, "Min Damage 1 %d", minDamage);
+
+                    percentage = (minDamage * MAX_PERCENT_2) / targetCurrentHp; 
+                    
+                    MgbaPrintf(MGBA_LOG_WARN, "Min Damage 2 %d", percentage);
+                    percentage = (percentage / MAX_PERCENT);
+
+                    
+                    MgbaPrintf(MGBA_LOG_WARN, "Min Damage 3 %d", percentage);
+                    if(percentage >= MAX_PERCENT)
+                        percentage = MAX_PERCENT;
+                    ConvertIntToDecimalStringN(gStringVar1, percentage, STR_CONV_MODE_LEFT_ALIGN, 3);
+
+                    MgbaPrintf(MGBA_LOG_WARN, "Min Damage %d", percentage);
+                    MgbaClose();
+
+                    //Max Damage Percentage
+                    percentage = (maxDamage * MAX_PERCENT_2)/ targetCurrentHp; 
+                    percentage = (percentage / MAX_PERCENT);
+                    if(percentage > MAX_PERCENT)
+                        percentage = MAX_PERCENT;
+                    ConvertIntToDecimalStringN(gStringVar2, percentage, STR_CONV_MODE_LEFT_ALIGN, 3);
+
+                    StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone);
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+                }
+                else{
+                    StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone_Guaranteed_KO);
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+                }
+            }
+            else{
+                AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_Target_Nothing);
+            }
         break;
     }
 
