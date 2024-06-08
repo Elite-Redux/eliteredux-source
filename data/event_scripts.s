@@ -1278,3 +1278,29 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/DiglettsCave_B1F/scripts.inc"
 
 	.include "data/maps/DiglettsCave_SouthEntrance/scripts.inc"
+
+	.include "data/maps/SSAnne_Exterior/scripts.inc"
+
+	.include "data/maps/VermilionCity_House1/scripts.inc"
+
+	.include "data/maps/VermilionCity_House2/scripts.inc"
+
+	.include "data/maps/NewMap4/scripts.inc"
+
+	.include "data/maps/VermilionCity_PokemonFanClub/scripts.inc"
+
+	.include "data/maps/VermilionCity_Gym/scripts.inc"
+
+	.include "data/maps/SaffronCity_CopycatsHouse_1F/scripts.inc"
+
+	.include "data/maps/SaffronCity_CopycatsHouse_2F/scripts.inc"
+
+	.include "data/maps/SaffronCity_House/scripts.inc"
+
+	.include "data/maps/SaffronCity_PokemonTrainerFanClub/scripts.inc"
+
+	.include "data/maps/SaffronCity_MrPsychicsHouse/scripts.inc"
+
+	.include "data/maps/SaffronCity_Dojo/scripts.inc"
+
+	.include "data/maps/SaffronCity_Gym/scripts.inc"

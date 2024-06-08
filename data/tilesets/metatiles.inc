@@ -759,3 +759,24 @@ gMetatiles_DiglettsCave::
 	.align 1
 gMetatileAttributes_DiglettsCave::
 	.incbin "data/tilesets/secondary/diglettscave/metatile_attributes.bin"
+	.align 1
+gMetatiles_FanClubDaycare::
+	.incbin "data/tilesets/secondary/fanclubdaycare/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_FanClubDaycare::
+	.incbin "data/tilesets/secondary/fanclubdaycare/metatile_attributes.bin"
+	.align 1
+gMetatiles_VermilionGym::
+	.incbin "data/tilesets/secondary/vermiliongym/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_VermilionGym::
+	.incbin "data/tilesets/secondary/vermiliongym/metatile_attributes.bin"
+	.align 1
+gMetatiles_SaffronGym::
+	.incbin "data/tilesets/secondary/saffrongym/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_SaffronGym::
+	.incbin "data/tilesets/secondary/saffrongym/metatile_attributes.bin"

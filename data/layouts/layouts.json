@@ -5500,6 +5500,136 @@
       "secondary_tileset": "gTileset_DiglettsCave",
       "border_filepath": "data/layouts/DiglettsCave_SouthEntrance/border.bin",
       "blockdata_filepath": "data/layouts/DiglettsCave_SouthEntrance/map.bin"
+    },
+    {
+      "id": "LAYOUT_SSANNE_EXTERIOR",
+      "name": "SSAnne_Exterior_Layout",
+      "width": 70,
+      "height": 32,
+      "primary_tileset": "gTileset_General_FRLG",
+      "secondary_tileset": "gTileset_VermilionCity",
+      "border_filepath": "data/layouts/SSAnne_Exterior/border.bin",
+      "blockdata_filepath": "data/layouts/SSAnne_Exterior/map.bin"
+    },
+    {
+      "id": "LAYOUT_VERMILION_CITY_HOUSE1",
+      "name": "VermilionCity_House1_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/VermilionCity_House1/border.bin",
+      "blockdata_filepath": "data/layouts/VermilionCity_House1/map.bin"
+    },
+    {
+      "id": "LAYOUT_VERMILION_CITY_HOUSE2",
+      "name": "VermilionCity_House2_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/VermilionCity_House2/border.bin",
+      "blockdata_filepath": "data/layouts/VermilionCity_House2/map.bin"
+    },
+    {
+      "id": "LAYOUT_NEW_MAP4",
+      "name": "NewMap4_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/NewMap4/border.bin",
+      "blockdata_filepath": "data/layouts/NewMap4/map.bin"
+    },
+    {
+      "id": "LAYOUT_VERMILION_CITY_POKEMON_FAN_CLUB",
+      "name": "VermilionCity_PokemonFanClub_Layout",
+      "width": 12,
+      "height": 12,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_FanClubDaycare",
+      "border_filepath": "data/layouts/VermilionCity_PokemonFanClub/border.bin",
+      "blockdata_filepath": "data/layouts/VermilionCity_PokemonFanClub/map.bin"
+    },
+    {
+      "id": "LAYOUT_VERMILION_CITY_GYM",
+      "name": "VermilionCity_Gym_Layout",
+      "width": 11,
+      "height": 21,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_VermilionGym",
+      "border_filepath": "data/layouts/VermilionCity_Gym/border.bin",
+      "blockdata_filepath": "data/layouts/VermilionCity_Gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_SAFFRON_CITY_COPYCATS_HOUSE_1F",
+      "name": "SaffronCity_CopycatsHouse_1F_Layout",
+      "width": 13,
+      "height": 10,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/SaffronCity_CopycatsHouse_1F/border.bin",
+      "blockdata_filepath": "data/layouts/SaffronCity_CopycatsHouse_1F/map.bin"
+    },
+    {
+      "id": "LAYOUT_SAFFRON_CITY_COPYCATS_HOUSE_2F",
+      "name": "SaffronCity_CopycatsHouse_2F_Layout",
+      "width": 12,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/SaffronCity_CopycatsHouse_2F/border.bin",
+      "blockdata_filepath": "data/layouts/SaffronCity_CopycatsHouse_2F/map.bin"
+    },
+    {
+      "id": "LAYOUT_SAFFRON_CITY_HOUSE",
+      "name": "SaffronCity_House_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/SaffronCity_House/border.bin",
+      "blockdata_filepath": "data/layouts/SaffronCity_House/map.bin"
+    },
+    {
+      "id": "LAYOUT_SAFFRON_CITY_POKEMON_TRAINER_FAN_CLUB",
+      "name": "SaffronCity_PokemonTrainerFanClub_Layout",
+      "width": 11,
+      "height": 17,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_FanClubDaycare",
+      "border_filepath": "data/layouts/SaffronCity_PokemonTrainerFanClub/border.bin",
+      "blockdata_filepath": "data/layouts/SaffronCity_PokemonTrainerFanClub/map.bin"
+    },
+    {
+      "id": "LAYOUT_SAFFRON_CITY_MR_PSYCHICS_HOUSE",
+      "name": "SaffronCity_MrPsychicsHouse_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/SaffronCity_MrPsychicsHouse/border.bin",
+      "blockdata_filepath": "data/layouts/SaffronCity_MrPsychicsHouse/map.bin"
+    },
+    {
+      "id": "LAYOUT_SAFFRON_CITY_DOJO",
+      "name": "SaffronCity_Dojo_Layout",
+      "width": 13,
+      "height": 16,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_PewterGym",
+      "border_filepath": "data/layouts/SaffronCity_Dojo/border.bin",
+      "blockdata_filepath": "data/layouts/SaffronCity_Dojo/map.bin"
+    },
+    {
+      "id": "LAYOUT_SAFFRON_CITY_GYM",
+      "name": "SaffronCity_Gym_Layout",
+      "width": 29,
+      "height": 25,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_SaffronGym",
+      "border_filepath": "data/layouts/SaffronCity_Gym/border.bin",
+      "blockdata_filepath": "data/layouts/SaffronCity_Gym/map.bin"
     }
   ]
 }

@@ -64,6 +64,48 @@
       "elevation": 0,
       "dest_map": "MAP_ROUTE_7_EAST_ENTRANCE",
       "dest_warp_id": 1
+    },
+    {
+      "x": 22,
+      "y": 14,
+      "elevation": 0,
+      "dest_map": "MAP_SAFFRON_CITY_COPYCATS_HOUSE_1F",
+      "dest_warp_id": 0
+    },
+    {
+      "x": 27,
+      "y": 21,
+      "elevation": 0,
+      "dest_map": "MAP_SAFFRON_CITY_HOUSE",
+      "dest_warp_id": 0
+    },
+    {
+      "x": 47,
+      "y": 21,
+      "elevation": 0,
+      "dest_map": "MAP_SAFFRON_CITY_POKEMON_TRAINER_FAN_CLUB",
+      "dest_warp_id": 0
+    },
+    {
+      "x": 43,
+      "y": 38,
+      "elevation": 0,
+      "dest_map": "MAP_SAFFRON_CITY_MR_PSYCHICS_HOUSE",
+      "dest_warp_id": 0
+    },
+    {
+      "x": 40,
+      "y": 12,
+      "elevation": 0,
+      "dest_map": "MAP_SAFFRON_CITY",
+      "dest_warp_id": 0
+    },
+    {
+      "x": 46,
+      "y": 12,
+      "elevation": 0,
+      "dest_map": "MAP_SAFFRON_CITY_GYM",
+      "dest_warp_id": 0
     }
   ],
   "coord_events": [

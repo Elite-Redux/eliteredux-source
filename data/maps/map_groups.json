@@ -186,7 +186,20 @@
     "ViridianCity_School",
     "DiglettsCave_NorthEntrance",
     "DiglettsCave_B1F",
-    "DiglettsCave_SouthEntrance"
+    "DiglettsCave_SouthEntrance",
+    "SSAnne_Exterior",
+    "VermilionCity_House1",
+    "VermilionCity_House2",
+    "NewMap4",
+    "VermilionCity_PokemonFanClub",
+    "VermilionCity_Gym",
+    "SaffronCity_CopycatsHouse_1F",
+    "SaffronCity_CopycatsHouse_2F",
+    "SaffronCity_House",
+    "SaffronCity_PokemonTrainerFanClub",
+    "SaffronCity_MrPsychicsHouse",
+    "SaffronCity_Dojo",
+    "SaffronCity_Gym"
   ],
   "gMapGroup_IndoorOldale": [
     "OldaleTown_House1",

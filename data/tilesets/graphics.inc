@@ -2289,3 +2289,63 @@ gTilesetPalettes_DiglettsCave::
 	.align 2
 gTilesetTiles_DiglettsCave::
 	.incbin "data/tilesets/secondary/diglettscave/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_FanClubDaycare::
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/fanclubdaycare/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_FanClubDaycare::
+	.incbin "data/tilesets/secondary/fanclubdaycare/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_VermilionGym::
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/vermiliongym/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_VermilionGym::
+	.incbin "data/tilesets/secondary/vermiliongym/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_SaffronGym::
+	.incbin "data/tilesets/secondary/saffrongym/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/saffrongym/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_SaffronGym::
+	.incbin "data/tilesets/secondary/saffrongym/tiles.4bpp.lz"

@@ -1138,3 +1138,36 @@ gTileset_DiglettsCave::
 	.4byte gMetatiles_DiglettsCave
 	.4byte gMetatileAttributes_DiglettsCave
 	.4byte NULL
+
+	.align 2
+gTileset_FanClubDaycare::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_FanClubDaycare
+	.4byte gTilesetPalettes_FanClubDaycare
+	.4byte gMetatiles_FanClubDaycare
+	.4byte gMetatileAttributes_FanClubDaycare
+	.4byte NULL
+
+	.align 2
+gTileset_VermilionGym::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_VermilionGym
+	.4byte gTilesetPalettes_VermilionGym
+	.4byte gMetatiles_VermilionGym
+	.4byte gMetatileAttributes_VermilionGym
+	.4byte NULL
+
+	.align 2
+gTileset_SaffronGym::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_SaffronGym
+	.4byte gTilesetPalettes_SaffronGym
+	.4byte gMetatiles_SaffronGym
+	.4byte gMetatileAttributes_SaffronGym
+	.4byte NULL
