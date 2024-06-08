@@ -268,6 +268,7 @@ static const u8 sBattleMoveSelector[]   = INCBIN_U8("graphics/ui_menus/battle_in
 static const u8 sPokeball_Sane_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/pokeball_sane.4bpp");
 static const u8 sPokeball_Status_Gfx[]  = INCBIN_U8("graphics/ui_menus/battle_interface/pokeball_status.4bpp");
 static const u8 sPokeball_Fainted_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/pokeball_fainted.4bpp");
+
 #define BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE 56
 #define BATTLE_WINDOW_SQUARE_SIZE (4 * 8)
 #define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT 0
@@ -531,6 +532,15 @@ static bool8 HasPriorityMove(u8 battler)
     return FALSE;
 }
 
+static const u8 sTitle_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/text_dmg_calc.4bpp");
+static const u8 sTitle_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/text_move_desc.4bpp");
+static const u8 sTitle_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/text_move_info.4bpp");
+static const u8 sTitle_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/text_spd_order.4bpp");
+
+static const u8 sSplit_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/split_physical.4bpp");
+static const u8 sSplit_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/split_special.4bpp");
+static const u8 sSplit_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/split_status.4bpp");
+
 void PrintBattleWindow_MoveSelection(void)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
@@ -576,6 +586,28 @@ void PrintBattleWindow_MoveSelection(void)
 
         y++;
     }
+
+    //Title
+    x  = 17;
+    y  = 0;
+    x2 = 2;
+    y2 = 0;
+    switch(moveInfoType){
+        case MOVE_INFO_DESCRIPTION:
+            BlitBitmapToWindow(windowId, sTitle_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        break;
+        case MOVE_INFO_POWER_ACC_PRIO_TYPE:
+        case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
+            BlitBitmapToWindow(windowId, sTitle_Move_Info, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        break;
+        case MOVE_SPEED_CALCULATION:
+            BlitBitmapToWindow(windowId, sTitle_Speed_Order, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        break;
+        case MOVE_INFO_DAMAGE_CALCULATION:
+            BlitBitmapToWindow(windowId, sTitle_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        break;
+    }
+        
 
     //Move Description
     x  = 2;
@@ -802,6 +834,25 @@ void PrintBattleWindow_MoveSelection(void)
                 AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_Target_Nothing);
             }
         break;
+    }
+
+    if(moveInfoType == MOVE_INFO_POWER_ACC_PRIO_TYPE){
+        //Split
+        x  = 23;
+        y  = 1;
+        x2 = 5;
+        y2 = 0;
+        switch(gBattleMoves[move].split){
+            case SPLIT_PHYSICAL:
+                BlitBitmapToWindow(windowId, sSplit_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
+            break;
+            case SPLIT_SPECIAL:
+                BlitBitmapToWindow(windowId, sSplit_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
+            break;
+            case SPLIT_STATUS:
+                BlitBitmapToWindow(windowId, sSplit_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
+            break;
+        }
     }
 
     PutWindowTilemap(windowId);
@@ -1534,7 +1585,8 @@ static void HandleInputChooseMove(void)
         PrintBattleWindow_MoveSelection();
     }
 
-    /*if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+    /*
+    if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
         gPlayerDpadHoldFrames++;
     else
         gPlayerDpadHoldFrames = 0;
