@@ -2170,6 +2170,11 @@
 	.byte \type
 	.endm
 
+	.macro calculatemovetypemodifiers
+	various BS_ATTACKER, VARIOUS_SET_DYNAMIC_TYPE
+	.byte TYPE_MYSTERY
+	.endm
+
 	.macro gotoactualmove battler:req
 	various \battler, VARIOUS_GOTO_ACTUAL_MOVE
 	.endm

@@ -9295,6 +9295,7 @@ BattleScript_AttackerUsedAnExtraMoveOnSwitchIn::
 	battlemacros MACROS_FORCE_FALSE_SWIPE_EFFECT, 0, NULL
 	battlemacros MACROS_RESET_MULTIHIT_HITS, 0, NULL
 	movevaluescleanup
+	calculatemovetypemodifiers
 	gotoactualmove BS_ATTACKER
 
 BattleScript_PickUpActivate::

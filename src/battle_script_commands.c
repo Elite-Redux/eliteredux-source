@@ -10641,6 +10641,7 @@ static void Cmd_various(void)
         return;
     case VARIOUS_SET_DYNAMIC_TYPE:
         gBattleStruct->dynamicMoveType = gBattlescriptCurrInstr[3];
+        if (gBattleStruct->dynamicMoveType == TYPE_MYSTERY) SetTypeBeforeUsingMove(gCurrentMove, gActiveBattler);
         gBattlescriptCurrInstr += 4;
         return;
     case VARIOUS_GOTO_ACTUAL_MOVE:
