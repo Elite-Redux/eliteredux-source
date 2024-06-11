@@ -4,104 +4,104 @@
 #define ABILITY_NONE 0 // No special ability.
 #define ABILITY_STENCH 1 // 10% chance to cause a foe to flinch.
 #define ABILITY_DRIZZLE 2 // Summons rain in battle. Lasts 8 turns.
-#define ABILITY_SPEED_BOOST 3 // Gradually boosts Speed.
-#define ABILITY_BATTLE_ARMOR 4 // Blocks critical hits. Takes 20% less damage.
-#define ABILITY_STURDY 5 // Negates 1-hit KO attacks.
-#define ABILITY_DAMP 6 // Makes foes Water-type on contact.
-#define ABILITY_LIMBER 7 // Prevents paralysis. Takes 50% less recoil damage.
-#define ABILITY_SAND_VEIL 8 // Ups evasion in a sandstorm.
-#define ABILITY_STATIC 9 // 30% chance to paralyze on contact. Works on offense too.
-#define ABILITY_VOLT_ABSORB 10 // Turns electricity into HP.
-#define ABILITY_WATER_ABSORB 11 // Changes water into HP.
-#define ABILITY_OBLIVIOUS 12 // Prevents attraction.
-#define ABILITY_CLOUD_NINE 13 // Negates weather effects.
+#define ABILITY_SPEED_BOOST 3 // Raises Speed by one stage after every turn.
+#define ABILITY_BATTLE_ARMOR 4 // Blocks critical hits. Takes 0.8x from all attacks.
+#define ABILITY_STURDY 5 // At full HP, user cannot be KO'd in one hit, stays at 1HP instead.
+#define ABILITY_DAMP 6 // Makes foes Water-type on contact. Works on offense.
+#define ABILITY_LIMBER 7 // Prevents paralysis. Takes 0.5x recoil damage.
+#define ABILITY_SAND_VEIL 8 // Evasion is boosted by 1.25x in a sandstorm.
+#define ABILITY_STATIC 9 // 30% chance to paralyze on enemy contact. Works on offense too.
+#define ABILITY_VOLT_ABSORB 10 // Heals 25% of max HP when hit by an Electric move.
+#define ABILITY_WATER_ABSORB 11 // Heals 25% of max HP when hit by a Water move.
+#define ABILITY_OBLIVIOUS 12 // Immune to infatuation, Scare, Intimidate and Taunt.
+#define ABILITY_CLOUD_NINE 13 // Negates weather effects as long as the user is on the field.
 #define ABILITY_COMPOUND_EYES 14 // 1.3x accuracy boost.
-#define ABILITY_INSOMNIA 15 // Prevents sleep.
-#define ABILITY_COLOR_CHANGE 16 // Changes type before getting hit.
-#define ABILITY_IMMUNITY 17 // Prevents poisoning. Halves damage from Poison.
-#define ABILITY_FLASH_FIRE 18 // Powers up Fire moves 50% if hit by fire.
-#define ABILITY_SHIELD_DUST 19 // Prevents added effects. Avoids entry hazard damage.
+#define ABILITY_INSOMNIA 15 // User cannot fall asleep. Rest fails if used.
+#define ABILITY_COLOR_CHANGE 16 // Changes type to a resist or an immunity before getting hit.
+#define ABILITY_IMMUNITY 17 // Prevents poisoning. Halves damage taken from Poison moves.
+#define ABILITY_FLASH_FIRE 18 // Powers up Fire moves by 1.5x if hit by a Fire move.
+#define ABILITY_SHIELD_DUST 19 // Immune to added move effects. Avoids entry hazard damage.
 #define ABILITY_OWN_TEMPO 20 // Prevents confusion. Blocks Intimidate and Scare.
-#define ABILITY_SUCTION_CUPS 21 // Negates moves that force switching out.
-#define ABILITY_INTIMIDATE 22 // Lowers the foe's Attack.
-#define ABILITY_SHADOW_TAG 23 // Prevents the foe's escape.
-#define ABILITY_ROUGH_SKIN 24 // 1/8 HP damage when touched.
-#define ABILITY_WONDER_GUARD 25 // Only “Supereffective” hits.
-#define ABILITY_LEVITATE 26 // Not hit by Ground attacks. Ups Flying moves by 25%.
-#define ABILITY_EFFECT_SPORE 27 // Leaves spores on contact.
-#define ABILITY_SYNCHRONIZE 28 // Passes on status problems.
-#define ABILITY_CLEAR_BODY 29 // Prevents stat reductions.
-#define ABILITY_NATURAL_CURE 30 // Heals status problems upon switching out.
-#define ABILITY_LIGHTNING_ROD 31 // Draws electrical moves. Boosts Atk or SpAtk.
-#define ABILITY_SERENE_GRACE 32 // Doubles the chance for added effects.
+#define ABILITY_SUCTION_CUPS 21 // User cannot be switched out by an enemy's move.
+#define ABILITY_INTIMIDATE 22 // Lowers foes' Atk by one stage.
+#define ABILITY_SHADOW_TAG 23 // Opponents can't be switched out. Ghosts aren't affected.
+#define ABILITY_ROUGH_SKIN 24 // Enemy loses 1/8 of max HP if it uses a contact move.
+#define ABILITY_WONDER_GUARD 25 // User can only be hit by weaknesses or indirect damage.
+#define ABILITY_LEVITATE 26 // Immune to Ground-type moves. Ups own Flying moves by 1.25x.
+#define ABILITY_EFFECT_SPORE 27 // 30% chance to inflict SLP, PARA or PSN if hit by contact.
+#define ABILITY_SYNCHRONIZE 28 // Enemies that inflict status on the user also get same status.
+#define ABILITY_CLEAR_BODY 29 // Prevents stat reductions from enemies.
+#define ABILITY_NATURAL_CURE 30 // Heals status condition upon switching out.
+#define ABILITY_LIGHTNING_ROD 31 // Redirects Electric moves. Absorbs them, ups highest Atk.
+#define ABILITY_SERENE_GRACE 32 // Doubles secondary effect chance of its own moves.
 #define ABILITY_SWIFT_SWIM 33 // 1.5x Speed in rain.
 #define ABILITY_CHLOROPHYLL 34 // 1.5x Speed in sunshine.
 #define ABILITY_ILLUMINATE 35 // 1.2x accuracy boost.
 #define ABILITY_TRACE 36 // Copies foe's ability. Does not copy Innates.
 #define ABILITY_HUGE_POWER 37 // Doubles Attack.
-#define ABILITY_POISON_POINT 38 // 30% chance to poison on contact.
-#define ABILITY_INNER_FOCUS 39 // Prevents flinching. Focus Blast has 90% acc.
-#define ABILITY_MAGMA_ARMOR 40 // Prevents freezing. Takes 30% less damage from Water and Ice.
+#define ABILITY_POISON_POINT 38 // 30% chance to poison on contact. Works on offense.
+#define ABILITY_INNER_FOCUS 39 // Blocks flinch, Intimidate, Scare. Focus Blast has 90% acc.
+#define ABILITY_MAGMA_ARMOR 40 // Prevents freezing. Takes 0.7x damage from Water and Ice moves.
 #define ABILITY_WATER_VEIL 41 // No burns. Aqua Ring on entry. Recovers 1/16 HP a turn.
-#define ABILITY_MAGNET_PULL 42 // Traps Steel-type Pokémon.
-#define ABILITY_SOUNDPROOF 43 // Avoids sound-based moves.
-#define ABILITY_RAIN_DISH 44 // 1/8 HP recovery in rain.
+#define ABILITY_MAGNET_PULL 42 // Traps opposing Steel-types. Ghosts aren't affected.
+#define ABILITY_SOUNDPROOF 43 // Immune to sound-based moves.
+#define ABILITY_RAIN_DISH 44 // Heals 1/8 of max HP every turn in rain.
 #define ABILITY_SAND_STREAM 45 // Summons a sandstorm. Lasts 8 turns.
 #define ABILITY_PRESSURE 46 // Doubles foe's PP usage.
-#define ABILITY_THICK_FAT 47 // Takes half damage from Fire and Ice type attacks.
+#define ABILITY_THICK_FAT 47 // Takes half damage from Fire and Ice-type attacks.
 #define ABILITY_EARLY_BIRD 48 // Awakens twice as fast from sleep.
 #define ABILITY_FLAME_BODY 49 // 30% chance to burn on contact. Also works on offense.
-#define ABILITY_RUN_AWAY 50 // Makes escaping easier. Lowering stats ups Speed.
-#define ABILITY_KEEN_EYE 51 // Prevents loss of accuracy. 1.2x accuracy boost.
-#define ABILITY_HYPER_CUTTER 52 // Prevents Attack reduction. Ups crit level by +1.
+#define ABILITY_RUN_AWAY 50 // Guarantees fleeing. Lowering stats ups Speed.
+#define ABILITY_KEEN_EYE 51 // Prevents accuracy drops. 1.2x accuracy boost.
+#define ABILITY_HYPER_CUTTER 52 // Prevents Attack drops. Ups crit rate of contact moves by +1.
 #define ABILITY_PICKUP 53 // Removes all hazards on entry. Not immune to hazards.
-#define ABILITY_TRUANT 54 // Moves only every two turns.
-#define ABILITY_HUSTLE 55 // -10% accuracy, but +40% Atk & SpAtk.
+#define ABILITY_TRUANT 54 // Only moves every two turns.
+#define ABILITY_HUSTLE 55 // 0.9x accuracy. Raises Atk & SpAtk by 1.4x.
 #define ABILITY_CUTE_CHARM 56 // Infatuates on contact, which halves foe's power.
-#define ABILITY_PLUS 57 // Doubles damage with Minus.
-#define ABILITY_MINUS 58 // Doubles damage with Plus.
-#define ABILITY_FORECAST 59 // Changes with the weather. Weather setting triggers attack.
-#define ABILITY_STICKY_HOLD 60 // Prevents item theft.
+#define ABILITY_PLUS 57 // Deals double damage if an ally Pokémon has Minus.
+#define ABILITY_MINUS 58 // Deals double damage if an ally Pokémon has Plus.
+#define ABILITY_FORECAST 59 // Changes form with the weather. Weather setting triggers attack.
+#define ABILITY_STICKY_HOLD 60 // Prevents item theft from opponents.
 #define ABILITY_SHED_SKIN 61 // 30% chance to heal status conditions.
-#define ABILITY_GUTS 62 // Ups Attack by 50% if suffering.
-#define ABILITY_MARVEL_SCALE 63 // Ups Defense by 50% if suffering.
-#define ABILITY_LIQUID_OOZE 64 // Draining causes injury.
-#define ABILITY_OVERGROW 65 // Ups Grass moves by 20%, 50% when at 1/3 HP.
-#define ABILITY_BLAZE 66 // Ups Fire moves by 20%, 50% when at 1/3 HP.
-#define ABILITY_TORRENT 67 // Ups Water moves by 20%, 50% when at 1/3 HP.
-#define ABILITY_SWARM 68 // Ups Bug moves by 20%, 50% when at 1/3 HP.
+#define ABILITY_GUTS 62 // Ups Atk by 1.5x if suffering from a status condition.
+#define ABILITY_MARVEL_SCALE 63 // Ups Def by 1.5x if suffering from a status condition.
+#define ABILITY_LIQUID_OOZE 64 // Draining causes injury to opponent instead of healing.
+#define ABILITY_OVERGROW 65 // Boosts Grass-type moves by 1.2x, or 1.5x when at 1/3 HP.
+#define ABILITY_BLAZE 66 // Boosts Fire-type moves by 1.2x, or 1.5x when at 1/3 HP.
+#define ABILITY_TORRENT 67 // Boosts Water-type moves by 1.2x, or 1.5x when at 1/3 HP.
+#define ABILITY_SWARM 68 // Boosts Bug-type moves by 1.2x, or 1.5x when at 1/3 HP.
 #define ABILITY_ROCK_HEAD 69 // Prevents recoil damage.
-#define ABILITY_DROUGHT 70 // Summons sunlight in battle. Lasts 8 turns.
-#define ABILITY_ARENA_TRAP 71 // Prevents fleeing.
-#define ABILITY_VITAL_SPIRIT 72 // Prevents sleep. Heals status after using Fighting move.
-#define ABILITY_WHITE_SMOKE 73 // Prevents stat reduction.
+#define ABILITY_DROUGHT 70 // Summons sun in battle. Lasts 8 turns.
+#define ABILITY_ARENA_TRAP 71 // Prevents fleeing. Ghosts and ungrounded are immune.
+#define ABILITY_VITAL_SPIRIT 72 // Prevents sleep. Heals status after using a Fighting move.
+#define ABILITY_WHITE_SMOKE 73 // Prevents stat reductions from enemies.
 #define ABILITY_PURE_POWER 74 // Doubles Attack.
-#define ABILITY_SHELL_ARMOR 75 // Blocks critical hits. Takes 20% less damage.
-#define ABILITY_AIR_LOCK 76 // Negates weather effects.
+#define ABILITY_SHELL_ARMOR 75 // Blocks critical hits. Takes 0.8x from all attacks.
+#define ABILITY_AIR_LOCK 76 // Negates weather effects as long as the user is on the field.
 
 #define ABILITIES_COUNT_GEN3 (ABILITY_AIR_LOCK + 1)
 
-#define ABILITY_TANGLED_FEET 77 // Ups evasion if confused.
-#define ABILITY_MOTOR_DRIVE 78 // Electricity raises Speed by one level.
-#define ABILITY_RIVALRY 79 // + 25% against same gender. Normal against opposite.
-#define ABILITY_STEADFAST 80 // Flinching raises Speed by +1.
-#define ABILITY_SNOW_CLOAK 81 // Ups evasion one level in Hail.
-#define ABILITY_GLUTTONY 82 // Eats Berries early.
-#define ABILITY_ANGER_POINT 83 // Critical hits maximize Attack. Getting hit raises Attack.
-#define ABILITY_UNBURDEN 84 // Using a hold item doubles Speed.
-#define ABILITY_HEATPROOF 85 // Burn damage protection. Halves Fire damage.
-#define ABILITY_SIMPLE 86 // Doubles all stat changes.
-#define ABILITY_DRY_SKIN 87 // Prefers moisture to heat. Immune to Water, 1.25x dmg from Fire.
-#define ABILITY_DOWNLOAD 88 // Adjusts Attack or Special Attack favorably.
-#define ABILITY_IRON_FIST 89 // Boosts punching moves by 30%.
-#define ABILITY_POISON_HEAL 90 // Restores HP 1/8 if poisoned.
-#define ABILITY_ADAPTABILITY 91 // Increases STAB bonus from 50% to 100%.
-#define ABILITY_SKILL_LINK 92 // Multi-hit moves hit 5 times.
-#define ABILITY_HYDRATION 93 // Cures status in rain.
-#define ABILITY_SOLAR_POWER 94 // Powers up highest attacking stat by 50% in sunshine.
+#define ABILITY_TANGLED_FEET 77 // Doubles Evasion when confused.
+#define ABILITY_MOTOR_DRIVE 78 // Raises Speed by one stage if hit by an Electric move.
+#define ABILITY_RIVALRY 79 // Deals 1.25x more damage against same gender, else 1x.
+#define ABILITY_STEADFAST 80 // Flinching raises Speed by one stage.
+#define ABILITY_SNOW_CLOAK 81 // Evasion is boosted by 1.25x in hail.
+#define ABILITY_GLUTTONY 82 // Raises pinch Berry activation threshold: 1/4 max HP to 1/2.
+#define ABILITY_ANGER_POINT 83 // Getting hit raises Attack. Critical hits maximize Attack.
+#define ABILITY_UNBURDEN 84 // Consuming a hold item doubles Speed until switched out.
+#define ABILITY_HEATPROOF 85 // Halves damage taken from Fire. Takes no burn damage.
+#define ABILITY_SIMPLE 86 // Doubles all stat changes on the user.
+#define ABILITY_DRY_SKIN 87 // Water/Rain heals. Fire/Sun hurts.
+#define ABILITY_DOWNLOAD 88 // Raises Atk/Sp.Atk by one stage depending on opponent.
+#define ABILITY_IRON_FIST 89 // Boosts punching moves by 1.3x.
+#define ABILITY_POISON_HEAL 90 // Restores 1/8 of max HP on each turn if poisoned.
+#define ABILITY_ADAPTABILITY 91 // Increases STAB bonus from 1.5x to 2x.
+#define ABILITY_SKILL_LINK 92 // Multi-hit moves always hit the maximum number of times.
+#define ABILITY_HYDRATION 93 // Cures status at the end of every turn in rain.
+#define ABILITY_SOLAR_POWER 94 // Ups highest attacking stat by 1.5x in sun.
 #define ABILITY_QUICK_FEET 95 // Ups Speed by 50% if suffering.
-#define ABILITY_NORMALIZE 96 // Moves become Normal-type, get a 10% boost, and ignore resists.
-#define ABILITY_SNIPER 97 // Critical hits do 225% instead of 150% damage.
+#define ABILITY_NORMALIZE 96 // All moves become Normal-type, get 1.1x boost, ignore resists.
+#define ABILITY_SNIPER 97 // Critical hits have a 2.25x multiplier instead of 1.5x.
 #define ABILITY_MAGIC_GUARD 98 // Only damaged by attacks.
 #define ABILITY_NO_GUARD 99 // Ensures that all moves hit.
 #define ABILITY_STALL 100 // Always moves last.
@@ -150,7 +150,7 @@
 #define ABILITY_TELEPATHY 140 // Can't be damaged by an ally.
 #define ABILITY_MOODY 141 // Every turn, a random stat goes -1 and another one goes +2.
 #define ABILITY_OVERCOAT 142 // Blocks weather and powder. 20% less dmg from Special moves.
-#define ABILITY_POISON_TOUCH 143 // 30% chance to poison on contact.
+#define ABILITY_POISON_TOUCH 143 // 30% chance to poison on contact. Works on offense.
 #define ABILITY_REGENERATOR 144 // Heals 1/3 HP upon switching out.
 #define ABILITY_BIG_PECKS 145 // Boosts contact moves by 30%.
 #define ABILITY_SAND_RUSH 146 // 1.5x Speed in a sandstorm.
@@ -167,7 +167,7 @@
 #define ABILITY_SAP_SIPPER 157 // Grass ups Atk or SpAtk by +1.
 #define ABILITY_PRANKSTER 158 // Status moves have +1 priority. Fails on Dark types.
 #define ABILITY_SAND_FORCE 159 // Powers up by 30% in a sandstorm.
-#define ABILITY_IRON_BARBS 160 // 1/8 HP damage when touched.
+#define ABILITY_IRON_BARBS 160 // Enemy loses 1/8 of max HP if it uses a contact move.
 #define ABILITY_ZEN_MODE 161 // Transforms into Zen Mode.
 #define ABILITY_VICTORY_STAR 162 // 1.2x accuracy boost for itself and allies.
 #define ABILITY_TURBOBLAZE 163 // Moves hit through abilities. Adds Fire-Type.
@@ -205,7 +205,7 @@
 
 #define ABILITIES_COUNT_GEN6 (ABILITY_DELTA_STREAM + 1)
 
-#define ABILITY_STAMINA 192 // Boosts Defense +1 when hit. Maxes Defense on crit.
+#define ABILITY_STAMINA 192 // Getting hit raises Defense. Critical hits maximize Defense.
 #define ABILITY_WIMP_OUT 193 // Flees at half HP.
 #define ABILITY_EMERGENCY_EXIT 194 // Flees at half HP.
 #define ABILITY_WATER_COMPACTION 195 // Water boosts Defense by +2. Takes half damage from Water.
@@ -243,7 +243,7 @@
 #define ABILITY_PSYCHIC_SURGE 227 // Field becomes weird.
 #define ABILITY_MISTY_SURGE 228 // Field becomes misty.
 #define ABILITY_GRASSY_SURGE 229 // Field becomes grassy.
-#define ABILITY_FULL_METAL_BODY 230 // Prevents stat reduction.
+#define ABILITY_FULL_METAL_BODY 230 // Prevents stat reductions from enemies.
 #define ABILITY_SHADOW_SHIELD 231 // Halves damage at full HP.
 #define ABILITY_PRISM_ARMOR 232 // Weakens “supereffective” by 35%.
 #define ABILITY_NEUROFORCE 233 // Ups “supereffective” by 25%.
@@ -260,7 +260,7 @@
 #define ABILITY_GULP_MISSILE 241 // If hit, spits prey from sea.
 #define ABILITY_STALWART 242 // Ignores foe's redirection.
 #define ABILITY_STEAM_ENGINE 243 // Fire or Water hits up Speed.
-#define ABILITY_PUNK_ROCK 244 // Ups sound moves by 30% Takes half damage from sound.
+#define ABILITY_PUNK_ROCK 244 // Ups power of sound moves by 1.3x. Takes 0.5x dmg from sound moves.
 #define ABILITY_SAND_SPIT 245 // Creates a sandstorm if hit.
 #define ABILITY_ICE_SCALES 246 // Halves special damage.
 #define ABILITY_RIPEN 247 // Doubles effect of Berries.
@@ -469,31 +469,31 @@
 #define ABILITY_FURNACE 447 // User gains +2 Speed when when hit by rocks.
 #define ABILITY_ELECTROMORPHOSIS 448 // Charges up when getting hit.
 #define ABILITY_ROCKY_PAYLOAD 449 // Ups Rock and throwing moves by 50%.
-#define ABILITY_EARTH_EATER 450 // Changes ground into HP.
+#define ABILITY_EARTH_EATER 450 // Heals 25% of max HP when hit by a Ground move.
 #define ABILITY_LINGERING_AROMA 451 // Spreads with contact.
-#define ABILITY_FAIRY_TALE 452 // Adds fairy type
-#define ABILITY_RAGING_MOTH 453 // Fire moves hits twice, both hits at %75 power.
-#define ABILITY_ADRENALINE_RUSH 454 // KOs raise speed by +1.
+#define ABILITY_FAIRY_TALE 452 // Adds Fairy type.
+#define ABILITY_RAGING_MOTH 453 // Fire moves hits twice, both hits at 75% power.
+#define ABILITY_ADRENALINE_RUSH 454 // KOs raise Speed by one stage.
 #define ABILITY_ARCHMAGE 455 // 30% chance of adding a type related effect to each move.
 #define ABILITY_CRYOMANCY 456 // Ice moves inflict frostbite 5x more often.
 #define ABILITY_PHANTOM_PAIN 457 // Ghost type moves can hit normal type pokemon for neutral damage.
 #define ABILITY_PURGATORY 458 // Ups Ghost moves by 30%, 80% when at 1/3 HP.
 #define ABILITY_EMANATE 459 // Normal moves become Psychic and get a 10% boost.
-#define ABILITY_KUNOICHI_BLADE 460 // Boost weaker moves and increases the frequency of multi-hit moves
+#define ABILITY_KUNOICHI_BLADE 460 // Boosts weaker moves and increases the frequency of multi-hit moves.
 #define ABILITY_MONKEY_BUSINESS 461 // Uses Tickle on-entry.
 #define ABILITY_COMBAT_SPECIALIST 462 // Boosts punching and kicking moves by 30%.
-#define ABILITY_JUNGLES_GUARD 463 // Ally Grass types and Itself are protected from status conditions and lowering stats.
-#define ABILITY_HUNTERS_HORN 464 // Boost Horn moves and Heals 1/4 HP when defeating an enemy.
+#define ABILITY_JUNGLES_GUARD 463 // Grass-types on user side: immune to status/stat drops from enemy.
+#define ABILITY_HUNTERS_HORN 464 // Boost horn moves and heals 1/4 HP when defeating an enemy.
 #define ABILITY_PIXIE_POWER 465 // Boosts Fairy moves by 33% and 1.2x accuracy.
-#define ABILITY_PLASMA_LAMP 466 // Boost accuracy and Fire & Electric type moves by 1.2x
+#define ABILITY_PLASMA_LAMP 466 // Boost accuracy & power of Fire & Electric type moves by 1.2x.
 #define ABILITY_MAGMA_EATER 467 // Predator + Molten Down.
 #define ABILITY_SUPER_HOT_GOO 468 // Inflicts burn and lower the speed on contact.
 #define ABILITY_NIKA 469 // Iron fist + Water moves function normally under sun.
 #define ABILITY_ARCHER 470 // Boosts Arrow moves by 30%.
 #define ABILITY_COLD_PLASMA 471 // Electric type moves now inflict burn instead of paralysis.
-#define ABILITY_SUPER_SLAMMER 472 // Boosts Hammer and Slam moves by 30%
+#define ABILITY_SUPER_SLAMMER 472 // Boosts Hammer and Slam moves by 1.3x.
 #define ABILITY_INVERSE_ROOM 473 // Sets up the Inverse field condition for 3 turns upon entry
-#define ABILITY_ACCELERATE 474 // 2 turn based moves are now used instantly
+#define ABILITY_ACCELERATE 474 // Moves that need a charge turn are now used instantly.
 #define ABILITY_FROST_BURN 475 // Triggers 40BP Ice Beam after using a Fire-type move.
 #define ABILITY_ITCHY_DEFENSE 476 // Causes infestation when hit by a contact move.
 #define ABILITY_GENERATOR 477 // Charges up on entry.
@@ -507,7 +507,7 @@
 #define ABILITY_SOOTHING_AROMA 485 // Cures party status on entry.
 #define ABILITY_PRIM_AND_PROPER 486 // Wonder Skin + Cute Charm.
 #define ABILITY_SUPER_STRAIN 487 // KOs lower Attack by +1. Take 25% recoil damage.
-#define ABILITY_TIPPING_POINT 488 // Critical hits maximize SpAtk. Getting hit raises SpAtk.
+#define ABILITY_TIPPING_POINT 488 // Getting hit raises Sp.Atk. Critical hits maximize Sp.Atk.
 #define ABILITY_ENLIGHTENED 489 // Emanate + Inner Focus.
 #define ABILITY_PEACEFUL_SLUMBER 490 // Sweet Dreams + Self Sufficient.
 #define ABILITY_AFTERSHOCK 491 // Triggers Magnitude 4-7 after using a damaging move.
@@ -524,7 +524,7 @@
 #define ABILITY_SEABORNE 502 // Drizzle + Swift Swim.
 #define ABILITY_HIGH_TIDE 503 // Triggers 50 BP Surf after using a Water-type move.
 #define ABILITY_CHANGE_OF_HEART 504 // Uses Heart Swap on switch-in.
-#define ABILITY_MYSTIC_BLADES 505 // Keen edge moves do special damage and deal 30% more damage.
+#define ABILITY_MYSTIC_BLADES 505 // Keen edge moves become special and deal 30% more damage.
 #define ABILITY_DETERMINATION 506 // Ups Special Attack by 50% if suffering.
 #define ABILITY_FERTILIZE 507 // Normal moves become Grass and get a 10% boost.
 #define ABILITY_PURE_LOVE 508 // Infatuates on contact. Heal 25% damage vs infatuated.

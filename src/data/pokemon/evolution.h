@@ -824,4 +824,7 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_WORMADAM] = {{EVO_FORM_SHIFT, 1, SPECIES_WORMADAM},
                             {EVO_FORM_SHIFT, 1, SPECIES_WORMADAM_TRASH_CLOAK},
                             {EVO_FORM_SHIFT, 1, SPECIES_WORMADAM_SANDY_CLOAK},},
+
+    [SPECIES_MELOETTA] = {{EVO_FORM_SHIFT, 1, SPECIES_MELOETTA},
+                            {EVO_FORM_SHIFT, 1, SPECIES_MELOETTA_PIROUETTE},},
 };

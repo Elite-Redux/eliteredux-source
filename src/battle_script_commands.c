@@ -3970,23 +3970,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gBattlescriptCurrInstr = BattleScript_MoveEffectBugBite;
                 }
                 break;
-            case MOVE_EFFECT_RELIC_SONG:
-                if (GetBattlerAbility(gBattlerAttacker) != ABILITY_SHEER_FORCE || BattlerHasInnate(gBattlerAttacker, ABILITY_SHEER_FORCE))
-                {
-                    if (gBattleMons[gBattlerAttacker].species == SPECIES_MELOETTA)
-                    {
-                        UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MELOETTA_PIROUETTE);
-                        gBattleMons[gBattlerAttacker].species = SPECIES_MELOETTA_PIROUETTE;
-                        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeMoveEffect);
-                    }
-                    else if (gBattleMons[gBattlerAttacker].species == SPECIES_MELOETTA_PIROUETTE)
-                    {
-                        UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MELOETTA);
-                        gBattleMons[gBattlerAttacker].species = SPECIES_MELOETTA;
-                        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeMoveEffect);
-                    }
-                }
-                break;
             case MOVE_EFFECT_TRAP_BOTH:
                 if (!(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION) && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_ESCAPE_PREVENTION))
                 {

@@ -10698,9 +10698,19 @@ bool8 IsEeveelution(u16 species)
 
 u16 getLearnsetMon(u16 species)
 {
-    u16 baseSpecies = getBaseSpeciesFromMega(species);
-    if (baseSpecies) return baseSpecies;
-    return species;
+    u16 baseSpecies = GetFormShiftSpecies(species);
+    switch (baseSpecies)
+    {
+        // Deoxys, Wormadam, and Burmy forms have different learnsets
+        case SPECIES_NONE:
+        case SPECIES_DEOXYS:
+        case SPECIES_WORMADAM:
+        case SPECIES_BURMY:
+            return species;
+        
+        default:
+            return baseSpecies;
+    }
 }
 
 u16 getBaseSpeciesFromMega(u16 species){
@@ -10837,6 +10847,9 @@ const u8 gSpeciesNameLongWormadamGrass[] = _("Wormadam Grass");
 const u8 gSpeciesNameLongWormadamSand[] = _("Wormadam Sand");
 const u8 gSpeciesNameLongWormadamTrash[] = _("Wormadam Trash");
 
+const u8 gSpeciesNameLongMeloettaAria[] = _("Meloetta Aria");
+const u8 gSpeciesNameLongMeloettaPirouette[] = _("Meloetta Pirouette");
+
 const u8* GetSpeciesLongName(u16 species)
 {
     switch (species)
@@ -10966,6 +10979,11 @@ const u8* GetSpeciesLongName(u16 species)
             return gSpeciesNameLongWormadamSand;
         case SPECIES_WORMADAM_TRASH_CLOAK:
             return gSpeciesNameLongWormadamTrash;
+
+        case SPECIES_MELOETTA:
+            return gSpeciesNameLongMeloettaAria;
+        case SPECIES_MELOETTA_PIROUETTE:
+            return gSpeciesNameLongMeloettaPirouette;
 
         default:
             return NULL;

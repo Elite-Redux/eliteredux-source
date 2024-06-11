@@ -5772,7 +5772,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_PSYSHOCK] =
     {
-        .effect = EFFECT_PSYSHOCK,
+        .effect = EFFECT_HIT,
         .power = 80,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
@@ -5781,6 +5781,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .splitFlag = HITS_DEF,
     },
     [MOVE_VENOSHOCK] =
     {
@@ -6594,7 +6595,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_PSYSTRIKE] =
     {
-        .effect = EFFECT_PSYSHOCK,
+        .effect = EFFECT_HIT,
         .power = 100,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
@@ -6603,6 +6604,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .splitFlag = HITS_DEF,
     },
     [MOVE_TAIL_SLAP] =
     {
@@ -6682,7 +6684,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_RELIC_SONG] =
     {
-        .effect = EFFECT_RELIC_SONG,
+        .effect = EFFECT_SLEEP_HIT,
         .power = 85,
         .type = TYPE_NORMAL,
         .accuracy = 100,
@@ -6691,11 +6693,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_BOTH,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
-        .argument = STATUS1_SLEEP,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_SECRET_SWORD] =
     {
-        .effect = EFFECT_PSYSHOCK,
+        .effect = EFFECT_HIT,
         .power = 85,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
@@ -6704,6 +6706,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_SPECIAL,
+        .splitFlag = HITS_DEF,
     },
     [MOVE_GLACIATE] =
     {
@@ -8244,7 +8247,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_PHOTON_GEYSER] =
     {
-        .effect = EFFECT_PHOTON_GEYSER,
+        .effect = EFFECT_HIT,
         .power = 100,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
@@ -8253,6 +8256,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_FOES_AND_ALLY,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST | FLAG_TARGET_ABILITY_IGNORED,
         .split = SPLIT_SPECIAL,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_ZIPPY_ZAP] =
     {
@@ -8904,7 +8908,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SHELL_SIDE_ARM] =
     {
-        .effect = EFFECT_SHELL_SIDE_ARM,
+        .effect = EFFECT_POISON_HIT,
         .power = 100,
         .type = TYPE_POISON,
         .accuracy = 100,
@@ -8913,6 +8917,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .splitFlag = USE_HIGHEST_DAMAGE,
     },
     [MOVE_MISTY_EXPLOSION] =
     {
@@ -9667,8 +9672,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_PHYSICAL,
-        .hitsSpDef = TRUE,
         .parentalBondBanned = TRUE,
+        .splitFlag = HITS_SPDEF,
     },
     [MOVE_BRAMBLE_BLAST] =
     {

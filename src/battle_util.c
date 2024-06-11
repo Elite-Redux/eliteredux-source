@@ -8029,8 +8029,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Spike Armor
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_VOODOO_POWER)){
             if(ShouldApplyOnHitAffect(gBattlerAttacker)
-			 && (IS_MOVE_SPECIAL(move) || gBattleMoves[move].hitsSpDef)
-             && gBattleMoves[move].effect != EFFECT_PSYSHOCK
+			 && IS_MOVE_SPECIAL(move)
              && CanBleed(gBattlerAttacker)
              && (Random() % 100) < 30){
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_VOODOO_POWER;
@@ -11865,7 +11864,7 @@ bool32 IsMoveMakingContact(u16 move, u8 battlerAtk)
 {
     if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
     {
-        if (gBattleMoves[move].effect == EFFECT_SHELL_SIDE_ARM && gSwapDamageCategory)
+        if (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)
             return TRUE;
         else
             return FALSE;
@@ -11902,7 +11901,7 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
     // Protective Pads doesn't stop Unseen Fist from bypassing Protect effects, so IsMoveMakingContact() isn't used here.
     // This means extra logic is needed to handle Shell Side Arm.
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_UNSEEN_FIST
-        && (gBattleMoves[move].flags & FLAG_MAKES_CONTACT || (gBattleMoves[move].effect == EFFECT_SHELL_SIDE_ARM && gSwapDamageCategory)))
+        && (gBattleMoves[move].flags & FLAG_MAKES_CONTACT || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
         return FALSE;
     else if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
         return FALSE;
@@ -13305,7 +13304,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
 static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags)
 {
-    u8 atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_ATK : STAT_SPATK;
+    u8 atkStatToUse = (IS_MOVE_PHYSICAL(move) ^ gSwapDamageCategory) ? STAT_ATK : STAT_SPATK;
     u8 secondaryAtkStatToUse = 0;
     u8 statBattler = battlerAtk;
     //Calculates Highest Attack Stat after stat boosts
@@ -14103,6 +14102,39 @@ static bool32 CanEvolve(u32 species)
     return FALSE;
 }
 
+void SetSwapDamageCategory(int battler, int target, int move)
+{
+    switch (gBattleMoves[move].splitFlag)
+    {
+        default:
+            gSwapDamageCategory = FALSE;
+            return;
+        
+        USE_HIGHEST_OFFENSE:
+            {
+                int isUnaware = BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT);
+                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
+                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
+                if (atk > spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_SPECIAL;
+                else if (atk < spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_PHYSICAL;
+                else gSwapDamageCategory = Random() % 2;
+            }
+            return;
+
+        USE_HIGHEST_DAMAGE:
+            {
+                int isUnaware = BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT);
+                int isTargetUnaware = BATTLER_HAS_ABILITY(target, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(target, ABILITY_CONTEMPT);
+                // Atk / Def > SpAtk / SpDef is equivalent to Atk * SpDef > SpAtk * Def and doesn't have rounding issues
+                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE) * CalculateStat(target, STAT_SPDEF, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
+                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE) * CalculateStat(target, STAT_DEF, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
+                if (atk > spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_SPECIAL;
+                else if (atk < spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_PHYSICAL;
+                else gSwapDamageCategory = Random() % 2;
+            }
+    }
+}
+
 u8 CalculateBattlerLowestDefense(u8 battler){
     u8 defense = gBattleMons[battler].defense;
     u8 specialDefense = gBattleMons[battler].spDefense;
@@ -14131,7 +14163,11 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     u8 isUnaware = BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CONTEMPT) || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED;
     u16 modifier;
 
-    if ((gBattleMoves[move].effect == EFFECT_PSYSHOCK || IS_MOVE_PHYSICAL(move) || gBattleMoves[move].hitsDef) && !gBattleMoves[move].hitsSpDef) // uses defense stat instead of sp.def
+    if (gBattleMoves[move].splitFlag == HITS_SPDEF)
+    {
+        defStatToUse = STAT_SPDEF;
+    }
+    else if (gBattleMoves[move].splitFlag == HITS_DEF || (IS_MOVE_PHYSICAL(move) ^ gSwapDamageCategory))
     {
         defStatToUse = STAT_DEF;
     }
@@ -14630,6 +14666,7 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType
                             bool32 isCrit, bool32 randomFactor, bool32 updateFlags, u16* typeEffectivenessModifier)
 {
     s32 dmg;
+    SetSwapDamageCategory(battlerAtk, battlerDef, move);
     *typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(move, *moveType, battlerAtk, battlerDef, updateFlags);
     dmg = DoMoveDamageCalcInternal(move, battlerAtk, battlerDef, *moveType, fixedBasePower, isCrit, updateFlags, *typeEffectivenessModifier);
 
@@ -15281,7 +15318,6 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         // Changed Form ID                      Default Form ID               Should change on switch
         {SPECIES_MIMIKYU_BUSTED,                SPECIES_MIMIKYU,                FALSE},
         {SPECIES_GRENINJA_ASH,                  SPECIES_GRENINJA_BATTLE_BOND,   FALSE},
-        {SPECIES_MELOETTA_PIROUETTE,            SPECIES_MELOETTA,               FALSE},
         {SPECIES_EISCUE_NOICE_FACE,             SPECIES_EISCUE,                 FALSE},
         {SPECIES_PALAFIN_HERO,                  SPECIES_PALAFIN,                FALSE},
         {SPECIES_MINIOR_CORE_RED,               SPECIES_MINIOR,                 TRUE},
@@ -15458,7 +15494,7 @@ bool8 ShouldGetStatBadgeBoost(u16 badgeFlag, u8 battlerId)
 u8 GetBattleMoveSplit(u32 moveId)
 {
     if (gSwapDamageCategory) // Photon Geyser, Shell Side Arm, Light That Burns the Sky
-        return SPLIT_PHYSICAL;
+        return gBattleMoves[moveId].split == SPLIT_PHYSICAL ? SPLIT_SPECIAL : SPLIT_PHYSICAL;
     else if (IS_MOVE_STATUS(moveId) || B_PHYSICAL_SPECIAL_SPLIT >= GEN_4)
         return gBattleMoves[moveId].split;
     else if (gBattleMoves[moveId].type < TYPE_MYSTERY)

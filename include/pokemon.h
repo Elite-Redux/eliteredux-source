@@ -199,6 +199,15 @@ struct BaseStats
             u8 tier;
 };
 
+typedef enum {
+    USE_BASE_SPLIT,
+    USE_HIGHEST_OFFENSE,
+    USE_LOWEST_DEFENSE,
+    HITS_SPDEF,
+    HITS_DEF,
+    USE_HIGHEST_DAMAGE,
+} MoveSplitType;
+
 #include "constants/battle_config.h"
 struct BattleMove
 {
@@ -221,10 +230,9 @@ struct BattleMove
     u8 airBased:1;
     u8 alwaysCrit:1;
     u8 hammerBased:1;
-    u8 hitsSpDef:1;
-    u8 hitsDef:1;
     u8 throwingBased:1;
     u8 doubleDamageVsMega:1;
+    MoveSplitType splitFlag:3;
 };
 
 struct SpindaSpot
