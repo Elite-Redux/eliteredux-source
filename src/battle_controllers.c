@@ -18,11 +18,12 @@
 #include "constants/abilities.h"
 #include "constants/moves.h"
 
+//==========EWRAM==========//
 static EWRAM_DATA u8 sLinkSendTaskId = 0;
 static EWRAM_DATA u8 sLinkReceiveTaskId = 0;
-static EWRAM_DATA u8 sUnused = 0; // Debug? Never read
 EWRAM_DATA struct UnusedControllerStruct gUnusedControllerStruct = {}; // Debug? Unused code that writes to it, never read
 static EWRAM_DATA u8 sBattleBuffersTransferData[0x100] = {};
+static EWRAM_DATA u8 sMonIconSpriteID = MAX_SPRITES;
 
 static void CreateTasksForSendRecvLinkBuffers(void);
 static void InitLinkBtlControllers(void);
@@ -30,6 +31,16 @@ static void InitSinglePlayerBtlControllers(void);
 static void SetBattlePartyIds(void);
 static void Task_HandleSendLinkBuffersData(u8 taskId);
 static void Task_HandleCopyReceivedLinkBuffersData(u8 taskId);
+
+u8 getsMonIconSpriteID(void)
+{
+    return sMonIconSpriteID;
+}
+
+void setsMonIconSpriteID(u8 id)
+{
+    sMonIconSpriteID = id;
+}
 
 void HandleLinkBattleSetup(void)
 {
@@ -47,8 +58,7 @@ void HandleLinkBattleSetup(void)
 void SetUpBattleVarsAndBirchZigzagoon(void)
 {
     s32 i;
-	    
-	    
+	       
     gBattleMainFunc = BeginBattleIntroDummy;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
@@ -720,7 +730,7 @@ static void CreateTasksForSendRecvLinkBuffers(void)
     gTasks[sLinkReceiveTaskId].data[14] = 0;
     gTasks[sLinkReceiveTaskId].data[15] = 0;
 
-    sUnused = 0;
+    sMonIconSpriteID = MAX_SPRITES;
 }
 
 enum

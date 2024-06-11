@@ -898,7 +898,7 @@ void GetBattleAnimBg1Data(struct BattleAnimBgData *out)
     if (IsContest())
     {
         out->bgTiles = gUnknown_0202305C;
-        out->bgTilemap = (u16 *)gUnknown_02023060;
+        out->bgTilemap = (u16 *)gBattleAnimBgTilemapBuffer;
         out->paletteId = 14;
         out->bgId = 1;
         out->tilesOffset = 0;
@@ -907,7 +907,7 @@ void GetBattleAnimBg1Data(struct BattleAnimBgData *out)
     else
     {
         out->bgTiles = gUnknown_0202305C;
-        out->bgTilemap = (u16 *)gUnknown_02023060;
+        out->bgTilemap = (u16 *)gBattleAnimBgTilemapBuffer;
         out->paletteId = 8;
         out->bgId = 1;
         out->tilesOffset = 0x200;
@@ -920,7 +920,7 @@ void GetBattleAnimBgData(struct BattleAnimBgData *out, u32 bgId)
     if (IsContest())
     {
         out->bgTiles = gUnknown_0202305C;
-        out->bgTilemap = (u16 *)gUnknown_02023060;
+        out->bgTilemap = (u16 *)gBattleAnimBgTilemapBuffer;
         out->paletteId = 14;
         out->bgId = 1;
         out->tilesOffset = 0;
@@ -933,7 +933,7 @@ void GetBattleAnimBgData(struct BattleAnimBgData *out, u32 bgId)
     else
     {
         out->bgTiles = gUnknown_0202305C;
-        out->bgTilemap = (u16 *)gUnknown_02023060;
+        out->bgTilemap = (u16 *)gBattleAnimBgTilemapBuffer;
         out->paletteId = 9;
         out->bgId = 2;
         out->tilesOffset = 0x300;
@@ -944,7 +944,7 @@ void GetBattleAnimBgData(struct BattleAnimBgData *out, u32 bgId)
 void sub_80A6BFC(struct BattleAnimBgData *out, u8 unused)
 {
     out->bgTiles = gUnknown_0202305C;
-    out->bgTilemap = (u16 *)gUnknown_02023060;
+    out->bgTilemap = (u16 *)gBattleAnimBgTilemapBuffer;
     if (IsContest())
     {
         out->paletteId = 14;

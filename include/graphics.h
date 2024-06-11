@@ -7400,6 +7400,7 @@ extern const u16 gBerryFixWindow_Pal[];
 
 extern const u32 gBattleTextboxTiles[];
 extern const u32 gBattleTextboxTilemap[];
+extern const u32 gBattleTextboxTrainerTilemap[];
 extern const u32 gBattleTextboxPalette[];
 extern const u32 gUnknown_08D778F0[];
 extern const u32 gVsLettersGfx[];

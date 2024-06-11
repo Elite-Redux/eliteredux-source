@@ -1140,7 +1140,7 @@ static void AllocContestResources(void)
     gContestResources->boxBlinkTiles2 = AllocZeroed(0x800);
     gContestResources->field_3c = AllocZeroed(0x2000);
     gUnknown_0202305C = gContestResources->field_3c;
-    gUnknown_02023060 = gContestResources->contestBgTilemaps[1];
+    gBattleAnimBgTilemapBuffer = gContestResources->contestBgTilemaps[1];
 }
 
 static void FreeContestResources(void)
@@ -1163,7 +1163,7 @@ static void FreeContestResources(void)
     FREE_AND_SET_NULL(gContestResources->field_3c);
     FREE_AND_SET_NULL(gContestResources);
     gUnknown_0202305C = NULL;
-    gUnknown_02023060 = NULL;
+    gBattleAnimBgTilemapBuffer = NULL;
 }
 
 void CB2_StartContest(void)

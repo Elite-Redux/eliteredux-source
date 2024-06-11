@@ -159,6 +159,7 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
                 CreateWirelessStatusIndicatorSprite(0, 0);
             }
         }
+        ReshowNewBattleMenuAfterMenu();
         break;
     default:
         SetVBlankCallback(VBlankCB_Battle);
