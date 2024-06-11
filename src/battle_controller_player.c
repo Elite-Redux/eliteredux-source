@@ -25,6 +25,7 @@
 #include "party_menu.h"
 #include "pokeball.h"
 #include "pokemon.h"
+#include "pokemon_icon.h"
 #include "pokemon_storage_system.h"
 #include "pokemon_summary_screen.h"
 #include "random.h"
@@ -51,6 +52,9 @@
 #include "mgba_printf/mgba.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_BGM;
+//Mon Icons
+u8 BattleInterface_CreateMonIcon(u8 battler);
+void BattleInterface_DestroyMonIcon(void);
 
 // this file's functions
 static void PlayerHandleGetMonData(void);
@@ -282,12 +286,26 @@ void PrintBattleWindow_ActionPromt(void)
     bool32 copyToVram;
     struct TextPrinterTemplate printerTemplate;
     bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
+    bool8 isDoubleBattle  = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
+    u8 battler = gActiveBattler;
     u8 speed;
 
     //Fill the window with the fill value
     MoveIntoBattleBgWindow(windowId);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     copyToVram = TRUE;
+
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "PrintBattleWindow_ActionPromt battler %d", battler);
+    MgbaClose();
+
+    if(!isDoubleBattle)
+        battler = 0;
+    else
+        battler = battler % 4;
+
+    //Pokemon Icons
+    BattleInterface_CreateMonIcon(battler);
 
     //Pokeball Icons
     x  = 17;
@@ -317,9 +335,9 @@ void PrintBattleWindow_ActionPromt(void)
     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
     y++;
     //Part two
-    BattleStringExpandPlaceholdersToDisplayedString(sText_BattleMenu_Action_What_Will_X_Do_2);
-    x2 = 4 + GetStringCenterAlignXOffset(font, gDisplayedStringBattle, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gDisplayedStringBattle);
+    StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battler].species]);
+    x2 = 4 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
     y++;
     //Part three
     StringCopy(gStringVar1, sText_BattleMenu_Action_What_Will_X_Do_3);
@@ -446,16 +464,17 @@ enum{
 #define SPACE_BETWEEN_MOVE_NAME_AND_PP             (10 * 8)
 #define SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION    SPACE_BETWEEN_MOVE_NAME_AND_PP + (5 * 8) + 4
 static const u8 sText_PP[]            = _("{STR_VAR_1}/{STR_VAR_2}");
-const u8 sText_MoveInfo_Power[]       = _("Power: {STR_VAR_1}");
-const u8 sText_MoveInfo_True_Power[]  = _("True Power: {STR_VAR_1}");
-const u8 sText_MoveInfo_Accuracy[]    = _("Accuracy: {STR_VAR_1}");
-const u8 sText_MoveInfo_Priority[]    = _("Priority: {STR_VAR_1}");
-const u8 sText_MoveInfo_Type[]        = _("Type: {STR_VAR_1}{STR_VAR_2}");
-const u8 sText_MoveInfo_Type_Double[] = _("Type: {STR_VAR_1} & {STR_VAR_3} {STR_VAR_2}");
+const u8 sText_MoveInfo_Power[]       = _("Power:");
+const u8 sText_MoveInfo_True_Power[]  = _("True Power:");
+const u8 sText_MoveInfo_Accuracy[]    = _("Accuracy:");
+const u8 sText_MoveInfo_Priority[]    = _("Priority:");
+const u8 sText_MoveInfo_Type_Null[]   = _("Type:");
+const u8 sText_MoveInfo_Type[]        = _("{STR_VAR_2} {STR_VAR_1}");
+const u8 sText_MoveInfo_Type_Double[] = _("{STR_VAR_2} {STR_VAR_1} & {STR_VAR_3}");
 const u8 sText_MoveInfo_Chance[]      = _("Chance: {STR_VAR_1}");
-const u8 sText_MoveInfo_Contact[]     = _("Contact: {STR_VAR_1}");
-const u8 sText_MoveInfo_Boost[]       = _("Boost Type: {STR_VAR_1}");
-const u8 sText_Effect_Based_Type[]    = _("Based on: {STR_VAR_1}");
+const u8 sText_MoveInfo_Contact[]     = _("Contact:");
+const u8 sText_MoveInfo_Boost[]       = _("Boost Type:");
+const u8 sText_Effect_Based_Type[]    = _("Based on:");
 const u8 sText_Target_Nothing[]       = _("---");
 static const u8 gStabIcon[]           =  _("{PLUS}");
 static const u8 gNoStabIcon[]         =  _(" ");
@@ -503,8 +522,8 @@ const u8 sText_Effect_DamageDone[]                  = _("Calculated Damage\nRang
 const u8 sText_Effect_DamageDone_Guaranteed_KO[]    = _("Guaranteeed to KO\n{STR_VAR_3}\nin the next hit.");
 const u8 sText_Effect_Speed_Calculation_Singles[]   = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}");
 const u8 sText_Effect_Speed_Calculation_Priority2[] = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}{PLUS}");
-const u8 sText_Effect_Speed_Calculation[]           = _("{STR_VAR_1} Spd: {STR_VAR_2}");
-const u8 sText_Effect_Speed_CalculationPriority[]   = _("{STR_VAR_1} Spd: {STR_VAR_2}{PLUS}");
+const u8 sText_Effect_Speed_Calculation[]           = _("{STR_VAR_1}");
+const u8 sText_Effect_Speed_CalculationPriority[]   = _("{PLUS} {STR_VAR_1}");
 
 enum{
     MOVE_EFFECTIVENESS_NONE,
@@ -541,10 +560,12 @@ static const u8 sSplit_Physical[]          = INCBIN_U8("graphics/ui_menus/battle
 static const u8 sSplit_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/split_special.4bpp");
 static const u8 sSplit_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/split_status.4bpp");
 
+#define MOVE_INFO_WINDOW_SIZE 80
+
 void PrintBattleWindow_MoveSelection(void)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
-    u8 i, j, x, y, x2, y2, speed, moveType, effectiveness;
+    u8 i, j, x, y, x2, y2, offset, speed, moveType, effectiveness;
     u16 move, movePower;
     u8 windowId = B_WIN_ACTION_PROMPT;
     u8 font = FONT_SMALL_NARROW;
@@ -562,6 +583,8 @@ void PrintBattleWindow_MoveSelection(void)
     MoveIntoBattleBgWindow(windowId);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     copyToVram = TRUE;
+
+    BattleInterface_DestroyMonIcon();
 
     x  = 2;
     y  = 0;
@@ -635,20 +658,42 @@ void PrintBattleWindow_MoveSelection(void)
                 ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);
             else
                 StringCopy(gStringVar1, sText_Target_Nothing);
-            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Power);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Power);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            //Split
+            offset = offset - 16;
+            y2 = y2 + 4;
+            switch(gBattleMoves[move].split){
+                case SPLIT_PHYSICAL:
+                    BlitBitmapToWindow(windowId, sSplit_Physical, (x * 8) + x2 + offset, (y * 8) + y2, 16, 8);
+                break;
+                case SPLIT_SPECIAL:
+                    BlitBitmapToWindow(windowId, sSplit_Special, (x * 8) + x2 + offset, (y * 8) + y2, 16, 8);
+                break;
+                case SPLIT_STATUS:
+                    BlitBitmapToWindow(windowId, sSplit_Status, (x * 8) + x2 + offset, (y * 8) + y2, 16, 8);
+                break;
+            }
+            y2 = y2 - 4;
+
             y++;
             //Move Accuracy
             ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].accuracy, STR_CONV_MODE_LEFT_ALIGN, 3);
-            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Accuracy);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Accuracy);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
             y++;
             //Move Priority
             ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
-            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Priority);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Priority);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
             y++;
             //Move Type
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Type_Null);
             StringCopy(gStringVar1, gTypeNames[moveType]);
             if(IS_BATTLER_OF_TYPE(gActiveBattler, moveType))
                 StringCopy(gStringVar2, gStabIcon);
@@ -672,19 +717,24 @@ void PrintBattleWindow_MoveSelection(void)
             else{
                 StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type);
             }
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar4, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
         break;
         case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
             x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
-            movePower = CalcMoveBasePowerAfterModifiers(move, 0, gActiveBattler, target, moveType, FALSE);
+
             //Move Power
+            movePower = CalcMoveBasePowerAfterModifiers(move, 0, gActiveBattler, target, moveType, FALSE);
             if(!isStatusMove)
                 ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);
             else
                 StringCopy(gStringVar1, sText_Target_Nothing);
-            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_True_Power);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_True_Power);
+
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
             y++;
+
             //Boost Type
             if((gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST))
 			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Fist);
@@ -714,9 +764,11 @@ void PrintBattleWindow_MoveSelection(void)
 			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Reckless);
             else
 			    StringCopy(gStringVar1, sText_Target_Nothing);
-            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Boost);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Boost);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
             y++;
+
             //Based 
             if((gBattleMoves[move].flags & FLAG_WEATHER_BASED))
 			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Weather);
@@ -728,17 +780,21 @@ void PrintBattleWindow_MoveSelection(void)
 			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Sound);
             else
 			    StringCopy(gStringVar1, sText_Target_Nothing);
-            StringExpandPlaceholders(gStringVar4, sText_Effect_Based_Type);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_Effect_Based_Type);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
             y++;
+
             //Contact
             if(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
                 StringCopy(gStringVar1, sText_Yes);
             else
                 StringCopy(gStringVar1, sText_No);
-            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Contact);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Contact);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
             y++;
+
             //Chance
             /*ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].secondaryEffectChance, STR_CONV_MODE_LEFT_ALIGN, 3);
             StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Chance);
@@ -766,32 +822,25 @@ void PrintBattleWindow_MoveSelection(void)
                 }
             }
 
-            //First Mon
-            battlertoCheck = sBattlerByTurnOrder[0];
-            StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battlertoCheck].species]);
-            monSpeed = gBattleMons[battlertoCheck].speed;
-            ConvertIntToDecimalStringN(gStringVar2, monSpeed, STR_CONV_MODE_LEFT_ALIGN, 3);
-            if(HasPriorityMove(battlertoCheck))
-                StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_CalculationPriority);
-            else
-                StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_Calculation);
-
-            for (i = 1; i < gBattlersCount; i++)
+            for (i = 0; i < gBattlersCount; i++)
             {
-                StringCopy(gStringVar3, gStringVar4);
                 battlertoCheck = sBattlerByTurnOrder[i];
                 if(IsBattlerAlive(battlertoCheck)){
                     StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battlertoCheck].species]);
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
                     monSpeed = gBattleMons[battlertoCheck].speed;
-                    ConvertIntToDecimalStringN(gStringVar2, monSpeed, STR_CONV_MODE_LEFT_ALIGN, 3);
+                    ConvertIntToDecimalStringN(gStringVar1, monSpeed, STR_CONV_MODE_LEFT_ALIGN, 3);
                     if(HasPriorityMove(battlertoCheck))
-                        StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_Calculation_Priority2);
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_CalculationPriority);
                     else
-                        StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_Calculation_Singles);
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_Calculation);
+
+                    offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar4, 0xFF);
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+                    y++;
                 }
             }
-
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
         }
         break;
         case MOVE_INFO_DAMAGE_CALCULATION:
@@ -834,25 +883,6 @@ void PrintBattleWindow_MoveSelection(void)
                 AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_Target_Nothing);
             }
         break;
-    }
-
-    if(moveInfoType == MOVE_INFO_POWER_ACC_PRIO_TYPE){
-        //Split
-        x  = 23;
-        y  = 1;
-        x2 = 5;
-        y2 = 0;
-        switch(gBattleMoves[move].split){
-            case SPLIT_PHYSICAL:
-                BlitBitmapToWindow(windowId, sSplit_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
-            break;
-            case SPLIT_SPECIAL:
-                BlitBitmapToWindow(windowId, sSplit_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
-            break;
-            case SPLIT_STATUS:
-                BlitBitmapToWindow(windowId, sSplit_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
-            break;
-        }
     }
 
     PutWindowTilemap(windowId);
@@ -4479,7 +4509,36 @@ static const u8 sBattleAction_Pokemon_Gfs[] = INCBIN_U8("graphics/ui_menus/battl
 static const u8 sBattleAction_Run_Gfs[]     = INCBIN_U8("graphics/ui_menus/battle_interface/run.4bpp");
 static const u8 sBattleAction_Info_Gfs[]    = INCBIN_U8("graphics/ui_menus/battle_interface/info.4bpp");
 
-//Testo
+#define MON_ICON_X 24
+#define MON_ICON_Y 132
+
+u8 BattleInterface_CreateMonIcon(u8 battler){
+    u16 species = gBattleMons[battler].species;
+    u8 spriteId = getsMonIconSpriteID();
+
+    /*MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "BattleInterface_CreateMonIcon spriteId %d", spriteId);
+    MgbaClose();*/
+
+    if(spriteId == MAX_SPRITES || spriteId == 0){
+        LoadMonIconPalette(species);
+        spriteId = CreateMonIcon(species, SpriteCB_MonIcon, MON_ICON_X, MON_ICON_Y, 0, 0xFFFFFFFF);
+        gSprites[spriteId].oam.priority = 1;
+        setsMonIconSpriteID(spriteId);
+    }
+
+    return spriteId;
+}
+
+void BattleInterface_DestroyMonIcon(void){
+    u8 spriteID = getsMonIconSpriteID();
+    if(spriteID != MAX_SPRITES){
+        FreeSpriteOamMatrix(&gSprites[spriteID]);
+        DestroySprite(&gSprites[spriteID]);
+        setsMonIconSpriteID(MAX_SPRITES);
+    }
+}
+
 static void PlayerHandleChooseAction(void)
 {
     // "What will {x} do?" + "Fight/Pokémon/Bag/Run" menu

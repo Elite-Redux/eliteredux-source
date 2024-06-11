@@ -771,6 +771,8 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
         }
     }
 
+    setsMonIconSpriteID(MAX_SPRITES);
+
     return retVal;
 }
 
