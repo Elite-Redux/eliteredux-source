@@ -4713,15 +4713,34 @@ Move_SPACIAL_REND:
 	fadetobgfromset BG_SPACIAL_REND_ON_OPPONENT BG_SPACIAL_REND_ON_PLAYER BG_SPACIAL_REND_ON_OPPONENT
 	waitbgfadein
 	loopsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET, 3, 5
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 65335, 65285, 40, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 65435, 65410, 40, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 0, 0, 40, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 100, 125, 40, 0x28
 	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 200, 250, 40, 0x28
 	createvisualtask AnimTask_ShakeMon, 2, ANIM_TARGET, 0, 3, 15, 1
 	waitforvisualfinish
 	loopsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET, 3, 5
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 200, 65285, 40, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 100, 65410, 40, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 0, 0, 40, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 65435, 125, 40, 0x28
 	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 65335, 250, 40, 0x28
 	createvisualtask AnimTask_ShakeMon, 2, ANIM_TARGET, 0, 3, 15, 1
 	waitforvisualfinish
 	loopsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET, 3, 5
-	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 0, 65285, 40, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 0, 450, 60, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 0, 225, 62, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 0, 65310, 64, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 0, 65085, 66, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 450, 0, 68, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 225, 0, 70, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 65310, 0, 72, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 65085, 0, 74, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 100, 65410, 76, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 65435, 125, 78, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 65435, 65410, 80, 0x28
+	createsprite gSpacialRendBladesTemplate2, ANIM_TARGET, 1, 5, 0, 100, 125, 82, 0x28
 	createvisualtask AnimTask_ShakeMon, 2, ANIM_TARGET, 0, 3, 15, 1
 	waitforvisualfinish
 	restorebg
