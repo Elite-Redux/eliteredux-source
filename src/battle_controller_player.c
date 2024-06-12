@@ -16,6 +16,7 @@
 #include "event_data.h"
 #include "item.h"
 #include "item_menu.h"
+#include "item_use.h"
 #include "international_string_util.h"
 #include "link.h"
 #include "main.h"
@@ -55,6 +56,7 @@ extern struct MusicPlayerInfo gMPlayInfo_BGM;
 //Mon Icons
 u8 BattleInterface_CreateMonIcon(u8 battler);
 void BattleInterface_DestroyMonIcon(void);
+void BattleInterface_SetInvisibleMonIcon(void);
 
 // this file's functions
 static void PlayerHandleGetMonData(void);
@@ -229,6 +231,7 @@ enum Colors
     FONT_BLUE,
     FONT_BLUE_2,
     FONT_GRAY_2,
+    FONT_GREEN,
 };
 
 static const u8 sMenuWindowFontColors[][3] = 
@@ -242,6 +245,7 @@ static const u8 sMenuWindowFontColors[][3] =
     [FONT_BLUE]    = {TEXT_COLOR_TRANSPARENT,  6, 7},
     [FONT_BLUE_2]  = {TEXT_COLOR_TRANSPARENT,  7, TEXT_COLOR_TRANSPARENT},
     [FONT_GRAY_2]  = {TEXT_COLOR_TRANSPARENT,  4, TEXT_COLOR_TRANSPARENT},
+    [FONT_GREEN]   = {TEXT_COLOR_TRANSPARENT,  15, TEXT_COLOR_TRANSPARENT},
 };
 
 enum optionsButtonMode
@@ -253,14 +257,14 @@ enum optionsButtonMode
     BATTLE_ACTION_INFO,
 };
 
-const u8 sText_BattleMenu_Action_Fight[]   = _("Fight");
-const u8 sText_BattleMenu_Action_Debug[]   = _("Debug");
-const u8 sText_BattleMenu_Action_Bag[]     = _("Bag");
-const u8 sText_BattleMenu_Action_Pokemon[] = _("Pokémon");
-const u8 sText_BattleMenu_Action_Forfeit[] = _("Forfeit");
-const u8 sText_BattleMenu_Action_Run[]     = _("Run");
-const u8 sText_BattleMenu_Action_Info[]    = _("Info");
-const u8 sText_BattleMenu_Action_Catch[]   = _("Catch");
+const u8 sText_BattleMenu_Action_Fight[]            = _("Fight");
+const u8 sText_BattleMenu_Action_Debug[]            = _("Debug");
+const u8 sText_BattleMenu_Action_Bag[]              = _("Bag");
+const u8 sText_BattleMenu_Action_Pokemon[]          = _("Pokémon");
+const u8 sText_BattleMenu_Action_Forfeit[]          = _("Forfeit");
+const u8 sText_BattleMenu_Action_Run[]              = _("Run");
+const u8 sText_BattleMenu_Action_Info[]             = _("Info");
+const u8 sText_BattleMenu_Action_Catch[]            = _("Catch");
 const u8 sText_BattleMenu_Action_What_Will_X_Do_1[] = _("What will");
 const u8 sText_BattleMenu_Action_What_Will_X_Do_2[] = _("{B_ACTIVE_NAME2}");
 const u8 sText_BattleMenu_Action_What_Will_X_Do_3[] = _("do?");
@@ -296,7 +300,7 @@ void PrintBattleWindow_ActionPromt(void)
     copyToVram = TRUE;
 
     MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "PrintBattleWindow_ActionPromt battler %d", battler);
+    MgbaPrintf(MGBA_LOG_WARN, "PrintBattleWindow_ActionPromt gActionSelectionCursor %d", gActionSelectionCursor[gActiveBattler]);
     MgbaClose();
 
     if(!isDoubleBattle)
@@ -704,7 +708,7 @@ void PrintBattleWindow_MoveSelection(void)
             if(effectiveness == MOVE_EFFECTIVENESS_NONE)
                 fontColor = FONT_GRAY_2;
             else if(effectiveness == MOVE_EFFECTIVENESS_DOUBLE)
-                fontColor = FONT_BLUE_2;
+                fontColor = FONT_GREEN;
             else if (effectiveness == MOVE_EFFECTIVENESS_HALF)
                 fontColor = FONT_RED_2;
             else
@@ -942,11 +946,13 @@ static void HandleInputChooseAction(void)
             case BATTLE_ACTION_BAG:
                 if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
                 {
-                    gBattle_BG1_Y = 160;
-                    PlaySE(SE_SELECT);
-                    gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
-                    BtlController_EmitTwoReturnValues(1, B_ACTION_THROW_BALL, 0);
-                    PlayerBufferExecCompleted();
+                    if(CanThrowBall() == 0){
+                        gBattle_BG1_Y = 160;
+                        PlaySE(SE_SELECT);
+                        gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
+                        BtlController_EmitTwoReturnValues(1, B_ACTION_THROW_BALL, 0);
+                        PlayerBufferExecCompleted();
+                    }
                 }
                 else if (B_ENABLE_DEBUG)
                 {
@@ -959,6 +965,7 @@ static void HandleInputChooseAction(void)
                     PrintBattleWindow_ActionPromt();
                     PlayerBufferExecCompleted();
                 }
+                BattleInterface_SetInvisibleMonIcon();
             break;
             case BATTLE_ACTION_POKEMON:
                 BtlController_EmitTwoReturnValues(1, B_ACTION_SWITCH, 0);
@@ -970,8 +977,10 @@ static void HandleInputChooseAction(void)
                 BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
                 PrintBattleWindow_ActionPromt();
                 PlayerBufferExecCompleted();
+                BattleInterface_SetInvisibleMonIcon();
             break;
             case BATTLE_ACTION_INFO:
+                BattleInterface_SetInvisibleMonIcon();
                 value = 2;
                 VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
                 VarSet(VAR_BATTLE_MENU_ID, BATTLE_MENU_CHOSE_ACTION);
@@ -4526,6 +4535,9 @@ u8 BattleInterface_CreateMonIcon(u8 battler){
         gSprites[spriteId].oam.priority = 1;
         setsMonIconSpriteID(spriteId);
     }
+    else{
+        gSprites[spriteId].invisible = FALSE;
+    }
 
     return spriteId;
 }
@@ -4537,6 +4549,11 @@ void BattleInterface_DestroyMonIcon(void){
         DestroySprite(&gSprites[spriteID]);
         setsMonIconSpriteID(MAX_SPRITES);
     }
+}
+
+void BattleInterface_SetInvisibleMonIcon(void){
+    u8 spriteID = getsMonIconSpriteID();
+    gSprites[spriteID].invisible = TRUE;
 }
 
 static void PlayerHandleChooseAction(void)
