@@ -1,9 +1,9 @@
 {
-  "id": "MAP_SAFFRON_CITY_GYM",
-  "name": "SaffronCity_Gym",
-  "layout": "LAYOUT_SAFFRON_CITY_GYM",
-  "music": "MUS_RG_GYM",
-  "region_map_section": "MAPSEC_SAFFRON_CITY",
+  "id": "MAP_LAVENDER_TOWN_HOUSE1",
+  "name": "LavenderTown_House1",
+  "layout": "LAYOUT_LAVENDER_TOWN_HOUSE1",
+  "music": "MUS_RG_LAVENDER",
+  "region_map_section": "MAPSEC_LAVENDER_TOWN",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
   "map_type": "MAP_TYPE_INDOOR",
@@ -18,17 +18,10 @@
   ],
   "warp_events": [
     {
-      "x": 14,
-      "y": 23,
+      "x": 4,
+      "y": 7,
       "elevation": 0,
-      "dest_map": "MAP_SAFFRON_CITY",
-      "dest_warp_id": 11
-    },
-    {
-      "x": 18,
-      "y": 20,
-      "elevation": 0,
-      "dest_map": "MAP_SAFFRON_CITY_GYM",
+      "dest_map": "MAP_LAVENDER_TOWN",
       "dest_warp_id": 0
     }
   ],

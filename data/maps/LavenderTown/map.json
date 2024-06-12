@@ -33,7 +33,27 @@
 
   ],
   "warp_events": [
-
+    {
+      "x": 5,
+      "y": 16,
+      "elevation": 0,
+      "dest_map": "MAP_LAVENDER_TOWN_HOUSE1",
+      "dest_warp_id": 0
+    },
+    {
+      "x": 10,
+      "y": 16,
+      "elevation": 0,
+      "dest_map": "MAP_LAVENDER_TOWN_HOUSE2",
+      "dest_warp_id": 1
+    },
+    {
+      "x": 10,
+      "y": 11,
+      "elevation": 0,
+      "dest_map": "MAP_LAVENDER_TOWN_VOLUNTEER_POKEMON_HOUSE",
+      "dest_warp_id": 0
+    }
   ],
   "coord_events": [
 

@@ -1171,3 +1171,14 @@ gTileset_SaffronGym::
 	.4byte gMetatiles_SaffronGym
 	.4byte gMetatileAttributes_SaffronGym
 	.4byte NULL
+
+	.align 2
+gTileset_SilphCo::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_SilphCo
+	.4byte gTilesetPalettes_SilphCo
+	.4byte gMetatiles_SilphCo
+	.4byte gMetatileAttributes_SilphCo
+	.4byte NULL

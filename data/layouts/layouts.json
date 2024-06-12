@@ -5630,6 +5630,46 @@
       "secondary_tileset": "gTileset_SaffronGym",
       "border_filepath": "data/layouts/SaffronCity_Gym/border.bin",
       "blockdata_filepath": "data/layouts/SaffronCity_Gym/map.bin"
+    },
+    {
+      "id": "LAYOUT_SILPH_CO_1F",
+      "name": "SilphCo_1F_Layout",
+      "width": 36,
+      "height": 22,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/SilphCo_1F/border.bin",
+      "blockdata_filepath": "data/layouts/SilphCo_1F/map.bin"
+    },
+    {
+      "id": "LAYOUT_LAVENDER_TOWN_HOUSE1",
+      "name": "LavenderTown_House1_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/LavenderTown_House1/border.bin",
+      "blockdata_filepath": "data/layouts/LavenderTown_House1/map.bin"
+    },
+    {
+      "id": "LAYOUT_LAVENDER_TOWN_HOUSE2",
+      "name": "LavenderTown_House2_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Generic_Building2",
+      "border_filepath": "data/layouts/LavenderTown_House2/border.bin",
+      "blockdata_filepath": "data/layouts/LavenderTown_House2/map.bin"
+    },
+    {
+      "id": "LAYOUT_LAVENDER_TOWN_VOLUNTEER_POKEMON_HOUSE",
+      "name": "LavenderTown_VolunteerPokemonHouse_Layout",
+      "width": 12,
+      "height": 9,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_FanClubDaycare",
+      "border_filepath": "data/layouts/LavenderTown_VolunteerPokemonHouse/border.bin",
+      "blockdata_filepath": "data/layouts/LavenderTown_VolunteerPokemonHouse/map.bin"
     }
   ]
 }

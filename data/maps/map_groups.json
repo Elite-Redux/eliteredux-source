@@ -96,7 +96,8 @@
     "Underwater_Route105",
     "Underwater_Route125",
     "Route1",
-    "SeafoamIslands_B3F"
+    "SeafoamIslands_B3F",
+    "LavenderTown_House2"
   ],
   "gMapGroup_IndoorLittleroot": [
     "LittlerootTown_BrendansHouse_1F",
@@ -199,7 +200,10 @@
     "SaffronCity_PokemonTrainerFanClub",
     "SaffronCity_MrPsychicsHouse",
     "SaffronCity_Dojo",
-    "SaffronCity_Gym"
+    "SaffronCity_Gym",
+    "SilphCo_1F",
+    "LavenderTown_House1",
+    "LavenderTown_VolunteerPokemonHouse"
   ],
   "gMapGroup_IndoorOldale": [
     "OldaleTown_House1",

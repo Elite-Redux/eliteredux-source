@@ -780,3 +780,10 @@ gMetatiles_SaffronGym::
 	.align 1
 gMetatileAttributes_SaffronGym::
 	.incbin "data/tilesets/secondary/saffrongym/metatile_attributes.bin"
+	.align 1
+gMetatiles_SilphCo::
+	.incbin "data/tilesets/secondary/silphco/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_SilphCo::
+	.incbin "data/tilesets/secondary/silphco/metatile_attributes.bin"

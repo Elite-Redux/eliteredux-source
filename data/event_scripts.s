@@ -1304,3 +1304,11 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/SaffronCity_Dojo/scripts.inc"
 
 	.include "data/maps/SaffronCity_Gym/scripts.inc"
+
+	.include "data/maps/SilphCo_1F/scripts.inc"
+
+	.include "data/maps/LavenderTown_House1/scripts.inc"
+
+	.include "data/maps/LavenderTown_House2/scripts.inc"
+
+	.include "data/maps/LavenderTown_VolunteerPokemonHouse/scripts.inc"
