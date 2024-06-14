@@ -17,6 +17,7 @@
 #include "battle_interface.h"
 #include "battle_anim.h"
 #include "data.h"
+#include "mgba_printf/mgba.h"
 
 // this file's functions
 static void CB2_ReshowBattleScreenAfterMenu(void);
@@ -32,12 +33,14 @@ void ReshowBattleScreenDummy(void)
 
 void ReshowBattleScreenAfterMenu(void)
 {
+    gActionSelectionCursor[gActiveBattler] = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F);
     gPaletteFade.bufferTransferDisabled = 1;
     SetHBlankCallback(NULL);
     SetVBlankCallback(NULL);
     SetGpuReg(REG_OFFSET_MOSAIC, 0);
     gBattleScripting.reshowMainState = 0;
     gBattleScripting.reshowHelperState = 0;
+    VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, 0);
     SetMainCallback2(CB2_ReshowBattleScreenAfterMenu);
 }
 

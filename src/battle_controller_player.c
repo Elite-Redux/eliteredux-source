@@ -22,6 +22,7 @@
 #include "main.h"
 #include "menu.h"
 #include "m4a.h"
+#include "overworld.h"
 #include "palette.h"
 #include "party_menu.h"
 #include "pokeball.h"
@@ -299,17 +300,12 @@ void PrintBattleWindow_ActionPromt(void)
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     copyToVram = TRUE;
 
-    MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "PrintBattleWindow_ActionPromt gActionSelectionCursor %d", gActionSelectionCursor[gActiveBattler]);
-    MgbaClose();
-
-    if(!isDoubleBattle)
-        battler = 0;
-    else
-        battler = battler % 4;
+    /*MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "PrintBattleWindow_ActionPromt gActionSelectionCursor: %d gActiveBattler: %d", gActionSelectionCursor[gActiveBattler], gActiveBattler);
+    MgbaClose();*/
 
     //Pokemon Icons
-    BattleInterface_CreateMonIcon(battler);
+    //BattleInterface_CreateMonIcon(battler);
 
     //Pokeball Icons
     x  = 17;
@@ -588,7 +584,7 @@ void PrintBattleWindow_MoveSelection(void)
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     copyToVram = TRUE;
 
-    BattleInterface_DestroyMonIcon();
+    //BattleInterface_DestroyMonIcon();
 
     x  = 2;
     y  = 0;
@@ -603,8 +599,8 @@ void PrintBattleWindow_MoveSelection(void)
         StringCopy(gStringVar1, gMoveNamesLong[move]);
         AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
         //PP
-        ConvertIntToDecimalStringN(gStringVar1, gBattleMons[gActiveBattler].pp[i], STR_CONV_MODE_LEFT_ALIGN, 3); //Current PP
-        ConvertIntToDecimalStringN(gStringVar2, gBattleMoves[move].pp, STR_CONV_MODE_LEFT_ALIGN, 3);             //Max PP, ToFix
+        ConvertIntToDecimalStringN(gStringVar1, gBattleMons[gActiveBattler].pp[i], STR_CONV_MODE_LEFT_ALIGN, 3);  // Current PP
+        ConvertIntToDecimalStringN(gStringVar2, CalculatePPWithBonus(move, 255, 0), STR_CONV_MODE_LEFT_ALIGN, 3); // Max PP
         StringExpandPlaceholders(gStringVar4, sText_PP);
         AddTextPrinterParameterized4(windowId, font, (x * 8) + SPACE_BETWEEN_MOVE_NAME_AND_PP - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
 
@@ -901,19 +897,12 @@ enum{
 };
 
 void ReshowNewBattleMenuAfterMenu(void){
-    switch(VarGet(VAR_BATTLE_MENU_ID)){
-        case BATTLE_MENU_CHOSE_ACTION:
-            LoadBattleTextboxAndBackground();
-            PrintBattleWindow_ActionPromt();
-            gBattle_BG0_Y = 160;
-            //gBattle_BG1_Y = 160;
-        break;
-        case BATTLE_MENU_CHOSE_MOVE:
-            PrintBattleWindow_MoveSelection();
-            gBattle_BG0_Y = 160 * 2;
-            //gBattle_BG1_Y = 160 * 2;
-        break;
-    }
+    if(VarGet(VAR_TEMP_SPECIAL_VAR) != 0xFF)
+        gActiveBattler = VarGet(VAR_TEMP_SPECIAL_VAR);
+    LoadBattleTextboxAndBackground();
+    PrintBattleWindow_ActionPromt();
+    gBattle_BG0_Y = 160;
+    VarSet(VAR_TEMP_SPECIAL_VAR, 0xFF);
 }
 
 #define ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN FALSE // No idea what to call this constant
@@ -921,11 +910,15 @@ void ReshowNewBattleMenuAfterMenu(void){
 static void HandleInputChooseAction(void)
 {
     u16 itemId = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
+    bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
     u8 value = 0;
-    bool8 isTrainerBattle = gBattleTypeFlags & BATTLE_TYPE_TRAINER;
+
+    /*MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "HandleInputChooseAction VAR_TEMP_SPECIAL_VAR: %d gActiveBattler: %d", VarGet(VAR_TEMP_SPECIAL_VAR), gActiveBattler);
+    MgbaClose();*/
 
     DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
-    DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
+    DoBounceEffect(gActiveBattler, BOUNCE_MON,       7, 1);
 
     if (JOY_REPEAT(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
         gPlayerDpadHoldFrames++;
@@ -934,33 +927,39 @@ static void HandleInputChooseAction(void)
 
     if (JOY_NEW(A_BUTTON))
     {
-        PlaySE(SE_SELECT);
 
         switch (gActionSelectionCursor[gActiveBattler])
         {
             case BATTLE_ACTION_FIGHT:
+                PlaySE(SE_SELECT);
                 BtlController_EmitTwoReturnValues(1, B_ACTION_USE_MOVE, 0);
                 PrintBattleWindow_ActionPromt();
                 PlayerBufferExecCompleted();
             break;
             case BATTLE_ACTION_BAG:
-                if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+                if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && 
+                   !(gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)))
                 {
-                    if(CanThrowBall() == 0){
-                        gBattle_BG1_Y = 160;
+                    if(CanThrowBall() == 0 && GetGameStat(GAME_STAT_USED_POKECENTER) != 0){
                         PlaySE(SE_SELECT);
+                        gBattle_BG1_Y = 160;
                         gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
                         BtlController_EmitTwoReturnValues(1, B_ACTION_THROW_BALL, 0);
                         PlayerBufferExecCompleted();
                     }
+                    else{
+                        PlaySE(SE_BOO);
+                    }
                 }
                 else if (B_ENABLE_DEBUG)
                 {
+                    PlaySE(SE_SELECT);
                     gBattle_BG1_Y = 160;
                     BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
                     PlayerBufferExecCompleted();
                 }
                 else{
+                    PlaySE(SE_SELECT);
                     BtlController_EmitTwoReturnValues(1, B_ACTION_USE_ITEM, 0);
                     PrintBattleWindow_ActionPromt();
                     PlayerBufferExecCompleted();
@@ -968,11 +967,13 @@ static void HandleInputChooseAction(void)
                 BattleInterface_SetInvisibleMonIcon();
             break;
             case BATTLE_ACTION_POKEMON:
+                PlaySE(SE_SELECT);
                 BtlController_EmitTwoReturnValues(1, B_ACTION_SWITCH, 0);
                 PrintBattleWindow_ActionPromt();
                 PlayerBufferExecCompleted();
             break;
             case BATTLE_ACTION_RUN:
+                PlaySE(SE_SELECT);
                 gBattle_BG1_Y = 160;
                 BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
                 PrintBattleWindow_ActionPromt();
@@ -980,10 +981,11 @@ static void HandleInputChooseAction(void)
                 BattleInterface_SetInvisibleMonIcon();
             break;
             case BATTLE_ACTION_INFO:
-                BattleInterface_SetInvisibleMonIcon();
+                PlaySE(SE_SELECT);
                 value = 2;
+                BattleInterface_SetInvisibleMonIcon();
                 VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
-                VarSet(VAR_BATTLE_MENU_ID, BATTLE_MENU_CHOSE_ACTION);
+                VarSet(VAR_TEMP_SPECIAL_VAR, gActiveBattler);
                 BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
                 FreeAllWindowBuffers();
                 UI_Battle_Menu_Init(CB2_SetUpReshowBattleScreenAfterMenu);
@@ -4552,8 +4554,8 @@ void BattleInterface_DestroyMonIcon(void){
 }
 
 void BattleInterface_SetInvisibleMonIcon(void){
-    u8 spriteID = getsMonIconSpriteID();
-    gSprites[spriteID].invisible = TRUE;
+    /*u8 spriteID = getsMonIconSpriteID();
+    gSprites[spriteID].invisible = TRUE;*/
 }
 
 static void PlayerHandleChooseAction(void)

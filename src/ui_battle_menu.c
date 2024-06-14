@@ -4944,6 +4944,7 @@ void CB2_SetUpReshowBattleMenuAfterSummaryScreen(void)
 /* This is the meat of the UI. This is where you wait for player inputs and can branch to other tasks accordingly */
 static void Task_MenuMain(u8 taskId)
 {
+    u8 value = 3;
     if (JOY_NEW(B_BUTTON))
     {
         if(sMenuDataPtr->modeId == MODE_FIELD && sMenuDataPtr->fieldTabId == TAB_PARTY && sMenuDataPtr->partySelectorMode){
@@ -4954,6 +4955,7 @@ static void Task_MenuMain(u8 taskId)
             PrintPartyTab();
         }
         else{
+            VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
             PlaySE(SE_PC_OFF);
             BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);
             gTasks[taskId].func = Task_MenuTurnOff;
