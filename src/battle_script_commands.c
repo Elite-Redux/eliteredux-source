@@ -1616,7 +1616,8 @@ static void Cmd_attackcanceler(void)
 
     // Check Protean activation
     if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_PROTEAN || BattlerHasInnate(gBattlerAttacker, ABILITY_PROTEAN) ||
-	     GetBattlerAbility(gBattlerAttacker) == ABILITY_LIBERO  || BattlerHasInnate(gBattlerAttacker, ABILITY_LIBERO))
+	     GetBattlerAbility(gBattlerAttacker) == ABILITY_LIBERO  || BattlerHasInnate(gBattlerAttacker, ABILITY_LIBERO) ||
+         GetBattlerAbility(gBattlerAttacker) == ABILITY_RKS_SYSTEM  || BattlerHasInnate(gBattlerAttacker, ABILITY_RKS_SYSTEM))
         && (gBattleMons[gBattlerAttacker].type1 != moveType || gBattleMons[gBattlerAttacker].type2 != moveType ||
             (gBattleMons[gBattlerAttacker].type3 != moveType && gBattleMons[gBattlerAttacker].type3 != TYPE_MYSTERY))
         && gCurrentMove != MOVE_STRUGGLE)
@@ -1625,6 +1626,10 @@ static void Cmd_attackcanceler(void)
 			gBattleScripting.abilityPopupOverwrite = ABILITY_PROTEAN;
 			gLastUsedAbility = ABILITY_PROTEAN;
 		}
+        else if(GetBattlerAbility(gBattlerAttacker) == ABILITY_RKS_SYSTEM  || BattlerHasInnate(gBattlerAttacker, ABILITY_RKS_SYSTEM)){
+            gBattleScripting.abilityPopupOverwrite = ABILITY_RKS_SYSTEM;
+            gLastUsedAbility = ABILITY_RKS_SYSTEM;
+        }
 		else{
 			gBattleScripting.abilityPopupOverwrite = ABILITY_LIBERO;
 			gLastUsedAbility = ABILITY_LIBERO;
