@@ -26,7 +26,10 @@
 #include "constants/trainers.h"
 #include "constants/battle_anim.h"
 
-//Testo
+//Theme Stuf
+const u32 gBattleTextboxPalette_1[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
+const u32 gBattleTextboxPalette_2[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
+
 enum{
     BG_TEXTBOX,
     BG_BATTLE_ENTRY,
@@ -181,9 +184,6 @@ const struct WindowTemplate gStandardBattleWindowTemplates[] =
         .width = 26,
         .height = 4,
         .paletteNum = 0,
-        //.fgColor = 1,
-        //.bgColor = 1,
-        //.shadowColor = 1,
         .baseBlock = 0x0090,
     },
     [B_WIN_ACTION_PROMPT] = {
@@ -214,22 +214,22 @@ const struct WindowTemplate gStandardBattleWindowTemplates[] =
         .baseBlock = 0x02b0,
     },
     [B_WIN_YESNO] = {
-        .bg = B_WIN_DEFAULT_BG,
+        .bg          = B_WIN_DEFAULT_BG,
         .tilemapLeft = 26,
-        .tilemapTop = 9,
-        .width = 3,
-        .height = 4,
-        .paletteNum = 5,
-        .baseBlock = 0x0100,
+        .tilemapTop  = 9,
+        .width       = 3,
+        .height      = 4,
+        .paletteNum  = 0,
+        .baseBlock = 0x016e,
     },
     [B_WIN_LEVEL_UP_BOX] = {
-        .bg = B_WIN_DEFAULT_BG_1,
+        .bg          = B_WIN_DEFAULT_BG_1,
         .tilemapLeft = 19,
-        .tilemapTop = 8,
-        .width = 10,
-        .height = 11,
-        .paletteNum = 5,
-        .baseBlock = 0x0100,
+        .tilemapTop  = 8,
+        .width       = 10,
+        .height      = 11,
+        .paletteNum  = 0,
+        .baseBlock = 0x016e,
     },
     [B_WIN_LEVEL_UP_BANNER] = {
         .bg = B_WIN_DEFAULT_BG_2,
@@ -858,8 +858,6 @@ void LoadBattleBg(u8 battleBgType, u8 battleTerrain)
         break;
     }
 }
-const u32 gBattleTextboxPalette_1[] = INCBIN_U32("graphics/ui_menus/battle_interface/palette.gbapal.lz");
-const u32 gBattleTextboxPalette_2[] = INCBIN_U32("graphics/ui_menus/battle_interface/palette.gbapal.lz");
 
 //Testo
 void LoadBattleTextboxAndBackground(void)
