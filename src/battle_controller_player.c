@@ -385,7 +385,7 @@ void PrintBattleWindow_ActionPromt(void)
         // Fight
         x = x + 6;
         y = 2;
-        font = FONT_NARROW;
+        font = FONT_SMALL_NARROW;
         StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
         if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
             BlitBitmapToWindow(windowId, sBattleSelector2x, ((x - 1) * 8), ((y - 1) * 8) + y2, 48, 32);
@@ -396,6 +396,7 @@ void PrintBattleWindow_ActionPromt(void)
         // Fight
         x = x + 6;
         y  = 1;
+        font = FONT_SMALL_NARROW;
         StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
         if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
             BlitBitmapToWindow(windowId, sBattleSelector1x, ((x - 1) * 8), (y * 8) + y2, 48, 16);
@@ -852,9 +853,6 @@ void PrintBattleWindow_MoveSelection(void)
                 u8 moveIndex = gMoveSelectionCursor[gActiveBattler];
                 x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
                 StringCopy(gStringVar3, gSpeciesNames[gBattleMons[target].species]);
-                /*MgbaOpen();
-                MgbaPrintf(MGBA_LOG_WARN, "Min Damage %d", percentage);
-                MgbaClose();*/
                 if(targetCurrentHp > minDamage){
                     //Min Damage Percentage
                     percentage = (minDamage * MAX_PERCENT_2) / targetCurrentHp; 

@@ -3096,13 +3096,6 @@ void DoBounceEffect(u8 battler, u8 which, s8 delta, s8 amplitude)
     u8 invisibleSpriteId;
     u8 bouncerSpriteId;
 
-    /*MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "DoBounceEffect battler: %d", battler);
-    MgbaClose();
-
-    if(battler >= gBattlersCount)
-        battler = battler % gBattlersCount;*/
-
     switch (which)
     {
     case BOUNCE_HEALTHBOX:
