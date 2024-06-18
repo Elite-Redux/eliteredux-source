@@ -463,7 +463,12 @@ MossdeepCity_Text_HaveTM96:
 script MossdeepCity_EventScript_ScientistThrowPlayerRoute126 {
     lock
     faceplayer
-    if (flag(FLAG_HIDE_MOSSDEEP_CITY_TEAM_MAGMA) == FALSE){
+    if (flag(FLAG_DEFEATED_MOSSDEEP_GYM) == FALSE){
+        msgbox(format("The rocket is currently undergoing fueling, It's going to take a while. The more propellant you put, the heavier so needier in propellant it gets."), MSGBOX_DEFAULT)
+        release
+        end
+    }
+    if (flag(FLAG_RECEIVED_HM08) == FALSE){
         msgbox(format("Save the rocket fuel please aaauuurrgh."), MSGBOX_DEFAULT)
         release
         end
