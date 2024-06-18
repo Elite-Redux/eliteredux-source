@@ -172,6 +172,13 @@
 #define MAP_SILPH_CO_1F                           (101 | (1 << 8))
 #define MAP_LAVENDER_TOWN_HOUSE1                  (102 | (1 << 8))
 #define MAP_LAVENDER_TOWN_VOLUNTEER_POKEMON_HOUSE (103 | (1 << 8))
+#define MAP_POKEMON_TOWER_1F                      (104 | (1 << 8))
+#define MAP_POKEMON_TOWER_2F                      (105 | (1 << 8))
+#define MAP_POKEMON_TOWER_3F                      (106 | (1 << 8))
+#define MAP_POKEMON_TOWER_4F                      (107 | (1 << 8))
+#define MAP_POKEMON_TOWER_5F                      (108 | (1 << 8))
+#define MAP_POKEMON_TOWER_6F                      (109 | (1 << 8))
+#define MAP_POKEMON_TOWER_7F                      (110 | (1 << 8))
 
 // gMapGroup_IndoorOldale
 #define MAP_OLDALE_TOWN_HOUSE1            (0 | (2 << 8))

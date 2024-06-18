@@ -1312,3 +1312,17 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/LavenderTown_House2/scripts.inc"
 
 	.include "data/maps/LavenderTown_VolunteerPokemonHouse/scripts.inc"
+
+	.include "data/maps/PokemonTower_1F/scripts.inc"
+
+	.include "data/maps/PokemonTower_2F/scripts.inc"
+
+	.include "data/maps/PokemonTower_3F/scripts.inc"
+
+	.include "data/maps/PokemonTower_4F/scripts.inc"
+
+	.include "data/maps/PokemonTower_5F/scripts.inc"
+
+	.include "data/maps/PokemonTower_6F/scripts.inc"
+
+	.include "data/maps/PokemonTower_7F/scripts.inc"

@@ -1182,3 +1182,14 @@ gTileset_SilphCo::
 	.4byte gMetatiles_SilphCo
 	.4byte gMetatileAttributes_SilphCo
 	.4byte NULL
+
+	.align 2
+gTileset_PokemonTower::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_PokemonTower
+	.4byte gTilesetPalettes_PokemonTower
+	.4byte gMetatiles_PokemonTower
+	.4byte gMetatileAttributes_PokemonTower
+	.4byte NULL

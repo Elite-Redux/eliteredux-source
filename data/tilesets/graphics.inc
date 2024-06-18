@@ -2369,3 +2369,23 @@ gTilesetPalettes_SilphCo::
 	.align 2
 gTilesetTiles_SilphCo::
 	.incbin "data/tilesets/secondary/silphco/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_PokemonTower::
+	.incbin "data/tilesets/secondary/pokemontower/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/pokemontower/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_PokemonTower::
+	.incbin "data/tilesets/secondary/pokemontower/tiles.4bpp.lz"

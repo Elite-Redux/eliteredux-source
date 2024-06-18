@@ -787,3 +787,10 @@ gMetatiles_SilphCo::
 	.align 1
 gMetatileAttributes_SilphCo::
 	.incbin "data/tilesets/secondary/silphco/metatile_attributes.bin"
+	.align 1
+gMetatiles_PokemonTower::
+	.incbin "data/tilesets/secondary/pokemontower/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_PokemonTower::
+	.incbin "data/tilesets/secondary/pokemontower/metatile_attributes.bin"
