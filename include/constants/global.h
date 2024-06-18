@@ -134,6 +134,10 @@
 #define LEVEL_CAPS_ELITE       2
 #define LEVEL_CAPS_OFF         3
 
+//Themes
+#define THEME_1_DARK  0
+#define THEME_1_LIGHT 1
+
 //Saveblock Toggle Stuff
 #define SAVEBLOCK_RANDOMIZER        0
 #define SAVEBLOCK_INNATE_RANDOMIZER 1

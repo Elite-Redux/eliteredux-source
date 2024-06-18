@@ -46,4 +46,6 @@ void FreeMonSpritesGfx(void);
 bool32 ShouldPlayNormalMonCry(struct Pokemon *mon);
 void LoadHealthBoxesPalette(void);
 
+u8 getBattleInterfaceTheme(void);
+
 #endif // GUARD_BATTLE_GFX_SFX_UTIL_H

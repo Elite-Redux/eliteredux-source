@@ -519,9 +519,18 @@ static void CB2_EggHatch_0(void)
         gMain.state++;
         break;
     case 2:
-        DecompressAndLoadBgGfxUsingHeap(0, gBattleTextboxTiles, 0, 0, 0);
-        CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0);
-        LoadCompressedPalette(gBattleTextboxPalette, 0, 0x20);
+        switch(getBattleInterfaceTheme()){
+            case THEME_1_DARK:
+                DecompressAndLoadBgGfxUsingHeap(0, gTheme_1_Dark_BattleTextboxTiles, 0, 0, 0);
+                CopyToBgTilemapBuffer(0, gTheme_1_Dark_BattleTextboxTilemap, 0, 0);
+                LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette, 0, 0x20);
+            break;
+            case THEME_1_LIGHT:
+                DecompressAndLoadBgGfxUsingHeap(0, gTheme_1_Light_BattleTextboxTiles, 0, 0, 0);
+                CopyToBgTilemapBuffer(0, gTheme_1_Light_BattleTextboxTilemap, 0, 0);
+                LoadCompressedPalette(gTheme_1_Light_BattleTextboxPalette, 0, 0x20);
+            break;
+        }
         gMain.state++;
         break;
     case 3:

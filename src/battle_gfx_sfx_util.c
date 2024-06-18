@@ -719,6 +719,10 @@ void LoadHealthBoxesPalette(void)
     LoadSpritePalette(&sSpritePalettes_HealthBoxHealthBar[0]);
 }
 
+u8 getBattleInterfaceTheme(void){
+    return gSaveBlock2Ptr->battleInterfaceTheme;
+}
+
 bool8 BattleLoadAllHealthBoxesGfx(u8 state)
 {
     bool8 retVal = FALSE;

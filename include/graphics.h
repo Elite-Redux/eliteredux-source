@@ -7398,10 +7398,16 @@ extern const u32 gBerryFixWindow_Gfx[];
 extern const u32 gBerryFixWindow_Tilemap[];
 extern const u16 gBerryFixWindow_Pal[];
 
-extern const u32 gBattleTextboxTiles[];
-extern const u32 gBattleTextboxTilemap[];
-extern const u32 gBattleTextboxTrainerTilemap[];
-extern const u32 gBattleTextboxPalette[];
+//Theme Stuff
+// Theme 1 Dark
+extern const u32 gTheme_1_Dark_BattleTextboxTiles[];
+extern const u32 gTheme_1_Dark_BattleTextboxTilemap[];
+extern const u32 gTheme_1_Dark_BattleTextboxPalette[];
+// Theme 1 Light
+extern const u32 gTheme_1_Light_BattleTextboxTiles[];
+extern const u32 gTheme_1_Light_BattleTextboxTilemap[];
+extern const u32 gTheme_1_Light_BattleTextboxPalette[];
+
 extern const u32 gUnknown_08D778F0[];
 extern const u32 gVsLettersGfx[];
 extern const u32 gUnknown_08D77AE4[];

@@ -4025,7 +4025,18 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
     }
     else
     {
-        FillWindowPixelBuffer(windowId, textInfo[windowId].fillValue);
+        //Overrides
+        switch(getBattleInterfaceTheme()){
+            case THEME_1_DARK:
+                FillWindowPixelBuffer(windowId, PIXEL_FILL(3));
+            break;
+            case THEME_1_LIGHT:
+                FillWindowPixelBuffer(windowId, PIXEL_FILL(10));
+            break;
+            default:
+                FillWindowPixelBuffer(windowId, textInfo[windowId].fillValue);
+            break;
+        }
         copyToVram = TRUE;
     }
 
@@ -4039,9 +4050,24 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
     printerTemplate.letterSpacing = textInfo[windowId].letterSpacing;
     printerTemplate.lineSpacing   = textInfo[windowId].lineSpacing;
     printerTemplate.unk           = 0;
-    printerTemplate.fgColor       = textInfo[windowId].fgColor;
-    printerTemplate.bgColor       = textInfo[windowId].bgColor;
-    printerTemplate.shadowColor   = textInfo[windowId].shadowColor;
+    //Overrides
+    switch(getBattleInterfaceTheme()){
+        case THEME_1_DARK:
+            printerTemplate.fgColor       = 10; // Font Color
+            printerTemplate.bgColor       = 3;  // Background Color
+            printerTemplate.shadowColor   = 0;  // Shadow Color
+        break;
+        case THEME_1_LIGHT:
+            printerTemplate.fgColor       = 3;  // Font Color
+            printerTemplate.bgColor       = 10; // Background Color
+            printerTemplate.shadowColor   = 0;  // Shadow Color
+        break;
+        default:
+            printerTemplate.fgColor       = textInfo[windowId].fgColor;
+            printerTemplate.bgColor       = textInfo[windowId].bgColor;
+            printerTemplate.shadowColor   = textInfo[windowId].shadowColor;
+        break;
+    }
 
     if (printerTemplate.x == 0xFF)
     {

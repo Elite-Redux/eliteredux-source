@@ -27,8 +27,7 @@
 #include "constants/battle_anim.h"
 
 //Theme Stuf
-const u32 gBattleTextboxPalette_1[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
-const u32 gBattleTextboxPalette_2[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
+const u32 gTheme_1_Dark_BattleTextboxPalette_1[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
 
 enum{
     BG_TEXTBOX,
@@ -865,30 +864,29 @@ void LoadBattleTextboxAndBackground(void)
     //Loads Tiles and Tilemap for the Battle Textbox
     bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
 
-    LZDecompressVram(gBattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
-    if(!isTrainerBattle)
-        CopyToBgTilemapBuffer(BG_TEXTBOX, gBattleTextboxTilemap, 0, 0);
-    else
-        CopyToBgTilemapBuffer(BG_TEXTBOX, gBattleTextboxTrainerTilemap, 0, 0);
+    switch(getBattleInterfaceTheme()){
+        case THEME_1_DARK:
+            LZDecompressVram(gTheme_1_Dark_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            CopyToBgTilemapBuffer(BG_TEXTBOX, gTheme_1_Dark_BattleTextboxTilemap, 0, 0);
+        break;
+        case THEME_1_LIGHT:
+            LZDecompressVram(gTheme_1_Light_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            CopyToBgTilemapBuffer(BG_TEXTBOX, gTheme_1_Light_BattleTextboxTilemap, 0, 0);
+        break;
+    }
+
 
     CopyBgTilemapBufferToVram(BG_TEXTBOX);
     ShowBg(1);
 
-    LoadCompressedPalette(gBattleTextboxPalette_1, 0,    0x20);
-    LoadCompressedPalette(gBattleTextboxPalette_2, 0x10, 0x20);
+    LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette_1, 0,    0x20);
+    LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette_1, 0x10, 0x20);
 
     #if B_TERRAIN_BG_CHANGE == TRUE
         DrawTerrainTypeBattleBackground();
     #else
         DrawMainBattleBackground();
     #endif
-
-    //Original Function
-    /*
-    LZDecompressVram(gBattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
-    CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0);
-    CopyBgTilemapBufferToVram(0);
-    */
 }
 
 static void DrawLinkBattleParticipantPokeballs(u8 taskId, u8 multiplayerId, u8 bgId, u8 destX, u8 destY)
@@ -1236,14 +1234,21 @@ bool8 LoadChosenBattleElement(u8 caseId)
     switch (caseId)
     {
     case 0:
-        LZDecompressVram(gBattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+        switch(getBattleInterfaceTheme()){
+            case THEME_1_DARK:
+                LZDecompressVram(gTheme_1_Dark_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            break;
+            case THEME_1_LIGHT:
+                LZDecompressVram(gTheme_1_Light_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            break;
+        }
         break;
     case 1:
-        CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0);
+        CopyToBgTilemapBuffer(0, gTheme_1_Dark_BattleTextboxTilemap, 0, 0);
         CopyBgTilemapBufferToVram(0);
         break;
     case 2:
-        LoadCompressedPalette(gBattleTextboxPalette, 0, 0x40);
+        LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette, 0, 0x40);
         break;
     case 3:
         if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_EREADER_TRAINER))

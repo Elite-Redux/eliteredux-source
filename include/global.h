@@ -580,7 +580,7 @@ struct SaveBlock2
     u16 automaticExpGain:1;
     u16 permanentMegaMode:1;
     u16 automaticEvolution:1;
-    u16 filler:3;
+    u16 battleInterfaceTheme:3;
     u8 questStatus[SIDE_QUEST_FLAGS_COUNT];
     //u8 unlockedQuests[SIDE_QUEST_FLAGS_COUNT];
     //u8 completedQuests[SIDE_QUEST_FLAGS_COUNT];
