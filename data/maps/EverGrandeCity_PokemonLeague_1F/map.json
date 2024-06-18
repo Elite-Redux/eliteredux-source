@@ -136,7 +136,7 @@
       "x": 9,
       "y": 2,
       "elevation": 0,
-      "var": "VAR_UNUSED_0x8014",
+      "var": "VAR_TEMP_3",
       "var_value": "0",
       "script": "EverGrandeCity_PokemonLeague_1F_EventScript_LockedMode"
     },
@@ -145,7 +145,7 @@
       "x": 10,
       "y": 2,
       "elevation": 0,
-      "var": "VAR_UNUSED_0x8014",
+      "var": "VAR_TEMP_3",
       "var_value": "0",
       "script": "EverGrandeCity_PokemonLeague_1F_EventScript_LockedMode"
     }

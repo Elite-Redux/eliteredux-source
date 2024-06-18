@@ -14271,7 +14271,7 @@ u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 ability, u16 move)
 		|| (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_AURORA_BOREALIS, ability) && moveType == TYPE_ICE)
         || (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_AMPHIBIOUS, ability) && moveType == TYPE_WATER))
     {
-        if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_ADAPTABILITY, ability))
+        if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_ADAPTABILITY, ability) || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_RKS_SYSTEM, ability))
             return 4;
         else
             return 3;
