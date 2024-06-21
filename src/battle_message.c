@@ -4038,6 +4038,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
                 FillWindowPixelBuffer(windowId, textInfo[windowId].fillValue);
             break;
         }
+        gBattle_BG1_Y = 160;
         copyToVram = TRUE;
     }
 

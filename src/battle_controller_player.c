@@ -1824,6 +1824,15 @@ static void HandleInputChooseMove(void)
         VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
         PrintBattleWindow_MoveSelection();
     }
+    else if (gMain.newKeys & START_BUTTON)
+    {
+        if (CanMegaEvolve(gActiveBattler))
+        {
+            gBattleStruct->mega.playerSelect ^= 1;
+            ChangeMegaTriggerSprite(gBattleStruct->mega.triggerSpriteId, gBattleStruct->mega.playerSelect);
+            PlaySE(SE_SELECT);
+        }
+    }
 
     /*
     if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
