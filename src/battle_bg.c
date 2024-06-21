@@ -27,7 +27,9 @@
 #include "constants/battle_anim.h"
 
 //Theme Stuf
-const u32 gTheme_1_Dark_BattleTextboxPalette_1[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
+const u32 gTheme_Dark_BattleTextboxPalette_1[]   = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
+const u32 gTheme_Light_BattleTextboxPalette_1[]  = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
+const u32 gTheme_DPPt_BattleTextboxPalette_1[]   = INCBIN_U32("graphics/ui_menus/battle_interface/dppt_theme/palette.gbapal.lz");
 
 enum{
     BG_TEXTBOX,
@@ -865,22 +867,37 @@ void LoadBattleTextboxAndBackground(void)
     bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
 
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
-            LZDecompressVram(gTheme_1_Dark_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
-            CopyToBgTilemapBuffer(BG_TEXTBOX, gTheme_1_Dark_BattleTextboxTilemap, 0, 0);
+        case THEME_DARK:
+            LZDecompressVram(gTheme_Dark_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            CopyToBgTilemapBuffer(BG_TEXTBOX, gTheme_Dark_BattleTextboxTilemap, 0, 0);
+
+            CopyBgTilemapBufferToVram(BG_TEXTBOX);
+            ShowBg(1);
+
+            LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette_1, 0,    0x20);
+            LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette_1, 0x10, 0x20);
         break;
-        case THEME_1_LIGHT:
-            LZDecompressVram(gTheme_1_Light_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
-            CopyToBgTilemapBuffer(BG_TEXTBOX, gTheme_1_Light_BattleTextboxTilemap, 0, 0);
+        case THEME_LIGHT:
+            LZDecompressVram(gTheme_Light_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            CopyToBgTilemapBuffer(BG_TEXTBOX, gTheme_Light_BattleTextboxTilemap, 0, 0);
+            
+            CopyBgTilemapBufferToVram(BG_TEXTBOX);
+            ShowBg(1);
+
+            LoadCompressedPalette(gTheme_Light_BattleTextboxPalette_1, 0,    0x20);
+            LoadCompressedPalette(gTheme_Light_BattleTextboxPalette_1, 0x10, 0x20);
+        break;
+        case THEME_DPPT:
+            LZDecompressVram(gTheme_DPPt_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            CopyToBgTilemapBuffer(BG_TEXTBOX, gTheme_DPPt_BattleTextboxTilemap, 0, 0);
+            
+            CopyBgTilemapBufferToVram(BG_TEXTBOX);
+            ShowBg(1);
+
+            LoadCompressedPalette(gTheme_DPPt_BattleTextboxPalette_1, 0,    0x20);
+            LoadCompressedPalette(gTheme_DPPt_BattleTextboxPalette_1, 0x10, 0x20);
         break;
     }
-
-
-    CopyBgTilemapBufferToVram(BG_TEXTBOX);
-    ShowBg(1);
-
-    LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette_1, 0,    0x20);
-    LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette_1, 0x10, 0x20);
 
     #if B_TERRAIN_BG_CHANGE == TRUE
         DrawTerrainTypeBattleBackground();
@@ -1235,20 +1252,23 @@ bool8 LoadChosenBattleElement(u8 caseId)
     {
     case 0:
         switch(getBattleInterfaceTheme()){
-            case THEME_1_DARK:
-                LZDecompressVram(gTheme_1_Dark_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            case THEME_DARK:
+                LZDecompressVram(gTheme_Dark_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
             break;
-            case THEME_1_LIGHT:
-                LZDecompressVram(gTheme_1_Light_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            case THEME_LIGHT:
+                LZDecompressVram(gTheme_Light_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            break;
+            case THEME_DPPT:
+                LZDecompressVram(gTheme_DPPt_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
             break;
         }
         break;
     case 1:
-        CopyToBgTilemapBuffer(0, gTheme_1_Dark_BattleTextboxTilemap, 0, 0);
+        CopyToBgTilemapBuffer(0, gTheme_Dark_BattleTextboxTilemap, 0, 0);
         CopyBgTilemapBufferToVram(0);
         break;
     case 2:
-        LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette, 0, 0x40);
+        LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette, 0, 0x40);
         break;
     case 3:
         if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_EREADER_TRAINER))

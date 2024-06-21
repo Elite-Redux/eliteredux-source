@@ -4027,10 +4027,11 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
     {
         //Overrides
         switch(getBattleInterfaceTheme()){
-            case THEME_1_DARK:
+            case THEME_DARK:
                 FillWindowPixelBuffer(windowId, PIXEL_FILL(3));
             break;
-            case THEME_1_LIGHT:
+            case THEME_LIGHT:
+            case THEME_DPPT:
                 FillWindowPixelBuffer(windowId, PIXEL_FILL(10));
             break;
             default:
@@ -4052,13 +4053,18 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
     printerTemplate.unk           = 0;
     //Overrides
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
+        case THEME_DARK:
             printerTemplate.fgColor       = 10; // Font Color
             printerTemplate.bgColor       = 3;  // Background Color
             printerTemplate.shadowColor   = 0;  // Shadow Color
         break;
-        case THEME_1_LIGHT:
+        case THEME_LIGHT:
             printerTemplate.fgColor       = 3;  // Font Color
+            printerTemplate.bgColor       = 10; // Background Color
+            printerTemplate.shadowColor   = 0;  // Shadow Color
+        break;
+        case THEME_DPPT:
+            printerTemplate.fgColor       = 2;  // Font Color
             printerTemplate.bgColor       = 10; // Background Color
             printerTemplate.shadowColor   = 0;  // Shadow Color
         break;

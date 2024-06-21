@@ -135,8 +135,9 @@
 #define LEVEL_CAPS_OFF         3
 
 //Themes
-#define THEME_1_DARK  0
-#define THEME_1_LIGHT 1
+#define THEME_DARK  0
+#define THEME_LIGHT 1
+#define THEME_DPPT  2
 
 //Saveblock Toggle Stuff
 #define SAVEBLOCK_RANDOMIZER        0

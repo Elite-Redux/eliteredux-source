@@ -2941,29 +2941,37 @@ static void InitTradeBgInternal(void)
     DeactivateAllTextPrinters();
     
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
-            DecompressAndLoadBgGfxUsingHeap(0, gTheme_1_Dark_BattleTextboxTiles, 0, 0, 0);
+        case THEME_DARK:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Dark_BattleTextboxTiles, 0, 0, 0);
         break;
-        case THEME_1_LIGHT:
-            DecompressAndLoadBgGfxUsingHeap(0, gTheme_1_Light_BattleTextboxTiles, 0, 0, 0);
+        case THEME_LIGHT:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Light_BattleTextboxTiles, 0, 0, 0);
+        break;
+        case THEME_DPPT:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_DPPt_BattleTextboxTiles, 0, 0, 0);
         break;
     }
-    LZDecompressWram(gTheme_1_Dark_BattleTextboxTilemap, gDecompressionBuffer);
+
+    LZDecompressWram(gTheme_Dark_BattleTextboxTilemap, gDecompressionBuffer);
     CopyToBgTilemapBuffer(0, gDecompressionBuffer, 0x800, 0);
-    LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette, 0, 0x20);
+    LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette, 0, 0x20);
     InitWindows(sTradeSequenceWindowTemplates);
 
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
-            DecompressAndLoadBgGfxUsingHeap(0, gTheme_1_Dark_BattleTextboxTiles, 0, 0, 0);
+        case THEME_DARK:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Dark_BattleTextboxTiles, 0, 0, 0);
         break;
-        case THEME_1_LIGHT:
-            DecompressAndLoadBgGfxUsingHeap(0, gTheme_1_Light_BattleTextboxTiles, 0, 0, 0);
+        case THEME_LIGHT:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Light_BattleTextboxTiles, 0, 0, 0);
+        break;
+        case THEME_DPPT:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_DPPt_BattleTextboxTiles, 0, 0, 0);
         break;
     }
-    LZDecompressWram(gTheme_1_Dark_BattleTextboxTilemap, gDecompressionBuffer);
+    
+    LZDecompressWram(gTheme_Dark_BattleTextboxTilemap, gDecompressionBuffer);
     CopyToBgTilemapBuffer(0, gDecompressionBuffer, 0x800, 0);
-    LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette, 0, 0x20);
+    LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette, 0, 0x20);
 }
 
 static void CB2_InGameTrade(void)

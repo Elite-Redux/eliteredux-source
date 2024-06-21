@@ -1,13 +1,17 @@
 #include "global.h"
 
 //Theme Stuff
-const u32 gTheme_1_Dark_BattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/textbox.4bpp.lz");
-const u32 gTheme_1_Dark_BattleTextboxPalette[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
-const u32 gTheme_1_Dark_BattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/tilemap.bin.lz");
+const u32 gTheme_Dark_BattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/textbox.4bpp.lz");
+const u32 gTheme_Dark_BattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/tilemap.bin.lz");
+const u32 gTheme_Dark_BattleTextboxPalette[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
 
-const u32 gTheme_1_Light_BattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_light/textbox.4bpp.lz");
-const u32 gTheme_1_Light_BattleTextboxPalette[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_light/palette.gbapal.lz");
-const u32 gTheme_1_Light_BattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_light/tilemap.bin.lz");
+const u32 gTheme_Light_BattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_light/textbox.4bpp.lz");
+const u32 gTheme_Light_BattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_light/tilemap.bin.lz");
+const u32 gTheme_Light_BattleTextboxPalette[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_light/palette.gbapal.lz");
+
+const u32 gTheme_DPPt_BattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/battle_interface/dppt_theme/textbox.4bpp.lz");
+const u32 gTheme_DPPt_BattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/dppt_theme/tilemap.bin.lz");
+const u32 gTheme_DPPt_BattleTextboxPalette[] = INCBIN_U32("graphics/ui_menus/battle_interface/dppt_theme/palette.gbapal.lz");
 
 const u32 gUnusedGfx_OldCharmap[] = INCBIN_U32("graphics/unused/old_charmap.4bpp.lz"); // japanese table and bunch of stuff
 const u32 gUnusedTimemap_OldCharmap[] = INCBIN_U32("graphics/unused/old_charmap.bin.lz");

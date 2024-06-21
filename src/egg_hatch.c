@@ -520,15 +520,20 @@ static void CB2_EggHatch_0(void)
         break;
     case 2:
         switch(getBattleInterfaceTheme()){
-            case THEME_1_DARK:
-                DecompressAndLoadBgGfxUsingHeap(0, gTheme_1_Dark_BattleTextboxTiles, 0, 0, 0);
-                CopyToBgTilemapBuffer(0, gTheme_1_Dark_BattleTextboxTilemap, 0, 0);
-                LoadCompressedPalette(gTheme_1_Dark_BattleTextboxPalette, 0, 0x20);
+            case THEME_DARK:
+                DecompressAndLoadBgGfxUsingHeap(0, gTheme_Dark_BattleTextboxTiles, 0, 0, 0);
+                CopyToBgTilemapBuffer(0, gTheme_Dark_BattleTextboxTilemap, 0, 0);
+                LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette, 0, 0x20);
             break;
-            case THEME_1_LIGHT:
-                DecompressAndLoadBgGfxUsingHeap(0, gTheme_1_Light_BattleTextboxTiles, 0, 0, 0);
-                CopyToBgTilemapBuffer(0, gTheme_1_Light_BattleTextboxTilemap, 0, 0);
-                LoadCompressedPalette(gTheme_1_Light_BattleTextboxPalette, 0, 0x20);
+            case THEME_LIGHT:
+                DecompressAndLoadBgGfxUsingHeap(0, gTheme_Light_BattleTextboxTiles, 0, 0, 0);
+                CopyToBgTilemapBuffer(0, gTheme_Light_BattleTextboxTilemap, 0, 0);
+                LoadCompressedPalette(gTheme_Light_BattleTextboxPalette, 0, 0x20);
+            break;
+            case THEME_DPPT:
+                DecompressAndLoadBgGfxUsingHeap(0, gTheme_DPPt_BattleTextboxTiles, 0, 0, 0);
+                CopyToBgTilemapBuffer(0, gTheme_DPPt_BattleTextboxTilemap, 0, 0);
+                LoadCompressedPalette(gTheme_DPPt_BattleTextboxPalette, 0, 0x20);
             break;
         }
         gMain.state++;

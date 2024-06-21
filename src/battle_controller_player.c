@@ -55,48 +55,79 @@
 
 //Theme Stuff
 //Theme 1 - Dark
-static const u8 sTheme_1_Dark_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_1.4bpp");
-static const u8 sTheme_1_Dark_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_1_selected.4bpp");
-static const u8 sTheme_1_Dark_BattleButton_2[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_2.4bpp");
-static const u8 sTheme_1_Dark_BattleButton_2_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_2_selected.4bpp");
-static const u8 sTheme_1_Dark_BattleButton_3[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_3.4bpp");
-static const u8 sTheme_1_Dark_BattleButton_3_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_3_selected.4bpp");
-static const u8 sTheme_1_Dark_BattleButton_4[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_4.4bpp");
-static const u8 sTheme_1_Dark_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_4_selected.4bpp");
-static const u8 sTheme_1_Dark_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/mega_button.4bpp");
-static const u8 sTheme_1_Dark_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/catch_button.4bpp");
-static const u8 sTheme_1_Dark_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_selector.4bpp");
+static const u8 sTheme_Dark_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_1.4bpp");
+static const u8 sTheme_Dark_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_1_selected.4bpp");
+static const u8 sTheme_Dark_BattleButton_2[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_2.4bpp");
+static const u8 sTheme_Dark_BattleButton_2_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_2_selected.4bpp");
+static const u8 sTheme_Dark_BattleButton_3[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_3.4bpp");
+static const u8 sTheme_Dark_BattleButton_3_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_3_selected.4bpp");
+static const u8 sTheme_Dark_BattleButton_4[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_4.4bpp");
+static const u8 sTheme_Dark_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_4_selected.4bpp");
+static const u8 sTheme_Dark_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/mega_button.4bpp");
+static const u8 sTheme_Dark_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/catch_button.4bpp");
+static const u8 sTheme_Dark_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_selector.4bpp");
 
-static const u8 sTheme_1_Dark_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_sane.4bpp");
-static const u8 sTheme_1_Dark_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_status.4bpp");
-static const u8 sTheme_1_Dark_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_fainted.4bpp");
+static const u8 sTheme_Dark_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_sane.4bpp");
+static const u8 sTheme_Dark_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_status.4bpp");
+static const u8 sTheme_Dark_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_fainted.4bpp");
 
-static const u8 sTheme_1_Dark_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_dmg_calc.4bpp");
-static const u8 sTheme_1_Dark_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_desc.4bpp");
-static const u8 sTheme_1_Dark_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_info.4bpp");
-static const u8 sTheme_1_Dark_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_spd_order.4bpp");
+static const u8 sTheme_Dark_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_dmg_calc.4bpp");
+static const u8 sTheme_Dark_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_desc.4bpp");
+static const u8 sTheme_Dark_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_info.4bpp");
+static const u8 sTheme_Dark_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_spd_order.4bpp");
+
+static const u8 sTheme_Dark_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_name.4bpp");
+static const u8 sTheme_Dark_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_pp.4bpp");
 
 //Theme 2 - Light
-static const u8 sTheme_1_Light_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1.4bpp");
-static const u8 sTheme_1_Light_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1_selected.4bpp");
-static const u8 sTheme_1_Light_BattleButton_2[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_2.4bpp");
-static const u8 sTheme_1_Light_BattleButton_2_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_2_selected.4bpp");
-static const u8 sTheme_1_Light_BattleButton_3[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_3.4bpp");
-static const u8 sTheme_1_Light_BattleButton_3_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_3_selected.4bpp");
-static const u8 sTheme_1_Light_BattleButton_4[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_4.4bpp");
-static const u8 sTheme_1_Light_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_4_selected.4bpp");
-static const u8 sTheme_1_Light_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/mega_button.4bpp");
-static const u8 sTheme_1_Light_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/catch_button.4bpp");
-static const u8 sTheme_1_Light_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_selector.4bpp");
+static const u8 sTheme_Light_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1.4bpp");
+static const u8 sTheme_Light_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1_selected.4bpp");
+static const u8 sTheme_Light_BattleButton_2[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_2.4bpp");
+static const u8 sTheme_Light_BattleButton_2_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_2_selected.4bpp");
+static const u8 sTheme_Light_BattleButton_3[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_3.4bpp");
+static const u8 sTheme_Light_BattleButton_3_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_3_selected.4bpp");
+static const u8 sTheme_Light_BattleButton_4[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_4.4bpp");
+static const u8 sTheme_Light_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_4_selected.4bpp");
+static const u8 sTheme_Light_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/mega_button.4bpp");
+static const u8 sTheme_Light_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/catch_button.4bpp");
+static const u8 sTheme_Light_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_selector.4bpp");
 
-static const u8 sTheme_1_Light_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_sane.4bpp");
-static const u8 sTheme_1_Light_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_status.4bpp");
-static const u8 sTheme_1_Light_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_fainted.4bpp");
+static const u8 sTheme_Light_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_sane.4bpp");
+static const u8 sTheme_Light_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_status.4bpp");
+static const u8 sTheme_Light_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_fainted.4bpp");
 
-static const u8 sTheme_1_Light_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_dmg_calc.4bpp");
-static const u8 sTheme_1_Light_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_desc.4bpp");
-static const u8 sTheme_1_Light_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_info.4bpp");
-static const u8 sTheme_1_Light_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_spd_order.4bpp");
+static const u8 sTheme_Light_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_dmg_calc.4bpp");
+static const u8 sTheme_Light_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_desc.4bpp");
+static const u8 sTheme_Light_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_info.4bpp");
+static const u8 sTheme_Light_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_spd_order.4bpp");
+
+static const u8 sTheme_Light_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_name.4bpp");
+static const u8 sTheme_Light_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_pp.4bpp");
+
+//Theme 3 - DPPt
+static const u8 sTheme_DPPt_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_1.4bpp");
+static const u8 sTheme_DPPt_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_1_selected.4bpp");
+static const u8 sTheme_DPPt_BattleButton_2[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_2.4bpp");
+static const u8 sTheme_DPPt_BattleButton_2_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_2_selected.4bpp");
+static const u8 sTheme_DPPt_BattleButton_3[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_3.4bpp");
+static const u8 sTheme_DPPt_BattleButton_3_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_3_selected.4bpp");
+static const u8 sTheme_DPPt_BattleButton_4[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_4.4bpp");
+static const u8 sTheme_DPPt_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_4_selected.4bpp");
+static const u8 sTheme_DPPt_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/mega_button.4bpp");
+static const u8 sTheme_DPPt_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/catch_button.4bpp");
+static const u8 sTheme_DPPt_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_selector.4bpp");
+
+static const u8 sTheme_DPPt_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_sane.4bpp");
+static const u8 sTheme_DPPt_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_status.4bpp");
+static const u8 sTheme_DPPt_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_fainted.4bpp");
+
+static const u8 sTheme_DPPt_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_dmg_calc.4bpp");
+static const u8 sTheme_DPPt_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_desc.4bpp");
+static const u8 sTheme_DPPt_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_info.4bpp");
+static const u8 sTheme_DPPt_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_spd_order.4bpp");
+
+static const u8 sTheme_DPPt_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_name.4bpp");
+static const u8 sTheme_DPPt_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_pp.4bpp");
 
 static const u8 sSplit_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/split_physical.4bpp");
 static const u8 sSplit_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/split_special.4bpp");
@@ -321,9 +352,12 @@ const u8 sText_BattleMenu_Action_What_Will_X_Do_1[] = _("What will");
 const u8 sText_BattleMenu_Action_What_Will_X_Do_2[] = _("{STR_VAR_1} do?");
 //const u8 sText_BattleMenu_Action_What_Will_X_Do[] = _("What will\nCrabominable\ndo?");
 
-#define BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE 100
-#define BATTLE_WINDOW_SQUARE_SIZE 47
+#define BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE      100
+#define BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT 88
+#define BATTLE_WINDOW_SQUARE_SIZE      47
+#define BATTLE_WINDOW_SQUARE_SIZE_DPPT 44
 #define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT 13
+#define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT 14
 
 void PrintBattleWindow_ActionPromt(void)
 {
@@ -337,13 +371,16 @@ void PrintBattleWindow_ActionPromt(void)
     u8 battler = gActiveBattler;
     u8 speed;
     bool8 canUsePokeball = !isTrainerBattle && CanThrowBall() == 0 && GetGameStat(GAME_STAT_USED_POKECENTER) != 0;
-    bool8 canMega = TRUE;
+    bool8 canMega = FALSE;
 
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
+        case THEME_DARK:
             fontColor = FONT_WHITE_2;
         break;
-        case THEME_1_LIGHT:
+        case THEME_LIGHT:
+            fontColor = FONT_BLACK_2;
+        break;
+        case THEME_DPPT:
             fontColor = FONT_BLACK_2;
         break;
     }
@@ -360,11 +397,11 @@ void PrintBattleWindow_ActionPromt(void)
     for(i = 0; i < PARTY_SIZE; i++){
         if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE){
             if(GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL) == 0) //Fainted
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_Pokeball_Fainted_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+                BlitBitmapToWindow(windowId, sTheme_Dark_Pokeball_Fainted_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
             else if(GetMonData(&gPlayerParty[i], MON_DATA_STATUS, NULL) != STATUS1_NONE) //Status
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_Pokeball_Status_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+                BlitBitmapToWindow(windowId, sTheme_Dark_Pokeball_Status_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
             else //Sane
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_Pokeball_Sane_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+                BlitBitmapToWindow(windowId, sTheme_Dark_Pokeball_Sane_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
         }
         x++;
     }
@@ -375,26 +412,37 @@ void PrintBattleWindow_ActionPromt(void)
     y2 = 0;
     x2 = 0;
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
+        case THEME_DARK:
             if(canMega)
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_Mega, (x * 8) + x2, (y * 8) + y2, 32, 8);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_Mega, (x * 8) + x2, (y * 8) + y2, 32, 8);
             x = x + 9;
             if(canUsePokeball)
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 8);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 8);
         break;
-        case THEME_1_LIGHT:
+        case THEME_LIGHT:
             if(canMega)
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_Mega, (x * 8) + x2, (y * 8) + y2, 32, 8);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_Mega, (x * 8) + x2, (y * 8) + y2, 32, 8);
             x = x + 9;
             if(canUsePokeball)
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 8);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 8);
+        break;
+        case THEME_DPPT:
+            x  = 0;
+            y  = 0;
+            y2 = 0;
+            x2 = 0;
+            if(canMega)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_Mega, (x * 8) + x2, (y * 8) + y2, 32, 16);
+            x = x + 10;
+            if(canUsePokeball)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 16);
         break;
     }
 
     
     //What Will X Do?
     x  = 1;
-    if(!canUsePokeball && !canMega){
+    if((!canUsePokeball && !canMega) || getBattleInterfaceTheme() == THEME_DPPT){
         y  = 1;
         y2 = 4;
     }
@@ -405,14 +453,30 @@ void PrintBattleWindow_ActionPromt(void)
 
     //First Part
     StringCopy(gStringVar1, sText_BattleMenu_Action_What_Will_X_Do_1);
-    offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
-    y++;
-    //Part two
-    StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battler].species]);
-    StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
-    offset = GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Part two
+            StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battler].species]);
+            StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
+            offset = 4 + GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+        default:
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Part two
+            StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battler].species]);
+            StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
+            offset = GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+    }
 
     //Buttons
     x  = 15;
@@ -421,91 +485,162 @@ void PrintBattleWindow_ActionPromt(void)
 
     // Fight Button
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
+        case THEME_DARK:
             if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
             else
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
         break;
-        case THEME_1_LIGHT:
+        case THEME_LIGHT:
             if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
             else
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
         break;
     }
 
     //Text
-    StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
-    offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
+            offset = 6 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            
+            x = x + 6;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
-    x = x + 6;
+            x = x + 6;
+        break;
+    }
+
 
     // Info
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
+        case THEME_DARK:
             if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
             else
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
         break;
-        case THEME_1_LIGHT:
+        case THEME_LIGHT:
             if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
             else
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
         break;
     }
+    
     //Text
-    StringCopy(gStringVar1, sText_BattleMenu_Action_Info);
-    offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Info);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
-    y  = y + 2;
-    x  = 15;
+            y  = y + 2;
+            x  = 15;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Info);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            y  = y + 2;
+            x  = 15;
+        break;
+    }
 
     // Pokemon
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
+        case THEME_DARK:
             if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
             else
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
         break;
-        case THEME_1_LIGHT:
+        case THEME_LIGHT:
             if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
             else
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
         break;
     }
-    //Text
-    StringCopy(gStringVar1, sText_BattleMenu_Action_Pokemon);
-    offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
-    x = x + 6;
+    //Text
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokemon);
+            offset = 6 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokemon);
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+    }
 
     // Run
     switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
+        case THEME_DARK:
             if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
             else
-                BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
         break;
-        case THEME_1_LIGHT:
+        case THEME_LIGHT:
             if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
             else
-                BlitBitmapToWindow(windowId, sTheme_1_Light_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
         break;
     }
+
     //Text
-    StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
-    offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
-    AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+    }
 
     PutWindowTilemap(windowId);
     CopyWindowToVram(windowId, 3);
@@ -622,15 +757,19 @@ void PrintBattleWindow_MoveSelection(void)
     u8 fontColor = FONT_WHITE_2;
     u8 moveInfoType = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
     u8 target = BATTLE_OPPOSITE(gActiveBattler);
+    u8 battleTheme = getBattleInterfaceTheme();
     bool32 copyToVram;
     bool8 isStatusMove;
     struct TextPrinterTemplate printerTemplate;
 
-    switch(getBattleInterfaceTheme()){
-        case THEME_1_DARK:
+    switch(battleTheme){
+        case THEME_DARK:
             fontColor = FONT_WHITE_2;
         break;
-        case THEME_1_LIGHT:
+        case THEME_LIGHT:
+            fontColor = FONT_BLACK_2;
+        break;
+        case THEME_DPPT:
             fontColor = FONT_BLACK_2;
         break;
     }
@@ -662,18 +801,43 @@ void PrintBattleWindow_MoveSelection(void)
         AddTextPrinterParameterized4(windowId, font, (x * 8) + SPACE_BETWEEN_MOVE_NAME_AND_PP - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
 
         if(gMoveSelectionCursor[gActiveBattler] == i){
-            switch(getBattleInterfaceTheme()){
-                case THEME_1_DARK:
-                    BlitBitmapToWindow(windowId, sTheme_1_Dark_BattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
+            switch(battleTheme){
+                case THEME_DARK:
+                    BlitBitmapToWindow(windowId, sTheme_Dark_BattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
                 break;
-                case THEME_1_LIGHT:
-                    BlitBitmapToWindow(windowId, sTheme_1_Light_BattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
+                case THEME_LIGHT:
+                    BlitBitmapToWindow(windowId, sTheme_Light_BattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
+                break;
+                case THEME_DPPT:
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_BattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
                 break;
             }
         }
 
-
         y++;
+    }
+
+    //Move Info
+    x  = 1;
+    y  = 0;
+    x2 = 4;
+    y2 = 0;
+    switch(battleTheme){
+        case THEME_DARK:
+            BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_Name, (x * 8) + x2, (y * 8) + y2, 24, 8);
+            x = x + 10;
+            BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_PP,   (x * 8) + x2, (y * 8) + y2, 16, 8);
+        break;
+        case THEME_LIGHT:
+            BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_Name, (x * 8) + x2, (y * 8) + y2, 24, 8);
+            x = x + 10;
+            BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_PP,   (x * 8) + x2, (y * 8) + y2, 16, 8);
+        break;
+        case THEME_DPPT:
+            BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_Name, (x * 8) + x2, (y * 8) + y2, 24, 8);
+            x = x + 10;
+            BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_PP,   (x * 8) + x2, (y * 8) + y2, 16, 8);
+        break;
     }
 
     //Title
@@ -683,17 +847,37 @@ void PrintBattleWindow_MoveSelection(void)
     y2 = 0;
     switch(moveInfoType){
         case MOVE_INFO_DESCRIPTION:
-            BlitBitmapToWindow(windowId, sTheme_1_Dark_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            if(battleTheme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
         break;
         case MOVE_INFO_POWER_ACC_PRIO_TYPE:
         case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
-            BlitBitmapToWindow(windowId, sTheme_1_Dark_Title_Move_Info, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            if(battleTheme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_Info, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_Info, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_Info, (x * 8) + x2, (y * 8) + y2, 56, 8);
         break;
         case MOVE_SPEED_CALCULATION:
-            BlitBitmapToWindow(windowId, sTheme_1_Dark_Title_Speed_Order, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            if(battleTheme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Speed_Order, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Title_Speed_Order, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Speed_Order, (x * 8) + x2, (y * 8) + y2, 56, 8);
         break;
         case MOVE_INFO_DAMAGE_CALCULATION:
-            BlitBitmapToWindow(windowId, sTheme_1_Dark_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            if(battleTheme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
         break;
     }
         
