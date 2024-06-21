@@ -1508,6 +1508,7 @@
 #define FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119                       3067
 #define FLAG_HIDE_SCOTT_ROUTE_118                                   3068
 #define FLAG_SYS_DEBUG_MENU_OPENED                                  3069
+#define FLAG_RECEIVED_SILVALLY                                      3070
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 
