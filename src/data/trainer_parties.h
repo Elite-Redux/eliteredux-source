@@ -38279,25 +38279,25 @@ static const struct TrainerMonItemCustomMoves sParty_Kaylee[] = { // Debug Train
     .ability = 1, //
     .evs = {0, 0, 0, 0, 0, 0},      // HP, Atk, Def, SpA, SpD, Spe
 	.nature = NATURE_ADAMANT,
-	.moves = MOVE_TACKLE, MOVE_TACKLE, MOVE_TACKLE, MOVE_TACKLE
+	.moves = MOVE_TORMENT, MOVE_TORMENT, MOVE_TORMENT, MOVE_TORMENT
     },
     {
     .lvl = 0,
-    .species = SPECIES_PERSIAN_ALOLAN,
+    .species = SPECIES_JIGGLYPUFF,
     .heldItem = ITEM_NUGGET,
-    .ability = 0, //
+    .ability = 1, //
     .evs = {0, 0, 0, 0, 0, 0},      // HP, Atk, Def, SpA, SpD, Spe
 	.nature = NATURE_ADAMANT,
-	.moves = MOVE_TACKLE, MOVE_TACKLE, MOVE_TACKLE, MOVE_TACKLE
+	.moves = MOVE_TORMENT, MOVE_TORMENT, MOVE_TORMENT, MOVE_TORMENT
     },
     {
     .lvl = 0,
-    .species = SPECIES_KECLEON,
+    .species = SPECIES_JIGGLYPUFF,
     .heldItem = ITEM_NUGGET,
-    .ability = 0, //
+    .ability = 1, //
     .evs = {0, 0, 0, 0, 0, 0},      // HP, Atk, Def, SpA, SpD, Spe
 	.nature = NATURE_ADAMANT,
-	.moves = MOVE_SPLASH, MOVE_SPLASH, MOVE_SPLASH, MOVE_SPLASH
+	.moves = MOVE_TORMENT, MOVE_TORMENT, MOVE_TORMENT, MOVE_TORMENT
     },
 };
 

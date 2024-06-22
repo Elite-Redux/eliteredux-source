@@ -1203,7 +1203,7 @@ static void WallyHandlePrintSelectionString(void)
         WallyBufferExecCompleted();
 }
 
-static void HandleChooseActionAfterDma3(void)
+static void HandleChooseActionAfterDma3Wally(void)
 {
     if (!IsDma3ManagerBusyWithBgCopy())
     {
@@ -1217,7 +1217,7 @@ static void WallyHandleChooseAction(void)
 {
     s32 i;
 
-    gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3;
+    gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3Wally;
     //BattlePutTextOnWindow(gText_BattleMenu, B_WIN_ACTION_MENU);
 
     for (i = 0; i < 4; i++)

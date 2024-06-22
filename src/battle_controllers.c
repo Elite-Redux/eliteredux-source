@@ -23,7 +23,6 @@ static EWRAM_DATA u8 sLinkSendTaskId = 0;
 static EWRAM_DATA u8 sLinkReceiveTaskId = 0;
 EWRAM_DATA struct UnusedControllerStruct gUnusedControllerStruct = {}; // Debug? Unused code that writes to it, never read
 static EWRAM_DATA u8 sBattleBuffersTransferData[0x100] = {};
-static EWRAM_DATA u8 sMonIconSpriteID = MAX_SPRITES;
 
 static void CreateTasksForSendRecvLinkBuffers(void);
 static void InitLinkBtlControllers(void);
@@ -31,16 +30,6 @@ static void InitSinglePlayerBtlControllers(void);
 static void SetBattlePartyIds(void);
 static void Task_HandleSendLinkBuffersData(u8 taskId);
 static void Task_HandleCopyReceivedLinkBuffersData(u8 taskId);
-
-u8 getsMonIconSpriteID(void)
-{
-    return sMonIconSpriteID;
-}
-
-void setsMonIconSpriteID(u8 id)
-{
-    sMonIconSpriteID = id;
-}
 
 void HandleLinkBattleSetup(void)
 {
@@ -729,8 +718,6 @@ static void CreateTasksForSendRecvLinkBuffers(void)
     gTasks[sLinkReceiveTaskId].data[13] = 0;
     gTasks[sLinkReceiveTaskId].data[14] = 0;
     gTasks[sLinkReceiveTaskId].data[15] = 0;
-
-    sMonIconSpriteID = MAX_SPRITES;
 }
 
 enum

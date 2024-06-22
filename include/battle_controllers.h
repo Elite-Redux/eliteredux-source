@@ -261,8 +261,8 @@ void Task_PlayerController_RestoreBgmAfterCry(u8 taskId);
 void ActionSelectionCreateCursorAt(u8 cursorPos, u8 unused);
 void ActionSelectionDestroyCursorAt(u8 cursorPos);
 void InitMoveSelectionsVarsAndStrings(void);
-u8 getsMonIconSpriteID(void);
-void setsMonIconSpriteID(u8 id);
+
+void HandleChooseActionAfterDma3_Player(void);
 
 // recorded player controller
 void SetControllerToRecordedPlayer(void);

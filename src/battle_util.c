@@ -34,6 +34,8 @@
 #include "pokedex.h"
 #include "mail.h"
 #include "field_weather.h"
+#include "reshow_battle_screen.h"
+#include "ui_battle_menu.h"
 #include "constants/abilities.h"
 #include "constants/battle_anim.h"
 #include "constants/battle_config.h"
@@ -48,6 +50,7 @@
 #include "constants/species.h"
 #include "constants/trainers.h"
 #include "constants/weather.h"
+#include "constants/rgb.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 
@@ -775,6 +778,19 @@ void HandleAction_ThrowBall(void)
     gLastUsedItem = gLastThrownBall;
     RemoveBagItem(gLastUsedItem, 1);
     gBattlescriptCurrInstr = BattleScript_BallThrow;
+    gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
+}
+
+void HandleAction_ShowBattleInfo(void)
+{
+    u8 value = 2;
+    gBattlerAttacker = gBattlerByTurnOrder[gCurrentTurnActionNumber];
+    VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
+
+    gBattle_BG0_X = 0;
+    gBattle_BG0_Y = 0;
+    VarSet(VAR_TEMP_SPECIAL_VAR, gActiveBattler);
+    gBattlescriptCurrInstr = BattleScript_PrintCantRunFromTrainer;
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
 

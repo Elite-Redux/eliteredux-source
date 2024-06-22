@@ -24,7 +24,7 @@ static void CB2_ReshowBattleScreenAfterMenu(void);
 static bool8 LoadBattlerSpriteGfx(u8 battlerId);
 static void CreateBattlerSprite(u8 battlerId);
 static void CreateHealthboxSprite(u8 battlerId);
-static void sub_80A95F4(void);
+static void ClearBattleBgCntBaseBlocks(void);
 
 void ReshowBattleScreenDummy(void)
 {
@@ -46,8 +46,7 @@ void ReshowBattleScreenAfterMenu(void)
 
 static void CB2_ReshowBattleScreenAfterMenu(void)
 {
-    u8 value = 0;
-    
+    u8 value = 1;
     switch (gBattleScripting.reshowMainState)
     {
     case 0:
@@ -68,6 +67,7 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
         gBattle_BG2_Y = 0;
         gBattle_BG3_X = 0;
         gBattle_BG3_Y = 0;
+        VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
         break;
     case 1:
         CpuFastFill(0, (void*)(VRAM), VRAM_SIZE);
@@ -161,26 +161,25 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
                 LoadWirelessStatusIndicatorSpriteGfx();
                 CreateWirelessStatusIndicatorSprite(0, 0);
             }
+        
         }
-        ReshowNewBattleMenuAfterMenu();
         break;
     default:
         SetVBlankCallback(VBlankCB_Battle);
-        sub_80A95F4();
+        ClearBattleBgCntBaseBlocks();
         BeginHardwarePaletteFade(0xFF, 0, 0x10, 0, 1);
         gPaletteFade.bufferTransferDisabled = 0;
         SetMainCallback2(BattleMainCB2);
-        sub_805EF14();
+        FillAroundBattleWindows();
+
+        ReshowNewBattleMenuAfterMenu();
         break;
     }
-
-    value = 1;
-    VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
 
     gBattleScripting.reshowMainState++;
 }
 
-static void sub_80A95F4(void)
+static void ClearBattleBgCntBaseBlocks(void)
 {
     struct BGCntrlBitfield *regBgcnt1, *regBgcnt2;
 

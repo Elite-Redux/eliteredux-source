@@ -4945,6 +4945,7 @@ void CB2_SetUpReshowBattleMenuAfterSummaryScreen(void)
 static void Task_MenuMain(u8 taskId)
 {
     u8 value = 3;
+
     if (JOY_NEW(B_BUTTON))
     {
         if(sMenuDataPtr->modeId == MODE_FIELD && sMenuDataPtr->fieldTabId == TAB_PARTY && sMenuDataPtr->partySelectorMode){
@@ -4961,8 +4962,7 @@ static void Task_MenuMain(u8 taskId)
             gTasks[taskId].func = Task_MenuTurnOff;
         }
     }
-
-    if (JOY_NEW(A_BUTTON))
+    else if (JOY_NEW(A_BUTTON))
     {
         if(sMenuDataPtr->modeId != MODE_FIELD){
             switch(sMenuDataPtr->tabId){
@@ -5038,8 +5038,7 @@ static void Task_MenuMain(u8 taskId)
             }
         }
     }
-
-    if (JOY_NEW(DPAD_DOWN)){
+    else if (JOY_NEW(DPAD_DOWN)){
         if(sMenuDataPtr->modeId == MODE_FIELD && sMenuDataPtr->fieldTabId == TAB_PARTY && sMenuDataPtr->partySelectorMode){
             if((sMenuDataPtr->partyMenuSelectorID_Y) < PARTY_TAB_NUM_MONS_Y - 1)
                 sMenuDataPtr->partyMenuSelectorID_Y++;
@@ -5064,8 +5063,7 @@ static void Task_MenuMain(u8 taskId)
             PrintPage();
         }
     }
-
-    if (JOY_NEW(DPAD_UP)){
+    else if (JOY_NEW(DPAD_UP)){
         if(sMenuDataPtr->modeId == MODE_FIELD && sMenuDataPtr->fieldTabId == TAB_PARTY && sMenuDataPtr->partySelectorMode){
             if(sMenuDataPtr->partyMenuSelectorID_Y != 0)
                 sMenuDataPtr->partyMenuSelectorID_Y--;
@@ -5090,8 +5088,7 @@ static void Task_MenuMain(u8 taskId)
             PrintPage();
         }
     }
-
-    if (JOY_NEW(DPAD_LEFT)){
+    else if (JOY_NEW(DPAD_LEFT)){
         switch(sMenuDataPtr->modeId){
             case MODE_FIELD:
                 if(sMenuDataPtr->fieldTabId == TAB_PARTY && sMenuDataPtr->partySelectorMode){
@@ -5120,8 +5117,7 @@ static void Task_MenuMain(u8 taskId)
             break;
         }
     }
-
-    if (JOY_NEW(DPAD_RIGHT)){
+    else if (JOY_NEW(DPAD_RIGHT)){
         switch(sMenuDataPtr->modeId){
             case MODE_FIELD:
                 if(sMenuDataPtr->fieldTabId == TAB_PARTY && sMenuDataPtr->partySelectorMode){

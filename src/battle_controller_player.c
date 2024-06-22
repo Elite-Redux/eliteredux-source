@@ -137,7 +137,6 @@ extern struct MusicPlayerInfo gMPlayInfo_BGM;
 //Mon Icons
 u8 BattleInterface_CreateMonIcon(u8 battler);
 void BattleInterface_DestroyMonIcon(void);
-void BattleInterface_SetInvisibleMonIcon(void);
 
 // this file's functions
 static void PlayerHandleGetMonData(void);
@@ -197,6 +196,7 @@ static void PlayerHandleResetActionMoveSelection(void);
 static void PlayerHandleEndLinkBattle(void);
 static void PlayerHandleBattleDebug(void);
 static void PlayerCmdEnd(void);
+static void HandleInputChooseActionPlayer(void);
 
 static void PlayerBufferRunCommand(void);
 static void HandleInputChooseTarget(void);
@@ -782,6 +782,9 @@ void PrintBattleWindow_MoveSelection(void)
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     copyToVram = TRUE;
 
+    gBattle_BG1_X = 0;
+    gBattle_BG1_Y = 0;
+
     x  = 2;
     y  = 0;
     y2 = 4;
@@ -1147,21 +1150,23 @@ void ReshowNewBattleMenuAfterMenu(void){
     if(VarGet(VAR_TEMP_SPECIAL_VAR) != 0xFF)
         gActiveBattler = VarGet(VAR_TEMP_SPECIAL_VAR);
     LoadBattleTextboxAndBackground();
-    PrintBattleWindow_ActionPromt();
     gBattle_BG0_Y = 160;
     VarSet(VAR_TEMP_SPECIAL_VAR, 0xFF);
+    //SetControllerToPlayer();
+
+    PrintBattleWindow_ActionPromt();
 }
 
 #define ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN FALSE // No idea what to call this constant
 
-static void HandleInputChooseAction(void)
+static void HandleInputChooseActionPlayer(void)
 {
     u16 itemId = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
     bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
     u8 value = 0;
 
     /*MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "HandleInputChooseAction VAR_TEMP_SPECIAL_VAR: %d gActiveBattler: %d", VarGet(VAR_TEMP_SPECIAL_VAR), gActiveBattler);
+    MgbaPrintf(MGBA_LOG_WARN, "HandleInputChooseActionPlayer VAR_TEMP_SPECIAL_VAR: %d gActiveBattler: %d", VarGet(VAR_TEMP_SPECIAL_VAR), gActiveBattler);
     MgbaClose();*/
 
     DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
@@ -1174,7 +1179,6 @@ static void HandleInputChooseAction(void)
 
     if (JOY_NEW(A_BUTTON))
     {
-
         switch (gActionSelectionCursor[gActiveBattler])
         {
             case BATTLE_ACTION_FIGHT:
@@ -1211,7 +1215,6 @@ static void HandleInputChooseAction(void)
                     PrintBattleWindow_ActionPromt();
                     PlayerBufferExecCompleted();
                 }
-                BattleInterface_SetInvisibleMonIcon();
             break;
             case BATTLE_ACTION_POKEMON:
                 PlaySE(SE_SELECT);
@@ -1225,21 +1228,19 @@ static void HandleInputChooseAction(void)
                 BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
                 PrintBattleWindow_ActionPromt();
                 PlayerBufferExecCompleted();
-                BattleInterface_SetInvisibleMonIcon();
             break;
             case BATTLE_ACTION_INFO:
                 PlaySE(SE_SELECT);
-                value = 2;
-                BattleInterface_SetInvisibleMonIcon();
-                VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
-                VarSet(VAR_TEMP_SPECIAL_VAR, gActiveBattler);
-                BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_SHOW_BATTLE_INFO, 0);
+                PlayerBufferExecCompleted();
+
+                /*BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
                 FreeAllWindowBuffers();
-                UI_Battle_Menu_Init(CB2_SetUpReshowBattleScreenAfterMenu);
+                UI_Battle_Menu_Init(ReshowBattleScreenAfterMenu);*/
             break;
         }
     }
-    if (JOY_NEW(R_BUTTON))
+    else if (JOY_NEW(R_BUTTON))
     {
         if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)) && CanThrowBall() == 0 && GetGameStat(GAME_STAT_USED_POKECENTER) != 0)
         {
@@ -1249,7 +1250,7 @@ static void HandleInputChooseAction(void)
             PlayerBufferExecCompleted();
         }
     }
-    if (JOY_NEW(L_BUTTON))
+    else if (JOY_NEW(L_BUTTON))
     {
         if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)) && CanThrowBall() == 0 && GetGameStat(GAME_STAT_USED_POKECENTER) != 0)
         {
@@ -1679,7 +1680,6 @@ static void HandleInputChooseMove(void)
 
     if(gMain.newKeys & A_BUTTON)
     {
-        TryToHideMoveInfoWindow();
         FlagClear(FLAG_SYS_MOVE_INFO);
         PlaySE(SE_SELECT);
         if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_CURSE)
@@ -1773,10 +1773,8 @@ static void HandleInputChooseMove(void)
             gBattlerControllerFuncs[gActiveBattler] = HandleInputShowEntireFieldTargets;
             break;
         }
-        //testo
-        gBattle_BG1_X = 240;
-        gBattle_BG1_Y = 240;
-        //HideBg(1);
+        
+        PrintBattleWindow_MoveSelection();
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
@@ -1786,7 +1784,6 @@ static void HandleInputChooseMove(void)
         HideMegaTriggerSprite();
         PlayerBufferExecCompleted();
         FlagClear(FLAG_SYS_MOVE_INFO);
-        TryToHideMoveInfoWindow();
     }
     else if (JOY_NEW(DPAD_UP))
     {
@@ -1850,7 +1847,6 @@ static void HandleInputChooseMove(void)
         HideMegaTriggerSprite();
         PlayerBufferExecCompleted();
         FlagClear(FLAG_SYS_MOVE_INFO);
-        TryToHideMoveInfoWindow();
     }
     else if (JOY_NEW(L_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
@@ -4711,52 +4707,14 @@ static void PlayerHandlePrintSelectionString(void)
         PlayerBufferExecCompleted();
 }
 
-static void HandleChooseActionAfterDma3(void)
+void HandleChooseActionAfterDma3_Player(void)
 {
     if (!IsDma3ManagerBusyWithBgCopy())
     {
         gBattle_BG0_X = 0;
         gBattle_BG0_Y = DISPLAY_HEIGHT;
-        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseAction;
+        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseActionPlayer;
     }
-}
-
-#define MON_ICON_X 24
-#define MON_ICON_Y 132
-
-u8 BattleInterface_CreateMonIcon(u8 battler){
-    u16 species = gBattleMons[battler].species;
-    u8 spriteId = getsMonIconSpriteID();
-
-    /*MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "BattleInterface_CreateMonIcon spriteId %d", spriteId);
-    MgbaClose();*/
-
-    if(spriteId == MAX_SPRITES || spriteId == 0){
-        LoadMonIconPalette(species);
-        spriteId = CreateMonIcon(species, SpriteCB_MonIcon, MON_ICON_X, MON_ICON_Y, 0, 0xFFFFFFFF);
-        gSprites[spriteId].oam.priority = 1;
-        setsMonIconSpriteID(spriteId);
-    }
-    else{
-        gSprites[spriteId].invisible = FALSE;
-    }
-
-    return spriteId;
-}
-
-void BattleInterface_DestroyMonIcon(void){
-    u8 spriteID = getsMonIconSpriteID();
-    if(spriteID != MAX_SPRITES){
-        FreeSpriteOamMatrix(&gSprites[spriteID]);
-        DestroySprite(&gSprites[spriteID]);
-        setsMonIconSpriteID(MAX_SPRITES);
-    }
-}
-
-void BattleInterface_SetInvisibleMonIcon(void){
-    /*u8 spriteID = getsMonIconSpriteID();
-    gSprites[spriteID].invisible = TRUE;*/
 }
 
 static void PlayerHandleChooseAction(void)
@@ -4769,7 +4727,7 @@ static void PlayerHandleChooseAction(void)
     gBattle_BG1_Y = 0;
     ShowBg(1);
 
-    gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3;
+    gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3_Player;
     BattleTv_ClearExplosionFaintCause();
 
     PrintBattleWindow_ActionPromt();

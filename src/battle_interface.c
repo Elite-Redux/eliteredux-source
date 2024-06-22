@@ -3723,11 +3723,6 @@ void TryToAddMoveInfoWindow(void)
     }*/
 }
 
-void TryToHideMoveInfoWindow(void)
-{
-    /*gSprites[gBattleStruct->moveInfoSpriteId].sHide = TRUE;   // Hide*/
-}
-
 static void DestroyMoveInfoWinGfx(struct Sprite *sprite)
 {
     /*FreeSpriteTilesByTag(ENEMY_INFO_WINDOW_TAG);

@@ -440,7 +440,7 @@ static void SafariHandlePrintSelectionString(void)
         SafariBufferExecCompleted();
 }
 
-static void HandleChooseActionAfterDma3(void)
+static void HandleChooseActionAfterDma3Safari(void)
 {
     if (!IsDma3ManagerBusyWithBgCopy())
     {
@@ -454,7 +454,7 @@ static void SafariHandleChooseAction(void)
 {
     s32 i;
 
-    gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3;
+    gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3Safari;
     //BattlePutTextOnWindow(gText_SafariZoneMenu, B_WIN_ACTION_MENU);
 
     for (i = 0; i < 4; i++)

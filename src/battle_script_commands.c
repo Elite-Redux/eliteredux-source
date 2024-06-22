@@ -5268,6 +5268,7 @@ static void Cmd_jumpifabilitypresent(void)
 static void Cmd_endselectionscript(void)
 {
     *(gBattlerAttacker + gBattleStruct->selectionScriptFinished) = TRUE;
+    //
 }
 
 static void Cmd_playanimation(void)

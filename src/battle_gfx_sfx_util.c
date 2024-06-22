@@ -775,8 +775,6 @@ bool8 BattleLoadAllHealthBoxesGfx(u8 state)
         }
     }
 
-    setsMonIconSpriteID(MAX_SPRITES);
-
     return retVal;
 }
 
@@ -1213,7 +1211,7 @@ void HideBattlerShadowSprite(u8 battlerId)
     gSprites[gBattleSpritesDataPtr->healthBoxesData[battlerId].shadowSpriteId].callback = SpriteCB_SetInvisible;
 }
 
-void sub_805EF14(void)
+void FillAroundBattleWindows(void)
 {
     u16 *vramPtr = (u16*)(VRAM + 0x240);
     s32 i;
