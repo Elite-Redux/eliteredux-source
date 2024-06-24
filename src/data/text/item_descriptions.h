@@ -2498,7 +2498,7 @@ static const u8 sOddKeystoneDesc[] = _(
 
 static const u8 sAdamantOrbDesc[] = _(
     "This orb enables\n"
-    "Dialgo to revert to\n"
+    "Dialga to revert to\n"
     "its origin in battle.");
 
 static const u8 sLustrousOrbDesc[] = _(
