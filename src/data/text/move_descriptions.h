@@ -4684,7 +4684,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_SMOLDER_BASH - 1] = sMoveTwoLineDescription_MoveSmolderBash,
 };
 
-static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
+static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a\nlong tail or a\nforeleg, etc.");
 static const u8 sMoveFourLineDescription_MoveKarateChop[] = _("The foe is attacked\nwith a sharp chop.\nIt has a high\ncritical-hit ratio.");
 static const u8 sMoveFourLineDescription_MoveDoubleSlap[] = _("The foe is slapped\nrepeatedly, back\nand forth, two to\nfive times.");
 static const u8 sMoveFourLineDescription_MoveCometPunch[] = _("Hits 2 to 5 times.\nHas +1 priority.\nIron Fist boost.");
