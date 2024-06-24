@@ -5734,7 +5734,6 @@ static void BufferMonPokemonEvolutionData(void)
                 PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
                 //Evolution Method
                 StringCopy(gStringVar2, gSpeciesNames[gEvolutionTable[species][i].param]); //mon name
-                ConvertIntToDecimalStringN(gStringVar2, gEvolutionTable[species][i].param, STR_CONV_MODE_LEADING_ZEROS, EVO_SCREEN_LVL_DIGITS); //level
                 StringExpandPlaceholders(gStringVar4, gText_EVO_SPECIFIC_MON_IN_PARTY );
                 PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
                 break;
