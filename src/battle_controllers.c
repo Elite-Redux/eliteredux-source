@@ -1559,3 +1559,10 @@ void BtlController_EmitDebugMenu(u8 bufferId)
     sBattleBuffersTransferData[0] = CONTROLLER_DEBUGMENU;
     PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, 1);
 }
+
+void BtlController_EmitInfoMenu(u8 bufferId)
+{
+    sBattleBuffersTransferData[0] = CONTROLLER_INFO_MENU;
+    PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, 1);
+}
+

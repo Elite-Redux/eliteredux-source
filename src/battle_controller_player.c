@@ -195,6 +195,7 @@ static void PlayerHandleLinkStandbyMsg(void);
 static void PlayerHandleResetActionMoveSelection(void);
 static void PlayerHandleEndLinkBattle(void);
 static void PlayerHandleBattleDebug(void);
+static void PlayerHandleBattleInfoMenu(void);
 static void PlayerCmdEnd(void);
 static void HandleInputChooseActionPlayer(void);
 
@@ -290,6 +291,7 @@ static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
     [CONTROLLER_RESETACTIONMOVESELECTION] = PlayerHandleResetActionMoveSelection,
     [CONTROLLER_ENDLINKBATTLE]            = PlayerHandleEndLinkBattle,
     [CONTROLLER_DEBUGMENU]                = PlayerHandleBattleDebug,
+    [CONTROLLER_INFO_MENU]                = PlayerHandleBattleInfoMenu,
     [CONTROLLER_TERMINATOR_NOP]           = PlayerCmdEnd
 };
 
@@ -1231,12 +1233,11 @@ static void HandleInputChooseActionPlayer(void)
             break;
             case BATTLE_ACTION_INFO:
                 PlaySE(SE_SELECT);
-                BtlController_EmitTwoReturnValues(1, B_ACTION_SHOW_BATTLE_INFO, 0);
-                PlayerBufferExecCompleted();
-
-                /*BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
                 FreeAllWindowBuffers();
-                UI_Battle_Menu_Init(ReshowBattleScreenAfterMenu);*/
+                BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_SHOW_BATTLE_INFO, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
             break;
         }
     }
@@ -5306,6 +5307,14 @@ static void PlayerHandleBattleDebug(void)
 {
     BeginNormalPaletteFade(-1, 0, 0, 0x10, 0);
     SetMainCallback2(CB2_BattleDebugMenu);
+    gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
+}
+
+static void PlayerHandleBattleInfoMenu(void)
+{
+    BeginNormalPaletteFade(-1, 0, 0, 0x10, 0);
+    //SetMainCallback2(ReshowBattleScreenAfterMenu);
+    UI_Battle_Menu_Init(ReshowBattleScreenAfterMenu);
     gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
 }
 

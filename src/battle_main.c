@@ -40,6 +40,7 @@
 #include "random.h"
 #include "rtc.h"
 #include "recorded_battle.h"
+#include "reshow_battle_screen.h"
 #include "roamer.h"
 #include "safari_zone.h"
 #include "scanline_effect.h"
@@ -53,6 +54,7 @@
 #include "trig.h"
 #include "tv.h"
 #include "util.h"
+#include "ui_battle_menu.h"
 #include "wild_encounter.h"
 #include "window.h"
 #include "constants/abilities.h"
@@ -4417,6 +4419,11 @@ static void HandleTurnActionSelectionState(void)
                     BtlController_EmitChooseItem(0, gBattleStruct->battlerPartyOrders[gActiveBattler]);
                     MarkBattlerForControllerExec(gActiveBattler);
                     break;
+                case B_ACTION_SHOW_BATTLE_INFO:
+                    *(gBattleStruct->battlerPartyIndexes + gActiveBattler) = gBattlerPartyIndexes[gActiveBattler];
+                    BtlController_EmitInfoMenu(0);
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    break;
                 case B_ACTION_CANCEL_PARTNER:
                     gBattleCommunication[gActiveBattler] = STATE_WAIT_SET_BEFORE_ACTION;
                     gBattleCommunication[GetBattlerAtPosition(BATTLE_PARTNER(GetBattlerPosition(gActiveBattler)))] = STATE_BEFORE_ACTION_CHOSEN;
@@ -4629,7 +4636,7 @@ static void HandleTurnActionSelectionState(void)
                     gBattleCommunication[gActiveBattler]++;
                     break;
                 case B_ACTION_SHOW_BATTLE_INFO:
-                    gBattleCommunication[gActiveBattler] = STATE_BEFORE_ACTION_CHOSEN;
+                        gBattleCommunication[gActiveBattler] = STATE_BEFORE_ACTION_CHOSEN;
                     break;
                 case B_ACTION_DEBUG:
                     gBattleCommunication[gActiveBattler] = STATE_BEFORE_ACTION_CHOSEN;
