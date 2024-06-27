@@ -186,4 +186,8 @@
 
 #define BALL_SWAP_PRICE          5 //Price to swap a ball
 
+//Yes No Box
+#define BATTLE_BOX_YES_NO_Y     0
+#define BATTLE_BOX_YES_NO_WIDTH 4
+
 #endif // GUARD_CONSTANTS_GLOBAL_H

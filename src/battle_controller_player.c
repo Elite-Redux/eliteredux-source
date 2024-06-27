@@ -372,7 +372,7 @@ void PrintBattleWindow_ActionPromt(void)
     bool8 isDoubleBattle  = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
     u8 battler = gActiveBattler;
     u8 speed;
-    bool8 canUsePokeball = !isTrainerBattle && CanThrowBall() == 0 && GetGameStat(GAME_STAT_USED_POKECENTER) != 0;
+    bool8 canUsePokeball = !isTrainerBattle && CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET);
     bool8 canMega = FALSE;
 
     switch(getBattleInterfaceTheme()){
@@ -1190,10 +1190,9 @@ static void HandleInputChooseActionPlayer(void)
                 PlayerBufferExecCompleted();
             break;
             case BATTLE_ACTION_BAG:
-                if(!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) && 
-                   !(gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)))
+                if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)))
                 {
-                    if(CanThrowBall() == 0 && GetGameStat(GAME_STAT_USED_POKECENTER) != 0){
+                    if(CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET)){
                         PlaySE(SE_SELECT);
                         gBattle_BG1_Y = 160;
                         gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
@@ -1243,7 +1242,7 @@ static void HandleInputChooseActionPlayer(void)
     }
     else if (JOY_NEW(R_BUTTON))
     {
-        if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)) && CanThrowBall() == 0 && GetGameStat(GAME_STAT_USED_POKECENTER) != 0)
+        if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)) && CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET))
         {
             gBattle_BG1_Y = 160;
             gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
@@ -1253,7 +1252,7 @@ static void HandleInputChooseActionPlayer(void)
     }
     else if (JOY_NEW(L_BUTTON))
     {
-        if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)) && CanThrowBall() == 0 && GetGameStat(GAME_STAT_USED_POKECENTER) != 0)
+        if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)) && CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET))
         {
             gBattle_BG1_Y = 160;
             gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
