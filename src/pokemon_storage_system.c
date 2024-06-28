@@ -8158,9 +8158,9 @@ static bool8 SetMenuTexts_Mon(void)
             SetMenuText(MENU_STORE);
     }
 
-    if (GetMonData(&pokemon, MON_DATA_LEVEL, NULL) < GetLevelCap() && GetMonData(&pokemon, MON_DATA_LEVEL, NULL) < MAX_LEVEL) //ToDo: Remove mons at the level cap from the level up menu
+    if (GetMonData(&pokemon, MON_DATA_LEVEL, NULL) < GetLevelCap() && GetMonData(&pokemon, MON_DATA_LEVEL, NULL) < MAX_LEVEL  && GetMonData(&pokemon, MON_DATA_IS_EGG, NULL) == FALSE) //ToDo: Remove mons at the level cap from the level up menu
         SetMenuText(MENU_LEVEL_UP);
-    if (getNumofAvailableEvos(&pokemon) != 0) //ToDo: Remove mons that can't evolve
+    if (getNumofAvailableEvos(&pokemon) != 0 && GetMonData(&pokemon, MON_DATA_IS_EGG, NULL) == FALSE) //ToDo: Remove mons that can't evolve
         SetMenuText(MENU_EVOLVE);
     SetMenuText(MENU_MARK);
     SetMenuText(MENU_RELEASE);
