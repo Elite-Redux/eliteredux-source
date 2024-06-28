@@ -1788,7 +1788,7 @@ script PetalburgCity_Gym_EventScript_Norman{
 		case 7:
 		case 8:
 			//Give Slakingite
-			if(!flag(FLAG_BADGE06_GET) && !flag(FLAG_OBTAINED_SLAKINGITE)){ // Checking if the player has already received the item
+			if(flag(FLAG_BADGE06_GET) && !flag(FLAG_OBTAINED_SLAKINGITE)){ // Checking if the player has already received the item
 				msgbox(format("Take this special Item as a gift from me!"))
 				giveitem(ITEM_SLAKINGITE)
 				playfanfare(MUS_OBTAIN_ITEM)
