@@ -2758,7 +2758,8 @@ static void DoHitAnimBlinkSpriteEffect(void)
 
 static void PlayerHandleYesNoInput(void)
 {
-    /*if (JOY_NEW(DPAD_UP) && gMultiUsePlayerCursor != 0)
+    
+    if (JOY_NEW(DPAD_UP) && gMultiUsePlayerCursor != 0)
     {
         PlaySE(SE_SELECT);
         BattleDestroyYesNoCursorAt(gMultiUsePlayerCursor);
@@ -2771,17 +2772,20 @@ static void PlayerHandleYesNoInput(void)
         BattleDestroyYesNoCursorAt(gMultiUsePlayerCursor);
         gMultiUsePlayerCursor = 1;
         BattleCreateYesNoCursorAt(1);
-    }*/
-    if (JOY_NEW(START_BUTTON))
+    }
+    if (JOY_NEW(A_BUTTON))
     {
         HandleBattleWindow(0x18, 8, 0x1D, 0xD, WINDOW_CLEAR);
         PlaySE(SE_SELECT);
 
-        BtlController_EmitTwoReturnValues(1, 0xD, 0);
+        if (gMultiUsePlayerCursor != 0)
+            BtlController_EmitTwoReturnValues(1, 0xE, 0);
+        else
+            BtlController_EmitTwoReturnValues(1, 0xD, 0);
 
         PlayerBufferExecCompleted();
     }
-    if (JOY_NEW(B_BUTTON) || JOY_NEW(A_BUTTON))
+    if (JOY_NEW(B_BUTTON))
     {
         HandleBattleWindow(0x18, 8, 0x1D, 0xD, WINDOW_CLEAR);
         PlaySE(SE_SELECT);
@@ -4737,7 +4741,8 @@ static void PlayerHandleYesNoBox(void)
 {
     if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
     {
-        HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
+        //HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
+        HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
         BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
         gMultiUsePlayerCursor = 1;
         BattleCreateYesNoCursorAt(1);
