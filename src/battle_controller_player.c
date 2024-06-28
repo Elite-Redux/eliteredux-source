@@ -83,6 +83,9 @@ static const u8 sTheme_Dark_Split_Physical[]          = INCBIN_U8("graphics/ui_m
 static const u8 sTheme_Dark_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/split/split_special.4bpp");
 static const u8 sTheme_Dark_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/split/split_status.4bpp");
 
+static const u8 sTheme_Dark_Target_0[]                = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/target_0.4bpp");
+static const u8 sTheme_Dark_Target_1[]                = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/target_1.4bpp");
+
 //Theme 2 - Light
 static const u8 sTheme_Light_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1.4bpp");
 static const u8 sTheme_Light_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1_selected.4bpp");
@@ -112,6 +115,9 @@ static const u8 sTheme_Light_Split_Physical[]          = INCBIN_U8("graphics/ui_
 static const u8 sTheme_Light_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/split/split_special.4bpp");
 static const u8 sTheme_Light_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/split/split_status.4bpp");
 
+static const u8 sTheme_Light_Target_0[]                = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/target_0.4bpp");
+static const u8 sTheme_Light_Target_1[]                = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/target_1.4bpp");
+
 //Theme 3 - DPPt
 static const u8 sTheme_DPPt_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_1.4bpp");
 static const u8 sTheme_DPPt_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_1_selected.4bpp");
@@ -140,6 +146,9 @@ static const u8 sTheme_DPPt_Title_Move_PP[]           = INCBIN_U8("graphics/ui_m
 static const u8 sTheme_DPPt_Split_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/split/split_physical.4bpp");
 static const u8 sTheme_DPPt_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/split/split_special.4bpp");
 static const u8 sTheme_DPPt_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/split/split_status.4bpp");
+
+static const u8 sTheme_DPPt_Target_0[]                = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/target_0.4bpp");
+static const u8 sTheme_DPPt_Target_1[]                = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/target_1.4bpp");
 
 static const u8 sSplit_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/split_physical.4bpp");
 static const u8 sSplit_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/split_special.4bpp");
@@ -793,10 +802,6 @@ void PrintBattleWindow_MoveSelection(void)
 
     if(target >= MAX_BATTLERS_COUNT)
         target = BATTLE_OPPOSITE(gActiveBattler);
-
-    MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "PrintBattleWindow_MoveSelection Selected Target: %d", target);
-    MgbaClose();
     
     if(!IsBattlerAlive(target))
         target = BATTLE_PARTNER(target);
@@ -874,12 +879,17 @@ void PrintBattleWindow_MoveSelection(void)
     y2 = 0;
     switch(moveInfoType){
         case MOVE_INFO_DESCRIPTION:
-            if(battleTheme == THEME_DARK)
+            if(battleTheme == THEME_DARK){
                 BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
-            else if(battleTheme == THEME_LIGHT)
+            }
+            else if(battleTheme == THEME_LIGHT){
                 BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
-            else if(battleTheme == THEME_DPPT)
+
+            }
+            else if(battleTheme == THEME_DPPT){
                 BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+
+            }
         break;
         case MOVE_INFO_POWER_ACC_PRIO_TYPE:
         case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
@@ -905,6 +915,46 @@ void PrintBattleWindow_MoveSelection(void)
                 BlitBitmapToWindow(windowId, sTheme_Light_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
             else if(battleTheme == THEME_DPPT)
                 BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        break;
+    }
+
+    //Target
+    switch(battleTheme){
+        case THEME_DARK:
+            if(IsDoubleBattle()){
+                if(target == 3){
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Target_0, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Target_1, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+                else if(target == 1){
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Target_1, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Target_0, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+            }
+        break;
+        case THEME_LIGHT:
+            if(IsDoubleBattle()){
+                if(target == 3){
+                    BlitBitmapToWindow(windowId, sTheme_Light_Target_0, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Light_Target_1, (x * 8) + x2 + 64 + 4, (y * 8) + y2, 8, 8);
+                }
+                else if(target == 1){
+                    BlitBitmapToWindow(windowId, sTheme_Light_Target_1, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Light_Target_0, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+            }
+        break;
+        case THEME_DPPT:
+            if(IsDoubleBattle()){
+                if(target == 3){
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Target_0, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Target_1, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+                else if(target == 1){
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Target_1, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Target_0, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+            }
         break;
     }
         
