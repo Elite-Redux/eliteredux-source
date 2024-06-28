@@ -79,6 +79,10 @@ static const u8 sTheme_Dark_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_m
 static const u8 sTheme_Dark_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_name.4bpp");
 static const u8 sTheme_Dark_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_pp.4bpp");
 
+static const u8 sTheme_Dark_Split_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/split/split_physical.4bpp");
+static const u8 sTheme_Dark_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/split/split_special.4bpp");
+static const u8 sTheme_Dark_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/split/split_status.4bpp");
+
 //Theme 2 - Light
 static const u8 sTheme_Light_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1.4bpp");
 static const u8 sTheme_Light_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1_selected.4bpp");
@@ -104,6 +108,10 @@ static const u8 sTheme_Light_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_
 static const u8 sTheme_Light_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_name.4bpp");
 static const u8 sTheme_Light_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_pp.4bpp");
 
+static const u8 sTheme_Light_Split_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/split/split_physical.4bpp");
+static const u8 sTheme_Light_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/split/split_special.4bpp");
+static const u8 sTheme_Light_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/split/split_status.4bpp");
+
 //Theme 3 - DPPt
 static const u8 sTheme_DPPt_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_1.4bpp");
 static const u8 sTheme_DPPt_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_1_selected.4bpp");
@@ -128,6 +136,10 @@ static const u8 sTheme_DPPt_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_m
 
 static const u8 sTheme_DPPt_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_name.4bpp");
 static const u8 sTheme_DPPt_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_pp.4bpp");
+
+static const u8 sTheme_DPPt_Split_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/split/split_physical.4bpp");
+static const u8 sTheme_DPPt_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/split/split_special.4bpp");
+static const u8 sTheme_DPPt_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/split/split_status.4bpp");
 
 static const u8 sSplit_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/split_physical.4bpp");
 static const u8 sSplit_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/split_special.4bpp");
@@ -314,6 +326,7 @@ enum Colors
     FONT_GREEN,
     FONT_YELLOW,
     FONT_PURPLE,
+    FONT_GRAY,
     FONT_GRAY_2,
 };
 
@@ -328,6 +341,7 @@ static const u8 sMenuWindowFontColors[][3] =
     [FONT_GREEN]   = {TEXT_COLOR_TRANSPARENT,  14,  TEXT_COLOR_TRANSPARENT},
     [FONT_YELLOW]  = {TEXT_COLOR_TRANSPARENT,  13,  TEXT_COLOR_TRANSPARENT},
     [FONT_PURPLE]  = {TEXT_COLOR_TRANSPARENT,  11,  TEXT_COLOR_TRANSPARENT},
+    [FONT_GRAY]    = {TEXT_COLOR_TRANSPARENT,  8,   TEXT_COLOR_TRANSPARENT},
     [FONT_GRAY_2]  = {TEXT_COLOR_TRANSPARENT,  4,   TEXT_COLOR_TRANSPARENT},
 };
 
@@ -659,6 +673,7 @@ enum{
 
 #define SPACE_BETWEEN_MOVE_NAME_AND_PP             (10 * 8)
 #define SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION    SPACE_BETWEEN_MOVE_NAME_AND_PP + (5 * 8) + 4
+#define MOVE_SPLIT_X                               SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + (6 * 8) + 4
 static const u8 sText_PP[]            = _("{STR_VAR_1}/{STR_VAR_2}");
 const u8 sText_MoveInfo_Power[]       = _("Power:");
 const u8 sText_MoveInfo_True_Power[]  = _("True Power:");
@@ -758,7 +773,7 @@ void PrintBattleWindow_MoveSelection(void)
     u8 font = FONT_SMALL_NARROW;
     u8 fontColor = FONT_WHITE_2;
     u8 moveInfoType = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
-    u8 target = BATTLE_OPPOSITE(gActiveBattler);
+    u8 target = gMultiUsePlayerCursor; //BATTLE_OPPOSITE(gActiveBattler);
     u8 battleTheme = getBattleInterfaceTheme();
     bool32 copyToVram;
     bool8 isStatusMove;
@@ -919,22 +934,45 @@ void PrintBattleWindow_MoveSelection(void)
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
             //Split
-            offset = offset - 16;
+            x2 = MOVE_SPLIT_X;
             y2 = y2 + 4;
+
             switch(gBattleMoves[move].split){
                 case SPLIT_PHYSICAL:
-                    BlitBitmapToWindow(windowId, sSplit_Physical, (x * 8) + x2 + offset, (y * 8) + y2, 16, 8);
+                    if(battleTheme == THEME_DARK)
+                        BlitBitmapToWindow(windowId, sTheme_Dark_Split_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_LIGHT)
+                        BlitBitmapToWindow(windowId, sTheme_Light_Split_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_DPPT)
+                        BlitBitmapToWindow(windowId, sTheme_DPPt_Split_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else
+                        BlitBitmapToWindow(windowId, sSplit_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
                 break;
                 case SPLIT_SPECIAL:
-                    BlitBitmapToWindow(windowId, sSplit_Special, (x * 8) + x2 + offset, (y * 8) + y2, 16, 8);
+                    if(battleTheme == THEME_DARK)
+                        BlitBitmapToWindow(windowId, sTheme_Dark_Split_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_LIGHT)
+                        BlitBitmapToWindow(windowId, sTheme_Light_Split_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_DPPT)
+                        BlitBitmapToWindow(windowId, sTheme_DPPt_Split_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else
+                        BlitBitmapToWindow(windowId, sSplit_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
                 break;
                 case SPLIT_STATUS:
-                    BlitBitmapToWindow(windowId, sSplit_Status, (x * 8) + x2 + offset, (y * 8) + y2, 16, 8);
+                    if(battleTheme == THEME_DARK)
+                        BlitBitmapToWindow(windowId, sTheme_Dark_Split_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_LIGHT)
+                        BlitBitmapToWindow(windowId, sTheme_Light_Split_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_DPPT)
+                        BlitBitmapToWindow(windowId, sTheme_DPPt_Split_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else
+                        BlitBitmapToWindow(windowId, sSplit_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
                 break;
             }
             y2 = y2 - 4;
 
             y++;
+            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
             //Move Accuracy
             ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].accuracy, STR_CONV_MODE_LEFT_ALIGN, 3);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Accuracy);
@@ -956,14 +994,30 @@ void PrintBattleWindow_MoveSelection(void)
                 StringCopy(gStringVar2, gNoStabIcon);
 
             effectiveness = GetMoveTypeEffectiveness(move, target, gActiveBattler);
-            if(effectiveness == MOVE_EFFECTIVENESS_NONE)
-                fontColor = FONT_GRAY_2;
-            else if(effectiveness == MOVE_EFFECTIVENESS_DOUBLE)
-                fontColor = FONT_GREEN;
-            else if (effectiveness == MOVE_EFFECTIVENESS_HALF)
-                fontColor = FONT_RED;
-            else
-                fontColor = FONT_WHITE_2;
+            
+            switch(battleTheme){
+                case THEME_DARK:
+                    if(effectiveness == MOVE_EFFECTIVENESS_NONE)
+                        fontColor = FONT_GRAY_2;
+                    else if(effectiveness == MOVE_EFFECTIVENESS_DOUBLE)
+                        fontColor = FONT_GREEN;
+                    else if (effectiveness == MOVE_EFFECTIVENESS_HALF)
+                        fontColor = FONT_RED;
+                    else
+                        fontColor = FONT_WHITE_2;
+                break;
+                case THEME_LIGHT:
+                case THEME_DPPT:
+                    if(effectiveness == MOVE_EFFECTIVENESS_NONE)
+                        fontColor = FONT_GRAY;
+                    else if(effectiveness == MOVE_EFFECTIVENESS_DOUBLE)
+                        fontColor = FONT_GREEN;
+                    else if (effectiveness == MOVE_EFFECTIVENESS_HALF)
+                        fontColor = FONT_RED;
+                    else
+                        fontColor = FONT_BLACK_2;
+                break;
+            }
             
             if(gBattleMoves[move].type != gBattleMoves[move].type2 && gBattleMoves[move].type2 != TYPE_NORMAL){
                 StringCopy(gStringVar3, gTypeNames[gBattleMoves[move].type2]);
@@ -1427,6 +1481,7 @@ static void HandleInputChooseTarget(void)
     s32 i;
     static const u8 identities[MAX_BATTLERS_COUNT] = {B_POSITION_PLAYER_LEFT, B_POSITION_PLAYER_RIGHT, B_POSITION_OPPONENT_RIGHT, B_POSITION_OPPONENT_LEFT};
     u16 move = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_MOVE1 + gMoveSelectionCursor[gActiveBattler]);
+    u8 windowMode = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
 
     DoBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX, 15, 1);
     for (i = 0; i < gBattlersCount; i++)
@@ -1513,6 +1568,7 @@ static void HandleInputChooseTarget(void)
             } while (i == 0);
         }
         gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_ShowAsMoveTarget;
+        PrintBattleWindow_MoveSelection();
     }
     else if (JOY_NEW(DPAD_RIGHT | DPAD_DOWN))
     {
@@ -1564,6 +1620,25 @@ static void HandleInputChooseTarget(void)
         }
 
         gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_ShowAsMoveTarget;
+        PrintBattleWindow_MoveSelection();
+    }
+    else if(JOY_NEW(R_BUTTON))
+    {
+        if(windowMode == 0)
+            windowMode = NUM_MOVE_INFO_TYPES - 1;
+        else
+            windowMode--;
+        VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
+        PrintBattleWindow_MoveSelection();
+    }
+    else if(JOY_NEW(L_BUTTON))
+    {
+        if(windowMode == NUM_MOVE_INFO_TYPES - 1)
+            windowMode = 0;
+        else
+            windowMode++;
+        VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
+        PrintBattleWindow_MoveSelection();
     }
 }
 
