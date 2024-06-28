@@ -1,5 +1,8 @@
 #include "global.h"
 
+const u32 gBattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/battle_interface/vanilla/textbox.4bpp.lz");
+const u32 gBattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/vanilla/textbox_map.bin.lz");
+const u32 gBattleTextboxPalette[] = INCBIN_U32("graphics/ui_menus/battle_interface/vanilla/textbox.gbapal.lz");
 //Theme Stuff
 const u32 gTheme_Dark_BattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/textbox.4bpp.lz");
 const u32 gTheme_Dark_BattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/tilemap.bin.lz");

@@ -322,8 +322,8 @@ graphics/pokenav/region_map.8bpp: %.8bpp: %.png
 $(MISCGFXDIR)/japanese_hof.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 29
 
-$(BATINTGFXDIR)/textbox.gbapal: $(BATINTGFXDIR)/textbox_0.gbapal \
-								$(BATINTGFXDIR)/textbox_1.gbapal
+graphics/ui_menus/battle_interface/default/textbox.gbapal: graphics/ui_menus/battle_interface/vanilla/textbox_0.gbapal \
+														   graphics/ui_menus/battle_interface/vanilla/textbox_1.gbapal
 	@cat $^ >$@
 
 $(BTLANMSPRGFXDIR)/ice_cube.4bpp: $(BTLANMSPRGFXDIR)/ice_cube_0.4bpp \

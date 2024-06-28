@@ -7399,6 +7399,9 @@ extern const u32 gBerryFixWindow_Tilemap[];
 extern const u16 gBerryFixWindow_Pal[];
 
 //Theme Stuff
+extern const u32 gBattleTextboxTiles[];
+extern const u32 gBattleTextboxTilemap[];
+extern const u32 gBattleTextboxPalette[];
 // Theme 1 Dark
 extern const u32 gTheme_Dark_BattleTextboxTiles[];
 extern const u32 gTheme_Dark_BattleTextboxTilemap[];
