@@ -773,7 +773,7 @@ void PrintBattleWindow_MoveSelection(void)
     u8 font = FONT_SMALL_NARROW;
     u8 fontColor = FONT_WHITE_2;
     u8 moveInfoType = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
-    u8 target = gMultiUsePlayerCursor; //BATTLE_OPPOSITE(gActiveBattler);
+    u8 target = gMultiUsePlayerCursor;
     u8 battleTheme = getBattleInterfaceTheme();
     bool32 copyToVram;
     bool8 isStatusMove;
@@ -790,6 +790,13 @@ void PrintBattleWindow_MoveSelection(void)
             fontColor = FONT_BLACK_2;
         break;
     }
+
+    if(target >= MAX_BATTLERS_COUNT)
+        target = BATTLE_OPPOSITE(gActiveBattler);
+
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "PrintBattleWindow_MoveSelection Selected Target: %d", target);
+    MgbaClose();
     
     if(!IsBattlerAlive(target))
         target = BATTLE_PARTNER(target);
