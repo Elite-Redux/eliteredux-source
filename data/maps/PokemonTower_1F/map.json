@@ -19,10 +19,10 @@
   "warp_events": [
     {
       "x": 11,
-      "y": 19,
+      "y": 18,
       "elevation": 0,
-      "dest_map": "MAP_LAVENDER_TOWN",
-      "dest_warp_id": 3
+      "dest_map": "MAP_POKEMON_TOWER_1F",
+      "dest_warp_id": 0
     },
     {
       "x": 19,
@@ -37,6 +37,27 @@
       "elevation": 0,
       "dest_map": "MAP_POKEMON_TOWER_1F",
       "dest_warp_id": 0
+    },
+    {
+      "x": 10,
+      "y": 19,
+      "elevation": 0,
+      "dest_map": "MAP_LAVENDER_TOWN",
+      "dest_warp_id": 3
+    },
+    {
+      "x": 12,
+      "y": 19,
+      "elevation": 0,
+      "dest_map": "MAP_LAVENDER_TOWN",
+      "dest_warp_id": 3
+    },
+    {
+      "x": 11,
+      "y": 19,
+      "elevation": 0,
+      "dest_map": "MAP_LAVENDER_TOWN",
+      "dest_warp_id": 3
     }
   ],
   "coord_events": [
