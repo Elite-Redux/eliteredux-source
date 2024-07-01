@@ -171,68 +171,132 @@ static void SafariBufferRunCommand(void)
     }
 }
 
+enum optionsButtonMode
+{
+    BATTLE_ACTION_SAFARI_CATCH,
+    BATTLE_ACTION_SAFARI_POKEBLOCK,
+    BATTLE_ACTION_SAFARI_GO_NEAR,
+    BATTLE_ACTION_SAFARI_RUN,
+};
+
+#define ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN FALSE // No idea what to call this constant
+
 static void HandleInputChooseAction(void)
 {
+    u16 itemId = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
+    bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
+    u8 value = 0;
+
+    if (JOY_REPEAT(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;
+
     if (JOY_NEW(A_BUTTON))
     {
         PlaySE(SE_SELECT);
 
         switch (gActionSelectionCursor[gActiveBattler])
         {
-        case 0:
+        case BATTLE_ACTION_SAFARI_CATCH:
             BtlController_EmitTwoReturnValues(1, B_ACTION_SAFARI_BALL, 0);
             break;
-        case 1:
+        case BATTLE_ACTION_SAFARI_POKEBLOCK:
             BtlController_EmitTwoReturnValues(1, B_ACTION_SAFARI_POKEBLOCK, 0);
             break;
-        case 2:
+        case BATTLE_ACTION_SAFARI_GO_NEAR:
             BtlController_EmitTwoReturnValues(1, B_ACTION_SAFARI_GO_NEAR, 0);
             break;
-        case 3:
+        case BATTLE_ACTION_SAFARI_RUN:
             BtlController_EmitTwoReturnValues(1, B_ACTION_SAFARI_RUN, 0);
             break;
         }
         SafariBufferExecCompleted();
-    }
-    else if (JOY_NEW(DPAD_LEFT))
-    {
-        if (gActionSelectionCursor[gActiveBattler] & 1)
-        {
-            PlaySE(SE_SELECT);
-            ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
-            gActionSelectionCursor[gActiveBattler] ^= 1;
-            ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
-        }
+        PrintBattleWindow_ActionPromt_Safari();
     }
     else if (JOY_NEW(DPAD_RIGHT))
     {
-        if (!(gActionSelectionCursor[gActiveBattler] & 1))
-        {
-            PlaySE(SE_SELECT);
-            ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
-            gActionSelectionCursor[gActiveBattler] ^= 1;
-            ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
+        PlaySE(SE_SELECT);
+        switch(gActionSelectionCursor[gActiveBattler]){
+            case BATTLE_ACTION_SAFARI_CATCH:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_POKEBLOCK;
+            break;
+            case BATTLE_ACTION_SAFARI_GO_NEAR:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_RUN;
+            break;
+            case BATTLE_ACTION_SAFARI_POKEBLOCK:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_CATCH;
+            break;
+            case BATTLE_ACTION_SAFARI_RUN:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_GO_NEAR;
+            break;
         }
+        PrintBattleWindow_ActionPromt_Safari();
+    }
+    else if (JOY_NEW(DPAD_LEFT))
+    {
+        PlaySE(SE_SELECT);
+        switch(gActionSelectionCursor[gActiveBattler]){
+            case BATTLE_ACTION_SAFARI_CATCH:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_POKEBLOCK;
+            break;
+            case BATTLE_ACTION_SAFARI_GO_NEAR:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_RUN;
+            break;
+            case BATTLE_ACTION_SAFARI_POKEBLOCK:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_CATCH;
+            break;
+            case BATTLE_ACTION_SAFARI_RUN:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_GO_NEAR;
+            break;
+        }
+        PrintBattleWindow_ActionPromt_Safari();
     }
     else if (JOY_NEW(DPAD_UP))
     {
-        if (gActionSelectionCursor[gActiveBattler] & 2)
-        {
-            PlaySE(SE_SELECT);
-            ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
-            gActionSelectionCursor[gActiveBattler] ^= 2;
-            ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
+        PlaySE(SE_SELECT);
+        switch(gActionSelectionCursor[gActiveBattler]){
+            case BATTLE_ACTION_SAFARI_CATCH:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_GO_NEAR;
+            break;
+            case BATTLE_ACTION_SAFARI_GO_NEAR:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_CATCH;
+            break;
+            case BATTLE_ACTION_SAFARI_POKEBLOCK:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_RUN;
+            break;
+            case BATTLE_ACTION_SAFARI_RUN:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_POKEBLOCK;
+            break;
         }
+        PrintBattleWindow_ActionPromt_Safari();
     }
     else if (JOY_NEW(DPAD_DOWN))
     {
-        if (!(gActionSelectionCursor[gActiveBattler] & 2))
-        {
-            PlaySE(SE_SELECT);
-            ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
-            gActionSelectionCursor[gActiveBattler] ^= 2;
-            ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
+        PlaySE(SE_SELECT);
+        switch(gActionSelectionCursor[gActiveBattler]){
+            case BATTLE_ACTION_SAFARI_CATCH:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_GO_NEAR;
+            break;
+            case BATTLE_ACTION_SAFARI_GO_NEAR:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_CATCH;
+            break;
+            case BATTLE_ACTION_SAFARI_POKEBLOCK:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_RUN;
+            break;
+            case BATTLE_ACTION_SAFARI_RUN:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_POKEBLOCK;
+            break;
         }
+        PrintBattleWindow_ActionPromt_Safari();
     }
 }
 
@@ -453,16 +517,16 @@ static void HandleChooseActionAfterDma3Safari(void)
 static void SafariHandleChooseAction(void)
 {
     s32 i;
+    
+	//Reshow Bg
+    gBattle_BG1_X = 0;
+    gBattle_BG1_Y = 0;
+    ShowBg(1);
 
     gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3Safari;
-    //BattlePutTextOnWindow(gText_SafariZoneMenu, B_WIN_ACTION_MENU);
+    BattleTv_ClearExplosionFaintCause();
 
-    for (i = 0; i < 4; i++)
-        ActionSelectionDestroyCursorAt(i);
-
-    ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
-    BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo2);
-    //BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_ACTION_PROMPT);
+    PrintBattleWindow_ActionPromt_Safari();
 }
 
 static void SafariHandleYesNoBox(void)

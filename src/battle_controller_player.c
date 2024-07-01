@@ -671,6 +671,246 @@ void PrintBattleWindow_ActionPromt(void)
     CopyWindowToVram(windowId, 3);
 }
 
+
+enum optionsButtonModeSafari
+{
+    BATTLE_ACTION_SAFARI_CATCH,
+    BATTLE_ACTION_SAFARI_POKEBLOCK,
+    BATTLE_ACTION_SAFARI_GO_NEAR,
+    BATTLE_ACTION_SAFARI_RUN,
+};
+
+
+const u8 sText_BattleMenu_Action_Go_Near[]        = _("Go Near");
+const u8 sText_BattleMenu_Action_Pokeblock[]      = _("Pokeblock");  
+
+const u8 sText_BattleMenu_Action_You[]            = _("{PLAYER}");  
+
+void PrintBattleWindow_ActionPromt_Safari(void)
+{
+    u8 i, x, y, x2, y2, offset;
+    u8 windowId = B_WIN_ACTION_PROMPT;
+    u8 font = FONT_SMALL_NARROW;
+    u8 fontColor = FONT_WHITE_2;
+    struct TextPrinterTemplate printerTemplate;
+    u8 speed;
+
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            fontColor = FONT_WHITE_2;
+        break;
+        case THEME_LIGHT:
+            fontColor = FONT_BLACK_2;
+        break;
+        case THEME_DPPT:
+            fontColor = FONT_BLACK_2;
+        break;
+    }
+
+    //Fill the window with the fill value
+    MoveIntoBattleBgWindow(windowId);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+
+    //What Will X Do?
+    x  = 1;
+    y  = 1;
+    y2 = 4;
+
+    //First Part
+    StringCopy(gStringVar1, sText_BattleMenu_Action_What_Will_X_Do_1);
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Part two
+            StringCopy(gStringVar1, sText_BattleMenu_Action_You);
+            StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
+            offset = 4 + GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+        default:
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Part two
+            StringCopy(gStringVar1, sText_BattleMenu_Action_You);
+            StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
+            offset = GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+    }
+
+    //Buttons
+    x  = 15;
+    y  = 1;
+    y2 = 0;
+
+    // Fight Button
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_CATCH)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_CATCH)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_CATCH)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+    }
+
+    //Text
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Catch);
+            offset = 6 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            
+            x = x + 6;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Catch);
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+    }
+
+
+    // Info
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_POKEBLOCK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_POKEBLOCK)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_POKEBLOCK)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+    }
+    
+    //Text
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokeblock);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            y  = y + 2;
+            x  = 15;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokeblock);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE) + 4;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            y  = y + 2;
+            x  = 15;
+        break;
+    }
+
+    // Pokemon
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_GO_NEAR)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_GO_NEAR)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_GO_NEAR)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+    }
+
+    //Text
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Go_Near);
+            offset = 6 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Go_Near);
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+    }
+
+    // Run
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_RUN)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_RUN)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_RUN)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+    }
+
+    //Text
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+    }
+
+    PutWindowTilemap(windowId);
+    CopyWindowToVram(windowId, 3);
+}
+
 enum{
     MOVE_INFO_DESCRIPTION,
     MOVE_INFO_POWER_ACC_PRIO_TYPE,
