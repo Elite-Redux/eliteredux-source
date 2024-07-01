@@ -2950,6 +2950,9 @@ static void InitTradeBgInternal(void)
         case THEME_DPPT:
             DecompressAndLoadBgGfxUsingHeap(0, gTheme_DPPt_BattleTextboxTiles, 0, 0, 0);
         break;
+        case THEME_CLASSIC:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Classic_BattleTextboxTiles, 0, 0, 0);
+        break;
     }
 
     LZDecompressWram(gTheme_Dark_BattleTextboxTilemap, gDecompressionBuffer);
@@ -2966,6 +2969,9 @@ static void InitTradeBgInternal(void)
         break;
         case THEME_DPPT:
             DecompressAndLoadBgGfxUsingHeap(0, gTheme_DPPt_BattleTextboxTiles, 0, 0, 0);
+        break;
+        case THEME_CLASSIC:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Classic_BattleTextboxTiles, 0, 0, 0);
         break;
     }
     

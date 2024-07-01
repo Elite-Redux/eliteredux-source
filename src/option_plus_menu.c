@@ -235,7 +235,7 @@ struct // MENU_CUSTOM
     int (*processInput)(int selection);
 } static const sItemFunctionsCustom[MENUITEM_CUSTOM_COUNT] =
 {
-    [MENUITEM_CUSTOM_BATTLE_UI_THEME]     = {DrawChoices_BattleInterfaceTheme,     ProcessInput_Options_Three},
+    [MENUITEM_CUSTOM_BATTLE_UI_THEME]     = {DrawChoices_BattleInterfaceTheme,     ProcessInput_Options_Four},
     [MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = {DrawChoices_BattleInterfaceShortcut,  ProcessInput_Options_Five},
     [MENUITEM_CUSTOM_AUTO_RUN]            = {DrawChoices_AutoRun,                  ProcessInput_Options_Two},
     //[MENUITEM_CUSTOM_PERMANENT_REPEL]   = {DrawChoices_PermanentRepel,           ProcessInput_Options_Two},
@@ -1384,7 +1384,7 @@ static void DrawChoices_AutoRun(int selection, int y)
 const u8 gText_Theme_Name_01[]   = _("Elite Redux Dark");
 const u8 gText_Theme_Name_02[]   = _("Elite Redux Clear");
 const u8 gText_Theme_Name_03[]   = _("Diamond & Pearl");
-const u8 gText_Theme_Name_04[]   = _("Theme Name");
+const u8 gText_Theme_Name_04[]   = _("Classic");
 
 const u8 gText_Shortuct_01[]        = _("Fight");
 const u8 gText_Shortuct_02[]        = _("Pokemon");

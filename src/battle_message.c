@@ -4033,6 +4033,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
             break;
             case THEME_LIGHT:
             case THEME_DPPT:
+            case THEME_CLASSIC:
                 FillWindowPixelBuffer(windowId, PIXEL_FILL(10));
             break;
             default:
@@ -4061,6 +4062,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
             printerTemplate.shadowColor   = 0;  // Shadow Color
         break;
         case THEME_LIGHT:
+        case THEME_CLASSIC:
             printerTemplate.fgColor       = 3;  // Font Color
             printerTemplate.bgColor       = 10; // Background Color
             printerTemplate.shadowColor   = 0;  // Shadow Color

@@ -7414,6 +7414,10 @@ extern const u32 gTheme_Light_BattleTextboxPalette[];
 extern const u32 gTheme_DPPt_BattleTextboxTiles[];
 extern const u32 gTheme_DPPt_BattleTextboxTilemap[];
 extern const u32 gTheme_DPPt_BattleTextboxPalette[];
+// Theme 4 Classic
+extern const u32 gTheme_Classic_BattleTextboxTiles[];
+extern const u32 gTheme_Classic_BattleTextboxTilemap[];
+extern const u32 gTheme_Classic_BattleTextboxPalette[];
 
 extern const u32 gUnknown_08D778F0[];
 extern const u32 gVsLettersGfx[];

@@ -16,6 +16,10 @@ const u32 gTheme_DPPt_BattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/bat
 const u32 gTheme_DPPt_BattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/dppt_theme/tilemap.bin.lz");
 const u32 gTheme_DPPt_BattleTextboxPalette[] = INCBIN_U32("graphics/ui_menus/battle_interface/dppt_theme/palette.gbapal.lz");
 
+const u32 gTheme_Classic_BattleTextboxTiles[]   = INCBIN_U32("graphics/ui_menus/battle_interface/classic_theme/textbox.4bpp.lz");
+const u32 gTheme_Classic_BattleTextboxTilemap[] = INCBIN_U32("graphics/ui_menus/battle_interface/classic_theme/tilemap.bin.lz");
+const u32 gTheme_Classic_BattleTextboxPalette[] = INCBIN_U32("graphics/ui_menus/battle_interface/classic_theme/palette.gbapal.lz");
+
 const u32 gUnusedGfx_OldCharmap[] = INCBIN_U32("graphics/unused/old_charmap.4bpp.lz"); // japanese table and bunch of stuff
 const u32 gUnusedTimemap_OldCharmap[] = INCBIN_U32("graphics/unused/old_charmap.bin.lz");
 const u32 gUnusedPal_OldCharmap[] = INCBIN_U32("graphics/unused/old_charmap.gbapal.lz");
