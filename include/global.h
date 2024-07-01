@@ -591,6 +591,8 @@ struct SaveBlock2
     u32 encounteredroutes3;
     u32 encounteredroutes4;
     u32 encounteredroutes5;
+    u8 shortcutButton:3;
+    u8 filler:5;
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;

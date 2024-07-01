@@ -67,6 +67,13 @@ static const u8 sTheme_Dark_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_m
 static const u8 sTheme_Dark_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/catch_button.4bpp");
 static const u8 sTheme_Dark_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_selector.4bpp");
 
+static const u8 sTheme_Dark_Extra_Button_Fight[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_fight.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Forfeit[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_forfeit.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Info[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_info.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Pokemon[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_pokemon.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Run[]        = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_run.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Debug[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_debug.4bpp");
+
 static const u8 sTheme_Dark_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_sane.4bpp");
 static const u8 sTheme_Dark_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_status.4bpp");
 static const u8 sTheme_Dark_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_fainted.4bpp");
@@ -99,6 +106,13 @@ static const u8 sTheme_Light_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_
 static const u8 sTheme_Light_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/catch_button.4bpp");
 static const u8 sTheme_Light_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_selector.4bpp");
 
+static const u8 sTheme_Light_Extra_Button_Fight[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_fight.4bpp");
+static const u8 sTheme_Light_Extra_Button_Forfeit[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_forfeit.4bpp");
+static const u8 sTheme_Light_Extra_Button_Info[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_info.4bpp");
+static const u8 sTheme_Light_Extra_Button_Pokemon[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_pokemon.4bpp");
+static const u8 sTheme_Light_Extra_Button_Run[]        = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_run.4bpp");
+static const u8 sTheme_Light_Extra_Button_Debug[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_debug.4bpp");
+
 static const u8 sTheme_Light_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_sane.4bpp");
 static const u8 sTheme_Light_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_status.4bpp");
 static const u8 sTheme_Light_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_fainted.4bpp");
@@ -130,6 +144,13 @@ static const u8 sTheme_DPPt_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_m
 static const u8 sTheme_DPPt_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/mega_button.4bpp");
 static const u8 sTheme_DPPt_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/catch_button.4bpp");
 static const u8 sTheme_DPPt_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_selector.4bpp");
+
+static const u8 sTheme_DPPt_Extra_Button_Fight[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_fight.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Forfeit[]    = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_forfeit.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Info[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_info.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Pokemon[]    = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_pokemon.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Run[]        = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_run.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Debug[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_debug.4bpp");
 
 static const u8 sTheme_DPPt_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_sane.4bpp");
 static const u8 sTheme_DPPt_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_status.4bpp");
@@ -357,10 +378,10 @@ static const u8 sMenuWindowFontColors[][3] =
 enum optionsButtonMode
 {
     BATTLE_ACTION_FIGHT,
-    BATTLE_ACTION_BAG,
     BATTLE_ACTION_POKEMON,
     BATTLE_ACTION_RUN,
     BATTLE_ACTION_INFO,
+    BATTLE_ACTION_DEBUG,
 };
 
 const u8 sText_BattleMenu_Action_Fight[]            = _("Fight");
@@ -384,6 +405,67 @@ const u8 sText_BattleMenu_Action_What_Will_X_Do_2[] = _("{STR_VAR_1} do?");
 #define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT 13
 #define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT 14
 
+void PrintShortcutButton(u8 windowId, u8 button, u8 x, u8 y, u8 x2, u8 y2){
+    u8 theme = getBattleInterfaceTheme();
+    bool8 isTrainerBattle = FALSE;
+    switch(button){
+        case BATTLE_ACTION_FIGHT:
+            if(theme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Fight,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Fight, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Fight,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+        break;
+        case BATTLE_ACTION_INFO:
+            if(theme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Info,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Info, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Info,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+        break;
+        case BATTLE_ACTION_POKEMON:
+            if(theme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Pokemon,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Pokemon, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Pokemon,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+        break;
+        case BATTLE_ACTION_RUN:
+            isTrainerBattle = (gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL));
+            if(isTrainerBattle){
+                if(theme == THEME_DARK)
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Run,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+                else if(theme == THEME_LIGHT)
+                    BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Run, (x * 8) + x2, (y * 8) + y2, 32, 8);
+                else if(theme == THEME_DPPT)
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Run,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+            }
+            else{
+                if(theme == THEME_DARK)
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Forfeit,  (x * 8) + x2, (y * 8) + y2, 40, 8);
+                else if(theme == THEME_LIGHT)
+                    BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Forfeit, (x * 8) + x2, (y * 8) + y2, 40, 8);
+                else if(theme == THEME_DPPT)
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Forfeit,  (x * 8) + x2, (y * 8) + y2, 40, 16);
+            }
+        break;
+        case BATTLE_ACTION_DEBUG:
+            if(B_ENABLE_DEBUG){
+                if(theme == THEME_DARK)
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Debug,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+                else if(theme == THEME_LIGHT)
+                    BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Debug, (x * 8) + x2, (y * 8) + y2, 32, 8);
+                else if(theme == THEME_DPPT)
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Debug,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+            }
+        break;
+
+    }
+}
+
 void PrintBattleWindow_ActionPromt(void)
 {
     u8 i, x, y, x2, y2, offset;
@@ -396,7 +478,8 @@ void PrintBattleWindow_ActionPromt(void)
     u8 battler = gActiveBattler;
     u8 speed;
     bool8 canUsePokeball = !isTrainerBattle && CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET);
-    bool8 canMega = FALSE;
+    u8 shortcutButton = gSaveBlock2Ptr->shortcutButton;
+    bool8 hasShortcutButtonEnabled = (shortcutButton != BATTLE_ACTION_DEBUG || B_ENABLE_DEBUG);
 
     switch(getBattleInterfaceTheme()){
         case THEME_DARK:
@@ -438,15 +521,15 @@ void PrintBattleWindow_ActionPromt(void)
     x2 = 0;
     switch(getBattleInterfaceTheme()){
         case THEME_DARK:
-            if(canMega)
-                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_Mega, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            if(hasShortcutButtonEnabled)
+                PrintShortcutButton(windowId, shortcutButton, x, y, x2, y2);
             x = x + 9;
             if(canUsePokeball)
                 BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 8);
         break;
         case THEME_LIGHT:
-            if(canMega)
-                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_Mega, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            if(hasShortcutButtonEnabled)
+                PrintShortcutButton(windowId, shortcutButton, x, y, x2, y2);
             x = x + 9;
             if(canUsePokeball)
                 BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 8);
@@ -456,8 +539,8 @@ void PrintBattleWindow_ActionPromt(void)
             y  = 0;
             y2 = 0;
             x2 = 0;
-            if(canMega)
-                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_Mega, (x * 8) + x2, (y * 8) + y2, 32, 16);
+            if(hasShortcutButtonEnabled)
+                PrintShortcutButton(windowId, shortcutButton, x, y, x2, y2);
             x = x + 10;
             if(canUsePokeball)
                 BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 16);
@@ -467,7 +550,7 @@ void PrintBattleWindow_ActionPromt(void)
     
     //What Will X Do?
     x  = 1;
-    if((!canUsePokeball && !canMega) || getBattleInterfaceTheme() == THEME_DPPT){
+    if((!canUsePokeball && !hasShortcutButtonEnabled) || getBattleInterfaceTheme() == THEME_DPPT){
         y  = 1;
         y2 = 4;
     }
@@ -656,12 +739,18 @@ void PrintBattleWindow_ActionPromt(void)
     //Text
     switch(getBattleInterfaceTheme()){
         case THEME_DPPT:
-            StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            if(isTrainerBattle)
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Forfeit);
+            else
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
             offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
         break;
         default:
-            StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            if(isTrainerBattle)
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Forfeit);
+            else
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
             offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
         break;
@@ -1515,6 +1604,7 @@ static void HandleInputChooseActionPlayer(void)
 {
     u16 itemId = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
     bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
+    u8 shortcutButton = gSaveBlock2Ptr->shortcutButton;
     u8 value = 0;
 
     /*MgbaOpen();
@@ -1539,21 +1629,8 @@ static void HandleInputChooseActionPlayer(void)
                 PrintBattleWindow_ActionPromt();
                 PlayerBufferExecCompleted();
             break;
-            case BATTLE_ACTION_BAG:
-                if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)))
-                {
-                    if(CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET)){
-                        PlaySE(SE_SELECT);
-                        gBattle_BG1_Y = 160;
-                        gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
-                        BtlController_EmitTwoReturnValues(1, B_ACTION_THROW_BALL, 0);
-                        PlayerBufferExecCompleted();
-                    }
-                    else{
-                        PlaySE(SE_BOO);
-                    }
-                }
-                else if (B_ENABLE_DEBUG)
+            case BATTLE_ACTION_DEBUG:
+                if (B_ENABLE_DEBUG)
                 {
                     PlaySE(SE_SELECT);
                     gBattle_BG1_Y = 160;
@@ -1561,10 +1638,7 @@ static void HandleInputChooseActionPlayer(void)
                     PlayerBufferExecCompleted();
                 }
                 else{
-                    PlaySE(SE_SELECT);
-                    BtlController_EmitTwoReturnValues(1, B_ACTION_USE_ITEM, 0);
-                    PrintBattleWindow_ActionPromt();
-                    PlayerBufferExecCompleted();
+                    PlaySE(SE_BOO);
                 }
             break;
             case BATTLE_ACTION_POKEMON:
@@ -1602,12 +1676,44 @@ static void HandleInputChooseActionPlayer(void)
     }
     else if (JOY_NEW(L_BUTTON))
     {
-        if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)) && CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET))
+        switch (shortcutButton)
         {
-            gBattle_BG1_Y = 160;
-            gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
-            BtlController_EmitTwoReturnValues(1, B_ACTION_THROW_BALL, 0);
-            PlayerBufferExecCompleted();
+            case BATTLE_ACTION_FIGHT:
+                PlaySE(SE_SELECT);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_USE_MOVE, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_POKEMON:
+                PlaySE(SE_SELECT);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_SWITCH, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_RUN:
+                PlaySE(SE_SELECT);
+                gBattle_BG1_Y = 160;
+                BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_INFO:
+                PlaySE(SE_SELECT);
+                FreeAllWindowBuffers();
+                BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_SHOW_BATTLE_INFO, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_DEBUG:
+                if (B_ENABLE_DEBUG)
+                {
+                    PlaySE(SE_SELECT);
+                    gBattle_BG1_Y = 160;
+                    BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
+                    PlayerBufferExecCompleted();
+                }
+            break;
         }
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
