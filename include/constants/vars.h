@@ -238,7 +238,7 @@
 #define VAR_BATTLE_FIELD_EFFECT_TYPE         0x40DB // Type of weather, terrain or room at the start of the battle
 #define VAR_BATTLE_FIELD_ID                  0x40DC // 
 #define VAR_EVENT_PICHU_SLOT                 0x40DD
-#define VAR_NEVER_READ_0x40DE                0x40DE // Var is written to, but never read
+#define VAR_MONOTYPE_BOOST                   0x40DE // Mono type champion related
 #define VAR_NEVER_READ_0x40DF                0x40DF // Var is written to, but never read
 #define VAR_NEVER_READ_0x40E0                0x40E0 // Var is written to, but never read
 #define VAR_NEVER_READ_0x40E1                0x40E1 // Var is written to, but never read

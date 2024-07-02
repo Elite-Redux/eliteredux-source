@@ -39391,7 +39391,7 @@ static const struct TrainerMonItemCustomMoves sParty_NewTrainer[] = {
     .ability = 0,
     .evs = {},
     .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
 };
 
@@ -39403,7 +39403,7 @@ static const struct TrainerMonItemCustomMoves sParty_NewTrainer1[] = {
     .ability = 0,
     .evs = {},
     .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
 };
 
@@ -39415,6 +39415,439 @@ static const struct TrainerMonItemCustomMoves sParty_NewTrainer11[] = {
     .ability = 0,
     .evs = {},
     .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
 };
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Normal[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Normal_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fighting[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fighting_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Flying[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Flying_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Poison[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Poison_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Ground[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Ground_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Rock[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Rock_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Bug[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Bug_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Ghost[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Ghost_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Steel[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Steel_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fire[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fire_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Water[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Water_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Grass[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Grass_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Electric[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Electric_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Psychic[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Psychic_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Ice[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Ice_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Dragon[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Dragon_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Dark[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Dark_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fairy[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fairy_Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BULBASAUR,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+

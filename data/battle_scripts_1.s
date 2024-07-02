@@ -9652,6 +9652,96 @@ BattleScript_SetMagicRoomFromScript::
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
+BattleScript_SetMonotypeEffect_Normal::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_NORMAL
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Fighting::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_FIGHTING
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Flying::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_FLYING
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Poison::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_POISON
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Ground::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_GROUND
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Rock::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_ROCK
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Bug::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_BUG
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Ghost::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_GHOST
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Steel::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_STEEL
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Fire::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_FIRE
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Water::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_WATER
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Grass::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_GRASS
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Electric::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_ELECTRIC
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Psychic::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_PSYCHIC
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Ice::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_ICE
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Dragon::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_DRAGON
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Dark::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_DARK
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_SetMonotypeEffect_Fairy::
+	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_FAIRY
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
 BattleScript_SetWonderRoomFromScript::
 	printstring STRINGID_WONDERROOMSTARTS
 	playmoveanimation BS_ATTACKER, MOVE_TRICK_ROOM

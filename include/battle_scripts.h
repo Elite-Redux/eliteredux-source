@@ -605,4 +605,23 @@ extern const u8 BattleScript_SetWonderRoomFromScript[];
 extern const u8 BattleScript_SetGravityFromScript[];
 extern const u8 BattleScript_SetInverseRoomFromScript[];
 
+extern const u8 BattleScript_SetMonotypeEffect_Normal[];
+extern const u8 BattleScript_SetMonotypeEffect_Fighting[];
+extern const u8 BattleScript_SetMonotypeEffect_Flying[];
+extern const u8 BattleScript_SetMonotypeEffect_Poison[];
+extern const u8 BattleScript_SetMonotypeEffect_Ground[];
+extern const u8 BattleScript_SetMonotypeEffect_Rock[];
+extern const u8 BattleScript_SetMonotypeEffect_Bug[];
+extern const u8 BattleScript_SetMonotypeEffect_Ghost[];
+extern const u8 BattleScript_SetMonotypeEffect_Steel[];
+extern const u8 BattleScript_SetMonotypeEffect_Fire[];
+extern const u8 BattleScript_SetMonotypeEffect_Water[];
+extern const u8 BattleScript_SetMonotypeEffect_Grass[];
+extern const u8 BattleScript_SetMonotypeEffect_Electric[];
+extern const u8 BattleScript_SetMonotypeEffect_Psychic[];
+extern const u8 BattleScript_SetMonotypeEffect_Ice[];
+extern const u8 BattleScript_SetMonotypeEffect_Dragon[];
+extern const u8 BattleScript_SetMonotypeEffect_Dark[];
+extern const u8 BattleScript_SetMonotypeEffect_Fairy[];
+
 #endif // GUARD_BATTLE_SCRIPTS_H

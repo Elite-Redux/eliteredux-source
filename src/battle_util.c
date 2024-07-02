@@ -4888,6 +4888,86 @@ bool8 UseIntimidateClone(u8 battler, u16 abilityToCheck)
 
     return FALSE;
 }
+bool8 TryToSetMonotypeChampEffect(u8 battler){
+    //Mainly to announce the effect
+    u16 champType = VarGet(VAR_MONOTYPE_BOOST);
+
+    switch(champType){
+        case TYPE_NORMAL:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Normal);
+            return TRUE;
+        break;
+        case TYPE_FIGHTING:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Fighting);
+            return TRUE;
+        break;
+        case TYPE_FLYING:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Flying);
+            return TRUE;
+        break;
+        case TYPE_POISON:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Poison);
+            return TRUE;
+        break;
+        case TYPE_GROUND:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Ground);
+            return TRUE;
+        break;
+        case TYPE_ROCK:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Rock);
+            return TRUE;
+        break;
+        case TYPE_BUG:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Bug);
+            return TRUE;
+        break;
+        case TYPE_GHOST:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Ghost);
+            return TRUE;
+        break;
+        case TYPE_STEEL:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Steel);
+            return TRUE;
+        break;
+        case TYPE_FIRE:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Fire);
+            return TRUE;
+        break;
+        case TYPE_WATER:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Water);
+            return TRUE;
+        break;
+        case TYPE_GRASS:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Grass);
+            return TRUE;
+        break;
+        case TYPE_ELECTRIC:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Electric);
+            return TRUE;
+        break;
+        case TYPE_PSYCHIC:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Psychic);
+            return TRUE;
+        break;
+        case TYPE_ICE:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Ice);
+            return TRUE;
+        break;
+        case TYPE_DRAGON:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Dragon);
+            return TRUE;
+        break;
+        case TYPE_DARK:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Dark);
+            return TRUE;
+        break;
+        case TYPE_FAIRY:
+            BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Fairy);
+            return TRUE;
+        break;
+    }
+    return FALSE;
+}
 
 bool8 TryToSetFieldEffect(u8 battler){
     u16 effect = VarGet(VAR_BATTLE_FIELD_EFFECT_TYPE);
@@ -5102,6 +5182,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     {
     case ABILITYEFFECT_SWITCH_IN_TERRAIN:
         if(TryToSetFieldEffect(battler))
+            effect++;
+        if(TryToSetMonotypeChampEffect(battler))
             effect++;
         break;
     case ABILITYEFFECT_SWITCH_IN_WEATHER:
@@ -16040,7 +16122,7 @@ u8 BattlerHasInnateOrAbility(u8 battler, u16 ability){
 bool8 IsTrickRoomActive(void){
     if(IsAbilityOnField(ABILITY_CLUELESS))
         return FALSE;
-    else if(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
+    else if((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) || (VarGet((VAR_MONOTYPE_BOOST) == TYPE_NORMAL && gBattleResults.battleTurnCounter % 2 == 1)))
         return TRUE;
     else
         return FALSE;
@@ -16076,7 +16158,7 @@ bool8 isMagicRoomActive(void){
 bool8 isWonderRoomActive(void){
     if(IsAbilityOnField(ABILITY_CLUELESS))
         return FALSE;
-    else if(gFieldStatuses & STATUS_FIELD_WONDER_ROOM)
+    else if((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) || (VarGet((VAR_MONOTYPE_BOOST) == TYPE_NORMAL && gBattleResults.battleTurnCounter % 2 == 0)))
         return TRUE;
     else
         return FALSE;

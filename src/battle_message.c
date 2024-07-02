@@ -983,6 +983,25 @@ static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
 
+static const u8 sText_AnnounceMonotypeBoostNormal[]   = _("Trick room and Wonder Room will alternate\neach turn for the rest of the battle!");
+static const u8 sText_AnnounceMonotypeBoostFighting[] = _("Super Effective moves will do neutral damage\nFighting moves are boosted, status moves\lare disabled and you can't switch!");
+static const u8 sText_AnnounceMonotypeBoostFlying[]   = _("A mysterious air current is protecting Flying\ntype Pokémon and Boosting the\lChampion's team Speed!");
+static const u8 sText_AnnounceMonotypeBoostPoison[]   = _("The field is full of Toxic Waste!\nThe Champion team's will receive\lreduced damage!");
+static const u8 sText_AnnounceMonotypeBoostGround[]   = _("All the flying Pokémon seem to have problems\nstaying int he air!, the Champion's team gets\lreduced damage from Super-Effective moves!");
+static const u8 sText_AnnounceMonotypeBoostRock[]      = _("The Champion's team is immune to Rock-type\nmoves, deals super-effective damage to\lRock-types, and uses Salt Cure every turn!");
+static const u8 sText_AnnounceMonotypeBoostBug[]      = _("There seems to be Sticky Webs\nand infestaton on your field side!");
+static const u8 sText_AnnounceMonotypeBoostGhost[]    = _("All your team became cursed!");
+static const u8 sText_AnnounceMonotypeBoostSteel[]    = _("The champion's team can break\nthe mold and has raised defenses!");
+static const u8 sText_AnnounceMonotypeBoostFire[]     = _("The sunlight became extremely harsh!");
+static const u8 sText_AnnounceMonotypeBoostWater[]    = _("An extremely heavy rain started!");
+static const u8 sText_AnnounceMonotypeBoostGrass[]    = _("The terrain became weird!,\nthe Champion´s team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostElectric[] = _("The terrain became weird!,\nthe Champion´s team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostPsychic[]  = _("The terrain became weird!,\nthe Champion´s team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostIce[]      = _("It's hailing, the Champion's team\nwill raise it's speed and attack!");
+static const u8 sText_AnnounceMonotypeBoostDragon[]   = _("The Champion´s team is\nintimidating your whole team, they can bypass\lyour immunities!");
+static const u8 sText_AnnounceMonotypeBoostDark[]     = _("Your whole team became asleep!");
+static const u8 sText_AnnounceMonotypeBoostFairy[]    = _("The terrain became weird!,\nthe Champion´s team Fairy moves will\lhit Poison and Steel-types Super Effectively!");
+
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
     [STRINGID_TRAINER1LOSETEXT - 12] = sText_Trainer1LoseText,
@@ -1748,6 +1767,24 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_THUNDER_CAGE - 12] = sText_ThunderCage,
     [STRINGID_SNAP_TRAP - 12] = sText_SnapTrap,
     [STRINGID_ELECTRO_SHOT - 12] = sText_ElectroShot,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_NORMAL - 12] = sText_AnnounceMonotypeBoostNormal,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_FIGHTING - 12] = sText_AnnounceMonotypeBoostFighting,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_FLYING - 12] = sText_AnnounceMonotypeBoostFlying,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_POISON - 12] = sText_AnnounceMonotypeBoostPoison,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_GROUND - 12] = sText_AnnounceMonotypeBoostGround,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_ROCK - 12] = sText_AnnounceMonotypeBoostRock,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_BUG - 12] = sText_AnnounceMonotypeBoostBug,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_GHOST - 12] = sText_AnnounceMonotypeBoostGhost,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_STEEL - 12] = sText_AnnounceMonotypeBoostSteel,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_FIRE - 12] = sText_AnnounceMonotypeBoostFire,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_WATER - 12] = sText_AnnounceMonotypeBoostWater,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_GRASS - 12] = sText_AnnounceMonotypeBoostGrass,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_ELECTRIC - 12] = sText_AnnounceMonotypeBoostElectric,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_PSYCHIC - 12] = sText_AnnounceMonotypeBoostPsychic,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_ICE - 12] = sText_AnnounceMonotypeBoostIce,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_DRAGON - 12] = sText_AnnounceMonotypeBoostDragon,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_DARK - 12] = sText_AnnounceMonotypeBoostDark,
+    [STRINGID_ANNOUNCE_MONOTYPEBOOST_FAIRY - 12] = sText_AnnounceMonotypeBoostFairy,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
