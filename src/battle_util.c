@@ -4888,9 +4888,17 @@ bool8 UseIntimidateClone(u8 battler, u16 abilityToCheck)
 
     return FALSE;
 }
+
+u8 getMonotypeChampType(void){
+    if(FlagGet(FLAG_MONOTYPE_CHAMPION_BOOST))
+        return VarGet(VAR_MONOTYPE_BOOST);
+    else
+        return TYPE_NONE;
+}
+
 bool8 TryToSetMonotypeChampEffect(u8 battler){
     //Mainly to announce the effect
-    u16 champType = VarGet(VAR_MONOTYPE_BOOST);
+    u16 champType = getMonotypeChampType();
 
     switch(champType){
         case TYPE_NORMAL:
@@ -16122,7 +16130,7 @@ u8 BattlerHasInnateOrAbility(u8 battler, u16 ability){
 bool8 IsTrickRoomActive(void){
     if(IsAbilityOnField(ABILITY_CLUELESS))
         return FALSE;
-    else if((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) || (VarGet((VAR_MONOTYPE_BOOST) == TYPE_NORMAL && gBattleResults.battleTurnCounter % 2 == 1)))
+    else if((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) || (getMonotypeChampType() == TYPE_NORMAL && gBattleResults.battleTurnCounter % 2 == 1))
         return TRUE;
     else
         return FALSE;
@@ -16158,7 +16166,7 @@ bool8 isMagicRoomActive(void){
 bool8 isWonderRoomActive(void){
     if(IsAbilityOnField(ABILITY_CLUELESS))
         return FALSE;
-    else if((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) || (VarGet((VAR_MONOTYPE_BOOST) == TYPE_NORMAL && gBattleResults.battleTurnCounter % 2 == 0)))
+    else if((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) || (getMonotypeChampType() == TYPE_NORMAL && gBattleResults.battleTurnCounter % 2 == 0))
         return TRUE;
     else
         return FALSE;

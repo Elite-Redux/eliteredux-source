@@ -324,6 +324,7 @@ bool32 CanGetFrostbite(u8 battlerId);
 bool32 CanBeConfused(u8 battlerId);
 bool32 CanBleed(u8 battlerId);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
+u8 getMonotypeChampType(void);
 
 // Move checks
 bool8 IsTwoStrikesMove(u16 move);

@@ -994,13 +994,13 @@ static const u8 sText_AnnounceMonotypeBoostGhost[]    = _("All your team became 
 static const u8 sText_AnnounceMonotypeBoostSteel[]    = _("The champion's team can break\nthe mold and has raised defenses!");
 static const u8 sText_AnnounceMonotypeBoostFire[]     = _("The sunlight became extremely harsh!");
 static const u8 sText_AnnounceMonotypeBoostWater[]    = _("An extremely heavy rain started!");
-static const u8 sText_AnnounceMonotypeBoostGrass[]    = _("The terrain became weird!,\nthe Champion´s team will get reduced damage!");
-static const u8 sText_AnnounceMonotypeBoostElectric[] = _("The terrain became weird!,\nthe Champion´s team will get reduced damage!");
-static const u8 sText_AnnounceMonotypeBoostPsychic[]  = _("The terrain became weird!,\nthe Champion´s team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostGrass[]    = _("The terrain became weird!,\nthe Champion's team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostElectric[] = _("The terrain became weird!,\nthe Champion's team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostPsychic[]  = _("The terrain became weird!,\nthe Champion's team will get reduced damage!");
 static const u8 sText_AnnounceMonotypeBoostIce[]      = _("It's hailing, the Champion's team\nwill raise it's speed and attack!");
-static const u8 sText_AnnounceMonotypeBoostDragon[]   = _("The Champion´s team is\nintimidating your whole team, they can bypass\lyour immunities!");
+static const u8 sText_AnnounceMonotypeBoostDragon[]   = _("The Champion's team is\nintimidating your whole team, they can bypass\lyour immunities!");
 static const u8 sText_AnnounceMonotypeBoostDark[]     = _("Your whole team became asleep!");
-static const u8 sText_AnnounceMonotypeBoostFairy[]    = _("The terrain became weird!,\nthe Champion´s team Fairy moves will\lhit Poison and Steel-types Super Effectively!");
+static const u8 sText_AnnounceMonotypeBoostFairy[]    = _("The terrain became weird!,\nthe Champion's team Fairy moves will\lhit Poison and Steel-types Super Effectively!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
