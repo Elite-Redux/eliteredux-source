@@ -55,6 +55,7 @@
 #include "constants/battle_frontier.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "battle_events.h"
 
 typedef u16 (*SpecialFunc)(void);
 typedef void (*NativeFunc)(void);
@@ -2989,12 +2990,9 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
     return FALSE;
 }
 
-bool8 ScrCmd_changemovement(struct ScriptContext *ctx)
+bool8 ScrCmd_registerbattleevent(struct ScriptContext *ctx)
 {
-    u16 localId = VarGet(ScriptReadHalfword(ctx));
-    u8 movement = VarGet(ScriptReadByte(ctx));
-    struct ObjectEvent *objectEvent;
-    objectEvent = &gObjectEvents[localId];
-    SetTrainerMovementType(objectEvent, movement);
+    u8 battleEvent = VarGet(ScriptReadByte(ctx));
+    registerBattleEvent(battleEvent)
     return FALSE;
 }
