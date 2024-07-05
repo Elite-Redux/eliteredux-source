@@ -1,7 +1,9 @@
 #ifndef GUARD_BATTLE_EVENTS_H
 #define GUARD_BATTLE_EVENTS_H
 
-extern u8 gNbBattleEvents;
+#define BATTLE_EVENTS_MAX_REGISTERABLE 16
 
+extern u8 gNbBattleEvents;
+extern u8 gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE];
 
 #endif // GUARD_BATTLE_EVENTS_H
