@@ -160,4 +160,5 @@
 	.include "src/quests.o"
 	.include "src/tmhm_struct.o"
 	.include "src/pokemon_debug.o"
+	.include "src/battle_events.o"
 	
