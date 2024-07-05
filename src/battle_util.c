@@ -4291,6 +4291,9 @@ static const u16 sWeatherFlagsInfo[][3] =
 
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
 {
+    if(FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)){
+        return FALSE;
+    }
     if ((gBattleWeather & WEATHER_PRIMAL_ANY)
         && !BATTLER_HAS_ABILITY(battler, ABILITY_DESOLATE_LAND)
         && !BATTLER_HAS_ABILITY(battler, ABILITY_PRIMORDIAL_SEA)
@@ -4311,6 +4314,23 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
             gWishFutureKnock.weatherDuration = WEATHER_DURATION_EXTENDED;
         else
             gWishFutureKnock.weatherDuration = WEATHER_DURATION;
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+bool32 SetPermanentWeather(u32 weatherEnumId)
+{
+    if(FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)){
+        return FALSE;
+    }
+    else
+    {
+        gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
+        gWishFutureKnock.weatherDuration = 255;
+        FlagSet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER);
 
         return TRUE;
     }
@@ -14767,6 +14787,26 @@ s32 DoMoveDamageCalcInternal(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType
     // Calculate final modifiers.
     dmg = CalcFinalDmg(dmg, move, battlerAtk, battlerDef, moveType, typeEffectivenessModifier, isCrit, updateFlags);
 
+    // Monotype Champ
+    switch(getMonotypeChampType()){
+        case TYPE_GRASS:
+        case TYPE_PSYCHIC:
+        case TYPE_ELECTRIC:
+        case TYPE_POISON:
+        case TYPE_STEEL:
+            if(GetBattlerSide(battlerDef) != B_SIDE_PLAYER)
+                dmg = dmg / 2;
+        break;
+        case TYPE_GROUND:
+        case TYPE_FIGHTING:
+            // SE Moves are halved
+            if(GetBattlerSide(battlerDef) != B_SIDE_PLAYER){
+                if(typeEffectivenessModifier >= UQ_4_12(2.0))
+                    dmg = dmg / 2;
+            }
+        break;
+    }
+
     return dmg;
 }
 
@@ -16388,13 +16428,10 @@ bool8 IsBattlerCursed(u8 battler)
 
 void MakePlayerTeamAsleep(void){
     u8 i;
-    u8 status = STATUS1_SLEEP;
-    u8 turns;
+    u32 status = STATUS1_SLEEP_TURN(3);
 
     for(i = 0; i < PARTY_SIZE; i++){
-        if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL)){
-            turns = STATUS1_SLEEP_TURN((B_SLEEP_TURNS >= GEN_5) ? ((Random() % 3) + 2) : ((Random() % 4) + 3));
+        if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL))
             SetMonData(&gPlayerParty[i], MON_DATA_STATUS, &status);
-        }
     }
 }

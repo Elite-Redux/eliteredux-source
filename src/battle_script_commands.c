@@ -10326,34 +10326,36 @@ static void Cmd_various(void)
         return;
     case VARIOUS_TRY_TO_CLEAR_PRIMAL_WEATHER:
     {
-        bool8 shouldNotClear = FALSE;
+        if(!FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)){ //Monotype Champ
+            bool8 shouldNotClear = FALSE;
 
-        for (i = 0; i < gBattlersCount; i++)
-        {
-            u32 ability = GetBattlerAbility(i);
-            if ((((ability == ABILITY_DESOLATE_LAND  || BattlerHasInnate(i, ABILITY_DESOLATE_LAND))  && gBattleWeather & WEATHER_SUN_PRIMAL)
-             || (( ability == ABILITY_PRIMORDIAL_SEA || BattlerHasInnate(i, ABILITY_PRIMORDIAL_SEA)) && gBattleWeather & WEATHER_RAIN_PRIMAL)
-             || (( ability == ABILITY_DELTA_STREAM   || BattlerHasInnate(i, ABILITY_DELTA_STREAM))   && gBattleWeather & WEATHER_STRONG_WINDS))
-             && IsBattlerAlive(i))
-                shouldNotClear = TRUE;
-        }
-        if (gBattleWeather & WEATHER_SUN_PRIMAL && !shouldNotClear)
-        {
-            gBattleWeather &= ~WEATHER_SUN_PRIMAL;
-            PrepareStringBattle(STRINGID_EXTREMESUNLIGHTFADED, gActiveBattler);
-            gBattleCommunication[MSG_DISPLAY] = 1;
-        }
-        else if (gBattleWeather & WEATHER_RAIN_PRIMAL && !shouldNotClear)
-        {
-            gBattleWeather &= ~WEATHER_RAIN_PRIMAL;
-            PrepareStringBattle(STRINGID_HEAVYRAINLIFTED, gActiveBattler);
-            gBattleCommunication[MSG_DISPLAY] = 1;
-        }
-        else if (gBattleWeather & WEATHER_STRONG_WINDS && !shouldNotClear)
-        {
-            gBattleWeather &= ~WEATHER_STRONG_WINDS;
-            PrepareStringBattle(STRINGID_STRONGWINDSDISSIPATED, gActiveBattler);
-            gBattleCommunication[MSG_DISPLAY] = 1;
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                u32 ability = GetBattlerAbility(i);
+                if ((((ability == ABILITY_DESOLATE_LAND  || BattlerHasInnate(i, ABILITY_DESOLATE_LAND))  && gBattleWeather & WEATHER_SUN_PRIMAL)
+                || (( ability == ABILITY_PRIMORDIAL_SEA || BattlerHasInnate(i, ABILITY_PRIMORDIAL_SEA)) && gBattleWeather & WEATHER_RAIN_PRIMAL)
+                || (( ability == ABILITY_DELTA_STREAM   || BattlerHasInnate(i, ABILITY_DELTA_STREAM))   && gBattleWeather & WEATHER_STRONG_WINDS))
+                && IsBattlerAlive(i))
+                    shouldNotClear = TRUE;
+            }
+            if (gBattleWeather & WEATHER_SUN_PRIMAL && !shouldNotClear)
+            {
+                gBattleWeather &= ~WEATHER_SUN_PRIMAL;
+                PrepareStringBattle(STRINGID_EXTREMESUNLIGHTFADED, gActiveBattler);
+                gBattleCommunication[MSG_DISPLAY] = 1;
+            }
+            else if (gBattleWeather & WEATHER_RAIN_PRIMAL && !shouldNotClear)
+            {
+                gBattleWeather &= ~WEATHER_RAIN_PRIMAL;
+                PrepareStringBattle(STRINGID_HEAVYRAINLIFTED, gActiveBattler);
+                gBattleCommunication[MSG_DISPLAY] = 1;
+            }
+            else if (gBattleWeather & WEATHER_STRONG_WINDS && !shouldNotClear)
+            {
+                gBattleWeather &= ~WEATHER_STRONG_WINDS;
+                PrepareStringBattle(STRINGID_STRONGWINDSDISSIPATED, gActiveBattler);
+                gBattleCommunication[MSG_DISPLAY] = 1;
+            }
         }
         break;
     }

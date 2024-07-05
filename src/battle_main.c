@@ -6854,10 +6854,65 @@ bool32 IsWildMonSmart(void)
 
 void HandleMonoChampSpecialEffects(void){
     u16 champType = getMonotypeChampType();
+    u32 fieldEffectId;
+    bool8 setTerrain = FALSE;
 
     switch(champType){
         case TYPE_DARK:
             MakePlayerTeamAsleep();
         break;
+        case TYPE_GRASS:
+            fieldEffectId = STATUS_FIELD_GRASSY_TERRAIN;
+            setTerrain = TRUE;
+        break;
+        case TYPE_ELECTRIC:
+            fieldEffectId = STATUS_FIELD_ELECTRIC_TERRAIN;
+            setTerrain = TRUE;
+        break;
+        case TYPE_FAIRY:
+            fieldEffectId = STATUS_FIELD_MISTY_TERRAIN;
+            setTerrain = TRUE;
+        break;
+        case TYPE_PSYCHIC:
+            fieldEffectId = STATUS_FIELD_PSYCHIC_TERRAIN;
+            setTerrain = TRUE;
+        break;
+        case TYPE_ICE:
+            SetPermanentWeather(ENUM_WEATHER_HAIL);
+        break;
+        case TYPE_FIRE:
+            SetPermanentWeather(ENUM_WEATHER_SUN_PRIMAL);
+        break;
+        case TYPE_WATER:
+            SetPermanentWeather(ENUM_WEATHER_RAIN_PRIMAL);
+        break;
+        case TYPE_FLYING:
+            SetPermanentWeather(ENUM_WEATHER_STRONG_WINDS);
+        break;
+        case TYPE_ROCK:
+            SetPermanentWeather(ENUM_WEATHER_SANDSTORM);
+        break;
+    }
+
+    if(setTerrain){
+        if(fieldEffectId & STATUS_FIELD_TERRAIN_ANY){
+            u16 terrainFlags = fieldEffectId & STATUS_FIELD_TERRAIN_ANY; // only works for status flag (1 << 15)
+            gFieldStatuses = terrainFlags | STATUS_FIELD_TERRAIN_PERMANENT;            // terrain is permanent
+            switch (fieldEffectId & STATUS_FIELD_TERRAIN_ANY)
+            {
+            case STATUS_FIELD_ELECTRIC_TERRAIN:
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESELECTRIC;
+            break;
+            case STATUS_FIELD_MISTY_TERRAIN:
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESMISTY;
+            break;
+            case STATUS_FIELD_GRASSY_TERRAIN:
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESGRASSY;
+            break;
+            case STATUS_FIELD_PSYCHIC_TERRAIN:
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESPSYCHIC;
+            break;
+            }
+        }
     }
 }

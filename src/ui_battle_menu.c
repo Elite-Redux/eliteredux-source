@@ -2204,7 +2204,7 @@ const u8 sText_Title_Status_Trapped_Description[]           = _("This Pokémon c
 #define MAX_DESCRIPTION_LINES 3
 #define LINES_BETWEEN_STUFF 1
 
-#define SHOW_SLEEPING_TURNS FALSE
+#define SHOW_SLEEPING_TURNS TRUE
 
 static void PrintStatusTab(void){
     u8 i, j;
@@ -3412,7 +3412,7 @@ static void PrintFieldTab(void)
             
                 if((gBattleWeather & WEATHER_ANY)){
                     //Turns Left
-                    if(!(gBattleWeather & WEATHER_RAIN_PRIMAL) && !(gBattleWeather & WEATHER_SUN_PRIMAL)){
+                    if(!(gBattleWeather & WEATHER_RAIN_PRIMAL) && !(gBattleWeather & WEATHER_SUN_PRIMAL) && !FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)){
                         AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_Title_Field_Turns_Left);
                         ConvertIntToDecimalStringN(gStringVar1, gWishFutureKnock.weatherDuration, STR_CONV_MODE_LEFT_ALIGN, 4);
                         AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
