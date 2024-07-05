@@ -347,6 +347,7 @@ SECTIONS {
         src/quests.o(.text);
         src/tmhm_struct.o(.text);
         src/pokemon_debug.o(.text);
+        src/battle_events.o(.text);
     } =0
 
     script_data :
@@ -722,6 +723,7 @@ SECTIONS {
         src/tmhm_struct.o(.rodata);
         src/script.o(.rodata);
         src/pokemon_debug.o(.rodata);
+        src/battle_events.o(.rodata);
     } =0
 
     song_data :
