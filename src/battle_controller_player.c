@@ -905,7 +905,6 @@ enum optionsButtonModeSafari
     BATTLE_ACTION_SAFARI_RUN,
 };
 
-
 const u8 sText_BattleMenu_Action_Go_Near[]        = _("Go Near");
 const u8 sText_BattleMenu_Action_Pokeblock[]      = _("Pokéblock");  
 

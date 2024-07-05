@@ -410,7 +410,7 @@ static const u8 sPickupItemSlots[][2] =
 
 static const u8 sPickupItemOffsets[] = {0, 9, 18, 27, 36, 45, 54};
 
-static const struct PyramidTrainerEncounterMusic sTrainerClassEncounterMusic[54] =
+static const struct PyramidTrainerEncounterMusic sTrainerClassEncounterMusic[55] =
 {
     {TRAINER_CLASS_TEAM_AQUA, TRAINER_ENCOUNTER_MUSIC_AQUA},
     {TRAINER_CLASS_AQUA_ADMIN, TRAINER_ENCOUNTER_MUSIC_AQUA},

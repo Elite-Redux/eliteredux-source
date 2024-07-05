@@ -524,7 +524,6 @@ static void SafariHandleChooseAction(void)
     ShowBg(1);
 
     gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3Safari;
-    BattleTv_ClearExplosionFaintCause();
 
     PrintBattleWindow_ActionPromt_Safari();
 }
