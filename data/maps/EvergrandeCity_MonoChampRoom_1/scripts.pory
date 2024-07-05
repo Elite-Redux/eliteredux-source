@@ -1,4 +1,6 @@
 const LOCALID_SCOTT              = 19
+const BATTLE_FIELD_EFFECT_NONE   = 0
+const BP_MONOCHAPION_PRIZE       = 5
 
 mapscripts EvergrandeCity_MonoChampRoom_1_MapScripts{
     MAP_SCRIPT_ON_FRAME_TABLE
@@ -130,14 +132,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Normal{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_NORMAL)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_NORMAL)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_NORMAL, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -155,14 +158,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fighting{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_FIGHTING)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_FIGHTING)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_FIGHTING, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -180,14 +184,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Flying{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_FLYING)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_FLYING)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_FLYING, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -205,14 +210,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Poison{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_POISON)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_POISON)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_POISON, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -230,14 +236,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ground{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_GROUND)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_GROUND)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_GROUND, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -255,14 +262,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Rock{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_ROCK)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_ROCK)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_ROCK, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -280,14 +288,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Bug{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_BUG)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_BUG)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_BUG, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -305,14 +314,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ghost{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_GHOST)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_GHOST)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_GHOST, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -330,14 +340,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Steel{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_STEEL)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_STEEL)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_STEEL, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -355,14 +366,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fire{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_FIRE)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_FIRE)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_FIRE, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -380,14 +392,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Water{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_WATER)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_WATER)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_WATER, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -405,14 +418,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Grass{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_GRASS)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_GRASS)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_GRASS, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -430,14 +444,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Electric{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_ELECTRIC)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_ELECTRIC)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_ELECTRIC, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -455,14 +470,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Psychic{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_PSYCHIC)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_PSYCHIC)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_PSYCHIC, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -480,14 +496,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ice{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_ICE)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_ICE)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_ICE, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -505,14 +522,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Dragon{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_DRAGON)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_DRAGON)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_DRAGON, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -530,14 +548,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Dark{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_DARK)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_DARK)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_DARK, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }
@@ -555,14 +574,15 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fairy{
             msgbox(format("Come back when you are ready"))
         }
         else{
-            setflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-            setvar(VAR_MONOTYPE_BOOST, TYPE_FAIRY)
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_FAIRY)
             msgbox(format("Let's get started"))
             trainerbattle_no_intro(TRAINER_MONOCHAMP_FAIRY, format("I lost"))
         }
     }
-    clearflag(FLAG_MONOTYPE_CHAMPION_BOOST)
-    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
     release
     end
 }

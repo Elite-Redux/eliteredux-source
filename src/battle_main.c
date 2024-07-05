@@ -130,6 +130,8 @@ static void HandleEndTurn_MonFled(void);
 static void HandleEndTurn_FinishBattle(void);
 static u8 getRole(u16 species);
 
+void HandleMonoChampSpecialEffects(void);
+
 // EWRAM vars
 EWRAM_DATA u16 gBattle_BG0_X = 0;
 EWRAM_DATA u16 gBattle_BG0_Y = 0;
@@ -3562,6 +3564,7 @@ static void DoBattleIntro(void)
         gActiveBattler = gBattleCommunication[1];
         BtlController_EmitGetMonData(0, REQUEST_ALL_BATTLE, 0);
         MarkBattlerForControllerExec(gActiveBattler);
+        HandleMonoChampSpecialEffects();
         (*state)++;
         break;
     case 1: // Loop through all battlers.
@@ -3598,6 +3601,7 @@ static void DoBattleIntro(void)
             else
             {
                 memcpy(&gBattleMons[gActiveBattler], &gBattleResources->bufferB[gActiveBattler][4], sizeof(gBattleMons[gActiveBattler]));
+
                 gBattleMons[gActiveBattler].type1 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type1, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
                 gBattleMons[gActiveBattler].type2 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
                 gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
@@ -5608,6 +5612,7 @@ static void HandleEndTurn_MonFled(void)
 
 static void HandleEndTurn_FinishBattle(void)
 {
+    //Reset Battle Flags
     u32 i;
 
     if (gCurrentActionFuncId == B_ACTION_TRY_FINISH || gCurrentActionFuncId == B_ACTION_FINISHED)
@@ -5668,6 +5673,9 @@ static void HandleEndTurn_FinishBattle(void)
 
 		FlagClear(FLAG_SMART_AI);
 		FlagClear(FLAG_TOTEM_BATTLE);
+
+        VarSet(VAR_BATTLE_FIELD_EFFECT_TYPE, 0);
+        VarSet(VAR_BATTLE_FIELD_ID, 0);
 
     #ifdef DEBUG_BUILD
         CheckForBadEggs();
@@ -6842,4 +6850,14 @@ static u8 getRole (u16 species)
 bool32 IsWildMonSmart(void)
 {
     return (B_SMART_WILD_AI_FLAG != 0 && FlagGet(B_SMART_WILD_AI_FLAG));
+}
+
+void HandleMonoChampSpecialEffects(void){
+    u16 champType = getMonotypeChampType();
+
+    switch(champType){
+        case TYPE_DARK:
+            MakePlayerTeamAsleep();
+        break;
+    }
 }

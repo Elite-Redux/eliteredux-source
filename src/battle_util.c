@@ -3042,7 +3042,7 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_CURSE:  // curse
-            if ((gBattleMons[gActiveBattler].status2 & STATUS2_CURSED)
+            if (((gBattleMons[gActiveBattler].status2 & STATUS2_CURSED) || IsBattlerCursed(gActiveBattler))
                 && gBattleMons[gActiveBattler].hp != 0)
             {
                 MAGIC_GUARD_CHECK;
@@ -4890,8 +4890,8 @@ bool8 UseIntimidateClone(u8 battler, u16 abilityToCheck)
 }
 
 u8 getMonotypeChampType(void){
-    if(FlagGet(FLAG_MONOTYPE_CHAMPION_BOOST))
-        return VarGet(VAR_MONOTYPE_BOOST);
+    if(VarGet(VAR_BATTLE_FIELD_EFFECT_TYPE) == BATTLE_FIELD_EFFECT_MONOCHAMP)
+        return VarGet(VAR_BATTLE_FIELD_ID);
     else
         return TYPE_NONE;
 }
@@ -4982,8 +4982,8 @@ bool8 TryToSetFieldEffect(u8 battler){
     u16 fieldEffectId = VarGet(VAR_BATTLE_FIELD_ID);
     bool8 isTemporary = FALSE;
 
-    VarSet(VAR_BATTLE_FIELD_EFFECT_TYPE, 0);
-    VarSet(VAR_BATTLE_FIELD_ID, 0);
+    //VarSet(VAR_BATTLE_FIELD_EFFECT_TYPE, 0);
+    //VarSet(VAR_BATTLE_FIELD_ID, 0);
     
     switch(effect){
         //Weather
@@ -5132,6 +5132,10 @@ bool8 TryToSetFieldEffect(u8 battler){
             break;
             }
         break;
+        case BATTLE_FIELD_EFFECT_MONOCHAMP:
+            if(TryToSetMonotypeChampEffect(battler))
+                return TRUE;
+        break;
         //Other
         default:
             if (GetCurrentWeather() == WEATHER_RAIN_THUNDERSTORM && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
@@ -5190,8 +5194,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     {
     case ABILITYEFFECT_SWITCH_IN_TERRAIN:
         if(TryToSetFieldEffect(battler))
-            effect++;
-        if(TryToSetMonotypeChampEffect(battler))
             effect++;
         break;
     case ABILITYEFFECT_SWITCH_IN_WEATHER:
@@ -16373,5 +16375,26 @@ bool32 IsHealingMoveEffect(u16 effect)
         return TRUE;
     default:
         return FALSE;
+    }
+}
+
+bool8 IsBattlerCursed(u8 battler)
+{
+    if (getMonotypeChampType() == TYPE_GHOST && GetBattlerSide(battler) == B_SIDE_PLAYER)
+        return TRUE;
+    else
+        return FALSE;
+}
+
+void MakePlayerTeamAsleep(void){
+    u8 i;
+    u8 status = STATUS1_SLEEP;
+    u8 turns;
+
+    for(i = 0; i < PARTY_SIZE; i++){
+        if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL)){
+            turns = STATUS1_SLEEP_TURN((B_SLEEP_TURNS >= GEN_5) ? ((Random() % 3) + 2) : ((Random() % 4) + 3));
+            SetMonData(&gPlayerParty[i], MON_DATA_STATUS, &status);
+        }
     }
 }

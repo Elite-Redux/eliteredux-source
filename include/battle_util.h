@@ -334,4 +334,8 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
 
 u32 GetIllusionMonSpecies(u32 battlerId);
 s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, bool32 isCrit, u8 randomFactor);
+
+//Monotype funcs
+bool8 IsBattlerCursed(u8 battler);
+void MakePlayerTeamAsleep(void);
 #endif // GUARD_BATTLE_UTIL_H

@@ -452,7 +452,7 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFATUATION);
         else if (status & STATUS2_CONFUSION)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_CONFUSION);
-        else if (status & STATUS2_CURSED)
+        else if ((status & STATUS2_CURSED) || IsBattlerCursed(gActiveBattler))
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_CURSED);
         else if (status & STATUS2_NIGHTMARE)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_NIGHTMARE);

@@ -983,14 +983,14 @@ static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
 
-static const u8 sText_AnnounceMonotypeBoostNormal[]   = _("Trick room and Wonder Room will alternate\neach turn for the rest of the battle!");
+static const u8 sText_AnnounceMonotypeBoostNormal[]   = _("Trick room and Wonder Room will alternate\neach turn for the rest of the battle!"); //Done
 static const u8 sText_AnnounceMonotypeBoostFighting[] = _("Super Effective moves will do neutral damage\nFighting moves are boosted, status moves\lare disabled and you can't switch!");
 static const u8 sText_AnnounceMonotypeBoostFlying[]   = _("A mysterious air current is protecting Flying\ntype Pokémon and Boosting the\lChampion's team Speed!");
 static const u8 sText_AnnounceMonotypeBoostPoison[]   = _("The field is full of Toxic Waste!\nThe Champion team's will receive\lreduced damage!");
 static const u8 sText_AnnounceMonotypeBoostGround[]   = _("All the flying Pokémon seem to have problems\nstaying int he air!, the Champion's team gets\lreduced damage from Super-Effective moves!");
-static const u8 sText_AnnounceMonotypeBoostRock[]      = _("The Champion's team is immune to Rock-type\nmoves, deals super-effective damage to\lRock-types, and uses Salt Cure every turn!");
+static const u8 sText_AnnounceMonotypeBoostRock[]     = _("The Champion's team is immune to Rock-type\nmoves, deals super-effective damage to\lRock-types, and uses Salt Cure every turn!");
 static const u8 sText_AnnounceMonotypeBoostBug[]      = _("There seems to be Sticky Webs\nand infestaton on your field side!");
-static const u8 sText_AnnounceMonotypeBoostGhost[]    = _("All your team became cursed!");
+static const u8 sText_AnnounceMonotypeBoostGhost[]    = _("All your team became cursed!"); //Done
 static const u8 sText_AnnounceMonotypeBoostSteel[]    = _("The champion's team can break\nthe mold and has raised defenses!");
 static const u8 sText_AnnounceMonotypeBoostFire[]     = _("The sunlight became extremely harsh!");
 static const u8 sText_AnnounceMonotypeBoostWater[]    = _("An extremely heavy rain started!");
