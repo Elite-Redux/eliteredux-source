@@ -3007,10 +3007,11 @@ bool8 ScrCmd_adddefeatedcountmax7(struct ScriptContext *ctx)
     if (ScriptReadByte(ctx)){ // reset the count
         gSpecialVar_Result = 0;
     }
+    
     for (i = 0; i < 7; i++){
         trainerFlag = ScriptReadHalfword(ctx);
         if (trainerFlag == 0) break;
-        if (FlagGet(trainerFlag)){
+        if (HasTrainerBeenFought(trainerFlag)){
             gSpecialVar_Result += 1;
         }
     }

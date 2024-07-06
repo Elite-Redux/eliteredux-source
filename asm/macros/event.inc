@@ -2116,15 +2116,14 @@
 	.endm
 
 	@ adds to var result the number of trainer fought
-	.macro adddefeatedcountmax7 resetcount:req, trainer0:req, trainer1, trainer2, trainer3, trainer4, trainer5, trainer6, trainer7
+	.macro adddefeatedcountmax7 resetcount:req, trainer0:req, trainer1=0, trainer2=0, trainer3=0, trainer4=0, trainer5=0, trainer6=0
 	.byte 0xef
 	.byte \resetcount
 	.2byte \trainer0
-	.2byte 0 @ \trainer1
-	.2byte 0 @ \trainer2
-	.2byte 0 @ \trainer3
-	.2byte 0 @ \trainer4
-	.2byte 0 @ \trainer5
-	.2byte 0 @ \trainer6
-	.2byte 0 @ \trainer7
+	.2byte \trainer1
+	.2byte \trainer2
+	.2byte \trainer3
+	.2byte \trainer4
+	.2byte \trainer5
+	.2byte \trainer6
 	.endm
