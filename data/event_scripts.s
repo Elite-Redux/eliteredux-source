@@ -54,6 +54,7 @@
 #include "constants/vars.h"
 #include "constants/weather.h"
 #include "constants/quests.h"
+#include "constants/battle_events.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/event.inc"
 	.include "constants/constants.inc"
