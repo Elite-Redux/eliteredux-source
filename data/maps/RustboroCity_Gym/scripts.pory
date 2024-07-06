@@ -95,10 +95,7 @@ RustboroCity_Gym_EventScript_Tommy:: @ 8212FFA
 	msgbox RustboroCity_Gym_Text_TommyPostBattle, MSGBOX_AUTOCLOSE
 	end
 
-RustboroCity_Gym_EventScript_Marc:: @ 8213011
-	trainerbattle_single TRAINER_MARC, RustboroCity_Gym_Text_MarcIntro, RustboroCity_Gym_Text_MarcDefeat
-	msgbox RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE
-	end
+
 
 RustboroCity_Gym_EventScript_GymGuide:: @ 8213028
 	lock
@@ -518,3 +515,20 @@ script RustboroCity_Gym_EventScript_CheckTrainers{
 		return
 	}
 }
+
+script RustboroCity_Gym_EventScript_Marc{
+	lock
+	faceplayer
+	if (defeated(TRAINER_MARC){
+		msgbox(RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("I give you a {COLOR LIGHT_GREEN} hint {COLOR LIGHT_GRAY} about what i am responsible of", MSGBOX_NPC)
+		msgbox(format("Do you want a battle?"), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_MARC, RustboroCity_Gym_Text_MarcIntro, RustboroCity_Gym_Text_MarcDefeat)
+		}
+	}
+	release
+	end
+}
+	
