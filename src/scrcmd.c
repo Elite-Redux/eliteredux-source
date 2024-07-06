@@ -2996,3 +2996,24 @@ bool8 ScrCmd_registerbattleevent(struct ScriptContext *ctx)
     registerBattleEvent(battleEvent);
     return FALSE;
 }
+
+// if the trainer was defeated, then adds 1 to the var result 
+// which is used as a counter
+// the first byte is a bool8 if the var results should be reset, consider this if you need to count more than 7 trainers
+bool8 ScrCmd_adddefeatedcountmax7(struct ScriptContext *ctx)
+{
+    u8 i;
+    u16 trainerFlag;
+    if (ScriptReadByte(ctx)){ // reset the count
+        gSpecialVar_Result = 0;
+    }
+    for (i = 0; i < 7; i++){
+        trainerFlag = ScriptReadHalfword(ctx);
+        if (trainerFlag == 0) break;
+        if (FlagGet(trainerFlag)){
+            gSpecialVar_Result += 1;
+        }
+    }
+    
+    return FALSE;
+}

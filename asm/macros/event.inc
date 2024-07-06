@@ -2109,9 +2109,22 @@
 	waitstate
 	.endm
 
-	@ change the movement of an object event with the id
-	.macro changemovement objectid:req, movementid:req
+	@ register an event for the next battle (see src/battle_events.c)
+	.macro registerbattleevent battleeventid:req
 	.byte 0xee
-	.2byte \objectid
-	.byte \movementid
+	.byte \battleeventid
+	.endm
+
+	@ adds to var result the number of trainer fought
+	.macro adddefeatedcountmax7 resetcount:req, trainer0:req, trainer1, trainer2, trainer3, trainer4, trainer5, trainer6, trainer7
+	.byte 0xef
+	.byte \resetcount
+	.2byte \trainer0
+	.2byte 0 @ \trainer1
+	.2byte 0 @ \trainer2
+	.2byte 0 @ \trainer3
+	.2byte 0 @ \trainer4
+	.2byte 0 @ \trainer5
+	.2byte 0 @ \trainer6
+	.2byte 0 @ \trainer7
 	.endm
