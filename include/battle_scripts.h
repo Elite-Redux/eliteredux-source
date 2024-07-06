@@ -605,4 +605,6 @@ extern const u8 BattleScript_SetWonderRoomFromScript[];
 extern const u8 BattleScript_SetGravityFromScript[];
 extern const u8 BattleScript_SetInverseRoomFromScript[];
 
+extern const u8 BattleScript_GymSkillTerrain[];
+
 #endif // GUARD_BATTLE_SCRIPTS_H

@@ -11995,3 +11995,8 @@ BattleScript_EffectUpperHand::
 	trypupperhand BS_TARGET, BattleScript_ButItFailedAtkStringPpReduce
 	setmoveeffect MOVE_EFFECT_FLINCH
 	goto BattleScript_EffectHit
+
+BattleScript_GymSkillTerrain::
+	printstring STRINGID_GYMSKILL_TERRAIN
+	waitmessage B_WAIT_TIME_LONG
+	return

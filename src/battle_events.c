@@ -4,6 +4,14 @@
 #include "constants/battle_events.h"
 #include "battle_main.h"
 #include "battle.h"
+#include "battle_util.h"
+#include "battle_scripts.h"
+#include "battle_controllers.h"
+#include "constants/battle_string_ids.h"
+#include "constants/abilities.h"
+#include "constants/hold_effects.h"
+#include "battle_anim.h"  // for GetBattlerPosition required by BATTLER_HAS_ABILITY_FAST
+#include "battle_ai_main.h" // for BattlerHasInnate required by BATTLER_HAS_ABILITY_FAST trully hilarious C
 
 static u8 gNbBattleEvents;
 EWRAM_DATA u8 gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { BATTLE_EVENT_NONE };
@@ -53,14 +61,14 @@ void changeStats(u8 battler, u8 stat, s8 stages){
             && !BATTLER_HAS_ABILITY_FAST(battler, ABILITY_CLEAR_BODY, ability)
             && !BATTLER_HAS_ABILITY_FAST(battler, ABILITY_FULL_METAL_BODY, ability)
             && !BATTLER_HAS_ABILITY_FAST(battler, ABILITY_WHITE_SMOKE, ability)
-            && !(BATTLER_HAS_ABILITY_FAST(battler, ABILITY_KEEN_EYE, ability) && currStat == STAT_ACC)
-            && !(BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MINDS_EYE, ability) && currStat == STAT_ACC)
-            && !(BATTLER_HAS_ABILITY_FAST(battler, ABILITY_HYPER_CUTTER, ability) && currStat == STAT_ATK)
+            && !(BATTLER_HAS_ABILITY_FAST(battler, ABILITY_KEEN_EYE, ability) && stat == STAT_ACC)
+            && !(BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MINDS_EYE, ability) && stat == STAT_ACC)
+            && !(BATTLER_HAS_ABILITY_FAST(battler, ABILITY_HYPER_CUTTER, ability) && stat == STAT_ATK)
             && GetBattlerHoldEffect(battler, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
     {
         if (stages < 0)
         {
-            return
+            return;
         }
     }
     // this seems to be to show the animation
@@ -79,6 +87,9 @@ void battleEventsMegaSwitch(u8 battleEvent){
         break;
     case BATTLE_EVENT_STEALTH_ROCK_START:
         gSideStatuses[B_SIDE_PLAYER] |= ~(SIDE_STATUS_STEALTH_ROCK);
+        gBattlescriptCurrInstr = BattleScript_GymSkillTerrain;
+        BtlController_EmitPrintString(0, STRINGID_POINTEDSTONESFLOAT);
+        MarkBattlerForControllerExec(gActiveBattler);
         break;
     case BATTLE_EVENT_LAST_PARALYZED:
         for (i = gPlayerPartyCount - 1; gPlayerPartyCount > 0 ; i--){
