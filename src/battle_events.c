@@ -2,19 +2,22 @@
 #include "gba/gba.h"
 #include "battle_events.h"
 #include "constants/battle_events.h"
+#include "constants/battle_string_ids.h"
+#include "constants/abilities.h"
+#include "constants/hold_effects.h"
 #include "battle_main.h"
 #include "battle.h"
 #include "battle_util.h"
 #include "battle_scripts.h"
 #include "battle_controllers.h"
-#include "constants/battle_string_ids.h"
-#include "constants/abilities.h"
-#include "constants/hold_effects.h"
 #include "battle_anim.h"  // for GetBattlerPosition required by BATTLER_HAS_ABILITY_FAST
 #include "battle_ai_main.h" // for BattlerHasInnate required by BATTLER_HAS_ABILITY_FAST trully hilarious C
+#include "mgba_printf/mgba.h"
+#include "mgba_printf/mini_printf.h"
 
 static u8 gNbBattleEvents;
 EWRAM_DATA u8 gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { BATTLE_EVENT_NONE };
+
 
 void registerBattleEvent(u8 battleEvent){
     //reached the limit
@@ -36,6 +39,9 @@ void unregisterBattlesEvents(){
 
 void execBattleEvents(u8 execEnum){
     u8 i;
+    /*MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "gNbBattleEvents: %d", gNbBattleEvents);
+    MgbaClose();*/
     for (i = 0; i < gNbBattleEvents; i++){
         battleEventsMegaSwitch(gBattleEvents[i], execEnum);
     }
@@ -86,20 +92,22 @@ void battleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
     case BATTLE_EVENT_NONE:
         break;
     case BATTLE_EVENT_STEALTH_ROCK_START:
-        gSideStatuses[B_SIDE_PLAYER] |= ~(SIDE_STATUS_STEALTH_ROCK);
-        gBattlescriptCurrInstr = BattleScript_GymSkillTerrain;
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
+        /*gBattlescriptCurrInstr = BattleScript_GymSkillTerrain;
         BtlController_EmitPrintString(0, STRINGID_POINTEDSTONESFLOAT);
-        MarkBattlerForControllerExec(gActiveBattler);
+        MarkBattlerForControllerExec(gActiveBattler);*/
         break;
     case BATTLE_EVENT_LAST_PARALYZED:
-        for (i = gPlayerPartyCount - 1; gPlayerPartyCount > 0 ; i--){
+        for (i = gPlayerPartyCount - 1; i > 0 ; i--){
             if (gPlayerParty[i].status == STATUS1_NONE){
                 gPlayerParty[i].status = STATUS1_PARALYSIS;
+                break;
             }
         }
         break;
     case BATTLE_EVENT_LEADER_1RST_PLUS_FOUR_DEF_BOOST:
-        gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = 4;
+        gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = 
+            min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 4);
         break;
     }
 

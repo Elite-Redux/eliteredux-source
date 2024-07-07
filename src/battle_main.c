@@ -3883,6 +3883,7 @@ static void TryDoEventsBeforeFirstTurn(void)
     if (gBattleControllerExecFlags)
         return;
 
+
     // Set invalid mons as absent(for example when starting a double battle with only one pokemon).
     if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI))
     {
@@ -3892,7 +3893,11 @@ static void TryDoEventsBeforeFirstTurn(void)
                 gAbsentBattlerFlags |= gBitTable[i];
         }
     }
-
+    if (!gBattleStruct->battleEventDone){
+        // exec battle events before pokemons have landed and executed their abilities
+        execBattleEvents(EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN);
+        gBattleStruct->battleEventDone = TRUE;
+    }
     if (gBattleStruct->switchInAbilitiesCounter == 0)
     {
         for (i = 0; i < gBattlersCount; i++)
@@ -3941,6 +3946,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         return;
     }
     
+
     // Check all switch in abilities happening from the fastest mon to slowest.
     while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount)
     {
@@ -4012,8 +4018,6 @@ static void TryDoEventsBeforeFirstTurn(void)
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
     }
 
-    // exec battle event for the first time
-    execBattleEvents(EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN)
 }
 
 static void HandleEndTurn_ContinueBattle(void)
@@ -5694,6 +5698,9 @@ static void HandleEndTurn_FinishBattle(void)
         if (gBattleControllerExecFlags == 0)
             gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
     }
+
+    //reset battle Events at the end of the battle
+    unregisterBattlesEvents();
 }
 
 static void FreeResetData_ReturnToOvOrDoEvolutions(void)
