@@ -34,9 +34,6 @@ void unregisterBattlesEvents(){
 
 void execBattleEvents(u8 execEnum){
     u8 i;
-    MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "gNbBattleEvents: %d", gNbBattleEvents);
-    MgbaClose();
     for (i = 0; i < gNbBattleEvents; i++){
         battleEventsMegaSwitch(gBattleEvents[i], execEnum);
     }
