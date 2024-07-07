@@ -558,8 +558,51 @@ StarterRegionStringGalar:
 StarterRegionStringPaldea:
 	.string "Paldea$"
 
-StarterRegionStringAlt:
-	.string "Alternate$"
+StarterRegionStringBug:
+	.string "Bug$"
+
+StarterRegionStringDark:
+	.string "Dark$"
+
+StarterRegionStringDragon:
+	.string "Dragon$"
+
+StarterRegionStringElectric:
+	.string "Electric$"
+
+StarterRegionStringFairy:
+	.string "Fairy$"
+
+StarterRegionStringFighting:
+	.string "Fighting$"
+
+StarterRegionStringFlying:
+	.string "Flying$"
+
+StarterRegionStringGhost:
+	.string "Ghost$"
+
+StarterRegionStringGround:
+	.string "Ground$"
+
+StarterRegionStringIce:
+	.string "Ice$"
+
+StarterRegionStringNormal:
+	.string "Normal$"
+
+StarterRegionStringPoison:
+	.string "Poison$"
+
+StarterRegionStringPsychic:
+	.string "Psychic$"
+
+StarterRegionStringRock:
+	.string "Rock$"
+
+StarterRegionStringSteel:
+	.string "Steel$"
+
 `
 
 text RivalsHouse_1F_Text_SureAboutRegion{
