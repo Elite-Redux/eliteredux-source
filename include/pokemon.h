@@ -197,6 +197,7 @@ struct BaseStats
  /* 0x16 */ u16 innates[NUM_INNATE_PER_SPECIES];
  /* 0x15 */ u16 shopPrice;
             u8 tier;
+            u8 altShinyMask;
 };
 
 typedef enum {
@@ -442,6 +443,9 @@ u16 GetBattleBGM(void);
 void PlayBattleBGM(void);
 void PlayMapChosenOrBattleBGM(u16 songId);
 void CreateTask_PlayMapChosenOrBattleBGM(u16 songId);
+u32 getNumAlts(u16 species);
+const u32 *GetShinySpritePal(u16 species, u32 personality);
+const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 personality);
 const u32 *GetMonFrontSpritePal(struct Pokemon *mon);
 const u32 *GetMonSpritePal(u16 species, u32 personality, bool8 isShiny);
 const struct CompressedSpritePalette *GetMonSpritePalStruct(struct Pokemon *mon);

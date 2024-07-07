@@ -122,6 +122,7 @@ extern const struct CompressedSpriteSheet gMonBackPicTableFemale[];
 extern const struct CompressedSpritePalette gMonPaletteTable[];
 extern const struct CompressedSpritePalette gMonPaletteTableFemale[];
 extern const struct CompressedSpritePalette gMonShinyPaletteTable[];
+extern const struct CompressedSpritePalette gMonAltShinyPaletteTable[];
 extern const struct CompressedSpritePalette gMonShinyPaletteTableFemale[];
 extern const union AnimCmd *const *const gTrainerFrontAnimsPtrTable[];
 extern const struct MonCoords gTrainerFrontPicCoords[];

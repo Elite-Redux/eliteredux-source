@@ -8202,6 +8202,71 @@ static void Task_PlayMapChosenOrBattleBGM(u8 taskId)
 
 #undef tSongId
 
+const u32 *GetShinySpritePal(u16 species, u32 personality)
+{
+    u8 mask = gBaseStats[species].altShinyMask;
+    u32 res;
+    if (mask > 0){
+        u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
+        if(rndSeed == 0){
+            u16 newseed = Random();
+            VarSet(VAR_RANDOMIZED_SEED, newseed);
+            rndSeed = VarGet(VAR_RANDOMIZED_SEED);
+        }
+        rndSeed ^= species * personality;
+        res = RandRangeDeterministic(0, 8, &rndSeed);
+        //uncomment this when we had more tables
+        // while ((mask >> res) == 0){
+        //     res = RandRangeDeterministic(0, 8, &rndSeed);
+        // }
+        switch(res){
+            //will be expanded later once we had add more tables, this is fine for now
+            default:
+            case 0:
+                return gMonAltShinyPaletteTable[species].data;
+        }
+    }
+    return gMonShinyPaletteTable[species].data;
+}
+
+u32 getNumAlts(u16 species){
+    u8 mask = gBaseStats[species].altShinyMask;
+    u8 i = 0;
+    u8 count = 0;
+    for(i = 0; i < 9; i++){
+        if(((mask >> i) & 1) == 1)
+            count++;
+    }
+    return count;
+}
+
+const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 personality)
+{
+    u8 mask = gBaseStats[species].altShinyMask;
+    u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
+    if(rndSeed == 0){
+            u16 newseed = Random();
+            VarSet(VAR_RANDOMIZED_SEED, newseed);
+            rndSeed = VarGet(VAR_RANDOMIZED_SEED);
+        }
+    u8 alts = getNumAlts(species);
+    rndSeed ^= species * personality;
+    u32 res;
+    res = RandRangeDeterministic(0, alts, &rndSeed);
+    if (mask > 0 && res != 0){
+        //uncomment this when we had more tables
+        // while ((mask >> res) == 0){
+        //     res = RandRangeDeterministic(0, 8, &rndSeed);
+        // }
+        switch(res){
+            //will be expanded later once we had add more tables, this is fine for now
+            default:
+            case 0:
+                return &gMonAltShinyPaletteTable[species];
+        }
+    }
+    return &gMonShinyPaletteTable[species];
+}
 const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
 {
     bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
@@ -8214,7 +8279,7 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonShinyPaletteTableFemale[species].data;
         else
-            return gMonShinyPaletteTable[species].data;
+            return GetShinySpritePal(species, personality);
     }
     else
     {
@@ -8226,12 +8291,14 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
 }
 
 const u32 *GetMonSpritePal(u16 species, u32 personality, bool8 isShiny){
+    u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     if (isShiny)
     {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonShinyPaletteTableFemale[species].data;
         else
-            return gMonShinyPaletteTable[species].data;
+            return GetShinySpritePal(species, personality);
+            
     }
     else
     {
@@ -8261,7 +8328,7 @@ const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return &gMonShinyPaletteTableFemale[species];
         else
-            return &gMonShinyPaletteTable[species];
+            return GetShinySpritePalAddr(species, personality);
     }
     else
     {
