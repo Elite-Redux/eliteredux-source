@@ -73,6 +73,7 @@
 #include "cable_club.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "battle_events.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;
@@ -4010,6 +4011,9 @@ static void TryDoEventsBeforeFirstTurn(void)
         StopCryAndClearCrySongs();
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
     }
+
+    // exec battle event for the first time
+    execBattleEvents(EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN)
 }
 
 static void HandleEndTurn_ContinueBattle(void)

@@ -34,10 +34,10 @@ void unregisterBattlesEvents(){
     gNbBattleEvents = 0;
 }
 
-void execBattleEvents(){
+void execBattleEvents(u8 execEnum){
     u8 i;
     for (i = 0; i < gNbBattleEvents; i++){
-        battleEventsMegaSwitch(gBattleEvents[i]);
+        battleEventsMegaSwitch(gBattleEvents[i], execEnum);
     }
 }
 
@@ -77,9 +77,9 @@ void changeStats(u8 battler, u8 stat, s8 stages){
     //MarkBattlerForControllerExec(battler);
 }
 
-void battleEventsMegaSwitch(u8 battleEvent){
+void battleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
     u8 i;
-    if (gBattleResults.battleTurnCounter > 0) return;
+    if (execEnum != EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN) return;
     // TURN 0 switch statements
     switch (battleEvent)
     {
