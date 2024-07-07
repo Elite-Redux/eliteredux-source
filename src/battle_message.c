@@ -983,6 +983,7 @@ static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
 static const u8 sText_GymSkillTerrain[] = _("Something unusual modifies the terrain.");
+static const u8 sText_GymSkillFourTimesBoost[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} got extremely buffed.");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1750,6 +1751,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_SNAP_TRAP - 12] = sText_SnapTrap,
     [STRINGID_ELECTRO_SHOT - 12] = sText_ElectroShot,
     [STRINGID_GYMSKILL_TERRAIN - 12] = sText_GymSkillTerrain,
+    [STRINGID_GYMSKILL_FOURTIMESBOOST - 12] = sText_GymSkillFourTimesBoost,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
