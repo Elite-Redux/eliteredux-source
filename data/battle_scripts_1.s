@@ -12087,19 +12087,19 @@ BattleScript_EffectUpperHand::
 	goto BattleScript_EffectHit
 
 BattleScript_ParasiticSporesSpreadWithAbility::
-	call BattleScript_ParasiticSporesLoadBattlers
+	call BattleScript_ParasiticSpores_LoadBattlers
 	call BattleScript_AbilityPopUp
 	waitmessage B_WAIT_TIME_SHORT	
 	call BattleScript_ParasiticSporesSpread_Main
 BattleScript_ParasiticSporesSpread::
-	call BattleScript_ParasiticSporesLoadBattlers
+	call BattleScript_ParasiticSpores_LoadBattlers
 BattleScript_ParasiticSporesSpread_Main:
 	printstring STRINGID_PARASITIC_SPORES_SPREAD
 	waitmessage B_WAIT_TIME_LONG
 	return
 
 BattleScript_ParasiticSpores_LoadBattlers:
-	getbattler gStackBattler1
+	getbattler BS_STACK_1
 	copybyte gBattlerAbility, gStackBattler1
 	copybyte gEffectBattler, gStackBattler2
 	return
