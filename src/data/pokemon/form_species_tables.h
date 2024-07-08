@@ -1677,3 +1677,8 @@ static const u16 sChien_PaoFormSpeciesIdTable[] = {
     SPECIES_CHIEN_PAO_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sDracovishFormSpeciesIdTable[] = {
+    SPECIES_DRACOVISH,
+    SPECIES_DRACOVISH_MEGA,
+    FORM_SPECIES_END,
+};

@@ -40258,6 +40258,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_DRACOVISH_MEGA] =
+    {
+    .baseHP        = 90,
+    .baseAttack    = 90,
+    .baseDefense   = 100,
+    .baseSpeed     = 75,
+    .baseSpAttack  = 70,
+    .baseSpDefense = 80,
+    .type1 = TYPE_WATER,
+    .type2 = TYPE_DRAGON,
+    .catchRate = 255,
+    .expYield = 177,
+    .evYield_Defense   = 2,
+    .genderRatio = MON_GENDERLESS,
+    .eggCycles = 35,
+    .friendship = 70,
+    .growthRate = GROWTH_SLOW,
+    .eggGroup1 = EGG_GROUP_UNDISCOVERED,
+    .eggGroup2 = EGG_GROUP_UNDISCOVERED,
+	.abilities = {ABILITY_STRONG_JAW, ABILITY_SWIFT_SWIM, ABILITY_SAND_RUSH},
+	.innates = {ABILITY_FOSSILIZED, ABILITY_DRAGONS_MAW, ABILITY_PREDATOR},
+    .bodyColor = BODY_COLOR_GREEN,
+    .noFlip = FALSE,
+    .tier = 4,
+    },
+
     [SPECIES_CHIEN_PAO_MEGA] =
     {
         .baseHP        = 80,
