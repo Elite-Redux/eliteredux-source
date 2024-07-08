@@ -5416,6 +5416,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_CHIEN_PAO_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_DRAGONITE_DELIVERY] =
     {
         .size = 0,

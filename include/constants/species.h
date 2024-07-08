@@ -1672,8 +1672,9 @@
 
 // Monotype Mons
 #define SPECIES_DRAGONITE_DELIVERY          REDUX_FORMS_START + 69
+#define SPECIES_CHIEN_PAO_MEGA              REDUX_FORMS_START + 70
 
-#define LAST_REDUX_FORM                     SPECIES_DRAGONITE_DELIVERY
+#define LAST_REDUX_FORM                     SPECIES_CHIEN_PAO_MEGA
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

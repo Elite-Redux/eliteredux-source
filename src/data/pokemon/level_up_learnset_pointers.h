@@ -951,6 +951,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_CHI_YU] = sChiYuLevelUpLearnset,
     [SPECIES_TING_LU] = sTingLuLevelUpLearnset,
     [SPECIES_CHIEN_PAO] = sChienPaoLevelUpLearnset,
+    [SPECIES_CHIEN_PAO_MEGA] = sChienPaoLevelUpLearnset,
     [SPECIES_WO_CHIEN] = sWoChienLevelUpLearnset,
     [SPECIES_GHOLDENGO] = sGholdengoLevelUpLearnset,
     [SPECIES_GIMMIGHOUL] = sGimmighoulLevelUpLearnset,

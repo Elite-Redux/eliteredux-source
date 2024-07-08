@@ -1672,3 +1672,8 @@ static const u16 sNoivernFormSpeciesIdTable[] = {
     SPECIES_NOIVERN_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sChien_PaoFormSpeciesIdTable[] = {
+    SPECIES_CHIEN_PAO,
+    SPECIES_CHIEN_PAO_MEGA,
+    FORM_SPECIES_END,
+};

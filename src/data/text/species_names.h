@@ -1020,6 +1020,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_PHANTOWL] = _("Phantowl"),
     [SPECIES_DUELUMBER] = _("Duelumber"),
     [SPECIES_ESCARGINITE] = _("Escarginite"),
+[   SPECIES_CHIEN_PAO_MEGA] = _("Chien Pao"),
     [SPECIES_ARCHALUDON] = _("Archaludon"),
     [SPECIES_GOUGING_FIRE] = _("Gouging Fire"),
     [SPECIES_IRON_BOULDER] = _("Iron Boulder"),
