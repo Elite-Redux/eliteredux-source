@@ -2202,12 +2202,12 @@ const u8 sText_Title_Status_Showdown_Mode_Description[]     = _("This Pokémon's
                                                                 "crits for one turn.");
 const u8 sText_Title_Status_Trapped[]                       = _("Trapped");
 const u8 sText_Title_Status_Trapped_Description[]           = _("This Pokémon can't swap and\n"
-                                                                "takes 1/8 of their maximum HP\n"
+                                                                "takes 1/8 of its maximum HP\n"
                                                                 "in damage for some turns.");
 const u8 sText_Title_Status_Parasitic_Spores[]              = _("Parasitic Spores");
-const u8 sText_Title_Status_Parasitic_Spores_Description[]  = _("This Pokémon takes 1/8 of their\n"
-                                                                "maximum HP if they are not\n"
-                                                                "Ghost-type. Spread on contact.");
+const u8 sText_Title_Status_Parasitic_Spores_Description[]  = _("This Pokémon takes 1/8 of its\n"
+                                                                "maximum HP if it is not\n"
+                                                                "Ghost-type. Spreads on contact.");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
 #define MAX_DESCRIPTION_LINES 3
