@@ -12103,3 +12103,8 @@ BattleScript_ParasiticSpores_LoadBattlers:
 	copybyte gBattlerAbility, gStackBattler1
 	copybyte gEffectBattler, gStackBattler2
 	return
+
+BattleScript_ParasiticSporesDamage::
+	printstring STRINGID_HURT_BY_PARASITIC_SPORES
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_DoTurnDmg

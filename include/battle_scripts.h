@@ -182,6 +182,7 @@ extern const u8 BattleScript_CuteCharmActivates[];
 extern const u8 BattleScript_AbilityStatusEffect[];
 extern const u8 BattleScript_ParasiticSporesSpread[];
 extern const u8 BattleScript_ParasiticSporesSpreadWithAbility[];
+extern const u8 BattleScript_ParasiticSporesDamage[];
 extern const u8 BattleScript_MoveSecondStatusEffect[];
 extern const u8 BattleScript_SynchronizeActivates[];
 extern const u8 BattleScript_NoItemSteal[];

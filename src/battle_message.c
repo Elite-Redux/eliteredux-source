@@ -1002,6 +1002,7 @@ const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pT
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
 static const u8 sText_ParasiticSpores[] = _("{B_ATK_NAME_WITH_PREFIX} is coated\nin parasitic spores!");
 static const u8 sText_ParasiticSporesSpread[] = _("{B_STACK_1_NAME_WITH_PREFIX} spreads its\nspores to {B_STACK_2_NAME_WITH_PREFIX}.");
+static const u8 sText_HurtByParasiticSpores[] = _("{B_ATK_TEAM1} {B_ATK_NAME_WITH_PREFIX} was hurt\nby its parasitic spores!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1788,6 +1789,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ANNOUNCE_MONOTYPEBOOST_FAIRY - 12] = sText_AnnounceMonotypeBoostFairy,
     [STRINGID_PARASITIC_SPORES - 12] = sText_ParasiticSpores,
     [STRINGID_PARASITIC_SPORES_SPREAD - 12] = sText_ParasiticSporesSpread,
+    [STRINGID_HURT_BY_PARASITIC_SPORES - 12] = sText_HurtByParasiticSpores,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

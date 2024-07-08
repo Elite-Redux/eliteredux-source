@@ -2704,6 +2704,7 @@ enum
     ENDTURN_TOXIC_WASTE_DAMAGE,
     ENDTURN_SEA_OF_FIRE_DAMAGE,
     ENDTURN_COMMANDER,
+    ENDTURN_PARASITIC_SPORES_DAMAGE,
     ENDTURN_BATTLER_COUNT,
 };
 
@@ -2962,13 +2963,27 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_COMMANDER:
-            if (IsBattlerAlive(gBattlerAttacker) && GetAbilityState(gBattlerAttacker, ABILITY_COMMANDER) == COMMANDER_NEEDS_CANCELLING)
+            if (IsBattlerAlive(gActiveBattler) && GetAbilityState(gActiveBattler, ABILITY_COMMANDER) == COMMANDER_NEEDS_CANCELLING)
             {
-                SetAbilityState(gBattlerAttacker, ABILITY_COMMANDER, COMMANDER_NOT_ACTIVE);
-                gStatuses3[gBattlerAttacker] &= ~STATUS3_SEMI_INVULNERABLE;
+                SetAbilityState(gActiveBattler, ABILITY_COMMANDER, COMMANDER_NOT_ACTIVE);
+                gStatuses3[gActiveBattler] &= ~STATUS3_SEMI_INVULNERABLE;
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_COMMANDER;
-                gStackBattler1 = gBattlerAttacker;
+                gStackBattler1 = gActiveBattler;
                 BattleScriptExecute(BattleScript_CommanderEndsEnd2);
+                effect++;
+            }
+            gBattleStruct->turnEffectsTracker++;
+            break;
+        case ENDTURN_PARASITIC_SPORES_DAMAGE:
+            if (IsBattlerAlive(gActiveBattler) && gVolatileStructs[gActiveBattler].parasiticSpores && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST))
+            {
+                MAGIC_GUARD_CHECK;
+
+                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+                if (gBattleMoveDamage == 0)
+                    gBattleMoveDamage = 1;
+                MarkBattlerForControllerExec(gActiveBattler);
+                BattleScriptExecute(BattleScript_ParasiticSporesDamage);
                 effect++;
             }
             gBattleStruct->turnEffectsTracker++;
@@ -5281,8 +5296,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if (!gVolatileStructs[battler].parasiticSpores)
             {
                 gVolatileStructs[battler].parasiticSpores = TRUE;
-                gVolatileStructs[battler].parasiticSporesParty = GetBattlerSide(battler);
-                gVolatileStructs[battler].parasiticSporesPartyIndex = gBattlerPartyIndexes[battler];
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PARASITIC_SPORES;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
                 effect++;
@@ -9786,8 +9799,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             {
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_PARASITIC_SPORES;
                 gVolatileStructs[opponent].parasiticSpores = TRUE;
-                gVolatileStructs[opponent].parasiticSporesParty = gVolatileStructs[opponent].parasiticSporesParty;
-                gVolatileStructs[opponent].parasiticSporesPartyIndex = gVolatileStructs[opponent].parasiticSporesPartyIndex;
                 gStackBattler1 = battler;
                 gStackBattler2 = opponent;
                 if (BATTLER_HAS_ABILITY(battler, ABILITY_PARASITIC_SPORES)) gBattlescriptCurrInstr = BattleScript_ParasiticSporesSpreadWithAbility;
