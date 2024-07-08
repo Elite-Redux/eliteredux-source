@@ -8,6 +8,8 @@ DewfordTown_Gym_OnTransition: @ 81FC642
 	end
 
 DewfordTown_Gym_EventScript_SetFlashRadius:: @ 81FC648
+	@ temporary should remove
+	goto DewfordTown_Gym_EventScript_SetLightsOn
 	goto_if_defeated TRAINER_BRAWLY_1, DewfordTown_Gym_EventScript_SetLightsOn
 	call DewfordTown_Gym_EventScript_CountTrainersDefeated
 	copyvar VAR_0x8001, VAR_0x8000
