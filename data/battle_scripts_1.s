@@ -12008,3 +12008,9 @@ BattleScript_GymSkillFourTimesBoost::
 	waitmessage B_WAIT_TIME_LONG
 	playstatchangeanimation BS_OPPONENT1, BIT_DEF, STAT_CHANGE_BY_TWO
 	end2
+
+BattleScript_GymSkillEndOfTurnBoost::
+	printstring STRINGID_GYMSKILL_ENDOFTURNBOOST
+	waitmessage B_WAIT_TIME_LONG
+	playstatchangeanimation BS_OPPONENT1, BIT_DEF, 0x00
+	end2

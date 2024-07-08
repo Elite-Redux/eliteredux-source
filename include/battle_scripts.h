@@ -607,5 +607,6 @@ extern const u8 BattleScript_SetInverseRoomFromScript[];
 
 extern const u8 BattleScript_GymSkillTerrainStealthRock[];
 extern const u8 BattleScript_GymSkillFourTimesBoost[];
+extern const u8 BattleScript_GymSkillEndOfTurnBoost[];
 
 #endif // GUARD_BATTLE_SCRIPTS_H
