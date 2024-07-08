@@ -1682,3 +1682,8 @@ static const u16 sDracovishFormSpeciesIdTable[] = {
     SPECIES_DRACOVISH_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sLedianFormSpeciesIdTable[] = {
+    SPECIES_LEDIAN,
+    SPECIES_LEDIAN_PARADOX,
+    FORM_SPECIES_END,
+};

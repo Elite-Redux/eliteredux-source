@@ -872,4 +872,5 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_CHIEN_PAO_MEGA] = sChien_PaoFormSpeciesIdTable,
     [SPECIES_DRACOVISH_MEGA] = sDracovishFormSpeciesIdTable,
 
+    [SPECIES_LEDIAN_PARADOX] = sLedianFormSpeciesIdTable,
 };

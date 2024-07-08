@@ -1674,8 +1674,9 @@
 #define SPECIES_DRAGONITE_DELIVERY          REDUX_FORMS_START + 69
 #define SPECIES_CHIEN_PAO_MEGA              REDUX_FORMS_START + 70
 #define SPECIES_DRACOVISH_MEGA              REDUX_FORMS_START + 71
+#define SPECIES_LEDIAN_PARADOX              REDUX_FORMS_START + 72
 
-#define LAST_REDUX_FORM                     SPECIES_DRACOVISH_MEGA
+#define LAST_REDUX_FORM                     SPECIES_LEDIAN_PARADOX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

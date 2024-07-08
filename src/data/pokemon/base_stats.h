@@ -40258,6 +40258,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_LEDIAN_PARADOX] =
+    {
+    .baseHP        = 55,
+    .baseAttack    = 95,
+    .baseDefense   = 50,
+    .baseSpeed     = 105,
+    .baseSpAttack  = 35,
+    .baseSpDefense = 110,        
+    .type1 = TYPE_BUG,
+    .type2 = TYPE_FIGHTING,
+    .catchRate = 255,
+    .expYield = 137,
+    .evYield_SpDefense = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 15,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_BUG,
+    .abilities = {ABILITY_AERILATE, ABILITY_POLLINATE, ABILITY_AERODYNAMICS},
+    .innates = {ABILITY_RAGING_BOXER, ABILITY_IRON_FIST, ABILITY_LEVITATE},
+    .bodyColor = BODY_COLOR_RED,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_DRACOVISH_MEGA] =
     {
     .baseHP        = 90,

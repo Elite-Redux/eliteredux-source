@@ -1020,6 +1020,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_PHANTOWL] = _("Phantowl"),
     [SPECIES_DUELUMBER] = _("Duelumber"),
     [SPECIES_ESCARGINITE] = _("Escarginite"),
+    [SPECIES_LEDIAN_PARADOX] = _("Ledian"),//To Change
     [SPECIES_DRACOVISH_MEGA] = _("Dracovish"),
     [SPECIES_CHIEN_PAO_MEGA] = _("Chien Pao"),
     [SPECIES_ARCHALUDON] = _("Archaludon"),
