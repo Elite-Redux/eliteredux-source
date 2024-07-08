@@ -3879,7 +3879,9 @@ static void DoBattleIntro(void)
 static void TryDoEventsBeforeFirstTurn(void)
 {
     s32 i, j;
-
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "Enteded in %X", gBattleStruct->battleEventDone);
+    MgbaClose();
     if (gBattleControllerExecFlags)
         return;
 
@@ -3893,11 +3895,15 @@ static void TryDoEventsBeforeFirstTurn(void)
                 gAbsentBattlerFlags |= gBitTable[i];
         }
     }
+    // exec battle events before pokemons have landed and executed their abilities
     if (!gBattleStruct->battleEventDone){
-        // exec battle events before pokemons have landed and executed their abilities
-        execBattleEvents(EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN);
-        gBattleStruct->battleEventDone = TRUE;
+        if (ExecBattleEvents(EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN) == EXEC_BATTLE_EVENTS_ALL_CLEAR){
+            gBattleStruct->battleEventDone = TRUE;
+        } else {
+            return;
+        }
     }
+
     if (gBattleStruct->switchInAbilitiesCounter == 0)
     {
         for (i = 0; i < gBattlersCount; i++)
@@ -5700,7 +5706,7 @@ static void HandleEndTurn_FinishBattle(void)
     }
 
     //reset battle Events at the end of the battle
-    unregisterBattlesEvents();
+    UnregisterBattlesEvents();
 }
 
 static void FreeResetData_ReturnToOvOrDoEvolutions(void)

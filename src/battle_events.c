@@ -11,10 +11,11 @@
 #include "mgba_printf/mini_printf.h"
 
 static u8 gNbBattleEvents;
+static u8 gCurrBattleEvent;
 EWRAM_DATA u8 gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { BATTLE_EVENT_NONE };
 
 
-void registerBattleEvent(u8 battleEvent){
+void RegisterBattleEvent(u8 battleEvent){
     //reached the limit
     if (gNbBattleEvents == BATTLE_EVENTS_MAX_REGISTERABLE) {
         //how could i warn btw? shout in a message box?
@@ -24,22 +25,28 @@ void registerBattleEvent(u8 battleEvent){
     gNbBattleEvents += 1;
 }
 
-void unregisterBattlesEvents(){
+void UnregisterBattlesEvents(){
     u8 i;
     for (i = 0; i < gNbBattleEvents; i++){
         gBattleEvents[i] = BATTLE_EVENT_NONE;
     }
     gNbBattleEvents = 0;
+    gCurrBattleEvent = 0;
 }
 
-void execBattleEvents(u8 execEnum){
-    u8 i;
-    for (i = 0; i < gNbBattleEvents; i++){
-        battleEventsMegaSwitch(gBattleEvents[i], execEnum);
+bool8 ExecBattleEvents(u8 execEnum){
+    // it goes by the principle that it will be executed in loop until it returns ALL CLEAR
+    while (gCurrBattleEvent < gNbBattleEvents){
+        gCurrBattleEvent++;
+        if (BattleEventsMegaSwitch(gBattleEvents[gCurrBattleEvent - 1], execEnum) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
+            return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     }
+    // reset so it can be reexecuted later in a battle
+    gCurrBattleEvent = 0;
+    return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
 }
 
-void battleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
+bool8 BattleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
     u8 i;
     if (execEnum != EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN) return;
     // TURN 0 switch statements
@@ -49,8 +56,8 @@ void battleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
         break;
     case BATTLE_EVENT_STEALTH_ROCK_START:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
-        //BattleScriptPushCursorAndCallback(BattleScript_GymSkillTerrainStealthRock);
-        break;
+        BattleScriptExecute(BattleScript_GymSkillTerrainStealthRock);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     case BATTLE_EVENT_LAST_PARALYZED:
         for (i = gPlayerPartyCount - 1; i > 0 ; i--){
             if (gPlayerParty[i].status == STATUS1_NONE){
@@ -61,8 +68,8 @@ void battleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
         break;
     case BATTLE_EVENT_LEADER_1RST_PLUS_FOUR_DEF_BOOST:
         gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 4);
-        //BattleScriptPushCursorAndCallback(BattleScript_GymSkillFourTimesBoost);
-        break;
+        BattleScriptExecute(BattleScript_GymSkillFourTimesBoost);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     }
-
+    return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }

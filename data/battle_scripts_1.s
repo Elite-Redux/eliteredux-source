@@ -11999,10 +11999,12 @@ BattleScript_EffectUpperHand::
 BattleScript_GymSkillTerrainStealthRock::
 	printstring STRINGID_GYMSKILL_TERRAIN
 	waitmessage B_WAIT_TIME_LONG
-	printfromtable gStealthRocksSet
+	printfromtable gStealthRocksSet @ //BS_PLAYER1
 	waitmessage B_WAIT_TIME_LONG
+	end2
 
 BattleScript_GymSkillFourTimesBoost::
 	printstring STRINGID_GYMSKILL_FOURTIMESBOOST
 	waitmessage B_WAIT_TIME_LONG
-	playstatchangeanimation BS_ATTACKER, BIT_DEF, STAT_CHANGE_BY_TWO 
+	playstatchangeanimation BS_OPPONENT1, BIT_DEF, STAT_CHANGE_BY_TWO
+	end2

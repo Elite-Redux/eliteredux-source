@@ -2993,7 +2993,7 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
 bool8 ScrCmd_registerbattleevent(struct ScriptContext *ctx)
 {
     u8 battleEvent = VarGet(ScriptReadByte(ctx));
-    registerBattleEvent(battleEvent);
+    RegisterBattleEvent(battleEvent);
     return FALSE;
 }
 
