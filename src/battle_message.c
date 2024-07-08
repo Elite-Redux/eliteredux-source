@@ -824,6 +824,24 @@ static const u8 sText_PkmnBledBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s abilit
 static const u8 sText_ThunderCage[] = _("{B_DEF_NAME_WITH_PREFIX} was trapped by\nThunder Cage!");
 static const u8 sText_SnapTrap[] = _("{B_DEF_NAME_WITH_PREFIX} was trapped by\na Snap Trap!");
 static const u8 sText_ElectroShot[] = _("{B_ATK_NAME_WITH_PREFIX} absorbed\nelectricity!");
+static const u8 sText_AnnounceMonotypeBoostNormal[] = _("Trick room and Wonder Room will alternate\neach turn for the rest of the battle!");
+static const u8 sText_AnnounceMonotypeBoostFighting[] = _("Super Effective moves will do neutral damage\nFighting moves are boosted, status moves\lare disabled and you can't switch!");
+static const u8 sText_AnnounceMonotypeBoostFlying[] = _("A mysterious air current is protecting Flying\ntype Pokémon and Boosting the\lChampion's team Speed!");
+static const u8 sText_AnnounceMonotypeBoostPoison[] = _("The field is full of Toxic Waste!\nThe Champion team's will receive\lreduced damage!");
+static const u8 sText_AnnounceMonotypeBoostGround[] = _("All the flying Pokémon seem to have problems\nstaying int he air!, the Champion's team gets\lreduced damage from Super-Effective moves!");
+static const u8 sText_AnnounceMonotypeBoostRock[] = _("The Champion's team is immune to Rock-type\nmoves, deals super-effective damage to\lRock-types, and uses Salt Cure every turn!");
+static const u8 sText_AnnounceMonotypeBoostBug[] = _("There seems to be Sticky Webs\nand infestaton on your field side!");
+static const u8 sText_AnnounceMonotypeBoostGhost[] = _("All your team became cursed!");
+static const u8 sText_AnnounceMonotypeBoostSteel[] = _("The champion's team can break\nthe mold and has raised defenses!");
+static const u8 sText_AnnounceMonotypeBoostFire[] = _("The sunlight became extremely harsh!");
+static const u8 sText_AnnounceMonotypeBoostWater[] = _("An extremely heavy rain started!");
+static const u8 sText_AnnounceMonotypeBoostGrass[] = _("The terrain became weird!,\nthe Champion's team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostElectric[] = _("The terrain became weird!,\nthe Champion's team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostPsychic[] = _("The terrain became weird!,\nthe Champion's team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostIce[] = _("It's hailing, the Champion's team\nwill raise it's speed and attack!");
+static const u8 sText_AnnounceMonotypeBoostDragon[] = _("The Champion's team is\nintimidating your whole team, they can bypass\lyour immunities!");
+static const u8 sText_AnnounceMonotypeBoostDark[] = _("Your whole team became asleep!");
+static const u8 sText_AnnounceMonotypeBoostFairy[] = _("The terrain became weird!,\nthe Champion's team Fairy moves will\lhit Poison and Steel-types Super Effectively!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -982,25 +1000,8 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-
-static const u8 sText_AnnounceMonotypeBoostNormal[]   = _("Trick room and Wonder Room will alternate\neach turn for the rest of the battle!"); //Done
-static const u8 sText_AnnounceMonotypeBoostFighting[] = _("Super Effective moves will do neutral damage\nFighting moves are boosted, status moves\lare disabled and you can't switch!"); //Damage thing done
-static const u8 sText_AnnounceMonotypeBoostFlying[]   = _("A mysterious air current is protecting Flying\ntype Pokémon and Boosting the\lChampion's team Speed!"); //Weather Done
-static const u8 sText_AnnounceMonotypeBoostPoison[]   = _("The field is full of Toxic Waste!\nThe Champion team's will receive\lreduced damage!");
-static const u8 sText_AnnounceMonotypeBoostGround[]   = _("All the flying Pokémon seem to have problems\nstaying int he air!, the Champion's team gets\lreduced damage from Super-Effective moves!"); //Damage thing done
-static const u8 sText_AnnounceMonotypeBoostRock[]     = _("The Champion's team is immune to Rock-type\nmoves, deals super-effective damage to\lRock-types, and uses Salt Cure every turn!");
-static const u8 sText_AnnounceMonotypeBoostBug[]      = _("There seems to be Sticky Webs\nand infestaton on your field side!");
-static const u8 sText_AnnounceMonotypeBoostGhost[]    = _("All your team became cursed!");                                             //Done
-static const u8 sText_AnnounceMonotypeBoostSteel[]    = _("The champion's team can break\nthe mold and has raised defenses!");         //Damage Thing Done
-static const u8 sText_AnnounceMonotypeBoostFire[]     = _("The sunlight became extremely harsh!");                                     //Done
-static const u8 sText_AnnounceMonotypeBoostWater[]    = _("An extremely heavy rain started!");                                         //Done
-static const u8 sText_AnnounceMonotypeBoostGrass[]    = _("The terrain became weird!,\nthe Champion's team will get reduced damage!"); //Done
-static const u8 sText_AnnounceMonotypeBoostElectric[] = _("The terrain became weird!,\nthe Champion's team will get reduced damage!"); //Done
-static const u8 sText_AnnounceMonotypeBoostPsychic[]  = _("The terrain became weird!,\nthe Champion's team will get reduced damage!"); //Done
-static const u8 sText_AnnounceMonotypeBoostIce[]      = _("It's hailing, the Champion's team\nwill raise it's speed and attack!");
-static const u8 sText_AnnounceMonotypeBoostDragon[]   = _("The Champion's team is\nintimidating your whole team, they can bypass\lyour immunities!");
-static const u8 sText_AnnounceMonotypeBoostDark[]     = _("Your whole team became asleep!");                                           //Done
-static const u8 sText_AnnounceMonotypeBoostFairy[]    = _("The terrain became weird!,\nthe Champion's team Fairy moves will\lhit Poison and Steel-types Super Effectively!"); //Terrain Thing Done
+static const u8 sText_ParasiticSpores[] = _("{B_ATK_NAME_WITH_PREFIX} is coated\nin parasitic spores!");
+static const u8 sText_ParasiticSporesSpread[] = _("{B_STACK_1_NAME_WITH_PREFIX} spreads its\nspores to {B_STACK_2_NAME_WITH_PREFIX}.");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1785,6 +1786,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ANNOUNCE_MONOTYPEBOOST_DRAGON - 12] = sText_AnnounceMonotypeBoostDragon,
     [STRINGID_ANNOUNCE_MONOTYPEBOOST_DARK - 12] = sText_AnnounceMonotypeBoostDark,
     [STRINGID_ANNOUNCE_MONOTYPEBOOST_FAIRY - 12] = sText_AnnounceMonotypeBoostFairy,
+    [STRINGID_PARASITIC_SPORES - 12] = sText_ParasiticSpores,
+    [STRINGID_PARASITIC_SPORES_SPREAD - 12] = sText_ParasiticSporesSpread,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -1868,6 +1871,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_VIOLENT_RUSH] = STRINGID_VIOLENT_RUSH,
     [B_MSG_SWITCHIN_RAPID_RESPONSE] = STRINGID_RAPID_RESPONSE,
     [B_MSG_SWITCHIN_SHOWDOWN_MODE] = STRINGID_SHOWDOWN_MODE,
+    [B_MSG_SWITCHIN_PARASITIC_SPORES] = STRINGID_PARASITIC_SPORES,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

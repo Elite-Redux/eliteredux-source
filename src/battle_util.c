@@ -5276,6 +5276,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect++;
         }
 
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_PARASITIC_SPORES))
+        {
+            if (!gVolatileStructs[battler].parasiticSpores)
+            {
+                gVolatileStructs[battler].parasiticSpores = TRUE;
+                gVolatileStructs[battler].parasiticSporesParty = GetBattlerSide(battler);
+                gVolatileStructs[battler].parasiticSporesPartyIndex = gBattlerPartyIndexes[battler];
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PARASITIC_SPORES;
+                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
+            }
+        }
+
         if (CheckAndSetSwitchInAbility(battler, ABILITY_ANTICIPATION))
         {
             u32 side = GetBattlerSide(battler);
@@ -9764,6 +9777,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                     effect++;
                 }
+            }
+
+            if (gVolatileStructs[battler].parasiticSpores
+                && ShouldApplyOnHitAffect(opponent)
+                && IsMoveMakingContact(move, gBattlerAttacker)
+                && !gVolatileStructs[battler].parasiticSpores)
+            {
+                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_PARASITIC_SPORES;
+                gVolatileStructs[opponent].parasiticSpores = TRUE;
+                gVolatileStructs[opponent].parasiticSporesParty = gVolatileStructs[opponent].parasiticSporesParty;
+                gVolatileStructs[opponent].parasiticSporesPartyIndex = gVolatileStructs[opponent].parasiticSporesPartyIndex;
+                gStackBattler1 = battler;
+                gStackBattler2 = opponent;
+                if (BATTLER_HAS_ABILITY(battler, ABILITY_PARASITIC_SPORES)) gBattlescriptCurrInstr = BattleScript_ParasiticSporesSpreadWithAbility;
+                else gBattlescriptCurrInstr = BattleScript_ParasiticSporesSpread;
+                BattleScriptPushCursor();
+                effect++;
             }
 
             {

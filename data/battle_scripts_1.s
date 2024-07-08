@@ -12085,3 +12085,21 @@ BattleScript_EffectUpperHand::
 	trypupperhand BS_TARGET, BattleScript_ButItFailedAtkStringPpReduce
 	setmoveeffect MOVE_EFFECT_FLINCH
 	goto BattleScript_EffectHit
+
+BattleScript_ParasiticSporesSpreadWithAbility::
+	call BattleScript_ParasiticSporesLoadBattlers
+	call BattleScript_AbilityPopUp
+	waitmessage B_WAIT_TIME_SHORT	
+	call BattleScript_ParasiticSporesSpread_Main
+BattleScript_ParasiticSporesSpread::
+	call BattleScript_ParasiticSporesLoadBattlers
+BattleScript_ParasiticSporesSpread_Main:
+	printstring STRINGID_PARASITIC_SPORES_SPREAD
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_ParasiticSpores_LoadBattlers:
+	getbattler gStackBattler1
+	copybyte gBattlerAbility, gStackBattler1
+	copybyte gEffectBattler, gStackBattler2
+	return
