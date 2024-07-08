@@ -4889,6 +4889,11 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     // various effects
     if (gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_TAILWIND)
         speed *= 2;
+    else if(GET_BATTLER_SIDE(battlerId) != B_SIDE_PLAYER && getMonotypeChampType() == TYPE_FLYING)
+        speed *= 2;
+
+    if(GET_BATTLER_SIDE(battlerId) != B_SIDE_PLAYER && getMonotypeChampType() == TYPE_ICE)
+        speed *= 2;
 
     if (gSideTimers[GET_BATTLER_SIDE2(battlerId)].swampTimer)
         speed /= 4;
@@ -6891,6 +6896,13 @@ void HandleMonoChampSpecialEffects(void){
         break;
         case TYPE_ROCK:
             SetPermanentWeather(ENUM_WEATHER_SANDSTORM);
+        break;
+        case TYPE_BUG:
+            gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+        break;
+        case TYPE_POISON:
+            gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount = 2;
+            gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
         break;
     }
 

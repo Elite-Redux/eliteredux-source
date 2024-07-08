@@ -12830,6 +12830,10 @@ static void Cmd_battlemacros(void)
                     break;
             }
 
+            //Monotype Stuff
+            if(getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(gBattlerAttacker) != B_SIDE_PLAYER && ability == ABILITY_NONE)
+                ability = ABILITY_FEARMONGER;
+
             numAbility = i;
             numStats = gIntimidateCloneData[numAbility].numStatsLowered;
 
@@ -12886,6 +12890,10 @@ static void Cmd_battlemacros(void)
                 if(gIntimidateCloneData[i].ability == ability)
                     break;
             }
+
+            //Monotype Stuff
+            if(getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(gBattlerAttacker) != B_SIDE_PLAYER && ability == ABILITY_NONE)
+                ability = ABILITY_FEARMONGER;
 
             numAbility = i;
             numStats = gIntimidateCloneData[numAbility].numStatsLowered;

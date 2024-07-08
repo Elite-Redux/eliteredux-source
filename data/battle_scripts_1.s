@@ -9665,6 +9665,8 @@ BattleScript_SetMonotypeEffect_Fighting::
 BattleScript_SetMonotypeEffect_Flying::
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_FLYING
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_BATTLER_0, B_ANIM_STRONG_WINDS, NULL
+	call BattleScript_OnWeatherChange
 	end3
 
 BattleScript_SetMonotypeEffect_Poison::
@@ -9680,6 +9682,8 @@ BattleScript_SetMonotypeEffect_Ground::
 BattleScript_SetMonotypeEffect_Rock::
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_ROCK
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_BATTLER_0, B_ANIM_SANDSTORM_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
 	end3
 
 BattleScript_SetMonotypeEffect_Bug::
@@ -9700,31 +9704,43 @@ BattleScript_SetMonotypeEffect_Steel::
 BattleScript_SetMonotypeEffect_Fire::
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_FIRE
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_BATTLER_0, B_ANIM_SUN_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
 	end3
 
 BattleScript_SetMonotypeEffect_Water::
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_WATER
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_BATTLER_0, B_ANIM_RAIN_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
 	end3
 
 BattleScript_SetMonotypeEffect_Grass::
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_GRASS
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	end3
 
 BattleScript_SetMonotypeEffect_Electric::
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_ELECTRIC
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	end3
 
 BattleScript_SetMonotypeEffect_Psychic::
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_PSYCHIC
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	end3
 
 BattleScript_SetMonotypeEffect_Ice::
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_ICE
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_BATTLER_0, B_ANIM_HAIL_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
 	end3
 
 BattleScript_SetMonotypeEffect_Dragon::
@@ -9740,6 +9756,8 @@ BattleScript_SetMonotypeEffect_Dark::
 BattleScript_SetMonotypeEffect_Fairy::
 	printstring STRINGID_ANNOUNCE_MONOTYPEBOOST_FAIRY
 	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
+	call BattleScript_OnTerrainChanged
 	end3
 
 BattleScript_SetWonderRoomFromScript::

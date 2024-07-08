@@ -1701,6 +1701,21 @@ u8 TrySetCantSelectMoveBattleScript(void)
             limitations++;
         }
     }
+    else if (gBattleMoves[move].split == SPLIT_STATUS && getMonotypeChampType() == TYPE_FIGHTING && GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
+    {
+        gBattleScripting.battler = gActiveBattler;
+        gCurrentMove = move;
+        if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
+        {
+            gPalaceSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingDisabledMoveInPalace;
+            gRoundStructs[gActiveBattler].palaceUnableToUseMove = TRUE;
+        }
+        else
+        {
+            gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingDisabledMove;
+            limitations++;
+        }
+    }
 
     if (move == gLastMoves[gActiveBattler] && move != MOVE_STRUGGLE && (gBattleMons[gActiveBattler].status2 & STATUS2_TORMENT))
     {
@@ -1925,7 +1940,9 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
 
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
-        if (gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
+        if (gBattleMoves[gBattleMons[battlerId].moves[i]].split == SPLIT_STATUS && getMonotypeChampType() == TYPE_FIGHTING && GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+            unusableMoves |= 1 << i;
+        else if (gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
             unusableMoves |= 1 << i;
         else if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP)
             unusableMoves |= 1 << i;
@@ -2877,7 +2894,32 @@ u8 DoBattlerEndTurnEffects(void)
                     BattleScriptExecute(BattleScript_ToxicWasteTurnDmg);
                     effect++;
                 }
-            
+            }
+            else if(getMonotypeChampType() == TYPE_POISON && gBattleMons[gActiveBattler].hp != 0 && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON) && GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER){
+                MAGIC_GUARD_CHECK;
+                if(ability != ABILITY_POISON_HEAL && !BattlerHasInnate(gActiveBattler, ABILITY_POISON_HEAL))
+				    TOXIC_BOOST_CHECK;
+
+                if (BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_POISON_HEAL, ability))
+                {
+                    if (!BATTLER_MAX_HP(gActiveBattler) && !BATTLER_HEALING_BLOCKED(gActiveBattler))
+                    {
+                        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+                        if (gBattleMoveDamage == 0)
+                            gBattleMoveDamage = 1;
+                        gBattleMoveDamage *= -1;
+                        BattleScriptExecute(BattleScript_PoisonHealActivates);
+                        effect++;
+                    }
+                }
+                else
+                {
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    BattleScriptExecute(BattleScript_ToxicWasteTurnDmg);
+                    effect++;
+                }
             }
             gBattleStruct->turnEffectsTracker++;
             break;
@@ -3083,7 +3125,23 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_WRAP:  // wrap
-            if ((gBattleMons[gActiveBattler].status2 & STATUS2_WRAPPED) && gBattleMons[gActiveBattler].hp != 0)
+            if(getMonotypeChampType() == TYPE_BUG && gBattleMons[gActiveBattler].hp != 0 && GET_BATTLER_SIDE(gActiveBattler) == B_SIDE_PLAYER){
+                u16 trappedMove = MOVE_INFESTATION;
+                MAGIC_GUARD_CHECK;
+                gBattleScripting.animArg1 = trappedMove;
+                gBattleScripting.animArg2 = trappedMove >> 8;
+                PREPARE_MOVE_BUFFER(gBattleTextBuff1, trappedMove);
+                gBattlescriptCurrInstr = BattleScript_WrapTurnDmg;
+
+                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / ((B_BINDING_DAMAGE >= GEN_6) ? 8 : 16);
+
+                if (gBattleMoveDamage == 0)
+                    gBattleMoveDamage = 1;
+
+                BattleScriptExecute(gBattlescriptCurrInstr);
+                effect++;
+            }
+            else if ((gBattleMons[gActiveBattler].status2 & STATUS2_WRAPPED) && gBattleMons[gActiveBattler].hp != 0)
             {
                 if (--gVolatileStructs[gActiveBattler].wrapTurns != 0)  // damaged by wrap
                 {
@@ -4888,6 +4946,7 @@ bool8 UseIntimidateClone(u8 battler, u16 abilityToCheck)
 {
     u8 numAbility, numStats, statToLower, i, target;
     bool8 canLowerStat = FALSE;
+    
     for(numAbility = 0; i < NUM_INTIMIDATE_CLONES; i++){
         if(gIntimidateCloneData[numAbility].ability == abilityToCheck)
             break;
@@ -5918,6 +5977,12 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         
         // Fearmonger
         if(CheckAndSetSwitchInAbility(battler, ABILITY_FEARMONGER)) {
+            effect += UseIntimidateClone(battler, ABILITY_FEARMONGER);
+        }
+        
+        // Fearmonger
+        if(getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(battler) != B_SIDE_PLAYER) {
+            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FEARMONGER;
             effect += UseIntimidateClone(battler, ABILITY_FEARMONGER);
         }
         
@@ -10077,6 +10142,8 @@ bool32 CanBattlerEscape(u32 battlerId) // no ability check
         return FALSE;
     else if (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK)
         return FALSE;
+    else if (GetBattlerSide(battlerId) == B_SIDE_PLAYER && getMonotypeChampType() == TYPE_FIGHTING)
+        return FALSE;
     else
         return TRUE;
 }
@@ -12120,6 +12187,8 @@ bool32 IsBattlerGrounded(u8 battlerId)
     else if (gStatuses3[battlerId] & STATUS3_ROOTED)
         return TRUE;
     else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
+        return TRUE;
+    else if (getMonotypeChampType() == TYPE_GROUND && GetBattlerSide(battlerId) == B_SIDE_PLAYER)
         return TRUE;
 
     else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
@@ -14839,11 +14908,28 @@ s32 DoMoveDamageCalcInternal(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType
                 dmg = dmg / 2;
         break;
         case TYPE_GROUND:
+            // SE Moves are halved
+            if(GetBattlerSide(battlerDef) != B_SIDE_PLAYER){
+                if(typeEffectivenessModifier >= UQ_4_12(2.0))
+                    dmg = dmg / 2;
+            }
+        break;
         case TYPE_FIGHTING:
             // SE Moves are halved
             if(GetBattlerSide(battlerDef) != B_SIDE_PLAYER){
                 if(typeEffectivenessModifier >= UQ_4_12(2.0))
                     dmg = dmg / 2;
+            }
+            else if(GetBattlerSide(battlerDef) == B_SIDE_PLAYER && 
+                    GetBattlerSide(battlerAtk) != B_SIDE_PLAYER && 
+                    gBattleMoves[move].type == TYPE_FIGHTING){
+                dmg = dmg * 2;
+            }
+        break;
+        case TYPE_ICE:
+            // Moves do double damage
+            if(GetBattlerSide(battlerDef) == B_SIDE_PLAYER && GetBattlerSide(battlerAtk) != B_SIDE_PLAYER){
+                dmg = dmg * 2;
             }
         break;
     }
@@ -15002,6 +15088,21 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
         mod = UQ_4_12(1.0);
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, ABILITY_OVERWHELM);
+    }
+	else if (moveType == TYPE_FAIRY && (defType == TYPE_POISON || defType == TYPE_STEEL) && GetBattlerSide(battlerDef) == B_SIDE_PLAYER && getMonotypeChampType() == TYPE_FAIRY)
+    {
+        mod = UQ_4_12(2.0); // super-effective
+    }
+	else if (mod == UQ_4_12(0.0) && GetBattlerSide(battlerDef) == B_SIDE_PLAYER && getMonotypeChampType() == TYPE_DRAGON)
+    {
+        mod = UQ_4_12(1.0);
+    }
+	else if (getMonotypeChampType() == TYPE_ROCK)
+    {
+        if(GetBattlerSide(battlerDef) == B_SIDE_PLAYER && defType == TYPE_ROCK && moveType == TYPE_ROCK)
+            mod = UQ_4_12(2.0); // super-effective
+        else if(GetBattlerSide(battlerDef) != B_SIDE_PLAYER && moveType == TYPE_ROCK)
+            mod = UQ_4_12(0.0); // Immune
     }
 
     if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
@@ -16134,7 +16235,8 @@ bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler)
         ability == ABILITY_TURBOBLAZE                   ||
         BattlerHasInnate(battler, ABILITY_MOLD_BREAKER) || 
         BattlerHasInnate(battler, ABILITY_TERAVOLT)     || 
-        BattlerHasInnate(battler, ABILITY_TURBOBLAZE))
+        BattlerHasInnate(battler, ABILITY_TURBOBLAZE)   ||
+        (getMonotypeChampType() == TYPE_STEEL && GetBattlerSide(battler) != B_SIDE_PLAYER))
         return TRUE;
 
     return FALSE;
