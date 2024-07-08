@@ -3879,9 +3879,6 @@ static void DoBattleIntro(void)
 static void TryDoEventsBeforeFirstTurn(void)
 {
     s32 i, j;
-    MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "Enteded in %X", gBattleStruct->battleEventDone);
-    MgbaClose();
     if (gBattleControllerExecFlags)
         return;
 
@@ -4024,6 +4021,8 @@ static void TryDoEventsBeforeFirstTurn(void)
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
     }
 
+    // I need this reset for the end of the turn
+    gBattleStruct->battleEventDone = FALSE;
 }
 
 static void HandleEndTurn_ContinueBattle(void)
@@ -4067,6 +4066,15 @@ void BattleTurnPassed(void)
     gBattleStruct->faintedActionsState = 0;
     if (HandleWishPerishSongOnTurnEnd())
         return;
+    
+    // end of the turn, exec battle events
+    if (!gBattleStruct->battleEventDone){
+        if (ExecBattleEvents(EXEC_BATTLE_EVENT_END_OF_TURN) == EXEC_BATTLE_EVENTS_ALL_CLEAR){
+            gBattleStruct->battleEventDone = TRUE;
+        } else {
+            return;
+        }
+    }
 
     ClearMiscTurnFlags();
     TurnValuesCleanUp(FALSE);
@@ -4096,6 +4104,7 @@ void BattleTurnPassed(void)
         gBattleStruct->arenaTurnCounter++;
     }
 
+
     for (i = 0; i < gBattlersCount; i++)
     {
         gChosenActionByBattler[i] = B_ACTION_NONE;
@@ -4117,6 +4126,9 @@ void BattleTurnPassed(void)
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
     else if (ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), gTrainerBattleOpponent_A, TRAINER_SLIDE_LAST_LOW_HP))
         BattleScriptExecute(BattleScript_TrainerSlideMsgEnd2);
+
+    // I need this reset for the end of the next turn
+    gBattleStruct->battleEventDone = FALSE;
 }
 
 u8 IsRunningFromBattleImpossible(void)

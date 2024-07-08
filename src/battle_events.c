@@ -34,7 +34,7 @@ void UnregisterBattlesEvents(){
     gCurrBattleEvent = 0;
 }
 
-bool8 ExecBattleEvents(u8 execEnum){
+u8 ExecBattleEvents(u8 execEnum){
     // it goes by the principle that it will be executed in loop until it returns ALL CLEAR
     while (gCurrBattleEvent < gNbBattleEvents){
         gCurrBattleEvent++;
@@ -46,10 +46,25 @@ bool8 ExecBattleEvents(u8 execEnum){
     return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
 }
 
-bool8 BattleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
+u8 BattleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
+    switch (execEnum)
+    {
+    case EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN:
+        if (BattleEventBeforeFirstTurnExec(battleEvent) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
+            return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        break;
+    case EXEC_BATTLE_EVENT_END_OF_TURN:
+        if (BattleEventEndTurnExec(battleEvent) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
+            return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        break;
+    default:
+        break;
+    }
+    return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+}
+
+u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
     u8 i;
-    if (execEnum != EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN) return;
-    // TURN 0 switch statements
     switch (battleEvent)
     {
     case BATTLE_EVENT_NONE:
@@ -70,6 +85,15 @@ bool8 BattleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
         gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 4);
         BattleScriptExecute(BattleScript_GymSkillFourTimesBoost);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    }
+    return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+}
+
+u8 BattleEventEndTurnExec(u8 battleEvent){
+    switch (battleEvent)
+    {
+    case BATTLE_EVENT_NONE:
+        break;
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
