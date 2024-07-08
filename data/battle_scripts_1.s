@@ -12089,8 +12089,8 @@ BattleScript_EffectUpperHand::
 BattleScript_ParasiticSporesSpreadWithAbility::
 	call BattleScript_ParasiticSpores_LoadBattlers
 	call BattleScript_AbilityPopUp
-	waitmessage B_WAIT_TIME_SHORT	
-	call BattleScript_ParasiticSporesSpread_Main
+	waitmessage B_WAIT_TIME_SHORT
+	goto BattleScript_ParasiticSporesSpread_Main
 BattleScript_ParasiticSporesSpread::
 	call BattleScript_ParasiticSpores_LoadBattlers
 BattleScript_ParasiticSporesSpread_Main:

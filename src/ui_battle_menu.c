@@ -169,6 +169,7 @@ enum
     STATUS_INFO_SHOWDOWN_MODE,
     STATUS_INFO_DRAGON_CHEER,
     STATUS_INFO_WRAPPED,
+    STATUS_INFO_PARASITIC_SPORES,
     NUM_STATUS_INFO,
 };
 
@@ -857,6 +858,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 break;
                 case STATUS_INFO_WRAPPED:
                     if (gBattleMons[j].status2 & STATUS2_WRAPPED)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_PARASITIC_SPORES:
+                    if (gVolatileStructs[j].parasiticSpores)
                         isExtraInfoShown = TRUE;
                 break;
             }
@@ -2199,6 +2204,10 @@ const u8 sText_Title_Status_Trapped[]                       = _("Trapped");
 const u8 sText_Title_Status_Trapped_Description[]           = _("This Pokémon can't swap and\n"
                                                                 "takes 1/8 of their maximum HP\n"
                                                                 "in damage for some turns.");
+const u8 sText_Title_Status_Parasitic_Spores[]              = _("Parasitic Spores");
+const u8 sText_Title_Status_Parasitic_Spores_Description[]  = _("This Pokémon takes 1/8 of their\n"
+                                                                "maximum HP if they are not\n"
+                                                                "Ghost-type. Spread on contact.");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
 #define MAX_DESCRIPTION_LINES 3
@@ -2815,6 +2824,15 @@ static void PrintStatusTab(void){
                 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Status_Trapped_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_PARASITIC_SPORES:
+                StringCopy(gStringVar1, sText_Title_Status_Parasitic_Spores);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                StringCopy(gStringVar1, sText_Title_Status_Parasitic_Spores_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;

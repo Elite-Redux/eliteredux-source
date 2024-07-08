@@ -9795,15 +9795,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if (gVolatileStructs[battler].parasiticSpores
                 && ShouldApplyOnHitAffect(opponent)
                 && IsMoveMakingContact(move, gBattlerAttacker)
-                && !gVolatileStructs[battler].parasiticSpores)
+                && !gVolatileStructs[opponent].parasiticSpores)
             {
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_PARASITIC_SPORES;
                 gVolatileStructs[opponent].parasiticSpores = TRUE;
                 gStackBattler1 = battler;
                 gStackBattler2 = opponent;
+                BattleScriptPushCursor();
                 if (BATTLER_HAS_ABILITY(battler, ABILITY_PARASITIC_SPORES)) gBattlescriptCurrInstr = BattleScript_ParasiticSporesSpreadWithAbility;
                 else gBattlescriptCurrInstr = BattleScript_ParasiticSporesSpread;
-                BattleScriptPushCursor();
                 effect++;
             }
 
