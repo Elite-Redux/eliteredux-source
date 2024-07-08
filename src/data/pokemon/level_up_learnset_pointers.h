@@ -1565,6 +1565,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_IRON_BOULDER] = sIron_BoulderLevelUpLearnset,
     [SPECIES_GOUGING_FIRE] = sGouging_FireLevelUpLearnset,
     [SPECIES_ARCHALUDON] = sArchaludonLevelUpLearnset,
+    [SPECIES_DRAGONITE_DELIVERY] = sDragoniteLevelUpLearnset,
     [SPECIES_ESCARGINITE_REDUX] = sEscarginite_ReduxLevelUpLearnset,
     [SPECIES_ESCARGINITE] = sEscarginiteLevelUpLearnset,
     [SPECIES_DUELUMBER] = sDuelumberLevelUpLearnset,

@@ -1,3 +1,4 @@
+extern const u8 gMonFootprint_Dragonite_Delivery[];
 #ifndef GUARD_GRAPHICS_H
 #define GUARD_GRAPHICS_H
 
@@ -10749,6 +10750,7 @@ extern const u8  gMonIcon_Dewleon[];
 extern const u8 gMonIcon_Phantowl[];
 extern const u8 gMonIcon_Duelumber[];
 extern const u8 gMonIcon_Escarginite[];
+extern const u8 gMonIcon_Dragonite_Delivery[];
 extern const u8 gMonIcon_Archaludon[];
 extern const u8 gMonIcon_Gouging_Fire[];
 extern const u8 gMonIcon_Iron_Boulder[];
@@ -10770,6 +10772,7 @@ extern const u8 gMonIcon_Kingambit_Redux[];
 extern const u32 gMonShinyPalette_Phantowl[];
 extern const u32 gMonShinyPalette_Duelumber[];
 extern const u32 gMonShinyPalette_Escarginite[];
+extern const u32 gMonShinyPalette_Dragonite_Delivery[];
 extern const u32 gMonShinyPalette_Archaludon[];
 extern const u32 gMonShinyPalette_Gouging_Fire[];
 extern const u32 gMonShinyPalette_Iron_Boulder[];
@@ -10793,6 +10796,7 @@ extern const u32 gMonShinyPalette_Kingambit_Redux[];
 extern const u32 gMonPalette_Phantowl[];
 extern const u32 gMonPalette_Duelumber[];
 extern const u32 gMonPalette_Escarginite[];
+extern const u32 gMonPalette_Dragonite_Delivery[];
 extern const u32 gMonPalette_Archaludon[];
 extern const u32 gMonPalette_Gouging_Fire[];
 extern const u32 gMonPalette_Iron_Boulder[];
@@ -10814,6 +10818,7 @@ extern const u32 gMonPalette_Kingambit_Redux[];
 extern const u32 gMonBackPic_Phantowl[];
 extern const u32 gMonBackPic_Duelumber[];
 extern const u32 gMonBackPic_Escarginite[];
+extern const u32 gMonBackPic_Dragonite_Delivery[];
 extern const u32 gMonBackPic_Archaludon[];
 extern const u32 gMonBackPic_Gouging_Fire[];
 extern const u32 gMonBackPic_Iron_Boulder[];
@@ -10857,6 +10862,7 @@ extern const u32 gMonBackPic_Kingambit_Redux[];
 extern const u32 gMonFrontPic_Phantowl[];
 extern const u32 gMonFrontPic_Duelumber[];
 extern const u32 gMonFrontPic_Escarginite[];
+extern const u32 gMonFrontPic_Dragonite_Delivery[];
 extern const u32 gMonFrontPic_Archaludon[];
 extern const u32 gMonFrontPic_Gouging_Fire[];
 extern const u32 gMonFrontPic_Iron_Boulder[];

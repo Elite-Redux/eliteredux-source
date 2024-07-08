@@ -149,6 +149,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DRATINI] = _("Dratini"),
     [SPECIES_DRAGONAIR] = _("Dragonair"),
     [SPECIES_DRAGONITE] = _("Dragonite"),
+    [SPECIES_DRAGONITE_DELIVERY] = _("Dragonite"),
     [SPECIES_MEWTWO] = _("Mewtwo"),
     [SPECIES_MEW] = _("Mew"),
     [SPECIES_CHIKORITA] = _("Chikorita"),

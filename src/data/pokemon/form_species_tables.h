@@ -1604,6 +1604,7 @@ static const u16 sInfernapeFormSpeciesIdTable[] = {
 static const u16 sDragoniteFormSpeciesIdTable[] = {
     SPECIES_DRAGONITE,
     SPECIES_DRAGONITE_MEGA,
+    SPECIES_DRAGONITE_DELIVERY,
     FORM_SPECIES_END,
 };
 static const u16 sEmpoleonFormSpeciesIdTable[] = {

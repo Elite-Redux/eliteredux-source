@@ -5400,6 +5400,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_DRAGONITE_DELIVERY] =
+    {
+    .baseHP        = 91,
+    .baseAttack    = 134,
+    .baseDefense   = 95,
+    .baseSpeed     = 80,
+    .baseSpAttack  = 100,
+    .baseSpDefense = 100,
+    .type1 = TYPE_DRAGON,
+    .type2 = TYPE_FLYING,
+    .catchRate = 255,
+    .expYield = 270,
+    .evYield_Attack    = 3,
+    .item2 = ITEM_DRAGON_SCALE,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 40,
+    .friendship = 35,
+    .growthRate = GROWTH_SLOW,
+    .eggGroup1 = EGG_GROUP_WATER_1,
+    .eggGroup2 = EGG_GROUP_DRAGON,
+    .abilities = {ABILITY_DRAGONS_MAW, ABILITY_AERILATE, ABILITY_PRISM_SCALES},
+    .innates = {ABILITY_MULTISCALE, ABILITY_OVERWHELM, ABILITY_RAMPAGE},
+    .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_MEWTWO] =
     {
     .baseHP        = 106,

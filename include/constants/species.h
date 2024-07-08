@@ -1670,7 +1670,10 @@
 #define SPECIES_BASCULIN_WHITESTRIPED       REDUX_FORMS_START + 67
 #define SPECIES_ESCARGINITE_REDUX           REDUX_FORMS_START + 68
 
-#define LAST_REDUX_FORM                     SPECIES_ESCARGINITE_REDUX
+// Monotype Mons
+#define SPECIES_DRAGONITE_DELIVERY          REDUX_FORMS_START + 69
+
+#define LAST_REDUX_FORM                     SPECIES_DRAGONITE_DELIVERY
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

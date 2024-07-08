@@ -839,7 +839,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_INFERNAPE] = sInfernapeFormSpeciesIdTable,
     [SPECIES_INFERNAPE_MEGA] = sInfernapeFormSpeciesIdTable,
 
-    [SPECIES_DRAGONITE] = sDragoniteFormSpeciesIdTable,
+    [SPECIES_DRAGONITE_DELIVERY] = sDragoniteFormSpeciesIdTable,
     [SPECIES_DRAGONITE_MEGA] = sDragoniteFormSpeciesIdTable,
 
     [SPECIES_BUTTERFREE] = sButterfreeFormSpeciesIdTable,
