@@ -449,7 +449,11 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
     u8 wildMonIndex = 0;
     u8 level;
     u16 species;
-
+    u16 loc = gSaveBlock1Ptr->location.mapNum;
+    u16 locG = gSaveBlock1Ptr->location.mapGroup;
+    if(!gSaveBlock2Ptr->nuzlockeCaptures && IsRouteEncountered(loc, locG)){
+        return FALSE;
+    }
     switch (area)
     {
     case WILD_AREA_BERRY:
@@ -569,6 +573,7 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
 
     }
 
+    MarkRouteAsEncountered(loc, locG);
     CreateWildMon(species, level, TRUE);
     return TRUE;
 }

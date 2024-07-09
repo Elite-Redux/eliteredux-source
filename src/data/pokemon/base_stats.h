@@ -28496,6 +28496,7 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = FALSE,
     .flags = F_ULTRA_BEAST,
+    .shopPrice = 250,
     .tier = 5,
     },
 
@@ -28629,6 +28630,7 @@ const struct BaseStats gBaseStats[] =
     .innates = {ABILITY_STURDY, ABILITY_GALVANIZE, ABILITY_NONE},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
+    .shopPrice = 250,
     .tier = 5,
     },
 
@@ -28655,6 +28657,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_MAGNET_PULL, ABILITY_IRON_FIST, ABILITY_JUGGERNAUT},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
+    .shopPrice = 350,
     .tier = 0,
     },
     
@@ -30771,6 +30774,7 @@ const struct BaseStats gBaseStats[] =
 	.innates = {ABILITY_UNSEEN_FIST, ABILITY_FIGHT_SPIRIT, ABILITY_INNER_FOCUS},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
+    .shopPrice = 250,
     .tier = 0,
     },
 

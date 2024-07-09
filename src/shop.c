@@ -494,6 +494,9 @@ static const u16 sAdoptionCenterInventory_SevenBadges[] = {
 
 // 8 Badges
 static const u16 sAdoptionCenterInventory_EightBadges[] = {
+    SPECIES_KUBFU,
+    SPECIES_MELTAN,
+    SPECIES_POIPOLE,
     SPECIES_AZELF_REDUX,
     SPECIES_UXIE_REDUX,
     SPECIES_MESPRIT_REDUX,
