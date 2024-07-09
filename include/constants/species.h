@@ -1680,8 +1680,10 @@
 #define SPECIES_WIGGLYTUFF_PRIMAL           REDUX_FORMS_START + 75
 #define SPECIES_FLYGON_REDUX                REDUX_FORMS_START + 76
 #define SPECIES_FLYGON_REDUX_MEGA           REDUX_FORMS_START + 77
+#define SPECIES_MAWILE_REDUX_B              REDUX_FORMS_START + 78
+#define SPECIES_MAWILE_REDUX_B_MEGA         REDUX_FORMS_START + 79
 
-#define LAST_REDUX_FORM                     SPECIES_FLYGON_REDUX_MEGA
+#define LAST_REDUX_FORM                     SPECIES_MAWILE_REDUX_B_MEGA
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

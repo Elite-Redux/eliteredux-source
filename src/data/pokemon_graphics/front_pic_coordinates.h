@@ -5422,6 +5422,16 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_MAWILE_REDUX_B_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_MAWILE_REDUX_B] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_FLYGON_REDUX_MEGA] =
     {
         .size = 0,
