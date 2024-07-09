@@ -17304,6 +17304,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 5,
     },
 
+[SPECIES_VICTINI_PRIMAL] =
+    {
+    .baseHP        = 100,
+    .baseAttack    = 100,
+    .baseDefense   = 100,
+    .baseSpeed     = 100,
+    .baseSpAttack  = 100,
+    .baseSpDefense = 100,
+    .type1 = TYPE_PSYCHIC,
+    .type2 = TYPE_FIRE,
+    .catchRate = 255,
+    .expYield = 270,
+    .evYield_HP    = 3,
+    .genderRatio = MON_GENDERLESS,
+    .eggCycles = 120,
+    .friendship = 100,
+    .growthRate = GROWTH_SLOW,
+    .eggGroup1 = EGG_GROUP_UNDISCOVERED,
+    .eggGroup2 = EGG_GROUP_UNDISCOVERED,
+    .abilities = {ABILITY_TURBOBLAZE, ABILITY_SOLAR_FLARE, ABILITY_POWER_SPOT},
+    .innates = {ABILITY_VICTORY_STAR, ABILITY_MAGIC_GUARD, ABILITY_PSYCHIC_MIND},
+    .bodyColor = BODY_COLOR_YELLOW,
+    .noFlip = FALSE,
+    .tier = 5,
+    },
+
 [SPECIES_SNIVY] =
     {
     .baseHP        = 45,

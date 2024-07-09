@@ -1692,3 +1692,8 @@ static const u16 sSnorlaxFormSpeciesIdTable[] = {
     SPECIES_SNORLAX_PRIMAL,
     FORM_SPECIES_END,
 };
+static const u16 sVictiniFormSpeciesIdTable[] = {
+    SPECIES_VICTINI,
+    SPECIES_VICTINI_PRIMAL,
+    FORM_SPECIES_END,
+};

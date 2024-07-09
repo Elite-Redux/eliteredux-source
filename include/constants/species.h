@@ -1675,9 +1675,10 @@
 #define SPECIES_CHIEN_PAO_MEGA              REDUX_FORMS_START + 70
 #define SPECIES_DRACOVISH_MEGA              REDUX_FORMS_START + 71
 #define SPECIES_LEDIAN_PARADOX              REDUX_FORMS_START + 72
-#define SPECIES_SNORLAX_PRIMAL             REDUX_FORMS_START + 73
+#define SPECIES_SNORLAX_PRIMAL              REDUX_FORMS_START + 73
+#define SPECIES_VICTINI_PRIMAL              REDUX_FORMS_START + 74
 
-#define LAST_REDUX_FORM                     SPECIES_SNORLAX_PRIMAL
+#define LAST_REDUX_FORM                     SPECIES_VICTINI_PRIMAL
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1
