@@ -827,7 +827,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_TERAPAGOS_STELLAR] = sTerapagosFormSpeciesIdTable,
 
-    [SPECIES_FLYGON] = sFlygonFormSpeciesIdTable,
+    [SPECIES_FLYGON_REDUX] = sFlygonFormSpeciesIdTable,
     [SPECIES_FLYGON_MEGA] = sFlygonFormSpeciesIdTable,
 
     [SPECIES_TORTERRA] = sTorterraFormSpeciesIdTable,

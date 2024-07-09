@@ -5422,6 +5422,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_FLYGON_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_WIGGLYTUFF_PRIMAL] =
     {
         .size = 0,

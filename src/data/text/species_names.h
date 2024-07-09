@@ -1020,6 +1020,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_PHANTOWL] = _("Phantowl"),
     [SPECIES_DUELUMBER] = _("Duelumber"),
     [SPECIES_ESCARGINITE] = _("Escarginite"),
+    [SPECIES_FLYGON_REDUX] = _("Flygon"),
     [SPECIES_WIGGLYTUFF_PRIMAL] = _("Wigglytuff"),
     [SPECIES_VICTINI_PRIMAL] = _("Victini"),
     [SPECIES_SNORLAX_PRIMAL] = _("Snorlax"),

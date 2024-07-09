@@ -21,6 +21,11 @@ static const union AnimCmd sAnim_ESCARGINITE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_FLYGON_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_WIGGLYTUFF_PRIMAL_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -180,6 +185,11 @@ static const union AnimCmd *const sAnims_DUELUMBER[] ={
 static const union AnimCmd *const sAnims_ESCARGINITE[] ={
     sAnim_GeneralFrame0,
     sAnim_ESCARGINITE_1,
+};
+
+static const union AnimCmd *const sAnims_FLYGON_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FLYGON_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_WIGGLYTUFF_PRIMAL[] ={
@@ -19703,6 +19713,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(SCIZOR_REDUX),
+    ANIM_CMD(FLYGON_REDUX),
     ANIM_CMD(WIGGLYTUFF_PRIMAL),
     ANIM_CMD(VICTINI_PRIMAL),
     ANIM_CMD(SNORLAX_PRIMAL),
