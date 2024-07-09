@@ -3419,8 +3419,7 @@ const u16 gEggMoves[] = {
         MOVE_WOOD_HAMMER,
         MOVE_SPIKES,
         MOVE_GRASS_WHISTLE,
-        MOVE_GRASSY_TERRAIN,
-        MOVE_BELLY_DRUM),
+        MOVE_GRASSY_TERRAIN),
 
     egg_moves(DWEBBLE,
         MOVE_ENDURE,
