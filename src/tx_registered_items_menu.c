@@ -518,7 +518,7 @@ u8 TxRegItemsMenu_CountUsedRegisteredItemSlots(void)
     u8 usedSlots = 0;
     u8 i;
 
-    for (i = 0; i < PC_ITEMS_COUNT; i++)
+    for (i = 0; i < ARRAY_COUNT(gSaveBlock1Ptr->registeredItems); i++)
     {
         if (gSaveBlock1Ptr->registeredItems[i].itemId != ITEM_NONE)
             usedSlots++;
