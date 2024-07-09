@@ -1681,7 +1681,7 @@
 #define SPECIES_FLYGON_REDUX                REDUX_FORMS_START + 76
 #define SPECIES_FLYGON_REDUX_MEGA           REDUX_FORMS_START + 77
 
-#define LAST_REDUX_FORM                     SPECIES_FLYGON_REDUX
+#define LAST_REDUX_FORM                     SPECIES_FLYGON_REDUX_MEGA
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

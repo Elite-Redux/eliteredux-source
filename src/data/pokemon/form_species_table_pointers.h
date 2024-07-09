@@ -879,4 +879,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_WIGGLYTUFF_PRIMAL] = sWigglytuffFormSpeciesIdTable,
 
+    [SPECIES_FLYGON_REDUX_MEGA] = sFlygonFormSpeciesIdTable,
+
 };

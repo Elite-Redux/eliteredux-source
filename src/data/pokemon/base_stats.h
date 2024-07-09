@@ -11389,6 +11389,35 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+
+
+[SPECIES_FLYGON_REDUX_MEGA] =
+    {
+    .baseHP        =  80,
+    .baseAttack    =  120,
+    .baseDefense   =  100,
+    .baseSpeed     =  110,
+    .baseSpAttack  =  130,
+    .baseSpDefense =  100,
+    .type1 = TYPE_GROUND,
+    .type2 = TYPE_BUG,
+    .catchRate = 255,
+    .expYield = 294,
+    .evYield_Attack    = 1,
+    .evYield_Speed     = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_DRAGON,
+	.abilities = {ABILITY_AMPLIFIER, ABILITY_TINTED_LENS, ABILITY_SAND_GUARD},
+	.innates = {ABILITY_DRAGONFLY, ABILITY_SAND_SONG, ABILITY_DESERT_SPIRIT},
+    .bodyColor = BODY_COLOR_GREEN,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_CACNEA] =
     {
     .baseHP        = 50,
