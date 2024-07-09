@@ -877,4 +877,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_VICTINI_PRIMAL] = sVictiniFormSpeciesIdTable,
 
+    [SPECIES_WIGGLYTUFF_PRIMAL] = sWigglytuffFormSpeciesIdTable,
+
 };

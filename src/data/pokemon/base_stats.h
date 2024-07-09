@@ -1535,6 +1535,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_WIGGLYTUFF_PRIMAL] =
+    {
+    .baseHP        = 120,
+    .baseAttack    = 70,
+    .baseDefense   = 45, // With Fur Coat, effectively base 139
+    .baseSpeed     = 45,
+    .baseSpAttack  = 105,
+    .baseSpDefense = 80, // 60
+    .type1 = TYPE_NORMAL,
+    .type2 = TYPE_FAIRY,
+    .catchRate = 255,
+    .expYield = 196,
+    .evYield_HP    = 3,
+    .item2 = ITEM_LEFTOVERS,
+    .genderRatio = PERCENT_FEMALE(75),
+    .eggCycles = 10,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_FAIRY,
+    .abilities = {ABILITY_SWEET_DREAMS, ABILITY_COMPETITIVE, ABILITY_MAGIC_GUARD},
+    .innates = {ABILITY_CUTE_CHARM, ABILITY_INFLATABLE, ABILITY_FUR_COAT},
+    .bodyColor = BODY_COLOR_PINK,
+    .noFlip = TRUE,
+    .tier = 0,
+    },
+
 [SPECIES_ZUBAT] =
     {
     .baseHP        = 40,
