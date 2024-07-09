@@ -40,6 +40,7 @@
 #include "text.h"
 #include "trainer_hill.h"
 #include "util.h"
+#include "quests.h"
 #include "constants/abilities.h"
 #include "constants/battle_frontier.h"
 #include "constants/battle_move_effects.h"
@@ -11326,4 +11327,62 @@ u16 GetEvolutionForMon(struct Pokemon *mon, u8 num){
 	}
 
 	return SPECIES_NONE;
+}
+
+//If this is ever used
+#define NEW_SHINY_VARIANTS 2
+
+struct ShinyUnlock
+{
+    u16 flag;
+    u16 questComplete;
+    u16 variable;
+    u8 value;
+};
+
+static const struct ShinyUnlock sShinyUnlock[NUM_SPECIES][NEW_SHINY_VARIANTS] =
+{
+    [SPECIES_BULBASAUR] = {
+        {   
+            //First Shiny
+            .flag = FLAG_RECEIVED_POKEDEX_FROM_BIRCH, 
+            .questComplete = 0, 
+            .variable = 0, 
+            .value = 0
+        },
+        {   
+            //Second Shiny
+            .flag = 0, 
+            .questComplete = SIDE_QUEST_1, 
+            .variable = 0, 
+            .value = 0
+        },
+    },
+    [SPECIES_CHARMANDER] = {
+        {   
+            //First Shiny
+            .flag = 0, 
+            .questComplete = 0, 
+            .variable = VAR_BIRCH_STATE, 
+            .value = 3
+        },
+        {   
+            //Second Shiny
+            .variable = VAR_BIRCH_STATE, 
+            .value = 3
+        },
+    },
+};
+
+bool8 isShinyVariantUnlocked(u16 species, u8 variant){
+    struct ShinyUnlock sSpeciesShinyUnlock = sShinyUnlock[species][variant];
+
+    if(sSpeciesShinyUnlock.flag != 0 && !FlagGet(sSpeciesShinyUnlock.flag))
+        return FALSE;
+    else if (sSpeciesShinyUnlock.questComplete != 0 && GetSetQuestFlag(sSpeciesShinyUnlock.questComplete, FLAG_GET_COMPLETED))
+        return FALSE;
+    else if (sSpeciesShinyUnlock.variable != 0 && VarGet(sSpeciesShinyUnlock.variable) >= sSpeciesShinyUnlock.value)
+        return FALSE;
+    else
+        return TRUE;
 }
