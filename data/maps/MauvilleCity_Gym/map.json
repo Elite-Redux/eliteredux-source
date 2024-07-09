@@ -12,7 +12,7 @@
   "allow_running": false,
   "show_map_name": false,
   "battle_scene": "MAP_BATTLE_SCENE_GYM",
-  "connections": null,
+  "connections": 0,
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_WATTSON",
@@ -29,8 +29,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MAN_5",
-      "x": 7,
-      "y": 8,
+      "x": 6,
+      "y": 6,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -42,8 +42,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_GIRL_3",
-      "x": 1,
-      "y": 16,
+      "x": 3,
+      "y": 13,
       "elevation": 0,
       "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 0,
@@ -55,7 +55,7 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_YOUNGSTER",
-      "x": 5,
+      "x": 9,
       "y": 10,
       "elevation": 0,
       "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
@@ -68,8 +68,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MAN_5",
-      "x": 1,
-      "y": 13,
+      "x": 3,
+      "y": 10,
       "elevation": 0,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -94,8 +94,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MANIAC",
-      "x": 7,
-      "y": 10,
+      "x": 6,
+      "y": 8,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 1,
@@ -125,8 +125,8 @@
   "coord_events": [
     {
       "type": "trigger",
-      "x": 4,
-      "y": 12,
+      "x": 6,
+      "y": 14,
       "elevation": 3,
       "var": "VAR_TEMP_0",
       "var_value": "0",
@@ -134,8 +134,8 @@
     },
     {
       "type": "trigger",
-      "x": 3,
-      "y": 9,
+      "x": 0,
+      "y": 14,
       "elevation": 3,
       "var": "VAR_TEMP_0",
       "var_value": "0",
@@ -143,8 +143,8 @@
     },
     {
       "type": "trigger",
-      "x": 0,
-      "y": 15,
+      "x": 3,
+      "y": 14,
       "elevation": 3,
       "var": "VAR_TEMP_0",
       "var_value": "0",
@@ -152,8 +152,8 @@
     },
     {
       "type": "trigger",
-      "x": 8,
-      "y": 9,
+      "x": 9,
+      "y": 14,
       "elevation": 3,
       "var": "VAR_TEMP_0",
       "var_value": "0",
