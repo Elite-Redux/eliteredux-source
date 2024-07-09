@@ -3410,7 +3410,7 @@ const u16 gEggMoves[] = {
         MOVE_EXTRASENSORY),
 
     egg_moves(MARACTUS,
-        MOVE_GRASSY_GLIDE, // new
+        MOVE_GRASSY_GLIDE,
         MOVE_BULLET_SEED,
         MOVE_BOUNCE,
         MOVE_WORRY_SEED,
@@ -3419,7 +3419,8 @@ const u16 gEggMoves[] = {
         MOVE_WOOD_HAMMER,
         MOVE_SPIKES,
         MOVE_GRASS_WHISTLE,
-        MOVE_GRASSY_TERRAIN),
+        MOVE_GRASSY_TERRAIN,
+        MOVE_BELLY_DRUM),
 
     egg_moves(DWEBBLE,
         MOVE_ENDURE,

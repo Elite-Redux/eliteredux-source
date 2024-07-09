@@ -2328,7 +2328,7 @@ static const struct LevelUpMove sMagnetonLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sFarfetchdLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_AQUA_JET),
+    LEVEL_UP_MOVE(1, MOVE_AQUA_CUTTER),
     LEVEL_UP_MOVE(1, MOVE_FURY_CUTTER),
     LEVEL_UP_MOVE(1, MOVE_LEER),
     LEVEL_UP_MOVE(1, MOVE_PECK),
@@ -14697,6 +14697,7 @@ static const struct LevelUpMove sSawsbuckLevelUpLearnset[] = {
     LEVEL_UP_MOVE(41, MOVE_NATURE_POWER),
     LEVEL_UP_MOVE(46, MOVE_DOUBLE_EDGE),
     LEVEL_UP_MOVE(51, MOVE_SOLAR_BEAM),
+    LEVEL_UP_MOVE(75, MOVE_HORN_DRILL),
     LEVEL_UP_END
 };
 
@@ -26526,6 +26527,8 @@ static const struct LevelUpMove sLilligantHisuianLevelUpLearnset[] = {
     LEVEL_UP_MOVE(17, MOVE_SYNTHESIS),
     LEVEL_UP_MOVE(19, MOVE_MAGICAL_LEAF),
     LEVEL_UP_MOVE(21, MOVE_ENERGY_BALL),
+    LEVEL_UP_MOVE(22, MOVE_NIGHT_SLASH),
+    LEVEL_UP_MOVE(22, MOVE_AQUA_CUTTER),
     LEVEL_UP_MOVE(24, MOVE_DIAMOND_BLADE),
     LEVEL_UP_MOVE(26, MOVE_GIGA_DRAIN),
     LEVEL_UP_MOVE(28, MOVE_AROMATHERAPY),
