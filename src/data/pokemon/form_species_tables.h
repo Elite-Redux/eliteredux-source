@@ -1604,6 +1604,7 @@ static const u16 sInfernapeFormSpeciesIdTable[] = {
 static const u16 sDragoniteFormSpeciesIdTable[] = {
     SPECIES_DRAGONITE,
     SPECIES_DRAGONITE_MEGA,
+    SPECIES_DRAGONITE_DELIVERY,
     FORM_SPECIES_END,
 };
 static const u16 sEmpoleonFormSpeciesIdTable[] = {
@@ -1669,5 +1670,20 @@ static const u16 sNoibatFormSpeciesIdTable[] = {
 static const u16 sNoivernFormSpeciesIdTable[] = {
     SPECIES_NOIVERN,
     SPECIES_NOIVERN_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sChien_PaoFormSpeciesIdTable[] = {
+    SPECIES_CHIEN_PAO,
+    SPECIES_CHIEN_PAO_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sDracovishFormSpeciesIdTable[] = {
+    SPECIES_DRACOVISH,
+    SPECIES_DRACOVISH_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sLedianFormSpeciesIdTable[] = {
+    SPECIES_LEDIAN,
+    SPECIES_LEDIAN_PARADOX,
     FORM_SPECIES_END,
 };

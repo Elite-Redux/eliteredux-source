@@ -21,6 +21,26 @@ static const union AnimCmd sAnim_ESCARGINITE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_LEDIAN_PARADOX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_DRACOVISH_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_CHIEN_PAO_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_DRAGONITE_DELIVERY_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_ARCHALUDON_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -145,6 +165,26 @@ static const union AnimCmd *const sAnims_DUELUMBER[] ={
 static const union AnimCmd *const sAnims_ESCARGINITE[] ={
     sAnim_GeneralFrame0,
     sAnim_ESCARGINITE_1,
+};
+
+static const union AnimCmd *const sAnims_LEDIAN_PARADOX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_LEDIAN_PARADOX_1,
+};
+
+static const union AnimCmd *const sAnims_DRACOVISH_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DRACOVISH_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_CHIEN_PAO_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CHIEN_PAO_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_DRAGONITE_DELIVERY[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DRAGONITE_DELIVERY_1,
 };
 
 static const union AnimCmd *const sAnims_ARCHALUDON[] ={
@@ -19633,6 +19673,10 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(SCIZOR_REDUX),
+    ANIM_CMD(LEDIAN_PARADOX),
+    ANIM_CMD(DRACOVISH_MEGA),
+    ANIM_CMD(CHIEN_PAO_MEGA),
+    ANIM_CMD(DRAGONITE_DELIVERY),
     ANIM_CMD(ARCHALUDON),
     ANIM_CMD(RAGING_BOLT),
     ANIM_CMD(GOUGING_FIRE),

@@ -56,7 +56,6 @@ static const u8 sAbilityTruantDescription[] = _("Only moves every two turns.");
 static const u8 sAbilityHustleDescription[] = _("0. 9x accuracy.\nRaises Atk & SpAtk by 1. 4x.");
 static const u8 sAbilityCuteCharmDescription[] = _("30% chance to charm attacker on\ncontact, which halves its power.");
 static const u8 sAbilityPlusDescription[] = _("Deals double damage if an ally\nPokémon has Minus or Plus.");
-static const u8 sAbilityMinusDescription[] = _("Deals double damage if an ally\nPokémon has Minus or Plus.");
 static const u8 sAbilityForecastDescription[] = _("Changes form with the weather.\nWeather setting triggers attack.");
 static const u8 sAbilityStickyHoldDescription[] = _("Immune to item theft or deletion\nfrom enemies.");
 static const u8 sAbilityShedSkinDescription[] = _("30% chance to heal its status\ncondition at the end of a turn.");
@@ -579,6 +578,7 @@ static const u8 sAbilityContemptDescription[] = _("Ignores opposing stat changes
 static const u8 sAbilityAerialistDescription[] = _("Combines Levitate & Flock.");
 static const u8 sAbilityTeraShellDescription[] = _("All hits will be not very effective\nwhile at full HP.");
 static const u8 sAbilityToxicChainDescription[] = _("Moves have a 30% chance to\nbadly poison the foe.");
+static const u8 sAbilityParasiticSporesDescription[] = _("Deals 1/8 HP damage to non-\nGhost. Spreads on contact.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1191,6 +1191,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_AERIALIST] = _("Aerialist"),
     [ABILITY_TERA_SHELL] = _("Tera Shell"),
     [ABILITY_TOXIC_CHAIN] = _("Toxic Chain"),
+    [ABILITY_PARASITIC_SPORES] = _("Parasitic Spores"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1253,7 +1254,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_HUSTLE] = sAbilityHustleDescription,
     [ABILITY_CUTE_CHARM] = sAbilityCuteCharmDescription,
     [ABILITY_PLUS] = sAbilityPlusDescription,
-    [ABILITY_MINUS] = sAbilityMinusDescription,
+    [ABILITY_MINUS] = sAbilityPlusDescription,
     [ABILITY_FORECAST] = sAbilityForecastDescription,
     [ABILITY_STICKY_HOLD] = sAbilityStickyHoldDescription,
     [ABILITY_SHED_SKIN] = sAbilityShedSkinDescription,
@@ -1804,4 +1805,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_AERIALIST] = sAbilityAerialistDescription,
     [ABILITY_TERA_SHELL] = sAbilityTeraShellDescription,
     [ABILITY_TOXIC_CHAIN] = sAbilityToxicChainDescription,
+    [ABILITY_PARASITIC_SPORES] = sAbilityParasiticSporesDescription,
 };

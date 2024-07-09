@@ -839,7 +839,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_INFERNAPE] = sInfernapeFormSpeciesIdTable,
     [SPECIES_INFERNAPE_MEGA] = sInfernapeFormSpeciesIdTable,
 
-    [SPECIES_DRAGONITE] = sDragoniteFormSpeciesIdTable,
+    [SPECIES_DRAGONITE_DELIVERY] = sDragoniteFormSpeciesIdTable,
     [SPECIES_DRAGONITE_MEGA] = sDragoniteFormSpeciesIdTable,
 
     [SPECIES_BUTTERFREE] = sButterfreeFormSpeciesIdTable,
@@ -869,4 +869,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_MILOTIC] = sMiloticFormSpeciesIdTable,
     [SPECIES_MILOTIC_MEGA] = sMiloticFormSpeciesIdTable,
 
+    [SPECIES_CHIEN_PAO_MEGA] = sChien_PaoFormSpeciesIdTable,
+    [SPECIES_DRACOVISH_MEGA] = sDracovishFormSpeciesIdTable,
+
+    [SPECIES_LEDIAN_PARADOX] = sLedianFormSpeciesIdTable,
 };
