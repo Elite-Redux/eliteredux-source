@@ -1687,3 +1687,8 @@ static const u16 sLedianFormSpeciesIdTable[] = {
     SPECIES_LEDIAN_PARADOX,
     FORM_SPECIES_END,
 };
+static const u16 sSnorlaxFormSpeciesIdTable[] = {
+    SPECIES_SNORLAX,
+    SPECIES_SNORLAX_PRIMAL,
+    FORM_SPECIES_END,
+};

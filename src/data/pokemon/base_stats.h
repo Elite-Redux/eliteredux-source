@@ -40262,6 +40262,34 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_SNORLAX_PRIMAL] =
+    {
+    .baseHP        = 160,
+    .baseAttack    = 110,
+    .baseDefense   = 65,
+    .baseSpeed     = 30,
+    .baseSpAttack  = 65,
+    .baseSpDefense = 110,
+    .type1 = TYPE_NORMAL,
+    .type2 = TYPE_NORMAL,
+    .catchRate = 255,
+    .expYield = 189,
+    .evYield_HP    = 2,
+    .item1 = ITEM_LEFTOVERS,
+    .item2 = ITEM_LEFTOVERS,
+    .genderRatio = PERCENT_FEMALE(12.5),
+    .eggCycles = 40,
+    .friendship = 70,
+    .growthRate = GROWTH_SLOW,
+    .eggGroup1 = EGG_GROUP_MONSTER,
+    .eggGroup2 = EGG_GROUP_MONSTER,
+    .abilities = {ABILITY_LETS_ROLL, ABILITY_OBLIVIOUS, ABILITY_COMATOSE},
+    .innates = {ABILITY_SELF_SUFFICIENT, ABILITY_THICK_FAT, ABILITY_GLUTTONY},
+    .bodyColor = BODY_COLOR_BLACK,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
     [SPECIES_LEDIAN_PARADOX] =
     {
     .baseHP        = 55,
