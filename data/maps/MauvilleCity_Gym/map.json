@@ -120,6 +120,20 @@
       "elevation": 0,
       "dest_map": "MAP_MAUVILLE_CITY",
       "dest_warp_id": 0
+    },
+    {
+      "x": 8,
+      "y": 16,
+      "elevation": 0,
+      "dest_map": "MAP_LAVARIDGE_TOWN_GYM_1F",
+      "dest_warp_id": 0
+    },
+    {
+      "x": 9,
+      "y": 16,
+      "elevation": 0,
+      "dest_map": "MAP_LAVARIDGE_TOWN_GYM_1F",
+      "dest_warp_id": 1
     }
   ],
   "coord_events": [
