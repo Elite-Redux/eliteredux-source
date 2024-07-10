@@ -9151,6 +9151,7 @@ static void Cmd_various(void)
           && HasAttackerFaintedTarget()
           && !NoAliveMonsForEitherParty())
         {
+            SetAbilityState(gActiveBattler, BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAMPAGE) ? ABILITY_RAMPAGE : ABILITY_BERSERKER_RAGE, TRUE);
             gVolatileStructs[gActiveBattler].rechargeTimer = 0;
             gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
         }

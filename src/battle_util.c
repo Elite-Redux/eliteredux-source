@@ -224,6 +224,9 @@ void HandleAction_UseMove(void)
         return;
     }
 
+    SetAbilityState(gBattlerAttacker, ABILITY_RAMPAGE, FALSE);
+    SetAbilityState(gBattlerAttacker, ABILITY_BERSERKER_RAGE, FALSE);
+
     gIsCriticalHit = FALSE;
     gBattleStruct->atkCancellerTracker = 0;
     gMoveResultFlags = 0;
@@ -1913,7 +1916,10 @@ u8 TrySetCantSelectMoveBattleScript(void)
         }
     }
 
-    if (move == gLastChosenMove[gActiveBattler] && gBattleMoves[move].effect == EFFECT_EVERY_OTHER_TURN)
+    if (move == gLastChosenMove[gActiveBattler]
+        && gBattleMoves[move].effect == EFFECT_EVERY_OTHER_TURN
+        && !GetAbilityState(gActiveBattler, ABILITY_RAMPAGE)
+        && !GetAbilityState(gActiveBattler, ABILITY_BERSERKER_RAGE))
     {
         if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
         {
@@ -1972,7 +1978,10 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
             unusableMoves |= 1 << i;
         else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DISCIPLINE) && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
             unusableMoves |= 1 << i;
-        else if (gBattleMons[battlerId].moves[i] == gLastChosenMove[battlerId] && gBattleMoves[gBattleMons[battlerId].moves[i]].effect == EFFECT_EVERY_OTHER_TURN)
+        else if (gBattleMons[battlerId].moves[i] == gLastChosenMove[battlerId]
+            && gBattleMoves[gBattleMons[battlerId].moves[i]].effect == EFFECT_EVERY_OTHER_TURN
+            && !GetAbilityState(battlerId, ABILITY_RAMPAGE)
+            && !GetAbilityState(battlerId, ABILITY_BERSERKER_RAGE))
             unusableMoves |= 1 << i;
         else if (IsSleepClauseDisablingMove(battlerId, gBattleMons[battlerId].moves[i])){
             unusableMoves |= 1 << i;
