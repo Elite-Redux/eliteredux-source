@@ -11961,8 +11961,8 @@ BattleScript_SeedSowerTryLeech:
 	jumpifstatus3 BS_ATTACKER, STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
 	jumpiftype BS_ATTACKER, TYPE_GRASS, BattleScript_SeedSowerEnd
 BattleScript_SeedSowerDoLeech:
-	setuserstatus3 STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
 	swapbattlerandtargetvia34
+	setseeded
 	playmoveanimation BS_ATTACKER, MOVE_LEECH_SEED
 	waitanimation
 	printstring STRINGID_PKMNSEEDED
