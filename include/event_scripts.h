@@ -377,6 +377,8 @@ extern const u8 SootopolisCity_Gym_1F_Text_JuanDefeatRematch[];
 extern const u8 SootopolisCity_Gym_1F_Text_WallaceDefeatRematch[];
 extern const u8 SootopolisCity_Gym_1F_Text_Juan_Round_2[];
 extern const u8 SootopolisCity_Gym_1F_Text_Wallace_Round_2[];
+extern const u8 DewfordTown_Gym_Text_LilithDefeat[];
+extern const u8 DewfordTown_Gym_Text_BrendenDefeat[];
 
 //field effects
 extern const u8 EventScript_UseStrength[];

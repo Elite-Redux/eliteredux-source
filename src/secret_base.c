@@ -1176,6 +1176,12 @@ const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
             else
                 return SootopolisCity_Gym_1F_Text_WallaceDefeatRematch;
         break;
+        case TAG_TEAM_BRENDEN_LILITH:
+            if(!isTrainerB)
+                return DewfordTown_Gym_Text_LilithDefeat;
+            else
+                return DewfordTown_Gym_Text_BrendenDefeat;
+        break;
     }
         
 }

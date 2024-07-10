@@ -146,16 +146,6 @@ DewfordTown_Gym_EventScript_CheckLilith:: @ 81FC7B3
 DewfordTown_Gym_EventScript_StopCountingTrainers:: @ 81FC7C1
 	return
 
-DewfordTown_Gym_EventScript_Brawly:: @ 81FC7C2
-	call DewfordTown_Gym_EventScript_CheckTrainers
-	//goto_if_set FLAG_DAILY_REMATCH_BRAWLY, DewfordTown_Gym_EventScript_AlreadyRematched
-	goto_if_set FLAG_SYS_GAME_CLEAR, DewfordTown_Gym_EventScript_BrawlyRematch
-	setvar VAR_0x8004, 15
-	trainerbattle_single TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC
-	goto_if_unset FLAG_RECEIVED_TM08, DewfordTown_Gym_EventScript_GiveBulkUp
-	msgbox DewfordTown_Gym_Text_BrawlyPostBattle, MSGBOX_DEFAULT
-	release
-	end
 
 DewfordTown_Gym_EventScript_BrawlyDefeated:: @ 81FC7F7
 	call DewfordTown_Gym_EventScript_AnimateFlashFullBrightness
@@ -240,9 +230,7 @@ DewfordTown_Gym_EventScript_Exit::
 	releaseall
 	end
 
-DewfordTown_Gym_EventScript_Takao:: @ 81FC8B7
-	trainerbattle_single TRAINER_TAKAO, DewfordTown_Gym_Text_TakaoIntro, DewfordTown_Gym_Text_TakaoDefeat, DewfordTown_Gym_EventScript_TakaoBrightenRoom
-	msgbox DewfordTown_Gym_Text_TakaoPostBattle, MSGBOX_AUTOCLOSE
+
 	end
 
 DewfordTown_Gym_EventScript_TakaoBrightenRoom:: @ 81FC8D2
@@ -250,19 +238,9 @@ DewfordTown_Gym_EventScript_TakaoBrightenRoom:: @ 81FC8D2
 	release
 	end
 
-DewfordTown_Gym_EventScript_Jocelyn:: @ 81FC8D9
-	trainerbattle_single TRAINER_JOCELYN, DewfordTown_Gym_Text_JocelynIntro, DewfordTown_Gym_Text_JocelynDefeat, DewfordTown_Gym_EventScript_JocelynBrightenRoom
-	msgbox DewfordTown_Gym_Text_JocelynPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 DewfordTown_Gym_EventScript_JocelynBrightenRoom:: @ 81FC8F4
 	call DewfordTown_Gym_EventScript_BrightenRoom
 	release
-	end
-
-DewfordTown_Gym_EventScript_Laura:: @ 81FC8FB
-	trainerbattle_single TRAINER_LAURA, DewfordTown_Gym_Text_LauraIntro, DewfordTown_Gym_Text_LauraDefeat, DewfordTown_Gym_EventScript_LauraBrightenRoom
-	msgbox DewfordTown_Gym_Text_LauraPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 DewfordTown_Gym_EventScript_LauraBrightenRoom:: @ 81FC916
@@ -270,29 +248,14 @@ DewfordTown_Gym_EventScript_LauraBrightenRoom:: @ 81FC916
 	release
 	end
 
-DewfordTown_Gym_EventScript_Brenden:: @ 81FC91D
-	trainerbattle_single TRAINER_BRENDEN, DewfordTown_Gym_Text_BrendenIntro, DewfordTown_Gym_Text_BrendenDefeat, DewfordTown_Gym_EventScript_BrendenBrightenRoom
-	msgbox DewfordTown_Gym_Text_BrendenPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 DewfordTown_Gym_EventScript_BrendenBrightenRoom:: @ 81FC938
 	call DewfordTown_Gym_EventScript_BrightenRoom
 	release
 	end
 
-DewfordTown_Gym_EventScript_Cristian:: @ 81FC93F
-	trainerbattle_single TRAINER_CRISTIAN, DewfordTown_Gym_Text_CristianIntro, DewfordTown_Gym_Text_CristianDefeat, DewfordTown_Gym_EventScript_CristianBrightenRoom
-	msgbox DewfordTown_Gym_Text_CristianPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 DewfordTown_Gym_EventScript_CristianBrightenRoom:: @ 81FC95A
 	call DewfordTown_Gym_EventScript_BrightenRoom
 	release
-	end
-
-DewfordTown_Gym_EventScript_Lilith:: @ 81FC961
-	trainerbattle_single TRAINER_LILITH, DewfordTown_Gym_Text_LilithIntro, DewfordTown_Gym_Text_LilithDefeat, DewfordTown_Gym_EventScript_LilithBrightenRoom
-	msgbox DewfordTown_Gym_Text_LilithPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 DewfordTown_Gym_EventScript_LilithBrightenRoom:: @ 81FC97C
@@ -404,11 +367,18 @@ DewfordTown_Gym_Text_LauraPostBattle: @ 81FCD4F
 	.string "But because it's so dark, I can never\n"
 	.string "see Brawly's face…$"
 
+DewfordTown_Gym_Text_BrendenAndLilithIntro:
+    .string "Ufufu…\n"
+	.string "Are you stumbling around in the dark?\p"
+	.string "I'll show you the gumption of\n"
+	.string "a sailing man!$"
+
+
 DewfordTown_Gym_Text_LilithIntro: @ 81FCDB8
 	.string "Ufufu…\n"
 	.string "Are you stumbling around in the dark?$"
 
-DewfordTown_Gym_Text_LilithDefeat: @ 81FCDE5
+DewfordTown_Gym_Text_LilithDefeat:: @ 81FCDE5
 	.string "Oh, you…\n"
 	.string "I don't want to know you!$"
 
@@ -420,7 +390,7 @@ DewfordTown_Gym_Text_BrendenIntro: @ 81FCE48
 	.string "I'll show you the gumption of\n"
 	.string "a sailing man!$"
 
-DewfordTown_Gym_Text_BrendenDefeat: @ 81FCE75
+DewfordTown_Gym_Text_BrendenDefeat:: @ 81FCE75
 	.string "How'd this happen?\n"
 	.string "It's not like me to lose this way!$"
 
@@ -534,21 +504,201 @@ script DewfordTown_Gym_EventScript_GiveBulkUp{
 	end
 }
 
+
+
+script DewfordTown_Gym_EventScript_Takao{
+    lock
+    faceplayer
+    if (defeated(TRAINER_TAKAO)){
+        msgbox(DewfordTown_Gym_Text_TakaoPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        msgbox(format("The best offense is a good defense, let's see how well you hold up under my {COLOR GREEN} Powered-Up Punches {COLOR DARK_GRAY}."), MSGBOX_YESNO)
+        if (var(VAR_RESULT)){
+            trainerbattle_single(TRAINER_TAKAO, DewfordTown_Gym_Text_TakaoIntro , DewfordTown_Gym_Text_TakaoDefeat)
+        }
+    }
+    release
+    end
+}
+
+script DewfordTown_Gym_EventScript_Jocelyn{
+    lock
+    faceplayer
+    if (defeated(TRAINER_JOCELYN)){
+        msgbox(DewfordTown_Gym_Text_JocelynPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        msgbox(format("What, a battle? Fine, but make it quick, I still need to {COLOR GREEN} put this Mat away {COLOR DARK_GRAY}"), MSGBOX_YESNO)
+        if (var(VAR_RESULT)){
+            trainerbattle_single(TRAINER_JOCELYN, DewfordTown_Gym_Text_JocelynIntro , DewfordTown_Gym_Text_JocelynDefeat)
+        }
+    }
+    release
+    end
+}
+
+script DewfordTown_Gym_EventScript_Laura{
+    lock
+    faceplayer
+    if (defeated(TRAINER_LAURA)){
+        msgbox(DewfordTown_Gym_Text_LauraPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        msgbox(format("After training in this gym for so long I can even fight  {COLOR GREEN} in the Dark {COLOR DARK_GRAY}"), MSGBOX_YESNO)
+        if (var(VAR_RESULT)){
+            trainerbattle_single(TRAINER_LAURA, DewfordTown_Gym_Text_LauraIntro , DewfordTown_Gym_Text_LauraDefeat)
+        }
+    }
+    release
+    end
+}
+
+script DewfordTown_Gym_EventScript_Cristian{
+    lock
+    faceplayer
+    if (defeated(TRAINER_CRISTIAN)){
+        msgbox(DewfordTown_Gym_Text_CristianPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        msgbox(format("Walking over a {COLOR GREEN} Floor of Spikes {COLOR DARK_GRAY} trains your focus, let's see how well you've trained yours."), MSGBOX_YESNO)
+        if (var(VAR_RESULT)){
+            trainerbattle_single(TRAINER_CRISTIAN, DewfordTown_Gym_Text_CristianIntro , DewfordTown_Gym_Text_CristianDefeat)
+        }
+    }
+    release
+    end
+}
+
+script DewfordTown_Gym_EventScript_BrendenAndLilith{
+    msgbox(format("I just had a good stretch and I'm raring to go. I hope you're ready I feel  {COLOR GREEN} Boosted Up  {COLOR DARK_GRAY} and ready to go!."), MSGBOX_AUTOCLOSE)
+    msgbox(format("Walking over a {COLOR GREEN} Floor of Spikes {COLOR DARK_GRAY} trains your focus, let's see how well you've trained yours."), MSGBOX_AUTOCLOSE)
+    msgbox(format("want a double versus one?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT)){
+        starttagbattle(TRAINER_LILITH, TRAINER_BRENDEN, TAG_TEAM_BRENDEN_LILITH, 0, DewfordTown_Gym_Text_BrendenAndLilithIntro)
+    }
+    release
+    end
+}
+
+script DewfordTown_Gym_EventScript_Brenden{
+    lock
+    faceplayer
+    if (defeated(TRAINER_BRENDEN)){
+        msgbox(DewfordTown_Gym_Text_BrendenPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        goto(DewfordTown_Gym_EventScript_BrendenAndLilith)
+    }
+    release
+    end
+}
+
+script DewfordTown_Gym_EventScript_Lilith{
+    lock
+    faceplayer
+    if (defeated(TRAINER_LILITH)){
+        msgbox(DewfordTown_Gym_Text_LilithPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        goto(DewfordTown_Gym_EventScript_BrendenAndLilith)
+    }
+    release
+    end
+}
+
+movement DewfordTown_Gym_Movement_PlayerWalksOut{
+    walk_left
+}
+
+const LOCALID_BRAWLY = 1
+
+movement DewfordTown_Gym_Movement_BrawlyAskPlayer{
+    jump_in_place_left
+}
+
+movement DewfordTown_Gym_Movement_BrawlyEntersTheRing{
+    jump_left * 2
+    walk_left
+}
+
+script DewfordTown_Gym_EventScript_EnteredTheRing{
+    lock
+    applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyAskPlayer)
+    waitmovement(0)
+    msgbox(format("Ready to face me?"), MSGBOX_YESNO)
+    if (!var(VAR_RESULT)){
+        applymovement(OBJ_EVENT_ID_PLAYER, DewfordTown_Gym_Movement_PlayerWalksOut)
+        waitmovement(0)
+        release
+        end
+    }
+    applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyEntersTheRing)
+    waitmovement(0)
+    setvar(VAR_TEMP_0, 1)
+    goto(DewfordTown_Gym_EventScript_BrawlyEngage)
+    release
+    end
+}
+
+
+text DewfordTown_Gym_Text_BrawlyIntro0{
+    format("Aw man you lazy like that? Alright then i wont be nice")
+}
+
+text DewfordTown_Gym_Text_BrawlyIntro1{
+    format("Alright you at least tried to battle some lets gets this over with")
+}
+
+text DewfordTown_Gym_Text_BrawlyIntroAll{
+    format("See this pumps me up for a nice challenge mate, lets do this!")
+}
+
 script DewfordTown_Gym_EventScript_CheckTrainers{
-	//Check that you have defeated every trainer in that Gym and that you don't have that badge yet
-	if(((!defeated(TRAINER_TAKAO)    || 
-	     !defeated(TRAINER_JOCELYN)  || 
-		 !defeated(TRAINER_LAURA)    || 
-	     !defeated(TRAINER_BRENDEN)  || 
-		 !defeated(TRAINER_CRISTIAN) || 
-		 !defeated(TRAINER_LILITH))  &&
-		 !flag(FLAG_BADGE02_GET))){
-		msgbox(format("Brawly: Sorry, but you need to defeat every trainer on this Gym before battling me."), MSGBOX_NPC)
+    if (flag(FLAG_BADGE01_GET)) {
+		msgbox(RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT)
 		release
 		end
 	}
-	else{
-		//If you have beaten every trainer or you have the badge just return to the previous script
-		return
+	// set battle event flags
+	if (!defeated(TRAINER_TAKAO)){
+	
 	}
+	if (!defeated(TRAINER_JOCELYN)){
+	
+	}
+	if (!defeated(TRAINER_LAURA)){
+	
+	}
+	if (!defeated(TRAINER_BRENDEN)){ // by entension TRAINER_LILITH too
+	
+	}
+	if (!defeated(TRAINER_CRISTIAN)){
+	
+	}
+	return
+}
+
+script DewfordTown_Gym_EventScript_BrawlyEngage{
+    goto_if_set(FLAG_SYS_GAME_CLEAR, DewfordTown_Gym_EventScript_BrawlyRematch)
+    call(DewfordTown_Gym_EventScript_CheckTrainers)
+	setvar(VAR_0x8004, 15)
+	// count the number of trainer defeated, and tell a different line
+	// brenden is a tag battle so you know the lillith flag throught it. 
+	adddefeatedcountmax7(1, TRAINER_TAKAO, TRAINER_JOCELYN, TRAINER_LAURA, TRAINER_BRENDEN, TRAINER_CRISTIAN)
+	switch (var(VAR_RESULT)) {
+		case 0:
+			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro0, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
+		break
+		case 5:
+			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntroAll, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
+		break
+		default:
+			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro1, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
+    	}
+	
+	goto_if_unset(FLAG_RECEIVED_TM08, DewfordTown_Gym_EventScript_GiveBulkUp)
+	release
+	end
+}
+
+script DewfordTown_Gym_EventScript_Brawly{
+    lock
+    faceplayer
+    msgbox(format("If you want to fight, face me, enter the ring and place you in the center. This is how I know someone is ready."), MSGBOX_DEFAULT)
+    release
 }

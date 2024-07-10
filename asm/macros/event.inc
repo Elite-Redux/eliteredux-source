@@ -2127,3 +2127,4 @@
 	.2byte \trainer5
 	.2byte \trainer6
 	.endm
+

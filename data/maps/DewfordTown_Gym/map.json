@@ -150,7 +150,15 @@
     }
   ],
   "coord_events": [
-
+    {
+      "type": "trigger",
+      "x": 8,
+      "y": 15,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "DewfordTown_Gym_EventScript_EnteredTheRing"
+    }
   ],
   "bg_events": [
     {

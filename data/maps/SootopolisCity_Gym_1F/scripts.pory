@@ -293,12 +293,6 @@ script SootopolisCity_Gym_1F_EventScript_AfterBattle{
 	goto_if_unset(FLAG_RECEIVED_TM03, SootopolisCity_Gym_1F_EventScript_GiveScald)
 	goto_if_unset(FLAG_BADGE06_GET, SootopolisCity_Gym_1F_EventScript_GoGetFortreeBadge)
 	msgbox(SootopolisCity_Gym_1F_Text_JuanPostBattle, MSGBOX_DEFAULT)
-	// new, if you fought the rival 2, you get the skip to evergreen city
-	if(flag(FLAG_DEFEATED_RIVAL_RUSTBORO)){
-	    clearflag(FLAG_HIDE_RIVAL_SOOTOPOLIS_EVERGRANDE)
-	}
-	release
-	end
 }
 
 script SootopolisCity_Gym_1F_EventScript_Juan_Defeated{
@@ -337,6 +331,10 @@ script SootopolisCity_Gym_1F_EventScript_Juan_Defeated{
 		closemessage
 		delay(30)
 		setflag(FLAG_ENABLE_JUAN_MATCH_CALL)
+		// new, if you fought the rival 2, you get the skip to evergreen city
+		if(flag(FLAG_DEFEATED_RIVAL_RUSTBORO)){
+			clearflag(FLAG_HIDE_RIVAL_SOOTOPOLIS_EVERGRANDE)
+		}
 	}
 	goto(SootopolisCity_Gym_1F_EventScript_AfterBattle)
 }
