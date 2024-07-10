@@ -3751,26 +3751,28 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BLAST_BURN] =
     {
         .effect = EFFECT_EVERY_OTHER_TURN,
-        .power = 140,
+        .power = 130,
         .type = TYPE_FIRE,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .splitFlag = STAT_HIGHEST_ATTACKING,
     },
     [MOVE_HYDRO_CANNON] =
     {
         .effect = EFFECT_EVERY_OTHER_TURN,
-        .power = 140,
+        .power = 130,
         .type = TYPE_WATER,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_SPECIAL,
+        .splitFlag = STAT_HIGHEST_ATTACKING,
     },
     [MOVE_METEOR_MASH] =
     {
@@ -4130,14 +4132,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FRENZY_PLANT] =
     {
         .effect = EFFECT_EVERY_OTHER_TURN,
-        .power = 140,
+        .power = 130,
         .type = TYPE_GRASS,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_SPECIAL,
+        .splitFlag = STAT_HIGHEST_ATTACKING,
     },
     [MOVE_BULK_UP] =
     {
@@ -5365,9 +5368,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ROCK_WRECKER] =
     {
         .effect = EFFECT_EVERY_OTHER_TURN,
-        .power = 140,
+        .power = 120,
         .type = TYPE_ROCK,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -10538,7 +10541,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_GIGATON_HAMMER] =
     {
         .effect = EFFECT_EVERY_OTHER_TURN,
-        .power = 160,
+        .power = 140,
         .type = TYPE_STEEL,
         .accuracy = 100,
         .pp = 5,
