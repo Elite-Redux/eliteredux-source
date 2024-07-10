@@ -579,6 +579,8 @@ static const u8 sAbilityAerialistDescription[] = _("Combines Levitate & Flock.")
 static const u8 sAbilityTeraShellDescription[] = _("All hits will be not very effective\nwhile at full HP.");
 static const u8 sAbilityToxicChainDescription[] = _("Moves have a 30% chance to\nbadly poison the foe.");
 static const u8 sAbilityParasiticSporesDescription[] = _("Deals 1/8 HP damage to non-\nGhost. Spreads on contact.");
+static const u8 sAbilityPoisonPuppeteerDescription[] = _("Poison also inflicts confusion.");
+static const u8 sAbilityEntranceDescription[] = _("Confusion also inflicts\ninfatuation.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1192,6 +1194,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TERA_SHELL] = _("Tera Shell"),
     [ABILITY_TOXIC_CHAIN] = _("Toxic Chain"),
     [ABILITY_PARASITIC_SPORES] = _("Parasitic Spores"),
+    [ABILITY_POISON_PUPPETEER] = _("Poison Puppeteer"),
+    [ABILITY_ENTRANCE] = _("Entrance"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1806,4 +1810,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TERA_SHELL] = sAbilityTeraShellDescription,
     [ABILITY_TOXIC_CHAIN] = sAbilityToxicChainDescription,
     [ABILITY_PARASITIC_SPORES] = sAbilityParasiticSporesDescription,
+    [ABILITY_POISON_PUPPETEER] = sAbilityPoisonPuppeteerDescription,
+    [ABILITY_ENTRANCE] = sAbilityEntranceDescription,
 };

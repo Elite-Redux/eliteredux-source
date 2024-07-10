@@ -10687,6 +10687,14 @@ BattleScript_GooeyActivates::
 	swapattackerwithtarget
 	return
 
+BattleScript_AbilityStatusEffectSafe::
+	saveattackerandtargetto34
+	copybyte gBattlerAttacker, gStackBattler1
+	copybyte gBattlerTarget, gStackBattler2
+	call BattleScript_AbilityStatusEffect
+	restoreattackerandtargetfrom34
+	return
+
 BattleScript_AbilityStatusEffect::
 	waitstate
 	call BattleScript_AbilityPopUp

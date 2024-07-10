@@ -180,6 +180,7 @@ extern const u8 BattleScript_RoughSkinActivates[];
 extern const u8 BattleScript_IronBarbsActivates[];
 extern const u8 BattleScript_CuteCharmActivates[];
 extern const u8 BattleScript_AbilityStatusEffect[];
+extern const u8 BattleScript_AbilityStatusEffectSafe[];
 extern const u8 BattleScript_ParasiticSporesSpread[];
 extern const u8 BattleScript_ParasiticSporesSpreadWithAbility[];
 extern const u8 BattleScript_ParasiticSporesDamage[];

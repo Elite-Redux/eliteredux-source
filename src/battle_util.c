@@ -6214,7 +6214,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         {
             bool8 becameConfused = FALSE;
             if (CanBeConfused(battler)) {
-                gBattleMons[battler].status2 |= STATUS2_CONFUSION;
                 gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
                 becameConfused = TRUE;
             }
@@ -9855,6 +9854,54 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                     effect++;
                 }
+            }
+
+            {
+            int flag;
+            if (flag = GetAbilityState(battler, ABILITY_ENTRANCE)) {
+                for (int i = 0; i < gBattlersCount; i++)
+                {
+                    if (!(flag & (1 << i))) continue;
+                    if (IsBattlerAlive(i)
+                        && IsBattlerAlive(battler)
+                        && !BATTLER_HAS_ABILITY(i, ABILITY_OBLIVIOUS)
+                        && !IsAbilityOnSide(i, ABILITY_AROMA_VEIL)
+                        && GetGenderFromSpeciesAndPersonality(gBattleMons[i].species, gBattleMons[i].personality) != GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality)
+                        && !(gBattleMons[i].status2 & STATUS2_INFATUATION)
+                        && GetGenderFromSpeciesAndPersonality(gBattleMons[i].species, pidAtk) != MON_GENDERLESS
+                        && GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, pidDef) != MON_GENDERLESS) {
+                            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ENTRANCE;
+                            gBattleScripting.moveEffect = MOVE_EFFECT_ATTRACT | HITMARKER_IGNORE_SAFEGUARD;
+                            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                            gStackBattler1 = battler;
+                            gStackBattler2 = i;
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_AbilityStatusEffectSafe;
+                        
+                    }
+                }
+            }
+            }
+
+            {
+            int flag;
+            if (flag = GetAbilityState(battler, ABILITY_POISON_PUPPETEER)) {
+                for (int i = 0; i < gBattlersCount; i++)
+                {
+                    if (!(flag & (1 << i))) continue;
+                    if (IsBattlerAlive(i)
+                        && CanBeConfused(i)) {
+                            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ENTRANCE;
+                            gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION | HITMARKER_IGNORE_SAFEGUARD;
+                            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                            gStackBattler1 = battler;
+                            gStackBattler2 = i;
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_AbilityStatusEffectSafe;
+                        
+                    }
+                }
+            }
             }
 
             if (gVolatileStructs[battler].parasiticSpores

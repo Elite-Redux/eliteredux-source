@@ -3457,6 +3457,9 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleStruct->synchronizeMoveEffect = gBattleScripting.moveEffect;
                 gHitMarker |= HITMARKER_SYNCHRONISE_EFFECT;
              }
+            
+            if (gBattleScripting.moveEffect == MOVE_EFFECT_POISON || gBattleScripting.moveEffect == MOVE_EFFECT_TOXIC)
+                SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_POISON_PUPPETEER);
             return;
         }
         else if (statusChanged == FALSE)
@@ -3564,6 +3567,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_CONFUSION:
                 if (CanBeConfused(gEffectBattler))
                 {
+                    SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_ENTRANCE);
                     gBattleMons[gEffectBattler].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2); // 2-5 turns
 
                     BattleScriptPush(gBattlescriptCurrInstr);
@@ -8747,10 +8751,14 @@ static void Cmd_various(void)
             gBattlescriptCurrInstr += 7;
         return;
     case VARIOUS_INFATUATE_WITH_BATTLER:
+    {
+        int attacker = GetBattlerForBattleScript(gBattlescriptCurrInstr[3]);
         gBattleScripting.battler = gActiveBattler;
-        gBattleMons[gActiveBattler].status2 |= STATUS2_INFATUATED_WITH(GetBattlerForBattleScript(gBattlescriptCurrInstr[3]));
+        gBattleMons[gActiveBattler].status2 |= STATUS2_INFATUATED_WITH(attacker);
+        
         gBattlescriptCurrInstr += 4;
         return;
+    }
     case VARIOUS_SET_LAST_USED_ITEM:
         gLastUsedItem = gBattleMons[gActiveBattler].item;
         break;
@@ -16826,4 +16834,17 @@ void CheckForBadEggs(void){
         }
     }
     #endif
+}
+
+void SetBattlerAffectedFlag(int attacker, int target, int ability)
+{
+    if (attacker == target) return;
+    int flag = GetAbilityState(attacker, ability);
+    SetAbilityState(attacker, ability, flag | (1 << target));
+}
+
+void ClearBattlerAffectedFlag(int attacker, int target, int ability)
+{
+    int flag = GetAbilityState(attacker, ability);
+    SetAbilityState(attacker, ability, flag & ~(1 << target));
 }
