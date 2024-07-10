@@ -4962,7 +4962,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_DRAGON_RUSH] =
     {
-        .effect = EFFECT_FLINCH_RECOIL_25,
+        .effect = EFFECT_FLINCH_RECOIL_33,
         .power = 120,
         .type = TYPE_DRAGON,
         .accuracy = 95,

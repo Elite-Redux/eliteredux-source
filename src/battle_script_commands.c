@@ -5754,7 +5754,6 @@ static void Cmd_moveend(void)
             {
                 switch (gBattleMoves[gCurrentMove].effect)
                 {
-                case EFFECT_FLINCH_RECOIL_25:
                 case EFFECT_RECOIL_25: // Take Down, 25% recoil
                     gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 4);
                     BattleScriptPushCursor();
@@ -5767,6 +5766,7 @@ static void Cmd_moveend(void)
                     gBattlescriptCurrInstr = BattleScript_MoveEffectRecoilWithStatus;
                     effect = TRUE;
                     break;
+                case EFFECT_FLINCH_RECOIL_33:
                 case EFFECT_RECOIL_33: // Double Edge, 33 % recoil
                     gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 3);
                     BattleScriptPushCursor();

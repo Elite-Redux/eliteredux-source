@@ -4910,7 +4910,7 @@ static bool8 CanMoveHaveExtraFlinchChance(u16 move)
         case EFFECT_FLINCH_HIT:
         case EFFECT_FAKE_OUT:
         case EFFECT_FLINCH_STATUS:
-        case EFFECT_FLINCH_RECOIL_25:
+        case EFFECT_FLINCH_RECOIL_33:
         case EFFECT_FLINCH_RECOIL_50:
         case EFFECT_FLINCH_MINIMIZE_HIT:
         case EFFECT_FLING:
