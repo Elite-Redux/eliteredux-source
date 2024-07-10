@@ -199,7 +199,7 @@ $(TILESETGFXDIR)/secondary/dewford_gym/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 61
 
 $(TILESETGFXDIR)/secondary/lavaridge_gym/tiles.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -num_tiles 54
+	$(GFX) $< $@ 
 
 $(TILESETGFXDIR)/secondary/petalburg_gym/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 148

@@ -94,7 +94,7 @@ u8 BattleEventEndTurnExec(u8 battleEvent){
     {
     case BATTLE_EVENT_NONE:
         break;
-    case STEADY_DEFENSE:
+    case BATTLE_EVENT_STEADY_DEFENSE:
         gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 1);
         BattleScriptExecute(BattleScript_GymSkillEndOfTurnBoost);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
