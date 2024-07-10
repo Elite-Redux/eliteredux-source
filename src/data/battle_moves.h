@@ -6262,7 +6262,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ACROBATICS] =
     {
         .effect = EFFECT_ACROBATICS,
-        .power = 55,
+        .power = 75,
         .type = TYPE_FLYING,
         .accuracy = 100,
         .pp = 15,
