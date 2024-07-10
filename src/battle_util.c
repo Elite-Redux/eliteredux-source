@@ -224,8 +224,11 @@ void HandleAction_UseMove(void)
         return;
     }
 
-    SetAbilityState(gBattlerAttacker, ABILITY_RAMPAGE, FALSE);
-    SetAbilityState(gBattlerAttacker, ABILITY_BERSERKER_RAGE, FALSE);
+    if (!gProcessingExtraAttacks)
+    {
+        SetAbilityState(gBattlerAttacker, ABILITY_RAMPAGE, FALSE);
+        SetAbilityState(gBattlerAttacker, ABILITY_BERSERKER_RAGE, FALSE);
+    }
 
     gIsCriticalHit = FALSE;
     gBattleStruct->atkCancellerTracker = 0;
