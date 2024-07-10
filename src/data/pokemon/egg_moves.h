@@ -3410,7 +3410,7 @@ const u16 gEggMoves[] = {
         MOVE_EXTRASENSORY),
 
     egg_moves(MARACTUS,
-        MOVE_GRASSY_GLIDE, // new
+        MOVE_GRASSY_GLIDE,
         MOVE_BULLET_SEED,
         MOVE_BOUNCE,
         MOVE_WORRY_SEED,
@@ -5445,6 +5445,48 @@ const u16 gEggMoves[] = {
         MOVE_THUNDER_PUNCH),
 
     egg_moves(LEDIAN_PARADOX,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(SNORLAX_PRIMAL,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(VICTINI_PRIMAL,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(WIGGLYTUFF_PRIMAL,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(FLYGON_REDUX,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(FLYGON_REDUX_MEGA,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(MAWILE_REDUX_B,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(MAWILE_REDUX_B_MEGA,
         MOVE_SPLASH,
         MOVE_FIRE_PUNCH,
         MOVE_ICE_PUNCH,

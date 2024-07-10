@@ -409,6 +409,8 @@ static const u16 sMawileFormSpeciesIdTable[] = {
     SPECIES_MAWILE_MEGA_REDUX,
     SPECIES_MAWILE_REDUX,
     SPECIES_MAWILE_MEGA,
+    SPECIES_MAWILE_REDUX_B,
+    SPECIES_MAWILE_REDUX_B_MEGA,
     FORM_SPECIES_END,
 };
 
@@ -1593,6 +1595,8 @@ static const u16 sTerapagosFormSpeciesIdTable[] = {
 };
 static const u16 sFlygonFormSpeciesIdTable[] = {
     SPECIES_FLYGON,
+    SPECIES_FLYGON_REDUX_MEGA,
+    SPECIES_FLYGON_REDUX,
     SPECIES_FLYGON_MEGA,
     FORM_SPECIES_END,
 };
@@ -1685,5 +1689,20 @@ static const u16 sDracovishFormSpeciesIdTable[] = {
 static const u16 sLedianFormSpeciesIdTable[] = {
     SPECIES_LEDIAN,
     SPECIES_LEDIAN_PARADOX,
+    FORM_SPECIES_END,
+};
+static const u16 sSnorlaxFormSpeciesIdTable[] = {
+    SPECIES_SNORLAX,
+    SPECIES_SNORLAX_PRIMAL,
+    FORM_SPECIES_END,
+};
+static const u16 sVictiniFormSpeciesIdTable[] = {
+    SPECIES_VICTINI,
+    SPECIES_VICTINI_PRIMAL,
+    FORM_SPECIES_END,
+};
+static const u16 sWigglytuffFormSpeciesIdTable[] = {
+    SPECIES_WIGGLYTUFF,
+    SPECIES_WIGGLYTUFF_PRIMAL,
     FORM_SPECIES_END,
 };

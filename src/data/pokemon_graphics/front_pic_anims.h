@@ -21,6 +21,41 @@ static const union AnimCmd sAnim_ESCARGINITE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_MAWILE_REDUX_B_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_MAWILE_REDUX_B_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_FLYGON_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_FLYGON_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_WIGGLYTUFF_PRIMAL_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_VICTINI_PRIMAL_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_SNORLAX_PRIMAL_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_LEDIAN_PARADOX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -165,6 +200,41 @@ static const union AnimCmd *const sAnims_DUELUMBER[] ={
 static const union AnimCmd *const sAnims_ESCARGINITE[] ={
     sAnim_GeneralFrame0,
     sAnim_ESCARGINITE_1,
+};
+
+static const union AnimCmd *const sAnims_MAWILE_REDUX_B_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MAWILE_REDUX_B_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_MAWILE_REDUX_B[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MAWILE_REDUX_B_1,
+};
+
+static const union AnimCmd *const sAnims_FLYGON_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FLYGON_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_FLYGON_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FLYGON_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_WIGGLYTUFF_PRIMAL[] ={
+    sAnim_GeneralFrame0,
+    sAnim_WIGGLYTUFF_PRIMAL_1,
+};
+
+static const union AnimCmd *const sAnims_VICTINI_PRIMAL[] ={
+    sAnim_GeneralFrame0,
+    sAnim_VICTINI_PRIMAL_1,
+};
+
+static const union AnimCmd *const sAnims_SNORLAX_PRIMAL[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SNORLAX_PRIMAL_1,
 };
 
 static const union AnimCmd *const sAnims_LEDIAN_PARADOX[] ={
@@ -19673,6 +19743,13 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(SCIZOR_REDUX),
+    ANIM_CMD(MAWILE_REDUX_B_MEGA),
+    ANIM_CMD(MAWILE_REDUX_B),
+    ANIM_CMD(FLYGON_REDUX_MEGA),
+    ANIM_CMD(FLYGON_REDUX),
+    ANIM_CMD(WIGGLYTUFF_PRIMAL),
+    ANIM_CMD(VICTINI_PRIMAL),
+    ANIM_CMD(SNORLAX_PRIMAL),
     ANIM_CMD(LEDIAN_PARADOX),
     ANIM_CMD(DRACOVISH_MEGA),
     ANIM_CMD(CHIEN_PAO_MEGA),

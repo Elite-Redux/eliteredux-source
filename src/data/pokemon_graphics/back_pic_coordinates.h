@@ -5416,6 +5416,41 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_MAWILE_REDUX_B_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_MAWILE_REDUX_B] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_FLYGON_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_FLYGON_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_WIGGLYTUFF_PRIMAL] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_VICTINI_PRIMAL] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_SNORLAX_PRIMAL] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_LEDIAN_PARADOX] =
     {
         .size = 0,

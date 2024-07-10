@@ -715,7 +715,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_BISHARP_REDUX] = sBisharpFormSpeciesIdTable,
     [SPECIES_BISHARP] = sBisharpFormSpeciesIdTable,
 
-    [SPECIES_MAWILE] = sMawileFormSpeciesIdTable,
+    [SPECIES_MAWILE_REDUX_B] = sMawileFormSpeciesIdTable,
     [SPECIES_MAWILE_REDUX] = sMawileFormSpeciesIdTable,
     [SPECIES_MAWILE_MEGA] = sMawileFormSpeciesIdTable,
     [SPECIES_MAWILE_MEGA_REDUX] = sMawileFormSpeciesIdTable,
@@ -827,7 +827,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_TERAPAGOS_STELLAR] = sTerapagosFormSpeciesIdTable,
 
-    [SPECIES_FLYGON] = sFlygonFormSpeciesIdTable,
+    [SPECIES_FLYGON_REDUX] = sFlygonFormSpeciesIdTable,
     [SPECIES_FLYGON_MEGA] = sFlygonFormSpeciesIdTable,
 
     [SPECIES_TORTERRA] = sTorterraFormSpeciesIdTable,
@@ -873,4 +873,14 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_DRACOVISH_MEGA] = sDracovishFormSpeciesIdTable,
 
     [SPECIES_LEDIAN_PARADOX] = sLedianFormSpeciesIdTable,
+    [SPECIES_SNORLAX_PRIMAL] = sSnorlaxFormSpeciesIdTable,
+
+    [SPECIES_VICTINI_PRIMAL] = sVictiniFormSpeciesIdTable,
+
+    [SPECIES_WIGGLYTUFF_PRIMAL] = sWigglytuffFormSpeciesIdTable,
+
+    [SPECIES_FLYGON_REDUX_MEGA] = sFlygonFormSpeciesIdTable,
+
+    [SPECIES_MAWILE_REDUX_B_MEGA] = sMawileFormSpeciesIdTable,
+
 };
