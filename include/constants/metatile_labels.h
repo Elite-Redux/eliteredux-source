@@ -334,7 +334,8 @@
 #define METATILE_MauvilleGym_RedBeamV2_On        0x249
 #define METATILE_MauvilleGym_tripping_floorH0_0  0x201
 #define METATILE_MauvilleGym_tripping_floorH0_1  0x203
-#define METATILE_MauvilleGym_tripping_floorH1_0  0x204
+#define METATILE_MauvilleGym_tripping_floorH1_0  0x202
+#define METATILE_MauvilleGym_tripping_floorH1_1  0x204
 
 // gTileset_Mauville
 #define METATILE_Mauville_DeepSand_BottomMid  0x259

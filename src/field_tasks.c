@@ -20,6 +20,7 @@
 #include "constants/items.h"
 #include "constants/songs.h"
 #include "constants/metatile_labels.h"
+#include "mgba_printf/mgba.h"
 
 struct PacifidlogMetatileOffsets
 {
@@ -35,6 +36,7 @@ static void PacifidlogBridgePerStepCallback(u8 taskId);
 static void SootopolisGymIcePerStepCallback(u8 taskId);
 static void CrackedFloorPerStepCallback(u8 taskId);
 static void Task_MuddySlope(u8 taskId);
+static void ChangeMauvilleGroundTilesCallback(u8 taskId);
 
 static const TaskFunc sPerStepCallbacks[] =
 {
@@ -45,7 +47,8 @@ static const TaskFunc sPerStepCallbacks[] =
     [STEP_CB_SOOTOPOLIS_ICE]    = SootopolisGymIcePerStepCallback,
     [STEP_CB_TRUCK]             = EndTruckSequence,
     [STEP_CB_SECRET_BASE]       = SecretBasePerStepCallback,
-    [STEP_CB_CRACKED_FLOOR]     = CrackedFloorPerStepCallback
+    [STEP_CB_CRACKED_FLOOR]     = CrackedFloorPerStepCallback,
+    [STEP_CB_MAUVILLE_GYM]      = ChangeMauvilleGroundTilesCallback
 };
 
 // they are in pairs but declared as 1D array
@@ -759,5 +762,72 @@ static void Task_MuddySlope(u8 taskId)
             data[i + 2] -= y2;
             SetMuddySlopeMetatile(&data[i], data[i + 1], data[i + 2]);
         }
+    }
+}
+
+#define CHANGE_MAUVILLE_TILES_FREQUENCY 9 // redraw each X frame
+#define CHANGE_MAUVILLE_FULL_METATILES_NUMBER 13
+#define CHANGE_MAUVILLE_HALF_METATILES_NUMBER 4
+
+static const struct UColumnCoords8 mauvilleGymTrippingTilesFullColumnCoords[CHANGE_MAUVILLE_FULL_METATILES_NUMBER] = {
+    {1, 2, 16},
+    {2, 2, 16},
+    {3, 4, 16},
+    {3, 19, 20},
+    {4, 4, 17},
+    {4, 19, 19},
+    {5, 4, 19},
+    {6, 4, 16},
+    {6, 19, 20},
+    {7, 2, 17},
+    {7, 19, 20},
+    {8, 2, 15},
+    {9, 2, 15},
+};
+
+static const struct UColumnCoords8 mauvilleGymTrippingTilesHalfColumnCoords[CHANGE_MAUVILLE_HALF_METATILES_NUMBER] = {
+    {0, 2, 16},
+    {2, 17, 20},
+    {4, 18, 18},
+    {7, 18, 18},
+};
+
+const u16 mauvilleGymTrippingFullMetatilesTable[] = 
+{
+    METATILE_MauvilleGym_tripping_floorH1_0,
+    METATILE_MauvilleGym_tripping_floorH1_1
+};
+
+const u16 mauvilleGymTrippingHalfMetatilesTable[] = 
+{
+    METATILE_MauvilleGym_tripping_floorH0_0,
+    METATILE_MauvilleGym_tripping_floorH0_1
+};
+
+// the +7 is because i use the coordinate of porymap which is offseted
+static void redrawColumnWithSevenOffset(struct UColumnCoords8 coords, u16 metatile){
+    u8 i;
+    for (i = coords.y0; i <= coords.y1; i++){
+        MapGridSetMetatileIdAt(coords.x + 7, i + 7, metatile);
+        CurrentMapDrawMetatileAt(coords.x + 7, i + 7);
+    }
+    
+}
+
+static void ChangeMauvilleGroundTilesCallback(u8 taskId)
+{
+    u8 i, metaTileId;
+    int frameIdx;
+
+    frameIdx = ++gTasks[taskId].data[1];
+    if (frameIdx % CHANGE_MAUVILLE_TILES_FREQUENCY != 0)
+        return;
+    
+    metaTileId = (frameIdx % (CHANGE_MAUVILLE_TILES_FREQUENCY * 2)) & 1;
+    for (i = 0; i < CHANGE_MAUVILLE_FULL_METATILES_NUMBER; i++){
+        redrawColumnWithSevenOffset(mauvilleGymTrippingTilesFullColumnCoords[i], mauvilleGymTrippingFullMetatilesTable[metaTileId]);
+    }
+    for (i = 0; i < CHANGE_MAUVILLE_HALF_METATILES_NUMBER; i++){
+        redrawColumnWithSevenOffset(mauvilleGymTrippingTilesHalfColumnCoords[i], mauvilleGymTrippingHalfMetatilesTable[metaTileId]);
     }
 }
