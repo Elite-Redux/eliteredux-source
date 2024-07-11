@@ -318,10 +318,6 @@
 #define METATILE_MauvilleGym_GreenBeamV2_On      0x248
 #define METATILE_MauvilleGym_PoleBottom_Off      0x243
 #define METATILE_MauvilleGym_PoleBottom_On       0x242
-#define METATILE_MauvilleGym_PoleTop_Off         0x251
-#define METATILE_MauvilleGym_PoleTop_On          0x250
-#define METATILE_MauvilleGym_PressedSwitch       0x206
-#define METATILE_MauvilleGym_RaisedSwitch        0x205
 #define METATILE_MauvilleGym_RedBeamH1_Off       0x232
 #define METATILE_MauvilleGym_RedBeamH1_On        0x222
 #define METATILE_MauvilleGym_RedBeamH2_Off       0x233
@@ -334,8 +330,14 @@
 #define METATILE_MauvilleGym_RedBeamV2_On        0x249
 #define METATILE_MauvilleGym_tripping_floorH0_0  0x201
 #define METATILE_MauvilleGym_tripping_floorH0_1  0x203
+#define METATILE_MauvilleGym_tripping_floorH0_2  0x205
+#define METATILE_MauvilleGym_tripping_floorH0_3  0x208
+#define METATILE_MauvilleGym_tripping_floorH0_4  0x20A
 #define METATILE_MauvilleGym_tripping_floorH1_0  0x202
 #define METATILE_MauvilleGym_tripping_floorH1_1  0x204
+#define METATILE_MauvilleGym_tripping_floorH1_2  0x206
+#define METATILE_MauvilleGym_tripping_floorH1_3  0x209
+#define METATILE_MauvilleGym_tripping_floorH1_4  0x20B
 
 // gTileset_Mauville
 #define METATILE_Mauville_DeepSand_BottomMid  0x259

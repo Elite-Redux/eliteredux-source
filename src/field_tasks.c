@@ -768,6 +768,7 @@ static void Task_MuddySlope(u8 taskId)
 #define CHANGE_MAUVILLE_TILES_FREQUENCY 9 // redraw each X frame
 #define CHANGE_MAUVILLE_FULL_METATILES_NUMBER 13
 #define CHANGE_MAUVILLE_HALF_METATILES_NUMBER 4
+#define CHANGE_MAUVILLE_ANIM_NUMBER 5
 
 static const struct UColumnCoords8 mauvilleGymTrippingTilesFullColumnCoords[CHANGE_MAUVILLE_FULL_METATILES_NUMBER] = {
     {1, 2, 16},
@@ -792,16 +793,22 @@ static const struct UColumnCoords8 mauvilleGymTrippingTilesHalfColumnCoords[CHAN
     {7, 18, 18},
 };
 
-const u16 mauvilleGymTrippingFullMetatilesTable[] = 
+const u16 mauvilleGymTrippingFullMetatilesTable[CHANGE_MAUVILLE_ANIM_NUMBER] = 
 {
     METATILE_MauvilleGym_tripping_floorH1_0,
-    METATILE_MauvilleGym_tripping_floorH1_1
+    METATILE_MauvilleGym_tripping_floorH1_1,
+    METATILE_MauvilleGym_tripping_floorH1_2,
+    METATILE_MauvilleGym_tripping_floorH1_3,
+    METATILE_MauvilleGym_tripping_floorH1_4,
 };
 
-const u16 mauvilleGymTrippingHalfMetatilesTable[] = 
+const u16 mauvilleGymTrippingHalfMetatilesTable[CHANGE_MAUVILLE_ANIM_NUMBER] = 
 {
     METATILE_MauvilleGym_tripping_floorH0_0,
-    METATILE_MauvilleGym_tripping_floorH0_1
+    METATILE_MauvilleGym_tripping_floorH0_1,
+    METATILE_MauvilleGym_tripping_floorH0_2,
+    METATILE_MauvilleGym_tripping_floorH0_3,
+    METATILE_MauvilleGym_tripping_floorH0_4,
 };
 
 // the +7 is because i use the coordinate of porymap which is offseted
@@ -823,7 +830,7 @@ static void ChangeMauvilleGroundTilesCallback(u8 taskId)
     if (frameIdx % CHANGE_MAUVILLE_TILES_FREQUENCY != 0)
         return;
     
-    metaTileId = (frameIdx % (CHANGE_MAUVILLE_TILES_FREQUENCY * 2)) & 1;
+    metaTileId = (frameIdx % (CHANGE_MAUVILLE_TILES_FREQUENCY * CHANGE_MAUVILLE_ANIM_NUMBER)) / CHANGE_MAUVILLE_TILES_FREQUENCY;
     for (i = 0; i < CHANGE_MAUVILLE_FULL_METATILES_NUMBER; i++){
         redrawColumnWithSevenOffset(mauvilleGymTrippingTilesFullColumnCoords[i], mauvilleGymTrippingFullMetatilesTable[metaTileId]);
     }
