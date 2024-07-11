@@ -10778,7 +10778,7 @@ static void Cmd_various(void)
                 }
             }
 
-            if (state.stat >= NUM_NATURE_STATS - 1) state = (struct StatCopyState) {0};
+            if (state.stat >= NUM_BATTLE_STATS) state = (struct StatCopyState) {0};
 
             SetAbilityStateAs(battler, ABILITY_EGOIST, (union AbilityStates) { .statCopyState = state });
             return;
