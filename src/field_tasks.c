@@ -765,7 +765,7 @@ static void Task_MuddySlope(u8 taskId)
     }
 }
 
-#define CHANGE_MAUVILLE_TILES_FREQUENCY 9 // redraw each X frame
+#define CHANGE_MAUVILLE_TILES_FREQUENCY 6 // redraw each X frame
 #define CHANGE_MAUVILLE_FULL_METATILES_NUMBER 13
 #define CHANGE_MAUVILLE_HALF_METATILES_NUMBER 4
 #define CHANGE_MAUVILLE_ANIM_NUMBER 5
