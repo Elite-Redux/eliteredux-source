@@ -1,8 +1,33 @@
-raw `
-MauvilleCity_Gym_MapScripts:: @ 820DD6E
-	map_script MAP_SCRIPT_ON_LOAD, MauvilleCity_Gym_OnLoad
-	.byte 0
+mapscripts MauvilleCity_Gym_MapScripts{
+    MAP_SCRIPT_ON_FRAME_TABLE [
+        VAR_TEMP_A, 0 : MauvilleCity_Gym_EventScript_CountFrames
+    ]
+}
 
+script MauvilleCity_Gym_EventScript_CountFrames{
+    setvar(VAR_TEMP_A,  1)
+    call(MauvilleCity_Gym_EventScript_InitFrameEngine)
+}
+
+script MauvilleCity_Gym_EventScript_InitFrameEngine{
+    delay(40)
+    call(MauvilleCity_Gym_EventScript_ChangeTiles)
+    goto(MauvilleCity_Gym_EventScript_InitFrameEngine)
+}
+
+script MauvilleCity_Gym_EventScript_ChangeTiles{
+    setmetatile(1, 3, METATILE_MauvilleGym_tripping_floorH1_0, 0)
+    setmetatile(1, 4, METATILE_MauvilleGym_tripping_floorH1_0, 0)
+    setmetatile(1, 5, METATILE_MauvilleGym_tripping_floorH1_0, 0)
+    setmetatile(1, 6, METATILE_MauvilleGym_tripping_floorH1_0, 0)
+    setmetatile(1, 7, METATILE_MauvilleGym_tripping_floorH1_0, 1)
+    setmetatile(1, 8, METATILE_MauvilleGym_tripping_floorH1_0, 1)
+    setmetatile(1, 9, METATILE_MauvilleGym_tripping_floorH1_0, 1)
+    setmetatile(1, 10, METATILE_MauvilleGym_tripping_floorH1_0, 1)
+    setmetatile(1, 11, METATILE_MauvilleGym_tripping_floorH1_0, 1)
+}
+
+raw `
 MauvilleCity_Gym_OnLoad: @ 820DD74
 	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_DeactivatePuzzle
 	switch VAR_MAUVILLE_GYM_STATE
@@ -505,6 +530,7 @@ script MauvilleCity_Gym_EventScript_GiveVoltSwitch{
 	end
 }
 
+
 script MauvilleCity_Gym_EventScript_CheckTrainers{
 	//Check that you have defeated every trainer in that Gym and that you don't have that badge yet
 	if(((!defeated(TRAINER_KIRK)     || 
@@ -522,3 +548,4 @@ script MauvilleCity_Gym_EventScript_CheckTrainers{
 		return
 	}
 }
+
