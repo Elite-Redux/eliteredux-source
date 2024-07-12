@@ -2233,9 +2233,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
     else
     {
         //Boost Critical Chance
-        critChance  = 2 * ((gBattleMons[gBattlerAttacker].status2 & STATUS2_FOCUS_ENERGY) != 0)
-                    + (gStatuses4[gBattlerAttacker] & STATUS4_DRAGON_CHEER ? 1 + IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_DRAGON) : 0)
-                    + ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
+        critChance  = ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
                     + (holdEffectAtk == HOLD_EFFECT_SCOPE_LENS)
                     + 2 * (holdEffectAtk == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
                     + BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk)
@@ -2243,7 +2241,8 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYPER_CUTTER))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PRECISE_FIST)  && IS_IRON_FIST(battlerAtk, move))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SUPER_LUCK))
-                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER));
+                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER))
+                    + gVolatileStructs[battlerAtk].critBoost;
 
         if (critChance >= ARRAY_COUNT(sCriticalHitChance))
             critChance = ARRAY_COUNT(sCriticalHitChance) - 1;
@@ -11215,6 +11214,21 @@ static void Cmd_various(void)
                 return;
         }
         }
+    case VARIOUS_INCREASE_CRIT:
+        {
+            int increase = T1_READ_8(gBattlescriptCurrInstr + 3);
+            int failPtr = T1_READ_PTR(gBattlescriptCurrInstr + 4);
+            increase = min(3 - gVolatileStructs[gActiveBattler].critBoost, increase);
+            if (!increase && failPtr)
+            {
+                gBattlescriptCurrInstr = failPtr;
+                return;
+            }
+            gVolatileStructs[gActiveBattler].critBoost += increase;
+            gBattlescriptCurrInstr += 7;
+            return;
+        }
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;

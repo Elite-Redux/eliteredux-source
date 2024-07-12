@@ -845,6 +845,10 @@ static const u8 sText_AnnounceMonotypeBoostFairy[] = _("The terrain became weird
 static const u8 sText_ParasiticSpores[] = _("{B_ATK_NAME_WITH_PREFIX} is coated\nin parasitic spores!");
 static const u8 sText_ParasiticSporesSpread[] = _("{B_STACK_1_NAME_WITH_PREFIX} spreads its\nspores to {B_STACK_2_NAME_WITH_PREFIX}.");
 static const u8 sText_HurtByParasiticSpores[] = _("{B_ATK_TEAM1} {B_ATK_NAME_WITH_PREFIX} was hurt\nby its parasitic spores!");
+static const u8 sText_CritCantIncrease[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s critical\nhit chance wont go any higher!");
+static const u8 sText_CritPlus1[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s critical\nhit chance rose!");
+static const u8 sText_CritPlus2[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s critical\nhit chance sharply rose!");
+static const u8 sText_CritPlus3[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} maxed\nits critical hit chance!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1790,6 +1794,10 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PARASITIC_SPORES - 12] = sText_ParasiticSpores,
     [STRINGID_PARASITIC_SPORES_SPREAD - 12] = sText_ParasiticSporesSpread,
     [STRINGID_HURT_BY_PARASITIC_SPORES - 12] = sText_HurtByParasiticSpores,
+    [STRINGID_CRIT_CANT_INCREASE - 12] = sText_CritCantIncrease,
+    [STRINGID_CRIT_PLUS_1 - 12] = sText_CritPlus1,
+    [STRINGID_CRIT_PLUS_2 - 12] = sText_CritPlus2,
+    [STRINGID_CRIT_PLUS_3 - 12] = sText_CritPlus3,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2340,6 +2348,14 @@ const u16 gPrimalEvolutionAnnouncement[] =
     [B_MSG_PRIMAL_REVERSION] = STRINGID_PKMNREVERTEDTOPRIMAL,
     [B_MSG_ORIGIN_REVERSION] = STRINGID_ORIGIN_REVERSION,
     [B_MSG_CROWNED_REVERSION] = STRINGID_CROWNED_REVERSION,
+};
+
+const u16 gCritRaisedStrings[] = 
+{
+    [B_MSG_CRIT_NO_INCREASE] = STRINGID_CRIT_CANT_INCREASE,
+    [B_MSG_CRIT_INCREASE_1] = STRINGID_CRIT_PLUS_1,
+    [B_MSG_CRIT_INCREASE_2] = STRINGID_CRIT_PLUS_2,
+    [B_MSG_CRIT_INCREASE_3] = STRINGID_CRIT_PLUS_3,
 };
 
 // END OF GENERATED

@@ -132,6 +132,7 @@ struct VolatileStruct
     u8 readiedAction:1;
     u8 showdownMode:1;
     u8 parasiticSpores:1;
+    u8 critBoost:2;
 };
 
 struct RoundStruct

@@ -1140,7 +1140,10 @@ BattleScript_EffectDecorate:
 	ppreduce
 	jumpifstat BS_TARGET, CMP_NOT_EQUAL, STAT_ATK, 12, BattleScript_DecorateBoost
 	jumpifstat BS_TARGET, CMP_NOT_EQUAL, STAT_SPATK, 12, BattleScript_DecorateBoost
-	jumpifstatus2 BS_TARGET, STATUS2_FOCUS_ENERGY, BattleScript_ButItFailed
+	increasecrit BS_TARGET, 2, BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	goto BattleScript_DecorateBoostCritContinue
 BattleScript_DecorateBoost:
 	attackanimation
 	waitanimation
@@ -1158,10 +1161,10 @@ BattleScript_DecorateBoostSpAtk:
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_DecorateBoostCrit:
-	jumpifstatus2 BS_TARGET, STATUS2_FOCUS_ENERGY, BattleScript_MoveEnd
-	setfocusenergy
+	increasecrit BS_TARGET, 2, BattleScript_MoveEnd
+BattleScript_DecorateBoostCritContinue:
 	getbattler BS_TARGET
-	printfromtable gFocusEnergyUsedStringIds
+	printfromtable gCritRaisedStrings
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
@@ -4461,12 +4464,11 @@ BattleScript_EffectFocusEnergy:
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifstatus2 BS_ATTACKER, STATUS2_FOCUS_ENERGY, BattleScript_ButItFailed
-	setfocusenergy
+	increasecrit BS_ATTACKER, 2, BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	getbattler BS_ATTACKER
-	printfromtable gFocusEnergyUsedStringIds
+	printstring STRINGID_PKMNGETTINGPUMPED
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
@@ -12041,22 +12043,35 @@ BattleScript_EffectDragonCheer::
 	attackcanceler
 	attackstring
 	ppreduce
-	setdragoncheer BS_ATTACKER, BattleScript_EffectDragonCheer_PartnerOnly
+	jumpiftype BS_ATTACKER, TYPE_DRAGON, BattleScript_EffectDragonCheer_AttackerDragon
+	increasecrit BS_ATTACKER, 1, BattleScript_EffectDragonCheer_PartnerOnly
+	goto BattleScript_EffectDragonCheer_AttackerContinue
+BattleScript_EffectDragonCheer_AttackerDragon:
+	increasecrit BS_ATTACKER, 2, BattleScript_EffectDragonCheer_PartnerOnly
+BattleScript_EffectDragonCheer_AttackerContinue:
 	attackanimation
 	waitanimation
 	getbattler BS_ATTACKER
-	printfromtable gFocusEnergyUsedStringIds
+	printfromtable gCritRaisedStrings
 	waitmessage B_WAIT_TIME_LONG
-	setdragoncheer BS_ATTACKER_PARTNER, BattleScript_MoveEnd
+	jumpiftype BS_ATTACKER_PARTNER, TYPE_DRAGON, BattleScript_EffectDragonCheer_PartnerDragon
+	increasecrit BS_ATTACKER_PARTNER, 1, BattleScript_MoveEnd
+	goto BattleScript_EffectDragonCheer_DoPartner
+BattleScript_EffectDragonCheer_PartnerDragon:
+	increasecrit BS_ATTACKER_PARTNER, 2, BattleScript_MoveEnd
 BattleScript_EffectDragonCheer_DoPartner:
-	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_MoveEnd
 	getbattler BS_ATTACKER_PARTNER
-	printfromtable gFocusEnergyUsedStringIds
+	printfromtable gCritRaisedStrings
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 BattleScript_EffectDragonCheer_PartnerOnly:
 	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_ButItFailed
-	setdragoncheer BS_ATTACKER_PARTNER, BattleScript_ButItFailed
+	jumpiftype BS_ATTACKER_PARTNER, TYPE_DRAGON, BattleScript_EffectDragonCheer_PartnerOnlyDragon
+	increasecrit BS_ATTACKER_PARTNER, 1, BattleScript_MoveEnd
+	goto BattleScript_EffectDragonCheer_DoPartner
+BattleScript_EffectDragonCheer_PartnerOnlyDragon:
+	increasecrit BS_ATTACKER_PARTNER, 2, BattleScript_MoveEnd
+BattleScript_EffectDragonCheer_PartnerOnlyContinue:
 	attackanimation
 	waitanimation
 	goto BattleScript_EffectDragonCheer_DoPartner

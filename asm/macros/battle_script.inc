@@ -2295,6 +2295,12 @@
 	.2byte \effect
 	.endm
 
+	.macro increasecrit battler:req amount:req failPtr=NULL
+	various \battler, VARIOUS_INCREASE_CRIT
+	.byte \amount
+	.4byte \failPtr
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

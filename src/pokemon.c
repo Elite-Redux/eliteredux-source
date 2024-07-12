@@ -6082,9 +6082,10 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
 
             // Dire Hit
             if ((itemEffect[i] & ITEM0_DIRE_HIT)
-             && !(gBattleMons[gActiveBattler].status2 & STATUS2_FOCUS_ENERGY))
+             && gVolatileStructs[gActiveBattler].critBoost < 3)
             {
-                gBattleMons[gActiveBattler].status2 |= STATUS2_FOCUS_ENERGY;
+                int increase = min(2, 3 - gVolatileStructs[gActiveBattler].critBoost);
+                gVolatileStructs[gActiveBattler].critBoost += increase;
                 retVal = FALSE;
             }
         #ifndef ITEM_EXPANSION
