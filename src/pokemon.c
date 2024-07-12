@@ -8233,8 +8233,9 @@ const u32 *GetShinySpritePal(u16 species, u32 personality)
         // }
         switch(res){
             //will be expanded later once we had add more tables, this is fine for now
-            default:
             case 0:
+                return gMonAltShinyPaletteTable[species].data;
+            default:
                 return gMonAltShinyPaletteTable[species].data;
         }
     }
@@ -8256,14 +8257,16 @@ const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 per
 {
     u8 mask = gBaseStats[species].altShinyMask;
     u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
+    u16 newseed;
+    u32 res;
+    u8 alts;
     if(rndSeed == 0){
-            u16 newseed = Random();
+            newseed = Random();
             VarSet(VAR_RANDOMIZED_SEED, newseed);
             rndSeed = VarGet(VAR_RANDOMIZED_SEED);
         }
-    u8 alts = getNumAlts(species);
+    alts = getNumAlts(species);
     rndSeed ^= species * personality;
-    u32 res;
     res = RandRangeDeterministic(0, alts, &rndSeed);
     if (mask > 0 && res != 0){
         //uncomment this when we had more tables
@@ -8272,8 +8275,9 @@ const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 per
         // }
         switch(res){
             //will be expanded later once we had add more tables, this is fine for now
-            default:
             case 0:
+                return &gMonAltShinyPaletteTable[species];
+            default:
                 return &gMonAltShinyPaletteTable[species];
         }
     }
