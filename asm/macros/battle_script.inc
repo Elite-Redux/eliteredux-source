@@ -2275,9 +2275,8 @@
 	readtargetfromstack4
 	.endm
 
-	.macro setdragoncheer battler:req, failPtr:req
-	various \battler, VARIOUS_SET_DRAGON_CHEER
-	.4byte \failPtr
+	.macro disablerandom battler:req
+	various \battler, VARIOUS_DISABLE_RANDOM
 	.endm
 
 	.macro jumpifstatup battler:req, ptr:req

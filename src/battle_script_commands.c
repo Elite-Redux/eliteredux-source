@@ -11050,17 +11050,14 @@ static void Cmd_various(void)
     case VARIOUS_RESTORE_STACK_STATE:
         ReadActiveScriptInitialStackState();
         break;
-    case VARIOUS_SET_DRAGON_CHEER:
-        if (gStatuses4[gActiveBattler] & STATUS4_DRAGON_CHEER) {
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
-            SetActiveMultistringChooser(B_MSG_FOCUS_ENERGY_FAILED);
+    case VARIOUS_DISABLE_RANDOM:
+        do {
+            gVolatileStructs[gActiveBattler].disabledMove = Random() % 4;
         }
-        else {
-            gBattlescriptCurrInstr += 7;
-            gStatuses4[gActiveBattler] |= STATUS4_DRAGON_CHEER;
-            SetActiveMultistringChooser(B_MSG_GETTING_PUMPED);
-        }
-        return;
+        while (gBattleMons[gActiveBattler].moves[gVolatileStructs[gActiveBattler].disabledMove] != MOVE_NONE);
+        gVolatileStructs[gActiveBattler].disableTimer = gVolatileStructs[gActiveBattler].disableTimerStartValue = 4;
+        PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleMons[gActiveBattler].moves[gVolatileStructs[gActiveBattler].disabledMove])
+        break;
     case VARIOUS_GOTO_IF_STAT_UP:
         {
         u8 i;

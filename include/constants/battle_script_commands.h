@@ -244,7 +244,7 @@
 #define VARIOUS_RESTORE_TURN_BATTLERS           162
 #define VARIOUS_WRITE_STACK_BATTLER             163
 #define VARIOUS_RESTORE_STACK_STATE             164
-#define VARIOUS_SET_DRAGON_CHEER                165
+#define VARIOUS_DISABLE_RANDOM                  165
 #define VARIOUS_GOTO_IF_STAT_UP                 166
 #define VARIOUS_TRY_UPPER_HAND                  167
 #define VARIOUS_REQUIRE_CAN_DO_EFFECT           168
