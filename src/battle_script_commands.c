@@ -16855,8 +16855,10 @@ void CheckForBadEggs(void){
 void SetBattlerAffectedFlag(int attacker, int target, int ability)
 {
     if (attacker == target) return;
+    {
     int flag = GetAbilityState(attacker, ability);
     SetAbilityState(attacker, ability, flag | (1 << target));
+    }
 }
 
 void ClearBattlerAffectedFlag(int attacker, int target, int ability)

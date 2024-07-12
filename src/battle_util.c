@@ -9870,8 +9870,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
             {
             int flag;
-            if (flag = GetAbilityState(battler, ABILITY_ENTRANCE)) {
-                for (int i = 0; i < gBattlersCount; i++)
+            if ((flag = GetAbilityState(battler, ABILITY_ENTRANCE))) {
+                for (i = 0; i < gBattlersCount; i++)
                 {
                     if (!(flag & (1 << i))) continue;
                     if (IsBattlerAlive(i)
@@ -9897,8 +9897,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
             {
             int flag;
-            if (flag = GetAbilityState(battler, ABILITY_POISON_PUPPETEER)) {
-                for (int i = 0; i < gBattlersCount; i++)
+            if ((flag = GetAbilityState(battler, ABILITY_POISON_PUPPETEER))) {
+                for (i = 0; i < gBattlersCount; i++)
                 {
                     if (!(flag & (1 << i))) continue;
                     if (IsBattlerAlive(i)
