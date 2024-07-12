@@ -827,7 +827,7 @@ void InitTilesetAnim_EliteFour(void)
 void InitTilesetAnim_MauvilleGym(void)
 {
     sSecondaryTilesetAnimCounter = 0;
-    sSecondaryTilesetAnimCounterMax = sPrimaryTilesetAnimCounterMax;
+    sSecondaryTilesetAnimCounterMax = 25;
     sSecondaryTilesetAnimCallback = TilesetAnim_MauvilleGym;
 }
 
@@ -1081,12 +1081,11 @@ static void QueueAnimTiles_Slateport_Balloons(u16 timer)
     AppendTilesetAnimToBuffer(gTilesetAnims_Slateport_Balloons[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 224)), 0x80);
 }
 
-static u8 offsetPreviousAnimLoop;
 static void TilesetAnim_MauvilleGym(u16 timer)
 {
     /*if (timer % 2 == 0)
         QueueAnimTiles_MauvilleGym_ElectricGates(timer >> 1);*/
-    if(timer % 6 == 0){
+    if(timer % 5 == 0){
         QueueAnimTiles_MauvilleGym_TrippingFloor(timer);
     }
 }
@@ -1165,16 +1164,8 @@ static void QueueAnimTiles_MauvilleGym_ElectricGates(u16 timer)
 
 static void QueueAnimTiles_MauvilleGym_TrippingFloor(u16 timer)
 {
-    u16 i;
-    if (offsetPreviousAnimLoop == 4){
-        offsetPreviousAnimLoop = 0;
-    } else {
-        offsetPreviousAnimLoop++;
-    }
-    i = offsetPreviousAnimLoop;
-    MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "%d %d", timer, i);
-    MgbaClose();
+    // since sSecondaryTilesetAnimCounterMax = 25; it's understandly safe
+    u16 i = timer / 5; 
     // the 0x100 here is calculated by (widthpx * heightpx) / 2 of one animated frame (the png file 0 for example)
     // beware that your tiles must be sliced from top left to bottom right in the tileset
     AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_TrippingFloor[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 4)), 0x100);
