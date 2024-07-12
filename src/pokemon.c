@@ -10929,6 +10929,12 @@ const u8 gSpeciesNameLongWormadamTrash[] = _("Wormadam Trash");
 const u8 gSpeciesNameLongMeloettaAria[] = _("Meloetta Aria");
 const u8 gSpeciesNameLongMeloettaPirouette[] = _("Meloetta Pirouette");
 
+const u8 gSpeciesNameLongUrsalunaBloodmoon[] = _("Ursaluna Bloodmoon");
+
+const u8 gSpeciesNameLongBasculin[] = _("Basculin Red");
+const u8 gSpeciesNameLongBasculinBlue[] = _("Basculin Blue");
+const u8 gSpeciesNameLongBasculinWhite[] = _("Basculin White");
+
 const u8* GetSpeciesLongName(u16 species)
 {
     switch (species)
@@ -11063,6 +11069,16 @@ const u8* GetSpeciesLongName(u16 species)
             return gSpeciesNameLongMeloettaAria;
         case SPECIES_MELOETTA_PIROUETTE:
             return gSpeciesNameLongMeloettaPirouette;
+        
+        case SPECIES_URSALUNA_BLOODMOON:
+            return gSpeciesNameLongUrsalunaBloodmoon;
+
+        case SPECIES_BASCULIN:
+            return gSpeciesNameLongBasculin;
+        case SPECIES_BASCULIN_BLUE_STRIPED:
+            return gSpeciesNameLongBasculinBlue;
+        case SPECIES_BASCULIN_WHITESTRIPED:
+            return gSpeciesNameLongBasculinWhite;
 
         default:
             return NULL;

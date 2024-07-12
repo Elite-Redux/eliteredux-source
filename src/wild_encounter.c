@@ -570,6 +570,17 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
                     break;
             }
             break;
+        case SPECIES_BASCULIN:
+            switch (Random() % 3)
+            {
+                case 0:
+                    species = SPECIES_BASCULIN;
+                case 1:
+                    species = SPECIES_BASCULIN_BLUE_STRIPED;
+                case 2:
+                    species = SPECIES_BASCULIN_WHITESTRIPED;
+            }
+            break;
 
     }
 
