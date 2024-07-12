@@ -785,7 +785,7 @@
       "id": "LAYOUT_PETALBURG_CITY_GYM",
       "name": "PetalburgCity_Gym_Layout",
       "width": 9,
-      "height": 112,
+      "height": 47,
       "primary_tileset": "gTileset_Building",
       "secondary_tileset": "gTileset_PetalburgGym",
       "border_filepath": "data/layouts/PetalburgCity_Gym/border.bin",

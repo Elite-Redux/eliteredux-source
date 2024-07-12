@@ -19,15 +19,14 @@ PetalburgCity_Gym_OnLoad: @ 820489E
 
 @ NOTE: Strength and OHKO rooms are misleading. Both are more accurately Critical-Hit
 PetalburgCity_Gym_EventScript_OpenUnlockedDoors:: @ 82048B5
-	setvar VAR_0x8005, 1
 	call PetalburgCity_Gym_EventScript_OpenGymEntranceDoors
-	call_if_defeated TRAINER_RANDALL, PetalburgCity_Gym_EventScript_OpenSpeedRoomDoors
-	call_if_defeated TRAINER_MARY, PetalburgCity_Gym_EventScript_OpenAccuracyRoomDoors
-	call_if_defeated TRAINER_PARKER, PetalburgCity_Gym_EventScript_OpenConfusionRoomDoors
-	call_if_defeated TRAINER_ALEXIA, PetalburgCity_Gym_EventScript_OpenDefenseRoomDoors
-	call_if_defeated TRAINER_GEORGE, PetalburgCity_Gym_EventScript_OpenRecoveryRoomDoors
-	call_if_defeated TRAINER_JODY, PetalburgCity_Gym_EventScript_OpenStrengthRoomDoors
-	call_if_defeated TRAINER_BERKE, PetalburgCity_Gym_EventScript_OpenOHKORoomDoors
+	@ call_if_defeated TRAINER_RANDALL, PetalburgCity_Gym_EventScript_OpenSpeedRoomDoors
+	@ call_if_defeated TRAINER_MARY, PetalburgCity_Gym_EventScript_OpenAccuracyRoomDoors
+	@ call_if_defeated TRAINER_PARKER, PetalburgCity_Gym_EventScript_OpenConfusionRoomDoors
+	@ call_if_defeated TRAINER_ALEXIA, PetalburgCity_Gym_EventScript_OpenDefenseRoomDoors
+	@ call_if_defeated TRAINER_GEORGE, PetalburgCity_Gym_EventScript_OpenRecoveryRoomDoors
+	@ call_if_defeated TRAINER_JODY, PetalburgCity_Gym_EventScript_OpenStrengthRoomDoors
+	@ call_if_defeated TRAINER_BERKE, PetalburgCity_Gym_EventScript_OpenOHKORoomDoors
 	end
 
 PetalburgCity_Gym_EventScript_UnlockAllDoors:: @ 82048FF
@@ -760,11 +759,38 @@ PetalburgCity_Gym_Movement_PlayerExitWithWallyEast: @ 8205123
 
 PetalburgCity_Gym_EventScript_SpeedRoomDoor:: @ 8205137
 	lockall
+	@ compare VAR_PETALBURG_GYM_STATE, 6
+	@ goto_if_lt PetalburgCity_Gym_EventScript_DoorLocked
+	setvar VAR_0x8008, 3
+	setvar VAR_0x8009, 33
+	msgbox PetalburgCity_Gym_Text_EnterMainRoom, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq PetalburgCity_Gym_EventScript_EnterRoom
+	compare VAR_RESULT, NO
+	goto_if_eq PetalburgCity_Gym_EventScript_DontEnterRoom
+	end
+
+@ VAR_0x8008 and VAR_0x8009 below are the x and y coordinates of the warp
+PetalburgCity_Gym_EventScript_MainRoomRight:: @ 8205187
+	lockall
 	compare VAR_PETALBURG_GYM_STATE, 6
 	goto_if_lt PetalburgCity_Gym_EventScript_DoorLocked
-	setvar VAR_0x8008, 7
-	setvar VAR_0x8009, 85
-	msgbox PetalburgCity_Gym_Text_EnterSpeedRoom, MSGBOX_YESNO
+	setvar VAR_0x8008, 5
+	setvar VAR_0x8009, 33
+	msgbox PetalburgCity_Gym_Text_EnterMainRoom, MSGBOX_YESNO
+	compare VAR_RESULT, YES
+	goto_if_eq PetalburgCity_Gym_EventScript_EnterRoom
+	compare VAR_RESULT, NO
+	goto_if_eq PetalburgCity_Gym_EventScript_DontEnterRoom
+	end
+
+PetalburgCity_Gym_EventScript_MainRoomLeft:: @ 8205137
+	lockall
+	compare VAR_PETALBURG_GYM_STATE, 6
+	goto_if_lt PetalburgCity_Gym_EventScript_DoorLocked
+	setvar VAR_0x8008, 3
+	setvar VAR_0x8009, 33
+	msgbox PetalburgCity_Gym_Text_EnterMainRoom, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq PetalburgCity_Gym_EventScript_EnterRoom
 	compare VAR_RESULT, NO
@@ -788,19 +814,7 @@ PetalburgCity_Gym_EventScript_DoorLocked:: @ 820517D
 	releaseall
 	end
 
-@ VAR_0x8008 and VAR_0x8009 below are the x and y coordinates of the warp
-PetalburgCity_Gym_EventScript_AccuracyRoomDoor:: @ 8205187
-	lockall
-	compare VAR_PETALBURG_GYM_STATE, 6
-	goto_if_lt PetalburgCity_Gym_EventScript_DoorLocked
-	setvar VAR_0x8008, 1
-	setvar VAR_0x8009, 98
-	msgbox PetalburgCity_Gym_Text_EnterAccuracyRoom, MSGBOX_YESNO
-	compare VAR_RESULT, YES
-	goto_if_eq PetalburgCity_Gym_EventScript_EnterRoom
-	compare VAR_RESULT, NO
-	goto_if_eq PetalburgCity_Gym_EventScript_DontEnterRoom
-	end
+
 
 PetalburgCity_Gym_EventScript_ConfusionRoomDoor:: @ 82051BC
 	lockall
@@ -900,7 +914,7 @@ PetalburgCity_Gym_EventScript_RightOHKORoomDoor:: @ 8205321
 
 PetalburgCity_Gym_EventScript_LeftGymLeadersRoomDoor:: @ 8205354
 	lockall
-	goto_if_not_defeated TRAINER_JODY, PetalburgCity_Gym_EventScript_DoorLocked
+	@ goto_if_not_defeated TRAINER_JODY, PetalburgCity_Gym_EventScript_DoorLocked
 	setvar VAR_0x8008, 1
 	setvar VAR_0x8009, 7
 	msgbox PetalburgCity_Gym_Text_EnterGymLeadersRoom, MSGBOX_YESNO
@@ -912,7 +926,7 @@ PetalburgCity_Gym_EventScript_LeftGymLeadersRoomDoor:: @ 8205354
 
 PetalburgCity_Gym_EventScript_RightGymLeadersRoomDoor:: @ 8205387
 	lockall
-	goto_if_not_defeated TRAINER_BERKE, PetalburgCity_Gym_EventScript_DoorLocked
+	@ goto_if_not_defeated TRAINER_BERKE, PetalburgCity_Gym_EventScript_DoorLocked
 	setvar VAR_0x8008, 7
 	setvar VAR_0x8009, 7
 	msgbox PetalburgCity_Gym_Text_EnterGymLeadersRoom, MSGBOX_YESNO
@@ -1010,7 +1024,7 @@ PetalburgCity_Gym_EventScript_OpenGymEntranceDoors:: @ 820555E
 	call_if_eq PetalburgCity_Gym_EventScript_SlideOpenRoomDoors
 	compare VAR_0x8005, 1
 	call_if_eq PetalburgCity_Gym_EventScript_UnlockRoomDoors
-	call PetalburgCity_Gym_EventScript_SetEntranceRoomDoorMetatiles
+	@ call PetalburgCity_Gym_EventScript_SetEntranceRoomDoorMetatiles
 	return
 
 PetalburgCity_Gym_EventScript_OpenSpeedRoomDoors:: @ 820557F
@@ -1077,10 +1091,10 @@ PetalburgCity_Gym_EventScript_OpenOHKORoomDoors:: @ 8205645
 	return
 
 PetalburgCity_Gym_EventScript_SetEntranceRoomDoorMetatiles:: @ 8205666
-	setmetatile 6, 85, METATILE_PetalburgGym_RoomEntrance_Left, 0
-	setmetatile 7, 85, METATILE_PetalburgGym_RoomEntrance_Right, 0
-	setmetatile 1, 98, METATILE_PetalburgGym_RoomEntrance_Left, 0
-	setmetatile 2, 98, METATILE_PetalburgGym_RoomEntrance_Right, 0
+	@ setmetatile 6, 85, METATILE_PetalburgGym_RoomEntrance_Left, 0
+	setmetatile 7, 40, METATILE_PetalburgGym_RoomEntrance_Right, 0
+	setmetatile 1, 40, METATILE_PetalburgGym_RoomEntrance_Left, 0
+	@ setmetatile 2, 98, METATILE_PetalburgGym_RoomEntrance_Right, 0
 	return
 
 PetalburgCity_Gym_EventScript_SetSpeedRoomDoorMetatiles:: @ 820568B
@@ -1581,6 +1595,10 @@ PetalburgCity_Gym_Text_DoorAppearsLocked2: @ 8207256
 
 PetalburgCity_Gym_Text_EnterAccuracyRoom: @ 8207280
 	.string "“Accuracy Room,” the sign says.\p"
+	.string "Do you want to go through?$"
+
+PetalburgCity_Gym_Text_EnterMainRoom: @ 8207280
+	.string "“Main room” the sign says.\p"
 	.string "Do you want to go through?$"
 
 PetalburgCity_Gym_Text_EnterConfusionRoom: @ 82072BB
