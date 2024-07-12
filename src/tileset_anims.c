@@ -70,6 +70,7 @@ static void QueueAnimTiles_Cave_Lava(u16);
 static void QueueAnimTiles_BattleFrontierOutsideWest_Flag(u16);
 static void QueueAnimTiles_BattleFrontierOutsideEast_Flag(u16);
 static void QueueAnimTiles_MauvilleGym_ElectricGates(u16);
+static void QueueAnimTiles_MauvilleGym_TrippingFloor(u16);
 static void QueueAnimTiles_SootopolisGym_Waterfalls(u16);
 static void QueueAnimTiles_EliteFour_GroundLights(u16);
 static void QueueAnimTiles_EliteFour_WallLights(u16);
@@ -474,6 +475,22 @@ const u16 *const gTilesetAnims_MauvilleGym_ElectricGates[] = {
     gTilesetAnims_MauvilleGym_ElectricGates_Frame0,
     gTilesetAnims_MauvilleGym_ElectricGates_Frame1
 };
+
+const u16 tileset_anims_space_12[16] = {};
+const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame0[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/0.4bpp");
+const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame1[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/1.4bpp");
+const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame2[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/2.4bpp");
+const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame3[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/3.4bpp");
+const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame4[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/4.4bpp");
+
+const u16 *const gTilesetAnims_MauvilleGym_TrippingFloor[] = {
+    gTilesetAnims_MauvilleGym_TrippingFloor_Frame0,
+    gTilesetAnims_MauvilleGym_TrippingFloor_Frame1,
+    gTilesetAnims_MauvilleGym_TrippingFloor_Frame2,
+    gTilesetAnims_MauvilleGym_TrippingFloor_Frame3,
+    gTilesetAnims_MauvilleGym_TrippingFloor_Frame4,
+};
+
 
 const u16 gTilesetAnims_BikeShop_BlinkingLights_Frame0[] = INCBIN_U16("data/tilesets/secondary/bike_shop/anim/blinking_lights/0.4bpp");
 const u16 gTilesetAnims_BikeShop_BlinkingLights_Frame1[] = INCBIN_U16("data/tilesets/secondary/bike_shop/anim/blinking_lights/1.4bpp");
@@ -1065,8 +1082,10 @@ static void QueueAnimTiles_Slateport_Balloons(u16 timer)
 
 static void TilesetAnim_MauvilleGym(u16 timer)
 {
-    if (timer % 2 == 0)
-        QueueAnimTiles_MauvilleGym_ElectricGates(timer >> 1);
+    /*if (timer % 2 == 0)
+        QueueAnimTiles_MauvilleGym_ElectricGates(timer >> 1);*/
+    if (timer % 6 == 0)
+        QueueAnimTiles_MauvilleGym_TrippingFloor(timer);
 }
 
 static void TilesetAnim_SootopolisGym(u16 timer)
@@ -1139,6 +1158,15 @@ static void QueueAnimTiles_MauvilleGym_ElectricGates(u16 timer)
 {
     u16 i = timer % 2;
     AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_ElectricGates[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 144)), 0x200);
+}
+
+static void QueueAnimTiles_MauvilleGym_TrippingFloor(u16 timer)
+{
+    // timer % number of frames in the animation
+    u16 i = timer % 5; //HOLY SHIT I NEED TO OVERWRITE IN THE VRAM HOW DO I KNOW THE OFFSET
+    // the 0x100 here is calculated by (widthpx * heightpx) / 2 of one animated frame (the png file 0 for example)
+    // beware that your tiles must be sliced from top left to bottom right in the tileset
+    AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_TrippingFloor[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 4)), 0x100);
 }
 
 static void QueueAnimTiles_BikeShop_BlinkingLights(u16 timer)

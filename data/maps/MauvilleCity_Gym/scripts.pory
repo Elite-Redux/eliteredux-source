@@ -1,26 +1,6 @@
 mapscripts MauvilleCity_Gym_MapScripts{
-    MAP_SCRIPT_ON_RESUME: MauvilleCity_Gym_OnResume
+    
 }
-
-script MauvilleCity_Gym_OnResume{
-    setstepcallback(STEP_CB_MAUVILLE_GYM)
-}
-
-
-
-
-script MauvilleCity_Gym_EventScript_ChangeTiles{
-    setmetatile(1, 3, METATILE_MauvilleGym_tripping_floorH1_0, 0)
-    setmetatile(1, 4, METATILE_MauvilleGym_tripping_floorH1_0, 0)
-    setmetatile(1, 5, METATILE_MauvilleGym_tripping_floorH1_0, 0)
-    setmetatile(1, 6, METATILE_MauvilleGym_tripping_floorH1_0, 0)
-    setmetatile(1, 7, METATILE_MauvilleGym_tripping_floorH1_0, 1)
-    setmetatile(1, 8, METATILE_MauvilleGym_tripping_floorH1_0, 1)
-    setmetatile(1, 9, METATILE_MauvilleGym_tripping_floorH1_0, 1)
-    setmetatile(1, 10, METATILE_MauvilleGym_tripping_floorH1_0, 1)
-    setmetatile(1, 11, METATILE_MauvilleGym_tripping_floorH1_0, 1)
-}
-
 raw `
 MauvilleCity_Gym_OnLoad: @ 820DD74
 	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_DeactivatePuzzle

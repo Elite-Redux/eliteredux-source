@@ -9,6 +9,5 @@
 #define STEP_CB_TRUCK               5
 #define STEP_CB_SECRET_BASE         6
 #define STEP_CB_CRACKED_FLOOR       7
-#define STEP_CB_MAUVILLE_GYM        8 //not a step cb but to keep it coherent, it's a gf moment don't ask me
 
 #endif // GUARD_CONSTANTS_FIELD_TASKS_H
