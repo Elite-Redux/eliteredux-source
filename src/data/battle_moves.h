@@ -1948,7 +1948,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_HYPER_FANG] =
     {
         .effect = EFFECT_FLINCH_HIT,
-        .power = 75,
+        .power = 85,
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 15,
@@ -1959,7 +1959,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SHARPEN] =
     {
-        .effect = EFFECT_ATTACK_UP,
+        .effect = EFFECT_SHARPEN,
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 0,

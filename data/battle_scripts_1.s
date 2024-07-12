@@ -470,6 +470,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectArgumentHitIfStatUp	  @ EFFECT_ARGUMENT_HIT_IF_STAT_UP
 	.4byte BattleScript_EffectUpperHand				  @ EFFECT_UPPER_HAND
 	.4byte BattleScript_EffectElectroShot			  @ EFFECT_ELECTRO_SHOT
+	.4byte BattleScript_EffectSharpen				  @ EFFECT_SHARPEN
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -12149,3 +12150,25 @@ BattleScript_ParasiticSporesDamage::
 	printstring STRINGID_HURT_BY_PARASITIC_SPORES
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_DoTurnDmg
+
+BattleScript_EffectSharpen::
+	attackcanceler
+	attackstring
+	ppreduce
+	raisehighestattackingstat BS_ATTACKER, 1, BattleScript_EffectSharpen_CritOnly
+	attackanimation
+	waitanimation
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	increasecrit BS_ATTACKER, 1, BattleScript_MoveEnd
+BattleScript_EffectSharpen_AfterCrit:
+	getbattler BS_ATTACKER
+	printfromtable gCritRaisedStrings
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectSharpen_CritOnly:
+	increasecrit BS_ATTACKER, 1, BattleScript_ButItFailed
+	goto BattleScript_EffectSharpen_AfterCrit

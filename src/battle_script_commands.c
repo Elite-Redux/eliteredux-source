@@ -11217,8 +11217,9 @@ static void Cmd_various(void)
     case VARIOUS_INCREASE_CRIT:
         {
             int increase = T1_READ_8(gBattlescriptCurrInstr + 3);
-            int failPtr = T1_READ_PTR(gBattlescriptCurrInstr + 4);
+            u8* failPtr = T1_READ_PTR(gBattlescriptCurrInstr + 4);
             increase = min(3 - gVolatileStructs[gActiveBattler].critBoost, increase);
+            gBattleCommunication[MULTISTRING_CHOOSER] = increase;
             if (!increase && failPtr)
             {
                 gBattlescriptCurrInstr = failPtr;
