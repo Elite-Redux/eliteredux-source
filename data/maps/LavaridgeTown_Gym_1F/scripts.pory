@@ -49,16 +49,6 @@ LavaridgeTown_Gym_1F_EventScript_CheckBuryDanielle:: @ 81FE77E
 LavaridgeTown_Gym_1F_EventScript_EndCheckBuryTrainers:: @ 81FE78B
 	return
 
-LavaridgeTown_Gym_1F_EventScript_Flannery:: @ 81FE78C
-	//call LavaridgeTown_Gym_EventScript_CheckTrainers
-	//goto_if_set FLAG_DAILY_REMATCH_FLANNERY, LavaridgeTown_Gym_1F_EventScript_AlreadyRematched
-	goto_if_set FLAG_SYS_GAME_CLEAR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch
-	setvar VAR_0x8004, 15
-	trainerbattle_single TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntro, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC
-	goto_if_unset FLAG_RECEIVED_TM50, LavaridgeTown_Gym_1F_EventScript_GiveOverheat
-	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostBattle, MSGBOX_DEFAULT
-	release
-	end
 
 LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated:: @ 81FE7C1
 	message LavaridgeTown_Gym_1F_Text_ReceivedHeatBadge
@@ -449,27 +439,6 @@ script LavaridgeTown_Gym_1F_EventScript_GiveOverheat{
 	end
 }
 
-script LavaridgeTown_Gym_EventScript_CheckTrainers{
-	//Check that you have defeated every trainer in that Gym and that you don't have that badge yet
-	if(((!defeated(TRAINER_COLE)     || 
-	     !defeated(TRAINER_AXLE)     || 
-		 !defeated(TRAINER_KEEGAN)   || 
-		 !defeated(TRAINER_GERALD)   ||
-	     !defeated(TRAINER_JEFF)     ||
-		 !defeated(TRAINER_JACE)     ||
-		 !defeated(TRAINER_DANIELLE) ||
-		 !defeated(TRAINER_ELI)) &&
-		 !flag(FLAG_BADGE04_GET))){
-		msgbox(format("Flannery: Sorry, but you need to defeat every trainer on this Gym before battling me."), MSGBOX_NPC)
-		release
-		end
-	}
-	else{
-		//If you have beaten every trainer or you have the badge just return to the previous script
-		return
-	}
-}
-
 script LavaridgeTown_Gym_1F_EventScript_Cole{
 	lock
 	faceplayer
@@ -585,3 +554,69 @@ script LavaridgeTown_Gym_B1F_EventScript_Eli{
 	release
 	end
 }
+
+script LavaridgeTown_Gym_EventScript_CheckTrainers{
+    if (flag(FLAG_BADGE05_GET)) {
+        msgbox(LavaridgeTown_Gym_1F_Text_FlanneryPostBattle, MSGBOX_DEFAULT)
+        release
+        end
+    }
+    // set battle event flags
+    if (!defeated(TRAINER_COLE)){
+    
+    }
+    if (!defeated(TRAINER_AXLE)){
+    
+    }
+    if (!defeated(TRAINER_KEEGAN)){
+    
+    }
+    if (!defeated(TRAINER_GERALD)){
+    
+    }
+    if (!defeated(TRAINER_JEFF)){
+    
+    }
+    if (!defeated(TRAINER_DANIELLE)){
+    
+    }
+    if (!defeated(TRAINER_ELI)){
+    
+    }
+    if (!defeated(TRAINER_JACE)){
+    
+    }
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryIntro0{
+    format("Oh, I see you haven't been able to experience our hot moves! Brace yourself, then!")
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryIntro1{
+    format("Not bad you have some fiery spirit to you but you wont be ready for my hellflames of a battle.")
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryIntroAll{
+    format("A cold headed one I see.")
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Flannery{
+    goto_if_set(FLAG_SYS_GAME_CLEAR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch)
+    call(LavaridgeTown_Gym_EventScript_CheckTrainers)
+    setvar(VAR_0x8004, 15)
+    adddefeatedcountmax7(1, TRAINER_COLE, TRAINER_AXLE, TRAINER_KEEGAN, TRAINER_GERALD, TRAINER_JEFF, TRAINER_DANIELLE, TRAINER_ELI)
+    adddefeatedcountmax7(0, TRAINER_JACE) // 0 because no reset of the var_result
+    switch (var(VAR_RESULT)) {
+        case 0:
+            trainerbattle_single(TRAINER_FLANNERY_1 LavaridgeTown_Gym_1F_Text_FlanneryIntro0, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
+        break
+        case 8:
+            trainerbattle_single(TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntroAll, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
+        break
+        default:
+            trainerbattle_single(TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntro1, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
+    }
+    goto_if_unset(FLAG_RECEIVED_TM50, LavaridgeTown_Gym_1F_EventScript_GiveOverheat)
+}
+
+
