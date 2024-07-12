@@ -1083,8 +1083,8 @@ static void QueueAnimTiles_Slateport_Balloons(u16 timer)
 
 static void TilesetAnim_MauvilleGym(u16 timer)
 {
-    /*if (timer % 2 == 0)
-        QueueAnimTiles_MauvilleGym_ElectricGates(timer >> 1);*/
+    if (timer % 2 == 0)
+        QueueAnimTiles_MauvilleGym_ElectricGates(timer >> 1);
     if(timer % 5 == 0){
         QueueAnimTiles_MauvilleGym_TrippingFloor(timer);
     }
