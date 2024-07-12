@@ -6,26 +6,34 @@
     <title>fuggin lazy doubledot :DDDD</title>
 </head>
 <body>
-    <textarea name="" id="textarea_in">
+    <textarea class="widetextarea" name="" id="textarea_in">
         
     </textarea>
-    <textarea name="" id="textarea_out">
+    <textarea class="widetextarea" name="" id="textarea_out">
         
     </textarea>
-    <div class="aaa">
+    <!--div class="aaa">
         <button id="workplease">Work please</button>
-    </div>
+    </div-->
+	<div class="flex half">
+		<span>Down put the text you want the trainer to have</span>
+	</div>
+	<textarea class="smalltextarea" name="" id="textarea_trainertext" placeholder="put the engagement battle text">
+        
+    </textarea>
 </body>
 <script>
     function convert(text){
 	data = getData(text.split('\n').map(x => x.trim()).filter(x => x))
+	trainerText = document.getElementById('textarea_trainertext').value.trim() || `{COLOR GREEN}hint{COLOR DARK_GRAY}.`
+	console.log(trainerText)
 	return `script ${data.scriptName}{
 	lock
 	faceplayer
 	if (defeated(${data.trainer})){
 		msgbox(${data.passed}, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		msgbox(format("${trainerText}"), MSGBOX_YESNO)
 		if (var(VAR_RESULT)){
 			trainerbattle_single(${data.trainer}, ${data.intro} , ${data.defeat})
 		}
@@ -37,8 +45,13 @@
 
 function getData(array){
 	const battleData = array[1].split(/[, ]/).filter(x => x)
+	while(true){
+		if (array[2] == undefined) throw "couldn't find msgbox"
+		if (array[2].match("msgbox")) break
+		array.splice(2, 1)
+	}
     const afterData =  array[2].split(/[, ]/).filter(x => x)
-	if(battleData[0].match("trainerbattle")){
+	if(battleData[0] == "trainerbattle"){
 		return {
 			scriptName: array[0].replace(/:.*/, ''),
 			trainer: battleData[2],
@@ -47,6 +60,7 @@ function getData(array){
             passed: afterData[1],
 		}
 	} else {
+
 		return {
 			scriptName: array[0].replace(/:.*/, ''),
 			trainer: battleData[1],
@@ -70,7 +84,7 @@ function parseInput(){
 
 document.getElementById('textarea_in').addEventListener('keyup', parseInput)
 document.getElementById('textarea_in').addEventListener('paste', parseInput)
-document.getElementById('workplease').addEventListener('click', parseInput)
+/*document.getElementById('workplease').addEventListener('click', parseInput)*/
 </script>
 <style>
     html, body{
@@ -80,9 +94,25 @@ document.getElementById('workplease').addEventListener('click', parseInput)
         width: 100%;
         background-color: rgb(85, 8, 85);
     }
-    textarea{
+    .widetextarea{
         width: 40%;
         height: 50%;
+		background-color: rgb(177, 104, 177);
     }
+	.smalltextarea{
+		width: 40%;
+        height: 10%;
+		background-color: rgb(177, 104, 177);
+	}
+	.flex{
+		display: flex;
+	}
+	.half{
+		width: 40%;
+		background-color: rgb(179, 73, 221);
+	}
+	span{
+		margin: auto;
+	}
 </style>
 </html>

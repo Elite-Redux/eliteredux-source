@@ -393,10 +393,7 @@ PetalburgCity_Gym_EventScript_GiveEnigmaBerry:: @ 8204E1D
 	release
 	end
 	
-PetalburgCity_Gym_EventScript_NormanBattle::
-	msgbox PetalburgCity_Gym_Text_NormanBattleIntro, MSGBOX_DEFAULT
-	setvar VAR_0x8004, 15
-	trainerbattle_no_intro TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanDefeat
+PetalburgCity_Gym_EventScript_NormanAfterBattle::
 	message PetalburgCity_Gym_Text_ReceivedBalanceBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
@@ -925,11 +922,6 @@ PetalburgCity_Gym_EventScript_RightGymLeadersRoomDoor:: @ 8205387
 	goto_if_eq PetalburgCity_Gym_EventScript_DontEnterRoom
 	end
 
-PetalburgCity_Gym_EventScript_Randall:: @ 82053BA
-	trainerbattle_single TRAINER_RANDALL, PetalburgCity_Gym_Text_RandallIntro, PetalburgCity_Gym_Text_RandallDefeat, PetalburgCity_Gym_EventScript_SlideOpenSpeedRoomDoors
-	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_RandallPostBadge
-	msgbox PetalburgCity_Gym_Text_RandallPostBattle, MSGBOX_AUTOCLOSE
-	end
 
 PetalburgCity_Gym_EventScript_SlideOpenSpeedRoomDoors:: @ 82053DE
 	setvar VAR_0x8005, 0
@@ -940,12 +932,6 @@ PetalburgCity_Gym_EventScript_SlideOpenSpeedRoomDoors:: @ 82053DE
 
 PetalburgCity_Gym_EventScript_RandallPostBadge:: @ 82053ED
 	msgbox PetalburgCity_Gym_Text_RandallPostBadge, MSGBOX_NPC
-	end
-
-PetalburgCity_Gym_EventScript_Parker:: @ 82053F6
-	trainerbattle_single TRAINER_PARKER, PetalburgCity_Gym_Text_ParkerIntro, PetalburgCity_Gym_Text_ParkerDefeat, PetalburgCity_Gym_EventScript_SlideOpenConfusionRoomDoors
-	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_ParkerPostBadge
-	msgbox PetalburgCity_Gym_Text_ParkerPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 PetalburgCity_Gym_EventScript_SlideOpenConfusionRoomDoors:: @ 820541A
@@ -959,11 +945,6 @@ PetalburgCity_Gym_EventScript_ParkerPostBadge:: @ 8205429
 	msgbox PetalburgCity_Gym_Text_ParkerPostBadge, MSGBOX_NPC
 	end
 
-PetalburgCity_Gym_EventScript_George:: @ 8205432
-	trainerbattle_single TRAINER_GEORGE, PetalburgCity_Gym_Text_GeorgeIntro, PetalburgCity_Gym_Text_GeorgeDefeat, PetalburgCity_Gym_EventScript_SlideOpenRecoveryRoomDoors
-	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_GeorgePostBadge
-	msgbox PetalburgCity_Gym_Text_GeorgePostBattle, MSGBOX_AUTOCLOSE
-	end
 
 PetalburgCity_Gym_EventScript_SlideOpenRecoveryRoomDoors:: @ 8205456
 	setvar VAR_0x8005, 0
@@ -974,12 +955,6 @@ PetalburgCity_Gym_EventScript_SlideOpenRecoveryRoomDoors:: @ 8205456
 
 PetalburgCity_Gym_EventScript_GeorgePostBadge:: @ 8205465
 	msgbox PetalburgCity_Gym_Text_GeorgePostBadge, MSGBOX_NPC
-	end
-
-PetalburgCity_Gym_EventScript_Berke:: @ 820546E
-	trainerbattle_single TRAINER_BERKE, PetalburgCity_Gym_Text_BerkeIntro, PetalburgCity_Gym_Text_BerkeDefeat, PetalburgCity_Gym_EventScript_SlideOpenOHKORoomDoors
-	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_BerkePostBadge
-	msgbox PetalburgCity_Gym_Text_BerkePostBattle, MSGBOX_AUTOCLOSE
 	end
 
 PetalburgCity_Gym_EventScript_SlideOpenOHKORoomDoors:: @ 8205492
@@ -993,12 +968,6 @@ PetalburgCity_Gym_EventScript_BerkePostBadge:: @ 82054A1
 	msgbox PetalburgCity_Gym_Text_BerkePostBadge, MSGBOX_NPC
 	end
 
-PetalburgCity_Gym_EventScript_Mary:: @ 82054AA
-	trainerbattle_single TRAINER_MARY, PetalburgCity_Gym_Text_MaryIntro, PetalburgCity_Gym_Text_MaryDefeat, PetalburgCity_Gym_EventScript_SlideOpenAccuracyRoomDoors
-	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_MaryPostBadge
-	msgbox PetalburgCity_Gym_Text_MaryPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 PetalburgCity_Gym_EventScript_SlideOpenAccuracyRoomDoors:: @ 82054CE
 	setvar VAR_0x8005, 0
 	call PetalburgCity_Gym_EventScript_OpenAccuracyRoomDoors
@@ -1010,11 +979,6 @@ PetalburgCity_Gym_EventScript_MaryPostBadge:: @ 82054DD
 	msgbox PetalburgCity_Gym_Text_MaryPostBadge, MSGBOX_NPC
 	end
 
-PetalburgCity_Gym_EventScript_Alexia:: @ 82054E6
-	trainerbattle_single TRAINER_ALEXIA, PetalburgCity_Gym_Text_AlexiaIntro, PetalburgCity_Gym_Text_AlexiaDefeat, PetalburgCity_Gym_EventScript_SlideOpenDefenseRoomDoors
-	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_AlexiaPostBadge
-	msgbox PetalburgCity_Gym_Text_AlexiaPostBattle, MSGBOX_AUTOCLOSE
-	end
 
 PetalburgCity_Gym_EventScript_SlideOpenDefenseRoomDoors:: @ 820550A
 	setvar VAR_0x8005, 0
@@ -1025,12 +989,6 @@ PetalburgCity_Gym_EventScript_SlideOpenDefenseRoomDoors:: @ 820550A
 
 PetalburgCity_Gym_EventScript_AlexiaPostBadge:: @ 8205519
 	msgbox PetalburgCity_Gym_Text_AlexiaPostBadge, MSGBOX_NPC
-	end
-
-PetalburgCity_Gym_EventScript_Jody:: @ 8205522
-	trainerbattle_single TRAINER_JODY, PetalburgCity_Gym_Text_JodyIntro, PetalburgCity_Gym_Text_JodyDefeat, PetalburgCity_Gym_EventScript_SlideOpenStrengthRoomDoors
-	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_JodyPostBadge
-	msgbox PetalburgCity_Gym_Text_JodyPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 PetalburgCity_Gym_EventScript_SlideOpenStrengthRoomDoors:: @ 8205546
@@ -1710,26 +1668,6 @@ script PetalburgCity_Gym_EventScript_Kangaskhan{
 	return
 }
 
-// Script unused for now
-script PetalburgCity_Gym_EventScript_CheckTrainers{
-	//Check that you have defeated every trainer in that Gym and that you don't have that badge yet
-	if((!defeated(TRAINER_RANDALL) || 
-		!defeated(TRAINER_PARKER)  || 
-		!defeated(TRAINER_GEORGE)  || 
-		!defeated(TRAINER_BERKE)   ||
-		!defeated(TRAINER_MARY)    || 
-		!defeated(TRAINER_ALEXIA)  || 
-		!defeated(TRAINER_JODY))   &&
-		!flag(FLAG_BADGE05_GET)){
-		msgbox(format("Dad: Sorry {PLAYER}, but you need to defeat every trainer on this Gym before battling your dad."), MSGBOX_NPC)
-		release
-		end
-	}
-	else{
-		//If you have beaten every trainer or you have the badge just return to the previous script
-		return
-	}
-}
 
 script PetalburgCity_Gym_EventScript_Norman{
 	lock
@@ -1850,3 +1788,173 @@ script PetalburgCity_Gym_EventScript_Norman_Rematch{
 	releaseall
 	end
 }
+
+script PetalburgCity_Gym_EventScript_Randall{
+	lock
+	faceplayer
+	goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_RandallPostBadge)
+	if (defeated(TRAINER_RANDALL)){
+		msgbox(PetalburgCity_Gym_Text_RandallPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_RANDALL, PetalburgCity_Gym_Text_RandallIntro , PetalburgCity_Gym_Text_RandallDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_Parker{
+	lock
+	faceplayer
+	goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_ParkerPostBadge)
+	if (defeated(TRAINER_PARKER)){
+		msgbox(PetalburgCity_Gym_Text_ParkerPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_PARKER, PetalburgCity_Gym_Text_ParkerIntro , PetalburgCity_Gym_Text_ParkerDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_George{
+	lock
+	faceplayer
+	goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_GeorgePostBadge)
+	if (defeated(TRAINER_GEORGE)){
+		msgbox(PetalburgCity_Gym_Text_GeorgePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_GEORGE, PetalburgCity_Gym_Text_GeorgeIntro , PetalburgCity_Gym_Text_GeorgeDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_Berke{
+	lock
+	faceplayer
+	goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_BerkePostBadge)
+	if (defeated(TRAINER_BERKE)){
+		msgbox(PetalburgCity_Gym_Text_BerkePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_BERKE, PetalburgCity_Gym_Text_BerkeIntro , PetalburgCity_Gym_Text_BerkeDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_Mary{
+	lock
+	faceplayer
+	if (defeated(TRAINER_MARY)){
+		msgbox(PetalburgCity_Gym_Text_MaryPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_MARY, PetalburgCity_Gym_Text_MaryIntro , PetalburgCity_Gym_Text_MaryDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_Alexia{
+	lock
+	faceplayer
+	goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_AlexiaPostBadge)
+	if (defeated(TRAINER_ALEXIA)){
+		msgbox(PetalburgCity_Gym_Text_AlexiaPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_ALEXIA, PetalburgCity_Gym_Text_AlexiaIntro , PetalburgCity_Gym_Text_AlexiaDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_Jody{
+	lock
+	faceplayer
+    goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_JodyPostBadge)
+	if (defeated(TRAINER_JODY)){
+		msgbox(PetalburgCity_Gym_Text_JodyPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_JODY, PetalburgCity_Gym_Text_JodyIntro , PetalburgCity_Gym_Text_JodyDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_CheckTrainers{
+    if (flag(FLAG_BADGE05_GET)) {
+        msgbox(PetalburgCity_Gym_Text_YouHaveGottenStronger, MSGBOX_DEFAULT)
+        release
+        end
+    }
+    // set battle event flags
+    if (!defeated(TRAINER_RANDALL)){
+    
+    }
+    if (!defeated(TRAINER_PARKER)){
+    
+    }
+    if (!defeated(TRAINER_GEORGE)){
+    
+    }
+    if (!defeated(TRAINER_BERKE)){
+    
+    }
+    if (!defeated(TRAINER_MARY)){
+    
+    }
+    if (!defeated(TRAINER_ALEXIA)){
+    
+    }
+    if (!defeated(TRAINER_JODY)){
+    
+    }
+}
+
+text PetalburgCity_Gym_Text_NormanBattleIntro0{
+    format("So you want to fight me for real, is that it, {PLAYER}? Well then! Let your old man show you how it's done!")
+}
+text PetalburgCity_Gym_Text_NormanBattleIntro1{
+    format("Are you in such a rush to leave? Well, you'd better have the skills to back it up. Come at me, {PLAYER}!")
+}
+text PetalburgCity_Gym_Text_NormanBattleIntroAll{
+    format("I see you've learned what your old man's gym has to teach. Now, {PLAYER}, can you put it into action?")
+}
+script PetalburgCity_Gym_EventScript_NormanBattle{
+    call(PetalburgCity_Gym_EventScript_CheckTrainers)
+    setvar(VAR_0x8004, 15)
+    //msgbox(PetalburgCity_Gym_Text_NormanBattleIntro, MSGBOX_DEFAULT)
+    adddefeatedcountmax7(1, TRAINER_RANDALL, TRAINER_PARKER, TRAINER_GEORGE, TRAINER_BERKE, TRAINER_MARY, TRAINER_ALEXIA, TRAINER_JODY)
+    switch (var(VAR_RESULT)) {
+        case 0:
+            trainerbattle_single(TRAINER_NORMAN_1 PetalburgCity_Gym_Text_NormanBattleIntro0, PetalburgCity_Gym_Text_NormanDefeat, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
+        break
+        case 7:
+            trainerbattle_single(TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanBattleIntroAll, PetalburgCity_Gym_Text_NormanDefeat, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
+        break
+        default:
+            trainerbattle_single(TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanBattleIntro1, PetalburgCity_Gym_Text_NormanDefeat, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
+    }
+    
+}
+
+
