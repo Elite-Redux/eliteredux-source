@@ -67,19 +67,6 @@ MauvilleCity_Gym_EventScript_DeactivatePuzzle:: @ 820DEE7
 	special MauvilleGymDeactivatePuzzle
 	end
 
-MauvilleCity_Gym_EventScript_Wattson:: @ 820DEEB
-	call MauvilleCity_Gym_EventScript_CheckTrainers
-	//goto_if_set FLAG_DAILY_REMATCH_WATTSON, MauvilleCity_Gym_EventScript_AlreadyRematched
-	goto_if_set FLAG_SYS_GAME_CLEAR, MauvilleCity_Gym_EventScript_WattsonRematch
-	setvar VAR_0x8004, 15
-	trainerbattle_single TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC
-	goto_if_unset FLAG_RECEIVED_TM72, MauvilleCity_Gym_EventScript_GiveVoltSwitch
-	compare VAR_NEW_MAUVILLE_STATE, 6
-	goto_if_eq MauvilleCity_Gym_EventScript_CompletedNewMauville
-	msgbox MauvilleCity_Gym_Text_WattsonPostBattle, MSGBOX_DEFAULT
-	release
-	end
-
 MauvilleCity_Gym_EventScript_WattsonDefeated:: @ 820DF2B
 	message MauvilleCity_Gym_Text_ReceivedDynamoBadge
 	waitmessage
@@ -240,31 +227,6 @@ MauvilleCity_Gym_EventScript_ClearBarriersAltState:: @ 820E0B4
 	releaseall
 	end
 
-MauvilleCity_Gym_EventScript_Kirk:: @ 820E0B9
-	trainerbattle_single TRAINER_KIRK, MauvilleCity_Gym_Text_KirkIntro, MauvilleCity_Gym_Text_KirkDefeat
-	msgbox MauvilleCity_Gym_Text_KirkPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-MauvilleCity_Gym_EventScript_Shawn:: @ 820E0D0
-	trainerbattle_single TRAINER_SHAWN, MauvilleCity_Gym_Text_ShawnIntro, MauvilleCity_Gym_Text_ShawnDefeat
-	msgbox MauvilleCity_Gym_Text_ShawnPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-MauvilleCity_Gym_EventScript_Ben:: @ 820E0E7
-	trainerbattle_single TRAINER_BEN, MauvilleCity_Gym_Text_BenIntro, MauvilleCity_Gym_Text_BenDefeat
-	msgbox MauvilleCity_Gym_Text_BenPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-MauvilleCity_Gym_EventScript_Vivian:: @ 820E0FE
-	trainerbattle_single TRAINER_VIVIAN, MauvilleCity_Gym_Text_VivianIntro, MauvilleCity_Gym_Text_VivianDefeat
-	msgbox MauvilleCity_Gym_Text_VivianPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-MauvilleCity_Gym_EventScript_Angelo:: @ 820E115
-	trainerbattle_single TRAINER_ANGELO, MauvilleCity_Gym_Text_AngeloIntro, MauvilleCity_Gym_Text_AngeloDefeat
-	msgbox MauvilleCity_Gym_Text_AngeloPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 MauvilleCity_Gym_EventScript_GymGuide::
 	lock
 	faceplayer
@@ -340,7 +302,7 @@ MauvilleCity_Gym_Text_ShawnIntro: @ 820E369
 	.string "I trained under Wattson!\n"
 	.string "There ain't no way I'll lose easily!$"
 
-MauvilleCity_Gym_Text_ShawnDefeat: @ 820E3A7
+MauvilleCity_Gym_Text_ShawnDefeat:: @ 820E3A7
 	.string "Unplugged and turned off…$"
 
 MauvilleCity_Gym_Text_ShawnPostBattle: @ 820E3C1
@@ -377,13 +339,18 @@ MauvilleCity_Gym_Text_VivianPostBattle: @ 820E50F
 MauvilleCity_Gym_Text_AngeloIntro: @ 820E593
 	.string "I love shiny things!$"
 
-MauvilleCity_Gym_Text_AngeloDefeat: @ 820E5A8
+MauvilleCity_Gym_Text_AngeloDefeat:: @ 820E5A8
 	.string "Oh…\n"
 	.string "My eyes are frazzled…$"
 
 MauvilleCity_Gym_Text_AngeloPostBattle: @ 820E5C2
 	.string "Mauville Gym's Wattson has a shiny\n"
 	.string "forehead. It makes me happy!$"
+
+MauvilleCity_Gym_Text_ShawnAndAngeloIntro: @ 820E593
+	.string "I love shiny things!\p"
+	.string "I trained under Wattson!\n"
+	.string "There ain't no way I'll lose easily!$"
 
 MauvilleCity_Gym_Text_WattsonIntro: @ 820E602
 	.string "I've given up on my plans to convert\n"
@@ -499,21 +466,138 @@ script MauvilleCity_Gym_EventScript_GiveVoltSwitch{
 }
 
 
+script MauvilleCity_Gym_EventScript_Angelo{
+    lock
+    faceplayer
+    if (defeated(TRAINER_ANGELO)){
+        msgbox(MauvilleCity_Gym_Text_AngeloPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        goto(MauvilleCity_Gym_EventScript_ShawnAndAngelo)
+    }
+    release
+    end
+}
+script MauvilleCity_Gym_EventScript_Shawn{
+    lock
+    faceplayer
+    if (defeated(TRAINER_SHAWN)){
+        msgbox(MauvilleCity_Gym_Text_ShawnPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        goto(MauvilleCity_Gym_EventScript_ShawnAndAngelo)
+    }
+    release
+    end
+}
+
+script MauvilleCity_Gym_EventScript_ShawnAndAngelo{
+    msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+    msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+    msgbox(format("Do you see double?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT)){
+        starttagbattle(TRAINER_SHAWN, TRAINER_ANGELO, TAG_TEAM_SHAWN_ANGELO, 0, MauvilleCity_Gym_Text_ShawnAndAngeloIntro)
+    }
+    release
+    end
+}
+
+
+script MauvilleCity_Gym_EventScript_Kirk{
+    lock
+    faceplayer
+    if (defeated(TRAINER_KIRK)){
+        msgbox(MauvilleCity_Gym_Text_KirkPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+        if (var(VAR_RESULT)){
+            trainerbattle_single(TRAINER_KIRK, MauvilleCity_Gym_Text_KirkIntro , MauvilleCity_Gym_Text_KirkDefeat)
+        }
+    }
+    release
+    end
+}
+
+script MauvilleCity_Gym_EventScript_Ben{
+    lock
+    faceplayer
+    if (defeated(TRAINER_BEN)){
+        msgbox(MauvilleCity_Gym_Text_BenPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+        if (var(VAR_RESULT)){
+            trainerbattle_single(TRAINER_BEN, MauvilleCity_Gym_Text_BenIntro , MauvilleCity_Gym_Text_BenDefeat)
+        }
+    }
+    release
+    end
+}
+
+script MauvilleCity_Gym_EventScript_Vivian{
+    lock
+    faceplayer
+    if (defeated(TRAINER_VIVIAN)){
+        msgbox(MauvilleCity_Gym_Text_VivianPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+        if (var(VAR_RESULT)){
+            trainerbattle_single(TRAINER_VIVIAN, MauvilleCity_Gym_Text_VivianIntro , MauvilleCity_Gym_Text_VivianDefeat)
+        }
+    }
+    release
+    end
+}
+
+text MauvilleCity_Gym_Text_WattsonIntro0{
+    format("hahahaaa would you look at this fiesty child you wanna play rough? Alright then.")
+}
+text MauvilleCity_Gym_Text_WattsonIntro1{
+    format("not bad having some electricity in you to fight some trainers but not enough!")
+}
+text MauvilleCity_Gym_Text_WattsonIntroAll{
+    format("Now this is going to amp me up we shall give it our all hahahaa")
+}
+
+script MauvilleCity_Gym_EventScript_Wattson{
+    goto_if_set(FLAG_SYS_GAME_CLEAR, MauvilleCity_Gym_EventScript_WattsonRematch)
+    //goto_if_set(FLAG_DAILY_REMATCH_WATTSON, MauvilleCity_Gym_EventScript_AlreadyRematched)
+    if (var(VAR_NEW_MAUVILLE_STATE) == 6){
+        goto(MauvilleCity_Gym_EventScript_CompletedNewMauville)
+    }
+    call(MauvilleCity_Gym_EventScript_CheckTrainers)
+    setvar(VAR_0x8004, 15)
+    // Shawn is a double battle with angelo
+    adddefeatedcountmax7(1, TRAINER_VIVIAN, TRAINER_KIRK, TRAINER_SHAWN, TRAINER_BEN)
+	switch (var(VAR_RESULT)) {
+		case 0:
+			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro0, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
+		break
+		case 4:
+			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntroAll, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
+		break
+		default:
+			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro1, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
+	}
+	goto_if_unset(FLAG_RECEIVED_TM72, MauvilleCity_Gym_EventScript_GiveVoltSwitch)
+}
+
 script MauvilleCity_Gym_EventScript_CheckTrainers{
-	//Check that you have defeated every trainer in that Gym and that you don't have that badge yet
-	if(((!defeated(TRAINER_KIRK)     || 
-	     !defeated(TRAINER_SHAWN)    || 
-		 !defeated(TRAINER_BEN)      || 
-	     !defeated(TRAINER_VIVIAN)   || 
-		 !defeated(TRAINER_ANGELO))  &&
-		 !flag(FLAG_BADGE03_GET))){
-		msgbox(format("Wattson: Sorry, but you need to defeat every trainer on this Gym before battling me."), MSGBOX_NPC)
+    if (flag(FLAG_BADGE03_GET)) {
+		msgbox(MauvilleCity_Gym_Text_WattsonPostBattle, MSGBOX_DEFAULT)
 		release
 		end
 	}
-	else{
-		//If you have beaten every trainer or you have the badge just return to the previous script
-		return
+	// set battle event flags
+	if (!defeated(TRAINER_VIVIAN)){
+	
 	}
+	if (!defeated(TRAINER_KIRK)){
+	
+	}
+	if (!defeated(TRAINER_BEN)){
+	
+	}
+	if (!defeated(TRAINER_SHAWN)){ // by entension TRAINER_SHAWN too
+	
+	}
+	return
 }
 

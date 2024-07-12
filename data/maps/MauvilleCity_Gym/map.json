@@ -43,11 +43,11 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_GIRL_3",
       "x": 3,
-      "y": 13,
+      "y": 11,
       "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_FACE_UP",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 10,
+      "movement_range_y": 10,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "2",
       "script": "MauvilleCity_Gym_EventScript_Vivian",
@@ -55,12 +55,12 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_YOUNGSTER",
-      "x": 8,
+      "x": 7,
       "y": 10,
       "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 10,
+      "movement_range_y": 10,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "MauvilleCity_Gym_EventScript_Ben",
@@ -68,12 +68,12 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MAN_5",
-      "x": 3,
-      "y": 10,
+      "x": 7,
+      "y": 6,
       "elevation": 0,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 10,
+      "movement_range_y": 10,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "2",
       "script": "MauvilleCity_Gym_EventScript_Kirk",
@@ -137,42 +137,7 @@
     }
   ],
   "coord_events": [
-    {
-      "type": "trigger",
-      "x": 6,
-      "y": 14,
-      "elevation": 3,
-      "var": "VAR_TEMP_0",
-      "var_value": "0",
-      "script": "MauvilleCity_Gym_EventScript_Switch2"
-    },
-    {
-      "type": "trigger",
-      "x": 0,
-      "y": 14,
-      "elevation": 3,
-      "var": "VAR_TEMP_0",
-      "var_value": "0",
-      "script": "MauvilleCity_Gym_EventScript_Switch3"
-    },
-    {
-      "type": "trigger",
-      "x": 3,
-      "y": 14,
-      "elevation": 3,
-      "var": "VAR_TEMP_0",
-      "var_value": "0",
-      "script": "MauvilleCity_Gym_EventScript_Switch1"
-    },
-    {
-      "type": "trigger",
-      "x": 9,
-      "y": 14,
-      "elevation": 3,
-      "var": "VAR_TEMP_0",
-      "var_value": "0",
-      "script": "MauvilleCity_Gym_EventScript_Switch4"
-    }
+
   ],
   "bg_events": [
     {

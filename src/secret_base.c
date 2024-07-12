@@ -1182,6 +1182,12 @@ const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
             else
                 return DewfordTown_Gym_Text_BrendenDefeat;
         break;
+        case TAG_TEAM_SHAWN_ANGELO:
+            if(!isTrainerB)
+                return MauvilleCity_Gym_Text_ShawnDefeat;
+            else
+                return MauvilleCity_Gym_Text_AngeloDefeat;
+        break;
     }
         
 }

@@ -155,52 +155,12 @@ LavaridgeTown_Gym_1F_EventScript_Exit::
 	releaseall
 	end
 
-LavaridgeTown_Gym_1F_EventScript_Cole:: @ 81FE87F
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_COLE, LOCALID_COLE, LavaridgeTown_Gym_1F_Text_ColeIntro, LavaridgeTown_Gym_1F_Text_ColeDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_ColePostBattle MSGBOX_AUTOCLOSE
-	end
-
 LavaridgeTown_Gym_EventScript_CheckTrainerScript:: @ 81FE89A
 	call LavaridgeTown_Gym_1F_EventScript_SetTrainerTempVars
 	release
 	special ShouldTryGetTrainerScript
 	compare VAR_RESULT, 1
 	goto_if_eq EventScript_GotoTrainerScript
-	end
-
-LavaridgeTown_Gym_1F_EventScript_Axle:: @ 81FE8AF
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_AXLE, LOCALID_AXLE, LavaridgeTown_Gym_1F_Text_AxleIntro, LavaridgeTown_Gym_1F_Text_AxleDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_AxlePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Keegan:: @ 81FE8CA
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_KEEGAN, LOCALID_KEEGAN, LavaridgeTown_Gym_B1F_Text_KeeganIntro, LavaridgeTown_Gym_B1F_Text_KeeganDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_KeeganPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_1F_EventScript_Danielle:: @ 81FE8E5
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_DANIELLE, LOCALID_DANIELLE, LavaridgeTown_Gym_1F_Text_DanielleIntro, LavaridgeTown_Gym_1F_Text_DanielleDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_DaniellePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_1F_EventScript_Gerald:: @ 81FE900
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_GERALD, LOCALID_GERALD, LavaridgeTown_Gym_1F_Text_GeraldIntro, LavaridgeTown_Gym_1F_Text_GeraldDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_GeraldPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Jace:: @ 81FE91B
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_JACE, LOCALID_JACE, LavaridgeTown_Gym_B1F_Text_JaceIntro, LavaridgeTown_Gym_B1F_Text_JaceDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_JacePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Jeff:: @ 81FE936
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_JEFF, LOCALID_JEFF, LavaridgeTown_Gym_B1F_Text_JeffIntro, LavaridgeTown_Gym_B1F_Text_JeffDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_JeffPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Eli:: @ 81FE951
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_ELI, LOCALID_ELI, LavaridgeTown_Gym_B1F_Text_EliIntro, LavaridgeTown_Gym_B1F_Text_EliDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_EliPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 LavaridgeTown_Gym_1F_EventScript_GymGuide:: @ 81FE96C
@@ -508,4 +468,120 @@ script LavaridgeTown_Gym_EventScript_CheckTrainers{
 		//If you have beaten every trainer or you have the badge just return to the previous script
 		return
 	}
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Cole{
+	lock
+	faceplayer
+	if (defeated(TRAINER_COLE)){
+		msgbox(LavaridgeTown_Gym_1F_Text_ColePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_COLE, LavaridgeTown_Gym_1F_Text_ColeIntro , LavaridgeTown_Gym_1F_Text_ColeDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Axle{
+	lock
+	faceplayer
+	if (defeated(TRAINER_AXLE)){
+		msgbox(LavaridgeTown_Gym_1F_Text_AxlePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_AXLE, LavaridgeTown_Gym_1F_Text_AxleIntro , LavaridgeTown_Gym_1F_Text_AxleDefeat)
+		}
+	}
+	release
+	end
+}
+script LavaridgeTown_Gym_B1F_EventScript_Keegan{
+	lock
+	faceplayer
+	if (defeated(TRAINER_KEEGAN)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_KeeganPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_KEEGAN, LavaridgeTown_Gym_B1F_Text_KeeganIntro , LavaridgeTown_Gym_B1F_Text_KeeganDefeat)
+		}
+	}
+	release
+	end
+}
+script LavaridgeTown_Gym_1F_EventScript_Danielle{
+	lock
+	faceplayer
+	if (defeated(TRAINER_DANIELLE)){
+		msgbox(LavaridgeTown_Gym_1F_Text_DaniellePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_DANIELLE, LavaridgeTown_Gym_1F_Text_DanielleIntro , LavaridgeTown_Gym_1F_Text_DanielleDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Gerald{
+	lock
+	faceplayer
+	if (defeated(TRAINER_GERALD)){
+		msgbox(LavaridgeTown_Gym_1F_Text_GeraldPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_GERALD, LavaridgeTown_Gym_1F_Text_GeraldIntro , LavaridgeTown_Gym_1F_Text_GeraldDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_B1F_EventScript_Jace{
+	lock
+	faceplayer
+	if (defeated(TRAINER_JACE)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_JacePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_JACE, LavaridgeTown_Gym_B1F_Text_JaceIntro , LavaridgeTown_Gym_B1F_Text_JaceDefeat)
+		}
+	}
+	release
+	end
+}
+script LavaridgeTown_Gym_B1F_EventScript_Jeff{
+	lock
+	faceplayer
+	if (defeated(TRAINER_JEFF)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_JeffPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_JEFF, LavaridgeTown_Gym_B1F_Text_JeffIntro , LavaridgeTown_Gym_B1F_Text_JeffDefeat)
+		}
+	}
+	release
+	end
+}
+script LavaridgeTown_Gym_B1F_EventScript_Eli{
+	lock
+	faceplayer
+	if (defeated(TRAINER_ELI)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_EliPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_ELI, LavaridgeTown_Gym_B1F_Text_EliIntro , LavaridgeTown_Gym_B1F_Text_EliDefeat)
+		}
+	}
+	release
+	end
 }

@@ -649,8 +649,8 @@ text DewfordTown_Gym_Text_BrawlyIntroAll{
 }
 
 script DewfordTown_Gym_EventScript_CheckTrainers{
-    if (flag(FLAG_BADGE01_GET)) {
-		msgbox(RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT)
+    if (flag(FLAG_BADGE02_GET)) {
+		msgbox(DewfordTown_Gym_Text_BrawlyPostBattle, MSGBOX_DEFAULT)
 		release
 		end
 	}
