@@ -5285,6 +5285,9 @@ static void TurnValuesCleanUp(bool8 clearRoundStruts)
 void TurnStructsClear(void)
 {
     ZERO(gTurnStructs)
+    ZERO(gSideTimers[0].started)
+    ZERO(gSideTimers[1].started)
+    ZERO(gFieldTimers.started)
 }
 
 static void CheckMegaEvolutionBeforeTurn(void)

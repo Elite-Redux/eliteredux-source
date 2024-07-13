@@ -2125,32 +2125,6 @@ static int CheckAndSetOncePerTurnAbility(int battler, int ability)
     }
 }
 
-static void RecordAbilityUsedThisRound(int battler, int ability)
-{
-    int index = GetAbilityNumber(battler, ability);
-    if (index >= 0) gRoundStructs[battler].abilityUsedCount[index]++;
-}
-
-static int WasAbilityUsedThisRoundBySide(int side, int ability)
-{
-    int index = GetAbilityNumber(side, ability);
-    if (index >= 0 && gTurnStructs[side].turnAbilityTriggers[index]) return TRUE;
-    side = BATTLE_PARTNER(side);
-    index = GetAbilityNumber(side, ability);
-    if (index >= 0 && gTurnStructs[side].turnAbilityTriggers[index]) return TRUE;
-}
-
-static int WasAbilityUsedThisRound(int ability)
-{
-    int battler;
-    for (battler = 0; battler < gBattlersCount; battler++)
-    {
-        int index = GetAbilityNumber(battler, ability);
-        if (index >= 0 && gTurnStructs[battler].turnAbilityTriggers[index]) return TRUE;
-    }
-    return FALSE;
-}
-
 enum
 {
     ENDTURN_ORDER,
@@ -2229,7 +2203,7 @@ u8 DoFieldEndTurnEffects(void)
                 gActiveBattler = gBattlerAttacker = gSideTimers[side].reflectBattlerId;
                 if (gSideStatuses[side] & SIDE_STATUS_REFLECT)
                 {
-                    if (--gSideTimers[side].reflectTimer == 0)
+                    if (!gSideTimers[side].started.reflect && --gSideTimers[side].reflectTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_REFLECT;
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
@@ -2254,7 +2228,7 @@ u8 DoFieldEndTurnEffects(void)
                 gActiveBattler = gBattlerAttacker = gSideTimers[side].lightscreenBattlerId;
                 if (gSideStatuses[side] & SIDE_STATUS_LIGHTSCREEN)
                 {
-                    if (--gSideTimers[side].lightscreenTimer == 0)
+                    if (!gSideTimers[side].started.lightscreen && --gSideTimers[side].lightscreenTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_LIGHTSCREEN;
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
@@ -2281,7 +2255,7 @@ u8 DoFieldEndTurnEffects(void)
                 //Aurora Veil
                 if (gSideStatuses[side] & SIDE_STATUS_AURORA_VEIL)
                 {
-                    if (!WasAbilityUsedThisRoundBySide(side, ABILITY_NORTH_WIND) && --gSideTimers[side].auroraVeilTimer == 0)
+                    if (!gSideTimers[side].started.auroraVeil && --gSideTimers[side].auroraVeilTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_AURORA_VEIL;
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
@@ -2293,7 +2267,7 @@ u8 DoFieldEndTurnEffects(void)
                 //Spider Web
                 if (gSideStatuses[side] & SIDE_STATUS_STICKY_WEB)
                 {
-                    if (!WasAbilityUsedThisRoundBySide(BATTLE_OPPOSITE(side), ABILITY_SPIDER_LAIR) && --gSideTimers[side].spiderWebTimer == 1)
+                    if (!gSideTimers[side].started.spiderWeb && --gSideTimers[side].spiderWebTimer == 1)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_STICKY_WEB;
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
@@ -2318,7 +2292,8 @@ u8 DoFieldEndTurnEffects(void)
                 side = gBattleStruct->turnSideTracker;
                 gActiveBattler = gBattlerAttacker = gSideTimers[side].mistBattlerId;
                 if (gSideTimers[side].mistTimer != 0
-                 && --gSideTimers[side].mistTimer == 0)
+                    && !gSideTimers[side].started.mist
+                    && --gSideTimers[side].mistTimer == 0)
                 {
                     gSideStatuses[side] &= ~SIDE_STATUS_MIST;
                     BattleScriptExecute(BattleScript_SideStatusWoreOff);
@@ -2343,7 +2318,7 @@ u8 DoFieldEndTurnEffects(void)
                 gActiveBattler = gBattlerAttacker = gSideTimers[side].safeguardBattlerId;
                 if (gSideStatuses[side] & SIDE_STATUS_SAFEGUARD)
                 {
-                    if (!WasAbilityUsedThisRoundBySide(side, ABILITY_PASTEL_VEIL) && --gSideTimers[side].safeguardTimer == 0)
+                    if (!gSideTimers[side].started.safeguard && --gSideTimers[side].safeguardTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_SAFEGUARD;
                         BattleScriptExecute(BattleScript_SafeguardEnds);
@@ -2367,7 +2342,7 @@ u8 DoFieldEndTurnEffects(void)
                 gActiveBattler = gBattlerAttacker = gSideTimers[side].luckyChantBattlerId;
                 if (gSideStatuses[side] & SIDE_STATUS_LUCKY_CHANT)
                 {
-                    if (--gSideTimers[side].luckyChantTimer == 0)
+                    if (!gSideTimers[side].started.luckyChant && --gSideTimers[side].luckyChantTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_LUCKY_CHANT;
                         BattleScriptExecute(BattleScript_LuckyChantEnds);
@@ -2391,7 +2366,7 @@ u8 DoFieldEndTurnEffects(void)
                 gActiveBattler = gBattlerAttacker = gSideTimers[side].tailwindBattlerId;
                 if (gSideStatuses[side] & SIDE_STATUS_TAILWIND)
                 {
-                    if (!WasAbilityUsedThisRoundBySide(side, ABILITY_AIR_BLOWER) && --gSideTimers[side].tailwindTimer == 0)
+                    if (!gSideTimers[side].started.tailwind && --gSideTimers[side].tailwindTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_TAILWIND;
                         BattleScriptExecute(BattleScript_TailwindEnds);
@@ -2530,14 +2505,14 @@ u8 DoFieldEndTurnEffects(void)
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_TRICK_ROOM:
-            if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM && --gFieldTimers.trickRoomTimer == 0)
+            if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM && !gFieldTimers.started.trickRoom && --gFieldTimers.trickRoomTimer == 0)
             {
                 gFieldStatuses &= ~(STATUS_FIELD_TRICK_ROOM);
                 BattleScriptExecute(BattleScript_TrickRoomEnds);
                 effect++;
             }
 
-            if (gFieldStatuses & STATUS_FIELD_INVERSE_ROOM && --gFieldTimers.inverseRoomTimer == 0)
+            if (gFieldStatuses & STATUS_FIELD_INVERSE_ROOM && !gFieldTimers.started.inverseRoom && --gFieldTimers.inverseRoomTimer == 0)
             {
                 gFieldStatuses &= ~(STATUS_FIELD_INVERSE_ROOM);
                 BattleScriptExecute(BattleScript_InverseRoomEnds);
@@ -2630,7 +2605,10 @@ u8 DoFieldEndTurnEffects(void)
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_GRAVITY:
-            if (gFieldStatuses & STATUS_FIELD_GRAVITY && --gFieldTimers.gravityTimer == 0)
+            if (gFieldStatuses & STATUS_FIELD_GRAVITY
+                && !WasAbilityUsedThisRound(ABILITY_ATLAS)
+                && !WasAbilityUsedThisRound(ABILITY_GRAVITY_WELL)
+                && --gFieldTimers.gravityTimer == 0)
             {
                 gFieldStatuses &= ~(STATUS_FIELD_GRAVITY);
                 BattleScriptExecute(BattleScript_GravityEnds);
@@ -2668,7 +2646,7 @@ u8 DoFieldEndTurnEffects(void)
                             break;
                     }
 
-                    if (gSideTimers[side].rainbowTimer > 0 && --gSideTimers[side].rainbowTimer == 0)
+                    if (gSideTimers[side].rainbowTimer && !gSideTimers[side].started.rainbow && --gSideTimers[side].rainbowTimer == 0)
                     {
                         BattleScriptExecute(BattleScript_RainbowDisappeared);
                         effect++;
@@ -2697,7 +2675,7 @@ u8 DoFieldEndTurnEffects(void)
                             break;
                     }
 
-                    if (gSideTimers[side].fireSeaTimer > 0 && --gSideTimers[side].fireSeaTimer == 0)
+                    if (gSideTimers[side].fireSeaTimer > 0 && !gSideTimers[side].started.fireSea && --gSideTimers[side].fireSeaTimer == 0)
                     {
                         BattleScriptExecute(BattleScript_TheSeaOfFireDisappeared);
                         effect++;
@@ -2725,7 +2703,7 @@ u8 DoFieldEndTurnEffects(void)
                             break;
                     }
 
-                    if (gSideTimers[side].swampTimer > 0 && --gSideTimers[side].swampTimer == 0)
+                    if (gSideTimers[side].swampTimer && !gSideTimers[side].started.swamp && --gSideTimers[side].swampTimer == 0)
                     {
                         BattleScriptExecute(BattleScript_TheSwampDisappeared);
                         effect++;
@@ -5874,6 +5852,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Atlas
         if(CheckAndSetSwitchInAbility(battler, ABILITY_ATLAS)){
             if(!(gFieldStatuses & STATUS_FIELD_GRAVITY)){
+                gFieldTimers.started.gravity = TRUE;
                 gFieldTimers.gravityTimer = GRAVITY_DURATION_EXTENDED;
                 gFieldStatuses |= STATUS_FIELD_GRAVITY;
                 BattleScriptPushCursorAndCallback(BattleScript_AtlasStarts);
@@ -5884,6 +5863,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Gravity Well
         if(CheckAndSetSwitchInAbility(battler, ABILITY_GRAVITY_WELL)) {
             if(!(gFieldStatuses & STATUS_FIELD_GRAVITY)){
+                gFieldTimers.started.gravity = TRUE;
                 gFieldTimers.gravityTimer = GRAVITY_DURATION;
                 gFieldStatuses |= STATUS_FIELD_GRAVITY;
                 BattleScriptPushCursorAndCallback(BattleScript_GravityStarts);
@@ -6068,10 +6048,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Air Blower
         if(CheckAndSetSwitchInAbility(battler, ABILITY_AIR_BLOWER) &&
         !(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)){
-            RecordAbilityUsedThisRound(battler, ABILITY_AIR_BLOWER);
-            gSideStatuses[GetBattlerSide(battler)] |= SIDE_STATUS_TAILWIND;
-            gSideTimers[GetBattlerSide(battler)].tailwindBattlerId = gBattlerAttacker;
-            gSideTimers[GetBattlerSide(battler)].tailwindTimer = TAILWIND_DURATION_SHORT;
+            int side = GetBattlerSide(battler);
+            gSideTimers[side].started.tailwind = TRUE;
+            gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
+            gSideTimers[side].tailwindBattlerId = gBattlerAttacker;
+            gSideTimers[side].tailwindTimer = TAILWIND_DURATION_SHORT;
             // Prevents double activation of Wind Rider
             DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
             DisableSwitchInAbility(BATTLE_PARTNER(battler), ABILITY_WIND_RIDER);
@@ -6082,10 +6063,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Pastel Veil Rework
         if(CheckAndSetSwitchInAbility(battler, ABILITY_PASTEL_VEIL) &&
         !(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)){
-            RecordAbilityUsedThisRound(battler, ABILITY_PASTEL_VEIL);
-            gSideStatuses[GetBattlerSide(battler)] |= SIDE_STATUS_SAFEGUARD;
-            gSideTimers[GetBattlerSide(battler)].safeguardBattlerId = gBattlerAttacker;
-            gSideTimers[GetBattlerSide(battler)].safeguardTimer = SCREEN_DURATION;
+            int side = GetBattlerSide(battler);
+            gSideTimers[side].started.safeguard = TRUE;
+            gSideStatuses[side] |= SIDE_STATUS_SAFEGUARD;
+            gSideTimers[side].safeguardBattlerId = gBattlerAttacker;
+            gSideTimers[side].safeguardTimer = SCREEN_DURATION;
             BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivated);
             effect++;
         }
@@ -6094,12 +6076,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetSwitchInAbility(battler, ABILITY_NORTH_WIND)){
             if (!(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL))
             {
-                RecordAbilityUsedThisRound(battler, ABILITY_NORTH_WIND);
-                gSideStatuses[GetBattlerSide(battler)] |= SIDE_STATUS_AURORA_VEIL;
+                int side = GetBattlerSide(battler);
+                gSideTimers[side].started.auroraVeil = TRUE;
+                gSideStatuses[side] |= SIDE_STATUS_AURORA_VEIL;
                 if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
-                    gSideTimers[GET_BATTLER_SIDE(battler)].auroraVeilTimer = SCREEN_DURATION;
+                    gSideTimers[side].auroraVeilTimer = SCREEN_DURATION;
                 else
-                    gSideTimers[GET_BATTLER_SIDE(battler)].auroraVeilTimer = SCREEN_DURATION_SHORT;
+                    gSideTimers[side].auroraVeilTimer = SCREEN_DURATION_SHORT;
                 BattleScriptPushCursorAndCallback(BattleScript_NorthWindActivated);
                 effect++;
             }
@@ -6109,9 +6092,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetOncePerTurnAbility(battler, ABILITY_SPIDER_LAIR)){
             if (!(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB))
             {
-                RecordAbilityUsedThisRound(battler, ABILITY_SPIDER_LAIR);
-                gSideStatuses[BATTLE_OPPOSITE(battler)] |= SIDE_STATUS_STICKY_WEB;
-                gSideTimers[BATTLE_OPPOSITE(battler)].spiderWebTimer = 5;
+                int side = BATTLE_OPPOSITE(battler);
+                gSideTimers[side].started.spiderWeb = TRUE;
+                gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
+                gSideTimers[side].spiderWebTimer = 5;
                 BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);
                 effect++;
             }
@@ -6207,6 +6191,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetSwitchInAbility(battler, ABILITY_INVERSE_ROOM)){
             if(!(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)){
                 //Enable Trick Room
+                gFieldTimers.started.inverseRoom = TRUE;
                 gFieldStatuses |= STATUS_FIELD_INVERSE_ROOM;
                 gFieldTimers.inverseRoomTimer = INVERSE_ROOM_DURATION_SHORT;
                 BattleScriptPushCursorAndCallback(BattleScript_InversedRoomActivated);

@@ -66,6 +66,7 @@
 #define SCREEN_DURATION_SHORT           3
 #define TAILWIND_DURATION               3
 #define TAILWIND_DURATION_SHORT         3
+#define PLEDGE_DURATION                 3
 
 #define IS_WHOLE_SIDE_ALIVE(battler)((IsBattlerAlive(battler) && IsBattlerAlive(BATTLE_PARTNER(battler))))
 #define BATTLER_HAS_ABILITY(battlerId, ability) (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, gBattlerAttacker, ability))

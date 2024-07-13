@@ -142,7 +142,6 @@ struct RoundStruct
     u32 specialDmg;
     u8 physicalBattlerId;
     u8 specialBattlerId;
-    u8 abilityUsedCount[NUM_INNATE_PER_SPECIES + 1];
     u32 protected:1;
     u32 spikyShielded:1;
     u32 kingsShielded:1;
@@ -229,8 +228,26 @@ struct TurnStruct
     u8 shouldTriggerSwitchItem:1;
 };
 
+struct SideBeganThisTurn
+{
+    u8 reflect:1;
+    u8 lightscreen:1;
+    u8 mist:1;
+    u8 safeguard:1;
+    u8 followme:1;
+    u8 auroraVeil:1;
+    u8 tailwind:1;
+    u8 luckyChant:1;
+    u8 retaliate:1;
+    u8 spiderWeb:1;
+    u8 swamp:1;
+    u8 fireSea:1;
+    u8 rainbow:1;
+};
+
 struct SideTimer
 {
+    struct SideBeganThisTurn started;
     u8 reflectTimer;
     u8 reflectBattlerId;
     u8 lightscreenTimer;
@@ -259,8 +276,23 @@ struct SideTimer
     u8 followmePowder:1; // Rage powder, does not affect grass type pokemon.
 };
 
+struct FieldBeganThisTurn
+{
+    u8 mudSport:1;
+    u8 waterSport:1;
+    u8 wonderRoom:1;
+    u8 magicRoom:1;
+    u8 trickRoom:1;
+    u8 terrain:1;
+    u8 gravity:1;
+    u8 fairyLock:1;
+    u8 inverseRoom:1;
+    u8 weather:1;
+};
+
 struct FieldTimer
 {
+    struct FieldBeganThisTurn started;
     u8 mudSportTimer;
     u8 waterSportTimer;
     u8 wonderRoomTimer;

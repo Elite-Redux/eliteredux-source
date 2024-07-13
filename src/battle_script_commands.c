@@ -3542,7 +3542,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_RAINBOW:
                 if (!gSideTimers[GetBattlerSide(gEffectBattler)].rainbowTimer)
                 {
-                    gSideTimers[GetBattlerSide(gEffectBattler)].rainbowTimer = 4;
+                    gSideTimers[GetBattlerSide(gEffectBattler)].started.rainbow = TRUE;
+                    gSideTimers[GetBattlerSide(gEffectBattler)].rainbowTimer = PLEDGE_DURATION;
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_RainbowStart;
                 }
@@ -3550,7 +3551,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_SWAMP:
                 if (!gSideTimers[GetBattlerSide(gEffectBattler)].swampTimer)
                 {
-                    gSideTimers[GetBattlerSide(gEffectBattler)].swampTimer = 4;
+                    gSideTimers[GetBattlerSide(gEffectBattler)].started.swamp = TRUE;
+                    gSideTimers[GetBattlerSide(gEffectBattler)].swampTimer = PLEDGE_DURATION;
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_SwampStart;
                 }
@@ -3558,7 +3560,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_FIRE_SEA:
                 if (!gSideTimers[GetBattlerSide(gEffectBattler)].fireSeaTimer)
                 {
-                    gSideTimers[GetBattlerSide(gEffectBattler)].fireSeaTimer = 4;
+                    gSideTimers[GetBattlerSide(gEffectBattler)].started.fireSea = TRUE;
+                    gSideTimers[GetBattlerSide(gEffectBattler)].fireSeaTimer = PLEDGE_DURATION;
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_SeaOfFireStart;
                 }
@@ -9375,9 +9378,11 @@ static void Cmd_various(void)
     case VARIOUS_SET_LUCKY_CHANT:
         if (!(gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] & SIDE_STATUS_LUCKY_CHANT))
         {
-            gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] |= SIDE_STATUS_LUCKY_CHANT;
-            gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].luckyChantBattlerId = gActiveBattler;
-            gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].luckyChantTimer = 5;
+            int side = GET_BATTLER_SIDE(gActiveBattler);
+            gSideTimers[side].started.luckyChant = TRUE;
+            gSideStatuses[side] |= SIDE_STATUS_LUCKY_CHANT;
+            gSideTimers[side].luckyChantBattlerId = gActiveBattler;
+            gSideTimers[side].luckyChantTimer = SCREEN_DURATION;
             gBattlescriptCurrInstr += 7;
         }
         else
@@ -10091,12 +10096,14 @@ static void Cmd_various(void)
         }
         else
         {
-            gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] |= SIDE_STATUS_AURORA_VEIL;
+            int side = GET_BATTLER_SIDE(gActiveBattler);
+            gSideTimers[side].started.auroraVeil = TRUE;
+            gSideStatuses[side] |= SIDE_STATUS_AURORA_VEIL;
             if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
-                gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilTimer = SCREEN_DURATION_EXTENDED + 1;
+                gSideTimers[side].auroraVeilTimer = SCREEN_DURATION_EXTENDED;
             else
-                gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilTimer = SCREEN_DURATION + 1;
-            gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilBattlerId = gActiveBattler;
+                gSideTimers[side].auroraVeilTimer = SCREEN_DURATION;
+            gSideTimers[side].auroraVeilBattlerId = gActiveBattler;
 
             SetActiveMultistringChooser(B_MSG_SET_SAFEGUARD);
         }
@@ -10891,6 +10898,7 @@ static void Cmd_various(void)
     case VARIOUS_SWAP_SIDE_EFFECTS:
     {
         u32 temp;
+        struct SideBeganThisTurn tempSide;
         u32 tempFlags = gSideStatuses[0] & SIDE_STATUS_SWAPPABLE;
         gSideStatuses[0] &= ~SIDE_STATUS_SWAPPABLE;
         gSideStatuses[0] |= (gSideStatuses[1] & SIDE_STATUS_SWAPPABLE);
@@ -10901,7 +10909,6 @@ static void Cmd_various(void)
         SWAP(gSideTimers[0].lightscreenTimer, gSideTimers[1].lightscreenTimer, temp)
         SWAP(gSideTimers[0].mistTimer, gSideTimers[1].mistTimer, temp)
         SWAP(gSideTimers[0].safeguardTimer, gSideTimers[1].safeguardTimer, temp)
-        SWAP(gSideTimers[0].reflectTimer, gSideTimers[1].reflectTimer, temp)
         SWAP(gSideTimers[0].spikesAmount, gSideTimers[1].spikesAmount, temp)
         SWAP(gSideTimers[0].toxicSpikesAmount, gSideTimers[1].toxicSpikesAmount, temp)
         SWAP(gSideTimers[0].stealthRockType, gSideTimers[1].stealthRockType, temp)
@@ -10913,6 +10920,7 @@ static void Cmd_various(void)
         SWAP(gSideTimers[0].swampTimer, gSideTimers[1].swampTimer, temp)
         SWAP(gSideTimers[0].fireSeaTimer, gSideTimers[1].fireSeaTimer, temp)
         SWAP(gSideTimers[0].rainbowTimer, gSideTimers[1].rainbowTimer, temp)
+        SWAP(gSideTimers[0].started, gSideTimers[1].started, tempSide);
 
         #define UPDATE_COURTCHANGED_BATTLER(structField) \
         {                                                \
@@ -11528,12 +11536,14 @@ static void Cmd_setreflect(void)
     }
     else
     {
-        gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_REFLECT;
+        int side = GET_BATTLER_SIDE(gBattlerAttacker);
+        gSideStatuses[side] |= SIDE_STATUS_REFLECT;
+        gSideTimers[side].started.reflect = TRUE;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
-            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].reflectTimer = SCREEN_DURATION_EXTENDED + 1;
+            gSideTimers[side].reflectTimer = SCREEN_DURATION_EXTENDED;
         else
-            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].reflectTimer = SCREEN_DURATION + 1;
-        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].reflectBattlerId = gBattlerAttacker;
+            gSideTimers[side].reflectTimer = SCREEN_DURATION;
+        gSideTimers[side].reflectBattlerId = gBattlerAttacker;
 
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && CountAliveMonsInBattle(BATTLE_ALIVE_ATK_SIDE) == 2)
             SetActiveMultistringChooser(B_MSG_SET_REFLECT_DOUBLE);
@@ -12746,12 +12756,14 @@ static void Cmd_setlightscreen(void)
     }
     else
     {
-        gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_LIGHTSCREEN;
+        int side = GET_BATTLER_SIDE(gBattlerAttacker);
+        gSideTimers[side].started.lightscreen = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_LIGHTSCREEN;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
-            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].lightscreenTimer = SCREEN_DURATION_EXTENDED + 1;
+            gSideTimers[side].lightscreenTimer = SCREEN_DURATION_EXTENDED;
         else
-            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].lightscreenTimer = SCREEN_DURATION + 1;
-        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].lightscreenBattlerId = gBattlerAttacker;
+            gSideTimers[side].lightscreenTimer = SCREEN_DURATION;
+        gSideTimers[side].lightscreenBattlerId = gBattlerAttacker;
 
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && CountAliveMonsInBattle(BATTLE_ALIVE_ATK_SIDE) == 2)
             SetActiveMultistringChooser(B_MSG_SET_LIGHTSCREEN_DOUBLE);
@@ -13180,9 +13192,11 @@ static void Cmd_setmist(void)
     }
     else
     {
-        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistTimer = SCREEN_DURATION + 1;
-        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistBattlerId = gBattlerAttacker;
-        gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_MIST;
+        int side = GET_BATTLER_SIDE(gBattlerAttacker);
+        gSideTimers[side].started.mist;
+        gSideTimers[side].mistTimer = SCREEN_DURATION;
+        gSideTimers[side].mistBattlerId = gBattlerAttacker;
+        gSideStatuses[side] |= SIDE_STATUS_MIST;
         SetActiveMultistringChooser(B_MSG_SET_MIST);
     }
     gBattlescriptCurrInstr++;
@@ -13897,9 +13911,10 @@ static void Cmd_settailwind(void)
 
     if (!(gSideStatuses[side] & SIDE_STATUS_TAILWIND))
     {
+        gSideTimers[side].started.tailwind = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
         gSideTimers[side].tailwindBattlerId = gBattlerAttacker;
-        gSideTimers[side].tailwindTimer = TAILWIND_DURATION + 1;
+        gSideTimers[side].tailwindTimer = TAILWIND_DURATION;
         gBattlescriptCurrInstr += 5;
     }
     else
@@ -14262,9 +14277,11 @@ static void Cmd_setsafeguard(void)
     }
     else
     {
-        gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_SAFEGUARD;
-        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].safeguardTimer = 5;
-        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].safeguardBattlerId = gBattlerAttacker;
+        int side = GET_BATTLER_SIDE(gBattlerAttacker);
+        gSideTimers[side].started.safeguard = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_SAFEGUARD;
+        gSideTimers[side].safeguardTimer = 5;
+        gSideTimers[side].safeguardBattlerId = gBattlerAttacker;
         SetActiveMultistringChooser(B_MSG_SET_SAFEGUARD);
     }
 
