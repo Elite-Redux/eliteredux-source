@@ -2902,14 +2902,18 @@ BattleScript_EffectWorrySeed:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	tryworryseed BattleScript_ButItFailed
 	attackanimation
 	waitanimation
+	tryworryseed BattleScript_EffectWorrySeed_Fear
 	printstring STRINGID_PKMNACQUIREDABILITY
 	waitmessage B_WAIT_TIME_LONG
 	trytoclearprimalweather
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
+BattleScript_EffectWorrySeed_Fear:
+	setfear BS_TARGET
+	printstring STRINGID_FILLED_WITH_FEAR
+	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectPowerSplit:
