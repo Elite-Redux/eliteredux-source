@@ -2093,6 +2093,58 @@ void TryToRevertMimicry(void)
     }
 }
 
+static int GetAbilityNumber(int battler, int ability)
+{
+    int index;
+    switch (BattlerHasInnateOrAbility(battler, ability))
+    {
+        case BATTLER_INNATE:
+            return GetBattlerInnateNum(battler, ability) + 1;
+        
+        case BATTLER_ABILITY:
+            return 0;
+        
+        default:
+            return -1;
+    }
+}
+
+static int CheckAndSetOncePerTurnAbility(int battler, int ability)
+{
+    int index = GetAbilityNumber(battler, ability);
+    if (index < 0) return FALSE;
+
+    if (!gTurnStructs[battler].turnAbilityTriggers[index])
+    {
+        gTurnStructs[battler].turnAbilityTriggers[index]++;
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
+static int WasAbilityUsedThisTurnBySide(int side, int ability)
+{
+    int index = GetAbilityNumber(side, ability);
+    if (index >= 0 && gTurnStructs[side].turnAbilityTriggers[index]) return TRUE;
+    side = BATTLE_PARTNER(side);
+    index = GetAbilityNumber(side, ability);
+    if (index >= 0 && gTurnStructs[side].turnAbilityTriggers[index]) return TRUE;
+}
+
+static int WasAbilityUsedThisTurn(int ability)
+{
+    int battler;
+    for (battler = 0; battler < gBattlersCount; battler++)
+    {
+        int index = GetAbilityNumber(battler, ability);
+        if (index >= 0 && gTurnStructs[battler].turnAbilityTriggers[index]) return TRUE;
+    }
+    return FALSE;
+}
+
 enum
 {
     ENDTURN_ORDER,
@@ -2235,7 +2287,7 @@ u8 DoFieldEndTurnEffects(void)
                 //Spider Web
                 if (gSideStatuses[side] & SIDE_STATUS_STICKY_WEB)
                 {
-                    if (--gSideTimers[side].spiderWebTimer == 1)
+                    if (--gSideTimers[side].spiderWebTimer == 1 && !WasAbilityUsedThisTurnBySide(BATTLE_OPPOSITE(side), ABILITY_SPIDER_LAIR))
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_STICKY_WEB;
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
@@ -4845,35 +4897,6 @@ static bool8 UseEntryMove(u8 battler, u16 ability, u8 *effect, u16 extraMove, u8
     return FALSE;
 }
 
-static u8 CheckAndSetOncePerTurnAbility(u8 battler, u16 ability)
-{
-    u8 index;
-
-    switch (BattlerHasInnateOrAbility(battler, ability))
-    {
-        case BATTLER_INNATE:
-            index = GetBattlerInnateNum(battler, ability) + 1;
-            break;
-        
-        case BATTLER_ABILITY:
-            index = 0;
-            break;
-        
-        default:
-            return FALSE;
-    }
-
-    if (!gTurnStructs[battler].turnAbilityTriggers[index])
-    {
-        gTurnStructs[battler].turnAbilityTriggers[index]++;
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
-    }
-}
-
 static u16 UseAttackerFollowUpMove(u8 battler, u16 ability, u16 extraMove, u8 movePower, u8 moveEffectPercentChance, u8 extraMoveSecondaryEffect)
 {
     gTempMove = gCurrentMove;
@@ -6077,8 +6100,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetOncePerTurnAbility(battler, ABILITY_SPIDER_LAIR)){
             if (!(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB))
             {
+                CheckAndSetOncePerTurnAbility(battler, ABILITY_SPIDER_LAIR);
                 gSideStatuses[BATTLE_OPPOSITE(battler)] |= SIDE_STATUS_STICKY_WEB;
-                gSideTimers[BATTLE_OPPOSITE(battler)].spiderWebTimer = 6; // 5 - 1 for the ability
+                gSideTimers[BATTLE_OPPOSITE(battler)].spiderWebTimer = 5;
                 BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);
                 effect++;
             }
