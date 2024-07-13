@@ -7921,6 +7921,7 @@ static void Cmd_setgravity(void)
     else
     {
         gFieldStatuses |= STATUS_FIELD_GRAVITY;
+        gFieldTimers.started.gravity = TRUE;
         gFieldTimers.gravityTimer = GRAVITY_DURATION;
         gBattlescriptCurrInstr += 5;
     }
@@ -8438,6 +8439,7 @@ static void HandleTerrainMove(u32 moveEffect)
     {
         gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
         gFieldStatuses |= statusFlag;
+        gFieldTimers.started.terrain = TRUE;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
             *timer = 8;
         else
@@ -8772,7 +8774,8 @@ static void Cmd_various(void)
         else
         {
             gFieldStatuses |= STATUS_FIELD_FAIRY_LOCK;
-            gFieldTimers.fairyLockTimer = 2;
+            gFieldTimers.started.fairyLock = TRUE;
+            gFieldTimers.fairyLockTimer = 1;
             gBattlescriptCurrInstr += 7;
         }
         return;
@@ -15134,15 +15137,19 @@ static void Cmd_setroom(void)
     {
     case EFFECT_TRICK_ROOM:
         HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, B_MSG_TRICKROOMSTARTS, TRICK_ROOM_DURATION);
+        gFieldTimers.started.trickRoom = TRUE;
         break;
     case EFFECT_WONDER_ROOM:
         HandleRoomMove(STATUS_FIELD_WONDER_ROOM, &gFieldTimers.wonderRoomTimer, B_MSG_WONDERROOMSTARTS, WONDER_ROOM_DURATION);
+        gFieldTimers.started.wonderRoom = TRUE;
         break;
     case EFFECT_MAGIC_ROOM:
         HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, B_MSG_MAGICROOMSTARTS, MAGIC_ROOM_DURATION);
+        gFieldTimers.started.magicRoom = TRUE;
         break;
     case EFFECT_INVERSE_ROOM:
         HandleRoomMove(STATUS_FIELD_INVERSE_ROOM, &gFieldTimers.inverseRoomTimer, B_MSG_INVERSEROOMSTARTS, INVERSE_ROOM_DURATION);
+        gFieldTimers.started.inverseRoom = TRUE;
         break;
     default:
         SetActiveMultistringChooser(B_MSG_ROOMEMPTYSTRING);
@@ -15710,7 +15717,8 @@ static void Cmd_settypebasedhalvers(void) // water and mud sport
         if (!(gFieldStatuses & STATUS_FIELD_MUDSPORT))
         {
             gFieldStatuses |= STATUS_FIELD_MUDSPORT;
-            gFieldTimers.mudSportTimer = 5;
+            gFieldTimers.started.mudSport = TRUE;
+            gFieldTimers.mudSportTimer = SPORT_DURATION;
             SetActiveMultistringChooser(B_MSG_WEAKEN_ELECTRIC);
             worked = TRUE;
         }
@@ -15720,7 +15728,8 @@ static void Cmd_settypebasedhalvers(void) // water and mud sport
         if (!(gFieldStatuses & STATUS_FIELD_WATERSPORT))
         {
             gFieldStatuses |= STATUS_FIELD_WATERSPORT;
-            gFieldTimers.waterSportTimer = 5;
+            gFieldTimers.started.waterSport;
+            gFieldTimers.waterSportTimer = SPORT_DURATION;
             SetActiveMultistringChooser(B_MSG_WEAKEN_FIRE);
             worked = TRUE;
         }

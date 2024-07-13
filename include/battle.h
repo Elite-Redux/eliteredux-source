@@ -238,7 +238,6 @@ struct SideBeganThisTurn
     u8 auroraVeil:1;
     u8 tailwind:1;
     u8 luckyChant:1;
-    u8 retaliate:1;
     u8 spiderWeb:1;
     u8 swamp:1;
     u8 fireSea:1;

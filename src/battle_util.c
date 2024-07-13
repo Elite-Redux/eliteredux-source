@@ -2410,7 +2410,7 @@ u8 DoFieldEndTurnEffects(void)
                 if (!(gBattleWeather & WEATHER_RAIN_PERMANENT)
                  && !(gBattleWeather & WEATHER_RAIN_PRIMAL))
                 {
-                    if (--gWishFutureKnock.weatherDuration == 0)
+                    if (!gFieldTimers.started.weather && --gWishFutureKnock.weatherDuration == 0)
                     {
                         gBattleWeather &= ~WEATHER_RAIN_TEMPORARY;
                         gBattleWeather &= ~WEATHER_RAIN_DOWNPOUR;
@@ -2438,7 +2438,7 @@ u8 DoFieldEndTurnEffects(void)
         case ENDTURN_SANDSTORM:
             if (gBattleWeather & WEATHER_SANDSTORM_ANY)
             {
-                if (!(gBattleWeather & WEATHER_SANDSTORM_PERMANENT) && --gWishFutureKnock.weatherDuration == 0)
+                if (!(gBattleWeather & WEATHER_SANDSTORM_PERMANENT) && !gFieldTimers.started.weather && --gWishFutureKnock.weatherDuration == 0)
                 {
                     gBattleWeather &= ~WEATHER_SANDSTORM_TEMPORARY;
                     gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
@@ -2459,8 +2459,9 @@ u8 DoFieldEndTurnEffects(void)
             if (gBattleWeather & WEATHER_SUN_ANY)
             {
                 if (!(gBattleWeather & WEATHER_SUN_PERMANENT)
-                 && !(gBattleWeather & WEATHER_SUN_PRIMAL)
-                 && --gWishFutureKnock.weatherDuration == 0)
+                    && !(gBattleWeather & WEATHER_SUN_PRIMAL)
+                    && !gFieldTimers.started.weather
+                    && --gWishFutureKnock.weatherDuration == 0)
                 {
                     gBattleWeather &= ~WEATHER_SUN_TEMPORARY;
                     gBattlescriptCurrInstr = BattleScript_SunlightFaded;
@@ -2478,7 +2479,7 @@ u8 DoFieldEndTurnEffects(void)
         case ENDTURN_HAIL:
             if (gBattleWeather & WEATHER_HAIL_ANY)
             {
-                if (!(gBattleWeather & WEATHER_HAIL_PERMANENT) && --gWishFutureKnock.weatherDuration == 0)
+                if (!(gBattleWeather & WEATHER_HAIL_PERMANENT) && !gFieldTimers.started.weather && --gWishFutureKnock.weatherDuration == 0)
                 {
                     gBattleWeather &= ~WEATHER_HAIL_TEMPORARY;
                     gBattlescriptCurrInstr = BattleScript_SandStormHailEnds;
@@ -2522,7 +2523,7 @@ u8 DoFieldEndTurnEffects(void)
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_WONDER_ROOM:
-            if (gFieldStatuses & STATUS_FIELD_WONDER_ROOM && --gFieldTimers.wonderRoomTimer == 0)
+            if (gFieldStatuses & STATUS_FIELD_WONDER_ROOM && !gFieldTimers.started.wonderRoom && --gFieldTimers.wonderRoomTimer == 0)
             {
                 gFieldStatuses &= ~(STATUS_FIELD_WONDER_ROOM);
                 BattleScriptExecute(BattleScript_WonderRoomEnds);
@@ -2541,7 +2542,7 @@ u8 DoFieldEndTurnEffects(void)
             break;
         case ENDTURN_ELECTRIC_TERRAIN:
             if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN
-              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && --gFieldTimers.terrainTimer == 0))
+              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && !gFieldTimers.started.terrain && --gFieldTimers.terrainTimer == 0))
             {
                 gFieldStatuses &= ~(STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_TERRAIN_PERMANENT);
                 TryToRevertMimicry();
@@ -2552,7 +2553,7 @@ u8 DoFieldEndTurnEffects(void)
             break;
         case ENDTURN_MISTY_TERRAIN:
             if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN
-              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && --gFieldTimers.terrainTimer == 0))
+              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && !gFieldTimers.started.terrain && --gFieldTimers.terrainTimer == 0))
             {
                 gFieldStatuses &= ~(STATUS_FIELD_MISTY_TERRAIN);
                 TryToRevertMimicry();
@@ -2564,8 +2565,7 @@ u8 DoFieldEndTurnEffects(void)
         case ENDTURN_GRASSY_TERRAIN:
             if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
             {
-                if (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT)
-                  && (gFieldTimers.terrainTimer == 0 || --gFieldTimers.terrainTimer == 0))
+                if (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && !gFieldTimers.started.terrain && --gFieldTimers.terrainTimer == 0)
                 {
                     gFieldStatuses &= ~(STATUS_FIELD_GRASSY_TERRAIN);
                     TryToRevertMimicry();
@@ -2577,7 +2577,7 @@ u8 DoFieldEndTurnEffects(void)
             break;
         case ENDTURN_PSYCHIC_TERRAIN:
             if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN
-              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && --gFieldTimers.terrainTimer == 0))
+              && (!(gFieldStatuses & STATUS_FIELD_TERRAIN_PERMANENT) && !gFieldTimers.started.terrain && --gFieldTimers.terrainTimer == 0))
             {
                 gFieldStatuses &= ~(STATUS_FIELD_PSYCHIC_TERRAIN);
                 TryToRevertMimicry();
@@ -2596,7 +2596,7 @@ u8 DoFieldEndTurnEffects(void)
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_MUD_SPORT:
-            if (gFieldStatuses & STATUS_FIELD_MUDSPORT && --gFieldTimers.mudSportTimer == 0)
+            if (gFieldStatuses & STATUS_FIELD_MUDSPORT && !gFieldTimers.started.mudSport && --gFieldTimers.mudSportTimer == 0)
             {
                 gFieldStatuses &= ~(STATUS_FIELD_MUDSPORT);
                 BattleScriptExecute(BattleScript_MudSportEnds);
@@ -2605,10 +2605,7 @@ u8 DoFieldEndTurnEffects(void)
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_GRAVITY:
-            if (gFieldStatuses & STATUS_FIELD_GRAVITY
-                && !WasAbilityUsedThisRound(ABILITY_ATLAS)
-                && !WasAbilityUsedThisRound(ABILITY_GRAVITY_WELL)
-                && --gFieldTimers.gravityTimer == 0)
+            if (gFieldStatuses & STATUS_FIELD_GRAVITY && !gFieldTimers.started.gravity && --gFieldTimers.gravityTimer == 0)
             {
                 gFieldStatuses &= ~(STATUS_FIELD_GRAVITY);
                 BattleScriptExecute(BattleScript_GravityEnds);
@@ -2621,7 +2618,7 @@ u8 DoFieldEndTurnEffects(void)
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_FAIRY_LOCK:
-            if (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK && --gFieldTimers.fairyLockTimer == 0)
+            if (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK && !gFieldTimers.started.fairyLock && --gFieldTimers.fairyLockTimer == 0)
             {
                 gFieldStatuses &= ~(STATUS_FIELD_FAIRY_LOCK);
             }
@@ -4434,6 +4431,7 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
     else if (!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
     {
         gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0]);
+        gFieldTimers.started.weather = TRUE;
         if (GetBattlerHoldEffect(battler, TRUE) == sWeatherFlagsInfo[weatherEnumId][2])
             gWishFutureKnock.weatherDuration = WEATHER_DURATION_EXTENDED;
         else
@@ -4492,6 +4490,7 @@ static bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer)
     {
         gFieldStatuses &= ~(STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_PSYCHIC_TERRAIN);
         gFieldStatuses |= statusFlag;
+        gFieldTimers.started.terrain = TRUE;
 
         if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
             *timer = TERRAIN_DURATION_EXTENDED;
@@ -5189,6 +5188,7 @@ bool8 TryToSetFieldEffect(u8 battler){
             case STATUS_FIELD_TRICK_ROOM:
                 if(!(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)){
                     //Enable Trick Room
+                    gFieldTimers.started.trickRoom = TRUE;
                     gFieldStatuses |= STATUS_FIELD_TRICK_ROOM;
                     if(isTemporary)
                         gFieldTimers.trickRoomTimer = TRICK_ROOM_DURATION;
@@ -5201,6 +5201,7 @@ bool8 TryToSetFieldEffect(u8 battler){
             case STATUS_FIELD_MAGIC_ROOM:
                 if(!(gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)){
                     //Enable Magic Room
+                    gFieldTimers.started.magicRoom = TRUE;
                     gFieldStatuses |= STATUS_FIELD_MAGIC_ROOM;
                     if(isTemporary)
                         gFieldTimers.magicRoomTimer= MAGIC_ROOM_DURATION;
@@ -5213,6 +5214,7 @@ bool8 TryToSetFieldEffect(u8 battler){
             case STATUS_FIELD_WONDER_ROOM:
                 if(!(gFieldStatuses & STATUS_FIELD_WONDER_ROOM)){
                     //Enable Wonder Room
+                    gFieldTimers.started.wonderRoom = TRUE;
                     gFieldStatuses |= STATUS_FIELD_WONDER_ROOM;
                     if(isTemporary)
                         gFieldTimers.wonderRoomTimer = WONDER_ROOM_DURATION;
@@ -5225,6 +5227,7 @@ bool8 TryToSetFieldEffect(u8 battler){
             case STATUS_FIELD_INVERSE_ROOM:
                 if(!(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)){
                     //Enable Inverse Room
+                    gFieldTimers.started.inverseRoom = TRUE;
                     gFieldStatuses |= STATUS_FIELD_INVERSE_ROOM;
                     if(isTemporary)
                         gFieldTimers.inverseRoomTimer = INVERSE_ROOM_DURATION;
@@ -5238,6 +5241,7 @@ bool8 TryToSetFieldEffect(u8 battler){
                 if(!(gFieldStatuses & STATUS_FIELD_GRAVITY)){
                     //Enable Trick Room
                     gFieldStatuses |= STATUS_FIELD_GRAVITY;
+                    gFieldTimers.started.gravity = TRUE;
                     if(isTemporary)
                         gFieldTimers.gravityTimer = GRAVITY_DURATION;
                     else
@@ -6180,6 +6184,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if (CheckAndSetSwitchInAbility(battler, ABILITY_TWISTED_DIMENSION)) {
             if(!(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)){
                 //Enable Trick Room
+                gFieldTimers.started.trickRoom = TRUE;
                 gFieldStatuses |= STATUS_FIELD_TRICK_ROOM;
                 gFieldTimers.trickRoomTimer = TRICK_ROOM_DURATION_SHORT;
                 BattleScriptPushCursorAndCallback(BattleScript_TwistedDimensionActivated);
