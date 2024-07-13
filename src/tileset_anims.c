@@ -72,6 +72,7 @@ static void QueueAnimTiles_BattleFrontierOutsideWest_Flag(u16);
 static void QueueAnimTiles_BattleFrontierOutsideEast_Flag(u16);
 static void QueueAnimTiles_MauvilleGym_ElectricGates(u16);
 static void QueueAnimTiles_MauvilleGym_TrippingFloor(u16);
+static void QueueAnimTiles_MauvilleGym_GearsGround(u16);
 static void QueueAnimTiles_SootopolisGym_Waterfalls(u16);
 static void QueueAnimTiles_EliteFour_GroundLights(u16);
 static void QueueAnimTiles_EliteFour_WallLights(u16);
@@ -492,6 +493,27 @@ const u16 *const gTilesetAnims_MauvilleGym_TrippingFloor[] = {
     gTilesetAnims_MauvilleGym_TrippingFloor_Frame4,
 };
 
+const u16 tileset_anims_space_13[16] = {};
+const u16 gTilesetAnims_MauvilleGym_GrearGround_Frame0[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/ground_gears/0.4bpp");
+const u16 gTilesetAnims_MauvilleGym_GrearGround_Frame1[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/ground_gears/1.4bpp");
+const u16 gTilesetAnims_MauvilleGym_GrearGround_Frame2[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/ground_gears/2.4bpp");
+const u16 gTilesetAnims_MauvilleGym_GrearGround_Frame3[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/ground_gears/3.4bpp");
+const u16 gTilesetAnims_MauvilleGym_GrearGround_Frame4[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/ground_gears/4.4bpp");
+const u16 gTilesetAnims_MauvilleGym_GrearGround_Frame5[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/ground_gears/5.4bpp");
+const u16 gTilesetAnims_MauvilleGym_GrearGround_Frame6[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/ground_gears/6.4bpp");
+const u16 gTilesetAnims_MauvilleGym_GrearGround_Frame7[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/ground_gears/7.4bpp");
+
+const u16 *const gTilesetAnims_MauvilleGym_GrearGround[] = {
+    gTilesetAnims_MauvilleGym_GrearGround_Frame0,
+    gTilesetAnims_MauvilleGym_GrearGround_Frame1,
+    gTilesetAnims_MauvilleGym_GrearGround_Frame2,
+    gTilesetAnims_MauvilleGym_GrearGround_Frame3,
+    gTilesetAnims_MauvilleGym_GrearGround_Frame4,
+    gTilesetAnims_MauvilleGym_GrearGround_Frame5,
+    gTilesetAnims_MauvilleGym_GrearGround_Frame6,
+    gTilesetAnims_MauvilleGym_GrearGround_Frame7,
+};
+
 
 const u16 gTilesetAnims_BikeShop_BlinkingLights_Frame0[] = INCBIN_U16("data/tilesets/secondary/bike_shop/anim/blinking_lights/0.4bpp");
 const u16 gTilesetAnims_BikeShop_BlinkingLights_Frame1[] = INCBIN_U16("data/tilesets/secondary/bike_shop/anim/blinking_lights/1.4bpp");
@@ -827,7 +849,7 @@ void InitTilesetAnim_EliteFour(void)
 void InitTilesetAnim_MauvilleGym(void)
 {
     sSecondaryTilesetAnimCounter = 0;
-    sSecondaryTilesetAnimCounterMax = 25;
+    sSecondaryTilesetAnimCounterMax = 125;
     sSecondaryTilesetAnimCallback = TilesetAnim_MauvilleGym;
 }
 
@@ -1088,6 +1110,9 @@ static void TilesetAnim_MauvilleGym(u16 timer)
     if(timer % 5 == 0){
         QueueAnimTiles_MauvilleGym_TrippingFloor(timer);
     }
+    if(timer % 8 == 0){
+        QueueAnimTiles_MauvilleGym_GearsGround(timer % 64);
+    }
 }
 
 static void TilesetAnim_SootopolisGym(u16 timer)
@@ -1164,11 +1189,17 @@ static void QueueAnimTiles_MauvilleGym_ElectricGates(u16 timer)
 
 static void QueueAnimTiles_MauvilleGym_TrippingFloor(u16 timer)
 {
-    // since sSecondaryTilesetAnimCounterMax = 25; it's understandly safe
-    u16 i = timer / 5; 
+    
+    // since QueueAnimTiles_MauvilleGym_TrippingFloor( timer % 25); it's understandly safe
+    u16 i = (timer % 25) / 5; 
     // the 0x100 here is calculated by (widthpx * heightpx) / 2 of one animated frame (the png file 0 for example)
     // beware that your tiles must be sliced from top left to bottom right in the tileset
     AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_TrippingFloor[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 4)), 0x100);
+}
+
+static void QueueAnimTiles_MauvilleGym_GearsGround(u16 timer){
+    u16 i = timer / 8;
+    AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_GrearGround[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 20)), 126);
 }
 
 static void QueueAnimTiles_BikeShop_BlinkingLights(u16 timer)
