@@ -3428,7 +3428,7 @@ BattleScript_EffectBerrySmash:
 	setbyte sBERRY_OVERRIDE, FALSE
 	readtargetfromstack4
 	jumpifnotmove MOVE_BELCH BattleScript_HitFromAccCheck
-	jumpifnotberry BattleScript_HitFromAccCheck
+	jumpifnotberry BS_ATTACKER, BattleScript_HitFromAccCheck
 	goto BattleScript_ButItFailed
 BattleScript_EffectBerrySmashNoBerry:
 	setmoveeffect 0
