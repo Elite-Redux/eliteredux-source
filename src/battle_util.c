@@ -2125,7 +2125,13 @@ static int CheckAndSetOncePerTurnAbility(int battler, int ability)
     }
 }
 
-static int WasAbilityUsedThisTurnBySide(int side, int ability)
+static void RecordAbilityUsedThisRound(int battler, int ability)
+{
+    int index = GetAbilityNumber(battler, ability);
+    if (index >= 0) gRoundStructs[battler].abilityUsedCount[index]++;
+}
+
+static int WasAbilityUsedThisRoundBySide(int side, int ability)
 {
     int index = GetAbilityNumber(side, ability);
     if (index >= 0 && gTurnStructs[side].turnAbilityTriggers[index]) return TRUE;
@@ -2134,7 +2140,7 @@ static int WasAbilityUsedThisTurnBySide(int side, int ability)
     if (index >= 0 && gTurnStructs[side].turnAbilityTriggers[index]) return TRUE;
 }
 
-static int WasAbilityUsedThisTurn(int ability)
+static int WasAbilityUsedThisRound(int ability)
 {
     int battler;
     for (battler = 0; battler < gBattlersCount; battler++)
@@ -2287,7 +2293,7 @@ u8 DoFieldEndTurnEffects(void)
                 //Spider Web
                 if (gSideStatuses[side] & SIDE_STATUS_STICKY_WEB)
                 {
-                    if (--gSideTimers[side].spiderWebTimer == 1 && !WasAbilityUsedThisTurnBySide(BATTLE_OPPOSITE(side), ABILITY_SPIDER_LAIR))
+                    if (!WasAbilityUsedThisRoundBySide(BATTLE_OPPOSITE(side), ABILITY_SPIDER_LAIR) && --gSideTimers[side].spiderWebTimer == 1)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_STICKY_WEB;
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
@@ -2385,7 +2391,7 @@ u8 DoFieldEndTurnEffects(void)
                 gActiveBattler = gBattlerAttacker = gSideTimers[side].tailwindBattlerId;
                 if (gSideStatuses[side] & SIDE_STATUS_TAILWIND)
                 {
-                    if (--gSideTimers[side].tailwindTimer == 0)
+                    if (!WasAbilityUsedThisRoundBySide(side, ABILITY_AIR_BLOWER) && --gSideTimers[side].tailwindTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_TAILWIND;
                         BattleScriptExecute(BattleScript_TailwindEnds);
@@ -6062,6 +6068,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Air Blower
         if(CheckAndSetSwitchInAbility(battler, ABILITY_AIR_BLOWER) &&
         !(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)){
+            RecordAbilityUsedThisRound(battler, ABILITY_AIR_BLOWER);
             gSideStatuses[GetBattlerSide(battler)] |= SIDE_STATUS_TAILWIND;
             gSideTimers[GetBattlerSide(battler)].tailwindBattlerId = gBattlerAttacker;
             gSideTimers[GetBattlerSide(battler)].tailwindTimer = 3;
@@ -6100,7 +6107,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetOncePerTurnAbility(battler, ABILITY_SPIDER_LAIR)){
             if (!(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB))
             {
-                CheckAndSetOncePerTurnAbility(battler, ABILITY_SPIDER_LAIR);
+                RecordAbilityUsedThisRound(battler, ABILITY_SPIDER_LAIR);
                 gSideStatuses[BATTLE_OPPOSITE(battler)] |= SIDE_STATUS_STICKY_WEB;
                 gSideTimers[BATTLE_OPPOSITE(battler)].spiderWebTimer = 5;
                 BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);

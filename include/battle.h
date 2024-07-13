@@ -142,6 +142,7 @@ struct RoundStruct
     u32 specialDmg;
     u8 physicalBattlerId;
     u8 specialBattlerId;
+    u8 abilityUsedCount[NUM_INNATE_PER_SPECIES + 1];
     u32 protected:1;
     u32 spikyShielded:1;
     u32 kingsShielded:1;
