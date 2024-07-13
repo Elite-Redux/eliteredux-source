@@ -2281,7 +2281,7 @@ u8 DoFieldEndTurnEffects(void)
                 //Aurora Veil
                 if (gSideStatuses[side] & SIDE_STATUS_AURORA_VEIL)
                 {
-                    if (--gSideTimers[side].auroraVeilTimer == 0)
+                    if (!WasAbilityUsedThisRoundBySide(side, ABILITY_NORTH_WIND) && --gSideTimers[side].auroraVeilTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_AURORA_VEIL;
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
@@ -2343,7 +2343,7 @@ u8 DoFieldEndTurnEffects(void)
                 gActiveBattler = gBattlerAttacker = gSideTimers[side].safeguardBattlerId;
                 if (gSideStatuses[side] & SIDE_STATUS_SAFEGUARD)
                 {
-                    if (--gSideTimers[side].safeguardTimer == 0)
+                    if (!WasAbilityUsedThisRoundBySide(side, ABILITY_PASTEL_VEIL) && --gSideTimers[side].safeguardTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_SAFEGUARD;
                         BattleScriptExecute(BattleScript_SafeguardEnds);
@@ -6071,7 +6071,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             RecordAbilityUsedThisRound(battler, ABILITY_AIR_BLOWER);
             gSideStatuses[GetBattlerSide(battler)] |= SIDE_STATUS_TAILWIND;
             gSideTimers[GetBattlerSide(battler)].tailwindBattlerId = gBattlerAttacker;
-            gSideTimers[GetBattlerSide(battler)].tailwindTimer = 3;
+            gSideTimers[GetBattlerSide(battler)].tailwindTimer = TAILWIND_DURATION_SHORT;
             // Prevents double activation of Wind Rider
             DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
             DisableSwitchInAbility(BATTLE_PARTNER(battler), ABILITY_WIND_RIDER);
@@ -6082,9 +6082,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Pastel Veil Rework
         if(CheckAndSetSwitchInAbility(battler, ABILITY_PASTEL_VEIL) &&
         !(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD)){
+            RecordAbilityUsedThisRound(battler, ABILITY_PASTEL_VEIL);
             gSideStatuses[GetBattlerSide(battler)] |= SIDE_STATUS_SAFEGUARD;
             gSideTimers[GetBattlerSide(battler)].safeguardBattlerId = gBattlerAttacker;
-            gSideTimers[GetBattlerSide(battler)].safeguardTimer = 5;
+            gSideTimers[GetBattlerSide(battler)].safeguardTimer = SCREEN_DURATION;
             BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivated);
             effect++;
         }
@@ -6093,11 +6094,12 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetSwitchInAbility(battler, ABILITY_NORTH_WIND)){
             if (!(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL))
             {
+                RecordAbilityUsedThisRound(battler, ABILITY_NORTH_WIND);
                 gSideStatuses[GetBattlerSide(battler)] |= SIDE_STATUS_AURORA_VEIL;
                 if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
-                    gSideTimers[GET_BATTLER_SIDE(battler)].auroraVeilTimer = 5;
+                    gSideTimers[GET_BATTLER_SIDE(battler)].auroraVeilTimer = SCREEN_DURATION;
                 else
-                    gSideTimers[GET_BATTLER_SIDE(battler)].auroraVeilTimer = 3;
+                    gSideTimers[GET_BATTLER_SIDE(battler)].auroraVeilTimer = SCREEN_DURATION_SHORT;
                 BattleScriptPushCursorAndCallback(BattleScript_NorthWindActivated);
                 effect++;
             }

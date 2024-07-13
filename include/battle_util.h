@@ -61,6 +61,11 @@
 #define INVERSE_ROOM_DURATION           5
 #define INVERSE_ROOM_DURATION_SHORT     3
 #define ROOM_DURATION_MAX               255
+#define SCREEN_DURATION                 5
+#define SCREEN_DURATION_EXTENDED        8
+#define SCREEN_DURATION_SHORT           3
+#define TAILWIND_DURATION               3
+#define TAILWIND_DURATION_SHORT         3
 
 #define IS_WHOLE_SIDE_ALIVE(battler)((IsBattlerAlive(battler) && IsBattlerAlive(BATTLE_PARTNER(battler))))
 #define BATTLER_HAS_ABILITY(battlerId, ability) (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, gBattlerAttacker, ability))

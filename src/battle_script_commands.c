@@ -10093,9 +10093,9 @@ static void Cmd_various(void)
         {
             gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] |= SIDE_STATUS_AURORA_VEIL;
             if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
-                gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilTimer = 8;
+                gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilTimer = SCREEN_DURATION_EXTENDED + 1;
             else
-                gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilTimer = 5;
+                gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilTimer = SCREEN_DURATION + 1;
             gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].auroraVeilBattlerId = gActiveBattler;
 
             SetActiveMultistringChooser(B_MSG_SET_SAFEGUARD);
@@ -11530,9 +11530,9 @@ static void Cmd_setreflect(void)
     {
         gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_REFLECT;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
-            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].reflectTimer = 8;
+            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].reflectTimer = SCREEN_DURATION_EXTENDED + 1;
         else
-            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].reflectTimer = 5;
+            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].reflectTimer = SCREEN_DURATION + 1;
         gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].reflectBattlerId = gBattlerAttacker;
 
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && CountAliveMonsInBattle(BATTLE_ALIVE_ATK_SIDE) == 2)
@@ -12748,9 +12748,9 @@ static void Cmd_setlightscreen(void)
     {
         gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_LIGHTSCREEN;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LIGHT_CLAY)
-            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].lightscreenTimer = 8;
+            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].lightscreenTimer = SCREEN_DURATION_EXTENDED + 1;
         else
-            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].lightscreenTimer = 5;
+            gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].lightscreenTimer = SCREEN_DURATION + 1;
         gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].lightscreenBattlerId = gBattlerAttacker;
 
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && CountAliveMonsInBattle(BATTLE_ALIVE_ATK_SIDE) == 2)
@@ -13899,7 +13899,7 @@ static void Cmd_settailwind(void)
     {
         gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
         gSideTimers[side].tailwindBattlerId = gBattlerAttacker;
-        gSideTimers[side].tailwindTimer = (B_TAILWIND_TURNS >= GEN_5) ? 4 : 3;
+        gSideTimers[side].tailwindTimer = TAILWIND_DURATION + 1;
         gBattlescriptCurrInstr += 5;
     }
     else
