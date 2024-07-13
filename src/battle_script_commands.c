@@ -13180,7 +13180,7 @@ static void Cmd_setmist(void)
     }
     else
     {
-        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistTimer = 5;
+        gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistTimer = SCREEN_DURATION + 1;
         gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].mistBattlerId = gBattlerAttacker;
         gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)] |= SIDE_STATUS_MIST;
         SetActiveMultistringChooser(B_MSG_SET_MIST);

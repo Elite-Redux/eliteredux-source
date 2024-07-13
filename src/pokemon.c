@@ -6252,7 +6252,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             if ((itemEffect[i] & ITEM3_GUARD_SPEC)
              && gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer == 0)
             {
-                gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer = 5;
+                gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer = SCREEN_DURATION + 1;
                 retVal = FALSE;
             }
 
