@@ -227,7 +227,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectOverheat                @ EFFECT_OVERHEAT
 	.4byte BattleScript_EffectTickle                  @ EFFECT_TICKLE
 	.4byte BattleScript_EffectCosmicPower             @ EFFECT_COSMIC_POWER
-	.4byte BattleScript_EffectSkyUppercut             @ EFFECT_SKY_UPPERCUT
+	.4byte BattleScript_EffectHit             	      @ EFFECT_SKY_UPPERCUT
 	.4byte BattleScript_EffectBulkUp                  @ EFFECT_BULK_UP
 	.4byte BattleScript_EffectPlaceholder             @ EFFECT_PLACEHOLDER
 	.4byte BattleScript_EffectWaterSport              @ EFFECT_WATER_SPORT
@@ -349,7 +349,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectAromaticMist            @ EFFECT_AROMATIC_MIST
 	.4byte BattleScript_EffectPowder                  @ EFFECT_POWDER
 	.4byte BattleScript_EffectSpAtkUpHit              @ EFFECT_SP_ATTACK_UP_HIT
-	.4byte BattleScript_EffectHit                     @ EFFECT_BELCH
+	.4byte BattleScript_EffectBerrySmash              @ EFFECT_BELCH
 	.4byte BattleScript_EffectPartingShot             @ EFFECT_PARTING_SHOT
 	.4byte BattleScript_EffectSpectralThief           @ EFFECT_SPECTRAL_THIEF
 	.4byte BattleScript_EffectVCreate                 @ EFFECT_V_CREATE
@@ -3427,9 +3427,10 @@ BattleScript_EffectBerrySmash:
 	consumeberry BS_ATTACKER
 	setbyte sBERRY_OVERRIDE, FALSE
 	readtargetfromstack4
-	goto BattleScript_HitFromAccCheck
+	jumpifnotmove MOVE_BELCH BattleScript_HitFromAccCheck
+	jumpifnotberry BattleScript_HitFromAccCheck
+	goto BattleScript_ButItFailed
 BattleScript_EffectBerrySmashNoBerry:
-	setdynamictype BS_ATTACKER, 0
 	setmoveeffect 0
 	goto BattleScript_EffectHit
 
@@ -6878,9 +6879,6 @@ BattleScript_CosmicPowerTrySpDef::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_CosmicPowerEnd::
 	goto BattleScript_MoveEnd
-
-BattleScript_EffectSkyUppercut::
-	goto BattleScript_EffectHit
 
 BattleScript_EffectBulkUp::
 	attackcanceler
