@@ -471,6 +471,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectUpperHand				  @ EFFECT_UPPER_HAND
 	.4byte BattleScript_EffectElectroShot			  @ EFFECT_ELECTRO_SHOT
 	.4byte BattleScript_EffectSharpen				  @ EFFECT_SHARPEN
+	.4byte BattleScript_EffectScaryFace				  @ EFFECT_SCARY_FACE
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -12172,3 +12173,21 @@ BattleScript_EffectSharpen_AfterCrit:
 BattleScript_EffectSharpen_CritOnly:
 	increasecrit BS_ATTACKER, 1, BattleScript_ButItFailed
 	goto BattleScript_EffectSharpen_AfterCrit
+
+BattleScript_EffectScaryFace::
+	attackcanceler
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	setstatchanger STAT_SPEED, 2, TRUE
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_EffectScaryFace_Fear
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatDownStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_EffectScaryFace_Fear:
+	setfear BS_TARGET
+	printstring STRINGID_FILLED_WITH_FEAR
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd

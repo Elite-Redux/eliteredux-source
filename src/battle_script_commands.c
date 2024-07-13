@@ -10646,7 +10646,8 @@ static void Cmd_various(void)
     case VARIOUS_GOTO_ACTUAL_MOVE:
         gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
         return;
-    case VARIOUS_INCREASE_TRIPLE_KICK_DAMAGE:
+    case VARIOUS_SET_FEAR:
+        gVolatileStructs[gActiveBattler].fearTimer = 2;
         break;
     case VARIOUS_HANDLE_WEATHER_CHANGE:
         gBattlescriptCurrInstr += 3;

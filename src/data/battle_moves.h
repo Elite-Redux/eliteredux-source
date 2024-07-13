@@ -2263,7 +2263,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SCARY_FACE] =
     {
-        .effect = EFFECT_SPEED_DOWN_2,
+        .effect = EFFECT_SCARY_FACE,
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 100,

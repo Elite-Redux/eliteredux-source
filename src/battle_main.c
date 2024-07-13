@@ -5266,6 +5266,8 @@ static void TurnValuesCleanUp(bool8 clearRoundStruts)
                 if (gVolatileStructs[gActiveBattler].rechargeTimer == 0)
                     gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
             }
+
+            if (gVolatileStructs[gActiveBattler].fearTimer) gVolatileStructs[gActiveBattler].fearTimer--;
         }
 
         if (gVolatileStructs[gActiveBattler].substituteHP == 0)

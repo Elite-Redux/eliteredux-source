@@ -170,6 +170,7 @@ enum
     STATUS_INFO_DRAGON_CHEER,
     STATUS_INFO_WRAPPED,
     STATUS_INFO_PARASITIC_SPORES,
+    STATUS_INFO_FEAR,
     NUM_STATUS_INFO,
 };
 
@@ -864,7 +865,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                     if (gVolatileStructs[j].parasiticSpores)
                         isExtraInfoShown = TRUE;
                 break;
-
+                case STATUS_INFO_FEAR:
+                    if (gVolatileStructs[j].fearTimer)
+                        isExtraInfoShown = TRUE;
+                break;
             }
 
             if(isExtraInfoShown && IsBattlerAlive(j)){
@@ -2214,6 +2218,10 @@ const u8 sText_Title_Status_Parasitic_Spores[]              = _("Parasitic Spore
 const u8 sText_Title_Status_Parasitic_Spores_Description[]  = _("This Pokémon takes 1/8 of its\n"
                                                                 "maximum HP if it is not\n"
                                                                 "Ghost-type. Spreads on contact.");
+const u8 sText_Title_Status_Fear[]                          = _("Fear");
+const u8 sText_Title_Status_Fear_Description[]              = _("For one turn this Pokémon\n"
+                                                                "can't swap and takes 50% more\n"
+                                                                "damage.");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
 #define MAX_DESCRIPTION_LINES 3
@@ -2839,6 +2847,15 @@ static void PrintStatusTab(void){
                 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Status_Parasitic_Spores_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_FEAR:
+                StringCopy(gStringVar1, sText_Title_Status_Fear);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Description
+                StringCopy(gStringVar1, sText_Title_Status_Fear);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;

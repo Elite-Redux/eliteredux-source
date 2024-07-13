@@ -2179,8 +2179,8 @@
 	various \battler, VARIOUS_GOTO_ACTUAL_MOVE
 	.endm
 
-	.macro increasetriplekickpower battler:req
-	various \battler, VARIOUS_INCREASE_TRIPLE_KICK_DAMAGE
+	.macro setfear battler:req
+	various \battler, VARIOUS_SET_FEAR
 	.endm
 
 	.macro handleweatherchange battler:req
