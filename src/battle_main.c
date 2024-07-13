@@ -5239,12 +5239,12 @@ static void SetActionsAndBattlersTurnOrder(void)
     gBattleStruct->mega.battlerId = 0;
 }
 
-static void TurnValuesCleanUp(bool8 clearRoundStruts)
+static void TurnValuesCleanUp(bool8 turnPassOnly)
 {
     s32 i;
     for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
     {
-        if (!clearRoundStruts)
+        if (!turnPassOnly)
         {
             ZERO(gRoundStructs[gActiveBattler])
 
@@ -5279,15 +5279,18 @@ static void TurnValuesCleanUp(bool8 clearRoundStruts)
     gSideStatuses[0] &= ~(SIDE_STATUS_QUICK_GUARD | SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK);
     gSideStatuses[1] &= ~(SIDE_STATUS_QUICK_GUARD | SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK);
     gSideTimers[0].followmeTimer = 0;
-    gSideTimers[1].followmeTimer = 0;    
+    gSideTimers[1].followmeTimer = 0;
+    
+    if (!turnPassOnly) {
+        ZERO(gSideTimers[0].started)
+        ZERO(gSideTimers[1].started)
+        ZERO(gFieldTimers.started)
+    }
 }
 
 void TurnStructsClear(void)
 {
     ZERO(gTurnStructs)
-    ZERO(gSideTimers[0].started)
-    ZERO(gSideTimers[1].started)
-    ZERO(gFieldTimers.started)
 }
 
 static void CheckMegaEvolutionBeforeTurn(void)
