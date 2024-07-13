@@ -794,3 +794,10 @@ gMetatiles_PokemonTower::
 	.align 1
 gMetatileAttributes_PokemonTower::
 	.incbin "data/tilesets/secondary/pokemontower/metatile_attributes.bin"
+	.align 1
+gMetatiles_PowerPlant::
+	.incbin "data/tilesets/secondary/powerplant/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_PowerPlant::
+	.incbin "data/tilesets/secondary/powerplant/metatile_attributes.bin"

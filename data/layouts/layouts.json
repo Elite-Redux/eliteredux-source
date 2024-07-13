@@ -5740,6 +5740,16 @@
       "secondary_tileset": "gTileset_PokemonTower",
       "border_filepath": "data/layouts/PokemonTower_7F/border.bin",
       "blockdata_filepath": "data/layouts/PokemonTower_7F/map.bin"
+    },
+    {
+      "id": "LAYOUT_POWER_PLANT",
+      "name": "PowerPlant_Layout",
+      "width": 49,
+      "height": 40,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_PowerPlant",
+      "border_filepath": "data/layouts/PowerPlant/border.bin",
+      "blockdata_filepath": "data/layouts/PowerPlant/map.bin"
     }
   ]
 }

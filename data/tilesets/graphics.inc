@@ -2389,3 +2389,23 @@ gTilesetPalettes_PokemonTower::
 	.align 2
 gTilesetTiles_PokemonTower::
 	.incbin "data/tilesets/secondary/pokemontower/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_PowerPlant::
+	.incbin "data/tilesets/secondary/powerplant/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/powerplant/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_PowerPlant::
+	.incbin "data/tilesets/secondary/powerplant/tiles.4bpp.lz"

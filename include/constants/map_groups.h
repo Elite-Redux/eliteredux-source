@@ -179,6 +179,7 @@
 #define MAP_POKEMON_TOWER_5F                      (108 | (1 << 8))
 #define MAP_POKEMON_TOWER_6F                      (109 | (1 << 8))
 #define MAP_POKEMON_TOWER_7F                      (110 | (1 << 8))
+#define MAP_POWER_PLANT                           (111 | (1 << 8))
 
 // gMapGroup_IndoorOldale
 #define MAP_OLDALE_TOWN_HOUSE1            (0 | (2 << 8))
