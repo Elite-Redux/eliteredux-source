@@ -4187,15 +4187,17 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_POISON_TAIL] =
     {
-        .effect = EFFECT_POISON_HIT,
+        .effect = EFFECT_HIT_SWITCH_TARGET,
         .power = 80,
         .type = TYPE_POISON,
         .accuracy = 100,
-        .pp = 20,
-        .secondaryEffectChance = 30,
+        .pp = 10,
+        .secondaryEffectChance = 10,
+        .priority = -6,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
+        .argument = MOVE_EFFECT_POISON,
     },
     [MOVE_COVET] =
     {

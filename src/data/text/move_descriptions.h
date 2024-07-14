@@ -1363,8 +1363,8 @@ static const u8 sMoveTwoLineDescription_MoveMudShot[] = _(
     "Has +1 priority.");
 
 static const u8 sMoveTwoLineDescription_MovePoisonTail[] = _(
-    "Has a high critical-hit\n"
-    "ratio. May also poison.");
+    "Forces the target to\n"
+    "Switch. May also poison.");
 
 static const u8 sMoveTwoLineDescription_MoveCovet[] = _(
     "Cutely begs to obtain an\n"
@@ -5026,7 +5026,7 @@ static const u8 sMoveFourLineDescription_MoveFrenzyPlant[] = _("The foe is hit w
 static const u8 sMoveFourLineDescription_MoveBulkUp[] = _("The user bulks up\nits body to boost\nboth its Attack and\nDefense stats.");
 static const u8 sMoveFourLineDescription_MoveBounce[] = _("The user bounces\non the foe on the\n2nd turn. 30%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveMudShot[] = _("Has a 10% chance\nto drop foe's Speed.\nHas +1 priority.\nMega Launcher boost");
-static const u8 sMoveFourLineDescription_MovePoisonTail[] = _("An attack with a\nhigh critical-hit\nratio. 30%\npoison chance.");
+static const u8 sMoveFourLineDescription_MovePoisonTail[] = _("An attack that forces\nthe target to switch.\n10% poison chance.");
 static const u8 sMoveFourLineDescription_MoveCovet[] = _("A cutely executed\nattack that also\nsteals the foe's\nhold item.");
 static const u8 sMoveFourLineDescription_MoveVoltTackle[] = _("The user throws an\nelectrified tackle.\n25% recoil, 10%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveMagicalLeaf[] = _("Attacks with a\nleaf that can't be\nevaded and deals\nphysical damage.");

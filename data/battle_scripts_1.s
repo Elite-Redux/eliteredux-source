@@ -2176,6 +2176,8 @@ BattleScript_EffectHitSwitchTarget:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
+	argumenttomoveeffect
+	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	jumpifability BS_TARGET, ABILITY_SUCTION_CUPS, BattleScript_AbilityPreventsPhasingOut
 	jumpifability BS_TARGET, ABILITY_GUARD_DOG, BattleScript_AbilityPreventsPhasingOut
