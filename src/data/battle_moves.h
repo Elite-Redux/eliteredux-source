@@ -2118,15 +2118,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FLAME_WHEEL] =
     {
         .effect = EFFECT_ROLLOUT,
-        .power = 30,
+        .power = 40,
         .type = TYPE_FIRE,
-        .accuracy = 90,
-        .pp = 20,
+        .accuracy = 100,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-        .parentalBondBanned = TRUE,
     },
     [MOVE_SNORE] =
     {
@@ -2519,15 +2518,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ROLLOUT] =
     {
         .effect = EFFECT_ROLLOUT,
-        .power = 30,
+        .power = 40,
         .type = TYPE_ROCK,
-        .accuracy = 90,
-        .pp = 20,
+        .accuracy = 100,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-        .parentalBondBanned = TRUE,
     },
     [MOVE_FALSE_SWIPE] =
     {
@@ -3680,15 +3678,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ICE_BALL] =
     {
         .effect = EFFECT_ROLLOUT,
-        .power = 30,
+        .power = 40,
         .type = TYPE_ICE,
-        .accuracy = 90,
-        .pp = 20,
+        .accuracy = 100,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_BALLISTIC,
         .split = SPLIT_PHYSICAL,
-        .parentalBondBanned = TRUE,
     },
     [MOVE_NEEDLE_ARM] =
     {

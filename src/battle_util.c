@@ -1380,7 +1380,7 @@ void CancelMultiTurnMoves(u8 battler)
 
     gStatuses3[battler] &= ~(STATUS3_SEMI_INVULNERABLE);
 
-    gVolatileStructs[battler].rolloutTimer = 0;
+    gVolatileStructs[battler].rolloutCounter = 0;
     gVolatileStructs[battler].furyCutterCounter = 0;
 }
 
@@ -12545,11 +12545,8 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
             basePower *= 2;
         break;
     case EFFECT_ROLLOUT:
-        if (gProcessingExtraAttacks) break;
-        for (i = 1; i < (5 - gVolatileStructs[battlerAtk].rolloutTimer); i++)
-            basePower *= 2;
-        if (gBattleMons[battlerAtk].status2 & STATUS2_DEFENSE_CURL)
-            basePower *= 2;
+        if (gProcessingExtraAttacks || !gVolatileStructs[battlerAtk].rolloutCounter) break;
+        basePower << (gVolatileStructs[battlerAtk].rolloutCounter - 1);
         break;
     case EFFECT_MAGNITUDE:
         basePower = gBattleStruct->magnitudeBasePower;

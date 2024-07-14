@@ -14162,21 +14162,18 @@ static void Cmd_handlerollout(void)
 {
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
     {
-        CancelMultiTurnMoves(gBattlerAttacker);
-        gBattlescriptCurrInstr = BattleScript_MoveMissedPause;
+        gVolatileStructs[gBattlerAttacker].rolloutCounter = 0;
     }
     else
     {
-        if (!(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS) && !gProcessingExtraAttacks) // First hit.
+        if (gBattleMons[gBattlerAttacker].status2 & STATUS2_DEFENSE_CURL && !gVolatileStructs[gBattlerAttacker].rolloutCounter)
+            gVolatileStructs[gBattlerAttacker].rolloutCounter++;
+        
+        if (!gProcessingExtraAttacks
+            && gTurnStructs[gBattlerAttacker].parentalBondOn == gTurnStructs[gBattlerAttacker].parentalBondInitialCount
+            && gVolatileStructs[gBattlerAttacker].rolloutCounter < 3) // First hit only.
         {
-            gVolatileStructs[gBattlerAttacker].rolloutTimer = 5;
-            gVolatileStructs[gBattlerAttacker].rolloutTimerStartValue = 5;
-            gBattleMons[gBattlerAttacker].status2 |= STATUS2_MULTIPLETURNS;
-            gLockedMoves[gBattlerAttacker] = gCurrentMove;
-        }
-        if (--gVolatileStructs[gBattlerAttacker].rolloutTimer == 0) // Last hit.
-        {
-            gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_MULTIPLETURNS);
+            gVolatileStructs[gBattlerAttacker].rolloutCounter++;
         }
 
         gBattlescriptCurrInstr++;
