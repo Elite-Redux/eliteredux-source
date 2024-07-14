@@ -9308,7 +9308,7 @@ static void Cmd_various(void)
         gBattlerAbility = BATTLE_PARTNER(gActiveBattler);
         i = GetBattlerAbility(gBattlerAbility);
         if (IsBattlerAlive(gBattlerAbility)
-            && (i == ABILITY_RECEIVER || i == ABILITY_POWER_OF_ALCHEMY))
+            && (i == ABILITY_RECEIVER))
         {
             if (!IsRolePlayBannedAbility(gBattleMons[gActiveBattler].ability))
             {

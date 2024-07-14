@@ -9131,6 +9131,22 @@ BattleScript_BattlerInnateStatRaiseOnSwitchIn::
 	printstring STRINGID_BATTLERINNATERAISEDSTAT
 	waitmessage B_WAIT_TIME_LONG
 	end3
+
+BattleScript_PowerOfAlchemySludge::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_POWER_OF_ALCHEMY
+	waitmessage B_WAIT_TIME_LONG
+	printstring STRINGID_POWER_OF_ALCHEMY_SLUDGE
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_PowerOfAlchemyGold::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_POWER_OF_ALCHEMY
+	waitmessage B_WAIT_TIME_LONG
+	printstring STRINGID_POWER_OF_ALCHEMY_GOLD
+	waitmessage B_WAIT_TIME_LONG
+	end3
 	
 BattleScript_BattlerAddedTheType::
 	copybyte gBattlerAbility, gBattlerAttacker

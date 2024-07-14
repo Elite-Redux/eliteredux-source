@@ -107,7 +107,6 @@ static const u16 sRolePlayBannedAbilities[] =
 {
     ABILITY_TRACE,
     ABILITY_WONDER_GUARD,
-    ABILITY_POWER_OF_ALCHEMY,
     ABILITY_RECEIVER,
 };
 
@@ -6619,6 +6618,31 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
                 BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
                 effect++;
+            }
+        }
+
+        // Power of Alchemy
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_POWER_OF_ALCHEMY)) {
+            int target = BATTLE_OPPOSITE(battler);
+            if (!IsBattlerAlive(target) || !gBattleMons[target].item || !CanBattlerGetOrLoseItem(target, ITEM_NONE))
+                target = BATTLE_PARTNER(target);
+            
+            if (IsBattlerAlive(target) && gBattleMons[target].item && CanBattlerGetOrLoseItem(target, ITEM_NONE))
+            {
+                gStackBattler2 = target;
+                gLastUsedItem = gBattleMons[target].item;
+                if (gBattleMons[target].item == ITEM_BLACK_SLUDGE)
+                {
+                    gBattleMons[target].item = ITEM_BIG_NUGGET;
+                    BattleScriptPushCursorAndCallback(BattleScript_PowerOfAlchemyGold);
+                    effect++;
+                }
+                else if (gBattleMons[target].item != ITEM_BIG_NUGGET)
+                {
+                    gBattleMons[target].item = ITEM_BLACK_SLUDGE;
+                    BattleScriptPushCursorAndCallback(BattleScript_PowerOfAlchemySludge);
+                    effect++;
+                }
             }
         }
         //abilityEffect End
@@ -15765,8 +15789,6 @@ bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId)
     else if (holdEffect == HOLD_EFFECT_PRIMAL_ORB)
         return FALSE;
     else if (holdEffect == HOLD_EFFECT_MEGA_STONE)
-        return FALSE;
-    else if (GET_BASE_SPECIES_ID(species) == SPECIES_GIRATINA && itemId == ITEM_GRISEOUS_ORB)
         return FALSE;
     else if (GET_BASE_SPECIES_ID(species) == SPECIES_GENESECT && holdEffect == HOLD_EFFECT_DRIVE)
         return FALSE;

@@ -1008,6 +1008,9 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_PowerOfAlchemy[] = _("{B_ATK_NAME_WITH_PREFIX} transforms\n{B_STACK_2_NAME_WITH_PREFIX}'s item!");
+static const u8 sText_PowerOfAlchemySludge[] = _("The {B_LAST_ITEM} turned\ninto sludge…");
+static const u8 sText_PowerOfAlchemyGold[] = _("The {B_LAST_ITEM} turned\ninto gold!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1800,6 +1803,9 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_CRIT_PLUS_2 - 12] = sText_CritPlus2,
     [STRINGID_CRIT_PLUS_3 - 12] = sText_CritPlus3,
     [STRINGID_FILLED_WITH_FEAR - 12] = sText_FilledWithFear,
+    [STRINGID_POWER_OF_ALCHEMY - 12] = sText_PowerOfAlchemy,
+    [STRINGID_POWER_OF_ALCHEMY_SLUDGE - 12] = sText_PowerOfAlchemySludge,
+    [STRINGID_POWER_OF_ALCHEMY_GOLD - 12] = sText_PowerOfAlchemyGold,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
