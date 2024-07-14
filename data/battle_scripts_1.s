@@ -7867,10 +7867,11 @@ BattleScript_GulpMissileGorging::
 	getbattlerfainted BS_ATTACKER
 	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_GulpMissileNoSecondEffectGorging
 BattleScript_GulpMissileNoDmgGorging:
-	jumpifabsent BS_TARGET, BattleScript_Return
+	jumpifabsent BS_TARGET, BattleScript_GulpMissileDoParalyze
 	handleformchange BS_TARGET, 0
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
+BattleScript_GulpMissileDoParalyze:
 	swapattackerwithtarget
 	setmoveeffect MOVE_EFFECT_PARALYSIS
 	seteffectprimary
@@ -7902,10 +7903,11 @@ BattleScript_GulpMissileGulping::
 	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_GulpMissileNoSecondEffectGulping
 	jumpifflowerveilattacker BattleScript_GulpMissileNoSecondEffectGulping
 BattleScript_GulpMissileNoDmgGulping:
-	jumpifabsent BS_TARGET, BattleScript_Return
+	jumpifabsent BS_TARGET, BattleScript_GulpMissileDoDefense
 	handleformchange BS_TARGET, 0
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
+BattleScript_GulpMissileDoDefense:
 	swapattackerwithtarget @ to make gStatDownStringIds down below print the right battler
 	setstatchanger STAT_DEF, 1, TRUE
 	statbuffchange STAT_BUFF_NOT_PROTECT_AFFECTED, BattleScript_GulpMissileGorgingTargetDefenseCantGoLower
