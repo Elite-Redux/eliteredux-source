@@ -4428,15 +4428,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BRINE] =
     {
-        .effect = EFFECT_BRINE,
-        .power = 65,
+        .effect = EFFECT_SE_AGAINST_TYPE_HIT,
+        .power = 70,
         .type = TYPE_WATER,
         .accuracy = 100,
-        .pp = 15,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .argument = TYPE_WATER,
     },
     [MOVE_NATURAL_GIFT] =
     {
@@ -10407,11 +10408,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_CHILLING_WATER] =
     {
-        .effect = EFFECT_ATTACK_DOWN_HIT,
-        .power = 50,
+        .effect = EFFECT_FROSTBITE_HIT,
+        .power = 80,
         .type = TYPE_WATER,
         .accuracy = 100,
-        .pp = 20,
+        .pp = 30,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,

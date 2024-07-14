@@ -1443,8 +1443,8 @@ static const u8 sMoveTwoLineDescription_MoveHealingWish[] = _(
     "the recipient.");
 
 static const u8 sMoveTwoLineDescription_MoveBrine[] = _(
-    "Does double damage to foes\n"
-    "with half HP.");
+    "Deals Super Effective\n"
+    "damage vs Water.");
 
 static const u8 sMoveTwoLineDescription_MoveNaturalGift[] = _(
     "The effectiveness varies\n"
@@ -3344,7 +3344,8 @@ static const u8 sMoveTwoLineDescription_MoveKarma[] = _(
     "Lowers Speed.");
 
 static const u8 sMoveTwoLineDescription_MoveChillingWater[] = _(
-    "Lowers target's attack.");
+    "Shoots ice-cold water at the\n"
+    "foe. May cause frostbite.");
 
 static const u8 sMoveTwoLineDescription_MoveGhastlyEcho[] = _(
     "Deals damage and switches out.\n"
@@ -5045,7 +5046,7 @@ static const u8 sMoveFourLineDescription_MoveWakeUpSlap[] = _("This attack hits\
 static const u8 sMoveFourLineDescription_MoveHammerArm[] = _("A strong, heavy\nfist is swung. Drops\nthe user's Speed.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveGyroBall[] = _("A fast spin. The\nslower the user,\nthe greater the\ndamage.");
 static const u8 sMoveFourLineDescription_MoveHealingWish[] = _("The user faints.\nIts replacement\nhas its HP restored\nand status cured.");
-static const u8 sMoveFourLineDescription_MoveBrine[] = _("If the foe's HP is\ndown to about half,\nthis will hit with\ndouble the power.");
+static const u8 sMoveFourLineDescription_MoveBrine[] = _("Deals Super Effective\ndamage vs Water.");
 static const u8 sMoveFourLineDescription_MoveNaturalGift[] = _("The user's Berry\ndetermines this\nattack's type\nand its power.");
 static const u8 sMoveFourLineDescription_MoveFeint[] = _("Hits a foe using\nmoves like Protect,\nlifting the effect\nof those moves.");
 static const u8 sMoveFourLineDescription_MovePluck[] = _("If the foe has a\nBerry, user gains\ngains its effect.\nStrong Jaw boost.");
@@ -5531,7 +5532,7 @@ static const u8 sMoveFourLineDescription_MoveAquaCutter[] = _("The user expels\n
 static const u8 sMoveFourLineDescription_MoveInverseRoom[] = _("The user exerts an\nunknown power that\nreverses the type\nchart for 5 turns.");
 static const u8 sMoveFourLineDescription_MoveBlazingBone[] = _("Strikes with a fiery\nbone 2-5 times.\nHas +1 priority.\nBone-based.");
 static const u8 sMoveFourLineDescription_MoveKarma[] = _("Purges its impurities.\nLowers Speed, raises\nSpAtk and SpDef.");
-static const u8 sMoveFourLineDescription_MoveChillingWater[] = _("The user attacks\nthe foe by showering\nit with cold water.\nLowers its Atk.");
+static const u8 sMoveFourLineDescription_MoveChillingWater[] = _("Fires ice-cold water\nat the foe. 30%\nchance to inflict\nFrostbite.");
 static const u8 sMoveFourLineDescription_MoveGhastlyEcho[] = _("Deals damage and\nswitches. Switch-in\ngets 50% boost for 1\nturn. Sound-based.");
 static const u8 sMoveFourLineDescription_MoveChillyReception[] = _("The user tells a bad\njoke and switches\nwith an ally. This\nsummons hail.");
 static const u8 sMoveFourLineDescription_MoveIceSpinner[] = _("Deals damage and\nremoves active\nterrain. Field-based.");
