@@ -6351,6 +6351,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
         .argument = MOVE_EFFECT_WATER_PLEDGE | MOVE_EFFECT_CERTAIN,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_FIRE_PLEDGE] =
     {
@@ -6364,6 +6365,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
         .argument = MOVE_EFFECT_FIRE_PLEDGE | MOVE_EFFECT_CERTAIN,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_GRASS_PLEDGE] =
     {
@@ -6377,6 +6379,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
         .argument = MOVE_EFFECT_GRASS_PLEDGE | MOVE_EFFECT_CERTAIN,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_VOLT_SWITCH] =
     {
