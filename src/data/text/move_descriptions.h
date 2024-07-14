@@ -647,8 +647,8 @@ static const u8 sMoveTwoLineDescription_MoveSuperFang[] = _(
     "and cuts half the foe's HP.");
 
 static const u8 sMoveTwoLineDescription_MoveSlash[] = _(
-    "Slashes with claws, etc. Has\n"
-    "a high critical-hit ratio.");
+    "Slashes with claws, etc.\n"
+    "Always crits.");
 
 static const u8 sMoveTwoLineDescription_MoveSubstitute[] = _(
     "Creates a decoy using 1/4\n"
@@ -4846,7 +4846,7 @@ static const u8 sMoveFourLineDescription_MoveSharpen[] = _("The user sharpens\ni
 static const u8 sMoveFourLineDescription_MoveConversion[] = _("The user changes\nits type to match\nthe type of one of\nits moves.");
 static const u8 sMoveFourLineDescription_MoveTriAttack[] = _("30% chance to\nparalyze, burn, or\nfrostbite foes.\nUses highest Attack.");
 static const u8 sMoveFourLineDescription_MoveSuperFang[] = _("The user attacks\nwith sharp fangs\nand halves the\nfoe's HP.");
-static const u8 sMoveFourLineDescription_MoveSlash[] = _("The foe is slashed\nwith claws, etc.\nHigh crit.\nKeen Edge boost.");
+static const u8 sMoveFourLineDescription_MoveSlash[] = _("The foe is slashed\nwith claws, etc.\nAlways crits.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveSubstitute[] = _("The user creates a\ndecoy using one-\nquarter of its full\nHP.");
 static const u8 sMoveFourLineDescription_MoveStruggle[] = _("An attack that is\nused only if there\nis no PP. It also\nhurts the user.");
 static const u8 sMoveFourLineDescription_MoveSketch[] = _("This move copies\nthe move last used\nby the foe, then\ndisappears.");
