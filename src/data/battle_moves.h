@@ -1490,15 +1490,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_EGG_BOMB] =
     {
-        .effect = EFFECT_BURN_HIT,
+        .effect = EFFECT_GRAV_APPLE,
         .power = 100,
         .type = TYPE_FIRE,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 10,
-        .secondaryEffectChance = 10,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_BALLISTIC,
         .split = SPLIT_PHYSICAL,
+        .argument = MOVE_EFFECT_BURN,
         .throwingBased = TRUE,
     },
     [MOVE_LICK] =
@@ -8778,6 +8779,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
+        .argument = MOVE_EFFECT_DEF_MINUS_1,
         .throwingBased = TRUE,
     },
     [MOVE_SPIRIT_BREAK] =

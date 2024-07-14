@@ -386,7 +386,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectTripleHit               @ EFFECT_TRIPLE_HIT
 	.4byte BattleScript_EffectRecoilHP25              @ EFFECT_RECOIL_HP_25
 	.4byte BattleScript_EffectStuffCheeks             @ EFFECT_STUFF_CHEEKS
-	.4byte BattleScript_EffectDefenseDownHit          @ EFFECT_GRAV_APPLE
+	.4byte BattleScript_EffectArgumentHit             @ EFFECT_GRAV_APPLE
 	.4byte BattleScript_EffectEvasionUpHit            @ EFFECT_EVASION_UP_HIT
 	.4byte BattleScript_EffectGlitzyGlow              @ EFFECT_GLITZY_GLOW
 	.4byte BattleScript_EffectBaddyBad                @ EFFECT_BADDY_BAD
@@ -1532,6 +1532,7 @@ BattleScript_DrainBrainMustLower:
 	goto BattleScript_DrainBrainLower
 
 BattleScript_EffectBugBite:
+	jumpifnotberry BS_TARGET, BattleScript_EffectKnockOff
 	setmoveeffect MOVE_EFFECT_BUG_BITE | MOVE_EFFECT_CERTAIN
 	goto BattleScript_EffectHit
 

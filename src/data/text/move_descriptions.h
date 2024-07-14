@@ -1795,8 +1795,8 @@ static const u8 sMoveTwoLineDescription_MoveJudgment[] = _(
     "kind of Plate held.");
 
 static const u8 sMoveTwoLineDescription_MoveBugBite[] = _(
-    "Eats the foe's held Berry\n"
-    "gaining its effect.");
+    "Tears away the foe's item,\n"
+    "eating it if it's a Berry.");
 
 static const u8 sMoveTwoLineDescription_MoveChargeBeam[] = _(
     "Fires a beam of electricity.\n"
@@ -4804,7 +4804,7 @@ static const u8 sMoveFourLineDescription_MoveBide[] = _("The user endures\nattac
 static const u8 sMoveFourLineDescription_MoveMetronome[] = _("Waggles a finger\nand stimulates the\nbrain into using any\nmove at random.");
 static const u8 sMoveFourLineDescription_MoveMirrorMove[] = _("The user counters\nthe move last used\nby the foe with the\nsame move.");
 static const u8 sMoveFourLineDescription_MoveSelfDestruct[] = _("The user blows up\nto inflict severe\ndamage, even\nmaking itself faint.");
-static const u8 sMoveFourLineDescription_MoveEggBomb[] = _("A large egg is\nhurled with great\nforce. 10%\nburn chance.");
+static const u8 sMoveFourLineDescription_MoveEggBomb[] = _("Hurls an egg with\ngreat force. 30% Burn\nchance. 1.5x damage\nunder Gravity.");
 static const u8 sMoveFourLineDescription_MoveLick[] = _("The foe is licked\nand hit with a long\ntongue. 30%\nflinch chance.");
 static const u8 sMoveFourLineDescription_MoveSmog[] = _("The foe is attacked\nwith exhaust gases.\n50% poison\nchance.");
 static const u8 sMoveFourLineDescription_MoveSludge[] = _("Hurls toxic sludge\nat the foe.\nSuper-effective on\nWater. 30% poison chance.");
@@ -5133,7 +5133,7 @@ static const u8 sMoveFourLineDescription_MoveStealthRock[] = _("Levitating stone
 static const u8 sMoveFourLineDescription_MoveGrassKnot[] = _("A snaring grass\ntrap that inflicts\nmore damage on\nheavier foes.");
 static const u8 sMoveFourLineDescription_MoveChatter[] = _("The foe is left\nconfused by sound\nwaves of deafening\nchatter.");
 static const u8 sMoveFourLineDescription_MoveJudgment[] = _("The type of this\nmove varies with\nthe kind of Plate\nthe user is holding.");
-static const u8 sMoveFourLineDescription_MoveBugBite[] = _("If the foe has a\nBerry, user gains\ngains its effect.\nStrong Jaw boost.");
+static const u8 sMoveFourLineDescription_MoveBugBite[] = _("Removes the foe's\nitem and eats it if it's\na Berry.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveChargeBeam[] = _("Attacks with an\nelectric charge.\nRaises own SpAtk.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveWoodHammer[] = _("The user slams its\nrugged body into\nthe foe. 33%\nrecoil damage.");
 static const u8 sMoveFourLineDescription_MoveAquaJet[] = _("The user lunges at\nthe foe at a fast\nspeed. This has\n+1 priority.");
