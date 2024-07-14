@@ -632,7 +632,7 @@ static const u8 sMoveTwoLineDescription_MoveHyperFang[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveSharpen[] = _(
     "Reduces the polygon count\n"
-    "and raises Attack.");
+    "boosting Attack and Crit.");
 
 static const u8 sMoveTwoLineDescription_MoveConversion[] = _(
     "Changes the user's type\n"
@@ -1507,8 +1507,8 @@ static const u8 sMoveTwoLineDescription_MoveHealBlock[] = _(
     "recovering any HP.");
 
 static const u8 sMoveTwoLineDescription_MoveWringOut[] = _(
-    "The higher the foe's HP\n"
-    "the more damage caused.");
+    "Crushes quicker foes,\n"
+    "nullifying their ability.");
 
 static const u8 sMoveTwoLineDescription_MovePowerTrick[] = _(
     "The user swaps its Attack\n"
@@ -1843,8 +1843,8 @@ static const u8 sMoveTwoLineDescription_MoveLunarDance[] = _(
     "the recipient.");
 
 static const u8 sMoveTwoLineDescription_MoveCrushGrip[] = _(
-    "The higher the foe's HP\n"
-    "the more damage caused.");
+    "Crushes quicker foes,\n"
+    "nullifying their ability.");
 
 static const u8 sMoveTwoLineDescription_MoveMagmaStorm[] = _(
     "Traps the foe in a vortex\n"
@@ -3560,8 +3560,8 @@ static const u8 sMoveTwoLineDescription_MoveTachyonCutter[] = _(
     "Never misses.");
 
 static const u8 sMoveTwoLineDescription_MoveHardPress[] = _(
-    "The target is crushed.\n"
-    "Damage based on target's current health.");
+    "Crushes quicker foes,\n"
+    "nullifying their ability.");
 
 static const u8 sMoveTwoLineDescription_MoveDragonCheer[] = _(
     "Raises crit by one stage\n"
@@ -4842,9 +4842,9 @@ static const u8 sMoveFourLineDescription_MoveBonemerang[] = _("The user throws a
 static const u8 sMoveFourLineDescription_MoveRest[] = _("The user sleeps for\ntwo turns to fully\nrestore HP and heal\nany status problem.");
 static const u8 sMoveFourLineDescription_MoveRockSlide[] = _("Large boulders are\nhurled at the foe.\n20% flinch chance.");
 static const u8 sMoveFourLineDescription_MoveHyperFang[] = _("The foe is attacked\nwith sharp fangs.\n30% flinch chance.\nStrong Jaw boost.");
-static const u8 sMoveFourLineDescription_MoveSharpen[] = _("The user reduces\nits polygon count\nto sharpen edges\nand raise Attack.");
+static const u8 sMoveFourLineDescription_MoveSharpen[] = _("The user sharpens\nits edges. Boosting\nits highest Attack\nand its Crit.");
 static const u8 sMoveFourLineDescription_MoveConversion[] = _("The user changes\nits type to match\nthe type of one of\nits moves.");
-static const u8 sMoveFourLineDescription_MoveTriAttack[] = _("A simultaneous\n3-beam attack. 30%\nchance to paralyze,\nburn or frostbite foes.");
+static const u8 sMoveFourLineDescription_MoveTriAttack[] = _("30% chance to\nparalyze, burn, or\nfrostbite foes.\nUses highest Attack.");
 static const u8 sMoveFourLineDescription_MoveSuperFang[] = _("The user attacks\nwith sharp fangs\nand halves the\nfoe's HP.");
 static const u8 sMoveFourLineDescription_MoveSlash[] = _("The foe is slashed\nwith claws, etc.\nHigh crit.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveSubstitute[] = _("The user creates a\ndecoy using one-\nquarter of its full\nHP.");
@@ -4867,7 +4867,7 @@ static const u8 sMoveFourLineDescription_MoveSpite[] = _("A move that cuts\n2 to
 static const u8 sMoveFourLineDescription_MovePowderSnow[] = _("Blasts the foe with\na snowy gust.\n30% chance to\nfrostbite the foe.");
 static const u8 sMoveFourLineDescription_MoveProtect[] = _("Enables the user to\nevade all attacks.\nIt may fail if used\nin succession.");
 static const u8 sMoveFourLineDescription_MoveMachPunch[] = _("A punch thrown at\nblinding speed.\n+1 priority.\nIron Fist boost.");
-static const u8 sMoveFourLineDescription_MoveScaryFace[] = _("Frightens the foe\nwith a scary face\nto sharply reduce\nits Speed.");
+static const u8 sMoveFourLineDescription_MoveScaryFace[] = _("Frightens the foe\nwith a scary face.\nInflicts fear and\nsharply lowers Speed.");
 static const u8 sMoveFourLineDescription_MoveFeintAttack[] = _("The user draws up\nclose to the foe\ndisarmingly, then\nhits without fail.");
 static const u8 sMoveFourLineDescription_MoveSweetKiss[] = _("The user kisses\nthe foe with sweet\ncuteness that\ncauses confusion.");
 static const u8 sMoveFourLineDescription_MoveBellyDrum[] = _("The user maximizes\nits Attack stat at\nthe cost of half\nits full HP.");
@@ -5061,7 +5061,7 @@ static const u8 sMoveFourLineDescription_MoveFling[] = _("The user flings its\ni
 static const u8 sMoveFourLineDescription_MovePsychoShift[] = _("The user transfers\nits status problems\nto the target using\npsychic powers.");
 static const u8 sMoveFourLineDescription_MoveTrumpCard[] = _("The fewer PP this\nmove has, the\ngreater its power.");
 static const u8 sMoveFourLineDescription_MoveHealBlock[] = _("The foe cannot use\nany moves, held\nitems or Abilities\nthat recover HP.");
-static const u8 sMoveFourLineDescription_MoveWringOut[] = _("The user wrings the\nfoe. The more HP\nthe foe has, the\nstronger this move.");
+static const u8 sMoveFourLineDescription_MoveWringOut[] = _("This attack will\nalso negate the\nfoe's Ability if it\nhas moved already.");
 static const u8 sMoveFourLineDescription_MovePowerTrick[] = _("The user employs\nits psychic power\nto swap its Attack\nand Defense stat.");
 static const u8 sMoveFourLineDescription_MoveGastroAcid[] = _("Stomach acids are\nspewed at the foe,\nnegating the effect\nof its Ability.");
 static const u8 sMoveFourLineDescription_MoveLuckyChant[] = _("For 5 turns, the\nfoe is prevented\nfrom landing\ncritical hits.");
@@ -5145,7 +5145,7 @@ static const u8 sMoveFourLineDescription_MoveDoubleHit[] = _("The user slams the
 static const u8 sMoveFourLineDescription_MoveRoarOfTime[] = _("A blast which\ndistorts even time.\nForces the target\nto switch. Moves last.");
 static const u8 sMoveFourLineDescription_MoveSpacialRend[] = _("The foe, and the\nspace around it, is\ntorn. Critical hits\nland more easily.");
 static const u8 sMoveFourLineDescription_MoveLunarDance[] = _("The user faints.\nIts replacement\nhas its HP restored\nand status cured.");
-static const u8 sMoveFourLineDescription_MoveCrushGrip[] = _("The user wrings the\nfoe. The more HP\nthe foe has, the\nstronger this move.");
+static const u8 sMoveFourLineDescription_MoveCrushGrip[] = _("This attack will\nalso negate the\nfoe's Ability if it\nhas moved already.");
 static const u8 sMoveFourLineDescription_MoveMagmaStorm[] = _("The foe becomes\ntrapped within a\nmaelstrom of fire\nfor 4 or 5 turns.");
 static const u8 sMoveFourLineDescription_MoveDarkVoid[] = _("The foe is dragged\ninto a world of\ntotal darkness that\nputs it to sleep.");
 static const u8 sMoveFourLineDescription_MoveSeedFlare[] = _("A shock wave is\nloosed at the foe.\n40% chance to\nlower foe's SpDef.");
@@ -5590,7 +5590,7 @@ static const u8 sMoveFourLineDescription_MoveFickleBeam[] = _("Shoots a beam of 
 static const u8 sMoveFourLineDescription_MoveBurningBulwark[] = _("The user's hot fur shields\nfrom attacks and burns\nany direct attacker.");
 static const u8 sMoveFourLineDescription_MoveThunderclap[] = _("User strikes first\nwith +1 priority.\nFails if target's not\nreadying an attack.");
 static const u8 sMoveFourLineDescription_MoveTachyonCutter[] = _("Launches particle\nblades twice.\nNever misses.");
-static const u8 sMoveFourLineDescription_MoveHardPress[] = _("Crushes the target with\narm, claw, or similar\nMore target HP,\nmore power.");
+static const u8 sMoveFourLineDescription_MoveHardPress[] = _("This attack will\nalso negate the\nfoe's Ability if it\nhas moved already.");
 static const u8 sMoveFourLineDescription_MoveDragonCheer[] = _("Raises crit by +1\nfor all allies.\n+2 crit for Dragons.");
 static const u8 sMoveFourLineDescription_MoveAlluringVoice[] = _("The user attacks with\nan angelic voice. Causes\nconfusion if target's\nstats were boosted.");
 static const u8 sMoveFourLineDescription_MoveMightyCleave[] = _("The user wields light\natop its head to\ncleave the target.\nHits through Protect.");
