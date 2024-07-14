@@ -849,6 +849,7 @@ static const u8 sText_CritCantIncrease[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s 
 static const u8 sText_CritPlus1[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s critical\nhit chance rose!");
 static const u8 sText_CritPlus2[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s critical\nhit chance sharply rose!");
 static const u8 sText_CritPlus3[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} maxed\nits critical hit chance!");
+static const u8 sText_FilledWithFear[] = _("{B_DEF_NAME_WITH_PREFIX} is filled\nwith fear!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1007,7 +1008,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_FilledWithFear[] = _("{B_DEF_NAME_WITH_PREFIX} is filled\nwith fear!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {

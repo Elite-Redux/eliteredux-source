@@ -40,7 +40,7 @@
 #define ABILITY_TRACE 36 // Copies the foe's ability. Does not copy innates.
 #define ABILITY_HUGE_POWER 37 // Doubles own Attack stat. Boosts raw stat, not base stat.
 #define ABILITY_POISON_POINT 38 // 30% chance to poison on contact. Also works on offense.
-#define ABILITY_INNER_FOCUS 39 // Blocks flinch, Intimidate, Scare. Focus Blast has 90% accuracy.
+#define ABILITY_INNER_FOCUS 39 // Blocks flinch, Intimidate, Scare. Focus Blast never misses.
 #define ABILITY_MAGMA_ARMOR 40 // Frostbite-immune. Takes 30% less dmg from Water/Ice-type moves.
 #define ABILITY_WATER_VEIL 41 // Burn-immune. Casts Aqua Ring on entry.
 #define ABILITY_MAGNET_PULL 42 // Traps opposing Steel-types. Ghosts aren't affected.
