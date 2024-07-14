@@ -2271,7 +2271,7 @@ u8 DoFieldEndTurnEffects(void)
                         gSideStatuses[side] &= ~SIDE_STATUS_STICKY_WEB;
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
                         gBattleCommunication[MULTISTRING_CHOOSER] = side;
-                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SPIDER_WEB);
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_STICKY_WEB);
                         effect++;
                     }
                 }
