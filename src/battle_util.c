@@ -4478,6 +4478,7 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePo
         .attacker = battler,
         .target = target,
         .movePower = movePower,
+        .movePos = MAX_MON_MOVES,
     };
 
     return TRUE;

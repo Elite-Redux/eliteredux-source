@@ -9534,9 +9534,12 @@ static void Cmd_various(void)
                 gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
                 break;
             default:
-                gCalledMove = move;
-                gHitMarker &= ~(HITMARKER_ATTACKSTRING_PRINTED);
-                gBattlerTarget = GetMoveTarget(gCalledMove, 0);
+                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+                    .attacker = gBattlerAttacker,
+                    .move = move,
+                    .target = GetMoveTarget(gCalledMove, 0),
+                    .movePos = MAX_MON_MOVES,
+                };
                 gStatuses3[gBattlerAttacker] |= STATUS3_ME_FIRST;
                 gBattlescriptCurrInstr += 7;
                 break;
@@ -13333,22 +13336,19 @@ static void Cmd_mimicattackcopy(void)
 
 static void Cmd_metronome(void)
 {
-    while (1)
-    {
-        int move = (Random() % (MOVES_COUNT - 1)) + 1;
-        if (gBattleMoves[move].effect == EFFECT_PLACEHOLDER)
-            continue;
+    int move;
+    do {
+        move = (Random() % (MOVES_COUNT - 1)) + 1;
+    } while (gBattleMoves[move].effect == EFFECT_PLACEHOLDER || (sForbiddenMoves[move] & FORBIDDEN_METRONOME));
 
-        if (!(sForbiddenMoves[move] & FORBIDDEN_METRONOME))
-        {
-            gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
-                .attacker = gBattlerAttacker,
-                .move = move,
-                .target = GetMoveTarget(move, 0),
-            };
-            return;
-        }
-    }
+    gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+        .attacker = gBattlerAttacker,
+        .move = move,
+        .target = GetMoveTarget(move, 0),
+        .movePos = MAX_MON_MOVES,
+    };
+    gBattlescriptCurrInstr++;
+    return;
 }
 
 static void Cmd_calculatesetdamage(void)
