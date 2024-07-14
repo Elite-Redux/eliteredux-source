@@ -835,8 +835,8 @@ static const u8 sMoveTwoLineDescription_MoveSpark[] = _(
     "+2 priority. May paralyze.");
 
 static const u8 sMoveTwoLineDescription_MoveFuryCutter[] = _(
-    "An attack that intensifies\n"
-    "on each successive hit.");
+    "Slices the foe 3 times in a\n"
+    "row with rising intensity.");
 
 static const u8 sMoveTwoLineDescription_MoveSteelWing[] = _(
     "Strikes the foe with hard\n"
@@ -1983,8 +1983,8 @@ static const u8 sMoveTwoLineDescription_MoveRound[] = _(
     "Others can join in too.");
 
 static const u8 sMoveTwoLineDescription_MoveEchoedVoice[] = _(
-    "Does more damage every turn\n"
-    "it is used.");
+    "Slices the foe 3 times in a\n"
+    "with rising intensity.");
 
 static const u8 sMoveTwoLineDescription_MoveChipAway[] = _(
     "Strikes through the foe's\n"
@@ -4893,7 +4893,7 @@ static const u8 sMoveFourLineDescription_MoveFalseSwipe[] = _("Always leaves the
 static const u8 sMoveFourLineDescription_MoveSwagger[] = _("A move that makes\nthe foe confused,\nbut also sharply\nraises its Attack.");
 static const u8 sMoveFourLineDescription_MoveMilkDrink[] = _("Heals the user by\nup to half its full\nHP. It can be used\nto heal an ally.");
 static const u8 sMoveFourLineDescription_MoveSpark[] = _("Rapid electrical\ntackle. Has 10%\nparalyze chance.\nHas +2 priority.");
-static const u8 sMoveFourLineDescription_MoveFuryCutter[] = _("Doubles power on\neach successive hit.\nMax 160 base power.\nKeen Edge boost.");
+static const u8 sMoveFourLineDescription_MoveFuryCutter[] = _("A 3-slice attack.\nMore powerful with\neach successive hit.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveSteelWing[] = _("Hits with wings\nof steel. 20% chance\nto raise Defense.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveMeanLook[] = _("The foe is fixed\nwith a mean look\nthat prevents it\nfrom escaping.");
 static const u8 sMoveFourLineDescription_MoveAttract[] = _("Inflicts infatuation\non opposite gender\nwhich halves\nAtk and SpAtk.");
@@ -5180,7 +5180,7 @@ static const u8 sMoveFourLineDescription_MoveSimpleBeam[] = _("The user's odd\np
 static const u8 sMoveFourLineDescription_MoveEntrainment[] = _("An odd dance that\ncompels the target\nto mimic the\nAbility of the user.");
 static const u8 sMoveFourLineDescription_MoveAfterYou[] = _("The user helps the\ntarget and forces\nit to move right\nafter the user.");
 static const u8 sMoveFourLineDescription_MoveRound[] = _("A loud song attack.\nOthers can join in,\nincreasing the\npower of the move.");
-static const u8 sMoveFourLineDescription_MoveEchoedVoice[] = _("The user attacks\nwith an echoing\nvoice which builds\nin power each turn.");
+static const u8 sMoveFourLineDescription_MoveEchoedVoice[] = _("A 3-hit attack.\nMore powerful with\neach successive hit.\nSound-based.");
 static const u8 sMoveFourLineDescription_MoveChipAway[] = _("The user strikes at\nthe first opening,\nignoring its foe's\nstat changes.");
 static const u8 sMoveFourLineDescription_MoveClearSmog[] = _("A clump of special\nmud is hurled at\nthe foe, resetting\ntheir stat changes.");
 static const u8 sMoveFourLineDescription_MoveStoredPower[] = _("The more the user's\nstats are raised,\nthe greater this\nmove's power.");
