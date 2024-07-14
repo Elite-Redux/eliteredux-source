@@ -9524,12 +9524,13 @@ BattleScript_EmergencyExitWildNoPopUp::
 
 BattleScript_TraceActivates::
 	pause B_WAIT_TIME_SHORT
+	copybyte gBattlerAbility, gStackBattler1
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNTRACED
 	waitmessage B_WAIT_TIME_LONG
-	settracedability BS_SCRIPTING
+	settracedability BS_STACK_1
 	saveattackerandtargetto34
-	switchinabilities BS_SCRIPTING
+	switchinabilities BS_STACK_1
 	return
 
 BattleScript_TraceActivatesEnd3::

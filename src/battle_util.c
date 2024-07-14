@@ -9516,20 +9516,26 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     if (!IsRolePlayBannedAbility(gBattleMons[target1].ability) && gBattleMons[target1].hp != 0
                      && !IsRolePlayBannedAbility(gBattleMons[target2].ability) && gBattleMons[target2].hp != 0)
-                        gActiveBattler = GetBattlerAtPosition(((Random() & 1) * 2) | side), effect++;
+                        gStackBattler2 = GetBattlerAtPosition(((Random() & 1) * 2) | side), effect++;
                     else if (!IsRolePlayBannedAbility(gBattleMons[target1].ability) && gBattleMons[target1].hp != 0)
-                        gActiveBattler = target1, effect++;
+                        gStackBattler2 = target1, effect++;
                     else if (!IsRolePlayBannedAbility(gBattleMons[target2].ability) && gBattleMons[target2].hp != 0)
-                        gActiveBattler = target2, effect++;
+                        gStackBattler2 = target2, effect++;
                 }
                 else
                 {
                     if (!IsRolePlayBannedAbility(gBattleMons[target1].ability) && gBattleMons[target1].hp != 0)
-                        gActiveBattler = target1, effect++;
+                        gStackBattler2 = target1, effect++;
                 }
 
                 if (effect)
                 {
+                    gBattleResources->flags->flags[i] &= ~(RESOURCE_FLAG_TRACED);
+                    gBattleStruct->tracedAbility[i] = gLastUsedAbility = gBattleMons[gStackBattler2].ability;
+                    gStackBattler1 = i;
+                    
+                    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility)
+
                     if (caseID == ABILITYEFFECT_TRACE1)
                     {
                         BattleScriptPushCursorAndCallback(BattleScript_TraceActivatesEnd3);
@@ -9539,12 +9545,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         BattleScriptPushCursor();
                         gBattlescriptCurrInstr = BattleScript_TraceActivates;
                     }
-                    gBattleResources->flags->flags[i] &= ~(RESOURCE_FLAG_TRACED);
-                    gBattleStruct->tracedAbility[i] = gLastUsedAbility = gBattleMons[gActiveBattler].ability;
-                    battler = gBattlerAbility = gBattleScripting.battler = i;
-
-                    PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gActiveBattler, gBattlerPartyIndexes[gActiveBattler])
-                    PREPARE_ABILITY_BUFFER(gBattleTextBuff2, gLastUsedAbility)
                     break;
                 }
             }
