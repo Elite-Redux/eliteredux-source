@@ -13335,15 +13335,17 @@ static void Cmd_metronome(void)
 {
     while (1)
     {
-        gCurrentMove = (Random() % (MOVES_COUNT - 1)) + 1;
-        if (gBattleMoves[gCurrentMove].effect == EFFECT_PLACEHOLDER)
+        int move = (Random() % (MOVES_COUNT - 1)) + 1;
+        if (gBattleMoves[move].effect == EFFECT_PLACEHOLDER)
             continue;
 
-        if (!(sForbiddenMoves[gCurrentMove] & FORBIDDEN_METRONOME))
+        if (!(sForbiddenMoves[move] & FORBIDDEN_METRONOME))
         {
-            gHitMarker &= ~(HITMARKER_ATTACKSTRING_PRINTED);
-            gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
-            gBattlerTarget = GetMoveTarget(gCurrentMove, 0);
+            gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+                .attacker = gBattlerAttacker,
+                .move = move,
+                .target = GetMoveTarget(move, 0),
+            };
             return;
         }
     }
