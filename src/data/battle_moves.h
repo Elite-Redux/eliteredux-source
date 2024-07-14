@@ -9388,7 +9388,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SCORCHED_EARTH] =
     {
         .effect = EFFECT_BURN_HIT,
-        .power = 100,
+        .power = 70,
         .type = TYPE_FIRE,
         .type2 = TYPE_GROUND,
         .accuracy = 100,
