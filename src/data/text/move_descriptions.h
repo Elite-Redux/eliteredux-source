@@ -1455,8 +1455,8 @@ static const u8 sMoveTwoLineDescription_MoveFeint[] = _(
     "using moves like Protect.");
 
 static const u8 sMoveTwoLineDescription_MovePluck[] = _(
-    "Eats the foe's held Berry\n"
-    "gaining its effect.");
+    "Plucks the foe's item away,\n"
+    "eating it if it's a Berry.");
 
 static const u8 sMoveTwoLineDescription_MoveTailwind[] = _(
     "Whips up a turbulent breeze\n"
@@ -5049,7 +5049,7 @@ static const u8 sMoveFourLineDescription_MoveHealingWish[] = _("The user faints.
 static const u8 sMoveFourLineDescription_MoveBrine[] = _("Deals Super Effective\ndamage vs Water.");
 static const u8 sMoveFourLineDescription_MoveNaturalGift[] = _("The user's Berry\ndetermines this\nattack's type\nand its power.");
 static const u8 sMoveFourLineDescription_MoveFeint[] = _("Hits a foe using\nmoves like Protect,\nlifting the effect\nof those moves.");
-static const u8 sMoveFourLineDescription_MovePluck[] = _("If the foe has a\nBerry, user gains\ngains its effect.\nStrong Jaw boost.");
+static const u8 sMoveFourLineDescription_MovePluck[] = _("Plucks away the foe's\nitem, eating it if it's\na Berry.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveTailwind[] = _("A turbulent whirl-\nwind that ups the\nSpeed stat of the\nparty for 4 turns.");
 static const u8 sMoveFourLineDescription_MoveAcupressure[] = _("The user applies\npressure to stress\npoints, sharply\nboosting one stat.");
 static const u8 sMoveFourLineDescription_MoveMetalBurst[] = _("The user retaliates\nwith greater power\nagainst the last\nfoe to damage it.");

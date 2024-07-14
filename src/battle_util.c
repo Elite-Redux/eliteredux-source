@@ -9991,6 +9991,7 @@ bool32 IsUnsuppressableAbility(u32 ability)
 {
     switch (ability)
     {
+    case ABILITY_FORECAST:
     case ABILITY_MULTITYPE:
     case ABILITY_ZEN_MODE:
     case ABILITY_STANCE_CHANGE:
