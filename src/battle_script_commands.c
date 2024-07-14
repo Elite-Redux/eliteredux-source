@@ -14168,7 +14168,7 @@ static void Cmd_handlerollout(void)
     {
         if (gBattleMons[gBattlerAttacker].status2 & STATUS2_DEFENSE_CURL && !gVolatileStructs[gBattlerAttacker].rolloutCounter)
             gVolatileStructs[gBattlerAttacker].rolloutCounter++;
-        
+
         if (!gProcessingExtraAttacks
             && gTurnStructs[gBattlerAttacker].parentalBondOn == gTurnStructs[gBattlerAttacker].parentalBondInitialCount
             && gVolatileStructs[gBattlerAttacker].rolloutCounter < 3) // First hit only.

@@ -12546,7 +12546,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         break;
     case EFFECT_ROLLOUT:
         if (gProcessingExtraAttacks || !gVolatileStructs[battlerAtk].rolloutCounter) break;
-        basePower << (gVolatileStructs[battlerAtk].rolloutCounter - 1);
+        basePower = basePower << (gVolatileStructs[battlerAtk].rolloutCounter - 1);
         break;
     case EFFECT_MAGNITUDE:
         basePower = gBattleStruct->magnitudeBasePower;
