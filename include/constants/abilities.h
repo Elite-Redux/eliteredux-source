@@ -183,7 +183,7 @@
 #define ABILITY_MAGICIAN 170 // Steals the foe's held item after using a non-contact move.
 #define ABILITY_BULLETPROOF 171 // Immune to projectile, ball, or bomb-based moves.
 #define ABILITY_COMPETITIVE 172 // Raises Sp. Atk by two stages if stats are lowered by an enemy.
-#define ABILITY_STRONG_JAW 173 // Boosts the power of bite/fang moves by 1. 3x.
+#define ABILITY_STRONG_JAW 173 // Boosts the power of bite/fang moves by 1.5x.
 #define ABILITY_REFRIGERATE 174 // Normal-type moves become Ice- type moves and get a 1. 1x boost.
 #define ABILITY_SWEET_VEIL 175 // This Pokémon and its ally are immune to sleep.
 #define ABILITY_STANCE_CHANGE 176 // Turns into Blade or Shield form depending on move used.
