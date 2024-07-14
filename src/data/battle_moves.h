@@ -4007,7 +4007,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_IRON_FIST_BOOST | FLAG_DMG_IN_AIR,
         .split = SPLIT_PHYSICAL,
-        .argument = TYPE_FLYING
+        .argument = TYPE_FLYING,
     },
     [MOVE_SAND_TOMB] =
     {

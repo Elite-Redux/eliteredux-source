@@ -595,8 +595,8 @@ static const u8 sMoveTwoLineDescription_MovePsywave[] = _(
     "Has +1 priority.");
 
 static const u8 sMoveTwoLineDescription_MoveSplash[] = _(
-    "It's just a splash...\n"
-    "Has no effect whatsoever.");
+    "Does more damage if the\n"
+    "user outweighs the foe.");
 
 static const u8 sMoveTwoLineDescription_MoveAcidArmor[] = _(
     "Liquifies the user's body\n"
@@ -2267,8 +2267,8 @@ static const u8 sMoveTwoLineDescription_MoveTrickOrTreat[] = _(
     "making the foe Ghost-type.");
 
 static const u8 sMoveTwoLineDescription_MoveNobleRoar[] = _(
-    "Intimidates the foe, to cut\n"
-    "Attack and SpAtk");
+    "Intimidates foes, cutting\n"
+    "their Attack and SpAtk");
 
 static const u8 sMoveTwoLineDescription_MoveIonDeluge[] = _(
     "Electrifies Normal-type\n"
@@ -4833,7 +4833,7 @@ static const u8 sMoveFourLineDescription_MoveDizzyPunch[] = _("The foe is hit wi
 static const u8 sMoveFourLineDescription_MoveSpore[] = _("The user scatters\nbursts of fine\nspores that induce\nsleep.");
 static const u8 sMoveFourLineDescription_MoveFlash[] = _("A blast of light\nthat has 50% chance\nto drop foe's Atk.\nField-based.");
 static const u8 sMoveFourLineDescription_MovePsywave[] = _("A quick wave of\npsychic energy.\n+1 priority. 30%\nconfusion chance.");
-static const u8 sMoveFourLineDescription_MoveSplash[] = _("The user just flops\nand splashes around\nwithout having any\neffect.");
+static const u8 sMoveFourLineDescription_MoveSplash[] = _("The user slams\nthe foe with its\nheavy body. Heavier\nusers are stronger.");
 static const u8 sMoveFourLineDescription_MoveAcidArmor[] = _("The user alters its\ncells to liquefy\nitself and sharply\nraise Defense.");
 static const u8 sMoveFourLineDescription_MoveCrabhammer[] = _("A large pincer is\nused to hammer the\nfoe. It has a high\ncritical-hit ratio.");
 static const u8 sMoveFourLineDescription_MoveExplosion[] = _("The user explodes\nto inflict terrible\ndamage even while\nfainting itself.");
@@ -5251,7 +5251,7 @@ static const u8 sMoveFourLineDescription_MoveStickyWeb[] = _("A sticky net woven
 static const u8 sMoveFourLineDescription_MoveFellStinger[] = _("If this attack\nknocks out a foe,\nthe user's Attack\nrises by +3.");
 static const u8 sMoveFourLineDescription_MovePhantomForce[] = _("The user vanishes.\nThe next turn, it\nstrikes the foe,\nignoring Protect.");
 static const u8 sMoveFourLineDescription_MoveTrickOrTreat[] = _("The user adds the\nGhost-type to its\nfoe by taking it\ntrick-or-treating.");
-static const u8 sMoveFourLineDescription_MoveNobleRoar[] = _("A noble roar that\nintimidates the foe\nand lowers its\nAttack and SpAtk");
+static const u8 sMoveFourLineDescription_MoveNobleRoar[] = _("A noble roar that\nintimidates foes\nand lowers their\nAttack and SpAtk");
 static const u8 sMoveFourLineDescription_MoveIonDeluge[] = _("The user disperses\ncharged particles\nwhich electrify\nNormal-type moves.");
 static const u8 sMoveFourLineDescription_MoveParabolicCharge[] = _("The user attacks\nall around it, and\nrestores HP by 25%\nof damage dealt.");
 static const u8 sMoveFourLineDescription_MoveForestsCurse[] = _("The user puts a\nforest curse on the\nfoe. The foe is now\nGrass-type as well.");
