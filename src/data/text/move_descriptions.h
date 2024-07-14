@@ -284,7 +284,7 @@ static const u8 sMoveTwoLineDescription_MoveAbsorb[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveMegaDrain[] = _(
     "An attack that absorbs\n"
-    "half the damage inflicted.");
+    "75% of the damage inflicted.");
 
 static const u8 sMoveTwoLineDescription_MoveLeechSeed[] = _(
     "Plants a seed on the foe to\n"
@@ -4756,7 +4756,7 @@ static const u8 sMoveFourLineDescription_MoveCounter[] = _("A retaliation move\n
 static const u8 sMoveFourLineDescription_MoveSeismicToss[] = _("A gravity-fed throw\nthat causes damage\nmatching the user's\nlevel.");
 static const u8 sMoveFourLineDescription_MoveStrength[] = _("The foe is slugged\nat maximum power.\nDrops Defenses.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveAbsorb[] = _("An attack that\nabsorbs half the\ndamage it inflicted\nto restore HP.");
-static const u8 sMoveFourLineDescription_MoveMegaDrain[] = _("A tough attack that\ndrains half the\ndamage it inflicted\nto restore HP.");
+static const u8 sMoveFourLineDescription_MoveMegaDrain[] = _("A tough attack that\ndrains 75% of the\ndamage it inflicted\nto restore HP.");
 static const u8 sMoveFourLineDescription_MoveLeechSeed[] = _("A seed is planted\non the foe to steal\nsome HP for the \nuser on every turn.");
 static const u8 sMoveFourLineDescription_MoveGrowth[] = _("The user's body is\nforced to grow,\nraising its Atk.\nand Sp. Atk stat.");
 static const u8 sMoveFourLineDescription_MoveRazorLeaf[] = _("Both foes are hit\nwith a cutting leaf.\nAlways crits.\nKeen Edge boost.");
