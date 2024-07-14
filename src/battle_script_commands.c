@@ -5576,6 +5576,22 @@ static bool32 TryKnockOffBattleScript(u32 battlerDef)
     return FALSE;
 }
 
+static int CanPickpocket(int target, int attackerStealing)
+{
+    int stealer = attackerStealing ? gBattlerAttacker : target;
+    int stolen = attackerStealing ? target : gBattlerAttacker;
+    int makesContact = IsMoveMakingContact(gCurrentMove, gBattlerAttacker);
+    int ability = makesContact ? ABILITY_PICKPOCKET : ABILITY_MAGICIAN;
+    if (!BATTLER_DAMAGED(target)) return FALSE;
+    if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) return FALSE;
+    if (!BATTLER_HAS_ABILITY(stealer, ability)) return FALSE;
+    if (DoesSubstituteBlockMove(gBattlerAttacker, target, gCurrentMove)) return FALSE;
+    if (!CanStealItem(stealer, stolen, gBattleMons[stolen].item)) return FALSE;
+    if (BattlerHasAbility(stolen, gBattlerAttacker, ABILITY_STICKY_HOLD)) return FALSE;
+    if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) return FALSE;
+    return ability;
+}
+
 static void Cmd_moveend(void)
 {
     s32 i, j;
@@ -6256,61 +6272,34 @@ static void Cmd_moveend(void)
             gBattleScripting.moveendState++;
             break;
         case MOVEEND_PICKPOCKET:
-            if (IsBattlerAlive(gBattlerAttacker)
-              && gBattleMons[gBattlerAttacker].item != ITEM_NONE        // Attacker must be holding an item
-              && !(gWishFutureKnock.knockedOffMons[GetBattlerSide(gBattlerAttacker)] & gBitTable[gBattlerPartyIndexes[gBattlerAttacker]])   // But not knocked off
-              && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))  // Pickpocket doesn't activate for sheer force
-              && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))           // Obviously attack needs to have worked
             {
-                u8 isContact = IsMoveMakingContact(gCurrentMove, gBattlerAttacker);
-                u8 canAttackerSteal = ((BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PICKPOCKET) && isContact) 
-                            || (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_MAGICIAN) && !isContact))
-                            && gBattleMons[gBattlerAttacker].item == ITEM_NONE;
-                u8 battlers[4] = {0, 1, 2, 3};
-                SortBattlersBySpeed(battlers, FALSE); // Pickpocket activates for fastest mon without item
-                for (i = 0; i < gBattlersCount; i++)
+            int ability;
+            int checkOffense = gBattleMons[gBattlerAttacker].item == ITEM_NONE;
+            u8 thieves[4] = {0};
+            int thiefCount = 0;
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                if (i == gBattlerAttacker) continue;
+                if ((ability = CanPickpocket(i, checkOffense))) thieves[thiefCount++] = i;
+            }
+            if (thiefCount > 0)
+            {
+                if (checkOffense)
                 {
-                    u8 battler = battlers[i];
-                    // Attacker is mon who made contact, battler is mon with pickpocket
-                    if (battler != gBattlerAttacker                                                     // Cannot pickpocket yourself
-                      && ((BATTLER_HAS_ABILITY(battler, ABILITY_PICKPOCKET) && isContact) 
-                            || (BATTLER_HAS_ABILITY(battler, ABILITY_MAGICIAN) && !isContact))
-                      && BATTLER_DAMAGED(battler)                                                       // Target needs to have been damaged
-                      && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)              // Subsitute unaffected
-                      && gBattleMons[battler].item == ITEM_NONE                                         // Pickpocketer can't have an item already
-                      && CanStealItem(battler, gBattlerAttacker, gBattleMons[gBattlerAttacker].item))   // Cannot steal plates, mega stones, etc
-                    {
-                        gBattlerTarget = gBattlerAbility = battler;
-                        // Battle scripting is super brittle so we shall do the item exchange now (if possible)
-                        if ((GetBattlerAbility(gBattlerAttacker) != ABILITY_STICKY_HOLD || !BattlerHasInnate(gBattlerAttacker, ABILITY_STICKY_HOLD)))
-                            StealTargetItem(gBattlerTarget, gBattlerAttacker);  // Target takes attacker's item
-
-                        gEffectBattler = gBattlerAttacker;
-                        gBattleScripting.abilityPopupOverwrite = isContact ? ABILITY_PICKPOCKET : ABILITY_MAGICIAN;
-                        BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_Pickpocket;   // Includes sticky hold check to print separate string
-                        effect = TRUE;
-                        break; // Pickpocket activates on fastest mon, so exit loop.
-                    }
-                    else if (battler != gBattlerAttacker                                                     // Cannot pickpocket yourself
-                      && canAttackerSteal
-                      && BATTLER_DAMAGED(battler)                                                       // Target needs to have been damaged
-                      && !DoesSubstituteBlockMove(gBattlerAttacker, battler, gCurrentMove)              // Subsitute unaffected
-                      && CanStealItem(gBattlerAttacker, battler, gBattleMons[battler].item))   // Cannot steal plates, mega stones, etc
-                    {
-                        gBattlerTarget = gBattlerAbility = gBattlerAttacker;
-                        // Battle scripting is super brittle so we shall do the item exchange now (if possible)
-                        if ((GetBattlerAbility(battler) != ABILITY_STICKY_HOLD || !BattlerHasInnate(battler, ABILITY_STICKY_HOLD)))
-                            StealTargetItem(gBattlerAttacker, gBattlerTarget);  // Target takes attacker's item
-
-                        gEffectBattler = battler;
-                        gBattleScripting.abilityPopupOverwrite = isContact ? ABILITY_PICKPOCKET : ABILITY_MAGICIAN;
-                        BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = BattleScript_Pickpocket;   // Includes sticky hold check to print separate string
-                        effect = TRUE;
-                        break; // Pickpocket activates on fastest mon, so exit loop.
-                    }
+                    gStackBattler1 = gBattlerAttacker;
+                    gStackBattler2 = thieves[Random() % thiefCount];
                 }
+                else
+                {
+                    gStackBattler1 = thieves[Random() % thiefCount];
+                    gStackBattler2 = gBattlerAttacker;
+                }
+                StealTargetItem(gStackBattler1, gStackBattler2);
+                gBattleScripting.abilityPopupOverwrite = ability;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_Pickpocket;   // Includes sticky hold check to print separate string
+                effect = TRUE;
+            }
             }
             gBattleScripting.moveendState++;
             break;

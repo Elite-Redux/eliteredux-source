@@ -11390,20 +11390,25 @@ BattleScript_JabocaRowapBerryActivate_Dmg:
 	return
 
 BattleScript_Pickpocket::
+	copybyte gBattlerAbility, gStackBattler1
 	call BattleScript_AbilityPopUp
-	jumpifability BS_ATTACKER, ABILITY_STICKY_HOLD, BattleScript_PickpocketPrevented
-	swapattackerwithtarget
+	saveattackerandtargetto34
+	copybyte gBattlerAttacker, gStackBattler1
+	copybyte gBattlerTarget, gStackBattler2
+	jumpifability BS_TARGET, ABILITY_STICKY_HOLD, BattleScript_PickpocketPrevented
+	copybyte gEffectBattler, gBattlerTarget
 	call BattleScript_ItemSteal
-	swapattackerwithtarget
-	activateitemeffects BS_TARGET
+	activateitemeffects BS_ATTACKER
+	restoreattackerandtargetfrom34
 	return
 
 BattleScript_PickpocketPrevented:
 	pause B_WAIT_TIME_SHORT
-	copybyte gBattlerAbility, gBattlerAttacker
+	copybyte gBattlerAbility, gBattlerTarget
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ITEMCANNOTBEREMOVED
 	waitmessage B_WAIT_TIME_LONG
+	restoreattackerandtargetfrom34
 	return
 
 BattleScript_StickyBarbTransfer::
