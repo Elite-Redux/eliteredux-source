@@ -188,7 +188,7 @@ static const u8 sMoveTwoLineDescription_MoveSing[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveSupersonic[] = _(
     "Emits bizarre sound waves\n"
-    "that may confuse the foe.");
+    "that may confuse foes.");
 
 static const u8 sMoveTwoLineDescription_MoveSonicBoom[] = _(
     "Launches shock waves that\n"
@@ -391,8 +391,8 @@ static const u8 sMoveTwoLineDescription_MoveQuickAttack[] = _(
     "that always strikes first.");
 
 static const u8 sMoveTwoLineDescription_MoveRage[] = _(
-    "Raises the user's Attack\n"
-    "every time it is hit.");
+    "A rampage of 2 to 3 turns\n"
+    "that confuses the user.");
 
 static const u8 sMoveTwoLineDescription_MoveTeleport[] = _(
     "A psychic move for fleeing\n"
@@ -4731,7 +4731,7 @@ static const u8 sMoveFourLineDescription_MoveBite[] = _("The user bites with\nvi
 static const u8 sMoveFourLineDescription_MoveGrowl[] = _("The user growls in\na cute way, making\nthe foe lower its\nAttack stat.");
 static const u8 sMoveFourLineDescription_MoveRoar[] = _("The foe is made to\nswitch out with an\nally. In the wild,\nthe battle ends.");
 static const u8 sMoveFourLineDescription_MoveSing[] = _("A soothing song\nin a calming voice\nlulls the foe into\na deep slumber.");
-static const u8 sMoveFourLineDescription_MoveSupersonic[] = _("The user generates\nodd sound waves.\nIt confuses the\nfoe.");
+static const u8 sMoveFourLineDescription_MoveSupersonic[] = _("The user generates\nodd sound waves\nthat confuse foes.");
 static const u8 sMoveFourLineDescription_MoveSonicBoom[] = _("The foe is hit with\na shock wave that\nalways inflicts 20-\nHP damage.");
 static const u8 sMoveFourLineDescription_MoveDisable[] = _("For a few turns,\nit prevents the foe\nfrom using the move\nit last used.");
 static const u8 sMoveFourLineDescription_MoveAcid[] = _("Super effective vs\nSteel. Hits both foes.\n30% chance to\nlower SpDef.");
@@ -4782,7 +4782,7 @@ static const u8 sMoveFourLineDescription_MoveHypnosis[] = _("Hypnotic suggestion
 static const u8 sMoveFourLineDescription_MoveMeditate[] = _("The user meditates\nto awaken its power\nand raise its\nAttack stat.");
 static const u8 sMoveFourLineDescription_MoveAgility[] = _("The user relaxes\nand lightens its\nbody to sharply\nboost its Speed.");
 static const u8 sMoveFourLineDescription_MoveQuickAttack[] = _("An almost invisibly\nfast attack with\n+1 priority.");
-static const u8 sMoveFourLineDescription_MoveRage[] = _("An attack that\nbecomes stronger\neach time the user\nis hit in battle.");
+static const u8 sMoveFourLineDescription_MoveRage[] = _("The user thrashes\nabout for two to\nthree turns, then\nbecomes confused.");
 static const u8 sMoveFourLineDescription_MoveTeleport[] = _("Use it to flee from\nany wild Pokémon.\nAlso warps to the\nlast POKé CENTER.");
 static const u8 sMoveFourLineDescription_MoveNightShade[] = _("An attack with a\nmirage that inflicts\ndamage matching\nthe user's level.");
 static const u8 sMoveFourLineDescription_MoveMimic[] = _("The user copies the\nmove last used by\nthe foe for the\nrest of the battle.");
