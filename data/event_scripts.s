@@ -1124,3 +1124,5 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/EvergrandeCity_MonoChampRoom_1/scripts.inc"
 
 	.include "data/maps/FortreeCity_GymReworked/scripts.inc"
+
+	.include "data/maps/MossDeepCity_GymReworked/scripts.inc"

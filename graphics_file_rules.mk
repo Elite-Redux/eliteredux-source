@@ -208,7 +208,7 @@ $(TILESETGFXDIR)/secondary/fortree_gym/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@
 
 $(TILESETGFXDIR)/secondary/mossdeep_gym/tiles.4bpp: %.4bpp: %.png
-	$(GFX) $< $@ -num_tiles 82
+	$(GFX) $< $@ -num_tiles 86
 
 $(TILESETGFXDIR)/secondary/sootopolis_gym/tiles.4bpp: %.4bpp: %.png
 	$(GFX) $< $@ -num_tiles 484

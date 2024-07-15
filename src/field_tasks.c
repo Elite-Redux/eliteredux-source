@@ -36,6 +36,7 @@ static void PacifidlogBridgePerStepCallback(u8 taskId);
 static void SootopolisGymIcePerStepCallback(u8 taskId);
 static void CrackedFloorPerStepCallback(u8 taskId);
 static void Task_MuddySlope(u8 taskId);
+static void Task_MossDeepGymReworkFollowArrow(u8 taskId);
 
 static const TaskFunc sPerStepCallbacks[] =
 {
@@ -47,6 +48,7 @@ static const TaskFunc sPerStepCallbacks[] =
     [STEP_CB_TRUCK]             = EndTruckSequence,
     [STEP_CB_SECRET_BASE]       = SecretBasePerStepCallback,
     [STEP_CB_CRACKED_FLOOR]     = CrackedFloorPerStepCallback,
+    [STEP_CB_MOSSDEEP_ARROW]    = Task_MossDeepGymReworkFollowArrow
 };
 
 // they are in pairs but declared as 1D array
@@ -759,6 +761,146 @@ static void Task_MuddySlope(u8 taskId)
             data[i + 1] -= x2;
             data[i + 2] -= y2;
             SetMuddySlopeMetatile(&data[i], data[i + 1], data[i + 2]);
+        }
+    }
+}
+
+#define MOSSDEEPGYMREWORKGROUND_X0 7
+#define MOSSDEEPGYMREWORKGROUND_Y0 11
+#define MOSSDEEPGYMREWORKGROUND_X1 20
+#define MOSSDEEPGYMREWORKGROUND_Y1 20
+
+static const int mossDeepGymReworkFollowArrowTable[5][9] = {
+    {
+        METATILE_MossdeepGym_YellowArrow_UpLeft,
+        METATILE_MossdeepGym_YellowArrow_Up,
+        METATILE_MossdeepGym_YellowArrow_UpRight,
+        METATILE_MossdeepGym_YellowArrow_Left,
+        METATILE_MossdeepGym_YellowArrow_Square,
+        METATILE_MossdeepGym_YellowArrow_Right,
+        METATILE_MossdeepGym_YellowArrow_DownLeft,
+        METATILE_MossdeepGym_YellowArrow_Down,
+        METATILE_MossdeepGym_YellowArrow_DownRight
+    },
+    {
+        METATILE_MossdeepGym_BlueArrow_UpLeft,
+        METATILE_MossdeepGym_BlueArrow_Up,
+        METATILE_MossdeepGym_BlueArrow_UpRight,
+        METATILE_MossdeepGym_BlueArrow_Left,
+        METATILE_MossdeepGym_BlueArrow_Square,
+        METATILE_MossdeepGym_BlueArrow_Right,
+        METATILE_MossdeepGym_BlueArrow_DownLeft,
+        METATILE_MossdeepGym_BlueArrow_Down,
+        METATILE_MossdeepGym_BlueArrow_DownRight,
+    },
+    {
+        METATILE_MossdeepGym_GreenArrow_UpLeft,
+        METATILE_MossdeepGym_GreenArrow_Up,
+        METATILE_MossdeepGym_GreenArrow_UpRight,
+        METATILE_MossdeepGym_GreenArrow_Left,
+        METATILE_MossdeepGym_GreenArrow_Square,
+        METATILE_MossdeepGym_GreenArrow_Right,
+        METATILE_MossdeepGym_GreenArrow_DownLeft,
+        METATILE_MossdeepGym_GreenArrow_Down,
+        METATILE_MossdeepGym_GreenArrow_DownRight,
+    },
+     {
+        METATILE_MossdeepGym_RedArrow_UpLeft,
+        METATILE_MossdeepGym_RedArrow_Up,
+        METATILE_MossdeepGym_RedArrow_UpRight,
+        METATILE_MossdeepGym_RedArrow_Left,
+        METATILE_MossdeepGym_RedArrow_Square,
+        METATILE_MossdeepGym_RedArrow_Right,
+        METATILE_MossdeepGym_RedArrow_DownLeft,
+        METATILE_MossdeepGym_RedArrow_Down,
+        METATILE_MossdeepGym_RedArrow_DownRight,
+    },
+    {
+        METATILE_MossdeepGym_BrownArrow_UpLeft,
+        METATILE_MossdeepGym_BrownArrow_Up,
+        METATILE_MossdeepGym_BrownArrow_UpRight,
+        METATILE_MossdeepGym_BrownArrow_Left,
+        METATILE_MossdeepGym_BrownArrow_Square,
+        METATILE_MossdeepGym_BrownArrow_Right,
+        METATILE_MossdeepGym_BrownArrow_DownLeft,
+        METATILE_MossdeepGym_BrownArrow_Down,
+        METATILE_MossdeepGym_BrownArrow_DownRight,
+    },
+};
+
+static void MossDeepGymReworkFollowArrow_DrawTile(s16 x, s16 y, s16 ix, s16 jy){
+    s16 xDelta, yDelta;
+    u16 tile;
+    u8  tileColor, tileAngle;
+    xDelta = ix - x;
+    yDelta = jy - y;
+    if (xDelta == 0){
+        if (yDelta > 0){
+            tileAngle = 1;
+        } else {
+            tileAngle = 7;
+        }
+    } else if (yDelta == 0){
+        if (xDelta > 1){
+            tileAngle = 5;
+        } else {
+            tileAngle = 3;
+        }
+    } else if (xDelta > 0){
+        if (xDelta > yDelta){
+            tileAngle = 2;
+        } else {
+            tileAngle = 8;
+        }
+    } else if (yDelta > 0){
+        if (yDelta > xDelta){
+            tileAngle = 6;
+        } else {
+            tileAngle = 0;
+        }
+    } else {
+        tileAngle = 4;
+    }
+    tileColor = (jy - MOSSDEEPGYMREWORKGROUND_Y0) % 5;
+    MapGridSetMetatileIdAt(ix, jy, mossDeepGymReworkFollowArrowTable[tileColor][tileAngle]);
+    CurrentMapDrawMetatileAt(ix, jy);
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "x: %d, y: %d, ix: %d, jy: %d, xDelta: %i, yDelta: %i", x, y, ix, jy, xDelta, yDelta);
+    MgbaClose();
+
+}
+
+static void Task_MossDeepGymReworkFollowArrow(u8 taskId){
+    s16 x, y, x0, y0, x1, y1, ix, jy;
+    s16 *data = gTasks[taskId].data;
+    
+    // reminded this is executed each frame
+    // So I need to check if the player moved first
+    PlayerGetDestCoords(&x, &y);
+
+    if (x == data[1] && y == data[2])
+        return;
+
+    data[1] = x;
+    data[2] = y;
+
+    // what interrest me is if we're walking on the arrow ground
+    if (x < MOSSDEEPGYMREWORKGROUND_X0 || x > MOSSDEEPGYMREWORKGROUND_X1 || 
+        y < MOSSDEEPGYMREWORKGROUND_Y0 || y > MOSSDEEPGYMREWORKGROUND_Y1)
+        return;
+    
+    // get the coordinates of 3 tiles around but care not to take something ouside the arrow ground
+    x0 = max(MOSSDEEPGYMREWORKGROUND_X0, x - 3);
+    y0 = max(MOSSDEEPGYMREWORKGROUND_Y0, y - 3);
+    x1 = min(MOSSDEEPGYMREWORKGROUND_X1, x + 3);
+    y1 = min(MOSSDEEPGYMREWORKGROUND_Y1, y + 3);
+    /*MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "x: %d, y: %d, x0: %d, y0: %d, x1: %d, y1:%d", x, y, x0, y0, x1, y1);
+    MgbaClose();*/
+    //loop and replace the tiles to point to the player
+    for (ix = x0; ix <= x1; ix++){
+        for(jy = y0; jy <= y1; jy++){
+            MossDeepGymReworkFollowArrow_DrawTile(x, y, ix, jy);
         }
     }
 }

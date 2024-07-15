@@ -382,7 +382,51 @@
 #define METATILE_MossdeepGameCorner_CounterOpen_Top       0x22C
 
 // gTileset_MossdeepGym
-#define METATILE_MossdeepGym_YellowArrow_Right  0x250
+#define METATILE_MossdeepGym_BlueArrow_Down         0x259
+#define METATILE_MossdeepGym_BlueArrow_DownLeft     0x231
+#define METATILE_MossdeepGym_BlueArrow_DownRight    0x230
+#define METATILE_MossdeepGym_BlueArrow_Left         0x25A
+#define METATILE_MossdeepGym_BlueArrow_Right        0x258
+#define METATILE_MossdeepGym_BlueArrow_Square       0x25C
+#define METATILE_MossdeepGym_BlueArrow_Up           0x25B
+#define METATILE_MossdeepGym_BlueArrow_UpLeft       0x232
+#define METATILE_MossdeepGym_BlueArrow_UpRight      0x233
+#define METATILE_MossdeepGym_BrownArrow_Down        0x271
+#define METATILE_MossdeepGym_BrownArrow_DownLeft    0x249
+#define METATILE_MossdeepGym_BrownArrow_DownRight   0x248
+#define METATILE_MossdeepGym_BrownArrow_Left        0x272
+#define METATILE_MossdeepGym_BrownArrow_Right       0x270
+#define METATILE_MossdeepGym_BrownArrow_Square      0x274
+#define METATILE_MossdeepGym_BrownArrow_Up          0x273
+#define METATILE_MossdeepGym_BrownArrow_UpLeft      0x24A
+#define METATILE_MossdeepGym_BrownArrow_UpRight     0x24B
+#define METATILE_MossdeepGym_GreenArrow_Down        0x261
+#define METATILE_MossdeepGym_GreenArrow_DownLeft    0x239
+#define METATILE_MossdeepGym_GreenArrow_DownRight   0x238
+#define METATILE_MossdeepGym_GreenArrow_Left        0x262
+#define METATILE_MossdeepGym_GreenArrow_Right       0x260
+#define METATILE_MossdeepGym_GreenArrow_Square      0x264
+#define METATILE_MossdeepGym_GreenArrow_Up          0x263
+#define METATILE_MossdeepGym_GreenArrow_UpLeft      0x23A
+#define METATILE_MossdeepGym_GreenArrow_UpRight     0x23B
+#define METATILE_MossdeepGym_RedArrow_Down          0x269
+#define METATILE_MossdeepGym_RedArrow_DownLeft      0x241
+#define METATILE_MossdeepGym_RedArrow_DownRight     0x240
+#define METATILE_MossdeepGym_RedArrow_Left          0x26A
+#define METATILE_MossdeepGym_RedArrow_Right         0x268
+#define METATILE_MossdeepGym_RedArrow_Square        0x26C
+#define METATILE_MossdeepGym_RedArrow_Up            0x26B
+#define METATILE_MossdeepGym_RedArrow_UpLeft        0x242
+#define METATILE_MossdeepGym_RedArrow_UpRight       0x243
+#define METATILE_MossdeepGym_YellowArrow_Down       0x251
+#define METATILE_MossdeepGym_YellowArrow_DownLeft   0x22B
+#define METATILE_MossdeepGym_YellowArrow_DownRight  0x22A
+#define METATILE_MossdeepGym_YellowArrow_Left       0x252
+#define METATILE_MossdeepGym_YellowArrow_Right      0x250
+#define METATILE_MossdeepGym_YellowArrow_Square     0x254
+#define METATILE_MossdeepGym_YellowArrow_Up         0x253
+#define METATILE_MossdeepGym_YellowArrow_UpLeft     0x22C
+#define METATILE_MossdeepGym_YellowArrow_UpRight    0x22D
 
 // gTileset_Mossdeep
 #define METATILE_Mossdeep_Door              0x2A1
