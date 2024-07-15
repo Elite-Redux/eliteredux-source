@@ -769,6 +769,7 @@ static void Task_MuddySlope(u8 taskId)
 #define MOSSDEEPGYMREWORKGROUND_Y0 11
 #define MOSSDEEPGYMREWORKGROUND_X1 20
 #define MOSSDEEPGYMREWORKGROUND_Y1 20
+#define MOSSDEEPGYMREWORKGROUND_RANGE 7
 
 static const int mossDeepGymReworkFollowArrowTable[5][9] = {
     {
@@ -834,39 +835,36 @@ static void MossDeepGymReworkFollowArrow_DrawTile(s16 x, s16 y, s16 ix, s16 jy){
     u8  tileColor, tileAngle;
     xDelta = ix - x;
     yDelta = jy - y;
-    if (xDelta == 0){
+    if (xDelta == 0 && yDelta == 0){
+        tileAngle = 4;
+    } else if (xDelta == 0){
         if (yDelta > 0){
             tileAngle = 1;
         } else {
             tileAngle = 7;
         }
     } else if (yDelta == 0){
-        if (xDelta > 1){
+        if (xDelta < 1){
             tileAngle = 5;
         } else {
             tileAngle = 3;
         }
-    } else if (xDelta > 0){
-        if (xDelta > yDelta){
-            tileAngle = 2;
-        } else {
+    } else if (yDelta < 0){
+        if (xDelta < 0){
             tileAngle = 8;
-        }
-    } else if (yDelta > 0){
-        if (yDelta > xDelta){
+        } else {
             tileAngle = 6;
+        }
+    } else {
+        if (xDelta < 0){
+            tileAngle = 2;
         } else {
             tileAngle = 0;
         }
-    } else {
-        tileAngle = 4;
     }
     tileColor = (jy - MOSSDEEPGYMREWORKGROUND_Y0) % 5;
     MapGridSetMetatileIdAt(ix, jy, mossDeepGymReworkFollowArrowTable[tileColor][tileAngle]);
     CurrentMapDrawMetatileAt(ix, jy);
-    MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "x: %d, y: %d, ix: %d, jy: %d, xDelta: %i, yDelta: %i", x, y, ix, jy, xDelta, yDelta);
-    MgbaClose();
 
 }
 
@@ -890,13 +888,10 @@ static void Task_MossDeepGymReworkFollowArrow(u8 taskId){
         return;
     
     // get the coordinates of 3 tiles around but care not to take something ouside the arrow ground
-    x0 = max(MOSSDEEPGYMREWORKGROUND_X0, x - 3);
-    y0 = max(MOSSDEEPGYMREWORKGROUND_Y0, y - 3);
-    x1 = min(MOSSDEEPGYMREWORKGROUND_X1, x + 3);
-    y1 = min(MOSSDEEPGYMREWORKGROUND_Y1, y + 3);
-    /*MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "x: %d, y: %d, x0: %d, y0: %d, x1: %d, y1:%d", x, y, x0, y0, x1, y1);
-    MgbaClose();*/
+    x0 = max(MOSSDEEPGYMREWORKGROUND_X0, x - MOSSDEEPGYMREWORKGROUND_RANGE);
+    y0 = max(MOSSDEEPGYMREWORKGROUND_Y0, y - MOSSDEEPGYMREWORKGROUND_RANGE);
+    x1 = min(MOSSDEEPGYMREWORKGROUND_X1, x + MOSSDEEPGYMREWORKGROUND_RANGE);
+    y1 = min(MOSSDEEPGYMREWORKGROUND_Y1, y + MOSSDEEPGYMREWORKGROUND_RANGE);
     //loop and replace the tiles to point to the player
     for (ix = x0; ix <= x1; ix++){
         for(jy = y0; jy <= y1; jy++){
