@@ -95,6 +95,7 @@ enum
     FIELD_INFO_MUD_SPORT,
     FIELD_INFO_WATER_SPORT,
     FIELD_INFO_ION_DELUGE,
+    FIELD_INFO_QUASH,
     NUM_FIELD_INFO,
 };
 
@@ -543,6 +544,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
             break;
             case FIELD_INFO_ION_DELUGE:
                 if(gFieldStatuses & STATUS_FIELD_ION_DELUGE)
+                    isExtraInfoShown = TRUE;
+            break;
+            case FIELD_INFO_QUASH:
+                if(gFieldTimers.quashTimer)
                     isExtraInfoShown = TRUE;
             break;
         }
@@ -3393,6 +3398,10 @@ const u8 sText_Title_Field_Ion_Deluge[]                     = _("Ion Deluge");
 const u8 sText_Title_Field_Ion_Deluge_Description[]         = _("Causes all the Normal-type moves to\n"
                                                                 "become Electric-type instad,\n"
                                                                 "including status moves.");
+const u8 sText_Title_Field_Quash[]                          = _("Quash");
+const u8 sText_Title_Field_Quash_Description[]              = _("Suppresses priority, stat boosts,\n"
+                                                                "abilities, and field effects when\n"
+                                                                "determining turn order.");
 const u8 sText_Title_Field_No_Effect[]                      = _("Field has no effect");
 const u8 sText_Title_Field_No_Effect_Description[]          = _("The field has no special effect.");
 static void PrintFieldTab(void)
@@ -3667,6 +3676,23 @@ static void PrintFieldTab(void)
                 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Field_Ion_Deluge_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+
+                printedInfo = TRUE;
+            break;
+            case FIELD_INFO_QUASH:
+                StringCopy(gStringVar1, sText_Title_Field_Quash);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Turns Left
+                StringCopy(gStringVar1, sText_Title_Field_Turns_Left);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                turnsLeft = gFieldTimers.quashTimer;
+                ConvertIntToDecimalStringN(gStringVar1, turnsLeft, STR_CONV_MODE_LEFT_ALIGN, 4);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                StringCopy(gStringVar1, sText_Title_Field_Quash_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
 
                 printedInfo = TRUE;

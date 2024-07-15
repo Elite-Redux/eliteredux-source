@@ -2039,8 +2039,8 @@ static const u8 sMoveTwoLineDescription_MoveIncinerate[] = _(
     "preventing their use.");
 
 static const u8 sMoveTwoLineDescription_MoveQuash[] = _(
-    "Suppresses the foe, making\n"
-    "it move last.");
+    "Suppresses distortions\n"
+    "that let battlers move first.");
 
 static const u8 sMoveTwoLineDescription_MoveAcrobatics[] = _(
     "Does 1.5x damage if the\n"
@@ -5195,7 +5195,7 @@ static const u8 sMoveFourLineDescription_MoveSkyDrop[] = _("The user hurls and\n
 static const u8 sMoveFourLineDescription_MoveShiftGear[] = _("The user rotates its\ngears, raising its\nAttack and sharply\nraising its Speed.");
 static const u8 sMoveFourLineDescription_MoveCircleThrow[] = _("The foe is thrown,\ndragging out another\nPokémon into battle.\nWild Pokémon flee.");
 static const u8 sMoveFourLineDescription_MoveIncinerate[] = _("A fiery attack that\nburns up any Berry\nor Gem the foe may\nbe holding.");
-static const u8 sMoveFourLineDescription_MoveQuash[] = _("The user suppresses\nthe foe and makes\nits move go last.");
+static const u8 sMoveFourLineDescription_MoveQuash[] = _("Suppresses most\neffects that would\naffect turn order.");
 static const u8 sMoveFourLineDescription_MoveAcrobatics[] = _("The user nimbly\nstrikes the foe.\n50% more damage\nwithout an item.");
 static const u8 sMoveFourLineDescription_MoveReflectType[] = _("The user reflects\nthe foe's type,\nmaking it the same\ntype as the foe.");
 static const u8 sMoveFourLineDescription_MoveRetaliate[] = _("This vengeful move\ndeals double damage\nif an ally fainted\nin the turn before.");

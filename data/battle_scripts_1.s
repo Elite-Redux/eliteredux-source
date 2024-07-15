@@ -12068,6 +12068,11 @@ BattleScript_TheSwampDisappeared::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
+BattleScript_QuashEnds::
+	printstring STRINGID_QUASH_ENDS
+	waitmessage B_WAIT_TIME_LONG
+	end2
+
 BattleScript_EffectDragonCheer::
 	attackcanceler
 	attackstring

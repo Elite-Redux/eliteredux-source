@@ -922,7 +922,7 @@ void HandleAction_TryFinish(void)
 
 void HandleAction_NothingIsFainted(void)
 {
-    RecalculateMoveOrder(++gCurrentTurnActionNumber + (gAfterYouBattlers ? gAfterYouBattlers-- : 0), gBattlersCount - (gQuashedBattlers ? gQuashedBattlers-- : 0));
+    RecalculateMoveOrder(++gCurrentTurnActionNumber + (gAfterYouBattlers ? gAfterYouBattlers-- : 0), gBattlersCount);
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     ClearMiscTurnFlags();
 }
@@ -930,7 +930,7 @@ void HandleAction_NothingIsFainted(void)
 void HandleAction_ActionFinished(void)
 {
     gBattleStruct->monToSwitchIntoId[gBattlerByTurnOrder[gCurrentTurnActionNumber]] = 6;
-    RecalculateMoveOrder(++gCurrentTurnActionNumber + (gAfterYouBattlers ? gAfterYouBattlers-- : 0), gBattlersCount - (gQuashedBattlers ? gQuashedBattlers-- : 0));
+    RecalculateMoveOrder(++gCurrentTurnActionNumber + (gAfterYouBattlers ? gAfterYouBattlers-- : 0), gBattlersCount);
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     TurnStructsClear();
     gRoundStructs[gBattlerAttacker].extraMoveUsed = 0;
@@ -2156,6 +2156,7 @@ enum
     ENDTURN_RAINBOW,
     ENDTURN_SEA_OF_FIRE,
     ENDTURN_SWAMP,
+    ENDTURN_QUASH,
     ENDTURN_FIELD_COUNT,
 };
 
@@ -2715,6 +2716,12 @@ u8 DoFieldEndTurnEffects(void)
                 gBattleStruct->turnSideTracker = 0;
             }
             break;
+        case ENDTURN_QUASH:
+            if (gFieldTimers.quashTimer && !gFieldTimers.started.quash && --gFieldTimers.quashTimer == 0)
+            {
+                BattleScriptExecute(BattleScript_QuashEnds);
+                effect++;
+            }
         case ENDTURN_FIELD_COUNT:
             effect++;
             break;

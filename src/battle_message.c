@@ -538,7 +538,7 @@ static const u8 sText_GravityPreventsUsage[] = _("{B_ATK_NAME_WITH_PREFIX} can't
 static const u8 sText_HealBlockPreventsUsage[] = _("{B_ATK_NAME_WITH_PREFIX} was\nprevented from healing!\p");
 static const u8 sText_NotDoneYet[] = _("This move effect is not done yet!\p");
 static const u8 sText_StickyWebUsed[] = _("A sticky web spreads out on the\nground around {B_DEF_TEAM2} team!");
-static const u8 sText_QuashSuccess[] = _("The opposing {B_ATK_NAME_WITH_PREFIX}'s move was postponed!");
+static const u8 sText_QuashSuccess[] = _("{B_ATK_NAME_WITH_PREFIX} irons out\nany distortions in time!");
 static const u8 sText_PkmnBlewAwayToxicSpikes[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nToxic Spikes!");
 static const u8 sText_PkmnBlewAwayStickyWeb[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nSticky Web!");
 static const u8 sText_PkmnBlewAwayStealthRock[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nStealth Rock!");
@@ -1011,6 +1011,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_QuashEnds[] = _("The normalization of time comes\nto an end!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1806,6 +1807,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_POWER_OF_ALCHEMY - 12] = sText_PowerOfAlchemy,
     [STRINGID_POWER_OF_ALCHEMY_SLUDGE - 12] = sText_PowerOfAlchemySludge,
     [STRINGID_POWER_OF_ALCHEMY_GOLD - 12] = sText_PowerOfAlchemyGold,
+    [STRINGID_QUASH_ENDS - 12] = sText_QuashEnds,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

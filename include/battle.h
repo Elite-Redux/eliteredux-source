@@ -286,6 +286,7 @@ struct FieldBeganThisTurn
     u8 fairyLock:1;
     u8 inverseRoom:1;
     u8 weather:1;
+    u8 quash:1;
 };
 
 struct FieldTimer
@@ -300,6 +301,7 @@ struct FieldTimer
     u8 gravityTimer;
     u8 fairyLockTimer;
     u8 inverseRoomTimer;
+    u8 quashTimer;
 };
 
 struct WishFutureKnock
@@ -951,7 +953,6 @@ extern u8 gStackBattler4;
 extern u32 gBattleControllerExecFlags;
 extern u8 gBattlersCount;
 extern u16 gBattlerPartyIndexes[MAX_BATTLERS_COUNT];
-extern u8 gQuashedBattlers;
 extern u8 gAfterYouBattlers;
 extern u8 gBattlerPositions[MAX_BATTLERS_COUNT];
 extern u8 gActionsByTurnOrder[MAX_BATTLERS_COUNT];

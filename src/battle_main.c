@@ -167,7 +167,6 @@ EWRAM_DATA u8 gStackBattler4 = 0;
 EWRAM_DATA u32 gBattleControllerExecFlags = 0;
 EWRAM_DATA u8 gBattlersCount = 0;
 EWRAM_DATA u16 gBattlerPartyIndexes[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA u8 gQuashedBattlers = 0;
 EWRAM_DATA u8 gAfterYouBattlers = 0;
 EWRAM_DATA u8 gBattlerPositions[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gActionsByTurnOrder[MAX_BATTLERS_COUNT] = {0};
@@ -4945,10 +4944,13 @@ u16 IsMyceliumMightActive(u32 battlerId)
 s8 GetChosenMovePriority(u32 battlerId, u32 target)
 {
     u16 move = GetChosenMove(battlerId);
+    int priority;
 
     gTurnStructs[battlerId].pranksterElevated = 0;
 
-    return GetMovePriority(battlerId, move, target);
+    priority = GetMovePriority(battlerId, move, target);
+    if (priority > 0 && gFieldTimers.quashTimer) priority = 0;
+    return priority;
 }
 
 s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
@@ -5035,9 +5037,44 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     u32 holdEffectBattler1 = 0, holdEffectBattler2 = 0;
     s8 priority1 = 0, priority2 = 0;
 
+    holdEffectBattler1 = GetBattlerHoldEffect(battler1, TRUE);
+    holdEffectBattler2 = GetBattlerHoldEffect(battler2, TRUE);
+
+    // Quash disables most speed calcs
+    if (gFieldTimers.quashTimer)
+    {
+        int speed1 = gBattleMons[battler1].speed;
+        int speed2 = gBattleMons[battler2].speed;
+
+        if (!ignoreChosenMoves)
+        {
+            if (gChosenActionByBattler[battler1] == B_ACTION_USE_MOVE)
+            {
+                priority1 = gBattleMoves[GetChosenMove(battler1)].priority;
+                priority1 = min(-4, priority1);
+            }
+            if (gChosenActionByBattler[battler2] == B_ACTION_USE_MOVE)
+            {
+                priority2 = gBattleMoves[GetChosenMove(battler1)].priority;
+                priority2 = min(-4, priority2);
+            }
+        }
+
+        if (priority1 > priority2) return 0;
+        if (priority2 > priority1) return 1;
+
+        if (holdEffectBattler1 == HOLD_EFFECT_CHOICE_SCARF) speed1 = speed1 * 3 / 2;
+        else if (holdEffectBattler1 == HOLD_EFFECT_IRON_BALL) speed1 /= 2;
+        if (holdEffectBattler2 == HOLD_EFFECT_CHOICE_SCARF) speed2 = speed2 * 3 / 2;
+        else if (holdEffectBattler2 == HOLD_EFFECT_IRON_BALL) speed2 /= 2;
+
+        if (speed1 > speed2) return 0;
+        if (speed2 > speed1) return 1;
+        return Random() % 2;
+    }
+
     // Battler 1
     speedBattler1 = GetBattlerTotalSpeedStat(battler1, TOTAL_SPEED_FULL);
-    holdEffectBattler1 = GetBattlerHoldEffect(battler1, TRUE);
 
     // Quick Draw
     if (!ignoreChosenMoves && GetBattlerAbility(battler1) == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler1]) && Random() % 100 < 30)
@@ -5053,7 +5090,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
 
     // Battler 2
     speedBattler2 = GetBattlerTotalSpeedStat(battler2, TOTAL_SPEED_FULL);
-    holdEffectBattler2 = GetBattlerHoldEffect(battler2, TRUE);
+
     // Quick Draw
     if (!ignoreChosenMoves && GetBattlerAbility(battler2) == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler2]) && Random() % 100 < 30)
         gRoundStructs[battler2].quickDraw = TRUE;
@@ -5135,7 +5172,7 @@ static void SetActionsAndBattlersTurnOrder(void)
     s32 turnOrderId = 0;
     s32 i, j;
 
-    gAfterYouBattlers = gQuashedBattlers = 0;
+    gAfterYouBattlers = 0;
 
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
     {

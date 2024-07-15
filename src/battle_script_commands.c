@@ -9470,21 +9470,14 @@ static void Cmd_various(void)
         }
         return;
     case VARIOUS_TRY_QUASH:
-        if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget))
+        if (gFieldTimers.quashTimer)
         {
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         }
         else
         {
-            // Shift battlers up to target position and move target battler to last.
-            u8 targetPosition = GetBattlerTurnOrderNum(gBattlerTarget);
-            for (i = targetPosition; i < gBattlersCount - 1; i++)
-            {
-                gBattlerByTurnOrder[i] = gBattlerByTurnOrder[i + 1];
-            }
-
-            gBattlerByTurnOrder[gBattlersCount - 1] = gBattlerTarget;
-            gQuashedBattlers++;
+            gFieldTimers.quashTimer = QUASH_DURATION;
+            gFieldTimers.started.quash = TRUE;
             gBattlescriptCurrInstr += 7;
         }
         return;
@@ -10003,8 +9996,6 @@ static void Cmd_various(void)
             gBattlerByTurnOrder[gCurrentTurnActionNumber + 1] = gBattlerTarget;
             gAfterYouBattlers++;
 
-            if (targetPosition >= gBattlersCount - gQuashedBattlers)
-                gQuashedBattlers--;
             gBattlescriptCurrInstr += 7;
         }
         return;
