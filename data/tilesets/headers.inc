@@ -601,7 +601,7 @@ gTileset_FortreeGym::
 	.4byte gTilesetPalettes_FortreeGym
 	.4byte gMetatiles_FortreeGym
 	.4byte gMetatileAttributes_FortreeGym
-	.4byte NULL @ animation callback
+	.4byte InitTilesetAnim_FortreeGym
 
 	.align 2
 gTileset_MossdeepGym::

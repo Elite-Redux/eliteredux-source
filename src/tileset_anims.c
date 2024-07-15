@@ -44,6 +44,7 @@ static void TilesetAnim_MauvilleGym(u16);
 static void TilesetAnim_BikeShop(u16);
 static void TilesetAnim_BattlePyramid(u16);
 static void TilesetAnim_BattleDome(u16);
+static void TilesetAnim_FortreeGym(u16);
 static void QueueAnimTiles_General_Flower(u16);
 static void QueueAnimTiles_General_Water(u16);
 static void QueueAnimTiles_General_SandWaterEdge(u16);
@@ -76,6 +77,7 @@ static void QueueAnimTiles_MauvilleGym_GearsGround(u16);
 static void QueueAnimTiles_SootopolisGym_Waterfalls(u16);
 static void QueueAnimTiles_EliteFour_GroundLights(u16);
 static void QueueAnimTiles_EliteFour_WallLights(u16);
+static void QueueAnimTiles_FortreeGym_Turbine(u16);
 
 const u16 gTilesetAnims_General_Flower_Frame1[] = INCBIN_U16("data/tilesets/primary/general/anim/flower/1.4bpp");
 const u16 gTilesetAnims_General_Flower_Frame0[] = INCBIN_U16("data/tilesets/primary/general/anim/flower/0.4bpp");
@@ -514,6 +516,22 @@ const u16 *const gTilesetAnims_MauvilleGym_GrearGround[] = {
     gTilesetAnims_MauvilleGym_GrearGround_Frame7,
 };
 
+const u16 tileset_anims_space_14[16] = {};
+const u16 gTilesetAnims_FortreeGym_Turbine_Frame0[] = INCBIN_U16("data/tilesets/secondary/fortree_gym/anim/turbine/0.4bpp");
+const u16 gTilesetAnims_FortreeGym_Turbine_Frame1[] = INCBIN_U16("data/tilesets/secondary/fortree_gym/anim/turbine/1.4bpp");
+const u16 gTilesetAnims_FortreeGym_Turbine_Frame2[] = INCBIN_U16("data/tilesets/secondary/fortree_gym/anim/turbine/2.4bpp");
+const u16 gTilesetAnims_FortreeGym_Turbine_Frame3[] = INCBIN_U16("data/tilesets/secondary/fortree_gym/anim/turbine/3.4bpp");
+const u16 gTilesetAnims_FortreeGym_Turbine_Frame4[] = INCBIN_U16("data/tilesets/secondary/fortree_gym/anim/turbine/4.4bpp");
+
+const u16 *const gTilesetAnims_FortreeGym_Turbine[] = {
+    gTilesetAnims_FortreeGym_Turbine_Frame0,
+    gTilesetAnims_FortreeGym_Turbine_Frame1,
+    gTilesetAnims_FortreeGym_Turbine_Frame2,
+    gTilesetAnims_FortreeGym_Turbine_Frame3,
+    gTilesetAnims_FortreeGym_Turbine_Frame4,
+};
+
+
 
 const u16 gTilesetAnims_BikeShop_BlinkingLights_Frame0[] = INCBIN_U16("data/tilesets/secondary/bike_shop/anim/blinking_lights/0.4bpp");
 const u16 gTilesetAnims_BikeShop_BlinkingLights_Frame1[] = INCBIN_U16("data/tilesets/secondary/bike_shop/anim/blinking_lights/1.4bpp");
@@ -853,6 +871,13 @@ void InitTilesetAnim_MauvilleGym(void)
     sSecondaryTilesetAnimCallback = TilesetAnim_MauvilleGym;
 }
 
+void InitTilesetAnim_FortreeGym(void)
+{
+    sSecondaryTilesetAnimCounter = 0;
+    sSecondaryTilesetAnimCounterMax = 25;
+    sSecondaryTilesetAnimCallback = TilesetAnim_FortreeGym;
+}
+
 void InitTilesetAnim_BikeShop(void)
 {
     sSecondaryTilesetAnimCounter = 0;
@@ -1115,6 +1140,12 @@ static void TilesetAnim_MauvilleGym(u16 timer)
     }
 }
 
+static void TilesetAnim_FortreeGym(u16 timer){
+    if (timer % 5 == 0){
+        QueueAnimTiles_FortreeGym_Turbine(timer);
+    }
+}
+
 static void TilesetAnim_SootopolisGym(u16 timer)
 {
     if (timer % 8 == 0)
@@ -1200,6 +1231,12 @@ static void QueueAnimTiles_MauvilleGym_TrippingFloor(u16 timer)
 static void QueueAnimTiles_MauvilleGym_GearsGround(u16 timer){
     u16 i = timer / 8;
     AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_GrearGround[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 20)), 126);
+}
+
+
+static void QueueAnimTiles_FortreeGym_Turbine(u16 timer){
+    u16 i = (timer % 25) / 5;
+    AppendTilesetAnimToBuffer(gTilesetAnims_FortreeGym_Turbine[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 64)), 512);
 }
 
 static void QueueAnimTiles_BikeShop_BlinkingLights(u16 timer)

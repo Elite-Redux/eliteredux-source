@@ -1,1 +1,23 @@
 mapscripts FortreeCity_GymReworked_MapScripts {}
+
+
+raw `
+FortreeCity_GymReworked_Text_GymStatueCertified:
+	.string "Fortree City Pokémon Gym\p"
+	.string "Winona's Certified Trainers:\n"
+	.string "{PLAYER}$"
+
+FortreeCity_GymReworked_Text_GymStatue:
+	.string "Fortree City Pokémon Gym$"
+`
+
+script FortreeCity_GymReworked_EventScript_GymStatue{
+    lock
+    if (flag(FLAG_BADGE06_GET)) {
+        msgbox(FortreeCity_GymReworked_Text_GymStatueCertified, MSGBOX_DEFAULT)
+    }
+    else{
+        msgbox(FortreeCity_GymReworked_Text_GymStatue, MSGBOX_DEFAULT)
+    }
+    release
+}
