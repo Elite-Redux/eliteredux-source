@@ -631,8 +631,9 @@
 #define ABILITY_PARASITIC_SPORES 609 // Deals 1/8 HP damage to non- Ghost. Spreads on contact.
 #define ABILITY_POISON_PUPPETEER 610 // Poison also inflicts confusion.
 #define ABILITY_ENTRANCE 611 // Confusion also inflicts infatuation.
+#define ABILITY_REJECTION 612 // Applies Quash on switch-in.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ENTRANCE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_REJECTION + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

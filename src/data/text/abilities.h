@@ -581,6 +581,7 @@ static const u8 sAbilityToxicChainDescription[] = _("Moves have a 30% chance to\
 static const u8 sAbilityParasiticSporesDescription[] = _("Deals 1/8 HP damage to non-\nGhost. Spreads on contact.");
 static const u8 sAbilityPoisonPuppeteerDescription[] = _("Poison also inflicts confusion.");
 static const u8 sAbilityEntranceDescription[] = _("Confusion also inflicts\ninfatuation.");
+static const u8 sAbilityRejectionDescription[] = _("Applies Quash on switch-in.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1196,6 +1197,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_PARASITIC_SPORES] = _("Parasitic Spores"),
     [ABILITY_POISON_PUPPETEER] = _("Poison Puppeteer"),
     [ABILITY_ENTRANCE] = _("Entrance"),
+    [ABILITY_REJECTION] = _("Rejection"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1812,4 +1814,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_PARASITIC_SPORES] = sAbilityParasiticSporesDescription,
     [ABILITY_POISON_PUPPETEER] = sAbilityPoisonPuppeteerDescription,
     [ABILITY_ENTRANCE] = sAbilityEntranceDescription,
+    [ABILITY_REJECTION] = sAbilityRejectionDescription,
 };

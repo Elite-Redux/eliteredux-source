@@ -6262,7 +6262,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_QUASH,
         .power = 0,
-        .type = TYPE_DARK,
+        .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,

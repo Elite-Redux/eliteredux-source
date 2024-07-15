@@ -538,7 +538,7 @@ static const u8 sText_GravityPreventsUsage[] = _("{B_ATK_NAME_WITH_PREFIX} can't
 static const u8 sText_HealBlockPreventsUsage[] = _("{B_ATK_NAME_WITH_PREFIX} was\nprevented from healing!\p");
 static const u8 sText_NotDoneYet[] = _("This move effect is not done yet!\p");
 static const u8 sText_StickyWebUsed[] = _("A sticky web spreads out on the\nground around {B_DEF_TEAM2} team!");
-static const u8 sText_QuashSuccess[] = _("{B_ATK_NAME_WITH_PREFIX} irons out\nany distortions in time!");
+static const u8 sText_QuashSuccess[] = _("The timeline can no longer be\ndistorted!");
 static const u8 sText_PkmnBlewAwayToxicSpikes[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nToxic Spikes!");
 static const u8 sText_PkmnBlewAwayStickyWeb[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nSticky Web!");
 static const u8 sText_PkmnBlewAwayStealthRock[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nStealth Rock!");
@@ -853,6 +853,7 @@ static const u8 sText_FilledWithFear[] = _("{B_DEF_NAME_WITH_PREFIX} is filled\n
 static const u8 sText_PowerOfAlchemy[] = _("{B_ATK_NAME_WITH_PREFIX} transforms\n{B_STACK_2_NAME_WITH_PREFIX}'s item!");
 static const u8 sText_PowerOfAlchemySludge[] = _("The {B_LAST_ITEM} turned\ninto sludge…");
 static const u8 sText_PowerOfAlchemyGold[] = _("The {B_LAST_ITEM} turned\ninto gold!");
+static const u8 sText_QuashEnds[] = _("The normalization of time comes\nto an end!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1011,7 +1012,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_QuashEnds[] = _("The normalization of time comes\nto an end!");
+static const u8 sText_new[] = _("");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1808,6 +1809,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_POWER_OF_ALCHEMY_SLUDGE - 12] = sText_PowerOfAlchemySludge,
     [STRINGID_POWER_OF_ALCHEMY_GOLD - 12] = sText_PowerOfAlchemyGold,
     [STRINGID_QUASH_ENDS - 12] = sText_QuashEnds,
+    [STRINGID_NEW - 12] = sText_new,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -1892,6 +1894,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_RAPID_RESPONSE] = STRINGID_RAPID_RESPONSE,
     [B_MSG_SWITCHIN_SHOWDOWN_MODE] = STRINGID_SHOWDOWN_MODE,
     [B_MSG_SWITCHIN_PARASITIC_SPORES] = STRINGID_PARASITIC_SPORES,
+    [B_MSG_SWITCHIN_REJECTION] = STRINGID_QUASHSUCCESS,
 };
 
 const u16 gParadoxBoostSourceIds[] = 
