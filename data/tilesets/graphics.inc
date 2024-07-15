@@ -2409,3 +2409,23 @@ gTilesetPalettes_PowerPlant::
 	.align 2
 gTilesetTiles_PowerPlant::
 	.incbin "data/tilesets/secondary/powerplant/tiles.4bpp.lz"
+
+	.align 2
+gTilesetPalettes_CeruleanGym::
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/00.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/01.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/02.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/03.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/04.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/05.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/06.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/07.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/08.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/09.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/10.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/11.gbapal"
+	.incbin "data/tilesets/secondary/ceruleangym/palettes/12.gbapal"
+
+	.align 2
+gTilesetTiles_CeruleanGym::
+	.incbin "data/tilesets/secondary/ceruleangym/tiles.4bpp.lz"

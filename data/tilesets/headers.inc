@@ -1204,3 +1204,14 @@ gTileset_PowerPlant::
 	.4byte gMetatiles_PowerPlant
 	.4byte gMetatileAttributes_PowerPlant
 	.4byte NULL
+
+	.align 2
+gTileset_CeruleanGym::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_CeruleanGym
+	.4byte gTilesetPalettes_CeruleanGym
+	.4byte gMetatiles_CeruleanGym
+	.4byte gMetatileAttributes_CeruleanGym
+	.4byte NULL

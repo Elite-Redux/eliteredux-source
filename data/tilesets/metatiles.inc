@@ -801,3 +801,10 @@ gMetatiles_PowerPlant::
 	.align 1
 gMetatileAttributes_PowerPlant::
 	.incbin "data/tilesets/secondary/powerplant/metatile_attributes.bin"
+	.align 1
+gMetatiles_CeruleanGym::
+	.incbin "data/tilesets/secondary/ceruleangym/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_CeruleanGym::
+	.incbin "data/tilesets/secondary/ceruleangym/metatile_attributes.bin"

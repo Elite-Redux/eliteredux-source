@@ -1328,3 +1328,5 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/PokemonTower_7F/scripts.inc"
 
 	.include "data/maps/PowerPlant/scripts.inc"
+
+	.include "data/maps/CeruleanCity_Gym/scripts.inc"

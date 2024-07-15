@@ -211,7 +211,8 @@
     "PokemonTower_5F",
     "PokemonTower_6F",
     "PokemonTower_7F",
-    "PowerPlant"
+    "PowerPlant",
+    "CeruleanCity_Gym"
   ],
   "gMapGroup_IndoorOldale": [
     "OldaleTown_House1",

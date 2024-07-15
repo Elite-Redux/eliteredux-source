@@ -5750,6 +5750,16 @@
       "secondary_tileset": "gTileset_PowerPlant",
       "border_filepath": "data/layouts/PowerPlant/border.bin",
       "blockdata_filepath": "data/layouts/PowerPlant/map.bin"
+    },
+    {
+      "id": "LAYOUT_CERULEAN_CITY_GYM",
+      "name": "CeruleanCity_Gym_Layout",
+      "width": 17,
+      "height": 20,
+      "primary_tileset": "gTileset_Building_Frlg",
+      "secondary_tileset": "gTileset_Rustboro",
+      "border_filepath": "data/layouts/CeruleanCity_Gym/border.bin",
+      "blockdata_filepath": "data/layouts/CeruleanCity_Gym/map.bin"
     }
   ]
 }
