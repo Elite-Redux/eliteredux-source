@@ -4725,7 +4725,7 @@
       "id": "LAYOUT_MOSS_DEEP_CITY_GYM_REWORKED",
       "name": "MossDeepCity_GymReworked_Layout",
       "width": 14,
-      "height": 18,
+      "height": 16,
       "primary_tileset": "gTileset_Building",
       "secondary_tileset": "gTileset_MossdeepGym",
       "border_filepath": "data/layouts/MossDeepCity_GymReworked/border.bin",
