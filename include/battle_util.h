@@ -119,7 +119,7 @@ struct ParadoxBoost
 struct StatCopyState
 {
     bool8 inProgress:1;
-    u8 battler:2;
+    u8 battler:3;
     u8 stat:4;
     bool8 announced:1;
 };
