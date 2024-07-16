@@ -5950,6 +5950,15 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
         if (ItemId_GetPocket(item) == POCKET_BERRIES)
             return gNaturalGiftTable[ITEM_TO_BERRY(item)].type;
     }
+    
+    if (gBattleMoves[move].effect == EFFECT_FLING)
+    {
+        if (holdEffect == HOLD_EFFECT_GEMS)
+        {
+            return ItemId_GetHoldEffectParam(item);
+        }
+    }
+
     //Sand Song
     if(HAS_ABILITY(ABILITY_SAND_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
         return TYPE_GROUND;
@@ -6108,6 +6117,14 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
                 return TYPE_NORMAL;
         }
     }
+    
+    if (gBattleMoves[move].effect == EFFECT_FLING)
+    {
+        if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS)
+        {
+            return GetBattlerHoldEffectParam(battlerAtk);
+        }
+    }
 
     attackerAbility = GetBattlerAbility(battlerAtk);
     GET_MOVE_TYPE(move, moveType);
@@ -6258,7 +6275,12 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
 
     attackerAbility = GetBattlerAbility(battlerAtk);
     GET_MOVE_TYPE(move, moveType);
-    if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL)
+    if (gBattleMoves[move].effect == EFFECT_FLING
+        && GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_GEMS)
+    {
+        gBattleStruct->dynamicMoveType = GetBattlerHoldEffectParam(battlerAtk) | 0x80;
+    }
+    else if ((gFieldStatuses & STATUS_FIELD_ION_DELUGE && moveType == TYPE_NORMAL)
         || gStatuses4[battlerAtk] & STATUS4_ELECTRIFIED)
     {
         gBattleStruct->dynamicMoveType = 0x80 | TYPE_ELECTRIC;
