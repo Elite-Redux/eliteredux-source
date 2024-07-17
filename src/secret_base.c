@@ -1188,6 +1188,18 @@ const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
             else
                 return MauvilleCity_Gym_Text_AngeloDefeat;
         break;
+        case TAG_TEAM_EDUARDO_FLINT:
+            if(!isTrainerB)
+                return FortreeCity_Gym_Text_EdwardoDefeat;
+            else
+                return FortreeCity_Gym_Text_FlintDefeat;
+        break;
+        case TAG_TEAM_ASHLEY_JARED:
+            if(!isTrainerB)
+                return FortreeCity_Gym_Text_AshleyDefeat;
+            else
+                return FortreeCity_Gym_Text_JaredDefeat;
+        break;
     }
         
 }

@@ -16,17 +16,6 @@ FortreeCity_Gym_EventScript_InitRotatingGates:: @ 82165C4
 	special RotatingGate_InitPuzzleAndGraphics
 	end
 
-FortreeCity_Gym_EventScript_Winona:: @ 82165C8
-	//call FortreeCity_Gym_EventScript_CheckTrainers
-	//goto_if_set FLAG_DAILY_REMATCH_WINONA, FortreeCity_Gym_EventScript_AlreadyRematched
-	goto_if_set FLAG_SYS_GAME_CLEAR, FortreeCity_Gym_EventScript_WinonaRematch
-	setvar VAR_0x8004, 15
-	trainerbattle_single TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaIntro, FortreeCity_Gym_Text_WinonaDefeat, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC
-	goto_if_unset FLAG_RECEIVED_TM51, FortreeCity_Gym_EventScript_GiveRoost
-	msgbox FortreeCity_Gym_Text_WinonaPostBattle, MSGBOX_DEFAULT
-	release
-	end
-
 FortreeCity_Gym_EventScript_WinonaDefeated:: @ 82165FD
 	message FortreeCity_Gym_Text_ReceivedFeatherBadge
 	waitmessage
@@ -105,36 +94,6 @@ FortreeCity_Gym_EventScript_Exit::
 	releaseall
 	end
 
-FortreeCity_Gym_EventScript_Jared:: @ 82166A8
-	trainerbattle_single TRAINER_JARED, FortreeCity_Gym_Text_JaredIntro, FortreeCity_Gym_Text_JaredDefeat
-	msgbox FortreeCity_Gym_Text_JaredPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-FortreeCity_Gym_EventScript_Edwardo:: @ 82166BF
-	trainerbattle_single TRAINER_EDWARDO, FortreeCity_Gym_Text_EdwardoIntro, FortreeCity_Gym_Text_EdwardoDefeat
-	msgbox FortreeCity_Gym_Text_EdwardoPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-FortreeCity_Gym_EventScript_Flint:: @ 82166D6
-	trainerbattle_single TRAINER_FLINT, FortreeCity_Gym_Text_FlintIntro, FortreeCity_Gym_Text_FlintDefeat
-	msgbox FortreeCity_Gym_Text_FlintPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-FortreeCity_Gym_EventScript_Ashley:: @ 82166ED
-	trainerbattle_single TRAINER_ASHLEY, FortreeCity_Gym_Text_AshleyIntro, FortreeCity_Gym_Text_AshleyDefeat
-	msgbox FortreeCity_Gym_Text_AshleyPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-FortreeCity_Gym_EventScript_Humberto:: @ 8216704
-	trainerbattle_single TRAINER_HUMBERTO, FortreeCity_Gym_Text_HumbertoIntro, FortreeCity_Gym_Text_HumbertoDefeat
-	msgbox FortreeCity_Gym_Text_HumbertoPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-FortreeCity_Gym_EventScript_Darius:: @ 821671B
-	trainerbattle_single TRAINER_DARIUS, FortreeCity_Gym_Text_DariusIntro, FortreeCity_Gym_Text_DariusDefeat
-	msgbox FortreeCity_Gym_Text_DariusPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 FortreeCity_Gym_EventScript_GymGuide:: @ 8216732
 	lock
 	faceplayer
@@ -203,7 +162,7 @@ FortreeCity_Gym_Text_JaredIntro: @ 82168A2
 	.string "Behold the elegant battle style of\n"
 	.string "Bird Pokémon!$"
 
-FortreeCity_Gym_Text_JaredDefeat: @ 82168D3
+FortreeCity_Gym_Text_JaredDefeat:: @ 82168D3
 	.string "You…\n"
 	.string "You're strong…$"
 
@@ -213,13 +172,22 @@ FortreeCity_Gym_Text_JaredPostBattle: @ 82168E7
 	.string "Do you have the smarts to get to\n"
 	.string "our Leader?$"
 
+FortreeCity_Gym_Text_EdwardoAndFlintIntro: @ 821695A
+	.string "The lovers of Bird Pokémon aspire\n"
+	.string "to join this Gym.\p"
+	.string "As a member of the Fortree Gym,\n"
+	.string "I'm not allowed to lose!\p"
+	.string "There's no need for Winona, our Gym\n"
+	.string "Leader, to deal with you!\p"
+	.string "I'm plenty good enough for you!$"
+
 FortreeCity_Gym_Text_EdwardoIntro: @ 821695A
 	.string "The lovers of Bird Pokémon aspire\n"
 	.string "to join this Gym.\p"
 	.string "As a member of the Fortree Gym,\n"
 	.string "I'm not allowed to lose!$"
 
-FortreeCity_Gym_Text_EdwardoDefeat: @ 82169C7
+FortreeCity_Gym_Text_EdwardoDefeat:: @ 82169C7
 	.string "It was too much of a load for me\n"
 	.string "to bear…$"
 
@@ -234,7 +202,7 @@ FortreeCity_Gym_Text_FlintIntro: @ 8216A66
 	.string "Leader, to deal with you!\p"
 	.string "I'm plenty good enough for you!$"
 
-FortreeCity_Gym_Text_FlintDefeat: @ 8216AC4
+FortreeCity_Gym_Text_FlintDefeat:: @ 8216AC4
 	.string "Winona, I…\n"
 	.string "I lost!$"
 
@@ -243,11 +211,17 @@ FortreeCity_Gym_Text_FlintPostBattle: @ 8216AD7
 	.string "She's the ultimate Leader!\p"
 	.string "Blush…$"
 
+FortreeCity_Gym_Text_AshleyAndJaredIntro: @ 8216B1A
+	.string "Winona taught me personally!\n"
+	.string "You can't beat me easily!\p"
+	.string "Behold the elegant battle style of\n"
+	.string "Bird Pokémon!$"
+
 FortreeCity_Gym_Text_AshleyIntro: @ 8216B1A
 	.string "Winona taught me personally!\n"
 	.string "You can't beat me easily!$"
 
-FortreeCity_Gym_Text_AshleyDefeat: @ 8216B51
+FortreeCity_Gym_Text_AshleyDefeat:: @ 8216B51
 	.string "I was beaten…$"
 
 FortreeCity_Gym_Text_AshleyPostBattle: @ 8216B5F
@@ -387,20 +361,153 @@ script FortreeCity_Gym_EventScript_GiveRoost{
 	end
 }
 
-script FortreeCity_Gym_EventScript_CheckTrainers{
-	//Check that you have defeated every trainer in that Gym and that you don't have that badge yet
-	if((!defeated(TRAINER_JARED)    || 
-	    !defeated(TRAINER_FLINT)    || 
-	    !defeated(TRAINER_ASHLEY)   || 
-	    !defeated(TRAINER_EDWARDO)  || 
-		!defeated(TRAINER_HUMBERTO) || 
-		!defeated(TRAINER_DARIUS))){
-		msgbox(format("Winona: Sorry, but you need to defeat every trainer on this Gym before battling me."), MSGBOX_NPC)
-		release
-		end
+script FortreeCity_Gym_EventScript_Edwardo{
+	lock
+	faceplayer
+	if (defeated(TRAINER_EDWARDO)){
+		msgbox(FortreeCity_Gym_Text_EdwardoPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		goto(FortreeCity_Gym_EventScript_EdwardoAndFlint)
 	}
-	else{
-		//If you have beaten every trainer or you have the badge just return to the previous script
-		return
-	}
+	release
+	end
 }
+script FortreeCity_Gym_EventScript_Flint{
+	lock
+	faceplayer
+	if (defeated(TRAINER_FLINT)){
+		msgbox(FortreeCity_Gym_Text_FlintPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		goto(FortreeCity_Gym_EventScript_EdwardoAndFlint)
+	}
+	release
+	end
+}
+
+script FortreeCity_Gym_EventScript_EdwardoAndFlint{
+    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
+    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
+    msgbox(format("Two wings for a battle?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT)){
+        starttagbattle(TRAINER_EDWARDO, TRAINER_FLINT, TAG_TEAM_EDUARDO_FLINT, 0, FortreeCity_Gym_Text_EdwardoAndFlintIntro)
+    }
+    release
+    end
+}
+
+
+script FortreeCity_Gym_EventScript_Ashley{
+	lock
+	faceplayer
+	if (defeated(TRAINER_ASHLEY)){
+		msgbox(FortreeCity_Gym_Text_AshleyPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+	    goto(FortreeCity_Gym_EventScript_AshleyAndJared)
+	}
+	release
+	end
+}
+script FortreeCity_Gym_EventScript_Jared{
+	lock
+	faceplayer
+	if (defeated(TRAINER_JARED)){
+		msgbox(FortreeCity_Gym_Text_JaredPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+	    goto(FortreeCity_Gym_EventScript_AshleyAndJared)
+
+	}
+	release
+	end
+}
+script FortreeCity_Gym_EventScript_AshleyAndJared{
+    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
+    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
+    msgbox(format("Battling two birds with one fight?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT)){
+        starttagbattle(TRAINER_ASHLEY, TRAINER_JARED, TAG_TEAM_ASHLEY_JARED, 0, FortreeCity_Gym_Text_AshleyAndJaredIntro)
+    }
+    release
+    end
+}
+
+script FortreeCity_Gym_EventScript_Humberto{
+	lock
+	faceplayer
+	if (defeated(TRAINER_HUMBERTO)){
+		msgbox(FortreeCity_Gym_Text_HumbertoPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_HUMBERTO, FortreeCity_Gym_Text_HumbertoIntro , FortreeCity_Gym_Text_HumbertoDefeat)
+		}
+	}
+	release
+	end
+}
+script FortreeCity_Gym_EventScript_Darius{
+	lock
+	faceplayer
+	if (defeated(TRAINER_DARIUS)){
+		msgbox(FortreeCity_Gym_Text_DariusPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_DARIUS, FortreeCity_Gym_Text_DariusIntro , FortreeCity_Gym_Text_DariusDefeat)
+		}
+	}
+	release
+	end
+}
+
+text FortreeCity_Gym_Text_WinonaIntro0{
+    format("When I see a bird that goes to high speed, I believe it would be bored by some breeze only. Breathe in now and let's swirl.")
+}
+
+text FortreeCity_Gym_Text_WinonaIntro1{
+    format("You've experimented some wind, scorching, chilling or blasting. But I'm sure you'd be interrested in some more than mere gusts.")
+}
+
+text FortreeCity_Gym_Text_WinonaIntroAll{
+    format("Flying in the sense of the zephyr brings a bird far away. It's time to lift up.")
+}
+
+script FortreeCity_Gym_EventScript_CheckTrainers{
+    if (flag(FLAG_BADGE06_GET)) {
+        msgbox(FortreeCity_Gym_Text_WinonaPostBattle, MSGBOX_DEFAULT)
+        release
+        end
+    }
+    // set battle event flags
+    if (!defeated(TRAINER_JARED)){ //TRAINER_ASHLEY
+    
+    }
+    if (!defeated(TRAINER_FLINT)){ // TRAINER_EDWARDO
+    
+    }
+    if (!defeated(TRAINER_HUMBERTO)){
+    
+    }
+    if (!defeated(TRAINER_DARIUS)){
+    
+    }
+    return
+}
+
+script FortreeCity_Gym_EventScript_Winona{
+    goto_if_set(FLAG_SYS_GAME_CLEAR, FortreeCity_Gym_EventScript_WinonaRematch)
+    call(FortreeCity_Gym_EventScript_CheckTrainers)
+    setvar(VAR_0x8004, 15)
+    adddefeatedcountmax7(1, TRAINER_JARED, TRAINER_FLINT, TRAINER_HUMBERTO, TRAINER_DARIUS)
+    switch (var(VAR_RESULT)) {
+        case 0:
+            trainerbattle_single(TRAINER_WINONA_1 FortreeCity_Gym_Text_WinonaIntro0, FortreeCity_Gym_Text_WinonaDefeat, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)
+        break
+        case 4:
+            trainerbattle_single(TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaIntroAll, FortreeCity_Gym_Text_WinonaDefeat, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)
+        break
+        default:
+            trainerbattle_single(TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaIntro1, FortreeCity_Gym_Text_WinonaDefeat, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)
+    }
+    goto_if_unset(FLAG_RECEIVED_TM51, FortreeCity_Gym_EventScript_GiveRoost)
+}
+

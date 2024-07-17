@@ -381,6 +381,11 @@ extern const u8 DewfordTown_Gym_Text_LilithDefeat[];
 extern const u8 DewfordTown_Gym_Text_BrendenDefeat[];
 extern const u8 MauvilleCity_Gym_Text_ShawnDefeat[];
 extern const u8 MauvilleCity_Gym_Text_AngeloDefeat[];
+extern const u8 FortreeCity_Gym_Text_EdwardoDefeat[];
+extern const u8 FortreeCity_Gym_Text_FlintDefeat[];
+extern const u8 FortreeCity_Gym_Text_AshleyDefeat[];
+extern const u8 FortreeCity_Gym_Text_JaredDefeat[];
+
 
 //field effects
 extern const u8 EventScript_UseStrength[];
