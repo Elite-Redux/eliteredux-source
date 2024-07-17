@@ -397,6 +397,9 @@ extern const u8 MossdeepCity_Gym_Text_MaceyDefeat[];
 extern const u8 MossdeepCity_Gym_Text_CliffordDefeat[];
 extern const u8 MossdeepCity_Gym_Text_NateDefeat[];
 extern const u8 MossdeepCity_Gym_Text_VirgilDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_BridgetDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_CrissyDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_BethanyDefeat[];
 
 //field effects
 extern const u8 EventScript_UseStrength[];

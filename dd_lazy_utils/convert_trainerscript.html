@@ -18,8 +18,7 @@
 	<hr>
 	<textarea class="widetextarea" name="" id="quick_in"></textarea>
 	<select name="" id="quick_in_sel">
-		<option value="0">externText</option>
-		<option value="1">tagBattle</option>
+		<option value="0">tagBattle</option>
 	</select>
 	<textarea class="widetextarea" name="" id="quick_out"></textarea>
 </body>
@@ -27,7 +26,6 @@
     function convert(text){
 	data = getTrainerDataFromScript(text.split('\n').map(x => x.trim()).filter(x => x))
 	trainerText = document.getElementById('textarea_trainertext').value.trim() || `{COLOR GREEN}hint{COLOR DARK_GRAY}.`
-	console.log(trainerText)
 	return `script ${data.scriptName}{
 	lock
 	faceplayer
@@ -134,13 +132,27 @@ function quickTMergeTagBattle(val){
 			}
 		}
 	}
+	const TAG_TEAM = `TAG_TEAM_${data[0].tname.toUpperCase()}_${data[1].tname.toUpperCase()}`
+	document.getElementById('textarea_out').value = `#define ${TAG_TEAM}${" ".repeat(41 - TAG_TEAM.length )}
+case ${TAG_TEAM}:
+        	if(!isTrainerB)
+		        return ${data[0].defeat};
+	        else
+		        return ${data[1].defeat};
+        break;	
+`
+	data.forEach(x => {
+		const outVal = `extern const u8 ${x.defeat}[];`
+		if (document.getElementById('textarea_out').value) document.getElementById('textarea_out').value += '\n'
+		document.getElementById('textarea_out').value += outVal
+	})
 	const template = `script ${data[0].sname}EventScript_${data[0].tname}And${data[1].tname}{
     msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
     msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
     msgbox(format("Generic battle askance"), MSGBOX_YESNO)
     if (var(VAR_RESULT)){
-        starttagbattle(${data[0].trainer}, ${data[1].trainer}, TAG_TEAM_${data[0].tname.toUpperCase()}_${data[1].tname.toUpperCase()},\
-0, ${data[0].sname}Text_${data[0].tname}And${data[1].tname}Intro)
+        starttagbattle(${data[0].trainer}, ${data[1].trainer}, ${TAG_TEAM},\
+ 0, ${data[0].sname}Text_${data[0].tname}And${data[1].tname}Intro)
     }
     release
     end
@@ -175,7 +187,6 @@ document.getElementById('quick_out').value = template
 
 function quickTransform(){
 	const scriptTable = [
-		quickTExternText,
 		quickTMergeTagBattle
 	]
 	scriptTable[document.getElementById('quick_in_sel').value](document.getElementById('quick_in').value)

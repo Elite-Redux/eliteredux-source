@@ -496,3 +496,91 @@ script SootopolisCity_Gym_EventScript_CheckTrainers{
 		return
 	}
 }
+
+// script SootopolisCity_Gym_EventScript_
+
+script SootopolisCity_Gym_EventScript_PleaseWalkOnTile{
+    msgbox(format("If you're seeking to battle us, trainer, Please walk on a this diamond shaped tile."), MSGBOX_DEFAULT)
+}
+
+movement SootopolisCity_Gym_Movement_PlayerWalksAway{
+    walk_up
+}
+movement SootopolisCity_Gym_Movement_BottomBattlePlayerWalksIn{
+    walk_down * 2
+}
+text MultiChoice_BottomBattle{
+    "Nevermind$"
+    "1 v 1 times 3$"
+    "miss Bridget then 1 v 2$"
+    "miss Bethany then 1 v 2$"
+    "miss Crissy  then 1 v 2$"
+	"$"
+}
+
+script SootopolisCity_Gym_EventScript_TriggerBottomBattle{
+    if (defeated(TRAINER_BRIDGET)){
+		setvar(VAR_TEMP_0, 1)
+        end
+    }
+    lock
+    msgbox(format("Are you ready to battle us three?"), MSGBOX_YESNO)
+    if (!var(VAR_RESULT)){
+        goto(SootopolisCity_Gym_EventScript_PlayerWalksAway)
+    }
+    msgbox(format("We're gratiously presenting you a choice of battles, your choice?"), MSGBOX_DEFAULT)
+    multichoice2(0, 0, MultiChoice_BottomBattle)
+    switch(var(VAR_RESULT)){
+        case 0:
+            goto(SootopolisCity_Gym_EventScript_PlayerWalksAway)
+        break
+        case 1:
+            trainerbattle_no_intro(TRAINER_BRIDGET, SootopolisCity_Gym_B1F_Text_BridgetDefeat)
+            trainerbattle_no_intro(TRAINER_CRISSY, SootopolisCity_Gym_B1F_Text_CrissyDefeat)
+            trainerbattle_no_intro(TRAINER_BETHANY, SootopolisCity_Gym_B1F_Text_BethanyDefeat)
+        break
+        case 2:
+            trainerbattle_no_intro(TRAINER_BRIDGET, SootopolisCity_Gym_B1F_Text_BridgetDefeat)
+			starttagbattle(TRAINER_CRISSY, TRAINER_BETHANY, TAG_TEAM_CRISSY_BETHANY, 0)
+        break
+        case 3:
+            trainerbattle_no_intro(TRAINER_CRISSY, SootopolisCity_Gym_B1F_Text_CrissyDefeat)
+			starttagbattle(TRAINER_BRIDGET, TRAINER_BETHANY, TAG_TEAM_BRIDGET_BETHANY, 0)
+        break
+        case 4:
+            trainerbattle_no_intro(TRAINER_BETHANY, SootopolisCity_Gym_B1F_Text_BethanyDefeat)
+            starttagbattle(TRAINER_BRIDGET, TRAINER_CRISSY, TAG_TEAM_BRIDGET_CRISSY,0)
+        break
+    }
+    release
+    end
+}
+
+script SootopolisCity_Gym_EventScript_PlayerWalksAway{
+    applymovement(OBJ_EVENT_ID_PLAYER, SootopolisCity_Gym_Movement_PlayerWalksAway)
+	waitmovement(0)
+    release
+    end
+}
+
+script SootopolisCity_Gym_EventScript_TriggerMiddleBattle{
+    lock
+	msgbox(format("Are you ready to battle us four?"), MSGBOX_YESNO)
+    if (!var(VAR_RESULT)){
+        goto(SootopolisCity_Gym_EventScript_PlayerWalksAway)
+    }
+    release
+    end
+}
+
+script SootopolisCity_Gym_EventScript_TriggerTopBattle{
+    lock
+    msgbox(format("Are you ready to battle us three?"), MSGBOX_YESNO)
+    if (!var(VAR_RESULT)){
+        applymovement(OBJ_EVENT_ID_PLAYER, SootopolisCity_Gym_Movement_PlayerWalksAway)
+        release
+        end
+    }
+}
+
+

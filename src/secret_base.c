@@ -1236,6 +1236,24 @@ const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
             else
                 return MossdeepCity_Gym_Text_VirgilDefeat;
         break;
+        case TAG_TEAM_BRIDGET_CRISSY:
+        if(!isTrainerB)
+            return SootopolisCity_Gym_B1F_Text_BridgetDefeat;
+        else
+            return SootopolisCity_Gym_B1F_Text_CrissyDefeat;
+        break;
+        case TAG_TEAM_CRISSY_BETHANY:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_CrissyDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_BethanyDefeat;
+        break;	
+        case TAG_TEAM_BRIDGET_BETHANY:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_BridgetDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_BethanyDefeat;
+        break;
     }
         
 }

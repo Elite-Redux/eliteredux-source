@@ -2,14 +2,20 @@ raw `
 SootopolisCity_Gym_B1F_MapScripts:: @ 8225C8A
 	.byte 0
 
-SootopolisCity_Gym_B1F_EventScript_Andrea:: @ 8225C8B
-	trainerbattle_single TRAINER_ANDREA, SootopolisCity_Gym_B1F_Text_AndreaIntro, SootopolisCity_Gym_B1F_Text_AndreaDefeat
-	msgbox SootopolisCity_Gym_B1F_Text_AndreaPostBattle, MSGBOX_AUTOCLOSE
+
+SootopolisCity_Gym_B1F_EventScript_Bridget:: @ 8225CE7
+	trainerbattle_single TRAINER_BRIDGET, SootopolisCity_Gym_B1F_Text_BridgetIntro, SootopolisCity_Gym_B1F_Text_BridgetDefeat
+	msgbox SootopolisCity_Gym_B1F_Text_BridgetPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 SootopolisCity_Gym_B1F_EventScript_Crissy:: @ 8225CA2
 	trainerbattle_single TRAINER_CRISSY, SootopolisCity_Gym_B1F_Text_CrissyIntro, SootopolisCity_Gym_B1F_Text_CrissyDefeat
 	msgbox SootopolisCity_Gym_B1F_Text_CrissyPostBattle, MSGBOX_AUTOCLOSE
+	end
+
+SootopolisCity_Gym_B1F_EventScript_Bethany:: @ 8225D2C
+	trainerbattle_single TRAINER_BETHANY, SootopolisCity_Gym_B1F_Text_BethanyIntro, SootopolisCity_Gym_B1F_Text_BethanyDefeat
+	msgbox SootopolisCity_Gym_B1F_Text_BethanyPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 SootopolisCity_Gym_B1F_EventScript_Brianna:: @ 8225CB9
@@ -22,9 +28,9 @@ SootopolisCity_Gym_B1F_EventScript_Connie:: @ 8225CD0
 	msgbox SootopolisCity_Gym_B1F_Text_ConniePostBattle, MSGBOX_AUTOCLOSE
 	end
 
-SootopolisCity_Gym_B1F_EventScript_Bridget:: @ 8225CE7
-	trainerbattle_single TRAINER_BRIDGET, SootopolisCity_Gym_B1F_Text_BridgetIntro, SootopolisCity_Gym_B1F_Text_BridgetDefeat
-	msgbox SootopolisCity_Gym_B1F_Text_BridgetPostBattle, MSGBOX_AUTOCLOSE
+SootopolisCity_Gym_B1F_EventScript_Andrea:: @ 8225C8B
+	trainerbattle_single TRAINER_ANDREA, SootopolisCity_Gym_B1F_Text_AndreaIntro, SootopolisCity_Gym_B1F_Text_AndreaDefeat
+	msgbox SootopolisCity_Gym_B1F_Text_AndreaPostBattle, MSGBOX_AUTOCLOSE
 	end
 
 SootopolisCity_Gym_B1F_EventScript_Olivia:: @ 8225CFE
@@ -37,10 +43,7 @@ SootopolisCity_Gym_B1F_EventScript_Tiffany:: @ 8225D15
 	msgbox SootopolisCity_Gym_B1F_Text_TiffanyPostBattle, MSGBOX_AUTOCLOSE
 	end
 
-SootopolisCity_Gym_B1F_EventScript_Bethany:: @ 8225D2C
-	trainerbattle_single TRAINER_BETHANY, SootopolisCity_Gym_B1F_Text_BethanyIntro, SootopolisCity_Gym_B1F_Text_BethanyDefeat
-	msgbox SootopolisCity_Gym_B1F_Text_BethanyPostBattle, MSGBOX_AUTOCLOSE
-	end
+
 
 SootopolisCity_Gym_B1F_EventScript_Annika:: @ 8225D43
 	trainerbattle_single TRAINER_ANNIKA, SootopolisCity_Gym_B1F_Text_AnnikaIntro, SootopolisCity_Gym_B1F_Text_AnnikaDefeat
@@ -56,7 +59,7 @@ SootopolisCity_Gym_B1F_Text_AndreaIntro: @ 8225D71
 	.string "I'll show you the sublime techniques\n"
 	.string "I learned from our Leader Juan!$"
 
-SootopolisCity_Gym_B1F_Text_AndreaDefeat: @ 8225DB6
+SootopolisCity_Gym_B1F_Text_AndreaDefeat:: @ 8225DB6
 	.string "Please forgive me, Juan…$"
 
 SootopolisCity_Gym_B1F_Text_AndreaPostBattle: @ 8225DCF
@@ -68,7 +71,7 @@ SootopolisCity_Gym_B1F_Text_CrissyIntro: @ 8225E04
 	.string "get to see Juan.\p"
 	.string "Not if you lose to me, you won't!$"
 
-SootopolisCity_Gym_B1F_Text_CrissyDefeat: @ 8225E60
+SootopolisCity_Gym_B1F_Text_CrissyDefeat:: @ 8225E60
 	.string "You're strong!\n"
 	.string "I was fooled by your cute looks!$"
 
@@ -82,7 +85,7 @@ SootopolisCity_Gym_B1F_Text_DaphneIntro: @ 8225ED6
 	.string "The very beauty of it compelled me to\n"
 	.string "become a Trainer.$"
 
-SootopolisCity_Gym_B1F_Text_DaphneDefeat: @ 8225F35
+SootopolisCity_Gym_B1F_Text_DaphneDefeat:: @ 8225F35
 	.string "You battled with more beauty than\n"
 	.string "I could muster…$"
 
@@ -96,7 +99,7 @@ SootopolisCity_Gym_B1F_Text_ConnieIntro: @ 8225FBE
 	.string "I should teach you how harsh battles\n"
 	.string "can be.$"
 
-SootopolisCity_Gym_B1F_Text_ConnieDefeat: @ 8225FEB
+SootopolisCity_Gym_B1F_Text_ConnieDefeat:: @ 8225FEB
 	.string "Oh.\n"
 	.string "You're strong.$"
 
@@ -110,7 +113,7 @@ SootopolisCity_Gym_B1F_Text_BridgetIntro: @ 8226061
 	.string "in the Hoenn region…\p"
 	.string "That's the Sootopolis Gym.$"
 
-SootopolisCity_Gym_B1F_Text_BridgetDefeat: @ 82260B6
+SootopolisCity_Gym_B1F_Text_BridgetDefeat:: @ 82260B6
 	.string "What a high level you are!$"
 
 SootopolisCity_Gym_B1F_Text_BridgetPostBattle: @ 82260D1
@@ -124,7 +127,7 @@ SootopolisCity_Gym_B1F_Text_OliviaIntro: @ 8226164
 	.string "JUAN.\p"
 	.string "Don't think I'm a pushover.$"
 
-SootopolisCity_Gym_B1F_Text_OliviaDefeat: @ 82261A7
+SootopolisCity_Gym_B1F_Text_OliviaDefeat:: @ 82261A7
 	.string "I was beaten…$"
 
 SootopolisCity_Gym_B1F_Text_OliviaPostBattle: @ 82261B5
@@ -137,7 +140,7 @@ SootopolisCity_Gym_B1F_Text_TiffanyIntro: @ 82261F7
 	.string "A Trainer putting on that performance\n"
 	.string "would be elegantly beautiful!$"
 
-SootopolisCity_Gym_B1F_Text_TiffanyDefeat: @ 8226274
+SootopolisCity_Gym_B1F_Text_TiffanyDefeat:: @ 8226274
 	.string "Well, excuse me?!$"
 
 SootopolisCity_Gym_B1F_Text_TiffanyPostBattle: @ 8226286
@@ -149,7 +152,7 @@ SootopolisCity_Gym_B1F_Text_BethanyIntro: @ 82262F3
 	.string "When I'm with my Pokémon, the time\n"
 	.string "flies by before you can say, “Oops!”$"
 
-SootopolisCity_Gym_B1F_Text_BethanyDefeat: @ 822633B
+SootopolisCity_Gym_B1F_Text_BethanyDefeat:: @ 822633B
 	.string "Oops!$"
 
 SootopolisCity_Gym_B1F_Text_BethanyPostBattle: @ 8226341
@@ -160,7 +163,7 @@ SootopolisCity_Gym_B1F_Text_AnnikaIntro: @ 8226388
 	.string "I can battle with really rare Pokémon\n"
 	.string "if you'd like.$"
 
-SootopolisCity_Gym_B1F_Text_AnnikaDefeat: @ 82263BD
+SootopolisCity_Gym_B1F_Text_AnnikaDefeat:: @ 82263BD
 	.string "Oh, there now! Did you have a good look\n"
 	.string "at my Pokémon?$"
 
@@ -174,7 +177,7 @@ SootopolisCity_Gym_B1F_Text_BriannaIntro: @ 822646E
 	.string "Giggle…\n"
 	.string "Your grim look is so charming.$"
 
-SootopolisCity_Gym_B1F_Text_BriannaDefeat: @ 8226495
+SootopolisCity_Gym_B1F_Text_BriannaDefeat:: @ 8226495
 	.string "Oh, dear.\n"
 	.string "I went much too easy on you.$"
 
