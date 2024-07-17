@@ -1200,6 +1200,42 @@ const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
             else
                 return FortreeCity_Gym_Text_JaredDefeat;
         break;
+        case TAG_TEAM_SAMANTHA_BLAKE:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_SamanthaDefeat;
+            else
+                return MossdeepCity_Gym_Text_BlakeDefeat;
+        break;
+        case TAG_TEAM_MAURA_PRESTON:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_MauraDefeat;
+            else
+                return MossdeepCity_Gym_Text_PrestonDefeat;
+        break;
+        case TAG_TEAM_SYLVIA_HANNAH:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_SylviaDefeat;
+            else
+                return MossdeepCity_Gym_Text_HannahDefeat;
+        break;
+        case TAG_TEAM_KATHLEEN_NICHOLAS:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_KathleenDefeat;
+            else
+                return MossdeepCity_Gym_Text_NicholasDefeat;
+        break;
+        case TAG_TEAM_MACEY_CLIFFORD:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_MaceyDefeat;
+            else
+                return MossdeepCity_Gym_Text_CliffordDefeat;
+        break;
+        case TAG_TEAM_NATE_VIRGIL:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_NateDefeat;
+            else
+                return MossdeepCity_Gym_Text_VirgilDefeat;
+        break;
     }
         
 }

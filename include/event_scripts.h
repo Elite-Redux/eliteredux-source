@@ -385,7 +385,18 @@ extern const u8 FortreeCity_Gym_Text_EdwardoDefeat[];
 extern const u8 FortreeCity_Gym_Text_FlintDefeat[];
 extern const u8 FortreeCity_Gym_Text_AshleyDefeat[];
 extern const u8 FortreeCity_Gym_Text_JaredDefeat[];
-
+extern const u8 MossdeepCity_Gym_Text_SamanthaDefeat[];
+extern const u8 MossdeepCity_Gym_Text_BlakeDefeat[];
+extern const u8 MossdeepCity_Gym_Text_MauraDefeat[];
+extern const u8 MossdeepCity_Gym_Text_PrestonDefeat[];
+extern const u8 MossdeepCity_Gym_Text_SylviaDefeat[];
+extern const u8 MossdeepCity_Gym_Text_HannahDefeat[];
+extern const u8 MossdeepCity_Gym_Text_KathleenDefeat[];
+extern const u8 MossdeepCity_Gym_Text_NicholasDefeat[];
+extern const u8 MossdeepCity_Gym_Text_MaceyDefeat[];
+extern const u8 MossdeepCity_Gym_Text_CliffordDefeat[];
+extern const u8 MossdeepCity_Gym_Text_NateDefeat[];
+extern const u8 MossdeepCity_Gym_Text_VirgilDefeat[];
 
 //field effects
 extern const u8 EventScript_UseStrength[];
