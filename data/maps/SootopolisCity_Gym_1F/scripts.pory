@@ -506,12 +506,18 @@ script SootopolisCity_Gym_EventScript_PleaseWalkOnTile{
 movement SootopolisCity_Gym_Movement_PlayerWalksAway{
     walk_up
 }
+script SootopolisCity_Gym_EventScript_PlayerWalksAway{
+    applymovement(OBJ_EVENT_ID_PLAYER, SootopolisCity_Gym_Movement_PlayerWalksAway)
+	waitmovement(0)
+    release
+    end
+}
 movement SootopolisCity_Gym_Movement_BottomBattlePlayerWalksIn{
     walk_down * 2
 }
 text MultiChoice_BottomBattle{
     "Nevermind$"
-    "1 v 1 times 3$"
+    "1 v 1 times 3 but no heal$"
     "miss Bridget then 1 v 2$"
     "miss Bethany then 1 v 2$"
     "miss Crissy  then 1 v 2$"
@@ -519,9 +525,9 @@ text MultiChoice_BottomBattle{
 }
 
 script SootopolisCity_Gym_EventScript_TriggerBottomBattle{
-    if (defeated(TRAINER_BRIDGET)){
+    if (defeated(TRAINER_BRIDGET) && defeated(TRAINER_BETHANY) && defeated(TRAINER_CRISSY)){
 		setvar(VAR_TEMP_0, 1)
-        end
+        //end
     }
     lock
     msgbox(format("Are you ready to battle us three?"), MSGBOX_YESNO)
@@ -536,39 +542,48 @@ script SootopolisCity_Gym_EventScript_TriggerBottomBattle{
         break
         case 1:
             trainerbattle_no_intro(TRAINER_BRIDGET, SootopolisCity_Gym_B1F_Text_BridgetDefeat)
+			setflag(FLAG_SYS_DISABLE_AUTOHEAL)
             trainerbattle_no_intro(TRAINER_CRISSY, SootopolisCity_Gym_B1F_Text_CrissyDefeat)
             trainerbattle_no_intro(TRAINER_BETHANY, SootopolisCity_Gym_B1F_Text_BethanyDefeat)
+			clearflag(FLAG_SYS_DISABLE_AUTOHEAL)
         break
         case 2:
             trainerbattle_no_intro(TRAINER_BRIDGET, SootopolisCity_Gym_B1F_Text_BridgetDefeat)
 			starttagbattle(TRAINER_CRISSY, TRAINER_BETHANY, TAG_TEAM_CRISSY_BETHANY, 0)
         break
         case 3:
-            trainerbattle_no_intro(TRAINER_CRISSY, SootopolisCity_Gym_B1F_Text_CrissyDefeat)
-			starttagbattle(TRAINER_BRIDGET, TRAINER_BETHANY, TAG_TEAM_BRIDGET_BETHANY, 0)
+			trainerbattle_no_intro(TRAINER_BETHANY, SootopolisCity_Gym_B1F_Text_BethanyDefeat)
+            starttagbattle(TRAINER_BRIDGET, TRAINER_CRISSY, TAG_TEAM_BRIDGET_CRISSY,0)
         break
         case 4:
-            trainerbattle_no_intro(TRAINER_BETHANY, SootopolisCity_Gym_B1F_Text_BethanyDefeat)
-            starttagbattle(TRAINER_BRIDGET, TRAINER_CRISSY, TAG_TEAM_BRIDGET_CRISSY,0)
+			trainerbattle_no_intro(TRAINER_CRISSY, SootopolisCity_Gym_B1F_Text_CrissyDefeat)
+			starttagbattle(TRAINER_BRIDGET, TRAINER_BETHANY, TAG_TEAM_BRIDGET_BETHANY, 0)
         break
     }
     release
     end
 }
 
-script SootopolisCity_Gym_EventScript_PlayerWalksAway{
-    applymovement(OBJ_EVENT_ID_PLAYER, SootopolisCity_Gym_Movement_PlayerWalksAway)
-	waitmovement(0)
-    release
-    end
+text MultiChoice_MiddleBattle{
+    "Nevermind$"
+    "1 v 1 times 4$"
+    "miss Daphnee and miss Annika$"
+	"miss Daphnee and miss Andrea$"
+    "miss Connie and miss Andrea$"
+	"$"
 }
-
 script SootopolisCity_Gym_EventScript_TriggerMiddleBattle{
     lock
+	if (defeated(TRAINER_DAPHNE) && defeated(TRAINER_ANNIKA) && defeated(TRAINER_CONNIE) && defeated(TRAINER_ANDREA)){
+		setvar(VAR_TEMP_1, 1)
+        end
+    }
 	msgbox(format("Are you ready to battle us four?"), MSGBOX_YESNO)
     if (!var(VAR_RESULT)){
         goto(SootopolisCity_Gym_EventScript_PlayerWalksAway)
     }
+	msgbox(format("By respect of our values, we're giving you some options."), MSGBOX_DEFAULT)
+    multichoice2(0, 0, MultiChoice_BottomBattle)
     release
     end
 }
