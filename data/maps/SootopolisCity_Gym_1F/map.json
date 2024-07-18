@@ -24,7 +24,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "SootopolisCity_Gym_1F_EventScript_Juan",
+      "script": "",
       "flag": "0"
     },
     {
@@ -50,7 +50,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "SootopolisCity_Gym_EventScript_PleaseWalkOnTile",
+      "script": "SootopolisCity_Gym_B1F_EventScript_Andrea",
       "flag": "0"
     },
     {
@@ -63,7 +63,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "1",
-      "script": "SootopolisCity_Gym_EventScript_PleaseWalkOnTile",
+      "script": "SootopolisCity_Gym_B1F_EventScript_Connie",
       "flag": "0"
     },
     {
@@ -76,7 +76,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "2",
-      "script": "SootopolisCity_Gym_EventScript_PleaseWalkOnTile",
+      "script": "SootopolisCity_Gym_B1F_EventScript_Daphne",
       "flag": "0"
     },
     {
@@ -236,7 +236,7 @@
       "y": 24,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": ""
+      "script": "SootopolisCity_Gym_1F_EventScript_LeftGymStatue"
     },
     {
       "type": "sign",

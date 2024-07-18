@@ -159,7 +159,7 @@
       "y": 16,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": ""
+      "script": "FortreeCity_Gym_EventScript_RightGymStatue"
     },
     {
       "type": "sign",
@@ -167,7 +167,7 @@
       "y": 16,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "NULL"
+      "script": "FortreeCity_Gym_EventScript_LeftGymStatue"
     }
   ]
 }
