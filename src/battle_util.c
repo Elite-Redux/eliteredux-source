@@ -6670,11 +6670,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         {
             gBattlerAttacker = battler;
 
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_TRUANT))
-            {
-                gVolatileStructs[gBattlerAttacker].truantCounter ^= 1;
-            }
-
             if (BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT)
                 || BATTLER_HAS_ABILITY(battler, ABILITY_FORECAST)
                 || (BATTLER_HAS_ABILITY(battler, ABILITY_SCHOOLING) && gBattleMons[battler].level < 20))
