@@ -15,8 +15,8 @@ SootopolisCity_Gym_1F_OnResume: @ 8224E67
 	end
 
 SootopolisCity_Gym_1F_OnLoad: @ 8224E6A
-	call SootopolisCity_Gym_1F_EventScript_CheckSetStairMetatiles
-	special SetSootopolisGymCrackedIceMetatiles
+	@ call SootopolisCity_Gym_1F_EventScript_CheckSetStairMetatiles
+	@ special SetSootopolisGymCrackedIceMetatiles
 	end
 
 SootopolisCity_Gym_1F_EventScript_CheckSetStairMetatiles:: @ 8224E73
@@ -480,11 +480,11 @@ script SootopolisCity_Gym_EventScript_CheckTrainers{
 		 !defeated(TRAINER_ANNIKA)  || 
 		 !defeated(TRAINER_DAPHNE)  || 
 		 !defeated(TRAINER_BRIDGET) ||
-		 !defeated(TRAINER_TIFFANY) //||
-	     //!defeated(TRAINER_CRISSY)  || 
-		 //!defeated(TRAINER_BRIANNA) || 
-	     //!defeated(TRAINER_OLIVIA)  || 
-		 //!defeated(TRAINER_BETHANY) || 
+		 !defeated(TRAINER_TIFFANY) ||
+	     !defeated(TRAINER_CRISSY)  || 
+		 !defeated(TRAINER_BRIANNA) || 
+	     !defeated(TRAINER_OLIVIA)  || 
+		 !defeated(TRAINER_BETHANY)
 		 ) &&
 		 !flag(FLAG_BADGE08_GET))){
 		msgbox(format("Juan: Sorry, but you need to defeat every trainer on this Gym before battling us."), MSGBOX_NPC)
@@ -496,8 +496,6 @@ script SootopolisCity_Gym_EventScript_CheckTrainers{
 		return
 	}
 }
-
-// script SootopolisCity_Gym_EventScript_
 
 script SootopolisCity_Gym_EventScript_PleaseWalkOnTile{
     msgbox(format("If you're seeking to battle us, trainer, Please walk on a this diamond shaped tile."), MSGBOX_DEFAULT)
@@ -563,39 +561,112 @@ script SootopolisCity_Gym_EventScript_TriggerBottomBattle{
     release
     end
 }
-
+script SootopolisCity_Gym_EventScript_AskForHealMiddleBattle{ // Unused
+	if (var(VAR_TEMP_A) == 0){
+		msgbox(format("Do you want to use your only heal?"), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			playfanfare(MUS_HEAL)
+			waitfanfare
+			special(HealPlayerParty)
+			setvar(VAR_TEMP_A, 1)
+		}
+	}
+}
 text MultiChoice_MiddleBattle{
     "Nevermind$"
-    "1 v 1 times 4$"
-    "miss Daphnee and miss Annika$"
-	"miss Daphnee and miss Andrea$"
-    "miss Connie and miss Andrea$"
+    "1v1 3 times no heal$"
+    "miss Daphnee and 2v1$"
+	"miss Connie  and 2v1$"
+	"miss Andrea  and 2v1$$"
 	"$"
 }
 script SootopolisCity_Gym_EventScript_TriggerMiddleBattle{
     lock
-	if (defeated(TRAINER_DAPHNE) && defeated(TRAINER_ANNIKA) && defeated(TRAINER_CONNIE) && defeated(TRAINER_ANDREA)){
+	if (defeated(TRAINER_DAPHNE) && defeated(TRAINER_CONNIE) && defeated(TRAINER_ANDREA)){
 		setvar(VAR_TEMP_1, 1)
         end
     }
-	msgbox(format("Are you ready to battle us four?"), MSGBOX_YESNO)
+	msgbox(format("Are you ready to battle us three?"), MSGBOX_YESNO)
     if (!var(VAR_RESULT)){
         goto(SootopolisCity_Gym_EventScript_PlayerWalksAway)
     }
-	msgbox(format("By respect of our values, we're giving you some options."), MSGBOX_DEFAULT)
-    multichoice2(0, 0, MultiChoice_BottomBattle)
+	msgbox(format("By respect of our values, we're giving you some options on the fight order"), MSGBOX_DEFAULT)
+    multichoice2(0, 0, MultiChoice_MiddleBattle)
+	switch(var(VAR_RESULT)){
+        case 0:
+            goto(SootopolisCity_Gym_EventScript_PlayerWalksAway)
+        break
+        case 1:
+			setflag(FLAG_SYS_DISABLE_AUTOHEAL)
+			trainerbattle_no_intro(TRAINER_DAPHNE, SootopolisCity_Gym_B1F_Text_DaphneDefeat)
+			trainerbattle_no_intro(TRAINER_CONNIE, SootopolisCity_Gym_B1F_Text_ConnieDefeat)
+			trainerbattle_no_intro(TRAINER_ANDREA, SootopolisCity_Gym_B1F_Text_AndreaDefeat)
+			clearflag(FLAG_SYS_DISABLE_AUTOHEAL)
+        break
+        case 2:
+            trainerbattle_no_intro(TRAINER_DAPHNE, SootopolisCity_Gym_B1F_Text_DaphneDefeat)
+			starttagbattle(TRAINER_CONNIE, TRAINER_ANDREA, TAG_TEAM_CONNIE_ANDREA, 0)
+        break
+        case 3:
+			trainerbattle_no_intro(TRAINER_CONNIE, SootopolisCity_Gym_B1F_Text_ConnieDefeat)
+			starttagbattle(TRAINER_ANDREA, TRAINER_DAPHNE, TAG_TEAM_ANDREA_DAPHNE, 0)
+        break
+        case 4:
+			trainerbattle_no_intro(TRAINER_ANDREA, SootopolisCity_Gym_B1F_Text_AndreaDefeat)
+			starttagbattle(TRAINER_DAPHNE, TRAINER_CONNIE, TAG_TEAM_DAPHNE_CONNIE, 0)
+        break
+    }
     release
     end
 }
 
+text MultiChoice_TopBattle{
+    "Nevermind$"
+    "1 v 1 times 3 but no heal$"
+    "miss Olivia  then 1 v 2$"
+    "miss Brianna then 1 v 2$"
+    "miss Annika  then 1 v 2$"
+	"$"
+}
 script SootopolisCity_Gym_EventScript_TriggerTopBattle{
+	if (defeated(TRAINER_OLIVIA) && defeated(TRAINER_ANNIKA) && defeated(TRAINER_BRIANNA)){
+		setvar(VAR_TEMP_2, 1)
+        //end
+    }
     lock
     msgbox(format("Are you ready to battle us three?"), MSGBOX_YESNO)
     if (!var(VAR_RESULT)){
-        applymovement(OBJ_EVENT_ID_PLAYER, SootopolisCity_Gym_Movement_PlayerWalksAway)
-        release
-        end
+        goto(SootopolisCity_Gym_EventScript_PlayerWalksAway)
     }
+	msgbox(format("Similar to our peers within this arena, we're giving you some choice"), MSGBOX_DEFAULT)
+    multichoice2(0, 0, MultiChoice_TopBattle)
+	switch(var(VAR_RESULT)){
+        case 0:
+            goto(SootopolisCity_Gym_EventScript_PlayerWalksAway)
+        break
+        case 1:
+			trainerbattle_no_intro(TRAINER_OLIVIA, SootopolisCity_Gym_B1F_Text_OliviaDefeat)
+			setflag(FLAG_SYS_DISABLE_AUTOHEAL)
+            trainerbattle_no_intro(TRAINER_BRIANNA, SootopolisCity_Gym_B1F_Text_BriannaDefeat)
+            trainerbattle_no_intro(TRAINER_ANNIKA, SootopolisCity_Gym_B1F_Text_AnnikaDefeat)
+			clearflag(FLAG_SYS_DISABLE_AUTOHEAL)
+        break
+        case 2:
+			trainerbattle_no_intro(TRAINER_OLIVIA, SootopolisCity_Gym_B1F_Text_OliviaDefeat)
+            starttagbattle(TRAINER_ANNIKA, TRAINER_BRIANNA, TAG_TEAM_ANNIKA_BRIANNA, 0)
+        break
+        case 3:
+			trainerbattle_no_intro(TRAINER_BRIANNA, SootopolisCity_Gym_B1F_Text_BriannaDefeat)
+			starttagbattle(TRAINER_OLIVIA, TRAINER_ANNIKA, TAG_TEAM_OLIVIA_ANNIKA, 0)
+        break
+        case 4:
+			trainerbattle_no_intro(TRAINER_ANNIKA, SootopolisCity_Gym_B1F_Text_AnnikaDefeat)
+			starttagbattle(TRAINER_BRIANNA, TRAINER_OLIVIA, TAG_TEAM_BRIANNA_OLIVIA, 0)
+        break
+    }
+	setvar(VAR_TEMP_2, 1)
+	release
+	end
 }
 
 

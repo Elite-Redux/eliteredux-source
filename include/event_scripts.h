@@ -400,6 +400,12 @@ extern const u8 MossdeepCity_Gym_Text_VirgilDefeat[];
 extern const u8 SootopolisCity_Gym_B1F_Text_BridgetDefeat[];
 extern const u8 SootopolisCity_Gym_B1F_Text_CrissyDefeat[];
 extern const u8 SootopolisCity_Gym_B1F_Text_BethanyDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_AnnikaDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_BriannaDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_OliviaDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_DaphneDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_ConnieDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_AndreaDefeat[];
 
 //field effects
 extern const u8 EventScript_UseStrength[];

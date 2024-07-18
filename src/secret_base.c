@@ -1254,6 +1254,42 @@ const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
 	        else
 		        return SootopolisCity_Gym_B1F_Text_BethanyDefeat;
         break;
+        case TAG_TEAM_ANNIKA_BRIANNA:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_AnnikaDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_BriannaDefeat;
+        break;
+        case TAG_TEAM_BRIANNA_OLIVIA:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_BriannaDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_OliviaDefeat;
+        break;
+        case TAG_TEAM_OLIVIA_ANNIKA:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_OliviaDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_AnnikaDefeat;
+        break;	
+        case TAG_TEAM_DAPHNE_CONNIE:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_DaphneDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_ConnieDefeat;
+        break;
+        case TAG_TEAM_CONNIE_ANDREA:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_ConnieDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_AndreaDefeat;
+        break;
+        case TAG_TEAM_ANDREA_DAPHNE:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_AndreaDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_DaphneDefeat;
+        break;	
     }
         
 }
