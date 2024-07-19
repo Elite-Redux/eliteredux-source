@@ -616,6 +616,7 @@ script SootopolisCity_Gym_EventScript_TriggerMiddleBattle{
 			starttagbattle(TRAINER_DAPHNE, TRAINER_CONNIE, TAG_TEAM_DAPHNE_CONNIE, 0)
         break
     }
+    setvar(VAR_TEMP_1, 1)
     release
     end
 }
@@ -631,7 +632,7 @@ text MultiChoice_TopBattle{
 script SootopolisCity_Gym_EventScript_TriggerTopBattle{
 	if (defeated(TRAINER_OLIVIA) && defeated(TRAINER_ANNIKA) && defeated(TRAINER_BRIANNA)){
 		setvar(VAR_TEMP_2, 1)
-        //end
+        end
     }
     lock
     msgbox(format("Are you ready to battle us three?"), MSGBOX_YESNO)

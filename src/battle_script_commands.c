@@ -9856,6 +9856,9 @@ static void Cmd_various(void)
     case VARIOUS_UPDATE_ABILITY_POPUP:
         UpdateAbilityPopup(gActiveBattler);
         break;
+    case VARIOUS_GYMSKILL_POPUP:
+        CreateGymSkillPopUp(0);
+        break;
     case VARIOUS_DEFOG:
         if (T1_READ_8(gBattlescriptCurrInstr + 3)) // Clear
         {

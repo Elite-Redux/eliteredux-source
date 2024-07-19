@@ -11996,7 +11996,13 @@ BattleScript_EffectUpperHand::
 	setmoveeffect MOVE_EFFECT_FLINCH
 	goto BattleScript_EffectHit
 
+
+BattleScript_GymSkillPopup:
+	various 0, VARIOUS_GYMSKILL_POPUP
+	return
+
 BattleScript_GymSkillTerrainStealthRock::
+	call BattleScript_GymSkillPopup
 	printstring STRINGID_GYMSKILL_TERRAIN
 	waitmessage B_WAIT_TIME_LONG
 	printfromtable gStealthRocksSet @ //BS_PLAYER1
@@ -12004,13 +12010,16 @@ BattleScript_GymSkillTerrainStealthRock::
 	end2
 
 BattleScript_GymSkillFourTimesBoost::
+	call BattleScript_GymSkillPopup
 	printstring STRINGID_GYMSKILL_FOURTIMESBOOST
 	waitmessage B_WAIT_TIME_LONG
 	playstatchangeanimation BS_OPPONENT1, BIT_DEF, STAT_CHANGE_BY_TWO
 	end2
 
 BattleScript_GymSkillEndOfTurnBoost::
+	call BattleScript_GymSkillPopup
 	printstring STRINGID_GYMSKILL_ENDOFTURNBOOST
 	waitmessage B_WAIT_TIME_LONG
 	playstatchangeanimation BS_OPPONENT1, BIT_DEF, 0x00
 	end2
+
