@@ -8220,6 +8220,26 @@ const u32 *GetShinySpritePal(u16 species, u32 personality)
 {
     u8 mask = gBaseStats[species].altShinyMask;
     u32 res;
+    u16 shinyodds = getShinyOdds();
+    u16 rareodds;
+    u16 legendaryodds;
+    switch(shinyodds){
+        case 64:
+            //shinyodds = 1024;
+            rareodds = 5000;
+            legendaryodds = 10000;
+            break;
+        case 512:
+            //shinyodds = 128;
+            rareodds = 512;
+            legendaryodds = 1024;
+            break;
+        default:
+            //shinyodds = 5;
+            rareodds = 25;
+            legendaryodds = 50;
+            break;
+    }
     if (mask > 0){
         u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
         if(rndSeed == 0){
@@ -8228,17 +8248,27 @@ const u32 *GetShinySpritePal(u16 species, u32 personality)
             rndSeed = VarGet(VAR_RANDOMIZED_SEED);
         }
         rndSeed ^= species * personality;
-        res = RandRangeDeterministic(0, 8, &rndSeed);
-        //uncomment this when we had more tables
-        // while ((mask >> res) == 0){
-        //     res = RandRangeDeterministic(0, 8, &rndSeed);
-        // }
-        switch(res){
-            //will be expanded later once we had add more tables, this is fine for now
-            case 0:
-                return gMonAltShinyPaletteTable[species].data;
+        switch(mask){
+            case 1: //rare shiny only
+                res = RandRangeDeterministic(0, rareodds, &rndSeed);
+                if(res == 0)
+                    return gMonRareShinyPaletteTable[species].data;
+                break;
+            case 2: //legendary shiny only
+                res = RandRangeDeterministic(0, legendaryodds, &rndSeed);
+                if(res == 0)
+                    return gMonLegendaryShinyPaletteTable[species].data;
+                break;
+            case 3: //rare and legendary shiny
+                res = RandRangeDeterministic(0, rareodds, &rndSeed);
+                if(res == 0)
+                    return gMonRareShinyPaletteTable[species].data;
+                res = RandRangeDeterministic(0, legendaryodds, &rndSeed);
+                if(res == 0)
+                    return gMonLegendaryShinyPaletteTable[species].data;
+                break;
             default:
-                return gMonAltShinyPaletteTable[species].data;
+                return gMonShinyPaletteTable[species].data;
         }
     }
     return gMonShinyPaletteTable[species].data;
@@ -8261,27 +8291,53 @@ const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 per
     u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     u16 newseed;
     u32 res;
-    u8 alts;
+    u16 shinyodds = getShinyOdds();
+    u16 rareodds;
+    u16 legendaryodds;
+    switch(shinyodds){
+        case 64:
+            //shinyodds = 1024;
+            rareodds = 5000;
+            legendaryodds = 10000;
+            break;
+        case 512:
+            //shinyodds = 128;
+            rareodds = 512;
+            legendaryodds = 1024;
+            break;
+        default:
+            //shinyodds = 5;
+            rareodds = 25;
+            legendaryodds = 50;
+            break;
+    }
     if(rndSeed == 0){
             newseed = Random();
             VarSet(VAR_RANDOMIZED_SEED, newseed);
             rndSeed = VarGet(VAR_RANDOMIZED_SEED);
         }
-    alts = getNumAlts(species);
     rndSeed ^= species * personality;
-    res = RandRangeDeterministic(0, alts, &rndSeed);
-    if (mask > 0 && res != 0){
-        //uncomment this when we had more tables
-        // while ((mask >> res) == 0){
-        //     res = RandRangeDeterministic(0, 8, &rndSeed);
-        // }
-        switch(res){
-            //will be expanded later once we had add more tables, this is fine for now
-            case 0:
-                return &gMonAltShinyPaletteTable[species];
+    switch(mask) {
+            case 1: //rare shiny only
+                res = RandRangeDeterministic(0, rareodds, &rndSeed);
+                if(res == 0)
+                    return &gMonRareShinyPaletteTable[species];
+                break;
+            case 2: //legendary shiny only
+                res = RandRangeDeterministic(0, legendaryodds, &rndSeed);
+                if(res == 0)
+                    return &gMonLegendaryShinyPaletteTable[species];
+                break;
+            case 3: //rare and legendary shiny
+                res = RandRangeDeterministic(0, rareodds, &rndSeed);
+                if(res == 0)
+                    return &gMonRareShinyPaletteTable[species];
+                res = RandRangeDeterministic(0, legendaryodds, &rndSeed);
+                if(res == 0)
+                    return &gMonLegendaryShinyPaletteTable[species];
+                break;
             default:
-                return &gMonAltShinyPaletteTable[species];
-        }
+                return &gMonShinyPaletteTable[species];
     }
     return &gMonShinyPaletteTable[species];
 }

@@ -10934,8 +10934,8 @@ extern const u32 gBattleAnimBgImage_Rainbow[];
 extern const u32 gBattleAnimBGPalette_Rainbow[];
 extern const u32 gBattleAnimBgTilemap_Rainbow[];
 extern const u32 gBattleAnimBgPalette_Chloroblast[];
-extern const u32 gMonAltShinyPalette_Corphish[];
-
+// extern const u32 gMonAltShinyPalette_Corphish[];
+extern const u32 gMonRareShinyPalette_Morpeko[];
 
 // GEN IX ITEMS
 extern const u32 gItemIcon_AbilityShield[];
