@@ -4013,33 +4013,33 @@ void CreateGymSkillPopUp(u32 gymskill)
     spriteId1 = CreateSprite(&sSpriteTemplate_GymskillPopUp,
                                 coords[battlerPosition][0],
                                 0, 0);
-    spriteId2 = CreateSprite(&sSpriteTemplate_GymskillPopUp,
+    /*spriteId2 = CreateSprite(&sSpriteTemplate_GymskillPopUp,
                                 coords[battlerPosition][0] + 64,
-                                0, 1);
+                                0, 1);*/
     
     gSprites[spriteId1].tOriginalY = coords[battlerPosition][1];
-    gSprites[spriteId2].tOriginalY = coords[battlerPosition][1];
-    gSprites[spriteId2].oam.tileNum += (8 * 4); //Second half of pop up
+    //gSprites[spriteId2].tOriginalY = coords[battlerPosition][1];
+    //gSprites[spriteId2].oam.tileNum += (8 * 4); //Second half of pop up
 
     gBattleStruct->gymskillPopUpSpriteIds[0] = spriteId1;
-    gBattleStruct->gymskillPopUpSpriteIds[1] = spriteId2;
+    //gBattleStruct->gymskillPopUpSpriteIds[1] = spriteId2;
 
     taskId = CreateTask(Task_FreeGymskillPopUpGfx, 5);
     gTasks[taskId].tSpriteId1 = spriteId1;
-    gTasks[taskId].tSpriteId2 = spriteId2;
+    //gTasks[taskId].tSpriteId2 = spriteId2;
 
     gSprites[spriteId1].tIsMain = TRUE;
 
     StartSpriteAnim(&gSprites[spriteId1], 0);
-    StartSpriteAnim(&gSprites[spriteId2], 0);
+    //StartSpriteAnim(&gSprites[spriteId2], 0);
 
     //PrintGymskillOnGymskillPopUp(gymskill, spriteId1, spriteId2);
-    PrintOnGymskillPopUp(sGymSkillText,
+    /*PrintOnGymskillPopUp(sGymSkillText,
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32),
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId2].oam.tileNum * 32),
                         10, 20,
                         2,
-                        14, 2, 3);
+                        14, 2, 3);*/
     //RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));
 }
 
