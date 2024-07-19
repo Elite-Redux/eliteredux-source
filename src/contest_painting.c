@@ -365,7 +365,7 @@ static void VBlankCB_ContestPainting(void)
 
 static void InitContestMonPixels(u16 species, u8 whichSprite)
 {
-    bool8 isShiny = FALSE;
+    u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;
     const void *pal = GetMonSpritePal(species, gContestPaintingWinner->personality, isShiny);
     LZDecompressVram(pal, gContestPaintingMonPalette);

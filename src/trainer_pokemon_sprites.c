@@ -86,7 +86,7 @@ static bool16 DecompressPic(u16 species, u32 personality, bool8 isFrontPic, u8 *
     return FALSE;
 }
 
-static void LoadPicPaletteByTagOrSlot(u16 species, u32 otId, u32 personality, u8 paletteSlot, u16 paletteTag, bool8 isTrainer, bool8 isShiny, bool8 isAlpha)
+static void LoadPicPaletteByTagOrSlot(u16 species, u32 otId, u32 personality, u8 paletteSlot, u16 paletteTag, bool8 isTrainer, u8 isShiny, bool8 isAlpha)
 {
     if (!isTrainer)
     {
@@ -118,7 +118,7 @@ static void LoadPicPaletteByTagOrSlot(u16 species, u32 otId, u32 personality, u8
 
 static void LoadPicPaletteBySlot(u16 species, u32 otId, u32 personality, u8 paletteSlot, bool8 isTrainer)
 {
-    bool8 isShiny = FALSE;
+    u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;
     if (!isTrainer)
         LoadHueShiftedMonPalette(GetMonSpritePal(species, personality, isShiny), paletteSlot * 0x10, 0x20, personality, isAlpha);
@@ -134,7 +134,7 @@ static void AssignSpriteAnimsTable(bool8 isTrainer)
         sCreatingSpriteTemplate.anims = gTrainerFrontAnimsPtrTable[0];
 }
 
-static u16 CreatePicSprite(u16 species, u32 otId, u32 personality, bool8 isFrontPic, s16 x, s16 y, u8 paletteSlot, u16 paletteTag, bool8 isTrainer, bool8 isShiny, bool8 isAlpha)
+static u16 CreatePicSprite(u16 species, u32 otId, u32 personality, bool8 isFrontPic, s16 x, s16 y, u8 paletteSlot, u16 paletteTag, bool8 isTrainer, u8 isShiny, bool8 isAlpha)
 {
     u8 i;
     u8 *framePics;
@@ -194,7 +194,7 @@ static u16 CreatePicSprite(u16 species, u32 otId, u32 personality, bool8 isFront
     return spriteId;
 }
 
-u16 CreatePicSprite2(u16 species, u32 otId, u32 personality, u8 flags, s16 x, s16 y, u8 paletteSlot, u16 paletteTag, bool8 isShiny, bool8 isAlpha)
+u16 CreatePicSprite2(u16 species, u32 otId, u32 personality, u8 flags, s16 x, s16 y, u8 paletteSlot, u16 paletteTag, u8 isShiny, bool8 isAlpha)
 {
     u8 *framePics;
     struct SpriteFrameImage *images;
@@ -332,7 +332,7 @@ static u16 CreateTrainerCardSprite(u16 species, u32 otId, u32 personality, bool8
     return 0xFFFF;
 }
 
-u16 CreateMonPicSprite(u16 species, u32 otId, u32 personality, bool8 isFrontPic, s16 x, s16 y, u8 paletteSlot, u16 paletteTag, bool8 isShiny, bool8 isAlpha)
+u16 CreateMonPicSprite(u16 species, u32 otId, u32 personality, bool8 isFrontPic, s16 x, s16 y, u8 paletteSlot, u16 paletteTag, u8 isShiny, bool8 isAlpha)
 {
     return CreatePicSprite(species, otId, personality, isFrontPic, x, y, paletteSlot, paletteTag, FALSE, isShiny, isAlpha);
 }

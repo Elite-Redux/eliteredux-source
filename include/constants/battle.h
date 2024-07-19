@@ -462,7 +462,7 @@
 #define B_WIN_NO_EFFECT          18
 #define B_WIN_YESNO_TWO          19
 
-#define NUM_BATTLE_WIN           B_WIN_YESNO_TWO + 1
+#define NUM_BATTLE_WIN             B_WIN_YESNO_TWO + 1
 
 // The following are duplicate id values for windows that Battle Arena uses differently.
 #define ARENA_WIN_PLAYER_NAME      NUM_BATTLE_WIN + 1

@@ -7327,5 +7327,5 @@ const u32 gMonPalette_Dewleon[]                 = INCBIN_U32("graphics/pokemon/d
 const u32 gMonShinyPalette_Dewleon[]            = INCBIN_U32("graphics/pokemon/dewleon/shiny.gbapal.lz");
 const u8  gMonIcon_Dewleon[]                    = INCBIN_U8("graphics/pokemon/dewleon/icon.4bpp");
 
-// const u32 gMonAltShinyPalette_Corphish[]            = INCBIN_U32("graphics/pokemon/corphish/shinyalt1.gbapal.lz");
+const u32 gMonAltShinyPalette_Corphish[]            = INCBIN_U32("graphics/pokemon/corphish/shinyalt1.gbapal.lz");
 const u32 gMonRareShinyPalette_Morpeko[]            = INCBIN_U32("graphics/pokemon/morpeko/rareshiny.gbapal.lz");

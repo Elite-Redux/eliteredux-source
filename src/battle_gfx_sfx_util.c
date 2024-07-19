@@ -904,7 +904,8 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
     u32 personalityValue, otId, position, paletteOffset, targetSpecies;
     const void *lzPaletteData, *src;
     void *dst;
-    bool8 isShiny, isAlpha;
+    bool8 isAlpha;
+    u8 isShiny;
 
     if (IsContest())
     {

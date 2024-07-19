@@ -16364,7 +16364,7 @@ static void Cmd_displaydexinfo(void)
     u16 dexnum = SpeciesToNationalPokedexNum(species);
     u32 otId = gBattleMons[GetCatchingBattler()].otId;
     u32 personality = gBattleMons[GetCatchingBattler()].personality;
-    bool8 isShiny = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_IS_SHINY, NULL);
+    u8 isShiny = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_IS_SHINY, NULL);
     bool8 isAlpha = GetMonData(&gEnemyParty[gBattlerPartyIndexes[GetCatchingBattler()]], MON_DATA_IS_ALPHA, NULL);
 
     switch (gBattleCommunication[0])

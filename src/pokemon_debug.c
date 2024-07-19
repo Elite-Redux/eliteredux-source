@@ -724,12 +724,12 @@ static void UpdateBattlerValue(struct PokemonDebugMenu *data)
 }
 
 //Sprite functions
-static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, bool8 isShiny)
+static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, u8 isShiny)
 {
     if(isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
-    if (isShiny)
+    if (isShiny != SHINY_NONE)
     {
         if (SpeciesHasGenderDifference[species] && isFemale)
             return gMonShinyPaletteTableFemale[species].data;
@@ -745,7 +745,7 @@ static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, bool8
     }
 }
 
-static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, bool8 isShiny, u8 battlerId)
+static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, u8 isShiny, u8 battlerId)
 {
     const void *lzPaletteData;
     u16 paletteOffset = 0x100 + battlerId * 16;;
@@ -753,7 +753,7 @@ static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, bo
     if(isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
-    if (isShiny)
+    if (isShiny != SHINY_NONE)
     {
         if (SpeciesHasGenderDifference[species] && isFemale)
             lzPaletteData = gMonShinyPaletteTableFemale[species].data;

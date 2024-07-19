@@ -212,7 +212,7 @@ struct DodrioGame_Player
 // Pokémon is whether or not it's shiny
 struct DodrioGame_MonInfo
 {
-    bool8 isShiny;
+    u8 isShiny;
 };
 
 struct DodrioGame_ScoreResults

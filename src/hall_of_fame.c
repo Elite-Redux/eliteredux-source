@@ -44,7 +44,7 @@
 struct HallofFameMon
 {
     u32 tid:30;
-    u32 isShiny:1;
+    u32 isShiny:1; //ToFix
     u32 isAlpha:1;
     u32 personality;
     u16 species;

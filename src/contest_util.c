@@ -878,7 +878,7 @@ static void Task_ShowWinnerMonBanner(u8 taskId)
     u32 otId;
     u32 personality;
     const struct CompressedSpritePalette *pokePal;
-    bool8 isShiny = FALSE;
+    u8 isShiny = FALSE;
 
     switch (gTasks[taskId].tState)
     {
@@ -2553,7 +2553,7 @@ void ShowContestEntryMonPic(void)
     u8 spriteId;
     u8 taskId;
     u8 left, top;
-    bool8 isShiny = FALSE;
+    u8 isShiny = FALSE;
 
     if (FindTaskIdByFunc(Task_ShowContestEntryMonPic) == TASK_NONE)
     {

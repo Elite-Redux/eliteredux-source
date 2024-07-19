@@ -3828,6 +3828,20 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     CalculateMonStats(mon);
 }
 
+u8 GenerateShinyForm(u16 species){
+    u8 numShinies = gBaseStats[species].numShinies;
+    u8 isShiny = SHINY_VANILLA;
+    u16 rand = Random(); // Max value is 65535
+
+    //Rare shiny creation
+    if(rand < LEGENDARY_SHINY_ODDS && numShinies >= SHINY_LEGENDARY)
+        isShiny = SHINY_LEGENDARY;
+    else if(rand < RARE_SHINY_ODDS && numShinies >= SHINY_RARE)
+        isShiny = SHINY_RARE;
+    
+    return isShiny;
+}
+
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
 {
     u8 speciesName[POKEMON_NAME_LENGTH + 1];
@@ -3837,7 +3851,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u8 maxIV = MAX_IV_MASK;
     u8 statIDs[NUM_STATS] = {0, 1, 2, 3, 4, 5};
     u8 hpType;
-    u8 isShiny = 0;
+    u8 isShiny = SHINY_NONE;
     u16 temp;
     bool8 isAlpha = FALSE;
     u8 numShinies = gBaseStats[species].numShinies;
@@ -3871,30 +3885,16 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         if (!FlagGet(FLAG_SHINY_CREATION)){
             for (i = 0; i < shinyRolls; i++)
             {   
-                temp = Random();
-                if (temp < getShinyOdds()){
-                    FlagSet(FLAG_SHINY_CREATION);   // use a flag bc of CreateDexNavWildMon
-                    if(temp < 16) {
-                        if(temp < 8) {
-                            isShiny = 3;
-                            break;
-                        }
-                        isShiny = 2;
-                        break;
-                    }
-                    isShiny = 1;
+                if (Random() < getShinyOdds()){
+                    FlagSet(FLAG_SHINY_CREATION);
                     break;
-                } 
+                }
             }
         }
-        
-        if(numShinies == 1 && isShiny == 3)
-        {
-            isShiny = 2;    
-        }
-        if((numShinies == 2 && isShiny == 2) || (numShinies == 0 && isShiny)){
-            isShiny = 1;
-        }
+
+        if (FlagGet(FLAG_SHINY_CREATION))
+            isShiny = GenerateShinyForm(species);
+
         FlagClear(FLAG_SHINY_CREATION);
     }
 
@@ -3921,10 +3921,11 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     value = ITEM_POKE_BALL;
     SetBoxMonData(boxMon, MON_DATA_POKEBALL, &value);
     SetBoxMonData(boxMon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
-    SetBoxMonData(boxMon, MON_DATA_IS_SHINY, &isShiny);
+    SetBoxMonData(boxMon, MON_DATA_IS_SHINY,  &isShiny);
+    SetBoxMonData(boxMon, MON_DATA_MAX_SHINY, &isShiny);
     SetBoxMonData(boxMon, MON_DATA_IS_ALPHA, &isAlpha);
 
-    if(isShiny && VarGet(VAR_DEXNAV_SHINY_FLAG) == 1)
+    if(isShiny != SHINY_NONE && VarGet(VAR_DEXNAV_SHINY_FLAG) == 1)
         VarSet(VAR_DEXNAV_SHINY_FLAG, 2);
 
     if (fixedIV < USE_RANDOM_IVS)
@@ -5160,6 +5161,9 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
     case MON_DATA_IS_SHINY:
         retVal = boxMon->isShiny;
         break;
+    case MON_DATA_MAX_SHINY:
+        retVal = boxMon->maxShiny;
+        break;
     case MON_DATA_SPEED_DOWN:
         retVal = boxMon->speedDown;
         break;
@@ -5494,6 +5498,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     case MON_DATA_IS_SHINY:
         SET32(boxMon->isShiny);
+        break;
+    case MON_DATA_MAX_SHINY:
+        SET32(boxMon->maxShiny);
         break;
     case MON_DATA_SPEED_DOWN:
         SET32(boxMon->speedDown);
@@ -8236,13 +8243,23 @@ static void Task_PlayMapChosenOrBattleBGM(u8 taskId)
 
 const u32 *GetShinySpritePal(u16 species, u32 isShiny)
 {
+    u8 numShinies = gBaseStats[species].numShinies;
     switch(isShiny){
-        case 1:
+        case SHINY_VANILLA:
             return gMonShinyPaletteTable[species].data;
-        case 2:
-            return gMonRareShinyPaletteTable[species].data;
-        case 3:
-            return gMonLegendaryShinyPaletteTable[species].data;
+        break;
+        case SHINY_RARE:
+            if(numShinies >= SHINY_RARE)
+                return gMonRareShinyPaletteTable[species].data;
+            else
+                return gMonShinyPaletteTable[species].data;
+        break;
+        case SHINY_LEGENDARY:
+            if(numShinies >= SHINY_LEGENDARY)
+                return gMonLegendaryShinyPaletteTable[species].data;
+            else
+                return gMonShinyPaletteTable[species].data;
+        break;
     }
     return gMonShinyPaletteTable[species].data;
 }
@@ -8250,19 +8267,29 @@ const u32 *GetShinySpritePal(u16 species, u32 isShiny)
 
 const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 isShiny)
 {
+    u8 numShinies = gBaseStats[species].numShinies;
     switch(isShiny){
-        case 1:
+        case SHINY_VANILLA:
             return &gMonShinyPaletteTable[species];
-        case 2:
-            return &gMonRareShinyPaletteTable[species];
-        case 3:
-            return &gMonLegendaryShinyPaletteTable[species];
+        break;
+        case SHINY_RARE:
+            if(numShinies >= SHINY_RARE)
+                return &gMonRareShinyPaletteTable[species];
+            else
+                return &gMonShinyPaletteTable[species];
+        break;
+        case SHINY_LEGENDARY:
+            if(numShinies >= SHINY_RARE)
+                return &gMonLegendaryShinyPaletteTable[species];
+            else
+                return &gMonShinyPaletteTable[species];
+        break;
     }
     return &gMonShinyPaletteTable[species];
 }
 const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
 {
-    u32 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
     u32 otId = GetMonData(mon, MON_DATA_OT_ID, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
@@ -8283,14 +8310,13 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
     }
 }
 
-const u32 *GetMonSpritePal(u16 species, u32 personality, u32 isShiny){
-    if (isShiny)
+const u32 *GetMonSpritePal(u16 species, u32 personality, u8 isShiny){
+    if (isShiny != SHINY_NONE)
     {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonShinyPaletteTableFemale[species].data;
         else
             return GetShinySpritePal(species, isShiny);
-            
     }
     else
     {
@@ -8306,21 +8332,21 @@ const struct CompressedSpritePalette *GetMonSpritePalStruct(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
     u32 otId = GetMonData(mon, MON_DATA_OT_ID, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
-    bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
     return GetMonSpritePalStructFromOtIdPersonality(species, personality, isShiny);
 }
 
-const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u16 species, u32 personality, bool8 isShiny)
+const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u16 species, u32 personality, u8 isShiny)
 {
     if(isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
-    if (isShiny)
+    if (isShiny != SHINY_NONE)
     {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return &gMonShinyPaletteTableFemale[species];
         else
-            return GetShinySpritePalAddr(species, personality);
+            return GetShinySpritePalAddr(species, isShiny);
     }
     else
     {
@@ -8484,19 +8510,10 @@ void SetWildMonHeldItem(void)
     }
 }
 
-bool8 IsMonShiny(struct Pokemon *mon)
+u8 IsMonShiny(struct Pokemon *mon)
 {
-    bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, NULL);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, NULL);
     return isShiny;
-}
-
-bool8 IsShinyOtIdPersonality(u32 otId, u32 personality)
-{
-    bool8 retVal = FALSE;
-    u32 shinyValue = HIHALF(otId) ^ LOHALF(otId) ^ HIHALF(personality) ^ LOHALF(personality);
-    if (shinyValue < getShinyOdds())
-        retVal = TRUE;
-    return retVal;
 }
 
 const u8 *GetTrainerPartnerName(void)

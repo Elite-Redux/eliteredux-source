@@ -4089,7 +4089,7 @@ static void PrintNotEggInfo(void)
         }
     }
 
-    if (IsMonShiny(mon))
+    if (IsMonShiny(mon) != SHINY_NONE)
         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Shiny, 62, 18, 0, PSS_COLOR_SHINY_STARS);
     
     #if CONFIG_FATEFUL_ENCOUNTER_MARK
@@ -6603,7 +6603,7 @@ static u8 LoadMonGfxAndSprite(struct Pokemon *mon, s16 *state)
         (*state)++;
         return 0xFF;
     case 1:
-        pal = GetMonSpritePalStruct(mon);
+        pal = GetMonSpritePalStruct(mon); 
         LoadCompressedSpritePalette(pal);
         SetMultiuseSpriteTemplateToPokemon(pal->tag, 1);
         (*state)++;

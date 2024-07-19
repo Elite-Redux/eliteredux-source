@@ -246,7 +246,7 @@ void ReducePlayerPartyToSelectedMons(void)
     CalculatePlayerPartyCount();
 }
 
-u8 ScriptGiveCustomMon(u16 species, u8 level, u16 item, u8 ball, u8 nature, u8 abilityNum, u8 *evs, u8 *ivs, u16 *moves, bool8 isShiny)
+u8 ScriptGiveCustomMon(u16 species, u8 level, u16 item, u8 ball, u8 nature, u8 abilityNum, u8 *evs, u8 *ivs, u16 *moves, u8 isShiny)
 {
     u16 nationalDexNum;
     int sentToPc;
@@ -259,6 +259,7 @@ u8 ScriptGiveCustomMon(u16 species, u8 level, u16 item, u8 ball, u8 nature, u8 a
     if (nature == NUM_NATURES || nature == 0xFF)
         nature = Random() % NUM_NATURES;
 
+    //To Change
     if (isShiny)
         CreateShinyMonWithNature(&mon, species, level, nature);
     else

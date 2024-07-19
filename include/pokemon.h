@@ -58,8 +58,8 @@ struct BoxPokemon
     u32 isEgg:1;
     u32 metLevel:7;
     u32 pokeball:5; //31 balls
-    u32 isShiny:3;
-    u32 filler:1;
+    u32 isShiny:2;  //0 = not shiny, 1 = shiny, 2 = rare shiny, 3 = legendary shiny
+    u32 maxShiny:2; //0 = not shiny, 1 = shiny, 2 = rare shiny, 3 = legendary shiny
 
     // Words 13 & 14: Trainer name + met location
     u8 metLocation;
@@ -446,9 +446,9 @@ void CreateTask_PlayMapChosenOrBattleBGM(u16 songId);
 const u32 *GetShinySpritePal(u16 species, u32 isShiny);
 const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 isShiny);
 const u32 *GetMonFrontSpritePal(struct Pokemon *mon);
-const u32 *GetMonSpritePal(u16 species, u32 personality, u32 isShiny);
+const u32 *GetMonSpritePal(u16 species, u32 personality, u8 isShiny);
 const struct CompressedSpritePalette *GetMonSpritePalStruct(struct Pokemon *mon);
-const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u16 species , u32 personality, bool8 isShiny);
+const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u16 species , u32 personality, u8 isShiny);
 bool32 IsHMMove2(u16 move);
 bool8 IsMonSpriteNotFlipped(u16 species);
 s8 GetMonFlavorRelation(struct Pokemon *mon, u8 flavor);
@@ -459,7 +459,6 @@ void MonRestorePP(struct Pokemon *mon);
 void SetMonPreventsSwitchingString(void);
 void SetWildMonHeldItem(void);
 bool8 IsMonShiny(struct Pokemon *mon);
-bool8 IsShinyOtIdPersonality(u32 otId, u32 personality);
 const u8 *GetTrainerPartnerName(void);
 void BattleAnimateFrontSprite(struct Sprite* sprite, u16 species, bool8 noCry, u8 arg3);
 void DoMonFrontSpriteAnimation(struct Sprite* sprite, u16 species, bool8 noCry, u8 arg3);

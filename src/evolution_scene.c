@@ -213,8 +213,8 @@ void EvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u
     u16 currSpecies;
     u32 trainerId, personality;
     const struct CompressedSpritePalette* pokePal;
-    u8 ID;
-    bool8 isShiny, isAlpha;
+    u8 ID, isShiny;
+    bool8 isAlpha;
     const u8* longName;
 
     SetHBlankCallback(NULL);
@@ -320,7 +320,7 @@ static void CB2_EvolutionSceneLoadGraphics(void)
     u16 postEvoSpecies;
     u32 trainerId, personality;
     struct Pokemon* mon = &gPlayerParty[gTasks[sEvoStructPtr->evoTaskId].tPartyId];
-    bool8 isShiny;
+    u8 isShiny;
     bool8 isAlpha;
 
     postEvoSpecies = gTasks[sEvoStructPtr->evoTaskId].tPostEvoSpecies;
@@ -392,7 +392,7 @@ static void CB2_TradeEvolutionSceneLoadGraphics(void)
 {
     struct Pokemon* mon = &gPlayerParty[gTasks[sEvoStructPtr->evoTaskId].tPartyId];
     u16 postEvoSpecies = gTasks[sEvoStructPtr->evoTaskId].tPostEvoSpecies;
-    bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
     bool8 isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA);
 
     switch (gMain.state)
@@ -482,8 +482,8 @@ void TradeEvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, u8 preEvoSprit
     u16 currSpecies;
     u32 trainerId, personality;
     const struct CompressedSpritePalette* pokePal;
-    u8 ID;
-    bool8 isShiny, isAlpha;
+    u8 ID, isShiny;
+    bool8 isAlpha;
 
     GetMonData(mon, MON_DATA_NICKNAME, name);
     GetMonData(mon, MON_DATA_IS_SHINY, isShiny);

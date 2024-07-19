@@ -3121,7 +3121,7 @@ static u8 CreateJudgeSpeechBubbleSprite(void)
 static u8 CreateContestantSprite(u16 species, u32 otId, u32 personality, u32 index)
 {
     u8 spriteId;
-    bool8 isShiny = FALSE;
+    u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;
     species = SanitizeSpecies(species);
 

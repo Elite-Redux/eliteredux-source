@@ -411,6 +411,12 @@ extern u8 PlayersHouse_2F_EventScript_CheckWallClock[];
 static const u8 MAP_GROUP_COUNT[] = {57, 5, 5, 6, 7, 8, 9, 7, 7, 14, 8, 17, 10, 23, 13, 15, 15, 2, 2, 2, 3, 1, 1, 1, 108, 61, 89, 2, 1, 13, 1, 1, 3, 1, 0};
 
 // Text
+// Shiny
+static const u8 sDebugText_Not_Shiny[] =        _("Not Shiny");
+static const u8 sDebugText_Vanilla_Shiny[] =    _("Vanilla Shiny");
+static const u8 sDebugText_Rare_Shiny[] =       _("Rare Shiny");
+static const u8 sDebugText_Legendary_Shiny[] =  _("Legendary Shiny");
+
 // General
 static const u8 sDebugText_True[] =          _("TRUE");
 static const u8 sDebugText_False[] =         _("FALSE");
@@ -3103,7 +3109,7 @@ static void DebugAction_Give_Pokemon_SelectLevel(u8 taskId)
 
             ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, 0);
             StringCopyPadded(gStringVar3, gStringVar3, CHAR_SPACE, 15);
-            StringCopyPadded(gStringVar2, sDebugText_False, CHAR_SPACE, 15);
+            StringCopyPadded(gStringVar2, sDebugText_Not_Shiny, CHAR_SPACE, 15);
             StringExpandPlaceholders(gStringVar4, sDebugText_PokemonShiny);
             AddTextPrinterParameterized(gTasks[taskId].data[2], 1, gStringVar4, 1, 1, 0, NULL);
 
@@ -3122,6 +3128,12 @@ static void DebugAction_Give_Pokemon_SelectLevel(u8 taskId)
 //If complex
 static void DebugAction_Give_Pokemon_SelectShiny(u8 taskId)
 {
+    u16 species = sDebugMonData->mon_speciesId;
+    u8 numShinies = gBaseStats[species].numShinies;;
+
+    if(numShinies == 0)
+        numShinies = SHINY_VANILLA;
+
     if (gMain.newKeys & DPAD_ANY)
     {
         PlaySE(SE_SELECT);
@@ -3129,20 +3141,32 @@ static void DebugAction_Give_Pokemon_SelectShiny(u8 taskId)
         if (gMain.newKeys & DPAD_UP)
         {
             gTasks[taskId].data[3] += sPowersOfTen[gTasks[taskId].data[4]];
-            if (gTasks[taskId].data[3] > 1)
-                gTasks[taskId].data[3] = 1;
+            if (gTasks[taskId].data[3] > numShinies)
+                gTasks[taskId].data[3] = numShinies;
         }
         if (gMain.newKeys & DPAD_DOWN)
         {
             gTasks[taskId].data[3] -= sPowersOfTen[gTasks[taskId].data[4]];
-            if (gTasks[taskId].data[3] < 0)
-                gTasks[taskId].data[3] = 0;
+            if (gTasks[taskId].data[3] < numShinies)
+                gTasks[taskId].data[3] = numShinies;
         }
 
-        if (gTasks[taskId].data[3] == 1)
-            StringCopyPadded(gStringVar2, sDebugText_True, CHAR_SPACE, 15);
-        else
-            StringCopyPadded(gStringVar2, sDebugText_False, CHAR_SPACE, 15);
+        switch(gTasks[taskId].data[3])
+        {
+            case SHINY_NONE:
+                StringCopyPadded(gStringVar2, sDebugText_Not_Shiny, CHAR_SPACE, 15);
+                break;
+            case SHINY_VANILLA:
+                StringCopyPadded(gStringVar2, sDebugText_Vanilla_Shiny, CHAR_SPACE, 15);
+                break;
+            case SHINY_RARE:
+                StringCopyPadded(gStringVar2, sDebugText_Rare_Shiny, CHAR_SPACE, 15);
+                break;
+            case SHINY_LEGENDARY:
+                StringCopyPadded(gStringVar2, sDebugText_Legendary_Shiny, CHAR_SPACE, 15);
+                break;
+            
+        }
         ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, 0);
         StringCopyPadded(gStringVar3, gStringVar3, CHAR_SPACE, 15);
         StringExpandPlaceholders(gStringVar4, sDebugText_PokemonShiny);
@@ -3155,14 +3179,24 @@ static void DebugAction_Give_Pokemon_SelectShiny(u8 taskId)
         gTasks[taskId].data[3] = 0;
         gTasks[taskId].data[4] = 0;
 
-        StringCopy(gStringVar2, gText_DigitIndicator[gTasks[taskId].data[4]]);
+        /*StringCopy(gStringVar2, gText_DigitIndicator[gTasks[taskId].data[4]]);
         ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, 2);
         StringCopyPadded(gStringVar3, gStringVar3, CHAR_SPACE, 15);
         StringCopy(gStringVar1, gNatureNamePointers[0]);
         StringExpandPlaceholders(gStringVar4, sDebugText_PokemonNature);
         AddTextPrinterParameterized(gTasks[taskId].data[2], 1, gStringVar4, 1, 1, 0, NULL);
 
-        gTasks[taskId].func = DebugAction_Give_Pokemon_SelectNature;
+        gTasks[taskId].func = DebugAction_Give_Pokemon_SelectNature;*/
+
+        //Since Ivs are no longer a thing and nature can be given at any time jump straight to moves
+        StringCopy(gStringVar2, gText_DigitIndicator[gTasks[taskId].data[4]]);
+        StringCopy(gStringVar1, gMoveNames[gTasks[taskId].data[3]]);
+        StringCopyPadded(gStringVar1, gStringVar1, CHAR_SPACE, 15);
+        ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, 3);
+        StringExpandPlaceholders(gStringVar4, sDebugText_PokemonMove_0);
+        AddTextPrinterParameterized(gTasks[taskId].data[2], 1, gStringVar4, 1, 1, 0, NULL);
+
+        gTasks[taskId].func = DebugAction_Give_Pokemon_Move;
     }
     else if (gMain.newKeys & B_BUTTON)
     {
@@ -3574,7 +3608,8 @@ static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId) //https://githu
     CreateMonWithNature(&mon, species, level, 32, nature);
     
     //Shinyness
-    SetMonData(&gPlayerParty[0], MON_DATA_IS_SHINY, &isShiny);
+    SetMonData(&mon, MON_DATA_IS_SHINY,  &isShiny);
+    SetMonData(&mon, MON_DATA_MAX_SHINY, &isShiny);
 
     //EVs/IVs
     for (i = 0; i < NUM_STATS; i++)

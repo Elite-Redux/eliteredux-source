@@ -3077,10 +3077,7 @@ static void FillPartnerParty(u16 trainerId)
     {
         for (i = 0; i < MULTI_PARTY_SIZE; i++)
         {
-            do
-            {
-                j = Random32();
-            } while (IsShinyOtIdPersonality(STEVEN_OTID, j) || sStevenMons[i].nature != GetNatureFromPersonality(j));
+            j = Random32();
             CreateMon(&gPlayerParty[MULTI_PARTY_SIZE + i],
                       sStevenMons[i].species,
                       sStevenMons[i].level,
@@ -3111,10 +3108,7 @@ static void FillPartnerParty(u16 trainerId)
 
         for (i = 0; i < 3 && i < gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].partySize; i++)
         {
-            do
-            {
-                j = Random32();
-            } while (IsShinyOtIdPersonality(otID, j));
+            j = Random32();
 
             switch (gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].partyFlags)
             {

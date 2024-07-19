@@ -725,7 +725,7 @@ static bool8 LoadMonAndSceneGfx(struct Pokemon *mon)
     u16 species;
     u32 personality, trainerId;
     const struct CompressedSpritePalette *palette;
-    bool8 isShiny;
+    u8 isShiny;
 
     switch (sPokeblockFeed->loadGfxState)
     {

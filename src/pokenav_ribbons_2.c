@@ -960,7 +960,7 @@ static u16 DrawRibbonsMonFrontPic(s32 x, s32 y)
 {
     u16 species, spriteId;
     u32 personality, otId;
-    bool8 isShiny = FALSE;
+    u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;
 
     GetMonSpeciesPersonalityOtId(&species, &personality, &otId);

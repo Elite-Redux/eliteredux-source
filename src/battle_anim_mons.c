@@ -2080,7 +2080,7 @@ u8 CreateAdditionalMonSpriteForMoveAnim(u16 species, bool8 isBackpic, u8 id, s16
     u8 spriteId;
     u16 sheet = LoadSpriteSheet(&sSpriteSheet_MoveEffectMons[id]);
     u16 palette = AllocSpritePalette(sSpriteTemplate_MoveEffectMons[id].paletteTag);
-    bool8 isShiny = FALSE;
+    u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;
 
     if (gMonSpritesGfxPtr != NULL && gMonSpritesGfxPtr->buffer == NULL)
