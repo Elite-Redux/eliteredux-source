@@ -1581,11 +1581,16 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
 };
 
                                      
-const struct CompressedSpritePalette gMonAltShinyPaletteTable[] =
+const struct CompressedSpritePalette gMonRareShinyPaletteTable[] =
 {
-    SPECIES_SHINY_PAL(CORPHISH, gMonAltShinyPalette_Corphish),
+    // SPECIES_SHINY_PAL(CORPHISH, gMonAltShinyPalette_Corphish),
+    SPECIES_SHINY_PAL(MORPEKO, gMonRareShinyPalette_Morpeko),
 };
 
+const struct CompressedSpritePalette gMonLegendaryShinyPaletteTable[] =
+{
+    // SPECIES_SHINY_PAL(CORPHISH, gMonAltShinyPalette_Corphish),
+};
 
 const struct CompressedSpritePalette gMonShinyPaletteTableFemale[] =
 {
