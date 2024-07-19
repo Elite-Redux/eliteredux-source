@@ -462,15 +462,17 @@
 #define B_WIN_NO_EFFECT          18
 #define B_WIN_YESNO_TWO          19
 
+#define NUM_BATTLE_WIN           B_WIN_YESNO_TWO + 1
+
 // The following are duplicate id values for windows that Battle Arena uses differently.
-#define ARENA_WIN_PLAYER_NAME      15
-#define ARENA_WIN_VS               16
-#define ARENA_WIN_OPPONENT_NAME    17
-#define ARENA_WIN_MIND             18
-#define ARENA_WIN_SKILL            19
-#define ARENA_WIN_BODY             20
-#define ARENA_WIN_JUDGMENT_TITLE   21
-#define ARENA_WIN_JUDGMENT_TEXT    22
+#define ARENA_WIN_PLAYER_NAME      NUM_BATTLE_WIN + 1
+#define ARENA_WIN_VS               NUM_BATTLE_WIN + 2
+#define ARENA_WIN_OPPONENT_NAME    NUM_BATTLE_WIN + 3
+#define ARENA_WIN_MIND             NUM_BATTLE_WIN + 4
+#define ARENA_WIN_SKILL            NUM_BATTLE_WIN + 5
+#define ARENA_WIN_BODY             NUM_BATTLE_WIN + 6
+#define ARENA_WIN_JUDGMENT_TITLE   NUM_BATTLE_WIN + 7
+#define ARENA_WIN_JUDGMENT_TEXT    NUM_BATTLE_WIN + 8
 
 // Ability Conditions
 #define CONDITION_SPIKES       0
