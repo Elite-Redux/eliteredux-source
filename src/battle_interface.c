@@ -3939,6 +3939,57 @@ static const struct SpriteTemplate sSpriteTemplate_GymskillPopUp =
     .callback = SpriteCb_GymskillPopUp
 };
 
+static u8* AddTextPrinterAndCreateWindowOnGymskillPopUp(const u8 *str, u32 x, u32 y, u32 color1, u32 color2, u32 color3, u32 *windowId)
+{
+    u8 color[3] = {color1, color2, color3};
+    struct WindowTemplate winTemplate = {0};
+    winTemplate.width = POPUP_WINDOW_WIDTH;
+    winTemplate.height = 2;
+
+    *windowId = AddWindow(&winTemplate);
+    FillWindowPixelBuffer(*windowId, (color1 << 4) | (color1));
+
+    AddTextPrinterParameterized4(*windowId, FONT_SMALL, x, y, 0, 0, color, TEXT_SKIP_DRAW, str);
+    return (u8*)(GetWindowAttribute(*windowId, WINDOW_TILE_DATA ));
+}
+
+
+static void TextIntoGymskillPopUp(void *dest, u8 *windowTileData, s32 xTileAmount, bool32 arg3)
+{
+    CpuCopy32(windowTileData + 256, dest + 256, xTileAmount * 32);
+    if (xTileAmount > 0)
+    {
+        do
+        {
+            if (arg3)
+                CpuCopy32(windowTileData + 16, dest + 16, 16);
+            else
+                CpuCopy32(windowTileData + 20, dest + 20, 12);
+            dest += 32, windowTileData += 32;
+            xTileAmount--;
+        } while (xTileAmount != 0);
+    }
+}
+
+static void PrintOnGymskillPopUp(const u8 *str, u8 *spriteTileData1, u8 *spriteTileData2, u32 x1, u32 x2, u32 y, u32 color1, u32 color2, u32 color3)
+{
+    u32 windowId;
+    u8 *windowTileData;
+    u16 width;
+
+    windowTileData = AddTextPrinterAndCreateWindowOnGymskillPopUp(str, x1, y, color1, color2, color3, &windowId);
+    TextIntoGymskillPopUp(spriteTileData1, windowTileData, 8, (y == 0));
+    RemoveWindow(windowId);
+
+    width = GetStringWidth(FONT_SMALL, str, 0);
+
+    if (width > MAX_POPUP_STRING_WIDTH - 5)
+    {
+        windowTileData = AddTextPrinterAndCreateWindowOnGymskillPopUp(str, x2 - MAX_POPUP_STRING_WIDTH, y, color1, color2, color3, &windowId);
+        TextIntoGymskillPopUp(spriteTileData2, windowTileData, 3, (y == 0));
+        RemoveWindow(windowId);
+    }
+}
 
 static const s16 sGymSkillPopUpCoordsSingles[MAX_BATTLERS_COUNT][2] =
 {
@@ -3982,15 +4033,14 @@ void CreateGymSkillPopUp(u32 gymskill)
     StartSpriteAnim(&gSprites[spriteId1], 0);
     StartSpriteAnim(&gSprites[spriteId2], 0);
 
-    //PrintBattlerOnGymskillPopUp(battlerId, spriteId1, spriteId2);
     //PrintGymskillOnGymskillPopUp(gymskill, spriteId1, spriteId2);
-    /*PrintOnAbilityPopUp(sGymSkillText,
+    PrintOnGymskillPopUp(sGymSkillText,
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32),
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId2].oam.tileNum * 32),
-                        7, 65,
-                        6,
-                        2, 7, 1);*/
-    RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));
+                        10, 20,
+                        2,
+                        14, 2, 3);
+    //RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));
 }
 
 void UpdateGymskillPopup()
