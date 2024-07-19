@@ -595,7 +595,7 @@ void PrintBattleWindow_ActionPromt(void)
         break;
     }
 
-    //Mega and Catch Icons
+    //Catch Icon
     x  = 1;
     y  = 1;
     y2 = 0;
@@ -1203,6 +1203,7 @@ const u8 sText_MoveInfo_True_Power[]      = _("True Power:");
 const u8 sText_MoveInfo_Accuracy[]        = _("Accuracy:");
 const u8 sText_MoveInfo_Priority[]        = _("Priority:");
 const u8 sText_MoveInfo_Type_Null[]       = _("Type:");
+const u8 sText_MoveInfo_Types_Null[]      = _("Types:");
 const u8 sText_MoveInfo_Type[]            = _("{STR_VAR_2} {STR_VAR_1}");
 const u8 sText_MoveInfo_Type_Double[]     = _("{STR_VAR_2} {STR_VAR_1} & {STR_VAR_3}");
 const u8 sText_MoveInfo_Chance[]          = _("Chance: {STR_VAR_1}");
@@ -1291,7 +1292,7 @@ static bool8 HasPriorityMove(u8 battler)
 void PrintBattleWindow_MoveSelection(void)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
-    u8 i, j, x, y, x2, y2, offset, speed, moveType, effectiveness;
+    u8 i, j, x, y, x2, y2, offset, speed, moveType, effectiveness, extraX;
     u16 move, movePower;
     u8 windowId = B_WIN_ACTION_PROMPT;
     u8 font = FONT_SMALL_NARROW;
@@ -1301,6 +1302,7 @@ void PrintBattleWindow_MoveSelection(void)
     u8 battleTheme = getBattleInterfaceTheme();
     bool32 copyToVram;
     bool8 isStatusMove;
+    bool8 isDoubleTypedMove = FALSE;
     struct TextPrinterTemplate printerTemplate;
 
     switch(battleTheme){
@@ -1518,12 +1520,19 @@ void PrintBattleWindow_MoveSelection(void)
     GET_MOVE_TYPE(move, moveType);
     x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION; //Default
 
+    if(gBattleMoves[move].type != gBattleMoves[move].type2 && gBattleMoves[move].type2 != TYPE_NORMAL && gBattleMoves[move].type2 != TYPE_NONE)
+        isDoubleTypedMove = TRUE;
+
     switch(moveInfoType){
         case MOVE_INFO_DESCRIPTION:
             StringCopy(gStringVar4, gMoveFourLineDescriptionPointers[move - 1]);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
         break;
         case MOVE_INFO_POWER_ACC_PRIO_TYPE:
+            if(isDoubleTypedMove)
+                extraX = 8;
+            else
+                extraX = 0;
             x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
             //Move Power
             if(!isStatusMove)
@@ -1531,8 +1540,8 @@ void PrintBattleWindow_MoveSelection(void)
             else
                 StringCopy(gStringVar1, sText_Target_Nothing);
 
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Power);
-            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Power);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF) + extraX;
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
 
             //Split
@@ -1581,21 +1590,23 @@ void PrintBattleWindow_MoveSelection(void)
 
             y++;
             x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
+
             //Move Accuracy
             ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].accuracy, STR_CONV_MODE_LEFT_ALIGN, 3);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Accuracy);
-            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Accuracy);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF) + extraX;
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
             y++;
             //Move Priority
             ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
-            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Priority);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF) + extraX;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Priority);
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
             y++;
             //Move Type
-            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Type_Null);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Type_Null);
             StringCopy(gStringVar1, gTypeNames[moveType]);
+            //Stab
             if(IS_BATTLER_OF_TYPE(gActiveBattler, moveType))
                 StringCopy(gStringVar2, gStabIcon);
             else
@@ -1628,14 +1639,15 @@ void PrintBattleWindow_MoveSelection(void)
                 break;
             }
             
-            if(gBattleMoves[move].type != gBattleMoves[move].type2 && gBattleMoves[move].type2 != TYPE_NORMAL){
+            if(isDoubleTypedMove){
                 StringCopy(gStringVar3, gTypeNames[gBattleMoves[move].type2]);
                 StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type_Double);
             }
             else{
                 StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type);
             }
-            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar4, 0xFF);
+
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar4, 0xFF) + extraX;
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
         break;
         case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
@@ -5444,7 +5456,7 @@ static void PlayerHandleYesNoBox(void)
     {
         //HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
         HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
-        BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
+        BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO_TWO);
         gMultiUsePlayerCursor = 1;
         BattleCreateYesNoCursorAt(1);
         gBattlerControllerFuncs[gActiveBattler] = PlayerHandleYesNoInput;

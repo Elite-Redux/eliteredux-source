@@ -460,6 +460,7 @@
 #define B_WIN_SUPER_EFFECTIVE    16
 #define B_WIN_NOT_VERY_EFFECTIVE 17
 #define B_WIN_NO_EFFECT          18
+#define B_WIN_YESNO_TWO          19
 
 // The following are duplicate id values for windows that Battle Arena uses differently.
 #define ARENA_WIN_PLAYER_NAME      15

@@ -217,6 +217,15 @@ const struct WindowTemplate gStandardBattleWindowTemplates[] =
         .baseBlock = 0x02b0,
     },
     [B_WIN_YESNO] = {
+        .bg = 0,
+        .tilemapLeft = 26,
+        .tilemapTop = 9,
+        .width = 3,
+        .height = 4,
+        .paletteNum  = 0,
+        .baseBlock = 0x0100,
+    },
+    [B_WIN_YESNO_TWO] = {
         .bg          = B_WIN_DEFAULT_BG,
         .tilemapLeft = BATTLE_BOX_YES_NO_Y + 2,
         .tilemapTop  = 9,
@@ -393,6 +402,15 @@ static const struct WindowTemplate gBattleArenaWindowTemplates[] =
         .baseBlock = 0x02b0,
     },
     [B_WIN_YESNO] = {
+        .bg = 0,
+        .tilemapLeft = 26,
+        .tilemapTop = 9,
+        .width = 3,
+        .height = 4,
+        .paletteNum = 5,
+        .baseBlock = 0x0100,
+    },
+    [B_WIN_YESNO_TWO] = {
         .bg = 0,
         .tilemapLeft = BATTLE_BOX_YES_NO_Y + 2,
         .tilemapTop = 9,
