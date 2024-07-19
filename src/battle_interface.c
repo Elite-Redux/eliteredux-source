@@ -3907,7 +3907,7 @@ void TryRestoreLastUsedBall(void)
 
 #define GYMSKILL_POP_UP_TAG 0xD724 //TODO FIX ?
 
-static const u8 sGymskillPopUpGfx[] = INCBIN_U8("graphics/battle_interface/gymskill_pop_up.4bpp");
+static const u8 sGymskillPopUpGfx[] = INCBIN_U8("graphics/battle_interface/gymskill_pop_up_hardcoded.4bpp");
 static const u16 sGymskillPopUpPalette[] = INCBIN_U16("graphics/battle_interface/gymskill_pop_up.gbapal");
 
 static const struct SpriteSheet sSpriteSheet_GymSkillPopUp =
