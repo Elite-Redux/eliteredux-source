@@ -3837,8 +3837,10 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u8 maxIV = MAX_IV_MASK;
     u8 statIDs[NUM_STATS] = {0, 1, 2, 3, 4, 5};
     u8 hpType;
-    bool8 isShiny = FALSE;
+    u8 isShiny = 0;
+    u16 temp;
     bool8 isAlpha = FALSE;
+    u8 numShinies = gBaseStats[species].numShinies;
 
     ZeroBoxMonData(boxMon);
 
@@ -3868,15 +3870,31 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
 
         if (!FlagGet(FLAG_SHINY_CREATION)){
             for (i = 0; i < shinyRolls; i++)
-            {
-                if (Random() < getShinyOdds())
+            {   
+                temp = Random();
+                if (temp < getShinyOdds()){
                     FlagSet(FLAG_SHINY_CREATION);   // use a flag bc of CreateDexNavWildMon
+                    if(temp < 16) {
+                        if(temp < 8) {
+                            isShiny = 3;
+                            break;
+                        }
+                        isShiny = 2;
+                        break;
+                    }
+                    isShiny = 1;
+                    break;
+                } 
             }
         }
-
-        if (FlagGet(FLAG_SHINY_CREATION))
-            isShiny = TRUE;
         
+        if(numShinies == 1 && isShiny == 3)
+        {
+            isShiny = 2;    
+        }
+        if((numShinies == 2 && isShiny == 2) || (numShinies == 0 && isShiny)){
+            isShiny = 1;
+        }
         FlagClear(FLAG_SHINY_CREATION);
     }
 
@@ -8216,134 +8234,35 @@ static void Task_PlayMapChosenOrBattleBGM(u8 taskId)
 
 #undef tSongId
 
-const u32 *GetShinySpritePal(u16 species, u32 personality)
+const u32 *GetShinySpritePal(u16 species, u32 isShiny)
 {
-    u8 mask = gBaseStats[species].altShinyMask;
-    u32 res;
-    u16 shinyodds = getShinyOdds();
-    u16 rareodds;
-    u16 legendaryodds;
-    switch(shinyodds){
-        case 64:
-            //shinyodds = 1024;
-            rareodds = 5000;
-            legendaryodds = 10000;
-            break;
-        case 512:
-            //shinyodds = 128;
-            rareodds = 512;
-            legendaryodds = 1024;
-            break;
-        default:
-            //shinyodds = 5;
-            rareodds = 25;
-            legendaryodds = 50;
-            break;
-    }
-    if (mask > 0){
-        u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
-        if(rndSeed == 0){
-            u16 newseed = Random();
-            VarSet(VAR_RANDOMIZED_SEED, newseed);
-            rndSeed = VarGet(VAR_RANDOMIZED_SEED);
-        }
-        rndSeed ^= species * personality;
-        switch(mask){
-            case 1: //rare shiny only
-                res = RandRangeDeterministic(0, rareodds, &rndSeed);
-                if(res == 0)
-                    return gMonRareShinyPaletteTable[species].data;
-                break;
-            case 2: //legendary shiny only
-                res = RandRangeDeterministic(0, legendaryodds, &rndSeed);
-                if(res == 0)
-                    return gMonLegendaryShinyPaletteTable[species].data;
-                break;
-            case 3: //rare and legendary shiny
-                res = RandRangeDeterministic(0, rareodds, &rndSeed);
-                if(res == 0)
-                    return gMonRareShinyPaletteTable[species].data;
-                res = RandRangeDeterministic(0, legendaryodds, &rndSeed);
-                if(res == 0)
-                    return gMonLegendaryShinyPaletteTable[species].data;
-                break;
-            default:
-                return gMonShinyPaletteTable[species].data;
-        }
+    switch(isShiny){
+        case 1:
+            return gMonShinyPaletteTable[species].data;
+        case 2:
+            return gMonRareShinyPaletteTable[species].data;
+        case 3:
+            return gMonLegendaryShinyPaletteTable[species].data;
     }
     return gMonShinyPaletteTable[species].data;
 }
 
-u32 getNumAlts(u16 species){
-    u8 mask = gBaseStats[species].altShinyMask;
-    u8 i = 0;
-    u8 count = 0;
-    for(i = 0; i < 9; i++){
-        if(((mask >> i) & 1) == 1)
-            count++;
-    }
-    return count;
-}
 
-const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 personality)
+const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 isShiny)
 {
-    u8 mask = gBaseStats[species].altShinyMask;
-    u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
-    u16 newseed;
-    u32 res;
-    u16 shinyodds = getShinyOdds();
-    u16 rareodds;
-    u16 legendaryodds;
-    switch(shinyodds){
-        case 64:
-            //shinyodds = 1024;
-            rareodds = 5000;
-            legendaryodds = 10000;
-            break;
-        case 512:
-            //shinyodds = 128;
-            rareodds = 512;
-            legendaryodds = 1024;
-            break;
-        default:
-            //shinyodds = 5;
-            rareodds = 25;
-            legendaryodds = 50;
-            break;
-    }
-    if(rndSeed == 0){
-            newseed = Random();
-            VarSet(VAR_RANDOMIZED_SEED, newseed);
-            rndSeed = VarGet(VAR_RANDOMIZED_SEED);
-        }
-    rndSeed ^= species * personality;
-    switch(mask) {
-            case 1: //rare shiny only
-                res = RandRangeDeterministic(0, rareodds, &rndSeed);
-                if(res == 0)
-                    return &gMonRareShinyPaletteTable[species];
-                break;
-            case 2: //legendary shiny only
-                res = RandRangeDeterministic(0, legendaryodds, &rndSeed);
-                if(res == 0)
-                    return &gMonLegendaryShinyPaletteTable[species];
-                break;
-            case 3: //rare and legendary shiny
-                res = RandRangeDeterministic(0, rareodds, &rndSeed);
-                if(res == 0)
-                    return &gMonRareShinyPaletteTable[species];
-                res = RandRangeDeterministic(0, legendaryodds, &rndSeed);
-                if(res == 0)
-                    return &gMonLegendaryShinyPaletteTable[species];
-                break;
-            default:
-                return &gMonShinyPaletteTable[species];
+    switch(isShiny){
+        case 1:
+            return &gMonShinyPaletteTable[species];
+        case 2:
+            return &gMonRareShinyPaletteTable[species];
+        case 3:
+            return &gMonLegendaryShinyPaletteTable[species];
     }
     return &gMonShinyPaletteTable[species];
 }
 const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
 {
-    bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
+    u32 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
     u32 otId = GetMonData(mon, MON_DATA_OT_ID, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
@@ -8353,7 +8272,7 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonShinyPaletteTableFemale[species].data;
         else
-            return GetShinySpritePal(species, personality);
+            return GetShinySpritePal(species, isShiny);
     }
     else
     {
@@ -8364,14 +8283,13 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
     }
 }
 
-const u32 *GetMonSpritePal(u16 species, u32 personality, bool8 isShiny){
-    u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
+const u32 *GetMonSpritePal(u16 species, u32 personality, u32 isShiny){
     if (isShiny)
     {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonShinyPaletteTableFemale[species].data;
         else
-            return GetShinySpritePal(species, personality);
+            return GetShinySpritePal(species, isShiny);
             
     }
     else

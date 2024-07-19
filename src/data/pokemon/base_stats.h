@@ -11738,7 +11738,6 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_RED,
     .noFlip = FALSE,
     .tier = 1,
-    .altShinyMask = 0,
     },
 
 [SPECIES_CRAWDAUNT] =
@@ -30518,7 +30517,6 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
     .tier = 3,
-    .altShinyMask = 1,
     },
 
 [SPECIES_CUFANT] =
