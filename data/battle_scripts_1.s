@@ -12023,3 +12023,53 @@ BattleScript_GymSkillEndOfTurnBoost::
 	playstatchangeanimation BS_OPPONENT1, BIT_DEF, 0x00
 	end2
 
+
+BattleScript_GymSkillSteadyPrintString:
+	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
+	waitmessage B_WAIT_TIME_LONG
+	end2
+
+BattleScript_GymSkillSteadyStatsCannotChange:
+	end2
+
+BattleScript_GymSkillSteadyStatsChange:
+	copybyte gBattlerAttacker BS_OPPONENT1
+	copybyte gActiveBattler B_POSITION_OPPONENT_LEFT
+	@ trying to printstring here freezes the game, but doing it before copybyte is fine.
+	@ printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
+	@ waitmessage B_WAIT_TIME_LONG
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillSteadyStatsChange_
+BattleScript_GymSkillSteadyStatsChange_:
+	setgraphicalstatchangevalues
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillSteadyStatsCannotChange
+	playanimation BS_OPPONENT1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	call BattleScript_GymSkillPopup	
+	end2
+
+BattleScript_GymSkillSteadyOffense::
+	setstatchanger STAT_ATK, 1, FALSE
+	goto BattleScript_GymSkillSteadyStatsChange
+	end2
+
+BattleScript_GymSkillSteadyDefense::
+	setstatchanger STAT_DEF, 1, FALSE
+	goto BattleScript_GymSkillSteadyStatsChange
+	end2
+
+@ BattleScript_GymSkill
+@ gStackBattler1
+@ gStackBattler2
+@ saveattackertostack3
+@ readattackerfromstack3
+
+BattleScript_GymSkillPosture::
+	setstatchanger STAT_ATK, 4, FALSE
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
+BattleScript_GymSkillPosture_:
+	setgraphicalstatchangevalues
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillSteadyStatsCannotChange
+	playanimation BS_OPPONENT1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	call BattleScript_GymSkillPopup	
+	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
+	waitmessage STRINGID_GYMSKILL_POSTURE
+	end2

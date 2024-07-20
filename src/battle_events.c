@@ -9,6 +9,8 @@
 #include "battle_scripts.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "string_util.h"
+#include "strings.h"
 
 static u8 gNbBattleEvents;
 static u8 gCurrBattleEvent;
@@ -25,6 +27,7 @@ void RegisterBattleEvent(u8 battleEvent){
     gNbBattleEvents += 1;
 }
 
+// clear all battle Events
 void UnregisterBattlesEvents(){
     u8 i;
     for (i = 0; i < gNbBattleEvents; i++){
@@ -38,7 +41,7 @@ u8 ExecBattleEvents(u8 execEnum){
     // it goes by the principle that it will be executed in loop until it returns ALL CLEAR
     while (gCurrBattleEvent < gNbBattleEvents){
         gCurrBattleEvent++;
-        if (BattleEventsMegaSwitch(gBattleEvents[gCurrBattleEvent - 1], execEnum) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
+        if (BattleEventExec(gBattleEvents[gCurrBattleEvent - 1], execEnum) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     }
     // reset so it can be reexecuted later in a battle
@@ -46,7 +49,8 @@ u8 ExecBattleEvents(u8 execEnum){
     return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
 }
 
-u8 BattleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
+//exec only one battle Event
+u8 BattleEventExec(u8 battleEvent, u8 execEnum){
     switch (execEnum)
     {
     case EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN:
@@ -63,6 +67,7 @@ u8 BattleEventsMegaSwitch(u8 battleEvent, u8 execEnum){
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 
+// ran once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
     u8 i;
     switch (battleEvent)
@@ -82,21 +87,22 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
         }
         break;
     case BATTLE_EVENT_LEADER_1RST_PLUS_FOUR_DEF_BOOST:
-        gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 4);
-        BattleScriptExecute(BattleScript_GymSkillFourTimesBoost);
+        //gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 4);
+        StringExpandPlaceholders(gStringVar1, gText_Attack);
+        BattleScriptExecute(BattleScript_GymSkillPosture);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 
+// ran once the turn has reached its end before the player can get its hand on control again
 u8 BattleEventEndTurnExec(u8 battleEvent){
     switch (battleEvent)
     {
     case BATTLE_EVENT_NONE:
         break;
     case BATTLE_EVENT_STEADY_DEFENSE:
-        gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 1);
-        BattleScriptExecute(BattleScript_GymSkillEndOfTurnBoost);
+        BattleScriptExecute(BattleScript_GymSkillSteadyDefense);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;

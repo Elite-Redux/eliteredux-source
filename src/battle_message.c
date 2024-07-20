@@ -985,6 +985,8 @@ const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthi
 static const u8 sText_GymSkillTerrain[] = _("Something unusual modifies the terrain.");
 static const u8 sText_GymSkillFourTimesBoost[] = _("{B_OPPONENT_MON1_NAME} got extremely buffed.");
 static const u8 sText_GymSkillEndOfTurnBoost[] = _("{B_OPPONENT_MON1_NAME} got buffed.");
+static const u8 sText_GymSkillSteadyStatsBoost[] = _("{STR_VAR_1} Increases steadily.");
+static const u8 sText_GymSkillPosture[] = _("{B_OPPONENT_MON1_NAME} position itself to strike,, its {STR_VAR_1} abruptly increase.");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1754,6 +1756,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GYMSKILL_TERRAIN - 12] = sText_GymSkillTerrain,
     [STRINGID_GYMSKILL_FOURTIMESBOOST - 12] = sText_GymSkillFourTimesBoost,
     [STRINGID_GYMSKILL_ENDOFTURNBOOST - 12] = sText_GymSkillEndOfTurnBoost,
+    [STRINGID_GYMSKILL_STEADYSTATSBOOST - 12] = sText_GymSkillSteadyStatsBoost,
+    [STRINGID_GYMSKILL_POSTURE - 12] = sText_GymSkillPosture,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

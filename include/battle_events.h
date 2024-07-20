@@ -12,7 +12,7 @@ void RegisterBattleEvent(u8 battleEvent);
 void UnregisterBattlesEvents();
 // will iterate over the battleEvents
 u8 ExecBattleEvents(u8 execEnum);
-u8 BattleEventsMegaSwitch(u8 battleEvent, u8 execEnum);
+u8 BattleEventExec(u8 battleEvent, u8 execEnum);
 u8 BattleEventBeforeFirstTurnExec(u8 battleEvent);
 u8 BattleEventEndTurnExec(u8 battleEvent);
 // enum to communicate to execBattleEvent as execEnum parameter
