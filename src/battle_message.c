@@ -983,7 +983,7 @@ static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
 static const u8 sText_GymSkillTerrain[] = _("Something unusual modifies the terrain.");
-static const u8 sText_GymSkillSteadyStatsBoost[] = _("{B_OPPONENT_MON1_NAME}'s {STR_VAR_1} Increases steadily.");
+static const u8 sText_GymSkillSteadyStatsBoost[] = _("{B_OPPONENT_MON1_NAME}'s {STR_VAR_1} steadily increases.");
 static const u8 sText_GymSkillPosture[] = _("{B_OPPONENT_MON1_NAME} position itself to {STR_VAR_2},\nits {STR_VAR_1} abruptly increase.");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =

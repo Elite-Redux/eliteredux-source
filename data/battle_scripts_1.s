@@ -12037,7 +12037,8 @@ BattleScript_GymSkillPostureAccuracy::
 	goto BattleScript_GymSkillPosture
 
 BattleScript_GymSkillPosture:
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT 
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
 BattleScript_GymSkillPosture_:
 	setgraphicalstatchangevalues
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
@@ -12051,12 +12052,13 @@ BattleScript_GymSkillPostureCrit::
 
 
 BattleScript_GymSkillSteadyStatsChange:
-	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillSteadyStatsChange_
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillSteadyStatsChange_
 BattleScript_GymSkillSteadyStatsChange_:
 	setgraphicalstatchangevalues
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
 	playanimation BS_OPPONENT1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
 	call BattleScript_GymSkillPopup	
 	end2
 
