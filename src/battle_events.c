@@ -72,6 +72,30 @@ const u8 gText_Rush[] = _("Rush");
 const u8 gText_Aim[] = _("Aim");
 const u8 gText_Focus[] = _("Focus");
 
+const u8 sOnSwitchInForbiddenBattleEvent[] = {
+    BATTLE_EVENT_STEADY_OFFENSE,
+    BATTLE_EVENT_STEADY_DEFENSE,
+    BATTLE_EVENT_STEADY_SPECIAL,
+    BATTLE_EVENT_STEADY_SPDEF,
+    BATTLE_EVENT_STEADY_SPEED,
+    BATTLE_EVENT_STEADY_ACCURACY,
+    BATTLE_EVENT_STEADY_CRIT,
+};
+
+bool8 isBattleEventForbiddenOnSwitchIn(u8 battleEvent)
+{
+    u32 i;
+    if (!battleEvent) return TRUE;
+    for (i = 0; i < ARRAY_COUNT(sOnSwitchInForbiddenBattleEvent); i++)
+    {
+        if (battleEvent == sOnSwitchInForbiddenBattleEvent[i])
+            return TRUE;
+    }
+    return FALSE;
+}
+if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2) 
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR; // switched in and don't apply then because it's buggy and too OP
+
 // ran once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
     u8 i;
@@ -97,7 +121,6 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
         BattleScriptExecute(BattleScript_GymSkillPostureOffensive);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     case BATTLE_EVENT_POSTURE_DEFENSE:
-        //gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 4);
         StringExpandPlaceholders(gStringVar1, gText_Defense);
         StringExpandPlaceholders(gStringVar2, gText_Defend);
         BattleScriptExecute(BattleScript_GymSkillPostureDefensive);
@@ -133,6 +156,9 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
 
 // ran once the turn has reached its end before the player can get its hand on control again
 u8 BattleEventEndTurnExec(u8 battleEvent){
+    // prevent some abitlity to be executed once a pokemon has landed because it's too OP and most importantly bugged af.
+    if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2 && isBattleEventForbiddenOnSwitchIn(battleEvent))
+        return EXEC_BATTLE_EVENTS_ALL_CLEAR;
     switch (battleEvent)
     {
     case BATTLE_EVENT_NONE:

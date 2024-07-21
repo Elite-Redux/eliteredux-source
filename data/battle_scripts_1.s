@@ -12042,7 +12042,7 @@ BattleScript_GymSkillPosture:
 BattleScript_GymSkillPosture_:
 	setgraphicalstatchangevalues
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
-	playanimation BS_OPPONENT1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	call BattleScript_GymSkillPopup	
 	printstring STRINGID_GYMSKILL_POSTURE
 	end2
@@ -12057,7 +12057,7 @@ BattleScript_GymSkillSteadyStatsChange:
 BattleScript_GymSkillSteadyStatsChange_:
 	setgraphicalstatchangevalues
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
-	playanimation BS_OPPONENT1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
 	call BattleScript_GymSkillPopup	
 	end2
