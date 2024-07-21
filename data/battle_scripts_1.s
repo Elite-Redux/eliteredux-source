@@ -12058,8 +12058,8 @@ BattleScript_GymSkillSteadyStatsChange_:
 	setgraphicalstatchangevalues
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
 	call BattleScript_GymSkillPopup	
+	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
 	end2
 
 BattleScript_GymSkillSteadyOffense::
@@ -12090,7 +12090,7 @@ BattleScript_GymSkillTerrainStealthRock::
 	waitanimation
 	printstring STRINGID_GYMSKILL_TERRAIN
 	waitmessage B_WAIT_TIME_LONG
-	printfromtable gStealthRocksSet @ //BS_PLAYER1
+	printfromtable gStealthRocksSet
 	waitmessage B_WAIT_TIME_LONG
 	end2
 

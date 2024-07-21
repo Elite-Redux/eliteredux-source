@@ -3997,10 +3997,13 @@ static const s16 sGymSkillPopUpCoordsSingles[MAX_BATTLERS_COUNT][2] =
     {120, 23}, // opponent
 };
 static const u8 sGymSkillText[] = _("Gymskill");
-void CreateGymSkillPopUp(u32 gymskill)
+void CreateGymSkillPopUp(u32 gymskill) // parameter unused for now
 {
     const s16 (*coords)[2];
     u8 spriteId1, spriteId2, battlerPosition, taskId;
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "%d", gBattleStruct->activeGymskillPopUps);
+    MgbaClose();
     if (!gBattleStruct->activeGymskillPopUps){
         LoadSpriteSheet(&sSpriteSheet_GymSkillPopUp);
         LoadSpritePalette(&sSpritePalette_GymskillPopUp);
@@ -4009,7 +4012,6 @@ void CreateGymSkillPopUp(u32 gymskill)
     battlerPosition = 1;
 
     coords = sGymSkillPopUpCoordsSingles;
-
     spriteId1 = CreateSprite(&sSpriteTemplate_GymskillPopUp,
                                 coords[battlerPosition][0],
                                 0, 0);
@@ -4043,16 +4045,6 @@ void CreateGymSkillPopUp(u32 gymskill)
     //RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));
 }
 
-void UpdateGymskillPopup()
-{
-    u8 spriteId1 = gBattleStruct->gymskillPopUpSpriteIds[0];
-    u8 spriteId2 = gBattleStruct->gymskillPopUpSpriteIds[1];
-    //u16 gymskill = (gBattleScripting.gymskillPopupOverwrite != 0) ? gBattleScripting.gymskillPopupOverwrite : gBattleMons[battlerId].gymskill;
-    
-    //PrintGymskillOnGymskillPopUp(gymskill, spriteId1, spriteId2);
-    RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));
-}
-
 static void SpriteCb_GymskillPopUp(struct Sprite *sprite)
 {
     if (!sprite->tHide) // Show
@@ -4068,32 +4060,16 @@ static void SpriteCb_GymskillPopUp(struct Sprite *sprite)
     }
     else // Hide
     {
-        if (sprite->tFrames == 0)
+        if ((sprite->y -= 4) <= 0)
         {
-            if ((sprite->y -= 4) <= 0)
-            {
-                DestroySprite(sprite);
-            }
-        }
-        else
-        {
-            if (!gBattleScripting.fixedPopup)
-                sprite->tFrames--;
+            DestroySprite(sprite);
         }
     }
 }
 
-void DestroyGymSkillPopUp()
-{
-    gSprites[gBattleStruct->gymskillPopUpSpriteIds[0]].tFrames = 0;
-    gSprites[gBattleStruct->gymskillPopUpSpriteIds[1]].tFrames = 0;
-    gBattleScripting.fixedPopup = FALSE;
-}
-
 static void Task_FreeGymskillPopUpGfx(u8 taskId)
 {
-    if (!gSprites[gTasks[taskId].tSpriteId1].inUse
-        && !gSprites[gTasks[taskId].tSpriteId2].inUse)
+    if (!gSprites[gTasks[taskId].tSpriteId1].inUse)
     {
         FreeSpriteTilesByTag(GYMSKILL_POP_UP_TAG);
         FreeSpritePaletteByTag(GYMSKILL_POP_UP_TAG);
