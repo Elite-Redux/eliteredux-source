@@ -16,7 +16,6 @@ static u8 gNbBattleEvents;
 static u8 gCurrBattleEvent;
 EWRAM_DATA u8 gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { BATTLE_EVENT_NONE };
 
-
 void RegisterBattleEvent(u8 battleEvent){
     //reached the limit
     if (gNbBattleEvents == BATTLE_EVENTS_MAX_REGISTERABLE) {
@@ -67,6 +66,12 @@ u8 BattleEventExec(u8 battleEvent, u8 execEnum){
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 
+const u8 gText_Strike[] = _("Strike");
+const u8 gText_Defend[] = _("Defend");
+const u8 gText_Rush[] = _("Rush");
+const u8 gText_Aim[] = _("Aim");
+const u8 gText_Focus[] = _("Focus");
+
 // ran once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
     u8 i;
@@ -74,7 +79,7 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
     {
     case BATTLE_EVENT_NONE:
         break;
-    case BATTLE_EVENT_STEALTH_ROCK_START:
+    case BATTLE_EVENT_STEALTH_ROCK:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
         BattleScriptExecute(BattleScript_GymSkillTerrainStealthRock);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
@@ -86,12 +91,42 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
             }
         }
         break;
-    case BATTLE_EVENT_LEADER_1RST_PLUS_FOUR_DEF_BOOST:
-        //gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 4);
+    case BATTLE_EVENT_POSTURE_OFFENSE:
         StringExpandPlaceholders(gStringVar1, gText_Attack);
-        BattleScriptExecute(BattleScript_GymSkillPosture);
+        StringExpandPlaceholders(gStringVar2, gText_Strike);
+        BattleScriptExecute(BattleScript_GymSkillPostureOffensive);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
-    }
+    case BATTLE_EVENT_POSTURE_DEFENSE:
+        //gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] = min(12, gBattleMons[B_POSITION_OPPONENT_LEFT].statStages[STAT_DEF] + 4);
+        StringExpandPlaceholders(gStringVar1, gText_Defense);
+        StringExpandPlaceholders(gStringVar2, gText_Defend);
+        BattleScriptExecute(BattleScript_GymSkillPostureDefensive);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_POSTURE_SPECIAL:
+        StringExpandPlaceholders(gStringVar1, gText_SpAtk);
+        StringExpandPlaceholders(gStringVar2, gText_Strike);
+        BattleScriptExecute(BattleScript_GymSkillPostureSpecial);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_POSTURE_SPDEF:
+        StringExpandPlaceholders(gStringVar1, gText_SpDef)
+        StringExpandPlaceholders(gStringVar2, gText_Defend);
+        BattleScriptExecute(BattleScript_GymSkillPostureSpdef);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_POSTURE_SPEED:
+        StringExpandPlaceholders(gStringVar1, gText_Speed);
+        StringExpandPlaceholders(gStringVar2, gText_Rush);
+        BattleScriptExecute(BattleScript_GymSkillPostureSpeed);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_POSTURE_ACCURACY:
+        StringExpandPlaceholders(gStringVar1, gText_Accuracy2);
+        StringExpandPlaceholders(gStringVar2, gText_Aim);
+        BattleScriptExecute(BattleScript_GymSkillPostureAccuracy);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_POSTURE_CRIT:
+        StringExpandPlaceholders(gStringVar1, gText_Critical);
+        StringExpandPlaceholders(gStringVar2, gText_Focus);
+        BattleScriptExecute(BattleScript_GymSkillPostureCrit);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 

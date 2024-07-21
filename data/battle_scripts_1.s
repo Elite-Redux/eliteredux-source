@@ -12056,20 +12056,42 @@ BattleScript_GymSkillSteadyDefense::
 	goto BattleScript_GymSkillSteadyStatsChange
 	end2
 
+
+
 @ BattleScript_GymSkill
 @ gStackBattler1
 @ gStackBattler2
 @ saveattackertostack3
 @ readattackerfromstack3
-
-BattleScript_GymSkillPosture::
+BattleScript_GymSkillPostureOffensive::
 	setstatchanger STAT_ATK, 4, FALSE
+	goto BattleScript_GymSkillPosture
+BattleScript_GymSkillPostureDefensive::
+	setstatchanger STAT_DEF, 4, FALSE
+	goto BattleScript_GymSkillPosture
+BattleScript_GymSkillPostureSpecial::
+	setstatchanger STAT_SPATK, 4, FALSE
+	goto BattleScript_GymSkillPosture
+BattleScript_GymSkillPostureSpdef::
+	setstatchanger STAT_SPDEF, 4, FALSE
+	goto BattleScript_GymSkillPosture
+BattleScript_GymSkillPostureSpeed::
+	setstatchanger STAT_SPEED, 4, FALSE
+	goto BattleScript_GymSkillPosture
+BattleScript_GymSkillPostureAccuracy::
+	setstatchanger STAT_ACC, 4, FALSE
+	goto BattleScript_GymSkillPosture
+
+BattleScript_GymSkillPosture:
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
 BattleScript_GymSkillPosture_:
 	setgraphicalstatchangevalues
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillSteadyStatsCannotChange
 	playanimation BS_OPPONENT1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	call BattleScript_GymSkillPopup	
-	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
-	waitmessage STRINGID_GYMSKILL_POSTURE
+	printstring STRINGID_GYMSKILL_POSTURE
 	end2
+
+BattleScript_GymSkillPostureCrit::
+	end2 @not implemented yet	
+
