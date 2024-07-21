@@ -153,7 +153,7 @@ u8 BattleEventEndTurnExec(u8 battleEvent){
         StringExpandPlaceholders(gStringVar1, gText_SpDef);
         BattleScriptExecute(BattleScript_GymSkillSteadySpedef);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
-    case BATTLE_EVENT_STEADY_SPDEF:
+    case BATTLE_EVENT_STEADY_SPEED:
         StringExpandPlaceholders(gStringVar1, gText_Speed);
         BattleScriptExecute(BattleScript_GymSkillSteadySpeed);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;

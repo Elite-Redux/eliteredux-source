@@ -12069,7 +12069,7 @@ BattleScript_GymSkillSteadyDefense::
 BattleScript_GymSkillSteadySpecial::
 	setstatchanger STAT_SPATK, 1, FALSE
 	goto BattleScript_GymSkillSteadyStatsChange
-BattleScript_GymSkillSteadySpeDef::
+BattleScript_GymSkillSteadySpedef::
 	setstatchanger STAT_SPDEF, 1, FALSE
 	goto BattleScript_GymSkillSteadyStatsChange
 BattleScript_GymSkillSteadySpeed::
