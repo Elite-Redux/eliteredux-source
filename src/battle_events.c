@@ -93,8 +93,6 @@ bool8 isBattleEventForbiddenOnSwitchIn(u8 battleEvent)
     }
     return FALSE;
 }
-if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2) 
-            return EXEC_BATTLE_EVENTS_ALL_CLEAR; // switched in and don't apply then because it's buggy and too OP
 
 // ran once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
