@@ -108,7 +108,7 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
         BattleScriptExecute(BattleScript_GymSkillPostureSpecial);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     case BATTLE_EVENT_POSTURE_SPDEF:
-        StringExpandPlaceholders(gStringVar1, gText_SpDef)
+        StringExpandPlaceholders(gStringVar1, gText_SpDef);
         StringExpandPlaceholders(gStringVar2, gText_Defend);
         BattleScriptExecute(BattleScript_GymSkillPostureSpdef);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
@@ -127,6 +127,7 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
         StringExpandPlaceholders(gStringVar2, gText_Focus);
         BattleScriptExecute(BattleScript_GymSkillPostureCrit);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 
@@ -136,8 +137,33 @@ u8 BattleEventEndTurnExec(u8 battleEvent){
     {
     case BATTLE_EVENT_NONE:
         break;
+    case BATTLE_EVENT_STEADY_OFFENSE:
+        StringExpandPlaceholders(gStringVar1, gText_Attack);
+        BattleScriptExecute(BattleScript_GymSkillSteadyOffense);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     case BATTLE_EVENT_STEADY_DEFENSE:
+        StringExpandPlaceholders(gStringVar1, gText_Defense);
         BattleScriptExecute(BattleScript_GymSkillSteadyDefense);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_STEADY_SPECIAL:
+        StringExpandPlaceholders(gStringVar1, gText_SpAtk);
+        BattleScriptExecute(BattleScript_GymSkillSteadySpecial);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_STEADY_SPDEF:
+        StringExpandPlaceholders(gStringVar1, gText_SpDef);
+        BattleScriptExecute(BattleScript_GymSkillSteadySpedef);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_STEADY_SPDEF:
+        StringExpandPlaceholders(gStringVar1, gText_Speed);
+        BattleScriptExecute(BattleScript_GymSkillSteadySpeed);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_STEADY_ACCURACY:
+        StringExpandPlaceholders(gStringVar1, gText_Accuracy2);
+        BattleScriptExecute(BattleScript_GymSkillSteadyAccuracy);
+        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+    case BATTLE_EVENT_STEADY_CRIT:
+        StringExpandPlaceholders(gStringVar1, gText_Critical);
+        BattleScriptExecute(BattleScript_GymSkillSteadyCrit);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;

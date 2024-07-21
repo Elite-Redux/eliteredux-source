@@ -605,10 +605,14 @@ extern const u8 BattleScript_SetWonderRoomFromScript[];
 extern const u8 BattleScript_SetGravityFromScript[];
 extern const u8 BattleScript_SetInverseRoomFromScript[];
 
-extern const u8 BattleScript_GymSkillTerrainStealthRock[];
-extern const u8 BattleScript_GymSkillFourTimesBoost[];
-extern const u8 BattleScript_GymSkillEndOfTurnBoost[];
+extern const u8 BattleScript_GymSkillSteadyOffense[];
 extern const u8 BattleScript_GymSkillSteadyDefense[];
+extern const u8 BattleScript_GymSkillSteadySpecial[];
+extern const u8 BattleScript_GymSkillSteadySpedef[];
+extern const u8 BattleScript_GymSkillSteadySpeed[];
+extern const u8 BattleScript_GymSkillSteadyAccuracy[];
+extern const u8 BattleScript_GymSkillSteadyCrit[]; //not implemented yet
+
 extern const u8 BattleScript_GymSkillPostureOffensive[];
 extern const u8 BattleScript_GymSkillPostureDefensive[];
 extern const u8 BattleScript_GymSkillPostureSpecial[];
@@ -616,5 +620,8 @@ extern const u8 BattleScript_GymSkillPostureSpdef[];
 extern const u8 BattleScript_GymSkillPostureSpeed[];
 extern const u8 BattleScript_GymSkillPostureAccuracy[];
 extern const u8 BattleScript_GymSkillPostureCrit[]; //not implemented yet
+
+extern const u8 BattleScript_GymSkillTerrainStealthRock[];
+
 
 #endif // GUARD_BATTLE_SCRIPTS_H

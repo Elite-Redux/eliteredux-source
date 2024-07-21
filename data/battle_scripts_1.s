@@ -11996,73 +11996,27 @@ BattleScript_EffectUpperHand::
 	setmoveeffect MOVE_EFFECT_FLINCH
 	goto BattleScript_EffectHit
 
+@ memo of tools i need to try
+@ BattleScript_GymSkill
+@ gStackBattler1
+@ gStackBattler2
+@ saveattackertostack3
+@ readattackerfromstack3
+@ copybyte gBattlerAttacker BS_OPPONENT1
+@ copybyte gActiveBattler B_POSITION_OPPONENT_LEFT 
 
 BattleScript_GymSkillPopup:
 	various 0, VARIOUS_GYMSKILL_POPUP
 	return
-
-BattleScript_GymSkillTerrainStealthRock::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_TERRAIN
-	waitmessage B_WAIT_TIME_LONG
-	printfromtable gStealthRocksSet @ //BS_PLAYER1
-	waitmessage B_WAIT_TIME_LONG
-	end2
-
-BattleScript_GymSkillFourTimesBoost::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_FOURTIMESBOOST
-	waitmessage B_WAIT_TIME_LONG
-	playstatchangeanimation BS_OPPONENT1, BIT_DEF, STAT_CHANGE_BY_TWO
-	end2
-
-BattleScript_GymSkillEndOfTurnBoost::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_ENDOFTURNBOOST
-	waitmessage B_WAIT_TIME_LONG
-	playstatchangeanimation BS_OPPONENT1, BIT_DEF, 0x00
-	end2
-
 
 BattleScript_GymSkillSteadyPrintString:
 	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillSteadyStatsCannotChange:
+BattleScript_GymSkillStatsCannotChange:
 	end2
 
-BattleScript_GymSkillSteadyStatsChange:
-	copybyte gBattlerAttacker BS_OPPONENT1
-	copybyte gActiveBattler B_POSITION_OPPONENT_LEFT
-	@ trying to printstring here freezes the game, but doing it before copybyte is fine.
-	@ printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
-	@ waitmessage B_WAIT_TIME_LONG
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillSteadyStatsChange_
-BattleScript_GymSkillSteadyStatsChange_:
-	setgraphicalstatchangevalues
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillSteadyStatsCannotChange
-	playanimation BS_OPPONENT1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	call BattleScript_GymSkillPopup	
-	end2
-
-BattleScript_GymSkillSteadyOffense::
-	setstatchanger STAT_ATK, 1, FALSE
-	goto BattleScript_GymSkillSteadyStatsChange
-	end2
-
-BattleScript_GymSkillSteadyDefense::
-	setstatchanger STAT_DEF, 1, FALSE
-	goto BattleScript_GymSkillSteadyStatsChange
-	end2
-
-
-
-@ BattleScript_GymSkill
-@ gStackBattler1
-@ gStackBattler2
-@ saveattackertostack3
-@ readattackerfromstack3
 BattleScript_GymSkillPostureOffensive::
 	setstatchanger STAT_ATK, 4, FALSE
 	goto BattleScript_GymSkillPosture
@@ -12086,7 +12040,7 @@ BattleScript_GymSkillPosture:
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
 BattleScript_GymSkillPosture_:
 	setgraphicalstatchangevalues
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillSteadyStatsCannotChange
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
 	playanimation BS_OPPONENT1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	call BattleScript_GymSkillPopup	
 	printstring STRINGID_GYMSKILL_POSTURE
@@ -12094,4 +12048,44 @@ BattleScript_GymSkillPosture_:
 
 BattleScript_GymSkillPostureCrit::
 	end2 @not implemented yet	
+
+
+BattleScript_GymSkillSteadyStatsChange:
+	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillSteadyStatsChange_
+BattleScript_GymSkillSteadyStatsChange_:
+	setgraphicalstatchangevalues
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	playanimation BS_OPPONENT1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	call BattleScript_GymSkillPopup	
+	end2
+
+BattleScript_GymSkillSteadyOffense::
+	setstatchanger STAT_ATK, 1, FALSE
+	goto BattleScript_GymSkillSteadyStatsChange
+BattleScript_GymSkillSteadyDefense::
+	setstatchanger STAT_DEF, 1, FALSE
+	goto BattleScript_GymSkillSteadyStatsChange
+BattleScript_GymSkillSteadySpecial::
+	setstatchanger STAT_SPATK, 1, FALSE
+	goto BattleScript_GymSkillSteadyStatsChange
+BattleScript_GymSkillSteadySpeDef::
+	setstatchanger STAT_SPDEF, 1, FALSE
+	goto BattleScript_GymSkillSteadyStatsChange
+BattleScript_GymSkillSteadySpeed::
+	setstatchanger STAT_SPEED, 1, FALSE
+	goto BattleScript_GymSkillSteadyStatsChange
+BattleScript_GymSkillSteadyAccuracy::
+	setstatchanger STAT_ACC, 1, FALSE
+	goto BattleScript_GymSkillSteadyStatsChange
+BattleScript_GymSkillSteadyCrit:: @ not implemented yet
+	end2
+
+BattleScript_GymSkillTerrainStealthRock::
+	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_TERRAIN
+	waitmessage B_WAIT_TIME_LONG
+	printfromtable gStealthRocksSet @ //BS_PLAYER1
+	waitmessage B_WAIT_TIME_LONG
+	end2
 
