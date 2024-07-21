@@ -4001,9 +4001,6 @@ void CreateGymSkillPopUp(u32 gymskill) // parameter unused for now
 {
     const s16 (*coords)[2];
     u8 spriteId1, spriteId2, battlerPosition, taskId;
-    MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "%d", gBattleStruct->activeGymskillPopUps);
-    MgbaClose();
     if (!gBattleStruct->activeGymskillPopUps){
         LoadSpriteSheet(&sSpriteSheet_GymSkillPopUp);
         LoadSpritePalette(&sSpritePalette_GymskillPopUp);
