@@ -471,26 +471,6 @@ script RustboroCity_Gym_EventScript_GiveRockTomb{
 	end
 }
 
-script RustboroCity_Gym_EventScript_CheckTrainers{
-	if (flag(FLAG_BADGE01_GET)) {
-		msgbox(RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT)
-		release
-		end
-	}
-    	// register all battle events for all trainer not fought
-	if (defeated(TRAINER_MARC)){ // WARNING THIS WAS UN NEGATED FOR TEST PURPOSE
-		registerbattleevent(BATTLE_EVENT_STEADY_DEFENSE)
-	}
-	if (!defeated(TRAINER_TOMMY)){
-		registerbattleevent(BATTLE_EVENT_LAST_PARALYZED)
-		registerbattleevent(BATTLE_EVENT_LAST_PARALYZED)
-	}
-	if (!defeated(TRAINER_JOSH)){
-		registerbattleevent(BATTLE_EVENT_POSTURE_DEFENSE)
-		// registerbattleevent(BATTLE_EVENT_STEALTH_ROCK) DEBUG ONLY
-	}
-	return
-}
 
 script RustboroCity_Gym_EventScript_Marc{
 	lock
@@ -539,6 +519,27 @@ script RustboroCity_Gym_EventScript_Tommy{
 	}
 	release
 	end
+}
+
+script RustboroCity_Gym_EventScript_CheckTrainers{
+	if (flag(FLAG_BADGE01_GET)) {
+		msgbox(RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT)
+		release
+		end
+	}
+    	// register all battle events for all trainer not fought
+	if (defeated(TRAINER_MARC)){ // WARNING THIS WAS UN NEGATED FOR TEST PURPOSE
+		registerbattleevent(BATTLE_EVENT_STEADY_DEFENSE)
+	}
+	if (!defeated(TRAINER_TOMMY)){
+		registerbattleevent(BATTLE_EVENT_LAST_PARALYZED)
+		registerbattleevent(BATTLE_EVENT_LAST_PARALYZED)
+	}
+	if (!defeated(TRAINER_JOSH)){
+		registerbattleevent(BATTLE_EVENT_POSTURE_DEFENSE)
+		registerbattleevent(BATTLE_EVENT_STEALTH_ROCK)
+	}
+	return
 }
 
 text RustboroCity_Gym_Text_RoxanneIntro0{

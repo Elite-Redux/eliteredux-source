@@ -12085,6 +12085,9 @@ BattleScript_GymSkillSteadyCrit:: @ not implemented yet
 
 BattleScript_GymSkillTerrainStealthRock::
 	call BattleScript_GymSkillPopup
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
+	waitanimation
 	printstring STRINGID_GYMSKILL_TERRAIN
 	waitmessage B_WAIT_TIME_LONG
 	printfromtable gStealthRocksSet @ //BS_PLAYER1
