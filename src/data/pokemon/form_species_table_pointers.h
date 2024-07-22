@@ -612,7 +612,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_STUFFUL]               = sStuffulFormSpeciesIdTable,
 
     [SPECIES_BEWEAR_REDUX]          = sBewearFormSpeciesIdTable,
-    [SPECIES_BEWEAR]                = sBewearFormSpeciesIdTable,
+    [SPECIES_BEWEAR_ANGRY] = sBewearFormSpeciesIdTable,
 
     [SPECIES_PANPOUR_REDUX]         = sPanpourFormSpeciesIdTable,
     [SPECIES_PANPOUR]               = sPanpourFormSpeciesIdTable,

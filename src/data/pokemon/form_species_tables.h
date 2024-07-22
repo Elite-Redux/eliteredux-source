@@ -1247,6 +1247,7 @@ static const u16 sStuffulFormSpeciesIdTable[] = {
 };
 static const u16 sBewearFormSpeciesIdTable[] = {
     SPECIES_BEWEAR,
+    SPECIES_BEWEAR_ANGRY,
     SPECIES_BEWEAR_REDUX,
     FORM_SPECIES_END,
 };
