@@ -3994,7 +3994,7 @@ static void PrintOnGymskillPopUp(const u8 *str, u8 *spriteTileData1, u8 *spriteT
 static const s16 sGymSkillPopUpCoordsSingles[MAX_BATTLERS_COUNT][2] =
 {
     {29, 93}, // player
-    {120, 23}, // opponent
+    {149, 24}, // opponent
 };
 static const u8 sGymSkillText[] = _("Gymskill");
 void CreateGymSkillPopUp(u32 gymskill) // parameter unused for now
@@ -4057,10 +4057,18 @@ static void SpriteCb_GymskillPopUp(struct Sprite *sprite)
     }
     else // Hide
     {
-        if ((sprite->y -= 4) <= 0)
+        if (sprite->tFrames == 0)
+        {
+            if ((sprite->y -= 4) <= 0)
         {
             DestroySprite(sprite);
         }
+        }
+        else
+        {
+            sprite->tFrames--;
+        }
+        
     }
 }
 

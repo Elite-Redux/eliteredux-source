@@ -2332,3 +2332,47 @@ checkstatbuffonlowered_queensmourning_\@:
 	goto checkstatbuffonlowered_none_\@
 checkstatbuffonlowered_none_\@:
 	.endm
+
+@ unused, was for an experiment
+.macro battlemacrostyped macro_type:req, type:req, data:req, ptr:req, data2
+	.if \param2 == BATTLE_MACROS_TYPE_U8
+		.byte 0x93
+		.byte \param0
+		.byte \data
+		.if \data2
+			.byte \data2
+		.else
+			.byte 0
+		.endif
+		.4byte \ptr
+	.endif
+	.if \param2 == BATTLE_MACROS_TYPE_U16
+		.byte 0x93
+		.byte \param0
+		.2byte \data
+		.4byte \ptr
+	.endif
+	.endm
+
+@ unused, was for an experiment
+.macro battlemacrosflexible4 macro_data_type:req, macro_type:req, data:req, data2, data3, data4
+	.byte 0x93
+	.byte \macro_data_type
+	.byte \macro_type
+	.byte \data 
+	.if \data2
+		.byte \data2
+	.else
+		.byte 0
+	.endif
+	.if \data3
+		.byte \data3
+	.else
+		.byte 0
+	.endif
+	.if \data4
+		.byte \data4
+	.else
+		.byte 0
+	.endif
+.endm
