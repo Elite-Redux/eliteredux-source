@@ -12045,6 +12045,7 @@ BattleScript_GymSkillPosture_:
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_GYMSKILL_POSTURE
+	waitmessage B_WAIT_TIME_SHORT
 	end2
 
 BattleScript_GymSkillPostureCrit::
@@ -12060,6 +12061,7 @@ BattleScript_GymSkillSteadyStatsChange_:
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
+	waitmessage B_WAIT_TIME_LONG
 	end2
 
 BattleScript_GymSkillSteadyOffense::
@@ -12083,11 +12085,12 @@ BattleScript_GymSkillSteadyAccuracy::
 BattleScript_GymSkillSteadyCrit:: @ not implemented yet
 	end2
 
-BattleScript_GymSkillLastParalyzed::
-
-
-BattleScript_GymSkillStatusEvent:
+BattleScript_GymSkillStatusOnTeam::
+	waitse @ because inside battle_event.c there's playSE
 	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_STATUSONTEAM
+	waitmessage B_WAIT_TIME_LONG
+	end2
 
 BattleScript_GymSkillTerrainStealthRock::
 	call BattleScript_GymSkillPopup

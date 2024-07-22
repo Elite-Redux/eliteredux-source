@@ -11,6 +11,8 @@
 #include "mgba_printf/mini_printf.h"
 #include "string_util.h"
 #include "strings.h"
+#include "sound.h"
+#include "constants/songs.h"
 
 static u8 gNbBattleEvents;
 static u8 gCurrBattleEvent;
@@ -72,11 +74,21 @@ u8 BattleEventExec(u8 battleEvent, u8 execEnum){
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 
-const u8 gText_Strike[] = _("Strike");
-const u8 gText_Defend[] = _("Defend");
-const u8 gText_Rush[] = _("Rush");
-const u8 gText_Aim[] = _("Aim");
-const u8 gText_Focus[] = _("Focus");
+// you cannot fathom my lazyness
+#define RUN_BATTLESCRIPT(bs)    BattleScriptExecute(bs); \
+    return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+#define SET_STR1(str)   StringExpandPlaceholders(gStringVar1, str);
+#define SET_STR2(str1, str2) StringExpandPlaceholders(gStringVar1, str1);\
+    StringExpandPlaceholders(gStringVar2, str2);
+
+
+const u8 sText_Strike[] = _("Strike");
+const u8 sText_Defend[] = _("Defend");
+const u8 sText_Rush[] = _("Rush");
+const u8 sText_Aim[] = _("Aim");
+const u8 sText_Focus[] = _("Focus");
+const u8 sText_Toxic[] = _("Sharp poison");
+static const u8 sText_Frostbite[] = _("Frostbite");
 
 const u8 sOnSwitchInForbiddenBattleEvent[] = {
     BATTLE_EVENT_STEADY_OFFENSE,
@@ -88,7 +100,7 @@ const u8 sOnSwitchInForbiddenBattleEvent[] = {
     BATTLE_EVENT_STEADY_CRIT,
 };
 
-bool8 isBattleEventForbiddenOnSwitchIn(u8 battleEvent)
+bool8 IsBattleEventForbiddenOnSwitchIn(u8 battleEvent)
 {
     u32 i;
     if (!battleEvent) return TRUE;
@@ -99,61 +111,87 @@ bool8 isBattleEventForbiddenOnSwitchIn(u8 battleEvent)
     }
     return FALSE;
 }
-// you cannot fathom my lazyness
-#define RUN_BATTLESCRIPT(bs)    BattleScriptExecute(bs); \
-    return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
-#define SET_STR1(str) StringExpandPlaceholders(gStringVar1, str);
-#define SET_STR2(str) StringExpandPlaceholders(gStringVar2, str);
+
+bool8 AffectNStatusOnTeamFromLastToFirst(u16 status, u8 n){
+    u8 i;
+    if (n == 0)
+        n = 1;
+    for (i = gPlayerPartyCount - 1; i > 0 ; i--){
+        if (gPlayerParty[i].status == STATUS1_NONE){
+            gPlayerParty[i].status = status;
+            if ((--n) == 0)
+                return TRUE;
+        }
+    }
+    return FALSE;
+}
 
 // ran once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
-    u8 i;
     u8 data;
     switch (battleEvent)
     {
     case BATTLE_EVENT_NONE:
         break;
+    case BATTLE_EVENT_POSTURE_OFFENSE:
+        SET_STR2(gText_Attack, sText_Strike)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureOffensive)
+    case BATTLE_EVENT_POSTURE_DEFENSE:
+        SET_STR2(gText_Defense, sText_Defend)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureDefensive)
+    case BATTLE_EVENT_POSTURE_SPECIAL:
+        SET_STR2(gText_SpAtk, sText_Strike)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpecial)
+    case BATTLE_EVENT_POSTURE_SPDEF:
+        SET_STR2(gText_SpDef, sText_Defend)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpdef)
+    case BATTLE_EVENT_POSTURE_SPEED:
+        SET_STR2(gText_Speed, sText_Rush)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpeed)
+    case BATTLE_EVENT_POSTURE_ACCURACY:
+        SET_STR2(gText_Accuracy2, sText_Aim)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureAccuracy)
+    case BATTLE_EVENT_POSTURE_CRIT:
+        SET_STR2(gText_Critical, sText_Focus)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureCrit)
+    case BATTLE_EVENT_LAST_PARALYZED:
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_PARALYSIS, getCurrentBattleEventData()))
+            PlaySE(SE_M_THUNDERBOLT2);
+        SET_STR1(gText_Paralysis)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+    case BATTLE_EVENT_LAST_BURNED:
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BURN, getCurrentBattleEventData()))
+            PlaySE(SE_M_FLAME_WHEEL);
+        SET_STR1(gText_Burn)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+    case BATTLE_EVENT_LAST_SLEEP:
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_SLEEP, getCurrentBattleEventData()))
+            PlaySE(SE_M_SNORE);
+        SET_STR1(gText_Sleep)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+    case BATTLE_EVENT_LAST_FROSTBITE:
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_FROSTBITE, getCurrentBattleEventData()))
+            PlaySE(SE_M_ICY_WIND); // TODO PROBABLY WRONG SE
+        SET_STR1(sText_Frostbite)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+    case BATTLE_EVENT_LAST_BLEED:
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BLEED, getCurrentBattleEventData()))
+            PlaySE(SE_M_BUBBLE);
+        SET_STR1(gText_Bleed)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+    case BATTLE_EVENT_LAST_POISONED:
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_POISON, getCurrentBattleEventData()))
+            PlaySE12WithPanning(SE_M_TOXIC, 13); // UNTESTED PROBABLY BROKEN BUT XD! 
+        SET_STR1(gText_Poison)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+    case BATTLE_EVENT_LAST_TOXIC:
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_TOXIC_POISON, getCurrentBattleEventData()))
+            PlaySE(SE_M_TOXIC);
+        SET_STR1(sText_Toxic)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_STEALTH_ROCK:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
         RUN_BATTLESCRIPT(BattleScript_GymSkillTerrainStealthRock)
-    case BATTLE_EVENT_LAST_PARALYZED:
-        data = getCurrentBattleEventData();
-        for (i = gPlayerPartyCount - 1; i > 0 ; i--){
-            if (gPlayerParty[i].status == STATUS1_NONE){
-                gPlayerParty[i].status = STATUS1_PARALYSIS;
-                if (data == 0 || (--data) == 0)
-                    break;
-            }
-        }
-        break;
-    case BATTLE_EVENT_POSTURE_OFFENSE:
-        SET_STR1(gText_Attack)
-        SET_STR2(gText_Strike)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureOffensive)
-    case BATTLE_EVENT_POSTURE_DEFENSE:
-        SET_STR1(gText_Defense)
-        SET_STR2(gText_Defend)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureDefensive)
-    case BATTLE_EVENT_POSTURE_SPECIAL:
-        SET_STR1(gText_SpAtk)
-        SET_STR2(gText_Strike)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpecial)
-    case BATTLE_EVENT_POSTURE_SPDEF:
-        SET_STR1(gText_SpDef)
-        SET_STR2(gText_Defend)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpdef)
-    case BATTLE_EVENT_POSTURE_SPEED:
-        SET_STR1(gText_Speed)
-        SET_STR2(gText_Rush)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpeed)
-    case BATTLE_EVENT_POSTURE_ACCURACY:
-        SET_STR1(gText_Accuracy2)
-        SET_STR2(gText_Aim)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureAccuracy)
-    case BATTLE_EVENT_POSTURE_CRIT:
-        SET_STR1(gText_Critical)
-        SET_STR2(gText_Focus)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureCrit)
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
@@ -161,7 +199,7 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
 // ran once the turn has reached its end before the player can get its hand on control again
 u8 BattleEventEndTurnExec(u8 battleEvent){
     // prevent some abitlity to be executed once a pokemon has landed because it's too OP and most importantly bugged af.
-    if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2 && isBattleEventForbiddenOnSwitchIn(battleEvent))
+    if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2 && IsBattleEventForbiddenOnSwitchIn(battleEvent))
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
     switch (battleEvent)
     {

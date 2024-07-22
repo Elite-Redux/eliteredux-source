@@ -2364,3 +2364,9 @@ checkstatbuffonlowered_none_\@:
 	.byte \data3
 	.byte \data4
 .endm
+
+@ taken from events.inc
+@ Blocks script execution until the currently-playing sound (triggered by playse) finishes playing.
+.macro waitse
+	.byte 0x30
+	.endm
