@@ -2355,24 +2355,12 @@ checkstatbuffonlowered_none_\@:
 	.endm
 
 @ unused, was for an experiment
-.macro battlemacrosflexible4 macro_data_type:req, macro_type:req, data:req, data2, data3, data4
+.macro battlemacrosflexible4 macro_data_type:req, macro_type:req, data:req, data2=0, data3=0, data4=0
 	.byte 0x93
 	.byte \macro_data_type
 	.byte \macro_type
 	.byte \data 
-	.if \data2
-		.byte \data2
-	.else
-		.byte 0
-	.endif
-	.if \data3
-		.byte \data3
-	.else
-		.byte 0
-	.endif
-	.if \data4
-		.byte \data4
-	.else
-		.byte 0
-	.endif
+	.byte \data2
+	.byte \data3
+	.byte \data4
 .endm

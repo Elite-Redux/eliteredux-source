@@ -15,14 +15,16 @@
 static u8 gNbBattleEvents;
 static u8 gCurrBattleEvent;
 EWRAM_DATA u8 gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { BATTLE_EVENT_NONE };
+EWRAM_DATA u8 gBattleEventsData[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
 
-void RegisterBattleEvent(u8 battleEvent){
+void RegisterBattleEvent(u8 battleEvent, u8 battleEventData){
     //reached the limit
     if (gNbBattleEvents == BATTLE_EVENTS_MAX_REGISTERABLE) {
         //how could i warn btw? shout in a message box?
         return;
     }
     gBattleEvents[gNbBattleEvents] = battleEvent;
+    gBattleEventsData[gNbBattleEvents] = battleEventData;
     gNbBattleEvents += 1;
 }
 
@@ -34,6 +36,10 @@ void UnregisterBattlesEvents(){
     }
     gNbBattleEvents = 0;
     gCurrBattleEvent = 0;
+}
+
+u8 getCurrentBattleEventData(){
+    return gBattleEventsData[gCurrBattleEvent - 1];
 }
 
 u8 ExecBattleEvents(u8 execEnum){
@@ -97,6 +103,7 @@ bool8 isBattleEventForbiddenOnSwitchIn(u8 battleEvent)
 // ran once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
     u8 i;
+    u8 data;
     switch (battleEvent)
     {
     case BATTLE_EVENT_NONE:
@@ -106,10 +113,12 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
         BattleScriptExecute(BattleScript_GymSkillTerrainStealthRock);
         return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
     case BATTLE_EVENT_LAST_PARALYZED:
+        data = getCurrentBattleEventData();
         for (i = gPlayerPartyCount - 1; i > 0 ; i--){
             if (gPlayerParty[i].status == STATUS1_NONE){
                 gPlayerParty[i].status = STATUS1_PARALYSIS;
-                break;
+                if (data == 0 || (--data) == 0)
+                    break;
             }
         }
         break;

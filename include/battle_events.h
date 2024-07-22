@@ -8,7 +8,8 @@
 extern u8 gNbBattleEvents;
 extern u8 gCurrBattleEvent;
 extern u8 gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE];
-void RegisterBattleEvent(u8 battleEvent);
+extern u8 gBattleEventsData[BATTLE_EVENTS_MAX_REGISTERABLE];
+void RegisterBattleEvent(u8 battleEvent, u8 battleEventData);
 void UnregisterBattlesEvents();
 // will iterate over the battleEvents
 u8 ExecBattleEvents(u8 execEnum);

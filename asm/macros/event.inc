@@ -2110,9 +2110,10 @@
 	.endm
 
 	@ register an event for the next battle (see src/battle_events.c)
-	.macro registerbattleevent battleeventid:req
+	.macro registerbattleevent battleeventid:req, data=0
 	.byte 0xee
 	.byte \battleeventid
+	.byte \data
 	.endm
 
 	@ adds to var result the number of trainer fought
