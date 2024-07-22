@@ -1020,6 +1020,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_PHANTOWL] = _("Phantowl"),
     [SPECIES_DUELUMBER] = _("Duelumber"),
     [SPECIES_ESCARGINITE] = _("Escarginite"),
+[SPECIES_ABOMASNOW_SANTA] = _("Abomasnow"),
 [SPECIES_WEAVILE_REDUX_MEGA] = _("Weavile"),
 [SPECIES_WEAVILE_REDUX] = _("Weavile"),
 [SPECIES_RIBOMBEE_REDUX_MEGA] = _("Ribombee"),

@@ -21,6 +21,11 @@ static const union AnimCmd sAnim_ESCARGINITE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_ABOMASNOW_SANTA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_WEAVILE_REDUX_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -220,6 +225,11 @@ static const union AnimCmd *const sAnims_DUELUMBER[] ={
 static const union AnimCmd *const sAnims_ESCARGINITE[] ={
     sAnim_GeneralFrame0,
     sAnim_ESCARGINITE_1,
+};
+
+static const union AnimCmd *const sAnims_ABOMASNOW_SANTA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_ABOMASNOW_SANTA_1,
 };
 
 static const union AnimCmd *const sAnims_WEAVILE_REDUX_MEGA[] ={
@@ -19783,6 +19793,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(SCIZOR_REDUX),
+    ANIM_CMD(ABOMASNOW_SANTA),
     ANIM_CMD(WEAVILE_REDUX_MEGA),
     ANIM_CMD(WEAVILE_REDUX),
     ANIM_CMD(RIBOMBEE_REDUX_MEGA),

@@ -581,6 +581,7 @@ static const u16 sLucarioFormSpeciesIdTable[] = {
 
 static const u16 sAbomasnowFormSpeciesIdTable[] = {
     SPECIES_ABOMASNOW,
+    SPECIES_ABOMASNOW_SANTA,
     SPECIES_ABOMASNOW_MEGA,
     FORM_SPECIES_END,
 };

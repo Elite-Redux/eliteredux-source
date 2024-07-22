@@ -26975,21 +26975,27 @@ static const struct LevelUpMove sEscarginiteLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sWeavile_Redux_MegaLevelUpLearnset[] = {
-    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
-    LEVEL_UP_MOVE( 5, MOVE_GROWL),
-    LEVEL_UP_MOVE(10, MOVE_EMBER),
+static const struct LevelUpMove sAbomasnow_SantaLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_ICE_PUNCH),
+    LEVEL_UP_MOVE(1, MOVE_AURORA_VEIL),
+    LEVEL_UP_MOVE(1, MOVE_LEAFAGE),
+    LEVEL_UP_MOVE(1, MOVE_LEER),
+    LEVEL_UP_MOVE(1, MOVE_MIST),
+    LEVEL_UP_MOVE(1, MOVE_POWDER_SNOW),
+    LEVEL_UP_MOVE(13, MOVE_GRASS_WHISTLE),
+    LEVEL_UP_MOVE(15, MOVE_ICE_SHARD),
+    LEVEL_UP_MOVE(20, MOVE_RAZOR_LEAF),
+    LEVEL_UP_MOVE(25, MOVE_ICY_WIND),
+    LEVEL_UP_MOVE(30, MOVE_SWAGGER),
+    LEVEL_UP_MOVE(35, MOVE_INGRAIN),
+    LEVEL_UP_MOVE(41, MOVE_WOOD_HAMMER),
+    LEVEL_UP_MOVE(45, MOVE_BLIZZARD),
+    LEVEL_UP_MOVE(50, MOVE_SHEER_COLD),
+    LEVEL_UP_MOVE(60, MOVE_ICE_HAMMER),
     LEVEL_UP_END
 };
 
 static const struct LevelUpMove sWeavile_ReduxLevelUpLearnset[] = {
-    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
-    LEVEL_UP_MOVE( 5, MOVE_GROWL),
-    LEVEL_UP_MOVE(10, MOVE_EMBER),
-    LEVEL_UP_END
-};
-
-static const struct LevelUpMove sRibombee_Redux_MegaLevelUpLearnset[] = {
     LEVEL_UP_MOVE( 1, MOVE_TACKLE),
     LEVEL_UP_MOVE( 5, MOVE_GROWL),
     LEVEL_UP_MOVE(10, MOVE_EMBER),
