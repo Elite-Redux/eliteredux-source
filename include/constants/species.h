@@ -1688,8 +1688,9 @@
 #define SPECIES_WEAVILE_REDUX_MEGA          REDUX_FORMS_START + 83
 #define SPECIES_ABOMASNOW_SANTA             REDUX_FORMS_START + 84
 #define SPECIES_BEWEAR_ANGRY                REDUX_FORMS_START + 85
+#define SPECIES_MIMIKYU_RAYQUAZA            REDUX_FORMS_START + 86
 
-#define LAST_REDUX_FORM                     SPECIES_BEWEAR_ANGRY
+#define LAST_REDUX_FORM                     SPECIES_MIMIKYU_RAYQUAZA
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1
