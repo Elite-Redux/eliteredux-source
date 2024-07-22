@@ -887,4 +887,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_RIBOMBEE_REDUX_MEGA] = sRibombeeFormSpeciesIdTable,
 
+    [SPECIES_WEAVILE_REDUX] = sWeavileFormSpeciesIdTable,
+
 };

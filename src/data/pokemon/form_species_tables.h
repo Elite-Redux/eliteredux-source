@@ -1708,3 +1708,8 @@ static const u16 sWigglytuffFormSpeciesIdTable[] = {
     SPECIES_WIGGLYTUFF_PRIMAL,
     FORM_SPECIES_END,
 };
+static const u16 sWeavileFormSpeciesIdTable[] = {
+    SPECIES_WEAVILE,
+    SPECIES_WEAVILE_REDUX,
+    FORM_SPECIES_END,
+};

@@ -1573,6 +1573,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_MAWILE_REDUX_B_MEGA] = sMawile_Redux_BLevelUpLearnset,
     [SPECIES_RIBOMBEE_REDUX] = sRibombee_ReduxLevelUpLearnset,
     [SPECIES_RIBOMBEE_REDUX_MEGA] = sRibombee_Redux_MegaLevelUpLearnset,
+    [SPECIES_WEAVILE_REDUX] = sWeavile_ReduxLevelUpLearnset,
     [SPECIES_ESCARGINITE_REDUX] = sEscarginite_ReduxLevelUpLearnset,
     [SPECIES_ESCARGINITE] = sEscarginiteLevelUpLearnset,
     [SPECIES_DUELUMBER] = sDuelumberLevelUpLearnset,
