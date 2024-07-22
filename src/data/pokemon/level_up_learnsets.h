@@ -26975,6 +26975,13 @@ static const struct LevelUpMove sEscarginiteLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sRibombee_ReduxLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sMawile_Redux_BLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_ASTONISH),
     LEVEL_UP_MOVE(1, MOVE_CRUNCH),
