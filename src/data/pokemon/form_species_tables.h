@@ -1204,6 +1204,7 @@ static const u16 sClawitzerFormSpeciesIdTable[] = {
 };
 static const u16 sRibombeeFormSpeciesIdTable[] = {
     SPECIES_RIBOMBEE,
+    SPECIES_RIBOMBEE_REDUX_MEGA,
     SPECIES_RIBOMBEE_REDUX,
     SPECIES_RIBOMBEE_MEGA,
     FORM_SPECIES_END,
