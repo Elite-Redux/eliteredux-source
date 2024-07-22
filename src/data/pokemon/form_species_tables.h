@@ -1710,6 +1710,7 @@ static const u16 sWigglytuffFormSpeciesIdTable[] = {
 };
 static const u16 sWeavileFormSpeciesIdTable[] = {
     SPECIES_WEAVILE,
+    SPECIES_WEAVILE_REDUX_MEGA,
     SPECIES_WEAVILE_REDUX,
     FORM_SPECIES_END,
 };

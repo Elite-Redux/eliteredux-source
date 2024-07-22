@@ -889,4 +889,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_WEAVILE_REDUX] = sWeavileFormSpeciesIdTable,
 
+    [SPECIES_WEAVILE_REDUX_MEGA] = sWeavileFormSpeciesIdTable,
+
 };
