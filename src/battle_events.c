@@ -99,6 +99,11 @@ bool8 isBattleEventForbiddenOnSwitchIn(u8 battleEvent)
     }
     return FALSE;
 }
+// you cannot fathom my lazyness
+#define RUN_BATTLESCRIPT(bs)    BattleScriptExecute(bs); \
+    return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+#define SET_STR1(str) StringExpandPlaceholders(gStringVar1, str);
+#define SET_STR2(str) StringExpandPlaceholders(gStringVar2, str);
 
 // ran once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
@@ -110,8 +115,7 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
         break;
     case BATTLE_EVENT_STEALTH_ROCK:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
-        BattleScriptExecute(BattleScript_GymSkillTerrainStealthRock);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        RUN_BATTLESCRIPT(BattleScript_GymSkillTerrainStealthRock)
     case BATTLE_EVENT_LAST_PARALYZED:
         data = getCurrentBattleEventData();
         for (i = gPlayerPartyCount - 1; i > 0 ; i--){
@@ -123,40 +127,33 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
         }
         break;
     case BATTLE_EVENT_POSTURE_OFFENSE:
-        StringExpandPlaceholders(gStringVar1, gText_Attack);
-        StringExpandPlaceholders(gStringVar2, gText_Strike);
-        BattleScriptExecute(BattleScript_GymSkillPostureOffensive);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Attack)
+        SET_STR2(gText_Strike)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureOffensive)
     case BATTLE_EVENT_POSTURE_DEFENSE:
-        StringExpandPlaceholders(gStringVar1, gText_Defense);
-        StringExpandPlaceholders(gStringVar2, gText_Defend);
-        BattleScriptExecute(BattleScript_GymSkillPostureDefensive);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Defense)
+        SET_STR2(gText_Defend)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureDefensive)
     case BATTLE_EVENT_POSTURE_SPECIAL:
-        StringExpandPlaceholders(gStringVar1, gText_SpAtk);
-        StringExpandPlaceholders(gStringVar2, gText_Strike);
-        BattleScriptExecute(BattleScript_GymSkillPostureSpecial);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_SpAtk)
+        SET_STR2(gText_Strike)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpecial)
     case BATTLE_EVENT_POSTURE_SPDEF:
-        StringExpandPlaceholders(gStringVar1, gText_SpDef);
-        StringExpandPlaceholders(gStringVar2, gText_Defend);
-        BattleScriptExecute(BattleScript_GymSkillPostureSpdef);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_SpDef)
+        SET_STR2(gText_Defend)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpdef)
     case BATTLE_EVENT_POSTURE_SPEED:
-        StringExpandPlaceholders(gStringVar1, gText_Speed);
-        StringExpandPlaceholders(gStringVar2, gText_Rush);
-        BattleScriptExecute(BattleScript_GymSkillPostureSpeed);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Speed)
+        SET_STR2(gText_Rush)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpeed)
     case BATTLE_EVENT_POSTURE_ACCURACY:
-        StringExpandPlaceholders(gStringVar1, gText_Accuracy2);
-        StringExpandPlaceholders(gStringVar2, gText_Aim);
-        BattleScriptExecute(BattleScript_GymSkillPostureAccuracy);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Accuracy2)
+        SET_STR2(gText_Aim)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureAccuracy)
     case BATTLE_EVENT_POSTURE_CRIT:
-        StringExpandPlaceholders(gStringVar1, gText_Critical);
-        StringExpandPlaceholders(gStringVar2, gText_Focus);
-        BattleScriptExecute(BattleScript_GymSkillPostureCrit);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Critical)
+        SET_STR2(gText_Focus)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureCrit)
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
@@ -171,33 +168,26 @@ u8 BattleEventEndTurnExec(u8 battleEvent){
     case BATTLE_EVENT_NONE:
         break;
     case BATTLE_EVENT_STEADY_OFFENSE:
-        StringExpandPlaceholders(gStringVar1, gText_Attack);
-        BattleScriptExecute(BattleScript_GymSkillSteadyOffense);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Attack)
+        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyOffense);
     case BATTLE_EVENT_STEADY_DEFENSE:
-        StringExpandPlaceholders(gStringVar1, gText_Defense);
-        BattleScriptExecute(BattleScript_GymSkillSteadyDefense);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Defense);
+        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyDefense);
     case BATTLE_EVENT_STEADY_SPECIAL:
-        StringExpandPlaceholders(gStringVar1, gText_SpAtk);
-        BattleScriptExecute(BattleScript_GymSkillSteadySpecial);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_SpAtk);
+        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadySpecial);
     case BATTLE_EVENT_STEADY_SPDEF:
-        StringExpandPlaceholders(gStringVar1, gText_SpDef);
-        BattleScriptExecute(BattleScript_GymSkillSteadySpedef);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_SpDef);
+        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadySpedef);
     case BATTLE_EVENT_STEADY_SPEED:
-        StringExpandPlaceholders(gStringVar1, gText_Speed);
-        BattleScriptExecute(BattleScript_GymSkillSteadySpeed);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Speed);
+        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadySpeed);
     case BATTLE_EVENT_STEADY_ACCURACY:
-        StringExpandPlaceholders(gStringVar1, gText_Accuracy2);
-        BattleScriptExecute(BattleScript_GymSkillSteadyAccuracy);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Accuracy2);
+        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyAccuracy);
     case BATTLE_EVENT_STEADY_CRIT:
-        StringExpandPlaceholders(gStringVar1, gText_Critical);
-        BattleScriptExecute(BattleScript_GymSkillSteadyCrit);
-        return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        SET_STR1(gText_Critical);
+        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyCrit);
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
