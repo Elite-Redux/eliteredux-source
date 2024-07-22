@@ -655,6 +655,16 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_URSALUNITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Ursalunite},
     [ITEM_ARCANITE_R]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Arcanite_R},
     [ITEM_TYRANITARITE_R]  = {gItemIcon_GenericMegaStone, gItemIconPalette_Tyranitarite_R},
+    //Monotype Mega Stones
+    [ITEM_CHIEN_PAOITE]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_DRACOVISHITE]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_MAWILITE_R_B]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_RIBOMBITE_R]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_WEAVILEITE_R]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_FLYGONITE_R]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_SNORLAX_ORB]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_VICTINI_ORB]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_WIGGLITUFF_ORB]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
 
     [ITEM_MEGA_BRACELET] = {gItemIcon_MegaBracelet, gItemIconPalette_MegaBracelet},
     [ITEM_ABILITY_CAPSULE] = {gItemIcon_AbilityCapsule, gItemIconPalette_AbilityCapsule},

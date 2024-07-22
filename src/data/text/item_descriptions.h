@@ -3336,6 +3336,51 @@ static const u8 sSandslashiteDesc[] = _(
     "Sandslash to Mega\n"
     "Evolve in battle.");
 
+static const u8 sChienPaoiteDesc[] = _(
+    "This stone enables\n"
+    "Chien-Pao to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sDracovishiteDesc[] = _(
+    "This stone enables\n"
+    "Dracovish to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sMawiliteRDesc[] = _(
+    "This stone enables\n"
+    "Mawile R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sRibombiteRDesc[] = _(
+    "This stone enables\n"
+    "Ribombee R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sWeaviliteRDesc[] = _(
+    "This stone enables\n"
+    "Weavile R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sFlygoniteRDesc[] = _(
+    "This stone enables\n"
+    "Flygon R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSnorlaxOrbDesc[] = _(
+    "This stone enables\n"
+    "Snorlax to Primal\n"
+    "Reverse in battle.");
+
+static const u8 sVictiniOrbDesc[] = _(
+    "This stone enables\n"
+    "Victini to Primal\n"
+    "Reverse in battle.");
+
+static const u8 sWigglytuffOrbDesc[] = _(
+    "This stone enables\n"
+    "Wigglytuff to Primal\n"
+    "Reverse in battle.");
+
 static const u8 sMegaBraceletDesc[] = _(
     "Enables {PKMN} holding\n"
     "their Mega Stone to\n"

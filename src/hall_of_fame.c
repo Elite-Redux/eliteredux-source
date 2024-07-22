@@ -910,6 +910,43 @@ u16 getHallofFameSpecies(u8 num){
             break;
         case SPECIES_GRENINJA_BATTLE_BOND:
             return SPECIES_GRENINJA_ASH;
+        break;
+        case SPECIES_CHIEN_PAO:
+            if(item == ITEM_CHIEN_PAOITE)
+                return SPECIES_CHIEN_PAO_MEGA;
+        break;
+        case SPECIES_DRACOVISH:
+            if(item == ITEM_DRACOVISHITE)
+                return SPECIES_DRACOVISH_MEGA;
+        break;
+        case SPECIES_MAWILE_REDUX_B:
+            if(item == ITEM_MAWILITE_R_B)
+                return SPECIES_MAWILE_REDUX_B_MEGA;
+        break;
+        case SPECIES_RIBOMBEE_REDUX:
+            if(item == ITEM_RIBOMBITE_R)
+                return SPECIES_RIBOMBEE_REDUX_MEGA;
+        break;
+        case SPECIES_WEAVILE_REDUX:
+            if(item == ITEM_WEAVILEITE_R)
+                return SPECIES_WEAVILE_REDUX_MEGA;
+        break;
+        case SPECIES_FLYGON_REDUX:
+            if(item == ITEM_FLYGONITE_R)
+                return SPECIES_FLYGON_REDUX_MEGA;
+        break;
+        case SPECIES_SNORLAX:
+            if(item == ITEM_SNORLAX_ORB)
+                return SPECIES_SNORLAX_PRIMAL;
+        break;
+        case SPECIES_VICTINI:
+            if(item == ITEM_VICTINI_ORB)
+                return SPECIES_VICTINI_PRIMAL;
+        break;
+        case SPECIES_WIGGLYTUFF:
+            if(item == ITEM_WIGGLITUFF_ORB)
+                return SPECIES_WIGGLYTUFF_PRIMAL;
+        break;
     }
 
     return species;
