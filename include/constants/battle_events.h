@@ -24,12 +24,21 @@
 #define BATTLE_EVENT_LAST_BLEED         34
 #define BATTLE_EVENT_LAST_POISONED      35
 #define BATTLE_EVENT_LAST_TOXIC         36
-// void of 24
+// void of 14
+#define BATTLE_EVENT_CURSE_ON_KILL      50
+#define BATTLE_EVENT_LEECHSEED_ON_KILL  51
+// void of 9
 #define BATTLE_EVENT_STEALTH_ROCK       60
-#define BATTLE_EVENT_CREEPING_THORNS    61
+#define BATTLE_EVENT_TOXIC_SPIKES       61
 #define BATTLE_EVENT_SPIKES             62
 #define BATTLE_EVENT_STICKY_WEB         63
-// void of 8
+#define BATTLE_EVENT_TAILWIND           64
+#define BATTLE_EVENT_REFLECT            65
+#define BATTLE_EVENT_LIGHTSCREEN        66
+#define BATTLE_EVENT_AURORAVEIL         67
+#define BATTLE_EVENT_LUCKY_CHANT        68
+#define BATTLE_EVENT_QUICK_GUARD        69
+// void of 8z
 #define BATTLE_EVENT_ELECTRIC_SURGE     70
 #define BATTLE_EVENT_PSYCHIC_SURGE      71
 #define BATTLE_EVENT_GRASSY_SURGE       72

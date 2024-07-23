@@ -14,19 +14,26 @@
 #include "sound.h"
 #include "constants/songs.h"
 
+
 static u8 gNbBattleEvents;
 static u8 gCurrBattleEvent;
-EWRAM_DATA u8 gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { BATTLE_EVENT_NONE };
-EWRAM_DATA u8 gBattleEventsData[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
+EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 
+    { .id = BATTLE_EVENT_NONE, 
+    .data0=0, 
+    .data1=0 }
+ };
 
-void RegisterBattleEvent(u8 battleEvent, u8 battleEventData){
+
+void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventData1){
     //reached the limit
     if (gNbBattleEvents == BATTLE_EVENTS_MAX_REGISTERABLE) {
         //how could i warn btw? shout in a message box?
         return;
     }
-    gBattleEvents[gNbBattleEvents] = battleEvent;
-    gBattleEventsData[gNbBattleEvents] = battleEventData;
+    // using a pointer over gBattleEvents would be nicer but i suppose it will stay like that because C sucks
+    gBattleEvents[gNbBattleEvents].id = battleEventID;
+    gBattleEvents[gNbBattleEvents].data0 = battleEventData0 & 0xF;
+    gBattleEvents[gNbBattleEvents].data1 = battleEventData1 & 0xF;
     gNbBattleEvents += 1;
 }
 
@@ -34,28 +41,32 @@ void RegisterBattleEvent(u8 battleEvent, u8 battleEventData){
 void UnregisterBattlesEvents(){
     u8 i;
     for (i = 0; i < gNbBattleEvents; i++){
-        gBattleEvents[i] = BATTLE_EVENT_NONE;
+        // a dangerous alternative would be to use memset xd
+        gBattleEvents[i].id = BATTLE_EVENT_NONE;
+        gBattleEvents[i].data0 = 0;
+        gBattleEvents[i].data1 = 0;
     }
     gNbBattleEvents = 0;
     gCurrBattleEvent = 0;
 }
 
-void UnregisterCurrentEventData(){
-    gBattleEventsData[gCurrBattleEvent - 1] = BATTLE_EVENT_NONE;
+void UnregisterCurrentBattleEvent(){
+    gBattleEvents[gCurrBattleEvent].id = BATTLE_EVENT_NONE;
+    gBattleEvents[gCurrBattleEvent].data0 = 0;
+    gBattleEvents[gCurrBattleEvent].data1 = 0;
     // i do wonder if it's worth to shift the array afterwards so less cycles are needed for that
     // probably overkill
-}
-
-u8 GetCurrentBattleEventData(){
-    return gBattleEventsData[gCurrBattleEvent - 1];
 }
 
 u8 ExecBattleEvents(u8 execEnum){
     // it goes by the principle that it will be executed in loop until it returns ALL CLEAR
     while (gCurrBattleEvent < gNbBattleEvents){
-        gCurrBattleEvent++;
-        if (BattleEventExec(gBattleEvents[gCurrBattleEvent - 1], execEnum) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
+        if (BattleEventExec(gBattleEvents[gCurrBattleEvent], execEnum) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL){
+            gCurrBattleEvent++;
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+        } 
+        gCurrBattleEvent++;
+            
     }
     // reset so it can be reexecuted later in a battle
     gCurrBattleEvent = 0;
@@ -63,9 +74,10 @@ u8 ExecBattleEvents(u8 execEnum){
 }
 
 //exec only one battle Event
-u8 BattleEventExec(u8 battleEvent, u8 execEnum){
-    if (battleEvent == BATTLE_EVENT_NONE)
+u8 BattleEventExec(struct BattleEvent battleEvent, u8 execEnum){
+    if (battleEvent.id == BATTLE_EVENT_NONE)
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        
     switch (execEnum)
     {
     case EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN:
@@ -85,22 +97,23 @@ u8 BattleEventExec(u8 battleEvent, u8 execEnum){
 // you cannot fathom my lazyness
 #define RUN_BATTLESCRIPT(bs)    BattleScriptExecute(bs); \
     return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
-#define RUN_BATTLESCRIPT_UNREGISTER(bs)   UnregisterCurrentEventData();\
+#define RUN_BATTLESCRIPT_UNREGISTER(bs)   UnregisterCurrentBattleEvent();\
     BattleScriptExecute(bs); \
     return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
 #define SET_STR1(str)   StringExpandPlaceholders(gStringVar1, str);
 #define SET_STR2(str1, str2) StringExpandPlaceholders(gStringVar1, str1);\
     StringExpandPlaceholders(gStringVar2, str2);
 
-
+// I couldn't find some reliable substitute sometimes, probably missed some.
 const u8 sText_Strike[] = _("Strike");
 const u8 sText_Defend[] = _("Defend");
 const u8 sText_Rush[] = _("Rush");
 const u8 sText_Aim[] = _("Aim");
 const u8 sText_Focus[] = _("Focus");
 const u8 sText_Toxic[] = _("Sharp poison");
-static const u8 sText_Frostbite[] = _("Frostbite");
+const u8 sText_Frostbite[] = _("Frostbite");
 
+// do not put BattleEventBeforeFirstTurn related BEvents in it.
 const u8 sOnSwitchInForbiddenBattleEvent[] = {
     BATTLE_EVENT_STEADY_OFFENSE,
     BATTLE_EVENT_STEADY_DEFENSE,
@@ -111,13 +124,12 @@ const u8 sOnSwitchInForbiddenBattleEvent[] = {
     BATTLE_EVENT_STEADY_CRIT,
 };
 
-bool8 IsBattleEventForbiddenOnSwitchIn(u8 battleEvent)
+bool8 IsBattleEventForbiddenOnSwitchIn(u8 battleEventID)
 {
     u32 i;
-    if (!battleEvent) return TRUE;
     for (i = 0; i < ARRAY_COUNT(sOnSwitchInForbiddenBattleEvent); i++)
     {
-        if (battleEvent == sOnSwitchInForbiddenBattleEvent[i])
+        if (battleEventID == sOnSwitchInForbiddenBattleEvent[i])
             return TRUE;
     }
     return FALSE;
@@ -128,6 +140,7 @@ bool8 AffectNStatusOnTeamFromLastToFirst(u32 status, u8 n){
     if (n == 0)
         n = 1;
     for (i = gPlayerPartyCount - 1; i > 0 ; i--){
+        // do not overwrite a status already existing if we want to have multiple possible status registerable.
         if (gPlayerParty[i].status == STATUS1_NONE){
             gPlayerParty[i].status = status;
             if ((--n) == 0)
@@ -138,9 +151,9 @@ bool8 AffectNStatusOnTeamFromLastToFirst(u32 status, u8 n){
 }
 
 // ran once pokemon have landed before their ability have popped
-u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
+u8 BattleEventBeforeFirstTurnExec(struct BattleEvent battleEvent){
     u8 data;
-    switch (battleEvent)
+    switch (battleEvent.id)
     {
     case BATTLE_EVENT_NONE:
         break;
@@ -166,57 +179,67 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
         SET_STR2(gText_Critical, sText_Focus)
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureCrit)
     case BATTLE_EVENT_LAST_PARALYZED:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_PARALYSIS, GetCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_PARALYSIS, battleEvent.data0))
             PlaySE(SE_M_THUNDERBOLT2);
         SET_STR1(gText_Paralysis)
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_BURNED:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BURN, GetCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BURN, battleEvent.data0))
             PlaySE(SE_M_FLAME_WHEEL);
         SET_STR1(gText_Burn)
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_SLEEP:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_SLEEP, GetCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_SLEEP, battleEvent.data0))
             PlaySE(SE_M_SNORE);
         SET_STR1(gText_Sleep)
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_FROSTBITE:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_FROSTBITE, GetCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_FROSTBITE, battleEvent.data0))
             PlaySE(SE_M_ICY_WIND); // TODO PROBABLY WRONG SE
         SET_STR1(sText_Frostbite)
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_BLEED:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BLEED, GetCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BLEED, battleEvent.data0))
             PlaySE(SE_M_BUBBLE);
         SET_STR1(gText_Bleed)
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_POISONED:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_POISON, GetCurrentBattleEventData()))
-            PlaySE12WithPanning(SE_M_TOXIC, 13); // UNTESTED PROBABLY BROKEN BUT XD! 
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_POISON, battleEvent.data0))
+            PlaySE12WithPanning(SE_M_TOXIC, 13);
         SET_STR1(gText_Poison)
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_TOXIC:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_TOXIC_POISON, GetCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_TOXIC_POISON, battleEvent.data0))
             PlaySE(SE_M_TOXIC);
         SET_STR1(sText_Toxic)
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_STEALTH_ROCK:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainStealthRock)
+    /*case BATTLE_EVENT_TOXIC_SPIKES:
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainToxicSpikes)
+    case BATTLE_EVENT_SPIKES:
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
+        gSideTimers[B_SIDE_PLAYER].spikesAmount = (battleEvent.data0 & 0x03) || 1
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainSpikes)
+    case BATTLE_EVENT_:
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainToxicSpikes)*/
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 
 // ran once the turn has reached its end before the player can get its hand on control again
-u8 BattleEventEndTurnExec(u8 battleEvent){
+u8 BattleEventEndTurnExec(struct BattleEvent battleEvent){
     /*MgbaOpen();
     MgbaPrintf(MGBA_LOG_WARN, "fainted player: %d, fainted trainer %d", gFaintedMonCount[0], gFaintedMonCount[1]);
     MgbaClose();*/
     //moveSecondaryEffectChance if i want to apply serene grace
     // prevent some abitlity to be executed once a pokemon has landed because it's too OP and most importantly bugged af.
-    if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2 && IsBattleEventForbiddenOnSwitchIn(battleEvent))
+    if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2 && IsBattleEventForbiddenOnSwitchIn(battleEvent.id))
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-    switch (battleEvent)
+    switch (battleEvent.id)
     {
     case BATTLE_EVENT_NONE:
         break;
