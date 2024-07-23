@@ -40,7 +40,13 @@ void UnregisterBattlesEvents(){
     gCurrBattleEvent = 0;
 }
 
-u8 getCurrentBattleEventData(){
+void UnregisterCurrentEventData(){
+    gBattleEventsData[gCurrBattleEvent - 1] = BATTLE_EVENT_NONE;
+    // i do wonder if it's worth to shift the array afterwards so less cycles are needed for that
+    // probably overkill
+}
+
+u8 GetCurrentBattleEventData(){
     return gBattleEventsData[gCurrBattleEvent - 1];
 }
 
@@ -58,6 +64,8 @@ u8 ExecBattleEvents(u8 execEnum){
 
 //exec only one battle Event
 u8 BattleEventExec(u8 battleEvent, u8 execEnum){
+    if (battleEvent == BATTLE_EVENT_NONE)
+        return EXEC_BATTLE_EVENTS_ALL_CLEAR;
     switch (execEnum)
     {
     case EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN:
@@ -76,6 +84,9 @@ u8 BattleEventExec(u8 battleEvent, u8 execEnum){
 
 // you cannot fathom my lazyness
 #define RUN_BATTLESCRIPT(bs)    BattleScriptExecute(bs); \
+    return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
+#define RUN_BATTLESCRIPT_UNREGISTER(bs)   UnregisterCurrentEventData();\
+    BattleScriptExecute(bs); \
     return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
 #define SET_STR1(str)   StringExpandPlaceholders(gStringVar1, str);
 #define SET_STR2(str1, str2) StringExpandPlaceholders(gStringVar1, str1);\
@@ -112,7 +123,7 @@ bool8 IsBattleEventForbiddenOnSwitchIn(u8 battleEvent)
     return FALSE;
 }
 
-bool8 AffectNStatusOnTeamFromLastToFirst(u16 status, u8 n){
+bool8 AffectNStatusOnTeamFromLastToFirst(u32 status, u8 n){
     u8 i;
     if (n == 0)
         n = 1;
@@ -135,69 +146,73 @@ u8 BattleEventBeforeFirstTurnExec(u8 battleEvent){
         break;
     case BATTLE_EVENT_POSTURE_OFFENSE:
         SET_STR2(gText_Attack, sText_Strike)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureOffensive)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureOffensive)
     case BATTLE_EVENT_POSTURE_DEFENSE:
         SET_STR2(gText_Defense, sText_Defend)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureDefensive)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureDefensive)
     case BATTLE_EVENT_POSTURE_SPECIAL:
         SET_STR2(gText_SpAtk, sText_Strike)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpecial)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureSpecial)
     case BATTLE_EVENT_POSTURE_SPDEF:
         SET_STR2(gText_SpDef, sText_Defend)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpdef)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureSpdef)
     case BATTLE_EVENT_POSTURE_SPEED:
         SET_STR2(gText_Speed, sText_Rush)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureSpeed)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureSpeed)
     case BATTLE_EVENT_POSTURE_ACCURACY:
         SET_STR2(gText_Accuracy2, sText_Aim)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureAccuracy)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureAccuracy)
     case BATTLE_EVENT_POSTURE_CRIT:
         SET_STR2(gText_Critical, sText_Focus)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPostureCrit)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureCrit)
     case BATTLE_EVENT_LAST_PARALYZED:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_PARALYSIS, getCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_PARALYSIS, GetCurrentBattleEventData()))
             PlaySE(SE_M_THUNDERBOLT2);
         SET_STR1(gText_Paralysis)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_BURNED:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BURN, getCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BURN, GetCurrentBattleEventData()))
             PlaySE(SE_M_FLAME_WHEEL);
         SET_STR1(gText_Burn)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_SLEEP:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_SLEEP, getCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_SLEEP, GetCurrentBattleEventData()))
             PlaySE(SE_M_SNORE);
         SET_STR1(gText_Sleep)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_FROSTBITE:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_FROSTBITE, getCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_FROSTBITE, GetCurrentBattleEventData()))
             PlaySE(SE_M_ICY_WIND); // TODO PROBABLY WRONG SE
         SET_STR1(sText_Frostbite)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_BLEED:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BLEED, getCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BLEED, GetCurrentBattleEventData()))
             PlaySE(SE_M_BUBBLE);
         SET_STR1(gText_Bleed)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_POISONED:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_POISON, getCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_POISON, GetCurrentBattleEventData()))
             PlaySE12WithPanning(SE_M_TOXIC, 13); // UNTESTED PROBABLY BROKEN BUT XD! 
         SET_STR1(gText_Poison)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_TOXIC:
-        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_TOXIC_POISON, getCurrentBattleEventData()))
+        if (AffectNStatusOnTeamFromLastToFirst(STATUS1_TOXIC_POISON, GetCurrentBattleEventData()))
             PlaySE(SE_M_TOXIC);
         SET_STR1(sText_Toxic)
-        RUN_BATTLESCRIPT(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
     case BATTLE_EVENT_STEALTH_ROCK:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillTerrainStealthRock)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainStealthRock)
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 
 // ran once the turn has reached its end before the player can get its hand on control again
 u8 BattleEventEndTurnExec(u8 battleEvent){
+    /*MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "fainted player: %d, fainted trainer %d", gFaintedMonCount[0], gFaintedMonCount[1]);
+    MgbaClose();*/
+    //moveSecondaryEffectChance if i want to apply serene grace
     // prevent some abitlity to be executed once a pokemon has landed because it's too OP and most importantly bugged af.
     if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2 && IsBattleEventForbiddenOnSwitchIn(battleEvent))
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
