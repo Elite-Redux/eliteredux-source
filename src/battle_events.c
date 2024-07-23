@@ -50,6 +50,12 @@ void UnregisterBattlesEvents(){
     gCurrBattleEvent = 0;
 }
 
+/**
+ * Two reasons to unregister
+ * - remove the need to process the data, economising a fair share of cycles.
+ * - Allow for one time uses mid battle even if we could use the data for that
+ *   It's just that if we unregister it with RUN_BATTLESCRIPT_UNREGISTER it lower the chances of forgetting
+ */
 void UnregisterCurrentBattleEvent(){
     gBattleEvents[gCurrBattleEvent].id = BATTLE_EVENT_NONE;
     gBattleEvents[gCurrBattleEvent].data0 = 0;
@@ -84,7 +90,7 @@ u8 BattleEventExec(struct BattleEvent battleEvent, u8 execEnum){
         if (BattleEventBeforeFirstTurnExec(battleEvent) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
         break;
-    case EXEC_BATTLE_EVENT_END_OF_TURN:
+    case EXEC_BATTLE_EVENT_START_OF_TURN:
         if (BattleEventEndTurnExec(battleEvent) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
         break;
@@ -235,6 +241,7 @@ u8 BattleEventEndTurnExec(struct BattleEvent battleEvent){
     /*MgbaOpen();
     MgbaPrintf(MGBA_LOG_WARN, "fainted player: %d, fainted trainer %d", gFaintedMonCount[0], gFaintedMonCount[1]);
     MgbaClose();*/
+    // SIDE_STATUS_MAT_BLOCK to put matblock
     //moveSecondaryEffectChance if i want to apply serene grace
     // prevent some abitlity to be executed once a pokemon has landed because it's too OP and most importantly bugged af.
     if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2 && IsBattleEventForbiddenOnSwitchIn(battleEvent.id))

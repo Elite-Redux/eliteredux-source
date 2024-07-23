@@ -4067,15 +4067,6 @@ void BattleTurnPassed(void)
     if (HandleWishPerishSongOnTurnEnd())
         return;
     
-    // end of the turn, exec battle events
-    if (!gBattleStruct->battleEventDone){
-        if (ExecBattleEvents(EXEC_BATTLE_EVENT_END_OF_TURN) == EXEC_BATTLE_EVENTS_ALL_CLEAR){
-            gBattleStruct->battleEventDone = TRUE;
-        } else {
-            return;
-        }
-    }
-
     ClearMiscTurnFlags();
     TurnValuesCleanUp(FALSE);
     gHitMarker &= ~(HITMARKER_NO_ATTACKSTRING);
@@ -4127,6 +4118,14 @@ void BattleTurnPassed(void)
     else if (ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), gTrainerBattleOpponent_A, TRAINER_SLIDE_LAST_LOW_HP))
         BattleScriptExecute(BattleScript_TrainerSlideMsgEnd2);
 
+    // end of the turn, exec battle events
+    if (!gBattleStruct->battleEventDone){
+        if (ExecBattleEvents(EXEC_BATTLE_EVENT_START_OF_TURN) == EXEC_BATTLE_EVENTS_ALL_CLEAR){
+            gBattleStruct->battleEventDone = TRUE;
+        } else {
+            return;
+        }
+    }
     // I need this reset for the end of the next turn
     gBattleStruct->battleEventDone = FALSE;
 }

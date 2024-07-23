@@ -30,7 +30,7 @@ u8 BattleEventEndTurnExec(struct BattleEvent);
 // enum to communicate to execBattleEvent as execEnum parameter
 enum {
     EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN,
-    EXEC_BATTLE_EVENT_END_OF_TURN,
+    EXEC_BATTLE_EVENT_START_OF_TURN,
 };
 
 // enum that returns from execBattleEvents to communicate if a rendering is needed or if all battleEvents were done correctly
