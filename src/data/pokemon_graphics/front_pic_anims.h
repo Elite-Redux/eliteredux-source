@@ -21,6 +21,11 @@ static const union AnimCmd sAnim_ESCARGINITE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_SOLROCK_SYSTEM_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_DARKRAI_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -266,6 +271,11 @@ static const union AnimCmd *const sAnims_DUELUMBER[] ={
 static const union AnimCmd *const sAnims_ESCARGINITE[] ={
     sAnim_GeneralFrame0,
     sAnim_ESCARGINITE_1,
+};
+
+static const union AnimCmd *const sAnims_SOLROCK_SYSTEM[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SOLROCK_SYSTEM_1,
 };
 
 static const union AnimCmd *const sAnims_DARKRAI_MEGA[] ={
@@ -19864,6 +19874,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(SCIZOR_REDUX),
+    ANIM_CMD(SOLROCK_SYSTEM),
     ANIM_CMD(DARKRAI_MEGA),
     ANIM_CMD(ESPEON_MEGA),
     ANIM_CMD(RATICATE_REDUX),

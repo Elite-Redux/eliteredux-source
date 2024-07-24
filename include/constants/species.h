@@ -1695,8 +1695,9 @@
 #define SPECIES_CINCCINO_REDUX              REDUX_FORMS_START + 90
 #define SPECIES_ESPEON_MEGA                 REDUX_FORMS_START + 91
 #define SPECIES_DARKRAI_MEGA                REDUX_FORMS_START + 92
+#define SPECIES_SOLROCK_SYSTEM              REDUX_FORMS_START + 93
 
-#define LAST_REDUX_FORM                     SPECIES_DARKRAI_MEGA
+#define LAST_REDUX_FORM                     SPECIES_SOLROCK_SYSTEM
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

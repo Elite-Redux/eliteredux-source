@@ -895,4 +895,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_DARKRAI_MEGA] = sDarkraiFormSpeciesIdTable,
 
+    [SPECIES_SOLROCK_SYSTEM] = sSolrockFormSpeciesIdTable,
+
 };

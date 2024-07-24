@@ -1729,3 +1729,8 @@ static const u16 sDarkraiFormSpeciesIdTable[] = {
     SPECIES_DARKRAI_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sSolrockFormSpeciesIdTable[] = {
+    SPECIES_SOLROCK,
+    SPECIES_SOLROCK_SYSTEM,
+    FORM_SPECIES_END,
+};
