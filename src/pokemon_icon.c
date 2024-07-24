@@ -1574,7 +1574,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_NOIVERN_REDUX] = gMonIcon_NoivernRedux,
     [SPECIES_INFERNAPE_REDUX] = gMonIcon_InfernapeRedux,
     [SPECIES_LUXRAY_REDUX] = gMonIcon_LuxrayRedux,
-
+    [SPECIES_MINCCINO_REDUX] = gMonIcon_MinccinoRedux,
     [SPECIES_EGG] = gMonIcon_Egg,
 };
 
@@ -2830,6 +2830,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_GROWLITHE_REDUX]       = 3,
     [SPECIES_ARCANINE_REDUX]        = 3,
     [SPECIES_ARCANINE_MEGA_REDUX]   = 3,
+    [SPECIES_MINCCINO_REDUX]        = 2,
 
     [SPECIES_RATTATA_ALOLAN] = 2,
     [SPECIES_RATICATE_ALOLAN] = 2,

@@ -7362,5 +7362,14 @@ const u32 gMonPalette_Dewleon[]                 = INCBIN_U32("graphics/pokemon/d
 const u32 gMonShinyPalette_Dewleon[]            = INCBIN_U32("graphics/pokemon/dewleon/shiny.gbapal.lz");
 const u8  gMonIcon_Dewleon[]                    = INCBIN_U8("graphics/pokemon/dewleon/icon.4bpp");
 
-const u32 gMonAltShinyPalette_Corphish[]            = INCBIN_U32("graphics/pokemon/corphish/shinyalt1.gbapal.lz");
+const u32 gMonFrontPic_MinccinoRedux[]                = INCBIN_U32("graphics/pokemon/minccino_redux/front.4bpp.lz");
+const u32 gMonBackPic_MinccinoRedux[]                 = INCBIN_U32("graphics/pokemon/minccino_redux/back.4bpp.lz");
+const u32 gMonPalette_MinccinoRedux[]                 = INCBIN_U32("graphics/pokemon/minccino_redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_MinccinoRedux[]            = INCBIN_U32("graphics/pokemon/minccino_redux/shiny.gbapal.lz");
+const u8  gMonIcon_MinccinoRedux[]                    = INCBIN_U8("graphics/pokemon/minccino_redux/icon.4bpp");
+
+//Rare Shinies
+const u32 gMonRareShinyPalette_Corphish[]            = INCBIN_U32("graphics/pokemon/corphish/shinyalt1.gbapal.lz");
 const u32 gMonRareShinyPalette_Morpeko[]            = INCBIN_U32("graphics/pokemon/morpeko/rareshiny.gbapal.lz");
+
+//Legendary Shinies
