@@ -2830,7 +2830,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_GROWLITHE_REDUX]       = 3,
     [SPECIES_ARCANINE_REDUX]        = 3,
     [SPECIES_ARCANINE_MEGA_REDUX]   = 3,
-    [SPECIES_MINCCINO_REDUX]        = 2,
+    [SPECIES_MINCCINO_REDUX]        = 0,
 
     [SPECIES_RATTATA_ALOLAN] = 2,
     [SPECIES_RATICATE_ALOLAN] = 2,
