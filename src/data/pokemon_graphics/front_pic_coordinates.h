@@ -5422,6 +5422,16 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_RATICATE_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_RATTATA_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_MIMIKYU_RAYQUAZA] =
     {
         .size = 0,
