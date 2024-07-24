@@ -5422,6 +5422,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_DARKRAI_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_ESPEON_MEGA] =
     {
         .size = 0,

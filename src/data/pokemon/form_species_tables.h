@@ -1724,3 +1724,8 @@ static const u16 sEspeonFormSpeciesIdTable[] = {
     SPECIES_ESPEON_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sDarkraiFormSpeciesIdTable[] = {
+    SPECIES_DARKRAI,
+    SPECIES_DARKRAI_MEGA,
+    FORM_SPECIES_END,
+};

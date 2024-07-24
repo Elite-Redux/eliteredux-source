@@ -893,4 +893,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_ESPEON_MEGA] = sEspeonFormSpeciesIdTable,
 
+    [SPECIES_DARKRAI_MEGA] = sDarkraiFormSpeciesIdTable,
+
 };
