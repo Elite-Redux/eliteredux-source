@@ -42,6 +42,7 @@ static const u16 sRattataFormSpeciesIdTable[] = {
 
 static const u16 sRaticateFormSpeciesIdTable[] = {
     SPECIES_RATICATE,
+    SPECIES_RATICATE_REDUX,
     SPECIES_RATICATE_ALOLAN,
     FORM_SPECIES_END,
 };
