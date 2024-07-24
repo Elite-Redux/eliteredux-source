@@ -35,6 +35,7 @@ static const u16 sPidgeotFormSpeciesIdTable[] = {
 
 static const u16 sRattataFormSpeciesIdTable[] = {
     SPECIES_RATTATA,
+    SPECIES_RATTATA_REDUX,
     SPECIES_RATTATA_ALOLAN,
     FORM_SPECIES_END,
 };
