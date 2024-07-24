@@ -1020,6 +1020,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_PHANTOWL] = _("Phantowl"),
     [SPECIES_DUELUMBER] = _("Duelumber"),
     [SPECIES_ESCARGINITE] = _("Escarginite"),
+[SPECIES_CALYREX_CLOUD_RIDER] = _("Calyrex"),
 [SPECIES_SPECTRIER_CLOUD] = _("Spectrier"),
 [SPECIES_SOLROCK_SYSTEM] = _("Solrock"),
 [SPECIES_DARKRAI_MEGA] = _("Darkrai"),

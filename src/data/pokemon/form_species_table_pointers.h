@@ -139,7 +139,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ETERNATUS] = sEternatusFormSpeciesIdTable,
     [SPECIES_URSHIFU] = sUrshifuFormSpeciesIdTable,
     [SPECIES_ZARUDE] = sZarudeFormSpeciesIdTable,
-    [SPECIES_CALYREX] = sCalyrexFormSpeciesIdTable,
+    [SPECIES_CALYREX_CLOUD_RIDER] = sCalyrexFormSpeciesIdTable,
     // Megas
     [SPECIES_VENUSAUR_MEGA] = sVenusaurFormSpeciesIdTable,
     [SPECIES_CHARIZARD_MEGA_X] = sCharizardFormSpeciesIdTable,
