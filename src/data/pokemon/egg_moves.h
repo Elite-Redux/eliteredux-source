@@ -5492,5 +5492,47 @@ const u16 gEggMoves[] = {
         MOVE_ICE_PUNCH,
         MOVE_THUNDER_PUNCH),
 
+    egg_moves(RIBOMBEE_REDUX,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(RIBOMBEE_REDUX_MEGA,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(WEAVILE_REDUX,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(WEAVILE_REDUX_MEGA,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(ABOMASNOW_SANTA,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(BEWEAR_ANGRY,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
+    egg_moves(MIMIKYU_RAYQUAZA,
+        MOVE_SPLASH,
+        MOVE_FIRE_PUNCH,
+        MOVE_ICE_PUNCH,
+        MOVE_THUNDER_PUNCH),
+
     EGG_MOVES_TERMINATOR
 };

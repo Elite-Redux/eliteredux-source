@@ -5416,6 +5416,41 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_MIMIKYU_RAYQUAZA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_BEWEAR_ANGRY] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_ABOMASNOW_SANTA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_WEAVILE_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_WEAVILE_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_RIBOMBEE_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_RIBOMBEE_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_MAWILE_REDUX_B_MEGA] =
     {
         .size = 0,

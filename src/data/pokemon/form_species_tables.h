@@ -581,6 +581,7 @@ static const u16 sLucarioFormSpeciesIdTable[] = {
 
 static const u16 sAbomasnowFormSpeciesIdTable[] = {
     SPECIES_ABOMASNOW,
+    SPECIES_ABOMASNOW_SANTA,
     SPECIES_ABOMASNOW_MEGA,
     FORM_SPECIES_END,
 };
@@ -947,6 +948,7 @@ static const u16 sMiniorFormSpeciesIdTable[] = {
 
 static const u16 sMimikyuFormSpeciesIdTable[] = {
     SPECIES_MIMIKYU,
+    SPECIES_MIMIKYU_RAYQUAZA,
     SPECIES_MIMIKYU_BUSTED,
     FORM_SPECIES_END,
 };
@@ -1204,6 +1206,8 @@ static const u16 sClawitzerFormSpeciesIdTable[] = {
 };
 static const u16 sRibombeeFormSpeciesIdTable[] = {
     SPECIES_RIBOMBEE,
+    SPECIES_RIBOMBEE_REDUX_MEGA,
+    SPECIES_RIBOMBEE_REDUX,
     SPECIES_RIBOMBEE_MEGA,
     FORM_SPECIES_END,
 };
@@ -1244,6 +1248,7 @@ static const u16 sStuffulFormSpeciesIdTable[] = {
 };
 static const u16 sBewearFormSpeciesIdTable[] = {
     SPECIES_BEWEAR,
+    SPECIES_BEWEAR_ANGRY,
     SPECIES_BEWEAR_REDUX,
     FORM_SPECIES_END,
 };
@@ -1704,5 +1709,11 @@ static const u16 sVictiniFormSpeciesIdTable[] = {
 static const u16 sWigglytuffFormSpeciesIdTable[] = {
     SPECIES_WIGGLYTUFF,
     SPECIES_WIGGLYTUFF_PRIMAL,
+    FORM_SPECIES_END,
+};
+static const u16 sWeavileFormSpeciesIdTable[] = {
+    SPECIES_WEAVILE,
+    SPECIES_WEAVILE_REDUX_MEGA,
+    SPECIES_WEAVILE_REDUX,
     FORM_SPECIES_END,
 };

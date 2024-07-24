@@ -21,6 +21,41 @@ static const union AnimCmd sAnim_ESCARGINITE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_MIMIKYU_RAYQUAZA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_BEWEAR_ANGRY_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_ABOMASNOW_SANTA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_WEAVILE_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_WEAVILE_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_RIBOMBEE_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_RIBOMBEE_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_MAWILE_REDUX_B_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -200,6 +235,41 @@ static const union AnimCmd *const sAnims_DUELUMBER[] ={
 static const union AnimCmd *const sAnims_ESCARGINITE[] ={
     sAnim_GeneralFrame0,
     sAnim_ESCARGINITE_1,
+};
+
+static const union AnimCmd *const sAnims_MIMIKYU_RAYQUAZA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MIMIKYU_RAYQUAZA_1,
+};
+
+static const union AnimCmd *const sAnims_BEWEAR_ANGRY[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BEWEAR_ANGRY_1,
+};
+
+static const union AnimCmd *const sAnims_ABOMASNOW_SANTA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_ABOMASNOW_SANTA_1,
+};
+
+static const union AnimCmd *const sAnims_WEAVILE_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_WEAVILE_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_WEAVILE_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_WEAVILE_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_RIBOMBEE_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_RIBOMBEE_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_RIBOMBEE_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_RIBOMBEE_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_MAWILE_REDUX_B_MEGA[] ={
@@ -19743,6 +19813,13 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(SCIZOR_REDUX),
+    ANIM_CMD(MIMIKYU_RAYQUAZA),
+    ANIM_CMD(BEWEAR_ANGRY),
+    ANIM_CMD(ABOMASNOW_SANTA),
+    ANIM_CMD(WEAVILE_REDUX_MEGA),
+    ANIM_CMD(WEAVILE_REDUX),
+    ANIM_CMD(RIBOMBEE_REDUX_MEGA),
+    ANIM_CMD(RIBOMBEE_REDUX),
     ANIM_CMD(MAWILE_REDUX_B_MEGA),
     ANIM_CMD(MAWILE_REDUX_B),
     ANIM_CMD(FLYGON_REDUX_MEGA),

@@ -80,7 +80,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_GASTRODON] = sGastrodonFormSpeciesIdTable,
     [SPECIES_LOPUNNY] = sLopunnyFormSpeciesIdTable,
     [SPECIES_LUCARIO] = sLucarioFormSpeciesIdTable,
-    [SPECIES_ABOMASNOW] = sAbomasnowFormSpeciesIdTable,
+    [SPECIES_ABOMASNOW_SANTA] = sAbomasnowFormSpeciesIdTable,
     [SPECIES_GALLADE] = sGalladeFormSpeciesIdTable,
     [SPECIES_SHAYMIN] = sShayminFormSpeciesIdTable,
     [SPECIES_ARCEUS] = sArceusFormSpeciesIdTable,
@@ -123,7 +123,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_WISHIWASHI] = sWishiwashiFormSpeciesIdTable,
     [SPECIES_SILVALLY] = sSilvallyFormSpeciesIdTable,
     [SPECIES_MINIOR] = sMiniorFormSpeciesIdTable,
-    [SPECIES_MIMIKYU] = sMimikyuFormSpeciesIdTable,
+    [SPECIES_MIMIKYU_RAYQUAZA] = sMimikyuFormSpeciesIdTable,
     [SPECIES_NECROZMA] = sNecrozmaFormSpeciesIdTable,
     [SPECIES_MAGEARNA] = sMagearnaFormSpeciesIdTable,
     [SPECIES_CRAMORANT] = sCramorantFormSpeciesIdTable,
@@ -612,7 +612,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_STUFFUL]               = sStuffulFormSpeciesIdTable,
 
     [SPECIES_BEWEAR_REDUX]          = sBewearFormSpeciesIdTable,
-    [SPECIES_BEWEAR]                = sBewearFormSpeciesIdTable,
+    [SPECIES_BEWEAR_ANGRY] = sBewearFormSpeciesIdTable,
 
     [SPECIES_PANPOUR_REDUX]         = sPanpourFormSpeciesIdTable,
     [SPECIES_PANPOUR]               = sPanpourFormSpeciesIdTable,
@@ -882,5 +882,13 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_FLYGON_REDUX_MEGA] = sFlygonFormSpeciesIdTable,
 
     [SPECIES_MAWILE_REDUX_B_MEGA] = sMawileFormSpeciesIdTable,
+
+    [SPECIES_RIBOMBEE_REDUX] = sRibombeeFormSpeciesIdTable,
+
+    [SPECIES_RIBOMBEE_REDUX_MEGA] = sRibombeeFormSpeciesIdTable,
+
+    [SPECIES_WEAVILE_REDUX] = sWeavileFormSpeciesIdTable,
+
+    [SPECIES_WEAVILE_REDUX_MEGA] = sWeavileFormSpeciesIdTable,
 
 };
