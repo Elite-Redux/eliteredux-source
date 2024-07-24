@@ -1583,6 +1583,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_ESPEON_MEGA] = sEspeonLevelUpLearnset,
     [SPECIES_DARKRAI_MEGA] = sDarkraiLevelUpLearnset,
     [SPECIES_SOLROCK_SYSTEM] = sSolrock_SystemLevelUpLearnset,
+    [SPECIES_SPECTRIER_CLOUD] = sSpectrier_CloudLevelUpLearnset,
     [SPECIES_ESCARGINITE_REDUX] = sEscarginite_ReduxLevelUpLearnset,
     [SPECIES_ESCARGINITE] = sEscarginiteLevelUpLearnset,
     [SPECIES_DUELUMBER] = sDuelumberLevelUpLearnset,

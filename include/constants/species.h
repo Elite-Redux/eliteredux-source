@@ -1696,8 +1696,9 @@
 #define SPECIES_ESPEON_MEGA                 REDUX_FORMS_START + 91
 #define SPECIES_DARKRAI_MEGA                REDUX_FORMS_START + 92
 #define SPECIES_SOLROCK_SYSTEM              REDUX_FORMS_START + 93
+#define SPECIES_SPECTRIER_CLOUD             REDUX_FORMS_START + 94
 
-#define LAST_REDUX_FORM                     SPECIES_SOLROCK_SYSTEM
+#define LAST_REDUX_FORM                     SPECIES_SPECTRIER_CLOUD
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

@@ -1734,3 +1734,8 @@ static const u16 sSolrockFormSpeciesIdTable[] = {
     SPECIES_SOLROCK_SYSTEM,
     FORM_SPECIES_END,
 };
+static const u16 sSpectrierFormSpeciesIdTable[] = {
+    SPECIES_SPECTRIER,
+    SPECIES_SPECTRIER_CLOUD,
+    FORM_SPECIES_END,
+};

@@ -897,4 +897,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_SOLROCK_SYSTEM] = sSolrockFormSpeciesIdTable,
 
+    [SPECIES_SPECTRIER_CLOUD] = sSpectrierFormSpeciesIdTable,
+
 };
