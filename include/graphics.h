@@ -10927,6 +10927,11 @@ extern const u32 gMonPalette_Tyranitar_Mega_Redux[];
 extern const u32 gMonPalette_Tyranitar_Redux[];
 extern const u32 gMonPalette_Pupitar_Redux[];
 extern const u32 gMonPalette_Larvitar_Redux[];
+extern const u32 gMonFrontPic_MinccinoRedux[];
+extern const u32 gMonBackPic_MinccinoRedux[];
+extern const u32 gMonPalette_MinccinoRedux[];
+extern const u32 gMonShinyPalette_MinccinoRedux[];
+extern const u8  gMonIcon_MinccinoRedux[];
 
 extern const u32 gMonBackPic_Castform_Sandy[];
 extern const u32 gMonBackPic_Kingambit_Redux[];
@@ -10974,7 +10979,7 @@ extern const u32 gBattleAnimBgImage_Rainbow[];
 extern const u32 gBattleAnimBGPalette_Rainbow[];
 extern const u32 gBattleAnimBgTilemap_Rainbow[];
 extern const u32 gBattleAnimBgPalette_Chloroblast[];
-extern const u32 gMonAltShinyPalette_Corphish[];
+extern const u32 gMonRareShinyPalette_Corphish[];
 extern const u32 gMonRareShinyPalette_Morpeko[];
 
 // GEN IX ITEMS

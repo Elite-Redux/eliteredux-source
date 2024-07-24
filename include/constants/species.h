@@ -1691,8 +1691,10 @@
 #define SPECIES_MIMIKYU_RAYQUAZA            REDUX_FORMS_START + 86
 #define SPECIES_RATTATA_REDUX               REDUX_FORMS_START + 87
 #define SPECIES_RATICATE_REDUX              REDUX_FORMS_START + 88
+#define SPECIES_MINCCINO_REDUX              REDUX_FORMS_START + 89
+#define SPECIES_CINCCINO_REDUX              REDUX_FORMS_START + 90
 
-#define LAST_REDUX_FORM                     SPECIES_RATICATE_REDUX
+#define LAST_REDUX_FORM                     SPECIES_CINCCINO_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

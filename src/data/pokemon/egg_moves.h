@@ -5540,5 +5540,16 @@ const u16 gEggMoves[] = {
         MOVE_ICE_PUNCH,
         MOVE_THUNDER_PUNCH),
 
+    egg_moves(MINCCINO_REDUX,
+        MOVE_IRON_TAIL,
+        MOVE_TAIL_WHIP,
+        MOVE_AQUA_TAIL,
+        MOVE_MUD_SLAP,
+        MOVE_KNOCK_OFF,
+        MOVE_FAKE_TEARS,
+        MOVE_SLEEP_TALK,
+        MOVE_ENDURE,
+        MOVE_FLAIL),
+    
     EGG_MOVES_TERMINATOR
 };
