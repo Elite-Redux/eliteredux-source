@@ -36,12 +36,12 @@ static const union AnimCmd sAnim_SOLROCK_SYSTEM_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_DARKRAI_MEGA_1[] =
+static const union AnimCmd sAnim_DARKRAI_NIGHTMARE_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_ESPEON_MEGA_1[] =
+static const union AnimCmd sAnim_ESPEON_GALAXY_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -298,14 +298,14 @@ static const union AnimCmd *const sAnims_SOLROCK_SYSTEM[] ={
     sAnim_SOLROCK_SYSTEM_1,
 };
 
-static const union AnimCmd *const sAnims_DARKRAI_MEGA[] ={
+static const union AnimCmd *const sAnims_DARKRAI_NIGHTMARE[] ={
     sAnim_GeneralFrame0,
-    sAnim_DARKRAI_MEGA_1,
+    sAnim_DARKRAI_NIGHTMARE_1,
 };
 
-static const union AnimCmd *const sAnims_ESPEON_MEGA[] ={
+static const union AnimCmd *const sAnims_ESPEON_GALAXY[] ={
     sAnim_GeneralFrame0,
-    sAnim_ESPEON_MEGA_1,
+    sAnim_ESPEON_GALAXY_1,
 };
 
 static const union AnimCmd *const sAnims_RATICATE_REDUX[] ={
@@ -19897,8 +19897,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(CALYREX_CLOUD_RIDER),
     ANIM_CMD(SPECTRIER_CLOUD),
     ANIM_CMD(SOLROCK_SYSTEM),
-    ANIM_CMD(DARKRAI_MEGA),
-    ANIM_CMD(ESPEON_MEGA),
+    ANIM_CMD(DARKRAI_NIGHTMARE),
+    ANIM_CMD(ESPEON_GALAXY),
     ANIM_CMD(RATICATE_REDUX),
     ANIM_CMD(RATTATA_REDUX),
     ANIM_CMD(MIMIKYU_RAYQUAZA),

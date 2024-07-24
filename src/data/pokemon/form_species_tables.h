@@ -1722,12 +1722,12 @@ static const u16 sWeavileFormSpeciesIdTable[] = {
 };
 static const u16 sEspeonFormSpeciesIdTable[] = {
     SPECIES_ESPEON,
-    SPECIES_ESPEON_MEGA,
+    SPECIES_ESPEON_GALAXY,
     FORM_SPECIES_END,
 };
 static const u16 sDarkraiFormSpeciesIdTable[] = {
     SPECIES_DARKRAI,
-    SPECIES_DARKRAI_MEGA,
+    SPECIES_DARKRAI_NIGHTMARE,
     FORM_SPECIES_END,
 };
 static const u16 sSolrockFormSpeciesIdTable[] = {

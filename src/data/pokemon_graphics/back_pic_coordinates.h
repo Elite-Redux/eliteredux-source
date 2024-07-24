@@ -5431,12 +5431,12 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_DARKRAI_MEGA] =
+    [SPECIES_DARKRAI_NIGHTMARE] =
     {
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_ESPEON_MEGA] =
+    [SPECIES_ESPEON_GALAXY] =
     {
         .size = 0,
         .y_offset =  0

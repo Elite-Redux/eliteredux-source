@@ -40497,7 +40497,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },
 
-    [SPECIES_DARKRAI_MEGA] =
+    [SPECIES_DARKRAI_NIGHTMARE] =
     {
         .baseHP        = 110,
         .baseAttack    = 115,
@@ -40529,7 +40529,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },
 
-    [SPECIES_ESPEON_MEGA] =
+    [SPECIES_ESPEON_GALAXY] =
     {
         .baseHP        = 110,
         .baseAttack    = 115,
