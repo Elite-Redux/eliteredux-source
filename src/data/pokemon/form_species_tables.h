@@ -1719,3 +1719,8 @@ static const u16 sWeavileFormSpeciesIdTable[] = {
     SPECIES_WEAVILE_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sEspeonFormSpeciesIdTable[] = {
+    SPECIES_ESPEON,
+    SPECIES_ESPEON_MEGA,
+    FORM_SPECIES_END,
+};
