@@ -5416,6 +5416,41 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_CALYREX_CLOUD_RIDER] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_SPECTRIER_CLOUD] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_SOLROCK_SYSTEM] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_DARKRAI_NIGHTMARE] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_ESPEON_GALAXY] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_RATICATE_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_RATTATA_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_MIMIKYU_RAYQUAZA] =
     {
         .size = 0,

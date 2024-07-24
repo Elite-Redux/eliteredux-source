@@ -21,6 +21,41 @@ static const union AnimCmd sAnim_ESCARGINITE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_SPECTRIER_CLOUD_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_SOLROCK_SYSTEM_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_DARKRAI_NIGHTMARE_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_ESPEON_GALAXY_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_RATICATE_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_RATTATA_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_MIMIKYU_RAYQUAZA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -246,6 +281,41 @@ static const union AnimCmd *const sAnims_DUELUMBER[] ={
 static const union AnimCmd *const sAnims_ESCARGINITE[] ={
     sAnim_GeneralFrame0,
     sAnim_ESCARGINITE_1,
+};
+
+static const union AnimCmd *const sAnims_CALYREX_CLOUD_RIDER[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CALYREX_CLOUD_RIDER_1,
+};
+
+static const union AnimCmd *const sAnims_SPECTRIER_CLOUD[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SPECTRIER_CLOUD_1,
+};
+
+static const union AnimCmd *const sAnims_SOLROCK_SYSTEM[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SOLROCK_SYSTEM_1,
+};
+
+static const union AnimCmd *const sAnims_DARKRAI_NIGHTMARE[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DARKRAI_NIGHTMARE_1,
+};
+
+static const union AnimCmd *const sAnims_ESPEON_GALAXY[] ={
+    sAnim_GeneralFrame0,
+    sAnim_ESPEON_GALAXY_1,
+};
+
+static const union AnimCmd *const sAnims_RATICATE_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_RATICATE_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_RATTATA_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_RATTATA_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_MIMIKYU_RAYQUAZA[] ={
@@ -19824,6 +19894,13 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(SCIZOR_REDUX),
+    ANIM_CMD(CALYREX_CLOUD_RIDER),
+    ANIM_CMD(SPECTRIER_CLOUD),
+    ANIM_CMD(SOLROCK_SYSTEM),
+    ANIM_CMD(DARKRAI_NIGHTMARE),
+    ANIM_CMD(ESPEON_GALAXY),
+    ANIM_CMD(RATICATE_REDUX),
+    ANIM_CMD(RATTATA_REDUX),
     ANIM_CMD(MIMIKYU_RAYQUAZA),
     ANIM_CMD(BEWEAR_ANGRY),
     ANIM_CMD(ABOMASNOW_SANTA),
