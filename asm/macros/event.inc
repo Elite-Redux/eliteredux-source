@@ -2130,3 +2130,7 @@
 	.2byte \trainer6
 	.endm
 
+	.macro yesnobattle text:req type=MSGBOX_NPC
+		msgbox \text, \type
+		multichoice2 0, 0, Common_Text_YesNoBattle, 1
+	.endm

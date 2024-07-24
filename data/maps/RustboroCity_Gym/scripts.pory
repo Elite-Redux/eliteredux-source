@@ -478,8 +478,8 @@ script RustboroCity_Gym_EventScript_Marc{
 	if (defeated(TRAINER_MARC)){
 		msgbox(RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format("Luv me pokemons, luv me {COLOR GREEN}stealth rocks{COLOR DARK_GRAY}, hate wotar types. Simple as."), MSGBOX_NPC)
-		msgbox(format("Wanna battle?"), MSGBOX_YESNO)
+		msgbox(format("Luv me pokemons, luv me {COLOR GREEN}stealth rocks{COLOR DARK_GRAY}, hate wotar types. Simple as."))
+		//yesnobattle(format("Wanna battle?"), MSGBOX_YESNO)
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_MARC, "Alright mate Lets do this." , RustboroCity_Gym_Text_MarcDefeat)
 		}
@@ -495,8 +495,8 @@ script RustboroCity_Gym_EventScript_Josh{
 	if (defeated(TRAINER_JOSH)){
 		msgbox(RustboroCity_Gym_Text_JoshPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format("Roxanne always told me to {COLOR GREEN}iron defense myself{COLOR DARK_GRAY} to understand my rock type pokemons better."), MSGBOX_NPC)
-		msgbox(format("Ready for a battle?"), MSGBOX_YESNO)
+		yesnobattle(format("Roxanne always told me to {COLOR GREEN}iron defense myself{COLOR DARK_GRAY} to understand my rock type pokemons better."))
+		//msgbox(format("Ready for a battle?"), MSGBOX_YESNO)
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_JOSH, RustboroCity_Gym_Text_JoshIntro , RustboroCity_Gym_Text_JoshDefeat)
 		}
@@ -511,8 +511,8 @@ script RustboroCity_Gym_EventScript_Tommy{
 	if (defeated(TRAINER_TOMMY)){
 		msgbox(RustboroCity_Gym_Text_TommyPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format("When doing a trek, watch out because a falling rock can hurt your foot. Leaving you {COLOR GREEN}paralyzed{COLOR DARK_GRAY}."), MSGBOX_NPC)
-		msgbox(format("Are you ready for some action?"), MSGBOX_YESNO)
+		yesnobattle(format("When doing a trek, watch out because a falling rock can hurt your foot. Leaving you {COLOR GREEN}paralyzed{COLOR DARK_GRAY}."))
+		//msgbox(format("Are you ready for some action?"), MSGBOX_YESNO)
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_TOMMY, RustboroCity_Gym_Text_TommyIntro , RustboroCity_Gym_Text_TommyDefeat)
 		}

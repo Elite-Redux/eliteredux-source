@@ -26,7 +26,7 @@ void UnregisterBattlesEvents();
 u8 ExecBattleEvents(u8 execEnum);
 u8 BattleEventExec(struct BattleEvent battleEvent, u8 execEnum);
 u8 BattleEventBeforeFirstTurnExec(struct BattleEvent);
-u8 BattleEventEndTurnExec(struct BattleEvent);
+u8 BattleEventStartTurnExec(struct BattleEvent);
 // enum to communicate to execBattleEvent as execEnum parameter
 enum {
     EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN,

@@ -47,7 +47,7 @@
 #define BATTLE_EVENT_RAIN               80
 #define BATTLE_EVENT_SUN                81
 // void of 19
-#define BATTLE_EVENT_RISE_OF_THE_FALLEN 100
+#define BATTLE_EVENT_LAST_STAND         100
 
 
 #endif // GUARD_CONSTANTS_BATTLE_EVENTS_H

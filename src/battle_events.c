@@ -91,7 +91,7 @@ u8 BattleEventExec(struct BattleEvent battleEvent, u8 execEnum){
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
         break;
     case EXEC_BATTLE_EVENT_START_OF_TURN:
-        if (BattleEventEndTurnExec(battleEvent) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
+        if (BattleEventStartTurnExec(battleEvent) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
         break;
     default:
@@ -237,14 +237,16 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent battleEvent){
 }
 
 // ran once the turn has reached its end before the player can get its hand on control again
-u8 BattleEventEndTurnExec(struct BattleEvent battleEvent){
+// which is the start, the end of the end is in fact the start, how philosophic. 
+u8 BattleEventStartTurnExec(struct BattleEvent battleEvent){
     /*MgbaOpen();
     MgbaPrintf(MGBA_LOG_WARN, "fainted player: %d, fainted trainer %d", gFaintedMonCount[0], gFaintedMonCount[1]);
     MgbaClose();*/
-    // SIDE_STATUS_MAT_BLOCK to put matblock
+    // to put matblock gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_MAT_BLOCK;
+    // PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 2, magnitude); // to indicade the number left of somethingTher.
     //moveSecondaryEffectChance if i want to apply serene grace
     // prevent some abitlity to be executed once a pokemon has landed because it's too OP and most importantly bugged af.
-    if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 2 && IsBattleEventForbiddenOnSwitchIn(battleEvent.id))
+    if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 1 && IsBattleEventForbiddenOnSwitchIn(battleEvent.id))
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
     switch (battleEvent.id)
     {
