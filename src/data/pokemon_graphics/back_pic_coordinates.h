@@ -5569,7 +5569,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_TERAPAGOS] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  17
     },
     [SPECIES_TERAPAGOS_STELLAR] =
     {

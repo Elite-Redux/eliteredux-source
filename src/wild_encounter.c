@@ -28,6 +28,7 @@
 #include "constants/weather.h"
 #include "constants/species.h"
 #include "item.h"
+#include "mgba_printf/mgba.h"
 
 extern const u8 EventScript_RepelWoreOff[];
 
@@ -451,7 +452,7 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
     u16 species;
     u16 loc = gSaveBlock1Ptr->location.mapNum;
     u16 locG = gSaveBlock1Ptr->location.mapGroup;
-    if(!gSaveBlock2Ptr->nuzlockeCaptures && IsRouteEncountered(loc, locG)){
+    if(gSaveBlock2Ptr->nuzlockeCaptures && IsRouteEncountered(loc, locG)){
         return FALSE;
     }
     switch (area)
@@ -583,7 +584,7 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
             break;
 
     }
-
+    
     MarkRouteAsEncountered(loc, locG);
     CreateWildMon(species, level, TRUE);
     return TRUE;
