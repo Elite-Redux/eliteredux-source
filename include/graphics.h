@@ -10740,11 +10740,11 @@ extern const u32 gMonPalette_ClawitzerRedux[];
 extern const u32 gMonShinyPalette_ClawitzerRedux[];
 extern const u8  gMonIcon_ClawitzerRedux[];
 
-extern const u32 gMonFrontPic_Dewleon[];
-extern const u32 gMonBackPic_Dewleon[];
-extern const u32 gMonPalette_Dewleon[];
-extern const u32 gMonShinyPalette_Dewleon[];
-extern const u8  gMonIcon_Dewleon[];
+extern const u32 gMonFrontPic_Kekleong[];
+extern const u32 gMonBackPic_Kekleong[];
+extern const u32 gMonPalette_Kekleong[];
+extern const u32 gMonShinyPalette_Kekleong[];
+extern const u8  gMonIcon_Kekleong[];
 
 extern const u8 gMonIcon_Phantowl[];
 extern const u8 gMonIcon_Duelumber[];

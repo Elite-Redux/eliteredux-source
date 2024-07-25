@@ -40288,7 +40288,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_DEWLEON] =
+[SPECIES_KEKLEONG] =
     {
     .baseHP        = 90,
     .baseAttack    = 90,

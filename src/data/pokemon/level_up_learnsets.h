@@ -26829,7 +26829,7 @@ static const struct LevelUpMove sCalyrexShadowRiderLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sDewleonLevelUpLearnset[] = {
+static const struct LevelUpMove sKekleongLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_AQUA_FANG),
     LEVEL_UP_MOVE(0, MOVE_SHEER_COLD),
     LEVEL_UP_MOVE(1, MOVE_ASTONISH),

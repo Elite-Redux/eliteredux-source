@@ -1601,7 +1601,7 @@
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400 // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
-#define SPECIES_DEWLEON                     REDUX_FORMS_START + 1
+#define SPECIES_KEKLEONG                    REDUX_FORMS_START + 1
 #define SPECIES_INFERNAPE_REDUX             REDUX_FORMS_START + 2
 #define SPECIES_NOIBAT_REDUX                REDUX_FORMS_START + 3
 #define SPECIES_NOIVERN_REDUX               REDUX_FORMS_START + 4
@@ -1692,7 +1692,7 @@
 #define SPECIES_BEWEAR_ANGRY                REDUX_FORMS_START + 87
 #define SPECIES_MIMIKYU_RAYQUAZA            REDUX_FORMS_START + 88
 #define SPECIES_ESPEON_GALAXY               REDUX_FORMS_START + 89
-#define SPECIES_DARKRAI_NIGHTMARE                REDUX_FORMS_START + 90
+#define SPECIES_DARKRAI_NIGHTMARE           REDUX_FORMS_START + 90
 #define SPECIES_SOLROCK_SYSTEM              REDUX_FORMS_START + 91
 #define SPECIES_SPECTRIER_CLOUD             REDUX_FORMS_START + 92
 #define SPECIES_CALYREX_CLOUD_RIDER         REDUX_FORMS_START + 93
