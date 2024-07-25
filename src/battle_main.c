@@ -6857,9 +6857,6 @@ static void HandleBattleEvents(void){
     // end of the turn, exec battle events
     
     if (gBattleStruct->battleEventDone != BATTLE_EVENTS_DONE){
-            MgbaOpen();
-            MgbaPrintf(MGBA_LOG_WARN, "cooked %d", gBattleStruct->battleEventDone);
-            MgbaClose();
         if (ExecBattleEvents() == EXEC_BATTLE_EVENTS_ALL_CLEAR){
             gBattleStruct->battleEventDone = BATTLE_EVENTS_DONE;
         } else {

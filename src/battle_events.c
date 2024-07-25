@@ -311,9 +311,6 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyCrit);
     
     case BATTLE_EVENT_ONSWITCH_MAT_BLOCK:
-        MgbaOpen();
-        MgbaPrintf(MGBA_LOG_WARN, "putain %d", gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn);
-        MgbaClose();
         if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn != 1){
             battleEvent->data1 = 0;
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
