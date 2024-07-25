@@ -985,8 +985,12 @@ const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthi
 static const u8 sText_GymSkillTerrain[] = _("Something unusual modifies the terrain.");
 static const u8 sText_GymSkillSteadyStatsBoost[] = _("{B_OPPONENT_MON1_NAME}'s {STR_VAR_1} steadily increases.");
 static const u8 sText_GymSkillPosture[] = _("{B_OPPONENT_MON1_NAME} position itself to {STR_VAR_2},\nits {STR_VAR_1} abruptly increase.");
-static const u8 sText_GymSkillStatusOnTeam[] = _("Some of your team members are affected by\n{STR_VAR_1}");
+static const u8 sText_GymSkillStatusOnTeam[] = _("Some of your team members are affected by\n{STR_VAR_1}.");
 static const u8 sText_GymSkillLastStand[] = _("{B_OPPONENT_MON1_NAME} will not accept defeat!\nAnd its stats increase sharply.");
+static const u8 sText_GymSkillMatBlock[] = _("{B_OPPONENT_MON1_NAME} picked up a mat block\nto use as cover this turn.");
+static const u8 sText_GymSkillLeechSeed[] = _("woe leech seed be upon ye.");
+static const u8 sText_GymSkillForeSight[] = _("{B_PLAYER_MON1_NAME} was foresighted.");
+
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1758,6 +1762,9 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GYMSKILL_POSTURE - 12] = sText_GymSkillPosture,
     [STRINGID_GYMSKILL_STATUSONTEAM - 12] = sText_GymSkillStatusOnTeam,
     [STRINGID_GYMSKILL_LASTSTAND - 12] = sText_GymSkillLastStand,
+    [STRINGID_GYMSKILL_MATBLOCK - 12] = sText_GymSkillMatBlock,
+    [STRINGID_GYMSKILL_LEECH_SEED - 12] = sText_GymSkillLeechSeed,
+    [STRINGID_GYMSKILL_FORESIGHT - 12] = sText_GymSkillForeSight,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

@@ -504,6 +504,20 @@ script DewfordTown_Gym_EventScript_GiveBulkUp{
 	end
 }
 
+script DewfordTown_Gym_EventScript_Laura{
+    lock
+    faceplayer
+    if (defeated(TRAINER_LAURA)){
+        msgbox(DewfordTown_Gym_Text_LauraPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        yesnobattle(format("After training in this gym for so long I can even fight {COLOR GREEN}in the Dark, by following my foes breathe and ki{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+        if (var(VAR_RESULT)){
+            trainerbattle_single(TRAINER_LAURA, DewfordTown_Gym_Text_LauraIntro , DewfordTown_Gym_Text_LauraDefeat)
+        }
+    }
+    release
+    end
+}
 
 
 script DewfordTown_Gym_EventScript_Takao{
@@ -512,39 +526,9 @@ script DewfordTown_Gym_EventScript_Takao{
     if (defeated(TRAINER_TAKAO)){
         msgbox(DewfordTown_Gym_Text_TakaoPostBattle, MSGBOX_AUTOCLOSE)
     } else {
-        msgbox(format("The best offense is a good defense, let's see how well you hold up under my {COLOR GREEN} Powered-Up Punches {COLOR DARK_GRAY}."), MSGBOX_YESNO)
+        yesnobattle(format("If you don't stretch well before a battle you could get really hurt, worst case scenario you could get {COLOR GREEN}Paralyzed{COLOR DARK_GRAY}!"))
         if (var(VAR_RESULT)){
             trainerbattle_single(TRAINER_TAKAO, DewfordTown_Gym_Text_TakaoIntro , DewfordTown_Gym_Text_TakaoDefeat)
-        }
-    }
-    release
-    end
-}
-
-script DewfordTown_Gym_EventScript_Jocelyn{
-    lock
-    faceplayer
-    if (defeated(TRAINER_JOCELYN)){
-        msgbox(DewfordTown_Gym_Text_JocelynPostBattle, MSGBOX_AUTOCLOSE)
-    } else {
-        msgbox(format("What, a battle? Fine, but make it quick, I still need to {COLOR GREEN} put this Mat away {COLOR DARK_GRAY}"), MSGBOX_YESNO)
-        if (var(VAR_RESULT)){
-            trainerbattle_single(TRAINER_JOCELYN, DewfordTown_Gym_Text_JocelynIntro , DewfordTown_Gym_Text_JocelynDefeat)
-        }
-    }
-    release
-    end
-}
-
-script DewfordTown_Gym_EventScript_Laura{
-    lock
-    faceplayer
-    if (defeated(TRAINER_LAURA)){
-        msgbox(DewfordTown_Gym_Text_LauraPostBattle, MSGBOX_AUTOCLOSE)
-    } else {
-        msgbox(format("After training in this gym for so long I can even fight  {COLOR GREEN} in the Dark {COLOR DARK_GRAY}"), MSGBOX_YESNO)
-        if (var(VAR_RESULT)){
-            trainerbattle_single(TRAINER_LAURA, DewfordTown_Gym_Text_LauraIntro , DewfordTown_Gym_Text_LauraDefeat)
         }
     }
     release
@@ -557,7 +541,7 @@ script DewfordTown_Gym_EventScript_Cristian{
     if (defeated(TRAINER_CRISTIAN)){
         msgbox(DewfordTown_Gym_Text_CristianPostBattle, MSGBOX_AUTOCLOSE)
     } else {
-        msgbox(format("Walking over a {COLOR GREEN} Floor of Spikes {COLOR DARK_GRAY} trains your focus, let's see how well you've trained yours."), MSGBOX_YESNO)
+        yesnobattle(format("Walking over a {COLOR GREEN}floor of Spikes{COLOR DARK_GRAY} trains your focus, let's see how well you've trained yours."))
         if (var(VAR_RESULT)){
             trainerbattle_single(TRAINER_CRISTIAN, DewfordTown_Gym_Text_CristianIntro , DewfordTown_Gym_Text_CristianDefeat)
         }
@@ -566,10 +550,23 @@ script DewfordTown_Gym_EventScript_Cristian{
     end
 }
 
+script DewfordTown_Gym_EventScript_Jocelyn{
+    lock
+    faceplayer
+    if (defeated(TRAINER_JOCELYN)){
+        msgbox(DewfordTown_Gym_Text_JocelynPostBattle, MSGBOX_AUTOCLOSE)
+    } else {
+        yesnobattle(format("What, a battle? Fine, but make it quick, I still need to {COLOR GREEN}put this Mat away{COLOR DARK_GRAY}."))
+        if (var(VAR_RESULT)){
+            trainerbattle_single(TRAINER_JOCELYN, DewfordTown_Gym_Text_JocelynIntro , DewfordTown_Gym_Text_JocelynDefeat)
+        }
+    }
+    release
+    end
+}
+
 script DewfordTown_Gym_EventScript_BrendenAndLilith{
-    msgbox(format("I just had a good stretch and I'm raring to go. I hope you're ready I feel  {COLOR GREEN} Boosted Up  {COLOR DARK_GRAY} and ready to go!."), MSGBOX_AUTOCLOSE)
-    msgbox(format("Walking over a {COLOR GREEN} Floor of Spikes {COLOR DARK_GRAY} trains your focus, let's see how well you've trained yours."), MSGBOX_AUTOCLOSE)
-    msgbox(format("want a double versus one?"), MSGBOX_YESNO)
+    yesnobattle(format("I just had a good stretch and I'm raring to go. I hope you're ready I feel {COLOR GREEN}Boosted Up{COLOR DARK_GRAY} and ready to go!"))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_LILITH, TRAINER_BRENDEN, TAG_TEAM_BRENDEN_LILITH, 0, DewfordTown_Gym_Text_BrendenAndLilithIntro)
     }
@@ -618,18 +615,21 @@ movement DewfordTown_Gym_Movement_BrawlyEntersTheRingJump{
 script DewfordTown_Gym_Movement_BrawlyEntersTheRing{
 	applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyEntersTheRingJump)
 	playSE(SE_LEDGE)
+	waitse
 	waitmovement(0)
-	applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyEntersTheRingJump)
 	playSE(SE_LEDGE)
-	waitmovement(0)
 	applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyEntersTheRingJump)
-	playSE(SE_LEDGE)
 	waitmovement(0)
+	playSE(SE_LEDGE)
+	applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyEntersTheRingJump)
+	waitmovement(0)
+	waitse
 }
 
 
 script DewfordTown_Gym_EventScript_EnteredTheRing{
     lock
+	playSE(SE_LEDGE)
     applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyAskPlayer)
     waitmovement(0)
     msgbox(format("Ready to face me?"), MSGBOX_YESNO)
@@ -666,20 +666,21 @@ script DewfordTown_Gym_EventScript_CheckTrainers{
 		end
 	}
 	// set battle event flags
-	if (!defeated(TRAINER_TAKAO)){
-		registerbattleevent(BATTLE_EVENT_POSTURE_OFFENSE) // todo change
-	}
-	if (!defeated(TRAINER_JOCELYN)){
-	
-	}
 	if (!defeated(TRAINER_LAURA)){
-		registerbattleevent(BATTLE_EVENT_STEADY_ACCURACY)
+		registerbattleevent(BATTLE_EVENT_ONSTAY_FORESIGHT, 1)
 	}
-	if (!defeated(TRAINER_BRENDEN)){ // by entension TRAINER_LILITH too
-	
+	if (!defeated(TRAINER_TAKAO)){
+		registerbattleevent(BATTLE_EVENT_LAST_PARALYZED, 2)
 	}
 	if (!defeated(TRAINER_CRISTIAN)){
-	
+		registerbattleevent(BATTLE_EVENT_SPIKES, 2)
+	}
+	if (!defeated(TRAINER_JOCELYN)){
+		registerbattleevent(BATTLE_EVENT_ONSWITCH_MAT_BLOCK, 1)
+	}
+	if (!defeated(TRAINER_BRENDEN)){ // by entension TRAINER_LILITH too
+		registerbattleevent(BATTLE_EVENT_POSTURE_OFFENSE)
+
 	}
 	return
 }

@@ -12141,3 +12141,30 @@ BattleScript_GymSkillTerrain:
 	printstring STRINGID_GYMSKILL_TERRAIN
 	waitmessage B_WAIT_TIME_LONG
 	return
+
+BattleScript_GymSkillMatBlock::
+	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_MATBLOCK
+	waitmessage B_WAIT_TIME_LONG
+	end2
+
+BattleScript_GymSkillLeechSeed::
+	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_LEECH_SEED
+	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_LEECH_SEED
+	waitanimation
+	waitmessage B_WAIT_TIME_LONG
+	end2
+
+BattleScript_GymSkillForesight::
+	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_FORESIGHT
+	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_FORESIGHT
+	waitanimation
+	waitmessage B_WAIT_TIME_LONG
+	setforesight
+	end2
+

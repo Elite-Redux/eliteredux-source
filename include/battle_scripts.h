@@ -629,5 +629,9 @@ extern const u8 BattleScript_GymSkillTerrainSpikes[];
 extern const u8 BattleScript_GymSkillTerrainToxicSpikes[];
 extern const u8 BattleScript_GymSkillTerrainStickyWeb[];
 
+extern const u8 BattleScript_GymSkillMatBlock[];
+
+extern const u8 BattleScript_GymSkillForesight[];
+extern const u8 BattleScript_GymSkillLeechSeed[];
 
 #endif // GUARD_BATTLE_SCRIPTS_H

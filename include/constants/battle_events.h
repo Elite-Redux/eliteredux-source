@@ -25,7 +25,7 @@
 #define BATTLE_EVENT_LAST_POISONED      35
 #define BATTLE_EVENT_LAST_TOXIC         36
 // void of 14
-#define BATTLE_EVENT_CURSE_ON_KILL      50
+#define BATTLE_EVENT_ONKILLNS_CURSE     50
 #define BATTLE_EVENT_LEECHSEED_ON_KILL  51
 // void of 9
 #define BATTLE_EVENT_STEALTH_ROCK       60
@@ -38,7 +38,7 @@
 #define BATTLE_EVENT_AURORAVEIL         67
 #define BATTLE_EVENT_LUCKY_CHANT        68
 #define BATTLE_EVENT_QUICK_GUARD        69
-// void of 8z
+// void of 0
 #define BATTLE_EVENT_ELECTRIC_SURGE     70
 #define BATTLE_EVENT_PSYCHIC_SURGE      71
 #define BATTLE_EVENT_GRASSY_SURGE       72
@@ -48,6 +48,11 @@
 #define BATTLE_EVENT_SUN                81
 // void of 19
 #define BATTLE_EVENT_LAST_STAND         100
+// void of 20
+#define BATTLE_EVENT_ONSTAY_LEECH_SEED  120
+#define BATTLE_EVENT_ONSTAY_FORESIGHT   121
+// void of 20
+#define BATTLE_EVENT_ONSWITCH_MAT_BLOCK 140
 
 
 #endif // GUARD_CONSTANTS_BATTLE_EVENTS_H
