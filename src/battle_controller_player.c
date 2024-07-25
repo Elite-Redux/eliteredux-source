@@ -1254,12 +1254,13 @@ const u8 gText_MoveInfo_Damage[] = _("Damage");
 
 const u8 gText_Target_Nothing[]   = _("---");
 const u8 sText_Title_Controllers_Move[]      = _("{DPAD_UPDOWN}Switch {DPAD_LEFTRIGHT}Page {A_BUTTON}Mode");*/
-const u8 sText_Effect_DamageDone[]                  = _("Calculated Damage\nRange: {STR_VAR_1}% - {STR_VAR_2}%\nof {STR_VAR_3}\nCurrent Health.");
-const u8 sText_Effect_DamageDone_Guaranteed_KO[]    = _("Guaranteed to KO\n{STR_VAR_3}\nin the next hit.");
-const u8 sText_Effect_Speed_Calculation_Singles[]   = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}");
-const u8 sText_Effect_Speed_Calculation_Priority2[] = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}{PLUS}");
-const u8 sText_Effect_Speed_Calculation[]           = _("{STR_VAR_1}");
-const u8 sText_Effect_Speed_CalculationPriority[]   = _("{PLUS} {STR_VAR_1}");
+const u8 sText_Effect_DamageDone[]                     = _("Calculated Damage\nRange: {STR_VAR_1}% - {STR_VAR_2}%\nof {STR_VAR_3}\nCurrent Health.");
+const u8 sText_Effect_DamageDone_Guaranteed_KO[]       = _("{COLOR 14}Guaranteed {COLOR 2}to KO\n{STR_VAR_3}\nin the next hit.");
+const u8 sText_Effect_DamageDone_Guaranteed_KO_White[] = _("{COLOR 14}Guaranteed {COLOR 10}to KO\n{STR_VAR_3}\nin the next hit.");
+const u8 sText_Effect_Speed_Calculation_Singles[]      = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}");
+const u8 sText_Effect_Speed_Calculation_Priority2[]    = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}{PLUS}");
+const u8 sText_Effect_Speed_Calculation[]              = _("{STR_VAR_1}");
+const u8 sText_Effect_Speed_CalculationPriority[]      = _("{PLUS} {STR_VAR_1}");
 
 enum{
     MOVE_EFFECTIVENESS_NONE,
@@ -1782,6 +1783,11 @@ void PrintBattleWindow_MoveSelection(void)
                 u8 moveIndex = gMoveSelectionCursor[gActiveBattler];
                 x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
                 StringCopy(gStringVar3, gSpeciesNames[gBattleMons[target].species]);
+
+                MgbaOpen();
+                MgbaPrintf(MGBA_LOG_WARN, "MOVE_INFO_DAMAGE_CALCULATION targetCurrentHp: %d minDamage: %d", targetCurrentHp, minDamage);
+                MgbaClose();
+
                 if(targetCurrentHp > minDamage){
                     //Min Damage Percentage
                     percentage = (minDamage * MAX_PERCENT_2) / targetCurrentHp; 
@@ -1802,7 +1808,10 @@ void PrintBattleWindow_MoveSelection(void)
                     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
                 }
                 else{
-                    StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone_Guaranteed_KO);
+                    if(fontColor == FONT_WHITE_2)
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone_Guaranteed_KO_White);
+                    else
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone_Guaranteed_KO);
                     AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
                 }
             }

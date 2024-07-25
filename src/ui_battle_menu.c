@@ -3197,10 +3197,10 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx){
     StringCopy(gStringVar1, gStringVar4);
     ConvertIntToDecimalStringN(gStringVar2, damageCalculation->maxDamagePercentage, STR_CONV_MODE_LEFT_ALIGN, 3);
     ConvertIntToDecimalStringN(gStringVar3, damageCalculation->chance2KO, STR_CONV_MODE_LEFT_ALIGN, 3);
-    if(damageCalculation->chance2KO >= 100)
-        StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FifthPart_Guaranteed);
-    else
+    if(targetCurrentHp > minDamage)
         StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FifthPart);
+    else
+        StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FifthPart_Guaranteed);
 
     //Sixth Part
     StringCopy(gStringVar1, gStringVar4);
