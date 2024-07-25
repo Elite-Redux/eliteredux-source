@@ -2131,6 +2131,9 @@
 	.endm
 
 	.macro yesnobattle text:req type=MSGBOX_NPC
+		yesnobattle_replay_\@:
 		msgbox \text, \type
 		multichoice2 0, 0, Common_Text_YesNoBattle, 1
+		compare VAR_RESULT, 2
+		goto_if TRUE, yesnobattle_replay_\@
 	.endm

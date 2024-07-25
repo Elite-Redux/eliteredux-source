@@ -243,6 +243,8 @@ u8 BattleEventStartTurnExec(struct BattleEvent battleEvent){
     MgbaPrintf(MGBA_LOG_WARN, "fainted player: %d, fainted trainer %d", gFaintedMonCount[0], gFaintedMonCount[1]);
     MgbaClose();*/
     // to put matblock gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_MAT_BLOCK;
+    //gQueuedExtraAttackData if I want to add attack to the queue?
+    //gQuashedBattlers++; how do I use that even?
     // PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 2, magnitude); // to indicade the number left of somethingTher.
     //moveSecondaryEffectChance if i want to apply serene grace
     // prevent some abitlity to be executed once a pokemon has landed because it's too OP and most importantly bugged af.
