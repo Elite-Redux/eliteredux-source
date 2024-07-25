@@ -611,10 +611,22 @@ movement DewfordTown_Gym_Movement_BrawlyAskPlayer{
     jump_in_place_left
 }
 
-movement DewfordTown_Gym_Movement_BrawlyEntersTheRing{
-    jump_left * 2
-    walk_left
+movement DewfordTown_Gym_Movement_BrawlyEntersTheRingJump{
+	jump_left
 }
+
+script DewfordTown_Gym_Movement_BrawlyEntersTheRing{
+	applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyEntersTheRingJump)
+	playSE(SE_LEDGE)
+	waitmovement(0)
+	applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyEntersTheRingJump)
+	playSE(SE_LEDGE)
+	waitmovement(0)
+	applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyEntersTheRingJump)
+	playSE(SE_LEDGE)
+	waitmovement(0)
+}
+
 
 script DewfordTown_Gym_EventScript_EnteredTheRing{
     lock
@@ -627,8 +639,7 @@ script DewfordTown_Gym_EventScript_EnteredTheRing{
         release
         end
     }
-    applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyEntersTheRing)
-    waitmovement(0)
+    call(DewfordTown_Gym_Movement_BrawlyEntersTheRing)
     setvar(VAR_TEMP_0, 1)
     goto(DewfordTown_Gym_EventScript_BrawlyEngage)
     release

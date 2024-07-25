@@ -4062,12 +4062,8 @@ void BattleTurnPassed(void)
             return;
     }
     if (HandleFaintedMonActions()){
-        MgbaOpen();
-        MgbaPrintf(MGBA_LOG_WARN, "%d", gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn);
-        MgbaClose();
         return;
     }
-        
     gBattleStruct->faintedActionsState = 0;
     if (HandleWishPerishSongOnTurnEnd())
         return;
@@ -4099,8 +4095,14 @@ void BattleTurnPassed(void)
         gBattleResults.battleTurnCounter++;
         gBattleStruct->arenaTurnCounter++;
     }
-
-
+    // end of the turn, exec battle events
+    if (!gBattleStruct->battleEventDone){
+        if (ExecBattleEvents(EXEC_BATTLE_EVENT_START_OF_TURN) == EXEC_BATTLE_EVENTS_ALL_CLEAR){
+            gBattleStruct->battleEventDone = TRUE;
+        } else {
+            return;
+        }
+    }
     for (i = 0; i < gBattlersCount; i++)
     {
         gChosenActionByBattler[i] = B_ACTION_NONE;
@@ -4123,14 +4125,6 @@ void BattleTurnPassed(void)
     else if (ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), gTrainerBattleOpponent_A, TRAINER_SLIDE_LAST_LOW_HP))
         BattleScriptExecute(BattleScript_TrainerSlideMsgEnd2);
 
-    // end of the turn, exec battle events
-    if (!gBattleStruct->battleEventDone){
-        if (ExecBattleEvents(EXEC_BATTLE_EVENT_START_OF_TURN) == EXEC_BATTLE_EVENTS_ALL_CLEAR){
-            gBattleStruct->battleEventDone = TRUE;
-        } else {
-            return;
-        }
-    }
     // I need this reset for the end of the next turn
     gBattleStruct->battleEventDone = FALSE;
 }
