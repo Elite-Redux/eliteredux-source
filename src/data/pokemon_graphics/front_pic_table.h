@@ -1592,6 +1592,7 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(LUXRAY_REDUX,    gMonFrontPic_LuxrayRedux),
     SPECIES_SPRITE(CASCOON_PRIMAL,     gMonFrontPic_CascoonPrimal),
     SPECIES_SPRITE(MINCCINO_REDUX,    gMonFrontPic_MinccinoRedux),
+    SPECIES_SPRITE(CINCCINO_REDUX,    gMonFrontPic_CinccinoRedux),
     SPECIES_SPRITE(EGG, gMonFrontPic_Egg),
 };
 

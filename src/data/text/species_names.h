@@ -1190,7 +1190,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 
     [SPECIES_RIBOMBEE_MEGA] = _("Ribombee"),
     [SPECIES_MINCCINO_REDUX] = _("Minccino"),
-
+    [SPECIES_CINCCINO_REDUX] = _("Cinccino"),
     
     // Megas
     [SPECIES_VENUSAUR_MEGA] = _("Venusaur"),
