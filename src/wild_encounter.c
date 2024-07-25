@@ -584,8 +584,11 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
             break;
 
     }
-    
-    MarkRouteAsEncountered(loc, locG);
+    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+    {
+        MarkRouteAsEncountered(loc, locG);
+    }
+    //MarkRouteAsEncountered(loc, locG);
     CreateWildMon(species, level, TRUE);
     return TRUE;
 }
@@ -769,13 +772,13 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                 {
                     return FALSE;
                 }
-                else 
-                {
-                    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
-                    {
-                        MarkRouteAsEncountered(loc, locG);
-                    }
-                }
+                // else 
+                // {
+                //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                //     {
+                //         MarkRouteAsEncountered(loc, locG);
+                //     }
+                // }
                 roamer = &gSaveBlock1Ptr->roamer;
                 if (!IsWildLevelAllowedByRepel(roamer->level))
                     return FALSE;
@@ -794,17 +797,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                 // try a regular wild land encounter
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
-                    if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
-                    {
-                        return FALSE;
-                    }
-                    else 
-                    {
-                        if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
-                        {
-                            MarkRouteAsEncountered(loc, locG);
-                        }
-                    }
+                    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    // {
+                    //     return FALSE;
+                    // }
+                    // else 
+                    // {
+                    //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    //     {
+                    //         MarkRouteAsEncountered(loc, locG);
+                    //     }
+                    // }
                     if (TryDoDoubleWildBattle())
                     {
                         struct Pokemon mon1 = gEnemyParty[0];
@@ -858,17 +861,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
             {
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].waterMonsInfo, WILD_AREA_WATER, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
-                    if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
-                    {
-                        return FALSE;
-                    }
-                    else 
-                    {
-                        if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
-                        {
-                            MarkRouteAsEncountered(loc, locG);
-                        }
-                    }
+                    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    // {
+                    //     return FALSE;
+                    // }
+                    // else 
+                    // {
+                    //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    //     {
+                    //         MarkRouteAsEncountered(loc, locG);
+                    //     }
+                    // }
                     gIsSurfingEncounter = TRUE;
                     if (TryDoDoubleWildBattle())
                     {
