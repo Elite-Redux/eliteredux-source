@@ -620,10 +620,14 @@ extern const u8 BattleScript_GymSkillPostureSpdef[];
 extern const u8 BattleScript_GymSkillPostureSpeed[];
 extern const u8 BattleScript_GymSkillPostureAccuracy[];
 extern const u8 BattleScript_GymSkillPostureCrit[]; //not implemented yet
+extern const u8 BattleScript_GymSkillLastStand[];
 
 extern const u8 BattleScript_GymSkillStatusOnTeam[];
 
 extern const u8 BattleScript_GymSkillTerrainStealthRock[];
+extern const u8 BattleScript_GymSkillTerrainSpikes[];
+extern const u8 BattleScript_GymSkillTerrainToxicSpikes[];
+extern const u8 BattleScript_GymSkillTerrainStickyWeb[];
 
 
 #endif // GUARD_BATTLE_SCRIPTS_H

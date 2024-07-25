@@ -478,8 +478,7 @@ script RustboroCity_Gym_EventScript_Marc{
 	if (defeated(TRAINER_MARC)){
 		msgbox(RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format("Luv me pokemons, luv me {COLOR GREEN}stealth rocks{COLOR DARK_GRAY}, hate wotar types. Simple as."))
-		//yesnobattle(format("Wanna battle?"), MSGBOX_YESNO)
+		yesnobattle(format("{COLOR GREEN}The last mountain rise above all others, glistering all colors{COLOR DARK_GRAY}. This is a sight you should witness by yourself one day."))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_MARC, "Alright mate Lets do this." , RustboroCity_Gym_Text_MarcDefeat)
 		}
@@ -495,8 +494,7 @@ script RustboroCity_Gym_EventScript_Josh{
 	if (defeated(TRAINER_JOSH)){
 		msgbox(RustboroCity_Gym_Text_JoshPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("Roxanne always told me to {COLOR GREEN}iron defense myself{COLOR DARK_GRAY} to understand my rock type pokemons better."))
-		//msgbox(format("Ready for a battle?"), MSGBOX_YESNO)
+		yesnobattle(format("Roxanne always told me that the best defense is to {COLOR GREEN}start solid and to reach the firmest point possible{COLOR DARK_GRAY}."))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_JOSH, RustboroCity_Gym_Text_JoshIntro , RustboroCity_Gym_Text_JoshDefeat)
 		}
@@ -511,8 +509,7 @@ script RustboroCity_Gym_EventScript_Tommy{
 	if (defeated(TRAINER_TOMMY)){
 		msgbox(RustboroCity_Gym_Text_TommyPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("When doing a trek, watch out because a falling rock can hurt your foot. Leaving you {COLOR GREEN}paralyzed{COLOR DARK_GRAY}."))
-		//msgbox(format("Are you ready for some action?"), MSGBOX_YESNO)
+		yesnobattle(format("When doing a trek, watch out when {COLOR GREEN}entering on a rocky field{COLOR DARK_GRAY}, it can hurt your feets and legs. Leaving you {COLOR GREEN}paralyzed{COLOR DARK_GRAY}!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_TOMMY, RustboroCity_Gym_Text_TommyIntro , RustboroCity_Gym_Text_TommyDefeat)
 		}
@@ -527,16 +524,17 @@ script RustboroCity_Gym_EventScript_CheckTrainers{
 		release
 		end
 	}
-    	// register all battle events for all trainer not fought
-	if (defeated(TRAINER_MARC)){ // WARNING THIS WAS UN NEGATED FOR TEST PURPOSE
-		registerbattleevent(BATTLE_EVENT_STEADY_DEFENSE)
+	// register all battle events for all trainer not fought
+	if (!defeated(TRAINER_MARC)){
+		registerbattleevent(BATTLE_EVENT_LAST_STAND, 5)
 	}
 	if (!defeated(TRAINER_TOMMY)){
 		registerbattleevent(BATTLE_EVENT_LAST_PARALYZED, 2)
+		registerbattleevent(BATTLE_EVENT_STEALTH_ROCK)
 	}
 	if (!defeated(TRAINER_JOSH)){
 		registerbattleevent(BATTLE_EVENT_POSTURE_DEFENSE)
-		registerbattleevent(BATTLE_EVENT_STEALTH_ROCK)
+		registerbattleevent(BATTLE_EVENT_STEADY_DEFENSE)
 	}
 	return
 }
@@ -556,8 +554,6 @@ script RustboroCity_Gym_EventScript_Roxanne{
 	
 	setvar(VAR_0x8004, 15)
 	// count the number of trainer defeated, and tell a different line
-	// DEBUG ONLY
-	trainerbattle_no_intro(TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxanneDefeat)
 	adddefeatedcountmax7(1, TRAINER_JOSH, TRAINER_TOMMY, TRAINER_MARC)
 	switch (var(VAR_RESULT)) {
 		case 0:

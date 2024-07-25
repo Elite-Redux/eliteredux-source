@@ -275,6 +275,11 @@ u8 BattleEventStartTurnExec(struct BattleEvent battleEvent){
     case BATTLE_EVENT_STEADY_CRIT:
         SET_STR1(gText_Critical);
         RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyCrit);
+    
+    case BATTLE_EVENT_LAST_STAND:
+        if (gFaintedMonCount[1] != battleEvent.data0)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLastStand);
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }

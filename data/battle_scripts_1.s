@@ -12085,6 +12085,14 @@ BattleScript_GymSkillSteadyAccuracy::
 BattleScript_GymSkillSteadyCrit:: @ not implemented yet
 	end2
 
+BattleScript_GymSkillLastStand::
+	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_LASTSTAND
+	waitmessage B_WAIT_TIME_LONG
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	call BattleScript_AllStatsTwoUp
+	end2
+
 BattleScript_GymSkillStatusOnTeam::
 	waitse @ because inside battle_event.c there's playSE
 	call BattleScript_GymSkillPopup
@@ -12093,9 +12101,7 @@ BattleScript_GymSkillStatusOnTeam::
 	end2
 
 BattleScript_GymSkillTerrainStealthRock::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_TERRAIN
-	waitmessage B_WAIT_TIME_LONG
+	call BattleScript_GymSkillTerrain
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
 	waitanimation
@@ -12103,3 +12109,35 @@ BattleScript_GymSkillTerrainStealthRock::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
+BattleScript_GymSkillTerrainSpikes::
+	call BattleScript_GymSkillTerrain
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_SPIKES
+	waitanimation
+	printstring STRINGID_SPIKESSCATTERED
+	waitmessage B_WAIT_TIME_LONG
+	end2
+
+BattleScript_GymSkillTerrainToxicSpikes::
+	call BattleScript_GymSkillTerrain
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
+	waitanimation
+	printstring STRINGID_POISONSPIKESSCATTERED
+	waitmessage B_WAIT_TIME_LONG
+	end2
+
+BattleScript_GymSkillTerrainStickyWeb::
+	call BattleScript_GymSkillTerrain
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
+	waitanimation
+	printstring STRINGID_STICKYWEBUSED
+	waitmessage B_WAIT_TIME_LONG
+	end2
+
+BattleScript_GymSkillTerrain:
+	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_TERRAIN
+	waitmessage B_WAIT_TIME_LONG
+	return
