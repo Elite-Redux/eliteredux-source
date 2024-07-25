@@ -4061,8 +4061,13 @@ void BattleTurnPassed(void)
         if (DoBattlerEndTurnEffects())
             return;
     }
-    if (HandleFaintedMonActions())
+    if (HandleFaintedMonActions()){
+        MgbaOpen();
+        MgbaPrintf(MGBA_LOG_WARN, "%d", gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn);
+        MgbaClose();
         return;
+    }
+        
     gBattleStruct->faintedActionsState = 0;
     if (HandleWishPerishSongOnTurnEnd())
         return;
