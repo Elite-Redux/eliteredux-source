@@ -2718,7 +2718,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_AUDINO_MEGA] = 1,
     [SPECIES_DIANCIE_MEGA] = 0,
     [SPECIES_CASCOON_PRIMAL]  = 2,
-    [SPECIES_DEWLEON] = 1,
+    [SPECIES_DEWLEON] = 4,
 
     //Custom Mega
     [SPECIES_MILOTIC_MEGA] = 2,
