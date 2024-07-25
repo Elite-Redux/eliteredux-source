@@ -10956,6 +10956,11 @@ extern const u32 gMonBackPic_MinccinoRedux[];
 extern const u32 gMonPalette_MinccinoRedux[];
 extern const u32 gMonShinyPalette_MinccinoRedux[];
 extern const u8  gMonIcon_MinccinoRedux[];
+extern const u32 gMonFrontPic_CinccinoRedux[];
+extern const u32 gMonBackPic_CinccinoRedux[];
+extern const u32 gMonPalette_CinccinoRedux[];
+extern const u32 gMonShinyPalette_CinccinoRedux[];
+extern const u8  gMonIcon_CinccinoRedux[];
 
 extern const u32 gMonBackPic_Castform_Sandy[];
 extern const u32 gMonBackPic_Kingambit_Redux[];

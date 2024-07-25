@@ -268,6 +268,17 @@ static const union AnimCmd *const sAnims_MINCCINO_REDUX[] ={
     sAnim_MINCCINO_REDUX_1,
 };
 
+static const union AnimCmd sAnim_CINCCINO_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_CINCCINO_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CINCCINO_REDUX_1,
+};
+
 static const union AnimCmd *const sAnims_PHANTOWL[] ={
     sAnim_GeneralFrame0,
     sAnim_PHANTOWL_1,
@@ -19924,6 +19935,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(GOUGING_FIRE),
     ANIM_CMD(ESCARGINITE_REDUX),
     ANIM_CMD(MINCCINO_REDUX),
+    ANIM_CMD(CINCCINO_REDUX),
     ANIM_CMD(IRON_BOULDER),
     ANIM_CMD(HYDRAPPLE),
     ANIM_CMD(IRON_CROWN),

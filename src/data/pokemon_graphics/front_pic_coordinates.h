@@ -7691,8 +7691,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 11,
     },
-
-
+    [SPECIES_CINCCINO_REDUX] =
+    {
+        .size = 0x45,
+        .y_offset = 7,
+    },
 
     // Egg
     [SPECIES_EGG] =

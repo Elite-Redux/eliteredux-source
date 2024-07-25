@@ -7402,6 +7402,11 @@ const u32 gMonBackPic_MinccinoRedux[]                 = INCBIN_U32("graphics/pok
 const u32 gMonPalette_MinccinoRedux[]                 = INCBIN_U32("graphics/pokemon/minccino_redux/normal.gbapal.lz");
 const u32 gMonShinyPalette_MinccinoRedux[]            = INCBIN_U32("graphics/pokemon/minccino_redux/shiny.gbapal.lz");
 const u8  gMonIcon_MinccinoRedux[]                    = INCBIN_U8("graphics/pokemon/minccino_redux/icon.4bpp");
+const u32 gMonFrontPic_CinccinoRedux[]                = INCBIN_U32("graphics/pokemon/cinccino_redux/front.4bpp.lz");
+const u32 gMonBackPic_CinccinoRedux[]                 = INCBIN_U32("graphics/pokemon/cinccino_redux/back.4bpp.lz");
+const u32 gMonPalette_CinccinoRedux[]                 = INCBIN_U32("graphics/pokemon/cinccino_redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_CinccinoRedux[]            = INCBIN_U32("graphics/pokemon/cinccino_redux/shiny.gbapal.lz");
+const u8  gMonIcon_CinccinoRedux[]                    = INCBIN_U8("graphics/pokemon/cinccino_redux/icon.4bpp");
 
 //Rare Shinies
 const u32 gMonRareShinyPalette_Corphish[]            = INCBIN_U32("graphics/pokemon/corphish/shinyalt1.gbapal.lz");
