@@ -613,12 +613,7 @@ extern const u8 BattleScript_GymSkillSteadySpeed[];
 extern const u8 BattleScript_GymSkillSteadyAccuracy[];
 extern const u8 BattleScript_GymSkillSteadyCrit[]; //not implemented yet
 
-extern const u8 BattleScript_GymSkillPostureOffensive[];
-extern const u8 BattleScript_GymSkillPostureDefensive[];
-extern const u8 BattleScript_GymSkillPostureSpecial[];
-extern const u8 BattleScript_GymSkillPostureSpdef[];
-extern const u8 BattleScript_GymSkillPostureSpeed[];
-extern const u8 BattleScript_GymSkillPostureAccuracy[];
+extern const u8 BattleScript_GymSkillPosture[];
 extern const u8 BattleScript_GymSkillPostureCrit[]; //not implemented yet
 extern const u8 BattleScript_GymSkillLastStand[];
 

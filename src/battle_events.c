@@ -176,23 +176,47 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         break;
     case BATTLE_EVENT_POSTURE_OFFENSE:
         SET_STR2(gText_Attack, sText_Strike)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureOffensive)
+        if (battleEvent->data0 == 0)
+            battleEvent->data0 = 4;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 1, battleEvent->data0);
+        SET_STATCHANGER(STAT_ATK, battleEvent->data0, FALSE);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_DEFENSE:
         SET_STR2(gText_Defense, sText_Defend)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureDefensive)
+        if (battleEvent->data0 == 0)
+            battleEvent->data0 = 4;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 1, battleEvent->data0);
+        SET_STATCHANGER(STAT_DEF, battleEvent->data0, FALSE);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_SPECIAL:
         SET_STR2(gText_SpAtk, sText_Strike)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureSpecial)
+        if (battleEvent->data0 == 0)
+            battleEvent->data0 = 4;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 1, battleEvent->data0);
+        SET_STATCHANGER(STAT_SPATK, battleEvent->data0, FALSE);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_SPDEF:
         SET_STR2(gText_SpDef, sText_Defend)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureSpdef)
+        if (battleEvent->data0 == 0)
+            battleEvent->data0 = 4;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 1, battleEvent->data0);
+        SET_STATCHANGER(STAT_SPDEF, battleEvent->data0, FALSE);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_SPEED:
         SET_STR2(gText_Speed, sText_Rush)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureSpeed)
+        if (battleEvent->data0 == 0)
+            battleEvent->data0 = 4;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 1, battleEvent->data0);
+        SET_STATCHANGER(STAT_SPEED, battleEvent->data0, FALSE);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_ACCURACY:
         SET_STR2(gText_Accuracy2, sText_Aim)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureAccuracy)
-    case BATTLE_EVENT_POSTURE_CRIT:
+        if (battleEvent->data0 == 0)
+            battleEvent->data0 = 4;
+        PREPARE_BYTE_NUMBER_BUFFER(gStringVar3, 1, battleEvent->data0);
+        SET_STATCHANGER(STAT_ACC, battleEvent->data0, FALSE);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
+    case BATTLE_EVENT_POSTURE_CRIT: // not implemented fully
         SET_STR2(gText_Critical, sText_Focus)
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureCrit)
 
@@ -255,7 +279,6 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
     MgbaClose();*/
     //gQueuedExtraAttackData if I want to add attack to the queue?
     //gQuashedBattlers++; how do I use that even?
-    // PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 2, magnitude); // to indicade the number left of somethingTher.
     //moveSecondaryEffectChance if i want to apply serene grace
     // sText_PkmnRevivedReadyToFight => 
 

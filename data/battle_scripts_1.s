@@ -12017,26 +12017,7 @@ BattleScript_GymSkillSteadyPrintString:
 BattleScript_GymSkillStatsCannotChange:
 	end2
 
-BattleScript_GymSkillPostureOffensive::
-	setstatchanger STAT_ATK, 4, FALSE
-	goto BattleScript_GymSkillPosture
-BattleScript_GymSkillPostureDefensive::
-	setstatchanger STAT_DEF, 4, FALSE
-	goto BattleScript_GymSkillPosture
-BattleScript_GymSkillPostureSpecial::
-	setstatchanger STAT_SPATK, 4, FALSE
-	goto BattleScript_GymSkillPosture
-BattleScript_GymSkillPostureSpdef::
-	setstatchanger STAT_SPDEF, 4, FALSE
-	goto BattleScript_GymSkillPosture
-BattleScript_GymSkillPostureSpeed::
-	setstatchanger STAT_SPEED, 4, FALSE
-	goto BattleScript_GymSkillPosture
-BattleScript_GymSkillPostureAccuracy::
-	setstatchanger STAT_ACC, 4, FALSE
-	goto BattleScript_GymSkillPosture
-
-BattleScript_GymSkillPosture:
+BattleScript_GymSkillPosture::
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT 
 	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
 BattleScript_GymSkillPosture_:
@@ -12045,14 +12026,14 @@ BattleScript_GymSkillPosture_:
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_GYMSKILL_POSTURE
-	waitmessage B_WAIT_TIME_SHORT
+	waitmessage B_WAIT_TIME_LONG
 	end2
 
 BattleScript_GymSkillPostureCrit::
 	end2 @not implemented yet	
 
 
-BattleScript_GymSkillSteadyStatsChange:
+BattleScript_GymSkillSteadyStatsChange::
 	call BattleScript_GymSkillPopup	
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillSteadyStatsChange_
