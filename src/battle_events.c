@@ -65,10 +65,10 @@ void UnregisterCurrentBattleEvent(){
 }
 
 // entry point of battleEvents in battle.
-u8 ExecBattleEvents(u8 execEnum){
+u8 ExecBattleEvents(){
     // it goes by the principle that it will be executed in loop until it returns ALL CLEAR
     while (gCurrBattleEvent < gNbBattleEvents){
-        if (BattleEventExec(&gBattleEvents[gCurrBattleEvent], execEnum) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL){
+        if (BattleEventExec(&gBattleEvents[gCurrBattleEvent]) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL){
             gCurrBattleEvent++;
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
         } 
@@ -81,21 +81,19 @@ u8 ExecBattleEvents(u8 execEnum){
 }
 
 //exec only one battle Event
-u8 BattleEventExec(struct BattleEvent *battleEvent, u8 execEnum){
+u8 BattleEventExec(struct BattleEvent *battleEvent){
     if (battleEvent->id == BATTLE_EVENT_NONE)
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         
-    switch (execEnum)
+    switch (gBattleResults.battleTurnCounter)
     {
-    case EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN:
+    case 0:
         if (BattleEventBeforeFirstTurnExec(battleEvent) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
         break;
-    case EXEC_BATTLE_EVENT_START_OF_TURN:
+    default:
         if (BattleEventStartTurnExec(battleEvent) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL)
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
-        break;
-    default:
         break;
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
@@ -275,8 +273,9 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
 // which is the start, the end of the end is in fact the start, how philosophic. 
 u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
     /*MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "fainted player: %d, fainted trainer %d", gFaintedMonCount[0], gFaintedMonCount[1]);
+    MgbaPrintf(MGBA_LOG_WARN, "");
     MgbaClose();*/
+    //"fainted player: %d, fainted trainer %d", gFaintedMonCount[0], gFaintedMonCount[1]
     //gQueuedExtraAttackData if I want to add attack to the queue?
     //gQuashedBattlers++; how do I use that even?
     //moveSecondaryEffectChance if i want to apply serene grace
@@ -312,10 +311,16 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyCrit);
     
     case BATTLE_EVENT_ONSWITCH_MAT_BLOCK:
-        if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn != 1)
+        MgbaOpen();
+        MgbaPrintf(MGBA_LOG_WARN, "putain %d", gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn);
+        MgbaClose();
+        if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn != 1){
+            battleEvent->data1 = 0;
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        }
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_MAT_BLOCK;
-        if (battleEvent->data0 > 1){
+        if (!battleEvent->data1 && battleEvent->data0 > 1){
+            battleEvent->data1 = 1;
             battleEvent->data0--;
             RUN_BATTLESCRIPT(BattleScript_GymSkillMatBlock)
         }

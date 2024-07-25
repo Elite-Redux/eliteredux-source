@@ -23,15 +23,11 @@ extern struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE];
 void RegisterBattleEvent(u8 battleEvent, u8 battleEventData0, u8 battleEventData1);
 void UnregisterBattlesEvents();
 // will iterate over the battleEvents
-u8 ExecBattleEvents(u8 execEnum);
-u8 BattleEventExec(struct BattleEvent *battleEvent, u8 execEnum);
+u8 ExecBattleEvents();
+u8 BattleEventExec(struct BattleEvent *battleEvent);
 u8 BattleEventBeforeFirstTurnExec(struct BattleEvent*);
 u8 BattleEventStartTurnExec(struct BattleEvent*);
 // enum to communicate to execBattleEvent as execEnum parameter
-enum {
-    EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN,
-    EXEC_BATTLE_EVENT_START_OF_TURN,
-};
 
 // enum that returns from execBattleEvents to communicate if a rendering is needed or if all battleEvents were done correctly
 
@@ -40,5 +36,9 @@ enum {
     EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL,
 };
 
+enum{
+    BATTLE_EVENTS_NOT_DONE,
+    BATTLE_EVENTS_DONE,
+};
 
 #endif // GUARD_BATTLE_EVENTS_H

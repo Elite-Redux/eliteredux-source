@@ -12146,7 +12146,6 @@ BattleScript_GymSkillForesight::
 	playmoveanimation BS_ATTACKER, MOVE_FORESIGHT
 	waitanimation
 	waitmessage B_WAIT_TIME_LONG
-	setforesight
 	end2
 
 BattleScript_GymSkillMagnetRise::

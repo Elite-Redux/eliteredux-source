@@ -130,7 +130,7 @@ static void HandleEndTurn_RanFromBattle(void);
 static void HandleEndTurn_MonFled(void);
 static void HandleEndTurn_FinishBattle(void);
 static u8 getRole(u16 species);
-
+static void HandleBattleEvents(void);
 // EWRAM vars
 EWRAM_DATA u16 gBattle_BG0_X = 0;
 EWRAM_DATA u16 gBattle_BG0_Y = 0;
@@ -3892,14 +3892,6 @@ static void TryDoEventsBeforeFirstTurn(void)
                 gAbsentBattlerFlags |= gBitTable[i];
         }
     }
-    // exec battle events before pokemons have landed and executed their abilities
-    if (!gBattleStruct->battleEventDone){
-        if (ExecBattleEvents(EXEC_BATTLE_EVENT_BEFORE_FIRST_TURN) == EXEC_BATTLE_EVENTS_ALL_CLEAR){
-            gBattleStruct->battleEventDone = TRUE;
-        } else {
-            return;
-        }
-    }
 
     if (gBattleStruct->switchInAbilitiesCounter == 0)
     {
@@ -3993,7 +3985,7 @@ static void TryDoEventsBeforeFirstTurn(void)
     TurnStructsClear();
     *(&gBattleStruct->field_91) = gAbsentBattlerFlags;
     BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
-    gBattleMainFunc = HandleTurnActionSelectionState;
+    gBattleMainFunc = HandleBattleEvents;
     ResetSentPokesToOpponentValue();
 
     for (i = 0; i < BATTLE_COMMUNICATION_ENTRIES_COUNT; i++)
@@ -4021,8 +4013,6 @@ static void TryDoEventsBeforeFirstTurn(void)
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
     }
 
-    // I need this reset for the end of the turn
-    gBattleStruct->battleEventDone = FALSE;
 }
 
 static void HandleEndTurn_ContinueBattle(void)
@@ -4095,14 +4085,7 @@ void BattleTurnPassed(void)
         gBattleResults.battleTurnCounter++;
         gBattleStruct->arenaTurnCounter++;
     }
-    // end of the turn, exec battle events
-    if (!gBattleStruct->battleEventDone){
-        if (ExecBattleEvents(EXEC_BATTLE_EVENT_START_OF_TURN) == EXEC_BATTLE_EVENTS_ALL_CLEAR){
-            gBattleStruct->battleEventDone = TRUE;
-        } else {
-            return;
-        }
-    }
+
     for (i = 0; i < gBattlersCount; i++)
     {
         gChosenActionByBattler[i] = B_ACTION_NONE;
@@ -4115,7 +4098,7 @@ void BattleTurnPassed(void)
     *(&gBattleStruct->field_91) = gAbsentBattlerFlags;
     BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
     GetAiLogicData(); // get assumed abilities, hold effects, etc of all battlers
-    gBattleMainFunc = HandleTurnActionSelectionState;
+    gBattleMainFunc = HandleBattleEvents;
     gRandomTurnNumber = Random();
 
     if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
@@ -4126,7 +4109,7 @@ void BattleTurnPassed(void)
         BattleScriptExecute(BattleScript_TrainerSlideMsgEnd2);
 
     // I need this reset for the end of the next turn
-    gBattleStruct->battleEventDone = FALSE;
+    gBattleStruct->battleEventDone = BATTLE_EVENTS_NOT_DONE;
 }
 
 u8 IsRunningFromBattleImpossible(void)
@@ -6867,4 +6850,22 @@ static u8 getRole (u16 species)
 bool32 IsWildMonSmart(void)
 {
     return (B_SMART_WILD_AI_FLAG != 0 && FlagGet(B_SMART_WILD_AI_FLAG));
+}
+
+static void HandleBattleEvents(void){
+
+    // end of the turn, exec battle events
+    
+    if (gBattleStruct->battleEventDone != BATTLE_EVENTS_DONE){
+            MgbaOpen();
+            MgbaPrintf(MGBA_LOG_WARN, "cooked %d", gBattleStruct->battleEventDone);
+            MgbaClose();
+        if (ExecBattleEvents() == EXEC_BATTLE_EVENTS_ALL_CLEAR){
+            gBattleStruct->battleEventDone = BATTLE_EVENTS_DONE;
+        } else {
+            return;
+        }
+    }
+    gBattleStruct->battleEventDone = BATTLE_EVENTS_NOT_DONE;
+    gBattleMainFunc = HandleTurnActionSelectionState;
 }

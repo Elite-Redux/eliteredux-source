@@ -685,7 +685,7 @@ struct BattleStruct
     bool8 singleuseability[PARTY_SIZE][NUM_INNATE_PER_SPECIES + 1][2]; // For the sake of Instruct
     s8 statChangesToCheck[MAX_BATTLERS_COUNT][NUM_BATTLE_STATS - 1];
     u8 timesDamaged[PARTY_SIZE][2];
-    bool8 battleEventDone;
+    u8 battleEventDone; 
 
 };
 
