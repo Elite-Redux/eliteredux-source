@@ -12149,3 +12149,11 @@ BattleScript_GymSkillForesight::
 	setforesight
 	end2
 
+BattleScript_GymSkillMagnetRise::
+	call BattleScript_GymSkillPopup
+	printstring STRINGID_PKMNLEVITATEDONELECTROMAGNETISM
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_MAGNET_RISE
+	waitanimation
+	waitmessage B_WAIT_TIME_LONG
+	end2

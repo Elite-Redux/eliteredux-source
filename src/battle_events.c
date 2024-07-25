@@ -310,7 +310,7 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
     case BATTLE_EVENT_STEADY_CRIT:
         SET_STR1(gText_Critical);
         RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyCrit);
-
+    
     case BATTLE_EVENT_ONSWITCH_MAT_BLOCK:
         if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn != 1)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
@@ -325,14 +325,18 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         if (!HasNumberOfTurnsStayedReached(battleEvent) || gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_FORESIGHT)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
         gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_FORESIGHT;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillForesight)
-            
+        RUN_BATTLESCRIPT(BattleScript_GymSkillForesight)  
     case BATTLE_EVENT_ONSTAY_LEECH_SEED:
         if (!HasNumberOfTurnsStayedReached(battleEvent) || gStatuses3[B_SIDE_PLAYER] & STATUS3_LEECHSEED)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gStatuses3[B_SIDE_PLAYER] |= STATUS3_LEECHSEED;
         RUN_BATTLESCRIPT(BattleScript_GymSkillLeechSeed)
-
+    case BATTLE_EVENT_ONSTAY_MAGNET_RISE:
+        if (!HasNumberOfTurnsStayedReached(battleEvent) || gStatuses3[B_SIDE_OPPONENT] & STATUS3_MAGNET_RISE)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
+        gStatuses3[B_SIDE_OPPONENT] |= STATUS3_MAGNET_RISE;
+        RUN_BATTLESCRIPT(BattleScript_GymSkillMagnetRise)
+    
     case BATTLE_EVENT_LAST_STAND:
         if (gFaintedMonCount[1] != battleEvent->data0)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;

@@ -628,5 +628,6 @@ extern const u8 BattleScript_GymSkillMatBlock[];
 
 extern const u8 BattleScript_GymSkillForesight[];
 extern const u8 BattleScript_GymSkillLeechSeed[];
+extern const u8 BattleScript_GymSkillMagnetRise[];
 
 #endif // GUARD_BATTLE_SCRIPTS_H
