@@ -1593,6 +1593,7 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(LUXRAY_REDUX,    gMonPalette_LuxrayRedux),
     SPECIES_PAL(CASCOON_PRIMAL,     gMonPalette_CascoonPrimal),
     SPECIES_PAL(MINCCINO_REDUX,    gMonPalette_MinccinoRedux),
+    SPECIES_PAL(CINCCINO_REDUX,    gMonPalette_CinccinoRedux),
 };
 
 const struct CompressedSpritePalette gMonPaletteTableFemale[] =
