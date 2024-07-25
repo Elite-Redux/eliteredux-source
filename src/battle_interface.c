@@ -4047,7 +4047,7 @@ static void SpriteCb_GymskillPopUp(struct Sprite *sprite)
     if (!sprite->tHide) // Show
     {   
         if (sprite->tIsMain && ++sprite->tFrames == 4)
-            PlaySE(SE_BALL_TRAY_ENTER);
+            PlaySE(SE_TRUCK_DOOR);
         if ((sprite->y += 4) >= sprite->tOriginalY)
         {
             sprite->y = sprite->tOriginalY;

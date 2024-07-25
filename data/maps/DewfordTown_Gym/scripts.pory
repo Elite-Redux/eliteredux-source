@@ -656,13 +656,13 @@ script DewfordTown_Gym_EventScript_CheckTrainers{
 	}
 	// set battle event flags
 	if (!defeated(TRAINER_TAKAO)){
-	
+		registerbattleevent(BATTLE_EVENT_POSTURE_OFFENSE) // todo change
 	}
 	if (!defeated(TRAINER_JOCELYN)){
 	
 	}
 	if (!defeated(TRAINER_LAURA)){
-	
+		registerbattleevent(BATTLE_EVENT_STEADY_ACCURACY)
 	}
 	if (!defeated(TRAINER_BRENDEN)){ // by entension TRAINER_LILITH too
 	

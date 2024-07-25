@@ -248,6 +248,9 @@ u8 BattleEventStartTurnExec(struct BattleEvent battleEvent){
     // PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 2, magnitude); // to indicade the number left of somethingTher.
     //moveSecondaryEffectChance if i want to apply serene grace
     // prevent some abitlity to be executed once a pokemon has landed because it's too OP and most importantly bugged af.
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "%d", gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn);
+    MgbaClose();
     if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn == 1 && IsBattleEventForbiddenOnSwitchIn(battleEvent.id))
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
     switch (battleEvent.id)
