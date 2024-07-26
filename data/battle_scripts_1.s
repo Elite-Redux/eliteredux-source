@@ -12157,3 +12157,27 @@ BattleScript_GymSkillMagnetRise::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
+BattleScript_GymSkillPermaHealBlock::
+	call BattleScript_GymSkillPopup
+	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_HEAL_BLOCK
+	waitanimation
+	printstring STRINGID_PKMNPREVENTEDFROMHEALING
+	waitmessage B_WAIT_TIME_LONG
+	end2
+
+BattleScript_GymSkillPermaNightmare:: @ todo
+	
+	end2
+
+BattleScript_GymSkillCopyStats::
+	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	copyfoestats BattleScript_ButItFailed
+	call BattleScript_GymSkillPopup
+	attackanimation
+	waitanimation
+	printstring STRINGID_PKMNCOPIEDSTATCHANGES
+	waitmessage B_WAIT_TIME_LONG
+	end2
+

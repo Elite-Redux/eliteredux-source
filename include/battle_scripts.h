@@ -630,4 +630,9 @@ extern const u8 BattleScript_GymSkillForesight[];
 extern const u8 BattleScript_GymSkillLeechSeed[];
 extern const u8 BattleScript_GymSkillMagnetRise[];
 
+extern const u8 BattleScript_GymSkillPermaNightmare[];
+extern const u8 BattleScript_GymSkillPermaHealBlock[]; // not implemented fully yet, missing anim
+
+extern const u8 BattleScript_GymSkillCopyStats[];
+
 #endif // GUARD_BATTLE_SCRIPTS_H

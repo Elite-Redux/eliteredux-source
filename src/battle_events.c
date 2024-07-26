@@ -343,6 +343,24 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         if (gFaintedMonCount[1] != battleEvent->data0)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLastStand);
+    
+    case BATTLE_EVENT_PERMA_HEAL_BLOCK:
+        if (gStatuses3[B_SIDE_PLAYER] & STATUS3_HEAL_BLOCK)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        gStatuses3[B_SIDE_PLAYER] |= STATUS3_HEAL_BLOCK;
+        gVolatileStructs[B_SIDE_PLAYER].healBlockTimer = 5;
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaHealBlock);
+    case BATTLE_EVENT_PERMA_NIGHTMARE:
+        if (gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_NIGHTMARE)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_NIGHTMARE;
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaNightmare);
+
+    case BATTLE_EVENT_ONDS_COPY_STATS:
+        if (!gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn || gSideTimers[B_POSITION_OPPONENT_LEFT].retaliateTimer != 1)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        RUN_BATTLESCRIPT(BattleScript_GymSkillCopyStats);
+
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }

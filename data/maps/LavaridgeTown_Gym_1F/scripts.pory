@@ -562,30 +562,31 @@ script LavaridgeTown_Gym_EventScript_CheckTrainers{
         end
     }
     // set battle event flags
-    if (!defeated(TRAINER_COLE)){
-    
+	if (!defeated(TRAINER_JEFF)){
+		registerbattleevent(BATTLE_EVENT_STEADY_SPECIAL)
     }
-    if (!defeated(TRAINER_AXLE)){
-    
-    }
-    if (!defeated(TRAINER_KEEGAN)){
-    
-    }
-    if (!defeated(TRAINER_GERALD)){
-    
-    }
-    if (!defeated(TRAINER_JEFF)){
-    
-    }
-    if (!defeated(TRAINER_DANIELLE)){
-    
+	if (!defeated(TRAINER_JACE)){
+		registerbattleevent(BATTLE_EVENT_LAST_TOXIC, 2)
     }
     if (!defeated(TRAINER_ELI)){
-    
+		registerbattleevent(BATTLE_EVENT_PERMA_HEAL_BLOCK)
     }
-    if (!defeated(TRAINER_JACE)){
-    
+	if (!defeated(TRAINER_KEEGAN)){
+		registerbattleevent(BATTLE_EVENT_STEADY_ACCURACY)
     }
+    if (!defeated(TRAINER_COLE)){
+		//registerbattleevent(BATTLE_EVENT_)
+    }
+    if (!defeated(TRAINER_GERALD)){
+		registerbattleevent(BATTLE_EVENT_POSTURE_DEFENSE)
+    }
+	if (!defeated(TRAINER_AXLE)){
+		registerbattleevent(BATTLE_EVENT_ONDS_COPY_STATS)
+    }
+	if (!defeated(TRAINER_DANIELLE)){
+		registerbattleevent(BATTLE_EVENT_POSTURE_SPECIAL)
+    }
+
 }
 
 text LavaridgeTown_Gym_1F_Text_FlanneryIntro0{
@@ -604,8 +605,8 @@ script LavaridgeTown_Gym_1F_EventScript_Flannery{
     goto_if_set(FLAG_SYS_GAME_CLEAR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch)
     call(LavaridgeTown_Gym_EventScript_CheckTrainers)
     setvar(VAR_0x8004, 15)
-    adddefeatedcountmax7(1, TRAINER_COLE, TRAINER_AXLE, TRAINER_KEEGAN, TRAINER_GERALD, TRAINER_JEFF, TRAINER_DANIELLE, TRAINER_ELI)
-    adddefeatedcountmax7(0, TRAINER_JACE) // 0 because no reset of the var_result
+    adddefeatedcountmax7(1, TRAINER_JEFF, TRAINER_JACE, TRAINER_ELI, TRAINER_KEEGAN, TRAINER_COLE, TRAINER_GERALD, TRAINER_AXLE)
+    adddefeatedcountmax7(0, TRAINER_DANIELLE) // 0 because no reset of the var_result
     switch (var(VAR_RESULT)) {
         case 0:
             trainerbattle_single(TRAINER_FLANNERY_1 LavaridgeTown_Gym_1F_Text_FlanneryIntro0, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
