@@ -111,7 +111,7 @@ void AnimTranslateLinear_WaitEnd(struct Sprite *sprite);
 u8 GetBattlerSpriteBGPriority(u8 battlerId);
 void *LoadPointerFromVars(s16 bottom, s16 top);
 void StorePointerInVars(s16 *bottom, s16 *top, const void *ptr);
-void sub_80A8278(void);
+void InitPrioritiesForVisibleBattlers(void);
 void GetBattleAnimBg1Data(struct BattleAnimBgData*);
 void GetBattleAnimBgData(struct BattleAnimBgData*, u32 arg1);
 u8 GetBattlerSpriteSubpriority(u8 battlerId);

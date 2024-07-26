@@ -1784,10 +1784,6 @@ void PrintBattleWindow_MoveSelection(void)
                 x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
                 StringCopy(gStringVar3, gSpeciesNames[gBattleMons[target].species]);
 
-                MgbaOpen();
-                MgbaPrintf(MGBA_LOG_WARN, "MOVE_INFO_DAMAGE_CALCULATION targetCurrentHp: %d minDamage: %d", targetCurrentHp, minDamage);
-                MgbaClose();
-
                 if(targetCurrentHp > minDamage){
                     //Min Damage Percentage
                     percentage = (minDamage * MAX_PERCENT_2) / targetCurrentHp; 
