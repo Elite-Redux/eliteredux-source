@@ -1236,6 +1236,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_LOPUNNY_MEGA] = _("Lopunny"),
     [SPECIES_GARCHOMP_MEGA] = _("Garchomp"),
     [SPECIES_LUCARIO_MEGA] = _("Lucario"),
+    [SPECIES_LUCARIO_MEGA_Y] = _("Lucario"),
     [SPECIES_ABOMASNOW_MEGA] = _("Abomasnow"),
     [SPECIES_GALLADE_MEGA] = _("Gallade"),
     [SPECIES_AUDINO_MEGA] = _("Audino"),

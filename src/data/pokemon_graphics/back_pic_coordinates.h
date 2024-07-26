@@ -6046,6 +6046,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset = 0,
     },
+    [SPECIES_LUCARIO_MEGA_Y] =
+    {
+        .size = 0,
+        .y_offset = 0,
+    },
     [SPECIES_ABOMASNOW_MEGA] =
     {
         .size = 0,

@@ -9590,4 +9590,14 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
+    [ITEM_SENZU] =
+    {
+        .name = _("Senzu Bean"),
+        .itemId = ITEM_SENZU,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sSenzuDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
 };
