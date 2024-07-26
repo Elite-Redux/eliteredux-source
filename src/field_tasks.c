@@ -771,6 +771,16 @@ static void Task_MuddySlope(u8 taskId)
 #define MOSSDEEPGYMREWORKGROUND_Y1 20
 #define MOSSDEEPGYMREWORKGROUND_RANGE 7
 
+static const int mossDeepGymReworkFloorSound[7] = {
+    SE_NOTE_A,
+    SE_NOTE_B,
+    SE_NOTE_C,
+    SE_NOTE_D,
+    SE_NOTE_E,
+    SE_NOTE_F,
+    SE_NOTE_G
+};
+
 static const int mossDeepGymReworkFollowArrowTable[5][9] = {
     {
         METATILE_MossdeepGym_YellowArrow_UpLeft,
@@ -881,12 +891,12 @@ static void Task_MossDeepGymReworkFollowArrow(u8 taskId){
 
     data[1] = x;
     data[2] = y;
-
     // what interrest me is if we're walking on the arrow ground
     if (x < MOSSDEEPGYMREWORKGROUND_X0 || x > MOSSDEEPGYMREWORKGROUND_X1 || 
         y < MOSSDEEPGYMREWORKGROUND_Y0 || y > MOSSDEEPGYMREWORKGROUND_Y1)
         return;
-    
+    // play a note when walking on a tile because it felt fun
+    PlaySE(mossDeepGymReworkFloorSound[(y + x) % 7]);
     // get the coordinates of 3 tiles around but care not to take something ouside the arrow ground
     x0 = max(MOSSDEEPGYMREWORKGROUND_X0, x - MOSSDEEPGYMREWORKGROUND_RANGE);
     y0 = max(MOSSDEEPGYMREWORKGROUND_Y0, y - MOSSDEEPGYMREWORKGROUND_RANGE);

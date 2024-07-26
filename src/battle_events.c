@@ -189,7 +189,6 @@ static void DepleteTeamPowerPointOfMove(u16 moveId){
             SetMonData(&gPlayerParty[i], MON_DATA_PP1 + j, 0);
         }
     }
-    return FALSE;
 }
 
 // ran once pokemon have landed before their ability have popped
