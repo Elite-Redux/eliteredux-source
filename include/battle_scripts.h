@@ -615,7 +615,9 @@ extern const u8 BattleScript_GymSkillSteadyCrit[]; //not implemented yet
 
 extern const u8 BattleScript_GymSkillPosture[];
 extern const u8 BattleScript_GymSkillPostureCrit[]; //not implemented yet
+
 extern const u8 BattleScript_GymSkillLastStand[];
+extern const u8 BattleScript_GymSkillSubstitute[];
 
 extern const u8 BattleScript_GymSkillStatusOnTeam[];
 

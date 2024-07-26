@@ -49,6 +49,7 @@
 #define BATTLE_EVENT_SUN                81
 // void of 19
 #define BATTLE_EVENT_LAST_STAND         100
+#define BATTLE_EVENT_SUBSTITUTE         101
 // void of 20
 #define BATTLE_EVENT_ONSTAY_LEECH_SEED  120
 #define BATTLE_EVENT_ONSTAY_FORESIGHT   121

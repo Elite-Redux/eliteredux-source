@@ -50,18 +50,18 @@ PetalburgCity_Gym_OnTransition: @ 820492D
 	end
 
 PetalburgCity_Gym_EventScript_MoveWallyToEntrance:: @ 820494D
-	setobjectxyperm LOCALID_WALLY, 5, 108
+	setobjectxyperm LOCALID_WALLY, 5, 44
 	return
 
 PetalburgCity_Gym_EventScript_MoveNormanToEntrance:: @ 8204955
-	setobjectxyperm LOCALID_NORMAN, 4, 107
+	setobjectxyperm LOCALID_NORMAN, 4, 43
 	return
 
 PetalburgCity_Gym_EventScript_CheckNormanForRematch:: @ 820495D
 	//goto_if_unset FLAG_DAILY_REMATCH_NORMAN, PetalburgCity_Gym_EventScript_DontMoveNormanToFront
 	compare VAR_PETALBURG_GYM_STATE, 8
 	goto_if_eq PetalburgCity_Gym_EventScript_DontMoveNormanToFront @ If var = 8 set var = 8? Why
-	setobjectxyperm LOCALID_NORMAN, 4, 107
+	setobjectxyperm LOCALID_NORMAN, 4, 43
 	return
 
 PetalburgCity_Gym_EventScript_DontMoveNormanToFront:: @ 8204985
@@ -1926,26 +1926,28 @@ script PetalburgCity_Gym_EventScript_CheckTrainers{
     }
     // set battle event flags
     if (!defeated(TRAINER_RANDALL)){
-    
+		registerbattleevent(BATTLE_EVENT_POSTURE_SPEED)
+    }
+	if (!defeated(TRAINER_MARY)){
+		registerbattleevent(BATTLE_EVENT_STEADY_ACCURACY)
+		registerbattleevent(BATTLE_EVENT_LAST_STAND, 5)
     }
     if (!defeated(TRAINER_PARKER)){
-    
+		registerbattleevent(BATTLE_EVENT_SPIKES, 2)
+    }
+	if (!defeated(TRAINER_ALEXIA)){
+		registerbattleevent(BATTLE_EVENT_POSTURE_DEFENSE)
     }
     if (!defeated(TRAINER_GEORGE)){
-    
+		registerbattleevent(BATTLE_EVENT_ONSTAY_LEECH_SEED, 3)
+    }
+	if (!defeated(TRAINER_JODY)){
+		registerbattleevent(BATTLE_EVENT_POSTURE_OFFENSE)
     }
     if (!defeated(TRAINER_BERKE)){
-    
+		registerbattleevent(BATTLE_EVENT_SUBSTITUTE, 5)
     }
-    if (!defeated(TRAINER_MARY)){
     
-    }
-    if (!defeated(TRAINER_ALEXIA)){
-    
-    }
-    if (!defeated(TRAINER_JODY)){
-    
-    }
 }
 
 text PetalburgCity_Gym_Text_NormanBattleIntro0{

@@ -12131,7 +12131,7 @@ BattleScript_GymSkillMatBlock::
 
 BattleScript_GymSkillLeechSeed::
 	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_LEECH_SEED
+	printstring STRINGID_GYMSKILL_WOEUPONYE
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_LEECH_SEED
@@ -12181,3 +12181,10 @@ BattleScript_GymSkillCopyStats::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
+BattleScript_GymSkillSubstitute::
+	call BattleScript_GymSkillPopup
+	playmoveanimation BS_ATTACKER, MOVE_SUBSTITUTE
+	waitanimation
+	printstring STRINGID_PKMNMADESUBSTITUTE
+	waitmessage B_WAIT_TIME_LONG
+	end2

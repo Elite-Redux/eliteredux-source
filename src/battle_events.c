@@ -117,6 +117,7 @@ const u8 sText_Aim[] = _("Aim");
 const u8 sText_Focus[] = _("Focus");
 const u8 sText_Toxic[] = _("Sharp poison");
 const u8 sText_Frostbite[] = _("Frostbite");
+const u8 sText_LeechSeed[] = _("Leech seed");
 
 // do not put BattleEventBeforeFirstTurn related BEvents in it.
 const u8 sOnSwitchInForbiddenBattleEvent[] = {
@@ -163,6 +164,17 @@ bool8 HasNumberOfTurnsStayedReached(struct BattleEvent *battleEvent){
         battleEvent->data1 += 1;
     }
     return battleEvent->data1 >= battleEvent->data0;
+}
+
+static void SetsubstituteBattleEvent(void)
+{
+    u32 hp = gBattleMons[gBattlerAttacker].maxHP / 4;
+    hp = max(hp, 1);
+
+    gBattleMons[gBattlerAttacker].status2 |= STATUS2_SUBSTITUTE;
+    gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_WRAPPED);
+    gVolatileStructs[gBattlerAttacker].substituteHP = hp;
+    gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE;
 }
 
 // ran once pokemon have landed before their ability have popped
@@ -331,7 +343,9 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
     case BATTLE_EVENT_ONSTAY_LEECH_SEED:
         if (!HasNumberOfTurnsStayedReached(battleEvent) || gStatuses3[B_SIDE_PLAYER] & STATUS3_LEECHSEED)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        SET_STR1(sText_LeechSeed)
         gStatuses3[B_SIDE_PLAYER] |= STATUS3_LEECHSEED;
+        gStatuses3[B_SIDE_PLAYER] |= B_SIDE_OPPONENT;
         RUN_BATTLESCRIPT(BattleScript_GymSkillLeechSeed)
     case BATTLE_EVENT_ONSTAY_MAGNET_RISE:
         if (!HasNumberOfTurnsStayedReached(battleEvent) || gStatuses3[B_SIDE_OPPONENT] & STATUS3_MAGNET_RISE)
@@ -343,7 +357,13 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         if (gFaintedMonCount[1] != battleEvent->data0)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLastStand);
-    
+    case BATTLE_EVENT_SUBSTITUTE:
+        if (gFaintedMonCount[1] != battleEvent->data0)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        gBattlerAttacker = B_SIDE_OPPONENT;
+        SetsubstituteBattleEvent();
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillSubstitute);
+
     case BATTLE_EVENT_PERMA_HEAL_BLOCK:
         if (gStatuses3[B_SIDE_PLAYER] & STATUS3_HEAL_BLOCK)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
