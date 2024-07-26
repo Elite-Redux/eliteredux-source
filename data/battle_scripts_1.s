@@ -12156,3 +12156,4 @@ BattleScript_GymSkillMagnetRise::
 	waitanimation
 	waitmessage B_WAIT_TIME_LONG
 	end2
+

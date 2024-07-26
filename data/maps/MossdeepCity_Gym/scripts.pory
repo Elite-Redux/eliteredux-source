@@ -686,11 +686,34 @@ script MossdeepCity_Gym_EventScript_GiveCalmMind{
 	end
 }
 
+script MossdeepCity_Gym_EventScript_GiveBattleText{
+	adddefeatedcountmax7(1, TRAINER_SAMANTHA, TRAINER_MAURA, TRAINER_SYLVIA, TRAINER_KATHLEEN, TRAINER_MACEY, TRAINER_NATE)
+	switch(var(VAR_RESULT)){
+		case 0:
+			yesnobattle(format("{COLOR GREEN}Light screen{COLOR DARK_GRAY} indeed."))
+		break
+		case 1:
+			yesnobattle(format("{COLOR GREEN}Reflect{COLOR DARK_GRAY} seems so."))
+		break
+		case 2:
+			yesnobattle(format("What? it's not because we're psychic expert that we're not allowed to use {COLOR GREEN}toxic spikes{COLOR DARK_GRAY}."))
+		break
+		case 3:
+			yesnobattle(format("This gym is so crazy that anyone trying to sleep here {COLOR GREEN}is permanently haunted by nightmares{COLOR DARK_GRAY}."))
+		break
+		case 4:
+			yesnobattle(format("Don't fix the pendulum or you'd be {COLOR GREEN}falling asleep{COLOR DARK_GRAY}. It always confused me how it worked."))
+		break
+		case 5:
+			yesnobattle(format("Fighting in double does not justify being a coward {COLOR GREEN}hidden behind a shield{COLOR DARK_GRAY}."))
+		break
+	}
+	return
+}
+
 
 script MossdeepCity_Gym_EventScript_SamanthaAndBlake{
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("Generic battle askance"), MSGBOX_YESNO)
+    call(MossdeepCity_Gym_EventScript_GiveBattleText)
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_SAMANTHA, TRAINER_BLAKE, TAG_TEAM_SAMANTHA_BLAKE,0, MossdeepCity_Gym_Text_SamanthaAndBlakeIntro)
     }
@@ -723,9 +746,7 @@ script MossdeepCity_Gym_EventScript_Blake {
 }
 
 script MossdeepCity_Gym_EventScript_MauraAndPreston{
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("Generic battle askance"), MSGBOX_YESNO)
+    call(MossdeepCity_Gym_EventScript_GiveBattleText)
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_MAURA, TRAINER_PRESTON, TAG_TEAM_MAURA_PRESTON,0, MossdeepCity_Gym_Text_MauraAndPrestonIntro)
     }
@@ -758,9 +779,7 @@ script MossdeepCity_Gym_EventScript_Preston {
 }
 
 script MossdeepCity_Gym_EventScript_SylviaAndHannah{
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("Generic battle askance"), MSGBOX_YESNO)
+    call(MossdeepCity_Gym_EventScript_GiveBattleText)
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_SYLVIA, TRAINER_HANNAH, TAG_TEAM_SYLVIA_HANNAH,0, MossdeepCity_Gym_Text_SylviaAndHannahIntro)
     }
@@ -793,9 +812,7 @@ script MossdeepCity_Gym_EventScript_Hannah {
 }
 
 script MossdeepCity_Gym_EventScript_NateAndVirgil{
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("Generic battle askance"), MSGBOX_YESNO)
+    call(MossdeepCity_Gym_EventScript_GiveBattleText)
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_NATE, TRAINER_VIRGIL, TAG_TEAM_NATE_VIRGIL,0, MossdeepCity_Gym_Text_NateAndVirgilIntro)
     }
@@ -829,9 +846,7 @@ script MossdeepCity_Gym_EventScript_Virgil {
 
 
 script MossdeepCity_Gym_EventScript_MaceyAndClifford{
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("Generic battle askance"), MSGBOX_YESNO)
+    call(MossdeepCity_Gym_EventScript_GiveBattleText)
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_MACEY, TRAINER_CLIFFORD, TAG_TEAM_MACEY_CLIFFORD,0, MossdeepCity_Gym_Text_MaceyAndCliffordIntro)
     }
@@ -865,9 +880,7 @@ script MossdeepCity_Gym_EventScript_Clifford {
 
 
 script MossdeepCity_Gym_EventScript_KathleenAndNicholas{
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("Generic battle askance"), MSGBOX_YESNO)
+    call(MossdeepCity_Gym_EventScript_GiveBattleText)
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_KATHLEEN, TRAINER_NICHOLAS, TAG_TEAM_KATHLEEN_NICHOLAS,0, MossdeepCity_Gym_Text_KathleenAndNicholasIntro)
     }
@@ -905,25 +918,27 @@ script MossdeepCity_Gym_EventScript_CheckTrainers{
         release
         end
     }
-    // set battle event flags
-    if (!defeated(TRAINER_SAMANTHA)){ // BLAKE
-    
-    }
-    if (!defeated(TRAINER_MAURA)){ //TRAINER_PRESTON
-    
-    }
-    if (!defeated(TRAINER_SYLVIA)){ //TRAINER_HANNAH
-    
-    }
-    if (!defeated(TRAINER_KATHLEEN)){ //TRAINER_NICHOLAS
-    
-    }
-    if (!defeated(TRAINER_MACEY)){ //TRAINER_CLIFFORD
-    
-    }
-    if (!defeated(TRAINER_NATE)){ //TRAINER_VIRGIL
-    
-    }
+	// TRAINER_SAMANTHA => TRAINER_BLAKE
+	// TRAINER_MAURA    => TRAINER_PRESTON	
+	// TRAINER_SYLVIA   => TRAINER_HANNAH
+	// TRAINER_KATHLEEN => TRAINER_NICHOLAS
+	// TRAINER_MACEY    => TRAINER_CLIFFORD
+	// TRAINER_NATE     => TRAINER_VIRGIL
+    adddefeatedcountmax7(1, TRAINER_SAMANTHA, TRAINER_MAURA, TRAINER_SYLVIA, TRAINER_KATHLEEN, TRAINER_MACEY, TRAINER_NATE)
+	switch(var(VAR_RESULT)){
+		case 0:
+			//setbattleevent(BATTLE_EVENT,var(VAR_RESULT))
+		case 1:
+			//setbattleevent(BATTLE_EVENT,var(VAR_RESULT))
+		case 2:
+			//setbattleevent(BATTLE_EVENT_TOXIC_SPIKES)
+		case 3:
+			//setbattleevent(BATTLE_EVENT_PERMA_NIGHTMARE)
+		case 4:
+			//setbattleevent(BATTLE_EVENT_LAST_SLEEP, 1)
+		case 5:
+			//setbattleevent(BATTLE_EVENT_NO_PROTECT)
+	}
 }
 
 script MossdeepCity_Gym_EventScript_TateAndLiza{
@@ -932,7 +947,6 @@ script MossdeepCity_Gym_EventScript_TateAndLiza{
 	setvar(VAR_0x8004, 15)
 	setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_ROOM)
 	setvar(VAR_BATTLE_FIELD_ID, STATUS_FIELD_TRICK_ROOM)
-	//adddefeatedcountmax7(1, TRAINER_SAMANTHA, TRAINER_MAURA, TRAINER_SYLVIA, TRAINER_KATHLEEN, TRAINER_MACEY, TRAINER_NATE)
 	trainerbattle_double(TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaIntro, MossdeepCity_Gym_Text_TateAndLizaDefeat, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated, NO_MUSIC)
 	clearflag(FLAG_SYS_INVERSE_BATTLE)
 	goto_if_eq(MossdeepCity_Gym_EventScript_TateAndLizaRematch)

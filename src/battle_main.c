@@ -4108,8 +4108,6 @@ void BattleTurnPassed(void)
     else if (ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), gTrainerBattleOpponent_A, TRAINER_SLIDE_LAST_LOW_HP))
         BattleScriptExecute(BattleScript_TrainerSlideMsgEnd2);
 
-    // I need this reset for the end of the next turn
-    gBattleStruct->battleEventDone = BATTLE_EVENTS_NOT_DONE;
 }
 
 u8 IsRunningFromBattleImpossible(void)
@@ -6856,7 +6854,7 @@ static void HandleBattleEvents(void){
 
     // end of the turn, exec battle events
     
-    if (gBattleStruct->battleEventDone != BATTLE_EVENTS_DONE){
+    if (gBattleStruct->battleEventDone == BATTLE_EVENTS_NOT_DONE){
         if (ExecBattleEvents() == EXEC_BATTLE_EVENTS_ALL_CLEAR){
             gBattleStruct->battleEventDone = BATTLE_EVENTS_DONE;
         } else {
