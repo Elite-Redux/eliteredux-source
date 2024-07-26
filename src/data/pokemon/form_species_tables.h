@@ -578,6 +578,7 @@ static const u16 sGarchompFormSpeciesIdTable[] = {
 static const u16 sLucarioFormSpeciesIdTable[] = {
     SPECIES_LUCARIO,
     SPECIES_LUCARIO_MEGA,
+    SPECIES_LUCARIO_MEGA_Y,
     FORM_SPECIES_END,
 };
 

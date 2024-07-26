@@ -272,7 +272,16 @@ static const union AnimCmd *const sAnims_MINCCINO_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_MINCCINO_REDUX_1,
 };
+static const union AnimCmd sAnim_LUCARIO_MEGA_Y_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 
+static const union AnimCmd *const sAnims_LUCARIO_MEGA_Y[] ={
+    sAnim_GeneralFrame0,
+    sAnim_LUCARIO_MEGA_Y_1,
+};
 static const union AnimCmd sAnim_CINCCINO_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -19958,6 +19967,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(IRON_EXO),
     ANIM_CMD(URSALUNA_MEGA),
     ANIM_CMD(WIGGLYTUFF_MEGA),
+    ANIM_CMD(LUCARIO_MEGA_Y),
     ANIM_CMD(TYRANITAR_MEGA_REDUX),
     ANIM_CMD(TYRANITAR_REDUX),
     ANIM_CMD(PUPITAR_REDUX),
