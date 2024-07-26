@@ -14929,7 +14929,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             MulModifier(&finalModifier, UQ_4_12(0.50));
     }
 	// Fur Coat
-	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_FUR_COAT)){
+	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_FUR_COAT) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_APPLE_ENLIGHTENMENT)){
 		if (IS_MOVE_PHYSICAL(move))
             MulModifier(&finalModifier, UQ_4_12(0.50));
     }

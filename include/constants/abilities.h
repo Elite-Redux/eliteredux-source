@@ -632,8 +632,9 @@
 #define ABILITY_POISON_PUPPETEER 610 // Poison also inflicts confusion.
 #define ABILITY_ENTRANCE 611 // Confusion also inflicts infatuation.
 #define ABILITY_REJECTION 612 // Applies Quash on switch-in.
+#define ABILITY_APPLE_ENLIGHTENMENT 613 // Fur Coat + Magic Guard
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_REJECTION + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_APPLE_ENLIGHTENMENT + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
