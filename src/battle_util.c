@@ -8003,12 +8003,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 		
 		// Inflatable
-		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_INFLATABLE) || Battler_Has_Ability(battler, gBattlerAttacker, ABILITY_BALLOON_BOMBER)){
+		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_INFLATABLE) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BALLOON_BOMBER)){
 			if (ShouldApplyOnHitAffect(battler)
 			 && (CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPDEF, MAX_STAT_STAGE, CMP_LESS_THAN))
 			 && (moveType == TYPE_FIRE || moveType == TYPE_FLYING))
 			{
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_INFLATABLE;
+                if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_INFLATABLE)){
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_INFLATABLE;
+                }
+                else{
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_BALLOON_BOMBER;
+                }
 				BattleScriptPushCursorAndCallback(BattleScript_InflatableActivates);
 				gBattleScripting.battler = battler;
 				effect++;
