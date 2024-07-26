@@ -9910,7 +9910,7 @@ u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID){
         do{
             species = RandRangeDeterministic(min, max, &rndSeed);
         }
-        while(gBaseStats[species].tier != 3 && gBaseStats[species].tier != 4);
+        while(gBaseStats[species].tier != 3);
     }
     else if(enc && leg){
         return RandRangeDeterministic(min, max, &rndSeed);
