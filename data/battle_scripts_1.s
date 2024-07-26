@@ -12213,6 +12213,8 @@ BattleScript_GymSkillLightscreen::
 
 BattleScript_GymSkillNoProtect::
 	call BattleScript_GymSkillPopup
+	playSE SE_M_DETECT
 	printstring STRINGID_GYMSKILL_NOPROTECT
-	waitmessage B_WAIT_TIME_LONG
+	waitmessage B_WAIT_TIME_SHORT
+	playSE SE_M_BRICK_BREAK
 	end2

@@ -991,7 +991,7 @@ static const u8 sText_GymSkillMatBlock[] = _("{B_OPPONENT_MON1_NAME} picked up a
 static const u8 sText_GymSkillWoeUponYe[] = _("Woe {STR_VAR_1} be upon ye.");
 static const u8 sText_GymSkillForesight[] = _("{B_PLAYER_MON1_NAME} was foresighted.");
 static const u8 sText_GymSkillEmbargo[] = _("{B_PLAYER_NAME}'s team is unable to use items for {STR_VAR_1} turns.");
-static const u8 sText_GymSkillNoProtect[] = _("{B_PLAYER_NAME}'s team had its power points of protect drained.");
+static const u8 sText_GymSkillNoProtect[] = _("{B_PLAYER_NAME}'s team had its power points of\n protect drained.");
 static const u8 sText_GymSkillWindSmackDown[] = _("The winds cause {B_PLAYER_MON1_NAME}\nto be smacked down.");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =

@@ -13,7 +13,7 @@
 #include "strings.h"
 #include "sound.h"
 #include "constants/songs.h"
-
+#include "field_message_box.h"
 
 static u8 gNbBattleEvents;
 static u8 gCurrBattleEvent;
@@ -23,11 +23,13 @@ EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = {
     .data1=0 }
  };
 
-
+const u8 sText_WarnMaxBattleEventReached[] = _("Warning you have registered\ntoo many battle events.");
 void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventData1){
     //reached the limit
     if (gNbBattleEvents == BATTLE_EVENTS_MAX_REGISTERABLE) {
-        //how could i warn btw? shout in a message box?
+        //I sure hope this will trigger well enough so it may warn the user.
+        PlaySE(SE_LOW_HEALTH);
+        ShowFieldMessage(sText_WarnMaxBattleEventReached);
         return;
     }
     // using a pointer over gBattleEvents would be nicer but i suppose it will stay like that because C sucks
@@ -166,7 +168,7 @@ bool8 HasNumberOfTurnsStayedReached(struct BattleEvent *battleEvent){
     return battleEvent->data1 >= battleEvent->data0;
 }
 
-static void SetSubstituteBattleEvent(void)
+void SetSubstituteBattleEvent(void)
 {
     u32 hp = gBattleMons[gBattlerAttacker].maxHP / 4;
     hp = max(hp, 1);
@@ -177,18 +179,27 @@ static void SetSubstituteBattleEvent(void)
     gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE;
 }
 
-static void DepleteTeamPowerPointOfMove(u16 moveId){
+bool8 DepleteTeamPowerPointOfMove(u16 moveId){
+    bool8 hasBeenModified;
     u8 i, j;
-    u32 move;
+    u32 move, wtf;
     for (i = 0; i < gPlayerPartyCount; i++){
         // if the move is the one targetted it totally depletes its PP
         for (j = 0; j < MAX_MON_MOVES; j++){
             move = GetMonData(&gPlayerParty[i], MON_DATA_MOVE1 + j);
             if (move != moveId)
                 continue;
-            SetMonData(&gPlayerParty[i], MON_DATA_PP1 + j, 0);
+            wtf = 0;
+            SetMonData(&gPlayerParty[i], MON_DATA_PP1 + j, &wtf);
+            //yeah huh you need to apply this to the gbattlers too
+            if (i == 0)
+                gBattleMons[B_POSITION_PLAYER_LEFT].pp[j] = 0;
+            if (i == 1)
+                gBattleMons[B_POSITION_PLAYER_RIGHT].pp[j] = 0;
+            hasBeenModified = TRUE;
         }
     }
+    return hasBeenModified;
 }
 
 // ran once pokemon have landed before their ability have popped
@@ -305,7 +316,8 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLightscreen)
     
     case BATTLE_EVENT_NO_PROTECT:
-        DepleteTeamPowerPointOfMove(MOVE_PROTECT);
+        if (!DepleteTeamPowerPointOfMove(MOVE_PROTECT))
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillNoProtect)
     
     }

@@ -927,17 +927,17 @@ script MossdeepCity_Gym_EventScript_CheckTrainers{
     adddefeatedcountmax7(1, TRAINER_SAMANTHA, TRAINER_MAURA, TRAINER_SYLVIA, TRAINER_KATHLEEN, TRAINER_MACEY, TRAINER_NATE)
 	switch(var(VAR_RESULT)){
 		case 0:
-			//setbattleevent(BATTLE_EVENT,var(VAR_RESULT))
+			//registerbattleevent(BATTLE_EVENT,var(VAR_RESULT))
 		case 1:
-			//setbattleevent(BATTLE_EVENT,var(VAR_RESULT))
+			//registerbattleevent(BATTLE_EVENT,var(VAR_RESULT))
 		case 2:
-			//setbattleevent(BATTLE_EVENT_TOXIC_SPIKES)
+			//registerbattleevent(BATTLE_EVENT_TOXIC_SPIKES)
 		case 3:
-			//setbattleevent(BATTLE_EVENT_PERMA_NIGHTMARE)
+			//registerbattleevent(BATTLE_EVENT_PERMA_NIGHTMARE)
 		case 4:
-			//setbattleevent(BATTLE_EVENT_LAST_SLEEP, 1)
+			//registerbattleevent(BATTLE_EVENT_LAST_SLEEP, 1)
 		case 5:
-			//setbattleevent(BATTLE_EVENT_NO_PROTECT)
+			registerbattleevent(BATTLE_EVENT_NO_PROTECT)
 	}
 }
 
