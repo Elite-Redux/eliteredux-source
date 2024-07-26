@@ -2275,7 +2275,7 @@ void LaunchBattleAnimation(const u8 *const animsTable[], u16 tableId, bool8 isMo
 
     if (!IsContest())
     {
-        sub_80A8278();
+        InitPrioritiesForVisibleBattlers();
         UpdateOamPriorityInAllHealthboxes(0, hideHpBoxes);
         for (i = 0; i < MAX_BATTLERS_COUNT; i++)
         {
@@ -2680,7 +2680,7 @@ static void ScriptCmd_end(void)
         m4aMPlayVolumeControl(&gMPlayInfo_BGM, 0xFFFF, 256);
         if (!IsContest())
         {
-            sub_80A8278();
+            InitPrioritiesForVisibleBattlers();
             UpdateOamPriorityInAllHealthboxes(1, TRUE);
         }
         gAnimScriptActive = FALSE;

@@ -51,16 +51,16 @@ static const u16 sBgColor[] = {RGB_WHITE};
 static const struct UCoords8 sBattlerCoordsDebug[][4] =
 {
     {
-        { 72, 80 },
-        { 176, 40 },
-        { 48, 40 },
-        { 112, 80 },
+        [B_POSITION_PLAYER_LEFT]    = { 72,  80 },
+        [B_POSITION_OPPONENT_LEFT]  = { 176, 40 },
+        [B_POSITION_PLAYER_RIGHT]   = { 48,  40 },
+        [B_POSITION_OPPONENT_RIGHT] = { 112, 80 },
     },
     {
-        { 32, 80 },
-        { 200, 40 },
-        { 90, 88 },
-        { 152, 32 },
+        [B_POSITION_PLAYER_LEFT]    = { 32,  80 },
+        [B_POSITION_OPPONENT_LEFT]  = { 200, 40 },
+        [B_POSITION_PLAYER_RIGHT]   = { 90,  80 }, //Used to be 88 was changed to fix the sprite priority bug
+        [B_POSITION_OPPONENT_RIGHT] = { 152, 32 },
     },
 };
 

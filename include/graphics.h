@@ -8623,6 +8623,8 @@ extern const u32 gItemIcon_Feraligatrite_Y[];
 extern const u32 gItemIconPalette_Feraligatrite_Y[];
 extern const u32 gItemIcon_Froslassite[];
 extern const u32 gItemIconPalette_Froslassite[];
+extern const u32 gItemIcon_Wigglytuffite[];
+extern const u32 gItemIconPalette_Wigglytuffite[];
 
 extern const u32 gItemIcon_GenericMegaStone[];
 extern const u32 gItemIconPalette_Garchompite_R[];
