@@ -7946,7 +7946,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
 		}
-		
+		// Aftermath
+		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_AFTERMATH)){
+            if (ShouldApplyOnHitAffect(gBattlerAttacker)
+                && !IsBattlerAlive(battler)
+                && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
+            {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_AFTERMATH;
+                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AftermathDmg;
+                effect++;
+            }
+		}
 		// Effect Spore
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_EFFECT_SPORE)) {
             EFFECT_SPORE:
