@@ -990,8 +990,9 @@ static const u8 sText_GymSkillLastStand[] = _("{B_OPPONENT_MON1_NAME} will not a
 static const u8 sText_GymSkillMatBlock[] = _("{B_OPPONENT_MON1_NAME} picked up a mat block\nto use as cover this turn.");
 static const u8 sText_GymSkillWoeUponYe[] = _("Woe {STR_VAR_1} be upon ye.");
 static const u8 sText_GymSkillForesight[] = _("{B_PLAYER_MON1_NAME} was foresighted.");
-static const u8 sText_GymSkillEmbargo[] = _("{B_PLAYER_NAME}'s team is unable to use items for {B_BUFF1} turns");
-
+static const u8 sText_GymSkillEmbargo[] = _("{B_PLAYER_NAME}'s team is unable to use items for {STR_VAR_1} turns.");
+static const u8 sText_GymSkillNoProtect[] = _("{B_PLAYER_NAME}'s team had its power points of protect drained.");
+static const u8 sText_GymSkillWindSmackDown[] = _("The winds cause {B_PLAYER_MON1_NAME}\nto be smacked down.");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1766,7 +1767,11 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GYMSKILL_MATBLOCK - 12] = sText_GymSkillMatBlock,
     [STRINGID_GYMSKILL_WOEUPONYE - 12] = sText_GymSkillWoeUponYe,
     [STRINGID_GYMSKILL_FORESIGHT - 12] = sText_GymSkillForesight,
+    [STRINGID_GYMSKILL_EMBARGO - 12] = sText_GymSkillEmbargo,
+    [STRINGID_GYMSKILL_NOPROTECT - 12] = sText_GymSkillNoProtect,
+    [STRINGID_GYMSKILL_SMACKDOWN - 12] = sText_GymSkillWindSmackDown,
 };
+
 
 const u16 gMentalHerbCureStringIds[] = 
 {

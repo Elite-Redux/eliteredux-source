@@ -166,7 +166,7 @@ bool8 HasNumberOfTurnsStayedReached(struct BattleEvent *battleEvent){
     return battleEvent->data1 >= battleEvent->data0;
 }
 
-static void SetsubstituteBattleEvent(void)
+static void SetSubstituteBattleEvent(void)
 {
     u32 hp = gBattleMons[gBattlerAttacker].maxHP / 4;
     hp = max(hp, 1);
@@ -175,6 +175,21 @@ static void SetsubstituteBattleEvent(void)
     gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_WRAPPED);
     gVolatileStructs[gBattlerAttacker].substituteHP = hp;
     gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE;
+}
+
+static void DepleteTeamPowerPointOfMove(u16 moveId){
+    u8 i, j;
+    u32 move;
+    for (i = 0; i < gPlayerPartyCount; i++){
+        // if the move is the one targetted it totally depletes its PP
+        for (j = 0; j < MAX_MON_MOVES; j++){
+            move = GetMonData(&gPlayerParty[i], MON_DATA_MOVE1 + j);
+            if (move != moveId)
+                continue;
+            SetMonData(&gPlayerParty[i], MON_DATA_PP1 + j, 0);
+        }
+    }
+    return FALSE;
 }
 
 // ran once pokemon have landed before their ability have popped
@@ -279,6 +294,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
     case BATTLE_EVENT_EMBARGO:
         gStatuses3[B_SIDE_PLAYER] |= STATUS3_EMBARGO;
         gVolatileStructs[B_SIDE_PLAYER].embargoTimer = battleEvent->data0;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillEmbargo)
     case BATTLE_EVENT_REFLECT:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_REFLECT;
@@ -288,6 +304,11 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_LIGHTSCREEN;
         gSideTimers[B_SIDE_PLAYER].lightscreenTimer = battleEvent->data0;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLightscreen)
+    
+    case BATTLE_EVENT_NO_PROTECT:
+        DepleteTeamPowerPointOfMove(MOVE_PROTECT);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillNoProtect)
+    
     }
         
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
@@ -373,7 +394,7 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         if (gFaintedMonCount[1] != battleEvent->data0)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gBattlerAttacker = B_SIDE_OPPONENT;
-        SetsubstituteBattleEvent();
+        SetSubstituteBattleEvent();
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillSubstitute);
 
     case BATTLE_EVENT_PERMA_HEAL_BLOCK:
@@ -387,6 +408,11 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_NIGHTMARE;
         RUN_BATTLESCRIPT(BattleScript_GymSkillPermaNightmare);
+    case BATTLE_EVENT_PERMA_SMACKDOWN:
+        if (gStatuses3[B_SIDE_PLAYER] & STATUS3_SMACKED_DOWN)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        gStatuses3[B_SIDE_PLAYER] |= STATUS3_SMACKED_DOWN;
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaHealBlock);
 
     case BATTLE_EVENT_ONDS_COPY_STATS:
         if (!gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn || gSideTimers[B_POSITION_OPPONENT_LEFT].retaliateTimer != 1)

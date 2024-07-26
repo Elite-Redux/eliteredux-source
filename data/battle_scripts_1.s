@@ -12167,7 +12167,7 @@ BattleScript_GymSkillPermaHealBlock::
 	end2
 
 BattleScript_GymSkillPermaNightmare:: @ todo
-	
+	playse SE_M_NIGHTMARE 
 	end2
 
 BattleScript_GymSkillCopyStats::
@@ -12209,4 +12209,10 @@ BattleScript_GymSkillLightscreen::
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_LIGHT_SCREEN
 	waitanimation
+	end2
+
+BattleScript_GymSkillNoProtect::
+	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_NOPROTECT
+	waitmessage B_WAIT_TIME_LONG
 	end2

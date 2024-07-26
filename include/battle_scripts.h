@@ -629,6 +629,8 @@ extern const u8 BattleScript_GymSkillEmbargo[];
 extern const u8 BattleScript_GymSkillReflect[];
 extern const u8 BattleScript_GymSkillLightscreen[];
 
+extern const u8 BattleScript_GymSkillNoProtect[];
+
 extern const u8 BattleScript_GymSkillMatBlock[];
 
 extern const u8 BattleScript_GymSkillForesight[];

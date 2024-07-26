@@ -48,8 +48,9 @@
 
 #define BATTLE_EVENT_PERMA_HEAL_BLOCK   160
 #define BATTLE_EVENT_PERMA_NIGHTMARE    161
+#define BATTLE_EVENT_PERMA_SMACKDOWN    162 // made specifically with winona in mind
 
-#define BATTLE_EVENT_ONDS_COPY_STATS    180 //DS => Death Switch
+#define BATTLE_EVENT_ONDS_COPY_STATS    180 //DS => Death Switch (in)
 
 #define BATTLE_EVENT_STEALTH_ROCK       200
 #define BATTLE_EVENT_TOXIC_SPIKES       201
@@ -62,5 +63,7 @@
 #define BATTLE_EVENT_AURORAVEIL         208
 #define BATTLE_EVENT_LUCKY_CHANT        209
 #define BATTLE_EVENT_QUICK_GUARD        210
+
+#define BATTLE_EVENT_NO_PROTECT         230
 
 #endif // GUARD_CONSTANTS_BATTLE_EVENTS_H
