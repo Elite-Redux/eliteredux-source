@@ -1549,6 +1549,10 @@ const u32 gItemIconPalette_Feraligatrite_Y[] = INCBIN_U32("graphics/items/icon_p
 const u32 gItemIcon_Froslassite[] = INCBIN_U32("graphics/items/icons/froslassite.4bpp.lz");
 const u32 gItemIconPalette_Froslassite[] = INCBIN_U32("graphics/items/icon_palettes/froslassite.gbapal.lz");
 
+
+const u32 gItemIcon_Wigglytuffite[]  = INCBIN_U32("graphics/items/icons/wigglytuffite.4bpp.lz");
+const u32 gItemIconPalette_Wigglytuffite[]  = INCBIN_U32("graphics/items/icon_palettes/wigglytuffite.gbapal.lz");
+
 const u32 gItemIcon_GenericMegaStone[]      = INCBIN_U32("graphics/items/icons/generic_megastone.4bpp.lz");
 const u32 gItemIconPalette_Garchompite_R[]  = INCBIN_U32("graphics/items/icon_palettes/garchompite_r.gbapal.lz");
 const u32 gItemIconPalette_Granbullite[]    = INCBIN_U32("graphics/items/icon_palettes/granbullite.gbapal.lz");
