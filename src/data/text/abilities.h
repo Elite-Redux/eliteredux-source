@@ -582,7 +582,7 @@ static const u8 sAbilityParasiticSporesDescription[] = _("Deals 1/8 HP damage to
 static const u8 sAbilityPoisonPuppeteerDescription[] = _("Poison also inflicts confusion.");
 static const u8 sAbilityEntranceDescription[] = _("Confusion also inflicts\ninfatuation.");
 static const u8 sAbilityRejectionDescription[] = _("Applies Quash on switch-in.");
-static const u8 sAbilityAppleEnlightmentDescription[] = _("Fur coat + Magic Guard.");
+static const u8 sAbilityAppleEnlightenmentDescription[] = _("Fur coat + Magic Guard.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
