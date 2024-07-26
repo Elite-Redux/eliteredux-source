@@ -12188,3 +12188,25 @@ BattleScript_GymSkillSubstitute::
 	printstring STRINGID_PKMNMADESUBSTITUTE
 	waitmessage B_WAIT_TIME_LONG
 	end2
+
+BattleScript_GymSkillEmbargo::
+	call BattleScript_GymSkillPopup
+	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_EMBARGO
+	waitanimation
+	end2
+
+BattleScript_GymSkillReflect::
+	call BattleScript_GymSkillPopup
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_REFLECT
+	waitanimation
+	end2
+
+
+BattleScript_GymSkillLightscreen::
+	call BattleScript_GymSkillPopup
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_LIGHT_SCREEN
+	waitanimation
+	end2

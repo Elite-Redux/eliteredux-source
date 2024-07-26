@@ -625,6 +625,9 @@ extern const u8 BattleScript_GymSkillTerrainStealthRock[];
 extern const u8 BattleScript_GymSkillTerrainSpikes[];
 extern const u8 BattleScript_GymSkillTerrainToxicSpikes[];
 extern const u8 BattleScript_GymSkillTerrainStickyWeb[];
+extern const u8 BattleScript_GymSkillEmbargo[];
+extern const u8 BattleScript_GymSkillReflect[];
+extern const u8 BattleScript_GymSkillLightscreen[];
 
 extern const u8 BattleScript_GymSkillMatBlock[];
 

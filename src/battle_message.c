@@ -989,7 +989,8 @@ static const u8 sText_GymSkillStatusOnTeam[] = _("Some of your team members are 
 static const u8 sText_GymSkillLastStand[] = _("{B_OPPONENT_MON1_NAME} will not accept defeat!\nAnd its stats increase sharply.");
 static const u8 sText_GymSkillMatBlock[] = _("{B_OPPONENT_MON1_NAME} picked up a mat block\nto use as cover this turn.");
 static const u8 sText_GymSkillWoeUponYe[] = _("Woe {STR_VAR_1} be upon ye.");
-static const u8 sText_GymSkillForeSight[] = _("{B_PLAYER_MON1_NAME} was foresighted.");
+static const u8 sText_GymSkillForesight[] = _("{B_PLAYER_MON1_NAME} was foresighted.");
+static const u8 sText_GymSkillEmbargo[] = _("{B_PLAYER_NAME}'s team is unable to use items for {B_BUFF1} turns");
 
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
@@ -1764,7 +1765,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GYMSKILL_LASTSTAND - 12] = sText_GymSkillLastStand,
     [STRINGID_GYMSKILL_MATBLOCK - 12] = sText_GymSkillMatBlock,
     [STRINGID_GYMSKILL_WOEUPONYE - 12] = sText_GymSkillWoeUponYe,
-    [STRINGID_GYMSKILL_FORESIGHT - 12] = sText_GymSkillForeSight,
+    [STRINGID_GYMSKILL_FORESIGHT - 12] = sText_GymSkillForesight,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

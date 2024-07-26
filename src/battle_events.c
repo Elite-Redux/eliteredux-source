@@ -276,6 +276,18 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
         gSideTimers[B_SIDE_PLAYER].spikesAmount = battleEvent->data0 ? battleEvent->data0 & 0x03 : 1;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainSpikes)
+    case BATTLE_EVENT_EMBARGO:
+        gStatuses3[B_SIDE_PLAYER] |= STATUS3_EMBARGO;
+        gVolatileStructs[B_SIDE_PLAYER].embargoTimer = battleEvent->data0;
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillEmbargo)
+    case BATTLE_EVENT_REFLECT:
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_REFLECT;
+        gSideTimers[B_SIDE_PLAYER].reflectTimer = battleEvent->data0;
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillReflect)
+    case BATTLE_EVENT_LIGHTSCREEN:
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_LIGHTSCREEN;
+        gSideTimers[B_SIDE_PLAYER].lightscreenTimer = battleEvent->data0;
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLightscreen)
     }
         
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
