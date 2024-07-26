@@ -25,7 +25,7 @@ extern const struct OamData gOamData_AffineNormal_ObjNormal_64x64;
 static void sub_80A6FB4(struct Sprite *sprite);
 static void AnimFastTranslateLinearWaitEnd(struct Sprite *sprite);
 static void AnimThrowProjectile_Step(struct Sprite *sprite);
-static void sub_80A8DFC(struct Sprite *sprite);
+static void AnimBattlerTrace(struct Sprite *sprite);
 static void AnimWeatherBallUp_Step(struct Sprite *sprite);
 static u16 GetBattlerYDeltaFromSpriteId(u8 spriteId);
 static void AnimTask_BlendPalInAndOutSetup(struct Task *task);
@@ -33,7 +33,7 @@ static void AnimTask_AlphaFadeIn_Step(u8 taskId);
 static void AnimTask_AttackerPunchWithTrace_Step(u8 taskId);
 static void AnimTask_BlendMonInAndOut_Step(u8 taskId);
 static bool8 sub_80A7238(void);
-static void sub_80A8D78(struct Task *task, u8 taskId);
+static void CreateBattlerTrace(struct Task *task, u8 taskId);
 
 // EWRAM vars
 EWRAM_DATA static union AffineAnimCmd *gAnimTaskAffineAnim = NULL;
@@ -42,16 +42,16 @@ EWRAM_DATA static union AffineAnimCmd *gAnimTaskAffineAnim = NULL;
 static const struct UCoords8 sBattlerCoords[][4] =
 {
     {
-        { 72, 80 },
-        { 176, 40 },
-        { 48, 40 },
-        { 112, 80 },
+        [B_POSITION_PLAYER_LEFT]    = { 72,  80 },
+        [B_POSITION_OPPONENT_LEFT]  = { 176, 40 },
+        [B_POSITION_PLAYER_RIGHT]   = { 48,  40 },
+        [B_POSITION_OPPONENT_RIGHT] = { 112, 80 },
     },
     {
-        { 32, 80 },
-        { 200, 40 },
-        { 90, 88 },
-        { 152, 32 },
+        [B_POSITION_PLAYER_LEFT]    = { 32,  80 },
+        [B_POSITION_OPPONENT_LEFT]  = { 200, 40 },
+        [B_POSITION_PLAYER_RIGHT]   = { 90,  80 }, //Used to be 88 was changed to fix the sprite priority bug
+        [B_POSITION_OPPONENT_RIGHT] = { 152, 32 },
     },
 };
 
@@ -1995,7 +1995,8 @@ void AnimTask_GetFrustrationPowerLevel(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
-void sub_80A8174(u8 priority)
+// Unused
+void SetPriorityForVisibleBattlers(u8 priority)
 {
     if (IsBattlerSpriteVisible(gBattleAnimTarget))
         gSprites[gBattlerSpriteIds[gBattleAnimTarget]].oam.priority = priority;
@@ -2007,7 +2008,7 @@ void sub_80A8174(u8 priority)
         gSprites[gBattlerSpriteIds[BATTLE_PARTNER(gBattleAnimAttacker)]].oam.priority = priority;
 }
 
-void sub_80A8278(void)
+void InitPrioritiesForVisibleBattlers(void)
 {
     int i;
 
@@ -2024,7 +2025,7 @@ void sub_80A8278(void)
 u8 GetBattlerSpriteSubpriority(u8 battlerId)
 {
     u8 position;
-    u8 subpriority;
+    u8 subpriority = 50;
 
     if (IsContest())
     {
@@ -2036,14 +2037,23 @@ u8 GetBattlerSpriteSubpriority(u8 battlerId)
     else
     {
         position = GetBattlerPosition(battlerId);
-        if (position == B_POSITION_PLAYER_LEFT)
-            subpriority = 30;
-        else if (position == B_POSITION_PLAYER_RIGHT)
-            subpriority = 20;
-        else if (position == B_POSITION_OPPONENT_LEFT)
-            subpriority = 40;
-        else
-            subpriority = 50;
+        subpriority = 50;
+
+        switch(position)
+        {
+            case B_POSITION_PLAYER_LEFT:
+                return 30;
+            break;
+            case B_POSITION_PLAYER_RIGHT:
+                return 20;
+            break;
+            case B_POSITION_OPPONENT_LEFT:
+                return 40;
+            break;
+            case B_POSITION_OPPONENT_RIGHT:
+                return 50;
+            break;
+        }
     }
 
     return subpriority;
@@ -2387,7 +2397,7 @@ static void AnimTask_AttackerPunchWithTrace_Step(u8 taskId)
     switch (task->data[2])
     {
     case 0:
-        sub_80A8D78(task, taskId);
+        CreateBattlerTrace(task, taskId);
         gSprites[task->data[0]].x2 += task->data[1];
         if (++task->data[3] == 5)
         {
@@ -2396,7 +2406,7 @@ static void AnimTask_AttackerPunchWithTrace_Step(u8 taskId)
         }
         break;
     case 1:
-        sub_80A8D78(task, taskId);
+        CreateBattlerTrace(task, taskId);
         gSprites[task->data[0]].x2 -= task->data[1];
         if (--task->data[3] == 0)
         {
@@ -2414,9 +2424,10 @@ static void AnimTask_AttackerPunchWithTrace_Step(u8 taskId)
     }
 }
 
-static void sub_80A8D78(struct Task *task, u8 taskId)
+static void CreateBattlerTrace(struct Task *task, u8 taskId)
 {
     s16 spriteId = CloneBattlerSpriteWithBlend(0);
+
     if (spriteId >= 0)
     {
         gSprites[spriteId].oam.priority = task->data[6];
@@ -2425,12 +2436,13 @@ static void sub_80A8D78(struct Task *task, u8 taskId)
         gSprites[spriteId].data[1] = taskId;
         gSprites[spriteId].data[2] = spriteId;
         gSprites[spriteId].x2 = gSprites[task->data[0]].x2;
-        gSprites[spriteId].callback = sub_80A8DFC;
+        gSprites[spriteId].callback = AnimBattlerTrace;
         task->data[5]++;
     }
 }
 
-static void sub_80A8DFC(struct Sprite *sprite)
+// Just waits until destroyed
+static void AnimBattlerTrace(struct Sprite *sprite)
 {
     if (--sprite->data[0] == 0)
     {
