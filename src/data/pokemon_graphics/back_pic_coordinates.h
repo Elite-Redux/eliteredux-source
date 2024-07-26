@@ -5508,7 +5508,7 @@ const struct MonCoords gMonBackPicCoords[] =
     },
     [SPECIES_WIGGLYTUFF_PRIMAL] =
     {
-        .size = 0,
+        .size = 0x78,
         .y_offset =  0
     },
     [SPECIES_VICTINI_PRIMAL] =
@@ -6294,6 +6294,11 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SLOWKING_MEGA] =
     {
         .size = 0x87,
+        .y_offset = 0,
+    },
+    [SPECIES_WIGGLYTUFF_MEGA] =
+    {
+        .size = 0x78,
         .y_offset = 0,
     },
     // Special Mega + Primals

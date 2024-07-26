@@ -1535,14 +1535,41 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_WIGGLYTUFF_MEGA] =
+    {
+    .baseHP        = 120,
+    .baseAttack    = 90,
+    .baseDefense   = 55,
+    .baseSpeed     = 60,
+    .baseSpAttack  = 140,
+    .baseSpDefense = 100, // first innate is a placeholder for now
+    .type1 = TYPE_FIRE,
+    .type2 = TYPE_FAIRY,
+    .catchRate = 255,
+    .expYield = 196,
+    .evYield_HP    = 3,
+    .item2 = ITEM_LEFTOVERS,
+    .genderRatio = PERCENT_FEMALE(75),
+    .eggCycles = 10,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_FAIRY,
+    .abilities = {ABILITY_COMBUSTION, ABILITY_TIPPING_POINT, ABILITY_MAGIC_GUARD},
+    .innates = {ABILITY_CUTE_CHARM, ABILITY_IMMOLATE, ABILITY_FUR_COAT},
+    .bodyColor = BODY_COLOR_PINK,
+    .noFlip = TRUE,
+    .tier = 0,
+    },
+
 [SPECIES_WIGGLYTUFF_PRIMAL] =
     {
     .baseHP        = 120,
-    .baseAttack    = 70,
-    .baseDefense   = 45, // With Fur Coat, effectively base 139
-    .baseSpeed     = 45,
-    .baseSpAttack  = 105,
-    .baseSpDefense = 80, // 60
+    .baseAttack    = 90,
+    .baseDefense   = 65,
+    .baseSpeed     = 90,
+    .baseSpAttack  = 165,
+    .baseSpDefense = 115, // abilities are placeholders for now
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_FAIRY,
     .catchRate = 255,
@@ -1555,8 +1582,8 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_FAST,
     .eggGroup1 = EGG_GROUP_FAIRY,
     .eggGroup2 = EGG_GROUP_FAIRY,
-    .abilities = {ABILITY_SWEET_DREAMS, ABILITY_COMPETITIVE, ABILITY_MAGIC_GUARD},
-    .innates = {ABILITY_CUTE_CHARM, ABILITY_INFLATABLE, ABILITY_FUR_COAT},
+    .abilities = {ABILITY_FUR_COAT, ABILITY_INFLATABLE, ABILITY_MAGIC_GUARD},
+    .innates = {ABILITY_FAIRY_AURA, ABILITY_SOUL_HEART, ABILITY_COMPETITIVE},
     .bodyColor = BODY_COLOR_PINK,
     .noFlip = TRUE,
     .tier = 0,

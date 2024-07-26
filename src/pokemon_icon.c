@@ -1177,6 +1177,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_SCIZOR_REDUX] = gMonIcon_Scizor_Redux,
     [SPECIES_IRON_EXO] = gMonIcon_Iron_Exo,
     [SPECIES_URSALUNA_MEGA] = gMonIcon_Ursaluna_Mega,
+    [SPECIES_WIGGLYTUFF_MEGA] = gMonIcon_Wigglytuff_Mega,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,
@@ -2770,6 +2771,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_BRELOOM_MEGA]    = 1,
     [SPECIES_SLAKING_MEGA]    = 2,
     [SPECIES_RIBOMBEE_MEGA] = 2,
+    [SPECIES_WIGGLYTUFF_MEGA] = 2,
     [SPECIES_BEEDRILL_MEGA_REDUX] = 0,
     [SPECIES_ALAKAZAM_MEGA_REDUX] = 2,
     [SPECIES_SKARMORY_MEGA_REDUX] = 0,

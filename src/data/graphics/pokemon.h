@@ -7385,6 +7385,12 @@ const u32 gMonPalette_LaprasMegaX[]             = INCBIN_U32("graphics/pokemon/l
 const u32 gMonShinyPalette_LaprasMegaX[]        = INCBIN_U32("graphics/pokemon/lapras/mega_x/shiny.gbapal.lz");
 const u8  gMonIcon_LaprasMegaX[]                = INCBIN_U8("graphics/pokemon/lapras/mega_x/icon.4bpp");
 
+const u32 gMonFrontPic_WigglytuffMega[]            = INCBIN_U32("graphics/pokemon/wigglytuff/mega/front.4bpp.lz");
+const u32 gMonBackPic_WigglytuffMega[]             = INCBIN_U32("graphics/pokemon/wigglytuff/mega/back.4bpp.lz");
+const u32 gMonPalette_WigglytuffMega[]             = INCBIN_U32("graphics/pokemon/wigglytuff/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_WigglytuffMega[]        = INCBIN_U32("graphics/pokemon/wigglytuff/mega/shiny.gbapal.lz");
+const u8  gMonIcon_WigglytuffMega[]                = INCBIN_U8("graphics/pokemon/wigglytuff/mega/icon.4bpp");
+
 const u32 gMonFrontPic_ClawitzerRedux[]         = INCBIN_U32("graphics/pokemon/clawitzer/redux/front.4bpp.lz");
 const u32 gMonBackPic_ClawitzerRedux[]          = INCBIN_U32("graphics/pokemon/clawitzer/redux/back.4bpp.lz");
 const u32 gMonPalette_ClawitzerRedux[]          = INCBIN_U32("graphics/pokemon/clawitzer/redux/normal.gbapal.lz");

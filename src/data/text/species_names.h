@@ -1286,6 +1286,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_LANTURN_MEGA]       = _("Lanturn"),
     [SPECIES_KEKLEONG]            = _("Kekleong"),
     [SPECIES_LAPRAS_MEGA_X]      = _("Lapras"),
+    [SPECIES_WIGGLYTUFF_MEGA]      = _("Wigglytuff"),
     [SPECIES_CLAWITZER_REDUX]    = _("Clawitzer"),
     // Special Mega + Primals
     [SPECIES_RAYQUAZA_MEGA]  = _("Rayquaza"),
