@@ -148,7 +148,7 @@ DewfordTown_Gym_EventScript_StopCountingTrainers:: @ 81FC7C1
 
 
 DewfordTown_Gym_EventScript_BrawlyDefeated:: @ 81FC7F7
-	call DewfordTown_Gym_EventScript_AnimateFlashFullBrightness
+	//call DewfordTown_Gym_EventScript_AnimateFlashFullBrightness
 	message DewfordTown_Gym_Text_ReceivedKnuckleBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
