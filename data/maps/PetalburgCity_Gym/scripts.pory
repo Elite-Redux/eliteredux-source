@@ -54,7 +54,7 @@ PetalburgCity_Gym_EventScript_MoveWallyToEntrance:: @ 820494D
 	return
 
 PetalburgCity_Gym_EventScript_MoveNormanToEntrance:: @ 8204955
-	setobjectxyperm LOCALID_NORMAN, 4, 43
+	setobjectxyperm LOCALID_NORMAN, 4, 42
 	return
 
 PetalburgCity_Gym_EventScript_CheckNormanForRematch:: @ 820495D
@@ -100,7 +100,6 @@ PetalburgCity_Gym_EventScript_ReturnFromWallyTutorial:: @ 82049A4
 	end
 
 PetalburgCity_Gym_Movement_WallyExitGym: @ 82049EC
-	walk_down
 	walk_down
 	walk_down
 	delay_16

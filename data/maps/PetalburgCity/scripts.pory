@@ -56,7 +56,7 @@ PetalburgCity_EventScript_WallyTutorial:: @ 81DC32E
 	fadedefaultbgm
 	clearflag FLAG_DONT_TRANSITION_MUSIC
 	setvar VAR_PETALBURG_GYM_STATE, 1
-	warp MAP_PETALBURG_CITY_GYM, 255, 4, 108
+	warp MAP_PETALBURG_CITY_GYM, 255, 4, 44
 	waitstate
 	releaseall
 	end
