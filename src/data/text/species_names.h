@@ -1020,6 +1020,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_PHANTOWL] = _("Phantowl"),
     [SPECIES_DUELUMBER] = _("Duelumber"),
     [SPECIES_ESCARGINITE] = _("Escarginite"),
+[SPECIES_TINKATON_MEGA] = _("Tinkaton"),
     [SPECIES_ARACHTRES] = _("Arachtres"),
 [SPECIES_KARTANA_FALLEN] = _("Kartana"),
 [SPECIES_KINGAMBIT_REDUX_MEGA] = _("Kingambit"),

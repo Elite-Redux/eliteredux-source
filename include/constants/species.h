@@ -1600,7 +1600,7 @@
 #define SPECIES_CASCOON_PRIMAL              CUSTOM_MEGA_START + 57
 #define SPECIES_WIGGLYTUFF_MEGA             CUSTOM_MEGA_START + 58
 #define SPECIES_LUCARIO_MEGA_Y              CUSTOM_MEGA_START + 59
-#define SPECIES_KINGAMBIT_REDUX_MEGA        CUSTOM_MEGA_START + 399    // Lacks proper sprites
+#define SPECIES_KINGAMBIT_REDUX_MEGA        CUSTOM_MEGA_START + 60    // Lacks proper sprites
 
 #define LAST_VALID_CUSTOM_MEGA              SPECIES_KINGAMBIT_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
@@ -1706,8 +1706,9 @@
 #define SPECIES_WIGGLYTUFF_ALPHA            REDUX_FORMS_START + 96
 #define SPECIES_YVELTAL_MEGA                REDUX_FORMS_START + 97
 #define SPECIES_KARTANA_FALLEN              REDUX_FORMS_START + 98
+#define SPECIES_TINKATON_MEGA               REDUX_FORMS_START + 99
 
-#define LAST_REDUX_FORM                     SPECIES_KARTANA_FALLEN
+#define LAST_REDUX_FORM                     SPECIES_TINKATON_MEGA
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

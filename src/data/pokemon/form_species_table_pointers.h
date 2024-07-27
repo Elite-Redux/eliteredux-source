@@ -907,4 +907,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_KARTANA_FALLEN] = sKartana_FallenFormSpeciesIdTable,
 
+    [SPECIES_TINKATON_MEGA] = sTinkatonFormSpeciesIdTable,
+
 };
