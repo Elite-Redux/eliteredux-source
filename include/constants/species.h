@@ -1703,7 +1703,7 @@
 #define SPECIES_MAWILE_REDUX_B_MEGA         REDUX_FORMS_START + 95
 #define SPECIES_WIGGLYTUFF_ALPHA            REDUX_FORMS_START + 96
 
-#define LAST_REDUX_FORM                     SPECIES_MAWILE_REDUX_B_MEGA
+#define LAST_REDUX_FORM                     SPECIES_WIGGLYTUFF_ALPHA
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

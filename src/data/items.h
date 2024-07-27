@@ -9570,10 +9570,10 @@ const struct Item gItems[] =
 
     [ITEM_WIGGLITUFF_ORB] = 
     {
-        .name = _("Wigglituff Orb"),
+        .name = _("Ancient Apple"),
         .itemId = ITEM_WIGGLITUFF_ORB,
         .price = 0,
-        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
         .description = sWigglytuffOrbDesc,
         .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
