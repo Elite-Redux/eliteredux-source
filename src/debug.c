@@ -3898,8 +3898,8 @@ static void DebugAction_Sound_SE_SelectId(u8 taskId)
         if (gMain.newKeys & DPAD_UP)
         {
             gTasks[taskId].data[3] += sPowersOfTen[gTasks[taskId].data[4]];
-            if (gTasks[taskId].data[3] > SE_SUDOWOODO_SHAKE)
-                gTasks[taskId].data[3] = SE_SUDOWOODO_SHAKE;
+            if (gTasks[taskId].data[3] > PH_NURSE_SOLO)
+                gTasks[taskId].data[3] = PH_NURSE_SOLO;
         }
         if (gMain.newKeys & DPAD_DOWN)
         {
@@ -4854,6 +4854,57 @@ static void DebugAction_Sound_MUS_SelectId(u8 taskId)
     X(SE_PIKE_CURTAIN_CLOSE, "SE-PIKE-CURTAIN-CLOSE") \
     X(SE_PIKE_CURTAIN_OPEN, "SE-PIKE-CURTAIN-OPEN") \
     X(SE_SUDOWOODO_SHAKE, "SE-SUDOWOODO-SHAKE") \
+    X(PH_TRAP_BLEND, "PH-TRAP-BLEND") \
+    X(PH_TRAP_HELD, "PH-TRAP-HELD") \
+    X(PH_TRAP_SOLO, "PH-TRAP-SOLO") \
+    X(PH_FACE_BLEND, "PH-FACE-BLEND") \
+    X(PH_FACE_HELD, "PH-FACE-HELD") \
+    X(PH_FACE_SOLO, "PH-FACE-SOLO") \
+    X(PH_CLOTH_BLEND, "PH-CLOTH-BLEND") \
+    X(PH_CLOTH_HELD, "PH-CLOTH-HELD") \
+    X(PH_CLOTH_SOLO, "PH-CLOTH-SOLO") \
+    X(PH_DRESS_BLEND, "PH-DRESS-BLEND") \
+    X(PH_DRESS_HELD, "PH-DRESS-HELD") \
+    X(PH_DRESS_SOLO, "PH-DRESS-SOLO") \
+    X(PH_FLEECE_BLEND, "PH-FLEECE-BLEND") \
+    X(PH_FLEECE_HELD, "PH-FLEECE-HELD") \
+    X(PH_FLEECE_SOLO, "PH-FLEECE-SOLO") \
+    X(PH_KIT_BLEND, "PH-KIT-BLEND") \
+    X(PH_KIT_HELD, "PH-KIT-HELD") \
+    X(PH_KIT_SOLO, "PH-KIT-SOLO") \
+    X(PH_PRICE_BLEND, "PH-PRICE-BLEND") \
+    X(PH_PRICE_HELD, "PH-PRICE-HELD") \
+    X(PH_PRICE_SOLO, "PH-PRICE-SOLO") \
+    X(PH_LOT_BLEND, "PH-LOT-BLEND") \
+    X(PH_LOT_HELD, "PH-LOT-HELD") \
+    X(PH_LOT_SOLO, "PH-LOT-SOLO") \
+    X(PH_GOAT_BLEND, "PH-GOAT-BLEND") \
+    X(PH_GOAT_HELD, "PH-GOAT-HELD") \
+    X(PH_GOAT_SOLO, "PH-GOAT-SOLO") \
+    X(PH_THOUGHT_BLEND, "PH-THOUGHT-BLEND") \
+    X(PH_THOUGHT_HELD, "PH-THOUGHT-HELD") \
+    X(PH_THOUGHT_SOLO, "PH-THOUGHT-SOLO") \
+    X(PH_CHOICE_BLEND, "PH-CHOICE-BLEND") \
+    X(PH_CHOICE_HELD, "PH-CHOICE-HELD") \
+    X(PH_CHOICE_SOLO, "PH-CHOICE-SOLO") \
+    X(PH_MOUTH_BLEND, "PH-MOUTH-BLEND") \
+    X(PH_MOUTH_HELD, "PH-MOUTH-HELD") \
+    X(PH_MOUTH_SOLO, "PH-MOUTH-SOLO") \
+    X(PH_FOOT_BLEND, "PH-FOOT-BLEND") \
+    X(PH_FOOT_HELD, "PH-FOOT-HELD") \
+    X(PH_FOOT_SOLO, "PH-FOOT-SOLO") \
+    X(PH_GOOSE_BLEND, "PH-GOOSE-BLEND") \
+    X(PH_GOOSE_HELD, "PH-GOOSE-HELD") \
+    X(PH_GOOSE_SOLO, "PH-GOOSE-SOLO") \
+    X(PH_STRUT_BLEND, "PH-STRUT-BLEND") \
+    X(PH_STRUT_HELD, "PH-STRUT-HELD") \
+    X(PH_STRUT_SOLO, "PH-STRUT-SOLO") \
+    X(PH_CURE_BLEND, "PH-CURE-BLEND") \
+    X(PH_CURE_HELD, "PH-CURE-HELD") \
+    X(PH_CURE_SOLO, "PH-CURE-SOLO") \
+    X(PH_NURSE_BLEND, "PH-NURSE-BLEND") \
+    X(PH_NURSE_HELD, "PH-NURSE-HELD") \
+    X(PH_NURSE_SOLO, "PH-NURSE-SOLO") \
 
 // Create BGM list
 #define X(songId, name) static const u8 sBGMName_##songId[] = _(name);
