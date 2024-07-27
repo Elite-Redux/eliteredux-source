@@ -12018,16 +12018,27 @@ BattleScript_GymSkillSteadyPrintString:
 BattleScript_GymSkillStatsCannotChange:
 	end2
 
+
 BattleScript_GymSkillPosture::
-	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT 
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	call BattleScript_GymSkillPostureAfterAttackerSet
+	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_GymSkillPostureSetForDouble
+	end2
+	
+BattleScript_GymSkillPostureAfterAttackerSet:
 	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
 BattleScript_GymSkillPosture_:
 	call BattleScript_GymSkillPopup	
+	printstring STRINGID_GYMSKILL_POSTURE
 	setgraphicalstatchangevalues
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printstring STRINGID_GYMSKILL_POSTURE
-	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_GymSkillPostureSetForDouble:
+	jumpifhasnohp B_POSITION_PLAYER_RIGHT, BattleScript_GymSkillEnd2
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_RIGHT
+	call BattleScript_GymSkillPostureAfterAttackerSet
 	end2
 
 BattleScript_GymSkillPostureCrit::
