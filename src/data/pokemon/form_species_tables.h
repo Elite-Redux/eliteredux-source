@@ -578,6 +578,7 @@ static const u16 sGarchompFormSpeciesIdTable[] = {
 static const u16 sLucarioFormSpeciesIdTable[] = {
     SPECIES_LUCARIO,
     SPECIES_LUCARIO_MEGA,
+    SPECIES_LUCARIO_MEGA_Y,
     FORM_SPECIES_END,
 };
 
@@ -1711,6 +1712,7 @@ static const u16 sVictiniFormSpeciesIdTable[] = {
 };
 static const u16 sWigglytuffFormSpeciesIdTable[] = {
     SPECIES_WIGGLYTUFF,
+    SPECIES_WIGGLYTUFF_MEGA,
     SPECIES_WIGGLYTUFF_PRIMAL,
     FORM_SPECIES_END,
 };
@@ -1720,6 +1722,7 @@ static const u16 sWeavileFormSpeciesIdTable[] = {
     SPECIES_WEAVILE_REDUX,
     FORM_SPECIES_END,
 };
+
 static const u16 sEspeonFormSpeciesIdTable[] = {
     SPECIES_ESPEON,
     SPECIES_ESPEON_GALAXY,

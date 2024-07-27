@@ -5550,6 +5550,22 @@ const u16 gEggMoves[] = {
         MOVE_SLEEP_TALK,
         MOVE_ENDURE,
         MOVE_FLAIL),
+
+    egg_moves(WIGGLYTUFF_ALPHA,
+        MOVE_MISTY_EXPLOSION, // this entire list is a placeholder cause this mon can't breed. i was too lazy to add the moves manually
+        MOVE_PERISH_SONG,
+        MOVE_PRESENT,
+        MOVE_FEINT_ATTACK,
+        MOVE_WISH,
+        MOVE_FAKE_TEARS,
+        MOVE_LAST_RESORT,
+        MOVE_COVET,
+        MOVE_GRAVITY,
+        MOVE_SLEEP_TALK,
+        MOVE_CAPTIVATE,
+        MOVE_PUNISHMENT,
+        MOVE_MISTY_TERRAIN,
+        MOVE_HEAL_PULSE),
     
     EGG_MOVES_TERMINATOR
 };

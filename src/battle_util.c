@@ -7953,7 +7953,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
 		}
-		
+		// Aftermath
+		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_AFTERMATH) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BALLOON_BOMBER)){
+            if (ShouldApplyOnHitAffect(gBattlerAttacker)
+                && !IsBattlerAlive(battler)
+                && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
+            {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_AFTERMATH;
+                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AftermathDmg;
+                effect++;
+            }
+		}
 		// Effect Spore
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_EFFECT_SPORE)) {
             EFFECT_SPORE:
@@ -8010,12 +8022,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 		
 		// Inflatable
-		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_INFLATABLE)){
+		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_INFLATABLE) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BALLOON_BOMBER)){
 			if (ShouldApplyOnHitAffect(battler)
 			 && (CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPDEF, MAX_STAT_STAGE, CMP_LESS_THAN))
 			 && (moveType == TYPE_FIRE || moveType == TYPE_FLYING))
 			{
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_INFLATABLE;
+                if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_INFLATABLE)){
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_INFLATABLE;
+                }
+                else{
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_BALLOON_BOMBER;
+                }
 				BattleScriptPushCursorAndCallback(BattleScript_InflatableActivates);
 				gBattleScripting.battler = battler;
 				effect++;
@@ -14936,7 +14953,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             MulModifier(&finalModifier, UQ_4_12(0.50));
     }
 	// Fur Coat
-	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_FUR_COAT)){
+	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_FUR_COAT) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_APPLE_ENLIGHTENMENT)){
 		if (IS_MOVE_PHYSICAL(move))
             MulModifier(&finalModifier, UQ_4_12(0.50));
     }

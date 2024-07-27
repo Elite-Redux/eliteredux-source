@@ -582,6 +582,8 @@ static const u8 sAbilityParasiticSporesDescription[] = _("Deals 1/8 HP damage to
 static const u8 sAbilityPoisonPuppeteerDescription[] = _("Poison also inflicts confusion.");
 static const u8 sAbilityEntranceDescription[] = _("Confusion also inflicts\ninfatuation.");
 static const u8 sAbilityRejectionDescription[] = _("Applies Quash on switch-in.");
+static const u8 sAbilityAppleEnlightenmentDescription[] = _("Fur coat + Magic Guard.");
+static const u8 sAbilityBalloonBomberDescription[] = _("Aftermath + Inflatable");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1198,6 +1200,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_POISON_PUPPETEER] = _("Poison Puppeteer"),
     [ABILITY_ENTRANCE] = _("Entrance"),
     [ABILITY_REJECTION] = _("Rejection"),
+    [ABILITY_APPLE_ENLIGHTENMENT] = _("Apple Enlightenment"),
+    [ABILITY_BALLOON_BOMBER] = _("Balloon Bomber"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1815,4 +1819,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_POISON_PUPPETEER] = sAbilityPoisonPuppeteerDescription,
     [ABILITY_ENTRANCE] = sAbilityEntranceDescription,
     [ABILITY_REJECTION] = sAbilityRejectionDescription,
+    [ABILITY_APPLE_ENLIGHTENMENT] = sAbilityAppleEnlightenmentDescription,
+    [ABILITY_BALLOON_BOMBER] = sAbilityBalloonBomberDescription,
 };

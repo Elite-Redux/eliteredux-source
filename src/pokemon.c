@@ -10759,7 +10759,7 @@ bool8 isSpeciesPlaceholderMon(u16 species){
         return FALSE;
     else if (species <= CUSTOM_MEGA_START)
         return TRUE;
-    else if (species < SPECIES_CASCOON_PRIMAL)
+    else if (species <= LAST_VALID_CUSTOM_MEGA)
         return FALSE;
     else if (species <= REDUX_FORMS_START)
         return TRUE;

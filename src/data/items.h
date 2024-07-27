@@ -9570,10 +9570,10 @@ const struct Item gItems[] =
 
     [ITEM_WIGGLITUFF_ORB] = 
     {
-        .name = _("Wigglituff Orb"),
+        .name = _("Ancient Apple"),
         .itemId = ITEM_WIGGLITUFF_ORB,
         .price = 0,
-        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
         .description = sWigglytuffOrbDesc,
         .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
@@ -9586,6 +9586,16 @@ const struct Item gItems[] =
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
         .description = sWigglytuffiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_SENZU] =
+    {
+        .name = _("Senzu Bean"),
+        .itemId = ITEM_SENZU,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sSenzuDesc,
         .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,

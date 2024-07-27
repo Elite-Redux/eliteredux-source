@@ -1532,9 +1532,9 @@
 // Castform Sand
 #define SPECIES_CASTFORM_SANDY              FORMS_START + 345
 
-#define SPECIES_TERAPAGOS_STELLAR           FORMS_START + 346
+#define SPECIES_TERAPAGOS_STELLAR           FORMS_START + 346 //unused for now
 
-#define LAST_VALID_STANDARD_FORM            SPECIES_TERAPAGOS_STELLAR
+#define LAST_VALID_STANDARD_FORM            SPECIES_CASTFORM_SANDY
 
 // Custom Megas
 #define CUSTOM_MEGA_START                   FORMS_START + 600
@@ -1598,7 +1598,9 @@
 #define SPECIES_SCRAFTY_MEGA                CUSTOM_MEGA_START + 56
 #define SPECIES_CASCOON_PRIMAL              CUSTOM_MEGA_START + 57
 #define SPECIES_WIGGLYTUFF_MEGA             CUSTOM_MEGA_START + 58
-#define SPECIES_KINGAMBIT_REDUX_MEGA        REDUX_FORMS_START + 59
+#define SPECIES_LUCARIO_MEGA_Y              CUSTOM_MEGA_START + 59
+#define SPECIES_KINGAMBIT_REDUX_MEGA        CUSTOM_MEGA_START + 399 //unimplemented
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_LUCARIO_MEGA_Y //this is for the debug menu
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400 // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
@@ -1699,8 +1701,9 @@
 #define SPECIES_CALYREX_CLOUD_RIDER         REDUX_FORMS_START + 93
 #define SPECIES_MAWILE_REDUX_B              REDUX_FORMS_START + 94
 #define SPECIES_MAWILE_REDUX_B_MEGA         REDUX_FORMS_START + 95
+#define SPECIES_WIGGLYTUFF_ALPHA            REDUX_FORMS_START + 96
 
-#define LAST_REDUX_FORM                     SPECIES_MAWILE_REDUX_B_MEGA
+#define LAST_REDUX_FORM                     SPECIES_WIGGLYTUFF_ALPHA
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

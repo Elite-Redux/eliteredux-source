@@ -3386,6 +3386,11 @@ static const u8 sWigglytuffiteDesc[] = _(
     "Wigglytuff to Mega\n"
     "Evolve in battle.");
 
+static const u8 sSenzuDesc[] = _(
+    "This bean enables\n"
+    "Lucario to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sMegaBraceletDesc[] = _(
     "Enables {PKMN} holding\n"
     "their Mega Stone to\n"

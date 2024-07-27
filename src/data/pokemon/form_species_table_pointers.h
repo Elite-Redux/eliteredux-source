@@ -899,4 +899,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_SPECTRIER_CLOUD] = sSpectrierFormSpeciesIdTable,
 
+    [SPECIES_WIGGLYTUFF_MEGA] = sWigglytuffFormSpeciesIdTable,
+
 };

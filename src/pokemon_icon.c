@@ -1155,6 +1155,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_FLYGON_REDUX_MEGA] = gMonIcon_Flygon_Redux_Mega,
     [SPECIES_FLYGON_REDUX] = gMonIcon_Flygon_Redux,
     [SPECIES_WIGGLYTUFF_PRIMAL] = gMonIcon_Wigglytuff_Primal,
+    [SPECIES_WIGGLYTUFF_ALPHA] = gMonIcon_WigglytuffAlpha,
     [SPECIES_VICTINI_PRIMAL] = gMonIcon_Victini_Primal,
     [SPECIES_SNORLAX_PRIMAL] = gMonIcon_Snorlax_Primal,
     [SPECIES_LEDIAN_PARADOX] = gMonIcon_Ledian_Paradox,
@@ -1177,7 +1178,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_SCIZOR_REDUX] = gMonIcon_Scizor_Redux,
     [SPECIES_IRON_EXO] = gMonIcon_Iron_Exo,
     [SPECIES_URSALUNA_MEGA] = gMonIcon_Ursaluna_Mega,
-    [SPECIES_WIGGLYTUFF_MEGA] = gMonIcon_Wigglytuff_Mega,
+    [SPECIES_WIGGLYTUFF_MEGA] = gMonIcon_WigglytuffMega,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,
@@ -1584,6 +1585,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_LUXRAY_REDUX] = gMonIcon_LuxrayRedux,
     [SPECIES_MINCCINO_REDUX] = gMonIcon_MinccinoRedux,
     [SPECIES_CINCCINO_REDUX] = gMonIcon_CinccinoRedux,
+    [SPECIES_LUCARIO_MEGA_Y] = gMonIcon_LucarioMegaY,
     [SPECIES_EGG] = gMonIcon_Egg,
 };
 
@@ -3090,13 +3092,14 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_FLYGON_REDUX_MEGA] = 2,
     [SPECIES_FLYGON_REDUX] = 2,
     [SPECIES_WIGGLYTUFF_PRIMAL] = 0,
+    [SPECIES_WIGGLYTUFF_ALPHA] = 0,
     [SPECIES_VICTINI_PRIMAL] = 0,
     [SPECIES_SNORLAX_PRIMAL] = 3,
     [SPECIES_LEDIAN_PARADOX] = 0,
     [SPECIES_DRACOVISH_MEGA] = 0,
     [SPECIES_CHIEN_PAO_MEGA] = 0,
     [SPECIES_DRAGONITE_DELIVERY] = 2,
-    [SPECIES_ARCHALUDON] = 1,
+    [SPECIES_ARCHALUDON] = 0,
     [SPECIES_GOUGING_FIRE] = 5,
     [SPECIES_IRON_BOULDER] = 1,
     [SPECIES_IRON_CROWN] = 1,
@@ -3115,6 +3118,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_PUPITAR_REDUX] = 2,
     [SPECIES_TYRANITAR_REDUX] = 1,
     [SPECIES_TYRANITAR_MEGA_REDUX] = 0,
+    [SPECIES_LUCARIO_MEGA_Y] = 0,
 
     [SPECIES_EGG] = 1,
 };

@@ -205,6 +205,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
+    [SPECIES_WIGGLYTUFF_ALPHA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
     [SPECIES_ZUBAT] =
     {
         .size = 0x77,
@@ -6042,6 +6047,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .y_offset = 4,
     },
     [SPECIES_LUCARIO_MEGA] =
+    {
+        .size = 0,
+        .y_offset = 0,
+    },
+    [SPECIES_LUCARIO_MEGA_Y] =
     {
         .size = 0,
         .y_offset = 0,
