@@ -452,7 +452,7 @@ script MauvilleCity_Gym_EventScript_Vivian{
     if (defeated(TRAINER_VIVIAN)){
         msgbox(MauvilleCity_Gym_Text_VivianPostBattle, MSGBOX_AUTOCLOSE)
     } else {
-        yesnobattle(format("If you don't pay attention, high current will {COLOR GREEN}burn you{COLOR DARK_GRAY}."))
+        yesnobattle(format("Watch your step! Those high-voltage wires can leave you with a nasty {COLOR GREEN} burn. {COLOR DARK_GRAY}."))
         if (var(VAR_RESULT)){
             trainerbattle_single(TRAINER_VIVIAN, MauvilleCity_Gym_Text_VivianIntro , MauvilleCity_Gym_Text_VivianDefeat)
         }
@@ -467,7 +467,7 @@ script MauvilleCity_Gym_EventScript_Kirk{
     if (defeated(TRAINER_KIRK)){
         msgbox(MauvilleCity_Gym_Text_KirkPostBattle, MSGBOX_AUTOCLOSE)
     } else {
-        yesnobattle(format("Pikachu use Electro weeeeeb! Oh was it{COLOR GREEN}sticky web{COLOR DARK_GRAY}? I don't remembeeeeer."))
+        yesnobattle(format("You've probably noticed the crazy amount of traps around here yeah? Wattson's an old coot even left some {COLOR GREEN} Sticky webs {COLOR DARK_GRAY} just lying around!"))
         if (var(VAR_RESULT)){
             trainerbattle_single(TRAINER_KIRK, MauvilleCity_Gym_Text_KirkIntro , MauvilleCity_Gym_Text_KirkDefeat)
         }
@@ -482,7 +482,9 @@ script MauvilleCity_Gym_EventScript_Ben{
     if (defeated(TRAINER_BEN)){
         msgbox(MauvilleCity_Gym_Text_BenPostBattle, MSGBOX_AUTOCLOSE)
     } else {
-        yesnobattle(format("Ampli set, amped up to the max. Yep It's time to pump {COLOR GREEN}speed{COLOR DARK_GRAY}."))
+        yesnobattle(format("I'm already amped up to the max!
+ I hope you're able to keep, because I'm pumped up and ready to have this tempo going
+{COLOR GREEN} super speed!{COLOR DARK_GRAY}"))
         if (var(VAR_RESULT)){
             trainerbattle_single(TRAINER_BEN, MauvilleCity_Gym_Text_BenIntro , MauvilleCity_Gym_Text_BenDefeat)
         }
@@ -515,9 +517,8 @@ script MauvilleCity_Gym_EventScript_Shawn{
 }
 
 script MauvilleCity_Gym_EventScript_ShawnAndAngelo{
-    msgbox(format("Hey look at this {COLOR GREEN}super conductivity effect{COLOR DARK_GRAY}, truly amazing."), MSGBOX_AUTOCLOSE)
-    msgbox(format("Loud music {COLOR GREEN}strengthen my mind{COLOR DARK_GRAY}."), MSGBOX_AUTOCLOSE)
-    msgbox(format("Do you see double?"), MSGBOX_YESNO)
+    yesnobattle(format("Isn't technology amazing? With the {COLOR GREEN} power of magnets {COLOR DARK_GRAY} we can travel without even touching the ground!\p
+Music is my way of letting all my stress out! Keeps me calm, and it's a really great way to {COLOR GREEN} strengthen my mind{COLOR DARK_GRAY}."))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_SHAWN, TRAINER_ANGELO, TAG_TEAM_SHAWN_ANGELO, 0, MauvilleCity_Gym_Text_ShawnAndAngeloIntro)
     }

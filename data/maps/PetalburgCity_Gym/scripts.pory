@@ -1814,9 +1814,24 @@ script PetalburgCity_Gym_EventScript_Randall{
 	if (defeated(TRAINER_RANDALL)){
 		msgbox(PetalburgCity_Gym_Text_RandallPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		yesnobattle(format("Hey, how about a race before fighting your old man? I'll warn you {COLOR GREEN} the longer I run the faster I get! {COLOR DARK_GRAY}."))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_RANDALL, PetalburgCity_Gym_Text_RandallIntro , PetalburgCity_Gym_Text_RandallDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_Mary{
+	lock
+	faceplayer
+	if (defeated(TRAINER_MARY)){
+		msgbox(PetalburgCity_Gym_Text_MaryPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("{COLOR GREEN} I won't give up {COLOR DARK_GRAY}, I'm {COLOR GREEN} constantly aiming {COLOR DARK_GRAY} for my goal."))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_MARY, PetalburgCity_Gym_Text_MaryIntro , PetalburgCity_Gym_Text_MaryDefeat)
 		}
 	}
 	release
@@ -1830,56 +1845,9 @@ script PetalburgCity_Gym_EventScript_Parker{
 	if (defeated(TRAINER_PARKER)){
 		msgbox(PetalburgCity_Gym_Text_ParkerPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		yesnobattle(format("Why am I always the one who has to clean up the {COLOR GREEN} debris {COLOR DARK_GRAY} from the battles. This isn't fair at all!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_PARKER, PetalburgCity_Gym_Text_ParkerIntro , PetalburgCity_Gym_Text_ParkerDefeat)
-		}
-	}
-	release
-	end
-}
-
-script PetalburgCity_Gym_EventScript_George{
-	lock
-	faceplayer
-	goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_GeorgePostBadge)
-	if (defeated(TRAINER_GEORGE)){
-		msgbox(PetalburgCity_Gym_Text_GeorgePostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_GEORGE, PetalburgCity_Gym_Text_GeorgeIntro , PetalburgCity_Gym_Text_GeorgeDefeat)
-		}
-	}
-	release
-	end
-}
-
-script PetalburgCity_Gym_EventScript_Berke{
-	lock
-	faceplayer
-	goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_BerkePostBadge)
-	if (defeated(TRAINER_BERKE)){
-		msgbox(PetalburgCity_Gym_Text_BerkePostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_BERKE, PetalburgCity_Gym_Text_BerkeIntro , PetalburgCity_Gym_Text_BerkeDefeat)
-		}
-	}
-	release
-	end
-}
-
-script PetalburgCity_Gym_EventScript_Mary{
-	lock
-	faceplayer
-	if (defeated(TRAINER_MARY)){
-		msgbox(PetalburgCity_Gym_Text_MaryPostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_MARY, PetalburgCity_Gym_Text_MaryIntro , PetalburgCity_Gym_Text_MaryDefeat)
 		}
 	}
 	release
@@ -1893,9 +1861,25 @@ script PetalburgCity_Gym_EventScript_Alexia{
 	if (defeated(TRAINER_ALEXIA)){
 		msgbox(PetalburgCity_Gym_Text_AlexiaPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		yesnobattle(format("If you're patient and {COLOR GREEN} defend well {COLOR DARK_GRAY} then even the strongest attack can't stop you!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_ALEXIA, PetalburgCity_Gym_Text_AlexiaIntro , PetalburgCity_Gym_Text_AlexiaDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_George{
+	lock
+	faceplayer
+	goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_GeorgePostBadge)
+	if (defeated(TRAINER_GEORGE)){
+		msgbox(PetalburgCity_Gym_Text_GeorgePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("Be careful! If you dont stay active then maybe {COLOR GREEN} plants will start growing around you.{COLOR DARK_GRAY}."))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_GEORGE, PetalburgCity_Gym_Text_GeorgeIntro , PetalburgCity_Gym_Text_GeorgeDefeat)
 		}
 	}
 	release
@@ -1909,9 +1893,25 @@ script PetalburgCity_Gym_EventScript_Jody{
 	if (defeated(TRAINER_JODY)){
 		msgbox(PetalburgCity_Gym_Text_JodyPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		yesnobattle(format("If you're aggresive and {COLOR GREEN} attack well {COLOR DARK_GRAY} then even the strongest defence can't stop you!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_JODY, PetalburgCity_Gym_Text_JodyIntro , PetalburgCity_Gym_Text_JodyDefeat)
+		}
+	}
+	release
+	end
+}
+
+script PetalburgCity_Gym_EventScript_Berke{
+	lock
+	faceplayer
+	goto_if_set(FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_BerkePostBadge)
+	if (defeated(TRAINER_BERKE)){
+		msgbox(PetalburgCity_Gym_Text_BerkePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("There's no {COLOR GREEN} substitute {COLOR DARK_GRAY} for hard work."))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_BERKE, PetalburgCity_Gym_Text_BerkeIntro , PetalburgCity_Gym_Text_BerkeDefeat)
 		}
 	}
 	release

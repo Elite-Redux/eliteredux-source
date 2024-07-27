@@ -471,23 +471,6 @@ script RustboroCity_Gym_EventScript_GiveRockTomb{
 	end
 }
 
-
-script RustboroCity_Gym_EventScript_Marc{
-	lock
-	faceplayer
-	if (defeated(TRAINER_MARC)){
-		msgbox(RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		yesnobattle(format("{COLOR GREEN}The last mountain rise above all others, glistering all colors{COLOR DARK_GRAY}. This is a sight you should witness by yourself one day."))
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_MARC, "Alright mate Lets do this." , RustboroCity_Gym_Text_MarcDefeat)
-		}
-	}
-	release
-	end
-}
-
-
 script RustboroCity_Gym_EventScript_Josh{
 	lock
 	faceplayer
@@ -509,7 +492,7 @@ script RustboroCity_Gym_EventScript_Tommy{
 	if (defeated(TRAINER_TOMMY)){
 		msgbox(RustboroCity_Gym_Text_TommyPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("When doing a trek, watch out when {COLOR GREEN}entering on a rocky field{COLOR DARK_GRAY}, it can hurt your feets and legs. Leaving you {COLOR GREEN}paralyzed{COLOR DARK_GRAY}!"))
+		yesnobattle(format("When doing a trek, watch out when {COLOR GREEN}entering on a rocky field{COLOR DARK_GRAY}, it can hurt your legs. Leaving you {COLOR GREEN}paralyzed{COLOR DARK_GRAY}!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_TOMMY, RustboroCity_Gym_Text_TommyIntro , RustboroCity_Gym_Text_TommyDefeat)
 		}
@@ -517,6 +500,22 @@ script RustboroCity_Gym_EventScript_Tommy{
 	release
 	end
 }
+
+script RustboroCity_Gym_EventScript_Marc{
+	lock
+	faceplayer
+	if (defeated(TRAINER_MARC)){
+		msgbox(RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("They say that when under immense pressure even coal becomes diamonds. Once I get {COLOR GREEN} backed into a corner {COLOR DARK_GRAY} is when my true power shines!"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_MARC, "Alright mate Lets do this." , RustboroCity_Gym_Text_MarcDefeat)
+		}
+	}
+	release
+	end
+}
+
 
 script RustboroCity_Gym_EventScript_CheckTrainers{
 	if (flag(FLAG_BADGE01_GET)) {

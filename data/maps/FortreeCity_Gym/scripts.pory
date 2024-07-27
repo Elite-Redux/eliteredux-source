@@ -361,6 +361,21 @@ script FortreeCity_Gym_EventScript_GiveRoost{
 	end
 }
 
+script FortreeCity_Gym_EventScript_Humberto{
+	lock
+	faceplayer
+	if (defeated(TRAINER_HUMBERTO)){
+		msgbox(FortreeCity_Gym_Text_HumbertoPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("{COLOR GREEN} POSTURE SPEDEF {COLOR DARK_GRAY}"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_HUMBERTO, FortreeCity_Gym_Text_HumbertoIntro , FortreeCity_Gym_Text_HumbertoDefeat)
+		}
+	}
+	release
+	end
+}
+
 script FortreeCity_Gym_EventScript_Edwardo{
 	lock
 	faceplayer
@@ -385,9 +400,8 @@ script FortreeCity_Gym_EventScript_Flint{
 }
 
 script FortreeCity_Gym_EventScript_EdwardoAndFlint{
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("Two wings for a battle?"), MSGBOX_YESNO)
+    yesnobattle(format("{COLOR GREEN}Wintry wind\nPassing a pokémon\pWith a swollen face.{COLOR DARK_GRAY}\p
+If you can't keep up with the wind you {COLOR GREEN}will end up grounded{COLOR DARK_GRAY}."))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_EDWARDO, TRAINER_FLINT, TAG_TEAM_EDUARDO_FLINT, 0, FortreeCity_Gym_Text_EdwardoAndFlintIntro)
     }
@@ -420,9 +434,7 @@ script FortreeCity_Gym_EventScript_Jared{
 	end
 }
 script FortreeCity_Gym_EventScript_AshleyAndJared{
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("{COLOR GREEN}Hint.{COLOR DARK_GRAY}"), MSGBOX_AUTOCLOSE)
-    msgbox(format("Battling two birds with one fight?"), MSGBOX_YESNO)
+    yesnobattle(format("{COLOR GREEN}Using items before the second turn{COLOR DARK_GRAY}? nuh-huh, don't think so."))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_ASHLEY, TRAINER_JARED, TAG_TEAM_ASHLEY_JARED, 0, FortreeCity_Gym_Text_AshleyAndJaredIntro)
     }
@@ -430,27 +442,13 @@ script FortreeCity_Gym_EventScript_AshleyAndJared{
     end
 }
 
-script FortreeCity_Gym_EventScript_Humberto{
-	lock
-	faceplayer
-	if (defeated(TRAINER_HUMBERTO)){
-		msgbox(FortreeCity_Gym_Text_HumbertoPostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_HUMBERTO, FortreeCity_Gym_Text_HumbertoIntro , FortreeCity_Gym_Text_HumbertoDefeat)
-		}
-	}
-	release
-	end
-}
 script FortreeCity_Gym_EventScript_Darius{
 	lock
 	faceplayer
 	if (defeated(TRAINER_DARIUS)){
 		msgbox(FortreeCity_Gym_Text_DariusPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format("{COLOR GREEN}hint{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+		yesnobattle(format("{COLOR GREEN}POSTURE DEF{COLOR DARK_GRAY}"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_DARIUS, FortreeCity_Gym_Text_DariusIntro , FortreeCity_Gym_Text_DariusDefeat)
 		}

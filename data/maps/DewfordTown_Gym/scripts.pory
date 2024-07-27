@@ -510,7 +510,7 @@ script DewfordTown_Gym_EventScript_Laura{
     if (defeated(TRAINER_LAURA)){
         msgbox(DewfordTown_Gym_Text_LauraPostBattle, MSGBOX_AUTOCLOSE)
     } else {
-        yesnobattle(format("After training in this gym for so long I can even fight {COLOR GREEN}in the Dark, by following my foes breathe and ki{COLOR DARK_GRAY}."), MSGBOX_YESNO)
+        yesnobattle(format(" I hope you don't think that just because you brought a ghost type you'll be able to beat me! {COLOR GREEN} Thanks to my Ki even Ghosts don't stand a chance!{COLOR DARK_GRAY}."))
         if (var(VAR_RESULT)){
             trainerbattle_single(TRAINER_LAURA, DewfordTown_Gym_Text_LauraIntro , DewfordTown_Gym_Text_LauraDefeat)
         }
@@ -566,7 +566,9 @@ script DewfordTown_Gym_EventScript_Jocelyn{
 }
 
 script DewfordTown_Gym_EventScript_BrendenAndLilith{
-    yesnobattle(format("I just had a good stretch and I'm raring to go. I hope you're ready I feel {COLOR GREEN}Boosted Up{COLOR DARK_GRAY} and ready to go!"))
+    yesnobattle(
+		format("I just had a good stretch and I'm raring to go. I hope you're ready I feel {COLOR GREEN}Boosted Up{COLOR DARK_GRAY} and ready to go!\p"
+		       "My fighting style excels at {COLOR GREEN} copying my opponents strengths! {COLOR DARK_GRAY} Let's see how you deal with it!"))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_LILITH, TRAINER_BRENDEN, TAG_TEAM_BRENDEN_LILITH, 0, DewfordTown_Gym_Text_BrendenAndLilithIntro)
     }

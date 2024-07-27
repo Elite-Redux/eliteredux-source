@@ -439,73 +439,15 @@ script LavaridgeTown_Gym_1F_EventScript_GiveOverheat{
 	end
 }
 
-script LavaridgeTown_Gym_1F_EventScript_Cole{
+script LavaridgeTown_Gym_B1F_EventScript_Jeff{
 	lock
 	faceplayer
-	if (defeated(TRAINER_COLE)){
-		msgbox(LavaridgeTown_Gym_1F_Text_ColePostBattle, MSGBOX_AUTOCLOSE)
+	if (defeated(TRAINER_JEFF)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_JeffPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		yesnobattle(format("As the battle goes on my flames {COLOR GREEN} will only get hotter! {COLOR DARK_GRAY} Hope you're prepared for a wildfire."))
 		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_COLE, LavaridgeTown_Gym_1F_Text_ColeIntro , LavaridgeTown_Gym_1F_Text_ColeDefeat)
-		}
-	}
-	release
-	end
-}
-
-script LavaridgeTown_Gym_1F_EventScript_Axle{
-	lock
-	faceplayer
-	if (defeated(TRAINER_AXLE)){
-		msgbox(LavaridgeTown_Gym_1F_Text_AxlePostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_AXLE, LavaridgeTown_Gym_1F_Text_AxleIntro , LavaridgeTown_Gym_1F_Text_AxleDefeat)
-		}
-	}
-	release
-	end
-}
-script LavaridgeTown_Gym_B1F_EventScript_Keegan{
-	lock
-	faceplayer
-	if (defeated(TRAINER_KEEGAN)){
-		msgbox(LavaridgeTown_Gym_B1F_Text_KeeganPostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_KEEGAN, LavaridgeTown_Gym_B1F_Text_KeeganIntro , LavaridgeTown_Gym_B1F_Text_KeeganDefeat)
-		}
-	}
-	release
-	end
-}
-script LavaridgeTown_Gym_1F_EventScript_Danielle{
-	lock
-	faceplayer
-	if (defeated(TRAINER_DANIELLE)){
-		msgbox(LavaridgeTown_Gym_1F_Text_DaniellePostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_DANIELLE, LavaridgeTown_Gym_1F_Text_DanielleIntro , LavaridgeTown_Gym_1F_Text_DanielleDefeat)
-		}
-	}
-	release
-	end
-}
-
-script LavaridgeTown_Gym_1F_EventScript_Gerald{
-	lock
-	faceplayer
-	if (defeated(TRAINER_GERALD)){
-		msgbox(LavaridgeTown_Gym_1F_Text_GeraldPostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_GERALD, LavaridgeTown_Gym_1F_Text_GeraldIntro , LavaridgeTown_Gym_1F_Text_GeraldDefeat)
+			trainerbattle_single(TRAINER_JEFF, LavaridgeTown_Gym_B1F_Text_JeffIntro , LavaridgeTown_Gym_B1F_Text_JeffDefeat)
 		}
 	}
 	release
@@ -518,7 +460,7 @@ script LavaridgeTown_Gym_B1F_EventScript_Jace{
 	if (defeated(TRAINER_JACE)){
 		msgbox(LavaridgeTown_Gym_B1F_Text_JacePostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		yesnobattle(format("Take care you don't breathe in too much of this smoke, it's extremely {COLOR GREEN} toxic {COLOR DARK_GRAY}."))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_JACE, LavaridgeTown_Gym_B1F_Text_JaceIntro , LavaridgeTown_Gym_B1F_Text_JaceDefeat)
 		}
@@ -526,29 +468,91 @@ script LavaridgeTown_Gym_B1F_EventScript_Jace{
 	release
 	end
 }
-script LavaridgeTown_Gym_B1F_EventScript_Jeff{
-	lock
-	faceplayer
-	if (defeated(TRAINER_JEFF)){
-		msgbox(LavaridgeTown_Gym_B1F_Text_JeffPostBattle, MSGBOX_AUTOCLOSE)
-	} else {
-		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_JEFF, LavaridgeTown_Gym_B1F_Text_JeffIntro , LavaridgeTown_Gym_B1F_Text_JeffDefeat)
-		}
-	}
-	release
-	end
-}
+
 script LavaridgeTown_Gym_B1F_EventScript_Eli{
 	lock
 	faceplayer
 	if (defeated(TRAINER_ELI)){
 		msgbox(LavaridgeTown_Gym_B1F_Text_EliPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		msgbox(format(" {COLOR GREEN}hint{COLOR DARK_GRAY} ."), MSGBOX_YESNO)
+		yesnobattle(format("I've read that trolls {COLOR GREEN} can't heal {COLOR DARK_GRAY} when attacked with fire. Don't you think fantasy is amazing?"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_ELI, LavaridgeTown_Gym_B1F_Text_EliIntro , LavaridgeTown_Gym_B1F_Text_EliDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_B1F_EventScript_Keegan{
+	lock
+	faceplayer
+	if (defeated(TRAINER_KEEGAN)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_KeeganPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("The fog around here is very thick, luckily we're all used to it and can see {COLOR GREEN} perfectly fine. {COLOR DARK_GRAY}."))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_KEEGAN, LavaridgeTown_Gym_B1F_Text_KeeganIntro , LavaridgeTown_Gym_B1F_Text_KeeganDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Cole{
+	lock
+	faceplayer
+	if (defeated(TRAINER_COLE)){
+		msgbox(LavaridgeTown_Gym_1F_Text_ColePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("I hope you're ready for me. My pokemon will {COLOR GREEN} leave you burned!{COLOR DARK_GRAY}"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_COLE, LavaridgeTown_Gym_1F_Text_ColeIntro , LavaridgeTown_Gym_1F_Text_ColeDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Gerald{
+	lock
+	faceplayer
+	if (defeated(TRAINER_GERALD)){
+		msgbox(LavaridgeTown_Gym_1F_Text_GeraldPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("They say that fire types are often frail, but through hard work even they can put up a {COLOR GREEN} solid defense.{COLOR DARK_GRAY}"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_GERALD, LavaridgeTown_Gym_1F_Text_GeraldIntro , LavaridgeTown_Gym_1F_Text_GeraldDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Axle{
+	lock
+	faceplayer
+	if (defeated(TRAINER_AXLE)){
+		msgbox(LavaridgeTown_Gym_1F_Text_AxlePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("Flames are amazing! Just give them a little fuel and they can burn for ages, doesn't that get you all {COLOR GREEN} Psyched Up {COLOR DARK_GRAY} for a battle?"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_AXLE, LavaridgeTown_Gym_1F_Text_AxleIntro , LavaridgeTown_Gym_1F_Text_AxleDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Danielle{
+	lock
+	faceplayer
+	if (defeated(TRAINER_DANIELLE)){
+		msgbox(LavaridgeTown_Gym_1F_Text_DaniellePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("I hope you're ready my passion burns at molten temperatures {COLOR GREEN} my flames are white hot!{COLOR DARK_GRAY} "))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_DANIELLE, LavaridgeTown_Gym_1F_Text_DanielleIntro , LavaridgeTown_Gym_1F_Text_DanielleDefeat)
 		}
 	}
 	release
