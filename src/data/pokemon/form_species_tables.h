@@ -1743,3 +1743,13 @@ static const u16 sSpectrierFormSpeciesIdTable[] = {
     SPECIES_SPECTRIER_CLOUD,
     FORM_SPECIES_END,
 };
+static const u16 sYveltal_MegaFormSpeciesIdTable[] = {
+    SPECIES_YVELTAL_MEGA,
+    SPECIES_YVELTAL,
+    FORM_SPECIES_END,
+};
+static const u16 sKingambit_Redux_MegaFormSpeciesIdTable[] = {
+    SPECIES_KINGAMBIT_REDUX_MEGA,
+    SPECIES_KINGAMBIT,
+    FORM_SPECIES_END,
+};
