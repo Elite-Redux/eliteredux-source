@@ -1588,6 +1588,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_SOLROCK_SYSTEM] = sSolrock_SystemLevelUpLearnset,
     [SPECIES_SPECTRIER_CLOUD] = sSpectrier_CloudLevelUpLearnset,
     [SPECIES_CALYREX_CLOUD_RIDER] = sCalyrex_Cloud_RiderLevelUpLearnset,
+    [SPECIES_YVELTAL_MEGA] = sYveltalLevelUpLearnset,
     [SPECIES_ESCARGINITE_REDUX] = sEscarginite_ReduxLevelUpLearnset,
     [SPECIES_ESCARGINITE] = sEscarginiteLevelUpLearnset,
     [SPECIES_DUELUMBER] = sDuelumberLevelUpLearnset,
