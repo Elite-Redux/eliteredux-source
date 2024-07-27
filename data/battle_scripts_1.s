@@ -7433,12 +7433,16 @@ BattleScript_SunlightFaded::
 	end2
 
 BattleScript_FogContinues::
-	printstring STRINGID_FOGISDEEP
+	printstring STRINGID_FOGENDS
 	waitmessage B_WAIT_TIME_LONG
-	playanimation BS_ATTACKER, B_ANIM_FOG_CONTINUES
+	call BattleScript_OnWeatherChange
 	end2
 
-BattleScript_FogEnded::
+BattleScript_FogEnds::
+	printstring 
+	end2
+
+BattleScript_FogBlownAway::
 	printstring STRINGID_FOGBLOWNAWAY
 	waitmessage B_WAIT_TIME_LONG
 	call BattleScript_OnWeatherChange

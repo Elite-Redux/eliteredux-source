@@ -2048,14 +2048,10 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     if (IsGravityActive())
         calc = (calc * 5) / 3; // 1.66 Gravity acc boost
 
-    if (WEATHER_HAS_EFFECT && gBattleWeather & B_WEATHER_FOG_PERMANENT) 
-	{
-        if ((atkAbility != ABILITY_ILLUMINATE) && (atkAbility != ABILITY_MINDS_EYE)
-        && (atkAbility != ABILITY_RADIANCE) && (atkAbility != ABILITY_PLASMA_LAMP))
-		    calc = (calc * 80) / 100; // 20% fog loss
-	}
+    if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST))
+        calc = (calc * 75) / 100; // Equivalent to 1 stage of evasion
 
-        return min(calc, 100);
+    return min(calc, 100);
 }
 
 static void Cmd_accuracycheck(void)
@@ -8521,11 +8517,11 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
         DEFOG_CLEAR(SIDE_STATUS_TOXIC_SPIKES, toxicSpikesAmount, BattleScript_ToxicSpikesFree, 0);
         DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebAmount, BattleScript_StickyWebFree, 0);
     }
-    if (gBattleWeather & B_WEATHER_FOG_PERMANENT)
+    if (gBattleWeather & WEATHER_FOG_ANY)
     {
-        gBattleWeather &= ~B_WEATHER_FOG_PERMANENT;
+        gBattleWeather &= ~WEATHER_FOG_ANY;
         BattleScriptPushCursor();
-        gBattlescriptCurrInstr = BattleScript_FogEnded;
+        gBattlescriptCurrInstr = BattleScript_FogBlownAway;
         return TRUE;
     }
 

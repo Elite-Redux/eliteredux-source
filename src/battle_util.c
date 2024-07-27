@@ -2496,8 +2496,15 @@ u8 DoFieldEndTurnEffects(void)
             }
             gBattleStruct->turnCountersTracker++;
             break;
-        case ENDTURN_FOG: // Fog cannot be ended, unless Defog is used
-            if (gBattleWeather & B_WEATHER_FOG_PERMANENT)
+        case ENDTURN_FOG:
+            if (gBattleWeather & WEATHER_FOG_TEMPORARY && !gFieldTimers.started.weather && --gWishFutureKnock.weatherDuration == 0)
+            {
+                gBattleWeather &= ~WEATHER_FOG_ANY;
+                gBattlescriptCurrInstr = BattleScript_FogEnds;
+                BattleScriptExecute(gBattlescriptCurrInstr);
+                effect++;
+            }
+            else if (gBattleWeather & WEATHER_FOG_ANY)
             {
                 gBattlescriptCurrInstr = BattleScript_FogContinues;
                 BattleScriptExecute(gBattlescriptCurrInstr);
@@ -4413,7 +4420,7 @@ static const u16 sWeatherFlagsInfo[][3] =
     [ENUM_WEATHER_SANDSTORM]    = {WEATHER_SANDSTORM_TEMPORARY, WEATHER_SANDSTORM_PERMANENT, HOLD_EFFECT_SMOOTH_ROCK},
     [ENUM_WEATHER_HAIL]         = {WEATHER_HAIL_TEMPORARY,      WEATHER_HAIL_PERMANENT,      HOLD_EFFECT_ICY_ROCK},
     [ENUM_WEATHER_STRONG_WINDS] = {WEATHER_STRONG_WINDS,        WEATHER_STRONG_WINDS,        HOLD_EFFECT_NONE},
-    [ENUM_WEATHER_FOG]          = {B_WEATHER_FOG_PERMANENT,     B_WEATHER_FOG_PERMANENT,     HOLD_EFFECT_NONE},
+    [ENUM_WEATHER_FOG]          = {WEATHER_FOG_TEMPORARY,       WEATHER_FOG_PERMANENT,       HOLD_EFFECT_NONE},
 };
 
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
@@ -5354,11 +5361,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     effect++;
                 }
                 break;
-            //case WEATHER_FOG_DIAGONAL:  // added to Lavaridge Gym; doesn't trigger B_WEATHER_FOG_PERMANENT
+            //case WEATHER_FOG_DIAGONAL:  // added to Lavaridge Gym; doesn't trigger WEATHER_FOG_PERMANENT
             case WEATHER_FOG_HORIZONTAL:
-                if (!(gBattleWeather & B_WEATHER_FOG_PERMANENT))
+                if (!(gBattleWeather & WEATHER_FOG_PERMANENT))
                 {
-                    gBattleWeather = B_WEATHER_FOG_PERMANENT;
+                    gBattleWeather = WEATHER_FOG_PERMANENT;
                     gBattleScripting.animArg1 = B_ANIM_FOG_CONTINUES;
                     effect++;
                 }
@@ -7215,7 +7222,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
         //Sand Guard
         else if(BATTLER_HAS_ABILITY(battler, ABILITY_SAND_GUARD)
-            && gBattleWeather & B_WEATHER_SANDSTORM && WEATHER_HAS_EFFECT
+            && gBattleWeather & WEATHER_SANDSTORM_ANY && WEATHER_HAS_EFFECT
             && GetChosenMovePriority(gBattlerAttacker, battler) > 0
             && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
         {
@@ -7838,7 +7845,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		// Sand Spit
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SAND_SPIT)){
 			if (ShouldApplyOnHitAffect(battler)
-             && !(gBattleWeather & B_WEATHER_SANDSTORM && WEATHER_HAS_EFFECT))
+             && !(gBattleWeather & WEATHER_SANDSTORM_ANY && WEATHER_HAS_EFFECT))
             {
                 if (gBattleWeather & B_WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
                 {
@@ -12929,7 +12936,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 	// Sand Force
 	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SAND_FORCE)){
 		if ((moveType == TYPE_STEEL || moveType == TYPE_ROCK || moveType == TYPE_GROUND)
-            && gBattleWeather & B_WEATHER_SANDSTORM && WEATHER_HAS_EFFECT)
+            && gBattleWeather & WEATHER_SANDSTORM_ANY && WEATHER_HAS_EFFECT)
            MulModifier(&modifier, UQ_4_12(1.3));
     }
 	
@@ -13436,7 +13443,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
             MulModifier(&modifier, UQ_4_12(2.0));
         break;
     case EFFECT_SOLARBEAM:
-        if (IsBattlerWeatherAffected(battlerAtk, (WEATHER_HAIL_ANY | WEATHER_SANDSTORM_ANY | WEATHER_RAIN_ANY | B_WEATHER_FOG_PERMANENT))
+        if (IsBattlerWeatherAffected(battlerAtk, (WEATHER_HAIL_ANY | WEATHER_SANDSTORM_ANY | WEATHER_RAIN_ANY | WEATHER_FOG_ANY))
             && !BattlerHasInnate(gBattlerAttacker, ABILITY_SOLAR_FLARE)
             && GetBattlerAbility(gBattlerAttacker) != ABILITY_SOLAR_FLARE
             && !BattlerHasInnate(gBattlerAttacker, ABILITY_BIG_LEAVES)
@@ -14935,7 +14942,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
     }
     // Sand Guard
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_SAND_GUARD) 
-        && gBattleWeather & B_WEATHER_SANDSTORM && WEATHER_HAS_EFFECT
+        && gBattleWeather & WEATHER_SANDSTORM_ANY && WEATHER_HAS_EFFECT
         && IS_MOVE_SPECIAL(move))
             MulModifier(&finalModifier, UQ_4_12(0.50));
 	
@@ -15256,8 +15263,8 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
     if (moveType == TYPE_FIRE && gVolatileStructs[battlerDef].tarShot)
         mod = UQ_4_12(2.0); // super-effective
 
-    // B_WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokémon
-    if (gBattleWeather & B_WEATHER_STRONG_WINDS && WEATHER_HAS_EFFECT)
+    // WEATHER_STRONG_WINDS weakens Super Effective moves against Flying-type Pokémon
+    if (gBattleWeather & WEATHER_STRONG_WINDS && WEATHER_HAS_EFFECT)
     {
         if (defType == TYPE_FLYING && mod >= UQ_4_12(2.0))
             mod = UQ_4_12(1.0);
