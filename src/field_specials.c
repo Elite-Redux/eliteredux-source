@@ -2497,7 +2497,7 @@ void ShowScrollableMultichoice(void)
             break;
         case SCROLL_MULTI_REGION_NAMES:
             task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
-            task->tNumItems = 14;
+            task->tNumItems = 24;
             task->tLeft = 22;
             task->tTop = 1;
             task->tWidth = 12;
@@ -2542,7 +2542,7 @@ void ShowScrollableMultichoice(void)
     }
 }
 
-static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] = 
+static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH + 5] = 
 {
     [SCROLL_MULTI_NONE] = 
     {
@@ -2926,11 +2926,21 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_Alola,
         gText_Galar,
         gText_Paldea,
-        gText_Alt1,
-        gText_Alt2,
-        gText_Alt3,
-        gText_Alt4,
-        gText_Alt5
+        gText_Bug,
+        gText_Dark,
+        gText_Dragon,
+        gText_Electric,
+        gText_Fairy,
+        gText_Fighting,
+        gText_Flying,
+        gText_Ghost,
+        gText_Ground,
+        gText_Ice2,
+        gText_Normal,
+        gText_Poison2,
+        gText_Psychic,
+        gText_Rock,
+        gText_Steel,
     },
     [SCROLL_MULTI_FURFROU_TRIMS] = 
     {

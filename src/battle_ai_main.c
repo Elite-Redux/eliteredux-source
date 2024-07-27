@@ -346,6 +346,7 @@ static u8 ChooseMoveOrAction_Singles(void)
         && !(gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION))
         && !(gStatuses3[gActiveBattler] & STATUS3_ROOTED)
         && !(gStatuses4[gActiveBattler] & STATUS4_COMMANDED)
+        && !gVolatileStructs[gActiveBattler].fearTimer
         && !(gBattleTypeFlags & (BATTLE_TYPE_ARENA | BATTLE_TYPE_PALACE))
         && AI_THINKING_STRUCT->aiFlags & (AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_PREFER_BATON_PASS))
     {
@@ -1706,11 +1707,11 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 10;
             break;
         case EFFECT_FOCUS_ENERGY:
-            if (gBattleMons[battlerAtk].status2 & STATUS2_FOCUS_ENERGY)
+            if (gVolatileStructs[battlerAtk].critBoost > 1)
                 score -= 10;
             break;
         case EFFECT_DRAGON_CHEER:
-            if (gStatuses4[battlerAtk] & STATUS4_DRAGON_CHEER || gStatuses4[BATTLE_PARTNER(battlerAtk)] & STATUS4_DRAGON_CHEER)
+            if (gVolatileStructs[battlerAtk].critBoost > 1 || gVolatileStructs[BATTLE_PARTNER(battlerAtk)].critBoost > 1)
                 score -= 10;
             break;
         case EFFECT_CONFUSE:

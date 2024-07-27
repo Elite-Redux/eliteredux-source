@@ -2713,7 +2713,7 @@ static void CreateJumpMonSprite(struct PokemonJumpGfx *jumpGfx, struct PokemonJu
     u8 *unusedBuffer;
     u8 subpriority;
     u8 spriteId;
-    bool8 isShiny = FALSE;
+    u8 isShiny = FALSE;
 
     spriteTemplate = sSpriteTemplate_JumpMon;
     buffer = Alloc(0x2000);

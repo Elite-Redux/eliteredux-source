@@ -61,6 +61,14 @@
 #define INVERSE_ROOM_DURATION           5
 #define INVERSE_ROOM_DURATION_SHORT     3
 #define ROOM_DURATION_MAX               255
+#define SCREEN_DURATION                 5
+#define SCREEN_DURATION_EXTENDED        8
+#define SCREEN_DURATION_SHORT           3
+#define TAILWIND_DURATION               3
+#define TAILWIND_DURATION_SHORT         3
+#define PLEDGE_DURATION                 3
+#define SPORT_DURATION                  5
+#define QUASH_DURATION                  5
 
 #define IS_WHOLE_SIDE_ALIVE(battler)((IsBattlerAlive(battler) && IsBattlerAlive(BATTLE_PARTNER(battler))))
 #define BATTLER_HAS_ABILITY(battlerId, ability) (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, gBattlerAttacker, ability))
@@ -111,7 +119,7 @@ struct ParadoxBoost
 struct StatCopyState
 {
     bool8 inProgress:1;
-    u8 battler:2;
+    u8 battler:3;
     u8 stat:4;
     bool8 announced:1;
 };
@@ -185,6 +193,7 @@ u8 AtkCanceller_UnableToUseMove(void);
 u8 AtkCanceller_UnableToUseMove2(void);
 bool8 HasNoMonsToSwitch(u8 battlerId, u8 r1, u8 r2);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
+bool32 SetPermanentWeather(u32 weatherEnumId);
 u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 special, u16 moveArg);
 u32 GetBattlerAbility(u8 battlerId);
 bool8 BattlerAbilityIsSuppressed(u8 battlerId, u8 attacker);
@@ -324,6 +333,7 @@ bool32 CanGetFrostbite(u8 battlerId);
 bool32 CanBeConfused(u8 battlerId);
 bool32 CanBleed(u8 battlerId);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
+u8 getMonotypeChampType(void);
 
 // Move checks
 bool8 IsTwoStrikesMove(u16 move);
@@ -333,4 +343,8 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
 
 u32 GetIllusionMonSpecies(u32 battlerId);
 s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, bool32 isCrit, u8 randomFactor);
+
+//Monotype funcs
+bool8 IsBattlerCursed(u8 battler);
+void MakePlayerTeamAsleep(void);
 #endif // GUARD_BATTLE_UTIL_H

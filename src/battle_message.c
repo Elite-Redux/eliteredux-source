@@ -257,7 +257,7 @@ static const u8 sText_PkmnAnchorsItselfWith[] = _("{B_DEF_NAME_WITH_PREFIX} anch
 static const u8 sText_PkmnCutsAttackWith[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s Ability\ncuts {B_DEF_NAME_WITH_PREFIX}'s Attack!");
 static const u8 sText_PkmnPreventsStatLossWith[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s ability\nprevents stat loss!");
 static const u8 sText_PkmnHurtsWith[] = _("{B_ATK_NAME_WITH_PREFIX} was hurt by\n{B_DEF_NAME_WITH_PREFIX}'s {B_BUFF1}!");
-static const u8 sText_PkmnTraced[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} Traced\n{B_BUFF1}'s {B_BUFF2}!");
+static const u8 sText_PkmnTraced[] = _("{B_STACK_1_NAME_WITH_PREFIX} Traced\n{B_STACK_2_NAME_WITH_PREFIX}'s {B_BUFF1}!");
 const u8 gText_StatSharply[] = _("sharply ");
 const u8 gText_StatRose[] = _("rose!");
 static const u8 sText_StatHarshly[] = _("harshly ");
@@ -538,7 +538,7 @@ static const u8 sText_GravityPreventsUsage[] = _("{B_ATK_NAME_WITH_PREFIX} can't
 static const u8 sText_HealBlockPreventsUsage[] = _("{B_ATK_NAME_WITH_PREFIX} was\nprevented from healing!\p");
 static const u8 sText_NotDoneYet[] = _("This move effect is not done yet!\p");
 static const u8 sText_StickyWebUsed[] = _("A sticky web spreads out on the\nground around {B_DEF_TEAM2} team!");
-static const u8 sText_QuashSuccess[] = _("The opposing {B_ATK_NAME_WITH_PREFIX}'s move was postponed!");
+static const u8 sText_QuashSuccess[] = _("The timeline can no longer be\ndistorted!");
 static const u8 sText_PkmnBlewAwayToxicSpikes[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nToxic Spikes!");
 static const u8 sText_PkmnBlewAwayStickyWeb[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nSticky Web!");
 static const u8 sText_PkmnBlewAwayStealthRock[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nStealth Rock!");
@@ -664,7 +664,7 @@ static const u8 sText_BattlerInnateRaisedStat[] = _("{B_SCR_ACTIVE_NAME_WITH_PRE
 static const u8 sText_BattlerAddedTheType[] = _("{B_ACTIVE_NAME_WITH_PREFIX} added the {B_BUFF2}-type!");
 static const u8 sText_BattlerCoiledUp[] = _("{B_ACTIVE_NAME_WITH_PREFIX} coiled up\nand is ready to bite!");
 static const u8 sText_AttackerTypeChangedTo[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s type\nchanged to {B_BUFF1}!");
-static const u8 sText_AbilityRestoredHPALittle[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s ability\nrestored its HP a little");
+static const u8 sText_AbilityRestoredHPALittle[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s ability\nrestored it's HP a little!");
 static const u8 sText_BattlerEnvelopedItselfInAVeil[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s enveloped itself in\na veil made of water.");
 static const u8 sText_BattlerAbilitySetUpTailwind[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s Air Blower set up\nTailwind!");
 static const u8 sText_TargetPkmnHurtsWith[] = _("{B_DEF_NAME_WITH_PREFIX} was hurt by\n{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}!");
@@ -824,6 +824,36 @@ static const u8 sText_PkmnBledBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s abilit
 static const u8 sText_ThunderCage[] = _("{B_DEF_NAME_WITH_PREFIX} was trapped by\nThunder Cage!");
 static const u8 sText_SnapTrap[] = _("{B_DEF_NAME_WITH_PREFIX} was trapped by\na Snap Trap!");
 static const u8 sText_ElectroShot[] = _("{B_ATK_NAME_WITH_PREFIX} absorbed\nelectricity!");
+static const u8 sText_AnnounceMonotypeBoostNormal[] = _("Trick room and Wonder Room will alternate\neach turn for the rest of the battle!");
+static const u8 sText_AnnounceMonotypeBoostFighting[] = _("Super Effective moves will do neutral damage\nFighting moves are boosted, status moves\lare disabled and you can't switch!");
+static const u8 sText_AnnounceMonotypeBoostFlying[] = _("A mysterious air current is protecting Flying\ntype Pokémon and Boosting the\lChampion's team Speed!");
+static const u8 sText_AnnounceMonotypeBoostPoison[] = _("The field is full of Toxic Waste!\nThe Champion team's will receive\lreduced damage!");
+static const u8 sText_AnnounceMonotypeBoostGround[] = _("All the flying Pokémon seem to have problems\nstaying int he air!, the Champion's team gets\lreduced damage from Super-Effective moves!");
+static const u8 sText_AnnounceMonotypeBoostRock[] = _("The Champion's team is immune to Rock-type\nmoves, deals super-effective damage to\lRock-types, and Sandstorm is active!");
+static const u8 sText_AnnounceMonotypeBoostBug[] = _("There seems to be Sticky Webs\nand infestaton on your field side!");
+static const u8 sText_AnnounceMonotypeBoostGhost[] = _("All your team became cursed!");
+static const u8 sText_AnnounceMonotypeBoostSteel[] = _("The champion's team can break\nthe mold and has raised defenses!");
+static const u8 sText_AnnounceMonotypeBoostFire[] = _("The sunlight became extremely harsh!");
+static const u8 sText_AnnounceMonotypeBoostWater[] = _("An extremely heavy rain started!");
+static const u8 sText_AnnounceMonotypeBoostGrass[] = _("The terrain became weird!,\nthe Champion's team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostElectric[] = _("The terrain became weird!,\nthe Champion's team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostPsychic[] = _("The terrain became weird!,\nthe Champion's team will get reduced damage!");
+static const u8 sText_AnnounceMonotypeBoostIce[] = _("It's hailing, the Champion's team\nwill raise it's speed and attack!");
+static const u8 sText_AnnounceMonotypeBoostDragon[] = _("The Champion's team is\nintimidating your whole team, they can bypass\lyour immunities!");
+static const u8 sText_AnnounceMonotypeBoostDark[] = _("Your whole team became asleep!");
+static const u8 sText_AnnounceMonotypeBoostFairy[] = _("The terrain became weird!,\nthe Champion's team Fairy moves will\lhit Poison and Steel-types Super Effectively!");
+static const u8 sText_ParasiticSpores[] = _("{B_ATK_NAME_WITH_PREFIX} is coated\nin parasitic spores!");
+static const u8 sText_ParasiticSporesSpread[] = _("{B_STACK_1_NAME_WITH_PREFIX} spreads its\nspores to {B_STACK_2_NAME_WITH_PREFIX}.");
+static const u8 sText_HurtByParasiticSpores[] = _("{B_ATK_TEAM1} {B_ATK_NAME_WITH_PREFIX} was hurt\nby its parasitic spores!");
+static const u8 sText_CritCantIncrease[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s critical\nhit chance wont go any higher!");
+static const u8 sText_CritPlus1[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s critical\nhit chance rose!");
+static const u8 sText_CritPlus2[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s critical\nhit chance sharply rose!");
+static const u8 sText_CritPlus3[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} maxed\nits critical hit chance!");
+static const u8 sText_FilledWithFear[] = _("{B_DEF_NAME_WITH_PREFIX} is filled\nwith fear!");
+static const u8 sText_PowerOfAlchemy[] = _("{B_ATK_NAME_WITH_PREFIX} transforms\n{B_STACK_2_NAME_WITH_PREFIX}'s item!");
+static const u8 sText_PowerOfAlchemySludge[] = _("The {B_LAST_ITEM} turned\ninto sludge…");
+static const u8 sText_PowerOfAlchemyGold[] = _("The {B_LAST_ITEM} turned\ninto gold!");
+static const u8 sText_QuashEnds[] = _("The normalization of time comes\nto an end!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -982,6 +1012,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_new[] = _("");
 static const u8 sText_GymSkillTerrain[] = _("Something unusual modifies the terrain.");
 static const u8 sText_GymSkillSteadyStatsBoost[] = _("{B_OPPONENT_MON1_NAME}'s {STR_VAR_1} steadily increases.");
 static const u8 sText_GymSkillPosture[] = _("{B_ATK_NAME_WITH_PREFIX} position itself to {STR_VAR_2},\nits {STR_VAR_1} increase by {B_BUFF3}.");
@@ -1762,20 +1793,6 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_THUNDER_CAGE - 12] = sText_ThunderCage,
     [STRINGID_SNAP_TRAP - 12] = sText_SnapTrap,
     [STRINGID_ELECTRO_SHOT - 12] = sText_ElectroShot,
-    [STRINGID_GYMSKILL_TERRAIN - 12] = sText_GymSkillTerrain,
-    [STRINGID_GYMSKILL_STEADYSTATSBOOST - 12] = sText_GymSkillSteadyStatsBoost,
-    [STRINGID_GYMSKILL_POSTURE - 12] = sText_GymSkillPosture,
-    [STRINGID_GYMSKILL_STATUSONTEAM - 12] = sText_GymSkillStatusOnTeam,
-    [STRINGID_GYMSKILL_LASTSTAND - 12] = sText_GymSkillLastStand,
-    [STRINGID_GYMSKILL_MATBLOCK - 12] = sText_GymSkillMatBlock,
-    [STRINGID_GYMSKILL_WOEUPONYE - 12] = sText_GymSkillWoeUponYe,
-    [STRINGID_GYMSKILL_FORESIGHT - 12] = sText_GymSkillForesight,
-    [STRINGID_GYMSKILL_EMBARGO - 12] = sText_GymSkillEmbargo,
-    [STRINGID_GYMSKILL_NOPROTECT - 12] = sText_GymSkillNoProtect,
-    [STRINGID_GYMSKILL_SMACKDOWN - 12] = sText_GymSkillWindSmackDown,
-    [STRINGID_GYMSKILL_REFLECT - 12] = sText_GymSkillReflect,
-    [STRINGID_GYMSKILL_LIGHTSCREEN - 12] = sText_GymSkillLightscreen,
-    [STRINGID_GYMSKILL_LUCKY_CHANT - 12] = sText_GymSkillLuckyChant,
 };
 
 
@@ -1860,6 +1877,8 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_VIOLENT_RUSH] = STRINGID_VIOLENT_RUSH,
     [B_MSG_SWITCHIN_RAPID_RESPONSE] = STRINGID_RAPID_RESPONSE,
     [B_MSG_SWITCHIN_SHOWDOWN_MODE] = STRINGID_SHOWDOWN_MODE,
+    [B_MSG_SWITCHIN_PARASITIC_SPORES] = STRINGID_PARASITIC_SPORES,
+    [B_MSG_SWITCHIN_REJECTION] = STRINGID_QUASHSUCCESS,
 };
 
 const u16 gParadoxBoostSourceIds[] = 
@@ -2326,6 +2345,14 @@ const u16 gPrimalEvolutionAnnouncement[] =
     [B_MSG_PRIMAL_REVERSION] = STRINGID_PKMNREVERTEDTOPRIMAL,
     [B_MSG_ORIGIN_REVERSION] = STRINGID_ORIGIN_REVERSION,
     [B_MSG_CROWNED_REVERSION] = STRINGID_CROWNED_REVERSION,
+};
+
+const u16 gCritRaisedStrings[] = 
+{
+    [B_MSG_CRIT_NO_INCREASE] = STRINGID_CRIT_CANT_INCREASE,
+    [B_MSG_CRIT_INCREASE_1] = STRINGID_CRIT_PLUS_1,
+    [B_MSG_CRIT_INCREASE_2] = STRINGID_CRIT_PLUS_2,
+    [B_MSG_CRIT_INCREASE_3] = STRINGID_CRIT_PLUS_3,
 };
 
 // END OF GENERATED
@@ -4062,6 +4089,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
             break;
             case THEME_LIGHT:
             case THEME_DPPT:
+            case THEME_CLASSIC:
                 FillWindowPixelBuffer(windowId, PIXEL_FILL(10));
             break;
             default:
@@ -4090,6 +4118,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
             printerTemplate.shadowColor   = 0;  // Shadow Color
         break;
         case THEME_LIGHT:
+        case THEME_CLASSIC:
             printerTemplate.fgColor       = 3;  // Font Color
             printerTemplate.bgColor       = 10; // Background Color
             printerTemplate.shadowColor   = 0;  // Shadow Color

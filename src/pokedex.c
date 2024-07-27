@@ -4291,7 +4291,7 @@ static void HighlightSubmenuScreenSelectBarItem(u8 a, u16 b)
 #define tPersonalityLo data[14]
 #define tPersonalityHi data[15]
 
-u8 DisplayCaughtMonDexPage(u16 species, u16 dexNum, u32 otId, u32 personality, bool8 isShiny, bool8 isAlpha)
+u8 DisplayCaughtMonDexPage(u16 species, u16 dexNum, u32 otId, u32 personality, u8 isShiny, bool8 isAlpha)
 {
     u8 taskId = CreateTask(Task_DisplayCaughtMonDexPage, 0);
 
@@ -4309,7 +4309,7 @@ static void Task_DisplayCaughtMonDexPage(u8 taskId)
     u8 spriteId;
     u16 species   = gTasks[taskId].tSpecies;
     u16 dexNum    = SpeciesToNationalPokedexNum(species);
-    bool8 isShiny = gTasks[taskId].tIsShiny;
+    u8 isShiny = gTasks[taskId].tIsShiny;
     bool8 isAlpha = gTasks[taskId].tIsAlpha;
     u32 otId = getShinyOdds();
     u32 personality = 0xFF;
@@ -4415,7 +4415,7 @@ static void Task_ExitCaughtMonPage(u8 taskId)
         u8 paletteNum;
         const u32 *lzPaletteData;
         void *buffer;
-        bool8 isShiny = gTasks[taskId].tIsShiny;
+        u8 isShiny = gTasks[taskId].tIsShiny;
         bool8 isAlpha = gTasks[taskId].tIsAlpha;
 
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_1D_MAP | DISPCNT_OBJ_ON);
@@ -5065,7 +5065,7 @@ static u32 GetPokedexMonPersonality(u16 species)
 
 u16 CreateMonSpriteFromNationalDexNumber(u16 nationalNum, s16 x, s16 y, u16 paletteSlot)
 {
-    bool8 isShiny = FALSE;
+    u8 isShiny = FALSE;
     bool8 isAlpha = FALSE;
     nationalNum = NationalPokedexNumToSpecies(nationalNum);
     return CreateMonPicSprite(nationalNum, getShinyOdds(), GetPokedexMonPersonality(nationalNum), TRUE, x, y, paletteSlot, 0xFFFF, isShiny, isAlpha);

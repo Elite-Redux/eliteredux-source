@@ -888,6 +888,26 @@
 #define TRAINER_NEW_TRAINER                            883
 #define TRAINER_NEW_TRAINER1                           884
 #define TRAINER_NEW_TRAINER11                          885
+
+#define TRAINER_MONOCHAMP_NORMAL                       886
+#define TRAINER_MONOCHAMP_FIGHTING                     887
+#define TRAINER_MONOCHAMP_FLYING                       888
+#define TRAINER_MONOCHAMP_POISON                       889
+#define TRAINER_MONOCHAMP_GROUND                       890
+#define TRAINER_MONOCHAMP_ROCK                         891
+#define TRAINER_MONOCHAMP_BUG                          892
+#define TRAINER_MONOCHAMP_GHOST                        893
+#define TRAINER_MONOCHAMP_STEEL                        894
+#define TRAINER_MONOCHAMP_FIRE                         895
+#define TRAINER_MONOCHAMP_WATER                        896
+#define TRAINER_MONOCHAMP_GRASS                        897
+#define TRAINER_MONOCHAMP_ELECTRIC                     898
+#define TRAINER_MONOCHAMP_PSYCHIC                      899
+#define TRAINER_MONOCHAMP_ICE                          900
+#define TRAINER_MONOCHAMP_DRAGON                       901
+#define TRAINER_MONOCHAMP_DARK                         902
+#define TRAINER_MONOCHAMP_FAIRY                        903
+
 #define TRAINERS_COUNT                                 1600
 #define MAX_OLD_TRAINERS_COUNT                         TRAINERS_COUNT + 1
 

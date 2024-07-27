@@ -2534,10 +2534,7 @@ void CreateFrontierBrainPokemon(void)
 
         do
         {
-            do
-            {
-                j = Random32(); //should just be one while loop, but that doesn't match
-            } while (IsShinyOtIdPersonality(FRONTIER_BRAIN_OTID, j));
+            j = Random32(); //should just be one while loop, but that doesn't match
         } while (sFrontierBrainsMons[facility][symbol][i].nature != GetNatureFromPersonality(j));
         CreateMon(&gEnemyParty[monPartyId],
                   sFrontierBrainsMons[facility][symbol][i].species,

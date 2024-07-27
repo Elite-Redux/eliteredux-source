@@ -28,6 +28,7 @@
 #include "constants/weather.h"
 #include "constants/species.h"
 #include "item.h"
+#include "mgba_printf/mgba.h"
 
 extern const u8 EventScript_RepelWoreOff[];
 
@@ -434,6 +435,7 @@ u16 MaybeFindSpecialMon(u8 area)
             }
             break;
         case WILD_AREA_BERRY:
+            return SPECIES_VICTINI;
         case WILD_AREA_HONEY:
             return (Random() % 2) ? SPECIES_SHAYMIN : SPECIES_CELEBI;
         case WILD_AREA_FISHING:
@@ -448,7 +450,11 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
     u8 wildMonIndex = 0;
     u8 level;
     u16 species;
-
+    u16 loc = gSaveBlock1Ptr->location.mapNum;
+    u16 locG = gSaveBlock1Ptr->location.mapGroup;
+    if(gSaveBlock2Ptr->nuzlockeCaptures && IsRouteEncountered(loc, locG)){
+        return FALSE;
+    }
     switch (area)
     {
     case WILD_AREA_BERRY:
@@ -565,9 +571,24 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
                     break;
             }
             break;
+        case SPECIES_BASCULIN:
+            switch (Random() % 3)
+            {
+                case 0:
+                    species = SPECIES_BASCULIN;
+                case 1:
+                    species = SPECIES_BASCULIN_BLUE_STRIPED;
+                case 2:
+                    species = SPECIES_BASCULIN_WHITESTRIPED;
+            }
+            break;
 
     }
-
+    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+    {
+        MarkRouteAsEncountered(loc, locG);
+    }
+    //MarkRouteAsEncountered(loc, locG);
     CreateWildMon(species, level, TRUE);
     return TRUE;
 }
@@ -751,13 +772,13 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                 {
                     return FALSE;
                 }
-                else 
-                {
-                    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
-                    {
-                        MarkRouteAsEncountered(loc, locG);
-                    }
-                }
+                // else 
+                // {
+                //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                //     {
+                //         MarkRouteAsEncountered(loc, locG);
+                //     }
+                // }
                 roamer = &gSaveBlock1Ptr->roamer;
                 if (!IsWildLevelAllowedByRepel(roamer->level))
                     return FALSE;
@@ -776,17 +797,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                 // try a regular wild land encounter
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
-                    if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
-                    {
-                        return FALSE;
-                    }
-                    else 
-                    {
-                        if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
-                        {
-                            MarkRouteAsEncountered(loc, locG);
-                        }
-                    }
+                    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    // {
+                    //     return FALSE;
+                    // }
+                    // else 
+                    // {
+                    //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    //     {
+                    //         MarkRouteAsEncountered(loc, locG);
+                    //     }
+                    // }
                     if (TryDoDoubleWildBattle())
                     {
                         struct Pokemon mon1 = gEnemyParty[0];
@@ -840,17 +861,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
             {
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].waterMonsInfo, WILD_AREA_WATER, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
-                    if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
-                    {
-                        return FALSE;
-                    }
-                    else 
-                    {
-                        if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
-                        {
-                            MarkRouteAsEncountered(loc, locG);
-                        }
-                    }
+                    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    // {
+                    //     return FALSE;
+                    // }
+                    // else 
+                    // {
+                    //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    //     {
+                    //         MarkRouteAsEncountered(loc, locG);
+                    //     }
+                    // }
                     gIsSurfingEncounter = TRUE;
                     if (TryDoDoubleWildBattle())
                     {

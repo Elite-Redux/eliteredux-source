@@ -1083,6 +1083,31 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(PHANTOWL, gMonShinyPalette_Phantowl),
     SPECIES_SHINY_PAL(DUELUMBER, gMonShinyPalette_Duelumber),
     SPECIES_SHINY_PAL(ESCARGINITE, gMonShinyPalette_Escarginite),
+    SPECIES_SHINY_PAL(CALYREX_CLOUD_RIDER, gMonShinyPalette_Calyrex_Cloud_Rider),
+    SPECIES_SHINY_PAL(SPECTRIER_CLOUD, gMonShinyPalette_Spectrier_Cloud),
+    SPECIES_SHINY_PAL(SOLROCK_SYSTEM, gMonShinyPalette_Solrock_System),
+    SPECIES_SHINY_PAL(DARKRAI_NIGHTMARE, gMonShinyPalette_Darkrai_Nightmare),
+    SPECIES_SHINY_PAL(ESPEON_GALAXY, gMonShinyPalette_Espeon_Galaxy),
+    SPECIES_SHINY_PAL(RATICATE_REDUX, gMonShinyPalette_Raticate_Redux),
+    SPECIES_SHINY_PAL(RATTATA_REDUX, gMonShinyPalette_Rattata_Redux),
+    SPECIES_SHINY_PAL(MIMIKYU_RAYQUAZA, gMonShinyPalette_Mimikyu_Rayquaza),
+    SPECIES_SHINY_PAL(BEWEAR_ANGRY, gMonShinyPalette_Bewear_Angry),
+    SPECIES_SHINY_PAL(ABOMASNOW_SANTA, gMonShinyPalette_Abomasnow_Santa),
+    SPECIES_SHINY_PAL(WEAVILE_REDUX_MEGA, gMonShinyPalette_Weavile_Redux_Mega),
+    SPECIES_SHINY_PAL(WEAVILE_REDUX, gMonShinyPalette_Weavile_Redux),
+    SPECIES_SHINY_PAL(RIBOMBEE_REDUX_MEGA, gMonShinyPalette_Ribombee_Redux_Mega),
+    SPECIES_SHINY_PAL(RIBOMBEE_REDUX, gMonShinyPalette_Ribombee_Redux),
+    SPECIES_SHINY_PAL(MAWILE_REDUX_B_MEGA, gMonShinyPalette_Mawile_Redux_B_Mega),
+    SPECIES_SHINY_PAL(MAWILE_REDUX_B, gMonShinyPalette_Mawile_Redux_B),
+    SPECIES_SHINY_PAL(FLYGON_REDUX_MEGA, gMonShinyPalette_Flygon_Redux_Mega),
+    SPECIES_SHINY_PAL(FLYGON_REDUX, gMonShinyPalette_Flygon_Redux),
+    SPECIES_SHINY_PAL(WIGGLYTUFF_PRIMAL, gMonShinyPalette_Wigglytuff_Primal),
+    SPECIES_SHINY_PAL(VICTINI_PRIMAL, gMonShinyPalette_Victini_Primal),
+    SPECIES_SHINY_PAL(SNORLAX_PRIMAL, gMonShinyPalette_Snorlax_Primal),
+    SPECIES_SHINY_PAL(LEDIAN_PARADOX, gMonShinyPalette_Ledian_Paradox),
+    SPECIES_SHINY_PAL(DRACOVISH_MEGA, gMonShinyPalette_Dracovish_Mega),
+    SPECIES_SHINY_PAL(CHIEN_PAO_MEGA, gMonShinyPalette_Chien_Pao_Mega),
+    SPECIES_SHINY_PAL(DRAGONITE_DELIVERY, gMonShinyPalette_Dragonite_Delivery),
     SPECIES_SHINY_PAL(ARCHALUDON, gMonShinyPalette_Archaludon),
     SPECIES_SHINY_PAL(GOUGING_FIRE, gMonShinyPalette_Gouging_Fire),
     SPECIES_SHINY_PAL(IRON_BOULDER, gMonShinyPalette_Iron_Boulder),
@@ -1234,7 +1259,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(LANTURN_MEGA,      gMonShinyPalette_LanturnMega),
     SPECIES_SHINY_PAL(LAPRAS_MEGA_X,     gMonShinyPalette_LaprasMegaX),
     SPECIES_SHINY_PAL(CLAWITZER_REDUX,   gMonShinyPalette_ClawitzerRedux),
-    SPECIES_SHINY_PAL(DEWLEON,           gMonShinyPalette_Dewleon),
+    SPECIES_SHINY_PAL(KEKLEONG,           gMonShinyPalette_Kekleong),
 
     SPECIES_SHINY_PAL(RAYQUAZA_MEGA, gMonShinyPalette_RayquazaMega),
     SPECIES_SHINY_PAL(KYOGRE_PRIMAL, gMonShinyPalette_KyogrePrimal),
@@ -1566,7 +1591,21 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(NOIVERN_REDUX,   gMonShinyPalette_NoivernRedux),
     SPECIES_SHINY_PAL(INFERNAPE_REDUX, gMonShinyPalette_InfernapeRedux),
     SPECIES_SHINY_PAL(LUXRAY_REDUX,    gMonShinyPalette_LuxrayRedux),
-    SPECIES_SHINY_PAL(CASCOON_PRIMAL,     gMonShinyPalette_CascoonPrimal),
+    SPECIES_SHINY_PAL(CASCOON_PRIMAL,  gMonShinyPalette_CascoonPrimal),
+    SPECIES_SHINY_PAL(MINCCINO_REDUX, gMonShinyPalette_MinccinoRedux),
+    SPECIES_SHINY_PAL(CINCCINO_REDUX, gMonShinyPalette_CinccinoRedux),
+};
+
+                                     
+const struct CompressedSpritePalette gMonRareShinyPaletteTable[] =
+{
+    SPECIES_SHINY_PAL(CORPHISH, gMonRareShinyPalette_Corphish),
+    SPECIES_SHINY_PAL(MORPEKO, gMonRareShinyPalette_Morpeko),
+};
+
+const struct CompressedSpritePalette gMonLegendaryShinyPaletteTable[] =
+{
+    
 };
 
 const struct CompressedSpritePalette gMonShinyPaletteTableFemale[] =

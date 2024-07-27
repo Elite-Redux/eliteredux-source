@@ -5422,6 +5422,131 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_CALYREX_CLOUD_RIDER] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_SPECTRIER_CLOUD] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_SOLROCK_SYSTEM] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_DARKRAI_NIGHTMARE] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_ESPEON_GALAXY] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_RATICATE_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_RATTATA_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_MIMIKYU_RAYQUAZA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_BEWEAR_ANGRY] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_ABOMASNOW_SANTA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_WEAVILE_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_WEAVILE_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_RIBOMBEE_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_RIBOMBEE_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_MAWILE_REDUX_B_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_MAWILE_REDUX_B] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_FLYGON_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_FLYGON_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_WIGGLYTUFF_PRIMAL] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_VICTINI_PRIMAL] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_SNORLAX_PRIMAL] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_LEDIAN_PARADOX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_DRACOVISH_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_CHIEN_PAO_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_DRAGONITE_DELIVERY] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_ARCHALUDON] =
     {
         .size = 0,
@@ -6162,7 +6287,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x87,
         .y_offset = 0,
     },
-    [SPECIES_DEWLEON] =
+    [SPECIES_KEKLEONG] =
     {
         .size = 0x87,
         .y_offset = 0,
@@ -7561,6 +7686,17 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 0,
     },
+    [SPECIES_MINCCINO_REDUX] =
+    {
+        .size = 0x45,
+        .y_offset = 11,
+    },
+    [SPECIES_CINCCINO_REDUX] =
+    {
+        .size = 0x45,
+        .y_offset = 7,
+    },
+
     // Egg
     [SPECIES_EGG] =
     {

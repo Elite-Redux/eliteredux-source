@@ -179,36 +179,111 @@ static const u16 sStarterMonPaldea[STARTER_MON_COUNT] =
     SPECIES_QUAXLY,
 };
 
-static const u16 sStarterMonAlt1[STARTER_MON_COUNT] =
+static const u16 sStarterMonBug[STARTER_MON_COUNT] =
 {
-    SPECIES_LITWICK,
-    SPECIES_MACHOP,
-    SPECIES_SANDILE,
-};
-static const u16 sStarterMonAlt2[STARTER_MON_COUNT] =
-{
-    SPECIES_ZUBAT,
-    SPECIES_DIGLETT,
-    SPECIES_ELEKID,
-};
-static const u16 sStarterMonAlt3[STARTER_MON_COUNT] =
-{
+    SPECIES_BLIPBUG,
     SPECIES_TRAPINCH,
-    SPECIES_GASTLY,
-    SPECIES_TOGEPI,
+    SPECIES_VENIPEDE,
 };
-static const u16 sStarterMonAlt4[STARTER_MON_COUNT] =
+
+static const u16 sStarterMonDark[STARTER_MON_COUNT] =
 {
-    SPECIES_ABRA,
-    SPECIES_GEODUDE_ALOLAN,
-    SPECIES_PIKIPEK,
+    SPECIES_IMPIDIMP,
+    SPECIES_SANDILE,
+    SPECIES_PAWNIARD,
 };
-static const u16 sStarterMonAlt5[STARTER_MON_COUNT] =
+
+static const u16 sStarterMonDragon[STARTER_MON_COUNT] =
 {
-    SPECIES_VULPIX_ALOLAN,
     SPECIES_BAGON,
+    SPECIES_FRIGIBAX,
+    SPECIES_JANGMO_O,
+};
+
+static const u16 sStarterMonElectric[STARTER_MON_COUNT] =
+{
+    SPECIES_PAWMI,
+    SPECIES_MAGNEMITE,
+    SPECIES_GEODUDE_ALOLAN,
+};
+
+static const u16 sStarterMonFairy[STARTER_MON_COUNT] =
+{
+    SPECIES_TOGEPI,
+    SPECIES_RALTS,
+    SPECIES_TINKATINK,
+};
+
+static const u16 sStarterMonFighting[STARTER_MON_COUNT] =
+{
+    SPECIES_MACHOP,
+    SPECIES_TIMBURR,
+    SPECIES_POLIWAG,
+};
+
+static const u16 sStarterMonFlying[STARTER_MON_COUNT] =
+{
+    SPECIES_HOPPIP,
+    SPECIES_ZUBAT,
+    SPECIES_HOOTHOOT,
+};
+
+static const u16 sStarterMonGhost[STARTER_MON_COUNT] =
+{
+    SPECIES_GASTLY,
+    SPECIES_LITWICK,
+    SPECIES_HONEDGE,
+};
+
+static const u16 sStarterMonGround[STARTER_MON_COUNT] =
+{
+    SPECIES_RHYHORN,
+    SPECIES_GIBLE,
+    SPECIES_TYMPOLE,
+};
+
+static const u16 sStarterMonIce[STARTER_MON_COUNT] =
+{
+    SPECIES_SMOOCHUM,
+    SPECIES_SPHEAL,
+    SPECIES_SWINUB,
+};
+
+static const u16 sStarterMonNormal[STARTER_MON_COUNT] =
+{
+    SPECIES_ZIGZAGOON_GALARIAN,
+    SPECIES_IGGLYBUFF,
+    SPECIES_SMOLIV,
+};
+
+static const u16 sStarterMonPoison[STARTER_MON_COUNT] =
+{
+    SPECIES_NIDORAN_F,
+    SPECIES_WEEDLE,
+    SPECIES_ODDISH,
+};
+
+static const u16 sStarterMonPsychic[STARTER_MON_COUNT] =
+{
+    SPECIES_CATERPIE,
+    SPECIES_HATENNA,
     SPECIES_BELDUM,
 };
+
+static const u16 sStarterMonRock[STARTER_MON_COUNT] =
+{
+    SPECIES_ROLYCOLY,
+    SPECIES_LARVITAR,
+    SPECIES_BONSLY,
+};
+
+static const u16 sStarterMonSteel[STARTER_MON_COUNT] =
+{
+    SPECIES_KLINK,
+    SPECIES_GOOMY,
+    SPECIES_ARON,
+};
+
 
 static const struct BgTemplate sBgTemplates[3] =
 {
@@ -474,15 +549,35 @@ u16 GetStarterPokemon(u16 chosenStarterId)
         case 9:
             return sStarterMonPaldea[chosenStarterId];
         case 10:
-            return sStarterMonAlt1[chosenStarterId];
+            return sStarterMonBug[chosenStarterId];
         case 11:
-            return sStarterMonAlt2[chosenStarterId];
+            return sStarterMonDark[chosenStarterId];
         case 12:
-            return sStarterMonAlt3[chosenStarterId];
+            return sStarterMonDragon[chosenStarterId];
         case 13:
-            return sStarterMonAlt4[chosenStarterId];
+            return sStarterMonElectric[chosenStarterId];
         case 14:
-            return sStarterMonAlt5[chosenStarterId];
+            return sStarterMonFairy[chosenStarterId];
+        case 15:
+            return sStarterMonFighting[chosenStarterId];
+        case 16:
+            return sStarterMonFlying[chosenStarterId];
+        case 17:
+            return sStarterMonGhost[chosenStarterId];
+        case 18:
+            return sStarterMonGround[chosenStarterId];
+        case 19:
+            return sStarterMonIce[chosenStarterId];
+        case 20:
+            return sStarterMonNormal[chosenStarterId];
+        case 21:
+            return sStarterMonPoison[chosenStarterId];
+        case 22:
+            return sStarterMonPsychic[chosenStarterId];
+        case 23:
+            return sStarterMonRock[chosenStarterId];
+        case 24:
+            return sStarterMonSteel[chosenStarterId];
         default:
             return sStarterMonHoenn[chosenStarterId];
         }

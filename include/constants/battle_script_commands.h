@@ -228,7 +228,7 @@
 #define VARIOUS_TRY_ACTIVATE_SUPER_STRAIN       146
 #define VARIOUS_SET_DYNAMIC_TYPE                147
 #define VARIOUS_GOTO_ACTUAL_MOVE                148
-#define VARIOUS_INCREASE_TRIPLE_KICK_DAMAGE     149
+#define VARIOUS_SET_FEAR                        149
 #define VARIOUS_HANDLE_WEATHER_CHANGE           150
 #define VARIOUS_HANDLE_TERRAIN_CHANGE           151
 #define VARIOUS_GET_BATTLER                     152
@@ -244,11 +244,12 @@
 #define VARIOUS_RESTORE_TURN_BATTLERS           162
 #define VARIOUS_WRITE_STACK_BATTLER             163
 #define VARIOUS_RESTORE_STACK_STATE             164
-#define VARIOUS_SET_DRAGON_CHEER                165
+#define VARIOUS_DISABLE_RANDOM                  165
 #define VARIOUS_GOTO_IF_STAT_UP                 166
 #define VARIOUS_TRY_UPPER_HAND                  167
 #define VARIOUS_REQUIRE_CAN_DO_EFFECT           168
-#define VARIOUS_GYMSKILL_POPUP                  169
+#define VARIOUS_INCREASE_CRIT                   169
+#define VARIOUS_GYMSKILL_POPUP                  170
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0

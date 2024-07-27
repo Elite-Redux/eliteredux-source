@@ -188,7 +188,7 @@ static const u8 sMoveTwoLineDescription_MoveSing[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveSupersonic[] = _(
     "Emits bizarre sound waves\n"
-    "that may confuse the foe.");
+    "that may confuse foes.");
 
 static const u8 sMoveTwoLineDescription_MoveSonicBoom[] = _(
     "Launches shock waves that\n"
@@ -236,11 +236,11 @@ static const u8 sMoveTwoLineDescription_MoveBlizzard[] = _(
 
 static const u8 sMoveTwoLineDescription_MovePsybeam[] = _(
     "Fires a peculiar ray that\n"
-    "may confuse the foe.");
+    "lowers Special Attack.");
 
 static const u8 sMoveTwoLineDescription_MoveBubbleBeam[] = _(
     "Forcefully sprays bubbles\n"
-    "that may lower Speed.");
+    "that hit repeatedly.");
 
 static const u8 sMoveTwoLineDescription_MoveAuroraBeam[] = _(
     "A rainbow-colored beam which\n"
@@ -284,7 +284,7 @@ static const u8 sMoveTwoLineDescription_MoveAbsorb[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveMegaDrain[] = _(
     "An attack that absorbs\n"
-    "half the damage inflicted.");
+    "75% of the damage inflicted.");
 
 static const u8 sMoveTwoLineDescription_MoveLeechSeed[] = _(
     "Plants a seed on the foe to\n"
@@ -367,8 +367,8 @@ static const u8 sMoveTwoLineDescription_MoveToxic[] = _(
     "intensifying toxin.");
 
 static const u8 sMoveTwoLineDescription_MoveConfusion[] = _(
-    "A psychic attack that may\n"
-    "cause confusion.");
+    "A psychic attack that\n"
+    "causes confusion.");
 
 static const u8 sMoveTwoLineDescription_MovePsychic[] = _(
     "A powerful psychic attack\n"
@@ -391,8 +391,8 @@ static const u8 sMoveTwoLineDescription_MoveQuickAttack[] = _(
     "that always strikes first.");
 
 static const u8 sMoveTwoLineDescription_MoveRage[] = _(
-    "Raises the user's Attack\n"
-    "every time it is hit.");
+    "A rampage of 2 to 3 turns\n"
+    "that confuses the user.");
 
 static const u8 sMoveTwoLineDescription_MoveTeleport[] = _(
     "A psychic move for fleeing\n"
@@ -484,7 +484,7 @@ static const u8 sMoveTwoLineDescription_MoveEggBomb[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveLick[] = _(
     "Licks with a long tongue to\n"
-    "injure. May also paralyze.");
+    "injure. May also flinch.");
 
 static const u8 sMoveTwoLineDescription_MoveSmog[] = _(
     "An exhaust-gas attack\n"
@@ -595,8 +595,8 @@ static const u8 sMoveTwoLineDescription_MovePsywave[] = _(
     "Has +1 priority.");
 
 static const u8 sMoveTwoLineDescription_MoveSplash[] = _(
-    "It's just a splash...\n"
-    "Has no effect whatsoever.");
+    "Does more damage if the\n"
+    "user outweighs the foe.");
 
 static const u8 sMoveTwoLineDescription_MoveAcidArmor[] = _(
     "Liquifies the user's body\n"
@@ -632,7 +632,7 @@ static const u8 sMoveTwoLineDescription_MoveHyperFang[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveSharpen[] = _(
     "Reduces the polygon count\n"
-    "and raises Attack.");
+    "boosting Attack and Crit.");
 
 static const u8 sMoveTwoLineDescription_MoveConversion[] = _(
     "Changes the user's type\n"
@@ -647,8 +647,8 @@ static const u8 sMoveTwoLineDescription_MoveSuperFang[] = _(
     "and cuts half the foe's HP.");
 
 static const u8 sMoveTwoLineDescription_MoveSlash[] = _(
-    "Slashes with claws, etc. Has\n"
-    "a high critical-hit ratio.");
+    "Slashes with claws, etc.\n"
+    "Always crits.");
 
 static const u8 sMoveTwoLineDescription_MoveSubstitute[] = _(
     "Creates a decoy using 1/4\n"
@@ -683,8 +683,8 @@ static const u8 sMoveTwoLineDescription_MoveNightmare[] = _(
     "sleeping foe every turn.");
 
 static const u8 sMoveTwoLineDescription_MoveFlameWheel[] = _(
-    "A fiery charge attack that\n"
-    "may inflict a burn.");
+    "Rolls into a wheel to strike\n"
+    "with rising intensity.");
 
 static const u8 sMoveTwoLineDescription_MoveSnore[] = _(
     "A loud attack that can be\n"
@@ -752,7 +752,7 @@ static const u8 sMoveTwoLineDescription_MoveSludgeBomb[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveMudSlap[] = _(
     "Hurls mud in the foe's face\n"
-    "to reduce its accuracy.");
+    "dealing repeated damage.");
 
 static const u8 sMoveTwoLineDescription_MoveOctazooka[] = _(
     "Fires a lump of ink to\n"
@@ -815,7 +815,7 @@ static const u8 sMoveTwoLineDescription_MoveCharm[] = _(
     "reduces its Attack.");
 
 static const u8 sMoveTwoLineDescription_MoveRollout[] = _(
-    "An attack lasting 5 turns\n"
+    "Rolls into a ball to strike\n"
     "with rising intensity.");
 
 static const u8 sMoveTwoLineDescription_MoveFalseSwipe[] = _(
@@ -835,8 +835,8 @@ static const u8 sMoveTwoLineDescription_MoveSpark[] = _(
     "+2 priority. May paralyze.");
 
 static const u8 sMoveTwoLineDescription_MoveFuryCutter[] = _(
-    "An attack that intensifies\n"
-    "on each successive hit.");
+    "Slices the foe 3 times in a\n"
+    "row with rising intensity.");
 
 static const u8 sMoveTwoLineDescription_MoveSteelWing[] = _(
     "Strikes the foe with hard\n"
@@ -1199,8 +1199,8 @@ static const u8 sMoveTwoLineDescription_MoveMudSport[] = _(
     "raise electrical resistance.");
 
 static const u8 sMoveTwoLineDescription_MoveIceBall[] = _(
-    "A 5-turn attack that gains\n"
-    "power on successive hits.");
+    "Rolls into a ball to strike\n"
+    "with rising intensity.");
 
 static const u8 sMoveTwoLineDescription_MoveNeedleArm[] = _(
     "Attacks with thorny arms.\n"
@@ -1223,19 +1223,19 @@ static const u8 sMoveTwoLineDescription_MoveCrushClaw[] = _(
     "claws. May lower Defense.");
 
 static const u8 sMoveTwoLineDescription_MoveBlastBurn[] = _(
-    "Powerful, but leaves the\n"
-    "user immobile the next turn.");
+    "Powerful, but can't be\n"
+    "used next turn.");
 
 static const u8 sMoveTwoLineDescription_MoveHydroCannon[] = _(
-    "Powerful, but leaves the\n"
-    "user immobile the next turn.");
+    "Powerful, but can't be\n"
+    "used the next turn.");
 
 static const u8 sMoveTwoLineDescription_MoveMeteorMash[] = _(
     "Fires a meteor-like punch.\n"
     "May raise Attack.");
 
 static const u8 sMoveTwoLineDescription_MoveAstonish[] = _(
-    "An attack that may shock\n"
+    "An attack that shocks\n"
     "the foe into flinching.");
 
 static const u8 sMoveTwoLineDescription_MoveWeatherBall[] = _(
@@ -1347,8 +1347,8 @@ static const u8 sMoveTwoLineDescription_MoveDragonClaw[] = _(
     "claws.");
 
 static const u8 sMoveTwoLineDescription_MoveFrenzyPlant[] = _(
-    "Powerful, but leaves the\n"
-    "user immobile the next turn.");
+    "Powerful, but can't be\n"
+    "used next turn.");
 
 static const u8 sMoveTwoLineDescription_MoveBulkUp[] = _(
     "Bulks up the body to boost\n"
@@ -1363,8 +1363,8 @@ static const u8 sMoveTwoLineDescription_MoveMudShot[] = _(
     "Has +1 priority.");
 
 static const u8 sMoveTwoLineDescription_MovePoisonTail[] = _(
-    "Has a high critical-hit\n"
-    "ratio. May also poison.");
+    "Forces the target to\n"
+    "Switch. May also poison.");
 
 static const u8 sMoveTwoLineDescription_MoveCovet[] = _(
     "Cutely begs to obtain an\n"
@@ -1443,8 +1443,8 @@ static const u8 sMoveTwoLineDescription_MoveHealingWish[] = _(
     "the recipient.");
 
 static const u8 sMoveTwoLineDescription_MoveBrine[] = _(
-    "Does double damage to foes\n"
-    "with half HP.");
+    "Deals Super Effective\n"
+    "damage vs Water.");
 
 static const u8 sMoveTwoLineDescription_MoveNaturalGift[] = _(
     "The effectiveness varies\n"
@@ -1455,8 +1455,8 @@ static const u8 sMoveTwoLineDescription_MoveFeint[] = _(
     "using moves like Protect.");
 
 static const u8 sMoveTwoLineDescription_MovePluck[] = _(
-    "Eats the foe's held Berry\n"
-    "gaining its effect.");
+    "Plucks the foe's item away,\n"
+    "eating it if it's a Berry.");
 
 static const u8 sMoveTwoLineDescription_MoveTailwind[] = _(
     "Whips up a turbulent breeze\n"
@@ -1507,8 +1507,8 @@ static const u8 sMoveTwoLineDescription_MoveHealBlock[] = _(
     "recovering any HP.");
 
 static const u8 sMoveTwoLineDescription_MoveWringOut[] = _(
-    "The higher the foe's HP\n"
-    "the more damage caused.");
+    "Crushes quicker foes,\n"
+    "nullifying their ability.");
 
 static const u8 sMoveTwoLineDescription_MovePowerTrick[] = _(
     "The user swaps its Attack\n"
@@ -1547,8 +1547,8 @@ static const u8 sMoveTwoLineDescription_MoveLastResort[] = _(
     "other move has been used.");
 
 static const u8 sMoveTwoLineDescription_MoveWorrySeed[] = _(
-    "Plants a seed on the foe\n"
-    "giving it Insomnia.");
+    "Plants a seed that causes\n"
+    "Fear and gives Insomina.");
 
 static const u8 sMoveTwoLineDescription_MoveSuckerPunch[] = _(
     "Strikes first if the foe\n"
@@ -1624,7 +1624,7 @@ static const u8 sMoveTwoLineDescription_MoveDragonPulse[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveDragonRush[] = _(
     "Tackles the foe with menace.\n"
-    "May cause flinching.");
+    "Damages the user.");
 
 static const u8 sMoveTwoLineDescription_MovePowerGem[] = _(
     "Attacks with rays of light\n"
@@ -1712,7 +1712,7 @@ static const u8 sMoveTwoLineDescription_MoveZenHeadbutt[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveMirrorShot[] = _(
     "Emits a flash of energy to\n"
-    "damage and cut accuracy.");
+    "damage and cut SpDef.");
 
 static const u8 sMoveTwoLineDescription_MoveFlashCannon[] = _(
     "Releases a blast of light\n"
@@ -1768,7 +1768,7 @@ static const u8 sMoveTwoLineDescription_MoveIronHead[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveMagnetBomb[] = _(
     "Launches a magnet that\n"
-    "strikes without fail.");
+    "is Super Effective vs Steel.");
 
 static const u8 sMoveTwoLineDescription_MoveStoneEdge[] = _(
     "Stabs the foe with stones.\n"
@@ -1795,8 +1795,8 @@ static const u8 sMoveTwoLineDescription_MoveJudgment[] = _(
     "kind of Plate held.");
 
 static const u8 sMoveTwoLineDescription_MoveBugBite[] = _(
-    "Eats the foe's held Berry\n"
-    "gaining its effect.");
+    "Tears away the foe's item,\n"
+    "eating it if it's a Berry.");
 
 static const u8 sMoveTwoLineDescription_MoveChargeBeam[] = _(
     "Fires a beam of electricity.\n"
@@ -1843,8 +1843,8 @@ static const u8 sMoveTwoLineDescription_MoveLunarDance[] = _(
     "the recipient.");
 
 static const u8 sMoveTwoLineDescription_MoveCrushGrip[] = _(
-    "The higher the foe's HP\n"
-    "the more damage caused.");
+    "Crushes quicker foes,\n"
+    "nullifying their ability.");
 
 static const u8 sMoveTwoLineDescription_MoveMagmaStorm[] = _(
     "Traps the foe in a vortex\n"
@@ -1935,8 +1935,8 @@ static const u8 sMoveTwoLineDescription_MoveHeavySlam[] = _(
     "user outweighs the foe.");
 
 static const u8 sMoveTwoLineDescription_MoveSynchronoise[] = _(
-    "An odd shock wave that only\n"
-    "damages same-type foes.");
+    "An odd shock wave that\n"
+    "Matches user's second type.");
 
 static const u8 sMoveTwoLineDescription_MoveElectroBall[] = _(
     "Hurls an orb that does more\n"
@@ -1983,8 +1983,8 @@ static const u8 sMoveTwoLineDescription_MoveRound[] = _(
     "Others can join in too.");
 
 static const u8 sMoveTwoLineDescription_MoveEchoedVoice[] = _(
-    "Does more damage every turn\n"
-    "it is used.");
+    "Slices the foe 3 times in a\n"
+    "with rising intensity.");
 
 static const u8 sMoveTwoLineDescription_MoveChipAway[] = _(
     "Strikes through the foe's\n"
@@ -2039,11 +2039,11 @@ static const u8 sMoveTwoLineDescription_MoveIncinerate[] = _(
     "preventing their use.");
 
 static const u8 sMoveTwoLineDescription_MoveQuash[] = _(
-    "Suppresses the foe, making\n"
-    "it move last.");
+    "Suppresses distortions\n"
+    "that let battlers move first.");
 
 static const u8 sMoveTwoLineDescription_MoveAcrobatics[] = _(
-    "Does double damage if the\n"
+    "Does 1.5x damage if the\n"
     "user has no item.");
 
 static const u8 sMoveTwoLineDescription_MoveReflectType[] = _(
@@ -2267,8 +2267,8 @@ static const u8 sMoveTwoLineDescription_MoveTrickOrTreat[] = _(
     "making the foe Ghost-type.");
 
 static const u8 sMoveTwoLineDescription_MoveNobleRoar[] = _(
-    "Intimidates the foe, to cut\n"
-    "Attack and SpAtk");
+    "Intimidates foes, cutting\n"
+    "their Attack and SpAtk");
 
 static const u8 sMoveTwoLineDescription_MoveIonDeluge[] = _(
     "Electrifies Normal-type\n"
@@ -2656,7 +2656,7 @@ static const u8 sMoveTwoLineDescription_MoveLiquidation[] = _(
 
 static const u8 sMoveTwoLineDescription_MovePrismaticLaser[] = _(
     "A high power laser that\n"
-    "forces recharge next turn.");
+    "can't be used next turn.");
 
 static const u8 sMoveTwoLineDescription_MoveSpectralThief[] = _(
     "Steals the target's stat\n"
@@ -2884,7 +2884,7 @@ static const u8 sMoveTwoLineDescription_MoveFalseSurrender[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveMeteorAssault[] = _(
     "Attacks with a thick leek.\n"
-    "The user must then rest.");
+    "Can't be used next turn.");
 
 static const u8 sMoveTwoLineDescription_MoveEternabeam[] = _(
     "Eternatus' strongest move.\n"
@@ -3344,7 +3344,8 @@ static const u8 sMoveTwoLineDescription_MoveKarma[] = _(
     "Lowers Speed.");
 
 static const u8 sMoveTwoLineDescription_MoveChillingWater[] = _(
-    "Lowers target's attack.");
+    "Shoots ice-cold water at the\n"
+    "foe. May cause frostbite.");
 
 static const u8 sMoveTwoLineDescription_MoveGhastlyEcho[] = _(
     "Deals damage and switches out.\n"
@@ -3560,8 +3561,8 @@ static const u8 sMoveTwoLineDescription_MoveTachyonCutter[] = _(
     "Never misses.");
 
 static const u8 sMoveTwoLineDescription_MoveHardPress[] = _(
-    "The target is crushed.\n"
-    "Damage based on target's current health.");
+    "Crushes quicker foes,\n"
+    "nullifying their ability.");
 
 static const u8 sMoveTwoLineDescription_MoveDragonCheer[] = _(
     "Raises crit by one stage\n"
@@ -4731,7 +4732,7 @@ static const u8 sMoveFourLineDescription_MoveBite[] = _("The user bites with\nvi
 static const u8 sMoveFourLineDescription_MoveGrowl[] = _("The user growls in\na cute way, making\nthe foe lower its\nAttack stat.");
 static const u8 sMoveFourLineDescription_MoveRoar[] = _("The foe is made to\nswitch out with an\nally. In the wild,\nthe battle ends.");
 static const u8 sMoveFourLineDescription_MoveSing[] = _("A soothing song\nin a calming voice\nlulls the foe into\na deep slumber.");
-static const u8 sMoveFourLineDescription_MoveSupersonic[] = _("The user generates\nodd sound waves.\nIt confuses the\nfoe.");
+static const u8 sMoveFourLineDescription_MoveSupersonic[] = _("The user generates\nodd sound waves\nthat confuse foes.");
 static const u8 sMoveFourLineDescription_MoveSonicBoom[] = _("The foe is hit with\na shock wave that\nalways inflicts 20-\nHP damage.");
 static const u8 sMoveFourLineDescription_MoveDisable[] = _("For a few turns,\nit prevents the foe\nfrom using the move\nit last used.");
 static const u8 sMoveFourLineDescription_MoveAcid[] = _("Super effective vs\nSteel. Hits both foes.\n30% chance to\nlower SpDef.");
@@ -4743,19 +4744,19 @@ static const u8 sMoveFourLineDescription_MoveHydroPump[] = _("A high volume of\n
 static const u8 sMoveFourLineDescription_MoveSurf[] = _("A big wave crashes\ndown on the foe.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveIceBeam[] = _("The foe is struck\nwith an icy beam.\n10% frostbite chance.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveBlizzard[] = _("The foe is blasted\nwith a blizzard.\n10% frostbite chance.\nWeather-based.");
-static const u8 sMoveFourLineDescription_MovePsybeam[] = _("A peculiar ray is\nshot at the foe.\n10% confusion.\nMega Launcher boost");
-static const u8 sMoveFourLineDescription_MoveBubbleBeam[] = _("A spray of bubbles\nstrikes the foe.\n10% speed drop.\nMega Launcher boost");
+static const u8 sMoveFourLineDescription_MovePsybeam[] = _("A peculiar ray is\nshot at the foe.\nthat lowers SpAtk.\nMega Launcher boost");
+static const u8 sMoveFourLineDescription_MoveBubbleBeam[] = _("A spray of bubbles\nstrikes the foe\n2-5 times.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveAuroraBeam[] = _("A rainbow-colored\nattack beam.\n100% attack drop.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveHyperBeam[] = _("Does severe\ndamage.\nNeeds recharging.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MovePeck[] = _("Hits 2-5x with\na horn or beak.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveDrillPeck[] = _("A corkscrewing\nattack.\nHigh crit.\nMighty Horn boost.");
-static const u8 sMoveFourLineDescription_MoveSubmission[] = _("A reckless, full-\nbody throw attack.\n50% recoil damage.");
+static const u8 sMoveFourLineDescription_MoveSubmission[] = _("A reckless, full-\nbody throw attack.\n33% recoil damage.");
 static const u8 sMoveFourLineDescription_MoveLowKick[] = _("Inflicts more damage\non heavier foes.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveCounter[] = _("A retaliation move\nthat counters any\nphysical hit with\ndouble the damage.");
 static const u8 sMoveFourLineDescription_MoveSeismicToss[] = _("A gravity-fed throw\nthat causes damage\nmatching the user's\nlevel.");
 static const u8 sMoveFourLineDescription_MoveStrength[] = _("The foe is slugged\nat maximum power.\nDrops Defenses.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveAbsorb[] = _("An attack that\nabsorbs half the\ndamage it inflicted\nto restore HP.");
-static const u8 sMoveFourLineDescription_MoveMegaDrain[] = _("A tough attack that\ndrains half the\ndamage it inflicted\nto restore HP.");
+static const u8 sMoveFourLineDescription_MoveMegaDrain[] = _("A tough attack that\ndrains 75% of the\ndamage it inflicted\nto restore HP.");
 static const u8 sMoveFourLineDescription_MoveLeechSeed[] = _("A seed is planted\non the foe to steal\nsome HP for the \nuser on every turn.");
 static const u8 sMoveFourLineDescription_MoveGrowth[] = _("The user's body is\nforced to grow,\nraising its Atk.\nand Sp. Atk stat.");
 static const u8 sMoveFourLineDescription_MoveRazorLeaf[] = _("Both foes are hit\nwith a cutting leaf.\nAlways crits.\nKeen Edge boost.");
@@ -4776,13 +4777,13 @@ static const u8 sMoveFourLineDescription_MoveEarthquake[] = _("An earthquake tha
 static const u8 sMoveFourLineDescription_MoveFissure[] = _("The foe is dropped\ninto a fissure.\nHits both foes.");
 static const u8 sMoveFourLineDescription_MoveDig[] = _("An attack that hits\non the 2nd turn.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveToxic[] = _("A move that badly\npoisons the foe.\nIts poison damage\nworsens every turn.");
-static const u8 sMoveFourLineDescription_MoveConfusion[] = _("A weak telekinetic\nattack with a\n10% confusion\nchance.");
-static const u8 sMoveFourLineDescription_MovePsychic[] = _("A strong telekinetic\nattack. 10%\nchance to drop\nfoe's SpDef stat.");
+static const u8 sMoveFourLineDescription_MoveConfusion[] = _("A weak telekinetic\nattack that confuses\nthe foe.");
+static const u8 sMoveFourLineDescription_MovePsychic[] = _("A strong telekinetic\nattack. 20%\nchance to drop\nfoe's SpDef stat.");
 static const u8 sMoveFourLineDescription_MoveHypnosis[] = _("Hypnotic suggestion\nis used to make the\nfoe fall into a\ndeep sleep.");
 static const u8 sMoveFourLineDescription_MoveMeditate[] = _("The user meditates\nto awaken its power\nand raise its\nAttack stat.");
 static const u8 sMoveFourLineDescription_MoveAgility[] = _("The user relaxes\nand lightens its\nbody to sharply\nboost its Speed.");
 static const u8 sMoveFourLineDescription_MoveQuickAttack[] = _("An almost invisibly\nfast attack with\n+1 priority.");
-static const u8 sMoveFourLineDescription_MoveRage[] = _("An attack that\nbecomes stronger\neach time the user\nis hit in battle.");
+static const u8 sMoveFourLineDescription_MoveRage[] = _("The user thrashes\nabout for two to\nthree turns, then\nbecomes confused.");
 static const u8 sMoveFourLineDescription_MoveTeleport[] = _("Use it to flee from\nany wild Pokémon.\nAlso warps to the\nlast POKé CENTER.");
 static const u8 sMoveFourLineDescription_MoveNightShade[] = _("An attack with a\nmirage that inflicts\ndamage matching\nthe user's level.");
 static const u8 sMoveFourLineDescription_MoveMimic[] = _("The user copies the\nmove last used by\nthe foe for the\nrest of the battle.");
@@ -4804,15 +4805,15 @@ static const u8 sMoveFourLineDescription_MoveBide[] = _("The user endures\nattac
 static const u8 sMoveFourLineDescription_MoveMetronome[] = _("Waggles a finger\nand stimulates the\nbrain into using any\nmove at random.");
 static const u8 sMoveFourLineDescription_MoveMirrorMove[] = _("The user counters\nthe move last used\nby the foe with the\nsame move.");
 static const u8 sMoveFourLineDescription_MoveSelfDestruct[] = _("The user blows up\nto inflict severe\ndamage, even\nmaking itself faint.");
-static const u8 sMoveFourLineDescription_MoveEggBomb[] = _("A large egg is\nhurled with great\nforce. 10%\nburn chance.");
-static const u8 sMoveFourLineDescription_MoveLick[] = _("The foe is licked\nand hit with a long\ntongue. 30%\nparalyze chance.");
+static const u8 sMoveFourLineDescription_MoveEggBomb[] = _("Hurls an egg with\ngreat force. 30% Burn\nchance. 1.5x damage\nunder Gravity.");
+static const u8 sMoveFourLineDescription_MoveLick[] = _("The foe is licked\nand hit with a long\ntongue. 30%\nflinch chance.");
 static const u8 sMoveFourLineDescription_MoveSmog[] = _("The foe is attacked\nwith exhaust gases.\n50% poison\nchance.");
 static const u8 sMoveFourLineDescription_MoveSludge[] = _("Hurls toxic sludge\nat the foe.\nSuper-effective on\nWater. 30% poison chance.");
 static const u8 sMoveFourLineDescription_MoveBoneClub[] = _("The foe is clubbed\nwith a bone.\n30% flinch chance.");
 static const u8 sMoveFourLineDescription_MoveFireBlast[] = _("The foe is hit with\nan intense flame.\nIt has a 20%\nburn chance.");
 static const u8 sMoveFourLineDescription_MoveWaterfall[] = _("A powerful charge\nattack. 20%\nflinch chance.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveClamp[] = _("The foe is clamped\nand squeezed by\nthe user's shell for\nfour or five turns.");
-static const u8 sMoveFourLineDescription_MoveSwift[] = _("Star-shaped rays\nthat never miss are\nfired at all foes in\nbattle.");
+static const u8 sMoveFourLineDescription_MoveSwift[] = _("Special-based\nextreme speed. Has\n+2 priority.");
 static const u8 sMoveFourLineDescription_MoveSkullBash[] = _("The user raises its\nDefense in the 1st\nturn, then attacks\nin the 2nd turn.");
 static const u8 sMoveFourLineDescription_MoveSpikeCannon[] = _("Sharp spikes are\nfired two to\nfive times.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveConstrict[] = _("The foe is attacked\nwith long tentacles\nor vines. Lowers\nfoe's Speed.");
@@ -4833,7 +4834,7 @@ static const u8 sMoveFourLineDescription_MoveDizzyPunch[] = _("The foe is hit wi
 static const u8 sMoveFourLineDescription_MoveSpore[] = _("The user scatters\nbursts of fine\nspores that induce\nsleep.");
 static const u8 sMoveFourLineDescription_MoveFlash[] = _("A blast of light\nthat has 50% chance\nto drop foe's Atk.\nField-based.");
 static const u8 sMoveFourLineDescription_MovePsywave[] = _("A quick wave of\npsychic energy.\n+1 priority. 30%\nconfusion chance.");
-static const u8 sMoveFourLineDescription_MoveSplash[] = _("The user just flops\nand splashes around\nwithout having any\neffect.");
+static const u8 sMoveFourLineDescription_MoveSplash[] = _("The user slams\nthe foe with its\nheavy body. Heavier\nusers are stronger.");
 static const u8 sMoveFourLineDescription_MoveAcidArmor[] = _("The user alters its\ncells to liquefy\nitself and sharply\nraise Defense.");
 static const u8 sMoveFourLineDescription_MoveCrabhammer[] = _("A large pincer is\nused to hammer the\nfoe. It has a high\ncritical-hit ratio.");
 static const u8 sMoveFourLineDescription_MoveExplosion[] = _("The user explodes\nto inflict terrible\ndamage even while\nfainting itself.");
@@ -4842,11 +4843,11 @@ static const u8 sMoveFourLineDescription_MoveBonemerang[] = _("The user throws a
 static const u8 sMoveFourLineDescription_MoveRest[] = _("The user sleeps for\ntwo turns to fully\nrestore HP and heal\nany status problem.");
 static const u8 sMoveFourLineDescription_MoveRockSlide[] = _("Large boulders are\nhurled at the foe.\n20% flinch chance.");
 static const u8 sMoveFourLineDescription_MoveHyperFang[] = _("The foe is attacked\nwith sharp fangs.\n30% flinch chance.\nStrong Jaw boost.");
-static const u8 sMoveFourLineDescription_MoveSharpen[] = _("The user reduces\nits polygon count\nto sharpen edges\nand raise Attack.");
+static const u8 sMoveFourLineDescription_MoveSharpen[] = _("The user sharpens\nits edges. Boosting\nits highest Attack\nand its Crit.");
 static const u8 sMoveFourLineDescription_MoveConversion[] = _("The user changes\nits type to match\nthe type of one of\nits moves.");
-static const u8 sMoveFourLineDescription_MoveTriAttack[] = _("A simultaneous\n3-beam attack. 30%\nchance to paralyze,\nburn or frostbite foes.");
+static const u8 sMoveFourLineDescription_MoveTriAttack[] = _("30% chance to\nparalyze, burn, or\nfrostbite foes.\nUses highest Attack.");
 static const u8 sMoveFourLineDescription_MoveSuperFang[] = _("The user attacks\nwith sharp fangs\nand halves the\nfoe's HP.");
-static const u8 sMoveFourLineDescription_MoveSlash[] = _("The foe is slashed\nwith claws, etc.\nHigh crit.\nKeen Edge boost.");
+static const u8 sMoveFourLineDescription_MoveSlash[] = _("The foe is slashed\nwith claws, etc.\nAlways crits.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveSubstitute[] = _("The user creates a\ndecoy using one-\nquarter of its full\nHP.");
 static const u8 sMoveFourLineDescription_MoveStruggle[] = _("An attack that is\nused only if there\nis no PP. It also\nhurts the user.");
 static const u8 sMoveFourLineDescription_MoveSketch[] = _("This move copies\nthe move last used\nby the foe, then\ndisappears.");
@@ -4855,7 +4856,7 @@ static const u8 sMoveFourLineDescription_MoveThief[] = _("An attack that may\nta
 static const u8 sMoveFourLineDescription_MoveSpiderWeb[] = _("Ensnares the foe \nwith sticky string\nso it doesn't flee\nor switch out.");
 static const u8 sMoveFourLineDescription_MoveMindReader[] = _("The user predicts\nthe foe's action to\nensure its next\nattack hits.");
 static const u8 sMoveFourLineDescription_MoveNightmare[] = _("A sleeping foe is\nshown a nightmare\nthat inflicts some\ndamage every turn.");
-static const u8 sMoveFourLineDescription_MoveFlameWheel[] = _("The user makes a\nfiery charge at the\nfoe. 10%\nburn chance.");
+static const u8 sMoveFourLineDescription_MoveFlameWheel[] = _("A rolling attack\nthat becomes\nstronger each time\nit hits.");
 static const u8 sMoveFourLineDescription_MoveSnore[] = _("An attack that can\nbe used only while\nasleep. Has a\n30% flinch chance.");
 static const u8 sMoveFourLineDescription_MoveCurse[] = _("A move that works\ndifferently for the\nGHOST-type and all\nthe other types.");
 static const u8 sMoveFourLineDescription_MoveFlail[] = _("A desperate attack\nthat deals critical\ndamage when the user\nis below 50% HP.");
@@ -4867,12 +4868,12 @@ static const u8 sMoveFourLineDescription_MoveSpite[] = _("A move that cuts\n2 to
 static const u8 sMoveFourLineDescription_MovePowderSnow[] = _("Blasts the foe with\na snowy gust.\n30% chance to\nfrostbite the foe.");
 static const u8 sMoveFourLineDescription_MoveProtect[] = _("Enables the user to\nevade all attacks.\nIt may fail if used\nin succession.");
 static const u8 sMoveFourLineDescription_MoveMachPunch[] = _("A punch thrown at\nblinding speed.\n+1 priority.\nIron Fist boost.");
-static const u8 sMoveFourLineDescription_MoveScaryFace[] = _("Frightens the foe\nwith a scary face\nto sharply reduce\nits Speed.");
+static const u8 sMoveFourLineDescription_MoveScaryFace[] = _("Frightens the foe\nwith a scary face.\nInflicts fear and\nsharply lowers Speed.");
 static const u8 sMoveFourLineDescription_MoveFeintAttack[] = _("The user draws up\nclose to the foe\ndisarmingly, then\nhits without fail.");
 static const u8 sMoveFourLineDescription_MoveSweetKiss[] = _("The user kisses\nthe foe with sweet\ncuteness that\ncauses confusion.");
 static const u8 sMoveFourLineDescription_MoveBellyDrum[] = _("The user maximizes\nits Attack stat at\nthe cost of half\nits full HP.");
 static const u8 sMoveFourLineDescription_MoveSludgeBomb[] = _("Filthy sludge is\nhurled at the foe.\n30% poison\nchance.");
-static const u8 sMoveFourLineDescription_MoveMudSlap[] = _("Mud is hurled in\nthe foe's face to\ninflict damage and\nlower its accuracy.");
+static const u8 sMoveFourLineDescription_MoveMudSlap[] = _("Mud is hurled in\nthe foe's face to\ninflict damage 2-5\ntimes.");
 static const u8 sMoveFourLineDescription_MoveOctazooka[] = _("Ink is blasted in\nthe foe's face.\nLowers accuracy.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveSpikes[] = _("A trap of spikes is\nlaid around the\nfoe's party to hurt\nfoes switching in.");
 static const u8 sMoveFourLineDescription_MoveZapCannon[] = _("An electric blast is\nfired like a cannon.\nAlways paralyzes.\nMega Launcher boost");
@@ -4888,12 +4889,12 @@ static const u8 sMoveFourLineDescription_MoveSandstorm[] = _("An 8-turn sandstor
 static const u8 sMoveFourLineDescription_MoveGigaDrain[] = _("A harsh attack that\nabsorbs half the\ndamage it inflicted\nto restore HP.");
 static const u8 sMoveFourLineDescription_MoveEndure[] = _("The user endures\nany hit with 1 HP\nleft. It may fail if\nused in succession.");
 static const u8 sMoveFourLineDescription_MoveCharm[] = _("The foe is charmed\nby the user's cute\nappeals, sharply\ncutting its Attack.");
-static const u8 sMoveFourLineDescription_MoveRollout[] = _("A 5-turn rolling\nattack that becomes\nstronger each time\nit hits.");
+static const u8 sMoveFourLineDescription_MoveRollout[] = _("A rolling attack\nthat becomes\nstronger each time\nit hits.");
 static const u8 sMoveFourLineDescription_MoveFalseSwipe[] = _("Always leaves the\nfoe with at\nleast 1 HP.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveSwagger[] = _("A move that makes\nthe foe confused,\nbut also sharply\nraises its Attack.");
 static const u8 sMoveFourLineDescription_MoveMilkDrink[] = _("Heals the user by\nup to half its full\nHP. It can be used\nto heal an ally.");
 static const u8 sMoveFourLineDescription_MoveSpark[] = _("Rapid electrical\ntackle. Has 10%\nparalyze chance.\nHas +2 priority.");
-static const u8 sMoveFourLineDescription_MoveFuryCutter[] = _("Doubles power on\neach successive hit.\nMax 160 base power.\nKeen Edge boost.");
+static const u8 sMoveFourLineDescription_MoveFuryCutter[] = _("A 3-slice attack.\nMore powerful with\neach successive hit.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveSteelWing[] = _("Hits with wings\nof steel. 20% chance\nto raise Defense.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveMeanLook[] = _("The foe is fixed\nwith a mean look\nthat prevents it\nfrom escaping.");
 static const u8 sMoveFourLineDescription_MoveAttract[] = _("Inflicts infatuation\non opposite gender\nwhich halves\nAtk and SpAtk.");
@@ -4914,7 +4915,7 @@ static const u8 sMoveFourLineDescription_MoveEncore[] = _("Makes the foe use\nth
 static const u8 sMoveFourLineDescription_MovePursuit[] = _("An attack move that\nworks especially\nwell on a foe that\nis switching out.");
 static const u8 sMoveFourLineDescription_MoveRapidSpin[] = _("Frees the user from\nBind, Leech Seed,\nSpikes etc.\nUps Speed by +1.");
 static const u8 sMoveFourLineDescription_MoveSweetScent[] = _("Allures the foe to\nreduce evasiveness.\nIt also attracts\nwild Pokémon.");
-static const u8 sMoveFourLineDescription_MoveIronTail[] = _("An attack with a\nsteel-hard tail.\n30% chance to\nlower foe's Defense.");
+static const u8 sMoveFourLineDescription_MoveIronTail[] = _("An attack with a\nsteel-hard tail.\n20% chance to\nlower foe's Defense.");
 static const u8 sMoveFourLineDescription_MoveMetalClaw[] = _("The foe is attacked\nwith steel claws.\n20% chance to raise\nthe user's Attack.");
 static const u8 sMoveFourLineDescription_MoveVitalThrow[] = _("Makes the user\nattack after the\nfoe. In return,\nit will not miss.");
 static const u8 sMoveFourLineDescription_MoveMorningSun[] = _("Restores the user's\nHP. The amount of\nHP regained varies\nwith the weather.");
@@ -4975,7 +4976,7 @@ static const u8 sMoveFourLineDescription_MoveGrudge[] = _("If the user faints,\n
 static const u8 sMoveFourLineDescription_MoveSnatch[] = _("Steals the effects\nof the foe's\nhealing or status-\nchanging move.");
 static const u8 sMoveFourLineDescription_MoveSecretPower[] = _("Physical Hidden Power.\nVaries in type and\nintensity depending\non the user.");
 static const u8 sMoveFourLineDescription_MoveDive[] = _("The user dives\nunderwater and\nhits next turn.\nField-based.");
-static const u8 sMoveFourLineDescription_MoveArmThrust[] = _("Straigh-arm punches\nthat hit\ntwo to five times.\nHigh crit ratio.");
+static const u8 sMoveFourLineDescription_MoveArmThrust[] = _("Straigh-arm punches\nthat hit\ntwo to five times.");
 static const u8 sMoveFourLineDescription_MoveCamouflage[] = _("Alters the user's\ntype depending on\nthe location's\nterrain.");
 static const u8 sMoveFourLineDescription_MoveTailGlow[] = _("The user flashes a\nlight that raises\nits Sp. Atk\nstat by +3.");
 static const u8 sMoveFourLineDescription_MoveLusterPurge[] = _("A burst of light\ninjures the foe. Has\n50% chance to lower\nthe foe's SpDef.");
@@ -4984,16 +4985,16 @@ static const u8 sMoveFourLineDescription_MoveFeatherDance[] = _("The foe is cove
 static const u8 sMoveFourLineDescription_MoveTeeterDance[] = _("A wobbly dance\nthat confuses all\nthe Pokémon in\nbattle.");
 static const u8 sMoveFourLineDescription_MoveBlazeKick[] = _("A fiery kick with a\nhigh crit ratio.\n10% burn chance.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveMudSport[] = _("Weakens Electric-\ntype attacks while\nthe user is in the\nbattle.");
-static const u8 sMoveFourLineDescription_MoveIceBall[] = _("A 5-turn rolling\nattack that becomes\nstronger each time\nit rolls.");
+static const u8 sMoveFourLineDescription_MoveIceBall[] = _("A rolling attack\nthat becomes\nstronger each time\nit rolls.");
 static const u8 sMoveFourLineDescription_MoveNeedleArm[] = _("Attacks with\nthorny arms.\n30% chance to\nmake the foe flinch.");
 static const u8 sMoveFourLineDescription_MoveSlackOff[] = _("The user slacks off\nand restores its HP\nby half its full\nHP.");
 static const u8 sMoveFourLineDescription_MoveHyperVoice[] = _("The user lets loose\na horribly loud\nshout with the\npower to damage.");
 static const u8 sMoveFourLineDescription_MovePoisonFang[] = _("The foe is bitten\nwith toxic fangs.\n50% poison chance.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveCrushClaw[] = _("The foe is attacked\nwith sharp claws.\n50% chance to\nlower foe's Defense.");
-static const u8 sMoveFourLineDescription_MoveBlastBurn[] = _("The foe is hit with\na huge explosion.\nNeeds recharging.\nMega Launcher boost");
-static const u8 sMoveFourLineDescription_MoveHydroCannon[] = _("The foe is hit with\na watery cannon.\nNeeds recharging.\nMega Launcher boost");
+static const u8 sMoveFourLineDescription_MoveBlastBurn[] = _("The foe is hit with\na huge explosion.\nCan only be used\nevery-other turn.");
+static const u8 sMoveFourLineDescription_MoveHydroCannon[] = _("The foe is hit with\na watery cannon.\nCan only be used\nevery-other turn.");
 static const u8 sMoveFourLineDescription_MoveMeteorMash[] = _("Hard, fast punch.\n20% chance to\nraise user's Attack.\nIron Fist boost.");
-static const u8 sMoveFourLineDescription_MoveAstonish[] = _("An attack using a\nstartling shout.\n30% flinch chance.");
+static const u8 sMoveFourLineDescription_MoveAstonish[] = _("A startling shout that\nflinches the target.\nCan only be used on\nthe first turn.");
 static const u8 sMoveFourLineDescription_MoveWeatherBall[] = _("Varies in power and\ntype depending on\nthe weather.\nWeather-based.");
 static const u8 sMoveFourLineDescription_MoveAromatherapy[] = _("A soothing scent is\nreleased to heal\nall status problems\nin the user's party.");
 static const u8 sMoveFourLineDescription_MoveFakeTears[] = _("The user feigns\ncrying to sharply\nlower the foe's\nSp. Def stat.");
@@ -5009,7 +5010,7 @@ static const u8 sMoveFourLineDescription_MoveCosmicPower[] = _("The user absorbs
 static const u8 sMoveFourLineDescription_MoveWaterSpout[] = _("The higher the\nuser's HP, the more\npowerful it is.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveSignalBeam[] = _("Hits with a\nflashing beam.\n10% confusion chance\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveShadowPunch[] = _("A strong punch from\nthe shadows.\nAlways hits.\nIron Fist boost.");
-static const u8 sMoveFourLineDescription_MoveExtrasensory[] = _("The user attacks\nwith an odd power.\n10% flinch chance.");
+static const u8 sMoveFourLineDescription_MoveExtrasensory[] = _("Attacks with an odd\npower. 10% flinch\nchance. Never misses.\nIncreased crit rate.");
 static const u8 sMoveFourLineDescription_MoveSkyUppercut[] = _("The user attacks\nwith an uppercut\nthrown skywards.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveSandTomb[] = _("The foe is trapped\ninside a painful\nsandstorm for four\nor five turns.");
 static const u8 sMoveFourLineDescription_MoveSheerCold[] = _("This move is super\neffective on Water.\n20% frostbite chance.");
@@ -5021,14 +5022,14 @@ static const u8 sMoveFourLineDescription_MoveIronDefense[] = _("The user hardens
 static const u8 sMoveFourLineDescription_MoveBlock[] = _("The user blocks the\nfoe's way with arms\nspread wide to\nprevent escape.");
 static const u8 sMoveFourLineDescription_MoveHowl[] = _("The user howls to\nraise its spirit and\nboost its Attack\nstat.");
 static const u8 sMoveFourLineDescription_MoveDragonClaw[] = _("Sharp, huge claws\nhook and slash the\nfoe quickly.\nKeen Edge boost.");
-static const u8 sMoveFourLineDescription_MoveFrenzyPlant[] = _("The foe is hit with\nan enormous branch.\nNeeds recharging.\nMega Launcher boost");
+static const u8 sMoveFourLineDescription_MoveFrenzyPlant[] = _("The foe is hit with\nan enormous branch.\nCan only be used\nevery-other turn.");
 static const u8 sMoveFourLineDescription_MoveBulkUp[] = _("The user bulks up\nits body to boost\nboth its Attack and\nDefense stats.");
 static const u8 sMoveFourLineDescription_MoveBounce[] = _("The user bounces\non the foe on the\n2nd turn. 30%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveMudShot[] = _("Has a 10% chance\nto drop foe's Speed.\nHas +1 priority.\nMega Launcher boost");
-static const u8 sMoveFourLineDescription_MovePoisonTail[] = _("An attack with a\nhigh critical-hit\nratio. 30%\npoison chance.");
+static const u8 sMoveFourLineDescription_MovePoisonTail[] = _("An attack that forces\nthe target to switch.\n10% poison chance.");
 static const u8 sMoveFourLineDescription_MoveCovet[] = _("A cutely executed\nattack that also\nsteals the foe's\nhold item.");
 static const u8 sMoveFourLineDescription_MoveVoltTackle[] = _("The user throws an\nelectrified tackle.\n25% recoil, 10%\nparalyze chance.");
-static const u8 sMoveFourLineDescription_MoveMagicalLeaf[] = _("The foe is attacked\nwith a strange leaf\nthat cannot be\nevaded.");
+static const u8 sMoveFourLineDescription_MoveMagicalLeaf[] = _("Attacks with a\nleaf that can't be\nevaded and deals\nphysical damage.");
 static const u8 sMoveFourLineDescription_MoveWaterSport[] = _("Weakens Fire-type\nattacks while the\nuser is in the\nbattle.");
 static const u8 sMoveFourLineDescription_MoveCalmMind[] = _("The user focuses\nits mind to raise\nthe Sp. Atk and\nSp. Def stats.");
 static const u8 sMoveFourLineDescription_MoveLeafBlade[] = _("The foe is slashed\nwith a sharp leaf.\nHigh crit ratio.\nKeen Edge boost.");
@@ -5045,10 +5046,10 @@ static const u8 sMoveFourLineDescription_MoveWakeUpSlap[] = _("This attack hits\
 static const u8 sMoveFourLineDescription_MoveHammerArm[] = _("A strong, heavy\nfist is swung. Drops\nthe user's Speed.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveGyroBall[] = _("A fast spin. The\nslower the user,\nthe greater the\ndamage.");
 static const u8 sMoveFourLineDescription_MoveHealingWish[] = _("The user faints.\nIts replacement\nhas its HP restored\nand status cured.");
-static const u8 sMoveFourLineDescription_MoveBrine[] = _("If the foe's HP is\ndown to about half,\nthis will hit with\ndouble the power.");
+static const u8 sMoveFourLineDescription_MoveBrine[] = _("Deals Super Effective\ndamage vs Water.");
 static const u8 sMoveFourLineDescription_MoveNaturalGift[] = _("The user's Berry\ndetermines this\nattack's type\nand its power.");
 static const u8 sMoveFourLineDescription_MoveFeint[] = _("Hits a foe using\nmoves like Protect,\nlifting the effect\nof those moves.");
-static const u8 sMoveFourLineDescription_MovePluck[] = _("If the foe has a\nBerry, user gains\ngains its effect.\nStrong Jaw boost.");
+static const u8 sMoveFourLineDescription_MovePluck[] = _("Plucks away the foe's\nitem, eating it if it's\na Berry.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveTailwind[] = _("A turbulent whirl-\nwind that ups the\nSpeed stat of the\nparty for 4 turns.");
 static const u8 sMoveFourLineDescription_MoveAcupressure[] = _("The user applies\npressure to stress\npoints, sharply\nboosting one stat.");
 static const u8 sMoveFourLineDescription_MoveMetalBurst[] = _("The user retaliates\nwith greater power\nagainst the last\nfoe to damage it.");
@@ -5061,7 +5062,7 @@ static const u8 sMoveFourLineDescription_MoveFling[] = _("The user flings its\ni
 static const u8 sMoveFourLineDescription_MovePsychoShift[] = _("The user transfers\nits status problems\nto the target using\npsychic powers.");
 static const u8 sMoveFourLineDescription_MoveTrumpCard[] = _("The fewer PP this\nmove has, the\ngreater its power.");
 static const u8 sMoveFourLineDescription_MoveHealBlock[] = _("The foe cannot use\nany moves, held\nitems or Abilities\nthat recover HP.");
-static const u8 sMoveFourLineDescription_MoveWringOut[] = _("The user wrings the\nfoe. The more HP\nthe foe has, the\nstronger this move.");
+static const u8 sMoveFourLineDescription_MoveWringOut[] = _("This attack will\nalso negate the\nfoe's Ability if it\nhas moved already.");
 static const u8 sMoveFourLineDescription_MovePowerTrick[] = _("The user employs\nits psychic power\nto swap its Attack\nand Defense stat.");
 static const u8 sMoveFourLineDescription_MoveGastroAcid[] = _("Stomach acids are\nspewed at the foe,\nnegating the effect\nof its Ability.");
 static const u8 sMoveFourLineDescription_MoveLuckyChant[] = _("For 5 turns, the\nfoe is prevented\nfrom landing\ncritical hits.");
@@ -5069,9 +5070,9 @@ static const u8 sMoveFourLineDescription_MoveMeFirst[] = _("The foe's intended\n
 static const u8 sMoveFourLineDescription_MoveCopycat[] = _("The user tries to\nmimic the move used\nimmediately before\nit.");
 static const u8 sMoveFourLineDescription_MovePowerSwap[] = _("The user and foe\nswap any changes\nto their Attack and\nSp. Atk stats.");
 static const u8 sMoveFourLineDescription_MoveGuardSwap[] = _("The user and foe\nswap any changes\nto their Defense\nand Sp. Def stats.");
-static const u8 sMoveFourLineDescription_MovePunishment[] = _("The more the foe\nhas powered up with\nstat changes, the\nharder this hits.");
+static const u8 sMoveFourLineDescription_MovePunishment[] = _("Deals more damage\nif the user has more\nstat changes. Pierces\nincreased defenses.");
 static const u8 sMoveFourLineDescription_MoveLastResort[] = _("This fails unless\nthe user has used\nits other moves in\nthe battle already.");
-static const u8 sMoveFourLineDescription_MoveWorrySeed[] = _("A seed that causes\nworry is planted on\nthe foe, giving it\nInsomnia.");
+static const u8 sMoveFourLineDescription_MoveWorrySeed[] = _("A seed that is\nplanted that causes\nFear and gives\nInsomnia.");
 static const u8 sMoveFourLineDescription_MoveSuckerPunch[] = _("User strikes first.\nIt fails if the foe\nis not attacking.");
 static const u8 sMoveFourLineDescription_MoveToxicSpikes[] = _("Poison spikes are\nlaid at the foe's\nfeet. They poison\nfoes that switch in.");
 static const u8 sMoveFourLineDescription_MoveHeartSwap[] = _("The user employs\nits psychic powers\nto swap stat changes\nwith the target.");
@@ -5084,13 +5085,13 @@ static const u8 sMoveFourLineDescription_MoveRockPolish[] = _("The user polishes
 static const u8 sMoveFourLineDescription_MovePoisonJab[] = _("A stabbing attack\nwith 30% poison\nchance. Iron Fist\n& Mighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveDarkPulse[] = _("Releases an aura\nwith dark thoughts.\n20% flinch chance.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveNightSlash[] = _("The user waits to\nstrike, slashing\nthe foe. High crit.\nKeen Edge boost.");
-static const u8 sMoveFourLineDescription_MoveAquaTail[] = _("The user attacks\nby swinging its\ntail as if it were\na vicious wave.");
+static const u8 sMoveFourLineDescription_MoveAquaTail[] = _("The user attacks\nby swinging its\ntail.\nHigh crit chance.");
 static const u8 sMoveFourLineDescription_MoveSeedBomb[] = _("A barrage of hard-\nshelled seeds is\nslammed on the\nfoe from above.");
 static const u8 sMoveFourLineDescription_MoveAirSlash[] = _("A blade of air with\n30% flinch chance.\nKeen Edge boost.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveXScissor[] = _("Slashes with crossed\nscythes, claws etc.\nHigh crit ratio.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveBugBuzz[] = _("A harsh sound wave\nfrom the user.\n10% chance to\ndrop foe's Sp. Def. ");
 static const u8 sMoveFourLineDescription_MoveDragonPulse[] = _("The user's gaping\nmouth generates a\nshock wave attack.\nMega Launcher boost");
-static const u8 sMoveFourLineDescription_MoveDragonRush[] = _("A tackle exhibiting\ndevastating menace.\n20% flinch chance.");
+static const u8 sMoveFourLineDescription_MoveDragonRush[] = _("A tackle exhibiting\ndevastating menace.\n20% flinch chance.\n33% recoil.");
 static const u8 sMoveFourLineDescription_MovePowerGem[] = _("A ray of light is\nshot at the foe,\nsparkling as if it\nwere made of gems.");
 static const u8 sMoveFourLineDescription_MoveDrainPunch[] = _("A forceful punch\nthat recovers\n50% of the damage.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveVacuumWave[] = _("A pure vacuum is\nfired at the foe.\n+1 priority.");
@@ -5112,7 +5113,7 @@ static const u8 sMoveFourLineDescription_MoveShadowSneak[] = _("The user's shado
 static const u8 sMoveFourLineDescription_MoveMudBomb[] = _("A hard-packed mud\nball is hurled at\nthe foe. 30% chance\nto drop accuracy.");
 static const u8 sMoveFourLineDescription_MovePsychoCut[] = _("Psychic blades\nstrike the foe.\nHigh crit ratio.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveZenHeadbutt[] = _("The user focuses,\nand strikes the\nfoe. 20% flinch\nchance. Field-based.");
-static const u8 sMoveFourLineDescription_MoveMirrorShot[] = _("A flash of energy\nis loosed at the\nfoe. 30% chance to\ndrop their accuracy.");
+static const u8 sMoveFourLineDescription_MoveMirrorShot[] = _("A flash of energy\nis loosed at the\nfoe. Lowers Special\nDefense.");
 static const u8 sMoveFourLineDescription_MoveFlashCannon[] = _("Light energy attack.\n10% chance to lower\ntheir SpDef stat.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveRockClimb[] = _("A charging attack.\n20% confusion\nchance. Field-based.");
 static const u8 sMoveFourLineDescription_MoveDefog[] = _("Wind blows across\nthe battlefield,\nclearing barriers,\nobstacles, etc.");
@@ -5126,14 +5127,14 @@ static const u8 sMoveFourLineDescription_MoveRockWrecker[] = _("Hurls a massive\
 static const u8 sMoveFourLineDescription_MoveCrossPoison[] = _("Poisonous strikes.\nHigh crit ratio.\n10% poison chance.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveGunkShot[] = _("Filthy garbage is\nshot at the foe.\n30% poison chance.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveIronHead[] = _("The user slams the\nfoe with its steel-\nhard head. 30%\nflinch chance.");
-static const u8 sMoveFourLineDescription_MoveMagnetBomb[] = _("A steel bomb is\nlaunched at the\nfoe. This attack\nwill not miss.");
+static const u8 sMoveFourLineDescription_MoveMagnetBomb[] = _("Launches a magnetic\nbomb that is Super\nEffective vs Steel.\nNever misses.");
 static const u8 sMoveFourLineDescription_MoveStoneEdge[] = _("Sharpened stones\nstab the foe from\nbelow. Critical hits\nland more easily.");
 static const u8 sMoveFourLineDescription_MoveCaptivate[] = _("Foes of a different\ngender are charmed,\nharshly lowering\ntheir Sp. Atk stat.");
 static const u8 sMoveFourLineDescription_MoveStealthRock[] = _("Levitating stones\nsurround the foe.\nThis hurts foes\nthat switch in.");
 static const u8 sMoveFourLineDescription_MoveGrassKnot[] = _("A snaring grass\ntrap that inflicts\nmore damage on\nheavier foes.");
 static const u8 sMoveFourLineDescription_MoveChatter[] = _("The foe is left\nconfused by sound\nwaves of deafening\nchatter.");
 static const u8 sMoveFourLineDescription_MoveJudgment[] = _("The type of this\nmove varies with\nthe kind of Plate\nthe user is holding.");
-static const u8 sMoveFourLineDescription_MoveBugBite[] = _("If the foe has a\nBerry, user gains\ngains its effect.\nStrong Jaw boost.");
+static const u8 sMoveFourLineDescription_MoveBugBite[] = _("Removes the foe's\nitem and eats it if it's\na Berry.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveChargeBeam[] = _("Attacks with an\nelectric charge.\nRaises own SpAtk.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveWoodHammer[] = _("The user slams its\nrugged body into\nthe foe. 33%\nrecoil damage.");
 static const u8 sMoveFourLineDescription_MoveAquaJet[] = _("The user lunges at\nthe foe at a fast\nspeed. This has\n+1 priority.");
@@ -5145,7 +5146,7 @@ static const u8 sMoveFourLineDescription_MoveDoubleHit[] = _("The user slams the
 static const u8 sMoveFourLineDescription_MoveRoarOfTime[] = _("A blast which\ndistorts even time.\nForces the target\nto switch. Moves last.");
 static const u8 sMoveFourLineDescription_MoveSpacialRend[] = _("The foe, and the\nspace around it, is\ntorn. Critical hits\nland more easily.");
 static const u8 sMoveFourLineDescription_MoveLunarDance[] = _("The user faints.\nIts replacement\nhas its HP restored\nand status cured.");
-static const u8 sMoveFourLineDescription_MoveCrushGrip[] = _("The user wrings the\nfoe. The more HP\nthe foe has, the\nstronger this move.");
+static const u8 sMoveFourLineDescription_MoveCrushGrip[] = _("This attack will\nalso negate the\nfoe's Ability if it\nhas moved already.");
 static const u8 sMoveFourLineDescription_MoveMagmaStorm[] = _("The foe becomes\ntrapped within a\nmaelstrom of fire\nfor 4 or 5 turns.");
 static const u8 sMoveFourLineDescription_MoveDarkVoid[] = _("The foe is dragged\ninto a world of\ntotal darkness that\nputs it to sleep.");
 static const u8 sMoveFourLineDescription_MoveSeedFlare[] = _("A shock wave is\nloosed at the foe.\n40% chance to\nlower foe's SpDef.");
@@ -5168,7 +5169,7 @@ static const u8 sMoveFourLineDescription_MoveFlameBurst[] = _("Also hits foe's\n
 static const u8 sMoveFourLineDescription_MoveSludgeWave[] = _("It swamps the area\naround the user\nwith sludge. 10%\npoison chance.");
 static const u8 sMoveFourLineDescription_MoveQuiverDance[] = _("A beautiful, mystic\ndance which boosts\nthe user's Sp. Atk,\nSp. Def and Speed.");
 static const u8 sMoveFourLineDescription_MoveHeavySlam[] = _("The user slams\nthe foe with its\nheavy body. Heavier\nusers are stronger.");
-static const u8 sMoveFourLineDescription_MoveSynchronoise[] = _("An odd shack wave\nthat only hurts\nPokémon of the same\ntype as the user.");
+static const u8 sMoveFourLineDescription_MoveSynchronoise[] = _("An odd shockwave.\nMatches the user's\nsecond type.\nSound-based.");
 static const u8 sMoveFourLineDescription_MoveElectroBall[] = _("An electric orb is\nhurled at the foe.\nFaster users deal\ngreater damage.");
 static const u8 sMoveFourLineDescription_MoveSoak[] = _("The foe is struck\nby a torrent of\nwater which changes\nits type to Water.");
 static const u8 sMoveFourLineDescription_MoveFlameCharge[] = _("Cloaked in flames,\nthe user strikes.\nThis raises its\nSpeed stat.");
@@ -5180,7 +5181,7 @@ static const u8 sMoveFourLineDescription_MoveSimpleBeam[] = _("The user's odd\np
 static const u8 sMoveFourLineDescription_MoveEntrainment[] = _("An odd dance that\ncompels the target\nto mimic the\nAbility of the user.");
 static const u8 sMoveFourLineDescription_MoveAfterYou[] = _("The user helps the\ntarget and forces\nit to move right\nafter the user.");
 static const u8 sMoveFourLineDescription_MoveRound[] = _("A loud song attack.\nOthers can join in,\nincreasing the\npower of the move.");
-static const u8 sMoveFourLineDescription_MoveEchoedVoice[] = _("The user attacks\nwith an echoing\nvoice which builds\nin power each turn.");
+static const u8 sMoveFourLineDescription_MoveEchoedVoice[] = _("A 3-hit attack.\nMore powerful with\neach successive hit.\nSound-based.");
 static const u8 sMoveFourLineDescription_MoveChipAway[] = _("The user strikes at\nthe first opening,\nignoring its foe's\nstat changes.");
 static const u8 sMoveFourLineDescription_MoveClearSmog[] = _("A clump of special\nmud is hurled at\nthe foe, resetting\ntheir stat changes.");
 static const u8 sMoveFourLineDescription_MoveStoredPower[] = _("The more the user's\nstats are raised,\nthe greater this\nmove's power.");
@@ -5194,16 +5195,16 @@ static const u8 sMoveFourLineDescription_MoveSkyDrop[] = _("The user hurls and\n
 static const u8 sMoveFourLineDescription_MoveShiftGear[] = _("The user rotates its\ngears, raising its\nAttack and sharply\nraising its Speed.");
 static const u8 sMoveFourLineDescription_MoveCircleThrow[] = _("The foe is thrown,\ndragging out another\nPokémon into battle.\nWild Pokémon flee.");
 static const u8 sMoveFourLineDescription_MoveIncinerate[] = _("A fiery attack that\nburns up any Berry\nor Gem the foe may\nbe holding.");
-static const u8 sMoveFourLineDescription_MoveQuash[] = _("The user suppresses\nthe foe and makes\nits move go last.");
-static const u8 sMoveFourLineDescription_MoveAcrobatics[] = _("The user nimbly\nstrikes the foe.\nDouble damage\nwithout an item.");
+static const u8 sMoveFourLineDescription_MoveQuash[] = _("Suppresses most\neffects that would\naffect turn order.");
+static const u8 sMoveFourLineDescription_MoveAcrobatics[] = _("The user nimbly\nstrikes the foe.\n50% more damage\nwithout an item.");
 static const u8 sMoveFourLineDescription_MoveReflectType[] = _("The user reflects\nthe foe's type,\nmaking it the same\ntype as the foe.");
 static const u8 sMoveFourLineDescription_MoveRetaliate[] = _("This vengeful move\ndeals double damage\nif an ally fainted\nin the turn before.");
 static const u8 sMoveFourLineDescription_MoveFinalGambit[] = _("This attack causes\nthe user to faint,\nbut does damage\nequal to its HP.");
 static const u8 sMoveFourLineDescription_MoveBestow[] = _("The user passes its\nheld item to the\nfoe when the foe is\nnot holding an item.");
 static const u8 sMoveFourLineDescription_MoveInferno[] = _("The foe is engulfed\nin an intense fire.\nBurns the foe.\nMega Launcher boost");
-static const u8 sMoveFourLineDescription_MoveWaterPledge[] = _("A column of water\nthat strikes for\nmore damage if used\nwith Fire Pledge.");
-static const u8 sMoveFourLineDescription_MoveFirePledge[] = _("A column of fire\nthat strikes for\nmore damage if used\nwith Grass Pledge.");
-static const u8 sMoveFourLineDescription_MoveGrassPledge[] = _("A column of grass\nthat strikes for\nmore damage if used\nwith Water Pledge.");
+static const u8 sMoveFourLineDescription_MoveWaterPledge[] = _("Creates a rainbow\nin sun or a swamp\nwith grass. Uses\nhighest attack.");
+static const u8 sMoveFourLineDescription_MoveFirePledge[] = _("Creates a rainbow\nin rain or a firestorm\nwith grass. Uses\nhighest attack.");
+static const u8 sMoveFourLineDescription_MoveGrassPledge[] = _("Creates a swamp in\nrain and a firestorm\nin sun. Uses highest\nattack.");
 static const u8 sMoveFourLineDescription_MoveVoltSwitch[] = _("The user strikes,\nand then switches\nwith a waiting\nparty Pokémon.");
 static const u8 sMoveFourLineDescription_MoveStruggleBug[] = _("A desperate attack\nthat deals critical\ndamage when the user\nis below 50% HP.");
 static const u8 sMoveFourLineDescription_MoveBulldoze[] = _("A mighty stomp\nwhich hits all\nfoes, and lowers\ntheir Speed stat.");
@@ -5230,7 +5231,7 @@ static const u8 sMoveFourLineDescription_MoveHeadCharge[] = _("Powerful guard ha
 static const u8 sMoveFourLineDescription_MoveGearGrind[] = _("The user attacks by\nthrowing steel\ngears at its target\ntwice.");
 static const u8 sMoveFourLineDescription_MoveSearingShot[] = _("Scarlet flames\ntorch the field.\n30% burn chance.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveTechnoBlast[] = _("A beam of light\nthat changes type\ndepending on the\nuser's held Drive.");
-static const u8 sMoveFourLineDescription_MoveRelicSong[] = _("An ancient song\nthat may induce\nsleep in its\nlisteners.");
+static const u8 sMoveFourLineDescription_MoveRelicSong[] = _("An ancient song\nthat may induce\nsleep. Uses highest\nAttack stat.");
 static const u8 sMoveFourLineDescription_MoveSecretSword[] = _("The user cuts its\nfoe, oddly dealing\nphysical damage.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveGlaciate[] = _("The user blows\nfreezing cold air\nat its foes that\nlowers their Speed.");
 static const u8 sMoveFourLineDescription_MoveBoltStrike[] = _("The user strikes\nits foe with\nelectricity. 30%\nparalyze chance.");
@@ -5251,7 +5252,7 @@ static const u8 sMoveFourLineDescription_MoveStickyWeb[] = _("A sticky net woven
 static const u8 sMoveFourLineDescription_MoveFellStinger[] = _("If this attack\nknocks out a foe,\nthe user's Attack\nrises by +3.");
 static const u8 sMoveFourLineDescription_MovePhantomForce[] = _("The user vanishes.\nThe next turn, it\nstrikes the foe,\nignoring Protect.");
 static const u8 sMoveFourLineDescription_MoveTrickOrTreat[] = _("The user adds the\nGhost-type to its\nfoe by taking it\ntrick-or-treating.");
-static const u8 sMoveFourLineDescription_MoveNobleRoar[] = _("A noble roar that\nintimidates the foe\nand lowers its\nAttack and SpAtk");
+static const u8 sMoveFourLineDescription_MoveNobleRoar[] = _("A noble roar that\nintimidates foes\nand lowers their\nAttack and SpAtk");
 static const u8 sMoveFourLineDescription_MoveIonDeluge[] = _("The user disperses\ncharged particles\nwhich electrify\nNormal-type moves.");
 static const u8 sMoveFourLineDescription_MoveParabolicCharge[] = _("The user attacks\nall around it, and\nrestores HP by 25%\nof damage dealt.");
 static const u8 sMoveFourLineDescription_MoveForestsCurse[] = _("The user puts a\nforest curse on the\nfoe. The foe is now\nGrass-type as well.");
@@ -5268,7 +5269,7 @@ static const u8 sMoveFourLineDescription_MoveMistyTerrain[] = _("Weakens Dragon-
 static const u8 sMoveFourLineDescription_MoveElectrify[] = _("This move\nelectrifies the foe,\nmaking its next\nmove Electric-type.");
 static const u8 sMoveFourLineDescription_MovePlayRough[] = _("The user and foe\nplay rough, with a\n10% chance to drop\nfoe's Attack.");
 static const u8 sMoveFourLineDescription_MoveFairyWind[] = _("A quick moving cloud\nof pixie dust.\nHas +1 Priority.\nAir-based.");
-static const u8 sMoveFourLineDescription_MoveMoonblast[] = _("The power of the\nmoon strikes the\nfoe. 30% chance to\nlower foe's SpAtk.");
+static const u8 sMoveFourLineDescription_MoveMoonblast[] = _("The power of the\nmoon strikes the\nfoe. 20% chance to\nlower foe's SpAtk.");
 static const u8 sMoveFourLineDescription_MoveBoomburst[] = _("An explosively loud\nsound is let out,\nhitting all that\nsurrounds it.");
 static const u8 sMoveFourLineDescription_MoveFairyLock[] = _("For 1 turn, the\nuser locks down\nthe battlefield and\nprevents fleeing.");
 static const u8 sMoveFourLineDescription_MoveKingsShield[] = _("A protective stance\nis assumed. Contact\nby the foe lowers\nits Attack.");
@@ -5348,7 +5349,7 @@ static const u8 sMoveFourLineDescription_MoveStompingTantrum[] = _("A frustrated
 static const u8 sMoveFourLineDescription_MoveShadowBone[] = _("The foe is hit by a\nspirit bone.\n20% chance to drop\nfoe's Defense.");
 static const u8 sMoveFourLineDescription_MoveAccelerock[] = _("The user smashes\ninto the foe at\nhigh speed. Has\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveLiquidation[] = _("A full-force blast\nof water with a\n20% chance to lower\nfoe's Defense.");
-static const u8 sMoveFourLineDescription_MovePrismaticLaser[] = _("Severely damaging\nlaser beams.\nNeeds recharging.\nMega Launcher boost");
+static const u8 sMoveFourLineDescription_MovePrismaticLaser[] = _("Severely damaging\nlaser beams. Can't be\nused twice in a row.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveSpectralThief[] = _("Hiding in the foe's\nshadow, the user\nsteals its stat\nboosts and attacks.");
 static const u8 sMoveFourLineDescription_MoveSunsteelStrike[] = _("Slams into the\nfoe like a meteor.\nIgnores Abilities.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveMoongeistBeam[] = _("A sinister ray\nattacks the foe.\nIgnores Abilities.\nMega Launcher boost");
@@ -5405,7 +5406,7 @@ static const u8 sMoveFourLineDescription_MoveStrangeSteam[] = _("The user attack
 static const u8 sMoveFourLineDescription_MoveLifeDew[] = _("The user restores\nthe HP of itself\nand its allies with\nmysterious water.");
 static const u8 sMoveFourLineDescription_MoveObstruct[] = _("Protects the user,\nand harshly lowers\nthe Defense of foes\nthat make contact.");
 static const u8 sMoveFourLineDescription_MoveFalseSurrender[] = _("The user pretends\nto bow, then stabs\nits foe. This move\nnever misses.");
-static const u8 sMoveFourLineDescription_MoveMeteorAssault[] = _("Attacks wildly with\na thick leek. Needs\nrecharging. Keen Edge\nboost.");
+static const u8 sMoveFourLineDescription_MoveMeteorAssault[] = _("Attacks wildly with\na thick leek. Can only\nbe used every-other\nturn. Keen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveEternabeam[] = _("Eternatus's most\npowerful move. On\nthe next turn, the\nuser must rest.");
 static const u8 sMoveFourLineDescription_MoveSteelBeam[] = _("Fires a powerful\nbeam of steel.\n50% recoil damage.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveExpandingForce[] = _("This move's power\ngoes up and damages\nall foes while on\nPsychic Terrain.");
@@ -5454,7 +5455,7 @@ static const u8 sMoveFourLineDescription_MoveRagingFury[] = _("The user thrashes
 static const u8 sMoveFourLineDescription_MovePlasmaPulse[] = _("Double damage\nagainst status.\n10% paralyze chance.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MovePrimalBeam[] = _("An strange beam\nthat uses the user's\nAttack, may\nrise own Atk.");
 static const u8 sMoveFourLineDescription_MoveDraconicFangs[] = _("The user bites with\ndraconic fangs.\n30% flinch chance.\nStrong Jaw boost.");
-static const u8 sMoveFourLineDescription_MovePixieBeam[] = _("A powerful magic\nbeam. 30% chance\nto lower SpAtk.\nMega launcher.");
+static const u8 sMoveFourLineDescription_MovePixieBeam[] = _("A powerful magic\nbeam. 20% chance\nto lower SpAtk.\nMega launcher.");
 static const u8 sMoveFourLineDescription_MovePixieSlash[] = _("The foe is slashed\nwith a whimsical\nblade. High Crit ratio.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveSeismicBlade[] = _("The foe is slashed\nwith a tectonic\nblade. High Crit ratio.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveMountainChunk[] = _("Hurls a chunk of a\nmountain at the foe.\n30% flinch chance.\nMega Launcher boost.");
@@ -5531,7 +5532,7 @@ static const u8 sMoveFourLineDescription_MoveAquaCutter[] = _("The user expels\n
 static const u8 sMoveFourLineDescription_MoveInverseRoom[] = _("The user exerts an\nunknown power that\nreverses the type\nchart for 5 turns.");
 static const u8 sMoveFourLineDescription_MoveBlazingBone[] = _("Strikes with a fiery\nbone 2-5 times.\nHas +1 priority.\nBone-based.");
 static const u8 sMoveFourLineDescription_MoveKarma[] = _("Purges its impurities.\nLowers Speed, raises\nSpAtk and SpDef.");
-static const u8 sMoveFourLineDescription_MoveChillingWater[] = _("The user attacks\nthe foe by showering\nit with cold water.\nLowers its Atk.");
+static const u8 sMoveFourLineDescription_MoveChillingWater[] = _("Fires ice-cold water\nat the foe. 30%\nchance to inflict\nFrostbite.");
 static const u8 sMoveFourLineDescription_MoveGhastlyEcho[] = _("Deals damage and\nswitches. Switch-in\ngets 50% boost for 1\nturn. Sound-based.");
 static const u8 sMoveFourLineDescription_MoveChillyReception[] = _("The user tells a bad\njoke and switches\nwith an ally. This\nsummons hail.");
 static const u8 sMoveFourLineDescription_MoveIceSpinner[] = _("Deals damage and\nremoves active\nterrain. Field-based.");
@@ -5590,7 +5591,7 @@ static const u8 sMoveFourLineDescription_MoveFickleBeam[] = _("Shoots a beam of 
 static const u8 sMoveFourLineDescription_MoveBurningBulwark[] = _("The user's hot fur shields\nfrom attacks and burns\nany direct attacker.");
 static const u8 sMoveFourLineDescription_MoveThunderclap[] = _("User strikes first\nwith +1 priority.\nFails if target's not\nreadying an attack.");
 static const u8 sMoveFourLineDescription_MoveTachyonCutter[] = _("Launches particle\nblades twice.\nNever misses.");
-static const u8 sMoveFourLineDescription_MoveHardPress[] = _("Crushes the target with\narm, claw, or similar\nMore target HP,\nmore power.");
+static const u8 sMoveFourLineDescription_MoveHardPress[] = _("This attack will\nalso negate the\nfoe's Ability if it\nhas moved already.");
 static const u8 sMoveFourLineDescription_MoveDragonCheer[] = _("Raises crit by +1\nfor all allies.\n+2 crit for Dragons.");
 static const u8 sMoveFourLineDescription_MoveAlluringVoice[] = _("The user attacks with\nan angelic voice. Causes\nconfusion if target's\nstats were boosted.");
 static const u8 sMoveFourLineDescription_MoveMightyCleave[] = _("The user wields light\natop its head to\ncleave the target.\nHits through Protect.");

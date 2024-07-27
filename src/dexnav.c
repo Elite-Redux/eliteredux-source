@@ -3014,7 +3014,7 @@ static void Task_DexNavMain(u8 taskId)
                         {
                             couldGiveMon = FALSE;
                             species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
-                            if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT)){
+                            if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT) && !gSaveBlock2Ptr->nuzlockeCaptures){
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
                                 if(couldGiveMon < 2){
                                     VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
@@ -3070,7 +3070,7 @@ static void Task_DexNavMain(u8 taskId)
                         {
                             couldGiveMon = FALSE;
                             species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
-                            if(species != SPECIES_NONE){
+                            if(species != SPECIES_NONE && !gSaveBlock2Ptr->nuzlockeCaptures){
                                 VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
                                 if(couldGiveMon < 2){

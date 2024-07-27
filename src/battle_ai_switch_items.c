@@ -621,6 +621,8 @@ bool32 ShouldSwitch(void)
         return FALSE;
     if (gStatuses4[gActiveBattler] & STATUS4_COMMANDED)
         return FALSE;
+    if (gVolatileStructs[gActiveBattler].fearTimer)
+        return FALSE;
     if (IsAbilityPreventingEscape(gActiveBattler))
         return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_ARENA)

@@ -43,6 +43,8 @@ void SetMoveEffect(bool32 primary, u32 certain);
 bool32 CanBattlerSwitch(u32 battlerId);
 void BattleDestroyYesNoCursorAt(u8 cursorPosition);
 void BattleCreateYesNoCursorAt(u8 cursorPosition);
+void BattleDestroyYesNoCursorAt_Two(u8 cursorPosition);
+void BattleCreateYesNoCursorAt_Two(u8 cursorPosition);
 void BufferMoveToLearnIntoBattleTextBuff2(void);
 void HandleBattleWindow(u8 xStart, u8 yStart, u8 xEnd, u8 yEnd, u8 flags);
 bool8 UproarWakeUpCheck(u8 battlerId);
@@ -76,6 +78,8 @@ s8 ChangeStatBuffsImplicit(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
 s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
 u8 GetFirstFaintedPartyIndex(u8 battler);
 void SetCudChew(u32 battlerId, u32 itemId);
+void SetBattlerAffectedFlag(int attacker, int target, int ability);
+void ClearBattlerAffectedFlag(int attacker, int target, int ability);
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];

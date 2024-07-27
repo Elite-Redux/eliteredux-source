@@ -521,7 +521,7 @@ void ConditionGraphDrawMonPic(s16 index, u8 arg1)
     u32 personality, tid;
     struct PokenavSub11 *structPtr = GetSubstructPtr(POKENAV_SUBSTRUCT_CONDITION_GRAPH);
     struct PokenavSub18 *monListPtr = GetSubstructPtr(POKENAV_SUBSTRUCT_MON_LIST);
-    bool8 isShiny;
+    u8 isShiny;
     bool8 isAlpha;
 
     if (index == (IsConditionMenuSearchMode() != 0 ? monListPtr->listCount : monListPtr->listCount - 1))

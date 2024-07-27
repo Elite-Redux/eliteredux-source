@@ -95,6 +95,7 @@ enum
     FIELD_INFO_MUD_SPORT,
     FIELD_INFO_WATER_SPORT,
     FIELD_INFO_ION_DELUGE,
+    FIELD_INFO_QUASH,
     NUM_FIELD_INFO,
 };
 
@@ -169,6 +170,8 @@ enum
     STATUS_INFO_SHOWDOWN_MODE,
     STATUS_INFO_DRAGON_CHEER,
     STATUS_INFO_WRAPPED,
+    STATUS_INFO_PARASITIC_SPORES,
+    STATUS_INFO_FEAR,
     NUM_STATUS_INFO,
 };
 
@@ -543,6 +546,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 if(gFieldStatuses & STATUS_FIELD_ION_DELUGE)
                     isExtraInfoShown = TRUE;
             break;
+            case FIELD_INFO_QUASH:
+                if(gFieldTimers.quashTimer)
+                    isExtraInfoShown = TRUE;
+            break;
         }
 
         if(isExtraInfoShown){
@@ -857,6 +864,14 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 break;
                 case STATUS_INFO_WRAPPED:
                     if (gBattleMons[j].status2 & STATUS2_WRAPPED)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_PARASITIC_SPORES:
+                    if (gVolatileStructs[j].parasiticSpores)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_FEAR:
+                    if (gVolatileStructs[j].fearTimer)
                         isExtraInfoShown = TRUE;
                 break;
             }
@@ -1478,7 +1493,7 @@ static void PrintStatsTab(){
     y++;
     //Speed
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Speed);
-    y = y + 2;
+    y += 2;
     //Accuracy
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Accuracy);
     //Evasion
@@ -1512,9 +1527,14 @@ static void PrintStatsTab(){
             }
         }
         if(statorder[i + 1] == STAT_SPEED)
-            y = y + 2;
+            y += 2;
         else
             y++;
+    }
+
+    for (i = 0; i < gVolatileStructs[sMenuDataPtr->battlerId].critBoost; i++)
+    {
+        BlitBitmapToWindow(windowId, sStatUpArrow, ((x + i) * 8) + x2, (y * 8), 8, 8);
     }
 
     //Stat names
@@ -2197,14 +2217,22 @@ const u8 sText_Title_Status_Showdown_Mode_Description[]     = _("This Pokémon's
                                                                 "crits for one turn.");
 const u8 sText_Title_Status_Trapped[]                       = _("Trapped");
 const u8 sText_Title_Status_Trapped_Description[]           = _("This Pokémon can't swap and\n"
-                                                                "takes 1/8 of their maximum HP\n"
+                                                                "takes 1/8 of its maximum HP\n"
                                                                 "in damage for some turns.");
+const u8 sText_Title_Status_Parasitic_Spores[]              = _("Parasitic Spores");
+const u8 sText_Title_Status_Parasitic_Spores_Description[]  = _("This Pokémon takes 1/8 of its\n"
+                                                                "maximum HP if it is not\n"
+                                                                "Ghost-type. Spreads on contact.");
+const u8 sText_Title_Status_Fear[]                          = _("Fear");
+const u8 sText_Title_Status_Fear_Description[]              = _("For one turn this Pokémon\n"
+                                                                "can't swap and takes 50% more\n"
+                                                                "damage.");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
 #define MAX_DESCRIPTION_LINES 3
 #define LINES_BETWEEN_STUFF 1
 
-#define SHOW_SLEEPING_TURNS FALSE
+#define SHOW_SLEEPING_TURNS TRUE
 
 static void PrintStatusTab(void){
     u8 i, j;
@@ -2818,6 +2846,24 @@ static void PrintStatusTab(void){
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;
+            case STATUS_INFO_PARASITIC_SPORES:
+                StringCopy(gStringVar1, sText_Title_Status_Parasitic_Spores);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                StringCopy(gStringVar1, sText_Title_Status_Parasitic_Spores_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_FEAR:
+                StringCopy(gStringVar1, sText_Title_Status_Fear);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Description
+                StringCopy(gStringVar1, sText_Title_Status_Fear);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
         }
         if(printedInfo)
             y = y + MAX_DESCRIPTION_LINES + 2;
@@ -3151,10 +3197,10 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx){
     StringCopy(gStringVar1, gStringVar4);
     ConvertIntToDecimalStringN(gStringVar2, damageCalculation->maxDamagePercentage, STR_CONV_MODE_LEFT_ALIGN, 3);
     ConvertIntToDecimalStringN(gStringVar3, damageCalculation->chance2KO, STR_CONV_MODE_LEFT_ALIGN, 3);
-    if(damageCalculation->chance2KO >= 100)
-        StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FifthPart_Guaranteed);
-    else
+    if(targetCurrentHp > minDamage)
         StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FifthPart);
+    else
+        StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_FifthPart_Guaranteed);
 
     //Sixth Part
     StringCopy(gStringVar1, gStringVar4);
@@ -3352,6 +3398,10 @@ const u8 sText_Title_Field_Ion_Deluge[]                     = _("Ion Deluge");
 const u8 sText_Title_Field_Ion_Deluge_Description[]         = _("Causes all the Normal-type moves to\n"
                                                                 "become Electric-type instad,\n"
                                                                 "including status moves.");
+const u8 sText_Title_Field_Quash[]                          = _("Quash");
+const u8 sText_Title_Field_Quash_Description[]              = _("Suppresses priority, stat boosts,\n"
+                                                                "abilities, and field effects when\n"
+                                                                "determining turn order.");
 const u8 sText_Title_Field_No_Effect[]                      = _("Field has no effect");
 const u8 sText_Title_Field_No_Effect_Description[]          = _("The field has no special effect.");
 static void PrintFieldTab(void)
@@ -3412,7 +3462,7 @@ static void PrintFieldTab(void)
             
                 if((gBattleWeather & WEATHER_ANY)){
                     //Turns Left
-                    if(!(gBattleWeather & WEATHER_RAIN_PRIMAL) && !(gBattleWeather & WEATHER_SUN_PRIMAL)){
+                    if(!(gBattleWeather & WEATHER_RAIN_PRIMAL) && !(gBattleWeather & WEATHER_SUN_PRIMAL) && !FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)){
                         AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_Title_Field_Turns_Left);
                         ConvertIntToDecimalStringN(gStringVar1, gWishFutureKnock.weatherDuration, STR_CONV_MODE_LEFT_ALIGN, 4);
                         AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
@@ -3626,6 +3676,23 @@ static void PrintFieldTab(void)
                 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Field_Ion_Deluge_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+
+                printedInfo = TRUE;
+            break;
+            case FIELD_INFO_QUASH:
+                StringCopy(gStringVar1, sText_Title_Field_Quash);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Turns Left
+                StringCopy(gStringVar1, sText_Title_Field_Turns_Left);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                turnsLeft = gFieldTimers.quashTimer;
+                ConvertIntToDecimalStringN(gStringVar1, turnsLeft, STR_CONV_MODE_LEFT_ALIGN, 4);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                StringCopy(gStringVar1, sText_Title_Field_Quash_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
 
                 printedInfo = TRUE;

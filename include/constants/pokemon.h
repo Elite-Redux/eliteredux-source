@@ -101,6 +101,15 @@
 #define SHINY_ODDS_2 13107 // Actual probability is SHINY_ODDS/65536 -> 1/5
 #define ALPHA_ODDS   4
 
+#define LEGENDARY_SHINY_ODDS 8 // Actual probability is  LEGENDARY_SHINY_ODDS / 65536 meaning 1/8192
+#define RARE_SHINY_ODDS   16   // Actual probability is  RARE_SHINY_ODDS      / 65536 meaning 1/4096
+
+//Shiny Defines
+#define SHINY_NONE      0
+#define SHINY_VANILLA   1
+#define SHINY_RARE      2
+#define SHINY_LEGENDARY 3
+
 // Flags for Get(Box)MonData / Set(Box)MonData
 #define MON_DATA_PERSONALITY        0
 #define MON_DATA_OT_ID              1
@@ -190,6 +199,7 @@
 #define MON_DATA_IS_ALPHA          87 // New
 #define MON_DATA_IS_SHINY          88 // New
 #define MON_DATA_HP_TYPE           89 // New
+#define MON_DATA_MAX_SHINY         90 // New
 
 // Ribbon IDs used by TV and Pokénav
 #define CHAMPION_RIBBON       0

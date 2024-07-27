@@ -277,6 +277,7 @@ void SetControllerToPlayerPartner(void);
 
 // safari controller
 void SetControllerToSafari(void);
+void PrintBattleWindow_ActionPromt_Safari(void);
 
 // wally controller
 void SetControllerToWally(void);

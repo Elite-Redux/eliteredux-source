@@ -921,12 +921,7 @@ static void AnimRolloutParticle(struct Sprite *sprite)
 
 static u8 GetRolloutCounter(void)
 {
-    u8 retVal = gAnimVolatileStructPtr->rolloutTimerStartValue - gAnimVolatileStructPtr->rolloutTimer;
-    u8 var0 = retVal - 1;
-    if (var0 > 4)
-        retVal = 1;
-
-    return retVal;
+    return gAnimVolatileStructPtr->rolloutCounter + 1;
 }
 
 static void AnimRockTomb(struct Sprite *sprite)

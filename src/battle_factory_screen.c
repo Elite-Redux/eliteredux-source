@@ -2007,7 +2007,7 @@ static void Select_CreateMonSprite(void)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
-    bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, NULL);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, NULL);
     bool8 isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA, NULL);
 
     sFactorySelectScreen->monPics[1].monSpriteId = CreateMonPicSprite(species, otId, personality, TRUE, 88, 32, 15, 0xFFFF, isShiny, isAlpha);
@@ -2025,9 +2025,10 @@ static void Select_SetMonPicAnimating(bool8 animating)
 static void Select_ReshowMonSprite(void)
 {
     struct Pokemon *mon;
+    u8 isShiny;
     u16 species;
     u32 personality, otId;
-    bool8 isAlpha, isShiny;
+    bool8 isAlpha;
 
     sFactorySelectScreen->monPics[1].bgSpriteId = CreateSprite(&sSpriteTemplate_Select_MonPicBgAnim, 120, 64, 1);
     StartSpriteAffineAnim(&gSprites[sFactorySelectScreen->monPics[1].bgSpriteId], 2);
@@ -2060,7 +2061,7 @@ static void Select_CreateChosenMonsSprites(void)
                 u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
                 u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
                 u32 otId = GetMonData(mon, MON_DATA_OT_ID, NULL);
-                bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, NULL);
+                u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, NULL);
                 bool8 isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA, NULL);
 
                 sFactorySelectScreen->monPics[i].monSpriteId = CreateMonPicSprite(species, otId, personality, TRUE, (i * 72) + 16, 32, i + 13, 0xFFFF, isShiny, isAlpha);
@@ -4069,7 +4070,8 @@ static void Swap_ShowSummaryMonSprite(void)
     struct Pokemon *mon;
     u16 species;
     u32 personality, otId;
-    bool8 isShiny, isAlpha;
+    u8 isShiny;
+    bool8 isAlpha;
 
     sFactorySwapScreen->monPic.bgSpriteId = CreateSprite(&sSpriteTemplate_Swap_MonPicBgAnim, 120, 64, 1);
     StartSpriteAffineAnim(&gSprites[sFactorySwapScreen->monPic.bgSpriteId], 2);
@@ -4296,7 +4298,8 @@ static void Swap_CreateMonSprite(void)
     struct Pokemon *mon;
     u16 species;
     u32 personality, otId;
-    bool8 isShiny, isAlpha;
+    bool8 isAlpha;
+    u8 isShiny;
 
     if (!sFactorySwapScreen->inEnemyScreen)
         mon = &gPlayerParty[sFactorySwapScreen->cursorPos];

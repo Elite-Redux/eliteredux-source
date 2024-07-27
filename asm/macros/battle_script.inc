@@ -2179,8 +2179,8 @@
 	various \battler, VARIOUS_GOTO_ACTUAL_MOVE
 	.endm
 
-	.macro increasetriplekickpower battler:req
-	various \battler, VARIOUS_INCREASE_TRIPLE_KICK_DAMAGE
+	.macro setfear battler:req
+	various \battler, VARIOUS_SET_FEAR
 	.endm
 
 	.macro handleweatherchange battler:req
@@ -2275,9 +2275,8 @@
 	readtargetfromstack4
 	.endm
 
-	.macro setdragoncheer battler:req, failPtr:req
-	various \battler, VARIOUS_SET_DRAGON_CHEER
-	.4byte \failPtr
+	.macro disablerandom battler:req
+	various \battler, VARIOUS_DISABLE_RANDOM
 	.endm
 
 	.macro jumpifstatup battler:req, ptr:req
@@ -2293,6 +2292,12 @@
 	.macro requirecandoeffect battler:req, effect:req
 	various \battler, VARIOUS_REQUIRE_CAN_DO_EFFECT
 	.2byte \effect
+	.endm
+
+	.macro increasecrit battler:req amount:req failPtr=NULL
+	various \battler, VARIOUS_INCREASE_CRIT
+	.byte \amount
+	.4byte \failPtr
 	.endm
 
 	.macro twoturnmoveacceleratecheck

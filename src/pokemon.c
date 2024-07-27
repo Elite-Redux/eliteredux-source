@@ -40,6 +40,7 @@
 #include "text.h"
 #include "trainer_hill.h"
 #include "util.h"
+#include "quests.h"
 #include "constants/abilities.h"
 #include "constants/battle_frontier.h"
 #include "constants/battle_move_effects.h"
@@ -1445,7 +1446,7 @@ const u16 gSpeciesToNationalPokedexNum[NUM_SPECIES] = // Assigns all species to 
     [SPECIES_LANTURN_MEGA - 1] = NATIONAL_DEX_LANTURN,
     [SPECIES_LAPRAS_MEGA_X - 1] = NATIONAL_DEX_LAPRAS,
     [SPECIES_RIBOMBEE_MEGA- 1] = NATIONAL_DEX_RIBOMBEE,
-    [SPECIES_DEWLEON - 1] = NATIONAL_DEX_DEWGONG,
+    [SPECIES_KEKLEONG - 1] = NATIONAL_DEX_DEWGONG,
     [SPECIES_CLAWITZER_REDUX - 1] = NATIONAL_DEX_CLAWITZER,
 
     // Special Mega + Primals
@@ -3167,7 +3168,8 @@ static const u8 sMonFrontAnimIdsTable[NUM_SPECIES - 1] =
     [SPECIES_GIMMIGHOUL - 1]    = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_GHOLDENGO - 1]     = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_WO_CHIEN - 1]      = ANIM_V_SQUISH_AND_BOUNCE,
-    [SPECIES_CHIEN_PAO - 1]     = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_CHIEN_PAO - 1]      = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_CHIEN_PAO_MEGA - 1] = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_TING_LU - 1]       = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_CHI_YU - 1]        = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_ROARING_MOON - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
@@ -3186,6 +3188,30 @@ static const u8 sMonFrontAnimIdsTable[NUM_SPECIES - 1] =
     [SPECIES_PHANTOWL - 1]      = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_DUELUMBER - 1]     = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_ESCARGINITE - 1]   = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_CALYREX_CLOUD_RIDER - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_SPECTRIER_CLOUD - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_SOLROCK_SYSTEM - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_DARKRAI_NIGHTMARE - 1]   = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_ESPEON_GALAXY - 1]    = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_RATICATE_REDUX - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_RATTATA_REDUX - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_MIMIKYU_RAYQUAZA - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_BEWEAR_ANGRY - 1]   = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_ABOMASNOW_SANTA - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_WEAVILE_REDUX_MEGA - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_WEAVILE_REDUX - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_RIBOMBEE_REDUX_MEGA - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_RIBOMBEE_REDUX - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_MAWILE_REDUX_B_MEGA - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_MAWILE_REDUX_B - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_FLYGON_REDUX_MEGA - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_FLYGON_REDUX - 1]   = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_WIGGLYTUFF_PRIMAL - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_VICTINI_PRIMAL - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_SNORLAX_PRIMAL - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_LEDIAN_PARADOX - 1] = ANIM_V_SLIDE_WOBBLE,
+    [SPECIES_DRACOVISH_MEGA - 1] = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_DRAGONITE_DELIVERY - 1] = ANIM_V_SHAKE,
     [SPECIES_ARCHALUDON - 1]    = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_GOUGING_FIRE - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_IRON_BOULDER - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
@@ -3816,6 +3842,20 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     CalculateMonStats(mon);
 }
 
+u8 GenerateShinyForm(u16 species){
+    u8 numShinies = gBaseStats[species].numShinies;
+    u8 isShiny = SHINY_VANILLA;
+    u16 rand = Random(); // Max value is 65535
+
+    //Rare shiny creation
+    if(rand < LEGENDARY_SHINY_ODDS && numShinies >= SHINY_LEGENDARY)
+        isShiny = SHINY_LEGENDARY;
+    else if(rand < RARE_SHINY_ODDS && numShinies >= SHINY_RARE)
+        isShiny = SHINY_RARE;
+    
+    return isShiny;
+}
+
 void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, u8 hasFixedPersonality, u32 fixedPersonality, u8 otIdType, u32 fixedOtId)
 {
     u8 speciesName[POKEMON_NAME_LENGTH + 1];
@@ -3825,8 +3865,10 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     u8 maxIV = MAX_IV_MASK;
     u8 statIDs[NUM_STATS] = {0, 1, 2, 3, 4, 5};
     u8 hpType;
-    bool8 isShiny = FALSE;
+    u8 isShiny = SHINY_NONE;
+    u16 temp;
     bool8 isAlpha = FALSE;
+    u8 numShinies = gBaseStats[species].numShinies;
 
     ZeroBoxMonData(boxMon);
 
@@ -3856,15 +3898,17 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
 
         if (!FlagGet(FLAG_SHINY_CREATION)){
             for (i = 0; i < shinyRolls; i++)
-            {
-                if (Random() < getShinyOdds())
-                    FlagSet(FLAG_SHINY_CREATION);   // use a flag bc of CreateDexNavWildMon
+            {   
+                if (Random() < getShinyOdds()){
+                    FlagSet(FLAG_SHINY_CREATION);
+                    break;
+                }
             }
         }
 
         if (FlagGet(FLAG_SHINY_CREATION))
-            isShiny = TRUE;
-        
+            isShiny = GenerateShinyForm(species);
+
         FlagClear(FLAG_SHINY_CREATION);
     }
 
@@ -3891,10 +3935,11 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     value = ITEM_POKE_BALL;
     SetBoxMonData(boxMon, MON_DATA_POKEBALL, &value);
     SetBoxMonData(boxMon, MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);
-    SetBoxMonData(boxMon, MON_DATA_IS_SHINY, &isShiny);
+    SetBoxMonData(boxMon, MON_DATA_IS_SHINY,  &isShiny);
+    SetBoxMonData(boxMon, MON_DATA_MAX_SHINY, &isShiny);
     SetBoxMonData(boxMon, MON_DATA_IS_ALPHA, &isAlpha);
 
-    if(isShiny && VarGet(VAR_DEXNAV_SHINY_FLAG) == 1)
+    if(isShiny != SHINY_NONE && VarGet(VAR_DEXNAV_SHINY_FLAG) == 1)
         VarSet(VAR_DEXNAV_SHINY_FLAG, 2);
 
     if (fixedIV < USE_RANDOM_IVS)
@@ -5130,6 +5175,9 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
     case MON_DATA_IS_SHINY:
         retVal = boxMon->isShiny;
         break;
+    case MON_DATA_MAX_SHINY:
+        retVal = boxMon->maxShiny;
+        break;
     case MON_DATA_SPEED_DOWN:
         retVal = boxMon->speedDown;
         break;
@@ -5464,6 +5512,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     case MON_DATA_IS_SHINY:
         SET32(boxMon->isShiny);
+        break;
+    case MON_DATA_MAX_SHINY:
+        SET32(boxMon->maxShiny);
         break;
     case MON_DATA_SPEED_DOWN:
         SET32(boxMon->speedDown);
@@ -6070,9 +6121,10 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
 
             // Dire Hit
             if ((itemEffect[i] & ITEM0_DIRE_HIT)
-             && !(gBattleMons[gActiveBattler].status2 & STATUS2_FOCUS_ENERGY))
+             && gVolatileStructs[gActiveBattler].critBoost < 3)
             {
-                gBattleMons[gActiveBattler].status2 |= STATUS2_FOCUS_ENERGY;
+                int increase = min(2, 3 - gVolatileStructs[gActiveBattler].critBoost);
+                gVolatileStructs[gActiveBattler].critBoost += increase;
                 retVal = FALSE;
             }
         #ifndef ITEM_EXPANSION
@@ -6239,7 +6291,8 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             if ((itemEffect[i] & ITEM3_GUARD_SPEC)
              && gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer == 0)
             {
-                gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer = 5;
+                gSideTimers[GetBattlerSide(gActiveBattler)].started.mist = TRUE;
+                gSideTimers[GetBattlerSide(gActiveBattler)].mistTimer = SCREEN_DURATION;
                 retVal = FALSE;
             }
 
@@ -8202,9 +8255,55 @@ static void Task_PlayMapChosenOrBattleBGM(u8 taskId)
 
 #undef tSongId
 
+const u32 *GetShinySpritePal(u16 species, u32 isShiny)
+{
+    u8 numShinies = gBaseStats[species].numShinies;
+    switch(isShiny){
+        case SHINY_VANILLA:
+            return gMonShinyPaletteTable[species].data;
+        break;
+        case SHINY_RARE:
+            if(numShinies >= SHINY_RARE)
+                return gMonRareShinyPaletteTable[species].data;
+            else
+                return gMonShinyPaletteTable[species].data;
+        break;
+        case SHINY_LEGENDARY:
+            if(numShinies >= SHINY_LEGENDARY)
+                return gMonLegendaryShinyPaletteTable[species].data;
+            else
+                return gMonShinyPaletteTable[species].data;
+        break;
+    }
+    return gMonShinyPaletteTable[species].data;
+}
+
+
+const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 isShiny)
+{
+    u8 numShinies = gBaseStats[species].numShinies;
+    switch(isShiny){
+        case SHINY_VANILLA:
+            return &gMonShinyPaletteTable[species];
+        break;
+        case SHINY_RARE:
+            if(numShinies >= SHINY_RARE)
+                return &gMonRareShinyPaletteTable[species];
+            else
+                return &gMonShinyPaletteTable[species];
+        break;
+        case SHINY_LEGENDARY:
+            if(numShinies >= SHINY_RARE)
+                return &gMonLegendaryShinyPaletteTable[species];
+            else
+                return &gMonShinyPaletteTable[species];
+        break;
+    }
+    return &gMonShinyPaletteTable[species];
+}
 const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
 {
-    bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
     u32 otId = GetMonData(mon, MON_DATA_OT_ID, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
@@ -8214,7 +8313,7 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonShinyPaletteTableFemale[species].data;
         else
-            return gMonShinyPaletteTable[species].data;
+            return GetShinySpritePal(species, isShiny);
     }
     else
     {
@@ -8225,13 +8324,13 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
     }
 }
 
-const u32 *GetMonSpritePal(u16 species, u32 personality, bool8 isShiny){
-    if (isShiny)
+const u32 *GetMonSpritePal(u16 species, u32 personality, u8 isShiny){
+    if (isShiny != SHINY_NONE)
     {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return gMonShinyPaletteTableFemale[species].data;
         else
-            return gMonShinyPaletteTable[species].data;
+            return GetShinySpritePal(species, isShiny);
     }
     else
     {
@@ -8247,21 +8346,21 @@ const struct CompressedSpritePalette *GetMonSpritePalStruct(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
     u32 otId = GetMonData(mon, MON_DATA_OT_ID, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
-    bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, 0);
     return GetMonSpritePalStructFromOtIdPersonality(species, personality, isShiny);
 }
 
-const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u16 species, u32 personality, bool8 isShiny)
+const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u16 species, u32 personality, u8 isShiny)
 {
     if(isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
-    if (isShiny)
+    if (isShiny != SHINY_NONE)
     {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
             return &gMonShinyPaletteTableFemale[species];
         else
-            return &gMonShinyPaletteTable[species];
+            return GetShinySpritePalAddr(species, isShiny);
     }
     else
     {
@@ -8425,19 +8524,10 @@ void SetWildMonHeldItem(void)
     }
 }
 
-bool8 IsMonShiny(struct Pokemon *mon)
+u8 IsMonShiny(struct Pokemon *mon)
 {
-    bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, NULL);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, NULL);
     return isShiny;
-}
-
-bool8 IsShinyOtIdPersonality(u32 otId, u32 personality)
-{
-    bool8 retVal = FALSE;
-    u32 shinyValue = HIHALF(otId) ^ LOHALF(otId) ^ HIHALF(personality) ^ LOHALF(personality);
-    if (shinyValue < getShinyOdds())
-        retVal = TRUE;
-    return retVal;
 }
 
 const u8 *GetTrainerPartnerName(void)
@@ -9407,7 +9497,6 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        innate != ABILITY_STANCE_CHANGE          &&
        innate != ABILITY_RKS_SYSTEM             &&
        innate != ABILITY_BATTLE_BOND            &&
-       innate != ABILITY_POWER_CONSTRUCT        &&
        innate != ABILITY_ICE_FACE               &&
        innate != ABILITY_GULP_MISSILE           &&
        innate != ABILITY_DISGUISE               &&
@@ -9415,6 +9504,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        innate != ABILITY_AS_ONE_ICE_RIDER       &&
        innate != ABILITY_AS_ONE_SHADOW_RIDER    &&
        innate != ABILITY_CROWNED_KING           &&
+       innate != ABILITY_ZERO_TO_HERO           &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        innate != ABILITY_ANGELS_WRATH           &&
        #endif
@@ -9444,6 +9534,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
               randomizedInnate == ABILITY_AS_ONE_ICE_RIDER      ||
               randomizedInnate == ABILITY_AS_ONE_SHADOW_RIDER   ||
               randomizedInnate == ABILITY_CROWNED_KING          ||
+              randomizedInnate == ABILITY_ZERO_TO_HERO          ||
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedInnate == ABILITY_COMATOSE              ||
               randomizedInnate == ABILITY_TRUANT                ||
@@ -10121,7 +10212,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_ZARUDE_DADA                || //Unfinished|
                 (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
                 (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
-                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_DEWLEON) 
+                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KEKLEONG) 
                 );
         }
         else{
@@ -10205,7 +10296,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_MORPEKO_HANGRY             ||
                 (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
                 (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
-                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_DEWLEON) 
+                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KEKLEONG) 
                 );
         }
     }
@@ -10850,6 +10941,12 @@ const u8 gSpeciesNameLongWormadamTrash[] = _("Wormadam Trash");
 const u8 gSpeciesNameLongMeloettaAria[] = _("Meloetta Aria");
 const u8 gSpeciesNameLongMeloettaPirouette[] = _("Meloetta Pirouette");
 
+const u8 gSpeciesNameLongUrsalunaBloodmoon[] = _("Ursaluna Bloodmoon");
+
+const u8 gSpeciesNameLongBasculin[] = _("Basculin Red");
+const u8 gSpeciesNameLongBasculinBlue[] = _("Basculin Blue");
+const u8 gSpeciesNameLongBasculinWhite[] = _("Basculin White");
+
 const u8* GetSpeciesLongName(u16 species)
 {
     switch (species)
@@ -10984,6 +11081,16 @@ const u8* GetSpeciesLongName(u16 species)
             return gSpeciesNameLongMeloettaAria;
         case SPECIES_MELOETTA_PIROUETTE:
             return gSpeciesNameLongMeloettaPirouette;
+        
+        case SPECIES_URSALUNA_BLOODMOON:
+            return gSpeciesNameLongUrsalunaBloodmoon;
+
+        case SPECIES_BASCULIN:
+            return gSpeciesNameLongBasculin;
+        case SPECIES_BASCULIN_BLUE_STRIPED:
+            return gSpeciesNameLongBasculinBlue;
+        case SPECIES_BASCULIN_WHITESTRIPED:
+            return gSpeciesNameLongBasculinWhite;
 
         default:
             return NULL;
@@ -11255,4 +11362,62 @@ u16 GetEvolutionForMon(struct Pokemon *mon, u8 num){
 	}
 
 	return SPECIES_NONE;
+}
+
+//If this is ever used
+#define NEW_SHINY_VARIANTS 2
+
+struct ShinyUnlock
+{
+    u16 flag;
+    u16 questComplete;
+    u16 variable;
+    u8 value;
+};
+
+static const struct ShinyUnlock sShinyUnlock[NUM_SPECIES][NEW_SHINY_VARIANTS] =
+{
+    [SPECIES_BULBASAUR] = {
+        {   
+            //First Shiny
+            .flag = FLAG_RECEIVED_POKEDEX_FROM_BIRCH, 
+            .questComplete = 0, 
+            .variable = 0, 
+            .value = 0
+        },
+        {   
+            //Second Shiny
+            .flag = 0, 
+            .questComplete = SIDE_QUEST_1, 
+            .variable = 0, 
+            .value = 0
+        },
+    },
+    [SPECIES_CHARMANDER] = {
+        {   
+            //First Shiny
+            .flag = 0, 
+            .questComplete = 0, 
+            .variable = VAR_BIRCH_STATE, 
+            .value = 3
+        },
+        {   
+            //Second Shiny
+            .variable = VAR_BIRCH_STATE, 
+            .value = 3
+        },
+    },
+};
+
+bool8 isShinyVariantUnlocked(u16 species, u8 variant){
+    struct ShinyUnlock sSpeciesShinyUnlock = sShinyUnlock[species][variant];
+
+    if(sSpeciesShinyUnlock.flag != 0 && !FlagGet(sSpeciesShinyUnlock.flag))
+        return FALSE;
+    else if (sSpeciesShinyUnlock.questComplete != 0 && GetSetQuestFlag(sSpeciesShinyUnlock.questComplete, FLAG_GET_COMPLETED))
+        return FALSE;
+    else if (sSpeciesShinyUnlock.variable != 0 && VarGet(sSpeciesShinyUnlock.variable) >= sSpeciesShinyUnlock.value)
+        return FALSE;
+    else
+        return TRUE;
 }

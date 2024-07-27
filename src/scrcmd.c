@@ -2773,7 +2773,7 @@ bool8 ScrCmd_givecustommon(struct ScriptContext *ctx)
     u16 move2 = ScriptReadHalfword(ctx);
     u16 move3 = ScriptReadHalfword(ctx);
     u16 move4 = ScriptReadHalfword(ctx);
-    bool8 isShiny = ScriptReadByte(ctx);
+    u8 isShiny = ScriptReadByte(ctx);
 
     u8 evs[NUM_STATS] = {hpEv, atkEv, defEv, speedEv, spAtkEv, spDefEv};
     u8 ivs[NUM_STATS] = {hpIv, atkIv, defIv, speedIv, spAtkIv, spDefIv};

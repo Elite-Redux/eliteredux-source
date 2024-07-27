@@ -149,6 +149,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DRATINI] = _("Dratini"),
     [SPECIES_DRAGONAIR] = _("Dragonair"),
     [SPECIES_DRAGONITE] = _("Dragonite"),
+    [SPECIES_DRAGONITE_DELIVERY] = _("Dragonite"),
     [SPECIES_MEWTWO] = _("Mewtwo"),
     [SPECIES_MEW] = _("Mew"),
     [SPECIES_CHIKORITA] = _("Chikorita"),
@@ -1019,6 +1020,30 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_PHANTOWL] = _("Phantowl"),
     [SPECIES_DUELUMBER] = _("Duelumber"),
     [SPECIES_ESCARGINITE] = _("Escarginite"),
+[SPECIES_CALYREX_CLOUD_RIDER] = _("Calyrex"),
+[SPECIES_SPECTRIER_CLOUD] = _("Spectrier"),
+[SPECIES_SOLROCK_SYSTEM] = _("Solrock"),
+[SPECIES_DARKRAI_NIGHTMARE] = _("Darkrai"),
+[SPECIES_ESPEON_GALAXY] = _("Espeon"),
+[SPECIES_RATICATE_REDUX] = _("Raticate"),
+[SPECIES_RATTATA_REDUX] = _("Rattata"),
+[SPECIES_MIMIKYU_RAYQUAZA] = _("Mimikyu"),
+[SPECIES_BEWEAR_ANGRY] = _("Bewear"),
+[SPECIES_ABOMASNOW_SANTA] = _("Abomasnow"),
+[SPECIES_WEAVILE_REDUX_MEGA] = _("Weavile"),
+[SPECIES_WEAVILE_REDUX] = _("Weavile"),
+[SPECIES_RIBOMBEE_REDUX_MEGA] = _("Ribombee"),
+[SPECIES_RIBOMBEE_REDUX] = _("Ribombee"),
+    [SPECIES_MAWILE_REDUX_B] = _("Mawile"),
+    [SPECIES_MAWILE_REDUX_B_MEGA] = _("Mawile"),
+    [SPECIES_FLYGON_REDUX] = _("Flygon"),
+    [SPECIES_FLYGON_REDUX_MEGA] = _("Flygon"),
+    [SPECIES_WIGGLYTUFF_PRIMAL] = _("Wigglytuff"),
+    [SPECIES_VICTINI_PRIMAL] = _("Victini"),
+    [SPECIES_SNORLAX_PRIMAL] = _("Snorlax"),
+    [SPECIES_LEDIAN_PARADOX] = _("Ledian"),//To Change
+    [SPECIES_DRACOVISH_MEGA] = _("Dracovish"),
+    [SPECIES_CHIEN_PAO_MEGA] = _("Chien Pao"),
     [SPECIES_ARCHALUDON] = _("Archaludon"),
     [SPECIES_GOUGING_FIRE] = _("Gouging Fire"),
     [SPECIES_IRON_BOULDER] = _("Iron Boulder"),
@@ -1164,7 +1189,9 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_AEGISLASH_BLADE_REDUX] = _("Aegislash"),
 
     [SPECIES_RIBOMBEE_MEGA] = _("Ribombee"),
-
+    [SPECIES_MINCCINO_REDUX] = _("Minccino"),
+    [SPECIES_CINCCINO_REDUX] = _("Cinccino"),
+    
     // Megas
     [SPECIES_VENUSAUR_MEGA] = _("Venusaur"),
     [SPECIES_CHARIZARD_MEGA_X] = _("Charizard"),
@@ -1257,7 +1284,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SHEDINJA_MEGA]      = _("Shedinja"),
     [SPECIES_SWALOT_MEGA]        = _("Swalot"),
     [SPECIES_LANTURN_MEGA]       = _("Lanturn"),
-    [SPECIES_DEWLEON]            = _("Dewleon"),
+    [SPECIES_KEKLEONG]            = _("Kekleong"),
     [SPECIES_LAPRAS_MEGA_X]      = _("Lapras"),
     [SPECIES_CLAWITZER_REDUX]    = _("Clawitzer"),
     // Special Mega + Primals
@@ -1584,7 +1611,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     // Eternatus
     [SPECIES_ETERNATUS_ETERNAMAX] = _("Eternatus"),
     // Urshifu
-    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE] = _("Urshifu"),
+    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE] = _("UrshifuRapid"),
     // Zarude
     [SPECIES_ZARUDE_DADA] = _("Zarude"),
     // Calyrex

@@ -272,7 +272,7 @@
     },
     {
       "x": 14,
-      "y": 0,
+      "y": 1,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_1F",
       "dest_warp_id": 6

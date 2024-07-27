@@ -27,9 +27,11 @@
 #include "constants/battle_anim.h"
 
 //Theme Stuf
-const u32 gTheme_Dark_BattleTextboxPalette_1[]   = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
-const u32 gTheme_Light_BattleTextboxPalette_1[]  = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
-const u32 gTheme_DPPt_BattleTextboxPalette_1[]   = INCBIN_U32("graphics/ui_menus/battle_interface/dppt_theme/palette.gbapal.lz");
+const u32 gTheme_Dark_BattleTextboxPalette_1[]    = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
+const u32 gTheme_Light_BattleTextboxPalette_1[]   = INCBIN_U32("graphics/ui_menus/battle_interface/theme_1_dark/palette.gbapal.lz");
+const u32 gTheme_DPPt_BattleTextboxPalette_1[]    = INCBIN_U32("graphics/ui_menus/battle_interface/dppt_theme/palette.gbapal.lz");
+const u32 gTheme_Classic_BattleTextboxPalette_1[] = INCBIN_U32("graphics/ui_menus/battle_interface/classic_theme/palette.gbapal.lz");
+
 
 enum{
     BG_TEXTBOX,
@@ -215,6 +217,15 @@ const struct WindowTemplate gStandardBattleWindowTemplates[] =
         .baseBlock = 0x02b0,
     },
     [B_WIN_YESNO] = {
+        .bg = 0,
+        .tilemapLeft = 26,
+        .tilemapTop = 9,
+        .width = 3,
+        .height = 4,
+        .paletteNum  = 0,
+        .baseBlock = 0x0100,
+    },
+    [B_WIN_YESNO_TWO] = {
         .bg          = B_WIN_DEFAULT_BG,
         .tilemapLeft = BATTLE_BOX_YES_NO_Y + 2,
         .tilemapTop  = 9,
@@ -391,6 +402,15 @@ static const struct WindowTemplate gBattleArenaWindowTemplates[] =
         .baseBlock = 0x02b0,
     },
     [B_WIN_YESNO] = {
+        .bg = 0,
+        .tilemapLeft = 26,
+        .tilemapTop = 9,
+        .width = 3,
+        .height = 4,
+        .paletteNum = 5,
+        .baseBlock = 0x0100,
+    },
+    [B_WIN_YESNO_TWO] = {
         .bg = 0,
         .tilemapLeft = BATTLE_BOX_YES_NO_Y + 2,
         .tilemapTop = 9,
@@ -897,6 +917,16 @@ void LoadBattleTextboxAndBackground(void)
             LoadCompressedPalette(gTheme_DPPt_BattleTextboxPalette_1, 0,    0x20);
             LoadCompressedPalette(gTheme_DPPt_BattleTextboxPalette_1, 0x10, 0x20);
         break;
+        case THEME_CLASSIC:
+            LZDecompressVram(gTheme_Classic_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            CopyToBgTilemapBuffer(BG_TEXTBOX, gTheme_Classic_BattleTextboxTilemap, 0, 0);
+            
+            CopyBgTilemapBufferToVram(BG_TEXTBOX);
+            ShowBg(1);
+
+            LoadCompressedPalette(gTheme_Classic_BattleTextboxPalette_1, 0,    0x20);
+            LoadCompressedPalette(gTheme_Classic_BattleTextboxPalette_1, 0x10, 0x20);
+        break;
     }
 
     #if B_TERRAIN_BG_CHANGE == TRUE
@@ -1260,6 +1290,9 @@ bool8 LoadChosenBattleElement(u8 caseId)
             break;
             case THEME_DPPT:
                 LZDecompressVram(gTheme_DPPt_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
+            break;
+            case THEME_CLASSIC:
+                LZDecompressVram(gTheme_Classic_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
             break;
         }
         break;

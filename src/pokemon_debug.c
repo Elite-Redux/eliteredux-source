@@ -51,16 +51,16 @@ static const u16 sBgColor[] = {RGB_WHITE};
 static const struct UCoords8 sBattlerCoordsDebug[][4] =
 {
     {
-        { 72, 80 },
-        { 176, 40 },
-        { 48, 40 },
-        { 112, 80 },
+        [B_POSITION_PLAYER_LEFT]    = { 72,  80 },
+        [B_POSITION_OPPONENT_LEFT]  = { 176, 40 },
+        [B_POSITION_PLAYER_RIGHT]   = { 48,  40 },
+        [B_POSITION_OPPONENT_RIGHT] = { 112, 80 },
     },
     {
-        { 32, 80 },
-        { 200, 40 },
-        { 90, 88 },
-        { 152, 32 },
+        [B_POSITION_PLAYER_LEFT]    = { 32,  80 },
+        [B_POSITION_OPPONENT_LEFT]  = { 200, 40 },
+        [B_POSITION_PLAYER_RIGHT]   = { 90,  80 }, //Used to be 88 was changed to fix the sprite priority bug
+        [B_POSITION_OPPONENT_RIGHT] = { 152, 32 },
     },
 };
 
@@ -724,12 +724,12 @@ static void UpdateBattlerValue(struct PokemonDebugMenu *data)
 }
 
 //Sprite functions
-static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, bool8 isShiny)
+static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, u8 isShiny)
 {
     if(isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
-    if (isShiny)
+    if (isShiny != SHINY_NONE)
     {
         if (SpeciesHasGenderDifference[species] && isFemale)
             return gMonShinyPaletteTableFemale[species].data;
@@ -745,7 +745,7 @@ static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, bool8
     }
 }
 
-static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, bool8 isShiny, u8 battlerId)
+static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, u8 isShiny, u8 battlerId)
 {
     const void *lzPaletteData;
     u16 paletteOffset = 0x100 + battlerId * 16;;
@@ -753,7 +753,7 @@ static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, bo
     if(isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
-    if (isShiny)
+    if (isShiny != SHINY_NONE)
     {
         if (SpeciesHasGenderDifference[species] && isFemale)
             lzPaletteData = gMonShinyPaletteTableFemale[species].data;

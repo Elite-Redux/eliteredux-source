@@ -1558,6 +1558,8 @@ void CB2_WhiteOut(void)
         FlagClear(FLAG_TAG_BATTLE);
         FlagClear(FLAG_SYS_DISABLE_AUTOHEAL);
         FlagClear(FLAG_SYS_LOCKED_MODE);
+        VarSet(VAR_BATTLE_FIELD_EFFECT_TYPE, 0);
+        VarSet(VAR_BATTLE_FIELD_ID, 0);
         FieldClearVBlankHBlankCallbacks();
         StopMapMusic();
         ResetSafariZoneFlag_();

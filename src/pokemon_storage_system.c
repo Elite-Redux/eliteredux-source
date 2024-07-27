@@ -7362,7 +7362,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
         if (sStorage->displayMonSpecies != SPECIES_NONE)
         {
             u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
-            bool8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
+            u8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
             sanityIsBadEgg = GetBoxMonData(boxMon, MON_DATA_SANITY_IS_BAD_EGG);
             if (sanityIsBadEgg)
                 sStorage->displayMonIsEgg = TRUE;
@@ -10586,7 +10586,7 @@ void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
     u32 pid = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
-    bool8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
+    u8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
 
     // Update front sprite
     sStorage->displayMonSpecies = species;
@@ -10604,7 +10604,7 @@ void UpdateSpeciesSpritePSS_Mon(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES);
     u32 otId = GetMonData(mon, MON_DATA_OT_ID);
     u32 pid = GetMonData(mon, MON_DATA_PERSONALITY);
-    bool8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
 
     // Update front sprite
     sStorage->displayMonSpecies = species;

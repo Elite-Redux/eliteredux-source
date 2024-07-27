@@ -107,8 +107,7 @@ struct VolatileStruct
     u8 encoreTimerStartValue:4;
     u8 perishSongTimer:4;
     u8 perishSongTimerStartValue:4;
-    u8 rolloutTimer:4;
-    u8 rolloutTimerStartValue:4;
+    u8 rolloutCounter:2;
     u8 chargeTimer:4;
     u8 chargeTimerStartValue:4;
     u8 tauntTimer:4;
@@ -131,6 +130,9 @@ struct VolatileStruct
     u8 rapidResponse:1;
     u8 readiedAction:1;
     u8 showdownMode:1;
+    u8 parasiticSpores:1;
+    u8 critBoost:2;
+    u8 fearTimer:2;
 };
 
 struct RoundStruct
@@ -225,8 +227,25 @@ struct TurnStruct
     u8 shouldTriggerSwitchItem:1;
 };
 
+struct SideBeganThisTurn
+{
+    u8 reflect:1;
+    u8 lightscreen:1;
+    u8 mist:1;
+    u8 safeguard:1;
+    u8 followme:1;
+    u8 auroraVeil:1;
+    u8 tailwind:1;
+    u8 luckyChant:1;
+    u8 spiderWeb:1;
+    u8 swamp:1;
+    u8 fireSea:1;
+    u8 rainbow:1;
+};
+
 struct SideTimer
 {
+    struct SideBeganThisTurn started;
     u8 reflectTimer;
     u8 reflectBattlerId;
     u8 lightscreenTimer;
@@ -255,8 +274,24 @@ struct SideTimer
     u8 followmePowder:1; // Rage powder, does not affect grass type pokemon.
 };
 
+struct FieldBeganThisTurn
+{
+    u8 mudSport:1;
+    u8 waterSport:1;
+    u8 wonderRoom:1;
+    u8 magicRoom:1;
+    u8 trickRoom:1;
+    u8 terrain:1;
+    u8 gravity:1;
+    u8 fairyLock:1;
+    u8 inverseRoom:1;
+    u8 weather:1;
+    u8 quash:1;
+};
+
 struct FieldTimer
 {
+    struct FieldBeganThisTurn started;
     u8 mudSportTimer;
     u8 waterSportTimer;
     u8 wonderRoomTimer;
@@ -266,6 +301,7 @@ struct FieldTimer
     u8 gravityTimer;
     u8 fairyLockTimer;
     u8 inverseRoomTimer;
+    u8 quashTimer;
 };
 
 struct WishFutureKnock
@@ -921,7 +957,6 @@ extern u8 gStackBattler4;
 extern u32 gBattleControllerExecFlags;
 extern u8 gBattlersCount;
 extern u16 gBattlerPartyIndexes[MAX_BATTLERS_COUNT];
-extern u8 gQuashedBattlers;
 extern u8 gAfterYouBattlers;
 extern u8 gBattlerPositions[MAX_BATTLERS_COUNT];
 extern u8 gActionsByTurnOrder[MAX_BATTLERS_COUNT];
