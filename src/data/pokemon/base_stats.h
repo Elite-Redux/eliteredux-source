@@ -40455,6 +40455,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_ARACHTRES] =
+    {
+    .baseHP        = 80,
+    .baseAttack    = 110,
+    .baseDefense   = 80,
+    .baseSpeed     = 80,
+    .baseSpAttack  = 60,
+    .baseSpDefense = 80,
+    .type1 = TYPE_BUG,
+    .type2 = TYPE_POISON,
+    .catchRate = 255,
+    .expYield = 140,
+    .evYield_Attack    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 15,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_BUG,
+    .abilities = {ABILITY_SPIDER_LAIR, ABILITY_SNIPER, ABILITY_EXPLOIT_WEAKNESS},
+    .innates = {ABILITY_POISON_TOUCH, ABILITY_MERCILESS, ABILITY_OPPORTUNIST},
+    .bodyColor = BODY_COLOR_RED,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
     [SPECIES_CALYREX_CLOUD_RIDER] =
     {
         .baseHP        = 110,
