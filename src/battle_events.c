@@ -296,6 +296,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainStealthRock)
     case BATTLE_EVENT_TOXIC_SPIKES:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
+        gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount = 2;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainToxicSpikes)
     case BATTLE_EVENT_SPIKES:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
@@ -309,12 +310,19 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
     case BATTLE_EVENT_REFLECT:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_REFLECT;
         gSideTimers[B_SIDE_PLAYER].reflectTimer = battleEvent->data0;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillReflect)
     case BATTLE_EVENT_LIGHTSCREEN:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_LIGHTSCREEN;
         gSideTimers[B_SIDE_PLAYER].lightscreenTimer = battleEvent->data0;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLightscreen)
-    
+    case BATTLE_EVENT_LUCKY_CHANT:
+        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_LUCKY_CHANT;
+        gSideTimers[B_SIDE_PLAYER].luckyChantTimer = battleEvent->data0;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLuckyChant)
+
     case BATTLE_EVENT_NO_PROTECT:
         if (!DepleteTeamPowerPointOfMove(MOVE_PROTECT))
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
@@ -416,6 +424,8 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         RUN_BATTLESCRIPT(BattleScript_GymSkillPermaHealBlock);
     case BATTLE_EVENT_PERMA_NIGHTMARE:
         if (gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_NIGHTMARE)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        if (!gBattleMons[B_SIDE_PLAYER].status1 & STATUS1_SLEEP)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_NIGHTMARE;
         RUN_BATTLESCRIPT(BattleScript_GymSkillPermaNightmare);

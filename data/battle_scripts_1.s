@@ -12198,23 +12198,31 @@ BattleScript_GymSkillEmbargo::
 
 BattleScript_GymSkillReflect::
 	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_REFLECT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_REFLECT
 	waitanimation
 	end2
 
-
 BattleScript_GymSkillLightscreen::
 	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_LIGHTSCREEN
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_LIGHT_SCREEN
 	waitanimation
 	end2
 
+BattleScript_GymSkillLuckyChant::
+	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_LUCKY_CHANT
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_LUCKY_CHANT
+	waitanimation
+	end2
+
 BattleScript_GymSkillNoProtect::
 	call BattleScript_GymSkillPopup
+		printstring STRINGID_GYMSKILL_NOPROTECT
 	playSE SE_M_DETECT
-	printstring STRINGID_GYMSKILL_NOPROTECT
-	waitmessage B_WAIT_TIME_SHORT
 	playSE SE_M_BRICK_BREAK
 	end2

@@ -628,6 +628,7 @@ extern const u8 BattleScript_GymSkillTerrainStickyWeb[];
 extern const u8 BattleScript_GymSkillEmbargo[];
 extern const u8 BattleScript_GymSkillReflect[];
 extern const u8 BattleScript_GymSkillLightscreen[];
+extern const u8 BattleScript_GymSkillLuckyChant[];
 
 extern const u8 BattleScript_GymSkillNoProtect[];
 

@@ -993,6 +993,9 @@ static const u8 sText_GymSkillForesight[] = _("{B_PLAYER_MON1_NAME} was foresigh
 static const u8 sText_GymSkillEmbargo[] = _("{B_PLAYER_NAME}'s team is unable to use items for {STR_VAR_1} turns.");
 static const u8 sText_GymSkillNoProtect[] = _("{B_PLAYER_NAME}'s team had its power points of\n protect drained.");
 static const u8 sText_GymSkillWindSmackDown[] = _("The winds cause {B_PLAYER_MON1_NAME}\nto be smacked down.");
+static const u8 sText_GymSkillReflect[] = _("A defensive screen was set on {B_TRAINER1_NAME}\nteam for {B_BUFF1} turns.");
+static const u8 sText_GymSkillLightscreen[] = _("A spe. defensive screen was set on {B_TRAINER1_NAME}\nteam for {B_BUFF1} turns.");
+static const u8 sText_GymSkillLuckyChant[] = _("A lucky chant was set on {B_TRAINER1_NAME}\nteam for {B_BUFF1} turns.");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1770,6 +1773,9 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GYMSKILL_EMBARGO - 12] = sText_GymSkillEmbargo,
     [STRINGID_GYMSKILL_NOPROTECT - 12] = sText_GymSkillNoProtect,
     [STRINGID_GYMSKILL_SMACKDOWN - 12] = sText_GymSkillWindSmackDown,
+    [STRINGID_GYMSKILL_REFLECT - 12] = sText_GymSkillReflect,
+    [STRINGID_GYMSKILL_LIGHTSCREEN - 12] = sText_GymSkillLightscreen,
+    [STRINGID_GYMSKILL_LUCKY_CHANT - 12] = sText_GymSkillLuckyChant,
 };
 
 
