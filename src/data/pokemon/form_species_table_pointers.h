@@ -905,4 +905,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_KINGAMBIT_REDUX_MEGA] = sKingambit_Redux_MegaFormSpeciesIdTable,
 
+    [SPECIES_KARTANA_FALLEN] = sKartana_FallenFormSpeciesIdTable,
+
 };

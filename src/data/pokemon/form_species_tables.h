@@ -1753,3 +1753,8 @@ static const u16 sKingambit_Redux_MegaFormSpeciesIdTable[] = {
     SPECIES_KINGAMBIT,
     FORM_SPECIES_END,
 };
+static const u16 sKartana_FallenFormSpeciesIdTable[] = {
+    SPECIES_KARTANA_FALLEN,
+    SPECIES_KARTANA,
+    FORM_SPECIES_END,
+};

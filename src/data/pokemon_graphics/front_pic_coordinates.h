@@ -5432,6 +5432,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_KARTANA_FALLEN] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .size = 0,

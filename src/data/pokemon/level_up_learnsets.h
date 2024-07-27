@@ -26975,6 +26975,13 @@ static const struct LevelUpMove sEscarginiteLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sKartana_FallenLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sArachtresLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SWORDS_DANCE),
     LEVEL_UP_MOVE(1, MOVE_CONSTRICT),
