@@ -464,9 +464,6 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
 
 
     case BATTLE_EVENT_TENSE_BATTLE:
-        MgbaOpen();
-        MgbaPrintf(2, "%d | %d", (gPlayerPartyCount - gFaintedMonCount[0]), ((gEnemyPartyCount - - gFaintedMonCount[0]) - 3));
-        MgbaClose();
         // play the gym battle music of gen 4 in tense moments  
         // if 50% or more of the pokemon in battle on both sides have been defeated, then play the music 
         if (gFaintedMonCount[1] >= (gEnemyPartyCount / 2) && gFaintedMonCount[0] >= (gPlayerPartyCount / 2) ){
