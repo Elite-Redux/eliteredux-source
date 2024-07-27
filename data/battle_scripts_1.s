@@ -12002,8 +12002,9 @@ BattleScript_EffectUpperHand::
 @ gStackBattler2
 @ saveattackertostack3
 @ readattackerfromstack3
-@ copybyte gBattlerAttacker BS_OPPONENT1
-@ copybyte gActiveBattler B_POSITION_OPPONENT_LEFT 
+
+BattleScript_GymSkillEnd2:
+	end2
 
 BattleScript_GymSkillPopup:
 	various 0, VARIOUS_GYMSKILL_POPUP
@@ -12192,6 +12193,11 @@ BattleScript_GymSkillEmbargo::
 	printstring STRINGID_GYMSKILL_EMBARGO
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_EMBARGO
+	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_GymSkillEmbargoDouble
+	waitanimation
+	end2
+BattleScript_GymSkillEmbargoDouble:
+	jumpifhasnohp B_POSITION_PLAYER_RIGHT, BattleScript_GymSkillEnd2
 	setbyte gBattlerTarget, B_POSITION_PLAYER_RIGHT
 	playmoveanimation BS_ATTACKER, MOVE_EMBARGO
 	waitanimation

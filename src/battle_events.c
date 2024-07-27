@@ -205,9 +205,13 @@ bool8 DepleteTeamPowerPointOfMove(u16 moveId){
 /*
 void ApplyOnAllSide(u8 side){
     u8 i;
+    MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "count: %d", gBattlersCount);
+    MgbaClose();
     for (i = 0; i < gBattlersCount; i++)
     {
         if (GetBattlerSide(i) == side)
+        
 
     }
 }*/
@@ -313,8 +317,12 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         gSideTimers[B_SIDE_PLAYER].spikesAmount = battleEvent->data0 ? battleEvent->data0 & 0x03 : 1;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainSpikes)
     case BATTLE_EVENT_EMBARGO:
-        gStatuses3[B_SIDE_PLAYER] |= STATUS3_EMBARGO;
-        gVolatileStructs[B_SIDE_PLAYER].embargoTimer = battleEvent->data0;
+        gStatuses3[B_POSITION_PLAYER_LEFT] |= STATUS3_EMBARGO;
+        gVolatileStructs[B_POSITION_PLAYER_LEFT].embargoTimer = battleEvent->data0;
+        if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && gPlayerPartyCount >= 2){
+            gStatuses3[B_POSITION_PLAYER_RIGHT] |= STATUS3_EMBARGO;
+            gVolatileStructs[B_POSITION_PLAYER_RIGHT].embargoTimer = battleEvent->data0;
+        }
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillEmbargo)
     case BATTLE_EVENT_REFLECT:
