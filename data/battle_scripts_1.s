@@ -7439,7 +7439,9 @@ BattleScript_FogContinues::
 	end2
 
 BattleScript_FogEnds::
-	printstring 
+	printstring STRINGID_FOGENDS
+	waitmessage B_WAIT_TIME_LONG
+	call BattleScript_OnWeatherChange
 	end2
 
 BattleScript_FogBlownAway::
