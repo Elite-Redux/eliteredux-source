@@ -1039,6 +1039,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_FLYGON_REDUX] = _("Flygon"),
     [SPECIES_FLYGON_REDUX_MEGA] = _("Flygon"),
     [SPECIES_WIGGLYTUFF_PRIMAL] = _("Wigglytuff"),
+    [SPECIES_WIGGLYTUFF_ALPHA]      = _("Wigglytuff"),
     [SPECIES_VICTINI_PRIMAL] = _("Victini"),
     [SPECIES_SNORLAX_PRIMAL] = _("Snorlax"),
     [SPECIES_LEDIAN_PARADOX] = _("Ledian"),//To Change

@@ -1102,6 +1102,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(FLYGON_REDUX_MEGA, gMonBackPic_Flygon_Redux_Mega),
     SPECIES_SPRITE(FLYGON_REDUX, gMonBackPic_Flygon_Redux),
     SPECIES_SPRITE(WIGGLYTUFF_PRIMAL, gMonBackPic_Wigglytuff_Primal),
+    SPECIES_SPRITE(WIGGLYTUFF_ALPHA,   gMonBackPic_WigglytuffAlpha),
     SPECIES_SPRITE(VICTINI_PRIMAL, gMonBackPic_Victini_Primal),
     SPECIES_SPRITE(SNORLAX_PRIMAL, gMonBackPic_Snorlax_Primal),
     SPECIES_SPRITE(LEDIAN_PARADOX, gMonBackPic_Ledian_Paradox),

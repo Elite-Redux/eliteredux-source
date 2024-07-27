@@ -7391,6 +7391,12 @@ const u32 gMonPalette_WigglytuffMega[]             = INCBIN_U32("graphics/pokemo
 const u32 gMonShinyPalette_WigglytuffMega[]        = INCBIN_U32("graphics/pokemon/wigglytuff/mega/shiny.gbapal.lz");
 const u8  gMonIcon_WigglytuffMega[]                = INCBIN_U8("graphics/pokemon/wigglytuff/mega/icon.4bpp");
 
+const u32 gMonFrontPic_WigglytuffAlpha[]            = INCBIN_U32("graphics/pokemon/wigglytuffalpha/front.4bpp.lz");
+const u32 gMonBackPic_WigglytuffAlpha[]             = INCBIN_U32("graphics/pokemon/wigglytuffalpha/back.4bpp.lz");
+const u32 gMonPalette_WigglytuffAlpha[]             = INCBIN_U32("graphics/pokemon/wigglytuffalpha/normal.gbapal.lz");
+const u32 gMonShinyPalette_WigglytuffAlpha[]        = INCBIN_U32("graphics/pokemon/wigglytuffalpha/shiny.gbapal.lz");
+const u8  gMonIcon_WigglytuffAlpha[]                = INCBIN_U8("graphics/pokemon/wigglytuffalpha/icon.4bpp");
+
 const u32 gMonFrontPic_LucarioMegaY[]           = INCBIN_U32("graphics/pokemon/lucario/mega_y/front.4bpp.lz");
 const u32 gMonBackPic_LucarioMegaY[]            = INCBIN_U32("graphics/pokemon/lucario/mega_y/back.4bpp.lz");
 const u32 gMonPalette_LucarioMegaY[]            = INCBIN_U32("graphics/pokemon/lucario/mega_y/normal.gbapal.lz");

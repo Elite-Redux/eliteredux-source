@@ -1028,7 +1028,26 @@ static const union AnimCmd sAnim_WIGGLYTUFF_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_WIGGLYTUFF_ALPHA_1[] =
+{
+    ANIMCMD_FRAME(0, 15),
+    ANIMCMD_FRAME(1, 20),
+    ANIMCMD_FRAME(0, 15),
+    ANIMCMD_FRAME(1, 20),
+    ANIMCMD_FRAME(0, 15),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_WIGGLYTUFF_2[] =
+{
+    ANIMCMD_FRAME(0, 20),
+    ANIMCMD_FRAME(2, 20),
+    ANIMCMD_FRAME(0, 20),
+    ANIMCMD_FRAME(2, 20),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_WIGGLYTUFF_ALPHA_2[] =
 {
     ANIMCMD_FRAME(0, 20),
     ANIMCMD_FRAME(2, 20),
@@ -12204,6 +12223,12 @@ static const union AnimCmd *const sAnims_WIGGLYTUFF[] ={
     sAnim_WIGGLYTUFF_2,
 };
 
+static const union AnimCmd *const sAnims_WIGGLYTUFF_ALPHA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_WIGGLYTUFF_ALPHA_1,
+    sAnim_WIGGLYTUFF_ALPHA_2,
+};
+
 static const union AnimCmd *const sAnims_ZUBAT[] ={
     sAnim_GeneralFrame0,
     sAnim_ZUBAT_1,
@@ -19943,6 +19968,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(FLYGON_REDUX_MEGA),
     ANIM_CMD(FLYGON_REDUX),
     ANIM_CMD(WIGGLYTUFF_PRIMAL),
+    ANIM_CMD(WIGGLYTUFF_ALPHA),
     ANIM_CMD(VICTINI_PRIMAL),
     ANIM_CMD(SNORLAX_PRIMAL),
     ANIM_CMD(LEDIAN_PARADOX),

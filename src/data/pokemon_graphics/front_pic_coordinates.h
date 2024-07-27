@@ -5527,6 +5527,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_WIGGLYTUFF_ALPHA] =
+    {
+        .size = 0x67,
+        .y_offset = 4,
+    },
     [SPECIES_VICTINI_PRIMAL] =
     {
         .size = 0,
