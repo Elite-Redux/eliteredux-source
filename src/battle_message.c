@@ -1793,6 +1793,17 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_THUNDER_CAGE - 12] = sText_ThunderCage,
     [STRINGID_SNAP_TRAP - 12] = sText_SnapTrap,
     [STRINGID_ELECTRO_SHOT - 12] = sText_ElectroShot,
+    [STRINGID_GYMSKILL_TERRAIN - 12] = sText_GymSkillTerrain,
+    [STRINGID_GYMSKILL_STEADYSTATSBOOST - 12] = sText_GymSkillSteadyStatsBoost,
+    [STRINGID_GYMSKILL_POSTURE - 12] = sText_GymSkillPosture,
+    [STRINGID_GYMSKILL_STATUSONTEAM - 12] = sText_GymSkillStatusOnTeam,
+    [STRINGID_GYMSKILL_LASTSTAND - 12] = sText_GymSkillLastStand,
+    [STRINGID_GYMSKILL_MATBLOCK - 12] = sText_GymSkillMatBlock,
+    [STRINGID_GYMSKILL_WOEUPONYE - 12] = sText_GymSkillWoeUponYe,
+    [STRINGID_GYMSKILL_FORESIGHT - 12] = sText_GymSkillForesight,
+    [STRINGID_GYMSKILL_EMBARGO - 12] = sText_GymSkillEmbargo,
+    [STRINGID_GYMSKILL_NOPROTECT - 12] = sText_GymSkillNoProtect,
+    [STRINGID_GYMSKILL_SMACKDOWN - 12] = sText_GymSkillWindSmackDown,
 };
 
 

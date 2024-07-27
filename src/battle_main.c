@@ -130,9 +130,9 @@ static void HandleEndTurn_RanFromBattle(void);
 static void HandleEndTurn_MonFled(void);
 static void HandleEndTurn_FinishBattle(void);
 static u8 getRole(u16 species);
-
-void HandleMonoChampSpecialEffects(void);
 static void HandleBattleEvents(void);
+void HandleMonoChampSpecialEffects(void);
+
 // EWRAM vars
 EWRAM_DATA u16 gBattle_BG0_X = 0;
 EWRAM_DATA u16 gBattle_BG0_Y = 0;
@@ -6933,4 +6933,91 @@ static u8 getRole (u16 species)
 bool32 IsWildMonSmart(void)
 {
     return (B_SMART_WILD_AI_FLAG != 0 && FlagGet(B_SMART_WILD_AI_FLAG));
+}
+
+
+void HandleMonoChampSpecialEffects(void){
+    u16 champType = getMonotypeChampType();
+    u32 fieldEffectId;
+    bool8 setTerrain = FALSE;
+
+    switch(champType){
+        case TYPE_DARK:
+            MakePlayerTeamAsleep();
+        break;
+        case TYPE_GRASS:
+            fieldEffectId = STATUS_FIELD_GRASSY_TERRAIN;
+            setTerrain = TRUE;
+        break;
+        case TYPE_ELECTRIC:
+            fieldEffectId = STATUS_FIELD_ELECTRIC_TERRAIN;
+            setTerrain = TRUE;
+        break;
+        case TYPE_FAIRY:
+            fieldEffectId = STATUS_FIELD_MISTY_TERRAIN;
+            setTerrain = TRUE;
+        break;
+        case TYPE_PSYCHIC:
+            fieldEffectId = STATUS_FIELD_PSYCHIC_TERRAIN;
+            setTerrain = TRUE;
+        break;
+        case TYPE_ICE:
+            SetPermanentWeather(ENUM_WEATHER_HAIL);
+        break;
+        case TYPE_FIRE:
+            SetPermanentWeather(ENUM_WEATHER_SUN_PRIMAL);
+        break;
+        case TYPE_WATER:
+            SetPermanentWeather(ENUM_WEATHER_RAIN_PRIMAL);
+        break;
+        case TYPE_FLYING:
+            SetPermanentWeather(ENUM_WEATHER_STRONG_WINDS);
+        break;
+        case TYPE_ROCK:
+            SetPermanentWeather(ENUM_WEATHER_SANDSTORM);
+        break;
+        case TYPE_BUG:
+            gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STICKY_WEB;
+        break;
+        case TYPE_POISON:
+            gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount = 2;
+            gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
+        break;
+    }
+
+    if(setTerrain){
+        if(fieldEffectId & STATUS_FIELD_TERRAIN_ANY){
+            u16 terrainFlags = fieldEffectId & STATUS_FIELD_TERRAIN_ANY; // only works for status flag (1 << 15)
+            gFieldStatuses = terrainFlags | STATUS_FIELD_TERRAIN_PERMANENT;            // terrain is permanent
+            switch (fieldEffectId & STATUS_FIELD_TERRAIN_ANY)
+            {
+            case STATUS_FIELD_ELECTRIC_TERRAIN:
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESELECTRIC;
+            break;
+            case STATUS_FIELD_MISTY_TERRAIN:
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESMISTY;
+            break;
+            case STATUS_FIELD_GRASSY_TERRAIN:
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESGRASSY;
+            break;
+            case STATUS_FIELD_PSYCHIC_TERRAIN:
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINBECOMESPSYCHIC;
+            break;
+            }
+        }
+    }
+}
+
+static void HandleBattleEvents(void){
+
+    // end of the turn, exec battle events
+    if (gBattleStruct->battleEventDone != BATTLE_EVENTS_DONE){
+        if (ExecBattleEvents() == EXEC_BATTLE_EVENTS_ALL_CLEAR){
+            gBattleStruct->battleEventDone = BATTLE_EVENTS_DONE;
+        } else {
+            return;
+        }
+    }
+    gBattleStruct->battleEventDone = BATTLE_EVENTS_NOT_DONE;
+    gBattleMainFunc = HandleTurnActionSelectionState;
 }
