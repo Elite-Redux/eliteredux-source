@@ -699,7 +699,7 @@ script MossdeepCity_Gym_EventScript_GiveBattleText{
 			yesnobattle(format("What? it's not because we're psychic expert that we're not allowed to use {COLOR GREEN}toxic spikes{COLOR DARK_GRAY}."))
 		break
 		case 3:
-			yesnobattle(format("This gym is so crazy that anyone trying to sleep here {COLOR GREEN}is permanently haunted by nightmares{COLOR DARK_GRAY}."))
+			yesnobattle(format("{COLOR GREEN}Lucky chant{COLOR DARK_GRAY}."))
 		break
 		case 4:
 			yesnobattle(format("Don't fix the pendulum or you'd be {COLOR GREEN}falling asleep{COLOR DARK_GRAY}. It always confused me how it worked."))

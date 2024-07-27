@@ -400,8 +400,7 @@ script FortreeCity_Gym_EventScript_Flint{
 }
 
 script FortreeCity_Gym_EventScript_EdwardoAndFlint{
-    yesnobattle(format("{COLOR GREEN}Wintry wind\nPassing a pokémon\pWith a swollen face.{COLOR DARK_GRAY}\p
-If you can't keep up with the wind you {COLOR GREEN}will end up grounded{COLOR DARK_GRAY}."))
+    yesnobattle(format("{COLOR GREEN}Wintry wind\nPassing a pokémon\pWith a swollen face.{COLOR DARK_GRAY}"))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_EDWARDO, TRAINER_FLINT, TAG_TEAM_EDUARDO_FLINT, 0, FortreeCity_Gym_Text_EdwardoAndFlintIntro)
     }
@@ -480,11 +479,10 @@ script FortreeCity_Gym_EventScript_CheckTrainers{
 		registerbattleevent(BATTLE_EVENT_POSTURE_SPDEF)
     }
     if (!defeated(TRAINER_FLINT)){ // TRAINER_EDWARDO
-    	registerbattleevent(BATTLE_EVENT_LAST_FROSTBITE, 2)
-		//registerbattleevent(BATTLE_EVENT_PERMA_SMACKDOWN)
+    	registerbattleevent(BATTLE_EVENT_LAST_FROSTBITE, 4)
     }
     if (!defeated(TRAINER_HUMBERTO)){
-		registerbattleevent(BATTLE_EVENT_EMBARGO, 2)
+		registerbattleevent(BATTLE_EVENT_EMBARGO, 4)
     }
     if (!defeated(TRAINER_DARIUS)){
 		registerbattleevent(BATTLE_EVENT_POSTURE_DEFENSE)
