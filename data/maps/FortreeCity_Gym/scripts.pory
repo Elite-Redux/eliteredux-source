@@ -367,7 +367,7 @@ script FortreeCity_Gym_EventScript_Humberto{
 	if (defeated(TRAINER_HUMBERTO)){
 		msgbox(FortreeCity_Gym_Text_HumbertoPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("{COLOR GREEN} POSTURE SPEDEF {COLOR DARK_GRAY}"))
+		yesnobattle(format("The winds in this gym are crazy! My pokémon are able to use it to {COLOR GREEN} protect them {COLOR DARK_GRAY} from attacks so I hope you know what you're doing!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_HUMBERTO, FortreeCity_Gym_Text_HumbertoIntro , FortreeCity_Gym_Text_HumbertoDefeat)
 		}
@@ -400,7 +400,7 @@ script FortreeCity_Gym_EventScript_Flint{
 }
 
 script FortreeCity_Gym_EventScript_EdwardoAndFlint{
-    yesnobattle(format("{COLOR GREEN}Wintry wind\nPassing a pokémon\pWith a swollen face.{COLOR DARK_GRAY}"))
+    yesnobattle(format("There are all kinds of winds around the world, lets see if you can fight even in a {COLOR GREEN}winter gale!{COLOR DARK_GRAY}"))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_EDWARDO, TRAINER_FLINT, TAG_TEAM_EDUARDO_FLINT, 0, FortreeCity_Gym_Text_EdwardoAndFlintIntro)
     }
@@ -433,7 +433,7 @@ script FortreeCity_Gym_EventScript_Jared{
 	end
 }
 script FortreeCity_Gym_EventScript_AshleyAndJared{
-    yesnobattle(format("{COLOR GREEN}Using items before the second turn{COLOR DARK_GRAY}? nuh-huh, don't think so."))
+    yesnobattle(format("Hope you weren't thinking of {COLOR GREEN}using items{COLOR DARK_GRAY} against us because they might get blown off!"))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_ASHLEY, TRAINER_JARED, TAG_TEAM_ASHLEY_JARED, 0, FortreeCity_Gym_Text_AshleyAndJaredIntro)
     }
@@ -447,7 +447,7 @@ script FortreeCity_Gym_EventScript_Darius{
 	if (defeated(TRAINER_DARIUS)){
 		msgbox(FortreeCity_Gym_Text_DariusPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("{COLOR GREEN}POSTURE DEF{COLOR DARK_GRAY}"))
+		yesnobattle(format("Surviving through strong winds has {COLOR GREEN}hardened the bodies{COLOR DARK_GRAY} of my pokemon, now they're tougher than all the rest."))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_DARIUS, FortreeCity_Gym_Text_DariusIntro , FortreeCity_Gym_Text_DariusDefeat)
 		}
@@ -457,15 +457,15 @@ script FortreeCity_Gym_EventScript_Darius{
 }
 
 text FortreeCity_Gym_Text_WinonaIntro0{
-    format("When I see a bird that goes to high speed, I believe it would be bored by some breeze only. Breathe in now and let's swirl.")
+    format("A clever bird will normally wait out the storm, but I see that you decided to fly right in, let's see if you have the skill to back it up.")
 }
 
 text FortreeCity_Gym_Text_WinonaIntro1{
-    format("You've experimented some wind, scorching, chilling or blasting. But I'm sure you'd be interrested in some more than mere gusts.")
+    format("You've experienced the storm but were in too quick of a rush to let it pass fully, I hope you're ready for some gale force!")
 }
 
 text FortreeCity_Gym_Text_WinonaIntroAll{
-    format("Flying in the sense of the zephyr brings a bird far away. It's time to lift up.")
+    format("Just because the storm is gone doesn't mean you still can't get blown away. Let's take to the skies and have have a fair fight!")
 }
 
 script FortreeCity_Gym_EventScript_CheckTrainers{

@@ -690,22 +690,22 @@ script MossdeepCity_Gym_EventScript_GiveBattleText{
 	adddefeatedcountmax7(1, TRAINER_SAMANTHA, TRAINER_MAURA, TRAINER_SYLVIA, TRAINER_KATHLEEN, TRAINER_MACEY, TRAINER_NATE)
 	switch(var(VAR_RESULT)){
 		case 0:
-			yesnobattle(format("{COLOR GREEN}Light screen{COLOR DARK_GRAY} indeed."))
+			yesnobattle(format("Our psychic powers mean that making this {COLOR GREEN}Light screen{COLOR DARK_GRAY} is childs play."))
 		break
 		case 1:
-			yesnobattle(format("{COLOR GREEN}Reflect{COLOR DARK_GRAY} seems so."))
+			yesnobattle(format("If you think that coming at us with brute force will make it easy you're sorely mistaken, even the strongest attacks can be {COLOR GREEN}Reflected{COLOR DARK_GRAY}."))
 		break
 		case 2:
-			yesnobattle(format("What? it's not because we're psychic expert that we're not allowed to use {COLOR GREEN}toxic spikes{COLOR DARK_GRAY}."))
+			yesnobattle(format("With just a bit of psychic powers you can even manipulate {COLOR GREEN}Luck{COLOR DARK_GRAY} to your will."))
 		break
 		case 3:
-			yesnobattle(format("{COLOR GREEN}Lucky chant{COLOR DARK_GRAY}."))
+			yesnobattle(format("A lot of the time {COLOR GREEN}toxins{COLOR DARK_GRAY} are used to purify the body and mind. Be careful there still might be some laying around."))
 		break
 		case 4:
-			yesnobattle(format("Don't fix the pendulum or you'd be {COLOR GREEN}falling asleep{COLOR DARK_GRAY}. It always confused me how it worked."))
+			yesnobattle(format("Hypnosis is a very powerful psychic power, it can even {COLOR GREEN}put people to sleep{COLOR DARK_GRAY}."))
 		break
 		case 5:
-			yesnobattle(format("Fighting in double does not justify being a coward {COLOR GREEN}hidden behind a shield{COLOR DARK_GRAY}."))
+			yesnobattle(format("I hope you think you'll be safe {COLOR GREEN}protected behind a shield{COLOR DARK_GRAY} because that won't work with us."))
 		break
 	}
 	return
