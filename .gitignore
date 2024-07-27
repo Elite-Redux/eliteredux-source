@@ -54,4 +54,5 @@ generators.py
 poryscript
 generators.py
 data/maps/*/*scripts.inc
-dockerfiledd_lazy_utils/ # doubledot stuff
+dockerfile
+dd_lazy_utils/ # doubledot stuff
