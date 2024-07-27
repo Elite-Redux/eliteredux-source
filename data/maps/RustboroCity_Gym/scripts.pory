@@ -509,7 +509,7 @@ script RustboroCity_Gym_EventScript_Marc{
 	} else {
 		yesnobattle(format("They say that when under immense pressure even coal becomes diamonds. Once I get {COLOR GREEN} backed into a corner {COLOR DARK_GRAY} is when my true power shines!"))
 		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_MARC, "Alright mate Lets do this." , RustboroCity_Gym_Text_MarcDefeat)
+			trainerbattle_single(TRAINER_MARC, RustboroCity_Gym_Text_MarcIntro , RustboroCity_Gym_Text_MarcDefeat)
 		}
 	}
 	release
@@ -569,4 +569,8 @@ script RustboroCity_Gym_EventScript_Roxanne{
 	goto_if_unset(FLAG_RECEIVED_TM39, RustboroCity_Gym_EventScript_GiveRockTomb)
 	release
 	end
+}
+
+script RustboroCity_Gym_EventScript_ResetTrainers{
+	
 }

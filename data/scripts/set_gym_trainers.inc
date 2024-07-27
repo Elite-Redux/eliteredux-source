@@ -1,4 +1,7 @@
 Common_EventScript_SetGymTrainers::
+	@ ghostly remove the set gym trainers
+	@ mainly because it makes the minimun battle more accurate
+	end
 	switch VAR_0x8008
 	case 1, RustboroCity_Gym_SetGymTrainers
 	case 2, DewfordTown_Gym_SetGymTrainers
