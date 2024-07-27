@@ -691,6 +691,7 @@ script DewfordTown_Gym_EventScript_BrawlyEngage{
     goto_if_set(FLAG_SYS_GAME_CLEAR, DewfordTown_Gym_EventScript_BrawlyRematch)
     call(DewfordTown_Gym_EventScript_CheckTrainers)
 	setvar(VAR_0x8004, 15)
+	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
 	// count the number of trainer defeated, and tell a different line
 	// brenden is a tag battle so you know the lillith flag throught it. 
 	adddefeatedcountmax7(1, TRAINER_TAKAO, TRAINER_JOCELYN, TRAINER_LAURA, TRAINER_BRENDEN, TRAINER_CRISTIAN)

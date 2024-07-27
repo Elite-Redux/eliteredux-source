@@ -2374,4 +2374,13 @@ checkstatbuffonlowered_none_\@:
 @ Blocks script execution until the currently-playing sound (triggered by playse) finishes playing.
 .macro waitse
 	.byte 0x30
-	.endm
+.endm
+
+@ taken from events.inc
+@ Plays the specified (song_number) song. If save_song is TRUE, the
+@ specified (song_number) will be saved as if savebgm was called with it.
+.macro playbgm song_number:req, save_song:req
+	.byte 0x33
+	.2byte \song_number
+	.byte \save_song
+.endm

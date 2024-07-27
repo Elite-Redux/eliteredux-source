@@ -550,7 +550,7 @@ text RustboroCity_Gym_Text_RoxanneIntroAll{
 script RustboroCity_Gym_EventScript_Roxanne{
     goto_if_set(FLAG_SYS_GAME_CLEAR, RustboroCity_Gym_EventScript_RoxanneRematch)
 	call(RustboroCity_Gym_EventScript_CheckTrainers)
-	
+	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
 	setvar(VAR_0x8004, 15)
 	// count the number of trainer defeated, and tell a different line
 	adddefeatedcountmax7(1, TRAINER_JOSH, TRAINER_TOMMY, TRAINER_MARC)

@@ -669,4 +669,5 @@ extern const u8 BattleScript_GymSkillPermaHealBlock[]; // not implemented fully 
 
 extern const u8 BattleScript_GymSkillCopyStats[];
 
+
 #endif // GUARD_BATTLE_SCRIPTS_H

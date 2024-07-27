@@ -494,6 +494,7 @@ script FortreeCity_Gym_EventScript_Winona{
     goto_if_set(FLAG_SYS_GAME_CLEAR, FortreeCity_Gym_EventScript_WinonaRematch)
     call(FortreeCity_Gym_EventScript_CheckTrainers)
     setvar(VAR_0x8004, 15)
+	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
     adddefeatedcountmax7(1, TRAINER_JARED, TRAINER_FLINT, TRAINER_HUMBERTO, TRAINER_DARIUS)
     switch (var(VAR_RESULT)) {
         case 0:

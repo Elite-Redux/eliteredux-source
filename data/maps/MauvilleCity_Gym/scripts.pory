@@ -567,6 +567,7 @@ script MauvilleCity_Gym_EventScript_Wattson{
     }
     call(MauvilleCity_Gym_EventScript_CheckTrainers)
     setvar(VAR_0x8004, 15)
+	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
     // Shawn is a double battle with angelo
     adddefeatedcountmax7(1, TRAINER_VIVIAN, TRAINER_KIRK, TRAINER_SHAWN, TRAINER_BEN)
 	switch (var(VAR_RESULT)) {

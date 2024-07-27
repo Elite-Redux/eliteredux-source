@@ -346,6 +346,10 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillNoProtect)
     
+
+    case BATTLE_EVENT_TENSE_BATTLE:
+        CalculateEnemyPartyCount();
+        return EXEC_BATTLE_EVENTS_ALL_CLEAR;
     }
         
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
@@ -458,6 +462,14 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         RUN_BATTLESCRIPT(BattleScript_GymSkillCopyStats);
 
+
+    case BATTLE_EVENT_TENSE_BATTLE:
+        // if 50% or more of the pokemon in battle have fainted play the gym battle music of gen 4
+        if ((gFaintedMonCount[1] + gFaintedMonCount[0]) >= ((gEnemyPartyCount + gPlayerPartyCount) / 2)){
+            PlayBGM(DP_SEQ_BA_GYM);
+            UnregisterCurrentBattleEvent();
+        }
+        return EXEC_BATTLE_EVENTS_ALL_CLEAR;
     }
     return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }

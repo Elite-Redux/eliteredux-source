@@ -271,6 +271,7 @@ script SootopolisCity_Gym_1F_EventScript_Juan{
 	}
 	else{
 		call(SootopolisCity_Gym_EventScript_CheckTrainers)
+		registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
 		special(HealPlayerParty)
 		setflag(FLAG_SYS_DISABLE_AUTOHEAL)
 		setvar(VAR_0x8004, 15)

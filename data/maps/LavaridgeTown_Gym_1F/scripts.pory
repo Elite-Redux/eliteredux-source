@@ -609,6 +609,7 @@ script LavaridgeTown_Gym_1F_EventScript_Flannery{
     goto_if_set(FLAG_SYS_GAME_CLEAR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch)
     call(LavaridgeTown_Gym_EventScript_CheckTrainers)
     setvar(VAR_0x8004, 15)
+	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
     adddefeatedcountmax7(1, TRAINER_JEFF, TRAINER_JACE, TRAINER_ELI, TRAINER_KEEGAN, TRAINER_COLE, TRAINER_GERALD, TRAINER_AXLE)
     adddefeatedcountmax7(0, TRAINER_DANIELLE) // 0 because no reset of the var_result
     switch (var(VAR_RESULT)) {

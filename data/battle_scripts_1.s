@@ -12246,7 +12246,6 @@ BattleScript_GymSkillSteadyPrintString:
 BattleScript_GymSkillStatsCannotChange:
 	end2
 
-
 BattleScript_GymSkillPosture::
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	call BattleScript_GymSkillPostureAfterAttackerSet
