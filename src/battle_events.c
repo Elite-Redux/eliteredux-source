@@ -201,6 +201,16 @@ bool8 DepleteTeamPowerPointOfMove(u16 moveId){
     }
     return hasBeenModified;
 }
+/**/
+/*
+void ApplyOnAllSide(u8 side){
+    u8 i;
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (GetBattlerSide(i) == side)
+
+    }
+}*/
 
 // ran once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){

@@ -150,7 +150,24 @@
     }
   ],
   "coord_events": [
-
+    {
+      "type": "trigger",
+      "x": 10,
+      "y": 13,
+      "elevation": 0,
+      "var": "VAR_TEMP_5",
+      "var_value": "0",
+      "script": "FortreeCity_GymReworked_EventScript_EnterPlateform1"
+    },
+    {
+      "type": "trigger",
+      "x": 9,
+      "y": 13,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "FortreeCity_GymReworked_EventScript_EnterPlateform0"
+    }
   ],
   "bg_events": [
     {

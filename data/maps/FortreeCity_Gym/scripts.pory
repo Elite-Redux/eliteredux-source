@@ -479,16 +479,17 @@ script FortreeCity_Gym_EventScript_CheckTrainers{
     }
     // set battle event flags
     if (!defeated(TRAINER_JARED)){ //TRAINER_ASHLEY
-    
+		//registerbattleevent(BATTLE_EVENT_POSTURE_SPEDEF)
     }
     if (!defeated(TRAINER_FLINT)){ // TRAINER_EDWARDO
-    
+    	//registerbattleevent(BATTLE_EVENT_LAST_FROSTBITE, 2)
+		registerbattleevent(BATTLE_EVENT_PERMA_SMACKDOWN)
     }
     if (!defeated(TRAINER_HUMBERTO)){
-    
+		registerbattleevent(BATTLE_EVENT_EMBARGO, 2)
     }
     if (!defeated(TRAINER_DARIUS)){
-    
+		//registerbattleevent(BATTLE_EVENT_POSTURE_DEF)
     }
     return
 }

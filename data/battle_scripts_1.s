@@ -12175,23 +12175,24 @@ BattleScript_GymSkillCopyStats::
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	copyfoestats BattleScript_ButItFailed
 	call BattleScript_GymSkillPopup
+	printstring STRINGID_PKMNCOPIEDSTATCHANGES
 	attackanimation
 	waitanimation
-	printstring STRINGID_PKMNCOPIEDSTATCHANGES
-	waitmessage B_WAIT_TIME_LONG
 	end2
 
 BattleScript_GymSkillSubstitute::
 	call BattleScript_GymSkillPopup
+	printstring STRINGID_PKMNMADESUBSTITUTE
 	playmoveanimation BS_ATTACKER, MOVE_SUBSTITUTE
 	waitanimation
-	printstring STRINGID_PKMNMADESUBSTITUTE
-	waitmessage B_WAIT_TIME_LONG
 	end2
 
 BattleScript_GymSkillEmbargo::
 	call BattleScript_GymSkillPopup
+	printstring STRINGID_GYMSKILL_EMBARGO
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
+	playmoveanimation BS_ATTACKER, MOVE_EMBARGO
+	setbyte gBattlerTarget, B_POSITION_PLAYER_RIGHT
 	playmoveanimation BS_ATTACKER, MOVE_EMBARGO
 	waitanimation
 	end2
