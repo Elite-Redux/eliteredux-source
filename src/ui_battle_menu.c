@@ -3320,6 +3320,7 @@ const u8 sText_Title_Field_Weather_Snow[]                 = _("Snow");
 const u8 sText_Title_Field_Weather_Strong_Winds[]         = _("Strong Winds");
 const u8 sText_Title_Field_Weather_Rain_Primal[]          = _("Primal Rain");
 const u8 sText_Title_Field_Weather_Sun_Primal[]           = _("Primal Sun");
+const u8 sText_Title_Field_Weather_EerieFog[]             = _("Eerie Fog");
 
 const u8 sText_Title_Field_Weather_Description_Rain[]         = _("Strengthens Water-type moves by\n"
                                                                   "50% while weakening Fire-type\n"
@@ -3342,6 +3343,9 @@ const u8 sText_Title_Field_Weather_Description_Primal_Rain[]  = _("Boosts the po
 const u8 sText_Title_Field_Weather_Description_Primal_Sun[]  = _("Boosts the power of Fire-type\n"
                                                                  "moves and protects Pokémon from\n"
                                                                  "Water-type moves.");
+const u8 sText_Title_Field_Weather_Description_EerieFog[]    = _("Makes Ghost-type Pokémon harder\n"
+                                                                 "to hit and reduces stat gains for\n"
+                                                                 "non-Ghost and Psychic types.");
 //Terrains
 const u8 sText_Title_Field_Terrain[]                      = _("{STR_VAR_1} Terrain");
 const u8 sText_Title_Field_Terrain_Electric[]             = _("Electric");
@@ -3455,6 +3459,8 @@ static void PrintFieldTab(void)
                     StringCopy(gStringVar1, sText_Title_Field_Weather_Rain_Primal);
                 else if((gBattleWeather & WEATHER_SUN_PRIMAL))
                     StringCopy(gStringVar1, sText_Title_Field_Weather_Sun_Primal);
+                else if (gBattleWeather & WEATHER_FOG_ANY)
+                    StringCopy(gStringVar1, sText_Title_Field_Weather_EerieFog);
                 else
                     StringCopy(gStringVar1, sText_Title_Field_None);
 
@@ -3462,7 +3468,7 @@ static void PrintFieldTab(void)
             
                 if((gBattleWeather & WEATHER_ANY)){
                     //Turns Left
-                    if(!(gBattleWeather & WEATHER_RAIN_PRIMAL) && !(gBattleWeather & WEATHER_SUN_PRIMAL) && !FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)){
+                    if(!(gBattleWeather & WEATHER_PERMANENT) && !FlagGet(FLAG_PERMANENT_UNCHANGEABLE_WEATHER)){
                         AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_Title_Field_Turns_Left);
                         ConvertIntToDecimalStringN(gStringVar1, gWishFutureKnock.weatherDuration, STR_CONV_MODE_LEFT_ALIGN, 4);
                         AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
@@ -3483,6 +3489,8 @@ static void PrintFieldTab(void)
                         StringCopy(gStringVar1, sText_Title_Field_Weather_Description_Sandstorm);
                     else if((gBattleWeather & WEATHER_HAIL_ANY))
                         StringCopy(gStringVar1, sText_Title_Field_Weather_Description_Hail);
+                    else if (gBattleWeather & WEATHER_FOG_ANY)
+                        StringCopy(gStringVar1, sText_Title_Field_Weather_Description_EerieFog);
                     
                     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 }
