@@ -1804,6 +1804,9 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GYMSKILL_EMBARGO - 12] = sText_GymSkillEmbargo,
     [STRINGID_GYMSKILL_NOPROTECT - 12] = sText_GymSkillNoProtect,
     [STRINGID_GYMSKILL_SMACKDOWN - 12] = sText_GymSkillWindSmackDown,
+    [STRINGID_GYMSKILL_REFLECT - 12] = sText_GymSkillReflect,
+    [STRINGID_GYMSKILL_LIGHTSCREEN - 12] = sText_GymSkillLightscreen,
+    [STRINGID_GYMSKILL_LUCKY_CHANT - 12] = sText_GymSkillLuckyChant,
 };
 
 
