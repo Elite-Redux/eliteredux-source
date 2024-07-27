@@ -5440,6 +5440,21 @@ static void Cmd_playstatchangeanimation(void)
 
     if (gBattlerAttacker != gActiveBattler && BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SUBDUE, ability))
         flags |= STAT_CHANGE_BY_TWO;
+    
+    if (!(flags & STAT_CHANGE_NEGATIVE)
+        && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)
+        && !(IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC)))
+    {
+        if (flags & STAT_CHANGE_BY_TWO)
+        {
+            flags &= ~STAT_CHANGE_BY_TWO;
+        }
+        else
+        {
+            gBattlescriptCurrInstr += 4;
+            return;
+        }
+    }
 
     if (flags & STAT_CHANGE_NEGATIVE) // goes down
     {
@@ -12057,6 +12072,11 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
             gBattleScripting.moveEffect = ReverseStatChangeMoveEffect(gBattleScripting.moveEffect);
         }
     }
+
+    if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
+        && !(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(battler, TYPE_PSYCHIC))
+        && statValue > 0)
+            statValue--;
 
     flags &= ~(STAT_BUFF_UPDATE_MOVE_EFFECT);
 

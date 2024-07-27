@@ -2308,6 +2308,13 @@ twoturnmoveacceleratecheck_\@:
 	setbyte sACCELERATED_TWO_TURN, 1
 	.endm
 
+	.macro jumpiffogreducesstatboosts battler:req ptr:req
+	jumpiftype \battler, TYPE_GHOST, jumpiffogreducesstatboosts_ok_\@
+	jumpiftype \battler, TYPE_PSYCHIC, jumpiffogreducesstatboosts_ok_\@
+	jumpifweatheraffected \battler, WEATHER_FOG_ANY, \ptr
+	jumpiffogreducesstatboosts_ok_\@:
+	.endm
+
 	.macro checkstatbuffonlowered
 	jumpifability BS_TARGET, ABILITY_COMPETITIVE,           checkstatbuffonlowered_competitive_\@
 	jumpifability BS_TARGET, ABILITY_DEFIANT,               checkstatbuffonlowered_defiant_\@
