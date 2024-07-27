@@ -1092,8 +1092,8 @@ PetalburgCity_Gym_EventScript_OpenOHKORoomDoors:: @ 8205645
 
 PetalburgCity_Gym_EventScript_SetEntranceRoomDoorMetatiles:: @ 8205666
 	@ setmetatile 6, 85, METATILE_PetalburgGym_RoomEntrance_Left, 0
-	setmetatile 7, 40, METATILE_PetalburgGym_RoomEntrance_Right, 0
-	setmetatile 1, 40, METATILE_PetalburgGym_RoomEntrance_Left, 0
+	@ setmetatile 7, 40, METATILE_PetalburgGym_RoomEntrance_Right, 0
+	@ setmetatile 1, 40, METATILE_PetalburgGym_RoomEntrance_Left, 0
 	@ setmetatile 2, 98, METATILE_PetalburgGym_RoomEntrance_Right, 0
 	return
 
