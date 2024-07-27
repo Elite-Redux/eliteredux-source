@@ -7435,6 +7435,12 @@ const u32 gMonPalette_Kekleong[]                = INCBIN_U32("graphics/pokemon/k
 const u32 gMonShinyPalette_Kekleong[]           = INCBIN_U32("graphics/pokemon/kekleong/shiny.gbapal.lz");
 const u8  gMonIcon_Kekleong[]                   = INCBIN_U8("graphics/pokemon/kekleong/icon.4bpp");
 
+const u32 gMonFrontPic_Arachtres[]          = INCBIN_U32("graphics/pokemon/arachtres/front.4bpp.lz");
+const u32 gMonBackPic_Arachtres[]           = INCBIN_U32("graphics/pokemon/arachtres/back.4bpp.lz");
+const u32 gMonPalette_Arachtres[]           = INCBIN_U32("graphics/pokemon/arachtres/normal.gbapal.lz");
+const u32 gMonShinyPalette_Arachtres[]      = INCBIN_U32("graphics/pokemon/arachtres/shiny.gbapal.lz");
+const u8  gMonIcon_Arachtres[]              = INCBIN_U8("graphics/pokemon/arachtres/icon.4bpp");
+
 const u32 gMonFrontPic_MinccinoRedux[]          = INCBIN_U32("graphics/pokemon/minccino/redux/front.4bpp.lz");
 const u32 gMonBackPic_MinccinoRedux[]           = INCBIN_U32("graphics/pokemon/minccino/redux/back.4bpp.lz");
 const u32 gMonPalette_MinccinoRedux[]           = INCBIN_U32("graphics/pokemon/minccino/redux/normal.gbapal.lz");

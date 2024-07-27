@@ -5452,6 +5452,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_ARACHTRES] =
+    {
+        .size = 0x87,
+        .y_offset = 6,
+    },
     [SPECIES_CALYREX_CLOUD_RIDER] =
     {
         .size = 0,

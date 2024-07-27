@@ -41,6 +41,11 @@ static const union AnimCmd sAnim_YVELTAL_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_ARACHTRES_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -346,6 +351,11 @@ static const union AnimCmd *const sAnims_KINGAMBIT_REDUX_MEGA[] ={
 static const union AnimCmd *const sAnims_YVELTAL_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_YVELTAL_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_ARACHTRES[] ={
+    sAnim_GeneralFrame0,
+    sAnim_ARACHTRES_1,
 };
 
 static const union AnimCmd *const sAnims_CALYREX_CLOUD_RIDER[] ={
@@ -19988,6 +19998,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(DUELUMBER),
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
+    ANIM_CMD(ARACHTRES),
     ANIM_CMD(SCIZOR_REDUX),
     ANIM_CMD(TINKATON_MEGA),
     ANIM_CMD(KARTANA_FALLEN),
