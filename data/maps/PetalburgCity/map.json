@@ -164,8 +164,8 @@
   "coord_events": [
     {
       "type": "trigger",
-      "x": 8,
-      "y": 10,
+      "x": 27,
+      "y": 16,
       "elevation": 3,
       "var": "VAR_PETALBURG_CITY_STATE",
       "var_value": "0",
@@ -173,8 +173,8 @@
     },
     {
       "type": "trigger",
-      "x": 8,
-      "y": 11,
+      "x": 27,
+      "y": 17,
       "elevation": 3,
       "var": "VAR_PETALBURG_CITY_STATE",
       "var_value": "0",
@@ -182,8 +182,8 @@
     },
     {
       "type": "trigger",
-      "x": 8,
-      "y": 12,
+      "x": 27,
+      "y": 18,
       "elevation": 3,
       "var": "VAR_PETALBURG_CITY_STATE",
       "var_value": "0",
@@ -191,8 +191,8 @@
     },
     {
       "type": "trigger",
-      "x": 8,
-      "y": 13,
+      "x": 27,
+      "y": 19,
       "elevation": 3,
       "var": "VAR_PETALBURG_CITY_STATE",
       "var_value": "0",
