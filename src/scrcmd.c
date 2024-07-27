@@ -2285,7 +2285,13 @@ bool8 ScrCmd_freerotatingtilepuzzle(struct ScriptContext *ctx)
 
 bool8 ScrCmd_selectapproachingtrainer(struct ScriptContext *ctx)
 {
-    gSelectedObjectEvent = GetCurrentApproachingTrainerObjectEventId();
+    u8 setObjectByCommand = ScriptReadByte(ctx);
+    if (setObjectByCommand == 255){
+        gSelectedObjectEvent = GetCurrentApproachingTrainerObjectEventId();
+    } else {
+        gSelectedObjectEvent = setObjectByCommand;
+    }
+        
     return FALSE;
 }
 

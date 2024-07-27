@@ -1598,8 +1598,9 @@
 	.2byte \y
 	.endm
 
-	.macro selectapproachingtrainer
+	.macro selectapproachingtrainer objectId=255
 	.byte 0xd8
+	.byte \objectId
 	.endm
 
 	.macro lockfortrainer

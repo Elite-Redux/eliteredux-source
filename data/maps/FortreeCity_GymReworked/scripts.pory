@@ -63,7 +63,7 @@ movement FortreeCity_GymReworked_Movement_PlayerWalksIn1{
 movement FortreeCity_GymReworked_Movement_PlayerWalksToBattleWinona{
     walk_left * 3
     walk_up
-    face_left // this is one of a odd piece moment because for some reason
+    face_right // this is one of a odd piece moment because for some reason
     // because gSelectedObjectEvent is targeted to the player and then there's a implicit faceplayer launched after which makes the player face to the opposite end.
 }
 
@@ -86,6 +86,7 @@ script FortreeCity_GymReworked_EventScript_EnterPlateform1{
 const LOCALID_WINONA = 1
 script FortreeCity_GymReworked_EventScript_EnterPlateform{
     applymovement(OBJ_EVENT_ID_PLAYER, FortreeCity_GymReworked_Movement_PlayerWalksToBattleWinona)
+    selectapproachingtrainer(LOCALID_WINONA)
     waitmovement(0)
     goto(FortreeCity_Gym_EventScript_Winona)
 }
