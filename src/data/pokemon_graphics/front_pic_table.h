@@ -1084,6 +1084,8 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(DUELUMBER, gMonFrontPic_Duelumber),
     SPECIES_SPRITE(ESCARGINITE, gMonFrontPic_Escarginite),
     SPECIES_SPRITE(ARACHTRES, gMonFrontPic_Arachtres),
+    SPECIES_SPRITE(KINGAMBIT_REDUX_MEGA, gMonFrontPic_Kingambit_Redux_Mega),
+    SPECIES_SPRITE(YVELTAL_MEGA, gMonFrontPic_Yveltal_Mega),
     SPECIES_SPRITE(CALYREX_CLOUD_RIDER, gMonFrontPic_Calyrex_Cloud_Rider),
     SPECIES_SPRITE(SPECTRIER_CLOUD, gMonFrontPic_Spectrier_Cloud),
     SPECIES_SPRITE(SOLROCK_SYSTEM, gMonFrontPic_Solrock_System),
