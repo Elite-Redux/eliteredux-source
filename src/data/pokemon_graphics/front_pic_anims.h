@@ -48,20 +48,17 @@ static const union AnimCmd sAnim_ARACHTRES_1[] =
 };
 static const union AnimCmd sAnim_FLAIRGRANCE_1[] =
 {
-    ANIMCMD_FRAME(1, 30),
-    ANIMCMD_FRAME(0, 30),
+    ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 static const union AnimCmd sAnim_POLARTIC_1[] =
 {
-    ANIMCMD_FRAME(1, 30),
-    ANIMCMD_FRAME(0, 30),
+    ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 static const union AnimCmd sAnim_POLARTIC_BLUEMOON_1[] =
 {
-    ANIMCMD_FRAME(1, 30),
-    ANIMCMD_FRAME(0, 30),
+    ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
@@ -1113,11 +1110,7 @@ static const union AnimCmd sAnim_WIGGLYTUFF_1[] =
 
 static const union AnimCmd sAnim_WIGGLYTUFF_ALPHA_1[] =
 {
-    ANIMCMD_FRAME(0, 15),
-    ANIMCMD_FRAME(1, 20),
-    ANIMCMD_FRAME(0, 15),
-    ANIMCMD_FRAME(1, 20),
-    ANIMCMD_FRAME(0, 15),
+    ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
 
@@ -1130,13 +1123,9 @@ static const union AnimCmd sAnim_WIGGLYTUFF_2[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_WIGGLYTUFF_ALPHA_2[] =
-{
-    ANIMCMD_FRAME(0, 20),
-    ANIMCMD_FRAME(2, 20),
-    ANIMCMD_FRAME(0, 20),
-    ANIMCMD_FRAME(2, 20),
-    ANIMCMD_END,
+static const union AnimCmd *const sAnims_WIGGLYTUFF_ALPHA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_WIGGLYTUFF_ALPHA_1,
 };
 
 static const union AnimCmd sAnim_ZUBAT_1[] =
@@ -12304,12 +12293,6 @@ static const union AnimCmd *const sAnims_WIGGLYTUFF[] ={
     sAnim_GeneralFrame0,
     sAnim_WIGGLYTUFF_1,
     sAnim_WIGGLYTUFF_2,
-};
-
-static const union AnimCmd *const sAnims_WIGGLYTUFF_ALPHA[] ={
-    sAnim_GeneralFrame0,
-    sAnim_WIGGLYTUFF_ALPHA_1,
-    sAnim_WIGGLYTUFF_ALPHA_2,
 };
 
 static const union AnimCmd *const sAnims_ZUBAT[] ={
