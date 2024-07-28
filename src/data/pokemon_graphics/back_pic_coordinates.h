@@ -5451,6 +5451,16 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x88,
         .y_offset = 5,
     },
+    [SPECIES_POLARTIC] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_POLARTIC_BLUEMOON] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_CALYREX_CLOUD_RIDER] =
     {
         .size = 0,

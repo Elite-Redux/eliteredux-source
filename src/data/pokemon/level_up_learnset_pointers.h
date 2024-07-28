@@ -1598,6 +1598,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_PHANTOWL] = sPhantowlLevelUpLearnset,
     [SPECIES_ARACHTRES] = sArachtresLevelUpLearnset,
     [SPECIES_FLAIRGRANCE] = sFlairgranceLevelUpLearnset,
+    [SPECIES_POLARTIC] = sPolarticLevelUpLearnset,
+    [SPECIES_POLARTIC_BLUEMOON] = sPolartic_BluemoonLevelUpLearnset,
     [SPECIES_MINCCINO_REDUX] = sMinccino_ReduxLevelUpLearnset,
     [SPECIES_CINCCINO_REDUX] = sCinccino_ReduxLevelUpLearnset,
 };

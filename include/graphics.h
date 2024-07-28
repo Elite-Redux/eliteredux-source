@@ -10960,6 +10960,16 @@ extern const u32 gMonBackPic_Flairgrance[];
 extern const u32 gMonPalette_Flairgrance[];
 extern const u32 gMonShinyPalette_Flairgrance[];
 extern const u8  gMonIcon_Flairgrance[];
+extern const u32 gMonFrontPic_Polartic[];
+extern const u32 gMonBackPic_Polartic[];
+extern const u32 gMonPalette_Polartic[];
+extern const u32 gMonShinyPalette_Polartic[];
+extern const u8  gMonIcon_Polartic[];
+extern const u32 gMonFrontPic_Polartic_Bluemoon[];
+extern const u32 gMonBackPic_Polartic_Bluemoon[];
+extern const u32 gMonPalette_Polartic_Bluemoon[];
+extern const u32 gMonShinyPalette_Polartic_Bluemoon[];
+extern const u8  gMonIcon_Polartic_Bluemoon[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];

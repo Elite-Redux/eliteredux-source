@@ -52,6 +52,18 @@ static const union AnimCmd sAnim_FLAIRGRANCE_1[] =
     ANIMCMD_FRAME(0, 30),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_POLARTIC_1[] =
+{
+    ANIMCMD_FRAME(1, 30),
+    ANIMCMD_FRAME(0, 30),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_POLARTIC_BLUEMOON_1[] =
+{
+    ANIMCMD_FRAME(1, 30),
+    ANIMCMD_FRAME(0, 30),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -367,6 +379,16 @@ static const union AnimCmd *const sAnims_ARACHTRES[] ={
 static const union AnimCmd *const sAnims_FLAIRGRANCE[] ={
     sAnim_GeneralFrame0,
     sAnim_FLAIRGRANCE_1,
+};
+
+static const union AnimCmd *const sAnims_POLARTIC[] ={
+    sAnim_GeneralFrame0,
+    sAnim_POLARTIC_1,
+};
+
+static const union AnimCmd *const sAnims_POLARTIC_BLUEMOON[] ={
+    sAnim_GeneralFrame0,
+    sAnim_POLARTIC_BLUEMOON_1,
 };
 
 static const union AnimCmd *const sAnims_CALYREX_CLOUD_RIDER[] ={
@@ -20011,6 +20033,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(ARACHTRES),
     ANIM_CMD(FLAIRGRANCE),
+    ANIM_CMD(POLARTIC),
+    ANIM_CMD(POLARTIC_BLUEMOON),
     ANIM_CMD(SCIZOR_REDUX),
     ANIM_CMD(TINKATON_MEGA),
     ANIM_CMD(KARTANA_FALLEN),

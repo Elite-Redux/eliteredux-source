@@ -7447,6 +7447,18 @@ const u32 gMonPalette_Flairgrance[]           = INCBIN_U32("graphics/pokemon/fla
 const u32 gMonShinyPalette_Flairgrance[]      = INCBIN_U32("graphics/pokemon/flairgrance/shiny.gbapal.lz");
 const u8  gMonIcon_Flairgrance[]              = INCBIN_U8("graphics/pokemon/flairgrance/icon.4bpp");
 
+const u32 gMonFrontPic_Polartic[]          = INCBIN_U32("graphics/pokemon/polartic/front.4bpp.lz");
+const u32 gMonBackPic_Polartic[]           = INCBIN_U32("graphics/pokemon/polartic/back.4bpp.lz");
+const u32 gMonPalette_Polartic[]           = INCBIN_U32("graphics/pokemon/polartic/normal.gbapal.lz");
+const u32 gMonShinyPalette_Polartic[]      = INCBIN_U32("graphics/pokemon/polartic/shiny.gbapal.lz");
+const u8  gMonIcon_Polartic[]              = INCBIN_U8("graphics/pokemon/polartic/icon.4bpp");
+
+const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
+const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
+const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");
+const u32 gMonShinyPalette_Polartic_Bluemoon[]      = INCBIN_U32("graphics/pokemon/polartic/bluemoon/shiny.gbapal.lz");
+const u8  gMonIcon_Polartic_Bluemoon[]              = INCBIN_U8("graphics/pokemon/polartic/bluemoon/icon.4bpp");
+
 const u32 gMonFrontPic_MinccinoRedux[]          = INCBIN_U32("graphics/pokemon/minccino/redux/front.4bpp.lz");
 const u32 gMonBackPic_MinccinoRedux[]           = INCBIN_U32("graphics/pokemon/minccino/redux/back.4bpp.lz");
 const u32 gMonPalette_MinccinoRedux[]           = INCBIN_U32("graphics/pokemon/minccino/redux/normal.gbapal.lz");
