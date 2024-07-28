@@ -2668,6 +2668,9 @@ const u16 gEggMoves[] = {
         MOVE_WIDE_GUARD,
         MOVE_GUARD_SPLIT),
 
+        egg_moves(COMBEE,
+        MOVE_DESTINY_BOND
+
     egg_moves(PACHIRISU,
         MOVE_COVET,
         MOVE_BITE,
@@ -2840,6 +2843,7 @@ const u16 gEggMoves[] = {
         MOVE_STEALTH_ROCK,
         MOVE_CURSE,
         MOVE_ENDURE),
+        MOVE_WOOD_HAMMER),
 
     egg_moves(MIME_JR,
         MOVE_FUTURE_SIGHT,
