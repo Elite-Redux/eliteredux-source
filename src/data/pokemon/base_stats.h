@@ -40623,6 +40623,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_ARASHINNE] =
+    {
+    .baseHP        = 67,
+    .baseAttack    = 58,
+    .baseDefense   = 57,
+    .baseSpeed     = 101,
+    .baseSpAttack  = 101,
+    .baseSpDefense = 87,
+    .type1 = TYPE_ELECTRIC,
+    .type2 = TYPE_FAIRY,
+    .catchRate = 180,
+    .expYield = 151,
+    .evYield_Speed     = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_FAIRY,
+	.abilities = {ABILITY_CHEEK_POUCH, ABILITY_GALVANIZE, ABILITY_PIXILATE},
+	.innates = {ABILITY_RETRIEVER, ABILITY_ELECTROCYTES, ABILITY_GLUTTONY},
+    .bodyColor = BODY_COLOR_YELLOW,
+    .noFlip = FALSE,
+    .tier = 4,
+    },
+
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .baseHP        = 110,
