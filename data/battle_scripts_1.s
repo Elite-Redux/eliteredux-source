@@ -7889,6 +7889,10 @@ BattleScript_GulpMissileNoDmgGorging:
 	handleformchange BS_TARGET, 0
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
+	handleformchange BS_TARGET, 1
+	handleformchange BS_TARGET, 2
+	swapbattlerandtargetvia34
+	switchinabilities BS_ATTACKER
 BattleScript_GulpMissileDoParalyze:
 	swapattackerwithtarget
 	setmoveeffect MOVE_EFFECT_PARALYSIS
@@ -7899,6 +7903,10 @@ BattleScript_GulpMissileNoSecondEffectGorging:
 	handleformchange BS_TARGET, 0
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
+	handleformchange BS_TARGET, 1
+	handleformchange BS_TARGET, 2
+	swapbattlerandtargetvia34
+	switchinabilities BS_ATTACKER
 	return
 
 BattleScript_GulpMissileGulping::
@@ -7925,6 +7933,10 @@ BattleScript_GulpMissileNoDmgGulping:
 	handleformchange BS_TARGET, 0
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
+	handleformchange BS_TARGET, 1
+	handleformchange BS_TARGET, 2
+	swapbattlerandtargetvia34
+	switchinabilities BS_ATTACKER
 BattleScript_GulpMissileDoDefense:
 	swapattackerwithtarget @ to make gStatDownStringIds down below print the right battler
 	setstatchanger STAT_DEF, 1, TRUE
@@ -7939,6 +7951,10 @@ BattleScript_GulpMissileNoSecondEffectGulping:
 	handleformchange BS_TARGET, 0
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
+	handleformchange BS_TARGET, 1
+	handleformchange BS_TARGET, 2
+	swapbattlerandtargetvia34
+	switchinabilities BS_ATTACKER
 	return
 BattleScript_GulpMissileGorgingTargetDefenseCantGoLower:
 	printstring STRINGID_STATSWONTDECREASE
@@ -8499,6 +8515,8 @@ BattleScript_AttackerFormChangeNoPopup::
 	playanimation BS_ATTACKER, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
 	handleformchange BS_ATTACKER, 2 
+	saveattackerandtargetto34
+	switchinabilities BS_ATTACKER
 	return
 	
 BattleScript_AttackerFormChangeEnd3::
@@ -8518,6 +8536,8 @@ BattleScript_AttackerFormChangeMoveEffect::
 	printstring STRINGID_PKMNTRANSFORMED
 	waitmessage B_WAIT_TIME_LONG
 	handleformchange BS_ATTACKER, 2 
+	saveattackerandtargetto34
+	switchinabilities BS_ATTACKER
 	end3
 
 BattleScript_BallFetch::
@@ -8537,6 +8557,8 @@ BattleScript_TargetFormChange::
 	playanimation BS_TARGET, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
 	handleformchange BS_TARGET, 2 
+	swapbattlerandtargetvia34
+	switchinabilities BS_ATTACKER
 	return
 
 BattleScript_IllusionOff::
@@ -10765,6 +10787,9 @@ BattleScript_BattleBondActivatesOnMoveEndAttacker::
 	waitanimation
 	handleformchange BS_ATTACKER, 2
 	printstring STRINGID_ATTACKERBECAMEASHSPECIES
+	waitmessage B_WAIT_TIME_LONG
+	saveattackerandtargetto34
+	switchinabilities BS_ATTACKER
 	return
 
 BattleScript_DancerActivates::

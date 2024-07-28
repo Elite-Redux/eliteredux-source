@@ -675,8 +675,8 @@ static const u8 sMoveTwoLineDescription_MoveSpiderWeb[] = _(
     "from fleeing or switching.");
 
 static const u8 sMoveTwoLineDescription_MoveMindReader[] = _(
-    "Senses the foe's action to\n"
-    "ensure the next move's hit.");
+    "Reads the opponent's\n"
+    "mind to dodge their attack.");
 
 static const u8 sMoveTwoLineDescription_MoveNightmare[] = _(
     "Inflicts 1/4 damage on a\n"
@@ -4854,7 +4854,7 @@ static const u8 sMoveFourLineDescription_MoveSketch[] = _("This move copies\nthe
 static const u8 sMoveFourLineDescription_MoveTripleKick[] = _("A 3-kick attack.\nMore powerful with\neach successive hit.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveThief[] = _("An attack that may\ntake the foe's held\nitem if the user\nisn't holding one.");
 static const u8 sMoveFourLineDescription_MoveSpiderWeb[] = _("Ensnares the foe \nwith sticky string\nso it doesn't flee\nor switch out.");
-static const u8 sMoveFourLineDescription_MoveMindReader[] = _("The user predicts\nthe foe's action to\nensure its next\nattack hits.");
+static const u8 sMoveFourLineDescription_MoveMindReader[] = _("Dodges all attacks\nand lowers the SpDef\nof attackers. May fail\nif used in succession.");
 static const u8 sMoveFourLineDescription_MoveNightmare[] = _("A sleeping foe is\nshown a nightmare\nthat inflicts some\ndamage every turn.");
 static const u8 sMoveFourLineDescription_MoveFlameWheel[] = _("A rolling attack\nthat becomes\nstronger each time\nit hits.");
 static const u8 sMoveFourLineDescription_MoveSnore[] = _("An attack that can\nbe used only while\nasleep. Has a\n30% flinch chance.");

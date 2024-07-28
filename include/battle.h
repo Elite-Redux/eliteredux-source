@@ -73,10 +73,20 @@ struct ResourceFlags
 #define RESOURCE_FLAG_NEUTRALIZING_GAS  0x40
 #define RESOURCE_FLAG_SCARED            0x50
 
+struct VolatileBeganThisTurn
+{
+    u8 violentRush:1;
+    u8 rapidResponse:1;
+    u8 readiedAction:1;
+    u8 showdownMode:1;
+    u8 fear:1;
+};
+
 struct VolatileStruct
 {
     u32 transformedMonPersonality;
     u32 abilityState[NUM_INNATE_PER_SPECIES + 1];
+    struct VolatileBeganThisTurn started;
     u16 disabledMove;
     u16 encoredMove;
     u8 protectUses;
@@ -132,7 +142,7 @@ struct VolatileStruct
     u8 showdownMode:1;
     u8 parasiticSpores:1;
     u8 critBoost:2;
-    u8 fearTimer:2;
+    u8 fear:1;
 };
 
 struct RoundStruct
@@ -184,6 +194,7 @@ struct RoundStruct
     u8 silkTrapped:1;
     u8 attackCancelled:1;
     u8 burningBulwark:1;
+    u8 mindReader:1;
 };
 
 struct TurnStruct

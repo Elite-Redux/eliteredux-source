@@ -2730,11 +2730,12 @@ u8 DoFieldEndTurnEffects(void)
                 BattleScriptExecute(BattleScript_QuashEnds);
                 effect++;
             }
+            gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_SMOKESCREEN:
             while (gBattleStruct->turnSideTracker < 2)
             {
-                side = gBattleStruct->turnSideTracker;
+                side = gBattleStruct->turnSideTracker++;
                 gActiveBattler = gBattlerAttacker = gSideTimers[side].smokescreenBattler;
                 if (gSideTimers[side].smokescreenTimer)
                 {
@@ -2747,7 +2748,6 @@ u8 DoFieldEndTurnEffects(void)
                         effect++;
                     }
                 }
-                gBattleStruct->turnSideTracker++;
                 if (effect)
                     break;
             }
@@ -2811,6 +2811,7 @@ enum
     ENDTURN_SEA_OF_FIRE_DAMAGE,
     ENDTURN_COMMANDER,
     ENDTURN_PARASITIC_SPORES_DAMAGE,
+    ENDTURN_GENERIC_BATTLER_TIMERS,
     ENDTURN_BATTLER_COUNT,
 };
 
@@ -3575,8 +3576,15 @@ u8 DoBattlerEndTurnEffects(void)
 
             break;
         case ENDTURN_PLASMA_FISTS:
-            for (i = 0; i < gBattlersCount; i++)
-                gStatuses4[i] &= ~(STATUS4_PLASMA_FISTS);
+            gStatuses4[gActiveBattler] &= ~(STATUS4_PLASMA_FISTS);
+            gBattleStruct->turnEffectsTracker++;
+            break;
+        case ENDTURN_GENERIC_BATTLER_TIMERS:
+            if (!gVolatileStructs[gActiveBattler].started.fear) gVolatileStructs[i].fear = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.rapidResponse) gVolatileStructs[i].rapidResponse = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.readiedAction) gVolatileStructs[i].readiedAction = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.showdownMode) gVolatileStructs[i].showdownMode = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.violentRush) gVolatileStructs[i].violentRush = FALSE;
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_BATTLER_COUNT:  // done
@@ -6415,7 +6423,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         if (CheckAndSetSwitchInAbility(battler, ABILITY_VIOLENT_RUSH))
         {
-            gVolatileStructs[battler].violentRush = TRUE;
+            gVolatileStructs[battler].violentRush = gVolatileStructs[battler].started.violentRush = TRUE;
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_VIOLENT_RUSH;
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
@@ -6423,7 +6431,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         if (CheckAndSetSwitchInAbility(battler, ABILITY_RAPID_RESPONSE))
         {
-            gVolatileStructs[battler].rapidResponse = TRUE;
+            gVolatileStructs[battler].rapidResponse = gVolatileStructs[battler].started.rapidResponse = TRUE;
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_RAPID_RESPONSE;
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
@@ -6431,7 +6439,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         if (CheckAndSetSwitchInAbility(battler, ABILITY_READIED_ACTION))
         {
-            gVolatileStructs[battler].readiedAction = TRUE;
+            gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_READIED_ACTION;
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
@@ -6439,7 +6447,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         if (CheckAndSetSwitchInAbility(battler, ABILITY_SHOWDOWN_MODE))
         {
-            gVolatileStructs[battler].showdownMode = TRUE;
+            gVolatileStructs[battler].showdownMode = gVolatileStructs[battler].started.showdownMode = TRUE;
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SHOWDOWN_MODE;
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
@@ -10320,7 +10328,7 @@ bool32 CanBattlerEscape(u32 battlerId) // no ability check
         return FALSE;
     else if (GetBattlerSide(battlerId) == B_SIDE_PLAYER && getMonotypeChampType() == TYPE_FIGHTING)
         return FALSE;
-    else if (gVolatileStructs[battlerId].fearTimer)
+    else if (gVolatileStructs[battlerId].fear)
         return FALSE;
     else
         return TRUE;
@@ -13525,7 +13533,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
         MulModifier(&modifier, UQ_4_12(2.0));
     if (gStatuses3[battlerAtk] & STATUS3_ME_FIRST)
         MulModifier(&modifier, UQ_4_12(1.5));
-    if (gVolatileStructs[battlerDef].fearTimer)
+    if (gVolatileStructs[battlerDef].fear)
         MulModifier(&modifier, UQ_4_12(1.5));
 
     if (GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN && moveType == TYPE_GRASS && IsBattlerGrounded(battlerAtk) && !(gStatuses3[battlerAtk] & STATUS3_SEMI_INVULNERABLE))
