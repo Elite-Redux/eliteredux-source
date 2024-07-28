@@ -221,7 +221,7 @@ MossdeepCity_Gym_EventScript_WarpToEntrance:: @ 8220AF1
 MossdeepCity_Gym_EventScript_GymGuide:: 
 	lockall
 	faceplayer
-	goto_if_set FLAG_DEFEATED_MOSSDEEP_GYM, MossdeepCity_Gym_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_DEFEATED_MOSSDEEP_GYM, MossdeepCity_Gym_EventScript_AskResetTrainers
 	msgbox MossdeepCity_Gym_Text_Guide1, MSGBOX_DEFAULT
 	msgbox MossdeepCity_Gym_Text_Guide2, MSGBOX_DEFAULT
 	release
@@ -913,7 +913,7 @@ script MossdeepCity_Gym_EventScript_Nicholas {
 }
 
 script MossdeepCity_Gym_EventScript_CheckTrainers{
-    if (flag(FLAG_BADGE07_GET)) {
+    if (defeated(TRAINER_TATE_AND_LIZA_1)) {
         msgbox(MossdeepCity_Gym_Text_TateAndLizaPostBattle, MSGBOX_DEFAULT)
         release
         end
@@ -982,3 +982,76 @@ script MossdeepCity_Gym_EventScript_TateAndLiza{
 
 }
 
+script MossdeepCity_Gym_EventScript_AskResetTrainers{
+	lock
+	clydeaskresettrainers(MossdeepCity_Gym_EventScript_ResetAllTrainers, MossdeepCity_Gym_EventScript_SelectTrainers)
+	release
+	end
+}
+
+script MossdeepCity_Gym_EventScript_ResetAllTrainers{
+	cleartrainerflag(TRAINER_SAMANTHA)
+	cleartrainerflag(TRAINER_BLAKE)
+	cleartrainerflag(TRAINER_MAURA)
+	cleartrainerflag(TRAINER_PRESTON)
+	cleartrainerflag(TRAINER_SYLVIA)
+	cleartrainerflag(TRAINER_HANNAH)
+	cleartrainerflag(TRAINER_KATHLEEN)
+	cleartrainerflag(TRAINER_NICHOLAS)
+	cleartrainerflag(TRAINER_MACEY)
+	cleartrainerflag(TRAINER_CLIFFORD)
+	cleartrainerflag(TRAINER_NATE)
+	cleartrainerflag(TRAINER_VIRGIL)
+	cleartrainerflag(TRAINER_TATE_AND_LIZA_1)
+	return
+}
+
+movement MossdeepCity_Gym_Movement_SylviaAndHannah{
+	walk_fastest_left * 5
+	walk_fastest_up * 2
+}
+
+movement MossdeepCity_Gym_Movement_NateAndVirgil{
+	walk_fastest_right * 7
+}
+
+movement MossdeepCity_Gym_Movement_MaceyAndClifford{
+	walk_fastest_up * 4
+}
+
+movement MossdeepCity_Gym_Movement_PrestonAndMaura{
+	walk_fastest_left * 7
+}
+movement MossdeepCity_Gym_Movement_SamantaAndBlake{
+	walk_fastest_up * 3
+}
+movement MossdeepCity_Gym_Movement_KathleenAndNicholas{
+	walk_fastest_right * 7
+}
+movement MossdeepCity_Gym_Movement_TateAndLyza{
+	walk_fastest_left * 3
+	walk_fastest_up * 3
+}
+
+// don't forget to bring you back to the player
+movement MossdeepCity_Gym_Movement_Clyde{
+	walk_fastest_right * 1
+	walk_fastest_down * 12
+}
+
+script MossdeepCity_Gym_EventScript_SelectTrainers{
+	special(SpawnCameraObject)
+	selecttrainercameraoffset()
+	selecttrainer(MossdeepCity_Gym_Movement_SylviaAndHannah, "Sylvia & Hannah", TRAINER_SYLVIA, TRAINER_HANNAH)
+	selecttrainer(MossdeepCity_Gym_Movement_NateAndVirgil, "Nate & Virgil", TRAINER_NATE, TRAINER_VIRGIL)
+	selecttrainer(MossdeepCity_Gym_Movement_MaceyAndClifford, "Macey & Clifford", TRAINER_MACEY, TRAINER_CLIFFORD)
+	selecttrainer(MossdeepCity_Gym_Movement_PrestonAndMaura, "Preston & Maura", TRAINER_PRESTON, TRAINER_MAURA)
+	selecttrainer(MossdeepCity_Gym_Movement_SamantaAndBlake, "Samanta & Blake", TRAINER_SAMANTHA, TRAINER_BLAKE)
+	selecttrainer(MossdeepCity_Gym_Movement_KathleenAndNicholas, "Kathleen & Nicholas", TRAINER_KATHLEEN, TRAINER_NICHOLAS)
+	selecttrainer(MossdeepCity_Gym_Movement_TateAndLyza, "Tate & Lyza", TRAINER_TATE_AND_LIZA_1)
+	applymovement(OBJ_EVENT_ID_CAMERA, MossdeepCity_Gym_Movement_Clyde)
+	waitmovement(0)
+	selecttrainercameraoffset(TRUE)
+	special(RemoveCameraObject)
+	return
+}
