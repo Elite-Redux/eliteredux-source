@@ -603,7 +603,7 @@ script MauvilleCity_Gym_EventScript_ResetAllTrainers{
 
 movement MauvilleCity_Gym_Movement_Vivian{
 	walk_fastest_up * 5
-	walk_fastest_left * 4
+	walk_fastest_left * 5
 }
 
 movement MauvilleCity_Gym_Movement_Ben{
@@ -629,19 +629,20 @@ movement MauvilleCity_Gym_Movement_Wattson{
 // don't forget to bring you back to the player
 movement MauvilleCity_Gym_Movement_Clyde{
 	walk_fastest_down * 18
-	walk_fastest_right * 1
+	walk_fastest_right * 2
 }
 
 script MauvilleCity_Gym_EventScript_SelectTrainers{
 	special(SpawnCameraObject)
+	selecttrainercameraoffset()
 	selecttrainer(MauvilleCity_Gym_Movement_Vivian, "Vivian", TRAINER_VIVIAN)
 	selecttrainer(MauvilleCity_Gym_Movement_Ben, "Ben", TRAINER_BEN)
 	selecttrainer(MauvilleCity_Gym_Movement_Kirk, "Kirk", TRAINER_KIRK)
 	selecttrainer(MauvilleCity_Gym_Movement_ShawnAndAngelo, "Shawn & Angelo", TRAINER_SHAWN, TRAINER_ANGELO)
 	selecttrainer(MauvilleCity_Gym_Movement_Wattson, "Wattson", TRAINER_WATTSON_1)
-
 	applymovement(OBJ_EVENT_ID_CAMERA, MauvilleCity_Gym_Movement_Clyde)
 	waitmovement(0)
+	selecttrainercameraoffset(TRUE)
 	special(RemoveCameraObject)
 	return
 }

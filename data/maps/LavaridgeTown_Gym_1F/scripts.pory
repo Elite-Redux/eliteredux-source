@@ -653,7 +653,7 @@ script LavaridgeTown_Gym_1F_EventScript_ResetAllTrainers{
 
 movement LavaridgeTown_Gym_1F_Movement_Jeff{
 	walk_fastest_up * 8
-	walk_fastest_right * 2
+	walk_fastest_right * 3
 }
 
 movement LavaridgeTown_Gym_1F_Movement_Cole{
@@ -693,12 +693,13 @@ movement LavaridgeTown_Gym_1F_Movement_Flannery{
 
 // don't forget to bring you back to the player
 movement LavaridgeTown_Gym_1F_Movement_Clyde{
-	walk_fastest_right * 4
+	walk_fastest_right * 3
 	walk_fastest_down * 11
 }
 
 script LavaridgeTown_Gym_1F_EventScript_SelectTrainers{
 	special(SpawnCameraObject)
+	selecttrainercameraoffset
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Jeff, "Jeff", TRAINER_JEFF)
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Cole, "Cole", TRAINER_COLE)
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Eli, "Eli", TRAINER_ELI)
@@ -708,9 +709,9 @@ script LavaridgeTown_Gym_1F_EventScript_SelectTrainers{
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Danielle, "Danielle", TRAINER_DANIELLE)
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Keegan, "Keegan", TRAINER_KEEGAN)
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Flannery, "Flannery", TRAINER_FLANNERY_1)
-
 	applymovement(OBJ_EVENT_ID_CAMERA, LavaridgeTown_Gym_1F_Movement_Clyde)
 	waitmovement(0)
+	selecttrainercameraoffset(TRUE)
 	special(RemoveCameraObject)
 	return
 }

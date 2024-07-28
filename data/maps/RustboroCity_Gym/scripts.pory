@@ -82,7 +82,6 @@ RustboroCity_Gym_EventScript_GymGuide:: @ 8213028
 	end
 
 RustboroCity_Gym_EventScript_GymGuidePostVictory:: @ 821303D
-	call RustboroCity_Gym_EventScript_AskResetTrainers
 	release
 	end
 
@@ -588,7 +587,7 @@ script RustboroCity_Gym_EventScript_ResetAllTrainers{
 
 movement RustboroCity_Gym_Movement_Tommy{
 	walk_fastest_right * 3
-	walk_fastest_up * 7
+	walk_fastest_up * 6
 }
 
 movement RustboroCity_Gym_Movement_Marc{
@@ -615,12 +614,14 @@ movement RustboroCity_Gym_Movement_Clyde{
 
 script RustboroCity_Gym_EventScript_SelectTrainers{
 	special(SpawnCameraObject)
+	selecttrainercameraoffset()
 	selecttrainer(RustboroCity_Gym_Movement_Tommy, "Tommy", TRAINER_TOMMY)
 	selecttrainer(RustboroCity_Gym_Movement_Marc, "Marc", TRAINER_MARC)
 	selecttrainer(RustboroCity_Gym_Movement_Josh, "Josh", TRAINER_JOSH)
 	selecttrainer(RustboroCity_Gym_Movement_Roxanne, "Roxanne", TRAINER_ROXANNE_1)
 	applymovement(OBJ_EVENT_ID_CAMERA, RustboroCity_Gym_Movement_Clyde)
 	waitmovement(0)
+	selecttrainercameraoffset(TRUE)
 	special(RemoveCameraObject)
 	return
 }

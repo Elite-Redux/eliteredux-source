@@ -740,7 +740,7 @@ script DewfordTown_Gym_EventScript_ResetAllTrainers{
 
 movement DewfordTown_Gym_Movement_Takao{
 	walk_fastest_left * 1
-	walk_fastest_up * 6
+	walk_fastest_up * 5
 }
 
 movement DewfordTown_Gym_Movement_Cristian{
@@ -770,20 +770,21 @@ movement DewfordTown_Gym_Movement_Brawly{
 // don't forget to bring you back to the player
 movement DewfordTown_Gym_Movement_Clyde{
 	walk_fastest_left * 6
-	walk_fastest_down * 9
+	walk_fastest_down * 8
 }
 
 script DewfordTown_Gym_EventScript_SelectTrainers{
 	special(SpawnCameraObject)
+	selecttrainercameraoffset()
 	selecttrainer(DewfordTown_Gym_Movement_Takao, "Takao", TRAINER_TAKAO)
 	selecttrainer(DewfordTown_Gym_Movement_Cristian, "Christian", TRAINER_CRISTIAN)
 	selecttrainer(DewfordTown_Gym_Movement_Laura, "Laura", TRAINER_LAURA)
 	selecttrainer(DewfordTown_Gym_Movement_BrendenAndLilith, "Brenden & Lilith", TRAINER_BRENDEN, TRAINER_LILITH)
 	selecttrainer(DewfordTown_Gym_Movement_Jocelyn, "Jocelyn", TRAINER_JOCELYN)
 	selecttrainer(DewfordTown_Gym_Movement_Brawly, "brawly", TRAINER_BRAWLY_1)
-
 	applymovement(OBJ_EVENT_ID_CAMERA, DewfordTown_Gym_Movement_Clyde)
 	waitmovement(0)
+	selecttrainercameraoffset(TRUE)
 	special(RemoveCameraObject)
 	return
 }

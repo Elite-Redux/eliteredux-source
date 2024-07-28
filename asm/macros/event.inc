@@ -2151,6 +2151,48 @@
 		call_if TRUE, \select
 	.endm
 
+	@ utility to put the camera on top of the NPC so you can talk the NPC for any angle
+	@ - [off] to get the camera from the NPC back to the player
+	.macro selecttrainercameraoffset off=FALSE
+		compare VAR_FACING, DIR_NORTH
+		goto_if TRUE, selecttrainercameraoffsetapplyup_\@
+		compare VAR_FACING, DIR_SOUTH
+		goto_if TRUE, selecttrainercameraoffsetapplydown_\@
+		compare VAR_FACING, DIR_WEST
+		goto_if TRUE, selecttrainercameraoffsetapplyleft_\@
+		goto selecttrainercameraoffsetapplyright_\@
+		selecttrainercameraoffsetapplyup_\@:
+			.if \off
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestDown
+			.else
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestUp
+			.endif
+			goto selecttrainercameraoffsetend_\@
+		selecttrainercameraoffsetapplydown_\@:
+			.if \off
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestUp
+			.else
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestDown
+			.endif
+			goto selecttrainercameraoffsetend_\@
+		selecttrainercameraoffsetapplyleft_\@:
+			.if \off
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestRight
+			.else
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestLeft
+			.endif
+			goto selecttrainercameraoffsetend_\@
+		selecttrainercameraoffsetapplyright_\@:
+			.if \off
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestLeft
+			.else
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestRight
+			.endif
+			goto selecttrainercameraoffsetend_\@
+		selecttrainercameraoffsetend_\@:
+		waitmovement 0
+	.endm
+
 	@ used in gyms to clear or set flags of trainers after the gym has been done
 	@ - [movement]: To go to target
 	@ - [name]: Tell in the message box who's trainer is aimed.
