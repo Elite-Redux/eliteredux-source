@@ -97,7 +97,7 @@ FortreeCity_Gym_EventScript_Exit::
 FortreeCity_Gym_EventScript_GymGuide:: @ 8216732
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_FORTREE_GYM, FortreeCity_Gym_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_DEFEATED_FORTREE_GYM, FortreeCity_Gym_EventScript_AskResetTrainers
 	goto_if_set FLAG_MOVE_FORTREE_GYM_ENERGY_ROOT, FortreeCity_GymGuide_2
 	msgbox FortreeCity_Gym_Text_GymGuideAdvice, MSGBOX_DEFAULT
 	giveitem ITEM_ENERGY_ROOT, 10
@@ -469,7 +469,7 @@ text FortreeCity_Gym_Text_WinonaIntroAll{
 }
 
 script FortreeCity_Gym_EventScript_CheckTrainers{
-    if (flag(FLAG_BADGE06_GET)) {
+    if (defeated(TRAINER_WINONA_1)) {
         msgbox(FortreeCity_Gym_Text_WinonaPostBattle, MSGBOX_DEFAULT)
         release
         end
@@ -509,3 +509,67 @@ script FortreeCity_Gym_EventScript_Winona{
     goto_if_unset(FLAG_RECEIVED_TM51, FortreeCity_Gym_EventScript_GiveRoost)
 }
 
+script FortreeCity_Gym_EventScript_AskResetTrainers{
+	lock
+	clydeaskresettrainers(FortreeCity_Gym_EventScript_ResetAllTrainers, FortreeCity_Gym_EventScript_SelectTrainers)
+	release
+	end
+}
+
+
+script FortreeCity_Gym_EventScript_ResetAllTrainers{
+	cleartrainerflag(TRAINER_JARED)
+	cleartrainerflag(TRAINER_ASHLEY)
+	cleartrainerflag(TRAINER_FLINT)
+	cleartrainerflag(TRAINER_EDWARDO)
+	cleartrainerflag(TRAINER_HUMBERTO)
+	cleartrainerflag(TRAINER_DARIUS)
+	cleartrainerflag(TRAINER_WINONA_1)
+	return
+}
+
+movement FortreeCity_Gym_Movement_Humberto{
+	walk_fastest_left * 10
+	walk_fastest_up * 5
+}
+
+movement FortreeCity_Gym_Movement_Darius{
+	walk_fastest_left * 2
+	walk_fastest_up * 5
+}
+
+movement FortreeCity_Gym_Movement_FlintAndEdwardo{
+	walk_fastest_right * 7
+	walk_fastest_up * 4
+}
+
+movement FortreeCity_Gym_Movement_JaredAndAshley{
+	walk_fastest_down * 8
+	walk_fastest_right * 10
+}
+
+movement FortreeCity_Gym_Movement_Winona{
+	walk_fastest_left * 4
+}
+
+// don't forget to bring you back to the player
+movement FortreeCity_Gym_Movement_Clyde{
+	walk_fastest_left * 1
+	walk_fastest_down * 6
+}
+
+
+script FortreeCity_Gym_EventScript_SelectTrainers{
+	special(SpawnCameraObject)
+	selecttrainercameraoffset()
+	selecttrainer(FortreeCity_Gym_Movement_Humberto, "Humberto", TRAINER_HUMBERTO)
+	selecttrainer(FortreeCity_Gym_Movement_Darius, "Darius", TRAINER_DARIUS)
+	selecttrainer(FortreeCity_Gym_Movement_FlintAndEdwardo, "Flint & Edwardo", TRAINER_FLINT, TRAINER_EDWARDO)
+	selecttrainer(FortreeCity_Gym_Movement_JaredAndAshley, "Jared & Ashley", TRAINER_JARED, TRAINER_ASHLEY)
+	selecttrainer(FortreeCity_Gym_Movement_Winona, "Winona", TRAINER_WINONA_1)
+	applymovement(OBJ_EVENT_ID_CAMERA, FortreeCity_Gym_Movement_Clyde)
+	waitmovement(0)
+	selecttrainercameraoffset(TRUE)
+	special(RemoveCameraObject)
+	return
+}

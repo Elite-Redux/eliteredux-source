@@ -1149,7 +1149,7 @@ PetalburgCity_Gym_EventScript_UnlockRoomDoors:: @ 820574B
 PetalburgCity_Gym_EventScript_GymGuide:: @ 820574F
 	lock
 	faceplayer
-	goto_if_unset FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_AskResetTrainers
+	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_AskResetTrainers
 	msgbox PetalburgCity_Gym_Text_GymGuideAdvice1, MSGBOX_DEFAULT
 	msgbox PetalburgCity_Gym_Text_GymGuideAdvice2, MSGBOX_DEFAULT
 	release
