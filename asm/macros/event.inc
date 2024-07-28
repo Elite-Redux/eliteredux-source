@@ -2138,3 +2138,32 @@
 		compare VAR_RESULT, 2
 		goto_if TRUE, yesnobattle_replay_\@
 	.endm
+
+	@ used in gyms to clear or set flags of trainers after the gym has been done
+	@ - [movement]: To go to target
+	@ - [name]: Tell in the message box who's trainer is aimed.
+	@ - [trainer] : Trainer id.
+	.macro selecttrainer movement:req name:req trainer:req
+		applymovement OBJ_EVENT_ID_CAMERA, \movement
+		msgbox \name
+		waitmovement 0
+		goto_if_not_defeated \trainer, selecttrainernotdefeated_\@
+		goto_if_defeated \trainer, selecttrainerdefeated_\@
+		selecttrainernotdefeatedsetflag_\@:
+			settrainerflag \trainer
+			goto selecttrainerdend_\@
+		selecttrainernotdefeated_\@:
+			multichoice2 2, 1 Common_Text_SetFlagOrNext
+			compare VAR_RESULT, 1
+			goto_if TRUE, selecttrainernotdefeatedsetflag_\@
+			goto selecttrainerdend_\@
+		selecttrainerdefeatedclearflag_\@:
+			cleartrainerflag \trainer
+			goto selecttrainerdend_\@
+		selecttrainerdefeated_\@:
+			multichoice2 2, 1 Common_Text_ClearFlagOrNext
+			compare VAR_RESULT, 1
+			goto_if TRUE, selecttrainerdefeatedclearflag_\@
+			goto selecttrainerdend_\@
+		selecttrainerdend_\@:
+	.endm

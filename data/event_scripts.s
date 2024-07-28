@@ -1032,6 +1032,17 @@ Common_Text_YesNoBattle::
 	.string "{COLOR BLUE}Sorry what? >.<{COLOR DARK_GRAY}$"
 	.string "$"
 
+Common_Text_ClearFlagOrNext::
+	.string "{COLOR BLUE}Next{COLOR DARK_GRAY}$"
+	.string "{COLOR GREEN}Set undefeated{COLOR DARK_GRAY}$"
+	.string "$"
+
+
+Common_Text_SetFlagOrNext::
+	.string "{COLOR BLUE}Next{COLOR DARK_GRAY}$"
+	.string "{COLOR RED}Set defeated{COLOR DARK_GRAY}$"
+	.string "$"
+
 
 	.include "data/scripts/pc_transfer.inc"
 	.include "data/scripts/mevent.inc"

@@ -76,7 +76,8 @@ RustboroCity_Gym_EventScript_Exit::
 RustboroCity_Gym_EventScript_GymGuide:: @ 8213028
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, RustboroCity_Gym_EventScript_GymGuidePostVictory
+	call RustboroCity_Gym_EventScript_AskResetTrainers
+	goto_if_set FLAG_BADGE01_GET, RustboroCity_Gym_EventScript_GymGuidePostVictory
 	msgbox RustboroCity_Gym_Text_GymGuideAdvice, MSGBOX_DEFAULT
 	release
 	end
@@ -518,7 +519,7 @@ script RustboroCity_Gym_EventScript_Marc{
 
 
 script RustboroCity_Gym_EventScript_CheckTrainers{
-	if (flag(FLAG_BADGE01_GET)) {
+	if (defeated(TRAINER_ROXANNE_1)) {
 		msgbox(RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT)
 		release
 		end
@@ -570,7 +571,89 @@ script RustboroCity_Gym_EventScript_Roxanne{
 	release
 	end
 }
+text RustboroCity_Gym_Text_ClydeAskReset{
+	"{COLOR RED}Nevermind{COLOR DARK_GRAY}$"
+	"{COLOR GREEN}Reset all trainers{COLOR DARK_GRAY}$"
+	"{COLOR BLUE}Select trainers{COLOR DARK_GRAY}$"
+	"$"
+}
 
-script RustboroCity_Gym_EventScript_ResetTrainers{
-	
+script RustboroCity_Gym_EventScript_AskResetTrainers{
+	lock
+	msgbox(format("Can I help you with trainers?"))
+	multichoice2(3, 1, RustboroCity_Gym_Text_ClydeAskReset)
+	switch(var(VAR_RESULT)){
+		case 0:
+
+		break
+		case 1:
+			call(RustboroCity_Gym_EventScript_ResetAllTrainers)
+		break
+		case 2:
+			call(RustboroCity_Gym_EventScript_SelectTrainers)
+		break
+	}
+	release
+	end
+	return
+}
+
+script RustboroCity_Gym_EventScript_ResetAllTrainers{
+	cleartrainerflag(TRAINER_JOSH)
+	cleartrainerflag(TRAINER_TOMMY)
+	cleartrainerflag(TRAINER_MARC)
+	cleartrainerflag(TRAINER_ROXANNE_1)
+	return
+}
+
+
+text RustboroCity_Gym_Text_ClearFlagOrNext{
+	"{COLOR BLUE}Next{COLOR DARK_GRAY}$"
+	"{COLOR GREEN}Set undefeated{COLOR DARK_GRAY}$"
+	"$"
+}
+
+text RustboroCity_Gym_Text_SetFlagOrNext{
+	"{COLOR BLUE}Next{COLOR DARK_GRAY}$"
+	"{COLOR RED}Set defeated{COLOR DARK_GRAY}$"
+	"$"
+}
+
+movement RustboroCity_Gym_Movement_Tommy{
+	walk_fastest_right * 3
+	walk_fastest_up * 7
+}
+
+movement RustboroCity_Gym_Movement_Marc{
+	walk_fastest_left * 4
+	walk_fastest_up * 4
+}
+
+movement RustboroCity_Gym_Movement_Josh{
+	walk_fastest_right * 5
+	walk_fastest_up * 3
+}
+
+movement RustboroCity_Gym_Movement_Roxanne{
+	walk_fastest_left * 1
+	walk_fastest_up * 3
+}
+
+// don't forget to bring you back to the player
+movement RustboroCity_Gym_Movement_Clyde{
+	walk_fastest_left * 2
+	walk_fastest_down * 16
+}
+
+
+script RustboroCity_Gym_EventScript_SelectTrainers{
+	special(SpawnCameraObject)
+	selecttrainer(RustboroCity_Gym_Movement_Tommy, "Tommy", TRAINER_TOMMY)
+	selecttrainer(RustboroCity_Gym_Movement_Marc, "Marc", TRAINER_MARC)
+	selecttrainer(RustboroCity_Gym_Movement_Josh, "Josh", TRAINER_JOSH)
+	selecttrainer(RustboroCity_Gym_Movement_Roxanne, "Roxanne", TRAINER_ROXANNE_1)
+	applymovement(OBJ_EVENT_ID_CAMERA, RustboroCity_Gym_Movement_Clyde)
+	waitmovement(0)
+	special(RemoveCameraObject)
+	return
 }
