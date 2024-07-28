@@ -10970,6 +10970,11 @@ extern const u32 gMonBackPic_Polartic_Bluemoon[];
 extern const u32 gMonPalette_Polartic_Bluemoon[];
 extern const u32 gMonShinyPalette_Polartic_Bluemoon[];
 extern const u8  gMonIcon_Polartic_Bluemoon[];
+extern const u32 gMonFrontPic_Arashinne[];
+extern const u32 gMonBackPic_Arashinne[];
+extern const u32 gMonPalette_Arashinne[];
+extern const u32 gMonShinyPalette_Arashinne[];
+extern const u8  gMonIcon_Arashinne[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];

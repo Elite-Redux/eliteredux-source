@@ -5461,6 +5461,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_ARASHINNE] =
+    {
+        .size = 0x86,
+        .y_offset = 12,
+    },
     [SPECIES_CALYREX_CLOUD_RIDER] =
     {
         .size = 0,
