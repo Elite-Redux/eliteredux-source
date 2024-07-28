@@ -472,6 +472,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectElectroShot			  @ EFFECT_ELECTRO_SHOT
 	.4byte BattleScript_EffectSharpen				  @ EFFECT_SHARPEN
 	.4byte BattleScript_EffectScaryFace				  @ EFFECT_SCARY_FACE
+	.4byte BattleScript_EffectSmokescreen			  @ EFFECT_SMOKESCREEN
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -12243,4 +12244,15 @@ BattleScript_EffectScaryFace_Fear:
 	setfear BS_TARGET
 	printstring STRINGID_FILLED_WITH_FEAR
 	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectSmokescreen::
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifsideaffecting BS_ATTACKER, SIDE_STATUS_SMOKESCREEN, BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	setmoveeffect MOVE_EFFECT_SMOKESCREEN
+	seteffectprimary
 	goto BattleScript_MoveEnd

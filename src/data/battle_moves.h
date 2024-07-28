@@ -1334,14 +1334,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SMOKESCREEN] =
     {
-        .effect = EFFECT_ACCURACY_DOWN,
+        .effect = EFFECT_SMOKESCREEN,
         .power = 0,
         .type = TYPE_NORMAL,
-        .accuracy = 100,
+        .accuracy = 0,
         .pp = 20,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+        .target = MOVE_TARGET_USER,
+        .flags = FLAG_SNATCH_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_STATUS,
     },
     [MOVE_CONFUSE_RAY] =

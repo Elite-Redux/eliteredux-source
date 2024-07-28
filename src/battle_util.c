@@ -2157,6 +2157,7 @@ enum
     ENDTURN_SEA_OF_FIRE,
     ENDTURN_SWAMP,
     ENDTURN_QUASH,
+    ENDTURN_SMOKESCREEN,
     ENDTURN_FIELD_COUNT,
 };
 
@@ -2729,6 +2730,33 @@ u8 DoFieldEndTurnEffects(void)
                 BattleScriptExecute(BattleScript_QuashEnds);
                 effect++;
             }
+            break;
+        case ENDTURN_SMOKESCREEN:
+            while (gBattleStruct->turnSideTracker < 2)
+            {
+                side = gBattleStruct->turnSideTracker;
+                gActiveBattler = gBattlerAttacker = gSideTimers[side].smokescreenBattler;
+                if (gSideTimers[side].smokescreenTimer)
+                {
+                    if (!gSideTimers[side].started.smokescreen && --gSideTimers[side].smokescreenTimer == 0)
+                    {
+                        gSideStatuses[side] &= ~SIDE_STATUS_SMOKESCREEN;
+                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
+                        gBattleCommunication[MULTISTRING_CHOOSER] = side;
+                        PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SMOKESCREEN);
+                        effect++;
+                    }
+                }
+                gBattleStruct->turnSideTracker++;
+                if (effect)
+                    break;
+            }
+            if (!effect)
+            {
+                gBattleStruct->turnCountersTracker++;
+                gBattleStruct->turnSideTracker = 0;
+            }
+            break;
         case ENDTURN_FIELD_COUNT:
             effect++;
             break;

@@ -241,6 +241,7 @@ struct SideBeganThisTurn
     u8 swamp:1;
     u8 fireSea:1;
     u8 rainbow:1;
+    u8 smokescreen:1;
 };
 
 struct SideTimer
@@ -272,6 +273,8 @@ struct SideTimer
     u8 rainbowTimer;
     u8 followmeTarget:3;
     u8 followmePowder:1; // Rage powder, does not affect grass type pokemon.
+    u8 smokescreenTimer:3;
+    u8 smokescreenBattler:2;
 };
 
 struct FieldBeganThisTurn
