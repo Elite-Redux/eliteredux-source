@@ -771,7 +771,10 @@ struct BattleStruct
                                         || gRoundStructs[battlerId].spikyShielded                                    \
                                         || gRoundStructs[battlerId].kingsShielded                                    \
                                         || gRoundStructs[battlerId].banefulBunkered                                  \
-                                        || gRoundStructs[battlerId].obstructed)                                      \
+                                        || gRoundStructs[battlerId].obstructed                                      \
+                                        || gRoundStructs[battlerId].burningBulwark                                      \
+                                        || gRoundStructs[battlerId].silkTrapped                                      \
+                                        || gRoundStructs[battlerId].mindReader)
 
 #define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
 #define GET_STAT_BUFF_VALUE_WITH_SIGN(n)((n & 0xF8))

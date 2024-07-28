@@ -30,6 +30,7 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
     .tier = 3,
+    .numShinies = 1,
     },
 
 [SPECIES_IVYSAUR] =
@@ -57,6 +58,7 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
     .tier = 0,
+    .numShinies = 1,
     },
 
 [SPECIES_VENUSAUR] =
@@ -84,6 +86,7 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
     .tier = 0,
+    .numShinies = 1,
     },
 
 [SPECIES_VENUSAUR_MEGA] =
@@ -111,6 +114,7 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
     .tier = 0,
+    .numShinies = 1,
     },
 
 [SPECIES_CHARMANDER] =
