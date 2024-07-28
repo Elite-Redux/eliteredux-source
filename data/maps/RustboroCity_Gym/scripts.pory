@@ -76,14 +76,13 @@ RustboroCity_Gym_EventScript_Exit::
 RustboroCity_Gym_EventScript_GymGuide:: @ 8213028
 	lock
 	faceplayer
-	call RustboroCity_Gym_EventScript_AskResetTrainers
-	goto_if_set FLAG_BADGE01_GET, RustboroCity_Gym_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_BADGE01_GET, RustboroCity_Gym_EventScript_AskResetTrainers
 	msgbox RustboroCity_Gym_Text_GymGuideAdvice, MSGBOX_DEFAULT
 	release
 	end
 
 RustboroCity_Gym_EventScript_GymGuidePostVictory:: @ 821303D
-	msgbox RustboroCity_Gym_Text_GymGuidePostVictory, MSGBOX_DEFAULT
+	call RustboroCity_Gym_EventScript_AskResetTrainers
 	release
 	end
 
@@ -580,22 +579,9 @@ text RustboroCity_Gym_Text_ClydeAskReset{
 
 script RustboroCity_Gym_EventScript_AskResetTrainers{
 	lock
-	msgbox(format("Can I help you with trainers?"))
-	multichoice2(3, 1, RustboroCity_Gym_Text_ClydeAskReset)
-	switch(var(VAR_RESULT)){
-		case 0:
-
-		break
-		case 1:
-			call(RustboroCity_Gym_EventScript_ResetAllTrainers)
-		break
-		case 2:
-			call(RustboroCity_Gym_EventScript_SelectTrainers)
-		break
-	}
+	clydeaskresettrainers(RustboroCity_Gym_EventScript_ResetAllTrainers, RustboroCity_Gym_EventScript_SelectTrainers)
 	release
 	end
-	return
 }
 
 script RustboroCity_Gym_EventScript_ResetAllTrainers{
@@ -604,19 +590,6 @@ script RustboroCity_Gym_EventScript_ResetAllTrainers{
 	cleartrainerflag(TRAINER_MARC)
 	cleartrainerflag(TRAINER_ROXANNE_1)
 	return
-}
-
-
-text RustboroCity_Gym_Text_ClearFlagOrNext{
-	"{COLOR BLUE}Next{COLOR DARK_GRAY}$"
-	"{COLOR GREEN}Set undefeated{COLOR DARK_GRAY}$"
-	"$"
-}
-
-text RustboroCity_Gym_Text_SetFlagOrNext{
-	"{COLOR BLUE}Next{COLOR DARK_GRAY}$"
-	"{COLOR RED}Set defeated{COLOR DARK_GRAY}$"
-	"$"
 }
 
 movement RustboroCity_Gym_Movement_Tommy{

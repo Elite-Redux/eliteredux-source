@@ -1043,6 +1043,15 @@ Common_Text_SetFlagOrNext::
 	.string "{COLOR RED}Set defeated{COLOR DARK_GRAY}$"
 	.string "$"
 
+Common_Text_ClydePoliteness:
+	.string "Can I help you with trainers?$"
+
+Common_Text_ClydeAskResetTrainers::
+	.string "{COLOR RED}Nevermind{COLOR DARK_GRAY}$"
+	.string "{COLOR GREEN}Reset all trainers{COLOR DARK_GRAY}$"
+	.string "{COLOR BLUE}Select trainers{COLOR DARK_GRAY}$"
+	.string "$"
+
 
 	.include "data/scripts/pc_transfer.inc"
 	.include "data/scripts/mevent.inc"

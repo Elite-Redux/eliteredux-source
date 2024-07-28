@@ -2139,6 +2139,18 @@
 		goto_if TRUE, yesnobattle_replay_\@
 	.endm
 
+	@ little wrapper for set/reset trainers with clyde in gyms
+	@ - [reset] run a script to reset all trainers as undefeated
+	@ - [select] run a script to select the trainers
+	.macro clydeaskresettrainers reset:req select:req
+		msgbox Common_Text_ClydePoliteness
+		multichoice2 3, 1 Common_Text_ClydeAskResetTrainers
+		compare VAR_RESULT, 1
+		call_if TRUE, \reset
+		compare VAR_RESULT, 2
+		call_if TRUE, \select
+	.endm
+
 	@ used in gyms to clear or set flags of trainers after the gym has been done
 	@ - [movement]: To go to target
 	@ - [name]: Tell in the message box who's trainer is aimed.
