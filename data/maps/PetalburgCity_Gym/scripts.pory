@@ -1149,7 +1149,7 @@ PetalburgCity_Gym_EventScript_UnlockRoomDoors:: @ 820574B
 PetalburgCity_Gym_EventScript_GymGuide:: @ 820574F
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_GymGuidePostVictory
+	goto_if_unset FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_AskResetTrainers
 	msgbox PetalburgCity_Gym_Text_GymGuideAdvice1, MSGBOX_DEFAULT
 	msgbox PetalburgCity_Gym_Text_GymGuideAdvice2, MSGBOX_DEFAULT
 	release
@@ -1918,7 +1918,7 @@ script PetalburgCity_Gym_EventScript_Berke{
 }
 
 script PetalburgCity_Gym_EventScript_CheckTrainers{
-    if (flag(FLAG_BADGE05_GET)) {
+    if (defeated(TRAINER_NORMAN_1)) {
         msgbox(PetalburgCity_Gym_Text_YouHaveGottenStronger, MSGBOX_DEFAULT)
         release
         end
@@ -1963,7 +1963,7 @@ script PetalburgCity_Gym_EventScript_NormanBattle{
     setvar(VAR_0x8004, 15)
     //msgbox(PetalburgCity_Gym_Text_NormanBattleIntro, MSGBOX_DEFAULT)
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
-    adddefeatedcountmax7(1, TRAINER_RANDALL, TRAINER_PARKER, TRAINER_GEORGE, TRAINER_BERKE, TRAINER_MARY, TRAINER_ALEXIA, TRAINER_JODY)
+    adddefeatedcountmax7(1, TRAINER_RANDALL, TRAINER_MARY, TRAINER_PARKER, TRAINER_ALEXIA, TRAINER_GEORGE, TRAINER_JODY, TRAINER_BERKE)
     switch (var(VAR_RESULT)) {
         case 0:
             trainerbattle_single(TRAINER_NORMAN_1 PetalburgCity_Gym_Text_NormanBattleIntro0, PetalburgCity_Gym_Text_NormanDefeat, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
@@ -1975,4 +1975,81 @@ script PetalburgCity_Gym_EventScript_NormanBattle{
             trainerbattle_single(TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanBattleIntro1, PetalburgCity_Gym_Text_NormanDefeat, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
     }
     
+}
+
+
+script PetalburgCity_Gym_EventScript_AskResetTrainers{
+	lock
+	clydeaskresettrainers(PetalburgCity_Gym_EventScript_ResetAllTrainers, PetalburgCity_Gym_EventScript_SelectTrainers)
+	release
+	end
+}
+script PetalburgCity_Gym_EventScript_ResetAllTrainers{
+	cleartrainerflag(TRAINER_RANDALL)
+	cleartrainerflag(TRAINER_MARY)
+	cleartrainerflag(TRAINER_PARKER)
+	cleartrainerflag(TRAINER_ALEXIA)
+	cleartrainerflag(TRAINER_GEORGE)
+	cleartrainerflag(TRAINER_JODY)
+	cleartrainerflag(TRAINER_BERKE)
+	cleartrainerflag(TRAINER_NORMAN_1)
+	return
+}
+
+movement PetalburgCity_Gym_Movement_Jody{
+	walk_fastest_left * 1
+	walk_fastest_up * 18
+}
+
+movement PetalburgCity_Gym_Movement_Mary{
+	walk_fastest_right * 4
+}
+
+movement PetalburgCity_Gym_Movement_Parker{
+	walk_fastest_up * 5
+}
+
+movement PetalburgCity_Gym_Movement_Alexia{
+	walk_fastest_left * 2
+}
+
+movement PetalburgCity_Gym_Movement_Berke{
+	walk_fastest_left * 2
+}
+
+movement PetalburgCity_Gym_Movement_Randall{
+	walk_fastest_up * 5
+}
+
+movement PetalburgCity_Gym_Movement_George{
+	walk_fastest_right * 4
+}
+
+movement PetalburgCity_Gym_Movement_Norman{
+	walk_fastest_left * 2
+	walk_fastest_up * 14
+}
+
+// don't forget to bring you back to the player
+movement PetalburgCity_Gym_Movement_Clyde{
+	walk_fastest_left * 1
+	walk_fastest_down * 42
+}
+
+script PetalburgCity_Gym_EventScript_SelectTrainers{
+	special(SpawnCameraObject)
+	selecttrainercameraoffset()
+	selecttrainer(PetalburgCity_Gym_Movement_Jody, "Jody", TRAINER_JODY)
+	selecttrainer(PetalburgCity_Gym_Movement_Mary, "Mary", TRAINER_MARY)
+	selecttrainer(PetalburgCity_Gym_Movement_Parker, "Parker", TRAINER_PARKER)
+	selecttrainer(PetalburgCity_Gym_Movement_Alexia, "Alexia", TRAINER_ALEXIA)
+	selecttrainer(PetalburgCity_Gym_Movement_Berke, "Berke", TRAINER_BERKE)
+	selecttrainer(PetalburgCity_Gym_Movement_Randall, "Randall", TRAINER_RANDALL)
+	selecttrainer(PetalburgCity_Gym_Movement_George, "George", TRAINER_GEORGE)
+	selecttrainer(PetalburgCity_Gym_Movement_Norman, "Norman", TRAINER_NORMAN_1)
+	applymovement(OBJ_EVENT_ID_CAMERA, PetalburgCity_Gym_Movement_Clyde)
+	waitmovement(0)
+	selecttrainercameraoffset(TRUE)
+	special(RemoveCameraObject)
+	return
 }
