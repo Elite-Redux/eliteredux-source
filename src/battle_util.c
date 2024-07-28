@@ -2730,6 +2730,7 @@ u8 DoFieldEndTurnEffects(void)
                 BattleScriptExecute(BattleScript_QuashEnds);
                 effect++;
             }
+            gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_SMOKESCREEN:
             while (gBattleStruct->turnSideTracker < 2)
