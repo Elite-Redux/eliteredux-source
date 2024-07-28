@@ -833,19 +833,19 @@ void (* const gBattleScriptingCommandsTable[])(void) =
 
 const struct StatFractions gAccuracyStageRatios[] =
 {
-    { 33, 100}, // -6
-    { 36, 100}, // -5
-    { 43, 100}, // -4
-    { 50, 100}, // -3
-    { 60, 100}, // -2
-    { 75, 100}, // -1
-    {  1,   1}, //  0
-    {133, 100}, // +1
-    {166, 100}, // +2
-    {  2,   1}, // +3
-    {233, 100}, // +4
-    {133,  50}, // +5
-    {  3,   1}, // +6
+    {1, 3}, // -6
+    {3, 8}, // -5
+    {3, 7}, // -4
+    {1, 2}, // -3
+    {2, 3}, // -2
+    {3, 4}, // -1
+    {1, 1}, //  0
+    {4, 3}, // +1
+    {3, 2}, // +2
+    {2, 1}, // +3
+    {7, 3}, // +4
+    {8, 3}, // +5
+    {3, 1}, // +6
 };
 
 static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
@@ -2050,6 +2050,9 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
 
     if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST))
         calc = (calc * 75) / 100; // Equivalent to 1 stage of evasion
+    
+    if (gSideTimers[GET_BATTLER_SIDE(battlerDef)].smokescreenTimer)
+        calc = (calc * 75) / 100;
 
     return min(calc, 100);
 }
@@ -4030,6 +4033,18 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gBattlescriptCurrInstr = BattleScript_AnnounceStatus;
                 }
                 break;
+            case MOVE_EFFECT_SMOKESCREEN:
+                if (!gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].smokescreenTimer)
+                {
+                    int side = GET_BATTLER_SIDE(gBattlerAttacker);
+                    gSideTimers[side].smokescreenTimer = 5;
+                    gSideTimers[side].started.smokescreen = TRUE;
+                    gSideTimers[side].smokescreenBattler = gBattlerAttacker;
+                    gSideStatuses[side] |= SIDE_STATUS_SMOKESCREEN;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SMOKESCREEN;
+                    BattleScriptPush(gBattlescriptCurrInstr);
+                    gBattlescriptCurrInstr = BattleScript_AnnounceStatus;
+                }
             }
         }
     }
@@ -8517,6 +8532,7 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
             DEFOG_CLEAR(SIDE_STATUS_MIST, mistTimer, BattleScript_SideStatusWoreOffReturn, MOVE_MIST);
             DEFOG_CLEAR(SIDE_STATUS_AURORA_VEIL, auroraVeilTimer, BattleScript_SideStatusWoreOffReturn, MOVE_AURORA_VEIL);
             DEFOG_CLEAR(SIDE_STATUS_SAFEGUARD, safeguardTimer, BattleScript_SideStatusWoreOffReturn, MOVE_SAFEGUARD);
+            DEFOG_CLEAR(SIDE_STATUS_LIGHTSCREEN, smokescreenTimer, BattleScript_SideStatusWoreOffReturn, MOVE_SMOKESCREEN);
         }
         DEFOG_CLEAR(SIDE_STATUS_SPIKES, spikesAmount, BattleScript_SpikesFree, 0);
         switch (sideTimer->stealthRockType)
@@ -10917,6 +10933,7 @@ static void Cmd_various(void)
         SWAP(gSideTimers[0].swampTimer, gSideTimers[1].swampTimer, temp)
         SWAP(gSideTimers[0].fireSeaTimer, gSideTimers[1].fireSeaTimer, temp)
         SWAP(gSideTimers[0].rainbowTimer, gSideTimers[1].rainbowTimer, temp)
+        SWAP(gSideTimers[0].smokescreenTimer, gSideTimers[1].smokescreenTimer, temp)
         SWAP(gSideTimers[0].started, gSideTimers[1].started, tempSide);
 
         #define UPDATE_COURTCHANGED_BATTLER(structField) \
@@ -10933,6 +10950,7 @@ static void Cmd_various(void)
         UPDATE_COURTCHANGED_BATTLER(auroraVeilBattlerId);
         UPDATE_COURTCHANGED_BATTLER(tailwindBattlerId);
         UPDATE_COURTCHANGED_BATTLER(luckyChantBattlerId);
+        UPDATE_COURTCHANGED_BATTLER(smokescreenBattler);
 
         #undef UPDATE_COURTCHANGED_BATTLER
 

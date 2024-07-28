@@ -427,8 +427,8 @@ static const u8 sMoveTwoLineDescription_MoveMinimize[] = _(
     "to raise evasiveness.");
 
 static const u8 sMoveTwoLineDescription_MoveSmokescreen[] = _(
-    "Lowers the foe's accuracy\n"
-    "using smoke, ink, etc.");
+    "Obscures the user's party\n"
+    "in smoke for 5 turns.");
 
 static const u8 sMoveTwoLineDescription_MoveConfuseRay[] = _(
     "A sinister ray that\n"
@@ -4792,7 +4792,7 @@ static const u8 sMoveFourLineDescription_MoveDoubleTeam[] = _("The user creates\
 static const u8 sMoveFourLineDescription_MoveRecover[] = _("A self-healing move\nthat restores HP by\nup to half of the\nuser's maximum HP.");
 static const u8 sMoveFourLineDescription_MoveHarden[] = _("The user stiffens\nall the muscles in\nits body to raise\nits Defense stat.");
 static const u8 sMoveFourLineDescription_MoveMinimize[] = _("The user compresses\nall the cells in its\nbody to raise its\nevasiveness.");
-static const u8 sMoveFourLineDescription_MoveSmokescreen[] = _("An obscuring cloud\nof smoke or ink\nreduces the foe's\naccuracy.");
+static const u8 sMoveFourLineDescription_MoveSmokescreen[] = _("Obscures the user's\nparty in smoke for 5\nturns, increasing\nevasiveness by 33%.");
 static const u8 sMoveFourLineDescription_MoveConfuseRay[] = _("The foe is exposed\nto a sinister ray\nthat triggers\nconfusion.");
 static const u8 sMoveFourLineDescription_MoveWithdraw[] = _("The user withdraws\nits body in its hard\nshell, raising its\nDefense stat.");
 static const u8 sMoveFourLineDescription_MoveDefenseCurl[] = _("The user curls up\nto conceal weak\nspots and raise its\nDefense stat.");
