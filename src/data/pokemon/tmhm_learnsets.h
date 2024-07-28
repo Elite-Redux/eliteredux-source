@@ -2095,6 +2095,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_VENOSHOCK)
         TM(MOVE_U_TURN)
         TM(MOVE_SUBSTITUTE)
+        TM(MOVE_DARK_PULSE)
         TM(MOVE_CURSE)
         TM(MOVE_FLY)
         TM(MOVE_FLASH)
