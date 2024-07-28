@@ -401,6 +401,9 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_FLASH)
         TMHM_LEARNSET_END
 
+    [SPECIES_KAKUNA] = TMHM_LEARNSET
+        TM(MOVE_TOXIC)
+
     [SPECIES_BEEDRILL] = TMHM_LEARNSET
         TM(MOVE_TOXIC)
         TM(MOVE_HIDDEN_POWER)
@@ -2056,6 +2059,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_STRUGGLE_BUG)
         TM(MOVE_VENOSHOCK)
         TM(MOVE_SUBSTITUTE)
+        TM(MOVE_DARK_PULSE)
         TM(MOVE_CURSE)
         TM(MOVE_FLASH)
         TMHM_LEARNSET_END
