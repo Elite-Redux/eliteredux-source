@@ -210,7 +210,7 @@ MauvilleCity_Gym_EventScript_ClearBarriersAltState:: @ 820E0B4
 MauvilleCity_Gym_EventScript_GymGuide::
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_AskResetTrainers
 	msgbox MauvilleCity_Gym_Text_GymGuideAdvice, MSGBOX_DEFAULT
 	msgbox MauvilleCity_Gym_Text_GymGuideAdvice2, MSGBOX_DEFAULT
 	release
@@ -537,7 +537,7 @@ text MauvilleCity_Gym_Text_WattsonIntroAll{
 }
 
 script MauvilleCity_Gym_EventScript_CheckTrainers{
-    if (flag(FLAG_BADGE03_GET)) {
+    if (flag(TRAINER_WATTSON_1)) {
 		msgbox(MauvilleCity_Gym_Text_WattsonPostBattle, MSGBOX_DEFAULT)
 		release
 		end
@@ -581,4 +581,67 @@ script MauvilleCity_Gym_EventScript_Wattson{
 			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro1, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
 	}
 	goto_if_unset(FLAG_RECEIVED_TM72, MauvilleCity_Gym_EventScript_GiveVoltSwitch)
+}
+
+
+script MauvilleCity_Gym_EventScript_AskResetTrainers{
+	lock
+	clydeaskresettrainers(MauvilleCity_Gym_EventScript_ResetAllTrainers, MauvilleCity_Gym_EventScript_SelectTrainers)
+	release
+	end
+}
+
+script MauvilleCity_Gym_EventScript_ResetAllTrainers{
+	cleartrainerflag(TRAINER_VIVIAN)
+	cleartrainerflag(TRAINER_BEN)
+	cleartrainerflag(TRAINER_KIRK)
+	cleartrainerflag(TRAINER_SHAWN)
+	cleartrainerflag(TRAINER_ANGELO)
+	cleartrainerflag(TRAINER_WATTSON_1)
+	return
+}
+
+movement MauvilleCity_Gym_Movement_Vivian{
+	walk_fastest_up * 5
+	walk_fastest_left * 4
+}
+
+movement MauvilleCity_Gym_Movement_Ben{
+	walk_fastest_right * 6
+	walk_fastest_up * 3
+}
+
+movement MauvilleCity_Gym_Movement_Kirk{
+	walk_fastest_left * 1
+	walk_fastest_up * 3
+}
+
+movement MauvilleCity_Gym_Movement_ShawnAndAngelo{
+	walk_fastest_left * 4
+	walk_fastest_up * 3
+}
+
+movement MauvilleCity_Gym_Movement_Wattson{
+	walk_fastest_right * 2
+	walk_fastest_up * 4
+}
+
+// don't forget to bring you back to the player
+movement MauvilleCity_Gym_Movement_Clyde{
+	walk_fastest_down * 18
+	walk_fastest_right * 1
+}
+
+script MauvilleCity_Gym_EventScript_SelectTrainers{
+	special(SpawnCameraObject)
+	selecttrainer(MauvilleCity_Gym_Movement_Vivian, "Vivian", TRAINER_VIVIAN)
+	selecttrainer(MauvilleCity_Gym_Movement_Ben, "Ben", TRAINER_BEN)
+	selecttrainer(MauvilleCity_Gym_Movement_Kirk, "Kirk", TRAINER_KIRK)
+	selecttrainer(MauvilleCity_Gym_Movement_ShawnAndAngelo, "Shawn & Angelo", TRAINER_SHAWN, TRAINER_ANGELO)
+	selecttrainer(MauvilleCity_Gym_Movement_Wattson, "Wattson", TRAINER_WATTSON_1)
+
+	applymovement(OBJ_EVENT_ID_CAMERA, MauvilleCity_Gym_Movement_Clyde)
+	waitmovement(0)
+	special(RemoveCameraObject)
+	return
 }
