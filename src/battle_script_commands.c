@@ -1054,6 +1054,7 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_SPARKLY_SWIRL] = FORBIDDEN_METRONOME,
     [MOVE_SPECTRAL_THIEF] = FORBIDDEN_METRONOME,
     [MOVE_SPIKY_SHIELD] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_MIND_READER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_SPIRIT_BREAK] = FORBIDDEN_METRONOME,
     [MOVE_SPLISHY_SPLASH] = FORBIDDEN_METRONOME,
     [MOVE_SPOTLIGHT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
@@ -3877,6 +3878,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gRoundStructs[gBattlerTarget].obstructed = FALSE;
                     gRoundStructs[gBattlerTarget].silkTrapped = FALSE;
                     gRoundStructs[gBattlerTarget].burningBulwark = FALSE;
+                    gRoundStructs[gBattlerTarget].mindReader = FALSE;
                     if (gCurrentMove == MOVE_FEINT)
                     {
                         BattleScriptPush(gBattlescriptCurrInstr);
@@ -5743,6 +5745,16 @@ static void Cmd_moveend(void)
                 {
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
                     gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_2;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_OBSTRUCT);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
+                    effect = 1;
+                }
+                else if (gRoundStructs[gBattlerTarget].mindReader)
+                {
+                    gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_SP_DEF_MINUS_1;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_MIND_READER);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
                     effect = 1;
@@ -11351,6 +11363,11 @@ static void Cmd_setprotectlike(void)
             else if (gCurrentMove == MOVE_BURNING_BULWARK)
             {
                 gRoundStructs[gBattlerAttacker].burningBulwark = TRUE;
+                SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
+            }
+            else if (gCurrentMove == MOVE_MIND_READER)
+            {
+                gRoundStructs[gBattlerAttacker].mindReader = TRUE;
                 SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
             }
 

@@ -184,6 +184,7 @@ struct RoundStruct
     u8 silkTrapped:1;
     u8 attackCancelled:1;
     u8 burningBulwark:1;
+    u8 mindReader:1;
 };
 
 struct TurnStruct
