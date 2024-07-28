@@ -10679,7 +10679,7 @@ static void Cmd_various(void)
         gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
         return;
     case VARIOUS_SET_FEAR:
-        gVolatileStructs[gActiveBattler].fearTimer = 2;
+        gVolatileStructs[gActiveBattler].fear = gVolatileStructs[gActiveBattler].started.fear = TRUE;
         break;
     case VARIOUS_HANDLE_WEATHER_CHANGE:
         gBattlescriptCurrInstr += 3;

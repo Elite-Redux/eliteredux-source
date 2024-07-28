@@ -880,7 +880,7 @@ void UI_Battle_Menu_Init(MainCallback callback)
                         isExtraInfoShown = TRUE;
                 break;
                 case STATUS_INFO_FEAR:
-                    if (gVolatileStructs[j].fearTimer)
+                    if (gVolatileStructs[j].fear)
                         isExtraInfoShown = TRUE;
                 break;
             }
