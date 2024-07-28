@@ -156,7 +156,7 @@ LavaridgeTown_Gym_EventScript_CheckTrainerScript:: @ 81FE89A
 LavaridgeTown_Gym_1F_EventScript_GymGuide:: @ 81FE96C
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, LavaridgeTown_Gym_1F_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, LavaridgeTown_Gym_1F_EventScript_AskResetTrainers
 	msgbox LavaridgeTown_Gym_1F_Text_GymGuideAdvice1, MSGBOX_DEFAULT
 	msgbox LavaridgeTown_Gym_1F_Text_GymGuideAdvice2, MSGBOX_DEFAULT
 	release
@@ -560,7 +560,7 @@ script LavaridgeTown_Gym_1F_EventScript_Danielle{
 }
 
 script LavaridgeTown_Gym_EventScript_CheckTrainers{
-    if (flag(FLAG_BADGE05_GET)) {
+    if (defeated(TRAINER_FLANNERY_1)) {
         msgbox(LavaridgeTown_Gym_1F_Text_FlanneryPostBattle, MSGBOX_DEFAULT)
         release
         end
@@ -630,3 +630,87 @@ script LavaridgeTown_Gym_1F_EventScript_DEBUGPLEASEREMOVE{
     setvar(VAR_PETALBURG_GYM_STATE, 6)
 }
 
+
+script LavaridgeTown_Gym_1F_EventScript_AskResetTrainers{
+	lock
+	clydeaskresettrainers(LavaridgeTown_Gym_1F_EventScript_ResetAllTrainers, LavaridgeTown_Gym_1F_EventScript_SelectTrainers)
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_ResetAllTrainers{
+	cleartrainerflag(TRAINER_JEFF)
+	cleartrainerflag(TRAINER_COLE)
+	cleartrainerflag(TRAINER_ELI)
+	cleartrainerflag(TRAINER_GERALD)
+	cleartrainerflag(TRAINER_AXLE)
+	cleartrainerflag(TRAINER_JACE)
+	cleartrainerflag(TRAINER_DANIELLE)
+	cleartrainerflag(TRAINER_KEEGAN)
+	cleartrainerflag(TRAINER_FLANNERY_1)
+	return
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Jeff{
+	walk_fastest_up * 8
+	walk_fastest_right * 2
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Cole{
+	walk_fastest_left * 3
+	walk_fastest_up * 5
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Eli{
+	walk_fastest_left * 6
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Gerald{
+	walk_fastest_left * 3
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Axle{
+	walk_fastest_down * 3
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Jace{
+	walk_fastest_down * 3
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Danielle{
+	walk_fastest_down * 3
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Keegan{
+	walk_fastest_right * 5
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Flannery{
+	walk_fastest_right * 1
+	walk_fastest_up * 7
+}
+
+
+// don't forget to bring you back to the player
+movement LavaridgeTown_Gym_1F_Movement_Clyde{
+	walk_fastest_right * 4
+	walk_fastest_down * 11
+}
+
+script LavaridgeTown_Gym_1F_EventScript_SelectTrainers{
+	special(SpawnCameraObject)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Jeff, "Jeff", TRAINER_JEFF)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Cole, "Cole", TRAINER_COLE)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Eli, "Eli", TRAINER_ELI)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Gerald, "Gerald", TRAINER_GERALD)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Axle, "Axle", TRAINER_AXLE)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Jace, "Jace", TRAINER_JACE)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Danielle, "Danielle", TRAINER_DANIELLE)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Keegan, "Keegan", TRAINER_KEEGAN)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Flannery, "Flannery", TRAINER_FLANNERY_1)
+
+	applymovement(OBJ_EVENT_ID_CAMERA, LavaridgeTown_Gym_1F_Movement_Clyde)
+	waitmovement(0)
+	special(RemoveCameraObject)
+	return
+}
