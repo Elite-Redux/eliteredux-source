@@ -570,12 +570,6 @@ script RustboroCity_Gym_EventScript_Roxanne{
 	release
 	end
 }
-text RustboroCity_Gym_Text_ClydeAskReset{
-	"{COLOR RED}Nevermind{COLOR DARK_GRAY}$"
-	"{COLOR GREEN}Reset all trainers{COLOR DARK_GRAY}$"
-	"{COLOR BLUE}Select trainers{COLOR DARK_GRAY}$"
-	"$"
-}
 
 script RustboroCity_Gym_EventScript_AskResetTrainers{
 	lock

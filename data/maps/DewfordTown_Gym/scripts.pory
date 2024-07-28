@@ -266,7 +266,7 @@ DewfordTown_Gym_EventScript_LilithBrightenRoom:: @ 81FC97C
 DewfordTown_Gym_EventScript_GymGuide:: 
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, DewfordTown_Gym_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_DEFEATED_DEWFORD_GYM, DewfordTown_Gym_EventScript_AskResetTrainers
 	msgbox DewfordTown_Gym_Text_Guide2, MSGBOX_DEFAULT
 	release
 	end
@@ -662,7 +662,7 @@ text DewfordTown_Gym_Text_BrawlyIntroAll{
 }
 
 script DewfordTown_Gym_EventScript_CheckTrainers{
-    if (flag(FLAG_BADGE02_GET)) {
+    if (defeated(TRAINER_BRAWLY_1)) {
 		msgbox(DewfordTown_Gym_Text_BrawlyPostBattle, MSGBOX_DEFAULT)
 		release
 		end
@@ -716,4 +716,74 @@ script DewfordTown_Gym_EventScript_Brawly{
     faceplayer
     msgbox(format("If you want to fight, face me, enter the ring and place you in the center. This is how I know someone is ready."), MSGBOX_DEFAULT)
     release
+}
+
+
+
+script DewfordTown_Gym_EventScript_AskResetTrainers{
+	lock
+	clydeaskresettrainers(DewfordTown_Gym_EventScript_ResetAllTrainers, DewfordTown_Gym_EventScript_SelectTrainers)
+	release
+	end
+}
+
+script DewfordTown_Gym_EventScript_ResetAllTrainers{
+	cleartrainerflag(TRAINER_TAKAO)
+	cleartrainerflag(TRAINER_CRISTIAN)
+	cleartrainerflag(TRAINER_LAURA)
+	cleartrainerflag(TRAINER_BRENDEN)
+	cleartrainerflag(TRAINER_LILITH)
+	cleartrainerflag(TRAINER_JOCELYN)
+	cleartrainerflag(TRAINER_BRAWLY_1)
+	return
+}
+
+movement DewfordTown_Gym_Movement_Takao{
+	walk_fastest_left * 1
+	walk_fastest_up * 6
+}
+
+movement DewfordTown_Gym_Movement_Cristian{
+	walk_fastest_right * 1
+}
+
+movement DewfordTown_Gym_Movement_Laura{
+	walk_fastest_right * 7
+}
+
+movement DewfordTown_Gym_Movement_BrendenAndLilith{
+	walk_fastest_up * 2
+	walk_fastest_left * 6
+	walk_fastest_up * 4
+}
+
+movement DewfordTown_Gym_Movement_Jocelyn{
+	walk_fastest_right * 4
+	walk_fastest_up * 1
+}
+
+movement DewfordTown_Gym_Movement_Brawly{
+	walk_fastest_right * 2
+	walk_fastest_down * 4
+}
+
+// don't forget to bring you back to the player
+movement DewfordTown_Gym_Movement_Clyde{
+	walk_fastest_left * 6
+	walk_fastest_down * 9
+}
+
+script DewfordTown_Gym_EventScript_SelectTrainers{
+	special(SpawnCameraObject)
+	selecttrainer(DewfordTown_Gym_Movement_Takao, "Takao", TRAINER_TAKAO)
+	selecttrainer(DewfordTown_Gym_Movement_Cristian, "Christian", TRAINER_CRISTIAN)
+	selecttrainer(DewfordTown_Gym_Movement_Laura, "Laura", TRAINER_LAURA)
+	selecttrainer(DewfordTown_Gym_Movement_BrendenAndLilith, "Brenden & Lilith", TRAINER_BRENDEN, TRAINER_LILITH)
+	selecttrainer(DewfordTown_Gym_Movement_Jocelyn, "Jocelyn", TRAINER_JOCELYN)
+	selecttrainer(DewfordTown_Gym_Movement_Brawly, "brawly", TRAINER_BRAWLY_1)
+
+	applymovement(OBJ_EVENT_ID_CAMERA, DewfordTown_Gym_Movement_Clyde)
+	waitmovement(0)
+	special(RemoveCameraObject)
+	return
 }

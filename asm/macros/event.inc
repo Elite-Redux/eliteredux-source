@@ -2155,7 +2155,8 @@
 	@ - [movement]: To go to target
 	@ - [name]: Tell in the message box who's trainer is aimed.
 	@ - [trainer] : Trainer id.
-	.macro selecttrainer movement:req name:req trainer:req
+	@ - [trainer] : Second Trainer id in case of a tagbattle.
+	.macro selecttrainer movement:req name:req trainer:req trainer2=0
 		applymovement OBJ_EVENT_ID_CAMERA, \movement
 		msgbox \name
 		waitmovement 0
@@ -2163,6 +2164,9 @@
 		goto_if_defeated \trainer, selecttrainerdefeated_\@
 		selecttrainernotdefeatedsetflag_\@:
 			settrainerflag \trainer
+			.if \trainer2
+				settrainerflag \trainer2
+			.endif
 			goto selecttrainerdend_\@
 		selecttrainernotdefeated_\@:
 			multichoice2 2, 1 Common_Text_SetFlagOrNext
@@ -2171,6 +2175,9 @@
 			goto selecttrainerdend_\@
 		selecttrainerdefeatedclearflag_\@:
 			cleartrainerflag \trainer
+			.if \trainer2
+				cleartrainerflag \trainer2
+			.endif
 			goto selecttrainerdend_\@
 		selecttrainerdefeated_\@:
 			multichoice2 2, 1 Common_Text_ClearFlagOrNext
