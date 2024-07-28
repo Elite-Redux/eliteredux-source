@@ -14996,8 +14996,7 @@ static void Cmd_tryswapitems(void) // trick
                 SetActiveMultistringChooser(B_MSG_ITEM_SWAP_BOTH);  // attacker's item -> <- target's item
             else if (oldItemAtk == 0 && *newItemAtk != 0)
                 {
-                    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNBURDEN) && gBattleResources->flags->flags[gBattlerAttacker] & RESOURCE_FLAG_UNBURDEN)
-                        gBattleResources->flags->flags[gBattlerAttacker] &= ~(RESOURCE_FLAG_UNBURDEN);
+                    gBattleResources->flags->flags[gBattlerAttacker] &= ~(RESOURCE_FLAG_UNBURDEN);
 
                     SetActiveMultistringChooser(B_MSG_ITEM_SWAP_TAKEN); // nothing -> <- target's item
                 }

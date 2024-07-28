@@ -12352,6 +12352,8 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return TRUE;
     else if (gRoundStructs[battlerId].angelsWrathProtected && gBattleMoves[move].power != 0)
         return TRUE;
+    else if (gRoundStructs[battlerId].mindReader)
+        return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD
              && GetChosenMovePriority(gBattlerAttacker, battlerId) > 0)
         return TRUE;
