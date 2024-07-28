@@ -46,6 +46,12 @@ static const union AnimCmd sAnim_ARACHTRES_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_FLAIRGRANCE_1[] =
+{
+    ANIMCMD_FRAME(1, 30),
+    ANIMCMD_FRAME(0, 30),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -356,6 +362,11 @@ static const union AnimCmd *const sAnims_YVELTAL_MEGA[] ={
 static const union AnimCmd *const sAnims_ARACHTRES[] ={
     sAnim_GeneralFrame0,
     sAnim_ARACHTRES_1,
+};
+
+static const union AnimCmd *const sAnims_FLAIRGRANCE[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FLAIRGRANCE_1,
 };
 
 static const union AnimCmd *const sAnims_CALYREX_CLOUD_RIDER[] ={
@@ -19999,6 +20010,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ENAMORUS_THERIAN),
     ANIM_CMD(ESCARGINITE),
     ANIM_CMD(ARACHTRES),
+    ANIM_CMD(FLAIRGRANCE),
     ANIM_CMD(SCIZOR_REDUX),
     ANIM_CMD(TINKATON_MEGA),
     ANIM_CMD(KARTANA_FALLEN),

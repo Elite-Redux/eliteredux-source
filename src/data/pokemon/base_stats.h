@@ -40545,6 +40545,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_FLAIRGRANCE] =
+    {
+    .baseHP         = 101,
+    .baseAttack     = 72,
+    .baseDefense    = 79,
+    .baseSpeed      = 29,
+    .baseSpAttack   = 99,
+    .baseSpDefense  = 100,
+    .type1 = TYPE_FAIRY,
+    .type2 = TYPE_FAIRY,
+    .catchRate = 140,
+    .expYield = 162,
+    .evYield_HP    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_FAIRY,
+	.abilities = {ABILITY_AROMA_VEIL, ABILITY_LINGERING_AROMA, ABILITY_FAIRY_AURA},
+	.innates = {ABILITY_HEALER, ABILITY_PIXILATE, ABILITY_SOOTHING_AROMA},
+    .bodyColor = BODY_COLOR_PINK,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .baseHP        = 110,
