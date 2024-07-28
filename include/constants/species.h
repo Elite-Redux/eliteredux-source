@@ -1535,7 +1535,7 @@
 #define SPECIES_CASTFORM_SANDY              FORMS_START + 345
 
 // Misc Forms
-#define SPECIES_POLARTIC_BLUEMOON 346
+#define SPECIES_POLARTIC_BLUEMOON           FORMS_START + 346
 
 #define SPECIES_TERAPAGOS_STELLAR           FORMS_START + 347 //unused for now
 
