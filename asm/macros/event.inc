@@ -2118,19 +2118,6 @@
 	.byte \data1
 	.endm
 
-	@ adds to var result the number of trainer fought
-	.macro adddefeatedcountmax7 resetcount:req, trainer0:req, trainer1=0, trainer2=0, trainer3=0, trainer4=0, trainer5=0, trainer6=0
-	.byte 0xef
-	.byte \resetcount
-	.2byte \trainer0
-	.2byte \trainer1
-	.2byte \trainer2
-	.2byte \trainer3
-	.2byte \trainer4
-	.2byte \trainer5
-	.2byte \trainer6
-	.endm
-
 	@ if the trainer was defeated add 1 to var result, if reset then var result is init to 0 first
 	@ - [trainer] trainer id.
 	@ - [reset] boolean, if set then var result is set to 0 before trainer check
