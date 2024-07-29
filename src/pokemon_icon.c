@@ -1148,6 +1148,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_BEEFENDER] = gMonIcon_Beefender,
     [SPECIES_SALAZARUS] = gMonIcon_Salazarus,
     [SPECIES_GUERSHOOS] = gMonIcon_Guershoos,
+    [SPECIES_LEPASTRY] = gMonIcon_Lepastry,
     [SPECIES_TINKATON_MEGA] = gMonIcon_Tinkaton_Mega,
     [SPECIES_KARTANA_FALLEN] = gMonIcon_Kartana_Fallen,
     [SPECIES_KINGAMBIT_REDUX_MEGA] = gMonIcon_Kingambit_Redux_Mega,

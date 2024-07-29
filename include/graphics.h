@@ -11012,6 +11012,11 @@ extern const u32 gMonBackPic_Guershoos[];
 extern const u32 gMonPalette_Guershoos[];
 extern const u32 gMonShinyPalette_Guershoos[];
 extern const u8  gMonIcon_Guershoos[];
+extern const u32 gMonFrontPic_Lepastry[];
+extern const u32 gMonBackPic_Lepastry[];
+extern const u32 gMonPalette_Lepastry[];
+extern const u32 gMonShinyPalette_Lepastry[];
+extern const u8  gMonIcon_Lepastry[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];

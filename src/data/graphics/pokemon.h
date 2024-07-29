@@ -7501,6 +7501,12 @@ const u32 gMonPalette_Guershoos[]           = INCBIN_U32("graphics/pokemon/guers
 const u32 gMonShinyPalette_Guershoos[]      = INCBIN_U32("graphics/pokemon/guershoos/shiny.gbapal.lz");
 const u8  gMonIcon_Guershoos[]              = INCBIN_U8("graphics/pokemon/guershoos/icon.4bpp");
 
+const u32 gMonFrontPic_Lepastry[]          = INCBIN_U32("graphics/pokemon/lepastry/front.4bpp.lz");
+const u32 gMonBackPic_Lepastry[]           = INCBIN_U32("graphics/pokemon/lepastry/back.4bpp.lz");
+const u32 gMonPalette_Lepastry[]           = INCBIN_U32("graphics/pokemon/lepastry/normal.gbapal.lz");
+const u32 gMonShinyPalette_Lepastry[]      = INCBIN_U32("graphics/pokemon/lepastry/shiny.gbapal.lz");
+const u8  gMonIcon_Lepastry[]              = INCBIN_U8("graphics/pokemon/lepastry/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

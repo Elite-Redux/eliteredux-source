@@ -40841,6 +40841,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_LEPASTRY] =
+    {
+    .baseHP        = 82,
+    .baseAttack    = 80,
+    .baseDefense   = 86,
+    .baseSpeed     = 72,
+    .baseSpAttack  = 85,
+    .baseSpDefense = 75,
+    .type1 = TYPE_FAIRY,
+    .type2 = TYPE_FAIRY,
+    .catchRate = 140,
+    .expYield = 168,
+    .evYield_Defense   = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_FAIRY,
+	.abilities = {ABILITY_SWEET_VEIL, ABILITY_WELL_BAKED_BODY, ABILITY_UNBURDEN},
+	.innates = {ABILITY_GOOEY, ABILITY_PIXILATE, ABILITY_STICKY_HOLD},
+    .bodyColor = BODY_COLOR_WHITE,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .baseHP        = 110,
