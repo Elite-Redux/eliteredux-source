@@ -10995,6 +10995,11 @@ extern const u32 gMonBackPic_Sopranice[];
 extern const u32 gMonPalette_Sopranice[];
 extern const u32 gMonShinyPalette_Sopranice[];
 extern const u8  gMonIcon_Sopranice[];
+extern const u32 gMonFrontPic_Beefender[];
+extern const u32 gMonBackPic_Beefender[];
+extern const u32 gMonPalette_Beefender[];
+extern const u32 gMonShinyPalette_Beefender[];
+extern const u8  gMonIcon_Beefender[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];
