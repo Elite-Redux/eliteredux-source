@@ -52,8 +52,8 @@
     b = temp;               \
 }
 
-#define DEBUG_BUILD
-#define DEBUG_POKEMON_MENU TRUE
+// #define DEBUG_BUILD
+// #define DEBUG_POKEMON_MENU TRUE
 #define CURRENT_GAME_VERSION 1038
 
 // free saveblock 1 defines             If defined it will free the space
