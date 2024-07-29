@@ -7489,6 +7489,12 @@ const u32 gMonPalette_Polartic[]           = INCBIN_U32("graphics/pokemon/polart
 const u32 gMonShinyPalette_Polartic[]      = INCBIN_U32("graphics/pokemon/polartic/shiny.gbapal.lz");
 const u8  gMonIcon_Polartic[]              = INCBIN_U8("graphics/pokemon/polartic/icon.4bpp");
 
+const u32 gMonFrontPic_Salazarus[]          = INCBIN_U32("graphics/pokemon/salazarus/front.4bpp.lz");
+const u32 gMonBackPic_Salazarus[]           = INCBIN_U32("graphics/pokemon/salazarus/back.4bpp.lz");
+const u32 gMonPalette_Salazarus[]           = INCBIN_U32("graphics/pokemon/salazarus/normal.gbapal.lz");
+const u32 gMonShinyPalette_Salazarus[]      = INCBIN_U32("graphics/pokemon/salazarus/shiny.gbapal.lz");
+const u8  gMonIcon_Salazarus[]              = INCBIN_U8("graphics/pokemon/salazarus/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

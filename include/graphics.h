@@ -11000,6 +11000,11 @@ extern const u32 gMonBackPic_Beefender[];
 extern const u32 gMonPalette_Beefender[];
 extern const u32 gMonShinyPalette_Beefender[];
 extern const u8  gMonIcon_Beefender[];
+extern const u32 gMonFrontPic_Salazarus[];
+extern const u32 gMonBackPic_Salazarus[];
+extern const u32 gMonPalette_Salazarus[];
+extern const u32 gMonShinyPalette_Salazarus[];
+extern const u8  gMonIcon_Salazarus[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];
