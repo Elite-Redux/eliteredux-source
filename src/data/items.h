@@ -9590,7 +9590,7 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
-    [ITEM_SENZU] =
+    [ITEM_SENZU] = //mega evo stone for lucario mega Y
     {
         .name = _("Senzu Bean"),
         .itemId = ITEM_SENZU,
