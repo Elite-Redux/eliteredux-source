@@ -10975,6 +10975,11 @@ extern const u32 gMonBackPic_Arashinne[];
 extern const u32 gMonPalette_Arashinne[];
 extern const u32 gMonShinyPalette_Arashinne[];
 extern const u8  gMonIcon_Arashinne[];
+extern const u32 gMonFrontPic_Dreadnaut[];
+extern const u32 gMonBackPic_Dreadnaut[];
+extern const u32 gMonPalette_Dreadnaut[];
+extern const u32 gMonShinyPalette_Dreadnaut[];
+extern const u8  gMonIcon_Dreadnaut[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];

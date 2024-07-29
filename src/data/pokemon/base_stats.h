@@ -40653,6 +40653,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 4,
     },
 
+    [SPECIES_DREADNAUT] =
+    {
+    .baseHP        = 70,
+    .baseAttack    = 131,
+    .baseDefense   = 120,
+    .baseSpeed     = 40,
+    .baseSpAttack  = 76,
+    .baseSpDefense = 90,
+    .type1 = TYPE_GHOST,
+    .type2 = TYPE_GRASS,
+    .catchRate = 255,
+    .expYield = 181,
+    .evYield_Attack    = 2,
+    .genderRatio = MON_GENDERLESS,
+    .eggCycles = 25,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_MINERAL,
+    .eggGroup2 = EGG_GROUP_MINERAL,
+    .abilities = {ABILITY_WATER_ABSORB, ABILITY_SOUL_EATER, ABILITY_SHEER_FORCE},
+    .innates = {ABILITY_METALLIC, ABILITY_SEAWEED, ABILITY_STEELWORKER},
+    .bodyColor = BODY_COLOR_GREEN,
+    .noFlip = TRUE,
+    .tier = 2,
+    },
+
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .baseHP        = 110,

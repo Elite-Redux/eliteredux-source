@@ -1025,6 +1025,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_POLARTIC] = _("Polartic"),
     [SPECIES_POLARTIC_BLUEMOON] = _("Polartic"),
     [SPECIES_ARASHINNE] = _("Arashinne"),
+    [SPECIES_DREADNAUT] = _("Dreadnaut"),
 [SPECIES_TINKATON_MEGA] = _("Tinkaton"),
 [SPECIES_KARTANA_FALLEN] = _("Kartana"),
 [SPECIES_KINGAMBIT_REDUX_MEGA] = _("Kingambit"),
