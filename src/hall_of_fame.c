@@ -946,13 +946,11 @@ u16 getHallofFameSpecies(u8 num){
         case SPECIES_WIGGLYTUFF:
             if(item == ITEM_WIGGLITUFF_ORB)
                 return SPECIES_WIGGLYTUFF_PRIMAL;
-        break;
-        case SPECIES_WIGGLYTUFF:
-            if(item == ITEM_WIGGLYTUFFITE):
+            if(item == ITEM_WIGGLYTUFFITE)
                 return SPECIES_WIGGLYTUFF_MEGA;
         break;
         case SPECIES_TINKATON:
-            if(item == ITEM_TINKATITE):
+            if(item == ITEM_TINKATITE)
                 return SPECIES_TINKATON_MEGA;
         break;
     }
