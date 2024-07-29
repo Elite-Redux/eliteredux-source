@@ -7465,6 +7465,12 @@ const u32 gMonPalette_Sopranice[]           = INCBIN_U32("graphics/pokemon/sopra
 const u32 gMonShinyPalette_Sopranice[]      = INCBIN_U32("graphics/pokemon/sopranice/shiny.gbapal.lz");
 const u8  gMonIcon_Sopranice[]              = INCBIN_U8("graphics/pokemon/sopranice/icon.4bpp");
 
+const u32 gMonFrontPic_Beefender[]          = INCBIN_U32("graphics/pokemon/beefender/front.4bpp.lz");
+const u32 gMonBackPic_Beefender[]           = INCBIN_U32("graphics/pokemon/beefender/back.4bpp.lz");
+const u32 gMonPalette_Beefender[]           = INCBIN_U32("graphics/pokemon/beefender/normal.gbapal.lz");
+const u32 gMonShinyPalette_Beefender[]      = INCBIN_U32("graphics/pokemon/beefender/shiny.gbapal.lz");
+const u8  gMonIcon_Beefender[]              = INCBIN_U8("graphics/pokemon/beefender/icon.4bpp");
+
 const u32 gMonFrontPic_Arashinne[]          = INCBIN_U32("graphics/pokemon/arashinne/front.4bpp.lz");
 const u32 gMonBackPic_Arashinne[]           = INCBIN_U32("graphics/pokemon/arashinne/back.4bpp.lz");
 const u32 gMonPalette_Arashinne[]           = INCBIN_U32("graphics/pokemon/arashinne/normal.gbapal.lz");

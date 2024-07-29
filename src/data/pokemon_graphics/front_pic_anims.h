@@ -86,6 +86,11 @@ static const union AnimCmd sAnim_SOPRANICE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_BEEFENDER_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -426,6 +431,11 @@ static const union AnimCmd *const sAnims_HELIOSUNNY[] ={
 static const union AnimCmd *const sAnims_SOPRANICE[] ={
     sAnim_GeneralFrame0,
     sAnim_SOPRANICE_1,
+};
+
+static const union AnimCmd *const sAnims_BEEFENDER[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BEEFENDER_1,
 };
 
 static const union AnimCmd *const sAnims_POLARTIC[] ={
@@ -20073,6 +20083,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(BOARLOCK),
     ANIM_CMD(HELIOSUNNY),
     ANIM_CMD(SOPRANICE),
+    ANIM_CMD(BEEFENDER),
     ANIM_CMD(SCIZOR_REDUX),
     ANIM_CMD(TINKATON_MEGA),
     ANIM_CMD(KARTANA_FALLEN),

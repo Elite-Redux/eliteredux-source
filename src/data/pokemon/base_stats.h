@@ -40758,6 +40758,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_BEEFENDER] =
+    {
+    .baseHP        = 70,
+    .baseAttack    = 80,
+    .baseDefense   = 112,
+    .baseSpeed     = 40,
+    .baseSpAttack  = 80,
+    .baseSpDefense = 112,
+    .type1 = TYPE_BUG,
+    .type2 = TYPE_FLYING,
+    .catchRate = 255,
+    .expYield = 166,
+    .evYield_Defense   = 1,
+    .evYield_SpDefense = 1,
+    .item2 = ITEM_POISON_BARB,
+    .genderRatio = MON_FEMALE,
+    .eggCycles = 15,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_BUG,
+    .abilities = {ABILITY_REGENERATOR, ABILITY_STAMINA, ABILITY_PARENTAL_BOND},
+    .innates = {ABILITY_KINGS_WRATH, ABILITY_SUPREME_OVERLORD, ABILITY_SELF_SUFFICIENT},
+    .bodyColor = BODY_COLOR_YELLOW,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
 
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
