@@ -4387,7 +4387,6 @@ const u16 gEggMoves[] = {
         MOVE_SUPERSONIC,
         MOVE_STICKY_WEB,
         MOVE_RECOVER),
-        MOVE_BATON_PASS),
 
     egg_moves(NICKIT,
         MOVE_QUICK_GUARD,
