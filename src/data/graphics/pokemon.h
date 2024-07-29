@@ -7459,6 +7459,11 @@ const u32 gMonPalette_Heliosunny[]           = INCBIN_U32("graphics/pokemon/heli
 const u32 gMonShinyPalette_Heliosunny[]      = INCBIN_U32("graphics/pokemon/heliosunny/shiny.gbapal.lz");
 const u8  gMonIcon_Heliosunny[]              = INCBIN_U8("graphics/pokemon/heliosunny/icon.4bpp");
 
+const u32 gMonFrontPic_Sopranice[]          = INCBIN_U32("graphics/pokemon/sopranice/front.4bpp.lz");
+const u32 gMonBackPic_Sopranice[]           = INCBIN_U32("graphics/pokemon/sopranice/back.4bpp.lz");
+const u32 gMonPalette_Sopranice[]           = INCBIN_U32("graphics/pokemon/sopranice/normal.gbapal.lz");
+const u32 gMonShinyPalette_Sopranice[]      = INCBIN_U32("graphics/pokemon/sopranice/shiny.gbapal.lz");
+const u8  gMonIcon_Sopranice[]              = INCBIN_U8("graphics/pokemon/sopranice/icon.4bpp");
 
 const u32 gMonFrontPic_Arashinne[]          = INCBIN_U32("graphics/pokemon/arashinne/front.4bpp.lz");
 const u32 gMonBackPic_Arashinne[]           = INCBIN_U32("graphics/pokemon/arashinne/back.4bpp.lz");

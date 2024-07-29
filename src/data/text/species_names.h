@@ -1028,6 +1028,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DREADNAUT] = _("Dreadnaut"),
     [SPECIES_BOARLOCK] = _("Boarlock"),
     [SPECIES_HELIOSUNNY] = _("Heliosunny"),
+    [SPECIES_SOPRANICE] = _("Sopranice"),
 [SPECIES_TINKATON_MEGA] = _("Tinkaton"),
 [SPECIES_KARTANA_FALLEN] = _("Kartana"),
 [SPECIES_KINGAMBIT_REDUX_MEGA] = _("Kingambit"),

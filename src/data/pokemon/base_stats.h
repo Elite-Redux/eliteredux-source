@@ -40732,6 +40732,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_SOPRANICE] =
+    {
+    .baseHP        = 65,
+    .baseAttack    = 50,
+    .baseDefense   = 35,
+    .baseSpeed     = 115,
+    .baseSpAttack  = 115,
+    .baseSpDefense = 95,
+    .type1 = TYPE_ICE,
+    .type2 = TYPE_PSYCHIC,
+    .catchRate = 255,
+    .expYield = 159,
+    .evYield_SpAttack  = 2,
+    .genderRatio = MON_FEMALE,
+    .eggCycles = 25,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
+    .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
+    .abilities = {ABILITY_PSYCHIC_MIND, ABILITY_DANCER, ABILITY_PSYCHIC_SURGE},
+    .innates = {ABILITY_DRY_SKIN, ABILITY_REFRIGERATE, ABILITY_AMPLIFIER},
+    .bodyColor = BODY_COLOR_RED,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
