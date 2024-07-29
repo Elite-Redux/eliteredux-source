@@ -693,8 +693,12 @@ script DewfordTown_Gym_EventScript_BrawlyEngage{
 	setvar(VAR_0x8004, 15)
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
 	// count the number of trainer defeated, and tell a different line
-	// brenden is a tag battle so you know the lillith flag throught it. 
-	adddefeatedcountmax7(1, TRAINER_TAKAO, TRAINER_JOCELYN, TRAINER_LAURA, TRAINER_BRENDEN, TRAINER_CRISTIAN)
+	// brenden is a tag battle so you know the lillith flag throught it.
+	adddefeatedcount(TRAINER_TAKAO, 1)
+	adddefeatedcount(TRAINER_JOCELYN)
+	adddefeatedcount(TRAINER_LAURA) 
+	adddefeatedcount(TRAINER_BRENDEN) // TRAINER_LILITH
+	adddefeatedcount(TRAINER_CRISTIAN) 
 	switch (var(VAR_RESULT)) {
 		case 0:
 			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro0, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)

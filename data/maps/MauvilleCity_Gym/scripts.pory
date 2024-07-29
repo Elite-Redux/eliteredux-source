@@ -552,7 +552,7 @@ script MauvilleCity_Gym_EventScript_CheckTrainers{
 	if (!defeated(TRAINER_BEN)){
 		registerbattleevent(BATTLE_EVENT_STEADY_SPEED)
 	}
-	if (!defeated(TRAINER_SHAWN)){ // by entension TRAINER_ANGELOR too
+	if (!defeated(TRAINER_SHAWN)){ // by entension TRAINER_ANGELO too
 		registerbattleevent(BATTLE_EVENT_ONSTAY_MAGNET_RISE, 2)
 		registerbattleevent(BATTLE_EVENT_POSTURE_SPDEF)
 	}
@@ -569,7 +569,10 @@ script MauvilleCity_Gym_EventScript_Wattson{
     setvar(VAR_0x8004, 15)
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
     // Shawn is a double battle with angelo
-    adddefeatedcountmax7(1, TRAINER_VIVIAN, TRAINER_KIRK, TRAINER_SHAWN, TRAINER_BEN)
+	adddefeatedcount(TRAINER_VIVIAN, 1)  
+	adddefeatedcount(TRAINER_KIRK) 
+	adddefeatedcount(TRAINER_SHAWN) // TRAINER_ANGELO
+	adddefeatedcount(TRAINER_BEN)
 	switch (var(VAR_RESULT)) {
 		case 0:
 			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro0, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)

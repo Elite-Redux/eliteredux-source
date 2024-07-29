@@ -610,8 +610,14 @@ script LavaridgeTown_Gym_1F_EventScript_Flannery{
     call(LavaridgeTown_Gym_EventScript_CheckTrainers)
     setvar(VAR_0x8004, 15)
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
-    adddefeatedcountmax7(1, TRAINER_JEFF, TRAINER_JACE, TRAINER_ELI, TRAINER_KEEGAN, TRAINER_COLE, TRAINER_GERALD, TRAINER_AXLE)
-    adddefeatedcountmax7(0, TRAINER_DANIELLE) // 0 because no reset of the var_result
+	adddefeatedcount(TRAINER_JEFF, 1)  
+	adddefeatedcount(TRAINER_JACE) 
+	adddefeatedcount(TRAINER_ELI) 
+	adddefeatedcount(TRAINER_KEEGAN)
+	adddefeatedcount(TRAINER_COLE)  
+	adddefeatedcount(TRAINER_GERALD)
+	adddefeatedcount(TRAINER_AXLE) 
+	adddefeatedcount(TRAINER_DANIELLE)
     switch (var(VAR_RESULT)) {
         case 0:
             trainerbattle_single(TRAINER_FLANNERY_1 LavaridgeTown_Gym_1F_Text_FlanneryIntro0, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)

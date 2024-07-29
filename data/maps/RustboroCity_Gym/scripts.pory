@@ -567,7 +567,9 @@ script RustboroCity_Gym_EventScript_Roxanne{
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
 	setvar(VAR_0x8004, 15)
 	// count the number of trainer defeated, and tell a different line
-	adddefeatedcountmax7(1, TRAINER_JOSH, TRAINER_TOMMY, TRAINER_MARC)
+	adddefeatedcount(TRAINER_JOSH, 1)
+	adddefeatedcount(TRAINER_TOMMY)
+	adddefeatedcount(TRAINER_MARC)
 	switch (var(VAR_RESULT)) {
 		case 0:
 			trainerbattle_single(TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxanneIntro0, RustboroCity_Gym_Text_RoxanneDefeat, RustboroCity_Gym_EventScript_RoxanneDefeated, NO_MUSIC)

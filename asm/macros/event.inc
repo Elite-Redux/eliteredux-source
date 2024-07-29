@@ -2131,6 +2131,19 @@
 	.2byte \trainer6
 	.endm
 
+	@ if the trainer was defeated add 1 to var result, if reset then var result is init to 0 first
+	@ - [trainer] trainer id.
+	@ - [reset] boolean, if set then var result is set to 0 before trainer check
+	.macro adddefeatedcount trainer:req, reset=0
+		.if \reset
+			setvar VAR_RESULT, 0
+		.endif
+		checktrainerflag \trainer
+		goto_if FALSE, adddefeatedcountend_\@
+		addvar VAR_RESULT, 1
+		adddefeatedcountend_\@:
+	.endm
+
 	.macro yesnobattle text:req type=MSGBOX_NPC
 		yesnobattle_replay_\@:
 		msgbox \text, \type

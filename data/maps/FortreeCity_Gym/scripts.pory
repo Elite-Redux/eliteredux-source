@@ -495,7 +495,10 @@ script FortreeCity_Gym_EventScript_Winona{
     call(FortreeCity_Gym_EventScript_CheckTrainers)
     setvar(VAR_0x8004, 15)
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
-    adddefeatedcountmax7(1, TRAINER_JARED, TRAINER_FLINT, TRAINER_HUMBERTO, TRAINER_DARIUS)
+	adddefeatedcount(TRAINER_JARED, 1)  //TRAINER_ASHLEY
+	adddefeatedcount(TRAINER_FLINT) // TRAINER_EDWARDO
+	adddefeatedcount(TRAINER_HUMBERTO) 
+	adddefeatedcount(TRAINER_DARIUS)
     switch (var(VAR_RESULT)) {
         case 0:
             trainerbattle_single(TRAINER_WINONA_1 FortreeCity_Gym_Text_WinonaIntro0, FortreeCity_Gym_Text_WinonaDefeat, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)

@@ -1963,7 +1963,13 @@ script PetalburgCity_Gym_EventScript_NormanBattle{
     setvar(VAR_0x8004, 15)
     //msgbox(PetalburgCity_Gym_Text_NormanBattleIntro, MSGBOX_DEFAULT)
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
-    adddefeatedcountmax7(1, TRAINER_RANDALL, TRAINER_MARY, TRAINER_PARKER, TRAINER_ALEXIA, TRAINER_GEORGE, TRAINER_JODY, TRAINER_BERKE)
+	adddefeatedcount(TRAINER_RANDALL, 1)
+	adddefeatedcount(TRAINER_MARY)
+	adddefeatedcount(TRAINER_PARKER)
+	adddefeatedcount(TRAINER_ALEXIA)
+	adddefeatedcount(TRAINER_GEORGE)
+	adddefeatedcount(TRAINER_JODY)
+	adddefeatedcount(TRAINER_BERKE)
     switch (var(VAR_RESULT)) {
         case 0:
             trainerbattle_single(TRAINER_NORMAN_1 PetalburgCity_Gym_Text_NormanBattleIntro0, PetalburgCity_Gym_Text_NormanDefeat, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)

@@ -687,7 +687,7 @@ script MossdeepCity_Gym_EventScript_GiveCalmMind{
 }
 
 script MossdeepCity_Gym_EventScript_GiveBattleText{
-	adddefeatedcountmax7(1, TRAINER_SAMANTHA, TRAINER_MAURA, TRAINER_SYLVIA, TRAINER_KATHLEEN, TRAINER_MACEY, TRAINER_NATE)
+	call (MossdeepCity_Gym_EventScript_CalcDefeatedCount)
 	switch(var(VAR_RESULT)){
 		case 0:
 			yesnobattle(format("Our psychic powers mean that making this {COLOR GREEN}Light screen{COLOR DARK_GRAY} is childs play."))
@@ -912,6 +912,16 @@ script MossdeepCity_Gym_EventScript_Nicholas {
 	end
 }
 
+script MossdeepCity_Gym_EventScript_CalcDefeatedCount{
+	adddefeatedcount(TRAINER_SAMANTHA, 1) // TRAINER_BLAKE
+	adddefeatedcount(TRAINER_MAURA) // TRAINER_PRESTON
+	adddefeatedcount(TRAINER_SYLVIA) // TRAINER_HANNAH
+	adddefeatedcount(TRAINER_KATHLEEN) // TRAINER_NICHOLAS
+	adddefeatedcount(TRAINER_MACEY) // TRAINER_CLIFFORD
+	adddefeatedcount(TRAINER_NATE) // TRAINER_VIRGIL
+	return
+}
+
 script MossdeepCity_Gym_EventScript_CheckTrainers{
     if (defeated(TRAINER_TATE_AND_LIZA_1)) {
         msgbox(MossdeepCity_Gym_Text_TateAndLizaPostBattle, MSGBOX_DEFAULT)
@@ -924,7 +934,7 @@ script MossdeepCity_Gym_EventScript_CheckTrainers{
 	// TRAINER_KATHLEEN => TRAINER_NICHOLAS
 	// TRAINER_MACEY    => TRAINER_CLIFFORD
 	// TRAINER_NATE     => TRAINER_VIRGIL
-    adddefeatedcountmax7(1, TRAINER_SAMANTHA, TRAINER_MAURA, TRAINER_SYLVIA, TRAINER_KATHLEEN, TRAINER_MACEY, TRAINER_NATE)
+    call (MossdeepCity_Gym_EventScript_CalcDefeatedCount)
 	if (var(VAR_RESULT) < 1 ){
 		registerbattleevent(BATTLE_EVENT_LIGHTSCREEN, 5)
 	}
@@ -960,7 +970,7 @@ script MossdeepCity_Gym_EventScript_TateAndLiza{
 	setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_ROOM)
 	setvar(VAR_BATTLE_FIELD_ID, STATUS_FIELD_TRICK_ROOM)
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
-	adddefeatedcountmax7(1, TRAINER_SAMANTHA, TRAINER_MAURA, TRAINER_SYLVIA, TRAINER_KATHLEEN, TRAINER_MACEY, TRAINER_NATE)
+	call (MossdeepCity_Gym_EventScript_CalcDefeatedCount)
     switch (var(VAR_RESULT)) {
 		case 0:
 			trainerbattle_double(TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaIntro0, MossdeepCity_Gym_Text_TateAndLizaDefeat, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated, NO_MUSIC)
