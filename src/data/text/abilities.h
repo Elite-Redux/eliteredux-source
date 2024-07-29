@@ -586,6 +586,7 @@ static const u8 sAbilityAppleEnlightenmentDescription[] = _("Fur coat + Magic Gu
 static const u8 sAbilityBalloonBomberDescription[] = _("Aftermath + Inflatable");
 static const u8 sAbilityFlamingMawDescription[] = _("Strong Jaw + Flaming Jaws");
 static const u8 sAbilityDemolitionistDescription[] = _("Readied Action + Ignores Protect\n+ screens break on readied turn");
+static const u8 sAbilityRockhardWillDescription[] = _("Boosts Rock-type moves by 1.2x,\nor 1.5x when under 1/3 HP.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1206,6 +1207,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BALLOON_BOMBER] = _("Balloon Bomb"),
     [ABILITY_FLAMING_MAW] = _("Flaming Maw"),
     [ABILITY_DEMOLITIONIST] = _("Demolitionist"),
+    [ABILITY_ROCKHARD_WILL] = _("Rockhard Will"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1827,4 +1829,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_BALLOON_BOMBER] = sAbilityBalloonBomberDescription,
     [ABILITY_FLAMING_MAW] = sAbilityFlamingMawDescription,
     [ABILITY_DEMOLITIONIST] = sAbilityDemolitionistDescription,
+    [ABILITY_ROCKHARD_WILL] = sAbilityRockhardWillDescription,
 };

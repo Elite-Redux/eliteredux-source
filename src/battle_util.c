@@ -13852,6 +13852,15 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
                 MulModifier(&modifier, UQ_4_12(1.2));
         }
         break;
+    case ABILITY_ROCKHARD_WILL:
+        if (moveType == TYPE_ROCK)
+        {
+            if (gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
+                MulModifier(&modifier, UQ_4_12(1.5));
+            else
+                MulModifier(&modifier, UQ_4_12(1.2));
+        }
+        break;
     case ABILITY_VENGEANCE:
         if (moveType == TYPE_GHOST)
         {
