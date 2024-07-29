@@ -8805,10 +8805,10 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_TREECKO] =
     {
     .baseHP        = 40,
-    .baseAttack    = 45,
+    .baseAttack    = 65,
     .baseDefense   = 35,
     .baseSpeed     = 70,
-    .baseSpAttack  = 65,
+    .baseSpAttack  = 45,
     .baseSpDefense = 55,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_GRASS,
@@ -8831,10 +8831,10 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_GROVYLE] =
     {
     .baseHP        = 50,
-    .baseAttack    = 65,
+    .baseAttack    = 85,
     .baseDefense   = 45,
     .baseSpeed     = 95,
-    .baseSpAttack  = 85,
+    .baseSpAttack  = 65,
     .baseSpDefense = 65,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_GRASS,
