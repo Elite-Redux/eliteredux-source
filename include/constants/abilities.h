@@ -634,8 +634,9 @@
 #define ABILITY_REJECTION 612 // Applies Quash on switch-in.
 #define ABILITY_APPLE_ENLIGHTENMENT 613 // Fur coat + Magic Guard.
 #define ABILITY_BALLOON_BOMBER 614 // Aftermath + Inflatable
+#define ABILITY_FLAMING_MAW 615 // Strong Jaw + Flaming Jaws
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BALLOON_BOMBER + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_FLAMING_MAW + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
