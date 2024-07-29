@@ -7453,6 +7453,12 @@ const u32 gMonPalette_Boarlock[]           = INCBIN_U32("graphics/pokemon/boarlo
 const u32 gMonShinyPalette_Boarlock[]      = INCBIN_U32("graphics/pokemon/boarlock/shiny.gbapal.lz");
 const u8  gMonIcon_Boarlock[]              = INCBIN_U8("graphics/pokemon/boarlock/icon.4bpp");
 
+const u32 gMonFrontPic_Heliosunny[]          = INCBIN_U32("graphics/pokemon/heliosunny/front.4bpp.lz");
+const u32 gMonBackPic_Heliosunny[]           = INCBIN_U32("graphics/pokemon/heliosunny/back.4bpp.lz");
+const u32 gMonPalette_Heliosunny[]           = INCBIN_U32("graphics/pokemon/heliosunny/normal.gbapal.lz");
+const u32 gMonShinyPalette_Heliosunny[]      = INCBIN_U32("graphics/pokemon/heliosunny/shiny.gbapal.lz");
+const u8  gMonIcon_Heliosunny[]              = INCBIN_U8("graphics/pokemon/heliosunny/icon.4bpp");
+
 
 const u32 gMonFrontPic_Arashinne[]          = INCBIN_U32("graphics/pokemon/arashinne/front.4bpp.lz");
 const u32 gMonBackPic_Arashinne[]           = INCBIN_U32("graphics/pokemon/arashinne/back.4bpp.lz");

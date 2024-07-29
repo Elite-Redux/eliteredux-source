@@ -40705,6 +40705,34 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_HELIOSUNNY] =
+    {
+    .baseHP        = 62,
+    .baseAttack    = 55,
+    .baseDefense   = 52,
+    .baseSpeed     = 109,
+    .baseSpAttack  = 119,
+    .baseSpDefense = 94,
+    .type1 = TYPE_ELECTRIC,
+    .type2 = TYPE_NORMAL,
+    .catchRate = 255,
+    .expYield = 168,
+    .evYield_Speed     = 1,
+    .evYield_SpAttack  = 1,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_MONSTER,
+    .eggGroup2 = EGG_GROUP_DRAGON,
+	.abilities = {ABILITY_DRY_SKIN, ABILITY_SOLAR_POWER, ABILITY_SAND_RUSH},
+	.innates = {ABILITY_LIGHTNING_ROD, ABILITY_SHORT_CIRCUIT, ABILITY_GENERATOR},
+    .bodyColor = BODY_COLOR_YELLOW,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
+
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .baseHP        = 110,
