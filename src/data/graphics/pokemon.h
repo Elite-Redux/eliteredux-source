@@ -7447,6 +7447,13 @@ const u32 gMonPalette_Dreadnaut[]           = INCBIN_U32("graphics/pokemon/dread
 const u32 gMonShinyPalette_Dreadnaut[]      = INCBIN_U32("graphics/pokemon/dreadnaut/shiny.gbapal.lz");
 const u8  gMonIcon_Dreadnaut[]              = INCBIN_U8("graphics/pokemon/dreadnaut/icon.4bpp");
 
+const u32 gMonFrontPic_Boarlock[]          = INCBIN_U32("graphics/pokemon/boarlock/front.4bpp.lz");
+const u32 gMonBackPic_Boarlock[]           = INCBIN_U32("graphics/pokemon/boarlock/back.4bpp.lz");
+const u32 gMonPalette_Boarlock[]           = INCBIN_U32("graphics/pokemon/boarlock/normal.gbapal.lz");
+const u32 gMonShinyPalette_Boarlock[]      = INCBIN_U32("graphics/pokemon/boarlock/shiny.gbapal.lz");
+const u8  gMonIcon_Boarlock[]              = INCBIN_U8("graphics/pokemon/boarlock/icon.4bpp");
+
+
 const u32 gMonFrontPic_Arashinne[]          = INCBIN_U32("graphics/pokemon/arashinne/front.4bpp.lz");
 const u32 gMonBackPic_Arashinne[]           = INCBIN_U32("graphics/pokemon/arashinne/back.4bpp.lz");
 const u32 gMonPalette_Arashinne[]           = INCBIN_U32("graphics/pokemon/arashinne/normal.gbapal.lz");

@@ -10980,6 +10980,11 @@ extern const u32 gMonBackPic_Dreadnaut[];
 extern const u32 gMonPalette_Dreadnaut[];
 extern const u32 gMonShinyPalette_Dreadnaut[];
 extern const u8  gMonIcon_Dreadnaut[];
+extern const u32 gMonFrontPic_Boarlock[];
+extern const u32 gMonBackPic_Boarlock[];
+extern const u32 gMonPalette_Boarlock[];
+extern const u32 gMonShinyPalette_Boarlock[];
+extern const u8  gMonIcon_Boarlock[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];

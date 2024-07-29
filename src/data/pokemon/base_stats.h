@@ -40679,6 +40679,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 2,
     },
 
+    [SPECIES_BOARLOCK] =
+    {
+    .baseHP        = 100,
+    .baseAttack    = 45,
+    .baseDefense   = 55,
+    .baseSpeed     = 80,
+    .baseSpAttack  = 100,
+    .baseSpDefense = 110,
+    .type1 = TYPE_PSYCHIC,
+    .type2 = TYPE_PSYCHIC,
+    .catchRate = 255,
+    .expYield = 165,
+    .evYield_SpDefense = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_FIELD,
+	.abilities = {ABILITY_MAGIC_BOUNCE, ABILITY_GLUTTONY, ABILITY_OWN_TEMPO},
+	.innates = {ABILITY_FOREWARN, ABILITY_THICK_FAT, ABILITY_FUR_COAT},
+    .bodyColor = BODY_COLOR_PURPLE,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .baseHP        = 110,
