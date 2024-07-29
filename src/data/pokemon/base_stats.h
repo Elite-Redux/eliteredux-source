@@ -40813,6 +40813,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_GUERSHOOS] =
+    {
+    .baseHP        = 88,
+    .baseAttack    = 110,
+    .baseDefense   = 80,
+    .baseSpeed     = 45,
+    .baseSpAttack  = 55,
+    .baseSpDefense = 80,
+    .type1 = TYPE_NORMAL,
+    .type2 = TYPE_NORMAL,
+    .catchRate = 127,
+    .expYield = 146,
+    .evYield_Attack    = 2,
+    .item2 = ITEM_PECHA_BERRY,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 15,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_FIELD,
+    .abilities = {ABILITY_AMBUSH, ABILITY_ANALYTIC, ABILITY_OPPORTUNIST},
+    .innates = {ABILITY_STAKEOUT, ABILITY_STRONG_JAW, ABILITY_PREDATOR},
+    .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .baseHP        = 110,

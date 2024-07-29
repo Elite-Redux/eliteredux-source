@@ -1031,6 +1031,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SOPRANICE] = _("Sopranice"),
     [SPECIES_BEEFENDER] = _("Beefender"),
     [SPECIES_SALAZARUS] = _("Salazarus"),
+    [SPECIES_GUERSHOOS] = _("Guershoos"),
 [SPECIES_TINKATON_MEGA] = _("Tinkaton"),
 [SPECIES_KARTANA_FALLEN] = _("Kartana"),
 [SPECIES_KINGAMBIT_REDUX_MEGA] = _("Kingambit"),
