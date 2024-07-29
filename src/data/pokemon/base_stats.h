@@ -40461,7 +40461,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_TINKATON_MEGA] =
     {
-    .baseHP         = 85,
+    .baseHP         = 85, // add demolitionist when it's coded
     .baseAttack     = 110,
     .baseDefense    = 107,
     .baseSpeed      = 94,
@@ -40485,7 +40485,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_SLOW,
         .eggGroup1 = EGG_GROUP_FAIRY,
         .eggGroup2 = EGG_GROUP_FAIRY,
-	.abilities = {ABILITY_DEMOLITIONIST, ABILITY_DEMOLITIONIST, ABILITY_DEMOLITIONIST},
+	.abilities = {ABILITY_READIED_ACTION, ABILITY_READIED_ACTION, ABILITY_READIED_ACTION},
 	.innates = {ABILITY_SUPER_SLAMMER, ABILITY_LONG_REACH, ABILITY_MOLD_BREAKER},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
