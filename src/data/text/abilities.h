@@ -585,6 +585,7 @@ static const u8 sAbilityRejectionDescription[] = _("Applies Quash on switch-in."
 static const u8 sAbilityAppleEnlightenmentDescription[] = _("Fur coat + Magic Guard.");
 static const u8 sAbilityBalloonBomberDescription[] = _("Aftermath + Inflatable");
 static const u8 sAbilityFlamingMawDescription[] = _("Strong Jaw + Flaming Jaws");
+static const u8 sAbilityDemolitionistDescription[] = _("Readied Action + Ignores Protect\n+ screens break on readied turn");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1204,6 +1205,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_APPLE_ENLIGHTENMENT] = _("Apple Enlightenment"),
     [ABILITY_BALLOON_BOMBER] = _("Balloon Bomber"),
     [ABILITY_FLAMING_MAW] = _("Flaming Maw"),
+    [ABILITY_DEMOLITIONIST] = _("Demolitionist"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1824,4 +1826,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_APPLE_ENLIGHTENMENT] = sAbilityAppleEnlightenmentDescription,
     [ABILITY_BALLOON_BOMBER] = sAbilityBalloonBomberDescription,
     [ABILITY_FLAMING_MAW] = sAbilityFlamingMawDescription,
+    [ABILITY_DEMOLITIONIST] = sAbilityDemolitionistDescription,
 };

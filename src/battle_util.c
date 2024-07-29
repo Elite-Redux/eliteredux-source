@@ -12367,7 +12367,6 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return FALSE;
 }
 
-
 bool32 IsBattlerGrounded(u8 battlerId)
 {
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)

@@ -635,8 +635,9 @@
 #define ABILITY_APPLE_ENLIGHTENMENT 613 // Fur coat + Magic Guard.
 #define ABILITY_BALLOON_BOMBER 614 // Aftermath + Inflatable
 #define ABILITY_FLAMING_MAW 615 // Strong Jaw + Flaming Jaws
+#define ABILITY_DEMOLITIONIST 616 // Readied Action + Ignores Protection and shatters screens on the readied turn.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_FLAMING_MAW + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DEMOLITIONIST + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
