@@ -1203,7 +1203,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ENTRANCE] = _("Entrance"),
     [ABILITY_REJECTION] = _("Rejection"),
     [ABILITY_APPLE_ENLIGHTENMENT] = _("Apple Enlightenment"),
-    [ABILITY_BALLOON_BOMBER] = _("Balloon Bomber"),
+    [ABILITY_BALLOON_BOMBER] = _("Balloon Bomb"),
     [ABILITY_FLAMING_MAW] = _("Flaming Maw"),
     [ABILITY_DEMOLITIONIST] = _("Demolitionist"),
 };
