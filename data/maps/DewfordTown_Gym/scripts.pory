@@ -148,6 +148,10 @@ DewfordTown_Gym_EventScript_StopCountingTrainers:: @ 81FC7C1
 
 
 DewfordTown_Gym_EventScript_BrawlyDefeated:: @ 81FC7F7
+	goto_if_unset FLAG_DEFEATED_DEWFORD_GYM, DewfordTown_Gym_EventScript_BrawlyDefeatedFirstTime
+	release
+	end
+DewfordTown_Gym_EventScript_BrawlyDefeatedFirstTime:: @ 81FC7F7
 	//call DewfordTown_Gym_EventScript_AnimateFlashFullBrightness
 	message DewfordTown_Gym_Text_ReceivedKnuckleBadge
 	waitmessage
@@ -699,6 +703,7 @@ script DewfordTown_Gym_EventScript_BrawlyEngage{
 	adddefeatedcount(TRAINER_LAURA) 
 	adddefeatedcount(TRAINER_BRENDEN) // TRAINER_LILITH
 	adddefeatedcount(TRAINER_CRISTIAN) 
+	goto(DewfordTown_Gym_EventScript_BrawlyDefeated)
 	switch (var(VAR_RESULT)) {
 		case 0:
 			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro0, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
@@ -739,6 +744,7 @@ script DewfordTown_Gym_EventScript_ResetAllTrainers{
 	cleartrainerflag(TRAINER_LILITH)
 	cleartrainerflag(TRAINER_JOCELYN)
 	cleartrainerflag(TRAINER_BRAWLY_1)
+	setvar(VAR_TEMP_0, 0)//So you can reset refight brawly
 	return
 }
 

@@ -50,6 +50,10 @@ MossdeepCity_Gym_EventScript_SetSwitch4Metatiles:: @ 8220885
 	end
 
 MossdeepCity_Gym_EventScript_TateAndLizaDefeated:: @ 82208D1
+	goto_if_unset FLAG_DEFEATED_MOSSDEEP_GYM, MossdeepCity_Gym_EventScript_TateAndLizaDefeatedFirstTime
+	release
+	end
+MossdeepCity_Gym_EventScript_TateAndLizaDefeatedFirstTime:
 	message MossdeepCity_Gym_Text_ReceivedMindBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare

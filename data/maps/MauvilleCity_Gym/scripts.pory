@@ -48,6 +48,10 @@ MauvilleCity_Gym_EventScript_DeactivatePuzzle:: @ 820DEE7
 	end
 
 MauvilleCity_Gym_EventScript_WattsonDefeated:: @ 820DF2B
+	goto_if_unset FLAG_DEFEATED_MAUVILLE_GYM, MauvilleCity_Gym_EventScript_WattsonDefeatedFirstTime
+	release
+	end
+MauvilleCity_Gym_EventScript_WattsonDefeatedFirstTime:: 
 	message MauvilleCity_Gym_Text_ReceivedDynamoBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare

@@ -392,6 +392,11 @@ PetalburgCity_Gym_EventScript_GiveEnigmaBerry:: @ 8204E1D
 	end
 	
 PetalburgCity_Gym_EventScript_NormanAfterBattle::
+	goto_if_unset FLAG_DEFEATED_PETALBURG_GYM, PetalburgCity_Gym_EventScript_NormanAfterBattleFirstTime
+	release
+	end
+
+PetalburgCity_Gym_EventScript_NormanAfterBattleFirstTime::
 	message PetalburgCity_Gym_Text_ReceivedBalanceBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare

@@ -3,6 +3,10 @@ RustboroCity_Gym_MapScripts:: @ 8212F30
 	.byte 0
 
 RustboroCity_Gym_EventScript_RoxanneDefeated:: @ 8212F66
+	goto_if_unset FLAG_DEFEATED_RUSTBORO_GYM, RustboroCity_Gym_EventScript_RoxanneDefeatedFirstTime
+	release
+	end
+RustboroCity_Gym_EventScript_RoxanneDefeatedFirstTime:: 
 	message RustboroCity_Gym_Text_ReceivedStoneBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare

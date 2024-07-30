@@ -51,6 +51,11 @@ LavaridgeTown_Gym_1F_EventScript_EndCheckBuryTrainers:: @ 81FE78B
 
 
 LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated:: @ 81FE7C1
+	goto_if_unset FLAG_DEFEATED_LAVARIDGE_GYM, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated
+	release
+	end
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryDefeatedFirstTime:
 	message LavaridgeTown_Gym_1F_Text_ReceivedHeatBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare

@@ -17,6 +17,11 @@ FortreeCity_Gym_EventScript_InitRotatingGates:: @ 82165C4
 	end
 
 FortreeCity_Gym_EventScript_WinonaDefeated:: @ 82165FD
+	goto_if_unset FLAG_DEFEATED_FORTREE_GYM, FortreeCity_Gym_EventScript_WinonaDefeatedFirstTime
+	release
+	end
+
+FortreeCity_Gym_EventScript_WinonaDefeatedFirstTime:
 	message FortreeCity_Gym_Text_ReceivedFeatherBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
@@ -528,6 +533,7 @@ script FortreeCity_Gym_EventScript_ResetAllTrainers{
 	cleartrainerflag(TRAINER_HUMBERTO)
 	cleartrainerflag(TRAINER_DARIUS)
 	cleartrainerflag(TRAINER_WINONA_1)
+	setvar(VAR_TEMP_5, 0) // so you can refight winona with the reset
 	return
 }
 
