@@ -471,7 +471,7 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
             UnregisterCurrentBattleEvent();
         } 
         // if the player have 3 pokemon less than the gym leader then play the music
-        else if ((gPlayerPartyCount - gFaintedMonCount[0]) <= ((gEnemyPartyCount - - gFaintedMonCount[1]) - 3)){
+        else if ((gPlayerPartyCount - gFaintedMonCount[0]) <= ((gEnemyPartyCount - gFaintedMonCount[1]) - 3)){
             PlayBGM(DP_SEQ_BA_GYM);
             UnregisterCurrentBattleEvent();
         }
