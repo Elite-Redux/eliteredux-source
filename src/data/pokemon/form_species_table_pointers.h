@@ -80,7 +80,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_GASTRODON] = sGastrodonFormSpeciesIdTable,
     [SPECIES_LOPUNNY] = sLopunnyFormSpeciesIdTable,
     [SPECIES_LUCARIO] = sLucarioFormSpeciesIdTable,
-    [SPECIES_ABOMASNOW_SANTA] = sAbomasnowFormSpeciesIdTable,
+    [SPECIES_ABOMASNOW] = sAbomasnowFormSpeciesIdTable,
     [SPECIES_GALLADE] = sGalladeFormSpeciesIdTable,
     [SPECIES_SHAYMIN] = sShayminFormSpeciesIdTable,
     [SPECIES_ARCEUS] = sArceusFormSpeciesIdTable,
@@ -869,44 +869,28 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_MILOTIC] = sMiloticFormSpeciesIdTable,
     [SPECIES_MILOTIC_MEGA] = sMiloticFormSpeciesIdTable,
 
+    #ifndef DISABLE_TWO_POINT_FIVE_STUFF
     [SPECIES_CHIEN_PAO_MEGA] = sChien_PaoFormSpeciesIdTable,
     [SPECIES_DRACOVISH_MEGA] = sDracovishFormSpeciesIdTable,
-
     [SPECIES_LEDIAN_PARADOX] = sLedianFormSpeciesIdTable,
     [SPECIES_SNORLAX_PRIMAL] = sSnorlaxFormSpeciesIdTable,
-
     [SPECIES_VICTINI_PRIMAL] = sVictiniFormSpeciesIdTable,
-
     [SPECIES_WIGGLYTUFF_PRIMAL] = sWigglytuffFormSpeciesIdTable,
-
     [SPECIES_FLYGON_REDUX_MEGA] = sFlygonFormSpeciesIdTable,
-
     [SPECIES_MAWILE_REDUX_B_MEGA] = sMawileFormSpeciesIdTable,
-
     [SPECIES_RIBOMBEE_REDUX] = sRibombeeFormSpeciesIdTable,
-
     [SPECIES_RIBOMBEE_REDUX_MEGA] = sRibombeeFormSpeciesIdTable,
-
     [SPECIES_WEAVILE_REDUX] = sWeavileFormSpeciesIdTable,
-
     [SPECIES_WEAVILE_REDUX_MEGA] = sWeavileFormSpeciesIdTable,
-
     [SPECIES_ESPEON_GALAXY] = sEspeonFormSpeciesIdTable,
-
     [SPECIES_DARKRAI_NIGHTMARE] = sDarkraiFormSpeciesIdTable,
-
     [SPECIES_SOLROCK_SYSTEM] = sSolrockFormSpeciesIdTable,
-
     [SPECIES_SPECTRIER_CLOUD] = sSpectrierFormSpeciesIdTable,
-
     [SPECIES_WIGGLYTUFF_MEGA] = sWigglytuffFormSpeciesIdTable,
-
     [SPECIES_YVELTAL_MEGA] = sYveltal_MegaFormSpeciesIdTable,
-
     [SPECIES_KINGAMBIT_REDUX_MEGA] = sKingambit_Redux_MegaFormSpeciesIdTable,
-
     [SPECIES_KARTANA_FALLEN] = sKartana_FallenFormSpeciesIdTable,
-
     [SPECIES_TINKATON_MEGA] = sTinkatonFormSpeciesIdTable,
-
+    [SPECIES_ABOMASNOW_SANTA] = sAbomasnowFormSpeciesIdTable,
+    #endif
 };

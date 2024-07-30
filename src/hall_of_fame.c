@@ -911,6 +911,7 @@ u16 getHallofFameSpecies(u8 num){
         case SPECIES_GRENINJA_BATTLE_BOND:
             return SPECIES_GRENINJA_ASH;
         break;
+        #ifndef DISABLE_TWO_POINT_FIVE_STUFF
         case SPECIES_CHIEN_PAO:
             if(item == ITEM_CHIEN_PAOITE)
                 return SPECIES_CHIEN_PAO_MEGA;
@@ -953,6 +954,7 @@ u16 getHallofFameSpecies(u8 num){
             if(item == ITEM_TINKATITE)
                 return SPECIES_TINKATON_MEGA;
         break;
+        #endif
     }
 
     return species;

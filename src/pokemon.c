@@ -3851,11 +3851,13 @@ u8 GenerateShinyForm(u16 species){
     u8 isShiny = SHINY_VANILLA;
     u16 rand = Random(); // Max value is 65535
 
-    //Rare shiny creation
-    if(rand < LEGENDARY_SHINY_ODDS && numShinies >= SHINY_LEGENDARY)
-        isShiny = SHINY_LEGENDARY;
-    else if(rand < RARE_SHINY_ODDS && numShinies >= SHINY_RARE)
-        isShiny = SHINY_RARE;
+    #ifndef DISABLE_TWO_POINT_FIVE_STUFF
+        //Rare shiny creation
+        if(rand < LEGENDARY_SHINY_ODDS && numShinies >= SHINY_LEGENDARY)
+            isShiny = SHINY_LEGENDARY;
+        else if(rand < RARE_SHINY_ODDS && numShinies >= SHINY_RARE)
+            isShiny = SHINY_RARE;
+    #endif
     
     return isShiny;
 }

@@ -186,7 +186,10 @@
 #define B_MOLD_BREAKER_WORKS_ON_INNATES     TRUE    // If set to TRUE, Mold Breaker will disable innates
 
 // Item Restoration Settings
-#define B_RESTORE_ALL_ITEMS             TRUE     // If set to TRUE, all items are restored after Trainer battles, including berries, even they were not stolen.
-#define B_ALWAYS_RESTORE_ITEMS          TRUE     // If set to TRUE, stolen items (or all items if set above) will be restored after Wild battles.
+#define B_RESTORE_ALL_ITEMS                 TRUE     // If set to TRUE, all items are restored after Trainer battles, including berries, even they were not stolen.
+#define B_ALWAYS_RESTORE_ITEMS              TRUE     // If set to TRUE, stolen items (or all items if set above) will be restored after Wild battles.
+
+// Misc Stuff
+#define DISABLE_TWO_POINT_FIVE_STUFF        TRUE     // If set to TRUE, disables all the 2.5 features that are not fully implemented yet.
 
 #endif // GUARD_CONSTANTS_BATTLE_CONFIG_H
