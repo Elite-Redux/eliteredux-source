@@ -50,6 +50,7 @@ MossdeepCity_Gym_EventScript_SetSwitch4Metatiles:: @ 8220885
 	end
 
 MossdeepCity_Gym_EventScript_TateAndLizaDefeated:: @ 82208D1
+	clearflag(FLAG_SYS_INVERSE_BATTLE)
 	goto_if_unset FLAG_DEFEATED_MOSSDEEP_GYM, MossdeepCity_Gym_EventScript_TateAndLizaDefeatedFirstTime
 	release
 	end
@@ -969,10 +970,11 @@ text MossdeepCity_Gym_Text_TateAndLizaIntroAll{
 }
 script MossdeepCity_Gym_EventScript_TateAndLiza{
     goto_if_set(FLAG_SYS_GAME_CLEAR, MossdeepCity_Gym_EventScript_TateAndLizaRematch)
-    call(MossdeepCity_Gym_EventScript_CheckTrainers)
+    //call(MossdeepCity_Gym_EventScript_CheckTrainers)
 	setvar(VAR_0x8004, 15)
 	setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_ROOM)
 	setvar(VAR_BATTLE_FIELD_ID, STATUS_FIELD_TRICK_ROOM)
+	setflag(FLAG_SYS_INVERSE_BATTLE)
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
 	call (MossdeepCity_Gym_EventScript_CalcDefeatedCount)
     switch (var(VAR_RESULT)) {
