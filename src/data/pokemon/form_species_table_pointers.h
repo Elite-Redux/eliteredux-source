@@ -901,8 +901,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_WIGGLYTUFF_MEGA] = sWigglytuffFormSpeciesIdTable,
 
-    [SPECIES_TINKATON_MEGA] = sWigglytuffFormSpeciesIdTable,
-
     [SPECIES_YVELTAL_MEGA] = sYveltal_MegaFormSpeciesIdTable,
 
     [SPECIES_KINGAMBIT_REDUX_MEGA] = sKingambit_Redux_MegaFormSpeciesIdTable,

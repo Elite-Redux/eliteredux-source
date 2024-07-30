@@ -672,7 +672,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_PYROAR] = sPyroarLevelUpLearnset,
     [SPECIES_FLABEBE] = sFlabebeLevelUpLearnset,
     [SPECIES_FLOETTE] = sFloetteLevelUpLearnset,
-    [SPECIES_FLOETTE_ETERNAL_FLOWER] = sFloetteEternalFlowerLevelUpLearnset,
     [SPECIES_FLORGES] = sFlorgesLevelUpLearnset,
     [SPECIES_SKIDDO] = sSkiddoLevelUpLearnset,
     [SPECIES_GOGOAT] = sGogoatLevelUpLearnset,
