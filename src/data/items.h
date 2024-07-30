@@ -9570,7 +9570,7 @@ const struct Item gItems[] =
 
     [ITEM_WIGGLITUFF_ORB] = 
     {
-        .name = _("Ancient Apple"),
+        .name = _("Ancient Apple"), // this item will be getting resprited one day
         .itemId = ITEM_WIGGLITUFF_ORB,
         .price = 0,
         .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
