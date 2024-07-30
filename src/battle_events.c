@@ -159,8 +159,8 @@ bool8 AffectNStatusOnTeamFromLastToFirst(u32 status, u8 n){
 }
 
 // will always set the data in slot 2 (data1) of the battleEvent
-bool8 HasNumberOfTurnsStayedReached(struct BattleEvent *battleEvent){
-    if (gVolatileStructs[B_POSITION_PLAYER_LEFT].isFirstTurn){
+bool8 HasNumberOfTurnsStayedReached(struct BattleEvent *battleEvent, u8 pos){
+    if (gVolatileStructs[pos].isFirstTurn){
         battleEvent->data1 = 0;
     } else {
         battleEvent->data1 += 1;
@@ -410,19 +410,19 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillMatBlock)
     
     case BATTLE_EVENT_ONSTAY_FORESIGHT:
-        if (!HasNumberOfTurnsStayedReached(battleEvent) || gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_FORESIGHT)
+        if (!HasNumberOfTurnsStayedReached(battleEvent, B_POSITION_PLAYER_LEFT) || gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_FORESIGHT)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
         gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_FORESIGHT;
         RUN_BATTLESCRIPT(BattleScript_GymSkillForesight)  
     case BATTLE_EVENT_ONSTAY_LEECH_SEED:
-        if (!HasNumberOfTurnsStayedReached(battleEvent) || gStatuses3[B_SIDE_PLAYER] & STATUS3_LEECHSEED)
+        if (!HasNumberOfTurnsStayedReached(battleEvent, B_POSITION_PLAYER_LEFT) || gStatuses3[B_SIDE_PLAYER] & STATUS3_LEECHSEED)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         SET_STR1(sText_LeechSeed)
         gStatuses3[B_SIDE_PLAYER] |= STATUS3_LEECHSEED;
         gStatuses3[B_SIDE_PLAYER] |= B_SIDE_OPPONENT;
         RUN_BATTLESCRIPT(BattleScript_GymSkillLeechSeed)
     case BATTLE_EVENT_ONSTAY_MAGNET_RISE:
-        if (!HasNumberOfTurnsStayedReached(battleEvent) || gStatuses3[B_SIDE_OPPONENT] & STATUS3_MAGNET_RISE)
+        if (!HasNumberOfTurnsStayedReached(battleEvent, B_POSITION_OPPONENT_LEFT) || gStatuses3[B_SIDE_OPPONENT] & STATUS3_MAGNET_RISE)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
         gStatuses3[B_SIDE_OPPONENT] |= STATUS3_MAGNET_RISE;
         RUN_BATTLESCRIPT(BattleScript_GymSkillMagnetRise)
