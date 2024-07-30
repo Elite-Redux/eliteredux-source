@@ -113,7 +113,6 @@ void InitBattleControllers(void)
 static void InitSinglePlayerBtlControllers(void)
 {
     s32 i;
-
     if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER)
     {
         gBattleMainFunc = BeginBattleIntro;

@@ -3887,6 +3887,13 @@ static void DoBattleIntro(void)
 static void TryDoEventsBeforeFirstTurn(void)
 {
     s32 i, j;
+    #ifdef DEBUG_BUILD
+    if (FlagGet(FLAG_SYS_AUTOWIN)){
+        gBattleOutcome = B_OUTCOME_WON;
+        gBattleMainFunc = HandleEndTurn_BattleWon;
+        return;
+    }
+    #endif
     if (gBattleControllerExecFlags)
         return;
 
