@@ -970,7 +970,7 @@ text MossdeepCity_Gym_Text_TateAndLizaIntroAll{
 }
 script MossdeepCity_Gym_EventScript_TateAndLiza{
     goto_if_set(FLAG_SYS_GAME_CLEAR, MossdeepCity_Gym_EventScript_TateAndLizaRematch)
-    //call(MossdeepCity_Gym_EventScript_CheckTrainers)
+    call(MossdeepCity_Gym_EventScript_CheckTrainers)
 	setvar(VAR_0x8004, 15)
 	setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_ROOM)
 	setvar(VAR_BATTLE_FIELD_ID, STATUS_FIELD_TRICK_ROOM)
