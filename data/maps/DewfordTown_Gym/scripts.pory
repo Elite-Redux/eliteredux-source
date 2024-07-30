@@ -703,7 +703,6 @@ script DewfordTown_Gym_EventScript_BrawlyEngage{
 	adddefeatedcount(TRAINER_LAURA) 
 	adddefeatedcount(TRAINER_BRENDEN) // TRAINER_LILITH
 	adddefeatedcount(TRAINER_CRISTIAN) 
-	goto(DewfordTown_Gym_EventScript_BrawlyDefeated)
 	switch (var(VAR_RESULT)) {
 		case 0:
 			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro0, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
