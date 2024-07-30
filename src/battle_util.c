@@ -8919,10 +8919,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMING_JAWS) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMING_MAW)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBeBurned(gBattlerTarget)
-			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
+			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) //Biting Moves
              && (Random() % 2) == 0)
             {
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FLAMING_JAWS;
+                if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMING_JAWS))
+				    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FLAMING_JAWS;
+                else
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FLAMING_MAW;
                 gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
                 PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
                 BattleScriptPushCursor();
@@ -8932,6 +8935,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+        //Radio Jam
         if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RADIO_JAM))
         {
             if (ShouldApplyOnHitAffect(gBattlerTarget)
@@ -8951,7 +8955,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FEARMONGER)){
             if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBeParalyzed(gBattlerAttacker, gBattlerTarget)
-             && IsMoveMakingContact(move, gBattlerAttacker) //Does it need to be a contact move?
+             && IsMoveMakingContact(move, gBattlerAttacker) //Does it need to be a contact move? A: Yes
              && (Random() % 10) == 0)
             {
 				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FEARMONGER;

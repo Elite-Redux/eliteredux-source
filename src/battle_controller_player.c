@@ -2149,7 +2149,7 @@ static void HandleInputChooseTarget(void)
         EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
         //TryHideLastUsedBall();
         //TryToHideEnemyInfoWindow();
-        //HideMegaTriggerSprite();
+        HideMegaTriggerSprite();
         PlayerBufferExecCompleted();
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
