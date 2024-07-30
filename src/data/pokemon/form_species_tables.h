@@ -1764,3 +1764,14 @@ static const u16 sTinkatonFormSpeciesIdTable[] = {
     SPECIES_TINKATON_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sGyaradeathFormSpeciesIdTable[] = {
+    SPECIES_GYARADEATH,
+    SPECIES_GYARADEATH_MEGA_X,
+    SPECIES_GYARADEATH_MEGA_Y,
+    FORM_SPECIES_END,
+};
+static const u16 sPolarticFormSpeciesIdTable[] = {
+    SPECIES_POLARTIC,
+    SPECIES_POLARTIC_BLUEMOON,
+    FORM_SPECIES_END,
+};

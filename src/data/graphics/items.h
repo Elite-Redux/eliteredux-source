@@ -1556,6 +1556,11 @@ const u32 gItemIconPalette_Wigglytuffite[]  = INCBIN_U32("graphics/items/icon_pa
 const u32 gItemIcon_Tinkatite[]  = INCBIN_U32("graphics/items/icons/tinkatite.4bpp.lz");
 const u32 gItemIconPalette_Tinkatite[]  = INCBIN_U32("graphics/items/icon_palettes/tinkatite.gbapal.lz");
 
+const u32 gItemIcon_GyaradeathiteX[]  = INCBIN_U32("graphics/items/icons/gyaradeathite_x.4bpp.lz");
+const u32 gItemIconPalette_GyaradeathiteX[]  = INCBIN_U32("graphics/items/icon_palettes/gyaradeathite_x.gbapal.lz");
+
+const u32 gItemIcon_GyaradeathiteY[]  = INCBIN_U32("graphics/items/icons/gyaradeathite_y.4bpp.lz");
+const u32 gItemIconPalette_GyaradeathiteY[]  = INCBIN_U32("graphics/items/icon_palettes/gyaradeathite_y.gbapal.lz");
 
 const u32 gItemIcon_Senzu[] = INCBIN_U32("graphics/items/icons/senzu.4bpp.lz");
 const u32 gItemIconPalette_Senzu[] = INCBIN_U32("graphics/items/icon_palettes/senzu.gbapal.lz");

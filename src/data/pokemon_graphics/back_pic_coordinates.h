@@ -5506,6 +5506,21 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x88,
         .y_offset = 4,
     },
+    [SPECIES_GYARADEATH] =
+    {
+        .size = 0x88,
+        .y_offset = 5,
+    },
+    [SPECIES_GYARADEATH_MEGA_X] =
+    {
+        .size = 0,
+        .y_offset = 3,
+    },
+     [SPECIES_GYARADEATH_MEGA_Y] =
+    {
+        .size = 0,
+        .y_offset = 3,
+    },
     [SPECIES_CALYREX_CLOUD_RIDER] =
     {
         .size = 0,

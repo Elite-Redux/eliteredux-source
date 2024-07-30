@@ -3391,6 +3391,11 @@ static const u8 sTinkatiteDesc[] = _(
     "Tinkaton to Mega\n"
     "Evolve in battle.");
 
+static const u8 sGyaradeathiteDesc[] = _(
+    "This stone enables\n"
+    "Gyaradeath to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sSenzuDesc[] = _(
     "This bean enables\n"
     "Lucario to Mega\n"

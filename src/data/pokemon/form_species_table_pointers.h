@@ -901,8 +901,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_WIGGLYTUFF_MEGA] = sWigglytuffFormSpeciesIdTable,
 
-    [SPECIES_TINKATON_MEGA] = sWigglytuffFormSpeciesIdTable,
-
     [SPECIES_YVELTAL_MEGA] = sYveltal_MegaFormSpeciesIdTable,
 
     [SPECIES_KINGAMBIT_REDUX_MEGA] = sKingambit_Redux_MegaFormSpeciesIdTable,
@@ -910,5 +908,13 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_KARTANA_FALLEN] = sKartana_FallenFormSpeciesIdTable,
 
     [SPECIES_TINKATON_MEGA] = sTinkatonFormSpeciesIdTable,
+
+    [SPECIES_POLARTIC] = sPolarticFormSpeciesIdTable,
+
+    [SPECIES_GYARADEATH] = sGyaradeathFormSpeciesIdTable,
+
+    [SPECIES_GYARADEATH_MEGA_X] = sGyaradeathFormSpeciesIdTable,
+
+    [SPECIES_GYARADEATH_MEGA_Y] = sGyaradeathFormSpeciesIdTable,
 
 };
