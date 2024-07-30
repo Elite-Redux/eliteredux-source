@@ -19,36 +19,6 @@ LilycoveCity_DepartmentStoreRooftop_EventScript_HideSaleWoman:: @ 822022B
 	setflag FLAG_HIDE_LILYCOVE_DEPARTMENT_STORE_ROOFTOP_SALE_WOMAN
 	return
 
-LilycoveCity_DepartmentStoreRooftop_EventScript_SaleWoman:: @ 822022F
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemartdecoration LilycoveCity_DepartmentStoreRooftop_PokemartDecor_ClearOutSale
-	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-LilycoveCity_DepartmentStoreRooftop_PokemartDecor_ClearOutSale: @ 8220248
-	.2byte DECOR_MUD_BALL
-	.2byte DECOR_FENCE_LENGTH
-	.2byte DECOR_FENCE_WIDTH
-	.2byte DECOR_TIRE
-	.2byte DECOR_BREAKABLE_DOOR
-	.2byte DECOR_SOLID_BOARD
-	.2byte DECOR_SAND_ORNAMENT
-	.2byte DECOR_STAND
-	.2byte DECOR_SLIDE
-	.2byte DECOR_TV
-	.2byte DECOR_ROUND_TV
-	.2byte DECOR_CUTE_TV
-	.2byte DECOR_WAILMER_DOLL
-	.2byte DECOR_RHYDON_DOLL
-	.2byte 0
-	release
-	end
-
 LilycoveCity_DepartmentStoreRooftop_EventScript_Man:: @ 8220268
 	lock
 	faceplayer
@@ -66,14 +36,6 @@ LilycoveCity_DepartmentStoreRooftop_EventScript_ManClearOutSale:: @ 8220282
 
 LilycoveCity_DepartmentStoreRooftop_EventScript_ThirstyMan:: @ 822028C
 	msgbox LilycoveCity_DepartmentStoreRooftop_Text_BoneDryThirsty, MSGBOX_NPC
-	end
-
-LilycoveCity_DepartmentStoreRooftop_EventScript_VendingMachine:: @ 8220295
-	lockall
-	message LilycoveCity_DepartmentStoreRooftop_Text_WhichDrinkWouldYouLike
-	waitmessage
-	showmoneybox 0, 0, 0
-	goto LilycoveCity_DepartmentStoreRooftop_EventScript_ChooseDrink
 	end
 
 LilycoveCity_DepartmentStoreRooftop_EventScript_ChooseDrink:: @ 82202A6
@@ -262,3 +224,13 @@ LilycoveCity_DepartmentStoreRooftop_Text_HaveTM90:
 	.string "own lives to the utmost!\p"
 	.string "I hope you'll get that way, too!$"
 `
+
+
+script LilycoveCity_DepartmentStoreRooftop_EventScript_VendingMachine{
+	lockall
+	message(format("It seems like the Vending Machine is broken, I can't sell you any drinks right now."))
+	waitmessage
+	releaseall
+	end
+}
+

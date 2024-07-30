@@ -52,7 +52,7 @@
 extern const u8 EventScript_ResetAllMapFlags[];
 
 static void ClearFrontierRecord(void);
-static void WarpToTruck(void);
+static void WarpToHome(void);
 static void ResetMiniGamesRecords(void);
 static void RandomizeBerryEncounters(void);
 
@@ -135,10 +135,15 @@ static void ClearFrontierRecord(void)
     gSaveBlock2Ptr->frontier.opponentNames[1][0] = EOS;
 }
 
-static void WarpToTruck(void)
+static void WarpToHome(void)
 {
-    SetWarpDestination(MAP_GROUP(INSIDE_OF_TRUCK), MAP_NUM(INSIDE_OF_TRUCK), -1, -1, -1);
-    WarpIntoMap();
+    if (gSaveBlock2Ptr->playerGender == FEMALE){
+        SetWarpDestination(MAP_GROUP(LITTLEROOT_TOWN_MAYS_HOUSE_2F), MAP_NUM(LITTLEROOT_TOWN_MAYS_HOUSE_2F), -1, 7, 4);
+        WarpIntoMap();
+    } else {
+        SetWarpDestination(MAP_GROUP(LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), MAP_NUM(LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), -1, 1, 4);
+        WarpIntoMap();
+    }
 }
 
 void Sav2_ClearSetDefault(void)
@@ -171,7 +176,6 @@ void NewGameInitData(void)
     ClearSav1();
     ClearMailData();
     gSaveBlock2Ptr->specialSaveWarpFlags = 0;
-    gSaveBlock2Ptr->gcnLinkFlags = 0;
     InitPlayerTrainerId();
     PlayTimeCounter_Reset();
     ClearPokedexFlags();
@@ -181,6 +185,7 @@ void NewGameInitData(void)
     ClearSecretBases();
     ClearBerryTrees();
     SetMoney(&gSaveBlock1Ptr->money, 999900);
+    gSaveBlock2Ptr->frontier.battlePoints = 20;
     SetCoins(0);
     ResetLinkContestBoolean();
     ResetGameStats();
@@ -205,7 +210,7 @@ void NewGameInitData(void)
     InitDewfordTrend();
     ResetFanClub();
     ResetLotteryCorner();
-    WarpToTruck();
+    WarpToHome();
     ScriptContext2_RunNewScript(EventScript_ResetAllMapFlags);
     ResetMiniGamesRecords();
     InitUnionRoomChatRegisteredTexts();
@@ -213,12 +218,14 @@ void NewGameInitData(void)
     ResetAllApprenticeData();
     ClearRankingHallRecords();
     InitMatchCallCounters();
-    sub_801AFD8();
+    ClearMysteryGift();
     WipeTrainerNameRecords();
     ResetTrainerHillResults();
     ResetContestLinkResults();
     RandomizeBerryEncounters();
 	gSaveBlock1Ptr->dexNavChain = 0;
+    memset(&gSaveBlock2Ptr->questStatus, 0, sizeof(gSaveBlock2Ptr->questStatus));
+    gSaveBlock2Ptr->activeQuest = 0;
 }
 
 static void ResetMiniGamesRecords(void)

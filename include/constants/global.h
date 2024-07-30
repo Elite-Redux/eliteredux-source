@@ -46,8 +46,7 @@
 #define BAG_BERRIES_COUNT 66
 #define BAG_POKEBALLS_COUNT 27
 #define BAG_KEYITEMS_COUNT 55
-#define BAG_MEGASTONES_COUNT_NEW 140
-#define BAG_MEGASTONES_COUNT 70 //Unused
+#define BAG_MEGASTONES_COUNT 140
 #define OBJECT_EVENT_TEMPLATES_COUNT 64
 #define DECOR_MAX_SECRET_BASE 16
 #define DECOR_MAX_PLAYERS_HOUSE 12
@@ -85,12 +84,12 @@
 
 // string lengths
 #define ITEM_NAME_LENGTH 17
-#define POKEMON_NAME_LENGTH 10
+#define POKEMON_NAME_LENGTH 12
 #define PLAYER_NAME_LENGTH 7
 #define MAIL_WORDS_COUNT 9
 #define EASY_CHAT_BATTLE_WORDS_COUNT 6
 #define MOVE_NAME_LENGTH 12
-#define LONG_MOVE_NAME_LENGTH 16
+#define LONG_MOVE_NAME_LENGTH 18
 #define NUM_QUESTIONNAIRE_WORDS 4
 
 #define MALE 0
@@ -135,6 +134,12 @@
 #define LEVEL_CAPS_ELITE       2
 #define LEVEL_CAPS_OFF         3
 
+//Themes
+#define THEME_DARK    0
+#define THEME_LIGHT   1
+#define THEME_DPPT    2
+#define THEME_CLASSIC 3
+
 //Saveblock Toggle Stuff
 #define SAVEBLOCK_RANDOMIZER        0
 #define SAVEBLOCK_INNATE_RANDOMIZER 1
@@ -142,9 +147,48 @@
 #define SAVEBLOCK_ENABLE_LEGENDARY  3
 
 //In Battle Debug Stuff
-#define MACROS_PRINT_MGBA_MESSAGE       0
-#define MACROS_FORCE_FALSE_SWIPE_EFFECT 1
-#define MACROS_RESET_MULTIHIT_HITS      2
-#define MACROS_GET_DOUBLE_HEALTH        3
+#define MACROS_PRINT_MGBA_MESSAGE                          0
+#define MACROS_FORCE_FALSE_SWIPE_EFFECT                    1
+#define MACROS_RESET_MULTIHIT_HITS                         2
+// Missing 3
+#define MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_1   4
+#define MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_2   5
+#define MACROS_SAVE_ABILITY_TO_VARIABLE                    6
+#define MACROS_OVERWRITE_NEXT_STRING                       7
+#define MACROS_CLEAN_OVERWRITEN_STRINGS                    8
+
+//Get Extra ID Stuff
+#define GET_EXTRA_ID_DEFAULT             0
+#define GET_EXTRA_ID_BATTLE_POINTS       1
+#define GET_EXTRA_ID_ITEM                2
+#define GET_EXTRA_ID_POKEMON             3
+#define GET_EXTRA_ID_RANDOM_FROM_POOL    4
+
+#define MAX_SIGHT_RADIUS 10
+
+#define POKEMON_POOL_DEFAULT     0
+#define POKEMON_POOL_STARTERS    1
+#define POKEMON_POOL_FOSSILS     2
+#define POKEMON_POOL_REDUX_FORMS 3
+
+//BP Gain Config
+#define DEFAULT_BP_GAIN_PER_TRAINER 5
+
+//Shop Config
+#define DEFAULT_POKEMON_PRICE    15
+#define DEFAULT_ITEM_PRICE       30
+#define DEFAULT_MEGA_STONE_PRICE 30
+#define DEFAULT_DECORATION_PRICE 5
+
+//Dexnav
+#define DEFAULT_DEXNAV_MON_PRICE 1
+#define DEXNAV_BUY_ALL_DISCOUNT  50 //In Percent
+#define DEXNAV_MON_FREE          TRUE
+
+#define BALL_SWAP_PRICE          5 //Price to swap a ball
+
+//Yes No Box
+#define BATTLE_BOX_YES_NO_Y     0
+#define BATTLE_BOX_YES_NO_WIDTH 4
 
 #endif // GUARD_CONSTANTS_GLOBAL_H

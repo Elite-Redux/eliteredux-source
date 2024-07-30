@@ -4,6 +4,7 @@
 #include "decompress.h"
 #include "decoration.h"
 #include "decoration_inventory.h"
+#include "event_data.h"
 #include "event_object_movement.h"
 #include "field_player_avatar.h"
 #include "field_screen_effect.h"
@@ -24,7 +25,12 @@
 #include "overworld.h"
 #include "palette.h"
 #include "party_menu.h"
+#include "pokemon.h"
+#include "pokemon_icon.h"
+#include "pokedex.h"
+#include "random.h"
 #include "scanline_effect.h"
+#include "script_pokemon_util.h"
 #include "script.h"
 #include "shop.h"
 #include "sound.h"
@@ -38,6 +44,8 @@
 #include "constants/metatile_behaviors.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#include "mgba_printf/mgba.h"
+#include "mgba_printf/mini_printf.h"
 
 #define TAG_SCROLL_ARROW   2100
 #define TAG_ITEM_ICON_BASE 2110
@@ -276,27 +284,34 @@ static const u8 sShopBuyMenuTextColors[][3] =
 static u8 CreateShopMenu(u8 martType)
 {
     int numMenuItems;
+    struct WindowTemplate winTemplate;
 
     ScriptContext2_Enable();
     sMartInfo.martType = martType;
 
-    if (martType == MART_TYPE_NORMAL)
-    {
-        struct WindowTemplate winTemplate;
-        winTemplate = sShopMenuWindowTemplates[0];
-        winTemplate.width = GetMaxWidthInMenuTable(sShopMenuActions_BuySellQuit, ARRAY_COUNT(sShopMenuActions_BuySellQuit));
-        sMartInfo.windowId = AddWindow(&winTemplate);
-        sMartInfo.menuActions = sShopMenuActions_BuySellQuit;
-        numMenuItems = ARRAY_COUNT(sShopMenuActions_BuySellQuit);
-    }
-    else
-    {
-        struct WindowTemplate winTemplate;
-        winTemplate = sShopMenuWindowTemplates[1];
-        winTemplate.width = GetMaxWidthInMenuTable(sShopMenuActions_BuyQuit, ARRAY_COUNT(sShopMenuActions_BuyQuit));
-        sMartInfo.windowId = AddWindow(&winTemplate);
-        sMartInfo.menuActions = sShopMenuActions_BuyQuit;
-        numMenuItems = ARRAY_COUNT(sShopMenuActions_BuyQuit);
+    switch(sMartInfo.martType){
+        case MART_TYPE_NORMAL:
+            winTemplate = sShopMenuWindowTemplates[0];
+            winTemplate.width = GetMaxWidthInMenuTable(sShopMenuActions_BuySellQuit, ARRAY_COUNT(sShopMenuActions_BuySellQuit));
+            sMartInfo.windowId = AddWindow(&winTemplate);
+            sMartInfo.menuActions = sShopMenuActions_BuySellQuit;
+            numMenuItems = ARRAY_COUNT(sShopMenuActions_BuySellQuit);
+        break;
+        case MART_TYPE_DECOR:
+        case MART_TYPE_DECOR2:
+            winTemplate = sShopMenuWindowTemplates[1];
+            winTemplate.width = GetMaxWidthInMenuTable(sShopMenuActions_BuyQuit, ARRAY_COUNT(sShopMenuActions_BuyQuit));
+            sMartInfo.windowId = AddWindow(&winTemplate);
+            sMartInfo.menuActions = sShopMenuActions_BuyQuit;
+            numMenuItems = ARRAY_COUNT(sShopMenuActions_BuyQuit);
+        break;
+        case MART_TYPE_MONS:
+            winTemplate = sShopMenuWindowTemplates[1];
+            winTemplate.width = GetMaxWidthInMenuTable(sShopMenuActions_BuyQuit, ARRAY_COUNT(sShopMenuActions_BuyQuit));
+            sMartInfo.windowId = AddWindow(&winTemplate);
+            sMartInfo.menuActions = sShopMenuActions_BuyQuit;
+            numMenuItems = ARRAY_COUNT(sShopMenuActions_BuyQuit);
+        break;
     }
 
     SetStandardWindowBorderStyle(sMartInfo.windowId, 0);
@@ -313,13 +328,253 @@ static void SetShopMenuCallback(void (* callback)(void))
     sMartInfo.callback = callback;
 }
 
+// 0 Badges
+static const u16 sAdoptionCenterInventory_ZeroBadges[] = {
+    SPECIES_PANSAGE_REDUX,
+    SPECIES_PANSEAR_REDUX,
+    SPECIES_PANPOUR_REDUX,
+    SPECIES_NONE,
+};
+
+// 1 Badge
+static const u16 sAdoptionCenterInventory_OneBadges[] = {
+    SPECIES_WEEDLE_REDUX,
+    SPECIES_WHISMUR_REDUX,
+    SPECIES_STUFFUL_REDUX,
+    SPECIES_SOLOSIS_REDUX,
+    SPECIES_ABRA_REDUX,
+    SPECIES_PANSAGE_REDUX,
+    SPECIES_PANSEAR_REDUX,
+    SPECIES_PANPOUR_REDUX,
+    SPECIES_NONE,
+};
+
+// 2 Badges
+static const u16 sAdoptionCenterInventory_TwoBadges[] = {
+    SPECIES_PAWNIARD_REDUX,
+    SPECIES_MACHOP_REDUX,
+    SPECIES_BUIZEL_REDUX,
+    SPECIES_HONEDGE_REDUX,
+    SPECIES_WEEDLE_REDUX,
+    SPECIES_WHISMUR_REDUX,
+    SPECIES_STUFFUL_REDUX,
+    SPECIES_SOLOSIS_REDUX,
+    SPECIES_ABRA_REDUX,
+    SPECIES_PANSAGE_REDUX,
+    SPECIES_PANSEAR_REDUX,
+    SPECIES_PANPOUR_REDUX,
+    SPECIES_NONE,
+};
+
+// 3 Badges
+static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
+    SPECIES_HOUNDOUR_REDUX,
+    SPECIES_SLUGMA_REDUX,
+    SPECIES_GROWLITHE_REDUX,
+    SPECIES_SABLEYE_REDUX,
+    SPECIES_MAWILE_REDUX,
+    SPECIES_DODUO_REDUX,
+    SPECIES_SKARMORY_REDUX,
+    SPECIES_PAWNIARD_REDUX,
+    SPECIES_MACHOP_REDUX,
+    SPECIES_BUIZEL_REDUX,
+    SPECIES_HONEDGE_REDUX,
+    SPECIES_WEEDLE_REDUX,
+    SPECIES_WHISMUR_REDUX,
+    SPECIES_STUFFUL_REDUX,
+    SPECIES_SOLOSIS_REDUX,
+    SPECIES_ABRA_REDUX,
+    SPECIES_PANSAGE_REDUX,
+    SPECIES_PANSEAR_REDUX,
+    SPECIES_PANPOUR_REDUX,
+    SPECIES_NONE,
+};
+
+// 4 Badges
+static const u16 sAdoptionCenterInventory_FourBadges[] = {
+    SPECIES_HOUNDOUR_REDUX,
+    SPECIES_SLUGMA_REDUX,
+    SPECIES_GROWLITHE_REDUX,
+    SPECIES_SABLEYE_REDUX,
+    SPECIES_MAWILE_REDUX,
+    SPECIES_DODUO_REDUX,
+    SPECIES_SKARMORY_REDUX,
+    SPECIES_PAWNIARD_REDUX,
+    SPECIES_MACHOP_REDUX,
+    SPECIES_BUIZEL_REDUX,
+    SPECIES_HONEDGE_REDUX,
+    SPECIES_WEEDLE_REDUX,
+    SPECIES_WHISMUR_REDUX,
+    SPECIES_STUFFUL_REDUX,
+    SPECIES_SOLOSIS_REDUX,
+    SPECIES_ABRA_REDUX,
+    SPECIES_PANSAGE_REDUX,
+    SPECIES_PANSEAR_REDUX,
+    SPECIES_PANPOUR_REDUX,
+    SPECIES_NONE,
+};
+
+// 5 Badges
+static const u16 sAdoptionCenterInventory_FiveBadges[] = {
+    SPECIES_HOUNDOUR_REDUX,
+    SPECIES_SLUGMA_REDUX,
+    SPECIES_GROWLITHE_REDUX,
+    SPECIES_SABLEYE_REDUX,
+    SPECIES_MAWILE_REDUX,
+    SPECIES_DODUO_REDUX,
+    SPECIES_SKARMORY_REDUX,
+    SPECIES_PAWNIARD_REDUX,
+    SPECIES_MACHOP_REDUX,
+    SPECIES_BUIZEL_REDUX,
+    SPECIES_HONEDGE_REDUX,
+    SPECIES_WEEDLE_REDUX,
+    SPECIES_WHISMUR_REDUX,
+    SPECIES_STUFFUL_REDUX,
+    SPECIES_SOLOSIS_REDUX,
+    SPECIES_ABRA_REDUX,
+    SPECIES_PANSAGE_REDUX,
+    SPECIES_PANSEAR_REDUX,
+    SPECIES_PANPOUR_REDUX,
+    SPECIES_NONE,
+};
+
+// 6 Badges
+static const u16 sAdoptionCenterInventory_SixBadges[] = {
+    SPECIES_DEINO_REDUX,
+    SPECIES_GIBLE_REDUX,
+    SPECIES_LARVITAR_REDUX,
+    SPECIES_HOUNDOUR_REDUX,
+    SPECIES_SLUGMA_REDUX,
+    SPECIES_GROWLITHE_REDUX,
+    SPECIES_SABLEYE_REDUX,
+    SPECIES_MAWILE_REDUX,
+    SPECIES_DODUO_REDUX,
+    SPECIES_SKARMORY_REDUX,
+    SPECIES_PAWNIARD_REDUX,
+    SPECIES_MACHOP_REDUX,
+    SPECIES_BUIZEL_REDUX,
+    SPECIES_HONEDGE_REDUX,
+    SPECIES_WEEDLE_REDUX,
+    SPECIES_WHISMUR_REDUX,
+    SPECIES_STUFFUL_REDUX,
+    SPECIES_SOLOSIS_REDUX,
+    SPECIES_ABRA_REDUX,
+    SPECIES_PANSAGE_REDUX,
+    SPECIES_PANSEAR_REDUX,
+    SPECIES_PANPOUR_REDUX,
+    SPECIES_NONE,
+};
+
+// 7 Badges
+static const u16 sAdoptionCenterInventory_SevenBadges[] = {
+    SPECIES_DEINO_REDUX,
+    SPECIES_GIBLE_REDUX,
+    SPECIES_LARVITAR_REDUX,
+    SPECIES_HOUNDOUR_REDUX,
+    SPECIES_SLUGMA_REDUX,
+    SPECIES_GROWLITHE_REDUX,
+    SPECIES_SABLEYE_REDUX,
+    SPECIES_MAWILE_REDUX,
+    SPECIES_DODUO_REDUX,
+    SPECIES_SKARMORY_REDUX,
+    SPECIES_PAWNIARD_REDUX,
+    SPECIES_MACHOP_REDUX,
+    SPECIES_BUIZEL_REDUX,
+    SPECIES_HONEDGE_REDUX,
+    SPECIES_WEEDLE_REDUX,
+    SPECIES_WHISMUR_REDUX,
+    SPECIES_STUFFUL_REDUX,
+    SPECIES_SOLOSIS_REDUX,
+    SPECIES_ABRA_REDUX,
+    SPECIES_PANSAGE_REDUX,
+    SPECIES_PANSEAR_REDUX,
+    SPECIES_PANPOUR_REDUX,
+    SPECIES_NONE,
+};
+
+// 8 Badges
+static const u16 sAdoptionCenterInventory_EightBadges[] = {
+    SPECIES_KUBFU,
+    SPECIES_MELTAN,
+    SPECIES_POIPOLE,
+    SPECIES_AZELF_REDUX,
+    SPECIES_UXIE_REDUX,
+    SPECIES_MESPRIT_REDUX,
+    SPECIES_DEINO_REDUX,
+    SPECIES_GIBLE_REDUX,
+    SPECIES_LARVITAR_REDUX,
+    SPECIES_HOUNDOUR_REDUX,
+    SPECIES_SLUGMA_REDUX,
+    SPECIES_GROWLITHE_REDUX,
+    SPECIES_SABLEYE_REDUX,
+    SPECIES_MAWILE_REDUX,
+    SPECIES_DODUO_REDUX,
+    SPECIES_SKARMORY_REDUX,
+    SPECIES_PAWNIARD_REDUX,
+    SPECIES_MACHOP_REDUX,
+    SPECIES_BUIZEL_REDUX,
+    SPECIES_HONEDGE_REDUX,
+    SPECIES_WEEDLE_REDUX,
+    SPECIES_WHISMUR_REDUX,
+    SPECIES_STUFFUL_REDUX,
+    SPECIES_SOLOSIS_REDUX,
+    SPECIES_ABRA_REDUX,
+    SPECIES_PANSAGE_REDUX,
+    SPECIES_PANSEAR_REDUX,
+    SPECIES_PANPOUR_REDUX,
+    SPECIES_NONE,
+};
+
+static const u16 *const sAdoptionCenterInventories[] = 
+{
+    sAdoptionCenterInventory_ZeroBadges,  // 0 Badges
+    sAdoptionCenterInventory_OneBadges,   // 1 Badge
+    sAdoptionCenterInventory_TwoBadges,   // 2 Badges
+    sAdoptionCenterInventory_ThreeBadges, // 3 Badges
+    sAdoptionCenterInventory_FourBadges,  // 4 Badges
+    sAdoptionCenterInventory_FiveBadges,  // 5 Badges
+    sAdoptionCenterInventory_SixBadges,   // 6 Badges
+    sAdoptionCenterInventory_SevenBadges, // 7 Badges
+    sAdoptionCenterInventory_EightBadges  // 8 Badges
+};
+
+static u8 GetNumberOfBadges(void)
+{
+    if(FlagGet(FLAG_BADGE08_GET))
+        return 8;
+    else if(FlagGet(FLAG_BADGE07_GET))
+        return 7;
+    else if(FlagGet(FLAG_BADGE06_GET))
+        return 6;
+    else if(FlagGet(FLAG_BADGE05_GET))
+        return 5;
+    else if(FlagGet(FLAG_BADGE04_GET))
+        return 4;
+    else if(FlagGet(FLAG_BADGE03_GET))
+        return 3;
+    else if(FlagGet(FLAG_BADGE02_GET))
+        return 2;
+    else if(FlagGet(FLAG_BADGE01_GET))
+        return 1;
+    else
+        return 0;
+}
+
 static void SetShopItemsForSale(const u16 *items)
 {
     u16 i = 0;
 
-    sMartInfo.itemList = items;
-    sMartInfo.itemCount = 0;
+    if (items == NULL){
+        switch(sMartInfo.martType){
+            case MART_TYPE_MONS:
+                sMartInfo.itemList = sAdoptionCenterInventories[GetNumberOfBadges()];
+            break;
+        }
+    }
+    else
+        sMartInfo.itemList = items;
 
+    sMartInfo.itemCount = 0;
     while (sMartInfo.itemList[i])
     {
         sMartInfo.itemCount++;
@@ -514,18 +769,34 @@ static void BuyMenuBuildListMenuTemplate(void)
 
 static void BuyMenuSetListEntry(struct ListMenuItem *menuItem, u16 item, u8 *name)
 {
-    if (sMartInfo.martType == MART_TYPE_NORMAL)
-        CopyItemName(item, name);
-    else
-        StringCopy(name, gDecorations[item].name);
+    switch(sMartInfo.martType){
+        case MART_TYPE_NORMAL:
+            CopyItemName(item, name);
+        break;
+        case MART_TYPE_DECOR:
+        case MART_TYPE_DECOR2:
+            StringCopy(name, gDecorations[item].name);
+        break;
+        case MART_TYPE_MONS:
+            StringCopy(name, gSpeciesNames[item]);
+        break;
+    }
 
     menuItem->name = name;
     menuItem->id = item;
 }
 
+extern const struct PokedexEntry gPokedexEntries[];
+const u8 sText_Title_PokemonDescription[] = _("The {STR_VAR_2}\nPokémon {STR_VAR_1}\nat {LV}{STR_VAR_3}");
+
 static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, struct ListMenu *list)
 {
     const u8 *description;
+    u8 level = GetLevelCap();
+
+    if(level >= MAX_LEVEL)
+        level = MAX_LEVEL;
+
     if (onInit != TRUE)
         PlaySE(SE_SELECT);
 
@@ -536,12 +807,29 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, s
 
     BuyMenuRemoveItemIcon(item, sShopData->iconSlot ^ 1);
     sShopData->iconSlot ^= 1;
+
     if (item != LIST_CANCEL)
     {
-        if (sMartInfo.martType == MART_TYPE_NORMAL)
-            description = ItemId_GetDescription(item);
-        else
-            description = gDecorations[item].description;
+        switch(sMartInfo.martType){
+            case MART_TYPE_NORMAL:
+                description = ItemId_GetDescription(item);
+            break;
+            case MART_TYPE_DECOR:
+            case MART_TYPE_DECOR2:
+                description = gDecorations[item].description;
+            break;
+            case MART_TYPE_MONS:{
+                u16 dexnum = SpeciesToNationalPokedexNum(item);
+
+                StringCopy(gStringVar1, gSpeciesNames[item]);
+                StringCopy(gStringVar2, gPokedexEntries[dexnum].categoryName);
+                ConvertIntToDecimalStringN(gStringVar3, level, STR_CONV_MODE_LEFT_ALIGN, 3);
+                StringExpandPlaceholders(gStringVar4, sText_Title_PokemonDescription);
+
+                description = gStringVar4;
+            }
+            break;
+        }
     }
     else
     {
@@ -552,38 +840,75 @@ static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, s
     BuyMenuPrint(2, description, 3, 1, 0, 0);
 }
 
+const u8 sText_BuyMenuPrintPriceInList_BattlePoints[] = _("{STR_VAR_1}");
+
 static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
 {
     u8 x;
-
     if (itemId != LIST_CANCEL)
     {
-        if (sMartInfo.martType == MART_TYPE_NORMAL)
-        {
-            if ((ItemId_GetPocket(itemId) == POCKET_TM_HM) && (CheckBagHasItem(itemId, 1) == TRUE))
-            {
-                StringCopy(gStringVar1, gText_ShopPurchasedTMPrice);
-                StringExpandPlaceholders(gStringVar4, gText_StrVar1);
+        switch(sMartInfo.martType){
+            case MART_TYPE_NORMAL:
+                if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS){
+                    u16 price = ItemId_GetBPPrice(itemId);
+                    if(price == 0 && (ItemId_GetPocket(itemId) == POCKET_MEGA_STONES))
+                        price = DEFAULT_MEGA_STONE_PRICE;
+                    else if(price == 0)
+                        price = DEFAULT_ITEM_PRICE;
+                    
+                    ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 5);
+                    if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_NORMAL)
+                        StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
+                    else
+                        StringExpandPlaceholders(gStringVar4, sText_BuyMenuPrintPriceInList_BattlePoints);
+                }
+                else{
+                    if ((ItemId_GetPocket(itemId) == POCKET_TM_HM) && (CheckBagHasItem(itemId, 1) == TRUE))
+                    {
+                        StringCopy(gStringVar1, gText_ShopPurchasedTMPrice);
+                        StringExpandPlaceholders(gStringVar4, gText_StrVar1);
+                    }
+                    else
+                    {
+                        ConvertIntToDecimalStringN(gStringVar1, ItemId_GetPrice(itemId) >> GetPriceReduction(POKENEWS_SLATEPORT), STR_CONV_MODE_LEFT_ALIGN, 5);
+                        if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_NORMAL)
+                            StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
+                        else
+                            StringExpandPlaceholders(gStringVar4, sText_BuyMenuPrintPriceInList_BattlePoints);
+                    }
+                }
+            break;
+            case MART_TYPE_DECOR:
+            case MART_TYPE_DECOR2:
+                if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS){
+                    u16 price = gDecorations[itemId].bpPrice;
+                    if(price == 0)
+                        price = DEFAULT_DECORATION_PRICE;
+                    
+                    ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 5);
+                    StringExpandPlaceholders(gStringVar4, sText_BuyMenuPrintPriceInList_BattlePoints);
+                }
+                else{
+                    u16 price = gDecorations[itemId].price;
+                    ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 5);
+                    StringExpandPlaceholders(gStringVar4, sText_BuyMenuPrintPriceInList_BattlePoints);
+                }
+            break;
+            case MART_TYPE_MONS:{
+                u8 price = gBaseStats[itemId].shopPrice;
+
+                if(price == 0)
+                    price = DEFAULT_POKEMON_PRICE;
+                ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 5);
+                if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_NORMAL)
+                    StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
+                else
+                    StringExpandPlaceholders(gStringVar4, sText_BuyMenuPrintPriceInList_BattlePoints);
             }
-            else
-            {
-            ConvertIntToDecimalStringN(
-                gStringVar1,
-                ItemId_GetPrice(itemId) >> GetPriceReduction(POKENEWS_SLATEPORT),
-                STR_CONV_MODE_LEFT_ALIGN,
-                5);
-                StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
-            }
+
+            break;
         }
-        else
-        {
-            ConvertIntToDecimalStringN(
-                gStringVar1,
-                gDecorations[itemId].price,
-                STR_CONV_MODE_LEFT_ALIGN,
-                5);
-                StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
-        }
+
         x = GetStringRightAlignXOffset(7, gStringVar4, 0x78);
         AddTextPrinterParameterized4(windowId, 7, x, y, 0, 0, sShopBuyMenuTextColors[1], -1, gStringVar4);
     }
@@ -620,6 +945,9 @@ static void BuyMenuPrintCursor(u8 scrollIndicatorsTaskId, u8 colorSet)
     BuyMenuPrint(1, gText_SelectorArrow2, 0, y, 0, colorSet);
 }
 
+#define POKEMON_ICON_X (8 * 8) + 16
+#define POKEMON_ICON_Y 16
+
 static void BuyMenuAddItemIcon(u16 item, u8 iconSlot)
 {
     u8 spriteId;
@@ -627,21 +955,34 @@ static void BuyMenuAddItemIcon(u16 item, u8 iconSlot)
     if (*spriteIdPtr != SPRITE_NONE)
         return;
 
-    if (sMartInfo.martType == MART_TYPE_NORMAL || item == 0xFFFF)
-    {
-        spriteId = AddItemIconSprite(iconSlot + TAG_ITEM_ICON_BASE, iconSlot + TAG_ITEM_ICON_BASE, item);
-        if (spriteId != MAX_SPRITES)
-        {
-            *spriteIdPtr = spriteId;
-            gSprites[spriteId].x2 = 24;
-            gSprites[spriteId].y2 = 88;
-        }
-    }
-    else
-    {
-        spriteId = AddDecorationIconObject(item, 20, 84, 1, iconSlot + TAG_ITEM_ICON_BASE, iconSlot + TAG_ITEM_ICON_BASE);
-        if (spriteId != MAX_SPRITES)
-            *spriteIdPtr = spriteId;
+    switch(sMartInfo.martType){
+        case MART_TYPE_NORMAL:
+            spriteId = AddItemIconSprite(iconSlot + TAG_ITEM_ICON_BASE, iconSlot + TAG_ITEM_ICON_BASE, item);
+            if (spriteId != MAX_SPRITES)
+            {
+                *spriteIdPtr = spriteId;
+                gSprites[spriteId].x2 = 24;
+                gSprites[spriteId].y2 = 88;
+            }
+        break;
+        case MART_TYPE_DECOR:
+        case MART_TYPE_DECOR2:
+            spriteId = AddDecorationIconObject(item, 20, 84, 1, iconSlot + TAG_ITEM_ICON_BASE, iconSlot + TAG_ITEM_ICON_BASE);
+            if (spriteId != MAX_SPRITES)
+                *spriteIdPtr = spriteId;
+        break;
+        case MART_TYPE_MONS:
+            if (item > SPECIES_NONE && item < NUM_SPECIES){
+                LoadMonIconPalette(item);
+                spriteId = CreateMonIconNoPersonality(item, SpriteCallbackDummy, 0, 0, 0);
+                if (spriteId != MAX_SPRITES)
+                {
+                    *spriteIdPtr = spriteId;
+                    gSprites[spriteId].x2 = 20;
+                    gSprites[spriteId].y2 = 82;
+                }
+            }
+        break;
     }
 }
 
@@ -714,7 +1055,17 @@ static void BuyMenuDrawGraphics(void)
     BuyMenuDrawMapGraphics();
     BuyMenuCopyMenuBgToBg1TilemapBuffer();
     AddMoneyLabelObject(19, 11);
-    PrintMoneyAmountInMoneyBoxWithBorder(0, 1, 13, GetMoney(&gSaveBlock1Ptr->money));
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            PrintMoneyAmountInMoneyBoxWithBorder(0, 1, 13, GetMoney(&gSaveBlock1Ptr->money));
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            PrintMoneyAmountInMoneyBoxWithBorder(0, 1, 13, gSaveBlock2Ptr->frontier.battlePoints);
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            PrintMoneyAmountInMoneyBoxWithBorder(0, 1, 13, gSaveBlock1Ptr->coins);
+        break;
+    }
     ScheduleBgCopyTilemapToVram(0);
     ScheduleBgCopyTilemapToVram(1);
     ScheduleBgCopyTilemapToVram(2);
@@ -916,9 +1267,28 @@ static bool8 BuyMenuCheckForOverlapWithMenuBg(int x, int y)
     return FALSE;
 }
 
+const u8 gText_Var1AndYouWantedVar2BP[] = _("{STR_VAR_1}? And you wanted {STR_VAR_2}\nThat will be {STR_VAR_3} BP.");
+const u8 gText_Var1IsItThatllBeVar2BP[] = _("{STR_VAR_1}, is it?\nThat'll be {STR_VAR_2} BP. Do you want it?");
+const u8 gText_Var1AndYouWantedVar2Coins[] = _("{STR_VAR_1}? And you wanted {STR_VAR_2}\nThat will be {STR_VAR_3} Coins.");
+const u8 gText_Var1IsItThatllBeVar2Coins[] = _("{STR_VAR_1}, is it?\nThat'll be {STR_VAR_2} Coins. Do you want it?");
+const u8 gText_YouWantedVar1ThatllBeVar2BP[] = _("You wanted {STR_VAR_1}?\nThat'll be {STR_VAR_2} BP. Will that be okay?");
+
 static void Task_BuyMenu(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
+    u32 money;
+    
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            money = gSaveBlock1Ptr->money;
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            money = gSaveBlock2Ptr->frontier.battlePoints;
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            money = gSaveBlock1Ptr->coins;
+        break;
+    }
 
     if (!gPaletteFade.active)
     {
@@ -940,63 +1310,139 @@ static void Task_BuyMenu(u8 taskId)
             BuyMenuRemoveScrollIndicatorArrows();
             BuyMenuPrintCursor(tListTaskId, 2);
 
-            if (sMartInfo.martType == MART_TYPE_NORMAL)
-            {
-                sShopData->totalCost = (ItemId_GetPrice(itemId) >> GetPriceReduction(POKENEWS_SLATEPORT));
+            if (sMartInfo.martType == MART_TYPE_NORMAL){
+                if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS){
+                    u16 price = ItemId_GetBPPrice(itemId);
+                    
+                    if(price == 0 && (ItemId_GetPocket(itemId) == POCKET_MEGA_STONES))
+                        price = DEFAULT_MEGA_STONE_PRICE;
+                    else if(price == 0)
+                        price = DEFAULT_ITEM_PRICE;
+                    
+                    sShopData->totalCost = price;
+                }
+                else{
+                    sShopData->totalCost = (ItemId_GetPrice(itemId) >> GetPriceReduction(POKENEWS_SLATEPORT));
+                }
             }
-            else
+            else if(sMartInfo.martType == MART_TYPE_DECOR || sMartInfo.martType == MART_TYPE_DECOR2){
+                if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS){
+                    u8 price = gBaseStats[itemId].shopPrice;
+
+                    if(price == 0)
+                        price = DEFAULT_DECORATION_PRICE;
+
+                    sShopData->totalCost = price;
+                }
+                else{
+                    sShopData->totalCost = gDecorations[itemId].price;
+                }
+            }
+            else// if(sMartInfo.martType == MART_TYPE_MONS){
             {
-                sShopData->totalCost = gDecorations[itemId].price;
+                u8 price = gBaseStats[itemId].shopPrice;
+
+                if(price == 0)
+                    price = DEFAULT_POKEMON_PRICE;
+                sShopData->totalCost = price;
             }
 
-            if (!IsEnoughMoney(&gSaveBlock1Ptr->money, sShopData->totalCost))
-            {
-                if((ItemId_GetPocket(itemId) == POCKET_TM_HM) && (CheckBagHasItem(itemId, 1) == TRUE))
+            if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_NORMAL){
+                //Not Enough Money
+                if (!IsEnoughMoney(&money, sShopData->totalCost))
                 {
-                    BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveTM, BuyMenuReturnToItemList);
+                    if((ItemId_GetPocket(itemId) == POCKET_TM_HM) && (CheckBagHasItem(itemId, 1) == TRUE))
+                    {
+                        BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveTM, BuyMenuReturnToItemList);
+                    }
+                    else
+                    {
+                        BuyMenuDisplayMessage(taskId, gText_YouDontHaveMoney, BuyMenuReturnToItemList);
+                    }
                 }
-                else
-                {
-                    BuyMenuDisplayMessage(taskId, gText_YouDontHaveMoney, BuyMenuReturnToItemList);
+                else{
+                    if (sMartInfo.martType == MART_TYPE_NORMAL){
+                        CopyItemName(itemId, gStringVar1);
+                        if (ItemId_GetPocket(itemId) == POCKET_TM_HM)
+                        {
+                            if((CheckBagHasItem(itemId, 1) == TRUE))
+                            {
+                                BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveTM, BuyMenuReturnToItemList);
+                            }
+                            else
+                            {
+                                tItemCount = 1;
+                                ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
+                                StringCopy(gStringVar4, gMoveNamesLong[ItemIdToBattleMoveId(itemId)]);
+                                StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
+                                BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
+                            }
+                        }
+                        else
+                        {
+                            BuyMenuDisplayMessage(taskId, gText_Var1CertainlyHowMany, Task_BuyHowManyDialogueInit);
+                        }
+                    }
+                    else if(sMartInfo.martType == MART_TYPE_DECOR || sMartInfo.martType == MART_TYPE_DECOR2){
+                        StringCopy(gStringVar1, gDecorations[itemId].name);
+                        ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
+
+                        if (sMartInfo.martType == MART_TYPE_DECOR)
+                            StringExpandPlaceholders(gStringVar4, gText_Var1IsItThatllBeVar2);
+                        else // MART_TYPE_DECOR2
+                            StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
+
+                        BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
+                    }
+                    //There are no normal shops that sell mons, so this is ToDo
                 }
             }
-            else
-            {
-                if (sMartInfo.martType == MART_TYPE_NORMAL)
-                {
-                    CopyItemName(itemId, gStringVar1);
-                    if (ItemId_GetPocket(itemId) == POCKET_TM_HM)
+            else if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS){
+                if (gSaveBlock2Ptr->frontier.battlePoints < sShopData->totalCost){
+                    //Not enough BP
+                    if (sMartInfo.martType == MART_TYPE_NORMAL)
                     {
-                        if((CheckBagHasItem(itemId, 1) == TRUE))
+                        if((ItemId_GetPocket(itemId) == POCKET_TM_HM) && (CheckBagHasItem(itemId, 1) == TRUE))
                         {
                             BuyMenuDisplayMessage(taskId, gText_ShopAlreadyHaveTM, BuyMenuReturnToItemList);
                         }
                         else
                         {
-                            tItemCount = 1;
-                            ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
-                            StringCopy(gStringVar4, gMoveNamesLong[ItemIdToBattleMoveId(itemId)]);
-                            StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
-                            BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
+                            BuyMenuDisplayMessage(taskId, gText_YouDontHaveMoney, BuyMenuReturnToItemList);
                         }
                     }
                     else
-                    {
-                        BuyMenuDisplayMessage(taskId, gText_Var1CertainlyHowMany, Task_BuyHowManyDialogueInit);
+                        BuyMenuDisplayMessage(taskId, gText_YouDontHaveMoney, BuyMenuReturnToItemList);
+                }
+                else{
+                    //Enough BP
+                    if(sMartInfo.martType == MART_TYPE_NORMAL){
+                        CopyItemName(itemId, gStringVar1);
+                        ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
+                        StringExpandPlaceholders(gStringVar4, gText_Var1IsItThatllBeVar2BP);
+
+                        BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
+                    }
+                    else if(sMartInfo.martType == MART_TYPE_MONS){
+                        StringCopy(gStringVar1, gSpeciesNames[itemId]);
+                        ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
+                        StringExpandPlaceholders(gStringVar4, gText_Var1IsItThatllBeVar2BP);
+
+                        BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
+                    }
+                    else{ 
+                        //Decorations
+                        StringCopy(gStringVar1, gDecorations[itemId].name);
+                        ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
+                        StringExpandPlaceholders(gStringVar4, gText_Var1IsItThatllBeVar2BP);
+
+                        BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
                     }
                 }
-                else
-                {
-                    StringCopy(gStringVar1, gDecorations[itemId].name);
-                    ConvertIntToDecimalStringN(gStringVar2, sShopData->totalCost, STR_CONV_MODE_LEFT_ALIGN, 6);
-
-                    if (sMartInfo.martType == MART_TYPE_DECOR)
-                        StringExpandPlaceholders(gStringVar4, gText_Var1IsItThatllBeVar2);
-                    else // MART_TYPE_DECOR2
-                        StringExpandPlaceholders(gStringVar4, gText_YouWantedVar1ThatllBeVar2);
-
-                    BuyMenuDisplayMessage(taskId, gStringVar4, BuyMenuConfirmPurchase);
-                }
+            }
+            else{
+                //Coins
+                //ToDo
             }
             break;
         }
@@ -1019,7 +1465,17 @@ static void Task_BuyHowManyDialogueInit(u8 taskId)
     BuyMenuPrintItemQuantityAndPrice(taskId);
     ScheduleBgCopyTilemapToVram(0);
 
-    maxQuantity = GetMoney(&gSaveBlock1Ptr->money) / sShopData->totalCost;
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            maxQuantity = GetMoney(&gSaveBlock1Ptr->money) / sShopData->totalCost;
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            maxQuantity = gSaveBlock2Ptr->frontier.battlePoints / sShopData->totalCost;
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            maxQuantity = gSaveBlock1Ptr->coins / sShopData->totalCost;
+        break;
+    }
 
     if (maxQuantity > 99)
     {
@@ -1039,7 +1495,19 @@ static void Task_BuyHowManyDialogueHandleInput(u8 taskId)
 
     if (AdjustQuantityAccordingToDPadInput(&tItemCount, sShopData->maxQuantity) == TRUE)
     {
-        sShopData->totalCost = (ItemId_GetPrice(tItemId) >> GetPriceReduction(POKENEWS_SLATEPORT)) * tItemCount;
+        if(VarGet(VAR_SHOP_MONEY_TYPE) == MART_MONEY_TYPE_BATTLE_POINTS){
+            u16 price = ItemId_GetBPPrice(tItemId);
+            if(price == 0 && (ItemId_GetPocket(tItemId) == POCKET_MEGA_STONES))
+                price = DEFAULT_MEGA_STONE_PRICE;
+            else if(price == 0)
+                price = DEFAULT_ITEM_PRICE;
+                    
+            sShopData->totalCost = price * tItemCount;
+        }
+        else{
+            sShopData->totalCost = (ItemId_GetPrice(tItemId) >> GetPriceReduction(POKENEWS_SLATEPORT)) * tItemCount;
+        }
+
         BuyMenuPrintItemQuantityAndPrice(taskId);
     }
     else
@@ -1077,43 +1545,83 @@ static void BuyMenuConfirmPurchase(u8 taskId)
 static void BuyMenuTryMakePurchase(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
+    u8 level = GetLevelCap();
+
+    if(level >= MAX_LEVEL)
+        level = MAX_LEVEL;
 
     PutWindowTilemap(1);
 
-    if (sMartInfo.martType == MART_TYPE_NORMAL)
-    {
-        if (AddBagItem(tItemId, tItemCount) == TRUE)
+    switch(sMartInfo.martType){
+        case MART_TYPE_NORMAL:
+            if(tItemCount == 0)
+                tItemCount = 1;
+            
+            if (AddBagItem(tItemId, tItemCount) == TRUE)
+            {
+                BuyMenuDisplayMessage(taskId, gText_HereYouGoThankYou, BuyMenuSubtractMoney);
+                RecordItemPurchase(taskId);
+            }
+            else
+            {
+                BuyMenuDisplayMessage(taskId, gText_NoMoreRoomForThis, BuyMenuReturnToItemList);
+            }
+        break;
+        case MART_TYPE_DECOR:
+        case MART_TYPE_DECOR2:
+            if (DecorationAdd(tItemId))
+            {
+                if (sMartInfo.martType == MART_TYPE_DECOR)
+                    BuyMenuDisplayMessage(taskId, gText_ThankYouIllSendItHome, BuyMenuSubtractMoney);
+                else // MART_TYPE_DECOR2
+                    BuyMenuDisplayMessage(taskId, gText_ThanksIllSendItHome, BuyMenuSubtractMoney);
+            }
+            else
+            {
+                BuyMenuDisplayMessage(taskId, gText_SpaceForVar1Full, BuyMenuReturnToItemList);
+            }
+        break;
+        case MART_TYPE_MONS:
         {
-            BuyMenuDisplayMessage(taskId, gText_HereYouGoThankYou, BuyMenuSubtractMoney);
-            RecordItemPurchase(taskId);
+            bool8 couldGiveMon = FALSE;
+            if (Random() < ALPHA_ODDS && GetNumberOfBadges() >= 6)
+                FlagSet(FLAG_ALPHA_CREATION);
+            
+            couldGiveMon = ScriptGiveMon(tItemId, level, ITEM_NONE, 0, 0, 0);
+            if(couldGiveMon < 2){
+                BuyMenuDisplayMessage(taskId, gText_HereYouGoThankYou, BuyMenuSubtractMoney);
+                RecordItemPurchase(taskId);
+            }
+            else
+            {
+                BuyMenuDisplayMessage(taskId, gText_NoMoreRoomForThis, BuyMenuReturnToItemList);
+            }
         }
-        else
-        {
-            BuyMenuDisplayMessage(taskId, gText_NoMoreRoomForThis, BuyMenuReturnToItemList);
-        }
-    }
-    else
-    {
-        if (DecorationAdd(tItemId))
-        {
-            if (sMartInfo.martType == MART_TYPE_DECOR)
-                BuyMenuDisplayMessage(taskId, gText_ThankYouIllSendItHome, BuyMenuSubtractMoney);
-            else // MART_TYPE_DECOR2
-                BuyMenuDisplayMessage(taskId, gText_ThanksIllSendItHome, BuyMenuSubtractMoney);
-        }
-        else
-        {
-            BuyMenuDisplayMessage(taskId, gText_SpaceForVar1Full, BuyMenuReturnToItemList);
-        }
+        break;
     }
 }
 
 static void BuyMenuSubtractMoney(u8 taskId)
 {
     IncrementGameStat(GAME_STAT_SHOPPED);
-    RemoveMoney(&gSaveBlock1Ptr->money, sShopData->totalCost);
-    PlaySE(SE_SHOP);
-    PrintMoneyAmountInMoneyBox(0, GetMoney(&gSaveBlock1Ptr->money), 0);
+
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            RemoveMoney(&gSaveBlock1Ptr->money, sShopData->totalCost);
+            PlaySE(SE_SHOP);
+            PrintMoneyAmountInMoneyBox(0, GetMoney(&gSaveBlock1Ptr->money), 0);
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - sShopData->totalCost;
+            PlaySE(SE_SHOP);
+            PrintMoneyAmountInMoneyBox(0, gSaveBlock2Ptr->frontier.battlePoints, 0);
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            gSaveBlock1Ptr->coins = gSaveBlock1Ptr->coins - sShopData->totalCost;
+            PlaySE(SE_SHOP);
+            PrintMoneyAmountInMoneyBox(0, gSaveBlock1Ptr->coins, 0);
+        break;
+    }
 
     if (sMartInfo.martType == MART_TYPE_NORMAL)
     {
@@ -1244,7 +1752,8 @@ static void RecordItemPurchase(u8 taskId)
 
 void CreatePokemartMenu(const u16 *itemsForSale)
 {
-    CreateShopMenu(MART_TYPE_NORMAL);
+    CreateShopMenu(VarGet(VAR_SHOP_TYPE));
+    VarSet(VAR_SHOP_TYPE, 0);
     SetShopItemsForSale(itemsForSale);
     ClearItemPurchases();
     SetShopMenuCallback(EnableBothScriptContexts);

@@ -1,6 +1,6 @@
 raw `
 .set LOCALID_NURSE, 1
-.set LOCALID_SCOTT, 6
+.set LOCALID_SCOTT, 7
 
 EverGrandeCity_PokemonCenter_1F_MapScripts:: @ 8229A34
 	map_script MAP_SCRIPT_ON_TRANSITION, EverGrandeCity_PokemonCenter_1F_OnTransition

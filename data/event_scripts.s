@@ -53,6 +53,7 @@
 #include "constants/union_room.h"
 #include "constants/vars.h"
 #include "constants/weather.h"
+#include "constants/quests.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/event.inc"
 	.include "constants/constants.inc"
@@ -580,6 +581,7 @@ gStdScripts_End::
 	.include "data/scripts/new_game.inc"
 	.include "data/scripts/hall_of_fame.inc"
 	.include "data/scripts/debug.inc"
+	.include "data/scripts/update_version_flags.inc"
 
 EventScript_WhiteOut:: @ 8271857
 	call EverGrandeCity_HallOfFame_EventScript_ResetEliteFour
@@ -857,8 +859,7 @@ Common_EventScript_TryRemoveMon::
 
 @ The below and surf.inc could be split into some text/notices.inc
 gText_PokemartSign:: @ 8272B6A
-	.string "“Selected items for your convenience!”\n"
-	.string "Pokémon Mart$"
+	.string "Pokemon Adoption Center$"
 
 gText_PokemonCenterSign:: @ 8272B9E
 	.string "“Rejuvenate your tired partners!”\n"
@@ -1108,3 +1109,15 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/MeteorFalls_HaxorusRoom/scripts.inc"
 
 	.include "data/maps/PetalburgWoods_BreloomRoom/scripts.inc"
+
+	.include "data/maps/RusturfTunnel_2F/scripts.inc"
+
+	.include "data/maps/Secret_Dungeon/scripts.inc"
+
+	.include "data/maps/LilycoveCity_MossDeepCityTeleporter/scripts.inc"
+
+	.include "data/maps/GraniteCave_PuzzleOut/scripts.inc"
+
+	.include "data/maps/SeafloorCavernShortcut/scripts.inc"
+
+	.include "data/maps/EvergrandeCity_MonoChampRoom_1/scripts.inc"

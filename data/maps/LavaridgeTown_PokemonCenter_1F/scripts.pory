@@ -1,6 +1,6 @@
 raw `
 .set LOCALID_NURSE, 1
-.set LOCALID_LUCY, 8
+.set LOCALID_LUCY, 7
 
 LavaridgeTown_PokemonCenter_1F_MapScripts:: @ 81FFAFA
 	map_script MAP_SCRIPT_ON_TRANSITION, LavaridgeTown_PokemonCenter_1F_OnTransition
@@ -35,7 +35,6 @@ LavaridgeTown_PokemonCenter_1F_EventScript_Gentleman:: @ 81FFB2E
 LavaridgeTown_PokemonCenter_1F_EventScript_MoomooMilk::
 	lock
 	faceplayer
-	showmoneybox 0, 0, 0
 	msgbox LavaridgeTown_PokemonCenter_1F_Text_WantToBuyMoomooMilk, MSGBOX_DEFAULT
 	multichoice 16, 0, MULTI_MOOMOO_MILK, 0
 	switch VAR_RESULT

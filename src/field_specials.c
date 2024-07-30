@@ -68,6 +68,7 @@
 #include "constants/weather.h"
 #include "constants/metatile_labels.h"
 #include "palette.h"
+#include "tmhm_struct.h"
 
 EWRAM_DATA bool8 gBikeCyclingChallenge = FALSE;
 EWRAM_DATA u8 gBikeCollisions = 0;
@@ -130,7 +131,11 @@ static void Task_CloseBattlePikeCurtain(u8 taskId);
 static u8 DidPlayerGetFirstFans(void);
 static void SetInitialFansOfPlayer(void);
 static u16 PlayerGainRandomTrainerFan(void);
+#ifndef FREE_LINK_BATTLE_RECORDS
 static void BufferFanClubTrainerName_(struct LinkBattleRecords *linkRecords, u8 a, u8 b);
+#else
+static void BufferFanClubTrainerName_(u8 whichLinkTrainer, u8 whichNPCTrainer);
+#endif
 
 void Special_ShowDiploma(void)
 {
@@ -1658,15 +1663,15 @@ u16 GetMysteryEventCardVal(void)
     switch (gSpecialVar_Result)
     {
         case GET_NUM_STAMPS:
-            return mevent_081445C0(GET_NUM_STAMPS_INTERNAL);
+            return MysteryGift_GetCardStat(GET_NUM_STAMPS_INTERNAL);
         case GET_MAX_STAMPS:
-            return mevent_081445C0(GET_MAX_STAMPS_INTERNAL);
+            return MysteryGift_GetCardStat(GET_MAX_STAMPS_INTERNAL);
         case GET_CARD_BATTLES_WON:
-            return mevent_081445C0(GET_CARD_BATTLES_WON_INTERNAL);
+            return MysteryGift_GetCardStat(GET_CARD_BATTLES_WON_INTERNAL);
         case 3: // Never occurs
-            return mevent_081445C0(1);
+            return MysteryGift_GetCardStat(1);
         case 4: // Never occurs
-            return mevent_081445C0(2);
+            return MysteryGift_GetCardStat(2);
         default:
             return 0;
     }
@@ -2482,7 +2487,7 @@ void ShowScrollableMultichoice(void)
         case SCROLL_MULTI_GAMECORNER_FIRE_STARTERS:
         case SCROLL_MULTI_GAMECORNER_WATER_STARTERS:
             task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
-            task->tNumItems = 9;
+            task->tNumItems = 10;
             task->tLeft = 19;
             task->tTop = 1;
             task->tWidth = 12;
@@ -2492,7 +2497,7 @@ void ShowScrollableMultichoice(void)
             break;
         case SCROLL_MULTI_REGION_NAMES:
             task->tMaxItemsOnScreen = MAX_SCROLL_MULTI_ON_SCREEN;
-            task->tNumItems = 8;
+            task->tNumItems = 24;
             task->tLeft = 22;
             task->tTop = 1;
             task->tWidth = 12;
@@ -2537,7 +2542,7 @@ void ShowScrollableMultichoice(void)
     }
 }
 
-static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] = 
+static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH + 5] = 
 {
     [SCROLL_MULTI_NONE] = 
     {
@@ -2881,6 +2886,7 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_GameCornerChespin,
         gText_GameCornerRowlet,
         gText_GameCornerGrookey,
+        gText_GameCornerSprigatito,
         gText_Exit
     },
     [SCROLL_MULTI_GAMECORNER_FIRE_STARTERS] =
@@ -2893,6 +2899,7 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_GameCornerFennekin,
         gText_GameCornerLitten,
         gText_GameCornerScorbunny,
+        gText_GameCornerFuecoco,
         gText_Exit
     },
     [SCROLL_MULTI_GAMECORNER_WATER_STARTERS] =
@@ -2905,6 +2912,7 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_GameCornerFroakie,
         gText_GameCornerPopplio,
         gText_GameCornerSobble,
+        gText_GameCornerQuaxly,
         gText_Exit
     },
     [SCROLL_MULTI_REGION_NAMES] = 
@@ -2917,6 +2925,22 @@ static const u8 *const sScrollableMultichoiceOptions[][MAX_SCROLL_MULTI_LENGTH] 
         gText_Kalos,
         gText_Alola,
         gText_Galar,
+        gText_Paldea,
+        gText_Bug,
+        gText_Dark,
+        gText_Dragon,
+        gText_Electric,
+        gText_Fairy,
+        gText_Fighting,
+        gText_Flying,
+        gText_Ghost,
+        gText_Ground,
+        gText_Ice2,
+        gText_Normal,
+        gText_Poison2,
+        gText_Psychic,
+        gText_Rock,
+        gText_Steel,
     },
     [SCROLL_MULTI_FURFROU_TRIMS] = 
     {
@@ -3957,85 +3981,85 @@ void GetBattleFrontierTutorMoveIndex(void)
             i = 0;
             do
             {
-                if (gTutorMoves[i] == sPokemonCenter_TutorMoves1[moveIndex])
+                if (GetTutorMove(i) == sPokemonCenter_TutorMoves1[moveIndex])
                 {
                     gSpecialVar_0x8005 = i;
                     break;
                 }
                 i++;
-            } while (i < TUTOR_MOVE_COUNT);
+            } while (i < TUTOR_COUNT);
             break;
         case 1:
             i = 0;
             do
             {
-                if (gTutorMoves[i] == sPokemonCenter_TutorMoves2[moveIndex])
+                if (GetTutorMove(i) == sPokemonCenter_TutorMoves2[moveIndex])
                 {
                     gSpecialVar_0x8005 = i;
                     break;
                 }
                 i++;
-            } while (i < TUTOR_MOVE_COUNT);
+            } while (i < TUTOR_COUNT);
             break;
         case 2:
             i = 0;
             do
             {
-                if (gTutorMoves[i] == sPokemonCenter_TutorMoves3[moveIndex])
+                if (GetTutorMove(i) == sPokemonCenter_TutorMoves3[moveIndex])
                 {
                     gSpecialVar_0x8005 = i;
                     break;
                 }
                 i++;
-            } while (i < TUTOR_MOVE_COUNT);
+            } while (i < TUTOR_COUNT);
             break;
         case 3:
             i = 0;
             do
             {
-                if (gTutorMoves[i] == sPokemonCenter_TutorMoves4[moveIndex])
+                if (GetTutorMove(i) == sPokemonCenter_TutorMoves4[moveIndex])
                 {
                     gSpecialVar_0x8005 = i;
                     break;
                 }
                 i++;
-            } while (i < TUTOR_MOVE_COUNT);
+            } while (i < TUTOR_COUNT);
             break;
         case 4:
             i = 0;
             do
             {
-                if (gTutorMoves[i] == sPokemonCenter_TutorMoves5[moveIndex])
+                if (GetTutorMove(i) == sPokemonCenter_TutorMoves5[moveIndex])
                 {
                     gSpecialVar_0x8005 = i;
                     break;
                 }
                 i++;
-            } while (i < TUTOR_MOVE_COUNT);
+            } while (i < TUTOR_COUNT);
             break;
         case 5:
             i = 0;
             do
             {
-                if (gTutorMoves[i] == sPokemonCenter_TutorMoves6[moveIndex])
+                if (GetTutorMove(i) == sPokemonCenter_TutorMoves6[moveIndex])
                 {
                     gSpecialVar_0x8005 = i;
                     break;
                 }
                 i++;
-            } while (i < TUTOR_MOVE_COUNT);
+            } while (i < TUTOR_COUNT);
             break;
         case 6:
             i = 0;
             do
             {
-                if (gTutorMoves[i] == sPokemonCenter_TutorMoves7[moveIndex])
+                if (GetTutorMove(i) == sPokemonCenter_TutorMoves7[moveIndex])
                 {
                     gSpecialVar_0x8005 = i;
                     break;
                 }
                 i++;
-            } while (i < TUTOR_MOVE_COUNT);
+            } while (i < TUTOR_COUNT);
             break;
     }
 }
@@ -5031,9 +5055,14 @@ void BufferFanClubTrainerName(void)
         case FANCLUB_MEMBER8:
             break;
     }
+    #ifndef FREE_LINK_BATTLE_RECORDS
     BufferFanClubTrainerName_(&gSaveBlock1Ptr->linkBattleRecords, whichLinkTrainer, whichNPCTrainer);
+    #else
+    BufferFanClubTrainerName_(whichLinkTrainer, whichNPCTrainer);
+    #endif
 }
 
+#ifndef FREE_LINK_BATTLE_RECORDS
 static void BufferFanClubTrainerName_(struct LinkBattleRecords *linkRecords, u8 whichLinkTrainer, u8 whichNPCTrainer)
 {
     struct LinkBattleRecord *record = &linkRecords->entries[whichLinkTrainer];
@@ -5071,6 +5100,35 @@ static void BufferFanClubTrainerName_(struct LinkBattleRecords *linkRecords, u8 
         ConvertInternationalString(gStringVar1, linkRecords->languages[whichLinkTrainer]);
     }
 }
+#else
+static void BufferFanClubTrainerName_(u8 whichLinkTrainer, u8 whichNPCTrainer)
+{
+    switch (whichNPCTrainer)
+    {
+        case 0:
+            StringCopy(gStringVar1, gText_Wallace);
+            break;
+        case 1:
+            StringCopy(gStringVar1, gText_Steven);
+            break;
+        case 2:
+            StringCopy(gStringVar1, gText_Brawly);
+            break;
+        case 3:
+            StringCopy(gStringVar1, gText_Winona);
+            break;
+        case 4:
+            StringCopy(gStringVar1, gText_Phoebe);
+            break;
+        case 5:
+            StringCopy(gStringVar1, gText_Glacia);
+            break;
+        default:
+            StringCopy(gStringVar1, gText_Wallace);
+            break;
+    }
+}
+#endif
 
 void UpdateTrainerFansAfterLinkBattle(void)
 {
@@ -5495,31 +5553,8 @@ void ChangeChosenMonHiddenPower (void)
 {
     int i;
     u8 hiddenPowerType = gSpecialVar_0x8007;
-
-    static const u8 hiddenPowerSpreads[NUMBER_OF_MON_TYPES - 3][NUM_STATS] = {
-    //   HP  Atk Def Spe SpA SpD
-        {31,  0, 30, 30, 30, 30}, // TYPE_FIGHTING
-        {30,  0, 30, 31, 30, 30}, // TYPE_FLYING
-        {30,  1, 30, 31, 30, 30}, // TYPE_POISON
-        {31,  1, 31, 31, 30, 30}, // TYPE_GROUND
-        {31,  1, 30, 30, 31, 30}, // TYPE_ROCK
-        {31,  0, 30, 31, 31, 30}, // TYPE_BUG
-        {31,  1, 30, 31, 31, 30}, // TYPE_GHOST
-        {31,  1, 31, 31, 31, 30}, // TYPE_STEEL
-        {31,  0, 31, 30, 30, 31}, // TYPE_FIRE
-        {31,  1, 31, 30, 30, 31}, // TYPE_WATER
-        {31,  0, 31, 31, 30, 31}, // TYPE_GRASS
-        {31,  1, 31, 31, 30, 31}, // TYPE_ELECTRIC
-        {31,  0, 31, 30, 31, 31}, // TYPE_PSYCHIC
-        {31,  0, 30, 31, 31, 31}, // TYPE_ICE
-        {31,  0, 31, 31, 31, 31}, // TYPE_DRAGON
-        {31, 31, 31, 31, 31, 31}, // TYPE_DARK
-    };
   
-    for (i = 0; i < NUM_STATS; i++)
-    {
-        SetMonData(&gPlayerParty[gSpecialVar_0x800A], MON_DATA_HP_IV + i, &hiddenPowerSpreads[hiddenPowerType][i]);
-    }
+    SetMonData(&gPlayerParty[gSpecialVar_0x800A], MON_DATA_HP_TYPE, &hiddenPowerType);
     CalculateMonStats(&gPlayerParty[gSpecialVar_0x800A]);
 }
 
@@ -5985,7 +6020,8 @@ u16 GetMysteryGiftSpecies (void)
         // Species, held item, flag set when received, flag needed to receive
         {SPECIES_GRENINJA_BATTLE_BOND, ITEM_COMET_SHARD, FLAG_RECEIVED_ASH_GRENINJA, FLAG_BADGE04_GET},
         {SPECIES_ZYGARDE_10, ITEM_CHOICE_BAND, FLAG_RECEIVED_ZYGARDE_10, FLAG_SYS_GAME_CLEAR}, 
-        {SPECIES_MELOETTA, ITEM_RELIC_STATUE, FLAG_RECEIVED_MELOETTA, FLAG_BADGE05_GET}
+        {SPECIES_MELOETTA, ITEM_RELIC_STATUE, FLAG_RECEIVED_MELOETTA, FLAG_BADGE05_GET},
+        {SPECIES_SILVALLY, ITEM_NORMAL_GEM, FLAG_RECEIVED_SILVALLY, FLAG_BADGE06_GET},
     };
 
     int i;

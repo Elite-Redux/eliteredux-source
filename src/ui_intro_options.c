@@ -58,6 +58,8 @@ enum{
     SETTING_RANDOMIZER_MOVE_MODE,
     SETTING_RANDOMIZER_TYPE_MODE,
     SETTING_INDIVIDUAL_COLORS,
+    SETTING_PERMANENT_MEGA_MODE,
+    SETTING_NUZLOCKE_CAPTURES,
     NUM_INTRO_OPTIONS,
 };
 
@@ -162,7 +164,6 @@ void Task_OpenIntroOptionMenuFromStartMenu(u8 taskId)
     }
 }
 
-
 static void SaveOptionsData()
 {
     gSaveBlock2Ptr->gameDifficulty          = sMenuDataPtr->temporal_settings[SETTING_DIFFICULTY];
@@ -171,8 +172,12 @@ static void SaveOptionsData()
         gSaveBlock2Ptr->encounterRandomizedMode = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE];
         gSaveBlock2Ptr->encounterRandomizedLegendaryMode = FALSE;
     }
-    else{
+    else if(sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] == 2){
         gSaveBlock2Ptr->encounterRandomizedMode = TRUE;
+        gSaveBlock2Ptr->encounterRandomizedLegendaryMode = TRUE;
+    }
+    else{
+        gSaveBlock2Ptr->encounterRandomizedMode = FALSE;
         gSaveBlock2Ptr->encounterRandomizedLegendaryMode = TRUE;
     }
     gSaveBlock2Ptr->innaterandomizedMode    = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_INNATE_MODE];
@@ -180,23 +185,33 @@ static void SaveOptionsData()
     gSaveBlock2Ptr->individualColors        = sMenuDataPtr->temporal_settings[SETTING_INDIVIDUAL_COLORS];
     gSaveBlock2Ptr->moveRandomizedMode      = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MOVE_MODE];
     gSaveBlock2Ptr->typeRandomizedMode      = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_TYPE_MODE];
+    gSaveBlock2Ptr->permanentMegaMode       = sMenuDataPtr->temporal_settings[SETTING_PERMANENT_MEGA_MODE];
+    gSaveBlock2Ptr->nuzlockeCaptures        = sMenuDataPtr->temporal_settings[SETTING_NUZLOCKE_CAPTURES];
 }
 
 static void LoadOptionsData()
 {
     sMenuDataPtr->temporal_settings[SETTING_DIFFICULTY] = gSaveBlock2Ptr->gameDifficulty;
     sMenuDataPtr->temporal_settings[SETTING_LEVEL_CAP] = gSaveBlock2Ptr->levelCaps;
-    if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE){
-        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = gSaveBlock2Ptr->encounterRandomizedMode;
+    if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE && gSaveBlock2Ptr->encounterRandomizedMode == TRUE){
+        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 1;
     }
-    else{
+    else if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == TRUE && gSaveBlock2Ptr->encounterRandomizedMode == TRUE){
         sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 2;
     }
-    sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_INNATE_MODE] = gSaveBlock2Ptr->innaterandomizedMode;
+    else if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE && gSaveBlock2Ptr->encounterRandomizedMode == FALSE){
+        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 0;
+    }
+    else{
+        sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 3;
+    }
+    sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_INNATE_MODE]  = gSaveBlock2Ptr->innaterandomizedMode;
     sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_ABILITY_MODE] = gSaveBlock2Ptr->abilityRandomizedMode;
-    sMenuDataPtr->temporal_settings[SETTING_INDIVIDUAL_COLORS] = gSaveBlock2Ptr->individualColors;
-    sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MOVE_MODE] = gSaveBlock2Ptr->moveRandomizedMode;
-    sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_TYPE_MODE] = gSaveBlock2Ptr->typeRandomizedMode;
+    sMenuDataPtr->temporal_settings[SETTING_INDIVIDUAL_COLORS]       = gSaveBlock2Ptr->individualColors;
+    sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MOVE_MODE]    = gSaveBlock2Ptr->moveRandomizedMode;
+    sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_TYPE_MODE]    = gSaveBlock2Ptr->typeRandomizedMode;
+    sMenuDataPtr->temporal_settings[SETTING_PERMANENT_MEGA_MODE]     = gSaveBlock2Ptr->permanentMegaMode;
+    sMenuDataPtr->temporal_settings[SETTING_NUZLOCKE_CAPTURES]       = gSaveBlock2Ptr->nuzlockeCaptures;
 }
 
 // This is our main initialization function if you want to call the menu from elsewhere
@@ -316,6 +331,7 @@ static bool8 Menu_DoGfxSetup(void)
 
 static void Menu_FreeResources(void)
 {
+    FlagClear(FLAG_SYS_DEBUG_MENU_OPENED);
     try_free(sMenuDataPtr);
     try_free(sBg1TilemapBuffer);
     FreeAllWindowBuffers();
@@ -454,8 +470,7 @@ struct OptionData
     u8 numOptions;
 };
 
-struct OptionData Intro_Options[NUM_INTRO_OPTIONS] = {
-    
+const struct OptionData Intro_Options[NUM_INTRO_OPTIONS] = {
     [SETTING_DIFFICULTY] =
     {
         .title = _("Difficulty"),
@@ -496,13 +511,15 @@ struct OptionData Intro_Options[NUM_INTRO_OPTIONS] = {
             _("Disabled"),
             _("Normal"),
             _("Legendary"),
+            _("Scaled")
             },
         .optionDescription = { 
             _("No changes to the encounters."),
             _("Wild Encounters will be fully randomized.\nThis doesn't affect static encounters,\nlike Gift or Legendary Pokémon."),
             _("Wild Encounters will be fully randomized.\nYou may encounter legendary Pokémon here,\nIt only affects normal encounters."),
+            _("Wild Encounters will have a weighted\nrandomization. You will encounter Pokémon\nbased on the area you are in.")
             },
-        .numOptions = 3,
+        .numOptions = 4,
     },
     [SETTING_RANDOMIZER_ABILITY_MODE] =
     {
@@ -569,6 +586,33 @@ struct OptionData Intro_Options[NUM_INTRO_OPTIONS] = {
             },
         .numOptions = 2,
     },
+    [SETTING_PERMANENT_MEGA_MODE] =
+    {
+        .title = _("Permanent Mega Evolution"),
+        .options = { 
+            _("Disabled"),
+            _("Enabled"),
+            },
+        .optionDescription = { 
+            _("Normal Mega Evolution."),
+            _("Pokémon can evolve into their Mega\nEvolutions as if they were a normal\nevolution."),
+            },
+        .numOptions = 2,
+    },
+    [SETTING_NUZLOCKE_CAPTURES] =
+    {
+        .title = _("Nuzlocke Captures"),
+        .options = { 
+            _("Disabled"),
+            _("Enabled"),
+            },
+        .optionDescription = { 
+            _("Normal captures."),
+            _("Nuzlocke rules: only one encounter\nper area. Dexnav and wild\nencounters disable per route."),
+            },
+        .numOptions = 2,
+    },
+    
 };
 
 static const u8 sText_Menu_Title[] = _("Elite Redux Setup - press START to save");
@@ -630,8 +674,10 @@ static void Task_MenuTurnOff(u8 taskId)
 
     if (!gPaletteFade.active)
     {
-        //SetMainCallback2(sMenuDataPtr->savedCallback);
-        DoNamingScreen(0, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, sMenuDataPtr->savedCallback);
+        if(FlagGet(FLAG_SYS_DEBUG_MENU_OPENED))
+            SetMainCallback2(sMenuDataPtr->savedCallback);
+        else
+            DoNamingScreen(0, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, sMenuDataPtr->savedCallback);
         Menu_FreeResources();
         DestroyTask(taskId);
     }

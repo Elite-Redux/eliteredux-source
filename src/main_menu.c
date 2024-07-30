@@ -50,6 +50,7 @@
 #include "constants/trainers.h"
 #include "constants/rgb.h"
 #include "constants/vars.h"
+#include "script.h"
 
 /*
  * Main menu state machine
@@ -699,33 +700,15 @@ static u32 InitMainMenu(bool8 returningFromOptionsMenu)
 
 #define tArrowTaskIsScrolled data[15]   // For scroll indicator arrow task
 
+extern const u8 EventScript_UpdateVersionFlags[];
 const u8 gText_FutureSave[] = _("The save file cannot be loaded since\nits from a future version of this game.");
 static void Task_MainMenuCheckSaveFile(u8 taskId)
 {
     u8 i, j, itemcount;
     s16* data = gTasks[taskId].data;
 	u16 timesUpdated = 0 + VarGet(VAR_UPDATED_TIMES);
-
-    if(VarGet(VAR_SAVE_VERSION) < 1017){
-        //updating version
-        FlagClear(FLAG_GOT_TM24_FROM_WATTSON);
-        if(FlagGet(FLAG_BADGE05_GET) == TRUE){
-            FlagSet(FLAG_GOT_TM24_FROM_WATTSON);
-            FlagClear(FLAG_HIDE_MAUVILLE_CITY_WATTSON);
-            FlagClear(FLAG_WATTSON_REMATCH_AVAILABLE);
-        }
-    }
-
-    if(!FlagGet(FLAG_UPDATED_MEGA_STONE_POCKET)){
-        for (i = 0; i < BAG_MEGASTONES_COUNT; i++)
-        {
-            if(gSaveBlock1Ptr->bagPocket_MegaStones[i].itemId != ITEM_NONE){
-                itemcount = gSaveBlock1Ptr->bagPocket_MegaStones[i].quantity;
-                AddBagItem(gSaveBlock1Ptr->bagPocket_MegaStones[i].itemId, itemcount);
-            }
-        }
-        FlagSet(FLAG_UPDATED_MEGA_STONE_POCKET);
-    }
+	FlagClear(FLAG_TAG_BATTLE);
+    VarSet(VAR_TRAINER_PRIZE_BP, 0);
 
     if (!gPaletteFade.active)
     {
@@ -749,6 +732,8 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
 					timesUpdated++;
 					VarSet(VAR_UPDATED_TIMES, timesUpdated);
 					VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
+                    //Settings the new flags to their defaults
+                    ScriptContext2_RunNewScript(EventScript_UpdateVersionFlags);
 				}
                 tMenuType = HAS_SAVED_GAME;
                 if (IsMysteryGiftEnabled())
@@ -2248,7 +2233,7 @@ static void SpriteCB_MovePlayerDownWhileShrinking(struct Sprite *sprite)
 
 static u8 NewGameBirchSpeech_CreateLotadSprite(u8 a, u8 b)
 {
-    return CreatePicSprite2(SPECIES_DEWGONG, SHINY_ODDS, 0, 1, a, b, 14, -1);
+    return CreatePicSprite2(SPECIES_DEWGONG, SHINY_ODDS, 0, 1, a, b, 14, -1, FALSE, FALSE);
 }
 
 static void AddBirchSpeechObjects(u8 taskId)

@@ -1,0 +1,4 @@
+EventScript_UpdateVersionFlags::
+    setflag FLAG_HIDE_RIVAL_SOOTOPOLIS_EVERGRANDE
+	setflag FLAG_HIDE_RIVAL_HELPING_WATERFALL_ROUTE_119
+    end

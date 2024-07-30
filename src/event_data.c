@@ -79,10 +79,11 @@ void EnableNationalPokedex(void)
 
 bool32 IsNationalPokedexEnabled(void)
 {
-    if (gSaveBlock2Ptr->pokedex.nationalMagic == 0xDA && VarGet(VAR_NATIONAL_DEX) == 0x302 && FlagGet(FLAG_SYS_NATIONAL_DEX))
+    return TRUE;
+    /*if (gSaveBlock2Ptr->pokedex.nationalMagic == 0xDA && VarGet(VAR_NATIONAL_DEX) == 0x302 && FlagGet(FLAG_SYS_NATIONAL_DEX))
         return TRUE;
     else
-        return FALSE;
+        return FALSE;*/
 }
 
 void DisableMysteryEvent(void)
@@ -138,7 +139,6 @@ void ClearMysteryEventFlags(void)
 void ClearMysteryEventVars(void)
 {
     VarSet(VAR_EVENT_PICHU_SLOT, 0);
-    VarSet(VAR_NEVER_READ_0x40DE, 0);
     VarSet(VAR_NEVER_READ_0x40DF, 0);
     VarSet(VAR_NEVER_READ_0x40E0, 0);
     VarSet(VAR_NEVER_READ_0x40E1, 0);

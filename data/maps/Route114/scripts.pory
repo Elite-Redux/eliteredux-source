@@ -80,6 +80,10 @@ Route114_EventScript_FossilManiacsHouseSign:: @ 81F262E
 Route114_EventScript_LanettesHouseSign:: @ 81F2637
 	msgbox Route114_Text_LanettesHouse, MSGBOX_SIGN
 	end
+	
+Route114_EventScript_AnnualFishingContestSign::
+	msgbox Route114_Text_AnnualFishingContestSign, MSGBOX_SIGN
+	end
 
 Route114_EventScript_Lenny:: @ 81F2640
 	trainerbattle_single TRAINER_LENNY, Route114_Text_LennyIntro, Route114_Text_LennyDefeat
@@ -201,6 +205,10 @@ Route114_Text_FossilManiacsHouseSign: @ 81F28DB
 
 Route114_Text_LanettesHouse: @ 81F2910
 	.string "Lanette's House$"
+	
+Route114_Text_AnnualFishingContestSign: @ 81F2910
+    .string "Fishing contest!\n"
+	.string "Make those fishing reel turn!$"
 
 `
 script Route114_EventScript_LegendaryNPC{
@@ -264,6 +272,7 @@ script Route114_EventScript_Feraligatr{
 	setvar(VAR_TOTEM_POKEMON_EVASION_BOOST,  0)
 	setvar(VAR_TOTEM_MESSAGE, TOTEM_FIGHT_FERALIGATR)
 	//setflag(FLAG_SHINY_CREATION)
+	setflag(FLAG_ALPHA_CREATION)
 	setwildbattlewithcustommoves(SPECIES_FERALIGATR, 0, ITEM_FERALIGATRITE_Y, MOVE_HYDRO_CANNON, MOVE_HYPER_BEAM, MOVE_BLIZZARD, MOVE_HYPER_VOICE, 0, NATURE_MODEST, 252, 252, 252, 252, 252, 252)
 	setflag(FLAG_SYS_CTRL_OBJ_DELETE)
 	dowildbattle
@@ -304,7 +313,9 @@ script Route114_EventScript_Feraligatr_Join{
     msgbox(format("Feraligatr seems to want to join your team, will you let this Feraligatr join you?"), MSGBOX_YESNO)
 	if(var(VAR_RESULT) == 1){
 		setflag(FLAG_OBTAINED_ROUTE114_FERALIGATR)
+		setflag(FLAG_ALPHA_CREATION)
 		givecustommon(SPECIES_FERALIGATR, 50, ITEM_NONE, ITEM_CHERISH_BALL, NATURE_MODEST, 0, 252, 0, 0, 0, 252, 4, 0, 0, 0, 0, 0, 0, MOVE_HYDRO_CANNON, MOVE_HYPER_BEAM, MOVE_BLIZZARD, MOVE_HYPER_VOICE, FALSE)
+		clearflag(FLAG_ALPHA_CREATION)
 		playfanfare(MUS_OBTAIN_ITEM)
 		message(format("{PLAYER} received a Feraligatr!"))
 		waitfanfare
@@ -321,4 +332,35 @@ script Route114_EventScript_Feraligatr_Join{
 	}
 	release
 	end
+}
+const LOCALID_ROCK_0 = 9
+const LOCALID_ROCK_1 = 16
+const LOCALID_ROCK_2 = 17
+const LOCALID_ROCK_3 = 18
+const LOCALID_ROCK_4 = 19
+const LOCALID_ROCK_5 = 29
+
+script Route114_EventScript_RockSmashSign{
+    lock
+    msgbox(format("It's a button, press it?"), MSGBOX_YESNO)
+    closemessage
+    if (var(VAR_RESULT) != 1){
+        release
+        end
+    }
+    playse(SE_M_ROCK_THROW)
+    applymovement(LOCALID_ROCK_0, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_1, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_2, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_3, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_4, Movement_SmashRock)
+	applymovement(LOCALID_ROCK_5, Movement_SmashRock)
+	waitmovement(0)
+	removeobject(LOCALID_ROCK_0)
+	removeobject(LOCALID_ROCK_1)
+	removeobject(LOCALID_ROCK_2)
+	removeobject(LOCALID_ROCK_3)
+	removeobject(LOCALID_ROCK_4)
+	removeobject(LOCALID_ROCK_5)
+	waitse
 }

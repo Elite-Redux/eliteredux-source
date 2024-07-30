@@ -110,7 +110,10 @@
 #define STATUS1_TOXIC_TURN(num)  ((num) << 8)
 #define STATUS1_FROSTBITE        (1 << 12)
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
-#define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON | STATUS1_FROSTBITE)
+#define STATUS1_BLEED            (1 << 13)
+#define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON | STATUS1_FROSTBITE | STATUS1_BLEED)
+
+#define BLEED_DAMAGE(hp) (hp * 6 / 100)
 
 // Volatile status ailments
 // These are removed after exiting the battle or switching out
@@ -177,6 +180,10 @@
 #define STATUS4_ELECTRIFIED             (1 << 0)
 #define STATUS4_PLASMA_FISTS            (1 << 1)
 #define STATUS4_COILED                  (1 << 2)
+#define STATUS4_SALT_CURE               (1 << 3)
+#define STATUS4_GHASTLY_ECHO            (1 << 4)
+#define STATUS4_COMMANDED               (1 << 5)
+#define STATUS4_DRAGON_CHEER            (1 << 6)
 
 #define HITMARKER_x10                   (1 << 4)
 #define HITMARKER_SKIP_DMG_TRACK        (1 << 5)
@@ -225,9 +232,11 @@
 #define SIDE_STATUS_WIDE_GUARD              (1 << 19)
 #define SIDE_STATUS_CRAFTY_SHIELD           (1 << 20)
 #define SIDE_STATUS_MAT_BLOCK               (1 << 21)
+#define SIDE_STATUS_SMOKESCREEN             (1 << 22)
 
 #define SIDE_STATUS_HAZARDS_ANY    (SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_STEALTH_ROCK)
 #define SIDE_STATUS_SCREEN_ANY     (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL)
+#define SIDE_STATUS_SWAPPABLE      (SIDE_STATUS_HAZARDS_ANY | SIDE_STATUS_SCREEN_ANY | SIDE_STATUS_SAFEGUARD | SIDE_STATUS_MIST | SIDE_STATUS_TAILWIND | SIDE_STATUS_SMOKESCREEN)
 
 // Field affecting statuses.
 #define STATUS_FIELD_MAGIC_ROOM                     (1 << 0)
@@ -243,6 +252,7 @@
 #define STATUS_FIELD_ION_DELUGE                     (1 << 10)
 #define STATUS_FIELD_FAIRY_LOCK                     (1 << 11)
 #define STATUS_FIELD_TERRAIN_PERMANENT              (1 << 12)   // Overworld thunderstorm generates electric terrain
+#define STATUS_FIELD_INVERSE_ROOM                   (1 << 13)
 
 #define STATUS_FIELD_TERRAIN_ANY        (STATUS_FIELD_GRASSY_TERRAIN | STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN | STATUS_FIELD_PSYCHIC_TERRAIN)
 
@@ -267,7 +277,6 @@
 #define WEATHER_SANDSTORM_TEMPORARY (1 << 4)
 #define WEATHER_SANDSTORM_PERMANENT (1 << 5)
 #define WEATHER_SANDSTORM_ANY       (WEATHER_SANDSTORM_TEMPORARY | WEATHER_SANDSTORM_PERMANENT)
-#define B_WEATHER_SANDSTORM         (WEATHER_SANDSTORM_TEMPORARY | WEATHER_SANDSTORM_PERMANENT)
 #define WEATHER_SUN_TEMPORARY       (1 << 6)
 #define WEATHER_SUN_PERMANENT       (1 << 7)
 #define WEATHER_SUN_PRIMAL          (1 << 8)
@@ -276,11 +285,12 @@
 #define WEATHER_HAIL_PERMANENT      (1 << 10)
 #define WEATHER_HAIL_ANY            (WEATHER_HAIL_TEMPORARY | WEATHER_HAIL_PERMANENT)
 #define WEATHER_STRONG_WINDS        (1 << 11)
-#define B_WEATHER_STRONG_WINDS      (1 << 11)
-#define WEATHER_ANY                 (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_SUN_ANY | WEATHER_HAIL_ANY | WEATHER_STRONG_WINDS)
-#define B_WEATHER_ANY               (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_SUN_ANY | WEATHER_HAIL_ANY | WEATHER_STRONG_WINDS)
+#define WEATHER_FOG_PERMANENT       (1 << 12)
+#define WEATHER_FOG_TEMPORARY       (1 << 13)
+#define WEATHER_FOG_ANY             (WEATHER_FOG_PERMANENT | WEATHER_FOG_TEMPORARY)
+#define WEATHER_ANY                 (WEATHER_RAIN_ANY | WEATHER_SANDSTORM_ANY | WEATHER_SUN_ANY | WEATHER_HAIL_ANY | WEATHER_STRONG_WINDS | WEATHER_FOG_ANY)
 #define WEATHER_PRIMAL_ANY          (WEATHER_RAIN_PRIMAL | WEATHER_SUN_PRIMAL | WEATHER_STRONG_WINDS)
-#define B_WEATHER_PRIMAL_ANY        (WEATHER_RAIN_PRIMAL | WEATHER_SUN_PRIMAL | WEATHER_STRONG_WINDS)
+#define WEATHER_PERMANENT           (WEATHER_PRIMAL_ANY | WEATHER_RAIN_PERMANENT | WEATHER_SANDSTORM_PERMANENT | WEATHER_SUN_PERMANENT | WEATHER_HAIL_PERMANENT | WEATHER_FOG_PERMANENT)
 
 // Battle Weather as enum
 #define ENUM_WEATHER_NONE                 0
@@ -291,6 +301,7 @@
 #define ENUM_WEATHER_SUN_PRIMAL           5
 #define ENUM_WEATHER_RAIN_PRIMAL          6
 #define ENUM_WEATHER_STRONG_WINDS         7
+#define ENUM_WEATHER_FOG                  8
 
 // Move Effects
 #define MOVE_EFFECT_SLEEP                  1
@@ -300,75 +311,90 @@
 #define MOVE_EFFECT_PARALYSIS              5
 #define MOVE_EFFECT_TOXIC                  6
 #define MOVE_EFFECT_FROSTBITE              7
-#define PRIMARY_STATUS_MOVE_EFFECT         MOVE_EFFECT_FROSTBITE // All above move effects apply primary status
-#define MOVE_EFFECT_CONFUSION              8
-#define MOVE_EFFECT_FLINCH                 9
-#define MOVE_EFFECT_TRI_ATTACK             10
-#define MOVE_EFFECT_UPROAR                 11
-#define MOVE_EFFECT_PAYDAY                 12
-#define MOVE_EFFECT_CHARGING               13
-#define MOVE_EFFECT_WRAP                   14
-#define MOVE_EFFECT_INCINERATE 			   15
-#define MOVE_EFFECT_ATK_PLUS_1             16
-#define MOVE_EFFECT_DEF_PLUS_1             17
-#define MOVE_EFFECT_SPD_PLUS_1             18
-#define MOVE_EFFECT_SP_ATK_PLUS_1          19
-#define MOVE_EFFECT_SP_DEF_PLUS_1          20
-#define MOVE_EFFECT_ACC_PLUS_1             21
-#define MOVE_EFFECT_EVS_PLUS_1             22
-#define MOVE_EFFECT_ATK_MINUS_1            23
-#define MOVE_EFFECT_DEF_MINUS_1            24
-#define MOVE_EFFECT_SPD_MINUS_1            25
-#define MOVE_EFFECT_SP_ATK_MINUS_1         26
-#define MOVE_EFFECT_SP_DEF_MINUS_1         27
-#define MOVE_EFFECT_ACC_MINUS_1            28
-#define MOVE_EFFECT_EVS_MINUS_1            29
-#define MOVE_EFFECT_RECHARGE               30
-#define MOVE_EFFECT_RAGE                   31
-#define MOVE_EFFECT_STEAL_ITEM             32
-#define MOVE_EFFECT_PREVENT_ESCAPE         33
-#define MOVE_EFFECT_NIGHTMARE              34
-#define MOVE_EFFECT_ALL_STATS_UP           35
-#define MOVE_EFFECT_RAPIDSPIN              36
-#define MOVE_EFFECT_REMOVE_STATUS          37
-#define MOVE_EFFECT_ATK_DEF_DOWN           38
-#define MOVE_EFFECT_RECOIL_HP_25           39
-#define MOVE_EFFECT_ATK_PLUS_2             40
-#define MOVE_EFFECT_DEF_PLUS_2             41
-#define MOVE_EFFECT_SPD_PLUS_2             42
-#define MOVE_EFFECT_SP_ATK_PLUS_2          43
-#define MOVE_EFFECT_SP_DEF_PLUS_2          44
-#define MOVE_EFFECT_ACC_PLUS_2             45
-#define MOVE_EFFECT_EVS_PLUS_2             46
-#define MOVE_EFFECT_ATK_MINUS_2            47
-#define MOVE_EFFECT_DEF_MINUS_2            48
-#define MOVE_EFFECT_SPD_MINUS_2            49
-#define MOVE_EFFECT_SP_ATK_MINUS_2         50
-#define MOVE_EFFECT_SP_DEF_MINUS_2         51
-#define MOVE_EFFECT_ACC_MINUS_2            52
-#define MOVE_EFFECT_EVS_MINUS_2            53
-#define MOVE_EFFECT_THRASH                 54
-#define MOVE_EFFECT_KNOCK_OFF              55
-#define MOVE_EFFECT_DEF_SPDEF_DOWN         56
-#define MOVE_EFFECT_BURN_UP                57
-#define MOVE_EFFECT_CLEAR_SMOG             58
-#define MOVE_EFFECT_BUG_BITE               59
-#define MOVE_EFFECT_SP_ATK_TWO_DOWN        60
-#define MOVE_EFFECT_SMACK_DOWN             61
-#define MOVE_EFFECT_FLAME_BURST            62
-#define MOVE_EFFECT_FEINT                  63
-#define MOVE_EFFECT_SPECTRAL_THIEF         64
-#define MOVE_EFFECT_V_CREATE               65
-#define MOVE_EFFECT_HAPPY_HOUR             66
-#define MOVE_EFFECT_CORE_ENFORCER          67
-#define MOVE_EFFECT_THROAT_CHOP            68
-#define MOVE_EFFECT_RELIC_SONG             69
-#define MOVE_EFFECT_TRAP_BOTH              70
-#define MOVE_EFFECT_SPD_PLUS_1_DEF_MINUS_1 71
-#define MOVE_EFFECT_ATTRACT                72
-#define MOVE_EFFECT_CURSE                  73
-#define NUM_MOVE_EFFECTS                   74
+#define MOVE_EFFECT_BLEED                  8
+#define PRIMARY_STATUS_MOVE_EFFECT         MOVE_EFFECT_BLEED // All above move effects apply primary status
+#define MOVE_EFFECT_CONFUSION              9
+#define MOVE_EFFECT_FLINCH                 10
+#define MOVE_EFFECT_TRI_ATTACK             11
+#define MOVE_EFFECT_UPROAR                 12
+#define MOVE_EFFECT_PAYDAY                 13
+#define MOVE_EFFECT_CHARGING               14
+#define MOVE_EFFECT_WRAP                   15
+#define MOVE_EFFECT_INCINERATE 			   16
+#define MOVE_EFFECT_ATK_PLUS_1             17
+#define MOVE_EFFECT_DEF_PLUS_1             18
+#define MOVE_EFFECT_SPD_PLUS_1             19
+#define MOVE_EFFECT_SP_ATK_PLUS_1          20
+#define MOVE_EFFECT_SP_DEF_PLUS_1          21
+#define MOVE_EFFECT_ACC_PLUS_1             22
+#define MOVE_EFFECT_EVS_PLUS_1             23
+#define MOVE_EFFECT_ATK_MINUS_1            24
+#define MOVE_EFFECT_DEF_MINUS_1            25
+#define MOVE_EFFECT_SPD_MINUS_1            26
+#define MOVE_EFFECT_SP_ATK_MINUS_1         27
+#define MOVE_EFFECT_SP_DEF_MINUS_1         28
+#define MOVE_EFFECT_ACC_MINUS_1            29
+#define MOVE_EFFECT_EVS_MINUS_1            30
+#define MOVE_EFFECT_RECHARGE               31
+#define MOVE_EFFECT_RAGE                   32
+#define MOVE_EFFECT_STEAL_ITEM             33
+#define MOVE_EFFECT_PREVENT_ESCAPE         34
+#define MOVE_EFFECT_NIGHTMARE              35
+#define MOVE_EFFECT_ALL_STATS_UP           36
+#define MOVE_EFFECT_RAPIDSPIN              37
+#define MOVE_EFFECT_REMOVE_STATUS          38
+#define MOVE_EFFECT_ATK_DEF_DOWN           39
+#define MOVE_EFFECT_RECOIL_HP_25           40
+#define MOVE_EFFECT_ATK_PLUS_2             41
+#define MOVE_EFFECT_DEF_PLUS_2             42
+#define MOVE_EFFECT_SPD_PLUS_2             43
+#define MOVE_EFFECT_SP_ATK_PLUS_2          44
+#define MOVE_EFFECT_SP_DEF_PLUS_2          45
+#define MOVE_EFFECT_ACC_PLUS_2             46
+#define MOVE_EFFECT_EVS_PLUS_2             47
+#define MOVE_EFFECT_ATK_MINUS_2            48
+#define MOVE_EFFECT_DEF_MINUS_2            49
+#define MOVE_EFFECT_SPD_MINUS_2            50
+#define MOVE_EFFECT_SP_ATK_MINUS_2         51
+#define MOVE_EFFECT_SP_DEF_MINUS_2         52
+#define MOVE_EFFECT_ACC_MINUS_2            53
+#define MOVE_EFFECT_EVS_MINUS_2            54
+#define MOVE_EFFECT_THRASH                 55
+#define MOVE_EFFECT_KNOCK_OFF              56
+#define MOVE_EFFECT_DEF_SPDEF_DOWN         57
+#define MOVE_EFFECT_BURN_UP                58
+#define MOVE_EFFECT_CLEAR_SMOG             59
+#define MOVE_EFFECT_BUG_BITE               60
+#define MOVE_EFFECT_SP_ATK_TWO_DOWN        61
+#define MOVE_EFFECT_SMACK_DOWN             62
+#define MOVE_EFFECT_FLAME_BURST            63
+#define MOVE_EFFECT_FEINT                  64
+#define MOVE_EFFECT_SPECTRAL_THIEF         65
+#define MOVE_EFFECT_V_CREATE               66
+#define MOVE_EFFECT_HAPPY_HOUR             67
+#define MOVE_EFFECT_CORE_ENFORCER          68
+#define MOVE_EFFECT_THROAT_CHOP            69
+#define MOVE_EFFECT_RELIC_SONG             70
+#define MOVE_EFFECT_TRAP_BOTH              71
+#define MOVE_EFFECT_SPD_PLUS_1_DEF_MINUS_1 72
+#define MOVE_EFFECT_ATTRACT                73
+#define MOVE_EFFECT_CURSE                  74
+#define MOVE_EFFECT_DISABLE                75
+#define MOVE_EFFECT_GLAIVE_RUSH            76
+#define MOVE_EFFECT_SALT_CURE              77
+#define MOVE_EFFECT_ORDER_UP               78
+#define MOVE_EFFECT_WATER_PLEDGE           79
+#define MOVE_EFFECT_FIRE_PLEDGE            80
+#define MOVE_EFFECT_GRASS_PLEDGE           81
+#define MOVE_EFFECT_RAINBOW                82
+#define MOVE_EFFECT_FIRE_SEA               83
+#define MOVE_EFFECT_SWAMP                  84
+#define MOVE_EFFECT_SYRUP                  85
+#define MOVE_EFFECT_DIRE_CLAW              86
+#define MOVE_EFFECT_SMOKESCREEN            87
+#define NUM_MOVE_EFFECTS                   88
 
+#define MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES 0x2000
 #define MOVE_EFFECT_AFFECTS_USER        0x4000
 #define MOVE_EFFECT_CERTAIN             0x8000
 
@@ -419,44 +445,52 @@
 #define B_WIN_MSG                 0
 #define B_WIN_ACTION_PROMPT       1 // "What will {x} do?"
 #define B_WIN_ACTION_MENU         2 // "Fight/Pokémon/Bag/Run" menu
-#define B_WIN_MOVE_NAME_1         3 // Top left
-#define B_WIN_MOVE_NAME_2         4 // Top right
-#define B_WIN_MOVE_NAME_3         5 // Bottom left
-#define B_WIN_MOVE_NAME_4         6 // Bottom right
-#define B_WIN_PP                  7
-#define B_WIN_DUMMY               8
-#define B_WIN_PP_REMAINING        9
-#define B_WIN_MOVE_TYPE          10
-#define B_WIN_SWITCH_PROMPT      11 // "Switch which?"
-#define B_WIN_YESNO              12
-#define B_WIN_LEVEL_UP_BOX       13
-#define B_WIN_LEVEL_UP_BANNER    14
-#define B_WIN_VS_PLAYER          15
-#define B_WIN_VS_OPPONENT        16
-#define B_WIN_VS_MULTI_PLAYER_1  17
-#define B_WIN_VS_MULTI_PLAYER_2  18
-#define B_WIN_VS_MULTI_PLAYER_3  19
-#define B_WIN_VS_MULTI_PLAYER_4  20
-#define B_WIN_VS_OUTCOME_DRAW    21
-#define B_WIN_VS_OUTCOME_LEFT    22
-#define B_WIN_VS_OUTCOME_RIGHT   23
-#define B_WIN_SUPER_EFFECTIVE    24
-#define B_WIN_NOT_VERY_EFFECTIVE 25
-#define B_WIN_NO_EFFECT          26
+#define B_WIN_SWITCH_PROMPT       3 // "Switch which?"
+#define B_WIN_YESNO               4
+#define B_WIN_LEVEL_UP_BOX        5
+#define B_WIN_LEVEL_UP_BANNER     6
+#define B_WIN_VS_PLAYER           7
+#define B_WIN_VS_OPPONENT         8
+#define B_WIN_VS_MULTI_PLAYER_1   9
+#define B_WIN_VS_MULTI_PLAYER_2  10
+#define B_WIN_VS_MULTI_PLAYER_3  11
+#define B_WIN_VS_MULTI_PLAYER_4  12
+#define B_WIN_VS_OUTCOME_DRAW    13
+#define B_WIN_VS_OUTCOME_LEFT    14
+#define B_WIN_VS_OUTCOME_RIGHT   15
+#define B_WIN_SUPER_EFFECTIVE    16
+#define B_WIN_NOT_VERY_EFFECTIVE 17
+#define B_WIN_NO_EFFECT          18
+#define B_WIN_YESNO_TWO          19
+
+#define NUM_BATTLE_WIN             B_WIN_YESNO_TWO + 1
 
 // The following are duplicate id values for windows that Battle Arena uses differently.
-#define ARENA_WIN_PLAYER_NAME      15
-#define ARENA_WIN_VS               16
-#define ARENA_WIN_OPPONENT_NAME    17
-#define ARENA_WIN_MIND             18
-#define ARENA_WIN_SKILL            19
-#define ARENA_WIN_BODY             20
-#define ARENA_WIN_JUDGMENT_TITLE   21
-#define ARENA_WIN_JUDGMENT_TEXT    22
+#define ARENA_WIN_PLAYER_NAME      NUM_BATTLE_WIN + 1
+#define ARENA_WIN_VS               NUM_BATTLE_WIN + 2
+#define ARENA_WIN_OPPONENT_NAME    NUM_BATTLE_WIN + 3
+#define ARENA_WIN_MIND             NUM_BATTLE_WIN + 4
+#define ARENA_WIN_SKILL            NUM_BATTLE_WIN + 5
+#define ARENA_WIN_BODY             NUM_BATTLE_WIN + 6
+#define ARENA_WIN_JUDGMENT_TITLE   NUM_BATTLE_WIN + 7
+#define ARENA_WIN_JUDGMENT_TEXT    NUM_BATTLE_WIN + 8
 
 // Ability Conditions
 #define CONDITION_SPIKES       0
 #define CONDITION_TOXIC_SPIKES 1
 #define CONDITION_STEALTH_ROCK 2
+
+// Tag Teams
+#define TAG_TEAM_WALLACE_JUAN 0
+#define TAG_TEAM_WALLACE_JUAN_2 1
+#define TAG_TEAM_WALLACE_JUAN_REMATCH 2
+
+// VAR_BATTLE_FIELD_EFFECT_TYPE
+#define BATTLE_FIELD_EFFECT_NONE            0
+#define BATTLE_FIELD_EFFECT_WEATHER         1
+#define BATTLE_FIELD_EFFECT_TERRAIN         2
+#define BATTLE_FIELD_EFFECT_ROOM            3
+#define BATTLE_FIELD_EFFECT_MONOCHAMP       4
+#define BATTLE_FIELD_EFFECT_SPECIAL_TRAINER 5
 
 #endif // GUARD_CONSTANTS_BATTLE_H

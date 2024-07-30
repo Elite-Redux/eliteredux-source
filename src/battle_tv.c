@@ -239,7 +239,7 @@ static const u16 sPoints_MoveEffect[NUM_BATTLE_MOVE_EFFECTS] =
     [EFFECT_FLINCH_MINIMIZE_HIT] = 1, 
     [EFFECT_SOLARBEAM] = 1, 
     [EFFECT_THUNDER] = 1, 
-    [EFFECT_TELEPORT] = 1, 
+    [EFFECT_SWITCH_ARGUMENT] = 1, 
     [EFFECT_BEAT_UP] = 2, 
     [EFFECT_SEMI_INVULNERABLE] = 3, 
     [EFFECT_DEFENSE_CURL] = 1, 
@@ -301,6 +301,7 @@ static const u16 sPoints_MoveEffect[NUM_BATTLE_MOVE_EFFECTS] =
     [EFFECT_DRAGON_DANCE] = 1, 
     [EFFECT_CAMOUFLAGE] = 3,
     [EFFECT_FROSTBITE_HIT] = 1,
+    [EFFECT_BLEED_HIT] = 1,
 };
 
 static const u16 sPoints_Effectiveness[] =
@@ -969,7 +970,7 @@ static bool8 IsNotSpecialBattleString(u16 stringId)
         return FALSE;
 }
 
-void BattleTv_SetDataBasedOnMove(u16 move, u16 weatherFlags, struct DisableStruct *disableStructPtr)
+void BattleTv_SetDataBasedOnMove(u16 move, u16 weatherFlags, struct VolatileStruct *volatileStructPtr)
 {
     struct BattleTv *tvPtr;
     u32 atkSide, defSide;
@@ -995,7 +996,7 @@ void BattleTv_SetDataBasedOnMove(u16 move, u16 weatherFlags, struct DisableStruc
     tvPtr->side[atkSide].usedMoveSlot = moveSlot;
     AddMovePoints(PTS_MOVE_EFFECT, moveSlot, gBattleMoves[move].effect, 0);
     AddPointsBasedOnWeather(weatherFlags, move, moveSlot);
-    if (disableStructPtr->chargeTimer != 0)
+    if (volatileStructPtr->chargeTimer != 0)
         AddMovePoints(PTS_ELECTRIC, move, moveSlot, 0);
 
     if (move == MOVE_WISH)
@@ -1455,11 +1456,13 @@ static void TrySetBattleSeminarShow(void)
     currMoveSaved = gCurrentMove;
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
+        u8 moveType;
         gCurrentMove = gBattleMons[gBattlerAttacker].moves[i];
+        moveType = gBattleMoves[gCurrentMove].type;
         powerOverride = 0;
         if (ShouldCalculateDamage(gCurrentMove, &dmgByMove[i], &powerOverride))
         {
-            gBattleMoveDamage = CalculateMoveDamage(gCurrentMove, gBattlerAttacker, gBattlerTarget, gBattleMoves[gCurrentMove].type, powerOverride, FALSE, FALSE, FALSE);
+            gBattleMoveDamage = CalculateMoveDamage(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, powerOverride, FALSE, FALSE, FALSE);
             dmgByMove[i] = gBattleMoveDamage;
             if (dmgByMove[i] == 0 && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
                 dmgByMove[i] = 1;

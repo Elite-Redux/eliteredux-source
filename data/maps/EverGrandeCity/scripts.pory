@@ -1,12 +1,15 @@
 raw `
 EverGrandeCity_MapScripts:: @ 81E7D1B
 	map_script MAP_SCRIPT_ON_TRANSITION, EverGrandeCity_OnTransition
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, EverGrandeCity_OnFrame
 	.byte 0
 
 EverGrandeCity_OnTransition: @ 81E7D21
 	call_if_set FLAG_SYS_WEATHER_CTRL, Common_EventScript_SetAbnormalWeather
 	end
-
+EverGrandeCity_OnFrame:
+    map_script_2 VAR_TEMP_A, 0, EverGrandeCity_EventScript_RivalTalk
+    .2byte 0
 EverGrandeCity_EventScript_VictoryRoadSign:: @ 81E7D2B
 	msgbox EverGrandeCity_Text_EnteringVictoryRoad, MSGBOX_SIGN
 	end
@@ -37,3 +40,41 @@ EverGrandeCity_Text_CitySign: @ 81E7D89
 	.string "and Pokémon.”$"
 
 `
+const LOCALID_RIVAL = 1
+
+script EverGrandeCity_EventScript_RivalTalk{
+    setvar(VAR_TEMP_A, 1)
+    if (!flag(FLAG_RIVAL_EVERGRANDE_ESCORT)){
+        return
+    }
+    // chit chat cutscene
+    lock
+    applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceRight)
+    applymovement(LOCALID_RIVAL, Common_Movement_FaceLeft)
+    waitmovement(0)
+    delay(10)
+    applymovement(LOCALID_RIVAL, Common_Movement_FaceRight)
+    waitmovement(0)
+    delay(20)
+    applymovement(LOCALID_RIVAL, Common_Movement_FaceUp)
+    waitmovement(0)
+    delay(20)
+    applymovement(LOCALID_RIVAL, Common_Movement_FaceDown)
+    waitmovement(0)
+    delay(20)
+    applymovement(LOCALID_RIVAL, Common_Movement_FaceLeft)
+    msgbox(format(  "I love this place, it is sad it has to be this far."
+                    "But I suppose this is what makes this place so charming."
+                    "Anyway {PLAYER}, see you later, bye."))
+    closemessage
+    applymovement(LOCALID_RIVAL, EverGrandeCity_Movement_RivalExit)
+    waitmovement(0)
+    removeobject(LOCALID_RIVAL)
+    clearflag(FLAG_RIVAL_EVERGRANDE_ESCORT)
+    setflag(FLAG_HIDE_RIVAL_SOOTOPOLIS_EVERGRANDE)
+    release
+}
+
+movement EverGrandeCity_Movement_RivalExit{
+    walk_up * 7
+}

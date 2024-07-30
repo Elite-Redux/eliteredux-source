@@ -502,3 +502,48 @@ script Route118_EventScript_StevenTrigger{
 	releaseall
     end
 }
+
+const LOCALID_SCOTT = 24
+
+script Route118_EventScript_Scott{
+    lock
+    faceplayer
+    if(flag(FLAG_HIDE_ROUTE_118_GABBY_AND_TY_1) == TRUE){
+        call(Route118_EventScript_ScottUnbotheredByReporters)
+    } else {
+        call(Route118_EventScript_ScottBotheredByReporters)
+    }
+    release
+}
+
+script Route118_EventScript_ScottUnbotheredByReporters{
+    msgbox(format("Hi {PLAYER}, I see we meet again."
+                  "Today, I take a little break at the sea, as I can't go to Route109.\p"
+                  "Why? I can't stop being bothered by those reporters."))
+}
+
+script Route118_EventScript_ScottBotheredByReporters{
+    msgbox(format("Hey, {PLAYER}, I'm sorry but i must not stay longer here."
+                  "Those reporters are trying to pass me as a children stalker."
+                  "It's obviously wrong but whatever.\p"
+                  "I'll take some time in the jungle, at least there is no camera there."))
+    switch(var(VAR_FACING)){
+        case DIR_WEST:
+           applymovement(OBJ_EVENT_ID_PLAYER, Route118_Movement_PlayerLetScottLeaveBotheredByReporters)
+        break
+    }
+    applymovement(LOCALID_SCOTT, Route118_Movement_ScottLeaveBotheredByReporters)
+    waitmovement(0)
+    setflag(FLAG_HIDE_SCOTT_ROUTE_118)
+    removeobject(LOCALID_SCOTT)
+}
+movement Route118_Movement_PlayerLetScottLeaveBotheredByReporters{
+    walk_up
+    face_down
+    face_right
+    walk_down
+    face_left
+}
+movement Route118_Movement_ScottLeaveBotheredByReporters{
+    walk_right * 9
+}

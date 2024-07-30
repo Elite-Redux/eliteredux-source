@@ -5,7 +5,7 @@ OldaleTown_Mart_MapScripts:: @ 81FC23F
 OldaleTown_Mart_EventScript_Woman:: @ 81FC28A
 	lock
 	faceplayer
-	goto_if_set FLAG_ADVENTURE_STARTED, OldaleTown_Mart_EventScript_PokeBallsInStock
+	goto_if_set FLAG_RECEIVED_POKEDEX_FROM_BIRCH, OldaleTown_Mart_EventScript_PokeBallsInStock
 	msgbox OldaleTown_Mart_Text_PokeBallsAreSoldOut, MSGBOX_DEFAULT
 	release
 	end
@@ -34,3 +34,591 @@ OldaleTown_Mart_Text_RestoreHPWithPotion: @ 81FC338
 	.string "restore its HP with a Potion.$"
 
 `
+
+script OldaleTown_Mart_EventScript_Clerk{
+	lock
+	faceplayer
+	if(flag(FLAG_RECEIVED_POKEDEX_FROM_BIRCH)){
+		setvar(VAR_SHOP_TYPE, 3)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		message(gText_HowMayIServeYou)
+		waitmessage
+		pokemart(0)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need your Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+script General_Adoption_Center_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_RECEIVED_POKEDEX_FROM_BIRCH)){
+		setvar(VAR_SHOP_TYPE, 3)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		message(gText_HowMayIServeYou)
+		waitmessage
+		pokemart(0)
+		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartGrassStarters {
+	SPECIES_BULBASAUR
+	SPECIES_CHIKORITA
+	SPECIES_TREECKO
+	SPECIES_TURTWIG
+	SPECIES_SNIVY
+	SPECIES_CHESPIN
+	SPECIES_ROWLET
+	SPECIES_GROOKEY
+	SPECIES_SPRIGATITO
+}
+
+script General_Adoption_Center_Starters_Grass_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_RECEIVED_POKEDEX_FROM_BIRCH)){
+		if(flag(FLAG_BADGE04_GET)){
+			setvar(VAR_SHOP_TYPE, 3)
+			setvar(VAR_SHOP_MONEY_TYPE, 1)
+			message(gText_HowMayIServeYou)
+			waitmessage
+			pokemart(MartGrassStarters)
+			msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+			setvar(VAR_SHOP_MONEY_TYPE, 0)
+		}
+		else{
+			msgbox(format("I will get some rare Grass mons to sell later, make sure to come back to check them."), MSGBOX_DEFAULT)
+		}
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartFireStarters {
+	SPECIES_CHARMANDER
+	SPECIES_CYNDAQUIL
+	SPECIES_TORCHIC
+	SPECIES_CHIMCHAR
+	SPECIES_TEPIG
+	SPECIES_FENNEKIN
+	SPECIES_LITTEN
+	SPECIES_SCORBUNNY
+	SPECIES_FUECOCO
+}
+
+script General_Adoption_Center_Starters_Fire_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		if(flag(FLAG_BADGE04_GET)){
+			setvar(VAR_SHOP_TYPE, 3)
+			setvar(VAR_SHOP_MONEY_TYPE, 1)
+			message(gText_HowMayIServeYou)
+			waitmessage
+			pokemart(MartFireStarters)
+			msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+			setvar(VAR_SHOP_MONEY_TYPE, 0)
+		}
+		else{
+			msgbox(format("I will get some rare Fire mons to sell later, make sure to come back to check them."), MSGBOX_DEFAULT)
+		}
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartWaterStarters {
+	SPECIES_SQUIRTLE
+	SPECIES_TOTODILE
+	SPECIES_MUDKIP
+	SPECIES_PIPLUP
+	SPECIES_OSHAWOTT
+	SPECIES_FROAKIE
+	SPECIES_POPPLIO
+	SPECIES_SOBBLE
+	SPECIES_QUAXLY
+}
+
+script General_Adoption_Center_Starters_Water_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		if(flag(FLAG_BADGE04_GET)){
+			setvar(VAR_SHOP_TYPE, 3)
+			setvar(VAR_SHOP_MONEY_TYPE, 1)
+			message(gText_HowMayIServeYou)
+			waitmessage
+			pokemart(MartWaterStarters)
+			msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+			setvar(VAR_SHOP_MONEY_TYPE, 0)
+		}
+		else{
+			msgbox(format("I will get some rare Water mons to sell later, make sure to come back to check them."), MSGBOX_DEFAULT)
+		}
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartCasinoMons {
+	SPECIES_PORYGON
+	SPECIES_MUNCHLAX
+	SPECIES_VULPIX_ALOLAN
+	SPECIES_SANDSHREW_ALOLAN
+	SPECIES_RATTATA_ALOLAN
+	SPECIES_MEOWTH_ALOLAN
+	SPECIES_GRIMER_ALOLAN
+	SPECIES_DIGLETT_ALOLAN
+	SPECIES_GEODUDE_ALOLAN
+	SPECIES_MAROWAK_ALOLAN
+	SPECIES_EXEGGUTOR_ALOLAN
+	SPECIES_GIMMIGHOUL
+	SPECIES_RAICHU_ALOLAN
+}
+
+script General_Adoption_Center_Casino_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		setvar(VAR_SHOP_TYPE, 3)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		message(gText_HowMayIServeYou)
+		waitmessage
+		pokemart(MartCasinoMons)
+		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartElectricMons {
+	SPECIES_PICHU
+	SPECIES_MINUN
+	SPECIES_PLUSLE
+	SPECIES_PACHIRISU
+	SPECIES_EMOLGA
+	SPECIES_DEDENNE
+	SPECIES_TOGEDEMARU
+	SPECIES_MORPEKO
+	SPECIES_PAWMI
+}
+
+script General_Adoption_Center_Pikaclones_Script{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		setvar(VAR_SHOP_TYPE, 3)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		message(gText_HowMayIServeYou)
+		waitmessage
+		pokemart(MartElectricMons)
+		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart AdoptionCenter_Mega_Stones {
+	ITEM_HOUNDOOMINITE_R
+	ITEM_SABLENITE_R
+	ITEM_GARCHOMPITE_R
+	ITEM_ARCANITE_R
+	ITEM_SKARMORITE_R
+	ITEM_MACHAMPITE_R
+	ITEM_BEEDRILLITE_R
+	ITEM_TYRANITARITE_R
+	ITEM_ALAKAZITE_R
+	ITEM_SCRAFTITE
+	ITEM_FROSLASSITE
+	ITEM_RIBOMBITE
+	ITEM_URSALUNITE
+	ITEM_MAWILITE_R
+	ITEM_WIGGLYTUFFITE
+	ITEM_TINKATITE
+}
+
+script General_Adoption_Center_Mega_Stones_Script{
+	lock
+	faceplayer
+	checkitem(ITEM_MEGA_BRACELET, 1)
+	if(var(VAR_RESULT) == 0){
+		msgbox(format("Sorry, I can't sell you any item if you don't have a Mega Bracelet."), MSGBOX_DEFAULT)
+	}
+	else{
+		message(gText_HowMayIServeYou)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		waitmessage
+		pokemart(AdoptionCenter_Mega_Stones)
+		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+	}
+	release
+	end
+}
+
+mart SlateportCity_PokemartDecor_Dolls {
+	DECOR_AZURILL_DOLL
+	DECOR_SKITTY_DOLL
+	DECOR_NONE
+}
+
+mart SlateportCity_PokemartDecor_Dolls_PostGame {
+	DECOR_AZURILL_DOLL
+	DECOR_SKITTY_DOLL
+	DECOR_REGIROCK_DOLL
+	DECOR_REGICE_DOLL
+	DECOR_REGISTEEL_DOLL
+	DECOR_SNORLAX_DOLL
+	DECOR_RHYDON_DOLL
+	DECOR_LAPRAS_DOLL
+	DECOR_VENUSAUR_DOLL
+	DECOR_CHARIZARD_DOLL
+	DECOR_BLASTOISE_DOLL
+	DECOR_NONE
+}
+
+script SlateportCity_EventScript_DollClerk{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	if(flag(FLAG_SYS_GAME_CLEAR)){
+		pokemartdecoration(SlateportCity_PokemartDecor_Dolls_PostGame)
+	}
+	else{
+		pokemartdecoration(SlateportCity_PokemartDecor_Dolls)
+	}
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+
+mart SlateportCity_PokemartDecor {
+	DECOR_RED_BRICK
+	DECOR_BLUE_BRICK
+	DECOR_YELLOW_BRICK
+	DECOR_RED_BALLOON
+	DECOR_BLUE_BALLOON
+	DECOR_YELLOW_BALLOON
+	DECOR_C_LOW_NOTE_MAT
+	DECOR_D_NOTE_MAT
+	DECOR_E_NOTE_MAT
+	DECOR_F_NOTE_MAT
+	DECOR_G_NOTE_MAT
+	DECOR_A_NOTE_MAT
+	DECOR_B_NOTE_MAT
+	DECOR_C_HIGH_NOTE_MAT
+	DECOR_NONE
+}
+
+script SlateportCity_EventScript_DecorClerk{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	pokemartdecoration(SlateportCity_PokemartDecor)
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+
+mart MartIncenseMons {
+	SPECIES_MUNCHLAX
+	SPECIES_WYNAUT
+	SPECIES_HAPPINY
+	SPECIES_MIME_JR
+	SPECIES_CHINGLING
+	SPECIES_BONSLY
+	SPECIES_BUDEW
+	SPECIES_AZURILL
+	SPECIES_MANTYKE
+}
+
+script SlateportCity_EventScript_IncenseStand{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		setvar(VAR_SHOP_TYPE, 3)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		message(gText_HowMayIServeYou)
+		waitmessage
+		pokemart(MartIncenseMons)
+		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart MartEnergyGuruMons {
+	SPECIES_TYROGUE
+	SPECIES_HITMONCHAN
+	SPECIES_HITMONLEE
+	SPECIES_HITMONTOP
+}
+
+script SlateportCity_EventScript_EnergyGuru{
+	lock
+	faceplayer
+	if(flag(FLAG_ADVENTURE_STARTED)){
+		setvar(VAR_SHOP_TYPE, 3)
+		setvar(VAR_SHOP_MONEY_TYPE, 1)
+		message(gText_HowMayIServeYou)
+		waitmessage
+		pokemart(MartEnergyGuruMons)
+		msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+	}
+	else{
+		msgbox(format("Sorry but I can't sell you any Pokémon yet, you need a Pokedex."), MSGBOX_DEFAULT)
+	}
+	release
+	end
+}
+
+mart FortreeCity_DecorationShop_PokemartDecor_Desks {
+	DECOR_SMALL_DESK
+	DECOR_POKEMON_DESK
+	DECOR_HEAVY_DESK
+	DECOR_RAGGED_DESK
+	DECOR_COMFORT_DESK
+	DECOR_BRICK_DESK
+	DECOR_CAMP_DESK
+	DECOR_HARD_DESK
+	DECOR_NONE
+}
+
+script FortreeCity_DecorationShop_EventScript_ClerkDesks{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	pokemartdecoration(FortreeCity_DecorationShop_PokemartDecor_Desks)
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+
+mart FortreeCity_DecorationShop_PokemartDecor_Chairs {
+	DECOR_SMALL_DESK
+	DECOR_POKEMON_DESK
+	DECOR_HEAVY_DESK
+	DECOR_RAGGED_CHAIR
+	DECOR_COMFORT_CHAIR
+	DECOR_BRICK_CHAIR
+	DECOR_CAMP_CHAIR
+	DECOR_HARD_CHAIR
+	DECOR_NONE
+}
+
+script FortreeCity_DecorationShop_EventScript_ClerkChairs{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	pokemartdecoration(FortreeCity_DecorationShop_PokemartDecor_Chairs)
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+
+mart LilycoveCity_DepartmentStore_5F_Pokemart_Dolls {
+	DECOR_PICHU_DOLL
+	DECOR_PIKACHU_DOLL
+	DECOR_MARILL_DOLL
+	DECOR_JIGGLYPUFF_DOLL
+	DECOR_DUSKULL_DOLL 
+	DECOR_WYNAUT_DOLL
+	DECOR_BALTOY_DOLL
+	DECOR_KECLEON_DOLL
+	DECOR_AZURILL_DOLL
+	DECOR_SKITTY_DOLL
+	DECOR_SWABLU_DOLL
+	DECOR_GULPIN_DOLL
+	DECOR_NONE
+}
+
+script LilycoveCity_DepartmentStore_5F_EventScript_ClerkFarLeft{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	pokemartdecoration(LilycoveCity_DepartmentStore_5F_Pokemart_Dolls)
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+
+mart LilycoveCity_DepartmentStore_5F_Pokemart_Cushions {
+	DECOR_PIKA_CUSHION
+	DECOR_ROUND_CUSHION
+	DECOR_ZIGZAG_CUSHION
+	DECOR_SPIN_CUSHION
+	DECOR_DIAMOND_CUSHION
+	DECOR_BALL_CUSHION
+	DECOR_GRASS_CUSHION
+	DECOR_FIRE_CUSHION
+	DECOR_WATER_CUSHION
+	DECOR_NONE
+}
+
+script LilycoveCity_DepartmentStore_5F_EventScript_ClerkMidLeft{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	pokemartdecoration(LilycoveCity_DepartmentStore_5F_Pokemart_Cushions)
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+
+mart LilycoveCity_DepartmentStore_5F_Pokemart_Posters {
+	DECOR_BALL_POSTER
+	DECOR_GREEN_POSTER
+	DECOR_RED_POSTER
+	DECOR_BLUE_POSTER
+	DECOR_CUTE_POSTER
+	DECOR_PIKA_POSTER
+	DECOR_LONG_POSTER
+	DECOR_SEA_POSTER
+	DECOR_SKY_POSTER
+	DECOR_NONE
+}
+
+script LilycoveCity_DepartmentStore_5F_EventScript_ClerkMidRight{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	pokemartdecoration(LilycoveCity_DepartmentStore_5F_Pokemart_Posters)
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+
+mart LilycoveCity_DepartmentStore_5F_Pokemart_Mats {
+	DECOR_SURF_MAT
+	DECOR_THUNDER_MAT
+	DECOR_FIRE_BLAST_MAT
+	DECOR_POWDER_SNOW_MAT
+	DECOR_ATTRACT_MAT
+	DECOR_FISSURE_MAT
+	DECOR_SPIKES_MAT
+	DECOR_GLITTER_MAT
+	DECOR_JUMP_MAT
+	DECOR_SPIN_MAT
+	DECOR_NONE
+}
+
+script LilycoveCity_DepartmentStore_5F_EventScript_ClerkFarRight{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	pokemartdecoration(LilycoveCity_DepartmentStore_5F_Pokemart_Mats)
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+
+mart LilycoveCity_DepartmentStoreRooftop_PokemartDecor_ClearOutSale {
+	DECOR_MUD_BALL
+	DECOR_FENCE_LENGTH
+	DECOR_FENCE_WIDTH
+	DECOR_TIRE
+	DECOR_BREAKABLE_DOOR
+	DECOR_SOLID_BOARD
+	DECOR_SAND_ORNAMENT
+	DECOR_STAND
+	DECOR_SLIDE
+	DECOR_TV
+	DECOR_ROUND_TV
+	DECOR_CUTE_TV
+	DECOR_WAILMER_DOLL
+	DECOR_RHYDON_DOLL
+	DECOR_NONE
+}
+
+script LilycoveCity_DepartmentStoreRooftop_EventScript_SaleWoman{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	pokemartdecoration(LilycoveCity_DepartmentStoreRooftop_PokemartDecor_ClearOutSale)
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+
+mart Route104_PrettyPetalFlowerShop_Pokemart_Plants {
+	DECOR_RED_PLANT
+	DECOR_TROPICAL_PLANT
+	DECOR_PRETTY_FLOWERS
+	DECOR_COLORFUL_PLANT
+	DECOR_BIG_PLANT
+	DECOR_GORGEOUS_PLANT
+	DECOR_NONE
+}
+
+script Route104_PrettyPetalFlowerShop_EventScript_SellDecorations{
+	lock
+	faceplayer
+	message(gText_HowMayIServeYou)
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	waitmessage
+	pokemartdecoration(Route104_PrettyPetalFlowerShop_Pokemart_Plants)
+	msgbox(gText_PleaseComeAgain, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}

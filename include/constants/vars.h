@@ -120,7 +120,7 @@
 #define VAR_CANDY_BOX_NUM_LEVELS             0x4065 // New Var
 #define VAR_DAMAGE_DONE                      0x4066 // New Var
 #define VAR_BATTLE_CONTROLLER_PLAYER_F       0x4067 // New Var
-#define VAR_RANDOMIZED_SEED                  0x4068 //Randomizer
+#define VAR_RANDOMIZED_SEED                  0x4068 // Randomizer
 #define VAR_ROUTE110_STATE                   0x4069
 #define VAR_SAVE_VERSION                     0x406A // New Var
 #define VAR_UPDATED_TIMES                    0x406B // New Var
@@ -128,7 +128,7 @@
 #define VAR_TEMP_MOVEEFFECT                  0x406D // Extra Move
 #define VAR_TEMP_MOVEEFECT_CHANCE            0x406E // Extra Move
 #define VAR_ROUTE116_STATE                   0x406F
-#define VAR_FORCE_END2                       0x4070 // Unused Var
+#define VAR_SAVED_ABILITY                    0x4070
 #define VAR_ROUTE118_STATE                   0x4071
 #define VAR_ROUTE119_STATE                   0x4072
 #define VAR_TOTEM_MESSAGE                    0x4073
@@ -141,11 +141,11 @@
 #define VAR_TOTEM_POKEMON_ACCURACY_BOOST     0x407A // Accuracy Boost
 #define VAR_ROUTE128_STATE                   0x407B
 #define VAR_TOTEM_POKEMON_EVASION_BOOST      0x407C // Evasion Boost
-#define VAR_ROUTE130_STATE                   0x407D // Unused Var
-#define VAR_ROUTE131_STATE                   0x407E // Unused Var
-#define VAR_ROUTE132_STATE                   0x407F // Unused Var
-#define VAR_ROUTE133_STATE                   0x4080 // Unused Var
-#define VAR_ROUTE134_STATE                   0x4081 // Unused Var
+#define VAR_TEMP_BATTLE_STRING_OVERWRITE_1   0x407D
+#define VAR_TEMP_BATTLE_STRING_OVERWRITE_2   0x407E
+#define VAR_TEMP_BATTLE_STRING_OVERWRITE_3   0x407F
+#define VAR_TEMP_BATTLE_STRING_OVERWRITE_4   0x4080
+#define VAR_INTIMIDATED_TARGETS              0x4081
 #define VAR_LITTLEROOT_HOUSES_STATE_MAY      0x4082
 #define VAR_STARTER_GEN                      0x4083 // Used to track which set of starters the player chose from
 #define VAR_BIRCH_LAB_STATE                  0x4084
@@ -184,7 +184,7 @@
 #define VAR_TRICK_HOUSE_BEING_WATCHED_STATE  0x40A5
 #define VAR_TRICK_HOUSE_FOUND_TRICK_MASTER   0x40A6
 #define VAR_TRICK_HOUSE_ENTRANCE_STATE       0x40A7
-#define VAR_UNUSED_0x40A8                    0x40A8 // Unused Var
+#define VAR_SHOP_TYPE                        0x40A8
 #define VAR_CYCLING_CHALLENGE_STATE          0x40A9
 #define VAR_SLATEPORT_MUSEUM_1F_STATE        0x40AA
 #define VAR_TRICK_HOUSE_PUZZLE_1_STATE       0x40AB
@@ -200,10 +200,10 @@
 #define VAR_TRICK_HOUSE_ENTER_FROM_CORRIDOR  0x40B5
 #define VAR_TRICK_HOUSE_PUZZLE_7_STATE_2     0x40B6 // Leftover from RS, never set
 #define VAR_SLATEPORT_FAN_CLUB_STATE         0x40B7
-#define VAR_UNUSED_0x40B8                    0x40B8 // Unused Var
+#define VAR_SHOP_MONEY_TYPE                  0x40B8
 #define VAR_MT_PYRE_STATE                    0x40B9
 #define VAR_NEW_MAUVILLE_STATE               0x40BA
-#define VAR_UNUSED_0x40BB                    0x40BB // Unused Var
+#define VAR_TAG_TEAM_ID                      0x40BB
 #define VAR_BRAVO_TRAINER_BATTLE_TOWER_ON    0x40BC
 #define VAR_JAGGED_PASS_ASH_WEATHER          0x40BD
 #define VAR_GLASS_WORKSHOP_STATE             0x40BE
@@ -235,17 +235,17 @@
 #define VAR_SOOTOPOLIS_WALLACE_STATE         0x40D8
 #define VAR_HAS_TALKED_TO_SEAFLOOR_CAVERN_ENTRANCE_GRUNT 0x40D9
 #define VAR_REGISTER_BIRCH_STATE             0x40DA
-#define VAR_UNUSED_0x40DB                    0x40DB // Unused Var
-#define VAR_UNUSED_0x40DC                    0x40DC // Unused Var
+#define VAR_BATTLE_FIELD_EFFECT_TYPE         0x40DB // Type of weather, terrain or room at the start of the battle
+#define VAR_BATTLE_FIELD_ID                  0x40DC // 
 #define VAR_EVENT_PICHU_SLOT                 0x40DD
-#define VAR_NEVER_READ_0x40DE                0x40DE // Var is written to, but never read
+#define VAR_MONOTYPE_BOOST                   0x40DE // Mono type champion related
 #define VAR_NEVER_READ_0x40DF                0x40DF // Var is written to, but never read
 #define VAR_NEVER_READ_0x40E0                0x40E0 // Var is written to, but never read
 #define VAR_NEVER_READ_0x40E1                0x40E1 // Var is written to, but never read
 #define VAR_NEVER_READ_0x40E2                0x40E2 // Var is written to, but never read
 #define VAR_NEVER_READ_0x40E3                0x40E3 // Var is written to, but never read
 #define VAR_NEVER_READ_0x40E4                0x40E4 // var is written to, but never read
-#define VAR_UNUSED_0x40E5                    0x40E5 // Unused Var
+#define VAR_BATTLE_CONTROLLER_MOVE_WINDOW    0x40E5
 #define VAR_DAILY_SLOTS                      0x40E6
 #define VAR_DAILY_WILDS                      0x40E7
 #define VAR_DAILY_BLENDER                    0x40E8
@@ -265,13 +265,13 @@
 #define VAR_RIVAL_RAYQUAZA_CALL_STEP_COUNTER 0x40F6
 #define VAR_DEXNAV_SPECIES                   0x40F7 // Registered dexnav species
 #define VAR_DEXNAV_STEP_COUNTER              0x40F8 // steps for finding hidden pokemon
-#define VAR_UNUSED_0x40F9                    0x40F9 // Unused Var
-#define VAR_UNUSED_0x40FA                    0x40FA // Unused Var
-#define VAR_UNUSED_0x40FB                    0x40FB // Unused Var
-#define VAR_UNUSED_0x40FC                    0x40FC // Unused Var
-#define VAR_UNUSED_0x40FD                    0x40FD // Unused Var
-#define VAR_UNUSED_0x40FE                    0x40FE // Unused Var
-#define VAR_UNUSED_0x40FF                    0x40FF // Unused Var
+#define VAR_TRAINER_PRIZE_BP                 0x40F9
+#define VAR_BATTLE_MENU_MON_ID_X             0x40FA // New Var
+#define VAR_BATTLE_MENU_MON_ID_Y             0x40FB // New Var
+#define VAR_DEXNAV_ENVIORMENT                0x40FC // Registered dexnav enviorment
+#define VAR_DEXNAV_SHINY_FLAG                0x40FD
+#define VAR_DEXNAV_ALPHA_FLAG                0x40FE
+#define VAR_BATTLE_MENU_ID                   0x40FF
 
 #define VARS_END                             0x40FF
 #define VARS_COUNT                           (VARS_END - VARS_START + 1)
@@ -299,7 +299,7 @@
 #define VAR_CONTEST_CATEGORY          0x8011
 #define VAR_MON_BOX_ID                0x8012
 #define VAR_MON_BOX_POS               0x8013
-#define VAR_UNUSED_0x8014             0x8014
+#define VAR_TEMP_SPECIAL_VAR          0x8014 // Used to store a temporary value in: Battle Controller Player when going to the info screen
 #define VAR_TRAINER_BATTLE_OPPONENT_A 0x8015 // Alias of gTrainerBattleOpponent_A
 
 #define SPECIAL_VARS_END              0x8015

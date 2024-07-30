@@ -91,7 +91,8 @@ LittlerootTown_BrendansHouse_1F_EventScript_PetalburgGymReport:: @ 81F784D
 	lockall
 	setvar VAR_0x8004, MALE
 	setvar VAR_0x8005, LOCALID_MOM
-	goto PlayersHouse_1F_EventScript_PetalburgGymReportMale
+	@ goto PlayersHouse_1F_EventScript_PetalburgGymReportMale
+	setvar VAR_LITTLEROOT_INTRO_STATE, 7
 	end
 
 LittlerootTown_BrendansHouse_1F_EventScript_YoureNewNeighbor:: @ 81F785E
@@ -203,6 +204,7 @@ LittlerootTown_BrendansHouse_1F_EventScript_ChooseStarterSet::
 	case 5, LittlerootTown_BrendansHouse_1F_EventScript_Kalos
 	case 6, LittlerootTown_BrendansHouse_1F_EventScript_Alola
 	case 7, LittlerootTown_BrendansHouse_1F_EventScript_Galar
+	case 8, LittlerootTown_BrendansHouse_1F_EventScript_Paldea
 	goto LittlerootTown_BrendansHouse_1F_EventScript_ChooseStarterSet
 	end
 
@@ -268,6 +270,14 @@ LittlerootTown_BrendansHouse_1F_EventScript_Galar:
 	goto_if_eq LittlerootTown_BrendansHouse_1F_EventScript_ChooseStarterSet
 	setvar VAR_STARTER_GEN, 8
 	bufferstring 1, StarterRegionStringGalar
+	return
+
+LittlerootTown_BrendansHouse_1F_EventScript_Paldea:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_1F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 9
+	bufferstring 1, StarterRegionStringPaldea
 	return
 
 LittlerootTown_BrendansHouse_1F_EventScript_PlayerFaceBrendan:: @ 81F7981
@@ -538,4 +548,60 @@ PlayersHouse_1F_Text_StillUnknownPokemon: @ 81F83A1
 
 text PlayersHouse_1F_Text_Which_Region{
 	"Hmm. Which region was it again?"
+}
+
+const MOM_LOCAL_ID = 1
+script LittlerootTown_BrendansHouse_1F_EventScript_MomGivesStuff0{
+    lock
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff0)
+    waitmovement(0)
+    call(LittlerootTown_EventScript_GiveRunningShoes)
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomBackTV0)
+    waitmovement(0)
+    release
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff0{
+    walk_right * 3
+    walk_up   
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomBackTV0{
+    walk_down
+    walk_left * 3
+    face_up
+}
+script LittlerootTown_BrendansHouse_1F_EventScript_MomGivesStuff1{
+    lock
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff1)
+    waitmovement(0)
+    call(LittlerootTown_EventScript_GiveRunningShoes)
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomBackTV1)
+    waitmovement(0)
+    release
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff1{
+    walk_right * 4
+    face_up
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomBackTV1{
+    face_down
+    walk_left * 4
+    face_up
+}
+script LittlerootTown_BrendansHouse_1F_EventScript_MomGivesStuff2{
+    lock
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff2)
+    waitmovement(0)
+    call(LittlerootTown_EventScript_GiveRunningShoes)
+    applymovement(MOM_LOCAL_ID,LittlerootTown_BrendansHouse_1F_Movement_MomBackTV2)
+    waitmovement(0)
+    release
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomGivesStuff2{
+    walk_right * 5
+    walk_up
+}
+movement LittlerootTown_BrendansHouse_1F_Movement_MomBackTV2{
+    walk_down
+    walk_left * 5
+    face_up
 }

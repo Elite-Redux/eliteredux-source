@@ -10,6 +10,7 @@
 #define AILMENT_PKRS  6
 #define AILMENT_FNT   7
 #define AILMENT_FSB   8
+#define AILMENT_BLD   9
 
 #define PARTY_CHOOSE_MON        0
 #define PARTY_MUST_CHOOSE_MON   1
@@ -170,8 +171,6 @@
 #define TUTOR_MOVE_AGILITY          148
 #define TUTOR_MOVE_TELEPORT         149
 
-#define TUTOR_MOVE_COUNT            150
-
 #define PARTY_LAYOUT_SINGLE          0
 #define PARTY_LAYOUT_DOUBLE          1
 #define PARTY_LAYOUT_MULTI           2
@@ -208,6 +207,7 @@
 #define PARTY_ACTION_MOVE_TUTOR         12
 #define PARTY_ACTION_MINIGAME           13
 #define PARTY_ACTION_REUSABLE_ITEM      14  // Unused. The only reusable items are handled separately
+#define PARTY_ACTION_CHOOSE_FAINTED_MON 15
 
 // IDs for DisplayPartyMenuStdMessage, to display the message at the bottom of the party menu
 #define PARTY_MSG_CHOOSE_MON                0

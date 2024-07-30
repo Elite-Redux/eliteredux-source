@@ -395,12 +395,35 @@
 #define ANIM_TAG_OMEGA_SYMBOL               (ANIM_SPRITES_START + 383)
 #define ANIM_TAG_PRIMAL_PARTICLES           (ANIM_SPRITES_START + 384)
 #define ANIM_TAG_STEEL_BEAM                 (ANIM_SPRITES_START + 385)
+#define ANIM_TAG_POLTERGEIST                (ANIM_SPRITES_START + 386)
+#define ANIM_TAG_TEAPOT                     (ANIM_SPRITES_START + 387)
+#define ANIM_TAG_WOOD_HAMMER_HAMMER         (ANIM_SPRITES_START + 388)
+#define ANIM_TAG_SNOWFLAKES                 (ANIM_SPRITES_START + 389)
+#define ANIM_TAG_SYRUP_BLOB_RED             (ANIM_SPRITES_START + 390)
+#define ANIM_TAG_SYRUP_SHELL_RED            (ANIM_SPRITES_START + 391)
+#define ANIM_TAG_SYRUP_BLOB_YELLOW          (ANIM_SPRITES_START + 392)
+#define ANIM_TAG_SYRUP_SHELL_YELLOW         (ANIM_SPRITES_START + 393)
+#define ANIM_TAG_SYRUP_SPLAT_RED            (ANIM_SPRITES_START + 394)
+#define ANIM_TAG_SYRUP_SPLAT_YELLOW         (ANIM_SPRITES_START + 395)
+#define ANIM_TAG_CUPID_SHOT                 (ANIM_SPRITES_START + 396)
+#define ANIM_TAG_DRAGON_ENERGY              (ANIM_SPRITES_START + 397)
+#define ANIM_TAG_FROST_BOLT_ARROW           (ANIM_SPRITES_START + 398)
+#define ANIM_TAG_THORNS                     (ANIM_SPRITES_START + 399)
+#define ANIM_TAG_CASCOON_STONE              (ANIM_SPRITES_START + 400)
+#define ANIM_TAG_CASCOON_SYMBOL             (ANIM_SPRITES_START + 401)
 
 // battlers
 #define ANIM_ATTACKER    0
 #define ANIM_TARGET      1
 #define ANIM_ATK_PARTNER 2
 #define ANIM_DEF_PARTNER 3
+
+// Below are used by AnimTask_ShakeMon2 and AnimTask_SetGrayscaleOrOriginalPal
+#define ANIM_PLAYER_LEFT      (MAX_BATTLERS_COUNT + 0)
+#define ANIM_OPPONENT_LEFT    (MAX_BATTLERS_COUNT + 1)
+#define ANIM_PLAYER_RIGHT     (MAX_BATTLERS_COUNT + 2)
+#define ANIM_OPPONENT_RIGHT   (MAX_BATTLERS_COUNT + 3)
+#define ANIM_ATTACKER_FORCE   (MAX_BATTLERS_COUNT + 4)
 
 // stereo panning constants [0-255]
 //
@@ -498,6 +521,8 @@
 #define BG_AURA_SPHERE                          77
 #define BG_STEEL_BEAM_OPPONENT                  78
 #define BG_STEEL_BEAM_PLAYER                    79
+#define BG_RAINBOW                              80
+#define BG_CHLOROBLAST                          81
 
 // table ids for general animations (gBattleAnims_General)
 #define B_ANIM_CASTFORM_CHANGE          0
@@ -534,6 +559,12 @@
 #define B_ANIM_PRIMAL_REVERSION         31
 #define B_ANIM_ITEM_HEAL                32 // Leftovers and berries
 #define B_ANIM_BEAK_BLAST_SETUP         33
+#define B_ANIM_SALT_CURE_DAMAGE         34
+#define B_ANIM_RAINBOW                  35
+#define B_ANIM_SEA_OF_FIRE              36
+#define B_ANIM_SWAMP                    37
+#define B_ANIM_SYRUP_BOMB_SPEED_DROP    38
+#define B_ANIM_FOG_CONTINUES            39
 
 // special animations table (gBattleAnims_Special)
 #define B_ANIM_LVL_UP                   0
@@ -556,9 +587,13 @@
 #define B_ANIM_STATUS_CURSED            7
 #define B_ANIM_STATUS_NIGHTMARE         8
 #define B_ANIM_STATUS_WRAPPED           9 // does not actually exist
+#define B_ANIM_STATUS_BLEED             10
 
 // Tasks with return values often assign them to gBattleAnimArgs[7].
 #define ARG_RET_ID 7
+
+// For createsprite macro to use internally
+#define ANIMSPRITE_IS_TARGET (1 << 7)
 
 // Trapping Wrap-like moves end turn animation.
 #define TRAP_ANIM_BIND 0
@@ -569,6 +604,8 @@
 #define TRAP_ANIM_SAND_TOMB 4
 #define TRAP_ANIM_MAGMA_STORM 5
 #define TRAP_ANIM_INFESTATION 6
+#define TRAP_ANIM_THUNDER_CAGE 7
+#define TRAP_ANIM_SNAP_TRAP 8
 
 // Weather defines for battle animation scripts.
 #define ANIM_WEATHER_NONE 0
@@ -576,6 +613,7 @@
 #define ANIM_WEATHER_RAIN 2
 #define ANIM_WEATHER_SANDSTORM 3
 #define ANIM_WEATHER_HAIL 4
+#define ANIM_WEATHER_FOG 5
 
 // mon pal blend
 #define ANIM_PAL_BG             0x1
@@ -600,5 +638,30 @@
 #define ANIM_SURF_PAL_SURF           0
 #define ANIM_SURF_PAL_MUDDY_WATER    1
 #define ANIM_SURF_PAL_SLUDGE_WAVE    2
+
+// Flags given to various functions to indicate which palettes to consider.
+// Handled by UnpackSelectedBattlePalettes
+#define F_PAL_BG                  (1 << 0)
+#define F_PAL_ATTACKER            (1 << 1)
+#define F_PAL_TARGET              (1 << 2)
+#define F_PAL_ATK_PARTNER         (1 << 3)
+#define F_PAL_DEF_PARTNER         (1 << 4)
+#define F_PAL_ANIM_1              (1 << 5) // Palette set for GetBattleAnimBg1Data/GetBgDataForTransform. Only used (ineffectually?) by Aromatherapy.
+#define F_PAL_ANIM_2              (1 << 6) // Palette set for GetBattleAnimBgData/GetBgDataForTransform. Unused.
+#define F_PAL_ATK_SIDE            (F_PAL_ATTACKER | F_PAL_ATK_PARTNER)
+#define F_PAL_DEF_SIDE            (F_PAL_TARGET | F_PAL_DEF_PARTNER)
+#define F_PAL_BATTLERS            (F_PAL_ATK_SIDE | F_PAL_DEF_SIDE)
+#define F_PAL_ADJACENT            (F_PAL_DEF_SIDE | F_PAL_ATK_PARTNER)
+#define F_PAL_ALL_BUT_DEF         (F_PAL_ATK_SIDE | F_PAL_DEF_PARTNER)
+#define F_PAL_ALL_BUT_ATK_PARTNER (F_PAL_ATTACKER | F_PAL_DEF_SIDE)
+// The below are only used by AnimTask_BlendBattleAnimPal to get battler sprite palettes by position rather than by role.
+// It's redundant with F_PAL_BATTLERS, because they're only ever used together to refer to all the battlers at once.
+#define F_PAL_BATTLERS_2  (1 << 7 | 1 << 8 | 1 << 9 | 1 << 10)
+
+// esper wing
+#define ESPER_WING_SPEED    16
+
+// triple arrows
+#define TRIPLE_ARROW_FLY_TIME   9
 
 #endif // GUARD_CONSTANTS_BATTLE_ANIM_H

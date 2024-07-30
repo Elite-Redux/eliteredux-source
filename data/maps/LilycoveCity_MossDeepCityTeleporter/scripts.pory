@@ -1,0 +1,23 @@
+raw `LilycoveCity_MossDeepCityTeleporter_MapScripts::
+	.byte 0
+`
+
+script LilycoveCity_MossDeepCityTeleporter_EventScript_NatuAskTeleport{
+    lock
+    faceplayer
+    msgbox(format("(Telepathy) Do you wish to be transported to Mossdeep?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT) != 1) {
+        msgbox(format("The future barely changed."), MSGBOX_DEFAULT)
+        release
+        end
+    }
+    msgbox(format("The future is now, young trainer."), MSGBOX_DEFAULT)
+    playse(SE_WARP_IN)
+    waitse
+    warp(MAP_MOSSDEEP_CITY, 255, 1, 21)
+    waitstate
+    release
+    end
+}
+
+

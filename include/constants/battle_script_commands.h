@@ -3,44 +3,43 @@
 
 // Battle Scripting and BattleCommunication addresses
 #define sPAINSPLIT_HP                gBattleScripting
-#define sBIDE_DMG                    gBattleScripting + 4
-#define sMULTIHIT_STRING             gBattleScripting + 8
-#define sEXP_CATCH                   gBattleScripting + 0xE
-#define sTWOTURN_STRINGID            gBattleScripting + 0xF
-#define sB_ANIM_ARG1                 gBattleScripting + 0x10
-#define sB_ANIM_ARG2                 gBattleScripting + 0x11
-#define sTRIPLE_KICK_POWER           gBattleScripting + 0x12
-#define sMOVEEND_STATE               gBattleScripting + 0x14
-#define sSAVED_STAT_CHANGER          gBattleScripting + 0x15
-#define sSHIFT_SWITCHED              gBattleScripting + 0x16
-#define sBATTLER                     gBattleScripting + 0x17
-#define sB_ANIM_TURN                 gBattleScripting + 0x18
-#define sB_ANIM_TARGETS_HIT          gBattleScripting + 0x19
-#define sSTATCHANGER                 gBattleScripting + 0x1A
-#define sSTAT_ANIM_PLAYED            gBattleScripting + 0x1B
-#define sGIVEEXP_STATE               gBattleScripting + 0x1C
-#define sBATTLE_STYLE                gBattleScripting + 0x1D
-#define sLVLBOX_STATE                gBattleScripting + 0x1E
-#define sLEARNMOVE_STATE             gBattleScripting + 0x1F
-#define sSAVED_BATTLER               gBattleScripting + 0x20
-#define sRESHOW_MAIN_STATE           gBattleScripting + 0x21
-#define sRESHOW_HELPER_STATE         gBattleScripting + 0x22
-#define sFIELD_23                    gBattleScripting + 0x23 //unused? - levelUpHP?
-#define sWINDOWS_TYPE                gBattleScripting + 0x24
-#define sMULTIPLAYER_ID              gBattleScripting + 0x25
-#define sSPECIAL_TRAINER_BATTLE_TYPE gBattleScripting + 0x26
-#define sMON_CAUGHT                  gBattleScripting + 0x27 //monCaught
-#define sSAVED_DMG                   gBattleScripting + 0x28 //savedDmg
-#define sSAVED_MOVE_EFFECT           gBattleScripting + 0x2C //savedMoveEffect
-#define sMOVE_EFFECT                 gBattleScripting + 0x2E //moveEffect
-#define sMULTIHIT_EFFECT             gBattleScripting + 0x30 //multihitMoveEffect
-#define sILLUSION_NICK_HACK          gBattleScripting + 0x32 //illusionNickHack
-#define sFIXED_ABILITY_POPUP         gBattleScripting + 0x33 //fixedPopup
-#define sABILITY_OVERWRITE           gBattleScripting + 0x34 //abilityPopupOverwrite
-#define sSWITCH_IN_BATTLER_OVERWRITE gBattleScripting + 0x36 //switchInBattlerOverwrite
-#define sSWITCH_CASE                 gBattleScripting + 0x37 //switchCase
-#define sBERRY_OVERRIDE              gBattleScripting + 0x38 //overrideBerryRequirements
-#define sBATTLER_OVERRIDE            gBattleScripting + 0x39 //battlerPopupOverwrite
+#define sBIDE_DMG                    sPAINSPLIT_HP + 4
+#define sSAVED_MOVE_EFFECT           sBIDE_DMG + 4
+#define sMOVE_EFFECT                 sSAVED_MOVE_EFFECT + 2
+#define sMULTIHIT_EFFECT             sMOVE_EFFECT + 2
+#define sABILITY_OVERWRITE           sMULTIHIT_EFFECT + 2
+#define sMULTIHIT_STRING             sABILITY_OVERWRITE + 2
+#define sEXP_CATCH                   sMULTIHIT_STRING + 6
+#define sTWOTURN_STRINGID            sEXP_CATCH + 1
+#define sB_ANIM_ARG1                 sTWOTURN_STRINGID + 1
+#define sB_ANIM_ARG2                 sB_ANIM_ARG1 + 1
+#define sMOVEEND_STATE               sB_ANIM_ARG2 + 1
+#define sSAVED_STAT_CHANGER          sMOVEEND_STATE + 1
+#define sSHIFT_SWITCHED              sSAVED_STAT_CHANGER + 1
+#define sBATTLER                     sSHIFT_SWITCHED + 1
+#define sB_ANIM_TURN                 sBATTLER + 1
+#define sB_ANIM_TARGETS_HIT          sB_ANIM_TURN + 1
+#define sSTATCHANGER                 sB_ANIM_TARGETS_HIT + 1
+#define sSTAT_ANIM_PLAYED            sSTATCHANGER + 1
+#define sGIVEEXP_STATE               sSTAT_ANIM_PLAYED + 1
+#define sLVLBOX_STATE                sGIVEEXP_STATE + 1
+#define sLEARNMOVE_STATE             sLVLBOX_STATE + 1
+#define sRESHOW_MAIN_STATE           sLEARNMOVE_STATE + 1
+#define sRESHOW_HELPER_STATE         sRESHOW_MAIN_STATE + 1
+#define sLEVEL_UP_HP                 sRESHOW_HELPER_STATE + 1
+#define sWINDOWS_TYPE                sLEVEL_UP_HP + 1
+#define sMULTIPLAYER_ID              sWINDOWS_TYPE + 1
+#define sSPECIAL_TRAINER_BATTLE_TYPE sMULTIPLAYER_ID + 1
+#define sMON_CAUGHT                  sSPECIAL_TRAINER_BATTLE_TYPE + 1
+#define sILLUSION_NICK_HACK          sMON_CAUGHT + 1
+#define sFIXED_ABILITY_POPUP         sILLUSION_NICK_HACK + 1
+#define sSWITCH_IN_BATTLER_OVERWRITE sFIXED_ABILITY_POPUP + 1
+#define sSWITCH_CASE                 sSWITCH_IN_BATTLER_OVERWRITE + 1
+#define sBERRY_OVERRIDE              sSWITCH_CASE + 1
+#define sBATTLER_OVERRIDE            sBERRY_OVERRIDE + 1
+#define sEFFECT_CHANCE               sBATTLER_OVERRIDE + 2 // Missing forceFalseSwipeEffect
+#define sACCELERATED_TWO_TURN        sEFFECT_CHANCE + 3
+#define sUSING_EXTRA_MOVE            sACCELERATED_TWO_TURN + 1
 
 #define cMULTISTRING_CHOOSER         gBattleCommunication + 5
 #define cMISS_TYPE                   gBattleCommunication + 6
@@ -62,6 +61,14 @@
 #define BS_PLAYER2                  13
 #define BS_OPPONENT2                14
 #define BS_ABILITY_BATTLER          15
+#define BS_ABILITY_PARTNER          16
+#define BS_TARGET_PARTNER           17
+#define BS_ATTACKER_PARTNER         18
+#define BS_CHOOSE_FAINTED_MON       19
+#define BS_STACK_1                  20
+#define BS_STACK_2                  21
+#define BS_STACK_3                  22
+#define BS_STACK_4                  23
 
 // Cmd_accuracycheck
 #define NO_ACC_CALC_CHECK_LOCK_ON 0xFFFF
@@ -184,7 +191,7 @@
 #define VARIOUS_JUMP_IF_TERRAIN_AFFECTED        109
 #define VARIOUS_EERIE_SPELL_PP_REDUCE           110
 #define VARIOUS_JUMP_IF_TEAM_HEALTHY            111
-#define VARIOUS_TRY_HEAL_QUARTER_HP             112
+#define VARIOUS_TRY_HEAL_PERCENT_HP             112
 #define VARIOUS_REMOVE_TERRAIN                  113
 #define VARIOUS_JUMP_IF_PRANKSTER_BLOCKED       114
 #define VARIOUS_TRY_TO_CLEAR_PRIMAL_WEATHER     115
@@ -217,6 +224,31 @@
 #define VARIOUS_GET_BATTLER_SIDE                142
 #define VARIOUS_SET_WEATHER_GRAPHICS            143
 #define VARIOUS_TRY_ACTIVATE_JAWS_OF_CARNAGE    144
+#define VARIOUS_RAISE_HIGHEST_ATTACKING_STAT    145
+#define VARIOUS_TRY_ACTIVATE_SUPER_STRAIN       146
+#define VARIOUS_SET_DYNAMIC_TYPE                147
+#define VARIOUS_GOTO_ACTUAL_MOVE                148
+#define VARIOUS_SET_FEAR                        149
+#define VARIOUS_HANDLE_WEATHER_CHANGE           150
+#define VARIOUS_HANDLE_TERRAIN_CHANGE           151
+#define VARIOUS_GET_BATTLER                     152
+#define VARIOUS_DO_COPY_STAT_CHANGE             153
+#define VARIOUS_TRY_LOSE_PERCENT_HP             154
+#define VARIOUS_SWAP_SIDE_EFFECTS               155
+#define VARIOUS_GHASTLY_ECHO                    156
+#define VARIOUS_TRY_REVIVAL_BLESSING            157
+#define VARIOUS_REMOVE_WEATHER                  158
+#define VARIOUS_COPY_ABILITY                    159
+#define VARIOUS_TRY_FLING                       160
+#define VARIOUS_JUMP_IF_STATUS_4                161
+#define VARIOUS_RESTORE_TURN_BATTLERS           162
+#define VARIOUS_WRITE_STACK_BATTLER             163
+#define VARIOUS_RESTORE_STACK_STATE             164
+#define VARIOUS_DISABLE_RANDOM                  165
+#define VARIOUS_GOTO_IF_STAT_UP                 166
+#define VARIOUS_TRY_UPPER_HAND                  167
+#define VARIOUS_REQUIRE_CAN_DO_EFFECT           168
+#define VARIOUS_INCREASE_CRIT                   169
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0
@@ -239,6 +271,7 @@
 #define STAT_BUFF_ALLOW_PTR                 (1 << 0)   // If set, allow use of jumpptr. Set in every use of statbuffchange
 #define STAT_BUFF_NOT_PROTECT_AFFECTED      (1 << 5)
 #define STAT_BUFF_UPDATE_MOVE_EFFECT        (1 << 6)
+#define STAT_BUFF_DONT_SET_BUFFERS          (1 << 7)
 
 // stat change flags for Cmd_playstatchangeanimation
 #define STAT_CHANGE_NEGATIVE             (1 << 0)
@@ -260,38 +293,43 @@
 
 // cases for Cmd_moveend
 #define MOVEEND_SUM_DAMAGE                        0
-#define MOVEEND_PROTECT_LIKE_EFFECT               1
-#define MOVEEND_RAGE                              2
-#define MOVEEND_SYNCHRONIZE_TARGET                3
-#define MOVEEND_ABILITIES                         4
-#define MOVEEND_ABILITIES_ATTACKER                5
-#define MOVEEND_STATUS_IMMUNITY_ABILITIES         6
-#define MOVEEND_SYNCHRONIZE_ATTACKER              7
-#define MOVEEND_CHOICE_MOVE                       8
-#define MOVEEND_ATTACKER_INVISIBLE                9
-#define MOVEEND_ATTACKER_VISIBLE                  10
-#define MOVEEND_TARGET_VISIBLE                    11
-#define MOVEEND_ITEM_EFFECTS_TARGET               12
-#define MOVEEND_ITEM_EFFECTS_ALL                  13
-#define MOVEEND_KINGSROCK                         14
-#define MOVEEND_SUBSTITUTE                        15
-#define MOVEEND_UPDATE_LAST_MOVES                 16
-#define MOVEEND_MIRROR_MOVE                       17
-#define MOVEEND_NEXT_TARGET                       18    // Everything up until here is handled for each strike of a multi-hit move
-#define MOVEEND_MULTIHIT_MOVE                     19
-#define MOVEEND_MOVE_EFFECTS2                     20
-#define MOVEEND_RECOIL                            21
-#define MOVEEND_EJECT_BUTTON                      22
-#define MOVEEND_RED_CARD                          23
-#define MOVEEND_EJECT_PACK                        24
-#define MOVEEND_LIFEORB_SHELLBELL                 25    // Includes shell bell, throat spray, etc
-#define MOVEEND_CHANGED_ITEMS                     26
-#define MOVEEND_DEFROST                           27
-#define MOVEEND_PICKPOCKET                        28
-#define MOVEEND_DANCER                            29
-#define MOVEEND_EMERGENCY_EXIT                    30
-#define MOVEEND_CLEAR_BITS                        31
-#define MOVEEND_COUNT                             32
+#define MOVEEND_PROTECT_LIKE_EFFECT               MOVEEND_SUM_DAMAGE + 1
+#define MOVEEND_RAGE                              MOVEEND_PROTECT_LIKE_EFFECT + 1
+#define MOVEEND_SYNCHRONIZE_TARGET                MOVEEND_RAGE + 1
+#define MOVEEND_DANCER                            MOVEEND_SYNCHRONIZE_TARGET + 1
+#define MOVEEND_ABILITIES                         MOVEEND_DANCER + 1
+#define MOVEEND_ABILITIES_EITHER                  MOVEEND_ABILITIES + 1
+#define MOVEEND_ABILITIES_ATTACKER                MOVEEND_ABILITIES_EITHER + 1
+#define MOVEEND_ABILITIES_ATTACKER_EITHER         MOVEEND_ABILITIES_ATTACKER + 1
+#define MOVEEND_STATUS_IMMUNITY_ABILITIES         MOVEEND_ABILITIES_ATTACKER_EITHER + 1
+#define MOVEEND_SYNCHRONIZE_ATTACKER              MOVEEND_STATUS_IMMUNITY_ABILITIES + 1
+#define MOVEEND_CHOICE_MOVE                       MOVEEND_SYNCHRONIZE_ATTACKER + 1
+#define MOVEEND_ATTACKER_INVISIBLE                MOVEEND_CHOICE_MOVE + 1
+#define MOVEEND_ATTACKER_VISIBLE                  MOVEEND_ATTACKER_INVISIBLE + 1
+#define MOVEEND_TARGET_VISIBLE                    MOVEEND_ATTACKER_VISIBLE + 1
+#define MOVEEND_ITEM_EFFECTS_TARGET               MOVEEND_TARGET_VISIBLE + 1
+#define MOVEEND_ITEM_EFFECTS_ALL                  MOVEEND_ITEM_EFFECTS_TARGET + 1
+#define MOVEEND_KINGSROCK                         MOVEEND_ITEM_EFFECTS_ALL + 1
+#define MOVEEND_SUBSTITUTE                        MOVEEND_KINGSROCK + 1
+#define MOVEEND_UPDATE_LAST_MOVES                 MOVEEND_SUBSTITUTE + 1
+#define MOVEEND_MIRROR_MOVE                       MOVEEND_UPDATE_LAST_MOVES + 1
+#define MOVEEND_NEXT_TARGET                       MOVEEND_MIRROR_MOVE + 1    // Everything up until here is handled for each strike of a multi-hit move
+#define MOVEEND_MULTIHIT_MOVE                     MOVEEND_NEXT_TARGET + 1
+#define MOVEEND_MOVE_EFFECTS2                     MOVEEND_MULTIHIT_MOVE + 1
+#define MOVEEND_RECOIL                            MOVEEND_MOVE_EFFECTS2 + 1
+#define MOVEEND_CHARGE                            MOVEEND_RECOIL + 1
+#define MOVEEND_ATTACKER_FOLLOWUP_MOVE            MOVEEND_CHARGE + 1
+#define MOVEEND_ABILITIES_AFTER_RECOIL            MOVEEND_ATTACKER_FOLLOWUP_MOVE + 1
+#define MOVEEND_EJECT_BUTTON                      MOVEEND_ABILITIES_AFTER_RECOIL + 1
+#define MOVEEND_RED_CARD                          MOVEEND_EJECT_BUTTON + 1
+#define MOVEEND_EJECT_PACK                        MOVEEND_RED_CARD + 1
+#define MOVEEND_LIFEORB_SHELLBELL                 MOVEEND_EJECT_PACK + 1
+#define MOVEEND_CHANGED_ITEMS                     MOVEEND_LIFEORB_SHELLBELL + 1
+#define MOVEEND_DEFROST                           MOVEEND_CHANGED_ITEMS + 1
+#define MOVEEND_PICKPOCKET                        MOVEEND_DEFROST + 1
+#define MOVEEND_EMERGENCY_EXIT                    MOVEEND_PICKPOCKET + 1
+#define MOVEEND_CLEAR_BITS                        MOVEEND_EMERGENCY_EXIT + 1
+#define MOVEEND_COUNT                             MOVEEND_CLEAR_BITS + 1
 
 // switch cases
 #define B_SWITCH_NORMAL     0

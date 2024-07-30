@@ -724,6 +724,35 @@
 	.endif
 	.endm
 
+	@ Starts a tag trainer battle, takes two trainers, intro text, loss text, and an optional event script
+	@ when used with an event script, you can also pass in an optional flag to disable music
+	.macro starttagbattle trainer1:req, trainer2:req, tagteamtextid:req, intro:req, intro_text=FALSE, event_script=FALSE
+	.if \intro_text != FALSE
+		msgbox \intro_text
+	.endif
+	setflag FLAG_TAG_BATTLE
+	setvar VAR_0x8004, SPECIAL_BATTLE_TWO_OPPONENTS
+	setvar VAR_0x8005, \intro
+	setvar VAR_0x8006, \trainer1
+	setvar VAR_0x8007, \trainer2 
+	setvar VAR_TAG_TEAM_ID, \tagteamtextid
+	special DoSpecialTrainerBattle
+	waitstate
+	clearflag FLAG_TAG_BATTLE
+	specialvar VAR_RESULT, GetBattleOutcome
+	switch VAR_RESULT
+	.if \event_script != FALSE
+	case B_OUTCOME_WON, \event_script
+	.endif
+	case B_OUTCOME_FORFEITED, Common_EventScript_Lost
+	case B_OUTCOME_DREW, Common_EventScript_Lost
+	case B_OUTCOME_LOST, Common_EventScript_Lost
+	case B_OUTCOME_RAN, Common_EventScript_Lost
+    case B_OUTCOME_PLAYER_TELEPORTED, Common_EventScript_Lost
+	settrainerflag \trainer1
+	settrainerflag \trainer2
+	.endm
+
 	@ Starts a rematch battle, takes a trainer, intro text and loss text
 	.macro trainerbattle_rematch trainer:req, intro_text:req, lose_text:req
 	trainerbattle TRAINER_BATTLE_REMATCH, \trainer, 0, \intro_text, \lose_text
@@ -738,7 +767,6 @@
 	.macro trainerbattle_no_intro trainer:req, lose_text:req
 	trainerbattle TRAINER_BATTLE_SINGLE_NO_INTRO_TEXT, \trainer, 0, \lose_text
 	.endm
-
 
 	@ Starts a trainer battle using the battle information stored in RAM (usually by trainerbattle, which actually calls this 
 	@ command behind-the-scenes), and blocks script execution until the battle finishes.
@@ -1801,6 +1829,21 @@
 	.2byte \number
 	.endm
 
+	.macro questmenu case:req, questId:req
+    .byte 0xec
+    .byte \case
+    .byte \questId
+    .endm
+    
+    .macro openquestmenu
+    questmenu 0 0
+    .endm
+
+	.macro getobjecteventextraid, type:req
+    .byte 0xed
+    .2byte \type
+    .endm
+
 @ Supplementary
 
 	.macro goto_if_unset flag:req, dest:req
@@ -2064,4 +2107,11 @@
 	setvar VAR_0x8008, \b,
 	callnative ScriptMenu_ScrollingMultichoice2
 	waitstate
+	.endm
+
+	@ change the movement of an object event with the id
+	.macro changemovement objectid:req, movementid:req
+	.byte 0xee
+	.2byte \objectid
+	.byte \movementid
 	.endm

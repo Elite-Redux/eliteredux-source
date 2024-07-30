@@ -177,6 +177,7 @@ enum
     CONTROLLER_DEBUGMENU,
     /*new controllers should go here*/
     CONTROLLER_TERMINATOR_NOP,
+    CONTROLLER_INFO_MENU,
     CONTROLLER_CMDS_COUNT
 };
 
@@ -206,7 +207,7 @@ void BtlController_EmitPaletteFade(u8 bufferId); // unused
 void BtlController_EmitSuccessBallThrowAnim(u8 bufferId); // unused
 void BtlController_EmitBallThrowAnim(u8 bufferId, u8 caseId);
 void BtlController_EmitPause(u8 bufferId, u8 toWait, void *data); // unused
-void BtlController_EmitMoveAnimation(u8 bufferId, u16 move, u8 turnOfMove, u16 movePower, s32 dmg, u8 friendship, struct DisableStruct *disableStructPtr, u8 multihit);
+void BtlController_EmitMoveAnimation(u8 bufferId, u16 move, u8 turnOfMove, u16 movePower, s32 dmg, u8 friendship, struct VolatileStruct *volatileStructPtr, u8 multihit);
 void BtlController_EmitPrintString(u8 bufferId, u16 stringId);
 void BtlController_EmitPrintSelectionString(u8 bufferId, u16 stringId);
 void BtlController_EmitChooseAction(u8 bufferId, u8 arg1, u16 arg2);
@@ -248,6 +249,7 @@ void BtlController_EmitLinkStandbyMsg(u8 bufferId, u8 arg1, bool32 record);
 void BtlController_EmitResetActionMoveSelection(u8 bufferId, u8 caseId);
 void BtlController_EmitEndLinkBattle(u8 bufferId, u8 battleOutcome);
 void BtlController_EmitDebugMenu(u8 bufferId);
+void BtlController_EmitInfoMenu(u8 bufferId);
 
 // player controller
 void SetControllerToPlayer(void);
@@ -262,6 +264,8 @@ void ActionSelectionCreateCursorAt(u8 cursorPos, u8 unused);
 void ActionSelectionDestroyCursorAt(u8 cursorPos);
 void InitMoveSelectionsVarsAndStrings(void);
 
+void HandleChooseActionAfterDma3_Player(void);
+
 // recorded player controller
 void SetControllerToRecordedPlayer(void);
 
@@ -273,6 +277,7 @@ void SetControllerToPlayerPartner(void);
 
 // safari controller
 void SetControllerToSafari(void);
+void PrintBattleWindow_ActionPromt_Safari(void);
 
 // wally controller
 void SetControllerToWally(void);
@@ -285,5 +290,7 @@ void SetControllerToLinkOpponent(void);
 
 // link partner
 void SetControllerToLinkPartner(void);
+
+void ReshowNewBattleMenuAfterMenu(void);
 
 #endif // GUARD_BATTLE_CONTROLLERS_H

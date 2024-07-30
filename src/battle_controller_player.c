@@ -16,13 +16,18 @@
 #include "event_data.h"
 #include "item.h"
 #include "item_menu.h"
+#include "item_use.h"
+#include "international_string_util.h"
 #include "link.h"
 #include "main.h"
+#include "menu.h"
 #include "m4a.h"
+#include "overworld.h"
 #include "palette.h"
 #include "party_menu.h"
 #include "pokeball.h"
 #include "pokemon.h"
+#include "pokemon_icon.h"
 #include "pokemon_storage_system.h"
 #include "pokemon_summary_screen.h"
 #include "random.h"
@@ -46,8 +51,173 @@
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/rgb.h"
+#include "mgba_printf/mgba.h"
+
+//Theme Stuff
+//Theme 1 - Dark
+static const u8 sTheme_Dark_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_1.4bpp");
+static const u8 sTheme_Dark_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_1_selected.4bpp");
+static const u8 sTheme_Dark_BattleButton_2[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_2.4bpp");
+static const u8 sTheme_Dark_BattleButton_2_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_2_selected.4bpp");
+static const u8 sTheme_Dark_BattleButton_3[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_3.4bpp");
+static const u8 sTheme_Dark_BattleButton_3_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_3_selected.4bpp");
+static const u8 sTheme_Dark_BattleButton_4[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_4.4bpp");
+static const u8 sTheme_Dark_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/button_4_selected.4bpp");
+static const u8 sTheme_Dark_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/mega_button.4bpp");
+static const u8 sTheme_Dark_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/catch_button.4bpp");
+static const u8 sTheme_Dark_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_selector.4bpp");
+
+static const u8 sTheme_Dark_Extra_Button_Fight[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_fight.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Forfeit[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_forfeit.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Info[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_info.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Pokemon[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_pokemon.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Run[]        = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_run.4bpp");
+static const u8 sTheme_Dark_Extra_Button_Debug[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/buttons/extra/l_button_debug.4bpp");
+
+static const u8 sTheme_Dark_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_sane.4bpp");
+static const u8 sTheme_Dark_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_status.4bpp");
+static const u8 sTheme_Dark_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/pokeball_fainted.4bpp");
+
+static const u8 sTheme_Dark_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_dmg_calc.4bpp");
+static const u8 sTheme_Dark_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_desc.4bpp");
+static const u8 sTheme_Dark_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_info.4bpp");
+static const u8 sTheme_Dark_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_spd_order.4bpp");
+
+static const u8 sTheme_Dark_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_name.4bpp");
+static const u8 sTheme_Dark_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_pp.4bpp");
+
+static const u8 sTheme_Dark_Split_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/split/split_physical.4bpp");
+static const u8 sTheme_Dark_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/split/split_special.4bpp");
+static const u8 sTheme_Dark_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/split/split_status.4bpp");
+
+static const u8 sTheme_Dark_Target_0[]                = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/target_0.4bpp");
+static const u8 sTheme_Dark_Target_1[]                = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/pokeball_icons/target_1.4bpp");
+
+//Theme 2 - Light
+static const u8 sTheme_Light_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1.4bpp");
+static const u8 sTheme_Light_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_1_selected.4bpp");
+static const u8 sTheme_Light_BattleButton_2[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_2.4bpp");
+static const u8 sTheme_Light_BattleButton_2_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_2_selected.4bpp");
+static const u8 sTheme_Light_BattleButton_3[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_3.4bpp");
+static const u8 sTheme_Light_BattleButton_3_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_3_selected.4bpp");
+static const u8 sTheme_Light_BattleButton_4[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_4.4bpp");
+static const u8 sTheme_Light_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/button_4_selected.4bpp");
+static const u8 sTheme_Light_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/mega_button.4bpp");
+static const u8 sTheme_Light_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/catch_button.4bpp");
+static const u8 sTheme_Light_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_selector.4bpp");
+
+static const u8 sTheme_Light_Extra_Button_Fight[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_fight.4bpp");
+static const u8 sTheme_Light_Extra_Button_Forfeit[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_forfeit.4bpp");
+static const u8 sTheme_Light_Extra_Button_Info[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_info.4bpp");
+static const u8 sTheme_Light_Extra_Button_Pokemon[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_pokemon.4bpp");
+static const u8 sTheme_Light_Extra_Button_Run[]        = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_run.4bpp");
+static const u8 sTheme_Light_Extra_Button_Debug[]      = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/buttons/extra/l_button_debug.4bpp");
+
+static const u8 sTheme_Light_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_sane.4bpp");
+static const u8 sTheme_Light_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_status.4bpp");
+static const u8 sTheme_Light_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/pokeball_fainted.4bpp");
+
+static const u8 sTheme_Light_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_dmg_calc.4bpp");
+static const u8 sTheme_Light_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_desc.4bpp");
+static const u8 sTheme_Light_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_info.4bpp");
+static const u8 sTheme_Light_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_spd_order.4bpp");
+
+static const u8 sTheme_Light_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_name.4bpp");
+static const u8 sTheme_Light_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_pp.4bpp");
+
+static const u8 sTheme_Light_Split_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/split/split_physical.4bpp");
+static const u8 sTheme_Light_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/split/split_special.4bpp");
+static const u8 sTheme_Light_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/split/split_status.4bpp");
+
+static const u8 sTheme_Light_Target_0[]                = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/target_0.4bpp");
+static const u8 sTheme_Light_Target_1[]                = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/pokeball_icons/target_1.4bpp");
+
+//Theme 3 - DPPt
+static const u8 sTheme_DPPt_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_1.4bpp");
+static const u8 sTheme_DPPt_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_1_selected.4bpp");
+static const u8 sTheme_DPPt_BattleButton_2[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_2.4bpp");
+static const u8 sTheme_DPPt_BattleButton_2_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_2_selected.4bpp");
+static const u8 sTheme_DPPt_BattleButton_3[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_3.4bpp");
+static const u8 sTheme_DPPt_BattleButton_3_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_3_selected.4bpp");
+static const u8 sTheme_DPPt_BattleButton_4[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_4.4bpp");
+static const u8 sTheme_DPPt_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/button_4_selected.4bpp");
+static const u8 sTheme_DPPt_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/mega_button.4bpp");
+static const u8 sTheme_DPPt_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/catch_button.4bpp");
+static const u8 sTheme_DPPt_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_selector.4bpp");
+
+static const u8 sTheme_DPPt_Extra_Button_Fight[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_fight.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Forfeit[]    = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_forfeit.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Info[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_info.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Pokemon[]    = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_pokemon.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Run[]        = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_run.4bpp");
+static const u8 sTheme_DPPt_Extra_Button_Debug[]      = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/buttons/extra/l_button_debug.4bpp");
+
+static const u8 sTheme_DPPt_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_sane.4bpp");
+static const u8 sTheme_DPPt_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_status.4bpp");
+static const u8 sTheme_DPPt_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/pokeball_fainted.4bpp");
+
+static const u8 sTheme_DPPt_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_dmg_calc.4bpp");
+static const u8 sTheme_DPPt_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_desc.4bpp");
+static const u8 sTheme_DPPt_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_info.4bpp");
+static const u8 sTheme_DPPt_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_spd_order.4bpp");
+
+static const u8 sTheme_DPPt_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_name.4bpp");
+static const u8 sTheme_DPPt_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_pp.4bpp");
+
+static const u8 sTheme_DPPt_Split_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/split/split_physical.4bpp");
+static const u8 sTheme_DPPt_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/split/split_special.4bpp");
+static const u8 sTheme_DPPt_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/split/split_status.4bpp");
+
+static const u8 sTheme_DPPt_Target_0[]                = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/target_0.4bpp");
+static const u8 sTheme_DPPt_Target_1[]                = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/pokeball_icons/target_1.4bpp");
+
+//Theme 4 - Classic
+/*static const u8 sTheme_Classic_BattleButton_1[]          = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/button_1.4bpp");
+static const u8 sTheme_Classic_BattleButton_1_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/button_1_selected.4bpp");
+static const u8 sTheme_Classic_BattleButton_2[]          = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/button_2.4bpp");
+static const u8 sTheme_Classic_BattleButton_2_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/button_2_selected.4bpp");
+static const u8 sTheme_Classic_BattleButton_3[]          = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/button_3.4bpp");
+static const u8 sTheme_Classic_BattleButton_3_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/button_3_selected.4bpp");
+static const u8 sTheme_Classic_BattleButton_4[]          = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/button_4.4bpp");
+static const u8 sTheme_Classic_BattleButton_4_Selected[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/button_4_selected.4bpp");
+static const u8 sTheme_Classic_BattleButton_Mega[]       = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/mega_button.4bpp");*/
+static const u8 sTheme_Classic_BattleButton_Catch[]      = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/catch_button.4bpp");
+static const u8 sTheme_Classic_BattleMoveSelector[]      = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_selector.4bpp");
+
+static const u8 sTheme_Classic_Extra_Button_Fight[]      = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_fight.4bpp");
+static const u8 sTheme_Classic_Extra_Button_Forfeit[]    = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_forfeit.4bpp");
+static const u8 sTheme_Classic_Extra_Button_Info[]       = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_info.4bpp");
+static const u8 sTheme_Classic_Extra_Button_Pokemon[]    = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_pokemon.4bpp");
+static const u8 sTheme_Classic_Extra_Button_Run[]        = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_run.4bpp");
+static const u8 sTheme_Classic_Extra_Button_Debug[]      = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/buttons/extra/l_button_debug.4bpp");
+
+static const u8 sTheme_Classic_Pokeball_Sane_Gfx[]       = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/pokeball_icons/pokeball_sane.4bpp");
+static const u8 sTheme_Classic_Pokeball_Status_Gfx[]     = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/pokeball_icons/pokeball_status.4bpp");
+static const u8 sTheme_Classic_Pokeball_Fainted_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/pokeball_icons/pokeball_fainted.4bpp");
+
+static const u8 sTheme_Classic_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_dmg_calc.4bpp");
+static const u8 sTheme_Classic_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_move_desc.4bpp");
+static const u8 sTheme_Classic_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_move_info.4bpp");
+static const u8 sTheme_Classic_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_spd_order.4bpp");
+
+static const u8 sTheme_Classic_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_move_name.4bpp");
+static const u8 sTheme_Classic_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_move_pp.4bpp");
+
+static const u8 sTheme_Classic_Split_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/split/split_physical.4bpp");
+static const u8 sTheme_Classic_Split_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/split/split_special.4bpp");
+static const u8 sTheme_Classic_Split_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/split/split_status.4bpp");
+
+static const u8 sTheme_Classic_Target_0[]                = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/pokeball_icons/target_0.4bpp");
+static const u8 sTheme_Classic_Target_1[]                = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/pokeball_icons/target_1.4bpp");
+
+static const u8 sSplit_Physical[]          = INCBIN_U8("graphics/ui_menus/battle_interface/split_physical.4bpp");
+static const u8 sSplit_Special[]           = INCBIN_U8("graphics/ui_menus/battle_interface/split_special.4bpp");
+static const u8 sSplit_Status[]            = INCBIN_U8("graphics/ui_menus/battle_interface/split_status.4bpp");
 
 extern struct MusicPlayerInfo gMPlayInfo_BGM;
+//Mon Icons
+u8 BattleInterface_CreateMonIcon(u8 battler);
+void BattleInterface_DestroyMonIcon(void);
 
 // this file's functions
 static void PlayerHandleGetMonData(void);
@@ -106,7 +276,9 @@ static void PlayerHandleLinkStandbyMsg(void);
 static void PlayerHandleResetActionMoveSelection(void);
 static void PlayerHandleEndLinkBattle(void);
 static void PlayerHandleBattleDebug(void);
+static void PlayerHandleBattleInfoMenu(void);
 static void PlayerCmdEnd(void);
+static void HandleInputChooseActionPlayer(void);
 
 static void PlayerBufferRunCommand(void);
 static void HandleInputChooseTarget(void);
@@ -137,6 +309,8 @@ static void Task_StartSendOutAnim(u8 taskId);
 static void EndDrawPartyStatusSummary(void);
 static void ChangeMoveDisplayMode();
 static void MoveSelectionDisplaySplitIcon(void);
+static void PlayerBufferExecCompleted(void);
+static u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId);
 static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId);
 
 static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
@@ -198,6 +372,7 @@ static void (*const sPlayerBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
     [CONTROLLER_RESETACTIONMOVESELECTION] = PlayerHandleResetActionMoveSelection,
     [CONTROLLER_ENDLINKBATTLE]            = PlayerHandleEndLinkBattle,
     [CONTROLLER_DEBUGMENU]                = PlayerHandleBattleDebug,
+    [CONTROLLER_INFO_MENU]                = PlayerHandleBattleInfoMenu,
     [CONTROLLER_TERMINATOR_NOP]           = PlayerCmdEnd
 };
 
@@ -206,6 +381,1695 @@ static const u8 sUnused[] = {0x48, 0x48, 0x20, 0x5a, 0x50, 0x50, 0x50, 0x58};
 
 void BattleControllerDummy(void)
 {
+    // dummy function
+}
+
+enum Colors
+{
+    FONT_BLACK,
+    FONT_BLACK_2,
+    FONT_WHITE,
+    FONT_WHITE_2,
+    FONT_RED,
+    FONT_BLUE,
+    FONT_GREEN,
+    FONT_YELLOW,
+    FONT_PURPLE,
+    FONT_GRAY,
+    FONT_GRAY_2,
+};
+
+static const u8 sMenuWindowFontColors[][3] = 
+{
+    [FONT_BLACK]   = {TEXT_COLOR_TRANSPARENT,  2,   3},
+    [FONT_BLACK_2] = {TEXT_COLOR_TRANSPARENT,  2,   TEXT_COLOR_TRANSPARENT},
+    [FONT_WHITE]   = {TEXT_COLOR_TRANSPARENT,  10,  8},
+    [FONT_WHITE_2] = {TEXT_COLOR_TRANSPARENT,  10,  TEXT_COLOR_TRANSPARENT},
+    [FONT_RED]     = {TEXT_COLOR_TRANSPARENT,  12,  TEXT_COLOR_TRANSPARENT},
+    [FONT_BLUE]    = {TEXT_COLOR_TRANSPARENT,  15,  TEXT_COLOR_TRANSPARENT},
+    [FONT_GREEN]   = {TEXT_COLOR_TRANSPARENT,  14,  TEXT_COLOR_TRANSPARENT},
+    [FONT_YELLOW]  = {TEXT_COLOR_TRANSPARENT,  13,  TEXT_COLOR_TRANSPARENT},
+    [FONT_PURPLE]  = {TEXT_COLOR_TRANSPARENT,  11,  TEXT_COLOR_TRANSPARENT},
+    [FONT_GRAY]    = {TEXT_COLOR_TRANSPARENT,  8,   TEXT_COLOR_TRANSPARENT},
+    [FONT_GRAY_2]  = {TEXT_COLOR_TRANSPARENT,  4,   TEXT_COLOR_TRANSPARENT},
+};
+
+enum optionsButtonMode
+{
+    BATTLE_ACTION_FIGHT,
+    BATTLE_ACTION_POKEMON,
+    BATTLE_ACTION_RUN,
+    BATTLE_ACTION_INFO,
+    BATTLE_ACTION_DEBUG,
+};
+
+const u8 sText_BattleMenu_Action_Fight[]            = _("Fight");
+const u8 sText_BattleMenu_Action_Pokemon[]          = _("Pokémon");
+const u8 sText_BattleMenu_Action_Forfeit[]          = _("Forfeit");
+const u8 sText_BattleMenu_Action_Run[]              = _("Run");
+const u8 sText_BattleMenu_Action_Info[]             = _("Info");  
+const u8 sText_BattleMenu_Action_Catch[]            = _("Catch");
+
+const u8 sText_BattleMenu_Action_Fight_Case[]       = _("FIGHT");
+const u8 sText_BattleMenu_Action_Pokemon_Case[]     = _("{PKMN}");
+const u8 sText_BattleMenu_Action_Forfeit_Case[]     = _("FORFEIT");
+const u8 sText_BattleMenu_Action_Run_Case[]         = _("RUN");
+const u8 sText_BattleMenu_Action_Info_Case[]        = _("INFO");  
+const u8 sText_BattleMenu_Action_Catch_Case[]       = _("CATCH");
+
+const u8 sText_BattleMenu_Action_Debug[]            = _("Debug");   //Unused
+const u8 sText_BattleMenu_Action_Bag[]              = _("Bag");     //Unused
+
+const u8 sText_BattleMenu_Action_What_Will_X_Do_1[] = _("What will");
+const u8 sText_BattleMenu_Action_What_Will_X_Do_2[] = _("{STR_VAR_1} do?");
+//const u8 sText_BattleMenu_Action_What_Will_X_Do[] = _("What will\nCrabominable\ndo?");
+
+#define BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE      100
+#define BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT 88
+#define BATTLE_WINDOW_SQUARE_SIZE      47
+#define BATTLE_WINDOW_SQUARE_SIZE_DPPT 44
+#define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT 13
+#define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT 14
+#define BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC 4
+
+void PrintShortcutButton(u8 windowId, u8 button, u8 x, u8 y, u8 x2, u8 y2){
+    u8 theme = getBattleInterfaceTheme();
+    bool8 isTrainerBattle = FALSE;
+    switch(button){
+        case BATTLE_ACTION_FIGHT:
+            if(theme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Fight,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Fight, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Fight,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+            else if(theme == THEME_CLASSIC)
+                BlitBitmapToWindow(windowId, sTheme_Classic_Extra_Button_Fight,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+        break;
+        case BATTLE_ACTION_INFO:
+            if(theme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Info,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Info, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Info,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+            else if(theme == THEME_CLASSIC)
+                BlitBitmapToWindow(windowId, sTheme_Classic_Extra_Button_Info,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+        break;
+        case BATTLE_ACTION_POKEMON:
+            if(theme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Pokemon,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Pokemon, (x * 8) + x2, (y * 8) + y2, 32, 8);
+            else if(theme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Pokemon,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+            else if(theme == THEME_CLASSIC)
+                BlitBitmapToWindow(windowId, sTheme_Classic_Extra_Button_Pokemon,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+        break;
+        case BATTLE_ACTION_RUN:
+            isTrainerBattle = (gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL));
+            if(isTrainerBattle){
+                if(theme == THEME_DARK)
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Run,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+                else if(theme == THEME_LIGHT)
+                    BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Run, (x * 8) + x2, (y * 8) + y2, 32, 8);
+                else if(theme == THEME_DPPT)
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Run,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+                else
+                    BlitBitmapToWindow(windowId, sTheme_Classic_Extra_Button_Run,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+            }
+            else{
+                if(theme == THEME_DARK)
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Forfeit,  (x * 8) + x2, (y * 8) + y2, 40, 8);
+                else if(theme == THEME_LIGHT)
+                    BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Forfeit, (x * 8) + x2, (y * 8) + y2, 40, 8);
+                else if(theme == THEME_DPPT)
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Forfeit,  (x * 8) + x2, (y * 8) + y2, 40, 16);
+                else if(theme == THEME_CLASSIC)
+                    BlitBitmapToWindow(windowId, sTheme_Classic_Extra_Button_Forfeit,  (x * 8) + x2, (y * 8) + y2, 40, 8);
+            }
+        break;
+        case BATTLE_ACTION_DEBUG:
+            if(B_ENABLE_DEBUG){
+                if(theme == THEME_DARK)
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Extra_Button_Debug,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+                else if(theme == THEME_LIGHT)
+                    BlitBitmapToWindow(windowId, sTheme_Light_Extra_Button_Debug, (x * 8) + x2, (y * 8) + y2, 32, 8);
+                else if(theme == THEME_DPPT)
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Extra_Button_Debug,  (x * 8) + x2, (y * 8) + y2, 32, 16);
+                else if(theme == THEME_CLASSIC)
+                    BlitBitmapToWindow(windowId, sTheme_Classic_Extra_Button_Debug,  (x * 8) + x2, (y * 8) + y2, 32, 8);
+            }
+        break;
+
+    }
+}
+
+void PrintBattleWindow_ActionPromt(void)
+{
+    u8 i, x, y, x2, y2, offset;
+    u8 windowId = B_WIN_ACTION_PROMPT;
+    u8 font = FONT_SMALL_NARROW;
+    u8 fontColor = FONT_WHITE_2;
+    struct TextPrinterTemplate printerTemplate;
+    bool8 isTrainerBattle = (gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL));
+    bool8 isDoubleBattle  = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
+    u8 battler = gActiveBattler;
+    u8 speed;
+    bool8 canUsePokeball = !isTrainerBattle && CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET);
+    u8 shortcutButton = gSaveBlock2Ptr->shortcutButton;
+    bool8 hasShortcutButtonEnabled = (shortcutButton != BATTLE_ACTION_DEBUG || B_ENABLE_DEBUG);
+    u8 battleTheme = getBattleInterfaceTheme();
+    u8 dummy = 0;
+
+    switch(battleTheme){
+        case THEME_DARK:
+            fontColor = FONT_WHITE_2;
+        break;
+        case THEME_LIGHT:
+            fontColor = FONT_BLACK_2;
+        break;
+        case THEME_DPPT:
+            fontColor = FONT_BLACK_2;
+        break;
+        case THEME_CLASSIC:
+            fontColor = FONT_BLACK_2;
+        break;
+    }
+
+    //Fill the window with the fill value
+    MoveIntoBattleBgWindow(windowId);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+
+    //Pokeball Icons
+    x  = 19;
+    y  = 0;
+    y2 = 0;
+    x2 = 0;
+    switch(battleTheme){
+        default:
+            for(i = 0; i < PARTY_SIZE; i++){
+                if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE){
+                    if(GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL) == 0) //Fainted
+                        BlitBitmapToWindow(windowId, sTheme_Dark_Pokeball_Fainted_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+                    else if(GetMonData(&gPlayerParty[i], MON_DATA_STATUS, NULL) != STATUS1_NONE) //Status
+                        BlitBitmapToWindow(windowId, sTheme_Dark_Pokeball_Status_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+                    else //Sane
+                        BlitBitmapToWindow(windowId, sTheme_Dark_Pokeball_Sane_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+                }
+                x++;
+            }
+        break;
+        case THEME_CLASSIC:
+            for(i = 0; i < PARTY_SIZE; i++){
+                if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE){
+                    if(GetMonData(&gPlayerParty[i], MON_DATA_HP, NULL) == 0) //Fainted
+                        BlitBitmapToWindow(windowId, sTheme_Classic_Pokeball_Fainted_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+                    else if(GetMonData(&gPlayerParty[i], MON_DATA_STATUS, NULL) != STATUS1_NONE) //Status
+                        BlitBitmapToWindow(windowId, sTheme_Classic_Pokeball_Status_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+                    else //Sane
+                        BlitBitmapToWindow(windowId, sTheme_Classic_Pokeball_Sane_Gfx, (x  * 8) + x2, (y * 8) + y2, 8, 8);
+                }
+                x++;
+            }
+        break;
+    }
+
+    //Catch Icon
+    x  = 1;
+    y  = 1;
+    y2 = 0;
+    x2 = 0;
+    switch(battleTheme){
+        case THEME_DARK:
+            if(hasShortcutButtonEnabled)
+                PrintShortcutButton(windowId, shortcutButton, x, y, x2, y2);
+            x = x + 9;
+            if(canUsePokeball)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 8);
+        break;
+        case THEME_LIGHT:
+            if(hasShortcutButtonEnabled)
+                PrintShortcutButton(windowId, shortcutButton, x, y, x2, y2);
+            x = x + 9;
+            if(canUsePokeball)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 8);
+        break;
+        case THEME_DPPT:
+            x  = 0;
+            y  = 0;
+            y2 = 0;
+            x2 = 0;
+            if(hasShortcutButtonEnabled)
+                PrintShortcutButton(windowId, shortcutButton, x, y, x2, y2);
+            x = x + 10;
+            if(canUsePokeball)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_Catch, (x * 8) + x2, (y * 8) + y2, 32, 16);
+        break;
+        case THEME_CLASSIC:
+            if(hasShortcutButtonEnabled)
+                PrintShortcutButton(windowId, shortcutButton, x, y, x2, y2);
+            x = x + 7;
+            if(canUsePokeball)
+                BlitBitmapToWindow(windowId, sTheme_Classic_BattleButton_Catch, (x * 8) + x2 + 4, (y * 8) + y2, 32, 8);
+        break;
+    }
+
+    
+    //What Will X Do?
+    x  = 1;
+    if((!canUsePokeball && !hasShortcutButtonEnabled) || battleTheme == THEME_DPPT){
+        y  = 1;
+        y2 = 4;
+    }
+    else{
+        y  = 2;
+        y2 = 0;
+    }
+
+    //First Part
+    StringCopy(gStringVar1, sText_BattleMenu_Action_What_Will_X_Do_1);
+    switch(battleTheme){
+        case THEME_DPPT:
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Part two
+            StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battler].species]);
+            StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
+            offset = 4 + GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+        case THEME_CLASSIC:
+            //This theme does not have this part
+        break;
+        default:
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Part two
+            StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battler].species]);
+            StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
+            offset = GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+    }
+
+    //Buttons
+    x  = 15;
+    y  = 1;
+    y2 = 0;
+
+    // Fight Button
+    switch(battleTheme){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_CLASSIC:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_FIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Classic_BattleMoveSelector, (x * 8) + x2 - 4, (y * 8) + y2 + 4, 8, 8);
+        break;
+    }
+
+    //Text
+    switch(battleTheme){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
+            offset = 6 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            
+            x = x + 6;
+        break;
+        case THEME_CLASSIC:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Fight_Case);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            x = x + 6;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Fight);
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+    }
+
+
+    // Info
+    switch(battleTheme){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_CLASSIC:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_INFO)
+                BlitBitmapToWindow(windowId, sTheme_Classic_BattleMoveSelector, (x * 8) + x2 - 4, (y * 8) + y2 + 4, 8, 8);
+        break;
+    }
+    
+    //Text
+    switch(battleTheme){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Info);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            y  = y + 2;
+            x  = 15;
+        break;
+        case THEME_CLASSIC:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Info_Case);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            y  = y + 2;
+            x  = 15;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Info);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            y  = y + 2;
+            x  = 15;
+        break;
+    }
+
+    // Pokemon
+    switch(battleTheme){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_CLASSIC:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_POKEMON)
+                BlitBitmapToWindow(windowId, sTheme_Classic_BattleMoveSelector, (x * 8) + x2 - 4, (y * 8) + y2 + 4, 8, 8);
+        break;
+    }
+
+    //Text
+    switch(battleTheme){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokemon);
+            offset = 6 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+        case THEME_CLASSIC:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokemon_Case);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokemon);
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+    }
+
+    // Run
+    switch(battleTheme){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_CLASSIC:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_RUN)
+                BlitBitmapToWindow(windowId, sTheme_Classic_BattleMoveSelector, (x * 8) + x2 - 4, (y * 8) + y2 + 4, 8, 8);
+        break;
+    }
+
+    //Text
+    switch(battleTheme){
+        case THEME_DPPT:
+            if(isTrainerBattle)
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Forfeit);
+            else
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+        case THEME_CLASSIC:
+            if(isTrainerBattle)
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Forfeit_Case);
+            else
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Run_Case);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+        default:
+            if(isTrainerBattle)
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Forfeit);
+            else
+                StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+    }
+
+    PutWindowTilemap(windowId);
+    CopyWindowToVram(windowId, 3);
+}
+
+
+enum optionsButtonModeSafari
+{
+    BATTLE_ACTION_SAFARI_CATCH,
+    BATTLE_ACTION_SAFARI_POKEBLOCK,
+    BATTLE_ACTION_SAFARI_GO_NEAR,
+    BATTLE_ACTION_SAFARI_RUN,
+};
+
+const u8 sText_BattleMenu_Action_Go_Near[]        = _("Go Near");
+const u8 sText_BattleMenu_Action_Pokeblock[]      = _("Pokéblock");  
+
+const u8 sText_BattleMenu_Action_Go_Near_Case[]        = _("GO NEAR");
+const u8 sText_BattleMenu_Action_Pokeblock_Case[]      = _("POKéBLOCK");  
+
+const u8 sText_BattleMenu_Action_You[]            = _("{PLAYER}");  
+
+void PrintBattleWindow_ActionPromt_Safari(void)
+{
+    u8 i, x, y, x2, y2, offset;
+    u8 windowId = B_WIN_ACTION_PROMPT;
+    u8 font = FONT_SMALL_NARROW;
+    u8 fontColor = FONT_WHITE_2;
+    struct TextPrinterTemplate printerTemplate;
+    u8 speed;
+
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            fontColor = FONT_WHITE_2;
+        break;
+        case THEME_LIGHT:
+            fontColor = FONT_BLACK_2;
+        break;
+        case THEME_DPPT:
+            fontColor = FONT_BLACK_2;
+        break;
+        case THEME_CLASSIC:
+            fontColor = FONT_BLACK_2;
+        break;
+    }
+
+    //Fill the window with the fill value
+    MoveIntoBattleBgWindow(windowId);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+
+    //What Will X Do?
+    x  = 1;
+    y  = 1;
+    y2 = 4;
+
+    //First Part
+    StringCopy(gStringVar1, sText_BattleMenu_Action_What_Will_X_Do_1);
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Part two
+            StringCopy(gStringVar1, sText_BattleMenu_Action_You);
+            StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
+            offset = 4 + GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+        case THEME_CLASSIC:
+            //This theme does not have this part
+        break;
+        default:
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Part two
+            StringCopy(gStringVar1, sText_BattleMenu_Action_You);
+            StringExpandPlaceholders(gStringVar4, sText_BattleMenu_Action_What_Will_X_Do_2);
+            offset = GetStringCenterAlignXOffset(font, gStringVar4, BATTLE_WINDOW_WHAT_WILL_X_DO_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+    }
+
+    //Buttons
+    x  = 15;
+    y  = 1;
+    y2 = 0;
+
+    // Fight Button
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_CATCH)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_CATCH)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_CATCH)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_1_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_1, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_CLASSIC:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_CATCH)
+                BlitBitmapToWindow(windowId, sTheme_Classic_BattleMoveSelector, (x * 8) + x2 - 4, (y * 8) + y2 + 4, 8, 8);
+        break;
+    }
+
+    //Text
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Catch);
+            offset = 6 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            
+            x = x + 6;
+        break;
+        case THEME_CLASSIC:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Catch_Case);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            x = x + 6;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Catch);
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+    }
+
+
+    // Info
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_POKEBLOCK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_POKEBLOCK)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_POKEBLOCK)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_2_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_2, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_CLASSIC:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_POKEBLOCK)
+                BlitBitmapToWindow(windowId, sTheme_Classic_BattleMoveSelector, (x * 8) + x2 - 4, (y * 8) + y2 + 4, 8, 8);
+    }
+    
+    //Text
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokeblock);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            y  = y + 2;
+            x  = 15;
+        break;
+        case THEME_CLASSIC:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokeblock_Case);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            y  = y + 2;
+            x  = 15;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Pokeblock);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE) + 4;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            y  = y + 2;
+            x  = 15;
+        break;
+    }
+
+    // Pokemon
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_GO_NEAR)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_GO_NEAR)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_GO_NEAR)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_3_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_3, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_CLASSIC:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_GO_NEAR)
+                BlitBitmapToWindow(windowId, sTheme_Classic_BattleMoveSelector, (x * 8) + x2 - 4, (y * 8) + y2 + 4, 8, 8);
+        break;
+    }
+
+    //Text
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Go_Near);
+            offset = 6 + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+        case THEME_CLASSIC:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Go_Near_Case);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Go_Near);
+            offset = GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            x = x + 6;
+        break;
+    }
+
+    // Run
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_RUN)
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Dark_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_LIGHT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_RUN)
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_Light_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_DPPT:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_RUN)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_4_Selected, (x * 8) + x2, (y * 8) + y2, 64, 16);
+            else
+                BlitBitmapToWindow(windowId, sTheme_DPPt_BattleButton_4, (x * 8) + x2, (y * 8) + y2, 64, 16);
+        break;
+        case THEME_CLASSIC:
+            if(gActionSelectionCursor[gActiveBattler] == BATTLE_ACTION_SAFARI_RUN)
+                BlitBitmapToWindow(windowId, sTheme_Classic_BattleMoveSelector, (x * 8) + x2 - 4, (y * 8) + y2 + 4, 8, 8);
+        break;
+    }
+
+    //Text
+    switch(getBattleInterfaceTheme()){
+        case THEME_DPPT:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_DPPT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE_DPPT);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+        case THEME_CLASSIC:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Run_Case);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT_CLASSIC;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+        default:
+            StringCopy(gStringVar1, sText_BattleMenu_Action_Run);
+            offset = BATTLE_WINDOW_SPACE_BETWEEN_SQUARE_AND_TEXT + GetStringCenterAlignXOffset(font, gStringVar1, BATTLE_WINDOW_SQUARE_SIZE);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        break;
+    }
+
+    PutWindowTilemap(windowId);
+    CopyWindowToVram(windowId, 3);
+}
+
+enum{
+    MOVE_INFO_DESCRIPTION,
+    MOVE_INFO_POWER_ACC_PRIO_TYPE,
+    MOVE_INFO_POWER_ACC_PRIO_TYPE_2,
+    MOVE_SPEED_CALCULATION,
+    MOVE_INFO_DAMAGE_CALCULATION,
+    NUM_MOVE_INFO_TYPES,
+};
+
+#define SPACE_BETWEEN_MOVE_NAME_AND_PP             (10 * 8)
+#define SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION    SPACE_BETWEEN_MOVE_NAME_AND_PP + (5 * 8) + 4
+#define MOVE_SPLIT_X                               SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + (6 * 8) + 4
+static const u8 sText_PP[]                = _("{STR_VAR_1}/{STR_VAR_2}");
+const u8 sText_MoveInfo_Power[]           = _("Power:");
+const u8 sText_MoveInfo_True_Power[]      = _("True Power:");
+const u8 sText_MoveInfo_Accuracy[]        = _("Accuracy:");
+const u8 sText_MoveInfo_Priority[]        = _("Priority:");
+const u8 sText_MoveInfo_Type_Null[]       = _("Type:");
+const u8 sText_MoveInfo_Types_Null[]      = _("Types:");
+const u8 sText_MoveInfo_Type[]            = _("{STR_VAR_2} {STR_VAR_1}");
+const u8 sText_MoveInfo_Type_Double[]     = _("{STR_VAR_2} {STR_VAR_1} & {STR_VAR_3}");
+const u8 sText_MoveInfo_Chance[]          = _("Chance: {STR_VAR_1}");
+const u8 sText_MoveInfo_Contact[]         = _("Contact:");
+const u8 sText_MoveInfo_Boost[]           = _("Boost Type:");
+const u8 sText_Effect_Based_Type[]        = _("Based on:");
+const u8 sText_Target_Nothing[]           = _("---");
+const u8 sText_DamageCalculation_Status[] = _("This is an status\nmove it does not\ndeal direct\ndamage.");
+static const u8 gStabIcon[]               =  _("{PLUS}");
+static const u8 gNoStabIcon[]             =  _(" ");
+static const u8 sText_Yes[]               = _("Yes");
+static const u8 sText_No[]                = _("No");
+
+const u8 sText_Effect_Hit_Number[]          = _("Max Hits");
+const u8 sText_Effect_Boost_Type_Weather[]  = _("Weather");
+const u8 sText_Effect_Boost_Type_Fist[]     = _("Fist");
+const u8 sText_Effect_Boost_Type_Kick[]     = _("Kick");
+const u8 sText_Effect_Boost_Type_Sound[]    = _("Sound");
+const u8 sText_Effect_Boost_Type_Cannon[]   = _("Cannon");
+const u8 sText_Effect_Boost_Type_Dance[]    = _("Dance");
+const u8 sText_Effect_Boost_Type_Field[]    = _("Field");
+const u8 sText_Effect_Boost_Type_Bone[]     = _("Bone");
+const u8 sText_Effect_Boost_Type_Slash[]    = _("Slash");
+const u8 sText_Effect_Boost_Type_Bite[]     = _("Bite");
+const u8 sText_Effect_Boost_Type_Arrow[]    = _("Arrow");
+const u8 sText_Effect_Boost_Type_Hammer[]   = _("Hammer");
+const u8 sText_Effect_Boost_Type_Air[]      = _("Air");
+const u8 sText_Effect_Boost_Type_Horn[]     = _("Horn");
+const u8 sText_Effect_Boost_Type_Throw[]    = _("Throwing");
+const u8 sText_Effect_Boost_Type_Reckless[] = _("Reckless");
+const u8 sText_Effect_Critical_High[]       = _("High");
+const u8 sText_Effect_Critical_Always[]     = _("Always");
+const u8 sText_Effect_Sheer_Force_Boosted[] = _("Sheer Force");
+const u8 sText_Effect_Ignores_Ability[]     = _("Ign. Ability");
+const u8 sText_Effect_Ignores_Stats[]       = _("Ign. Stats");
+/*
+const u8 gText_MoveInfo_Split[]    = _("Split: {STR_VAR_1}");
+const u8 gText_MoveInfo_STAB[]     = _("STAB: {STR_VAR_1}");
+
+const u8 gText_Split_Physical[] = _("Physical");
+const u8 gText_Split_Special[]  = _("Special");
+const u8 gText_Split_Status[]   = _("Status");
+
+const u8 gText_MoveInfo_Target1[] = _("Target 1: {STR_VAR_1}");
+const u8 gText_MoveInfo_Target2[] = _("Target 2: {STR_VAR_1}");
+
+const u8 gText_MoveInfo_Damage[] = _("Damage");
+
+const u8 gText_Target_Nothing[]   = _("---");
+const u8 sText_Title_Controllers_Move[]      = _("{DPAD_UPDOWN}Switch {DPAD_LEFTRIGHT}Page {A_BUTTON}Mode");*/
+const u8 sText_Effect_DamageDone[]                     = _("Calculated Damage\nRange: {STR_VAR_1}% - {STR_VAR_2}%\nof {STR_VAR_3}\nCurrent Health.");
+const u8 sText_Effect_DamageDone_Guaranteed_KO[]       = _("{COLOR 14}Guaranteed {COLOR 2}to KO\n{STR_VAR_3}\nin the next hit.");
+const u8 sText_Effect_DamageDone_Guaranteed_KO_White[] = _("{COLOR 14}Guaranteed {COLOR 10}to KO\n{STR_VAR_3}\nin the next hit.");
+const u8 sText_Effect_Speed_Calculation_Singles[]      = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}");
+const u8 sText_Effect_Speed_Calculation_Priority2[]    = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}{PLUS}");
+const u8 sText_Effect_Speed_Calculation[]              = _("{STR_VAR_1}");
+const u8 sText_Effect_Speed_CalculationPriority[]      = _("{PLUS} {STR_VAR_1}");
+
+enum{
+    MOVE_EFFECTIVENESS_NONE,
+    MOVE_EFFECTIVENESS_HALF,
+    MOVE_EFFECTIVENESS_NORMAL,
+    MOVE_EFFECTIVENESS_DOUBLE,
+    MOVE_EFFECTIVENESS_STATUS,
+};
+
+#define NEGATIVE_MOVE_X 2
+#define MAX_DAMAGE_FACTOR 0
+#define MIN_DAMAGE_FACTOR 16
+#define MAX_PERCENT 100
+#define MAX_PERCENT_2 10000
+
+static bool8 HasPriorityMove(u8 battler)
+{
+    u8 i;
+    for(i = 0; i < MAX_MON_MOVES; i++){
+        if(gBattleMons[battler].moves[i] == MOVE_NONE)
+            return FALSE;
+        else if(gBattleMoves[gBattleMons[battler].moves[i]].priority > 0)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+#define MOVE_INFO_WINDOW_SIZE 80
+
+void PrintBattleWindow_MoveSelection(void)
+{
+    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
+    u8 i, j, x, y, x2, y2, offset, speed, moveType, effectiveness, extraX;
+    u16 move, movePower;
+    u8 windowId = B_WIN_ACTION_PROMPT;
+    u8 font = FONT_SMALL_NARROW;
+    u8 fontColor = FONT_WHITE_2;
+    u8 moveInfoType = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
+    u8 target = gMultiUsePlayerCursor;
+    u8 battleTheme = getBattleInterfaceTheme();
+    bool32 copyToVram;
+    bool8 isStatusMove;
+    bool8 isDoubleTypedMove = FALSE;
+    struct TextPrinterTemplate printerTemplate;
+
+    switch(battleTheme){
+        case THEME_DARK:
+            fontColor = FONT_WHITE_2;
+        break;
+        case THEME_LIGHT:
+            fontColor = FONT_BLACK_2;
+        break;
+        case THEME_DPPT:
+            fontColor = FONT_BLACK_2;
+        break;
+        case THEME_CLASSIC:
+            fontColor = FONT_BLACK_2;
+        break;
+    }
+
+    if(target >= MAX_BATTLERS_COUNT)
+        target = BATTLE_OPPOSITE(gActiveBattler);
+    
+    if(!IsBattlerAlive(target))
+        target = BATTLE_PARTNER(target);
+
+    //Fill the window with the fill value
+    MoveIntoBattleBgWindow(windowId);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
+    copyToVram = TRUE;
+
+    gBattle_BG1_X = 0;
+    gBattle_BG1_Y = 0;
+
+    x  = 2;
+    y  = 0;
+    y2 = 4;
+    x2 = 0;
+
+    //Move Selection
+    for(i = 0; i < MAX_MON_MOVES; i++){
+        move = moveInfo->moves[i];
+        if(move == MOVE_NONE)
+            break;
+        StringCopy(gStringVar1, gMoveNamesLong[move]);
+        AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+        //PP
+        ConvertIntToDecimalStringN(gStringVar1, gBattleMons[gActiveBattler].pp[i], STR_CONV_MODE_LEFT_ALIGN, 3);  // Current PP
+        ConvertIntToDecimalStringN(gStringVar2, CalculatePPWithBonus(move, 255, 0), STR_CONV_MODE_LEFT_ALIGN, 3); // Max PP
+        StringExpandPlaceholders(gStringVar4, sText_PP);
+        AddTextPrinterParameterized4(windowId, font, (x * 8) + SPACE_BETWEEN_MOVE_NAME_AND_PP - NEGATIVE_MOVE_X, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+
+        if(gMoveSelectionCursor[gActiveBattler] == i){
+            switch(battleTheme){
+                case THEME_DARK:
+                    BlitBitmapToWindow(windowId, sTheme_Dark_BattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
+                break;
+                case THEME_LIGHT:
+                    BlitBitmapToWindow(windowId, sTheme_Light_BattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
+                break;
+                case THEME_DPPT:
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_BattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
+                break;
+                case THEME_CLASSIC:
+                    BlitBitmapToWindow(windowId, sTheme_Classic_BattleMoveSelector, ((x - 1) * 8) - 1, (y * 8) + y2 + 4, 8, 8);
+                break;
+            }
+        }
+
+        y++;
+    }
+
+    //Move Info
+    x  = 1;
+    y  = 0;
+    x2 = 4;
+    y2 = 0;
+    switch(battleTheme){
+        case THEME_DARK:
+            BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_Name, (x * 8) + x2, (y * 8) + y2, 24, 8);
+            x = x + 10;
+            BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_PP,   (x * 8) + x2, (y * 8) + y2, 16, 8);
+        break;
+        case THEME_LIGHT:
+            BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_Name, (x * 8) + x2, (y * 8) + y2, 24, 8);
+            x = x + 10;
+            BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_PP,   (x * 8) + x2, (y * 8) + y2, 16, 8);
+        break;
+        case THEME_DPPT:
+            BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_Name, (x * 8) + x2, (y * 8) + y2, 24, 8);
+            x = x + 10;
+            BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_PP,   (x * 8) + x2, (y * 8) + y2, 16, 8);
+        break;
+        case THEME_CLASSIC:
+            BlitBitmapToWindow(windowId, sTheme_Classic_Title_Move_Name, (x * 8) + x2, (y * 8) + y2, 24, 8);
+            x = x + 10;
+            BlitBitmapToWindow(windowId, sTheme_Classic_Title_Move_PP,   (x * 8) + x2, (y * 8) + y2, 16, 8);
+        break;
+    }
+
+    //Title
+    x  = 17;
+    y  = 0;
+    x2 = 2;
+    y2 = 0;
+    switch(moveInfoType){
+        case MOVE_INFO_DESCRIPTION:
+            if(battleTheme == THEME_DARK){
+                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            }
+            else if(battleTheme == THEME_LIGHT){
+                BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+
+            }
+            else if(battleTheme == THEME_DPPT){
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            }
+            else if(battleTheme == THEME_CLASSIC){
+                BlitBitmapToWindow(windowId, sTheme_Classic_Title_Move_Description, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            }
+        break;
+        case MOVE_INFO_POWER_ACC_PRIO_TYPE:
+        case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
+            if(battleTheme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Move_Info, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Title_Move_Info, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Move_Info, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_CLASSIC)
+                BlitBitmapToWindow(windowId, sTheme_Classic_Title_Move_Info, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        break;
+        case MOVE_SPEED_CALCULATION:
+            if(battleTheme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Speed_Order, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Title_Speed_Order, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Speed_Order, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_CLASSIC)
+                BlitBitmapToWindow(windowId, sTheme_Classic_Title_Speed_Order, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        break;
+        case MOVE_INFO_DAMAGE_CALCULATION:
+            if(battleTheme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if(battleTheme == THEME_CLASSIC)
+                BlitBitmapToWindow(windowId, sTheme_Classic_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        break;
+    }
+
+    //Target
+    switch(battleTheme){
+        case THEME_DARK:
+            if(IsDoubleBattle()){
+                if(target == 3){
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Target_0, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Target_1, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+                else if(target == 1){
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Target_1, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Dark_Target_0, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+            }
+        break;
+        case THEME_LIGHT:
+            if(IsDoubleBattle()){
+                if(target == 3){
+                    BlitBitmapToWindow(windowId, sTheme_Light_Target_0, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Light_Target_1, (x * 8) + x2 + 64 + 4, (y * 8) + y2, 8, 8);
+                }
+                else if(target == 1){
+                    BlitBitmapToWindow(windowId, sTheme_Light_Target_1, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Light_Target_0, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+            }
+        break;
+        case THEME_DPPT:
+            if(IsDoubleBattle()){
+                if(target == 3){
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Target_0, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Target_1, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+                else if(target == 1){
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Target_1, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_DPPt_Target_0, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+            }
+        break;
+        case THEME_CLASSIC:
+            if(IsDoubleBattle()){
+                if(target == 3){
+                    BlitBitmapToWindow(windowId, sTheme_Classic_Target_0, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Classic_Target_1, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+                else if(target == 1){
+                    BlitBitmapToWindow(windowId, sTheme_Classic_Target_1, (x * 8) + x2 + 64, (y * 8) + y2, 8, 8);
+                    BlitBitmapToWindow(windowId, sTheme_Classic_Target_0, (x * 8) + x2 + 64 + 8, (y * 8) + y2, 8, 8);
+                }
+            }
+        break;
+    }
+        
+    //Move Description
+    x  = 2;
+    y  = 0;
+    y2 = 4;
+    x2 = 0;
+
+    move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
+    movePower = gBattleMoves[move].power;
+    isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
+    moveType  = gBattleMoves[move].type;
+    SetTypeBeforeUsingMove(move, gActiveBattler);
+    GET_MOVE_TYPE(move, moveType);
+    x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION; //Default
+
+    if(gBattleMoves[move].type != gBattleMoves[move].type2 && gBattleMoves[move].type2 != TYPE_NORMAL && gBattleMoves[move].type2 != TYPE_NONE)
+        isDoubleTypedMove = TRUE;
+
+    switch(moveInfoType){
+        case MOVE_INFO_DESCRIPTION:
+            StringCopy(gStringVar4, gMoveFourLineDescriptionPointers[move - 1]);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+        case MOVE_INFO_POWER_ACC_PRIO_TYPE:
+            if(isDoubleTypedMove)
+                extraX = 8;
+            else
+                extraX = 0;
+            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
+            //Move Power
+            if(!isStatusMove)
+                ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);
+            else
+                StringCopy(gStringVar1, sText_Target_Nothing);
+
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Power);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF) + extraX;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+            //Split
+            x2 = MOVE_SPLIT_X;
+            y2 = y2 + 4;
+
+            switch(gBattleMoves[move].split){
+                case SPLIT_PHYSICAL:
+                    if(battleTheme == THEME_DARK)
+                        BlitBitmapToWindow(windowId, sTheme_Dark_Split_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_LIGHT)
+                        BlitBitmapToWindow(windowId, sTheme_Light_Split_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_DPPT)
+                        BlitBitmapToWindow(windowId, sTheme_DPPt_Split_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if (battleTheme == THEME_CLASSIC)
+                        BlitBitmapToWindow(windowId, sTheme_Classic_Split_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else
+                        BlitBitmapToWindow(windowId, sSplit_Physical, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                break;
+                case SPLIT_SPECIAL:
+                    if(battleTheme == THEME_DARK)
+                        BlitBitmapToWindow(windowId, sTheme_Dark_Split_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_LIGHT)
+                        BlitBitmapToWindow(windowId, sTheme_Light_Split_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_DPPT)
+                        BlitBitmapToWindow(windowId, sTheme_DPPt_Split_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if (battleTheme == THEME_CLASSIC)
+                        BlitBitmapToWindow(windowId, sTheme_Classic_Split_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else
+                        BlitBitmapToWindow(windowId, sSplit_Special, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                break;
+                case SPLIT_STATUS:
+                    if(battleTheme == THEME_DARK)
+                        BlitBitmapToWindow(windowId, sTheme_Dark_Split_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_LIGHT)
+                        BlitBitmapToWindow(windowId, sTheme_Light_Split_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if(battleTheme == THEME_DPPT)
+                        BlitBitmapToWindow(windowId, sTheme_DPPt_Split_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else if (battleTheme == THEME_CLASSIC)
+                        BlitBitmapToWindow(windowId, sTheme_Classic_Split_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                    else
+                        BlitBitmapToWindow(windowId, sSplit_Status, (x * 8) + x2, (y * 8) + y2, 16, 8);
+                break;
+            }
+            y2 = y2 - 4;
+
+            y++;
+            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
+
+            //Move Accuracy
+            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].accuracy, STR_CONV_MODE_LEFT_ALIGN, 3);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Accuracy);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF) + extraX;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+            //Move Priority
+            ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF) + extraX;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Priority);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+            //Move Type
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Type_Null);
+            StringCopy(gStringVar1, gTypeNames[moveType]);
+            //Stab
+            if(IS_BATTLER_OF_TYPE(gActiveBattler, moveType))
+                StringCopy(gStringVar2, gStabIcon);
+            else
+                StringCopy(gStringVar2, gNoStabIcon);
+
+            effectiveness = GetMoveTypeEffectiveness(move, target, gActiveBattler);
+            
+            switch(battleTheme){
+                case THEME_DARK:
+                    if(effectiveness == MOVE_EFFECTIVENESS_NONE)
+                        fontColor = FONT_GRAY_2;
+                    else if(effectiveness == MOVE_EFFECTIVENESS_DOUBLE)
+                        fontColor = FONT_GREEN;
+                    else if (effectiveness == MOVE_EFFECTIVENESS_HALF)
+                        fontColor = FONT_RED;
+                    else
+                        fontColor = FONT_WHITE_2;
+                break;
+                case THEME_LIGHT:
+                case THEME_DPPT:
+                case THEME_CLASSIC:
+                    if(effectiveness == MOVE_EFFECTIVENESS_NONE)
+                        fontColor = FONT_GRAY;
+                    else if(effectiveness == MOVE_EFFECTIVENESS_DOUBLE)
+                        fontColor = FONT_GREEN;
+                    else if (effectiveness == MOVE_EFFECTIVENESS_HALF)
+                        fontColor = FONT_RED;
+                    else
+                        fontColor = FONT_BLACK_2;
+                break;
+            }
+            
+            if(isDoubleTypedMove){
+                StringCopy(gStringVar3, gTypeNames[gBattleMoves[move].type2]);
+                StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type_Double);
+            }
+            else{
+                StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type);
+            }
+
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar4, 0xFF) + extraX;
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+        break;
+        case MOVE_INFO_POWER_ACC_PRIO_TYPE_2:
+            x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
+
+            //Move Power
+            movePower = CalcMoveBasePowerAfterModifiers(move, 0, gActiveBattler, target, moveType, FALSE);
+            if(!isStatusMove)
+                ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);
+            else
+                StringCopy(gStringVar1, sText_Target_Nothing);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_True_Power);
+
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Boost Type
+            if((gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Fist);
+            else if((gBattleMoves[move].flags & FLAG_STRIKER_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Kick);
+            else if((gBattleMoves[move].flags & FLAG_BONE_BASED))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Bone);
+            else if((gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Cannon);
+            else if((gBattleMoves[move].flags & FLAG_DANCE))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Dance);
+            else if((gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Slash);
+            else if((gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Bite);
+            else if (gBattleMoves[move].airBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Air);
+            else if (gBattleMoves[move].hornBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Horn);
+            else if (gBattleMoves[move].hammerBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Hammer);
+            else if (gBattleMoves[move].arrowBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Arrow);
+            else if (gBattleMoves[move].throwingBased)
+                StringCopy(gStringVar1, sText_Effect_Boost_Type_Throw);
+            else if((gBattleMoves[move].flags & FLAG_RECKLESS_BOOST))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Reckless);
+            else
+			    StringCopy(gStringVar1, sText_Target_Nothing);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Boost);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Based 
+            if((gBattleMoves[move].flags & FLAG_WEATHER_BASED))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Weather);
+            else if((gBattleMoves[move].flags & FLAG_FIELD_BASED))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Field);
+            else if((gBattleMoves[move].flags & FLAG_BONE_BASED))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Bone);
+            else if((gBattleMoves[move].flags & FLAG_SOUND))
+			    StringCopy(gStringVar1, sText_Effect_Boost_Type_Sound);
+            else
+			    StringCopy(gStringVar1, sText_Target_Nothing);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_Effect_Based_Type);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Contact
+            if(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+                StringCopy(gStringVar1, sText_Yes);
+            else
+                StringCopy(gStringVar1, sText_No);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Contact);
+            offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar1, 0xFF);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+            y++;
+
+            //Chance
+            /*ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[move].secondaryEffectChance, STR_CONV_MODE_LEFT_ALIGN, 3);
+            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Chance);
+            AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+            y++;*/
+        break;
+        case MOVE_SPEED_CALCULATION:{
+            u16 battlertoCheck, monSpeed;
+            u8 sBattlerByTurnOrder[gBattlersCount];
+            u8 numMons = 2;
+
+            for (i = 0; i < gBattlersCount; i++)
+                sBattlerByTurnOrder[i] = i;
+
+            for (i = 0; i < gBattlersCount - 1; i++)
+            {
+                for (j = i + 1; j < gBattlersCount; j++)
+                {
+                    if (GetWhoStrikesFirst(sBattlerByTurnOrder[i], sBattlerByTurnOrder[j], TRUE) != 0)
+                    {
+                        u8 temp = sBattlerByTurnOrder[i];
+                        sBattlerByTurnOrder[i] = sBattlerByTurnOrder[j];
+                        sBattlerByTurnOrder[j] = temp;
+                    }
+                }
+            }
+
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                battlertoCheck = sBattlerByTurnOrder[i];
+                if(IsBattlerAlive(battlertoCheck)){
+                    StringCopy(gStringVar1, gSpeciesNames[gBattleMons[battlertoCheck].species]);
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar1);
+
+                    monSpeed = gBattleMons[battlertoCheck].speed;
+                    ConvertIntToDecimalStringN(gStringVar1, monSpeed, STR_CONV_MODE_LEFT_ALIGN, 3);
+                    if(HasPriorityMove(battlertoCheck))
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_CalculationPriority);
+                    else
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_Calculation);
+
+                    offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar4, 0xFF);
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+                    y++;
+                }
+            }
+        }
+        break;
+        case MOVE_INFO_DAMAGE_CALCULATION:
+            if(!isStatusMove && move != MOVE_NONE){
+                s16 percentage;
+                u16 targetCurrentHp = gBattleMons[target].hp;
+                u16 minDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR);
+                u16 maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR);
+                u8 moveIndex = gMoveSelectionCursor[gActiveBattler];
+                x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
+                StringCopy(gStringVar3, gSpeciesNames[gBattleMons[target].species]);
+
+                if(targetCurrentHp > minDamage){
+                    //Min Damage Percentage
+                    percentage = (minDamage * MAX_PERCENT_2) / targetCurrentHp; 
+                    percentage = (percentage / MAX_PERCENT);
+                    if(percentage >= MAX_PERCENT)
+                        percentage = MAX_PERCENT;
+                    ConvertIntToDecimalStringN(gStringVar1, percentage, STR_CONV_MODE_LEFT_ALIGN, 3);
+
+
+                    //Max Damage Percentage
+                    percentage = (maxDamage * MAX_PERCENT_2)/ targetCurrentHp; 
+                    percentage = (percentage / MAX_PERCENT);
+                    if(percentage > MAX_PERCENT)
+                        percentage = MAX_PERCENT;
+                    ConvertIntToDecimalStringN(gStringVar2, percentage, STR_CONV_MODE_LEFT_ALIGN, 3);
+
+                    StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone);
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+                }
+                else{
+                    if(fontColor == FONT_WHITE_2)
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone_Guaranteed_KO_White);
+                    else
+                        StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone_Guaranteed_KO);
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+                }
+            }
+            else{
+                AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_DamageCalculation_Status);
+            }
+        break;
+    }
+
+    PutWindowTilemap(windowId);
+    CopyWindowToVram(windowId, 3);
+}
+
+enum{
+    BATTLE_MENU_NONE,
+    BATTLE_MENU_CHOSE_ACTION,
+    BATTLE_MENU_CHOSE_MOVE,
+    NUM_BATTLE_MENUS
+};
+
+void ReshowNewBattleMenuAfterMenu(void){
+    if(VarGet(VAR_TEMP_SPECIAL_VAR) != 0xFF)
+        gActiveBattler = VarGet(VAR_TEMP_SPECIAL_VAR);
+    LoadBattleTextboxAndBackground();
+    gBattle_BG0_Y = 160;
+    VarSet(VAR_TEMP_SPECIAL_VAR, 0xFF);
+    //SetControllerToPlayer();
+
+    PrintBattleWindow_ActionPromt();
+}
+
+#define ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN FALSE // No idea what to call this constant
+
+static void HandleInputChooseActionPlayer(void)
+{
+    u16 itemId = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
+    bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
+    u8 shortcutButton = gSaveBlock2Ptr->shortcutButton;
+    u8 value = 0;
+
+    /*MgbaOpen();
+    MgbaPrintf(MGBA_LOG_WARN, "HandleInputChooseActionPlayer VAR_TEMP_SPECIAL_VAR: %d gActiveBattler: %d", VarGet(VAR_TEMP_SPECIAL_VAR), gActiveBattler);
+    MgbaClose();*/
+
+    DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
+    DoBounceEffect(gActiveBattler, BOUNCE_MON,       7, 1);
+
+    if (JOY_REPEAT(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        switch (gActionSelectionCursor[gActiveBattler])
+        {
+            case BATTLE_ACTION_FIGHT:
+                PlaySE(SE_SELECT);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_USE_MOVE, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_DEBUG:
+                if (B_ENABLE_DEBUG)
+                {
+                    PlaySE(SE_SELECT);
+                    gBattle_BG1_Y = 160;
+                    BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
+                    PlayerBufferExecCompleted();
+                }
+                else{
+                    PlaySE(SE_BOO);
+                }
+            break;
+            case BATTLE_ACTION_POKEMON:
+                PlaySE(SE_SELECT);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_SWITCH, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_RUN:
+                PlaySE(SE_SELECT);
+                gBattle_BG1_Y = 160;
+                BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_INFO:
+                PlaySE(SE_SELECT);
+                FreeAllWindowBuffers();
+                BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_SHOW_BATTLE_INFO, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+        }
+    }
+    else if (JOY_NEW(R_BUTTON))
+    {
+        if(!(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL)) && CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET))
+        {
+            gBattle_BG1_Y = 160;
+            gLastThrownBall = gLastUsedItem = ITEM_POKE_BALL;
+            BtlController_EmitTwoReturnValues(1, B_ACTION_THROW_BALL, 0);
+            PlayerBufferExecCompleted();
+        }
+    }
+    else if (JOY_NEW(L_BUTTON))
+    {
+        switch (shortcutButton)
+        {
+            case BATTLE_ACTION_FIGHT:
+                PlaySE(SE_SELECT);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_USE_MOVE, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_POKEMON:
+                PlaySE(SE_SELECT);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_SWITCH, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_RUN:
+                PlaySE(SE_SELECT);
+                gBattle_BG1_Y = 160;
+                BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_INFO:
+                PlaySE(SE_SELECT);
+                FreeAllWindowBuffers();
+                BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
+                BtlController_EmitTwoReturnValues(1, B_ACTION_SHOW_BATTLE_INFO, 0);
+                PrintBattleWindow_ActionPromt();
+                PlayerBufferExecCompleted();
+            break;
+            case BATTLE_ACTION_DEBUG:
+                if (B_ENABLE_DEBUG)
+                {
+                    PlaySE(SE_SELECT);
+                    gBattle_BG1_Y = 160;
+                    BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
+                    PlayerBufferExecCompleted();
+                }
+            break;
+        }
+    }
+    else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
+    {
+        if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
+         && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_RIGHT
+         && !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)])
+         && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
+        {
+            if (gBattleResources->bufferA[gActiveBattler][1] == B_ACTION_USE_ITEM)
+            {
+                   // Add item to bag if it is a ball
+                   if (itemId <= LAST_BALL_INDEX)
+                       AddBagItem(itemId, 1);
+                else
+                    return;
+            }
+            PlaySE(SE_SELECT);
+            BtlController_EmitTwoReturnValues(1, B_ACTION_CANCEL_PARTNER, 0);
+            PlayerBufferExecCompleted();
+        }
+    }
+    else if (JOY_NEW(DPAD_RIGHT))
+    {
+        PlaySE(SE_SELECT);
+        switch(gActionSelectionCursor[gActiveBattler]){
+            case BATTLE_ACTION_FIGHT:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_INFO;
+            break;
+            case BATTLE_ACTION_POKEMON:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_RUN;
+            break;
+            case BATTLE_ACTION_INFO:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_FIGHT;
+            break;
+            case BATTLE_ACTION_RUN:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_POKEMON;
+            break;
+        }
+        PrintBattleWindow_ActionPromt();
+    }
+    else if (JOY_NEW(DPAD_LEFT))
+    {
+        PlaySE(SE_SELECT);
+        switch(gActionSelectionCursor[gActiveBattler]){
+            case BATTLE_ACTION_FIGHT:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_INFO;
+            break;
+            case BATTLE_ACTION_POKEMON:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_RUN;
+            break;
+            case BATTLE_ACTION_INFO:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_FIGHT;
+            break;
+            case BATTLE_ACTION_RUN:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_POKEMON;
+            break;
+        }
+        PrintBattleWindow_ActionPromt();
+    }
+    else if (JOY_NEW(DPAD_UP))
+    {
+        PlaySE(SE_SELECT);
+        switch(gActionSelectionCursor[gActiveBattler]){
+            case BATTLE_ACTION_FIGHT:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_POKEMON;
+            break;
+            case BATTLE_ACTION_POKEMON:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_FIGHT;
+            break;
+            case BATTLE_ACTION_INFO:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_RUN;
+            break;
+            case BATTLE_ACTION_RUN:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_INFO;
+            break;
+        }
+        PrintBattleWindow_ActionPromt();
+    }
+    else if (JOY_NEW(DPAD_DOWN))
+    {
+        PlaySE(SE_SELECT);
+        switch(gActionSelectionCursor[gActiveBattler]){
+            case BATTLE_ACTION_FIGHT:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_POKEMON;
+            break;
+            case BATTLE_ACTION_POKEMON:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_FIGHT;
+            break;
+            case BATTLE_ACTION_INFO:
+                gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_RUN;
+            break;
+            case BATTLE_ACTION_RUN:
+                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                    gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_INFO;
+            break;
+        }
+        PrintBattleWindow_ActionPromt();
+    }
+    else if (JOY_NEW(START_BUTTON))
+    {
+        SwapHpBarsWithHpText();
+    }
+    else if (B_ENABLE_DEBUG && gMain.newKeys & SELECT_BUTTON)
+    {
+        BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
+        PlayerBufferExecCompleted();
+    }
 }
 
 void SetControllerToPlayer(void)
@@ -248,151 +2112,6 @@ static void CompleteOnBankSpritePosX_0(void)
         PlayerBufferExecCompleted();
 }
 
-static void HandleInputChooseAction(void)
-{
-    u8 value = 0;    
-    
-    if (VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 1)
-    {
-        PlayerHandleChooseAction();
-        value = 0;
-        VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
-    }
-    
-    if (VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) != 2)
-    {
-        u16 itemId = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
-        DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
-        DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
-        
-        if (JOY_REPEAT(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
-            gPlayerDpadHoldFrames++;
-        else
-            gPlayerDpadHoldFrames = 0;
-
-        
-        if (JOY_NEW(A_BUTTON) && 
-            gActionSelectionCursor[gActiveBattler] == 1 &&
-            gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        {
-            value = 2;
-            VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
-            FreeAllWindowBuffers();
-            UI_Battle_Menu_Init(CB2_SetUpReshowBattleScreenAfterMenu);
-            //ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, gEnemyParty, gBattlerPartyIndexes[1], CalculateEnemyPartyCount() - 1, CB2_SetUpReshowBattleScreenAfterMenu);
-        }
-        else if (JOY_NEW(A_BUTTON))
-        {
-            PlaySE(SE_SELECT);
-            TryHideLastUsedBall();
-
-            switch (gActionSelectionCursor[gActiveBattler])
-            {
-            case 0:
-                BtlController_EmitTwoReturnValues(1, B_ACTION_USE_MOVE, 0);
-                break;
-            case 1:
-                BtlController_EmitTwoReturnValues(1, B_ACTION_USE_ITEM, 0);
-                break;
-            case 2:
-                BtlController_EmitTwoReturnValues(1, B_ACTION_SWITCH, 0);
-                break;
-            case 3:
-                BtlController_EmitTwoReturnValues(1, B_ACTION_RUN, 0);
-                break;
-            }
-            PlayerBufferExecCompleted();
-        }
-        else if (JOY_NEW(L_BUTTON) && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
-        {
-            value = 2;
-            VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
-            BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 0x10, RGB_BLACK);
-            FreeAllWindowBuffers();
-            ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, gEnemyParty, gBattlerPartyIndexes[1], CalculateEnemyPartyCount() - 1, CB2_SetUpReshowBattleScreenAfterMenu);
-        }
-        else if (JOY_NEW(DPAD_LEFT))
-        {
-            if (gActionSelectionCursor[gActiveBattler] & 1) // if is B_ACTION_USE_ITEM or B_ACTION_RUN
-            {
-                PlaySE(SE_SELECT);
-                ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
-                gActionSelectionCursor[gActiveBattler] ^= 1;
-                ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
-            }
-        }
-        else if (JOY_NEW(DPAD_RIGHT))
-        {
-            if (!(gActionSelectionCursor[gActiveBattler] & 1)) // if is B_ACTION_USE_MOVE or B_ACTION_SWITCH
-            {
-                PlaySE(SE_SELECT);
-                ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
-                gActionSelectionCursor[gActiveBattler] ^= 1;
-                ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
-            }
-        }
-        else if (JOY_NEW(DPAD_UP))
-        {
-            if (gActionSelectionCursor[gActiveBattler] & 2) // if is B_ACTION_SWITCH or B_ACTION_RUN
-            {
-                PlaySE(SE_SELECT);
-                ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
-                gActionSelectionCursor[gActiveBattler] ^= 2;
-                ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
-            }
-        }
-        else if (JOY_NEW(DPAD_DOWN))
-        {
-            if (!(gActionSelectionCursor[gActiveBattler] & 2)) // if is B_ACTION_USE_MOVE or B_ACTION_USE_ITEM
-            {
-                PlaySE(SE_SELECT);
-                ActionSelectionDestroyCursorAt(gActionSelectionCursor[gActiveBattler]);
-                gActionSelectionCursor[gActiveBattler] ^= 2;
-                ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
-            }
-        }
-        else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
-        {
-            if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
-             && GetBattlerPosition(gActiveBattler) == B_POSITION_PLAYER_RIGHT
-             && !(gAbsentBattlerFlags & gBitTable[GetBattlerAtPosition(B_POSITION_PLAYER_LEFT)])
-             && !(gBattleTypeFlags & BATTLE_TYPE_MULTI))
-            {
-                if (gBattleResources->bufferA[gActiveBattler][1] == B_ACTION_USE_ITEM)
-                {
-                    // Add item to bag if it is a ball
-                    if (itemId <= LAST_BALL_INDEX)
-                        AddBagItem(itemId, 1);
-                    else
-                        return;
-                }
-                PlaySE(SE_SELECT);
-                BtlController_EmitTwoReturnValues(1, B_ACTION_CANCEL_PARTNER, 0);
-                PlayerBufferExecCompleted();
-            }
-        }
-        else if (JOY_NEW(START_BUTTON))
-        {
-            SwapHpBarsWithHpText();
-        }
-        else if (B_ENABLE_DEBUG && gMain.newKeys & SELECT_BUTTON)
-        {
-            BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
-            PlayerBufferExecCompleted();
-        }
-        #if B_LAST_USED_BALL == TRUE
-        else if (JOY_NEW(B_LAST_USED_BALL_BUTTON) && CanThrowLastUsedBall())
-        {
-            PlaySE(SE_SELECT);
-            TryHideLastUsedBall();
-            BtlController_EmitTwoReturnValues(1, B_ACTION_THROW_BALL, 0);
-            PlayerBufferExecCompleted();
-        }
-        #endif
-    }
-}
-
 static void UnusedEndBounceEffect(void)
 {
     EndBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX);
@@ -405,6 +2124,7 @@ static void HandleInputChooseTarget(void)
     s32 i;
     static const u8 identities[MAX_BATTLERS_COUNT] = {B_POSITION_PLAYER_LEFT, B_POSITION_PLAYER_RIGHT, B_POSITION_OPPONENT_RIGHT, B_POSITION_OPPONENT_LEFT};
     u16 move = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_MOVE1 + gMoveSelectionCursor[gActiveBattler]);
+    u8 windowMode = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
 
     DoBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX, 15, 1);
     for (i = 0; i < gBattlersCount; i++)
@@ -427,13 +2147,15 @@ static void HandleInputChooseTarget(void)
         else
             BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
         EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
-        TryHideLastUsedBall();
-        HideMegaTriggerSprite();
+        //TryHideLastUsedBall();
+        //TryToHideEnemyInfoWindow();
+        //HideMegaTriggerSprite();
         PlayerBufferExecCompleted();
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
         PlaySE(SE_SELECT);
+        PrintBattleWindow_MoveSelection();
         gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_HideAsMoveTarget;
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
@@ -489,6 +2211,7 @@ static void HandleInputChooseTarget(void)
             } while (i == 0);
         }
         gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_ShowAsMoveTarget;
+        PrintBattleWindow_MoveSelection();
     }
     else if (JOY_NEW(DPAD_RIGHT | DPAD_DOWN))
     {
@@ -540,6 +2263,25 @@ static void HandleInputChooseTarget(void)
         }
 
         gSprites[gBattlerSpriteIds[gMultiUsePlayerCursor]].callback = SpriteCb_ShowAsMoveTarget;
+        PrintBattleWindow_MoveSelection();
+    }
+    else if(JOY_NEW(R_BUTTON))
+    {
+        if(windowMode == 0)
+            windowMode = NUM_MOVE_INFO_TYPES - 1;
+        else
+            windowMode--;
+        VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
+        PrintBattleWindow_MoveSelection();
+    }
+    else if(JOY_NEW(L_BUTTON))
+    {
+        if(windowMode == NUM_MOVE_INFO_TYPES - 1)
+            windowMode = 0;
+        else
+            windowMode++;
+        VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
+        PrintBattleWindow_MoveSelection();
     }
 }
 
@@ -591,6 +2333,7 @@ static void HandleInputShowEntireFieldTargets(void)
     {
         PlaySE(SE_SELECT);
         HideAllTargets();
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
         DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
@@ -612,14 +2355,16 @@ static void HandleInputShowTargets(void)
             BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | RET_MEGA_EVOLUTION | (gMultiUsePlayerCursor << 8));
         else
             BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
-        HideMegaTriggerSprite();
-        TryHideLastUsedBall();
+        //HideMegaTriggerSprite();
+        //TryHideLastUsedBall();
+        TryToHideEnemyInfoWindow();
         PlayerBufferExecCompleted();
     }
     else if (gMain.newKeys & B_BUTTON || gPlayerDpadHoldFrames > 59)
     {
         PlaySE(SE_SELECT);
         HideShownTargets();
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
         DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
@@ -634,21 +2379,25 @@ static void TryShowAsTarget(u32 battlerId)
         gSprites[gBattlerSpriteIds[battlerId]].callback = SpriteCb_ShowAsMoveTarget;
     }
 }
+static u8 getNumMoves(u8 battler){
+    u8 i, numMoves = 0;
+    for(i = 0; i < MAX_MON_MOVES; i++){
+        if(gBattleMons[battler].moves[i] != MOVE_NONE)
+            numMoves++;
+    }
+    return numMoves;
+
+}
 
 static void HandleInputChooseMove(void)
 {
     u16 moveTarget;
     u32 canSelectTarget = 0;
+    u8 windowMode = VarGet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW);
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
 
-    if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
-        gPlayerDpadHoldFrames++;
-    else
-        gPlayerDpadHoldFrames = 0;
-
-    if (gMain.newKeys & A_BUTTON)
+    if(gMain.newKeys & A_BUTTON)
     {
-        TryToHideMoveInfoWindow();
         FlagClear(FLAG_SYS_MOVE_INFO);
         PlaySE(SE_SELECT);
         if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_CURSE)
@@ -721,7 +2470,6 @@ static void HandleInputChooseMove(void)
             else
                 BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
             HideMegaTriggerSprite();
-            TryHideLastUsedBall();
             PlayerBufferExecCompleted();
             break;
         case 1:
@@ -743,6 +2491,8 @@ static void HandleInputChooseMove(void)
             gBattlerControllerFuncs[gActiveBattler] = HandleInputShowEntireFieldTargets;
             break;
         }
+        
+        PrintBattleWindow_MoveSelection();
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
@@ -752,7 +2502,69 @@ static void HandleInputChooseMove(void)
         HideMegaTriggerSprite();
         PlayerBufferExecCompleted();
         FlagClear(FLAG_SYS_MOVE_INFO);
-        TryToHideMoveInfoWindow();
+    }
+    else if (JOY_NEW(DPAD_UP))
+    {
+        if(gMoveSelectionCursor[gActiveBattler] != 0)
+            gMoveSelectionCursor[gActiveBattler]--;
+        else
+            gMoveSelectionCursor[gActiveBattler] = getNumMoves(gActiveBattler) - 1;
+        PlaySE(SE_SELECT);
+        PrintBattleWindow_MoveSelection();
+    }
+    else if (JOY_NEW(DPAD_DOWN))
+    {
+        if(gMoveSelectionCursor[gActiveBattler] < getNumMoves(gActiveBattler) - 1)
+            gMoveSelectionCursor[gActiveBattler]++;
+        else
+            gMoveSelectionCursor[gActiveBattler] = 0;
+        PlaySE(SE_SELECT);
+        PrintBattleWindow_MoveSelection();
+    }
+    else if (JOY_NEW(R_BUTTON) || JOY_NEW(DPAD_RIGHT))
+    {
+        if(windowMode >= NUM_MOVE_INFO_TYPES - 1)
+            windowMode = 0;
+        else
+            windowMode++;
+        VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
+        PrintBattleWindow_MoveSelection();
+    }
+    else if (JOY_NEW(L_BUTTON) || JOY_NEW(DPAD_LEFT))
+    {
+        if(windowMode == 0)
+            windowMode = NUM_MOVE_INFO_TYPES - 1;
+        else
+            windowMode--;
+        VarSet(VAR_BATTLE_CONTROLLER_MOVE_WINDOW, windowMode);
+        PrintBattleWindow_MoveSelection();
+    }
+    else if (gMain.newKeys & START_BUTTON)
+    {
+        if (CanMegaEvolve(gActiveBattler))
+        {
+            gBattleStruct->mega.playerSelect ^= 1;
+            ChangeMegaTriggerSprite(gBattleStruct->mega.triggerSpriteId, gBattleStruct->mega.playerSelect);
+            PlaySE(SE_SELECT);
+        }
+    }
+
+    /*
+    if (gMain.heldKeys & DPAD_ANY && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
+        gPlayerDpadHoldFrames++;
+    else
+        gPlayerDpadHoldFrames = 0;
+
+    if (gMain.newKeys & A_BUTTON)
+    
+    else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
+    {
+        PlaySE(SE_SELECT);
+        gBattleStruct->mega.playerSelect = FALSE;
+        BtlController_EmitTwoReturnValues(1, 10, 0xFFFF);
+        HideMegaTriggerSprite();
+        PlayerBufferExecCompleted();
+        FlagClear(FLAG_SYS_MOVE_INFO);
     }
     else if (JOY_NEW(L_BUTTON) || gPlayerDpadHoldFrames > 59)
     {
@@ -831,7 +2643,7 @@ static void HandleInputChooseMove(void)
                 gMultiUsePlayerCursor = gMoveSelectionCursor[gActiveBattler] + 1;
 
             MoveSelectionCreateCursorAt(gMultiUsePlayerCursor, 27);
-            BattlePutTextOnWindow(gText_BattleSwitchWhich, 0xB);
+            BattlePutTextOnWindow(gText_BattleSwitchWhich, B_WIN_SWITCH_PROMPT);
             gBattlerControllerFuncs[gActiveBattler] = HandleMoveSwitching;
         }
     }
@@ -843,7 +2655,7 @@ static void HandleInputChooseMove(void)
             ChangeMegaTriggerSprite(gBattleStruct->mega.triggerSpriteId, gBattleStruct->mega.playerSelect);
             PlaySE(SE_SELECT);
         }
-    }
+    }*/
 }
 
 static u32 HandleMoveInputUnused(void)
@@ -924,10 +2736,10 @@ static void HandleMoveSwitching(void)
             moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]] = moveInfo->maxPp[gMultiUsePlayerCursor];
             moveInfo->maxPp[gMultiUsePlayerCursor] = i;
 
-            if (gDisableStructs[gActiveBattler].mimickedMoves & gBitTable[gMoveSelectionCursor[gActiveBattler]])
+            if (gVolatileStructs[gActiveBattler].mimickedMoves & gBitTable[gMoveSelectionCursor[gActiveBattler]])
             {
-                gDisableStructs[gActiveBattler].mimickedMoves &= (~gBitTable[gMoveSelectionCursor[gActiveBattler]]);
-                gDisableStructs[gActiveBattler].mimickedMoves |= gBitTable[gMultiUsePlayerCursor];
+                gVolatileStructs[gActiveBattler].mimickedMoves &= (~gBitTable[gMoveSelectionCursor[gActiveBattler]]);
+                gVolatileStructs[gActiveBattler].mimickedMoves |= gBitTable[gMultiUsePlayerCursor];
             }
 
             MoveSelectionDisplayMoveNames();
@@ -989,6 +2801,7 @@ static void HandleMoveSwitching(void)
             }
         }
 
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         gMoveSelectionCursor[gActiveBattler] = gMultiUsePlayerCursor;
         MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
@@ -1001,6 +2814,7 @@ static void HandleMoveSwitching(void)
         PlaySE(SE_SELECT);
         MoveSelectionDestroyCursorAt(gMultiUsePlayerCursor);
         MoveSelectionCreateCursorAt(gMoveSelectionCursor[gActiveBattler], 0);
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
         MoveSelectionDisplayPpString();
         MoveSelectionDisplayPpNumber();
@@ -1662,6 +3476,7 @@ static void DoHitAnimBlinkSpriteEffect(void)
 
 static void PlayerHandleYesNoInput(void)
 {
+    
     if (JOY_NEW(DPAD_UP) && gMultiUsePlayerCursor != 0)
     {
         PlaySE(SE_SELECT);
@@ -1698,41 +3513,17 @@ static void PlayerHandleYesNoInput(void)
 
 static void MoveSelectionDisplayMoveNames(void)
 {
-    s32 i;
-    struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
-    gNumberOfMovesToChoose = 0;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        MoveSelectionDestroyCursorAt(i);
-        StringCopy(gDisplayedStringBattle, gMoveNames[moveInfo->moves[i]]);
-        BattlePutTextOnWindow(gDisplayedStringBattle, i + 3);
-        if (moveInfo->moves[i] != MOVE_NONE)
-            gNumberOfMovesToChoose++;
-    }
 }
 
 static void MoveSelectionDisplayPpString(void)
 {
-    StringCopy(gDisplayedStringBattle, gText_MoveInterfacePP);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 7);
+
 }
 
 static void MoveSelectionDisplayPpNumber(void)
 {
-    u8 *txtPtr;
-    struct ChooseMoveStruct *moveInfo;
 
-    if (gBattleResources->bufferA[gActiveBattler][2] == TRUE) // check if we didn't want to display pp number
-        return;
-
-    SetPpNumbersPaletteInMoveSelection();
-    moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
-    txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
-    *(txtPtr)++ = CHAR_SLASH;
-    ConvertIntToDecimalStringN(txtPtr, moveInfo->maxPp[gMoveSelectionCursor[gActiveBattler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
-
-    BattlePutTextOnWindow(gDisplayedStringBattle, 9);
 }
 
 static void MulModifier(u16 *modifier, u16 val)
@@ -1812,6 +3603,10 @@ u8 TypeEffectiveness(struct ChooseMoveStruct *moveInfo, u8 targetId)
 {
 	bool8 isInverse = (B_FLAG_INVERSE_BATTLE != 0 && FlagGet(B_FLAG_INVERSE_BATTLE)) ? TRUE : FALSE;
     u16 move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
+
+    if(IsInverseRoomActive()){
+        isInverse = !isInverse;
+    }
 	
 	if (gBattleMoves[move].power == 0)
 		return 10;
@@ -1824,29 +3619,6 @@ u8 TypeEffectiveness(struct ChooseMoveStruct *moveInfo, u8 targetId)
 			u16 mod2 = sTypeEffectivenessTable[gBattleMoves[move].type][gBattleMons[targetId].type2];
 			MulModifier(&mod, mod2);
 		}
-
-		if (gBattleMoves[move].effect == EFFECT_TWO_TYPED_MOVE)
-		{
-			u16 mod3 = sTypeEffectivenessTable[gBattleMoves[move].argument][gBattleMons[targetId].type1];
-			MulModifier(&mod, mod3);
-
-			if (gBattleMons[targetId].type2 != gBattleMons[targetId].type1)
-			{
-				u16 mod4 = sTypeEffectivenessTable[gBattleMoves[move].argument][gBattleMons[targetId].type2];
-				MulModifier(&mod, mod4);
-			}
-		}
-
-        if(gBattleMoves[move].type2 != TYPE_NORMAL && gBattleMoves[move].type2 < NUMBER_OF_MON_TYPES){
-			u16 mod3 = sTypeEffectivenessTable[gBattleMoves[move].type2][gBattleMons[targetId].type1];
-			MulModifier(&mod, mod3);
-
-			if (gBattleMons[targetId].type2 != gBattleMons[targetId].type1)
-			{
-				u16 mod4 = sTypeEffectivenessTable[gBattleMoves[move].type2][gBattleMons[targetId].type2];
-				MulModifier(&mod, mod4);
-            }
-        }
 
 		// 10 - normal effectiveness
 		// 24 - super effective
@@ -1876,79 +3648,85 @@ u8 TypeEffectiveness(struct ChooseMoveStruct *moveInfo, u8 targetId)
 	}
 }
 
-enum{
-    MOVE_EFFECTIVENESS_NONE,
-    MOVE_EFFECTIVENESS_HALF,
-    MOVE_EFFECTIVENESS_NORMAL,
-    MOVE_EFFECTIVENESS_DOUBLE,
-    MOVE_EFFECTIVENESS_STATUS,
-};
+bool8 DoesTargetHaveAbilityOrInnate(u8 targetId, u8 userId, u16 ability, u16 moveNum) {
+    return (gBattleMons[targetId].ability == ability || BattlerHasInnate(targetId, ability)) && !DoesBattlerIgnoreAbilityChecks(userId, targetId, moveNum);
+}
 
 u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
 {
     bool8 abilityNullifiesDamage = FALSE;
     u16 tempMod;
     u8 moveType = GetTypeBeforeUsingMove(moveNum, userId);
+    u8 moveType2 = gBattleMoves[moveNum].type2;
     u16 illusionSpecies = GetIllusionMonSpecies(targetId);
+    bool8 isInverse = (B_FLAG_INVERSE_BATTLE != 0 && FlagGet(B_FLAG_INVERSE_BATTLE)) ? TRUE : FALSE;
+    u16 mod = UQ_4_12(1.0);
+
+    if(IsInverseRoomActive()){
+        isInverse = !isInverse;
+    }
 
     if(gBattleMoves[moveNum].split == SPLIT_STATUS)
         return GetMoveTypeEffectivenessStatus(moveNum, targetId, userId);
-	else if (gBattleMoves[moveNum].power == 0 || 
+	else if (gBattleMoves[moveNum].power == 0            || 
         gBattleMoves[moveNum].effect == EFFECT_SONICBOOM ||
-        gBattleMoves[moveNum].effect == EFFECT_LEVEL_DAMAGE ||
-        gBattleMoves[moveNum].effect == EFFECT_DRAGON_RAGE)
+        gBattleMoves[moveNum].effect == EFFECT_LEVEL_DAMAGE)
 		return MOVE_EFFECTIVENESS_STATUS;
 	else
 	{
-        u16 mod;
+        //First Type
         if (illusionSpecies != SPECIES_NONE){
-            mod = sTypeEffectivenessTable[moveType][gBaseStats[illusionSpecies].type1];
+            MulByTypeEffectiveness(&mod, moveNum, moveType, targetId, gBaseStats[illusionSpecies].type1, userId, FALSE);
 
             if (gBaseStats[illusionSpecies].type2 != gBaseStats[illusionSpecies].type1)
-            {
-                u16 mod2 = sTypeEffectivenessTable[moveType][gBaseStats[illusionSpecies].type2];
-                MulModifier(&mod, mod2);
-            }
+                MulByTypeEffectiveness(&mod, moveNum, moveType, targetId, gBaseStats[illusionSpecies].type2, userId, FALSE);
 
             //Third Type
             if (gBattleMons[targetId].type3 != gBaseStats[illusionSpecies].type1 &&
                 gBattleMons[targetId].type3 != gBaseStats[illusionSpecies].type2 &&
                 gBattleMons[targetId].type3 != TYPE_MYSTERY)
-            {
-                u16 mod2 = sTypeEffectivenessTable[moveType][gBattleMons[targetId].type3];
-                MulModifier(&mod, mod2);
-            }
+                MulByTypeEffectiveness(&mod, moveNum, moveType, targetId, gBattleMons[targetId].type3, userId, FALSE);
         }
         else{
-            mod = sTypeEffectivenessTable[moveType][gBattleMons[targetId].type1];
+            MulByTypeEffectiveness(&mod, moveNum, moveType, targetId, gBattleMons[targetId].type1, userId, FALSE);
 
             if (gBattleMons[targetId].type2 != gBattleMons[targetId].type1)
-            {
-                u16 mod2 = sTypeEffectivenessTable[moveType][gBattleMons[targetId].type2];
-                MulModifier(&mod, mod2);
-            }
+                MulByTypeEffectiveness(&mod, moveNum, moveType, targetId, gBattleMons[targetId].type2, userId, FALSE);
 
             //Third Type
             if (gBattleMons[targetId].type3 != gBattleMons[targetId].type1 &&
                 gBattleMons[targetId].type3 != gBattleMons[targetId].type2 &&
                 gBattleMons[targetId].type3 != TYPE_MYSTERY)
-            {
-                u16 mod2 = sTypeEffectivenessTable[moveType][gBattleMons[targetId].type3];
-                MulModifier(&mod, mod2);
-            }
+                MulByTypeEffectiveness(&mod, moveNum, moveType, targetId, gBattleMons[targetId].type3, userId, FALSE);
         }
 
-		if (gBattleMoves[moveNum].effect == EFFECT_TWO_TYPED_MOVE)
-		{
-			u16 mod3 = sTypeEffectivenessTable[gBattleMoves[moveNum].argument][gBattleMons[targetId].type1];
-			MulModifier(&mod, mod3);
+        //Second Type
+        if(moveType2 != TYPE_NORMAL && moveType2 != TYPE_MYSTERY){
+            if (illusionSpecies != SPECIES_NONE){
+                MulByTypeEffectiveness(&mod, moveNum, moveType2, targetId, gBaseStats[illusionSpecies].type1, userId, FALSE);
 
-			if (gBattleMons[targetId].type2 != gBattleMons[targetId].type1)
-			{
-				u16 mod4 = sTypeEffectivenessTable[gBattleMoves[moveNum].argument][gBattleMons[targetId].type2];
-				MulModifier(&mod, mod4);
-			}
-		}
+                if (gBaseStats[illusionSpecies].type2 != gBaseStats[illusionSpecies].type1)
+                    MulByTypeEffectiveness(&mod, moveNum, moveType2, targetId, gBaseStats[illusionSpecies].type2, userId, FALSE);
+
+                //Third Type
+                if (gBattleMons[targetId].type3 != gBaseStats[illusionSpecies].type1 &&
+                    gBattleMons[targetId].type3 != gBaseStats[illusionSpecies].type2 &&
+                    gBattleMons[targetId].type3 != TYPE_MYSTERY)
+                    MulByTypeEffectiveness(&mod, moveNum, moveType2, targetId, gBattleMons[targetId].type3, userId, FALSE);
+            }
+            else{
+                MulByTypeEffectiveness(&mod, moveNum, moveType2, targetId, gBattleMons[targetId].type1, userId, FALSE);
+
+                if (gBattleMons[targetId].type2 != gBattleMons[targetId].type1)
+                    MulByTypeEffectiveness(&mod, moveNum, moveType2, targetId, gBattleMons[targetId].type2, userId, FALSE);
+
+                //Third Type
+                if (gBattleMons[targetId].type3 != gBattleMons[targetId].type1 &&
+                    gBattleMons[targetId].type3 != gBattleMons[targetId].type2 &&
+                    gBattleMons[targetId].type3 != TYPE_MYSTERY)
+                    MulByTypeEffectiveness(&mod, moveNum, moveType2, targetId, gBattleMons[targetId].type3, userId, FALSE);
+            }
+        }
 
         if(gBattleMons[userId].ability == ABILITY_TINTED_LENS|| BattlerHasInnate(userId, ABILITY_TINTED_LENS)){
             if(mod <= UQ_4_12(0.5)){
@@ -1972,13 +3750,19 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
 
         switch(moveType){
             case TYPE_GROUND:
-                if((gBattleMons[targetId].ability == ABILITY_LEVITATE || BattlerHasInnate(targetId, ABILITY_LEVITATE)) && !DoesBattlerIgnoreAbilityChecks(userId, moveNum))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_LEVITATE, moveNum))
                     abilityNullifiesDamage = TRUE;
 
-                if((gBattleMons[targetId].ability == ABILITY_DRAGONFLY || BattlerHasInnate(targetId, ABILITY_DRAGONFLY)) && !DoesBattlerIgnoreAbilityChecks(userId, moveNum))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_DRAGONFLY, moveNum))
+                    abilityNullifiesDamage = TRUE;
+
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_AERIALIST, moveNum))
                     abilityNullifiesDamage = TRUE;
 
                 if(gBattleMons[targetId].item == ITEM_AIR_BALLOON)
+                    abilityNullifiesDamage = TRUE;
+
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_EARTH_EATER, moveNum))
                     abilityNullifiesDamage = TRUE;
             break;
             case TYPE_ELECTRIC:
@@ -1994,36 +3778,36 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                         }
                         else if(gBattleMons[targetId].type1 == TYPE_GROUND && gBattleMons[targetId].type2 == TYPE_GROUND){
                             //Has the same type twice
-                            mod = UQ_4_12(0.5);
+                            mod = UQ_4_12(1);
                         }
-                        //tempMod = UQ_4_12(2.0);
-                        //MulModifier(&mod, tempMod);
+                        tempMod = UQ_4_12(0.5);
+                        MulModifier(&mod, tempMod);
                     }
                 }
 
-                if(gBattleMons[targetId].ability == ABILITY_VOLT_ABSORB || BattlerHasInnate(targetId, ABILITY_VOLT_ABSORB))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_VOLT_ABSORB, moveNum))
                     abilityNullifiesDamage = TRUE;
 
-                if(gBattleMons[targetId].ability == ABILITY_LIGHTNING_ROD || BattlerHasInnate(targetId, ABILITY_LIGHTNING_ROD) ||
-                  (gBattleMons[BATTLE_PARTNER(targetId)].ability == ABILITY_LIGHTNING_ROD && IsBattlerAlive(BATTLE_PARTNER(targetId))) || (BattlerHasInnate(BATTLE_PARTNER(targetId), ABILITY_LIGHTNING_ROD) && IsBattlerAlive(BATTLE_PARTNER(targetId))))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_LIGHTNING_ROD, moveNum) ||
+                  (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_LIGHTNING_ROD, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId))))
                   abilityNullifiesDamage = TRUE;
 
-                if(gBattleMons[targetId].ability == ABILITY_MOTOR_DRIVE || BattlerHasInnate(targetId, ABILITY_MOTOR_DRIVE))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_MOTOR_DRIVE, moveNum))
                     abilityNullifiesDamage = TRUE;
 
                 if(gBattleMons[userId].ability == ABILITY_OVERCHARGE|| BattlerHasInnate(userId, ABILITY_OVERCHARGE)){
                     if(gBattleMons[targetId].type1 == TYPE_ELECTRIC  || gBattleMons[targetId].type2 == TYPE_ELECTRIC){
-                        tempMod = UQ_4_12(2.0);
+                        tempMod = UQ_4_12(4.0);
                         MulModifier(&mod, tempMod);
                     }
                 }
             break;
             case TYPE_ICE:
-                if(gBattleMons[targetId].ability == ABILITY_ICE_DEW || BattlerHasInnate(targetId, ABILITY_ICE_DEW))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_ICE_DEW, moveNum))
                     abilityNullifiesDamage = TRUE;
             break;
             case TYPE_GRASS:
-                if(gBattleMons[targetId].ability == ABILITY_SAP_SIPPER || BattlerHasInnate(targetId, ABILITY_SAP_SIPPER))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_SAP_SIPPER, moveNum))
                     abilityNullifiesDamage = TRUE;
 
                 if(gBattleMons[userId].ability == ABILITY_SEAWEED || BattlerHasInnate(userId, ABILITY_SEAWEED)){
@@ -2075,34 +3859,34 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                     }
                 }
 
-                if(gBattleMons[targetId].ability == ABILITY_POISON_ABSORB || BattlerHasInnate(targetId, ABILITY_POISON_ABSORB))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_POISON_ABSORB, moveNum))
                     abilityNullifiesDamage = TRUE;
             break;
             case TYPE_FIRE:
-                if(gBattleMons[targetId].ability == ABILITY_WELL_BAKED_BODY || BattlerHasInnate(targetId, ABILITY_WELL_BAKED_BODY)){
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_WELL_BAKED_BODY, moveNum)){
                     tempMod = UQ_4_12(0.5);
                     MulModifier(&mod, tempMod);
                 }
                     
-                if(gBattleMons[targetId].ability == ABILITY_FLASH_FIRE || BattlerHasInnate(targetId, ABILITY_FLASH_FIRE))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_FLASH_FIRE, moveNum))
                     abilityNullifiesDamage = TRUE;
 
-                if(gBattleMons[targetId].ability == ABILITY_DRY_SKIN || BattlerHasInnate(targetId, ABILITY_DRY_SKIN)){
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_DRY_SKIN, moveNum)){
                     tempMod = UQ_4_12(2.0);
                     MulModifier(&mod, tempMod);
                 }
 
-                if(gBattleMons[targetId].ability == ABILITY_FLUFFY || BattlerHasInnate(targetId, ABILITY_FLUFFY)){
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_FLUFFY, moveNum)){
                     tempMod = UQ_4_12(2.0);
                     MulModifier(&mod, tempMod);
                 }
 
-                if(gBattleMons[targetId].ability == ABILITY_HEATPROOF || BattlerHasInnate(targetId, ABILITY_HEATPROOF)){
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_HEATPROOF, moveNum)){
                     tempMod = UQ_4_12(0.5);
                     MulModifier(&mod, tempMod);
                 }
 
-                if(gBattleMons[targetId].ability == ABILITY_SEAWEED || BattlerHasInnate(targetId, ABILITY_SEAWEED)){
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_SEAWEED, moveNum)){
                     if(gBattleMons[targetId].type1 == TYPE_GRASS  || gBattleMons[targetId].type2 == TYPE_GRASS){
                         tempMod = UQ_4_12(0.5);
                         MulModifier(&mod, tempMod);
@@ -2116,7 +3900,7 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                     }
                 }
 
-                if(gBattleMons[targetId].ability == ABILITY_WATER_BUBBLE || BattlerHasInnate(targetId, ABILITY_WATER_BUBBLE)){
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_WATER_BUBBLE, moveNum)){
                     tempMod = UQ_4_12(0.5);
                     MulModifier(&mod, tempMod);
                 }
@@ -2135,10 +3919,10 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                     tempMod = UQ_4_12(2.0);
                     MulModifier(&mod, tempMod);
                 }*/
-                if((gBattleMons[targetId].ability == ABILITY_EVAPORATE || BattlerHasInnate(targetId, ABILITY_EVAPORATE)) && !DoesBattlerIgnoreAbilityChecks(userId, moveNum))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_EVAPORATE, moveNum))
                     abilityNullifiesDamage = TRUE;
 
-                if(gBattleMons[targetId].ability == ABILITY_WATER_COMPACTION || BattlerHasInnate(targetId, ABILITY_WATER_COMPACTION)){
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_WATER_COMPACTION, moveNum)){
                     tempMod = UQ_4_12(0.5);
                     MulModifier(&mod, tempMod);
                 }
@@ -2147,28 +3931,28 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                     abilityNullifiesDamage = TRUE;
                 }
 
-                if(gBattleMons[targetId].ability == ABILITY_STORM_DRAIN || BattlerHasInnate(targetId, ABILITY_STORM_DRAIN))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_STORM_DRAIN, moveNum) ||
+                  (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_STORM_DRAIN, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId))))
                     abilityNullifiesDamage = TRUE;
 
-                if(gBattleMons[targetId].ability == ABILITY_WATER_ABSORB || BattlerHasInnate(targetId, ABILITY_WATER_ABSORB))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_WATER_ABSORB, moveNum))
                     abilityNullifiesDamage = TRUE;
 
-                if(gBattleMons[targetId].ability == ABILITY_DRY_SKIN || BattlerHasInnate(targetId, ABILITY_DRY_SKIN))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_DRY_SKIN, moveNum))
                     abilityNullifiesDamage = TRUE;
             break;
             case TYPE_ROCK:
-                if(gBattleMons[targetId].ability == ABILITY_FOSSILIZED || BattlerHasInnate(targetId, ABILITY_FOSSILIZED)){
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_FOSSILIZED, moveNum)){
                     tempMod = UQ_4_12(0.5);
                     MulModifier(&mod, tempMod);
                 }
 
-                if((gBattleMons[targetId].ability == ABILITY_MOUNTAINEER || BattlerHasInnate(targetId, ABILITY_MOUNTAINEER)) && !DoesBattlerIgnoreAbilityChecks(userId, moveNum)){
-                    //Has mountaineer
-                    abilityNullifiesDamage = FALSE;
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_MOUNTAINEER, moveNum)){
+                    abilityNullifiesDamage = TRUE;
                 }
             break;
             case TYPE_NORMAL:
-                if(gBattleMons[userId].ability == ABILITY_SCRAPPY || BattlerHasInnate(userId, ABILITY_SCRAPPY)){
+                /*if(gBattleMons[userId].ability == ABILITY_SCRAPPY || BattlerHasInnate(userId, ABILITY_SCRAPPY)){
                     if(gBattleMons[targetId].type1 == TYPE_GHOST  || gBattleMons[targetId].type2 == TYPE_GHOST){
                         if(gBattleMons[targetId].type1 == TYPE_GHOST && gBattleMons[targetId].type2 != TYPE_GHOST){
                             //Removes First Type Effectiveness and recalculates it
@@ -2183,10 +3967,10 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                             mod = UQ_4_12(1.0);
                         }
                     }
-                }
+                }*/
             break;
             case TYPE_FIGHTING:
-                if(gBattleMons[userId].ability == ABILITY_SCRAPPY || BattlerHasInnate(userId, ABILITY_SCRAPPY)){
+                /*if(gBattleMons[userId].ability == ABILITY_SCRAPPY || BattlerHasInnate(userId, ABILITY_SCRAPPY)){
                     if(gBattleMons[targetId].type1 == TYPE_GHOST  || gBattleMons[targetId].type2 == TYPE_GHOST){
                         if(gBattleMons[targetId].type1 == TYPE_GHOST && gBattleMons[targetId].type2 != TYPE_GHOST){
                             //Removes First Type Effectiveness and recalculates it
@@ -2201,9 +3985,25 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                             mod = UQ_4_12(1.0);
                         }
                     }
-                }
+                }*/
             break;
             case TYPE_DRAGON:
+                if(gBattleMoves[moveNum].effect == EFFECT_DRAGON_RAGE && IS_BATTLER_OF_TYPE(targetId, TYPE_FAIRY)){
+                    if(gBattleMons[targetId].type1 == TYPE_FAIRY  || gBattleMons[targetId].type2 == TYPE_FAIRY){
+                        if(gBattleMons[targetId].type1 == TYPE_FAIRY && gBattleMons[targetId].type2 != TYPE_FAIRY){
+                            //Removes First Type Effectiveness and recalculates it
+                            mod = sTypeEffectivenessTable[moveType][gBattleMons[targetId].type2];
+                        }
+                        else if(gBattleMons[targetId].type2 == TYPE_FAIRY && gBattleMons[targetId].type1 != TYPE_FAIRY){
+                            //Removes Second Type Effectiveness and recalculates it
+                            mod = sTypeEffectivenessTable[moveType][gBattleMons[targetId].type1];
+                        }
+                        else if(gBattleMons[targetId].type1 == TYPE_FAIRY && gBattleMons[targetId].type2 == TYPE_FAIRY){
+                            mod = UQ_4_12(1.0);
+                        }
+                    }
+                }
+
                 if(gBattleMons[userId].ability == ABILITY_OVERWHELM || BattlerHasInnate(userId, ABILITY_OVERWHELM)){
                     if(gBattleMons[targetId].type1 == TYPE_FAIRY  || gBattleMons[targetId].type2 == TYPE_FAIRY){
                         if(gBattleMons[targetId].type1 == TYPE_FAIRY && gBattleMons[targetId].type2 != TYPE_FAIRY){
@@ -2221,9 +4021,34 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                 }
             break;
             case TYPE_FLYING:
-                if(gBattleMons[targetId].ability == ABILITY_AERODYNAMICS || BattlerHasInnate(targetId, ABILITY_AERODYNAMICS))
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_AERODYNAMICS, moveNum))
                     abilityNullifiesDamage = TRUE;
             break;
+            case TYPE_DARK:
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_RADIANCE, moveNum) ||
+                  (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_RADIANCE, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId))))
+                    abilityNullifiesDamage = TRUE;
+
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_JUSTIFIED, moveNum))
+                    abilityNullifiesDamage = TRUE;
+                    
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_GIFTED_MIND, moveNum)){
+                    abilityNullifiesDamage = TRUE;
+                }
+            break;
+            case TYPE_GHOST:
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_PURIFYING_SALT, moveNum))
+                    MulModifier(&mod, UQ_4_12(0.5));
+
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_GIFTED_MIND, moveNum)){
+                    abilityNullifiesDamage = TRUE;
+                }
+            break;
+            case TYPE_BUG:
+                if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_GIFTED_MIND, moveNum)){
+                    abilityNullifiesDamage = TRUE;
+                }
+
         }
         if(gBattleMons[userId].ability == ABILITY_LUMBERJACK || BattlerHasInnate(userId, ABILITY_LUMBERJACK)){
             if(gBattleMons[targetId].type1 == TYPE_GRASS  || gBattleMons[targetId].type2 == TYPE_GRASS || gBattleMons[targetId].type3 == TYPE_GRASS){
@@ -2231,39 +4056,60 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                 MulModifier(&mod, tempMod);
             }
         }
-        if(gBattleMons[targetId].ability == ABILITY_GIFTED_MIND || BattlerHasInnate(targetId, ABILITY_GIFTED_MIND)){
+        if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_GIFTED_MIND, moveNum)){
             if(moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG){
-                abilityNullifiesDamage = TRUE;
+                tempMod = UQ_4_12(0.5);
+                MulModifier(&mod, tempMod);
             }
         }
 
-        if(gBattleMons[targetId].ability == ABILITY_WEATHER_CONTROL || BattlerHasInnate(targetId, ABILITY_WEATHER_CONTROL)){
+        if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_WEATHER_CONTROL, moveNum)){
             if(TestMoveFlags(moveNum, FLAG_WEATHER_BASED)){
                 abilityNullifiesDamage = TRUE;
             }
         }
 
-        if(gBattleMons[targetId].ability == ABILITY_BULLETPROOF || BattlerHasInnate(targetId, ABILITY_BULLETPROOF)){
+        if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_DELTA_STREAM, moveNum)){
+            if(TestMoveFlags(moveNum, FLAG_WEATHER_BASED)){
+                abilityNullifiesDamage = TRUE;
+            }
+        }
+
+        if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_BULLETPROOF, moveNum)){
             if(TestMoveFlags(moveNum, FLAG_BALLISTIC)){
                 abilityNullifiesDamage = TRUE;
             }
         }
 
-        if(gBattleMons[targetId].ability == ABILITY_SOUNDPROOF || BattlerHasInnate(targetId, ABILITY_SOUNDPROOF)){
+        if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_SOUNDPROOF, moveNum)){
             if(TestMoveFlags(moveNum, FLAG_SOUND)){
                 abilityNullifiesDamage = TRUE;
             }
         }
 
-        if(gBattleMons[targetId].ability == ABILITY_QUEENLY_MAJESTY || BattlerHasInnate(targetId, ABILITY_QUEENLY_MAJESTY) ||
-          (gBattleMons[BATTLE_PARTNER(targetId)].ability == ABILITY_QUEENLY_MAJESTY && IsBattlerAlive(BATTLE_PARTNER(targetId))) || (BattlerHasInnate(BATTLE_PARTNER(targetId), ABILITY_QUEENLY_MAJESTY) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
+        if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_NOISE_CANCEL, moveNum) ||
+            (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_NOISE_CANCEL, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
+            if(TestMoveFlags(moveNum, FLAG_SOUND)){
+                abilityNullifiesDamage = TRUE;
+            }
+        }
+
+        if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_QUEENLY_MAJESTY, moveNum) ||
+            (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_QUEENLY_MAJESTY, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
             if(GetMovePriority(userId, moveNum, targetId) > 0 && gBattleMoves[moveNum].target != MOVE_TARGET_USER){
                 abilityNullifiesDamage = TRUE;
             }
         }
 
-        if(gBattleMons[targetId].ability == ABILITY_DAZZLING || BattlerHasInnate(targetId, ABILITY_DAZZLING) ||
-          (gBattleMons[BATTLE_PARTNER(targetId)].ability == ABILITY_DAZZLING && IsBattlerAlive(BATTLE_PARTNER(targetId))) || (BattlerHasInnate(BATTLE_PARTNER(targetId), ABILITY_DAZZLING) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
+        if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_DAZZLING, moveNum) ||
+            (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_DAZZLING, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
+            if(GetMovePriority(userId, moveNum, targetId) > 0 && gBattleMoves[moveNum].target != MOVE_TARGET_USER){
+                abilityNullifiesDamage = TRUE;
+            }
+        }
+
+        if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_ARMOR_TAIL, moveNum) ||
+            (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_ARMOR_TAIL, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
             if(GetMovePriority(userId, moveNum, targetId) > 0 && gBattleMoves[moveNum].target != MOVE_TARGET_USER){
                 abilityNullifiesDamage = TRUE;
             }
@@ -2286,11 +4132,15 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
                     //Has the same type twice
                     mod = UQ_4_12(1.0);
                 }
-                else if((gBattleMons[targetId].ability == ABILITY_LEVITATE || BattlerHasInnate(targetId, ABILITY_LEVITATE)) && !DoesBattlerIgnoreAbilityChecks(userId, moveNum)){
+                else if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_LEVITATE, moveNum)){
                     //Has levitate
                     abilityNullifiesDamage = FALSE;
                 }
-                else if((gBattleMons[targetId].ability == ABILITY_DRAGONFLY || BattlerHasInnate(targetId, ABILITY_DRAGONFLY)) && !DoesBattlerIgnoreAbilityChecks(userId, moveNum)){
+                else if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_DRAGONFLY, moveNum)){
+                    //Has Dragonfly
+                    abilityNullifiesDamage = FALSE;
+                }
+                else if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_AERIALIST, moveNum)){
                     //Has Dragonfly
                     abilityNullifiesDamage = FALSE;
                 }
@@ -2319,7 +4169,7 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
         }
 
         if(gBattleMoves[moveNum].effect == EFFECT_FREEZE_DRY && IS_BATTLER_OF_TYPE(targetId, TYPE_WATER)){
-            tempMod = UQ_4_12(2.0);
+            tempMod = UQ_4_12(4.0);
             MulModifier(&mod, tempMod);
         }
 
@@ -2340,14 +4190,26 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId)
             break;
         }*/
 
-		if (mod == UQ_4_12(0.0) || abilityNullifiesDamage)
-			return MOVE_EFFECTIVENESS_NONE;
-		else if (mod <= UQ_4_12(0.5))
-			return MOVE_EFFECTIVENESS_HALF;
-		else if (mod >= UQ_4_12(2.0))
-			return MOVE_EFFECTIVENESS_DOUBLE;
-		else
-			return MOVE_EFFECTIVENESS_NORMAL;
+        if(!isInverse){
+            if (mod == UQ_4_12(0.0) || abilityNullifiesDamage)
+                return MOVE_EFFECTIVENESS_NONE;
+            else if (mod <= UQ_4_12(0.5))
+                return MOVE_EFFECTIVENESS_HALF;
+            else if (mod >= UQ_4_12(2.0))
+                return MOVE_EFFECTIVENESS_DOUBLE;
+            else
+                return MOVE_EFFECTIVENESS_NORMAL;
+        }
+        else{
+            if (abilityNullifiesDamage)
+                return MOVE_EFFECTIVENESS_NONE;
+            else if (mod >= UQ_4_12(2.0))
+                return MOVE_EFFECTIVENESS_HALF;
+            else if (mod <= UQ_4_12(0.5))
+                return MOVE_EFFECTIVENESS_DOUBLE;
+            else
+                return MOVE_EFFECTIVENESS_NORMAL;
+        }
 	}
 }
 
@@ -2356,6 +4218,28 @@ static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId)
     bool8 moveNullified = FALSE;
     u16 userSpecies = gBattleMons[userId].species;
     u16 targetSpecies = gBattleMons[targetId].species;
+
+    if (BattlerHasAbility(userId, userId, ABILITY_MYCELIUM_MIGHT) && gBattleMoves[moveNum].split == SPLIT_STATUS && gBattleMoves[moveNum].target & !MOVE_TARGET_USER) {
+        switch(gBattleMoves[moveNum].effect){
+            case EFFECT_SLEEP:
+            case EFFECT_TOXIC:
+            case EFFECT_POISON:
+            case EFFECT_WILL_O_WISP:
+            case EFFECT_FROSTBITE:
+            case EFFECT_PARALYZE_IGNORE_TYPE:
+            case EFFECT_PARALYZE:
+                return gBattleMons[targetId].status1 & STATUS1_ANY ? MOVE_EFFECTIVENESS_NONE : MOVE_EFFECTIVENESS_STATUS;
+            case EFFECT_CONFUSE:
+                return gBattleMons[targetId].status2 & STATUS2_CONFUSION ? MOVE_EFFECTIVENESS_NONE : MOVE_EFFECTIVENESS_STATUS;
+            default:
+                return MOVE_EFFECTIVENESS_STATUS;
+        }
+    }
+
+    if (BATTLER_HAS_ABILITY(targetId, ABILITY_GOOD_AS_GOLD)
+        && IS_MOVE_STATUS(moveNum)
+        && targetId != userId)
+            moveNullified = TRUE;
 
     //Specific Moves
     switch(moveNum){
@@ -2389,6 +4273,10 @@ static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId)
             if(!CanBeBurned(targetId))
                 moveNullified = TRUE;
         break;
+        case EFFECT_PARALYZE_IGNORE_TYPE:
+            if(!CanBeParalyzedIgnoreType(userId, targetId))
+                moveNullified = TRUE;
+        break;
         case EFFECT_PARALYZE:
             if(!CanBeParalyzed(userId, targetId))
                 moveNullified = TRUE;
@@ -2407,37 +4295,67 @@ static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId)
     }
 
     //Weather Control
-    if(gBattleMons[targetId].ability == ABILITY_WEATHER_CONTROL || BattlerHasInnate(targetId, ABILITY_WEATHER_CONTROL)){
+    if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_WEATHER_CONTROL, moveNum)){
+        if(TestMoveFlags(moveNum, FLAG_WEATHER_BASED)){
+            moveNullified = TRUE;
+        }
+    }
+
+    // Delta Stream
+    if(BattlerHasAbility(userId, userId, ABILITY_DELTA_STREAM)){
         if(TestMoveFlags(moveNum, FLAG_WEATHER_BASED)){
             moveNullified = TRUE;
         }
     }
             
     //Bulletproof
-    if(gBattleMons[targetId].ability == ABILITY_BULLETPROOF || BattlerHasInnate(targetId, ABILITY_BULLETPROOF)){
+    if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_BULLETPROOF, moveNum)){
         if(TestMoveFlags(moveNum, FLAG_BALLISTIC)){
             moveNullified = TRUE;
         }
     }
 
     //Soundproof
-    if(gBattleMons[targetId].ability == ABILITY_SOUNDPROOF || BattlerHasInnate(targetId, ABILITY_SOUNDPROOF)){
+    if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_SOUNDPROOF, moveNum)){
+        if(TestMoveFlags(moveNum, FLAG_SOUND)){
+            moveNullified = TRUE;
+        }
+    }
+
+    //Parroting
+    if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_PARROTING, moveNum)){
+        if(TestMoveFlags(moveNum, FLAG_SOUND)){
+            moveNullified = TRUE;
+        }
+    }
+
+    //Noise Cancel
+    if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_NOISE_CANCEL, moveNum)
+        || (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_NOISE_CANCEL, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
         if(TestMoveFlags(moveNum, FLAG_SOUND)){
             moveNullified = TRUE;
         }
     }
 
     //Queenly Majesty
-    if(gBattleMons[targetId].ability == ABILITY_QUEENLY_MAJESTY || BattlerHasInnate(targetId, ABILITY_QUEENLY_MAJESTY) ||
-    (gBattleMons[BATTLE_PARTNER(targetId)].ability == ABILITY_QUEENLY_MAJESTY && IsBattlerAlive(BATTLE_PARTNER(targetId))) || (BattlerHasInnate(BATTLE_PARTNER(targetId), ABILITY_QUEENLY_MAJESTY) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
+    if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_QUEENLY_MAJESTY, moveNum)
+        || (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_QUEENLY_MAJESTY, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
         if(GetMovePriority(userId, moveNum, targetId) > 0 && gBattleMoves[moveNum].target != MOVE_TARGET_USER){
             moveNullified = TRUE;
         }
     }
 
     //Dazzling
-    if(gBattleMons[targetId].ability == ABILITY_DAZZLING || BattlerHasInnate(targetId, ABILITY_DAZZLING) ||
-        (gBattleMons[BATTLE_PARTNER(targetId)].ability == ABILITY_DAZZLING && IsBattlerAlive(BATTLE_PARTNER(targetId))) || (BattlerHasInnate(BATTLE_PARTNER(targetId), ABILITY_DAZZLING) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
+    if(DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_DAZZLING, moveNum)
+        || (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_DAZZLING, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
+        if(GetMovePriority(userId, moveNum, targetId) > 0 && gBattleMoves[moveNum].target != MOVE_TARGET_USER){
+            moveNullified = TRUE;
+        }
+    }
+
+    //Armor Tail
+    if (DoesTargetHaveAbilityOrInnate(targetId, userId, ABILITY_ARMOR_TAIL, moveNum)
+        || (DoesTargetHaveAbilityOrInnate(BATTLE_PARTNER(targetId), userId, ABILITY_ARMOR_TAIL, moveNum) && IsBattlerAlive(BATTLE_PARTNER(targetId)))){
         if(GetMovePriority(userId, moveNum, targetId) > 0 && gBattleMoves[moveNum].target != MOVE_TARGET_USER){
             moveNullified = TRUE;
         }
@@ -2451,151 +4369,32 @@ static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId)
 
 static void MoveSelectionDisplayMoveTypeDoubles(u8 targetId)
 {
-	u8 WindowID;
-    u16 move;
-    u8 moveType;
 
-    static const u16 gType_Text_Pal[] = INCBIN_U16("graphics/battle_interface/text_se.gbapal");
-    static const u8 gEffectivenessUp[]           =  _("{COLOR 12}{SHADOW 11}{STR_VAR_1} {COLOR 5}{UP_ARROW_2} {COLOR 12}{STR_VAR_2}");
-    static const u8 gEffectivenessDown[]         =  _("{COLOR 12}{SHADOW 11}{STR_VAR_1} {COLOR 6}{DOWN_ARROW_2} {COLOR 12}{STR_VAR_2}");
-    static const u8 gEffectivenessNoDamage[]     =  _("{COLOR 12}{SHADOW 11}{STR_VAR_1} {COLOR 7}{BIG_MULT_X} {COLOR 12}{STR_VAR_2}");
-    static const u8 gEffectivenessNormalDamage[] =  _("{STR_VAR_1} {STR_VAR_2}");
-    static const u8 gStabIcon[]   =  _("{PLUS}");
-    static const u8 gNoStabIcon[] =  _(" ");
-
-	struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
-    //Move Name
-    LoadPalette(gType_Text_Pal, 5 * 0x10, 0x20);
-    move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
-    moveType = GetTypeBeforeUsingMove(move, gActiveBattler);
-	StringCopy(gStringVar1, gTypeNames[moveType]);
-    if(IS_BATTLER_OF_TYPE(gActiveBattler, moveType))
-	    StringCopy(gStringVar2, gStabIcon);
-    else
-	    StringCopy(gStringVar2, gNoStabIcon);
-
-    if(!IsBattlerAlive(targetId))
-        targetId = BATTLE_PARTNER(targetId);
-    
-    switch(GetMoveTypeEffectiveness(move, targetId, gActiveBattler)){
-        case MOVE_EFFECTIVENESS_NONE:
-            StringExpandPlaceholders(gStringVar4, gEffectivenessNoDamage);
-            WindowID = B_WIN_NO_EFFECT;
-        break;
-        case MOVE_EFFECTIVENESS_HALF:
-            StringExpandPlaceholders(gStringVar4, gEffectivenessDown);
-            WindowID = B_WIN_NOT_VERY_EFFECTIVE;
-        break;
-        case MOVE_EFFECTIVENESS_DOUBLE:
-            StringExpandPlaceholders(gStringVar4, gEffectivenessUp);
-            WindowID = B_WIN_SUPER_EFFECTIVE;
-        break;
-        default: //MOVE_EFFECTIVENESS_NORMAL
-            StringExpandPlaceholders(gStringVar4, gEffectivenessNormalDamage);
-            WindowID = B_WIN_MOVE_TYPE;
-        break;
-    }
-    BattlePutTextOnWindow(gStringVar4, WindowID);
-    PutWindowTilemap(WindowID );
-	CopyWindowToVram(WindowID , 3);
-
-    //BattlePutTextOnWindow(gDisplayedStringBattle, TypeEffectiveness(moveInfo, 1));
-    MoveSelectionDisplaySplitIcon();
 }
 
 static void MoveSelectionDisplayMoveType(void)
 {
-    u8 WindowID;
-    u16 move;
-    u8 targetId = B_POSITION_OPPONENT_LEFT;
-    u8 moveType;
-
-    static const u16 gType_Text_Pal[]         = INCBIN_U16("graphics/battle_interface/text_se.gbapal");
-    static const u8 gEffectivenessUp[]           =  _("{COLOR 12}{SHADOW 11}{STR_VAR_1} {COLOR 5}{UP_ARROW_2} {COLOR 12}{STR_VAR_2}");
-    static const u8 gEffectivenessDown[]         =  _("{COLOR 12}{SHADOW 11}{STR_VAR_1} {COLOR 6}{DOWN_ARROW_2} {COLOR 12}{STR_VAR_2}");
-    static const u8 gEffectivenessNoDamage[]     =  _("{COLOR 12}{SHADOW 11}{STR_VAR_1} {COLOR 7}{BIG_MULT_X} {COLOR 12}{STR_VAR_2}");
-    static const u8 gEffectivenessNormalDamage[] =  _("{STR_VAR_1} {STR_VAR_2}");
-    static const u8 gStabIcon[]   =  _("{PLUS}");
-    static const u8 gNoStabIcon[] =  _(" ");
-
-	struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
-    //Move Name
-    LoadPalette(gType_Text_Pal, 5 * 0x10, 0x20);
-    move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
-    moveType = GetTypeBeforeUsingMove(move, gActiveBattler);
-	StringCopy(gStringVar1, gTypeNames[moveType]);
-    if(IS_BATTLER_OF_TYPE(gActiveBattler, moveType))
-	    StringCopy(gStringVar2, gStabIcon);
-    else
-	    StringCopy(gStringVar2, gNoStabIcon);
-
-    if(!IsBattlerAlive(targetId))
-        targetId = BATTLE_PARTNER(targetId);
     
-    switch(GetMoveTypeEffectiveness(move, targetId, gActiveBattler)){
-        case MOVE_EFFECTIVENESS_NONE:
-            StringExpandPlaceholders(gStringVar4, gEffectivenessNoDamage);
-            WindowID = B_WIN_NO_EFFECT;
-        break;
-        case MOVE_EFFECTIVENESS_HALF:
-            StringExpandPlaceholders(gStringVar4, gEffectivenessDown);
-            WindowID = B_WIN_NOT_VERY_EFFECTIVE;
-        break;
-        case MOVE_EFFECTIVENESS_DOUBLE:
-            StringExpandPlaceholders(gStringVar4, gEffectivenessUp);
-            WindowID = B_WIN_SUPER_EFFECTIVE;
-        break;
-        default: //MOVE_EFFECTIVENESS_NORMAL
-            StringExpandPlaceholders(gStringVar4, gEffectivenessNormalDamage);
-            WindowID = B_WIN_MOVE_TYPE;
-        break;
-    }
-    BattlePutTextOnWindow(gStringVar4, WindowID);
-    PutWindowTilemap(WindowID);
-	CopyWindowToVram(WindowID ,3);
-
-    //BattlePutTextOnWindow(gDisplayedStringBattle, TypeEffectiveness(moveInfo, 1));
-    MoveSelectionDisplaySplitIcon();
 }
 
 static void MoveSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)
 {
-    u16 src[2];
-    src[0] = arg1 + 1;
-    src[1] = arg1 + 2;
-
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
-    CopyBgTilemapBufferToVram(0);
+    
 }
 
 static void MoveSelectionDestroyCursorAt(u8 cursorPosition)
 {
-    u16 src[2];
-    src[0] = 0x1016;
-    src[1] = 0x1016;
-
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 9 * (cursorPosition & 1) + 1, 55 + (cursorPosition & 2), 1, 2, 0x11);
-    CopyBgTilemapBufferToVram(0);
+    
 }
 
 void ActionSelectionCreateCursorAt(u8 cursorPosition, u8 arg1)
 {
-    u16 src[2];
-    src[0] = 1;
-    src[1] = 2;
-
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 7 * (cursorPosition & 1) + 16, 35 + (cursorPosition & 2), 1, 2, 0x11);
-    CopyBgTilemapBufferToVram(0);
+    
 }
 
 void ActionSelectionDestroyCursorAt(u8 cursorPosition)
 {
-    u16 src[2];
-    src[0] = 0x1016;
-    src[1] = 0x1016;
-
-    CopyToBgTilemapBufferRect_ChangePalette(0, src, 7 * (cursorPosition & 1) + 16, 35 + (cursorPosition & 2), 1, 2, 0x11);
-    CopyBgTilemapBufferToVram(0);
+    
 }
 
 void CB2_SetUpReshowBattleScreenAfterMenu(void)
@@ -2626,7 +4425,7 @@ static void PrintLinkStandbyMsg(void)
     {
         gBattle_BG0_X = 0;
         gBattle_BG0_Y = 0;
-        BattlePutTextOnWindow(gText_LinkStandby, 0);
+        BattlePutTextOnWindow(gText_LinkStandby, B_WIN_MSG);
     }
 }
 
@@ -2697,6 +4496,7 @@ static u32 CopyPlayerMonData(u8 monId, u8 *dst)
         battleMon.abilityNum = GetMonData(&gPlayerParty[monId], MON_DATA_ABILITY_NUM);
         battleMon.otId = GetMonData(&gPlayerParty[monId], MON_DATA_OT_ID);
         battleMon.nature = GetMonData(&gPlayerParty[monId], MON_DATA_NATURE);
+        battleMon.hpType = GetMonData(&gPlayerParty[monId], MON_DATA_HP_TYPE);
         GetMonData(&gPlayerParty[monId], MON_DATA_NICKNAME, nickname);
         StringCopy10(battleMon.nickname, nickname);
         GetMonData(&gPlayerParty[monId], MON_DATA_OT_NAME, battleMon.otName);
@@ -3046,6 +4846,7 @@ static void SetPlayerMonData(u8 monId)
             SetMonData(&gPlayerParty[monId], MON_DATA_SPATK, &battlePokemon->spAttack);
             SetMonData(&gPlayerParty[monId], MON_DATA_SPDEF, &battlePokemon->spDefense);
             SetMonData(&gPlayerParty[monId], MON_DATA_NATURE, &battlePokemon->nature);
+            SetMonData(&gPlayerParty[monId], MON_DATA_HP_TYPE, &battlePokemon->hpType);
         }
         break;
     case REQUEST_SPECIES_BATTLE:
@@ -3388,7 +5189,7 @@ static void PlayerHandleDrawTrainerPic(void)
         gSprites[gBattlerSpriteIds[gActiveBattler]].x2 = DISPLAY_WIDTH;
         gSprites[gBattlerSpriteIds[gActiveBattler]].y2 = 48;
         gSprites[gBattlerSpriteIds[gActiveBattler]].sSpeedX = -2;
-        gSprites[gBattlerSpriteIds[gActiveBattler]].callback = SpriteCB_TrainerSlideIn;
+        gSprites[gBattlerSpriteIds[gActiveBattler]].callback = SpriteCB_TrainerSpawn;
         gSprites[gBattlerSpriteIds[gActiveBattler]].oam.affineMode = ST_OAM_AFFINE_OFF;
         gSprites[gBattlerSpriteIds[gActiveBattler]].hFlip = 1;
     }
@@ -3402,7 +5203,7 @@ static void PlayerHandleDrawTrainerPic(void)
         gSprites[gBattlerSpriteIds[gActiveBattler]].oam.paletteNum = gActiveBattler;
         gSprites[gBattlerSpriteIds[gActiveBattler]].x2 = DISPLAY_WIDTH;
         gSprites[gBattlerSpriteIds[gActiveBattler]].sSpeedX = -2;
-        gSprites[gBattlerSpriteIds[gActiveBattler]].callback = SpriteCB_TrainerSlideIn;
+        gSprites[gBattlerSpriteIds[gActiveBattler]].callback = SpriteCB_TrainerSpawn;
     }
 
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnBattlerSpriteCallbackDummy;
@@ -3542,8 +5343,8 @@ static void PlayerHandleMoveAnimation(void)
         gAnimMoveDmg = gBattleResources->bufferA[gActiveBattler][6] | (gBattleResources->bufferA[gActiveBattler][7] << 8) | (gBattleResources->bufferA[gActiveBattler][8] << 16) | (gBattleResources->bufferA[gActiveBattler][9] << 24);
         gAnimFriendship = gBattleResources->bufferA[gActiveBattler][10];
         gWeatherMoveAnim = gBattleResources->bufferA[gActiveBattler][12] | (gBattleResources->bufferA[gActiveBattler][13] << 8);
-        gAnimDisableStructPtr = (struct DisableStruct *)&gBattleResources->bufferA[gActiveBattler][16];
-        gTransformedPersonalities[gActiveBattler] = gAnimDisableStructPtr->transformedMonPersonality;
+        gAnimVolatileStructPtr = (struct VolatileStruct *)&gBattleResources->bufferA[gActiveBattler][16];
+        gTransformedPersonalities[gActiveBattler] = gAnimVolatileStructPtr->transformedMonPersonality;
         if (IsMoveWithoutAnimation(move, gAnimMoveTurn)) // Always returns FALSE.
         {
             PlayerBufferExecCompleted();
@@ -3552,7 +5353,7 @@ static void PlayerHandleMoveAnimation(void)
         {
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].animationState = 0;
             gBattlerControllerFuncs[gActiveBattler] = PlayerDoMoveAnimation;
-            BattleTv_SetDataBasedOnMove(move, gWeatherMoveAnim, gAnimDisableStructPtr);
+            BattleTv_SetDataBasedOnMove(move, gWeatherMoveAnim, gAnimVolatileStructPtr);
         }
     }
 }
@@ -3614,7 +5415,7 @@ static void PlayerHandlePrintString(void)
     gBattle_BG0_Y = 0;
     stringId = (u16*)(&gBattleResources->bufferA[gActiveBattler][2]);
     BufferStringBattle(*stringId);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 0);
+    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MSG);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnInactiveTextPrinter2;
     BattleTv_SetDataBasedOnString(*stringId);
     BattleArena_DeductMindPoints(gActiveBattler, *stringId);
@@ -3628,44 +5429,39 @@ static void PlayerHandlePrintSelectionString(void)
         PlayerBufferExecCompleted();
 }
 
-static void HandleChooseActionAfterDma3(void)
+void HandleChooseActionAfterDma3_Player(void)
 {
     if (!IsDma3ManagerBusyWithBgCopy())
     {
         gBattle_BG0_X = 0;
         gBattle_BG0_Y = DISPLAY_HEIGHT;
-        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseAction;
+        gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseActionPlayer;
     }
 }
 
 static void PlayerHandleChooseAction(void)
 {
+    // "What will {x} do?" + "Fight/Pokémon/Bag/Run" menu
     s32 i;
+    
+	//Reshow Bg
+    gBattle_BG1_X = 0;
+    gBattle_BG1_Y = 0;
+    ShowBg(1);
 
-    gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3;
+    gBattlerControllerFuncs[gActiveBattler] = HandleChooseActionAfterDma3_Player;
     BattleTv_ClearExplosionFaintCause();
 
-    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-        BattlePutTextOnWindow(gText_BattleMenuTrainer, 2);
-    else
-        BattlePutTextOnWindow(gText_BattleMenu, 2);
-
-    for (i = 0; i < 4; i++)
-        ActionSelectionDestroyCursorAt(i);
-
-    TryRestoreLastUsedBall();
-    //TryToAddEnemyInfoWindow();
-    ActionSelectionCreateCursorAt(gActionSelectionCursor[gActiveBattler], 0);
-    BattleStringExpandPlaceholdersToDisplayedString(gText_WhatWillPkmnDo);
-    BattlePutTextOnWindow(gDisplayedStringBattle, 1);
+    PrintBattleWindow_ActionPromt();
 }
 
 static void PlayerHandleYesNoBox(void)
 {
     if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
     {
-        HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
-        BattlePutTextOnWindow(gText_BattleYesNoChoice, 12);
+        //HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
+        HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
+        BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO_TWO);
         gMultiUsePlayerCursor = 1;
         BattleCreateYesNoCursorAt(1);
         gBattlerControllerFuncs[gActiveBattler] = PlayerHandleYesNoInput;
@@ -3682,6 +5478,7 @@ static void HandleChooseMoveAfterDma3(void)
     {
         gBattle_BG0_X = 0;
         gBattle_BG0_Y = DISPLAY_HEIGHT * 2;
+        PrintBattleWindow_MoveSelection();
         gBattlerControllerFuncs[gActiveBattler] = HandleInputChooseMove;
     }
 }
@@ -4235,66 +6032,22 @@ static void PlayerHandleBattleDebug(void)
     gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
 }
 
+static void PlayerHandleBattleInfoMenu(void)
+{
+    BeginNormalPaletteFade(-1, 0, 0, 0x10, 0);
+    //SetMainCallback2(ReshowBattleScreenAfterMenu);
+    UI_Battle_Menu_Init(ReshowBattleScreenAfterMenu);
+    gBattlerControllerFuncs[gActiveBattler] = WaitForDebug;
+}
+
 static void PlayerCmdEnd(void)
 {
 }
 
 static void ChangeMoveDisplayMode(){
-    static const u8 gPowerText[] =  _("Power: {STR_VAR_1}");
-    static const u8 gAccuracyText[] =  _("Acc: {STR_VAR_1}");
-    static const u8 gContactText[] =  _("Contact");
-    static const u8 gNoContactText[] =  _("No Contact");
-    u8 *txtPtr;
-    u8 power = 0;
-    u8 accuracy = 0;
-    u16 move = MOVE_NONE;
 
-	struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
-    //Move Name
-    move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
-    StringCopy(gDisplayedStringBattle, gMoveNames[move]);
-
-    BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MOVE_NAME_1);
-    PutWindowTilemap(B_WIN_MOVE_NAME_1 );
-	CopyWindowToVram(B_WIN_MOVE_NAME_1 , 3);
-
-    //Move Power
-    power = gBattleMoves[move].power;
-	ConvertIntToDecimalStringN(gStringVar1, power, STR_CONV_MODE_RIGHT_ALIGN, 4);
-	StringExpandPlaceholders(gStringVar4, gPowerText);
-    BattlePutTextOnWindow(gStringVar4, B_WIN_MOVE_NAME_3);
-    PutWindowTilemap(B_WIN_MOVE_NAME_3 );
-	CopyWindowToVram(B_WIN_MOVE_NAME_3 , 3);
-
-    //Move Power
-    accuracy = gBattleMoves[move].accuracy;
-	ConvertIntToDecimalStringN(gStringVar1, accuracy, STR_CONV_MODE_RIGHT_ALIGN, 4);
-	StringExpandPlaceholders(gStringVar4, gAccuracyText);
-    BattlePutTextOnWindow(gStringVar4, B_WIN_MOVE_NAME_4);
-    PutWindowTilemap(B_WIN_MOVE_NAME_4 );
-	CopyWindowToVram(B_WIN_MOVE_NAME_4 , 3);
-
-    //Contact Move
-    if(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-	    StringExpandPlaceholders(gStringVar4, gContactText);
-    else
-        StringExpandPlaceholders(gStringVar4, gNoContactText);
-
-    BattlePutTextOnWindow(gStringVar4, B_WIN_MOVE_NAME_2);
-    PutWindowTilemap(B_WIN_MOVE_NAME_2 );
-	CopyWindowToVram(B_WIN_MOVE_NAME_2 , 3);
 }
 
 static void MoveSelectionDisplaySplitIcon(void){
-	static const u16 sSplitIcons_Pal[] = INCBIN_U16("graphics/interface/split_icons_battle.gbapal");
-	static const u8 sSplitIcons_Gfx[] = INCBIN_U8("graphics/interface/split_icons_battle.4bpp");
-	struct ChooseMoveStruct *moveInfo;
-	int icon;
-
-	moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]);
-	icon = GetBattleMoveSplit(moveInfo->moves[gMoveSelectionCursor[gActiveBattler]]);
-	LoadPalette(sSplitIcons_Pal, 10 * 0x10, 0x20);
-	BlitBitmapToWindow(B_WIN_DUMMY, sSplitIcons_Gfx + 0x80 * icon, 0, 0, 16, 16);
-	PutWindowTilemap(B_WIN_DUMMY);
-	CopyWindowToVram(B_WIN_DUMMY, 3);
+    
 }

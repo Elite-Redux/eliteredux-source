@@ -104,7 +104,6 @@ void TryAddLastUsedBallItemSprites(void);
 void UpdateAbilityPopup(u8 battlerId);
 
 void TryToAddMoveInfoWindow(void);
-void TryToHideMoveInfoWindow(void);
 
 void TryToAddEnemyInfoWindow(void);
 void TryToHideEnemyInfoWindow(void);

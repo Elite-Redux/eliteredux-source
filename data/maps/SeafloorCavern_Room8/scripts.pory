@@ -3,3 +3,9 @@ SeafloorCavern_Room8_MapScripts:: @ 8234DC7
 	.byte 0
 
 `
+
+script SeafloorCavern_Room8_EventScript_PuzzleSign{
+	msgbox(format("The way to the proceed is {UP_ARROW}{RIGHT_ARROW}{UP_ARROW}{LEFT_ARROW}-- (Next words are crossed and unreadable.) Team Magma caused earth to shake. Figure the solution yourself as I don't know anymore."))
+	release
+	end
+}

@@ -104,7 +104,7 @@ static u8 CreateContestantSprite(u16, u32, u32, u32);
 static void PrintContestMoveDescription(u16);
 static u16 SanitizeSpecies(u16);
 static void ContestClearGeneralTextWindow(void);
-static u16 GetChosenMove(u8);
+static u16 GetChosenContestMove(u8);
 static void GetAllChosenMoves(void);
 static void ContestPrintLinkStandby(void);
 static void FillContestantWindowBgs(void);
@@ -1140,7 +1140,7 @@ static void AllocContestResources(void)
     gContestResources->boxBlinkTiles2 = AllocZeroed(0x800);
     gContestResources->field_3c = AllocZeroed(0x2000);
     gUnknown_0202305C = gContestResources->field_3c;
-    gUnknown_02023060 = gContestResources->contestBgTilemaps[1];
+    gBattleAnimBgTilemapBuffer = gContestResources->contestBgTilemaps[1];
 }
 
 static void FreeContestResources(void)
@@ -1163,7 +1163,7 @@ static void FreeContestResources(void)
     FREE_AND_SET_NULL(gContestResources->field_3c);
     FREE_AND_SET_NULL(gContestResources);
     gUnknown_0202305C = NULL;
-    gUnknown_02023060 = NULL;
+    gBattleAnimBgTilemapBuffer = NULL;
 }
 
 void CB2_StartContest(void)
@@ -1633,7 +1633,7 @@ static void Task_SelectedMove(u8 taskId)
 {
     if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
     {
-        u16 move = GetChosenMove(gContestPlayerMonIndex);
+        u16 move = GetChosenContestMove(gContestPlayerMonIndex);
         u8 taskId2;
 
         eContestantStatus[gContestPlayerMonIndex].currMove = move;
@@ -1716,7 +1716,7 @@ static void Task_AppealSetup(u8 taskId)
 
             for (i = 0; i + gNumLinkContestPlayers < CONTESTANT_COUNT; i++)
             {
-                eContestantStatus[gNumLinkContestPlayers + i].currMove = GetChosenMove(gNumLinkContestPlayers + i);
+                eContestantStatus[gNumLinkContestPlayers + i].currMove = GetChosenContestMove(gNumLinkContestPlayers + i);
             }
         }
         gTasks[taskId].tState = APPEALSTATE_START_TURN;
@@ -3121,13 +3121,12 @@ static u8 CreateJudgeSpeechBubbleSprite(void)
 static u8 CreateContestantSprite(u16 species, u32 otId, u32 personality, u32 index)
 {
     u8 spriteId;
+    u8 isShiny = FALSE;
+    bool8 isAlpha = FALSE;
     species = SanitizeSpecies(species);
 
     HandleLoadSpecialPokePic(&gMonBackPicTable[species], gMonSpritesGfxPtr->sprites.ptr[0], species, personality);
-    if (gSaveBlock2Ptr->individualColors)
-        LoadHueShiftedMonPalette(GetMonSpritePalFromSpeciesAndPersonality(species, otId, personality), 0x120, 0x20, personality);
-    else
-        LoadCompressedPalette(GetMonSpritePalFromSpeciesAndPersonality(species, otId, personality), 0x120, 0x20);
+    LoadHueShiftedMonPalette(GetMonSpritePal(species, personality, isShiny), 0x120, 0x20, personality, isAlpha);
     SetMultiuseSpriteTemplateToPokemon(species, 0);
 
     spriteId = CreateSprite(&gMultiuseSpriteTemplate, 0x70, GetBattlerSpriteFinal_Y(2, species, FALSE), 30);
@@ -3382,7 +3381,7 @@ static void ContestClearGeneralTextWindow(void)
     Contest_SetBgCopyFlags(0);
 }
 
-static u16 GetChosenMove(u8 contestant)
+static u16 GetChosenContestMove(u8 contestant)
 {
     if (Contest_IsMonsTurnDisabled(contestant))
         return MOVE_NONE;
@@ -3405,7 +3404,7 @@ static void GetAllChosenMoves(void)
     s32 i;
 
     for (i = 0; i < CONTESTANT_COUNT; i++)
-        eContestantStatus[i].currMove = GetChosenMove(i);
+        eContestantStatus[i].currMove = GetChosenContestMove(i);
 }
 
 static void RankContestants(void)

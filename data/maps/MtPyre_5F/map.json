@@ -17,9 +17,9 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_BLACK_BELT",
       "x": 3,
-      "y": 7,
+      "y": 6,
       "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN_AND_LEFT",
+      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
       "movement_range_x": 1,
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NORMAL",
@@ -36,8 +36,8 @@
       "movement_range_x": 1,
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "MtPyre_5F_EventScript_ItemLaxIncense",
+      "trainer_sight_or_berry_tree_id": "5",
+      "script": "Common_EventScript_GiveItemBallBP",
       "flag": "FLAG_ITEM_MT_PYRE_5F_LAX_INCENSE"
     }
   ],

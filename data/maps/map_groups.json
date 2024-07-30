@@ -94,7 +94,8 @@
     "Underwater_Route128",
     "Underwater_Route129",
     "Underwater_Route105",
-    "Underwater_Route125"
+    "Underwater_Route125",
+    "RusturfTunnel_2F"
   ],
   "gMapGroup_IndoorLittleroot": [
     "LittlerootTown_BrendansHouse_1F",
@@ -246,7 +247,8 @@
     "LilycoveCity_DepartmentStore_4F",
     "LilycoveCity_DepartmentStore_5F",
     "LilycoveCity_DepartmentStoreRooftop",
-    "LilycoveCity_DepartmentStoreElevator"
+    "LilycoveCity_DepartmentStoreElevator",
+    "LilycoveCity_MossDeepCityTeleporter"
   ],
   "gMapGroup_IndoorMossdeep": [
     "MossdeepCity_Gym",
@@ -295,7 +297,8 @@
     "EverGrandeCity_HallOfFame",
     "EverGrandeCity_PokemonCenter_1F",
     "EverGrandeCity_PokemonCenter_2F",
-    "EverGrandeCity_PokemonLeague_2F"
+    "EverGrandeCity_PokemonLeague_2F",
+    "EvergrandeCity_MonoChampRoom_1"
   ],
   "gMapGroup_IndoorRoute104": [
     "Route104_MrBrineysHouse",
@@ -457,7 +460,10 @@
     "DewfordMeadow",
     "DewfordManor_1F",
     "MeteorFalls_HaxorusRoom",
-    "PetalburgWoods_BreloomRoom"
+    "PetalburgWoods_BreloomRoom",
+    "Secret_Dungeon",
+    "GraniteCave_PuzzleOut",
+    "SeafloorCavernShortcut"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",

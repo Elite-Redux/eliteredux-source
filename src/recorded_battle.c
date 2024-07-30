@@ -493,7 +493,7 @@ bool32 MoveRecordedBattleToSaveData(void)
     return ret;
 }
 
-static bool32 TryCopyRecordedBattleSaveData(struct RecordedBattleSave *dst, struct SaveSection *saveBuffer)
+static bool32 TryCopyRecordedBattleSaveData(struct RecordedBattleSave *dst, struct SaveSector *saveBuffer)
 {
     if (TryReadSpecialSaveSection(SECTOR_ID_RECORDED_BATTLE, (void*)(saveBuffer)) != SAVE_STATUS_OK)
         return FALSE;
@@ -508,7 +508,7 @@ static bool32 TryCopyRecordedBattleSaveData(struct RecordedBattleSave *dst, stru
 
 static bool32 CopyRecordedBattleFromSave(struct RecordedBattleSave *dst)
 {
-    struct SaveSection *savBuffer = AllocZeroed(sizeof(struct SaveSection));
+    struct SaveSector *savBuffer = AllocZeroed(sizeof(struct SaveSector));
     bool32 ret = TryCopyRecordedBattleSaveData(dst, savBuffer);
     Free(savBuffer);
 
@@ -788,7 +788,7 @@ void sub_818603C(u8 arg0)
                         movePp.moves[j] = gBattleMons[battlerId].moves[array1[j]];
                         movePp.pp[j] = gBattleMons[battlerId].pp[array1[j]];
                         array3[j] = ppBonuses[array1[j]];
-                        array2[j] = (gDisableStructs[battlerId].mimickedMoves & gBitTable[j]) >> j;
+                        array2[j] = (gVolatileStructs[battlerId].mimickedMoves & gBitTable[j]) >> j;
                     }
                     for (j = 0; j < MAX_MON_MOVES; j++)
                     {
@@ -796,11 +796,11 @@ void sub_818603C(u8 arg0)
                         gBattleMons[battlerId].pp[j] = movePp.pp[j];
                     }
                     gBattleMons[battlerId].ppBonuses = 0;
-                    gDisableStructs[battlerId].mimickedMoves = 0;
+                    gVolatileStructs[battlerId].mimickedMoves = 0;
                     for (j = 0; j < MAX_MON_MOVES; j++)
                     {
                         gBattleMons[battlerId].ppBonuses |= (array3[j]) << (j << 1);
-                        gDisableStructs[battlerId].mimickedMoves |= (array2[j]) << (j);
+                        gVolatileStructs[battlerId].mimickedMoves |= (array2[j]) << (j);
                     }
 
                     if (!(gBattleMons[battlerId].status2 & STATUS2_TRANSFORMED))

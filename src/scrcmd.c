@@ -49,8 +49,12 @@
 #include "trainer_see.h"
 #include "tv.h"
 #include "window.h"
+#include "quests.h"
 #include "constants/event_objects.h"
 #include "constants/items.h"
+#include "constants/battle_frontier.h"
+#include "mgba_printf/mgba.h"
+#include "mgba_printf/mini_printf.h"
 
 typedef u16 (*SpecialFunc)(void);
 typedef void (*NativeFunc)(void);
@@ -1707,6 +1711,9 @@ bool8 ScrCmd_givemon(struct ScriptContext *ctx)
     u32 unkParam2 = ScriptReadWord(ctx);
     u8 unkParam3 = ScriptReadByte(ctx);
 
+    if(level == 0)
+        level = GetLevelCap();
+
     gSpecialVar_Result = ScriptGiveMon(species, level, item, unkParam1, unkParam2, unkParam3);
     return FALSE;
 }
@@ -1765,8 +1772,20 @@ bool8 ScrCmd_removemoney(struct ScriptContext *ctx)
     u32 amount = VarGet(ScriptReadWord(ctx));
     u8 ignore = ScriptReadByte(ctx);
 
-    if (!ignore)
-        RemoveMoney(&gSaveBlock1Ptr->money, amount);
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            if (!ignore)
+                RemoveMoney(&gSaveBlock1Ptr->money, amount);
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            if (!ignore)
+                gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - amount;
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            if (!ignore)
+                gSaveBlock1Ptr->coins = gSaveBlock1Ptr->coins - amount;
+        break;
+    }
     return FALSE;
 }
 
@@ -1775,8 +1794,21 @@ bool8 ScrCmd_checkmoney(struct ScriptContext *ctx)
     u32 amount = VarGet(ScriptReadWord(ctx));
     u8 ignore = ScriptReadByte(ctx);
 
-    if (!ignore)
-        gSpecialVar_Result = IsEnoughMoney(&gSaveBlock1Ptr->money, amount);
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            if (!ignore)
+                gSpecialVar_Result = IsEnoughMoney(&gSaveBlock1Ptr->money, amount);
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            if (!ignore)
+                gSpecialVar_Result = gSaveBlock2Ptr->frontier.battlePoints >= amount;
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            if (!ignore)
+                gSpecialVar_Result = gSaveBlock1Ptr->coins >= amount;
+        break;
+    }
+    
     return FALSE;
 }
 
@@ -1786,8 +1818,21 @@ bool8 ScrCmd_showmoneybox(struct ScriptContext *ctx)
     u8 y = ScriptReadByte(ctx);
     u8 ignore = ScriptReadByte(ctx);
 
-    if (!ignore)
-        DrawMoneyBox(GetMoney(&gSaveBlock1Ptr->money), x, y);
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            if (!ignore)
+                DrawMoneyBox(GetMoney(&gSaveBlock1Ptr->money), x, y);
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            if (!ignore)
+                DrawMoneyBox(gSaveBlock2Ptr->frontier.battlePoints, x, y);
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            if (!ignore)
+                DrawMoneyBox(gSaveBlock1Ptr->coins, x, y);
+        break;
+    }
+
     return FALSE;
 }
 
@@ -1806,8 +1851,20 @@ bool8 ScrCmd_updatemoneybox(struct ScriptContext *ctx)
     u8 y = ScriptReadByte(ctx);
     u8 ignore = ScriptReadByte(ctx);
 
-    if (!ignore)
-        ChangeAmountInMoneyBox(GetMoney(&gSaveBlock1Ptr->money));
+    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+        case MART_MONEY_TYPE_NORMAL:
+            if (!ignore)
+                ChangeAmountInMoneyBox(GetMoney(&gSaveBlock1Ptr->money));
+        break;
+        case MART_MONEY_TYPE_BATTLE_POINTS:
+            if (!ignore)
+                ChangeAmountInMoneyBox(gSaveBlock2Ptr->frontier.battlePoints);
+        break;
+        case MART_MONEY_TYPE_CASINO_COINS:
+            if (!ignore)
+                ChangeAmountInMoneyBox(gSaveBlock1Ptr->coins);
+        break;
+    }
     return FALSE;
 }
 
@@ -2426,9 +2483,7 @@ bool8 ScrCmd_multichoice2(struct ScriptContext *ctx){
 }
 
 //Items given to you by Nurse Joy
-#define NURSE_BATTLE_ITEM_COUNT 217//+ 16
-
-static const u16 sBattleItemList[NURSE_BATTLE_ITEM_COUNT][2] =
+static const u16 sBattleItemList[][2] =
 {
     {ITEM_CANDY_BOX,         1},
     {ITEM_INFINITE_REPEL,    1},
@@ -2440,12 +2495,14 @@ static const u16 sBattleItemList[NURSE_BATTLE_ITEM_COUNT][2] =
     {ITEM_FOCUS_SASH,       50},
     {ITEM_TOXIC_ORB,        50},
     {ITEM_FLAME_ORB,        50},
+    {ITEM_FROST_ORB,        50},
     {ITEM_LIFE_ORB,         50},
     {ITEM_CHOICE_BAND,      50},
     {ITEM_CHOICE_SPECS,     50},
     {ITEM_CHOICE_SCARF,     50},
     {ITEM_ROCKY_HELMET,     50},
     {ITEM_ASSAULT_VEST,     50},
+    {ITEM_TACTICAL_VEST,    50},
     {ITEM_LIGHT_CLAY,       50},
     {ITEM_HEAVY_DUTY_BOOTS, 50},
     {ITEM_AIR_BALLOON,      50},
@@ -2471,19 +2528,22 @@ static const u16 sBattleItemList[NURSE_BATTLE_ITEM_COUNT][2] =
     {ITEM_SOUL_DEW,          5},
     {ITEM_RED_ORB,           5},
     {ITEM_BLUE_ORB,          5},
-    {ITEM_MIRACLE_SEED,     10},
-    {ITEM_CHARCOAL,         10},
     {ITEM_LEEK,             10},
+    {ITEM_DEEP_SEA_SCALE,   10},
+    {ITEM_DEEP_SEA_TOOTH,   10},
     {ITEM_BIG_ROOT,         50},
     {ITEM_MENTAL_HERB,      50},
     {ITEM_POWER_HERB,       50},
     {ITEM_WHITE_HERB,       50},
+    {ITEM_MIRROR_HERB,      50},
     {ITEM_ELECTRIC_SEED,    50},
     {ITEM_PSYCHIC_SEED,     50},
     {ITEM_MISTY_SEED,       50},
     {ITEM_GRASSY_SEED,      50},
     {ITEM_BERRY_JUICE,      50},
     {ITEM_BRIGHT_POWDER,    50},
+    {ITEM_MIRACLE_SEED,     50},
+    {ITEM_CHARCOAL,         50},
     {ITEM_HARD_STONE,       50},
     {ITEM_MYSTIC_WATER,     50},
     {ITEM_SILVER_POWDER,    50},
@@ -2498,7 +2558,8 @@ static const u16 sBattleItemList[NURSE_BATTLE_ITEM_COUNT][2] =
     {ITEM_BLACK_GLASSES,    50},
     {ITEM_SPELL_TAG,        50},
     {ITEM_DRAGON_FANG,      50},
-    {ITEM_MAGNET,           50},
+    {ITEM_METAL_COAT,       50},
+    {ITEM_FAIRY_FEATHER,    50},
     {ITEM_BINDING_BAND,     50},
     {ITEM_SAFETY_GOGGLES,   50},
     {ITEM_EJECT_BUTTON,     50},
@@ -2507,8 +2568,15 @@ static const u16 sBattleItemList[NURSE_BATTLE_ITEM_COUNT][2] =
     {ITEM_IRON_BALL,        50},
     {ITEM_IRON_PILL,        50},
     {ITEM_QUICK_CLAW,       50},
+    {ITEM_KINGS_ROCK,       50},
     {ITEM_MUSCLE_BAND,      50},
     {ITEM_WISE_GLASSES,     50},
+    {ITEM_ABILITY_SHIELD,   50},
+    {ITEM_CLEAR_AMULET,     50},
+    {ITEM_PUNCHING_GLOVE,   50},
+    {ITEM_COVERT_CLOAK,     50},
+    {ITEM_LOADED_DICE,      50},
+    {ITEM_BOOSTER_ENERGY,   50},
     //Pokeballs
     {ITEM_POKE_BALL,         1},
     {ITEM_MASTER_BALL,       1},
@@ -2657,7 +2725,7 @@ bool8 ScrCmd_giveBattleItems(struct ScriptContext *ctx)
 {
     u8 i;
     //Battle Items
-    for(i = 0; i < NURSE_BATTLE_ITEM_COUNT; i++){
+    for(i = 0; i < ARRAY_COUNT(sBattleItemList); i++){
         if(CheckBagHasItem(ITEM_MEGA_BRACELET, 1) && FlagGet(FLAG_SYS_RECEIVED_KEYSTONE)){
             //With Mega Stones
             if (!CheckBagHasItem(sBattleItemList[i][0], sBattleItemList[i][1])){
@@ -2704,7 +2772,7 @@ bool8 ScrCmd_givecustommon(struct ScriptContext *ctx)
     u16 move2 = ScriptReadHalfword(ctx);
     u16 move3 = ScriptReadHalfword(ctx);
     u16 move4 = ScriptReadHalfword(ctx);
-    bool8 isShiny = ScriptReadByte(ctx);
+    u8 isShiny = ScriptReadByte(ctx);
 
     u8 evs[NUM_STATS] = {hpEv, atkEv, defEv, speedEv, spAtkEv, spDefEv};
     u8 ivs[NUM_STATS] = {hpIv, atkIv, defIv, speedIv, spAtkIv, spDefIv};
@@ -2838,5 +2906,95 @@ bool8 ScrCmd_setwildbattlewithcustommoves(struct ScriptContext *ctx)
 	SetMonData(pkmn, MON_DATA_SPDEF_EV,  &spd_evs);
 	SetMonData(pkmn, MON_DATA_SPEED_EV,  &speed_evs);
 	
+    return FALSE;
+}
+
+bool8 ScrCmd_questmenu(struct ScriptContext *ctx)
+{
+    u8 caseId = ScriptReadByte(ctx);
+    u8 questId = VarGet(ScriptReadByte(ctx));
+
+    switch (caseId)
+    {
+    case QUEST_MENU_OPEN:
+    default:
+        SetQuestMenuActive();
+        BeginNormalPaletteFade(0xFFFFFFFF, 2, 16, 0, 0);
+        QuestMenu_Init(0, CB2_ReturnToFieldContinueScriptPlayMapMusic);
+        ScriptContext1_Stop();
+        break;
+    case QUEST_MENU_UNLOCK_QUEST:
+        GetSetQuestFlag(questId, FLAG_SET_UNLOCKED);
+        break;
+    case QUEST_MENU_COMPLETE_QUEST:
+        GetSetQuestFlag(questId, FLAG_SET_COMPLETED);
+        break;
+    case QUEST_MENU_SET_ACTIVE:
+        SetActiveQuest(questId);
+        break;
+    case QUEST_MENU_RESET_ACTIVE:
+        ResetActiveQuest();
+        break;
+    case QUEST_MENU_BUFFER_QUEST_NAME:
+            CopyQuestName(gStringVar1, questId);
+        break;
+    case QUEST_MENU_GET_ACTIVE_QUEST:
+        gSpecialVar_Result = GetActiveQuestIndex();
+        break;
+    case QUEST_MENU_CHECK_UNLOCKED:
+        if (GetSetQuestFlag(questId, FLAG_GET_UNLOCKED))
+            gSpecialVar_Result = TRUE;
+        else
+            gSpecialVar_Result = FALSE;
+        break;
+    case QUEST_MENU_CHECK_COMPLETE:
+        if (GetSetQuestFlag(questId, FLAG_GET_COMPLETED))
+            gSpecialVar_Result = TRUE;
+        else
+            gSpecialVar_Result = FALSE;
+        break;
+    }
+
+    return TRUE;
+}
+
+bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
+{
+    u8 caseId = ScriptReadByte(ctx);
+    u16 num = gMapHeader.events->objectEvents[gSpecialVar_LastTalked - 1].trainerRange_berryTreeId;
+
+    switch(caseId){
+        case GET_EXTRA_ID_BATTLE_POINTS:
+            if(num == 0)
+                num++;
+            
+            ConvertIntToDecimalStringN(gStringVar1, num, STR_CONV_MODE_LEFT_ALIGN, 3);
+            if (gSaveBlock2Ptr->frontier.battlePoints + num > MAX_BATTLE_FRONTIER_POINTS)
+                gSaveBlock2Ptr->frontier.battlePoints = MAX_BATTLE_FRONTIER_POINTS;
+            else
+                gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints + num;
+            FlagSet(gMapHeader.events->objectEvents[gSpecialVar_LastTalked - 1].flagId);
+        break;
+        case GET_EXTRA_ID_POKEMON:
+            StringCopy(gStringVar1, gSpeciesNames[num]);
+            FlagSet(gMapHeader.events->objectEvents[gSpecialVar_LastTalked - 1].flagId);
+        break;
+        case GET_EXTRA_ID_RANDOM_FROM_POOL:
+            num = GetRandomSpeciesFromPool(num);
+            StringCopy(gStringVar1, gSpeciesNames[num]);
+            FlagSet(gMapHeader.events->objectEvents[gSpecialVar_LastTalked - 1].flagId);
+        break;
+    }
+    gSpecialVar_Result = num;
+    return FALSE;
+}
+
+bool8 ScrCmd_changemovement(struct ScriptContext *ctx)
+{
+    u16 localId = VarGet(ScriptReadHalfword(ctx));
+    u8 movement = VarGet(ScriptReadByte(ctx));
+    struct ObjectEvent *objectEvent;
+    objectEvent = &gObjectEvents[localId];
+    SetTrainerMovementType(objectEvent, movement);
     return FALSE;
 }

@@ -118,16 +118,16 @@ AquaHideout_B2F_Text_MattPostBattle: @ 8233FF2
 	.string "Hehehe!$"
 
 AquaHideout_B2F_Text_Grunt4Intro: @ 82340B4
-	.string "Wahahah, I grew weary of waiting!\n"
-	.string "You owe me a battle, too!$"
+	.string "WHO JUST UNPLUGED THE PC?!\n"
+	.string "I bet its you kid!$"
 
 AquaHideout_B2F_Text_Grunt4Defeat: @ 82340F0
-	.string "Tired of waiting…\n"
-	.string "Lost and dazed…$"
+	.string "Tsssk, well i had more business\n"
+	.string "with the computer anyway.$"
 
 AquaHideout_B2F_Text_Grunt4PostBattle: @ 8234112
-	.string "Boss…\n"
-	.string "Is this good enough?$"
+	.string "Which one of these is the power on?\n"
+	.string "I hate computers, really.$"
 
 AquaHideout_B2F_Text_Grunt6Intro: @ 823412D
 	.string "Warp panels, the Hideout's pride\n"

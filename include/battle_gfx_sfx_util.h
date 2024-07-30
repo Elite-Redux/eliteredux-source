@@ -6,6 +6,7 @@ void FreeBattleSpritesData(void);
 u16 ChooseMoveAndTargetInBattlePalace(void);
 void SpriteCB_WaitForBattlerBallReleaseAnim(struct Sprite *sprite);
 void SpriteCB_TrainerSlideIn(struct Sprite *sprite);
+void SpriteCB_TrainerSpawn(struct Sprite *sprite);
 void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status);
 bool8 TryHandleLaunchBattleTableAnimation(u8 activeBattlerId, u8 attacker, u8 target, u8 tableId, u16 argument);
 void InitAndLaunchSpecialAnimation(u8 activeBattlerId, u8 attacker, u8 target, u8 tableId);
@@ -39,10 +40,13 @@ void LoadAndCreateEnemyShadowSprites(void);
 void SpriteCB_SetInvisible(struct Sprite *sprite);
 void SetBattlerShadowSpriteCallback(u8 battlerId, u16 species);
 void HideBattlerShadowSprite(u8 battlerId);
-void sub_805EF14(void);
+void FillAroundBattleWindows(void);
 void ClearTemporarySpeciesSpriteData(u8 battlerId, bool8 dontClearSubstitute);
 void AllocateMonSpritesGfx(void);
 void FreeMonSpritesGfx(void);
 bool32 ShouldPlayNormalMonCry(struct Pokemon *mon);
+void LoadHealthBoxesPalette(void);
+
+u8 getBattleInterfaceTheme(void);
 
 #endif // GUARD_BATTLE_GFX_SFX_UTIL_H

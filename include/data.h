@@ -24,7 +24,6 @@ struct TrainerMonNoItemDefaultMoves
     u16 iv;
     u8 lvl;
     u16 species;
-    u8 ivs[NUM_STATS];
     u8 evs[NUM_STATS];
     u8 nature;
 };
@@ -35,7 +34,6 @@ struct TrainerMonItemDefaultMoves
     u8 lvl;
     u16 species;
     u16 heldItem;
-    u8 ivs[NUM_STATS];
     u8 evs[NUM_STATS];
     u8 nature;
 };
@@ -46,7 +44,6 @@ struct TrainerMonNoItemCustomMoves
     u8 lvl;
     u16 species;
     u16 moves[MAX_MON_MOVES];
-    u8 ivs[NUM_STATS];
     u8 evs[NUM_STATS];
     u8 nature;
 };
@@ -59,10 +56,11 @@ struct TrainerMonItemCustomMoves
     u8 ability;
     u8 spread;
     u16 moves[MAX_MON_MOVES];
-    u8 ivs[NUM_STATS];
+    u8 hpType;
     u8 evs[NUM_STATS];
     u8 nature;
     bool8 zeroSpeedIvs;
+    bool8 isAlpha;
 };
 
 union TrainerMonPtr
@@ -124,6 +122,8 @@ extern const struct CompressedSpriteSheet gMonBackPicTableFemale[];
 extern const struct CompressedSpritePalette gMonPaletteTable[];
 extern const struct CompressedSpritePalette gMonPaletteTableFemale[];
 extern const struct CompressedSpritePalette gMonShinyPaletteTable[];
+extern const struct CompressedSpritePalette gMonRareShinyPaletteTable[];
+extern const struct CompressedSpritePalette gMonLegendaryShinyPaletteTable[];
 extern const struct CompressedSpritePalette gMonShinyPaletteTableFemale[];
 extern const union AnimCmd *const *const gTrainerFrontAnimsPtrTable[];
 extern const struct MonCoords gTrainerFrontPicCoords[];

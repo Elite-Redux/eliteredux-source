@@ -586,7 +586,6 @@ LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex:: @ 81FA2F8
 	setflag FLAG_ADVENTURE_STARTED
 	setvar VAR_OLDALE_TOWN_STATE, 1
 	setvar VAR_LITTLEROOT_RIVAL_STATE, 4
-	setvar VAR_LITTLEROOT_TOWN_STATE, 3
 	releaseall
 	end
 
@@ -821,8 +820,24 @@ LittlerootTown_ProfessorBirchsLab_Text_HeardYouBeatRivalTakePokedex: @ 81FAB22
 	.string "research, but I think you should have\l"
 	.string "this Pokédex.$"
 
+LittlerootTown_ProfessorBirchsLab_Text_ThanksForSavingTakePokedex: @ 81FAB22
+	.string "Prof. Birch: {PLAYER}{KUN}!\p"
+	.string "{RIVAL}'s been helping with my research\n"
+	.string "for a long time.\p"
+	.string "{RIVAL} has an extensive history as\n"
+	.string "a Trainer already.\p"
+	.string "You seem like you'd be a good Trainer,\n"
+	.string "seeing how easily you kicked that\l"
+	.string "Zigzagoon butt!\p"
+	.string "You should keep that Pokémon, {PLAYER}{KUN}.\n"
+	.string "And you know what?\p"
+	.string "Here, I ordered this for my research,\n"
+	.string "but I think you should have this\l"
+	.string "Pokédex.$"
+
 LittlerootTown_ProfessorBirchsLab_Text_ReceivedPokedex: @ 81FAC32
-	.string "{PLAYER} received the National Pokédex!$"
+	.string "{PLAYER} received a Pokémon, and the\n"
+	.string "National Pokédex!$"
 
 LittlerootTown_ProfessorBirchsLab_Text_ExplainPokedex: @ 81FAC4B
 	.string "Prof. Birch: The Pokédex is a high-tech\n"
@@ -833,7 +848,15 @@ LittlerootTown_ProfessorBirchsLab_Text_ExplainPokedex: @ 81FAC4B
 	.string "Whenever my kid catches a rare Pokémon\n"
 	.string "and records its data in the Pokédex,\l"
 	.string "why, {RIVAL} looks for me while I'm out\l"
-	.string "doing fieldwork, and shows me.$"
+	.string "doing fieldwork, and shows me.\p"
+	.string "As a new trainer, I'd recommend that you\n"
+	.string "catch a few new Pokémon around here,\l"
+	.string "and hone your battling skills by\l"
+	.string "training against my kid.\p"
+	.string "Go talk to the Nurse in the nearby town,\n"
+	.string "then meet {RIVAL} somewhere around...\l"
+	.string "Route 103, I believe.\p"
+	.string "Good luck, little fella! Ho ho!$"
 
 LittlerootTown_ProfessorBirchsLab_Text_CountlessPokemonAwait: @ 81FAD6F
 	.string "Prof. Birch: Countless Pokémon\n"

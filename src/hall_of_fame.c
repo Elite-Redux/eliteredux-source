@@ -36,13 +36,16 @@
 #include "constants/rgb.h"
 #include "constants/items.h"
 #include "constants/species.h"
+#include "constants/abilities.h"
 
 #define HALL_OF_FAME_MAX_TEAMS 30
 #define TAG_CONFETTI 1001
 
 struct HallofFameMon
 {
-    u32 tid;
+    u32 tid:30;
+    u32 isShiny:1; //ToFix
+    u32 isAlpha:1;
     u32 personality;
     u16 species;
     u8 lvl;
@@ -806,11 +809,149 @@ u16 getHallofFameSpecies(u8 num){
             if(item == ITEM_SLOWKINGITE)
                 return SPECIES_SLOWKING_MEGA;
         break;
+        case SPECIES_RIBOMBEE:
+            if(item == ITEM_RIBOMBITE)
+                return SPECIES_RIBOMBEE_MEGA;
+        break;
+        case SPECIES_SCRAFTY:
+            if(item == ITEM_SCRAFTITE)
+                return SPECIES_SCRAFTY_MEGA;
+        break;
+        case SPECIES_FROSLASS:
+            if(item == ITEM_FROSLASSITE)
+                return SPECIES_FROSLASS_MEGA;
+        break;
+        case SPECIES_SABLEYE_REDUX:
+            if(item == ITEM_SABLENITE_R)
+                return SPECIES_SABLEYE_MEGA_REDUX;
+        break;
+        case SPECIES_URSALUNA:
+            if(item == ITEM_URSALUNITE)
+                return SPECIES_URSALUNA_MEGA;
+        break;
+        case SPECIES_MAWILE_REDUX:
+            if(item == ITEM_MAWILITE_R)
+                return SPECIES_MAWILE_MEGA_REDUX;
+        break;
+        case SPECIES_HOUNDOOM_REDUX:
+            if(item == ITEM_HOUNDOOMINITE_R)
+                return SPECIES_HOUNDOOM_MEGA_REDUX;
+        break;
+        case SPECIES_BEEDRILL_REDUX:
+            if(item == ITEM_BEEDRILLITE_R)
+                return SPECIES_BEEDRILL_MEGA_REDUX;
+        break;
+        case SPECIES_ALAKAZAM_REDUX:
+            if(item == ITEM_ALAKAZITE_R)
+                return SPECIES_ALAKAZAM_MEGA_REDUX;
+        break;
+        case SPECIES_MACHAMP_REDUX:
+            if(item == ITEM_MACHAMPITE_R)
+                return SPECIES_MACHAMP_MEGA_REDUX;
+        break;
+        case SPECIES_SKARMORY_REDUX:
+            if(item == ITEM_SKARMORITE_R)
+                return SPECIES_SKARMORY_MEGA_REDUX;
+        break;
+        case SPECIES_ARCANINE_REDUX:
+            if(item == ITEM_ARCANITE_R)
+                return SPECIES_ARCANINE_MEGA_REDUX;
+        break;
+        case SPECIES_TYRANITAR_REDUX:
+            if(item == ITEM_TYRANITARITE_R)
+                return SPECIES_TYRANITAR_MEGA_REDUX;
+        break;
+        case SPECIES_GARCHOMP_REDUX:
+            if(item == ITEM_GARCHOMPITE_R)
+                return SPECIES_GARCHOMP_MEGA_REDUX;
+        break;
+        case SPECIES_DIALGA:
+            if(item == ITEM_ADAMANT_ORB)
+                return SPECIES_DIALGA_ORIGIN;
+        break;
+        case SPECIES_PALKIA:
+            if(item == ITEM_LUSTROUS_ORB)
+                return SPECIES_PALKIA_ORIGIN;
+        break;
+        case SPECIES_GIRATINA:
+            if(item == ITEM_GRISEOUS_ORB)
+                return SPECIES_GIRATINA_ORIGIN;
+        break;
+        case SPECIES_ZAMAZENTA:
+            if(item == ITEM_RUSTED_SHIELD)
+                return SPECIES_ZAMAZENTA_CROWNED_SHIELD;
+        break;
+        case SPECIES_ZACIAN:
+            if(item == ITEM_RUSTED_SWORD)
+                return SPECIES_ZACIAN_CROWNED_SWORD;
+        break;
+        /*case SPECIES_KINGAMBIT_REDUX:
+            if(item == ITEM_KINGAMBITITE_R)
+                return SPECIES_KINGAMBIT_REDUX_MEGA;
+        break;*/
         case SPECIES_RAYQUAZA:
             for(i = 0; i < MAX_MON_MOVES; i++){
                 if(GetMonData(&gPlayerParty[num], MON_DATA_MOVE1 + i) == MOVE_DRAGON_ASCENT)
                     return SPECIES_RAYQUAZA_MEGA;
             }
+        break;
+        case SPECIES_NECROZMA_DAWN_WINGS:
+        case SPECIES_NECROZMA_DUSK_MANE:
+            for(i = 0; i < MAX_MON_MOVES; i++){
+                if(GetMonData(&gPlayerParty[num], MON_DATA_MOVE1 + i) == MOVE_PHOTON_GEYSER)
+                    return SPECIES_NECROZMA_ULTRA;
+            }
+            break;
+        case SPECIES_DARMANITAN_GALARIAN:
+        case SPECIES_DARMANITAN:
+            if(GetAbilityBySpecies(species, GetMonData(&gPlayerParty[num], MON_DATA_ABILITY_NUM)) == ABILITY_ZEN_MODE ||
+               SpeciesHasInnate(species, ABILITY_ZEN_MODE, GetMonData(&gPlayerParty[num], MON_DATA_LEVEL), GetMonData(&gPlayerParty[num], MON_DATA_PERSONALITY), FALSE, FALSE))
+               return species == SPECIES_DARMANITAN ? SPECIES_DARMANITAN_ZEN_MODE : SPECIES_DARMANITAN_ZEN_MODE_GALARIAN;
+            break;
+        case SPECIES_GRENINJA_BATTLE_BOND:
+            return SPECIES_GRENINJA_ASH;
+        break;
+        case SPECIES_CHIEN_PAO:
+            if(item == ITEM_CHIEN_PAOITE)
+                return SPECIES_CHIEN_PAO_MEGA;
+        break;
+        case SPECIES_DRACOVISH:
+            if(item == ITEM_DRACOVISHITE)
+                return SPECIES_DRACOVISH_MEGA;
+        break;
+        case SPECIES_MAWILE_REDUX_B:
+            if(item == ITEM_MAWILITE_R_B)
+                return SPECIES_MAWILE_REDUX_B_MEGA;
+        break;
+        case SPECIES_RIBOMBEE_REDUX:
+            if(item == ITEM_RIBOMBITE_R)
+                return SPECIES_RIBOMBEE_REDUX_MEGA;
+        break;
+        case SPECIES_WEAVILE_REDUX:
+            if(item == ITEM_WEAVILEITE_R)
+                return SPECIES_WEAVILE_REDUX_MEGA;
+        break;
+        case SPECIES_FLYGON_REDUX:
+            if(item == ITEM_FLYGONITE_R)
+                return SPECIES_FLYGON_REDUX_MEGA;
+        break;
+        case SPECIES_SNORLAX:
+            if(item == ITEM_SNORLAX_ORB)
+                return SPECIES_SNORLAX_PRIMAL;
+        break;
+        case SPECIES_VICTINI:
+            if(item == ITEM_VICTINI_ORB)
+                return SPECIES_VICTINI_PRIMAL;
+        break;
+        case SPECIES_WIGGLYTUFF:
+            if(item == ITEM_WIGGLITUFF_ORB)
+                return SPECIES_WIGGLYTUFF_PRIMAL;
+            if(item == ITEM_WIGGLYTUFFITE)
+                return SPECIES_WIGGLYTUFF_MEGA;
+        break;
+        case SPECIES_TINKATON:
+            if(item == ITEM_TINKATITE)
+                return SPECIES_TINKATON_MEGA;
         break;
     }
 
@@ -833,6 +974,8 @@ static void Task_Hof_InitMonData(u8 taskId)
             sHofMonPtr->mon[i].tid = GetMonData(&gPlayerParty[i], MON_DATA_OT_ID);
             sHofMonPtr->mon[i].personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY);
             sHofMonPtr->mon[i].lvl = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
+            sHofMonPtr->mon[i].isShiny = GetMonData(&gPlayerParty[i], MON_DATA_IS_SHINY);
+            sHofMonPtr->mon[i].isAlpha = GetMonData(&gPlayerParty[i], MON_DATA_IS_ALPHA);
             GetMonData(&gPlayerParty[i], MON_DATA_NICKNAME, nick);
             for (j = 0; j < POKEMON_NAME_LENGTH; j++)
             {
@@ -843,6 +986,8 @@ static void Task_Hof_InitMonData(u8 taskId)
         else
         {
             sHofMonPtr->mon[i].species = SPECIES_NONE;
+            sHofMonPtr->mon[i].isShiny = FALSE;
+            sHofMonPtr->mon[i].isAlpha = FALSE;
             sHofMonPtr->mon[i].tid = 0;
             sHofMonPtr->mon[i].personality = 0;
             sHofMonPtr->mon[i].lvl = 0;
@@ -876,7 +1021,7 @@ static void Task_Hof_InitTeamSaveData(u8 taskId)
     }
     else
     {
-        if (Save_LoadGameData(SAVE_HALL_OF_FAME) != SAVE_STATUS_OK)
+        if (LoadGameSave(SAVE_HALL_OF_FAME) != SAVE_STATUS_OK)
             memset(gDecompressionBuffer, 0, 0x2000);
     }
 
@@ -971,7 +1116,7 @@ static void Task_Hof_DisplayMon(u8 taskId)
     if (currMon->species == SPECIES_EGG)
         destY += 10;
 
-    spriteId = CreatePicSprite2(currMon->species, currMon->tid, currMon->personality, 1, startX, startY, currMonId, 0xFFFF);
+    spriteId = CreatePicSprite2(currMon->species, currMon->tid, currMon->personality, 1, startX, startY, currMonId, 0xFFFF, currMon->isShiny, currMon->isAlpha);
     gSprites[spriteId].tDestinationX = destX;
     gSprites[spriteId].tDestinationY = destY;
     gSprites[spriteId].data[0] = 0;
@@ -1248,7 +1393,7 @@ void CB2_DoHallOfFamePC(void)
 static void Task_HofPC_CopySaveData(u8 taskId)
 {
     sub_81980F0(0, 0x1E, 0, 0xC, 0x226);
-    if (Save_LoadGameData(SAVE_HALL_OF_FAME) != SAVE_STATUS_OK)
+    if (LoadGameSave(SAVE_HALL_OF_FAME) != SAVE_STATUS_OK)
     {
         gTasks[taskId].func = Task_HofPC_PrintDataIsCorrupted;
     }
@@ -1319,7 +1464,7 @@ static void Task_HofPC_DrawSpritesPrintText(u8 taskId)
             if (currMon->species == SPECIES_EGG)
                 posY += 10;
 
-            spriteId = CreateMonPicSprite(currMon->species, currMon->tid, currMon->personality, 1, posX, posY, i, 0xFFFF);
+            spriteId = CreateMonPicSprite(currMon->species, currMon->tid, currMon->personality, 1, posX, posY, i, 0xFFFF, currMon->isShiny, currMon->isAlpha);
             gSprites[spriteId].oam.priority = 1;
             gTasks[taskId].tMonSpriteId(i) = spriteId;
         }
@@ -1498,7 +1643,7 @@ static void Task_HofPC_ExitOnButtonPress(u8 taskId)
 static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
 {
     u8 numModes = 0;
-    static const u8 gText_WelcomeToHOF[] 		  = _("Elite Redux v1.7-a1 - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
+    static const u8 gText_WelcomeToHOF[] 		  = _("Elite Redux v2.0 - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
     static const u8 sText_WinsLossesText[]        = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}");
     static const u8 sText_WinsLossesLockedText[]  = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}      {COLOR LIGHT_RED}{SHADOW RED}Locked Mode{COLOR WHITE}{SHADOW DARK_GRAY}");
     
@@ -1576,12 +1721,13 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
     AddTextPrinterParameterized3(0, FONT_SMALL_NARROW, GetStringCenterAlignXOffset(1, gStringVar4, 0xD0), 0, sMonInfoTextColors, 0, gStringVar4);
     
     if(gSaveBlock2Ptr->encounterRandomizedMode ||
+       gSaveBlock2Ptr->encounterRandomizedLegendaryMode ||
        gSaveBlock2Ptr->typeRandomizedMode      ||
        gSaveBlock2Ptr->abilityRandomizedMode   ||
        gSaveBlock2Ptr->innaterandomizedMode){
 
         //Encounter Randomizer
-        if(gSaveBlock2Ptr->encounterRandomizedMode){
+        if(gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
             StringCopy(gStringVar1, encounterRandomizerModeText);
             numModes++;
         }
@@ -1619,7 +1765,7 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
         }                
 
         if(numModes == 1){
-            if(gSaveBlock2Ptr->encounterRandomizedMode){
+            if(gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
                 StringCopy(gStringVar1, encounterRandomizerModeTextNo);
             }
             else if(gSaveBlock2Ptr->typeRandomizedMode){
@@ -1630,7 +1776,7 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
             StringCopy(gStringVar2, typeRandomizerModeTextNo);
         }
             
-        if(gSaveBlock2Ptr->encounterRandomizedMode &&
+        if((gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode) &&
            gSaveBlock2Ptr->typeRandomizedMode      &&
            gSaveBlock2Ptr->abilityRandomizedMode   &&
            gSaveBlock2Ptr->innaterandomizedMode)

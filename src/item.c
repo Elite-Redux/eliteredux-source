@@ -914,6 +914,11 @@ u16 ItemId_GetPrice(u16 itemId)
     return gItems[SanitizeItemId(itemId)].price;
 }
 
+u16 ItemId_GetBPPrice(u16 itemId)
+{
+    return gItems[SanitizeItemId(itemId)].bpPrice;
+}
+
 u8 ItemId_GetHoldEffect(u16 itemId)
 {
     return gItems[SanitizeItemId(itemId)].holdEffect;

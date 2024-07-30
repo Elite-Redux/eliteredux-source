@@ -63,6 +63,7 @@
 #define MAP_UNDERWATER_ROUTE129 (54 | (0 << 8))
 #define MAP_UNDERWATER_ROUTE105 (55 | (0 << 8))
 #define MAP_UNDERWATER_ROUTE125 (56 | (0 << 8))
+#define MAP_RUSTURF_TUNNEL_2F   (57 | (0 << 8))
 
 // gMapGroup_IndoorLittleroot
 #define MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F    (0 | (1 << 8))
@@ -215,6 +216,7 @@
 #define MAP_LILYCOVE_CITY_DEPARTMENT_STORE_5F       (20 | (13 << 8))
 #define MAP_LILYCOVE_CITY_DEPARTMENT_STORE_ROOFTOP  (21 | (13 << 8))
 #define MAP_LILYCOVE_CITY_DEPARTMENT_STORE_ELEVATOR (22 | (13 << 8))
+#define MAP_LILYCOVE_CITY_MOSS_DEEP_CITY_TELEPORTER (23 | (13 << 8))
 
 // gMapGroup_IndoorMossdeep
 #define MAP_MOSSDEEP_CITY_GYM               (0 | (14 << 8))
@@ -264,6 +266,7 @@
 #define MAP_EVER_GRANDE_CITY_POKEMON_CENTER_1F (12 | (16 << 8))
 #define MAP_EVER_GRANDE_CITY_POKEMON_CENTER_2F (13 | (16 << 8))
 #define MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_2F (14 | (16 << 8))
+#define MAP_EVERGRANDE_CITY_MONO_CHAMP_ROOM_1  (15 | (16 << 8))
 
 // gMapGroup_IndoorRoute104
 #define MAP_ROUTE104_MR_BRINEYS_HOUSE         (0 | (17 << 8))
@@ -426,6 +429,9 @@
 #define MAP_DEWFORD_MANOR_1F             (2 | (25 << 8))
 #define MAP_METEOR_FALLS_HAXORUS_ROOM    (3 | (25 << 8))
 #define MAP_PETALBURG_WOODS_BRELOOM_ROOM (4 | (25 << 8))
+#define MAP_SECRET_DUNGEON               (5 | (25 << 8))
+#define MAP_GRANITE_CAVE_PUZZLE_OUT      (6 | (25 << 8))
+#define MAP_SEAFLOOR_CAVERN_SHORTCUT     (7 | (25 << 8))
 
 // gMapGroup_IndoorDynamic
 #define MAP_SECRET_BASE_RED_CAVE1    (0 | (26 << 8))

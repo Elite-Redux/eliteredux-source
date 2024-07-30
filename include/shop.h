@@ -8,6 +8,14 @@ enum
     MART_TYPE_NORMAL, // normal mart
     MART_TYPE_DECOR,
     MART_TYPE_DECOR2,
+    MART_TYPE_MONS,
+};
+
+enum
+{
+    MART_MONEY_TYPE_NORMAL,
+    MART_MONEY_TYPE_BATTLE_POINTS,
+    MART_MONEY_TYPE_CASINO_COINS,
 };
 
 // shop view window NPC info enum

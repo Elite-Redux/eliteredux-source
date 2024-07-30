@@ -719,7 +719,7 @@ static void SetPlayerCardData(struct TrainerCard *trainerCard, u8 cardType)
 
     trainerCard->pokemonTrades = GetCappedGameStat(GAME_STAT_POKEMON_TRADES, 0xFFFF);
 
-    trainerCard->money = GetMoney(&gSaveBlock1Ptr->money);
+    trainerCard->money = gSaveBlock2Ptr->frontier.battlePoints;
 
     for (i = 0; i < TRAINER_CARD_PROFILE_LENGTH; i++)
         trainerCard->easyChatProfile[i] = gSaveBlock1Ptr->easyChatProfile[i];
@@ -1028,29 +1028,31 @@ static void PrintIdOnCard(void)
     AddTextPrinterParameterized3(1, 1, xPos, top, sTrainerCardTextColors, TEXT_SPEED_FF, buffer);
 }
 
+const u8 sText_BattlePoints[] = _("Battle Points");
+
 static void PrintMoneyOnCard(void)
 {
     s32 xOffset;
     u8 top;
 
     if (!sData->isHoenn)
-        AddTextPrinterParameterized3(1, 1, 20, 56, sTrainerCardTextColors, TEXT_SPEED_FF, gText_TrainerCardMoney);
+        AddTextPrinterParameterized3(1, 1, 20, 56, sTrainerCardTextColors, TEXT_SPEED_FF, sText_BattlePoints);
     else
-        AddTextPrinterParameterized3(1, 1, 16, 57, sTrainerCardTextColors, TEXT_SPEED_FF, gText_TrainerCardMoney);
+        AddTextPrinterParameterized3(1, 1, 16, 57, sTrainerCardTextColors, TEXT_SPEED_FF, sText_BattlePoints);
 
     ConvertIntToDecimalStringN(gStringVar1, sData->trainerCard.money, STR_CONV_MODE_LEFT_ALIGN, 7);
-    StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
+    //StringExpandPlaceholders(gStringVar4, gText_PokedollarVar1);
     if (!sData->isHoenn)
     {
-        xOffset = GetStringRightAlignXOffset(1, gStringVar4, 144);
+        xOffset = GetStringRightAlignXOffset(1, gStringVar1, 144);
         top = 56;
     }
     else
     {
-        xOffset = GetStringRightAlignXOffset(1, gStringVar4, 128);
+        xOffset = GetStringRightAlignXOffset(1, gStringVar1, 128);
         top = 57;
     }
-    AddTextPrinterParameterized3(1, 1, xOffset, top, sTrainerCardTextColors, TEXT_SPEED_FF, gStringVar4);
+    AddTextPrinterParameterized3(1, 1, xOffset, top, sTrainerCardTextColors, TEXT_SPEED_FF, gStringVar1);
 }
 
 static u16 GetCaughtMonsCount(void)

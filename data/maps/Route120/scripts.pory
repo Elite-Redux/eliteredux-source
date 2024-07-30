@@ -498,3 +498,220 @@ script Route120_EventScript_LegendaryNPC{
     release
     end
 }
+const MAWOOTAD_NPC = 37
+
+script Route120_EventScript_MawootadNPC{
+    lockall
+    faceplayer
+    msgbox(format("Hey You're the kid who saved my research from being stolen!\p"
+    "It's perfect, follow me I need to show you something!"))
+    closemessage
+    switch(var(VAR_FACING)){
+        case DIR_WEST:
+           applymovement(OBJ_EVENT_ID_PLAYER, Route120_Movement_MawootadNPCCorrectWest)
+           waitmovement(0)
+        break
+        case DIR_NORTH :
+            applymovement(OBJ_EVENT_ID_PLAYER, Route120_Movement_MawootadNPCCorrectNorth)
+            waitmovement(0)
+        break
+        case DIR_SOUTH :
+            applymovement(OBJ_EVENT_ID_PLAYER, Route120_Movement_MawootadNPCCorrectSouth)
+            waitmovement(0)
+        break
+    }
+    applymovement(MAWOOTAD_NPC, Route120_Movement_MawootadNPCWalk1)
+    applymovement(OBJ_EVENT_ID_PLAYER, Route120_Movement_MawootadNPCWalk1)
+    waitmovement(0)
+    call(Route120_EventScript_MawootadNPCQuestion1)
+    releaseall
+    end
+}
+movement Route120_Movement_MawootadNPCCorrectNorth{
+    walk_left
+    walk_up
+    face_right
+}
+movement Route120_Movement_MawootadNPCCorrectWest{
+    walk_down
+    walk_left * 2
+    walk_up
+    face_right
+}
+movement Route120_Movement_MawootadNPCCorrectSouth{
+    walk_left
+    walk_down
+    face_right
+}
+movement Route120_Movement_MawootadNPCWalk1{
+    walk_right * 6
+}
+script Route120_EventScript_MawootadNPCQuestion1{
+    msgbox(format("Oh i may ask you question before showing you my latest research.\p"
+    "If you don't have the basics i'll just bore you."), MSGBOX_YESNO)
+    if (var(VAR_RESULT) != 1){
+        msgbox(format("Alright, see you next time then"))
+        closemessage
+        applymovement(MAWOOTAD_NPC, Route120_EventScript_MawootadNPCWalkAway)
+        setflag(FLAG_HIDE_MAWOOTAD)
+        waitmovement(0)
+        return
+    }
+    call(Route120_EventScript_MawootadNPCAskQuestion)
+    setflag(FLAG_HIDE_MAWOOTAD)
+    return
+}
+
+script Route120_EventScript_MawootadNPCAskQuestion{
+    // count the number of skipped trainer in weather institute
+    setvar(VAR_TEMP_2, 0)
+    if (!defeated(TRAINER_GRUNT_WEATHER_INST_1)){ //avoidable if not 4
+        addvar(VAR_TEMP_2, 1)
+    }
+    if (!defeated(TRAINER_GRUNT_WEATHER_INST_3)){ //avoidable
+        addvar(VAR_TEMP_2, 1)
+    }
+    if (!defeated(TRAINER_GRUNT_WEATHER_INST_4)){ //avoidable if not 1
+        addvar(VAR_TEMP_2, 1)
+    }
+    // the more trainers have been skipped, the harder the question will be
+    faceplayer
+    if (var(VAR_TEMP_2) >= 2){ // Totally unfair question
+        msgbox(format("Alright, how many letters i and o have i have been saying since now?"))
+        multichoice2(0, 0, MultiChoice_MawootadTotallyUnfairQuestion)
+        switch(var(VAR_RESULT)){
+            case 12:
+                msgbox(format("Easy enough, you follow. Lets get ahead!"))
+                closemessage
+                call(Route120_EventScript_MawootadNPCRightAnswer)
+            break
+            default:
+                call(Route120_EventScript_MawootadNPCWrongAnswer)
+        
+        }
+    } elif (var(VAR_TEMP_2) == 1){ // Finland
+        msgbox(format("What is a Metang?"))
+        multichoice2(0, 0, MultiChoice_MawootadFinlandQuestion)
+        switch(var(VAR_RESULT)){
+            case 1:
+                msgbox(format("From a genetic biologist point of view, any pokemon can be at 99% a Scorbuny"))
+                closemessage
+                call(Route120_EventScript_MawootadNPCRightAnswer)
+            break
+            default:
+                call(Route120_EventScript_MawootadNPCWrongAnswer)
+        
+        }
+    } else { // XD
+        msgbox(format("Who is the nicest girl gym leader?"))
+        multichoice2(0, 0, MultiChoice_MawootadXDQuestion)
+        switch(var(VAR_RESULT)){
+            case 2:
+                call(Route120_EventScript_MawootadNPCWrongAnswer)
+            break
+            default:
+                msgbox(format("As long it is not Flannery."))
+                closemessage
+                call(Route120_EventScript_MawootadNPCRightAnswer)
+        
+        }
+    }
+}
+script Route120_EventScript_MawootadNPCWrongAnswer{
+    msgbox(format("WROOONG! How can someone be wrong on that. That's it i leave!"))
+    closemessage
+    applymovement(MAWOOTAD_NPC, Route120_EventScript_MawootadNPCWalkAway)
+    waitmovement(0)
+    setflag(FLAG_HIDE_MAWOOTAD)
+	removeobject(MAWOOTAD_NPC)
+    return
+}
+script Route120_EventScript_MawootadNPCRightAnswer{
+    applymovement(MAWOOTAD_NPC, Route120_EventScript_MawootadNPCWalkAway)
+    applymovement(OBJ_EVENT_ID_PLAYER, Route120_EventScript_MawootadNPCTrainerFollowUp)
+    waitmovement(0)
+    applymovement(OBJ_EVENT_ID_PLAYER, Route120_EventScript_MawootadNPCTrainerCatchUp)
+    waitmovement(0)
+    playse(SE_PIN)
+	applymovement(MAWOOTAD_NPC, Common_Movement_ExclamationMark)
+	applymovement(MAWOOTAD_NPC, Common_Movement_WalkInPlaceFastestRight)
+	waitmovement(0)
+	msgbox(format("..."))
+	setvar(VAR_0x8004, 1)  //vertical pan
+	setvar(VAR_0x8005, 1)  //horizontal pan
+	setvar(VAR_0x8006, 2)  //num shakes
+	setvar(VAR_0x8007, 7)  //shake delay
+	special(ShakeCamera)
+	waitstate
+	applymovement(MAWOOTAD_NPC, Common_Movement_WalkInPlaceFastestRight)
+	waitmovement(0)
+	msgbox(format("Someone..."))
+	setvar(VAR_0x8004, 1)  //vertical pan
+	setvar(VAR_0x8005, 1)  //horizontal pan
+	setvar(VAR_0x8006, 4)  //num shakes
+	setvar(VAR_0x8007, 8)  //shake delay
+	special(ShakeCamera)
+	waitstate
+	msgbox(format("Someone stole my research again!"))
+	closemessage
+	playse(SE_M_SELF_DESTRUCT)
+	waitse
+	msgbox(format("TEAM AQUAAAAAA!!"))
+	msgbox(format("AAAAAAAAAH!!!"))
+	closemessage
+	playse(SE_M_TELEPORT)
+	removeobject(MAWOOTAD_NPC)
+	msgbox(format("(He teleported out of rage)"))
+	waitse
+	setflag(FLAG_HIDE_MAWOOTAD)
+    return
+}
+text MultiChoice_MawootadTotallyUnfairQuestion{
+    "Yes$"
+    "10$"
+    "11$"
+    "19$"
+    "20$"
+    "21$"
+    "22$"
+    "23$"
+    "24$"
+    "25$"
+    "27$"
+    "29$"
+    "38$"
+    "40$"
+    "41$"
+    "42$"
+    "$"
+}
+text MultiChoice_MawootadFinlandQuestion{
+    "Yes$"
+    "A Scorbuny$"
+    "50BP$"
+    "An OP Pokemon$"
+    "$"
+}
+text MultiChoice_MawootadXDQuestion{
+    "Yes$"
+    "Roxanne$"
+    "Flannery$"
+    "Winona$"
+    "Liza$"
+    "Wattson$"
+    "$"
+}
+movement Route120_EventScript_MawootadNPCWalkAway{
+    walk_right * 5
+    walk_up * 2
+    walk_right * 5
+}
+movement Route120_EventScript_MawootadNPCTrainerFollowUp{
+    walk_right * 6
+    walk_up * 2
+    walk_right * 4
+}
+movement Route120_EventScript_MawootadNPCTrainerCatchUp{
+    walk_down
+    walk_right
+}

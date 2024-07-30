@@ -418,6 +418,7 @@ static void Overworld_ResetStateAfterWhiteOut(void)
     FlagClear(FLAG_SYS_USE_STRENGTH);
     FlagClear(FLAG_SYS_USE_FLASH);
     FlagClear(FLAG_SYS_INVERSE_BATTLE);
+    VarSet(VAR_TRAINER_PRIZE_BP, 0);
     #if VAR_TERRAIN != 0
         VarSet(VAR_TERRAIN, 0);
     #endif
@@ -1540,7 +1541,7 @@ void CB2_NewGame(void)
     PlayTimeCounter_Start();
     ScriptContext1_Init();
     ScriptContext2_Disable();
-    gFieldCallback = ExecuteTruckSequence;
+    // gFieldCallback = ExecuteTruckSequence;
     gFieldCallback2 = NULL;
     DoMapLoadLoop(&gMain.state);
     SetFieldVBlankCallback();
@@ -1554,8 +1555,11 @@ void CB2_WhiteOut(void)
 
     if (++gMain.state >= 120)
     {
+        FlagClear(FLAG_TAG_BATTLE);
         FlagClear(FLAG_SYS_DISABLE_AUTOHEAL);
         FlagClear(FLAG_SYS_LOCKED_MODE);
+        VarSet(VAR_BATTLE_FIELD_EFFECT_TYPE, 0);
+        VarSet(VAR_BATTLE_FIELD_ID, 0);
         FieldClearVBlankHBlankCallbacks();
         StopMapMusic();
         ResetSafariZoneFlag_();

@@ -14,6 +14,7 @@
 #include "roamer.h"
 #include "tv.h"
 #include "link.h"
+#include "load_save.h"
 #include "script.h"
 #include "battle_debug.h"
 #include "battle_pike.h"
@@ -25,6 +26,9 @@
 #include "constants/layouts.h"
 #include "constants/maps.h"
 #include "constants/weather.h"
+#include "constants/species.h"
+#include "item.h"
+#include "mgba_printf/mgba.h"
 
 extern const u8 EventScript_RepelWoreOff[];
 
@@ -77,8 +81,14 @@ static bool8 CheckFeebas(void)
 
 u8 ChooseWildMonIndex_Land(void)
 {
-    u8 rand = Random() % ENCOUNTER_CHANCE_LAND_MONS_TOTAL;
-
+    u8 rand;
+    if(!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
+        rand = Random() % (ENCOUNTER_CHANCE_LAND_MONS_TOTAL / 2);
+    }
+    else{
+         rand = Random() % ENCOUNTER_CHANCE_LAND_MONS_TOTAL;
+    }
+    
     if (rand < ENCOUNTER_CHANCE_LAND_MONS_SLOT_0)
         return 0;
     else if (rand >= ENCOUNTER_CHANCE_LAND_MONS_SLOT_0 && rand < ENCOUNTER_CHANCE_LAND_MONS_SLOT_1)
@@ -348,14 +358,14 @@ static u8 PickWildMonNature(void)
     return Random() % NUM_NATURES;
 }
 
-void CreateWildMon(u16 species, u8 level)
+void CreateWildMon(u16 species, u8 level, int useRandomizer)
 {
     bool32 checkCuteCharm;
 
     ZeroEnemyPartyMons();
     checkCuteCharm = TRUE;
 
-    species = GetRandomPokemonFromSpecies(species);
+    if (useRandomizer) species = GetRandomPokemonFromSpecies(species);
 
     switch (gBaseStats[species].genderRatio)
     {
@@ -395,19 +405,59 @@ enum
     WILD_AREA_ROCKS,
     WILD_AREA_FISHING,
     WILD_AREA_HONEY,
+    WILD_AREA_BERRY,
 };
 
 #define WILD_CHECK_REPEL    0x1
 #define WILD_CHECK_KEEN_EYE 0x2
+
+u16 MaybeFindSpecialMon(u8 area)
+{
+    if (Random() % 2048 == 0) return SPECIES_MEW;
+    if (Random() % 512 > 0) return FALSE;
+    
+    switch (area)
+    {
+        case WILD_AREA_ROCKS:
+            if (Random() % 10 == 0) return SPECIES_REGIGIGAS;
+            switch (Random() % 5)
+            {
+                case 0:
+                    return SPECIES_REGICE;
+                case 1:
+                    return SPECIES_REGIDRAGO;
+                case 2:
+                    return SPECIES_REGIELEKI;
+                case 3:
+                    return SPECIES_REGIROCK;
+                case 4:
+                    return SPECIES_REGISTEEL;
+            }
+            break;
+        case WILD_AREA_BERRY:
+            return SPECIES_VICTINI;
+        case WILD_AREA_HONEY:
+            return (Random() % 2) ? SPECIES_SHAYMIN : SPECIES_CELEBI;
+        case WILD_AREA_FISHING:
+            return (Random() % 2) ? SPECIES_PHIONE : SPECIES_MANAPHY;
+    }
+
+    return FALSE;
+}
 
 bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 flags)
 {
     u8 wildMonIndex = 0;
     u8 level;
     u16 species;
-
+    u16 loc = gSaveBlock1Ptr->location.mapNum;
+    u16 locG = gSaveBlock1Ptr->location.mapGroup;
+    if(gSaveBlock2Ptr->nuzlockeCaptures && IsRouteEncountered(loc, locG)){
+        return FALSE;
+    }
     switch (area)
     {
+    case WILD_AREA_BERRY:
     case WILD_AREA_LAND:
         if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_STEEL, ABILITY_MAGNET_PULL, &wildMonIndex))
             break;
@@ -454,46 +504,104 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
     if (gMapHeader.mapLayoutId != LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS && flags & WILD_CHECK_KEEN_EYE && !IsAbilityAllowingEncounter(level))
         return FALSE;
 
-    species = wildMonInfo->wildPokemon[wildMonIndex].species;
+    species = MaybeFindSpecialMon(area);
+    if (!species) species = wildMonInfo->wildPokemon[wildMonIndex].species;
 
-    if (species == SPECIES_MINIOR)
+    switch (species)
     {
-        switch (Random() % 7)
-        {
-            case 0:
-                break;
-            case 1:
-                species = SPECIES_MINIOR_METEOR_ORANGE;
-                break;
-            case 2:
-                species = SPECIES_MINIOR_METEOR_YELLOW;
-                break;
-            case 3:
-                species = SPECIES_MINIOR_METEOR_GREEN;
-                break;
-            case 4:
-                species = SPECIES_MINIOR_METEOR_BLUE;
-                break;
-            case 5:
-                species = SPECIES_MINIOR_METEOR_INDIGO;
-                break;
-            case 6:
-                species = SPECIES_MINIOR_METEOR_VIOLET;
-                break;
-        }
-    }
+        case SPECIES_MINIOR:
+            switch (Random() % 7)
+            {
+                case 0:
+                    break;
+                case 1:
+                    species = SPECIES_MINIOR_METEOR_ORANGE;
+                    break;
+                case 2:
+                    species = SPECIES_MINIOR_METEOR_YELLOW;
+                    break;
+                case 3:
+                    species = SPECIES_MINIOR_METEOR_GREEN;
+                    break;
+                case 4:
+                    species = SPECIES_MINIOR_METEOR_BLUE;
+                    break;
+                case 5:
+                    species = SPECIES_MINIOR_METEOR_INDIGO;
+                    break;
+                case 6:
+                    species = SPECIES_MINIOR_METEOR_VIOLET;
+                    break;
+            }
+            break;
+        case SPECIES_TATSUGIRI:
+            switch (Random() % 3)
+            {
+                case 0:
+                    species = SPECIES_TATSUGIRI_CURLY;
+                    break;
+                case 1:
+                    species = SPECIES_TATSUGIRI_DROOPY;
+                    break;
+                case 2:
+                    species = SPECIES_TATSUGIRI_STRETCHY;
+                    break;
+            }
+            break;
+        case SPECIES_SHELLOS:
+            if (Random() % 2) species == SPECIES_SHELLOS_EAST_SEA;
+            break;
+        case SPECIES_GASTRODON:
+            if (Random() % 2) species == SPECIES_GASTRODON_EAST_SEA;
+            break;
+        case SPECIES_SQUAWKABILLY:
+            switch (Random() % 4)
+            {
+                case 0:
+                    species = SPECIES_SQUAWKABILLY;
+                    break;
+                case 1:
+                    species = SPECIES_SQUAWKABILLY_BLUE_PLUMAGE;
+                    break;
+                case 2:
+                    species = SPECIES_SQUAWKABILLY_WHITE_PLUMAGE;
+                    break;
+                case 3:
+                    species = SPECIES_SQUAWKABILLY_YELLOW_PLUMAGE;
+                    break;
+            }
+            break;
+        case SPECIES_BASCULIN:
+            switch (Random() % 3)
+            {
+                case 0:
+                    species = SPECIES_BASCULIN;
+                case 1:
+                    species = SPECIES_BASCULIN_BLUE_STRIPED;
+                case 2:
+                    species = SPECIES_BASCULIN_WHITESTRIPED;
+            }
+            break;
 
-    CreateWildMon(species, level);
+    }
+    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+    {
+        MarkRouteAsEncountered(loc, locG);
+    }
+    //MarkRouteAsEncountered(loc, locG);
+    CreateWildMon(species, level, TRUE);
     return TRUE;
 }
 
 static u16 GenerateFishingWildMon(const struct WildPokemonInfo *wildMonInfo, u8 rod)
 {
-    u8 wildMonIndex = ChooseWildMonIndex_Fishing(rod);
     u8 level = ChooseWildMonLevel();
+    u16 species = MaybeFindSpecialMon(WILD_AREA_FISHING);
 
-    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level);
-    return wildMonInfo->wildPokemon[wildMonIndex].species;
+    if (!species) species = wildMonInfo->wildPokemon[ChooseWildMonIndex_Fishing(rod)].species;
+
+    CreateWildMon(species, level, TRUE);
+    return species;
 }
 
 static bool8 SetUpMassOutbreakEncounter(u8 flags)
@@ -503,7 +611,7 @@ static bool8 SetUpMassOutbreakEncounter(u8 flags)
     if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(gSaveBlock1Ptr->outbreakPokemonLevel))
         return FALSE;
 
-    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel);
+    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel, TRUE);
     for (i = 0; i < 4; i++)
         SetMonMoveSlot(&gEnemyParty[0], gSaveBlock1Ptr->outbreakPokemonMoves[i], i);
 
@@ -566,6 +674,22 @@ static bool8 DoWildEncounterRateTest(u32 encounterRate, bool8 ignoreAbility)
     }
     if (encounterRate > 2880)
         encounterRate = 2880;
+    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+    // {
+    //     return DoWildEncounterRateDiceRoll(0);
+    // }
+    // else if(!IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures){
+    //     if(DoWildEncounterRateDiceRoll(encounterRate)){
+    //         MarkRouteAsEncountered(loc, locG);
+    //         return TRUE;
+    //     }
+    //     else{
+    //         return FALSE;
+    //     }
+    // }
+    // else{
+    //     return DoWildEncounterRateDiceRoll(encounterRate);
+    // }
     return DoWildEncounterRateDiceRoll(encounterRate);
 }
 
@@ -590,6 +714,8 @@ static bool8 AreLegendariesInSootopolisPreventingEncounters(void)
 
 bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavior)
 {
+    u16 loc = gSaveBlock1Ptr->location.mapNum;
+    u16 locG = gSaveBlock1Ptr->location.mapGroup;
     u16 headerId;
     struct Roamer *roamer;
 
@@ -642,6 +768,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
 
             if (TryStartRoamerEncounter() == TRUE)
             {
+                if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                {
+                    return FALSE;
+                }
+                // else 
+                // {
+                //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                //     {
+                //         MarkRouteAsEncountered(loc, locG);
+                //     }
+                // }
                 roamer = &gSaveBlock1Ptr->roamer;
                 if (!IsWildLevelAllowedByRepel(roamer->level))
                     return FALSE;
@@ -660,6 +797,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                 // try a regular wild land encounter
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
+                    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    // {
+                    //     return FALSE;
+                    // }
+                    // else 
+                    // {
+                    //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    //     {
+                    //         MarkRouteAsEncountered(loc, locG);
+                    //     }
+                    // }
                     if (TryDoDoubleWildBattle())
                     {
                         struct Pokemon mon1 = gEnemyParty[0];
@@ -691,6 +839,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
 
             if (TryStartRoamerEncounter() == TRUE)
             {
+                if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                {
+                    return FALSE;
+                }
+                else 
+                {
+                    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    {
+                        MarkRouteAsEncountered(loc, locG);
+                    }
+                }
                 roamer = &gSaveBlock1Ptr->roamer;
                 if (!IsWildLevelAllowedByRepel(roamer->level))
                     return FALSE;
@@ -702,6 +861,17 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
             {
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].waterMonsInfo, WILD_AREA_WATER, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
+                    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    // {
+                    //     return FALSE;
+                    // }
+                    // else 
+                    // {
+                    //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    //     {
+                    //         MarkRouteAsEncountered(loc, locG);
+                    //     }
+                    // }
                     gIsSurfingEncounter = TRUE;
                     if (TryDoDoubleWildBattle())
                     {
@@ -755,7 +925,7 @@ void BerryWildEncounter(u8 headerId)
 {
     if (gBerryTreeWildMonHeaders[headerId].landMonsInfo != NULL)
     {
-        TryGenerateWildMon(gBerryTreeWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, 0);
+        TryGenerateWildMon(gBerryTreeWildMonHeaders[headerId].landMonsInfo, WILD_AREA_BERRY, 0);
         BattleSetup_StartWildBattle();
         gSpecialVar_Result = TRUE;
     }
@@ -857,7 +1027,7 @@ void FishingWildEncounter(u8 rod)
         u8 level = ChooseWildMonLevel();
 
         species = gWildFeebasRoute119Data.species;
-        CreateWildMon(species, level);
+        CreateWildMon(species, level, TRUE);
     }
     else
     {

@@ -64,7 +64,7 @@ static bool8 ShouldSwitchIfAllBadMoves(void)
 static bool8 ShouldSwitchIfPerishSong(void)
 {
     if (gStatuses3[gActiveBattler] & STATUS3_PERISH_SONG
-        && gDisableStructs[gActiveBattler].perishSongTimer == 0)
+        && gVolatileStructs[gActiveBattler].perishSongTimer == 0)
     {
         *(gBattleStruct->AI_monToSwitchIntoId + gActiveBattler) = PARTY_SIZE;
         BtlController_EmitTwoReturnValues(1, B_ACTION_SWITCH, 0);
@@ -201,6 +201,11 @@ static bool8 FindMonThatAbsorbsOpponentsMove(void)
         absorbingTypeAbilities[0] = ABILITY_SAP_SIPPER;
         numAbsorbingAbilities = 1;
     }
+    else if (gBattleMoves[gLastLandedMoves[gActiveBattler]].type == TYPE_GROUND)
+    {
+        absorbingTypeAbilities[0] = ABILITY_EARTH_EATER;
+        numAbsorbingAbilities = 1;
+    }
     else
         return FALSE;
     
@@ -261,7 +266,7 @@ static bool8 ShouldSwitchIfNaturalCure(void)
 {
     if (!(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP))
         return FALSE;
-    if (!BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_NATURAL_CURE) && !BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_SELF_REPAIR))
+    if (!BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_NATURAL_CURE) && !BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_SELF_REPAIR) && !BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_NATURAL_RECOVERY))
         return FALSE;
 
     if ((gLastLandedMoves[gActiveBattler] == 0 || gLastLandedMoves[gActiveBattler] == 0xFFFF) && Random() & 1)
@@ -294,7 +299,7 @@ static bool8 ShouldSwitchIfNaturalCure(void)
 
 static bool8 ShouldSwitchIfEncored(void)
 {
-    if (gDisableStructs[gActiveBattler].encoredMove == MOVE_NONE)
+    if (gVolatileStructs[gActiveBattler].encoredMove == MOVE_NONE)
         return FALSE;
 
     if (FindMonWithFlagsAndSuperEffective(MOVE_RESULT_DOESNT_AFFECT_FOE, 1))
@@ -500,7 +505,7 @@ static bool8 IsMonHealthyEnoughToSwitch(void)
     u32 battlerHp = gBattleMons[gActiveBattler].hp;
 
     if (gBattleMons[gActiveBattler].ability == ABILITY_REGENERATOR)
-        battlerHp = (battlerHp * 130) / 100; // Account for Regenerator healing
+        battlerHp = (battlerHp * 133) / 100; // Account for Regenerator healing
     
     if (CalculateHazardDamage() > battlerHp) // Battler will die to hazards
         return FALSE;
@@ -526,6 +531,7 @@ static u32 CalculateHazardDamage(void)
     if ((gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount > 0) 
        && !BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_LEVITATE)
        && !BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_DRAGONFLY)
+       && !BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_AERIALIST)
        && holdEffect != HOLD_EFFECT_AIR_BALLOON
        && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FLYING))
     {
@@ -534,7 +540,7 @@ static u32 CalculateHazardDamage(void)
     }
 
     if (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK)
-        stealthHazardDmg = GetStealthHazardDamage(gBattleMoves[MOVE_STEALTH_ROCK].type, gActiveBattler);
+        stealthHazardDmg = GetStealthHazardDamage(gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType, gActiveBattler);
 
     totalHazardDmg = spikesDmg + stealthHazardDmg;
     
@@ -612,6 +618,10 @@ bool32 ShouldSwitch(void)
     if (gBattleMons[gActiveBattler].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION))
         return FALSE;
     if (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
+        return FALSE;
+    if (gStatuses4[gActiveBattler] & STATUS4_COMMANDED)
+        return FALSE;
+    if (gVolatileStructs[gActiveBattler].fear)
         return FALSE;
     if (IsAbilityPreventingEscape(gActiveBattler))
         return FALSE;
@@ -1120,8 +1130,13 @@ static bool8 ShouldUseItem(void)
         if (gItemEffectTable[item - ITEM_POTION] == NULL)
             continue;
 
-        if (item == ITEM_ENIGMA_BERRY)
+        if (item == ITEM_ENIGMA_BERRY){
+            #ifndef FREE_ENIGMA_BERRY
             itemEffects = gSaveBlock1Ptr->enigmaBerry.itemEffect;
+            #else
+            itemEffects = 0;
+            #endif
+        }
         else
             itemEffects = gItemEffectTable[item - ITEM_POTION];
 
@@ -1171,7 +1186,7 @@ static bool8 ShouldUseItem(void)
             break;
         case AI_ITEM_X_STAT:
             *(gBattleStruct->AI_itemFlags + gActiveBattler / 2) = 0;
-            if (gDisableStructs[gActiveBattler].isFirstTurn == 0)
+            if (gVolatileStructs[gActiveBattler].isFirstTurn == 0)
                 break;
         #ifndef ITEM_EXPANSION
             if (itemEffects[0] & ITEM0_X_ATTACK)
@@ -1206,7 +1221,7 @@ static bool8 ShouldUseItem(void)
             break;
         case AI_ITEM_GUARD_SPEC:
             battlerSide = GetBattlerSide(gActiveBattler);
-            if (gDisableStructs[gActiveBattler].isFirstTurn != 0 && gSideTimers[battlerSide].mistTimer == 0)
+            if (gVolatileStructs[gActiveBattler].isFirstTurn != 0 && gSideTimers[battlerSide].mistTimer == 0)
                 shouldUse = TRUE;
             break;
         case AI_ITEM_NOT_RECOGNIZABLE:

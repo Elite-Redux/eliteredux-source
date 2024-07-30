@@ -8,7 +8,6 @@
 #include "trig.h"
 
 static void AnimFireSpiralInward(struct Sprite *);
-static void AnimFirePlume(struct Sprite *);
 static void AnimLargeFlame(struct Sprite *);
 static void AnimLargeFlame_Step(struct Sprite *);
 static void AnimUnusedSmallEmber(struct Sprite *);
@@ -21,7 +20,6 @@ static void AnimFireRing_Step1(struct Sprite *);
 static void AnimFireRing_Step2(struct Sprite *);
 static void AnimFireRing_Step3(struct Sprite *);
 static void UpdateFireRingCircleOffset(struct Sprite *);
-static void AnimFireCross(struct Sprite *);
 static void AnimFireSpiralOutward_Step1(struct Sprite *);
 static void AnimFireSpiralOutward_Step2(struct Sprite *);
 static void AnimTask_EruptionLaunchRocks_Step(u8 taskId);
@@ -30,9 +28,7 @@ static void AnimEruptionLaunchRock(struct Sprite *);
 static u16 GetEruptionLaunchRockInitialYPos(u8 spriteId);
 static void InitEruptionLaunchRockCoordData(struct Sprite *sprite, s16 x, s16 y);
 static void UpdateEruptionLaunchRockPos(struct Sprite *);
-static void AnimEruptionFallingRock(struct Sprite *);
 static void AnimEruptionFallingRock_Step(struct Sprite *);
-static void AnimWillOWispOrb(struct Sprite *);
 static void AnimWillOWispOrb_Step(struct Sprite *);
 static void AnimWillOWispFire(struct Sprite *);
 static void AnimTask_MoveHeatWaveTargets_Step(u8 taskId);
@@ -111,7 +107,7 @@ static const union AnimCmd sAnim_FirePlume[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnims_FirePlume[] =
+const union AnimCmd *const gAnims_FirePlume[] =
 {
     sAnim_FirePlume,
 };
@@ -155,7 +151,7 @@ const struct SpriteTemplate gFirePlumeSpriteTemplate =
     .tileTag = ANIM_TAG_FIRE_PLUME,
     .paletteTag = ANIM_TAG_FIRE_PLUME,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_FirePlume,
+    .anims = gAnims_FirePlume,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimFirePlume,
@@ -167,7 +163,7 @@ static const struct SpriteTemplate sUnusedEmberFirePlumeSpriteTemplate =
     .tileTag = ANIM_TAG_SMALL_EMBER,
     .paletteTag = ANIM_TAG_SMALL_EMBER,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_FirePlume,
+    .anims = gAnims_FirePlume,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimFirePlume,
@@ -428,7 +424,7 @@ static const union AnimCmd sAnim_WillOWispOrb_3[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_WillOWispOrb[] =
+const union AnimCmd *const gAnims_WillOWispOrb[] =
 {
     sAnim_WillOWispOrb_0,
     sAnim_WillOWispOrb_1,
@@ -441,7 +437,7 @@ const struct SpriteTemplate gWillOWispOrbSpriteTemplate =
     .tileTag = ANIM_TAG_WISP_ORB,
     .paletteTag = ANIM_TAG_WISP_ORB,
     .oam = &gOamData_AffineOff_ObjNormal_16x16,
-    .anims = sAnims_WillOWispOrb,
+    .anims = gAnims_WillOWispOrb,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimWillOWispOrb,
@@ -502,7 +498,7 @@ const struct SpriteTemplate gLavaPlumeSpriteTemplate =
     .tileTag = ANIM_TAG_FIRE_PLUME,
     .paletteTag = ANIM_TAG_FIRE_PLUME,
     .oam = &gOamData_AffineOff_ObjNormal_32x32,
-    .anims = sAnims_FirePlume,
+    .anims = gAnims_FirePlume,
     .images = NULL,
     .affineAnims = gLavaPlumeAffineAnims,
     .callback = AnimLavaPlumeOrbitScatter,
@@ -528,6 +524,18 @@ const struct SpriteTemplate gSpacialRendBladesTemplate2 =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = AnimFireSpread
+};
+
+// Sea of Fire
+const struct SpriteTemplate gTwisterEmberSpriteTemplate =
+{
+	.tileTag = ANIM_TAG_SMALL_EMBER,
+	.paletteTag = ANIM_TAG_SMALL_EMBER,
+	.oam = &gOamData_AffineOff_ObjNormal_32x32,
+	.anims = gAnims_BasicFire,
+	.images = NULL,
+	.affineAnims = gDummySpriteAffineAnimTable,
+	.callback = AnimMoveTwisterParticle,
 };
 
 static void AnimLavaPlumeOrbitScatter(struct Sprite *sprite)
@@ -576,7 +584,7 @@ void AnimFireSpread(struct Sprite *sprite)
     StoreSpriteCallbackInData6(sprite, DestroyAnimSprite);
 }
 
-static void AnimFirePlume(struct Sprite *sprite)
+void AnimFirePlume(struct Sprite *sprite)
 {
     SetSpriteCoordsToAnimAttackerCoords(sprite);
 
@@ -806,7 +814,7 @@ static void UpdateFireRingCircleOffset(struct Sprite *sprite)
 // arg 3: x delta
 // arg 4: y delta
 // AnimFireCross(struct Sprite *sprite)
-static void AnimFireCross(struct Sprite *sprite)
+void AnimFireCross(struct Sprite *sprite)
 {
     sprite->x += gBattleAnimArgs[0];
     sprite->y += gBattleAnimArgs[1];
@@ -1075,7 +1083,7 @@ static void UpdateEruptionLaunchRockPos(struct Sprite *sprite)
         sprite->invisible = TRUE;
 }
 
-static void AnimEruptionFallingRock(struct Sprite *sprite)
+void AnimEruptionFallingRock(struct Sprite *sprite)
 {
     sprite->x = gBattleAnimArgs[0];
     sprite->y = gBattleAnimArgs[1];
@@ -1133,7 +1141,7 @@ static void AnimEruptionFallingRock_Step(struct Sprite *sprite)
     }
 }
 
-static void AnimWillOWispOrb(struct Sprite *sprite)
+void AnimWillOWispOrb(struct Sprite *sprite)
 {
     switch (sprite->data[0])
     {

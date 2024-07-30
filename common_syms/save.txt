@@ -3,11 +3,10 @@ gLastSaveCounter
 gLastKnownGoodSector
 gDamagedSaveSectors
 gSaveCounter
-gFastSaveSection
-gUnknown_03006208
+gReadWriteSector
+gIncrementalSectorId
 gSaveUnusedVar
 gSaveFileStatus
 gGameContinueCallback
 gRamSaveSectionLocations
-gSaveUnusedVar2
 gSaveAttemptStatus

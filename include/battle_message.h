@@ -67,6 +67,10 @@
 #define B_TXT_ACTIVE_NAME 0x3C
 #define B_TXT_ACTIVE_NAME2 0x3D // no Illusion check
 #define B_TXT_BUFF4 0x3E //For Damage Done so it does not get overwritten
+#define B_TXT_STACK_1_NAME_WITH_PREFIX 0x3F //Stack battler
+#define B_TXT_STACK_2_NAME_WITH_PREFIX 0x40
+#define B_TXT_STACK_3_NAME_WITH_PREFIX 0x41
+#define B_TXT_STACK_4_NAME_WITH_PREFIX 0x42
 
 // for B_TXT_BUFF1, B_TXT_BUFF2, B_TXT_BUFF3 and B_TXT_BUFF4
 
@@ -245,8 +249,11 @@ extern const u8* const gRefereeStringsTable[];
 extern const u8 *const gRoundsStringTable[];
 
 extern const u8 gText_PkmnIsEvolving[];
+extern const u8 gText_PkmnIsDeEvolving[];
 extern const u8 gText_CongratsPkmnEvolved[];
+extern const u8 gText_CongratsPkmnDeEvolved[];
 extern const u8 gText_PkmnStoppedEvolving[];
+extern const u8 gText_PkmnStoppedDeEvolving[];
 extern const u8 gText_EllipsisQuestionMark[];
 extern const u8 gText_WhatWillPkmnDo[];
 extern const u8 gText_WhatWillPkmnDo2[];
@@ -275,6 +282,7 @@ extern const u8 gText_Paralysis[];
 extern const u8 gText_Ice[];
 extern const u8 gText_Confusion[];
 extern const u8 gText_Love[];
+extern const u8 gText_Bleed[];
 extern const u8 gText_SpaceAndSpace[];
 extern const u8 gText_CommaSpace[];
 extern const u8 gText_Space2[];

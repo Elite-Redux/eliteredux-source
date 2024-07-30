@@ -139,27 +139,6 @@ SlateportCity_Movement_ScottExit: @ 81DCDB4
 	walk_left
 	step_end
 
-SlateportCity_EventScript_EnergyGuru:: @ 81DCDBD
-	lock
-	faceplayer
-	message SlateportCity_Text_EnergyGuruSellWhatYouNeed
-	waitmessage
-	pokemart SlateportCity_Pokemart_EnergyGuru
-	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
-	release
-	end
-
-SlateportCity_Pokemart_EnergyGuru: @ 81DCDD4
-	.2byte ITEM_PROTEIN
-	.2byte ITEM_IRON
-	.2byte ITEM_CARBOS
-	.2byte ITEM_ZINC
-	.2byte ITEM_CALCIUM
-	.2byte ITEM_HP_UP
-	.2byte ITEM_NONE
-	release
-	end
-
 SlateportCity_EventScript_PowerItems::
 	lock
 	faceplayer
@@ -179,31 +158,6 @@ SlateportCity_Pokemart_PowerItems::
 	.2byte ITEM_POWER_BAND
 	.2byte ITEM_POWER_ANKLET
 	.2byte ITEM_POWER_WEIGHT
-	.2byte ITEM_NONE
-	release
-	end
-
-SlateportCity_EventScript_IncenseStand::
-	lock
-	faceplayer
-	message SlateportCity_Text_IncenseStand
-	waitmessage
-	pokemart SlateportCity_Pokemart_Incense
-	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-SlateportCity_Pokemart_Incense::
-	.2byte ITEM_SEA_INCENSE
-	.2byte ITEM_LAX_INCENSE
-	.2byte ITEM_ROSE_INCENSE
-	.2byte ITEM_PURE_INCENSE
-	.2byte ITEM_ROCK_INCENSE
-	.2byte ITEM_ODD_INCENSE
-	.2byte ITEM_LUCK_INCENSE
-	.2byte ITEM_FULL_INCENSE
-	.2byte ITEM_WAVE_INCENSE
 	.2byte ITEM_NONE
 	release
 	end
@@ -558,57 +512,8 @@ SlateportCity_EventScript_AquaGrunt11:: @ 81DD153
 	release
 	end
 
-SlateportCity_EventScript_DollClerk:: @ 81DD16A
-	lock
-	faceplayer
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemartdecoration SlateportCity_PokemartDecor_Dolls
-	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
-	release
-	end
-
-	.align 2
-SlateportCity_PokemartDecor_Dolls: @ 81DD184
-	.2byte DECOR_AZURILL_DOLL
-	.2byte DECOR_MARILL_DOLL
-	.2byte DECOR_SKITTY_DOLL
-	.2byte DECOR_NONE
-	release
-	end
-
 SlateportCity_EventScript_ComeBackWithSecretPower:: @ 81DD18E
 	msgbox gText_ComeBackWithSecretPower, MSGBOX_DEFAULT
-	release
-	end
-
-SlateportCity_EventScript_DecorClerk:: @ 81DD198
-	lock
-	faceplayer
-	goto_if_unset FLAG_RECEIVED_SECRET_POWER, SlateportCity_EventScript_ComeBackWithSecretPower
-	message gText_HowMayIServeYou
-	waitmessage
-	pokemartdecoration SlateportCity_PokemartDecor
-	msgbox gText_PleaseComeAgain, MSGBOX_DEFAULT
-	release
-	end
-
-SlateportCity_PokemartDecor: @ 81DD1B8
-	.2byte DECOR_RED_BRICK
-	.2byte DECOR_BLUE_BRICK
-	.2byte DECOR_YELLOW_BRICK
-	.2byte DECOR_RED_BALLOON
-	.2byte DECOR_BLUE_BALLOON
-	.2byte DECOR_YELLOW_BALLOON
-	.2byte DECOR_C_LOW_NOTE_MAT
-	.2byte DECOR_D_NOTE_MAT
-	.2byte DECOR_E_NOTE_MAT
-	.2byte DECOR_F_NOTE_MAT
-	.2byte DECOR_G_NOTE_MAT
-	.2byte DECOR_A_NOTE_MAT
-	.2byte DECOR_B_NOTE_MAT
-	.2byte DECOR_C_HIGH_NOTE_MAT
-	.2byte DECOR_NONE
 	release
 	end
 
@@ -698,7 +603,8 @@ SlateportCity_EventScript_Greta::
 	checkflag FLAG_DEFEATED_SLATEPORT_GRETA
 	goto_if_eq SlateportCity_EventScript_GretaDefeated
 	msgbox SlateportCity_Text_GretaHowdy, MSGBOX_DEFAULT
-	goto_if_unset FLAG_HIDE_LAVARIDGE_POKECENTER_LUCY, SlateportCity_EventScript_GretaNotStrongEnough
+	compare VAR_LAVARIDGE_LUCY_STATE, 2
+	goto_if_ne SlateportCity_EventScript_GretaNotStrongEnough
 	goto_if_unset FLAG_HIDE_FORTREE_POKECENTER_SPENSER, SlateportCity_EventScript_GretaNotStrongEnough
 	msgbox SlateportCity_Text_GretaReadyForBattle, MSGBOX_YESNO
 	compare VAR_RESULT, NO

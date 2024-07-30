@@ -162,6 +162,23 @@ LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet::
 	case 5, LittlerootTown_BrendansHouse_2F_EventScript_Kalos
 	case 6, LittlerootTown_BrendansHouse_2F_EventScript_Alola
 	case 7, LittlerootTown_BrendansHouse_2F_EventScript_Galar
+	case 8, LittlerootTown_BrendansHouse_2F_EventScript_Paldea
+	case 9, LittlerootTown_BrendansHouse_2F_EventScript_Bug
+	case 10, LittlerootTown_BrendansHouse_2F_EventScript_Dark
+	case 11, LittlerootTown_BrendansHouse_2F_EventScript_Dragon
+	case 12, LittlerootTown_BrendansHouse_2F_EventScript_Electric
+	case 13, LittlerootTown_BrendansHouse_2F_EventScript_Fairy
+	case 14, LittlerootTown_BrendansHouse_2F_EventScript_Fighting
+	case 15, LittlerootTown_BrendansHouse_2F_EventScript_Flying
+	case 16, LittlerootTown_BrendansHouse_2F_EventScript_Ghost
+	case 17, LittlerootTown_BrendansHouse_2F_EventScript_Ground
+	case 18, LittlerootTown_BrendansHouse_2F_EventScript_Ice
+	case 19, LittlerootTown_BrendansHouse_2F_EventScript_Normal
+	case 20, LittlerootTown_BrendansHouse_2F_EventScript_Poison
+	case 21, LittlerootTown_BrendansHouse_2F_EventScript_Psychic
+	case 22, LittlerootTown_BrendansHouse_2F_EventScript_Rock
+	case 23, LittlerootTown_BrendansHouse_2F_EventScript_Steel
+
 	goto LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
 	end
 
@@ -228,6 +245,136 @@ LittlerootTown_BrendansHouse_2F_EventScript_Galar:
 	setvar VAR_STARTER_GEN, 8
 	bufferstring 1, StarterRegionStringGalar
 	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Paldea:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 9
+	bufferstring 1, StarterRegionStringPaldea
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Bug:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 10
+	bufferstring 1, StarterRegionStringBug
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Dark:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 11
+	bufferstring 1, StarterRegionStringDark
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Dragon:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 12
+	bufferstring 1, StarterRegionStringDragon
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Electric:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 13
+	bufferstring 1, StarterRegionStringElectric
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Fairy:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 14
+	bufferstring 1, StarterRegionStringFairy
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Fighting:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 15
+	bufferstring 1, StarterRegionStringFighting
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Flying:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 16
+	bufferstring 1, StarterRegionStringFlying
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Ghost:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 17
+	bufferstring 1, StarterRegionStringGhost
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Ground:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 18
+	bufferstring 1, StarterRegionStringGround
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Ice:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 19
+	bufferstring 1, StarterRegionStringIce
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Normal:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 20
+	bufferstring 1, StarterRegionStringNormal
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Poison:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 21
+	bufferstring 1, StarterRegionStringPoison
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Psychic:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 22
+	bufferstring 1, StarterRegionStringPsychic
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Rock:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 23
+	bufferstring 1, StarterRegionStringRock
+	return
+
+LittlerootTown_BrendansHouse_2F_EventScript_Steel:
+	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
+	compare VAR_RESULT, NO
+	goto_if_eq LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
+	setvar VAR_STARTER_GEN, 24
+	bufferstring 1, StarterRegionStringSteel
+	return
+
+
 
 LittlerootTown_BrendansHouse_2F_Movement_BrendanEnters: @ 81F85BC
 	walk_down
@@ -406,4 +553,21 @@ PlayersHouse_2F_Text_ItsAGameCube: @ 81F884F
 	.string "It's a Nintendo GameCube.\p"
 	.string "A Game Boy Advance is connected to\n"
 	.string "serve as the Controller.$"
+
+IntroSkip_EventScript_SetIntroFlagsMale:: @ 823BF20
+    lockall
+	setrespawn HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_MOM
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_TRUCK
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_TRUCK
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_MOM
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_SIBLING
+	clearflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_2F_POKE_BALL
+	setvar VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 1
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_MOM_OUTSIDE
+	setvar VAR_LITTLEROOT_INTRO_STATE, 5
+	clearflag FLAG_HIDE_LITTLEROOT_TOWN_FAT_MAN
+	clearflag FLAG_HIDE_MAP_NAME_POPUP
+	releaseall
+	end
 `

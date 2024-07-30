@@ -211,8 +211,9 @@ SootopolisCity_OnResume: @ 81E590B
 	end
 
 SootopolisCity_OnFrame: @ 81E5914
-	map_script_2 VAR_SOOTOPOLIS_CITY_STATE, 1, SootopolisCity_EventScript_StartLegendariesScene
-	map_script_2 VAR_SKY_PILLAR_STATE, 1, SootopolisCity_EventScript_StartRayquazaScene
+	@ map_script_2 VAR_SOOTOPOLIS_CITY_STATE, 1, SootopolisCity_EventScript_StartLegendariesScene
+	@ skypillar skip made me modify this
+	map_script_2 VAR_SOOTOPOLIS_CITY_STATE, 1, SootopolisCity_EventScript_StartRayquazaScene
 	.2byte 0
 
 @ If not at PokeCenter, assumed to have arrived via Dive
@@ -509,6 +510,14 @@ SootopolisCity_Movement_GroudonIdle: @ 81E5BF7
 @ If not at PokeCenter, assumed to have arrived via Dive
 SootopolisCity_EventScript_StartRayquazaScene:: @ 81E5BFE
 	lockall
+	@ Here is the skypillar skip
+	setflag FLAG_STEVEN_GUIDES_TO_CAVE_OF_ORIGIN
+	setflag FLAG_WALLACE_GOES_TO_SKY_PILLAR
+	setvar VAR_SOOTOPOLIS_CITY_STATE, 5
+	setvar VAR_SKY_PILLAR_STATE, 1
+	@ end of skypillar skip
+	@ make the aqua guy disappear which at this time have an ID of 19
+	removeobject 19
 	special StorePlayerCoordsInVars
 	compare VAR_0x8004, 43
 	goto_if_ne SootopolisCity_EventScript_RayquazaSceneFromDive
@@ -1797,3 +1806,58 @@ SootopolisCity_Text_DazzledByMentor: @ 81E7CBC
 	.string "dazzled by my mentor's breathtakingly\l"
 	.string "elegant battle style.$"
 `
+const LOCALID_AQUA_GUY = 19
+script SootopolisCity_EventScript_AquaGuyCaveTP{
+    lock
+    faceplayer
+    msgbox(format("Oh you're that kid."))
+    closemessage
+    applymovement(LOCALID_AQUA_GUY, Common_Movement_FaceOriginalDirection)
+    waitmovement(0)
+    delay(20)
+    msgbox(format(  "Listen, I don't hate you, Team Aqua is not what I believed it to be.\p"
+                    "I know what you're looking for, I also gave this information to a powerful gray haired guy.\p"
+                    "But for you I can directly bring you up there right now."))
+    closemessage
+    faceplayer
+    waitmovement(0)
+    msgbox(format(  "So what's your call? i don't plan to stay here forever."), MSGBOX_YESNO)
+    if (var(VAR_RESULT) != 1) { //refused
+        msgbox(format("Understandable, don't mind if i take my leave then."))
+        closemessage
+        fadescreen(FADE_TO_BLACK)
+        removeobject(LOCALID_AQUA_GUY)
+        fadescreen(FADE_FROM_BLACK)
+        release
+        return
+    }
+    msgbox(format("No time to waste."))
+    closemessage
+    setflag(FLAG_HIDE_AQUA_GUY_SOOTOPOLIS)
+    warp(MAP_UNDERWATER_SEAFLOOR_CAVERN, 255, 6, 7)
+    waitstate
+    release
+}
+const LOCALID_RIVAL = 20
+script SootopolisCity_EventScript_RivalTP{
+    // Teleport player to EverGrande City with the rival
+    lock
+    faceplayer
+    msgbox(format(  "Hey, {PLAYER}, what's up."
+                    "I see that I missed the spectacle."
+                    "How about going to EverGrande city"
+                    "while we talk about these recent events?"
+                    "I kinda need to look for some stuff there."), MSGBOX_YESNO)
+    closemessage
+    if (var(VAR_RESULT) != 1){
+        msgbox(format(  "I suppose i'm going with my Pokémons"))
+        release
+        return
+    }
+    msgbox(format(  "Nice, let's head up there."))
+    closemessage
+    setflag(FLAG_RIVAL_EVERGRANDE_ESCORT)
+    warp(MAP_EVER_GRANDE_CITY, 255, 19, 55)
+    waitstate
+    release
+}

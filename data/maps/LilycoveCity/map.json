@@ -196,8 +196,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_AQUA_MEMBER_M",
-      "x": 38,
-      "y": 9,
+      "x": 48,
+      "y": 7,
       "elevation": 5,
       "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
       "movement_range_x": 0,
@@ -410,6 +410,13 @@
       "elevation": 0,
       "dest_map": "MAP_LILYCOVE_CITY_LILYCOVE_MUSEUM_1F",
       "dest_warp_id": 1
+    },
+    {
+      "x": 48,
+      "y": 6,
+      "elevation": 0,
+      "dest_map": "MAP_LILYCOVE_CITY_MOSS_DEEP_CITY_TELEPORTER",
+      "dest_warp_id": 0
     }
   ],
   "coord_events": [

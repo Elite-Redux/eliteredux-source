@@ -30,7 +30,7 @@ MtPyre_Exterior_EventScript_SunTrigger:: @ 8231FF2
 `
 
 script MtPyre_Exterior_EventScript_Yda {
-	trainerbattle_single(TRAINER_YDA_MTPYRE, format("Hey there, sorry, but you can't go any further.\pWhy not?...\p...Don't you know who am I?\pI'm Ydarissep, the great oracle!\pI have the extraordinary ability to predict where and when a new Pokémon species will show up just by sniffing the air.\pAnyone trying to steal this discovery from me is in for a battle!"), format("I bet you didn't see that coming, I lost!"))
+	trainerbattle_single(TRAINER_CREW_MTPYRE, format("Hey there, sorry, but you can't go any further.\pWhy not?...\p...Don't you know who am I?\pI'm part of the crew, the great oracles!\pI have the extraordinary ability to predict where and when a new Pokémon species will show up just by sniffing the air.\pAnyone trying to steal this discovery from me is in for a battle!"), format("I bet you didn't see that coming, I lost!"))
 	msgbox(format("Smell ya later."), MSGBOX_NPC) // after player won
 	release
 	end

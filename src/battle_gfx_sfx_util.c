@@ -28,6 +28,8 @@
 #include "constants/rgb.h"
 #include "constants/battle_palace.h"
 #include "constants/abilities.h"
+#include "constants/battle_move_effects.h"
+#include "mgba_printf/mgba.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;
@@ -233,13 +235,13 @@ u16 ChooseMoveAndTargetInBattlePalace(void)
             // then there's a 50% chance it won't be used anyway
             if (Random() % 100 > 49)
             {
-                gProtectStructs[gActiveBattler].palaceUnableToUseMove = TRUE;
+                gRoundStructs[gActiveBattler].palaceUnableToUseMove = TRUE;
                 return 0;
             }
         }
         else
         {
-            gProtectStructs[gActiveBattler].palaceUnableToUseMove = TRUE;
+            gRoundStructs[gActiveBattler].palaceUnableToUseMove = TRUE;
             return 0;
         }
     }
@@ -390,6 +392,18 @@ void SpriteCB_TrainerSlideIn(struct Sprite *sprite)
     }
 }
 
+void SpriteCB_TrainerSpawn(struct Sprite *sprite)
+{
+    if (!(gIntroSlideFlags & 1))
+    {
+        sprite->x2 = 0;
+        if (sprite->y2 != 0)
+            sprite->callback = SpriteCB_TrainerSlideVertical;
+        else
+            sprite->callback = SpriteCallbackDummy;
+    }
+}
+
 // Slide up to 0 if necessary (used by multi battle intro)
 static void SpriteCB_TrainerSlideVertical(struct Sprite *sprite)
 {
@@ -405,18 +419,32 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
     gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 1;
     if (!isStatus2)
     {
-        if (status == STATUS1_FREEZE || status == STATUS1_FROSTBITE)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FRZ);
-        else if (status == STATUS1_POISON || status & STATUS1_TOXIC_POISON)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PSN);
-        else if (status == STATUS1_BURN)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_BRN);
-        else if (status & STATUS1_SLEEP)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SLP);
-        else if (status == STATUS1_PARALYSIS)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PRZ);
-        else // no animation
-            gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
+        switch(status)
+        {
+            case STATUS1_FREEZE:
+            case STATUS1_FROSTBITE:
+                LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FRZ);
+            break;
+            case STATUS1_POISON:
+            case STATUS1_TOXIC_POISON:
+                LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PSN);
+            break;
+            case STATUS1_BURN:
+                LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_BRN);
+            break;
+            case STATUS1_SLEEP:
+                LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SLP);
+            break;
+            case STATUS1_PARALYSIS:
+                LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PRZ);
+            break;
+            case STATUS1_BLEED:
+                LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_BLEED);
+            break;
+            default: // no animation
+                gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
+            break;
+        }
     }
     else
     {
@@ -424,7 +452,7 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFATUATION);
         else if (status & STATUS2_CONFUSION)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_CONFUSION);
-        else if (status & STATUS2_CURSED)
+        else if ((status & STATUS2_CURSED) || IsBattlerCursed(gActiveBattler))
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_CURSED);
         else if (status & STATUS2_NIGHTMARE)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_NIGHTMARE);
@@ -498,6 +526,7 @@ static bool8 ShouldAnimBeDoneRegardlessOfSubstitute(u8 animId)
     case B_ANIM_SUN_CONTINUES:
     case B_ANIM_SANDSTORM_CONTINUES:
     case B_ANIM_HAIL_CONTINUES:
+    case B_ANIM_FOG_CONTINUES:
     case B_ANIM_SNATCH_MOVE:
         return TRUE;
     default:
@@ -569,10 +598,12 @@ static void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battlerId, bool32 op
     u32 monsPersonality, currentPersonality, otId, species, paletteOffset, position;
     const void *lzPaletteData;
     struct Pokemon *illusionMon = GetIllusionMonPtr(battlerId);
+    bool8 isAlpha;
     if (illusionMon != NULL)
         mon = illusionMon;
 
     monsPersonality = GetMonData(mon, MON_DATA_PERSONALITY);
+    isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA);
     if (gBattleSpritesDataPtr->battlerData[battlerId].transformSpecies == SPECIES_NONE)
     {
         species = GetMonData(mon, MON_DATA_SPECIES);
@@ -604,11 +635,10 @@ static void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battlerId, bool32 op
     if (gBattleSpritesDataPtr->battlerData[battlerId].transformSpecies == SPECIES_NONE)
         lzPaletteData = GetMonFrontSpritePal(mon);
     else
-        lzPaletteData = GetMonSpritePalFromSpeciesAndPersonality(species, otId, monsPersonality);
+        lzPaletteData = GetMonFrontSpritePal(mon);
 
     LZDecompressWram(lzPaletteData, gDecompressionBuffer);
-    if (gSaveBlock2Ptr->individualColors)
-        HueShiftMonPalette((u16*) gDecompressionBuffer, currentPersonality);
+    HueShiftMonPalette((u16*) gDecompressionBuffer, currentPersonality, isAlpha);
     LoadPalette(gDecompressionBuffer, paletteOffset, 0x20);
     LoadPalette(gDecompressionBuffer, 0x80 + battlerId * 16, 0x20);
 
@@ -693,6 +723,16 @@ void BattleLoadAllHealthBoxesGfxAtOnce(void)
     }
     for (i = 0; i < numberOfBattlers; i++)
         LoadCompressedSpriteSheet(&sSpriteSheets_HealthBar[gBattlerPositions[i]]);
+}
+
+// For Pokemon Debug Menu
+void LoadHealthBoxesPalette(void)
+{
+    LoadSpritePalette(&sSpritePalettes_HealthBoxHealthBar[0]);
+}
+
+u8 getBattleInterfaceTheme(void){
+    return gSaveBlock2Ptr->battleInterfaceTheme;
 }
 
 bool8 BattleLoadAllHealthBoxesGfx(u8 state)
@@ -864,6 +904,8 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
     u32 personalityValue, otId, position, paletteOffset, targetSpecies;
     const void *lzPaletteData, *src;
     void *dst;
+    bool8 isAlpha;
+    u8 isShiny;
 
     if (IsContest())
     {
@@ -881,10 +923,16 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
     {
         position = GetBattlerPosition(battlerAtk);
 
-        if (GetBattlerSide(battlerDef) == B_SIDE_OPPONENT)
+        if (GetBattlerSide(battlerDef) == B_SIDE_OPPONENT){
+            isAlpha = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_IS_ALPHA);
+            isShiny = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_IS_SHINY);
             targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_SPECIES);
-        else
+        }
+        else{
+            isAlpha = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_IS_ALPHA);
+            isShiny = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_IS_SHINY);
             targetSpecies = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_SPECIES);
+        }
 
         if (GetBattlerSide(battlerAtk) == B_SIDE_PLAYER)
         {
@@ -927,10 +975,9 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
         dst = (void *)(OBJ_VRAM0 + gSprites[gBattlerSpriteIds[battlerAtk]].oam.tileNum * 32);
         DmaCopy32(3, src, dst, MON_PIC_SIZE);
         paletteOffset = 0x100 + battlerAtk * 16;
-        lzPaletteData = GetMonSpritePalFromSpeciesAndPersonality(targetSpecies, otId, personalityValue);
+        lzPaletteData = GetMonSpritePal(targetSpecies, personalityValue, isShiny);
         LZDecompressWram(lzPaletteData, gDecompressionBuffer);
-        if (gSaveBlock2Ptr->individualColors)
-            HueShiftMonPalette((u16*) gDecompressionBuffer, personalityValue);
+        HueShiftMonPalette((u16*) gDecompressionBuffer, personalityValue, isAlpha);
         LoadPalette(gDecompressionBuffer, paletteOffset, 32);
 
         if (targetSpecies == SPECIES_CASTFORM || targetSpecies == SPECIES_CHERRIM)
@@ -1008,7 +1055,7 @@ void LoadBattleMonGfxAndAnimate(u8 battlerId, bool8 loadMonSprite, u8 spriteId)
 
 void TrySetBehindSubstituteSpriteBit(u8 battlerId, u16 move)
 {
-    if (move == MOVE_SUBSTITUTE)
+    if (gBattleMoves[move].effect == EFFECT_SUBSTITUTE || gBattleMoves[move].effect == EFFECT_SHED_TAIL)
         gBattleSpritesDataPtr->battlerData[battlerId].behindSubstitute = 1;
 }
 
@@ -1177,7 +1224,7 @@ void HideBattlerShadowSprite(u8 battlerId)
     gSprites[gBattleSpritesDataPtr->healthBoxesData[battlerId].shadowSpriteId].callback = SpriteCB_SetInvisible;
 }
 
-void sub_805EF14(void)
+void FillAroundBattleWindows(void)
 {
     u16 *vramPtr = (u16*)(VRAM + 0x240);
     s32 i;

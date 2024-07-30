@@ -8,13 +8,13 @@ static void AnimSludgeProjectile_Step(struct Sprite *);
 static void AnimAcidPoisonBubble(struct Sprite *);
 static void AnimSludgeBombHitParticle_Step(struct Sprite *);
 static void AnimAcidPoisonDroplet(struct Sprite *);
-static void AnimBubbleEffect(struct Sprite *);
 static void AnimBubbleEffect_Step(struct Sprite *);
 static void AnimSuckerPunchStep(struct Sprite *sprite);
 static void AnimSuckerPunch(struct Sprite *sprite);
 static void AnimGunkShotParticlesStep(struct Sprite *sprite);
 static void AnimGunkShotParticles(struct Sprite *sprite);
 static void AnimGunkShotImpact(struct Sprite *sprite);
+static void AnimAnimSyrupBomb(struct Sprite *);
 
 static const union AnimCmd sAnim_ToxicBubble[] =
 {
@@ -98,6 +98,17 @@ static const union AffineAnimCmd *const sAffineAnims_SludgeBombHit[] =
     sAffineAnim_SludgeBombHit,
 };
 
+const struct SpriteTemplate gFumigationBombProjectileSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_POISON_BUBBLE,
+    .paletteTag = ANIM_TAG_GLOWY_GREEN_ORB,
+    .oam = &gOamData_AffineDouble_ObjNormal_16x16,
+    .anims = gAnims_PoisonProjectile,
+    .images = NULL,
+    .affineAnims = gAffineAnims_PoisonProjectile,
+    .callback = AnimSludgeProjectile,
+};
+
 const struct SpriteTemplate gSludgeProjectileSpriteTemplate =
 {
     .tileTag = ANIM_TAG_POISON_BUBBLE,
@@ -113,6 +124,17 @@ const struct SpriteTemplate gAcidPoisonBubbleSpriteTemplate =
 {
     .tileTag = ANIM_TAG_POISON_BUBBLE,
     .paletteTag = ANIM_TAG_POISON_BUBBLE,
+    .oam = &gOamData_AffineDouble_ObjNormal_16x16,
+    .anims = gAnims_PoisonProjectile,
+    .images = NULL,
+    .affineAnims = gAffineAnims_PoisonProjectile,
+    .callback = AnimAcidPoisonBubble,
+};
+
+const struct SpriteTemplate gBloodShotBubbleSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_POISON_BUBBLE,
+    .paletteTag = ANIM_TAG_RED_PARTICLES,
     .oam = &gOamData_AffineDouble_ObjNormal_16x16,
     .anims = gAnims_PoisonProjectile,
     .images = NULL,
@@ -154,6 +176,17 @@ const struct SpriteTemplate gAcidPoisonDropletSpriteTemplate =
     .callback = AnimAcidPoisonDroplet,
 };
 
+const struct SpriteTemplate gBloodDropletSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_RED_PARTICLES,
+    .paletteTag = ANIM_TAG_RED_PARTICLES,
+    .oam = &gOamData_AffineDouble_ObjNormal_16x16,
+    .anims = gAnims_AcidPoisonDroplet,
+    .images = NULL,
+    .affineAnims = gAffineAnims_Droplet,
+    .callback = AnimAcidPoisonDroplet,
+};
+
 static const union AffineAnimCmd sAffineAnim_Bubble[] =
 {
     AFFINEANIMCMD_FRAME(0x9C, 0x9C, 0, 0),
@@ -161,7 +194,7 @@ static const union AffineAnimCmd sAffineAnim_Bubble[] =
     AFFINEANIMCMD_END,
 };
 
-static const union AffineAnimCmd *const sAffineAnims_Bubble[] =
+const union AffineAnimCmd *const gAffineAnims_Bubble[] =
 {
     sAffineAnim_Bubble,
 };
@@ -173,7 +206,7 @@ const struct SpriteTemplate gPoisonBubbleSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjNormal_16x16,
     .anims = gAnims_PoisonProjectile,
     .images = NULL,
-    .affineAnims = sAffineAnims_Bubble,
+    .affineAnims = gAffineAnims_Bubble,
     .callback = AnimBubbleEffect,
 };
 
@@ -184,7 +217,7 @@ const struct SpriteTemplate gWaterBubbleSpriteTemplate =
     .oam = &gOamData_AffineNormal_ObjBlend_16x16,
     .anims = gAnims_WaterBubble,
     .images = NULL,
-    .affineAnims = sAffineAnims_Bubble,
+    .affineAnims = gAffineAnims_Bubble,
     .callback = AnimBubbleEffect,
 };
 
@@ -304,6 +337,123 @@ const struct SpriteTemplate gGunkShotImpactSpriteTemplate =
     .images = NULL,
     .affineAnims = gSuckerPunchImpactAffineAnim,
     .callback = AnimGunkShotImpact,
+};
+
+static const union AnimCmd sAnim_SyrupCoat[] =
+{
+    ANIMCMD_FRAME(128, 10),
+    ANIMCMD_FRAME(64, 5),
+    ANIMCMD_FRAME(0, 45),
+    ANIMCMD_FRAME(64, 15),
+    ANIMCMD_FRAME(128, 15),
+    ANIMCMD_FRAME(192, 20),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_SyrupStick[] =
+{
+    ANIMCMD_FRAME(192, 5),
+    ANIMCMD_FRAME(128, 35),
+    ANIMCMD_FRAME(192, 20),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SyrupCoat[] =
+{
+    sAnim_SyrupCoat,
+};
+
+static const union AnimCmd *const sAnims_SyrupStick[] =
+{
+    sAnim_SyrupStick,
+};
+
+const struct SpriteTemplate gSyrupRedProjectileSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SYRUP_BLOB_RED,
+    .paletteTag = ANIM_TAG_SYRUP_BLOB_RED,
+    .oam = &gOamData_AffineDouble_ObjNormal_16x16,
+    .anims = gAnims_PoisonProjectile,
+    .images = NULL,
+    .affineAnims = gAffineAnims_PoisonProjectile,
+    .callback = AnimSludgeProjectile,
+};
+
+const struct SpriteTemplate gSyrupYellowProjectileSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SYRUP_BLOB_YELLOW,
+    .paletteTag = ANIM_TAG_SYRUP_BLOB_YELLOW,
+    .oam = &gOamData_AffineDouble_ObjNormal_16x16,
+    .anims = gAnims_PoisonProjectile,
+    .images = NULL,
+    .affineAnims = gAffineAnims_PoisonProjectile,
+    .callback = AnimSludgeProjectile,
+};
+
+const struct SpriteTemplate gSyrupBombRedHitParticleSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SYRUP_SPLAT_RED,
+    .paletteTag = ANIM_TAG_SYRUP_BLOB_RED,
+    .oam = &gOamData_AffineNormal_ObjNormal_16x16,
+    .anims = gAnims_PoisonProjectile,
+    .images = NULL,
+    .affineAnims = sAffineAnims_SludgeBombHit,
+    .callback = AnimSludgeBombHitParticle,
+};
+
+const struct SpriteTemplate gSyrupBombYellowHitParticleSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SYRUP_SPLAT_YELLOW,
+    .paletteTag = ANIM_TAG_SYRUP_BLOB_YELLOW,
+    .oam = &gOamData_AffineNormal_ObjNormal_16x16,
+    .anims = gAnims_PoisonProjectile,
+    .images = NULL,
+    .affineAnims = sAffineAnims_SludgeBombHit,
+    .callback = AnimSludgeBombHitParticle,
+};
+
+const struct SpriteTemplate gSyrupBombRedShellSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SYRUP_SHELL_RED,
+    .paletteTag = ANIM_TAG_SYRUP_BLOB_RED,
+    .oam = &gOamData_AffineOff_ObjNormal_64x64,
+    .anims = sAnims_SyrupCoat,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimAnimSyrupBomb,
+};
+
+const struct SpriteTemplate gSyrupBombYellowShellSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SYRUP_SHELL_YELLOW,
+    .paletteTag = ANIM_TAG_SYRUP_BLOB_YELLOW,
+    .oam = &gOamData_AffineOff_ObjNormal_64x64,
+    .anims = sAnims_SyrupCoat,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimAnimSyrupBomb,
+};
+
+const struct SpriteTemplate gSyrupBombRedShellBSpriteTemplate =
+{
+     .tileTag = ANIM_TAG_SYRUP_SHELL_RED,
+     .paletteTag = ANIM_TAG_SYRUP_BLOB_RED,
+     .oam = &gOamData_AffineOff_ObjNormal_64x64,
+     .anims = sAnims_SyrupStick,
+     .images = NULL,
+     .affineAnims = gDummySpriteAffineAnimTable,
+     .callback = AnimAnimSyrupBomb,
+};
+
+const struct SpriteTemplate gSyrupBombYellowShellBSpriteTemplate =
+{
+    .tileTag = ANIM_TAG_SYRUP_SHELL_YELLOW,
+    .paletteTag = ANIM_TAG_SYRUP_BLOB_YELLOW,
+    .oam = &gOamData_AffineOff_ObjNormal_64x64,
+    .anims = sAnims_SyrupStick,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = AnimAnimSyrupBomb,
 };
 
 static void AnimGunkShotImpact(struct Sprite *sprite)
@@ -505,7 +655,7 @@ static void AnimAcidPoisonDroplet(struct Sprite *sprite)
 // arg 0: initial x pixel offset
 // arg 1: initial y pixel offset
 // arg 2: 0 = single-target, 1 = multi-target
-static void AnimBubbleEffect(struct Sprite *sprite)
+void AnimBubbleEffect(struct Sprite *sprite)
 {
     if (!gBattleAnimArgs[2])
     {
@@ -534,4 +684,27 @@ static void AnimBubbleEffect_Step(struct Sprite *sprite)
 
     if (sprite->affineAnimEnded)
         DestroyAnimSprite(sprite);
+}
+
+static void AnimSyrupBomb_Step(struct Sprite *sprite)
+{
+    if (sprite->data[1] > sprite->data[0] - 10)
+        sprite->invisible = sprite->data[1] & 1;
+
+    if (sprite->data[1] == sprite->data[0])
+        DestroyAnimSprite(sprite);
+
+    sprite->data[1]++;
+}
+
+static void AnimAnimSyrupBomb(struct Sprite *sprite)
+{
+    if (gBattleAnimArgs[0] == ANIM_TARGET)
+    {
+        sprite->x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);
+        sprite->y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y) + 2;
+    }
+
+    sprite->data[0] = gBattleAnimArgs[1];
+    sprite->callback = AnimSyrupBomb_Step;
 }

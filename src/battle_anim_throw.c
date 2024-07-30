@@ -22,6 +22,7 @@
 #include "constants/moves.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
+#include "mgba_printf/mgba.h"
 
 // iwram
 u32 gMonShrinkDuration;
@@ -2487,24 +2488,21 @@ void AnimTask_SetTargetToEffectBattler(u8 taskId)
 
 void TryShinyAnimation(u8 battler, struct Pokemon *mon)
 {
-    bool8 isShiny;
+    u8 isShiny;
     u32 otId, personality;
     u32 shinyValue;
     u8 taskCirc, taskDgnl;
 
-    isShiny = FALSE;
     gBattleSpritesDataPtr->healthBoxesData[battler].triedShinyMonAnim = TRUE;
     otId = GetMonData(mon, MON_DATA_OT_ID);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
+    isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
 
     if (IsBattlerSpriteVisible(battler))
     {
-        shinyValue = HIHALF(otId) ^ LOHALF(otId) ^ HIHALF(personality) ^ LOHALF(personality);
-        if (shinyValue < getShinyOdds())
-            isShiny = TRUE;
-
-        if (isShiny)
+        if (isShiny != SHINY_NONE)
         {
+            //To Expand
             if (GetSpriteTileStartByTag(ANIM_TAG_GOLD_STARS) == 0xFFFF)
             {
                 LoadCompressedSpriteSheetUsingHeap(&gBattleAnimPicTable[ANIM_TAG_GOLD_STARS - ANIM_SPRITES_START]);
@@ -2757,6 +2755,10 @@ void AnimTask_GetTrappedMoveAnimId(u8 taskId)
         gBattleAnimArgs[0] = TRAP_ANIM_MAGMA_STORM;
     else if (gBattleSpritesDataPtr->animationData->animArg == MOVE_INFESTATION)
         gBattleAnimArgs[0] = TRAP_ANIM_INFESTATION;
+    else if (gBattleSpritesDataPtr->animationData->animArg == MOVE_THUNDER_CAGE)
+        gBattleAnimArgs[0] = TRAP_ANIM_THUNDER_CAGE;
+    else if (gBattleSpritesDataPtr->animationData->animArg == MOVE_SNAP_TRAP)
+        gBattleAnimArgs[0] = TRAP_ANIM_SNAP_TRAP;
     else
         gBattleAnimArgs[0] = TRAP_ANIM_BIND;
 

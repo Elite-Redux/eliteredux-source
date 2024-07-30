@@ -17,13 +17,14 @@
 #include "battle_interface.h"
 #include "battle_anim.h"
 #include "data.h"
+#include "mgba_printf/mgba.h"
 
 // this file's functions
 static void CB2_ReshowBattleScreenAfterMenu(void);
 static bool8 LoadBattlerSpriteGfx(u8 battlerId);
 static void CreateBattlerSprite(u8 battlerId);
 static void CreateHealthboxSprite(u8 battlerId);
-static void sub_80A95F4(void);
+static void ClearBattleBgCntBaseBlocks(void);
 
 void ReshowBattleScreenDummy(void)
 {
@@ -32,19 +33,20 @@ void ReshowBattleScreenDummy(void)
 
 void ReshowBattleScreenAfterMenu(void)
 {
+    gActionSelectionCursor[gActiveBattler] = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F);
     gPaletteFade.bufferTransferDisabled = 1;
     SetHBlankCallback(NULL);
     SetVBlankCallback(NULL);
     SetGpuReg(REG_OFFSET_MOSAIC, 0);
     gBattleScripting.reshowMainState = 0;
     gBattleScripting.reshowHelperState = 0;
+    VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, 0);
     SetMainCallback2(CB2_ReshowBattleScreenAfterMenu);
 }
 
 static void CB2_ReshowBattleScreenAfterMenu(void)
 {
-    u8 value = 0;
-    
+    u8 value = 1;
     switch (gBattleScripting.reshowMainState)
     {
     case 0:
@@ -65,6 +67,7 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
         gBattle_BG2_Y = 0;
         gBattle_BG3_X = 0;
         gBattle_BG3_Y = 0;
+        VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
         break;
     case 1:
         CpuFastFill(0, (void*)(VRAM), VRAM_SIZE);
@@ -158,25 +161,25 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
                 LoadWirelessStatusIndicatorSpriteGfx();
                 CreateWirelessStatusIndicatorSprite(0, 0);
             }
+        
         }
         break;
     default:
         SetVBlankCallback(VBlankCB_Battle);
-        sub_80A95F4();
+        ClearBattleBgCntBaseBlocks();
         BeginHardwarePaletteFade(0xFF, 0, 0x10, 0, 1);
         gPaletteFade.bufferTransferDisabled = 0;
         SetMainCallback2(BattleMainCB2);
-        sub_805EF14();
+        FillAroundBattleWindows();
+
+        ReshowNewBattleMenuAfterMenu();
         break;
     }
-
-    value = 1;
-    VarSet(VAR_BATTLE_CONTROLLER_PLAYER_F, value);
 
     gBattleScripting.reshowMainState++;
 }
 
-static void sub_80A95F4(void)
+static void ClearBattleBgCntBaseBlocks(void)
 {
     struct BGCntrlBitfield *regBgcnt1, *regBgcnt2;
 

@@ -53,7 +53,7 @@ bool8 TryDoDoubleWildBattle(void);
 void HoneyWildEncounter(void);
 u16 GetCurrentMapWildMonHeaderId(void);
 
-void CreateWildMon(u16 species, u8 level);
+void CreateWildMon(u16 species, u8 level, int useRandomizer);
 u16 GetCurrentMapWildMonHeaderId(void);
 u8 ChooseWildMonIndex_Land(void);
 u8 ChooseWildMonIndex_WaterRock(void);

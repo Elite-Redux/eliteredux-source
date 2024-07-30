@@ -67,24 +67,30 @@ void BattleTurnPassed(void);
 u8 IsRunningFromBattleImpossible(void);
 void SwitchPartyOrder(u8 battlerId);
 void SwapTurnOrder(u8 id1, u8 id2);
-u32 GetBattlerTotalSpeedStat(u8 battlerId);
+#define TOTAL_SPEED_FULL 0
+#define TOTAL_SPEED_PRIMARY 1
+#define TOTAL_SPEED_SECONDARY 2
+u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType);
+u16 GetChosenMove(u32 battlerId);
+u16 IsMyceliumMightActive(u32 battlerId);
 s8 GetChosenMovePriority(u32 battlerId, u32 target);
 s8 GetMovePriority(u32 battlerId, u16 move, u32 target);
 u8 GetWhoStrikesFirst(u8 battlerId1, u8 battlerId2, bool8 ignoreChosenMoves);
 void RunBattleScriptCommands_PopCallbacksStack(void);
 void RunBattleScriptCommands(void);
 bool8 TryRunFromBattle(u8 battlerId);
-void SpecialStatusesClear(void);
+void TurnStructsClear(void);
 void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk);
 u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk);
 s32 GetHighestLevelInPlayerParty(void);
 u16 selectMoves (u16 species, u8 i, u16 atk, u16 spAtk);
 u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer);
 bool32 IsWildMonSmart(void);
+void RecalculateMoveOrder(u8 startingFrom, u8 processTo);
 
 extern struct UnknownPokemonStruct4 gMultiPartnerParty[MULTI_PARTY_SIZE];
 
-extern const struct SpriteTemplate gUnknown_0831AC88;
+extern const struct SpriteTemplate gUnusedBattleInitSprite;
 extern const struct OamData gOamData_BattleSpriteOpponentSide;
 extern const struct OamData gOamData_BattleSpritePlayerSide;
 extern const u8 gTypeNames[NUMBER_OF_MON_TYPES][TYPE_NAME_LENGTH + 1];
@@ -100,7 +106,8 @@ extern const u8 gStatusConditionString_BurnJpn[8];
 extern const u8 gStatusConditionString_IceJpn[8];
 extern const u8 gStatusConditionString_ConfusionJpn[8];
 extern const u8 gStatusConditionString_LoveJpn[8];
+extern const u8 gStatusConditionString_BleedJpn[8];
 
-extern const u8 *const gStatusConditionStringsTable[7][2];
+extern const u8 *const gStatusConditionStringsTable[8][2];
 
 #endif // GUARD_BATTLE_MAIN_H

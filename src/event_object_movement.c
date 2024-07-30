@@ -478,6 +478,7 @@ const u8 gInitialMovementTypeFacingDirections[] = {
 #define OBJ_EVENT_PAL_TAG_SALAMENCE               0x112F
 #define OBJ_EVENT_PAL_TAG_DEWGONG                 0x1130
 #define OBJ_EVENT_PAL_TAG_FERALIGATR              0x1131
+#define OBJ_EVENT_PAL_TAG_HOODED                  0x1132
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF
 
 #include "data/object_events/object_event_graphics_info_pointers.h"
@@ -538,6 +539,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPaletteSalamence,          OBJ_EVENT_PAL_TAG_SALAMENCE},
     {gObjectEventPaletteDewgong,            OBJ_EVENT_PAL_TAG_DEWGONG},
     {gObjectEventPaletteFeraligatr,         OBJ_EVENT_PAL_TAG_FERALIGATR},
+    {gObjectEventPaletteHooded,             OBJ_EVENT_PAL_TAG_HOODED},
     {NULL,                                  0x0000},
 };
 
@@ -2663,6 +2665,7 @@ bool8 ObjectEventIsTrainerAndCloseToPlayer(struct ObjectEvent *objectEvent)
     s16 maxX;
     s16 minY;
     s16 maxY;
+    u8 approachRange;
 
     if (!TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_DASH))
     {
@@ -2672,13 +2675,19 @@ bool8 ObjectEventIsTrainerAndCloseToPlayer(struct ObjectEvent *objectEvent)
     {
         return FALSE;
     }
+
+    if(objectEvent->trainerRange_berryTreeId >= MAX_SIGHT_RADIUS)
+        approachRange = MAX_SIGHT_RADIUS;
+    else
+        approachRange = objectEvent->trainerRange_berryTreeId;
+
     PlayerGetDestCoords(&playerX, &playerY);
     objX = objectEvent->currentCoords.x;
     objY = objectEvent->currentCoords.y;
-    minX = objX - objectEvent->trainerRange_berryTreeId;
-    minY = objY - objectEvent->trainerRange_berryTreeId;
-    maxX = objX + objectEvent->trainerRange_berryTreeId;
-    maxY = objY + objectEvent->trainerRange_berryTreeId;
+    minX = objX - approachRange;
+    minY = objY - approachRange;
+    maxX = objX + approachRange;
+    maxY = objY + approachRange;
     if (minX > playerX || maxX < playerX || minY > playerY || maxY < playerY)
     {
         return FALSE;

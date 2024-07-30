@@ -6,6 +6,7 @@
 #include "dma3.h"
 #include "dynamic_placeholder_text_util.h"
 #include "event_data.h"
+#include "evolution_scene.h"
 #include "field_screen_effect.h"
 #include "field_weather.h"
 #include "fldeff_misc.h"
@@ -44,6 +45,8 @@
 #include "constants/songs.h"
 #include "constants/abilities.h"
 #include "constants/hold_effects.h"
+#include "mgba_printf/mini_printf.h"
+#include "mgba_printf/mgba.h"
 
 /*
     NOTE: This file is large. Some general groups of functions have
@@ -75,6 +78,8 @@ enum {
     MSG_WAS_DEPOSITED,
     MSG_BOX_IS_FULL,
     MSG_RELEASE_POKE,
+    MSG_LEVEL_UP_POKE,
+    MSG_EVOLVE_POKE,
     MSG_WAS_RELEASED,
     MSG_BYE_BYE,
     MSG_MARK_POKE,
@@ -102,8 +107,8 @@ enum {
 enum {
     MSG_VAR_NONE,
     MSG_VAR_MON_NAME_1,
-    MSG_VAR_MON_NAME_2, // Unused
-    MSG_VAR_MON_NAME_3, // Unused
+    MSG_VAR_MON_NAME_2,    // Unused
+    MSG_VAR_MON_NAME_3,    // Unused
     MSG_VAR_RELEASE_MON_1,
     MSG_VAR_RELEASE_MON_2, // Unused
     MSG_VAR_RELEASE_MON_3,
@@ -116,6 +121,8 @@ enum {
     MENU_STORE,
     MENU_WITHDRAW,
     MENU_MOVE,
+    MENU_LEVEL_UP,
+    MENU_EVOLVE,
     MENU_SHIFT,
     MENU_PLACE,
     MENU_SUMMARY,
@@ -397,6 +404,8 @@ struct ItemIcon
     bool8 active;
 };
 
+#define MAX_NUM_POKEMON_STORAGE_ITEMS 7
+
 struct PokemonStorageSystemData
 {
     u8 state;
@@ -459,6 +468,7 @@ struct PokemonStorageSystemData
     u16 numIconsPerSpecies[MAX_MON_ICONS];
     u16 iconSpeciesList[MAX_MON_ICONS];
     u16 boxSpecies[IN_BOX_COUNT];
+    u8  boxLevel[IN_BOX_COUNT];
     u32 boxPersonalities[IN_BOX_COUNT];
     u8 incomingBoxId;
     u8 shiftTimer;
@@ -472,7 +482,7 @@ struct PokemonStorageSystemData
     u8 iconScrollState;
     u8 iconScrollToBoxId; // Unnecessary duplicate of scrollToBoxId
     struct WindowTemplate menuWindow;
-    struct StorageMenu menuItems[7];
+    struct StorageMenu menuItems[MAX_NUM_POKEMON_STORAGE_ITEMS];
     u8 menuItemsCount;
     u8 menuWidth;
     u8 menuUnusedField; // Never read.
@@ -599,6 +609,8 @@ static void Task_TakeItemForMoving(u8);
 static void Task_ShowMarkMenu(u8);
 static void Task_ShowMonSummary(u8);
 static void Task_ReleaseMon(u8);
+static void Task_LevelUpMon(u8);
+static void Task_EvolveMon(u8);
 static void Task_ReshowPokeStorage(u8);
 static void Task_PokeStorageMain(u8);
 static void Task_JumpBox(u8);
@@ -639,6 +651,7 @@ static void InitMonIconFields(void);
 static void SpriteCB_BoxMonIconScrollOut(struct Sprite *);
 static void GetIncomingBoxMonData(u8);
 static void CreatePartyMonsSprites(bool8);
+static bool8 CreatePartyMonSprite(u8 partyId);
 static void CompactPartySprites(void);
 static u8 GetNumPartySpritesCompacting(void);
 static void MovePartySpriteToNextSlot(struct Sprite *, u16);
@@ -850,6 +863,8 @@ static bool8 DoShowPartyMenu(void);
 static bool8 HidePartyMenu(void);
 static bool8 IsDisplayMosaicActive(void);
 static void ShowYesNoWindow(s8);
+static void ShowLevelUpWindow(s8);
+static void ShowEvolveWindow(s8);
 static void UpdateCloseBoxButtonTilemap(bool8);
 static void PrintMessage(u8 id);
 static void LoadDisplayMonGfx(u16, u32);
@@ -872,6 +887,7 @@ u16 GetArceusFormPSS(struct BoxPokemon *boxMon);
 u16 GetSilvallyFormPSS(struct BoxPokemon *boxMon);
 u16 GetGiratinaFormPSS(struct BoxPokemon *boxMon);
 void UpdateSpeciesSpritePSS(struct BoxPokemon *boxmon);
+void UpdateSpeciesSpritePSS_Mon(struct Pokemon *mon);
 
 // Unknown utility
 static void UnkUtil_Init(struct UnkUtil *, struct UnkUtilData *, u32);
@@ -879,16 +895,21 @@ static void UnkUtil_Run(void);
 static void UnkUtil_CpuRun(struct UnkUtilData *);
 static void UnkUtil_DmaRun(struct UnkUtilData *);
 
+const u8 gPCText_LevelUp[] = _("Level Up");
+const u8 gPCText_Evolve[] = _("Evolve");
+const u8 gText_MoveLevelUpDescription[] = _("Level Up to what level?");
+const u8 gText_MoveEvolveDescription[] = _("Evolve into what?");
+
 struct {
     const u8 *text;
     const u8 *desc;
 } static const sMainMenuTexts[OPTIONS_COUNT] =
 {
-    [OPTION_WITHDRAW]   = {gText_WithdrawPokemon, gText_WithdrawMonDescription},
-    [OPTION_DEPOSIT]    = {gText_DepositPokemon,  gText_DepositMonDescription},
-    [OPTION_MOVE_MONS]  = {gText_MovePokemon,     gText_MoveMonDescription},
-    [OPTION_MOVE_ITEMS] = {gText_MoveItems,       gText_MoveItemsDescription},
-    [OPTION_EXIT]       = {gText_SeeYa,           gText_SeeYaDescription}
+    [OPTION_WITHDRAW]      = {gText_WithdrawPokemon, gText_WithdrawMonDescription},
+    [OPTION_DEPOSIT]       = {gText_DepositPokemon,  gText_DepositMonDescription},
+    [OPTION_MOVE_MONS]     = {gText_MovePokemon,     gText_MoveMonDescription},
+    [OPTION_MOVE_ITEMS]    = {gText_MoveItems,       gText_MoveItemsDescription},
+    [OPTION_EXIT]          = {gText_SeeYa,           gText_SeeYaDescription}
 };
 
 static const struct WindowTemplate sWindowTemplate_MainMenu =
@@ -1095,6 +1116,8 @@ static const struct StorageMessage sMessages[] =
     [MSG_WAS_DEPOSITED]        = {gText_PkmnWasDeposited,        MSG_VAR_MON_NAME_1},
     [MSG_BOX_IS_FULL]          = {gText_BoxIsFull2,              MSG_VAR_NONE},
     [MSG_RELEASE_POKE]         = {gText_ReleaseThisPokemon,      MSG_VAR_NONE},
+    [MSG_LEVEL_UP_POKE]        = {gText_MoveLevelUpDescription,  MSG_VAR_NONE},
+    [MSG_EVOLVE_POKE]          = {gText_MoveEvolveDescription,   MSG_VAR_NONE},
     [MSG_WAS_RELEASED]         = {gText_PkmnWasReleased,         MSG_VAR_RELEASE_MON_1},
     [MSG_BYE_BYE]              = {gText_ByeByePkmn,              MSG_VAR_RELEASE_MON_3},
     [MSG_MARK_POKE]            = {gText_MarkYourPkmn,            MSG_VAR_NONE},
@@ -1125,6 +1148,29 @@ static const struct WindowTemplate sYesNoWindowTemplate =
     .tilemapTop = 11,
     .width = 5,
     .height = 4,
+    .paletteNum = 15,
+    .baseBlock = 0x5C,
+};
+
+#define MAX_LEVEL_UP_OPTIONS 6
+static const struct WindowTemplate sLevelUpWindowTemplate =
+{
+    .bg = 0,
+    .tilemapLeft = 20,
+    .tilemapTop = 3,
+    .width = 9,
+    .height = MAX_LEVEL_UP_OPTIONS * 2,
+    .paletteNum = 15,
+    .baseBlock = 0x5C,
+};
+
+static const struct WindowTemplate sEvolutionWindowTemplate =
+{
+    .bg = 0,
+    .tilemapLeft = 15,
+    .tilemapTop = 3,
+    .width = 14,
+    .height = MAX_LEVEL_UP_OPTIONS * 2,
     .paletteNum = 15,
     .baseBlock = 0x5C,
 };
@@ -2655,6 +2701,14 @@ static void Task_OnSelectedMon(u8 taskId)
                 SetPokeStorageTask(Task_MoveMon);
             }
             break;
+        case MENU_LEVEL_UP:
+                PlaySE(SE_SELECT);
+                SetPokeStorageTask(Task_LevelUpMon);
+            break;
+        case MENU_EVOLVE:
+                PlaySE(SE_SELECT);
+                SetPokeStorageTask(Task_EvolveMon);
+            break;
         case MENU_PLACE:
             PlaySE(SE_SELECT);
             ClearBottomWindow();
@@ -4007,6 +4061,7 @@ static void CreateDisplayMonSprite(void)
 
 static void LoadDisplayMonGfx(u16 species, u32 pid)
 {
+    bool8 isAlpha = FALSE;
     if (sStorage->displayMonSprite == NULL)
         return;
 
@@ -4014,8 +4069,7 @@ static void LoadDisplayMonGfx(u16 species, u32 pid)
     {
         LoadSpecialPokePic(&gMonFrontPicTable[species], sStorage->tileBuffer, species, pid, TRUE);
         LZ77UnCompWram(sStorage->displayMonPalette, sStorage->displayMonPalBuffer);
-        if (gSaveBlock2Ptr->individualColors == TRUE)
-            HueShiftMonPalette((u16*) sStorage->displayMonPalBuffer, sStorage->displayMonPersonality);
+        HueShiftMonPalette((u16*) sStorage->displayMonPalBuffer, sStorage->displayMonPersonality, isAlpha);
         CpuCopy32(sStorage->tileBuffer, sStorage->displayMonTilePtr, MON_PIC_SIZE);
         LoadPalette(sStorage->displayMonPalBuffer, sStorage->displayMonPalOffset, 0x20);
         sStorage->displayMonSprite->invisible = FALSE;
@@ -4355,6 +4409,218 @@ static void PrintMessage(u8 id)
 static void ShowYesNoWindow(s8 cursorPos)
 {
     CreateYesNoMenu(&sYesNoWindowTemplate, 11, 14, 0);
+    Menu_MoveCursorNoWrapAround(cursorPos);
+}
+
+static void Task_EvolveMon(u8 taskId)
+{
+    struct Pokemon pokemon;
+    u8 newLevel, i;
+    u8 pos = GetCursorPosition();
+    u8 boxId = StorageGetCurrentBox();
+    u16 targetSpecies = SPECIES_NONE;
+    u8 numEvo = 0;
+    u8 targetNumEvo;
+
+    switch (sStorage->state)
+    {
+    case 0:
+        PrintMessage(MSG_EVOLVE_POKE);
+        ShowEvolveWindow(0);
+        sStorage->state++;
+        break;
+    case 1:
+        switch (Menu_ProcessInputNoWrapClearOnChoose())
+        {
+        case MENU_B_PRESSED:
+            ClearBottomWindow();
+            SetPokeStorageTask(Task_PokeStorageMain);
+            break;
+        case  0:
+        case  1:
+        case  2:
+        case  3:
+        case  4:
+        case  5:
+            if (sInPartyMenu)
+                pokemon = gPlayerParty[pos];
+            else
+                BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][pos], &pokemon);
+
+            for(i = 0; i < MAX_LEVEL_UP_OPTIONS; i++){
+                targetSpecies = GetEvolutionForMon(&pokemon, i);
+                if(targetSpecies != SPECIES_NONE){
+                    if(numEvo == Menu_ProcessInputNoWrapClearOnChoose())
+                        targetNumEvo = i;
+                    numEvo++;
+                }
+            }
+
+            targetSpecies = GetEvolutionForMon(&pokemon, targetNumEvo);
+
+            /*MgbaOpen();
+            MgbaPrintf(MGBA_LOG_WARN, "GetEvolutionForMon: %d targetSpecies: %d", targetNumEvo, targetSpecies);
+            MgbaClose();*/
+
+            if (sInPartyMenu){
+                SetMonData(&gPlayerParty[pos], MON_DATA_SPECIES, &targetSpecies);
+                SetMonData(&gPlayerParty[pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
+                CalculateMonStats(&gPlayerParty[pos]);
+                UpdateSpeciesSpritePSS_Mon(&gPlayerParty[pos]);
+            }
+            else{
+                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_SPECIES, &targetSpecies);
+                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
+                UpdateSpeciesSpritePSS(&gPokemonStoragePtr->boxes[boxId][pos]);
+            }
+
+            //BeginEvolutionScene(&pokemon, targetSpecies, FALSE, pos);
+            RefreshDisplayMon();
+            PrintDisplayMonInfo();
+            //PlayFanfareByFanfareNum(FANFARE_LEVEL_UP);
+            ClearBottomWindow();
+            SetPokeStorageTask(Task_PokeStorageMain);
+            break;
+        }
+        break;
+    }
+}
+
+static void Task_LevelUpMon(u8 taskId)
+{
+    u8 newLevel;
+    u8 pos = GetCursorPosition();
+    u8 boxId = StorageGetCurrentBox();
+    u32 experience = 0;
+
+    switch (sStorage->state)
+    {
+    case 0:
+        PrintMessage(MSG_LEVEL_UP_POKE);
+        ShowLevelUpWindow(0);
+        sStorage->state++;
+        break;
+    case 1:
+        switch (Menu_ProcessInputNoWrapClearOnChoose())
+        {
+        case MENU_B_PRESSED:
+            ClearBottomWindow();
+            SetPokeStorageTask(Task_PokeStorageMain);
+            break;
+        case  0:
+        case  1:
+        case  2:
+        case  3:
+        case  4:
+        case  5:
+            if(Menu_ProcessInputNoWrapClearOnChoose() != 0)
+                newLevel = sStorage->displayMonLevel + Menu_ProcessInputNoWrapClearOnChoose();
+            else
+                newLevel = GetLevelCap(); // Level Cap
+
+            if(newLevel > 100)
+                newLevel = 100;
+
+            experience = gExperienceTables[gBaseStats[sStorage->displayMonSpecies].growthRate][newLevel];
+
+            if (sInPartyMenu){
+                SetMonData(&gPlayerParty[pos], MON_DATA_EXP,   &experience);
+                SetMonData(&gPlayerParty[pos], MON_DATA_LEVEL, &newLevel);
+                CalculateMonStats(&gPlayerParty[pos]);
+            }
+            else{
+                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_EXP, &experience);
+                SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_LEVEL, &newLevel);
+            }
+
+            RefreshDisplayMon();
+            PrintDisplayMonInfo();
+            //PlayFanfareByFanfareNum(FANFARE_LEVEL_UP);
+            ClearBottomWindow();
+            SetPokeStorageTask(Task_PokeStorageMain);
+            break;
+        }
+        break;
+    }
+}
+
+void CreateLevelUpMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 paletteNum, u8 initialCursorPos)
+{
+    u8 nextlevel, numlevels, i, levelcap, windowId;
+    struct TextPrinterTemplate printer;
+    const u8 gText_YesNo123[] = _("");
+	static const u8 sText_levelCap[] =  _("Level Cap$");
+    u8 monlevel = sStorage->displayMonLevel;
+    u16 species = sStorage->displayMonSpecies;
+
+    levelcap = GetLevelCap();
+
+    windowId = setYesNoWindowId(AddWindow(window));
+    DrawStdFrameWithCustomTileAndPalette(windowId, TRUE, baseTileNum, paletteNum);
+
+    if(levelcap >= 100) //MAX_LEVEL
+        levelcap = 100;
+
+    numlevels = levelcap - monlevel;
+
+    if(numlevels >= MAX_LEVEL_UP_OPTIONS)
+        numlevels = MAX_LEVEL_UP_OPTIONS;
+
+    nextlevel = monlevel;
+
+    for(i = 0; i < numlevels; i++)
+    {
+        if(i == 0){
+            StringCopy(gStringVar1, sText_levelCap);
+        }
+        else{
+            nextlevel++;
+            ConvertIntToDecimalStringN(gStringVar1, nextlevel, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        }
+        AddTextPrinterParameterized(windowId, FONT_NORMAL, gStringVar1, 8, (i * 16) + 1, TEXT_SPEED_FF, NULL);
+    }
+
+    InitMenuInUpperLeftCornerPlaySoundWhenAPressed(windowId, numlevels, initialCursorPos);
+}
+
+static void ShowLevelUpWindow(s8 cursorPos)
+{
+    CreateLevelUpMenu(&sLevelUpWindowTemplate, 11, 14, 0);
+    Menu_MoveCursorNoWrapAround(cursorPos);
+}
+
+void CreateEvolveMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 paletteNum, u8 initialCursorPos)
+{
+    struct Pokemon pokemon;
+    u8 i, levelcap, windowId;
+    u16 targetSpecies;
+    u8 pos = GetCursorPosition();
+    u8 boxId = StorageGetCurrentBox();
+    u8 numEvolutions = 0;
+
+    windowId = setYesNoWindowId(AddWindow(window));
+    DrawStdFrameWithCustomTileAndPalette(windowId, TRUE, baseTileNum, paletteNum);
+
+    if (sInPartyMenu)
+        pokemon = gPlayerParty[pos];
+    else
+        BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][pos], &pokemon);
+
+    for(i = 0; i < MAX_LEVEL_UP_OPTIONS; i++)
+    {
+        targetSpecies = GetEvolutionForMon(&pokemon, i);
+        if(targetSpecies != SPECIES_NONE){
+            AddTextPrinterParameterized(windowId, FONT_NORMAL, SaveSpeciesWithSurname(targetSpecies), 8, (numEvolutions * 16) + 1, TEXT_SPEED_FF, NULL);
+            numEvolutions++;
+        }
+    }
+
+    InitMenuInUpperLeftCornerPlaySoundWhenAPressed(windowId, numEvolutions, initialCursorPos);
+}
+
+static void ShowEvolveWindow(s8 cursorPos)
+{
+    CreateEvolveMenu(&sEvolutionWindowTemplate, 11, 14, 0);
     Menu_MoveCursorNoWrapAround(cursorPos);
 }
 
@@ -4752,6 +5018,7 @@ static void GetIncomingBoxMonData(u8 boxId)
         for (j = 0; j < IN_BOX_COLUMNS; j++)
         {
             sStorage->boxSpecies[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_SPECIES2);
+            sStorage->boxLevel[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_LEVEL);
             if (sStorage->boxSpecies[boxPosition] != SPECIES_NONE)
                 sStorage->boxPersonalities[boxPosition] = GetBoxMonDataAt(boxId, boxPosition, MON_DATA_PERSONALITY);
             boxPosition++;
@@ -4786,17 +5053,8 @@ static void CreatePartyMonsSprites(bool8 visible)
     count = 1;
     for (i = 1; i < PARTY_SIZE; i++)
     {
-        species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2);
-        if (species != SPECIES_NONE)
-        {
-            personality = GetMonData(&gPlayerParty[i], MON_DATA_PERSONALITY);
-            sStorage->partySprites[i] = CreateMonIconSprite(species, personality, 152,  8 * (3 * (i - 1)) + 16, 1, 12);
+        if(CreatePartyMonSprite(i))
             count++;
-        }
-        else
-        {
-            sStorage->partySprites[i] = NULL;
-        }
     }
 
     if (!visible)
@@ -4816,6 +5074,23 @@ static void CreatePartyMonsSprites(bool8 visible)
                 sStorage->partySprites[i]->oam.objMode = ST_OAM_OBJ_BLEND;
         }
     }
+}
+
+static bool8 CreatePartyMonSprite(u8 partyId)
+{
+    u16 species = GetMonData(&gPlayerParty[partyId], MON_DATA_SPECIES2);
+    u32 personality = GetMonData(&gPlayerParty[partyId], MON_DATA_PERSONALITY);
+
+    if (species != SPECIES_NONE)
+    {
+        sStorage->partySprites[partyId] = CreateMonIconSprite(species, personality, 152,  8 * (3 * (partyId - 1)) + 16, 1, 12);
+        return TRUE;
+    }
+    else
+    {
+        sStorage->partySprites[partyId] = NULL;
+    }
+    return FALSE;
 }
 
 static void CompactPartySprites(void)
@@ -6428,14 +6703,9 @@ static void SetMovingMonData(u8 boxId, u8 position)
 static void SetPlacedMonData(u8 boxId, u8 position)
 {
     if (boxId == TOTAL_BOXES_COUNT)
-    {
         gPlayerParty[position] = sStorage->movingMon;
-    }
     else
-    {
-        BoxMonRestorePP(&sStorage->movingMon.box);
         SetBoxMonAt(boxId, position, &sStorage->movingMon.box);
-    }
 }
 
 static void PurgeMonOrBoxMon(u8 boxId, u8 position)
@@ -7092,6 +7362,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
         if (sStorage->displayMonSpecies != SPECIES_NONE)
         {
             u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
+            u8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
             sanityIsBadEgg = GetBoxMonData(boxMon, MON_DATA_SANITY_IS_BAD_EGG);
             if (sanityIsBadEgg)
                 sStorage->displayMonIsEgg = TRUE;
@@ -7109,7 +7380,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
             sStorage->displayMonLevel = GetLevelFromBoxMonExp(boxMon);
             sStorage->displayMonMarkings = GetBoxMonData(boxMon, MON_DATA_MARKINGS);
             sStorage->displayMonPersonality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
-            sStorage->displayMonPalette = GetMonSpritePalFromSpeciesAndPersonality(sStorage->displayMonSpecies, otId, sStorage->displayMonPersonality);
+            sStorage->displayMonPalette = GetMonSpritePal(sStorage->displayMonSpecies, sStorage->displayMonPersonality, isShiny);
             gender = GetGenderFromSpeciesAndPersonality(sStorage->displayMonSpecies, sStorage->displayMonPersonality);
             sStorage->displayMonItemId = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM);
         }
@@ -7314,6 +7585,7 @@ static u8 InBoxInput_Normal(void)
                 case MENU_WITHDRAW:
                     return INPUT_WITHDRAW;
                 case MENU_MOVE:
+                case MENU_LEVEL_UP:
                     return INPUT_MOVE_MON;
                 case MENU_SHIFT:
                     return INPUT_SHIFT_MON;
@@ -7595,6 +7867,7 @@ static u8 HandleInput_InParty(void)
                 case MENU_WITHDRAW:
                     return INPUT_WITHDRAW;
                 case MENU_MOVE:
+                case MENU_LEVEL_UP:
                     return INPUT_MOVE_MON;
                 case MENU_SHIFT:
                     return INPUT_SHIFT_MON;
@@ -7832,6 +8105,14 @@ static u8 SetSelectionMenuTexts(void)
 static bool8 SetMenuTexts_Mon(void)
 {
     u16 species = GetSpeciesAtCursorPosition();
+    struct Pokemon pokemon;
+    u8 pos = GetCursorPosition();
+    u8 boxId = StorageGetCurrentBox();
+
+    if (sInPartyMenu)
+        pokemon = gPlayerParty[pos];
+    else
+        BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][pos], &pokemon);
 
     switch (sStorage->boxOption)
     {
@@ -7877,6 +8158,10 @@ static bool8 SetMenuTexts_Mon(void)
             SetMenuText(MENU_STORE);
     }
 
+    if (GetMonData(&pokemon, MON_DATA_LEVEL, NULL) < GetLevelCap() && GetMonData(&pokemon, MON_DATA_LEVEL, NULL) < MAX_LEVEL  && GetMonData(&pokemon, MON_DATA_IS_EGG, NULL) == FALSE) //ToDo: Remove mons at the level cap from the level up menu
+        SetMenuText(MENU_LEVEL_UP);
+    if (getNumofAvailableEvos(&pokemon) != 0 && GetMonData(&pokemon, MON_DATA_IS_EGG, NULL) == FALSE) //ToDo: Remove mons that can't evolve
+        SetMenuText(MENU_EVOLVE);
     SetMenuText(MENU_MARK);
     SetMenuText(MENU_RELEASE);
     SetMenuText(MENU_CANCEL);
@@ -8148,6 +8433,8 @@ static const u8 *const sMenuTexts[] =
     [MENU_STORE]      = gPCText_Store,
     [MENU_WITHDRAW]   = gPCText_Withdraw,
     [MENU_MOVE]       = gPCText_Move,
+    [MENU_LEVEL_UP]   = gPCText_LevelUp,
+    [MENU_EVOLVE]     = gPCText_Evolve,
     [MENU_SHIFT]      = gPCText_Shift,
     [MENU_PLACE]      = gPCText_Place,
     [MENU_SUMMARY]    = gPCText_Summary,
@@ -10295,12 +10582,35 @@ static void UnkUtil_DmaRun(struct UnkUtilData *data)
 
 void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
 {
+    u8 pos = GetCursorPosition();
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
     u32 pid = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
+    u8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
 
     // Update front sprite
     sStorage->displayMonSpecies = species;
-    sStorage->displayMonPalette = GetMonSpritePalFromSpeciesAndPersonality(species, otId, pid);
+    sStorage->displayMonPalette = GetMonSpritePal(species, pid, isShiny);
     LoadDisplayMonGfx(species, pid);
+
+    // Update Icon
+    DestroyBoxMonIcon(sStorage->boxMonsSprites[pos]);
+    CreateBoxMonIconAtPos(pos);
+}
+
+void UpdateSpeciesSpritePSS_Mon(struct Pokemon *mon)
+{
+    u8 pos = GetCursorPosition();
+    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+    u32 otId = GetMonData(mon, MON_DATA_OT_ID);
+    u32 pid = GetMonData(mon, MON_DATA_PERSONALITY);
+    u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
+
+    // Update front sprite
+    sStorage->displayMonSpecies = species;
+    sStorage->displayMonPalette = GetMonSpritePal(species, pid, isShiny);
+    LoadDisplayMonGfx(species, pid);
+
+    DestroyPartyMonIcon(pos);
+    CreatePartyMonSprite(pos);
 }

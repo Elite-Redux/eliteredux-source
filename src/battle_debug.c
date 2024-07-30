@@ -172,6 +172,7 @@ static const u8 sText_MaxHp[] = _("HP Max");
 static const u8 sText_CurrHp[] = _("HP Current");
 static const u8 sText_Freeze[] = _("Freeze");
 static const u8 sText_Frostbite[] = _("Frostbite");
+static const u8 sText_Bleed[] = _("Bleed");
 static const u8 sText_ToxicPoison[] = _("Toxic Poison");
 static const u8 sText_ToxicCounter[] = _("Toxic Counter");
 static const u8 sText_Flinch[] = _("Flinch");
@@ -249,6 +250,7 @@ static const struct BitfieldInfo sStatus1Bitfield[] =
     {/*Toxic Poison*/ 1, 7},
     {/*Toxic Counter*/ 4, 8},
     {/*Frostbite*/ 1, 12},
+    {/*Bleed*/ 1, 13},
 };
 
 static const struct BitfieldInfo sStatus2Bitfield[] =
@@ -387,6 +389,7 @@ static const struct ListMenuItem sStatus1ListItems[] =
     {sText_ToxicPoison, 5},
     {sText_ToxicCounter, 6},
     {sText_Frostbite, 7},
+    {sText_Bleed, 8}
 };
 
 static const struct ListMenuItem sStatus2ListItems[] =
@@ -796,13 +799,13 @@ static void Task_ShowAiPoints(u8 taskId)
                                                  gBattleMons[data->aiBattlerId].otId,
                                                  gBattleMons[data->aiBattlerId].personality,
                                                  TRUE,
-                                                 39, 130, 15, 0xFFFF);
+                                                 39, 130, 15, 0xFFFF, FALSE, FALSE);
         #else
         data->aiMonSpriteId = CreateMonPicSprite(gBattleMons[data->aiBattlerId].species,
                                                  gBattleMons[data->aiBattlerId].otId,
                                                  gBattleMons[data->aiBattlerId].personality,
                                                  TRUE,
-                                                 39, 130, 15, 0xFFFF);
+                                                 39, 130, 15, 0xFFFF, FALSE, FALSE);
         #endif
         data->aiViewState++;
         break;
@@ -919,13 +922,13 @@ static void Task_ShowAiKnowledge(u8 taskId)
                                                  gBattleMons[data->aiBattlerId].otId,
                                                  gBattleMons[data->aiBattlerId].personality,
                                                  TRUE,
-                                                 39, 130, 15, 0xFFFF);
+                                                 39, 130, 15, 0xFFFF, FALSE, FALSE);
         #else
         data->aiMonSpriteId = CreateMonPicSprite(gBattleMons[data->aiBattlerId].species,
                                                  gBattleMons[data->aiBattlerId].otId,
                                                  gBattleMons[data->aiBattlerId].personality,
                                                  TRUE,
-                                                 39, 130, 15, 0xFFFF);
+                                                 39, 130, 15, 0xFFFF, FALSE, FALSE);
         #endif
         data->aiViewState++;
         break;
@@ -1598,7 +1601,7 @@ static u8 *GetSideStatusValue(struct BattleDebugMenu *data, bool32 changeStatus,
             else
                 *(u32*)(data->modifyArrows.modifiedValPtr) &= ~(SIDE_STATUS_STEALTH_ROCK);
         }
-        return &sideTimer->stealthRockAmount;
+        return &sideTimer->stealthRockType;
     case LIST_SIDE_TOXIC_SPIKES:
         if (changeStatus)
         {
@@ -1738,9 +1741,9 @@ static void SetUpModifyArrows(struct BattleDebugMenu *data)
             data->modifyArrows.minValue = 0;
             data->modifyArrows.maxValue = 255;
             data->modifyArrows.maxDigits = 3;
-            data->modifyArrows.modifiedValPtr = &gDisableStructs[data->battlerId].substituteHP;
+            data->modifyArrows.modifiedValPtr = &gVolatileStructs[data->battlerId].substituteHP;
             data->modifyArrows.typeOfVal = VAR_SUBSTITUTE;
-            data->modifyArrows.currValue = gDisableStructs[data->battlerId].substituteHP;
+            data->modifyArrows.currValue = gVolatileStructs[data->battlerId].substituteHP;
         }
         else if (data->currentSecondaryListItemId == VARIOUS_IN_LOVE)
         {
@@ -1962,6 +1965,7 @@ static const u8 sText_HoldEffectZoomLens[] = _("Zoom Lens");
 static const u8 sText_HoldEffectLaggingTail[] = _("Lagging Tail");
 static const u8 sText_HoldEffectFocusSash[] = _("Focus Sash");
 static const u8 sText_HoldEffectFlameOrb[] = _("Flame Orb");
+static const u8 sText_HoldEffectFrostOrb[] = _("Frost Orb");
 static const u8 sText_HoldEffectToxicOrb[] = _("Toxic Orb");
 static const u8 sText_HoldEffectStickyBarb[] = _("Sticky Barb");
 static const u8 sText_HoldEffectIronBall[] = _("Iron Ball");
@@ -1985,6 +1989,7 @@ static const u8 sText_HoldEffectMarangaBerry[] = _("Maranga Berry");
 static const u8 sText_HoldEffectFloatStone[] = _("Float Stone");
 static const u8 sText_HoldEffectEviolite[] = _("Eviolite");
 static const u8 sText_HoldEffectAssaultVest[] = _("Assault Vest");
+static const u8 sText_HoldEffectTacticalVest[] = _("Tactical Vest");
 static const u8 sText_HoldEffectDrive[] = _("Drive");
 static const u8 sText_HoldEffectGems[] = _("Gems");
 static const u8 sText_HoldEffectRockyHelmet[] = _("Rocky Helmet");
@@ -2013,6 +2018,13 @@ static const u8 sText_HoldEffectRoomService[] = _("Room Service");
 static const u8 sText_HoldEffectBlunderPolicy[] = _("Blunder Policy");
 static const u8 sText_HoldEffectHeavyDutyBoots[] = _("Heavy Duty Boots");
 static const u8 sText_HoldEffectThroatSpray[] = _("Throat Spray");
+static const u8 sText_HoldEffectAbilityShield[] = _("Ability Shield");
+static const u8 sText_HoldEffectMirrorHerb[] = _("Mirror Herb");
+static const u8 sText_HoldEffectClearAmulet[] = _("Clear Amulet");
+static const u8 sText_HoldEffectPunchingGlove[] = _("Punching Glove");
+static const u8 sText_HoldEffectCovertCloak[] = _("Covert Cloak");
+static const u8 sText_HoldEffectBoosterEnergy[] = _("Booster Energy");
+static const u8 sText_HoldEffectLoadedDice[] = _("Loaded Dice");
 static const u8 *const sHoldEffectNames[] = 
 {
     [HOLD_EFFECT_NONE] = sText_HoldEffectNone,
@@ -2153,6 +2165,15 @@ static const u8 *const sHoldEffectNames[] =
     [HOLD_EFFECT_BLUNDER_POLICY] = sText_HoldEffectBlunderPolicy,
     [HOLD_EFFECT_HEAVY_DUTY_BOOTS] = sText_HoldEffectHeavyDutyBoots,
     [HOLD_EFFECT_THROAT_SPRAY] = sText_HoldEffectThroatSpray,
+    [HOLD_EFFECT_FROST_ORB] = sText_HoldEffectFrostOrb,
+    [HOLD_EFFECT_TACTICAL_VEST] = sText_HoldEffectTacticalVest,
+    [HOLD_EFFECT_ABILITY_SHIELD] = sText_HoldEffectAbilityShield,
+    [HOLD_EFFECT_MIRROR_HERB] = sText_HoldEffectMirrorHerb,
+    [HOLD_EFFECT_CLEAR_AMULET] = sText_HoldEffectClearAmulet,
+    [HOLD_EFFECT_PUNCHING_GLOVE] = sText_HoldEffectPunchingGlove,
+    [HOLD_EFFECT_COVERT_CLOAK] = sText_HoldEffectCovertCloak,
+    [HOLD_EFFECT_BOOSTER_ENERGY] = sText_HoldEffectBoosterEnergy,
+    [HOLD_EFFECT_LOADED_DICE] = sText_HoldEffectLoadedDice,
 };
 static const u8 *GetHoldEffectName(u16 holdEffect)
 {

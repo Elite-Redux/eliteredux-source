@@ -365,6 +365,7 @@ PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 	case SPECIES_GRENINJA_BATTLE_BOND, PKMN_Center_EventScript_SetflagGreninja
 	case SPECIES_ZYGARDE_10, PKMN_Center_EventScript_SetflagZygarde10
 	case SPECIES_MELOETTA, PKMN_Center_EventScript_SetflagMeloetta
+	case SPECIES_SILVALLY, PKMN_Center_Eventscript_SetflagSilvally
 	releaseall
 	end
 
@@ -380,6 +381,28 @@ PKMN_Center_EventScript_SetflagZygarde10::
 
 PKMN_Center_EventScript_SetflagMeloetta::
 	setflag FLAG_RECEIVED_MELOETTA
+	releaseall
+	end
+
+PKMN_Center_Eventscript_SetflagSilvally::
+	giveitem ITEM_FIRE_MEMORY
+	giveitem ITEM_WATER_MEMORY
+	giveitem ITEM_GRASS_MEMORY
+	giveitem ITEM_ELECTRIC_MEMORY
+	giveitem ITEM_PSYCHIC_MEMORY
+	giveitem ITEM_ROCK_MEMORY
+	giveitem ITEM_GHOST_MEMORY
+	giveitem ITEM_DARK_MEMORY
+	giveitem ITEM_FAIRY_MEMORY
+	giveitem ITEM_STEEL_MEMORY
+	giveitem ITEM_ICE_MEMORY
+	giveitem ITEM_DRAGON_MEMORY
+	giveitem ITEM_FIGHTING_MEMORY
+	giveitem ITEM_FLYING_MEMORY
+	giveitem ITEM_POISON_MEMORY
+	giveitem ITEM_BUG_MEMORY
+	giveitem ITEM_GROUND_MEMORY
+	setflag FLAG_RECEIVED_SILVALLY
 	releaseall
 	end
 

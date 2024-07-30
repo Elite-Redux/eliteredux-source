@@ -459,3 +459,76 @@ MossdeepCity_Text_HaveTM96:
 	.string "… … … … … … … … … … … … … … … …\p"
 	.string "(Seems he has nothing to say…)$"
 `
+
+script MossdeepCity_EventScript_ScientistThrowPlayerRoute126 {
+    lock
+    faceplayer
+    if (flag(FLAG_DEFEATED_MOSSDEEP_GYM) == FALSE){
+        msgbox(format("The rocket is currently undergoing fueling, It's going to take a while. The more propellant you put, the heavier so needier in propellant it gets."), MSGBOX_DEFAULT)
+        release
+        end
+    }
+    if (flag(FLAG_RECEIVED_HM08) == FALSE){
+        msgbox(format("Save the rocket fuel please aaauuurrgh."), MSGBOX_DEFAULT)
+        release
+        end
+    }
+    msgbox(format("thanks for saving the rocket fuel, We still have some fuel to spare, would you like to go to Sootopolis City?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT) != 1) {
+        msgbox(format("It's wise, have a great day."), MSGBOX_DEFAULT)
+        release
+        end
+    }
+    msgbox(format("Rocket science babyyyyy!"), MSGBOX_DEFAULT)
+    goto(MossdeepCity_EventScript_RocketPlayer)
+}
+
+script MossdeepCity_EventScript_RocketPlayer{
+    playse(SE_M_FLAMETHROWER)
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 16)
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 15)
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 14)
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 13)
+    applymovement(OBJ_EVENT_ID_PLAYER, MossdeepCity_EventScript_BlowUpSpin)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    setobjectxy(OBJ_EVENT_ID_PLAYER, 64, 12)
+    playse(SE_M_COSMIC_POWER)
+    delay(40)
+    if (defeated(TRAINER_GRUNT_SPACE_CENTER_1) && defeated(TRAINER_GRUNT_SPACE_CENTER_2) && defeated(TRAINER_GRUNT_SPACE_CENTER_3) && defeated(TRAINER_GRUNT_SPACE_CENTER_4)){
+        goto(MossdeepCity_EventScript_ThrowPlayerCitySootopolis)
+    } else {
+        goto(MossdeepCity_EventScript_ThrowPlayerRoute126)
+    }
+    release
+    end
+}
+
+script MossdeepCity_EventScript_ThrowPlayerCitySootopolis {
+    warp(MAP_SOOTOPOLIS_CITY, 255, 28, 54)
+    waitstate
+    waitse
+    end
+}
+
+script MossdeepCity_EventScript_ThrowPlayerRoute126 {
+    warp(MAP_ROUTE126, 255, 43, 67)
+    waitstate
+    waitse
+    end
+}
+
+movement MossdeepCity_EventScript_BlowUpSpin{
+    face_down
+    face_left
+    face_up
+    face_right
+}
+

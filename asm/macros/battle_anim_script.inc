@@ -144,13 +144,13 @@
 	.byte \pan
 	.endm
 
-	.macro panse_1B se:req, param1:req, param2:req, param3:req, param4:req
+	.macro panse se:req, currentPan:req, targetPan:req, incrementPan:req, delay:req
 	.byte 0x1b
 	.2byte \se
-	.byte \param1
-	.byte \param2
-	.byte \param3
-	.byte \param4
+	.byte \currentPan
+	.byte \targetPan
+	.byte \incrementPan
+	.byte \delay
 	.endm
 
 	.macro loopsewithpan se:req, pan:req, wait:req, times:req
@@ -215,16 +215,16 @@
 	.byte \param2
 	.endm
 
-	.macro panse_26 se:req, param1:req, param2:req, param3:req, param4:req
+	.macro panse_adjustnone se:req, currentPan:req, targetPan:req, incrementPan:req, delay:req
 	.byte 0x26
 	.2byte \se
-	.byte \param1
-	.byte \param2
-	.byte \param3
-	.byte \param4
+	.byte \currentPan
+	.byte \targetPan
+	.byte \incrementPan
+	.byte \delay
 	.endm
 
-	.macro panse_27 se:req, param1:req, param2:req, param3:req, param4:req
+	.macro panse_adjustall se:req, param1:req, param2:req, param3:req, param4:req
 	.byte 0x27
 	.2byte \se
 	.byte \param1
@@ -233,16 +233,16 @@
 	.byte \param4
 	.endm
 
-	.macro monbgprio_28 battler:req
+	.macro splitbgprio battler:req
 	.byte 0x28
 	.byte \battler
 	.endm
 
-	.macro monbgprio_29
+	.macro splitbgprio_all
 	.byte 0x29
 	.endm
 
-	.macro monbgprio_2A battler:req
+	.macro splitbgprio_foes battler:req
 	.byte 0x2a
 	.byte \battler
 	.endm
@@ -323,8 +323,52 @@
     .endm
     
 .macro setblends setblends_value
-.byte 0xC
-.hword \setblends_value
-.endm
+	.byte 0xC
+	.hword \setblends_value
+	.endm
+
+	@ same as createvisualtask except takes in battlerargindex, which is the battle anim arg index of the battler to loop through
+.macro createvisualtaskontargets addr:req, priority:req, battlerargindex:req, argv:vararg
+	.byte 0x30
+	.4byte \addr
+	.byte \priority
+	.byte \battlerargindex
+	.byte (.Lcreatetask_\@_2 - .Lcreatetask_\@_1) / 2	@ num_args
+.Lcreatetask_\@_1:
+	.2byte \argv
+.Lcreatetask_\@_2:
+	.endm
+
+	@ same as createsprite except takes in battlerargindex, which is the battle anim arg index of the battler to loop through
+.macro createspriteontargets template:req, anim_battler:req, subpriority_offset:req, battlerargindex:req, argv:vararg
+	.byte 0x31
+	.4byte \template
+	.if \anim_battler == ANIM_TARGET
+	.byte ANIMSPRITE_IS_TARGET | (\subpriority_offset & 0x7F)
+	.else
+	.byte (\subpriority_offset & 0x7F)
+	.endif
+	.byte \battlerargindex
+	.byte (.Lsprite_\@_2 - .Lsprite_\@_1) / 2
+.Lsprite_\@_1:
+	.2byte \argv
+.Lsprite_\@_2:
+	.endm
+
+	@ does not overwrite gBattleAnimArgs[battlerargindex], some sprite templates are too dependent on the value (e.g. heal block)
+.macro createspriteontargets_onpos template:req, anim_battler:req, subpriority_offset:req, battlerargindex:req, argv:vararg
+	.byte 0x32
+	.4byte \template
+	.if \anim_battler == ANIM_TARGET
+	.byte 0x80 | (\subpriority_offset & 0x7F)
+	.else
+	.byte (\subpriority_offset & 0x7F)
+	.endif
+	.byte \battlerargindex
+	.byte (.Lsprite_\@_2 - .Lsprite_\@_1) / 2
+.Lsprite_\@_1:
+	.2byte \argv
+.Lsprite_\@_2:
+	.endm
 
 

@@ -54,10 +54,11 @@ void LoadCompressedSpritePalette(const struct CompressedSpritePalette *src)
 void LoadHueShiftedMonSpritePalette(const struct CompressedSpritePalette *src, u32 personality)
 {
     struct SpritePalette dest;
+    bool8 isAlpha = FALSE;
 
     LZ77UnCompWram(src->data, gDecompressionBuffer);
 
-    HueShiftMonPalette((u16*) gDecompressionBuffer, personality);
+    HueShiftMonPalette((u16*) gDecompressionBuffer, personality, isAlpha);
     dest.data = (void*) gDecompressionBuffer;
     dest.tag = src->tag;
     LoadSpritePalette(&dest);
@@ -93,6 +94,9 @@ void HandleLoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *des
 {
     bool8 isFrontPic;
 
+    if(isSpeciesPlaceholderMon(species))
+        species = PLACEHOLDER_SPECIES;
+
     if (src == &gMonFrontPicTable[species])
         isFrontPic = TRUE; // frontPic
     else
@@ -103,6 +107,9 @@ void HandleLoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *des
 
 void LoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *dest, s32 species, u32 personality, bool8 isFrontPic)
 {
+    if(isSpeciesPlaceholderMon(species))
+        species = PLACEHOLDER_SPECIES;
+
     if (species == SPECIES_UNOWN)
     {
         u32 id = GetUnownSpeciesId(personality);

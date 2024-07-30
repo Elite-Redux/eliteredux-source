@@ -59,7 +59,7 @@ extern const u8 gText_HatchedFromEgg[];
 extern const u8 gText_NicknameHatchPrompt[];
 
 static void Task_EggHatch(u8 taskID);
-static void CB2_EggHatch_0(void);
+static void CB2_LoadEggHatch(void);
 static void CB2_EggHatch_1(void);
 static void SpriteCB_Egg_0(struct Sprite* sprite);
 static void SpriteCB_Egg_1(struct Sprite* sprite);
@@ -437,10 +437,7 @@ static u8 EggHatchCreateMonSprite(u8 a0, u8 switchID, u8 pokeID, u16* speciesLoc
             HandleLoadSpecialPokePic(&gMonFrontPicTable[species],
                                      gMonSpritesGfxPtr->sprites.ptr[(a0 * 2) + 1],
                                      species, pid);
-            if (gSaveBlock2Ptr->individualColors)
-                LoadHueShiftedMonSpritePalette(GetMonSpritePalStruct(mon), pid);
-            else
-                LoadCompressedSpritePalette(GetMonSpritePalStruct(mon));
+            LoadHueShiftedMonSpritePalette(GetMonSpritePalStruct(mon), pid);
             *speciesLoc = species;
         }
         break;
@@ -473,13 +470,13 @@ static void Task_EggHatch(u8 taskID)
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
-        SetMainCallback2(CB2_EggHatch_0);
+        SetMainCallback2(CB2_LoadEggHatch);
         gFieldCallback = FieldCB_ContinueScriptHandleMusic;
         DestroyTask(taskID);
     }
 }
 
-static void CB2_EggHatch_0(void)
+static void CB2_LoadEggHatch(void)
 {
     switch (gMain.state)
     {
@@ -522,10 +519,29 @@ static void CB2_EggHatch_0(void)
         gMain.state++;
         break;
     case 2:
+    
         DecompressAndLoadBgGfxUsingHeap(0, gBattleTextboxTiles, 0, 0, 0);
         CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0);
         LoadCompressedPalette(gBattleTextboxPalette, 0, 0x20);
         gMain.state++;
+        /*switch(getBattleInterfaceTheme()){
+            case THEME_DARK:
+                DecompressAndLoadBgGfxUsingHeap(0, gTheme_Dark_BattleTextboxTiles, 0, 0, 0);
+                CopyToBgTilemapBuffer(0, gTheme_Dark_BattleTextboxTilemap, 0, 0);
+                LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette, 0, 0x20);
+            break;
+            case THEME_LIGHT:
+                DecompressAndLoadBgGfxUsingHeap(0, gTheme_Light_BattleTextboxTiles, 0, 0, 0);
+                CopyToBgTilemapBuffer(0, gTheme_Light_BattleTextboxTilemap, 0, 0);
+                LoadCompressedPalette(gTheme_Light_BattleTextboxPalette, 0, 0x20);
+            break;
+            case THEME_DPPT:
+                DecompressAndLoadBgGfxUsingHeap(0, gTheme_DPPt_BattleTextboxTiles, 0, 0, 0);
+                CopyToBgTilemapBuffer(0, gTheme_DPPt_BattleTextboxTilemap, 0, 0);
+                LoadCompressedPalette(gTheme_DPPt_BattleTextboxPalette, 0, 0x20);
+            break;
+        }
+        gMain.state++;*/
         break;
     case 3:
         LoadSpriteSheet(&sEggHatch_Sheet);
@@ -880,7 +896,7 @@ u8 GetEggCyclesToSubtract(void)
         if (!GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_EGG))
         {
             u16 ability = GetMonAbility(&gPlayerParty[i]);
-            if (ability == ABILITY_MAGMA_ARMOR || ability == ABILITY_FLAME_BODY)
+            if (ability == ABILITY_MAGMA_ARMOR || ability == ABILITY_FLAME_BODY || ability == ABILITY_SUPER_HOT_GOO)
                 return 2;
         }
     }

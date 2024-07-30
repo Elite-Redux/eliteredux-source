@@ -47,8 +47,8 @@ LittlerootTown_OnTransition: @ 81E7DDB
 	compare VAR_LITTLEROOT_INTRO_STATE, 2
 	call_if_eq LittlerootTown_EventScript_MoveMomToMaysDoor
 	call_if_unset FLAG_RESCUED_BIRCH, LittlerootTown_EventScript_SetTwinPos
-	compare VAR_LITTLEROOT_TOWN_STATE, 3
-	call_if_eq LittlerootTown_EventScript_SetMomStandingInFrontOfDoorPos
+	@ compare VAR_LITTLEROOT_TOWN_STATE, 3
+	@ call_if_eq LittlerootTown_EventScript_SetMomStandingInFrontOfDoorPos
 	compare VAR_LITTLEROOT_HOUSES_STATE_MAY, 4
 	call_if_eq LittlerootTown_EventScript_SetExitedHouseAfterLatiSSTicketEvent
 	compare VAR_LITTLEROOT_HOUSES_STATE_BRENDAN, 4
@@ -454,6 +454,7 @@ LittlerootTown_EventScript_GiveRunningShoesTrigger0:: @ 81E81BB
 	lockall
 	setvar VAR_0x8008, 0
 	setobjectxy LOCALID_MOM, 10, 9
+	setvar VAR_LITTLEROOT_TOWN_STATE, 4
 	goto LittlerootTown_EventScript_GiveRunningShoesTrigger
 	end
 
@@ -954,6 +955,7 @@ LittlerootTown_EventScript_GiveRunningShoes:: @ 81E8693
 	giveitem ITEM_COIN_CASE
 	setflag FLAG_RECEIVED_COIN_CASE
 	setflag FLAG_RECEIVED_OLD_ROD
+	setvar VAR_LITTLEROOT_TOWN_STATE, 4
 	msgbox LittlerootTown_Text_ComeHomeIfAnythingHappens, MSGBOX_DEFAULT
 	closemessage
 	delay 30
@@ -1101,13 +1103,7 @@ LittlerootTown_Text_WaitPlayer: @ 81E87E1
 LittlerootTown_Text_WearTheseRunningShoes: @ 81E87F0
 	.string "Mom: {PLAYER}! {PLAYER}! Did you\n"
 	.string "introduce yourself to Prof. Birch?\p"
-	.string "Oh! What an adorable Pokémon!\n"
-	.string "You got it from Prof. Birch. How nice!\p"
-	.string "You're your father's child, all right.\n"
-	.string "You look good together with Pokémon!\p"
-	.string "Here, honey! If you're going out on an\n"
-	.string "adventure, take Dad's old stuff.\p"
-	.string "He never uses it anyway!$"
+	.string "He's always in the wild!\n"
 
 LittlerootTown_Text_ComeHomeIfAnythingHappens: @ 81E8A03
 	.string "… … … … … … … …\n"

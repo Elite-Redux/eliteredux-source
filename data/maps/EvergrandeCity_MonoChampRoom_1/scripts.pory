@@ -1,0 +1,588 @@
+const LOCALID_SCOTT              = 19
+const BATTLE_FIELD_EFFECT_NONE   = 0
+const BP_MONOCHAPION_PRIZE       = 5
+
+mapscripts EvergrandeCity_MonoChampRoom_1_MapScripts{
+    MAP_SCRIPT_ON_FRAME_TABLE
+    [
+        VAR_TEMP_1, 0: EvergrandeCity_MonoChampRoom_1_OnTrainsition
+    ]
+}
+
+script EvergrandeCity_MonoChampRoom_1_OnTrainsition{
+    lock
+    call(EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers)
+    applymovement(LOCALID_SCOTT, EvergrandeCity_MonoChampRoom_1_MovementScript_Scott_1)
+    waitmovement(LOCALID_SCOTT)
+    msgbox(format("Welcome to the Type Mono Champion Room, if you defeat all of the trainers here you will be able to get a reward from me, if you want to give up just talk to me and I will take you out of the room, however you will have to defeat all of the trainers again to get the reward, the same goes for if you lose to any of the trainers, Good luck!"))
+    applymovement(OBJ_EVENT_ID_PLAYER, EvergrandeCity_MonoChampRoom_1_MovementScript_Player_1)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    applymovement(LOCALID_SCOTT, EvergrandeCity_MonoChampRoom_1_MovementScript_Scott_2)
+    waitmovement(LOCALID_SCOTT)
+    setvar(VAR_TEMP_1, 1)
+    setobjectxyperm(LOCALID_SCOTT, 14, 17)
+    release
+    end
+}
+
+movement  EvergrandeCity_MonoChampRoom_1_MovementScript_Scott_1{
+    face_right
+}
+
+movement  EvergrandeCity_MonoChampRoom_1_MovementScript_Scott_2{
+    walk_right
+    face_up
+}
+
+movement  EvergrandeCity_MonoChampRoom_1_MovementScript_Player_1{
+    walk_up
+}
+
+script EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers{
+    cleartrainerflag(TRAINER_MONOCHAMP_NORMAL)
+    cleartrainerflag(TRAINER_MONOCHAMP_FIGHTING)
+    cleartrainerflag(TRAINER_MONOCHAMP_FLYING)
+    cleartrainerflag(TRAINER_MONOCHAMP_POISON)
+    cleartrainerflag(TRAINER_MONOCHAMP_GROUND)
+    cleartrainerflag(TRAINER_MONOCHAMP_ROCK)
+    cleartrainerflag(TRAINER_MONOCHAMP_BUG)
+    cleartrainerflag(TRAINER_MONOCHAMP_GHOST)
+    cleartrainerflag(TRAINER_MONOCHAMP_STEEL)
+    cleartrainerflag(TRAINER_MONOCHAMP_FIRE)
+    cleartrainerflag(TRAINER_MONOCHAMP_WATER)
+    cleartrainerflag(TRAINER_MONOCHAMP_GRASS)
+    cleartrainerflag(TRAINER_MONOCHAMP_ELECTRIC)
+    cleartrainerflag(TRAINER_MONOCHAMP_PSYCHIC)
+    cleartrainerflag(TRAINER_MONOCHAMP_ICE)
+    cleartrainerflag(TRAINER_MONOCHAMP_DRAGON)
+    cleartrainerflag(TRAINER_MONOCHAMP_DARK)
+    cleartrainerflag(TRAINER_MONOCHAMP_FAIRY)
+    cleartrainerflag(TRAINER_MONOCHAMP_FAIRY)
+    setvar(VAR_MONOTYPE_BOOST, TYPE_NONE)
+    return
+}
+
+script EverGrandeCity_MonoChampRoom_1_EventScript_Scott_Outside{
+    lock
+    faceplayer
+    msgbox(format("Do you want to try defeating a bunch of strong trainers to avoid going throught the Victory Road and get a Rare Reward?"), MSGBOX_YESNO)
+    if(var(VAR_RESULT) == NO){
+        msgbox(format("Come back when you are ready"))
+    }
+    else{
+        msgbox(format("Let me take you there"))
+        call(EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers)
+        warp(MAP_EVERGRANDE_CITY_MONO_CHAMP_ROOM_1, 255, 14, 17)
+    }
+    release
+    end
+}
+
+script EverGrandeCity_MonoChampRoom_1_EventScript_Scott{
+    lock
+    faceplayer
+    if( defeated(TRAINER_MONOCHAMP_NORMAL)   &&
+        defeated(TRAINER_MONOCHAMP_FIGHTING) &&
+        defeated(TRAINER_MONOCHAMP_FLYING)   &&
+        defeated(TRAINER_MONOCHAMP_POISON)   &&
+        defeated(TRAINER_MONOCHAMP_GROUND)   &&
+        defeated(TRAINER_MONOCHAMP_ROCK)     &&
+        defeated(TRAINER_MONOCHAMP_BUG)      &&
+        defeated(TRAINER_MONOCHAMP_GHOST)    &&
+        defeated(TRAINER_MONOCHAMP_STEEL)    &&
+        defeated(TRAINER_MONOCHAMP_FIRE)     &&
+        defeated(TRAINER_MONOCHAMP_WATER)    &&
+        defeated(TRAINER_MONOCHAMP_GRASS)    &&
+        defeated(TRAINER_MONOCHAMP_ELECTRIC) &&
+        defeated(TRAINER_MONOCHAMP_PSYCHIC)  &&
+        defeated(TRAINER_MONOCHAMP_ICE)      &&
+        defeated(TRAINER_MONOCHAMP_DRAGON)   &&
+        defeated(TRAINER_MONOCHAMP_DARK)     &&
+        defeated(TRAINER_MONOCHAMP_FAIRY)){
+            msgbox(format("Congratulations, you have defeated all of the Type Mono Champions, here is your reward, a Rare Candy"))
+            giveitem(ITEM_RARE_CANDY, 1)
+            msgbox(format("If you want to try again just talk to me"))
+            warp(MAP_VICTORY_ROAD_1F, 255, 46, 15)
+    }
+    else{
+        msgbox(format("Do you want to leave the room?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            msgbox(format("Let me take you out of the room"))
+            call(EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers)
+            warp(MAP_EVER_GRANDE_CITY, 255, 25, 46)
+        }
+    }
+    release
+    end
+}
+
+//Normal Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Normal{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_NORMAL) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Normal Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_NORMAL)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_NORMAL, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Fighting Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fighting{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_FIGHTING) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Fighting Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_FIGHTING)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_FIGHTING, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Flying Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Flying{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_FLYING) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Flying Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_FLYING)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_FLYING, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Poison Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Poison{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_POISON) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Poison Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_POISON)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_POISON, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Ground Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ground{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_GROUND) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Ground Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_GROUND)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_GROUND, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Rock Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Rock{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_ROCK) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Rock Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_ROCK)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_ROCK, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Bug Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Bug{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_BUG) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Bug Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_BUG)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_BUG, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Ghost Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ghost{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_GHOST) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Ghost Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_GHOST)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_GHOST, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Steel Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Steel{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_STEEL) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Steel Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_STEEL)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_STEEL, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Fire Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fire{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_FIRE) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Fire Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_FIRE)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_FIRE, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Water Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Water{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_WATER) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Water Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_WATER)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_WATER, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Grass Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Grass{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_GRASS) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Grass Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_GRASS)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_GRASS, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Electric Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Electric{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_ELECTRIC) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Electric Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_ELECTRIC)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_ELECTRIC, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Psychic Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Psychic{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_PSYCHIC) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Psychic Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_PSYCHIC)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_PSYCHIC, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Ice Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Ice{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_ICE) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Ice Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_ICE)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_ICE, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Dragon Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Dragon{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_DRAGON) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Dragon Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_DRAGON)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_DRAGON, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Dark Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Dark{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_DARK) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Dark Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_DARK)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_DARK, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}
+
+//Fairy Type Champion
+script EverGrandeCity_MonoChampRoom_1_EventScript_MonoChamp_Fairy{
+    lock
+    faceplayer
+    if(defeated(TRAINER_MONOCHAMP_FAIRY) == TRUE){
+        msgbox(format("Good luck defeating the other Type Mono Champions"))
+    }
+    else{
+        msgbox(format("Hello, I'm the Fairy Type Mono Champion are you ready to fight me?"), MSGBOX_YESNO)
+        if(var(VAR_RESULT) == NO){
+            msgbox(format("Come back when you are ready"))
+        }
+        else{
+            setvar(VAR_TRAINER_PRIZE_BP, BP_MONOCHAPION_PRIZE)
+            setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_MONOCHAMP)
+            setvar(VAR_BATTLE_FIELD_ID, TYPE_FAIRY)
+            msgbox(format("Let's get started"))
+            trainerbattle_no_intro(TRAINER_MONOCHAMP_FAIRY, format("I lost"))
+        }
+    }
+    setvar(VAR_BATTLE_FIELD_EFFECT_TYPE, BATTLE_FIELD_EFFECT_NONE)
+    setvar(VAR_BATTLE_FIELD_ID, 0)
+    release
+    end
+}

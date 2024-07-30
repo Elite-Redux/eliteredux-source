@@ -2939,15 +2939,45 @@ static void InitTradeBgInternal(void)
     SetBgTilemapBuffer(1, Alloc(BG_SCREEN_SIZE));
     SetBgTilemapBuffer(3, Alloc(BG_SCREEN_SIZE));
     DeactivateAllTextPrinters();
-    DecompressAndLoadBgGfxUsingHeap(0, gBattleTextboxTiles, 0, 0, 0);
-    LZDecompressWram(gBattleTextboxTilemap, gDecompressionBuffer);
+    
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Dark_BattleTextboxTiles, 0, 0, 0);
+        break;
+        case THEME_LIGHT:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Light_BattleTextboxTiles, 0, 0, 0);
+        break;
+        case THEME_DPPT:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_DPPt_BattleTextboxTiles, 0, 0, 0);
+        break;
+        case THEME_CLASSIC:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Classic_BattleTextboxTiles, 0, 0, 0);
+        break;
+    }
+
+    LZDecompressWram(gTheme_Dark_BattleTextboxTilemap, gDecompressionBuffer);
     CopyToBgTilemapBuffer(0, gDecompressionBuffer, 0x800, 0);
-    LoadCompressedPalette(gBattleTextboxPalette, 0, 0x20);
+    LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette, 0, 0x20);
     InitWindows(sTradeSequenceWindowTemplates);
-    DecompressAndLoadBgGfxUsingHeap(0, gBattleTextboxTiles, 0, 0, 0);
-    LZDecompressWram(gBattleTextboxTilemap, gDecompressionBuffer);
+
+    switch(getBattleInterfaceTheme()){
+        case THEME_DARK:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Dark_BattleTextboxTiles, 0, 0, 0);
+        break;
+        case THEME_LIGHT:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Light_BattleTextboxTiles, 0, 0, 0);
+        break;
+        case THEME_DPPT:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_DPPt_BattleTextboxTiles, 0, 0, 0);
+        break;
+        case THEME_CLASSIC:
+            DecompressAndLoadBgGfxUsingHeap(0, gTheme_Classic_BattleTextboxTiles, 0, 0, 0);
+        break;
+    }
+    
+    LZDecompressWram(gTheme_Dark_BattleTextboxTilemap, gDecompressionBuffer);
     CopyToBgTilemapBuffer(0, gDecompressionBuffer, 0x800, 0);
-    LoadCompressedPalette(gBattleTextboxPalette, 0, 0x20);
+    LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette, 0, 0x20);
 }
 
 static void CB2_InGameTrade(void)
@@ -4686,10 +4716,10 @@ static void CB2_SaveAndEndTrade(void)
             IncrementGameStat(GAME_STAT_POKEMON_TRADES);
         if (gWirelessCommType)
         {
-            RecordIdOfWonderCardSenderByEventType(2, gLinkPlayers[GetMultiplayerId() ^ 1].trainerId);
+            MysteryGift_TryIncrementStat(2, gLinkPlayers[GetMultiplayerId() ^ 1].trainerId);
         }
         SetContinueGameWarpStatusToDynamicWarp();
-        sub_8153380();
+        LinkFullSave_Init();
         gMain.state++;
         sTradeData->timer = 0;
         break;
@@ -4700,7 +4730,7 @@ static void CB2_SaveAndEndTrade(void)
         }
         break;
     case 52:
-        if (sub_81533AC())
+        if (LinkFullSave_WriteSector())
         {
             ClearContinueGameWarpStatus2();
             gMain.state = 4;
@@ -4712,7 +4742,7 @@ static void CB2_SaveAndEndTrade(void)
         }
         break;
     case 4:
-        sub_81533E0();
+        LinkFullSave_ReplaceLastSector();
         gMain.state = 40;
         sTradeData->timer = 0;
         break;
@@ -4744,7 +4774,7 @@ static void CB2_SaveAndEndTrade(void)
     case 42:
         if (_IsLinkTaskFinished())
         {
-            sub_8153408();
+            LinkFullSave_SetLastSectorSignature();
             gMain.state = 5;
         }
         break;
@@ -5000,7 +5030,7 @@ static void CB2_SaveAndEndWirelessTrade(void)
             StringExpandPlaceholders(gStringVar4, gText_SavingDontTurnOffPower);
             DrawTextOnTradeWindow(0, gStringVar4, 0);
             IncrementGameStat(GAME_STAT_POKEMON_TRADES);
-            sub_8153380();
+            LinkFullSave_Init();
             sTradeData->timer = 0;
         }
         break;
@@ -5009,7 +5039,7 @@ static void CB2_SaveAndEndWirelessTrade(void)
             gMain.state = 4;
         break;
     case 4:
-        if (sub_81533AC())
+        if (LinkFullSave_WriteSector())
         {
             gMain.state = 5;
         }
@@ -5020,7 +5050,7 @@ static void CB2_SaveAndEndWirelessTrade(void)
         }
         break;
     case 5:
-        sub_81533E0();
+        LinkFullSave_ReplaceLastSector();
         gMain.state = 6;
         sTradeData->timer = 0;
         break;
@@ -5048,7 +5078,7 @@ static void CB2_SaveAndEndWirelessTrade(void)
     case 8:
         if (_IsLinkTaskFinished())
         {
-            sub_8153408();
+            LinkFullSave_SetLastSectorSignature();
             gMain.state = 9;
         }
         break;

@@ -4,109 +4,6 @@ raw `
 LilycoveCity_MoveDeletersHouse_MapScripts:: @ 821EA0A
 	.byte 0
 
-.set BALL_SWAP_PRICE,  	2000
-
-@ VAR_0x8004: Chosen Party Slot
-@ VAR_0x8005: Chosen Poke Ball
-LilycoveCity_EventScript_BallSwapper::
-	lock
-	faceplayer
-	@showmoneybox 0, 0, 0
-	call_if_unset FLAG_LILYCOVE_MET_BALL_SWAPPER, LilycoveCity_EventScript_BallSwapperIntro
-	checkmoney BALL_SWAP_PRICE, 0
-	compare VAR_RESULT, FALSE
-	goto_if_eq LilycoveCity_EventScript_BallSwapper_CantAfford
-	msgbox LilycoveCity_Text_BallSwapperChoosePokemon, MSGBOX_DEFAULT
-	@hidemoneybox
-	special ChoosePartyMon
-	waitstate
-	compare VAR_0x8004, PARTY_SIZE
-	goto_if_ge LilycoveCity_EventScript_BallSwapperExitNoMoneyBox
-	specialvar VAR_RESULT, ScriptGetPartyMonSpecies
-	compare VAR_RESULT, SPECIES_EGG
-	goto_if_eq LilycoveCity_EventScript_BallSwapperEgg
-	msgbox LilycoveCity_Text_BallSwapperChoosePokeBall, MSGBOX_AUTOCLOSE
-	fadescreen FADE_TO_BLACK
-	special Bag_ChoosePokeBall
-	waitstate
-	copyvar VAR_0x8005, VAR_ITEM_ID
-	compare VAR_ITEM_ID, 0
-	goto_if_eq LilycoveCity_EventScript_BallSwapperExitNoMoneyBox
-	showmoneybox 0, 0, 0
-	bufferpartymonnick 0, VAR_0x8004
-	bufferitemname 1, VAR_0x8005
-	msgbox LilycoveCity_Text_BallSwapperConfirmChoice, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LilycoveCity_EventScript_BallSwapperExit
-	playse SE_SHOP
-	removemoney BALL_SWAP_PRICE, 0
-	removeitem VAR_ITEM_ID, 1
-	updatemoneybox 0, 0
-	bufferpartymonnick 0, VAR_0x8004
-	msgbox LilycoveCity_Text_BallSwapperChooseGivePokemon, MSGBOX_DEFAULT
-	hidemoneybox
-	msgbox LilycoveCity_Text_BallSwapperChoosePleaseWait, MSGBOX_DEFAULT
-	fadescreen FADE_TO_BLACK
-	special ChangePokeBall
-	playse SE_BALL_OPEN
-	waitse
-	specialvar VAR_RESULT, ScriptGetPartyMonSpecies
-	playmoncry VAR_RESULT, 0
-	msgbox LilycoveCity_Text_BallSwapperDelay, MSGBOX_AUTOCLOSE
-	playse SE_BALL_BOUNCE_1
-	waitse
-	playse SE_BALL_BOUNCE_2
-	waitse
-	playse SE_BALL_BOUNCE_4
-	waitse
-	playse SE_RG_BALL_CLICK
-	waitse
-	fadescreen FADE_FROM_BLACK
-	playfanfare MUS_CAUGHT
-	bufferpartymonnick 0, VAR_0x8004
-	msgbox LilycoveCity_Text_BallSwapperAllDone, MSGBOX_DEFAULT
-	release
-	end
-
-LilycoveCity_EventScript_BallSwapperIntro::
-	msgbox LilycoveCity_Text_BallSwapperIntro, MSGBOX_DEFAULT
-	setflag FLAG_LILYCOVE_MET_BALL_SWAPPER
-	return
-
-LilycoveCity_EventScript_BallSwapper_CantAfford::
-	msgbox LilycoveCity_Text_BallSwapperCantAfford, MSGBOX_DEFAULT
-	release
-	end
-
-LilycoveCity_EventScript_BallSwapperExit::
-	hidemoneybox
-	msgbox LilycoveCity_Text_BallSwapperExit, MSGBOX_DEFAULT
-	release
-	end
-
-LilycoveCity_EventScript_BallSwapperExitNoMoneyBox::
-	msgbox LilycoveCity_Text_BallSwapperExit, MSGBOX_DEFAULT
-	release
-	end
-
-LilycoveCity_EventScript_BallSwapperEgg::
-	msgbox LilycoveCity_Text_BallSwapperEgg, MSGBOX_DEFAULT
-	release
-	end
-
-LilycoveCity_Text_BallSwapperIntro:
-	.string "I'm the Poké Ball Swapper!\p"
-	.string "I can move your Pokémon from their\n"
-	.string "current Poké Ball into a new one.\p"
-	.string "I charge ¥2000 for this, and I'll need\n"
-	.string "you to provide the new Poké Ball.$"
-
-LilycoveCity_Text_BallSwapperCantAfford:
-	.string "I'm the Poké Ball Swapper!\p"
-	.string "…But it seems you can't afford my\n"
-	.string "services.\p"
-	.string "Please come back when you have ¥2000.$"
-
 LilycoveCity_Text_BallSwapperChoosePokemon:
 	.string "Which Pokémon's Ball would you like\n"
 	.string "to swap?$"
@@ -117,7 +14,7 @@ LilycoveCity_Text_BallSwapperChoosePokeBall:
 
 LilycoveCity_Text_BallSwapperConfirmChoice:
 	.string "So you want to move {STR_VAR_1}\n"
-	.string "into a {STR_VAR_2} for ¥2000?$"
+	.string "into a {STR_VAR_2} for 100BP?$"
 
 LilycoveCity_Text_BallSwapperChooseGivePokemon:
 	.string "Very well. Please hand over your\n"
@@ -139,10 +36,101 @@ LilycoveCity_Text_BallSwapperAllDone:
 	.string "All done! I hope {STR_VAR_1} enjoys\n"
 	.string "its new Poké Ball!$"
 
-LilycoveCity_Text_BallSwapperExit:
-	.string "See you later then!$"
-
 LilycoveCity_Text_BallSwapperEgg:
 	.string "I can't change an Egg's Poké Ball!\n"
 	.string "Come back once it's hatched.$"
 `
+
+script LilycoveCity_EventScript_BallSwapper {
+	//VAR_0x8004: Chosen Party Slot
+	//VAR_0x8005: Chosen Poke Ball
+	lock
+	faceplayer
+	// Check if the player has already been told about the Ball Swapper
+	if(!flag(FLAG_LILYCOVE_MET_BALL_SWAPPER)) {
+		msgbox(format("I'm the Poké Ball Swapper!\pI can move your Pokémon from their current Poké Ball into a new one. I charge 100 BP for this."), MSGBOX_DEFAULT)
+		setflag(FLAG_LILYCOVE_MET_BALL_SWAPPER)
+	}
+	setvar(VAR_SHOP_MONEY_TYPE, 1)
+	checkmoney(BALL_SWAP_PRICE, 0)
+	// Check if the player has enough bp
+	if(var(VAR_RESULT) == 0) {
+		msgbox(format("I'm the Poké Ball Swapper!\p…But it seems you can't afford my services.\pPlease come back when you have 100BP."), MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+		release
+		end
+	}
+	msgbox(LilycoveCity_Text_BallSwapperChoosePokemon, MSGBOX_DEFAULT)
+	//hidemoneybox
+	special(ChoosePartyMon)
+	waitstate
+	// Cancelled
+	if(var(VAR_0x8004) == PARTY_SIZE){
+		msgbox("See you later then!", MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+		release
+		end
+	}
+	specialvar(VAR_RESULT, ScriptGetPartyMonSpecies)
+	// Check if the chosen Pokémon is an Egg
+	if(var(VAR_RESULT) == SPECIES_EGG) {
+		msgbox(LilycoveCity_Text_BallSwapperEgg, MSGBOX_DEFAULT)
+		release
+		end
+	}
+	msgbox(LilycoveCity_Text_BallSwapperChoosePokeBall, MSGBOX_AUTOCLOSE)
+	fadescreen(FADE_TO_BLACK)
+	special(Bag_ChoosePokeBall)
+	waitstate
+	// No Item Selected
+	copyvar(VAR_0x8005, VAR_ITEM_ID)
+	compare(VAR_ITEM_ID, 0)
+	if(var(VAR_ITEM_ID) == 0) {
+		msgbox("See you later then!", MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+		release
+		end
+	}
+	showmoneybox(0, 0, 0)
+	bufferpartymonnick(0, VAR_0x8004)
+	bufferitemname(1, VAR_0x8005)
+	msgbox(LilycoveCity_Text_BallSwapperConfirmChoice, MSGBOX_YESNO)
+	// Cancelled
+	if(!var(VAR_RESULT)) {
+		msgbox("See you later then!", MSGBOX_DEFAULT)
+		setvar(VAR_SHOP_MONEY_TYPE, 0)
+		hidemoneybox
+		release
+		end
+	}
+	removemoney(BALL_SWAP_PRICE, 0)
+	playse(SE_SHOP)
+	updatemoneybox(0, 0)
+	bufferpartymonnick(0, VAR_0x8004)
+	msgbox(LilycoveCity_Text_BallSwapperChooseGivePokemon, MSGBOX_DEFAULT)
+	hidemoneybox
+	msgbox(LilycoveCity_Text_BallSwapperChoosePleaseWait, MSGBOX_DEFAULT)
+	fadescreen(FADE_TO_BLACK)
+	special(ChangePokeBall)
+	playse(SE_BALL_OPEN)
+	waitse
+	specialvar(VAR_RESULT, ScriptGetPartyMonSpecies)
+	playmoncry(VAR_RESULT, 0)
+	msgbox(LilycoveCity_Text_BallSwapperDelay, MSGBOX_AUTOCLOSE)
+	playse(SE_BALL_BOUNCE_1)
+	waitse
+	playse(SE_BALL_BOUNCE_2)
+	waitse
+	playse(SE_BALL_BOUNCE_4)
+	waitse
+	playse(SE_RG_BALL_CLICK)
+	waitse
+	fadescreen(FADE_FROM_BLACK)
+	playfanfare(MUS_CAUGHT)
+	bufferpartymonnick(0, VAR_0x8004)
+	msgbox(LilycoveCity_Text_BallSwapperAllDone, MSGBOX_DEFAULT)
+	setvar(VAR_SHOP_MONEY_TYPE, 0)
+	release
+	end
+}
+	

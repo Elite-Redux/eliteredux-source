@@ -1312,6 +1312,11 @@ static const u8 sNeverMeltIceDesc[] = _(
     "raises the power of\n"
     "Ice-type moves.");
 
+static const u8 sFairyFeatherDesc[] = _(
+    "A hold item that\n"
+    "raises the power of\n"
+    "Fairy-type moves.");
+
 static const u8 sSpellTagDesc[] = _(
     "A hold item that\n"
     "raises the power of\n"
@@ -1560,6 +1565,11 @@ static const u8 sRedOrbDesc[] = _(
 
 static const u8 sBlueOrbDesc[] = _(
     "A blue, glowing orb\n"
+    "said to contain an\n"
+    "ancient power.");
+
+static const u8 sPurpleOrbDesc[] = _(
+    "A purple, glowing orb\n"
     "said to contain an\n"
     "ancient power.");
 
@@ -2386,6 +2396,11 @@ static const u8 sFlameOrbDesc[] = _(
     "inflicts a burn on\n"
     "holder in battle.");
 
+static const u8 sFrostOrbDesc[] = _(
+    "A bizarre orb that\n"
+    "inflicts frostbite\n"
+    "on holder in battle.");
+
 static const u8 sQuickPowderDesc[] = _(
     "An item to be held\n"
     "by Ditto. This odd\n"
@@ -2482,19 +2497,19 @@ static const u8 sOddKeystoneDesc[] = _(
     "occasionally.");
 
 static const u8 sAdamantOrbDesc[] = _(
-    "Boosts the power of\n"
-    "Dialga's Dragon and\n"
-    "Steel-type moves.");
+    "This orb enables\n"
+    "Dialga to revert to\n"
+    "its origin in battle.");
 
 static const u8 sLustrousOrbDesc[] = _(
-    "Boosts the power of\n"
-    "Palkia's Dragon and\n"
-    "Water-type moves.");
+    "This orb enables\n"
+    "Palkia to revert to\n"
+    "its origin in battle.");
 
 static const u8 sGriseousOrbDesc[] = _(
-    "Powers up Giratina's\n"
-    "Dragon and Ghost-\n"
-    "type moves.");
+    "This orb enables\n"
+    "Giratina to revert\n"
+    "to origin in battle.");
 
 static const u8 sGracideaDesc[] = _(
     "Bouquets made with\n"
@@ -2846,6 +2861,11 @@ static const u8 sAssaultVestDesc[] = _(
     "prevents the use\n"
     "of status moves.");
 
+static const u8 sTacticalVestDesc[] = _(
+    "Raises Def but\n"
+    "prevents the use\n"
+    "of status moves.");
+
 static const u8 sPixiePlateDesc[] = _(
     "A stone tablet that\n"
     "boosts the power of\n"
@@ -3081,6 +3101,41 @@ static const u8 sKingleriteDesc[] = _(
     "Kingler to Mega\n"
     "Evolve in battle.");
 
+static const u8 sUrsaluniteDesc[] = _(
+    "This stone enables\n"
+    "Ursaring to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sArcaniteDesc[] = _(
+    "This stone enables\n"
+    "Arcanine R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sTyranitariteRDesc[] = _(
+    "This stone enables\n"
+    "Tyranitar R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sKingambititeDesc[] = _(
+    "This stone enables\n"
+    "Kingambit to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sRibombiteDesc[] = _(
+    "This stone enables\n"
+    "Ribombee to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sScraftiteDesc[] = _(
+    "This stone enables\n"
+    "Scrafty to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sFroslassiteDesc[] = _(
+    "This stone enables\n"
+    "Froslass to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sLaprasiteDesc[] = _(
     "This stone enables\n"
     "Lapras to Mega\n"
@@ -3279,6 +3334,66 @@ static const u8 sNidokingiteDesc[] = _(
 static const u8 sSandslashiteDesc[] = _(
     "This stone enables\n"
     "Sandslash to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sChienPaoiteDesc[] = _(
+    "This stone enables\n"
+    "Chien-Pao to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sDracovishiteDesc[] = _(
+    "This stone enables\n"
+    "Dracovish to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sMawiliteRDesc[] = _(
+    "This stone enables\n"
+    "Mawile R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sRibombiteRDesc[] = _(
+    "This stone enables\n"
+    "Ribombee R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sWeaviliteRDesc[] = _(
+    "This stone enables\n"
+    "Weavile R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sFlygoniteRDesc[] = _(
+    "This stone enables\n"
+    "Flygon R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSnorlaxOrbDesc[] = _(
+    "This stone enables\n"
+    "Snorlax to Primal\n"
+    "Reverse in battle.");
+
+static const u8 sVictiniOrbDesc[] = _(
+    "This stone enables\n"
+    "Victini to Primal\n"
+    "Reverse in battle.");
+
+static const u8 sWigglytuffOrbDesc[] = _(
+    "This stone enables\n"
+    "Wigglytuff to Primal\n"
+    "Reverse in battle.");
+
+static const u8 sWigglytuffiteDesc[] = _(
+    "This stone enables\n"
+    "Wigglytuff to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sTinkatiteDesc[] = _(
+    "This stone enables\n"
+    "Tinkaton to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSenzuDesc[] = _(
+    "This bean enables\n"
+    "Lucario to Mega\n"
     "Evolve in battle.");
 
 static const u8 sMegaBraceletDesc[] = _(
@@ -3730,3 +3845,38 @@ static const u8 sNLunarizerDesc[] = _(
     "A device to fuse\n"
     "and split Necrozma\n"
     "using a Lunala.");
+
+static const u8 sAbilityShieldDesc[] = _(
+    "Ability changes are\n"
+    "prevented for this\n"
+    "items's holder.");
+
+static const u8 sClearAmuletDesc[] = _(
+    "Stat lowering is\n"
+    "prevented for this\n"
+    "items's holder.");
+
+static const u8 sPunchingGloveDesc[] = _(
+    "Powers up punching\n"
+    "moves and removes\n"
+    "their contact.");
+
+static const u8 sCovertCloakDesc[] = _(
+    "Protects the holder\n"
+    "from secondary\n"
+    "move effects.");
+
+static const u8 sBoosterEnergyDesc[] = _(
+    "Encapsuled energy\n"
+    "ups Pokémon with\n"
+    "certain Abilities.");
+
+static const u8 sMirrorHerbDesc[] = _(
+    "Mirrors an enemy's\n"
+    "stat increases\n"
+    "but only once.");
+
+static const u8 sLoadedDiceDesc[] = _(
+    "Rolls high numbers.\n"
+    "Multihit strikes\n"
+    "hit more times.");

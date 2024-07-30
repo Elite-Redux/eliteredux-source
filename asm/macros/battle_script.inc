@@ -140,11 +140,19 @@
 	.4byte \ptr
 	.endm
 
-	.macro jumpifability param0:req, ability:req, ptr:req
+	.macro jumpifability battler:req, ability:req, ptr:req
 	.byte 0x1e
-	.byte \param0
+	.byte \battler
 	.2byte \ability
 	.4byte \ptr
+	.endm
+
+	.macro callifability battler:req, ability:req, ptr:req
+	jumpifability \battler, \ability, callifability_\@_1
+	goto callifability_\@_2
+	callifability_\@_1:
+	call \ptr
+	callifability_\@_2:
 	.endm
 
 	.macro jumpifsideaffecting battler:req, sidestatus:req, ptr:req
@@ -373,17 +381,25 @@
 	.byte 0x43
 	.2byte \ability
 	.4byte \ptr
+	.byte 0
+	.endm
+
+	.macro callifabilitypresent ability:req, ptr:req
+	.byte 0x43
+	.2byte \ability
+	.4byte \ptr
+	.byte 1
 	.endm
 
 	.macro endselectionscript
 	.byte 0x44
 	.endm
 
-	.macro playanimation battler:req, param1:req, param2:req
+	.macro playanimation battler:req, animId:req, argPtr=NULL
 	.byte 0x45
 	.byte \battler
-	.byte \param1
-	.4byte \param2
+	.byte \animId
+	.4byte \argPtr
 	.endm
 
 	.macro playanimation2 battler:req, param1:req, param2:req
@@ -488,6 +504,7 @@
 	.macro switchineffects battler:req
 	.byte 0x52
 	.byte \battler
+	restoreattackerandtargetfrom34
 	.endm
 
 	.macro trainerslidein battler:req
@@ -795,9 +812,11 @@
 	.byte 0x92
 	.endm
 
-	.macro battlemacros type:req
+	.macro battlemacros param0:req, num:req, ptr:req
 	.byte 0x93
-	.2byte \type
+	.byte \param0
+	.2byte \num
+	.4byte \ptr
 	.endm
 
 	.macro jumpifabilityonside param0:req, ability:req, ptr:req
@@ -1169,6 +1188,7 @@
 	.macro switchoutabilities battler:req
 	.byte 0xe2
 	.byte \battler
+	restoreattackerandtargetfrom34
 	.endm
 
 	.macro jumpifhasnohp battler:req, param1:req
@@ -1213,7 +1233,7 @@
 	.4byte \param0
 	.endm
 
-	.macro pursuitrelated param0:req
+	.macro unused_pursuitrelated param0:req
 	.byte 0xec
 	.4byte \param0
 	.endm
@@ -1289,10 +1309,11 @@
 	.4byte \ptr
 	.endm
 
-	.macro trygetbaddreamstarget ptr:req, prevptr:req
+	.macro trygetbaddreamstarget ptr:req, prevptr:req, ptrpeaceful:req
 	.byte 0xfd
 	.4byte \ptr
 	.4byte \prevptr
+	.4byte \ptrpeaceful
 	.endm
 
 	.macro tryworryseed ptr:req
@@ -1420,6 +1441,7 @@
 
 	.macro switchinabilities battler:req
 	various \battler, VARIOUS_SWITCHIN_ABILITIES
+	restoreattackerandtargetfrom34
 	.endm
 
 	.macro savetarget
@@ -1444,6 +1466,10 @@
 
 	.macro tryactivatemoxie battler:req
 	various \battler, VARIOUS_TRY_ACTIVATE_MOXIE
+	.endm
+
+	.macro tryactivatesuperstrain battler:req
+	various \battler, VARIOUS_TRY_ACTIVATE_SUPER_STRAIN
 	.endm
 
 	.macro tryactivaterampage battler:req
@@ -1495,6 +1521,12 @@
 	.4byte \ptr
 	.endm
 
+	.macro trycopyabilitybetween copyFrom:req, copyTo:req, failPtr:req
+	various \copyFrom, VARIOUS_COPY_ABILITY
+	.byte \copyTo
+	.4byte \failPtr
+	.endm
+
 	.macro setlastusedability battler:req
 	various \battler, VARIOUS_SET_LAST_USED_ABILITY
 	.endm
@@ -1523,9 +1555,30 @@
 	various \battler, VARIOUS_INVERT_STAT_STAGES
 	.endm
 
-	.macro setterrain ptr:req
+	.macro setterrainwithoverride ptr:req, override:req
 	various BS_ATTACKER, VARIOUS_SET_TERRAIN
+	.byte \override
 	.4byte \ptr
+	.endm
+
+	.macro setterrain ptr:req
+	setterrainwithoverride \ptr, -1
+	.endm
+
+	.macro setmistyterrain ptr:req
+	setterrainwithoverride \ptr, B_MSG_TERRAINBECOMESMISTY
+	.endm
+
+	.macro setgrassyterrain ptr:req
+	setterrainwithoverride \ptr, B_MSG_TERRAINBECOMESGRASSY
+	.endm
+
+	.macro setelectricterrain ptr:req
+	setterrainwithoverride \ptr, B_MSG_TERRAINBECOMESELECTRIC
+	.endm
+
+	.macro setpsychicterrain ptr:req
+	setterrainwithoverride \ptr, B_MSG_TERRAINBECOMESPSYCHIC
 	.endm
 
 	.macro trymefirst ptr:req
@@ -1692,8 +1745,8 @@
 	.4byte \ptr
 	.endm
 
-	.macro tryinstruct ptr:req
-	various BS_ATTACKER, VARIOUS_TRY_INSTRUCT
+	.macro tryinstruct battler:req, ptr:req
+	various \battler, VARIOUS_TRY_INSTRUCT
 	.4byte \ptr
 	.endm
 
@@ -1766,6 +1819,12 @@
 	.4byte \ptr
 	.endm
 
+	.macro jumpifholdeffect battler:req, holdEffect:req, ptr:req
+	jumpifnoholdeffect \battler, \holdEffect, jumpifholdeffect_\@_fail
+	goto \ptr
+	jumpifholdeffect_\@_fail:
+	.endm
+
 	.macro infatuatewithbattler battler1:req, battler2:req
 	various \battler1, VARIOUS_INFATUATE_WITH_BATTLER
 	.byte \battler2
@@ -1836,13 +1895,18 @@
 	.4byte \ptr
 	.endm
 	
-	.macro tryhealquarterhealth battler:req, ptr:req
-	various \battler, VARIOUS_TRY_HEAL_QUARTER_HP
+	.macro tryhealpercenthealth battler:req, percent:req, ptr:req
+	various \battler, VARIOUS_TRY_HEAL_PERCENT_HP
+	.byte \percent
 	.4byte \ptr
 	.endm
 	
 	.macro removeterrain
 	various BS_ATTACKER, VARIOUS_REMOVE_TERRAIN
+	.endm
+	
+	.macro removeweather
+	various BS_ATTACKER, VARIOUS_REMOVE_WEATHER
 	.endm
 
 	.macro consumeberry battler:req, restoreItem=FALSE
@@ -1964,6 +2028,10 @@
 	.macro setmoveeffect effect:req
 	sethword sMOVE_EFFECT \effect
 	sethword sSAVED_MOVE_EFFECT \effect
+	.endm
+
+	.macro setmoveeffectchance effect:req
+	sethword sEFFECT_CHANCE \effect
 	.endm
 
 	.macro chosenstatus1animation battler:req, status:req
@@ -2091,3 +2159,188 @@
 	1:
 	.endm
 
+	.macro raisehighestattackingstat battler:req, increase:req, ptr:req
+	various \battler, VARIOUS_RAISE_HIGHEST_ATTACKING_STAT
+	.byte \increase
+	.4byte \ptr
+	.endm
+
+	.macro setdynamictype battler:req, type:req
+	various \battler, VARIOUS_SET_DYNAMIC_TYPE
+	.byte \type
+	.endm
+
+	.macro calculatemovetypemodifiers
+	various BS_ATTACKER, VARIOUS_SET_DYNAMIC_TYPE
+	.byte TYPE_MYSTERY
+	.endm
+
+	.macro gotoactualmove battler:req
+	various \battler, VARIOUS_GOTO_ACTUAL_MOVE
+	.endm
+
+	.macro setfear battler:req
+	various \battler, VARIOUS_SET_FEAR
+	.endm
+
+	.macro handleweatherchange battler:req
+	various \battler, VARIOUS_HANDLE_WEATHER_CHANGE
+	.endm
+
+	.macro handleterrainchange battler:req
+	various \battler, VARIOUS_HANDLE_TERRAIN_CHANGE
+	.endm
+
+	.macro getbattler battler:req
+	various \battler, VARIOUS_GET_BATTLER
+	.endm
+
+	.macro docopystatchange
+	various BS_ATTACKER, VARIOUS_DO_COPY_STAT_CHANGE
+	.endm
+
+	.macro trylosepercenthp battler:req, percent:req, ptr:req
+	various \battler, VARIOUS_TRY_LOSE_PERCENT_HP
+	.byte \percent
+	.4byte \ptr
+	.endm
+
+	.macro swapsideeffects
+	various BS_ATTACKER, VARIOUS_SWAP_SIDE_EFFECTS
+	.endm
+
+	.macro setghastlyecho battler:req
+	various \battler, VARIOUS_GHASTLY_ECHO
+	.endm
+
+	.macro tryrevivalblessing, jumpInstr:req
+	various BS_ATTACKER, VARIOUS_TRY_REVIVAL_BLESSING
+	.4byte \jumpInstr
+	.endm
+
+	.macro tryfling, battler:req, onFail:req
+	various \battler, VARIOUS_TRY_FLING
+	.4byte \onFail
+	.endm
+
+	.macro jumpifstatus4, battler:req, status:req, onFail:req
+	various \battler, VARIOUS_JUMP_IF_STATUS_4
+	.4byte \status
+	.4byte \onFail
+	.endm
+
+	.macro restoreturnbattlers
+	various BS_ATTACKER, VARIOUS_RESTORE_TURN_BATTLERS
+	.endm
+
+	.macro writestackbattler, battler:req, number:req
+	various \battler, VARIOUS_WRITE_STACK_BATTLER
+	.byte \number
+	.endm
+
+	.macro restorestackstate
+	various BS_ATTACKER, VARIOUS_RESTORE_STACK_STATE
+	.endm
+
+	.macro saveattackertostack3
+	writestackbattler BS_ATTACKER, 3
+	.endm
+
+	.macro readattackerfromstack3
+	copybyte gBattlerAttacker, gStackBattler3
+	.endm
+
+	.macro savetargettostack4
+	writestackbattler BS_TARGET, 4
+	.endm
+
+	.macro readtargetfromstack4
+	copybyte gBattlerTarget, gStackBattler4
+	.endm
+
+	.macro saveattackerandtargetto34
+	saveattackertostack3
+	savetargettostack4
+	.endm
+	
+	.macro swapbattlerandtargetvia34
+	saveattackerandtargetto34
+	copybyte gBattlerAttacker, gStackBattler4
+	copybyte gBattlerTarget, gStackBattler3
+	.endm
+
+	.macro restoreattackerandtargetfrom34
+	restorestackstate
+	readattackerfromstack3
+	readtargetfromstack4
+	.endm
+
+	.macro disablerandom battler:req
+	various \battler, VARIOUS_DISABLE_RANDOM
+	.endm
+
+	.macro jumpifstatup battler:req, ptr:req
+	various \battler, VARIOUS_GOTO_IF_STAT_UP
+	.4byte \ptr
+	.endm
+
+	.macro trypupperhand battler:req, ptr:req
+	various \battler, VARIOUS_TRY_UPPER_HAND
+	.4byte \ptr
+	.endm
+
+	.macro requirecandoeffect battler:req, effect:req
+	various \battler, VARIOUS_REQUIRE_CAN_DO_EFFECT
+	.2byte \effect
+	.endm
+
+	.macro increasecrit battler:req amount:req failPtr=NULL
+	various \battler, VARIOUS_INCREASE_CRIT
+	.byte \amount
+	.4byte \failPtr
+	.endm
+
+	.macro twoturnmoveacceleratecheck
+	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
+	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd
+	call BattleScript_PowerHerbActivation
+twoturnmoveacceleratecheck_\@:
+	setbyte sACCELERATED_TWO_TURN, 1
+	.endm
+
+	.macro jumpiffogreducesstatboosts battler:req ptr:req
+	jumpiftype \battler, TYPE_GHOST, jumpiffogreducesstatboosts_ok_\@
+	jumpiftype \battler, TYPE_PSYCHIC, jumpiffogreducesstatboosts_ok_\@
+	jumpifweatheraffected \battler, WEATHER_FOG_ANY, \ptr
+	jumpiffogreducesstatboosts_ok_\@:
+	.endm
+
+	.macro checkstatbuffonlowered
+	jumpifability BS_TARGET, ABILITY_COMPETITIVE,           checkstatbuffonlowered_competitive_\@
+	jumpifability BS_TARGET, ABILITY_DEFIANT,               checkstatbuffonlowered_defiant_\@
+	jumpifability BS_TARGET, ABILITY_CONTEMPT,              checkstatbuffonlowered_defiant_\@
+	jumpifability BS_TARGET, ABILITY_FORT_KNOX,             checkstatbuffonlowered_fortknox_\@
+	jumpifability BS_TARGET, ABILITY_RUN_AWAY,              checkstatbuffonlowered_runaway_\@
+	jumpifabilityonside BS_TARGET, ABILITY_KINGS_WRATH,     checkstatbuffonlowered_kingswrath_\@
+	jumpifabilityonside BS_TARGET, ABILITY_QUEENS_MOURNING, checkstatbuffonlowered_queensmourning_\@
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_competitive_\@:
+	call BattleScript_CompetitiveActivates
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_defiant_\@:
+	call BattleScript_DefiantActivates
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_fortknox_\@:
+	call BattleScript_FortKnoxActivates
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_runaway_\@:
+	call BattleScript_RunAwayActivates
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_kingswrath_\@:
+	call BattleScript_KingsWrathActivated
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_queensmourning_\@:
+	call BattleScript_QueensMourningActivated
+	goto checkstatbuffonlowered_none_\@
+checkstatbuffonlowered_none_\@:
+	.endm

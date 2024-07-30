@@ -41,3 +41,12 @@ u16 RandRange(u16 min, u16 max)
     max++;   // make inclusive
     return (Random() % (max - min)) + min;
 }
+
+u16 RandRangeDeterministic(u16 min, u16 max, u32* seed)
+{
+    if (min == max)
+        return min;
+    max++;   // make inclusive
+    *seed = ISO_RANDOMIZE1(*seed);
+    return ((*seed >> 16) % (max - min)) + min;
+}

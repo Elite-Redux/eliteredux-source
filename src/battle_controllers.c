@@ -18,9 +18,9 @@
 #include "constants/abilities.h"
 #include "constants/moves.h"
 
+//==========EWRAM==========//
 static EWRAM_DATA u8 sLinkSendTaskId = 0;
 static EWRAM_DATA u8 sLinkReceiveTaskId = 0;
-static EWRAM_DATA u8 sUnused = 0; // Debug? Never read
 EWRAM_DATA struct UnusedControllerStruct gUnusedControllerStruct = {}; // Debug? Unused code that writes to it, never read
 static EWRAM_DATA u8 sBattleBuffersTransferData[0x100] = {};
 
@@ -47,8 +47,7 @@ void HandleLinkBattleSetup(void)
 void SetUpBattleVarsAndBirchZigzagoon(void)
 {
     s32 i;
-	    
-	    
+	       
     gBattleMainFunc = BeginBattleIntroDummy;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
@@ -719,8 +718,6 @@ static void CreateTasksForSendRecvLinkBuffers(void)
     gTasks[sLinkReceiveTaskId].data[13] = 0;
     gTasks[sLinkReceiveTaskId].data[14] = 0;
     gTasks[sLinkReceiveTaskId].data[15] = 0;
-
-    sUnused = 0;
 }
 
 enum
@@ -1070,7 +1067,7 @@ void BtlController_EmitPause(u8 bufferId, u8 toWait, void *data)
     PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, toWait * 3 + 2);
 }
 
-void BtlController_EmitMoveAnimation(u8 bufferId, u16 move, u8 turnOfMove, u16 movePower, s32 dmg, u8 friendship, struct DisableStruct *disableStructPtr, u8 multihit)
+void BtlController_EmitMoveAnimation(u8 bufferId, u16 move, u8 turnOfMove, u16 movePower, s32 dmg, u8 friendship, struct VolatileStruct *volatileStructPtr, u8 multihit)
 {
     if(move == MOVE_NONE && gTempMove != MOVE_NONE){
         move = gCurrentMove;
@@ -1103,8 +1100,8 @@ void BtlController_EmitMoveAnimation(u8 bufferId, u16 move, u8 turnOfMove, u16 m
     }
     sBattleBuffersTransferData[14] = 0;
     sBattleBuffersTransferData[15] = 0;
-    memcpy(&sBattleBuffersTransferData[16], disableStructPtr, sizeof(struct DisableStruct));
-    PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, 16 + sizeof(struct DisableStruct));
+    memcpy(&sBattleBuffersTransferData[16], volatileStructPtr, sizeof(struct VolatileStruct));
+    PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, 16 + sizeof(struct VolatileStruct));
 }
 
 void BtlController_EmitPrintString(u8 bufferId, u16 stringID)
@@ -1562,3 +1559,10 @@ void BtlController_EmitDebugMenu(u8 bufferId)
     sBattleBuffersTransferData[0] = CONTROLLER_DEBUGMENU;
     PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, 1);
 }
+
+void BtlController_EmitInfoMenu(u8 bufferId)
+{
+    sBattleBuffersTransferData[0] = CONTROLLER_INFO_MENU;
+    PrepareBufferDataTransfer(bufferId, sBattleBuffersTransferData, 1);
+}
+

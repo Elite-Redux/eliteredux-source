@@ -11,6 +11,7 @@ struct Item
     u8 name[ITEM_NAME_LENGTH];
     u16 itemId;
     u32 price;
+    u8 bpPrice;
     u8 holdEffect;
     u8 holdEffectParam;
     const u8 *description;
@@ -64,6 +65,7 @@ bool8 RemovePyramidBagItem(u16 itemId, u16 count);
 const u8 *ItemId_GetName(u16 itemId);
 u16 ItemId_GetId(u16 itemId);
 u16 ItemId_GetPrice(u16 itemId);
+u16 ItemId_GetBPPrice(u16 itemId);
 u8 ItemId_GetHoldEffect(u16 itemId);
 u8 ItemId_GetHoldEffectParam(u16 itemId);
 const u8 *ItemId_GetDescription(u16 itemId);

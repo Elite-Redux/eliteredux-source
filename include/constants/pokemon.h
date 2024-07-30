@@ -23,6 +23,7 @@
 #define TYPE_DARK             17
 #define TYPE_FAIRY            18
 #define NUMBER_OF_MON_TYPES   19
+#define TYPE_CURRENT_MOVE     0x50
 
 // Pokemon egg groups
 #define EGG_GROUP_NONE          0
@@ -81,6 +82,11 @@
 #define STAT_SPDEF   5
 #define STAT_ACC     6 // Only in battles.
 #define STAT_EVASION 7 // Only in battles.
+#define STAT_HIGHEST_ATTACKING 0x50
+#define STAT_HIGHEST_DEFENDING 0x52
+#define STAT_HIGHEST_TOTAL 0x54
+#define STAT_HIGHEST_MASK (STAT_HIGHEST_ATTACKING | STAT_HIGHEST_DEFENDING | STAT_HIGHEST_TOTAL)
+#define STAT_USE_STAT_BOOSTS_IN_CALC 0x1
 
 #define NUM_NATURE_STATS NUM_STATS - 1 // excludes HP
 #define NUM_BATTLE_STATS NUM_STATS + 2 // includes Accuracy and Evasion
@@ -93,6 +99,16 @@
 #define SHINY_ODDS   64   // Actual probability is SHINY_ODDS/65536  -> 1/1024
 #define SHINY_ODDS_1 512   // Actual probability is SHINY_ODDS/65536 -> 1/128
 #define SHINY_ODDS_2 13107 // Actual probability is SHINY_ODDS/65536 -> 1/5
+#define ALPHA_ODDS   4
+
+#define LEGENDARY_SHINY_ODDS 8 // Actual probability is  LEGENDARY_SHINY_ODDS / 65536 meaning 1/8192
+#define RARE_SHINY_ODDS   16   // Actual probability is  RARE_SHINY_ODDS      / 65536 meaning 1/4096
+
+//Shiny Defines
+#define SHINY_NONE      0
+#define SHINY_VANILLA   1
+#define SHINY_RARE      2
+#define SHINY_LEGENDARY 3
 
 // Flags for Get(Box)MonData / Set(Box)MonData
 #define MON_DATA_PERSONALITY        0
@@ -167,7 +183,7 @@
 #define MON_DATA_VICTORY_RIBBON    69
 #define MON_DATA_ARTIST_RIBBON     70
 #define MON_DATA_EFFORT_RIBBON     71
-#define MON_DATA_FATEFUL_ENCOUNTER 72 // was 79
+#define MON_DATA_IS_EVENT_MON 72 // was 79
 #define MON_DATA_EVENT_LEGAL       75
 #define MON_DATA_KNOWN_MOVES       76
 #define MON_DATA_RIBBON_COUNT      77
@@ -180,6 +196,10 @@
 #define MON_DATA_NATURE            84 // New
 #define MON_DATA_SPEED_DOWN        85 // New
 #define MON_DATA_EXIOLITE          86 // New
+#define MON_DATA_IS_ALPHA          87 // New
+#define MON_DATA_IS_SHINY          88 // New
+#define MON_DATA_HP_TYPE           89 // New
+#define MON_DATA_MAX_SHINY         90 // New
 
 // Ribbon IDs used by TV and Pokénav
 #define CHAMPION_RIBBON       0
@@ -279,43 +299,38 @@
 #define EV_ITEM_RAISE_LIMIT 252
 
 // Battle move flags
-#define FLAG_MAKES_CONTACT                        (1 << 0)
-#define FLAG_PROTECT_AFFECTED                     (1 << 1)
-#define FLAG_MAGIC_COAT_AFFECTED                  (1 << 2)
-#define FLAG_SNATCH_AFFECTED                      (1 << 3)
-#define FLAG_MIRROR_MOVE_AFFECTED                 (1 << 4)
-#define FLAG_KINGS_ROCK_AFFECTED                  (1 << 5)
-#define FLAG_HIGH_CRIT                            (1 << 6)
-#define FLAG_RECKLESS_BOOST                       (1 << 7)
-#define FLAG_IRON_FIST_BOOST                      (1 << 8)
-#define FLAG_SHEER_FORCE_BOOST                    (1 << 9)
-#define FLAG_STRONG_JAW_BOOST                     (1 << 10)
-#define FLAG_MEGA_LAUNCHER_BOOST                  (1 << 11)
-#define FLAG_STAT_STAGES_IGNORED                  (1 << 12)
-#define FLAG_STRIKER_BOOST                        (1 << 13) // For Striker
-#define FLAG_DMG_UNDERGROUND                      (1 << 14)
-#define FLAG_DMG_UNDERWATER                       (1 << 15)
-#define FLAG_SOUND                                (1 << 16)
-#define FLAG_BALLISTIC                            (1 << 17)
-#define FLAG_PROTECTION_MOVE                      (1 << 18)
-#define FLAG_POWDER                               (1 << 19)
-#define FLAG_TARGET_ABILITY_IGNORED               (1 << 20)
-#define FLAG_DANCE                                (1 << 21)
-#define FLAG_DMG_2X_IN_AIR                        (1 << 22) // If target is in the air, can hit and deal double damage.
-#define FLAG_DMG_IN_AIR                           (1 << 23) // If target is in the air, can hit.
-#define FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING (1 << 24) // Makes a Ground type move do 1x damage to flying and levitating targets
-#define FLAG_THAW_USER                            (1 << 25)
-#define FLAG_HIT_IN_SUBSTITUTE                    (1 << 26) // Hyperspace Fury
-#define FLAG_TWO_STRIKES                          (1 << 27) // A move with this flag will strike twice, and may apply its effect on each hit
-#define FLAG_KEEN_EDGE_BOOST                      (1 << 28)
-#define FLAG_BONE_BASED                           (1 << 29) // For Bone Zone
-#define FLAG_WEATHER_BASED                        (1 << 30) // For Weather Control
-#define FLAG_FIELD_BASED                          (1 << 31) // For Field Explorer
-
-// Battle move Flags 2
-#define FLAG_AIR_BASED                            (1 << 0) // For Giant Wings
-#define FLAG_HORN_BASED                           (1 << 1) // For Mighty Horn
-#define FLAG_ALWAYS_CRIT                          (1 << 2) // For the move Frost Breath
+#define FLAG_MAKES_CONTACT                          (1 << 0)
+#define FLAG_PROTECT_AFFECTED                       (1 << 1)
+#define FLAG_MAGIC_COAT_AFFECTED                    (1 << 2)
+#define FLAG_SNATCH_AFFECTED                        (1 << 3)
+#define FLAG_MIRROR_MOVE_AFFECTED                   (1 << 4)
+#define FLAG_KINGS_ROCK_AFFECTED                    (1 << 5)
+#define FLAG_HIGH_CRIT                              (1 << 6)
+#define FLAG_RECKLESS_BOOST                         (1 << 7)
+#define FLAG_IRON_FIST_BOOST                        (1 << 8)
+#define FLAG_SHEER_FORCE_BOOST                      (1 << 9)
+#define FLAG_STRONG_JAW_BOOST                       (1 << 10)
+#define FLAG_MEGA_LAUNCHER_BOOST                    (1 << 11)
+#define FLAG_STAT_STAGES_IGNORED                    (1 << 12)
+#define FLAG_STRIKER_BOOST                          (1 << 13)
+#define FLAG_DMG_UNDERGROUND                        (1 << 14)
+#define FLAG_DMG_UNDERWATER                         (1 << 15)
+#define FLAG_SOUND                                  (1 << 16)
+#define FLAG_BALLISTIC                              (1 << 17)
+#define FLAG_PROTECTION_MOVE                        (1 << 18)
+#define FLAG_POWDER                                 (1 << 19)
+#define FLAG_TARGET_ABILITY_IGNORED                 (1 << 20)
+#define FLAG_DANCE                                  (1 << 21)
+#define FLAG_DMG_2X_IN_AIR                          (1 << 22)
+#define FLAG_DMG_IN_AIR                             (1 << 23)
+#define FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING   (1 << 24)
+#define FLAG_THAW_USER                              (1 << 25)
+#define FLAG_HIT_IN_SUBSTITUTE                      (1 << 26)
+#define FLAG_TWO_STRIKES                            (1 << 27)
+#define FLAG_KEEN_EDGE_BOOST                        (1 << 28)
+#define FLAG_BONE_BASED                             (1 << 29)
+#define FLAG_WEATHER_BASED                          (1 << 30)
+#define FLAG_FIELD_BASED                            (1 << 31)
 
 // Split defines.
 #define SPLIT_PHYSICAL  0x0
@@ -384,6 +399,10 @@
 
 #define EVOS_PER_MON 10
 
+//Form Change Methods
+#define EVO_FORM_SHIFT                    34     // Normal Form Change
+#define EVO_FORM_SHIFT_GENDER             35     // Form Change by gender
+
 // Evolution 'modes,' for GetEvolutionTargetSpecies
 #define EVO_MODE_NORMAL     0
 #define EVO_MODE_TRADE      1
@@ -431,5 +450,11 @@
 #define TOTEM_FIGHT_SANDSLASH     4
 #define TOTEM_FIGHT_FERALIGATR    5
 #define TOTEM_FIGHT_GYARADOS      6
+
+//Shiny types
+#define SHINY_TYPE_NONE           0
+#define SHINY_TYPE_STARS          1
+#define SHINY_TYPE_SQUARES        2
+#define SHINY_TYPE_SPECIAL        3 // New Palette Swaps for Shinies
 
 #endif // GUARD_CONSTANTS_POKEMON_H
