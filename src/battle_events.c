@@ -326,18 +326,18 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillEmbargo)
     case BATTLE_EVENT_REFLECT:
-        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_REFLECT;
-        gSideTimers[B_SIDE_PLAYER].reflectTimer = battleEvent->data0;
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_REFLECT;
+        gSideTimers[B_SIDE_OPPONENT].reflectTimer = battleEvent->data0;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillReflect)
     case BATTLE_EVENT_LIGHTSCREEN:
-        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_LIGHTSCREEN;
-        gSideTimers[B_SIDE_PLAYER].lightscreenTimer = battleEvent->data0;
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_LIGHTSCREEN;
+        gSideTimers[B_SIDE_OPPONENT].lightscreenTimer = battleEvent->data0;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLightscreen)
     case BATTLE_EVENT_LUCKY_CHANT:
-        gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_LUCKY_CHANT;
-        gSideTimers[B_SIDE_PLAYER].luckyChantTimer = battleEvent->data0;
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_LUCKY_CHANT;
+        gSideTimers[B_SIDE_OPPONENT].luckyChantTimer = battleEvent->data0;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLuckyChant)
 
