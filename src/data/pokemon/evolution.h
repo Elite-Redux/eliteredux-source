@@ -868,6 +868,8 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_BASCULIN] = {{EVO_FORM_SHIFT, 1, SPECIES_BASCULIN},
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_BLUE_STRIPED},
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_WHITESTRIPED},},
+    #ifndef DISABLE_TWO_POINT_FIVE_STUFF
     [SPECIES_POLARTIC] = {{EVO_FORM_SHIFT, 1, SPECIES_POLARTIC},
                             {EVO_FORM_SHIFT, 1, SPECIES_POLARTIC_BLUEMOON},},
+    #endif
 };

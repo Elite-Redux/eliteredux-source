@@ -514,6 +514,8 @@ void UI_Battle_Menu_Init(MainCallback callback)
             case FIELD_INFO_INVERSE_ROOM:
                 if(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
                     isExtraInfoShown = TRUE;
+                else if(FlagGet(B_FLAG_INVERSE_BATTLE))
+                    isExtraInfoShown = TRUE;
             break;
             case FIELD_INFO_TRICK_ROOM:
                 if(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
@@ -3545,12 +3547,14 @@ static void PrintFieldTab(void)
                 StringCopy(gStringVar1, sText_Title_Field_Inverse_Room);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
 
-                //Turns Left
-                StringCopy(gStringVar1, sText_Title_Field_Turns_Left);
-                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
-                turnsLeft = gFieldTimers.inverseRoomTimer ;
-                ConvertIntToDecimalStringN(gStringVar1, turnsLeft, STR_CONV_MODE_LEFT_ALIGN, 4);
-                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                //Turns Left, only shown when its a field effect and not from a flag
+                if(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM){
+                    StringCopy(gStringVar1, sText_Title_Field_Turns_Left);
+                    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                    turnsLeft = gFieldTimers.inverseRoomTimer ;
+                    ConvertIntToDecimalStringN(gStringVar1, turnsLeft, STR_CONV_MODE_LEFT_ALIGN, 4);
+                    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                }
                 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Field_Inverse_Description);
