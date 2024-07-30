@@ -1736,7 +1736,7 @@ script PetalburgCity_Gym_EventScript_Norman{
 				msgbox(PetalburgCity_Gym_Text_NormanMegaBracelet, MSGBOX_DEFAULT)
 				giveBattleItems
 				playfanfare(MUS_OBTAIN_ITEM)
-				message(format("{PLAYER} got all the {COLOR LIGHT_GREEN}Mega Stones{COLOR DARK_GRAY}!"))
+				message(format("{PLAYER} got some {COLOR LIGHT_GREEN}Mega Stones{COLOR DARK_GRAY}!"))
 				waitfanfare
 				closemessage
 				delay(30)
