@@ -5490,7 +5490,6 @@ const u16 gEggMoves[] = {
         MOVE_SLEEP_TALK,
         MOVE_TOXIC,
         MOVE_FIRE_SPIN,
-        MOVE_TOXIC,
         MOVE_CHARM,
         MOVE_WILL_O_WISP,
         MOVE_CLEAR_SMOG,
@@ -5498,7 +5497,6 @@ const u16 gEggMoves[] = {
         MOVE_FACADE,
         MOVE_VENOM_DRENCH,
         MOVE_SEISMIC_TOSS,
-        MOVE_TOXIC,
         MOVE_GUNK_SHOT,
         MOVE_PURSUIT),
 
