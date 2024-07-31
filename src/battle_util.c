@@ -5420,7 +5420,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if (GetSingleUseAbilityCounter(battler, ABILITY_ZERO_TO_HERO)
             && gBattleMons[battler].species == SPECIES_PALAFIN)
         {
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_PALAFIN_HERO);
+            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_PALAFIN_HERO);
             gBattleMons[battler].species = SPECIES_PALAFIN_HERO;
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
             effect++;
