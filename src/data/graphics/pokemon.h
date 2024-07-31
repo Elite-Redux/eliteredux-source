@@ -7525,6 +7525,12 @@ const u32 gMonPalette_GyaradeathMegaY[]           = INCBIN_U32("graphics/pokemon
 const u32 gMonShinyPalette_GyaradeathMegaY[]      = INCBIN_U32("graphics/pokemon/gyaradeath/mega_y/shiny.gbapal.lz");
 const u8  gMonIcon_GyaradeathMegaY[]              = INCBIN_U8("graphics/pokemon/gyaradeath/mega_y/icon.4bpp");
 
+const u32 gMonFrontPic_Tortemple[]          = INCBIN_U32("graphics/pokemon/tortemple/front.4bpp.lz");
+const u32 gMonBackPic_Tortemple[]           = INCBIN_U32("graphics/pokemon/tortemple/back.4bpp.lz");
+const u32 gMonPalette_Tortemple[]           = INCBIN_U32("graphics/pokemon/tortemple/normal.gbapal.lz");
+const u32 gMonShinyPalette_Tortemple[]      = INCBIN_U32("graphics/pokemon/tortemple/shiny.gbapal.lz");
+const u8  gMonIcon_Tortemple[]              = INCBIN_U8("graphics/pokemon/tortemple/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

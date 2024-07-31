@@ -40945,6 +40945,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_TORTEMPLE] =
+    {
+    .baseHP        = 70,
+    .baseAttack    = 85,
+    .baseDefense   = 140,
+    .baseSpeed     = 20,
+    .baseSpAttack  = 85,
+    .baseSpDefense = 70,
+    .type1 = TYPE_FIRE,
+    .type2 = TYPE_FIRE,
+    .catchRate = 255,
+    .expYield = 165,
+    .evYield_Defense   = 2,
+    .item2 = ITEM_CHARCOAL,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_FIELD,
+    .abilities = {ABILITY_STAMINA, ABILITY_IMPENETRABLE, ABILITY_DROUGHT},
+    .innates = {ABILITY_SHELL_ARMOR, ABILITY_WHITE_SMOKE, ABILITY_MOUNTAINEER},
+    .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = FALSE,
+    .tier = 4,
+    },
+
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .baseHP        = 110,
