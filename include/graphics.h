@@ -10555,6 +10555,8 @@ extern const u32 gBallIcon_Moon[];
 extern const u32 gBallIconPalette_Moon[];
 extern const u32 gBallIcon_Sport[];
 extern const u32 gBallIconPalette_Sport[];
+extern const u32 gBallIcon_Park[];
+extern const u32 gBallIconPalette_Park[];
 extern const u32 gBallIcon_Dream[];
 extern const u32 gBallIconPalette_Dream[];
 extern const u32 gBallIcon_Beast[];
