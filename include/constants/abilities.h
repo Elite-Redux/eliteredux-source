@@ -635,7 +635,7 @@
 #define ABILITY_APPLE_ENLIGHTENMENT 613 // Fur coat + Magic Guard.
 #define ABILITY_BALLOON_BOMBER 614 // Aftermath + Inflatable
 #define ABILITY_FLAMING_MAW 615 // Strong Jaw + Flaming Jaws
-#define ABILITY_DEMOLITIONIST 616 // Readied Action + Ignores Protection and shatters screens on the readied turn.
+#define ABILITY_DEMOLITIONIST 616 // Readied Action + Ignores Protect + screens break on readied turn
 #define ABILITY_ROCKHARD_WILL 617 // Boosts Rock-type moves by 1.2x, or 1.5x when under 1/3 HP.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_ROCKHARD_WILL + 1)
