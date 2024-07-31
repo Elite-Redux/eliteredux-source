@@ -16557,7 +16557,7 @@ static void Cmd_trygivecaughtmonnick(void)
             gBattleCommunication[MULTIUSE_STATE]++;
         }
         else{
-            HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
+            HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
             BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
             gBattleCommunication[MULTIUSE_STATE]++;
             gBattleCommunication[CURSOR_POSITION] = 0;

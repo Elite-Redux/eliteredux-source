@@ -5459,7 +5459,6 @@ static void PlayerHandleYesNoBox(void)
 {
     if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
     {
-        //HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
         HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
         BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO_TWO);
         gMultiUsePlayerCursor = 1;
