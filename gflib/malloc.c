@@ -1,7 +1,11 @@
 #include "global.h"
+#include "malloc.h"
 
 static void *sHeapStart;
 static u32 sHeapSize;
+__attribute__((section("__EWRAM_HEAP"))) u8 gHeap[HEAP_SIZE] = {0};
+
+
 static u32 sFiller; // needed to align dma3_manager.o(.bss)
 
 #define MALLOC_SYSTEM_ID 0xA3A3
