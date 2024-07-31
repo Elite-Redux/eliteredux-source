@@ -345,7 +345,7 @@ SECTIONS {
         src/quests.o(.text);
         src/tmhm_struct.o(.text);
         src/pokemon_debug.o(.text);
-    } =0
+    } > ROM =0
 
     script_data :
     ALIGN(4)
@@ -720,7 +720,7 @@ SECTIONS {
         src/tmhm_struct.o(.rodata);
         src/script.o(.rodata);
         src/pokemon_debug.o(.rodata);
-    } =0
+    } > ROM =0
 
     song_data :
     ALIGN(4)
