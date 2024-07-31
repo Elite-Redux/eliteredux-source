@@ -705,7 +705,7 @@ script MossdeepCity_Gym_EventScript_GiveBattleText{
 		break
 		case 3:
 			//yesnobattle(format("A lot of the time {COLOR GREEN}toxins{COLOR DARK_GRAY} are used to purify the body and mind. Be careful there still might be some laying around."))
-			yesnobattle(format("{COLOR GREEN}Wide guard.{COLOR DARK_GRAY}"))
+			yesnobattle(format("Our psychic powers can restrict the range of your moves! With this, you can only attack us {COLOR GREEN}one at a time{COLOR DARK_GRAY}."))
 		break
 		case 4:
 			yesnobattle(format("Hypnosis is a very powerful psychic power, it can even {COLOR GREEN}put people to sleep{COLOR DARK_GRAY}."))
