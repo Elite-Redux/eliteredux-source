@@ -341,6 +341,12 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLuckyChant)
 
+    case BATTLE_EVENT_PERMA_WIDE_GUARD:
+        if (gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_WIDE_GUARD)
+            return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_WIDE_GUARD;
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaWideGuard);
+
     case BATTLE_EVENT_NO_PROTECT:
         if (!DepleteTeamPowerPointOfMove(MOVE_PROTECT))
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
@@ -451,11 +457,11 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_NIGHTMARE;
         RUN_BATTLESCRIPT(BattleScript_GymSkillPermaNightmare);
-    case BATTLE_EVENT_PERMA_SMACKDOWN:
-        if (gStatuses3[B_SIDE_PLAYER] & STATUS3_SMACKED_DOWN)
+    case BATTLE_EVENT_PERMA_WIDE_GUARD:
+        if (gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_WIDE_GUARD)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-        gStatuses3[B_SIDE_PLAYER] |= STATUS3_SMACKED_DOWN;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaHealBlock);
+        gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_WIDE_GUARD;
+        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaWideGuard);
 
     case BATTLE_EVENT_ONDS_COPY_STATS:
         if (!gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn || gSideTimers[B_POSITION_OPPONENT_LEFT].retaliateTimer != 1)

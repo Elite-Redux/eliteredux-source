@@ -48,7 +48,8 @@
 
 #define BATTLE_EVENT_PERMA_HEAL_BLOCK   160
 #define BATTLE_EVENT_PERMA_NIGHTMARE    161
-#define BATTLE_EVENT_PERMA_SMACKDOWN    162 // made specifically with winona in mind
+#define BATTLE_EVENT_PERMA_SMACKDOWN    162 // made specifically with winona in mind but I changed my mind it's a bad idea
+#define BATTLE_EVENT_PERMA_WIDE_GUARD   163
 
 #define BATTLE_EVENT_ONDS_COPY_STATS    180 //DS => Death Switch (in)
 

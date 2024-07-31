@@ -12409,6 +12409,14 @@ BattleScript_GymSkillPermaNightmare:: @ todo
 	playse SE_M_NIGHTMARE 
 	end2
 
+BattleScript_GymSkillPermaWideGuard::
+	call BattleScript_GymSkillPopup
+	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
+	printstring STRINGID_GYMSKILL_PERMA_WIDEGUARD
+	playmoveanimation BS_ATTACKER, MOVE_WIDE_GUARD
+	waitanimation
+	end2
+
 BattleScript_GymSkillCopyStats::
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT

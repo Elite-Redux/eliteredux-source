@@ -704,7 +704,8 @@ script MossdeepCity_Gym_EventScript_GiveBattleText{
 			yesnobattle(format("With just a bit of psychic powers you can even manipulate {COLOR GREEN}Luck{COLOR DARK_GRAY} to your will."))
 		break
 		case 3:
-			yesnobattle(format("A lot of the time {COLOR GREEN}toxins{COLOR DARK_GRAY} are used to purify the body and mind. Be careful there still might be some laying around."))
+			//yesnobattle(format("A lot of the time {COLOR GREEN}toxins{COLOR DARK_GRAY} are used to purify the body and mind. Be careful there still might be some laying around."))
+			yesnobattle(format("{COLOR GREEN}Wide guard.{COLOR DARK_GRAY}"))
 		break
 		case 4:
 			yesnobattle(format("Hypnosis is a very powerful psychic power, it can even {COLOR GREEN}put people to sleep{COLOR DARK_GRAY}."))
@@ -950,7 +951,7 @@ script MossdeepCity_Gym_EventScript_CheckTrainers{
 		registerbattleevent(BATTLE_EVENT_LUCKY_CHANT, 5)
 	}
 	if (var(VAR_RESULT) < 4){
-		registerbattleevent(BATTLE_EVENT_TOXIC_SPIKES)
+		registerbattleevent(BATTLE_EVENT_PERMA_WIDE_GUARD)
 	}
 	if (var(VAR_RESULT) < 5){
 	    registerbattleevent(BATTLE_EVENT_LAST_SLEEP, 1)
