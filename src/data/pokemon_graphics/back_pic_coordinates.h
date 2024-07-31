@@ -5449,7 +5449,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_FLAIRGRANCE] =
     {
         .size = 0x88,
-        .y_offset = 5,
+        .y_offset = 0,
     },
     [SPECIES_POLARTIC] =
     {
@@ -5464,12 +5464,12 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_ARASHINNE] =
     {
         .size = 0x86,
-        .y_offset = 12,
+        .y_offset = 3,
     },
     [SPECIES_DREADNAUT] =
     {
         .size = 0x88,
-        .y_offset = 3,
+        .y_offset = 0,
     },
     [SPECIES_BOARLOCK] =
     {
@@ -5479,7 +5479,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_HELIOSUNNY] =
     {
         .size = 0x78,
-        .y_offset = 4,
+        .y_offset = 2,
     },
     [SPECIES_SOPRANICE] =
     {
@@ -5489,7 +5489,37 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_BEEFENDER] =
     {
         .size = 0x87,
+        .y_offset = 4,
+    },
+    [SPECIES_SALAZARUS] =
+    {
+        .size = 0x68,
+        .y_offset = 0,
+    },
+    [SPECIES_GUERSHOOS] =
+    {
+        .size = 0x67,
+        .y_offset = 3,
+    },
+    [SPECIES_LEPASTRY] =
+    {
+        .size = 0x88,
+        .y_offset = 4,
+    },
+    [SPECIES_GYARADEATH] =
+    {
+        .size = 0x88,
         .y_offset = 5,
+    },
+    [SPECIES_GYARADEATH_MEGA_X] =
+    {
+        .size = 0,
+        .y_offset = 3,
+    },
+     [SPECIES_GYARADEATH_MEGA_Y] =
+    {
+        .size = 0,
+        .y_offset = 3,
     },
     [SPECIES_CALYREX_CLOUD_RIDER] =
     {

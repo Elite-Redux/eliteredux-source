@@ -1553,6 +1553,15 @@ const u32 gItemIconPalette_Froslassite[] = INCBIN_U32("graphics/items/icon_palet
 const u32 gItemIcon_Wigglytuffite[]  = INCBIN_U32("graphics/items/icons/wigglytuffite.4bpp.lz");
 const u32 gItemIconPalette_Wigglytuffite[]  = INCBIN_U32("graphics/items/icon_palettes/wigglytuffite.gbapal.lz");
 
+const u32 gItemIcon_Tinkatite[]  = INCBIN_U32("graphics/items/icons/tinkatite.4bpp.lz");
+const u32 gItemIconPalette_Tinkatite[]  = INCBIN_U32("graphics/items/icon_palettes/tinkatite.gbapal.lz");
+
+const u32 gItemIcon_Gyaradeathite_X[]  = INCBIN_U32("graphics/items/icons/gyaradeathite_x.4bpp.lz");
+const u32 gItemIconPalette_Gyaradeathite_X[]  = INCBIN_U32("graphics/items/icon_palettes/gyaradeathite_x.gbapal.lz");
+
+const u32 gItemIcon_GyaradeathiteY[]  = INCBIN_U32("graphics/items/icons/gyaradeathite_y.4bpp.lz");
+const u32 gItemIconPalette_Gyaradeathite_Y[]  = INCBIN_U32("graphics/items/icon_palettes/gyaradeathite_y.gbapal.lz");
+
 const u32 gItemIcon_Senzu[] = INCBIN_U32("graphics/items/icons/senzu.4bpp.lz");
 const u32 gItemIconPalette_Senzu[] = INCBIN_U32("graphics/items/icon_palettes/senzu.gbapal.lz");
 

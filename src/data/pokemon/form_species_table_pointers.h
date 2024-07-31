@@ -909,4 +909,12 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_TINKATON_MEGA] = sTinkatonFormSpeciesIdTable,
 
+    [SPECIES_POLARTIC] = sPolarticFormSpeciesIdTable,
+
+    [SPECIES_GYARADEATH] = sGyaradeathFormSpeciesIdTable,
+
+    [SPECIES_GYARADEATH_MEGA_X] = sGyaradeathFormSpeciesIdTable,
+
+    [SPECIES_GYARADEATH_MEGA_Y] = sGyaradeathFormSpeciesIdTable,
+
 };

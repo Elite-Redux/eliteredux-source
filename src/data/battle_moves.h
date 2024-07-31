@@ -11073,7 +11073,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_IVY_CUDGEL] =
     {
-        .effect = EFFECT_MISC_HIT,
+        .effect = EFFECT_SYNCHRONOISE,
         .power = 100,
         .type = TYPE_GRASS,
         .accuracy = 100,

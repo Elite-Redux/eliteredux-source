@@ -1608,6 +1608,12 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_HELIOSUNNY] = sHeliosunnyLevelUpLearnset,
     [SPECIES_SOPRANICE] = sSopraniceLevelUpLearnset,
     [SPECIES_BEEFENDER] = sBeefenderLevelUpLearnset,
+    [SPECIES_SALAZARUS] = sSalazarusLevelUpLearnset,
+    [SPECIES_GUERSHOOS] = sGuershoosLevelUpLearnset,
+    [SPECIES_LEPASTRY] = sLepastryLevelUpLearnset,
+    [SPECIES_GYARADEATH] = sGyaradeathLevelUpLearnset,
+    [SPECIES_GYARADEATH_MEGA_X] = sGyaradeathLevelUpLearnset,
+    [SPECIES_GYARADEATH_MEGA_Y] = sGyaradeathLevelUpLearnset,
     [SPECIES_MINCCINO_REDUX] = sMinccino_ReduxLevelUpLearnset,
     [SPECIES_CINCCINO_REDUX] = sCinccino_ReduxLevelUpLearnset,
 };

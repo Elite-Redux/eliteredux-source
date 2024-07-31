@@ -1404,7 +1404,7 @@ static void Select_HandleMonSelectionChange(void)
     if (sFactorySelectScreen->mons[cursorPos].selectedId) // Deselect a mon.
     {
         paletteNum = IndexOfSpritePaletteTag(PALTAG_BALL_GRAY);
-        if (sFactorySelectScreen->selectingMonsState == FRONTIER_PARTY_SIZE 
+        if (sFactorySelectScreen->selectingMonsState == FRONTIER_PARTY_SIZE
          && sFactorySelectScreen->mons[cursorPos].selectedId == 1)
         {
             for (i = 0; i < SELECTABLE_MONS_COUNT; i++)
@@ -1757,7 +1757,8 @@ static void CreateFrontierFactorySelectableMons(u8 firstMonId)
                                              gFacilityTrainerMons[monId].nature,
                                              ivs,
                                              gFacilityTrainerMons[monId].evSpread,
-                                             otId);
+                                             otId,
+                                             gFacilityTrainerMons[monId].abilityNum);
         friendship = 0;
         for (j = 0; j < MAX_MON_MOVES; j++)
             SetMonMoveAvoidReturn(&sFactorySelectScreen->mons[i + firstMonId].monData, gFacilityTrainerMons[monId].moves[j], j);
@@ -1787,7 +1788,8 @@ static void CreateSlateportTentSelectableMons(u8 firstMonId)
                                              gFacilityTrainerMons[monId].nature,
                                              ivs,
                                              gFacilityTrainerMons[monId].evSpread,
-                                             otId);
+                                             otId,
+                                             gFacilityTrainerMons[monId].abilityNum);
         friendship = 0;
         for (j = 0; j < MAX_MON_MOVES; j++)
             SetMonMoveAvoidReturn(&sFactorySelectScreen->mons[i + firstMonId].monData, gFacilityTrainerMons[monId].moves[j], j);
@@ -3065,7 +3067,7 @@ static void Swap_Task_ScreenInfoTransitionOut(u8 taskId)
         }
         break;
     case 5:
-        if (gTasks[taskId].tSlideFinishedPkmn == TRUE 
+        if (gTasks[taskId].tSlideFinishedPkmn == TRUE
          && gTasks[taskId].tSlideFinishedCancel == TRUE)
         {
             gTasks[taskId].tState = gTasks[taskId].tFollowUpTaskState;
@@ -3131,7 +3133,7 @@ static void Swap_Task_ScreenInfoTransitionIn(u8 taskId)
         }
         break;
     case 2:
-        if (gTasks[taskId].tSlideFinishedPkmn == TRUE 
+        if (gTasks[taskId].tSlideFinishedPkmn == TRUE
          && gTasks[taskId].tSlideFinishedCancel == TRUE)
         {
             gPlttBufferFaded[226] = sPokeballGray_Pal[37];
@@ -3213,7 +3215,7 @@ static void Swap_Task_SwitchPartyScreen(u8 taskId)
         gTasks[taskId].tState++;
         break;
     case 3:
-        if (!FuncIsActiveTask(Swap_Task_SlideCycleBalls) 
+        if (!FuncIsActiveTask(Swap_Task_SlideCycleBalls)
          && gTasks[sFactorySwapScreen->fadeSpeciesNameTaskId].tFadeOutFinished == TRUE)
         {
             Swap_EraseSpeciesWindow();
@@ -3687,7 +3689,7 @@ static void Swap_HideActionButtonHighlights(void)
     {
         // Hide button highlight on "Pkmn for Swap"
         gSprites[sFactorySwapScreen->pkmnForSwapButtonSpriteIds[1][i]].invisible = TRUE;
-        
+
         // Hide button highlight on Cancel
         if (i < ARRAY_COUNT(sFactorySwapScreen->cancelButtonSpriteIds[0]))
             gSprites[sFactorySwapScreen->cancelButtonSpriteIds[1][i]].invisible = TRUE;

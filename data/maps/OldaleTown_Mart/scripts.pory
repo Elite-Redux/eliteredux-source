@@ -262,7 +262,7 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_URSALUNITE
 	ITEM_MAWILITE_R
 	ITEM_WIGGLYTUFFITE
-	ITEM_SENZU
+	ITEM_TINKATITE
 }
 
 script General_Adoption_Center_Mega_Stones_Script{

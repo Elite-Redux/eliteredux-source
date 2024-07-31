@@ -5502,6 +5502,36 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x86,
         .y_offset = 5,
     },
+    [SPECIES_SALAZARUS] =
+    {
+        .size = 0x45,
+        .y_offset = 1,
+    },
+    [SPECIES_GUERSHOOS] =
+    {
+        .size = 0x45,
+        .y_offset = 5,
+    },
+    [SPECIES_LEPASTRY] =
+    {
+        .size = 0x45,
+        .y_offset = 8,
+    },
+    [SPECIES_GYARADEATH] =
+    {
+        .size = 0x88,
+        .y_offset = 2,
+    },
+    [SPECIES_GYARADEATH_MEGA_X] =
+    {
+        .size = 0x88,
+        .y_offset = 2,
+    },
+    [SPECIES_GYARADEATH_MEGA_Y] =
+    {
+        .size = 0x88,
+        .y_offset = 2,
+    },
     [SPECIES_CALYREX_CLOUD_RIDER] =
     {
         .size = 0,

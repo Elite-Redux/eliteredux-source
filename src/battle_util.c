@@ -8916,7 +8916,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
 		//Flaming Jaws
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMING_JAWS)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMING_JAWS) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMING_MAW)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBeBurned(gBattlerTarget)
 			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
@@ -12367,7 +12367,6 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return FALSE;
 }
 
-
 bool32 IsBattlerGrounded(u8 battlerId)
 {
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
@@ -13002,7 +13001,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
     }
 	
 	// Strong Jaw
-	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_STRONG_JAW) && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
+	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_STRONG_JAW) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FLAMING_MAW) && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
         MulModifier(&modifier, UQ_4_12(1.5));
 	
 	// Devourer
@@ -13846,6 +13845,15 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         break;
     case ABILITY_OVERGROW:
         if (moveType == TYPE_GRASS)
+        {
+            if (gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
+                MulModifier(&modifier, UQ_4_12(1.5));
+            else
+                MulModifier(&modifier, UQ_4_12(1.2));
+        }
+        break;
+    case ABILITY_ROCKHARD_WILL:
+        if (moveType == TYPE_ROCK)
         {
             if (gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
                 MulModifier(&modifier, UQ_4_12(1.5));

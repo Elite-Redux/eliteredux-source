@@ -4269,7 +4269,7 @@ void CreateApprenticeMon(struct Pokemon *mon, const struct Apprentice *src, u8 m
     CalculateMonStats(mon);
 }
 
-void CreateMonWithEVSpreadNatureOTID(struct Pokemon *mon, u16 species, u8 level, u8 nature, u8 fixedIV, u8 evSpread, u32 otId)
+void CreateMonWithEVSpreadNatureOTID(struct Pokemon *mon, u16 species, u8 level, u8 nature, u8 fixedIV, u8 evSpread, u32 otId, u16 abilityNum)
 {
     s32 i;
     s32 statCount = 0;
@@ -4297,6 +4297,7 @@ void CreateMonWithEVSpreadNatureOTID(struct Pokemon *mon, u16 species, u8 level,
         evsBits <<= 1;
     }
     SetMonData(mon, MON_DATA_NATURE, &nature);
+    SetMonData(mon, MON_DATA_ABILITY_NUM, &abilityNum);
     CalculateMonStats(mon);
 }
 
@@ -4482,7 +4483,7 @@ void CalculateMonStats(struct Pokemon *mon)
     s32 movePP, i;
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
-	
+
 	if(B_PERFECT_IVS == TRUE){
         //Ivs are Disabled
         hpIV 		= MAX_IVS;
@@ -5051,7 +5052,7 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         else
         {
             for (retVal = 0;
-                retVal < POKEMON_NAME_LENGTH; 
+                retVal < POKEMON_NAME_LENGTH;
                 data[retVal] = boxMon->nickname[retVal], retVal++){}
 
             data[retVal] = EOS;
@@ -7967,16 +7968,16 @@ u8 GetNumberOfEggMoves(struct Pokemon *mon)
     for (i = 0; i < numEggMoves; i++)
     {
         hasMonMove = FALSE;
-        
+
         for (j = 0; j < MAX_MON_MOVES; j++){
             if(learnedMoves[j] == eggMoveBuffer[i])
                 hasMonMove = TRUE;
         }
-                
+
         if(!hasMonMove)
             moves[numMoves++] = eggMoveBuffer[i];
     }
-            
+
     return numMoves;
 }
 
@@ -7995,20 +7996,20 @@ u8 GetEggMoveTutorMoves(struct Pokemon *mon, u16 *moves)
 
     for (i = 0; i < MAX_MON_MOVES; i++)
         learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
-            
+
     for (i = 0; i < numEggMoves; i++)
     {
         hasMonMove = FALSE;
-        
+
         for (j = 0; j < MAX_MON_MOVES; j++){
             if(learnedMoves[j] == RandomizeMoves(eggMoveBuffer[i], firsStage, personality))
                 hasMonMove = TRUE;
         }
-                
+
         if(!hasMonMove)
             moves[numMoves++] = RandomizeMoves(eggMoveBuffer[i], firsStage, personality);
     }
-            
+
     return numMoves;
 }
 //TM Moves --------------------------------------------------------------------
@@ -8076,8 +8077,8 @@ u8 GetMoveTutorMoves(struct Pokemon *mon, u16 *moves)
 	
 	for (i = 0; i < TUTOR_COUNT; i++)
     {
-        if (CanLearnTutorMove(species, i) && 
-            !MonKnowsMove(mon, RandomizeMoves(GetTutorMove(i), species, personality)) && 
+        if (CanLearnTutorMove(species, i) &&
+            !MonKnowsMove(mon, RandomizeMoves(GetTutorMove(i), species, personality)) &&
             gBattleMoves[GetTutorMove(i)].effect != EFFECT_PLACEHOLDER)
         {
             moves[numMoves] = RandomizeMoves(GetTutorMove(i), species, personality);
@@ -9456,7 +9457,7 @@ bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool
         innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
         innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
     }
-	
+
     if(innate1 == ability      && (level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
         return TRUE;
     else if(innate2 == ability && (level >= INNATE_2_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
@@ -9469,17 +9470,17 @@ bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool
 
 u16 RandomizeMoves(u16 moves, u16 species, u32 personality){
     u16 randomizedMove = (moves + species + personality) % MOVES_COUNT;
-    if(gSaveBlock2Ptr->moveRandomizedMode == 1 && 
+    if(gSaveBlock2Ptr->moveRandomizedMode == 1 &&
         moves != MOVE_NONE){
             do{
                 randomizedMove++;
                 randomizedMove = randomizedMove % MOVES_COUNT;
             }
-            while(gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER || 
+            while(gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER ||
                   randomizedMove >= MOVES_COUNT    ||
                   randomizedMove == MOVE_DARK_VOID ||
                   randomizedMove == MOVE_NONE);
-                  
+
             if(randomizedMove >= (MOVES_COUNT - 1))
                 randomizedMove = MOVE_SPLASH;
 
@@ -9512,7 +9513,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        innate != ABILITY_ANGELS_WRATH           &&
        #endif
-       innate != ABILITY_HUNGER_SWITCH){ 
+       innate != ABILITY_HUNGER_SWITCH){
         //Only Randomize if you have the Innate Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
         u16 randomizedInnate = (innate + species + personality) % ABILITIES_COUNT;
@@ -9557,7 +9558,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
 //#define BALANCE_RANDOMIZER_ABILITIES
 
 u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
-    if(gSaveBlock2Ptr->abilityRandomizedMode == 1 && 
+    if(gSaveBlock2Ptr->abilityRandomizedMode == 1 &&
        ability != ABILITY_NONE              &&
        ability != ABILITY_ZEN_MODE          &&
        ability != ABILITY_WONDER_GUARD      &&
@@ -9576,7 +9577,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        ability != ABILITY_ANGELS_WRATH      &&
        #endif
-       ability != ABILITY_HUNGER_SWITCH){ 
+       ability != ABILITY_HUNGER_SWITCH){
         //Only Randomize if you have the Ability Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
         u16 randomizedAbility = (ability + species + personality) % ABILITIES_COUNT;
@@ -9618,7 +9619,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
 }
 
 u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType){
-    if(gSaveBlock2Ptr->typeRandomizedMode == 1 && type != TYPE_MYSTERY){ 
+    if(gSaveBlock2Ptr->typeRandomizedMode == 1 && type != TYPE_MYSTERY){
         //Only Randomize if you have the Type Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
         u8 randomizedType = TYPE_MYSTERY;
@@ -9777,7 +9778,7 @@ bool8 isMonNicknamed(struct Pokemon *mon){
             nicknamed = TRUE;
         }
     }
-    
+
     return nicknamed;
 }
 
@@ -9796,7 +9797,7 @@ bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon){
             nicknamed = TRUE;
         }
     }
-    
+
     return nicknamed;
 }
 
@@ -10116,16 +10117,16 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
             }
             while(species == SPECIES_NONE                     ||
                 //Sub-Legendary
-                species == SPECIES_ARTICUNO                   || 
-                species == SPECIES_ZAPDOS                     || 
-                species == SPECIES_MOLTRES                    || 
-                species == SPECIES_RAIKOU                     || 
-                species == SPECIES_ENTEI                      || 
-                species == SPECIES_SUICUNE                    || 
-                species == SPECIES_REGICE                     || 
-                species == SPECIES_REGIROCK                   || 
-                species == SPECIES_REGISTEEL                  || 
-                species == SPECIES_LATIAS                     || 
+                species == SPECIES_ARTICUNO                   ||
+                species == SPECIES_ZAPDOS                     ||
+                species == SPECIES_MOLTRES                    ||
+                species == SPECIES_RAIKOU                     ||
+                species == SPECIES_ENTEI                      ||
+                species == SPECIES_SUICUNE                    ||
+                species == SPECIES_REGICE                     ||
+                species == SPECIES_REGIROCK                   ||
+                species == SPECIES_REGISTEEL                  ||
+                species == SPECIES_LATIAS                     ||
                 species == SPECIES_LATIOS                     ||
                 species == SPECIES_UXIE                       ||
                 species == SPECIES_MESPRIT                    ||
@@ -10157,46 +10158,46 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_BLACEPHALON                ||
                 //Legendary
                 species == SPECIES_MEWTWO                     ||
-                species == SPECIES_LUGIA                      || 
-                species == SPECIES_HO_OH                      || 
-                species == SPECIES_KYOGRE                     || 
-                species == SPECIES_GROUDON                    || 
-                species == SPECIES_RAYQUAZA                   || 
-                species == SPECIES_DIALGA                     || 
-                species == SPECIES_PALKIA                     || 
-                species == SPECIES_GIRATINA                   || 
-                species == SPECIES_RESHIRAM                   || 
-                species == SPECIES_ZEKROM                     || 
-                species == SPECIES_KYUREM                     || 
-                species == SPECIES_XERNEAS                    || 
-                species == SPECIES_YVELTAL                    || 
-                species == SPECIES_ZYGARDE                    || 
-                species == SPECIES_COSMOG                     || 
-                species == SPECIES_COSMOEM                    || 
-                species == SPECIES_SOLGALEO                   || 
-                species == SPECIES_LUNALA                     || 
-                species == SPECIES_NECROZMA                   || 
+                species == SPECIES_LUGIA                      ||
+                species == SPECIES_HO_OH                      ||
+                species == SPECIES_KYOGRE                     ||
+                species == SPECIES_GROUDON                    ||
+                species == SPECIES_RAYQUAZA                   ||
+                species == SPECIES_DIALGA                     ||
+                species == SPECIES_PALKIA                     ||
+                species == SPECIES_GIRATINA                   ||
+                species == SPECIES_RESHIRAM                   ||
+                species == SPECIES_ZEKROM                     ||
+                species == SPECIES_KYUREM                     ||
+                species == SPECIES_XERNEAS                    ||
+                species == SPECIES_YVELTAL                    ||
+                species == SPECIES_ZYGARDE                    ||
+                species == SPECIES_COSMOG                     ||
+                species == SPECIES_COSMOEM                    ||
+                species == SPECIES_SOLGALEO                   ||
+                species == SPECIES_LUNALA                     ||
+                species == SPECIES_NECROZMA                   ||
                 //Mythical
-                species == SPECIES_MEW                        || 
-                species == SPECIES_CELEBI                     || 
-                species == SPECIES_JIRACHI                    || 
-                species == SPECIES_DEOXYS                     || 
-                species == SPECIES_PHIONE                     || 
-                species == SPECIES_MANAPHY                    || 
-                species == SPECIES_DARKRAI                    || 
-                species == SPECIES_SHAYMIN                    || 
-                species == SPECIES_ARCEUS                     || 
-                species == SPECIES_VICTINI                    || 
-                species == SPECIES_KELDEO                     || 
-                species == SPECIES_MELOETTA                   || 
-                species == SPECIES_GENESECT                   || 
-                species == SPECIES_DIANCIE                    || 
-                species == SPECIES_HOOPA                      || 
-                species == SPECIES_VOLCANION                  || 
-                species == SPECIES_MAGEARNA                   || 
-                species == SPECIES_MARSHADOW                  || 
-                species == SPECIES_ZERAORA                    || 
-                species == SPECIES_MELTAN                     || 
+                species == SPECIES_MEW                        ||
+                species == SPECIES_CELEBI                     ||
+                species == SPECIES_JIRACHI                    ||
+                species == SPECIES_DEOXYS                     ||
+                species == SPECIES_PHIONE                     ||
+                species == SPECIES_MANAPHY                    ||
+                species == SPECIES_DARKRAI                    ||
+                species == SPECIES_SHAYMIN                    ||
+                species == SPECIES_ARCEUS                     ||
+                species == SPECIES_VICTINI                    ||
+                species == SPECIES_KELDEO                     ||
+                species == SPECIES_MELOETTA                   ||
+                species == SPECIES_GENESECT                   ||
+                species == SPECIES_DIANCIE                    ||
+                species == SPECIES_HOOPA                      ||
+                species == SPECIES_VOLCANION                  ||
+                species == SPECIES_MAGEARNA                   ||
+                species == SPECIES_MARSHADOW                  ||
+                species == SPECIES_ZERAORA                    ||
+                species == SPECIES_MELTAN                     ||
                 species == SPECIES_MELMETAL                   ||
                 species == SPECIES_ZACIAN                     || //Unfinished
                 species == SPECIES_ZAMAZENTA                  || //Unfinished
@@ -10304,7 +10305,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 );
         }
     }
-    
+
 	return species;
 }
 u8 getTier(s8 loc, s8 locG){

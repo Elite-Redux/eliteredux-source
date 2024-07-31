@@ -9570,7 +9570,7 @@ const struct Item gItems[] =
 
     [ITEM_WIGGLITUFF_ORB] = 
     {
-        .name = _("Ancient Apple"),
+        .name = _("Ancient Apple"), // this item will be getting resprited one day
         .itemId = ITEM_WIGGLITUFF_ORB,
         .price = 0,
         .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
@@ -9590,7 +9590,7 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
-    [ITEM_SENZU] =
+    [ITEM_SENZU] = //mega evo stone for lucario mega Y
     {
         .name = _("Senzu Bean"),
         .itemId = ITEM_SENZU,
@@ -9600,4 +9600,38 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
+    [ITEM_TINKATITE] = 
+    {
+        .name = _("Tinkatite"),
+        .itemId = ITEM_TINKATITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sTinkatiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_GYARADEATHITE_X] =
+    {
+        .name = _("Gyaradeathite"),
+        .itemId = ITEM_GYARADEATHITE_X,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sGyaradeathiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_GYARADEATHITE_Y] =
+    {
+        .name = _("Gyaradeathite Y"),
+        .itemId = ITEM_GYARADEATHITE_Y,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sGyaradeathiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    
 };
