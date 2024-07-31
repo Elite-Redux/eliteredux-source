@@ -1,7 +1,6 @@
 #ifndef GUARD_ALLOC_H
 #define GUARD_ALLOC_H
 
-#define HEAP_SIZE 0x1C000
 #define malloc Alloc
 #define calloc(ct, sz) AllocZeroed((ct) * (sz))
 #define free Free
@@ -14,6 +13,7 @@
 
 #define TRY_FREE_AND_SET_NULL(ptr) if (ptr != NULL) FREE_AND_SET_NULL(ptr)
 
+#define HEAP_SIZE 0x1C000
 extern u8 gHeap[];
 
 void *Alloc(u32 size);
