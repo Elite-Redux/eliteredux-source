@@ -5476,7 +5476,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 u8 partner = BATTLE_PARTNER(commander);
                 gStatuses3[commander] |= STATUS3_SEMI_INVULNERABLE;
                 gStatuses4[partner] |= STATUS4_COMMANDED;
-                SetAbilityState(commander, ABILITY_COMMANDER, COMMANDER_ACTIVATING);
+                SetAbilityState(commander, ABILITY_COMMANDER, COMMANDER_ACTIVE);
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_COMMANDER;
                 gStackBattler1 = commander;
                 gStackBattler2 = partner;
