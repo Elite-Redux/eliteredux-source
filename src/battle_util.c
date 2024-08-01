@@ -12367,7 +12367,7 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return FALSE;
 }
 
-bool32 IsBattlerGrounded(u8 battlerId)
+static int CheckGroundingEffects(u8 battlerId)
 {
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
         return TRUE;
@@ -12379,23 +12379,41 @@ bool32 IsBattlerGrounded(u8 battlerId)
         return TRUE;
     else if (getMonotypeChampType() == TYPE_GROUND && GetBattlerSide(battlerId) == B_SIDE_PLAYER)
         return TRUE;
+    
+    return FALSE;
+}
 
-    else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
-        return FALSE;
-    else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
-        return FALSE;
-    else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
-        return FALSE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LEVITATE))
-        return FALSE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_AERIALIST))
-        return FALSE;
-	else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DRAGONFLY)) //Dragonfly
-        return FALSE;
-    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING))
-        return FALSE;
-    else
+static int CheckLevitatingEffects(u8 battlerId)
+{
+    if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
         return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
+        return TRUE;
+    else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
+        return TRUE;
+    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LEVITATE))
+        return TRUE;
+    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_AERIALIST))
+        return TRUE;
+	else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DRAGONFLY)) //Dragonfly
+        return TRUE;
+
+    return FALSE;
+}
+
+bool32 IsBattlerGroundedIgnoreType(u8 battlerId)
+{
+    if (CheckGroundingEffects(battlerId)) return TRUE;
+    if (CheckLevitatingEffects(battlerId)) return FALSE;
+    return TRUE;
+}
+
+bool32 IsBattlerGrounded(u8 battlerId)
+{
+    if (CheckGroundingEffects(battlerId)) return TRUE;
+    if (CheckLevitatingEffects(battlerId)) return FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING)) return FALSE;
+    return TRUE;
 }
 
 bool32 IsBattlerAlive(u8 battlerId)
@@ -14854,10 +14872,6 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         if (typeEffectivenessModifier <= UQ_4_12(0.5))
             MulModifier(&finalModifier, UQ_4_12(2.0));
         break;
-    case ABILITY_BONE_ZONE:
-        if (typeEffectivenessModifier <= UQ_4_12(0.5) && (gBattleMoves[move].flags & FLAG_BONE_BASED))
-            MulModifier(&finalModifier, UQ_4_12(2.0));
-        break;
     case ABILITY_SNIPER:
         if (isCrit)
             MulModifier(&finalModifier, UQ_4_12(1.5));
@@ -15394,7 +15408,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     if (recordAbilities && (illusionSpecies = GetIllusionMonSpecies(battlerDef)))
         TryNoticeIllusionInTypeEffectiveness(move, moveType, battlerAtk, battlerDef, modifier, illusionSpecies);
 
-    if (moveType == TYPE_GROUND && !IsBattlerGrounded(battlerDef)
+    if (moveType == TYPE_GROUND && !IsBattlerGroundedIgnoreType(battlerDef)
         && !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING)
         && !(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))) // Moves that ignore ground immunity
     {
