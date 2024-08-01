@@ -1362,8 +1362,20 @@ bool8 GetTrainerFlag(void)
         return FlagGet(GetTrainerAFlag());
 }
 
+void AddTrainerBattleWin(void){
+    u16 nbBattles;
+    nbBattles = GetTrainerBattleWins() + 1;
+    VarSet(VAR_TRACKCOUNT_WINS_HIGH, nbBattles >> 8);
+    VarSet(VAR_TRACKCOUNT_WINS_LOW, nbBattles & 0XFF);
+}
+
+u16 GetTrainerBattleWins(void){
+    return (VarGet(VAR_TRACKCOUNT_WINS_HIGH) << 8) | (VarGet(VAR_TRACKCOUNT_WINS_LOW));
+}
+
 static void SetBattledTrainersFlags(void)
 {
+    AddTrainerBattleWin();
     if (gTrainerBattleOpponent_B != 0)
         FlagSet(GetTrainerBFlag());
     FlagSet(GetTrainerAFlag());
