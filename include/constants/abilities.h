@@ -216,7 +216,7 @@
 #define ABILITY_STEELWORKER 200 // Boosts the power of Steel-type moves by 1.3x.
 #define ABILITY_BERSERK 201 // Boosts Sp. Atk by one stage when at 1/2 of max HP or lower.
 #define ABILITY_SLUSH_RUSH 202 // This Pokémon's Speed gets a 1.5x boost in hail.
-#define ABILITY_LONG_REACH 203 // Ups Phys. moves making contact by 1.2x + makes them non-contact.
+#define ABILITY_LONG_REACH 203 // Doesn't make contact. Boosts Phys. non-contact moves by 1.2x.
 #define ABILITY_LIQUID_VOICE 204 // Boosts own sound-based moves by 1.2x and makes them Water-type.
 #define ABILITY_TRIAGE 205 // Moves that have a healing effect gain +3 priority.
 #define ABILITY_GALVANIZE 206 // Normal-type moves become Elec.- type moves and get a 1.1x boost.
