@@ -5504,7 +5504,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_LEPASTRY] =
     {
         .size = 0x88,
-        .y_offset = 4,
+        .y_offset = 0,
     },
     [SPECIES_GYARADEATH] =
     {
@@ -5520,6 +5520,21 @@ const struct MonCoords gMonBackPicCoords[] =
     {
         .size = 0,
         .y_offset = 3,
+    },
+    [SPECIES_TORTEMPLE] =
+    {
+        .size = 0x86,
+        .y_offset = 0,
+    },
+    [SPECIES_BRONTONANA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_DREDWOOD] =
+    {
+        .size = 0x88,
+        .y_offset = 5,
     },
     [SPECIES_CALYREX_CLOUD_RIDER] =
     {
@@ -5939,7 +5954,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_VENUSAUR_MEGA] =
     {
         .size = 0,
-        .y_offset = 10,
+        .y_offset = 8,
     },
     [SPECIES_CHARIZARD_MEGA_X] =
     {

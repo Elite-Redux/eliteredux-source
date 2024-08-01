@@ -1309,6 +1309,9 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_GYARADEATH]      = _("Gyaradeath"),
     [SPECIES_GYARADEATH_MEGA_Y]      = _("Gyaradeath"),
     [SPECIES_GYARADEATH_MEGA_X]      = _("Gyaradeath"),
+    [SPECIES_TORTEMPLE]      = _("Tortemple"),
+    [SPECIES_BRONTONANA]      = _("Brontonana"),
+    [SPECIES_DREDWOOD]      = _("Dredwood"),
     [SPECIES_CLAWITZER_REDUX]    = _("Clawitzer"),
     // Special Mega + Primals
     [SPECIES_RAYQUAZA_MEGA]  = _("Rayquaza"),

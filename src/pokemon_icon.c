@@ -1199,6 +1199,9 @@ const u8 *const gMonIconTable[] =
     [SPECIES_GYARADEATH] = gMonIcon_Gyaradeath,
     [SPECIES_GYARADEATH_MEGA_X] = gMonIcon_GyaradeathMegaX,
     [SPECIES_GYARADEATH_MEGA_Y] = gMonIcon_GyaradeathMegaY,
+    [SPECIES_TORTEMPLE] = gMonIcon_Tortemple,
+    [SPECIES_BRONTONANA] = gMonIcon_Brontonana,
+    [SPECIES_DREDWOOD] = gMonIcon_Dredwood,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,
