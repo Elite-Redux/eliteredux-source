@@ -638,7 +638,7 @@ script LavaridgeTown_Gym_1F_EventScript_Flannery{
 }
 
 script LavaridgeTown_Gym_1F_EventScript_DEBUGPLEASEREMOVE{
-    msgbox(format("konbawa goshujin-sama {COLOR BLUE}><{COLOR DARK_GRAY} teehee, watashi wa Norman o debuggu chan {COLOR GREEN}desu{COLOR DARK_GRAY}.Release o ore no wasurenai de kudasai {COLOR BLUE}><{COLOR DARK_GRAY}"), MSGBOX_NPC)
+    msgbox(format("konbawa goshujin-sama {COLOR BLUE}><{COLOR DARK_GRAY} teehee, watashi wa Trolley-chan {COLOR GREEN}desu{COLOR DARK_GRAY}. Release o boku no wasurenai de kudasai {COLOR BLUE}><{COLOR DARK_GRAY}"), MSGBOX_NPC)
     setvar(VAR_PETALBURG_GYM_STATE, 6)
 	clearflag(FLAG_HIDE_PETALBURG_GYM_GREETER)
 }
