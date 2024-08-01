@@ -5509,17 +5509,17 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_GYARADEATH] =
     {
         .size = 0x88,
-        .y_offset = 5,
+        .y_offset = 0,
     },
     [SPECIES_GYARADEATH_MEGA_X] =
     {
         .size = 0,
-        .y_offset = 3,
+        .y_offset = 0,
     },
      [SPECIES_GYARADEATH_MEGA_Y] =
     {
         .size = 0,
-        .y_offset = 3,
+        .y_offset = 0,
     },
     [SPECIES_TORTEMPLE] =
     {
