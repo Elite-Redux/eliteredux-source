@@ -220,6 +220,7 @@ u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating);
 u32 GetBattlerHoldEffectParam(u8 battlerId);
 bool32 IsMoveMakingContact(u16 move, u8 battlerAtk);
 bool32 IsBattlerGrounded(u8 battlerId);
+bool32 IsBattlerGroundedIgnoreType(u8 battlerId);
 bool32 IsBattlerAlive(u8 battlerId);
 u8 GetBattleMonMoveSlot(struct BattlePokemon *battleMon, u16 move);
 u32 GetBattlerWeight(u8 battlerId);
@@ -314,6 +315,7 @@ u16 GetInnateInSlot(u16 species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 ability, u16 move);
 bool32 IsHealingMoveEffect(u16 effect);
+int IsMagicGuardProtected(int battler);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
