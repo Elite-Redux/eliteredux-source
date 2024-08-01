@@ -1775,3 +1775,8 @@ static const u16 sPolarticFormSpeciesIdTable[] = {
     SPECIES_POLARTIC_BLUEMOON,
     FORM_SPECIES_END,
 };
+static const u16 sArbokFormSpeciesIdTable[] = {
+    SPECIES_ARBOK,
+    SPECIES_ARBOK_MEGA,
+    FORM_SPECIES_END,
+};

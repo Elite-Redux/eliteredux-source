@@ -40998,7 +40998,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 2,
     },
 
-    [SPECIES_DREDWOOD] =
+[SPECIES_DREDWOOD] =
     {
     .baseHP        = 85,
     .baseAttack    = 100,
@@ -41020,6 +41020,32 @@ const struct BaseStats gBaseStats[] =
     .abilities = {ABILITY_VENGEANCE, ABILITY_CURSED_BODY, ABILITY_GRASSY_SURGE},
     .innates = {ABILITY_TOUGH_CLAWS, ABILITY_HARVEST, ABILITY_HAUNTED_SPIRIT},
     .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
+[SPECIES_ARBOK_MEGA] =
+    {
+    .baseHP        = 90,
+    .baseAttack    = 105,
+    .baseDefense   = 84,
+    .baseSpeed     = 80,
+    .baseSpAttack  = 65,
+    .baseSpDefense = 84,
+    .type1 = TYPE_POISON,
+    .type2 = TYPE_DARK,
+    .catchRate = 255,
+    .expYield = 157,
+    .evYield_Attack    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_DRAGON,
+    .abilities      = {ABILITY_MERCILESS, ABILITY_AMBUSH, ABILITY_INTIMIDATE},
+    .innates = {ABILITY_SOLENOGLYPHS, ABILITY_SHED_SKIN, ABILITY_COIL_UP},
+    .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = FALSE,
     .tier = 0,
     },

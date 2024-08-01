@@ -917,4 +917,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_GYARADEATH_MEGA_Y] = sGyaradeathFormSpeciesIdTable,
 
+    [SPECIES_ARBOK_MEGA] = sArbokFormSpeciesIdTable,
+
 };
