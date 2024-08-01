@@ -40945,7 +40945,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_TORTEMPLE] =
+[SPECIES_TORTEMPLE] =
     {
     .baseHP        = 70,
     .baseAttack    = 85,
@@ -40970,6 +40970,32 @@ const struct BaseStats gBaseStats[] =
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
     .tier = 4,
+    },
+
+[SPECIES_BRONTONANA] =
+    {
+    .baseHP        =  99,
+    .baseAttack    =  88,
+    .baseDefense   =  93,
+    .baseSpeed     =  51,
+    .baseSpAttack  = 92,
+    .baseSpDefense =  97,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_DRAGON,
+    .catchRate = 200,
+    .expYield = 161,
+    .evYield_HP    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 25,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_MONSTER,
+    .eggGroup2 = EGG_GROUP_GRASS,
+	.abilities = {ABILITY_RIPEN, ABILITY_AIR_BLOWER, ABILITY_UNBURDEN},
+	.innates = {ABILITY_AERIALIST, ABILITY_GIANT_WINGS, ABILITY_BIG_LEAVES},
+    .bodyColor = BODY_COLOR_GREEN,
+    .noFlip = FALSE,
+    .tier = 2,
     },
 
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
