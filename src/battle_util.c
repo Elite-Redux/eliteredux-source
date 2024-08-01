@@ -2830,10 +2830,10 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp)
     return hp * -1;
 }
 
-#define BATTLER_HAS_MAGIC_GUARD(battlerId) (GetBattlerAbility(battlerId) == ABILITY_MAGIC_GUARD || GetBattlerAbility(battlerId) == ABILITY_IMPENETRABLE || BattlerHasInnate(battlerId, ABILITY_MAGIC_GUARD) || BattlerHasInnate(battlerId, ABILITY_IMPENETRABLE))
+#define BATTLER_HAS_MAGIC_GUARD(battlerId) IsMagicGuardProtected(battlerId)
 
 #define MAGIC_GUARD_CHECK \
-if (ability == ABILITY_MAGIC_GUARD || ability == ABILITY_IMPENETRABLE || BattlerHasInnate(gActiveBattler, ABILITY_MAGIC_GUARD) || BattlerHasInnate(gActiveBattler, ABILITY_IMPENETRABLE)) \
+if (IsMagicGuardProtected(gActiveBattler)) \
 {\
     RecordAbilityBattle(gActiveBattler, ability);\
     gBattleStruct->turnEffectsTracker++;\
@@ -16787,4 +16787,14 @@ void MakePlayerTeamAsleep(void){
         if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL))
             SetMonData(&gPlayerParty[i], MON_DATA_STATUS, &status);
     }
+}
+
+int IsMagicGuardProtected(int battler)
+{
+    int ability = GetBattlerAbility(battler);
+
+    if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MAGIC_GUARD, ability)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_IMPENETRABLE, ability)) return TRUE;
+
+    return FALSE;
 }

@@ -3804,7 +3804,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattlescriptCurrInstr = BattleScript_AtkDefDown;
                 break;
             case MOVE_EFFECT_DEF_SPDEF_DOWN: // Close Combat
-                if (GetBattlerAbility(gBattlerAttacker) != ABILITY_BAD_COMPANY && !BattlerHasInnate(gBattlerAttacker, ABILITY_BAD_COMPANY)){
+                if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_BAD_COMPANY)){
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_DefSpDefDown;
                 }
@@ -3851,10 +3851,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             case MOVE_EFFECT_FLAME_BURST:
                 if (IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget)) &&
-				    GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)) != ABILITY_MAGIC_GUARD &&
-                    GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)) != ABILITY_IMPENETRABLE &&
-		            !BattlerHasInnate(BATTLE_PARTNER(gBattlerTarget), ABILITY_MAGIC_GUARD) &&
-		            !BattlerHasInnate(BATTLE_PARTNER(gBattlerTarget), ABILITY_IMPENETRABLE))
+				    !IsMagicGuardProtected(BATTLE_PARTNER(gBattlerTarget)))
                 {
                     gBattleMoveDamage = gBattleMons[BATTLE_PARTNER(gBattlerTarget)].hp / 4;
                     if (gBattleMoveDamage == 0)
@@ -5660,10 +5657,7 @@ static void Cmd_moveend(void)
             if (gRoundStructs[gBattlerAttacker].touchedProtectLike)
             {
                 if (gRoundStructs[gBattlerTarget].spikyShielded &&
-					GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD &&
-                    GetBattlerAbility(gBattlerAttacker) != ABILITY_IMPENETRABLE &&
-		            !BattlerHasInnate(gBattlerAttacker, ABILITY_MAGIC_GUARD) &&
-		            !BattlerHasInnate(gBattlerAttacker, ABILITY_IMPENETRABLE))
+					!IsMagicGuardProtected(gBattlerAttacker))
                 {
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
@@ -7246,10 +7240,7 @@ static void Cmd_switchineffects(void)
     }
     else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
         && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
-        && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD
-        && GetBattlerAbility(gActiveBattler) != ABILITY_IMPENETRABLE
-		&& !BattlerHasInnate(gActiveBattler, ABILITY_MAGIC_GUARD)
-		&& !BattlerHasInnate(gActiveBattler, ABILITY_IMPENETRABLE)
+        && !IsMagicGuardProtected(gActiveBattler)
         && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
         && IsBattlerGrounded(gActiveBattler))
     {
@@ -7264,10 +7255,7 @@ static void Cmd_switchineffects(void)
     else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK_DAMAGED)
         && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK)
         && IsBattlerAffectedByHazards(gActiveBattler, gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_ROCK)
-        && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD
-        && GetBattlerAbility(gActiveBattler) != ABILITY_IMPENETRABLE
-		&& !BattlerHasInnate(gActiveBattler, ABILITY_MAGIC_GUARD)
-		&& !BattlerHasInnate(gActiveBattler, ABILITY_IMPENETRABLE))
+        && !IsMagicGuardProtected(gActiveBattler))
     {
         gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
         gBattleMoveDamage = GetStealthHazardDamage(gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType, gActiveBattler);
@@ -13081,10 +13069,7 @@ static void Cmd_weatherdamage(void)
 
     gBattleMoveDamage = 0;
     if (IsBattlerAlive(gBattlerAttacker) && WEATHER_HAS_EFFECT  // Sandstorm damage
-	    && ability != ABILITY_MAGIC_GUARD
-        && ability != ABILITY_IMPENETRABLE
-		&& !BattlerHasInnate(gBattlerAttacker, ABILITY_MAGIC_GUARD)
-		&& !BattlerHasInnate(gBattlerAttacker, ABILITY_IMPENETRABLE))
+        && !(IsMagicGuardProtected(gBattlerAttacker)))
     {
         if (gBattleWeather & WEATHER_SANDSTORM_ANY)
         {
@@ -13092,10 +13077,10 @@ static void Cmd_weatherdamage(void)
                 && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)
                 && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
                 && !IsAbilityOnSide(gBattlerAttacker, ABILITY_DESERT_CLOAK)
-                && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_VEIL)
-                && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_FORCE)
-                && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_RUSH)
-                && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_OVERCOAT)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SAND_VEIL, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SAND_FORCE, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SAND_RUSH, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_OVERCOAT, ability)
                 && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
                 && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
             {
@@ -13106,7 +13091,7 @@ static void Cmd_weatherdamage(void)
         }
         if (gBattleWeather & WEATHER_HAIL_ANY) // Hail damage
         {
-            if ((ability == ABILITY_ICE_BODY || BattlerHasInnate(gBattlerAttacker, ABILITY_ICE_BODY))
+            if (BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_ICE_BODY, ability)
                 && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
                 && !BATTLER_MAX_HP(gBattlerAttacker)
                 && !BATTLER_HEALING_BLOCKED(gBattlerAttacker))
