@@ -11056,6 +11056,11 @@ extern const u32 gMonBackPic_ArbokMega[];
 extern const u32 gMonPalette_ArbokMega[];
 extern const u32 gMonShinyPalette_ArbokMega[];
 extern const u8  gMonIcon_ArbokMega[];
+extern const u32 gMonFrontPic_GolisopodMega[];
+extern const u32 gMonBackPic_GolisopodMega[];
+extern const u32 gMonPalette_GolisopodMega[];
+extern const u32 gMonShinyPalette_GolisopodMega[];
+extern const u8  gMonIcon_GolisopodMega[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];

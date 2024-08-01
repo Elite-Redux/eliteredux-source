@@ -41050,7 +41050,34 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_KINGAMBIT_REDUX_MEGA] =
+[SPECIES_GOLISOPOD_MEGA] =
+    {
+    .baseHP        = 75,
+    .baseAttack    = 125,
+    .baseDefense   = 140,
+    .baseSpeed     = 40,
+    .baseSpAttack  = 60,
+    .baseSpDefense = 90,
+    .type1 = TYPE_BUG,
+    .type2 = TYPE_WATER,
+    .catchRate = 255,
+    .expYield = 186,
+    .evYield_Defense   = 2,
+    .item1 = ITEM_GREEN_SHARD,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_WATER_3,
+    .abilities = {ABILITY_EMERGENCY_EXIT, ABILITY_TOUGH_CLAWS, ABILITY_PREDATOR},
+    .innates = {ABILITY_SHELL_ARMOR, ABILITY_COWARD, ABILITY_HYPER_CUTTER},
+    .bodyColor = BODY_COLOR_GRAY,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
+[SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
     .baseHP        = 90,
     .baseAttack    =  125,

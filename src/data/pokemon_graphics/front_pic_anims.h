@@ -351,6 +351,11 @@ static const union AnimCmd sAnim_ARBOK_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_GOLISOPOD_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_TYRANITAR_MEGA_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -757,6 +762,12 @@ static const union AnimCmd *const sAnims_ARBOK_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_ARBOK_MEGA_1,
 };
+
+static const union AnimCmd *const sAnims_GOLISOPOD_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GOLISOPOD_MEGA_1,
+};
+
 
 static const union AnimCmd *const sAnims_TYRANITAR_MEGA_REDUX[] ={
     sAnim_GeneralFrame0,
@@ -20194,6 +20205,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(BRONTONANA),
     ANIM_CMD(DREDWOOD),
     ANIM_CMD(ARBOK_MEGA),
+    ANIM_CMD(GOLISOPOD_MEGA),
     ANIM_CMD(SCIZOR_REDUX),
     ANIM_CMD(TINKATON_MEGA),
     ANIM_CMD(KARTANA_FALLEN),

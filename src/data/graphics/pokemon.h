@@ -7411,6 +7411,13 @@ const u32 gMonPalette_WigglytuffMega[]             = INCBIN_U32("graphics/pokemo
 const u32 gMonShinyPalette_WigglytuffMega[]        = INCBIN_U32("graphics/pokemon/wigglytuff/mega/shiny.gbapal.lz");
 const u8  gMonIcon_WigglytuffMega[]                = INCBIN_U8("graphics/pokemon/wigglytuff/mega/icon.4bpp");
 
+const u32 gMonFrontPic_GolisopodMega[]            = INCBIN_U32("graphics/pokemon/golisopod/mega/front.4bpp.lz");
+const u32 gMonBackPic_GolisopodMega[]             = INCBIN_U32("graphics/pokemon/golisopod/mega/back.4bpp.lz");
+const u32 gMonPalette_GolisopodMega[]             = INCBIN_U32("graphics/pokemon/golisopod/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_GolisopodMega[]        = INCBIN_U32("graphics/pokemon/golisopod/mega/shiny.gbapal.lz");
+const u8  gMonIcon_GolisopodMega[]                = INCBIN_U8("graphics/pokemon/golisopod/mega/icon.4bpp");
+
+
 const u32 gMonFrontPic_WigglytuffAlpha[]            = INCBIN_U32("graphics/pokemon/wigglytuff/alpha/front.4bpp.lz");
 const u32 gMonBackPic_WigglytuffAlpha[]             = INCBIN_U32("graphics/pokemon/wigglytuff/alpha/back.4bpp.lz");
 const u32 gMonPalette_WigglytuffAlpha[]             = INCBIN_U32("graphics/pokemon/wigglytuff/alpha/normal.gbapal.lz");

@@ -1103,6 +1103,7 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(BRONTONANA, gMonPalette_Brontonana),
     SPECIES_PAL(DREDWOOD, gMonPalette_Dredwood),
     SPECIES_PAL(ARBOK_MEGA, gMonPalette_ArbokMega),
+    SPECIES_PAL(GOLISOPOD_MEGA, gMonPalette_GolisopodMega),
     SPECIES_PAL(TINKATON_MEGA, gMonPalette_Tinkaton_Mega),
     SPECIES_PAL(KARTANA_FALLEN, gMonPalette_Kartana_Fallen),
     SPECIES_PAL(KINGAMBIT_REDUX_MEGA, gMonPalette_Kingambit_Redux_Mega),

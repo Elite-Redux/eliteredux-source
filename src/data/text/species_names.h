@@ -1313,6 +1313,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_BRONTONANA]      = _("Brontonana"),
     [SPECIES_DREDWOOD]      = _("Dredwood"),
     [SPECIES_ARBOK_MEGA]      = _("Arbok"),
+    [SPECIES_GOLISOPOD_MEGA]      = _("Golisopod"),
     [SPECIES_CLAWITZER_REDUX]    = _("Clawitzer"),
     // Special Mega + Primals
     [SPECIES_RAYQUAZA_MEGA]  = _("Rayquaza"),
