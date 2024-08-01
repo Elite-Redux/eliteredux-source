@@ -3580,11 +3580,11 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_GENERIC_BATTLER_TIMERS:
-            if (!gVolatileStructs[gActiveBattler].started.fear) gVolatileStructs[i].fear = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.rapidResponse) gVolatileStructs[i].rapidResponse = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.readiedAction) gVolatileStructs[i].readiedAction = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.showdownMode) gVolatileStructs[i].showdownMode = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.violentRush) gVolatileStructs[i].violentRush = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.fear) gVolatileStructs[gActiveBattler].fear = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.rapidResponse) gVolatileStructs[gActiveBattler].rapidResponse = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.readiedAction) gVolatileStructs[gActiveBattler].readiedAction = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.showdownMode) gVolatileStructs[gActiveBattler].showdownMode = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.violentRush) gVolatileStructs[gActiveBattler].violentRush = FALSE;
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_BATTLER_COUNT:  // done
