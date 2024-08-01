@@ -7537,6 +7537,12 @@ const u32 gMonPalette_Brontonana[]           = INCBIN_U32("graphics/pokemon/bron
 const u32 gMonShinyPalette_Brontonana[]      = INCBIN_U32("graphics/pokemon/brontonana/shiny.gbapal.lz");
 const u8  gMonIcon_Brontonana[]              = INCBIN_U8("graphics/pokemon/brontonana/icon.4bpp");
 
+const u32 gMonFrontPic_Dredwood[]          = INCBIN_U32("graphics/pokemon/dredwood/front.4bpp.lz");
+const u32 gMonBackPic_Dredwood[]           = INCBIN_U32("graphics/pokemon/dredwood/back.4bpp.lz");
+const u32 gMonPalette_Dredwood[]           = INCBIN_U32("graphics/pokemon/dredwood/normal.gbapal.lz");
+const u32 gMonShinyPalette_Dredwood[]      = INCBIN_U32("graphics/pokemon/dredwood/shiny.gbapal.lz");
+const u8  gMonIcon_Dredwood[]              = INCBIN_U8("graphics/pokemon/dredwood/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

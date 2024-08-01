@@ -40998,6 +40998,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 2,
     },
 
+    [SPECIES_DREDWOOD] =
+    {
+    .baseHP        = 85,
+    .baseAttack    = 100,
+    .baseDefense   = 86,
+    .baseSpeed     = 56,
+    .baseSpAttack  = 65,
+    .baseSpDefense = 92,
+    .type1 = TYPE_GHOST,
+    .type2 = TYPE_GRASS,
+    .catchRate = 255,
+    .expYield = 166,
+    .evYield_Attack    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_GRASS,
+    .eggGroup2 = EGG_GROUP_AMORPHOUS,
+    .abilities = {ABILITY_VENGEANCE, ABILITY_CURSED_BODY, ABILITY_GRASSY_SURGE},
+    .innates = {ABILITY_TOUGH_CLAWS, ABILITY_HARVEST, ABILITY_HAUNTED_SPIRIT},
+    .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
     [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
         .baseHP        = 110,

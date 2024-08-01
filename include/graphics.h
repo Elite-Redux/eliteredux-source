@@ -11046,6 +11046,11 @@ extern const u32 gMonBackPic_Brontonana[];
 extern const u32 gMonPalette_Brontonana[];
 extern const u32 gMonShinyPalette_Brontonana[];
 extern const u8  gMonIcon_Brontonana[];
+extern const u32 gMonFrontPic_Dredwood[];
+extern const u32 gMonBackPic_Dredwood[];
+extern const u32 gMonPalette_Dredwood[];
+extern const u32 gMonShinyPalette_Dredwood[];
+extern const u8  gMonIcon_Dredwood[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];

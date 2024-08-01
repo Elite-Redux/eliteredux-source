@@ -131,6 +131,11 @@ static const union AnimCmd sAnim_BRONTONANA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_DREDWOOD_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -516,6 +521,11 @@ static const union AnimCmd *const sAnims_TORTEMPLE[] ={
 static const union AnimCmd *const sAnims_BRONTONANA[] ={
     sAnim_GeneralFrame0,
     sAnim_BRONTONANA_1,
+};
+
+static const union AnimCmd *const sAnims_DREDWOOD[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DREDWOOD_1,
 };
 
 static const union AnimCmd *const sAnims_POLARTIC[] ={
@@ -20172,6 +20182,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(GYARADEATH_MEGA_Y),
     ANIM_CMD(TORTEMPLE),
     ANIM_CMD(BRONTONANA),
+    ANIM_CMD(DREDWOOD),
     ANIM_CMD(SCIZOR_REDUX),
     ANIM_CMD(TINKATON_MEGA),
     ANIM_CMD(KARTANA_FALLEN),
