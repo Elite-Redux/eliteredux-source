@@ -1290,6 +1290,12 @@ const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
 	        else
 		        return SootopolisCity_Gym_B1F_Text_DaphneDefeat;
         break;	
+        case TAG_TEAM_COLE_KEEGAN:
+        	if(!isTrainerB)
+		        return LavaridgeTown_Gym_1F_Text_ColeDefeat;
+	        else
+		        return LavaridgeTown_Gym_B1F_Text_KeeganDefeat;
+        break;	
     }
         
 }

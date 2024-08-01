@@ -502,6 +502,7 @@
 #define TAG_TEAM_DAPHNE_CONNIE          19
 #define TAG_TEAM_CONNIE_ANDREA          20
 #define TAG_TEAM_ANDREA_DAPHNE          21
+#define TAG_TEAM_COLE_KEEGAN            22
 
 // VAR_BATTLE_FIELD_EFFECT_TYPE
 #define BATTLE_FIELD_EFFECT_NONE            0

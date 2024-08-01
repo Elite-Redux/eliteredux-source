@@ -406,7 +406,8 @@ extern const u8 SootopolisCity_Gym_B1F_Text_OliviaDefeat[];
 extern const u8 SootopolisCity_Gym_B1F_Text_DaphneDefeat[];
 extern const u8 SootopolisCity_Gym_B1F_Text_ConnieDefeat[];
 extern const u8 SootopolisCity_Gym_B1F_Text_AndreaDefeat[];
-
+extern const u8 LavaridgeTown_Gym_1F_Text_ColeDefeat[];
+extern const u8 LavaridgeTown_Gym_B1F_Text_KeeganDefeat[];
 //field effects
 extern const u8 EventScript_UseStrength[];
 extern const u8 EventScript_FailSweetScent[];

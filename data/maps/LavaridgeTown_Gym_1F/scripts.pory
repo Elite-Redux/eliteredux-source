@@ -223,7 +223,7 @@ LavaridgeTown_Gym_1F_Text_ColeIntro: @ 81FEADE
 	.string "Owowowowow!\n"
 	.string "Yikes, it's hot!$"
 
-LavaridgeTown_Gym_1F_Text_ColeDefeat: @ 81FEAFB
+LavaridgeTown_Gym_1F_Text_ColeDefeat:: @ 81FEAFB
 	.string "I'm blinded by sweat in my eyes…$"
 
 LavaridgeTown_Gym_1F_Text_ColePostBattle: @ 81FEB1C
@@ -252,7 +252,7 @@ LavaridgeTown_Gym_B1F_Text_KeeganIntro: @ 81FEC31
 	.string "your willpower is an important ability\l"
 	.string "for all Trainers.$"
 
-LavaridgeTown_Gym_B1F_Text_KeeganDefeat: @ 81FECE3
+LavaridgeTown_Gym_B1F_Text_KeeganDefeat:: @ 81FECE3
 	.string "Play with fire, and be burned…$"
 
 LavaridgeTown_Gym_B1F_Text_KeeganPostBattle: @ 81FED02
@@ -495,10 +495,7 @@ script LavaridgeTown_Gym_B1F_EventScript_Keegan{
 	if (defeated(TRAINER_KEEGAN)){
 		msgbox(LavaridgeTown_Gym_B1F_Text_KeeganPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("The fog around here is very thick, luckily we're all used to it and can see {COLOR GREEN} perfectly fine. {COLOR DARK_GRAY}."))
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_KEEGAN, LavaridgeTown_Gym_B1F_Text_KeeganIntro , LavaridgeTown_Gym_B1F_Text_KeeganDefeat)
-		}
+		goto(LavaridgeTown_Gym_1F_EventScript_ColeAndKeegan)
 	}
 	release
 	end
@@ -510,13 +507,18 @@ script LavaridgeTown_Gym_1F_EventScript_Cole{
 	if (defeated(TRAINER_COLE)){
 		msgbox(LavaridgeTown_Gym_1F_Text_ColePostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("I hope you're ready for me. My pokemon will {COLOR GREEN} leave you burned!{COLOR DARK_GRAY}"))
-		if (var(VAR_RESULT)){
-			trainerbattle_single(TRAINER_COLE, LavaridgeTown_Gym_1F_Text_ColeIntro , LavaridgeTown_Gym_1F_Text_ColeDefeat)
-		}
+		goto(LavaridgeTown_Gym_1F_EventScript_ColeAndKeegan)
 	}
 	release
 	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_ColeAndKeegan{
+	yesnobattle(format("I hope you're ready for me. My pokemon will {COLOR GREEN} leave you burned!{COLOR DARK_GRAY}
+The fog around here is very thick, luckily we're all used to it and can see {COLOR GREEN} perfectly fine. {COLOR DARK_GRAY}."))
+		if (var(VAR_RESULT)){
+			starttagbattle(TRAINER_COLE, TRAINER_KEEGAN, TAG_TEAM_COLE_KEEGAN, 0)
+		}
 }
 
 script LavaridgeTown_Gym_1F_EventScript_Gerald{
@@ -584,7 +586,7 @@ script LavaridgeTown_Gym_EventScript_CheckTrainers{
 		registerbattleevent(BATTLE_EVENT_STEADY_ACCURACY)
     }
     if (!defeated(TRAINER_COLE)){
-		//registerbattleevent(BATTLE_EVENT_)
+		registerbattleevent(BATTLE_EVENT_LAST_BURNED, 2)
     }
     if (!defeated(TRAINER_GERALD)){
 		registerbattleevent(BATTLE_EVENT_POSTURE_DEFENSE)
@@ -617,8 +619,7 @@ script LavaridgeTown_Gym_1F_EventScript_Flannery{
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
 	adddefeatedcount(TRAINER_JEFF, 1)  
 	adddefeatedcount(TRAINER_JACE) 
-	adddefeatedcount(TRAINER_ELI) 
-	adddefeatedcount(TRAINER_KEEGAN)
+	adddefeatedcount(TRAINER_ELI) // TRAINER_KEEGAN 
 	adddefeatedcount(TRAINER_COLE)  
 	adddefeatedcount(TRAINER_GERALD)
 	adddefeatedcount(TRAINER_AXLE) 
@@ -627,7 +628,7 @@ script LavaridgeTown_Gym_1F_EventScript_Flannery{
         case 0:
             trainerbattle_single(TRAINER_FLANNERY_1 LavaridgeTown_Gym_1F_Text_FlanneryIntro0, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
         break
-        case 8:
+        case 7:
             trainerbattle_single(TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntroAll, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
         break
         default:
@@ -653,24 +654,24 @@ script LavaridgeTown_Gym_1F_EventScript_AskResetTrainers{
 script LavaridgeTown_Gym_1F_EventScript_ResetAllTrainers{
 	cleartrainerflag(TRAINER_JEFF)
 	cleartrainerflag(TRAINER_COLE)
+	cleartrainerflag(TRAINER_KEEGAN)
 	cleartrainerflag(TRAINER_ELI)
 	cleartrainerflag(TRAINER_GERALD)
 	cleartrainerflag(TRAINER_AXLE)
 	cleartrainerflag(TRAINER_JACE)
 	cleartrainerflag(TRAINER_DANIELLE)
-	cleartrainerflag(TRAINER_KEEGAN)
 	cleartrainerflag(TRAINER_FLANNERY_1)
 	return
 }
 
-movement LavaridgeTown_Gym_1F_Movement_Jeff{
+movement LavaridgeTown_Gym_1F_Movement_ColeAndKeegan{
+	walk_fastest_right * 2
 	walk_fastest_up * 8
-	walk_fastest_right * 3
 }
 
-movement LavaridgeTown_Gym_1F_Movement_Cole{
-	walk_fastest_left * 3
+movement LavaridgeTown_Gym_1F_Movement_Axle{
 	walk_fastest_up * 5
+	walk_fastest_left * 2
 }
 
 movement LavaridgeTown_Gym_1F_Movement_Eli{
@@ -681,21 +682,19 @@ movement LavaridgeTown_Gym_1F_Movement_Gerald{
 	walk_fastest_left * 3
 }
 
-movement LavaridgeTown_Gym_1F_Movement_Axle{
-	walk_fastest_down * 3
-}
-
 movement LavaridgeTown_Gym_1F_Movement_Jace{
-	walk_fastest_down * 3
+	walk_fastest_down * 5
 }
 
 movement LavaridgeTown_Gym_1F_Movement_Danielle{
-	walk_fastest_down * 3
+	walk_fastest_down * 5
 }
 
-movement LavaridgeTown_Gym_1F_Movement_Keegan{
+movement LavaridgeTown_Gym_1F_Movement_Jeff{
+	walk_fastest_up * 1
 	walk_fastest_right * 5
 }
+
 
 movement LavaridgeTown_Gym_1F_Movement_Flannery{
 	walk_fastest_right * 1
@@ -712,14 +711,13 @@ movement LavaridgeTown_Gym_1F_Movement_Clyde{
 script LavaridgeTown_Gym_1F_EventScript_SelectTrainers{
 	special(SpawnCameraObject)
 	selecttrainercameraoffset
-	selecttrainer(LavaridgeTown_Gym_1F_Movement_Jeff, "Jeff", TRAINER_JEFF)
-	selecttrainer(LavaridgeTown_Gym_1F_Movement_Cole, "Cole", TRAINER_COLE)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_ColeAndKeegan, "Cole & Keegan", TRAINER_COLE, TRAINER_KEEGAN)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Axle, "Axle", TRAINER_AXLE)
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Eli, "Eli", TRAINER_ELI)
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Gerald, "Gerald", TRAINER_GERALD)
-	selecttrainer(LavaridgeTown_Gym_1F_Movement_Axle, "Axle", TRAINER_AXLE)
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Jace, "Jace", TRAINER_JACE)
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Danielle, "Danielle", TRAINER_DANIELLE)
-	selecttrainer(LavaridgeTown_Gym_1F_Movement_Keegan, "Keegan", TRAINER_KEEGAN)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Jeff, "Jeff", TRAINER_JEFF)
 	selecttrainer(LavaridgeTown_Gym_1F_Movement_Flannery, "Flannery", TRAINER_FLANNERY_1)
 	applymovement(OBJ_EVENT_ID_CAMERA, LavaridgeTown_Gym_1F_Movement_Clyde)
 	waitmovement(0)
