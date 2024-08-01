@@ -450,7 +450,7 @@ script LavaridgeTown_Gym_B1F_EventScript_Jeff{
 	if (defeated(TRAINER_JEFF)){
 		msgbox(LavaridgeTown_Gym_B1F_Text_JeffPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("As the battle goes on my flames {COLOR GREEN} will only get hotter! {COLOR DARK_GRAY} Hope you're prepared for a wildfire."))
+		yesnobattle(format("As the battle goes on my flames {COLOR GREEN}will only get hotter!{COLOR DARK_GRAY} Hope you're prepared for a wildfire."))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_JEFF, LavaridgeTown_Gym_B1F_Text_JeffIntro , LavaridgeTown_Gym_B1F_Text_JeffDefeat)
 		}
@@ -465,7 +465,7 @@ script LavaridgeTown_Gym_B1F_EventScript_Jace{
 	if (defeated(TRAINER_JACE)){
 		msgbox(LavaridgeTown_Gym_B1F_Text_JacePostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("Take care you don't breathe in too much of this smoke, it's extremely {COLOR GREEN} toxic {COLOR DARK_GRAY}."))
+		yesnobattle(format("Take care you don't breathe in too much of this smoke, it's extremely {COLOR GREEN}toxic{COLOR DARK_GRAY}."))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_JACE, LavaridgeTown_Gym_B1F_Text_JaceIntro , LavaridgeTown_Gym_B1F_Text_JaceDefeat)
 		}
@@ -480,7 +480,7 @@ script LavaridgeTown_Gym_B1F_EventScript_Eli{
 	if (defeated(TRAINER_ELI)){
 		msgbox(LavaridgeTown_Gym_B1F_Text_EliPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("I've read that trolls {COLOR GREEN} can't heal {COLOR DARK_GRAY} when attacked with fire. Don't you think fantasy is amazing?"))
+		yesnobattle(format("I've read that trolls {COLOR GREEN}can't heal{COLOR DARK_GRAY} when attacked with fire. Don't you think fantasy is amazing?"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_ELI, LavaridgeTown_Gym_B1F_Text_EliIntro , LavaridgeTown_Gym_B1F_Text_EliDefeat)
 		}
@@ -514,8 +514,8 @@ script LavaridgeTown_Gym_1F_EventScript_Cole{
 }
 
 script LavaridgeTown_Gym_1F_EventScript_ColeAndKeegan{
-	yesnobattle(format("I hope you're ready for me. My pokemon will {COLOR GREEN} leave you burned!{COLOR DARK_GRAY}
-The fog around here is very thick, luckily we're all used to it and can see {COLOR GREEN} perfectly fine. {COLOR DARK_GRAY}."))
+	yesnobattle(format("I hope you're ready for me. My pokemon will {COLOR GREEN}leave you burned!{COLOR DARK_GRAY}
+The fog around here is very thick, luckily we're all used to it and can see {COLOR GREEN}perfectly fine{COLOR DARK_GRAY}."))
 		if (var(VAR_RESULT)){
 			starttagbattle(TRAINER_COLE, TRAINER_KEEGAN, TAG_TEAM_COLE_KEEGAN, 0)
 		}
@@ -527,7 +527,7 @@ script LavaridgeTown_Gym_1F_EventScript_Gerald{
 	if (defeated(TRAINER_GERALD)){
 		msgbox(LavaridgeTown_Gym_1F_Text_GeraldPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("They say that fire types are often frail, but through hard work even they can put up a {COLOR GREEN} solid defense.{COLOR DARK_GRAY}"))
+		yesnobattle(format("They say that fire types are often frail, but through hard work even they can put up a {COLOR GREEN}solid defense.{COLOR DARK_GRAY}"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_GERALD, LavaridgeTown_Gym_1F_Text_GeraldIntro , LavaridgeTown_Gym_1F_Text_GeraldDefeat)
 		}
@@ -542,7 +542,7 @@ script LavaridgeTown_Gym_1F_EventScript_Axle{
 	if (defeated(TRAINER_AXLE)){
 		msgbox(LavaridgeTown_Gym_1F_Text_AxlePostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("Flames are amazing! Just give them a little fuel and they can burn for ages, doesn't that get you all {COLOR GREEN} Psyched Up {COLOR DARK_GRAY} for a battle?"))
+		yesnobattle(format("Flames are amazing! Just give them a little fuel and they can burn for ages, doesn't that get you all {COLOR GREEN}Psyched Up{COLOR DARK_GRAY} for a battle?"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_AXLE, LavaridgeTown_Gym_1F_Text_AxleIntro , LavaridgeTown_Gym_1F_Text_AxleDefeat)
 		}
@@ -557,7 +557,7 @@ script LavaridgeTown_Gym_1F_EventScript_Danielle{
 	if (defeated(TRAINER_DANIELLE)){
 		msgbox(LavaridgeTown_Gym_1F_Text_DaniellePostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("I hope you're ready my passion burns at molten temperatures {COLOR GREEN} my flames are white hot!{COLOR DARK_GRAY} "))
+		yesnobattle(format("I hope you're ready my passion burns at molten temperatures {COLOR GREEN}my flames are white hot!{COLOR DARK_GRAY} "))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_DANIELLE, LavaridgeTown_Gym_1F_Text_DanielleIntro , LavaridgeTown_Gym_1F_Text_DanielleDefeat)
 		}

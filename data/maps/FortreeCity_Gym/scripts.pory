@@ -372,7 +372,7 @@ script FortreeCity_Gym_EventScript_Humberto{
 	if (defeated(TRAINER_HUMBERTO)){
 		msgbox(FortreeCity_Gym_Text_HumbertoPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("The winds in this gym are crazy! My pokémon are able to use it to {COLOR GREEN} protect them {COLOR DARK_GRAY} from attacks so I hope you know what you're doing!"))
+		yesnobattle(format("The winds in this gym are crazy! My pokémon are able to use it to {COLOR GREEN}protect them{COLOR DARK_GRAY} from attacks so I hope you know what you're doing!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_HUMBERTO, FortreeCity_Gym_Text_HumbertoIntro , FortreeCity_Gym_Text_HumbertoDefeat)
 		}
