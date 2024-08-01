@@ -11061,6 +11061,17 @@ extern const u32 gMonBackPic_GolisopodMega[];
 extern const u32 gMonPalette_GolisopodMega[];
 extern const u32 gMonShinyPalette_GolisopodMega[];
 extern const u8  gMonIcon_GolisopodMega[];
+extern const u32 gMonFrontPic_RapidashMega[];
+extern const u32 gMonBackPic_RapidashMega[];
+extern const u32 gMonPalette_RapidashMega[];
+extern const u32 gMonShinyPalette_RapidashMega[];
+extern const u8  gMonIcon_RapidashMega[];
+extern const u32 gMonFrontPic_RapidashMegaGalarian[];
+extern const u32 gMonBackPic_RapidashMegaGalarian[];
+extern const u32 gMonPalette_RapidashMegaGalarian[];
+extern const u32 gMonShinyPalette_RapidashMegaGalarian[];
+extern const u8  gMonIcon_RapidashMegaGalarian[];
+
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];

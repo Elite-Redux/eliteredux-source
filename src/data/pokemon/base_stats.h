@@ -41077,6 +41077,59 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_RAPIDASH_MEGA] =
+    {
+    .baseHP        = 85,
+    .baseAttack    = 110,
+    .baseDefense   = 70,
+    .baseSpeed     = 120, // 105
+    .baseSpAttack  = 75, // 80
+    .baseSpDefense = 80,
+    .type1 = TYPE_FIRE,
+    .type2 = TYPE_FIRE,
+    .catchRate = 255,
+    .expYield = 175,
+    .evYield_Speed     = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_FIELD,
+    .abilities = {ABILITY_RECKLESS, ABILITY_TURBOBLAZE, ABILITY_STRIKER},
+    .innates = {ABILITY_IMMOLATE, ABILITY_SPEED_FORCE, ABILITY_FLAME_BODY},
+    .bodyColor = BODY_COLOR_YELLOW,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
+[SPECIES_RAPIDASH_MEGA_GALARIAN] =
+    {
+    .baseHP        =  85,
+    .baseAttack    =  110,
+    .baseDefense   =  70,
+    .baseSpeed     =  120,
+    .baseSpAttack  =  75,
+    .baseSpDefense =  80,
+    .type1 = TYPE_FIRE,  // WAS PSYCHIC
+    .type2 = TYPE_FAIRY,
+    .catchRate = 255,
+    .expYield = 175,
+    .evYield_Speed     = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_FIELD,
+	.abilities = {ABILITY_DAZZLING, ABILITY_PASTEL_VEIL, ABILITY_SPEED_FORCE},
+	.innates = {ABILITY_PIXILATE, ABILITY_STRIKER, ABILITY_MIGHTY_HORN},
+    .bodyColor = BODY_COLOR_WHITE,
+    .noFlip = FALSE,
+    .flags = F_GALARIAN_FORM,
+    .tier = 0,
+    },
+
 [SPECIES_KINGAMBIT_REDUX_MEGA] =
     {
     .baseHP        = 90,

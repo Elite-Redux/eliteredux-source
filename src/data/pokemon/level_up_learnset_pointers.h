@@ -1618,6 +1618,9 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_BRONTONANA] = sBrontonanaLevelUpLearnset,
     [SPECIES_DREDWOOD] = sDredwoodLevelUpLearnset,
     [SPECIES_ARBOK_MEGA] = sArbokLevelUpLearnset,
+    [SPECIES_GOLISOPOD_MEGA] = sGolisopodLevelUpLearnset,
+    [SPECIES_RAPIDASH_MEGA] = sRapidashLevelUpLearnset,
+    [SPECIES_RAPIDASH_MEGA_GALARIAN] = sRapidashGalarianLevelUpLearnset,
     [SPECIES_MINCCINO_REDUX] = sMinccino_ReduxLevelUpLearnset,
     [SPECIES_CINCCINO_REDUX] = sCinccino_ReduxLevelUpLearnset,
 };

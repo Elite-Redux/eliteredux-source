@@ -7417,6 +7417,17 @@ const u32 gMonPalette_GolisopodMega[]             = INCBIN_U32("graphics/pokemon
 const u32 gMonShinyPalette_GolisopodMega[]        = INCBIN_U32("graphics/pokemon/golisopod/mega/shiny.gbapal.lz");
 const u8  gMonIcon_GolisopodMega[]                = INCBIN_U8("graphics/pokemon/golisopod/mega/icon.4bpp");
 
+const u32 gMonFrontPic_RapidashMega[]            = INCBIN_U32("graphics/pokemon/rapidash/mega/front.4bpp.lz");
+const u32 gMonBackPic_RapidashMega[]             = INCBIN_U32("graphics/pokemon/rapidash/mega/back.4bpp.lz");
+const u32 gMonPalette_RapidashMega[]             = INCBIN_U32("graphics/pokemon/rapidash/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_RapidashMega[]        = INCBIN_U32("graphics/pokemon/rapidash/mega/shiny.gbapal.lz");
+const u8  gMonIcon_RapidashMega[]                = INCBIN_U8("graphics/pokemon/rapidash/mega/icon.4bpp");
+
+const u32 gMonFrontPic_RapidashMegaGalarian[]            = INCBIN_U32("graphics/pokemon/rapidash/galarian_mega/front.4bpp.lz");
+const u32 gMonBackPic_RapidashMegaGalarian[]             = INCBIN_U32("graphics/pokemon/rapidash/galarian_mega/back.4bpp.lz");
+const u32 gMonPalette_RapidashMegaGalarian[]             = INCBIN_U32("graphics/pokemon/rapidash/galarian_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_RapidashMegaGalarian[]        = INCBIN_U32("graphics/pokemon/rapidash/galarian_mega/shiny.gbapal.lz");
+const u8  gMonIcon_RapidashMegaGalarian[]                = INCBIN_U8("graphics/pokemon/rapidash/galarian_mega/icon.4bpp");
 
 const u32 gMonFrontPic_WigglytuffAlpha[]            = INCBIN_U32("graphics/pokemon/wigglytuff/alpha/front.4bpp.lz");
 const u32 gMonBackPic_WigglytuffAlpha[]             = INCBIN_U32("graphics/pokemon/wigglytuff/alpha/back.4bpp.lz");
