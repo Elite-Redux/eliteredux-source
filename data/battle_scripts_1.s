@@ -6999,6 +6999,8 @@ BattleScript_FaintAttacker::
 	return
 
 BattleScript_FaintTarget::
+	savetargettostack4
+	copybyte gBattlerTarget, gStackBattler1
 	tryillusionoff BS_TARGET
 	playfaintcry BS_TARGET
 	pause B_WAIT_TIME_LONG
@@ -7016,6 +7018,7 @@ BattleScript_FaintTarget::
 	tryactivatebattlebond BS_ATTACKER
 	tryactivaterampage BS_ATTACKER
 	trytrainerslidefirstdownmsg BS_TARGET
+	readtargetfromstack4
 	return
 
 BattleScript_GiveExp::

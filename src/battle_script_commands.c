@@ -4214,16 +4214,16 @@ static void Cmd_tryfaintmon(void)
     else
     {
         u8 battlerId;
+        gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-        if (gBattlescriptCurrInstr[1] == BS_ATTACKER)
+        if (gActiveBattler == gBattlerAttacker)
         {
-            gActiveBattler = gBattlerAttacker;
             battlerId = gBattlerTarget;
             BS_ptr = BattleScript_FaintAttacker;
         }
         else
         {
-            gActiveBattler = gBattlerTarget;
+            gStackBattler1 = gActiveBattler;
             battlerId = gBattlerAttacker;
             BS_ptr = BattleScript_FaintTarget;
         }
