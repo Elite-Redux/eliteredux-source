@@ -137,6 +137,8 @@ s32 DoPoisonFieldEffect(void)
             && !MonHasInnate(pokemon, ABILITY_MAGIC_GUARD, FALSE)
             && ability != ABILITY_IMPENETRABLE
             && !MonHasInnate(pokemon, ABILITY_IMPENETRABLE, FALSE)
+            && ability != ABILITY_APPLE_ENLIGHTENMENT
+            && !MonHasInnate(pokemon, ABILITY_APPLE_ENLIGHTENMENT, FALSE)
             && B_ENABLE_FIELD_POISON)
         {
             hp = GetMonData(pokemon, MON_DATA_HP); 

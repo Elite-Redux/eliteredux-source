@@ -2507,6 +2507,7 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler)
     
     if (ability == ABILITY_MAGIC_GUARD || MonHasInnate(mon, ABILITY_MAGIC_GUARD, isEnemyMon) ||
         ability == ABILITY_IMPENETRABLE || MonHasInnate(mon, ABILITY_IMPENETRABLE, isEnemyMon) ||
+        ability == ABILITY_APPLE_ENLIGHTENMENT || MonHasInnate(mon, ABILITY_APPLE_ENLIGHTENMENT, isEnemyMon) ||
         holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS)
         return FALSE;
 

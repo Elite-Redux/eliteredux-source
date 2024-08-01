@@ -2348,4 +2348,5 @@ checkstatbuffonlowered_none_\@:
 	.macro jumpifmagicguard battler:req, ptr:req
 	jumpifability \battler, ABILITY_MAGIC_GUARD, \ptr
 	jumpifability \battler, ABILITY_IMPENETRABLE, \ptr
+	jumpifability \battler, ABILITY_APPLE_ENLIGHTENMENT, \ptr
 	.endm

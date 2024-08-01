@@ -16795,6 +16795,7 @@ int IsMagicGuardProtected(int battler)
 
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MAGIC_GUARD, ability)) return TRUE;
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_IMPENETRABLE, ability)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_APPLE_ENLIGHTENMENT, ability)) return TRUE;
 
     return FALSE;
 }
