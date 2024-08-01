@@ -41103,6 +41103,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_ORICORIO_MEGA] =
+    {
+    .baseHP        =  75,
+    .baseAttack    =  70,
+    .baseDefense   =  70,
+    .baseSpeed     =  103,
+    .baseSpAttack  =  108,
+    .baseSpDefense =  70,
+    .type1 = TYPE_FIRE,
+    .type2 = TYPE_FLYING,
+    .catchRate = 255,
+    .expYield = 167,
+    .evYield_SpAttack  = 2,
+    .item2 = ITEM_HONEY,
+    .genderRatio = PERCENT_FEMALE(75),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FLYING,
+    .eggGroup2 = EGG_GROUP_FLYING,
+	.abilities = {ABILITY_DANCER, ABILITY_PRANKSTER, ABILITY_TWO_STEP},
+	.innates = {ABILITY_SERENE_GRACE, ABILITY_FLASH_FIRE, ABILITY_FLOCK},
+    .bodyColor = BODY_COLOR_RED,
+    .noFlip = FALSE,
+    .tier = 2,
+    },
+
 [SPECIES_RAPIDASH_MEGA_GALARIAN] =
     {
     .baseHP        =  85,

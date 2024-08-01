@@ -7429,6 +7429,12 @@ const u32 gMonPalette_RapidashMegaGalarian[]             = INCBIN_U32("graphics/
 const u32 gMonShinyPalette_RapidashMegaGalarian[]        = INCBIN_U32("graphics/pokemon/rapidash/galarian_mega/shiny.gbapal.lz");
 const u8  gMonIcon_RapidashMegaGalarian[]                = INCBIN_U8("graphics/pokemon/rapidash/galarian_mega/icon.4bpp");
 
+const u32 gMonFrontPic_OricorioMega[]            = INCBIN_U32("graphics/pokemon/oricorio/mega/front.4bpp.lz");
+const u32 gMonBackPic_OricorioMega[]             = INCBIN_U32("graphics/pokemon/oricorio/mega/back.4bpp.lz");
+const u32 gMonPalette_OricorioMega[]             = INCBIN_U32("graphics/pokemon/oricorio/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_OricorioMega[]        = INCBIN_U32("graphics/pokemon/oricorio/mega/shiny.gbapal.lz");
+const u8  gMonIcon_OricorioMega[]                = INCBIN_U8("graphics/pokemon/oricorio/mega/icon.4bpp");
+
 const u32 gMonFrontPic_WigglytuffAlpha[]            = INCBIN_U32("graphics/pokemon/wigglytuff/alpha/front.4bpp.lz");
 const u32 gMonBackPic_WigglytuffAlpha[]             = INCBIN_U32("graphics/pokemon/wigglytuff/alpha/back.4bpp.lz");
 const u32 gMonPalette_WigglytuffAlpha[]             = INCBIN_U32("graphics/pokemon/wigglytuff/alpha/normal.gbapal.lz");

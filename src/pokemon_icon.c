@@ -1206,6 +1206,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_GOLISOPOD_MEGA] = gMonIcon_GolisopodMega,
     [SPECIES_RAPIDASH_MEGA] = gMonIcon_RapidashMega,
     [SPECIES_RAPIDASH_MEGA_GALARIAN] = gMonIcon_RapidashMegaGalarian,
+    [SPECIES_ORICORIO_MEGA] = gMonIcon_OricorioMega,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,
