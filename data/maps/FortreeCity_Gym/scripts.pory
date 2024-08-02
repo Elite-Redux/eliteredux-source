@@ -405,7 +405,7 @@ script FortreeCity_Gym_EventScript_Flint{
 }
 
 script FortreeCity_Gym_EventScript_EdwardoAndFlint{
-    yesnobattle(format("There are all kinds of winds around the world, lets see if you can fight even in a {COLOR GREEN}winter gale!{COLOR DARK_GRAY}"))
+    yesnobattle(format("You can't assume you'll have clear skies all the time. Let's see how well you can fight in a {COLOR GREEN}winter gale!{COLOR DARK_GRAY}"))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_EDWARDO, TRAINER_FLINT, TAG_TEAM_EDUARDO_FLINT, 0, FortreeCity_Gym_Text_EdwardoAndFlintIntro)
     }
@@ -438,7 +438,7 @@ script FortreeCity_Gym_EventScript_Jared{
 	end
 }
 script FortreeCity_Gym_EventScript_AshleyAndJared{
-    yesnobattle(format("Hope you weren't thinking of {COLOR GREEN}using items{COLOR DARK_GRAY} against us because they might get blown off!"))
+    yesnobattle(format("Mind the winds in here, they might {COLOR GREEN}blow your items away{COLOR DARK_GRAY} and leave you empty-handed!"))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_ASHLEY, TRAINER_JARED, TAG_TEAM_ASHLEY_JARED, 0, FortreeCity_Gym_Text_AshleyAndJaredIntro)
     }
@@ -473,6 +473,15 @@ text FortreeCity_Gym_Text_WinonaIntroAll{
     format("Just because the storm is gone doesn't mean you still can't get blown away. Let's take to the skies and have have a fair fight!")
 }
 
+text FortreeCity_Gym_Text_WinonaDefeat0{
+	format("And evidently you do have the skills required to navigate under fire. Marvelous work!")
+}
+text FortreeCity_Gym_Text_WinonaDefeat1{
+	format("One storm, successfully weathered. Long may it continue, challenger.")
+}
+text FortreeCity_Gym_Text_WinonaDefeatAll{
+	format("Outmaneuvered, outperformed, and left in your wake. Expertly done.")
+}
 script FortreeCity_Gym_EventScript_CheckTrainers{
     if (defeated(TRAINER_WINONA_1)) {
         msgbox(FortreeCity_Gym_Text_WinonaPostBattle, MSGBOX_DEFAULT)
@@ -506,13 +515,13 @@ script FortreeCity_Gym_EventScript_Winona{
 	adddefeatedcount(TRAINER_DARIUS)
     switch (var(VAR_RESULT)) {
         case 0:
-            trainerbattle_single(TRAINER_WINONA_1 FortreeCity_Gym_Text_WinonaIntro0, FortreeCity_Gym_Text_WinonaDefeat, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)
+            trainerbattle_single(TRAINER_WINONA_1 FortreeCity_Gym_Text_WinonaIntro0, FortreeCity_Gym_Text_WinonaDefeat0, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)
         break
         case 4:
-            trainerbattle_single(TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaIntroAll, FortreeCity_Gym_Text_WinonaDefeat, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)
+            trainerbattle_single(TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaIntroAll, FortreeCity_Gym_Text_WinonaDefeat1, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)
         break
         default:
-            trainerbattle_single(TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaIntro1, FortreeCity_Gym_Text_WinonaDefeat, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)
+            trainerbattle_single(TRAINER_WINONA_1, FortreeCity_Gym_Text_WinonaIntro1, FortreeCity_Gym_Text_WinonaDefeatAll, FortreeCity_Gym_EventScript_WinonaDefeated, NO_MUSIC)
     }
     goto_if_unset(FLAG_RECEIVED_TM51, FortreeCity_Gym_EventScript_GiveRoost)
 }

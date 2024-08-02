@@ -471,7 +471,7 @@ script MauvilleCity_Gym_EventScript_Kirk{
     if (defeated(TRAINER_KIRK)){
         msgbox(MauvilleCity_Gym_Text_KirkPostBattle, MSGBOX_AUTOCLOSE)
     } else {
-        yesnobattle(format("You've probably noticed the crazy amount of traps around here yeah? Wattson's an old coot even left some {COLOR GREEN}Sticky webs{COLOR DARK_GRAY} just lying around!"))
+        yesnobattle(format("Careful! Wattson's trying to use Galvantula silk make some traps, and they're {COLOR GREEN}leaving their Sticky Webs everywhere{COLOR DARK_GRAY}."))
         if (var(VAR_RESULT)){
             trainerbattle_single(TRAINER_KIRK, MauvilleCity_Gym_Text_KirkIntro , MauvilleCity_Gym_Text_KirkDefeat)
         }
@@ -531,15 +531,28 @@ Music is my way of letting all my stress out! Keeps me calm, and it's a really g
 }
 
 text MauvilleCity_Gym_Text_WattsonIntro0{
-    format("hahahaaa would you look at this fiesty child you wanna play rough? Alright then.")
+    format("Wahahaha, would you look at this? You must think you're something special!
+See how you handle this challenge, then!")
 }
 text MauvilleCity_Gym_Text_WattsonIntro1{
-    format("not bad having some electricity in you to fight some trainers but not enough!")
+    format("Not bad, child! You can't afford to cut corners when handling electricity,
+though - let me show you and your Pokemon what I mean!")
 }
 text MauvilleCity_Gym_Text_WattsonIntroAll{
-    format("Now this is going to amp me up we shall give it our all hahahaa")
+    format("Now this is going to amp me up we shall give it our all wahahahaa")
 }
-
+text MauvilleCity_Gym_Text_WattsonDefeat0{
+	format("Wahahaha! That battle was electrifying! Even all my tricks couldn't stop you.
+If you're ever in the mood for another challenge, my doors are always open!")
+}
+text MauvilleCity_Gym_Text_WattsonDefeat1{
+	format("Well would you look at that? You completely grounded my team hahahaha.
+You showed me a thing or two that's for sure!")
+}
+text MauvilleCity_Gym_Text_WattsonDefeatAll{
+	format("You practically lit up the stage with that battle hahahaha! You took your time
+and didn't let the high voltage change your flow of battle at all. Good job! Wahahaha!")
+}
 script MauvilleCity_Gym_EventScript_CheckTrainers{
     if (flag(TRAINER_WATTSON_1)) {
 		msgbox(MauvilleCity_Gym_Text_WattsonPostBattle, MSGBOX_DEFAULT)
@@ -579,13 +592,13 @@ script MauvilleCity_Gym_EventScript_Wattson{
 	adddefeatedcount(TRAINER_BEN)
 	switch (var(VAR_RESULT)) {
 		case 0:
-			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro0, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
+			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro0, MauvilleCity_Gym_Text_WattsonDefeat0, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
 		break
 		case 4:
-			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntroAll, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
+			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntroAll, MauvilleCity_Gym_Text_WattsonDefeatAll, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
 		break
 		default:
-			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro1, MauvilleCity_Gym_Text_WattsonDefeat, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
+			trainerbattle_single(TRAINER_WATTSON_1, MauvilleCity_Gym_Text_WattsonIntro1, MauvilleCity_Gym_Text_WattsonDefeat1, MauvilleCity_Gym_EventScript_WattsonDefeated, NO_MUSIC)
 	}
 	goto_if_unset(FLAG_RECEIVED_TM72, MauvilleCity_Gym_EventScript_GiveVoltSwitch)
 }

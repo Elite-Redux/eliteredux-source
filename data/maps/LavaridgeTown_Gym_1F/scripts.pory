@@ -557,7 +557,7 @@ script LavaridgeTown_Gym_1F_EventScript_Danielle{
 	if (defeated(TRAINER_DANIELLE)){
 		msgbox(LavaridgeTown_Gym_1F_Text_DaniellePostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("I hope you're ready my passion burns at molten temperatures {COLOR GREEN}my flames are white hot!{COLOR DARK_GRAY} "))
+		yesnobattle(format("My passion is burning white-hot and {COLOR GREEN}so are my Pokemon's flames{COLOR DARK_GRAY}! I hope you're ready!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_DANIELLE, LavaridgeTown_Gym_1F_Text_DanielleIntro , LavaridgeTown_Gym_1F_Text_DanielleDefeat)
 		}
@@ -612,6 +612,18 @@ text LavaridgeTown_Gym_1F_Text_FlanneryIntroAll{
     format("A cold headed one I see.")
 }
 
+text LavaridgeTown_Gym_1F_Text_FlanneryDefeat0{
+    format("Not many people can withstand the heat of my pokemon at full power! Hope you didn't get too singed!")
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryDefeat1{
+    format("Amazing! You managed to extinguish my entire strategy! Guess I still have a ways to go before catching up to grandpa! ")
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryDefeatAll{
+    format("Your drive and passion burns even hotter than mine! I hope your flame keeps on burning!")
+}
+
 script LavaridgeTown_Gym_1F_EventScript_Flannery{
     goto_if_set(FLAG_SYS_GAME_CLEAR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch)
     call(LavaridgeTown_Gym_EventScript_CheckTrainers)
@@ -626,13 +638,13 @@ script LavaridgeTown_Gym_1F_EventScript_Flannery{
 	adddefeatedcount(TRAINER_DANIELLE)
     switch (var(VAR_RESULT)) {
         case 0:
-            trainerbattle_single(TRAINER_FLANNERY_1 LavaridgeTown_Gym_1F_Text_FlanneryIntro0, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
+            trainerbattle_single(TRAINER_FLANNERY_1 LavaridgeTown_Gym_1F_Text_FlanneryIntro0, LavaridgeTown_Gym_1F_Text_FlanneryDefeat0, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
         break
         case 7:
-            trainerbattle_single(TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntroAll, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
+            trainerbattle_single(TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntroAll, LavaridgeTown_Gym_1F_Text_FlanneryDefeatAll, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
         break
         default:
-            trainerbattle_single(TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntro1, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
+            trainerbattle_single(TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntro1, LavaridgeTown_Gym_1F_Text_FlanneryDefeat1, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
     }
     goto_if_unset(FLAG_RECEIVED_TM50, LavaridgeTown_Gym_1F_EventScript_GiveOverheat)
 }

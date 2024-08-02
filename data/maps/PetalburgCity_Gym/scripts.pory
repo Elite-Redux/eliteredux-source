@@ -1881,7 +1881,7 @@ script PetalburgCity_Gym_EventScript_George{
 	if (defeated(TRAINER_GEORGE)){
 		msgbox(PetalburgCity_Gym_Text_GeorgePostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("Be careful! If you dont stay active then maybe {COLOR GREEN}plants will start growing around you.{COLOR DARK_GRAY}."))
+		yesnobattle(format("Your old man's plants will {COLOR GREEN}bloom around anything that holds still{COLOR DARK_GRAY} for too long. Look alive!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_GEORGE, PetalburgCity_Gym_Text_GeorgeIntro , PetalburgCity_Gym_Text_GeorgeDefeat)
 		}
@@ -1963,6 +1963,15 @@ text PetalburgCity_Gym_Text_NormanBattleIntro1{
 text PetalburgCity_Gym_Text_NormanBattleIntroAll{
     format("I see you've learned what your old man's gym has to teach. Now, {PLAYER}, can you put it into action?")
 }
+text PetalburgCity_Gym_Text_NormanDefeat0{
+	format("I... I can't believe it. I lost to {PLAYER} when they were at such a disadvantage? Is that challenge what you were looking for? I'm so proud!")
+}
+text PetalburgCity_Gym_Text_NormanDefeat1{
+	format("Hm, I suppose you were ready after all. Excellent work, {PLAYER}! I'm impressed.")
+}
+text PetalburgCity_Gym_Text_NormanDefeatAll{
+	format("I suspected this might be the case... You've grown so much, {PLAYER}. Congratulations on your victory!")
+}
 script PetalburgCity_Gym_EventScript_NormanBattle{
     call(PetalburgCity_Gym_EventScript_CheckTrainers)
     setvar(VAR_0x8004, 15)
@@ -1977,13 +1986,13 @@ script PetalburgCity_Gym_EventScript_NormanBattle{
 	adddefeatedcount(TRAINER_BERKE)
     switch (var(VAR_RESULT)) {
         case 0:
-            trainerbattle_single(TRAINER_NORMAN_1 PetalburgCity_Gym_Text_NormanBattleIntro0, PetalburgCity_Gym_Text_NormanDefeat, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
+            trainerbattle_single(TRAINER_NORMAN_1 PetalburgCity_Gym_Text_NormanBattleIntro0, PetalburgCity_Gym_Text_NormanDefeat0, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
         break
         case 7:
-            trainerbattle_single(TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanBattleIntroAll, PetalburgCity_Gym_Text_NormanDefeat, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
+            trainerbattle_single(TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanBattleIntroAll, PetalburgCity_Gym_Text_NormanDefeatAll, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
         break
         default:
-            trainerbattle_single(TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanBattleIntro1, PetalburgCity_Gym_Text_NormanDefeat, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
+            trainerbattle_single(TRAINER_NORMAN_1, PetalburgCity_Gym_Text_NormanBattleIntro1, PetalburgCity_Gym_Text_NormanDefeat1, PetalburgCity_Gym_EventScript_NormanAfterBattle, NO_MUSIC)
     }
     
 }

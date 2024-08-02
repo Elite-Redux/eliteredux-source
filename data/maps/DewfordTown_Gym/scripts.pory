@@ -514,7 +514,7 @@ script DewfordTown_Gym_EventScript_Laura{
     if (defeated(TRAINER_LAURA)){
         msgbox(DewfordTown_Gym_Text_LauraPostBattle, MSGBOX_AUTOCLOSE)
     } else {
-        yesnobattle(format(" I hope you don't think that just because you brought a ghost type you'll be able to beat me! {COLOR GREEN}Thanks to my Ki even Ghosts don't stand a chance!{COLOR DARK_GRAY}."))
+        yesnobattle(format("I hope you don't think that you'll be able to beat me just because you brought a ghost type! Thanks to my Ki, {COLOR GREEN}even Ghosts don't stand a chance{COLOR DARK_GRAY}!"))
         if (var(VAR_RESULT)){
             trainerbattle_single(TRAINER_LAURA, DewfordTown_Gym_Text_LauraIntro , DewfordTown_Gym_Text_LauraDefeat)
         }
@@ -654,17 +654,29 @@ script DewfordTown_Gym_EventScript_EnteredTheRing{
 
 
 text DewfordTown_Gym_Text_BrawlyIntro0{
-    format("Aw man you lazy like that? Alright then i wont be nice")
+    format("Alright, you rushed through the gym and that's not going to fly with me,
+yeah? Hope you're ready for a showdown because you're about to get wiped!")
 }
 
 text DewfordTown_Gym_Text_BrawlyIntro1{
-    format("Alright you at least tried to battle some lets gets this over with")
+    format("Woah there! What's the rush? If you want to fight me that badly, you coulda just asked...")
 }
 
 text DewfordTown_Gym_Text_BrawlyIntroAll{
-    format("See this pumps me up for a nice challenge mate, lets do this!")
+    format("You all warmed up then? Yeah? Then let's have ourselves a good clean fight!")
 }
 
+text DewfordTown_Gym_Text_BrawlyDefeat0{
+	format("I really thought I had you with that challenge
+I cranked it right up to 11. Guess I understimated you, huh? You've earned my respect!")
+}
+text DewfordTown_Gym_Text_BrawlyDefeat1{
+	format("Gotta hand it to you, you destroyed me out there. Kinda bummed I got beaten, but you won fair and square!")
+}
+text DewfordTown_Gym_Text_BrawlyDefeatAll{
+	format("Well played! Man, you beat me without even breaking a sweat.
+Guess I've got some serious training to do if I want to up my game.")
+}
 script DewfordTown_Gym_EventScript_CheckTrainers{
     if (defeated(TRAINER_BRAWLY_1)) {
 		msgbox(DewfordTown_Gym_Text_BrawlyPostBattle, MSGBOX_DEFAULT)
@@ -705,13 +717,13 @@ script DewfordTown_Gym_EventScript_BrawlyEngage{
 	adddefeatedcount(TRAINER_CRISTIAN) 
 	switch (var(VAR_RESULT)) {
 		case 0:
-			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro0, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
+			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro0, DewfordTown_Gym_Text_BrawlyDefeat0, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
 		break
 		case 5:
-			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntroAll, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
+			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntroAll, DewfordTown_Gym_Text_BrawlyDefeatAll, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
 		break
 		default:
-			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro1, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
+			trainerbattle_single(TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro1, DewfordTown_Gym_Text_BrawlyDefeat1, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC)
     	}
 	
 	goto_if_unset(FLAG_RECEIVED_TM08, DewfordTown_Gym_EventScript_GiveBulkUp)

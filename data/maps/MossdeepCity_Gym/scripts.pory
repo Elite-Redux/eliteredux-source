@@ -964,13 +964,32 @@ movement MossdeepCity_Gym_Text_LizaSansFromUndertale{
 	walk_in_place_down * 3
 }
 text MossdeepCity_Gym_Text_TateAndLizaIntro0{
-	format("T: We don't need psychic powers to tell us\pL: That you're about to have a bad time.")
+	format("T: We don't need psychic powers to tell us...
+L: ...that you're about to have a bad time.")
 }
 text MossdeepCity_Gym_Text_TateAndLizaIntro1{
-	format("T: You think that with just a few battles you're ready for us?\pL: Very well, but you better make sure you don't complain after you lose!")
+	format("T: You think that with just a few battles...
+L: ...you're ready for us?
+T: Very well, but you better make sure...
+L: ...you don't complain too much after you lose!")
 }
 text MossdeepCity_Gym_Text_TateAndLizaIntroAll{
-	format("T: You've strengthened your mind to the fullest\pL: but we hope that you don't think that those tricks were all we had up our sleeves!")
+	format("T: You've strengthened your mind to the fullest...
+L: ...but if you think we didn't save the best for last, you're wrong!!")
+}
+text MossdeepCity_Gym_Text_TateAndLizaDefeat0{
+	format("T: You forced our hands into giving you a special challenge, and then won anyway.
+L: Guess we're stopping now. Did you get the challenge you want?")
+}
+text MossdeepCity_Gym_Text_TateAndLizaDefeat1{
+	format("T: Even though you rushed a bit on your way through....
+L: .....you still ended up coming out on top!
+T: Congratulations on your victory.
+L: We foresee great battles in your future.")
+}
+text MossdeepCity_Gym_Text_TateAndLizaDefeatAll{
+	format("T: You even managed to defeat us...
+L: ...so you should have no trouble with the next gym!")
 }
 const LOCAL_ID_LIZA = 12
 script MossdeepCity_Gym_EventScript_TateAndLiza{
@@ -993,13 +1012,13 @@ script MossdeepCity_Gym_EventScript_TateAndLiza{
 			playse(SE_M_SKETCH)
 			delay(6)
 			playse(SE_M_METRONOME)
-			trainerbattle_double_no_intro(TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaDefeat, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated)
+			trainerbattle_double_no_intro(TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaDefeat0, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated)
 		break
 		case 6:
-			trainerbattle_double(TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaIntroAll, MossdeepCity_Gym_Text_TateAndLizaDefeat, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated, NO_MUSIC)
+			trainerbattle_double(TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaIntroAll, MossdeepCity_Gym_Text_TateAndLizaDefeatAll, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated, NO_MUSIC)
 		break
 		default:
-			trainerbattle_double(TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaIntro1, MossdeepCity_Gym_Text_TateAndLizaDefeat, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated, NO_MUSIC)
+			trainerbattle_double(TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaIntro1, MossdeepCity_Gym_Text_TateAndLizaDefeat1, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated, NO_MUSIC)
 		break
 	}
 	
