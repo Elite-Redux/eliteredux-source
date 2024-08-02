@@ -272,7 +272,7 @@
 #define ABILITY_PERISH_BODY 253 // If hit, casts Perish Song.
 #define ABILITY_WANDERING_SPIRIT 254 // Trades ability with attacker on contact.
 #define ABILITY_GORILLA_TACTICS 255 // Raises own Atk by 1.5x, but can only use the first chosen move.
-#define ABILITY_NEUTRALIZING_GAS 256 // All abilities are nullified. Innates still work.
+#define ABILITY_NEUTRALIZING_GAS 256 // All abilities are nullified.
 #define ABILITY_PASTEL_VEIL 257 // Casts Safeguard on entry.
 #define ABILITY_HUNGER_SWITCH 258 // Changes between Full and Hangry forms after each turn.
 #define ABILITY_QUICK_DRAW 259 // 30% chance to move first.
