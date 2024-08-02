@@ -1897,7 +1897,7 @@ script PetalburgCity_Gym_EventScript_Jody{
 	if (defeated(TRAINER_JODY)){
 		msgbox(PetalburgCity_Gym_Text_JodyPostBattle, MSGBOX_AUTOCLOSE)
 	} else {
-		yesnobattle(format("If you're aggresive and {COLOR GREEN}attack well{COLOR DARK_GRAY} then even the strongest defence can't stop you!"))
+		yesnobattle(format("If you're aggressive and {COLOR GREEN}attack well{COLOR DARK_GRAY} then even the strongest defense can't stop you!"))
 		if (var(VAR_RESULT)){
 			trainerbattle_single(TRAINER_JODY, PetalburgCity_Gym_Text_JodyIntro , PetalburgCity_Gym_Text_JodyDefeat)
 		}
