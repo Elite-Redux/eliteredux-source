@@ -4860,7 +4860,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_SPRIGATITO] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  3
     },
     [SPECIES_FLORAGATO] =
     {
@@ -4875,17 +4875,17 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_FUECOCO] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  3
     },
     [SPECIES_CROCALOR] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  3
     },
     [SPECIES_SKELEDIRGE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  3
     },
     [SPECIES_QUAXLY] =
     {
@@ -5125,7 +5125,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_TINKATON] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  2
     },
     [SPECIES_WIGLETT] =
     {
@@ -5250,7 +5250,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_GREAT_TUSK] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  4
     },
     [SPECIES_SCREAM_TAIL] =
     {

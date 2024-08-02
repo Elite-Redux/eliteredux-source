@@ -4834,7 +4834,7 @@ const struct MonCoords gMonBackPicCoords[] =
 	   [SPECIES_SNEASLER] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  6
     },
 	[SPECIES_OVERQWIL] =
     {
@@ -5114,7 +5114,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_TINKATON] =
     {
         .size = 0,
-        .y_offset =  15
+        .y_offset =  3
     },
     [SPECIES_WIGLETT] =
     {
@@ -5239,7 +5239,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_GREAT_TUSK] =
     {
         .size = 0,
-        .y_offset =  4
+        .y_offset =  9
     },
     [SPECIES_SCREAM_TAIL] =
     {
@@ -5569,7 +5569,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_ORICORIO_MEGA] =
     {
         .size = 0x88,
-        .y_offset = 0,
+        .y_offset = 7,
     },
     [SPECIES_AEGISLASH_BLADE_REDUX_MEGA] =
     {
@@ -5579,7 +5579,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_AEGISLASH_REDUX_MEGA] =
     {
         .size = 0,
-        .y_offset =  2
+        .y_offset =  3
     },
     [SPECIES_REUNICLUS_REDUX_MEGA] =
     {
@@ -5739,7 +5739,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_TERAPAGOS] =
     {
         .size = 0,
-        .y_offset =  17
+        .y_offset =  16
     },
     [SPECIES_TERAPAGOS_STELLAR] =
     {
