@@ -7447,6 +7447,19 @@ const u32 gMonPalette_LucarioMegaY[]            = INCBIN_U32("graphics/pokemon/l
 const u32 gMonShinyPalette_LucarioMegaY[]       = INCBIN_U32("graphics/pokemon/lucario/mega_y/shiny.gbapal.lz");
 const u8  gMonIcon_LucarioMegaY[]               = INCBIN_U8("graphics/pokemon/lucario/mega_y/icon.4bpp");
 
+const u32 gMonFrontPic_AegislashReduxMega[]            = INCBIN_U32("graphics/pokemon/aegislash/redux_mega/front.4bpp.lz");
+const u32 gMonBackPic_AegislashReduxMega[]             = INCBIN_U32("graphics/pokemon/aegislash/redux_mega/back.4bpp.lz");
+const u32 gMonPalette_AegislashReduxMega[]             = INCBIN_U32("graphics/pokemon/aegislash/redux_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_AegislashReduxMega[]        = INCBIN_U32("graphics/pokemon/aegislash/redux_mega/shiny.gbapal.lz");
+const u8  gMonIcon_AegislashReduxMega[]                = INCBIN_U8("graphics/pokemon/aegislash/redux_mega/icon.4bpp");
+
+const u32 gMonFrontPic_AegislashBladeReduxMega[]            = INCBIN_U32("graphics/pokemon/aegislash/blade_redux_mega/front.4bpp.lz");
+const u32 gMonBackPic_AegislashBladeReduxMega[]             = INCBIN_U32("graphics/pokemon/aegislash/blade_redux_mega/back.4bpp.lz");
+const u32 gMonPalette_AegislashBladeReduxMega[]             = INCBIN_U32("graphics/pokemon/aegislash/blade_redux_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_AegislashBladeReduxMega[]        = INCBIN_U32("graphics/pokemon/aegislash/blade_redux_mega/shiny.gbapal.lz");
+const u8  gMonIcon_AegislashBladeReduxMega[]                = INCBIN_U8("graphics/pokemon/aegislash/blade_redux_mega/icon.4bpp");
+
+
 const u32 gMonFrontPic_ClawitzerRedux[]         = INCBIN_U32("graphics/pokemon/clawitzer/redux/front.4bpp.lz");
 const u32 gMonBackPic_ClawitzerRedux[]          = INCBIN_U32("graphics/pokemon/clawitzer/redux/back.4bpp.lz");
 const u32 gMonPalette_ClawitzerRedux[]          = INCBIN_U32("graphics/pokemon/clawitzer/redux/normal.gbapal.lz");

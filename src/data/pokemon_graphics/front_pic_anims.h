@@ -371,6 +371,16 @@ static const union AnimCmd sAnim_ORICORIO_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_AEGISLASH_BLADE_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_AEGISLASH_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_TYRANITAR_MEGA_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -796,6 +806,16 @@ static const union AnimCmd *const sAnims_RAPIDASH_MEGA_GALARIAN[] ={
 static const union AnimCmd *const sAnims_ORICORIO_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_ORICORIO_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_AEGISLASH_BLADE_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_AEGISLASH_BLADE_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_AEGISLASH_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_AEGISLASH_REDUX_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_TYRANITAR_MEGA_REDUX[] ={
@@ -20238,6 +20258,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(RAPIDASH_MEGA),
     ANIM_CMD(RAPIDASH_MEGA_GALARIAN),
     ANIM_CMD(ORICORIO_MEGA),
+    ANIM_CMD(AEGISLASH_BLADE_REDUX_MEGA),
+    ANIM_CMD(AEGISLASH_REDUX_MEGA),
     ANIM_CMD(SCIZOR_REDUX),
     ANIM_CMD(TINKATON_MEGA),
     ANIM_CMD(KARTANA_FALLEN),

@@ -1317,6 +1317,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_RAPIDASH_MEGA]      = _("Rapidash"),
     [SPECIES_RAPIDASH_MEGA_GALARIAN]      = _("Rapidash"),
     [SPECIES_ORICORIO_MEGA]      = _("Oricorio"),
+    [SPECIES_AEGISLASH_REDUX_MEGA]      = _("Aegislash"),
+    [SPECIES_AEGISLASH_BLADE_REDUX_MEGA]      = _("Aegislash"),
     [SPECIES_CLAWITZER_REDUX]    = _("Clawitzer"),
     // Special Mega + Primals
     [SPECIES_RAYQUAZA_MEGA]  = _("Rayquaza"),

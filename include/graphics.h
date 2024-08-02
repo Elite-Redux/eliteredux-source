@@ -11123,6 +11123,16 @@ extern const u32 gMonBackPic_LucarioMegaY[];
 extern const u32 gMonPalette_LucarioMegaY[];
 extern const u32 gMonShinyPalette_LucarioMegaY[];
 extern const u8  gMonIcon_LucarioMegaY[];
+extern const u32 gMonFrontPic_AegislashReduxMega[];
+extern const u32 gMonBackPic_AegislashReduxMega[];
+extern const u32 gMonPalette_AegislashReduxMega[];
+extern const u32 gMonShinyPalette_AegislashReduxMega[];
+extern const u8  gMonIcon_AegislashReduxMega[];
+extern const u32 gMonFrontPic_AegislashBladeReduxMega[];
+extern const u32 gMonBackPic_AegislashBladeReduxMega[];
+extern const u32 gMonPalette_AegislashBladeReduxMega[];
+extern const u32 gMonShinyPalette_AegislashBladeReduxMega[];
+extern const u8  gMonIcon_AegislashBladeReduxMega[];
 
 extern const u32 gMonBackPic_Castform_Sandy[];
 extern const u32 gMonBackPic_Kingambit_Redux[];
