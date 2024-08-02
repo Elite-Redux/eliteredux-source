@@ -1627,8 +1627,9 @@
 #define SPECIES_AEGISLASH_REDUX_MEGA        CUSTOM_MEGA_START + 68
 #define SPECIES_AEGISLASH_BLADE_REDUX_MEGA  CUSTOM_MEGA_START + 69 // nice
 #define SPECIES_REUNICLUS_REDUX_MEGA        CUSTOM_MEGA_START + 70
+#define SPECIES_HYDREIGON_REDUX_MEGA        CUSTOM_MEGA_START + 71
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_REUNICLUS_REDUX_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_HYDREIGON_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA

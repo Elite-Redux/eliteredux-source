@@ -41270,6 +41270,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_HYDREIGON_REDUX_MEGA] =
+    {
+    .baseHP        = 100,
+    .baseAttack    =  105,
+    .baseDefense   = 100,
+    .baseSpeed     = 70,
+    .baseSpAttack  =  125,
+    .baseSpDefense = 100,
+    .type1 = TYPE_FAIRY,
+    .type2 = TYPE_DRAGON,
+    .catchRate = 255,
+    .expYield = 270,
+    .evYield_SpAttack  = 3,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 40,
+    .friendship = 35,
+    .growthRate = GROWTH_SLOW,
+    .eggGroup1 = EGG_GROUP_DRAGON,
+    .eggGroup2 = EGG_GROUP_DRAGON,
+    .abilities      = {ABILITY_MEGA_LAUNCHER, ABILITY_PIXILATE, ABILITY_CUTE_CHARM},
+    .innates        = {ABILITY_CELESTIAL_BLESSING, ABILITY_MULTI_HEADED, ABILITY_MISTY_SURGE},
+    .bodyColor = BODY_COLOR_BLUE,
+    .noFlip = FALSE,
+    .flags = F_THREE_HEADED,
+    .tier = 0,
+    },
+
     [SPECIES_YVELTAL_MEGA] =
     {
         .baseHP        = 110,
