@@ -7453,6 +7453,12 @@ const u32 gMonPalette_AegislashReduxMega[]             = INCBIN_U32("graphics/po
 const u32 gMonShinyPalette_AegislashReduxMega[]        = INCBIN_U32("graphics/pokemon/aegislash/redux_mega/shiny.gbapal.lz");
 const u8  gMonIcon_AegislashReduxMega[]                = INCBIN_U8("graphics/pokemon/aegislash/redux_mega/icon.4bpp");
 
+const u32 gMonFrontPic_ReuniclusReduxMega[]            = INCBIN_U32("graphics/pokemon/reuniclus/redux_mega/front.4bpp.lz");
+const u32 gMonBackPic_ReuniclusReduxMega[]             = INCBIN_U32("graphics/pokemon/reuniclus/redux_mega/back.4bpp.lz");
+const u32 gMonPalette_ReuniclusReduxMega[]             = INCBIN_U32("graphics/pokemon/reuniclus/redux_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_ReuniclusReduxMega[]        = INCBIN_U32("graphics/pokemon/reuniclus/redux_mega/shiny.gbapal.lz");
+const u8  gMonIcon_ReuniclusReduxMega[]                = INCBIN_U8("graphics/pokemon/reuniclus/redux_mega/icon.4bpp");
+
 const u32 gMonFrontPic_AegislashBladeReduxMega[]            = INCBIN_U32("graphics/pokemon/aegislash/blade_redux_mega/front.4bpp.lz");
 const u32 gMonBackPic_AegislashBladeReduxMega[]             = INCBIN_U32("graphics/pokemon/aegislash/blade_redux_mega/back.4bpp.lz");
 const u32 gMonPalette_AegislashBladeReduxMega[]             = INCBIN_U32("graphics/pokemon/aegislash/blade_redux_mega/normal.gbapal.lz");

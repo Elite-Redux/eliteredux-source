@@ -41244,6 +41244,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_REUNICLUS_REDUX_MEGA] =
+    {
+    .baseHP        =  110,
+    .baseAttack    =  65,
+    .baseDefense   =  85,
+    .baseSpeed     =  30,
+    .baseSpAttack  =  115,
+    .baseSpDefense =  85,
+    .type1 = TYPE_FIRE,
+    .type2 = TYPE_WATER,
+    .catchRate = 255,
+    .expYield = 221,
+    .evYield_SpAttack  = 3,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_AMORPHOUS,
+    .eggGroup2 = EGG_GROUP_AMORPHOUS,
+	.abilities = {ABILITY_OVERCOAT, ABILITY_WATER_ABSORB, ABILITY_FLASH_FIRE},
+	.innates = {ABILITY_WATER_BUBBLE, ABILITY_FLAMING_SOUL, ABILITY_WEATHER_DOUBLE_BOOST},
+    .bodyColor = BODY_COLOR_GREEN,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
     [SPECIES_YVELTAL_MEGA] =
     {
         .baseHP        = 110,

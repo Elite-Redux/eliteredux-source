@@ -36,6 +36,11 @@ static const union AnimCmd sAnim_KINGAMBIT_REDUX_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_REUNICLUS_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_YVELTAL_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -471,6 +476,11 @@ static const union AnimCmd *const sAnims_KARTANA_FALLEN[] ={
 static const union AnimCmd *const sAnims_KINGAMBIT_REDUX_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_KINGAMBIT_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_REUNICLUS_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_REUNICLUS_REDUX_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_YVELTAL_MEGA[] ={
@@ -20260,6 +20270,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ORICORIO_MEGA),
     ANIM_CMD(AEGISLASH_BLADE_REDUX_MEGA),
     ANIM_CMD(AEGISLASH_REDUX_MEGA),
+    ANIM_CMD(REUNICLUS_REDUX_MEGA),
     ANIM_CMD(SCIZOR_REDUX),
     ANIM_CMD(TINKATON_MEGA),
     ANIM_CMD(KARTANA_FALLEN),
