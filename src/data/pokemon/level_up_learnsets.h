@@ -27446,6 +27446,13 @@ static const struct LevelUpMove sDredwoodLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sCormLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(1, MOVE_POWDER_SNOW),
+    LEVEL_UP_MOVE(1, MOVE_STRUGGLE_BUG),
+    LEVEL_UP_MOVE(1, MOVE_FLASH_FREEZE),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sCalyrex_Cloud_RiderLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_CONFUSION),
     LEVEL_UP_MOVE(1, MOVE_GRASSY_GLIDE),

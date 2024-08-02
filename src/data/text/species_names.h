@@ -1120,6 +1120,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_GROWLITHE_HISUIAN] = _("Growlithe"),
     [SPECIES_QWILFISH_HISUIAN] = _("Qwilfish"),
     [SPECIES_BASCULEGION] = _("Basculegion"),
+    [SPECIES_CORM]      = _("Corm"),
 
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),

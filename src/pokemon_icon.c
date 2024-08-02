@@ -1211,6 +1211,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_HYDREIGON_REDUX_MEGA] = gMonIcon_HydreigonReduxMega,
     [SPECIES_AEGISLASH_BLADE_REDUX_MEGA] = gMonIcon_AegislashBladeReduxMega,
     [SPECIES_AEGISLASH_REDUX_MEGA] = gMonIcon_AegislashReduxMega,
+    [SPECIES_CORM] = gMonIcon_Corm,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,

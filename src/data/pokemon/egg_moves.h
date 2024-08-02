@@ -5135,6 +5135,13 @@ const u16 gEggMoves[] = {
         MOVE_AQUA_JET,
         MOVE_ACID_SPRAY),
 
+    egg_moves(CORM,
+        MOVE_FAIRY_WIND,
+        MOVE_MIRROR_COAT,
+        MOVE_BUG_BITE,
+        MOVE_FROST_BREATH,
+        MOVE_RAGE_POWDER),
+
     egg_moves(HONEDGE_REDUX,
         MOVE_SHADOW_SNEAK,
         MOVE_DESTINY_BOND,

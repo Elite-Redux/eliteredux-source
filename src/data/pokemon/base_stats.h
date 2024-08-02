@@ -41024,6 +41024,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_CORM] =
+    {
+    .baseHP        = 30,
+    .baseAttack    = 25,
+    .baseDefense   = 35,
+    .baseSpeed     = 20,
+    .baseSpAttack  = 45,
+    .baseSpDefense = 30,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_BUG,
+    .catchRate = 190,
+    .expYield = 37,
+    .evYield_SpAttack  = 1,
+    .item2 = ITEM_SNOWBALL,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_BUG,
+	.abilities = {ABILITY_SNOW_CLOAK, ABILITY_SHIELD_DUST, ABILITY_SNOW_WARNING},
+	.innates = {ABILITY_ICE_SCALES, ABILITY_SWARM, ABILITY_OVERCOAT},
+    .bodyColor = BODY_COLOR_WHITE,
+    .noFlip = FALSE,
+    .tier = 4,
+    },
+
 [SPECIES_ARBOK_MEGA] =
     {
     .baseHP        = 90,

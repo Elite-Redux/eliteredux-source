@@ -7592,6 +7592,12 @@ const u32 gMonPalette_Dredwood[]           = INCBIN_U32("graphics/pokemon/dredwo
 const u32 gMonShinyPalette_Dredwood[]      = INCBIN_U32("graphics/pokemon/dredwood/shiny.gbapal.lz");
 const u8  gMonIcon_Dredwood[]              = INCBIN_U8("graphics/pokemon/dredwood/icon.4bpp");
 
+const u32 gMonFrontPic_Corm[]          = INCBIN_U32("graphics/pokemon/corm/front.4bpp.lz");
+const u32 gMonBackPic_Corm[]           = INCBIN_U32("graphics/pokemon/corm/back.4bpp.lz");
+const u32 gMonPalette_Corm[]           = INCBIN_U32("graphics/pokemon/corm/normal.gbapal.lz");
+const u32 gMonShinyPalette_Corm[]      = INCBIN_U32("graphics/pokemon/corm/shiny.gbapal.lz");
+const u8  gMonIcon_Corm[]              = INCBIN_U8("graphics/pokemon/corm/icon.4bpp");
+
 const u32 gMonFrontPic_ArbokMega[]          = INCBIN_U32("graphics/pokemon/arbok/mega/front.4bpp.lz");
 const u32 gMonBackPic_ArbokMega[]           = INCBIN_U32("graphics/pokemon/arbok/mega/back.4bpp.lz");
 const u32 gMonPalette_ArbokMega[]           = INCBIN_U32("graphics/pokemon/arbok/mega/normal.gbapal.lz");
