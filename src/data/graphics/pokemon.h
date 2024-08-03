@@ -7598,6 +7598,18 @@ const u32 gMonPalette_Corm[]           = INCBIN_U32("graphics/pokemon/corm/norma
 const u32 gMonShinyPalette_Corm[]      = INCBIN_U32("graphics/pokemon/corm/shiny.gbapal.lz");
 const u8  gMonIcon_Corm[]              = INCBIN_U8("graphics/pokemon/corm/icon.4bpp");
 
+const u32 gMonFrontPic_Maizemoth[]          = INCBIN_U32("graphics/pokemon/maizemoth/front.4bpp.lz");
+const u32 gMonBackPic_Maizemoth[]           = INCBIN_U32("graphics/pokemon/maizemoth/back.4bpp.lz");
+const u32 gMonPalette_Maizemoth[]           = INCBIN_U32("graphics/pokemon/maizemoth/normal.gbapal.lz");
+const u32 gMonShinyPalette_Maizemoth[]      = INCBIN_U32("graphics/pokemon/maizemoth/shiny.gbapal.lz");
+const u8  gMonIcon_Maizemoth[]              = INCBIN_U8("graphics/pokemon/maizemoth/icon.4bpp");
+
+const u32 gMonFrontPic_MaizemothMega[]          = INCBIN_U32("graphics/pokemon/maizemoth/mega/front.4bpp.lz");
+const u32 gMonBackPic_MaizemothMega[]           = INCBIN_U32("graphics/pokemon/maizemoth/mega/back.4bpp.lz");
+const u32 gMonPalette_MaizemothMega[]           = INCBIN_U32("graphics/pokemon/maizemoth/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_MaizemothMega[]      = INCBIN_U32("graphics/pokemon/maizemoth/mega/shiny.gbapal.lz");
+const u8  gMonIcon_MaizemothMega[]              = INCBIN_U8("graphics/pokemon/maizemoth/mega/icon.4bpp");
+
 const u32 gMonFrontPic_ArbokMega[]          = INCBIN_U32("graphics/pokemon/arbok/mega/front.4bpp.lz");
 const u32 gMonBackPic_ArbokMega[]           = INCBIN_U32("graphics/pokemon/arbok/mega/back.4bpp.lz");
 const u32 gMonPalette_ArbokMega[]           = INCBIN_U32("graphics/pokemon/arbok/mega/normal.gbapal.lz");

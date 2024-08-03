@@ -5546,6 +5546,16 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x64,
         .y_offset = 17,
     },
+    [SPECIES_MAIZEMOTH] =
+    {
+        .size = 0x88,
+        .y_offset = 4,
+    },
+    [SPECIES_MAIZEMOTH_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 7,
+    },
     [SPECIES_ARBOK_MEGA] =
     {
         .size = 0x88,

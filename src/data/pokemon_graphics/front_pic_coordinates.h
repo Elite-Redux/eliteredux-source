@@ -5562,6 +5562,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 7,
     },
+     [SPECIES_MAIZEMOTH] =
+    {
+        .size = 0x87,
+        .y_offset = 5,
+    },
     [SPECIES_ARBOK_MEGA] =
     {
         .size = 0x88,
