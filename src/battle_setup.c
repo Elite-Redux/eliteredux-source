@@ -1378,14 +1378,19 @@ bool8 GetTrainerFlag(void)
     else
         return FlagGet(GetTrainerAFlag());
 }
-
+// uncomment this if two opponent must give two wins
+//#define TWO_TRAINERS_IN_DOUBLE_EQUALS_2_WINS
 void AddTrainerBattleWin(void){
     u16 nbBattles;
+    #ifdef TWO_TRAINERS_IN_DOUBLE_EQUALS_2_WINS
     if (gTrainerBattleOpponent_B != 0){
         nbBattles =  GetTrainerBattleWins() + 2;
     } else {
         nbBattles =  GetTrainerBattleWins() + 1;
     }
+    #else
+    nbBattles =  GetTrainerBattleWins() + 1;
+    #endif
     VarSet(VAR_TRACKCOUNT_WINS_HIGH, nbBattles >> 8);
     VarSet(VAR_TRACKCOUNT_WINS_LOW, nbBattles & 0XFF);
 }
