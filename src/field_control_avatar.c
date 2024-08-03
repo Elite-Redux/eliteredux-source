@@ -644,8 +644,9 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
         ScriptContext1_SetupScript(SSTidalCorridor_EventScript_ReachedStepCount);
         return TRUE;
     }
-    if (TryStartMatchCall())
-        return TRUE;
+    // Commented out matchcalls because they are annoying
+    // if (TryStartMatchCall())
+    //    return TRUE;
     return FALSE;
 }
 
