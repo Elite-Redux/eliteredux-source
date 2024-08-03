@@ -413,8 +413,9 @@ PlayersHouse_1F_Text_ArentYouInterestedInRoom: @ 81F7B24
 	.string "very own room?$"
 
 PlayersHouse_1F_Text_GoSetTheClock: @ 81F7B67
-	.string "Mom: {PLAYER}.\p"
-	.string "Go set the clock in your room, honey.$"
+	.string "Mom: Good morning, {PLAYER}!.\n"
+	.string "Go set the clock in your room, honey.\p"
+	.string "See if it's time for you to head out yet.$"
 
 PlayersHouse_1F_Text_OhComeQuickly: @ 81F7B96
 	.string "Mom: Oh! {PLAYER}, {PLAYER}!\n"
