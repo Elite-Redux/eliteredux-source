@@ -35,3 +35,8 @@ script MtPyre_Exterior_EventScript_Yda {
 	release
 	end
 }
+
+script MtPyre_Exterior_EventScript_VisitedMtPyre{
+    setflag(FLAG_VISITED_MT_PYRE)
+    setvar(VAR_TEMP_2, 1)
+}
