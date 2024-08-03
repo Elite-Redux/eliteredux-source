@@ -113,9 +113,9 @@ RustboroCity_Gym_EventScript_GymStatue:: @ 8213071
 
 RustboroCity_Gym_EventScript_RegisterRoxanne:: @ 821307B
 	lockall
-	pokenavcall RustboroCity_Gym_Text_RoxanneRegisterCall
-	waitmessage
-	delay 30
+	@ pokenavcall RustboroCity_Gym_Text_RoxanneRegisterCall
+	@ waitmessage
+	@ delay 30
 	@ playfanfare MUS_REGISTER_MATCH_CALL
 	@ msgbox RustboroCity_Gym_Text_RegisteredRoxanne, MSGBOX_DEFAULT
 	@ waitfanfare
