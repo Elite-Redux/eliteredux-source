@@ -58,11 +58,11 @@ MauvilleCity_Gym_EventScript_WattsonDefeatedFirstTime::
 	msgbox MauvilleCity_Gym_Text_ExplainDynamoBadgeTakeThis, MSGBOX_DEFAULT
 	closemessage
 	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox MauvilleCity_Gym_Text_RegisteredRaichu, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox MauvilleCity_Gym_Text_RegisteredRaichu, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	setvar VAR_SLATEPORT_OUTSIDE_MUSEUM_STATE, 3
 	clearflag FLAG_HIDE_VERDANTURF_TOWN_SCOTT
 	setflag FLAG_DEFEATED_MAUVILLE_GYM
@@ -78,11 +78,11 @@ MauvilleCity_Gym_EventScript_WattsonDefeatedFirstTime::
 	call MauvilleCity_Gym_EventScript_GiveVoltSwitch
 	closemessage
 	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox MauvilleCity_Gym_Text_RegisteredWattson, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox MauvilleCity_Gym_Text_RegisteredWattson, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	setflag FLAG_ENABLE_WATTSON_MATCH_CALL
 	release
 	end

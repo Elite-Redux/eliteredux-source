@@ -403,11 +403,11 @@ PetalburgCity_Gym_EventScript_NormanAfterBattleFirstTime::
 	msgbox PetalburgCity_Gym_Text_ExplainBalanceBadgeTakeThis, MSGBOX_DEFAULT
 	closemessage
 	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox PetalburgCity_Gym_Text_RegisteredExploud, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox PetalburgCity_Gym_Text_RegisteredExploud, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	setflag FLAG_DEFEATED_PETALBURG_GYM
 	setvar VAR_PETALBURG_GYM_STATE, 7
 	setflag FLAG_BADGE05_GET
