@@ -301,7 +301,7 @@ script MagmaHideout_4F_EventScript_WarpToSlatePortCity{
 script MagmaHideout_4F_EventScript_CourtneyChangedOpinion{
     lock
 	faceplayer
-    msgbox(format("Changed opinions?"), MSGBOX_YESNO)
+    msgbox(format("Oh, changed your mind?"), MSGBOX_YESNO)
     if (var(VAR_RESULT)){
         goto(MagmaHideout_4F_EventScript_WarpToSlatePortCity)
     }
@@ -315,7 +315,7 @@ script MagmaHideout_4F_EventScript_CourtneyGoOutside{
     addobject(LOCALID_COURTNEY)
     setobjectxy(LOCALID_COURTNEY, 5, 20)
     applymovement(LOCALID_COURTNEY, MagmaHideout_4F_Movement_CourtneyArrives)
-    message(format("Courtney: Maxie! Urgent matter!\nTeam aqua plan something we need t--"))
+    message(format("Courtney: Maxie! Urgent news!\nTeam Aqua are up to something, we need to go and-"))
 	waitmessage
     applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceLeft)
     waitmovement(LOCALID_COURTNEY)
@@ -323,12 +323,12 @@ script MagmaHideout_4F_EventScript_CourtneyGoOutside{
     playse(SE_PIN)
     closemessage
     delay(16)
-    msgbox(format("Oh, you're not Maxie...\pBut I know you like to meddle our affairs.\nSo that might work.\pCan you counter their plans for us please?"), MSGBOX_YESNO)
+    msgbox(format("Oh! You're not Maxie.\pYou're that kid who meddles in our business, right?\n...Wait, that might work...\pWill you help us cause trouble for Team Aqua?"), MSGBOX_YESNO)
     if (var(VAR_RESULT)){
         msgbox(format("Sweet, thank you {PLAYER}."), MSGBOX_DEFAULT)
         goto(MagmaHideout_4F_EventScript_WarpToSlatePortCity)
     } else {
-        msgbox(format("I'll stay a few minutes here if you change opinions."), MSGBOX_DEFAULT)
+        msgbox(format("Hm. You're sure? Think it over, we're not leaving yet."), MSGBOX_DEFAULT)
         applymovement(LOCALID_COURTNEY, MagmaHideout_4F_Movement_CourtneyGoToPanel)
         waitmovement(0)
     }
