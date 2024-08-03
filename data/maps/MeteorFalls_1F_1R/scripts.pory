@@ -625,7 +625,7 @@ script MeteorFalls_1F_1R_EventScript_RivalAskYouToBringYouToTeamMagma{
 	waitmovement(0)
 	applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceDown)
 	waitmovement(0)
-    msgbox(format("I know a shortcut, I can ask one of my pokemon to bring you close to Mt.chimney if you want?"), MSGBOX_YESNO)
+    msgbox(format("I know a shortcut, I can ask one of my pokemon to bring you close to Mt.Chimney if you want?"), MSGBOX_YESNO)
     if (var(VAR_RESULT)){
         warp(MAP_ROUTE112, 255, 24, 33)
         waitstate
