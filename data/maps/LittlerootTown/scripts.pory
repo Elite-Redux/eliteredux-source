@@ -956,8 +956,8 @@ LittlerootTown_EventScript_GiveRunningShoes:: @ 81E8693
 	setflag FLAG_RECEIVED_COIN_CASE
 	setflag FLAG_RECEIVED_OLD_ROD
 	setvar VAR_LITTLEROOT_TOWN_STATE, 4
-	msgbox LittlerootTown_Text_ComeHomeIfAnythingHappens, MSGBOX_DEFAULT
-	closemessage
+	@ msgbox LittlerootTown_Text_ComeHomeIfAnythingHappens, MSGBOX_DEFAULT
+	@ closemessage
 	delay 30
 	return
 
