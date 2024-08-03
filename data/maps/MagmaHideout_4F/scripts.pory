@@ -305,7 +305,7 @@ script MagmaHideout_4F_EventScript_CourtneyChangedOpinion{
     if (var(VAR_RESULT)){
         goto(MagmaHideout_4F_EventScript_WarpToSlatePortCity)
     }
-	//yeah it's fucking bugged, for some reason even courtney cannot being applied movement at this point
+	//yeah it's fucking bugged, for some reason even courtney have its movement type wrong.
     applymovement(LOCALID_COURTNEY, Common_Movement_FaceUp)
 	waitmovement(0)
     release

@@ -857,3 +857,9 @@ MtChimney_Text_SawyerPostRematch: @ 8230614
 	.string "Actually, it really is hot here.\n"
 	.string "I'm overdressed for these parts.$"
 `
+
+script MtChimney_EventScript_VisitedMtChimney{
+    setflag(FLAG_VISITED_MT_CHIMNEY)
+    setvar(VAR_TEMP_0, 1)
+}
+
