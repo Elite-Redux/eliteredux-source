@@ -5737,12 +5737,12 @@ static const struct TrainerMonItemCustomMoves sParty_Brawly1[] = {
 static const struct TrainerMonItemCustomMoves sParty_Brawly1Insane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_SPIDOPS,
-    .heldItem = ITEM_ASSAULT_VEST,
-    .ability = 1,
-    .evs = {252, 252, 0, 0, 0, 4},
-    .nature = NATURE_ADAMANT,
-    .moves = MOVE_FIRST_IMPRESSION, MOVE_WEB_SHOT, MOVE_U_TURN, MOVE_SUCKER_PUNCH
+    .species = SPECIES_NOIVERN_REDUX,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 0,
+    .evs = {160, 96, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_DUAL_WINGBEAT, MOVE_SPIRIT_SHACKLE, MOVE_JAGGED_FANGS, MOVE_FIRE_FANG
     },
     {
     .lvl = 0,
