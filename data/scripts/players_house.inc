@@ -89,7 +89,7 @@ PlayersHouse_2F_EventScript_RivalComesUpstairsMale::
 	waitmovement 0
 	@ start of picking starter region skip
 	msgbox RivalsHouse_2F_Text_MayWhoAreYou, MSGBOX_DEFAULT
-	call LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
+	call LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
 	msgbox RivalsHouse_1F_Text_MayCatchYouLater, MSGBOX_DEFAULT
 	closemessage
 	applymovement VAR_0x8008, PlayersHouse_2F_Movement_MomExitsMale
