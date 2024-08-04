@@ -14182,6 +14182,7 @@ static void Cmd_handlerollout(void)
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
     {
         gVolatileStructs[gBattlerAttacker].rolloutCounter = 0;
+        gBattlescriptCurrInstr = BattleScript_MoveMissedPause;
     }
     else
     {
