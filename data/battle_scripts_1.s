@@ -541,9 +541,9 @@ BattleScript_EffectSteelBeam::
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	seteffectwithchance
+	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_SteelBeamAfterSelfDamage
 	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_SteelBeamAfterSelfDamage
-	jumpifability BS_ATTACKER, ABILITY_IMPENETRABLE, BattleScript_SteelBeamAfterSelfDamage
-	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD,  BattleScript_SteelBeamAfterSelfDamage
+	jumpifmagicguard BS_ATTACKER, BattleScript_SteelBeamAfterSelfDamage
 	call BattleScript_SteelBeamSelfDamage
 BattleScript_SteelBeamAfterSelfDamage::
 	waitstate
@@ -555,8 +555,7 @@ BattleScript_SteelBeamMiss::
 	effectivenesssound
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	jumpifability BS_ATTACKER, ABILITY_IMPENETRABLE, BattleScript_MoveEnd
-	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD,  BattleScript_MoveEnd
+	jumpifmagicguard BS_ATTACKER, BattleScript_MoveEnd
 	bichalfword gMoveResultFlags, MOVE_RESULT_MISSED
 	call BattleScript_SteelBeamSelfDamage
 	orhalfword gMoveResultFlags, MOVE_RESULT_MISSED
@@ -4431,7 +4430,7 @@ BattleScript_EffectRecoilIfMiss::
 	argumenttomoveeffect
 	goto BattleScript_HitFromAtkString
 BattleScript_MoveMissedDoDamage::
-	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_PrintMoveMissed
+	jumpifmagicguard BS_ATTACKER, BattleScript_PrintMoveMissed
 	attackstring
 	ppreduce
 	pause B_WAIT_TIME_LONG
@@ -6999,6 +6998,8 @@ BattleScript_FaintAttacker::
 	return
 
 BattleScript_FaintTarget::
+	savetargettostack4
+	copybyte gBattlerTarget, gStackBattler1
 	tryillusionoff BS_TARGET
 	playfaintcry BS_TARGET
 	pause B_WAIT_TIME_LONG
@@ -7016,6 +7017,7 @@ BattleScript_FaintTarget::
 	tryactivatebattlebond BS_ATTACKER
 	tryactivaterampage BS_ATTACKER
 	trytrainerslidefirstdownmsg BS_TARGET
+	readtargetfromstack4
 	return
 
 BattleScript_GiveExp::
@@ -7878,7 +7880,7 @@ BattleScript_GulpMissileGorging::
 	effectivenesssound
 	hitanimation BS_ATTACKER
 	waitstate
-	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_GulpMissileNoDmgGorging
+	jumpifmagicguard BS_ATTACKER, BattleScript_GulpMissileNoDmgGorging
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	tryfaintmon BS_ATTACKER, FALSE, NULL
@@ -7917,7 +7919,7 @@ BattleScript_GulpMissileGulping::
 	effectivenesssound
 	hitanimation BS_ATTACKER
 	waitstate
-	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_GulpMissileNoDmgGulping
+	jumpifmagicguard BS_ATTACKER, BattleScript_GulpMissileNoDmgGulping
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	tryfaintmon BS_ATTACKER, FALSE, NULL
@@ -8814,7 +8816,7 @@ BattleScript_PrintPayDayMoneyString::
 	return
 
 BattleScript_WrapTurnDmg::
-	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD, BattleScript_DoTurnDmgEnd
+	jumpifmagicguard BS_ATTACKER, BattleScript_DoTurnDmgEnd
 	playanimation BS_ATTACKER, B_ANIM_TURN_TRAP, sB_ANIM_ARG1
 	printstring STRINGID_PKMNHURTBY
 	waitmessage B_WAIT_TIME_LONG
@@ -8982,9 +8984,8 @@ BattleScript_MoveEffectRecoil::
 	jumpifmove MOVE_STRUGGLE, BattleScript_DoRecoil
 	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD,    BattleScript_RecoilEnd
 	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_RecoilEnd
-	jumpifability BS_ATTACKER, ABILITY_IMPENETRABLE, BattleScript_RecoilEnd
-	jumpifability BS_ATTACKER, ABILITY_MAGIC_GUARD,  BattleScript_RecoilEnd
 	jumpifability BS_ATTACKER, ABILITY_BAD_COMPANY,  BattleScript_RecoilEnd
+	jumpifmagicguard BS_ATTACKER, BattleScript_RecoilEnd
 BattleScript_DoRecoil::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
 	healthbarupdate BS_ATTACKER
@@ -10114,8 +10115,7 @@ BattleScript_BadDreamsLoop:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	printstring STRINGID_BADDREAMSDMG
 	waitmessage B_WAIT_TIME_LONG
-	jumpifability BS_TARGET, ABILITY_MAGIC_GUARD, BattleScript_BadDreamsIncrement
-	jumpifability BS_TARGET, ABILITY_IMPENETRABLE, BattleScript_BadDreamsIncrement
+	jumpifmagicguard BS_TARGET, BattleScript_BadDreamsIncrement
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
 	tryfaintmon BS_TARGET, FALSE, NULL

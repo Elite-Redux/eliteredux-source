@@ -2344,3 +2344,8 @@ checkstatbuffonlowered_queensmourning_\@:
 	goto checkstatbuffonlowered_none_\@
 checkstatbuffonlowered_none_\@:
 	.endm
+
+.macro jumpifmagicguard battler:req, ptr:req
+	jumpifability \battler, ABILITY_MAGIC_GUARD, \ptr
+	jumpifability \battler, ABILITY_IMPENETRABLE, \ptr
+	.endm

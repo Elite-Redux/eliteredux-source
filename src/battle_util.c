@@ -2830,10 +2830,10 @@ s32 GetDrainedBigRootHp(u32 battler, s32 hp)
     return hp * -1;
 }
 
-#define BATTLER_HAS_MAGIC_GUARD(battlerId) (GetBattlerAbility(battlerId) == ABILITY_MAGIC_GUARD || GetBattlerAbility(battlerId) == ABILITY_IMPENETRABLE || BattlerHasInnate(battlerId, ABILITY_MAGIC_GUARD) || BattlerHasInnate(battlerId, ABILITY_IMPENETRABLE))
+#define BATTLER_HAS_MAGIC_GUARD(battlerId) IsMagicGuardProtected(battlerId)
 
 #define MAGIC_GUARD_CHECK \
-if (ability == ABILITY_MAGIC_GUARD || ability == ABILITY_IMPENETRABLE || BattlerHasInnate(gActiveBattler, ABILITY_MAGIC_GUARD) || BattlerHasInnate(gActiveBattler, ABILITY_IMPENETRABLE)) \
+if (IsMagicGuardProtected(gActiveBattler)) \
 {\
     RecordAbilityBattle(gActiveBattler, ability);\
     gBattleStruct->turnEffectsTracker++;\
@@ -3580,11 +3580,11 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_GENERIC_BATTLER_TIMERS:
-            if (!gVolatileStructs[gActiveBattler].started.fear) gVolatileStructs[i].fear = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.rapidResponse) gVolatileStructs[i].rapidResponse = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.readiedAction) gVolatileStructs[i].readiedAction = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.showdownMode) gVolatileStructs[i].showdownMode = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.violentRush) gVolatileStructs[i].violentRush = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.fear)          gVolatileStructs[gActiveBattler].fear          = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.rapidResponse) gVolatileStructs[gActiveBattler].rapidResponse = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.readiedAction) gVolatileStructs[gActiveBattler].readiedAction = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.showdownMode)  gVolatileStructs[gActiveBattler].showdownMode  = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.violentRush)   gVolatileStructs[gActiveBattler].violentRush   = FALSE;
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_BATTLER_COUNT:  // done
@@ -12371,7 +12371,7 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return FALSE;
 }
 
-bool32 IsBattlerGrounded(u8 battlerId)
+static int CheckGroundingEffects(u8 battlerId)
 {
     if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_IRON_BALL)
         return TRUE;
@@ -12381,25 +12381,45 @@ bool32 IsBattlerGrounded(u8 battlerId)
         return TRUE;
     else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
         return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_UNDERGROUND)
+        return TRUE;
     else if (getMonotypeChampType() == TYPE_GROUND && GetBattlerSide(battlerId) == B_SIDE_PLAYER)
         return TRUE;
 
-    else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
-        return FALSE;
-    else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
-        return FALSE;
-    else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
-        return FALSE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LEVITATE))
-        return FALSE;
-    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_AERIALIST))
-        return FALSE;
-	else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DRAGONFLY)) //Dragonfly
-        return FALSE;
-    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING))
-        return FALSE;
-    else
+    return FALSE;
+}
+
+static int CheckLevitatingEffects(u8 battlerId)
+{
+    if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
         return TRUE;
+    else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
+        return TRUE;
+    else if (GetBattlerHoldEffect(battlerId, TRUE) == HOLD_EFFECT_AIR_BALLOON)
+        return TRUE;
+    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LEVITATE))
+        return TRUE;
+    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_AERIALIST))
+        return TRUE;
+	else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DRAGONFLY)) //Dragonfly
+        return TRUE;
+
+    return FALSE;
+}
+
+bool32 IsBattlerGroundedIgnoreType(u8 battlerId)
+{
+    if (CheckGroundingEffects(battlerId)) return TRUE;
+    if (CheckLevitatingEffects(battlerId)) return FALSE;
+    return TRUE;
+}
+
+bool32 IsBattlerGrounded(u8 battlerId)
+{
+    if (CheckGroundingEffects(battlerId)) return TRUE;
+    if (CheckLevitatingEffects(battlerId)) return FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING)) return FALSE;
+    return TRUE;
 }
 
 bool32 IsBattlerAlive(u8 battlerId)
@@ -15402,7 +15422,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     if (recordAbilities && (illusionSpecies = GetIllusionMonSpecies(battlerDef)))
         TryNoticeIllusionInTypeEffectiveness(move, moveType, battlerAtk, battlerDef, modifier, illusionSpecies);
 
-    if (moveType == TYPE_GROUND && !IsBattlerGrounded(battlerDef)
+    if (moveType == TYPE_GROUND && !IsBattlerGroundedIgnoreType(battlerDef)
         && !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING)
         && !(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))) // Moves that ignore ground immunity
     {
@@ -16781,4 +16801,14 @@ void MakePlayerTeamAsleep(void){
         if(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL))
             SetMonData(&gPlayerParty[i], MON_DATA_STATUS, &status);
     }
+}
+
+int IsMagicGuardProtected(int battler)
+{
+    int ability = GetBattlerAbility(battler);
+
+    if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MAGIC_GUARD, ability))  return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_IMPENETRABLE, ability)) return TRUE;
+
+    return FALSE;
 }
