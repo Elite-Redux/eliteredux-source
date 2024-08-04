@@ -62,19 +62,6 @@
       "flag": "0"
     },
     {
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 14,
-      "y": 6,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route127_EventScript_ItemZinc",
-      "flag": "FLAG_ITEM_ROUTE_127_ZINC"
-    },
-    {
       "graphics_id": "OBJ_EVENT_GFX_FISHERMAN",
       "x": 42,
       "y": 21,
@@ -151,19 +138,6 @@
       "trainer_sight_or_berry_tree_id": "2",
       "script": "Route127_EventScript_Athena",
       "flag": "0"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
-      "x": 13,
-      "y": 20,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "Route127_EventScript_ItemRareCandy",
-      "flag": "FLAG_ITEM_ROUTE_127_RARE_CANDY"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MYSTERY_GIFT_MAN",
