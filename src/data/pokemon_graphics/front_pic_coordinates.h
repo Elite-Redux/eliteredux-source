@@ -5557,12 +5557,22 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 0,
     },
-      [SPECIES_CORM] =
+    [SPECIES_CORM] =
     {
         .size = 0x45,
         .y_offset = 7,
     },
-     [SPECIES_MAIZEMOTH] =
+    [SPECIES_MAIZEMOTH] =
+    {
+        .size = 0x87,
+        .y_offset = 5,
+    },
+    [SPECIES_POPMOTH] =
+    {
+        .size = 0x87,
+        .y_offset = 5,
+    },
+    [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x87,
         .y_offset = 5,

@@ -1214,6 +1214,8 @@ const u8 *const gMonIconTable[] =
     [SPECIES_CORM] = gMonIcon_Corm,
     [SPECIES_MAIZEMOTH] = gMonIcon_Maizemoth,
     [SPECIES_MAIZEMOTH_MEGA] = gMonIcon_MaizemothMega,
+    [SPECIES_POPMOTH] = gMonIcon_Popmoth,
+    [SPECIES_POPMOTH_MEGA] = gMonIcon_PopmothMega,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,

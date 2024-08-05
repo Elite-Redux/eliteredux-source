@@ -161,6 +161,16 @@ static const union AnimCmd sAnim_MAIZEMOTH_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_POPMOTH_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -611,6 +621,16 @@ static const union AnimCmd *const sAnims_MAIZEMOTH[] ={
 static const union AnimCmd *const sAnims_MAIZEMOTH_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_MAIZEMOTH_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_POPMOTH[] ={
+    sAnim_GeneralFrame0,
+    sAnim_POPMOTH_1,
+};
+
+static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_POPMOTH_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_POLARTIC[] ={
@@ -20300,6 +20320,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(CORM),
     ANIM_CMD(MAIZEMOTH),
     ANIM_CMD(MAIZEMOTH_MEGA),
+    ANIM_CMD(POPMOTH),
+    ANIM_CMD(POPMOTH_MEGA),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
     ANIM_CMD(RAPIDASH_MEGA),

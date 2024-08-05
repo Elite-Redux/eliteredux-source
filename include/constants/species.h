@@ -1051,8 +1051,9 @@
 #define SPECIES_DREDWOOD 1044
 #define SPECIES_CORM 1045
 #define SPECIES_MAIZEMOTH 1046
+#define SPECIES_POPMOTH 1047
 
-#define LAST_VALID_SPECIES SPECIES_MAIZEMOTH
+#define LAST_VALID_SPECIES SPECIES_POPMOTH
 
 #define FORMS_START  1500
 
@@ -1631,8 +1632,9 @@
 #define SPECIES_REUNICLUS_REDUX_MEGA        CUSTOM_MEGA_START + 70
 #define SPECIES_HYDREIGON_REDUX_MEGA        CUSTOM_MEGA_START + 71
 #define SPECIES_MAIZEMOTH_MEGA              CUSTOM_MEGA_START + 72
+#define SPECIES_POPMOTH_MEGA                CUSTOM_MEGA_START + 73
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_MAIZEMOTH_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_POPMOTH_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
@@ -2799,6 +2801,7 @@
 #define NATIONAL_DEX_DREDWOOD 1044
 #define NATIONAL_DEX_CORM 1045
 #define NATIONAL_DEX_MAIZEMOTH 1046
+#define NATIONAL_DEX_POPMOTH 1047
 
 #define NATIONAL_DEX_COUNT  1500
 #define POKEMON_SLOTS_NUMBER (NATIONAL_DEX_COUNT + 1)

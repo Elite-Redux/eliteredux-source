@@ -756,7 +756,7 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
                             {EVO_MEGA_EVOLUTION, ITEM_GYARADEATHITE_Y, SPECIES_GYARADEATH_MEGA_Y}},
 
     [SPECIES_CORM]  = {{EVO_LEVEL, 23, SPECIES_MAIZEMOTH},
-                            {EVO_LEVEL, 23, SPECIES_CORM}},
+                            {EVO_LEVEL, 23, SPECIES_POPMOTH}},
 
     //Monochamp Stuff
     /*[SPECIES_CHIEN_PAO]      = {{EVO_MEGA_EVOLUTION,   ITEM_CHIEN_PAOITE,   SPECIES_CHIEN_PAO_MEGA}},

@@ -1325,6 +1325,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_AEGISLASH_BLADE_REDUX_MEGA]      = _("Aegislash"),
     [SPECIES_MAIZEMOTH]             = _("Maizemoth"),
     [SPECIES_MAIZEMOTH_MEGA]      = _("Maizemoth"),
+    [SPECIES_POPMOTH]             = _("Popmoth"),
+    [SPECIES_POPMOTH_MEGA]             = _("Popmoth"),
     [SPECIES_CLAWITZER_REDUX]    = _("Clawitzer"),
     // Special Mega + Primals
     [SPECIES_RAYQUAZA_MEGA]  = _("Rayquaza"),
