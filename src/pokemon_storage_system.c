@@ -5083,7 +5083,10 @@ static bool8 CreatePartyMonSprite(u8 partyId)
 
     if (species != SPECIES_NONE)
     {
-        sStorage->partySprites[partyId] = CreateMonIconSprite(species, personality, 152,  8 * (3 * (partyId - 1)) + 16, 1, 12);
+        if(partyId == 0)
+            sStorage->partySprites[partyId] = CreateMonIconSprite(species, personality, 104, 64, 1, 12);
+        else
+            sStorage->partySprites[partyId] = CreateMonIconSprite(species, personality, 152,  8 * (3 * (partyId - 1)) + 16, 1, 12);
         return TRUE;
     }
     else
