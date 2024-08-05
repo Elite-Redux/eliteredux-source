@@ -4025,11 +4025,13 @@ u8 AtkCanceller_UnableToUseMove(void)
                         gBattleMoveDamage = CalculateMoveDamage(MOVE_NONE, gBattlerAttacker, gBattlerAttacker, &moveType, IsAbilityOnSide(BATTLE_OPPOSITE(gBattlerAttacker), ABILITY_COSMIC_DAZE) ? 80 : 40, FALSE, FALSE, TRUE);
                         gRoundStructs[gBattlerAttacker].confusionSelfDmg = TRUE;
                         gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+                        effect = 1;
                     }
                     else
                     {
                         gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
                         BattleScriptPushCursor();
+                        effect = 3;
                     }
                     gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
                 }
@@ -4037,8 +4039,8 @@ u8 AtkCanceller_UnableToUseMove(void)
                 {
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfusedNoMore;
+                    effect = 3;
                 }
-                effect = 1;
             }
             gBattleStruct->atkCancellerTracker++;
             break;
