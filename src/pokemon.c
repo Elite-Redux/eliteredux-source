@@ -9603,7 +9603,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
               randomizedAbility == ABILITY_AS_ONE_ICE_RIDER     ||
               randomizedAbility == ABILITY_AS_ONE_SHADOW_RIDER  ||
               randomizedAbility == ABILITY_CROWNED_KING         ||
-              randomizedAbility != ABILITY_ZERO_TO_HERO         ||
+              randomizedAbility == ABILITY_ZERO_TO_HERO         ||
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedAbility == ABILITY_COMATOSE             ||
               randomizedAbility == ABILITY_WONDER_GUARD         ||
