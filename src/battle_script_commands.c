@@ -7710,7 +7710,13 @@ static void Cmd_getmoneyreward(void)
         if (gBattleOutcome == B_OUTCOME_FORFEITED ||  gBattleOutcome == B_OUTCOME_LOST) {
             VarSet(VAR_TRAINER_PRIZE_BP, 0);
         } else {
-            VarSet(VAR_TRAINER_PRIZE_BP, DEFAULT_BP_GAIN_PER_TRAINER);
+            // if two opponnents are present give twice the BP amount
+            if (gTrainerBattleOpponent_B){
+                VarSet(VAR_TRAINER_PRIZE_BP, DEFAULT_BP_GAIN_PER_TRAINER * 2);
+            } else {
+                VarSet(VAR_TRAINER_PRIZE_BP, DEFAULT_BP_GAIN_PER_TRAINER);
+            }
+            
         }
         
         gSpecialVar_0x8004 = VarGet(VAR_TRAINER_PRIZE_BP);
