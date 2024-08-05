@@ -13162,7 +13162,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_UNDISCOVERED,
     .eggGroup2 = EGG_GROUP_UNDISCOVERED,
     .abilities = {ABILITY_AVENGER, ABILITY_NEUROFORCE, ABILITY_SPEED_BOOST},
-    .innates = {ABILITY_LEVITATE, ABILITY_VIOLENT_RUSH, ABILITY_MYSTIC_POWER},
+    .innates = {ABILITY_LEVITATE, ABILITY_RAPID_RESPONSE, ABILITY_MYSTIC_POWER},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
     .tier = 0,
@@ -19847,12 +19847,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_GOTHITELLE] =
     {
-    .baseHP        = 70,
+    .baseHP        = 80,
     .baseAttack    = 55,
     .baseDefense   = 95,
     .baseSpeed     = 65,
-    .baseSpAttack  = 95,
-    .baseSpDefense = 110,
+    .baseSpAttack  = 115,
+    .baseSpDefense = 130,
     .type1 = TYPE_PSYCHIC,
     .type2 = TYPE_PSYCHIC,
     .catchRate = 255,
