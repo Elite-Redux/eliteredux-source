@@ -2139,14 +2139,23 @@ static void Task_HandleInput(u8 taskId)
 		else if (gMain.newKeys & R_BUTTON)
 		{
             if(sMonSummaryScreen->currPageIndex == PSS_PAGE_EVOLUTION && enablePokemonChanges() && !gMain.inBattle){
-                u8 pokeball = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, NULL);
+                u8 pokeball = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, NULL);
 
                 if(pokeball < LAST_BALL_INDEX)
                     pokeball++;
                 else
                     pokeball = FIRST_BALL_INDEX;
-                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, &pokeball);
-                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, &pokeball);
+
+                if(!sMonSummaryScreen->isBoxMon){
+                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, &pokeball);
+                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, &pokeball);
+                }
+                else{
+                    struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
+                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, &pokeball);
+                    SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, &pokeball);
+                }
+
                 RefreshPageAfterChange(2);
                 CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
             }
@@ -2251,14 +2260,23 @@ static void Task_HandleInput(u8 taskId)
 		}
 		else if (gMain.newKeys & L_BUTTON){
             if(sMonSummaryScreen->currPageIndex == PSS_PAGE_EVOLUTION && enablePokemonChanges() && !gMain.inBattle){
-                u8 pokeball = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, NULL);
+                u8 pokeball = GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, NULL);
 
                 if(pokeball != FIRST_BALL_INDEX)
                     pokeball--;
                 else
                     pokeball =  LAST_BALL_INDEX;
-                SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, &pokeball);
-                SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, &pokeball);
+
+                if(!sMonSummaryScreen->isBoxMon){
+                    SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, &pokeball);
+                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, &pokeball);
+                }
+                else{
+                    struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
+                    SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_POKEBALL, &pokeball);
+                    SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, &pokeball);
+                }
+                
                 RefreshPageAfterChange(2);
                 CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
             }
@@ -6764,13 +6782,24 @@ static void RemoveAndCreateMonMarkingsSprite(struct Pokemon *mon)
     CreateMonMarkingsSprite(mon);
 }
 
+#define TAG_CAUGHT_BALL 5500
+
+static void DestroyCaughtBallSprite(void)
+{
+    DestroySprite(&gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]]);
+    FreeSpriteTilesByTag(TAG_CAUGHT_BALL);
+    FreeSpritePaletteByTag(TAG_CAUGHT_BALL);
+    sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL] = 0xFF;
+}
+
 static void CreateCaughtBallSprite(struct Pokemon *mon)
 {
     u8 ball = ItemIdToBallId(GetMonData(mon, MON_DATA_POKEBALL));
 
-    FreeSpriteTilesByTag(5500);
-    FreeSpritePaletteByTag(5500);
-    sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL] = AddBallIconSprite(5500, 5500, ball);
+    if(sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL] != 0xFF)
+        DestroyCaughtBallSprite();
+
+    sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL] = AddBallIconSprite(TAG_CAUGHT_BALL, TAG_CAUGHT_BALL, ball);
     gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]].callback = SpriteCallbackDummy;
     gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]].oam.priority = 0;
     gSprites[sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_BALL]].x = 12;
