@@ -1781,3 +1781,8 @@ static const u16 sArbokFormSpeciesIdTable[] = {
     SPECIES_ARBOK_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sLumberingSlothFormSpeciesIdTable[] = {
+    SPECIES_LUMBERING_SLOTH,
+    SPECIES_LUMBERING_SLOTH_OVERGROWN,
+    FORM_SPECIES_END,
+};

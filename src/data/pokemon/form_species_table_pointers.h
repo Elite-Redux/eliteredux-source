@@ -919,4 +919,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_ARBOK_MEGA] = sArbokFormSpeciesIdTable,
 
+    [SPECIES_LUMBERING_SLOTH] = sLumberingSlothFormSpeciesIdTable,
+
 };

@@ -790,7 +790,7 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_LANDORUS] = {{EVO_FORM_SHIFT, 1, SPECIES_LANDORUS},
                           {EVO_FORM_SHIFT, 1, SPECIES_LANDORUS_THERIAN},},
 
-    //Thundurus changes forms with the use of the Reveal Glass
+    //Tornadus changes forms with the use of the Reveal Glass
     [SPECIES_TORNADUS] = {{EVO_FORM_SHIFT, 1, SPECIES_TORNADUS},
                           {EVO_FORM_SHIFT, 1, SPECIES_TORNADUS_THERIAN},},
 
@@ -798,11 +798,11 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_THUNDURUS] = {{EVO_FORM_SHIFT, 1, SPECIES_THUNDURUS},
                            {EVO_FORM_SHIFT, 1, SPECIES_THUNDURUS_THERIAN},},
 
-    //Meloetta changes forms with the use of the Reveal Glass
+    //Enamorus changes forms with the use of the Reveal Glass
     [SPECIES_ENAMORUS] = {{EVO_FORM_SHIFT, 1, SPECIES_ENAMORUS},
                           {EVO_FORM_SHIFT, 1, SPECIES_ENAMORUS_THERIAN},},
 
-    //Meloetta changes forms with the use of the Meteorite
+    //Deoxys changes forms with the use of the Meteorite
     [SPECIES_DEOXYS] = {{EVO_FORM_SHIFT, 1, SPECIES_DEOXYS},
                         {EVO_FORM_SHIFT, 1, SPECIES_DEOXYS_ATTACK},
                         {EVO_FORM_SHIFT, 1, SPECIES_DEOXYS_SPEED},
@@ -877,4 +877,6 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_WHITESTRIPED},},
     [SPECIES_POLARTIC] = {{EVO_FORM_SHIFT, 1, SPECIES_POLARTIC},
                             {EVO_FORM_SHIFT, 1, SPECIES_POLARTIC_BLUEMOON},},
+    [SPECIES_LUMBERING_SLOTH] = {{EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH},
+                            {EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH_OVERGROWN},},
 };
