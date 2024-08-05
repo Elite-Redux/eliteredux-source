@@ -41077,6 +41077,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_BLIZZARD_MAW] =
+    {
+    .baseHP        = 80,
+    .baseAttack    = 130,
+    .baseDefense   = 80,
+    .baseSpeed     = 110,
+    .baseSpAttack  = 120,
+    .baseSpDefense = 80,
+    .type1 = TYPE_ICE,
+    .type2 = TYPE_ICE,
+    .catchRate = 255,
+    .expYield = 203,
+    .evYield_HP    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_MINERAL,
+	.abilities = {ABILITY_MOODY, ABILITY_CRYO_PROFICIENCY, ABILITY_CRYSTALLIZE},
+	.innates = {ABILITY_WHITEOUT, ABILITY_REFRIGERATE, ABILITY_IMPENETRABLE},
+    .bodyColor = BODY_COLOR_GRAY,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

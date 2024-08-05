@@ -7622,6 +7622,11 @@ const u32 gMonPalette_PopmothMega[]           = INCBIN_U32("graphics/pokemon/pop
 const u32 gMonShinyPalette_PopmothMega[]      = INCBIN_U32("graphics/pokemon/popmoth/mega/shiny.gbapal.lz");
 const u8  gMonIcon_PopmothMega[]              = INCBIN_U8("graphics/pokemon/popmoth/mega/icon.4bpp");
 
+const u32 gMonFrontPic_BlizzardMaw[]          = INCBIN_U32("graphics/pokemon/blizzard_maw/front.4bpp.lz");
+const u32 gMonBackPic_BlizzardMaw[]           = INCBIN_U32("graphics/pokemon/blizzard_maw/back.4bpp.lz");
+const u32 gMonPalette_BlizzardMaw[]           = INCBIN_U32("graphics/pokemon/blizzard_maw/normal.gbapal.lz");
+const u32 gMonShinyPalette_BlizzardMaw[]      = INCBIN_U32("graphics/pokemon/blizzard_maw/shiny.gbapal.lz");
+const u8  gMonIcon_BlizzardMaw[]              = INCBIN_U8("graphics/pokemon/blizzard_maw/icon.4bpp");
 
 const u32 gMonFrontPic_ArbokMega[]          = INCBIN_U32("graphics/pokemon/arbok/mega/front.4bpp.lz");
 const u32 gMonBackPic_ArbokMega[]           = INCBIN_U32("graphics/pokemon/arbok/mega/back.4bpp.lz");

@@ -166,6 +166,12 @@ static const union AnimCmd sAnim_POPMOTH_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+
+static const union AnimCmd sAnim_BLIZZARD_MAW_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -626,6 +632,11 @@ static const union AnimCmd *const sAnims_MAIZEMOTH_MEGA[] ={
 static const union AnimCmd *const sAnims_POPMOTH[] ={
     sAnim_GeneralFrame0,
     sAnim_POPMOTH_1,
+};
+
+static const union AnimCmd *const sAnims_BLIZZARD_MAW[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BLIZZARD_MAW_1,
 };
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
@@ -20322,6 +20333,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(MAIZEMOTH_MEGA),
     ANIM_CMD(POPMOTH),
     ANIM_CMD(POPMOTH_MEGA),
+    ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
     ANIM_CMD(RAPIDASH_MEGA),

@@ -1621,6 +1621,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_MAIZEMOTH] = sMaizemothLevelUpLearnset,
     [SPECIES_MAIZEMOTH_MEGA] = sMaizemothLevelUpLearnset,
     [SPECIES_POPMOTH] = sPopmothLevelUpLearnset,
+    [SPECIES_BLIZZARD_MAW] = sBlizzardMawLevelUpLearnset,
     [SPECIES_POPMOTH_MEGA] = sPopmothLevelUpLearnset,
     [SPECIES_ARBOK_MEGA] = sArbokLevelUpLearnset,
     [SPECIES_GOLISOPOD_MEGA] = sGolisopodLevelUpLearnset,
