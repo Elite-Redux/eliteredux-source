@@ -911,6 +911,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_POLARTIC] = sPolarticFormSpeciesIdTable,
 
+    [SPECIES_POLARTIC_BLUEMOON] = sPolarticFormSpeciesIdTable,
+
     [SPECIES_GYARADEATH] = sGyaradeathFormSpeciesIdTable,
 
     [SPECIES_GYARADEATH_MEGA_X] = sGyaradeathFormSpeciesIdTable,
@@ -920,5 +922,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ARBOK_MEGA] = sArbokFormSpeciesIdTable,
 
     [SPECIES_LUMBERING_SLOTH] = sLumberingSlothFormSpeciesIdTable,
+
+    [SPECIES_LUMBERING_SLOTH_OVERGROWN] = sLumberingSlothFormSpeciesIdTable,
 
 };

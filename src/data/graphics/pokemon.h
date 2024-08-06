@@ -7640,11 +7640,11 @@ const u32 gMonPalette_LumberingSloth[]           = INCBIN_U32("graphics/pokemon/
 const u32 gMonShinyPalette_LumberingSloth[]      = INCBIN_U32("graphics/pokemon/lumbering_sloth/shiny.gbapal.lz");
 const u8  gMonIcon_LumberingSloth[]              = INCBIN_U8("graphics/pokemon/lumbering_sloth/icon.4bpp");
 
-const u32 gMonFrontPic_LumberingSlothOvergrown[]          = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/front.4bpp.lz");
-const u32 gMonBackPic_LumberingSlothOvergrown[]           = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/back.4bpp.lz");
-const u32 gMonPalette_LumberingSlothOvergrown[]           = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/normal.gbapal.lz");
-const u32 gMonShinyPalette_LumberingSlothOvergrown[]      = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/shiny.gbapal.lz");
-const u8  gMonIcon_LumberingSlothOvergrown[]              = INCBIN_U8("graphics/pokemon/lumbering_sloth/overgrown/icon.4bpp");
+const u32 gMonFrontPic_LumberingSloth_Overgrown[]          = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/front.4bpp.lz");
+const u32 gMonBackPic_LumberingSloth_Overgrown[]           = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/back.4bpp.lz");
+const u32 gMonPalette_LumberingSloth_Overgrown[]           = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/normal.gbapal.lz");
+const u32 gMonShinyPalette_LumberingSloth_Overgrown[]      = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/shiny.gbapal.lz");
+const u8  gMonIcon_LumberingSloth_Overgrown[]              = INCBIN_U8("graphics/pokemon/lumbering_sloth/overgrown/icon.4bpp");
 
 const u32 gMonFrontPic_IronCarapace[]          = INCBIN_U32("graphics/pokemon/iron_carapace/front.4bpp.lz");
 const u32 gMonBackPic_IronCarapace[]           = INCBIN_U32("graphics/pokemon/iron_carapace/back.4bpp.lz");
