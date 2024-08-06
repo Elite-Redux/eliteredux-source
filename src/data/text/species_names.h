@@ -1121,7 +1121,6 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_QWILFISH_HISUIAN] = _("Qwilfish"),
     [SPECIES_BASCULEGION] = _("Basculegion"),
     [SPECIES_CORM]      = _("Corm"),
-    [SPECIES_MAIZEMOTH]      = _("Maizemoth"),
 
     [SPECIES_TORTERRA_REDUX]      = _("Torterra"),
     [SPECIES_TORTERRA_REDUX_MEGA]      = _("Torterra"),
