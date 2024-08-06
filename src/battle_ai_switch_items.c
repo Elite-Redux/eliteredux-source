@@ -524,7 +524,7 @@ static u32 CalculateHazardDamage(void)
     u32 spikesDmg = 0;
     u32 holdEffect = GetBattlerHoldEffect(gActiveBattler, TRUE);
 
-    if (BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_MAGIC_GUARD) ||
+    if (IsMagicGuardProtected(gActiveBattler) ||
         holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS)
         return totalHazardDmg;
 
@@ -621,7 +621,7 @@ bool32 ShouldSwitch(void)
         return FALSE;
     if (gStatuses4[gActiveBattler] & STATUS4_COMMANDED)
         return FALSE;
-    if (gVolatileStructs[gActiveBattler].fearTimer)
+    if (gVolatileStructs[gActiveBattler].fear)
         return FALSE;
     if (IsAbilityPreventingEscape(gActiveBattler))
         return FALSE;

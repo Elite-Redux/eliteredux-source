@@ -833,19 +833,19 @@ void (* const gBattleScriptingCommandsTable[])(void) =
 
 const struct StatFractions gAccuracyStageRatios[] =
 {
-    { 33, 100}, // -6
-    { 36, 100}, // -5
-    { 43, 100}, // -4
-    { 50, 100}, // -3
-    { 60, 100}, // -2
-    { 75, 100}, // -1
-    {  1,   1}, //  0
-    {133, 100}, // +1
-    {166, 100}, // +2
-    {  2,   1}, // +3
-    {233, 100}, // +4
-    {133,  50}, // +5
-    {  3,   1}, // +6
+    {1, 3}, // -6
+    {3, 8}, // -5
+    {3, 7}, // -4
+    {1, 2}, // -3
+    {2, 3}, // -2
+    {3, 4}, // -1
+    {1, 1}, //  0
+    {4, 3}, // +1
+    {3, 2}, // +2
+    {2, 1}, // +3
+    {7, 3}, // +4
+    {8, 3}, // +5
+    {3, 1}, // +6
 };
 
 static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
@@ -1054,6 +1054,7 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_SPARKLY_SWIRL] = FORBIDDEN_METRONOME,
     [MOVE_SPECTRAL_THIEF] = FORBIDDEN_METRONOME,
     [MOVE_SPIKY_SHIELD] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_MIND_READER] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_SPIRIT_BREAK] = FORBIDDEN_METRONOME,
     [MOVE_SPLISHY_SPLASH] = FORBIDDEN_METRONOME,
     [MOVE_SPOTLIGHT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
@@ -2048,14 +2049,13 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     if (IsGravityActive())
         calc = (calc * 5) / 3; // 1.66 Gravity acc boost
 
-    if (WEATHER_HAS_EFFECT && gBattleWeather & B_WEATHER_FOG_PERMANENT) 
-	{
-        if ((atkAbility != ABILITY_ILLUMINATE) && (atkAbility != ABILITY_MINDS_EYE)
-        && (atkAbility != ABILITY_RADIANCE) && (atkAbility != ABILITY_PLASMA_LAMP))
-		    calc = (calc * 80) / 100; // 20% fog loss
-	}
+    if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST))
+        calc = (calc * 75) / 100; // Equivalent to 1 stage of evasion
+    
+    if (gSideTimers[GET_BATTLER_SIDE(battlerDef)].smokescreenTimer)
+        calc = (calc * 75) / 100;
 
-        return min(calc, 100);
+    return min(calc, 100);
 }
 
 static void Cmd_accuracycheck(void)
@@ -3804,7 +3804,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattlescriptCurrInstr = BattleScript_AtkDefDown;
                 break;
             case MOVE_EFFECT_DEF_SPDEF_DOWN: // Close Combat
-                if (GetBattlerAbility(gBattlerAttacker) != ABILITY_BAD_COMPANY && !BattlerHasInnate(gBattlerAttacker, ABILITY_BAD_COMPANY)){
+                if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_BAD_COMPANY)){
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_DefSpDefDown;
                 }
@@ -3851,10 +3851,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             case MOVE_EFFECT_FLAME_BURST:
                 if (IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget)) &&
-				    GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)) != ABILITY_MAGIC_GUARD &&
-                    GetBattlerAbility(BATTLE_PARTNER(gBattlerTarget)) != ABILITY_IMPENETRABLE &&
-		            !BattlerHasInnate(BATTLE_PARTNER(gBattlerTarget), ABILITY_MAGIC_GUARD) &&
-		            !BattlerHasInnate(BATTLE_PARTNER(gBattlerTarget), ABILITY_IMPENETRABLE))
+				    !IsMagicGuardProtected(BATTLE_PARTNER(gBattlerTarget)))
                 {
                     gBattleMoveDamage = gBattleMons[BATTLE_PARTNER(gBattlerTarget)].hp / 4;
                     if (gBattleMoveDamage == 0)
@@ -3878,6 +3875,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gRoundStructs[gBattlerTarget].obstructed = FALSE;
                     gRoundStructs[gBattlerTarget].silkTrapped = FALSE;
                     gRoundStructs[gBattlerTarget].burningBulwark = FALSE;
+                    gRoundStructs[gBattlerTarget].mindReader = FALSE;
                     if (gCurrentMove == MOVE_FEINT)
                     {
                         BattleScriptPush(gBattlescriptCurrInstr);
@@ -4034,6 +4032,18 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gBattlescriptCurrInstr = BattleScript_AnnounceStatus;
                 }
                 break;
+            case MOVE_EFFECT_SMOKESCREEN:
+                if (!gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].smokescreenTimer)
+                {
+                    int side = GET_BATTLER_SIDE(gBattlerAttacker);
+                    gSideTimers[side].smokescreenTimer = 5;
+                    gSideTimers[side].started.smokescreen = TRUE;
+                    gSideTimers[side].smokescreenBattler = gBattlerAttacker;
+                    gSideStatuses[side] |= SIDE_STATUS_SMOKESCREEN;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SMOKESCREEN;
+                    BattleScriptPush(gBattlescriptCurrInstr);
+                    gBattlescriptCurrInstr = BattleScript_AnnounceStatus;
+                }
             }
         }
     }
@@ -4201,16 +4211,16 @@ static void Cmd_tryfaintmon(void)
     else
     {
         u8 battlerId;
+        gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
-        if (gBattlescriptCurrInstr[1] == BS_ATTACKER)
+        if (gActiveBattler == gBattlerAttacker)
         {
-            gActiveBattler = gBattlerAttacker;
             battlerId = gBattlerTarget;
             BS_ptr = BattleScript_FaintAttacker;
         }
         else
         {
-            gActiveBattler = gBattlerTarget;
+            gStackBattler1 = gActiveBattler;
             battlerId = gBattlerAttacker;
             BS_ptr = BattleScript_FaintTarget;
         }
@@ -5444,6 +5454,21 @@ static void Cmd_playstatchangeanimation(void)
 
     if (gBattlerAttacker != gActiveBattler && BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SUBDUE, ability))
         flags |= STAT_CHANGE_BY_TWO;
+    
+    if (!(flags & STAT_CHANGE_NEGATIVE)
+        && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)
+        && !(IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC)))
+    {
+        if (flags & STAT_CHANGE_BY_TWO)
+        {
+            flags &= ~STAT_CHANGE_BY_TWO;
+        }
+        else
+        {
+            gBattlescriptCurrInstr += 4;
+            return;
+        }
+    }
 
     if (flags & STAT_CHANGE_NEGATIVE) // goes down
     {
@@ -5632,10 +5657,7 @@ static void Cmd_moveend(void)
             if (gRoundStructs[gBattlerAttacker].touchedProtectLike)
             {
                 if (gRoundStructs[gBattlerTarget].spikyShielded &&
-					GetBattlerAbility(gBattlerAttacker) != ABILITY_MAGIC_GUARD &&
-                    GetBattlerAbility(gBattlerAttacker) != ABILITY_IMPENETRABLE &&
-		            !BattlerHasInnate(gBattlerAttacker, ABILITY_MAGIC_GUARD) &&
-		            !BattlerHasInnate(gBattlerAttacker, ABILITY_IMPENETRABLE))
+					!IsMagicGuardProtected(gBattlerAttacker))
                 {
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
@@ -5717,6 +5739,16 @@ static void Cmd_moveend(void)
                 {
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
                     gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_2;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_OBSTRUCT);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
+                    effect = 1;
+                }
+                else if (gRoundStructs[gBattlerTarget].mindReader)
+                {
+                    gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_SP_DEF_MINUS_1;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_MIND_READER);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
                     effect = 1;
@@ -7163,7 +7195,7 @@ static void Cmd_switchineffects(void)
 {
     s32 i;
 
-    gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+    gBattlerAttacker = gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
     UpdateSentPokesToOpponentValue(gActiveBattler);
 
     gHitMarker &= ~(HITMARKER_FAINTED(gActiveBattler));
@@ -7208,10 +7240,7 @@ static void Cmd_switchineffects(void)
     }
     else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
         && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
-        && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD
-        && GetBattlerAbility(gActiveBattler) != ABILITY_IMPENETRABLE
-		&& !BattlerHasInnate(gActiveBattler, ABILITY_MAGIC_GUARD)
-		&& !BattlerHasInnate(gActiveBattler, ABILITY_IMPENETRABLE)
+        && !IsMagicGuardProtected(gActiveBattler)
         && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
         && IsBattlerGrounded(gActiveBattler))
     {
@@ -7226,10 +7255,7 @@ static void Cmd_switchineffects(void)
     else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK_DAMAGED)
         && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK)
         && IsBattlerAffectedByHazards(gActiveBattler, gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_ROCK)
-        && GetBattlerAbility(gActiveBattler) != ABILITY_MAGIC_GUARD
-        && GetBattlerAbility(gActiveBattler) != ABILITY_IMPENETRABLE
-		&& !BattlerHasInnate(gActiveBattler, ABILITY_MAGIC_GUARD)
-		&& !BattlerHasInnate(gActiveBattler, ABILITY_IMPENETRABLE))
+        && !IsMagicGuardProtected(gActiveBattler))
     {
         gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
         gBattleMoveDamage = GetStealthHazardDamage(gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType, gActiveBattler);
@@ -8506,6 +8532,7 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
             DEFOG_CLEAR(SIDE_STATUS_MIST, mistTimer, BattleScript_SideStatusWoreOffReturn, MOVE_MIST);
             DEFOG_CLEAR(SIDE_STATUS_AURORA_VEIL, auroraVeilTimer, BattleScript_SideStatusWoreOffReturn, MOVE_AURORA_VEIL);
             DEFOG_CLEAR(SIDE_STATUS_SAFEGUARD, safeguardTimer, BattleScript_SideStatusWoreOffReturn, MOVE_SAFEGUARD);
+            DEFOG_CLEAR(SIDE_STATUS_LIGHTSCREEN, smokescreenTimer, BattleScript_SideStatusWoreOffReturn, MOVE_SMOKESCREEN);
         }
         DEFOG_CLEAR(SIDE_STATUS_SPIKES, spikesAmount, BattleScript_SpikesFree, 0);
         switch (sideTimer->stealthRockType)
@@ -8521,11 +8548,11 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
         DEFOG_CLEAR(SIDE_STATUS_TOXIC_SPIKES, toxicSpikesAmount, BattleScript_ToxicSpikesFree, 0);
         DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebAmount, BattleScript_StickyWebFree, 0);
     }
-    if (gBattleWeather & B_WEATHER_FOG_PERMANENT)
+    if (gBattleWeather & WEATHER_FOG_ANY)
     {
-        gBattleWeather &= ~B_WEATHER_FOG_PERMANENT;
+        gBattleWeather &= ~WEATHER_FOG_ANY;
         BattleScriptPushCursor();
-        gBattlescriptCurrInstr = BattleScript_FogEnded;
+        gBattlescriptCurrInstr = BattleScript_FogBlownAway;
         return TRUE;
     }
 
@@ -9108,6 +9135,7 @@ static void Cmd_various(void)
         break;
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlescriptCurrInstr += 3;
+        gBattlerAttacker = gActiveBattler;
         AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);
@@ -10643,7 +10671,7 @@ static void Cmd_various(void)
         gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
         return;
     case VARIOUS_SET_FEAR:
-        gVolatileStructs[gActiveBattler].fearTimer = 2;
+        gVolatileStructs[gActiveBattler].fear = gVolatileStructs[gActiveBattler].started.fear = TRUE;
         break;
     case VARIOUS_HANDLE_WEATHER_CHANGE:
         gBattlescriptCurrInstr += 3;
@@ -10909,6 +10937,7 @@ static void Cmd_various(void)
         SWAP(gSideTimers[0].swampTimer, gSideTimers[1].swampTimer, temp)
         SWAP(gSideTimers[0].fireSeaTimer, gSideTimers[1].fireSeaTimer, temp)
         SWAP(gSideTimers[0].rainbowTimer, gSideTimers[1].rainbowTimer, temp)
+        SWAP(gSideTimers[0].smokescreenTimer, gSideTimers[1].smokescreenTimer, temp)
         SWAP(gSideTimers[0].started, gSideTimers[1].started, tempSide);
 
         #define UPDATE_COURTCHANGED_BATTLER(structField) \
@@ -10925,6 +10954,7 @@ static void Cmd_various(void)
         UPDATE_COURTCHANGED_BATTLER(auroraVeilBattlerId);
         UPDATE_COURTCHANGED_BATTLER(tailwindBattlerId);
         UPDATE_COURTCHANGED_BATTLER(luckyChantBattlerId);
+        UPDATE_COURTCHANGED_BATTLER(smokescreenBattler);
 
         #undef UPDATE_COURTCHANGED_BATTLER
 
@@ -11325,6 +11355,11 @@ static void Cmd_setprotectlike(void)
             else if (gCurrentMove == MOVE_BURNING_BULWARK)
             {
                 gRoundStructs[gBattlerAttacker].burningBulwark = TRUE;
+                SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
+            }
+            else if (gCurrentMove == MOVE_MIND_READER)
+            {
+                gRoundStructs[gBattlerAttacker].mindReader = TRUE;
                 SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
             }
 
@@ -12064,6 +12099,11 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
             gBattleScripting.moveEffect = ReverseStatChangeMoveEffect(gBattleScripting.moveEffect);
         }
     }
+
+    if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
+        && !(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(battler, TYPE_PSYCHIC))
+        && statValue > 0)
+            statValue--;
 
     flags &= ~(STAT_BUFF_UPDATE_MOVE_EFFECT);
 
@@ -13032,10 +13072,7 @@ static void Cmd_weatherdamage(void)
 
     gBattleMoveDamage = 0;
     if (IsBattlerAlive(gBattlerAttacker) && WEATHER_HAS_EFFECT  // Sandstorm damage
-	    && ability != ABILITY_MAGIC_GUARD
-        && ability != ABILITY_IMPENETRABLE
-		&& !BattlerHasInnate(gBattlerAttacker, ABILITY_MAGIC_GUARD)
-		&& !BattlerHasInnate(gBattlerAttacker, ABILITY_IMPENETRABLE))
+        && !(IsMagicGuardProtected(gBattlerAttacker)))
     {
         if (gBattleWeather & WEATHER_SANDSTORM_ANY)
         {
@@ -13043,10 +13080,10 @@ static void Cmd_weatherdamage(void)
                 && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GROUND)
                 && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_STEEL)
                 && !IsAbilityOnSide(gBattlerAttacker, ABILITY_DESERT_CLOAK)
-                && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_VEIL)
-                && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_FORCE)
-                && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SAND_RUSH)
-                && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_OVERCOAT)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SAND_VEIL, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SAND_FORCE, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SAND_RUSH, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_OVERCOAT, ability)
                 && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
                 && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
             {
@@ -13057,7 +13094,7 @@ static void Cmd_weatherdamage(void)
         }
         if (gBattleWeather & WEATHER_HAIL_ANY) // Hail damage
         {
-            if ((ability == ABILITY_ICE_BODY || BattlerHasInnate(gBattlerAttacker, ABILITY_ICE_BODY))
+            if (BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_ICE_BODY, ability)
                 && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
                 && !BATTLER_MAX_HP(gBattlerAttacker)
                 && !BATTLER_HEALING_BLOCKED(gBattlerAttacker))
@@ -14146,6 +14183,7 @@ static void Cmd_handlerollout(void)
     if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
     {
         gVolatileStructs[gBattlerAttacker].rolloutCounter = 0;
+        gBattlescriptCurrInstr = BattleScript_MoveMissedPause;
     }
     else
     {
@@ -14948,8 +14986,7 @@ static void Cmd_tryswapitems(void) // trick
                 SetActiveMultistringChooser(B_MSG_ITEM_SWAP_BOTH);  // attacker's item -> <- target's item
             else if (oldItemAtk == 0 && *newItemAtk != 0)
                 {
-                    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNBURDEN) && gBattleResources->flags->flags[gBattlerAttacker] & RESOURCE_FLAG_UNBURDEN)
-                        gBattleResources->flags->flags[gBattlerAttacker] &= ~(RESOURCE_FLAG_UNBURDEN);
+                    gBattleResources->flags->flags[gBattlerAttacker] &= ~(RESOURCE_FLAG_UNBURDEN);
 
                     SetActiveMultistringChooser(B_MSG_ITEM_SWAP_TAKEN); // nothing -> <- target's item
                 }

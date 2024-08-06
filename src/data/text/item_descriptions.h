@@ -3381,6 +3381,26 @@ static const u8 sWigglytuffOrbDesc[] = _(
     "Wigglytuff to Primal\n"
     "Reverse in battle.");
 
+static const u8 sWigglytuffiteDesc[] = _(
+    "This stone enables\n"
+    "Wigglytuff to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sTinkatiteDesc[] = _(
+    "This stone enables\n"
+    "Tinkaton to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sGyaradeathiteDesc[] = _(
+    "This stone enables\n"
+    "Gyaradeath to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSenzuDesc[] = _(
+    "This bean enables\n"
+    "Lucario to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sMegaBraceletDesc[] = _(
     "Enables {PKMN} holding\n"
     "their Mega Stone to\n"

@@ -73,10 +73,20 @@ struct ResourceFlags
 #define RESOURCE_FLAG_NEUTRALIZING_GAS  0x40
 #define RESOURCE_FLAG_SCARED            0x50
 
+struct VolatileBeganThisTurn
+{
+    u8 violentRush:1;
+    u8 rapidResponse:1;
+    u8 readiedAction:1;
+    u8 showdownMode:1;
+    u8 fear:1;
+};
+
 struct VolatileStruct
 {
     u32 transformedMonPersonality;
     u32 abilityState[NUM_INNATE_PER_SPECIES + 1];
+    struct VolatileBeganThisTurn started;
     u16 disabledMove;
     u16 encoredMove;
     u8 protectUses;
@@ -132,7 +142,7 @@ struct VolatileStruct
     u8 showdownMode:1;
     u8 parasiticSpores:1;
     u8 critBoost:2;
-    u8 fearTimer:2;
+    u8 fear:1;
 };
 
 struct RoundStruct
@@ -184,6 +194,7 @@ struct RoundStruct
     u8 silkTrapped:1;
     u8 attackCancelled:1;
     u8 burningBulwark:1;
+    u8 mindReader:1;
 };
 
 struct TurnStruct
@@ -241,6 +252,7 @@ struct SideBeganThisTurn
     u8 swamp:1;
     u8 fireSea:1;
     u8 rainbow:1;
+    u8 smokescreen:1;
 };
 
 struct SideTimer
@@ -272,6 +284,8 @@ struct SideTimer
     u8 rainbowTimer;
     u8 followmeTarget:3;
     u8 followmePowder:1; // Rage powder, does not affect grass type pokemon.
+    u8 smokescreenTimer:3;
+    u8 smokescreenBattler:2;
 };
 
 struct FieldBeganThisTurn
@@ -761,7 +775,10 @@ struct BattleStruct
                                         || gRoundStructs[battlerId].spikyShielded                                    \
                                         || gRoundStructs[battlerId].kingsShielded                                    \
                                         || gRoundStructs[battlerId].banefulBunkered                                  \
-                                        || gRoundStructs[battlerId].obstructed)                                      \
+                                        || gRoundStructs[battlerId].obstructed                                      \
+                                        || gRoundStructs[battlerId].burningBulwark                                      \
+                                        || gRoundStructs[battlerId].silkTrapped                                      \
+                                        || gRoundStructs[battlerId].mindReader)
 
 #define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
 #define GET_STAT_BUFF_VALUE_WITH_SIGN(n)((n & 0xF8))

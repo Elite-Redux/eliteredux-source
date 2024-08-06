@@ -3417,6 +3417,7 @@ void SwitchInClearSetData(void)
         gVolatileStructs[gActiveBattler].perishSongTimerStartValue = VolatileStructCopy.perishSongTimerStartValue;
         gVolatileStructs[gActiveBattler].battlerPreventingEscape = VolatileStructCopy.battlerPreventingEscape;
         gVolatileStructs[gActiveBattler].critBoost = VolatileStructCopy.critBoost;
+        gVolatileStructs[gActiveBattler].parasiticSpores = VolatileStructCopy.parasiticSpores;
     }
     else if (gBattleMoves[gCurrentMove].effect == EFFECT_SHED_TAIL)
     {
@@ -5291,38 +5292,28 @@ static void SetActionsAndBattlersTurnOrder(void)
 static void TurnValuesCleanUp(bool8 turnPassOnly)
 {
     s32 i;
-    for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
+    for (i = 0; i < gBattlersCount; i++)
     {
         if (!turnPassOnly)
         {
-            ZERO(gRoundStructs[gActiveBattler])
+            ZERO(gRoundStructs[i])
+            ZERO(gVolatileStructs[i].started)
 
-            if (gVolatileStructs[gActiveBattler].isFirstTurn)
+            if (gVolatileStructs[i].isFirstTurn)
+                gVolatileStructs[i].isFirstTurn--;
+
+            if (gVolatileStructs[i].rechargeTimer)
             {
-                gVolatileStructs[gActiveBattler].isFirstTurn--;
-                if (!gVolatileStructs[gActiveBattler].isFirstTurn)
-                {
-                    gVolatileStructs[gActiveBattler].readiedAction = FALSE;
-                    gVolatileStructs[gActiveBattler].violentRush = FALSE;
-                    gVolatileStructs[gActiveBattler].rapidResponse = FALSE;
-                    gVolatileStructs[gActiveBattler].showdownMode = FALSE;
-                }
+                gVolatileStructs[i].rechargeTimer--;
+                if (gVolatileStructs[i].rechargeTimer == 0)
+                    gBattleMons[i].status2 &= ~(STATUS2_RECHARGE);
             }
-
-            if (gVolatileStructs[gActiveBattler].rechargeTimer)
-            {
-                gVolatileStructs[gActiveBattler].rechargeTimer--;
-                if (gVolatileStructs[gActiveBattler].rechargeTimer == 0)
-                    gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
-            }
-
-            if (gVolatileStructs[gActiveBattler].fearTimer) gVolatileStructs[gActiveBattler].fearTimer--;
         }
 
-        if (gVolatileStructs[gActiveBattler].substituteHP == 0)
-            gBattleMons[gActiveBattler].status2 &= ~(STATUS2_SUBSTITUTE);
+        if (gVolatileStructs[i].substituteHP == 0)
+            gBattleMons[i].status2 &= ~(STATUS2_SUBSTITUTE);
 
-        gTurnStructs[gActiveBattler].parentalBondOn = 0;
+        gTurnStructs[i].parentalBondOn = 0;
     }
 
     gSideStatuses[0] &= ~(SIDE_STATUS_QUICK_GUARD | SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK);
@@ -6078,8 +6069,8 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
                 return TYPE_FIRE;
             else if (gBattleWeather & WEATHER_HAIL_ANY)
                 return TYPE_ICE;
-            else if (gBattleWeather & B_WEATHER_FOG_PERMANENT)
-                return TYPE_FLYING;
+            else if (gBattleWeather & WEATHER_FOG_ANY)
+                return TYPE_GHOST;
             else
                 return TYPE_NORMAL;
         }
@@ -6233,8 +6224,8 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
                 gBattleStruct->dynamicMoveType = TYPE_FIRE | 0x80;
             else if (gBattleWeather & WEATHER_HAIL_ANY)
                 gBattleStruct->dynamicMoveType = TYPE_ICE | 0x80;
-            else if (gBattleWeather & B_WEATHER_FOG_PERMANENT)
-                gBattleStruct->dynamicMoveType = TYPE_FLYING | 0x80;
+            else if (gBattleWeather & WEATHER_FOG_ANY)
+                gBattleStruct->dynamicMoveType = TYPE_GHOST | 0x80;
             else
                 gBattleStruct->dynamicMoveType = TYPE_NORMAL | 0x80;
         }

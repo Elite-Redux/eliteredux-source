@@ -9570,13 +9570,68 @@ const struct Item gItems[] =
 
     [ITEM_WIGGLITUFF_ORB] = 
     {
-        .name = _("Wigglituff Orb"),
+        .name = _("Ancient Apple"), // this item will be getting resprited one day
         .itemId = ITEM_WIGGLITUFF_ORB,
         .price = 0,
-        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
         .description = sWigglytuffOrbDesc,
         .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
+    [ITEM_WIGGLYTUFFITE] = 
+    {
+        .name = _("Wigglytuffite"),
+        .itemId = ITEM_WIGGLYTUFFITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sWigglytuffiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_SENZU] = //mega evo stone for lucario mega Y
+    {
+        .name = _("Senzu Bean"),
+        .itemId = ITEM_SENZU,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sSenzuDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_TINKATITE] = 
+    {
+        .name = _("Tinkatite"),
+        .itemId = ITEM_TINKATITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sTinkatiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_GYARADEATHITE_X] =
+    {
+        .name = _("Gyaradeathite"),
+        .itemId = ITEM_GYARADEATHITE_X,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sGyaradeathiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_GYARADEATHITE_Y] =
+    {
+        .name = _("Gyaradeathite Y"),
+        .itemId = ITEM_GYARADEATHITE_Y,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sGyaradeathiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    
 };

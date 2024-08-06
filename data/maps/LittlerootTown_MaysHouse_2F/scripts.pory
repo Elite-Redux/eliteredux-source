@@ -99,9 +99,7 @@ LittlerootTown_MaysHouse_2F_EventScript_MeetMayNorth:: @ 81F93BA
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestLeft
 	waitmovement 0
 	msgbox RivalsHouse_2F_Text_MayWhoAreYou, MSGBOX_DEFAULT
-	call LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	msgbox RivalsHouse_1F_Text_MayCatchYouLater, MSGBOX_DEFAULT
-	closemessage
+	call LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
 	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_MaysHouse_2F_Movement_PlayerWatchMayNorth
 	applymovement LOCALID_RIVAL, LittlerootTown_MaysHouse_2F_Movement_MayWalkToPCNorth
 	waitmovement 0
@@ -113,9 +111,7 @@ LittlerootTown_MaysHouse_2F_EventScript_MeetMaySouth:: @ 81F93E9
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestLeft
 	waitmovement 0
 	msgbox RivalsHouse_2F_Text_MayWhoAreYou, MSGBOX_DEFAULT
-	call LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	msgbox RivalsHouse_1F_Text_MayCatchYouLater, MSGBOX_DEFAULT
-	closemessage
+	call LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
 	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_MaysHouse_2F_Movement_PlayerWatchMaySouth
 	applymovement LOCALID_RIVAL, LittlerootTown_MaysHouse_2F_Movement_MayWalkToPCSouth
 	waitmovement 0
@@ -127,9 +123,7 @@ LittlerootTown_MaysHouse_2F_EventScript_MeetMayWest:: @ 81F9418
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestUp
 	waitmovement 0
 	msgbox RivalsHouse_2F_Text_MayWhoAreYou, MSGBOX_DEFAULT
-	call LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	msgbox RivalsHouse_1F_Text_MayCatchYouLater, MSGBOX_DEFAULT
-	closemessage
+	call LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
 	applymovement LOCALID_RIVAL, LittlerootTown_MaysHouse_2F_Movement_MayWalkToPCWest
 	waitmovement 0
 	return
@@ -140,237 +134,10 @@ LittlerootTown_MaysHouse_2F_EventScript_MeetMayEast:: @ 81F9440
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestLeft
 	waitmovement 0
 	msgbox RivalsHouse_2F_Text_MayWhoAreYou, MSGBOX_DEFAULT
-	call LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	msgbox RivalsHouse_1F_Text_MayCatchYouLater, MSGBOX_DEFAULT
-	closemessage
+	call LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet
 	applymovement OBJ_EVENT_ID_PLAYER, LittlerootTown_MaysHouse_2F_Movement_PlayerWatchMayEast
 	applymovement LOCALID_RIVAL, LittlerootTown_MaysHouse_2F_Movement_MayWalkToPCEast
 	waitmovement 0
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet::
-	msgbox RivalsHouse_1F_Text_Which_Region, MSGBOX_DEFAULT
-	setvar VAR_0x8004, SCROLL_MULTI_REGION_NAMES
-	special ShowScrollableMultichoice
-	waitstate
-	switch VAR_RESULT
-	case 0, LittlerootTown_MaysHouse_2F_EventScript_Kanto
-	case 1, LittlerootTown_MaysHouse_2F_EventScript_Johto
-	case 2, LittlerootTown_MaysHouse_2F_EventScript_Hoenn
-	case 3, LittlerootTown_MaysHouse_2F_EventScript_Sinnoh
-	case 4, LittlerootTown_MaysHouse_2F_EventScript_Unova
-	case 5, LittlerootTown_MaysHouse_2F_EventScript_Kalos
-	case 6, LittlerootTown_MaysHouse_2F_EventScript_Alola
-	case 7, LittlerootTown_MaysHouse_2F_EventScript_Galar
-	case 8, LittlerootTown_MaysHouse_2F_EventScript_Paldea
-	case 9, LittlerootTown_MaysHouse_2F_EventScript_Bug
-	case 10, LittlerootTown_MaysHouse_2F_EventScript_Dark
-	case 11, LittlerootTown_MaysHouse_2F_EventScript_Dragon
-	case 12, LittlerootTown_MaysHouse_2F_EventScript_Electric
-	case 13, LittlerootTown_MaysHouse_2F_EventScript_Fairy
-	case 14, LittlerootTown_MaysHouse_2F_EventScript_Fighting
-	case 15, LittlerootTown_MaysHouse_2F_EventScript_Flying
-	case 16, LittlerootTown_MaysHouse_2F_EventScript_Ghost
-	case 17, LittlerootTown_MaysHouse_2F_EventScript_Ground
-	case 18, LittlerootTown_MaysHouse_2F_EventScript_Ice
-	case 19, LittlerootTown_MaysHouse_2F_EventScript_Normal
-	case 20, LittlerootTown_MaysHouse_2F_EventScript_Poison
-	case 21, LittlerootTown_MaysHouse_2F_EventScript_Psychic
-	case 22, LittlerootTown_MaysHouse_2F_EventScript_Rock
-	case 23, LittlerootTown_MaysHouse_2F_EventScript_Steel
-	goto LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	end
-
-LittlerootTown_MaysHouse_2F_EventScript_Kanto::
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 1
-	bufferstring 1, StarterRegionStringKanto
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Johto::
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 2
-	bufferstring 1, StarterRegionStringJohto
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Hoenn::
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 3
-	bufferstring 1, StarterRegionStringHoenn
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Sinnoh::
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 4
-	bufferstring 1, StarterRegionStringSinnoh
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Unova::
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 5
-	bufferstring 1, StarterRegionStringUnova
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Kalos::
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 6
-	bufferstring 1, StarterRegionStringKalos
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Alola::
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 7
-	bufferstring 1, StarterRegionStringAlola
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Galar::
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 8
-	bufferstring 1, StarterRegionStringGalar
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Paldea::
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 9
-	bufferstring 1, StarterRegionStringPaldea
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Bug:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 10
-	bufferstring 1, StarterRegionStringBug
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Dark:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 11
-	bufferstring 1, StarterRegionStringDark
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Dragon:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 12
-	bufferstring 1, StarterRegionStringDragon
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Electric:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 13
-	bufferstring 1, StarterRegionStringElectric
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Fairy:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 14
-	bufferstring 1, StarterRegionStringFairy
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Fighting:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 15
-	bufferstring 1, StarterRegionStringFighting
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Flying:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 16
-	bufferstring 1, StarterRegionStringFlying
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Ghost:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 17
-	bufferstring 1, StarterRegionStringGhost
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Ground:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 18
-	bufferstring 1, StarterRegionStringGround
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Ice:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 19
-	bufferstring 1, StarterRegionStringIce
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Normal:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 20
-	bufferstring 1, StarterRegionStringNormal
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Poison:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 21
-	bufferstring 1, StarterRegionStringPoison
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Psychic:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 22
-	bufferstring 1, StarterRegionStringPsychic
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Rock:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 23
-	bufferstring 1, StarterRegionStringRock
-	return
-
-LittlerootTown_MaysHouse_2F_EventScript_Steel:
-	msgbox RivalsHouse_1F_Text_SureAboutRegion, MSGBOX_YESNO
-	compare VAR_RESULT, NO
-	goto_if_eq LittlerootTown_MaysHouse_2F_EventScript_ChooseStarterSet
-	setvar VAR_STARTER_GEN, 24
-	bufferstring 1, StarterRegionStringSteel
 	return
 
 LittlerootTown_MaysHouse_2F_Movement_MayEnters: @ 81F946F

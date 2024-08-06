@@ -2668,6 +2668,9 @@ const u16 gEggMoves[] = {
         MOVE_WIDE_GUARD,
         MOVE_GUARD_SPLIT),
 
+    egg_moves(COMBEE,
+        MOVE_DESTINY_BOND,
+
     egg_moves(PACHIRISU,
         MOVE_COVET,
         MOVE_BITE,
@@ -2840,6 +2843,7 @@ const u16 gEggMoves[] = {
         MOVE_STEALTH_ROCK,
         MOVE_CURSE,
         MOVE_ENDURE),
+        MOVE_WOOD_HAMMER),
 
     egg_moves(MIME_JR,
         MOVE_FUTURE_SIGHT,
@@ -5131,6 +5135,13 @@ const u16 gEggMoves[] = {
         MOVE_AQUA_JET,
         MOVE_ACID_SPRAY),
 
+    egg_moves(CORM,
+        MOVE_FAIRY_WIND,
+        MOVE_MIRROR_COAT,
+        MOVE_BUG_BITE,
+        MOVE_FROST_BREATH,
+        MOVE_RAGE_POWDER),
+
     egg_moves(HONEDGE_REDUX,
         MOVE_SHADOW_SNEAK,
         MOVE_DESTINY_BOND,
@@ -5481,10 +5492,20 @@ const u16 gEggMoves[] = {
         MOVE_THUNDER_PUNCH),
 
     egg_moves(MAWILE_REDUX_B,
-        MOVE_SPLASH,
+        MOVE_REST,
         MOVE_FIRE_PUNCH,
-        MOVE_ICE_PUNCH,
-        MOVE_THUNDER_PUNCH),
+        MOVE_SLEEP_TALK,
+        MOVE_TOXIC,
+        MOVE_FIRE_SPIN,
+        MOVE_CHARM,
+        MOVE_WILL_O_WISP,
+        MOVE_CLEAR_SMOG,
+        MOVE_CREEPING_THORNS,
+        MOVE_FACADE,
+        MOVE_VENOM_DRENCH,
+        MOVE_SEISMIC_TOSS,
+        MOVE_GUNK_SHOT,
+        MOVE_PURSUIT),
 
     egg_moves(MAWILE_REDUX_B_MEGA,
         MOVE_SPLASH,
@@ -5550,6 +5571,22 @@ const u16 gEggMoves[] = {
         MOVE_SLEEP_TALK,
         MOVE_ENDURE,
         MOVE_FLAIL),
+
+    egg_moves(WIGGLYTUFF_ALPHA,
+        MOVE_MISTY_EXPLOSION, // this entire list is a placeholder cause this mon can't breed. i was too lazy to add the moves manually
+        MOVE_PERISH_SONG,
+        MOVE_PRESENT,
+        MOVE_FEINT_ATTACK,
+        MOVE_WISH,
+        MOVE_FAKE_TEARS,
+        MOVE_LAST_RESORT,
+        MOVE_COVET,
+        MOVE_GRAVITY,
+        MOVE_SLEEP_TALK,
+        MOVE_CAPTIVATE,
+        MOVE_PUNISHMENT,
+        MOVE_MISTY_TERRAIN,
+        MOVE_HEAL_PULSE),
     
     EGG_MOVES_TERMINATOR
 };

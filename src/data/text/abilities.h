@@ -191,7 +191,7 @@ static const u8 sAbilityWaterBubbleDescription[] = _("Halves Fire dmg taken, no 
 static const u8 sAbilitySteelworkerDescription[] = _("Boosts the power of Steel-type\nmoves by 1.3x.");
 static const u8 sAbilityBerserkDescription[] = _("Boosts Sp. Atk by one stage when\nat 1/2 of max HP or lower.");
 static const u8 sAbilitySlushRushDescription[] = _("This Pokémon's Speed gets a\n1.5x boost in hail.");
-static const u8 sAbilityLongReachDescription[] = _("Ups Phys. moves making contact by\n1.2x + makes them non-contact.");
+static const u8 sAbilityLongReachDescription[] = _("Doesn't make contact. Boosts\nPhys. non-contact moves by 1.2x.");
 static const u8 sAbilityLiquidVoiceDescription[] = _("Boosts own sound-based moves by\n1.2x and makes them Water-type.");
 static const u8 sAbilityTriageDescription[] = _("Moves that have a healing effect\ngain +3 priority.");
 static const u8 sAbilityGalvanizeDescription[] = _("Normal-type moves become Elec.-\ntype moves and get a 1.1x boost.");
@@ -237,7 +237,7 @@ static const u8 sAbilitySteelySpiritDescription[] = _("Boosts own & ally's Steel
 static const u8 sAbilityPerishBodyDescription[] = _("If hit, casts Perish Song.");
 static const u8 sAbilityWanderingSpiritDescription[] = _("Trades ability with attacker on\ncontact.");
 static const u8 sAbilityGorillaTacticsDescription[] = _("Raises own Atk by 1.5x, but can\nonly use the first chosen move.");
-static const u8 sAbilityNeutralizingGasDescription[] = _("All abilities are nullified.\nInnates still work.");
+static const u8 sAbilityNeutralizingGasDescription[] = _("All abilities are nullified.");
 static const u8 sAbilityPastelVeilDescription[] = _("Casts Safeguard on entry.");
 static const u8 sAbilityHungerSwitchDescription[] = _("Changes between Full and Hangry\nforms after each turn.");
 static const u8 sAbilityQuickDrawDescription[] = _("30% chance to move first.");
@@ -582,6 +582,11 @@ static const u8 sAbilityParasiticSporesDescription[] = _("Deals 1/8 HP damage to
 static const u8 sAbilityPoisonPuppeteerDescription[] = _("Poison also inflicts confusion.");
 static const u8 sAbilityEntranceDescription[] = _("Confusion also inflicts\ninfatuation.");
 static const u8 sAbilityRejectionDescription[] = _("Applies Quash on switch-in.");
+static const u8 sAbilityAppleEnlightenmentDescription[] = _("Fur coat + Magic Guard.");
+static const u8 sAbilityBalloonBomberDescription[] = _("Aftermath + Inflatable");
+static const u8 sAbilityFlamingMawDescription[] = _("Strong Jaw + Flaming Jaws");
+static const u8 sAbilityDemolitionistDescription[] = _("Readied Action + Ignores Protect\n+ screens break on readied turn");
+static const u8 sAbilityRockhardWillDescription[] = _("Boosts Rock-type moves by 1.2x,\nor 1.5x when under 1/3 HP.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1198,6 +1203,11 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_POISON_PUPPETEER] = _("Poison Puppeteer"),
     [ABILITY_ENTRANCE] = _("Entrance"),
     [ABILITY_REJECTION] = _("Rejection"),
+    [ABILITY_APPLE_ENLIGHTENMENT] = _("Apple Enlightenment"),
+    [ABILITY_BALLOON_BOMBER] = _("Balloon Bomb"),
+    [ABILITY_FLAMING_MAW] = _("Flaming Maw"),
+    [ABILITY_DEMOLITIONIST] = _("Demolitionist"),
+    [ABILITY_ROCKHARD_WILL] = _("Rockhard Will"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1815,4 +1825,9 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_POISON_PUPPETEER] = sAbilityPoisonPuppeteerDescription,
     [ABILITY_ENTRANCE] = sAbilityEntranceDescription,
     [ABILITY_REJECTION] = sAbilityRejectionDescription,
+    [ABILITY_APPLE_ENLIGHTENMENT] = sAbilityAppleEnlightenmentDescription,
+    [ABILITY_BALLOON_BOMBER] = sAbilityBalloonBomberDescription,
+    [ABILITY_FLAMING_MAW] = sAbilityFlamingMawDescription,
+    [ABILITY_DEMOLITIONIST] = sAbilityDemolitionistDescription,
+    [ABILITY_ROCKHARD_WILL] = sAbilityRockhardWillDescription,
 };

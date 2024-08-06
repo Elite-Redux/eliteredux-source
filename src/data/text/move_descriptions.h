@@ -427,8 +427,8 @@ static const u8 sMoveTwoLineDescription_MoveMinimize[] = _(
     "to raise evasiveness.");
 
 static const u8 sMoveTwoLineDescription_MoveSmokescreen[] = _(
-    "Lowers the foe's accuracy\n"
-    "using smoke, ink, etc.");
+    "Obscures the user's party\n"
+    "in smoke for 5 turns.");
 
 static const u8 sMoveTwoLineDescription_MoveConfuseRay[] = _(
     "A sinister ray that\n"
@@ -675,8 +675,8 @@ static const u8 sMoveTwoLineDescription_MoveSpiderWeb[] = _(
     "from fleeing or switching.");
 
 static const u8 sMoveTwoLineDescription_MoveMindReader[] = _(
-    "Senses the foe's action to\n"
-    "ensure the next move's hit.");
+    "Reads the opponent's\n"
+    "mind to dodge their attack.");
 
 static const u8 sMoveTwoLineDescription_MoveNightmare[] = _(
     "Inflicts 1/4 damage on a\n"
@@ -4792,7 +4792,7 @@ static const u8 sMoveFourLineDescription_MoveDoubleTeam[] = _("The user creates\
 static const u8 sMoveFourLineDescription_MoveRecover[] = _("A self-healing move\nthat restores HP by\nup to half of the\nuser's maximum HP.");
 static const u8 sMoveFourLineDescription_MoveHarden[] = _("The user stiffens\nall the muscles in\nits body to raise\nits Defense stat.");
 static const u8 sMoveFourLineDescription_MoveMinimize[] = _("The user compresses\nall the cells in its\nbody to raise its\nevasiveness.");
-static const u8 sMoveFourLineDescription_MoveSmokescreen[] = _("An obscuring cloud\nof smoke or ink\nreduces the foe's\naccuracy.");
+static const u8 sMoveFourLineDescription_MoveSmokescreen[] = _("Obscures the user's\nparty in smoke for 5\nturns, increasing\nevasiveness by 33%.");
 static const u8 sMoveFourLineDescription_MoveConfuseRay[] = _("The foe is exposed\nto a sinister ray\nthat triggers\nconfusion.");
 static const u8 sMoveFourLineDescription_MoveWithdraw[] = _("The user withdraws\nits body in its hard\nshell, raising its\nDefense stat.");
 static const u8 sMoveFourLineDescription_MoveDefenseCurl[] = _("The user curls up\nto conceal weak\nspots and raise its\nDefense stat.");
@@ -4854,7 +4854,7 @@ static const u8 sMoveFourLineDescription_MoveSketch[] = _("This move copies\nthe
 static const u8 sMoveFourLineDescription_MoveTripleKick[] = _("A 3-kick attack.\nMore powerful with\neach successive hit.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveThief[] = _("An attack that may\ntake the foe's held\nitem if the user\nisn't holding one.");
 static const u8 sMoveFourLineDescription_MoveSpiderWeb[] = _("Ensnares the foe \nwith sticky string\nso it doesn't flee\nor switch out.");
-static const u8 sMoveFourLineDescription_MoveMindReader[] = _("The user predicts\nthe foe's action to\nensure its next\nattack hits.");
+static const u8 sMoveFourLineDescription_MoveMindReader[] = _("Dodges all attacks\nand lowers the SpDef\nof attackers. May fail\nif used in succession.");
 static const u8 sMoveFourLineDescription_MoveNightmare[] = _("A sleeping foe is\nshown a nightmare\nthat inflicts some\ndamage every turn.");
 static const u8 sMoveFourLineDescription_MoveFlameWheel[] = _("A rolling attack\nthat becomes\nstronger each time\nit hits.");
 static const u8 sMoveFourLineDescription_MoveSnore[] = _("An attack that can\nbe used only while\nasleep. Has a\n30% flinch chance.");
@@ -5499,7 +5499,7 @@ static const u8 sMoveFourLineDescription_MoveFlashFreeze[] = _("Multiple ice cub
 static const u8 sMoveFourLineDescription_MovePhantomGloves[] = _("Throws foe with a\nghostly hand. 30% chance\nto lower Speed.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveHomingFletch[] = _("User fires a seeking\narrow. Cannot miss.\nHas +1 crit chance.\nArcher boost.");
 static const u8 sMoveFourLineDescription_MoveBitterMalice[] = _("Attacks with spine-\nchilling resentment.\n20% frostbite chance.\nPower doubles if statused.");
-static const u8 sMoveFourLineDescription_MoveInfernalParade[] = _("Attacks with spectral\nfireballs. 20%\nburn chance.\nPower doubles if statused.");
+static const u8 sMoveFourLineDescription_MoveInfernalParade[] = _("Attacks with spectral\nfireballs. 30%\nburn chance.\nPower doubles if statused.");
 static const u8 sMoveFourLineDescription_MoveDeviousShot[] = _("A devious arrow\nstrike. +1 crit\nchance. 50% bleed\nchance. Archer boost.");
 static const u8 sMoveFourLineDescription_MoveStarburst[] = _("The user crashes a star\nshaped ray down.\n30% flinch chance.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveCheapShot[] = _("The user sneaks into\nshadows, then attacks\nwith hidden projectile.\nMega Launcher boost.");

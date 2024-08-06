@@ -2388,6 +2388,7 @@ const u16 gStatusAnnounce[] =
 {
     [B_MSG_SALT_CURE] = STRINGID_AFFLICTED_WITH_SALT_CURE,
     [B_MSG_SYRUP] = STRINGID_AFFLICTED_WITH_SYRUP,
+    [B_MSG_SMOKESCREEN] = STRINGID_SMOKESCREEN,
 };
 
 const u16 gPrimalEvolutionAnnouncement[] = 

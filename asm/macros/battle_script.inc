@@ -2308,6 +2308,13 @@ twoturnmoveacceleratecheck_\@:
 	setbyte sACCELERATED_TWO_TURN, 1
 	.endm
 
+	.macro jumpiffogreducesstatboosts battler:req ptr:req
+	jumpiftype \battler, TYPE_GHOST, jumpiffogreducesstatboosts_ok_\@
+	jumpiftype \battler, TYPE_PSYCHIC, jumpiffogreducesstatboosts_ok_\@
+	jumpifweatheraffected \battler, WEATHER_FOG_ANY, \ptr
+	jumpiffogreducesstatboosts_ok_\@:
+	.endm
+
 	.macro checkstatbuffonlowered
 	jumpifability BS_TARGET, ABILITY_COMPETITIVE,           checkstatbuffonlowered_competitive_\@
 	jumpifability BS_TARGET, ABILITY_DEFIANT,               checkstatbuffonlowered_defiant_\@
@@ -2337,6 +2344,14 @@ checkstatbuffonlowered_queensmourning_\@:
 	goto checkstatbuffonlowered_none_\@
 checkstatbuffonlowered_none_\@:
 	.endm
+
+
+	.macro jumpifmagicguard battler:req, ptr:req
+	jumpifability \battler, ABILITY_MAGIC_GUARD, \ptr
+	jumpifability \battler, ABILITY_IMPENETRABLE, \ptr
+	jumpifability \battler, ABILITY_APPLE_ENLIGHTENMENT, \ptr
+	.endm
+
 
 @ unused, was for an experiment
 .macro battlemacrostyped macro_type:req, type:req, data:req, ptr:req, data2

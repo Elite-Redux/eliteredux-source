@@ -615,7 +615,11 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_FERALIGATRITE_Y] = {gItemIcon_Feraligatrite_Y, gItemIconPalette_Feraligatrite_Y},
     [ITEM_EMPOLEONITE]     = {gItemIcon_Empoleonite,     gItemIconPalette_Empoleonite},
     [ITEM_FROSLASSITE]     = {gItemIcon_Froslassite,     gItemIconPalette_Froslassite},
-
+    [ITEM_WIGGLYTUFFITE]   = {gItemIcon_Wigglytuffite, gItemIconPalette_Wigglytuffite},
+    [ITEM_TINKATITE]       = {gItemIcon_Tinkatite, gItemIconPalette_Tinkatite},
+    [ITEM_GYARADEATHITE_X] = {gItemIcon_Gyaradeathite_X, gItemIconPalette_Gyaradeathite_X},
+    [ITEM_GYARADEATHITE_Y] = {gItemIcon_Gyaradeathite_Y, gItemIconPalette_Gyaradeathite_Y},
+    
     [ITEM_HITMONCHANITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_HITMONLEENITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonlite},
     [ITEM_HITMONTOPITE]    = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmontopite},
@@ -655,6 +659,8 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_URSALUNITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Ursalunite},
     [ITEM_ARCANITE_R]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Arcanite_R},
     [ITEM_TYRANITARITE_R]  = {gItemIcon_GenericMegaStone, gItemIconPalette_Tyranitarite_R},
+    [ITEM_SENZU]           = {gItemIcon_Senzu, gItemIconPalette_Senzu},
+
     //Monotype Mega Stones
     [ITEM_CHIEN_PAOITE]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_DRACOVISHITE]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},

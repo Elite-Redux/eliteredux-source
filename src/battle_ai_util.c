@@ -703,7 +703,7 @@ bool32 IsBattlerTrapped(u8 battler, bool8 checkSwitch)
     {
         if (gBattleMons[battler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED)
           || gStatuses4[gActiveBattler] & STATUS4_COMMANDED
-          || gVolatileStructs[gActiveBattler].fearTimer
+          || gVolatileStructs[gActiveBattler].fear
           || IsAbilityPreventingEscape(battler)
           || gStatuses3[battler] & (STATUS3_ROOTED)    // TODO: sky drop target in air
           || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))
@@ -1514,7 +1514,7 @@ bool32 ShouldSetSandstorm(u8 battler, u16 ability, u16 holdEffect)
       || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_SAND_RUSH, ability)
       || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_SAND_FORCE, ability)
       || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_OVERCOAT, ability)
-      || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MAGIC_GUARD, ability)
+      || IsMagicGuardProtected(battler)
       || holdEffect == HOLD_EFFECT_SAFETY_GOGGLES
       || IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
       || IS_BATTLER_OF_TYPE(battler, TYPE_STEEL)
@@ -1538,7 +1538,7 @@ bool32 ShouldSetHail(u8 battler, u16 ability, u16 holdEffect)
       || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_ICE_BODY, ability)
       || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_FORECAST, ability)
       || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_SLUSH_RUSH, ability)
-      || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MAGIC_GUARD, ability)
+      || IsMagicGuardProtected(battler)
       || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_OVERCOAT, ability)
       || holdEffect == HOLD_EFFECT_SAFETY_GOGGLES
       || IS_BATTLER_OF_TYPE(battler, TYPE_ICE)
@@ -2426,7 +2426,7 @@ u32 GetBattlerSecondaryDamage(u8 battlerId)
 {
     u32 secondaryDamage;
     
-    if (BATTLER_HAS_ABILITY_FAST_AI(battlerId, ABILITY_MAGIC_GUARD))
+    if (IsMagicGuardProtected(battlerId))
         return FALSE;
     
     secondaryDamage = GetLeechSeedDamage(battlerId)
@@ -2506,6 +2506,8 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler)
         return FALSE;
     
     if (ability == ABILITY_MAGIC_GUARD || MonHasInnate(mon, ABILITY_MAGIC_GUARD, isEnemyMon) ||
+        ability == ABILITY_IMPENETRABLE || MonHasInnate(mon, ABILITY_IMPENETRABLE, isEnemyMon) ||
+        ability == ABILITY_APPLE_ENLIGHTENMENT || MonHasInnate(mon, ABILITY_APPLE_ENLIGHTENMENT, isEnemyMon) ||
         holdEffect == HOLD_EFFECT_HEAVY_DUTY_BOOTS)
         return FALSE;
 
@@ -2757,7 +2759,7 @@ bool32 ShouldPoisonSelf(u8 battler)
         (BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_POISON_HEAL)  ||
          BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_MARVEL_SCALE) ||
          BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_QUICK_FEET)   ||
-         BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_MAGIC_GUARD)  ||
+         IsMagicGuardProtected(battler)  ||
          HasMoveEffect(battler, EFFECT_FACADE)              ||
          HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT)       ||
          (BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_TOXIC_BOOST) && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||
@@ -2807,7 +2809,7 @@ bool32 ShouldBurnSelf(u8 battler)
     if (CanBeBurned(battler) && 
         (BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_QUICK_FEET)   ||
          BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_HEATPROOF)    ||
-         BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_MAGIC_GUARD)  ||
+         IsMagicGuardProtected(battler)  ||
          HasMoveEffect(battler, EFFECT_FACADE)              ||
          HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT)        ||
         (BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_FLARE_BOOST) && HasMoveWithSplit(battler, SPLIT_SPECIAL)) ||
@@ -2821,8 +2823,7 @@ bool32 ShouldBurnSelf(u8 battler)
 bool32 ShouldFrostbiteSelf(u8 battler)
 {
     if (CanGetFrostbite(battler) && 
-        (BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_QUICK_FEET)   ||
-         BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_MAGIC_GUARD)  ||
+        (IsMagicGuardProtected(battler)  ||
          HasMoveEffect(battler, EFFECT_FACADE)              ||
          HasMoveEffect(battler, EFFECT_PSYCHO_SHIFT)        ||
         (BATTLER_HAS_ABILITY_FAST_AI(battler, ABILITY_GUTS)        && HasMoveWithSplit(battler, SPLIT_PHYSICAL)) ||

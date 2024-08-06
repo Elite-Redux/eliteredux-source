@@ -47,10 +47,7 @@ const u8 gIron_CrownPokedexText[] = _(
     "I like potatos.");
 
 const u8 gPecharuntPokedexText[] = _(
-    "This is not a actually Pokemon.\n"
-    "It's really just a potato\n"
-    "Dont ask me why potato. Maybe because\n"
-    "I like potatos.");
+    "it's peach-shaped shell serves as\n storage for a potent poison. It makes \n poisonous mochi and serves them\n to people and Pokémon.");
 
 const u8 gTerapagosPokedexText[] = _(
     "This is not a actually Pokemon.\n"

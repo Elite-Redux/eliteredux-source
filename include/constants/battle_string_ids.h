@@ -1184,6 +1184,7 @@
 // gStatusAnnounce
 #define B_MSG_SALT_CURE 0
 #define B_MSG_SYRUP 1
+#define B_MSG_SMOKESCREEN 2
 
 // gPrimalEvolutionAnnouncement
 #define B_MSG_PRIMAL_REVERSION 0

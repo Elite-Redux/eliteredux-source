@@ -95,7 +95,7 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_RIVAL_MAY_NORMAL",
       "x": 2,
-      "y": 8,
+      "y": 7,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 1,
@@ -130,42 +130,6 @@
     }
   ],
   "coord_events": [
-    {
-      "type": "trigger",
-      "x": 2,
-      "y": 8,
-      "elevation": 0,
-      "var": "VAR_LITTLEROOT_INTRO_STATE",
-      "var_value": "4",
-      "script": "LittlerootTown_MaysHouse_1F_EventScript_GoSeeRoom"
-    },
-    {
-      "type": "trigger",
-      "x": 1,
-      "y": 3,
-      "elevation": 0,
-      "var": "VAR_LITTLEROOT_RIVAL_STATE",
-      "var_value": "2",
-      "script": "LittlerootTown_MaysHouse_1F_EventScript_MeetRival0"
-    },
-    {
-      "type": "trigger",
-      "x": 2,
-      "y": 4,
-      "elevation": 0,
-      "var": "VAR_LITTLEROOT_RIVAL_STATE",
-      "var_value": "2",
-      "script": "LittlerootTown_MaysHouse_1F_EventScript_MeetRival1"
-    },
-    {
-      "type": "trigger",
-      "x": 3,
-      "y": 3,
-      "elevation": 0,
-      "var": "VAR_LITTLEROOT_RIVAL_STATE",
-      "var_value": "2",
-      "script": "LittlerootTown_MaysHouse_1F_EventScript_MeetRival2"
-    },
     {
       "type": "trigger",
       "x": 1,

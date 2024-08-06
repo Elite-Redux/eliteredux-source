@@ -578,6 +578,7 @@ static const u16 sGarchompFormSpeciesIdTable[] = {
 static const u16 sLucarioFormSpeciesIdTable[] = {
     SPECIES_LUCARIO,
     SPECIES_LUCARIO_MEGA,
+    SPECIES_LUCARIO_MEGA_Y,
     FORM_SPECIES_END,
 };
 
@@ -886,6 +887,7 @@ static const u16 sOricorioFormSpeciesIdTable[] = {
     SPECIES_ORICORIO_POM_POM,
     SPECIES_ORICORIO_PAU,
     SPECIES_ORICORIO_SENSU,
+    SPECIES_ORICORIO_MEGA,
     FORM_SPECIES_END,
 };
 
@@ -1711,6 +1713,8 @@ static const u16 sVictiniFormSpeciesIdTable[] = {
 };
 static const u16 sWigglytuffFormSpeciesIdTable[] = {
     SPECIES_WIGGLYTUFF,
+    SPECIES_WIGGLYTUFF_MEGA,
+    SPECIES_WIGGLYTUFF_ALPHA,
     SPECIES_WIGGLYTUFF_PRIMAL,
     FORM_SPECIES_END,
 };
@@ -1720,6 +1724,7 @@ static const u16 sWeavileFormSpeciesIdTable[] = {
     SPECIES_WEAVILE_REDUX,
     FORM_SPECIES_END,
 };
+
 static const u16 sEspeonFormSpeciesIdTable[] = {
     SPECIES_ESPEON,
     SPECIES_ESPEON_GALAXY,
@@ -1738,5 +1743,46 @@ static const u16 sSolrockFormSpeciesIdTable[] = {
 static const u16 sSpectrierFormSpeciesIdTable[] = {
     SPECIES_SPECTRIER,
     SPECIES_SPECTRIER_CLOUD,
+    FORM_SPECIES_END,
+};
+static const u16 sYveltal_MegaFormSpeciesIdTable[] = {
+    SPECIES_YVELTAL_MEGA,
+    SPECIES_YVELTAL,
+    FORM_SPECIES_END,
+};
+static const u16 sKingambit_Redux_MegaFormSpeciesIdTable[] = {
+    SPECIES_KINGAMBIT_REDUX_MEGA,
+    SPECIES_KINGAMBIT,
+    FORM_SPECIES_END,
+};
+static const u16 sKartana_FallenFormSpeciesIdTable[] = {
+    SPECIES_KARTANA_FALLEN,
+    SPECIES_KARTANA,
+    FORM_SPECIES_END,
+};
+static const u16 sTinkatonFormSpeciesIdTable[] = {
+    SPECIES_TINKATON,
+    SPECIES_TINKATON_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sGyaradeathFormSpeciesIdTable[] = {
+    SPECIES_GYARADEATH,
+    SPECIES_GYARADEATH_MEGA_X,
+    SPECIES_GYARADEATH_MEGA_Y,
+    FORM_SPECIES_END,
+};
+static const u16 sPolarticFormSpeciesIdTable[] = {
+    SPECIES_POLARTIC,
+    SPECIES_POLARTIC_BLUEMOON,
+    FORM_SPECIES_END,
+};
+static const u16 sArbokFormSpeciesIdTable[] = {
+    SPECIES_ARBOK,
+    SPECIES_ARBOK_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sLumberingSlothFormSpeciesIdTable[] = {
+    SPECIES_LUMBERING_SLOTH,
+    SPECIES_LUMBERING_SLOTH_OVERGROWN,
     FORM_SPECIES_END,
 };
