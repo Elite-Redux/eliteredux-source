@@ -13021,7 +13021,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
     }
 	
 	// Strong Jaw
-	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_STRONG_JAW) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FLAMING_MAW) && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
+	if((BATTLER_HAS_ABILITY(battlerAtk, ABILITY_STRONG_JAW) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FLAMING_MAW)) && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
         MulModifier(&modifier, UQ_4_12(1.5));
 	
 	// Devourer
