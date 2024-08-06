@@ -41155,6 +41155,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_IRON_CARAPACE] =
+    {
+    .baseHP        =  100,
+    .baseAttack    =  115,
+    .baseDefense   = 90,
+    .baseSpeed     =  65,
+    .baseSpAttack  = 65,
+    .baseSpDefense =  90,
+    .type1 = TYPE_FIRE,
+    .type2 = TYPE_BUG,
+    .catchRate = 255,
+    .expYield = 184,
+    .evYield_Attack    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_BUG,
+	.abilities = {ABILITY_FLAMING_JAWS, ABILITY_FLASH_FIRE, ABILITY_ANTICIPATION},
+	.innates = {ABILITY_COIL_UP, ABILITY_HYPER_AGGRESSIVE, ABILITY_MOLTEN_DOWN},
+    .bodyColor = BODY_COLOR_RED,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

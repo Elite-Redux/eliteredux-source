@@ -1330,6 +1330,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_BLIZZARD_MAW]             = _("Blizzard Maw"),
     [SPECIES_LUMBERING_SLOTH]             = _("Lumber Sloth"),
     [SPECIES_LUMBERING_SLOTH_OVERGROWN]             = _("Lumber Sloth"),
+    [SPECIES_IRON_CARAPACE]             = _("Iron Carapace"),
     [SPECIES_CLAWITZER_REDUX]    = _("Clawitzer"),
     // Special Mega + Primals
     [SPECIES_RAYQUAZA_MEGA]  = _("Rayquaza"),

@@ -7646,6 +7646,12 @@ const u32 gMonPalette_LumberingSlothOvergrown[]           = INCBIN_U32("graphics
 const u32 gMonShinyPalette_LumberingSlothOvergrown[]      = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/shiny.gbapal.lz");
 const u8  gMonIcon_LumberingSlothOvergrown[]              = INCBIN_U8("graphics/pokemon/lumbering_sloth/overgrown/icon.4bpp");
 
+const u32 gMonFrontPic_IronCarapace[]          = INCBIN_U32("graphics/pokemon/iron_carapace/front.4bpp.lz");
+const u32 gMonBackPic_IronCarapace[]           = INCBIN_U32("graphics/pokemon/iron_carapace/back.4bpp.lz");
+const u32 gMonPalette_IronCarapace[]           = INCBIN_U32("graphics/pokemon/iron_carapace/normal.gbapal.lz");
+const u32 gMonShinyPalette_IronCarapace[]      = INCBIN_U32("graphics/pokemon/iron_carapace/shiny.gbapal.lz");
+const u8  gMonIcon_IronCarapace[]              = INCBIN_U8("graphics/pokemon/iron_carapace/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

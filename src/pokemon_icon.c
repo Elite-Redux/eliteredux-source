@@ -1219,6 +1219,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_BLIZZARD_MAW] = gMonIcon_BlizzardMaw,
     [SPECIES_LUMBERING_SLOTH] = gMonIcon_LumberingSloth,
     [SPECIES_LUMBERING_SLOTH_OVERGROWN] = gMonIcon_LumberingSlothOvergrown,
+    [SPECIES_IRON_CARAPACE] = gMonIcon_IronCarapace,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,
@@ -3145,8 +3146,9 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_BLIZZARD_MAW] = 0,
     [SPECIES_LUMBERING_SLOTH] = 0,
     [SPECIES_LUMBERING_SLOTH_OVERGROWN] = 0,
+    [SPECIES_IRON_CARAPACE] = 0,
 
-    [SPECIES_KINGAMBIT_REDUX_MEGA] = 2,
+    [SPECIES_KINGAMBIT_REDUX_MEGA] = 1,
     [SPECIES_YVELTAL_MEGA] = 2,
     [SPECIES_CALYREX_CLOUD_RIDER] = 0,
     [SPECIES_SPECTRIER_CLOUD] = 0,
