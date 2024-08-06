@@ -1635,6 +1635,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_AEGISLASH_BLADE_REDUX_MEGA] = sAegislashReduxLevelUpLearnset,
     [SPECIES_AEGISLASH_REDUX_MEGA] = sAegislashReduxLevelUpLearnset,
     [SPECIES_REUNICLUS_REDUX_MEGA] = sReuniclusReduxLevelUpLearnset,
+    [SPECIES_TORTERRA_REDUX] = sTorterraReduxLevelUpLearnset,
+    [SPECIES_TORTERRA_REDUX_MEGA] = sTorterraReduxLevelUpLearnset,
     [SPECIES_MINCCINO_REDUX] = sMinccino_ReduxLevelUpLearnset,
     [SPECIES_CINCCINO_REDUX] = sCinccino_ReduxLevelUpLearnset,
 };

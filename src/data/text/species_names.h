@@ -1123,6 +1123,9 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_CORM]      = _("Corm"),
     [SPECIES_MAIZEMOTH]      = _("Maizemoth"),
 
+    [SPECIES_TORTERRA_REDUX]      = _("Torterra"),
+    [SPECIES_TORTERRA_REDUX_MEGA]      = _("Torterra"),
+
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),
     [SPECIES_HOUNDOOM_MEGA_REDUX] = _("Houndoom"),

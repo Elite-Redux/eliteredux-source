@@ -1220,6 +1220,8 @@ const u8 *const gMonIconTable[] =
     [SPECIES_LUMBERING_SLOTH] = gMonIcon_LumberingSloth,
     [SPECIES_LUMBERING_SLOTH_OVERGROWN] = gMonIcon_LumberingSloth_Overgrown,
     [SPECIES_IRON_CARAPACE] = gMonIcon_IronCarapace,
+    [SPECIES_TORTERRA_REDUX] = gMonIcon_TorterraRedux,
+    [SPECIES_TORTERRA_REDUX_MEGA] = gMonIcon_TorterraReduxMega,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,

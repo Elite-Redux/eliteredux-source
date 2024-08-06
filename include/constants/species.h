@@ -1638,6 +1638,7 @@
 #define SPECIES_HYDREIGON_REDUX_MEGA        CUSTOM_MEGA_START + 71
 #define SPECIES_MAIZEMOTH_MEGA              CUSTOM_MEGA_START + 72
 #define SPECIES_POPMOTH_MEGA                CUSTOM_MEGA_START + 73
+#define SPECIES_TORTERRA_REDUX_MEGA         CUSTOM_MEGA_START + 74
 
 #define LAST_VALID_CUSTOM_MEGA              SPECIES_POPMOTH_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
@@ -1713,8 +1714,9 @@
 #define SPECIES_ESCARGINITE_REDUX           REDUX_FORMS_START + 68
 #define SPECIES_RATTATA_REDUX               REDUX_FORMS_START + 69
 #define SPECIES_RATICATE_REDUX              REDUX_FORMS_START + 70
-#define SPECIES_MINCCINO_REDUX              REDUX_FORMS_START + 71
-#define SPECIES_CINCCINO_REDUX              REDUX_FORMS_START + 72
+#define SPECIES_TORTERRA_REDUX              REDUX_FORMS_START + 71
+#define SPECIES_MINCCINO_REDUX              REDUX_FORMS_START + 99
+#define SPECIES_CINCCINO_REDUX              REDUX_FORMS_START + 100
 
 // Monotype Mons
 #define SPECIES_DRAGONITE_DELIVERY          REDUX_FORMS_START + 73 //T
