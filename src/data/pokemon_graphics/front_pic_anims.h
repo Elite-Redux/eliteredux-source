@@ -187,6 +187,11 @@ static const union AnimCmd sAnim_IRON_CARAPACE_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_GROTLE_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_TORTERRA_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -677,6 +682,11 @@ static const union AnimCmd *const sAnims_LUMBERING_SLOTH_OVERGROWN[] ={
 static const union AnimCmd *const sAnims_IRON_CARAPACE[] ={
     sAnim_GeneralFrame0,
     sAnim_IRON_CARAPACE_1,
+};
+
+static const union AnimCmd *const sAnims_GROTLE_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GROTLE_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_TORTERRA_REDUX[] ={
@@ -20386,6 +20396,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(LUMBERING_SLOTH),
     ANIM_CMD(LUMBERING_SLOTH_OVERGROWN),
     ANIM_CMD(IRON_CARAPACE),
+    ANIM_CMD(GROTLE_REDUX),
     ANIM_CMD(TORTERRA_REDUX),
     ANIM_CMD(TORTERRA_REDUX_MEGA),
     ANIM_CMD(BLIZZARD_MAW),

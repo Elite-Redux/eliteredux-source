@@ -5592,6 +5592,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x87,
         .y_offset = 4,
     },
+    [SPECIES_GROTLE_REDUX] =
+    {
+        .size = 0x56,
+        .y_offset = 7,
+    },
     [SPECIES_TORTERRA_REDUX] =
     {
         .size = 0x88,

@@ -1747,7 +1747,8 @@
 #define SPECIES_TINKATON_MEGA               REDUX_FORMS_START + 99
 
 // back to normal redux mons
-#define SPECIES_TORTERRA_REDUX              REDUX_FORMS_START + 100
+#define SPECIES_GROTLE_REDUX                REDUX_FORMS_START + 100
+#define SPECIES_TORTERRA_REDUX              REDUX_FORMS_START + 101
 
 #define LAST_REDUX_FORM                     SPECIES_TORTERRA_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
