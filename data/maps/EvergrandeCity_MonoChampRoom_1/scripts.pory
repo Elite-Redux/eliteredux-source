@@ -64,16 +64,17 @@ script EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers{
 
 script EverGrandeCity_MonoChampRoom_1_EventScript_Scott_Outside{
     lock
-    faceplayer
-    msgbox(format("Do you want to try defeating a bunch of strong trainers to avoid going throught the Victory Road and get a Rare Reward?"), MSGBOX_YESNO)
-    if(var(VAR_RESULT) == NO){
-        msgbox(format("Come back when you are ready"))
-    }
-    else{
-        msgbox(format("Let me take you there"))
-        call(EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers)
-        warp(MAP_EVERGRANDE_CITY_MONO_CHAMP_ROOM_1, 255, 14, 17)
-    }
+    msgbox(format("Why are you talking to thin air dude?"), MSGBOX_DEFAULT)
+    #faceplayer
+    #msgbox(format("Do you want to try defeating a bunch of strong trainers to avoid going throught the Victory Road and get a Rare Reward?"), MSGBOX_YESNO)
+    #if(var(VAR_RESULT) == NO){
+    #    msgbox(format("Come back when you are ready"))
+    #}
+    #else{
+    #    msgbox(format("Let me take you there"))
+    #    call(EverGrandeCity_MonoChampRoom_1_EventScript_ResetTrainers)
+    #    warp(MAP_EVERGRANDE_CITY_MONO_CHAMP_ROOM_1, 255, 14, 17)
+    #}
     release
     end
 }

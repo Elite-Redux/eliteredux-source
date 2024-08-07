@@ -10067,11 +10067,19 @@ void getGenRange(u8 gen, u16* min, u16* max){
             break;
         case 9:
             *min = GEN9_START;
+            #ifdef DISABLE_STUFF_FOR_PUBLIC_RELEASE
+            *max = LAST_VALID_SPECIES_PUBLIC + 1;
+            #else
             *max = LAST_VALID_SPECIES + 1;
+            #endif
             break;
         default:
             *min = GEN1_START;
+            #ifdef DISABLE_STUFF_FOR_PUBLIC_RELEASE
+            *max = LAST_VALID_SPECIES_PUBLIC + 1;
+            #else
             *max = LAST_VALID_SPECIES + 1;
+            #endif
             break;
     }
     *max-=2;
@@ -10218,8 +10226,12 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_ZAMAZENTA_CROWNED_SHIELD   || //Unfinished
                 species == SPECIES_ETERNATUS_ETERNAMAX        || //Unfinished
                 species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Unfinished
-                species == SPECIES_ZARUDE_DADA                || //Unfinished|
+                species == SPECIES_ZARUDE_DADA                || //Unfinished
+                #ifdef DISABLE_STUFF_FOR_PUBLIC_RELEASE
+                (species > LAST_VALID_SPECIES_PUBLIC && species < SPECIES_RATTATA_ALOLAN) || 
+                #else
                 (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
+                #endif
                 (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
                 (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KEKLEONG) 
                 );
@@ -10303,7 +10315,11 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_EISCUE_NOICE_FACE          ||
                 species == SPECIES_INDEEDEE_FEMALE            ||
                 species == SPECIES_MORPEKO_HANGRY             ||
+                #ifdef DISABLE_STUFF_FOR_PUBLIC_RELEASE
+                (species > LAST_VALID_SPECIES_PUBLIC && species < SPECIES_RATTATA_ALOLAN) ||
+                #else
                 (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
+                #endif
                 (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
                 (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KEKLEONG) 
                 );
@@ -10750,6 +10766,23 @@ u32 getMask(s8 loc, s8 locG){
 
     return 0;
 }
+
+bool8 isItemValid(u16 item){
+    #if DISABLE_STUFF_FOR_PUBLIC_RELEASE == TRUE
+    if(item < ITEM_LAST_MEGA_STONE && item > LAST_PUBLIC_MEGA_STONE)
+        return FALSE;
+    #endif
+
+    //Disable Unused Items
+    if(item < ITEMS_COUNT && item > ITEM_HEALTH_FEATHER)
+        return FALSE;
+
+    if(item > ITEMS_COUNT)
+        return FALSE;
+    
+    return TRUE;
+}
+
 bool8 isSpeciesPlaceholderMon(u16 species){
     //Special Cases
     switch(species){
@@ -10760,20 +10793,52 @@ bool8 isSpeciesPlaceholderMon(u16 species){
 
     if(species == SPECIES_NONE)
         return FALSE;
+
+    //Normal Species
+    #if DISABLE_STUFF_FOR_PUBLIC_RELEASE == TRUE
+    else if(species < LAST_VALID_SPECIES_PUBLIC + 1)
+        return FALSE;
+    #else
     else if(species < LAST_VALID_SPECIES + 1)
         return FALSE;
+    #endif
+
     else if(species <= FORMS_START)
         return TRUE;
-    else if (species < LAST_VALID_STANDARD_FORM)
+    
+    //Forms
+    #if DISABLE_STUFF_FOR_PUBLIC_RELEASE == TRUE
+    else if(species < LAST_VALID_STANDARD_FORM_PUBLIC)
         return FALSE;
+    #else
+    else if(species < LAST_VALID_STANDARD_FORM)
+        return FALSE;
+    #endif
+
     else if (species <= CUSTOM_MEGA_START)
         return TRUE;
-    else if (species <= LAST_VALID_CUSTOM_MEGA)
+    
+    //Megas
+    #if DISABLE_STUFF_FOR_PUBLIC_RELEASE == TRUE
+    else if(species <= LAST_VALID_CUSTOM_MEGA_PUBLIC)
         return FALSE;
+    #else
+    else if(species <= LAST_VALID_CUSTOM_MEGA)
+        return FALSE;
+    #endif
+    
     else if (species <= REDUX_FORMS_START)
         return TRUE;
+    
+    //Redux Forms
+    #if DISABLE_STUFF_FOR_PUBLIC_RELEASE == TRUE
+    else if (species < LAST_REDUX_FORM_PUBLIC + 1)
+        return FALSE;
+    #else
     else if (species < LAST_REDUX_FORM + 1)
         return FALSE;
+    #endif
+    
     else
         return TRUE;
 }

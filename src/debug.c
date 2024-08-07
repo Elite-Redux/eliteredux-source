@@ -2706,6 +2706,8 @@ static void DebugAction_Give_Item(u8 taskId)
     gSprites[gTasks[taskId].data[6]].y2 = DEBUG_NUMBER_ICON_Y+10;
     gSprites[gTasks[taskId].data[6]].oam.priority = 0;
 }
+#define PLACEHOLDER_ITEM_VALUE ITEM_POTION
+
 static void DebugAction_Give_Item_SelectId(u8 taskId)
 {
     if (gMain.newKeys & DPAD_ANY)
@@ -2736,7 +2738,12 @@ static void DebugAction_Give_Item_SelectId(u8 taskId)
         }
 
         StringCopy(gStringVar2, gText_DigitIndicator[gTasks[taskId].data[4]]);
-        CopyItemName(gTasks[taskId].data[3], gStringVar1);
+
+        if(isItemValid(gTasks[taskId].data[3]))
+            CopyItemName(gTasks[taskId].data[3], gStringVar1);
+        else
+            CopyItemName(PLACEHOLDER_ITEM_VALUE, gStringVar1);
+            
         StringCopyPadded(gStringVar1, gStringVar1, CHAR_SPACE, 15);
         ConvertIntToDecimalStringN(gStringVar3, gTasks[taskId].data[3], STR_CONV_MODE_LEADING_ZEROS, DEBUG_NUMBER_DIGITS_ITEMS);
         StringExpandPlaceholders(gStringVar4, sDebugText_ItemID);
@@ -2746,7 +2753,12 @@ static void DebugAction_Give_Item_SelectId(u8 taskId)
         FreeSpritePaletteByTag(ITEM_TAG);                       //Destroy item icon
         FreeSpriteOamMatrix(&gSprites[gTasks[taskId].data[6]]); //Destroy item icon
         DestroySprite(&gSprites[gTasks[taskId].data[6]]);       //Destroy item icon
-        gTasks[taskId].data[6] = AddItemIconSprite(ITEM_TAG, ITEM_TAG, gTasks[taskId].data[3]);
+        
+        if(isItemValid(gTasks[taskId].data[3]))
+            gTasks[taskId].data[6] = AddItemIconSprite(ITEM_TAG, ITEM_TAG, gTasks[taskId].data[3]);
+        else
+            gTasks[taskId].data[6] = AddItemIconSprite(ITEM_TAG, ITEM_TAG, PLACEHOLDER_ITEM_VALUE);
+        
         gSprites[gTasks[taskId].data[6]].x2 = DEBUG_NUMBER_ICON_X+10;
         gSprites[gTasks[taskId].data[6]].y2 = DEBUG_NUMBER_ICON_Y+10;
         gSprites[gTasks[taskId].data[6]].oam.priority = 0;
@@ -2754,7 +2766,11 @@ static void DebugAction_Give_Item_SelectId(u8 taskId)
 
     if (gMain.newKeys & A_BUTTON)
     {
-        gTasks[taskId].data[5] = gTasks[taskId].data[3];
+        if(isItemValid(gTasks[taskId].data[3]))
+            gTasks[taskId].data[5] = gTasks[taskId].data[3];
+        else
+            gTasks[taskId].data[5] = PLACEHOLDER_ITEM_VALUE;
+        
         gTasks[taskId].data[3] = 1;
         gTasks[taskId].data[4] = 0;
 

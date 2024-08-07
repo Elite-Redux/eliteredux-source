@@ -505,6 +505,7 @@ bool8 isMonNicknamed(struct Pokemon *mon);
 bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon);
 bool8 CheckBoxMonForBadChecksum(u8 box, u8 slot);
 bool8 isSpeciesPlaceholderMon(u16 species);
+bool8 isItemValid(u16 item);
 bool8 IsEeveelution(u16 species);
 u16 getBaseSpeciesFromMega(u16 species);
 u16 getLearnsetMon(u16 species);
