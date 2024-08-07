@@ -925,4 +925,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_LUMBERING_SLOTH_OVERGROWN] = sLumberingSlothFormSpeciesIdTable,
 
+    [SPECIES_TORTERRA_REDUX] = sTorterraFormSpeciesIdTable,
+
 };
