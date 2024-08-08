@@ -10188,12 +10188,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_WHISMUR] =
     {
-    .baseHP        = 64,
-    .baseAttack    = 51,
-    .baseDefense   = 23,
-    .baseSpeed     = 28,
-    .baseSpAttack  = 51,
-    .baseSpDefense = 23,
+    .baseHP        =  74,
+    .baseAttack    =  51,
+    .baseDefense   =  33,
+    .baseSpeed     =  38,
+    .baseSpAttack  =  71,
+    .baseSpDefense =  33,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_NORMAL,
     .catchRate = 190,
@@ -10214,11 +10214,11 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_LOUDRED] =
     {
-    .baseHP         = 84,
+    .baseHP         = 94,
     .baseAttack     = 71,
     .baseDefense    = 53,
     .baseSpeed      = 58,
-    .baseSpAttack   = 101,
+    .baseSpAttack   = 91,
     .baseSpDefense  = 53,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_NORMAL,
@@ -30766,10 +30766,10 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_DREEPY] =
     {
     .baseHP        = 28,
-    .baseAttack    = 60,
+    .baseAttack    = 70,
     .baseDefense   = 30,
     .baseSpeed     = 82,
-    .baseSpAttack  = 40,
+    .baseSpAttack  = 50,
     .baseSpDefense = 30,
     .type1 = TYPE_DRAGON,
     .type2 = TYPE_GHOST,
@@ -30792,10 +30792,10 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_DRAKLOAK] =
     {
     .baseHP        = 68,
-    .baseAttack    = 80,
+    .baseAttack    = 90,
     .baseDefense   = 50,
     .baseSpeed     = 102,
-    .baseSpAttack  = 60,
+    .baseSpAttack  = 70,
     .baseSpDefense = 50,
     .type1 = TYPE_DRAGON,
     .type2 = TYPE_GHOST,
@@ -31724,12 +31724,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_WHISMUR_REDUX] =
     {
-    .baseHP        =  64,
+    .baseHP        =  74,
     .baseAttack    =  51,
-    .baseDefense   =  23,
-    .baseSpeed     =  28,
-    .baseSpAttack  =  51,
-    .baseSpDefense =  23,
+    .baseDefense   =  33,
+    .baseSpeed     =  38,
+    .baseSpAttack  =  71,
+    .baseSpDefense =  33,
     .type1 = TYPE_GHOST,
     .type2 = TYPE_ELECTRIC,
     .catchRate = 190,
@@ -31750,12 +31750,12 @@ const struct BaseStats gBaseStats[] =
     
 [SPECIES_LOUDRED_REDUX] =
     {
-    .baseHP        =  84,
-    .baseAttack    =  71,
-    .baseDefense   =  43,
-    .baseSpeed     =  48,
-    .baseSpAttack  =  71,
-    .baseSpDefense =  43,
+    .baseHP         = 94,
+    .baseAttack     = 61,
+    .baseDefense    = 53,
+    .baseSpeed      = 58,
+    .baseSpAttack   = 81,
+    .baseSpDefense  = 63,
     .type1 = TYPE_GHOST,
     .type2 = TYPE_ELECTRIC,
     .catchRate = 120,
