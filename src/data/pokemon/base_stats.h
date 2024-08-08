@@ -41182,7 +41182,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_GROTLE_REDUX] =
+[SPECIES_TURTWIG_REDUX] =
+    {
+    .baseHP        = 55,
+    .baseAttack    = 68,
+    .baseDefense   = 64,
+    .baseSpeed     = 31,
+    .baseSpAttack  = 45,
+    .baseSpDefense = 55,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_GRASS,
+    .catchRate = 255,
+    .expYield = 64,
+    .evYield_Attack    = 1,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_MONSTER,
+    .eggGroup2 = EGG_GROUP_GRASS,
+    .abilities = {ABILITY_ROUGH_SKIN, ABILITY_STAMINA, ABILITY_SHEER_FORCE},
+    .innates = {ABILITY_OVERGROW, ABILITY_SHELL_ARMOR, ABILITY_CHLOROPLAST},
+    .bodyColor = BODY_COLOR_GREEN,
+    .noFlip = FALSE,
+    .tier = 3,
+    },
+
+[SPECIES_GROTLE_REDUX] =
     {
     .baseHP        = 75,
     .baseAttack    = 89,
@@ -41209,7 +41235,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_TORTERRA_REDUX] =
+[SPECIES_TORTERRA_REDUX] =
     {
     .baseHP        =  95,
     .baseAttack    =  119,

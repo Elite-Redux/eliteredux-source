@@ -27578,6 +27578,23 @@ static const struct LevelUpMove sIronCarapaceLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sTurtwigReduxLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(1, MOVE_TACKLE),
+    LEVEL_UP_MOVE(1, MOVE_WITHDRAW),
+    LEVEL_UP_MOVE(4, MOVE_ABSORB),
+    LEVEL_UP_MOVE(7, MOVE_SAND_TOMB),
+    LEVEL_UP_MOVE(10, MOVE_RAZOR_LEAF),
+    LEVEL_UP_MOVE(13, MOVE_CURSE),
+    LEVEL_UP_MOVE(16, MOVE_BITE),
+    LEVEL_UP_MOVE(19, MOVE_MEGA_DRAIN),
+    LEVEL_UP_MOVE(23, MOVE_LEECH_SEED),
+    LEVEL_UP_MOVE(27, MOVE_SYNTHESIS),
+    LEVEL_UP_MOVE(31, MOVE_CRUNCH),
+    LEVEL_UP_MOVE(36, MOVE_GIGA_DRAIN),
+    LEVEL_UP_MOVE(40, MOVE_LEAF_STORM),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sGrotleReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_EARTH_POWER),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),

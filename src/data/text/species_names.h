@@ -1122,6 +1122,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_BASCULEGION] = _("Basculegion"),
     [SPECIES_CORM]      = _("Corm"),
 
+    [SPECIES_TURTWIG_REDUX]      = _("Turtwig"),
     [SPECIES_GROTLE_REDUX]      = _("Grotle"),
     [SPECIES_TORTERRA_REDUX]      = _("Torterra"),
     [SPECIES_TORTERRA_REDUX_MEGA]      = _("Torterra"),

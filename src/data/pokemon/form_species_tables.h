@@ -1627,6 +1627,16 @@ static const u16 sEmpoleonFormSpeciesIdTable[] = {
     SPECIES_EMPOLEON_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sTurtwigFormSpeciesIdTable[] = {
+    SPECIES_TURTWIG,
+    SPECIES_TURTWIG_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sGrotleFormSpeciesIdTable[] = {
+    SPECIES_GROTLE,
+    SPECIES_GROTLE_REDUX,
+    FORM_SPECIES_END,
+};
 static const u16 sTorterraFormSpeciesIdTable[] = {
     SPECIES_TORTERRA,
     SPECIES_TORTERRA_MEGA,

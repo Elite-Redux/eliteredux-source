@@ -7652,6 +7652,12 @@ const u32 gMonPalette_IronCarapace[]           = INCBIN_U32("graphics/pokemon/ir
 const u32 gMonShinyPalette_IronCarapace[]      = INCBIN_U32("graphics/pokemon/iron_carapace/shiny.gbapal.lz");
 const u8  gMonIcon_IronCarapace[]              = INCBIN_U8("graphics/pokemon/iron_carapace/icon.4bpp");
 
+const u32 gMonFrontPic_TurtwigRedux[]          = INCBIN_U32("graphics/pokemon/turtwig/redux/front.4bpp.lz");
+const u32 gMonBackPic_TurtwigRedux[]           = INCBIN_U32("graphics/pokemon/turtwig/redux/back.4bpp.lz");
+const u32 gMonPalette_TurtwigRedux[]           = INCBIN_U32("graphics/pokemon/turtwig/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_TurtwigRedux[]      = INCBIN_U32("graphics/pokemon/turtwig/redux/shiny.gbapal.lz");
+const u8  gMonIcon_TurtwigRedux[]              = INCBIN_U8("graphics/pokemon/turtwig/redux/icon.4bpp");
+
 const u32 gMonFrontPic_GrotleRedux[]          = INCBIN_U32("graphics/pokemon/grotle/redux/front.4bpp.lz");
 const u32 gMonBackPic_GrotleRedux[]           = INCBIN_U32("graphics/pokemon/grotle/redux/back.4bpp.lz");
 const u32 gMonPalette_GrotleRedux[]           = INCBIN_U32("graphics/pokemon/grotle/redux/normal.gbapal.lz");
