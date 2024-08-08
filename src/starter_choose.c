@@ -189,7 +189,7 @@ static const u16 sStarterMonBug[STARTER_MON_COUNT] =
 static const u16 sStarterMonDark[STARTER_MON_COUNT] =
 {
     SPECIES_IMPIDIMP,
-    SPECIES_SANDILE,
+    SPECIES_ZIGZAGOON_GALARIAN,
     SPECIES_PAWNIARD,
 };
 
@@ -218,7 +218,7 @@ static const u16 sStarterMonFighting[STARTER_MON_COUNT] =
 {
     SPECIES_MACHOP,
     SPECIES_TIMBURR,
-    SPECIES_POLIWAG,
+    SPECIES_MANKEY,
 };
 
 static const u16 sStarterMonFlying[STARTER_MON_COUNT] =
@@ -232,14 +232,14 @@ static const u16 sStarterMonGhost[STARTER_MON_COUNT] =
 {
     SPECIES_GASTLY,
     SPECIES_LITWICK,
-    SPECIES_HONEDGE,
+    SPECIES_PHANTUMP,
 };
 
 static const u16 sStarterMonGround[STARTER_MON_COUNT] =
 {
     SPECIES_RHYHORN,
     SPECIES_GIBLE,
-    SPECIES_TYMPOLE,
+    SPECIES_SANDILE,
 };
 
 static const u16 sStarterMonIce[STARTER_MON_COUNT] =
@@ -251,21 +251,21 @@ static const u16 sStarterMonIce[STARTER_MON_COUNT] =
 
 static const u16 sStarterMonNormal[STARTER_MON_COUNT] =
 {
-    SPECIES_ZIGZAGOON_GALARIAN,
+    SPECIES_PORYGON,
     SPECIES_IGGLYBUFF,
-    SPECIES_SMOLIV,
+    SPECIES_WHISMUR,
 };
 
 static const u16 sStarterMonPoison[STARTER_MON_COUNT] =
 {
     SPECIES_NIDORAN_F,
-    SPECIES_WEEDLE,
+    SPECIES_SPINARAK,
     SPECIES_ODDISH,
 };
 
 static const u16 sStarterMonPsychic[STARTER_MON_COUNT] =
 {
-    SPECIES_CATERPIE,
+    SPECIES_MIME_JR,
     SPECIES_HATENNA,
     SPECIES_BELDUM,
 };
@@ -280,7 +280,7 @@ static const u16 sStarterMonRock[STARTER_MON_COUNT] =
 static const u16 sStarterMonSteel[STARTER_MON_COUNT] =
 {
     SPECIES_KLINK,
-    SPECIES_GOOMY,
+    SPECIES_HONEDGE,
     SPECIES_ARON,
 };
 
