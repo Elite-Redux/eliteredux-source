@@ -1571,6 +1571,7 @@ static const u16 sEnamorusFormSpeciesIdTable[] = {
 static const u16 sKingambitFormSpeciesIdTable[] = {
     SPECIES_KINGAMBIT,
     SPECIES_KINGAMBIT_REDUX,
+    SPECIES_KINGAMBIT_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sLarvitarFormSpeciesIdTable[] = {
@@ -1626,9 +1627,21 @@ static const u16 sEmpoleonFormSpeciesIdTable[] = {
     SPECIES_EMPOLEON_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sTurtwigFormSpeciesIdTable[] = {
+    SPECIES_TURTWIG,
+    SPECIES_TURTWIG_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sGrotleFormSpeciesIdTable[] = {
+    SPECIES_GROTLE,
+    SPECIES_GROTLE_REDUX,
+    FORM_SPECIES_END,
+};
 static const u16 sTorterraFormSpeciesIdTable[] = {
     SPECIES_TORTERRA,
     SPECIES_TORTERRA_MEGA,
+    SPECIES_TORTERRA_REDUX,
+    SPECIES_TORTERRA_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sMiloticFormSpeciesIdTable[] = {

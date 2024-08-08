@@ -637,8 +637,14 @@
 #define ABILITY_FLAMING_MAW 615 // Strong Jaw + Flaming Jaws
 #define ABILITY_DEMOLITIONIST 616 // Readied Action + Ignores Protect + screens break on readied turn
 #define ABILITY_ROCKHARD_WILL 617 // Boosts Rock-type moves by 1.2x, or 1.5x when under 1/3 HP.
+#define ABILITY_FRAGRANT_DAZE 618 // 30% chance to confuse on contact.
+#define ABILITY_OLD_MARINER 619 // Seaweed + Water Absorb.
+#define ABILITY_BEAUTIFUL_MUSIC 620 // Sound-based moves have 50% chance to infatuate the foe.
+#define ABILITY_SNOW_SONG 621 // Sound moves become Ice- type moves and get a 1.2x boost.
+#define ABILITY_RESONANCE 622 // Sound moves cause the target to bleed.
+#define ABILITY_CUTE_ANTECEDENCE 623 // At full HP, gives +1 priority to its Fairy-type moves.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ROCKHARD_WILL + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_CUTE_ANTECEDENCE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

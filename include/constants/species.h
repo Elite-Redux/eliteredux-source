@@ -1638,8 +1638,9 @@
 #define SPECIES_HYDREIGON_REDUX_MEGA        CUSTOM_MEGA_START + 71
 #define SPECIES_MAIZEMOTH_MEGA              CUSTOM_MEGA_START + 72
 #define SPECIES_POPMOTH_MEGA                CUSTOM_MEGA_START + 73
+#define SPECIES_TORTERRA_REDUX_MEGA         CUSTOM_MEGA_START + 74
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_POPMOTH_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_TORTERRA_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
@@ -1745,7 +1746,12 @@
 #define SPECIES_KARTANA_FALLEN              REDUX_FORMS_START + 98
 #define SPECIES_TINKATON_MEGA               REDUX_FORMS_START + 99
 
-#define LAST_REDUX_FORM                     SPECIES_TINKATON_MEGA
+// back to normal redux mons
+#define SPECIES_TURTWIG_REDUX               REDUX_FORMS_START + 100
+#define SPECIES_GROTLE_REDUX                REDUX_FORMS_START + 101
+#define SPECIES_TORTERRA_REDUX              REDUX_FORMS_START + 102
+
+#define LAST_REDUX_FORM                     SPECIES_TORTERRA_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

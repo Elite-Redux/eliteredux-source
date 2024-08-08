@@ -7341,7 +7341,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			}
 			
 			// Water Absorb
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_WATER_ABSORB)){
+			if(BATTLER_HAS_ABILITY(battler, ABILITY_WATER_ABSORB) || BATTLER_HAS_ABILITY(battler, ABILITY_OLD_MARINER)){
 				if (move != MOVE_NONE && moveType == TYPE_WATER){
                     effect = 1;
                     gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_WATER_ABSORB;
@@ -8635,6 +8635,42 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				}
 		}
 
+        // Resonance
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RESONANCE)){
+			if (ShouldApplyOnHitAffect(gBattlerTarget)
+				 && CanBleed(gBattlerTarget)
+				 && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
+				 && (Random() % 100) < 100)
+				{
+					gBattleScripting.abilityPopupOverwrite = ABILITY_RESONANCE;
+					gLastUsedAbility = ABILITY_RESONANCE;
+					gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
+					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+					effect++;
+				}
+		}
+
+        // Beautiful Music // uses resonance data as a placeholder cause i'm too lazy to delete my work
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RESONANCE)){
+			if (ShouldApplyOnHitAffect(gBattlerTarget)
+				 && CanBleed(gBattlerTarget)
+				 && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
+				 && (Random() % 100) < 100)
+				{
+					gBattleScripting.abilityPopupOverwrite = ABILITY_RESONANCE;
+					gLastUsedAbility = ABILITY_RESONANCE;
+					gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
+					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+					effect++;
+				}
+		}
+
 		// Toxic Chain
 		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_TOXIC_CHAIN)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
@@ -9903,6 +9939,22 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_SUPER_HOT_GOO;
                     gBattleScripting.moveEffect = MOVE_EFFECT_BURN | effectTargetFlag;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    effect++;
+                }
+            }
+
+            // Fragrant Daze
+            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FRAGRANT_DAZE)){
+                if (ShouldApplyOnHitAffect(opponent)
+                && CanBeConfused(gBattlerAttacker)
+                && IsMoveMakingContact(move, gBattlerAttacker)
+                && (Random() % 100) < 30)
+                {
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FRAGRANT_DAZE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION | effectTargetFlag;
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -13079,8 +13131,12 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 	// Sand Song
 	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SAND_SONG) && moveType == TYPE_GROUND && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk])
         MulModifier(&modifier, UQ_4_12(1.2));
+
+     // Snow Song
+	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SNOW_SONG) && moveType == TYPE_ICE && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk])
+        MulModifier(&modifier, UQ_4_12(1.2));
 	
-	// Sand Song
+	// Banshee
 	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BANSHEE) && moveType == TYPE_GHOST && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk])
         MulModifier(&modifier, UQ_4_12(1.2));
 	
@@ -13751,7 +13807,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
 static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags)
 {
-    u8 atkStatToUse = (IS_MOVE_PHYSICAL(move) ^ gSwapDamageCategory) ? STAT_ATK : STAT_SPATK;
+    u8 atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_ATK : STAT_SPATK;
     u8 secondaryAtkStatToUse = 0;
     u8 statBattler = battlerAtk;
     //Calculates Highest Attack Stat after stat boosts
@@ -14219,7 +14275,7 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     }
 	
 	//Seaweed
-	if(BattlerHasInnate(battlerDef, ABILITY_SEAWEED)){
+	if(BattlerHasInnate(battlerDef, ABILITY_SEAWEED) || BattlerHasInnate(battlerDef, ABILITY_OLD_MARINER)){
         if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS))
         {
             MulModifier(&modifier, UQ_4_12(0.5));
@@ -14566,7 +14622,7 @@ void SetSwapDamageCategory(int battler, int target, int move)
             gSwapDamageCategory = FALSE;
             return;
         
-        USE_HIGHEST_OFFENSE:
+        case USE_HIGHEST_OFFENSE:
             {
                 int isUnaware = BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT);
                 int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
@@ -14577,7 +14633,7 @@ void SetSwapDamageCategory(int battler, int target, int move)
             }
             return;
 
-        USE_HIGHEST_DAMAGE:
+        case USE_HIGHEST_DAMAGE:
             {
                 int isUnaware = BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT);
                 int isTargetUnaware = BATTLER_HAS_ABILITY(target, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(target, ABILITY_CONTEMPT);
@@ -14623,7 +14679,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     {
         defStatToUse = STAT_SPDEF;
     }
-    else if (gBattleMoves[move].splitFlag == HITS_DEF || (IS_MOVE_PHYSICAL(move) ^ gSwapDamageCategory))
+    else if (gBattleMoves[move].splitFlag == HITS_DEF || IS_MOVE_PHYSICAL(move))
     {
         defStatToUse = STAT_DEF;
     }
