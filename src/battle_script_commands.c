@@ -1969,6 +1969,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         }
     }
 	else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_FATAL_PRECISION, atkAbility)
+        && !IS_MOVE_STATUS(move)
         && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0))
         return 101;
     else if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY) && 
@@ -10501,22 +10502,10 @@ static void Cmd_various(void)
         return;
     case VARIOUS_PHOTON_GEYSER_CHECK:
     {
-        s32 physicalHigher = CalculateStat(gBattlerAttacker, STAT_ATK, 0, 0, TRUE, FALSE, FALSE, FALSE) -
-                            CalculateStat(gBattlerAttacker, STAT_SPATK, 0, 0, TRUE, FALSE, FALSE, FALSE);
-        u8 isPhysical = IS_MOVE_PHYSICAL(gCurrentMove);
-        if (physicalHigher == 0) gSwapDamageCategory = Random() % 2;
-        else gSwapDamageCategory = isPhysical ^ (physicalHigher > 0);
         break;
     }
     case VARIOUS_SHELL_SIDE_ARM_CHECK: // 0% chance GameFreak actually checks this way according to DaWobblefet, but this is the only functional explanation at the moment
     {
-        u8 attackerIsUnaware = BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CONTEMPT);
-        u8 targetIsUnaware = BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_CONTEMPT);
-        s32 physicalHigher = CalculateStat(gBattlerAttacker, STAT_ATK, 0, 0, TRUE, FALSE, targetIsUnaware, FALSE) / CalculateStat(gBattlerAttacker, STAT_SPDEF, 0, 0, TRUE, FALSE, attackerIsUnaware, FALSE) -
-                            CalculateStat(gBattlerAttacker, STAT_SPATK, 0, 0, TRUE, FALSE, targetIsUnaware, FALSE) / CalculateStat(gBattlerAttacker, STAT_DEF, 0, 0, TRUE, FALSE, attackerIsUnaware, FALSE);
-        u8 isPhysical = IS_MOVE_PHYSICAL(gCurrentMove);
-        if (physicalHigher == 0) gSwapDamageCategory = Random() % 2;
-        else gSwapDamageCategory = isPhysical ^ (physicalHigher > 0);
         break;
     }
     case VARIOUS_JUMP_IF_LEAF_GUARD_PROTECTED:
