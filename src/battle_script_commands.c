@@ -1969,6 +1969,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         }
     }
 	else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_FATAL_PRECISION, atkAbility)
+        && !IS_MOVE_STATUS(move)
         && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0))
         return 101;
     else if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY) && 
