@@ -7676,6 +7676,12 @@ const u32 gMonPalette_TorterraReduxMega[]           = INCBIN_U32("graphics/pokem
 const u32 gMonShinyPalette_TorterraReduxMega[]      = INCBIN_U32("graphics/pokemon/torterra/redux_mega/shiny.gbapal.lz");
 const u8  gMonIcon_TorterraReduxMega[]              = INCBIN_U8("graphics/pokemon/torterra/redux_mega/icon.4bpp");
 
+const u32 gMonFrontPic_ChimcharRedux[]          = INCBIN_U32("graphics/pokemon/chimchar/redux/front.4bpp.lz");
+const u32 gMonBackPic_ChimcharRedux[]           = INCBIN_U32("graphics/pokemon/chimchar/redux/back.4bpp.lz");
+const u32 gMonPalette_ChimcharRedux[]           = INCBIN_U32("graphics/pokemon/chimchar/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_ChimcharRedux[]      = INCBIN_U32("graphics/pokemon/chimchar/redux/shiny.gbapal.lz");
+const u8  gMonIcon_ChimcharRedux[]              = INCBIN_U8("graphics/pokemon/chimchar/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

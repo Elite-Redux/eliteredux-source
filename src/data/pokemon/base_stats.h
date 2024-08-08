@@ -41289,6 +41289,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_CHIMCHAR_REDUX] =
+    {
+    .baseHP        = 44,
+    .baseAttack    = 58,
+    .baseDefense   = 44,
+    .baseSpeed     = 61,
+    .baseSpAttack  = 58,
+    .baseSpDefense = 44,
+    .type1 = TYPE_FIRE,
+    .type2 = TYPE_FIRE,
+    .catchRate = 255,
+    .expYield = 62,
+    .evYield_Speed     = 1,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
+    .abilities = {ABILITY_IRON_FIST, ABILITY_POWER_FISTS, ABILITY_GORILLA_TACTICS},
+    .innates = {ABILITY_BLAZE, ABILITY_PRANKSTER, ABILITY_DEFIANT},
+    .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = TRUE,
+    .tier = 3,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

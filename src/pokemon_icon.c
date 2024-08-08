@@ -1224,6 +1224,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_GROTLE_REDUX] = gMonIcon_GrotleRedux,
     [SPECIES_TORTERRA_REDUX] = gMonIcon_TorterraRedux,
     [SPECIES_TORTERRA_REDUX_MEGA] = gMonIcon_TorterraReduxMega,
+    [SPECIES_CHIMCHAR_REDUX] = gMonIcon_ChimcharRedux,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,

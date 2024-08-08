@@ -207,6 +207,11 @@ static const union AnimCmd sAnim_TORTERRA_REDUX_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_CHIMCHAR_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -707,6 +712,11 @@ static const union AnimCmd *const sAnims_TORTERRA_REDUX[] ={
 static const union AnimCmd *const sAnims_TORTERRA_REDUX_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_TORTERRA_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_CHIMCHAR_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CHIMCHAR_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
@@ -20410,6 +20420,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(GROTLE_REDUX),
     ANIM_CMD(TORTERRA_REDUX),
     ANIM_CMD(TORTERRA_REDUX_MEGA),
+    ANIM_CMD(CHIMCHAR_REDUX),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
