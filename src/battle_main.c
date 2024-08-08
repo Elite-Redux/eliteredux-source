@@ -5106,9 +5106,9 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     if (!ignoreChosenMoves)
     {
         if (gChosenActionByBattler[battler1] == B_ACTION_USE_MOVE)
-            priority1 = GetChosenMovePriority(battler1, battler2);
+            priority1 = GetChosenMovePriority(battler1, gBattleStruct->moveTarget[battler1]);
         if (gChosenActionByBattler[battler2] == B_ACTION_USE_MOVE)
-            priority2 = GetChosenMovePriority(battler2, battler1);
+            priority2 = GetChosenMovePriority(battler2, gBattleStruct->moveTarget[battler2]);
     }
 
     if (priority1 == priority2)
