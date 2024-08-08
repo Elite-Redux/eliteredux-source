@@ -265,7 +265,7 @@ const struct SpriteTemplate gFlameChargeEmberTemplate =
     .callback = AnimPetalDanceBigFlower
 };
 
-//final gambit
+//final gambit - Crashes myboy!
 const struct SpriteTemplate gFinalGambitBlueYawnTemplate =
 {
     .tileTag = ANIM_TAG_PINK_CLOUD,

@@ -3418,7 +3418,9 @@ Move_FLASH_CANNON:
 	loopsewithpan SE_M_CHARGE, SOUND_PAN_ATTACKER, 6, 5
 	waitforvisualfinish
 	playsewithpan SE_M_PAY_DAY, SOUND_PAN_ATTACKER
-	createsprite gFlashCannonBallMovementTemplate, ANIM_TARGET, 2, 0, 0, 0x15
+	@ This line crashes MyBoy!
+	@ createsprite gFlashCannonBallMovementTemplate, ANIM_TARGET, 2, 0, 0, 0x15
+
 	clearmonbg ANIM_ATTACKER
 	waitforvisualfinish
 	playsewithpan SE_M_LEER, SOUND_PAN_ATTACKER
@@ -6217,15 +6219,22 @@ Move_RETALIATE:
 
 Move_FINAL_GAMBIT:
 	loadspritegfx ANIM_TAG_PINK_CLOUD @yawn animation
-	loadspritegfx ANIM_TAG_WATER_IMPACT @blue colour
+	loadspritegfx ANIM_TAG_CIRCLE_OF_LIGHT
 	loadspritegfx ANIM_TAG_EXPLOSION @explosion animation
+	loadspritegfx ANIM_TAG_WATER_IMPACT @blue colour
 	launchtask AnimTask_BlendBattleAnimPal 0xa 0x5 ANIM_PAL_BG 0x1 0x0 0xC 0x0 @Darken
 	waitforvisualfinish
 	launchtask AnimTask_ShakeMon2 0x2 0x5 0x0 0x1 0x0 0xa 0x1
 	launchtask AnimTask_BlendColorCycle 0x2 0x6 ANIM_PAL_ATK 0x0 0x2 0x0 0x8 0x7fff
 	waitforvisualfinish
-	playsewithpan SE_M_SAND_ATTACK, SOUND_PAN_ATTACKER
-	launchtemplate gFinalGambitBlueYawnTemplate 0x2 0x3 0x0 0x0 0x25
+
+	@ These lines Crash Myboy!
+	@ playsewithpan SE_M_SAND_ATTACK, SOUND_PAN_ATTACKER
+	@ launchtemplate gFinalGambitBlueYawnTemplate 0x2 0x3 0x0 0x0 0x25
+
+	createsprite gSuperpowerOrbSpriteTemplate, ANIM_TARGET, 2, 0
+	playsewithpan SE_M_MEGA_KICK, SOUND_PAN_ATTACKER
+
 	delay 0x4
 	waitforvisualfinish
 	launchtask AnimTask_ShakeMon 0x2 0x5 ANIM_TARGET 0x3 0x0 0xf 0x1
@@ -6952,8 +6961,11 @@ Move_HORN_LEECH:
 	loadspritegfx ANIM_TAG_ORBS
 	loadspritegfx ANIM_TAG_BLUE_STAR
 	playsewithpan SE_M_HEADBUTT, SOUND_PAN_ATTACKER
-	launchtemplate gHornLeechHornTemplate 0x82, 0x3, 0x0 0x0 0x25
-	waitforvisualfinish
+
+	@ These Lines Crashes Myboy!
+	@ launchtemplate gHornLeechHornTemplate 0x82, 0x3, 0x0 0x0 0x25
+	@ waitforvisualfinish
+
 	launchtask AnimTask_ShakeMon 0x2 0x5 ANIM_TARGET 0x5 0x0 0x6 0x1
 	launchtemplate gFlashingHitSplatSpriteTemplate 0x83 0x4 0x0 0x0 0x1 0x1
 	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
@@ -9565,11 +9577,15 @@ Move_WATER_SHURIKEN::
 	loadspritegfx ANIM_TAG_BLUE_RING_2 @rings
 	loadspritegfx ANIM_TAG_SMALL_BUBBLES @bubbles
 	loadspritegfx ANIM_TAG_IMPACT @hydro pump hit
+	
 	monbg ANIM_DEF_PARTNER
 	splitbgprio ANIM_TARGET
 	createsoundtask SoundTask_LoopSEAdjustPanning, 0x7, 0x87, 0xffc0, SOUND_PAN_TARGET, 0x5, 0x5, 0x0, 0x5
-	launchtemplate gWaterShurikenStarTemplate 0x82, 0x3, 0x0 0x0 0x27
-	delay 0x8
+
+	@ This crashes MyBoy!
+	@ launchtemplate gWaterShurikenStarTemplate 0x82, 0x3, 0x0 0x0 0x27
+	@ delay 0x8
+
 	launchtemplate gWaterShurikenRingTemplate 0x82, 0x4, 0x0 0x0 0x28 0xf
 	delay 0x5
 	launchtemplate gWaterShurikenRingTemplate 0x82, 0x4, 0x0 0x0 0x28 0xf

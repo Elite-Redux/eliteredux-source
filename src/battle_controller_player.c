@@ -1536,7 +1536,7 @@ void PrintBattleWindow_MoveSelection(void)
                 extraX = 0;
             x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
             //Move Power
-            if(!isStatusMove)
+            if(!isStatusMove && movePower >= 3)
                 ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);
             else
                 StringCopy(gStringVar1, sText_Target_Nothing);
@@ -1847,10 +1847,6 @@ static void HandleInputChooseActionPlayer(void)
     bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
     u8 shortcutButton = gSaveBlock2Ptr->shortcutButton;
     u8 value = 0;
-
-    /*MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "HandleInputChooseActionPlayer VAR_TEMP_SPECIAL_VAR: %d gActiveBattler: %d", VarGet(VAR_TEMP_SPECIAL_VAR), gActiveBattler);
-    MgbaClose();*/
 
     DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
     DoBounceEffect(gActiveBattler, BOUNCE_MON,       7, 1);
