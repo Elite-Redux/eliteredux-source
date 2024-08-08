@@ -27427,7 +27427,7 @@ static const struct LevelUpMove sBrontonanaLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sDredwoodLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(0, MOVE_SHADOW_CLAW),
+    LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
     LEVEL_UP_MOVE(1, MOVE_ASTONISH),
     LEVEL_UP_MOVE(1, MOVE_CONFUSE_RAY),
     LEVEL_UP_MOVE(1, MOVE_GROWTH),

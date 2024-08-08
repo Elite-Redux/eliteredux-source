@@ -4975,6 +4975,7 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
     GALE_WINGS_CLONE(ABILITY_VOLT_RUSH, TYPE_ELECTRIC)
     GALE_WINGS_CLONE(ABILITY_DARK_GALE_WINGS, TYPE_DARK)
     GALE_WINGS_CLONE(ABILITY_WATER_GALE_WINGS, TYPE_WATER)
+    GALE_WINGS_CLONE(ABILITY_CUTE_ANTECEDENCE, TYPE_FAIRY)
 
     #undef GALE_WINGS_CLONE
 
@@ -5955,7 +5956,12 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
         return TYPE_GROUND;
     }
 
-    //Requiem
+    //Snow Song
+    if(HAS_ABILITY(ABILITY_SNOW_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
+        return TYPE_ICE;
+    }
+
+    //Banshee
     if(HAS_ABILITY(ABILITY_BANSHEE) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
         return TYPE_GHOST;
     }
@@ -6124,6 +6130,8 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
         return TYPE_ELECTRIC;
     else if (gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SAND_SONG))
         return TYPE_GROUND;
+    else if (gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SNOW_SONG))
+        return TYPE_ICE;
     else if (gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BANSHEE))
         return TYPE_GHOST;
     else if (gBattleMoves[move].type == TYPE_NORMAL
@@ -6279,6 +6287,11 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     else if (gBattleMoves[move].flags & FLAG_SOUND && gBattleMoves[move].type == TYPE_NORMAL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SAND_SONG, attackerAbility))
     {
         gBattleStruct->dynamicMoveType = 0x80 | TYPE_GROUND;
+        gBattleStruct->ateBoost[battlerAtk] = 1;
+    }
+    else if (gBattleMoves[move].flags & FLAG_SOUND && gBattleMoves[move].type == TYPE_NORMAL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SNOW_SONG, attackerAbility))
+    {
+        gBattleStruct->dynamicMoveType = 0x80 | TYPE_ICE;
         gBattleStruct->ateBoost[battlerAtk] = 1;
     }
     else if (gBattleMoves[move].flags & FLAG_SOUND && gBattleMoves[move].type == TYPE_NORMAL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_BANSHEE, attackerAbility))

@@ -587,6 +587,12 @@ static const u8 sAbilityBalloonBomberDescription[] = _("Aftermath + Inflatable")
 static const u8 sAbilityFlamingMawDescription[] = _("Strong Jaw + Flaming Jaws");
 static const u8 sAbilityDemolitionistDescription[] = _("Readied Action + Ignores Protect\n+ screens break on readied turn");
 static const u8 sAbilityRockhardWillDescription[] = _("Boosts Rock-type moves by 1.2x,\nor 1.5x when under 1/3 HP.");
+static const u8 sAbilityFragrantDazeDescription[] = _("30% chance to confuse on contact.");
+static const u8 sAbilityOldMarinerDescription[] = _("Seaweed + Water Absorb.");
+static const u8 sAbilityBeautifulMusicDescription[] = _("Sound-based moves have 50% chance\nto infatuate the foe.");
+static const u8 sAbilitySnowSongDescription[] = _("Sound moves become Ice-\ntype moves and get a 1.2x boost.");
+static const u8 sAbilityResonanceDescription[] = _("Sound moves cause the target to \nbleed.");
+static const u8 sAbilityCuteAntecedenceDescription[] = _("At full HP, gives +1 priority to\nits Fairy-type moves.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1208,6 +1214,12 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_FLAMING_MAW] = _("Flaming Maw"),
     [ABILITY_DEMOLITIONIST] = _("Demolitionist"),
     [ABILITY_ROCKHARD_WILL] = _("Rockhard Will"),
+    [ABILITY_FRAGRANT_DAZE] = _("Fragrant Daze"),
+    [ABILITY_OLD_MARINER] = _("Old Mariner"),
+    [ABILITY_BEAUTIFUL_MUSIC] = _("Beautiful Music"),
+    [ABILITY_SNOW_SONG] = _("Snow Song"),
+    [ABILITY_RESONANCE] = _("Resonance"),
+    [ABILITY_CUTE_ANTECEDENCE] = _("Cute Antecedence"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1830,4 +1842,10 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_FLAMING_MAW] = sAbilityFlamingMawDescription,
     [ABILITY_DEMOLITIONIST] = sAbilityDemolitionistDescription,
     [ABILITY_ROCKHARD_WILL] = sAbilityRockhardWillDescription,
+    [ABILITY_FRAGRANT_DAZE] = sAbilityFragrantDazeDescription,
+    [ABILITY_OLD_MARINER] = sAbilityOldMarinerDescription,
+    [ABILITY_BEAUTIFUL_MUSIC] = sAbilityBeautifulMusicDescription,
+    [ABILITY_SNOW_SONG] = sAbilitySnowSongDescription,
+    [ABILITY_RESONANCE] = sAbilityResonanceDescription,
+    [ABILITY_CUTE_ANTECEDENCE] = sAbilityCuteAntecedenceDescription,
 };
