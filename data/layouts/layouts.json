@@ -785,7 +785,7 @@
       "id": "LAYOUT_PETALBURG_CITY_GYM",
       "name": "PetalburgCity_Gym_Layout",
       "width": 9,
-      "height": 112,
+      "height": 47,
       "primary_tileset": "gTileset_Building",
       "secondary_tileset": "gTileset_PetalburgGym",
       "border_filepath": "data/layouts/PetalburgCity_Gym/border.bin",
@@ -4710,6 +4710,26 @@
       "secondary_tileset": "gTileset_Cave",
       "border_filepath": "data/layouts/EvergrandeCity_MonoChampRoom_1/border.bin",
       "blockdata_filepath": "data/layouts/EvergrandeCity_MonoChampRoom_1/map.bin"
+    },
+    {
+      "id": "LAYOUT_FORTREE_CITY_GYM_REWORKED",
+      "name": "FortreeCity_GymReworked_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_FortreeGym",
+      "border_filepath": "data/layouts/FortreeCity_GymReworked/border.bin",
+      "blockdata_filepath": "data/layouts/FortreeCity_GymReworked/map.bin"
+    },
+    {
+      "id": "LAYOUT_MOSS_DEEP_CITY_GYM_REWORKED",
+      "name": "MossDeepCity_GymReworked_Layout",
+      "width": 14,
+      "height": 16,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_MossdeepGym",
+      "border_filepath": "data/layouts/MossDeepCity_GymReworked/border.bin",
+      "blockdata_filepath": "data/layouts/MossDeepCity_GymReworked/map.bin"
     }
   ]
 }

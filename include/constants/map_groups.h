@@ -191,6 +191,7 @@
 #define MAP_FORTREE_CITY_HOUSE4            (7 | (12 << 8))
 #define MAP_FORTREE_CITY_HOUSE5            (8 | (12 << 8))
 #define MAP_FORTREE_CITY_DECORATION_SHOP   (9 | (12 << 8))
+#define MAP_FORTREE_CITY_GYM_REWORKED      (10 | (12 << 8))
 
 // gMapGroup_IndoorLilycove
 #define MAP_LILYCOVE_CITY_COVE_LILY_MOTEL_1F        (0 | (13 << 8))
@@ -232,6 +233,7 @@
 #define MAP_MOSSDEEP_CITY_SPACE_CENTER_2F   (10 | (14 << 8))
 #define MAP_MOSSDEEP_CITY_GAME_CORNER_1F    (11 | (14 << 8))
 #define MAP_MOSSDEEP_CITY_GAME_CORNER_B1F   (12 | (14 << 8))
+#define MAP_MOSS_DEEP_CITY_GYM_REWORKED     (13 | (14 << 8))
 
 // gMapGroup_IndoorSootopolis
 #define MAP_SOOTOPOLIS_CITY_GYM_1F                   (0 | (15 << 8))

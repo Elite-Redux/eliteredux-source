@@ -644,8 +644,9 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
         ScriptContext1_SetupScript(SSTidalCorridor_EventScript_ReachedStepCount);
         return TRUE;
     }
-    if (TryStartMatchCall())
-        return TRUE;
+    // Commented out matchcalls because they are annoying
+    // if (TryStartMatchCall())
+    //    return TRUE;
     return FALSE;
 }
 
@@ -927,6 +928,17 @@ static s8 GetWarpEventAtPosition(struct MapHeader *mapHeader, u16 x, u16 y, u8 e
     return -1;
 }
 
+// Taken from https://github.com/rh-hideout/pokeemerald-expansion/pull/4900/files
+static bool32 ShouldTriggerScriptRun(const struct CoordEvent *coordEvent)
+{
+    u16 *varPtr = GetVarPointer(coordEvent->trigger);
+    // Treat non Vars as flags
+    if (varPtr == NULL)
+        return (FlagGet(coordEvent->trigger) == coordEvent->index);
+    else
+        return (*varPtr == coordEvent->index);
+}
+
 static u8 *TryRunCoordEventScript(struct CoordEvent *coordEvent)
 {
     if (coordEvent != NULL)
@@ -941,7 +953,7 @@ static u8 *TryRunCoordEventScript(struct CoordEvent *coordEvent)
             ScriptContext2_RunNewScript(coordEvent->script);
             return NULL;
         }
-        if (VarGet(coordEvent->trigger) == (u8)coordEvent->index)
+        if (ShouldTriggerScriptRun(coordEvent))
             return coordEvent->script;
     }
     return NULL;

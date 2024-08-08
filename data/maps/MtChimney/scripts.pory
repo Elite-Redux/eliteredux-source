@@ -494,7 +494,7 @@ MtChimney_EventScript_DefeatedShelby:: @ 822F176
 	special PlayerFaceTrainerAfterBattle
 	waitmovement 0
 	msgbox MtChimney_Text_ShelbyRegister, MSGBOX_DEFAULT
-	register_matchcall TRAINER_SHELBY_1
+	//register_matchcall TRAINER_SHELBY_1
 	release
 	end
 
@@ -536,7 +536,7 @@ MtChimney_EventScript_SawyerDefeated:: @ 822F234
 	special PlayerFaceTrainerAfterBattle
 	waitmovement 0
 	msgbox MtChimney_Text_SawyerRegister, MSGBOX_DEFAULT
-	register_matchcall TRAINER_SAWYER_1
+	//register_matchcall TRAINER_SAWYER_1
 	release
 	end
 
@@ -857,3 +857,9 @@ MtChimney_Text_SawyerPostRematch: @ 8230614
 	.string "Actually, it really is hot here.\n"
 	.string "I'm overdressed for these parts.$"
 `
+
+script MtChimney_EventScript_VisitedMtChimney{
+    setflag(FLAG_VISITED_MT_CHIMNEY)
+    setvar(VAR_TEMP_0, 1)
+}
+

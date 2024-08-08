@@ -1,0 +1,94 @@
+mapscripts FortreeCity_GymReworked_MapScripts {}
+
+
+raw `
+FortreeCity_GymReworked_Text_GymStatueCertified:
+	.string "Fortree City Pokémon Gym\p"
+	.string "Winona's Certified Trainers:\n"
+	.string "{PLAYER}$"
+
+FortreeCity_GymReworked_Text_GymStatue:
+	.string "Fortree City Pokémon Gym$"
+`
+
+script FortreeCity_GymReworked_EventScript_GymStatue{
+    lock
+    if (flag(FLAG_BADGE06_GET)) {
+        msgbox(FortreeCity_GymReworked_Text_GymStatueCertified, MSGBOX_DEFAULT)
+    }
+    else{
+        msgbox(FortreeCity_GymReworked_Text_GymStatue, MSGBOX_DEFAULT)
+    }
+    release
+}
+
+
+script FortreeCity_GymReworked_EventScript_CheckPlateformEvent{
+    if (flag(FLAG_BADGE06_GET)) {
+        setvar(VAR_TEMP_5, 1)
+        release
+        end
+    }
+    call(FortreeCity_GymReworked_EventScript_AskBattle)
+    setvar(VAR_TEMP_5, 1)
+    return
+}
+
+movement FortreeCity_GymReworked_Movement_PlayerWalksOut{
+    walk_down
+}
+
+script FortreeCity_GymReworked_EventScript_AskBattle{
+    msgbox(format("Do you wish to battle for the 6th badge?"), MSGBOX_YESNO)
+    if (!var(VAR_RESULT)) {
+        applymovement(OBJ_EVENT_ID_PLAYER, FortreeCity_GymReworked_Movement_PlayerWalksOut)
+        waitmovement(0)
+        release
+        end
+    }
+    closemessage
+    return
+}
+
+
+movement FortreeCity_GymReworked_Movement_PlayerWalksIn0{
+    walk_up
+}
+
+movement FortreeCity_GymReworked_Movement_PlayerWalksIn1{
+    walk_up
+    walk_left
+}
+
+movement FortreeCity_GymReworked_Movement_PlayerWalksToBattleWinona{
+    walk_left * 3
+    walk_up
+    face_right // this is one of a odd piece moment because for some reason
+    // because gSelectedObjectEvent is targeted to the player and then there's a implicit faceplayer launched after which makes the player face to the opposite end.
+}
+
+script FortreeCity_GymReworked_EventScript_EnterPlateform0{
+    lock
+    call(FortreeCity_GymReworked_EventScript_CheckPlateformEvent)
+    applymovement(OBJ_EVENT_ID_PLAYER, FortreeCity_GymReworked_Movement_PlayerWalksIn0)
+    waitmovement(0)
+    goto(FortreeCity_GymReworked_EventScript_EnterPlateform)
+}
+
+script FortreeCity_GymReworked_EventScript_EnterPlateform1{
+    lock
+    call(FortreeCity_GymReworked_EventScript_CheckPlateformEvent)
+    applymovement(OBJ_EVENT_ID_PLAYER, FortreeCity_GymReworked_Movement_PlayerWalksIn1)
+    waitmovement(0)
+    goto(FortreeCity_GymReworked_EventScript_EnterPlateform)
+}
+
+const LOCALID_WINONA = 1
+script FortreeCity_GymReworked_EventScript_EnterPlateform{
+    applymovement(OBJ_EVENT_ID_PLAYER, FortreeCity_GymReworked_Movement_PlayerWalksToBattleWinona)
+    selectapproachingtrainer(LOCALID_WINONA)
+    waitmovement(0)
+    goto(FortreeCity_Gym_EventScript_Winona)
+}
+
+

@@ -481,9 +481,29 @@
 #define CONDITION_STEALTH_ROCK 2
 
 // Tag Teams
-#define TAG_TEAM_WALLACE_JUAN 0
-#define TAG_TEAM_WALLACE_JUAN_2 1
-#define TAG_TEAM_WALLACE_JUAN_REMATCH 2
+#define TAG_TEAM_WALLACE_JUAN           0
+#define TAG_TEAM_WALLACE_JUAN_2         1
+#define TAG_TEAM_WALLACE_JUAN_REMATCH   2
+#define TAG_TEAM_BRENDEN_LILITH         3
+#define TAG_TEAM_SHAWN_ANGELO           4
+#define TAG_TEAM_EDUARDO_FLINT          5
+#define TAG_TEAM_ASHLEY_JARED           6
+#define TAG_TEAM_SAMANTHA_BLAKE         7
+#define TAG_TEAM_MAURA_PRESTON          8
+#define TAG_TEAM_SYLVIA_HANNAH          9
+#define TAG_TEAM_KATHLEEN_NICHOLAS      10
+#define TAG_TEAM_MACEY_CLIFFORD         11
+#define TAG_TEAM_NATE_VIRGIL            12
+#define TAG_TEAM_BRIDGET_CRISSY         13
+#define TAG_TEAM_CRISSY_BETHANY         14
+#define TAG_TEAM_BRIDGET_BETHANY        15
+#define TAG_TEAM_ANNIKA_BRIANNA         16
+#define TAG_TEAM_BRIANNA_OLIVIA         17
+#define TAG_TEAM_OLIVIA_ANNIKA          18
+#define TAG_TEAM_DAPHNE_CONNIE          19
+#define TAG_TEAM_CONNIE_ANDREA          20
+#define TAG_TEAM_ANDREA_DAPHNE          21
+#define TAG_TEAM_COLE_KEEGAN            22
 
 // VAR_BATTLE_FIELD_EFFECT_TYPE
 #define BATTLE_FIELD_EFFECT_NONE            0

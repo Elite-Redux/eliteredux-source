@@ -1653,7 +1653,7 @@
 	.macro showabilitypopup battler:req
 	various \battler, VARIOUS_ABILITY_POPUP
 	.endm
-	
+
 	.macro updateabilitypopup battler:req
 	various \battler, VARIOUS_UPDATE_ABILITY_POPUP
 	.endm
@@ -2345,8 +2345,57 @@ checkstatbuffonlowered_queensmourning_\@:
 checkstatbuffonlowered_none_\@:
 	.endm
 
+
 	.macro jumpifmagicguard battler:req, ptr:req
 	jumpifability \battler, ABILITY_MAGIC_GUARD, \ptr
 	jumpifability \battler, ABILITY_IMPENETRABLE, \ptr
 	jumpifability \battler, ABILITY_APPLE_ENLIGHTENMENT, \ptr
 	.endm
+
+
+@ unused, was for an experiment
+.macro battlemacrostyped macro_type:req, type:req, data:req, ptr:req, data2
+	.if \param2 == BATTLE_MACROS_TYPE_U8
+		.byte 0x93
+		.byte \param0
+		.byte \data
+		.if \data2
+			.byte \data2
+		.else
+			.byte 0
+		.endif
+		.4byte \ptr
+	.endif
+	.if \param2 == BATTLE_MACROS_TYPE_U16
+		.byte 0x93
+		.byte \param0
+		.2byte \data
+		.4byte \ptr
+	.endif
+	.endm
+
+@ unused, was for an experiment
+.macro battlemacrosflexible4 macro_data_type:req, macro_type:req, data:req, data2=0, data3=0, data4=0
+	.byte 0x93
+	.byte \macro_data_type
+	.byte \macro_type
+	.byte \data 
+	.byte \data2
+	.byte \data3
+	.byte \data4
+.endm
+
+@ taken from events.inc
+@ Blocks script execution until the currently-playing sound (triggered by playse) finishes playing.
+.macro waitse
+	.byte 0x30
+.endm
+
+@ taken from events.inc
+@ Plays the specified (song_number) song. If save_song is TRUE, the
+@ specified (song_number) will be saved as if savebgm was called with it.
+.macro playbgm song_number:req, save_song:req
+	.byte 0x33
+	.2byte \song_number
+	.byte \save_song
+.endm

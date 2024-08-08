@@ -92,12 +92,12 @@ SlateportCity_EventScript_ScottScene:: @ 81DCD1C
 	waitmovement 0
 	msgbox SlateportCity_Text_LetsRegisterEachOther, MSGBOX_DEFAULT
 	closemessage
-	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox SlateportCity_Text_RegisteredScott, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox SlateportCity_Text_RegisteredScott, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	setflag FLAG_ENABLE_SCOTT_MATCH_CALL
 	msgbox SlateportCity_Text_KeepEyeOnTrainersBeSeeingYou, MSGBOX_DEFAULT
 	closemessage

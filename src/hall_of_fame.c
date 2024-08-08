@@ -37,6 +37,7 @@
 #include "constants/items.h"
 #include "constants/species.h"
 #include "constants/abilities.h"
+#include "battle_setup.h"
 
 #define HALL_OF_FAME_MAX_TEAMS 30
 #define TAG_CONFETTI 1001
@@ -1667,7 +1668,7 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
     
 	static const u8 noText[]   = _("");
 
-    u16 wins   = getNumberOfUniqueDefeatedTrainers();
+    u16 wins   = GetTrainerBattleWins();
     u16 losses = 0 + VarGet(VAR_TIMES_WHITED_OUT);
 
 	//Number of Wins

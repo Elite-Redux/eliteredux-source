@@ -105,7 +105,10 @@ MeteorFalls_1F_1R_EventScript_MagmaAfterBattle::
 	setflag FLAG_MET_ARCHIE_METEOR_FALLS
 	setflag FLAG_HIDE_FALLARBOR_TOWN_BATTLE_TENT_SCOTT
 	setvar VAR_METEOR_FALLS_STATE, 1
-	releaseall
+	applymovement LOCALID_RIVAL, Common_Movement_ExclamationMark
+    playse SE_PIN
+	waitmovement LOCALID_RIVAL
+	goto MeteorFalls_1F_1R_EventScript_RivalAskYouToBringYouToTeamMagma
 	end
 
 MeteorFalls_1F_1R_EventScript_May::
@@ -279,6 +282,7 @@ MeteorFalls_1F_1R_EventScript_RivalTalkAfterBattle::
 	lock
 	faceplayer
 	msgbox MeteorFalls_1F_1R_Text_RivalAfterBattle, MSGBOX_DEFAULT
+	goto MeteorFalls_1F_1R_EventScript_RivalAskYouToBringYouToTeamMagma
 	release
 	end
 
@@ -614,4 +618,17 @@ script MeteorFalls_1F_1R_EventScript_AceTrainer_Block{
 
 script MeteorFalls_1F_1R_EventScript_MoveAceTrainer{
 	setobjectxyperm(LOCALID_ACE_TRAINER, 11, 27)
+}
+
+script MeteorFalls_1F_1R_EventScript_RivalAskYouToBringYouToTeamMagma{
+    applymovement(LOCALID_RIVAL, Common_Movement_WalkInPlaceUp)
+	waitmovement(0)
+	applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceDown)
+	waitmovement(0)
+    msgbox(format("I know a shortcut, I can ask one of my Pokémon to bring you close to Mt. Chimney if you want?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT)){
+        warp(MAP_ROUTE112, 255, 24, 33)
+        waitstate
+    }
+    releaseall
 }

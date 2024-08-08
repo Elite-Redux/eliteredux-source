@@ -36,6 +36,23 @@ EventScript_TryDoDoubleTrainerBattle::
 	special SetTrainerFacingDirection
 	goto EventScript_ShowTrainerIntroMsg
 
+EventScript_TryDoDoubleTrainerBattleNoIntro::
+	lock
+	faceplayer
+	call EventScript_RevealTrainer
+	specialvar VAR_RESULT, GetTrainerFlag
+	compare VAR_RESULT, FALSE
+	goto_if_ne EventScript_NoDoubleTrainerBattle
+	special HasEnoughMonsForDoubleBattle
+	compare VAR_RESULT, PLAYER_HAS_TWO_USABLE_MONS
+	goto_if_ne EventScript_NotEnoughMonsForDoubleBattle
+	special PlayTrainerEncounterMusic
+	special SetTrainerFacingDirection
+	trainerbattlebegin 
+	gotobeatenscript
+	releaseall
+	end
+
 EventScript_NotEnoughMonsForDoubleBattle::
 	special ShowTrainerCantBattleSpeech
 	waitmessage
@@ -129,6 +146,8 @@ EventScript_DoTrainerBattle::
 	compare VAR_RESULT, TRAINER_BATTLE_CONTINUE_SCRIPT_DOUBLE
 	goto_if_eq EventScript_EndTrainerBattle
 	compare VAR_RESULT, TRAINER_BATTLE_CONTINUE_SCRIPT_DOUBLE_NO_MUSIC
+	goto_if_eq EventScript_EndTrainerBattle
+	compare VAR_RESULT, TRAINER_BATTLE_DOUBLE_NO_INTRO_TEXT
 	goto_if_eq EventScript_EndTrainerBattle
 EventScript_EndTrainerBattle::
 	gotobeatenscript

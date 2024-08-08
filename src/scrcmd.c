@@ -55,6 +55,7 @@
 #include "constants/battle_frontier.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "battle_events.h"
 
 typedef u16 (*SpecialFunc)(void);
 typedef void (*NativeFunc)(void);
@@ -2284,7 +2285,13 @@ bool8 ScrCmd_freerotatingtilepuzzle(struct ScriptContext *ctx)
 
 bool8 ScrCmd_selectapproachingtrainer(struct ScriptContext *ctx)
 {
-    gSelectedObjectEvent = GetCurrentApproachingTrainerObjectEventId();
+    u8 setObjectByCommand = ScriptReadByte(ctx);
+    if (setObjectByCommand == 255){
+        gSelectedObjectEvent = GetCurrentApproachingTrainerObjectEventId();
+    } else {
+        gSelectedObjectEvent = setObjectByCommand;
+    }
+        
     return FALSE;
 }
 
@@ -2989,12 +2996,11 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
     return FALSE;
 }
 
-bool8 ScrCmd_changemovement(struct ScriptContext *ctx)
+bool8 ScrCmd_registerbattleevent(struct ScriptContext *ctx)
 {
-    u16 localId = VarGet(ScriptReadHalfword(ctx));
-    u8 movement = VarGet(ScriptReadByte(ctx));
-    struct ObjectEvent *objectEvent;
-    objectEvent = &gObjectEvents[localId];
-    SetTrainerMovementType(objectEvent, movement);
+    u8 battleEvent = VarGet(ScriptReadByte(ctx));
+    u8 battleEventData0 = VarGet(ScriptReadByte(ctx)); //& 0xF later
+    u8 battleEventData1 = VarGet(ScriptReadByte(ctx)); //& 0xF later 
+    RegisterBattleEvent(battleEvent, battleEventData0, battleEventData1);
     return FALSE;
 }

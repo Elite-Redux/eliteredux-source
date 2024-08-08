@@ -94,8 +94,8 @@ MagmaHideout_4F_EventScript_Maxie:: @ 823A560
 	setflag FLAG_HIDE_MAGMA_HIDEOUT_GRUNTS
 	fadescreen FADE_FROM_BLACK
 	releaseall
-	end
-
+    @ NEW shortcut for the next
+    goto MagmaHideout_4F_EventScript_CourtneyGoOutside
 	@msgbox MagmaHideout_4F_Text_MaxieImGoingAfterGroudon, MSGBOX_DEFAULT
 	@closemessage
 
@@ -279,3 +279,60 @@ MagmaHideout_4F_Text_MaxieImGoingAfterGroudon: @ 823ABE2
 	.string "I am going after Groudon, so this\n"
 	.string "is where we part!$"
 `
+
+const LOCALID_COURTNEY = 9
+movement MagmaHideout_4F_Movement_CourtneyArrives{
+    walk_fast_right * 4
+    walk_fast_down
+    walk_right * 5
+}
+
+movement MagmaHideout_4F_Movement_CourtneyGoToPanel{
+    walk_left
+    walk_up
+}
+
+script MagmaHideout_4F_EventScript_WarpToSlatePortCity{
+    warp(MAP_SLATEPORT_CITY, 255, 17, 10)
+    waitstate
+    release
+}
+
+script MagmaHideout_4F_EventScript_CourtneyChangedOpinion{
+    lock
+	faceplayer
+    msgbox(format("Oh, changed your mind?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT)){
+        goto(MagmaHideout_4F_EventScript_WarpToSlatePortCity)
+    }
+	//yeah it's fucking bugged, for some reason even courtney have its movement type wrong.
+    applymovement(LOCALID_COURTNEY, Common_Movement_FaceUp)
+	waitmovement(0)
+    release
+}
+script MagmaHideout_4F_EventScript_CourtneyGoOutside{
+    lock
+    addobject(LOCALID_COURTNEY)
+    setobjectxy(LOCALID_COURTNEY, 5, 20)
+    applymovement(LOCALID_COURTNEY, MagmaHideout_4F_Movement_CourtneyArrives)
+    message(format("Courtney: Maxie! Urgent news!\nTeam Aqua are up to something, we need to go and-"))
+	waitmessage
+    applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceLeft)
+    waitmovement(LOCALID_COURTNEY)
+    applymovement(LOCALID_COURTNEY, Common_Movement_ExclamationMark)
+    playse(SE_PIN)
+    closemessage
+    delay(16)
+    msgbox(format("Oh! You're not Maxie.\pYou're that kid who meddles in our business, right?\n...Wait, that might work...\pWill you help us cause trouble for Team Aqua?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT)){
+        msgbox(format("Sweet, thank you {PLAYER}."), MSGBOX_DEFAULT)
+        goto(MagmaHideout_4F_EventScript_WarpToSlatePortCity)
+    } else {
+        msgbox(format("Hm. You're sure? Think it over, we're not leaving yet."), MSGBOX_DEFAULT)
+        applymovement(LOCALID_COURTNEY, MagmaHideout_4F_Movement_CourtneyGoToPanel)
+        waitmovement(0)
+    }
+    release
+}
+
+

@@ -1014,6 +1014,22 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_new[] = _("");
+static const u8 sText_GymSkillTerrain[] = _("Something unusual modifies the terrain.");
+static const u8 sText_GymSkillSteadyStatsBoost[] = _("{B_OPPONENT_MON1_NAME}'s {STR_VAR_1} steadily increases.");
+static const u8 sText_GymSkillPosture[] = _("{B_ATK_NAME_WITH_PREFIX} position itself to {STR_VAR_2},\nits {STR_VAR_1} increase by {B_BUFF3}.");
+static const u8 sText_GymSkillStatusOnTeam[] = _("Some of your team members are affected by\n{STR_VAR_1}.");
+static const u8 sText_GymSkillLastStand[] = _("{B_OPPONENT_MON1_NAME} will not accept defeat!\nAnd its stats increase sharply.");
+static const u8 sText_GymSkillMatBlock[] = _("{B_OPPONENT_MON1_NAME} picked up a mat block\nto use as cover this turn.");
+static const u8 sText_GymSkillWoeUponYe[] = _("Woe {STR_VAR_1} be upon ye.");
+static const u8 sText_GymSkillForesight[] = _("{B_PLAYER_MON1_NAME} was foresighted.");
+static const u8 sText_GymSkillEmbargo[] = _("{B_PLAYER_NAME}'s on field pokemon are unable to use items\nfor {B_BUFF1} turns.");
+static const u8 sText_GymSkillNoProtect[] = _("{B_PLAYER_NAME}'s team had its power points of\n protect drained.");
+static const u8 sText_GymSkillWindSmackDown[] = _("The winds cause {B_PLAYER_MON1_NAME}\nto be smacked down.");
+static const u8 sText_GymSkillReflect[] = _("A defensive screen was set on {B_TRAINER1_NAME}\nteam for {B_BUFF1} turns.");
+static const u8 sText_GymSkillLightscreen[] = _("A spe. defensive screen was set on {B_TRAINER1_NAME}\nteam for {B_BUFF1} turns.");
+static const u8 sText_GymSkillLuckyChant[] = _("A lucky chant was set on {B_TRAINER1_NAME}\nteam for {B_BUFF1} turns.");
+static const u8 sText_GymSkillPermaWideGuard[] = _("Permanent wide guard has been casted on\n{B_TRAINER1_NAME}'s team");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1812,7 +1828,23 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_QUASH_ENDS - 12] = sText_QuashEnds,
     [STRINGID_FOGENDS - 12] = sText_FogEnds,
     [STRINGID_SMOKESCREEN - 12] = sText_Smokescreen,
+    [STRINGID_GYMSKILL_TERRAIN - 12] = sText_GymSkillTerrain,
+    [STRINGID_GYMSKILL_STEADYSTATSBOOST - 12] = sText_GymSkillSteadyStatsBoost,
+    [STRINGID_GYMSKILL_POSTURE - 12] = sText_GymSkillPosture,
+    [STRINGID_GYMSKILL_STATUSONTEAM - 12] = sText_GymSkillStatusOnTeam,
+    [STRINGID_GYMSKILL_LASTSTAND - 12] = sText_GymSkillLastStand,
+    [STRINGID_GYMSKILL_MATBLOCK - 12] = sText_GymSkillMatBlock,
+    [STRINGID_GYMSKILL_WOEUPONYE - 12] = sText_GymSkillWoeUponYe,
+    [STRINGID_GYMSKILL_FORESIGHT - 12] = sText_GymSkillForesight,
+    [STRINGID_GYMSKILL_EMBARGO - 12] = sText_GymSkillEmbargo,
+    [STRINGID_GYMSKILL_NOPROTECT - 12] = sText_GymSkillNoProtect,
+    [STRINGID_GYMSKILL_SMACKDOWN - 12] = sText_GymSkillWindSmackDown,
+    [STRINGID_GYMSKILL_REFLECT - 12] = sText_GymSkillReflect,
+    [STRINGID_GYMSKILL_LIGHTSCREEN - 12] = sText_GymSkillLightscreen,
+    [STRINGID_GYMSKILL_LUCKY_CHANT - 12] = sText_GymSkillLuckyChant,
+    [STRINGID_GYMSKILL_PERMA_WIDEGUARD - 12] = sText_GymSkillPermaWideGuard,
 };
+
 
 const u16 gMentalHerbCureStringIds[] = 
 {

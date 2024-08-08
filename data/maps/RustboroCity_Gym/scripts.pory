@@ -2,19 +2,11 @@ raw `
 RustboroCity_Gym_MapScripts:: @ 8212F30
 	.byte 0
 
-RustboroCity_Gym_EventScript_Roxanne::
-	call RustboroCity_Gym_EventScript_CheckTrainers //Make sure to call this before the Gym Leader Script
-	//goto_if_set FLAG_DAILY_REMATCH_ROXANNE, RustboroCity_Gym_EventScript_AlreadyRematched
-	goto_if_set FLAG_SYS_GAME_CLEAR, RustboroCity_Gym_EventScript_RoxanneRematch
-	setvar VAR_0x8004, 15
-	trainerbattle_single TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxanneIntro, RustboroCity_Gym_Text_RoxanneDefeat, RustboroCity_Gym_EventScript_RoxanneDefeated, NO_MUSIC
-	goto_if_eq RustboroCity_Gym_EventScript_RoxanneRematch
-	goto_if_unset FLAG_RECEIVED_TM39, RustboroCity_Gym_EventScript_GiveRockTomb
-	msgbox RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT
+RustboroCity_Gym_EventScript_RoxanneDefeated:: @ 8212F66
+	goto_if_unset FLAG_DEFEATED_RUSTBORO_GYM, RustboroCity_Gym_EventScript_RoxanneDefeatedFirstTime
 	release
 	end
-
-RustboroCity_Gym_EventScript_RoxanneDefeated:: @ 8212F66
+RustboroCity_Gym_EventScript_RoxanneDefeatedFirstTime:: 
 	message RustboroCity_Gym_Text_ReceivedStoneBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
@@ -85,31 +77,15 @@ RustboroCity_Gym_EventScript_Exit::
 	releaseall
 	end
 
-RustboroCity_Gym_EventScript_Josh:: @ 8212FE3
-	trainerbattle_single TRAINER_JOSH, RustboroCity_Gym_Text_JoshIntro, RustboroCity_Gym_Text_JoshDefeat
-	msgbox RustboroCity_Gym_Text_JoshPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-RustboroCity_Gym_EventScript_Tommy:: @ 8212FFA
-	trainerbattle_single TRAINER_TOMMY, RustboroCity_Gym_Text_TommyIntro, RustboroCity_Gym_Text_TommyDefeat
-	msgbox RustboroCity_Gym_Text_TommyPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-RustboroCity_Gym_EventScript_Marc:: @ 8213011
-	trainerbattle_single TRAINER_MARC, RustboroCity_Gym_Text_MarcIntro, RustboroCity_Gym_Text_MarcDefeat
-	msgbox RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 RustboroCity_Gym_EventScript_GymGuide:: @ 8213028
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_RUSTBORO_GYM, RustboroCity_Gym_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_BADGE01_GET, RustboroCity_Gym_EventScript_AskResetTrainers
 	msgbox RustboroCity_Gym_Text_GymGuideAdvice, MSGBOX_DEFAULT
 	release
 	end
 
 RustboroCity_Gym_EventScript_GymGuidePostVictory:: @ 821303D
-	msgbox RustboroCity_Gym_Text_GymGuidePostVictory, MSGBOX_DEFAULT
 	release
 	end
 
@@ -137,14 +113,14 @@ RustboroCity_Gym_EventScript_GymStatue:: @ 8213071
 
 RustboroCity_Gym_EventScript_RegisterRoxanne:: @ 821307B
 	lockall
-	pokenavcall RustboroCity_Gym_Text_RoxanneRegisterCall
-	waitmessage
-	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox RustboroCity_Gym_Text_RegisteredRoxanne, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ pokenavcall RustboroCity_Gym_Text_RoxanneRegisterCall
+	@ waitmessage
+	@ delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox RustboroCity_Gym_Text_RegisteredRoxanne, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	setflag FLAG_ENABLE_ROXANNE_MATCH_CALL
 	clearflag FLAG_ENABLE_ROXANNE_FIRST_CALL
 	releaseall
@@ -299,29 +275,6 @@ Rustboro_Gym_Guide_Move8::
 	face_down
 	step_end
 
-RustboroCity_Gym_Text_Tips::
-	.string "Yo, how's it going?\p"
-	.string "Listen, my friend!\n"
-	.string "Would you like to become the Champion?\p"
-	.string "I'm no Trainer, not me, but I can\n"
-	.string "sure give you winning advice.\p"
-	.string "That's settled, then! We'll aim for the\n"
-	.string "Pokémon Championship together!\p"
-	.string "It's your job as a Trainer to collect\n"
-	.string "Gym Badges, am I right?\p"
-	.string "But Gym Leaders aren't pushovers!\p"
-	.string "And that's where I come in!\n"
-	.string "I'm here to provide expert advice!\p"
-	.string "Roxanne, the Gym Leader, is a user\n"
-	.string "of Rock-type Pokémon.\p"
-	.string "She has a full team of six, with good\n"
-	.string "type variety.\p"
-	.string "Remember to use an Eviolite on\n"
-	.string "bulky Pokémon, which gives you a\l"
-	.string "better chance to withstand Roxanne.\p"
-	.string "Come see me afterwards, if you beat\n"
-	.string "the Gym Leader.$"
-
 RustboroCity_Gym_Text_GymGuideAdvice::
 	.string "That's all I've got for now,\n"
 	.string "Champ-to-be!\p"
@@ -332,18 +285,6 @@ RustboroCity_Gym_Text_GymGuideAdvice::
 	.string "People might have something that\n"
 	.string "could help you, like a Steel-type\l"
 	.string "Pokémon they're willing to trade!$"
-
-RustboroCity_Gym_Text_GymGuidePostVictory: @ 82132E2
-	.string "Whoa! What a breathtaking victory!\n"
-	.string "My cheering must've worked!\p"
-	.string "Great!\n"
-	.string "Check your Trainer Card.\p"
-	.string "The Stone Badge you got should be\n"
-	.string "properly recorded on it.\p"
-	.string "In other words…\p"
-	.string "You've climbed the first step on\n"
-	.string "the stairs to the Championship!\p"
-	.string "That's got to feel awesome!$"
 
 RustboroCity_Gym_Text_JoshIntro: @ 82133E9
 	.string "Don't take us Gym Trainers lightly!\n"
@@ -384,11 +325,6 @@ RustboroCity_Gym_Text_MarcPostBattle: @ 82135C0
 	.string "pick the Rock type at her young age.$"
 
 RustboroCity_Gym_Text_RoxanneIntro: @ 821362A
-	.string "Hello, I am Roxanne, the Rustboro\n"
-	.string "Pokémon Gym Leader.\p"
-	.string "I became a Gym Leader so that I might\n"
-	.string "apply what I learned at the Pokémon\l"
-	.string "Trainer's School in battle.\p"
 	.string "Would you kindly demonstrate how you\n"
 	.string "battle, and with which Pokémon?$"
 
@@ -491,6 +427,21 @@ RustboroCity_Gym_Text_RoxanneAllowLegends:
 	.string "And would you like me to battle with\n"
 	.string "Legendary Pokémon?$"
 `
+text RustboroCity_Gym_Text_Tips {
+	format("Yo, I assume you're a new trainer?
+My name's Clyde it's my job to make sure you know what you're heading into.
+Even if you think you have some Pokémon experience you better not let your guard down!
+{COLOR BLUE}Gyms work a little differently from what you'd expect.{COLOR DARK_GRAY}
+{COLOR RED}Every trainer here is fully optional!{COLOR DARK_GRAY}
+So if you're in a hurry you can go right up and fight the Gym Leader.
+However, I wouldn't recommend it.
+The Gym Leaders all have their own reasons but {COLOR RED}they might not appreciate you just charging through.{COLOR DARK_GRAY}
+So take your time, and even if you decide not to battle them make sure you talk to everyone here.
+{COLOR GREEN}They might give you some important hints.{COLOR DARK_GRAY}
+Good luck on your Pokémon journey trainer!
+You'll definitely need it.")
+}
+
 script RustboroCity_Gym_EventScript_GiveRockTomb{
 	msgbox(format("Take this special Pokémon as a gift from me!"))
 	givecustommon(SPECIES_AMAURA, 14, ITEM_CHOPLE_BERRY, ITEM_CHERISH_BALL, NATURE_BOLD, 0, 252, 0, 4, 0, 252, 0, 0, 0, 0, 0, 0, 0, MOVE_FREEZE_DRY, MOVE_THUNDER_WAVE, MOVE_ANCIENT_POWER, MOVE_HYPER_VOICE, TRUE)
@@ -503,18 +454,169 @@ script RustboroCity_Gym_EventScript_GiveRockTomb{
 	end
 }
 
+script RustboroCity_Gym_EventScript_Josh{
+	lock
+	faceplayer
+	if (defeated(TRAINER_JOSH)){
+		msgbox(RustboroCity_Gym_Text_JoshPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("Roxanne always told me that the best way to defend is to {COLOR GREEN}start out with a solid foundation{COLOR DARK_GRAY} and then {COLOR GREEN}slowly get tougher{COLOR DARK_GRAY}."))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_JOSH, RustboroCity_Gym_Text_JoshIntro , RustboroCity_Gym_Text_JoshDefeat)
+		}
+	}
+	release
+	end
+}
+
+script RustboroCity_Gym_EventScript_Tommy{
+	lock
+	faceplayer
+	if (defeated(TRAINER_TOMMY)){
+		msgbox(RustboroCity_Gym_Text_TommyPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("When doing a trek, watch out for {COLOR GREEN}rocky, uneven ground{COLOR DARK_GRAY}. You don't want to get hurt, or even worse, {COLOR GREEN}cut yourself on sharp stones{COLOR DARK_GRAY}!"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_TOMMY, RustboroCity_Gym_Text_TommyIntro , RustboroCity_Gym_Text_TommyDefeat)
+		}
+	}
+	release
+	end
+}
+
+script RustboroCity_Gym_EventScript_Marc{
+	lock
+	faceplayer
+	if (defeated(TRAINER_MARC)){
+		msgbox(RustboroCity_Gym_Text_MarcPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("They say that when under immense pressure, even coal becomes diamonds. Once I'm {COLOR GREEN}backed into a corner{COLOR DARK_GRAY}, that's when my true power starts to shine!"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_MARC, RustboroCity_Gym_Text_MarcIntro , RustboroCity_Gym_Text_MarcDefeat)
+		}
+	}
+	release
+	end
+}
+
+
 script RustboroCity_Gym_EventScript_CheckTrainers{
-	//Check that you have defeated every trainer in that Gym and that you don't have that badge yet
-	if(((!defeated(TRAINER_JOSH)  || 
-	     !defeated(TRAINER_TOMMY) || 
-		 !defeated(TRAINER_MARC)) &&
-		 !flag(FLAG_BADGE01_GET))){
-		msgbox(format("Roxanne: Sorry, but you need to defeat every trainer on this Gym before battling me."), MSGBOX_NPC)
+	if (defeated(TRAINER_ROXANNE_1)) {
+		msgbox(RustboroCity_Gym_Text_RoxannePostBattle, MSGBOX_DEFAULT)
 		release
 		end
 	}
-	else{
-		//If you have beaten every trainer or you have the badge just return to the previous script
-		return
+	// register all battle events for all trainer not fought
+	if (!defeated(TRAINER_MARC)){
+		registerbattleevent(BATTLE_EVENT_LAST_STAND, 5)
 	}
+	if (!defeated(TRAINER_TOMMY)){
+		registerbattleevent(BATTLE_EVENT_LAST_BLEED, 2)
+		registerbattleevent(BATTLE_EVENT_STEALTH_ROCK)
+	}
+	if (!defeated(TRAINER_JOSH)){
+		registerbattleevent(BATTLE_EVENT_POSTURE_DEFENSE)
+		registerbattleevent(BATTLE_EVENT_STEADY_DEFENSE)
+	}
+	return
+}
+
+text RustboroCity_Gym_Text_RoxanneIntro0{
+	format("Skipping the lesson and hoping to ace the test? You better know what you're doing!")
+}
+text RustboroCity_Gym_Text_RoxanneIntro1{
+	format("Decent effort on the coursework, you should probably be ready... Let's see how well you've learned.")
+}
+text RustboroCity_Gym_Text_RoxanneIntroAll{
+	format("Ah, you were diligent! Time to wrap this up, then. Are you ready to go?")
+}
+text RustboroCity_Gym_Text_RoxanneDefeat0{
+	format("I see you were going for extra credit and you've passed with flying colors! An easy A+")
+}
+text RustboroCity_Gym_Text_RoxanneDefeat1{
+	format("Your work was rushed but I could tell you still put in the effort! Full marks, you get an A!")
+}
+text RustboroCity_Gym_Text_RoxanneDefeatAll{
+	format("You dilligently studied and passed top of the class - you deserve an A!")
+}
+script RustboroCity_Gym_EventScript_Roxanne{
+    goto_if_set(FLAG_SYS_GAME_CLEAR, RustboroCity_Gym_EventScript_RoxanneRematch)
+	call(RustboroCity_Gym_EventScript_CheckTrainers)
+	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
+	setvar(VAR_0x8004, 15)
+	// count the number of trainer defeated, and tell a different line
+	adddefeatedcount(TRAINER_JOSH, 1)
+	adddefeatedcount(TRAINER_TOMMY)
+	adddefeatedcount(TRAINER_MARC)
+	switch (var(VAR_RESULT)) {
+		case 0:
+			trainerbattle_single(TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxanneIntro0, RustboroCity_Gym_Text_RoxanneDefeat0, RustboroCity_Gym_EventScript_RoxanneDefeated, NO_MUSIC)
+		break
+		case 3:
+			trainerbattle_single(TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxanneIntroAll, RustboroCity_Gym_Text_RoxanneDefeat1, RustboroCity_Gym_EventScript_RoxanneDefeated, NO_MUSIC)
+		break
+		default:
+			trainerbattle_single(TRAINER_ROXANNE_1, RustboroCity_Gym_Text_RoxanneIntro1, RustboroCity_Gym_Text_RoxanneDefeatAll, RustboroCity_Gym_EventScript_RoxanneDefeated, NO_MUSIC)
+    	}
+	
+	goto_if_eq(RustboroCity_Gym_EventScript_RoxanneRematch)
+	goto_if_unset(FLAG_RECEIVED_TM39, RustboroCity_Gym_EventScript_GiveRockTomb)
+	release
+	end
+}
+
+script RustboroCity_Gym_EventScript_AskResetTrainers{
+	lock
+	clydeaskresettrainers(RustboroCity_Gym_EventScript_ResetAllTrainers, RustboroCity_Gym_EventScript_SelectTrainers)
+	release
+	end
+}
+
+script RustboroCity_Gym_EventScript_ResetAllTrainers{
+	cleartrainerflag(TRAINER_JOSH)
+	cleartrainerflag(TRAINER_TOMMY)
+	cleartrainerflag(TRAINER_MARC)
+	cleartrainerflag(TRAINER_ROXANNE_1)
+	return
+}
+
+movement RustboroCity_Gym_Movement_Tommy{
+	walk_fastest_right * 3
+	walk_fastest_up * 6
+}
+
+movement RustboroCity_Gym_Movement_Marc{
+	walk_fastest_left * 4
+	walk_fastest_up * 4
+}
+
+movement RustboroCity_Gym_Movement_Josh{
+	walk_fastest_right * 5
+	walk_fastest_up * 3
+}
+
+movement RustboroCity_Gym_Movement_Roxanne{
+	walk_fastest_left * 1
+	walk_fastest_up * 3
+}
+
+// don't forget to bring you back to the player
+movement RustboroCity_Gym_Movement_Clyde{
+	walk_fastest_left * 2
+	walk_fastest_down * 16
+}
+
+
+script RustboroCity_Gym_EventScript_SelectTrainers{
+	special(SpawnCameraObject)
+	selecttrainercameraoffset()
+	selecttrainer(RustboroCity_Gym_Movement_Tommy, "Tommy", TRAINER_TOMMY)
+	selecttrainer(RustboroCity_Gym_Movement_Marc, "Marc", TRAINER_MARC)
+	selecttrainer(RustboroCity_Gym_Movement_Josh, "Josh", TRAINER_JOSH)
+	selecttrainer(RustboroCity_Gym_Movement_Roxanne, "Roxanne", TRAINER_ROXANNE_1)
+	applymovement(OBJ_EVENT_ID_CAMERA, RustboroCity_Gym_Movement_Clyde)
+	waitmovement(0)
+	selecttrainercameraoffset(TRUE)
+	special(RemoveCameraObject)
+	return
 }

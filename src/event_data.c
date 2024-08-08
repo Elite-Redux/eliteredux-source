@@ -139,8 +139,8 @@ void ClearMysteryEventFlags(void)
 void ClearMysteryEventVars(void)
 {
     VarSet(VAR_EVENT_PICHU_SLOT, 0);
-    VarSet(VAR_NEVER_READ_0x40DF, 0);
-    VarSet(VAR_NEVER_READ_0x40E0, 0);
+    //VarSet(VAR_NEVER_READ_0x40DF, 0);
+    //VarSet(VAR_NEVER_READ_0x40E0, 0);
     VarSet(VAR_NEVER_READ_0x40E1, 0);
     VarSet(VAR_NEVER_READ_0x40E2, 0);
     VarSet(VAR_NEVER_READ_0x40E3, 0);

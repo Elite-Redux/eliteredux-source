@@ -1176,6 +1176,126 @@ const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
             else
                 return SootopolisCity_Gym_1F_Text_WallaceDefeatRematch;
         break;
+        case TAG_TEAM_BRENDEN_LILITH:
+            if(!isTrainerB)
+                return DewfordTown_Gym_Text_LilithDefeat;
+            else
+                return DewfordTown_Gym_Text_BrendenDefeat;
+        break;
+        case TAG_TEAM_SHAWN_ANGELO:
+            if(!isTrainerB)
+                return MauvilleCity_Gym_Text_ShawnDefeat;
+            else
+                return MauvilleCity_Gym_Text_AngeloDefeat;
+        break;
+        case TAG_TEAM_EDUARDO_FLINT:
+            if(!isTrainerB)
+                return FortreeCity_Gym_Text_EdwardoDefeat;
+            else
+                return FortreeCity_Gym_Text_FlintDefeat;
+        break;
+        case TAG_TEAM_ASHLEY_JARED:
+            if(!isTrainerB)
+                return FortreeCity_Gym_Text_AshleyDefeat;
+            else
+                return FortreeCity_Gym_Text_JaredDefeat;
+        break;
+        case TAG_TEAM_SAMANTHA_BLAKE:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_SamanthaDefeat;
+            else
+                return MossdeepCity_Gym_Text_BlakeDefeat;
+        break;
+        case TAG_TEAM_MAURA_PRESTON:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_MauraDefeat;
+            else
+                return MossdeepCity_Gym_Text_PrestonDefeat;
+        break;
+        case TAG_TEAM_SYLVIA_HANNAH:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_SylviaDefeat;
+            else
+                return MossdeepCity_Gym_Text_HannahDefeat;
+        break;
+        case TAG_TEAM_KATHLEEN_NICHOLAS:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_KathleenDefeat;
+            else
+                return MossdeepCity_Gym_Text_NicholasDefeat;
+        break;
+        case TAG_TEAM_MACEY_CLIFFORD:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_MaceyDefeat;
+            else
+                return MossdeepCity_Gym_Text_CliffordDefeat;
+        break;
+        case TAG_TEAM_NATE_VIRGIL:
+            if(!isTrainerB)
+                return MossdeepCity_Gym_Text_NateDefeat;
+            else
+                return MossdeepCity_Gym_Text_VirgilDefeat;
+        break;
+        case TAG_TEAM_BRIDGET_CRISSY:
+        if(!isTrainerB)
+            return SootopolisCity_Gym_B1F_Text_BridgetDefeat;
+        else
+            return SootopolisCity_Gym_B1F_Text_CrissyDefeat;
+        break;
+        case TAG_TEAM_CRISSY_BETHANY:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_CrissyDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_BethanyDefeat;
+        break;	
+        case TAG_TEAM_BRIDGET_BETHANY:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_BridgetDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_BethanyDefeat;
+        break;
+        case TAG_TEAM_ANNIKA_BRIANNA:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_AnnikaDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_BriannaDefeat;
+        break;
+        case TAG_TEAM_BRIANNA_OLIVIA:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_BriannaDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_OliviaDefeat;
+        break;
+        case TAG_TEAM_OLIVIA_ANNIKA:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_OliviaDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_AnnikaDefeat;
+        break;	
+        case TAG_TEAM_DAPHNE_CONNIE:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_DaphneDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_ConnieDefeat;
+        break;
+        case TAG_TEAM_CONNIE_ANDREA:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_ConnieDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_AndreaDefeat;
+        break;
+        case TAG_TEAM_ANDREA_DAPHNE:
+        	if(!isTrainerB)
+		        return SootopolisCity_Gym_B1F_Text_AndreaDefeat;
+	        else
+		        return SootopolisCity_Gym_B1F_Text_DaphneDefeat;
+        break;	
+        case TAG_TEAM_COLE_KEEGAN:
+        	if(!isTrainerB)
+		        return LavaridgeTown_Gym_1F_Text_ColeDefeat;
+	        else
+		        return LavaridgeTown_Gym_B1F_Text_KeeganDefeat;
+        break;	
     }
         
 }

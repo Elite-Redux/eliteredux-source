@@ -102,3 +102,19 @@ Common_Movement_WalkUp2:: @ 82725CB
 	walk_up
 	walk_up
 	step_end
+
+Common_Movement_FastestLeft: @ 82725A4
+	walk_fastest_left
+	step_end
+
+Common_Movement_FastestUp: @ 82725A6
+	walk_fastest_up
+	step_end
+
+Common_Movement_FastestRight: @ 82725A8
+	walk_fastest_right
+	step_end
+
+Common_Movement_FastestDown: @ 82725AA
+	walk_fastest_down
+	step_end

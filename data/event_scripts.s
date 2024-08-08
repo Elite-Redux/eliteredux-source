@@ -54,6 +54,7 @@
 #include "constants/vars.h"
 #include "constants/weather.h"
 #include "constants/quests.h"
+#include "constants/battle_events.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/event.inc"
 	.include "constants/constants.inc"
@@ -1025,6 +1026,33 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	release
 	end
 
+Common_Text_YesNoBattle::
+	.string "{COLOR RED}No thanks :X{COLOR DARK_GRAY}$"
+	.string "{COLOR GREEN}Battle time! :D{COLOR DARK_GRAY}$"
+	.string "{COLOR BLUE}Sorry what? >.<{COLOR DARK_GRAY}$"
+	.string "$"
+
+Common_Text_ClearFlagOrNext::
+	.string "{COLOR BLUE}Next{COLOR DARK_GRAY}$"
+	.string "{COLOR GREEN}Set undefeated{COLOR DARK_GRAY}$"
+	.string "$"
+
+
+Common_Text_SetFlagOrNext::
+	.string "{COLOR BLUE}Next{COLOR DARK_GRAY}$"
+	.string "{COLOR RED}Set defeated{COLOR DARK_GRAY}$"
+	.string "$"
+
+Common_Text_ClydePoliteness:
+	.string "Can I help you with trainers?$"
+
+Common_Text_ClydeAskResetTrainers::
+	.string "{COLOR RED}Nevermind{COLOR DARK_GRAY}$"
+	.string "{COLOR GREEN}Reset all trainers{COLOR DARK_GRAY}$"
+	.string "{COLOR BLUE}Select trainers{COLOR DARK_GRAY}$"
+	.string "$"
+
+
 	.include "data/scripts/pc_transfer.inc"
 	.include "data/scripts/mevent.inc"
 	.include "data/scripts/abnormal_weather.inc"
@@ -1121,3 +1149,7 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/SeafloorCavernShortcut/scripts.inc"
 
 	.include "data/maps/EvergrandeCity_MonoChampRoom_1/scripts.inc"
+
+	.include "data/maps/FortreeCity_GymReworked/scripts.inc"
+
+	.include "data/maps/MossDeepCity_GymReworked/scripts.inc"

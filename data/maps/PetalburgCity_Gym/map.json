@@ -29,8 +29,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_WOMAN_5",
-      "x": 4,
-      "y": 94,
+      "x": 6,
+      "y": 26,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -42,8 +42,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MAN_3",
-      "x": 4,
-      "y": 81,
+      "x": 2,
+      "y": 16,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -55,8 +55,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MAN_3",
-      "x": 4,
-      "y": 42,
+      "x": 6,
+      "y": 21,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -69,7 +69,7 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_WOMAN_5",
       "x": 4,
-      "y": 55,
+      "y": 21,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -81,8 +81,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MAN_3",
-      "x": 4,
-      "y": 68,
+      "x": 6,
+      "y": 16,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -94,8 +94,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_WOMAN_5",
-      "x": 4,
-      "y": 16,
+      "x": 2,
+      "y": 26,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -107,8 +107,8 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MAN_3",
-      "x": 4,
-      "y": 29,
+      "x": 2,
+      "y": 21,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -121,7 +121,7 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_MAN_2",
       "x": 3,
-      "y": 109,
+      "y": 44,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
@@ -134,7 +134,7 @@
     {
       "graphics_id": "OBJ_EVENT_GFX_WALLY",
       "x": 4,
-      "y": 111,
+      "y": 46,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 0,
@@ -161,269 +161,108 @@
   "warp_events": [
     {
       "x": 4,
-      "y": 111,
+      "y": 46,
       "elevation": 3,
       "dest_map": "MAP_PETALBURG_CITY",
       "dest_warp_id": 2
     },
     {
       "x": 5,
-      "y": 111,
+      "y": 46,
       "elevation": 3,
       "dest_map": "MAP_PETALBURG_CITY",
       "dest_warp_id": 2
     },
     {
       "x": 1,
-      "y": 105,
+      "y": 40,
       "elevation": 3,
       "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 3
-    },
-    {
-      "x": 7,
-      "y": 85,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 2
-    },
-    {
-      "x": 6,
-      "y": 85,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 2
-    },
-    {
-      "x": 7,
-      "y": 105,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 6
-    },
-    {
-      "x": 1,
-      "y": 98,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 5
-    },
-    {
-      "x": 2,
-      "y": 98,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 5
-    },
-    {
-      "x": 1,
-      "y": 79,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 10
-    },
-    {
-      "x": 7,
-      "y": 79,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 12
-    },
-    {
-      "x": 7,
-      "y": 46,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 8
-    },
-    {
-      "x": 6,
-      "y": 46,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 8
-    },
-    {
-      "x": 1,
-      "y": 59,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 9
-    },
-    {
-      "x": 2,
-      "y": 59,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 9
-    },
-    {
-      "x": 1,
-      "y": 92,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 16
-    },
-    {
-      "x": 7,
-      "y": 92,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 18
-    },
-    {
-      "x": 7,
-      "y": 59,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 14
-    },
-    {
-      "x": 6,
-      "y": 59,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 14
-    },
-    {
-      "x": 1,
-      "y": 72,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 15
-    },
-    {
-      "x": 2,
-      "y": 72,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 15
+      "dest_warp_id": 4
     },
     {
       "x": 7,
       "y": 40,
       "elevation": 3,
       "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 24
+      "dest_warp_id": 12
     },
     {
-      "x": 1,
-      "y": 53,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 26
-    },
-    {
-      "x": 7,
-      "y": 53,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 28
-    },
-    {
-      "x": 1,
-      "y": 66,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 30
-    },
-    {
-      "x": 1,
-      "y": 20,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 20
-    },
-    {
-      "x": 2,
-      "y": 20,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 20
-    },
-    {
-      "x": 7,
-      "y": 20,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 21
-    },
-    {
-      "x": 6,
-      "y": 20,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 21
-    },
-    {
-      "x": 1,
+      "x": 3,
       "y": 33,
       "elevation": 3,
       "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 22
+      "dest_warp_id": 2
     },
     {
-      "x": 2,
+      "x": 4,
       "y": 33,
       "elevation": 3,
       "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 22
-    },
-    {
-      "x": 7,
-      "y": 33,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 23
-    },
-    {
-      "x": 6,
-      "y": 33,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 23
+      "dest_warp_id": 3
     },
     {
       "x": 7,
       "y": 14,
       "elevation": 3,
       "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 34
+      "dest_warp_id": 10
     },
     {
       "x": 1,
-      "y": 27,
+      "y": 14,
       "elevation": 3,
       "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 36
+      "dest_warp_id": 8
     },
     {
       "x": 1,
       "y": 7,
-      "elevation": 3,
+      "elevation": 0,
       "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 32
+      "dest_warp_id": 7
     },
     {
       "x": 2,
       "y": 7,
-      "elevation": 3,
+      "elevation": 0,
       "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 32
-    },
-    {
-      "x": 7,
-      "y": 7,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 33
+      "dest_warp_id": 7
     },
     {
       "x": 6,
       "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_PETALBURG_CITY_GYM",
+      "dest_warp_id": 6
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_PETALBURG_CITY_GYM",
+      "dest_warp_id": 6
+    },
+    {
+      "x": 5,
+      "y": 33,
       "elevation": 3,
       "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 33
+      "dest_warp_id": 3
+    },
+    {
+      "x": 7,
+      "y": 33,
+      "elevation": 0,
+      "dest_map": "MAP_FORTREE_CITY_GYM_REWORKED",
+      "dest_warp_id": 0
+    },
+    {
+      "x": 8,
+      "y": 33,
+      "elevation": 0,
+      "dest_map": "MAP_FORTREE_CITY_GYM_REWORKED",
+      "dest_warp_id": 1
     }
   ],
   "coord_events": [
@@ -433,50 +272,10 @@
     {
       "type": "sign",
       "x": 1,
-      "y": 105,
+      "y": 40,
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_SpeedRoomDoor"
-    },
-    {
-      "type": "sign",
-      "x": 7,
-      "y": 105,
-      "elevation": 3,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_AccuracyRoomDoor"
-    },
-    {
-      "type": "sign",
-      "x": 1,
-      "y": 79,
-      "elevation": 3,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_ConfusionRoomDoor"
-    },
-    {
-      "type": "sign",
-      "x": 7,
-      "y": 79,
-      "elevation": 3,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_LeftDefenseRoomDoor"
-    },
-    {
-      "type": "sign",
-      "x": 1,
-      "y": 92,
-      "elevation": 3,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_RightDefenseRoomDoor"
-    },
-    {
-      "type": "sign",
-      "x": 7,
-      "y": 92,
-      "elevation": 3,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_RecoveryRoomDoor"
+      "script": "PetalburgCity_Gym_EventScript_MainRoomLeft"
     },
     {
       "type": "sign",
@@ -484,35 +283,11 @@
       "y": 40,
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_LeftStrengthRoomDoor"
+      "script": "PetalburgCity_Gym_EventScript_MainRoomRight"
     },
     {
       "type": "sign",
       "x": 1,
-      "y": 53,
-      "elevation": 3,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_RightStrengthRoomDoor"
-    },
-    {
-      "type": "sign",
-      "x": 7,
-      "y": 53,
-      "elevation": 3,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_LeftOHKORoomDoor"
-    },
-    {
-      "type": "sign",
-      "x": 1,
-      "y": 66,
-      "elevation": 3,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "PetalburgCity_Gym_EventScript_RightOHKORoomDoor"
-    },
-    {
-      "type": "sign",
-      "x": 7,
       "y": 14,
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
@@ -520,8 +295,8 @@
     },
     {
       "type": "sign",
-      "x": 1,
-      "y": 27,
+      "x": 7,
+      "y": 14,
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "PetalburgCity_Gym_EventScript_RightGymLeadersRoomDoor"
@@ -529,7 +304,7 @@
     {
       "type": "sign",
       "x": 1,
-      "y": 110,
+      "y": 45,
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_NORTH",
       "script": "PetalburgCity_Gym_EventScript_LeftGymStatue"
@@ -537,7 +312,7 @@
     {
       "type": "sign",
       "x": 7,
-      "y": 110,
+      "y": 45,
       "elevation": 3,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_NORTH",
       "script": "PetalburgCity_Gym_EventScript_RightGymStatue"

@@ -73,6 +73,7 @@
 #include "cable_club.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "battle_events.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_SE1;
 extern struct MusicPlayerInfo gMPlayInfo_SE2;
@@ -129,7 +130,7 @@ static void HandleEndTurn_RanFromBattle(void);
 static void HandleEndTurn_MonFled(void);
 static void HandleEndTurn_FinishBattle(void);
 static u8 getRole(u16 species);
-
+static void HandleBattleEvents(void);
 void HandleMonoChampSpecialEffects(void);
 
 // EWRAM vars
@@ -3887,9 +3888,16 @@ static void DoBattleIntro(void)
 static void TryDoEventsBeforeFirstTurn(void)
 {
     s32 i, j;
-
+    #ifdef DEBUG_BUILD
+    if (FlagGet(FLAG_SYS_AUTOWIN)){
+        gBattleOutcome = B_OUTCOME_WON;
+        gBattleMainFunc = HandleEndTurn_BattleWon;
+        return;
+    }
+    #endif
     if (gBattleControllerExecFlags)
         return;
+
 
     // Set invalid mons as absent(for example when starting a double battle with only one pokemon).
     if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI))
@@ -3949,6 +3957,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         return;
     }
     
+
     // Check all switch in abilities happening from the fastest mon to slowest.
     while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount)
     {
@@ -3992,7 +4001,7 @@ static void TryDoEventsBeforeFirstTurn(void)
     TurnStructsClear();
     *(&gBattleStruct->field_91) = gAbsentBattlerFlags;
     BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
-    gBattleMainFunc = HandleTurnActionSelectionState;
+    gBattleMainFunc = HandleBattleEvents;
     ResetSentPokesToOpponentValue();
 
     for (i = 0; i < BATTLE_COMMUNICATION_ENTRIES_COUNT; i++)
@@ -4019,6 +4028,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         StopCryAndClearCrySongs();
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
     }
+
 }
 
 static void HandleEndTurn_ContinueBattle(void)
@@ -4057,12 +4067,13 @@ void BattleTurnPassed(void)
         if (DoBattlerEndTurnEffects())
             return;
     }
-    if (HandleFaintedMonActions())
+    if (HandleFaintedMonActions()){
         return;
+    }
     gBattleStruct->faintedActionsState = 0;
     if (HandleWishPerishSongOnTurnEnd())
         return;
-
+    
     ClearMiscTurnFlags();
     TurnValuesCleanUp(FALSE);
     gHitMarker &= ~(HITMARKER_NO_ATTACKSTRING);
@@ -4103,7 +4114,7 @@ void BattleTurnPassed(void)
     *(&gBattleStruct->field_91) = gAbsentBattlerFlags;
     BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
     GetAiLogicData(); // get assumed abilities, hold effects, etc of all battlers
-    gBattleMainFunc = HandleTurnActionSelectionState;
+    gBattleMainFunc = HandleBattleEvents;
     gRandomTurnNumber = Random();
 
     if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
@@ -4112,6 +4123,7 @@ void BattleTurnPassed(void)
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
     else if (ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), gTrainerBattleOpponent_A, TRAINER_SLIDE_LAST_LOW_HP))
         BattleScriptExecute(BattleScript_TrainerSlideMsgEnd2);
+
 }
 
 u8 IsRunningFromBattleImpossible(void)
@@ -5745,6 +5757,9 @@ static void HandleEndTurn_FinishBattle(void)
         if (gBattleControllerExecFlags == 0)
             gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
     }
+
+    //reset battle Events at the end of the battle
+    UnregisterBattlesEvents();
 }
 
 static void FreeResetData_ReturnToOvOrDoEvolutions(void)
@@ -6931,6 +6946,7 @@ bool32 IsWildMonSmart(void)
     return (B_SMART_WILD_AI_FLAG != 0 && FlagGet(B_SMART_WILD_AI_FLAG));
 }
 
+
 void HandleMonoChampSpecialEffects(void){
     u16 champType = getMonotypeChampType();
     u32 fieldEffectId;
@@ -7001,4 +7017,18 @@ void HandleMonoChampSpecialEffects(void){
             }
         }
     }
+}
+
+static void HandleBattleEvents(void){
+
+    // end of the turn, exec battle events
+    if (gBattleStruct->battleEventDone != BATTLE_EVENTS_DONE){
+        if (ExecBattleEvents() == EXEC_BATTLE_EVENTS_ALL_CLEAR){
+            gBattleStruct->battleEventDone = BATTLE_EVENTS_DONE;
+        } else {
+            return;
+        }
+    }
+    gBattleStruct->battleEventDone = BATTLE_EVENTS_NOT_DONE;
+    gBattleMainFunc = HandleTurnActionSelectionState;
 }

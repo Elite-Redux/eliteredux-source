@@ -652,14 +652,14 @@ static const struct UCoords8 sMauvilleGymSwitchCoords[] =
 // Presses the stepped-on switch and raises the rest
 void MauvilleGymPressSwitch(void)
 {
-    u8 i;
-    for (i = 0; i < ARRAY_COUNT(sMauvilleGymSwitchCoords); i++)
-    {
+    //u8 i;
+    //for (i = 0; i < ARRAY_COUNT(sMauvilleGymSwitchCoords); i++)
+    /*{
         if (i == gSpecialVar_0x8004)
-            MapGridSetMetatileIdAt(sMauvilleGymSwitchCoords[i].x, sMauvilleGymSwitchCoords[i].y, METATILE_MauvilleGym_PressedSwitch);
+            // MapGridSetMetatileIdAt(sMauvilleGymSwitchCoords[i].x, sMauvilleGymSwitchCoords[i].y, METATILE_MauvilleGym_PressedSwitch);
         else
-            MapGridSetMetatileIdAt(sMauvilleGymSwitchCoords[i].x, sMauvilleGymSwitchCoords[i].y, METATILE_MauvilleGym_RaisedSwitch);
-    }
+            // MapGridSetMetatileIdAt(sMauvilleGymSwitchCoords[i].x, sMauvilleGymSwitchCoords[i].y, METATILE_MauvilleGym_RaisedSwitch);
+    }*/
 }
 
 // Sets the gym barriers back to the default state; their alt state is handled by MauvilleCity_Gym_EventScript_SetAltBarriers
@@ -745,12 +745,12 @@ void MauvilleGymSetDefaultBarriers(void)
                 case METATILE_MauvilleGym_PoleBottom_Off:
                     MapGridSetMetatileIdAt(x, y, METATILE_MauvilleGym_RedBeamV1_On | METATILE_COLLISION_MASK);
                     break;
-                case METATILE_MauvilleGym_PoleTop_Off:
+                /*case METATILE_MauvilleGym_PoleTop_Off:
                     MapGridSetMetatileIdAt(x, y, METATILE_MauvilleGym_PoleTop_On | METATILE_COLLISION_MASK);
                     break;
                 case METATILE_MauvilleGym_PoleTop_On:
                     MapGridSetMetatileIdAt(x, y, METATILE_MauvilleGym_PoleTop_Off);
-                    break;
+                    break;*/
             }
         }
     }
@@ -763,7 +763,7 @@ void MauvilleGymDeactivatePuzzle(void)
     const struct UCoords8 *switchCoords = sMauvilleGymSwitchCoords;
     for (i = ARRAY_COUNT(sMauvilleGymSwitchCoords) - 1; i >= 0; i--)
     {
-        MapGridSetMetatileIdAt(switchCoords->x, switchCoords->y, METATILE_MauvilleGym_PressedSwitch);
+        //MapGridSetMetatileIdAt(switchCoords->x, switchCoords->y, METATILE_MauvilleGym_PressedSwitch);
         switchCoords++;
     }
     for (y = 12; y < 24; y++)
@@ -806,9 +806,9 @@ void MauvilleGymDeactivatePuzzle(void)
                 case METATILE_MauvilleGym_RedBeamV2_On:
                     MapGridSetMetatileIdAt(x, y, METATILE_MauvilleGym_FloorTile);
                     break;
-                case METATILE_MauvilleGym_PoleTop_On:
+                /*case METATILE_MauvilleGym_PoleTop_On:
                     MapGridSetMetatileIdAt(x, y, METATILE_MauvilleGym_PoleTop_Off);
-                    break;
+                    break;*/
             }
         }
     }
@@ -862,8 +862,8 @@ static void PetalburgGymSetDoorMetatiles(u8 roomNumber, u16 metatileId)
             nDoors = 2;
             doorCoordsX[0] = 1;
             doorCoordsX[1] = 7;
-            doorCoordsY[0] = 104;
-            doorCoordsY[1] = 104;
+            doorCoordsY[0] = 40;
+            doorCoordsY[1] = 40;
             break;
         case 2:
             nDoors = 2;

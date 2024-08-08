@@ -9,8 +9,8 @@ LavaridgeTown_Gym_1F_MapScripts:: @ 81FE6F4
 	.byte 0
 
 LavaridgeTown_Gym_1F_OnTransition: @ 81FE6FA
-	call LavaridgeTown_Gym_1F_EventScript_SetTrainerTempVars
-	call LavaridgeTown_Gym_1F_EventScript_CheckBuryTrainers
+	@ call LavaridgeTown_Gym_1F_EventScript_SetTrainerTempVars
+	@ call LavaridgeTown_Gym_1F_EventScript_CheckBuryTrainers
 	end
 
 @ Unclear where/if these temp vars are getting checked
@@ -49,29 +49,24 @@ LavaridgeTown_Gym_1F_EventScript_CheckBuryDanielle:: @ 81FE77E
 LavaridgeTown_Gym_1F_EventScript_EndCheckBuryTrainers:: @ 81FE78B
 	return
 
-LavaridgeTown_Gym_1F_EventScript_Flannery:: @ 81FE78C
-	//call LavaridgeTown_Gym_EventScript_CheckTrainers
-	//goto_if_set FLAG_DAILY_REMATCH_FLANNERY, LavaridgeTown_Gym_1F_EventScript_AlreadyRematched
-	goto_if_set FLAG_SYS_GAME_CLEAR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch
-	setvar VAR_0x8004, 15
-	trainerbattle_single TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntro, LavaridgeTown_Gym_1F_Text_FlanneryDefeat, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC
-	goto_if_unset FLAG_RECEIVED_TM50, LavaridgeTown_Gym_1F_EventScript_GiveOverheat
-	msgbox LavaridgeTown_Gym_1F_Text_FlanneryPostBattle, MSGBOX_DEFAULT
+
+LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated:: @ 81FE7C1
+	goto_if_unset FLAG_DEFEATED_LAVARIDGE_GYM, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeatedFirstTime
 	release
 	end
 
-LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated:: @ 81FE7C1
+LavaridgeTown_Gym_1F_EventScript_FlanneryDefeatedFirstTime:
 	message LavaridgeTown_Gym_1F_Text_ReceivedHeatBadge
 	waitmessage
 	call Common_EventScript_PlayGymBadgeFanfare
 	msgbox LavaridgeTown_Gym_1F_Text_ExplainHeatBadgeTakeThis, MSGBOX_DEFAULT
 	closemessage
-	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox LavaridgeTown_Gym_1F_Text_RegisteredArcanine, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox LavaridgeTown_Gym_1F_Text_RegisteredArcanine, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	msgbox LavaridgeTown_Gym_1F_Text_TakeThis, MSGBOX_DEFAULT
 	setflag FLAG_WHITEOUT_TO_LAVARIDGE
 	setflag FLAG_DEFEATED_LAVARIDGE_GYM
@@ -85,12 +80,12 @@ LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated:: @ 81FE7C1
 	setvar VAR_LAVARIDGE_TOWN_STATE, 1
 	call LavaridgeTown_Gym_1F_EventScript_GiveOverheat
 	closemessage
-	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox LavaridgeTown_Gym_1F_Text_RegisteredFlannery, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox LavaridgeTown_Gym_1F_Text_RegisteredFlannery, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	setflag FLAG_ENABLE_FLANNERY_MATCH_CALL
 	release
 	end
@@ -155,11 +150,6 @@ LavaridgeTown_Gym_1F_EventScript_Exit::
 	releaseall
 	end
 
-LavaridgeTown_Gym_1F_EventScript_Cole:: @ 81FE87F
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_COLE, LOCALID_COLE, LavaridgeTown_Gym_1F_Text_ColeIntro, LavaridgeTown_Gym_1F_Text_ColeDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_ColePostBattle MSGBOX_AUTOCLOSE
-	end
-
 LavaridgeTown_Gym_EventScript_CheckTrainerScript:: @ 81FE89A
 	call LavaridgeTown_Gym_1F_EventScript_SetTrainerTempVars
 	release
@@ -168,45 +158,10 @@ LavaridgeTown_Gym_EventScript_CheckTrainerScript:: @ 81FE89A
 	goto_if_eq EventScript_GotoTrainerScript
 	end
 
-LavaridgeTown_Gym_1F_EventScript_Axle:: @ 81FE8AF
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_AXLE, LOCALID_AXLE, LavaridgeTown_Gym_1F_Text_AxleIntro, LavaridgeTown_Gym_1F_Text_AxleDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_AxlePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Keegan:: @ 81FE8CA
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_KEEGAN, LOCALID_KEEGAN, LavaridgeTown_Gym_B1F_Text_KeeganIntro, LavaridgeTown_Gym_B1F_Text_KeeganDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_KeeganPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_1F_EventScript_Danielle:: @ 81FE8E5
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_DANIELLE, LOCALID_DANIELLE, LavaridgeTown_Gym_1F_Text_DanielleIntro, LavaridgeTown_Gym_1F_Text_DanielleDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_DaniellePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_1F_EventScript_Gerald:: @ 81FE900
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_GERALD, LOCALID_GERALD, LavaridgeTown_Gym_1F_Text_GeraldIntro, LavaridgeTown_Gym_1F_Text_GeraldDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_1F_Text_GeraldPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Jace:: @ 81FE91B
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_JACE, LOCALID_JACE, LavaridgeTown_Gym_B1F_Text_JaceIntro, LavaridgeTown_Gym_B1F_Text_JaceDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_JacePostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Jeff:: @ 81FE936
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_JEFF, LOCALID_JEFF, LavaridgeTown_Gym_B1F_Text_JeffIntro, LavaridgeTown_Gym_B1F_Text_JeffDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_JeffPostBattle, MSGBOX_AUTOCLOSE
-	end
-
-LavaridgeTown_Gym_B1F_EventScript_Eli:: @ 81FE951
-	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT, TRAINER_ELI, LOCALID_ELI, LavaridgeTown_Gym_B1F_Text_EliIntro, LavaridgeTown_Gym_B1F_Text_EliDefeat, LavaridgeTown_Gym_EventScript_CheckTrainerScript
-	msgbox LavaridgeTown_Gym_B1F_Text_EliPostBattle, MSGBOX_AUTOCLOSE
-	end
-
 LavaridgeTown_Gym_1F_EventScript_GymGuide:: @ 81FE96C
 	lock
 	faceplayer
-	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, LavaridgeTown_Gym_1F_EventScript_GymGuidePostVictory
+	goto_if_set FLAG_DEFEATED_LAVARIDGE_GYM, LavaridgeTown_Gym_1F_EventScript_AskResetTrainers
 	msgbox LavaridgeTown_Gym_1F_Text_GymGuideAdvice1, MSGBOX_DEFAULT
 	msgbox LavaridgeTown_Gym_1F_Text_GymGuideAdvice2, MSGBOX_DEFAULT
 	release
@@ -268,7 +223,7 @@ LavaridgeTown_Gym_1F_Text_ColeIntro: @ 81FEADE
 	.string "Owowowowow!\n"
 	.string "Yikes, it's hot!$"
 
-LavaridgeTown_Gym_1F_Text_ColeDefeat: @ 81FEAFB
+LavaridgeTown_Gym_1F_Text_ColeDefeat:: @ 81FEAFB
 	.string "I'm blinded by sweat in my eyes…$"
 
 LavaridgeTown_Gym_1F_Text_ColePostBattle: @ 81FEB1C
@@ -297,7 +252,7 @@ LavaridgeTown_Gym_B1F_Text_KeeganIntro: @ 81FEC31
 	.string "your willpower is an important ability\l"
 	.string "for all Trainers.$"
 
-LavaridgeTown_Gym_B1F_Text_KeeganDefeat: @ 81FECE3
+LavaridgeTown_Gym_B1F_Text_KeeganDefeat:: @ 81FECE3
 	.string "Play with fire, and be burned…$"
 
 LavaridgeTown_Gym_B1F_Text_KeeganPostBattle: @ 81FED02
@@ -489,23 +444,296 @@ script LavaridgeTown_Gym_1F_EventScript_GiveOverheat{
 	end
 }
 
+script LavaridgeTown_Gym_B1F_EventScript_Jeff{
+	lock
+	faceplayer
+	if (defeated(TRAINER_JEFF)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_JeffPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("As the battle goes on my flames {COLOR GREEN}will only get hotter!{COLOR DARK_GRAY} Hope you're prepared for a wildfire."))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_JEFF, LavaridgeTown_Gym_B1F_Text_JeffIntro , LavaridgeTown_Gym_B1F_Text_JeffDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_B1F_EventScript_Jace{
+	lock
+	faceplayer
+	if (defeated(TRAINER_JACE)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_JacePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("Take care you don't breathe in too much of this smoke, it's extremely {COLOR GREEN}toxic{COLOR DARK_GRAY}."))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_JACE, LavaridgeTown_Gym_B1F_Text_JaceIntro , LavaridgeTown_Gym_B1F_Text_JaceDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_B1F_EventScript_Eli{
+	lock
+	faceplayer
+	if (defeated(TRAINER_ELI)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_EliPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("I've read that trolls {COLOR GREEN}can't heal{COLOR DARK_GRAY} when attacked with fire. Don't you think fantasy is amazing?"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_ELI, LavaridgeTown_Gym_B1F_Text_EliIntro , LavaridgeTown_Gym_B1F_Text_EliDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_B1F_EventScript_Keegan{
+	lock
+	faceplayer
+	if (defeated(TRAINER_KEEGAN)){
+		msgbox(LavaridgeTown_Gym_B1F_Text_KeeganPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		goto(LavaridgeTown_Gym_1F_EventScript_ColeAndKeegan)
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Cole{
+	lock
+	faceplayer
+	if (defeated(TRAINER_COLE)){
+		msgbox(LavaridgeTown_Gym_1F_Text_ColePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		goto(LavaridgeTown_Gym_1F_EventScript_ColeAndKeegan)
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_ColeAndKeegan{
+	yesnobattle(format("I hope you're ready for me. My pokemon will {COLOR GREEN}leave you burned!{COLOR DARK_GRAY}
+The fog around here is very thick, luckily we're all used to it and can see {COLOR GREEN}perfectly fine{COLOR DARK_GRAY}."))
+		if (var(VAR_RESULT)){
+			starttagbattle(TRAINER_COLE, TRAINER_KEEGAN, TAG_TEAM_COLE_KEEGAN, 0)
+		}
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Gerald{
+	lock
+	faceplayer
+	if (defeated(TRAINER_GERALD)){
+		msgbox(LavaridgeTown_Gym_1F_Text_GeraldPostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("They say that fire types are often frail, but through hard work even they can put up a {COLOR GREEN}solid defense.{COLOR DARK_GRAY}"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_GERALD, LavaridgeTown_Gym_1F_Text_GeraldIntro , LavaridgeTown_Gym_1F_Text_GeraldDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Axle{
+	lock
+	faceplayer
+	if (defeated(TRAINER_AXLE)){
+		msgbox(LavaridgeTown_Gym_1F_Text_AxlePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("Flames are amazing! Just give them a little fuel and they can burn for ages, doesn't that get you all {COLOR GREEN}Psyched Up{COLOR DARK_GRAY} for a battle?"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_AXLE, LavaridgeTown_Gym_1F_Text_AxleIntro , LavaridgeTown_Gym_1F_Text_AxleDefeat)
+		}
+	}
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Danielle{
+	lock
+	faceplayer
+	if (defeated(TRAINER_DANIELLE)){
+		msgbox(LavaridgeTown_Gym_1F_Text_DaniellePostBattle, MSGBOX_AUTOCLOSE)
+	} else {
+		yesnobattle(format("My passion is burning white-hot and {COLOR GREEN}so are my Pokemon's flames{COLOR DARK_GRAY}! I hope you're ready!"))
+		if (var(VAR_RESULT)){
+			trainerbattle_single(TRAINER_DANIELLE, LavaridgeTown_Gym_1F_Text_DanielleIntro , LavaridgeTown_Gym_1F_Text_DanielleDefeat)
+		}
+	}
+	release
+	end
+}
+
 script LavaridgeTown_Gym_EventScript_CheckTrainers{
-	//Check that you have defeated every trainer in that Gym and that you don't have that badge yet
-	if(((!defeated(TRAINER_COLE)     || 
-	     !defeated(TRAINER_AXLE)     || 
-		 !defeated(TRAINER_KEEGAN)   || 
-		 !defeated(TRAINER_GERALD)   ||
-	     !defeated(TRAINER_JEFF)     ||
-		 !defeated(TRAINER_JACE)     ||
-		 !defeated(TRAINER_DANIELLE) ||
-		 !defeated(TRAINER_ELI)) &&
-		 !flag(FLAG_BADGE04_GET))){
-		msgbox(format("Flannery: Sorry, but you need to defeat every trainer on this Gym before battling me."), MSGBOX_NPC)
-		release
-		end
-	}
-	else{
-		//If you have beaten every trainer or you have the badge just return to the previous script
-		return
-	}
+    if (defeated(TRAINER_FLANNERY_1)) {
+        msgbox(LavaridgeTown_Gym_1F_Text_FlanneryPostBattle, MSGBOX_DEFAULT)
+        release
+        end
+    }
+    // set battle event flags
+	if (!defeated(TRAINER_JEFF)){
+		registerbattleevent(BATTLE_EVENT_STEADY_SPECIAL)
+    }
+	if (!defeated(TRAINER_JACE)){
+		registerbattleevent(BATTLE_EVENT_LAST_TOXIC, 2)
+    }
+    if (!defeated(TRAINER_ELI)){
+		registerbattleevent(BATTLE_EVENT_PERMA_HEAL_BLOCK)
+    }
+	if (!defeated(TRAINER_KEEGAN)){
+		registerbattleevent(BATTLE_EVENT_STEADY_ACCURACY)
+    }
+    if (!defeated(TRAINER_COLE)){
+		registerbattleevent(BATTLE_EVENT_LAST_BURNED, 2)
+    }
+    if (!defeated(TRAINER_GERALD)){
+		registerbattleevent(BATTLE_EVENT_POSTURE_DEFENSE)
+    }
+	if (!defeated(TRAINER_AXLE)){
+		registerbattleevent(BATTLE_EVENT_ONDS_COPY_STATS)
+    }
+	if (!defeated(TRAINER_DANIELLE)){
+		registerbattleevent(BATTLE_EVENT_POSTURE_SPECIAL)
+    }
+
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryIntro0{
+    format("Oh, I see you haven't been able to experience our hot moves! Brace yourself, then!")
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryIntro1{
+    format("Not bad you have some fiery spirit to you but you wont be ready for my hellflames of a battle.")
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryIntroAll{
+    format("A cold headed one I see.")
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryDefeat0{
+    format("Not many people can withstand the heat of my pokemon at full power! Hope you didn't get too singed!")
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryDefeat1{
+    format("Amazing! You managed to extinguish my entire strategy! Guess I still have a ways to go before catching up to grandpa! ")
+}
+
+text LavaridgeTown_Gym_1F_Text_FlanneryDefeatAll{
+    format("Your drive and passion burns even hotter than mine! I hope your flame keeps on burning!")
+}
+
+script LavaridgeTown_Gym_1F_EventScript_Flannery{
+    goto_if_set(FLAG_SYS_GAME_CLEAR, LavaridgeTown_Gym_1F_EventScript_FlanneryRematch)
+    call(LavaridgeTown_Gym_EventScript_CheckTrainers)
+    setvar(VAR_0x8004, 15)
+	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
+	adddefeatedcount(TRAINER_JEFF, 1)  
+	adddefeatedcount(TRAINER_JACE) 
+	adddefeatedcount(TRAINER_ELI) // TRAINER_KEEGAN 
+	adddefeatedcount(TRAINER_COLE)  
+	adddefeatedcount(TRAINER_GERALD)
+	adddefeatedcount(TRAINER_AXLE) 
+	adddefeatedcount(TRAINER_DANIELLE)
+    switch (var(VAR_RESULT)) {
+        case 0:
+            trainerbattle_single(TRAINER_FLANNERY_1 LavaridgeTown_Gym_1F_Text_FlanneryIntro0, LavaridgeTown_Gym_1F_Text_FlanneryDefeat0, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
+        break
+        case 7:
+            trainerbattle_single(TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntroAll, LavaridgeTown_Gym_1F_Text_FlanneryDefeatAll, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
+        break
+        default:
+            trainerbattle_single(TRAINER_FLANNERY_1, LavaridgeTown_Gym_1F_Text_FlanneryIntro1, LavaridgeTown_Gym_1F_Text_FlanneryDefeat1, LavaridgeTown_Gym_1F_EventScript_FlanneryDefeated, NO_MUSIC)
+    }
+    goto_if_unset(FLAG_RECEIVED_TM50, LavaridgeTown_Gym_1F_EventScript_GiveOverheat)
+}
+
+script LavaridgeTown_Gym_1F_EventScript_DEBUGPLEASEREMOVE{
+    msgbox(format("konbawa goshujin-sama {COLOR BLUE}><{COLOR DARK_GRAY} teehee, watashi wa Trolley-chan {COLOR GREEN}desu{COLOR DARK_GRAY}. Release o boku no wasurenai de kudasai {COLOR BLUE}><{COLOR DARK_GRAY}"), MSGBOX_NPC)
+    setvar(VAR_PETALBURG_GYM_STATE, 6)
+	clearflag(FLAG_HIDE_PETALBURG_GYM_GREETER)
+}
+
+
+script LavaridgeTown_Gym_1F_EventScript_AskResetTrainers{
+	lock
+	clydeaskresettrainers(LavaridgeTown_Gym_1F_EventScript_ResetAllTrainers, LavaridgeTown_Gym_1F_EventScript_SelectTrainers)
+	release
+	end
+}
+
+script LavaridgeTown_Gym_1F_EventScript_ResetAllTrainers{
+	cleartrainerflag(TRAINER_JEFF)
+	cleartrainerflag(TRAINER_COLE)
+	cleartrainerflag(TRAINER_KEEGAN)
+	cleartrainerflag(TRAINER_ELI)
+	cleartrainerflag(TRAINER_GERALD)
+	cleartrainerflag(TRAINER_AXLE)
+	cleartrainerflag(TRAINER_JACE)
+	cleartrainerflag(TRAINER_DANIELLE)
+	cleartrainerflag(TRAINER_FLANNERY_1)
+	return
+}
+
+movement LavaridgeTown_Gym_1F_Movement_ColeAndKeegan{
+	walk_fastest_right * 2
+	walk_fastest_up * 8
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Axle{
+	walk_fastest_up * 5
+	walk_fastest_left * 2
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Eli{
+	walk_fastest_left * 6
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Gerald{
+	walk_fastest_left * 3
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Jace{
+	walk_fastest_down * 5
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Danielle{
+	walk_fastest_down * 5
+}
+
+movement LavaridgeTown_Gym_1F_Movement_Jeff{
+	walk_fastest_up * 1
+	walk_fastest_right * 5
+}
+
+
+movement LavaridgeTown_Gym_1F_Movement_Flannery{
+	walk_fastest_right * 1
+	walk_fastest_up * 7
+}
+
+
+// don't forget to bring you back to the player
+movement LavaridgeTown_Gym_1F_Movement_Clyde{
+	walk_fastest_right * 3
+	walk_fastest_down * 11
+}
+
+script LavaridgeTown_Gym_1F_EventScript_SelectTrainers{
+	special(SpawnCameraObject)
+	selecttrainercameraoffset
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_ColeAndKeegan, "Cole & Keegan", TRAINER_COLE, TRAINER_KEEGAN)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Axle, "Axle", TRAINER_AXLE)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Eli, "Eli", TRAINER_ELI)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Gerald, "Gerald", TRAINER_GERALD)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Jace, "Jace", TRAINER_JACE)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Danielle, "Danielle", TRAINER_DANIELLE)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Jeff, "Jeff", TRAINER_JEFF)
+	selecttrainer(LavaridgeTown_Gym_1F_Movement_Flannery, "Flannery", TRAINER_FLANNERY_1)
+	applymovement(OBJ_EVENT_ID_CAMERA, LavaridgeTown_Gym_1F_Movement_Clyde)
+	waitmovement(0)
+	selecttrainercameraoffset(TRUE)
+	special(RemoveCameraObject)
+	return
 }

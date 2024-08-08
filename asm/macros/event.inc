@@ -662,6 +662,10 @@
 		.4byte \pointer3 @ event script
 	.elseif \type == TRAINER_BATTLE_SINGLE_NO_INTRO_TEXT
 		.4byte \pointer1 @ text
+	.elseif \type == TRAINER_BATTLE_DOUBLE_NO_INTRO_TEXT
+		.4byte \pointer1 @ text
+		.4byte \pointer2 @ text
+		.4byte \pointer3 @ event script
 	.elseif \type == TRAINER_BATTLE_DOUBLE
 		.4byte \pointer1 @ text
 		.4byte \pointer2 @ text
@@ -722,6 +726,12 @@
 	.else
 	trainerbattle TRAINER_BATTLE_CONTINUE_SCRIPT_DOUBLE_NO_MUSIC, \trainer, 0, \intro_text, \lose_text, \not_enough_pkmn_text, \event_script
 	.endif
+	.endm
+
+	@ Starts a double trainer battle, takes a trainer, intro text, loss text, text for when you have too few pokemon
+	@ and an optional event script, when used with an event script you can pass in an optional flag to disable music
+	.macro trainerbattle_double_no_intro trainer:req, lose_text:req, not_enough_pkmn_text:req, event_script:req
+	trainerbattle TRAINER_BATTLE_DOUBLE_NO_INTRO_TEXT, \trainer, 0, \lose_text, \not_enough_pkmn_text \event_script
 	.endm
 
 	@ Starts a tag trainer battle, takes two trainers, intro text, loss text, and an optional event script
@@ -1598,8 +1608,9 @@
 	.2byte \y
 	.endm
 
-	.macro selectapproachingtrainer
+	.macro selectapproachingtrainer objectId=255
 	.byte 0xd8
+	.byte \objectId
 	.endm
 
 	.macro lockfortrainer
@@ -2109,9 +2120,121 @@
 	waitstate
 	.endm
 
-	@ change the movement of an object event with the id
-	.macro changemovement objectid:req, movementid:req
+	@ register an event for the next battle (see src/battle_events.c)
+	.macro registerbattleevent battleeventid:req, data0=0, data1=0
 	.byte 0xee
-	.2byte \objectid
-	.byte \movementid
+	.byte \battleeventid
+	.byte \data0
+	.byte \data1
+	.endm
+
+	@ if the trainer was defeated add 1 to var result, if reset then var result is init to 0 first
+	@ - [trainer] trainer id.
+	@ - [reset] boolean, if set then var result is set to 0 before trainer check
+	.macro adddefeatedcount trainer:req, reset=0
+		.if \reset
+			setvar VAR_RESULT, 0
+		.endif
+		checktrainerflag \trainer
+		goto_if FALSE, adddefeatedcountend_\@
+		addvar VAR_RESULT, 1
+		adddefeatedcountend_\@:
+	.endm
+
+	.macro yesnobattle text:req type=MSGBOX_NPC
+		yesnobattle_replay_\@:
+		msgbox \text, \type
+		multichoice2 0, 0, Common_Text_YesNoBattle, 1
+		compare VAR_RESULT, 2
+		goto_if TRUE, yesnobattle_replay_\@
+	.endm
+
+	@ little wrapper for set/reset trainers with clyde in gyms
+	@ - [reset] run a script to reset all trainers as undefeated
+	@ - [select] run a script to select the trainers
+	.macro clydeaskresettrainers reset:req select:req
+		msgbox Common_Text_ClydePoliteness
+		multichoice2 3, 1 Common_Text_ClydeAskResetTrainers
+		compare VAR_RESULT, 1
+		call_if TRUE, \reset
+		compare VAR_RESULT, 2
+		call_if TRUE, \select
+	.endm
+
+	@ utility to put the camera on top of the NPC so you can talk the NPC for any angle
+	@ - [off] to get the camera from the NPC back to the player
+	.macro selecttrainercameraoffset off=FALSE
+		compare VAR_FACING, DIR_NORTH
+		goto_if TRUE, selecttrainercameraoffsetapplyup_\@
+		compare VAR_FACING, DIR_SOUTH
+		goto_if TRUE, selecttrainercameraoffsetapplydown_\@
+		compare VAR_FACING, DIR_WEST
+		goto_if TRUE, selecttrainercameraoffsetapplyleft_\@
+		goto selecttrainercameraoffsetapplyright_\@
+		selecttrainercameraoffsetapplyup_\@:
+			.if \off
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestDown
+			.else
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestUp
+			.endif
+			goto selecttrainercameraoffsetend_\@
+		selecttrainercameraoffsetapplydown_\@:
+			.if \off
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestUp
+			.else
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestDown
+			.endif
+			goto selecttrainercameraoffsetend_\@
+		selecttrainercameraoffsetapplyleft_\@:
+			.if \off
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestRight
+			.else
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestLeft
+			.endif
+			goto selecttrainercameraoffsetend_\@
+		selecttrainercameraoffsetapplyright_\@:
+			.if \off
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestLeft
+			.else
+				applymovement OBJ_EVENT_ID_CAMERA, Common_Movement_FastestRight
+			.endif
+			goto selecttrainercameraoffsetend_\@
+		selecttrainercameraoffsetend_\@:
+		waitmovement 0
+	.endm
+
+	@ used in gyms to clear or set flags of trainers after the gym has been done
+	@ - [movement]: To go to target
+	@ - [name]: Tell in the message box who's trainer is aimed.
+	@ - [trainer] : Trainer id.
+	@ - [trainer] : Second Trainer id in case of a tagbattle.
+	.macro selecttrainer movement:req name:req trainer:req trainer2=0
+		applymovement OBJ_EVENT_ID_CAMERA, \movement
+		msgbox \name
+		waitmovement 0
+		goto_if_not_defeated \trainer, selecttrainernotdefeated_\@
+		goto_if_defeated \trainer, selecttrainerdefeated_\@
+		selecttrainernotdefeatedsetflag_\@:
+			settrainerflag \trainer
+			.if \trainer2
+				settrainerflag \trainer2
+			.endif
+			goto selecttrainerdend_\@
+		selecttrainernotdefeated_\@:
+			multichoice2 2, 1 Common_Text_SetFlagOrNext
+			compare VAR_RESULT, 1
+			goto_if TRUE, selecttrainernotdefeatedsetflag_\@
+			goto selecttrainerdend_\@
+		selecttrainerdefeatedclearflag_\@:
+			cleartrainerflag \trainer
+			.if \trainer2
+				cleartrainerflag \trainer2
+			.endif
+			goto selecttrainerdend_\@
+		selecttrainerdefeated_\@:
+			multichoice2 2, 1 Common_Text_ClearFlagOrNext
+			compare VAR_RESULT, 1
+			goto_if TRUE, selecttrainerdefeatedclearflag_\@
+			goto selecttrainerdend_\@
+		selecttrainerdend_\@:
 	.endm

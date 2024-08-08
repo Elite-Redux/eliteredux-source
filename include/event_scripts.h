@@ -9,6 +9,7 @@ extern const u8 EventScript_TryDoDoubleTrainerBattle[];
 extern const u8 EventScript_TryDoNormalTrainerBattle[];
 extern const u8 EventScript_TryDoDoubleRematchBattle[];
 extern const u8 EventScript_TryDoRematchBattle[];
+extern const u8 EventScript_TryDoDoubleTrainerBattleNoIntro[];
 
 extern const u8 BerryTreeScript[];
 
@@ -377,7 +378,37 @@ extern const u8 SootopolisCity_Gym_1F_Text_JuanDefeatRematch[];
 extern const u8 SootopolisCity_Gym_1F_Text_WallaceDefeatRematch[];
 extern const u8 SootopolisCity_Gym_1F_Text_Juan_Round_2[];
 extern const u8 SootopolisCity_Gym_1F_Text_Wallace_Round_2[];
-
+extern const u8 DewfordTown_Gym_Text_LilithDefeat[];
+extern const u8 DewfordTown_Gym_Text_BrendenDefeat[];
+extern const u8 MauvilleCity_Gym_Text_ShawnDefeat[];
+extern const u8 MauvilleCity_Gym_Text_AngeloDefeat[];
+extern const u8 FortreeCity_Gym_Text_EdwardoDefeat[];
+extern const u8 FortreeCity_Gym_Text_FlintDefeat[];
+extern const u8 FortreeCity_Gym_Text_AshleyDefeat[];
+extern const u8 FortreeCity_Gym_Text_JaredDefeat[];
+extern const u8 MossdeepCity_Gym_Text_SamanthaDefeat[];
+extern const u8 MossdeepCity_Gym_Text_BlakeDefeat[];
+extern const u8 MossdeepCity_Gym_Text_MauraDefeat[];
+extern const u8 MossdeepCity_Gym_Text_PrestonDefeat[];
+extern const u8 MossdeepCity_Gym_Text_SylviaDefeat[];
+extern const u8 MossdeepCity_Gym_Text_HannahDefeat[];
+extern const u8 MossdeepCity_Gym_Text_KathleenDefeat[];
+extern const u8 MossdeepCity_Gym_Text_NicholasDefeat[];
+extern const u8 MossdeepCity_Gym_Text_MaceyDefeat[];
+extern const u8 MossdeepCity_Gym_Text_CliffordDefeat[];
+extern const u8 MossdeepCity_Gym_Text_NateDefeat[];
+extern const u8 MossdeepCity_Gym_Text_VirgilDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_BridgetDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_CrissyDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_BethanyDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_AnnikaDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_BriannaDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_OliviaDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_DaphneDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_ConnieDefeat[];
+extern const u8 SootopolisCity_Gym_B1F_Text_AndreaDefeat[];
+extern const u8 LavaridgeTown_Gym_1F_Text_ColeDefeat[];
+extern const u8 LavaridgeTown_Gym_B1F_Text_KeeganDefeat[];
 //field effects
 extern const u8 EventScript_UseStrength[];
 extern const u8 EventScript_FailSweetScent[];

@@ -841,11 +841,11 @@ RustboroCity_EventScript_MayEncounter:: @ 81E100B
 	msgbox RustboroCity_Text_MayHiLetsRegister, MSGBOX_DEFAULT
 	closemessage
 	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox RustboroCity_Text_RegisteredMay, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox RustboroCity_Text_RegisteredMay, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	setflag FLAG_ENABLE_RIVAL_MATCH_CALL
 	setvar VAR_RUSTBORO_CITY_STATE, 10
 	setvar VAR_ROUTE104_STATE, 2
@@ -915,11 +915,11 @@ RustboroCity_EventScript_BrendanEncounter:: @ 81E1114
 	msgbox RustboroCity_Text_BrendanHiLetsRegister, MSGBOX_DEFAULT
 	closemessage
 	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox RustboroCity_Text_RegisteredBrendan, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox RustboroCity_Text_RegisteredBrendan, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	setflag FLAG_ENABLE_RIVAL_MATCH_CALL
 	setvar VAR_RUSTBORO_CITY_STATE, 10
 	setvar VAR_ROUTE104_STATE, 2
@@ -987,20 +987,20 @@ RustboroCity_EventScript_Roxanne::
 RustboroCity_EventScript_PokecallMoveRoxanne::
 	msgbox RustboroCity_Text_RoxanneOhHello, MSGBOX_DEFAULT
 	closemessage
-	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox RustboroCity_Text_RegisteredAnorith, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox RustboroCity_Text_RegisteredAnorith, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	msgbox RustboroCity_Movement_RoxanneOneMoreThing, MSGBOX_DEFAULT
 	closemessage
-	delay 30
-	playfanfare MUS_REGISTER_MATCH_CALL
-	msgbox RustboroCity_Text_RegisteredRoxanne, MSGBOX_DEFAULT
-	waitfanfare
-	closemessage
-	delay 30
+	@ delay 30
+	@ playfanfare MUS_REGISTER_MATCH_CALL
+	@ msgbox RustboroCity_Text_RegisteredRoxanne, MSGBOX_DEFAULT
+	@ waitfanfare
+	@ closemessage
+	@ delay 30
 	msgbox RustboroCity_Text_RoxanneBye, MSGBOX_AUTOCLOSE
 	fadescreen FADE_TO_BLACK
 	removeobject LOCALID_ROXANNE

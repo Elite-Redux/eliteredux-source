@@ -72,6 +72,7 @@ script EverGrandeCity_EventScript_RivalTalk{
     removeobject(LOCALID_RIVAL)
     clearflag(FLAG_RIVAL_EVERGRANDE_ESCORT)
     setflag(FLAG_HIDE_RIVAL_SOOTOPOLIS_EVERGRANDE)
+    setflag(FLAG_VISITED_EVER_GRANDE_CITY)
     release
 }
 

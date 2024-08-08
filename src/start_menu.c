@@ -53,6 +53,7 @@
 #include "union_room.h"
 #include "constants/rgb.h"
 #include "quests.h"
+#include "battle_setup.h"
 
 // Menu actions
 enum
@@ -1624,7 +1625,7 @@ static void ShowGameVersionWindow(void)
 	static const u8 sText_Message_Save[]    =  _("{COLOR GREEN}Press SELECT to save{COLOR DARK_GRAY}\nLevel Cap: {STR_VAR_1}\nWins: {STR_VAR_2} Losses: {STR_VAR_3}$");
     static const u8 sText_Message_No_Save[] =  _("You can't save here\nLevel Cap: {STR_VAR_1}\nWins: {STR_VAR_2} Losses: {STR_VAR_3}$");
     u16 levelCap = GetLevelCap();
-    u16 wins   = getNumberOfUniqueDefeatedTrainers();
+    u16 wins   = GetTrainerBattleWins();
     u16 losses = 0 + VarGet(VAR_TIMES_WHITED_OUT);
 	sSafariBallsWindowId = AddWindow(&sExtraWindowTemplate);
     PutWindowTilemap(sSafariBallsWindowId);

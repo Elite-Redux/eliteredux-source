@@ -436,7 +436,24 @@
     }
   ],
   "coord_events": [
-
+    {
+      "type": "trigger",
+      "x": 19,
+      "y": 38,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "MtChimney_EventScript_VisitedMtChimney"
+    },
+    {
+      "type": "trigger",
+      "x": 19,
+      "y": 37,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "MtChimney_EventScript_VisitedMtChimney"
+    }
   ],
   "bg_events": [
     {

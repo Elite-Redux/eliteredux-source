@@ -1510,6 +1510,8 @@
 #define FLAG_SYS_DEBUG_MENU_OPENED                                  3069
 #define FLAG_RECEIVED_SILVALLY                                      3070
 #define FLAG_PERMANENT_UNCHANGEABLE_WEATHER                         3071
+#define FLAG_VISITED_MT_CHIMNEY                                     3072
+#define FLAG_VISITED_MT_PYRE                                        3073
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 

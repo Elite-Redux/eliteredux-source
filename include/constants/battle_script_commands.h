@@ -249,6 +249,7 @@
 #define VARIOUS_TRY_UPPER_HAND                  167
 #define VARIOUS_REQUIRE_CAN_DO_EFFECT           168
 #define VARIOUS_INCREASE_CRIT                   169
+#define VARIOUS_GYMSKILL_POPUP                  170
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0

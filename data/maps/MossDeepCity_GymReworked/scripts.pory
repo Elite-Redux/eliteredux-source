@@ -1,0 +1,7 @@
+mapscripts MossDeepCity_GymReworked_MapScripts {
+    MAP_SCRIPT_ON_RESUME: MossDeepCity_EventScript_OnResume
+}
+
+script MossDeepCity_EventScript_OnResume{
+    setstepcallback(STEP_CB_MOSSDEEP_ARROW)
+}

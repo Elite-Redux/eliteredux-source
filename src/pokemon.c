@@ -9695,6 +9695,7 @@ void CreateShinyMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 nat
     CreateMon(mon, species, level, 32, 1, personality, OT_ID_PRESET, otid);
 }
 
+// replaced by GetTrainerBattleWins()
 u16 getNumberOfUniqueDefeatedTrainers(void){
     u16 defeatedTrainers = 0;
     u16 i;
