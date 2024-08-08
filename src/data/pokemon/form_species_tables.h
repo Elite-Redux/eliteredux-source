@@ -1616,6 +1616,11 @@ static const u16 sChimcharFormSpeciesIdTable[] = {
     SPECIES_CHIMCHAR_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sMonfernoFormSpeciesIdTable[] = {
+    SPECIES_MONFERNO,
+    SPECIES_MONFERNO_REDUX,
+    FORM_SPECIES_END,
+};
 static const u16 sInfernapeFormSpeciesIdTable[] = {
     SPECIES_INFERNAPE,
     SPECIES_INFERNAPE_MEGA,

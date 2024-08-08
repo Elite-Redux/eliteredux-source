@@ -931,6 +931,10 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_TORTERRA_REDUX] = sTorterraFormSpeciesIdTable,
 
+    [SPECIES_TORTERRA_REDUX_MEGA] = sTorterraFormSpeciesIdTable,
+
     [SPECIES_CHIMCHAR_REDUX] = sChimcharFormSpeciesIdTable,
+
+    [SPECIES_MONFERNO_REDUX] = sMonfernoFormSpeciesIdTable,
 
 };

@@ -1751,8 +1751,9 @@
 #define SPECIES_GROTLE_REDUX                REDUX_FORMS_START + 101
 #define SPECIES_TORTERRA_REDUX              REDUX_FORMS_START + 102
 #define SPECIES_CHIMCHAR_REDUX              REDUX_FORMS_START + 103
+#define SPECIES_MONFERNO_REDUX              REDUX_FORMS_START + 104
 
-#define LAST_REDUX_FORM                     SPECIES_CHIMCHAR_REDUX
+#define LAST_REDUX_FORM                     SPECIES_MONFERNO_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

@@ -5617,6 +5617,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x55,
         .y_offset = 10,
     },
+    [SPECIES_MONFERNO_REDUX] =
+    {
+        .size = 0x66,
+        .y_offset = 8,
+    },
     [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x87,

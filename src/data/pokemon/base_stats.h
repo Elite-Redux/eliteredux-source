@@ -41315,6 +41315,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 3,
     },
 
+[SPECIES_MONFERNO_REDUX] =
+    {
+    .baseHP        = 64,
+    .baseAttack    = 78,
+    .baseDefense   = 52,
+    .baseSpeed     = 81,
+    .baseSpAttack  = 78,
+    .baseSpDefense = 52,
+    .type1 = TYPE_FIRE,
+    .type2 = TYPE_FIGHTING,
+    .catchRate = 255,
+    .expYield = 142,
+    .evYield_Speed     = 1,
+    .evYield_SpAttack  = 1,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
+    .abilities = {ABILITY_IRON_FIST, ABILITY_POWER_FISTS, ABILITY_GORILLA_TACTICS},
+    .innates = {ABILITY_BLAZE, ABILITY_PRANKSTER, ABILITY_DEFIANT},
+    .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = TRUE,
+    .tier = 0,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

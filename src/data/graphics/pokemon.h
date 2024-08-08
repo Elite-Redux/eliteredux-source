@@ -7682,6 +7682,12 @@ const u32 gMonPalette_ChimcharRedux[]           = INCBIN_U32("graphics/pokemon/c
 const u32 gMonShinyPalette_ChimcharRedux[]      = INCBIN_U32("graphics/pokemon/chimchar/redux/shiny.gbapal.lz");
 const u8  gMonIcon_ChimcharRedux[]              = INCBIN_U8("graphics/pokemon/chimchar/redux/icon.4bpp");
 
+const u32 gMonFrontPic_MonfernoRedux[]          = INCBIN_U32("graphics/pokemon/monferno/redux/front.4bpp.lz");
+const u32 gMonBackPic_MonfernoRedux[]           = INCBIN_U32("graphics/pokemon/monferno/redux/back.4bpp.lz");
+const u32 gMonPalette_MonfernoRedux[]           = INCBIN_U32("graphics/pokemon/monferno/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_MonfernoRedux[]      = INCBIN_U32("graphics/pokemon/monferno/redux/shiny.gbapal.lz");
+const u8  gMonIcon_MonfernoRedux[]              = INCBIN_U8("graphics/pokemon/monferno/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");
