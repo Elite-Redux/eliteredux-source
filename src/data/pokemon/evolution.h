@@ -751,12 +751,14 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_LARVITAR_REDUX] = {{EVO_LEVEL, 30, SPECIES_PUPITAR_REDUX}},
     [SPECIES_MAGCARGO_REDUX] = {{EVO_LEVEL, 45, SPECIES_ESCARGINITE_REDUX}},
     [SPECIES_DURALUDON] = {{EVO_LEVEL, 55, SPECIES_ARCHALUDON}},
+    [SPECIES_TURTWIG_REDUX]	 = {{EVO_LEVEL, 16, SPECIES_GROTLE_REDUX}},
+    [SPECIES_GROTLE_REDUX]	 = {{EVO_LEVEL, 32, SPECIES_TORTERRA_REDUX}},
 
     [SPECIES_GYARADEATH]	 = {{EVO_MEGA_EVOLUTION, ITEM_GYARADEATHITE_X, SPECIES_GYARADEATH_MEGA_X},
                             {EVO_MEGA_EVOLUTION, ITEM_GYARADEATHITE_Y, SPECIES_GYARADEATH_MEGA_Y}},
 
     [SPECIES_CORM]  = {{EVO_LEVEL, 23, SPECIES_MAIZEMOTH},
-                            {EVO_LEVEL, 23, SPECIES_CORM}},
+                            {EVO_LEVEL, 23, SPECIES_POPMOTH}},
 
     //Monochamp Stuff
     /*[SPECIES_CHIEN_PAO]      = {{EVO_MEGA_EVOLUTION,   ITEM_CHIEN_PAOITE,   SPECIES_CHIEN_PAO_MEGA}},
@@ -790,7 +792,7 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_LANDORUS] = {{EVO_FORM_SHIFT, 1, SPECIES_LANDORUS},
                           {EVO_FORM_SHIFT, 1, SPECIES_LANDORUS_THERIAN},},
 
-    //Thundurus changes forms with the use of the Reveal Glass
+    //Tornadus changes forms with the use of the Reveal Glass
     [SPECIES_TORNADUS] = {{EVO_FORM_SHIFT, 1, SPECIES_TORNADUS},
                           {EVO_FORM_SHIFT, 1, SPECIES_TORNADUS_THERIAN},},
 
@@ -798,11 +800,11 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_THUNDURUS] = {{EVO_FORM_SHIFT, 1, SPECIES_THUNDURUS},
                            {EVO_FORM_SHIFT, 1, SPECIES_THUNDURUS_THERIAN},},
 
-    //Meloetta changes forms with the use of the Reveal Glass
+    //Enamorus changes forms with the use of the Reveal Glass
     [SPECIES_ENAMORUS] = {{EVO_FORM_SHIFT, 1, SPECIES_ENAMORUS},
                           {EVO_FORM_SHIFT, 1, SPECIES_ENAMORUS_THERIAN},},
 
-    //Meloetta changes forms with the use of the Meteorite
+    //Deoxys changes forms with the use of the Meteorite
     [SPECIES_DEOXYS] = {{EVO_FORM_SHIFT, 1, SPECIES_DEOXYS},
                         {EVO_FORM_SHIFT, 1, SPECIES_DEOXYS_ATTACK},
                         {EVO_FORM_SHIFT, 1, SPECIES_DEOXYS_SPEED},
@@ -869,12 +871,17 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
 
     [SPECIES_URSALUNA] = {{EVO_FORM_SHIFT, 1, SPECIES_URSALUNA},
                             {EVO_FORM_SHIFT, 1, SPECIES_URSALUNA_BLOODMOON},},
+                            
     [SPECIES_URSHIFU] = {{EVO_FORM_SHIFT, 1, SPECIES_URSHIFU},
                             {EVO_FORM_SHIFT, 1, SPECIES_URSHIFU_RAPID_STRIKE_STYLE},},
 
     [SPECIES_BASCULIN] = {{EVO_FORM_SHIFT, 1, SPECIES_BASCULIN},
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_BLUE_STRIPED},
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_WHITESTRIPED},},
+
     [SPECIES_POLARTIC] = {{EVO_FORM_SHIFT, 1, SPECIES_POLARTIC},
                             {EVO_FORM_SHIFT, 1, SPECIES_POLARTIC_BLUEMOON},},
+
+    [SPECIES_LUMBERING_SLOTH] = {{EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH},
+                            {EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH_OVERGROWN},},
 };

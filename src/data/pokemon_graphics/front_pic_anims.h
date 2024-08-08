@@ -161,6 +161,57 @@ static const union AnimCmd sAnim_MAIZEMOTH_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_POPMOTH_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_BLIZZARD_MAW_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_LUMBERING_SLOTH_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_LUMBERING_SLOTH_OVERGROWN_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_IRON_CARAPACE_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_GROTLE_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TURTWIG_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TORTERRA_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TORTERRA_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -611,6 +662,56 @@ static const union AnimCmd *const sAnims_MAIZEMOTH[] ={
 static const union AnimCmd *const sAnims_MAIZEMOTH_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_MAIZEMOTH_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_POPMOTH[] ={
+    sAnim_GeneralFrame0,
+    sAnim_POPMOTH_1,
+};
+
+static const union AnimCmd *const sAnims_BLIZZARD_MAW[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BLIZZARD_MAW_1,
+};
+
+static const union AnimCmd *const sAnims_LUMBERING_SLOTH[] ={
+    sAnim_GeneralFrame0,
+    sAnim_LUMBERING_SLOTH_1,
+};
+
+static const union AnimCmd *const sAnims_LUMBERING_SLOTH_OVERGROWN[] ={
+    sAnim_GeneralFrame0,
+    sAnim_LUMBERING_SLOTH_OVERGROWN_1,
+};
+
+static const union AnimCmd *const sAnims_IRON_CARAPACE[] ={
+    sAnim_GeneralFrame0,
+    sAnim_IRON_CARAPACE_1,
+};
+
+static const union AnimCmd *const sAnims_TURTWIG_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TURTWIG_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_GROTLE_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GROTLE_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_TORTERRA_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TORTERRA_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_TORTERRA_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TORTERRA_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_POPMOTH_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_POLARTIC[] ={
@@ -20300,6 +20401,16 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(CORM),
     ANIM_CMD(MAIZEMOTH),
     ANIM_CMD(MAIZEMOTH_MEGA),
+    ANIM_CMD(POPMOTH),
+    ANIM_CMD(POPMOTH_MEGA),
+    ANIM_CMD(LUMBERING_SLOTH),
+    ANIM_CMD(LUMBERING_SLOTH_OVERGROWN),
+    ANIM_CMD(IRON_CARAPACE),
+    ANIM_CMD(TURTWIG_REDUX),
+    ANIM_CMD(GROTLE_REDUX),
+    ANIM_CMD(TORTERRA_REDUX),
+    ANIM_CMD(TORTERRA_REDUX_MEGA),
+    ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
     ANIM_CMD(RAPIDASH_MEGA),

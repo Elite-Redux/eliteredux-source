@@ -1121,7 +1121,11 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_QWILFISH_HISUIAN] = _("Qwilfish"),
     [SPECIES_BASCULEGION] = _("Basculegion"),
     [SPECIES_CORM]      = _("Corm"),
-    [SPECIES_MAIZEMOTH]      = _("Maizemoth"),
+
+    [SPECIES_TURTWIG_REDUX]      = _("Turtwig"),
+    [SPECIES_GROTLE_REDUX]      = _("Grotle"),
+    [SPECIES_TORTERRA_REDUX]      = _("Torterra"),
+    [SPECIES_TORTERRA_REDUX_MEGA]      = _("Torterra"),
 
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),
@@ -1325,6 +1329,12 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_AEGISLASH_BLADE_REDUX_MEGA]      = _("Aegislash"),
     [SPECIES_MAIZEMOTH]             = _("Maizemoth"),
     [SPECIES_MAIZEMOTH_MEGA]      = _("Maizemoth"),
+    [SPECIES_POPMOTH]             = _("Popmoth"),
+    [SPECIES_POPMOTH_MEGA]             = _("Popmoth"),
+    [SPECIES_BLIZZARD_MAW]             = _("Blizzard Maw"),
+    [SPECIES_LUMBERING_SLOTH]             = _("Lumber Sloth"),
+    [SPECIES_LUMBERING_SLOTH_OVERGROWN]             = _("Lumber Sloth"),
+    [SPECIES_IRON_CARAPACE]             = _("IronCarapace"),
     [SPECIES_CLAWITZER_REDUX]    = _("Clawitzer"),
     // Special Mega + Primals
     [SPECIES_RAYQUAZA_MEGA]  = _("Rayquaza"),

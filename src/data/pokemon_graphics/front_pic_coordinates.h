@@ -5060,12 +5060,12 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_BRAMBLIN] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  11
     },
     [SPECIES_BRAMBLEGHAST] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  7
     },
     [SPECIES_TOEDSCOOL] =
     {
@@ -5230,7 +5230,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_CLODSIRE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  8
     },
     [SPECIES_FARIGIRAF] =
     {
@@ -5240,7 +5240,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_DUDUNSPARCE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  5
     },
     [SPECIES_KINGAMBIT] =
     {
@@ -5525,7 +5525,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_LEPASTRY] =
     {
         .size = 0x45,
-        .y_offset = 8,
+        .y_offset = 1,
     },
     [SPECIES_GYARADEATH] =
     {
@@ -5557,12 +5557,62 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 0,
     },
-      [SPECIES_CORM] =
+    [SPECIES_CORM] =
     {
         .size = 0x45,
+        .y_offset = 20,
+    },
+    [SPECIES_MAIZEMOTH] =
+    {
+        .size = 0x87,
+        .y_offset = 5,
+    },
+    [SPECIES_POPMOTH] =
+    {
+        .size = 0x87,
+        .y_offset = 5,
+    },
+    [SPECIES_BLIZZARD_MAW] =
+    {
+        .size = 0,
+        .y_offset = 4,
+    },
+    [SPECIES_LUMBERING_SLOTH] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_LUMBERING_SLOTH_OVERGROWN] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_IRON_CARAPACE] =
+    {
+        .size = 0x87,
+        .y_offset = 4,
+    },
+    [SPECIES_TURTWIG_REDUX] =
+    {
+        .size = 0x45,
+        .y_offset = 11,
+    },
+    [SPECIES_GROTLE_REDUX] =
+    {
+        .size = 0x56,
         .y_offset = 7,
     },
-     [SPECIES_MAIZEMOTH] =
+    [SPECIES_TORTERRA_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_TORTERRA_REDUX_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x87,
         .y_offset = 5,
@@ -5895,17 +5945,17 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_TATSUGIRI_DROOPY] =
     {
         .size = 0,
-        .y_offset =  4
+        .y_offset =  11
     },
     [SPECIES_TATSUGIRI_STRETCHY] =
     {
         .size = 0,
-        .y_offset =  4
+        .y_offset =  11
     },
     [SPECIES_TATSUGIRI_CURLY] =
     {
         .size = 0,
-        .y_offset =  4
+        .y_offset =  11
     },
     [SPECIES_MAUSHOLD_FOUR] =
     {

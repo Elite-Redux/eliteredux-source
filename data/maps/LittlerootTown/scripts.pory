@@ -956,8 +956,8 @@ LittlerootTown_EventScript_GiveRunningShoes:: @ 81E8693
 	setflag FLAG_RECEIVED_COIN_CASE
 	setflag FLAG_RECEIVED_OLD_ROD
 	setvar VAR_LITTLEROOT_TOWN_STATE, 4
-	msgbox LittlerootTown_Text_ComeHomeIfAnythingHappens, MSGBOX_DEFAULT
-	closemessage
+	@ msgbox LittlerootTown_Text_ComeHomeIfAnythingHappens, MSGBOX_DEFAULT
+	@ closemessage
 	delay 30
 	return
 
@@ -2014,7 +2014,8 @@ script LittlerootTown_EventScript_TutorialNPC2{
 			goto(LittlerootTown_EventScript_TutorialNPC2)
 		case 1:// Pokémon changes
 			msgbox(format("Almost every Pokémon has been buffed to be more fun and useful.\p"
-                          "Some Pokémon have been reworked - e.g. Arbok is Poison/Dark and Gyarados is Water/Dragon with Levitate now. Gengar is levitating all the time and can be played special or physical now with fitting moves.\p"
+                          "Some Pokémon have been reworked - e.g. Arbok is Poison/Dark and Gyarados is Water/Dragon with Levitate now.\p" 
+						  "Dewgong has received a decent boost in stats which makes it useful for both defense and offense.\p"
                           "Check out the Online Pokédex for more information."))
 			goto(LittlerootTown_EventScript_TutorialNPC2)
 		case 2:// Ability changes
@@ -2053,7 +2054,7 @@ script LittlerootTown_EventScript_TutorialNPC2{
 			msgbox(format("You'll get one of each Pokéball from Nurse Joy. Every ball has 100% catch rate.\p"
                           "Nurse Joy gives you an upgraded DexNav: you can directly search the Pokémon you want. No need to walk slow when approaching.\p"
 						  "The Shiny rate can be massively boosted, up to 1/5.\p"
-						  "You can catch almost every Pokémon from Gen 1 to 8."))
+						  "You can catch almost every Pokémon from Gen 1 to 9."))
 			goto(LittlerootTown_EventScript_TutorialNPC2)
 		case 8:// Switch abilities 
 			msgbox(format("You can directly switch the ability in the Pokémon Summary Screen.\p"

@@ -5556,6 +5556,56 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x88,
         .y_offset = 7,
     },
+    [SPECIES_POPMOTH] =
+    {
+        .size = 0x88,
+        .y_offset = 5,
+    },
+    [SPECIES_BLIZZARD_MAW] =
+    {
+        .size = 0,
+        .y_offset = 0,
+    },
+    [SPECIES_LUMBERING_SLOTH] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    [SPECIES_LUMBERING_SLOTH_OVERGROWN] =
+    {
+        .size = 0x88,
+        .y_offset = 2,
+    },
+    [SPECIES_IRON_CARAPACE] =
+    {
+        .size = 0x88,
+        .y_offset = 2,
+    },
+    [SPECIES_TURTWIG_REDUX] =
+    {
+        .size = 0x67,
+        .y_offset = 6,
+    },
+    [SPECIES_GROTLE_REDUX] =
+    {
+        .size = 0x86,
+        .y_offset = 10,
+    },
+    [SPECIES_TORTERRA_REDUX] =
+    {
+        .size = 0x87,
+        .y_offset = 4,
+    },
+    [SPECIES_TORTERRA_REDUX_MEGA] =
+    {
+        .size = 0x87,
+        .y_offset = 4,
+    },
+    [SPECIES_POPMOTH_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 5,
+    },
     [SPECIES_ARBOK_MEGA] =
     {
         .size = 0x88,

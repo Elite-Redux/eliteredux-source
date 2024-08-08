@@ -7610,11 +7610,71 @@ const u32 gMonPalette_MaizemothMega[]           = INCBIN_U32("graphics/pokemon/m
 const u32 gMonShinyPalette_MaizemothMega[]      = INCBIN_U32("graphics/pokemon/maizemoth/mega/shiny.gbapal.lz");
 const u8  gMonIcon_MaizemothMega[]              = INCBIN_U8("graphics/pokemon/maizemoth/mega/icon.4bpp");
 
+const u32 gMonFrontPic_Popmoth[]          = INCBIN_U32("graphics/pokemon/popmoth/front.4bpp.lz");
+const u32 gMonBackPic_Popmoth[]           = INCBIN_U32("graphics/pokemon/popmoth/back.4bpp.lz");
+const u32 gMonPalette_Popmoth[]           = INCBIN_U32("graphics/pokemon/popmoth/normal.gbapal.lz");
+const u32 gMonShinyPalette_Popmoth[]      = INCBIN_U32("graphics/pokemon/popmoth/shiny.gbapal.lz");
+const u8  gMonIcon_Popmoth[]              = INCBIN_U8("graphics/pokemon/popmoth/icon.4bpp");
+
+const u32 gMonFrontPic_PopmothMega[]          = INCBIN_U32("graphics/pokemon/popmoth/mega/front.4bpp.lz");
+const u32 gMonBackPic_PopmothMega[]           = INCBIN_U32("graphics/pokemon/popmoth/mega/back.4bpp.lz");
+const u32 gMonPalette_PopmothMega[]           = INCBIN_U32("graphics/pokemon/popmoth/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_PopmothMega[]      = INCBIN_U32("graphics/pokemon/popmoth/mega/shiny.gbapal.lz");
+const u8  gMonIcon_PopmothMega[]              = INCBIN_U8("graphics/pokemon/popmoth/mega/icon.4bpp");
+
+const u32 gMonFrontPic_BlizzardMaw[]          = INCBIN_U32("graphics/pokemon/blizzard_maw/front.4bpp.lz");
+const u32 gMonBackPic_BlizzardMaw[]           = INCBIN_U32("graphics/pokemon/blizzard_maw/back.4bpp.lz");
+const u32 gMonPalette_BlizzardMaw[]           = INCBIN_U32("graphics/pokemon/blizzard_maw/normal.gbapal.lz");
+const u32 gMonShinyPalette_BlizzardMaw[]      = INCBIN_U32("graphics/pokemon/blizzard_maw/shiny.gbapal.lz");
+const u8  gMonIcon_BlizzardMaw[]              = INCBIN_U8("graphics/pokemon/blizzard_maw/icon.4bpp");
+
 const u32 gMonFrontPic_ArbokMega[]          = INCBIN_U32("graphics/pokemon/arbok/mega/front.4bpp.lz");
 const u32 gMonBackPic_ArbokMega[]           = INCBIN_U32("graphics/pokemon/arbok/mega/back.4bpp.lz");
 const u32 gMonPalette_ArbokMega[]           = INCBIN_U32("graphics/pokemon/arbok/mega/normal.gbapal.lz");
 const u32 gMonShinyPalette_ArbokMega[]      = INCBIN_U32("graphics/pokemon/arbok/mega/shiny.gbapal.lz");
 const u8  gMonIcon_ArbokMega[]              = INCBIN_U8("graphics/pokemon/arbok/mega/icon.4bpp");
+
+const u32 gMonFrontPic_LumberingSloth[]          = INCBIN_U32("graphics/pokemon/lumbering_sloth/front.4bpp.lz");
+const u32 gMonBackPic_LumberingSloth[]           = INCBIN_U32("graphics/pokemon/lumbering_sloth/back.4bpp.lz");
+const u32 gMonPalette_LumberingSloth[]           = INCBIN_U32("graphics/pokemon/lumbering_sloth/normal.gbapal.lz");
+const u32 gMonShinyPalette_LumberingSloth[]      = INCBIN_U32("graphics/pokemon/lumbering_sloth/shiny.gbapal.lz");
+const u8  gMonIcon_LumberingSloth[]              = INCBIN_U8("graphics/pokemon/lumbering_sloth/icon.4bpp");
+
+const u32 gMonFrontPic_LumberingSloth_Overgrown[]          = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/front.4bpp.lz");
+const u32 gMonBackPic_LumberingSloth_Overgrown[]           = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/back.4bpp.lz");
+const u32 gMonPalette_LumberingSloth_Overgrown[]           = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/normal.gbapal.lz");
+const u32 gMonShinyPalette_LumberingSloth_Overgrown[]      = INCBIN_U32("graphics/pokemon/lumbering_sloth/overgrown/shiny.gbapal.lz");
+const u8  gMonIcon_LumberingSloth_Overgrown[]              = INCBIN_U8("graphics/pokemon/lumbering_sloth/overgrown/icon.4bpp");
+
+const u32 gMonFrontPic_IronCarapace[]          = INCBIN_U32("graphics/pokemon/iron_carapace/front.4bpp.lz");
+const u32 gMonBackPic_IronCarapace[]           = INCBIN_U32("graphics/pokemon/iron_carapace/back.4bpp.lz");
+const u32 gMonPalette_IronCarapace[]           = INCBIN_U32("graphics/pokemon/iron_carapace/normal.gbapal.lz");
+const u32 gMonShinyPalette_IronCarapace[]      = INCBIN_U32("graphics/pokemon/iron_carapace/shiny.gbapal.lz");
+const u8  gMonIcon_IronCarapace[]              = INCBIN_U8("graphics/pokemon/iron_carapace/icon.4bpp");
+
+const u32 gMonFrontPic_TurtwigRedux[]          = INCBIN_U32("graphics/pokemon/turtwig/redux/front.4bpp.lz");
+const u32 gMonBackPic_TurtwigRedux[]           = INCBIN_U32("graphics/pokemon/turtwig/redux/back.4bpp.lz");
+const u32 gMonPalette_TurtwigRedux[]           = INCBIN_U32("graphics/pokemon/turtwig/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_TurtwigRedux[]      = INCBIN_U32("graphics/pokemon/turtwig/redux/shiny.gbapal.lz");
+const u8  gMonIcon_TurtwigRedux[]              = INCBIN_U8("graphics/pokemon/turtwig/redux/icon.4bpp");
+
+const u32 gMonFrontPic_GrotleRedux[]          = INCBIN_U32("graphics/pokemon/grotle/redux/front.4bpp.lz");
+const u32 gMonBackPic_GrotleRedux[]           = INCBIN_U32("graphics/pokemon/grotle/redux/back.4bpp.lz");
+const u32 gMonPalette_GrotleRedux[]           = INCBIN_U32("graphics/pokemon/grotle/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_GrotleRedux[]      = INCBIN_U32("graphics/pokemon/grotle/redux/shiny.gbapal.lz");
+const u8  gMonIcon_GrotleRedux[]              = INCBIN_U8("graphics/pokemon/grotle/redux/icon.4bpp");
+
+const u32 gMonFrontPic_TorterraRedux[]          = INCBIN_U32("graphics/pokemon/torterra/redux/front.4bpp.lz");
+const u32 gMonBackPic_TorterraRedux[]           = INCBIN_U32("graphics/pokemon/torterra/redux/back.4bpp.lz");
+const u32 gMonPalette_TorterraRedux[]           = INCBIN_U32("graphics/pokemon/torterra/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_TorterraRedux[]      = INCBIN_U32("graphics/pokemon/torterra/redux/shiny.gbapal.lz");
+const u8  gMonIcon_TorterraRedux[]              = INCBIN_U8("graphics/pokemon/torterra/redux/icon.4bpp");
+
+const u32 gMonFrontPic_TorterraReduxMega[]          = INCBIN_U32("graphics/pokemon/torterra/redux_mega/front.4bpp.lz");
+const u32 gMonBackPic_TorterraReduxMega[]           = INCBIN_U32("graphics/pokemon/torterra/redux_mega/back.4bpp.lz");
+const u32 gMonPalette_TorterraReduxMega[]           = INCBIN_U32("graphics/pokemon/torterra/redux_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_TorterraReduxMega[]      = INCBIN_U32("graphics/pokemon/torterra/redux_mega/shiny.gbapal.lz");
+const u8  gMonIcon_TorterraReduxMega[]              = INCBIN_U8("graphics/pokemon/torterra/redux_mega/icon.4bpp");
 
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
