@@ -13751,7 +13751,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
 static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 isCrit, bool32 updateFlags)
 {
-    u8 atkStatToUse = (IS_MOVE_PHYSICAL(move) ^ gSwapDamageCategory) ? STAT_ATK : STAT_SPATK;
+    u8 atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_ATK : STAT_SPATK;
     u8 secondaryAtkStatToUse = 0;
     u8 statBattler = battlerAtk;
     //Calculates Highest Attack Stat after stat boosts
@@ -14566,7 +14566,7 @@ void SetSwapDamageCategory(int battler, int target, int move)
             gSwapDamageCategory = FALSE;
             return;
         
-        USE_HIGHEST_OFFENSE:
+        case USE_HIGHEST_OFFENSE:
             {
                 int isUnaware = BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT);
                 int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
@@ -14577,7 +14577,7 @@ void SetSwapDamageCategory(int battler, int target, int move)
             }
             return;
 
-        USE_HIGHEST_DAMAGE:
+        case USE_HIGHEST_DAMAGE:
             {
                 int isUnaware = BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT);
                 int isTargetUnaware = BATTLER_HAS_ABILITY(target, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(target, ABILITY_CONTEMPT);
@@ -14623,7 +14623,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     {
         defStatToUse = STAT_SPDEF;
     }
-    else if (gBattleMoves[move].splitFlag == HITS_DEF || (IS_MOVE_PHYSICAL(move) ^ gSwapDamageCategory))
+    else if (gBattleMoves[move].splitFlag == HITS_DEF || IS_MOVE_PHYSICAL(move))
     {
         defStatToUse = STAT_DEF;
     }
