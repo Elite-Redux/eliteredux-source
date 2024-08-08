@@ -5622,6 +5622,16 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x66,
         .y_offset = 8,
     },
+    [SPECIES_INFERNAPE_REDUX] =
+    {
+        .size = 0x88,
+        .y_offset = 1,
+    },
+    [SPECIES_INFERNAPE_REDUX_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 1,
+    },
     [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x87,
@@ -7906,7 +7916,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 0,
     },
-    [SPECIES_INFERNAPE_REDUX] =
+    [SPECIES_INFERNAPE_REDUX_B] =
     {
         .size = 0x88,
         .y_offset = 0,

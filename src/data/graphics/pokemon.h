@@ -7279,11 +7279,11 @@ const u32 gMonPalette_LuxrayRedux[]         = INCBIN_U32("graphics/pokemon/luxra
 const u32 gMonShinyPalette_LuxrayRedux[]    = INCBIN_U32("graphics/pokemon/luxray/redux/shiny.gbapal.lz");
 const u8  gMonIcon_LuxrayRedux[]            = INCBIN_U8("graphics/pokemon/luxray/redux/icon.4bpp");
 
-const u32 gMonFrontPic_InfernapeRedux[]     = INCBIN_U32("graphics/pokemon/infernape/redux/front.4bpp.lz");
-const u32 gMonBackPic_InfernapeRedux[]      = INCBIN_U32("graphics/pokemon/infernape/redux/back.4bpp.lz");
-const u32 gMonPalette_InfernapeRedux[]      = INCBIN_U32("graphics/pokemon/infernape/redux/normal.gbapal.lz");
-const u32 gMonShinyPalette_InfernapeRedux[] = INCBIN_U32("graphics/pokemon/infernape/redux/shiny.gbapal.lz");
-const u8  gMonIcon_InfernapeRedux[]         = INCBIN_U8("graphics/pokemon/infernape/redux/icon.4bpp");
+const u32 gMonFrontPic_InfernapeReduxB[]     = INCBIN_U32("graphics/pokemon/infernape/redux_B/front.4bpp.lz");
+const u32 gMonBackPic_InfernapeReduxB[]      = INCBIN_U32("graphics/pokemon/infernape/redux_B/back.4bpp.lz");
+const u32 gMonPalette_InfernapeReduxB[]      = INCBIN_U32("graphics/pokemon/infernape/redux_B/normal.gbapal.lz");
+const u32 gMonShinyPalette_InfernapeReduxB[] = INCBIN_U32("graphics/pokemon/infernape/redux_B/shiny.gbapal.lz");
+const u8  gMonIcon_InfernapeReduxB[]         = INCBIN_U8("graphics/pokemon/infernape/redux_B/icon.4bpp");
 
 const u32 gMonFrontPic_CascoonPrimal[]          = INCBIN_U32("graphics/pokemon/cascoon/primal/front.4bpp.lz");
 const u32 gMonBackPic_CascoonPrimal[]           = INCBIN_U32("graphics/pokemon/cascoon/primal/back.4bpp.lz");
@@ -7687,6 +7687,18 @@ const u32 gMonBackPic_MonfernoRedux[]           = INCBIN_U32("graphics/pokemon/m
 const u32 gMonPalette_MonfernoRedux[]           = INCBIN_U32("graphics/pokemon/monferno/redux/normal.gbapal.lz");
 const u32 gMonShinyPalette_MonfernoRedux[]      = INCBIN_U32("graphics/pokemon/monferno/redux/shiny.gbapal.lz");
 const u8  gMonIcon_MonfernoRedux[]              = INCBIN_U8("graphics/pokemon/monferno/redux/icon.4bpp");
+
+const u32 gMonFrontPic_InfernapeRedux[]          = INCBIN_U32("graphics/pokemon/infernape/redux/front.4bpp.lz");
+const u32 gMonBackPic_InfernapeRedux[]           = INCBIN_U32("graphics/pokemon/infernape/redux/back.4bpp.lz");
+const u32 gMonPalette_InfernapeRedux[]           = INCBIN_U32("graphics/pokemon/infernape/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_InfernapeRedux[]      = INCBIN_U32("graphics/pokemon/infernape/redux/shiny.gbapal.lz");
+const u8  gMonIcon_InfernapeRedux[]              = INCBIN_U8("graphics/pokemon/infernape/redux/icon.4bpp");
+
+const u32 gMonFrontPic_InfernapeReduxMega[]          = INCBIN_U32("graphics/pokemon/infernape/redux_mega/front.4bpp.lz");
+const u32 gMonBackPic_InfernapeReduxMega[]           = INCBIN_U32("graphics/pokemon/infernape/redux_mega/back.4bpp.lz");
+const u32 gMonPalette_InfernapeReduxMega[]           = INCBIN_U32("graphics/pokemon/infernape/redux_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_InfernapeReduxMega[]      = INCBIN_U32("graphics/pokemon/infernape/redux_mega/shiny.gbapal.lz");
+const u8  gMonIcon_InfernapeReduxMega[]              = INCBIN_U8("graphics/pokemon/infernape/redux_mega/icon.4bpp");
 
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");

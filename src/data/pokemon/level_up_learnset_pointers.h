@@ -1543,7 +1543,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_CALYREX_ICE_RIDER] = sCalyrexIceRiderLevelUpLearnset,
     [SPECIES_CALYREX_SHADOW_RIDER] = sCalyrexShadowRiderLevelUpLearnset,
 
-    [SPECIES_INFERNAPE_REDUX] = sInfernapeReduxLevelUpLearnset,
+    [SPECIES_INFERNAPE_REDUX_B] = sInfernapeReduxBLevelUpLearnset,
     [SPECIES_NOIBAT_REDUX] = sNoibatReduxLevelUpLearnset,
     [SPECIES_NOIVERN_REDUX] = sNoivernReduxLevelUpLearnset,
     [SPECIES_LUXRAY_REDUX] = sLuxrayReduxLevelUpLearnset,
@@ -1640,6 +1640,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_TORTERRA_REDUX_MEGA] = sTorterraReduxLevelUpLearnset,
     [SPECIES_CHIMCHAR_REDUX] = sChimcharReduxLevelUpLearnset,
     [SPECIES_MONFERNO_REDUX] = sMonfernoReduxLevelUpLearnset,
+    [SPECIES_INFERNAPE_REDUX] = sInfernapeReduxLevelUpLearnset,
+    [SPECIES_INFERNAPE_REDUX_MEGA] = sInfernapeReduxLevelUpLearnset,
     [SPECIES_MINCCINO_REDUX] = sMinccino_ReduxLevelUpLearnset,
     [SPECIES_CINCCINO_REDUX] = sCinccino_ReduxLevelUpLearnset,
 };

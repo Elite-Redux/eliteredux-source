@@ -217,6 +217,16 @@ static const union AnimCmd sAnim_MONFERNO_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_INFERNAPE_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_INFERNAPE_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -727,6 +737,16 @@ static const union AnimCmd *const sAnims_CHIMCHAR_REDUX[] ={
 static const union AnimCmd *const sAnims_MONFERNO_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_MONFERNO_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_INFERNAPE_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_INFERNAPE_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_INFERNAPE_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_INFERNAPE_REDUX_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
@@ -18681,7 +18701,7 @@ static const union AnimCmd *const sAnims_SLAKING_MEGA[] ={
     sAnim_GENERIC,
 };
 
-static const union AnimCmd *const sAnims_INFERNAPE_REDUX[] ={
+static const union AnimCmd *const sAnims_INFERNAPE_REDUX_B[] ={
     sAnim_GeneralFrame0,
     sAnim_GENERIC,
 };
@@ -20302,7 +20322,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(GLIMMORA),
     ANIM_CMD(SLAKING_MEGA),
     ANIM_CMD(GREAVARD),
-    ANIM_CMD(INFERNAPE_REDUX),
+    ANIM_CMD(INFERNAPE_REDUX_B),
     ANIM_CMD(HOUNDSTONE),
     ANIM_CMD(NOIBAT_REDUX),
     ANIM_CMD(FLAMIGO),
@@ -20432,6 +20452,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(TORTERRA_REDUX_MEGA),
     ANIM_CMD(CHIMCHAR_REDUX),
     ANIM_CMD(MONFERNO_REDUX),
+    ANIM_CMD(INFERNAPE_REDUX),
+    ANIM_CMD(INFERNAPE_REDUX_MEGA),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),

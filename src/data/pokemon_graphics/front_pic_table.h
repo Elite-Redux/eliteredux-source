@@ -1116,6 +1116,8 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(TORTERRA_REDUX_MEGA, gMonFrontPic_TorterraReduxMega),
     SPECIES_SPRITE(CHIMCHAR_REDUX, gMonFrontPic_ChimcharRedux),
     SPECIES_SPRITE(MONFERNO_REDUX, gMonFrontPic_MonfernoRedux),
+    SPECIES_SPRITE(INFERNAPE_REDUX, gMonFrontPic_InfernapeRedux),
+    SPECIES_SPRITE(INFERNAPE_REDUX_MEGA, gMonFrontPic_InfernapeReduxMega),
     SPECIES_SPRITE(POPMOTH_MEGA, gMonFrontPic_PopmothMega),
     SPECIES_SPRITE(ARBOK_MEGA, gMonFrontPic_ArbokMega),
     SPECIES_SPRITE(GOLISOPOD_MEGA, gMonFrontPic_GolisopodMega),
@@ -1638,7 +1640,7 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
 
     SPECIES_SPRITE(NOIBAT_REDUX,    gMonFrontPic_NoibatRedux),
     SPECIES_SPRITE(NOIVERN_REDUX,   gMonFrontPic_NoivernRedux),
-    SPECIES_SPRITE(INFERNAPE_REDUX, gMonFrontPic_InfernapeRedux),
+    SPECIES_SPRITE(INFERNAPE_REDUX_B, gMonFrontPic_InfernapeReduxB),
     SPECIES_SPRITE(LUXRAY_REDUX,    gMonFrontPic_LuxrayRedux),
     SPECIES_SPRITE(CASCOON_PRIMAL,     gMonFrontPic_CascoonPrimal),
     SPECIES_SPRITE(MINCCINO_REDUX,    gMonFrontPic_MinccinoRedux),

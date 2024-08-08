@@ -1128,6 +1128,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_TORTERRA_REDUX_MEGA]      = _("Torterra"),
     [SPECIES_CHIMCHAR_REDUX]      = _("Chimchar"),
     [SPECIES_MONFERNO_REDUX]      = _("Monferno"),
+    [SPECIES_INFERNAPE_REDUX]      = _("Infernape"),
+    [SPECIES_INFERNAPE_REDUX_MEGA]      = _("Infernape"),
 
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),
@@ -1670,7 +1672,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_CALYREX_SHADOW_RIDER] = _("Calyrex"),
 
     // Custom Forms
-    [SPECIES_INFERNAPE_REDUX] = _("Infernape"),
+    [SPECIES_INFERNAPE_REDUX_B] = _("Infernape"),
     [SPECIES_NOIBAT_REDUX] = _("Noibat"),
     [SPECIES_NOIVERN_REDUX] = _("Noivern"),
     [SPECIES_LUXRAY_REDUX] = _("Luxray"),

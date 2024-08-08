@@ -937,4 +937,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_MONFERNO_REDUX] = sMonfernoFormSpeciesIdTable,
 
+    [SPECIES_INFERNAPE_REDUX] = sInfernapeFormSpeciesIdTable,
+
 };

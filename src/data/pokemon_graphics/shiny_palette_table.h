@@ -1118,6 +1118,8 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(TORTERRA_REDUX_MEGA, gMonShinyPalette_TorterraReduxMega),
     SPECIES_SHINY_PAL(CHIMCHAR_REDUX, gMonShinyPalette_ChimcharRedux),
     SPECIES_SHINY_PAL(MONFERNO_REDUX, gMonShinyPalette_MonfernoRedux),
+    SPECIES_SHINY_PAL(INFERNAPE_REDUX, gMonShinyPalette_InfernapeRedux),
+    SPECIES_SHINY_PAL(INFERNAPE_REDUX_MEGA, gMonShinyPalette_InfernapeReduxMega),
     SPECIES_SHINY_PAL(POPMOTH_MEGA, gMonShinyPalette_PopmothMega),
     SPECIES_SHINY_PAL(ARBOK_MEGA, gMonShinyPalette_ArbokMega),
     SPECIES_SHINY_PAL(GOLISOPOD_MEGA, gMonShinyPalette_GolisopodMega),
@@ -1639,7 +1641,7 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
 
     SPECIES_SHINY_PAL(NOIBAT_REDUX,    gMonShinyPalette_NoibatRedux),
     SPECIES_SHINY_PAL(NOIVERN_REDUX,   gMonShinyPalette_NoivernRedux),
-    SPECIES_SHINY_PAL(INFERNAPE_REDUX, gMonShinyPalette_InfernapeRedux),
+    SPECIES_SHINY_PAL(INFERNAPE_REDUX_B, gMonShinyPalette_InfernapeReduxB),
     SPECIES_SHINY_PAL(LUXRAY_REDUX,    gMonShinyPalette_LuxrayRedux),
     SPECIES_SHINY_PAL(CASCOON_PRIMAL,  gMonShinyPalette_CascoonPrimal),
     SPECIES_SHINY_PAL(MINCCINO_REDUX, gMonShinyPalette_MinccinoRedux),

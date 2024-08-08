@@ -1639,13 +1639,14 @@
 #define SPECIES_MAIZEMOTH_MEGA              CUSTOM_MEGA_START + 72
 #define SPECIES_POPMOTH_MEGA                CUSTOM_MEGA_START + 73
 #define SPECIES_TORTERRA_REDUX_MEGA         CUSTOM_MEGA_START + 74
+#define SPECIES_INFERNAPE_REDUX_MEGA        CUSTOM_MEGA_START + 75
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_TORTERRA_REDUX_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_INFERNAPE_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
 #define SPECIES_KEKLEONG                    REDUX_FORMS_START + 1
-#define SPECIES_INFERNAPE_REDUX             REDUX_FORMS_START + 2
+#define SPECIES_INFERNAPE_REDUX_B             REDUX_FORMS_START + 2
 #define SPECIES_NOIBAT_REDUX                REDUX_FORMS_START + 3
 #define SPECIES_NOIVERN_REDUX               REDUX_FORMS_START + 4
 #define SPECIES_LUXRAY_REDUX                REDUX_FORMS_START + 5
@@ -1752,8 +1753,9 @@
 #define SPECIES_TORTERRA_REDUX              REDUX_FORMS_START + 102
 #define SPECIES_CHIMCHAR_REDUX              REDUX_FORMS_START + 103
 #define SPECIES_MONFERNO_REDUX              REDUX_FORMS_START + 104
+#define SPECIES_INFERNAPE_REDUX             REDUX_FORMS_START + 105
 
-#define LAST_REDUX_FORM                     SPECIES_MONFERNO_REDUX
+#define LAST_REDUX_FORM                     SPECIES_INFERNAPE_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

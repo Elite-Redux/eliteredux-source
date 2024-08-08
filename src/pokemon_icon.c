@@ -1226,6 +1226,8 @@ const u8 *const gMonIconTable[] =
     [SPECIES_TORTERRA_REDUX_MEGA] = gMonIcon_TorterraReduxMega,
     [SPECIES_CHIMCHAR_REDUX] = gMonIcon_ChimcharRedux,
     [SPECIES_MONFERNO_REDUX] = gMonIcon_MonfernoRedux,
+    [SPECIES_INFERNAPE_REDUX] = gMonIcon_InfernapeRedux,
+    [SPECIES_INFERNAPE_REDUX_MEGA] = gMonIcon_InfernapeReduxMega,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,
@@ -1628,7 +1630,7 @@ const u8 *const gMonIconTable[] =
 
     [SPECIES_NOIBAT_REDUX] = gMonIcon_NoibatRedux,
     [SPECIES_NOIVERN_REDUX] = gMonIcon_NoivernRedux,
-    [SPECIES_INFERNAPE_REDUX] = gMonIcon_InfernapeRedux,
+    [SPECIES_INFERNAPE_REDUX_B] = gMonIcon_InfernapeReduxB,
     [SPECIES_LUXRAY_REDUX] = gMonIcon_LuxrayRedux,
     [SPECIES_MINCCINO_REDUX] = gMonIcon_MinccinoRedux,
     [SPECIES_CINCCINO_REDUX] = gMonIcon_CinccinoRedux,
@@ -2844,7 +2846,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_CLAWITZER_REDUX]       = 0,
     [SPECIES_NOIBAT_REDUX]          = 2,
     [SPECIES_NOIVERN_REDUX]         = 2,
-    [SPECIES_INFERNAPE_REDUX]       = 0,
+    [SPECIES_INFERNAPE_REDUX_B]       = 0,
     [SPECIES_LUXRAY_REDUX]          = 0,
     [SPECIES_MACHOP_REDUX]          = 2,
     [SPECIES_MACHOKE_REDUX]         = 2,

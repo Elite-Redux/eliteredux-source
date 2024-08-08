@@ -27651,6 +27651,11 @@ static const struct LevelUpMove sMonfernoReduxLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sInfernapeReduxLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sCalyrex_Cloud_RiderLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_CONFUSION),
     LEVEL_UP_MOVE(1, MOVE_GRASSY_GLIDE),
@@ -28242,7 +28247,7 @@ static const struct LevelUpMove sLuxrayReduxLevelUpLearnset[] = {
 	LEVEL_UP_END
 };
 
-static const struct LevelUpMove sInfernapeReduxLevelUpLearnset[] = {
+static const struct LevelUpMove sInfernapeReduxBLevelUpLearnset[] = {
 	LEVEL_UP_MOVE( 0, MOVE_CLOSE_COMBAT),
     LEVEL_UP_MOVE( 1, MOVE_PUNISHMENT),
 	LEVEL_UP_MOVE( 1, MOVE_MACH_PUNCH),

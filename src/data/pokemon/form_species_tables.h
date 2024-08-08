@@ -1624,6 +1624,8 @@ static const u16 sMonfernoFormSpeciesIdTable[] = {
 static const u16 sInfernapeFormSpeciesIdTable[] = {
     SPECIES_INFERNAPE,
     SPECIES_INFERNAPE_MEGA,
+    SPECIES_INFERNAPE_REDUX,
+    SPECIES_INFERNAPE_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sDragoniteFormSpeciesIdTable[] = {
