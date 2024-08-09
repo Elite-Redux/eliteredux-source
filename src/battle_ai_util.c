@@ -830,6 +830,7 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness)
         critChance = GetInverseCritChance(battlerAtk, battlerDef, move);
         normalDmg = CalculateMoveDamage(move, battlerAtk, battlerDef, &moveType, 0, FALSE, FALSE, FALSE);
         critDmg = CalculateMoveDamage(move, battlerAtk, battlerDef, &moveType, 0, TRUE, FALSE, FALSE);
+        gSwapDamageCategory = FALSE;
 
         gBattleStruct->dynamicMoveType = moveType | 0x80;
 

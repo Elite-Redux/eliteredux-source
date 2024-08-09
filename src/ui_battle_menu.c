@@ -4251,6 +4251,7 @@ static void PrintSpeedTab(void)
                         SetTypeBeforeUsingMove(move, battlertoCheck);
                         GET_MOVE_TYPE(move, moveType);
                         moveDamage = CalculateMoveDamage(move, battlertoCheck, target, &moveType, 0, FALSE, FALSE, FALSE);
+                        gSwapDamageCategory = FALSE;
                         if(targetCurrentHp <= moveDamage)
                             BlitBitmapToWindow(windowId, sCheck, (x * 8) + x2, (y * 8), 8, 8);
                     }

@@ -898,6 +898,7 @@ void ClearMiscTurnFlags() {
     gBattleScripting.acceleratedTwoTurn = 0;
     gBattleScripting.usingExtraMove = FALSE;
     gChosenMove = MOVE_NONE;
+    gSwapDamageCategory = FALSE;
 }
 
 void HandleAction_TryFinish(void)
@@ -15273,7 +15274,9 @@ s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, s3
 // for AI - get move damage and effectiveness with one function call
 s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, u16 *typeEffectivenessModifier)
 {
-    return DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, FALSE, FALSE, FALSE, typeEffectivenessModifier);
+    int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, FALSE, FALSE, FALSE, typeEffectivenessModifier);
+    gSwapDamageCategory = FALSE;
+    return val;
 }
 
 void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities)
