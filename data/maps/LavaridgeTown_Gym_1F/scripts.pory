@@ -514,8 +514,7 @@ script LavaridgeTown_Gym_1F_EventScript_Cole{
 }
 
 script LavaridgeTown_Gym_1F_EventScript_ColeAndKeegan{
-	yesnobattle(format("I hope you're ready for me. My pokemon will {COLOR GREEN}leave you burned!{COLOR DARK_GRAY}
-The fog around here is very thick, luckily we're all used to it and can see {COLOR GREEN}perfectly fine{COLOR DARK_GRAY}."))
+	yesnobattle(format("I hope you're ready for me. My pokemon will {COLOR GREEN}leave you burned! {COLOR DARK_GRAY}The fog around here is very thick, luckily we're all used to it and can see {COLOR GREEN}perfectly fine{COLOR DARK_GRAY}."))
 		if (var(VAR_RESULT)){
 			starttagbattle(TRAINER_COLE, TRAINER_KEEGAN, TAG_TEAM_COLE_KEEGAN, 0)
 		}

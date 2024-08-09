@@ -698,8 +698,7 @@ script MossdeepCity_Gym_EventScript_GiveBattleText{
 			yesnobattle(format("This {COLOR GREEN}Light Screen{COLOR DARK_GRAY} keeps us protected from special attacks. Nothing can get through."))
 		break
 		case 1:
-			yesnobattle(format("If you think that coming at us with brute force will make it easy, you're sorely mistaken. 
-Even the strongest attacks can be {COLOR GREEN}Reflected{COLOR DARK_GRAY}."))
+			yesnobattle(format("If you think that coming at us with brute force will make it easy, you're sorely mistaken. Even the strongest attacks can be {COLOR GREEN}Reflected{COLOR DARK_GRAY}."))
 		break
 		case 2:
 			yesnobattle(format("With just a bit of psychic powers and the right chant, you can even manipulate {COLOR GREEN}Luck{COLOR DARK_GRAY} to your will."))
@@ -965,32 +964,22 @@ movement MossdeepCity_Gym_Text_LizaSansFromUndertale{
 	walk_in_place_down * 3
 }
 text MossdeepCity_Gym_Text_TateAndLizaIntro0{
-	format("T: We don't need psychic powers to tell us...\p
-L: ...that you're about to have a bad time.")
+	format("T: We don't need psychic powers to tell us...\pL: ...that you're about to have a bad time.")
 }
 text MossdeepCity_Gym_Text_TateAndLizaIntro1{
-	format("T: You think that with just a few battles...\p
-L: ...you're ready for us?\p
-T: Very well, but you better make sure...\p
-L: ...you don't complain too much after you lose!")
+	format("T: You think that with just a few battles...\pL: ...you're ready for us?\pT: Very well, but you better make sure...\pL: ...you don't complain too much after you lose!")
 }
 text MossdeepCity_Gym_Text_TateAndLizaIntroAll{
-	format("T: You've strengthened your mind to the fullest...\p
-L: ...but if you think we didn't save the best for last, you're wrong!!")
+	format("T: You've strengthened your mind to the fullest...\pL: ...but if you think we didn't save the best for last, you're wrong!!")
 }
 text MossdeepCity_Gym_Text_TateAndLizaDefeat0{
-	format("T: You forced our hands into giving you a special challenge, and then won anyway.\p
-L: Guess we're stopping now. Did you get the challenge you want?")
+	format("T: You forced our hands into giving you a special challenge, and then won anyway.\pL: Guess we're stopping now. Did you get the challenge you want?")
 }
 text MossdeepCity_Gym_Text_TateAndLizaDefeat1{
-	format("T: Even though you rushed a bit on your way through....\p
-L: .....you still ended up coming out on top!\p
-T: Congratulations on your victory.\p
-L: We foresee great battles in your future.")
+	format("T: Even though you rushed a bit on your way through....\pL: .....you still ended up coming out on top!\pT: Congratulations on your victory.\pL: We foresee great battles in your future.")
 }
 text MossdeepCity_Gym_Text_TateAndLizaDefeatAll{
-	format("T: You even managed to defeat us...\p
-L: ...so you should have no trouble with the next gym!")
+	format("T: You even managed to defeat us...\pL: ...so you should have no trouble with the next gym!")
 }
 const LOCAL_ID_LIZA = 12
 script MossdeepCity_Gym_EventScript_TateAndLiza{

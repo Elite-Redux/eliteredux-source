@@ -428,18 +428,7 @@ RustboroCity_Gym_Text_RoxanneAllowLegends:
 	.string "Legendary Pokémon?$"
 `
 text RustboroCity_Gym_Text_Tips {
-	format("Yo, I assume you're a new trainer?
-My name's Clyde it's my job to make sure you know what you're heading into.
-Even if you think you have some Pokémon experience you better not let your guard down!
-{COLOR BLUE}Gyms work a little differently from what you'd expect.{COLOR DARK_GRAY}
-{COLOR RED}Every trainer here is fully optional!{COLOR DARK_GRAY}
-So if you're in a hurry you can go right up and fight the Gym Leader.
-However, I wouldn't recommend it.
-The Gym Leaders all have their own reasons but {COLOR RED}they might not appreciate you just charging through.{COLOR DARK_GRAY}
-So take your time, and even if you decide not to battle them make sure you talk to everyone here.
-{COLOR GREEN}They might give you some important hints.{COLOR DARK_GRAY}
-Good luck on your Pokémon journey trainer!
-You'll definitely need it.")
+	format("Yo, I assume you're a new trainer? My name's Clyde it's my job to make sure you know what you're heading into. Even if you think you have some Pokémon experience you better not let your guard down! {COLOR BLUE}Gyms work a little differently from what you'd expect.{COLOR DARK_GRAY} {COLOR RED}Every trainer here is fully optional!{COLOR DARK_GRAY} So if you're in a hurry you can go right up and fight the Gym Leader. However, I wouldn't recommend it. The Gym Leaders all have their own reasons but {COLOR RED}they might not appreciate you just charging through.{COLOR DARK_GRAY} So take your time, and even if you decide not to battle them make sure you talk to everyone here. {COLOR GREEN}They might give you some important hints.{COLOR DARK_GRAY} Good luck on your Pokémon journey trainer! You'll definitely need it.")
 }
 
 script RustboroCity_Gym_EventScript_GiveRockTomb{

@@ -654,8 +654,7 @@ script DewfordTown_Gym_EventScript_EnteredTheRing{
 
 
 text DewfordTown_Gym_Text_BrawlyIntro0{
-	format("Alright, you rushed through the gym and that's not going to fly with me, yeah?
-Hope you're ready for a showdown because you're about to get wiped!")
+    format("Alright, you rushed through the gym and that's not going to fly with me, yeah? Hope you're ready for a showdown because you're about to get wiped!")
 }
 
 text DewfordTown_Gym_Text_BrawlyIntro1{
@@ -667,15 +666,13 @@ text DewfordTown_Gym_Text_BrawlyIntroAll{
 }
 
 text DewfordTown_Gym_Text_BrawlyDefeat0{
-	format("I really thought I had you with that challenge
-I cranked it right up to 11. Guess I understimated you, huh? You've earned my respect!")
+	format("I really thought I had you with that challenge, I cranked it right up to 11. Guess I understimated you, huh? You've earned my respect!")
 }
 text DewfordTown_Gym_Text_BrawlyDefeat1{
 	format("Gotta hand it to you, you destroyed me out there. Kinda bummed I got beaten, but you won fair and square!")
 }
 text DewfordTown_Gym_Text_BrawlyDefeatAll{
-	format("Well played! Man, you beat me without even breaking a sweat.
-Guess I've got some serious training to do if I want to up my game.")
+	format("Well played! Man, you beat me without even breaking a sweat. Guess I've got some serious training to do if I want to up my game.")
 }
 script DewfordTown_Gym_EventScript_CheckTrainers{
     if (defeated(TRAINER_BRAWLY_1)) {

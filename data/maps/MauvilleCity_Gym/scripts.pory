@@ -486,9 +486,7 @@ script MauvilleCity_Gym_EventScript_Ben{
     if (defeated(TRAINER_BEN)){
         msgbox(MauvilleCity_Gym_Text_BenPostBattle, MSGBOX_AUTOCLOSE)
     } else {
-        yesnobattle(format("I'm already amped up to the max!
- I hope you're able to keep, because I'm pumped up and ready to have this tempo going
-{COLOR GREEN}super speed!{COLOR DARK_GRAY}"))
+        yesnobattle(format("I'm already amped up to the max! I hope you're able to keep, because I'm pumped up and ready to have this tempo going {COLOR GREEN}super speed!{COLOR DARK_GRAY}"))
         if (var(VAR_RESULT)){
             trainerbattle_single(TRAINER_BEN, MauvilleCity_Gym_Text_BenIntro , MauvilleCity_Gym_Text_BenDefeat)
         }
@@ -521,8 +519,7 @@ script MauvilleCity_Gym_EventScript_Shawn{
 }
 
 script MauvilleCity_Gym_EventScript_ShawnAndAngelo{
-    yesnobattle(format("Isn't technology amazing? With the {COLOR GREEN}power of magnets{COLOR DARK_GRAY} we can travel without even touching the ground!\p
-Music is my way of letting all my stress out! Keeps me calm, and it's a really great way to {COLOR GREEN}strengthen my mind{COLOR DARK_GRAY}."))
+    yesnobattle(format("Isn't technology amazing? With the {COLOR GREEN}power of magnets{COLOR DARK_GRAY} we can travel without even touching the ground!\pMusic is my way of letting all my stress out! Keeps me calm, and it's a really great way to {COLOR GREEN}strengthen my mind{COLOR DARK_GRAY}."))
     if (var(VAR_RESULT)){
         starttagbattle(TRAINER_SHAWN, TRAINER_ANGELO, TAG_TEAM_SHAWN_ANGELO, 0, MauvilleCity_Gym_Text_ShawnAndAngeloIntro)
     }
@@ -531,27 +528,22 @@ Music is my way of letting all my stress out! Keeps me calm, and it's a really g
 }
 
 text MauvilleCity_Gym_Text_WattsonIntro0{
-    format("Wahahaha, would you look at this? You must think you're something special!
-See how you handle this challenge, then!")
+    format("Wahahaha, would you look at this? You must think you're something special! See how you handle this challenge, then!")
 }
 text MauvilleCity_Gym_Text_WattsonIntro1{
-    format("Not bad, child! You can't afford to cut corners when handling electricity,
-though - let me show you and your Pokemon what I mean!")
+    format("Not bad, child! You can't afford to cut corners when handling electricity, though - let me show you and your Pokemon what I mean!")
 }
 text MauvilleCity_Gym_Text_WattsonIntroAll{
     format("Now this is going to amp me up we shall give it our all wahahahaa")
 }
 text MauvilleCity_Gym_Text_WattsonDefeat0{
-	format("Wahahaha! That battle was electrifying! Even all my tricks couldn't stop you.
-If you're ever in the mood for another challenge, my doors are always open!")
+	format("Wahahaha! That battle was electrifying! Even all my tricks couldn't stop you. If you're ever in the mood for another challenge, my doors are always open!")
 }
 text MauvilleCity_Gym_Text_WattsonDefeat1{
-	format("Well would you look at that? You completely grounded my team hahahaha.
-You showed me a thing or two that's for sure!")
+	format("Well would you look at that? You completely grounded my team hahahaha. You showed me a thing or two that's for sure!")
 }
 text MauvilleCity_Gym_Text_WattsonDefeatAll{
-	format("You practically lit up the stage with that battle hahahaha! You took your time
-and didn't let the high voltage change your flow of battle at all. Good job! Wahahaha!")
+	format("You practically lit up the stage with that battle hahahaha! You took your time and didn't let the high voltage change your flow of battle at all. Good job! Wahahaha!")
 }
 script MauvilleCity_Gym_EventScript_CheckTrainers{
     if (flag(TRAINER_WATTSON_1)) {
