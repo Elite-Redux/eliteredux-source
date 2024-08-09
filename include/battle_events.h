@@ -5,8 +5,8 @@
 #define BATTLE_EVENTS_MAX_REGISTERABLE 16
 
 
-extern u8 gNbBattleEvents;
-extern u8 gCurrBattleEvent;
+static u8 gNbBattleEvents;
+static u8 gCurrBattleEvent;
 
 /**
  * Structure that holds one battle event ID and two 4bits data.
