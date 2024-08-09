@@ -203,7 +203,7 @@ static const u16 sStarterMonDragon[STARTER_MON_COUNT] =
 static const u16 sStarterMonElectric[STARTER_MON_COUNT] =
 {
     SPECIES_PAWMI,
-    SPECIES_MAGNEMITE,
+    SPECIES_SHINX,
     SPECIES_GEODUDE_ALOLAN,
 };
 
@@ -280,7 +280,7 @@ static const u16 sStarterMonRock[STARTER_MON_COUNT] =
 static const u16 sStarterMonSteel[STARTER_MON_COUNT] =
 {
     SPECIES_KLINK,
-    SPECIES_HONEDGE,
+    SPECIES_MAGNEMITE,
     SPECIES_ARON,
 };
 
