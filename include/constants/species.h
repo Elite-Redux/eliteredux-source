@@ -1755,6 +1755,7 @@
 #define SPECIES_MONFERNO_REDUX              REDUX_FORMS_START + 104
 #define SPECIES_INFERNAPE_REDUX             REDUX_FORMS_START + 105
 #define SPECIES_PIPLUP_REDUX                REDUX_FORMS_START + 106
+#define SPECIES_PRINPLUP_REDUX                REDUX_FORMS_START + 107
 
 #define LAST_REDUX_FORM                     SPECIES_PIPLUP_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future

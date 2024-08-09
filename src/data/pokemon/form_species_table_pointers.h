@@ -941,4 +941,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_PIPLUP_REDUX] = sPiplupFormSpeciesIdTable,
 
+    [SPECIES_PRINPLUP_REDUX] = sPrinplupFormSpeciesIdTable,
+
 };

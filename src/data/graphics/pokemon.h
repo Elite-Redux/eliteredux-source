@@ -7706,6 +7706,12 @@ const u32 gMonPalette_PiplupRedux[]           = INCBIN_U32("graphics/pokemon/pip
 const u32 gMonShinyPalette_PiplupRedux[]      = INCBIN_U32("graphics/pokemon/piplup/redux/shiny.gbapal.lz");
 const u8  gMonIcon_PiplupRedux[]              = INCBIN_U8("graphics/pokemon/piplup/redux/icon.4bpp");
 
+const u32 gMonFrontPic_PrinplupRedux[]          = INCBIN_U32("graphics/pokemon/prinplup/redux/front.4bpp.lz");
+const u32 gMonBackPic_PrinplupRedux[]           = INCBIN_U32("graphics/pokemon/prinplup/redux/back.4bpp.lz");
+const u32 gMonPalette_PrinplupRedux[]           = INCBIN_U32("graphics/pokemon/prinplup/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_PrinplupRedux[]      = INCBIN_U32("graphics/pokemon/prinplup/redux/shiny.gbapal.lz");
+const u8  gMonIcon_PrinplupRedux[]              = INCBIN_U8("graphics/pokemon/prinplup/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

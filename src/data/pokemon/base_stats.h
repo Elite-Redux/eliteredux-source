@@ -31724,12 +31724,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_WHISMUR_REDUX] =
     {
-    .baseHP        =  74,
-    .baseAttack    =  51,
-    .baseDefense   =  33,
-    .baseSpeed     =  38,
-    .baseSpAttack  =  71,
-    .baseSpDefense =  33,
+    .baseHP        =  84,
+    .baseAttack    =  36,
+    .baseDefense   =  53,
+    .baseSpeed     =  19,
+    .baseSpAttack  =  45,
+    .baseSpDefense =  63,
     .type1 = TYPE_GHOST,
     .type2 = TYPE_ELECTRIC,
     .catchRate = 190,
@@ -31750,12 +31750,12 @@ const struct BaseStats gBaseStats[] =
     
 [SPECIES_LOUDRED_REDUX] =
     {
-    .baseHP         = 94,
-    .baseAttack     = 61,
-    .baseDefense    = 53,
-    .baseSpeed      = 58,
-    .baseSpAttack   = 81,
-    .baseSpDefense  = 63,
+    .baseHP         = 104,
+    .baseAttack     = 62,
+    .baseDefense    = 73,
+    .baseSpeed      = 39,
+    .baseSpAttack   = 71,
+    .baseSpDefense  = 83,
     .type1 = TYPE_GHOST,
     .type2 = TYPE_ELECTRIC,
     .catchRate = 120,
@@ -41424,6 +41424,31 @@ const struct BaseStats gBaseStats[] =
     .tier = 3,
     },
 
+[SPECIES_PRINPLUP_REDUX] =
+    {
+    .baseHP        = 64,
+    .baseAttack    = 66,
+    .baseDefense   = 68,
+    .baseSpeed     = 50,
+    .baseSpAttack  = 81,
+    .baseSpDefense = 76,
+    .type1 = TYPE_WATER,
+    .type2 = TYPE_WATER,
+    .catchRate = 255,
+    .expYield = 142,
+    .evYield_SpAttack  = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_WATER_1,
+    .eggGroup2 = EGG_GROUP_FIELD,
+    .abilities = {ABILITY_COMPETITIVE, ABILITY_DEFIANT, ABILITY_BIG_PECKS},
+    .innates = {ABILITY_TORRENT, ABILITY_ANTARCTIC_BIRD, ABILITY_SWIFT_SWIM},
+    .bodyColor = BODY_COLOR_BLUE,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
 
 [SPECIES_MAIZEMOTH_MEGA] =
     {

@@ -1643,6 +1643,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_INFERNAPE_REDUX] = sInfernapeReduxLevelUpLearnset,
     [SPECIES_INFERNAPE_REDUX_MEGA] = sInfernapeReduxLevelUpLearnset,
     [SPECIES_PIPLUP_REDUX] = sPiplupReduxLevelUpLearnset,
+    [SPECIES_PRINPLUP_REDUX] = sPrinplupReduxLevelUpLearnset,
     [SPECIES_MINCCINO_REDUX] = sMinccino_ReduxLevelUpLearnset,
     [SPECIES_CINCCINO_REDUX] = sCinccino_ReduxLevelUpLearnset,
 };

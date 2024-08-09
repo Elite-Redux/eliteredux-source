@@ -1628,15 +1628,20 @@ static const u16 sInfernapeFormSpeciesIdTable[] = {
     SPECIES_INFERNAPE_REDUX_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sDragoniteFormSpeciesIdTable[] = {
+    SPECIES_DRAGONITE,
+    SPECIES_DRAGONITE_MEGA,
+    SPECIES_DRAGONITE_DELIVERY,
+    FORM_SPECIES_END,
+};
 static const u16 sPiplupFormSpeciesIdTable[] = {
     SPECIES_PIPLUP,
     SPECIES_PIPLUP_REDUX,
     FORM_SPECIES_END,
 };
-static const u16 sDragoniteFormSpeciesIdTable[] = {
-    SPECIES_DRAGONITE,
-    SPECIES_DRAGONITE_MEGA,
-    SPECIES_DRAGONITE_DELIVERY,
+static const u16 sPrinplupFormSpeciesIdTable[] = {
+    SPECIES_PRINPLUP,
+    SPECIES_PRINPLUP_REDUX,
     FORM_SPECIES_END,
 };
 static const u16 sEmpoleonFormSpeciesIdTable[] = {
