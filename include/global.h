@@ -53,8 +53,8 @@
 }
 
 #define DEBUG_BUILD
-#define DEBUG_POKEMON_MENU               TRUE
 #define DISABLE_STUFF_FOR_PUBLIC_RELEASE TRUE // Disables stuff that shouldn't be in a public release
+#define DEBUG_POKEMON_MENU               !DISABLE_STUFF_FOR_PUBLIC_RELEASE
 
 #define CURRENT_GAME_VERSION 1038
 
