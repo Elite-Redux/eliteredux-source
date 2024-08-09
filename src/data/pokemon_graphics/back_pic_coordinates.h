@@ -5624,7 +5624,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_PIPLUP_REDUX] =
     {
         .size = 0x56,
-        .y_offset = 10,
+        .y_offset = 6,
     },
     [SPECIES_PRINPLUP_REDUX] =
     {
