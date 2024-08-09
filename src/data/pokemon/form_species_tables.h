@@ -1647,6 +1647,8 @@ static const u16 sPrinplupFormSpeciesIdTable[] = {
 static const u16 sEmpoleonFormSpeciesIdTable[] = {
     SPECIES_EMPOLEON,
     SPECIES_EMPOLEON_MEGA,
+    SPECIES_EMPOLEON_REDUX,
+    SPECIES_EMPOLEON_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sTurtwigFormSpeciesIdTable[] = {
