@@ -7712,6 +7712,18 @@ const u32 gMonPalette_PrinplupRedux[]           = INCBIN_U32("graphics/pokemon/p
 const u32 gMonShinyPalette_PrinplupRedux[]      = INCBIN_U32("graphics/pokemon/prinplup/redux/shiny.gbapal.lz");
 const u8  gMonIcon_PrinplupRedux[]              = INCBIN_U8("graphics/pokemon/prinplup/redux/icon.4bpp");
 
+const u32 gMonFrontPic_EmpoleonRedux[]          = INCBIN_U32("graphics/pokemon/empoleon/redux/front.4bpp.lz");
+const u32 gMonBackPic_EmpoleonRedux[]           = INCBIN_U32("graphics/pokemon/empoleon/redux/back.4bpp.lz");
+const u32 gMonPalette_EmpoleonRedux[]           = INCBIN_U32("graphics/pokemon/empoleon/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_EmpoleonRedux[]      = INCBIN_U32("graphics/pokemon/empoleon/redux/shiny.gbapal.lz");
+const u8  gMonIcon_EmpoleonRedux[]              = INCBIN_U8("graphics/pokemon/empoleon/redux/icon.4bpp");
+
+const u32 gMonFrontPic_EmpoleonReduxMega[]          = INCBIN_U32("graphics/pokemon/empoleon/redux_mega/front.4bpp.lz");
+const u32 gMonBackPic_EmpoleonReduxMega[]           = INCBIN_U32("graphics/pokemon/empoleon/redux_mega/back.4bpp.lz");
+const u32 gMonPalette_EmpoleonReduxMega[]           = INCBIN_U32("graphics/pokemon/empoleon/redux_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_EmpoleonReduxMega[]      = INCBIN_U32("graphics/pokemon/empoleon/redux_mega/shiny.gbapal.lz");
+const u8  gMonIcon_EmpoleonReduxMega[]              = INCBIN_U8("graphics/pokemon/empoleon/redux_mega/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

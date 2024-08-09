@@ -943,4 +943,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_PRINPLUP_REDUX] = sPrinplupFormSpeciesIdTable,
 
+    [SPECIES_EMPOLEON_REDUX] = sEmpoleonFormSpeciesIdTable,
+
+    [SPECIES_EMPOLEON_REDUX_MEGA] = sEmpoleonFormSpeciesIdTable,
+
 };
