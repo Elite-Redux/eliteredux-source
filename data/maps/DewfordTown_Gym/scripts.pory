@@ -654,8 +654,8 @@ script DewfordTown_Gym_EventScript_EnteredTheRing{
 
 
 text DewfordTown_Gym_Text_BrawlyIntro0{
-    format("Alright, you rushed through the gym and that's not going to fly with me,
-yeah? Hope you're ready for a showdown because you're about to get wiped!")
+	format("Alright, you rushed through the gym and that's not going to fly with me, yeah?
+Hope you're ready for a showdown because you're about to get wiped!")
 }
 
 text DewfordTown_Gym_Text_BrawlyIntro1{
