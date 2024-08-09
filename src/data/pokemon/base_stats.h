@@ -41398,6 +41398,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_PIPLUP_REDUX] =
+    {
+    .baseHP        = 53,
+    .baseAttack    = 51,
+    .baseDefense   = 53,
+    .baseSpeed     = 40,
+    .baseSpAttack  = 61,
+    .baseSpDefense = 56,
+    .type1 = TYPE_WATER,
+    .type2 = TYPE_WATER,
+    .catchRate = 255,
+    .expYield = 63,
+    .evYield_SpAttack  = 1,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_WATER_1,
+    .eggGroup2 = EGG_GROUP_FIELD,
+    .abilities = {ABILITY_COMPETITIVE, ABILITY_DEFIANT, ABILITY_BIG_PECKS},
+    .innates = {ABILITY_TORRENT, ABILITY_THICK_FAT, ABILITY_SWIFT_SWIM},
+    .bodyColor = BODY_COLOR_BLUE,
+    .noFlip = FALSE,
+    .tier = 3,
+    },
+
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

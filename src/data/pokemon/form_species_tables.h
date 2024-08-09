@@ -1628,6 +1628,11 @@ static const u16 sInfernapeFormSpeciesIdTable[] = {
     SPECIES_INFERNAPE_REDUX_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sPiplupFormSpeciesIdTable[] = {
+    SPECIES_PIPLUP,
+    SPECIES_PIPLUP_REDUX,
+    FORM_SPECIES_END,
+};
 static const u16 sDragoniteFormSpeciesIdTable[] = {
     SPECIES_DRAGONITE,
     SPECIES_DRAGONITE_MEGA,
