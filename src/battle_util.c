@@ -6086,6 +6086,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect += UseIntimidateClone(battler, ABILITY_MALICIOUS);
         }
         
+        // Monkey Business
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_TERRIFY)) {
+            effect += UseIntimidateClone(battler, ABILITY_TERRIFY);
+        }
+        
         // Water Veil
         if(CheckAndSetSwitchInAbility(battler, ABILITY_WATER_VEIL)){
             if (!(gStatuses3[battler] & STATUS3_AQUA_RING))

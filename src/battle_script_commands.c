@@ -12821,6 +12821,7 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
     switch(ability){
         case ABILITY_INTIMIDATE:
         case ABILITY_SCARE:
+        case ABILITY_TERRIFY:
         case ABILITY_FEARMONGER:
         case ABILITY_YUKI_ONNA:
             //Abilities that are immune to this effect
@@ -12904,7 +12905,10 @@ static void Cmd_battlemacros(void)
             for(i = 0; i < numStats; i++){
                 statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], opposingBattler);
                 if(!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE){
-                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG) ? 1 : -1), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
+                    s8 change = -1;
+                    if (BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG)) change *= -1;
+                    if (gIntimidateCloneData->statChange) change *= gIntimidateCloneData->statChange;
+                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(change), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
                     statslowered++;
                     gBattlerTarget = opposingBattler;
                     //For Abilities with multiple stats to lower - {} are necessary since this is a macro
@@ -12968,7 +12972,10 @@ static void Cmd_battlemacros(void)
             for(i = 0; i < numStats; i++){
                 statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], opposingBattler);
                 if(!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE){
-                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG) ? 1 : -1), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
+                    s8 change = -1;
+                    if (BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG)) change *= -1;
+                    if (gIntimidateCloneData->statChange) change *= gIntimidateCloneData->statChange;
+                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(change), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
                     statslowered++;
                     gBattlerTarget = opposingBattler;
                     //For Abilities with multiple stats to lower - {} are necessary since this is a macro

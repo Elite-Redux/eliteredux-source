@@ -11706,4 +11706,11 @@ const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES] = {
         },
         .targetBoth = TRUE,
     },
+    [I_CLONE_TERRIFY] = {
+        .ability = ABILITY_TERRIFY,
+        .numStatsLowered = 2,
+        .statsLowered = {STAT_SPATK, 0, 0},
+        .statChange = 2,
+        .targetBoth = TRUE,
+    },
 };
