@@ -34774,12 +34774,12 @@ static const struct TrainerMonItemCustomMoves sParty_SidneyInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_GRENINJA_BATTLE_BOND,
-    .heldItem = ITEM_LIFE_ORB,
+    .species = SPECIES_ALAKAZAM_REDUX,
+    .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
-    .evs = {0, 0, 4, 252, 0, 252},
+    .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_WATER_SHURIKEN, MOVE_DARK_PULSE, MOVE_GRASS_KNOT, MOVE_ICE_BEAM
+    .moves = MOVE_DARK_PULSE, MOVE_AURA_SPHERE, MOVE_PSYCHIC, MOVE_SLUDGE_BOMB
     },
     {
     .lvl = 0,
@@ -35005,12 +35005,12 @@ static const struct TrainerMonItemCustomMoves sParty_GlaciaInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_IRON_BUNDLE,
+    .species = SPECIES_WEAVILE,
     .heldItem = ITEM_FOCUS_SASH,
-    .ability = 1,
-    .evs = {252, 0, 4, 0, 0, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_TAUNT, MOVE_SCALD, MOVE_BLIZZARD, MOVE_FREEZE_DRY
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_TRIPLE_AXEL, MOVE_KNOCK_OFF, MOVE_FAKE_OUT, MOVE_NIGHT_SLASH
     },
     {
     .lvl = 0,
@@ -35111,7 +35111,7 @@ static const struct TrainerMonItemCustomMoves sParty_DrakeInsane[] = {
     {
     .lvl = 0,
     .species = SPECIES_KYUREM_BLACK,
-    .heldItem = ITEM_HEAVY_DUTY_BOOTS,
+    .heldItem = ITEM_SITRUS_BERRY,
     .ability = 1,
     .evs = {0, 252, 4, 0, 0, 252},
     .nature = NATURE_JOLLY,
@@ -35124,12 +35124,12 @@ static const struct TrainerMonItemCustomMoves sParty_DrakeInsane[] = {
     .ability = 2,
     .evs = {8, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_CLOSE_COMBAT, MOVE_DRAGON_RUSH, MOVE_COLLISION_COURSE, MOVE_FIRE_PUNCH
+    .moves = MOVE_IRON_HEAD, MOVE_DRAGON_RUSH, MOVE_COLLISION_COURSE, MOVE_FIRE_PUNCH
     },
     {
     .lvl = 0,
     .species = SPECIES_RAYQUAZA,
-    .heldItem = ITEM_LUM_BERRY,
+    .heldItem = ITEM_LIFE_ORB,
     .ability = 1,
     .evs = {0, 252, 4, 0, 0, 252},
     .nature = NATURE_ADAMANT,
