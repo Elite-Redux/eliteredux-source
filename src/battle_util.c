@@ -8651,6 +8651,27 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 					effect++;
 				}
 		}
+		
+		// Beautiful Music
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BEAUTIFUL_MUSIC)) {
+            if (ShouldApplyOnHitAffect(gBattlerTarget)
+                && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
+                && IsBattlerAlive(gBattlerTarget)
+                && (Random() % 100) < 50
+                && !BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_OBLIVIOUS)
+                && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
+                && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != GetGenderFromSpeciesAndPersonality(speciesDef, pidDef)
+                && !(gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
+                && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != MON_GENDERLESS
+                && GetGenderFromSpeciesAndPersonality(speciesDef, pidDef) != MON_GENDERLESS)
+            {
+				gBattleScripting.abilityPopupOverwrite = ABILITY_BEAUTIFUL_MUSIC;
+                gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_BeautifulMusicActivates;
+                effect++;
+            }
+		}
 
         // Resonance
 		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RESONANCE)){

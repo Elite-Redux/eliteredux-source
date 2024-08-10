@@ -180,6 +180,7 @@ extern const u8 BattleScript_ColorChangeActivates[];
 extern const u8 BattleScript_RoughSkinActivates[];
 extern const u8 BattleScript_IronBarbsActivates[];
 extern const u8 BattleScript_CuteCharmActivates[];
+extern const u8 BattleScript_BeautifulMusicActivates[];
 extern const u8 BattleScript_AbilityStatusEffect[];
 extern const u8 BattleScript_AbilitySetFear[];
 extern const u8 BattleScript_AbilityStatusEffectSafe[];

@@ -10748,6 +10748,12 @@ BattleScript_AngelsWrathProtectEffect::
 	restoreattackerandtargetfrom34
 	return
 
+BattleScript_BeautifulMusicActivates::
+	swapbattlerandtargetvia34
+	call BattleScript_CuteCharmActivates
+	restoreattackerandtargetfrom34
+	return
+
 BattleScript_CuteCharmActivates::
 	call BattleScript_AbilityPopUp
 	status2animation BS_ATTACKER, STATUS2_INFATUATION
@@ -10781,7 +10787,7 @@ BattleScript_AbilityStatusEffect::
 BattleScript_AbilitySetFear::
 	saveattackerandtargetto34
 	jumpifstatus4 BS_STACK_2, STATUS4_FEAR, BattleScript_AbilitySetFear_Return
-	copybyte gBattlerAbility, gStackBattler1
+	copybyte gBattlerAttacker, gStackBattler1
 	copybyte gBattlerTarget, gStackBattler2
 	call BattleScript_AbilityPopUp
 	call BattleScript_SetFear
