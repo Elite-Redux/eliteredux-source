@@ -3581,7 +3581,11 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_GENERIC_BATTLER_TIMERS:
-            if (!gVolatileStructs[gActiveBattler].started.fear) gVolatileStructs[gActiveBattler].fear = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.fear)
+            {
+                gStatuses4[gActiveBattler] &= ~STATUS4_FEAR;
+                gVolatileStructs[gActiveBattler].fear = FALSE;
+            }
             if (!gVolatileStructs[gActiveBattler].started.rapidResponse) gVolatileStructs[gActiveBattler].rapidResponse = FALSE;
             if (!gVolatileStructs[gActiveBattler].started.readiedAction) gVolatileStructs[gActiveBattler].readiedAction = FALSE;
             if (!gVolatileStructs[gActiveBattler].started.showdownMode) gVolatileStructs[gActiveBattler].showdownMode = FALSE;
@@ -10045,6 +10049,21 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                     effect++;
                 }
+            }
+
+            // Menacing Situation
+            if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_MENACING_SITUATION)) {
+                if (ShouldApplyOnHitAffect(opponent)
+                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && !gVolatileStructs[battler].fear
+                    && (Random() % 100) < 20) {
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_MENACING_SITUATION;
+                        gStackBattler1 = battler;
+                        gStackBattler2 = opponent;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AbilitySetFear;
+                        effect++;
+                    }
             }
 
             {

@@ -129,7 +129,7 @@ enum
     //STATUS_INFO_FLINCHED,
     STATUS_INFO_UPROAR,
     STATUS_INFO_BIDE,
-    STATUS_INFO_INFUATION,
+    STATUS_INFO_INFATUATION,
     STATUS_INFO_FOCUS_ENERGY,
     STATUS_INFO_TRANSFORMED,
     STATUS_INFO_ESCAPE_PREVENTION,
@@ -727,7 +727,7 @@ void UI_Battle_Menu_Init(MainCallback callback)
                     if(gBattleMons[j].status2 & STATUS2_BIDE)
                         isExtraInfoShown = TRUE;
                 break;
-                case STATUS_INFO_INFUATION:
+                case STATUS_INFO_INFATUATION:
                     if(gBattleMons[j].status2 & STATUS2_INFATUATION)
                         isExtraInfoShown = TRUE;
                 break;
@@ -2453,7 +2453,7 @@ static void PrintStatusTab(void){
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;
-            case STATUS_INFO_INFUATION:{
+            case STATUS_INFO_INFATUATION:{
                 u8 infuatedWith = 0;
                 u16 species = SPECIES_NONE;
 

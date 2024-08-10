@@ -593,6 +593,7 @@ static const u8 sAbilityBeautifulMusicDescription[] = _("Sound-based moves have 
 static const u8 sAbilitySnowSongDescription[] = _("Sound moves become Ice-\ntype moves and get a 1.2x boost.");
 static const u8 sAbilityResonanceDescription[] = _("Sound moves cause the target to \nbleed.");
 static const u8 sAbilityCuteAntecedenceDescription[] = _("At full HP, gives +1 priority to\nits Fairy-type moves.");
+static const u8 sAbilityMenacingSituationDescription[] = _("20% chance to Fear on contact.\nAlso works on offense.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1220,6 +1221,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SNOW_SONG] = _("Snow Song"),
     [ABILITY_RESONANCE] = _("Resonance"),
     [ABILITY_CUTE_ANTECEDENCE] = _("Cute Antecedence"),
+    [ABILITY_MENACING_SITUATION] = _("Menacing Situation"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1848,4 +1850,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SNOW_SONG] = sAbilitySnowSongDescription,
     [ABILITY_RESONANCE] = sAbilityResonanceDescription,
     [ABILITY_CUTE_ANTECEDENCE] = sAbilityCuteAntecedenceDescription,
+    [ABILITY_MENACING_SITUATION] = sAbilityMenacingSituationDescription,
 };
