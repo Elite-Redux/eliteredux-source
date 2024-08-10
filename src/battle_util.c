@@ -15427,7 +15427,7 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
 
     if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
-    if(gBattleMoves[move].effect == EFFECT_IGNORE_TYPE_IMMUNITY && defType == gBattleMoves[move].argument && mod == UQ_4_12(0.0))
+    if(gBattleMoves[move].effect == EFFECT_IGNORE_TYPE_IMMUNITY && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
     if(gBattleMoves[move].effect == EFFECT_SE_AGAINST_TYPE_HIT && defType == gBattleMoves[move].argument)
         mod = UQ_4_12(2.0); // super-effective
