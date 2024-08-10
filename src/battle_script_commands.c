@@ -1985,6 +1985,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
                 || gBattleMoves[move].effect == MOVE_SHEER_COLD
                 || move == MOVE_BLIZZARD))
         return 101;
+    else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SHINY_LIGHTNING, atkAbility) && gBattleMoves[move].effect == EFFECT_THUNDER)
+        return 101;
 
     // Check Wonder Skin.
     if ((BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_WONDER_SKIN, defAbility) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_PRIM_AND_PROPER, defAbility)) && IS_MOVE_STATUS(move))
@@ -2005,6 +2007,9 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
 
     if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_ILLUMINATE, atkAbility) || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_PLASMA_LAMP, atkAbility) || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_REFRIGERATOR, atkAbility))
         calc = (calc * 120) / 100; // 1.2 illuminate boost
+    
+    if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SHINY_LIGHTNING, atkAbility))
+        calc = calc * 120 / 100;
 
     if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_PIXIE_POWER, atkAbility))
         calc = (calc * 120) / 100; // 1.2 Pixie boost

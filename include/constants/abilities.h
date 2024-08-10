@@ -644,8 +644,9 @@
 #define ABILITY_RESONANCE 622 // Sound moves cause the target to  bleed.
 #define ABILITY_CUTE_ANTECEDENCE 623 // At full HP, gives +1 priority to its Fairy-type moves.
 #define ABILITY_MENACING_SITUATION 624 // 20% chance to Fear on contact. Also works on offense.
+#define ABILITY_SHINY_LIGHTNING 625 // Grants a 1.2x accuracy boost. Thunder never misses.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_MENACING_SITUATION + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SHINY_LIGHTNING + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
