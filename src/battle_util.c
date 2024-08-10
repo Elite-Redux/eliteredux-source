@@ -13761,6 +13761,12 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_SWORD_OF_RUIN)
+
+            // Last Stand
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_LAST_STAND))
+            {
+                statBase = statBase + (statBase * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
+            }
                     
             // Marvel Scale
             if (BATTLER_HAS_ABILITY(battler, ABILITY_MARVEL_SCALE)
@@ -13784,6 +13790,12 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_BEADS_OF_RUIN)
+
+            // Last Stand
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_LAST_STAND))
+            {
+                statBase = statBase + (statBase * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
+            }
 
             // Flower Gift
             if (BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT)

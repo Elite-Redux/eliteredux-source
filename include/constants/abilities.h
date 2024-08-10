@@ -647,8 +647,9 @@
 #define ABILITY_SHINY_LIGHTNING 625 // Grants a 1.2x accuracy boost. Thunder never misses.
 #define ABILITY_TERRIFY 626 // Lowers foes' Sp. Atk by two stages on entry.
 #define ABILITY_ICE_DOWNFALL 627 // Counters contact with 60BP Icicle Crash.
+#define ABILITY_LAST_STAND 628 // Def and SpDef increase as HP drops. Max 1.6x.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ICE_DOWNFALL + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_LAST_STAND + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
