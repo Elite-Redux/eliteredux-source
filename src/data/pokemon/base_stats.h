@@ -41529,6 +41529,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 4,
     },
 
+    [SPECIES_STEENEE_REDUX] =
+    {
+    .baseHP        = 52,
+    .baseAttack    = 40,
+    .baseDefense   = 48,
+    .baseSpeed     = 62,
+    .baseSpAttack  = 40,
+    .baseSpDefense = 48,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_GRASS,
+    .catchRate = 120,
+    .expYield = 102,
+    .evYield_Speed     = 2,
+    .item2 = ITEM_GRASSY_SEED,
+    .genderRatio = MON_FEMALE,
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_GRASS,
+    .eggGroup2 = EGG_GROUP_GRASS,
+    .abilities = {ABILITY_OBLIVIOUS, ABILITY_RECKLESS, ABILITY_FRIEND_GUARD},
+    .innates = {ABILITY_OVERGROW, ABILITY_CHLOROPHYLL, ABILITY_THICK_FAT},
+    .bodyColor = BODY_COLOR_PURPLE,
+    .noFlip = TRUE,
+    .tier = 0,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

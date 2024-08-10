@@ -7730,6 +7730,12 @@ const u32 gMonPalette_BounsweetRedux[]           = INCBIN_U32("graphics/pokemon/
 const u32 gMonShinyPalette_BounsweetRedux[]      = INCBIN_U32("graphics/pokemon/bounsweet/redux/shiny.gbapal.lz");
 const u8  gMonIcon_BounsweetRedux[]              = INCBIN_U8("graphics/pokemon/bounsweet/redux/icon.4bpp");
 
+const u32 gMonFrontPic_SteeneeRedux[]          = INCBIN_U32("graphics/pokemon/steenee/redux/front.4bpp.lz");
+const u32 gMonBackPic_SteeneeRedux[]           = INCBIN_U32("graphics/pokemon/steenee/redux/back.4bpp.lz");
+const u32 gMonPalette_SteeneeRedux[]           = INCBIN_U32("graphics/pokemon/steenee/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_SteeneeRedux[]      = INCBIN_U32("graphics/pokemon/steenee/redux/shiny.gbapal.lz");
+const u8  gMonIcon_SteeneeRedux[]              = INCBIN_U8("graphics/pokemon/steenee/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

@@ -1233,6 +1233,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_EMPOLEON_REDUX] = gMonIcon_EmpoleonRedux,
     [SPECIES_EMPOLEON_REDUX_MEGA] = gMonIcon_EmpoleonReduxMega,
     [SPECIES_BOUNSWEET_REDUX] = gMonIcon_BounsweetRedux,
+    [SPECIES_STEENEE_REDUX] = gMonIcon_SteeneeRedux,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,
