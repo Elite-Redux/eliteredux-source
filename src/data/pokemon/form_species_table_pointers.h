@@ -947,4 +947,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_EMPOLEON_REDUX_MEGA] = sEmpoleonFormSpeciesIdTable,
 
+    [SPECIES_BOUNSWEET_REDUX] = sBounsweetFormSpeciesIdTable,
+
 };

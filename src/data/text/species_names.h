@@ -1134,6 +1134,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_PRINPLUP_REDUX]      = _("Prinplup"),
     [SPECIES_EMPOLEON_REDUX]      = _("Empoleon"),
     [SPECIES_EMPOLEON_REDUX_MEGA]      = _("Empoleon"),
+    [SPECIES_BOUNSWEET_REDUX]      = _("Bounsweet"),
 
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),

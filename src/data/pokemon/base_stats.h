@@ -41502,6 +41502,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_BOUNSWEET_REDUX] =
+    {
+    .baseHP        = 42,
+    .baseAttack    = 30,
+    .baseDefense   = 38,
+    .baseSpeed     = 32,
+    .baseSpAttack  = 30,
+    .baseSpDefense = 38,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_GRASS,
+    .catchRate = 235,
+    .expYield = 42,
+    .evYield_HP    = 1,
+    .item2 = ITEM_GRASSY_SEED,
+    .genderRatio = MON_FEMALE,
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_GRASS,
+    .eggGroup2 = EGG_GROUP_GRASS,
+    .abilities = {ABILITY_OBLIVIOUS, ABILITY_PRANKSTER, ABILITY_SWEET_VEIL},
+    .innates = {ABILITY_OVERGROW, ABILITY_LEAF_GUARD, ABILITY_GRASS_PELT},
+    .bodyColor = BODY_COLOR_PURPLE,
+    .noFlip = FALSE,
+    .tier = 4,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

@@ -7724,6 +7724,12 @@ const u32 gMonPalette_EmpoleonReduxMega[]           = INCBIN_U32("graphics/pokem
 const u32 gMonShinyPalette_EmpoleonReduxMega[]      = INCBIN_U32("graphics/pokemon/empoleon/redux_mega/shiny.gbapal.lz");
 const u8  gMonIcon_EmpoleonReduxMega[]              = INCBIN_U8("graphics/pokemon/empoleon/redux_mega/icon.4bpp");
 
+const u32 gMonFrontPic_BounsweetRedux[]          = INCBIN_U32("graphics/pokemon/bounsweet/redux/front.4bpp.lz");
+const u32 gMonBackPic_BounsweetRedux[]           = INCBIN_U32("graphics/pokemon/bounsweet/redux/back.4bpp.lz");
+const u32 gMonPalette_BounsweetRedux[]           = INCBIN_U32("graphics/pokemon/bounsweet/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_BounsweetRedux[]      = INCBIN_U32("graphics/pokemon/bounsweet/redux/shiny.gbapal.lz");
+const u8  gMonIcon_BounsweetRedux[]              = INCBIN_U8("graphics/pokemon/bounsweet/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");
