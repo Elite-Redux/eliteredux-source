@@ -16873,6 +16873,8 @@ bool32 IsHealingMoveEffect(u16 effect)
     case EFFECT_JUNGLE_HEALING:
     case EFFECT_HEAL_PULSE:
     case EFFECT_MATCHA_GOTCHA:
+    case EFFECT_STRENGTH_SAP:
+    case EFFECT_DRAIN_BRAIN:
         return TRUE;
     default:
         return FALSE;

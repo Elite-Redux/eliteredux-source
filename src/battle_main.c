@@ -5015,7 +5015,7 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
         priority++;
     }
     
-	if ((GetBattlerAbility(battlerId) == ABILITY_TRIAGE || BattlerHasInnate(battlerId, ABILITY_TRIAGE)))
+	if (BattlerHasAbility(battlerId, battlerId, ABILITY_TRIAGE))
     {
         if (IsHealingMoveEffect(gBattleMoves[move].effect)) priority += 3;
     }
