@@ -7706,6 +7706,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+        if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ICE_DOWNFALL)){
+            if(ShouldApplyOnHitAffect(gBattlerAttacker)
+                && IsMoveMakingContact(move, gBattlerAttacker)){
+                    UseOutOfTurnAttack(battler, gBattlerAttacker, ABILITY_ICE_DOWNFALL, MOVE_ICICLE_CRASH, 60);
+            }
+        }
+
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ATOMIC_BURST)){
             if(ShouldApplyOnHitAffect(gBattlerAttacker)
                 && gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE){
