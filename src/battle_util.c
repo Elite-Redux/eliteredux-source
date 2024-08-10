@@ -7351,10 +7351,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			}
 			
 			// Water Absorb
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_WATER_ABSORB) || BATTLER_HAS_ABILITY(battler, ABILITY_OLD_MARINER)){
+			if(BATTLER_HAS_ABILITY(battler, ABILITY_WATER_ABSORB)){
 				if (move != MOVE_NONE && moveType == TYPE_WATER){
                     effect = 1;
                     gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_WATER_ABSORB;
+				}
+			}
+			
+			// Water Absorb
+			if(BATTLER_HAS_ABILITY(battler, ABILITY_OLD_MARINER)){
+				if (move != MOVE_NONE && moveType == TYPE_WATER){
+                    effect = 1;
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_OLD_MARINER;
 				}
 			}
 			
@@ -14145,13 +14153,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         if (gBattleMons[battlerAtk].status1 & STATUS1_ANY && IS_MOVE_PHYSICAL(move))
             MulModifier(&modifier, UQ_4_12(1.5));
         break;
-	case ABILITY_SEAWEED:
-		if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(battlerDef, TYPE_FIRE))
-        {
-            MulModifier(&modifier, UQ_4_12(2.0));
-            if (updateFlags)
-                RecordAbilityBattle(battlerDef, ABILITY_SEAWEED);
-        }
     }
 	
 	//Innates
@@ -14228,14 +14229,9 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
 	}
 	
 	//Seaweed
-	if(BattlerHasInnate(battlerAtk, ABILITY_SEAWEED)){
+	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SEAWEED) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_OLD_MARINER))
 		if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(battlerDef, TYPE_FIRE))
-        {
             MulModifier(&modifier, UQ_4_12(2.0));
-            if (updateFlags)
-                RecordAbilityBattle(battlerDef, ABILITY_SEAWEED);
-        }
-	}
 
     // target's abilities
     switch (GetBattlerAbility(battlerDef))
@@ -14278,14 +14274,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             MulModifier(&modifier, UQ_4_12(0.5));
             if (updateFlags)
                 RecordAbilityBattle(battlerDef, ABILITY_RAW_WOOD);
-        }
-        break;
-	case ABILITY_SEAWEED:
-        if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS))
-        {
-            MulModifier(&modifier, UQ_4_12(0.5));
-            if (updateFlags)
-                RecordAbilityBattle(battlerDef, ABILITY_SEAWEED);
         }
         break;
     case ABILITY_WATER_COMPACTION:
@@ -14340,14 +14328,9 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     }
 	
 	//Seaweed
-	if(BattlerHasInnate(battlerDef, ABILITY_SEAWEED) || BattlerHasInnate(battlerDef, ABILITY_OLD_MARINER)){
+	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_SEAWEED) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_OLD_MARINER))
         if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS))
-        {
             MulModifier(&modifier, UQ_4_12(0.5));
-            if (updateFlags)
-                RecordAbilityBattle(battlerDef, ABILITY_SEAWEED);
-        }
-    }
 	
 	//Overcoat
 	if(BattlerHasInnate(battlerDef, ABILITY_OVERCOAT)){
