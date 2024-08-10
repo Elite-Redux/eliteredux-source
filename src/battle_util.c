@@ -3581,7 +3581,11 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_GENERIC_BATTLER_TIMERS:
-            if (!gVolatileStructs[gActiveBattler].started.fear) gVolatileStructs[gActiveBattler].fear = FALSE;
+            if (!gVolatileStructs[gActiveBattler].started.fear)
+            {
+                gStatuses4[gActiveBattler] &= ~STATUS4_FEAR;
+                gVolatileStructs[gActiveBattler].fear = FALSE;
+            }
             if (!gVolatileStructs[gActiveBattler].started.rapidResponse) gVolatileStructs[gActiveBattler].rapidResponse = FALSE;
             if (!gVolatileStructs[gActiveBattler].started.readiedAction) gVolatileStructs[gActiveBattler].readiedAction = FALSE;
             if (!gVolatileStructs[gActiveBattler].started.showdownMode) gVolatileStructs[gActiveBattler].showdownMode = FALSE;
@@ -6082,6 +6086,11 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect += UseIntimidateClone(battler, ABILITY_MALICIOUS);
         }
         
+        // Monkey Business
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_TERRIFY)) {
+            effect += UseIntimidateClone(battler, ABILITY_TERRIFY);
+        }
+        
         // Water Veil
         if(CheckAndSetSwitchInAbility(battler, ABILITY_WATER_VEIL)){
             if (!(gStatuses3[battler] & STATUS3_AQUA_RING))
@@ -7342,10 +7351,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			}
 			
 			// Water Absorb
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_WATER_ABSORB) || BATTLER_HAS_ABILITY(battler, ABILITY_OLD_MARINER)){
+			if(BATTLER_HAS_ABILITY(battler, ABILITY_WATER_ABSORB)){
 				if (move != MOVE_NONE && moveType == TYPE_WATER){
                     effect = 1;
                     gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_WATER_ABSORB;
+				}
+			}
+			
+			// Water Absorb
+			if(BATTLER_HAS_ABILITY(battler, ABILITY_OLD_MARINER)){
+				if (move != MOVE_NONE && moveType == TYPE_WATER){
+                    effect = 1;
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_OLD_MARINER;
 				}
 			}
 			
@@ -7694,6 +7711,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if(ShouldApplyOnHitAffect(gBattlerAttacker)
                 && IsMoveMakingContact(move, gBattlerAttacker)){
                     UseOutOfTurnAttack(battler, gBattlerAttacker, ABILITY_PARRY, MOVE_MACH_PUNCH, 0);
+            }
+        }
+
+        if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ICE_DOWNFALL)){
+            if(ShouldApplyOnHitAffect(gBattlerAttacker)
+                && IsMoveMakingContact(move, gBattlerAttacker)){
+                    UseOutOfTurnAttack(battler, gBattlerAttacker, ABILITY_ICE_DOWNFALL, MOVE_ICICLE_CRASH, 60);
             }
         }
 
@@ -8634,6 +8658,27 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
 					effect++;
 				}
+		}
+		
+		// Beautiful Music
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BEAUTIFUL_MUSIC)) {
+            if (ShouldApplyOnHitAffect(gBattlerTarget)
+                && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
+                && IsBattlerAlive(gBattlerTarget)
+                && (Random() % 100) < 50
+                && !BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_OBLIVIOUS)
+                && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
+                && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != GetGenderFromSpeciesAndPersonality(speciesDef, pidDef)
+                && !(gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
+                && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != MON_GENDERLESS
+                && GetGenderFromSpeciesAndPersonality(speciesDef, pidDef) != MON_GENDERLESS)
+            {
+				gBattleScripting.abilityPopupOverwrite = ABILITY_BEAUTIFUL_MUSIC;
+                gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_BeautifulMusicActivates;
+                effect++;
+            }
 		}
 
         // Resonance
@@ -10045,6 +10090,21 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                     effect++;
                 }
+            }
+
+            // Menacing Situation
+            if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_MENACING_SITUATION)) {
+                if (ShouldApplyOnHitAffect(opponent)
+                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && !gVolatileStructs[battler].fear
+                    && (Random() % 100) < 20) {
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_MENACING_SITUATION;
+                        gStackBattler1 = battler;
+                        gStackBattler2 = opponent;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AbilitySetFear;
+                        effect++;
+                    }
             }
 
             {
@@ -13730,6 +13790,12 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_SWORD_OF_RUIN)
+
+            // Last Stand
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_LAST_STAND))
+            {
+                statBase = statBase + (statBase * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
+            }
                     
             // Marvel Scale
             if (BATTLER_HAS_ABILITY(battler, ABILITY_MARVEL_SCALE)
@@ -13753,6 +13819,12 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_BEADS_OF_RUIN)
+
+            // Last Stand
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_LAST_STAND))
+            {
+                statBase = statBase + (statBase * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
+            }
 
             // Flower Gift
             if (BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT)
@@ -14081,13 +14153,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         if (gBattleMons[battlerAtk].status1 & STATUS1_ANY && IS_MOVE_PHYSICAL(move))
             MulModifier(&modifier, UQ_4_12(1.5));
         break;
-	case ABILITY_SEAWEED:
-		if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(battlerDef, TYPE_FIRE))
-        {
-            MulModifier(&modifier, UQ_4_12(2.0));
-            if (updateFlags)
-                RecordAbilityBattle(battlerDef, ABILITY_SEAWEED);
-        }
     }
 	
 	//Innates
@@ -14164,14 +14229,9 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
 	}
 	
 	//Seaweed
-	if(BattlerHasInnate(battlerAtk, ABILITY_SEAWEED)){
+	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SEAWEED) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_OLD_MARINER))
 		if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(battlerDef, TYPE_FIRE))
-        {
             MulModifier(&modifier, UQ_4_12(2.0));
-            if (updateFlags)
-                RecordAbilityBattle(battlerDef, ABILITY_SEAWEED);
-        }
-	}
 
     // target's abilities
     switch (GetBattlerAbility(battlerDef))
@@ -14214,14 +14274,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             MulModifier(&modifier, UQ_4_12(0.5));
             if (updateFlags)
                 RecordAbilityBattle(battlerDef, ABILITY_RAW_WOOD);
-        }
-        break;
-	case ABILITY_SEAWEED:
-        if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS))
-        {
-            MulModifier(&modifier, UQ_4_12(0.5));
-            if (updateFlags)
-                RecordAbilityBattle(battlerDef, ABILITY_SEAWEED);
         }
         break;
     case ABILITY_WATER_COMPACTION:
@@ -14276,14 +14328,9 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     }
 	
 	//Seaweed
-	if(BattlerHasInnate(battlerDef, ABILITY_SEAWEED) || BattlerHasInnate(battlerDef, ABILITY_OLD_MARINER)){
+	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_SEAWEED) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_OLD_MARINER))
         if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS))
-        {
             MulModifier(&modifier, UQ_4_12(0.5));
-            if (updateFlags)
-                RecordAbilityBattle(battlerDef, ABILITY_SEAWEED);
-        }
-    }
 	
 	//Overcoat
 	if(BattlerHasInnate(battlerDef, ABILITY_OVERCOAT)){

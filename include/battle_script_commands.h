@@ -20,15 +20,17 @@ enum{
     I_CLONE_YUKI_ONNA,
     I_CLONE_MONKEY_BUSSINESS,
     I_CLONE_MALICIOUS,
+    I_CLONE_TERRIFY,
     NUM_INTIMIDATE_CLONES
 };
 
 struct IntimidateCloneData
 {
     u16 ability;
-    u8 numStatsLowered; //1 - 3
     u8 statsLowered[3]; //atk, def, speed
-    bool8 targetBoth;
+    u8 numStatsLowered:2; //1 - 3
+    bool8 targetBoth:1;
+    u8 statChange:4;
 };
 
 extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES];

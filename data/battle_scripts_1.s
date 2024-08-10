@@ -2921,10 +2921,17 @@ BattleScript_EffectWorrySeed:
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
 BattleScript_EffectWorrySeed_Fear:
+	call BattleScript_SetFear
+	goto BattleScript_MoveEnd
+
+BattleScript_SetFear:
+	jumpifstatus4 BS_TARGET, STATUS4_FEAR, BattleScript_SetFear_Return
 	setfear BS_TARGET
 	printstring STRINGID_FILLED_WITH_FEAR
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+BattleScript_SetFear_Return:
+	return
+
 
 BattleScript_EffectPowerSplit:
 	attackcanceler
@@ -10741,6 +10748,12 @@ BattleScript_AngelsWrathProtectEffect::
 	restoreattackerandtargetfrom34
 	return
 
+BattleScript_BeautifulMusicActivates::
+	swapbattlerandtargetvia34
+	call BattleScript_CuteCharmActivates
+	restoreattackerandtargetfrom34
+	return
+
 BattleScript_CuteCharmActivates::
 	call BattleScript_AbilityPopUp
 	status2animation BS_ATTACKER, STATUS2_INFATUATION
@@ -10769,6 +10782,17 @@ BattleScript_AbilityStatusEffect::
 	waitstate
 	call BattleScript_AbilityPopUp
 	seteffectsecondary
+	return
+
+BattleScript_AbilitySetFear::
+	saveattackerandtargetto34
+	jumpifstatus4 BS_STACK_2, STATUS4_FEAR, BattleScript_AbilitySetFear_Return
+	copybyte gBattlerAttacker, gStackBattler1
+	copybyte gBattlerTarget, gStackBattler2
+	call BattleScript_AbilityPopUp
+	call BattleScript_SetFear
+BattleScript_AbilitySetFear_Return:
+	restoreattackerandtargetfrom34
 	return
 
 BattleScript_MoveSecondStatusEffect::
@@ -12266,9 +12290,7 @@ BattleScript_EffectScaryFace::
 	printfromtable gStatDownStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_EffectScaryFace_Fear:
-	setfear BS_TARGET
-	printstring STRINGID_FILLED_WITH_FEAR
-	waitmessage B_WAIT_TIME_LONG
+	call BattleScript_SetFear
 	goto BattleScript_MoveEnd
 
 @ memo of tools i need to try

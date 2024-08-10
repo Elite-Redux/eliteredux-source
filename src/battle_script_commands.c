@@ -1985,6 +1985,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
                 || gBattleMoves[move].effect == MOVE_SHEER_COLD
                 || move == MOVE_BLIZZARD))
         return 101;
+    else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SHINY_LIGHTNING, atkAbility) && gBattleMoves[move].effect == EFFECT_THUNDER)
+        return 101;
 
     // Check Wonder Skin.
     if ((BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_WONDER_SKIN, defAbility) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_PRIM_AND_PROPER, defAbility)) && IS_MOVE_STATUS(move))
@@ -2005,6 +2007,9 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
 
     if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_ILLUMINATE, atkAbility) || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_PLASMA_LAMP, atkAbility) || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_REFRIGERATOR, atkAbility))
         calc = (calc * 120) / 100; // 1.2 illuminate boost
+    
+    if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SHINY_LIGHTNING, atkAbility))
+        calc = calc * 120 / 100;
 
     if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_PIXIE_POWER, atkAbility))
         calc = (calc * 120) / 100; // 1.2 Pixie boost
@@ -7708,7 +7713,13 @@ static void Cmd_getmoneyreward(void)
         if (gBattleOutcome == B_OUTCOME_FORFEITED ||  gBattleOutcome == B_OUTCOME_LOST) {
             VarSet(VAR_TRAINER_PRIZE_BP, 0);
         } else {
-            VarSet(VAR_TRAINER_PRIZE_BP, DEFAULT_BP_GAIN_PER_TRAINER);
+            // if two opponnents are present give twice the BP amount
+            if (gTrainerBattleOpponent_B){
+                VarSet(VAR_TRAINER_PRIZE_BP, DEFAULT_BP_GAIN_PER_TRAINER * 2);
+            } else {
+                VarSet(VAR_TRAINER_PRIZE_BP, DEFAULT_BP_GAIN_PER_TRAINER);
+            }
+            
         }
         
         gSpecialVar_0x8004 = VarGet(VAR_TRAINER_PRIZE_BP);
@@ -10660,6 +10671,7 @@ static void Cmd_various(void)
         gBattlescriptCurrInstr = gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect];
         return;
     case VARIOUS_SET_FEAR:
+        gStatuses4[gActiveBattler] |= STATUS4_FEAR;
         gVolatileStructs[gActiveBattler].fear = gVolatileStructs[gActiveBattler].started.fear = TRUE;
         break;
     case VARIOUS_HANDLE_WEATHER_CHANGE:
@@ -12809,6 +12821,7 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
     switch(ability){
         case ABILITY_INTIMIDATE:
         case ABILITY_SCARE:
+        case ABILITY_TERRIFY:
         case ABILITY_FEARMONGER:
         case ABILITY_YUKI_ONNA:
             //Abilities that are immune to this effect
@@ -12892,7 +12905,10 @@ static void Cmd_battlemacros(void)
             for(i = 0; i < numStats; i++){
                 statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], opposingBattler);
                 if(!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE){
-                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG) ? 1 : -1), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
+                    s8 change = -1;
+                    if (BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG)) change *= -1;
+                    if (gIntimidateCloneData->statChange) change *= gIntimidateCloneData->statChange;
+                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(change), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
                     statslowered++;
                     gBattlerTarget = opposingBattler;
                     //For Abilities with multiple stats to lower - {} are necessary since this is a macro
@@ -12956,7 +12972,10 @@ static void Cmd_battlemacros(void)
             for(i = 0; i < numStats; i++){
                 statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], opposingBattler);
                 if(!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE){
-                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG) ? 1 : -1), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
+                    s8 change = -1;
+                    if (BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG)) change *= -1;
+                    if (gIntimidateCloneData->statChange) change *= gIntimidateCloneData->statChange;
+                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(change), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
                     statslowered++;
                     gBattlerTarget = opposingBattler;
                     //For Abilities with multiple stats to lower - {} are necessary since this is a macro

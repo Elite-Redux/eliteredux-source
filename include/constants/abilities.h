@@ -641,10 +641,15 @@
 #define ABILITY_OLD_MARINER 619 // Seaweed + Water Absorb.
 #define ABILITY_BEAUTIFUL_MUSIC 620 // Sound-based moves have 50% chance to infatuate the foe.
 #define ABILITY_SNOW_SONG 621 // Sound moves become Ice- type moves and get a 1.2x boost.
-#define ABILITY_RESONANCE 622 // Sound moves cause the target to bleed.
+#define ABILITY_RESONANCE 622 // Sound moves cause the target to  bleed.
 #define ABILITY_CUTE_ANTECEDENCE 623 // At full HP, gives +1 priority to its Fairy-type moves.
+#define ABILITY_MENACING_SITUATION 624 // 20% chance to Fear on contact. Also works on offense.
+#define ABILITY_SHINY_LIGHTNING 625 // Grants a 1.2x accuracy boost. Thunder never misses.
+#define ABILITY_TERRIFY 626 // Lowers foes' Sp. Atk by two stages on entry.
+#define ABILITY_ICE_DOWNFALL 627 // Counters contact with 60BP Icicle Crash.
+#define ABILITY_LAST_STAND 628 // Def and SpDef increase as HP drops. Max 1.6x.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_CUTE_ANTECEDENCE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_LAST_STAND + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

@@ -6706,7 +6706,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST | FLAG_KINGS_ROCK_AFFECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_SPECIAL,
         .argument = HOLD_EFFECT_DRIVE,
     },
@@ -11704,6 +11704,13 @@ const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES] = {
             STAT_HIGHEST_DEFENDING | STAT_USE_STAT_BOOSTS_IN_CALC,
             0
         },
+        .targetBoth = TRUE,
+    },
+    [I_CLONE_TERRIFY] = {
+        .ability = ABILITY_TERRIFY,
+        .numStatsLowered = 2,
+        .statsLowered = {STAT_SPATK, 0, 0},
+        .statChange = 2,
         .targetBoth = TRUE,
     },
 };

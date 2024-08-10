@@ -593,6 +593,11 @@ static const u8 sAbilityBeautifulMusicDescription[] = _("Sound-based moves have 
 static const u8 sAbilitySnowSongDescription[] = _("Sound moves become Ice-\ntype moves and get a 1.2x boost.");
 static const u8 sAbilityResonanceDescription[] = _("Sound moves cause the target to \nbleed.");
 static const u8 sAbilityCuteAntecedenceDescription[] = _("At full HP, gives +1 priority to\nits Fairy-type moves.");
+static const u8 sAbilityMenacingSituationDescription[] = _("20% chance to Fear on contact.\nAlso works on offense.");
+static const u8 sAbilityShinyLightningDescription[] = _("Grants a 1.2x accuracy boost.\nThunder never misses.");
+static const u8 sAbilityTerrifyDescription[] = _("Lowers foes' Sp. Atk by two\nstages on entry.");
+static const u8 sAbilityIceDownfallDescription[] = _("Counters contact with\n60BP Icicle Crash.");
+static const u8 sAbilityLastStandDescription[] = _("Def and SpDef increase as\nHP drops. Max 1.6x.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1220,6 +1225,11 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SNOW_SONG] = _("Snow Song"),
     [ABILITY_RESONANCE] = _("Resonance"),
     [ABILITY_CUTE_ANTECEDENCE] = _("Cute Antecedence"),
+    [ABILITY_MENACING_SITUATION] = _("Menacing Situation"),
+    [ABILITY_SHINY_LIGHTNING] = _("Shiny Lightning"),
+    [ABILITY_TERRIFY] = _("Terrify"),
+    [ABILITY_ICE_DOWNFALL] = _("Ice Downfall"),
+    [ABILITY_LAST_STAND] = _("Last Stand"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1848,4 +1858,9 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SNOW_SONG] = sAbilitySnowSongDescription,
     [ABILITY_RESONANCE] = sAbilityResonanceDescription,
     [ABILITY_CUTE_ANTECEDENCE] = sAbilityCuteAntecedenceDescription,
+    [ABILITY_MENACING_SITUATION] = sAbilityMenacingSituationDescription,
+    [ABILITY_SHINY_LIGHTNING] = sAbilityShinyLightningDescription,
+    [ABILITY_TERRIFY] = sAbilityTerrifyDescription,
+    [ABILITY_ICE_DOWNFALL] = sAbilityIceDownfallDescription,
+    [ABILITY_LAST_STAND] = sAbilityLastStandDescription,
 };
