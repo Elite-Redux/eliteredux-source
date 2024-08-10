@@ -8468,9 +8468,9 @@ static void HandleTerrainMove(u32 moveEffect)
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
-            *timer = 8;
+            *timer = TERRAIN_DURATION_EXTENDED;
         else
-            *timer = 5;
+            *timer = TERRAIN_DURATION;
         gBattlescriptCurrInstr += 8;
     }
 }
