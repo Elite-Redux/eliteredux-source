@@ -15029,10 +15029,10 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_STUNKY] =
     {
     .baseHP        = 63,
-    .baseAttack    = 63,
+    .baseAttack    = 41,
     .baseDefense   = 47,
     .baseSpeed     = 74,
-    .baseSpAttack  = 41,
+    .baseSpAttack  = 63,
     .baseSpDefense = 41,
     .type1 = TYPE_POISON,
     .type2 = TYPE_DARK,
