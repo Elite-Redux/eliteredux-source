@@ -5591,7 +5591,7 @@ const u16 gEggMoves[] = {
         MOVE_GRASSY_TERRAIN,
         MOVE_HEAVY_SLAM),
 
-    egg_moves(WIGGLYTUFF_ALPHA,
+    egg_moves(WIGGLYTUFF_APEX,
         MOVE_MISTY_EXPLOSION, // this entire list is a placeholder cause this mon can't breed. i was too lazy to add the moves manually
         MOVE_PERISH_SONG,
         MOVE_PRESENT,

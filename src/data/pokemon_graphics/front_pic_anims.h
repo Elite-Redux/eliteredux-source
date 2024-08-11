@@ -252,6 +252,21 @@ static const union AnimCmd sAnim_BOUNSWEET_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_STEENEE_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TSAREENA_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TSAREENA_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -798,6 +813,22 @@ static const union AnimCmd *const sAnims_BOUNSWEET_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_BOUNSWEET_REDUX_1,
 };
+
+static const union AnimCmd *const sAnims_STEENEE_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_STEENEE_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_TSAREENA_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TSAREENA_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_TSAREENA_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TSAREENA_REDUX_MEGA_1,
+};
+
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
     sAnim_GeneralFrame0,
@@ -1569,7 +1600,7 @@ static const union AnimCmd sAnim_WIGGLYTUFF_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_WIGGLYTUFF_ALPHA_1[] =
+static const union AnimCmd sAnim_WIGGLYTUFF_APEX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -1584,9 +1615,9 @@ static const union AnimCmd sAnim_WIGGLYTUFF_2[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd *const sAnims_WIGGLYTUFF_ALPHA[] ={
+static const union AnimCmd *const sAnims_WIGGLYTUFF_APEX[] ={
     sAnim_GeneralFrame0,
-    sAnim_WIGGLYTUFF_ALPHA_1,
+    sAnim_WIGGLYTUFF_APEX_1,
 };
 
 static const union AnimCmd sAnim_ZUBAT_1[] =
@@ -20509,6 +20540,9 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(EMPOLEON_REDUX),
     ANIM_CMD(EMPOLEON_REDUX_MEGA),
     ANIM_CMD(BOUNSWEET_REDUX),
+    ANIM_CMD(STEENEE_REDUX),
+    ANIM_CMD(TSAREENA_REDUX),
+    ANIM_CMD(TSAREENA_REDUX_MEGA),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
@@ -20543,7 +20577,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(FLYGON_REDUX_MEGA),
     ANIM_CMD(FLYGON_REDUX),
     ANIM_CMD(WIGGLYTUFF_PRIMAL),
-    ANIM_CMD(WIGGLYTUFF_ALPHA),
+    ANIM_CMD(WIGGLYTUFF_APEX),
     ANIM_CMD(VICTINI_PRIMAL),
     ANIM_CMD(SNORLAX_PRIMAL),
     ANIM_CMD(LEDIAN_PARADOX),
