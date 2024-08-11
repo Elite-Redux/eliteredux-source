@@ -1054,6 +1054,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_GALLANTRY] = 1,
     [ABILITY_ANTICIPATION] = 1,
     [ABILITY_AERIALIST] = 1,
+    [ABILITY_FIRE_SCALES] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -14264,10 +14265,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         if (IS_MOVE_SPECIAL(move))
             MulModifier(&modifier, UQ_4_12(0.8));
         break;
-    case ABILITY_ICE_SCALES:
-        if (IS_MOVE_SPECIAL(move))
-            MulModifier(&modifier, UQ_4_12(0.5));
-        break;
 	case ABILITY_RAW_WOOD:
         if (moveType == TYPE_GRASS)
         {
@@ -15054,10 +15051,6 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         if (typeEffectivenessModifier >= UQ_4_12(2.0))
             MulModifier(&finalModifier, UQ_4_12(0.5));
         break;
-    case ABILITY_ICE_SCALES:
-        if (IS_MOVE_SPECIAL(move))
-            MulModifier(&finalModifier, UQ_4_12(0.50));
-        break;
     case ABILITY_PRISM_SCALES:
         if (IS_MOVE_SPECIAL(move))
             MulModifier(&finalModifier, UQ_4_12(0.70));
@@ -15114,7 +15107,12 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             MulModifier(&finalModifier, UQ_4_12(0.5));
     }
 	// Ice Scales
-	if(BattlerHasInnate(battlerDef, ABILITY_ICE_SCALES)){
+	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_ICE_SCALES)){
+		if (IS_MOVE_SPECIAL(move))
+            MulModifier(&finalModifier, UQ_4_12(0.50));
+    }
+	// Fire Scales
+	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_FIRE_SCALES)){
 		if (IS_MOVE_SPECIAL(move))
             MulModifier(&finalModifier, UQ_4_12(0.50));
     }
