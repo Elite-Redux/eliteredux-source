@@ -951,4 +951,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_STEENEE_REDUX] = sSteeneeFormSpeciesIdTable,
 
+    [SPECIES_TSAREENA_REDUX] = sTsareenaFormSpeciesIdTable,
+
 };

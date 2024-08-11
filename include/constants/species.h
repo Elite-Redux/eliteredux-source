@@ -1640,9 +1640,10 @@
 #define SPECIES_POPMOTH_MEGA                CUSTOM_MEGA_START + 73
 #define SPECIES_TORTERRA_REDUX_MEGA         CUSTOM_MEGA_START + 74
 #define SPECIES_INFERNAPE_REDUX_MEGA        CUSTOM_MEGA_START + 75
-#define SPECIES_EMPOLEON_REDUX_MEGA        CUSTOM_MEGA_START + 76
+#define SPECIES_EMPOLEON_REDUX_MEGA         CUSTOM_MEGA_START + 76
+#define SPECIES_TSAREENA_REDUX_MEGA         CUSTOM_MEGA_START + 77
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_EMPOLEON_REDUX_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_TSAREENA_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
@@ -1743,7 +1744,7 @@
 #define SPECIES_CALYREX_CLOUD_RIDER         REDUX_FORMS_START + 93
 #define SPECIES_MAWILE_REDUX_B              REDUX_FORMS_START + 94
 #define SPECIES_MAWILE_REDUX_B_MEGA         REDUX_FORMS_START + 95
-#define SPECIES_WIGGLYTUFF_ALPHA            REDUX_FORMS_START + 96
+#define SPECIES_WIGGLYTUFF_APEX             REDUX_FORMS_START + 96
 #define SPECIES_YVELTAL_MEGA                REDUX_FORMS_START + 97
 #define SPECIES_KARTANA_FALLEN              REDUX_FORMS_START + 98
 #define SPECIES_TINKATON_MEGA               REDUX_FORMS_START + 99
@@ -1760,8 +1761,9 @@
 #define SPECIES_EMPOLEON_REDUX              REDUX_FORMS_START + 108
 #define SPECIES_BOUNSWEET_REDUX             REDUX_FORMS_START + 109
 #define SPECIES_STEENEE_REDUX               REDUX_FORMS_START + 110
+#define SPECIES_TSAREENA_REDUX              REDUX_FORMS_START + 111
 
-#define LAST_REDUX_FORM                     SPECIES_STEENEE_REDUX
+#define LAST_REDUX_FORM                     SPECIES_TSAREENA_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

@@ -1566,7 +1566,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_WIGGLYTUFF_ALPHA] =
+    [SPECIES_WIGGLYTUFF_APEX] =
     {
     .baseHP        = 120,
     .baseAttack    = 70,
@@ -41529,7 +41529,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 4,
     },
 
-    [SPECIES_STEENEE_REDUX] =
+[SPECIES_STEENEE_REDUX] =
     {
     .baseHP        = 52,
     .baseAttack    = 40,
@@ -41551,6 +41551,60 @@ const struct BaseStats gBaseStats[] =
     .eggGroup2 = EGG_GROUP_GRASS,
     .abilities = {ABILITY_OBLIVIOUS, ABILITY_RECKLESS, ABILITY_FRIEND_GUARD},
     .innates = {ABILITY_OVERGROW, ABILITY_CHLOROPHYLL, ABILITY_THICK_FAT},
+    .bodyColor = BODY_COLOR_PURPLE,
+    .noFlip = TRUE,
+    .tier = 0,
+    },
+
+[SPECIES_TSAREENA_REDUX] =
+    {
+    .baseHP        = 72,
+    .baseAttack    = 120,
+    .baseDefense   = 90,
+    .baseSpeed     = 108,
+    .baseSpAttack  = 50,
+    .baseSpDefense = 90,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_FIGHTING,
+    .catchRate = 255,
+    .expYield = 230,
+    .evYield_Attack    = 3,
+    .item1 = ITEM_GRASSY_SEED,
+    .genderRatio = MON_FEMALE,
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_GRASS,
+    .eggGroup2 = EGG_GROUP_GRASS,
+	.abilities = {ABILITY_OBLIVIOUS, ABILITY_HYPER_AGGRESSIVE, ABILITY_RIVALRY},
+	.innates = {ABILITY_LOOTER, ABILITY_STRIKER, ABILITY_QUEENLY_MAJESTY},
+    .bodyColor = BODY_COLOR_PURPLE,
+    .noFlip = TRUE,
+    .tier = 0,
+    },
+
+[SPECIES_TSAREENA_REDUX_MEGA] =
+    {
+    .baseHP        = 72,
+    .baseAttack    = 120,
+    .baseDefense   = 90,
+    .baseSpeed     = 108,
+    .baseSpAttack  = 50,
+    .baseSpDefense = 90,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_FIGHTING,
+    .catchRate = 255,
+    .expYield = 230,
+    .evYield_Attack    = 3,
+    .item1 = ITEM_GRASSY_SEED,
+    .genderRatio = MON_FEMALE,
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_GRASS,
+    .eggGroup2 = EGG_GROUP_GRASS,
+	.abilities = {ABILITY_OBLIVIOUS, ABILITY_HYPER_AGGRESSIVE, ABILITY_RIVALRY},
+	.innates = {ABILITY_LOOTER, ABILITY_STRIKER, ABILITY_QUEENLY_MAJESTY},
     .bodyColor = BODY_COLOR_PURPLE,
     .noFlip = TRUE,
     .tier = 0,

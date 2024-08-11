@@ -27681,6 +27681,34 @@ static const struct LevelUpMove sSteeneeReduxLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sTsareenaReduxLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_DOUBLE_SLAP),
+    LEVEL_UP_MOVE(0, MOVE_TROP_KICK),
+    LEVEL_UP_MOVE(1, MOVE_PLAY_NICE),
+    LEVEL_UP_MOVE(1, MOVE_PUNISHMENT),
+    LEVEL_UP_MOVE(1, MOVE_RAPID_SPIN),
+    LEVEL_UP_MOVE(1, MOVE_RAZOR_LEAF),
+    LEVEL_UP_MOVE(1, MOVE_SPLASH),
+    LEVEL_UP_MOVE(1, MOVE_SWAGGER),
+    LEVEL_UP_MOVE(17, MOVE_SWEET_SCENT),
+    LEVEL_UP_MOVE(18, MOVE_DOUBLE_KICK),
+    LEVEL_UP_MOVE(21, MOVE_MAGICAL_LEAF),
+    LEVEL_UP_MOVE(25, MOVE_TEETER_DANCE),
+    LEVEL_UP_MOVE(29, MOVE_FLAIL),
+    LEVEL_UP_MOVE(29, MOVE_STOMP),
+    LEVEL_UP_MOVE(33, MOVE_AROMATIC_MIST),
+    LEVEL_UP_MOVE(35, MOVE_JUMP_KICK),
+    LEVEL_UP_MOVE(35, MOVE_NIGHT_SLASH),
+    LEVEL_UP_MOVE(36, MOVE_TRIPLE_AXEL),
+    LEVEL_UP_MOVE(36, MOVE_TRIPLE_KICK),
+    LEVEL_UP_MOVE(37, MOVE_CAPTIVATE),
+    LEVEL_UP_MOVE(41, MOVE_AROMATHERAPY),
+    LEVEL_UP_MOVE(45, MOVE_LEAF_STORM),
+    LEVEL_UP_MOVE(49, MOVE_HIGH_JUMP_KICK),
+    LEVEL_UP_MOVE(53, MOVE_POWER_WHIP),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sCalyrex_Cloud_RiderLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_CONFUSION),
     LEVEL_UP_MOVE(1, MOVE_GRASSY_GLIDE),
@@ -28338,7 +28366,7 @@ static const struct LevelUpMove sCinccino_ReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(49, MOVE_AFTER_YOU),
     LEVEL_UP_END
 };
-static const struct LevelUpMove sWigglytuff_AlphaLevelUpLearnset[] = {
+static const struct LevelUpMove sWigglytuff_ApexLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_APPLE_ACID),
     LEVEL_UP_MOVE(1, MOVE_DRAINING_KISS),
     LEVEL_UP_MOVE(1, MOVE_FAIRY_WIND),

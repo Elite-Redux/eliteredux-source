@@ -1267,6 +1267,12 @@ static const u16 sSteeneeFormSpeciesIdTable[] = {
     SPECIES_STEENEE_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sTsareenaFormSpeciesIdTable[] = {
+    SPECIES_TSAREENA,
+    SPECIES_TSAREENA_REDUX,
+    SPECIES_TSAREENA_REDUX_MEGA,
+    FORM_SPECIES_END,
+};
 static const u16 sPanpourFormSpeciesIdTable[] = {
     SPECIES_PANPOUR,
     SPECIES_PANPOUR_REDUX,
@@ -1761,7 +1767,7 @@ static const u16 sVictiniFormSpeciesIdTable[] = {
 static const u16 sWigglytuffFormSpeciesIdTable[] = {
     SPECIES_WIGGLYTUFF,
     SPECIES_WIGGLYTUFF_MEGA,
-    SPECIES_WIGGLYTUFF_ALPHA,
+    SPECIES_WIGGLYTUFF_APEX,
     SPECIES_WIGGLYTUFF_PRIMAL,
     FORM_SPECIES_END,
 };

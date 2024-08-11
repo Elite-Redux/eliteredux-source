@@ -205,7 +205,7 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
-    [SPECIES_WIGGLYTUFF_ALPHA] =
+    [SPECIES_WIGGLYTUFF_APEX] =
     {
         .size = 0x78,
         .y_offset = 0,
@@ -5650,6 +5650,16 @@ const struct MonCoords gMonBackPicCoords[] =
     {
         .size = 0x77,
         .y_offset = 8,
+    },
+    [SPECIES_TSAREENA_REDUX] =
+    {
+        .size = 0x77,
+        .y_offset = 6,
+    },
+    [SPECIES_TSAREENA_REDUX_MEGA] =
+    {
+        .size = 0x77,
+        .y_offset = 6,
     },
     [SPECIES_POPMOTH_MEGA] =
     {
