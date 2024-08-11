@@ -7737,7 +7737,7 @@ const u32 gMonShinyPalette_SteeneeRedux[]      = INCBIN_U32("graphics/pokemon/st
 const u8  gMonIcon_SteeneeRedux[]              = INCBIN_U8("graphics/pokemon/steenee/redux/icon.4bpp");
 
 const u32 gMonFrontPic_TsareenaRedux[]          = INCBIN_U32("graphics/pokemon/tsareena/redux/front.4bpp.lz");
-const u32 gMonBackPic_TsareenaeRedux[]           = INCBIN_U32("graphics/pokemon/tsareena/redux/back.4bpp.lz");
+const u32 gMonBackPic_TsareenaRedux[]           = INCBIN_U32("graphics/pokemon/tsareena/redux/back.4bpp.lz");
 const u32 gMonPalette_TsareenaRedux[]           = INCBIN_U32("graphics/pokemon/tsareena/redux/normal.gbapal.lz");
 const u32 gMonShinyPalette_TsareenaRedux[]      = INCBIN_U32("graphics/pokemon/tsareena/redux/shiny.gbapal.lz");
 const u8  gMonIcon_TsareenaRedux[]              = INCBIN_U8("graphics/pokemon/tsareena/redux/icon.4bpp");
