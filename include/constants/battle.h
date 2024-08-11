@@ -447,23 +447,23 @@
 #define B_WIN_ACTION_MENU         2 // "Fight/Pokémon/Bag/Run" menu
 #define B_WIN_SWITCH_PROMPT       3 // "Switch which?"
 #define B_WIN_YESNO               4
-#define B_WIN_LEVEL_UP_BOX        5
-#define B_WIN_LEVEL_UP_BANNER     6
-#define B_WIN_VS_PLAYER           7
-#define B_WIN_VS_OPPONENT         8
-#define B_WIN_VS_MULTI_PLAYER_1   9
-#define B_WIN_VS_MULTI_PLAYER_2  10
-#define B_WIN_VS_MULTI_PLAYER_3  11
-#define B_WIN_VS_MULTI_PLAYER_4  12
-#define B_WIN_VS_OUTCOME_DRAW    13
-#define B_WIN_VS_OUTCOME_LEFT    14
-#define B_WIN_VS_OUTCOME_RIGHT   15
-#define B_WIN_SUPER_EFFECTIVE    16
-#define B_WIN_NOT_VERY_EFFECTIVE 17
-#define B_WIN_NO_EFFECT          18
-#define B_WIN_YESNO_TWO          19
+#define B_WIN_YESNO_TWO           5
+#define B_WIN_LEVEL_UP_BOX        6
+#define B_WIN_LEVEL_UP_BANNER     7
+#define B_WIN_VS_PLAYER           8
+#define B_WIN_VS_OPPONENT         9
+#define B_WIN_VS_MULTI_PLAYER_1  10
+#define B_WIN_VS_MULTI_PLAYER_2  11
+#define B_WIN_VS_MULTI_PLAYER_3  12
+#define B_WIN_VS_MULTI_PLAYER_4  13
+#define B_WIN_VS_OUTCOME_DRAW    14
+#define B_WIN_VS_OUTCOME_LEFT    15
+#define B_WIN_VS_OUTCOME_RIGHT   16
+#define B_WIN_SUPER_EFFECTIVE    17
+#define B_WIN_NOT_VERY_EFFECTIVE 18
+#define B_WIN_NO_EFFECT          19
 
-#define NUM_BATTLE_WIN             B_WIN_YESNO_TWO + 1
+#define NUM_BATTLE_WIN             B_WIN_NO_EFFECT + 1
 
 // The following are duplicate id values for windows that Battle Arena uses differently.
 #define ARENA_WIN_PLAYER_NAME      NUM_BATTLE_WIN + 1
