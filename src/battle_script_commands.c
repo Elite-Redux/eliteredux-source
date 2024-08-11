@@ -8468,9 +8468,9 @@ static void HandleTerrainMove(u32 moveEffect)
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
-            *timer = 8;
+            *timer = TERRAIN_DURATION_EXTENDED;
         else
-            *timer = 5;
+            *timer = TERRAIN_DURATION;
         gBattlescriptCurrInstr += 8;
     }
 }
@@ -16862,7 +16862,7 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
     if (gBattleMoves[move].twoTurnMove && !BATTLER_HAS_ABILITY(battlerId, ABILITY_ACCELERATE)) return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
     {
-        switch (gBattleMoves[move].target)
+        switch (GetBattlerBattleMoveTargetFlags(move, battlerId))
         {
             case MOVE_TARGET_BOTH:
                 if (CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) >= 2) // Check for single target
@@ -16872,10 +16872,6 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
                 if (CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE) >= 2) // Count mons on both sides; ignore attacker
                     return FALSE;
                 break;
-            case MOVE_TARGET_SELECTED:
-                if (GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN && gBattleMoves[move].effect == EFFECT_EXPANDING_FORCE && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) >= 2) // Check for Expanding Force
-                    return FALSE;
-            break;
         }
     }
     return TRUE;

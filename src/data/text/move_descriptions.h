@@ -2316,11 +2316,11 @@ static const u8 sMoveTwoLineDescription_MoveFlowerShield[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveGrassyTerrain[] = _(
     "The ground turns to grass\n"
-    "for 5 turns. Restores HP.");
+    "for 8 turns. Restores HP.");
 
 static const u8 sMoveTwoLineDescription_MoveMistyTerrain[] = _(
     "Covers the ground with mist\n"
-    "for 5 turns. Blocks status.");
+    "for 8 turns. Blocks status.");
 
 static const u8 sMoveTwoLineDescription_MoveElectrify[] = _(
     "Electrifies the foe, making\n"
@@ -2412,7 +2412,7 @@ static const u8 sMoveTwoLineDescription_MoveHappyHour[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveElectricTerrain[] = _(
     "Electrifies the ground for\n"
-    "5 turns. Prevents sleep.");
+    "8 turns. Prevents sleep.");
 
 static const u8 sMoveTwoLineDescription_MoveDazzlingGleam[] = _(
     "Damages foes by emitting\n"
@@ -2560,7 +2560,7 @@ static const u8 sMoveTwoLineDescription_MoveAnchorShot[] = _(
 
 static const u8 sMoveTwoLineDescription_MovePsychicTerrain[] = _(
     "The ground turns weird for\n"
-    "5 turns. Blocks priority.");
+    "8 turns. Blocks priority.");
 
 static const u8 sMoveTwoLineDescription_MoveLunge[] = _(
     "Lunges at the foe to lower\n"
@@ -5264,8 +5264,8 @@ static const u8 sMoveFourLineDescription_MoveTopsyTurvy[] = _("All stat changes\
 static const u8 sMoveFourLineDescription_MoveDrainingKiss[] = _("A kiss that absorbs\n30% of damage it\ninflicted to\nrestore HP.");
 static const u8 sMoveFourLineDescription_MoveCraftyShield[] = _("A mysterious power\nprotects the user\nand its allies from\nstatus moves.");
 static const u8 sMoveFourLineDescription_MoveFlowerShield[] = _("A mysterious power\nraises the Defense\nof all Grass-type\nPokémon in battle.");
-static const u8 sMoveFourLineDescription_MoveGrassyTerrain[] = _("For 5 turns, the\nground turns grassy.\nThis ups Grass-type\nmoves, and heals.");
-static const u8 sMoveFourLineDescription_MoveMistyTerrain[] = _("Weakens Dragon-type\nmoves for 5 turns,\nand prevents status\nconditions for all.");
+static const u8 sMoveFourLineDescription_MoveGrassyTerrain[] = _("For 8 turns, the\nground turns grassy.\nThis ups Grass-type\nmoves, and heals.");
+static const u8 sMoveFourLineDescription_MoveMistyTerrain[] = _("Weakens Dragon-type\nmoves for 8 turns,\nand prevents status\nconditions for all.");
 static const u8 sMoveFourLineDescription_MoveElectrify[] = _("This move\nelectrifies the foe,\nmaking its next\nmove Electric-type.");
 static const u8 sMoveFourLineDescription_MovePlayRough[] = _("The user and foe\nplay rough, with a\n10% chance to drop\nfoe's Attack.");
 static const u8 sMoveFourLineDescription_MoveFairyWind[] = _("A quick moving cloud\nof pixie dust.\nHas +1 Priority.\nAir-based.");
@@ -5288,7 +5288,7 @@ static const u8 sMoveFourLineDescription_MovePowder[] = _("If the foe uses a\nFi
 static const u8 sMoveFourLineDescription_MoveGeomancy[] = _("On the 2nd turn,\nthe user sharply\nups its Sp. Atk, Sp.\nDef and Speed stats.");
 static const u8 sMoveFourLineDescription_MoveMagneticFlux[] = _("The user boosts the\ndefenses of allies\nwith the Plus or\nMinus Ability.");
 static const u8 sMoveFourLineDescription_MoveHappyHour[] = _("This move doubles\nthe amount of prize\nmoney received\nafter battle.");
-static const u8 sMoveFourLineDescription_MoveElectricTerrain[] = _("For 5 turns, the\ncharged ground ups\nElectric-type moves\nand prevents sleep.");
+static const u8 sMoveFourLineDescription_MoveElectricTerrain[] = _("For 8 turns, the\ncharged ground ups\nElectric-type moves\nand prevents sleep.");
 static const u8 sMoveFourLineDescription_MoveDazzlingGleam[] = _("The user emits a\npowerful flash,\nhitting all foes.");
 static const u8 sMoveFourLineDescription_MoveCelebrate[] = _("The Pokémon\ncongratulates you\non your special\nday!");
 static const u8 sMoveFourLineDescription_MoveHoldHands[] = _("The user and ally\nhold hands. This\nmakes them very\nhappy.");
@@ -5325,7 +5325,7 @@ static const u8 sMoveFourLineDescription_MoveGearUp[] = _("The user rotates its\
 static const u8 sMoveFourLineDescription_MoveThroatChop[] = _("For 2 turns after\nbeing hit, the foe\ncannot use moves\nthat emit sound.");
 static const u8 sMoveFourLineDescription_MovePollenPuff[] = _("A pollen puff that\nwill explode to\ndamage foes, but\nwill heal allies.");
 static const u8 sMoveFourLineDescription_MoveAnchorShot[] = _("The user's anchor\nchain strikes and\nentangles the foe,\npreventing escape.");
-static const u8 sMoveFourLineDescription_MovePsychicTerrain[] = _("For 5 turns, faster\nmoves will fail and\nPsychic-type moves\ndeal more damage.");
+static const u8 sMoveFourLineDescription_MovePsychicTerrain[] = _("For 8 turns, faster\nmoves will fail and\nPsychic-type moves\ndeal more damage.");
 static const u8 sMoveFourLineDescription_MoveLunge[] = _("The user lunges at\nthe foe with full\nforce, lowering the\nfoe's Attack stat.");
 static const u8 sMoveFourLineDescription_MoveFireLash[] = _("The foe is struck\nwith a burning\nlash that lowers\nits Defense stat.");
 static const u8 sMoveFourLineDescription_MovePowerTrip[] = _("The more the user's\nstats are raised,\nthe greater this\nattack's power.");
