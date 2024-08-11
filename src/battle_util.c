@@ -4941,22 +4941,20 @@ static bool8 UseEntryMove(u8 battler, u16 ability, u8 *effect, u16 extraMove, u8
     return FALSE;
 }
 
-static u16 UseAttackerFollowUpMove(u8 battler, u16 ability, u16 extraMove, u8 movePower, u8 moveEffectPercentChance, u8 extraMoveSecondaryEffect)
+static u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower)
 {
-    gTempMove = gCurrentMove;
-    gCurrentMove = extraMove;
-    VarSet(VAR_EXTRA_MOVE_DAMAGE, movePower);
     gRoundStructs[battler].extraMoveUsed = TRUE;
 
-    //Move Effect
-    VarSet(VAR_TEMP_MOVEEFECT_CHANCE, moveEffectPercentChance);
-    VarSet(VAR_TEMP_MOVEEFFECT, extraMoveSecondaryEffect);
+    gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+        .ability = ability,
+        .attacker = battler,
+        .target = target,
+        .move = extraMove,
+        .movePower = movePower,
+        .movePos = MAX_MON_MOVES,
+    };
 
-    gBattleScripting.abilityPopupOverwrite = ability;
-
-    SetTypeBeforeUsingMove(extraMove, battler);
-
-    return extraMove;
+    return TRUE;
 }
 
 static void AbilityHealMonStatus(u8 *effect, u8 battler, u16 ability) {
@@ -9833,7 +9831,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if (CanUseExtraMove(gBattlerAttacker, target))
                     {
                         gBattlerTarget = target;
-                        return UseAttackerFollowUpMove(battler, ABILITY_TWO_STEP, MOVE_REVELATION_DANCE, 50, 0, 0);
+                        return UseAttackerFollowUpMove(battler, target, ABILITY_TWO_STEP, MOVE_REVELATION_DANCE, 50);
                     }
                 }
             }
@@ -9848,7 +9846,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     case MOVE_SANDSTORM:
                     case MOVE_HAIL:
                         if (!CanUseExtraMove(gBattlerAttacker, gBattlerTarget)) break;
-                        return UseAttackerFollowUpMove(battler, ABILITY_FORECAST, MOVE_WEATHER_BALL, 0, 0, 0);
+                        return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_FORECAST, MOVE_WEATHER_BALL, 0);
                 }
             }
 
@@ -9857,7 +9855,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (GetTypeBeforeUsingMove(move, battler) == TYPE_FIRE)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_VOLCANO_RAGE, MOVE_ERUPTION, 50, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_VOLCANO_RAGE, MOVE_ERUPTION, 50);
                 }
             }
 
@@ -9866,7 +9864,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (GetTypeBeforeUsingMove(move, battler) == TYPE_FIRE)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_FROST_BURN, MOVE_ICE_BEAM, 40, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_FROST_BURN, MOVE_ICE_BEAM, 40);
                 }
             }
 
@@ -9876,7 +9874,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_PYRO_SHELLS, MOVE_OUTBURST, 50, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_PYRO_SHELLS, MOVE_OUTBURST, 50);
                 }
             }
 
@@ -9886,7 +9884,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (GetTypeBeforeUsingMove(move, battler) == TYPE_ELECTRIC)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_THUNDERCALL, MOVE_SMITE, 20, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_THUNDERCALL, MOVE_SMITE, 20);
                 }
             }
 
@@ -9896,7 +9894,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     gBattleMoves[move].power){
-                    return UseAttackerFollowUpMove(battler, ABILITY_AFTERSHOCK, MOVE_MAGNITUDE, 65, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_AFTERSHOCK, MOVE_MAGNITUDE, 65);
                 }
             }
 
@@ -9906,7 +9904,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (GetTypeBeforeUsingMove(move, battler) == TYPE_WATER)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_HIGH_TIDE, MOVE_SURF, 50, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_HIGH_TIDE, MOVE_SURF, 50);
                 }
             }
             #undef CHECK_ABILITY
@@ -11850,8 +11848,25 @@ case ITEMEFFECT_KINGSROCK:
             }
             break;
         case HOLD_EFFECT_LIFE_ORB:
+            {
+            int canProc = !gProcessingExtraAttacks;
+            if (gProcessingExtraAttacks) canProc = gBattlerAttacker == gBattlerByTurnOrder[gCurrentTurnActionNumber];
+            if (canProc && gQueuedAttackCount)
+            {
+                // Delay life orb until all extra attack actions for the battler are processed
+                int i;
+                for (i = 1; i <= gQueuedAttackCount; i++)
+                {
+                    if (gQueuedExtraAttackData[i].attacker == gBattlerAttacker)
+                    {
+                        canProc = FALSE;
+                        break;
+                    }
+                }
+            }
+
             if (gTurnStructs[gBattlerAttacker].damagedMons
-                && !gProcessingExtraAttacks
+                && canProc
                 && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                 && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)
 				&& !(BattlerHasInnate(gBattlerAttacker, ABILITY_SHEER_FORCE)    && (gBattleMoves[gCurrentMove].flags & FLAG_SHEER_FORCE_BOOST))
@@ -11866,6 +11881,7 @@ case ITEMEFFECT_KINGSROCK:
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ItemHurtRet;
                 gLastUsedItem = gBattleMons[gBattlerAttacker].item;
+            }
             }
             break;
         case HOLD_EFFECT_THROAT_SPRAY:  // Does NOT need to be a damaging move

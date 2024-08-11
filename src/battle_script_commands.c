@@ -2290,9 +2290,12 @@ static void Cmd_damagecalc(void)
 {
     u8 moveType;
     u8 movePower = 0;
-    bool8 isExtraMove = gRoundStructs[gBattlerAttacker].extraMoveUsed;
 
-    if(isExtraMove){
+    if (gProcessingExtraAttacks)
+    {
+        movePower = gQueuedExtraAttackData[0].movePower;
+    }
+    else if(gRoundStructs[gBattlerAttacker].extraMoveUsed){
         movePower = VarGet(VAR_EXTRA_MOVE_DAMAGE);
         VarSet(VAR_EXTRA_MOVE_DAMAGE, 0);
     }
@@ -6465,19 +6468,7 @@ static void Cmd_moveend(void)
                 break;
             }
         case MOVEEND_ATTACKER_FOLLOWUP_MOVE:
-            if (!gProcessingExtraAttacks && AbilityBattleEffects(ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE, gBattlerAttacker, 0, 0, gChosenMove))
-            {
-                gHitMarker |= (HITMARKER_NO_PPDEDUCT | HITMARKER_NO_ATTACKSTRING);
-                gBattleScripting.animTargetsHit = 0;
-                gBattleScripting.moveendState = 0;
-                gTurnStructs[gBattlerAttacker].multiHitOn = FALSE;
-                MoveValuesCleanUp();
-                gBattleScripting.usingExtraMove = TRUE;
-
-                gBattlescriptCurrInstr = BattleScript_AttackerUsedAnExtraMove;
-                return;
-            }
-
+            if (!gProcessingExtraAttacks) AbilityBattleEffects(ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE, gBattlerAttacker, 0, 0, gChosenMove);
             gBattleScripting.moveendState++;
             break;
         case MOVEEND_CLEAR_BITS: // Clear/Set bits for things like using a move for all targets and all hits.
@@ -14321,11 +14312,14 @@ static void Cmd_setsafeguard(void)
 
 static void Cmd_magnitudedamagecalculation(void)
 {
-    bool8 isExtraMove = gRoundStructs[gBattlerAttacker].extraMoveUsed;
     u8 maxRoll = 100;
     u32 magnitude;
 
-    if(isExtraMove){
+    if(gProcessingExtraAttacks){
+        maxRoll = gQueuedExtraAttackData[0].movePower;
+        if (!maxRoll) maxRoll = 100;
+    }
+    else if(gRoundStructs[gBattlerAttacker].extraMoveUsed){
         maxRoll = VarGet(VAR_EXTRA_MOVE_DAMAGE);
         if (!maxRoll) maxRoll = 100;
         VarSet(VAR_EXTRA_MOVE_DAMAGE, 0);
