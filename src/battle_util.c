@@ -1053,6 +1053,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_GALLANTRY] = 1,
     [ABILITY_ANTICIPATION] = 1,
     [ABILITY_AERIALIST] = 1,
+    [ABILITY_FIRE_SCALES] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -4933,22 +4934,20 @@ static bool8 UseEntryMove(u8 battler, u16 ability, u8 *effect, u16 extraMove, u8
     return FALSE;
 }
 
-static u16 UseAttackerFollowUpMove(u8 battler, u16 ability, u16 extraMove, u8 movePower, u8 moveEffectPercentChance, u8 extraMoveSecondaryEffect)
+static u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extraMove, u8 movePower)
 {
-    gTempMove = gCurrentMove;
-    gCurrentMove = extraMove;
-    VarSet(VAR_EXTRA_MOVE_DAMAGE, movePower);
     gRoundStructs[battler].extraMoveUsed = TRUE;
 
-    //Move Effect
-    VarSet(VAR_TEMP_MOVEEFECT_CHANCE, moveEffectPercentChance);
-    VarSet(VAR_TEMP_MOVEEFFECT, extraMoveSecondaryEffect);
+    gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+        .ability = ability,
+        .attacker = battler,
+        .target = target,
+        .move = extraMove,
+        .movePower = movePower,
+        .movePos = MAX_MON_MOVES,
+    };
 
-    gBattleScripting.abilityPopupOverwrite = ability;
-
-    SetTypeBeforeUsingMove(extraMove, battler);
-
-    return extraMove;
+    return TRUE;
 }
 
 static void AbilityHealMonStatus(u8 *effect, u8 battler, u16 ability) {
@@ -9752,7 +9751,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if (CanUseExtraMove(gBattlerAttacker, target))
                     {
                         gBattlerTarget = target;
-                        return UseAttackerFollowUpMove(battler, ABILITY_TWO_STEP, MOVE_REVELATION_DANCE, 50, 0, 0);
+                        return UseAttackerFollowUpMove(battler, target, ABILITY_TWO_STEP, MOVE_REVELATION_DANCE, 50);
                     }
                 }
             }
@@ -9767,7 +9766,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     case MOVE_SANDSTORM:
                     case MOVE_HAIL:
                         if (!CanUseExtraMove(gBattlerAttacker, gBattlerTarget)) break;
-                        return UseAttackerFollowUpMove(battler, ABILITY_FORECAST, MOVE_WEATHER_BALL, 0, 0, 0);
+                            return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_FORECAST, MOVE_WEATHER_BALL, 0);
                 }
             }
 
@@ -9776,7 +9775,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (GetTypeBeforeUsingMove(move, battler) == TYPE_FIRE)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_VOLCANO_RAGE, MOVE_ERUPTION, 50, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_VOLCANO_RAGE, MOVE_ERUPTION, 50);
                 }
             }
 
@@ -9785,7 +9784,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (GetTypeBeforeUsingMove(move, battler) == TYPE_FIRE)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_FROST_BURN, MOVE_ICE_BEAM, 40, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_FROST_BURN, MOVE_ICE_BEAM, 40);
                 }
             }
 
@@ -9795,7 +9794,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_PYRO_SHELLS, MOVE_OUTBURST, 50, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_PYRO_SHELLS, MOVE_OUTBURST, 50);
                 }
             }
 
@@ -9805,7 +9804,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (GetTypeBeforeUsingMove(move, battler) == TYPE_ELECTRIC)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_THUNDERCALL, MOVE_SMITE, 20, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_THUNDERCALL, MOVE_SMITE, 20);
                 }
             }
 
@@ -9815,7 +9814,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     gBattleMoves[move].power){
-                    return UseAttackerFollowUpMove(battler, ABILITY_AFTERSHOCK, MOVE_MAGNITUDE, 65, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_AFTERSHOCK, MOVE_MAGNITUDE, 65);
                 }
             }
 
@@ -9825,7 +9824,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     (GetTypeBeforeUsingMove(move, battler) == TYPE_WATER)){
-                    return UseAttackerFollowUpMove(battler, ABILITY_HIGH_TIDE, MOVE_SURF, 50, 0, 0);
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_HIGH_TIDE, MOVE_SURF, 50);
                 }
             }
             #undef CHECK_ABILITY
@@ -11738,8 +11737,25 @@ case ITEMEFFECT_KINGSROCK:
             }
             break;
         case HOLD_EFFECT_LIFE_ORB:
+            {
+            int canProc = !gProcessingExtraAttacks;
+            if (gProcessingExtraAttacks) canProc = gBattlerAttacker == gBattlerByTurnOrder[gCurrentTurnActionNumber];
+            if (canProc && gQueuedAttackCount)
+            {
+                // Delay life orb until all extra attack actions for the battler are processed
+                int i;
+                for (i = 1; i <= gQueuedAttackCount; i++)
+                {
+                    if (gQueuedExtraAttackData[i].attacker == gBattlerAttacker)
+                    {
+                        canProc = FALSE;
+                        break;
+                    }
+                }
+            }
+
             if (gTurnStructs[gBattlerAttacker].damagedMons
-                && !gProcessingExtraAttacks
+                && canProc
                 && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                 && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)
 				&& !(BattlerHasInnate(gBattlerAttacker, ABILITY_SHEER_FORCE)    && (gBattleMoves[gCurrentMove].flags & FLAG_SHEER_FORCE_BOOST))
@@ -11754,6 +11770,7 @@ case ITEMEFFECT_KINGSROCK:
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ItemHurtRet;
                 gLastUsedItem = gBattleMons[gBattlerAttacker].item;
+            }
             }
             break;
         case HOLD_EFFECT_THROAT_SPRAY:  // Does NOT need to be a damaging move
@@ -13459,12 +13476,10 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
             MulModifier(&modifier, holdEffectModifier);
         break;
     case HOLD_EFFECT_SOUL_DEW:
-        #if B_SOUL_DEW_BOOST >= GEN_7
-        if ((gBattleMons[battlerAtk].species == SPECIES_LATIAS || gBattleMons[battlerAtk].species == SPECIES_LATIOS) && (moveType == TYPE_PSYCHIC || moveType == TYPE_DRAGON))
-        #else
-        if ((gBattleMons[battlerAtk].species == SPECIES_LATIAS || gBattleMons[battlerAtk].species == SPECIES_LATIOS) && !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER) && IS_MOVE_SPECIAL(move))
-        #endif
-            MulModifier(&modifier, holdEffectModifier);
+        if ((GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_LATIAS || GET_BASE_SPECIES_ID(gBattleMons[battlerAtk].species) == SPECIES_LATIOS)
+            && !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+            && IS_MOVE_SPECIAL(move))
+                MulModifier(&modifier, holdEffectModifier);
         break;
     case HOLD_EFFECT_GEMS:
         if (gTurnStructs[battlerAtk].gemBoost && gBattleMons[battlerAtk].item)
@@ -14158,10 +14173,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         if (IS_MOVE_SPECIAL(move))
             MulModifier(&modifier, UQ_4_12(0.8));
         break;
-    case ABILITY_ICE_SCALES:
-        if (IS_MOVE_SPECIAL(move))
-            MulModifier(&modifier, UQ_4_12(0.5));
-        break;
 	case ABILITY_RAW_WOOD:
         if (moveType == TYPE_GRASS)
         {
@@ -14715,7 +14726,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         break;
 #if B_SOUL_DEW_BOOST <= GEN_6
     case HOLD_EFFECT_SOUL_DEW:
-        if ((gBattleMons[battlerDef].species == SPECIES_LATIAS || gBattleMons[battlerDef].species == SPECIES_LATIOS)
+        if ((GET_BASE_SPECIES_ID(gBattleMons[battlerDef].species) == SPECIES_LATIAS || GET_BASE_SPECIES_ID(gBattleMons[battlerDef].species) == SPECIES_LATIOS)
          && !(gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
          && defStatToUse == STAT_SPDEF)
             MulModifier(&modifier, UQ_4_12(1.5));
@@ -14965,10 +14976,6 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         if (typeEffectivenessModifier >= UQ_4_12(2.0))
             MulModifier(&finalModifier, UQ_4_12(0.5));
         break;
-    case ABILITY_ICE_SCALES:
-        if (IS_MOVE_SPECIAL(move))
-            MulModifier(&finalModifier, UQ_4_12(0.50));
-        break;
     case ABILITY_PRISM_SCALES:
         if (IS_MOVE_SPECIAL(move))
             MulModifier(&finalModifier, UQ_4_12(0.70));
@@ -15025,7 +15032,12 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             MulModifier(&finalModifier, UQ_4_12(0.5));
     }
 	// Ice Scales
-	if(BattlerHasInnate(battlerDef, ABILITY_ICE_SCALES)){
+	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_ICE_SCALES)){
+		if (IS_MOVE_SPECIAL(move))
+            MulModifier(&finalModifier, UQ_4_12(0.50));
+    }
+	// Fire Scales
+	if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_FIRE_SCALES)){
 		if (IS_MOVE_SPECIAL(move))
             MulModifier(&finalModifier, UQ_4_12(0.50));
     }
@@ -15336,7 +15348,7 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
 
     if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
-    if(gBattleMoves[move].effect == EFFECT_IGNORE_TYPE_IMMUNITY && defType == gBattleMoves[move].argument && mod == UQ_4_12(0.0))
+    if(gBattleMoves[move].effect == EFFECT_IGNORE_TYPE_IMMUNITY && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
     if(gBattleMoves[move].effect == EFFECT_SE_AGAINST_TYPE_HIT && defType == gBattleMoves[move].argument)
         mod = UQ_4_12(2.0); // super-effective
@@ -16782,6 +16794,8 @@ bool32 IsHealingMoveEffect(u16 effect)
     case EFFECT_JUNGLE_HEALING:
     case EFFECT_HEAL_PULSE:
     case EFFECT_MATCHA_GOTCHA:
+    case EFFECT_STRENGTH_SAP:
+    case EFFECT_DRAIN_BRAIN:
         return TRUE;
     default:
         return FALSE;

@@ -10323,7 +10323,7 @@ BattleScript_GrassyTerrainLoopIncrement::
 BattleScript_GrassyTerrainLoopEnd::
 	bicword gHitMarker, HITMARKER_SKIP_DMG_TRACK | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
 	jumpifword CMP_COMMON_BITS, gFieldStatuses, STATUS_FIELD_TERRAIN_PERMANENT, BattleScript_GrassyTerrainHealEnd
-	jumpifbyte CMP_EQUAL, gFieldTimers + 5, 0, BattleScript_GrassyTerrainEnds
+	jumpifword CMP_NO_COMMON_BITS, gFieldStatuses, STATUS_FIELD_GRASSY_TERRAIN, BattleScript_GrassyTerrainEnds
 BattleScript_GrassyTerrainHealEnd:
 	end2
 

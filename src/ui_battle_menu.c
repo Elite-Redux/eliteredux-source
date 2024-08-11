@@ -2078,7 +2078,7 @@ const u8 sText_Title_Status_Bide[]                         = _("Bide");
 const u8 sText_Title_Status_Bide_Description[]             = _("Will be unable to attack,\n"
                                                                "will do double the damage equal to\n"
                                                                "twice the damage it receives.");
-const u8 sText_Title_Status_Infuation[]                    = _("Infuated with {STR_VAR_1}");
+const u8 sText_Title_Status_Infuation[]                    = _("Infatuated with {B_EFF_NAME_WITH_PREFIX}");
 const u8 sText_Title_Status_Infuation_Description[]        = _("Reduces the dmg done to the target\n"
                                                                "of its infuation, it will end\n"
                                                                "when any of the two gets switched.");
@@ -2463,14 +2463,12 @@ static void PrintStatusTab(void){
                     if ((gBattleMons[sMenuDataPtr->battlerId].status2 & STATUS2_INFATUATION) && 
                         (gBattleMons[sMenuDataPtr->battlerId].status2 & STATUS2_INFATUATED_WITH(i)) &&
                         i != sMenuDataPtr->battlerId){
-                            infuatedWith = i;
-                            species = gBattleMons[infuatedWith].species;
+                            gBattleScripting.battler = i;
                             break;
                         }
                 }
 
-                StringCopy(gStringVar1, gSpeciesNames[species]);
-                StringExpandPlaceholders(gStringVar4, sText_Title_Status_Infuation);
+                BattleStringExpandPlaceholders(sText_Title_Status_Infuation, gStringVar4);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar4);
 
                 //Description

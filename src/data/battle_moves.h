@@ -9895,7 +9895,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_AURA_FORCE] =
     {
-        .effect = EFFECT_IGNORE_TYPE_IMMUNITY,
+        .effect = EFFECT_SE_AGAINST_TYPE_HIT,
         .power = 70,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
@@ -9904,6 +9904,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_PHYSICAL,
+        .argument = TYPE_GHOST,
     },
     [MOVE_DRAKE_MISSILE] =
     {

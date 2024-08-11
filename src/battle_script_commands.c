@@ -2285,9 +2285,12 @@ static void Cmd_damagecalc(void)
 {
     u8 moveType;
     u8 movePower = 0;
-    bool8 isExtraMove = gRoundStructs[gBattlerAttacker].extraMoveUsed;
 
-    if(isExtraMove){
+    if (gProcessingExtraAttacks)
+    {
+        movePower = gQueuedExtraAttackData[0].movePower;
+    }
+    else if(gRoundStructs[gBattlerAttacker].extraMoveUsed){
         movePower = VarGet(VAR_EXTRA_MOVE_DAMAGE);
         VarSet(VAR_EXTRA_MOVE_DAMAGE, 0);
     }
@@ -6463,18 +6466,8 @@ static void Cmd_moveend(void)
                 break;
             }
         case MOVEEND_ATTACKER_FOLLOWUP_MOVE:
-            if (!gProcessingExtraAttacks && AbilityBattleEffects(ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE, gBattlerAttacker, 0, 0, gChosenMove))
-            {
-                gHitMarker |= (HITMARKER_NO_PPDEDUCT | HITMARKER_NO_ATTACKSTRING);
-                gBattleScripting.animTargetsHit = 0;
-                gBattleScripting.moveendState = 0;
-                gTurnStructs[gBattlerAttacker].multiHitOn = FALSE;
-                MoveValuesCleanUp();
-                gBattleScripting.usingExtraMove = TRUE;
-
-                gBattlescriptCurrInstr = BattleScript_AttackerUsedAnExtraMove;
-                return;
-            }
+            if (!gProcessingExtraAttacks) 
+                AbilityBattleEffects(ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE, gBattlerAttacker, 0, 0, gChosenMove);
 
             gBattleScripting.moveendState++;
             break;
@@ -8466,9 +8459,9 @@ static void HandleTerrainMove(u32 moveEffect)
         gFieldStatuses |= statusFlag;
         gFieldTimers.started.terrain = TRUE;
         if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_TERRAIN_EXTENDER)
-            *timer = 8;
+            *timer = TERRAIN_DURATION_EXTENDED;
         else
-            *timer = 5;
+            *timer = TERRAIN_DURATION;
         gBattlescriptCurrInstr += 8;
     }
 }
@@ -14303,11 +14296,14 @@ static void Cmd_setsafeguard(void)
 
 static void Cmd_magnitudedamagecalculation(void)
 {
-    bool8 isExtraMove = gRoundStructs[gBattlerAttacker].extraMoveUsed;
     u8 maxRoll = 100;
     u32 magnitude;
 
-    if(isExtraMove){
+    if(gProcessingExtraAttacks){
+        maxRoll = gQueuedExtraAttackData[0].movePower;
+        if (!maxRoll) maxRoll = 100;
+    }
+    else if(gRoundStructs[gBattlerAttacker].extraMoveUsed){
         maxRoll = VarGet(VAR_EXTRA_MOVE_DAMAGE);
         if (!maxRoll) maxRoll = 100;
         VarSet(VAR_EXTRA_MOVE_DAMAGE, 0);
@@ -16844,7 +16840,7 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
     if (gBattleMoves[move].twoTurnMove && !BATTLER_HAS_ABILITY(battlerId, ABILITY_ACCELERATE)) return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
     {
-        switch (gBattleMoves[move].target)
+        switch (GetBattlerBattleMoveTargetFlags(move, battlerId))
         {
             case MOVE_TARGET_BOTH:
                 if (CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) >= 2) // Check for single target
@@ -16854,10 +16850,6 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
                 if (CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE) >= 2) // Count mons on both sides; ignore attacker
                     return FALSE;
                 break;
-            case MOVE_TARGET_SELECTED:
-                if (GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN && gBattleMoves[move].effect == EFFECT_EXPANDING_FORCE && CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) >= 2) // Check for Expanding Force
-                    return FALSE;
-            break;
         }
     }
     return TRUE;
