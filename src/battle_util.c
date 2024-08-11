@@ -1055,6 +1055,9 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_ANTICIPATION] = 1,
     [ABILITY_AERIALIST] = 1,
     [ABILITY_FIRE_SCALES] = 1,
+    [ABILITY_APPLE_ENLIGHTENMENT] = 1,
+    [ABILITY_OLD_MARINER] = 1,
+    [ABILITY_LAST_STAND] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
