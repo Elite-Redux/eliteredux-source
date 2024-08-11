@@ -7778,6 +7778,12 @@ const u32 gMonPalette_ToxtricityReduxLowKeyMega[]           = INCBIN_U32("graphi
 const u32 gMonShinyPalette_ToxtricityReduxLowKeyMega[]      = INCBIN_U32("graphics/pokemon/toxtricity/redux_low_key_mega/shiny.gbapal.lz");
 const u8  gMonIcon_ToxtricityReduxLowKeyMega[]              = INCBIN_U8("graphics/pokemon/toxtricity/redux_low_key_mega/icon.4bpp");
 
+const u32 gMonFrontPic_TrapinchRedux[]          = INCBIN_U32("graphics/pokemon/trapinch/redux/front.4bpp.lz");
+const u32 gMonBackPic_TrapinchRedux[]           = INCBIN_U32("graphics/pokemon/trapinch/redux/back.4bpp.lz");
+const u32 gMonPalette_TrapinchRedux[]           = INCBIN_U32("graphics/pokemon/trapinch/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_TrapinchRedux[]      = INCBIN_U32("graphics/pokemon/trapinch/redux/shiny.gbapal.lz");
+const u8  gMonIcon_TrapinchRedux[]              = INCBIN_U8("graphics/pokemon/trapinch/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

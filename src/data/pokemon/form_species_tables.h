@@ -1630,6 +1630,11 @@ static const u16 sTerapagosFormSpeciesIdTable[] = {
     SPECIES_TERAPAGOS_STELLAR,
     FORM_SPECIES_END,
 };
+static const u16 sTrapinchFormSpeciesIdTable[] = {
+    SPECIES_TRAPINCH,
+    SPECIES_TRAPINCH_REDUX,
+    FORM_SPECIES_END,
+};
 static const u16 sFlygonFormSpeciesIdTable[] = {
     SPECIES_FLYGON,
     SPECIES_FLYGON_REDUX_MEGA,

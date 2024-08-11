@@ -4251,6 +4251,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x68,
         .y_offset = 1,
     },
+    [SPECIES_TRAPINCH_REDUX] =
+    {
+        .size = 0x54,
+        .y_offset = 12,
+    },
     [SPECIES_SIZZLIPEDE] =
     {
         .size = 0x64,

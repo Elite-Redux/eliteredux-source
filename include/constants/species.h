@@ -1766,9 +1766,10 @@
 #define SPECIES_TSAREENA_REDUX              REDUX_FORMS_START + 111
 #define SPECIES_TOXEL_REDUX                 REDUX_FORMS_START + 112
 #define SPECIES_TOXTRICITY_REDUX            REDUX_FORMS_START + 113
-#define SPECIES_TOXTRICITY_REDUX_LOW_KEY            REDUX_FORMS_START + 114
+#define SPECIES_TOXTRICITY_REDUX_LOW_KEY    REDUX_FORMS_START + 114
+#define SPECIES_TRAPINCH_REDUX              REDUX_FORMS_START + 115
 
-#define LAST_REDUX_FORM                     SPECIES_TOXTRICITY_REDUX_LOW_KEY
+#define LAST_REDUX_FORM                     SPECIES_TRAPINCH_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

@@ -1241,6 +1241,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_TOXTRICITY_REDUX_MEGA] = gMonIcon_ToxtricityReduxMega,
     [SPECIES_TOXTRICITY_REDUX_LOW_KEY] = gMonIcon_ToxtricityReduxLowKey,
     [SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA] = gMonIcon_ToxtricityReduxLowKeyMega,
+    [SPECIES_TRAPINCH_REDUX] = gMonIcon_TrapinchRedux,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,

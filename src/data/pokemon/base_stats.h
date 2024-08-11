@@ -41740,6 +41740,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_TRAPINCH_REDUX] =
+    {
+    .baseHP        = 45,
+    .baseAttack    = 100,
+    .baseDefense   = 45,
+    .baseSpeed     = 10,
+    .baseSpAttack  = 45,
+    .baseSpDefense = 45,
+    .type1 = TYPE_GROUND,
+    .type2 = TYPE_BUG,
+    .catchRate = 255,
+    .expYield = 58,
+    .evYield_Attack    = 1,
+    .item2 = ITEM_SOFT_SAND,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_DRAGON,
+    .abilities = {ABILITY_SHEER_FORCE, ABILITY_ARENA_TRAP, ABILITY_EARTHBOUND},
+    .innates = {ABILITY_HYPER_CUTTER, ABILITY_STRONG_JAW, ABILITY_AMBUSH},
+    .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = FALSE,
+    .tier = 3,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

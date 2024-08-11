@@ -1654,6 +1654,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_TOXTRICITY_REDUX_MEGA] = sToxtricityReduxLevelUpLearnset,
     [SPECIES_TOXTRICITY_REDUX_LOW_KEY] = sToxtricityReduxLevelUpLearnset,
     [SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA] = sToxtricityReduxLevelUpLearnset,
+    [SPECIES_TRAPINCH_REDUX] = sTrapinchReduxLevelUpLearnset,
     [SPECIES_MINCCINO_REDUX] = sMinccino_ReduxLevelUpLearnset,
     [SPECIES_CINCCINO_REDUX] = sCinccino_ReduxLevelUpLearnset,
 };

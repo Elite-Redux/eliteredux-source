@@ -969,4 +969,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_TOXTRICITY_REDUX_LOW_KEY] = sToxtricityFormSpeciesIdTable,
 
+    [SPECIES_TRAPINCH_REDUX] = sTrapinchFormSpeciesIdTable,
+    [SPECIES_TRAPINCH] = sTrapinchFormSpeciesIdTable,
+
 };

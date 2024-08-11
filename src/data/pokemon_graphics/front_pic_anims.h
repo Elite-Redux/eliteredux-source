@@ -292,6 +292,11 @@ static const union AnimCmd sAnim_TOXTRICITY_REDUX_LOW_KEY_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_TRAPINCH_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -879,6 +884,10 @@ static const union AnimCmd *const sAnims_TOXTRICITY_REDUX_LOW_KEY_MEGA[] ={
     sAnim_TOXTRICITY_REDUX_LOW_KEY_MEGA_1,
 };
 
+static const union AnimCmd *const sAnims_TRAPINCH_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TRAPINCH_REDUX_1,
+};
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
     sAnim_GeneralFrame0,
@@ -20598,6 +20607,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(TOXTRICITY_REDUX_MEGA),
     ANIM_CMD(TOXTRICITY_REDUX_LOW_KEY),
     ANIM_CMD(TOXTRICITY_REDUX_LOW_KEY_MEGA),
+    ANIM_CMD(TRAPINCH_REDUX),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),

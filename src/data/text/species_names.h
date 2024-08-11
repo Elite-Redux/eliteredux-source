@@ -1143,6 +1143,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_TOXTRICITY_REDUX_MEGA]      = _("Toxtricity"),
     [SPECIES_TOXTRICITY_REDUX_LOW_KEY]      = _("Toxtricity"),
     [SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA]      = _("Toxtricity"),
+    [SPECIES_TRAPINCH_REDUX]      = _("Trapinch"),
 
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),
