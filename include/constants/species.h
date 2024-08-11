@@ -1642,8 +1642,10 @@
 #define SPECIES_INFERNAPE_REDUX_MEGA        CUSTOM_MEGA_START + 75
 #define SPECIES_EMPOLEON_REDUX_MEGA         CUSTOM_MEGA_START + 76
 #define SPECIES_TSAREENA_REDUX_MEGA         CUSTOM_MEGA_START + 77
+#define SPECIES_TOXTRICITY_REDUX_MEGA       CUSTOM_MEGA_START + 78
+#define SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA  CUSTOM_MEGA_START + 79
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_TSAREENA_REDUX_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_TOXTRICITY_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
@@ -1762,8 +1764,11 @@
 #define SPECIES_BOUNSWEET_REDUX             REDUX_FORMS_START + 109
 #define SPECIES_STEENEE_REDUX               REDUX_FORMS_START + 110
 #define SPECIES_TSAREENA_REDUX              REDUX_FORMS_START + 111
+#define SPECIES_TOXEL_REDUX                 REDUX_FORMS_START + 112
+#define SPECIES_TOXTRICITY_REDUX            REDUX_FORMS_START + 113
+#define SPECIES_TOXTRICITY_REDUX_LOW_KEY            REDUX_FORMS_START + 114
 
-#define LAST_REDUX_FORM                     SPECIES_TSAREENA_REDUX
+#define LAST_REDUX_FORM                     SPECIES_TOXTRICITY_REDUX_LOW_KEY
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

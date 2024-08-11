@@ -1138,6 +1138,11 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_STEENEE_REDUX]      = _("Steenee"),
     [SPECIES_TSAREENA_REDUX]      = _("Tsareena"),
     [SPECIES_TSAREENA_REDUX_MEGA]      = _("Tsareena"),
+    [SPECIES_TOXEL_REDUX]      = _("Toxel"),
+    [SPECIES_TOXTRICITY_REDUX]      = _("Toxtricity"),
+    [SPECIES_TOXTRICITY_REDUX_MEGA]      = _("Toxtricity"),
+    [SPECIES_TOXTRICITY_REDUX_LOW_KEY]      = _("Toxtricity"),
+    [SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA]      = _("Toxtricity"),
 
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),

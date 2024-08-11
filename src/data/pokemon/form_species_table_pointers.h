@@ -926,31 +926,47 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_LUMBERING_SLOTH_OVERGROWN] = sLumberingSlothFormSpeciesIdTable,
 
     [SPECIES_TURTWIG_REDUX] = sTurtwigFormSpeciesIdTable,
+    [SPECIES_TURTWIG] = sTurtwigFormSpeciesIdTable,
 
     [SPECIES_GROTLE_REDUX] = sGrotleFormSpeciesIdTable,
+    [SPECIES_GROTLE] = sGrotleFormSpeciesIdTable,
 
     [SPECIES_TORTERRA_REDUX] = sTorterraFormSpeciesIdTable,
 
     [SPECIES_TORTERRA_REDUX_MEGA] = sTorterraFormSpeciesIdTable,
 
     [SPECIES_CHIMCHAR_REDUX] = sChimcharFormSpeciesIdTable,
+    [SPECIES_CHIMCHAR] = sChimcharFormSpeciesIdTable,
 
     [SPECIES_MONFERNO_REDUX] = sMonfernoFormSpeciesIdTable,
+    [SPECIES_MONFERNO] = sMonfernoFormSpeciesIdTable,
 
     [SPECIES_INFERNAPE_REDUX] = sInfernapeFormSpeciesIdTable,
 
     [SPECIES_PIPLUP_REDUX] = sPiplupFormSpeciesIdTable,
+    [SPECIES_PIPLUP] = sPiplupFormSpeciesIdTable,
 
     [SPECIES_PRINPLUP_REDUX] = sPrinplupFormSpeciesIdTable,
+    [SPECIES_PRINPLUP] = sPrinplupFormSpeciesIdTable,
 
     [SPECIES_EMPOLEON_REDUX] = sEmpoleonFormSpeciesIdTable,
 
     [SPECIES_EMPOLEON_REDUX_MEGA] = sEmpoleonFormSpeciesIdTable,
 
     [SPECIES_BOUNSWEET_REDUX] = sBounsweetFormSpeciesIdTable,
+    [SPECIES_BOUNSWEET] = sBounsweetFormSpeciesIdTable,
 
     [SPECIES_STEENEE_REDUX] = sSteeneeFormSpeciesIdTable,
+    [SPECIES_STEENEE] = sSteeneeFormSpeciesIdTable,
 
     [SPECIES_TSAREENA_REDUX] = sTsareenaFormSpeciesIdTable,
+    [SPECIES_TSAREENA] = sTsareenaFormSpeciesIdTable,
+
+    [SPECIES_TOXEL_REDUX] = sToxelFormSpeciesIdTable,
+    [SPECIES_TOXEL] = sToxelFormSpeciesIdTable,
+
+    [SPECIES_TOXTRICITY_REDUX] = sToxtricityFormSpeciesIdTable,
+
+    [SPECIES_TOXTRICITY_REDUX_LOW_KEY] = sToxtricityFormSpeciesIdTable,
 
 };

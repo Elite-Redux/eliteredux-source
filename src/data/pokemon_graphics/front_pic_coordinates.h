@@ -5672,6 +5672,31 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 1,
     },
+    [SPECIES_TOXEL_REDUX] =
+    {
+        .size = 0x56,
+        .y_offset = 11,
+    },
+    [SPECIES_TOXTRICITY_REDUX] =
+    {
+        .size = 0x68,
+        .y_offset = 1,
+    },
+    [SPECIES_TOXTRICITY_REDUX_MEGA] =
+    {
+        .size = 0x68,
+        .y_offset = 1,
+    },
+    [SPECIES_TOXTRICITY_REDUX_LOW_KEY] =
+    {
+        .size = 0x68,
+        .y_offset = 1,
+    },
+    [SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA] =
+    {
+        .size = 0x68,
+        .y_offset = 1,
+    },
     [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x87,

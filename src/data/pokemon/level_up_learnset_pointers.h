@@ -1649,6 +1649,11 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_STEENEE_REDUX] = sSteeneeReduxLevelUpLearnset,
     [SPECIES_TSAREENA_REDUX] = sTsareenaReduxLevelUpLearnset,
     [SPECIES_TSAREENA_REDUX_MEGA] = sTsareenaReduxLevelUpLearnset,
+    [SPECIES_TOXEL_REDUX] = sToxelReduxLevelUpLearnset,
+    [SPECIES_TOXTRICITY_REDUX] = sToxtricityReduxLevelUpLearnset,
+    [SPECIES_TOXTRICITY_REDUX_MEGA] = sToxtricityReduxLevelUpLearnset,
+    [SPECIES_TOXTRICITY_REDUX_LOW_KEY] = sToxtricityReduxLevelUpLearnset,
+    [SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA] = sToxtricityReduxLevelUpLearnset,
     [SPECIES_MINCCINO_REDUX] = sMinccino_ReduxLevelUpLearnset,
     [SPECIES_CINCCINO_REDUX] = sCinccino_ReduxLevelUpLearnset,
 };

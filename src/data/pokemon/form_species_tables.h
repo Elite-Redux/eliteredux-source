@@ -978,9 +978,19 @@ static const u16 sCramorantFormSpeciesIdTable[] = {
     FORM_SPECIES_END,
 };
 
+static const u16 sToxelFormSpeciesIdTable[] = {
+    SPECIES_TOXEL,
+    SPECIES_TOXEL_REDUX,
+    FORM_SPECIES_END,
+};
+
 static const u16 sToxtricityFormSpeciesIdTable[] = {
     SPECIES_TOXTRICITY,
     SPECIES_TOXTRICITY_LOW_KEY,
+    SPECIES_TOXTRICITY_REDUX,
+    SPECIES_TOXTRICITY_REDUX_MEGA,
+    SPECIES_TOXTRICITY_REDUX_LOW_KEY,
+    SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA,
     FORM_SPECIES_END,
 };
 
