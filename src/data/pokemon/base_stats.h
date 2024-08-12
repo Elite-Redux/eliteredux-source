@@ -41875,6 +41875,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 2,
     },
 
+[SPECIES_CRABOMINABLE_REDUX] =
+    {
+    .baseHP        = 97,
+    .baseAttack    = 132,
+    .baseDefense   = 97,
+    .baseSpeed     = 43,
+    .baseSpAttack  = 62,
+    .baseSpDefense = 87,
+    .type1 = TYPE_FIGHTING,
+    .type2 = TYPE_ICE,
+    .catchRate = 255,
+    .expYield = 167,
+    .evYield_Attack    = 2,
+    .item2 = ITEM_CHERI_BERRY,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_WATER_3,
+    .eggGroup2 = EGG_GROUP_WATER_3,
+	.abilities = {ABILITY_HYPER_CUTTER, ABILITY_SUPER_SLAMMER, ABILITY_RAGING_BOXER},
+	.innates = {ABILITY_GRIP_PINCER, ABILITY_ANGER_POINT, ABILITY_PERMAFROST},
+    .bodyColor = BODY_COLOR_WHITE,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

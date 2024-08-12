@@ -7808,6 +7808,12 @@ const u32 gMonPalette_CrabrawlerRedux[]           = INCBIN_U32("graphics/pokemon
 const u32 gMonShinyPalette_CrabrawlerRedux[]      = INCBIN_U32("graphics/pokemon/crabrawler/redux/shiny.gbapal.lz");
 const u8  gMonIcon_CrabrawlerRedux[]              = INCBIN_U8("graphics/pokemon/crabrawler/redux/icon.4bpp");
 
+const u32 gMonFrontPic_CrabominableRedux[]          = INCBIN_U32("graphics/pokemon/crabominable/redux/front.4bpp.lz");
+const u32 gMonBackPic_CrabominableRedux[]           = INCBIN_U32("graphics/pokemon/crabominable/redux/back.4bpp.lz");
+const u32 gMonPalette_CrabominableRedux[]           = INCBIN_U32("graphics/pokemon/crabominable/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_CrabominableRedux[]      = INCBIN_U32("graphics/pokemon/crabominable/redux/shiny.gbapal.lz");
+const u8  gMonIcon_CrabominableRedux[]              = INCBIN_U8("graphics/pokemon/crabominable/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

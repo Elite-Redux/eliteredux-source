@@ -1866,3 +1866,8 @@ static const u16 sCrabrawlerFormSpeciesIdTable[] = {
     SPECIES_CRABRAWLER_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sCrabominableFormSpeciesIdTable[] = {
+    SPECIES_CRABOMINABLE,
+    SPECIES_CRABOMINABLE_REDUX,
+    FORM_SPECIES_END,
+};

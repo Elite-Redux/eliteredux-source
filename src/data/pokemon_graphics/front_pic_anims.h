@@ -317,6 +317,11 @@ static const union AnimCmd sAnim_CRABRAWLER_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_CRABOMINABLE_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -927,6 +932,11 @@ static const union AnimCmd *const sAnims_FLYGON_REDUX[] ={
 static const union AnimCmd *const sAnims_CRABRAWLER_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_CRABRAWLER_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_CRABOMINABLE_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CRABOMINABLE_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
@@ -20652,6 +20662,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(FLYGON_REDUX),
     ANIM_CMD(FLYGON_REDUX_MEGA),
     ANIM_CMD(CRABRAWLER_REDUX),
+    ANIM_CMD(CRABOMINABLE_REDUX),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
