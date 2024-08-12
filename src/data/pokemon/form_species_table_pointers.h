@@ -997,4 +997,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_GLIGAR_REDUX] = sGligarFormSpeciesIdTable,
     [SPECIES_GLIGAR] = sGligarFormSpeciesIdTable,
 
+    [SPECIES_GLISCOR_REDUX] = sGliscorFormSpeciesIdTable,
+    [SPECIES_GLISCOR] = sGliscorFormSpeciesIdTable,
+
 };

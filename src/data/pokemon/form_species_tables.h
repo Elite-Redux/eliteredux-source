@@ -1892,3 +1892,8 @@ static const u16 sGligarFormSpeciesIdTable[] = {
     SPECIES_GLIGAR_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sGliscorFormSpeciesIdTable[] = {
+    SPECIES_GLISCOR,
+    SPECIES_GLISCOR_REDUX,
+    FORM_SPECIES_END,
+};

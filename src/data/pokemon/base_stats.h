@@ -42039,6 +42039,58 @@ const struct BaseStats gBaseStats[] =
     .tier = 3,
     },
 
+[SPECIES_GLISCOR_REDUX] =
+    {
+    .baseHP        = 75,
+    .baseAttack    = 105,
+    .baseDefense   = 105,
+    .baseSpeed     = 105,
+    .baseSpAttack  = 60,
+    .baseSpDefense = 60,
+    .type1 = TYPE_POISON,
+    .type2 = TYPE_FIRE,
+    .catchRate = 255,
+    .expYield = 179,
+    .evYield_Defense   = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_BUG,
+	.abilities = {ABILITY_VIOLENT_RUSH, ABILITY_INTOXICATE, ABILITY_SHELL_ARMOR},
+	.innates = {ABILITY_GRIP_PINCER, ABILITY_EXPLOIT_WEAKNESS, ABILITY_SOLENOGLYPHS}, //3rd innate placeholder
+    .bodyColor = BODY_COLOR_PURPLE,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
+[SPECIES_MAGMENOUS] =
+    {
+    .baseHP        = 90,
+    .baseAttack    = 120,
+    .baseDefense   = 125,
+    .baseSpeed     = 125,
+    .baseSpAttack  = 60,
+    .baseSpDefense = 60,
+    .type1 = TYPE_POISON,
+    .type2 = TYPE_FIRE,
+    .catchRate = 255,
+    .expYield = 179,
+    .evYield_Defense   = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_BUG,
+	.abilities = {ABILITY_VIOLENT_RUSH, ABILITY_INTOXICATE, ABILITY_SHELL_ARMOR}, //2nd ability placeholder
+	.innates = {ABILITY_GRIP_PINCER, ABILITY_EXPLOIT_WEAKNESS, ABILITY_SOLENOGLYPHS}, //3rd innate placeholder
+    .bodyColor = BODY_COLOR_PURPLE,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

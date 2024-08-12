@@ -7844,6 +7844,18 @@ const u32 gMonPalette_GligarRedux[]           = INCBIN_U32("graphics/pokemon/gli
 const u32 gMonShinyPalette_GligarRedux[]      = INCBIN_U32("graphics/pokemon/gligar/redux/shiny.gbapal.lz");
 const u8  gMonIcon_GligarRedux[]              = INCBIN_U8("graphics/pokemon/gligar/redux/icon.4bpp");
 
+const u32 gMonFrontPic_GliscorRedux[]          = INCBIN_U32("graphics/pokemon/gliscor/redux/front.4bpp.lz");
+const u32 gMonBackPic_GliscorRedux[]           = INCBIN_U32("graphics/pokemon/gliscor/redux/back.4bpp.lz");
+const u32 gMonPalette_GliscorRedux[]           = INCBIN_U32("graphics/pokemon/gliscor/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_GliscorRedux[]      = INCBIN_U32("graphics/pokemon/gliscor/redux/shiny.gbapal.lz");
+const u8  gMonIcon_GliscorRedux[]              = INCBIN_U8("graphics/pokemon/gliscor/redux/icon.4bpp");
+
+const u32 gMonFrontPic_Magmenous[]          = INCBIN_U32("graphics/pokemon/magmenous/front.4bpp.lz");
+const u32 gMonBackPic_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/back.4bpp.lz");
+const u32 gMonPalette_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/normal.gbapal.lz");
+const u32 gMonShinyPalette_Magmenous[]      = INCBIN_U32("graphics/pokemon/magmenous/shiny.gbapal.lz");
+const u8  gMonIcon_Magmenous[]              = INCBIN_U8("graphics/pokemon/magmenous/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

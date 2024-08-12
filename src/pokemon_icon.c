@@ -1252,6 +1252,8 @@ const u8 *const gMonIconTable[] =
     [SPECIES_CLEFABLE_REDUX] = gMonIcon_ClefableRedux,
     [SPECIES_CLEFABLE_REDUX_MEGA] = gMonIcon_ClefableReduxMega,
     [SPECIES_GLIGAR_REDUX] = gMonIcon_GligarRedux,
+    [SPECIES_GLISCOR_REDUX] = gMonIcon_GliscorRedux,
+    [SPECIES_MAGMENOUS] = gMonIcon_Magmenous,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,
