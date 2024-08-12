@@ -7038,7 +7038,7 @@ static void InitSummaryScreenData(void)
         sStorage->summaryMon.mon = &sSavedMovingMon;
         sStorage->summaryStartPos = 0;
         sStorage->summaryMaxPos = 0;
-        sStorage->summaryScreenMode = SUMMARY_MODE_NORMAL;
+        sStorage->summaryScreenMode = SUMMARY_MODE_BOX;
     }
     else if (sCursorArea == CURSOR_AREA_IN_PARTY)
     {
