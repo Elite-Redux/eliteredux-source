@@ -1777,8 +1777,9 @@
 #define SPECIES_CLEFFA_REDUX                REDUX_FORMS_START + 120
 #define SPECIES_CLEFAIRY_REDUX              REDUX_FORMS_START + 121
 #define SPECIES_CLEFABLE_REDUX              REDUX_FORMS_START + 122
+#define SPECIES_GLIGAR_REDUX                REDUX_FORMS_START + 123
 
-#define LAST_REDUX_FORM                     SPECIES_CLEFABLE_REDUX
+#define LAST_REDUX_FORM                     SPECIES_GLIGAR_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

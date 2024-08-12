@@ -42013,6 +42013,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_GLIGAR_REDUX] =
+    {
+    .baseHP        = 65,
+    .baseAttack    = 75,
+    .baseDefense   = 105,
+    .baseSpeed     = 85,
+    .baseSpAttack  = 35,
+    .baseSpDefense = 65,
+    .type1 = TYPE_GROUND,
+    .type2 = TYPE_FLYING,
+    .catchRate = 255,
+    .expYield = 86,
+    .evYield_Defense   = 1,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_BUG,
+    .eggGroup2 = EGG_GROUP_BUG,
+    .abilities = {ABILITY_IMMUNITY, ABILITY_BATTLE_ARMOR, ABILITY_POISON_HEAL},
+    .innates = {ABILITY_HYPER_CUTTER, ABILITY_SAND_VEIL, ABILITY_ROUGH_SKIN},
+    .bodyColor = BODY_COLOR_PURPLE,
+    .noFlip = FALSE,
+    .tier = 3,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

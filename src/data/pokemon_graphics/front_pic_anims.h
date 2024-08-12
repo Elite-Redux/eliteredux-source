@@ -342,6 +342,11 @@ static const union AnimCmd sAnim_CLEFABLE_REDUX_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_GLIGAR_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -977,6 +982,11 @@ static const union AnimCmd *const sAnims_CLEFABLE_REDUX[] ={
 static const union AnimCmd *const sAnims_CLEFABLE_REDUX_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_CLEFABLE_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_GLIGAR_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GLIGAR_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
@@ -20707,6 +20717,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(CLEFAIRY_REDUX),
     ANIM_CMD(CLEFABLE_REDUX),
     ANIM_CMD(CLEFABLE_REDUX_MEGA),
+    ANIM_CMD(GLIGAR_REDUX),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
