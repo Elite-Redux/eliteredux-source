@@ -4251,6 +4251,26 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x68,
         .y_offset = 1,
     },
+    [SPECIES_TRAPINCH_REDUX] =
+    {
+        .size = 0x54,
+        .y_offset = 12,
+    },
+    [SPECIES_VIBRAVA_REDUX] =
+    {
+        .size = 0x86,
+        .y_offset = 10,
+    },
+    [SPECIES_FLYGON_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_FLYGON_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_SIZZLIPEDE] =
     {
         .size = 0x64,
@@ -5672,6 +5692,31 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 1,
     },
+    [SPECIES_TOXEL_REDUX] =
+    {
+        .size = 0x56,
+        .y_offset = 11,
+    },
+    [SPECIES_TOXTRICITY_REDUX] =
+    {
+        .size = 0x68,
+        .y_offset = 1,
+    },
+    [SPECIES_TOXTRICITY_REDUX_MEGA] =
+    {
+        .size = 0x68,
+        .y_offset = 1,
+    },
+    [SPECIES_TOXTRICITY_REDUX_LOW_KEY] =
+    {
+        .size = 0x68,
+        .y_offset = 1,
+    },
+    [SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA] =
+    {
+        .size = 0x68,
+        .y_offset = 1,
+    },
     [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x87,
@@ -5792,12 +5837,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_FLYGON_REDUX_MEGA] =
+    [SPECIES_FLYGON_REDUX_B_MEGA] =
     {
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_FLYGON_REDUX] =
+    [SPECIES_FLYGON_REDUX_B] =
     {
         .size = 0,
         .y_offset =  0

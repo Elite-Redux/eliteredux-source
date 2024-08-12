@@ -267,6 +267,51 @@ static const union AnimCmd sAnim_TSAREENA_REDUX_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_TOXEL_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TOXTRICITY_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TOXTRICITY_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TOXTRICITY_REDUX_LOW_KEY_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TOXTRICITY_REDUX_LOW_KEY_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_TRAPINCH_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_VIBRAVA_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_FLYGON_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_FLYGON_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -352,12 +397,12 @@ static const union AnimCmd sAnim_MAWILE_REDUX_B_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_FLYGON_REDUX_MEGA_1[] =
+static const union AnimCmd sAnim_FLYGON_REDUX_B_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_FLYGON_REDUX_1[] =
+static const union AnimCmd sAnim_FLYGON_REDUX_B_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -829,6 +874,50 @@ static const union AnimCmd *const sAnims_TSAREENA_REDUX_MEGA[] ={
     sAnim_TSAREENA_REDUX_MEGA_1,
 };
 
+static const union AnimCmd *const sAnims_TOXEL_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TOXEL_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_TOXTRICITY_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TOXTRICITY_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_TOXTRICITY_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TOXTRICITY_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_TOXTRICITY_REDUX_LOW_KEY[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TOXTRICITY_REDUX_LOW_KEY_1,
+};
+
+static const union AnimCmd *const sAnims_TOXTRICITY_REDUX_LOW_KEY_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TOXTRICITY_REDUX_LOW_KEY_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_TRAPINCH_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TRAPINCH_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_VIBRAVA_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_VIBRAVA_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_FLYGON_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FLYGON_REDUX_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_FLYGON_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FLYGON_REDUX_1,
+};
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
     sAnim_GeneralFrame0,
@@ -925,14 +1014,14 @@ static const union AnimCmd *const sAnims_MAWILE_REDUX_B[] ={
     sAnim_MAWILE_REDUX_B_1,
 };
 
-static const union AnimCmd *const sAnims_FLYGON_REDUX_MEGA[] ={
+static const union AnimCmd *const sAnims_FLYGON_REDUX_B_MEGA[] ={
     sAnim_GeneralFrame0,
-    sAnim_FLYGON_REDUX_MEGA_1,
+    sAnim_FLYGON_REDUX_B_MEGA_1,
 };
 
-static const union AnimCmd *const sAnims_FLYGON_REDUX[] ={
+static const union AnimCmd *const sAnims_FLYGON_REDUX_B[] ={
     sAnim_GeneralFrame0,
-    sAnim_FLYGON_REDUX_1,
+    sAnim_FLYGON_REDUX_B_1,
 };
 
 static const union AnimCmd *const sAnims_WIGGLYTUFF_PRIMAL[] ={
@@ -20543,6 +20632,15 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(STEENEE_REDUX),
     ANIM_CMD(TSAREENA_REDUX),
     ANIM_CMD(TSAREENA_REDUX_MEGA),
+    ANIM_CMD(TOXEL_REDUX),
+    ANIM_CMD(TOXTRICITY_REDUX),
+    ANIM_CMD(TOXTRICITY_REDUX_MEGA),
+    ANIM_CMD(TOXTRICITY_REDUX_LOW_KEY),
+    ANIM_CMD(TOXTRICITY_REDUX_LOW_KEY_MEGA),
+    ANIM_CMD(TRAPINCH_REDUX),
+    ANIM_CMD(VIBRAVA_REDUX),
+    ANIM_CMD(FLYGON_REDUX),
+    ANIM_CMD(FLYGON_REDUX_MEGA),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
@@ -20574,8 +20672,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(RIBOMBEE_REDUX),
     ANIM_CMD(MAWILE_REDUX_B_MEGA),
     ANIM_CMD(MAWILE_REDUX_B),
-    ANIM_CMD(FLYGON_REDUX_MEGA),
-    ANIM_CMD(FLYGON_REDUX),
+    ANIM_CMD(FLYGON_REDUX_B_MEGA),
+    ANIM_CMD(FLYGON_REDUX_B),
     ANIM_CMD(WIGGLYTUFF_PRIMAL),
     ANIM_CMD(WIGGLYTUFF_APEX),
     ANIM_CMD(VICTINI_PRIMAL),
