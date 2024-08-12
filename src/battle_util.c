@@ -6688,10 +6688,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Power of Alchemy
         if (CheckAndSetSwitchInAbility(battler, ABILITY_POWER_OF_ALCHEMY)) {
             int target = BATTLE_OPPOSITE(battler);
-            if (!IsBattlerAlive(target) || !gBattleMons[target].item || !CanBattlerGetOrLoseItem(target, ITEM_NONE))
+            if (!IsBattlerAlive(target) || !gBattleMons[target].item || !CanBattlerGetOrLoseItem(target, gBattleMons[target].item))
                 target = BATTLE_PARTNER(target);
             
-            if (IsBattlerAlive(target) && gBattleMons[target].item && CanBattlerGetOrLoseItem(target, ITEM_NONE))
+            if (IsBattlerAlive(target) && gBattleMons[target].item && CanBattlerGetOrLoseItem(target, gBattleMons[target].item))
             {
                 gStackBattler2 = target;
                 gLastUsedItem = gBattleMons[target].item;

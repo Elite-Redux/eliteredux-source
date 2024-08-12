@@ -4896,7 +4896,7 @@ static const struct TrainerMonItemCustomMoves sParty_Roxanne1Insane[] = {
     .zeroSpeedIvs = TRUE,
     .evs = {180, 0, 252, 0, 76, 0},
     .nature = NATURE_SASSY,
-    .moves = MOVE_JAGGED_FANGS, MOVE_DRAGON_BREATH, MOVE_DRAGON_TAIL, MOVE_HEAVY_SLAM
+    .moves = MOVE_JAGGED_FANGS, MOVE_DRAGON_BREATH, MOVE_EARTHQUAKE, MOVE_HEAVY_SLAM
     },
     {
     .lvl = 0,
