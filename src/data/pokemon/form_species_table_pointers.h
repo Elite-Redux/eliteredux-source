@@ -783,6 +783,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_PALAFIN_HERO] = sPalafinFormSpeciesIdTable,
 
     [SPECIES_DUDUNSPARCE_THREE_SEGMENT] = sDudunsparceFormSpeciesIdTable,
+    [SPECIES_DUDUNSPARCE] = sDudunsparceFormSpeciesIdTable,
 
     [SPECIES_MAUSHOLD_FOUR] = sMausholdFormSpeciesIdTable,
 
@@ -827,7 +828,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_TERAPAGOS_STELLAR] = sTerapagosFormSpeciesIdTable,
 
-    [SPECIES_FLYGON_REDUX] = sFlygonFormSpeciesIdTable,
+    [SPECIES_FLYGON_REDUX_B] = sFlygonFormSpeciesIdTable,
     [SPECIES_FLYGON_MEGA] = sFlygonFormSpeciesIdTable,
 
     [SPECIES_TORTERRA] = sTorterraFormSpeciesIdTable,
@@ -879,7 +880,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_WIGGLYTUFF_PRIMAL] = sWigglytuffFormSpeciesIdTable,
 
-    [SPECIES_FLYGON_REDUX_MEGA] = sFlygonFormSpeciesIdTable,
+    [SPECIES_FLYGON_REDUX_B_MEGA] = sFlygonFormSpeciesIdTable,
 
     [SPECIES_MAWILE_REDUX_B_MEGA] = sMawileFormSpeciesIdTable,
 
@@ -922,7 +923,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ARBOK_MEGA] = sArbokFormSpeciesIdTable,
 
     [SPECIES_LUMBERING_SLOTH] = sLumberingSlothFormSpeciesIdTable,
-
     [SPECIES_LUMBERING_SLOTH_OVERGROWN] = sLumberingSlothFormSpeciesIdTable,
 
     [SPECIES_TURTWIG_REDUX] = sTurtwigFormSpeciesIdTable,
@@ -971,5 +971,12 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_TRAPINCH_REDUX] = sTrapinchFormSpeciesIdTable,
     [SPECIES_TRAPINCH] = sTrapinchFormSpeciesIdTable,
+
+    [SPECIES_VIBRAVA_REDUX] = sVibravaFormSpeciesIdTable,
+    [SPECIES_VIBRAVA] = sVibravaFormSpeciesIdTable,
+
+    [SPECIES_FLYGON_REDUX] = sFlygonFormSpeciesIdTable,
+
+    [SPECIES_FLYGON_REDUX_MEGA] = sFlygonFormSpeciesIdTable,
 
 };

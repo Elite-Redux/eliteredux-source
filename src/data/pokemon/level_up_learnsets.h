@@ -27724,6 +27724,16 @@ static const struct LevelUpMove sTrapinchReduxLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sVibravaReduxLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sFlygonReduxLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sCalyrex_Cloud_RiderLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_CONFUSION),
     LEVEL_UP_MOVE(1, MOVE_GRASSY_GLIDE),
@@ -27887,7 +27897,7 @@ static const struct LevelUpMove sMawile_Redux_BLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sFlygon_ReduxLevelUpLearnset[] = {
+static const struct LevelUpMove sFlygon_Redux_BLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_DRAGON_BREATH),
     LEVEL_UP_MOVE(0, MOVE_DRAGON_CLAW),
     LEVEL_UP_MOVE(0, MOVE_DUAL_WINGBEAT),

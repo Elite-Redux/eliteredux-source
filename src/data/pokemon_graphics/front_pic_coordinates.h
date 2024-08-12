@@ -4256,6 +4256,21 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x54,
         .y_offset = 12,
     },
+    [SPECIES_VIBRAVA_REDUX] =
+    {
+        .size = 0x86,
+        .y_offset = 10,
+    },
+    [SPECIES_FLYGON_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_FLYGON_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_SIZZLIPEDE] =
     {
         .size = 0x64,
@@ -5822,12 +5837,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_FLYGON_REDUX_MEGA] =
+    [SPECIES_FLYGON_REDUX_B_MEGA] =
     {
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_FLYGON_REDUX] =
+    [SPECIES_FLYGON_REDUX_B] =
     {
         .size = 0,
         .y_offset =  0

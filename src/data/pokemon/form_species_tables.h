@@ -1635,11 +1635,18 @@ static const u16 sTrapinchFormSpeciesIdTable[] = {
     SPECIES_TRAPINCH_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sVibravaFormSpeciesIdTable[] = {
+    SPECIES_VIBRAVA,
+    SPECIES_VIBRAVA_REDUX,
+    FORM_SPECIES_END,
+};
 static const u16 sFlygonFormSpeciesIdTable[] = {
     SPECIES_FLYGON,
+    SPECIES_FLYGON_REDUX_B_MEGA,
+    SPECIES_FLYGON_REDUX_B,
+    SPECIES_FLYGON_MEGA,
     SPECIES_FLYGON_REDUX_MEGA,
     SPECIES_FLYGON_REDUX,
-    SPECIES_FLYGON_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sChimcharFormSpeciesIdTable[] = {

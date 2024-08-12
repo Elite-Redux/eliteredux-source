@@ -5691,6 +5691,21 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x66,
         .y_offset = 10,
     },
+    [SPECIES_VIBRAVA_REDUX] =
+    {
+        .size = 0x85,
+        .y_offset = 12,
+    },
+    [SPECIES_FLYGON_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  2
+    },
+    [SPECIES_FLYGON_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  3
+    },
     [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x88,
@@ -5816,12 +5831,12 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_FLYGON_REDUX_MEGA] =
+    [SPECIES_FLYGON_REDUX_B_MEGA] =
     {
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_FLYGON_REDUX] =
+    [SPECIES_FLYGON_REDUX_B] =
     {
         .size = 0,
         .y_offset =  0
