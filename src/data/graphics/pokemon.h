@@ -7814,6 +7814,12 @@ const u32 gMonPalette_CrabominableRedux[]           = INCBIN_U32("graphics/pokem
 const u32 gMonShinyPalette_CrabominableRedux[]      = INCBIN_U32("graphics/pokemon/crabominable/redux/shiny.gbapal.lz");
 const u8  gMonIcon_CrabominableRedux[]              = INCBIN_U8("graphics/pokemon/crabominable/redux/icon.4bpp");
 
+const u32 gMonFrontPic_CleffaRedux[]          = INCBIN_U32("graphics/pokemon/cleffa/redux/front.4bpp.lz");
+const u32 gMonBackPic_CleffaRedux[]           = INCBIN_U32("graphics/pokemon/cleffa/redux/back.4bpp.lz");
+const u32 gMonPalette_CleffaRedux[]           = INCBIN_U32("graphics/pokemon/cleffa/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_CleffaRedux[]      = INCBIN_U32("graphics/pokemon/cleffa/redux/shiny.gbapal.lz");
+const u8  gMonIcon_CleffaRedux[]              = INCBIN_U8("graphics/pokemon/cleffa/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

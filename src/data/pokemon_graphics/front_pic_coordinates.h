@@ -5727,6 +5727,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 0,
     },
+    [SPECIES_CLEFFA_REDUX] =
+    {
+        .size = 0x44,
+        .y_offset = 18,
+    },
     [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x87,

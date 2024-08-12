@@ -985,4 +985,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_CRABOMINABLE_REDUX] = sCrabominableFormSpeciesIdTable,
     [SPECIES_CRABOMINABLE] = sCrabominableFormSpeciesIdTable,
 
+    [SPECIES_CLEFFA_REDUX] = sCleffaFormSpeciesIdTable,
+    [SPECIES_CLEFFA] = sCleffaFormSpeciesIdTable,
+
 };

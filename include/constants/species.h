@@ -1773,8 +1773,9 @@
 #define SPECIES_FLYGON_REDUX                REDUX_FORMS_START + 117
 #define SPECIES_CRABRAWLER_REDUX            REDUX_FORMS_START + 118
 #define SPECIES_CRABOMINABLE_REDUX          REDUX_FORMS_START + 119
+#define SPECIES_CLEFFA_REDUX                REDUX_FORMS_START + 120
 
-#define LAST_REDUX_FORM                     SPECIES_CRABOMINABLE_REDUX
+#define LAST_REDUX_FORM                     SPECIES_CLEFFA_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

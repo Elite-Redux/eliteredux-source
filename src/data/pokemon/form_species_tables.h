@@ -1871,3 +1871,8 @@ static const u16 sCrabominableFormSpeciesIdTable[] = {
     SPECIES_CRABOMINABLE_REDUX,
     FORM_SPECIES_END,
 };
+    static const u16 sCleffaFormSpeciesIdTable[] = {
+    SPECIES_CLEFFA,
+    SPECIES_CLEFFA_REDUX,
+    FORM_SPECIES_END,
+};

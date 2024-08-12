@@ -41902,6 +41902,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_CLEFFA_REDUX] =
+    {
+    .baseHP        = 50,
+    .baseAttack    = 25,
+    .baseDefense   = 28,
+    .baseSpeed     = 15,
+    .baseSpAttack  = 45,
+    .baseSpDefense = 55,
+    .type1 = TYPE_FAIRY,
+    .type2 = TYPE_FAIRY,
+    .catchRate = 150,
+    .expYield = 44,
+    .evYield_SpDefense = 1,
+    .item2 = ITEM_EVIOLITE,
+    .genderRatio = PERCENT_FEMALE(75),
+    .eggCycles = 10,
+    .friendship = 140,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_UNDISCOVERED,
+    .eggGroup2 = EGG_GROUP_UNDISCOVERED,
+    .abilities = {ABILITY_UNAWARE, ABILITY_MAGIC_GUARD, ABILITY_FRIEND_GUARD},
+    .innates = {ABILITY_CUTE_CHARM, ABILITY_HEALER, ABILITY_NATURAL_CURE},
+    .bodyColor = BODY_COLOR_PINK,
+    .noFlip = TRUE,
+    .tier = 2,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,
