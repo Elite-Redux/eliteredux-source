@@ -1861,3 +1861,8 @@ static const u16 sLumberingSlothFormSpeciesIdTable[] = {
     SPECIES_LUMBERING_SLOTH_OVERGROWN,
     FORM_SPECIES_END,
 };
+static const u16 sCrabrawlerFormSpeciesIdTable[] = {
+    SPECIES_CRABRAWLER,
+    SPECIES_CRABRAWLER_REDUX,
+    FORM_SPECIES_END,
+};

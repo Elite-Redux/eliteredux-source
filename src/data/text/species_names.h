@@ -1147,6 +1147,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_VIBRAVA_REDUX]      = _("Vibrava"),
     [SPECIES_FLYGON_REDUX]      = _("Flygon"),
     [SPECIES_FLYGON_REDUX_MEGA]      = _("Flygon"),
+    [SPECIES_CRABRAWLER_REDUX]      = _("Crabrawler"),
 
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),

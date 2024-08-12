@@ -41848,6 +41848,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_CRABRAWLER_REDUX] =
+    {
+    .baseHP        = 47,
+    .baseAttack    = 82,
+    .baseDefense   = 57,
+    .baseSpeed     = 63,
+    .baseSpAttack  = 42,
+    .baseSpDefense = 47,
+    .type1 = TYPE_FIGHTING,
+    .type2 = TYPE_FIGHTING,
+    .catchRate = 225,
+    .expYield = 68,
+    .evYield_Attack    = 1,
+    .item2 = ITEM_ASPEAR_BERRY,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_WATER_3,
+    .eggGroup2 = EGG_GROUP_WATER_3,
+    .abilities = {ABILITY_HYPER_CUTTER, ABILITY_IRON_FIST, ABILITY_DEFIANT},
+    .innates = {ABILITY_GRIP_PINCER, ABILITY_ANGER_POINT, ABILITY_MOXIE},
+    .bodyColor = BODY_COLOR_PURPLE,
+    .noFlip = FALSE,
+    .tier = 2,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

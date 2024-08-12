@@ -1771,8 +1771,9 @@
 #define SPECIES_TRAPINCH_REDUX              REDUX_FORMS_START + 115
 #define SPECIES_VIBRAVA_REDUX               REDUX_FORMS_START + 116
 #define SPECIES_FLYGON_REDUX                REDUX_FORMS_START + 117
+#define SPECIES_CRABRAWLER_REDUX                REDUX_FORMS_START + 118
 
-#define LAST_REDUX_FORM                     SPECIES_FLYGON_REDUX
+#define LAST_REDUX_FORM                     SPECIES_CRABRAWLER_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

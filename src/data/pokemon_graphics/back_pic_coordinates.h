@@ -5706,6 +5706,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  3
     },
+    [SPECIES_CRABRAWLER_REDUX] =
+    {
+        .size = 0x86,
+        .y_offset = 9,
+    },
     [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x88,

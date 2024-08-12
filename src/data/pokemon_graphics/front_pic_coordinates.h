@@ -4251,26 +4251,6 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x68,
         .y_offset = 1,
     },
-    [SPECIES_TRAPINCH_REDUX] =
-    {
-        .size = 0x54,
-        .y_offset = 12,
-    },
-    [SPECIES_VIBRAVA_REDUX] =
-    {
-        .size = 0x86,
-        .y_offset = 10,
-    },
-    [SPECIES_FLYGON_REDUX_MEGA] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
-    [SPECIES_FLYGON_REDUX] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
     [SPECIES_SIZZLIPEDE] =
     {
         .size = 0x64,
@@ -5716,6 +5696,31 @@ const struct MonCoords gMonFrontPicCoords[] =
     {
         .size = 0x68,
         .y_offset = 1,
+    },
+    [SPECIES_TRAPINCH_REDUX] =
+    {
+        .size = 0x54,
+        .y_offset = 12,
+    },
+    [SPECIES_VIBRAVA_REDUX] =
+    {
+        .size = 0x86,
+        .y_offset = 10,
+    },
+    [SPECIES_FLYGON_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_FLYGON_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_CRABRAWLER_REDUX] =
+    {
+        .size = 0x45,
+        .y_offset = 7,
     },
     [SPECIES_POPMOTH_MEGA] =
     {
