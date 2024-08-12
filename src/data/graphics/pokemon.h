@@ -7820,6 +7820,24 @@ const u32 gMonPalette_CleffaRedux[]           = INCBIN_U32("graphics/pokemon/cle
 const u32 gMonShinyPalette_CleffaRedux[]      = INCBIN_U32("graphics/pokemon/cleffa/redux/shiny.gbapal.lz");
 const u8  gMonIcon_CleffaRedux[]              = INCBIN_U8("graphics/pokemon/cleffa/redux/icon.4bpp");
 
+const u32 gMonFrontPic_ClefairyRedux[]          = INCBIN_U32("graphics/pokemon/clefairy/redux/front.4bpp.lz");
+const u32 gMonBackPic_ClefairyRedux[]           = INCBIN_U32("graphics/pokemon/clefairy/redux/back.4bpp.lz");
+const u32 gMonPalette_ClefairyRedux[]           = INCBIN_U32("graphics/pokemon/clefairy/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_ClefairyRedux[]      = INCBIN_U32("graphics/pokemon/clefairy/redux/shiny.gbapal.lz");
+const u8  gMonIcon_ClefairyRedux[]              = INCBIN_U8("graphics/pokemon/clefairy/redux/icon.4bpp");
+
+const u32 gMonFrontPic_ClefableRedux[]          = INCBIN_U32("graphics/pokemon/clefable/redux/front.4bpp.lz");
+const u32 gMonBackPic_ClefableRedux[]           = INCBIN_U32("graphics/pokemon/clefable/redux/back.4bpp.lz");
+const u32 gMonPalette_ClefableRedux[]           = INCBIN_U32("graphics/pokemon/clefable/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_ClefableRedux[]      = INCBIN_U32("graphics/pokemon/clefable/redux/shiny.gbapal.lz");
+const u8  gMonIcon_ClefableRedux[]              = INCBIN_U8("graphics/pokemon/clefable/redux/icon.4bpp");
+
+const u32 gMonFrontPic_ClefableReduxMega[]          = INCBIN_U32("graphics/pokemon/clefable/redux_mega/front.4bpp.lz");
+const u32 gMonBackPic_ClefableReduxMega[]           = INCBIN_U32("graphics/pokemon/clefable/redux_mega/back.4bpp.lz");
+const u32 gMonPalette_ClefableReduxMega[]           = INCBIN_U32("graphics/pokemon/clefable/redux_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_ClefableReduxMega[]      = INCBIN_U32("graphics/pokemon/clefable/redux_mega/shiny.gbapal.lz");
+const u8  gMonIcon_ClefableReduxMega[]              = INCBIN_U8("graphics/pokemon/clefable/redux_mega/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

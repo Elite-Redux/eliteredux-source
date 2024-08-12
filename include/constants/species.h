@@ -1645,8 +1645,9 @@
 #define SPECIES_TOXTRICITY_REDUX_MEGA       CUSTOM_MEGA_START + 78
 #define SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA  CUSTOM_MEGA_START + 79
 #define SPECIES_FLYGON_REDUX_MEGA           CUSTOM_MEGA_START + 80
+#define SPECIES_CLEFABLE_REDUX_MEGA         CUSTOM_MEGA_START + 81
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_FLYGON_REDUX_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_CLEFABLE_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
@@ -1774,8 +1775,10 @@
 #define SPECIES_CRABRAWLER_REDUX            REDUX_FORMS_START + 118
 #define SPECIES_CRABOMINABLE_REDUX          REDUX_FORMS_START + 119
 #define SPECIES_CLEFFA_REDUX                REDUX_FORMS_START + 120
+#define SPECIES_CLEFAIRY_REDUX              REDUX_FORMS_START + 121
+#define SPECIES_CLEFABLE_REDUX              REDUX_FORMS_START + 122
 
-#define LAST_REDUX_FORM                     SPECIES_CLEFFA_REDUX
+#define LAST_REDUX_FORM                     SPECIES_CLEFABLE_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

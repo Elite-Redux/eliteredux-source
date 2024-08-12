@@ -1871,8 +1871,19 @@ static const u16 sCrabominableFormSpeciesIdTable[] = {
     SPECIES_CRABOMINABLE_REDUX,
     FORM_SPECIES_END,
 };
-    static const u16 sCleffaFormSpeciesIdTable[] = {
+static const u16 sCleffaFormSpeciesIdTable[] = {
     SPECIES_CLEFFA,
     SPECIES_CLEFFA_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sClefairyFormSpeciesIdTable[] = {
+    SPECIES_CLEFAIRY,
+    SPECIES_CLEFAIRY_REDUX,
+    FORM_SPECIES_END,
+};
+    static const u16 sClefableFormSpeciesIdTable[] = {
+    SPECIES_CLEFABLE,
+    SPECIES_CLEFABLE_REDUX,
+    SPECIES_CLEFABLE_REDUX_MEGA,
     FORM_SPECIES_END,
 };

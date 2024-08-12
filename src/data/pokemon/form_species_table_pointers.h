@@ -988,4 +988,10 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_CLEFFA_REDUX] = sCleffaFormSpeciesIdTable,
     [SPECIES_CLEFFA] = sCleffaFormSpeciesIdTable,
 
+    [SPECIES_CLEFAIRY_REDUX] = sClefairyFormSpeciesIdTable,
+    [SPECIES_CLEFAIRY] = sClefairyFormSpeciesIdTable,
+
+    [SPECIES_CLEFABLE_REDUX_MEGA] = sClefableFormSpeciesIdTable,
+    [SPECIES_CLEFABLE] = sClefableFormSpeciesIdTable,
+
 };

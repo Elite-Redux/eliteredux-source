@@ -5719,7 +5719,22 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_CLEFFA_REDUX] =
     {
         .size = 0x65,
-        .y_offset = 13,
+        .y_offset = 0,
+    },
+    [SPECIES_CLEFAIRY_REDUX] =
+    {
+        .size = 0x75,
+        .y_offset = 0,
+    },
+    [SPECIES_CLEFABLE_REDUX] =
+    {
+        .size = 0x86,
+        .y_offset = 0,
+    },
+    [SPECIES_CLEFABLE_REDUX_MEGA] =
+    {
+        .size = 0x86,
+        .y_offset = 0,
     },
     [SPECIES_POPMOTH_MEGA] =
     {
