@@ -1126,7 +1126,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_GROTLE_REDUX]      = _("Grotle"),
     [SPECIES_TORTERRA_REDUX]      = _("Torterra"),
     [SPECIES_TORTERRA_REDUX_MEGA]      = _("Torterra"),
-    
+
     [SPECIES_CHIMCHAR_REDUX]      = _("Chimchar"),
     [SPECIES_MONFERNO_REDUX]      = _("Monferno"),
     [SPECIES_INFERNAPE_REDUX]      = _("Infernape"),
@@ -1345,7 +1345,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SHEDINJA_MEGA]      = _("Shedinja"),
     [SPECIES_SWALOT_MEGA]        = _("Swalot"),
     [SPECIES_LANTURN_MEGA]       = _("Lanturn"),
-    [SPECIES_KEKLEONG]            = _("Kekleong"),
+    [SPECIES_KECLEONG]            = _("Kecleong"),
     [SPECIES_LAPRAS_MEGA_X]      = _("Lapras"),
     [SPECIES_WIGGLYTUFF_MEGA]      = _("Wigglytuff"),
     [SPECIES_GYARADEATH]      = _("Gyaradeath"),

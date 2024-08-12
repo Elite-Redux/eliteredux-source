@@ -39069,7 +39069,7 @@ static const struct TrainerMonItemCustomMoves sParty_Granbullite_Route123[] = { 
 static const struct TrainerMonItemCustomMoves sParty_CalvinE4[] = { // E4
     {
     .lvl = 0,
-    .species = SPECIES_KEKLEONG, // Calvin E4, Light Clay
+    .species = SPECIES_KECLEONG, // Calvin E4, Light Clay
     .heldItem = ITEM_LIGHT_CLAY,
     .ability = 0, // ABILITY_PRISMATIC_FUR, ABILITY_PRISMATIC_FUR, ABILITY_PRISMATIC_FUR},
     // .innates = {ABILITY_RETRIBUTION_BLOW, ABILITY_WONDER_SKIN, ABILITY_NORTH_WIND},

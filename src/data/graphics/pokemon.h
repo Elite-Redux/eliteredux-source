@@ -7478,11 +7478,11 @@ const u32 gMonPalette_ClawitzerRedux[]          = INCBIN_U32("graphics/pokemon/c
 const u32 gMonShinyPalette_ClawitzerRedux[]     = INCBIN_U32("graphics/pokemon/clawitzer/redux/shiny.gbapal.lz");
 const u8  gMonIcon_ClawitzerRedux[]             = INCBIN_U8("graphics/pokemon/clawitzer/redux/icon.4bpp");
 
-const u32 gMonFrontPic_Kekleong[]               = INCBIN_U32("graphics/pokemon/kekleong/front.4bpp.lz");
-const u32 gMonBackPic_Kekleong[]                = INCBIN_U32("graphics/pokemon/kekleong/back.4bpp.lz");
-const u32 gMonPalette_Kekleong[]                = INCBIN_U32("graphics/pokemon/kekleong/normal.gbapal.lz");
-const u32 gMonShinyPalette_Kekleong[]           = INCBIN_U32("graphics/pokemon/kekleong/shiny.gbapal.lz");
-const u8  gMonIcon_Kekleong[]                   = INCBIN_U8("graphics/pokemon/kekleong/icon.4bpp");
+const u32 gMonFrontPic_Kecleong[]               = INCBIN_U32("graphics/pokemon/kecleong/front.4bpp.lz");
+const u32 gMonBackPic_Kecleong[]                = INCBIN_U32("graphics/pokemon/kecleong/back.4bpp.lz");
+const u32 gMonPalette_Kecleong[]                = INCBIN_U32("graphics/pokemon/kecleong/normal.gbapal.lz");
+const u32 gMonShinyPalette_Kecleong[]           = INCBIN_U32("graphics/pokemon/kecleong/shiny.gbapal.lz");
+const u8  gMonIcon_Kecleong[]                   = INCBIN_U8("graphics/pokemon/kecleong/icon.4bpp");
 
 const u32 gMonFrontPic_Arachtres[]          = INCBIN_U32("graphics/pokemon/arachtres/front.4bpp.lz");
 const u32 gMonBackPic_Arachtres[]           = INCBIN_U32("graphics/pokemon/arachtres/back.4bpp.lz");

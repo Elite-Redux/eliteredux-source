@@ -19066,7 +19066,7 @@ static const union AnimCmd *const sAnims_LAPRAS_MEGA_X[] ={
     sAnim_GENERIC,
 };
 
-static const union AnimCmd *const sAnims_KEKLEONG[] ={
+static const union AnimCmd *const sAnims_KECLEONG[] ={
     sAnim_GeneralFrame0,
     sAnim_GENERIC,
 };
@@ -20588,7 +20588,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(KINGAMBIT),
     ANIM_CMD(LUXRAY_MEGA),
     ANIM_CMD(GREAT_TUSK),
-    ANIM_CMD(KEKLEONG),
+    ANIM_CMD(KECLEONG),
     ANIM_CMD(SCREAM_TAIL),
     ANIM_CMD(NIDOKING_MEGA),
     ANIM_CMD(BRUTE_BONNET),
@@ -20922,9 +20922,9 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD_FULL(DEERLING_SUMMER, sAnims_DEERLING),
     ANIM_CMD_FULL(DEERLING_AUTUMN, sAnims_DEERLING),
     ANIM_CMD_FULL(DEERLING_WINTER, sAnims_DEERLING),
-    ANIM_CMD_FULL(SAWSBUCK_SUMMER, sAnims_KEKLEONG),
-    ANIM_CMD_FULL(SAWSBUCK_AUTUMN, sAnims_KEKLEONG),
-    ANIM_CMD_FULL(SAWSBUCK_WINTER, sAnims_KEKLEONG),
+    ANIM_CMD_FULL(SAWSBUCK_SUMMER, sAnims_SAWSBUCK),
+    ANIM_CMD_FULL(SAWSBUCK_AUTUMN, sAnims_SAWSBUCK),
+    ANIM_CMD_FULL(SAWSBUCK_WINTER, sAnims_SAWSBUCK),
     ANIM_CMD(TORNADUS_THERIAN),
     ANIM_CMD(THUNDURUS_THERIAN),
     ANIM_CMD(LANDORUS_THERIAN),

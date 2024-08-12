@@ -1387,7 +1387,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_SWALOT_MEGA] = gMonIcon_SwalotMega,
     [SPECIES_LANTURN_MEGA] = gMonIcon_LanturnMega,
     [SPECIES_LAPRAS_MEGA_X] = gMonIcon_LaprasMegaX,
-    [SPECIES_KEKLEONG] = gMonIcon_Kekleong,
+    [SPECIES_KECLEONG] = gMonIcon_Kecleong,
     [SPECIES_CLAWITZER_REDUX] = gMonIcon_ClawitzerRedux,
     [SPECIES_CASCOON_PRIMAL] = gMonIcon_CascoonPrimal,
     [SPECIES_RAYQUAZA_MEGA] = gMonIcon_RayquazaMega,
@@ -2795,7 +2795,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_AUDINO_MEGA] = 1,
     [SPECIES_DIANCIE_MEGA] = 0,
     [SPECIES_CASCOON_PRIMAL]  = 2,
-    [SPECIES_KEKLEONG] = 4,
+    [SPECIES_KECLEONG] = 4,
 
     //Custom Mega
     [SPECIES_MILOTIC_MEGA] = 2,

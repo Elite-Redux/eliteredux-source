@@ -1084,7 +1084,7 @@ static const u16 sCrobatFormSpeciesIdTable[] = {
 static const u16 sDewgongFormSpeciesIdTable[] = {
     SPECIES_DEWGONG,
     SPECIES_DEWGONG_MEGA,
-    SPECIES_KEKLEONG,
+    SPECIES_KECLEONG,
     FORM_SPECIES_END,
 };
 

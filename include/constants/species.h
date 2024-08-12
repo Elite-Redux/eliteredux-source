@@ -1651,8 +1651,8 @@
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
-#define SPECIES_KEKLEONG                    REDUX_FORMS_START + 1
-#define SPECIES_INFERNAPE_REDUX_B             REDUX_FORMS_START + 2
+#define SPECIES_KECLEONG                    REDUX_FORMS_START + 1
+#define SPECIES_INFERNAPE_REDUX_B           REDUX_FORMS_START + 2
 #define SPECIES_NOIBAT_REDUX                REDUX_FORMS_START + 3
 #define SPECIES_NOIVERN_REDUX               REDUX_FORMS_START + 4
 #define SPECIES_LUXRAY_REDUX                REDUX_FORMS_START + 5

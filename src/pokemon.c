@@ -1446,7 +1446,7 @@ const u16 gSpeciesToNationalPokedexNum[NUM_SPECIES] = // Assigns all species to 
     [SPECIES_LANTURN_MEGA - 1] = NATIONAL_DEX_LANTURN,
     [SPECIES_LAPRAS_MEGA_X - 1] = NATIONAL_DEX_LAPRAS,
     [SPECIES_RIBOMBEE_MEGA- 1] = NATIONAL_DEX_RIBOMBEE,
-    [SPECIES_KEKLEONG - 1] = NATIONAL_DEX_DEWGONG,
+    [SPECIES_KECLEONG - 1] = NATIONAL_DEX_DEWGONG,
     [SPECIES_CLAWITZER_REDUX - 1] = NATIONAL_DEX_CLAWITZER,
 
     // Special Mega + Primals
@@ -10220,7 +10220,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_ZARUDE_DADA                || //Unfinished|
                 (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
                 (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
-                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KEKLEONG) 
+                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KECLEONG) 
                 );
         }
         else{
@@ -10304,7 +10304,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_MORPEKO_HANGRY             ||
                 (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
                 (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
-                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KEKLEONG) 
+                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KECLEONG) 
                 );
         }
     }

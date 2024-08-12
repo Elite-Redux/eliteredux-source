@@ -1214,7 +1214,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_WIGGLYTUFF_APEX] = sWigglytuff_ApexLevelUpLearnset,
     [SPECIES_WIGGLYTUFF_PRIMAL] = sWigglytuff_ApexLevelUpLearnset,
     [SPECIES_LUCARIO_MEGA_Y] = sLucarioLevelUpLearnset,
-    [SPECIES_KEKLEONG] = sKekleongLevelUpLearnset,
+    [SPECIES_KECLEONG] = sKecleongLevelUpLearnset,
     [SPECIES_CLAWITZER_REDUX] = sClawitzerReduxLevelUpLearnset,
     // Special Mega + Primals
     [SPECIES_RAYQUAZA_MEGA] = sRayquazaLevelUpLearnset,
