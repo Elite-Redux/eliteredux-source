@@ -13788,6 +13788,14 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             // Special Violent Rush
             if(gVolatileStructs[battler].rapidResponse) statBase = statBase * 6 / 5;
 
+            // Flower Gift
+            {
+            int flowerGiftUser;
+            if (flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)
+                && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
+                    statBase = statBase * 3 / 2;
+            }
+
             // Hadron Engine
             if (BATTLER_HAS_ABILITY(battler, ABILITY_HADRON_ENGINE)
                 && TERRAIN_HAS_EFFECT && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
@@ -13845,14 +13853,12 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             }
 
             // Flower Gift
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT)
-                && gBattleMons[battler].species == SPECIES_CHERRIM
-                && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
+            {
+            int flowerGiftUser;
+            if (flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)
+                && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
                     statBase = statBase * 3 / 2;
-            if (BATTLER_HAS_ABILITY(BATTLE_PARTNER(battler), ABILITY_FLOWER_GIFT)
-                && gBattleMons[BATTLE_PARTNER(battler)].species == SPECIES_CHERRIM
-                && IsBattlerWeatherAffected(BATTLE_PARTNER(battler), WEATHER_SUN_ANY))
-                    statBase = statBase * 3 / 2;
+            }
             
             // Sandstorm
             if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
@@ -14155,10 +14161,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
                 MulModifier(&modifier, UQ_4_12(2.0));
         }
         break;
-    case ABILITY_FLOWER_GIFT:
-        if (gBattleMons[battlerAtk].species == SPECIES_CHERRIM && IsBattlerWeatherAffected(battlerAtk, WEATHER_SUN_ANY) && IS_MOVE_PHYSICAL(move))
-            MulModifier(&modifier, UQ_4_12(1.5));
-        break;
     case ABILITY_STAKEOUT:
         if (gVolatileStructs[battlerDef].isFirstTurn == 2) // just switched in
             MulModifier(&modifier, UQ_4_12(2.0));
@@ -14359,18 +14361,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             MulModifier(&modifier, UQ_4_12(0.5));
             if (updateFlags)
                 RecordAbilityBattle(battlerDef, ABILITY_WATER_COMPACTION);
-        }
-	}
-
-    // ally's abilities
-    if (IsBattlerAlive(BATTLE_PARTNER(battlerAtk)))
-    {
-        switch (GetBattlerAbility(BATTLE_PARTNER(battlerAtk)))
-        {
-        case ABILITY_FLOWER_GIFT:
-            if (gBattleMons[BATTLE_PARTNER(battlerAtk)].species == SPECIES_CHERRIM && IsBattlerWeatherAffected(BATTLE_PARTNER(battlerAtk), WEATHER_SUN_ANY) && IS_MOVE_PHYSICAL(move))
-                MulModifier(&modifier, UQ_4_12(1.5));
-            break;
         }
     }
 
