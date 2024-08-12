@@ -126,7 +126,7 @@
 #define ABILITY_FRISK 119 // Checks foes' item and disables their items for two turns.
 #define ABILITY_RECKLESS 120 // Moves causing recoil damage deal 1.2x more damage.
 #define ABILITY_MULTITYPE 121 // Held Plate item decides holder's type.
-#define ABILITY_FLOWER_GIFT 122 // Changes to Sunshine form if sun is active.
+#define ABILITY_FLOWER_GIFT 122 // Increases the party's SpAtk and SpDef by 1.5x in Sun.
 #define ABILITY_BAD_DREAMS 123 // Sleeping Pokémon lose 1/4 of max HP at the end of each turn.
 
 #define ABILITIES_COUNT_GEN4 (ABILITY_BAD_DREAMS + 1)
