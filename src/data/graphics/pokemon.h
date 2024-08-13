@@ -7882,6 +7882,18 @@ const u32 gMonPalette_GlalieRedux[]           = INCBIN_U32("graphics/pokemon/gla
 const u32 gMonShinyPalette_GlalieRedux[]      = INCBIN_U32("graphics/pokemon/glalie/redux/shiny.gbapal.lz");
 const u8  gMonIcon_GlalieRedux[]              = INCBIN_U8("graphics/pokemon/glalie/redux/icon.4bpp");
 
+const u32 gMonFrontPic_FroslassRedux[]          = INCBIN_U32("graphics/pokemon/froslass/redux/front.4bpp.lz");
+const u32 gMonBackPic_FroslassRedux[]           = INCBIN_U32("graphics/pokemon/froslass/redux/back.4bpp.lz");
+const u32 gMonPalette_FroslassRedux[]           = INCBIN_U32("graphics/pokemon/froslass/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_FroslassRedux[]      = INCBIN_U32("graphics/pokemon/froslass/redux/shiny.gbapal.lz");
+const u8  gMonIcon_FroslassRedux[]              = INCBIN_U8("graphics/pokemon/froslass/redux/icon.4bpp");
+
+const u32 gMonFrontPic_FroslassReduxMega[]          = INCBIN_U32("graphics/pokemon/froslass/redux_mega/front.4bpp.lz");
+const u32 gMonBackPic_FroslassReduxMega[]           = INCBIN_U32("graphics/pokemon/froslass/redux_mega/back.4bpp.lz");
+const u32 gMonPalette_FroslassReduxMega[]           = INCBIN_U32("graphics/pokemon/froslass/redux_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_FroslassReduxMega[]      = INCBIN_U32("graphics/pokemon/froslass/redux_mega/shiny.gbapal.lz");
+const u8  gMonIcon_FroslassReduxMega[]              = INCBIN_U8("graphics/pokemon/froslass/redux_mega/icon.4bpp");
+
 const u32 gMonFrontPic_Magmenous[]          = INCBIN_U32("graphics/pokemon/magmenous/front.4bpp.lz");
 const u32 gMonBackPic_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/back.4bpp.lz");
 const u32 gMonPalette_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/normal.gbapal.lz");

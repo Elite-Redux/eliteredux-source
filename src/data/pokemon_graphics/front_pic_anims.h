@@ -402,6 +402,16 @@ static const union AnimCmd sAnim_GLALIE_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_FROSLASS_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_FROSLASS_REDUX_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -1057,6 +1067,16 @@ static const union AnimCmd *const sAnims_SNORUNT_REDUX[] ={
 static const union AnimCmd *const sAnims_GLALIE_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_GLALIE_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_FROSLASS_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FROSLASS_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_FROSLASS_REDUX_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FROSLASS_REDUX_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
@@ -20788,6 +20808,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(DEWGONG_REDUX),
     ANIM_CMD(SNORUNT_REDUX),
     ANIM_CMD(GLALIE_REDUX),
+    ANIM_CMD(FROSLASS_REDUX),
+    ANIM_CMD(FROSLASS_REDUX_MEGA),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),

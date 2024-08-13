@@ -1011,4 +1011,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_GLALIE_REDUX] = sGlalieFormSpeciesIdTable,
 
+    [SPECIES_FROSLASS_REDUX] = sFroslassFormSpeciesIdTable,
+
 };

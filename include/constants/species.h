@@ -1650,8 +1650,9 @@
 #define SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA  CUSTOM_MEGA_START + 79
 #define SPECIES_FLYGON_REDUX_MEGA           CUSTOM_MEGA_START + 80
 #define SPECIES_CLEFABLE_REDUX_MEGA         CUSTOM_MEGA_START + 81
+#define SPECIES_FROSLASS_REDUX_MEGA         CUSTOM_MEGA_START + 82
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_CLEFABLE_REDUX_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_FROSLASS_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
@@ -1784,8 +1785,9 @@
 #define SPECIES_DEWGONG_REDUX               REDUX_FORMS_START + 123
 #define SPECIES_SNORUNT_REDUX               REDUX_FORMS_START + 124
 #define SPECIES_GLALIE_REDUX                REDUX_FORMS_START + 125
+#define SPECIES_FROSLASS_REDUX              REDUX_FORMS_START + 126
 
-#define LAST_REDUX_FORM                     SPECIES_GLALIE_REDUX
+#define LAST_REDUX_FORM                     SPECIES_FROSLASS_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1
