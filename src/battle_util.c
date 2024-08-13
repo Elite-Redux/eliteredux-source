@@ -7323,161 +7323,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     case ABILITYEFFECT_ABSORBING: // 3
         if (move != MOVE_NONE)
         {
-            u8 statId;
+            int statId;
 			
-			// Innates
-			// Aerodynamics
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_AERODYNAMICS)){
-				if (move != MOVE_NONE && moveType == TYPE_FLYING){
-					effect = 2;
-					statId = STAT_SPEED;
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_AERODYNAMICS;
-				    gLastUsedAbility = ABILITY_AERODYNAMICS;
-				}
-			}
-			
-			// Volt Absorb
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_VOLT_ABSORB)){
-				if (move != MOVE_NONE && moveType == TYPE_ELECTRIC){
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_VOLT_ABSORB;
-                    effect = 1;
-				}
-			}
-
-            // Earth Eater
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_EARTH_EATER)){
-				if (move != MOVE_NONE && moveType == TYPE_GROUND){
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_EARTH_EATER;
-                    effect = 1;
-				}
-			}
-			
-			// Water Absorb
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_WATER_ABSORB)){
-				if (move != MOVE_NONE && moveType == TYPE_WATER){
-                    effect = 1;
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_WATER_ABSORB;
-				}
-			}
-			
-			// Water Absorb
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_OLD_MARINER)){
-				if (move != MOVE_NONE && moveType == TYPE_WATER){
-                    effect = 1;
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_OLD_MARINER;
-				}
-			}
-			
-			// Dry Skin
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_DRY_SKIN)){
-				if (move != MOVE_NONE && moveType == TYPE_WATER){
-                    effect = 1;
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_DRY_SKIN;
-				}
-			}
-			
-			// Poison Absorb
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_POISON_ABSORB)){
-				if (move != MOVE_NONE && moveType == TYPE_POISON){
-                    effect = 1;
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_POISON_ABSORB;
-				    gLastUsedAbility = ABILITY_POISON_ABSORB;
-				}
-			}
-			
-			// Lighting Rod
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_LIGHTNING_ROD)){
-				if (moveType == TYPE_ELECTRIC){
-                    effect = 2;
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_LIGHTNING_ROD;
-                    statId = GetHighestAttackingStatId(battler, TRUE);
-				}
-			}
-
-            // Storm Drain
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_STORM_DRAIN)){
-				if (moveType == TYPE_WATER){
-                    effect = 2;
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STORM_DRAIN;
-                    statId = GetHighestAttackingStatId(battler, TRUE);
-				}
-			}
-			
-			// Flash Fire
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_FLASH_FIRE)){
-                if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE) && B_FLASH_FIRE_FROZEN <= GEN_4))
-                {
-                    SetActiveAbilityPopupOverride(ABILITY_FLASH_FIRE);
-				    gLastUsedAbility = ABILITY_FLASH_FIRE;
-
-                    if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
-                    {
-                        SetActiveMultistringChooser(B_MSG_FLASH_FIRE_BOOST);
-                        if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                            gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
-                        else
-                            gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
-
-                        gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_FLASH_FIRE;
-                        effect = 3;
-                        gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
-                    }
-                    else
-                    {
-                        SetActiveMultistringChooser(B_MSG_FLASH_FIRE_NO_BOOST);
-                        if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                            gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
-                        else
-                            gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
-
-                        effect = 3;
-                        gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
-                    }
-                }
-			}
-
-            // Sap Sipper
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_SAP_SIPPER)){
-				if (moveType == TYPE_GRASS){
-                    effect = 2;
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_SAP_SIPPER;
-                    statId = GetHighestAttackingStatId(battler, TRUE);
-				}
-			}
-
-            // Ice Dew
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_ICE_DEW)){
-				if (moveType == TYPE_ICE){
-                    effect = 2;
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ICE_DEW;
-                    statId = GetHighestAttackingStatId(battler, TRUE);
-				}
-			}
-			
-			//Motor Drive
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_MOTOR_DRIVE)){
-                if (moveType == TYPE_ELECTRIC){
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_MOTOR_DRIVE;
-                    effect = 2, statId = STAT_SPEED;
-                }
-			}
-
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_WIND_RIDER)){
-                if (gBattleMoves[move].airBased){
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_WIND_RIDER;
-                    effect = 2;
-                    statId = GetHighestAttackingStatId(battler, TRUE);
-                }
-            }
-			
-			//Motor Drive
-			if(BATTLER_HAS_ABILITY(battler, ABILITY_JUSTIFIED)){
-                if (moveType == TYPE_DARK){
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_JUSTIFIED;
-                    effect = 2;
-                    statId = GetHighestAttackingStatId(battler, TRUE);
-                }
-			}
+			effect = TestImmunityAbilities(battler, gBattlerAttacker, move, moveType, &statId, &gBattleScripting.abilityPopupOverwrite);
 
             if (effect == 1) // Drain Hp ability.
             {
@@ -7524,6 +7372,30 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
                     ChangeStatBuffs(battler, StatBuffValue(1), statId, MOVE_EFFECT_AFFECTS_USER, NULL);
                     PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
+                }
+            }
+            else if (effect == 3) // Flash Fire special case
+            {
+                if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
+                {
+                    SetActiveMultistringChooser(B_MSG_FLASH_FIRE_BOOST);
+                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
+                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
+                    else
+                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
+
+                    gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_FLASH_FIRE;
+                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
+                }
+                else
+                {
+                    SetActiveMultistringChooser(B_MSG_FLASH_FIRE_NO_BOOST);
+                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
+                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
+                    else
+                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
+                        
+                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
                 }
             }
         }
@@ -16913,4 +16785,139 @@ int IsMagicGuardProtected(int battler)
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_APPLE_ENLIGHTENMENT, ability)) return TRUE;
 
     return FALSE;
+}
+
+int TestImmunityAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability)
+{
+    
+    // Aerodynamics
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_AERODYNAMICS)){
+        if (move != MOVE_NONE && moveType == TYPE_FLYING){
+            *statId = STAT_SPEED;
+            *ability = ABILITY_AERODYNAMICS;
+            return 2;
+        }
+    }
+    
+    // Volt Absorb
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_VOLT_ABSORB)){
+        if (move != MOVE_NONE && moveType == TYPE_ELECTRIC){
+            *ability = ABILITY_VOLT_ABSORB;
+            return 1;
+        }
+    }
+
+    // Earth Eater
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_EARTH_EATER)){
+        if (move != MOVE_NONE && moveType == TYPE_GROUND){
+            *ability = ABILITY_EARTH_EATER;
+            return 1;
+        }
+    }
+    
+    // Water Absorb
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_WATER_ABSORB)){
+        if (move != MOVE_NONE && moveType == TYPE_WATER){
+            *ability = ABILITY_WATER_ABSORB;
+            return 1;
+        }
+    }
+    
+    // Water Absorb
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_OLD_MARINER)){
+        if (move != MOVE_NONE && moveType == TYPE_WATER){
+            *ability = ABILITY_OLD_MARINER;
+            return 1;
+        }
+    }
+    
+    // Dry Skin
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_DRY_SKIN)){
+        if (move != MOVE_NONE && moveType == TYPE_WATER){
+            *ability = ABILITY_DRY_SKIN;
+            return 1;
+        }
+    }
+    
+    // Poison Absorb
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_POISON_ABSORB)){
+        if (move != MOVE_NONE && moveType == TYPE_POISON){
+            *ability = ABILITY_POISON_ABSORB;
+            return 1;
+        }
+    }
+    
+    // Lighting Rod
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_LIGHTNING_ROD)){
+        if (moveType == TYPE_ELECTRIC){
+            *ability = ABILITY_LIGHTNING_ROD;
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return 1;
+        }
+    }
+
+    // Storm Drain
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_STORM_DRAIN)){
+        if (moveType == TYPE_WATER){
+            *ability = ABILITY_STORM_DRAIN;
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return 1;
+        }
+    }
+    
+    // Flash Fire
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_FLASH_FIRE)){
+        if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE) && B_FLASH_FIRE_FROZEN <= GEN_4))
+        {
+            *ability = ABILITY_FLASH_FIRE;
+            return 3;
+        }
+    }
+
+    // Sap Sipper
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_SAP_SIPPER)){
+        if (moveType == TYPE_GRASS){
+            *ability = ABILITY_SAP_SIPPER;
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return 2;
+        }
+    }
+
+    // Ice Dew
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_ICE_DEW)){
+        if (moveType == TYPE_ICE){
+            *ability = ABILITY_ICE_DEW;
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return 2;
+        }
+    }
+    
+    //Motor Drive
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_MOTOR_DRIVE)){
+        if (moveType == TYPE_ELECTRIC){
+            *ability = ABILITY_MOTOR_DRIVE;
+            *statId = STAT_SPEED;
+            return 2;
+        }
+    }
+
+    // Wind Rider
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_WIND_RIDER)){
+        if (gBattleMoves[move].airBased){
+            *ability = ABILITY_WIND_RIDER;
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return 2;
+        }
+    }
+    
+    // Justified
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_JUSTIFIED)){
+        if (moveType == TYPE_DARK){
+            *ability = ABILITY_JUSTIFIED;
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return 2;
+        }
+    }
+
+    return 0;
 }
