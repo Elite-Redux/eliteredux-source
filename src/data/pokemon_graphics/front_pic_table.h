@@ -1149,6 +1149,7 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(SLYDUCK, gMonFrontPic_Slyduck),
     SPECIES_SPRITE(SHYDUCK, gMonFrontPic_Shyduck),
     SPECIES_SPRITE(SEEL_REDUX, gMonFrontPic_SeelRedux),
+    SPECIES_SPRITE(DEWGONG_REDUX, gMonFrontPic_DewgongRedux),
     SPECIES_SPRITE(POPMOTH_MEGA, gMonFrontPic_PopmothMega),
     SPECIES_SPRITE(ARBOK_MEGA, gMonFrontPic_ArbokMega),
     SPECIES_SPRITE(GOLISOPOD_MEGA, gMonFrontPic_GolisopodMega),
@@ -1168,8 +1169,6 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(SOLROCK_SYSTEM, gMonFrontPic_Solrock_System),
     SPECIES_SPRITE(DARKRAI_NIGHTMARE, gMonFrontPic_Darkrai_Nightmare),
     SPECIES_SPRITE(ESPEON_GALAXY, gMonFrontPic_Espeon_Galaxy),
-    SPECIES_SPRITE(RATICATE_REDUX, gMonFrontPic_Raticate_Redux),
-    SPECIES_SPRITE(RATTATA_REDUX, gMonFrontPic_Rattata_Redux),
     SPECIES_SPRITE(MIMIKYU_RAYQUAZA, gMonFrontPic_Mimikyu_Rayquaza),
     SPECIES_SPRITE(BEWEAR_ANGRY, gMonFrontPic_Bewear_Angry),
     SPECIES_SPRITE(ABOMASNOW_SANTA, gMonFrontPic_Abomasnow_Santa),
@@ -1674,8 +1673,6 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(INFERNAPE_REDUX_B, gMonFrontPic_InfernapeReduxB),
     SPECIES_SPRITE(LUXRAY_REDUX,    gMonFrontPic_LuxrayRedux),
     SPECIES_SPRITE(CASCOON_PRIMAL,     gMonFrontPic_CascoonPrimal),
-    SPECIES_SPRITE(MINCCINO_REDUX,    gMonFrontPic_MinccinoRedux),
-    SPECIES_SPRITE(CINCCINO_REDUX,    gMonFrontPic_CinccinoRedux),
     SPECIES_SPRITE(EGG, gMonFrontPic_Egg),
 };
 

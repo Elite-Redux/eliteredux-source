@@ -1582,8 +1582,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_ABOMASNOW_SANTA] = sAbomasnow_SantaLevelUpLearnset,
     [SPECIES_BEWEAR_ANGRY] = sBewearLevelUpLearnset,
     [SPECIES_MIMIKYU_RAYQUAZA] = sMimikyu_RayquazaLevelUpLearnset,
-    [SPECIES_RATTATA_REDUX] = sRattata_ReduxLevelUpLearnset,
-    [SPECIES_RATICATE_REDUX] = sRaticate_ReduxLevelUpLearnset,
     [SPECIES_ESPEON_GALAXY] = sEspeonLevelUpLearnset,
     [SPECIES_DARKRAI_NIGHTMARE] = sDarkraiLevelUpLearnset,
     [SPECIES_SOLROCK_SYSTEM] = sSolrock_SystemLevelUpLearnset,
@@ -1672,6 +1670,5 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_SLYDUCK] = sSlyduckLevelUpLearnset,
     [SPECIES_SHYDUCK] = sShyduckLevelUpLearnset,
     [SPECIES_SEEL_REDUX] = sSeelReduxLevelUpLearnset,
-    [SPECIES_MINCCINO_REDUX] = sMinccino_ReduxLevelUpLearnset,
-    [SPECIES_CINCCINO_REDUX] = sCinccino_ReduxLevelUpLearnset,
+    [SPECIES_DEWGONG_REDUX] = sDewgongReduxLevelUpLearnset,
 };

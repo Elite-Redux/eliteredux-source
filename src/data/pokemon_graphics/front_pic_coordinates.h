@@ -5787,6 +5787,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x76,
         .y_offset = 8,
     },
+    [SPECIES_DEWGONG_REDUX] =
+    {
+        .size = 0x87,
+        .y_offset = 2,
+    },
     [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x87,
@@ -5848,16 +5853,6 @@ const struct MonCoords gMonFrontPicCoords[] =
         .y_offset =  0
     },
     [SPECIES_ESPEON_GALAXY] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
-    [SPECIES_RATICATE_REDUX] =
-    {
-        .size = 0,
-        .y_offset =  0
-    },
-    [SPECIES_RATTATA_REDUX] =
     {
         .size = 0,
         .y_offset =  0
@@ -8095,16 +8090,6 @@ const struct MonCoords gMonFrontPicCoords[] =
     {
         .size = 0x88,
         .y_offset = 0,
-    },
-    [SPECIES_MINCCINO_REDUX] =
-    {
-        .size = 0x45,
-        .y_offset = 11,
-    },
-    [SPECIES_CINCCINO_REDUX] =
-    {
-        .size = 0x45,
-        .y_offset = 7,
     },
 
     // Egg

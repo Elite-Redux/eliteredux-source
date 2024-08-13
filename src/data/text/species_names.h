@@ -1180,6 +1180,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SHYDUCK]      = _("Shyduck"),
 
     [SPECIES_SEEL_REDUX]      = _("Seel"),
+    [SPECIES_DEWGONG_REDUX]      = _("Dewgong"),
 
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),
@@ -1267,8 +1268,6 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_AEGISLASH_BLADE_REDUX] = _("Aegislash"),
 
     [SPECIES_RIBOMBEE_MEGA] = _("Ribombee"),
-    [SPECIES_MINCCINO_REDUX] = _("Minccino"),
-    [SPECIES_CINCCINO_REDUX] = _("Cinccino"),
     
     // Megas
     [SPECIES_VENUSAUR_MEGA] = _("Venusaur"),

@@ -1085,6 +1085,7 @@ static const u16 sDewgongFormSpeciesIdTable[] = {
     SPECIES_DEWGONG,
     SPECIES_DEWGONG_MEGA,
     SPECIES_KECLEONG,
+    SPECIES_DEWGONG_REDUX,
     FORM_SPECIES_END,
 };
 
