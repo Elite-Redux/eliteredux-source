@@ -7876,6 +7876,12 @@ const u32 gMonPalette_SnoruntRedux[]           = INCBIN_U32("graphics/pokemon/sn
 const u32 gMonShinyPalette_SnoruntRedux[]      = INCBIN_U32("graphics/pokemon/snorunt/redux/shiny.gbapal.lz");
 const u8  gMonIcon_SnoruntRedux[]              = INCBIN_U8("graphics/pokemon/snorunt/redux/icon.4bpp");
 
+const u32 gMonFrontPic_GlalieRedux[]          = INCBIN_U32("graphics/pokemon/glalie/redux/front.4bpp.lz");
+const u32 gMonBackPic_GlalieRedux[]           = INCBIN_U32("graphics/pokemon/glalie/redux/back.4bpp.lz");
+const u32 gMonPalette_GlalieRedux[]           = INCBIN_U32("graphics/pokemon/glalie/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_GlalieRedux[]      = INCBIN_U32("graphics/pokemon/glalie/redux/shiny.gbapal.lz");
+const u8  gMonIcon_GlalieRedux[]              = INCBIN_U8("graphics/pokemon/glalie/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Magmenous[]          = INCBIN_U32("graphics/pokemon/magmenous/front.4bpp.lz");
 const u32 gMonBackPic_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/back.4bpp.lz");
 const u32 gMonPalette_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/normal.gbapal.lz");

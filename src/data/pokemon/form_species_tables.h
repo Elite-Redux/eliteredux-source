@@ -471,9 +471,16 @@ static const u16 sAbsolFormSpeciesIdTable[] = {
     FORM_SPECIES_END,
 };
 
+static const u16 sSnoruntFormSpeciesIdTable[] = {
+    SPECIES_SNORUNT,
+    SPECIES_SNORUNT_REDUX,
+    FORM_SPECIES_END,
+};
+
 static const u16 sGlalieFormSpeciesIdTable[] = {
     SPECIES_GLALIE,
     SPECIES_GLALIE_MEGA,
+    SPECIES_GLALIE_REDUX,
     FORM_SPECIES_END,
 };
 

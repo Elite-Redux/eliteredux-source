@@ -1783,8 +1783,9 @@
 #define SPECIES_SEEL_REDUX                  REDUX_FORMS_START + 122
 #define SPECIES_DEWGONG_REDUX               REDUX_FORMS_START + 123
 #define SPECIES_SNORUNT_REDUX               REDUX_FORMS_START + 124
+#define SPECIES_GLALIE_REDUX                REDUX_FORMS_START + 125
 
-#define LAST_REDUX_FORM                     SPECIES_SNORUNT_REDUX
+#define LAST_REDUX_FORM                     SPECIES_GLALIE_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

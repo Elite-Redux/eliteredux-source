@@ -1006,4 +1006,9 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_DEWGONG_REDUX] = sDewgongFormSpeciesIdTable,
 
+    [SPECIES_SNORUNT_REDUX] = sSnoruntFormSpeciesIdTable,
+    [SPECIES_SNORUNT] = sSnoruntFormSpeciesIdTable,
+
+    [SPECIES_GLALIE_REDUX] = sGlalieFormSpeciesIdTable,
+
 };

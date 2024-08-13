@@ -42274,6 +42274,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 3,
     },
 
+    [SPECIES_GLALIE_REDUX] =
+    {
+    .baseHP        =  80,
+    .baseAttack    =  100,
+    .baseDefense   =  70,
+    .baseSpeed     =  100,
+    .baseSpAttack  =  80,
+    .baseSpDefense =  70,
+    .type1 = TYPE_ICE,
+    .type2 = TYPE_ICE,
+    .catchRate = 255,
+    .expYield = 168,
+    .evYield_HP    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_MINERAL,
+	.abilities = {ABILITY_MOODY, ABILITY_WHITEOUT, ABILITY_REFRIGERATE},
+	.innates = {ABILITY_STURDY, ABILITY_FREEZING_POINT, ABILITY_IMPENETRABLE},
+    .bodyColor = BODY_COLOR_GRAY,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,
