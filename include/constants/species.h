@@ -1650,7 +1650,8 @@
 #define SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA  CUSTOM_MEGA_START + 79
 #define SPECIES_FLYGON_REDUX_MEGA           CUSTOM_MEGA_START + 80
 #define SPECIES_CLEFABLE_REDUX_MEGA         CUSTOM_MEGA_START + 81
-#define SPECIES_FROSLASS_REDUX_MEGA         CUSTOM_MEGA_START + 82
+#define SPECIES_GLALIE_REDUX_MEGA         CUSTOM_MEGA_START + 82
+#define SPECIES_FROSLASS_REDUX_MEGA         CUSTOM_MEGA_START + 83
 
 #define LAST_VALID_CUSTOM_MEGA              SPECIES_FROSLASS_REDUX_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future

@@ -1673,6 +1673,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_DEWGONG_REDUX] = sDewgongReduxLevelUpLearnset,
     [SPECIES_SNORUNT_REDUX] = sSnoruntReduxLevelUpLearnset,
     [SPECIES_GLALIE_REDUX] = sGlalieReduxLevelUpLearnset,
+    [SPECIES_GLALIE_REDUX_MEGA] = sGlalieReduxLevelUpLearnset,
     [SPECIES_FROSLASS_REDUX] = sFroslassReduxLevelUpLearnset,
     [SPECIES_FROSLASS_REDUX_MEGA] = sFroslassReduxLevelUpLearnset,
 };

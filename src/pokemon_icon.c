@@ -1260,6 +1260,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_DEWGONG_REDUX] = gMonIcon_DewgongRedux,
     [SPECIES_SNORUNT_REDUX] = gMonIcon_SnoruntRedux,
     [SPECIES_GLALIE_REDUX] = gMonIcon_GlalieRedux,
+    [SPECIES_GLALIE_REDUX_MEGA] = gMonIcon_GlalieReduxMega,
     [SPECIES_FROSLASS_REDUX] = gMonIcon_FroslassRedux,
     [SPECIES_FROSLASS_REDUX_MEGA] = gMonIcon_FroslassReduxMega,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,

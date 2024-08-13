@@ -1182,6 +1182,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 
     [SPECIES_SNORUNT_REDUX]      = _("Snorunt"),
     [SPECIES_GLALIE_REDUX]      = _("Glalie"),
+    [SPECIES_GLALIE_REDUX_MEGA]      = _("Glalie"),
     [SPECIES_FROSLASS_REDUX]      = _("Froslass"),
     [SPECIES_FROSLASS_REDUX_MEGA]      = _("Froslass"),
 

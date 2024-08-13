@@ -1010,7 +1010,9 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SNORUNT] = sSnoruntFormSpeciesIdTable,
 
     [SPECIES_GLALIE_REDUX] = sGlalieFormSpeciesIdTable,
+    [SPECIES_GLALIE_REDUX_MEGA] = sGlalieFormSpeciesIdTable,
 
     [SPECIES_FROSLASS_REDUX] = sFroslassFormSpeciesIdTable,
+    [SPECIES_FROSLASS_REDUX_MEGA] = sFroslassFormSpeciesIdTable,
 
 };

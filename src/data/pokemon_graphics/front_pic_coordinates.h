@@ -5802,6 +5802,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x76,
         .y_offset = 8,
     },
+    [SPECIES_GLALIE_REDUX_MEGA] =
+    {
+        .size = 0,
+        .y_offset = 4,
+    },
     [SPECIES_FROSLASS_REDUX] =
     {
         .size = 0x77,

@@ -481,6 +481,7 @@ static const u16 sGlalieFormSpeciesIdTable[] = {
     SPECIES_GLALIE,
     SPECIES_GLALIE_MEGA,
     SPECIES_GLALIE_REDUX,
+    SPECIES_GLALIE_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 
