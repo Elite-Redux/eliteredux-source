@@ -5557,6 +5557,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x45,
         .y_offset = 0,
     },
+    [SPECIES_KAIOSEA] =
+    {
+        .size = 0x77,
+        .y_offset = 5,
+    },
     [SPECIES_CORM] =
     {
         .size = 0x45,

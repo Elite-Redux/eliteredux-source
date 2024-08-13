@@ -42091,6 +42091,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_KAIOSEA] =
+    {
+    .baseHP        = 90,
+    .baseAttack    = 122,
+    .baseDefense   = 70,
+    .baseSpeed     = 108,
+    .baseSpAttack  = 65,
+    .baseSpDefense = 110,
+    .type1 = TYPE_WATER,
+    .type2 = TYPE_FLYING,
+    .catchRate = 255,
+    .expYield = 158,
+    .evYield_Attack    = 2,
+    .item2 = ITEM_MYSTIC_WATER,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_WATER_2,
+    .eggGroup2 = EGG_GROUP_WATER_2,
+    .abilities = {ABILITY_LIGHTNING_ROD, ABILITY_AERILATE, ABILITY_HYDRATE},
+    .innates = {ABILITY_HUNTERS_HORN, ABILITY_MULTISCALE, ABILITY_SUPREME_OVERLORD},
+    .bodyColor = BODY_COLOR_RED,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,
