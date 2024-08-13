@@ -8633,6 +8633,16 @@ extern const u32 gItemIcon_Gyaradeathite_X[];
 extern const u32 gItemIconPalette_Gyaradeathite_X[];
 extern const u32 gItemIcon_Gyaradeathite_Y[];
 extern const u32 gItemIconPalette_Gyaradeathite_Y[];
+extern const u32 gItemIcon_Arbokite[];
+extern const u32 gItemIconPalette_Arbokite[];
+extern const u32 gItemIcon_Clefabite_R[];
+extern const u32 gItemIconPalette_Clefabite_R[];
+extern const u32 gItemIcon_Empoleonite_R[];
+extern const u32 gItemIconPalette_Empoleonite_R[];
+extern const u32 gItemIcon_Flygonite_R[];
+extern const u32 gItemIconPalette_Flygonite_R[];
+extern const u32 gItemIcon_Aegislashite_R[];
+extern const u32 gItemIconPalette_Aegislashite_R[];
 
 extern const u32 gItemIcon_GenericMegaStone[];
 extern const u32 gItemIconPalette_Garchompite_R[];

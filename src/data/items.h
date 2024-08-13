@@ -9532,7 +9532,7 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
-    [ITEM_FLYGONITE_R] = 
+    [ITEM_FLYGONITE_R_B] = 
     {
         .name = _("Flygonite R"),
         .itemId = ITEM_WEAVILEITE_R,
@@ -9629,6 +9629,61 @@ const struct Item gItems[] =
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
         .description = sGyaradeathiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_AEGISLASHITE_R] = 
+    {
+        .name = _("Aegislashite R"),
+        .itemId = ITEM_AEGISLASHITE_R,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sAegislashiteRDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_CLEFABITE_R] = 
+    {
+        .name = _("Clefabite R"),
+        .itemId = ITEM_CLEFABITE_R,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sClefabiteRDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_FLYGONITE_R] = 
+    {
+        .name = _("Flygonite R"),
+        .itemId = ITEM_FLYGONITE_R,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sFlygoniteRDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_EMPOLEONITE_R] = 
+    {
+        .name = _("Empoleonite R"),
+        .itemId = ITEM_EMPOLEONITE_R,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sEmpoleoniteRDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_ARBOKITE] = 
+    {
+        .name = _("Arbokite"),
+        .itemId = ITEM_ARBOKITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sArbokiteDesc,
         .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,

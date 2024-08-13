@@ -3361,7 +3361,7 @@ static const u8 sWeaviliteRDesc[] = _(
     "Weavile R to Mega\n"
     "Evolve in battle.");
 
-static const u8 sFlygoniteRDesc[] = _(
+static const u8 sFlygoniteR_BDesc[] = _(
     "This stone enables\n"
     "Flygon R to Mega\n"
     "Evolve in battle.");
@@ -3397,8 +3397,33 @@ static const u8 sGyaradeathiteDesc[] = _(
     "Evolve in battle.");
 
 static const u8 sSenzuDesc[] = _(
-    "This bean enables\n"
+    "This stone enables\n"
     "Lucario to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sClefabiteRDesc[] = _(
+    "This stone enables\n"
+    "ClefableR to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sAegislashiteRDesc[] = _(
+    "This stone enables\n"
+    "AegislashR to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sEmpoleoniteRDesc[] = _(
+    "This stone enables\n"
+    "EmpoleonR to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sArbokiteDesc[] = _(
+    "This stone enables\n"
+    "Arbok to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sFlygoniteRDesc[] = _(
+    "This stone enables\n"
+    "FlygonR to Mega\n"
     "Evolve in battle.");
 
 static const u8 sMegaBraceletDesc[] = _(
