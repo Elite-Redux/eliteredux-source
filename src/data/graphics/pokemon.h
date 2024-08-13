@@ -7870,6 +7870,12 @@ const u32 gMonPalette_DewgongRedux[]           = INCBIN_U32("graphics/pokemon/de
 const u32 gMonShinyPalette_DewgongRedux[]      = INCBIN_U32("graphics/pokemon/dewgong/redux/shiny.gbapal.lz");
 const u8  gMonIcon_DewgongRedux[]              = INCBIN_U8("graphics/pokemon/dewgong/redux/icon.4bpp");
 
+const u32 gMonFrontPic_SnoruntRedux[]          = INCBIN_U32("graphics/pokemon/snorunt/redux/front.4bpp.lz");
+const u32 gMonBackPic_SnoruntRedux[]           = INCBIN_U32("graphics/pokemon/snorunt/redux/back.4bpp.lz");
+const u32 gMonPalette_SnoruntRedux[]           = INCBIN_U32("graphics/pokemon/snorunt/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_SnoruntRedux[]      = INCBIN_U32("graphics/pokemon/snorunt/redux/shiny.gbapal.lz");
+const u8  gMonIcon_SnoruntRedux[]              = INCBIN_U8("graphics/pokemon/snorunt/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Magmenous[]          = INCBIN_U32("graphics/pokemon/magmenous/front.4bpp.lz");
 const u32 gMonBackPic_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/back.4bpp.lz");
 const u32 gMonPalette_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/normal.gbapal.lz");

@@ -1180,6 +1180,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SEEL_REDUX]      = _("Seel"),
     [SPECIES_DEWGONG_REDUX]      = _("Dewgong"),
 
+    [SPECIES_SNORUNT_REDUX]      = _("Snorunt"),
+
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),
     [SPECIES_HOUNDOOM_MEGA_REDUX] = _("Houndoom"),

@@ -5792,6 +5792,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x87,
         .y_offset = 2,
     },
+    [SPECIES_SNORUNT_REDUX] =
+    {
+        .size = 0x56,
+        .y_offset = 12,
+    },
     [SPECIES_POPMOTH_MEGA] =
     {
         .size = 0x87,

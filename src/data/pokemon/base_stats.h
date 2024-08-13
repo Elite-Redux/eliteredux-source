@@ -42247,6 +42247,33 @@ const struct BaseStats gBaseStats[] =
     .noFlip = FALSE,
 },
 
+[SPECIES_SNORUNT_REDUX] =
+    {
+    .baseHP        = 50,
+    .baseAttack    = 50,
+    .baseDefense   = 50,
+    .baseSpeed     = 50,
+    .baseSpAttack  = 50,
+    .baseSpDefense = 50,
+    .type1 = TYPE_ICE,
+    .type2 = TYPE_ICE,
+    .catchRate = 190,
+    .expYield = 60,
+    .evYield_HP    = 1,
+    .item2 = ITEM_SNOWBALL,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_MINERAL,
+    .abilities = {ABILITY_REFRIGERATE, ABILITY_NORTH_WIND, ABILITY_MOODY},
+    .innates = {ABILITY_STURDY, ABILITY_FREEZING_POINT, ABILITY_CRYOMANCY},
+    .bodyColor = BODY_COLOR_GRAY,
+    .noFlip = FALSE,
+    .tier = 3,
+    },
+
 [SPECIES_MAIZEMOTH_MEGA] =
     {
     .baseHP        =  95,

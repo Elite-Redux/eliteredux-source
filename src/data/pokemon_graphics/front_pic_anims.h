@@ -392,6 +392,11 @@ static const union AnimCmd sAnim_DEWGONG_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_SNORUNT_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -1037,6 +1042,11 @@ static const union AnimCmd *const sAnims_SEEL_REDUX[] ={
 static const union AnimCmd *const sAnims_DEWGONG_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_DEWGONG_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_SNORUNT_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SNORUNT_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
@@ -20765,6 +20775,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(SHYDUCK),
     ANIM_CMD(MAGMENOUS),
     ANIM_CMD(SEEL_REDUX),
+    ANIM_CMD(SNORUNT_REDUX),
     ANIM_CMD(DEWGONG_REDUX),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
