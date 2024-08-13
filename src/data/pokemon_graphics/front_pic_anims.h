@@ -182,7 +182,7 @@ static const union AnimCmd sAnim_LUMBERING_SLOTH_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_LUMBERING_SLOTH_OVERGROWN_1[] =
+static const union AnimCmd sAnim_LUMBERING_SLOTH_ENGULFED_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -844,9 +844,9 @@ static const union AnimCmd *const sAnims_LUMBERING_SLOTH[] ={
     sAnim_LUMBERING_SLOTH_1,
 };
 
-static const union AnimCmd *const sAnims_LUMBERING_SLOTH_OVERGROWN[] ={
+static const union AnimCmd *const sAnims_LUMBERING_SLOTH_ENGULFED[] ={
     sAnim_GeneralFrame0,
-    sAnim_LUMBERING_SLOTH_OVERGROWN_1,
+    sAnim_LUMBERING_SLOTH_ENGULFED_1,
 };
 
 static const union AnimCmd *const sAnims_IRON_CARAPACE[] ={
@@ -20745,7 +20745,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(POPMOTH),
     ANIM_CMD(POPMOTH_MEGA),
     ANIM_CMD(LUMBERING_SLOTH),
-    ANIM_CMD(LUMBERING_SLOTH_OVERGROWN),
+    ANIM_CMD(LUMBERING_SLOTH_ENGULFED),
     ANIM_CMD(IRON_CARAPACE),
     ANIM_CMD(TURTWIG_REDUX),
     ANIM_CMD(GROTLE_REDUX),

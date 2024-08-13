@@ -921,7 +921,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ARBOK_MEGA] = sArbokFormSpeciesIdTable,
 
     [SPECIES_LUMBERING_SLOTH] = sLumberingSlothFormSpeciesIdTable,
-    [SPECIES_LUMBERING_SLOTH_OVERGROWN] = sLumberingSlothFormSpeciesIdTable,
+    [SPECIES_LUMBERING_SLOTH_ENGULFED] = sLumberingSlothFormSpeciesIdTable,
 
     [SPECIES_TURTWIG_REDUX] = sTurtwigFormSpeciesIdTable,
     [SPECIES_TURTWIG] = sTurtwigFormSpeciesIdTable,

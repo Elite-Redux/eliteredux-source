@@ -914,8 +914,8 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                             {EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_COMBAT_BREED},},
 
     [SPECIES_DUDUNSPARCE] = {{EVO_FORM_SHIFT, 1, SPECIES_DUDUNSPARCE},
-                            {EVO_FORM_SHIFT, 1, SPECIES_DUDUNSPARCE_THREE_SEGMENT},}, // this can be removed later if wanted
+                            {EVO_FORM_SHIFT, 1, SPECIES_DUDUNSPARCE_THREE_SEGMENT},},
 
     [SPECIES_LUMBERING_SLOTH] = {{EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH},
-                            {EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH_OVERGROWN},},
+                                    {EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH_ENGULFED},}, // testing purposes
 };

@@ -5576,7 +5576,7 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x88,
         .y_offset = 3,
     },
-    [SPECIES_LUMBERING_SLOTH_OVERGROWN] =
+    [SPECIES_LUMBERING_SLOTH_ENGULFED] =
     {
         .size = 0x88,
         .y_offset = 2,

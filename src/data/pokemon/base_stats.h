@@ -41130,7 +41130,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_LUMBERING_SLOTH_OVERGROWN] =
+[SPECIES_LUMBERING_SLOTH_ENGULFED] =
     {
     .baseHP        = 78,
     .baseAttack    = 84,
