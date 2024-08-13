@@ -316,6 +316,7 @@ void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 ability, u16 move);
 bool32 IsHealingMoveEffect(u16 effect);
 int IsMagicGuardProtected(int battler);
+int TestImmunityAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);

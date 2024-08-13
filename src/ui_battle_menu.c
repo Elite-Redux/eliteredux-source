@@ -2989,6 +2989,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex){
     bool8 isCrit = FALSE;
     u16 move = gBattleMons[battler].moves[moveIndex];
     const s8 *natureMod;
+    int ignored, immune;
     
     if(sMenuDataPtr->damageCalculation[battler][target][moveIndex].calculated)
         return;
@@ -3000,8 +3001,14 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex){
     GET_MOVE_TYPE(move, moveType);
 
     //Max and Min Damage
-    sMenuDataPtr->damageCalculation[battler][target][moveIndex].minDamage = minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR);
-    sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamage = maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR);
+    minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR);
+    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR);
+
+    immune = TestImmunityAbilities(target, battler, move, moveType, &ignored, (u16*) &ignored);
+    if (immune) minDamage = maxDamage = 0;
+
+    sMenuDataPtr->damageCalculation[battler][target][moveIndex].minDamage = minDamage;
+    sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamage = maxDamage;
 
     if(!IsBattlerAlive(battler) || 
        !IsBattlerAlive(target)  || 
