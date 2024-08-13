@@ -1146,7 +1146,12 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(CLEFABLE_REDUX_MEGA, gMonShinyPalette_ClefableReduxMega),
     SPECIES_SHINY_PAL(GLIGAR_REDUX, gMonShinyPalette_GligarRedux),
     SPECIES_SHINY_PAL(GLISCOR_REDUX, gMonShinyPalette_GliscorRedux),
+    SPECIES_SHINY_PAL(PSYDUCK_REDUX, gMonShinyPalette_PsyduckRedux),
+    SPECIES_SHINY_PAL(SLYDUCK, gMonShinyPalette_Slyduck),
+    SPECIES_SHINY_PAL(SHYDUCK, gMonShinyPalette_Shyduck),
     SPECIES_SHINY_PAL(MAGMENOUS, gMonShinyPalette_Magmenous),
+    SPECIES_SHINY_PAL(SEEL_REDUX, gMonShinyPalette_SeelRedux),
+    SPECIES_SHINY_PAL(DEWGONG_REDUX, gMonShinyPalette_DewgongRedux),
     SPECIES_SHINY_PAL(POPMOTH_MEGA, gMonShinyPalette_PopmothMega),
     SPECIES_SHINY_PAL(ARBOK_MEGA, gMonShinyPalette_ArbokMega),
     SPECIES_SHINY_PAL(GOLISOPOD_MEGA, gMonShinyPalette_GolisopodMega),
@@ -1166,8 +1171,6 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(SOLROCK_SYSTEM, gMonShinyPalette_Solrock_System),
     SPECIES_SHINY_PAL(DARKRAI_NIGHTMARE, gMonShinyPalette_Darkrai_Nightmare),
     SPECIES_SHINY_PAL(ESPEON_GALAXY, gMonShinyPalette_Espeon_Galaxy),
-    SPECIES_SHINY_PAL(RATICATE_REDUX, gMonShinyPalette_Raticate_Redux),
-    SPECIES_SHINY_PAL(RATTATA_REDUX, gMonShinyPalette_Rattata_Redux),
     SPECIES_SHINY_PAL(MIMIKYU_RAYQUAZA, gMonShinyPalette_Mimikyu_Rayquaza),
     SPECIES_SHINY_PAL(BEWEAR_ANGRY, gMonShinyPalette_Bewear_Angry),
     SPECIES_SHINY_PAL(ABOMASNOW_SANTA, gMonShinyPalette_Abomasnow_Santa),
@@ -1671,8 +1674,6 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(INFERNAPE_REDUX_B, gMonShinyPalette_InfernapeReduxB),
     SPECIES_SHINY_PAL(LUXRAY_REDUX,    gMonShinyPalette_LuxrayRedux),
     SPECIES_SHINY_PAL(CASCOON_PRIMAL,  gMonShinyPalette_CascoonPrimal),
-    SPECIES_SHINY_PAL(MINCCINO_REDUX, gMonShinyPalette_MinccinoRedux),
-    SPECIES_SHINY_PAL(CINCCINO_REDUX, gMonShinyPalette_CinccinoRedux),
 };
 
                                      

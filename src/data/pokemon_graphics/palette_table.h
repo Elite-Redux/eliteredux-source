@@ -1145,6 +1145,11 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(GLIGAR_REDUX, gMonPalette_GligarRedux),
     SPECIES_PAL(GLISCOR_REDUX, gMonPalette_GliscorRedux),
     SPECIES_PAL(MAGMENOUS, gMonPalette_Magmenous),
+    SPECIES_PAL(PSYDUCK_REDUX, gMonPalette_PsyduckRedux),
+    SPECIES_PAL(SLYDUCK, gMonPalette_Slyduck),
+    SPECIES_PAL(SHYDUCK, gMonPalette_Shyduck),
+    SPECIES_PAL(SEEL_REDUX, gMonPalette_SeelRedux),
+    SPECIES_PAL(DEWGONG_REDUX, gMonPalette_DewgongRedux),
     SPECIES_PAL(POPMOTH_MEGA, gMonPalette_PopmothMega),
     SPECIES_PAL(ARBOK_MEGA, gMonPalette_ArbokMega),
     SPECIES_PAL(GOLISOPOD_MEGA, gMonPalette_GolisopodMega),
@@ -1164,8 +1169,6 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(SOLROCK_SYSTEM, gMonPalette_Solrock_System),
     SPECIES_PAL(DARKRAI_NIGHTMARE, gMonPalette_Darkrai_Nightmare),
     SPECIES_PAL(ESPEON_GALAXY, gMonPalette_Espeon_Galaxy),
-    SPECIES_PAL(RATICATE_REDUX, gMonPalette_Raticate_Redux),
-    SPECIES_PAL(RATTATA_REDUX, gMonPalette_Rattata_Redux),
     SPECIES_PAL(MIMIKYU_RAYQUAZA, gMonPalette_Mimikyu_Rayquaza),
     SPECIES_PAL(BEWEAR_ANGRY, gMonPalette_Bewear_Angry),
     SPECIES_PAL(ABOMASNOW_SANTA, gMonPalette_Abomasnow_Santa),
@@ -1671,8 +1674,6 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(INFERNAPE_REDUX_B, gMonPalette_InfernapeReduxB),
     SPECIES_PAL(LUXRAY_REDUX,    gMonPalette_LuxrayRedux),
     SPECIES_PAL(CASCOON_PRIMAL,     gMonPalette_CascoonPrimal),
-    SPECIES_PAL(MINCCINO_REDUX,    gMonPalette_MinccinoRedux),
-    SPECIES_PAL(CINCCINO_REDUX,    gMonPalette_CinccinoRedux),
 };
 
 const struct CompressedSpritePalette gMonPaletteTableFemale[] =

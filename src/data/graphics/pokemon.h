@@ -10,8 +10,6 @@ const u8 gMonIcon_Spectrier_Cloud[] = INCBIN_U8("graphics/pokemon/spectrier/clou
 const u8 gMonIcon_Solrock_System[] = INCBIN_U8("graphics/pokemon/solrock/system/icon.4bpp");
 const u8 gMonIcon_Darkrai_Nightmare[] = INCBIN_U8("graphics/pokemon/darkrai/nightmare/icon.4bpp");
 const u8 gMonIcon_Espeon_Galaxy[] = INCBIN_U8("graphics/pokemon/espeon/galaxy/icon.4bpp");
-const u8 gMonIcon_Raticate_Redux[] = INCBIN_U8("graphics/pokemon/raticate/redux/icon.4bpp");
-const u8 gMonIcon_Rattata_Redux[] = INCBIN_U8("graphics/pokemon/rattata/redux/icon.4bpp");
 const u8 gMonIcon_Mimikyu_Rayquaza[] = INCBIN_U8("graphics/pokemon/mimikyu/rayquaza/icon.4bpp");
 const u8 gMonIcon_Bewear_Angry[] = INCBIN_U8("graphics/pokemon/bewear/angry/icon.4bpp");
 const u8 gMonIcon_Abomasnow_Santa[] = INCBIN_U8("graphics/pokemon/abomasnow/santa/icon.4bpp");
@@ -64,8 +62,6 @@ const u32 gMonShinyPalette_Spectrier_Cloud[] = INCBIN_U32("graphics/pokemon/spec
 const u32 gMonShinyPalette_Solrock_System[] = INCBIN_U32("graphics/pokemon/solrock/system/shiny.gbapal.lz");
 const u32 gMonShinyPalette_Darkrai_Nightmare[] = INCBIN_U32("graphics/pokemon/darkrai/nightmare/shiny.gbapal.lz");
 const u32 gMonShinyPalette_Espeon_Galaxy[] = INCBIN_U32("graphics/pokemon/espeon/galaxy/shiny.gbapal.lz");
-const u32 gMonShinyPalette_Raticate_Redux[] = INCBIN_U32("graphics/pokemon/raticate/redux/shiny.gbapal.lz");
-const u32 gMonShinyPalette_Rattata_Redux[] = INCBIN_U32("graphics/pokemon/rattata/redux/shiny.gbapal.lz");
 const u32 gMonShinyPalette_Mimikyu_Rayquaza[] = INCBIN_U32("graphics/pokemon/mimikyu/rayquaza/shiny.gbapal.lz");
 const u32 gMonShinyPalette_Bewear_Angry[] = INCBIN_U32("graphics/pokemon/bewear/angry/shiny.gbapal.lz");
 const u32 gMonShinyPalette_Abomasnow_Santa[] = INCBIN_U32("graphics/pokemon/abomasnow/santa/shiny.gbapal.lz");
@@ -118,8 +114,6 @@ const u32 gMonPalette_Spectrier_Cloud[] = INCBIN_U32("graphics/pokemon/spectrier
 const u32 gMonPalette_Solrock_System[] = INCBIN_U32("graphics/pokemon/solrock/system/normal.gbapal.lz");
 const u32 gMonPalette_Darkrai_Nightmare[] = INCBIN_U32("graphics/pokemon/darkrai/nightmare/normal.gbapal.lz");
 const u32 gMonPalette_Espeon_Galaxy[] = INCBIN_U32("graphics/pokemon/espeon/galaxy/normal.gbapal.lz");
-const u32 gMonPalette_Raticate_Redux[] = INCBIN_U32("graphics/pokemon/raticate/redux/normal.gbapal.lz");
-const u32 gMonPalette_Rattata_Redux[] = INCBIN_U32("graphics/pokemon/rattata/redux/normal.gbapal.lz");
 const u32 gMonPalette_Mimikyu_Rayquaza[] = INCBIN_U32("graphics/pokemon/mimikyu/rayquaza/normal.gbapal.lz");
 const u32 gMonPalette_Bewear_Angry[] = INCBIN_U32("graphics/pokemon/bewear/angry/normal.gbapal.lz");
 const u32 gMonPalette_Abomasnow_Santa[] = INCBIN_U32("graphics/pokemon/abomasnow/santa/normal.gbapal.lz");
@@ -172,8 +166,6 @@ const u32 gMonBackPic_Spectrier_Cloud[] = INCBIN_U32("graphics/pokemon/spectrier
 const u32 gMonBackPic_Solrock_System[] = INCBIN_U32("graphics/pokemon/solrock/system/back.4bpp.lz");
 const u32 gMonBackPic_Darkrai_Nightmare[] = INCBIN_U32("graphics/pokemon/darkrai/nightmare/back.4bpp.lz");
 const u32 gMonBackPic_Espeon_Galaxy[] = INCBIN_U32("graphics/pokemon/espeon/galaxy/back.4bpp.lz");
-const u32 gMonBackPic_Raticate_Redux[] = INCBIN_U32("graphics/pokemon/raticate/redux/back.4bpp.lz");
-const u32 gMonBackPic_Rattata_Redux[] = INCBIN_U32("graphics/pokemon/rattata/redux/back.4bpp.lz");
 const u32 gMonBackPic_Mimikyu_Rayquaza[] = INCBIN_U32("graphics/pokemon/mimikyu/rayquaza/back.4bpp.lz");
 const u32 gMonBackPic_Bewear_Angry[] = INCBIN_U32("graphics/pokemon/bewear/angry/back.4bpp.lz");
 const u32 gMonBackPic_Abomasnow_Santa[] = INCBIN_U32("graphics/pokemon/abomasnow/santa/back.4bpp.lz");
@@ -226,8 +218,6 @@ const u32 gMonFrontPic_Spectrier_Cloud[] = INCBIN_U32("graphics/pokemon/spectrie
 const u32 gMonFrontPic_Solrock_System[] = INCBIN_U32("graphics/pokemon/solrock/system/front.4bpp.lz");
 const u32 gMonFrontPic_Darkrai_Nightmare[] = INCBIN_U32("graphics/pokemon/darkrai/nightmare/front.4bpp.lz");
 const u32 gMonFrontPic_Espeon_Galaxy[] = INCBIN_U32("graphics/pokemon/espeon/galaxy/front.4bpp.lz");
-const u32 gMonFrontPic_Raticate_Redux[] = INCBIN_U32("graphics/pokemon/raticate/redux/front.4bpp.lz");
-const u32 gMonFrontPic_Rattata_Redux[] = INCBIN_U32("graphics/pokemon/rattata/redux/front.4bpp.lz");
 const u32 gMonFrontPic_Mimikyu_Rayquaza[] = INCBIN_U32("graphics/pokemon/mimikyu/rayquaza/front.4bpp.lz");
 const u32 gMonFrontPic_Bewear_Angry[] = INCBIN_U32("graphics/pokemon/bewear/angry/front.4bpp.lz");
 const u32 gMonFrontPic_Abomasnow_Santa[] = INCBIN_U32("graphics/pokemon/abomasnow/santa/front.4bpp.lz");
@@ -7850,6 +7840,36 @@ const u32 gMonPalette_GliscorRedux[]           = INCBIN_U32("graphics/pokemon/gl
 const u32 gMonShinyPalette_GliscorRedux[]      = INCBIN_U32("graphics/pokemon/gliscor/redux/shiny.gbapal.lz");
 const u8  gMonIcon_GliscorRedux[]              = INCBIN_U8("graphics/pokemon/gliscor/redux/icon.4bpp");
 
+const u32 gMonFrontPic_PsyduckRedux[]          = INCBIN_U32("graphics/pokemon/psyduck/redux/front.4bpp.lz");
+const u32 gMonBackPic_PsyduckRedux[]           = INCBIN_U32("graphics/pokemon/psyduck/redux/back.4bpp.lz");
+const u32 gMonPalette_PsyduckRedux[]           = INCBIN_U32("graphics/pokemon/psyduck/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_PsyduckRedux[]      = INCBIN_U32("graphics/pokemon/psyduck/redux/shiny.gbapal.lz");
+const u8  gMonIcon_PsyduckRedux[]              = INCBIN_U8("graphics/pokemon/psyduck/redux/icon.4bpp");
+
+const u32 gMonFrontPic_Slyduck[]          = INCBIN_U32("graphics/pokemon/slyduck/front.4bpp.lz");
+const u32 gMonBackPic_Slyduck[]           = INCBIN_U32("graphics/pokemon/slyduck/back.4bpp.lz");
+const u32 gMonPalette_Slyduck[]           = INCBIN_U32("graphics/pokemon/slyduck/normal.gbapal.lz");
+const u32 gMonShinyPalette_Slyduck[]      = INCBIN_U32("graphics/pokemon/slyduck/shiny.gbapal.lz");
+const u8  gMonIcon_Slyduck[]              = INCBIN_U8("graphics/pokemon/slyduck/icon.4bpp");
+
+const u32 gMonFrontPic_Shyduck[]          = INCBIN_U32("graphics/pokemon/shyduck/front.4bpp.lz");
+const u32 gMonBackPic_Shyduck[]           = INCBIN_U32("graphics/pokemon/shyduck/back.4bpp.lz");
+const u32 gMonPalette_Shyduck[]           = INCBIN_U32("graphics/pokemon/shyduck/normal.gbapal.lz");
+const u32 gMonShinyPalette_Shyduck[]      = INCBIN_U32("graphics/pokemon/shyduck/shiny.gbapal.lz");
+const u8  gMonIcon_Shyduck[]              = INCBIN_U8("graphics/pokemon/shyduck/icon.4bpp");
+
+const u32 gMonFrontPic_SeelRedux[]          = INCBIN_U32("graphics/pokemon/seel/redux/front.4bpp.lz");
+const u32 gMonBackPic_SeelRedux[]           = INCBIN_U32("graphics/pokemon/seel/redux/back.4bpp.lz");
+const u32 gMonPalette_SeelRedux[]           = INCBIN_U32("graphics/pokemon/seel/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_SeelRedux[]      = INCBIN_U32("graphics/pokemon/seel/redux/shiny.gbapal.lz");
+const u8  gMonIcon_SeelRedux[]              = INCBIN_U8("graphics/pokemon/seel/redux/icon.4bpp");
+
+const u32 gMonFrontPic_DewgongRedux[]          = INCBIN_U32("graphics/pokemon/dewgong/redux/front.4bpp.lz");
+const u32 gMonBackPic_DewgongRedux[]           = INCBIN_U32("graphics/pokemon/dewgong/redux/back.4bpp.lz");
+const u32 gMonPalette_DewgongRedux[]           = INCBIN_U32("graphics/pokemon/dewgong/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_DewgongRedux[]      = INCBIN_U32("graphics/pokemon/dewgong/redux/shiny.gbapal.lz");
+const u8  gMonIcon_DewgongRedux[]              = INCBIN_U8("graphics/pokemon/dewgong/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Magmenous[]          = INCBIN_U32("graphics/pokemon/magmenous/front.4bpp.lz");
 const u32 gMonBackPic_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/back.4bpp.lz");
 const u32 gMonPalette_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/normal.gbapal.lz");
@@ -7867,18 +7887,6 @@ const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokem
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");
 const u32 gMonShinyPalette_Polartic_Bluemoon[]      = INCBIN_U32("graphics/pokemon/polartic/bluemoon/shiny.gbapal.lz");
 const u8  gMonIcon_Polartic_Bluemoon[]              = INCBIN_U8("graphics/pokemon/polartic/bluemoon/icon.4bpp");
-
-const u32 gMonFrontPic_MinccinoRedux[]          = INCBIN_U32("graphics/pokemon/minccino/redux/front.4bpp.lz");
-const u32 gMonBackPic_MinccinoRedux[]           = INCBIN_U32("graphics/pokemon/minccino/redux/back.4bpp.lz");
-const u32 gMonPalette_MinccinoRedux[]           = INCBIN_U32("graphics/pokemon/minccino/redux/normal.gbapal.lz");
-const u32 gMonShinyPalette_MinccinoRedux[]      = INCBIN_U32("graphics/pokemon/minccino/redux/shiny.gbapal.lz");
-const u8  gMonIcon_MinccinoRedux[]              = INCBIN_U8("graphics/pokemon/minccino/redux/icon.4bpp");
-
-const u32 gMonFrontPic_CinccinoRedux[]          = INCBIN_U32("graphics/pokemon/cinccino/redux/front.4bpp.lz");
-const u32 gMonBackPic_CinccinoRedux[]           = INCBIN_U32("graphics/pokemon/cinccino/redux/back.4bpp.lz");
-const u32 gMonPalette_CinccinoRedux[]           = INCBIN_U32("graphics/pokemon/cinccino/redux/normal.gbapal.lz");
-const u32 gMonShinyPalette_CinccinoRedux[]      = INCBIN_U32("graphics/pokemon/cinccino/redux/shiny.gbapal.lz");
-const u8  gMonIcon_CinccinoRedux[]              = INCBIN_U8("graphics/pokemon/cinccino/redux/icon.4bpp");
 
 //Rare Shinies
 const u32 gMonRareShinyPalette_Corphish[]       = INCBIN_U32("graphics/pokemon/corphish/shinyalt1.gbapal.lz");

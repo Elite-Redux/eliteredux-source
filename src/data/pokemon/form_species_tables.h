@@ -35,14 +35,12 @@ static const u16 sPidgeotFormSpeciesIdTable[] = {
 
 static const u16 sRattataFormSpeciesIdTable[] = {
     SPECIES_RATTATA,
-    SPECIES_RATTATA_REDUX,
     SPECIES_RATTATA_ALOLAN,
     FORM_SPECIES_END,
 };
 
 static const u16 sRaticateFormSpeciesIdTable[] = {
     SPECIES_RATICATE,
-    SPECIES_RATICATE_REDUX,
     SPECIES_RATICATE_ALOLAN,
     FORM_SPECIES_END,
 };
@@ -1085,6 +1083,7 @@ static const u16 sDewgongFormSpeciesIdTable[] = {
     SPECIES_DEWGONG,
     SPECIES_DEWGONG_MEGA,
     SPECIES_KECLEONG,
+    SPECIES_DEWGONG_REDUX,
     FORM_SPECIES_END,
 };
 
@@ -1896,4 +1895,14 @@ static const u16 sGliscorFormSpeciesIdTable[] = {
     SPECIES_GLISCOR,
     SPECIES_GLISCOR_REDUX,
     FORM_SPECIES_END,
+};
+static const u16 sPsyduckFormSpeciesIdTable[] = {
+    SPECIES_PSYDUCK,
+    SPECIES_PSYDUCK_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sSeelFormSpeciesIdTable[] = {
+    SPECIES_SEEL,
+    SPECIES_SEEL_REDUX,
+    FORM_SPECIES_END,  
 };

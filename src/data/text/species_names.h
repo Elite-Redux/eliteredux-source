@@ -1042,8 +1042,6 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 [SPECIES_SOLROCK_SYSTEM] = _("Solrock"),
 [SPECIES_DARKRAI_NIGHTMARE] = _("Darkrai"),
 [SPECIES_ESPEON_GALAXY] = _("Espeon"),
-[SPECIES_RATICATE_REDUX] = _("Raticate"),
-[SPECIES_RATTATA_REDUX] = _("Rattata"),
 [SPECIES_MIMIKYU_RAYQUAZA] = _("Mimikyu"),
 [SPECIES_BEWEAR_ANGRY] = _("Bewear"),
 [SPECIES_ABOMASNOW_SANTA] = _("Abomasnow"),
@@ -1175,6 +1173,13 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_GLISCOR_REDUX]      = _("Gliscor"),
     [SPECIES_MAGMENOUS]      = _("Magmenous"),
 
+    [SPECIES_PSYDUCK_REDUX]      = _("Psyduck"),
+    [SPECIES_SLYDUCK]      = _("Slyduck"),
+    [SPECIES_SHYDUCK]      = _("Shyduck"),
+
+    [SPECIES_SEEL_REDUX]      = _("Seel"),
+    [SPECIES_DEWGONG_REDUX]      = _("Dewgong"),
+
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),
     [SPECIES_HOUNDOOM_MEGA_REDUX] = _("Houndoom"),
@@ -1261,8 +1266,6 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_AEGISLASH_BLADE_REDUX] = _("Aegislash"),
 
     [SPECIES_RIBOMBEE_MEGA] = _("Ribombee"),
-    [SPECIES_MINCCINO_REDUX] = _("Minccino"),
-    [SPECIES_CINCCINO_REDUX] = _("Cinccino"),
     
     // Megas
     [SPECIES_VENUSAUR_MEGA] = _("Venusaur"),

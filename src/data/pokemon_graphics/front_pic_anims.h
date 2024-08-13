@@ -367,6 +367,31 @@ static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_PSYDUCK_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_SLYDUCK_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_SHYDUCK_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_SEEL_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_DEWGONG_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -388,16 +413,6 @@ static const union AnimCmd sAnim_DARKRAI_NIGHTMARE_1[] =
     ANIMCMD_END,
 };
 static const union AnimCmd sAnim_ESPEON_GALAXY_1[] =
-{
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
-static const union AnimCmd sAnim_RATICATE_REDUX_1[] =
-{
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
-static const union AnimCmd sAnim_RATTATA_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -643,16 +658,6 @@ static const union AnimCmd sAnim_KINGAMBIT_REDUX_1[] =
     ANIMCMD_END,
 };
 
-static const union AnimCmd sAnim_MINCCINO_REDUX_1[] =
-{
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
-
-static const union AnimCmd *const sAnims_MINCCINO_REDUX[] ={
-    sAnim_GeneralFrame0,
-    sAnim_MINCCINO_REDUX_1,
-};
 static const union AnimCmd sAnim_LUCARIO_MEGA_Y_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -662,16 +667,6 @@ static const union AnimCmd sAnim_LUCARIO_MEGA_Y_1[] =
 static const union AnimCmd *const sAnims_LUCARIO_MEGA_Y[] ={
     sAnim_GeneralFrame0,
     sAnim_LUCARIO_MEGA_Y_1,
-};
-static const union AnimCmd sAnim_CINCCINO_REDUX_1[] =
-{
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
-
-static const union AnimCmd *const sAnims_CINCCINO_REDUX[] ={
-    sAnim_GeneralFrame0,
-    sAnim_CINCCINO_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_PHANTOWL[] ={
@@ -1014,9 +1009,34 @@ static const union AnimCmd *const sAnims_GLISCOR_REDUX[] ={
     sAnim_GLISCOR_REDUX_1,
 };
 
+static const union AnimCmd *const sAnims_PSYDUCK_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_PSYDUCK_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_SLYDUCK[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SLYDUCK_1,
+};
+
+static const union AnimCmd *const sAnims_SHYDUCK[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SHYDUCK_1,
+};
+
 static const union AnimCmd *const sAnims_MAGMENOUS[] ={
     sAnim_GeneralFrame0,
     sAnim_MAGMENOUS_1,
+};
+
+static const union AnimCmd *const sAnims_SEEL_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SEEL_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_DEWGONG_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DEWGONG_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
@@ -1057,16 +1077,6 @@ static const union AnimCmd *const sAnims_DARKRAI_NIGHTMARE[] ={
 static const union AnimCmd *const sAnims_ESPEON_GALAXY[] ={
     sAnim_GeneralFrame0,
     sAnim_ESPEON_GALAXY_1,
-};
-
-static const union AnimCmd *const sAnims_RATICATE_REDUX[] ={
-    sAnim_GeneralFrame0,
-    sAnim_RATICATE_REDUX_1,
-};
-
-static const union AnimCmd *const sAnims_RATTATA_REDUX[] ={
-    sAnim_GeneralFrame0,
-    sAnim_RATTATA_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_MIMIKYU_RAYQUAZA[] ={
@@ -20750,7 +20760,12 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(CLEFABLE_REDUX_MEGA),
     ANIM_CMD(GLIGAR_REDUX),
     ANIM_CMD(GLISCOR_REDUX),
+    ANIM_CMD(PSYDUCK_REDUX),
+    ANIM_CMD(SLYDUCK),
+    ANIM_CMD(SHYDUCK),
     ANIM_CMD(MAGMENOUS),
+    ANIM_CMD(SEEL_REDUX),
+    ANIM_CMD(DEWGONG_REDUX),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
@@ -20771,8 +20786,6 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(SOLROCK_SYSTEM),
     ANIM_CMD(DARKRAI_NIGHTMARE),
     ANIM_CMD(ESPEON_GALAXY),
-    ANIM_CMD(RATICATE_REDUX),
-    ANIM_CMD(RATTATA_REDUX),
     ANIM_CMD(MIMIKYU_RAYQUAZA),
     ANIM_CMD(BEWEAR_ANGRY),
     ANIM_CMD(ABOMASNOW_SANTA),
@@ -20796,8 +20809,6 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(RAGING_BOLT),
     ANIM_CMD(GOUGING_FIRE),
     ANIM_CMD(ESCARGINITE_REDUX),
-    ANIM_CMD(MINCCINO_REDUX),
-    ANIM_CMD(CINCCINO_REDUX),
     ANIM_CMD(IRON_BOULDER),
     ANIM_CMD(HYDRAPPLE),
     ANIM_CMD(IRON_CROWN),

@@ -5,8 +5,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_BLASTOISE] = sBlastoiseFormSpeciesIdTable,
     [SPECIES_BEEDRILL] = sBeedrillFormSpeciesIdTable,
     [SPECIES_PIDGEOT] = sPidgeotFormSpeciesIdTable,
-    [SPECIES_RATTATA_REDUX] = sRattataFormSpeciesIdTable,
-    [SPECIES_RATICATE_REDUX] = sRaticateFormSpeciesIdTable,
     [SPECIES_PIKACHU] = sPikachuFormSpeciesIdTable,
     [SPECIES_RAICHU] = sRaichuFormSpeciesIdTable,
     [SPECIES_SANDSHREW] = sSandshrewFormSpeciesIdTable,
@@ -999,5 +997,13 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_GLISCOR_REDUX] = sGliscorFormSpeciesIdTable,
     [SPECIES_GLISCOR] = sGliscorFormSpeciesIdTable,
+
+    [SPECIES_PSYDUCK_REDUX] = sPsyduckFormSpeciesIdTable,
+    [SPECIES_PSYDUCK] = sPsyduckFormSpeciesIdTable,
+
+    [SPECIES_SEEL_REDUX] = sSeelFormSpeciesIdTable,
+    [SPECIES_SEEL] = sSeelFormSpeciesIdTable,
+
+    [SPECIES_DEWGONG_REDUX] = sDewgongFormSpeciesIdTable,
 
 };
