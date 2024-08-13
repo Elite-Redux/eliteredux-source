@@ -1255,6 +1255,10 @@ const u8 *const gMonIconTable[] =
     [SPECIES_GLIGAR_REDUX] = gMonIcon_GligarRedux,
     [SPECIES_GLISCOR_REDUX] = gMonIcon_GliscorRedux,
     [SPECIES_MAGMENOUS] = gMonIcon_Magmenous,
+    [SPECIES_PSYDUCK_REDUX] = gMonIcon_PsyduckRedux,
+    [SPECIES_SLYDUCK] = gMonIcon_Slyduck,
+    [SPECIES_SHYDUCK] = gMonIcon_Shyduck,
+    [SPECIES_SEEL_REDUX] = gMonIcon_SeelRedux,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,

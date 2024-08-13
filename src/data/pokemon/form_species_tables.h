@@ -1897,3 +1897,13 @@ static const u16 sGliscorFormSpeciesIdTable[] = {
     SPECIES_GLISCOR_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sPsyduckFormSpeciesIdTable[] = {
+    SPECIES_PSYDUCK,
+    SPECIES_PSYDUCK_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sSeelFormSpeciesIdTable[] = {
+    SPECIES_SEEL,
+    SPECIES_SEEL_REDUX,
+    FORM_SPECIES_END,  
+};

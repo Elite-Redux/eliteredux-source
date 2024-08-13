@@ -1000,4 +1000,10 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_GLISCOR_REDUX] = sGliscorFormSpeciesIdTable,
     [SPECIES_GLISCOR] = sGliscorFormSpeciesIdTable,
 
+    [SPECIES_PSYDUCK_REDUX] = sPsyduckFormSpeciesIdTable,
+    [SPECIES_PSYDUCK] = sPsyduckFormSpeciesIdTable,
+
+    [SPECIES_SEEL_REDUX] = sSeelFormSpeciesIdTable,
+    [SPECIES_SEEL] = sSeelFormSpeciesIdTable,
+
 };

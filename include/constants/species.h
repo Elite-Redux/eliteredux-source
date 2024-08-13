@@ -1057,8 +1057,10 @@
 #define SPECIES_IRON_CARAPACE 1050
 #define SPECIES_MAGMENOUS 1051
 #define SPECIES_KAIOSEA 1052
+#define SPECIES_SLYDUCK 1053
+#define SPECIES_SHYDUCK 1054
 
-#define LAST_VALID_SPECIES SPECIES_KAIOSEA
+#define LAST_VALID_SPECIES SPECIES_SHYDUCK
 
 #define FORMS_START  1500
 
@@ -1781,8 +1783,10 @@
 #define SPECIES_CLEFABLE_REDUX              REDUX_FORMS_START + 122
 #define SPECIES_GLIGAR_REDUX                REDUX_FORMS_START + 123
 #define SPECIES_GLISCOR_REDUX               REDUX_FORMS_START + 124
+#define SPECIES_PSYDUCK_REDUX               REDUX_FORMS_START + 125
+#define SPECIES_SEEL_REDUX                  REDUX_FORMS_START + 126
 
-#define LAST_REDUX_FORM                     SPECIES_GLISCOR_REDUX
+#define LAST_REDUX_FORM                     SPECIES_SEEL_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

@@ -1175,6 +1175,12 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_GLISCOR_REDUX]      = _("Gliscor"),
     [SPECIES_MAGMENOUS]      = _("Magmenous"),
 
+    [SPECIES_PSYDUCK_REDUX]      = _("Psyduck"),
+    [SPECIES_SLYDUCK]      = _("Slyduck"),
+    [SPECIES_SHYDUCK]      = _("Shyduck"),
+
+    [SPECIES_SEEL_REDUX]      = _("Seel"),
+
     [SPECIES_HOUNDOUR_REDUX]      = _("Houndour"),
     [SPECIES_HOUNDOOM_REDUX]      = _("Houndoom"),
     [SPECIES_HOUNDOOM_MEGA_REDUX] = _("Houndoom"),

@@ -7850,6 +7850,30 @@ const u32 gMonPalette_GliscorRedux[]           = INCBIN_U32("graphics/pokemon/gl
 const u32 gMonShinyPalette_GliscorRedux[]      = INCBIN_U32("graphics/pokemon/gliscor/redux/shiny.gbapal.lz");
 const u8  gMonIcon_GliscorRedux[]              = INCBIN_U8("graphics/pokemon/gliscor/redux/icon.4bpp");
 
+const u32 gMonFrontPic_PsyduckRedux[]          = INCBIN_U32("graphics/pokemon/psyduck/redux/front.4bpp.lz");
+const u32 gMonBackPic_PsyduckRedux[]           = INCBIN_U32("graphics/pokemon/psyduck/redux/back.4bpp.lz");
+const u32 gMonPalette_PsyduckRedux[]           = INCBIN_U32("graphics/pokemon/psyduck/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_PsyduckRedux[]      = INCBIN_U32("graphics/pokemon/psyduck/redux/shiny.gbapal.lz");
+const u8  gMonIcon_PsyduckRedux[]              = INCBIN_U8("graphics/pokemon/psyduck/redux/icon.4bpp");
+
+const u32 gMonFrontPic_Slyduck[]          = INCBIN_U32("graphics/pokemon/slyduck/front.4bpp.lz");
+const u32 gMonBackPic_Slyduck[]           = INCBIN_U32("graphics/pokemon/slyduck/back.4bpp.lz");
+const u32 gMonPalette_Slyduck[]           = INCBIN_U32("graphics/pokemon/slyduck/normal.gbapal.lz");
+const u32 gMonShinyPalette_Slyduck[]      = INCBIN_U32("graphics/pokemon/slyduck/shiny.gbapal.lz");
+const u8  gMonIcon_Slyduck[]              = INCBIN_U8("graphics/pokemon/slyduck/icon.4bpp");
+
+const u32 gMonFrontPic_Shyduck[]          = INCBIN_U32("graphics/pokemon/shyduck/front.4bpp.lz");
+const u32 gMonBackPic_Shyduck[]           = INCBIN_U32("graphics/pokemon/shyduck/back.4bpp.lz");
+const u32 gMonPalette_Shyduck[]           = INCBIN_U32("graphics/pokemon/shyduck/normal.gbapal.lz");
+const u32 gMonShinyPalette_Shyduck[]      = INCBIN_U32("graphics/pokemon/shyduck/shiny.gbapal.lz");
+const u8  gMonIcon_Shyduck[]              = INCBIN_U8("graphics/pokemon/shyduck/icon.4bpp");
+
+const u32 gMonFrontPic_SeelRedux[]          = INCBIN_U32("graphics/pokemon/seel/redux/front.4bpp.lz");
+const u32 gMonBackPic_SeelRedux[]           = INCBIN_U32("graphics/pokemon/seel/redux/back.4bpp.lz");
+const u32 gMonPalette_SeelRedux[]           = INCBIN_U32("graphics/pokemon/seel/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_SeelRedux[]      = INCBIN_U32("graphics/pokemon/seel/redux/shiny.gbapal.lz");
+const u8  gMonIcon_SeelRedux[]              = INCBIN_U8("graphics/pokemon/seel/redux/icon.4bpp");
+
 const u32 gMonFrontPic_Magmenous[]          = INCBIN_U32("graphics/pokemon/magmenous/front.4bpp.lz");
 const u32 gMonBackPic_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/back.4bpp.lz");
 const u32 gMonPalette_Magmenous[]           = INCBIN_U32("graphics/pokemon/magmenous/normal.gbapal.lz");

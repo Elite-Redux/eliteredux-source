@@ -367,6 +367,26 @@ static const union AnimCmd sAnim_POPMOTH_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_PSYDUCK_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_SLYDUCK_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_SHYDUCK_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_SEEL_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -1014,9 +1034,29 @@ static const union AnimCmd *const sAnims_GLISCOR_REDUX[] ={
     sAnim_GLISCOR_REDUX_1,
 };
 
+static const union AnimCmd *const sAnims_PSYDUCK_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_PSYDUCK_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_SLYDUCK[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SLYDUCK_1,
+};
+
+static const union AnimCmd *const sAnims_SHYDUCK[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SHYDUCK_1,
+};
+
 static const union AnimCmd *const sAnims_MAGMENOUS[] ={
     sAnim_GeneralFrame0,
     sAnim_MAGMENOUS_1,
+};
+
+static const union AnimCmd *const sAnims_SEEL_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SEEL_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_POPMOTH_MEGA[] ={
@@ -20750,7 +20790,11 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(CLEFABLE_REDUX_MEGA),
     ANIM_CMD(GLIGAR_REDUX),
     ANIM_CMD(GLISCOR_REDUX),
+    ANIM_CMD(PSYDUCK_REDUX),
+    ANIM_CMD(SLYDUCK),
+    ANIM_CMD(SHYDUCK),
     ANIM_CMD(MAGMENOUS),
+    ANIM_CMD(SEEL_REDUX),
     ANIM_CMD(BLIZZARD_MAW),
     ANIM_CMD(ARBOK_MEGA),
     ANIM_CMD(GOLISOPOD_MEGA),
