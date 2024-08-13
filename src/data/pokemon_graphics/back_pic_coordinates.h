@@ -5541,10 +5541,15 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x88,
         .y_offset = 5,
     },
+    [SPECIES_KAIOSEA] =
+    {
+        .size = 0x87,
+        .y_offset = 0,
+    },
     [SPECIES_CORM] =
     {
         .size = 0x64,
-        .y_offset = 17,
+        .y_offset = 16,
     },
     [SPECIES_MAIZEMOTH] =
     {
@@ -5559,7 +5564,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_POPMOTH] =
     {
         .size = 0x88,
-        .y_offset = 5,
+        .y_offset = 6,
     },
     [SPECIES_BLIZZARD_MAW] =
     {
@@ -5744,12 +5749,12 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_GLISCOR_REDUX] =
     {
         .size = 0x86,
-        .y_offset = 11,
+        .y_offset = 0,
     },
     [SPECIES_MAGMENOUS] =
     {
         .size = 0x86,
-        .y_offset = 11,
+        .y_offset = 0,
     },
     [SPECIES_POPMOTH_MEGA] =
     {

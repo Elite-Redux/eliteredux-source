@@ -47665,4 +47665,32 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_U_TURN)
         TM(MOVE_ROOST)
         TMHM_LEARNSET_END
+
+    [SPECIES_KAIOSEA] = TMHM_LEARNSET
+        TM(MOVE_WATER_PULSE)
+        TM(MOVE_TOXIC)
+        TM(MOVE_HAIL)
+        TM(MOVE_HIDDEN_POWER)
+        TM(MOVE_ICE_BEAM)
+        TM(MOVE_BLIZZARD)
+        TM(MOVE_HYPER_BEAM)
+        TM(MOVE_PROTECT)
+        TM(MOVE_RAIN_DANCE)
+        TM(MOVE_FRUSTRATION)
+        TM(MOVE_RETURN)
+        TM(MOVE_FACADE)
+        TM(MOVE_SECRET_POWER)
+        TM(MOVE_REST)
+        TM(MOVE_ATTRACT)
+        TM(MOVE_SLEEP_TALK)
+        TM(MOVE_SCALD)
+        TM(MOVE_ENDURE)
+        TM(MOVE_GIGA_IMPACT)
+        TM(MOVE_POISON_JAB)
+        TM(MOVE_SUBSTITUTE)
+        TM(MOVE_CURSE)
+        TM(MOVE_SURF)
+        TM(MOVE_WATERFALL)
+        TM(MOVE_DIVE)
+        TMHM_LEARNSET_END
 };

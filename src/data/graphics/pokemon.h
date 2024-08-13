@@ -7856,6 +7856,12 @@ const u32 gMonPalette_Magmenous[]           = INCBIN_U32("graphics/pokemon/magme
 const u32 gMonShinyPalette_Magmenous[]      = INCBIN_U32("graphics/pokemon/magmenous/shiny.gbapal.lz");
 const u8  gMonIcon_Magmenous[]              = INCBIN_U8("graphics/pokemon/magmenous/icon.4bpp");
 
+const u32 gMonFrontPic_Kaiosea[]          = INCBIN_U32("graphics/pokemon/kaiosea/front.4bpp.lz");
+const u32 gMonBackPic_Kaiosea[]           = INCBIN_U32("graphics/pokemon/kaiosea/back.4bpp.lz");
+const u32 gMonPalette_Kaiosea[]           = INCBIN_U32("graphics/pokemon/kaiosea/normal.gbapal.lz");
+const u32 gMonShinyPalette_Kaiosea[]      = INCBIN_U32("graphics/pokemon/kaiosea/shiny.gbapal.lz");
+const u8  gMonIcon_Kaiosea[]              = INCBIN_U8("graphics/pokemon/kaiosea/icon.4bpp");
+
 const u32 gMonFrontPic_Polartic_Bluemoon[]          = INCBIN_U32("graphics/pokemon/polartic/bluemoon/front.4bpp.lz");
 const u32 gMonBackPic_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/back.4bpp.lz");
 const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokemon/polartic/bluemoon/normal.gbapal.lz");

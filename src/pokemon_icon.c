@@ -1202,6 +1202,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_TORTEMPLE] = gMonIcon_Tortemple,
     [SPECIES_BRONTONANA] = gMonIcon_Brontonana,
     [SPECIES_DREDWOOD] = gMonIcon_Dredwood,
+    [SPECIES_KAIOSEA] = gMonIcon_Kaiosea,
     [SPECIES_ARBOK_MEGA] = gMonIcon_ArbokMega,
     [SPECIES_GOLISOPOD_MEGA] = gMonIcon_GolisopodMega,
     [SPECIES_RAPIDASH_MEGA] = gMonIcon_RapidashMega,

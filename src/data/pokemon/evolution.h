@@ -99,6 +99,7 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_HORSEA]	 = {{EVO_LEVEL, 23, SPECIES_SEADRA}},
     [SPECIES_SEADRA]	 = {{EVO_LEVEL, 36, SPECIES_KINGDRA}},
     [SPECIES_GOLDEEN]	 = {{EVO_LEVEL, 23, SPECIES_SEAKING}},
+    // [SPECIES_SEAKING]	 = {{EVO_LEVEL, 45, SPECIES_KAIOSEA}}, // disabled until further notice
     [SPECIES_STARYU]     = {{EVO_LEVEL, 36, SPECIES_STARMIE}},
     [SPECIES_SCYTHER]    = {{EVO_LEVEL, 36, SPECIES_SCIZOR},
                             {EVO_LEVEL, 36, SPECIES_KLEAVOR}},
