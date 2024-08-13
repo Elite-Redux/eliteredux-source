@@ -46406,6 +46406,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_TRICK_ROOM)
         TM(MOVE_REFLECT)
         TM(MOVE_PSYSHOCK)
+        TM(MOVE_VENOSHOCK) // vanilla move. can be removed tho
         TMHM_LEARNSET_END
 
     [SPECIES_FEZANDIPITI] = TMHM_LEARNSET
