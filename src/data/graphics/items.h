@@ -1580,6 +1580,48 @@ const u32 gItemIconPalette_Flygonite_R[]  = INCBIN_U32("graphics/items/icon_pale
 const u32 gItemIcon_Aegislashite_R[]  = INCBIN_U32("graphics/items/icons/aegislashite_R.4bpp.lz");
 const u32 gItemIconPalette_Aegislashite_R[]  = INCBIN_U32("graphics/items/icon_palettes/aegislashite_R.gbapal.lz");
 
+const u32 gItemIcon_Froslassite_R[]  = INCBIN_U32("graphics/items/icons/froslassite_R.4bpp.lz");
+const u32 gItemIconPalette_Froslassite_R[]  = INCBIN_U32("graphics/items/icon_palettes/froslassite_R.gbapal.lz");
+
+const u32 gItemIcon_Glalitite_R[]  = INCBIN_U32("graphics/items/icons/glalitite_R.4bpp.lz");
+const u32 gItemIconPalette_Glalitite_R[]  = INCBIN_U32("graphics/items/icon_palettes/glalitite_R.gbapal.lz");
+
+const u32 gItemIcon_Golisopodite[]  = INCBIN_U32("graphics/items/icons/golisopodite.4bpp.lz");
+const u32 gItemIconPalette_Golisopodite[]  = INCBIN_U32("graphics/items/icon_palettes/golisopodite.gbapal.lz");
+
+const u32 gItemIcon_Hydreigonite_R[]  = INCBIN_U32("graphics/items/icons/hydreigonite_R.4bpp.lz");
+const u32 gItemIconPalette_Hydreigonite_R[]  = INCBIN_U32("graphics/items/icon_palettes/hydreigonite_R.gbapal.lz");
+
+const u32 gItemIcon_Infernapenite_R[]  = INCBIN_U32("graphics/items/icons/infernapenite_R.4bpp.lz");
+const u32 gItemIconPalette_Infernapenite_R[]  = INCBIN_U32("graphics/items/icon_palettes/infernapenite_R.gbapal.lz");
+
+const u32 gItemIcon_Reuniclusite_R[]  = INCBIN_U32("graphics/items/icons/reuniclusite_R.4bpp.lz");
+const u32 gItemIconPalette_Reuniclusite_R[]  = INCBIN_U32("graphics/items/icon_palettes/reuniclusite_R.gbapal.lz");
+
+const u32 gItemIcon_Torterranite_R[]  = INCBIN_U32("graphics/items/icons/torterranite_R.4bpp.lz");
+const u32 gItemIconPalette_Torterranite_R[]  = INCBIN_U32("graphics/items/icon_palettes/torterranite_R.gbapal.lz");
+
+const u32 gItemIcon_Tsareenite_R[]  = INCBIN_U32("graphics/items/icons/tsareenite_R.4bpp.lz");
+const u32 gItemIconPalette_Tsareenite_R[]  = INCBIN_U32("graphics/items/icon_palettes/tsareenite_R.gbapal.lz");
+
+const u32 gItemIcon_Toxtricitite_R[]  = INCBIN_U32("graphics/items/icons/toxtricitite_R.4bpp.lz");
+const u32 gItemIconPalette_Toxtricitite_R[]  = INCBIN_U32("graphics/items/icon_palettes/toxtricitite_R.gbapal.lz");
+
+const u32 gItemIcon_Rapidashite_G[]  = INCBIN_U32("graphics/items/icons/rapidashite_G.4bpp.lz");
+const u32 gItemIconPalette_Rapidashite_G[]  = INCBIN_U32("graphics/items/icon_palettes/rapidashite_G.gbapal.lz");
+
+const u32 gItemIcon_Maizemothite[]  = INCBIN_U32("graphics/items/icons/maizemothite.4bpp.lz");
+const u32 gItemIconPalette_Maizemothite[]  = INCBIN_U32("graphics/items/icon_palettes/maizemothite.gbapal.lz");
+
+const u32 gItemIcon_Popmothite[]  = INCBIN_U32("graphics/items/icons/popmothite.4bpp.lz");
+const u32 gItemIconPalette_Popmothite[]  = INCBIN_U32("graphics/items/icon_palettes/popmothite.gbapal.lz");
+
+const u32 gItemIcon_Rapidashite[]  = INCBIN_U32("graphics/items/icons/rapidashite.4bpp.lz");
+const u32 gItemIconPalette_Rapidashite[]  = INCBIN_U32("graphics/items/icon_palettes/rapidashite.gbapal.lz");
+
+const u32 gItemIcon_Oricorionite[]  = INCBIN_U32("graphics/items/icons/oricorionite.4bpp.lz");
+const u32 gItemIconPalette_Oricorionite[]  = INCBIN_U32("graphics/items/icon_palettes/oricorionite.gbapal.lz");
+
 const u32 gItemIcon_GenericMegaStone[]      = INCBIN_U32("graphics/items/icons/generic_megastone.4bpp.lz");
 const u32 gItemIconPalette_Garchompite_R[]  = INCBIN_U32("graphics/items/icon_palettes/garchompite_r.gbapal.lz");
 const u32 gItemIconPalette_Granbullite[]    = INCBIN_U32("graphics/items/icon_palettes/granbullite.gbapal.lz");
