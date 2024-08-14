@@ -2550,7 +2550,7 @@ static void Cmd_healthbarupdate(void)
             PrepareStringBattle(STRINGID_SUBSTITUTEDAMAGED, gActiveBattler);
             FlagSet(FLAG_SYS_DISABLE_DAMAGE_DONE);
         }
-        else if (RemainingNoDamageHits(gActiveBattler) > 0)
+        else if (gBattleMoveDamage > 0 && RemainingNoDamageHits(gActiveBattler) > 0)
         {
             u16 ability = GetNoDamageAbility(gActiveBattler);
             s8 noDamageHits = RemainingNoDamageHits(gActiveBattler) - 1;
@@ -2649,7 +2649,7 @@ static void Cmd_datahpupdate(void)
                 return;
             }
         }
-        else if (RemainingNoDamageHits(gActiveBattler) > 0)
+        else if (gBattleMoveDamage > 0 && RemainingNoDamageHits(gActiveBattler) > 0)
         {
             IncrementSingleUseAbilityCounter(gActiveBattler, GetNoDamageAbility(gActiveBattler), 1);
             if (RemainingNoDamageHits(gActiveBattler) <= 0)
