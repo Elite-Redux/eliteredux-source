@@ -27837,6 +27837,11 @@ static const struct LevelUpMove sFroslassReduxLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sAmphybuzzLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sCalyrex_Cloud_RiderLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_CONFUSION),
     LEVEL_UP_MOVE(1, MOVE_GRASSY_GLIDE),

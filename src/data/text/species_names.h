@@ -1125,6 +1125,9 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_POPMOTH]             = _("Popmoth"),
     [SPECIES_POPMOTH_MEGA]             = _("Popmoth"),
 
+    [SPECIES_AMPHYBUZZ]          = _("Amphybuzz"),
+    [SPECIES_AMPHYBUZZ_MEGA]          = _("Amphybuzz"),
+
     [SPECIES_BLIZZARD_MAW]             = _("Blizzard Maw"),
     [SPECIES_LUMBERING_SLOTH]             = _("Lumber Sloth"),
     [SPECIES_LUMBERING_SLOTH_ENGULFED]             = _("Lumber Sloth"),

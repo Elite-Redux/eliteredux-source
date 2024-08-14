@@ -1059,8 +1059,9 @@
 #define SPECIES_KAIOSEA 1052
 #define SPECIES_SLYDUCK 1053
 #define SPECIES_SHYDUCK 1054
+#define SPECIES_AMPHYBUZZ 1055
 
-#define LAST_VALID_SPECIES SPECIES_SHYDUCK
+#define LAST_VALID_SPECIES SPECIES_AMPHYBUZZ
 
 #define FORMS_START  1500
 
@@ -1652,8 +1653,9 @@
 #define SPECIES_CLEFABLE_REDUX_MEGA         CUSTOM_MEGA_START + 81
 #define SPECIES_GLALIE_REDUX_MEGA           CUSTOM_MEGA_START + 82
 #define SPECIES_FROSLASS_REDUX_MEGA         CUSTOM_MEGA_START + 83
+#define SPECIES_AMPHYBUZZ_MEGA              CUSTOM_MEGA_START + 84
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_FROSLASS_REDUX_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_AMPHYBUZZ_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA

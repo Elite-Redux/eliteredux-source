@@ -7582,6 +7582,18 @@ const u32 gMonPalette_Dredwood[]           = INCBIN_U32("graphics/pokemon/dredwo
 const u32 gMonShinyPalette_Dredwood[]      = INCBIN_U32("graphics/pokemon/dredwood/shiny.gbapal.lz");
 const u8  gMonIcon_Dredwood[]              = INCBIN_U8("graphics/pokemon/dredwood/icon.4bpp");
 
+const u32 gMonFrontPic_Amphybuzz[]          = INCBIN_U32("graphics/pokemon/amphybuzz/front.4bpp.lz");
+const u32 gMonBackPic_Amphybuzz[]           = INCBIN_U32("graphics/pokemon/amphybuzz/back.4bpp.lz");
+const u32 gMonPalette_Amphybuzz[]           = INCBIN_U32("graphics/pokemon/amphybuzz/normal.gbapal.lz");
+const u32 gMonShinyPalette_Amphybuzz[]      = INCBIN_U32("graphics/pokemon/amphybuzz/shiny.gbapal.lz");
+const u8  gMonIcon_Amphybuzz[]              = INCBIN_U8("graphics/pokemon/amphybuzz/icon.4bpp");
+
+const u32 gMonFrontPic_AmphybuzzMega[]          = INCBIN_U32("graphics/pokemon/amphybuzz/mega/front.4bpp.lz");
+const u32 gMonBackPic_AmphybuzzMega[]           = INCBIN_U32("graphics/pokemon/amphybuzz/mega/back.4bpp.lz");
+const u32 gMonPalette_AmphybuzzMega[]           = INCBIN_U32("graphics/pokemon/amphybuzz/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_AmphybuzzMega[]      = INCBIN_U32("graphics/pokemon/amphybuzz/mega/shiny.gbapal.lz");
+const u8  gMonIcon_AmphybuzzMega[]              = INCBIN_U8("graphics/pokemon/amphybuzz/mega/icon.4bpp");
+
 const u32 gMonFrontPic_Corm[]          = INCBIN_U32("graphics/pokemon/corm/front.4bpp.lz");
 const u32 gMonBackPic_Corm[]           = INCBIN_U32("graphics/pokemon/corm/back.4bpp.lz");
 const u32 gMonPalette_Corm[]           = INCBIN_U32("graphics/pokemon/corm/normal.gbapal.lz");
