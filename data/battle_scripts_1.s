@@ -11396,23 +11396,31 @@ BattleScript_AnnounceAirLockCloudNine::
 	end3
 
 BattleScript_QuickClawActivation::
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
 	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
 	waitanimation
 	printstring STRINGID_CANACTFASTERTHANKSTOITEM
 	waitmessage B_WAIT_TIME_LONG
+	readattackerfromstack3
 	end2
 
 BattleScript_QuickDrawActivation::
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_CANACTFASTERTHANKSTO
 	waitmessage B_WAIT_TIME_LONG
+	readattackerfromstack3
 	end2
 
 BattleScript_CustapBerryActivation::
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
 	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
@@ -11420,6 +11428,7 @@ BattleScript_CustapBerryActivation::
 	printstring STRINGID_CANACTFASTERTHANKSTOITEM
 	waitmessage B_WAIT_TIME_LONG
 	removeitem BS_ATTACKER
+	readattackerfromstack3
 	end2
 
 BattleScript_MicleBerryActivateEnd2::
