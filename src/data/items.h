@@ -9734,18 +9734,18 @@ const struct Item gItems[] =
     },
     [ITEM_HYDREIGONITE_R] = 
     {
-        .name = _("Arbokite"),
+        .name = _("Hydreigonite R"),
         .itemId = ITEM_HYDREIGONITE_R,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
-        .description = sArbokiteDesc,
+        .description = sHydreigoniteRDesc,
         .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
     [ITEM_INFERNAPENITE_R] = 
     {
-        .name = _("Infernapenite R"),
+        .name = _("Infernapite R"),
         .itemId = ITEM_INFERNAPENITE_R,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
