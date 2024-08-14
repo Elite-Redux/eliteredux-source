@@ -192,7 +192,7 @@ static const u8 sMoveTwoLineDescription_MoveSupersonic[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveSonicBoom[] = _(
     "Launches shock waves that\n"
-    "are super effective vs steel.");
+    "are super effective vs rock.");
 
 static const u8 sMoveTwoLineDescription_MoveDisable[] = _(
     "Psychically disables one of\n"
