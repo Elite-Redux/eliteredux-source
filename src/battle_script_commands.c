@@ -15366,6 +15366,7 @@ static void Cmd_trygetintimidatetarget(void)
 
 void DoRegenerator()
 {
+    if (!IsBattlerAlive(gActiveBattler)) return;
     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 3;
     gBattleMoveDamage += gBattleMons[gActiveBattler].hp;
     if (gBattleMoveDamage > gBattleMons[gActiveBattler].maxHP)
@@ -15400,59 +15401,61 @@ static void Cmd_switchoutabilities(void)
         gBattlescriptCurrInstr = BattleScript_TheToxicWasHasDissapeared;
     }
 
-    if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_NATURAL_CURE)
-        || CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_SELF_REPAIR)
-        || CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_NATURAL_RECOVERY))
-    {
-        u16 ability = gBattleScripting.abilityPopupOverwrite;
-        if (gBattleMons[gActiveBattler].status1 & STATUS1_ANY) {
-            switch (gBattleScripting.abilityPopupOverwrite)
-            {
-                case ABILITY_NATURAL_CURE:
-                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_NATURAL_CURE_EXITS;
-                    break;
-                case ABILITY_SELF_REPAIR:
-                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SELF_REPAIR_EXITS;
-                    break;
-                case ABILITY_NATURAL_RECOVERY:
-                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_NATURAL_RECOVERY_EXITS;
-                    break;
+    if (IsBattlerAlive(gActiveBattler)) {
+        if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_NATURAL_CURE)
+            || CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_SELF_REPAIR)
+            || CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_NATURAL_RECOVERY))
+        {
+            u16 ability = gBattleScripting.abilityPopupOverwrite;
+            if (gBattleMons[gActiveBattler].status1 & STATUS1_ANY) {
+                switch (gBattleScripting.abilityPopupOverwrite)
+                {
+                    case ABILITY_NATURAL_CURE:
+                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_NATURAL_CURE_EXITS;
+                        break;
+                    case ABILITY_SELF_REPAIR:
+                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SELF_REPAIR_EXITS;
+                        break;
+                    case ABILITY_NATURAL_RECOVERY:
+                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_NATURAL_RECOVERY_EXITS;
+                        break;
+                }
+                gBattleCommunication[MULTISTRING_CHOOSER] = ability == ABILITY_SELF_REPAIR ? B_MSG_SELF_REPAIR_EXITS : B_MSG_NATURAL_CURE_EXITS;
+                BattleScriptPush(gBattlescriptCurrInstr);
+                gBattlescriptCurrInstr = BattleScript_NaturalCureExits;
             }
-            gBattleCommunication[MULTISTRING_CHOOSER] = ability == ABILITY_SELF_REPAIR ? B_MSG_SELF_REPAIR_EXITS : B_MSG_NATURAL_CURE_EXITS;
-            BattleScriptPush(gBattlescriptCurrInstr);
-            gBattlescriptCurrInstr = BattleScript_NaturalCureExits;
-        }
 
-        if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR) || gBattleScripting.abilityPopupOverwrite == ABILITY_NATURAL_RECOVERY)
+            if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR) || gBattleScripting.abilityPopupOverwrite == ABILITY_NATURAL_RECOVERY)
+            {
+                if (!IsAbilityOnOpposingSide(gActiveBattler, ABILITY_PERMANENCE))
+                    DoRegenerator();
+            }
+        }
+        else if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR))
         {
-            if (!IsAbilityOnOpposingSide(gActiveBattler, ABILITY_PERMANENCE))
+            if (!(gBattleMons[gActiveBattler].status1 & STATUS1_BLEED) && !IsAbilityOnOpposingSide(gActiveBattler, ABILITY_PERMANENCE))
+            {
                 DoRegenerator();
+            }
         }
-    }
-    else if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR))
-    {
-        if (!(gBattleMons[gActiveBattler].status1 & STATUS1_BLEED) && !IsAbilityOnOpposingSide(gActiveBattler, ABILITY_PERMANENCE))
+
+        if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_RETRIEVER) && gBattleMons[gActiveBattler].item == 0)
         {
-            DoRegenerator();
-        }
-    }
+            u8 side = GetBattlerSide(gActiveBattler);
+            u8 index = gBattlerPartyIndexes[gActiveBattler];
+            u16 originalItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
 
-    if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_RETRIEVER) && gBattleMons[gActiveBattler].item == 0)
-    {
-        u8 side = GetBattlerSide(gActiveBattler);
-        u8 index = gBattlerPartyIndexes[gActiveBattler];
-        u16 originalItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
+            if (originalItem)
+            {
+                gBattleStruct->usedHeldItems[index][side] = ITEM_NONE;
+                gBattleMons[gActiveBattler].item = gLastUsedItem = originalItem;
 
-        if (originalItem)
-        {
-            gBattleStruct->usedHeldItems[index][side] = ITEM_NONE;
-            gBattleMons[gActiveBattler].item = gLastUsedItem = originalItem;
+                BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
+                MarkBattlerForControllerExec(gActiveBattler);
 
-            BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
-            MarkBattlerForControllerExec(gActiveBattler);
-
-            BattleScriptPush(gBattlescriptCurrInstr);
-            gBattlescriptCurrInstr = BattleScript_RetrieverExits;
+                BattleScriptPush(gBattlescriptCurrInstr);
+                gBattlescriptCurrInstr = BattleScript_RetrieverExits;
+            }
         }
     }
     

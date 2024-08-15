@@ -1211,7 +1211,7 @@ const u8 sText_MoveInfo_Contact[]         = _("Contact:");
 const u8 sText_MoveInfo_Boost[]           = _("Boost Type:");
 const u8 sText_Effect_Based_Type[]        = _("Based on:");
 const u8 sText_Target_Nothing[]           = _("---");
-const u8 sText_DamageCalculation_Status[] = _("This is an status\nmove it does not\ndeal direct\ndamage.");
+const u8 sText_DamageCalculation_Status[] = _("This is a status\nmove. It does not\ndeal direct\ndamage.");
 static const u8 gStabIcon[]               =  _("{PLUS}");
 static const u8 gNoStabIcon[]             =  _(" ");
 static const u8 sText_Yes[]               = _("Yes");
@@ -1257,6 +1257,7 @@ const u8 sText_Title_Controllers_Move[]      = _("{DPAD_UPDOWN}Switch {DPAD_LEFT
 const u8 sText_Effect_DamageDone[]                     = _("Calculated Damage\nRange: {STR_VAR_1}% - {STR_VAR_2}%\nof {STR_VAR_3}\nCurrent Health.");
 const u8 sText_Effect_DamageDone_Guaranteed_KO[]       = _("{COLOR 14}Guaranteed {COLOR 2}to KO\n{STR_VAR_3}\nin the next hit.");
 const u8 sText_Effect_DamageDone_Guaranteed_KO_White[] = _("{COLOR 14}Guaranteed {COLOR 10}to KO\n{STR_VAR_3}\nin the next hit.");
+const u8 sText_Effect_DamageDone_Immune[]              = _("{STR_VAR_3}\nis immune to\n{STR_VAR_1}.");
 const u8 sText_Effect_Speed_Calculation_Singles[]      = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}");
 const u8 sText_Effect_Speed_Calculation_Priority2[]    = _("{STR_VAR_3}\n{STR_VAR_1} Spd: {STR_VAR_2}{PLUS}");
 const u8 sText_Effect_Speed_Calculation[]              = _("{STR_VAR_1}");
@@ -1735,7 +1736,6 @@ void PrintBattleWindow_MoveSelection(void)
         case MOVE_SPEED_CALCULATION:{
             u16 battlertoCheck, monSpeed;
             u8 sBattlerByTurnOrder[gBattlersCount];
-            u8 numMons = 2;
 
             for (i = 0; i < gBattlersCount; i++)
                 sBattlerByTurnOrder[i] = i;
@@ -1781,10 +1781,18 @@ void PrintBattleWindow_MoveSelection(void)
                 u16 minDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR);
                 u16 maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR);
                 u8 moveIndex = gMoveSelectionCursor[gActiveBattler];
+                int ignored;
+                int immune = TestImmunityAbilities(target, gActiveBattler, move, moveType, &ignored, (u16*) &ignored);
+                if (immune) minDamage = maxDamage = 0;
                 x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
                 StringCopy(gStringVar3, gSpeciesNames[gBattleMons[target].species]);
 
-                if(targetCurrentHp > minDamage){
+                if (maxDamage == 0) {
+                    StringCopy(gStringVar1, gMoveNamesLong[move]);
+                    StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone_Immune);
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+                }
+                else if(targetCurrentHp > minDamage){
                     //Min Damage Percentage
                     percentage = (minDamage * MAX_PERCENT_2) / targetCurrentHp; 
                     percentage = (percentage / MAX_PERCENT);

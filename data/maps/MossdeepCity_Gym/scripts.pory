@@ -59,6 +59,8 @@ MossdeepCity_Gym_EventScript_TateAndLiza:: @ 8220898
 	setvar VAR_BATTLE_FIELD_ID, STATUS_FIELD_TRICK_ROOM
 	trainerbattle_double TRAINER_TATE_AND_LIZA_1, MossdeepCity_Gym_Text_TateAndLizaIntro, MossdeepCity_Gym_Text_TateAndLizaDefeat, MossdeepCity_Gym_Text_TateAndLizaNeedTwoMons, MossdeepCity_Gym_EventScript_TateAndLizaDefeated, NO_MUSIC
 	clearflag FLAG_SYS_INVERSE_BATTLE
+	setvar VAR_BATTLE_FIELD_EFFECT_TYPE, 0
+	setvar VAR_BATTLE_FIELD_ID, 0
 	goto_if_eq MossdeepCity_Gym_EventScript_TateAndLizaRematch
 	goto_if_unset FLAG_RECEIVED_TM04, MossdeepCity_Gym_EventScript_GiveCalmMind
 	msgbox MossdeepCity_Gym_Text_TateAndLizaPostBattle, MSGBOX_DEFAULT
@@ -116,6 +118,8 @@ MossdeepCity_Gym_EventScript_TateAndLizaRematch::
 	trainerbattle_no_intro TRAINER_TATE_AND_LIZA_3, MossdeepCity_Gym_Text_TateAndLizaRematchDefeat
 	//setflag FLAG_DAILY_REMATCH_TATE_AND_LIZA
 	clearflag FLAG_SYS_INVERSE_BATTLE
+	setvar VAR_BATTLE_FIELD_EFFECT_TYPE, 0
+	setvar VAR_BATTLE_FIELD_ID, 0
 	releaseall
 	end
 
@@ -126,6 +130,8 @@ MossdeepCity_Gym_EventScript_TateAndLizaDoublesRematch::
 	trainerbattle_no_intro TRAINER_TATE_AND_LIZA_2, MossdeepCity_Gym_Text_TateAndLizaRematchDefeat
 	//setflag FLAG_DAILY_REMATCH_TATE_AND_LIZA
 	clearflag FLAG_SYS_INVERSE_BATTLE
+	setvar VAR_BATTLE_FIELD_EFFECT_TYPE, 0
+	setvar VAR_BATTLE_FIELD_ID, 0
 	releaseall
 	end
 

@@ -223,7 +223,6 @@ EWRAM_DATA u32 gStatuses4[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA struct VolatileStruct gVolatileStructs[MAX_BATTLERS_COUNT] = {0}; // Cleared on switch
 EWRAM_DATA u16 gPauseCounterBattle = 0;
 EWRAM_DATA u16 gPaydayMoney = 0;
-EWRAM_DATA u16 gRandomTurnNumber = 0;
 EWRAM_DATA u8 gBattleCommunication[BATTLE_COMMUNICATION_ENTRIES_COUNT] = {0};
 EWRAM_DATA u8 gBattleOutcome = 0;
 EWRAM_DATA struct RoundStruct gRoundStructs[MAX_BATTLERS_COUNT] = {0}; // Cleared at end of round
@@ -3297,8 +3296,6 @@ static void BattleStartClearSetData(void)
     gBattleStruct->givenExpMons = 0;
     gBattleStruct->palaceFlags = 0;
 
-    gRandomTurnNumber = Random();
-
     gBattleResults.shinyWildMon = IsMonShiny(&gEnemyParty[0]);
 
     gBattleStruct->arenaLostPlayerMons = 0;
@@ -4010,8 +4007,6 @@ static void TryDoEventsBeforeFirstTurn(void)
     gBattleStruct->turnCountersTracker = 0;
     gMoveResultFlags = 0;
 
-    gRandomTurnNumber = Random();
-
     GetAiLogicData(); // get assumed abilities, hold effects, etc of all battlers
 
     if (gBattleTypeFlags & BATTLE_TYPE_ARENA)
@@ -4104,7 +4099,6 @@ void BattleTurnPassed(void)
     BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
     GetAiLogicData(); // get assumed abilities, hold effects, etc of all battlers
     gBattleMainFunc = HandleTurnActionSelectionState;
-    gRandomTurnNumber = Random();
 
     if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
         BattleScriptExecute(BattleScript_PalacePrintFlavorText);
@@ -5077,31 +5071,8 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     // Battler 1
     speedBattler1 = GetBattlerTotalSpeedStat(battler1, TOTAL_SPEED_FULL);
 
-    // Quick Draw
-    if (!ignoreChosenMoves && GetBattlerAbility(battler1) == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler1]) && Random() % 100 < 30)
-        gRoundStructs[battler1].quickDraw = TRUE;
-    
-    // Quick Claw and Custap Berry
-    if (!gRoundStructs[battler1].quickDraw
-     && ((holdEffectBattler1 == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * GetBattlerHoldEffectParam(battler1)) / 100)
-     || (!IsAbilityOnOpposingSide(battler1, ABILITY_UNNERVE)
-      && holdEffectBattler1 == HOLD_EFFECT_CUSTAP_BERRY
-      && HasEnoughHpToEatBerry(battler1, 4, gBattleMons[battler1].item))))
-        gRoundStructs[battler1].usedCustapBerry = TRUE;
-
     // Battler 2
     speedBattler2 = GetBattlerTotalSpeedStat(battler2, TOTAL_SPEED_FULL);
-
-    // Quick Draw
-    if (!ignoreChosenMoves && GetBattlerAbility(battler2) == ABILITY_QUICK_DRAW && !IS_MOVE_STATUS(gChosenMoveByBattler[battler2]) && Random() % 100 < 30)
-        gRoundStructs[battler2].quickDraw = TRUE;
-    // Quick Claw and Custap Berry
-    if (!gRoundStructs[battler2].quickDraw
-     && ((holdEffectBattler2 == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * GetBattlerHoldEffectParam(battler2)) / 100)
-     || (!IsAbilityOnOpposingSide(battler2, ABILITY_UNNERVE)
-      && holdEffectBattler2 == HOLD_EFFECT_CUSTAP_BERRY
-      && HasEnoughHpToEatBerry(battler2, 4, gBattleMons[battler2].item))))
-        gRoundStructs[battler2].usedCustapBerry = TRUE;
 
     if (!ignoreChosenMoves)
     {
@@ -5174,6 +5145,22 @@ static void SetActionsAndBattlersTurnOrder(void)
     s32 i, j;
 
     gAfterYouBattlers = 0;
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (!IsBattlerAlive(i))
+            continue;
+        else if (BattlerHasAbility(i, i, ABILITY_QUICK_DRAW)
+            && (Random() % 100) < 30)
+                gRoundStructs[i].quickDraw = TRUE;
+        else if (GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_QUICK_CLAW
+            && (Random() % 100) < GetBattlerHoldEffectParam(i))
+                gRoundStructs[i].usedCustapBerry = TRUE;
+        else if (!IsAbilityOnOpposingSide(i, ABILITY_UNNERVE)
+            && GetBattlerHoldEffect(i, TRUE) == HOLD_EFFECT_CUSTAP_BERRY
+            && HasEnoughHpToEatBerry(i, 4, gBattleMons[i].item))
+                gRoundStructs[i].usedCustapBerry = TRUE;
+    }
 
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
     {
@@ -5438,6 +5425,7 @@ static void CheckQuickClaw_CustapBerryActivation(void)
             {
                 if (gRoundStructs[gActiveBattler].usedCustapBerry)
                 {
+                    gStackBattler1 = gActiveBattler;
                     gRoundStructs[gActiveBattler].usedCustapBerry = FALSE;
                     gLastUsedItem = gBattleMons[gActiveBattler].item;
                     PREPARE_ITEM_BUFFER(gBattleTextBuff1, gLastUsedItem);
@@ -5454,18 +5442,12 @@ static void CheckQuickClaw_CustapBerryActivation(void)
                 }
                 else if (gRoundStructs[gActiveBattler].quickDraw)
                 {
-                    if(gBattleMons[gActiveBattler].ability == ABILITY_QUICK_DRAW || 
-                       BattlerHasInnate(gActiveBattler, ABILITY_QUICK_DRAW)){
-                        gRoundStructs[gActiveBattler].quickDraw = FALSE;
-                        gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = ABILITY_QUICK_DRAW;
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        //gBattlerAbility = gActiveBattler;
-                        RecordAbilityBattle(gActiveBattler, gLastUsedAbility);
-                        BattleScriptExecute(BattleScript_QuickDrawActivation);
-                    }
-                    else{
-                        BattleScriptExecute(BattleScript_QuickClawActivation);
-                    }
+                    gStackBattler1 = gBattlerAbility = gActiveBattler;
+                    gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = ABILITY_QUICK_DRAW;
+                    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                    //gBattlerAbility = gActiveBattler;
+                    RecordAbilityBattle(gActiveBattler, gLastUsedAbility);
+                    BattleScriptExecute(BattleScript_QuickDrawActivation);
                 }
                 return;
             }
