@@ -261,7 +261,6 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_RIBOMBITE
 	ITEM_URSALUNITE
 	ITEM_MAWILITE_R
-	ITEM_WIGGLYTUFFITE
 }
 
 script General_Adoption_Center_Mega_Stones_Script{
