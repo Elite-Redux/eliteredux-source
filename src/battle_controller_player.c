@@ -3484,16 +3484,16 @@ static void PlayerHandleYesNoInput(void)
     if (JOY_NEW(DPAD_UP) && gMultiUsePlayerCursor != 0)
     {
         PlaySE(SE_SELECT);
-        BattleDestroyYesNoCursorAt(gMultiUsePlayerCursor);
+        BattleDestroyYesNoCursorAt_Two(gMultiUsePlayerCursor);
         gMultiUsePlayerCursor = 0;
-        BattleCreateYesNoCursorAt(0);
+        BattleCreateYesNoCursorAt_Two(0);
     }
     if (JOY_NEW(DPAD_DOWN) && gMultiUsePlayerCursor == 0)
     {
         PlaySE(SE_SELECT);
-        BattleDestroyYesNoCursorAt(gMultiUsePlayerCursor);
+        BattleDestroyYesNoCursorAt_Two(gMultiUsePlayerCursor);
         gMultiUsePlayerCursor = 1;
-        BattleCreateYesNoCursorAt(1);
+        BattleCreateYesNoCursorAt_Two(1);
     }
     if (JOY_NEW(A_BUTTON))
     {
@@ -5466,7 +5466,7 @@ static void PlayerHandleYesNoBox(void)
         HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
         BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO_TWO);
         gMultiUsePlayerCursor = 1;
-        BattleCreateYesNoCursorAt(1);
+        BattleCreateYesNoCursorAt_Two(1);
         gBattlerControllerFuncs[gActiveBattler] = PlayerHandleYesNoInput;
     }
     else
