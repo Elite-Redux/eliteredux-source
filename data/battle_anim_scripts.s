@@ -3418,8 +3418,7 @@ Move_FLASH_CANNON:
 	loopsewithpan SE_M_CHARGE, SOUND_PAN_ATTACKER, 6, 5
 	waitforvisualfinish
 	playsewithpan SE_M_PAY_DAY, SOUND_PAN_ATTACKER
-	@ This line crashes MyBoy!
-	@ createsprite gFlashCannonBallMovementTemplate, ANIM_TARGET, 2, 0, 0, 0x15
+	createsprite gFlashCannonBallMovementTemplate, ANIM_TARGET, 2, 0, 0, 0x15
 
 	clearmonbg ANIM_ATTACKER
 	waitforvisualfinish
@@ -6116,8 +6115,7 @@ Move_INCINERATE:
 	createvisualtask AnimTask_BlendMonInAndOut, 5, ANIM_DEF_PARTNER, RGB_RED, 12, 1, 1
 	playsewithpan SE_M_FLAME_WHEEL, SOUND_PAN_ATTACKER
 	delay 5
-	@ This line crashes MyBoy!
-	@ createsprite gSlideMonToOriginalPosSpriteTemplate,  ANIM_ATTACKER, 2, 3, 0, 0, 9
+	createsprite gSlideMonToOriginalPosSpriteTemplate,  ANIM_ATTACKER, 2, 3, 0, 0, 9
 	waitforvisualfinish
 	clearmonbg ANIM_TARGET
 	blendoff
@@ -6228,11 +6226,8 @@ Move_FINAL_GAMBIT:
 	launchtask AnimTask_ShakeMon2 0x2 0x5 0x0 0x1 0x0 0xa 0x1
 	launchtask AnimTask_BlendColorCycle 0x2 0x6 ANIM_PAL_ATK 0x0 0x2 0x0 0x8 0x7fff
 	waitforvisualfinish
-
-	@ These lines Crash Myboy!
-	@ playsewithpan SE_M_SAND_ATTACK, SOUND_PAN_ATTACKER
-	@ launchtemplate gFinalGambitBlueYawnTemplate 0x2 0x3 0x0 0x0 0x25
-
+	playsewithpan SE_M_SAND_ATTACK, SOUND_PAN_ATTACKER
+	launchtemplate gFinalGambitBlueYawnTemplate 0x2 0x3 0x0 0x0 0x25
 	createsprite gSuperpowerOrbSpriteTemplate, ANIM_TARGET, 2, 0
 	playsewithpan SE_M_MEGA_KICK, SOUND_PAN_ATTACKER
 
@@ -6962,11 +6957,8 @@ Move_HORN_LEECH:
 	loadspritegfx ANIM_TAG_ORBS
 	loadspritegfx ANIM_TAG_BLUE_STAR
 	playsewithpan SE_M_HEADBUTT, SOUND_PAN_ATTACKER
-
-	@ These Lines Crashes Myboy!
-	@ launchtemplate gHornLeechHornTemplate 0x82, 0x3, 0x0 0x0 0x25
-	@ waitforvisualfinish
-
+	launchtemplate gHornLeechHornTemplate 0x82, 0x3, 0x0 0x0 0x25
+	waitforvisualfinish
 	launchtask AnimTask_ShakeMon 0x2 0x5 ANIM_TARGET 0x5 0x0 0x6 0x1
 	launchtemplate gFlashingHitSplatSpriteTemplate 0x83 0x4 0x0 0x0 0x1 0x1
 	playsewithpan SE_M_HORN_ATTACK, SOUND_PAN_TARGET
@@ -9582,11 +9574,8 @@ Move_WATER_SHURIKEN::
 	monbg ANIM_DEF_PARTNER
 	splitbgprio ANIM_TARGET
 	createsoundtask SoundTask_LoopSEAdjustPanning, 0x7, 0x87, 0xffc0, SOUND_PAN_TARGET, 0x5, 0x5, 0x0, 0x5
-
-	@ This crashes MyBoy!
-	@ launchtemplate gWaterShurikenStarTemplate 0x82, 0x3, 0x0 0x0 0x27
-	@ delay 0x8
-
+	launchtemplate gWaterShurikenStarTemplate 0x82, 0x3, 0x0 0x0 0x27
+	delay 0x8
 	launchtemplate gWaterShurikenRingTemplate 0x82, 0x4, 0x0 0x0 0x28 0xf
 	delay 0x5
 	launchtemplate gWaterShurikenRingTemplate 0x82, 0x4, 0x0 0x0 0x28 0xf
@@ -11707,9 +11696,8 @@ Move_ANCHOR_SHOT::
 	loadspritegfx ANIM_TAG_ANCHOR
 	playsewithpan SE_FALL SOUND_PAN_TARGET
 	monbg ANIM_TARGET
-	@ These lines crash MyBoy!
-	@ launchtemplate gAnchorShotAngledAnchorTemplate 0x2 0x3 0x0 0x0 0x35
-	@ waitforvisualfinish
+	launchtemplate gAnchorShotAngledAnchorTemplate 0x2 0x3 0x0 0x0 0x35
+	waitforvisualfinish
 	launchtemplate gAnchorShotAnchorTemplate 0x3 0x3 0x0 0xffe0 0xf
 	launchtask AnimTask_ShakeMon 0x2 0x5 ANIM_TARGET 0x0 0x3 0xf 0x1
 	delay 0x25
@@ -13869,16 +13857,15 @@ Move_DOUBLE_IRON_BASH::
 	splitbgprio ANIM_TARGET
 	setalpha 12, 8
 	loopsewithpan SE_M_WING_ATTACK, SOUND_PAN_ATTACKER, 0x14, 0x2
-	@ These lines crash MyBoy!
-	@ launchtask AnimTask_TranslateMonElliptical 0x2 0x5 0x0 0xc 0x4 0x1 0x4
-	@ launchtask AnimTask_AnimateGustTornadoPalette 0x5 0x2 0x1 0x46
-	@ launchtemplate gGustToTargetSpriteTemplate 0x2 0x5 0xffe7 0x0 0x0 0x0 0x0     @wing attack
-	@ launchtemplate gGustToTargetSpriteTemplate 0x2 0x5 0x19 0x0 0x0 0x0 0x0       @wing attack
-	@ delay 0x18
-	@ launchtemplate gSlideMonToOffsetSpriteTemplate 0x2 0x5 ANIM_ATTACKER 0x18 0x0 0x0 0x9
-	@ delay 0x11
-	@ launchtemplate gBasicHitSplatSpriteTemplate 0x84, 0x4, 0x0 0x0 0x1 0x1
-	@ launchtemplate gSlideMonToOffsetSpriteTemplate 0x2 0x5 ANIM_TARGET 0xffe0 0x0 0x0 0x3
+	launchtask AnimTask_TranslateMonElliptical 0x2 0x5 0x0 0xc 0x4 0x1 0x4
+	launchtask AnimTask_AnimateGustTornadoPalette 0x5 0x2 0x1 0x46
+	launchtemplate gGustToTargetSpriteTemplate 0x2 0x5 0xffe7 0x0 0x0 0x0 0x0     @wing attack
+	launchtemplate gGustToTargetSpriteTemplate 0x2 0x5 0x19 0x0 0x0 0x0 0x0       @wing attack
+	delay 0x18
+	launchtemplate gSlideMonToOffsetSpriteTemplate 0x2 0x5 ANIM_ATTACKER 0x18 0x0 0x0 0x9
+	delay 0x11
+	launchtemplate gBasicHitSplatSpriteTemplate 0x84, 0x4, 0x0 0x0 0x1 0x1
+	launchtemplate gSlideMonToOffsetSpriteTemplate 0x2 0x5 ANIM_TARGET 0xffe0 0x0 0x0 0x3
 	waitforvisualfinish
 	playsewithpan SE_M_RAZOR_WIND, SOUND_PAN_TARGET
 	waitforvisualfinish
@@ -15003,11 +14990,10 @@ METEOR_BEAM_BLAST:
 	end
 
 MeteorBeamRockLaunch:
-	@ This line crashes MyBoy!
-	@ createsprite gSpriteTemplate_MeteorBeamRock, ANIM_TARGET, 2, 0, 0, 0x10
-	@ delay 0x2
-	@ createsprite gSpriteTemplate_MeteorBeamRock, ANIM_TARGET, 2, 0, 0, 0x10
-	@ delay 0x2
+	createsprite gSpriteTemplate_MeteorBeamRock, ANIM_TARGET, 2, 0, 0, 0x10
+	delay 0x2
+	createsprite gSpriteTemplate_MeteorBeamRock, ANIM_TARGET, 2, 0, 0, 0x10
+	delay 0x2
 	return
 
 Move_SHELL_SIDE_ARM::
@@ -15510,8 +15496,6 @@ Move_COACHING::
 
 @Credits to Skeli
 Move_FLIP_TURN::
-	goto Move_U_TURN
-	@This Move crashes MyBoy!
 	loadspritegfx ANIM_TAG_ICE_CRYSTALS @;Bubbles
 	loadspritegfx ANIM_TAG_HYDRO_PUMP
 	loadspritegfx ANIM_TAG_WATER_IMPACT
