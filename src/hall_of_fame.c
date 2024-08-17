@@ -912,7 +912,7 @@ u16 getHallofFameSpecies(u8 num){
         case SPECIES_GRENINJA_BATTLE_BOND:
             return SPECIES_GRENINJA_ASH;
         break;
-        case SPECIES_CHIEN_PAO:
+      /*  case SPECIES_CHIEN_PAO:
             if(item == ITEM_CHIEN_PAOITE)
                 return SPECIES_CHIEN_PAO_MEGA;
         break;
@@ -932,7 +932,7 @@ u16 getHallofFameSpecies(u8 num){
             if(item == ITEM_WEAVILEITE_R)
                 return SPECIES_WEAVILE_REDUX_MEGA;
         break;
-        case SPECIES_FLYGON_REDUX:
+        case SPECIES_FLYGON_REDUX_B:
             if(item == ITEM_FLYGONITE_R)
                 return SPECIES_FLYGON_REDUX_MEGA;
         break;
@@ -945,15 +945,100 @@ u16 getHallofFameSpecies(u8 num){
                 return SPECIES_VICTINI_PRIMAL;
         break;
         case SPECIES_WIGGLYTUFF:
-            if(item == ITEM_WIGGLITUFF_ORB)
-                return SPECIES_WIGGLYTUFF_PRIMAL;
             if(item == ITEM_WIGGLYTUFFITE)
                 return SPECIES_WIGGLYTUFF_MEGA;
         break;
+        case SPECIES_WIGGLYTUFF_APEX:
+            if(item == ITEM_WIGGLITUFF_ORB)
+                return SPECIES_WIGGLYTUFF_PRIMAL;
         case SPECIES_TINKATON:
             if(item == ITEM_TINKATITE)
                 return SPECIES_TINKATON_MEGA;
         break;
+        case SPECIES_ORICORIO:
+            if(item == ITEM_ORICORIONITE)
+                return SPECIES_ORICORIO_MEGA;
+        break;
+        case SPECIES_ORICORIO_PAU:
+            if(item == ITEM_ORICORIONITE)
+                return SPECIES_ORICORIO_MEGA;
+        break;
+        case SPECIES_ORICORIO_POM_POM:
+            if(item == ITEM_ORICORIONITE)
+                return SPECIES_ORICORIO_MEGA;
+        break;
+        case SPECIES_ORICORIO_SENSU:
+            if(item == ITEM_ORICORIONITE)
+                return SPECIES_ORICORIO_MEGA;
+        break;
+        case SPECIES_AEGISLASH_REDUX:
+            if(item == ITEM_AEGISLASHITE_R)
+                return SPECIES_AEGISLASH_REDUX_MEGA;
+        break;
+        case SPECIES_ARBOK:
+            if(item == ITEM_ARBOKITE)
+                return SPECIES_ARBOK_MEGA;
+        break;
+        case SPECIES_GOLISOPOD:
+            if(item == ITEM_GOLISOPODITE)
+                return SPECIES_GOLISOPOD_MEGA;
+        break;
+        case SPECIES_RAPIDASH:
+            if(item == ITEM_RAPIDASHITE)
+                return SPECIES_RAPIDASH_MEGA;
+        break;
+        case SPECIES_RAPIDASH_GALARIAN:
+            if(item == ITEM_RAPIDASHITE_G)
+                return SPECIES_RAPIDASH_MEGA_GALARIAN;
+        break;
+        case SPECIES_MAIZEMOTH:
+            if(item == ITEM_MAIZEMOTHITE)
+                return SPECIES_MAIZEMOTH_MEGA;
+        break;
+        case SPECIES_POPMOTH:
+            if(item == ITEM_POPMOTHITE)
+                return SPECIES_POPMOTH_MEGA;
+        break;
+        case SPECIES_TOXTRICITY_REDUX:
+            if(item == ITEM_TOXTRICITITE_R)
+                return SPECIES_TOXTRICITY_REDUX_MEGA;
+        break;
+        case SPECIES_TOXTRICITY_REDUX_LOW_KEY:
+            if(item == ITEM_TOXTRICITITE_R)
+                return SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA;
+        break;
+        case SPECIES_GLALIE_REDUX:
+            if(item == ITEM_GLALITITE_R)
+                return SPECIES_GLALIE_REDUX_MEGA;
+        break;
+        case SPECIES_FROSLASS_REDUX:
+            if(item == ITEM_FROSLASSITE_R)
+                return SPECIES_FROSLASS_REDUX_MEGA;
+        break;
+        case SPECIES_TORTERRA_REDUX:
+            if(item == ITEM_TORTERRANITE_R)
+                return SPECIES_TORTERRA_REDUX_MEGA;
+        break;
+        case SPECIES_INFERNAPE_REDUX:
+            if(item == ITEM_INFERNAPENITE_R)
+                return SPECIES_INFERNAPE_REDUX_MEGA;
+        break;
+        case SPECIES_EMPOLEON_REDUX:
+            if(item == ITEM_EMPOLEONITE_R)
+                return SPECIES_EMPOLEON_REDUX_MEGA;
+        break;
+        case SPECIES_CLEFABLE_REDUX:
+            if(item == ITEM_CLEFABITE_R)
+                return SPECIES_CLEFABLE_REDUX_MEGA;
+        break;
+        case SPECIES_FLYGON_REDUX:
+            if(item == ITEM_FLYGONITE_R)
+                return SPECIES_FLYGON_REDUX_MEGA;
+        break;
+        case SPECIES_TSAREENA_REDUX:
+            if(item == ITEM_TSAREENITE_R)
+                return SPECIES_TSAREENA_REDUX_MEGA;
+        break; */
     }
 
     return species;
