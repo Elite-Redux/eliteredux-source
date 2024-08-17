@@ -250,6 +250,7 @@
 #define VARIOUS_REQUIRE_CAN_DO_EFFECT           168
 #define VARIOUS_INCREASE_CRIT                   169
 #define VARIOUS_GYMSKILL_POPUP                  170
+#define VARIOUS_DO_FOG_STAT_DROPS               171
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0

@@ -5439,44 +5439,28 @@ static void Cmd_setgraphicalstatchangevalues(void)
     gBattlescriptCurrInstr++;
 }
 
-static void Cmd_playstatchangeanimation(void)
+static int PlayStatChangeAnimation(int battler, int statsToCheck, int flags, int rawStatChange)
 {
     u32 ability;
     u32 currStat = 0;
     u32 statAnimId = 0;
     u32 changeableStatsCount = 0;
-    u32 statsToCheck = 0;
     u32 startingStatAnimId = 0;
-    u32 flags = gBattlescriptCurrInstr[3];
 
-    gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+    gActiveBattler = battler;
     ability = GetBattlerAbility(gActiveBattler);
-    statsToCheck = gBattlescriptCurrInstr[2];
 
-    // Handle Contrary and Simple
-    if (BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_CONTRARY, ability)){
-        flags ^= STAT_CHANGE_NEGATIVE;
-    }
-
-    if (BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_SIMPLE, ability))
-        flags |= STAT_CHANGE_BY_TWO;
-
-    if (gBattlerAttacker != gActiveBattler && BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SUBDUE, ability))
-        flags |= STAT_CHANGE_BY_TWO;
-    
-    if (!(flags & STAT_CHANGE_NEGATIVE)
-        && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)
-        && !(IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC)))
-    {
-        if (flags & STAT_CHANGE_BY_TWO)
-        {
-            flags &= ~STAT_CHANGE_BY_TWO;
+    if (!rawStatChange) {
+        // Handle Contrary and Simple
+        if (BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_CONTRARY, ability)){
+            flags ^= STAT_CHANGE_NEGATIVE;
         }
-        else
-        {
-            gBattlescriptCurrInstr += 4;
-            return;
-        }
+
+        if (BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_SIMPLE, ability))
+            flags |= STAT_CHANGE_BY_TWO;
+
+        if (gBattlerAttacker != gActiveBattler && BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SUBDUE, ability))
+            flags |= STAT_CHANGE_BY_TWO;
     }
 
     if (flags & STAT_CHANGE_NEGATIVE) // goes down
@@ -5490,7 +5474,7 @@ static void Cmd_playstatchangeanimation(void)
         {
             if (statsToCheck & 1)
             {
-                if (flags & STAT_CHANGE_CANT_PREVENT)
+                if (rawStatChange || flags & STAT_CHANGE_CANT_PREVENT)
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > MIN_STAT_STAGE)
                     {
@@ -5553,7 +5537,7 @@ static void Cmd_playstatchangeanimation(void)
 
     if (flags & STAT_CHANGE_MULTIPLE_STATS && changeableStatsCount < 2)
     {
-        gBattlescriptCurrInstr += 4;
+        // NOOP
     }
     else if (changeableStatsCount != 0 && !gBattleScripting.statAnimPlayed)
     {
@@ -5561,12 +5545,13 @@ static void Cmd_playstatchangeanimation(void)
         MarkBattlerForControllerExec(gActiveBattler);
         if (flags & STAT_CHANGE_MULTIPLE_STATS && changeableStatsCount > 1)
             gBattleScripting.statAnimPlayed = TRUE;
-        gBattlescriptCurrInstr += 4;
     }
-    else
-    {
-        gBattlescriptCurrInstr += 4;
-    }
+}
+
+static void Cmd_playstatchangeanimation(void)
+{
+    int changeableStatsCount = PlayStatChangeAnimation(GetBattlerForBattleScript(gBattlescriptCurrInstr[1]), gBattlescriptCurrInstr[2], gBattlescriptCurrInstr[3], FALSE);
+    gBattlescriptCurrInstr += 4;
 }
 
 static bool32 TryKnockOffBattleScript(u32 battlerDef)
@@ -11247,6 +11232,41 @@ static void Cmd_various(void)
             return;
         }
         break;
+    case VARIOUS_DO_FOG_STAT_DROPS:
+        {
+            u8* noChangePtr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
+            int bits = 0;
+
+            if (!IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)
+                || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
+                || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC))
+            {
+                gBattlescriptCurrInstr = noChangePtr;
+                return;
+            }
+
+            for (i = STAT_ATK; i < NUM_STATS; i++)
+            {
+                if (gBattleMons[gActiveBattler].statStages[i] > DEFAULT_STAT_STAGE)
+                {
+                    bits |= (1 << i);
+                    // Do stat drops directly to avoid weird ability/item interactions
+                    gBattleMons[gActiveBattler].statStages[i]--;
+                }
+            }
+
+            if (bits)
+            {
+                PlayStatChangeAnimation(gActiveBattler, bits, STAT_CHANGE_NEGATIVE, TRUE);
+                gBattlescriptCurrInstr += 7;
+            }
+            else
+            {
+                gBattlescriptCurrInstr = noChangePtr;
+            }
+
+            return;
+        }
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
@@ -12092,11 +12112,6 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         }
     }
 
-    if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
-        && !(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(battler, TYPE_PSYCHIC))
-        && statValue > 0)
-            statValue--;
-
     flags &= ~(STAT_BUFF_UPDATE_MOVE_EFFECT);
 
     if (dontSetBuffers) flags = 0;
@@ -12225,33 +12240,31 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
             return 0;
         }
         else if (!certain
-                && ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && statId == STAT_ACC)
-                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && statId == STAT_ACC)
-				|| (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && statId == STAT_ATK)))
+                && ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && statId == STAT_ACC && (gBattleScripting.abilityPopupOverwrite = ABILITY_KEEN_EYE))
+                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && statId == STAT_ACC && (gBattleScripting.abilityPopupOverwrite = ABILITY_MINDS_EYE))
+				|| (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && statId == STAT_ATK && (gBattleScripting.abilityPopupOverwrite = ABILITY_HYPER_CUTTER))))
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {
+                
                 BattleScriptPush(BS_ptr);
                 gBattleScripting.battler = gActiveBattler;
                 gBattlerAbility = gActiveBattler;
                 gBattlescriptCurrInstr = BattleScript_AbilityNoSpecificStatLoss;
-                gLastUsedAbility = GetBattlerAbility(gActiveBattler);
-                RecordAbilityBattle(gActiveBattler, gLastUsedAbility);
             }
             return 0;
         }
-        else if ((GetBattlerAbility(gActiveBattler) == ABILITY_MIRROR_ARMOR ||
-                  BattlerHasInnate(gActiveBattler, ABILITY_MIRROR_ARMOR))
+        else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MIRROR_ARMOR)
 			      && !affectsUser && gBattlerAttacker != gBattlerTarget && gActiveBattler == gBattlerTarget)
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_MIRROR_ARMOR;
                 SET_STATCHANGER(statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
                 BattleScriptPush(BS_ptr);
                 gBattleScripting.battler = gActiveBattler;
                 gBattlerAbility = gActiveBattler;
                 gBattlescriptCurrInstr = BattleScript_MirrorArmorReflect;
-                RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
             }
             return 0;
         }

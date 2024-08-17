@@ -871,6 +871,7 @@ static const u8 sText_GymSkillReflect[] = _("A defensive screen was set on {B_TR
 static const u8 sText_GymSkillLightscreen[] = _("A spe. defensive screen was set on {B_TRAINER1_NAME}\nteam for {B_BUFF1} turns.");
 static const u8 sText_GymSkillLuckyChant[] = _("A lucky chant was set on {B_TRAINER1_NAME}\nteam for {B_BUFF1} turns.");
 static const u8 sText_GymSkillPermaWideGuard[] = _("Permanent wide guard has been casted on\n{B_TRAINER1_NAME}'s team");
+static const u8 sText_FogStatDrops[] = _("{B_ATK_NAME_WITH_PREFIX}'s resolve\nfades due to the Eerie Fog!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1843,6 +1844,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GYMSKILL_LIGHTSCREEN - 12] = sText_GymSkillLightscreen,
     [STRINGID_GYMSKILL_LUCKY_CHANT - 12] = sText_GymSkillLuckyChant,
     [STRINGID_GYMSKILL_PERMA_WIDEGUARD - 12] = sText_GymSkillPermaWideGuard,
+    [STRINGID_FOG_STAT_DROPS - 12] = sText_FogStatDrops,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
