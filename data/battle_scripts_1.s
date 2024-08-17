@@ -7119,8 +7119,8 @@ BattleScript_LocalBattleWonReward::
 	printstring STRINGID_PLAYERGOTMONEY
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_PayDayMoneyAndPickUpItems::
-	givepaydaymoney
-	pickup
+	@ givepaydaymoney
+	@ pickup
 	end2
 
 BattleScript_LocalBattleLost::
