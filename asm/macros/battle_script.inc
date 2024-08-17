@@ -2300,19 +2300,17 @@
 	.4byte \failPtr
 	.endm
 
+	.macro dofogstatdrops battler:req noChangePtr:req
+	various \battler, VARIOUS_DO_FOG_STAT_DROPS
+	.4byte \noChangePtr
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd
 	call BattleScript_PowerHerbActivation
 twoturnmoveacceleratecheck_\@:
 	setbyte sACCELERATED_TWO_TURN, 1
-	.endm
-
-	.macro jumpiffogreducesstatboosts battler:req ptr:req
-	jumpiftype \battler, TYPE_GHOST, jumpiffogreducesstatboosts_ok_\@
-	jumpiftype \battler, TYPE_PSYCHIC, jumpiffogreducesstatboosts_ok_\@
-	jumpifweatheraffected \battler, WEATHER_FOG_ANY, \ptr
-	jumpiffogreducesstatboosts_ok_\@:
 	.endm
 
 	.macro checkstatbuffonlowered
