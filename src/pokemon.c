@@ -10757,11 +10757,11 @@ bool8 isSpeciesPlaceholderMon(u16 species){
 
     if(species == SPECIES_NONE)
         return FALSE;
-    else if(species < LAST_VALID_SPECIES + 1)
+    else if(species <= LAST_VALID_SPECIES)
         return FALSE;
     else if(species <= FORMS_START)
         return TRUE;
-    else if (species < LAST_VALID_STANDARD_FORM)
+    else if (species <= LAST_VALID_STANDARD_FORM)
         return FALSE;
     else if (species <= CUSTOM_MEGA_START)
         return TRUE;
@@ -10769,7 +10769,7 @@ bool8 isSpeciesPlaceholderMon(u16 species){
         return FALSE;
     else if (species <= REDUX_FORMS_START)
         return TRUE;
-    else if (species < LAST_REDUX_FORM + 1)
+    else if (species <= LAST_REDUX_FORM)
         return FALSE;
     else
         return TRUE;

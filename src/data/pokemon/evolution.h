@@ -600,6 +600,7 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_FRIGIBAX] = {{EVO_LEVEL, 23, SPECIES_ARCTIBAX}},
     [SPECIES_ARCTIBAX]              = {{EVO_LEVEL, 54, SPECIES_BAXCALIBUR}},
     [SPECIES_GIMMIGHOUL]            = {{EVO_LEVEL, 44, SPECIES_GHOLDENGO}},
+    [SPECIES_GIMMIGHOUL_ROAMING]    = {{EVO_LEVEL, 44, SPECIES_GHOLDENGO}},
     [SPECIES_POLTCHAGEIST]          = {{EVO_LEVEL, 36, SPECIES_SINISTCHA}}, //To Change
     //Alternate Forms
     [SPECIES_RATTATA_ALOLAN]	 = {{EVO_LEVEL, 20, SPECIES_RATICATE_ALOLAN}},
@@ -964,9 +965,6 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_GIMMIGHOUL] = {{EVO_FORM_SHIFT, 1, SPECIES_GIMMIGHOUL},
                                 {EVO_FORM_SHIFT, 1, SPECIES_GIMMIGHOUL_ROAMING},},
 
-    [SPECIES_GIMMIGHOUL_ROAMING] = {{EVO_FORM_SHIFT, 1, SPECIES_GIMMIGHOUL_ROAMING},
-                                {EVO_FORM_SHIFT, 1, SPECIES_GIMMIGHOUL},},
-
     [SPECIES_FLABEBE] = {{EVO_FORM_SHIFT, 1, SPECIES_FLABEBE},
                                 {EVO_FORM_SHIFT, 1, SPECIES_FLABEBE_BLUE_FLOWER},
                                 {EVO_FORM_SHIFT, 1, SPECIES_FLABEBE_ORANGE_FLOWER},
@@ -1016,15 +1014,15 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_GARDEN},
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ELEGANT},},
 
-    [SPECIES_VIVILLON_ARCHIPELAGO] = {{EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ARCHIPELAGO},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_JUNGLE},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MARINE},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MODERN},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MEADOW},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MONSOON},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_OCEAN},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_RIVER},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SANDSTORM},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SAVANNA},},
+    // [SPECIES_VIVILLON_ARCHIPELAGO] = {{EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ARCHIPELAGO},
+    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_JUNGLE},
+    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MARINE},
+    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MODERN},
+    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MEADOW},
+    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MONSOON},
+    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_OCEAN},
+    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_RIVER},
+    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SANDSTORM},
+    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SAVANNA},},
                                 
 };
