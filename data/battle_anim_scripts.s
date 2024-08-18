@@ -6218,9 +6218,8 @@ Move_RETALIATE:
 
 Move_FINAL_GAMBIT:
 	loadspritegfx ANIM_TAG_PINK_CLOUD @yawn animation
-	loadspritegfx ANIM_TAG_CIRCLE_OF_LIGHT
-	loadspritegfx ANIM_TAG_EXPLOSION @explosion animation
 	loadspritegfx ANIM_TAG_WATER_IMPACT @blue colour
+	loadspritegfx ANIM_TAG_EXPLOSION @explosion animation
 	launchtask AnimTask_BlendBattleAnimPal 0xa 0x5 ANIM_PAL_BG 0x1 0x0 0xC 0x0 @Darken
 	waitforvisualfinish
 	launchtask AnimTask_ShakeMon2 0x2 0x5 0x0 0x1 0x0 0xa 0x1
@@ -6228,9 +6227,6 @@ Move_FINAL_GAMBIT:
 	waitforvisualfinish
 	playsewithpan SE_M_SAND_ATTACK, SOUND_PAN_ATTACKER
 	launchtemplate gFinalGambitBlueYawnTemplate 0x2 0x3 0x0 0x0 0x25
-	createsprite gSuperpowerOrbSpriteTemplate, ANIM_TARGET, 2, 0
-	playsewithpan SE_M_MEGA_KICK, SOUND_PAN_ATTACKER
-
 	delay 0x4
 	waitforvisualfinish
 	launchtask AnimTask_ShakeMon 0x2 0x5 ANIM_TARGET 0x3 0x0 0xf 0x1
@@ -28670,11 +28666,10 @@ Move_CHLOROBLAST::
 	createvisualtask AnimTask_BlendBattleAnimPal, 0xa, (F_PAL_BG | F_PAL_BATTLERS_2), 0x2, 0x0, 0x0, 0x0 @;From Black
 	end
 ChloroblastShot:
-	@ These lines crashes MyBoy!
-	@ createsprite gSpriteTemplate_ChloroblastShot, ANIM_TARGET, 2, 0, 0, 0x19
-	@ delay 0x2
-	@ createsprite gSpriteTemplate_ChloroblastShot, ANIM_TARGET, 2, 0, 0, 0x19
-	@ delay 0x2
+	createsprite gSpriteTemplate_ChloroblastShot, ANIM_TARGET, 2, 0, 0, 0x19
+	delay 0x2
+	createsprite gSpriteTemplate_ChloroblastShot, ANIM_TARGET, 2, 0, 0, 0x19
+	delay 0x2
 	return
 
 @ credits to Skeli

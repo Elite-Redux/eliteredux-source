@@ -56,7 +56,7 @@
 #define DISABLE_STUFF_FOR_PUBLIC_RELEASE TRUE // Disables stuff that shouldn't be in a public release
 #define DEBUG_POKEMON_MENU               !DISABLE_STUFF_FOR_PUBLIC_RELEASE
 
-#define CURRENT_GAME_VERSION 1038
+#define CURRENT_GAME_VERSION 1040
 
 // free saveblock 1 defines             If defined it will free the space
 #define FREE_TRAINER_HILL               //frees up trainer hill data. 28 bytes.                        WARNING THIS HAS BEEN SHOWN TO BREAK MULTI BATTLES

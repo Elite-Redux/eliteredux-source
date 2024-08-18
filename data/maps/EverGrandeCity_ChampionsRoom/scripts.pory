@@ -42,7 +42,6 @@ EverGrandeCity_ChampionsRoom_Movement_PlayerApproachSteven: @ 8228A42
 	walk_up
 	step_end
 
-
 EverGrandeCity_ChampionsRoom_EventScript_Defeated:: @ 8228A61
 	playse SE_DOOR
 	setmetatile 6, 1, METATILE_EliteFour_OpenDoorChampion_Frame, 0
