@@ -1265,6 +1265,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_FROSLASS_REDUX_MEGA] = gMonIcon_FroslassReduxMega,
     [SPECIES_AMPHYBUZZ] = gMonIcon_Amphybuzz,
     [SPECIES_AMPHYBUZZ_MEGA] = gMonIcon_AmphybuzzMega,
+    [SPECIES_GIMMIGHOUL_ROAMING] = gMonIcon_GimmighoulRoaming,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,

@@ -5316,6 +5316,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_GIMMIGHOUL_ROAMING] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_GHOLDENGO] =
     {
         .size = 0,
@@ -7701,7 +7706,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_PUMPKABOO_SMALL] =
     {
         .size = 0x76,
-        .y_offset = 13,
+        .y_offset = 14,
     },
     [SPECIES_PUMPKABOO_LARGE] =
     {
@@ -7711,7 +7716,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_PUMPKABOO_SUPER] =
     {
         .size = 0x76,
-        .y_offset = 13,
+        .y_offset = 12,
     },
     // Gourgeist
     [SPECIES_GOURGEIST_SMALL] =

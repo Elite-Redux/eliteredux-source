@@ -1916,3 +1916,8 @@ static const u16 sSeelFormSpeciesIdTable[] = {
     SPECIES_SEEL_REDUX,
     FORM_SPECIES_END,  
 };
+static const u16 sGimmighoulFormSpeciesIdTable[] = {
+    SPECIES_GIMMIGHOUL,
+    SPECIES_GIMMIGHOUL_ROAMING,
+    FORM_SPECIES_END,  
+};

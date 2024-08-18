@@ -11671,6 +11671,11 @@ static const union AnimCmd sAnim_GIMMIGHOUL_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_GIMMIGHOUL_ROAMING_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_GHOLDENGO_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -18406,6 +18411,11 @@ static const union AnimCmd *const sAnims_GIMMIGHOUL[] ={
     sAnim_GIMMIGHOUL_1,
 };
 
+static const union AnimCmd *const sAnims_GIMMIGHOUL_ROAMING[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GIMMIGHOUL_ROAMING_1,
+};
+
 static const union AnimCmd *const sAnims_GHOLDENGO[] ={
     sAnim_GeneralFrame0,
     sAnim_GHOLDENGO_1,
@@ -20728,6 +20738,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(BAXCALIBUR),
     ANIM_CMD(KYOGRE_PRIMAL),
     ANIM_CMD(GIMMIGHOUL),
+    ANIM_CMD(GIMMIGHOUL_ROAMING),
     ANIM_CMD(GROUDON_PRIMAL),
     ANIM_CMD(GHOLDENGO),
     ANIM_CMD(RATTATA_ALOLAN),

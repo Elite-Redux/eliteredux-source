@@ -1015,4 +1015,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_FROSLASS_REDUX] = sFroslassFormSpeciesIdTable,
     [SPECIES_FROSLASS_REDUX_MEGA] = sFroslassFormSpeciesIdTable,
 
+    [SPECIES_GIMMIGHOUL] = sGimmighoulFormSpeciesIdTable,
+    [SPECIES_GIMMIGHOUL_ROAMING] = sGimmighoulFormSpeciesIdTable,
+
 };

@@ -7582,6 +7582,12 @@ const u32 gMonPalette_Dredwood[]           = INCBIN_U32("graphics/pokemon/dredwo
 const u32 gMonShinyPalette_Dredwood[]      = INCBIN_U32("graphics/pokemon/dredwood/shiny.gbapal.lz");
 const u8  gMonIcon_Dredwood[]              = INCBIN_U8("graphics/pokemon/dredwood/icon.4bpp");
 
+const u32 gMonFrontPic_GimmighoulRoaming[]          = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/front.4bpp.lz");
+const u32 gMonBackPic_GimmighoulRoaming[]           = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/back.4bpp.lz");
+const u32 gMonPalette_GimmighoulRoaming[]           = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/normal.gbapal.lz");
+const u32 gMonShinyPalette_GimmighoulRoaming[]      = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/shiny.gbapal.lz");
+const u8  gMonIcon_GimmighoulRoaming[]              = INCBIN_U8("graphics/pokemon/gimmighoul/roaming/icon.4bpp");
+
 const u32 gMonFrontPic_Amphybuzz[]          = INCBIN_U32("graphics/pokemon/amphybuzz/front.4bpp.lz");
 const u32 gMonBackPic_Amphybuzz[]           = INCBIN_U32("graphics/pokemon/amphybuzz/back.4bpp.lz");
 const u32 gMonPalette_Amphybuzz[]           = INCBIN_U32("graphics/pokemon/amphybuzz/normal.gbapal.lz");

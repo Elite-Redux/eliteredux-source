@@ -11106,6 +11106,11 @@ extern const u32 gMonBackPic_OricorioMega[];
 extern const u32 gMonPalette_OricorioMega[];
 extern const u32 gMonShinyPalette_OricorioMega[];
 extern const u8  gMonIcon_OricorioMega[];
+extern const u32 gMonFrontPic_GimmighoulRoaming[];
+extern const u32 gMonBackPic_GimmighoulRoaming[];
+extern const u32 gMonPalette_GimmighoulRoaming[];
+extern const u32 gMonShinyPalette_GimmighoulRoaming[];
+extern const u8  gMonIcon_GimmighoulRoaming[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
