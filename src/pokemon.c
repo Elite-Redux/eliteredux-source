@@ -10796,10 +10796,10 @@ bool8 isSpeciesPlaceholderMon(u16 species){
 
     //Normal Species
     #if DISABLE_STUFF_FOR_PUBLIC_RELEASE == TRUE
-    else if(species < LAST_VALID_SPECIES_PUBLIC + 1)
+    else if(species <= LAST_VALID_SPECIES_PUBLIC)
         return FALSE;
     #else
-    else if(species < LAST_VALID_SPECIES + 1)
+    else if(species <= LAST_VALID_SPECIES)
         return FALSE;
     #endif
 
@@ -10832,10 +10832,10 @@ bool8 isSpeciesPlaceholderMon(u16 species){
     
     //Redux Forms
     #if DISABLE_STUFF_FOR_PUBLIC_RELEASE == TRUE
-    else if (species < LAST_REDUX_FORM_PUBLIC + 1)
+    else if (species <= LAST_REDUX_FORM_PUBLIC)
         return FALSE;
     #else
-    else if (species < LAST_REDUX_FORM + 1)
+    else if (species <= LAST_REDUX_FORM)
         return FALSE;
     #endif
     
