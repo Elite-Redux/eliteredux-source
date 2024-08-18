@@ -1014,6 +1014,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_FogStatDrops[] = _("{B_ATK_NAME_WITH_PREFIX}'s resolve\nfades due to the Eerie Fog!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1812,6 +1813,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_QUASH_ENDS - 12] = sText_QuashEnds,
     [STRINGID_FOGENDS - 12] = sText_FogEnds,
     [STRINGID_SMOKESCREEN - 12] = sText_Smokescreen,
+    [STRINGID_FOG_STAT_DROPS - 12] = sText_FogStatDrops,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

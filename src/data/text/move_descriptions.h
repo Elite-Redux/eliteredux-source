@@ -47,8 +47,8 @@ static const u8 sMoveTwoLineDescription_MoveGuillotine[] = _(
     "High critical ratio.");
 
 static const u8 sMoveTwoLineDescription_MoveRazorWind[] = _(
-    "A 2-turn move that strikes\n"
-    "the foe on the 2nd turn.");
+    "Wind slices through Rock\n"
+    "for super effective damage.");
 
 static const u8 sMoveTwoLineDescription_MoveSwordsDance[] = _(
     "A fighting dance that\n"
@@ -4697,7 +4697,7 @@ static const u8 sMoveFourLineDescription_MoveThunderPunch[] = _("A punch with an
 static const u8 sMoveFourLineDescription_MoveScratch[] = _("Hard, pointed, and\nsharp claws rake\nthe foe.");
 static const u8 sMoveFourLineDescription_MoveViseGrip[] = _("Huge, impressive\npincers grip and\nsqueeze the foe.\nHigh crit ratio.");
 static const u8 sMoveFourLineDescription_MoveGuillotine[] = _("A vicious tearing\nattack with pincers.\nKeen Edge boost.\nHigh crit ratio.");
-static const u8 sMoveFourLineDescription_MoveRazorWind[] = _("Blades of wind hit\nthe foe on the 2nd\nturn. High crit.\nAir-based.");
+static const u8 sMoveFourLineDescription_MoveRazorWind[] = _("This move is super\neffective vs Rock.\n+1 priority in\ntailwind. High crit.");
 static const u8 sMoveFourLineDescription_MoveSwordsDance[] = _("A frenetic dance of\nfighting. It sharply\nraises the Attack\nstat.");
 static const u8 sMoveFourLineDescription_MoveCut[] = _("Sharp Steel attack,\nalways crits.\nKeen Edge boost.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveGust[] = _("Strikes the foe\nwith a gust of wind\nwhipped up by\nwings. Air-based.");
