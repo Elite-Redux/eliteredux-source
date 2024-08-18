@@ -1877,6 +1877,7 @@ static void HandleInputChooseActionPlayer(void)
             case BATTLE_ACTION_DEBUG:
                 if (B_ENABLE_DEBUG)
                 {
+                    FlagSet(FLAG_SYS_USED_DEBUG_MENU);
                     PlaySE(SE_SELECT);
                     gBattle_BG1_Y = 160;
                     BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
@@ -1953,6 +1954,7 @@ static void HandleInputChooseActionPlayer(void)
             case BATTLE_ACTION_DEBUG:
                 if (B_ENABLE_DEBUG)
                 {
+                    FlagSet(FLAG_SYS_USED_DEBUG_MENU);
                     PlaySE(SE_SELECT);
                     gBattle_BG1_Y = 160;
                     BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
@@ -2071,6 +2073,7 @@ static void HandleInputChooseActionPlayer(void)
     }
     else if (B_ENABLE_DEBUG && gMain.newKeys & SELECT_BUTTON)
     {
+        FlagSet(FLAG_SYS_USED_DEBUG_MENU);
         BtlController_EmitTwoReturnValues(1, B_ACTION_DEBUG, 0);
         PlayerBufferExecCompleted();
     }

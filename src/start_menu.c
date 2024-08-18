@@ -886,6 +886,7 @@ static bool8 StartMenuDebugCallback(void)
     HideStartMenuDebug(); // Hide start menu without enabling movement
 
 	#if TX_DEBUG_SYSTEM_ENABLE == TRUE
+        FlagSet(FLAG_SYS_USED_DEBUG_MENU);
 		FreezeObjectEvents();
 		Debug_ShowMainMenu();
 	#endif

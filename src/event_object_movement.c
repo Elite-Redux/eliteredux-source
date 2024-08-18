@@ -4754,8 +4754,10 @@ u8 GetCollisionAtCoords(struct ObjectEvent *objectEvent, s16 x, s16 y, u32 dir)
     u8 direction = dir;
 	
 	#if B_ENABLE_DEBUG == TRUE
-		if (FlagGet(FLAG_SYS_NO_COLLISION))
+		if (FlagGet(FLAG_SYS_NO_COLLISION)){
+            FlagSet(FLAG_SYS_USED_DEBUG_MENU);
 			return COLLISION_NONE;
+        }
 	#endif
 	
     if (IsCoordOutsideObjectEventMovementRange(objectEvent, x, y))

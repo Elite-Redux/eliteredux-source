@@ -981,6 +981,7 @@ void Debug_ShowMainMenu(void)
 {
     sDebugBattleData = AllocZeroed(sizeof(*sDebugBattleData));
     sDebugMenuListData = AllocZeroed(sizeof(*sDebugMenuListData));
+    FlagSet(FLAG_SYS_USED_DEBUG_MENU);
     Debug_InitDebugBattleData();
 
     Debug_ShowMenu(DebugTask_HandleMenuInput_Main, sDebugMenu_ListTemplate_Main);

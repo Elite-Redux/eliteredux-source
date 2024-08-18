@@ -146,6 +146,7 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
 	#if B_ENABLE_DEBUG == TRUE && TX_DEBUG_SYSTEM_IN_MENU == FALSE
     if ((heldKeys & TX_DEBUG_SYSTEM_HELD_KEYS) && input->TX_DEBUG_SYSTEM_TRIGGER_EVENT)
     {
+        FlagSet(FLAG_SYS_USED_DEBUG_MENU);
         input->input_field_1_2 = TRUE;
         input->TX_DEBUG_SYSTEM_TRIGGER_EVENT = FALSE;
     }
@@ -224,6 +225,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
 	#if B_ENABLE_DEBUG == TRUE && TX_DEBUG_SYSTEM_IN_MENU == FALSE
     if (input->input_field_1_2)
     {
+        FlagSet(FLAG_SYS_USED_DEBUG_MENU);
         PlaySE(SE_WIN_OPEN);
         FreezeObjectEvents();
         Debug_ShowMainMenu();

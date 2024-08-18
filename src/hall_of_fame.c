@@ -333,9 +333,9 @@ static const struct SpriteTemplate sSpriteTemplate_HofConfetti =
     .callback = SpriteCB_HofConfetti
 };
 
-static const u16 sHallOfFame_Pal[] = INCBIN_U16("graphics/misc/japanese_hof.gbapal");
+static const u16 sHallOfFame_Pal[] = INCBIN_U16("graphics/misc/hof_redux.gbapal");
 
-static const u32 sHallOfFame_Gfx[] = INCBIN_U32("graphics/misc/japanese_hof.4bpp.lz");
+static const u32 sHallOfFame_Gfx[] = INCBIN_U32("graphics/misc/hof_redux.4bpp.lz");
 
 static const struct HallofFameMon sDummyFameMon =
 {
@@ -1645,9 +1645,11 @@ static void Task_HofPC_ExitOnButtonPress(u8 taskId)
 static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
 {
     u8 numModes = 0;
-    static const u8 gText_WelcomeToHOF[] 		  = _("Elite Redux v2.1 - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
-    static const u8 sText_WinsLossesText[]        = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}");
-    static const u8 sText_WinsLossesLockedText[]  = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}      {COLOR LIGHT_RED}{SHADOW RED}Locked Mode{COLOR WHITE}{SHADOW DARK_GRAY}");
+    static const u8 gText_WelcomeToHOF[] 		        = _("Elite Redux v2.1 - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
+    static const u8 sText_WinsLossesText[]              = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}");
+    static const u8 sText_WinsLossesText_Debug[]        = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}.");
+    static const u8 sText_WinsLossesLockedText[]        = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}      {COLOR LIGHT_RED}{SHADOW RED}Locked Mode{COLOR WHITE}{SHADOW DARK_GRAY}");
+    static const u8 sText_WinsLossesLockedText_Debug[]  = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}      {COLOR LIGHT_RED}{SHADOW RED}Locked Mode{COLOR WHITE}{SHADOW DARK_GRAY}.");
     
     static const u8 easyCapText[] 				  = _("{COLOR LIGHT_GREEN}{SHADOW GREEN}Easy");
 	static const u8 moreCapText[] 			      = _("{COLOR LIGHT_BLUE}{SHADOW BLUE}More");
@@ -1678,11 +1680,17 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
 	ConvertIntToDecimalStringN(gStringVar2, losses, STR_CONV_MODE_RIGHT_ALIGN, 3);
 
     if(FlagGet(FLAG_SYS_LOCKED_MODE)){
-        StringExpandPlaceholders(gStringVar3, sText_WinsLossesLockedText);
+        if(FlagGet(FLAG_SYS_USED_DEBUG_MENU))
+            StringExpandPlaceholders(gStringVar3, sText_WinsLossesLockedText_Debug);
+        else
+            StringExpandPlaceholders(gStringVar3, sText_WinsLossesLockedText);
         FlagClear(FLAG_SYS_LOCKED_MODE); //This seems to not be saved upon reloading the game, the game probably saves before calling this funcition and restarts without saving
     }
     else{
-        StringExpandPlaceholders(gStringVar3, sText_WinsLossesText);
+        if(FlagGet(FLAG_SYS_USED_DEBUG_MENU))
+            StringExpandPlaceholders(gStringVar3, sText_WinsLossesText_Debug);
+        else
+            StringExpandPlaceholders(gStringVar3, sText_WinsLossesText);
     }
 	
 	//Difficulty
