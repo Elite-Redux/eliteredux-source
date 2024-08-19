@@ -3376,8 +3376,8 @@ const u8 sText_Title_Field_Terrain_Description_Psychic[]     = _("Pokémon on th
                                                                 "by priority moves. The power of\n"
                                                                 "Psychic-type moves is boosted.");
 const u8 sText_Title_Field_Terrain_Description_Misty[]       = _("Pokémon on the ground won't get any\n"
-                                                                 "status conditions, Damage from Dragon\n"
-                                                                 "type moves is halved.");
+                                                                 "status conditions. The power of\n"
+                                                                 "Fairy-type moves is boosted.");
 const u8 sText_Title_Field_Terrain_Description_Grassy[]      = _("Increases the power of Grass-type\n"
                                                                  "moves, Restores 1/16 HP to all\n"
                                                                  "Pokémon on the ground each turn.");
