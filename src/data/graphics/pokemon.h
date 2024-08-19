@@ -7822,6 +7822,12 @@ const u32 gMonPalette_CrabominableRedux[]           = INCBIN_U32("graphics/pokem
 const u32 gMonShinyPalette_CrabominableRedux[]      = INCBIN_U32("graphics/pokemon/crabominable/redux/shiny.gbapal.lz");
 const u8  gMonIcon_CrabominableRedux[]              = INCBIN_U8("graphics/pokemon/crabominable/redux/icon.4bpp");
 
+const u32 gMonFrontPic_Crabonination[]          = INCBIN_U32("graphics/pokemon/crabonination/front.4bpp.lz");
+const u32 gMonBackPic_Crabonination[]           = INCBIN_U32("graphics/pokemon/crabonination/back.4bpp.lz");
+const u32 gMonPalette_Crabonination[]           = INCBIN_U32("graphics/pokemon/crabonination/normal.gbapal.lz");
+const u32 gMonShinyPalette_Crabonination[]      = INCBIN_U32("graphics/pokemon/crabonination/shiny.gbapal.lz");
+const u8  gMonIcon_Crabonination[]              = INCBIN_U8("graphics/pokemon/crabonination/icon.4bpp");
+
 const u32 gMonFrontPic_CleffaRedux[]          = INCBIN_U32("graphics/pokemon/cleffa/redux/front.4bpp.lz");
 const u32 gMonBackPic_CleffaRedux[]           = INCBIN_U32("graphics/pokemon/cleffa/redux/back.4bpp.lz");
 const u32 gMonPalette_CleffaRedux[]           = INCBIN_U32("graphics/pokemon/cleffa/redux/normal.gbapal.lz");
@@ -7887,6 +7893,12 @@ const u32 gMonBackPic_DewgongRedux[]           = INCBIN_U32("graphics/pokemon/de
 const u32 gMonPalette_DewgongRedux[]           = INCBIN_U32("graphics/pokemon/dewgong/redux/normal.gbapal.lz");
 const u32 gMonShinyPalette_DewgongRedux[]      = INCBIN_U32("graphics/pokemon/dewgong/redux/shiny.gbapal.lz");
 const u8  gMonIcon_DewgongRedux[]              = INCBIN_U8("graphics/pokemon/dewgong/redux/icon.4bpp");
+
+const u32 gMonFrontPic_Bariong[]          = INCBIN_U32("graphics/pokemon/bariong/front.4bpp.lz");
+const u32 gMonBackPic_Bariong[]           = INCBIN_U32("graphics/pokemon/bariong/back.4bpp.lz");
+const u32 gMonPalette_Bariong[]           = INCBIN_U32("graphics/pokemon/bariong/normal.gbapal.lz");
+const u32 gMonShinyPalette_Bariong[]      = INCBIN_U32("graphics/pokemon/bariong/shiny.gbapal.lz");
+const u8  gMonIcon_Bariong[]              = INCBIN_U8("graphics/pokemon/bariong/icon.4bpp");
 
 const u32 gMonFrontPic_SnoruntRedux[]          = INCBIN_U32("graphics/pokemon/snorunt/redux/front.4bpp.lz");
 const u32 gMonBackPic_SnoruntRedux[]           = INCBIN_U32("graphics/pokemon/snorunt/redux/back.4bpp.lz");

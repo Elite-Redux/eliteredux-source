@@ -1166,6 +1166,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 
     [SPECIES_CRABRAWLER_REDUX]      = _("Crabrawler"),
     [SPECIES_CRABOMINABLE_REDUX]      = _("Crabominable"),
+    [SPECIES_CRABONINATION]      = _("Crabonination"),
 
     [SPECIES_CLEFFA_REDUX]      = _("Cleffa"),
     [SPECIES_CLEFAIRY_REDUX]      = _("Clefairy"),
@@ -1182,6 +1183,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 
     [SPECIES_SEEL_REDUX]      = _("Seel"),
     [SPECIES_DEWGONG_REDUX]      = _("Dewgong"),
+    [SPECIES_BARIONG]      = _("Bariong"),
 
     [SPECIES_SNORUNT_REDUX]      = _("Snorunt"),
     [SPECIES_GLALIE_REDUX]      = _("Glalie"),
