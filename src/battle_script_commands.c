@@ -12368,7 +12368,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
     if (gBattleMons[gActiveBattler].statStages[statId] > MAX_STAT_STAGE)
         gBattleMons[gActiveBattler].statStages[statId] = MAX_STAT_STAGE;
 
-    if (statValue && gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_IN_PROGRESS && statId <= NUM_NATURE_STATS)
+    if (statValue && gBattleStruct->statStageCheckState != STAT_STAGE_CHECK_IN_PROGRESS && statId < NUM_BATTLE_STATS)
     {
         gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_NEEDED;
         gBattleStruct->statChangesToCheck[battler][statId - 1] += statValue;
