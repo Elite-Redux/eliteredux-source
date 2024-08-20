@@ -177,6 +177,7 @@ void OpponentSwitchInResetSentPokesToOpponentValue(u8 battlerId);
 void UpdateSentPokesToOpponentValue(u8 battlerId);
 void BattleScriptPush(const u8* bsPtr);
 void BattleScriptPushCursor(void);
+void BattleScriptSaveCurrentStackData();
 void BattleScriptPop(void);
 void ReadActiveScriptInitialStackState();
 u8 TrySetCantSelectMoveBattleScript(void);
