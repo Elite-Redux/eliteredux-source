@@ -746,7 +746,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_PSYBEAM] =
     {
-        .effect = EFFECT_CONFUSE_HIT,
+        .effect = EFFECT_SPECIAL_ATTACK_DOWN_HIT,
         .power = 65,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,

@@ -1578,7 +1578,7 @@ void BattleScriptPush(const u8 *bsPtr)
     gBattleResources->battleScriptsStack->savedStackData[gBattleResources->battleScriptsStack->size] = savedStackData;
 }
 
-void BattleScriptPushCursor(void)
+void BattleScriptSaveCurrentStackData()
 {
     struct SavedStackData savedStackData = 
         {
@@ -1589,8 +1589,13 @@ void BattleScriptPushCursor(void)
             .stackBattler3 = gStackBattler3,
             .stackBattler4 = gStackBattler4,
         };
-    gBattleResources->battleScriptsStack->ptr[gBattleResources->battleScriptsStack->size++] = gBattlescriptCurrInstr;
     gBattleResources->battleScriptsStack->savedStackData[gBattleResources->battleScriptsStack->size] = savedStackData;
+}
+
+void BattleScriptPushCursor(void)
+{
+    gBattleResources->battleScriptsStack->ptr[gBattleResources->battleScriptsStack->size++] = gBattlescriptCurrInstr;
+    BattleScriptSaveCurrentStackData();
 }
 
 void BattleScriptPop(void)
@@ -10226,6 +10231,7 @@ void BattleScriptExecute(const u8 *BS_ptr)
     gBattleResources->battleCallbackStack->function[gBattleResources->battleCallbackStack->size++] = gBattleMainFunc;
     gBattleMainFunc = RunBattleScriptCommands_PopCallbacksStack;
     gCurrentActionFuncId = 0;
+    BattleScriptSaveCurrentStackData();
 }
 
 void BattleScriptPushCursorAndCallback(const u8 *BS_ptr)
