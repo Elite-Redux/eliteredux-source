@@ -13043,30 +13043,13 @@ static void Cmd_weatherdamage(void)
         }
         if (gBattleWeather & WEATHER_HAIL_ANY) // Hail damage
         {
-            if (BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_ICE_BODY, ability)
-                && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
-                && !BATTLER_MAX_HP(gBattlerAttacker)
-                && !BATTLER_HEALING_BLOCKED(gBattlerAttacker))
-            {
-                gBattlerAbility = gBattlerAttacker;
-                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
-                if (gBattleMoveDamage == 0)
-                    gBattleMoveDamage = 1;
-                gBattleMoveDamage *= -1;
-            }
-            else if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE)
-                && ability != ABILITY_SNOW_CLOAK
-				&& !BattlerHasInnate(gBattlerAttacker, ABILITY_SNOW_CLOAK)
-                && ability != ABILITY_OVERCOAT
-				&& !BattlerHasInnate(gBattlerAttacker, ABILITY_OVERCOAT)
-				&& ability != ABILITY_AURORA_BOREALIS
-				&& !BattlerHasInnate(gBattlerAttacker, ABILITY_AURORA_BOREALIS)
-                && ability != ABILITY_ICE_BODY
-				&& !BattlerHasInnate(gBattlerAttacker, ABILITY_ICE_BODY)
-                && ability != ABILITY_SLUSH_RUSH
-				&& !BattlerHasInnate(gBattlerAttacker, ABILITY_SLUSH_RUSH)
-				&& ability != ABILITY_NORTH_WIND
-				&& !BattlerHasInnate(gBattlerAttacker, ABILITY_NORTH_WIND)
+            if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SNOW_CLOAK, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_OVERCOAT, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_AURORA_BOREALIS, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_ICE_BODY, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_SLUSH_RUSH, ability)
+                && !BATTLER_HAS_ABILITY_FAST(gBattlerAttacker, ABILITY_NORTH_WIND, ability)
                 && !(gStatuses3[gBattlerAttacker] & (STATUS3_UNDERGROUND | STATUS3_UNDERWATER))
                 && GetBattlerHoldEffect(gBattlerAttacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
             {
