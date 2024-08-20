@@ -5330,7 +5330,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_GIMMIGHOUL_ROAMING] =
     {
         .size = 0,
-        .y_offset =  2
+        .y_offset =  15
     },
     [SPECIES_GHOLDENGO] =
     {
