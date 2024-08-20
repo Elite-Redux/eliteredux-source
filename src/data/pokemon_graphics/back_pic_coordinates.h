@@ -5919,7 +5919,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_BASCULEGION] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  8
     },
     [SPECIES_VENUSAUR_MEGA] =
     {
