@@ -1166,7 +1166,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 
     [SPECIES_CRABRAWLER_REDUX]      = _("Crabrawler"),
     [SPECIES_CRABOMINABLE_REDUX]      = _("Crabominable"),
-    [SPECIES_CRABONINATION]      = _("Craboninable"),
+    [SPECIES_CRABONINATION]      = _("Crabruiser"),
 
     [SPECIES_CLEFFA_REDUX]      = _("Cleffa"),
     [SPECIES_CLEFAIRY_REDUX]      = _("Clefairy"),
