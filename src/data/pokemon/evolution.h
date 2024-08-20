@@ -427,6 +427,8 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
 	[SPECIES_FLETCHINDER]= {{EVO_LEVEL, 35, SPECIES_TALONFLAME}},
 	[SPECIES_SCATTERBUG] = {{EVO_LEVEL, 9, SPECIES_SPEWPA}},
 	[SPECIES_SPEWPA]	 = {{EVO_LEVEL, 12, SPECIES_VIVILLON}},
+   // [SPECIES_SPEWPA]     = {{EVO_LEVEL, 12, SPECIES_VIVILLON_ARCHIPELAGO}}, //
+	[SPECIES_SPEWPA]	 = {{EVO_LEVEL, 12, SPECIES_VIVILLON}},
 	[SPECIES_LITLEO]	 = {{EVO_LEVEL_MALE, 35, SPECIES_PYROAR},
                             {EVO_LEVEL_FEMALE, 35, SPECIES_PYROAR}},
 	[SPECIES_FLABEBE]	 = {{EVO_LEVEL, 19, SPECIES_FLOETTE}},
@@ -922,6 +924,20 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                                 {EVO_FORM_SHIFT, 1, SPECIES_ALCREMIE_RUBY_CREAM},
                                 {EVO_FORM_SHIFT, 1, SPECIES_ALCREMIE_RUBY_SWIRL},
                                 {EVO_FORM_SHIFT, 1, SPECIES_ALCREMIE_MATCHA_CREAM},},
+
+    [SPECIES_PIKACHU] = {{EVO_FORM_SHIFT, 1, SPECIES_PIKACHU},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_ORIGINAL_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_HOENN_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_SINNOH_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_UNOVA_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_KALOS_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_ALOLA_CAP},
+                             //   {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_PARTNER_CAP}, //
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_WORLD_CAP},},
+
+    [SPECIES_PICHU] = {{EVO_FORM_SHIFT, 1, SPECIES_PICHU},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PICHU_SPIKY_EARED},},
+
 
     [SPECIES_VIVILLON] = {{EVO_FORM_SHIFT, 1, SPECIES_VIVILLON},
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SUN},
