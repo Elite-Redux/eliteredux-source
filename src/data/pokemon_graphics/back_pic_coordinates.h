@@ -4874,7 +4874,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SKELEDIRGE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  4
     },
     [SPECIES_QUAXLY] =
     {
