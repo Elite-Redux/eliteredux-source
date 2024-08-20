@@ -7126,6 +7126,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     effect++;
                 }
 			}
+			
+			// Ice Body
+			if(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ICE_BODY)){
+				if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)
+                 && !BATTLER_MAX_HP(battler)
+                 && !BATTLER_HEALING_BLOCKED(battler))
+                {
+                    gBattleMoveDamage = gBattleMons[battler].maxHP / 8; // was 16 : 8
+				    gBattleScripting.abilityPopupOverwrite = ABILITY_ICE_BODY;
+				    gLastUsedAbility = ABILITY_ICE_BODY;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    gBattleMoveDamage *= -1;
+                    BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+                    effect++;
+                }
+			}
 
             if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BLOOD_PRICE)) {
                 if (move && gBattleMoves[move].split != SPLIT_STATUS
