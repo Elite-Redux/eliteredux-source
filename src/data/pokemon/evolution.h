@@ -1005,15 +1005,15 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                                 {EVO_FORM_SHIFT, 1, SPECIES_ALCREMIE_RUBY_SWIRL},
                                 {EVO_FORM_SHIFT, 1, SPECIES_ALCREMIE_MATCHA_CREAM},},
 
-    [SPECIES_PIKACHU] = {{EVO_FORM_SHIFT, 1, SPECIES_PIKACHU},
-                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_ORIGINAL_CAP},
-                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_HOENN_CAP},
-                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_SINNOH_CAP},
-                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_UNOVA_CAP},
-                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_KALOS_CAP},
-                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_ALOLA_CAP},
-                             //   {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_PARTNER_CAP}, //
-                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_WORLD_CAP},},
+    [SPECIES_PIKACHU] = {{EVO_FORM_SHIFT_GENDER, MON_MALE, SPECIES_PIKACHU},
+                                {EVO_FORM_SHIFT_GENDER, MON_MALE, SPECIES_PIKACHU_ORIGINAL_CAP},
+                                {EVO_FORM_SHIFT_GENDER, MON_MALE, SPECIES_PIKACHU_HOENN_CAP},
+                                {EVO_FORM_SHIFT_GENDER, MON_MALE, SPECIES_PIKACHU_SINNOH_CAP},
+                                {EVO_FORM_SHIFT_GENDER, MON_MALE, SPECIES_PIKACHU_UNOVA_CAP},
+                                {EVO_FORM_SHIFT_GENDER, MON_MALE, SPECIES_PIKACHU_KALOS_CAP},
+                                {EVO_FORM_SHIFT_GENDER, MON_MALE, SPECIES_PIKACHU_ALOLA_CAP},
+                             //   {EVO_FORM_SHIFT_GENDER, MON_MALE, SPECIES_PIKACHU_PARTNER_CAP}, //
+                                {EVO_FORM_SHIFT_GENDER, MON_MALE, SPECIES_PIKACHU_WORLD_CAP},},
 
     [SPECIES_PICHU] = {{EVO_FORM_SHIFT, 1, SPECIES_PICHU},
                                 {EVO_FORM_SHIFT, 1, SPECIES_PICHU_SPIKY_EARED},},
