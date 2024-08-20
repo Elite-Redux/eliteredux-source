@@ -4428,7 +4428,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DURALUDON] =
     {
         .size = 0x88,
-        .y_offset = 1,
+        .y_offset = 0,
     },
     [SPECIES_DREEPY] =
     {
@@ -4864,12 +4864,12 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_FUECOCO] =
     {
         .size = 0,
-        .y_offset =  4
+        .y_offset =  0
     },
     [SPECIES_CROCALOR] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  8
     },
     [SPECIES_SKELEDIRGE] =
     {
@@ -4879,7 +4879,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_QUAXLY] =
     {
         .size = 0,
-        .y_offset =  7
+        .y_offset =  9
     },
     [SPECIES_QUAXWELL] =
     {
@@ -4889,7 +4889,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_QUAQUAVAL] =
     {
         .size = 0,
-        .y_offset =  1
+        .y_offset =  3
     },
     [SPECIES_LECHONK] =
     {
@@ -5084,22 +5084,22 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_RELLOR] =
     {
         .size = 0,
-        .y_offset =  15
+        .y_offset =  9
     },
     [SPECIES_RABSCA] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  4
     },
     [SPECIES_FLITTLE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  9
     },
     [SPECIES_ESPATHRA] =
     {
         .size = 0,
-        .y_offset =  11
+        .y_offset =  2
     },
     [SPECIES_TINKATINK] =
     {
@@ -5154,7 +5154,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_CYCLIZAR] =
     {
         .size = 0,
-        .y_offset =  6
+        .y_offset =  9
     },
     [SPECIES_ORTHWORM] =
     {
@@ -5224,7 +5224,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_FARIGIRAF] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  1
     },
     [SPECIES_DUDUNSPARCE] =
     {
@@ -5374,7 +5374,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DIPPLIN] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  1
     },
     [SPECIES_POLTCHAGEIST] =
     {
@@ -5394,7 +5394,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_MUNKIDORI] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  2
     },
     [SPECIES_FEZANDIPITI] =
     {
@@ -5404,7 +5404,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_OGERPON] =
     {
         .size = 0,
-        .y_offset = 16
+        .y_offset = 7
     },
     [SPECIES_PHANTOWL] =
     {

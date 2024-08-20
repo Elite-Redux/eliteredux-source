@@ -4900,7 +4900,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_QUAQUAVAL] =
     {
         .size = 0,
-        .y_offset =  12
+        .y_offset =  0
     },
     [SPECIES_LECHONK] =
     {
@@ -4910,17 +4910,17 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_OINKOLOGNE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  6
     },
     [SPECIES_TAROUNTULA] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  10
     },
     [SPECIES_SPIDOPS] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  5
     },
     [SPECIES_NYMBLE] =
     {
@@ -5230,7 +5230,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_CLODSIRE] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  8
     },
     [SPECIES_FARIGIRAF] =
     {
