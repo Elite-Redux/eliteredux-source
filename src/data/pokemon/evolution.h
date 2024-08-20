@@ -433,8 +433,8 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
 	[SPECIES_FLETCHLING] = {{EVO_LEVEL, 16, SPECIES_FLETCHINDER}},
 	[SPECIES_FLETCHINDER]= {{EVO_LEVEL, 35, SPECIES_TALONFLAME}},
 	[SPECIES_SCATTERBUG] = {{EVO_LEVEL, 9, SPECIES_SPEWPA}},
-	[SPECIES_SPEWPA]	 = {{EVO_LEVEL_MALE, 12, SPECIES_VIVILLON},
-                            {EVO_LEVEL_FEMALE, 12, SPECIES_VIVILLON_ARCHIPELAGO}},
+	[SPECIES_SPEWPA]	 = {{EVO_LEVEL, 12, SPECIES_VIVILLON}},
+   // [SPECIES_SPEWPA]     = {{EVO_LEVEL, 12, SPECIES_VIVILLON_ARCHIPELAGO}}, //
 	[SPECIES_LITLEO]	 = {{EVO_LEVEL_MALE, 35, SPECIES_PYROAR},
                             {EVO_LEVEL_FEMALE, 35, SPECIES_PYROAR}},
 	[SPECIES_FLABEBE]	 = {{EVO_LEVEL, 19, SPECIES_FLOETTE}},
@@ -962,7 +962,7 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                             {EVO_FORM_SHIFT, 1, SPECIES_MAUSHOLD_FOUR},},
 
     [SPECIES_LUMBERING_SLOTH] = {{EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH},
-                                    {EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH_ENGULFED},}, // testing purposes
+                                    {EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH_ENGULFED},}, // testing purposes. subject to removal
 
     [SPECIES_GIMMIGHOUL] = {{EVO_FORM_SHIFT, 1, SPECIES_GIMMIGHOUL},
                                 {EVO_FORM_SHIFT, 1, SPECIES_GIMMIGHOUL_ROAMING},},
@@ -1005,6 +1005,20 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                                 {EVO_FORM_SHIFT, 1, SPECIES_ALCREMIE_RUBY_SWIRL},
                                 {EVO_FORM_SHIFT, 1, SPECIES_ALCREMIE_MATCHA_CREAM},},
 
+    [SPECIES_PIKACHU] = {{EVO_FORM_SHIFT, 1, SPECIES_PIKACHU},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_ORIGINAL_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_HOENN_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_SINNOH_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_UNOVA_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_KALOS_CAP},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_ALOLA_CAP},
+                             //   {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_PARTNER_CAP}, //
+                                {EVO_FORM_SHIFT, 1, SPECIES_PIKACHU_WORLD_CAP},},
+
+    [SPECIES_PICHU] = {{EVO_FORM_SHIFT, 1, SPECIES_PICHU},
+                                {EVO_FORM_SHIFT, 1, SPECIES_PICHU_SPIKY_EARED},},
+
+
     [SPECIES_VIVILLON] = {{EVO_FORM_SHIFT, 1, SPECIES_VIVILLON},
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SUN},
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_FANCY},
@@ -1016,7 +1030,7 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_GARDEN},
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ELEGANT},},
 
-    // [SPECIES_VIVILLON_ARCHIPELAGO] = {{EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ARCHIPELAGO},
+    // [SPECIES_VIVILLON_ARCHIPELAGO] = {{EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ARCHIPELAGO}, //this is a temporary workaround to form slot limits
     //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_JUNGLE},
     //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MARINE},
     //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MODERN},
