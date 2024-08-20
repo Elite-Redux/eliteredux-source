@@ -5330,7 +5330,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_GIMMIGHOUL_ROAMING] =
     {
         .size = 0,
-        .y_offset =  2
+        .y_offset =  15
     },
     [SPECIES_GHOLDENGO] =
     {
@@ -5745,6 +5745,11 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_CRABOMINABLE_REDUX] =
     {
         .size = 0x45,
+        .y_offset = 0,
+    },
+    [SPECIES_CRABONINATION] =
+    {
+        .size = 0x55,
         .y_offset = 0,
     },
     [SPECIES_CLEFFA_REDUX] =

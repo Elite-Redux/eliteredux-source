@@ -337,6 +337,11 @@ static const union AnimCmd sAnim_CRABOMINABLE_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_CRABONINATION_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CLEFFA_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -398,6 +403,11 @@ static const union AnimCmd sAnim_SEEL_REDUX_1[] =
     ANIMCMD_END,
 };
 static const union AnimCmd sAnim_DEWGONG_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_BARIONG_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -1024,6 +1034,11 @@ static const union AnimCmd *const sAnims_CRABOMINABLE_REDUX[] ={
     sAnim_CRABOMINABLE_REDUX_1,
 };
 
+static const union AnimCmd *const sAnims_CRABONINATION[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CRABONINATION_1,
+};
+
 static const union AnimCmd *const sAnims_CLEFFA_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_CLEFFA_REDUX_1,
@@ -1082,6 +1097,11 @@ static const union AnimCmd *const sAnims_SEEL_REDUX[] ={
 static const union AnimCmd *const sAnims_DEWGONG_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_DEWGONG_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_BARIONG[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BARIONG_1,
 };
 
 static const union AnimCmd *const sAnims_SNORUNT_REDUX[] ={
@@ -20837,6 +20857,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(FLYGON_REDUX_MEGA),
     ANIM_CMD(CRABRAWLER_REDUX),
     ANIM_CMD(CRABOMINABLE_REDUX),
+    ANIM_CMD(CRABONINATION),
     ANIM_CMD(CLEFFA_REDUX),
     ANIM_CMD(CLEFAIRY_REDUX),
     ANIM_CMD(CLEFABLE_REDUX),
@@ -20849,6 +20870,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(MAGMENOUS),
     ANIM_CMD(SEEL_REDUX),
     ANIM_CMD(DEWGONG_REDUX),
+    ANIM_CMD(BARIONG),
     ANIM_CMD(SNORUNT_REDUX),
     ANIM_CMD(GLALIE_REDUX),
     ANIM_CMD(GLALIE_REDUX_MEGA),

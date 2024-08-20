@@ -27744,6 +27744,11 @@ static const struct LevelUpMove sCrabominableReduxLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sCraboninationLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sCleffaReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
     LEVEL_UP_END
@@ -27818,6 +27823,11 @@ static const struct LevelUpMove sSeelReduxLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sDewgongReduxLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sBariongLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
     LEVEL_UP_END
 };
