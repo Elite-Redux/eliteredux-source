@@ -53,7 +53,7 @@
 }
 
 #define DEBUG_BUILD
-#define DISABLE_STUFF_FOR_PUBLIC_RELEASE TRUE // Disables stuff that shouldn't be in a public release
+#define DISABLE_STUFF_FOR_PUBLIC_RELEASE FALSE // Disables stuff that shouldn't be in a public release
 #define DEBUG_POKEMON_MENU               !DISABLE_STUFF_FOR_PUBLIC_RELEASE
 
 #define CURRENT_GAME_VERSION 1040
@@ -80,7 +80,7 @@
 #define Q_8_8(n) ((s16)((n) * 256))
 
 #define UQ_4_12_PRECISION 10
-#define Q_4_12_PRECISION 12
+#define Q_4_12_PRECISION  12
 
 // Converts a number to Q4.12 fixed-point format
 #define Q_4_12(n)  ((s16)((n) * (1 << Q_4_12_PRECISION)))
