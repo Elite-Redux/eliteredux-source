@@ -1078,6 +1078,7 @@ static const struct WindowTemplate sPokemonList_WindowTemplate[] =
     DUMMY_WIN_TEMPLATE
 };
 
+static const u8 sText_No0000[] = _("{NO}0000");
 static const u8 sText_No000[] = _("{NO}000");
 static const u8 sCaughtBall_Gfx[] = INCBIN_U8("graphics/pokedex/caught_ball.4bpp");
 static const u8 sText_TenDashes[] = _("----------");
@@ -2609,7 +2610,7 @@ static void CreatePokedexList(u8 dexMode, u8 order)
     }
 }
 
-#define DEX_NUM_EXTRA_X 5
+#define DEX_NUM_EXTRA_X 4
 static void PrintMonDexNumAndName(u8 windowId, u8 fontId, const u8* str, u8 left, u8 top)
 {
     u8 color[3];
@@ -2620,23 +2621,39 @@ static void PrintMonDexNumAndName(u8 windowId, u8 fontId, const u8* str, u8 left
     AddTextPrinterParameterized4(windowId, fontId, (left * 8) + DEX_NUM_EXTRA_X, (top * 8) + 1, 0, 0, color, -1, str);
 }
 
-#define POKEMON_NAME_EXTRA_X 6
-static void PrintMonName(u8 windowId, u8 fontId, const u8* str, u8 left, u8 top)
+#define POKEMON_NAME_EXTRA_X 0
+static void PrintMonName(u8 windowId, u8 fontId, const u8* str, u8 left, u8 top, u16 dexNum)
 {
     u8 color[3];
 
     color[0] = TEXT_COLOR_TRANSPARENT;
     color[1] = TEXT_DYNAMIC_COLOR_6;
     color[2] = TEXT_COLOR_LIGHT_GRAY;
-    AddTextPrinterParameterized4(windowId, fontId, (left * 8) + POKEMON_NAME_EXTRA_X, (top * 8) + 1, 0, 0, color, -1, str);
+
+    switch(dexNum){
+        case SPECIES_CRABOMINABLE:
+        //case SPECIES_FLETCHINDER:
+        case SPECIES_CORVISQUIRE:
+        case SPECIES_CORVIKNIGHT:
+        case SPECIES_BLACEPHALON:
+        case SPECIES_BARRASKEWDA:
+        case SPECIES_CENTISKORCH:
+        case SPECIES_POLTEAGEIST:
+        case SPECIES_STONJOURNER:
+            AddTextPrinterParameterized4(windowId, fontId, (left * 8) + POKEMON_NAME_EXTRA_X, (top * 8) + 1, 0, 0, color, -1, str);
+        break;
+        default:
+            AddTextPrinterParameterized4(windowId, fontId, (left * 8) + POKEMON_NAME_EXTRA_X + 2, (top * 8) + 1, 0, 0, color, -1, str);
+        break;
+    }
 }
 
 // u16 ignored is passed but never used
 #define MON_LIST_X       1
 #define CAUGHT_BALL_X    11 // + EXTRA_POKEBALL_X
-#define MON_NAME_X       3  // + POKEMON_NAME_EXTRA_X
+#define MON_NAME_X       4  // + POKEMON_NAME_EXTRA_X
 #define DEX_NUM_X        0  // + DEX_NUM_EXTRA_X
-#define EXTRA_POKEBALL_X 1
+#define EXTRA_POKEBALL_X 2
 
 static void CreateMonListEntry(u8 position, u16 b, u16 ignored)
 {
@@ -2725,19 +2742,31 @@ static void CreateMonListEntry(u8 position, u16 b, u16 ignored)
     CopyWindowToVram(0, 2);
 }
 
+static void PrintMonDexNum(u8 windowId, u8 fontId, const u8 *str, u8 left, u8 top)
+{
+    static const u8 color[3] = { TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_LIGHT_GRAY };
+    AddTextPrinterParameterized4(windowId, fontId, (left * 8) + DEX_NUM_EXTRA_X, (top * 8) + 1, 0, 0, color, TEXT_SKIP_DRAW, str);
+}
+
 static void CreateMonDexNum(u16 entryNum, u8 left, u8 top, u16 unused)
 {
-    u8 text[6];
-    u16 dexNum;
+    u8 text[7];
+    u16 dexNum, offset = 2;
 
-    memcpy(text, sText_No000, ARRAY_COUNT(text));
     dexNum = sPokedexView->pokedexList[entryNum].dexNum;
     if (sPokedexView->dexMode == DEX_MODE_HOENN)
         dexNum = NationalToHoennOrder(dexNum);
-    text[2] = CHAR_0 + dexNum / 100;
-    text[3] = CHAR_0 + (dexNum % 100) / 10;
-    text[4] = CHAR_0 + (dexNum % 100) % 10;
-    PrintMonDexNumAndName(0, FONT_SMALL_NARROW, text, left, top);
+    memcpy(text, sText_No0000, ARRAY_COUNT(sText_No0000));
+    if (NATIONAL_DEX_COUNT > 999 && sPokedexView->dexMode != DEX_MODE_HOENN)
+    {
+        text[2] = CHAR_0 + dexNum / 1000;
+        offset++;
+    }
+    text[offset++] = CHAR_0 + (dexNum % 1000) / 100;
+    text[offset++] = CHAR_0 + ((dexNum % 1000) % 100) / 10;
+    text[offset++] = CHAR_0 + ((dexNum % 1000) % 100) % 10;
+    text[offset++] = EOS;
+    PrintMonDexNum(0, FONT_SMALL_NARROW, text, left, top);
 }
 
 static void CreateCaughtBall(bool16 owned, u8 x, u8 y, u16 unused)
@@ -2753,11 +2782,14 @@ static u8 CreateMonName(u16 num, u8 left, u8 top)
     const u8* str;
 
     num = NationalPokedexNumToSpecies(num);
+
     if (num)
         str = gSpeciesNames[num];
     else
         str = sText_TenDashes;
-    PrintMonName(0, FONT_SMALL_NARROW, str, left, top);
+    
+    PrintMonName(0, FONT_SMALL_NARROW, str, left, top, num);
+
     return StringLength(str);
 }
 

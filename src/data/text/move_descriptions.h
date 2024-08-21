@@ -1047,8 +1047,8 @@ static const u8 sMoveTwoLineDescription_MoveMemento[] = _(
     "the foe's abilities.");
 
 static const u8 sMoveTwoLineDescription_MoveFacade[] = _(
-    "Boosts Attack when burned,\n"
-    "paralyzed, or poisoned.");
+    "Boosts Attack when the user\n"
+    "has any status codition.");
 
 static const u8 sMoveTwoLineDescription_MoveFocusPunch[] = _(
     "A powerful loyalty attack.\n"
@@ -4947,7 +4947,7 @@ static const u8 sMoveFourLineDescription_MoveTorment[] = _("It enrages the foe,\
 static const u8 sMoveFourLineDescription_MoveFlatter[] = _("Flattery is used to\nconfuse the foe,\nbut its Sp. Atk\nalso rises.");
 static const u8 sMoveFourLineDescription_MoveWillOWisp[] = _("A sinister, bluish\nwhite flame is shot\nat the foe to\ninflict a burn.");
 static const u8 sMoveFourLineDescription_MoveMemento[] = _("The user faints,\nbut sharply lowers\nthe foe's Attack\nand SpAtk");
-static const u8 sMoveFourLineDescription_MoveFacade[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
+static const u8 sMoveFourLineDescription_MoveFacade[] = _("An attack that is\nboosted if user has\nany status non\nvolatile condition.");
 static const u8 sMoveFourLineDescription_MoveFocusPunch[] = _("Moves last.\nThe user flinches\nif hit beforehand.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveSmellingSalts[] = _("Doubly effective on\na paralyzed foe,\nbut it also cures\nthe foe's paralysis.");
 static const u8 sMoveFourLineDescription_MoveFollowMe[] = _("The user draws\nattention to itself,\nmaking foes attack\nonly the user.");

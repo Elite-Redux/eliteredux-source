@@ -25,6 +25,7 @@
 #include "palette.h"
 #include "pc_screen_effect.h"
 #include "pokemon.h"
+#include "pokedex.h"
 #include "pokemon_icon.h"
 #include "pokemon_summary_screen.h"
 #include "pokemon_storage_system.h"
@@ -4473,6 +4474,9 @@ static void Task_EvolveMon(u8 taskId)
                 SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
                 UpdateSpeciesSpritePSS(&gPokemonStoragePtr->boxes[boxId][pos]);
             }
+
+            GetSetPokedexFlag(SpeciesToNationalPokedexNum(targetSpecies), FLAG_SET_SEEN);
+            GetSetPokedexFlag(SpeciesToNationalPokedexNum(targetSpecies), FLAG_SET_CAUGHT);
 
             //BeginEvolutionScene(&pokemon, targetSpecies, FALSE, pos);
             RefreshDisplayMon();
