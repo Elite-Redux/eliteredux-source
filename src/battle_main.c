@@ -4442,8 +4442,8 @@ static void HandleTurnActionSelectionState(void)
                     #ifdef DEBUG_BUILD
                     BtlController_EmitDebugMenu(0);
                     MarkBattlerForControllerExec(gActiveBattler);
-                    break;
                     #endif
+                    break;
                 }
                 
                 if (gBattleTypeFlags & BATTLE_TYPE_TRAINER

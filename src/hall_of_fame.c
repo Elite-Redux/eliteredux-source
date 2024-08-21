@@ -1645,7 +1645,8 @@ static void Task_HofPC_ExitOnButtonPress(u8 taskId)
 static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
 {
     u8 numModes = 0;
-    static const u8 gText_WelcomeToHOF[] 		        = _("Elite Redux v2.1 - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
+    static const u8 gText_WelcomeToHOF[] 		        = _("Elite Redux v2.1 Stable - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
+    static const u8 gText_WelcomeToHOF_Debug[] 		    = _("Elite Redux v2.1 Debug - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
     static const u8 sText_WinsLossesText[]              = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}");
     static const u8 sText_WinsLossesText_Debug[]        = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}.");
     static const u8 sText_WinsLossesLockedText[]        = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}      {COLOR LIGHT_RED}{SHADOW RED}Locked Mode{COLOR WHITE}{SHADOW DARK_GRAY}");
@@ -1723,8 +1724,11 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
             break;
     }
 	
-	
+    #ifdef DEBUG_BUILD
+	StringExpandPlaceholders(gStringVar4, gText_WelcomeToHOF_Debug);
+    #else
 	StringExpandPlaceholders(gStringVar4, gText_WelcomeToHOF);
+    #endif
 	
 	FillWindowPixelBuffer(0, PIXEL_FILL(0));
     PutWindowTilemap(0);
