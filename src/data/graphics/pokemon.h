@@ -7774,17 +7774,17 @@ const u32 gMonPalette_ToxtricityReduxMega[]           = INCBIN_U32("graphics/pok
 const u32 gMonShinyPalette_ToxtricityReduxMega[]      = INCBIN_U32("graphics/pokemon/toxtricity/redux_mega/shiny.gbapal.lz");
 const u8  gMonIcon_ToxtricityReduxMega[]              = INCBIN_U8("graphics/pokemon/toxtricity/redux_mega/icon.4bpp");
 
-const u32 gMonFrontPic_ToxtricityReduxLowKey[]          = INCBIN_U32("graphics/pokemon/toxtricity/redux_low_key/front.4bpp.lz");
-const u32 gMonBackPic_ToxtricityReduxLowKey[]           = INCBIN_U32("graphics/pokemon/toxtricity/redux_low_key/back.4bpp.lz");
-const u32 gMonPalette_ToxtricityReduxLowKey[]           = INCBIN_U32("graphics/pokemon/toxtricity/redux_low_key/normal.gbapal.lz");
-const u32 gMonShinyPalette_ToxtricityReduxLowKey[]      = INCBIN_U32("graphics/pokemon/toxtricity/redux_low_key/shiny.gbapal.lz");
-const u8  gMonIcon_ToxtricityReduxLowKey[]              = INCBIN_U8("graphics/pokemon/toxtricity/redux_low_key/icon.4bpp");
+const u32 gMonFrontPic_ToxtricityReduxFuzz[]          = INCBIN_U32("graphics/pokemon/toxtricity/redux_fuzz/front.4bpp.lz");
+const u32 gMonBackPic_ToxtricityReduxFuzz[]           = INCBIN_U32("graphics/pokemon/toxtricity/redux_fuzz/back.4bpp.lz");
+const u32 gMonPalette_ToxtricityReduxFuzz[]           = INCBIN_U32("graphics/pokemon/toxtricity/redux_fuzz/normal.gbapal.lz");
+const u32 gMonShinyPalette_ToxtricityReduxFuzz[]      = INCBIN_U32("graphics/pokemon/toxtricity/redux_fuzz/shiny.gbapal.lz");
+const u8  gMonIcon_ToxtricityReduxFuzz[]              = INCBIN_U8("graphics/pokemon/toxtricity/redux_fuzz/icon.4bpp");
 
-const u32 gMonFrontPic_ToxtricityReduxLowKeyMega[]          = INCBIN_U32("graphics/pokemon/toxtricity/redux_low_key_mega/front.4bpp.lz");
-const u32 gMonBackPic_ToxtricityReduxLowKeyMega[]           = INCBIN_U32("graphics/pokemon/toxtricity/redux_low_key_mega/back.4bpp.lz");
-const u32 gMonPalette_ToxtricityReduxLowKeyMega[]           = INCBIN_U32("graphics/pokemon/toxtricity/redux_low_key_mega/normal.gbapal.lz");
-const u32 gMonShinyPalette_ToxtricityReduxLowKeyMega[]      = INCBIN_U32("graphics/pokemon/toxtricity/redux_low_key_mega/shiny.gbapal.lz");
-const u8  gMonIcon_ToxtricityReduxLowKeyMega[]              = INCBIN_U8("graphics/pokemon/toxtricity/redux_low_key_mega/icon.4bpp");
+const u32 gMonFrontPic_ToxtricityReduxFuzzMega[]          = INCBIN_U32("graphics/pokemon/toxtricity/redux_fuzz_mega/front.4bpp.lz");
+const u32 gMonBackPic_ToxtricityReduxFuzzMega[]           = INCBIN_U32("graphics/pokemon/toxtricity/redux_fuzz_mega/back.4bpp.lz");
+const u32 gMonPalette_ToxtricityReduxFuzzMega[]           = INCBIN_U32("graphics/pokemon/toxtricity/redux_fuzz_mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_ToxtricityReduxFuzzMega[]      = INCBIN_U32("graphics/pokemon/toxtricity/redux_fuzz_mega/shiny.gbapal.lz");
+const u8  gMonIcon_ToxtricityReduxFuzzMega[]              = INCBIN_U8("graphics/pokemon/toxtricity/redux_fuzz_mega/icon.4bpp");
 
 const u32 gMonFrontPic_TrapinchRedux[]          = INCBIN_U32("graphics/pokemon/trapinch/redux/front.4bpp.lz");
 const u32 gMonBackPic_TrapinchRedux[]           = INCBIN_U32("graphics/pokemon/trapinch/redux/back.4bpp.lz");

@@ -41773,7 +41773,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_TOXTRICITY_REDUX_LOW_KEY] =
+    [SPECIES_TOXTRICITY_REDUX_FUZZ] =
     {
     .baseHP        =  75,
     .baseAttack    = 75,
@@ -41799,7 +41799,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA] =
+[SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA] =
     {
     .baseHP        =  75,
     .baseAttack    = 75,

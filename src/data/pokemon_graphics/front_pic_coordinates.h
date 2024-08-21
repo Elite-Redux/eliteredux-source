@@ -5707,12 +5707,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x68,
         .y_offset = 1,
     },
-    [SPECIES_TOXTRICITY_REDUX_LOW_KEY] =
+    [SPECIES_TOXTRICITY_REDUX_FUZZ] =
     {
         .size = 0x68,
         .y_offset = 1,
     },
-    [SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA] =
+    [SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA] =
     {
         .size = 0x68,
         .y_offset = 1,
