@@ -106,7 +106,7 @@ static const union AnimCmd sAnim_SALAZARUS_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_GUERSHOOS_1[] =
+static const union AnimCmd sAnim_GOOSCHASE_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -804,9 +804,9 @@ static const union AnimCmd *const sAnims_SALAZARUS[] ={
     sAnim_SALAZARUS_1,
 };
 
-static const union AnimCmd *const sAnims_GUERSHOOS[] ={
+static const union AnimCmd *const sAnims_GOOSCHASE[] ={
     sAnim_GeneralFrame0,
-    sAnim_GUERSHOOS_1,
+    sAnim_GOOSCHASE_1,
 };
 
 static const union AnimCmd *const sAnims_LEPASTRY[] ={
@@ -20811,7 +20811,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(SOPRANICE),
     ANIM_CMD(BEEFENDER),
     ANIM_CMD(SALAZARUS),
-    ANIM_CMD(GUERSHOOS),
+    ANIM_CMD(GOOSCHASE),
     ANIM_CMD(LEPASTRY),
     ANIM_CMD(GYARADEATH),
     ANIM_CMD(GYARADEATH_MEGA_X),

@@ -7534,11 +7534,11 @@ const u32 gMonPalette_Salazarus[]           = INCBIN_U32("graphics/pokemon/salaz
 const u32 gMonShinyPalette_Salazarus[]      = INCBIN_U32("graphics/pokemon/salazarus/shiny.gbapal.lz");
 const u8  gMonIcon_Salazarus[]              = INCBIN_U8("graphics/pokemon/salazarus/icon.4bpp");
 
-const u32 gMonFrontPic_Guershoos[]          = INCBIN_U32("graphics/pokemon/guershoos/front.4bpp.lz");
-const u32 gMonBackPic_Guershoos[]           = INCBIN_U32("graphics/pokemon/guershoos/back.4bpp.lz");
-const u32 gMonPalette_Guershoos[]           = INCBIN_U32("graphics/pokemon/guershoos/normal.gbapal.lz");
-const u32 gMonShinyPalette_Guershoos[]      = INCBIN_U32("graphics/pokemon/guershoos/shiny.gbapal.lz");
-const u8  gMonIcon_Guershoos[]              = INCBIN_U8("graphics/pokemon/guershoos/icon.4bpp");
+const u32 gMonFrontPic_Gooschase[]          = INCBIN_U32("graphics/pokemon/gooschase/front.4bpp.lz");
+const u32 gMonBackPic_Gooschase[]           = INCBIN_U32("graphics/pokemon/gooschase/back.4bpp.lz");
+const u32 gMonPalette_Gooschase[]           = INCBIN_U32("graphics/pokemon/gooschase/normal.gbapal.lz");
+const u32 gMonShinyPalette_Gooschase[]      = INCBIN_U32("graphics/pokemon/gooschase/shiny.gbapal.lz");
+const u8  gMonIcon_Gooschase[]              = INCBIN_U8("graphics/pokemon/gooschase/icon.4bpp");
 
 const u32 gMonFrontPic_Lepastry[]          = INCBIN_U32("graphics/pokemon/lepastry/front.4bpp.lz");
 const u32 gMonBackPic_Lepastry[]           = INCBIN_U32("graphics/pokemon/lepastry/back.4bpp.lz");

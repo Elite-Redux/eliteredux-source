@@ -40848,7 +40848,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_GUERSHOOS] = // name is wip
+[SPECIES_GOOSCHASE] = // name is wip
     {
     .baseHP        = 98,
     .baseAttack    = 120,
