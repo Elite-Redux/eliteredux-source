@@ -11220,6 +11220,41 @@ static void Cmd_various(void)
             return;
         }
         break;
+    case VARIOUS_DO_FOG_STAT_DROPS:
+        {
+            u8* noChangePtr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
+            int bits = 0;
+
+            if (!IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)
+                || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
+                || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC))
+            {
+                gBattlescriptCurrInstr = noChangePtr;
+                return;
+            }
+
+            for (i = STAT_ATK; i < NUM_STATS; i++)
+            {
+                if (gBattleMons[gActiveBattler].statStages[i] > DEFAULT_STAT_STAGE)
+                {
+                    bits |= (1 << i);
+                    // Do stat drops directly to avoid weird ability/item interactions
+                    gBattleMons[gActiveBattler].statStages[i]--;
+                }
+            }
+
+            if (bits)
+            {
+                PlayStatChangeAnimation(gActiveBattler, bits, STAT_CHANGE_NEGATIVE, TRUE);
+                gBattlescriptCurrInstr += 7;
+            }
+            else
+            {
+                gBattlescriptCurrInstr = noChangePtr;
+            }
+
+            return;
+        }
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
