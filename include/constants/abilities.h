@@ -648,7 +648,7 @@
 #define ABILITY_TERRIFY 626 // Lowers foes' Sp. Atk by two stages on entry.
 #define ABILITY_ICE_DOWNFALL 627 // Counters contact with 60BP Icicle Crash.
 #define ABILITY_LAST_STAND 628 // Def and SpDef increase as HP drops. Max 1.6x.
-#define ABILITY_PYROCLASTIC_FLOW 629 // Molten Down + Corrosion.
+#define ABILITY_PYROCLASTIC_FLOW 629 // Combines Molten Down & Corrosion.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_PYROCLASTIC_FLOW + 1)
 

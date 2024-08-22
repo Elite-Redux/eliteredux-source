@@ -14510,12 +14510,10 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
             RecordAbilityBattle(battlerAtk, ABILITY_OVERCHARGE);
     }
 	// Molten Down
-	else if (moveType == TYPE_FIRE && defType == TYPE_ROCK && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MOLTEN_DOWN))
+	else if (moveType == TYPE_FIRE && defType == TYPE_ROCK && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MOLTEN_DOWN) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PYROCLASTIC_FLOW)))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
-        if (recordAbilities)
-            RecordAbilityBattle(battlerAtk, ABILITY_MOLTEN_DOWN);
     }
     // Magma Eater
     else if (moveType == TYPE_FIRE && defType == TYPE_ROCK && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MAGMA_EATER))
@@ -14525,12 +14523,10 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, ABILITY_MAGMA_EATER);
     }
-	else if (moveType == TYPE_POISON && defType == TYPE_STEEL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CORROSION))
+	else if (moveType == TYPE_POISON && defType == TYPE_STEEL && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CORROSION) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PYROCLASTIC_FLOW)))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
-        if (recordAbilities)
-            RecordAbilityBattle(battlerAtk, ABILITY_CORROSION);
     }
 	else if (move == MOVE_POISON_STING && defType == TYPE_STEEL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH))
     {

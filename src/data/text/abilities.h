@@ -598,7 +598,7 @@ static const u8 sAbilityShinyLightningDescription[] = _("Grants a 1.2x accuracy 
 static const u8 sAbilityTerrifyDescription[] = _("Lowers foes' Sp. Atk by two\nstages on entry.");
 static const u8 sAbilityIceDownfallDescription[] = _("Counters contact with\n60BP Icicle Crash.");
 static const u8 sAbilityLastStandDescription[] = _("Def and SpDef increase as\nHP drops. Max 1.6x.");
-static const u8 sAbilityPyroclasticFlowDescription[] = _("Molten Down + Corrosion.");
+static const u8 sAbilityPyroclasticFlowDescription[] = _("Combines Molten Down &\nCorrosion.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
