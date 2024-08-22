@@ -7197,12 +7197,13 @@ static void Cmd_switchineffects(void)
             u16 abilities[NUM_INNATE_PER_SPECIES + 1] = {0};
             u16 species = gBattleMons[i].species;
             u32 personality = gBattleMons[i].personality;
+            int level = gBattleMons[i].level;
             bool8 isPlayer = GetBattlerSide(i) == B_SIDE_PLAYER;
             u8 j = 0;
             if (IsUnsuppressableAbility(gBattleMons[i].ability)) abilities[0] = gBattleMons[i].ability;
             for (j = 0; j < NUM_INNATE_PER_SPECIES; j++)
             {
-                u16 innate = GetInnateInSlot(species, j, personality, isPlayer);
+                u16 innate = GetInnateInSlot(level, species, j, personality, isPlayer);
                 if (IsUnsuppressableAbility(innate)) abilities[j+1] = innate;
             }
             UpdateAbilityStateIndices(i, abilities);

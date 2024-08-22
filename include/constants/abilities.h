@@ -418,7 +418,7 @@
 #define ABILITY_STEEL_BARREL 396 // Immune to recoil damage, but not immune to Explosion/crash dmg.
 #define ABILITY_PYRO_SHELLS 397 // Triggers 50 BP Outburst after using a Mega Launcher move.
 #define ABILITY_FUNGAL_INFECTION 398 // Every attacking move inflicts Leech Seed on the target.
-#define ABILITY_PARRY 399 // Takes 80% from Contact, then counters with Mach Punch.
+#define ABILITY_PARRY 399 // Counters contact with Mach Punch. Takes 20% less damage.
 #define ABILITY_SCRAPYARD 400 // Sets a layer of Spikes when hit (contact move).
 #define ABILITY_LOOSE_QUILLS 401 // Sets a layer of Spikes when hit (contact move).
 #define ABILITY_TOXIC_DEBRIS 402 // Sets a layer of Toxic Spikes when hit by contact moves.

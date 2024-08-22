@@ -3001,10 +3001,10 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex){
     GET_MOVE_TYPE(move, moveType);
 
     //Max and Min Damage
-    minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR);
-    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR);
+    minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR, (u16*) &ignored);
+    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, (u16*) &ignored);
 
-    immune = TestImmunityAbilities(target, battler, move, moveType, &ignored, (u16*) &ignored);
+    immune = TestAbsorbingAbilities(target, battler, move, moveType, &ignored, (u16*) &ignored);
     if (immune) minDamage = maxDamage = 0;
 
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].minDamage = minDamage;
@@ -3037,7 +3037,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex){
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].hits2KO = (targetCurrentHp / sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamage);
 
     for(i = 0; i < MIN_DAMAGE_FACTOR; i++){
-        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i);
+        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i, (u16*) &ignored);
         tempchance = (targetCurrentHp / tempdamage);
 
         if(tempchance == hits2KO){
