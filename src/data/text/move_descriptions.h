@@ -3141,7 +3141,7 @@ static const u8 sMoveTwoLineDescription_MoveJaggedPunch[] = _(
     "Not done yet.");
 
 static const u8 sMoveTwoLineDescription_MoveCutsieSlap[] = _(
-    "Not done yet.");
+    "10% chance to cause infatuation.");
 
 static const u8 sMoveTwoLineDescription_MoveFairySpheres[] = _(
     "Not done yet.");
