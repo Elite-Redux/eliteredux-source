@@ -5532,7 +5532,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
         {
             UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
-            gBattleMons[battler].species == SPECIES_EISCUE;
+            gBattleMons[battler].species = SPECIES_EISCUE;
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
             effect++;
         }
