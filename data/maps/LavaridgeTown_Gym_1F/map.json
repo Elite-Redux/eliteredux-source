@@ -172,20 +172,6 @@
       "elevation": 3,
       "dest_map": "MAP_LAVARIDGE_TOWN",
       "dest_warp_id": 1
-    },
-    {
-      "x": 8,
-      "y": 18,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 4
-    },
-    {
-      "x": 9,
-      "y": 18,
-      "elevation": 3,
-      "dest_map": "MAP_PETALBURG_CITY_GYM",
-      "dest_warp_id": 12
     }
   ],
   "coord_events": [

@@ -94,20 +94,6 @@
       "elevation": 0,
       "dest_map": "MAP_RUSTBORO_CITY",
       "dest_warp_id": 0
-    },
-    {
-      "x": 8,
-      "y": 19,
-      "elevation": 0,
-      "dest_map": "MAP_DEWFORD_TOWN_GYM",
-      "dest_warp_id": 0
-    },
-    {
-      "x": 9,
-      "y": 19,
-      "elevation": 0,
-      "dest_map": "MAP_DEWFORD_TOWN_GYM",
-      "dest_warp_id": 1
     }
   ],
   "coord_events": [
