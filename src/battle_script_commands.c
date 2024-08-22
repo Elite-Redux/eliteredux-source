@@ -10680,7 +10680,7 @@ static void Cmd_various(void)
         {
             gBattleScripting.abilityPopupOverwrite = ABILITY_ICE_FACE;
             UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_EISCUE);
-            gBattleMons[gActiveBattler].species == SPECIES_EISCUE;
+            gBattleMons[gActiveBattler].species = SPECIES_EISCUE;
             BattleScriptPush(gBattlescriptCurrInstr);
             gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
         }
