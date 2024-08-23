@@ -45210,6 +45210,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_STEALTH_ROCK)
         TM(MOVE_STONE_EDGE)
         TM(MOVE_SECRET_POWER)
+        TM(MOVE_U_TURN)
         TMHM_LEARNSET_END
 
     [SPECIES_TINKATUFF] = TMHM_LEARNSET
@@ -45233,6 +45234,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_STEALTH_ROCK)
         TM(MOVE_STONE_EDGE)
         TM(MOVE_SECRET_POWER)
+        TM(MOVE_U_TURN)
         TMHM_LEARNSET_END
 
     [SPECIES_TINKATON] = TMHM_LEARNSET
@@ -45257,6 +45259,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_STEALTH_ROCK)
         TM(MOVE_STONE_EDGE)
         TM(MOVE_SECRET_POWER)
+        TM(MOVE_U_TURN)
         TMHM_LEARNSET_END
 
     [SPECIES_WIGLETT] = TMHM_LEARNSET
@@ -46403,6 +46406,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_TRICK_ROOM)
         TM(MOVE_REFLECT)
         TM(MOVE_PSYSHOCK)
+        TM(MOVE_VENOSHOCK) // vanilla move. can be removed tho
         TMHM_LEARNSET_END
 
     [SPECIES_FEZANDIPITI] = TMHM_LEARNSET
