@@ -10104,9 +10104,6 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
     if(map_tier == 1){
         map_tier_extra = 2;
     }
-    
-
-
 
     rndSeed ^= basespecies;
     rndSeed = ISO_RANDOMIZE1(rndSeed) >> 16;
@@ -10126,9 +10123,10 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
             //Legendary Mons Enabled
 
             do{
-                species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
+                species = RandRangeDeterministic(0, LAST_REDUX_FORM_PUBLIC - 1, &rndSeed);
             }
             while(species == SPECIES_NONE                     ||
+                isSpeciesPlaceholderMon(species)              ||
                 //Sub-Legendary
                 species == SPECIES_ARTICUNO                   ||
                 species == SPECIES_ZAPDOS                     ||
@@ -10228,6 +10226,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_ETERNATUS_ETERNAMAX        || //Unfinished
                 species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Unfinished
                 species == SPECIES_ZARUDE_DADA                || //Unfinished
+
                 #ifdef DISABLE_STUFF_FOR_PUBLIC_RELEASE
                 (species > LAST_VALID_SPECIES_PUBLIC && species < SPECIES_RATTATA_ALOLAN) || 
                 #else
@@ -10240,9 +10239,10 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
         else{
             //Legendary Mons Disabled
             do{
-                species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
+                species = RandRangeDeterministic(0, LAST_REDUX_FORM_PUBLIC - 1, &rndSeed);
             }
             while(species == SPECIES_NONE                     ||
+                isSpeciesPlaceholderMon(species)              ||
                 species == SPECIES_ZACIAN                     || //Legendary
                 species == SPECIES_ZAMAZENTA                  || //Legendary
                 species == SPECIES_ETERNATUS                  || //Legendary
