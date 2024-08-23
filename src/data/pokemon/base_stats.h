@@ -36706,7 +36706,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_TOXIC_CHAIN, ABILITY_GUARD_DOG, ABILITY_ANGER_POINT},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    .tier = 3,
+    .tier = 4,
     },
 
     [SPECIES_MUNKIDORI] =
@@ -36739,7 +36739,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_TOXIC_CHAIN, ABILITY_MONKEY_BUSINESS, ABILITY_PSYCHIC_MIND},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    .tier = 3,
+    .tier = 4,
     },
 
     [SPECIES_FEZANDIPITI] =
@@ -36772,7 +36772,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_TOXIC_CHAIN, ABILITY_PRANKSTER, ABILITY_MAJESTIC_BIRD},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
-    .tier = 3,
+    .tier = 4,
     },
 
     [SPECIES_OGERPON] =
