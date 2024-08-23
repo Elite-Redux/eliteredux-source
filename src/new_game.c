@@ -226,6 +226,11 @@ void NewGameInitData(void)
 	gSaveBlock1Ptr->dexNavChain = 0;
     memset(&gSaveBlock2Ptr->questStatus, 0, sizeof(gSaveBlock2Ptr->questStatus));
     gSaveBlock2Ptr->activeQuest = 0;
+    gSaveBlock2Ptr->encounteredroutes1 = 0;
+    gSaveBlock2Ptr->encounteredroutes2 = 0;
+    gSaveBlock2Ptr->encounteredroutes3 = 0;
+    gSaveBlock2Ptr->encounteredroutes4 = 0;
+    gSaveBlock2Ptr->encounteredroutes5 = 0;
 }
 
 static void ResetMiniGamesRecords(void)
