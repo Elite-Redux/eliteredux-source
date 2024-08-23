@@ -426,8 +426,7 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
 	[SPECIES_FLETCHLING] = {{EVO_LEVEL, 16, SPECIES_FLETCHINDER}},
 	[SPECIES_FLETCHINDER]= {{EVO_LEVEL, 35, SPECIES_TALONFLAME}},
 	[SPECIES_SCATTERBUG] = {{EVO_LEVEL, 9, SPECIES_SPEWPA}},
-	[SPECIES_SPEWPA]	 = {{EVO_LEVEL_MALE, 12, SPECIES_VIVILLON},
-                            {EVO_LEVEL_FEMALE, 12, SPECIES_VIVILLON_ARCHIPELAGO}},
+	[SPECIES_SPEWPA]	 = {{EVO_LEVEL, 12, SPECIES_VIVILLON}},
 	[SPECIES_LITLEO]	 = {{EVO_LEVEL_MALE, 35, SPECIES_PYROAR},
                             {EVO_LEVEL_FEMALE, 35, SPECIES_PYROAR}},
 	[SPECIES_FLABEBE]	 = {{EVO_LEVEL, 19, SPECIES_FLOETTE}},
@@ -747,6 +746,8 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_DURALUDON]       = {{EVO_LEVEL, 55, SPECIES_ARCHALUDON}},
 
     #ifndef DISABLE_TWO_POINT_FIVE_STUFF
+    [SPECIES_POLARTIC] = {{EVO_FORM_SHIFT, 1, SPECIES_POLARTIC},
+                            {EVO_FORM_SHIFT, 1, SPECIES_POLARTIC_BLUEMOON},},
     //Monochamp Stuff
     [SPECIES_CHIEN_PAO]        = {{EVO_MEGA_EVOLUTION,   ITEM_CHIEN_PAOITE,   SPECIES_CHIEN_PAO_MEGA}},
     [SPECIES_DRACOVISH]        = {{EVO_MEGA_EVOLUTION,   ITEM_DRACOVISHITE,   SPECIES_DRACOVISH_MEGA}},
@@ -871,9 +872,6 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_BLUE_STRIPED},
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_WHITESTRIPED},},
 
-    [SPECIES_POLARTIC] = {{EVO_FORM_SHIFT, 1, SPECIES_POLARTIC},
-                            {EVO_FORM_SHIFT, 1, SPECIES_POLARTIC_BLUEMOON},},
-
     [SPECIES_TAUROS_PALDEAN_COMBAT_BREED] = {{EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_COMBAT_BREED}, // this can be removed later if wanted
                             {EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_BLAZE_BREED}, 
                             {EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_AQUA_BREED},},
@@ -891,9 +889,6 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
 
     [SPECIES_MAUSHOLD] = {{EVO_FORM_SHIFT, 1, SPECIES_MAUSHOLD},
                             {EVO_FORM_SHIFT, 1, SPECIES_MAUSHOLD_FOUR},},
-
-    [SPECIES_LUMBERING_SLOTH] = {{EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH},
-                                    {EVO_FORM_SHIFT, 1, SPECIES_LUMBERING_SLOTH_ENGULFED},}, // testing purposes
 
     [SPECIES_FLABEBE] = {{EVO_FORM_SHIFT, 1, SPECIES_FLABEBE},
                                 {EVO_FORM_SHIFT, 1, SPECIES_FLABEBE_BLUE_FLOWER},
@@ -938,16 +933,5 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_HIGH_PLAINS},
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_GARDEN},
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ELEGANT},},
-
-    [SPECIES_VIVILLON_ARCHIPELAGO] = {{EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ARCHIPELAGO},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_JUNGLE},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MARINE},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MODERN},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MEADOW},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MONSOON},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_OCEAN},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_RIVER},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SANDSTORM},
-                                {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SAVANNA},},
                                 
 };
