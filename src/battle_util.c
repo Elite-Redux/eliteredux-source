@@ -16204,7 +16204,7 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     int ability;
     int actualAttacker = gBattlerAttacker;
     int triggeringBattler;
-    int effect;
+    int effect = 0;
     gBattlerAttacker = attacker;
 
     if ((ability = IsSoundproof(battler))
