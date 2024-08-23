@@ -1712,7 +1712,6 @@
 #define SPECIES_PUPITAR_REDUX               REDUX_FORMS_START + 60
 #define SPECIES_TYRANITAR_REDUX             REDUX_FORMS_START + 61
 #define SPECIES_IRON_EXO                    REDUX_FORMS_START + 64
-#define SPECIES_SCIZOR_REDUX                REDUX_FORMS_START + 65 //To Remove
 #define SPECIES_WOOPER_PALDEAN              REDUX_FORMS_START + 66
 #define SPECIES_BASCULIN_WHITESTRIPED       REDUX_FORMS_START + 67
 #define SPECIES_ESCARGINITE_REDUX           REDUX_FORMS_START + 68
@@ -1725,7 +1724,7 @@
 #define SPECIES_RIBOMBEE_REDUX              REDUX_FORMS_START + 74
 #define SPECIES_WEAVILE_REDUX               REDUX_FORMS_START + 75
 #define SPECIES_MAWILE_REDUX_B              REDUX_FORMS_START + 76
-
+#define SPECIES_SCIZOR_REDUX                REDUX_FORMS_START + 77 //to remove
 #define LAST_REDUX_FORM                     SPECIES_MAWILE_REDUX_B
 #define LAST_REDUX_FORM_PUBLIC              SPECIES_ESCARGINITE_REDUX  // For a public release
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400    // To make temporary space for anything we need to add in the future
