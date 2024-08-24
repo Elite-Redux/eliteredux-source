@@ -8403,6 +8403,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 					effect++;
 				}
 		}
+
 		// Loud Bang
 		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_LOUD_BANG)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
@@ -8413,7 +8414,37 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 					gBattleScripting.abilityPopupOverwrite = ABILITY_LOUD_BANG;
 					gLastUsedAbility = ABILITY_LOUD_BANG;
 					gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
-					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+					effect++;
+				}
+		}
+
+		// Loud Bang
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PIERCING_SOLO)){
+			if (ShouldApplyOnHitAffect(gBattlerTarget)
+				 && CanBleed(gBattlerTarget)
+				 && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
+				 && (Random() % 100) < 30)
+				{
+					gBattleScripting.abilityPopupOverwrite = ABILITY_PIERCING_SOLO;
+					gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+					effect++;
+				}
+		}
+
+		// Loud Bang
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DENTING_BLOWS)){
+			if (ShouldApplyOnHitAffect(gBattlerTarget)
+                    && CompareStat(gBattlerTarget, STAT_DEF, MIN_STAT_STAGE, CMP_GREATER_THAN)
+                    && (gBattleMoves[move].hammerBased))
+				{
+					gBattleScripting.abilityPopupOverwrite = ABILITY_DENTING_BLOWS;
+					gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
 					BattleScriptPushCursor();
 					gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
 					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
@@ -9613,7 +9644,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if(CHECK_ABILITY(ABILITY_VOLCANO_RAGE)){
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
-                    (GetTypeBeforeUsingMove(move, battler) == TYPE_FIRE)){
+                    moveType == TYPE_FIRE){
                     return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_VOLCANO_RAGE, MOVE_ERUPTION, 50);
                 }
             }
@@ -9622,7 +9653,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if(CHECK_ABILITY(ABILITY_FROST_BURN)){
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
-                    (GetTypeBeforeUsingMove(move, battler) == TYPE_FIRE)){
+                    moveType == TYPE_FIRE){
                     return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_FROST_BURN, MOVE_ICE_BEAM, 40);
                 }
             }
@@ -9642,7 +9673,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
-                    (GetTypeBeforeUsingMove(move, battler) == TYPE_ELECTRIC)){
+                    moveType == TYPE_ELECTRIC){
                     return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_THUNDERCALL, MOVE_SMITE, 20);
                 }
             }
@@ -9662,8 +9693,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
-                    (GetTypeBeforeUsingMove(move, battler) == TYPE_WATER)){
+                    moveType == TYPE_WATER){
                     return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_HIGH_TIDE, MOVE_SURF, 50);
+                }
+            }
+
+            //High Tide
+            if(CHECK_ABILITY(ABILITY_CHUNKY_BASS_LINE)){
+
+                //Checks if the ability is triggered
+                if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
+                    gBattleMoves[move].flags & FLAG_SOUND){
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_CHUNKY_BASS_LINE, MOVE_EARTHQUAKE, 40);
                 }
             }
             #undef CHECK_ABILITY
@@ -12890,6 +12931,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (gBattleMoves[move].hammerBased) MUL(1.3);
             return;
         
+        case ABILITY_SOUL_CRUSHER:
+            if (gBattleMoves[move].hammerBased) MUL(1.1);
+            return;
+            
         case ABILITY_FIELD_EXPLORER:
             if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.25);
             return;
@@ -13217,6 +13262,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (gVolatileStructs[battlerDef].isFirstTurn == 2) MUL(2.0);
             return;
         
+        case ABILITY_ICE_COLD_HUNTER:
         case ABILITY_WHITEOUT:
             if (moveType == TYPE_ICE && IsBattlerWeatherAffected(battlerAtk, WEATHER_HAIL_ANY)) MUL(1.5);
             return;
@@ -13289,6 +13335,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_ARCANE_FORCE:
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
+            return;
+        
+        case ABILITY_RHYTHMIC:
+            MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battlerAtk]);
             return;
     }
 }
@@ -14070,22 +14120,23 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     {
         defStatToUse = STAT_SPDEF;
     }
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
     {
         defStatToUse = STAT_SPDEF;
     }
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYSTIC_BLADES) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYSTIC_BLADES) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PONY_POWER) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PONY_POWER) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
-
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SOUL_CRUSHER) && gBattleMoves[move].hammerBased)
+    {
+        defStatToUse = STAT_SPDEF;
+    }
+    
     if ((gBattleMons[battlerAtk].ability == ABILITY_ROUNDHOUSE || 
         BattlerHasInnate(battlerAtk, ABILITY_ROUNDHOUSE)) && 
         gBattleMoves[move].flags & FLAG_STRIKER_BOOST) 
@@ -14287,6 +14338,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
                 MulModifier(&finalModifier, UQ_4_12(0.5));
             break;
+        case ABILITY_DUAL_HAMMER:
         case ABILITY_DUAL_WIELD:
         case ABILITY_RAGING_MOTH:
 		    MulModifier(&finalModifier, UQ_4_12(0.75));

@@ -602,6 +602,13 @@ static const u8 sAbilityPyroclasticFlowDescription[] = _("Combines Molten Down &
 static const u8 sAbilityBloodBathDescription[] = _("Immune to bleed. Inflict fear\nwhen inflicting bleed.");
 static const u8 sAbilityBattleAuraDescription[] = _("Sharply increases the critical\nhit rate for all while on the field.");
 static const u8 sAbilityBloodlustDescription[] = _("Immune to bleed. +1 priority\nvs bleeding foes.");
+static const u8 sAbilityPiercingSoloDescription[] = _("Sound moves have a 30%\nchance to cause bleeding.");
+static const u8 sAbilityRhythmicDescription[] = _("Deals 10% more damage for\neach repeated move use.");
+static const u8 sAbilityChunkyBassLineDescription[] = _("Triggers a 40BP Earthquake\nafter using a sound move.");
+static const u8 sAbilityDualHammerDescription[] = _("Super Slammer moves hit twice\nfor 75% damage.");
+static const u8 sAbilityDentingBlowsDescription[] = _("Hammer moves lower Defense.");
+static const u8 sAbilityIceColdHunterDescription[] = _("Combines Hyper Aggressive\nand Whiteout.");
+static const u8 sAbilitySoulCrusherDescription[] = _("Hammer moves become Special\nand get a 1.1x power boost.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1238,6 +1245,13 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BLOOD_BATH] = _("Blood Bath"),
     [ABILITY_BATTLE_AURA] = _("Battle Aura"),
     [ABILITY_BLOODLUST] = _("Bloodlust"),
+    [ABILITY_PIERCING_SOLO] = _("Piercing Solo"),
+    [ABILITY_RHYTHMIC] = _("Rhythmic"),
+    [ABILITY_CHUNKY_BASS_LINE] = _("Chunky Bass Line"),
+    [ABILITY_DUAL_HAMMER] = _("Jackhammer"),
+    [ABILITY_DENTING_BLOWS] = _("Denting Blows"),
+    [ABILITY_ICE_COLD_HUNTER] = _("Ice Cold Hunter"),
+    [ABILITY_SOUL_CRUSHER] = _("Soul Crusher"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1875,4 +1889,11 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_BLOOD_BATH] = sAbilityBloodBathDescription,
     [ABILITY_BATTLE_AURA] = sAbilityBattleAuraDescription,
     [ABILITY_BLOODLUST] = sAbilityBloodlustDescription,
+    [ABILITY_PIERCING_SOLO] = sAbilityPiercingSoloDescription,
+    [ABILITY_RHYTHMIC] = sAbilityRhythmicDescription,
+    [ABILITY_CHUNKY_BASS_LINE] = sAbilityChunkyBassLineDescription,
+    [ABILITY_DUAL_HAMMER] = sAbilityDualHammerDescription,
+    [ABILITY_DENTING_BLOWS] = sAbilityDentingBlowsDescription,
+    [ABILITY_ICE_COLD_HUNTER] = sAbilityIceColdHunterDescription,
+    [ABILITY_SOUL_CRUSHER] = sAbilitySoulCrusherDescription,
 };

@@ -1518,6 +1518,18 @@ static void Cmd_attackcanceler(void)
         PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
         return;
     }
+    // Dual Hammer
+    if (!gTurnStructs[gBattlerAttacker].parentalBondOn
+	&& (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DUAL_HAMMER))
+	&& (gBattleMoves[gCurrentMove].hammerBased)
+    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
+    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
+    {
+		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
+        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_DUAL_HAMMER;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
+        return;
+    }
     //Raging Moth
     if (!gTurnStructs[gBattlerAttacker].parentalBondOn
 	&& (GetBattlerAbility(gBattlerAttacker) == ABILITY_RAGING_MOTH || BattlerHasInnate(gBattlerAttacker, ABILITY_RAGING_MOTH)) // Includes Innate
@@ -1573,7 +1585,7 @@ static void Cmd_attackcanceler(void)
     }
 	// Hyper Aggressive
 	if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-    && (GetBattlerAbility(gBattlerAttacker) == ABILITY_HYPER_AGGRESSIVE || BattlerHasInnate(gBattlerAttacker, ABILITY_HYPER_AGGRESSIVE)) // Includes Innate
+    && (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_HYPER_AGGRESSIVE) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ICE_COLD_HUNTER))
     && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
     && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
     {
@@ -13440,6 +13452,8 @@ static void Cmd_calculatesetdamage(void)
     else if(gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_WIELD)
         gBattleMoveDamage = baseDamage * 3 / 4; // .75
     else if(gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_RAGING_MOTH)
+        gBattleMoveDamage = baseDamage * 3 / 4; // .75
+    else if(gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_HAMMER)
         gBattleMoveDamage = baseDamage * 3 / 4; // .75
 
     //Failsafe
