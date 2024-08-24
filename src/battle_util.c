@@ -13305,6 +13305,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_ARCANE_FORCE:
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
             return;
+        
+        case ABILITY_RHYTHMIC:
+            MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battlerAtk]);
+            return;
     }
 }
 

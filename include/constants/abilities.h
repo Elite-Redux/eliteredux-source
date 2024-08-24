@@ -653,8 +653,9 @@
 #define ABILITY_BATTLE_AURA 631 // Sharply increases the critical hit rate for all while on the field.
 #define ABILITY_BLOODLUST 632 // Immune to bleed. +1 priority vs bleeding foes.
 #define ABILITY_PIERCING_SOLO 633 // Sound moves have a 30% chance to cause bleeding.
+#define ABILITY_RHYTHMIC 634 // Deals 10% more damage for each repeated move use.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_PIERCING_SOLO + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_RHYTHMIC + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
