@@ -1058,6 +1058,8 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_APPLE_ENLIGHTENMENT] = 1,
     [ABILITY_OLD_MARINER] = 1,
     [ABILITY_LAST_STAND] = 1,
+    [ABILITY_BLOOD_BATH] = 1,
+    [ABILITY_BLOODLUST] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -10493,7 +10495,8 @@ bool32 CanBleed(u8 battlerId)
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK)
         || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)
-        || BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOOD_BATH))
+        || BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOOD_BATH)
+        || BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOODLUST))
         return FALSE;
     return TRUE;
 }

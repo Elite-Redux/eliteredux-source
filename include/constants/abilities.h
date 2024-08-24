@@ -651,8 +651,9 @@
 #define ABILITY_PYROCLASTIC_FLOW 629 // Combines Molten Down & Corrosion.
 #define ABILITY_BLOOD_BATH 630 // Immune to bleed. Inflict fear when inflicting bleed.
 #define ABILITY_BATTLE_AURA 631 // Sharply increases the critical hit rate for all while on the field.
+#define ABILITY_BLOODLUST 632 // Immune to bleed. +1 priority vs bleeding foes.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BATTLE_AURA + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_BLOODLUST + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

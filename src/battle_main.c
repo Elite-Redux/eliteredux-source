@@ -4992,6 +4992,9 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
         priority++;
     }
 
+    if (gBattleMons[target].status1 & STATUS1_BLEED && BattlerHasAbility(battlerId, battlerId, ABILITY_BLOODLUST))
+        priority++;
+
     // Sighting System
 	if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SIGHTING_SYSTEM) && gBattleMoves[move].accuracy && gBattleMoves[move].accuracy <= 75)
     { 
