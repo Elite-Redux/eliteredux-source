@@ -731,10 +731,10 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
             if(isSpeciesPlaceholderMon(oldSpecies)){
                 SetMonData(&gPlayerParty[i], MON_DATA_SPECIES, &species);
                 
-                SetBoxMonData(&gPlayerParty[i], MON_DATA_MOVE1, &newMove);
-                SetBoxMonData(&gPlayerParty[i], MON_DATA_MOVE2, &newMove2);
-                SetBoxMonData(&gPlayerParty[i], MON_DATA_MOVE3, &newMove2);
-                SetBoxMonData(&gPlayerParty[i], MON_DATA_MOVE4, &newMove2);
+                SetMonData(&gPlayerParty[i], MON_DATA_MOVE1, &newMove);
+                SetMonData(&gPlayerParty[i], MON_DATA_MOVE2, &newMove2);
+                SetMonData(&gPlayerParty[i], MON_DATA_MOVE3, &newMove2);
+                SetMonData(&gPlayerParty[i], MON_DATA_MOVE4, &newMove2);
             }
         }
 
