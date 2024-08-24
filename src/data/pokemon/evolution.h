@@ -434,7 +434,6 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
 	[SPECIES_FLETCHINDER]= {{EVO_LEVEL, 35, SPECIES_TALONFLAME}},
 	[SPECIES_SCATTERBUG] = {{EVO_LEVEL, 9, SPECIES_SPEWPA}},
 	[SPECIES_SPEWPA]	 = {{EVO_LEVEL, 12, SPECIES_VIVILLON}},
-   // [SPECIES_SPEWPA]     = {{EVO_LEVEL, 12, SPECIES_VIVILLON_ARCHIPELAGO}}, //
 	[SPECIES_LITLEO]	 = {{EVO_LEVEL_MALE, 35, SPECIES_PYROAR},
                             {EVO_LEVEL_FEMALE, 35, SPECIES_PYROAR}},
 	[SPECIES_FLABEBE]	 = {{EVO_LEVEL, 19, SPECIES_FLOETTE}},
@@ -943,18 +942,6 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_POLARTIC] = {{EVO_FORM_SHIFT, 1, SPECIES_POLARTIC},
                             {EVO_FORM_SHIFT, 1, SPECIES_POLARTIC_BLUEMOON},},
 
-  //  [SPECIES_TAUROS_PALDEAN_COMBAT_BREED] = {{EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_COMBAT_BREED},
-  //                          {EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_BLAZE_BREED}, 
-  //                          {EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_AQUA_BREED},},
-
-   // [SPECIES_TAUROS_PALDEAN_AQUA_BREED] = {{EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_AQUA_BREED},
-   //                         {EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_BLAZE_BREED}, 
-   //                         {EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_COMBAT_BREED},},
-
-   // [SPECIES_TAUROS_PALDEAN_BLAZE_BREED] = {{EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_BLAZE_BREED},
-   //                         {EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_AQUA_BREED}, 
-   //                         {EVO_FORM_SHIFT, 1, SPECIES_TAUROS_PALDEAN_COMBAT_BREED},}, 
-
     [SPECIES_DUDUNSPARCE] = {{EVO_FORM_SHIFT, 1, SPECIES_DUDUNSPARCE},
                             {EVO_FORM_SHIFT, 1, SPECIES_DUDUNSPARCE_THREE_SEGMENT},},
 
@@ -1029,16 +1016,5 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_HIGH_PLAINS},
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_GARDEN},
                                 {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ELEGANT},},
-
-    // [SPECIES_VIVILLON_ARCHIPELAGO] = {{EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_ARCHIPELAGO}, //this is a temporary workaround to form slot limits
-    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_JUNGLE},
-    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MARINE},
-    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MODERN},
-    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MEADOW},
-    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_MONSOON},
-    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_OCEAN},
-    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_RIVER},
-    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SANDSTORM},
-    //                             {EVO_FORM_SHIFT, 1, SPECIES_VIVILLON_SAVANNA},},
                                 
 };
