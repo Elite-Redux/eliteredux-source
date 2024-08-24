@@ -5160,27 +5160,27 @@
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_ARBOK"
+                "species": "SPECIES_TAUROS_PALDEAN_COMBAT_BREED"
               },
               {
                 "min_level": 26,
                 "max_level": 26,
-                "species": "SPECIES_KOMALA"
+                "species": "SPECIES_TAUROS_PALDEAN_BLAZE_BREED"
               },
               {
                 "min_level": 27,
                 "max_level": 27,
-                "species": "SPECIES_ARBOK"
+                "species": "SPECIES_TAUROS_PALDEAN_AQUA_BREED"
               },
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_KOMALA"
+                "species": "SPECIES_MILTANK"
               },
               {
                 "min_level": 25,
                 "max_level": 25,
-                "species": "SPECIES_ARBOK"
+                "species": "SPECIES_TAUROS"
               }
             ]
           },
