@@ -655,8 +655,9 @@
 #define ABILITY_PIERCING_SOLO 633 // Sound moves have a 30% chance to cause bleeding.
 #define ABILITY_RHYTHMIC 634 // Deals 10% more damage for each repeated move use.
 #define ABILITY_CHUNKY_BASS_LINE 635 // Triggers a 40BP Earthquake after using a sound move.
+#define ABILITY_DUAL_HAMMER 636 // Super Slammer moves hit twice for 75% damage.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_CHUNKY_BASS_LINE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DUAL_HAMMER + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

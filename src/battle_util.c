@@ -14316,6 +14316,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
                 MulModifier(&finalModifier, UQ_4_12(0.5));
             break;
+        case ABILITY_DUAL_HAMMER:
         case ABILITY_DUAL_WIELD:
         case ABILITY_RAGING_MOTH:
 		    MulModifier(&finalModifier, UQ_4_12(0.75));
