@@ -11150,6 +11150,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_SPECIAL,
         .parentalBondBanned = TRUE,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_HARD_PRESS] =
     {
@@ -11260,6 +11261,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRIKER_BOOST,
         .split = SPLIT_SPECIAL,
         .argument = MOVE_EFFECT_TOXIC,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_LUNAR_BLESSING] =
     {
