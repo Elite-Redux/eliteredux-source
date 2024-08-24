@@ -602,6 +602,7 @@ static const u8 sAbilityPyroclasticFlowDescription[] = _("Combines Molten Down &
 static const u8 sAbilityBloodBathDescription[] = _("Immune to bleed. Inflict fear\nwhen inflicting bleed.");
 static const u8 sAbilityBattleAuraDescription[] = _("Sharply increases the critical\nhit rate for all while on the field.");
 static const u8 sAbilityBloodlustDescription[] = _("Immune to bleed. +1 priority\nvs bleeding foes.");
+static const u8 sAbilityPiercingSoloDescription[] = _("Sound moves have a 30%\nchance to cause bleeding.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1238,6 +1239,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BLOOD_BATH] = _("Blood Bath"),
     [ABILITY_BATTLE_AURA] = _("Battle Aura"),
     [ABILITY_BLOODLUST] = _("Bloodlust"),
+    [ABILITY_PIERCING_SOLO] = _("Piercing Solo"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1875,4 +1877,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_BLOOD_BATH] = sAbilityBloodBathDescription,
     [ABILITY_BATTLE_AURA] = sAbilityBattleAuraDescription,
     [ABILITY_BLOODLUST] = sAbilityBloodlustDescription,
+    [ABILITY_PIERCING_SOLO] = sAbilityPiercingSoloDescription,
 };
