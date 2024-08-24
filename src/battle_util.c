@@ -9628,7 +9628,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if(CHECK_ABILITY(ABILITY_VOLCANO_RAGE)){
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
-                    (GetTypeBeforeUsingMove(move, battler) == TYPE_FIRE)){
+                    moveType == TYPE_FIRE){
                     return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_VOLCANO_RAGE, MOVE_ERUPTION, 50);
                 }
             }
@@ -9637,7 +9637,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if(CHECK_ABILITY(ABILITY_FROST_BURN)){
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
-                    (GetTypeBeforeUsingMove(move, battler) == TYPE_FIRE)){
+                    moveType == TYPE_FIRE){
                     return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_FROST_BURN, MOVE_ICE_BEAM, 40);
                 }
             }
@@ -9657,7 +9657,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
-                    (GetTypeBeforeUsingMove(move, battler) == TYPE_ELECTRIC)){
+                    moveType == TYPE_ELECTRIC){
                     return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_THUNDERCALL, MOVE_SMITE, 20);
                 }
             }
@@ -9677,8 +9677,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
-                    (GetTypeBeforeUsingMove(move, battler) == TYPE_WATER)){
+                    moveType == TYPE_WATER){
                     return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_HIGH_TIDE, MOVE_SURF, 50);
+                }
+            }
+
+            //High Tide
+            if(CHECK_ABILITY(ABILITY_CHUNKY_BASS_LINE)){
+
+                //Checks if the ability is triggered
+                if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
+                    gBattleMoves[move].flags & FLAG_SOUND){
+                    return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_CHUNKY_BASS_LINE, MOVE_EARTHQUAKE, 40);
                 }
             }
             #undef CHECK_ABILITY
