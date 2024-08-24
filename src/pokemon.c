@@ -10795,7 +10795,7 @@ bool8 isSpeciesPlaceholderMon(u16 species){
     if(species == SPECIES_NONE)
         return FALSE;
 
-    if(gBaseStats[partyspecies].baseSpeed == 0)
+    if(gBaseStats[species].baseSpeed == 0)
         return TRUE;
 
     //Normal Species
