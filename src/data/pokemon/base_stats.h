@@ -42382,12 +42382,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_SNORUNT_REDUX] =
     {
-    .baseHP        = 60,
-    .baseAttack    = 60,
-    .baseDefense   = 60,
-    .baseSpeed     = 60,
-    .baseSpAttack  = 60,
-    .baseSpDefense = 60,
+    .baseHP         = 60,
+    .baseAttack     = 60,
+    .baseDefense    = 50,
+    .baseSpeed      = 70,
+    .baseSpAttack   = 60,
+    .baseSpDefense  = 60,
     .type1 = TYPE_DARK,
     .type2 = TYPE_DARK,
     .catchRate = 190,
