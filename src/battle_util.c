@@ -12931,6 +12931,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (gBattleMoves[move].hammerBased) MUL(1.3);
             return;
         
+        case ABILITY_SOUL_CRUSHER:
+            if (gBattleMoves[move].hammerBased) MUL(1.1);
+            return;
+            
         case ABILITY_FIELD_EXPLORER:
             if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.25);
             return;
@@ -14116,22 +14120,23 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     {
         defStatToUse = STAT_SPDEF;
     }
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
     {
         defStatToUse = STAT_SPDEF;
     }
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYSTIC_BLADES) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYSTIC_BLADES) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PONY_POWER) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PONY_POWER) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
-
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SOUL_CRUSHER) && gBattleMoves[move].hammerBased)
+    {
+        defStatToUse = STAT_SPDEF;
+    }
+    
     if ((gBattleMons[battlerAtk].ability == ABILITY_ROUNDHOUSE || 
         BattlerHasInnate(battlerAtk, ABILITY_ROUNDHOUSE)) && 
         gBattleMoves[move].flags & FLAG_STRIKER_BOOST) 

@@ -658,8 +658,9 @@
 #define ABILITY_DUAL_HAMMER 636 // Super Slammer moves hit twice for 75% damage.
 #define ABILITY_DENTING_BLOWS 637 // Hammer moves lower Defense.
 #define ABILITY_ICE_COLD_HUNTER 638 // Combines Hyper Aggressive and Whiteout.
+#define ABILITY_SOUL_CRUSHER 639 // Hammer moves become Special and get a 1.1x power boost.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ICE_COLD_HUNTER + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SOUL_CRUSHER + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
