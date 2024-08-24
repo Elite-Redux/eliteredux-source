@@ -7582,6 +7582,12 @@ const u32 gMonPalette_Dredwood[]           = INCBIN_U32("graphics/pokemon/dredwo
 const u32 gMonShinyPalette_Dredwood[]      = INCBIN_U32("graphics/pokemon/dredwood/shiny.gbapal.lz");
 const u8  gMonIcon_Dredwood[]              = INCBIN_U8("graphics/pokemon/dredwood/icon.4bpp");
 
+const u32 gMonFrontPic_Phanfernal[]          = INCBIN_U32("graphics/pokemon/phanfernal/front.4bpp.lz");
+const u32 gMonBackPic_Phanfernal[]           = INCBIN_U32("graphics/pokemon/phanfernal/back.4bpp.lz");
+const u32 gMonPalette_Phanfernal[]           = INCBIN_U32("graphics/pokemon/phanfernal/normal.gbapal.lz");
+const u32 gMonShinyPalette_Phanfernal[]      = INCBIN_U32("graphics/pokemon/phanfernal/shiny.gbapal.lz");
+const u8  gMonIcon_Phanfernal[]              = INCBIN_U8("graphics/pokemon/phanfernal/icon.4bpp");
+
 const u32 gMonFrontPic_GimmighoulRoaming[]          = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/front.4bpp.lz");
 const u32 gMonBackPic_GimmighoulRoaming[]           = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/back.4bpp.lz");
 const u32 gMonPalette_GimmighoulRoaming[]           = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/normal.gbapal.lz");

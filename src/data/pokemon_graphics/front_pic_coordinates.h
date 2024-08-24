@@ -5567,6 +5567,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x77,
         .y_offset = 5,
     },
+    [SPECIES_PHANFERNAL] =
+    {
+        .size = 0,
+        .y_offset = 4,
+    },
     [SPECIES_AMPHYBUZZ] =
     {
         .size = 0x77,

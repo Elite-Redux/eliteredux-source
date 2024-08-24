@@ -465,6 +465,7 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
 	[SPECIES_PHANTUMP]	 = {{EVO_LEVEL, 20, SPECIES_TREVENANT}}, // was 0
     // [SPECIES_TREVENANT]	 = {{EVO_LEVEL, 55, SPECIES_DREDWOOD}}, // finished but not enabling until told to
 	[SPECIES_PUMPKABOO]	 = {{EVO_LEVEL, 20, SPECIES_GOURGEIST}},
+   // [SPECIES_GOURGEIST]	 = {{EVO_LEVEL, 55, SPECIES_PHANFERNAL}}, //not enabling until told to
 	[SPECIES_BERGMITE]	 = {{EVO_LEVEL, 23, SPECIES_AVALUGG},
                             {EVO_LEVEL, 23, SPECIES_AVALUGG_HISUIAN}},
 	[SPECIES_NOIBAT]	 = {{EVO_LEVEL, 24, SPECIES_NOIVERN}}, // was 0

@@ -151,6 +151,11 @@ static const union AnimCmd sAnim_KAIOSEA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_PHANFERNAL_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_AMPHYBUZZ_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -847,6 +852,11 @@ static const union AnimCmd *const sAnims_DREDWOOD[] ={
 static const union AnimCmd *const sAnims_KAIOSEA[] ={
     sAnim_GeneralFrame0,
     sAnim_KAIOSEA_1,
+};
+
+static const union AnimCmd *const sAnims_PHANFERNAL[] ={
+    sAnim_GeneralFrame0,
+    sAnim_PHANFERNAL_1,
 };
 
 static const union AnimCmd *const sAnims_CORM[] ={
@@ -20820,6 +20830,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(BRONTONANA),
     ANIM_CMD(DREDWOOD),
     ANIM_CMD(KAIOSEA),
+    ANIM_CMD(PHANFERNAL),
     ANIM_CMD(AMPHYBUZZ),
     ANIM_CMD(AMPHYBUZZ_MEGA),
     ANIM_CMD(CORM),

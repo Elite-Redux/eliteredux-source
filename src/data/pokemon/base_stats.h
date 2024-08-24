@@ -41058,6 +41058,32 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+[SPECIES_PHANFERNAL] =
+    {
+    .baseHP        = 95,
+    .baseAttack    = 78,
+    .baseDefense   = 142,
+    .baseSpeed     = 65,
+    .baseSpAttack  = 135,
+    .baseSpDefense = 85,
+    .type1 = TYPE_GHOST,
+    .type2 = TYPE_GRASS,
+    .catchRate = 255,
+    .expYield = 166,
+    .evYield_Attack    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_FAST,
+    .eggGroup1 = EGG_GROUP_GRASS,
+    .eggGroup2 = EGG_GROUP_AMORPHOUS,
+    .abilities = {ABILITY_SPEED_BOOST, ABILITY_FLASH_FIRE, ABILITY_SOUL_EATER},
+    .innates = {ABILITY_TURBOBLAZE, ABILITY_SCARE, ABILITY_MONSTER_MASH},
+    .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
 [SPECIES_AMPHYBUZZ] =
     {
     .baseHP        = 110,
@@ -41502,7 +41528,7 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_MEDIUM_SLOW,
     .eggGroup1 = EGG_GROUP_WATER_1,
     .eggGroup2 = EGG_GROUP_FIELD,
-    .abilities      = {ABILITY_PYROMANCY, ABILITY_WHITEOUT, ABILITY_FLAMING_SOUL},
+    .abilities      = {ABILITY_PYROMANCY, ABILITY_WHITEOUT, ABILITY_SOLAR_POWER},
     .innates        = {ABILITY_ANTARCTIC_BIRD, ABILITY_FLASH_FIRE, ABILITY_OVERCOAT},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
@@ -42382,8 +42408,8 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_SNORUNT_REDUX] =
     {
-    .baseHP         = 60,
-    .baseAttack     = 60,
+    .baseHP         = 65,
+    .baseAttack     = 65,
     .baseDefense    = 50,
     .baseSpeed      = 70,
     .baseSpAttack   = 60,

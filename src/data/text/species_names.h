@@ -1381,6 +1381,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_BRONTONANA]      = _("Brontonana"),
     [SPECIES_DREDWOOD]      = _("Dredwood"),
     [SPECIES_KAIOSEA]      = _("Kaiosea"),
+    [SPECIES_PHANFERNAL]      = _("Phanfernal"),
     [SPECIES_ARBOK_MEGA]      = _("Arbok"),
     [SPECIES_GOLISOPOD_MEGA]      = _("Golisopod"),
     [SPECIES_RAPIDASH_MEGA]      = _("Rapidash"),
