@@ -41931,12 +41931,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_CRABRAWLER_REDUX] =
     {
-    .baseHP        = 47,
-    .baseAttack    = 82,
-    .baseDefense   = 57,
-    .baseSpeed     = 63,
-    .baseSpAttack  = 42,
-    .baseSpDefense = 47,
+    .baseHP        = 62,
+    .baseAttack    = 72,
+    .baseDefense   = 77,
+    .baseSpeed     = 53,
+    .baseSpAttack  = 32,
+    .baseSpDefense = 57,
     .type1 = TYPE_FIGHTING,
     .type2 = TYPE_DARK,
     .catchRate = 225,
