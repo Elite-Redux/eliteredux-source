@@ -607,6 +607,7 @@ static const u8 sAbilityRhythmicDescription[] = _("Deals 10% more damage for\nea
 static const u8 sAbilityChunkyBassLineDescription[] = _("Triggers a 40BP Earthquake\nafter using a sound move.");
 static const u8 sAbilityDualHammerDescription[] = _("Super Slammer moves hit twice\nfor 75% damage.");
 static const u8 sAbilityDentingBlowsDescription[] = _("Hammer moves lower Defense.");
+static const u8 sAbilityIceColdHunterDescription[] = _("Combines Hyper Aggressive\nand Whiteout.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1248,6 +1249,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_CHUNKY_BASS_LINE] = _("Chunky Bass Line"),
     [ABILITY_DUAL_HAMMER] = _("Jackhammer"),
     [ABILITY_DENTING_BLOWS] = _("Denting Blows"),
+    [ABILITY_ICE_COLD_HUNTER] = _("Ice Cold Hunter"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1890,4 +1892,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_CHUNKY_BASS_LINE] = sAbilityChunkyBassLineDescription,
     [ABILITY_DUAL_HAMMER] = sAbilityDualHammerDescription,
     [ABILITY_DENTING_BLOWS] = sAbilityDentingBlowsDescription,
+    [ABILITY_ICE_COLD_HUNTER] = sAbilityIceColdHunterDescription,
 };

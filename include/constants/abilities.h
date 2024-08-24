@@ -657,8 +657,9 @@
 #define ABILITY_CHUNKY_BASS_LINE 635 // Triggers a 40BP Earthquake after using a sound move.
 #define ABILITY_DUAL_HAMMER 636 // Super Slammer moves hit twice for 75% damage.
 #define ABILITY_DENTING_BLOWS 637 // Hammer moves lower Defense.
+#define ABILITY_ICE_COLD_HUNTER 638 // Combines Hyper Aggressive and Whiteout.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DENTING_BLOWS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_ICE_COLD_HUNTER + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

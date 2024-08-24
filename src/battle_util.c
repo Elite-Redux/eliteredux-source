@@ -13258,6 +13258,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (gVolatileStructs[battlerDef].isFirstTurn == 2) MUL(2.0);
             return;
         
+        case ABILITY_ICE_COLD_HUNTER:
         case ABILITY_WHITEOUT:
             if (moveType == TYPE_ICE && IsBattlerWeatherAffected(battlerAtk, WEATHER_HAIL_ANY)) MUL(1.5);
             return;
