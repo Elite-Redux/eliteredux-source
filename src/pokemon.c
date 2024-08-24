@@ -10795,6 +10795,9 @@ bool8 isSpeciesPlaceholderMon(u16 species){
     if(species == SPECIES_NONE)
         return FALSE;
 
+    if(gBaseStats[partyspecies].baseSpeed == 0)
+        return TRUE;
+
     //Normal Species
     #if DISABLE_STUFF_FOR_PUBLIC_RELEASE == TRUE
     else if(species <= LAST_VALID_SPECIES_PUBLIC)
