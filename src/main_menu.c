@@ -25,6 +25,7 @@
 #include "pokeball.h"
 #include "pokedex.h"
 #include "pokemon.h"
+#include "pokemon_storage_system.h"
 #include "random.h"
 #include "rtc.h"
 #include "save.h"
@@ -709,6 +710,38 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
 	u16 timesUpdated = 0 + VarGet(VAR_UPDATED_TIMES);
 	FlagClear(FLAG_TAG_BATTLE);
     VarSet(VAR_TRAINER_PRIZE_BP, 0);
+
+    if(VarGet(VAR_SAVE_VERSION) <= 1041){
+        u8 i, j;
+        u16 species = SPECIES_MAGIKARP;
+        u16 oldSpecies = SPECIES_NONE;
+
+        gSaveBlock2Ptr->encounteredroutes1 = 0;
+        gSaveBlock2Ptr->encounteredroutes2 = 0;
+        gSaveBlock2Ptr->encounteredroutes3 = 0;
+        gSaveBlock2Ptr->encounteredroutes4 = 0;
+        gSaveBlock2Ptr->encounteredroutes5 = 0;
+
+        // Party Mons
+        for(i = 0; i < gPlayerPartyCount; i++)
+        {
+            oldSpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
+            if(isSpeciesPlaceholderMon(oldSpecies))
+                SetMonData(&gPlayerParty[i], MON_DATA_SPECIES, &species);
+        }
+
+        // Box Mons
+        for(i = 0; i < TOTAL_BOXES_COUNT; i++)
+        {
+            for(j = 0; j < IN_BOX_COUNT; j++)
+            {
+                oldSpecies = GetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_SPECIES);
+                if(isSpeciesPlaceholderMon(oldSpecies)){
+                    SetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_SPECIES, &species);
+                }
+            }
+        }
+    }
 
     if (!gPaletteFade.active)
     {
