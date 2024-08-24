@@ -9914,6 +9914,25 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             }
 
+            {
+            int flag;
+            if ((flag = GetAbilityState(battler, ABILITY_BLOOD_BATH))) {
+                for (i = 0; i < gBattlersCount; i++)
+                {
+                    if (!(flag & (1 << i))) continue;
+                    if (IsBattlerAlive(i)
+                        && !gVolatileStructs[i].fear) {
+                            gBattleScripting.abilityPopupOverwrite = ABILITY_BLOOD_BATH;
+                            gStackBattler1 = battler;
+                            gStackBattler2 = i;
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_AbilitySetFear;
+                        
+                    }
+                }
+            }
+            }
+
             if (gVolatileStructs[battler].parasiticSpores
                 && ShouldApplyOnHitAffect(opponent)
                 && IsMoveMakingContact(move, gBattlerAttacker)
@@ -10473,7 +10492,8 @@ bool32 CanBleed(u8 battlerId)
     if (!CanGetStatus(battlerId)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ROCK)
-        || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST))
+        || IS_BATTLER_OF_TYPE(battlerId, TYPE_GHOST)
+        || BATTLER_HAS_ABILITY(battlerId, ABILITY_BLOOD_BATH))
         return FALSE;
     return TRUE;
 }

@@ -649,8 +649,9 @@
 #define ABILITY_ICE_DOWNFALL 627 // Counters contact with 60BP Icicle Crash.
 #define ABILITY_LAST_STAND 628 // Def and SpDef increase as HP drops. Max 1.6x.
 #define ABILITY_PYROCLASTIC_FLOW 629 // Combines Molten Down & Corrosion.
+#define ABILITY_BLOOD_BATH 630 // Immune to bleed. Inflict fear when inflicting bleed.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_PYROCLASTIC_FLOW + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_BLOOD_BATH + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

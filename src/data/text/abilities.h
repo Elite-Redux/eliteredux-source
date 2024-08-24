@@ -599,6 +599,7 @@ static const u8 sAbilityTerrifyDescription[] = _("Lowers foes' Sp. Atk by two\ns
 static const u8 sAbilityIceDownfallDescription[] = _("Counters contact with\n60BP Icicle Crash.");
 static const u8 sAbilityLastStandDescription[] = _("Def and SpDef increase as\nHP drops. Max 1.6x.");
 static const u8 sAbilityPyroclasticFlowDescription[] = _("Combines Molten Down &\nCorrosion.");
+static const u8 sAbilityBloodBathDescription[] = _("Immune to bleed. Inflict fear\nwhen inflicting bleed.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1232,6 +1233,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ICE_DOWNFALL] = _("Ice Downfall"),
     [ABILITY_LAST_STAND] = _("Last Stand"),
     [ABILITY_PYROCLASTIC_FLOW] = _("Pyroclastic Flow"),
+    [ABILITY_BLOOD_BATH] = _("Blood Bath"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1866,4 +1868,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_ICE_DOWNFALL] = sAbilityIceDownfallDescription,
     [ABILITY_LAST_STAND] = sAbilityLastStandDescription,
     [ABILITY_PYROCLASTIC_FLOW] = sAbilityPyroclasticFlowDescription,
+    [ABILITY_BLOOD_BATH] = sAbilityBloodBathDescription,
 };

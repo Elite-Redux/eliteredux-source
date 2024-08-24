@@ -10651,6 +10651,7 @@ static void Cmd_various(void)
     case VARIOUS_SET_FEAR:
         gStatuses4[gActiveBattler] |= STATUS4_FEAR;
         gVolatileStructs[gActiveBattler].fear = gVolatileStructs[gActiveBattler].started.fear = TRUE;
+        SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_BLOOD_BATH);
         break;
     case VARIOUS_HANDLE_WEATHER_CHANGE:
         gBattlescriptCurrInstr += 3;
