@@ -606,6 +606,7 @@ static const u8 sAbilityPiercingSoloDescription[] = _("Sound moves have a 30%\nc
 static const u8 sAbilityRhythmicDescription[] = _("Deals 10% more damage for\neach repeated move use.");
 static const u8 sAbilityChunkyBassLineDescription[] = _("Triggers a 40BP Earthquake\nafter using a sound move.");
 static const u8 sAbilityDualHammerDescription[] = _("Super Slammer moves hit twice\nfor 75% damage.");
+static const u8 sAbilityDentingBlowsDescription[] = _("Hammer moves lower Defense.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1246,6 +1247,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_RHYTHMIC] = _("Rhythmic"),
     [ABILITY_CHUNKY_BASS_LINE] = _("Chunky Bass Line"),
     [ABILITY_DUAL_HAMMER] = _("Jackhammer"),
+    [ABILITY_DENTING_BLOWS] = _("Denting Blows"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1887,4 +1889,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_RHYTHMIC] = sAbilityRhythmicDescription,
     [ABILITY_CHUNKY_BASS_LINE] = sAbilityChunkyBassLineDescription,
     [ABILITY_DUAL_HAMMER] = sAbilityDualHammerDescription,
+    [ABILITY_DENTING_BLOWS] = sAbilityDentingBlowsDescription,
 };

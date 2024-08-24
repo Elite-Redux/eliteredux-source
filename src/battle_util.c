@@ -8429,6 +8429,22 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				 && (Random() % 100) < 30)
 				{
 					gBattleScripting.abilityPopupOverwrite = ABILITY_PIERCING_SOLO;
+					gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
+					BattleScriptPushCursor();
+					gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+					effect++;
+				}
+		}
+
+		// Loud Bang
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DENTING_BLOWS)){
+			if (ShouldApplyOnHitAffect(gBattlerTarget)
+                    && CompareStat(gBattlerTarget, STAT_DEF, MIN_STAT_STAGE, CMP_GREATER_THAN)
+                    && (gBattleMoves[move].hammerBased))
+				{
+					gBattleScripting.abilityPopupOverwrite = ABILITY_DENTING_BLOWS;
+					gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
 					BattleScriptPushCursor();
 					gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
 					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
