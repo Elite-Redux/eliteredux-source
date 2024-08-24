@@ -5239,7 +5239,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_GREAT_TUSK] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  9
     },
     [SPECIES_SCREAM_TAIL] =
     {
