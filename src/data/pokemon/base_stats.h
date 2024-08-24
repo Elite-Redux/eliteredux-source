@@ -37403,7 +37403,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-    [SPECIES_TAUROS_PALDEAN_BLAZE_BREED] =
+    [SPECIES_TAUROS_PALDEAN_AQUA_BREED] =
     {
         .baseHP        = 95,
         .baseAttack    = 130,
@@ -37412,7 +37412,7 @@ const struct BaseStats gBaseStats[] =
         .baseSpAttack  = 30,
         .baseSpDefense = 70,
         .type1 = TYPE_FIGHTING,
-        .type2 = TYPE_FIRE,
+        .type2 = TYPE_WATER,
         .catchRate = 255,
         .expYield = 600,
         .evYield_HP        = 0,
