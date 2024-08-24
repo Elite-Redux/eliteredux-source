@@ -13520,8 +13520,8 @@ const struct BaseStats gBaseStats[] =
     {
     .baseHP         = 80,
     .baseAttack     = 89,
-    .baseDefense    = 95,
-    .baseSpeed      = 36,
+    .baseDefense    = 90,
+    .baseSpeed      = 41,
     .baseSpAttack   = 55,
     .baseSpDefense  = 65,
     .type1 = TYPE_GRASS,
