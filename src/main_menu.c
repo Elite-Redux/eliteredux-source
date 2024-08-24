@@ -714,6 +714,8 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
     if(VarGet(VAR_SAVE_VERSION) <= 1041){
         u8 i, j;
         u16 species = SPECIES_MAGIKARP;
+        u16 newMove = MOVE_SPLASH;
+        u16 newMove2 = MOVE_NONE;
         u16 oldSpecies = SPECIES_NONE;
 
         gSaveBlock2Ptr->encounteredroutes1 = 0;
@@ -726,8 +728,14 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
         for(i = 0; i < gPlayerPartyCount; i++)
         {
             oldSpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
-            if(isSpeciesPlaceholderMon(oldSpecies))
+            if(isSpeciesPlaceholderMon(oldSpecies)){
                 SetMonData(&gPlayerParty[i], MON_DATA_SPECIES, &species);
+                
+                SetBoxMonData(&gPlayerParty[i], MON_DATA_MOVE1, &newMove);
+                SetBoxMonData(&gPlayerParty[i], MON_DATA_MOVE2, &newMove2);
+                SetBoxMonData(&gPlayerParty[i], MON_DATA_MOVE3, &newMove2);
+                SetBoxMonData(&gPlayerParty[i], MON_DATA_MOVE4, &newMove2);
+            }
         }
 
         // Box Mons
@@ -738,6 +746,11 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                 oldSpecies = GetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_SPECIES);
                 if(isSpeciesPlaceholderMon(oldSpecies)){
                     SetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_SPECIES, &species);
+
+                    SetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_MOVE1, &newMove);
+                    SetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_MOVE2, &newMove2);
+                    SetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_MOVE3, &newMove2);
+                    SetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_MOVE4, &newMove2);
                 }
             }
         }
