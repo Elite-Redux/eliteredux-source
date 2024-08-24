@@ -37873,9 +37873,9 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_SAMUROTT_HISUIAN] =
     {
     .baseHP        =  90,
-    .baseAttack    =  108,
+    .baseAttack    =  110,
     .baseDefense   =  80,
-    .baseSpeed     =  85,
+    .baseSpeed     =  90,
     .baseSpAttack  =  100,
     .baseSpDefense =  65,
     .type1 = TYPE_WATER,
