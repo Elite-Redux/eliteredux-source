@@ -5924,7 +5924,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_VENUSAUR_MEGA] =
     {
         .size = 0,
-        .y_offset = 10,
+        .y_offset = 8,
     },
     [SPECIES_CHARIZARD_MEGA_X] =
     {
