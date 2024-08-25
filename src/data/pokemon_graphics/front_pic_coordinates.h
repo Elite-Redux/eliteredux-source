@@ -5577,7 +5577,7 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x77,
         .y_offset = 2,
     },
-    [SPECIES_AMPHYBUZZ] =
+    [SPECIES_AMPHYBUZZ_MEGA] =
     {
         .size = 0,
         .y_offset = 2,
