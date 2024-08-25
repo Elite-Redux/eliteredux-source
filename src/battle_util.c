@@ -16790,7 +16790,7 @@ int TestImmunityAbilities(int battler, int battlerAtk, int move, int moveType, i
         if (moveType == TYPE_ELECTRIC){
             *ability = ABILITY_LIGHTNING_ROD;
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 1;
+            return 2;
         }
     }
 
@@ -16799,7 +16799,7 @@ int TestImmunityAbilities(int battler, int battlerAtk, int move, int moveType, i
         if (moveType == TYPE_WATER){
             *ability = ABILITY_STORM_DRAIN;
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 1;
+            return 2;
         }
     }
     
