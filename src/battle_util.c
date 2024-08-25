@@ -13830,7 +13830,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             // Flower Gift
             {
             int flowerGiftUser;
-            if (flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)
+            if ((flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT))
                 && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
                     statBase = statBase * 3 / 2;
             }
@@ -13894,7 +13894,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             // Flower Gift
             {
             int flowerGiftUser;
-            if (flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)
+            if ((flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT))
                 && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
                     statBase = statBase * 3 / 2;
             }

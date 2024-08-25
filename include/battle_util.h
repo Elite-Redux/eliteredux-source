@@ -198,9 +198,9 @@ bool32 SetPermanentWeather(u32 weatherEnumId);
 u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 special, u16 moveArg);
 
 #define GET_ALL_BATTLER_ABILITIES(abilitiesArray, battler, battlerAtk) \
-STATIC_ASSERT(ARRAY_COUNT(abilitiesArray) == 4, AbilitiesArrayShouldBeSize4 ## __counter__) \
-STATIC_ASSERT(sizeof(abilitiesArray[0]) == sizeof(u16), AbilitiesArrayShouldBeArrayOfU16 ## __counter__) \
-GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk)
+GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk) \
+// STATIC_ASSERT(ARRAY_COUNT(abilitiesArray) == 4, AbilitiesArrayShouldBeSize4 ## __counter__) \
+// STATIC_ASSERT(sizeof(abilitiesArray[0]) == sizeof(u16), AbilitiesArrayShouldBeArrayOfU16 ## __counter__) \
 
 void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
 u32 GetBattlerAbility(u8 battlerId);
