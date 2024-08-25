@@ -6725,6 +6725,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gFieldTimers.started.quash = TRUE;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_REJECTION;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
             }
         }
         //abilityEffect End
@@ -10138,8 +10139,8 @@ void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk)
 {
     int i;
     int level, species, personality, isPlayer;
-    memset(abilities, ABILITY_NONE, sizeof(*abilities) * 4);
     int ability;
+    memset(abilities, ABILITY_NONE, sizeof(*abilities) * 4);
 
     if (!DoesBattlerHaveAbilityShield(battler) && BattlerAbilityIsSuppressed(battler, battlerAtk)) return;
 
@@ -13829,7 +13830,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             // Flower Gift
             {
             int flowerGiftUser;
-            if (flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)
+            if ((flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT))
                 && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
                     statBase = statBase * 3 / 2;
             }
@@ -13893,7 +13894,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             // Flower Gift
             {
             int flowerGiftUser;
-            if (flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)
+            if ((flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT))
                 && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
                     statBase = statBase * 3 / 2;
             }
@@ -16238,7 +16239,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
         if (moveType == TYPE_ELECTRIC){
             *ability = ABILITY_LIGHTNING_ROD;
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 1;
+            return 2;
         }
     }
 
@@ -16247,7 +16248,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
         if (moveType == TYPE_WATER){
             *ability = ABILITY_STORM_DRAIN;
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 1;
+            return 2;
         }
     }
     

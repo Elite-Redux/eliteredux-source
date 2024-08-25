@@ -1308,7 +1308,7 @@ void PrintBattleWindow_MoveSelection(void)
     bool8 isDoubleTypedMove = FALSE;
     struct TextPrinterTemplate printerTemplate;
     u16 typeEffectivenessMultiplier;
-    int ignored;
+    int ignored, immune;
 
     switch(battleTheme){
         case THEME_DARK:
@@ -1524,7 +1524,7 @@ void PrintBattleWindow_MoveSelection(void)
     SetTypeBeforeUsingMove(move, gActiveBattler);
     GET_MOVE_TYPE(move, moveType);
     maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
-    int immune = TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16*) &ignored);
+    immune = TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16*) &ignored);
     if (!immune) immune = TestImmunityAbilities(target, gActiveBattler, move, moveType, (const u8**)&ignored, (u8*)&ignored, (u16*)&ignored);
     x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION; //Default
 
