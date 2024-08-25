@@ -609,6 +609,7 @@ static const u8 sAbilityDualHammerDescription[] = _("Super Slammer moves hit twi
 static const u8 sAbilityDentingBlowsDescription[] = _("Hammer moves lower Defense.");
 static const u8 sAbilityIceColdHunterDescription[] = _("Combines Hyper Aggressive\nand Whiteout.");
 static const u8 sAbilitySoulCrusherDescription[] = _("Hammer moves become Special\nand get a 1.1x power boost.");
+static const u8 sAbilityArcFlashDescription[] = _("50% chance to burn when hit or\nparalyze when dealing damage.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1252,6 +1253,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DENTING_BLOWS] = _("Denting Blows"),
     [ABILITY_ICE_COLD_HUNTER] = _("Ice Cold Hunter"),
     [ABILITY_SOUL_CRUSHER] = _("Soul Crusher"),
+    [ABILITY_ARC_FLASH] = _("Arc Flash"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1896,4 +1898,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DENTING_BLOWS] = sAbilityDentingBlowsDescription,
     [ABILITY_ICE_COLD_HUNTER] = sAbilityIceColdHunterDescription,
     [ABILITY_SOUL_CRUSHER] = sAbilitySoulCrusherDescription,
+    [ABILITY_ARC_FLASH] = sAbilityArcFlashDescription,
 };

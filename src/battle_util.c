@@ -9761,6 +9761,40 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     effect++;
                 }
             }
+
+            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ARC_FLASH)){
+                if (ShouldApplyOnHitAffect(opponent) && (Random() % 100) < 50)
+                {
+                    int shouldProc = FALSE;
+                    if (battler == gBattlerAttacker)
+                    {
+                        if (CanBeParalyzed(battler, opponent))
+                        {
+                            gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+                            shouldProc = TRUE;
+                        }
+                    }
+                    else
+                    {
+                        if (CanBeBurned(opponent))
+                        {
+                            gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
+                            shouldProc = TRUE;
+                        }
+                    }
+
+                    if (shouldProc)
+                    {
+                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ARC_FLASH;
+                        gStackBattler1 = battler;
+                        gStackBattler2 = opponent;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AbilityStatusEffectSafe;
+                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                        effect++;
+                    }
+                }
+            }
             
             // Flame Body
             if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAME_BODY)){
