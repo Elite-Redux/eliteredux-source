@@ -10139,8 +10139,8 @@ void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk)
 {
     int i;
     int level, species, personality, isPlayer;
-    memset(abilities, ABILITY_NONE, sizeof(*abilities) * 4);
     int ability;
+    memset(abilities, ABILITY_NONE, sizeof(*abilities) * 4);
 
     if (!DoesBattlerHaveAbilityShield(battler) && BattlerAbilityIsSuppressed(battler, battlerAtk)) return;
 
