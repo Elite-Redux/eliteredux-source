@@ -6711,6 +6711,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gFieldTimers.started.quash = TRUE;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_REJECTION;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                effect++;
             }
         }
         //abilityEffect End
