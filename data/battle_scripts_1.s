@@ -9059,6 +9059,7 @@ BattleScript_QueensMourning_DefenseUpDoAnim::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_QueensMourning_End:
 	readattackerfromstack3
+	return
 
 BattleScript_FortKnoxActivates::
 	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_DEF, MAX_STAT_STAGE, BattleScript_DefiantActivates_End
