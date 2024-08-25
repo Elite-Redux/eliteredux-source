@@ -4857,6 +4857,15 @@ static void SpriteCB_BoxMonIconScrollOut(struct Sprite *sprite)
     }
 }
 
+static void DestroyBoxMonIconAtPosition(u8 boxPosition)
+{
+    if (sStorage->boxMonsSprites[boxPosition] != NULL)
+    {
+        DestroyBoxMonIcon(sStorage->boxMonsSprites[boxPosition]);
+        sStorage->boxMonsSprites[boxPosition] = NULL;
+    }
+}
+
 // Sprites for Pokémon icons are destroyed during
 // the box scroll once they've gone offscreen
 static void DestroyBoxMonIconsInColumn(u8 column)
@@ -4866,11 +4875,7 @@ static void DestroyBoxMonIconsInColumn(u8 column)
 
     for (row = 0; row < IN_BOX_ROWS; row++)
     {
-        if (sStorage->boxMonsSprites[boxPosition] != NULL)
-        {
-            DestroyBoxMonIcon(sStorage->boxMonsSprites[boxPosition]);
-            sStorage->boxMonsSprites[boxPosition] = NULL;
-        }
+        DestroyBoxMonIconAtPosition(boxPosition);
         boxPosition += IN_BOX_COLUMNS;
     }
 }
@@ -5030,15 +5035,6 @@ static void GetIncomingBoxMonData(u8 boxId)
     }
 
     sStorage->incomingBoxId = boxId;
-}
-
-static void DestroyBoxMonIconAtPosition(u8 boxPosition)
-{
-    if (sStorage->boxMonsSprites[boxPosition] != NULL)
-    {
-        DestroyBoxMonIcon(sStorage->boxMonsSprites[boxPosition]);
-        sStorage->boxMonsSprites[boxPosition] = NULL;
-    }
 }
 
 static void SetBoxMonIconObjMode(u8 boxPosition, u8 objMode)
@@ -5228,11 +5224,7 @@ static void DestroyAllPartyMonIcons(void)
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if (sStorage->partySprites[i] != NULL)
-        {
-            DestroyBoxMonIcon(sStorage->partySprites[i]);
-            sStorage->partySprites[i] = NULL;
-        }
+        DestroyPartyMonIcon(i);
     }
 }
 
@@ -7204,19 +7196,13 @@ void SetArceusFormPSS(struct BoxPokemon *boxMon)
     {
         forme = GetArceusFormPSS(boxMon);
         SetBoxMonData(boxMon, MON_DATA_SPECIES, &forme);
-        UpdateSpeciesSpritePSS(boxMon);
+        sStorage->displayMonSpecies = forme;
     }
     else if(GET_BASE_SPECIES_ID(species) == SPECIES_SILVALLY && (ability == ABILITY_RKS_SYSTEM || BoxMonHasInnate(boxMon, ABILITY_RKS_SYSTEM, FALSE)))
     {
         forme = GetSilvallyFormPSS(boxMon);
         SetBoxMonData(boxMon, MON_DATA_SPECIES, &forme);
-        UpdateSpeciesSpritePSS(boxMon);
-    }
-    else if(GET_BASE_SPECIES_ID(species) == SPECIES_GIRATINA)
-    {
-        forme = GetGiratinaFormPSS(boxMon);
-        SetBoxMonData(boxMon, MON_DATA_SPECIES, &forme);
-        UpdateSpeciesSpritePSS(boxMon);
+        sStorage->displayMonSpecies = forme;
     }
 }
 
@@ -7345,6 +7331,10 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
             else
                 sStorage->displayMonIsEgg = GetMonData(mon, MON_DATA_IS_EGG);
 
+            if (GET_BASE_SPECIES_ID(sStorage->displayMonSpecies) == SPECIES_ARCEUS || 
+                GET_BASE_SPECIES_ID(sStorage->displayMonSpecies) == SPECIES_SILVALLY)
+                SetArceusFormPSS(pokemon);
+
             if(isMonNicknamed(mon)){
                 GetMonData(mon, MON_DATA_NICKNAME, sStorage->displayMonName);
                 StringGetEnd10(sStorage->displayMonName);
@@ -7375,6 +7365,10 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
                 sStorage->displayMonIsEgg = TRUE;
             else
                 sStorage->displayMonIsEgg = GetBoxMonData(boxMon, MON_DATA_IS_EGG);
+
+            if (GET_BASE_SPECIES_ID(sStorage->displayMonSpecies) == SPECIES_ARCEUS || 
+                GET_BASE_SPECIES_ID(sStorage->displayMonSpecies) == SPECIES_SILVALLY)
+                SetArceusFormPSS(pokemon);
 
             if(isBoxMonNicknamed(boxMon)){
                 GetBoxMonData(boxMon, MON_DATA_NICKNAME, sStorage->displayMonName);
@@ -7421,11 +7415,6 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
     {
         if (sStorage->displayMonSpecies == SPECIES_NIDORAN_F || sStorage->displayMonSpecies == SPECIES_NIDORAN_M)
             gender = MON_GENDERLESS;
-
-        if (GET_BASE_SPECIES_ID(sStorage->displayMonSpecies) == SPECIES_ARCEUS || 
-            GET_BASE_SPECIES_ID(sStorage->displayMonSpecies) == SPECIES_GIRATINA || 
-            GET_BASE_SPECIES_ID(sStorage->displayMonSpecies) == SPECIES_SILVALLY)
-            SetArceusFormPSS(pokemon);
 
         StringCopyPadded(sStorage->displayMonNameText, sStorage->displayMonName, CHAR_SPACE, 5);
 
@@ -10601,7 +10590,7 @@ void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
     LoadDisplayMonGfx(species, pid);
 
     // Update Icon
-    DestroyBoxMonIcon(sStorage->boxMonsSprites[pos]);
+    DestroyBoxMonIconAtPosition(pos);
     CreateBoxMonIconAtPos(pos);
 }
 
