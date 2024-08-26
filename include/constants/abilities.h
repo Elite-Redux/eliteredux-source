@@ -289,7 +289,7 @@
 
 #define ABILITY_CHLOROPLAST 268 // Weather Ball, Solar Beam/Blade, Growth act as if used in sun.
 #define ABILITY_WHITEOUT 269 // Grants a 1.5x power boost to Ice-type moves under hail.
-#define ABILITY_PYROMANCY 270 // Its Fire-type moves' burn chance is multiplied by five.
+#define ABILITY_PYROMANCY 270 // Moves inflict burn 5x as often.
 #define ABILITY_KEEN_EDGE 271 // Boosts the power of slashing moves by 1.3x.
 #define ABILITY_PRISM_SCALES 272 // Takes 30% less damage from Special attacks.
 #define ABILITY_POWER_FISTS 273 // Punching moves become Special and get a 1.3x power boost.
@@ -475,7 +475,7 @@
 #define ABILITY_RAGING_MOTH 453 // Fire moves hits twice, both hits at 75% power.
 #define ABILITY_ADRENALINE_RUSH 454 // KOs raise Speed by one stage.
 #define ABILITY_ARCHMAGE 455 // 30% chance of adding a type related effect to each move.
-#define ABILITY_CRYOMANCY 456 // Ice moves inflict frostbite 5x more often.
+#define ABILITY_CRYOMANCY 456 // Moves inflict frostbite 5x as often.
 #define ABILITY_PHANTOM_PAIN 457 // Ghost type moves can hit normal type pokemon for neutral damage.
 #define ABILITY_PURGATORY 458 // Boosts Ghost-type moves by 1.3x, or 1.8x when below 1/3 HP.
 #define ABILITY_EMANATE 459 // Normal-type moves become Psy.- type moves and get a 1.1x boost.
