@@ -876,6 +876,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_VICTINI_PRIMAL] = sVictiniFormSpeciesIdTable,
 
+    [SPECIES_WIGGLYTUFF_APEX] = sWigglytuffFormSpeciesIdTable,
+
     [SPECIES_WIGGLYTUFF_PRIMAL] = sWigglytuffFormSpeciesIdTable,
 
     [SPECIES_FLYGON_REDUX_B_MEGA] = sFlygonFormSpeciesIdTable,
