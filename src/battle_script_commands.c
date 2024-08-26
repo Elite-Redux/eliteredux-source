@@ -4109,13 +4109,11 @@ static void Cmd_seteffectwithchance(void)
 
     //Pyromancy boost
     if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PYROMANCY)
-             && moveType == TYPE_FIRE
              && moveEffect == MOVE_EFFECT_BURN)
         percentChance = percentChance * 5;
 
     //Cryomancy boost
     if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CRYOMANCY)
-             && moveType == TYPE_ICE
              && moveEffect == MOVE_EFFECT_FROSTBITE)
         percentChance = percentChance * 5;
 
