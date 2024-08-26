@@ -547,8 +547,8 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_CUFANT]                = {{EVO_LEVEL, 34, SPECIES_COPPERAJAH}},
     [SPECIES_DREEPY]                = {{EVO_LEVEL, 23, SPECIES_DRAKLOAK}},
     [SPECIES_DRAKLOAK]              = {{EVO_LEVEL, 60, SPECIES_DRAGAPULT}},
-   // [SPECIES_KUBFU]                 = {{EVO_LEVEL, 55, SPECIES_URSHIFU},
-    //                                   {EVO_LEVEL, 55, SPECIES_URSHIFU_RAPID_STRIKE_STYLE}}, //disabled cause it makes rapid blatantly better
+    [SPECIES_KUBFU]                 = {{EVO_LEVEL, 55, SPECIES_URSHIFU},
+                                       {EVO_LEVEL, 55, SPECIES_URSHIFU_RAPID_STRIKE_STYLE}},
 
     [SPECIES_SPRIGATITO]            = {{EVO_LEVEL, 16, SPECIES_FLORAGATO}},
     [SPECIES_FLORAGATO]             = {{EVO_LEVEL, 36, SPECIES_MEOWSCARADA}},
