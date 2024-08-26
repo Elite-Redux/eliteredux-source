@@ -933,8 +933,8 @@ const struct Evolution gFormChangeTable[NUM_SPECIES][EVOS_PER_MON] =
     [SPECIES_URSALUNA] = {{EVO_FORM_SHIFT, 1, SPECIES_URSALUNA},
                             {EVO_FORM_SHIFT, 1, SPECIES_URSALUNA_BLOODMOON},},
                             
-    [SPECIES_URSHIFU] = {{EVO_FORM_SHIFT, 1, SPECIES_URSHIFU},
-                            {EVO_FORM_SHIFT, 1, SPECIES_URSHIFU_RAPID_STRIKE_STYLE},},
+  //  [SPECIES_URSHIFU] = {{EVO_FORM_SHIFT, 1, SPECIES_URSHIFU}, //disabled for now
+  //                          {EVO_FORM_SHIFT, 1, SPECIES_URSHIFU_RAPID_STRIKE_STYLE},}, 
 
     [SPECIES_BASCULIN] = {{EVO_FORM_SHIFT, 1, SPECIES_BASCULIN},
                             {EVO_FORM_SHIFT, 1, SPECIES_BASCULIN_BLUE_STRIPED},
