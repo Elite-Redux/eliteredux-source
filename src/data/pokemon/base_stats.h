@@ -31540,10 +31540,10 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_DEINO_REDUX] =
     {
     .baseHP        =  52,
-    .baseAttack    =  65,
+    .baseAttack    =  45,
     .baseDefense   =  50,
     .baseSpeed     =  38,
-    .baseSpAttack  =  45,
+    .baseSpAttack  =  65,
     .baseSpDefense =  50,
     .type1 = TYPE_FAIRY,
     .type2 = TYPE_DRAGON,
