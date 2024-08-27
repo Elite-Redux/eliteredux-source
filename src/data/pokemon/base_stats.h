@@ -17863,12 +17863,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_PANSAGE] =
     {
-    .baseHP        = 50,
-    .baseAttack    = 65, //53
-    .baseDefense   = 48,
-    .baseSpeed     = 73, //64
-    .baseSpAttack  = 65, //53
-    .baseSpDefense = 48,
+    .baseHP         = 50,
+    .baseAttack     = 62, //53
+    .baseDefense    = 48,
+    .baseSpeed      = 67, //64
+    .baseSpAttack   = 62, //53
+    .baseSpDefense  = 48,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_GRASS,
     .catchRate = 190,
@@ -32307,12 +32307,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_PANSEAR_REDUX] =
     {
-    .baseHP        =  50,
-    .baseAttack    =  56, //53
-    .baseDefense   =  48,
-    .baseSpeed     =  64,
-    .baseSpAttack  =  53,
-    .baseSpDefense =  66, //48
+    .baseHP         = 50,
+    .baseAttack     = 61,
+    .baseDefense    = 48,
+    .baseSpeed      = 64,
+    .baseSpAttack   = 48,
+    .baseSpDefense  = 66,
     .type1 = TYPE_DARK,
     .type2 = TYPE_DARK,
     .catchRate = 190,
@@ -32363,12 +32363,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_PANSAGE_REDUX] =
     {
-    .baseHP        =  50,
-    .baseAttack    =  70, //53
-    .baseDefense   =  43, //48
-    .baseSpeed     =  78, //61
-    .baseSpAttack  =  70, //53
-    .baseSpDefense =  43, //48
+    .baseHP         = 44,
+    .baseAttack     = 68,
+    .baseDefense    = 43,
+    .baseSpeed      = 71,
+    .baseSpAttack   = 68,
+    .baseSpDefense  = 43,
     .type1 = TYPE_FIGHTING,
     .type2 = TYPE_FIGHTING,
     .catchRate = 190,
@@ -32419,12 +32419,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_PANPOUR_REDUX] =
     {
-    .baseHP        =  50,
-    .baseAttack    =  53,
-    .baseDefense   =  48,
-    .baseSpeed     =  64,
-    .baseSpAttack  =  53,
-    .baseSpDefense =  48,
+    .baseHP         = 50,
+    .baseAttack     = 53,
+    .baseDefense    = 48,
+    .baseSpeed      = 64,
+    .baseSpAttack   = 74,
+    .baseSpDefense  = 48,
     .type1 = TYPE_PSYCHIC,
     .type2 = TYPE_PSYCHIC,
     .catchRate = 190,
