@@ -274,7 +274,7 @@ static const u16 sStarterMonRock[STARTER_MON_COUNT] =
 {
     SPECIES_ROLYCOLY,
     SPECIES_LARVITAR,
-    SPECIES_BONSLY,
+    SPECIES_ROGGENROLA,
 };
 
 static const u16 sStarterMonSteel[STARTER_MON_COUNT] =
