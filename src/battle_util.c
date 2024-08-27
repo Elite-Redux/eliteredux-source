@@ -12959,6 +12959,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_HUNTERS_HORN:
         case ABILITY_MIGHTY_HORN:
+        case ABILITY_UNICORN:
             if (gBattleMoves[move].hornBased) MUL(1.3);
             return;
         
@@ -16380,6 +16381,17 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     {
         triggeringBattler--;
         *abilityPopup = ABILITY_DAZZLING;
+        if (triggeringBattler != battler) *overrideBattler = triggeringBattler;
+        *immunityScript = BattleScript_DazzlingProtected;
+        effect = 2;
+    }
+    //Unicorn
+    else if((triggeringBattler = IsAbilityOnSide(battler, ABILITY_UNICORN))
+        && GetChosenMovePriority(gBattlerAttacker, battler) > 0
+        && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
+    {
+        triggeringBattler--;
+        *abilityPopup = ABILITY_UNICORN;
         if (triggeringBattler != battler) *overrideBattler = triggeringBattler;
         *immunityScript = BattleScript_DazzlingProtected;
         effect = 2;

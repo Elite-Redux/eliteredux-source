@@ -660,8 +660,9 @@
 #define ABILITY_ICE_COLD_HUNTER 638 // Combines Hyper Aggressive and Whiteout.
 #define ABILITY_SOUL_CRUSHER 639 // Hammer moves become Special and get a 1.1x power boost.
 #define ABILITY_ARC_FLASH 640 // 50% chance to burn when hit or paralyze when dealing damage.
+#define ABILITY_UNICORN 641 // Mighty Horn + Dazzling
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ARC_FLASH + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_UNICORN + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
