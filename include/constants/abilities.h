@@ -86,7 +86,7 @@
 #define ABILITY_RIVALRY 79 // Deals 1.25x more damage against same gender, else 1x.
 #define ABILITY_STEADFAST 80 // Raises Speed by one stage if this Pokémon flinches.
 #define ABILITY_SNOW_CLOAK 81 // Evasion is boosted by 1.25x under hail.
-#define ABILITY_GLUTTONY 82 // Raises pinch Berry activation threshold: 1/4 max HP to 1/2.
+#define ABILITY_GLUTTONY 82 // Eats berries early. Berries also restore 1/3 of max HP.
 #define ABILITY_ANGER_POINT 83 // Getting hit raises Atk by +1. Critical hits maximize Attack.
 #define ABILITY_UNBURDEN 84 // Consuming its held item doubles Speed until switched out.
 #define ABILITY_HEATPROOF 85 // Halves damage taken from Fire- type moves. Takes no burn damage.
@@ -177,7 +177,7 @@
 
 #define ABILITY_AROMA_VEIL 165 // Immune to Encore, Attract, Taunt, Torment, Disable, Heal Block.
 #define ABILITY_FLOWER_VEIL 166 // Grass-types on this Pokémon's side are immune to stat drops.
-#define ABILITY_CHEEK_POUCH 167 // Eating a Berry also restores 1/3 of max HP.
+#define ABILITY_CHEEK_POUCH 167 // This ability has no effect.
 #define ABILITY_PROTEAN 168 // Changes type depending on the move it's about to use.
 #define ABILITY_FUR_COAT 169 // Halves damage taken by Physical moves. Does NOT double Defense.
 #define ABILITY_MAGICIAN 170 // Steals the foe's held item after using a non-contact move.

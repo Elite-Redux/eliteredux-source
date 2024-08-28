@@ -7946,7 +7946,7 @@ static void Cmd_setgravity(void)
 static bool32 TryCheekPouch(u32 battlerId, u32 itemId)
 {
     if (ItemId_GetPocket(itemId) == POCKET_BERRIES
-        && BATTLER_HAS_ABILITY(battlerId, ABILITY_CHEEK_POUCH)
+        && BATTLER_HAS_ABILITY(battlerId, ABILITY_GLUTTONY)
         && !BATTLER_HEALING_BLOCKED(battlerId)
         && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]]
         && !BATTLER_MAX_HP(battlerId))
