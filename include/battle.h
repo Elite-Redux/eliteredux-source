@@ -195,6 +195,7 @@ struct RoundStruct
     u8 attackCancelled:1;
     u8 burningBulwark:1;
     u8 mindReader:1;
+    u8 afterYou:1;
 };
 
 struct TurnStruct
@@ -970,7 +971,6 @@ extern u8 gStackBattler4;
 extern u32 gBattleControllerExecFlags;
 extern u8 gBattlersCount;
 extern u16 gBattlerPartyIndexes[MAX_BATTLERS_COUNT];
-extern u8 gAfterYouBattlers;
 extern u8 gBattlerPositions[MAX_BATTLERS_COUNT];
 extern u8 gActionsByTurnOrder[MAX_BATTLERS_COUNT];
 extern u8 gBattlerByTurnOrder[MAX_BATTLERS_COUNT];

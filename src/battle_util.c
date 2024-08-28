@@ -922,7 +922,7 @@ void HandleAction_TryFinish(void)
 
 void HandleAction_NothingIsFainted(void)
 {
-    RecalculateMoveOrder(++gCurrentTurnActionNumber + (gAfterYouBattlers ? gAfterYouBattlers-- : 0), gBattlersCount);
+    RecalculateMoveOrder(++gCurrentTurnActionNumber, gBattlersCount);
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     ClearMiscTurnFlags();
 }
@@ -930,7 +930,7 @@ void HandleAction_NothingIsFainted(void)
 void HandleAction_ActionFinished(void)
 {
     gBattleStruct->monToSwitchIntoId[gBattlerByTurnOrder[gCurrentTurnActionNumber]] = 6;
-    RecalculateMoveOrder(++gCurrentTurnActionNumber + (gAfterYouBattlers ? gAfterYouBattlers-- : 0), gBattlersCount);
+    RecalculateMoveOrder(++gCurrentTurnActionNumber, gBattlersCount);
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     TurnStructsClear();
     gRoundStructs[gBattlerAttacker].extraMoveUsed = 0;

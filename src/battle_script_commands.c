@@ -9989,23 +9989,13 @@ static void Cmd_various(void)
         SWAP(gBattleMons[gActiveBattler].attack, gBattleMons[gActiveBattler].defense, i);
         break;
     case VARIOUS_AFTER_YOU:
-        if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget)
-            || GetBattlerTurnOrderNum(gBattlerAttacker) == GetBattlerTurnOrderNum(gBattlerTarget) + 1)
+        if (gCurrentTurnActionNumber >= GetBattlerTurnOrderNum(gBattlerTarget))
         {
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         }
         else
         {
-            // Shift battlers down to target position and move target battler to next in line.
-            u8 targetPosition = GetBattlerTurnOrderNum(gBattlerTarget);
-            for (i = targetPosition; i > gCurrentTurnActionNumber + 1; i--)
-            {
-                gBattlerByTurnOrder[i] = gBattlerByTurnOrder[i-1];
-            }
-
-            gBattlerByTurnOrder[gCurrentTurnActionNumber + 1] = gBattlerTarget;
-            gAfterYouBattlers++;
-
+            gRoundStructs[gActiveBattler].afterYou = TRUE;
             gBattlescriptCurrInstr += 7;
         }
         return;
