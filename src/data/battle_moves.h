@@ -3405,7 +3405,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 100,
-        .pp = 10,
+        .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
         .flags = FLAG_SNATCH_AFFECTED,
@@ -4606,11 +4606,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TRUMP_CARD] =
     {
-        .effect = EFFECT_TRUMP_CARD,
-        .power = 0,
+        .effect = EFFECT_FLAIL,
+        .power = 80,
         .type = TYPE_NORMAL,
         .accuracy = 0,
-        .pp = 5,
+        .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -5238,6 +5238,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT | FLAG_SHEER_FORCE_BOOST | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_PHYSICAL,
+        .hornBased = TRUE,
     },
     [MOVE_ZEN_HEADBUTT] =
     {
@@ -6163,7 +6164,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SCALD] =
     {
         .effect = EFFECT_SCALD,
-        .power = 80,
+        .power = 75,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 15,
@@ -9118,7 +9119,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 15,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_THAW_USER,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_MEGA_LAUNCHER_BOOST | FLAG_THAW_USER,
         .split = SPLIT_SPECIAL,
     },
     [MOVE_JUNGLE_HEALING] =
@@ -10414,7 +10415,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_CHILLING_WATER] =
     {
         .effect = EFFECT_FROSTBITE_HIT,
-        .power = 80,
+        .power = 75,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 15,

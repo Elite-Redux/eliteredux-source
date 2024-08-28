@@ -12920,13 +12920,13 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 	// Field Explorer
 	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FIELD_EXPLORER)){
 		if (gBattleMoves[move].flags & FLAG_FIELD_BASED)
-           MulModifier(&modifier, UQ_4_12(1.25));
+           MulModifier(&modifier, UQ_4_12(1.5));
     }
 
     // Giant Wings
 	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GIANT_WINGS)){
         if (gBattleMoves[move].airBased)
-           MulModifier(&modifier, UQ_4_12(1.25));
+           MulModifier(&modifier, UQ_4_12(1.3));
     }
 	
 	// Sheer Force
