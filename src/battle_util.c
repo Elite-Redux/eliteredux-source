@@ -13243,6 +13243,9 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_FIGHTER:
             SWARM_LIKE(TYPE_FIGHTING)
+
+        case ABILITY_PSYCHIC_MIND:
+            SWARM_LIKE(TYPE_PSYCHIC)
         
         #undef SWARM_LIKE
         
@@ -13286,10 +13289,6 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_EARTHBOUND:
             if (moveType == TYPE_GROUND) MUL(1.25);
-            return;
-        
-        case ABILITY_PSYCHIC_MIND:
-            if (moveType == TYPE_PSYCHIC) MUL(1.25);
             return;
         
         case ABILITY_FOSSILIZED:
