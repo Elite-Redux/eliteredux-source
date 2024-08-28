@@ -168,7 +168,6 @@ EWRAM_DATA u8 gStackBattler4 = 0;
 EWRAM_DATA u32 gBattleControllerExecFlags = 0;
 EWRAM_DATA u8 gBattlersCount = 0;
 EWRAM_DATA u16 gBattlerPartyIndexes[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA u8 gAfterYouBattlers = 0;
 EWRAM_DATA u8 gBattlerPositions[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gActionsByTurnOrder[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerByTurnOrder[MAX_BATTLERS_COUNT] = {0};
@@ -5087,6 +5086,9 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         return Random() % 2;
     }
 
+    if (gRoundStructs[battler1].afterYou && !gRoundStructs[battler2].afterYou) return 0;
+    if (!gRoundStructs[battler1].afterYou && gRoundStructs[battler2].afterYou) return 1;
+
     // Battler 1
     speedBattler1 = GetBattlerTotalSpeedStat(battler1, TOTAL_SPEED_FULL);
 
@@ -5162,8 +5164,6 @@ static void SetActionsAndBattlersTurnOrder(void)
 {
     s32 turnOrderId = 0;
     s32 i, j;
-
-    gAfterYouBattlers = 0;
 
     for (i = 0; i < gBattlersCount; i++)
     {
