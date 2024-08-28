@@ -12040,14 +12040,14 @@ BattleScript_WildTotemMegaEvolution::
 
 BattleScript_SeedSower::
 	copybyte gBattlerAbility, gBattlerTarget
-	setgrassyterrain BattleScript_SeedSowerTestLeech
-	goto BattleScript_SeedSowerGrassySucceeded
+	setgrassyterrain BattleScript_SeedSowerEnd @ BattleScript_SeedSowerTestLeech
+	@ goto BattleScript_SeedSowerGrassySucceeded
 BattleScript_SeedSowerTestLeech:
-	jumpifstatus3 BS_ATTACKER, STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
-	jumpiftype BS_ATTACKER, TYPE_GRASS, BattleScript_SeedSowerEnd
-	call BattleScript_AbilityPopUp
-	waitmessage B_WAIT_TIME_SHORT
-	goto BattleScript_SeedSowerDoLeech
+	@ jumpifstatus3 BS_ATTACKER, STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
+	@ jumpiftype BS_ATTACKER, TYPE_GRASS, BattleScript_SeedSowerEnd
+	@ call BattleScript_AbilityPopUp
+	@ waitmessage B_WAIT_TIME_SHORT
+	@ goto BattleScript_SeedSowerDoLeech
 BattleScript_SeedSowerGrassySucceeded:
 	call BattleScript_AbilityPopUp
 	waitmessage B_WAIT_TIME_SHORT
@@ -12057,16 +12057,16 @@ BattleScript_SeedSowerGrassySucceeded:
 	waitmessage B_WAIT_TIME_LONG
 	call BattleScript_OnTerrainChanged
 BattleScript_SeedSowerTryLeech:
-	jumpifstatus3 BS_ATTACKER, STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
-	jumpiftype BS_ATTACKER, TYPE_GRASS, BattleScript_SeedSowerEnd
+	@ jumpifstatus3 BS_ATTACKER, STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
+	@ jumpiftype BS_ATTACKER, TYPE_GRASS, BattleScript_SeedSowerEnd
 BattleScript_SeedSowerDoLeech:
-	swapbattlerandtargetvia34
-	setseeded
-	playmoveanimation BS_ATTACKER, MOVE_LEECH_SEED
-	waitanimation
-	printstring STRINGID_PKMNSEEDED
-	waitmessage B_WAIT_TIME_LONG
-	restoreattackerandtargetfrom34
+	@ swapbattlerandtargetvia34
+	@ setseeded
+	@ playmoveanimation BS_ATTACKER, MOVE_LEECH_SEED
+	@ waitanimation
+	@ printstring STRINGID_PKMNSEEDED
+	@ waitmessage B_WAIT_TIME_LONG
+	@ restoreattackerandtargetfrom34
 BattleScript_SeedSowerEnd:
 	return
 

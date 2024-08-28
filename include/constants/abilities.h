@@ -562,7 +562,7 @@
 #define ABILITY_BANSHEE 540 // Normal-type moves become Ghost- type moves and get a 1.2x boost.
 #define ABILITY_WEB_SPINNER 541 // Uses String Shot on switch-in.
 #define ABILITY_SHOWDOWN_MODE 542 // Combines Ambush & Violent Rush.
-#define ABILITY_SEED_SOWER 543 // Sets Grassy Terrain and Leech Seed when hit.
+#define ABILITY_SEED_SOWER 543 // Sets Grassy Terrain when hit.
 #define ABILITY_AIRBORNE 544 // Boosts own & ally's Flying-type moves by 1.3x.
 #define ABILITY_PARROTING 545 // Copies sound moves used by others. Immune to sound.
 #define ABILITY_SALT_CIRCLE 546 // Prevents opposing pokemon from fleeing on entry.
