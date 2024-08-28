@@ -4126,7 +4126,7 @@ static void Cmd_seteffectwithchance(void)
     //Precise fist boosts
     if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRECISE_FIST)
              && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
-        percentChance = percentChance * 2;
+        percentChance = percentChance * 5;
 
     //Frostbite are more likely to occour during Hail
     if (moveEffect == MOVE_EFFECT_FROSTBITE && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_HAIL_ANY))

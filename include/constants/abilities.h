@@ -394,7 +394,7 @@
 #define ABILITY_MOMENTUM 372 // Contact moves use the Speed stat for damage calculation.
 #define ABILITY_GRIP_PINCER 373 // 50% chance to trap. Then ignores Defense & accuracy checks.
 #define ABILITY_BIG_LEAVES 374 // Chloroplast/phyll, Harvest, Leaf Guard and Solar Power.
-#define ABILITY_PRECISE_FIST 375 // Punching moves get +1 crit and double effect chance.
+#define ABILITY_PRECISE_FIST 375 // Punching moves get +1 crit and 5x effect chance.
 #define ABILITY_DEADEYE 376 // Never misses.
 #define ABILITY_ARTILLERY 377 // Mega Launcher moves always hit. Single-target now hits both foes.
 #define ABILITY_AMPLIFIER 378 // Ups sound moves by 30% and makes them hit both foes.
@@ -660,7 +660,7 @@
 #define ABILITY_ICE_COLD_HUNTER 638 // Combines Hyper Aggressive and Whiteout.
 #define ABILITY_SOUL_CRUSHER 639 // Hammer moves become Special and get a 1.1x power boost.
 #define ABILITY_ARC_FLASH 640 // 50% chance to burn when hit or paralyze when dealing damage.
-#define ABILITY_UNICORN 641 // Mighty Horn + Dazzling
+#define ABILITY_UNICORN 641 // Mighty Horn + Dazzling.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_UNICORN + 1)
 
