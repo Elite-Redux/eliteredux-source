@@ -1031,6 +1031,7 @@ static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
 static const u8 sText_new[] = _("");
+static const u8 sText_OnTheProwl[] = _("{B_ATK_NAME_WITH_PREFIX} looks\nfor the perfect opportunity!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1845,6 +1846,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GYMSKILL_LUCKY_CHANT - 12] = sText_GymSkillLuckyChant,
     [STRINGID_GYMSKILL_PERMA_WIDEGUARD - 12] = sText_GymSkillPermaWideGuard,
     [STRINGID_FOG_STAT_DROPS - 12] = sText_FogStatDrops,
+    [STRINGID_ON_THE_PROWL - 12] = sText_OnTheProwl,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -1930,6 +1932,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_SHOWDOWN_MODE] = STRINGID_SHOWDOWN_MODE,
     [B_MSG_SWITCHIN_PARASITIC_SPORES] = STRINGID_PARASITIC_SPORES,
     [B_MSG_SWITCHIN_REJECTION] = STRINGID_QUASHSUCCESS,
+    [B_MSG_SWITCHIN_ON_THE_PROWL] = STRINGID_ON_THE_PROWL,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

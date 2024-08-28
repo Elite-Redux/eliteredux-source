@@ -80,6 +80,7 @@ struct VolatileBeganThisTurn
     u8 readiedAction:1;
     u8 showdownMode:1;
     u8 fear:1;
+    u8 onTheProwl:1;
 };
 
 struct VolatileStruct
@@ -143,6 +144,7 @@ struct VolatileStruct
     u8 parasiticSpores:1;
     u8 critBoost:2;
     u8 fear:1;
+    u8 onTheProwl:1;
 };
 
 struct RoundStruct

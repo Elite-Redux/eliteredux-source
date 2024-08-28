@@ -3597,10 +3597,13 @@ u8 DoBattlerEndTurnEffects(void)
                 gStatuses4[gActiveBattler] &= ~STATUS4_FEAR;
                 gVolatileStructs[gActiveBattler].fear = FALSE;
             }
-            if (!gVolatileStructs[gActiveBattler].started.rapidResponse) gVolatileStructs[gActiveBattler].rapidResponse = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.readiedAction) gVolatileStructs[gActiveBattler].readiedAction = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.showdownMode) gVolatileStructs[gActiveBattler].showdownMode = FALSE;
-            if (!gVolatileStructs[gActiveBattler].started.violentRush) gVolatileStructs[gActiveBattler].violentRush = FALSE;
+            #define CLEAR_ONE_TURN(flag) if (!gVolatileStructs[gActiveBattler].started.flag) gVolatileStructs[gActiveBattler].flag = FALSE;
+            CLEAR_ONE_TURN(rapidResponse)
+            CLEAR_ONE_TURN(readiedAction)
+            CLEAR_ONE_TURN(showdownMode)
+            CLEAR_ONE_TURN(violentRush)
+            CLEAR_ONE_TURN(onTheProwl)
+            #undef CLEAR_ONE_TURN
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_BATTLER_COUNT:  // done
@@ -6462,6 +6465,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         {
             gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_READIED_ACTION;
+            BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+            effect++;
+        }
+
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_ON_THE_PROWL))
+        {
+            gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_ON_THE_PROWL;
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
         }

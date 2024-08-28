@@ -661,8 +661,9 @@
 #define ABILITY_SOUL_CRUSHER 639 // Hammer moves become Special and get a 1.1x power boost.
 #define ABILITY_ARC_FLASH 640 // 50% chance to burn when hit or paralyze when dealing damage.
 #define ABILITY_UNICORN 641 // Mighty Horn + Dazzling.
+#define ABILITY_ON_THE_PROWL 642 // +1 priority for the first turn.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_UNICORN + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_ON_THE_PROWL + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
