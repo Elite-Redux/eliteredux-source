@@ -612,6 +612,7 @@ static const u8 sAbilitySoulCrusherDescription[] = _("Hammer moves become Specia
 static const u8 sAbilityArcFlashDescription[] = _("50% chance to burn when hit or\nparalyze when dealing damage.");
 static const u8 sAbilityUnicornDescription[] = _("Mighty Horn + Dazzling.");
 static const u8 sAbilityOnTheProwlDescription[] = _("+1 priority for the first turn.");
+static const u8 sAbilityPretentiousDescription[] = _("Dealing a KO raises Crit by\none stage.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1258,6 +1259,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ARC_FLASH] = _("Arc Flash"),
     [ABILITY_UNICORN] = _("Unicorn"),
     [ABILITY_ON_THE_PROWL] = _("On the Prowl"),
+    [ABILITY_PRETENTIOUS] = _("Pretentious"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1905,4 +1907,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_ARC_FLASH] = sAbilityArcFlashDescription,
     [ABILITY_UNICORN] = sAbilityUnicornDescription,
     [ABILITY_ON_THE_PROWL] = sAbilityOnTheProwlDescription,
+    [ABILITY_PRETENTIOUS] = sAbilityPretentiousDescription,
 };

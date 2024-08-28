@@ -662,8 +662,9 @@
 #define ABILITY_ARC_FLASH 640 // 50% chance to burn when hit or paralyze when dealing damage.
 #define ABILITY_UNICORN 641 // Mighty Horn + Dazzling.
 #define ABILITY_ON_THE_PROWL 642 // +1 priority for the first turn.
+#define ABILITY_PRETENTIOUS 643 // Dealing a KO raises Crit by one stage.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ON_THE_PROWL + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_PRETENTIOUS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

@@ -12572,3 +12572,9 @@ BattleScript_EffectSmokescreen::
 	setmoveeffect MOVE_EFFECT_SMOKESCREEN
 	seteffectprimary
 	goto BattleScript_MoveEnd
+
+BattleScript_AbilityBoostsCrit::
+	call BattleScript_AbilityPopUp
+	printfromtable gCritRaisedStrings
+	waitmessage B_WAIT_TIME_LONG
+	return

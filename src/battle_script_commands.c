@@ -9219,6 +9219,19 @@ static void Cmd_various(void)
 
             #undef MOXIE_CHECK
 
+            gBattlescriptCurrInstr += 3;
+
+            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PRETENTIOUS)
+                && !NoAliveMonsForEitherParty()
+                && gVolatileStructs[gActiveBattler].critBoost < 3)
+            {
+                gVolatileStructs[gActiveBattler].critBoost++;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_PRETENTIOUS;
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
+                BattleScriptPush(gBattlescriptCurrInstr);
+                gBattlescriptCurrInstr = BattleScript_AbilityBoostsCrit;
+            }
+
             if (checkMoxieVariants
             && activateMoxieVariant
             && !NoAliveMonsForEitherParty()
@@ -9229,10 +9242,10 @@ static void Cmd_various(void)
                 SetStatChanger(statToChange, 1);
                 PREPARE_STAT_BUFFER(gBattleTextBuff1, statToChange);
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = abilityToCheck;
-                BattleScriptPush(gBattlescriptCurrInstr + 3);
+                BattleScriptPush(gBattlescriptCurrInstr);
                 gBattlescriptCurrInstr = BattleScript_RaiseStatOnFaintingTarget;
-                return;
             }
+            return;
         }
         break;
     case VARIOUS_TRY_ACTIVATE_SUPER_STRAIN:    // and variants
