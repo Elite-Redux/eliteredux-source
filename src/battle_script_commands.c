@@ -1353,7 +1353,7 @@ static bool32 NoTargetPresent(u32 move)
     if (!IsBattlerAlive(gBattlerTarget))
         gBattlerTarget = GetMoveTarget(move, 0);
 
-    switch (gBattleMoves[move].target)
+    switch (GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker))
     {
     case MOVE_TARGET_SELECTED:
     case MOVE_TARGET_DEPENDS:
