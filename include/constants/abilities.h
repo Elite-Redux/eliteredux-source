@@ -390,7 +390,7 @@
 #define ABILITY_SIGHTING_SYSTEM 368 // Moves always hit. Moves last for moves less than 80% accuracy.
 #define ABILITY_BAD_COMPANY 369 // Not implemented right now. Has no effect.
 #define ABILITY_OPPORTUNIST 370 // If target has less than 1/2 HP, single-target moves get +1 prio.
-#define ABILITY_GIANT_WINGS 371 // Boosts the power of wing, wind or air-based moves by 1.25x.
+#define ABILITY_GIANT_WINGS 371 // Boosts the power of wing, wind or air-based moves by 1.3x.
 #define ABILITY_MOMENTUM 372 // Contact moves use the Speed stat for damage calculation.
 #define ABILITY_GRIP_PINCER 373 // 50% chance to trap. Then ignores Defense & accuracy checks.
 #define ABILITY_BIG_LEAVES 374 // Chloroplast/phyll, Harvest, Leaf Guard and Solar Power.
