@@ -2541,7 +2541,7 @@ BattleScript_CoilTryCoilUp:
 BattleScript_CoilTryCoilUp_CheckCoiled:
 	jumpifstatus4 BS_ATTACKER, STATUS4_COILED, BattleScript_CoilEnd
 	copybyte gBattlerAbility, gBattlerAttacker
-	setbyte sABILITY_OVERWRITE, ABILITY_COIL_UP
+	sethword sABILITY_OVERWRITE, ABILITY_COIL_UP
 	setstatus4 BS_ATTACKER, STATUS4_COILED
 	call BattleScript_BattlerCoiledUpReturn
 BattleScript_CoilEnd:
