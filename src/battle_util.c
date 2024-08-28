@@ -13912,10 +13912,15 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         break;
 		
 	case ABILITY_PSYCHIC_MIND:
-        if (moveType == TYPE_PSYCHIC)
+        if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PSYCHIC_MIND)){
+		if (moveType == TYPE_PSYCHIC)
         {
-            MulModifier(&modifier, UQ_4_12(1.25));
+            if (gBattleMons[battlerAtk].hp <= (gBattleMons[battlerAtk].maxHP / 3))
+                MulModifier(&modifier, UQ_4_12(1.5));
+            else
+                MulModifier(&modifier, UQ_4_12(1.2));
         }
+	}
         break;
     case ABILITY_FOSSILIZED:
         if (moveType == TYPE_ROCK)

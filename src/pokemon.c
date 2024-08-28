@@ -9513,6 +9513,12 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        innate != ABILITY_AS_ONE_SHADOW_RIDER    &&
        innate != ABILITY_CROWNED_KING           &&
        innate != ABILITY_ZERO_TO_HERO           &&
+       innate != ABILITY_BAD_COMPANY            &&
+       innate != ABILITY_BALLOON_BOMBER         && // remove all below from the blacklist when the species with the ability is implemented
+       innate != ABILITY_APPLE_ENLIGHTENMENT    &&
+       innate != ABILITY_DEMOLITIONIST          &&
+       innate != ABILITY_FLAMING_MAW            &&
+       innate != ABILITY_ARCHMAGE               &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        innate != ABILITY_ANGELS_WRATH           &&
        #endif
@@ -9578,6 +9584,12 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
        ability != ABILITY_DISGUISE          &&
        ability != ABILITY_FLOWER_GIFT       &&
        ability != ABILITY_ZERO_TO_HERO      &&
+       ability != ABILITY_BAD_COMPANY       &&
+       ability != ABILITY_BALLOON_BOMBER    && // remove all below from the blacklist when the species with the ability is implemented
+       ability != ABILITY_APPLE_ENLIGHTENMENT    &&
+       ability != ABILITY_DEMOLITIONIST     &&
+       ability != ABILITY_FLAMING_MAW       &&
+       ability != ABILITY_ARCHMAGE          &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        ability != ABILITY_ANGELS_WRATH      &&
        #endif
