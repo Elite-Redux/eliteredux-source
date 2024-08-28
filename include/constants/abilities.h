@@ -83,7 +83,7 @@
 
 #define ABILITY_TANGLED_FEET 77 // Doubles Evasion when confused.
 #define ABILITY_MOTOR_DRIVE 78 // Raises Speed by one stage if hit by an Electric-type move.
-#define ABILITY_RIVALRY 79 // Deals 1.25x more damage against same gender, else 1x.
+#define ABILITY_RIVALRY 79 // Deals 1.25x to same gender. Takes .75x from opposite gender.
 #define ABILITY_STEADFAST 80 // Raises Speed by one stage if this Pokémon flinches.
 #define ABILITY_SNOW_CLOAK 81 // Evasion is boosted by 1.25x under hail.
 #define ABILITY_GLUTTONY 82 // Eats berries early. Berries also restore 1/3 of max HP.

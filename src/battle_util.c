@@ -13539,6 +13539,16 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_SAND_GUARD:
             if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(battlerAtk, WEATHER_SANDSTORM_ANY)) MUL(.5);
             return;
+        
+        case ABILITY_RIVALRY:
+            {
+                int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battlerAtk].species, gBattleMons[battlerAtk].personality);
+                if (genderAtk == MON_MALE) genderAtk = MON_FEMALE;
+                else if (genderAtk == MON_FEMALE) genderAtk = MON_MALE;
+                if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[battlerDef].species, gBattleMons[battlerDef].personality))
+                    MUL(.75);
+            }
+            return;
     }
 }
 
