@@ -11281,6 +11281,13 @@ static void Cmd_various(void)
 
             return;
         }
+    case VARIOUS_SET_STATUS_4:
+        {
+            int status4 = T1_READ_32(gBattlescriptCurrInstr + 3);
+            gStatuses4[gActiveBattler] |= status4;
+        }
+        gBattlescriptCurrInstr += 7;
+        return;
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
