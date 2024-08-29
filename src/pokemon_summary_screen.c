@@ -2916,10 +2916,10 @@ static void Task_SwitchToReplaceMove(u8 taskId)
             ClearWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
 
             LZDecompressWram(gSummaryScreenPageMoveReplaceTilemap, sMonSummaryScreen->bgTilemapBufferPage);
-            //LZDecompressWram(gSummaryScreenPageMoveDetailsReplaceTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+            LZDecompressWram(gSummaryScreenPageMoveDetailsReplaceTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
 
             SetBgTilemapBuffer(2, sMonSummaryScreen->bgTilemapBufferPage);
-            //SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
+            SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
             ScheduleBgCopyTilemapToVram(1);
             ScheduleBgCopyTilemapToVram(2);
             data[0]++;
