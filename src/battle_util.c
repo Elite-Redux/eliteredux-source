@@ -13340,6 +13340,17 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 		if (moveType == TYPE_POISON)
             MulModifier(&modifier, UQ_4_12(0.8));
     }
+    
+	// Rivalry
+    if(BATTLER_HAS_ABILITY(battlerDef, ABILITY_RIVALRY)){
+        if (GetGenderFromSpeciesAndPersonality(gBattleMons[battlerAtk].species, gBattleMons[battlerAtk].personality) != MON_GENDERLESS
+            && GetGenderFromSpeciesAndPersonality(gBattleMons[battlerDef].species, gBattleMons[battlerDef].personality) != MON_GENDERLESS)
+            {
+                if (GetGenderFromSpeciesAndPersonality(gBattleMons[battlerAtk].species, gBattleMons[battlerAtk].personality)
+                != GetGenderFromSpeciesAndPersonality(gBattleMons[battlerDef].species, gBattleMons[battlerDef].personality))
+                MulModifier(&modifier, UQ_4_12(0.75));
+            }
+	}
 
     if (gBattleMoves[move].doubleDamageVsMega
         && (gBattleStruct->mega.evolvedSpecies[battlerDef]
