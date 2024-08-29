@@ -10812,6 +10812,7 @@ u16 getLearnsetMon(u16 species)
         case SPECIES_DEOXYS:
         case SPECIES_WORMADAM:
         case SPECIES_BURMY:
+        case SPECIES_URSALUNA_BLOODMOON:
             return species;
         
         default:
