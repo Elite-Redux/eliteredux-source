@@ -7572,7 +7572,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             {
                 if(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer)){
                         gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_EVAPORATE;
-                        BattleScriptPushCursorAndCallback(BattleScript_MistySurgeActivates);
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_MistySurgeActivatesRet;
                         effect++;
                 }
             }
@@ -7974,7 +7975,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 else{
                     gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_BALLOON_BOMBER;
                 }
-				BattleScriptPushCursorAndCallback(BattleScript_InflatableActivates);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_InflatableActivates;
 				gBattleScripting.battler = battler;
 				effect++;
 			}
@@ -8137,7 +8139,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
 				gBattleScripting.animArg1 = 14 + STAT_ATK;
 				gBattleScripting.animArg2 = 0;
-				BattleScriptPushCursorAndCallback(BattleScript_AngerPointsLightBoostActivates);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AngerPointsLightBoostActivates;
 				effect++;
 			}
 		}
@@ -8160,7 +8163,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
 				gBattleScripting.animArg1 = 14 + STAT_ATK;
 				gBattleScripting.animArg2 = 0;
-				BattleScriptPushCursorAndCallback(BattleScript_AngerPointsLightBoostActivates);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AngerPointsLightBoostActivates;
 				effect++;
 			}
 		}
@@ -8183,7 +8187,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				ChangeStatBuffs(battler, StatBuffValue(1), STAT_SPATK, MOVE_EFFECT_AFFECTS_USER, NULL);
 				gBattleScripting.animArg1 = 14 + STAT_SPATK;
 				gBattleScripting.animArg2 = 0;
-				BattleScriptPushCursorAndCallback(BattleScript_TippingPointsLightBoostActivates);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_TippingPointsLightBoostActivates;
 				effect++;
 			}
 		}
@@ -8463,7 +8468,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
 					BattleScriptPushCursor();
 					ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
-					BattleScriptPushCursorAndCallback(BattleScript_AttackBoostActivates);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_AttackBoostActivates;
 					gBattleScripting.battler = battler;
 					effect++;
 				}
@@ -8515,7 +8521,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
 					BattleScriptPushCursor();
 					ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
-					BattleScriptPushCursorAndCallback(BattleScript_AttackBoostActivates);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_AttackBoostActivates;
 					gBattleScripting.battler = battler;
 					effect++;
 				}
@@ -8988,7 +8995,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gVolatileStructs[gBattlerTarget].disabledMove = gBattleMons[gBattlerTarget].moves[0];
                         
                         PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptPushCursorAndCallback(BattleScript_AngelsWrath_Effect_Tackle);
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AngelsWrath_Effect_Tackle;
                         effect++;
                     }
                 break;
@@ -9009,7 +9017,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                             gSideStatuses[GetBattlerSide(gBattlerTarget)] |= (SIDE_STATUS_STICKY_WEB);
 
                             PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                            BattleScriptPushCursorAndCallback(BattleScript_AngelsWrath_Effect_String_Shot);
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_AngelsWrath_Effect_String_Shot;
                             effect++;
                         }
                     }
@@ -9026,7 +9035,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
                         if(effectActivated){
                             PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                            BattleScriptPushCursorAndCallback(BattleScript_AngelsWrath_Effect_Harden);
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_AngelsWrath_Effect_Harden;
                             effect++;
                         }
                     }
@@ -9036,7 +9046,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         gRoundStructs[gBattlerAttacker].angelsWrathProtected = TRUE;
                         PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptPushCursorAndCallback(BattleScript_AngelsWrath_Effect_Iron_Defense);
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AngelsWrath_Effect_Iron_Defense;
                         effect++;
                     }
                 break;
@@ -9051,7 +9062,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                         gBattleMons[gBattlerTarget].statStages[STAT_SPEED] = 0;
                         gBattleMons[gBattlerTarget].status2 |= (STATUS2_ESCAPE_PREVENTION);
                         PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptPushCursorAndCallback(BattleScript_AngelsWrath_Effect_Electroweb);
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AngelsWrath_Effect_Electroweb;
                         effect++;
                     }
                 break;
@@ -9062,12 +9074,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         if(CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerTarget].item) && gBattleMons[gBattlerTarget].hp != 0){
                             gBattleMons[gBattlerTarget].item = ITEM_NONE;
-                            BattleScriptPushCursorAndCallback(BattleScript_AngelsWrath_Effect_Bug_Bite);
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_AngelsWrath_Effect_Bug_Bite;
                             effect++;
                         }
 
                         if(!BATTLER_MAX_HP(gBattlerAttacker)){
-                            BattleScriptPushCursorAndCallback(BattleScript_AngelsWrath_Effect_Bug_Bite_2);
+                            BattleScriptPushCursor();
+                            gBattlescriptCurrInstr = BattleScript_AngelsWrath_Effect_Bug_Bite_2;
                             effect++;
                         }
                     }
@@ -9156,7 +9170,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
                 PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
                 gBattleScripting.abilityPopupOverwrite = ABILITY_ABSORBANT;
-				BattleScriptPushCursorAndCallback(BattleScript_AbsorbantActivated);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AbsorbantActivated;
                 effect++;
             }
 		}
@@ -9172,7 +9187,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
                 PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
                     gBattleScripting.abilityPopupOverwrite = ABILITY_FUNGAL_INFECTION;
-				BattleScriptPushCursorAndCallback(BattleScript_FungalInfectionActivates);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_FungalInfectionActivates;
                 effect++;
             }
         }
@@ -9194,7 +9210,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleStruct->wrappedMove[gBattlerTarget] = gCurrentMove;
                     gBattleStruct->wrappedBy[gBattlerTarget] = battler;
                     gBattleScripting.abilityPopupOverwrite = ABILITY_GRIP_PINCER;
-                    BattleScriptPushCursorAndCallback(BattleScript_GripPincerActivated);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_GripPincerActivated;
                     effect++;
                 }
         }

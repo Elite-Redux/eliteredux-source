@@ -9115,7 +9115,7 @@ BattleScript_AttackBoostActivates::
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_PKMNRAISEDATTACK
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 
 BattleScript_FungalInfectionActivates::
 	sethword sABILITY_OVERWRITE, ABILITY_FUNGAL_INFECTION
@@ -9123,7 +9123,7 @@ BattleScript_FungalInfectionActivates::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNSEEDED
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 	
 BattleScript_InflatableActivates::
 	jumpifstat BS_ABILITY_BATTLER, CMP_LESS_THAN, STAT_DEF, MAX_STAT_STAGE, BattleScript_Inflatable_Def
@@ -9147,7 +9147,7 @@ BattleScript_Inflatable_SpDef::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_Inflatable_End:
 	readattackerfromstack3
-	end3
+	return
 	
 BattleScript_AngerPointsLightBoostActivates::
 	call BattleScript_AbilityPopUp
@@ -9393,7 +9393,7 @@ BattleScript_AtlasStarts::
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
-	BattleScript_GravityStarts::
+BattleScript_GravityStarts::
 	sethword sABILITY_OVERWRITE, ABILITY_GRAVITY_WELL
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
@@ -10073,13 +10073,17 @@ BattleScript_ElectricSurgeActivates::
 	call BattleScript_OnTerrainChanged
 	end3
 
-BattleScript_MistySurgeActivates::
+BattleScript_MistySurgeActivatesRet::
 	pause B_WAIT_TIME_SHORT
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_TERRAINBECOMESMISTY
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_SCRIPTING, B_ANIM_RESTORE_BG, NULL
 	call BattleScript_OnTerrainChanged
+	return
+
+BattleScript_MistySurgeActivates::
+	call BattleScript_MistySurgeActivatesRet
 	end3
 
 BattleScript_GrassySurgeActivates::
@@ -11656,7 +11660,7 @@ BattleScript_AbsorbantActivated::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNSEEDED
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 	
 BattleScript_AngelsWrath_Effect_Tackle::
 	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
@@ -11664,7 +11668,7 @@ BattleScript_AngelsWrath_Effect_Tackle::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_TACKLE_EFFECT
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 	
 BattleScript_AngelsWrath_Effect_String_Shot::
 	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
@@ -11672,7 +11676,7 @@ BattleScript_AngelsWrath_Effect_String_Shot::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_STRING_SHOT_EFFECT
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 	
 BattleScript_AngelsWrath_Effect_Harden::
 	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
@@ -11680,7 +11684,7 @@ BattleScript_AngelsWrath_Effect_Harden::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_HARDEN_EFFECT
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 	
 BattleScript_AngelsWrath_Effect_Iron_Defense::
 	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
@@ -11688,7 +11692,7 @@ BattleScript_AngelsWrath_Effect_Iron_Defense::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_IRON_DEFENSE_EFFECT
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 	
 BattleScript_AngelsWrath_Effect_Electroweb::
 	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
@@ -11696,7 +11700,7 @@ BattleScript_AngelsWrath_Effect_Electroweb::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_ELECTROWEB_EFFECT
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 	
 BattleScript_AngelsWrath_Effect_Bug_Bite::
 	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
@@ -11704,7 +11708,7 @@ BattleScript_AngelsWrath_Effect_Bug_Bite::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_BUG_BITE_EFFECT
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 
 BattleScript_AngelsWrath_Effect_Bug_Bite_2::
 	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
@@ -11716,7 +11720,7 @@ BattleScript_AngelsWrath_Effect_Bug_Bite_2::
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_ATTACKERREGAINEDHEALTH
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 
 BattleScript_NosferatuActivated::
 	sethword sABILITY_OVERWRITE, ABILITY_NOSFERATU
@@ -11908,7 +11912,7 @@ BattleScript_GripPincerActivated::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_GRIPPINCERACTIVATED
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 
 BattleScript_WildTotemBoostActivated::
 	printstring STRINGID_ATTACKERISREADYTOTESTYOU
