@@ -9508,6 +9508,8 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        innate != ABILITY_AS_ONE_SHADOW_RIDER    &&
        innate != ABILITY_CROWNED_KING           &&
        innate != ABILITY_ZERO_TO_HERO           &&
+       innate != ABILITY_BAD_COMPANY            &&
+       innate != ABILITY_ARCHMAGE               &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        innate != ABILITY_ANGELS_WRATH           &&
        #endif
@@ -9538,6 +9540,8 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
               randomizedInnate == ABILITY_AS_ONE_SHADOW_RIDER   ||
               randomizedInnate == ABILITY_CROWNED_KING          ||
               randomizedInnate == ABILITY_ZERO_TO_HERO          ||
+              randomizedInnate == ABILITY_BAD_COMPANY           ||
+              randomizedInnate == ABILITY_ARCHMAGE              ||
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedInnate == ABILITY_COMATOSE              ||
               randomizedInnate == ABILITY_TRUANT                ||
@@ -9573,6 +9577,8 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
        ability != ABILITY_DISGUISE          &&
        ability != ABILITY_FLOWER_GIFT       &&
        ability != ABILITY_ZERO_TO_HERO      &&
+       ability != ABILITY_BAD_COMPANY       &&
+       ability != ABILITY_ARCHMAGE          &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        ability != ABILITY_ANGELS_WRATH      &&
        #endif
@@ -9602,6 +9608,9 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
               randomizedAbility == ABILITY_AS_ONE_SHADOW_RIDER  ||
               randomizedAbility == ABILITY_CROWNED_KING         ||
               randomizedAbility == ABILITY_ZERO_TO_HERO         ||
+              randomizedAbility == ABILITY_BAD_COMPANY          ||
+              randomizedAbility == ABILITY_ARCHMAGE             ||
+              
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedAbility == ABILITY_COMATOSE             ||
               randomizedAbility == ABILITY_WONDER_GUARD         ||

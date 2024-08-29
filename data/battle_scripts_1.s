@@ -2508,7 +2508,11 @@ BattleScript_EffectCoil:
 	ppreduce
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_ATK, MAX_STAT_STAGE, BattleScript_CoilDoMoveAnim
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_DEF, MAX_STAT_STAGE, BattleScript_CoilDoMoveAnim
-	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_ACC, MAX_STAT_STAGE, BattleScript_CantRaiseMultipleStats
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_ACC, MAX_STAT_STAGE, BattleScript_CoilDoMoveAnim
+	jumpifability BS_ATTACKER, ABILITY_COIL_UP, BattleScript_EffectCoil_TryCoil
+	goto BattleScript_ButItFailed
+BattleScript_EffectCoil_TryCoil:
+	jumpifstatus4 BS_ATTACKER, STATUS4_COILED, BattleScript_ButItFailed
 BattleScript_CoilDoMoveAnim:
 	attackanimation
 	waitanimation
@@ -2527,10 +2531,19 @@ BattleScript_CoilTryDef:
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_CoilTryAcc:
 	setstatchanger STAT_ACC, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_CoilEnd
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_CoilEnd
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_CoilTryCoilUp
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_CoilTryCoilUp
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
+BattleScript_CoilTryCoilUp:
+	jumpifability BS_ATTACKER, ABILITY_COIL_UP, BattleScript_CoilTryCoilUp_CheckCoiled
+	goto BattleScript_CoilEnd
+BattleScript_CoilTryCoilUp_CheckCoiled:
+	jumpifstatus4 BS_ATTACKER, STATUS4_COILED, BattleScript_CoilEnd
+	copybyte gBattlerAbility, gBattlerAttacker
+	sethword sABILITY_OVERWRITE, ABILITY_COIL_UP
+	setstatus4 BS_ATTACKER, STATUS4_COILED
+	call BattleScript_BattlerCoiledUpReturn
 BattleScript_CoilEnd:
 	goto BattleScript_MoveEnd
 
@@ -6473,13 +6486,6 @@ BattleScript_EffectChargeString:
 BattleScript_GeneratorActivates::
 	call BattleScript_AbilityPopUp
 	setcharge
-	setstatchanger STAT_SPDEF, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GeneratorString
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GeneratorString
-	setgraphicalstatchangevalues
-	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printfromtable gStatUpStringIds
-	waitmessage B_WAIT_TIME_LONG
 BattleScript_GeneratorString:
 	printstring STRINGID_PKMNCHARGINGPOWER
 	waitmessage B_WAIT_TIME_LONG
@@ -9066,6 +9072,7 @@ BattleScript_QueensMourning_DefenseUpDoAnim::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_QueensMourning_End:
 	readattackerfromstack3
+	return
 
 BattleScript_FortKnoxActivates::
 	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_DEF, MAX_STAT_STAGE, BattleScript_DefiantActivates_End
@@ -9204,11 +9211,15 @@ BattleScript_BattlerAddedTheType::
 	end3
 	
 BattleScript_BattlerCoiledUp::
+	call BattleScript_BattlerCoiledUpReturn
+	end3
+
+BattleScript_BattlerCoiledUpReturn:
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_BATTLERCOILEDUP
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 	
 BattleScript_AttackerBecameTheType::
 	call BattleScript_AbilityPopUp
@@ -12046,14 +12057,14 @@ BattleScript_WildTotemMegaEvolution::
 
 BattleScript_SeedSower::
 	copybyte gBattlerAbility, gBattlerTarget
-	setgrassyterrain BattleScript_SeedSowerTestLeech
-	goto BattleScript_SeedSowerGrassySucceeded
+	setgrassyterrain BattleScript_SeedSowerEnd @ BattleScript_SeedSowerTestLeech
+	@ goto BattleScript_SeedSowerGrassySucceeded
 BattleScript_SeedSowerTestLeech:
-	jumpifstatus3 BS_ATTACKER, STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
-	jumpiftype BS_ATTACKER, TYPE_GRASS, BattleScript_SeedSowerEnd
-	call BattleScript_AbilityPopUp
-	waitmessage B_WAIT_TIME_SHORT
-	goto BattleScript_SeedSowerDoLeech
+	@ jumpifstatus3 BS_ATTACKER, STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
+	@ jumpiftype BS_ATTACKER, TYPE_GRASS, BattleScript_SeedSowerEnd
+	@ call BattleScript_AbilityPopUp
+	@ waitmessage B_WAIT_TIME_SHORT
+	@ goto BattleScript_SeedSowerDoLeech
 BattleScript_SeedSowerGrassySucceeded:
 	call BattleScript_AbilityPopUp
 	waitmessage B_WAIT_TIME_SHORT
@@ -12063,16 +12074,16 @@ BattleScript_SeedSowerGrassySucceeded:
 	waitmessage B_WAIT_TIME_LONG
 	call BattleScript_OnTerrainChanged
 BattleScript_SeedSowerTryLeech:
-	jumpifstatus3 BS_ATTACKER, STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
-	jumpiftype BS_ATTACKER, TYPE_GRASS, BattleScript_SeedSowerEnd
+	@ jumpifstatus3 BS_ATTACKER, STATUS3_LEECHSEED, BattleScript_SeedSowerEnd
+	@ jumpiftype BS_ATTACKER, TYPE_GRASS, BattleScript_SeedSowerEnd
 BattleScript_SeedSowerDoLeech:
-	swapbattlerandtargetvia34
-	setseeded
-	playmoveanimation BS_ATTACKER, MOVE_LEECH_SEED
-	waitanimation
-	printstring STRINGID_PKMNSEEDED
-	waitmessage B_WAIT_TIME_LONG
-	restoreattackerandtargetfrom34
+	@ swapbattlerandtargetvia34
+	@ setseeded
+	@ playmoveanimation BS_ATTACKER, MOVE_LEECH_SEED
+	@ waitanimation
+	@ printstring STRINGID_PKMNSEEDED
+	@ waitmessage B_WAIT_TIME_LONG
+	@ restoreattackerandtargetfrom34
 BattleScript_SeedSowerEnd:
 	return
 
@@ -12561,3 +12572,9 @@ BattleScript_EffectSmokescreen::
 	setmoveeffect MOVE_EFFECT_SMOKESCREEN
 	seteffectprimary
 	goto BattleScript_MoveEnd
+
+BattleScript_AbilityBoostsCrit::
+	call BattleScript_AbilityPopUp
+	printfromtable gCritRaisedStrings
+	waitmessage B_WAIT_TIME_LONG
+	return

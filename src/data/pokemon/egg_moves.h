@@ -5142,6 +5142,42 @@ const u16 gEggMoves[] = {
         MOVE_FROST_BREATH,
         MOVE_RAGE_POWDER),
 
+    egg_moves(SEEL_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(CRABRAWLER_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(BOUNSWEET_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(GLIGAR_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(TURTWIG_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(CHIMCHAR_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(PIPLUP_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(TRAPINCH_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(TOXEL_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(SNORUNT_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(PSYDUCK_REDUX,
+        MOVE_SPLASH),
+
+    egg_moves(CLEFFA_REDUX,
+        MOVE_SPLASH),
+
     egg_moves(HONEDGE_REDUX,
         MOVE_SHADOW_SNEAK,
         MOVE_DESTINY_BOND,

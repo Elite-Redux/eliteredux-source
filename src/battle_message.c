@@ -63,7 +63,7 @@ EWRAM_DATA struct BattleMsgData *gBattleMsgDataPtr = NULL;
 
 static const u8 sText_Trainer1LoseText[] = _("{B_TRAINER1_LOSE_TEXT}");
 static const u8 sText_PkmnGainedEXP[] = _("Your Pokémon gained Exp. Points!\p");
-static const u8 sText_PkmnGrewToLv[] = _("{B_BUFF1} grew to\nLV. {B_BUFF2}!{WAIT_SE}\p");
+static const u8 sText_PkmnGrewToLv[] = _("{B_STACK_1_NAME_WITH_PREFIX} grew to\nLV. {B_BUFF2}!{WAIT_SE}\p");
 static const u8 sText_PkmnLearnedMove[] = _("{B_BUFF1} learned\n{B_BUFF2}!{WAIT_SE}\p");
 static const u8 sText_TryToLearnMove1[] = _("{B_BUFF1} is trying to\nlearn {B_BUFF2}.\p");
 static const u8 sText_TryToLearnMove2[] = _("But, {B_BUFF1} can't learn\nmore than four moves.\p");
@@ -651,7 +651,7 @@ static const u8 sText_BattlerTypeChangedTo[] = _("{B_BUFF1}'s type\nchanged to {
 static const u8 sText_BothCanNoLongerEscape[] = _("Neither POKéMON can run away!");
 static const u8 sText_CantEscapeDueToUsedMove[] = _("{B_ATK_NAME_WITH_PREFIX} can no longer escape\nbecause it used {B_CURRENT_MOVE}!");
 static const u8 sText_PkmnBecameWeakerToFire[] = _("{B_DEF_NAME_WITH_PREFIX} became\nweaker to fire!");
-static const u8 sText_PkmnAboutToBeAttackedByItsItem[] = _("{B_DEF_NAME_WITH_PREFIX} is about\nto be attacked by its {B_BUFF1}!");
+static const u8 sText_PkmnAboutToBeAttackedByItsItem[] = _("{B_DEF_NAME_WITH_PREFIX} is about\nto be attacked by its {B_LAST_ITEM}!");
 static const u8 sText_CantEscapeBecauseOfCurrentMove[] = _("{B_DEF_NAME_WITH_PREFIX} can no longer escape\nbecause of {B_CURRENT_MOVE}!");
 static const u8 sText_NeutralizingGasEnters[] = _("Neutralizing Gas filled the area!");
 static const u8 sText_NeutralizingGasOver[] = _("The effects of Neutralizing\nGas wore off!");
@@ -872,6 +872,7 @@ static const u8 sText_GymSkillLightscreen[] = _("A spe. defensive screen was set
 static const u8 sText_GymSkillLuckyChant[] = _("A lucky chant was set on {B_TRAINER1_NAME}\nteam for {B_BUFF1} turns.");
 static const u8 sText_GymSkillPermaWideGuard[] = _("Permanent wide guard has been casted on\n{B_TRAINER1_NAME}'s team");
 static const u8 sText_FogStatDrops[] = _("{B_ATK_NAME_WITH_PREFIX}'s resolve\nfades due to the Eerie Fog!");
+static const u8 sText_OnTheProwl[] = _("{B_ATK_NAME_WITH_PREFIX} looks\nfor the perfect opportunity!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1030,7 +1031,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_new[] = _("");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1845,6 +1845,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_GYMSKILL_LUCKY_CHANT - 12] = sText_GymSkillLuckyChant,
     [STRINGID_GYMSKILL_PERMA_WIDEGUARD - 12] = sText_GymSkillPermaWideGuard,
     [STRINGID_FOG_STAT_DROPS - 12] = sText_FogStatDrops,
+    [STRINGID_ON_THE_PROWL - 12] = sText_OnTheProwl,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -1930,6 +1931,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_SHOWDOWN_MODE] = STRINGID_SHOWDOWN_MODE,
     [B_MSG_SWITCHIN_PARASITIC_SPORES] = STRINGID_PARASITIC_SPORES,
     [B_MSG_SWITCHIN_REJECTION] = STRINGID_QUASHSUCCESS,
+    [B_MSG_SWITCHIN_ON_THE_PROWL] = STRINGID_ON_THE_PROWL,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

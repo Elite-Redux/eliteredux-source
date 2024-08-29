@@ -151,6 +151,11 @@ static const union AnimCmd sAnim_KAIOSEA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_PHANFERNAL_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_AMPHYBUZZ_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -297,12 +302,12 @@ static const union AnimCmd sAnim_TOXTRICITY_REDUX_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_TOXTRICITY_REDUX_LOW_KEY_1[] =
+static const union AnimCmd sAnim_TOXTRICITY_REDUX_FUZZ_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
-static const union AnimCmd sAnim_TOXTRICITY_REDUX_LOW_KEY_MEGA_1[] =
+static const union AnimCmd sAnim_TOXTRICITY_REDUX_FUZZ_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -849,6 +854,11 @@ static const union AnimCmd *const sAnims_KAIOSEA[] ={
     sAnim_KAIOSEA_1,
 };
 
+static const union AnimCmd *const sAnims_PHANFERNAL[] ={
+    sAnim_GeneralFrame0,
+    sAnim_PHANFERNAL_1,
+};
+
 static const union AnimCmd *const sAnims_CORM[] ={
     sAnim_GeneralFrame0,
     sAnim_CORM_1,
@@ -994,14 +1004,14 @@ static const union AnimCmd *const sAnims_TOXTRICITY_REDUX_MEGA[] ={
     sAnim_TOXTRICITY_REDUX_MEGA_1,
 };
 
-static const union AnimCmd *const sAnims_TOXTRICITY_REDUX_LOW_KEY[] ={
+static const union AnimCmd *const sAnims_TOXTRICITY_REDUX_FUZZ[] ={
     sAnim_GeneralFrame0,
-    sAnim_TOXTRICITY_REDUX_LOW_KEY_1,
+    sAnim_TOXTRICITY_REDUX_FUZZ_1,
 };
 
-static const union AnimCmd *const sAnims_TOXTRICITY_REDUX_LOW_KEY_MEGA[] ={
+static const union AnimCmd *const sAnims_TOXTRICITY_REDUX_FUZZ_MEGA[] ={
     sAnim_GeneralFrame0,
-    sAnim_TOXTRICITY_REDUX_LOW_KEY_MEGA_1,
+    sAnim_TOXTRICITY_REDUX_FUZZ_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_TRAPINCH_REDUX[] ={
@@ -20820,6 +20830,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(BRONTONANA),
     ANIM_CMD(DREDWOOD),
     ANIM_CMD(KAIOSEA),
+    ANIM_CMD(PHANFERNAL),
     ANIM_CMD(AMPHYBUZZ),
     ANIM_CMD(AMPHYBUZZ_MEGA),
     ANIM_CMD(CORM),
@@ -20849,8 +20860,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(TOXEL_REDUX),
     ANIM_CMD(TOXTRICITY_REDUX),
     ANIM_CMD(TOXTRICITY_REDUX_MEGA),
-    ANIM_CMD(TOXTRICITY_REDUX_LOW_KEY),
-    ANIM_CMD(TOXTRICITY_REDUX_LOW_KEY_MEGA),
+    ANIM_CMD(TOXTRICITY_REDUX_FUZZ),
+    ANIM_CMD(TOXTRICITY_REDUX_FUZZ_MEGA),
     ANIM_CMD(TRAPINCH_REDUX),
     ANIM_CMD(VIBRAVA_REDUX),
     ANIM_CMD(FLYGON_REDUX),

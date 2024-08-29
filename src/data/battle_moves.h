@@ -621,7 +621,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
-        .argument = TYPE_ROCK,
+        .argument = TYPE_STEEL,
     },
     [MOVE_DISABLE] =
     {
@@ -1727,9 +1727,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BARRAGE] =
     {
         .effect = EFFECT_MULTI_HIT,
-        .power = 25,
-        .type = TYPE_NORMAL,
-        .accuracy = 85,
+        .power = 20,
+        .type = TYPE_STEEL,
+        .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -1857,7 +1857,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        .split = SPLIT_SPECIAL,
+        .split = SPLIT_PHYSICAL,
     },
     [MOVE_ACID_ARMOR] =
     {
@@ -5996,7 +5996,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 0,
         .type = TYPE_POISON,
         .accuracy = 0,
-        .pp = 20,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
         .flags = FLAG_SNATCH_AFFECTED,
@@ -7599,7 +7599,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_BOTH,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_DRAGON_ASCENT] =
@@ -8672,7 +8672,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 10,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_STRONG_JAW_BOOST | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_PYRO_BALL] =
@@ -9438,7 +9438,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 10,
         .secondaryEffectChance = 20,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_IRON_FIST_BOOST | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_DRACONIC_FANGS] =
@@ -10195,7 +10195,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 80,
         .type = TYPE_GRASS,
         .accuracy = 100,
-        .pp = 20,
+        .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
@@ -10418,8 +10418,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 80,
         .type = TYPE_WATER,
         .accuracy = 100,
-        .pp = 30,
-        .secondaryEffectChance = 100,
+        .pp = 15,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
@@ -11150,6 +11150,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_SPECIAL,
         .parentalBondBanned = TRUE,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_HARD_PRESS] =
     {
@@ -11260,6 +11261,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRIKER_BOOST,
         .split = SPLIT_SPECIAL,
         .argument = MOVE_EFFECT_TOXIC,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_LUNAR_BLESSING] =
     {

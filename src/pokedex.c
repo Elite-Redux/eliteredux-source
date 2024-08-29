@@ -6374,18 +6374,18 @@ static void FreeStatsScreenWindowAndBgBuffers(void)
 static void Task_HandleStatsScreenInput(u8 taskId)
 {
     // gTasks[taskId].data[5] = 0;
-    if (JOY_NEW(A_BUTTON))
-    {
-        PlaySE(SE_DEX_PAGE);
-        if (gTasks[taskId].data[5] == 0)
-            gTasks[taskId].data[5] = 1;
-        else
-            gTasks[taskId].data[5] = 0;
-        FillWindowPixelRect(0, PIXEL_FILL(0), 0, 48, 240, 130);
-        PrintStatsScreen_Left(taskId);
-        PrintStatsScreen_DestroyMoveItemIcon(taskId);
-        PrintStatsScreen_MoveNameAndInfo(taskId);
-    }
+    // if (JOY_NEW(A_BUTTON))
+    // {
+    //     PlaySE(SE_DEX_PAGE);
+    //     if (gTasks[taskId].data[5] == 0)
+    //         gTasks[taskId].data[5] = 1;
+    //     else
+    //         gTasks[taskId].data[5] = 0;
+    //     FillWindowPixelRect(0, PIXEL_FILL(0), 0, 48, 240, 130);
+    //     PrintStatsScreen_Left(taskId);
+    //     PrintStatsScreen_DestroyMoveItemIcon(taskId);
+    //     PrintStatsScreen_MoveNameAndInfo(taskId);
+    // }
     if (JOY_NEW(B_BUTTON))
     {
         BeginNormalPaletteFade(0xFFFFFFFF, 0, 0, 16, RGB_BLACK);

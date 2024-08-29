@@ -2305,6 +2305,11 @@
 	.4byte \noChangePtr
 	.endm
 
+	.macro setstatus4 battler:req status4:req
+	various \battler, VARIOUS_SET_STATUS_4
+	.4byte \status4
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

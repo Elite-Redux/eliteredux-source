@@ -584,6 +584,7 @@ extern const u8 BattleScript_IntimidateActivatedNew[];
 extern const u8 BattleScript_GeneratorActivates[];
 extern const u8 BattleScript_EffectSoothingAroma[];
 extern const u8 BattleScript_MoveWasDisabledMessage[];
+extern const u8 BattleScript_AbilityBoostsCrit[];
 
 extern const u8 BattleScript_Archmage_Effect_Type_Electric[];
 extern const u8 BattleScript_Archmage_Effect_Type_Fairy[];

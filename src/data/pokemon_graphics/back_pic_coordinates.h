@@ -5551,6 +5551,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x87,
         .y_offset = 0,
     },
+    [SPECIES_PHANFERNAL] =
+    {
+        .size = 0,
+        .y_offset = 0,
+    },
     [SPECIES_AMPHYBUZZ] =
     {
         .size = 0x78,
@@ -5696,12 +5701,12 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
-    [SPECIES_TOXTRICITY_REDUX_LOW_KEY] =
+    [SPECIES_TOXTRICITY_REDUX_FUZZ] =
     {
         .size = 0x78,
         .y_offset = 0,
     },
-    [SPECIES_TOXTRICITY_REDUX_LOW_KEY_MEGA] =
+    [SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA] =
     {
         .size = 0x78,
         .y_offset = 0,

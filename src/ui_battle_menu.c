@@ -173,6 +173,7 @@ enum
     STATUS_INFO_WRAPPED,
     STATUS_INFO_PARASITIC_SPORES,
     STATUS_INFO_FEAR,
+    STATUS_INFO_ON_THE_PROWL,
     NUM_STATUS_INFO,
 };
 
@@ -881,6 +882,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 break;
                 case STATUS_INFO_FEAR:
                     if (gVolatileStructs[j].fear)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_ON_THE_PROWL:
+                    if (gVolatileStructs[j].onTheProwl)
                         isExtraInfoShown = TRUE;
                 break;
             }
@@ -2232,10 +2237,10 @@ const u8 sText_Title_Status_Parasitic_Spores[]              = _("Parasitic Spore
 const u8 sText_Title_Status_Parasitic_Spores_Description[]  = _("This Pokémon takes 1/8 of its\n"
                                                                 "maximum HP if it is not\n"
                                                                 "Ghost-type. Spreads on contact.");
-const u8 sText_Title_Status_Fear[]                          = _("Fear");
-const u8 sText_Title_Status_Fear_Description[]              = _("For one turn this Pokémon\n"
-                                                                "can't swap and takes 50% more\n"
-                                                                "damage.");
+const u8 sText_Title_Status_Fear[]                          = _("On the Prowl");
+const u8 sText_Title_Status_Fear_Description[]              = _("This Pokémon gains +1 priority on\n"
+                                                                "moves for one turn. Does not work\n"
+                                                                "on moves with negative priority.");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
 #define MAX_DESCRIPTION_LINES 3
@@ -2868,6 +2873,15 @@ static void PrintStatusTab(void){
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;
+            case STATUS_INFO_ON_THE_PROWL:
+                StringCopy(gStringVar1, sText_Title_Status_Fear);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Description
+                StringCopy(gStringVar1, sText_Title_Status_Fear);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
         }
         if(printedInfo)
             y = y + MAX_DESCRIPTION_LINES + 2;
@@ -3001,10 +3015,10 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex){
     GET_MOVE_TYPE(move, moveType);
 
     //Max and Min Damage
-    minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR);
-    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR);
+    minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR, (u16*) &ignored);
+    maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, (u16*) &ignored);
 
-    immune = TestImmunityAbilities(target, battler, move, moveType, &ignored, (u16*) &ignored);
+    immune = TestAbsorbingAbilities(target, battler, move, moveType, &ignored, (u16*) &ignored);
     if (immune) minDamage = maxDamage = 0;
 
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].minDamage = minDamage;
@@ -3037,7 +3051,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex){
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].hits2KO = (targetCurrentHp / sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamage);
 
     for(i = 0; i < MIN_DAMAGE_FACTOR; i++){
-        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i);
+        tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i, (u16*) &ignored);
         tempchance = (targetCurrentHp / tempdamage);
 
         if(tempchance == hits2KO){

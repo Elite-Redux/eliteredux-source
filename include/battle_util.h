@@ -196,6 +196,13 @@ bool8 HasNoMonsToSwitch(u8 battlerId, u8 r1, u8 r2);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
 bool32 SetPermanentWeather(u32 weatherEnumId);
 u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 special, u16 moveArg);
+
+#define GET_ALL_BATTLER_ABILITIES(abilitiesArray, battler, battlerAtk) \
+GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk) \
+// STATIC_ASSERT(ARRAY_COUNT(abilitiesArray) == 4, AbilitiesArrayShouldBeSize4 ## __counter__) \
+// STATIC_ASSERT(sizeof(abilitiesArray[0]) == sizeof(u16), AbilitiesArrayShouldBeArrayOfU16 ## __counter__) \
+
+void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
 u32 GetBattlerAbility(u8 battlerId);
 bool8 BattlerAbilityIsSuppressed(u8 battlerId, u8 attacker);
 u32 GetBattlerAbilityWithoutRemoval(u8 battlerId);
@@ -312,12 +319,14 @@ void ReadActiveScriptInitialStackState();
 void SetActiveMultistringChooser(u8 messageId);
 void SetActiveAbilityPopupOverride(u16 messageId);
 void SetActiveStackBattler(u8 battler, u8 number);
-u16 GetInnateInSlot(u16 species, u8 position, u32 personality, u8 isPlayer);
+u16 GetInnateInSlot(int level, u16 species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 ability, u16 move);
 bool32 IsHealingMoveEffect(u16 effect);
 int IsMagicGuardProtected(int battler);
-int TestImmunityAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
+int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
+u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
+int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u8* overrideBattler, u16* abilityPopup);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
@@ -346,7 +355,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
 void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities);
 
 u32 GetIllusionMonSpecies(u32 battlerId);
-s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, bool32 isCrit, u8 randomFactor);
+s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, bool32 isCrit, u8 randomFactor, u16* typeEffectivenessModifier);
 
 //Monotype funcs
 bool8 IsBattlerCursed(u8 battler);

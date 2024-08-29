@@ -83,10 +83,10 @@
 
 #define ABILITY_TANGLED_FEET 77 // Doubles Evasion when confused.
 #define ABILITY_MOTOR_DRIVE 78 // Raises Speed by one stage if hit by an Electric-type move.
-#define ABILITY_RIVALRY 79 // Deals 1.25x more damage against same gender, else 1x.
+#define ABILITY_RIVALRY 79 // Deals 1.25x to same gender. Takes .75x from opposite gender.
 #define ABILITY_STEADFAST 80 // Raises Speed by one stage if this Pokémon flinches.
 #define ABILITY_SNOW_CLOAK 81 // Evasion is boosted by 1.25x under hail.
-#define ABILITY_GLUTTONY 82 // Raises pinch Berry activation threshold: 1/4 max HP to 1/2.
+#define ABILITY_GLUTTONY 82 // Eats berries early. Berries also restore 1/3 of max HP.
 #define ABILITY_ANGER_POINT 83 // Getting hit raises Atk by +1. Critical hits maximize Attack.
 #define ABILITY_UNBURDEN 84 // Consuming its held item doubles Speed until switched out.
 #define ABILITY_HEATPROOF 85 // Halves damage taken from Fire- type moves. Takes no burn damage.
@@ -177,7 +177,7 @@
 
 #define ABILITY_AROMA_VEIL 165 // Immune to Encore, Attract, Taunt, Torment, Disable, Heal Block.
 #define ABILITY_FLOWER_VEIL 166 // Grass-types on this Pokémon's side are immune to stat drops.
-#define ABILITY_CHEEK_POUCH 167 // Eating a Berry also restores 1/3 of max HP.
+#define ABILITY_CHEEK_POUCH 167 // This ability has no effect.
 #define ABILITY_PROTEAN 168 // Changes type depending on the move it's about to use.
 #define ABILITY_FUR_COAT 169 // Halves damage taken by Physical moves. Does NOT double Defense.
 #define ABILITY_MAGICIAN 170 // Steals the foe's held item after using a non-contact move.
@@ -289,7 +289,7 @@
 
 #define ABILITY_CHLOROPLAST 268 // Weather Ball, Solar Beam/Blade, Growth act as if used in sun.
 #define ABILITY_WHITEOUT 269 // Grants a 1.5x power boost to Ice-type moves under hail.
-#define ABILITY_PYROMANCY 270 // Its Fire-type moves' burn chance is multiplied by five.
+#define ABILITY_PYROMANCY 270 // Moves inflict burn 5x as often.
 #define ABILITY_KEEN_EDGE 271 // Boosts the power of slashing moves by 1.3x.
 #define ABILITY_PRISM_SCALES 272 // Takes 30% less damage from Special attacks.
 #define ABILITY_POWER_FISTS 273 // Punching moves become Special and get a 1.3x power boost.
@@ -390,11 +390,11 @@
 #define ABILITY_SIGHTING_SYSTEM 368 // Moves always hit. Moves last for moves less than 80% accuracy.
 #define ABILITY_BAD_COMPANY 369 // Not implemented right now. Has no effect.
 #define ABILITY_OPPORTUNIST 370 // If target has less than 1/2 HP, single-target moves get +1 prio.
-#define ABILITY_GIANT_WINGS 371 // Boosts the power of wing, wind or air-based moves by 1.25x.
+#define ABILITY_GIANT_WINGS 371 // Boosts the power of wing, wind or air-based moves by 1.3x.
 #define ABILITY_MOMENTUM 372 // Contact moves use the Speed stat for damage calculation.
 #define ABILITY_GRIP_PINCER 373 // 50% chance to trap. Then ignores Defense & accuracy checks.
 #define ABILITY_BIG_LEAVES 374 // Chloroplast/phyll, Harvest, Leaf Guard and Solar Power.
-#define ABILITY_PRECISE_FIST 375 // Punching moves get +1 crit and double effect chance.
+#define ABILITY_PRECISE_FIST 375 // Punching moves get +1 crit and 5x effect chance.
 #define ABILITY_DEADEYE 376 // Never misses.
 #define ABILITY_ARTILLERY 377 // Mega Launcher moves always hit. Single-target now hits both foes.
 #define ABILITY_AMPLIFIER 378 // Ups sound moves by 30% and makes them hit both foes.
@@ -418,7 +418,7 @@
 #define ABILITY_STEEL_BARREL 396 // Immune to recoil damage, but not immune to Explosion/crash dmg.
 #define ABILITY_PYRO_SHELLS 397 // Triggers 50 BP Outburst after using a Mega Launcher move.
 #define ABILITY_FUNGAL_INFECTION 398 // Every attacking move inflicts Leech Seed on the target.
-#define ABILITY_PARRY 399 // Takes 80% from Contact, then counters with Mach Punch.
+#define ABILITY_PARRY 399 // Counters contact with Mach Punch. Takes 20% less damage.
 #define ABILITY_SCRAPYARD 400 // Sets a layer of Spikes when hit (contact move).
 #define ABILITY_LOOSE_QUILLS 401 // Sets a layer of Spikes when hit (contact move).
 #define ABILITY_TOXIC_DEBRIS 402 // Sets a layer of Toxic Spikes when hit by contact moves.
@@ -475,7 +475,7 @@
 #define ABILITY_RAGING_MOTH 453 // Fire moves hits twice, both hits at 75% power.
 #define ABILITY_ADRENALINE_RUSH 454 // KOs raise Speed by one stage.
 #define ABILITY_ARCHMAGE 455 // 30% chance of adding a type related effect to each move.
-#define ABILITY_CRYOMANCY 456 // Ice moves inflict frostbite 5x more often.
+#define ABILITY_CRYOMANCY 456 // Moves inflict frostbite 5x as often.
 #define ABILITY_PHANTOM_PAIN 457 // Ghost type moves can hit normal type pokemon for neutral damage.
 #define ABILITY_PURGATORY 458 // Boosts Ghost-type moves by 1.3x, or 1.8x when below 1/3 HP.
 #define ABILITY_EMANATE 459 // Normal-type moves become Psy.- type moves and get a 1.1x boost.
@@ -562,7 +562,7 @@
 #define ABILITY_BANSHEE 540 // Normal-type moves become Ghost- type moves and get a 1.2x boost.
 #define ABILITY_WEB_SPINNER 541 // Uses String Shot on switch-in.
 #define ABILITY_SHOWDOWN_MODE 542 // Combines Ambush & Violent Rush.
-#define ABILITY_SEED_SOWER 543 // Sets Grassy Terrain and Leech Seed when hit.
+#define ABILITY_SEED_SOWER 543 // Sets Grassy Terrain when hit.
 #define ABILITY_AIRBORNE 544 // Boosts own & ally's Flying-type moves by 1.3x.
 #define ABILITY_PARROTING 545 // Copies sound moves used by others. Immune to sound.
 #define ABILITY_SALT_CIRCLE 546 // Prevents opposing pokemon from fleeing on entry.
@@ -648,8 +648,23 @@
 #define ABILITY_TERRIFY 626 // Lowers foes' Sp. Atk by two stages on entry.
 #define ABILITY_ICE_DOWNFALL 627 // Counters contact with 60BP Icicle Crash.
 #define ABILITY_LAST_STAND 628 // Def and SpDef increase as HP drops. Max 1.6x.
+#define ABILITY_PYROCLASTIC_FLOW 629 // Combines Molten Down & Corrosion.
+#define ABILITY_BLOOD_BATH 630 // Immune to bleed. Inflict fear when inflicting bleed.
+#define ABILITY_BATTLE_AURA 631 // Sharply increases the critical hit rate for all while on the field.
+#define ABILITY_BLOODLUST 632 // Immune to bleed. +1 priority vs bleeding foes.
+#define ABILITY_PIERCING_SOLO 633 // Sound moves have a 30% chance to cause bleeding.
+#define ABILITY_RHYTHMIC 634 // Deals 10% more damage for each repeated move use.
+#define ABILITY_CHUNKY_BASS_LINE 635 // Triggers a 40BP Earthquake after using a sound move.
+#define ABILITY_DUAL_HAMMER 636 // Super Slammer moves hit twice for 75% damage.
+#define ABILITY_DENTING_BLOWS 637 // Hammer moves lower Defense.
+#define ABILITY_ICE_COLD_HUNTER 638 // Combines Hyper Aggressive and Whiteout.
+#define ABILITY_SOUL_CRUSHER 639 // Hammer moves become Special and get a 1.1x power boost.
+#define ABILITY_ARC_FLASH 640 // 50% chance to burn when hit or paralyze when dealing damage.
+#define ABILITY_UNICORN 641 // Mighty Horn + Dazzling.
+#define ABILITY_ON_THE_PROWL 642 // +1 priority for the first turn.
+#define ABILITY_PRETENTIOUS 643 // Dealing a KO raises Crit by one stage.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_LAST_STAND + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_PRETENTIOUS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

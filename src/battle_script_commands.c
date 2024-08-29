@@ -1353,7 +1353,7 @@ static bool32 NoTargetPresent(u32 move)
     if (!IsBattlerAlive(gBattlerTarget))
         gBattlerTarget = GetMoveTarget(move, 0);
 
-    switch (gBattleMoves[move].target)
+    switch (GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker))
     {
     case MOVE_TARGET_SELECTED:
     case MOVE_TARGET_DEPENDS:
@@ -1518,6 +1518,18 @@ static void Cmd_attackcanceler(void)
         PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
         return;
     }
+    // Dual Hammer
+    if (!gTurnStructs[gBattlerAttacker].parentalBondOn
+	&& (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DUAL_HAMMER))
+	&& (gBattleMoves[gCurrentMove].hammerBased)
+    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
+    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
+    {
+		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
+        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_DUAL_HAMMER;
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
+        return;
+    }
     //Raging Moth
     if (!gTurnStructs[gBattlerAttacker].parentalBondOn
 	&& (GetBattlerAbility(gBattlerAttacker) == ABILITY_RAGING_MOTH || BattlerHasInnate(gBattlerAttacker, ABILITY_RAGING_MOTH)) // Includes Innate
@@ -1573,7 +1585,7 @@ static void Cmd_attackcanceler(void)
     }
 	// Hyper Aggressive
 	if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-    && (GetBattlerAbility(gBattlerAttacker) == ABILITY_HYPER_AGGRESSIVE || BattlerHasInnate(gBattlerAttacker, ABILITY_HYPER_AGGRESSIVE)) // Includes Innate
+    && (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_HYPER_AGGRESSIVE) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ICE_COLD_HUNTER))
     && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
     && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
     {
@@ -2248,6 +2260,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PRECISE_FIST)  && IS_IRON_FIST(battlerAtk, move))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SUPER_LUCK))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER))
+                    + 2 * (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BATTLE_AURA))
                     + gVolatileStructs[battlerAtk].critBoost;
 
         if (critChance >= ARRAY_COUNT(sCriticalHitChance))
@@ -3204,7 +3217,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
 
     if (gBattleMons[gEffectBattler].hp == 0
         && gBattleScripting.moveEffect != MOVE_EFFECT_PAYDAY
-        && gBattleScripting.moveEffect != MOVE_EFFECT_STEAL_ITEM)
+        && gBattleScripting.moveEffect != MOVE_EFFECT_STEAL_ITEM
+        && !(gBattleScripting.moveEffect >= MOVE_EFFECT_WATER_PLEDGE && gBattleScripting.moveEffect <= MOVE_EFFECT_SWAMP))
         INCREMENT_RESET_RETURN
 
     if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER)
@@ -4095,13 +4109,11 @@ static void Cmd_seteffectwithchance(void)
 
     //Pyromancy boost
     if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PYROMANCY)
-             && moveType == TYPE_FIRE
              && moveEffect == MOVE_EFFECT_BURN)
         percentChance = percentChance * 5;
 
     //Cryomancy boost
     if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CRYOMANCY)
-             && moveType == TYPE_ICE
              && moveEffect == MOVE_EFFECT_FROSTBITE)
         percentChance = percentChance * 5;
 
@@ -4114,7 +4126,7 @@ static void Cmd_seteffectwithchance(void)
     //Precise fist boosts
     if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRECISE_FIST)
              && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
-        percentChance = percentChance * 2;
+        percentChance = percentChance * 5;
 
     //Frostbite are more likely to occour during Hail
     if (moveEffect == MOVE_EFFECT_FROSTBITE && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_HAIL_ANY))
@@ -4710,7 +4722,7 @@ static void Cmd_getexp(void)
                 if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && gBattlerPartyIndexes[gActiveBattler] == gBattleStruct->expGetterMonId)
                     HandleLowHpMusicChange(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
 
-                PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gActiveBattler, gBattleStruct->expGetterMonId);
+                gStackBattler1 = gActiveBattler;
                 PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 3, GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL));
 
                 BattleScriptPushCursor();
@@ -7197,12 +7209,13 @@ static void Cmd_switchineffects(void)
             u16 abilities[NUM_INNATE_PER_SPECIES + 1] = {0};
             u16 species = gBattleMons[i].species;
             u32 personality = gBattleMons[i].personality;
+            int level = gBattleMons[i].level;
             bool8 isPlayer = GetBattlerSide(i) == B_SIDE_PLAYER;
             u8 j = 0;
             if (IsUnsuppressableAbility(gBattleMons[i].ability)) abilities[0] = gBattleMons[i].ability;
             for (j = 0; j < NUM_INNATE_PER_SPECIES; j++)
             {
-                u16 innate = GetInnateInSlot(species, j, personality, isPlayer);
+                u16 innate = GetInnateInSlot(level, species, j, personality, isPlayer);
                 if (IsUnsuppressableAbility(innate)) abilities[j+1] = innate;
             }
             UpdateAbilityStateIndices(i, abilities);
@@ -7933,7 +7946,7 @@ static void Cmd_setgravity(void)
 static bool32 TryCheekPouch(u32 battlerId, u32 itemId)
 {
     if (ItemId_GetPocket(itemId) == POCKET_BERRIES
-        && BATTLER_HAS_ABILITY(battlerId, ABILITY_CHEEK_POUCH)
+        && BATTLER_HAS_ABILITY(battlerId, ABILITY_GLUTTONY)
         && !BATTLER_HEALING_BLOCKED(battlerId)
         && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]]
         && !BATTLER_MAX_HP(battlerId))
@@ -9206,6 +9219,19 @@ static void Cmd_various(void)
 
             #undef MOXIE_CHECK
 
+            gBattlescriptCurrInstr += 3;
+
+            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PRETENTIOUS)
+                && !NoAliveMonsForEitherParty()
+                && gVolatileStructs[gActiveBattler].critBoost < 3)
+            {
+                gVolatileStructs[gActiveBattler].critBoost++;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_PRETENTIOUS;
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
+                BattleScriptPush(gBattlescriptCurrInstr);
+                gBattlescriptCurrInstr = BattleScript_AbilityBoostsCrit;
+            }
+
             if (checkMoxieVariants
             && activateMoxieVariant
             && !NoAliveMonsForEitherParty()
@@ -9216,10 +9242,10 @@ static void Cmd_various(void)
                 SetStatChanger(statToChange, 1);
                 PREPARE_STAT_BUFFER(gBattleTextBuff1, statToChange);
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = abilityToCheck;
-                BattleScriptPush(gBattlescriptCurrInstr + 3);
+                BattleScriptPush(gBattlescriptCurrInstr);
                 gBattlescriptCurrInstr = BattleScript_RaiseStatOnFaintingTarget;
-                return;
             }
+            return;
         }
         break;
     case VARIOUS_TRY_ACTIVATE_SUPER_STRAIN:    // and variants
@@ -9998,23 +10024,13 @@ static void Cmd_various(void)
         SWAP(gBattleMons[gActiveBattler].attack, gBattleMons[gActiveBattler].defense, i);
         break;
     case VARIOUS_AFTER_YOU:
-        if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget)
-            || GetBattlerTurnOrderNum(gBattlerAttacker) == GetBattlerTurnOrderNum(gBattlerTarget) + 1)
+        if (gCurrentTurnActionNumber >= GetBattlerTurnOrderNum(gBattlerTarget))
         {
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         }
         else
         {
-            // Shift battlers down to target position and move target battler to next in line.
-            u8 targetPosition = GetBattlerTurnOrderNum(gBattlerTarget);
-            for (i = targetPosition; i > gCurrentTurnActionNumber + 1; i--)
-            {
-                gBattlerByTurnOrder[i] = gBattlerByTurnOrder[i-1];
-            }
-
-            gBattlerByTurnOrder[gCurrentTurnActionNumber + 1] = gBattlerTarget;
-            gAfterYouBattlers++;
-
+            gRoundStructs[gActiveBattler].afterYou = TRUE;
             gBattlescriptCurrInstr += 7;
         }
         return;
@@ -10565,7 +10581,7 @@ static void Cmd_various(void)
         }
         else
         {
-            PREPARE_ITEM_BUFFER(gBattleTextBuff1, gBattleMons[gActiveBattler].item);
+            gLastUsedItem = gBattleMons[gActiveBattler].item;
             gBattlescriptCurrInstr += 7;
         }
         return;
@@ -10649,6 +10665,7 @@ static void Cmd_various(void)
     case VARIOUS_SET_FEAR:
         gStatuses4[gActiveBattler] |= STATUS4_FEAR;
         gVolatileStructs[gActiveBattler].fear = gVolatileStructs[gActiveBattler].started.fear = TRUE;
+        SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_BLOOD_BATH);
         break;
     case VARIOUS_HANDLE_WEATHER_CHANGE:
         gBattlescriptCurrInstr += 3;
@@ -10692,7 +10709,7 @@ static void Cmd_various(void)
         {
             gBattleScripting.abilityPopupOverwrite = ABILITY_ICE_FACE;
             UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_EISCUE);
-            gBattleMons[gActiveBattler].species == SPECIES_EISCUE;
+            gBattleMons[gActiveBattler].species = SPECIES_EISCUE;
             BattleScriptPush(gBattlescriptCurrInstr);
             gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
         }
@@ -11267,6 +11284,13 @@ static void Cmd_various(void)
 
             return;
         }
+    case VARIOUS_SET_STATUS_4:
+        {
+            int status4 = T1_READ_32(gBattlescriptCurrInstr + 3);
+            gStatuses4[gActiveBattler] |= status4;
+        }
+        gBattlescriptCurrInstr += 7;
+        return;
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
@@ -13436,6 +13460,8 @@ static void Cmd_calculatesetdamage(void)
     else if(gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_WIELD)
         gBattleMoveDamage = baseDamage * 3 / 4; // .75
     else if(gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_RAGING_MOTH)
+        gBattleMoveDamage = baseDamage * 3 / 4; // .75
+    else if(gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_HAMMER)
         gBattleMoveDamage = baseDamage * 3 / 4; // .75
 
     //Failsafe
