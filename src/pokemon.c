@@ -10272,47 +10272,10 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Legendary
                 species == SPECIES_ZARUDE_DADA                || //Legendary
                 //Unfinished Mons
-                species == SPECIES_SKWOVET                    ||
-                species == SPECIES_GREEDENT                   ||
-                species == SPECIES_BLIPBUG                    ||
-                species == SPECIES_DOTTLER                    ||
-                species == SPECIES_ORBEETLE                   ||
-                species == SPECIES_NICKIT                     ||
-                species == SPECIES_THIEVUL                    ||
-                species == SPECIES_GOSSIFLEUR                 ||
-                species == SPECIES_ELDEGOSS                   ||
-                species == SPECIES_WOOLOO                     ||
-                species == SPECIES_DUBWOOL                    ||
-                species == SPECIES_CHEWTLE                    ||
-                species == SPECIES_DREDNAW                    ||
-                species == SPECIES_SILICOBRA                  ||
-                species == SPECIES_SANDACONDA                 ||
-                species == SPECIES_CRAMORANT                  ||
-                species == SPECIES_ARROKUDA                   ||
-                species == SPECIES_BARRASKEWDA                ||
-                species == SPECIES_CLOBBOPUS                  ||
-                species == SPECIES_GRAPPLOCT                  ||
-                species == SPECIES_CURSOLA                    ||
-                species == SPECIES_MR_RIME                    ||
-                species == SPECIES_MILCERY                    ||
-                species == SPECIES_ALCREMIE                   ||
-                species == SPECIES_FALINKS                    ||
-                species == SPECIES_PINCURCHIN                 ||
-                species == SPECIES_SNOM                       ||
-                species == SPECIES_FROSMOTH                   ||
-                species == SPECIES_STONJOURNER                ||
-                species == SPECIES_EISCUE                     ||
-                species == SPECIES_INDEEDEE                   ||
-                species == SPECIES_MORPEKO                    ||
-                species == SPECIES_CUFANT                     ||
-                species == SPECIES_COPPERAJAH                 ||
-                species == SPECIES_DURALUDON                  ||
-                species == SPECIES_SLOWPOKE_GALARIAN          ||
-                species == SPECIES_WEEZING_GALARIAN           ||
-                species == SPECIES_MR_MIME_GALARIAN           ||
-                species == SPECIES_SLOWKING_GALARIAN          ||
-                species == SPECIES_CORSOLA_GALARIAN           ||
-                species == SPECIES_STUNFISK_GALARIAN          ||
+                species == SPECIES_INFERNAPE_REDUX            ||
+                species == SPECIES_TERAPAGOS                  ||
+                species == SPECIES_TERAPAGOS_STELLAR          ||
+                species == SPECIES_LUXRAY_REDUX               ||
                 species == SPECIES_CRAMORANT_GULPING          ||
                 species == SPECIES_CRAMORANT_GORGING          ||
                 species == SPECIES_SINISTEA_ANTIQUE           ||
