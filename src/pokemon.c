@@ -10273,6 +10273,12 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_ZARUDE_DADA                || //Legendary
                 //Unfinished Mons
                 species == SPECIES_INFERNAPE_REDUX            ||
+                species == SPECIES_ENAMORUS                   ||
+                species == SPECIES_ENAMORUS_THERIAN           ||
+                species == SPECIES_SINISTEA_ANTIQUE           ||
+                species == SPECIES_POLTEAGEIST_ANTIQUE        ||
+                species == SPECIES_INDEEDEE_FEMALE            ||
+                species == SPECIES_SCIZOR_REDUX               ||
                 species == SPECIES_TERAPAGOS                  ||
                 species == SPECIES_TERAPAGOS_STELLAR          ||
                 species == SPECIES_LUXRAY_REDUX               ||
