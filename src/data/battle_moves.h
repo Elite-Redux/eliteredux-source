@@ -137,9 +137,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_VISE_GRIP] =
     {
         .effect = EFFECT_HIT,
-        .power = 70,
+        .power = 120,
         .type = TYPE_BUG,
-        .accuracy = 100,
+        .accuracy = 85,
         .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -1009,7 +1009,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_SPEED_DOWN_2,
         .power = 0,
         .type = TYPE_BUG,
-        .accuracy = 95,
+        .accuracy = 100,
         .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_BOTH,
@@ -1912,7 +1912,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BONEMERANG] =
     {
         .effect = EFFECT_DOUBLE_HIT,
-        .power = 50,
+        .power = 45,
         .type = TYPE_GROUND,
         .accuracy = 100,
         .pp = 10,
@@ -4984,7 +4984,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_FLINCH_RECOIL_33,
         .power = 120,
         .type = TYPE_DRAGON,
-        .accuracy = 95,
+        .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 20,
         .target = MOVE_TARGET_SELECTED,
@@ -6584,10 +6584,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_SPECIAL,
         .airBased = TRUE,
     },
-    [MOVE_STEAMROLLER] =
+    [MOVE_STEAMROLLER] = // flinch effect to be removed and replaced with defense curl boosting bp and the move acting as if it was used by a +1 speed mon
     {
         .effect = EFFECT_FLINCH_HIT,
-        .power = 65,
+        .power = 80,
         .type = TYPE_BUG,
         .accuracy = 100,
         .pp = 20,
@@ -7556,8 +7556,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_LANDS_WRATH] =
     {
-        .effect = EFFECT_HIT,
-        .power = 90,
+        .effect = EFFECT_REMOVE_TERRAIN_NO_FAIL,
+        .power = 100,
         .type = TYPE_GROUND,
         .accuracy = 100,
         .pp = 10,
@@ -9874,7 +9874,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_HIT,
         .power = 100,
         .type = TYPE_STEEL,
-        .accuracy = 95,
+        .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -10874,13 +10874,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_PSYBLADE] =
     {
         .effect = EFFECT_MISC_HIT,
-        .power = 80,
+        .power = 85,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_KEEN_EDGE_BOOST,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_PHYSICAL,
         .argument = MISC_EFFECT_ELECTRIC_TERRAIN_BOOST,
     },
@@ -11325,12 +11325,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BLEAKWIND_STORM] =
     {
-        .effect = EFFECT_SPEED_DOWN_HIT,
+        .effect = EFFECT_TAILWIND,
         .power = 100,
         .type = TYPE_FLYING,
-        .accuracy = 80,
+        .accuracy = 90,
         .pp = 10,
-        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_BOTH,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
