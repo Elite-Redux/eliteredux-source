@@ -14310,7 +14310,7 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_WORMADAM] =
     {
-    .baseHP        = 80,
+    .baseHP        = 84,
     .baseAttack    = 59,
     .baseDefense   = 85,
     .baseSpeed     = 36,
@@ -14337,7 +14337,7 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_WORMADAM_SANDY_CLOAK] =
     {
-    .baseHP        = 80,
+    .baseHP        = 84,
     .baseAttack    = 99,
     .baseDefense   = 105,
     .baseSpeed     = 36,
@@ -14364,7 +14364,7 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_WORMADAM_TRASH_CLOAK] =
     {
-    .baseHP        =  80,
+    .baseHP        =  84,
     .baseAttack    =  69,
     .baseDefense   =  105,
     .baseSpeed     =  36,
