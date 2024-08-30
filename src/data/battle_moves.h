@@ -11448,6 +11448,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_SMASHING_PUMPKINS] =
     {
@@ -11460,6 +11461,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_AIRBORNE_SLAM] =
     {
@@ -11471,6 +11473,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_SPINE_BREAKER] =
     {
@@ -11483,6 +11486,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_CRACKLE_SLAM] =
     {
@@ -11495,6 +11499,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
         .argument = TYPE_STEEL,
+        .hammerBased = TRUE,
     },
     [MOVE_SQUALL_HAMMER] =
     {
@@ -11508,6 +11513,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 50,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_MEGATON_HAMMER] =
     {
@@ -11519,6 +11525,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_MAKES_CONTACT | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_BATTERING_RAM] =
     {
@@ -11531,6 +11538,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_PITFALL] = //add the "moves always hit enemy" effect later
     {
@@ -11543,6 +11551,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_VIRAL_STRIKE] = // to add passes status to the enemy and cure status of user 
     {
@@ -11555,6 +11564,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_SHADOW_HAMMER] =
     {
@@ -11566,6 +11576,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_BONK] =
     {
@@ -11577,6 +11588,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_MOLTEN_STRIKE] =
     {
@@ -11602,6 +11614,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_EARTHSPLITTER] = //to change to only down defense vs rock,ground,and grass
     {
@@ -11614,6 +11627,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_BEETLE_BASH] =
     {
@@ -11626,6 +11640,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_PEBBLE_SHOWER] =
     {
