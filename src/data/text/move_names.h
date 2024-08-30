@@ -1906,4 +1906,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_RAPID_RIVER] = _("Rapid River"),
     [MOVE_TOXIC_NEEDLES] = _("Toxic Needles"),
     [MOVE_SMOLDER_BASH] = _("Smolder Bash"),
+    [MOVE_BEATDOWN] = _("Beatdown"),
 };

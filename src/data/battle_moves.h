@@ -452,14 +452,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TAKE_DOWN] =
     {
-        .effect = EFFECT_RECOIL_25,
-        .power = 95,
-        .type = TYPE_NORMAL,
+        .effect = EFFECT_SPEED_DOWN_HIT,
+        .power = 85,
+        .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 20,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 20,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_RECKLESS_BOOST,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_THRASH] =
@@ -10059,12 +10059,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TORRENT_FIST] =
     {
-        .effect = EFFECT_FLINCH_HIT,
+        .effect = EFFECT_SPEED_DOWN_HIT,
         .power = 75,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 15,
-        .secondaryEffectChance = 10,
+        .secondaryEffectChance = 20,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_IRON_FIST_BOOST | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
@@ -11666,6 +11666,17 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
         .hornBased = TRUE,
+    },
+    [MOVE_BEATDOWN] =
+    {
+        .effect = EFFECT_MULTI_HIT,
+        .power = 25,
+        .type = TYPE_DARK,
+        .accuracy = 100,
+        .pp = 20,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_PHYSICAL,
     },
 };
 

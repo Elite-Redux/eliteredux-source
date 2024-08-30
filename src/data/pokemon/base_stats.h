@@ -40302,15 +40302,15 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_ZARUDE_DADA] =
+[SPECIES_ZARUDE_DADA] = // this entire mon is subject to change afaik
     {
     .baseHP        = 105,
-    .baseAttack    = 120,
+    .baseAttack    = 100,
     .baseDefense   = 105,
     .baseSpeed     = 105,
     .baseSpAttack  = 70,
-    .baseSpDefense = 95,
-    .type1 = TYPE_DARK,
+    .baseSpDefense = 115,
+    .type1 = TYPE_FAIRY,
     .type2 = TYPE_GRASS,
     .catchRate = 255,
     .expYield = 300,
@@ -40321,8 +40321,8 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_SLOW,
     .eggGroup1 = EGG_GROUP_UNDISCOVERED,
     .eggGroup2 = EGG_GROUP_UNDISCOVERED,
-    .abilities = {ABILITY_LEAF_GUARD, ABILITY_LEAF_GUARD, ABILITY_LEAF_GUARD},
-    .innates = {ABILITY_NONE, ABILITY_NONE, ABILITY_NONE},
+    .abilities = {ABILITY_PARENTAL_BOND, ABILITY_CHLOROPLAST, ABILITY_GRASSY_SURGE},
+    .innates = {ABILITY_FRIEND_GUARD, ABILITY_JUNGLES_GUARD, ABILITY_OVERGROW},
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
     .tier = 0,

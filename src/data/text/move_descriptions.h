@@ -3237,7 +3237,7 @@ static const u8 sMoveTwoLineDescription_MoveCheapShot[] = _(
     "Mega Launcher boost.");
 
 static const u8 sMoveTwoLineDescription_MoveTorrentFist[] = _(
-    "10% chance to flinch.\n"
+    "20% chance to drop speed.\n"
     "Iron Fist boost.");
 
 static const u8 sMoveTwoLineDescription_MoveStarCrash[] = _(
@@ -3730,6 +3730,11 @@ static const u8 sMoveTwoLineDescription_MoveToxicNeedles[] = _(
 static const u8 sMoveTwoLineDescription_MoveSmolderBash[] = _(
     "A scorching jab that has\n"
     "a 10% chance to burn.");
+
+static const u8 sMoveTwoLineDescription_MoveBeatdown[] = _(
+    "Hits 2-5 times\n"
+    "with an attack flurry.");
+
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -5503,7 +5508,7 @@ static const u8 sMoveFourLineDescription_MoveInfernalParade[] = _("Attacks with 
 static const u8 sMoveFourLineDescription_MoveDeviousShot[] = _("A devious arrow\nstrike. +1 crit\nchance. 50% bleed\nchance. Archer boost.");
 static const u8 sMoveFourLineDescription_MoveStarburst[] = _("The user crashes a star\nshaped ray down.\n30% flinch chance.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveCheapShot[] = _("The user sneaks into\nshadows, then attacks\nwith hidden projectile.\nMega Launcher boost.");
-static const u8 sMoveFourLineDescription_MoveTorrentFist[] = _("Strikes with a\nwater-infused fist.\n10% chance to\nflinch. Iron Fist boost.");
+static const u8 sMoveFourLineDescription_MoveTorrentFist[] = _("Strikes with a\nwater-infused fist.\n20% chance to drop\nspeed. Iron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveStarCrash[] = _("Strikes the foe like\na falling star.\n33% recoil damage.");
 static const u8 sMoveFourLineDescription_MoveStoneAxe[] = _("Swings its Stone Axes\ninto the foe, leaving\nbehind Stealth Rocks.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveEnergyWave[] = _("The user unleashes\na deadly wave of\nenergy to strike\nthe enemy.");
@@ -5634,6 +5639,7 @@ static const u8 sMoveFourLineDescription_MovePebbleShower[] = _("A rain of pebbl
 static const u8 sMoveFourLineDescription_MoveRapidRiver[] = _("A powerful surge\nof water that\nhits twice.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveToxicNeedles[] = _("Toxic pins are shot\nat the foe and hit\n2 - 5 times.\n10% poison chance.");
 static const u8 sMoveFourLineDescription_MoveSmolderBash[] = _("Bashes the foe with\na fiery horn.\n10% chance to\nburn. Horn-based.");
+static const u8 sMoveFourLineDescription_MoveBeatdown[] = _("Attacks the foe with\na flurry of blows.\nhits 2-5 times.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6585,4 +6591,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_RAPID_RIVER - 1] = sMoveFourLineDescription_MoveRapidRiver,
     [MOVE_TOXIC_NEEDLES - 1] = sMoveFourLineDescription_MoveToxicNeedles,
     [MOVE_SMOLDER_BASH - 1] = sMoveFourLineDescription_MoveSmolderBash,
+    [MOVE_BEATDOWN - 1] = sMoveFourLineDescription_MoveBeatdown,
 };
