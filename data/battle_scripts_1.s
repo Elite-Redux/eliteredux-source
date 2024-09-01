@@ -12111,6 +12111,7 @@ BattleScript_EffectRevivalBlessing::
 	attackcanceler
 	attackstring
 	ppreduce
+	jumpifweatheraffected BS_ATTACKER, WEATHER_FOG_ANY, BattleScript_ButItFailed
 	openpartyscreen BS_CHOOSE_FAINTED_MON, BattleScript_ButItFailed
 	waitstate
 	tryrevivalblessing BattleScript_ButItFailed

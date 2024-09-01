@@ -10138,6 +10138,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 1,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
+        .flags = FLAG_WEATHER_BASED,
         .split = SPLIT_STATUS,
     },
     [MOVE_WHIRLING_STRIKES] =
