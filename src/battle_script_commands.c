@@ -1347,6 +1347,7 @@ static bool32 NoTargetPresent(u32 move)
         case MOVE_RAIN_DANCE:
         case MOVE_SANDSTORM:
         case MOVE_HAIL:
+        case MOVE_EERIE_FOG:
             return FALSE;
     }
 
@@ -11291,6 +11292,19 @@ static void Cmd_various(void)
         }
         gBattlescriptCurrInstr += 7;
         return;
+    case VARIOUS_SET_FOG:
+        {
+            if (!TryChangeBattleWeather(gBattlerAttacker, ENUM_WEATHER_FOG, FALSE))
+            {
+                gMoveResultFlags |= MOVE_RESULT_MISSED;
+                SetActiveMultistringChooser(B_MSG_WEATHER_FAILED);
+            }
+            else
+            {
+                SetActiveMultistringChooser(B_MSG_STARTED_FOG);
+            }
+        }
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;

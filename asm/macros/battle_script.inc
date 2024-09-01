@@ -2310,6 +2310,10 @@
 	.4byte \status4
 	.endm
 
+	.macro setfog
+	various BS_ATTACKER, VARIOUS_SET_FOG
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

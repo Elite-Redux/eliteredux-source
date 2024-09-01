@@ -473,6 +473,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectSharpen				  @ EFFECT_SHARPEN
 	.4byte BattleScript_EffectScaryFace				  @ EFFECT_SCARY_FACE
 	.4byte BattleScript_EffectSmokescreen			  @ EFFECT_SMOKESCREEN
+	.4byte BattleScript_EffectEerieFog			 	  @ EFFECT_EERIE_FOG
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -12582,3 +12583,13 @@ BattleScript_AbilityBoostsCrit::
 	printfromtable gCritRaisedStrings
 	waitmessage B_WAIT_TIME_LONG
 	return
+
+BattleScript_EffectEerieFog::
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_SUN_PRIMAL, BattleScript_ExtremelyHarshSunlightWasNotLessened
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_RAIN_PRIMAL, BattleScript_NoReliefFromHeavyRain
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_STRONG_WINDS, BattleScript_MysteriousAirCurrentBlowsOn
+	setfog
+	goto BattleScript_MoveWeatherChange

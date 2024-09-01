@@ -4228,6 +4228,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_DARK_PULSE)
         TM(MOVE_DAZZLING_GLEAM)
         TM(MOVE_CURSE)
+        TM(MOVE_EERIE_FOG)
         TMHM_LEARNSET_END
 
     [SPECIES_HAUNTER] = TMHM_LEARNSET
@@ -4268,6 +4269,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_DARK_PULSE)
         TM(MOVE_DAZZLING_GLEAM)
         TM(MOVE_CURSE)
+        TM(MOVE_EERIE_FOG)
         TMHM_LEARNSET_END
 
     [SPECIES_GENGAR] = TMHM_LEARNSET
@@ -4316,6 +4318,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_DAZZLING_GLEAM)
         TM(MOVE_CURSE)
         TM(MOVE_ROCK_SMASH)
+        TM(MOVE_EERIE_FOG)
         TMHM_LEARNSET_END
 
     [SPECIES_ONIX] = TMHM_LEARNSET

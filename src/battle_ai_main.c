@@ -1236,6 +1236,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 case MOVE_RAIN_DANCE:
                 case MOVE_HAIL:
                 case MOVE_SANDSTORM:
+                case MOVE_EERIE_FOG:
                     RETURN_SCORE_MINUS(30);
             }
         }

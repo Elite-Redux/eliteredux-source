@@ -3735,6 +3735,10 @@ static const u8 sMoveTwoLineDescription_MoveBeatdown[] = _(
     "Hits 2-5 times\n"
     "with an attack flurry.");
 
+static const u8 sMoveTwoLineDescription_MoveEerieFog[] = _(
+    "An unnatural fog descends,\n"
+    "draining stat boosts.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4688,6 +4692,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TOXIC_NEEDLES - 1] = sMoveTwoLineDescription_MoveToxicNeedles,
     [MOVE_SMOLDER_BASH - 1] = sMoveTwoLineDescription_MoveSmolderBash,
     [MOVE_BEATDOWN - 1] = sMoveTwoLineDescription_MoveBeatdown,
+    [MOVE_EERIE_FOG - 1] = sMoveTwoLineDescription_MoveEerieFog,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5640,6 +5645,7 @@ static const u8 sMoveFourLineDescription_MoveRapidRiver[] = _("A powerful surge\
 static const u8 sMoveFourLineDescription_MoveToxicNeedles[] = _("Toxic pins are shot\nat the foe and hit\n2 - 5 times.\n10% poison chance.");
 static const u8 sMoveFourLineDescription_MoveSmolderBash[] = _("Bashes the foe with\na fiery horn.\n10% chance to\nburn. Horn-based.");
 static const u8 sMoveFourLineDescription_MoveBeatdown[] = _("Attacks the foe with\na flurry of blows.\nhits 2-5 times.");
+static const u8 sMoveFourLineDescription_MoveEerieFog[] = _("An eerie fog lasting\neight turns drains\nboosts from non-\nGhost and Psychic mons.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6592,4 +6598,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_TOXIC_NEEDLES - 1] = sMoveFourLineDescription_MoveToxicNeedles,
     [MOVE_SMOLDER_BASH - 1] = sMoveFourLineDescription_MoveSmolderBash,
     [MOVE_BEATDOWN - 1] = sMoveFourLineDescription_MoveBeatdown,
+    [MOVE_EERIE_FOG - 1] = sMoveFourLineDescription_MoveEerieFog,
 };

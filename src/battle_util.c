@@ -201,6 +201,7 @@ u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler)
         case MOVE_SUNNY_DAY:
         case MOVE_SANDSTORM:
         case MOVE_HAIL:
+        case MOVE_EERIE_FOG:
             if (!BATTLER_HAS_ABILITY(battler, ABILITY_FORECAST))
             {
                 return MOVE_TARGET_USER;
@@ -9664,6 +9665,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     case MOVE_RAIN_DANCE:
                     case MOVE_SANDSTORM:
                     case MOVE_HAIL:
+                    case MOVE_EERIE_FOG:
                         if (!CanUseExtraMove(gBattlerAttacker, gBattlerTarget)) break;
                         return UseAttackerFollowUpMove(battler, gBattlerTarget, ABILITY_FORECAST, MOVE_WEATHER_BALL, 0);
                 }

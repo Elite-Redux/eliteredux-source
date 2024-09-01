@@ -970,6 +970,7 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_TOXIC_NEEDLES
 	.4byte Move_NONE @ MOVE_SMOLDER_BASH
 	.4byte Move_NONE @ MOVE_BEATDOWN
+	.4byte Move_HAZE @ MOVE_EERIE_FOG
 
 	.align 2
 gBattleAnims_StatusConditions::
