@@ -12979,6 +12979,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (gBattleMons[battlerAtk].species == SPECIES_GRENINJA_ASH)
             basePower = 20;
         break;
+    case MOVE_OMINOUS_WIND:
+        if (IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY))
+            basePower *= 2;
+        break;
     }
 
     if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)){
