@@ -648,7 +648,7 @@
 #define ABILITY_RESONANCE 626 // Sound moves cause the target to  bleed.
 #define ABILITY_ETHEREAL_RUSH 627 // This Pokémon's Speed gets a 1.5x boost in fog.
 #define ABILITY_CUTE_ANTECEDENCE 628 // At full HP, gives +1 priority to its Fairy-type moves.
-#define ABILITY_RECURRING_VILLAIN 629 // Revives at 25% HP once after fainting in fog.
+#define ABILITY_RECURRING_NIGHTMARE 629 // Revives at 25% HP once after fainting in fog.
 #define ABILITY_MENACING_SITUATION 630 // 20% chance to Fear on contact. Also works on offense.
 #define ABILITY_SHINY_LIGHTNING 631 // Grants a 1.2x accuracy boost. Thunder never misses.
 #define ABILITY_TERRIFY 632 // Lowers foes' Sp. Atk by two stages on entry.
