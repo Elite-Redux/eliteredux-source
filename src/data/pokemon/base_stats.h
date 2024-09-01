@@ -42131,12 +42131,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_KINGAMBIT_REDUX] =
     {
-        .baseHP        = 90,
-        .baseAttack    =  125,
-        .baseDefense   =  90,
-        .baseSpeed     = 100,
-        .baseSpAttack  =  60,
-        .baseSpDefense =  85,
+    .baseHP         = 90,
+    .baseAttack     = 125,
+    .baseDefense    = 90,
+    .baseSpeed      = 110,
+    .baseSpAttack   = 60,
+    .baseSpDefense  = 75,
         .type1 = TYPE_FIGHTING,
         .type2 = TYPE_STEEL,
         .catchRate = 25,
@@ -42155,7 +42155,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
-        .abilities      = {ABILITY_DEFIANT, ABILITY_OPPORTUNIST, ABILITY_SWEEPING_EDGE},
+    .abilities      = {ABILITY_DEFIANT, ABILITY_SUPER_LUCK, ABILITY_TECHNICIAN},
         .innates = {ABILITY_KEEN_EDGE, ABILITY_INTIMIDATE, ABILITY_OLE},
         .bodyColor = BODY_COLOR_BLACK,
         .noFlip = FALSE,
