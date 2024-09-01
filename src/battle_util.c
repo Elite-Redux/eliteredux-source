@@ -13842,6 +13842,12 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                 && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)
                 && GetHighestAttackingStatId(battler, TRUE) == statEnum)
                     statBase = statBase * 3 / 2;
+
+            // Fog Power
+            if ((BATTLER_HAS_ABILITY(battler, ABILITY_FOG_POWER))
+                && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
+                && GetHighestAttackingStatId(battler, TRUE) == statEnum)
+                    statBase = statBase * 3 / 2;
             
             // Supreme Overlord
             if (BATTLER_HAS_ABILITY(battler, ABILITY_SUPREME_OVERLORD))
