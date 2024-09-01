@@ -14228,6 +14228,10 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     // apply attack stat modifiers
     modifier = UQ_4_12(1.0);
 
+    // Fog
+    if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST) && IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY))
+        MUL_MODIFIER(&modifier, .75);
+
     //Infatuation
     if ((gBattleMons[battlerAtk].status2 & STATUS2_INFATUATION) && (gBattleMons[battlerAtk].status2 & STATUS2_INFATUATED_WITH(battlerDef)))   
         MulModifier(&modifier, UQ_4_12(0.5));

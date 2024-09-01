@@ -2077,9 +2077,6 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
 
     if (IsGravityActive())
         calc = (calc * 5) / 3; // 1.66 Gravity acc boost
-
-    if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST))
-        calc = (calc * 75) / 100; // Equivalent to 1 stage of evasion
     
     if (gSideTimers[GET_BATTLER_SIDE(battlerDef)].smokescreenTimer)
         calc = (calc * 75) / 100;
