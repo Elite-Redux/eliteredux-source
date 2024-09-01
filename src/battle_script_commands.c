@@ -7944,7 +7944,7 @@ static void Cmd_setgravity(void)
     }
 }
 
-static bool32 TryCheekPouch(u32 battlerId, u32 itemId)
+static void TryCheekPouch(u32 battlerId, u32 itemId)
 {
     if (ItemId_GetPocket(itemId) == POCKET_BERRIES
         && BATTLER_HAS_ABILITY(battlerId, ABILITY_GLUTTONY)
@@ -7952,16 +7952,28 @@ static bool32 TryCheekPouch(u32 battlerId, u32 itemId)
         && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]]
         && !BATTLER_MAX_HP(battlerId))
     {
+        gBattleScripting.abilityPopupOverwrite = ABILITY_GLUTTONY;
         gBattleMoveDamage = gBattleMons[battlerId].maxHP / 3;
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         gBattlerAbility = battlerId;
-        BattleScriptPush(gBattlescriptCurrInstr + 2);
+        BattleScriptPush(gBattlescriptCurrInstr);
         gBattlescriptCurrInstr = BattleScript_CheekPouchActivates;
-        return TRUE;
     }
-    return FALSE;
+
+    if (ItemId_GetPocket(itemId) == POCKET_BERRIES
+        && BATTLER_HAS_ABILITY(battlerId, ABILITY_SUGAR_RUSH)
+        && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]]
+        && CompareStat(battlerId, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
+    {
+        gBattleScripting.abilityPopupOverwrite = ABILITY_SUGAR_RUSH;
+        SetStatChanger(STAT_SPEED, 2);
+        gBattlerAbility = gBattleScripting.battler = battlerId;
+        PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_SPEED);
+        BattleScriptPush(gBattlescriptCurrInstr);
+        gBattlescriptCurrInstr = BattleScript_ScriptingAbilityStatRaise;
+    }
 }
 
 void SetCudChew(u32 battlerId, u32 itemId)
@@ -8000,8 +8012,8 @@ static void Cmd_removeitem(void)
     MarkBattlerForControllerExec(gActiveBattler);
 
     ClearBattlerItemEffectHistory(gActiveBattler);
-    if (!TryCheekPouch(gActiveBattler, itemId))
-        gBattlescriptCurrInstr += 2;
+    gBattlescriptCurrInstr += 2;
+    TryCheekPouch(gActiveBattler, itemId);
 }
 
 static void Cmd_atknameinbuff1(void)
