@@ -10006,6 +10006,15 @@ BattleScript_DroughtActivates::
 	call BattleScript_OnWeatherChange
 	end3
 
+BattleScript_BadOmensActivates::
+	pause B_WAIT_TIME_SHORT
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_FOG_STARTS
+	waitstate
+	playanimation BS_BATTLER_0, B_ANIM_FOG_CONTINUES, NULL
+	call BattleScript_OnWeatherChange
+	end3
+
 BattleScript_DesolateLandActivates::
 	pause B_WAIT_TIME_SHORT
 	sethword sABILITY_OVERWRITE, ABILITY_DESOLATE_LAND

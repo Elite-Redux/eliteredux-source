@@ -5668,6 +5668,20 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+        // Bad Omens
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_BAD_OMENS)){
+            if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE))
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
+                effect++;
+            }
+            else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
+                effect++;
+            }
+        }
+
         // Snow Warning
         if(CheckAndSetSwitchInAbility(battler, ABILITY_SNOW_WARNING)){
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE))
