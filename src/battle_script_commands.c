@@ -11305,6 +11305,18 @@ static void Cmd_various(void)
             }
         }
         break;
+    case VARIOUS_TRY_RECURRING_NIGHTMARE:
+        if (IsBattlerAlive(gActiveBattler)) break;
+        if (!BattlerHasAbility(gActiveBattler, gActiveBattler, ABILITY_RECURRING_VILLAIN)) break;
+        if (!IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)) break;
+        if (GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_VILLAIN)) break;
+        if (HasNoMonsToSwitch(gActiveBattler, PARTY_SIZE, PARTY_SIZE)) break;
+        SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_VILLAIN, 1);
+        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
+        if (!gBattleMoveDamage) gBattleMoveDamage = 1;
+        BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 2, &gBattleMoveDamage);
+        MarkBattlerForControllerExec(gActiveBattler);
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;

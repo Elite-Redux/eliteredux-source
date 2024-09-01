@@ -7043,6 +7043,7 @@ BattleScript_HandleFaintedMon::
 	printstring STRINGID_CANTESCAPE2
 BattleScript_FaintedMonTryChooseAnother:
 	openpartyscreen BS_FAINTED, BattleScript_FaintedMonEnd
+	tryrecurringnightmare BS_FAINTED
 	switchhandleorder BS_FAINTED, 2
 BattleScript_FaintedMonChooseAnother:
 	drawpartystatussummary BS_FAINTED
@@ -7076,6 +7077,7 @@ BattleScript_HandleFaintedMonMultiple::
 BattleScript_HandleFaintedMonMultipleStart::
 	switchhandleorder BS_FAINTED, 0
 	openpartyscreen BS_FAINTED_LINK_MULTIPLE_2, BattleScript_HandleFaintedMonMultipleEnd
+	tryrecurringnightmare BS_FAINTED
 	switchhandleorder BS_FAINTED, 0
 BattleScript_HandleFaintedMonLoop::
 	switchhandleorder BS_FAINTED, 3

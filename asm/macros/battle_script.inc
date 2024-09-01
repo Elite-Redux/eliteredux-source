@@ -2314,6 +2314,10 @@
 	various BS_ATTACKER, VARIOUS_SET_FOG
 	.endm
 
+	.macro tryrecurringnightmare battler:req
+	various \battler, VARIOUS_TRY_RECURRING_NIGHTMARE
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd
