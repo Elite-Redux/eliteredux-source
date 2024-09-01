@@ -2515,14 +2515,24 @@ u8 DoFieldEndTurnEffects(void)
             if (gBattleWeather & WEATHER_FOG_TEMPORARY && !gFieldTimers.started.weather && --gWishFutureKnock.weatherDuration == 0)
             {
                 gBattleWeather &= ~WEATHER_FOG_ANY;
-                gBattlescriptCurrInstr = BattleScript_FogEnds;
-                BattleScriptExecute(gBattlescriptCurrInstr);
+                BattleScriptExecute(BattleScript_FogEnds);
                 effect++;
             }
             else if (gBattleWeather & WEATHER_FOG_ANY)
             {
-                gBattlescriptCurrInstr = BattleScript_FogContinues;
-                BattleScriptExecute(gBattlescriptCurrInstr);
+                BattleScriptExecute(BattleScript_FogContinues);
+                effect++;
+            }
+            else if (!gBattleWeather && gFieldTimers.fogReturnTimer)
+            {
+                if (gFieldTimers.fogReturnTimer > 50) gBattleWeather = WEATHER_FOG_PERMANENT;
+                else
+                {
+                    gBattleWeather = WEATHER_FOG_TEMPORARY;
+                    gWishFutureKnock.weatherDuration = gFieldTimers.fogReturnTimer;
+                }
+                gFieldTimers.fogReturnTimer = 0;
+                BattleScriptExecute(BattleScript_FogReturns);
                 effect++;
             }
             gBattleStruct->turnCountersTracker++;

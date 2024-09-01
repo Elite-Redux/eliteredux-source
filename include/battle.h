@@ -319,6 +319,7 @@ struct FieldTimer
     u8 fairyLockTimer;
     u8 inverseRoomTimer;
     u8 quashTimer;
+    u8 fogReturnTimer;
 };
 
 struct WishFutureKnock

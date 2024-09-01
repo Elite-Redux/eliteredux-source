@@ -7452,6 +7452,12 @@ BattleScript_SunlightFaded::
 	call BattleScript_OnWeatherChange
 	end2
 
+BattleScript_FogReturns::
+	printstring STRINGID_FOG_RETURNS
+	waitmessage B_WAIT_TIME_LONG
+	playanimation BS_ATTACKER, B_ANIM_FOG_CONTINUES
+	end2
+
 BattleScript_FogContinues::
 	printstring STRINGID_FOGISDEEP
 	waitmessage B_WAIT_TIME_LONG

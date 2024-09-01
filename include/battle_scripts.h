@@ -49,6 +49,7 @@ extern const u8 BattleScript_SunlightContinues[];
 extern const u8 BattleScript_SunlightFaded[];
 extern const u8 BattleScript_FogContinues[];
 extern const u8 BattleScript_FogEnds[];
+extern const u8 BattleScript_FogReturns[];
 extern const u8 BattleScript_FogBlownAway[];
 extern const u8 BattleScript_OverworldWeatherStarts[];
 extern const u8 BattleScript_OverworldTerrain[];

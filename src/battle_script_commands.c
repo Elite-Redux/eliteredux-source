@@ -8576,6 +8576,8 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
     }
     if (gBattleWeather & WEATHER_FOG_ANY)
     {
+        if (gBattleWeather & WEATHER_FOG_PERMANENT) gFieldTimers.fogReturnTimer = 99;
+        else gFieldTimers.fogReturnTimer = gWishFutureKnock.weatherDuration - 1;
         gBattleWeather &= ~WEATHER_FOG_ANY;
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_FogBlownAway;
