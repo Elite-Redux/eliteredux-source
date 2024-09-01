@@ -5569,8 +5569,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
         {
             gBattleMons[battler].status1 |= STATUS1_BURN;
-            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gStackBattler1].status1);
-            MarkBattlerForControllerExec(gActiveBattler);
+            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
+            MarkBattlerForControllerExec(battler);
             BattleScriptPushCursorAndCallback(BattleScript_FlareBoostEnd3);
             effect++;
         }
