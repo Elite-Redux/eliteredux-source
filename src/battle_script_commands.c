@@ -1443,6 +1443,12 @@ static void Cmd_attackcanceler(void)
 
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
+    if (gBattleMoves[gCurrentMove].type2)
+    {
+        CalculateMoveDamage(gCurrentMove, gBattlerAttacker, gBattlerTarget, &moveType, 1, FALSE, TRUE, TRUE);
+        gBattleStruct->dynamicMoveType = moveType | 0x80;
+    }
+
     if (moveType == TYPE_FIRE
      && (gBattleWeather & WEATHER_RAIN_PRIMAL)
      && WEATHER_HAS_EFFECT
