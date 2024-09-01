@@ -5542,6 +5542,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
             effect++;
         }
+        
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_DISGUISE)
+            && gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED
+            && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+        {
+            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_MIMIKYU);
+            gBattleMons[battler].species = SPECIES_MIMIKYU;
+            BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+            effect++;
+        }
 
         if (CheckAndSetSwitchInAbility(battler, ABILITY_IMPOSTER)
             && IsBattlerAlive(BATTLE_OPPOSITE(battler))

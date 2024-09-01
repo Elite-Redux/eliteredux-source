@@ -10734,6 +10734,17 @@ static void Cmd_various(void)
             BattleScriptPush(gBattlescriptCurrInstr);
             gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
         }
+
+        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE)
+            && gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU_BUSTED
+            && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY))
+        {
+            gBattleScripting.abilityPopupOverwrite = ABILITY_DISGUISE;
+            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MIMIKYU);
+            gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU;
+            BattleScriptPush(gBattlescriptCurrInstr);
+            gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
+        }
         return;
     case VARIOUS_HANDLE_TERRAIN_CHANGE:
         gBattlescriptCurrInstr += 3;
