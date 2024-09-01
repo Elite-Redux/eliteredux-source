@@ -950,6 +950,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_RAPID_RIVER] = _("Rapid River"),
     [MOVE_TOXIC_NEEDLES] = _("ToxicNeedles"),
     [MOVE_SMOLDER_BASH] = _("Smolder Bash"),
+    [MOVE_BEATDOWN] = _("Beatdown"),
 };
 
 // Second table with longer move names for places where they fit.

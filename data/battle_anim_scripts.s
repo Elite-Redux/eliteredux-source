@@ -969,6 +969,7 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_RAPID_RIVER
 	.4byte Move_NONE @ MOVE_TOXIC_NEEDLES
 	.4byte Move_NONE @ MOVE_SMOLDER_BASH
+	.4byte Move_NONE @ MOVE_BEATDOWN
 
 	.align 2
 gBattleAnims_StatusConditions::

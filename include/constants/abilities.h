@@ -222,7 +222,7 @@
 #define ABILITY_GALVANIZE 206 // Normal-type moves become Elec.- type moves and get a 1.1x boost.
 #define ABILITY_SURGE_SURFER 207 // If Electric Terrain is active, gets a 1.5x Speed boost.
 #define ABILITY_SCHOOLING 208 // If Lv. 20 or more: changes into School form until 1/4 HP or less.
-#define ABILITY_DISGUISE 209 // Its disguise protects it from taking damage just once.
+#define ABILITY_DISGUISE 209 // Protects once against an attack. Restores protection in fog.
 #define ABILITY_BATTLE_BOND 210 // Transforms into Battle Bond form after dealing a KO.
 #define ABILITY_POWER_CONSTRUCT 211 // At 1/2 of max HP or below, transforms into Complete form.
 #define ABILITY_CORROSION 212 // Steel-types take Supereffective from Poison. Can poison any type.
@@ -638,31 +638,37 @@
 #define ABILITY_DEMOLITIONIST 616 // Readied Action + Ignores Protect + screens break on readied turn
 #define ABILITY_ROCKHARD_WILL 617 // Boosts Rock-type moves by 1.2x, or 1.5x when under 1/3 HP.
 #define ABILITY_FRAGRANT_DAZE 618 // 30% chance to confuse on contact.
-#define ABILITY_OLD_MARINER 619 // Seaweed + Water Absorb.
-#define ABILITY_BEAUTIFUL_MUSIC 620 // Sound-based moves have 50% chance to infatuate the foe.
-#define ABILITY_SNOW_SONG 621 // Sound moves become Ice- type moves and get a 1.2x boost.
-#define ABILITY_RESONANCE 622 // Sound moves cause the target to  bleed.
-#define ABILITY_CUTE_ANTECEDENCE 623 // At full HP, gives +1 priority to its Fairy-type moves.
-#define ABILITY_MENACING_SITUATION 624 // 20% chance to Fear on contact. Also works on offense.
-#define ABILITY_SHINY_LIGHTNING 625 // Grants a 1.2x accuracy boost. Thunder never misses.
-#define ABILITY_TERRIFY 626 // Lowers foes' Sp. Atk by two stages on entry.
-#define ABILITY_ICE_DOWNFALL 627 // Counters contact with 60BP Icicle Crash.
-#define ABILITY_LAST_STAND 628 // Def and SpDef increase as HP drops. Max 1.6x.
-#define ABILITY_PYROCLASTIC_FLOW 629 // Combines Molten Down & Corrosion.
-#define ABILITY_BLOOD_BATH 630 // Immune to bleed. Inflict fear when inflicting bleed.
-#define ABILITY_BATTLE_AURA 631 // Sharply increases the critical hit rate for all while on the field.
-#define ABILITY_BLOODLUST 632 // Immune to bleed. +1 priority vs bleeding foes.
-#define ABILITY_PIERCING_SOLO 633 // Sound moves have a 30% chance to cause bleeding.
-#define ABILITY_RHYTHMIC 634 // Deals 10% more damage for each repeated move use.
-#define ABILITY_CHUNKY_BASS_LINE 635 // Triggers a 40BP Earthquake after using a sound move.
-#define ABILITY_DUAL_HAMMER 636 // Super Slammer moves hit twice for 75% damage.
-#define ABILITY_DENTING_BLOWS 637 // Hammer moves lower Defense.
-#define ABILITY_ICE_COLD_HUNTER 638 // Combines Hyper Aggressive and Whiteout.
-#define ABILITY_SOUL_CRUSHER 639 // Hammer moves become Special and get a 1.1x power boost.
-#define ABILITY_ARC_FLASH 640 // 50% chance to burn when hit or paralyze when dealing damage.
-#define ABILITY_UNICORN 641 // Mighty Horn + Dazzling.
-#define ABILITY_ON_THE_PROWL 642 // +1 priority for the first turn.
-#define ABILITY_PRETENTIOUS 643 // Dealing a KO raises Crit by one stage.
+#define ABILITY_BAD_OMENS 619 // Summons Eerie Fog on entry.
+#define ABILITY_OLD_MARINER 620 // Seaweed + Water Absorb.
+#define ABILITY_FOG_POWER 621 // Ups highest attacking stat in fog.
+#define ABILITY_BEAUTIFUL_MUSIC 622 // Sound-based moves have 50% chance to infatuate the foe.
+#define ABILITY_SURPRISE 623 // Astonishes enemy priority users in fog.
+#define ABILITY_SNOW_SONG 624 // Sound moves become Ice- type moves and get a 1.2x boost.
+#define ABILITY_FOG_WORSHIP 625 // Ups highest stat by +1 on entry in fog.
+#define ABILITY_RESONANCE 626 // Sound moves cause the target to  bleed.
+#define ABILITY_FOG_RUSH 627 // This Pokémon's Speed gets a 1.5x boost in fog.
+#define ABILITY_CUTE_ANTECEDENCE 628 // At full HP, gives +1 priority to its Fairy-type moves.
+#define ABILITY_RECURRING_VILLAIN 629 // Revives at 25% HP once after fainting in fog.
+#define ABILITY_MENACING_SITUATION 630 // 20% chance to Fear on contact. Also works on offense.
+#define ABILITY_SHINY_LIGHTNING 631 // Grants a 1.2x accuracy boost. Thunder never misses.
+#define ABILITY_TERRIFY 632 // Lowers foes' Sp. Atk by two stages on entry.
+#define ABILITY_ICE_DOWNFALL 633 // Counters contact with 60BP Icicle Crash.
+#define ABILITY_LAST_STAND 634 // Def and SpDef increase as HP drops. Max 1.6x.
+#define ABILITY_PYROCLASTIC_FLOW 635 // Combines Molten Down & Corrosion.
+#define ABILITY_BLOOD_BATH 636 // Immune to bleed. Inflict fear when inflicting bleed.
+#define ABILITY_BATTLE_AURA 637 // Sharply increases the critical hit rate for all while on the field.
+#define ABILITY_BLOODLUST 638 // Immune to bleed. +1 priority vs bleeding foes.
+#define ABILITY_PIERCING_SOLO 639 // Sound moves have a 30% chance to cause bleeding.
+#define ABILITY_RHYTHMIC 640 // Deals 10% more damage for each repeated move use.
+#define ABILITY_CHUNKY_BASS_LINE 641 // Triggers a 40BP Earthquake after using a sound move.
+#define ABILITY_DUAL_HAMMER 642 // Super Slammer moves hit twice for 75% damage.
+#define ABILITY_DENTING_BLOWS 643 // Hammer moves lower Defense.
+#define ABILITY_ICE_COLD_HUNTER 644 // Combines Hyper Aggressive and Whiteout.
+#define ABILITY_SOUL_CRUSHER 645 // Hammer moves become Special and get a 1.1x power boost.
+#define ABILITY_ARC_FLASH 646 // 50% chance to burn when hit or paralyze when dealing damage.
+#define ABILITY_UNICORN 647 // Mighty Horn + Dazzling.
+#define ABILITY_ON_THE_PROWL 648 // +1 priority for the first turn.
+#define ABILITY_PRETENTIOUS 649 // Dealing a KO raises Crit by one stage.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_PRETENTIOUS + 1)
 

@@ -3735,7 +3735,6 @@ static const u8 sMoveTwoLineDescription_MoveBeatdown[] = _(
     "Hits 2-5 times\n"
     "with an attack flurry.");
 
-
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4688,6 +4687,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_RAPID_RIVER - 1] = sMoveTwoLineDescription_MoveRapidRiver,
     [MOVE_TOXIC_NEEDLES - 1] = sMoveTwoLineDescription_MoveToxicNeedles,
     [MOVE_SMOLDER_BASH - 1] = sMoveTwoLineDescription_MoveSmolderBash,
+    [MOVE_BEATDOWN - 1] = sMoveTwoLineDescription_MoveBeatdown,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
