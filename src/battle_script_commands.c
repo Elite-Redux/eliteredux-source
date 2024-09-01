@@ -15489,13 +15489,13 @@ static void Cmd_switchoutabilities(void)
                 gBattlescriptCurrInstr = BattleScript_NaturalCureExits;
             }
 
-            if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR) || gBattleScripting.abilityPopupOverwrite == ABILITY_NATURAL_RECOVERY)
+            if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR) || CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_ETERNAL_BLESSING) || gBattleScripting.abilityPopupOverwrite == ABILITY_NATURAL_RECOVERY)
             {
                 if (!IsAbilityOnOpposingSide(gActiveBattler, ABILITY_PERMANENCE))
                     DoRegenerator();
             }
         }
-        else if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR))
+        else if (CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_REGENERATOR) || CheckAndSetSwitchInAbility(gActiveBattler, ABILITY_ETERNAL_BLESSING))
         {
             if (!(gBattleMons[gActiveBattler].status1 & STATUS1_BLEED) && !IsAbilityOnOpposingSide(gActiveBattler, ABILITY_PERMANENCE))
             {

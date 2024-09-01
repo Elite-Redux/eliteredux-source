@@ -620,6 +620,7 @@ static const u8 sAbilityUnicornDescription[] = _("Mighty Horn + Dazzling.");
 static const u8 sAbilityOnTheProwlDescription[] = _("+1 priority for the first turn.");
 static const u8 sAbilityPretentiousDescription[] = _("Dealing a KO raises Crit by\none stage.");
 static const u8 sAbilityVenoblazePincersDescription[] = _("1.2x boost to physical moves and\n20% chance to Burn or Poison.");
+static const u8 sAbilityEternalBlessingDescription[] = _("Combines Celestial Blessing\nand Regenerator.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1274,6 +1275,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ON_THE_PROWL] = _("On the Prowl"),
     [ABILITY_PRETENTIOUS] = _("Pretentious"),
     [ABILITY_VENOBLAZE_PINCERS] = _("Venoblaze Pincers"),
+    [ABILITY_ETERNAL_BLESSING] = _("Eternal Blessing"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1929,4 +1931,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_ON_THE_PROWL] = sAbilityOnTheProwlDescription,
     [ABILITY_PRETENTIOUS] = sAbilityPretentiousDescription,
     [ABILITY_VENOBLAZE_PINCERS] = sAbilityVenoblazePincersDescription,
+    [ABILITY_ETERNAL_BLESSING] = sAbilityEternalBlessingDescription,
 };

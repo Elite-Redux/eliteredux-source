@@ -7084,6 +7084,26 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
 
+            // Self Sufficient
+            if(BATTLER_HAS_ABILITY(battler, ABILITY_ETERNAL_BLESSING)){
+                if(!BATTLER_MAX_HP(battler) && 
+                   !BATTLER_HEALING_BLOCKED(gActiveBattler) && 
+                   gVolatileStructs[battler].isFirstTurn != 2 &&
+                   IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
+                {
+                    u16 abilityToCheck = ABILITY_ETERNAL_BLESSING; //For easier copypaste
+
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ETERNAL_BLESSING;
+                    
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 12;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    gBattleMoveDamage *= -1;
+                    BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
+                    effect++;
+                }
+            }
+
             if (BATTLER_HAS_ABILITY(battler, ABILITY_CUD_CHEW))
             {
                 struct CudChewState state = GetAbilityStateAs(battler, ABILITY_CUD_CHEW).cudChewState;
