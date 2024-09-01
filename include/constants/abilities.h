@@ -145,7 +145,7 @@
 #define ABILITY_LIGHT_METAL 135 // Boosts Speed by 1.3x and halves this Pokémon's weight.
 #define ABILITY_MULTISCALE 136 // At full HP, halves damage taken from attacks
 #define ABILITY_TOXIC_BOOST 137 // Ups Atk by 1.5x if poisoned. Immune to Poison status damage.
-#define ABILITY_FLARE_BOOST 138 // Ups Sp. Atk by 1.5x if burned. Immune to Burn status damage.
+#define ABILITY_FLARE_BOOST 138 // Ups Sp. Atk by 1.5x if burned. Ignites in fog.
 #define ABILITY_HARVEST 139 // 50% chance to recycle a used Berry every turn, 100% in sun.
 #define ABILITY_TELEPATHY 140 // Can't be damaged by ally attacks.
 #define ABILITY_MOODY 141 // Lowers a random stat by -1 and raises another by +2 every turn.

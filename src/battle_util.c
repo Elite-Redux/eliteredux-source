@@ -5554,6 +5554,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect++;
         }
 
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_FLARE_BOOST)
+            && CanBeBurned(battler)
+            && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+        {
+            gBattleMons[battler].status1 |= STATUS1_BURN;
+            BattleScriptPushCursorAndCallback(BattleScript_FlareBoostEnd3);
+            effect++;
+        }
+
         if (CheckAndSetSwitchInAbility(battler, ABILITY_IMPOSTER)
             && IsBattlerAlive(BATTLE_OPPOSITE(battler))
             && !(gBattleMons[BATTLE_OPPOSITE(battler)].status2 & (STATUS2_TRANSFORMED | STATUS2_SUBSTITUTE))

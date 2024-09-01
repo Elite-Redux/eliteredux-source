@@ -1439,7 +1439,8 @@ bool8 PartyIsMaxLevel(void)
 
 static void Cmd_attackcanceler(void)
 {
-    s32 i, moveType;
+    s32 i;
+    u8 moveType;
 
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
@@ -10747,6 +10748,16 @@ static void Cmd_various(void)
             gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU;
             BattleScriptPush(gBattlescriptCurrInstr);
             gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
+        }
+
+        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FLARE_BOOST)
+            && CanBeBurned(gActiveBattler)
+            && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY))
+        {
+            gBattleScripting.abilityPopupOverwrite = ABILITY_FLARE_BOOST;
+            gBattleMons[gActiveBattler].status1 |= STATUS1_BURN;
+            BattleScriptPush(gBattlescriptCurrInstr);
+            gBattlescriptCurrInstr = BattleScript_FlareBoostRet;
         }
         return;
     case VARIOUS_HANDLE_TERRAIN_CHANGE:
