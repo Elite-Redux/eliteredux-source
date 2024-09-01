@@ -4846,7 +4846,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
         if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SAND_RUSH, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_SANDSTORM_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_FOG_RUSH, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_FOG_ANY))
+        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_ETHEREAL_RUSH, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_FOG_ANY))
             speed = (speed * 150) / 100;
 
         if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SLUSH_RUSH, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_HAIL_ANY))

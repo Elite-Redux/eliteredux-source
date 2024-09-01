@@ -5689,7 +5689,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         // Bad Omens
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_BAD_OMENS)){
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_LOW_VISIBILITY)){
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE))
             {
                 BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
@@ -13993,7 +13993,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                     statBase = statBase * 3 / 2;
 
             // Fog Power
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_FOG_POWER))
+            if ((BATTLER_HAS_ABILITY(battler, ABILITY_ECTOPLASM))
                 && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
                 && GetHighestAttackingStatId(battler, TRUE) == statEnum)
                     statBase = statBase * 3 / 2;

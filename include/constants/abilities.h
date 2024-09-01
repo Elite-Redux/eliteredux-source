@@ -638,15 +638,15 @@
 #define ABILITY_DEMOLITIONIST 616 // Readied Action + Ignores Protect + screens break on readied turn
 #define ABILITY_ROCKHARD_WILL 617 // Boosts Rock-type moves by 1.2x, or 1.5x when under 1/3 HP.
 #define ABILITY_FRAGRANT_DAZE 618 // 30% chance to confuse on contact.
-#define ABILITY_BAD_OMENS 619 // Summons Eerie Fog on entry.
+#define ABILITY_LOW_VISIBILITY 619 // Summons Eerie Fog on entry.
 #define ABILITY_OLD_MARINER 620 // Seaweed + Water Absorb.
-#define ABILITY_FOG_POWER 621 // Ups highest attacking stat in fog.
+#define ABILITY_ECTOPLASM 621 // Ups highest attacking stat in fog.
 #define ABILITY_BEAUTIFUL_MUSIC 622 // Sound-based moves have 50% chance to infatuate the foe.
 #define ABILITY_SURPRISE 623 // Astonishes enemy priority users in fog.
 #define ABILITY_SNOW_SONG 624 // Sound moves become Ice- type moves and get a 1.2x boost.
-#define ABILITY_FOG_WORSHIP 625 // Ups highest stat by +1 on entry in fog.
+#define ABILITY_GREATER_SPIRIT 625 // Ups highest stat by +1 on entry in fog.
 #define ABILITY_RESONANCE 626 // Sound moves cause the target to  bleed.
-#define ABILITY_FOG_RUSH 627 // This Pokémon's Speed gets a 1.5x boost in fog.
+#define ABILITY_ETHEREAL_RUSH 627 // This Pokémon's Speed gets a 1.5x boost in fog.
 #define ABILITY_CUTE_ANTECEDENCE 628 // At full HP, gives +1 priority to its Fairy-type moves.
 #define ABILITY_RECURRING_VILLAIN 629 // Revives at 25% HP once after fainting in fog.
 #define ABILITY_MENACING_SITUATION 630 // 20% chance to Fear on contact. Also works on offense.
