@@ -8958,10 +8958,12 @@ BattleScript_FlareBoostEnd3::
 
 BattleScript_FlareBoostRet::
 	call BattleScript_AbilityPopUp
-	statusanimation BS_EFFECT_BATTLER
+	statusanimation BS_ATTACKER
 	printstring STRINGID_FLARE_BOOST_IGNITES
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_UpdateEffectStatusIconRet
+	updatestatusicon BS_ATTACKER
+	waitstate
+	return
 
 BattleScript_MoveEffectFreeze::
 	statusanimation BS_EFFECT_BATTLER

@@ -10756,6 +10756,8 @@ static void Cmd_various(void)
         {
             gBattleScripting.abilityPopupOverwrite = ABILITY_FLARE_BOOST;
             gBattleMons[gActiveBattler].status1 |= STATUS1_BURN;
+            BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gStackBattler1].status1);
+            MarkBattlerForControllerExec(gActiveBattler);
             BattleScriptPush(gBattlescriptCurrInstr);
             gBattlescriptCurrInstr = BattleScript_FlareBoostRet;
         }
