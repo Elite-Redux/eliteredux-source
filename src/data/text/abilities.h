@@ -622,6 +622,9 @@ static const u8 sAbilityPretentiousDescription[] = _("Dealing a KO raises Crit b
 static const u8 sAbilityVenoblazePincersDescription[] = _("1.2x boost to physical moves and\n20% chance to Burn or Poison.");
 static const u8 sAbilityEternalBlessingDescription[] = _("Combines Celestial Blessing\nand Regenerator.");
 static const u8 sAbilitySugarRushDescription[] = _("Sharply raises Speed when\neating a berry.");
+static const u8 sAbilityPeacefulRestDescription[] = _("Heals 1/8 of max HP every turn\nin fog.");
+static const u8 sAbilityWhiteNoiseDescription[] = _("Combines Static and\nPeaceful Rest.");
+static const u8 sAbilitySmokeyManeuversDescription[] = _("Evasion is boosted by 1.25x\nin fog.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1244,15 +1247,15 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DEMOLITIONIST] = _("Demolitionist"),
     [ABILITY_ROCKHARD_WILL] = _("Rockhard Will"),
     [ABILITY_FRAGRANT_DAZE] = _("Fragrant Daze"),
-    [ABILITY_BAD_OMENS] = _("Bad Omens"),
+    [ABILITY_BAD_OMENS] = _("Low Visibility"),
     [ABILITY_OLD_MARINER] = _("Old Mariner"),
-    [ABILITY_FOG_POWER] = _("WIP Fog Power"),
+    [ABILITY_FOG_POWER] = _("Ectoplasm"),
     [ABILITY_BEAUTIFUL_MUSIC] = _("Beautiful Music"),
     [ABILITY_SURPRISE] = _("Surprise!"),
     [ABILITY_SNOW_SONG] = _("Snow Song"),
-    [ABILITY_FOG_WORSHIP] = _("WIP Fog Worship"),
+    [ABILITY_FOG_WORSHIP] = _("Greater Spirit"),
     [ABILITY_RESONANCE] = _("Resonance"),
-    [ABILITY_FOG_RUSH] = _("WIP Fog Rush"),
+    [ABILITY_FOG_RUSH] = _("Ethereal Rush"),
     [ABILITY_CUTE_ANTECEDENCE] = _("Cute Antecedence"),
     [ABILITY_RECURRING_VILLAIN] = _("Recurring Nightmare"),
     [ABILITY_MENACING_SITUATION] = _("Menacing Situation"),
@@ -1278,6 +1281,9 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_VENOBLAZE_PINCERS] = _("Venoblaze Pincers"),
     [ABILITY_ETERNAL_BLESSING] = _("Eternal Blessing"),
     [ABILITY_SUGAR_RUSH] = _("Sugar Rush"),
+    [ABILITY_PEACEFUL_REST] = _("Peaceful Rest"),
+    [ABILITY_WHITE_NOISE] = _("White Noise"),
+    [ABILITY_SMOKEY_MANEUVERS] = _("Smokey Maneuvers"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1935,4 +1941,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_VENOBLAZE_PINCERS] = sAbilityVenoblazePincersDescription,
     [ABILITY_ETERNAL_BLESSING] = sAbilityEternalBlessingDescription,
     [ABILITY_SUGAR_RUSH] = sAbilitySugarRushDescription,
+    [ABILITY_PEACEFUL_REST] = sAbilityPeacefulRestDescription,
+    [ABILITY_WHITE_NOISE] = sAbilityWhiteNoiseDescription,
+    [ABILITY_SMOKEY_MANEUVERS] = sAbilitySmokeyManeuversDescription,
 };

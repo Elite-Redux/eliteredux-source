@@ -672,8 +672,11 @@
 #define ABILITY_VENOBLAZE_PINCERS 650 // 1.2x boost to physical moves and 20% chance to Burn or Poison.
 #define ABILITY_ETERNAL_BLESSING 651 // Combines Celestial Blessing and Regenerator.
 #define ABILITY_SUGAR_RUSH 652 // Sharply raises Speed when eating a berry.
+#define ABILITY_PEACEFUL_REST 653 // Heals 1/8 of max HP every turn in fog.
+#define ABILITY_WHITE_NOISE 654 // Combines Static and Peaceful Rest.
+#define ABILITY_SMOKEY_MANEUVERS 655 // Evasion is boosted by 1.25x in fog.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_SUGAR_RUSH + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SMOKEY_MANEUVERS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
