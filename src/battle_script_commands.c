@@ -2683,11 +2683,13 @@ static void Cmd_datahpupdate(void)
         {
             if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE))
             {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_DISGUISE;
                 UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MIMIKYU_BUSTED);
                 gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
             }
             else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ICE_FACE))
             {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_ICE_FACE;
                 UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_EISCUE_NOICE_FACE);
                 gBattleMons[gActiveBattler].species = SPECIES_EISCUE_NOICE_FACE;
             }
