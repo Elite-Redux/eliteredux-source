@@ -1061,6 +1061,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_LAST_STAND] = 1,
     [ABILITY_BLOOD_BATH] = 1,
     [ABILITY_BLOODLUST] = 1,
+    [ABILITY_SMOKEY_MANEUVERS] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur

@@ -2039,10 +2039,13 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_RADIANCE, atkAbility))
         calc = (calc * 120) / 100; // 1.2 keen eye boost
 
-    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_SAND_VEIL, defAbility) && gBattleWeather & WEATHER_SANDSTORM_ANY && WEATHER_HAS_EFFECT)
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_SAND_VEIL, defAbility) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))
         calc = (calc * 80) / 100; // 1.2 sand veil loss
 
-    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_SNOW_CLOAK, defAbility) && gBattleWeather & WEATHER_SANDSTORM_ANY && WEATHER_HAIL_ANY)
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_SMOKEY_MANEUVERS, defAbility) && IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY))
+        calc = (calc * 80) / 100; // 1.2 sand veil loss
+
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_SNOW_CLOAK, defAbility) && IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY))
         calc = (calc * 80) / 100; // 1.2 snow cloak loss
 
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_OLE, defAbility) && IS_MOVE_PHYSICAL(move))
