@@ -1615,7 +1615,7 @@ void PrintBattleWindow_MoveSelection(void)
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Type_Null);
             StringCopy(gStringVar1, gTypeNames[moveType]);
             //Stab
-            if(IS_BATTLER_OF_TYPE(gActiveBattler, moveType))
+            if(StabMultiplierInHalves(gActiveBattler, moveType, GetBattlerAbility(gActiveBattler), move) > 2)
                 StringCopy(gStringVar2, gStabIcon);
             else
                 StringCopy(gStringVar2, gNoStabIcon);
@@ -1650,13 +1650,7 @@ void PrintBattleWindow_MoveSelection(void)
                 break;
             }
             
-            if(isDoubleTypedMove){
-                StringCopy(gStringVar3, gTypeNames[gBattleMoves[move].type2]);
-                StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type_Double);
-            }
-            else{
-                StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type);
-            }
+            StringExpandPlaceholders(gStringVar4, sText_MoveInfo_Type);
 
             offset = MOVE_INFO_WINDOW_SIZE - GetStringWidth(font, gStringVar4, 0xFF) + extraX;
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 + offset, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
