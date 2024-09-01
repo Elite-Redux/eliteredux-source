@@ -8912,6 +8912,37 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+        //Shocking Jaws
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_VENOBLAZE_PINCERS)){
+			if (ShouldApplyOnHitAffect(gBattlerTarget)
+                && IS_MOVE_PHYSICAL(move)
+                && (Random() % 100) < 20)
+            {
+                int moveEffect = 0;
+                if (Random() % 2)
+                {
+                    if (CanBeBurned(gBattlerTarget))
+                    {
+                        moveEffect = MOVE_EFFECT_BURN;
+                    }
+                }
+                else if (CanBeParalyzed(battler, gBattlerTarget))
+                {
+                    moveEffect = MOVE_EFFECT_PARALYSIS;
+                }
+            
+                if (moveEffect)
+                {
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_VENOBLAZE_PINCERS;
+                    gBattleScripting.moveEffect = moveEffect;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    effect++;
+                }
+            }
+        }
+
         //Molten Blades
 		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_MOLTEN_BLADES)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
@@ -13160,6 +13191,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_TOUGH_CLAWS:
         case ABILITY_BIG_PECKS:
             if (IsMoveMakingContact(move, battlerAtk)) MUL(1.3);
+            return;
+        
+        case ABILITY_VENOBLAZE_PINCERS:
+            if (IS_MOVE_PHYSICAL(move)) MUL(1.2);
             return;
         
         case ABILITY_DREAMCATCHER:

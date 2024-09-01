@@ -669,8 +669,9 @@
 #define ABILITY_UNICORN 647 // Mighty Horn + Dazzling.
 #define ABILITY_ON_THE_PROWL 648 // +1 priority for the first turn.
 #define ABILITY_PRETENTIOUS 649 // Dealing a KO raises Crit by one stage.
+#define ABILITY_VENOBLAZE_PINCERS 650 // 1.2x boost to physical moves and 20% chance to Burn or Poison.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_PRETENTIOUS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_VENOBLAZE_PINCERS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
