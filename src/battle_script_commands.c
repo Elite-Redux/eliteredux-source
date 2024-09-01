@@ -11294,7 +11294,7 @@ static void Cmd_various(void)
         return;
     case VARIOUS_SET_FOG:
         {
-            if (!TryChangeBattleWeather(gBattlerAttacker, ENUM_WEATHER_FOG, FALSE))
+            if (!TryChangeBattleWeather(gActiveBattler, ENUM_WEATHER_FOG, FALSE))
             {
                 gMoveResultFlags |= MOVE_RESULT_MISSED;
                 SetActiveMultistringChooser(B_MSG_WEATHER_FAILED);
