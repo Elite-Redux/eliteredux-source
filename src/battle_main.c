@@ -4831,22 +4831,25 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     // weather abilities
     if (WEATHER_HAS_EFFECT)
     {
-        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SWIFT_SWIM, ability) && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & WEATHER_RAIN_ANY)
+        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SWIFT_SWIM, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SEABORNE, ability) && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & WEATHER_RAIN_ANY)
+        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SEABORNE, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_CHLOROPHYLL, ability) && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & WEATHER_SUN_ANY)
+        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_CHLOROPHYLL, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_BIG_LEAVES, ability) && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & WEATHER_SUN_ANY)
+        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_BIG_LEAVES, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SAND_RUSH, ability) && gBattleWeather & WEATHER_SANDSTORM_ANY)
+        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SAND_RUSH, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_SANDSTORM_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SLUSH_RUSH, ability) && gBattleWeather & WEATHER_HAIL_ANY)
+        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_FOG_RUSH, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_FOG_ANY))
+            speed = (speed * 150) / 100;
+
+        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SLUSH_RUSH, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_HAIL_ANY))
             speed = (speed * 150) / 100;
     }
     
