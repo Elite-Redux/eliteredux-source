@@ -2410,10 +2410,12 @@ static void HandleInputChooseMove(void)
         PlaySE(SE_SELECT);
         if (moveInfo->moves[gMoveSelectionCursor[gActiveBattler]] == MOVE_CURSE)
         {
-            if (moveInfo->monType1 != TYPE_GHOST && moveInfo->monType2 != TYPE_GHOST && moveInfo->monType3 != TYPE_GHOST)
-                moveTarget = MOVE_TARGET_USER;
-            else
+            if (moveInfo->monType1 == TYPE_GHOST || moveInfo->monType2 == TYPE_GHOST || moveInfo->monType3 == TYPE_GHOST)
                 moveTarget = MOVE_TARGET_SELECTED;
+            else if (IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY))
+                moveTarget = MOVE_TARGET_SELECTED;
+            else
+                moveTarget = MOVE_TARGET_USER;
         }
         else
         {

@@ -5239,6 +5239,7 @@ BattleScript_EffectMinimize::
 
 BattleScript_EffectCurse::
 	jumpiftype BS_ATTACKER, TYPE_GHOST, BattleScript_GhostCurse
+	jumpifweatheraffected BS_ATTACKER, WEATHER_FOG_ANY, BattleScript_GhostCurse
 	attackcanceler
 	attackstring
 	ppreduce

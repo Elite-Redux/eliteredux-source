@@ -1001,6 +1001,8 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             case EFFECT_CURSE:
                 if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST)) // Don't use Curse if you're a ghost type vs a Magic Guard user, they'll take no damage.
                     score -= 5;
+                else if (IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY))
+                    score -= 5;
                 break;
             }
         }
@@ -1784,7 +1786,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 10;
             break;
         case EFFECT_CURSE:
-            if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST))
+            if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST) || IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY))
             {
                 if (gBattleMons[battlerDef].status2 & STATUS2_CURSED
                   || DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
@@ -4161,7 +4163,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         }
         break;
     case EFFECT_CURSE:
-        if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST))
+        if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST) || IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY))
         {
             if (IsBattlerTrapped(battlerDef, TRUE))
                 score += 3;

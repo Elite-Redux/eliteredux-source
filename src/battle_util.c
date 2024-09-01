@@ -12146,8 +12146,15 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
         moveTarget = GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker);
     
     // Special cases
-    if (move == MOVE_CURSE && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
-        moveTarget = MOVE_TARGET_USER;
+    if (move == MOVE_CURSE)
+    {
+        if (IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GHOST))
+            moveTarget = MOVE_TARGET_SELECTED;
+        else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_FOG_ANY))
+            moveTarget = MOVE_TARGET_SELECTED;
+        else
+            moveTarget = MOVE_TARGET_USER;
+    }
     
     switch (moveTarget)
     {
