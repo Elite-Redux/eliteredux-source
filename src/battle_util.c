@@ -13129,7 +13129,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
         MulModifier(&modifier, UQ_4_12(1.2));
 	
 	// Tough Claws
-	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_TOUGH_CLAWS) && IsMoveMakingContact(move, battlerAtk))
+	if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_TOUGH_CLAWS) && (IsMoveMakingContact(move, battlerAtk) || move == MOVE_PRECIPICE_BLADES))
         MulModifier(&modifier, UQ_4_12(1.3));
     
 	// Big Pecks
@@ -14611,9 +14611,8 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         defStatToUse = STAT_SPDEF;
     }
 
-    if ((gBattleMons[battlerAtk].ability == ABILITY_ROUNDHOUSE || 
-        BattlerHasInnate(battlerAtk, ABILITY_ROUNDHOUSE)) && 
-        gBattleMoves[move].flags & FLAG_STRIKER_BOOST) 
+    if ((BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ROUNDHOUSE) && gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+        || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEADEYE) && gBattleMoves[move].arrowBased))
     {
         u32 def = CalculateStat(battlerDef, STAT_DEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
         u32 spDef = CalculateStat(battlerDef, STAT_SPDEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
