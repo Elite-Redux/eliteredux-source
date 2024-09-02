@@ -1682,6 +1682,12 @@ bool32 ShouldLowerStat(u8 battler, u16 battlerAbility, u8 stat)
 
 bool32 BattlerStatCanRise(u8 battler, u16 battlerAbility, u8 stat)
 {
+    // Don't try to boost stats in fog
+    if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
+        && (gVolatileStructs[battler].trickOrTreat
+            || !(IS_BATTLER_OF_TYPE(battler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(battler, TYPE_PSYCHIC))))
+        return FALSE;
+    
     if ((gBattleMons[battler].statStages[stat] < MAX_STAT_STAGE && 
           (battlerAbility != ABILITY_CONTRARY || !BattlerHasInnate(battler, ABILITY_CONTRARY)))
       || ((BATTLER_HAS_ABILITY_FAST(battler, ABILITY_CONTRARY, battlerAbility))
