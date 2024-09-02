@@ -10156,7 +10156,14 @@ static void Cmd_various(void)
     case VARIOUS_TRY_THIRD_TYPE:
         if (IS_BATTLER_OF_TYPE(gActiveBattler, gBattleMoves[gCurrentMove].argument))
         {
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
+            if (gBattleMoves[gCurrentMove].argument == TYPE_GHOST)
+            {
+                gVolatileStructs[gActiveBattler].trickOrTreat = TRUE;
+                gBattleMons[gActiveBattler].type3 = gBattleMoves[gCurrentMove].argument;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMoves[gCurrentMove].argument);
+                gBattlescriptCurrInstr += 7;
+            }
+            else gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         }
         else
         {
@@ -11302,8 +11309,9 @@ static void Cmd_various(void)
             int bits = 0;
 
             if (!IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)
-                || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
-                || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC))
+                || ((IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
+                    || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC)))
+                    && !gVolatileStructs[gActiveBattler].trickOrTreat)
             {
                 gBattlescriptCurrInstr = noChangePtr;
                 return;

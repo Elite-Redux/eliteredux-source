@@ -875,6 +875,7 @@ static const u8 sText_FogStatDrops[] = _("{B_ATK_NAME_WITH_PREFIX}'s resolve\nfa
 static const u8 sText_OnTheProwl[] = _("{B_ATK_NAME_WITH_PREFIX} looks\nfor the perfect opportunity!");
 static const u8 sText_FogStarts[] = _("An unnatural fog descends upon\nthe battlefield!");
 static const u8 sText_FlareBoostIgnites[] = _("{B_ATK_NAME_WITH_PREFIX}'s inner\nflame roars to life!");
+static const u8 sText_FogReturns[] = _("The eerie fog returns!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1033,7 +1034,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_FogReturns[] = _("The eerie fog returns!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {

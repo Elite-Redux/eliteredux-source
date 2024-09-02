@@ -145,6 +145,7 @@ struct VolatileStruct
     u8 critBoost:2;
     u8 fear:1;
     u8 onTheProwl:1;
+    u8 trickOrTreat:1;
 };
 
 struct RoundStruct
