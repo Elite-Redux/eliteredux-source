@@ -16616,7 +16616,8 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
         effect = 1;
     }
     //Queenly Majesty
-    else if((triggeringBattler = IsAbilityOnSide(battler, ABILITY_QUEENLY_MAJESTY))
+    else if(!gProcessingExtraAttacks
+        && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_QUEENLY_MAJESTY))
         && GetChosenMovePriority(gBattlerAttacker, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler)
         && !(move == MOVE_SCRATCH && BattlerHasInnateOrAbility(gBattlerAttacker, ABILITY_CHEAP_TACTICS))
@@ -16629,7 +16630,8 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
         effect = 1;
     }
     //Dazzling
-    else if((triggeringBattler = IsAbilityOnSide(battler, ABILITY_DAZZLING))
+    else if(!gProcessingExtraAttacks
+        && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_DAZZLING))
         && GetChosenMovePriority(gBattlerAttacker, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
     {
@@ -16640,7 +16642,8 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
         effect = 2;
     }
     //Unicorn
-    else if((triggeringBattler = IsAbilityOnSide(battler, ABILITY_UNICORN))
+    else if(!gProcessingExtraAttacks
+        && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_UNICORN))
         && GetChosenMovePriority(gBattlerAttacker, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
     {
@@ -16651,7 +16654,8 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
         effect = 2;
     }
     //Armor Tail
-    else if((triggeringBattler = IsAbilityOnSide(battler, ABILITY_ARMOR_TAIL))
+    else if(!gProcessingExtraAttacks
+        && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_ARMOR_TAIL))
         && GetChosenMovePriority(gBattlerAttacker, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
     {
@@ -16662,7 +16666,8 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
         effect = 1;
     }
     //Sand Guard
-    else if(BATTLER_HAS_ABILITY(battler, ABILITY_SAND_GUARD)
+    else if(!gProcessingExtraAttacks
+        && BATTLER_HAS_ABILITY(battler, ABILITY_SAND_GUARD)
         && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)
         && GetChosenMovePriority(gBattlerAttacker, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
@@ -16671,7 +16676,8 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
         *immunityScript = BattleScript_DazzlingProtected;
         effect = 2;
     }
-    else if (BlocksPrankster(move, gBattlerAttacker, gBattlerTarget, TRUE)
+    else if (!gProcessingExtraAttacks
+        && BlocksPrankster(move, gBattlerAttacker, gBattlerTarget, TRUE)
         && !(IS_MOVE_STATUS(move) && BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_MAGIC_BOUNCE)))
     {
         *immunityScript = BattleScript_DarkTypePreventsPrankster;
