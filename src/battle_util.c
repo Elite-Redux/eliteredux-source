@@ -7948,6 +7948,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
 		}
+
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RECURRING_NIGHTMARE)
+            && !IsBattlerAlive(battler)
+            && !GetSingleUseAbilityCounter(battler, ABILITY_RECURRING_NIGHTMARE)
+            && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+        {
+            SetSingleUseAbilityCounter(battler, ABILITY_RECURRING_NIGHTMARE, 1);
+        }
+
 		// Effect Spore
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_EFFECT_SPORE)) {
             EFFECT_SPORE:
@@ -10304,6 +10313,7 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_NEUTRALIZING_GAS:
     case ABILITY_HUNGER_SWITCH:
     case ABILITY_ANTICIPATION:
+    case ABILITY_RECURRING_NIGHTMARE:
         return TRUE;
     default:
         return FALSE;
