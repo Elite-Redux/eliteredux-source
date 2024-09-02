@@ -13359,10 +13359,6 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (gBattleMons[battlerAtk].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
             return;
         
-        case ABILITY_FLARE_BOOST:
-            if (gBattleMons[battlerAtk].status1 & STATUS1_BURN && IS_MOVE_SPECIAL(move)) MUL(1.5);
-            return;
-        
         case ABILITY_IRON_BARRAGE:
         case ABILITY_MEGA_LAUNCHER:
             if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.5);
@@ -14008,6 +14004,11 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if ((BATTLER_HAS_ABILITY(battler, ABILITY_ECTOPLASM))
                 && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
                 && GetHighestAttackingStatId(battler, TRUE) == statEnum)
+                    statBase = statBase * 3 / 2;
+                
+            // Flare Boost
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_FLARE_BOOST)
+                && gBattleMons[battler].status1 & STATUS1_BURN)
                     statBase = statBase * 3 / 2;
             
             // Supreme Overlord
