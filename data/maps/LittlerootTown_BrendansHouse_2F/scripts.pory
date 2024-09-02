@@ -475,14 +475,14 @@ script LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet{
 	    case 24:  bufferstring(1, StarterRegionStringSteel)
 	}
 	if (var(VAR_STARTER_GEN) < 10){
-		msgbox(format("So it was the region {STR_VAR_2}.\nRight?"), MSGBOX_YESNO)
+		msgbox(format("So it was the {STR_VAR_2} region.\nRight?"), MSGBOX_YESNO)
 		if (!var(VAR_RESULT)){
 			goto(LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet)
 		}
 		msgbox(RivalsHouse_1F_Text_BrendanSomeOtherTime, MSGBOX_DEFAULT)
 		closemessage
 	} else {
-		msgbox(format("So it was the type {STR_VAR_2}.\nRight?"), MSGBOX_YESNO)
+		msgbox(format("So it was {STR_VAR_2} type.\nRight?"), MSGBOX_YESNO)
 		if (!var(VAR_RESULT)){
 			goto(LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet)
 		}
