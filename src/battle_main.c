@@ -5528,6 +5528,21 @@ static void HandleEndTurn_BattleWon(void)
 {
     gCurrentActionFuncId = 0;
 
+    if (GetSingleUseAbilityCounter(0, ABILITY_RECURRING_NIGHTMARE) == 1)
+    {
+        int damage = gBattleMons[0].maxHP / 4;
+        if (!damage) damage = 1;
+        gBattleMons[0].hp = damage;
+        SetMonData(&gPlayerParty[gBattlerPartyIndexes[0]], MON_DATA_HP, &damage);
+    }
+    if (!(gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER) && GetSingleUseAbilityCounter(2, ABILITY_RECURRING_NIGHTMARE) == 1)
+    {
+        int damage = gBattleMons[2].maxHP / 4;
+        if (!damage) damage = 1;
+        gBattleMons[2].hp = damage;
+        SetMonData(&gPlayerParty[gBattlerPartyIndexes[2]], MON_DATA_HP, &damage);
+    }
+
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
     {
         gSpecialVar_Result = gBattleOutcome;

@@ -4017,7 +4017,6 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_FLINCH: // flinch
-            MGBA_PRINT_DEBUG("Battler %d is flinched %d", gBattlerAttacker, gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED)
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED)
             {
                 gRoundStructs[gBattlerAttacker].flinchImmobility = TRUE;
@@ -7948,14 +7947,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
 		}
-
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RECURRING_NIGHTMARE)
-            && !IsBattlerAlive(battler)
-            && !GetSingleUseAbilityCounter(battler, ABILITY_RECURRING_NIGHTMARE)
-            && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-        {
-            SetSingleUseAbilityCounter(battler, ABILITY_RECURRING_NIGHTMARE, 1);
-        }
 
 		// Effect Spore
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_EFFECT_SPORE)) {

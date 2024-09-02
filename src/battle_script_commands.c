@@ -4220,11 +4220,18 @@ static void Cmd_clearstatusfromeffect(void)
 static void Cmd_tryfaintmon(void)
 {
     const u8 *BS_ptr;
+    gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+
+    if (BattlerHasAbility(gActiveBattler, gBattlerAttacker, ABILITY_RECURRING_NIGHTMARE)
+        && !IsBattlerAlive(gActiveBattler)
+        && !GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE)
+        && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY))
+    {
+        SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, 1);
+    }
 
     if (gBattlescriptCurrInstr[2] != 0)
     {
-
-        gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
         if (gHitMarker & HITMARKER_FAINTED(gActiveBattler))
         {
             BS_ptr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
@@ -4241,7 +4248,6 @@ static void Cmd_tryfaintmon(void)
     else
     {
         u8 battlerId;
-        gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
         if (gActiveBattler == gBattlerAttacker)
         {
@@ -11361,6 +11367,8 @@ static void Cmd_various(void)
     case VARIOUS_TRY_RECURRING_NIGHTMARE:
         if (GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE) == 1)
         {
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
+            if (!gBattleMoveDamage) gBattleMoveDamage = 1;
             SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, 2);
             BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 2, &gBattleMoveDamage);
             MarkBattlerForControllerExec(gActiveBattler);
