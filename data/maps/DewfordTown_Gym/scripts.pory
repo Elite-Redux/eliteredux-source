@@ -731,7 +731,7 @@ script DewfordTown_Gym_EventScript_BrawlyEngage{
 script DewfordTown_Gym_EventScript_Brawly{
     lock
     faceplayer
-    msgbox(format("If you want to fight, face me, enter the ring and place you in the center. This is how I know someone is ready."), MSGBOX_DEFAULT)
+    msgbox(format("If you want to fight, face me, enter the ring, and take your place in the center. This is how I know someone is ready."), MSGBOX_DEFAULT)
     release
 }
 
