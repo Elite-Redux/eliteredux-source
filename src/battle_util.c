@@ -14766,6 +14766,9 @@ s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveT
     dmg *= 100 - randomFactor;
     dmg /= 100;
 
+    if (dmg == 0 && typeEffectivenessModifier > 0)
+        dmg = 1;
+
     return dmg;
 }
 
