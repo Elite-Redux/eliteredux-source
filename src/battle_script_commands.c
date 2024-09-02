@@ -3612,8 +3612,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_FLINCH:
                 if (!BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_INNER_FOCUS) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_ENLIGHTENED))
                 {
-                    if (GetBattlerTurnOrderNum(gEffectBattler) > gCurrentTurnActionNumber)
-                        gBattleMons[gEffectBattler].status2 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
+                    gBattleMons[gEffectBattler].status2 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                 }
                 break;
             case MOVE_EFFECT_UPROAR:
@@ -11863,7 +11862,7 @@ static void Cmd_jumpifnotfirstturn(void)
 {
     const u8* failJump = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 
-    if (gVolatileStructs[gBattlerAttacker].isFirstTurn)
+    if (gVolatileStructs[gBattlerAttacker].isFirstTurn || gProcessingExtraAttacks)
         gBattlescriptCurrInstr += 5;
     else
         gBattlescriptCurrInstr = failJump;

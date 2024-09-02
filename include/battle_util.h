@@ -250,6 +250,7 @@ bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId);
 struct Pokemon *GetIllusionMonPtr(u32 battlerId);
 void ClearIllusionMon(u32 battlerId);
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
+void TryPreemptiveActions();
 u8 GetBattleMoveSplit(u32 moveId);
 bool32 TestMoveFlags(u16 move, u32 flag);
 struct Pokemon *GetBattlerPartyData(u8 battlerId);

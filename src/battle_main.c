@@ -173,10 +173,11 @@ EWRAM_DATA u8 gActionsByTurnOrder[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerByTurnOrder[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gCurrentTurnActionNumber = 0;
 EWRAM_DATA bool8 gProcessingExtraAttacks = FALSE;
+EWRAM_DATA u8 gDelayedTurnActionId = B_ACTION_FINISHED;
 EWRAM_DATA u8 gQueuedAttackCount = 0;
 // Position 0 is active attack
 EWRAM_DATA struct ExtraAttackActionStruct gQueuedExtraAttackData[MAX_BATTLERS_COUNT + 1] = {0};
-EWRAM_DATA u8 gCurrentActionFuncId = 0;
+EWRAM_DATA u8 gCurrentActionFuncId = B_ACTION_FINISHED;
 EWRAM_DATA struct BattlePokemon gBattleMons[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gCurrMovePos = 0;
@@ -3251,6 +3252,9 @@ static void BattleStartClearSetData(void)
     gBattleWeather = 0;
     gHitMarker = 0;
 
+    gQueuedAttackCount = 0;
+    gDelayedTurnActionId = B_ACTION_FINISHED;
+
     if (!(gBattleTypeFlags & BATTLE_TYPE_RECORDED))
     {
         if (!(gBattleTypeFlags & BATTLE_TYPE_LINK) && gSaveBlock2Ptr->optionsBattleSceneOff == TRUE)
@@ -3325,6 +3329,8 @@ void SwitchInClearSetData(void)
     struct VolatileStruct VolatileStructCopy = gVolatileStructs[gActiveBattler];
 
     gActionsByTurnOrder[GetBattlerTurnOrderNum(gActiveBattler)] = B_ACTION_TRY_FINISH;
+
+    if (gBattlerByTurnOrder[gCurrentTurnActionNumber] == gActiveBattler) gDelayedTurnActionId = B_ACTION_FINISHED;
 
     ClearIllusionMon(gActiveBattler);
     if (gBattleMoves[gCurrentMove].effect != EFFECT_BATON_PASS)
@@ -5480,6 +5486,7 @@ static void CheckQuickClaw_CustapBerryActivation(void)
     TryClearRageAndFuryCutter();
     gCurrentTurnActionNumber = 0;
     gCurrentActionFuncId = gActionsByTurnOrder[0];
+    TryPreemptiveActions();
     gBattleStruct->dynamicMoveType = 0;
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
     {

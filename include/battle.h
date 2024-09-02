@@ -1046,6 +1046,7 @@ extern struct BattleStruct *gBattleStruct;
 extern u8 gQueuedAttackCount;
 extern struct ExtraAttackActionStruct gQueuedExtraAttackData[MAX_BATTLERS_COUNT + 1];
 extern bool8 gProcessingExtraAttacks;
+extern u8 gDelayedTurnActionId;
 extern u8 *gLinkBattleSendBuffer;
 extern u8 *gLinkBattleRecvBuffer;
 extern struct BattleResources *gBattleResources;

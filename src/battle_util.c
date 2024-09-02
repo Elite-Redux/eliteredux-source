@@ -915,10 +915,51 @@ void HandleAction_TryFinish(void)
     }
     
     gProcessingExtraAttacks = FALSE;
+
+    if (gDelayedTurnActionId != B_ACTION_FINISHED)
+    {
+        ClearMiscTurnFlags();
+        gCurrentActionFuncId = gDelayedTurnActionId;
+        gDelayedTurnActionId = B_ACTION_FINISHED;
+        return;
+    }
+
     if (!HandleFaintedMonActions())
     {
         gBattleStruct->faintedActionsState = 0;
         gCurrentActionFuncId = B_ACTION_FINISHED;
+    }
+}
+
+void TryPreemptiveActions()
+{
+    int battler = gBattlerByTurnOrder[gCurrentTurnActionNumber];
+    if (gCurrentActionFuncId == B_ACTION_USE_MOVE)
+    {
+        int i;
+        int move = GetChosenMove(battler);
+        int target = GetMoveTarget(move, FALSE);
+        int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
+        int surpriser = 0;
+        if ((targetFlag == MOVE_TARGET_FOES_AND_ALLY || GetBattlerSide(target) != GetBattlerSide(battler))
+            && GetMovePriority(battler, move, target) > 0
+            && (surpriser = IsAbilityOnOpposingSide(battler, ABILITY_SURPRISE)))
+        {
+            gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+                .ability = ABILITY_SURPRISE,
+                .attacker = surpriser - 1,
+                .move = MOVE_ASTONISH,
+                .target = battler,
+            };
+        }
+    }
+
+    if (gQueuedAttackCount)
+    {
+        gDelayedTurnActionId = gCurrentActionFuncId;
+        gCurrentActionFuncId = B_ACTION_USE_MOVE;
+        gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];
+        gProcessingExtraAttacks = TRUE;
     }
 }
 
@@ -927,6 +968,7 @@ void HandleAction_NothingIsFainted(void)
     RecalculateMoveOrder(++gCurrentTurnActionNumber, gBattlersCount);
     gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     ClearMiscTurnFlags();
+    TryPreemptiveActions();
 }
 
 void HandleAction_ActionFinished(void)
@@ -939,6 +981,7 @@ void HandleAction_ActionFinished(void)
     gLastLandedMoves[gBattlerAttacker] = 0;
     gLastHitByType[gBattlerAttacker] = 0;
     ClearMiscTurnFlags();
+    TryPreemptiveActions();
 }
 
 // rom const data
@@ -3974,6 +4017,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_FLINCH: // flinch
+            MGBA_PRINT_DEBUG("Battler %d is flinched %d", gBattlerAttacker, gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED)
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED)
             {
                 gRoundStructs[gBattlerAttacker].flinchImmobility = TRUE;
@@ -10442,8 +10486,7 @@ u32 IsAbilityOnField(u32 ability)
 
     for (i = 0; i < gBattlersCount; i++)
     {
-        if (IsBattlerAlive(i) && (GetBattlerAbility(i) == ability || 
-            BattlerHasInnate(i, ability)))
+        if (BATTLER_HAS_ABILITY(i, ability))
             return i + 1;
     }
 
