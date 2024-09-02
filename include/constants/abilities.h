@@ -640,7 +640,7 @@
 #define ABILITY_FRAGRANT_DAZE 618 // 30% chance to confuse on contact.
 #define ABILITY_LOW_VISIBILITY 619 // Summons Eerie Fog on entry.
 #define ABILITY_OLD_MARINER 620 // Seaweed + Water Absorb.
-#define ABILITY_ECTOPLASM 621 // Ups highest attacking stat in fog.
+#define ABILITY_ECTOPLASM 621 // Ups highest attacking stat by 1.5x in fog.
 #define ABILITY_BEAUTIFUL_MUSIC 622 // Sound-based moves have 50% chance to infatuate the foe.
 #define ABILITY_SURPRISE 623 // Astonishes enemy priority users in fog.
 #define ABILITY_SNOW_SONG 624 // Sound moves become Ice- type moves and get a 1.2x boost.
