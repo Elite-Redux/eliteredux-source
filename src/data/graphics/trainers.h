@@ -278,7 +278,7 @@ const u32 gTrainerFrontPic_RubySapphireMay[] = INCBIN_U32("graphics/trainers/fro
 const u32 gTrainerPalette_RubySapphireMay[] = INCBIN_U32("graphics/trainers/palettes/ruby_sapphire_may.gbapal.lz");
 
 const u32 gTrainerFrontPic_MagmaAdminF[] = INCBIN_U32("graphics/trainers/front_pics/magma_admin_f_front_pic.4bpp.lz");
-const u32 gTrainerPalette_MagmaAdminF[] = INCBIN_U32("graphics/trainers/palettes/magma_admin.gbapal.lz");
+const u32 gTrainerPalette_MagmaAdminF[] = INCBIN_U32("graphics/trainers/palettes/magma_admin_f.gbapal.lz");
 
 const u32 gTrainerFrontPic_Cynthia[] = INCBIN_U32("graphics/trainers/front_pics/cynthia_front_pic.4bpp.lz");
 const u32 gTrainerPalette_Cynthia[] = INCBIN_U32("graphics/trainers/palettes/cynthia.gbapal.lz");

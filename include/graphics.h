@@ -7226,6 +7226,7 @@ extern const u32 gTrainerPalette_SwimmerF[];
 extern const u32 gTrainerPalette_Twins[];
 extern const u32 gTrainerPalette_Sailor[];
 extern const u32 gTrainerPalette_MagmaAdmin[];
+extern const u32 gTrainerPalette_MagmaAdminF[];
 extern const u32 gTrainerPalette_Wally[];
 extern const u32 gTrainerPalette_Brendan[];
 extern const u32 gTrainerPalette_May[];
