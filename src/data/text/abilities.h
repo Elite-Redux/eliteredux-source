@@ -1281,7 +1281,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_VENOBLAZE_PINCERS] = _("Venoblaze Pincers"),
     [ABILITY_ETERNAL_BLESSING] = _("Eternal Blessing"),
     [ABILITY_SUGAR_RUSH] = _("Sugar Rush"),
-    [ABILITY_PEACEFUL_REST] = _("Peaceful Rest"),
+    [ABILITY_PEACEFUL_REST] = _("Rest in Peace"),
     [ABILITY_WHITE_NOISE] = _("White Noise"),
     [ABILITY_SMOKEY_MANEUVERS] = _("Smokey Maneuvers"),
 };
