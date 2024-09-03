@@ -195,7 +195,7 @@ const struct CompressedSpriteSheet gTrainerFrontPicTable[] =
     TRAINER_SPRITE(LEAF, gTrainerFrontPic_Leaf, 0x800),
     TRAINER_SPRITE(RS_BRENDAN, gTrainerFrontPic_RubySapphireBrendan, 0x800),
     TRAINER_SPRITE(RS_MAY, gTrainerFrontPic_RubySapphireMay, 0x800),
-    TRAINER_SPRITE(MAGMA_ADMIN_F, gTrainerFrontPic_MagmaAdminF, 0x800),
+    TRAINER_SPRITE(MAGMA_ADMIN_F, gTrainerFrontPic_MagmaAdmin, 0x800),
     TRAINER_SPRITE(CYNTHIA, gTrainerFrontPic_Cynthia, 0x800),
     TRAINER_SPRITE(BANEFUL, gTrainerFrontPic_Baneful, 0x800),
 };
