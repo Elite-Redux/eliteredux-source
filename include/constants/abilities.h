@@ -675,8 +675,9 @@
 #define ABILITY_PEACEFUL_REST 653 // Heals 1/8 of max HP every turn in fog.
 #define ABILITY_WHITE_NOISE 654 // Combines Static and Rest in Peace.
 #define ABILITY_SMOKEY_MANEUVERS 655 // Evasion is boosted by 1.25x in fog.
+#define ABILITY_TAG 656 // Attacks switching opponents with a 20BP Pursuit.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_SMOKEY_MANEUVERS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_TAG + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

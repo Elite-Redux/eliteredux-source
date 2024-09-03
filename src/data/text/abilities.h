@@ -625,6 +625,7 @@ static const u8 sAbilitySugarRushDescription[] = _("Sharply raises Speed when\ne
 static const u8 sAbilityPeacefulRestDescription[] = _("Heals 1/8 of max HP every turn\nin fog.");
 static const u8 sAbilityWhiteNoiseDescription[] = _("Combines Static and\nRest in Peace.");
 static const u8 sAbilitySmokeyManeuversDescription[] = _("Evasion is boosted by 1.25x\nin fog.");
+static const u8 sAbilityTagDescription[] = _("Attacks switching opponents\nwith a 20BP Pursuit.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1284,6 +1285,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_PEACEFUL_REST] = _("Rest in Peace"),
     [ABILITY_WHITE_NOISE] = _("White Noise"),
     [ABILITY_SMOKEY_MANEUVERS] = _("Smokey Maneuvers"),
+    [ABILITY_TAG] = _("Tag"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1944,4 +1946,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_PEACEFUL_REST] = sAbilityPeacefulRestDescription,
     [ABILITY_WHITE_NOISE] = sAbilityWhiteNoiseDescription,
     [ABILITY_SMOKEY_MANEUVERS] = sAbilitySmokeyManeuversDescription,
+    [ABILITY_TAG] = sAbilityTagDescription,
 };

@@ -954,6 +954,24 @@ void TryPreemptiveActions()
         }
     }
 
+    if (gCurrentActionFuncId == B_ACTION_SWITCH)
+    {
+        int i;
+        for (i = BATTLE_OPPOSITE(GetBattlerSide(battler)); i < gBattlersCount; i += 2)
+        {
+            if (BATTLER_HAS_ABILITY(i, ABILITY_TAG))
+            {
+                gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+                    .ability = ABILITY_TAG,
+                    .attacker = i,
+                    .move = MOVE_PURSUIT,
+                    .target = battler,
+                    .movePower = 20,
+                };
+            }
+        }
+    }
+
     if (gQueuedAttackCount)
     {
         gDelayedTurnActionId = gCurrentActionFuncId;
