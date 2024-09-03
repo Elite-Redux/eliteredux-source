@@ -908,11 +908,11 @@ static void PetalburgGymSetDoorMetatiles(u8 roomNumber, u16 metatileId)
             doorCoordsY[0] = 26;
             break;
     }
-    /*for (i = 0; i < nDoors; i++)
+    for (i = 0; i < nDoors; i++)
     {
         MapGridSetMetatileIdAt(doorCoordsX[i] + 7, doorCoordsY[i] + 7, metatileId | METATILE_COLLISION_MASK);
         MapGridSetMetatileIdAt(doorCoordsX[i] + 7, doorCoordsY[i] + 8, (metatileId + 8) | METATILE_COLLISION_MASK);
-    }*/
+    }
     DrawWholeMapView();
 }
 

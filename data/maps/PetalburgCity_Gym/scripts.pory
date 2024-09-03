@@ -11,10 +11,10 @@ PetalburgCity_Gym_MapScripts:: @ 8204889
 	.byte 0
 
 PetalburgCity_Gym_OnLoad: @ 820489E
-	compare VAR_PETALBURG_GYM_STATE, 6
-	goto_if_eq PetalburgCity_Gym_EventScript_OpenUnlockedDoors
-	compare VAR_PETALBURG_GYM_STATE, 7
-	call_if_ge PetalburgCity_Gym_EventScript_UnlockAllDoors
+	@compare VAR_PETALBURG_GYM_STATE, 6
+	@goto_if_eq PetalburgCity_Gym_EventScript_OpenUnlockedDoors
+	@compare VAR_PETALBURG_GYM_STATE, 7
+	@call_if_ge PetalburgCity_Gym_EventScript_UnlockAllDoors
 	end
 
 @ NOTE: Strength and OHKO rooms are misleading. Both are more accurately Critical-Hit
@@ -32,13 +32,13 @@ PetalburgCity_Gym_EventScript_OpenUnlockedDoors:: @ 82048B5
 PetalburgCity_Gym_EventScript_UnlockAllDoors:: @ 82048FF
 	setvar VAR_0x8005, 1
 	call PetalburgCity_Gym_EventScript_OpenGymEntranceDoors
-	@call PetalburgCity_Gym_EventScript_OpenSpeedRoomDoors
-	@call PetalburgCity_Gym_EventScript_OpenAccuracyRoomDoors
-	@call PetalburgCity_Gym_EventScript_OpenConfusionRoomDoors
-	@call PetalburgCity_Gym_EventScript_OpenDefenseRoomDoors
-	@call PetalburgCity_Gym_EventScript_OpenRecoveryRoomDoors
-	@call PetalburgCity_Gym_EventScript_OpenStrengthRoomDoors
-	@call PetalburgCity_Gym_EventScript_OpenOHKORoomDoors
+	call PetalburgCity_Gym_EventScript_OpenSpeedRoomDoors
+	call PetalburgCity_Gym_EventScript_OpenAccuracyRoomDoors
+	call PetalburgCity_Gym_EventScript_OpenConfusionRoomDoors
+	call PetalburgCity_Gym_EventScript_OpenDefenseRoomDoors
+	call PetalburgCity_Gym_EventScript_OpenRecoveryRoomDoors
+	call PetalburgCity_Gym_EventScript_OpenStrengthRoomDoors
+	call PetalburgCity_Gym_EventScript_OpenOHKORoomDoors
 	return
 
 PetalburgCity_Gym_OnTransition: @ 820492D
