@@ -6580,7 +6580,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
         
         // Aquatic
-        if(CheckAndSetOncePerTurnAbility(battler, ABILITY_AQUATIC)){
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_AQUATIC)){
             if (!IS_BATTLER_OF_TYPE(battler, TYPE_WATER))
             {
                 gBattleMons[battler].type3 = TYPE_WATER;
