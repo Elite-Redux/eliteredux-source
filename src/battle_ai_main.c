@@ -3128,6 +3128,12 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             RETURN_SCORE_PLUS(1);   // our partner benefits from sun
         }
         break;
+    case EFFECT_EERIE_FOG:
+        if (ShouldSetFog(battlerAtkPartner, atkPartnerAbility, atkPartnerHoldEffect))
+        {
+            RETURN_SCORE_PLUS(1);   // our partner benefits from sun
+        }
+        break;
     case EFFECT_HAIL:
         if (IsBattlerAlive(battlerAtkPartner)
          && ShouldSetHail(battlerAtkPartner, atkPartnerAbility, atkPartnerHoldEffect))
@@ -4326,6 +4332,12 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score++;
             if (HasMoveEffect(battlerDef, EFFECT_THUNDER) || HasMoveEffect(BATTLE_PARTNER(battlerDef), EFFECT_THUNDER))
                 score++;
+        }
+        break;
+    case EFFECT_EERIE_FOG:
+        if (ShouldSetFog(battlerAtk, AI_DATA->abilities[battlerAtk], AI_DATA->holdEffects[battlerAtk]))
+        {
+            score++;
         }
         break;
     case EFFECT_ATTACK_UP_HIT:
