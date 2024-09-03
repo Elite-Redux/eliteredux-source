@@ -1508,7 +1508,7 @@ bool32 ShouldSetSandstorm(u8 battler, u16 ability, u16 holdEffect)
 {
     if (!AI_WeatherHasEffect())
         return FALSE;
-    else if (gBattleWeather & WEATHER_SANDSTORM_ANY)
+    else if (gBattleWeather & (WEATHER_SANDSTORM_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
     
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_SAND_VEIL, ability)
@@ -1532,7 +1532,7 @@ bool32 ShouldSetHail(u8 battler, u16 ability, u16 holdEffect)
 {
     if (!AI_WeatherHasEffect())
         return FALSE;
-    else if (gBattleWeather & WEATHER_HAIL_ANY)
+    else if (gBattleWeather & (WEATHER_HAIL_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
     
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_SNOW_CLOAK, ability)
@@ -1556,7 +1556,7 @@ bool32 ShouldSetRain(u8 battlerAtk, u16 atkAbility, u16 holdEffect)
 {
     if (!AI_WeatherHasEffect())
         return FALSE;
-    else if (gBattleWeather & WEATHER_RAIN_ANY)
+    else if (gBattleWeather & (WEATHER_RAIN_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
     
     if (holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA
@@ -1579,7 +1579,7 @@ bool32 ShouldSetSun(u8 battlerAtk, u16 atkAbility, u16 holdEffect)
 {
     if (!AI_WeatherHasEffect())
         return FALSE;
-    else if (gBattleWeather & WEATHER_SUN_ANY)
+    else if (gBattleWeather & (WEATHER_SUN_ANY | WEATHER_PRIMAL_ANY))
         return FALSE;
     
     if (holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA
@@ -1602,6 +1602,31 @@ bool32 ShouldSetSun(u8 battlerAtk, u16 atkAbility, u16 holdEffect)
         return TRUE;
     }
     return FALSE;
+}
+
+static const u16 sFogAbilities[] = {
+    ABILITY_ECTOPLASM,
+    ABILITY_ETHEREAL_RUSH,
+    ABILITY_WHITE_NOISE,
+    ABILITY_PEACEFUL_REST,
+    ABILITY_SURPRISE,
+};
+
+int ShouldSetFog(int battlerAtk, int atkAbility, int holdEffect)
+{
+    int i;
+    if (!AI_WeatherHasEffect())
+        return FALSE;
+    else if (gBattleWeather & (WEATHER_FOG_ANY | WEATHER_PRIMAL_ANY))
+        return FALSE;
+    
+    if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST) && !gVolatileStructs[battlerAtk].trickOrTreat) return TRUE;
+    if (HasMove(battlerAtk, MOVE_OMINOUS_WIND)) return TRUE;
+    
+    for (i = 0; i < ARRAY_COUNT(sFogAbilities); i++)
+    {
+        if (BATTLER_HAS_ABILITY_FAST(battlerAtk, sFogAbilities[i], atkAbility)) return TRUE;
+    }
 }
 
 
