@@ -479,20 +479,6 @@ const u8 gInitialMovementTypeFacingDirections[] = {
 #define OBJ_EVENT_PAL_TAG_DEWGONG                 0x1130
 #define OBJ_EVENT_PAL_TAG_FERALIGATR              0x1131
 #define OBJ_EVENT_PAL_TAG_HOODED                  0x1132
-#define OBJ_EVENT_PAL_TAG_WALLY                   0x1133
-#define OBJ_EVENT_PAL_TAG_ROXANNE                 0x1134
-#define OBJ_EVENT_PAL_TAG_BRAWLY                  0x1135
-#define OBJ_EVENT_PAL_TAG_WATTSON                 0x1136
-#define OBJ_EVENT_PAL_TAG_NORMAN                  0x1137
-#define OBJ_EVENT_PAL_TAG_WINONA                  0x1138
-#define OBJ_EVENT_PAL_TAG_TATE                    0x1139
-#define OBJ_EVENT_PAL_TAG_LIZA                    0x1140
-#define OBJ_EVENT_PAL_TAG_JUAN                    0x1141
-#define OBJ_EVENT_PAL_TAG_WALLACE                 0x1142
-#define OBJ_EVENT_PAL_TAG_STEVEN                  0x1143
-#define OBJ_EVENT_PAL_TAG_MAXIE                   0x1144
-#define OBJ_EVENT_PAL_TAG_ARCHIE                  0x1145
-#define OBJ_EVENT_PAL_TAG_FLANNERY                0x1146
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF
 
 #include "data/object_events/object_event_graphics_info_pointers.h"
@@ -512,20 +498,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc2Reflection,        OBJ_EVENT_PAL_TAG_NPC_2_REFLECTION},
     {gObjectEventPal_Npc3Reflection,        OBJ_EVENT_PAL_TAG_NPC_3_REFLECTION},
     {gObjectEventPal_Npc4Reflection,        OBJ_EVENT_PAL_TAG_NPC_4_REFLECTION},
-    {gObjectEventPal_Wally,                 OBJ_EVENT_PAL_TAG_WALLY},
-    {gObjectEventPal_Roxanne,               OBJ_EVENT_PAL_TAG_ROXANNE},
-    {gObjectEventPal_Brawly,                OBJ_EVENT_PAL_TAG_BRAWLY},
-    {gObjectEventPal_Wattson,               OBJ_EVENT_PAL_TAG_WATTSON},
-    {gObjectEventPal_Flannery,              OBJ_EVENT_PAL_TAG_FLANNERY},
-    {gObjectEventPal_Norman,                OBJ_EVENT_PAL_TAG_NORMAN},
-    {gObjectEventPal_Winona,                OBJ_EVENT_PAL_TAG_WINONA},
-    {gObjectEventPal_Tate,                  OBJ_EVENT_PAL_TAG_TATE},
-    {gObjectEventPal_Liza,                  OBJ_EVENT_PAL_TAG_LIZA},
-    {gObjectEventPal_Juan,                  OBJ_EVENT_PAL_TAG_JUAN},
-    {gObjectEventPal_Wallace,               OBJ_EVENT_PAL_TAG_WALLACE},
-    {gObjectEventPal_Steven,                OBJ_EVENT_PAL_TAG_STEVEN},
-    {gObjectEventPal_Maxie,                 OBJ_EVENT_PAL_TAG_MAXIE},
-    {gObjectEventPal_Archie,                OBJ_EVENT_PAL_TAG_ARCHIE},
     {gObjectEventPal_Brendan,               OBJ_EVENT_PAL_TAG_BRENDAN},
     {gObjectEventPal_BrendanReflection,     OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION},
     {gObjectEventPal_BridgeReflection,      OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION},
