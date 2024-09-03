@@ -11,10 +11,10 @@ PetalburgCity_Gym_MapScripts:: @ 8204889
 	.byte 0
 
 PetalburgCity_Gym_OnLoad: @ 820489E
-	compare VAR_PETALBURG_GYM_STATE, 6
-	goto_if_eq PetalburgCity_Gym_EventScript_OpenUnlockedDoors
-	compare VAR_PETALBURG_GYM_STATE, 7
-	call_if_ge PetalburgCity_Gym_EventScript_UnlockAllDoors
+	@compare VAR_PETALBURG_GYM_STATE, 6
+	@goto_if_eq PetalburgCity_Gym_EventScript_OpenUnlockedDoors
+	@compare VAR_PETALBURG_GYM_STATE, 7
+	@call_if_ge PetalburgCity_Gym_EventScript_UnlockAllDoors
 	end
 
 @ NOTE: Strength and OHKO rooms are misleading. Both are more accurately Critical-Hit

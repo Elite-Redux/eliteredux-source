@@ -858,6 +858,7 @@ static void PetalburgGymSetDoorMetatiles(u8 roomNumber, u16 metatileId)
     u8 nDoors = 0;
     switch (roomNumber)
     {
+        // only 1 is used with the gym rework
         case 1:
             nDoors = 2;
             doorCoordsX[0] = 1;
