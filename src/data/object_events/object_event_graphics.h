@@ -424,6 +424,7 @@ const u16 gObjectEventPaletteSalamence[]      = INCBIN_U16("graphics/object_even
 const u16 gObjectEventPaletteDewgong[]        = INCBIN_U16("graphics/object_events/palettes/dewgong.gbapal");
 const u16 gObjectEventPaletteFeraligatr[]     = INCBIN_U16("graphics/object_events/palettes/feraligatr.gbapal");
 const u16 gObjectEventPaletteHooded[]         = INCBIN_U16("graphics/object_events/palettes/hooded.gbapal");
+const u16 gObjectEventPaletteMagmaAdminF[]    = INCBIN_U16("graphics/object_events/palettes/magma_admin_f.gbapal");
 
 
 const u32 gFieldEffectObjectPic_CaveDust[] = INCBIN_U32("graphics/field_effects/pics/cave_dust.4bpp");
