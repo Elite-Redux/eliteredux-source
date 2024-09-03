@@ -623,7 +623,7 @@ static const u8 sAbilityVenoblazePincersDescription[] = _("1.2x boost to physica
 static const u8 sAbilityEternalBlessingDescription[] = _("Combines Celestial Blessing\nand Regenerator.");
 static const u8 sAbilitySugarRushDescription[] = _("Sharply raises Speed when\neating a berry.");
 static const u8 sAbilityPeacefulRestDescription[] = _("Heals 1/8 of max HP every turn\nin fog.");
-static const u8 sAbilityWhiteNoiseDescription[] = _("Combines Static and\nPeaceful Rest.");
+static const u8 sAbilityWhiteNoiseDescription[] = _("Combines Static and\nRest in Peace.");
 static const u8 sAbilitySmokeyManeuversDescription[] = _("Evasion is boosted by 1.25x\nin fog.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
