@@ -150,7 +150,7 @@ static const u8 sAbilityRattledDescription[] = _("If hit by Bug, Dark or Ghost\n
 static const u8 sAbilityMagicBounceDescription[] = _("Bounces back the effect of\nstatus moves to their user.");
 static const u8 sAbilitySapSipperDescription[] = _("Absorbs Grass-type moves and\nraises highest Atk by one stage.");
 static const u8 sAbilityPranksterDescription[] = _("Status moves have +1 priority\nbut fail on opposing Dark-types.");
-static const u8 sAbilitySandForceDescription[] = _("Gives a 1.3x power boost to\nRock, Ground, Steel-type moves.");
+static const u8 sAbilitySandForceDescription[] = _("Ups highest attacking stat\nby 1.5x in sand.");
 static const u8 sAbilityZenModeDescription[] = _("Transforms into Zen Mode on\nentry until end of battle.");
 static const u8 sAbilityVictoryStarDescription[] = _("Gives 1.2x accuracy boost to\nits own and its allies' moves.");
 static const u8 sAbilityTurboblazeDescription[] = _("Moves hit through abilities.\nAdds Fire type to itself.");
@@ -254,7 +254,7 @@ static const u8 sAbilityWhiteoutDescription[] = _("Grants a 1.5x power boost to\
 static const u8 sAbilityPyromancyDescription[] = _("Moves inflict burn 5x as often.");
 static const u8 sAbilityKeenEdgeDescription[] = _("Boosts the power of slashing\nmoves by 1.3x.");
 static const u8 sAbilityPrismScalesDescription[] = _("Takes 30% less damage from\nSpecial attacks.");
-static const u8 sAbilityPowerFistsDescription[] = _("Punching moves become Special\nand get a 1.3x power boost.");
+static const u8 sAbilityPowerFistsDescription[] = _("Iron Fist moves target Special\nDefense and gain 30% power.");
 static const u8 sAbilitySandSongDescription[] = _("Normal sound moves become\nGround and get a 1.2x boost.");
 static const u8 sAbilityRampageDescription[] = _("No recharge after a KO, if it\nusually would need to recharge.");
 static const u8 sAbilityVengeanceDescription[] = _("Boosts Ghost-type moves by 1.2x,\nor 1.5x when below 1/3 HP.");
@@ -323,7 +323,7 @@ static const u8 sAbilitySpiderLairDescription[] = _("Casts Sticky Web on entry.\
 static const u8 sAbilityFatalPrecisionDescription[] = _("Super-effective moves never miss\nand get a 1.2x boost.");
 static const u8 sAbilityFortKnoxDescription[] = _("Boosts Defense by three stages if\nstats are lowered by an enemy.");
 static const u8 sAbilitySeaweedDescription[] = _("Takes 1/2 dmg from Fire if Grass,\ndoubles Grass dmg on Fire-types.");
-static const u8 sAbilityPsychicMindDescription[] = _("Boosts the power of Psychic-type\nmoves by 1.25x.");
+static const u8 sAbilityPsychicMindDescription[] = _("Boosts Psychic-type moves by\n1.2x, or 1.5x when under 1/3 HP.");
 static const u8 sAbilityPoisonAbsorbDescription[] = _("Heals 25% of max HP when hit\nby a Poison-type move.");
 static const u8 sAbilityTwistedDimensionDescription[] = _("Sets up Trick Room on\nentry, lasts 3 turns.");
 static const u8 sAbilityMultiHeadedDescription[] = _("Hits as many times,\nas it has heads.");
@@ -627,6 +627,7 @@ static const u8 sAbilityWhiteNoiseDescription[] = _("Combines Static and\nRest i
 static const u8 sAbilitySmokeyManeuversDescription[] = _("Evasion is boosted by 1.25x\nin fog.");
 static const u8 sAbilityTagDescription[] = _("Attacks switching opponents\nwith a 20BP Pursuit.");
 static const u8 sAbilityPowerMetalDescription[] = _("Normal sound moves become\nSteel and get a 1.2x boost.");
+static const u8 sAbilitySuperconductorDescription[] = _("Steel-type moves become Electric-type\nmoves and get a 1.1x boost.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1288,6 +1289,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SMOKEY_MANEUVERS] = _("Smokey Maneuvers"),
     [ABILITY_TAG] = _("Tag"),
     [ABILITY_POWER_METAL] = _("Power Metal"),
+    [ABILITY_SUPERCONDUCTOR] = _("Superconductor"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1950,4 +1952,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SMOKEY_MANEUVERS] = sAbilitySmokeyManeuversDescription,
     [ABILITY_TAG] = sAbilityTagDescription,
     [ABILITY_POWER_METAL] = sAbilityPowerMetalDescription,
+    [ABILITY_SUPERCONDUCTOR] = sAbilitySuperconductorDescription,
 };
