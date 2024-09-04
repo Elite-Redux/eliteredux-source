@@ -628,7 +628,7 @@ static const u8 sAbilitySmokeyManeuversDescription[] = _("Evasion is boosted by 
 static const u8 sAbilityTagDescription[] = _("Attacks switching opponents\nwith a 20BP Pursuit.");
 static const u8 sAbilityPowerMetalDescription[] = _("Normal sound moves become\nSteel and get a 1.2x boost.");
 static const u8 sAbilityPowerEdgeDescription[] = _("Keen Edge moves target Special\nDefense and gain 30% power.");
-static const u8 sAbilitySuperconductorDescription[] = _("Steel-type moves become Electric-type\nmoves and get a 1.1x boost.");
+static const u8 sAbilitySuperconductorDescription[] = _("Steel-type moves become Electric\n-type moves and get a 1.1x boost.");
 static const u8 sAbilityUltraInstinctDescription[] = _("Counters contact with Vacuum\nWave. Takes 20% less damage.");
 static const u8 sAbilityUnlockedPotentialDescription[] = _("Inner Focus + Berserk.");
 
