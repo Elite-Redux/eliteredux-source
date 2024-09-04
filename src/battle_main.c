@@ -5980,8 +5980,13 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
     }
 
     //Sand Song
-    if(HAS_ABILITY(ABILITY_SAND_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
+    if (HAS_ABILITY(ABILITY_SAND_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
         return TYPE_GROUND;
+    }
+
+    // Power Metal
+    if (HAS_ABILITY(ABILITY_POWER_METAL) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
+        return TYPE_STEEL;
     }
 
     //Snow Song
@@ -6158,6 +6163,8 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
         return TYPE_ELECTRIC;
     else if (gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SAND_SONG))
         return TYPE_GROUND;
+    else if (gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_POWER_METAL))
+        return TYPE_STEEL;
     else if (gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SNOW_SONG))
         return TYPE_ICE;
     else if (gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BANSHEE))
@@ -6315,6 +6322,11 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     else if (gBattleMoves[move].flags & FLAG_SOUND && gBattleMoves[move].type == TYPE_NORMAL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SAND_SONG, attackerAbility))
     {
         gBattleStruct->dynamicMoveType = 0x80 | TYPE_GROUND;
+        gBattleStruct->ateBoost[battlerAtk] = 1;
+    }
+    else if (gBattleMoves[move].flags & FLAG_SOUND && gBattleMoves[move].type == TYPE_NORMAL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_POWER_METAL, attackerAbility))
+    {
+        gBattleStruct->dynamicMoveType = 0x80 | TYPE_STEEL;
         gBattleStruct->ateBoost[battlerAtk] = 1;
     }
     else if (gBattleMoves[move].flags & FLAG_SOUND && gBattleMoves[move].type == TYPE_NORMAL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SNOW_SONG, attackerAbility))

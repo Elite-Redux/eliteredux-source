@@ -13327,6 +13327,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (moveType == TYPE_GROUND && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
             return;
 
+        case ABILITY_POWER_METAL:
+            if (moveType == TYPE_STEEL && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
+            return;
+
         case ABILITY_SNOW_SONG:
             if (moveType == TYPE_ICE && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
             return;
