@@ -268,9 +268,9 @@ PetalburgCity_EventScript_ShowGymToPlayer3:: @ 81DC4BE
 	end
 
 PetalburgCity_EventScript_ShowGymToPlayer:: @ 81DC4CA
-	@ghostly skip the whole events of both wally and scott
 	setvar VAR_PETALBURG_GYM_STATE, 2
 	setvar VAR_SCOTT_PETALBURG_ENCOUNTER, 1
+	@ghostly skip the whole events of both wally and scott
 	releaseall
 	end @ this was trunkated from the previous vanilla script
 	applymovement LOCALID_GYM_BOY, Common_Movement_FacePlayer
