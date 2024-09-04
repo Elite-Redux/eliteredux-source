@@ -3868,7 +3868,9 @@ BattleScript_EffectMindBlown::
 	attackstring
 	ppreduce
 	faintifabilitynotdamp
+	jumpifmagicguard BS_ATTACKER, BattleScript_EffectMindBlown_NoDamage
 	dmg_1_2_attackerhp
+BattleScript_EffectMindBlown_NoDamage:
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	waitstate
@@ -8748,6 +8750,8 @@ BattleScript_PowderMoveNoEffectWaitMsg:
 BattleScript_MoveUsedFlinched::
 	printstring STRINGID_PKMNFLINCHED
 	waitmessage B_WAIT_TIME_LONG
+	jumpifability BS_ATTACKER, ABILITY_RATTLED, BattleScript_FlinchedDoRattled
+BattleScript_MoveUsedFlinched_CheckSteadfast:
 	jumpifability BS_ATTACKER ABILITY_STEADFAST BattleScript_TryActivateSteadFast
 BattleScript_MoveUsedFlinchedEnd:
 	goto BattleScript_MoveEnd
@@ -8764,6 +8768,11 @@ BattleScript_TryActivateSteadFast:
 	printstring STRINGID_ATTACKERABILITYSTATRAISE
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveUsedFlinchedEnd
+BattleScript_FlinchedDoRattled:
+	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPEED, MAX_STAT_STAGE, BattleScript_MoveUsedFlinched_CheckSteadfast
+	setstatchanger STAT_SPEED, 1, FALSE
+	call BattleScript_TargetAbilityStatRaiseOnMoveEnd
+	goto BattleScript_MoveUsedFlinched_CheckSteadfast
 
 BattleScript_PrintUproarOverTurns::
 	printfromtable gUproarOverTurnStringIds

@@ -2926,6 +2926,11 @@ static const u8 sHoundoominiteDesc[] = _(
     "Houndoom to Mega\n"
     "Evolve in battle.");
 
+static const u8 sHoundoominiteRDesc[] = _(
+    "This stone enables\n"
+    "Houndoom R to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sAggroniteDesc[] = _(
     "This stone enables\n"
     "Aggron to Mega\n"
@@ -2986,6 +2991,11 @@ static const u8 sAlakaziteDesc[] = _(
     "Alakazam to Mega\n"
     "Evolve in battle.");
 
+static const u8 sAlakaziteRDesc[] = _(
+    "This stone enables\n"
+    "Alakazam R to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sHeracroniteDesc[] = _(
     "This stone enables\n"
     "Heracross to Mega\n"
@@ -3002,6 +3012,11 @@ static const u8 sManectiteDesc[] = _(
     "Evolve in battle.");
 
 static const u8 sGarchompiteDesc[] = _(
+    "This stone enables\n"
+    "Garchomp to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sGarchompiteRDesc[] = _(
     "This stone enables\n"
     "Garchomp to Mega\n"
     "Evolve in battle.");
@@ -3029,6 +3044,11 @@ static const u8 sSceptiliteDesc[] = _(
 static const u8 sSableniteDesc[] = _(
     "This stone enables\n"
     "Sableye to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSableniteRDesc[] = _(
+    "This stone enables\n"
+    "Sableye R to Mega\n"
     "Evolve in battle.");
 
 static const u8 sAltarianiteDesc[] = _(
@@ -3096,6 +3116,11 @@ static const u8 sMachampiteDesc[] = _(
     "Machamp to Mega\n"
     "Evolve in battle.");
 
+static const u8 sMachampiteRDesc[] = _(
+    "This stone enables\n"
+    "Machamp R to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sKingleriteDesc[] = _(
     "This stone enables\n"
     "Kingler to Mega\n"
@@ -3106,7 +3131,7 @@ static const u8 sUrsaluniteDesc[] = _(
     "Ursaring to Mega\n"
     "Evolve in battle.");
 
-static const u8 sArcaniteDesc[] = _(
+static const u8 sArcaniteRDesc[] = _(
     "This stone enables\n"
     "Arcanine R to Mega\n"
     "Evolve in battle.");
@@ -3174,6 +3199,11 @@ static const u8 sCrobatiteDesc[] = _(
 static const u8 sSkarmoriteDesc[] = _(
     "This stone enables\n"
     "Skarmory to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSkarmoriteRDesc[] = _(
+    "This stone enables\n"
+    "Skarmory R to Mega\n"
     "Evolve in battle.");
 
 static const u8 sBruxishiteDesc[] = _(
@@ -3296,6 +3326,11 @@ static const u8 sBeedrilliteDesc[] = _(
     "Beedrill to Mega\n"
     "Evolve in battle.");
 
+static const u8 sBeedrilliteRDesc[] = _(
+    "This stone enables\n"
+    "Beedrill R to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sFeraligatriteDesc[] = _(
     "This stone enables\n"
     "Feraligatr to Mega\n"
@@ -3403,17 +3438,17 @@ static const u8 sSenzuDesc[] = _(
 
 static const u8 sClefabiteRDesc[] = _(
     "This stone enables\n"
-    "ClefableR to Mega\n"
+    "Clefable R to Mega\n"
     "Evolve in battle.");
 
 static const u8 sAegislashiteRDesc[] = _(
     "This stone enables\n"
-    "AegislashR to Mega\n"
+    "Aegislash R to Mega\n"
     "Evolve in battle.");
 
 static const u8 sEmpoleoniteRDesc[] = _(
     "This stone enables\n"
-    "EmpoleonR to Mega\n"
+    "Empoleon R to Mega\n"
     "Evolve in battle.");
 
 static const u8 sArbokiteDesc[] = _(

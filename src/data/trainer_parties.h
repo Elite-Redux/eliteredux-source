@@ -23498,7 +23498,7 @@ static const struct TrainerMonItemCustomMoves sParty_Jessica1[] = {
     // .innates = {ABILITY_TOUGH_CLAWS, ABILITY_PREDATOR, ABILITY_TECHNICIAN},
     .evs = {4, 252, 0, 0, 0, 252},      // HP, Atk, Def, SpA, SpD, Spe
 	.nature = NATURE_JOLLY,
-    .moves = MOVE_ICICLE_CRASH, MOVE_WICKED_BLOW, MOVE_PSYCHO_CUT, MOVE_POWER_UP_PUNCH
+    .moves = MOVE_ICICLE_CRASH, MOVE_KNOCK_OFF, MOVE_PSYCHO_CUT, MOVE_POWER_UP_PUNCH
     }
 };
 
@@ -26297,7 +26297,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt45[] = {
     // .innates = {ABILITY_SHELL_ARMOR, ABILITY_GRIP_PINCER, ABILITY_NOCTURNAL},
     .evs = {4, 252, 0, 0, 0, 252},      // HP, Atk, Def, SpA, SpD, Spe
 	.nature = NATURE_JOLLY,
-    .moves = MOVE_POISON_JAB, MOVE_WICKED_BLOW, MOVE_FELL_STINGER, MOVE_VENOM_DRENCH
+    .moves = MOVE_POISON_JAB, MOVE_NIGHT_SLASH, MOVE_FELL_STINGER, MOVE_VENOM_DRENCH
     }
 };
 
@@ -37042,7 +37042,7 @@ static const struct TrainerMonItemCustomMoves sParty_Glacia3[] = { // legendarie
     // .innates = {ABILITY_TOUGH_CLAWS, ABILITY_PREDATOR, ABILITY_TECHNICIAN},
     .evs = {4, 252, 0, 0, 0, 252},      // HP, Atk, Def, SpA, SpD, Spe
 	.nature = NATURE_JOLLY,
-    .moves = MOVE_TRIPLE_AXEL, MOVE_WICKED_BLOW, MOVE_ICE_SHARD, MOVE_SWORDS_DANCE
+    .moves = MOVE_TRIPLE_AXEL, MOVE_KNOCK_OFF, MOVE_ICE_SHARD, MOVE_SWORDS_DANCE
     },
     {
     .lvl = 0,
@@ -38936,7 +38936,7 @@ static const struct TrainerMonItemCustomMoves sParty_Crobatite_DewfordManor[] = 
     .ability = 0, // Hyper Aggressive
     .evs = {0, 252, 0, 0, 4, 252}, // HP, Atk, Def, SpA, SpD, Spe
     .nature = NATURE_JOLLY,
-    .moves = MOVE_FAKE_OUT, MOVE_KNOCK_OFF, MOVE_TRIPLE_AXEL, MOVE_WICKED_BLOW
+    .moves = MOVE_FAKE_OUT, MOVE_KNOCK_OFF, MOVE_TRIPLE_AXEL, MOVE_KNOCK_OFF
     },
     {
     .lvl = 0,

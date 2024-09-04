@@ -97,10 +97,10 @@
       "x": 20,
       "y": 32,
       "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_BURIED",
+      "movement_type": "MOVEMENT_TYPE_NONE",
       "movement_range_x": 0,
       "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_BURIED",
+      "trainer_type": "TRAINER_TYPE_NORMAL",
       "trainer_sight_or_berry_tree_id": "1",
       "script": "JaggedPass_EventScript_Eric",
       "flag": "0"

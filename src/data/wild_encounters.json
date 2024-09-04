@@ -10124,7 +10124,7 @@
                 "species": "SPECIES_DEWGONG"
               },
               {
-                "min_level": 32,
+                "min_level": 30,
                 "max_level": 32,
                 "species": "SPECIES_DELIBIRD"
               },
@@ -10136,7 +10136,7 @@
               {
                 "min_level": 32,
                 "max_level": 32,
-                "species": "SPECIES_DELIBIRD"
+                "species": "SPECIES_SNOM"
               },
               {
                 "min_level": 32,
@@ -13305,7 +13305,7 @@
                 "species": "SPECIES_SEEL"
               },
               {
-                "min_level": 10,
+                "min_level": 6,
                 "max_level": 12,
                 "species": "SPECIES_SWINUB"
               },
@@ -13352,7 +13352,7 @@
               {
                 "min_level": 10,
                 "max_level": 12,
-                "species": "SPECIES_VANILLITE"
+                "species": "SPECIES_SNOM"
               },
               {
                 "min_level": 10,

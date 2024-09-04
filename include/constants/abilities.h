@@ -292,7 +292,7 @@
 #define ABILITY_PYROMANCY 270 // Moves inflict burn 5x as often.
 #define ABILITY_KEEN_EDGE 271 // Boosts the power of slashing moves by 1.3x.
 #define ABILITY_PRISM_SCALES 272 // Takes 30% less damage from Special attacks.
-#define ABILITY_POWER_FISTS 273 // Punching moves become Special and get a 1.3x power boost.
+#define ABILITY_POWER_FISTS 273 // Punching moves hit spdef and get a 1.3x power boost.
 #define ABILITY_SAND_SONG 274 // Normal sound moves become Ground and get a 1.2x boost.
 #define ABILITY_RAMPAGE 275 // No recharge after a KO, if it usually would need to recharge.
 #define ABILITY_VENGEANCE 276 // Boosts Ghost-type moves by 1.2x, or 1.5x when below 1/3 HP.
@@ -677,7 +677,8 @@
 #define ABILITY_SMOKEY_MANEUVERS 655 // Evasion is boosted by 1.25x in fog.
 #define ABILITY_TAG 656 // Attacks switching opponents with a 20BP Pursuit.
 #define ABILITY_POWER_METAL 657 // Normal sound moves become Steel and get a 1.2x boost.
-#define ABILITY_SUPERCONDUCTOR 658 // Steel moves become Electric and get a 10% boost
+#define ABILITY_POWER_EDGE 658 // Slice moves hit Spdef and get a 1.3x power boost.
+#define ABILITY_SUPERCONDUCTOR 659 // Steel moves become Electric and get a 10% boost
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_SUPERCONDUCTOR + 1)
 

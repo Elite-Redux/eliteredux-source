@@ -4288,6 +4288,9 @@ static void Cmd_tryfaintmon(void)
                 BattleScriptPush(gBattlescriptCurrInstr);
                 gBattleMoveDamage = gBattleMons[battlerId].hp;
                 gBattlescriptCurrInstr = BattleScript_DestinyBondTakesLife;
+                // Destiny Bond disables recurring nightmare
+                SetSingleUseAbilityCounter(gBattlerAttacker, ABILITY_RECURRING_NIGHTMARE, 2);
+                SetSingleUseAbilityCounter(gBattlerTarget, ABILITY_RECURRING_NIGHTMARE, 2);
             }
             if ((gStatuses3[gBattlerTarget] & STATUS3_GRUDGE)
              && !(gHitMarker & HITMARKER_GRUDGE)
@@ -11370,7 +11373,7 @@ static void Cmd_various(void)
             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
             if (!gBattleMoveDamage) gBattleMoveDamage = 1;
             SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, 2);
-            BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 2, &gBattleMoveDamage);
+            BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[gBattleStruct->battlerPartyIndexes[gActiveBattler]], 2, &gBattleMoveDamage);
             MarkBattlerForControllerExec(gActiveBattler);
         }
         break;
@@ -15144,8 +15147,6 @@ static void Cmd_trywish(void)
         }
         break;
     case 1: // heal effect
-        PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gWishFutureKnock.wishPartyId[gBattlerTarget])
-
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_BLEED) {
             gBattleMoveDamage = 0;
             gBattlescriptCurrInstr += 6;
