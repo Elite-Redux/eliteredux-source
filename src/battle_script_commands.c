@@ -11367,10 +11367,17 @@ static void Cmd_various(void)
     case VARIOUS_TRY_RECURRING_NIGHTMARE:
         if (GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE) == 1)
         {
+            int i;
+            for (i = 0; i < MAX_MON_MOVES; i++)
+            {
+                if (gBattleMons[gActiveBattler].moves[i] != MOVE_DESTINY_BOND) continue;
+                gBattleMons[gActiveBattler].pp[i] = 0;
+                BtlController_EmitSetMonData(1, REQUEST_PPMOVE1_BATTLE + i, gBitTable[gBattleStruct->battlerPartyIndexes[gActiveBattler]], 1, &gBattleMons[gActiveBattler].pp[i]);
+            }
             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
             if (!gBattleMoveDamage) gBattleMoveDamage = 1;
             SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, 2);
-            BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[*(gBattleStruct->battlerPartyIndexes + gActiveBattler)], 2, &gBattleMoveDamage);
+            BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, gBitTable[gBattleStruct->battlerPartyIndexes[gActiveBattler]], 2, &gBattleMoveDamage);
             MarkBattlerForControllerExec(gActiveBattler);
         }
         break;
