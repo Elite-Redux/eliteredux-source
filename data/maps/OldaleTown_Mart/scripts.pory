@@ -268,6 +268,7 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_TORTERRANITE_R
 	ITEM_EMPOLEONITE_R
 	ITEM_CLEFABITE_R
+	ITEM_SENZU
 }
 
 script General_Adoption_Center_Mega_Stones_Script{
