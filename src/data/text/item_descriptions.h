@@ -3046,6 +3046,11 @@ static const u8 sSableniteDesc[] = _(
     "Sableye to Mega\n"
     "Evolve in battle.");
 
+static const u8 sSableniteRDesc[] = _(
+    "This stone enables\n"
+    "Sableye R to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sAltarianiteDesc[] = _(
     "This stone enables\n"
     "Altaria to Mega\n"
@@ -3126,7 +3131,7 @@ static const u8 sUrsaluniteDesc[] = _(
     "Ursaring to Mega\n"
     "Evolve in battle.");
 
-static const u8 sArcaniteDesc[] = _(
+static const u8 sArcaniteRDesc[] = _(
     "This stone enables\n"
     "Arcanine R to Mega\n"
     "Evolve in battle.");
