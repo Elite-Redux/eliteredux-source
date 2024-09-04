@@ -3868,7 +3868,9 @@ BattleScript_EffectMindBlown::
 	attackstring
 	ppreduce
 	faintifabilitynotdamp
+	jumpifmagicguard BS_ATTACKER, BattleScript_EffectMindBlown_NoDamage
 	dmg_1_2_attackerhp
+BattleScript_EffectMindBlown_NoDamage:
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	waitstate
