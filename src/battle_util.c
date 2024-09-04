@@ -7791,7 +7791,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		// Rattled
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RATTLED)){
             if (ShouldApplyOnHitAffect(battler)
-             && (moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST || gBattleMons[battler].status2 & STATUS2_FLINCHED)
+             && (moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
              && CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
             {
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_RATTLED;
