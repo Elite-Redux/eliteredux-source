@@ -600,8 +600,8 @@ script SootopolisCity_Gym_EventScript_TriggerMiddleBattle{
             goto(SootopolisCity_Gym_EventScript_PlayerWalksAway)
         break
         case 1:
-			setflag(FLAG_SYS_DISABLE_AUTOHEAL)
 			trainerbattle_no_intro(TRAINER_DAPHNE, SootopolisCity_Gym_B1F_Text_DaphneDefeat)
+			setflag(FLAG_SYS_DISABLE_AUTOHEAL)
 			trainerbattle_no_intro(TRAINER_CONNIE, SootopolisCity_Gym_B1F_Text_ConnieDefeat)
 			trainerbattle_no_intro(TRAINER_ANDREA, SootopolisCity_Gym_B1F_Text_AndreaDefeat)
 			clearflag(FLAG_SYS_DISABLE_AUTOHEAL)
