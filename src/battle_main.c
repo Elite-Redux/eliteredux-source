@@ -6027,7 +6027,11 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
             ){
         return ateType;
     }
-	
+	//Superconductor
+    if(HAS_ABILITY(ABILITY_SUPERCONDUCTOR)){
+        if(gBattleMoves[move].type == TYPE_STEEL)
+            return TYPE_ELECTRIC;
+    }
 	//Crystallize
 	if(HAS_ABILITY(ABILITY_CRYSTALLIZE)){
 		if(gBattleMoves[move].type == TYPE_ROCK)
@@ -6198,6 +6202,8 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
         return ateType;
 	else if(gBattleMoves[move].type == TYPE_ROCK && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_CRYSTALLIZE, attackerAbility))
 		return TYPE_ICE;
+    else if(gBattleMoves[move].type == TYPE_STEEL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SUPERCONDUCTOR, attackerAbility))
+		return TYPE_ELECTRIC;
     else if (gBattleMoves[move].type != TYPE_NORMAL
              && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
@@ -6371,6 +6377,11 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     }
 	else if(gBattleMoves[move].type == TYPE_ROCK && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_CRYSTALLIZE, attackerAbility) && (ateType = TYPE_ICE)){
 		ateType = TYPE_ICE;
+		gBattleStruct->dynamicMoveType = 0x80 | ateType;
+		gBattleStruct->ateBoost[battlerAtk] = 1;
+	}
+    else if(gBattleMoves[move].type == TYPE_STEEL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SUPERCONDUCTOR, attackerAbility) && (ateType = TYPE_ELECTRIC)){
+		ateType = TYPE_ELECTRIC;
 		gBattleStruct->dynamicMoveType = 0x80 | ateType;
 		gBattleStruct->ateBoost[battlerAtk] = 1;
 	}

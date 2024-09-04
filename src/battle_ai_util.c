@@ -3545,6 +3545,10 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
     
     if ((AI_THINKING_STRUCT->aiFlags & AI_FLAG_TRY_TO_FAINT) && CanAIFaintTarget(battlerAtk, battlerDef, 0))
         return; // Damaging moves would get a score boost from AI_TryToFaint or PreferStrongestMove so we don't consider them here
+    
+    if (IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY) && (gVolatileStructs[battlerAtk].trickOrTreat
+        || !(IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST) || IS_BATTLER_OF_TYPE(battlerAtk, TYPE_PSYCHIC))))
+        return;
 
     // Set up on sleeping foe, but don't go too far
     if((gBattleMons[battlerDef].status1 & STATUS1_SLEEP) && gBattleMons[battlerAtk].statStages[statId] < STAT_UP_2_STAGE)

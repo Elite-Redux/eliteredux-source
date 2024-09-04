@@ -3369,7 +3369,7 @@ const u8 sText_Title_Field_Weather_Description_Primal_Sun[]  = _("Boosts the pow
                                                                  "moves and protects Pokémon from\n"
                                                                  "Water-type moves.");
 const u8 sText_Title_Field_Weather_Description_EerieFog[]    = _("Reduces damage Ghost-type Pokémon\n"
-                                                                 "take by 25% and reduces stat gains\n"
+                                                                 "take by 20% and reduces stat gains\n"
                                                                  "for non-Ghost and Psychic types.");
 //Terrains
 const u8 sText_Title_Field_Terrain[]                      = _("{STR_VAR_1} Terrain");

@@ -678,7 +678,9 @@
 #define ABILITY_TAG 656 // Attacks switching opponents with a 20BP Pursuit.
 #define ABILITY_POWER_METAL 657 // Normal sound moves become Steel and get a 1.2x boost.
 #define ABILITY_POWER_EDGE 658 // Slice moves hit Spdef and get a 1.3x power boost.
+#define ABILITY_SUPERCONDUCTOR 659 // Steel moves become Electric and get a 10% boost
 
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SUPERCONDUCTOR + 1)
 #define ABILITIES_COUNT_CUSTOM (ABILITY_POWER_EDGE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
