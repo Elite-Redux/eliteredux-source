@@ -9510,6 +9510,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        innate != ABILITY_ZERO_TO_HERO           &&
        innate != ABILITY_BAD_COMPANY            &&
        innate != ABILITY_ARCHMAGE               &&
+       innate != ABILITY_NEUTRALIZING_GAS       &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        innate != ABILITY_ANGELS_WRATH           &&
        #endif
