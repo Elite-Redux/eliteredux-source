@@ -8766,7 +8766,7 @@ BattleScript_TryActivateSteadFast:
 	printstring STRINGID_ATTACKERABILITYSTATRAISE
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveUsedFlinchedEnd
-BattleScript_FlinchedDoRattled
+BattleScript_FlinchedDoRattled:
 	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPEED, MAX_STAT_STAGE, BattleScript_MoveUsedFlinched_CheckSteadfast
 	setstatchanger STAT_SPEED, 1, FALSE
 	call BattleScript_TargetAbilityStatRaiseOnMoveEnd
