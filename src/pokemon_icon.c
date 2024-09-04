@@ -3236,7 +3236,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_TYRANITAR_REDUX] = 1,
     [SPECIES_TYRANITAR_MEGA_REDUX] = 0,
     [SPECIES_LUCARIO_MEGA_Y] = 0,
-
+    [SPECIES_TURTWIG_REDUX] = 0,
     [SPECIES_EGG] = 1,
 };
 
