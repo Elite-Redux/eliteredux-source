@@ -14319,7 +14319,7 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
 
     // Fog
     if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST) && IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && !gVolatileStructs[battlerDef].trickOrTreat)
-        MUL_MODIFIER(&modifier, .75);
+        MUL_MODIFIER(&modifier, .8);
 
     //Infatuation
     if ((gBattleMons[battlerAtk].status2 & STATUS2_INFATUATION) && (gBattleMons[battlerAtk].status2 & STATUS2_INFATUATED_WITH(battlerDef)))   
