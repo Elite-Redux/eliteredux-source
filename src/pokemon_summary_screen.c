@@ -6251,7 +6251,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			PrintSmallTextOnWindow(windowId, gStringVar1, MOVE_EFFECT_Y, PosX, 0, 0);
         break;
     }
-    ShowSplitIcon(GetBattleMoveSplit(move));
+    ShowSplitIcon(gBattleMoves[move].split);
 
     if(moveReplaceMode){
         // Move Type Icon
