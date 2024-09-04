@@ -255,7 +255,7 @@ static const u8 sAbilityPyromancyDescription[] = _("Moves inflict burn 5x as oft
 static const u8 sAbilityKeenEdgeDescription[] = _("Boosts the power of slashing\nmoves by 1.3x.");
 static const u8 sAbilityPrismScalesDescription[] = _("Takes 30% less damage from\nSpecial attacks.");
 static const u8 sAbilityPowerFistsDescription[] = _("Punching moves become Special\nand get a 1.3x power boost.");
-static const u8 sAbilitySandSongDescription[] = _("Normal-type moves become Ground-\ntype moves and get a 1.2x boost.");
+static const u8 sAbilitySandSongDescription[] = _("Normal sound moves become\nGround and get a 1.2x boost.");
 static const u8 sAbilityRampageDescription[] = _("No recharge after a KO, if it\nusually would need to recharge.");
 static const u8 sAbilityVengeanceDescription[] = _("Boosts Ghost-type moves by 1.2x,\nor 1.5x when below 1/3 HP.");
 static const u8 sAbilityBlitzBoxerDescription[] = _("At full HP, gives +1 priority to\nthis Pokémon's punching moves.");
@@ -514,7 +514,7 @@ static const u8 sAbilityBloodPriceDescription[] = _("Does 30% more damage but\nl
 static const u8 sAbilitySpikeArmorDescription[] = _("30% chance to bleed\non contact.");
 static const u8 sAbilityVoodooPowerDescription[] = _("30% chance to bleed when\nhit by special attacks.");
 static const u8 sAbilityChromeCoatDescription[] = _("Reduces special damage taken by\n40%, but decreases Speed by 10%.");
-static const u8 sAbilityBansheeDescription[] = _("Normal-type moves become Ghost-\ntype moves and get a 1.2x boost.");
+static const u8 sAbilityBansheeDescription[] = _("Normal sound moves become\nGhost and get a 1.2x boost.");
 static const u8 sAbilityWebSpinnerDescription[] = _("Uses String Shot\non switch-in.");
 static const u8 sAbilityShowdownModeDescription[] = _("Combines Ambush & Violent Rush.");
 static const u8 sAbilitySeedSowerDescription[] = _("Sets Grassy Terrain when hit.");
@@ -593,7 +593,7 @@ static const u8 sAbilityOldMarinerDescription[] = _("Seaweed + Water Absorb.");
 static const u8 sAbilityEctoplasmDescription[] = _("Ups highest attacking stat\nby 1.5x in fog.");
 static const u8 sAbilityBeautifulMusicDescription[] = _("Sound-based moves have 50% chance\nto infatuate the foe.");
 static const u8 sAbilitySurpriseDescription[] = _("Astonishes enemy priority users\nin fog.");
-static const u8 sAbilitySnowSongDescription[] = _("Sound moves become Ice-\ntype moves and get a 1.2x boost.");
+static const u8 sAbilitySnowSongDescription[] = _("Normal sound moves become\nIce and get a 1.2x boost.");
 static const u8 sAbilityGreaterSpiritDescription[] = _("Ups highest stat by +1\non entry in fog.");
 static const u8 sAbilityResonanceDescription[] = _("Sound moves cause the target to \nbleed.");
 static const u8 sAbilityEtherealRushDescription[] = _("This Pokémon's Speed gets a\n1.5x boost in fog.");
@@ -626,6 +626,7 @@ static const u8 sAbilityPeacefulRestDescription[] = _("Heals 1/8 of max HP every
 static const u8 sAbilityWhiteNoiseDescription[] = _("Combines Static and\nRest in Peace.");
 static const u8 sAbilitySmokeyManeuversDescription[] = _("Evasion is boosted by 1.25x\nin fog.");
 static const u8 sAbilityTagDescription[] = _("Attacks switching opponents\nwith a 20BP Pursuit.");
+static const u8 sAbilityPowerMetalDescription[] = _("Normal sound moves become\nSteel and get a 1.2x boost.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1286,6 +1287,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_WHITE_NOISE] = _("White Noise"),
     [ABILITY_SMOKEY_MANEUVERS] = _("Smokey Maneuvers"),
     [ABILITY_TAG] = _("Tag"),
+    [ABILITY_POWER_METAL] = _("Power Metal"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1947,4 +1949,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_WHITE_NOISE] = sAbilityWhiteNoiseDescription,
     [ABILITY_SMOKEY_MANEUVERS] = sAbilitySmokeyManeuversDescription,
     [ABILITY_TAG] = sAbilityTagDescription,
+    [ABILITY_POWER_METAL] = sAbilityPowerMetalDescription,
 };
