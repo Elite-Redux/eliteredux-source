@@ -124,6 +124,16 @@ SkyPillar_Top_EventScript_AwakenRayquaza:: @ 823979A
 	special ShakeCamera
 	waitstate
 	waitmoncry
+	@ modified to put the animation while fixing the rayquasa skip bug
+	special SpawnCameraObject
+	applymovement OBJ_EVENT_ID_CAMERA, SkyPillar_Top_Movement_CameraPanDown
+	waitmovement 0
+	special RemoveCameraObject
+	setvar VAR_SKY_PILLAR_RAQUAZA_CRY_DONE, 1
+	removeobject LOCALID_RAYQUAZA_SLEEPING
+	releaseall
+	end 
+	@ end of modified to put the animation while fixing the rayquasa skip bug
 	applymovement LOCALID_RAYQUAZA_SLEEPING, SkyPillar_Top_Movement_RayquazaFlyOff
 	waitmovement 0
 	removeobject LOCALID_RAYQUAZA_SLEEPING
