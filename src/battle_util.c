@@ -13796,6 +13796,11 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_SAND_GUARD:
             if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(battlerAtk, WEATHER_SANDSTORM_ANY)) MUL(.5);
             return;
+
+        case ABILITY_POWER_EDGE:
+            if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+                MUL(1.3);
+            return;
         
         case ABILITY_RIVALRY:
             {
@@ -14468,6 +14473,10 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         defStatToUse = STAT_SPDEF;
     }
     else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SOUL_CRUSHER) && gBattleMoves[move].hammerBased)
+    {
+        defStatToUse = STAT_SPDEF;
+    }
+    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_POWER_EDGE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
