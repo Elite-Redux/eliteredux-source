@@ -7670,6 +7670,12 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     UseOutOfTurnAttack(battler, gBattlerAttacker, ABILITY_PARRY, MOVE_MACH_PUNCH, 0);
             }
         }
+        if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ULTRA_INSTINCT)){
+            if(ShouldApplyOnHitAffect(gBattlerAttacker)
+                && IsMoveMakingContact(move, gBattlerAttacker)){
+                    UseOutOfTurnAttack(battler, gBattlerAttacker, ABILITY_ULTRA_INSTINCT, MOVE_VACUUM_WAVE, 0);
+            }
+        }
 
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ICE_DOWNFALL)){
             if(ShouldApplyOnHitAffect(gBattlerAttacker)
@@ -8274,7 +8280,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
 		// Static (Defender)
 
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERK) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERKER_RAGE)) {
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERK) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERKER_RAGE) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_UNLOCKED_POTENTIAL)) {
             if (ShouldApplyOnHitAffect(battler)
             // Had more than half of hp before, now has less
              && gBattleStruct->hpBefore[battler] > gBattleMons[battler].maxHP / 2
@@ -8282,8 +8288,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
              && (gTurnStructs[gBattlerAttacker].multiHitCounter == 0 || gTurnStructs[gBattlerAttacker].multiHitCounter == 1)
              && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
              && CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
-            {
-                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERK) ? ABILITY_BERSERK : ABILITY_BERSERKER_RAGE;
+            {  
+                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERK) ? ABILITY_BERSERK : (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERKER_RAGE) ? ABILITY_BERSERKER_RAGE : ABILITY_UNLOCKED_POTENTIAL);
                 SET_STATCHANGER(STAT_SPATK, 1, FALSE);
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseOnMoveEnd;
@@ -13708,6 +13714,10 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_PARRY:
+            MUL(.8);
+            return;
+        
+        case ABILITY_ULTRA_INSTINCT:
             MUL(.8);
             return;
         
