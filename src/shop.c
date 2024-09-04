@@ -330,6 +330,10 @@ static void SetShopMenuCallback(void (* callback)(void))
 
 // 0 Badges
 static const u16 sAdoptionCenterInventory_ZeroBadges[] = {
+    SPECIES_TURTWIG_REDUX, //testing purposes
+    SPECIES_CHIMCHAR_REDUX, //testing purposes
+    SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
@@ -338,6 +342,10 @@ static const u16 sAdoptionCenterInventory_ZeroBadges[] = {
 
 // 1 Badge
 static const u16 sAdoptionCenterInventory_OneBadges[] = {
+    SPECIES_TURTWIG_REDUX, //testing purposes
+    SPECIES_CHIMCHAR_REDUX, //testing purposes
+    SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_WEEDLE_REDUX,
     SPECIES_WHISMUR_REDUX,
     SPECIES_STUFFUL_REDUX,
@@ -351,6 +359,10 @@ static const u16 sAdoptionCenterInventory_OneBadges[] = {
 
 // 2 Badges
 static const u16 sAdoptionCenterInventory_TwoBadges[] = {
+    SPECIES_TURTWIG_REDUX, //testing purposes
+    SPECIES_CHIMCHAR_REDUX, //testing purposes
+    SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_PAWNIARD_REDUX,
     SPECIES_MACHOP_REDUX,
     SPECIES_BUIZEL_REDUX,
@@ -368,6 +380,11 @@ static const u16 sAdoptionCenterInventory_TwoBadges[] = {
 
 // 3 Badges
 static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
+    SPECIES_BOUNSWEET_REDUX, //testing purposes
+    SPECIES_TURTWIG_REDUX, //testing purposes
+    SPECIES_CHIMCHAR_REDUX, //testing purposes
+    SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_HOUNDOUR_REDUX,
     SPECIES_SLUGMA_REDUX,
     SPECIES_GROWLITHE_REDUX,
@@ -392,6 +409,13 @@ static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
 
 // 4 Badges
 static const u16 sAdoptionCenterInventory_FourBadges[] = {
+    SPECIES_TRAPINCH_REDUX, //testing purposes
+    SPECIES_TOXEL_REDUX, //testing purposes
+    SPECIES_BOUNSWEET_REDUX, //testing purposes
+    SPECIES_TURTWIG_REDUX, //testing purposes
+    SPECIES_CHIMCHAR_REDUX, //testing purposes
+    SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_HOUNDOUR_REDUX,
     SPECIES_SLUGMA_REDUX,
     SPECIES_GROWLITHE_REDUX,
@@ -416,6 +440,16 @@ static const u16 sAdoptionCenterInventory_FourBadges[] = {
 
 // 5 Badges
 static const u16 sAdoptionCenterInventory_FiveBadges[] = {
+    SPECIES_SEEL_REDUX, //testing purposes
+    SPECIES_GLIGAR_REDUX, //testing purposes
+    SPECIES_CRABRAWLER_REDUX, //testing purposes
+    SPECIES_TRAPINCH_REDUX, //testing purposes
+    SPECIES_TOXEL_REDUX, //testing purposes
+    SPECIES_BOUNSWEET_REDUX, //testing purposes
+    SPECIES_TURTWIG_REDUX, //testing purposes
+    SPECIES_CHIMCHAR_REDUX, //testing purposes
+    SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_HOUNDOUR_REDUX,
     SPECIES_SLUGMA_REDUX,
     SPECIES_GROWLITHE_REDUX,
@@ -440,6 +474,16 @@ static const u16 sAdoptionCenterInventory_FiveBadges[] = {
 
 // 6 Badges
 static const u16 sAdoptionCenterInventory_SixBadges[] = {
+    SPECIES_SEEL_REDUX, //testing purposes
+    SPECIES_GLIGAR_REDUX, //testing purposes
+    SPECIES_CRABRAWLER_REDUX, //testing purposes
+    SPECIES_TRAPINCH_REDUX, //testing purposes
+    SPECIES_TOXEL_REDUX, //testing purposes
+    SPECIES_BOUNSWEET_REDUX, //testing purposes
+    SPECIES_TURTWIG_REDUX, //testing purposes
+    SPECIES_CHIMCHAR_REDUX, //testing purposes
+    SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_GIBLE_REDUX,
     SPECIES_LARVITAR_REDUX,
@@ -467,6 +511,17 @@ static const u16 sAdoptionCenterInventory_SixBadges[] = {
 
 // 7 Badges
 static const u16 sAdoptionCenterInventory_SevenBadges[] = {
+    SPECIES_PSYDUCK_REDUX, //testing purposes
+    SPECIES_SEEL_REDUX, //testing purposes
+    SPECIES_GLIGAR_REDUX, //testing purposes
+    SPECIES_CRABRAWLER_REDUX, //testing purposes
+    SPECIES_TRAPINCH_REDUX, //testing purposes
+    SPECIES_TOXEL_REDUX, //testing purposes
+    SPECIES_BOUNSWEET_REDUX, //testing purposes
+    SPECIES_TURTWIG_REDUX, //testing purposes
+    SPECIES_CHIMCHAR_REDUX, //testing purposes
+    SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_DEINO_REDUX,
     SPECIES_GIBLE_REDUX,
     SPECIES_LARVITAR_REDUX,
@@ -494,8 +549,20 @@ static const u16 sAdoptionCenterInventory_SevenBadges[] = {
 
 // 8 Badges
 static const u16 sAdoptionCenterInventory_EightBadges[] = {
+    SPECIES_SEEL_REDUX, //testing purposes
+    SPECIES_GLIGAR_REDUX, //testing purposes
+    SPECIES_CRABRAWLER_REDUX, //testing purposes
+    SPECIES_PSYDUCK_REDUX, //testing purposes
+    SPECIES_TRAPINCH_REDUX, //testing purposes
+    SPECIES_TOXEL_REDUX, //testing purposes
+    SPECIES_BOUNSWEET_REDUX, //testing purposes
+    SPECIES_TURTWIG_REDUX, //testing purposes
+    SPECIES_CHIMCHAR_REDUX, //testing purposes
+    SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_MELTAN,
     SPECIES_POIPOLE,
+    SPECIES_KUBFU, //so shifus can be tested
     SPECIES_AZELF_REDUX,
     SPECIES_UXIE_REDUX,
     SPECIES_MESPRIT_REDUX,

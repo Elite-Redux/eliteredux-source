@@ -13242,7 +13242,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
             
         case ABILITY_FIELD_EXPLORER:
-            if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.25);
+            if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
             return;
         
         case ABILITY_GIANT_WINGS:
@@ -13251,12 +13251,6 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_SHEER_FORCE:
             if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST) MUL(1.3);
-            return;
-        
-        case ABILITY_SAND_FORCE:
-            if ((moveType == TYPE_STEEL || moveType == TYPE_ROCK || moveType == TYPE_GROUND)
-                && IsBattlerWeatherAffected(battlerAtk, WEATHER_SANDSTORM_ANY))
-                    MUL(1.3);
             return;
         
         case ABILITY_ANALYTIC:
@@ -14085,6 +14079,12 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             // Big Leaves/Solar Power
             if ((BATTLER_HAS_ABILITY(battler, ABILITY_BIG_LEAVES) || BATTLER_HAS_ABILITY(battler, ABILITY_SOLAR_POWER))
                 && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)
+                && GetHighestAttackingStatId(battler, TRUE) == statEnum)
+                    statBase = statBase * 3 / 2;
+
+            // Sand Force
+            if ((BATTLER_HAS_ABILITY(battler, ABILITY_SAND_FORCE))
+                && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)
                 && GetHighestAttackingStatId(battler, TRUE) == statEnum)
                     statBase = statBase * 3 / 2;
 
