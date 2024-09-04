@@ -1920,6 +1920,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
 		return 101;
     else if(move == MOVE_FOCUS_BLAST && (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_ENLIGHTENED, atkAbility)))
 		return 101;
+    else if(move == MOVE_FOCUS_BLAST && (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_UNLOCKED_POTENTIAL, atkAbility)))
+		return 101;
 
     if ((gStatuses3[battlerDef] & STATUS3_PHANTOM_FORCE)
         || (!(gBattleMoves[move].flags & FLAG_DMG_IN_AIR) && gStatuses3[battlerDef] & STATUS3_ON_AIR)
@@ -3610,7 +3612,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 }
                 break;
             case MOVE_EFFECT_FLINCH:
-                if (!BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_INNER_FOCUS) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_ENLIGHTENED))
+                if (!BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_INNER_FOCUS) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_ENLIGHTENED) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_UNLOCKED_POTENTIAL))
                 {
                     gBattleMons[gEffectBattler].status2 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                 }
@@ -12944,7 +12946,8 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
                BATTLER_HAS_ABILITY(battler, ABILITY_VITAL_SPIRIT) ||
                BATTLER_HAS_ABILITY(battler, ABILITY_DISCIPLINE)   ||
                BATTLER_HAS_ABILITY(battler, ABILITY_INNER_FOCUS)  ||
-               BATTLER_HAS_ABILITY(battler, ABILITY_ENLIGHTENED))
+               BATTLER_HAS_ABILITY(battler, ABILITY_UNLOCKED_POTENTIAL)  ||
+               BATTLER_HAS_ABILITY(battler, ABILITY_ENLIGHTENED)) 
                 return TRUE;
 
             checkOblivious = TRUE;
