@@ -3041,6 +3041,11 @@ static const u8 sSceptiliteDesc[] = _(
     "Sceptile to Mega\n"
     "Evolve in battle.");
 
+static const u8 sSableniteDesc[] = _(
+    "This stone enables\n"
+    "Sableye to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sSableniteRDesc[] = _(
     "This stone enables\n"
     "Sableye R to Mega\n"
