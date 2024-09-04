@@ -6656,7 +6656,7 @@ static void PrintStatsScreen_MoveNameAndInfo(u8 taskId)
         //Physical/Special Split from BE
         #ifdef BATTLE_ENGINE
             DestroySplitIcon();
-            ShowSplitIcon(GetBattleMoveSplit(move));
+            ShowSplitIcon(gBattleMoves[move].split);
         #endif
         //Accuracy
         PrintInfoScreenTextSmall(gText_Accuracy2,  moves_x + 69, moves_y + 64);
