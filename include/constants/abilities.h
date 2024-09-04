@@ -677,8 +677,9 @@
 #define ABILITY_SMOKEY_MANEUVERS 655 // Evasion is boosted by 1.25x in fog.
 #define ABILITY_TAG 656 // Attacks switching opponents with a 20BP Pursuit.
 #define ABILITY_POWER_METAL 657 // Normal sound moves become Steel and get a 1.2x boost.
+#define ABILITY_SUPERCONDUCTOR 658 // Steel moves become Electric and get a 10% boost
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_POWER_METAL + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SUPERCONDUCTOR + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

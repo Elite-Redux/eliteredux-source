@@ -627,6 +627,7 @@ static const u8 sAbilityWhiteNoiseDescription[] = _("Combines Static and\nRest i
 static const u8 sAbilitySmokeyManeuversDescription[] = _("Evasion is boosted by 1.25x\nin fog.");
 static const u8 sAbilityTagDescription[] = _("Attacks switching opponents\nwith a 20BP Pursuit.");
 static const u8 sAbilityPowerMetalDescription[] = _("Normal sound moves become\nSteel and get a 1.2x boost.");
+static const u8 sAbilitySuperconductorDescription[] = _("Steel-type moves become Electric-type\nmoves and get a 1.1x boost.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1288,6 +1289,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SMOKEY_MANEUVERS] = _("Smokey Maneuvers"),
     [ABILITY_TAG] = _("Tag"),
     [ABILITY_POWER_METAL] = _("Power Metal"),
+    [ABILITY_SUPERCONDUCTOR] = _("Superconductor"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1950,4 +1952,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SMOKEY_MANEUVERS] = sAbilitySmokeyManeuversDescription,
     [ABILITY_TAG] = sAbilityTagDescription,
     [ABILITY_POWER_METAL] = sAbilityPowerMetalDescription,
+    [ABILITY_SUPERCONDUCTOR] = sAbilitySuperconductorDescription,
 };

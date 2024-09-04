@@ -13287,6 +13287,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_DRACONIZE:
             MUL_ATE(TYPE_DRAGON)
         
+        case ABILITY_SUPERCONDUCTOR:
         case ABILITY_GALVANIZE:
             MUL_ATE(TYPE_ELECTRIC)
         
