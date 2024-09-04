@@ -15144,8 +15144,6 @@ static void Cmd_trywish(void)
         }
         break;
     case 1: // heal effect
-        PREPARE_MON_NICK_WITH_PREFIX_BUFFER(gBattleTextBuff1, gBattlerTarget, gWishFutureKnock.wishPartyId[gBattlerTarget])
-
         if (gBattleMons[gBattlerTarget].status1 & STATUS1_BLEED) {
             gBattleMoveDamage = 0;
             gBattlescriptCurrInstr += 6;
