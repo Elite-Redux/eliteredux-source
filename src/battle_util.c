@@ -16672,7 +16672,7 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     //Queenly Majesty
     else if(!gProcessingExtraAttacks
         && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_QUEENLY_MAJESTY))
-        && GetChosenMovePriority(gBattlerAttacker, battler) > 0
+        && GetMovePriority(gBattlerAttacker, move, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler)
         && !(move == MOVE_SCRATCH && BattlerHasInnateOrAbility(gBattlerAttacker, ABILITY_CHEAP_TACTICS))
         )
@@ -16686,7 +16686,7 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     //Dazzling
     else if(!gProcessingExtraAttacks
         && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_DAZZLING))
-        && GetChosenMovePriority(gBattlerAttacker, battler) > 0
+        && GetMovePriority(gBattlerAttacker, move, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
     {
         triggeringBattler--;
@@ -16698,7 +16698,7 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     //Unicorn
     else if(!gProcessingExtraAttacks
         && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_UNICORN))
-        && GetChosenMovePriority(gBattlerAttacker, battler) > 0
+        && GetMovePriority(gBattlerAttacker, move, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
     {
         triggeringBattler--;
@@ -16710,7 +16710,7 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     //Armor Tail
     else if(!gProcessingExtraAttacks
         && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_ARMOR_TAIL))
-        && GetChosenMovePriority(gBattlerAttacker, battler) > 0
+        && GetMovePriority(gBattlerAttacker, move, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
     {
         triggeringBattler--;
@@ -16723,7 +16723,7 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     else if(!gProcessingExtraAttacks
         && BATTLER_HAS_ABILITY(battler, ABILITY_SAND_GUARD)
         && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)
-        && GetChosenMovePriority(gBattlerAttacker, battler) > 0
+        && GetMovePriority(gBattlerAttacker, move, battler) > 0
         && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
     {
         *abilityPopup = ABILITY_SAND_GUARD;
