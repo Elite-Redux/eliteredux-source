@@ -1095,6 +1095,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 || (BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_SAND_GUARD) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))
                 || (!IS_BATTLER_OF_TYPE(battlerAtk, TYPE_NORMAL)
                     && !BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_INNER_FOCUS)
+                    && !BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_UNLOCKED_POTENTIAL)
                     && !BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_ENLIGHTENED)
                     && IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY)
                     && (BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_SURPRISE) || BATTLER_HAS_ABILITY_FAST_AI(BATTLE_PARTNER(battlerDef), ABILITY_SURPRISE)))) &&

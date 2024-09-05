@@ -1202,6 +1202,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_DREDWOOD] = gMonIcon_Dredwood,
     [SPECIES_KAIOSEA] = gMonIcon_Kaiosea,
     [SPECIES_PHANFERNAL] = gMonIcon_Phanfernal,
+    [SPECIES_SKULBERUS] = gMonIcon_Skulberus,
     [SPECIES_ARBOK_MEGA] = gMonIcon_ArbokMega,
     [SPECIES_GOLISOPOD_MEGA] = gMonIcon_GolisopodMega,
     [SPECIES_RAPIDASH_MEGA] = gMonIcon_RapidashMega,
@@ -3236,7 +3237,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_TYRANITAR_REDUX] = 1,
     [SPECIES_TYRANITAR_MEGA_REDUX] = 0,
     [SPECIES_LUCARIO_MEGA_Y] = 0,
-
+    [SPECIES_TURTWIG_REDUX] = 0,
     [SPECIES_EGG] = 1,
 };
 

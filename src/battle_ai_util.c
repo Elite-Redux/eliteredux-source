@@ -2912,7 +2912,7 @@ bool32 AI_CanBeInfatuated(u8 battlerAtk, u8 battlerDef, u16 defAbility, u8 atkGe
 
 u32 ShouldTryToFlinch(u8 battlerAtk, u8 battlerDef, u16 atkAbility, u16 defAbility, u16 move)
 {
-    if (BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_INNER_FOCUS)
+    if (BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_INNER_FOCUS || BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_UNLOCKED_POTENTIAL))
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
       || GetWhoStrikesFirst(battlerAtk, battlerDef, TRUE) == 1) // opponent goes first
     {
@@ -2923,6 +2923,7 @@ u32 ShouldTryToFlinch(u8 battlerAtk, u8 battlerDef, u16 atkAbility, u16 defAbili
         return 0;   // don't try to flinch sleeping pokemon
     }
     else if (BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_INNER_FOCUS)
+      || BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_UNLOCKED_POTENTIAL)
       || gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS
       || gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
     {

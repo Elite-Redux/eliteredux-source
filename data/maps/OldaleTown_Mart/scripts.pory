@@ -270,6 +270,7 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_CLEFABITE_R
 	ITEM_RAPIDASHITE
 	ITEM_RAPIDASHITE_G
+	ITEM_SENZU
 }
 
 script General_Adoption_Center_Mega_Stones_Script{
