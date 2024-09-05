@@ -12814,12 +12814,12 @@ u32 GetMoveTargetCount(u16 move, u8 battlerAtk, u8 battlerDef)
 
 #define MUL_MODIFIER(modifier, val) MulModifier(modifier, UQ_4_12(val))
 
-static void MulModifier(u16 *modifier, u16 val)
+void MulModifier(u16 *modifier, u16 val)
 {
     *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
 }
 
-static u32 ApplyModifier(u16 modifier, u32 val)
+u32 ApplyModifier(u16 modifier, u32 val)
 {
     return UQ_4_12_TO_INT((modifier * val) + UQ_4_12_ROUND);
 }
