@@ -1660,6 +1660,13 @@ void PrintBattleWindow_MoveSelection(void)
 
             //Move Power
             movePower = CalcMoveBasePowerAfterModifiers(move, 0, gActiveBattler, target, moveType, FALSE);
+            {
+                u16 multiplier = CalculateAbilityMultipliers(gActiveBattler, target, move, moveType, movePower, typeEffectivenessMultiplier, FALSE, (u16*)&ignored);
+                MulModifier(&multiplier, typeEffectivenessMultiplier);
+                movePower *= StabMultiplierInHalves(gActiveBattler, moveType, GetBattlerAbility(gActiveBattler), move);
+                movePower /= 2;
+                movePower = ApplyModifier(multiplier, movePower);
+            }
             if(!isStatusMove)
                 ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);
             else
@@ -3534,11 +3541,6 @@ static void MoveSelectionDisplayPpString(void)
 static void MoveSelectionDisplayPpNumber(void)
 {
 
-}
-
-static void MulModifier(u16 *modifier, u16 val)
-{
-	*modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
 }
 
 #define X UQ_4_12

@@ -1832,11 +1832,6 @@ const u8 gText_Boost_False[]         = _("False");
 
 const u8 gText_Move_Type_TwoTypedMoves[] = _("{STR_VAR_1}/{STR_VAR_2}");
 
-static void MulModifier(u16 *modifier, u16 val)
-{
-	*modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
-}
-
 static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx){
     u8 i, j;
     u8 windowId = WINDOW_1;

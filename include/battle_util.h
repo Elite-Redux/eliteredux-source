@@ -328,6 +328,8 @@ int IsMagicGuardProtected(int battler);
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
 u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u8* overrideBattler, u16* abilityPopup);
+void MulModifier(u16 *modifier, u16 val);
+u32 ApplyModifier(u16 modifier, u32 val);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
