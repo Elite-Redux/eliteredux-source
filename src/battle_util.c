@@ -13200,6 +13200,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
             return;
         
+        case ABILITY_POWER_EDGE:
         case ABILITY_MYSTIC_BLADES:
         case ABILITY_SWEEPING_EDGE_PLUS:
         case ABILITY_MOLTEN_BLADES:
@@ -13713,11 +13714,8 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (IS_MOVE_SPECIAL(move)) MUL(.6);
             return;
         
-        case ABILITY_PARRY:
-            MUL(.8);
-            return;
-        
         case ABILITY_ULTRA_INSTINCT:
+        case ABILITY_PARRY:
             MUL(.8);
             return;
         
@@ -13805,11 +13803,6 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_SAND_GUARD:
             if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(battlerAtk, WEATHER_SANDSTORM_ANY)) MUL(.5);
-            return;
-
-        case ABILITY_POWER_EDGE:
-            if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-                MUL(1.3);
             return;
         
         case ABILITY_RIVALRY:
