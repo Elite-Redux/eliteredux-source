@@ -271,6 +271,8 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_RAPIDASHITE
 	ITEM_RAPIDASHITE_G
 	ITEM_SENZU
+	ITEM_GYARADEATHITE_X
+	ITEM_GYARADEATHITE_Y
 }
 
 script General_Adoption_Center_Mega_Stones_Script{

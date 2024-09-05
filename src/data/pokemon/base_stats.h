@@ -41008,7 +41008,7 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_BRONTONANA] =
     {
-    .baseHP        =  121,
+    .baseHP        =  123,
     .baseAttack    =  88,
     .baseDefense   =  82,
     .baseSpeed     =  100,
@@ -41104,7 +41104,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_FIELD,
     .eggGroup2 = EGG_GROUP_FIELD,
     .abilities = {ABILITY_MOXIE, ABILITY_SCARE, ABILITY_DARK_GALE_WINGS},
-    .innates = {ABILITY_STAKEOUT, ABILITY_FLAMING_MAW, ABILITY_GUARD_DOG},
+    .innates = {ABILITY_STAKEOUT, ABILITY_STRONG_JAW, ABILITY_GUARD_DOG},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
     .tier = 0,
