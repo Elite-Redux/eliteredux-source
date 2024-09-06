@@ -667,7 +667,7 @@
 #define ABILITY_SOUL_CRUSHER 645 // Hammer moves become Special and get a 1.1x power boost.
 #define ABILITY_ARC_FLASH 646 // 50% chance to burn when hit or paralyze when dealing damage.
 #define ABILITY_UNICORN 647 // Mighty Horn + Dazzling.
-#define ABILITY_ON_THE_PROWL 648 // +1 priority for the first turn.
+#define ABILITY_ON_THE_PROWL 648 // +1 priority for the first turn. Negative priority becomes +0.
 #define ABILITY_PRETENTIOUS 649 // Dealing a KO raises Crit by one stage.
 #define ABILITY_VENOBLAZE_PINCERS 650 // 1.2x boost to physical moves and 20% chance to Burn or Poison.
 #define ABILITY_ETERNAL_BLESSING 651 // Combines Celestial Blessing and Regenerator.

@@ -5044,8 +5044,11 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
     if (move == MOVE_RAZOR_WIND && (gSideStatuses[0] & SIDE_STATUS_TAILWIND || gSideStatuses[1] & SIDE_STATUS_TAILWIND))
         priority++;
     
-    if (gVolatileStructs[battlerId].onTheProwl && gBattleMoves[move].priority >= 0)
-        priority++;
+    if (gVolatileStructs[battlerId].onTheProwl)
+    {
+        if (gBattleMoves[move].priority >= 0) priority++;
+        else priority -= gBattleMoves[move].priority;
+    }
 
     return priority;
 }
