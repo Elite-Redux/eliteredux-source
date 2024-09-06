@@ -3216,7 +3216,7 @@ u8 DoBattlerEndTurnEffects(void)
                 gBattleScripting.abilityPopupOverwrite = ABILITY_FUNERAL_PYRE;
                 gBattleScripting.battlerPopupOverwrite = source;
                 gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
-                gBattleMoveDamage = MAX(gBattleMoveDamage, 1);
+                gBattleMoveDamage = max(gBattleMoveDamage, 1);
                 BattleScriptExecute(BattleScript_FuneralPyreDamage);
                 effect++;
             }
