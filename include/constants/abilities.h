@@ -681,8 +681,9 @@
 #define ABILITY_SUPERCONDUCTOR 659 // Steel-type moves become Electric -type moves and get a 1.1x boost.
 #define ABILITY_ULTRA_INSTINCT 660 // Counters contact with Vacuum Wave. Takes 20% less damage.
 #define ABILITY_UNLOCKED_POTENTIAL 661 // Inner Focus + Berserk.
+#define ABILITY_HIGHER_RANK 662 // Priority moves get a 1.2x boost.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_UNLOCKED_POTENTIAL + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_HIGHER_RANK + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

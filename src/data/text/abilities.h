@@ -631,6 +631,7 @@ static const u8 sAbilityPowerEdgeDescription[] = _("Keen Edge moves target Speci
 static const u8 sAbilitySuperconductorDescription[] = _("Steel-type moves become Electric\n-type moves and get a 1.1x boost.");
 static const u8 sAbilityUltraInstinctDescription[] = _("Counters contact with Vacuum\nWave. Takes 20% less damage.");
 static const u8 sAbilityUnlockedPotentialDescription[] = _("Inner Focus + Berserk.");
+static const u8 sAbilityHigherRankDescription[] = _("Priority moves get a 1.2x boost.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1296,6 +1297,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SUPERCONDUCTOR] = _("Superconductor"),
     [ABILITY_ULTRA_INSTINCT] = _("Ultra Instinct"),
     [ABILITY_UNLOCKED_POTENTIAL] = _("Unlocked Potential"),
+    [ABILITY_HIGHER_RANK] = _("Higher Rank"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1962,4 +1964,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SUPERCONDUCTOR] = sAbilitySuperconductorDescription,
     [ABILITY_ULTRA_INSTINCT] = sAbilityUltraInstinctDescription,
     [ABILITY_UNLOCKED_POTENTIAL] = sAbilityUnlockedPotentialDescription,
+    [ABILITY_HIGHER_RANK] = sAbilityHigherRankDescription,
 };

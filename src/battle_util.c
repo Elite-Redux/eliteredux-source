@@ -13655,6 +13655,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_RHYTHMIC:
             MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battlerAtk]);
             return;
+        
+        case ABILITY_HIGHER_RANK:
+            if (GetMovePriority(battlerAtk, move, battlerDef) > 0) MUL(1.2);
+            return;
     }
 }
 
