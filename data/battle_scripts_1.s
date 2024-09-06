@@ -8722,6 +8722,19 @@ BattleScript_DoTurnDmg:
 BattleScript_DoTurnDmgEnd:
 	end2
 
+BattleScript_FuneralPyreDamage::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_PKMNHURTBYFUNERALPYRE
+	waitmessage B_WAIT_TIME_LONG
+	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	tryfaintmon BS_ATTACKER, FALSE, NULL
+	atk24 BattleScript_End2
+BattleScript_End2::
+	end2
+
 BattleScript_ToxicWasteTurnDmg::
 	printstring STRINGID_PKMNHURTBYTOXICWASTE
 	waitmessage B_WAIT_TIME_LONG

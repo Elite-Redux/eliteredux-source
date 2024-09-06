@@ -386,7 +386,7 @@ static const u8 sAbilityRetributionBlowDescription[] = _("Uses Hyper Beam if any
 static const u8 sAbilityFearmongerDescription[] = _("Intimidate + Scare; 10%\npara chance on contact moves.");
 static const u8 sAbilityKingsWrathDescription[] = _("Lowering any stats on its\nside raises Atk and Def.");
 static const u8 sAbilityQueensMourningDescription[] = _("Lowering any stats on its\nside raises SpAtk and SpDef.");
-static const u8 sAbilityToxicSpillDescription[] = _("Non-Poison-types get 1/8 dmg\nevery turn when on field.");
+static const u8 sAbilityToxicSpillDescription[] = _("Non-Poison-types take 1/8 dmg\nevery turn when on field.");
 static const u8 sAbilityDesertCloakDescription[] = _("Protects its side from status\nand secondary effects in sand.");
 static const u8 sAbilityDraconizeDescription[] = _("Normal-type moves become Dragon-\ntype moves and get a 1.1x boost.");
 static const u8 sAbilityPrettyPrincessDescription[] = _("Does 50% more damage if the\ntarget has any lowered stat.");
@@ -632,6 +632,7 @@ static const u8 sAbilitySuperconductorDescription[] = _("Steel-type moves become
 static const u8 sAbilityUltraInstinctDescription[] = _("Counters contact with Vacuum\nWave. Takes 20% less damage.");
 static const u8 sAbilityUnlockedPotentialDescription[] = _("Inner Focus + Berserk.");
 static const u8 sAbilityHigherRankDescription[] = _("Priority moves get a 1.2x boost.");
+static const u8 sAbilityFuneralPyreDescription[] = _("Non-Ghost and Dark-types\ntake 1/4 damage every turn.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1298,6 +1299,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ULTRA_INSTINCT] = _("Ultra Instinct"),
     [ABILITY_UNLOCKED_POTENTIAL] = _("Unlocked Potential"),
     [ABILITY_HIGHER_RANK] = _("Higher Rank"),
+    [ABILITY_FUNERAL_PYRE] = _("Funeral Pyre"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1965,4 +1967,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_ULTRA_INSTINCT] = sAbilityUltraInstinctDescription,
     [ABILITY_UNLOCKED_POTENTIAL] = sAbilityUnlockedPotentialDescription,
     [ABILITY_HIGHER_RANK] = sAbilityHigherRankDescription,
+    [ABILITY_FUNERAL_PYRE] = sAbilityFuneralPyreDescription,
 };

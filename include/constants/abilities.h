@@ -430,7 +430,7 @@
 #define ABILITY_FEARMONGER 408 // Intimidate + Scare; 10% para chance on contact moves.
 #define ABILITY_KINGS_WRATH 409 // Lowering any stats on its side raises Atk and Def.
 #define ABILITY_QUEENS_MOURNING 410 // Lowering any stats on its side raises SpAtk and SpDef.
-#define ABILITY_TOXIC_SPILL 411 // Non-Poison-types get 1/8 dmg every turn when on field.
+#define ABILITY_TOXIC_SPILL 411 // Non-Poison-types take 1/8 dmg every turn when on field.
 #define ABILITY_DESERT_CLOAK 412 // Protects its side from status and secondary effects in sand.
 #define ABILITY_DRACONIZE 413 // Normal-type moves become Dragon- type moves and get a 1.1x boost.
 #define ABILITY_PRETTY_PRINCESS 414 // Does 50% more damage if the target has any lowered stat.
@@ -682,8 +682,9 @@
 #define ABILITY_ULTRA_INSTINCT 660 // Counters contact with Vacuum Wave. Takes 20% less damage.
 #define ABILITY_UNLOCKED_POTENTIAL 661 // Inner Focus + Berserk.
 #define ABILITY_HIGHER_RANK 662 // Priority moves get a 1.2x boost.
+#define ABILITY_FUNERAL_PYRE 663 // Non-Ghost and Dark-types take 1/4 damage every turn.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_HIGHER_RANK + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_FUNERAL_PYRE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

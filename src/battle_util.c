@@ -2896,6 +2896,7 @@ enum
     ENDTURN_SEA_OF_FIRE_DAMAGE,
     ENDTURN_COMMANDER,
     ENDTURN_PARASITIC_SPORES_DAMAGE,
+    ENDTURN_FUNERAL_PYRE_DAMAGE,
     ENDTURN_GENERIC_BATTLER_TIMERS,
     ENDTURN_BATTLER_COUNT,
 };
@@ -3199,9 +3200,26 @@ u8 DoBattlerEndTurnEffects(void)
                 gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                 if (gBattleMoveDamage == 0)
                     gBattleMoveDamage = 1;
-                MarkBattlerForControllerExec(gActiveBattler);
                 BattleScriptExecute(BattleScript_ParasiticSporesDamage);
                 effect++;
+            }
+            gBattleStruct->turnEffectsTracker++;
+            break;
+        case ENDTURN_FUNERAL_PYRE_DAMAGE:
+            {
+            int source;
+            if (IsBattlerAlive(gActiveBattler) && (source = IsAbilityOnField(ABILITY_FUNERAL_PYRE))
+                && !(IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_DARK)))
+            {
+                MAGIC_GUARD_CHECK;
+
+                gBattleScripting.abilityPopupOverwrite = ABILITY_FUNERAL_PYRE;
+                gBattleScripting.battlerPopupOverwrite = source;
+                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
+                gBattleMoveDamage = MAX(gBattleMoveDamage, 1);
+                BattleScriptExecute(BattleScript_FuneralPyreDamage);
+                effect++;
+            }
             }
             gBattleStruct->turnEffectsTracker++;
             break;
@@ -6333,6 +6351,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetSwitchInAbility(battler, ABILITY_DAUNTLESS_SHIELD)){
             SET_STATCHANGER(STAT_DEF, 1, FALSE);
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
+            effect++;
+        }
+
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_FUNERAL_PYRE))
+        {
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FUNERAL_PYRE;
+            BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
         }
         
