@@ -1277,13 +1277,13 @@ enum{
 #define MAX_PERCENT 100
 #define MAX_PERCENT_2 10000
 
-static bool8 HasPriorityMove(u8 battler)
+static bool8 HasPriorityMove(u8 battler, int target)
 {
     u8 i;
     for(i = 0; i < MAX_MON_MOVES; i++){
         if(gBattleMons[battler].moves[i] == MOVE_NONE)
-            return FALSE;
-        else if(gBattleMoves[gBattleMons[battler].moves[i]].priority > 0)
+            continue;
+        else if(GetMovePriority(battler, gBattleMons[battler].moves[i], target) > 0)
             return TRUE;
     }
     return FALSE;
@@ -1773,7 +1773,7 @@ void PrintBattleWindow_MoveSelection(void)
 
                     monSpeed = GetBattlerTotalSpeedStat(battlertoCheck, TOTAL_SPEED_FULL);
                     ConvertIntToDecimalStringN(gStringVar1, monSpeed, STR_CONV_MODE_LEFT_ALIGN, 3);
-                    if(HasPriorityMove(battlertoCheck))
+                    if(HasPriorityMove(battlertoCheck, battlertoCheck == gActiveBattler ? target : BATTLE_OPPOSITE(battlertoCheck)))
                         StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_CalculationPriority);
                     else
                         StringExpandPlaceholders(gStringVar4, sText_Effect_Speed_Calculation);
