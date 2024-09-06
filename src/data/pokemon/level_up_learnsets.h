@@ -27770,7 +27770,6 @@ static const struct LevelUpMove sSteeneeReduxLevelUpLearnset[] = {
 
 static const struct LevelUpMove sTsareenaReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_WATER_PULSE),
-    LEVEL_UP_MOVE(1, MOVE_TRIPLE_DIVE),
     LEVEL_UP_MOVE(1, MOVE_SURF),
     LEVEL_UP_MOVE(1, MOVE_MOONBLAST),
     LEVEL_UP_MOVE(1, MOVE_MISTY_EXPLOSION),
@@ -27784,8 +27783,9 @@ static const struct LevelUpMove sTsareenaReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_HYDRO_PUMP),
     LEVEL_UP_MOVE(1, MOVE_DAZZLING_GLEAM),
     LEVEL_UP_MOVE(35, MOVE_RAPID_SPIN),
+    LEVEL_UP_MOVE(41, MOVE_TRIPLE_DIVE),
     LEVEL_UP_MOVE(45, MOVE_QUIVER_DANCE),
-    LEVEL_UP_MOVE(55, MOVE_AGILITY),
+    LEVEL_UP_MOVE(56, MOVE_AGILITY),
     LEVEL_UP_END
 };
 
@@ -27969,6 +27969,7 @@ static const struct LevelUpMove sClefableReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_EARTH_POWER),
     LEVEL_UP_MOVE(1, MOVE_MYSTICAL_FIRE),
     LEVEL_UP_MOVE(1, MOVE_LUNAR_DANCE),
+    LEVEL_UP_MOVE(1, MOVE_HYPNOSIS),
     LEVEL_UP_END
 };
 

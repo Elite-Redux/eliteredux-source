@@ -359,7 +359,7 @@ static const u16 sAdoptionCenterInventory_OneBadges[] = {
 
 // 2 Badges
 static const u16 sAdoptionCenterInventory_TwoBadges[] = {
-    SPECIES_TRAPINCH_REDUX, //testing purposes
+    SPECIES_BOUNSWEET_REDUX, //testing purposes
     SPECIES_TURTWIG_REDUX, //testing purposes
     SPECIES_CHIMCHAR_REDUX, //testing purposes
     SPECIES_PIPLUP_REDUX, //testing purposes
@@ -514,10 +514,10 @@ static const u16 sAdoptionCenterInventory_SixBadges[] = {
 
 // 7 Badges
 static const u16 sAdoptionCenterInventory_SevenBadges[] = {
-    SPECIES_PSYDUCK_REDUX, //testing purposes
     SPECIES_SEEL_REDUX, //testing purposes
     SPECIES_GLIGAR_REDUX, //testing purposes
     SPECIES_CRABRAWLER_REDUX, //testing purposes
+    SPECIES_PSYDUCK_REDUX, //testing purposes
     SPECIES_TRAPINCH_REDUX, //testing purposes
     SPECIES_TOXEL_REDUX, //testing purposes
     SPECIES_BOUNSWEET_REDUX, //testing purposes
