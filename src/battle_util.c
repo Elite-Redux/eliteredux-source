@@ -622,7 +622,7 @@ bool8 TryRunFromBattle(u8 battler)
 
     gPotentialItemEffectBattler = battler;
 
-    if (holdEffect == HOLD_EFFECT_CAN_ALWAYS_RUN)
+    if (holdEffect == HOLD_EFFECT_SHED_SHELL)
     {
         gLastUsedItem = gBattleMons[battler].item;
         gRoundStructs[battler].fleeFlag = 1;
@@ -4568,7 +4568,7 @@ static const u16 sWeatherFlagsInfo[][3] =
     [ENUM_WEATHER_SANDSTORM]    = {WEATHER_SANDSTORM_TEMPORARY, WEATHER_SANDSTORM_PERMANENT, HOLD_EFFECT_SMOOTH_ROCK},
     [ENUM_WEATHER_HAIL]         = {WEATHER_HAIL_TEMPORARY,      WEATHER_HAIL_PERMANENT,      HOLD_EFFECT_ICY_ROCK},
     [ENUM_WEATHER_STRONG_WINDS] = {WEATHER_STRONG_WINDS,        WEATHER_STRONG_WINDS,        HOLD_EFFECT_NONE},
-    [ENUM_WEATHER_FOG]          = {WEATHER_FOG_TEMPORARY,       WEATHER_FOG_PERMANENT,       HOLD_EFFECT_NONE},
+    [ENUM_WEATHER_FOG]          = {WEATHER_FOG_TEMPORARY,       WEATHER_FOG_PERMANENT,       HOLD_EFFECT_SMOKE_BALL},
 };
 
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)

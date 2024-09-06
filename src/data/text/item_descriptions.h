@@ -1163,9 +1163,9 @@ static const u8 sDeepSeaScaleDesc[] = _(
     "of Clamperl.");
 
 static const u8 sSmokeBallDesc[] = _(
-    "A hold item that\n"
-    "assures fleeing\n"
-    "from wild Pokémon.");
+    "Extends the length\n"
+    "of Eerie Fog if\n"
+    "used by the holder.");
 
 static const u8 sEverstoneDesc[] = _(
     "A wondrous hold\n"

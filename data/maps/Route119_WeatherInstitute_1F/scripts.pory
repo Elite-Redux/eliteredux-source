@@ -27,6 +27,7 @@ Route119_WeatherInstitute_1F_EventScript_LittleBoy:: @ 826FAA4
 	giveitem ITEM_DAMP_ROCK
 	giveitem ITEM_ICY_ROCK
 	giveitem ITEM_SMOOTH_ROCK
+	giveitem ITEM_SMOKE_BALL
 	setflag FLAG_WEATHER_INSTITUTE_ROCKS
 Route119_WeatherInstitute_1F_EventScript_LittleBoyGaveRocks:
 	msgbox Route119_WeatherInstitute_1F_Text_Rocks, MSGBOX_DEFAULT
