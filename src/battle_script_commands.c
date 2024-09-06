@@ -6453,7 +6453,7 @@ static void Cmd_moveend(void)
                 {
                     if (gCurrentMove == MOVE_DRAGON_DARTS)
                     {
-                        // TODO
+                        if (IsBattlerAlive(BATTLE_PARTNER(gBattlerTarget))) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
                     }
 
                     if (gBattleMons[gBattlerAttacker].hp

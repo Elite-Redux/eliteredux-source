@@ -13160,6 +13160,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY))
             basePower *= 2;
         break;
+    case MOVE_DRAGON_DARTS:
+        if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PARENTAL_BOND))
+            basePower = basePower * 5 / 4;
+        break;
     }
 
     if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)){
@@ -13837,6 +13841,8 @@ u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int mo
     {
         CalculateDefensiveAbilityMultiplier(abilities[i], battlerAtk, battlerDef, move, moveType, typeEffectivenessMultiplier, resistanceMultiplier, &multiplier);
     }
+
+    return multiplier;
 }
 
 u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags)
@@ -14573,7 +14579,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
     // take type effectiveness
     MulModifier(&finalModifier, typeEffectivenessModifier);
 
-    CalculateAbilityMultipliers(battlerAtk, battlerDef, move, moveType, CalcMoveBasePower(move, battlerAtk, battlerDef), typeEffectivenessModifier, isCrit, &ignored);
+    MulModifier(&finalModifier, CalculateAbilityMultipliers(battlerAtk, battlerDef, move, moveType, CalcMoveBasePower(move, battlerAtk, battlerDef), typeEffectivenessModifier, isCrit, &ignored));
 
     // check crit
     if (isCrit)
