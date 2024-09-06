@@ -4222,6 +4222,7 @@ static void Cmd_clearstatusfromeffect(void)
 static void Cmd_tryfaintmon(void)
 {
     const u8 *BS_ptr;
+    int recurringNightmare = FALSE;
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
     if (BattlerHasAbility(gActiveBattler, gBattlerAttacker, ABILITY_RECURRING_NIGHTMARE)
@@ -4230,6 +4231,7 @@ static void Cmd_tryfaintmon(void)
         && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY))
     {
         SetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE, 1);
+        recurringNightmare = TRUE;
     }
 
     if (gBattlescriptCurrInstr[2] != 0)
@@ -4258,10 +4260,21 @@ static void Cmd_tryfaintmon(void)
         }
         else
         {
-            gStackBattler1 = gActiveBattler;
             battlerId = gBattlerAttacker;
             BS_ptr = BattleScript_FaintTarget;
         }
+
+        SetActiveStackBattler(gActiveBattler, 1);
+
+        if (recurringNightmare)
+        {
+            SetActiveMultistringChooser(B_MSG_FADE_OUT);
+            SetActiveAbilityPopupOverride(ABILITY_RECURRING_NIGHTMARE);
+        }
+        else SetActiveMultistringChooser(B_MSG_MON_FAINTED);
+
+        
+
         if (!(gAbsentBattlerFlags & gBitTable[gActiveBattler])
          && gBattleMons[gActiveBattler].hp == 0)
         {

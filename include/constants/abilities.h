@@ -166,7 +166,7 @@
 #define ABILITY_MAGIC_BOUNCE 156 // Bounces back the effect of status moves to their user.
 #define ABILITY_SAP_SIPPER 157 // Absorbs Grass-type moves and raises highest Atk by one stage.
 #define ABILITY_PRANKSTER 158 // Status moves have +1 priority but fail on opposing Dark-types.
-#define ABILITY_SAND_FORCE 159 // Gives a 1.3x power boost to Rock, Ground, Steel-type moves.
+#define ABILITY_SAND_FORCE 159 // Ups highest attacking stat by 1.5x in sand.
 #define ABILITY_IRON_BARBS 160 // Enemies lose 1/8 of max HP if they use a contact move.
 #define ABILITY_ZEN_MODE 161 // Transforms into Zen Mode on entry until end of battle.
 #define ABILITY_VICTORY_STAR 162 // Gives 1.2x accuracy boost to its own and its allies' moves.
@@ -292,7 +292,7 @@
 #define ABILITY_PYROMANCY 270 // Moves inflict burn 5x as often.
 #define ABILITY_KEEN_EDGE 271 // Boosts the power of slashing moves by 1.3x.
 #define ABILITY_PRISM_SCALES 272 // Takes 30% less damage from Special attacks.
-#define ABILITY_POWER_FISTS 273 // Punching moves hit spdef and get a 1.3x power boost.
+#define ABILITY_POWER_FISTS 273 // Iron Fist moves target Special Defense and get a 1.3x boost.
 #define ABILITY_SAND_SONG 274 // Normal sound moves become Ground and get a 1.2x boost.
 #define ABILITY_RAMPAGE 275 // No recharge after a KO, if it usually would need to recharge.
 #define ABILITY_VENGEANCE 276 // Boosts Ghost-type moves by 1.2x, or 1.5x when below 1/3 HP.
@@ -362,7 +362,7 @@
 #define ABILITY_FATAL_PRECISION 340 // Super-effective moves never miss and get a 1.2x boost.
 #define ABILITY_FORT_KNOX 341 // Boosts Defense by three stages if stats are lowered by an enemy.
 #define ABILITY_SEAWEED 342 // Takes 1/2 dmg from Fire if Grass, doubles Grass dmg on Fire-types.
-#define ABILITY_PSYCHIC_MIND 343 // Boosts the power of Psychic-type moves by 1.25x.
+#define ABILITY_PSYCHIC_MIND 343 // Boosts Psychic-type moves by 1.2x, or 1.5x when under 1/3 HP.
 #define ABILITY_POISON_ABSORB 344 // Heals 25% of max HP when hit by a Poison-type move.
 #define ABILITY_SCAVENGER 345 // Dealing a KO heals 1/4 of this Pokémon's max HP.
 #define ABILITY_TWISTED_DIMENSION 346 // Sets up Trick Room on entry, lasts 3 turns.
@@ -677,10 +677,10 @@
 #define ABILITY_SMOKEY_MANEUVERS 655 // Evasion is boosted by 1.25x in fog.
 #define ABILITY_TAG 656 // Attacks switching opponents with a 20BP Pursuit.
 #define ABILITY_POWER_METAL 657 // Normal sound moves become Steel and get a 1.2x boost.
-#define ABILITY_POWER_EDGE 658 // Slice moves hit Spdef and get a 1.3x power boost.
-#define ABILITY_SUPERCONDUCTOR 659 // Steel moves become Electric and get a 10% boost
+#define ABILITY_POWER_EDGE 658 // Keen Edge moves target Special Defense and get a 1.3x boost.
+#define ABILITY_SUPERCONDUCTOR 659 // Steel-type moves become Electric -type moves and get a 1.1x boost.
 #define ABILITY_ULTRA_INSTINCT 660 // Counters contact with Vacuum Wave. Takes 20% less damage.
-#define ABILITY_UNLOCKED_POTENTIAL 661 // Berserk + Inner Focus.
+#define ABILITY_UNLOCKED_POTENTIAL 661 // Inner Focus + Berserk.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_UNLOCKED_POTENTIAL + 1)
 

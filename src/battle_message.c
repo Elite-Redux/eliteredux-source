@@ -876,6 +876,7 @@ static const u8 sText_OnTheProwl[] = _("{B_ATK_NAME_WITH_PREFIX} looks\nfor the 
 static const u8 sText_FogStarts[] = _("An unnatural fog descends upon\nthe battlefield!");
 static const u8 sText_FlareBoostIgnites[] = _("{B_ATK_NAME_WITH_PREFIX}'s inner\nflame roars to life!");
 static const u8 sText_FogReturns[] = _("The eerie fog returns!");
+static const u8 sText_RecurringNightmare[] = _("{B_STACK_1_NAME_WITH_PREFIX} fades\nback into the fog!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1852,6 +1853,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_FOG_STARTS - 12] = sText_FogStarts,
     [STRINGID_FLARE_BOOST_IGNITES - 12] = sText_FlareBoostIgnites,
     [STRINGID_FOG_RETURNS - 12] = sText_FogReturns,
+    [STRINGID_RECURRING_NIGHTMARE - 12] = sText_RecurringNightmare,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2414,6 +2416,12 @@ const u16 gCritRaisedStrings[] =
     [B_MSG_CRIT_INCREASE_1] = STRINGID_CRIT_PLUS_1,
     [B_MSG_CRIT_INCREASE_2] = STRINGID_CRIT_PLUS_2,
     [B_MSG_CRIT_INCREASE_3] = STRINGID_CRIT_PLUS_3,
+};
+
+const u16 gFaintMonMessage[] = 
+{
+    [B_MSG_MON_FAINTED] = STRINGID_ATTACKERFAINTED,
+    [B_MSG_FADE_OUT] = STRINGID_RECURRING_NIGHTMARE,
 };
 
 // END OF GENERATED

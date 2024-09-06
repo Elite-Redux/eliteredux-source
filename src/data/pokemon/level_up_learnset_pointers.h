@@ -1616,6 +1616,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_DREDWOOD] = sDredwoodLevelUpLearnset,
     [SPECIES_KAIOSEA] = sKaioseaLevelUpLearnset,
     [SPECIES_PHANFERNAL] = sPhanfernalLevelUpLearnset,
+    [SPECIES_SKULBERUS] = sSkulberusLevelUpLearnset,
     [SPECIES_CORM] = sCormLevelUpLearnset,
     [SPECIES_MAIZEMOTH] = sMaizemothLevelUpLearnset,
     [SPECIES_MAIZEMOTH_MEGA] = sMaizemothLevelUpLearnset,

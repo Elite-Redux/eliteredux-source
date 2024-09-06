@@ -7028,7 +7028,11 @@ BattleScript_FaintAttacker::
 	playfaintcry BS_ATTACKER
 	pause B_WAIT_TIME_LONG
 	dofaintanimation BS_ATTACKER
-	printstring STRINGID_ATTACKERFAINTED
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MON_FAINTED, BattleScript_FaintAttacker_NoPopup
+	copybyte gBattlerAbility, gStackBattler1
+	call BattleScript_AbilityPopUp
+BattleScript_FaintAttacker_NoPopup:
+	printfromtable gFaintMonMessage
 	cleareffectsonfaint BS_ATTACKER
 	tryactivatesoulheart
 	tryactivatereceiver BS_ATTACKER
@@ -7042,7 +7046,11 @@ BattleScript_FaintTarget::
 	playfaintcry BS_TARGET
 	pause B_WAIT_TIME_LONG
 	dofaintanimation BS_TARGET
-	printstring STRINGID_TARGETFAINTED
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MON_FAINTED, BattleScript_FaintTarget_NoPopup
+	copybyte gBattlerAbility, gStackBattler1
+	call BattleScript_AbilityPopUp
+BattleScript_FaintTarget_NoPopup:
+	printfromtable gFaintMonMessage
 	cleareffectsonfaint BS_TARGET
 	tryactivatefellstinger BS_ATTACKER
 	tryactivatesoulheart
@@ -8422,6 +8430,13 @@ BattleScript_SelectingImprisonedMoveInPalace::
 
 BattleScript_GrudgeTakesPp::
 	printstring STRINGID_PKMNLOSTPPGRUDGE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_RecurringNightmare::
+	copybyte gBattlerAbility, gStackBattler1
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_RECURRING_NIGHTMARE
 	waitmessage B_WAIT_TIME_LONG
 	return
 

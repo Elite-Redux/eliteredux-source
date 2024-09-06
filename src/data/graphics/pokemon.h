@@ -7588,6 +7588,13 @@ const u32 gMonPalette_Phanfernal[]           = INCBIN_U32("graphics/pokemon/phan
 const u32 gMonShinyPalette_Phanfernal[]      = INCBIN_U32("graphics/pokemon/phanfernal/shiny.gbapal.lz");
 const u8  gMonIcon_Phanfernal[]              = INCBIN_U8("graphics/pokemon/phanfernal/icon.4bpp");
 
+const u32 gMonFrontPic_Skulberus[]          = INCBIN_U32("graphics/pokemon/skulberus/front.4bpp.lz");
+const u32 gMonBackPic_Skulberus[]           = INCBIN_U32("graphics/pokemon/skulberus/back.4bpp.lz");
+const u32 gMonPalette_Skulberus[]           = INCBIN_U32("graphics/pokemon/skulberus/normal.gbapal.lz");
+const u32 gMonShinyPalette_Skulberus[]      = INCBIN_U32("graphics/pokemon/skulberus/shiny.gbapal.lz");
+const u8  gMonIcon_Skulberus[]              = INCBIN_U8("graphics/pokemon/skulberus/icon.4bpp");
+
+
 const u32 gMonFrontPic_GimmighoulRoaming[]          = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/front.4bpp.lz");
 const u32 gMonBackPic_GimmighoulRoaming[]           = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/back.4bpp.lz");
 const u32 gMonPalette_GimmighoulRoaming[]           = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/normal.gbapal.lz");
