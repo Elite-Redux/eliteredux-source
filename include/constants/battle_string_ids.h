@@ -1205,4 +1205,8 @@
 #define B_MSG_CRIT_INCREASE_2 2
 #define B_MSG_CRIT_INCREASE_3 3
 
+// gFaintMonMessage
+#define B_MSG_MON_FAINTED 0
+#define B_MSG_FADE_OUT 1
+
 #endif // GUARD_CONSTANTS_BATTLE_STRING_IDS_H
