@@ -6997,6 +6997,7 @@ BattleScript_FaintAttacker::
 	pause B_WAIT_TIME_LONG
 	dofaintanimation BS_ATTACKER
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MON_FAINTED, BattleScript_FaintAttacker_NoPopup
+	copybyte gBattlerAbility, gStackBattler1
 	call BattleScript_AbilityPopUp
 BattleScript_FaintAttacker_NoPopup:
 	printfromtable gFaintMonMessage
@@ -7014,6 +7015,7 @@ BattleScript_FaintTarget::
 	pause B_WAIT_TIME_LONG
 	dofaintanimation BS_TARGET
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MON_FAINTED, BattleScript_FaintTarget_NoPopup
+	copybyte gBattlerAbility, gStackBattler1
 	call BattleScript_AbilityPopUp
 BattleScript_FaintTarget_NoPopup:
 	printfromtable gFaintMonMessage
