@@ -10573,10 +10573,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TRIPLE_DIVE] =
     {
-        .effect = EFFECT_DOUBLE_HIT,
-        .power = 30,
+        .effect = EFFECT_TRIPLE_KICK,
+        .power = 20,
         .type = TYPE_WATER,
-        .accuracy = 100,
+        .accuracy = 90,
         .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
