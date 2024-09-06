@@ -693,9 +693,8 @@ bool32 IsBattlerTrapped(u8 battler, bool8 checkSwitch)
 {
     u8 holdEffect = AI_GetHoldEffect(battler);
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)
-      || (checkSwitch && holdEffect == HOLD_EFFECT_SHED_SHELL)
-      || (!checkSwitch && GetBattlerAbility(battler) == ABILITY_RUN_AWAY)
-      || (!checkSwitch && holdEffect == HOLD_EFFECT_CAN_ALWAYS_RUN))
+      || (holdEffect == HOLD_EFFECT_SHED_SHELL)
+      || (!checkSwitch && GetBattlerAbility(battler) == ABILITY_RUN_AWAY))
     {
         return FALSE;
     }

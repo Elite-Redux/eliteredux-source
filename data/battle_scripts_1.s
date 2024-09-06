@@ -8722,6 +8722,19 @@ BattleScript_DoTurnDmg:
 BattleScript_DoTurnDmgEnd:
 	end2
 
+BattleScript_FuneralPyreDamage::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_PKMNHURTBYFUNERALPYRE
+	waitmessage B_WAIT_TIME_LONG
+	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	tryfaintmon BS_ATTACKER, FALSE, NULL
+	atk24 BattleScript_End2
+BattleScript_End2::
+	end2
+
 BattleScript_ToxicWasteTurnDmg::
 	printstring STRINGID_PKMNHURTBYTOXICWASTE
 	waitmessage B_WAIT_TIME_LONG
@@ -11713,17 +11726,17 @@ sByteFour:
 .byte MAX_BATTLERS_COUNT
 
 BattleScript_NeutralizingGasExits::
-	savetarget
-	pause B_WAIT_TIME_SHORT
 	printstring STRINGID_NEUTRALIZINGGASOVER
 	waitmessage B_WAIT_TIME_LONG
-	setbyte gBattlerTarget, 0
-BattleScript_NeutralizingGasExitsLoop:
 	saveattackerandtargetto34
-	switchinabilities BS_TARGET
-	addbyte gBattlerTarget, 1
-	jumpifbytenotequal gBattlerTarget, sByteFour, BattleScript_NeutralizingGasExitsLoop	@ SOMEHOW, comparing to gBattlersCount is problematic.
-	restoretarget
+	setbyte gBattlerAttacker, 0
+	writestackbattler BS_ATTACKER, 1
+BattleScript_NeutralizingGasExitsLoop:
+	switchinabilities BS_STACK_1
+	restorestackstate
+	addbyte gStackBattler1, 1
+	writestackbattler BS_STACK_1, 1
+	jumpifbytenotequal gStackBattler1, gBattlersCount, BattleScript_NeutralizingGasExitsLoop
 	return
 
 BattleScript_NaturalCureExits::

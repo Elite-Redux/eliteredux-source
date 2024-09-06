@@ -877,6 +877,8 @@ static const u8 sText_FogStarts[] = _("An unnatural fog descends upon\nthe battl
 static const u8 sText_FlareBoostIgnites[] = _("{B_ATK_NAME_WITH_PREFIX}'s inner\nflame roars to life!");
 static const u8 sText_FogReturns[] = _("The eerie fog returns!");
 static const u8 sText_RecurringNightmare[] = _("{B_STACK_1_NAME_WITH_PREFIX} fades\nback into the fog!");
+static const u8 sText_PkmnHurtByFuneralPyre[] = _("{B_ATK_NAME_WITH_PREFIX} was hurt\nby the Funeral Pyre!");
+static const u8 sText_FuneralPyreEntry[] = _("{B_ATK_NAME_WITH_PREFIX} lights\na Funeral Pyre!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1854,6 +1856,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_FLARE_BOOST_IGNITES - 12] = sText_FlareBoostIgnites,
     [STRINGID_FOG_RETURNS - 12] = sText_FogReturns,
     [STRINGID_RECURRING_NIGHTMARE - 12] = sText_RecurringNightmare,
+    [STRINGID_PKMNHURTBYFUNERALPYRE - 12] = sText_PkmnHurtByFuneralPyre,
+    [STRINGID_FUNERAL_PYRE_ENTRY - 12] = sText_FuneralPyreEntry,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -1940,6 +1944,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_PARASITIC_SPORES] = STRINGID_PARASITIC_SPORES,
     [B_MSG_SWITCHIN_REJECTION] = STRINGID_QUASHSUCCESS,
     [B_MSG_SWITCHIN_ON_THE_PROWL] = STRINGID_ON_THE_PROWL,
+    [B_MSG_SWITCHIN_FUNERAL_PYRE] = STRINGID_FUNERAL_PYRE_ENTRY,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

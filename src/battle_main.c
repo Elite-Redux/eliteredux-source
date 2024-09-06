@@ -4152,7 +4152,7 @@ u8 IsRunningFromBattleImpossible(void)
         return 1;
     }
 
-    if (holdEffect == HOLD_EFFECT_CAN_ALWAYS_RUN)
+    if (holdEffect == HOLD_EFFECT_SHED_SHELL)
         return 0;
     #if B_GHOSTS_ESCAPE >= GEN_6
         if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST))
