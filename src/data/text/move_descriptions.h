@@ -2783,8 +2783,8 @@ static const u8 sMoveTwoLineDescription_MoveMagicPowder[] = _(
     "target into a Psychic-type.");
 
 static const u8 sMoveTwoLineDescription_MoveDragonDarts[] = _(
-    "The user attacks twice. No\n"
-    "additional effect.");
+    "The user attacks twice.\n"
+    "Parental Bond boost.");
 
 static const u8 sMoveTwoLineDescription_MoveTeatime[] = _(
     "All Pokémon have teatime\n"
@@ -3738,6 +3738,9 @@ static const u8 sMoveTwoLineDescription_MoveBeatdown[] = _(
 static const u8 sMoveTwoLineDescription_MoveEerieFog[] = _(
     "An unnatural fog descends,\n"
     "draining stat boosts.");
+
+static const u8 sMoveTwoLineDescription_MoveMysticDance[] = _(
+    "Not implemented.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -4693,6 +4696,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_SMOLDER_BASH - 1] = sMoveTwoLineDescription_MoveSmolderBash,
     [MOVE_BEATDOWN - 1] = sMoveTwoLineDescription_MoveBeatdown,
     [MOVE_EERIE_FOG - 1] = sMoveTwoLineDescription_MoveEerieFog,
+    [MOVE_MYSTIC_DANCE - 1] = sMoveTwoLineDescription_MoveMysticDance,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5391,7 +5395,7 @@ static const u8 sMoveFourLineDescription_MoveStuffCheeks[] = _("The user eats it
 static const u8 sMoveFourLineDescription_MoveNoRetreat[] = _("Ups all the user's\nstats. However, the\nuser cannot switch\nout or flee.");
 static const u8 sMoveFourLineDescription_MoveTarShot[] = _("Sticky tar lowers\nthe foe's Speed,\nand makes it weaker\nto Fire-type moves.");
 static const u8 sMoveFourLineDescription_MoveMagicPowder[] = _("A cloud of magic\npowder that changes\nthe foe to Psychic-\ntype.");
-static const u8 sMoveFourLineDescription_MoveDragonDarts[] = _("User fires two\ndragon-shaped darts.\nNo additional effect.");
+static const u8 sMoveFourLineDescription_MoveDragonDarts[] = _("User fires two\ndragon-shaped darts.\n1.25x boost from\nParental Bond.");
 static const u8 sMoveFourLineDescription_MoveTeatime[] = _("All Pokémon in the\nbattle have\nteatime, and eat\ntheir held Berry.");
 static const u8 sMoveFourLineDescription_MoveOctolock[] = _("Prevents escape,\nand lowers the Sp.\nDef and Defense of\nthe foe each turn.");
 static const u8 sMoveFourLineDescription_MoveBoltBeak[] = _("If attacking before\nthe target, move power\ndoubles. Strong Jaw\nboost");
@@ -5646,6 +5650,7 @@ static const u8 sMoveFourLineDescription_MoveToxicNeedles[] = _("Toxic pins are 
 static const u8 sMoveFourLineDescription_MoveSmolderBash[] = _("Bashes the foe with\na fiery horn.\n10% chance to\nburn. Horn-based.");
 static const u8 sMoveFourLineDescription_MoveBeatdown[] = _("Attacks the foe with\na flurry of blows.\nhits 2-5 times.");
 static const u8 sMoveFourLineDescription_MoveEerieFog[] = _("An eerie fog lasting\neight turns drains\nboosts from non-\nGhost and Psychic mons.");
+static const u8 sMoveFourLineDescription_MoveMysticDance[] = _("Not implemented.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6599,4 +6604,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_SMOLDER_BASH - 1] = sMoveFourLineDescription_MoveSmolderBash,
     [MOVE_BEATDOWN - 1] = sMoveFourLineDescription_MoveBeatdown,
     [MOVE_EERIE_FOG - 1] = sMoveFourLineDescription_MoveEerieFog,
+    [MOVE_MYSTIC_DANCE - 1] = sMoveFourLineDescription_MoveMysticDance,
 };

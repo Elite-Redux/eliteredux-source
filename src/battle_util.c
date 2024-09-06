@@ -13160,6 +13160,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY))
             basePower *= 2;
         break;
+    case MOVE_DRAGON_DARTS:
+        if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PARENTAL_BOND))
+            basePower = basePower * 5 / 4;
+        break;
     }
 
     if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)){
@@ -13200,6 +13204,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
             return;
         
+        case ABILITY_POWER_EDGE:
         case ABILITY_MYSTIC_BLADES:
         case ABILITY_SWEEPING_EDGE_PLUS:
         case ABILITY_MOLTEN_BLADES:
@@ -13713,11 +13718,8 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (IS_MOVE_SPECIAL(move)) MUL(.6);
             return;
         
-        case ABILITY_PARRY:
-            MUL(.8);
-            return;
-        
         case ABILITY_ULTRA_INSTINCT:
+        case ABILITY_PARRY:
             MUL(.8);
             return;
         
@@ -13806,11 +13808,6 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_SAND_GUARD:
             if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(battlerAtk, WEATHER_SANDSTORM_ANY)) MUL(.5);
             return;
-
-        case ABILITY_POWER_EDGE:
-            if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-                MUL(1.3);
-            return;
         
         case ABILITY_RIVALRY:
             {
@@ -13844,6 +13841,8 @@ u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int mo
     {
         CalculateDefensiveAbilityMultiplier(abilities[i], battlerAtk, battlerDef, move, moveType, typeEffectivenessMultiplier, resistanceMultiplier, &multiplier);
     }
+
+    return multiplier;
 }
 
 u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags)
@@ -14580,7 +14579,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
     // take type effectiveness
     MulModifier(&finalModifier, typeEffectivenessModifier);
 
-    CalculateAbilityMultipliers(battlerAtk, battlerDef, move, moveType, CalcMoveBasePower(move, battlerAtk, battlerDef), typeEffectivenessModifier, isCrit, &ignored);
+    MulModifier(&finalModifier, CalculateAbilityMultipliers(battlerAtk, battlerDef, move, moveType, CalcMoveBasePower(move, battlerAtk, battlerDef), typeEffectivenessModifier, isCrit, &ignored));
 
     // check crit
     if (isCrit)

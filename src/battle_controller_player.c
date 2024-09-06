@@ -1660,6 +1660,7 @@ void PrintBattleWindow_MoveSelection(void)
 
             //Move Power
             movePower = CalcMoveBasePowerAfterModifiers(move, 0, gActiveBattler, target, moveType, FALSE);
+            if (movePower)
             {
                 u16 multiplier = CalculateAbilityMultipliers(gActiveBattler, target, move, moveType, movePower, typeEffectivenessMultiplier, FALSE, (u16*)&ignored);
                 MulModifier(&multiplier, typeEffectivenessMultiplier);

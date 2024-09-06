@@ -474,6 +474,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectScaryFace				  @ EFFECT_SCARY_FACE
 	.4byte BattleScript_EffectSmokescreen			  @ EFFECT_SMOKESCREEN
 	.4byte BattleScript_EffectEerieFog			 	  @ EFFECT_EERIE_FOG
+	.4byte BattleScript_EffectMysticDance			  @ EFFECT_MYSTIC_DANCE
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -6955,6 +6956,37 @@ BattleScript_CantRaiseMultipleStats::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
+
+BattleScript_EffectMysticDance::
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_MysticDanceDoMoveAnim
+	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPEED, MAX_STAT_STAGE, BattleScript_CantRaiseMultipleStats
+
+BattleScript_MysticDanceDoMoveAnim::
+	attackanimation
+	waitanimation
+	setbyte sSTAT_ANIM_PLAYED, FALSE
+	playstatchangeanimation BS_ATTACKER, BIT_SPATK | BIT_SPEED, 0
+	setstatchanger STAT_SPATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_MysticDanceTrySpeed
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_MysticDanceTrySpeed
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_MysticDanceTrySpeed::
+	setstatchanger STAT_SPEED, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_MysticDanceEnd
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_MysticDanceEnd
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_MysticDanceEnd::
+	goto BattleScript_MoveEnd
+
+
+
+
+
 BattleScript_EffectDragonDance::
 	attackcanceler
 	attackstring
@@ -6996,7 +7028,11 @@ BattleScript_FaintAttacker::
 	playfaintcry BS_ATTACKER
 	pause B_WAIT_TIME_LONG
 	dofaintanimation BS_ATTACKER
-	printstring STRINGID_ATTACKERFAINTED
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MON_FAINTED, BattleScript_FaintAttacker_NoPopup
+	copybyte gBattlerAbility, gStackBattler1
+	call BattleScript_AbilityPopUp
+BattleScript_FaintAttacker_NoPopup:
+	printfromtable gFaintMonMessage
 	cleareffectsonfaint BS_ATTACKER
 	tryactivatesoulheart
 	tryactivatereceiver BS_ATTACKER
@@ -7010,7 +7046,11 @@ BattleScript_FaintTarget::
 	playfaintcry BS_TARGET
 	pause B_WAIT_TIME_LONG
 	dofaintanimation BS_TARGET
-	printstring STRINGID_TARGETFAINTED
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MON_FAINTED, BattleScript_FaintTarget_NoPopup
+	copybyte gBattlerAbility, gStackBattler1
+	call BattleScript_AbilityPopUp
+BattleScript_FaintTarget_NoPopup:
+	printfromtable gFaintMonMessage
 	cleareffectsonfaint BS_TARGET
 	tryactivatefellstinger BS_ATTACKER
 	tryactivatesoulheart
@@ -8390,6 +8430,13 @@ BattleScript_SelectingImprisonedMoveInPalace::
 
 BattleScript_GrudgeTakesPp::
 	printstring STRINGID_PKMNLOSTPPGRUDGE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_RecurringNightmare::
+	copybyte gBattlerAbility, gStackBattler1
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_RECURRING_NIGHTMARE
 	waitmessage B_WAIT_TIME_LONG
 	return
 

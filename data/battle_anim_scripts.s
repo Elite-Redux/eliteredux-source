@@ -971,6 +971,7 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_SMOLDER_BASH
 	.4byte Move_NONE @ MOVE_BEATDOWN
 	.4byte Move_HAZE @ MOVE_EERIE_FOG
+	.4byte Move_NONE @ MOVE_MYSTIC_DANCE
 
 	.align 2
 gBattleAnims_StatusConditions::
