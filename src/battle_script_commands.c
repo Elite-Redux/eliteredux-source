@@ -1961,7 +1961,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
 
     // Check Thunder and Hurricane on sunny weather.
     if (IsBattlerWeatherAffected(battlerDef, WEATHER_SUN_ANY)
-      && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
+      && (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE || gBattleMoves[move].effect == EFFECT_EERIE_SPELL))
         moveAcc = 50;
 
     if (moveAcc == 0)
@@ -2008,6 +2008,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
                 || move == MOVE_BLIZZARD))
         return 101;
     else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SHINY_LIGHTNING, atkAbility) && gBattleMoves[move].effect == EFFECT_THUNDER)
+        return 101;
+    else if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && gBattleMoves[move].effect == EFFECT_EERIE_SPELL)
         return 101;
 
     // Check Wonder Skin.
@@ -10307,7 +10309,7 @@ static void Cmd_various(void)
 
             if (i != MAX_MON_MOVES && gBattleMons[gActiveBattler].pp[i] != 0)
             {
-                s32 ppToDeduct = 3;
+                s32 ppToDeduct = 6;
 
                 if (gBattleMons[gActiveBattler].pp[i] < ppToDeduct)
                     ppToDeduct = gBattleMons[gActiveBattler].pp[i];
