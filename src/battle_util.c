@@ -16145,8 +16145,7 @@ void TryRestoreStolenItems(void)
     {
         for (i = 0; i < PARTY_SIZE; i++)
         {
-            if (gBattleStruct->itemStolen[i].originalItem != ITEM_NONE
-                && GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, NULL) != gBattleStruct->itemStolen[i].originalItem)
+            if (GetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, NULL) != gBattleStruct->itemStolen[i].originalItem)
             {
                 stolenItem = gBattleStruct->itemStolen[i].originalItem;
                 SetMonData(&gPlayerParty[i], MON_DATA_HELD_ITEM, &stolenItem);
