@@ -1,6 +1,6 @@
 raw `
 .set LOCALID_HIDEOUT_GUARD, 4
-.set LOCALID_CHANSEY, 7
+.set LOCALID_CHANSEY, 6
 
 JaggedPass_MapScripts:: @ 8230656
 	map_script MAP_SCRIPT_ON_RESUME, JaggedPass_OnResume
@@ -353,3 +353,46 @@ JaggedPass_Text_AutumnPostBattle: @ 8230EE3
 	.string "a little up the hill from here?$"
 
 `
+const LOCALID_ChonJena = 8
+
+movement JaggedPass_Movement_ChonJenaShake {
+	face_right
+	delay_2
+	face_down
+	delay_2
+	face_left
+	delay_2
+	face_down
+	delay_2
+	face_right
+	delay_2
+	face_down
+	delay_2
+	face_left
+	delay_2
+	face_down
+}
+
+movement JaggedPass_Movement_SudoWudoSuplex{
+	jump_2_up
+}
+
+script JaggedPass_EventScript_ChonJena {
+	lock
+	msgbox("Wait, this is not a tree.", MSGBOX_SIGN)
+	delay(20)
+	message("THIS IS...")
+	playse(SE_SUDOWOODO_SHAKE)
+	applymovement(LOCALID_ChonJena, JaggedPass_Movement_ChonJenaShake)
+	delay(50)
+	message("CHON JENAAAAAAAAA!")
+	playbgm(MUS_GSC_ROUTE38, FALSE)
+	setobjectxy(OBJ_EVENT_ID_PLAYER, 11, 23)
+	applymovement(OBJ_EVENT_ID_PLAYER, JaggedPass_Movement_SudoWudoSuplex)
+	playse(SE_LEDGE)
+	waitmovement(OBJ_EVENT_ID_PLAYER)
+	playse(SE_EFFECTIVE)
+	waitse()
+	waitbuttonpress
+	release
+}
