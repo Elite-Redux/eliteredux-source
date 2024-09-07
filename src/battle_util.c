@@ -8304,35 +8304,33 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		}
 
 		// Static (Defender)
-
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERK) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERKER_RAGE) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_UNLOCKED_POTENTIAL)) {
-            if (ShouldApplyOnHitAffect(battler)
-            // Had more than half of hp before, now has less
-             && gBattleStruct->hpBefore[battler] > gBattleMons[battler].maxHP / 2
-             && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2
-             && (gTurnStructs[gBattlerAttacker].multiHitCounter == 0 || gTurnStructs[gBattlerAttacker].multiHitCounter == 1)
-             && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
-             && CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
-            {  
-                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERK) ? ABILITY_BERSERK : (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BERSERKER_RAGE) ? ABILITY_BERSERKER_RAGE : ABILITY_UNLOCKED_POTENTIAL);
+        if (ShouldApplyOnHitAffect(battler)
+            && gBattleStruct->hpBefore[battler] > gBattleMons[battler].maxHP / 2
+            && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2
+            && (gTurnStructs[gBattlerAttacker].multiHitCounter == 0 || gTurnStructs[gBattlerAttacker].multiHitCounter == 1))
+        {
+            if ((CheckAndSetSwitchInAbility(battler, ABILITY_BERSERK)
+                    || CheckAndSetSwitchInAbility(battler, ABILITY_BERSERKER_RAGE)
+                    || CheckAndSetSwitchInAbility(battler, ABILITY_UNLOCKED_POTENTIAL))
+                && CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
+            {
                 SET_STATCHANGER(STAT_SPATK, 1, FALSE);
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseOnMoveEnd;
                 effect++;
             }
-        }
 
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ANGER_SHELL)) {
-            if (ShouldApplyOnHitAffect(battler)
-            // Had more than half of hp before, now has less
-             && gBattleStruct->hpBefore[battler] > gBattleMons[battler].maxHP / 2
-             && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2
-             && (gTurnStructs[gBattlerAttacker].multiHitCounter == 0 || gTurnStructs[gBattlerAttacker].multiHitCounter == 1)
-             && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove)))
+            if (CheckAndSetSwitchInAbility(battler, ABILITY_ANGER_SHELL))
             {
-                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ANGER_SHELL;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_AngerShell;
+                effect++;
+            }
+
+            if (CheckAndSetSwitchInAbility(battler, ABILITY_NO_TURNING_BACK))
+            {
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_NoTurningBack;
                 effect++;
             }
         }

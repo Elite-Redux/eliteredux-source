@@ -683,8 +683,9 @@
 #define ABILITY_UNLOCKED_POTENTIAL 661 // Inner Focus + Berserk.
 #define ABILITY_HIGHER_RANK 662 // Priority moves get a 1.2x boost.
 #define ABILITY_FUNERAL_PYRE 663 // Non-Ghost and Dark-types take 1/4 damage every turn.
+#define ABILITY_NO_TURNING_BACK 664 // Boosts all stats but can't retreat when below 1/2 max HP.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_FUNERAL_PYRE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_NO_TURNING_BACK + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

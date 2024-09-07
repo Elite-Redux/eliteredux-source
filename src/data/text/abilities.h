@@ -633,6 +633,7 @@ static const u8 sAbilityUltraInstinctDescription[] = _("Counters contact with Va
 static const u8 sAbilityUnlockedPotentialDescription[] = _("Inner Focus + Berserk.");
 static const u8 sAbilityHigherRankDescription[] = _("Priority moves get a 1.2x boost.");
 static const u8 sAbilityFuneralPyreDescription[] = _("Non-Ghost and Dark-types\ntake 1/4 damage every turn.");
+static const u8 sAbilityNoTurningBackDescription[] = _("Boosts all stats but can't retreat\nwhen below 1/2 max HP.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1265,7 +1266,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_RESONANCE] = _("Resonance"),
     [ABILITY_ETHEREAL_RUSH] = _("Ethereal Rush"),
     [ABILITY_CUTE_ANTECEDENCE] = _("Cute Antecedence"),
-    [ABILITY_RECURRING_NIGHTMARE] = _("Shallow Grave"),
+    [ABILITY_RECURRING_NIGHTMARE] = _("Shallow Gravezz"),
     [ABILITY_MENACING_SITUATION] = _("Menacing Situation"),
     [ABILITY_SHINY_LIGHTNING] = _("Shiny Lightning"),
     [ABILITY_TERRIFY] = _("Terrify"),
@@ -1300,6 +1301,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_UNLOCKED_POTENTIAL] = _("Unlocked Potential"),
     [ABILITY_HIGHER_RANK] = _("Higher Rank"),
     [ABILITY_FUNERAL_PYRE] = _("Funeral Pyre"),
+    [ABILITY_NO_TURNING_BACK] = _("No Turning Back"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1968,4 +1970,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_UNLOCKED_POTENTIAL] = sAbilityUnlockedPotentialDescription,
     [ABILITY_HIGHER_RANK] = sAbilityHigherRankDescription,
     [ABILITY_FUNERAL_PYRE] = sAbilityFuneralPyreDescription,
+    [ABILITY_NO_TURNING_BACK] = sAbilityNoTurningBackDescription,
 };

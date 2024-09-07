@@ -2385,6 +2385,13 @@ BattleScript_AngerShellEnd:
 	readattackerfromstack3
 	return
 
+BattleScript_NoTurningBack::
+	trynoretreat BS_TARGET, BattleScript_Return
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_NO_TURNING_BACK
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_AllStatsUp
+
 BattleScript_EffectLastResort:
 	attackcanceler
 	attackstring
