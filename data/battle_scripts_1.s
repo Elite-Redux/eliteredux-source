@@ -4722,7 +4722,9 @@ BattleScript_PowerHerbActivation:
 
 BattleScript_EffectTwoTurnSecondary::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_EffectTwoTurnSecondarySecondTurn
+	jumpifmove MOVE_SKULL_BASH, BattleScript_SetSkullBashString
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_METEOR_BEAM
+BattleScript_EffectTwoTurnSecondary_AfterSetString:
 	call BattleScriptFirstChargingTurn
 	argumenttomoveeffect
 	seteffectprimary
@@ -4735,6 +4737,9 @@ BattleScript_EffectTwoTurnSecondarySecondTurn:
 	clearstatusfromeffect BS_ATTACKER
 	orword gHitMarker, HITMARKER_NO_PPDEDUCT
 	goto BattleScript_HitFromAccCheck
+BattleScript_SetSkullBashString:
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_SKULL_BASH
+	goto BattleScript_EffectTwoTurnSecondary_AfterSetString
 
 BattleScript_EffectTwoTurnsAttack::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
