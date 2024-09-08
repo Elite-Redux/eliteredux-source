@@ -11123,6 +11123,11 @@ extern const u32 gMonBackPic_GimmighoulRoaming[];
 extern const u32 gMonPalette_GimmighoulRoaming[];
 extern const u32 gMonShinyPalette_GimmighoulRoaming[];
 extern const u8  gMonIcon_GimmighoulRoaming[];
+extern const u32 gMonFrontPic_BasculegionF[];
+extern const u32 gMonBackPic_BasculegionF[];
+extern const u32 gMonPalette_BasculegionF[];
+extern const u32 gMonShinyPalette_BasculegionF[];
+extern const u8  gMonIcon_BasculegionF[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
@@ -11231,6 +11236,16 @@ extern const u32 gMonFrontPic_Iron_Exo[];
 extern const u32 gMonFrontPic_Ursaluna_Mega[];
 extern const u32 gMonFrontPic_Castform_Sandy[];
 extern const u32 gMonFrontPic_Kingambit_Redux[];
+extern const u32 gMonFrontPic_Marbeep[];
+extern const u32 gMonBackPic_Marbeep[];
+extern const u32 gMonPalette_Marbeep[];
+extern const u32 gMonShinyPalette_Marbeep[];
+extern const u8  gMonIcon_Marbeep[];
+extern const u32 gMonFrontPic_Fluffbee[];
+extern const u32 gMonBackPic_Fluffbee[];
+extern const u32 gMonPalette_Fluffbee[];
+extern const u32 gMonShinyPalette_Fluffbee[];
+extern const u8  gMonIcon_Fluffbee[];
 extern const u32 gMonFrontPic_Amphybuzz[];
 extern const u32 gMonBackPic_Amphybuzz[];
 extern const u32 gMonPalette_Amphybuzz[];

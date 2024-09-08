@@ -3314,7 +3314,7 @@ static const u8 sMoveTwoLineDescription_MovePsychokineticSlam[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveEsperWing[] = _(
     "Deals damage.\n"
-    "Raises speed.");
+    "Drains 50% hp.");
 
 static const u8 sMoveTwoLineDescription_MoveMortalSpin[] = _(
     "Deals damage. Removes hazards.\n"
@@ -3741,6 +3741,14 @@ static const u8 sMoveTwoLineDescription_MoveEerieFog[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveMysticDance[] = _(
     "Not implemented.");
+
+static const u8 sMoveTwoLineDescription_MoveRelentlessClobber[] = _(
+    "Hits 2-5 times\n"
+    "with an attack flurry.");
+
+static const u8 sMoveTwoLineDescription_MovePopMayhem[] = _(
+    "Hits 2-5 times\n"
+    "and can burn.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -4697,6 +4705,8 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_BEATDOWN - 1] = sMoveTwoLineDescription_MoveBeatdown,
     [MOVE_EERIE_FOG - 1] = sMoveTwoLineDescription_MoveEerieFog,
     [MOVE_MYSTIC_DANCE - 1] = sMoveTwoLineDescription_MoveMysticDance,
+    [MOVE_RELENTLESS_CLOBBER - 1] = sMoveTwoLineDescription_MoveRelentlessClobber,
+    [MOVE_POP_MAYHEM - 1] = sMoveTwoLineDescription_MovePopMayhem,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5538,7 +5548,7 @@ static const u8 sMoveFourLineDescription_MoveLeechBlade[] = _("Heals 50% of dama
 static const u8 sMoveFourLineDescription_MoveYggdrasilForce[] = _("Nature's overcharges\nthe user's strike.\nLowers Atk and Def.");
 static const u8 sMoveFourLineDescription_MoveDrainBrain[] = _("Saps the foe's SpDef\nand heals HP by\nthe same amount.");
 static const u8 sMoveFourLineDescription_MovePsychokineticSlam[] = _("User charges, boosted\nby psychic power.\n33% recoil damage.");
-static const u8 sMoveFourLineDescription_MoveEsperWing[] = _("The user slashes the\nfoe with aura wings.\nRaises Speed.\nAir-based.");
+static const u8 sMoveFourLineDescription_MoveEsperWing[] = _("The user slashes the\nfoe with aura wings.\nDrains 50% HP.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveMortalSpin[] = _("The user spins and\nremoves all hazards.\nThis also poisons\nthe foe.");
 static const u8 sMoveFourLineDescription_MoveGemMissile[] = _("A fast attack that\nstrikes the foe\nwith a sharp gem.\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveRiderKick[] = _("An unerring kick that\nignores the foe's\nability. Can't miss.\nStriker boost.");
@@ -5651,6 +5661,8 @@ static const u8 sMoveFourLineDescription_MoveSmolderBash[] = _("Bashes the foe w
 static const u8 sMoveFourLineDescription_MoveBeatdown[] = _("Attacks the foe with\na flurry of blows.\nhits 2-5 times.");
 static const u8 sMoveFourLineDescription_MoveEerieFog[] = _("An eerie fog lasting\neight turns drains\nboosts from non-\nGhost and Psychic mons.");
 static const u8 sMoveFourLineDescription_MoveMysticDance[] = _("Not implemented.");
+static const u8 sMoveFourLineDescription_MoveRelentlessClobber[] = _("Pummels the target\nrepeatedly. Hammer based.");
+static const u8 sMoveFourLineDescription_MovePopMayhem[] = _("Pelts the target\nwith hot kernels.10%\nburn chance.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6605,4 +6617,6 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_BEATDOWN - 1] = sMoveFourLineDescription_MoveBeatdown,
     [MOVE_EERIE_FOG - 1] = sMoveFourLineDescription_MoveEerieFog,
     [MOVE_MYSTIC_DANCE - 1] = sMoveFourLineDescription_MoveMysticDance,
+    [MOVE_RELENTLESS_CLOBBER - 1] = sMoveFourLineDescription_MoveRelentlessClobber,
+    [MOVE_POP_MAYHEM - 1] = sMoveFourLineDescription_MovePopMayhem,
 };

@@ -3405,6 +3405,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 5,
+        .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
         .flags = FLAG_SNATCH_AFFECTED,
@@ -8572,7 +8573,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_OCTOLOCK] =
     {
         .effect = EFFECT_OCTOLOCK,
-        .power = 0,
+        .power = 20,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 15,
@@ -9621,7 +9622,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_VOLT_BOLT] =
     {
         .effect = EFFECT_HIT,
-        .power = 95,
+        .power = 70,
         .type = TYPE_ELECTRIC,
         .accuracy = 100,
         .pp = 20,
@@ -10315,15 +10316,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_ESPER_WING] =
     {
-        .effect = EFFECT_SPEED_UP_HIT,
+        .effect = EFFECT_ABSORB,
         .power = 80,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 10,
-        .secondaryEffectChance = 100,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .argument = 50,
         .airBased = TRUE,
     },
     [MOVE_MORTAL_SPIN] =
@@ -11703,7 +11705,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .hornBased = TRUE,
     },
-    [MOVE_BEATDOWN] =
+    [MOVE_BEATDOWN] = //this move should be reworked now cause it's just worse relentless clobber.
     {
         .effect = EFFECT_MULTI_HIT,
         .power = 25,
@@ -11714,6 +11716,33 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_RELENTLESS_CLOBBER] =
+    {
+        .effect = EFFECT_MULTI_HIT,
+        .power = 25,
+        .type = TYPE_DARK,
+        .accuracy = 100,
+        .pp = 20,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE
+    },
+    [MOVE_POP_MAYHEM] =
+    {
+        .effect = EFFECT_MULTI_HIT,
+        .power = 25,
+        .type = TYPE_FIRE,
+        .accuracy = 100,
+        .pp = 20,
+        .secondaryEffectChance = 10,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_BALLISTIC,
+        .split = SPLIT_PHYSICAL,
+        .argument = MOVE_EFFECT_BURN,
+        .parentalBondBanned = TRUE,
     },
     [MOVE_EERIE_FOG] =
     {

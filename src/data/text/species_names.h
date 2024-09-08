@@ -1118,13 +1118,16 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_GROWLITHE_HISUIAN] = _("Growlithe"),
     [SPECIES_QWILFISH_HISUIAN] = _("Qwilfish"),
     [SPECIES_BASCULEGION] = _("Basculegion"),
+    [SPECIES_BASCULEGION_F] = _("Basculegion"),
 
     [SPECIES_CORM]          = _("Corm"),
-    [SPECIES_MAIZEMOTH]             = _("Maizemoth"),
-    [SPECIES_MAIZEMOTH_MEGA]      = _("Maizemoth"),
-    [SPECIES_POPMOTH]             = _("Popmoth"),
-    [SPECIES_POPMOTH_MEGA]             = _("Popmoth"),
+    [SPECIES_MAIZEMOTH]             = _("Cormoth"),
+    [SPECIES_MAIZEMOTH_MEGA]      = _("Cormoth"),
+    [SPECIES_POPMOTH]             = _("Popcorm"),
+    [SPECIES_POPMOTH_MEGA]             = _("Popcorm"),
 
+    [SPECIES_MARBEEP]          = _("Marbeep"),
+    [SPECIES_FLUFFBEE]          = _("Fluffbee"),
     [SPECIES_AMPHYBUZZ]          = _("Amphybuzz"),
     [SPECIES_AMPHYBUZZ_MEGA]          = _("Amphybuzz"),
 

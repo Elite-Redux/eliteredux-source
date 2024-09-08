@@ -5814,6 +5814,20 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+        // Snowy Wrath (again to be merged with snow warning's code)
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_SNOWY_WRATH)){
+            if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE))
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
+                effect++;
+            }
+            else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
+                effect++;
+            }
+        }
+
         // Desolate Land
         if(CheckAndSetSwitchInAbility(battler, ABILITY_DESOLATE_LAND)){
             if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
@@ -9607,6 +9621,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     effect = 1;
                 }
             }
+            
+            //Flame Bubble (i'll prob merge the code with water bubble later)
+            if(BATTLER_HAS_ABILITY(battler, ABILITY_FLAME_BUBBLE)){
+                if (gBattleMons[battler].status1 & STATUS1_BURN)
+                {
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FLAME_BUBBLE;
+                    StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
+                    effect = 1;
+                }
+            }
 
             //Magma Armor
             if(BATTLER_HAS_ABILITY(battler, ABILITY_MAGMA_ARMOR)){
@@ -9684,6 +9708,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			// Water Veil & Water Bubble
 			if(BATTLER_HAS_ABILITY(battler, ABILITY_WATER_VEIL) || 
                BATTLER_HAS_ABILITY(battler, ABILITY_WATER_BUBBLE) || 
+               BATTLER_HAS_ABILITY(battler, ABILITY_FLAME_BUBBLE) ||
                BATTLER_HAS_ABILITY(battler, ABILITY_PURIFYING_WATERS)){
                 if (gBattleMons[battler].status1 & STATUS1_BURN)
                 {
@@ -10819,6 +10844,7 @@ bool32 CanBeBurned(u8 battlerId)
       || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_WATER_VEIL, ability)
       || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_PURIFYING_WATERS, ability)
       || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_WATER_BUBBLE, ability)
+      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_FLAME_BUBBLE, ability)
       || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_THERMAL_EXCHANGE, ability))
         return FALSE;
     return TRUE;
@@ -13522,6 +13548,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_WATER_BUBBLE:
+        case ABILITY_FLAME_BUBBLE:
             if (moveType == TYPE_WATER) MUL(2.0);
             return;
         
@@ -13530,6 +13557,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_FLASH_FIRE:
+        case ABILITY_ELEMENTAL_VORTEX:
              if (moveType == TYPE_FIRE && gBattleResources->flags->flags[battlerAtk] & RESOURCE_FLAG_FLASH_FIRE) MUL(1.5);
              return;
         
@@ -13634,6 +13662,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_ICE_COLD_HUNTER:
         case ABILITY_WHITEOUT:
+        case ABILITY_SNOWY_WRATH:
             if (moveType == TYPE_ICE && IsBattlerWeatherAffected(battlerAtk, WEATHER_HAIL_ANY)) MUL(1.5);
             return;
         
@@ -13753,6 +13782,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_HEATPROOF:
         case ABILITY_WATER_BUBBLE:
+        case ABILITY_FLAME_BUBBLE:
             if (moveType == TYPE_FIRE) RESISTANCE(.5);
             return;
         
@@ -16635,6 +16665,15 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
         if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE) && B_FLASH_FIRE_FROZEN <= GEN_4))
         {
             *ability = ABILITY_FLASH_FIRE;
+            return 3;
+        }
+    }
+
+    // Elemental Vortex (will also compress this into flash fire later)
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_ELEMENTAL_VORTEX)){
+        if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE) && B_FLASH_FIRE_FROZEN <= GEN_4))
+        {
+            *ability = ABILITY_ELEMENTAL_VORTEX;
             return 3;
         }
     }

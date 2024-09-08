@@ -88,6 +88,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SHUCKLE_MEGA] = sShuckleFormSpeciesIdTable,
     [SPECIES_AUDINO] = sAudinoFormSpeciesIdTable,
     [SPECIES_BASCULIN_WHITESTRIPED] = sBasculinFormSpeciesIdTable,
+    [SPECIES_BASCULEGION] = sBasculegionFormSpeciesIdTable,
     [SPECIES_DARUMAKA] = sDarumakaFormSpeciesIdTable,
     [SPECIES_DARMANITAN] = sDarmanitanFormSpeciesIdTable,
     [SPECIES_YAMASK] = sYamaskFormSpeciesIdTable,
@@ -1019,5 +1020,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_GIMMIGHOUL] = sGimmighoulFormSpeciesIdTable,
     [SPECIES_GIMMIGHOUL_ROAMING] = sGimmighoulFormSpeciesIdTable,
+
+    [SPECIES_AMPHYBUZZ] = sAmphybuzzFormSpeciesIdTable,
 
 };

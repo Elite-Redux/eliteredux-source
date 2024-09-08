@@ -273,6 +273,10 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_SENZU
 	ITEM_GYARADEATHITE_X
 	ITEM_GYARADEATHITE_Y
+	ITEM_FLYGONITE_R
+	ITEM_TSAREENITE_R
+	ITEM_REUNICLUSITE_R
+	ITEM_GOLISOPODITE
 }
 
 script General_Adoption_Center_Mega_Stones_Script{

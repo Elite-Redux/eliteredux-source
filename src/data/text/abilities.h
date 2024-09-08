@@ -633,6 +633,10 @@ static const u8 sAbilityUltraInstinctDescription[] = _("Counters contact with Va
 static const u8 sAbilityUnlockedPotentialDescription[] = _("Inner Focus + Berserk.");
 static const u8 sAbilityHigherRankDescription[] = _("Priority moves get a 1.2x boost.");
 static const u8 sAbilityFuneralPyreDescription[] = _("Non-Ghost and Dark-types\ntake 1/4 damage every turn.");
+static const u8 sAbilityFlameBubbleDescription[] = _("Water Bubble + Flaming Soul.");
+static const u8 sAbilityElementalVortexDescription[] = _("Flash Fire + Water Absorb.");
+static const u8 sAbilitySnowyWrathDescription[] = _("Snow Warning + Whiteout.");
+static const u8 sAbilityPatternChangeDescription[] = _("Changes type depending on the\nmove it's about to use.");
 static const u8 sAbilityNoTurningBackDescription[] = _("Boosts all stats but can't retreat\nwhen below 1/2 max HP.");
 static const u8 sAbilityFlammableCoatDescription[] = _("Changes forms when using or\nhit by a Fire-type move.");
 
@@ -1302,6 +1306,10 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_UNLOCKED_POTENTIAL] = _("Unlocked Potential"),
     [ABILITY_HIGHER_RANK] = _("Higher Rank"),
     [ABILITY_FUNERAL_PYRE] = _("Funeral Pyre"),
+    [ABILITY_FLAME_BUBBLE] = _("Flame Bubble"),
+    [ABILITY_ELEMENTAL_VORTEX] = _("Elemental Vortex"),
+    [ABILITY_SNOWY_WRATH] = _("Snowy Wrath"),
+    [ABILITY_PATTERN_CHANGE] = _("Pattern Change"),
     [ABILITY_NO_TURNING_BACK] = _("No Turning Back"),
     [ABILITY_FLAMMABLE_COAT] = _("Flammable Coat"),
 };
@@ -1972,6 +1980,10 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_UNLOCKED_POTENTIAL] = sAbilityUnlockedPotentialDescription,
     [ABILITY_HIGHER_RANK] = sAbilityHigherRankDescription,
     [ABILITY_FUNERAL_PYRE] = sAbilityFuneralPyreDescription,
+    [ABILITY_FLAME_BUBBLE] = sAbilityFlameBubbleDescription,
+    [ABILITY_ELEMENTAL_VORTEX] = sAbilityElementalVortexDescription,
+    [ABILITY_SNOWY_WRATH] = sAbilitySnowyWrathDescription,
+    [ABILITY_PATTERN_CHANGE] = sAbilityPatternChangeDescription,
     [ABILITY_NO_TURNING_BACK] = sAbilityNoTurningBackDescription,
     [ABILITY_FLAMMABLE_COAT] = sAbilityFlammableCoatDescription,
 };

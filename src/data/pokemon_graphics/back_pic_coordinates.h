@@ -5561,6 +5561,16 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset = 0,
     },
+    [SPECIES_MARBEEP] =
+    {
+        .size = 0x75,
+        .y_offset = 6,
+    },
+    [SPECIES_FLUFFBEE] =
+    {
+        .size = 0x67,
+        .y_offset = 7,
+    },
     [SPECIES_AMPHYBUZZ] =
     {
         .size = 0x78,

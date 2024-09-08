@@ -1919,5 +1919,15 @@ static const u16 sSeelFormSpeciesIdTable[] = {
 static const u16 sGimmighoulFormSpeciesIdTable[] = {
     SPECIES_GIMMIGHOUL,
     SPECIES_GIMMIGHOUL_ROAMING,
-    FORM_SPECIES_END,  
+    FORM_SPECIES_END,
+};
+static const u16 sBasculegionFormSpeciesIdTable[] = {
+    SPECIES_BASCULEGION,
+    SPECIES_BASCULEGION_F,
+    FORM_SPECIES_END,
+};
+static const u16 sAmphybuzzFormSpeciesIdTable[] = {
+    SPECIES_AMPHYBUZZ,
+    SPECIES_AMPHYBUZZ_MEGA,
+    FORM_SPECIES_END,   
 };

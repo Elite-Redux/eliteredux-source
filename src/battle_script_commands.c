@@ -1635,6 +1635,7 @@ static void Cmd_attackcanceler(void)
     // Check Protean activation
     if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_PROTEAN || BattlerHasInnate(gBattlerAttacker, ABILITY_PROTEAN) ||
 	     GetBattlerAbility(gBattlerAttacker) == ABILITY_LIBERO  || BattlerHasInnate(gBattlerAttacker, ABILITY_LIBERO) ||
+         GetBattlerAbility(gBattlerAttacker) == ABILITY_PATTERN_CHANGE  || BattlerHasInnate(gBattlerAttacker, ABILITY_PATTERN_CHANGE) ||
          GetBattlerAbility(gBattlerAttacker) == ABILITY_RKS_SYSTEM  || BattlerHasInnate(gBattlerAttacker, ABILITY_RKS_SYSTEM))
         && (gBattleMons[gBattlerAttacker].type1 != moveType || gBattleMons[gBattlerAttacker].type2 != moveType ||
             (gBattleMons[gBattlerAttacker].type3 != moveType && gBattleMons[gBattlerAttacker].type3 != TYPE_MYSTERY))
@@ -1647,6 +1648,10 @@ static void Cmd_attackcanceler(void)
         else if(GetBattlerAbility(gBattlerAttacker) == ABILITY_RKS_SYSTEM  || BattlerHasInnate(gBattlerAttacker, ABILITY_RKS_SYSTEM)){
             gBattleScripting.abilityPopupOverwrite = ABILITY_RKS_SYSTEM;
             gLastUsedAbility = ABILITY_RKS_SYSTEM;
+        }
+        else if(GetBattlerAbility(gBattlerAttacker) == ABILITY_PATTERN_CHANGE  || BattlerHasInnate(gBattlerAttacker, ABILITY_PATTERN_CHANGE)){
+            gBattleScripting.abilityPopupOverwrite = ABILITY_PATTERN_CHANGE;
+            gLastUsedAbility = ABILITY_PATTERN_CHANGE;
         }
 		else{
 			gBattleScripting.abilityPopupOverwrite = ABILITY_LIBERO;
@@ -2063,8 +2068,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_SNOW_CLOAK, defAbility) && IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY))
         calc = (calc * 80) / 100; // 1.2 snow cloak loss
 
-    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_OLE, defAbility) && IS_MOVE_PHYSICAL(move))
-        calc = (calc * 80) / 100; // 20% Ole! loss
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_OLE, defAbility) && !IS_MOVE_STATUS(move))
+        calc = (calc * 60) / 100; // 40% Ole! loss
 
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_TANGLED_FEET, defAbility) && gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
         calc = (calc * 50) / 100; // 1.5 tangled feet loss
