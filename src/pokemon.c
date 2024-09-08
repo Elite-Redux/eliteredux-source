@@ -9511,6 +9511,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        innate != ABILITY_BAD_COMPANY            &&
        innate != ABILITY_ARCHMAGE               &&
        innate != ABILITY_NEUTRALIZING_GAS       &&
+       innate != ABILITY_FLAMMABLE_COAT         &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        innate != ABILITY_ANGELS_WRATH           &&
        #endif
@@ -9533,6 +9534,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
               randomizedInnate == ABILITY_FORECAST              ||
               randomizedInnate == ABILITY_DISGUISE              ||
               randomizedInnate == ABILITY_STANCE_CHANGE         ||
+              randomizedInnate == ABILITY_FLAMMABLE_COAT        ||
               randomizedInnate == ABILITY_RKS_SYSTEM            ||
               randomizedInnate == ABILITY_BATTLE_BOND           ||
               randomizedInnate == ABILITY_FLOWER_GIFT           ||
@@ -9570,6 +9572,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
        ability != ABILITY_MULTITYPE         &&
        ability != ABILITY_FORECAST          &&
        ability != ABILITY_STANCE_CHANGE     &&
+       ability != ABILITY_FLAMMABLE_COAT    &&
        ability != ABILITY_RKS_SYSTEM        &&
        ability != ABILITY_BATTLE_BOND       &&
        ability != ABILITY_POWER_CONSTRUCT   &&
@@ -9601,6 +9604,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
               randomizedAbility == ABILITY_FORECAST             ||
               randomizedAbility == ABILITY_DISGUISE             ||
               randomizedAbility == ABILITY_STANCE_CHANGE        ||
+              randomizedAbility == ABILITY_FLAMMABLE_COAT       ||
               randomizedAbility == ABILITY_RKS_SYSTEM           ||
               randomizedAbility == ABILITY_BATTLE_BOND          ||
               randomizedAbility == ABILITY_FLOWER_GIFT          ||

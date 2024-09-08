@@ -7765,6 +7765,21 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMMABLE_COAT))
+        {
+            if (ShouldApplyOnHitAffect(battler)
+                && moveType == TYPE_FIRE
+                && gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH
+                && !(gBattleMons[battler].status2 & STATUS2_TRANSFORMED))
+            {
+                UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_LUMBERING_SLOTH_ENGULFED);
+                gBattleMons[battler].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_TargetFormChange;
+                effect++;
+            }
+        }
+
         //Rough Skin
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ROUGH_SKIN)){
             if (ShouldApplyOnHitAffect(gBattlerAttacker)
@@ -10363,6 +10378,7 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_MULTITYPE:
     case ABILITY_ZEN_MODE:
     case ABILITY_STANCE_CHANGE:
+    case ABILITY_FLAMMABLE_COAT:
     case ABILITY_POWER_CONSTRUCT:
     case ABILITY_SCHOOLING:
     case ABILITY_RKS_SYSTEM:
@@ -15546,6 +15562,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_MINIOR_CORE_YELLOW,            SPECIES_MINIOR_METEOR_YELLOW,   TRUE},
         {SPECIES_AEGISLASH_BLADE,               SPECIES_AEGISLASH,              TRUE},
         {SPECIES_AEGISLASH_BLADE_REDUX,         SPECIES_AEGISLASH_REDUX,        TRUE},
+        {SPECIES_AEGISLASH_BLADE_REDUX_MEGA,    SPECIES_AEGISLASH_REDUX_MEGA,   TRUE},
         {SPECIES_DARMANITAN_ZEN_MODE,           SPECIES_DARMANITAN,             TRUE},
         {SPECIES_WISHIWASHI_SCHOOL,             SPECIES_WISHIWASHI,             TRUE},
         {SPECIES_CRAMORANT_GORGING,             SPECIES_CRAMORANT,              TRUE},
@@ -15556,6 +15573,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_CASTFORM_SUNNY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SANDY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_DARMANITAN_ZEN_MODE_GALARIAN,  SPECIES_DARMANITAN_GALARIAN,    TRUE},
+        {SPECIES_LUMBERING_SLOTH_ENGULFED,      SPECIES_LUMBERING_SLOTH,        TRUE},
     };
 
     currSpecies = GetMonData(&party[monId], MON_DATA_SPECIES, NULL);
