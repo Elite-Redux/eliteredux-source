@@ -14276,25 +14276,20 @@ static void Cmd_setforesight(void)
 static void Cmd_trysetperishsong(void)
 {
     s32 i;
-    s32 notAffectedCount = 0;
+    s32 affectedCount = 0;
 
     for (i = 0; i < gBattlersCount; i++)
     {
-        if (gStatuses3[i] & STATUS3_PERISH_SONG
-            || IsSoundproof(i)
-            || BlocksPrankster(gCurrentMove, gBattlerAttacker, i, TRUE))
-        {
-            notAffectedCount++;
-        }
-        else
-        {
-            gStatuses3[i] |= STATUS3_PERISH_SONG;
-            gVolatileStructs[i].perishSongTimer = 3;
-            gVolatileStructs[i].perishSongTimerStartValue = 3;
-        }
+        if (gStatuses3[i] & STATUS3_PERISH_SONG || IsSoundproof(i) || BlocksPrankster(gCurrentMove, gBattlerAttacker, i, TRUE))
+            continue;
+
+        affectedCount++;
+        gStatuses3[i] |= STATUS3_PERISH_SONG;
+        gVolatileStructs[i].perishSongTimer = 3;
+        gVolatileStructs[i].perishSongTimerStartValue = 3;
     }
 
-    if (notAffectedCount == gBattlersCount)
+    if (!affectedCount)
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     else
         gBattlescriptCurrInstr += 5;
