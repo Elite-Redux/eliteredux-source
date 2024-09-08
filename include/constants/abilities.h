@@ -687,8 +687,8 @@
 #define ABILITY_ELEMENTAL_VORTEX 665 // Flash Fire + Water Absorb.
 #define ABILITY_SNOWY_WRATH 666 // Snow Warning + Whiteout.
 #define ABILITY_PATTERN_CHANGE 667 // Changes type depending on the move it's about to use.
-#define ABILITY_NO_TURNING_BACK 664 // Boosts all stats but can't retreat when below 1/2 max HP.
-#define ABILITY_FLAMMABLE_COAT 665 // Changes forms when using or hit by a Fire-type move.
+#define ABILITY_NO_TURNING_BACK 668 // Boosts all stats but can't retreat when below 1/2 max HP.
+#define ABILITY_FLAMMABLE_COAT 669 // Changes forms when using or hit by a Fire-type move.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_FLAMMABLE_COAT + 1)
 
