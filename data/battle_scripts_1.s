@@ -12474,7 +12474,8 @@ BattleScript_GymSkillPosture::
 	end2
 	
 BattleScript_GymSkillPostureAfterAttackerSet:
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
+	@ commented out because we use raw stats now
+	@ statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
 BattleScript_GymSkillPosture_:
 	call BattleScript_GymSkillPopup	
 	printstring STRINGID_GYMSKILL_POSTURE
