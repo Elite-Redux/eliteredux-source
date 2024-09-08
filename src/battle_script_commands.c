@@ -1732,6 +1732,19 @@ static void Cmd_attackcanceler(void)
     if (TryAegiFormChange())
         return;
     #endif
+    
+    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FLAMMABLE_COAT)
+        && moveType == TYPE_FIRE
+        && gBattleMons[gBattlerAttacker].species == SPECIES_LUMBERING_SLOTH
+        && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED))
+    {
+        gBattleScripting.abilityPopupOverwrite = ABILITY_FLAMMABLE_COAT;
+        UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, SPECIES_LUMBERING_SLOTH_ENGULFED);
+        gBattleMons[gBattlerAttacker].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
+        return;
+    }
 
     gHitMarker &= ~(HITMARKER_x800000);
     if (!(gHitMarker & HITMARKER_OBEYS) && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))
