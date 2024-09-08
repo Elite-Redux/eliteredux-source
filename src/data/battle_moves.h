@@ -563,15 +563,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_GROWL] =
     {
-        .effect = EFFECT_ATTACK_DOWN,
-        .power = 0,
+        .effect = EFFECT_ATTACK_DOWN_HIT,
+        .power = 60,
         .type = TYPE_NORMAL,
         .accuracy = 100,
-        .pp = 20,
-        .secondaryEffectChance = 0,
+        .pp = 15,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_BOTH,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SOUND,
-        .split = SPLIT_STATUS,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
+        .split = SPLIT_SPECIAL,
     },
     [MOVE_ROAR] =
     {
