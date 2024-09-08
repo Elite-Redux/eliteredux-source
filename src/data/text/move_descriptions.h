@@ -2179,8 +2179,8 @@ static const u8 sMoveTwoLineDescription_MoveSearingShot[] = _(
     "everything around the user.");
 
 static const u8 sMoveTwoLineDescription_MoveTechnoBlast[] = _(
-    "The type varies with the\n"
-    "kind of Drive held.");
+    "The type varies based\n"
+    "on the user.");
 
 static const u8 sMoveTwoLineDescription_MoveRelicSong[] = _(
     "Attacks with an ancient\n"
@@ -4935,7 +4935,7 @@ static const u8 sMoveFourLineDescription_MoveVitalThrow[] = _("Makes the user\na
 static const u8 sMoveFourLineDescription_MoveMorningSun[] = _("Restores the user's\nHP. The amount of\nHP regained varies\nwith the weather.");
 static const u8 sMoveFourLineDescription_MoveSynthesis[] = _("Restores the user's\nHP. The amount of\nHP regained varies\nwith the weather.");
 static const u8 sMoveFourLineDescription_MoveMoonlight[] = _("Restores the user's\nHP. The amount of\nHP regained varies\nwith the weather.");
-static const u8 sMoveFourLineDescription_MoveHiddenPower[] = _("An attack that\nvaries in type and\nintensity depending\non the user.");
+static const u8 sMoveFourLineDescription_MoveHiddenPower[] = _("An attack that\nvaries in type\ndepending on\nthe user.");
 static const u8 sMoveFourLineDescription_MoveCrossChop[] = _("The foe is hit with\ndouble chops.\nIt has a high\ncritical-hit ratio.");
 static const u8 sMoveFourLineDescription_MoveTwister[] = _("A vicious twister\nattacks the foe.\n20% flinch chance.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveRainDance[] = _("A heavy rain falls\nfor eight turns,\npowering up Water-\ntype moves 50%.");
@@ -4988,7 +4988,7 @@ static const u8 sMoveFourLineDescription_MoveImprison[] = _("Prevents foes from\
 static const u8 sMoveFourLineDescription_MoveRefresh[] = _("A self-healing move\nthat cures the user\nof a poisoning,\nburn, or paralysis.");
 static const u8 sMoveFourLineDescription_MoveGrudge[] = _("If the user faints,\nthis move deletes\nthe PP of the move\nthat finished it.");
 static const u8 sMoveFourLineDescription_MoveSnatch[] = _("Steals the effects\nof the foe's\nhealing or status-\nchanging move.");
-static const u8 sMoveFourLineDescription_MoveSecretPower[] = _("Physical Hidden Power.\nVaries in type and\nintensity depending\non the user.");
+static const u8 sMoveFourLineDescription_MoveSecretPower[] = _("Physical Hidden Power.\nVaries in type\ndepending on\nthe user.");
 static const u8 sMoveFourLineDescription_MoveDive[] = _("The user dives\nunderwater and\nhits next turn.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveArmThrust[] = _("Straigh-arm punches\nthat hit\ntwo to five times.");
 static const u8 sMoveFourLineDescription_MoveCamouflage[] = _("Alters the user's\ntype depending on\nthe location's\nterrain.");
@@ -5244,7 +5244,7 @@ static const u8 sMoveFourLineDescription_MoveHurricane[] = _("30% chance to\ncon
 static const u8 sMoveFourLineDescription_MoveHeadCharge[] = _("Powerful guard hair\nheadbutts the foe\nin an attack. 25%\nrecoil damage.");
 static const u8 sMoveFourLineDescription_MoveGearGrind[] = _("The user attacks by\nthrowing steel\ngears at its target\ntwice.");
 static const u8 sMoveFourLineDescription_MoveSearingShot[] = _("Scarlet flames\ntorch the field.\n30% burn chance.\nMega Launcher boost");
-static const u8 sMoveFourLineDescription_MoveTechnoBlast[] = _("A beam of light\nthat changes type\ndepending on the\nuser's held Drive.");
+static const u8 sMoveFourLineDescription_MoveTechnoBlast[] = _("A beam of light\nthat changes type\ndepending on the\nuser.");
 static const u8 sMoveFourLineDescription_MoveRelicSong[] = _("An ancient song\nthat may induce\nsleep. Uses highest\nAttack stat.");
 static const u8 sMoveFourLineDescription_MoveSecretSword[] = _("The user cuts its\nfoe, oddly dealing\nphysical damage.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveGlaciate[] = _("The user blows\nfreezing cold air\nat its foes that\nlowers their Speed.");
