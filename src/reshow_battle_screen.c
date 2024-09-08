@@ -172,7 +172,7 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
         SetMainCallback2(BattleMainCB2);
         FillAroundBattleWindows();
 
-        ReshowNewBattleMenuAfterMenu();
+        // ReshowNewBattleMenuAfterMenu();
         break;
     }
 
