@@ -956,6 +956,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_RELENTLESS_CLOBBER] = _("Relentless C"),
     [MOVE_POP_MAYHEM] = _("Popping Mayh"),
     [MOVE_SNAP_JAW] = _("Snap Jaw"),
+    [MOVE_TANGLING_HUSK] = _("TanglingHusk"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1918,4 +1919,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_RELENTLESS_CLOBBER] = _("Relentless Clobber"),
     [MOVE_POP_MAYHEM] = _("Popping Mayhem"),
     [MOVE_SNAP_JAW] = _("Snap Jaw"),
+    [MOVE_TANGLING_HUSK] = _("Tangling Husk"),
 };

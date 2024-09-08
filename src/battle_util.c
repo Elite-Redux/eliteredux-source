@@ -12680,6 +12680,8 @@ bool32 IsMoveMakingContact(u16 move, u8 battlerAtk)
 
 bool32 IsBattlerProtected(u8 battlerId, u16 move)
 {
+    int moveType;
+
     // Decorate bypasses protect and detect, but not crafty shield
     if (move == MOVE_DECORATE)
     {
@@ -12688,6 +12690,8 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         else if (gRoundStructs[battlerId].protected)
             return FALSE;
     }
+
+    GET_MOVE_TYPE(move, moveType)
 
     // Protective Pads doesn't stop Unseen Fist from bypassing Protect effects, so IsMoveMakingContact() isn't used here.
     // This means extra logic is needed to handle Shell Side Arm.
@@ -12729,6 +12733,8 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_MAT_BLOCK
       && !IS_MOVE_STATUS(move))
+        return TRUE;
+    else if (gRoundStructs[battlerId].tanglingHusked && moveType == TYPE_FIRE)
         return TRUE;
     else
         return FALSE;
