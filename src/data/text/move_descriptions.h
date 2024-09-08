@@ -2059,8 +2059,8 @@ static const u8 sMoveTwoLineDescription_MoveFinalGambit[] = _(
     "the foe equal to its HP.");
 
 static const u8 sMoveTwoLineDescription_MoveBestow[] = _(
-    "The user gives its held\n"
-    "item to the foe.");
+    "The user gives its item\n"
+    "and status to the foe.");
 
 static const u8 sMoveTwoLineDescription_MoveInferno[] = _(
     "Powerful and sure to inflict\n"
@@ -5214,7 +5214,7 @@ static const u8 sMoveFourLineDescription_MoveAcrobatics[] = _("The user nimbly\n
 static const u8 sMoveFourLineDescription_MoveReflectType[] = _("The user reflects\nthe foe's type,\nmaking it the same\ntype as the foe.");
 static const u8 sMoveFourLineDescription_MoveRetaliate[] = _("This vengeful move\ndeals double damage\nif an ally fainted\nin the turn before.");
 static const u8 sMoveFourLineDescription_MoveFinalGambit[] = _("This attack causes\nthe user to faint,\nbut does damage\nequal to its HP.");
-static const u8 sMoveFourLineDescription_MoveBestow[] = _("The user passes its\nheld item to the\nfoe when the foe is\nnot holding an item.");
+static const u8 sMoveFourLineDescription_MoveBestow[] = _("The user gives its\nitem and status\nto the foe.");
 static const u8 sMoveFourLineDescription_MoveInferno[] = _("The foe is engulfed\nin an intense fire.\nBurns the foe.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveWaterPledge[] = _("Creates a rainbow\nin sun or a swamp\nwith grass. Uses\nhighest attack.");
 static const u8 sMoveFourLineDescription_MoveFirePledge[] = _("Creates a rainbow\nin rain or a firestorm\nwith grass. Uses\nhighest attack.");
