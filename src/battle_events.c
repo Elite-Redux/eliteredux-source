@@ -16,7 +16,7 @@
 #include "field_message_box.h"
 
 static u8 gNbBattleEvents;
-static u8 gCurrBattleEvent;
+
 EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
 
 const u8 sText_WarnMaxBattleEventReached[] = _("Warning you have registered\ntoo many battle events.");
