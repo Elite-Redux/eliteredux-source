@@ -951,10 +951,10 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_TOXIC_NEEDLES] = _("ToxicNeedles"),
     [MOVE_SMOLDER_BASH] = _("Smolder Bash"),
     [MOVE_BEATDOWN] = _("Beatdown"),
-    [MOVE_RELENTLESS_CLOBBER] = _("Relentless Clobber"),
-    [MOVE_POP_MAYHEM] = _("Popping Mayhem"),
     [MOVE_EERIE_FOG] = _("Eerie Fog"),
     [MOVE_MYSTIC_DANCE] = _("Mystic Dance"),
+    [MOVE_RELENTLESS_CLOBBER] = _("Relentless C"),
+    [MOVE_POP_MAYHEM] = _("Popping Mayh"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1912,8 +1912,8 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_TOXIC_NEEDLES] = _("Toxic Needles"),
     [MOVE_SMOLDER_BASH] = _("Smolder Bash"),
     [MOVE_BEATDOWN] = _("Beatdown"),
-    [MOVE_RELENTLESS_CLOBBER] = _("Relentless Clobber"),
-    [MOVE_POP_MAYHEM] = _("Popping Mayhem"),
     [MOVE_EERIE_FOG] = _("Eerie Fog"),
     [MOVE_MYSTIC_DANCE] = _("Mystic Dance"),
+    [MOVE_RELENTLESS_CLOBBER] = _("Relentless Clobber"),
+    [MOVE_POP_MAYHEM] = _("Popping Mayhem"),
 };

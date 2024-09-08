@@ -636,7 +636,6 @@ static const u8 sAbilityFuneralPyreDescription[] = _("Non-Ghost and Dark-types\n
 static const u8 sAbilityFlameBubbleDescription[] = _("Water Bubble + Flaming Soul.");
 static const u8 sAbilityElementalVortexDescription[] = _("Flash Fire + Water Absorb.");
 static const u8 sAbilitySnowyWrathDescription[] = _("Snow Warning + Whiteout.");
-static const u8 sAbilityPatternChangeDescription[] = _("Changes type depending on the\nmove it's about to use.");
 static const u8 sAbilityNoTurningBackDescription[] = _("Boosts all stats but can't retreat\nwhen below 1/2 max HP.");
 static const u8 sAbilityFlammableCoatDescription[] = _("Changes forms when using or\nhit by a Fire-type move.");
 
@@ -1983,7 +1982,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_FLAME_BUBBLE] = sAbilityFlameBubbleDescription,
     [ABILITY_ELEMENTAL_VORTEX] = sAbilityElementalVortexDescription,
     [ABILITY_SNOWY_WRATH] = sAbilitySnowyWrathDescription,
-    [ABILITY_PATTERN_CHANGE] = sAbilityPatternChangeDescription,
+    [ABILITY_PATTERN_CHANGE] = sAbilityProteanDescription,
     [ABILITY_NO_TURNING_BACK] = sAbilityNoTurningBackDescription,
     [ABILITY_FLAMMABLE_COAT] = sAbilityFlammableCoatDescription,
 };
