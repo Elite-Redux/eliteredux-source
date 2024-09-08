@@ -5949,6 +5949,10 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
     {
         return GetMonData(mon, MON_DATA_HP_TYPE, NULL);
     }
+    else if (gBattleMoves[move].effect == EFFECT_FLING && ItemId_GetHoldEffect(item) == HOLD_EFFECT_GEMS)
+    {
+        return ItemId_GetSecondaryId(item);
+    }
     else if (gBattleMoves[move].effect == EFFECT_CHANGE_TYPE_ON_ITEM)
     {
         if (holdEffect == gBattleMoves[move].argument)
@@ -6109,6 +6113,10 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
     else if (gBattleMoves[move].effect == EFFECT_HIDDEN_POWER)
     {
         return gBattleMons[battlerAtk].hpType;
+    }
+    else if (gBattleMoves[move].effect == EFFECT_FLING && ItemId_GetHoldEffect(gBattleMons[battlerAtk].item) == HOLD_EFFECT_GEMS)
+    {
+        return ItemId_GetSecondaryId(gBattleMons[battlerAtk].item);
     }
     else if (gBattleMoves[move].effect == EFFECT_CHANGE_TYPE_ON_ITEM)
     {
@@ -6271,6 +6279,10 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     {
         gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].hpType | 0xC0;
     }
+    else if (gBattleMoves[move].effect == EFFECT_FLING && ItemId_GetHoldEffect(gBattleMons[battlerAtk].item) == HOLD_EFFECT_GEMS)
+    {
+        gBattleStruct->dynamicMoveType = ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) | 0x80;
+    }
     else if (gBattleMoves[move].effect == EFFECT_CHANGE_TYPE_ON_ITEM)
     {
         if (holdEffect == gBattleMoves[move].argument)
@@ -6352,6 +6364,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
              && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
              && gBattleMoves[move].effect != EFFECT_CHANGE_TYPE_ON_ITEM
+             && gBattleMoves[move].effect != EFFECT_FLING
              && gBattleMoves[move].effect != EFFECT_NATURAL_GIFT
              && (   (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_PIXILATE, attackerAbility)            && (ateType = TYPE_FAIRY))
                  || (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_REFRIGERATE, attackerAbility)         && (ateType = TYPE_ICE))

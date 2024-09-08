@@ -1377,7 +1377,7 @@ static bool32 NoTargetPresent(u32 move)
 
 static bool32 TryAegiFormChange(void)
 {
-    u16 newSpecies;
+    u16 newSpecies = 0;
     // Only Aegislash with Stance Change can transform, transformed mons cannot.
     if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STANCE_CHANGE)
         || gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED)
@@ -1388,34 +1388,31 @@ static bool32 TryAegiFormChange(void)
     default:
         return FALSE;
     case SPECIES_AEGISLASH: // Shield -> Blade
-        if (gBattleMoves[gCurrentMove].power == 0)
-            return FALSE;
-        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
-        newSpecies = SPECIES_AEGISLASH_BLADE;
+        if (gBattleMoves[gCurrentMove].power == 0) newSpecies = SPECIES_AEGISLASH_BLADE;
         break;
     case SPECIES_AEGISLASH_BLADE: // Blade -> Shield
-        if (gCurrentMove != MOVE_KINGS_SHIELD)
-            return FALSE;
-        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
-        newSpecies = SPECIES_AEGISLASH;
+        if (gCurrentMove == MOVE_KINGS_SHIELD) newSpecies = SPECIES_AEGISLASH;
         break;
     case SPECIES_AEGISLASH_BLADE_REDUX: // Special -> Physical
-        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased){
-            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
+        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased)
             newSpecies = SPECIES_AEGISLASH_REDUX;
-        }
-        else
-            return FALSE;
+        break;
+    case SPECIES_AEGISLASH_BLADE_REDUX_MEGA: // Special -> Physical
+        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased)
+            newSpecies = SPECIES_AEGISLASH_REDUX_MEGA;
         break;
     case SPECIES_AEGISLASH_REDUX: // Physical -> Special
-        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased){
-            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
+        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased)
             newSpecies = SPECIES_AEGISLASH_BLADE_REDUX;
-        }
-        else
-            return FALSE;
-    break;
+        break;
+    case SPECIES_AEGISLASH_REDUX_MEGA: // Physical -> Special
+        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased)
+            newSpecies = SPECIES_AEGISLASH_BLADE_REDUX_MEGA;
+        break;
     }
+
+    if (!newSpecies) return FALSE;
+    gBattleScripting.abilityPopupOverwrite = ABILITY_STANCE_CHANGE;
 
     UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, newSpecies);
     gBattleMons[gBattlerAttacker].species = newSpecies;
@@ -5701,12 +5698,10 @@ static void Cmd_moveend(void)
 					!IsMagicGuardProtected(gBattlerAttacker))
                 {
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
-                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
                     PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SPIKY_SHIELD);
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_SpikyShieldEffect;
+                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
                     effect = 1;
                 }
                 else if (gRoundStructs[gBattlerTarget].kingsShielded)
@@ -10085,7 +10080,6 @@ static void Cmd_various(void)
         return;
     case VARIOUS_BESTOW:
         if (gBattleMons[gBattlerAttacker].item == ITEM_NONE
-            || gBattleMons[gBattlerTarget].item != ITEM_NONE
             || !CanBattlerGetOrLoseItem(gBattlerAttacker, gBattleMons[gBattlerAttacker].item)
             || !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerAttacker].item))
         {
@@ -14279,25 +14273,20 @@ static void Cmd_setforesight(void)
 static void Cmd_trysetperishsong(void)
 {
     s32 i;
-    s32 notAffectedCount = 0;
+    s32 affectedCount = 0;
 
     for (i = 0; i < gBattlersCount; i++)
     {
-        if (gStatuses3[i] & STATUS3_PERISH_SONG
-            || IsSoundproof(i)
-            || BlocksPrankster(gCurrentMove, gBattlerAttacker, i, TRUE))
-        {
-            notAffectedCount++;
-        }
-        else
-        {
-            gStatuses3[i] |= STATUS3_PERISH_SONG;
-            gVolatileStructs[i].perishSongTimer = 3;
-            gVolatileStructs[i].perishSongTimerStartValue = 3;
-        }
+        if (gStatuses3[i] & STATUS3_PERISH_SONG || IsSoundproof(i) || BlocksPrankster(gCurrentMove, gBattlerAttacker, i, TRUE))
+            continue;
+
+        affectedCount++;
+        gStatuses3[i] |= STATUS3_PERISH_SONG;
+        gVolatileStructs[i].perishSongTimer = 3;
+        gVolatileStructs[i].perishSongTimerStartValue = 3;
     }
 
-    if (notAffectedCount == gBattlersCount)
+    if (!affectedCount)
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     else
         gBattlescriptCurrInstr += 5;

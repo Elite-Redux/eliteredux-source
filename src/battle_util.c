@@ -119,6 +119,7 @@ static const u16 sTwoStrikeMoves[] =
 {
     MOVE_DOUBLE_IRON_BASH,
     MOVE_TWINEEDLE,
+    MOVE_CROSS_POISON,
 };
 
 u8 CalcBeatUpPower(void)
@@ -4683,6 +4684,8 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 {
     u32 i;
 
+    if (gBattleMons[battler].status2 & STATUS2_TRANSFORMED) return FALSE;
+
     for (i = 0; i < ARRAY_COUNT(sHpTransformations); i++)
     {
         if (GetBattlerAbility(battler) == sHpTransformations[i][0] || BattlerHasInnate(battler, sHpTransformations[i][0]))
@@ -5528,7 +5531,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         gBattleScripting.battler = battler;
 
         if (GetSingleUseAbilityCounter(battler, ABILITY_ZERO_TO_HERO)
-            && gBattleMons[battler].species == SPECIES_PALAFIN)
+            && gBattleMons[battler].species == SPECIES_PALAFIN
+            && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
         {
             UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_PALAFIN_HERO);
             gBattleMons[battler].species = SPECIES_PALAFIN_HERO;
@@ -5625,7 +5629,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         
         if (CheckAndSetSwitchInAbility(battler, ABILITY_ICE_FACE)
             && gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE
-            && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
+            && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)
+            && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
         {
             UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
             gBattleMons[battler].species = SPECIES_EISCUE;
@@ -5635,7 +5640,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         
         if (CheckAndSetSwitchInAbility(battler, ABILITY_DISGUISE)
             && gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED
-            && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+            && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
+            && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
         {
             UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_MIMIKYU);
             gBattleMons[battler].species = SPECIES_MIMIKYU;
@@ -5679,7 +5685,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             gTurnStructs[battler].traced = TRUE;
         }
 
-		if (CheckAndSetSwitchInAbility(battler, ABILITY_ZEN_MODE) && ShouldChangeFormHpBased(battler))
+		if (CheckAndSetSwitchInAbility(battler, ABILITY_ZEN_MODE) && ShouldChangeFormHpBased(battler)
+            && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
         {
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
             effect++;
@@ -6912,7 +6919,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_POWER_CONSTRUCT;
                 if ((gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
-                    && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
+                    && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2
+                    && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
                 {
                     gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
                     UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_ZYGARDE_COMPLETE);
@@ -7124,7 +7132,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			}
 			
 			// Schooling
-            if(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SCHOOLING)){
+            if(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SCHOOLING)
+                && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)){
                 if (gBattleMons[battler].level >= 20){
 					if ((effect = ShouldChangeFormHpBased(battler)))
                     BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
@@ -7132,7 +7141,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 		
 			// Shields Down
-            if(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SHIELDS_DOWN)){
+            if(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SHIELDS_DOWN)
+                && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)){
 				if ((effect = ShouldChangeFormHpBased(battler))){
                     gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_SHIELDS_DOWN;
                     BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
@@ -7751,6 +7761,21 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ELECTROMORPHOSIS;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ElectromorphosisActivates;
+                effect++;
+            }
+        }
+
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMMABLE_COAT))
+        {
+            if (ShouldApplyOnHitAffect(battler)
+                && moveType == TYPE_FIRE
+                && gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH
+                && !(gBattleMons[battler].status2 & STATUS2_TRANSFORMED))
+            {
+                UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_LUMBERING_SLOTH_ENGULFED);
+                gBattleMons[battler].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_TargetFormChange;
                 effect++;
             }
         }
@@ -8496,7 +8521,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         break;
     case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker
         if (BATTLER_HAS_ABILITY(battler, ABILITY_SHIELDS_DOWN)
-            && gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
+            && gBattleMoves[move].effect == EFFECT_SHELL_SMASH
+            && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
         {
             u8 i;
             for (i = 0; i < ARRAY_COUNT(sHpTransformations); i++)
@@ -8517,7 +8543,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_GULP_MISSILE))
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_GULP_MISSILE)
+            && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
         {
             if (((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED)
                 || gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER
@@ -10351,6 +10378,7 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_MULTITYPE:
     case ABILITY_ZEN_MODE:
     case ABILITY_STANCE_CHANGE:
+    case ABILITY_FLAMMABLE_COAT:
     case ABILITY_POWER_CONSTRUCT:
     case ABILITY_SCHOOLING:
     case ABILITY_RKS_SYSTEM:
@@ -13187,6 +13215,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PARENTAL_BOND))
             basePower = basePower * 5 / 4;
         break;
+    case MOVE_SELF_DESTRUCT:
+        if (gRoundStructs[battlerAtk].physicalDmg || gRoundStructs[battlerAtk].specialDmg)
+            basePower *= 2;
+        break;
     }
 
     if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)){
@@ -15530,6 +15562,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_MINIOR_CORE_YELLOW,            SPECIES_MINIOR_METEOR_YELLOW,   TRUE},
         {SPECIES_AEGISLASH_BLADE,               SPECIES_AEGISLASH,              TRUE},
         {SPECIES_AEGISLASH_BLADE_REDUX,         SPECIES_AEGISLASH_REDUX,        TRUE},
+        {SPECIES_AEGISLASH_BLADE_REDUX_MEGA,    SPECIES_AEGISLASH_REDUX_MEGA,   TRUE},
         {SPECIES_DARMANITAN_ZEN_MODE,           SPECIES_DARMANITAN,             TRUE},
         {SPECIES_WISHIWASHI_SCHOOL,             SPECIES_WISHIWASHI,             TRUE},
         {SPECIES_CRAMORANT_GORGING,             SPECIES_CRAMORANT,              TRUE},
@@ -15540,6 +15573,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_CASTFORM_SUNNY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SANDY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_DARMANITAN_ZEN_MODE_GALARIAN,  SPECIES_DARMANITAN_GALARIAN,    TRUE},
+        {SPECIES_LUMBERING_SLOTH_ENGULFED,      SPECIES_LUMBERING_SLOTH,        TRUE},
     };
 
     currSpecies = GetMonData(&party[monId], MON_DATA_SPECIES, NULL);
