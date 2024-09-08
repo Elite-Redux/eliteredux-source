@@ -10082,7 +10082,6 @@ static void Cmd_various(void)
         return;
     case VARIOUS_BESTOW:
         if (gBattleMons[gBattlerAttacker].item == ITEM_NONE
-            || gBattleMons[gBattlerTarget].item != ITEM_NONE
             || !CanBattlerGetOrLoseItem(gBattlerAttacker, gBattleMons[gBattlerAttacker].item)
             || !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerAttacker].item))
         {

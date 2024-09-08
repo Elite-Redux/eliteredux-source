@@ -1905,11 +1905,31 @@ BattleScript_EffectBestow:
 	attackstring
 	ppreduce
 	jumpifsubstituteblocks BattleScript_ButItFailed
-	trybestow BattleScript_ButItFailed
+	trybestow BattleScript_EffectBestow_NoGiveItem
 	attackanimation
 	waitanimation
 	printstring STRINGID_BESTOWITEMGIVING
 	waitmessage B_WAIT_TIME_LONG
+	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_MoveEnd
+	jumpifsafeguard BattleScript_SafeguardProtected
+	trypsychoshift BattleScript_MoveEnd
+	copybyte gEffectBattler, gBattlerTarget
+	printfromtable gStatusConditionsStringIds
+	waitmessage B_WAIT_TIME_LONG
+	statusanimation BS_TARGET
+	updatestatusicon BS_TARGET
+	goto BattleScript_MoveEnd
+BattleScript_EffectBestow_NoGiveItem:
+	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
+	jumpifsafeguard BattleScript_SafeguardProtected
+	trypsychoshift BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	copybyte gEffectBattler, gBattlerTarget
+	printfromtable gStatusConditionsStringIds
+	waitmessage B_WAIT_TIME_LONG
+	statusanimation BS_TARGET
+	updatestatusicon BS_TARGET
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectAfterYou:
@@ -1960,7 +1980,7 @@ BattleScript_EffectPsychoShift:
 BattleScript_EffectPsychoShiftCanWork:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	jumpifsafeguard BattleScript_SafeguardProtected
-	trypsychoshift BattleScript_MoveEnd
+	trypsychoshift BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	copybyte gEffectBattler, gBattlerTarget
