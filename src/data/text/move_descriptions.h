@@ -1755,8 +1755,8 @@ static const u8 sMoveTwoLineDescription_MoveRockWrecker[] = _(
     "user immobile the next turn.");
 
 static const u8 sMoveTwoLineDescription_MoveCrossPoison[] = _(
-    "A slash that may poison a\n"
-    "foe and do critical damage.");
+    "Two slashes that may poison\n"
+    "a foe and do critical damage.");
 
 static const u8 sMoveTwoLineDescription_MoveGunkShot[] = _(
     "Shoots filthy garbage at\n"
@@ -5138,7 +5138,7 @@ static const u8 sMoveFourLineDescription_MoveLavaPlume[] = _("Scarlet flames was
 static const u8 sMoveFourLineDescription_MoveLeafStorm[] = _("A storm of sharp\nleaves is whipped\nup. The user's Sp.\nAtk sharply falls.");
 static const u8 sMoveFourLineDescription_MovePowerWhip[] = _("The user violently\nwhirls its vines or\ntentacles to lash\nat the foe.");
 static const u8 sMoveFourLineDescription_MoveRockWrecker[] = _("Hurls a massive rock\nat the foe. User\nrecharges after hit.\nThrow-based.");
-static const u8 sMoveFourLineDescription_MoveCrossPoison[] = _("Poisonous strikes.\nHigh crit ratio.\n10% poison chance.\nKeen Edge boost.");
+static const u8 sMoveFourLineDescription_MoveCrossPoison[] = _("Hits twice.\nHigh crit ratio.\n10% poison chance.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveGunkShot[] = _("Filthy garbage is\nshot at the foe.\n30% poison chance.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveIronHead[] = _("The user slams the\nfoe with its steel-\nhard head. 30%\nflinch chance.");
 static const u8 sMoveFourLineDescription_MoveMagnetBomb[] = _("Launches a magnetic\nbomb that is Super\nEffective vs Steel.\nNever misses.");

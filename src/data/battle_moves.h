@@ -5389,7 +5389,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_CROSS_POISON] =
     {
         .effect = EFFECT_POISON_HIT,
-        .power = 90,
+        .power = 40,
         .type = TYPE_POISON,
         .accuracy = 100,
         .pp = 15,
