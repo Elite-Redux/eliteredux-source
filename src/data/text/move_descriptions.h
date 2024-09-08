@@ -2379,8 +2379,8 @@ static const u8 sMoveTwoLineDescription_MoveMysticalFire[] = _(
     "fire. May lower SpAtk");
 
 static const u8 sMoveTwoLineDescription_MoveSpikyShield[] = _(
-    "Evades attack, and damages\n"
-    "the foe if struck.");
+    "Evades attack, and causes\n"
+    "bleeding if struck.");
 
 static const u8 sMoveTwoLineDescription_MoveAromaticMist[] = _(
     "Raises the Sp. Def of a\n"
@@ -5294,7 +5294,7 @@ static const u8 sMoveFourLineDescription_MoveSteamEruption[] = _("The foe is imm
 static const u8 sMoveFourLineDescription_MoveHyperspaceHole[] = _("Using a wormhole,\nthe user strikes.\nHas +1 priority.\nIgnores Protect etc.");
 static const u8 sMoveFourLineDescription_MoveWaterShuriken[] = _("The user hits the\nfoe with 2 to 5\nthrowing stars.\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveMysticalFire[] = _("The user breathes a\nspecial, hot fire.\nThis lowers the\nfoe's Sp. Atk stat.");
-static const u8 sMoveFourLineDescription_MoveSpikyShield[] = _("This prickly shield\nprotects the user\nand harms any foe\nthat makes contact.");
+static const u8 sMoveFourLineDescription_MoveSpikyShield[] = _("This prickly shield\nprotects the user\nand causes bleeding\non contact.");
 static const u8 sMoveFourLineDescription_MoveAromaticMist[] = _("The user raises\nthe Sp. Def stat of\nits partner with a\nmysterious aroma.");
 static const u8 sMoveFourLineDescription_MoveEerieImpulse[] = _("The foe's Sp. Atk\nis harshly lowered\nby exposure to an\neerie impulse.");
 static const u8 sMoveFourLineDescription_MoveVenomDrench[] = _("Poisoned foes\nsuffer lowered\nAttack, Sp. Atk and\nSpeed stats.");

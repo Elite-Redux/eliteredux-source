@@ -5698,12 +5698,10 @@ static void Cmd_moveend(void)
 					!IsMagicGuardProtected(gBattlerAttacker))
                 {
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
-                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
                     PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_SPIKY_SHIELD);
                     BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_SpikyShieldEffect;
+                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
                     effect = 1;
                 }
                 else if (gRoundStructs[gBattlerTarget].kingsShielded)
