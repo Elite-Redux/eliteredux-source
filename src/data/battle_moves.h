@@ -11766,6 +11766,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .argument = MOVE_EFFECT_BURN,
         .parentalBondBanned = TRUE,
     },
+    [MOVE_SNAP_JAW] =
+    {
+        .effect = EFFECT_SNAP_JAW,
+        .power = 80,
+        .type = TYPE_STEEL,
+        .accuracy = 100,
+        .pp = 10,
+        .secondaryEffectChance = 100,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRONG_JAW_BOOST,
+        .split = SPLIT_PHYSICAL,
+    },
 };
 
 const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES] = {

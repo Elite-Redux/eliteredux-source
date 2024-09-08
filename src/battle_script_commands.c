@@ -11409,6 +11409,10 @@ static void Cmd_various(void)
             MarkBattlerForControllerExec(gActiveBattler);
         }
         break;
+    case VARIOUS_SET_RANDOM:
+        gBattleCommunication[MULTIUSE_STATE] = Random() % T1_READ_8(gBattlescriptCurrInstr + 3);
+        gBattlescriptCurrInstr += 4;
+        return;
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
