@@ -1377,7 +1377,7 @@ static bool32 NoTargetPresent(u32 move)
 
 static bool32 TryAegiFormChange(void)
 {
-    u16 newSpecies;
+    u16 newSpecies = 0;
     // Only Aegislash with Stance Change can transform, transformed mons cannot.
     if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STANCE_CHANGE)
         || gBattleMons[gBattlerAttacker].status2 & STATUS2_TRANSFORMED)
@@ -1388,34 +1388,31 @@ static bool32 TryAegiFormChange(void)
     default:
         return FALSE;
     case SPECIES_AEGISLASH: // Shield -> Blade
-        if (gBattleMoves[gCurrentMove].power == 0)
-            return FALSE;
-        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
-        newSpecies = SPECIES_AEGISLASH_BLADE;
+        if (gBattleMoves[gCurrentMove].power == 0) newSpecies = SPECIES_AEGISLASH_BLADE;
         break;
     case SPECIES_AEGISLASH_BLADE: // Blade -> Shield
-        if (gCurrentMove != MOVE_KINGS_SHIELD)
-            return FALSE;
-        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
-        newSpecies = SPECIES_AEGISLASH;
+        if (gCurrentMove == MOVE_KINGS_SHIELD) newSpecies = SPECIES_AEGISLASH;
         break;
     case SPECIES_AEGISLASH_BLADE_REDUX: // Special -> Physical
-        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased){
-            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
+        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased)
             newSpecies = SPECIES_AEGISLASH_REDUX;
-        }
-        else
-            return FALSE;
+        break;
+    case SPECIES_AEGISLASH_BLADE_REDUX_MEGA: // Special -> Physical
+        if (gBattleMoves[gCurrentMove].split == SPLIT_PHYSICAL && !gBattleMoves[gCurrentMove].arrowBased)
+            newSpecies = SPECIES_AEGISLASH_REDUX_MEGA;
         break;
     case SPECIES_AEGISLASH_REDUX: // Physical -> Special
-        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased){
-            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STANCE_CHANGE;
+        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased)
             newSpecies = SPECIES_AEGISLASH_BLADE_REDUX;
-        }
-        else
-            return FALSE;
-    break;
+        break;
+    case SPECIES_AEGISLASH_REDUX_MEGA: // Physical -> Special
+        if (gBattleMoves[gCurrentMove].split == SPLIT_SPECIAL || gBattleMoves[gCurrentMove].arrowBased)
+            newSpecies = SPECIES_AEGISLASH_BLADE_REDUX_MEGA;
+        break;
     }
+
+    if (!newSpecies) return FALSE;
+    gBattleScripting.abilityPopupOverwrite = ABILITY_STANCE_CHANGE;
 
     UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, newSpecies);
     gBattleMons[gBattlerAttacker].species = newSpecies;
