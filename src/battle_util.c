@@ -13198,6 +13198,11 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PARENTAL_BOND))
             basePower = basePower * 5 / 4;
         break;
+    case MOVE_SELF_DESTRUCT:
+        if ((gRoundStructs[battlerAtk].physicalDmg && gRoundStructs[battlerAtk].physicalBattlerId == battlerDef)
+            || (gRoundStructs[battlerAtk].specialDmg && gRoundStructs[battlerAtk].specialBattlerId == battlerDef))
+            basePower *= 2;
+        break;
     }
 
     if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)){
