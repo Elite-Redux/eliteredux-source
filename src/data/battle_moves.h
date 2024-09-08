@@ -8579,7 +8579,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-        .split = SPLIT_STATUS,
+        .split = SPLIT_PHYSICAL,
     },
     [MOVE_BOLT_BEAK] =
     {
@@ -11262,7 +11262,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 5,
         .secondaryEffectChance = 50,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRIKER_BOOST,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
         .argument = MOVE_EFFECT_TOXIC,
         .splitFlag = USE_HIGHEST_OFFENSE,
@@ -11714,6 +11714,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .parentalBondBanned = TRUE,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_EERIE_FOG] =
@@ -11750,6 +11751,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+        .parentalBondBanned = TRUE,
         .hammerBased = TRUE,
     },
     [MOVE_POP_MAYHEM] =
@@ -11765,6 +11767,31 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .argument = MOVE_EFFECT_BURN,
         .parentalBondBanned = TRUE,
+    },
+    [MOVE_SNAP_JAW] =
+    {
+        .effect = EFFECT_SNAP_JAW,
+        .power = 80,
+        .type = TYPE_STEEL,
+        .accuracy = 100,
+        .pp = 10,
+        .secondaryEffectChance = 100,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRONG_JAW_BOOST,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_TANGLING_HUSK] =
+    {
+        .effect = EFFECT_PROTECT,
+        .power = 0,
+        .type = TYPE_GRASS,
+        .accuracy = 0,
+        .pp = 10,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_USER,
+        .priority = 4,
+        .flags = FLAG_PROTECTION_MOVE,
+        .split = SPLIT_PHYSICAL,
     },
 };
 

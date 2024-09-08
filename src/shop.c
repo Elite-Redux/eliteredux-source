@@ -386,6 +386,8 @@ static const u16 sAdoptionCenterInventory_TwoBadges[] = {
 
 // 3 Badges
 static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
+    SPECIES_GLIGAR_REDUX, //testing purposes
+    SPECIES_CRABRAWLER_REDUX, //testing purposes
     SPECIES_TRAPINCH_REDUX, //testing purposes
     SPECIES_TOXEL_REDUX, //testing purposes
     SPECIES_BOUNSWEET_REDUX, //testing purposes
@@ -395,6 +397,8 @@ static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_DEINO_REDUX,
+    SPECIES_LARVITAR_REDUX,
     SPECIES_HOUNDOUR_REDUX,
     SPECIES_SLUGMA_REDUX,
     SPECIES_GROWLITHE_REDUX,
@@ -419,6 +423,8 @@ static const u16 sAdoptionCenterInventory_ThreeBadges[] = {
 
 // 4 Badges
 static const u16 sAdoptionCenterInventory_FourBadges[] = {
+    SPECIES_GLIGAR_REDUX, //testing purposes
+    SPECIES_CRABRAWLER_REDUX, //testing purposes
     SPECIES_TRAPINCH_REDUX, //testing purposes
     SPECIES_TOXEL_REDUX, //testing purposes
     SPECIES_BOUNSWEET_REDUX, //testing purposes
@@ -428,6 +434,8 @@ static const u16 sAdoptionCenterInventory_FourBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_DEINO_REDUX,
+    SPECIES_LARVITAR_REDUX,
     SPECIES_HOUNDOUR_REDUX,
     SPECIES_SLUGMA_REDUX,
     SPECIES_GROWLITHE_REDUX,
@@ -464,6 +472,8 @@ static const u16 sAdoptionCenterInventory_FiveBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_DEINO_REDUX,
+    SPECIES_LARVITAR_REDUX,
     SPECIES_HOUNDOUR_REDUX,
     SPECIES_SLUGMA_REDUX,
     SPECIES_GROWLITHE_REDUX,

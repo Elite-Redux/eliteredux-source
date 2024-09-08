@@ -974,6 +974,8 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_MYSTIC_DANCE
 	.4byte Move_NONE @ MOVE_RELENTLESS_CLOBBER
 	.4byte Move_NONE @ MOVE_POP_MAYHEM
+	.4byte Move_NONE @ MOVE_SNAP_JAW
+	.4byte Move_NONE @ MOVE_TANGLING_HUSK
 
 	.align 2
 gBattleAnims_StatusConditions::

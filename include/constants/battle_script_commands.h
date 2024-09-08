@@ -254,6 +254,7 @@
 #define VARIOUS_SET_STATUS_4                    172
 #define VARIOUS_SET_FOG                         173
 #define VARIOUS_TRY_RECURRING_NIGHTMARE         174
+#define VARIOUS_SET_RANDOM                      175
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0

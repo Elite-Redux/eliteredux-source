@@ -1064,6 +1064,7 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_SUNSTEEL_STRIKE] = FORBIDDEN_METRONOME,
     [MOVE_SURGING_STRIKES] = FORBIDDEN_METRONOME,
     [MOVE_SWITCHEROO] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_TANGLING_HUSK] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_TECHNO_BLAST] = FORBIDDEN_METRONOME,
     [MOVE_THIEF] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_THOUSAND_ARROWS] = FORBIDDEN_METRONOME,
@@ -3927,6 +3928,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gRoundStructs[gBattlerTarget].silkTrapped = FALSE;
                     gRoundStructs[gBattlerTarget].burningBulwark = FALSE;
                     gRoundStructs[gBattlerTarget].mindReader = FALSE;
+                    gRoundStructs[gBattlerTarget].tanglingHusked = FALSE;
                     if (gCurrentMove == MOVE_FEINT)
                     {
                         BattleScriptPush(gBattlescriptCurrInstr);
@@ -5803,6 +5805,15 @@ static void Cmd_moveend(void)
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
                     gBattleScripting.moveEffect = MOVE_EFFECT_SP_DEF_MINUS_1;
                     PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_MIND_READER);
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
+                    effect = 1;
+                }
+                else if (gRoundStructs[gBattlerTarget].tanglingHusked)
+                {
+                    gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_SPD_MINUS_1;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_TANGLING_HUSK);
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_KingsShieldEffect;
                     effect = 1;
@@ -11409,6 +11420,10 @@ static void Cmd_various(void)
             MarkBattlerForControllerExec(gActiveBattler);
         }
         break;
+    case VARIOUS_SET_RANDOM:
+        gBattleCommunication[MULTIUSE_STATE] = Random() % T1_READ_8(gBattlescriptCurrInstr + 3);
+        gBattlescriptCurrInstr += 4;
+        return;
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
@@ -11514,6 +11529,11 @@ static void Cmd_setprotectlike(void)
             else if (gCurrentMove == MOVE_MIND_READER)
             {
                 gRoundStructs[gBattlerAttacker].mindReader = TRUE;
+                SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
+            }
+            else if (gCurrentMove == MOVE_TANGLING_HUSK)
+            {
+                gRoundStructs[gBattlerAttacker].tanglingHusked = TRUE;
                 SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
             }
 
