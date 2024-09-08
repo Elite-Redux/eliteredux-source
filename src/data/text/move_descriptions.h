@@ -2304,7 +2304,7 @@ static const u8 sMoveTwoLineDescription_MoveTopsyTurvy[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveDrainingKiss[] = _(
     "An attack that absorbs over\n"
-    "30% of damage inflicted.");
+    "50% of damage inflicted.");
 
 static const u8 sMoveTwoLineDescription_MoveCraftyShield[] = _(
     "Evades status moves for\n"
@@ -5275,7 +5275,7 @@ static const u8 sMoveFourLineDescription_MoveFreezeDry[] = _("This move is super
 static const u8 sMoveFourLineDescription_MoveDisarmingVoice[] = _("The user cries out\nwith a disarmingly\ncute voice. This\nnever misses.");
 static const u8 sMoveFourLineDescription_MovePartingShot[] = _("The foe's Attack\nand Sp. Atk stats\nare lowered by a\nparting threat.");
 static const u8 sMoveFourLineDescription_MoveTopsyTurvy[] = _("All stat changes\naffecting the foe\nturn topsy-turvy\nand are inverted.");
-static const u8 sMoveFourLineDescription_MoveDrainingKiss[] = _("A kiss that absorbs\n30% of damage it\ninflicted to\nrestore HP.");
+static const u8 sMoveFourLineDescription_MoveDrainingKiss[] = _("A kiss that absorbs\n50% of damage it\ninflicted to\nrestore HP.");
 static const u8 sMoveFourLineDescription_MoveCraftyShield[] = _("A mysterious power\nprotects the user\nand its allies from\nstatus moves.");
 static const u8 sMoveFourLineDescription_MoveFlowerShield[] = _("A mysterious power\nraises the Defense\nof all Grass-type\nPokémon in battle.");
 static const u8 sMoveFourLineDescription_MoveGrassyTerrain[] = _("For 8 turns, the\nground turns grassy.\nThis ups Grass-type\nmoves, and heals.");
