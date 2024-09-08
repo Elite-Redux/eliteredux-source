@@ -8203,14 +8203,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TEARFUL_LOOK] =
     {
-        .effect = EFFECT_NOBLE_ROAR,
+        .effect = EFFECT_SPECIAL_ATTACK_DOWN,
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 0,
         .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+        .priority = 1,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_STATUS,
     },
     [MOVE_ZING_ZAP] =

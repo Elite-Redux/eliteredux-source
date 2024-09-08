@@ -2672,7 +2672,7 @@ static const u8 sMoveTwoLineDescription_MoveMoongeistBeam[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveTearfulLook[] = _(
     "The user tears up, dropping\n"
-    "Attack and Sp. Attack.");
+    "Special Attack.");
 
 static const u8 sMoveTwoLineDescription_MoveZingZap[] = _(
     "An electrified impact that\n"
@@ -5367,7 +5367,7 @@ static const u8 sMoveFourLineDescription_MovePrismaticLaser[] = _("Severely dama
 static const u8 sMoveFourLineDescription_MoveSpectralThief[] = _("Hiding in the foe's\nshadow, the user\nsteals its stat\nboosts and attacks.");
 static const u8 sMoveFourLineDescription_MoveSunsteelStrike[] = _("Slams into the\nfoe like a meteor.\nIgnores Abilities.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveMoongeistBeam[] = _("A sinister ray\nattacks the foe.\nIgnores Abilities.\nMega Launcher boost");
-static const u8 sMoveFourLineDescription_MoveTearfulLook[] = _("The foe's attack\nstats are lowered\nby the user's teary\neyes.");
+static const u8 sMoveFourLineDescription_MoveTearfulLook[] = _("The foe's Special\nAttack is lowered\nby the user's teary\neyes.");
 static const u8 sMoveFourLineDescription_MoveZingZap[] = _("A strong electric\nblast crashes on\nthe foe. 30%\nflinch chance.");
 static const u8 sMoveFourLineDescription_MoveNaturesMadness[] = _("The user hits the\nfoe with the force\nof nature, halving\nthe foe's HP.");
 static const u8 sMoveFourLineDescription_MoveMultiAttack[] = _("A high-energy slam.\nThe memory held\ndetermines the\nmove's type.");
