@@ -31,8 +31,8 @@ void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventDa
     // using a pointer over gBattleEvents would be nicer but i suppose it will stay like that because C sucks
     gBattleEvents[gNbBattleEvents++] = (struct BattleEvent) {
         .id = battleEventID,
-        .data0 = battleEventData0,
-        .data1 = battleEventData1,
+        .data0 = battleEventData0 & 0xF, // bitmasked because it's only 4 bits per data
+        .data1 = battleEventData1 & 0xF,
     };
 }
 
