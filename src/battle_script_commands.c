@@ -7079,8 +7079,11 @@ static void Cmd_openpartyscreen(void)
             if (gAbsentBattlerFlags & gBitTable[gActiveBattler])
                 gActiveBattler ^= BIT_FLANK;
 
-            BtlController_EmitLinkStandbyMsg(0, 2, FALSE);
-            MarkBattlerForControllerExec(gActiveBattler);
+            if (gActiveBattler < gBattlersCount)
+            {
+                BtlController_EmitLinkStandbyMsg(0, 2, FALSE);
+                MarkBattlerForControllerExec(gActiveBattler);
+            }
         }
     }
 }
