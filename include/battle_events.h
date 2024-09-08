@@ -6,7 +6,7 @@
 
 
 static u8 gNbBattleEvents;
-static u8 gCurrBattleEvent;
+static s8 gCurrBattleEvent;
 
 /**
  * Structure that holds one battle event ID and two 4bits data.

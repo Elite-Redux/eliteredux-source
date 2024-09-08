@@ -38,8 +38,6 @@ void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventDa
 
 // clear all battle Events
 void UnregisterBattlesEvents(){
-    u8 i;
-    ZERO(gBattleEvents)
     gNbBattleEvents = 0;
     gCurrBattleEvent = 0;
 }
@@ -51,7 +49,7 @@ void UnregisterBattlesEvents(){
  *   It's just that if we unregister it with RUN_BATTLESCRIPT_UNREGISTER it lower the chances of forgetting
  */
 void UnregisterCurrentBattleEvent(){
-    ZERO(gBattleEvents[gCurrBattleEvent])
+    gBattleEvents[gCurrBattleEvent--] = gBattleEvents[--gNbBattleEvents];
     // i do wonder if it's worth to shift the array afterwards so less cycles are needed for that
     // probably overkill
 }
