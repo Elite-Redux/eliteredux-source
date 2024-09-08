@@ -277,6 +277,7 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_TSAREENITE_R
 	ITEM_REUNICLUSITE_R
 	ITEM_GOLISOPODITE
+	ITEM_TOXTRICITITE_R
 }
 
 script General_Adoption_Center_Mega_Stones_Script{
