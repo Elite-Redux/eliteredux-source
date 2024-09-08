@@ -616,7 +616,7 @@
 #define ABILITY_HAUNTING_FRENZY 594 // 20% chance to flinch the opponent. +1 speed on kill.
 #define ABILITY_NOISE_CANCEL 595 // Protects the party from sound- based moves.
 #define ABILITY_RADIO_JAM 596 // Sound-based moves inflict disable.
-#define ABILITY_OLE 597 // 20% chance to evade physical moves.
+#define ABILITY_OLE 597 // 40% chance to evade moves.
 #define ABILITY_MALICIOUS 598 // Lowers the foe's highest Attack and Defense stat.
 #define ABILITY_DEAD_POWER 599 // 1.5x Attack boost. 20% chance to curse on contact moves.
 #define ABILITY_BRAWLING_WYVERN 600 // Dragon type moves become punching moves.
@@ -683,8 +683,12 @@
 #define ABILITY_UNLOCKED_POTENTIAL 661 // Inner Focus + Berserk.
 #define ABILITY_HIGHER_RANK 662 // Priority moves get a 1.2x boost.
 #define ABILITY_FUNERAL_PYRE 663 // Non-Ghost and Dark-types take 1/4 damage every turn.
+#define ABILITY_FLAME_BUBBLE 664 // Water Bubble + Flaming Soul.
+#define ABILITY_ELEMENTAL_VORTEX 665 // Flash Fire + Water Absorb.
+#define ABILITY_SNOWY_WRATH 666 // Snow Warning + Whiteout.
+#define ABILITY_PATTERN_CHANGE 667 // Changes type depending on the move it's about to use.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_FUNERAL_PYRE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_PATTERN_CHANGE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

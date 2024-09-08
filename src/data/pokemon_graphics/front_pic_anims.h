@@ -161,6 +161,16 @@ static const union AnimCmd sAnim_SKULBERUS_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_MARBEEP_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_FLUFFBEE_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_AMPHYBUZZ_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -872,6 +882,16 @@ static const union AnimCmd *const sAnims_SKULBERUS[] ={
 static const union AnimCmd *const sAnims_CORM[] ={
     sAnim_GeneralFrame0,
     sAnim_CORM_1,
+};
+
+static const union AnimCmd *const sAnims_MARBEEP[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MARBEEP_1,
+};
+
+static const union AnimCmd *const sAnims_FLUFFBEE[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FLUFFBEE_1,
 };
 
 static const union AnimCmd *const sAnims_AMPHYBUZZ[] ={
@@ -20842,6 +20862,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(KAIOSEA),
     ANIM_CMD(PHANFERNAL),
     ANIM_CMD(SKULBERUS),
+    ANIM_CMD(MARBEEP),
+    ANIM_CMD(FLUFFBEE),
     ANIM_CMD(AMPHYBUZZ),
     ANIM_CMD(AMPHYBUZZ_MEGA),
     ANIM_CMD(CORM),

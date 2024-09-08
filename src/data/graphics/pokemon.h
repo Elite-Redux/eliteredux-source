@@ -7601,6 +7601,24 @@ const u32 gMonPalette_GimmighoulRoaming[]           = INCBIN_U32("graphics/pokem
 const u32 gMonShinyPalette_GimmighoulRoaming[]      = INCBIN_U32("graphics/pokemon/gimmighoul/roaming/shiny.gbapal.lz");
 const u8  gMonIcon_GimmighoulRoaming[]              = INCBIN_U8("graphics/pokemon/gimmighoul/roaming/icon.4bpp");
 
+const u32 gMonFrontPic_BasculegionF[]          = INCBIN_U32("graphics/pokemon/basculegion/female/front.4bpp.lz");
+const u32 gMonBackPic_BasculegionF[]           = INCBIN_U32("graphics/pokemon/basculegion/female/back.4bpp.lz");
+const u32 gMonPalette_BasculegionF[]           = INCBIN_U32("graphics/pokemon/basculegion/female/normal.gbapal.lz");
+const u32 gMonShinyPalette_BasculegionF[]      = INCBIN_U32("graphics/pokemon/basculegion/female/shiny.gbapal.lz");
+const u8  gMonIcon_BasculegionF[]              = INCBIN_U8("graphics/pokemon/basculegion/female/icon.4bpp");
+
+const u32 gMonFrontPic_Marbeep[]          = INCBIN_U32("graphics/pokemon/marbeep/front.4bpp.lz");
+const u32 gMonBackPic_Marbeep[]           = INCBIN_U32("graphics/pokemon/marbeep/back.4bpp.lz");
+const u32 gMonPalette_Marbeep[]           = INCBIN_U32("graphics/pokemon/marbeep/normal.gbapal.lz");
+const u32 gMonShinyPalette_Marbeep[]      = INCBIN_U32("graphics/pokemon/marbeep/shiny.gbapal.lz");
+const u8  gMonIcon_Marbeep[]              = INCBIN_U8("graphics/pokemon/marbeep/icon.4bpp");
+
+const u32 gMonFrontPic_Fluffbee[]          = INCBIN_U32("graphics/pokemon/fluffbee/front.4bpp.lz");
+const u32 gMonBackPic_Fluffbee[]           = INCBIN_U32("graphics/pokemon/fluffbee/back.4bpp.lz");
+const u32 gMonPalette_Fluffbee[]           = INCBIN_U32("graphics/pokemon/fluffbee/normal.gbapal.lz");
+const u32 gMonShinyPalette_Fluffbee[]      = INCBIN_U32("graphics/pokemon/fluffbee/shiny.gbapal.lz");
+const u8  gMonIcon_Fluffbee[]              = INCBIN_U8("graphics/pokemon/fluffbee/icon.4bpp");
+
 const u32 gMonFrontPic_Amphybuzz[]          = INCBIN_U32("graphics/pokemon/amphybuzz/front.4bpp.lz");
 const u32 gMonBackPic_Amphybuzz[]           = INCBIN_U32("graphics/pokemon/amphybuzz/back.4bpp.lz");
 const u32 gMonPalette_Amphybuzz[]           = INCBIN_U32("graphics/pokemon/amphybuzz/normal.gbapal.lz");
