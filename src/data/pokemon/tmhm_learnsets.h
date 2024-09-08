@@ -31992,6 +31992,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_FLY)
         TM(MOVE_WILL_O_WISP)
         TM(MOVE_SWORDS_DANCE)
+        TM(MOVE_EERIE_FOG)
         TMHM_LEARNSET_END
 
     [SPECIES_XERNEAS] = TMHM_LEARNSET
@@ -36120,6 +36121,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_STRENGTH)
         TM(MOVE_FLASH)
         TM(MOVE_ROCK_SMASH)
+        TM(MOVE_EXPLOSION)
         TMHM_LEARNSET_END
 
     [SPECIES_LUNALA] = TMHM_LEARNSET
@@ -36167,6 +36169,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_CUT)
         TM(MOVE_FLY)
         TM(MOVE_FLASH)
+        TM(MOVE_EXPLOSION)
         TMHM_LEARNSET_END
 
     [SPECIES_NIHILEGO] = TMHM_LEARNSET
@@ -37848,6 +37851,11 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_CUT)
         TM(MOVE_FLY)
         TM(MOVE_FLASH)
+        TM(MOVE_CALM_MIND)
+        TM(MOVE_LIGHT_SCREEN)
+        TM(MOVE_SLUDGE_WAVE)
+        TM(MOVE_WILL_O_WISP)
+        TM(MOVE_STRUGGLE_BUG)
         TMHM_LEARNSET_END
 
     [SPECIES_APPLETUN] = TMHM_LEARNSET
@@ -37887,6 +37895,11 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_STRENGTH)
         TM(MOVE_FLASH)
         TM(MOVE_ROCK_SMASH)
+        TM(MOVE_CALM_MIND)
+        TM(MOVE_SLUDGE_WAVE)
+        TM(MOVE_SLUDGE_BOMB)
+        TM(MOVE_WILL_O_WISP)
+        TM(MOVE_STRUGGLE_BUG)
         TMHM_LEARNSET_END
 
     [SPECIES_SILICOBRA] = TMHM_LEARNSET
