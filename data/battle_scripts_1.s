@@ -250,7 +250,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_GYRO_BALL
 	.4byte BattleScript_EffectHit                     @ EFFECT_ECHOED_VOICE
 	.4byte BattleScript_EffectHit                     @ EFFECT_PAYBACK
-	.4byte BattleScript_EffectHit                     @ EFFECT_ROUND
+	.4byte BattleScript_EffectArgumentHit             @ EFFECT_ROUND
 	.4byte BattleScript_EffectHit                     @ EFFECT_BRINE
 	.4byte BattleScript_EffectHit                     @ EFFECT_VENOSHOCK
 	.4byte BattleScript_EffectHit                     @ EFFECT_RETALIATE
@@ -1905,11 +1905,31 @@ BattleScript_EffectBestow:
 	attackstring
 	ppreduce
 	jumpifsubstituteblocks BattleScript_ButItFailed
-	trybestow BattleScript_ButItFailed
+	trybestow BattleScript_EffectBestow_NoGiveItem
 	attackanimation
 	waitanimation
 	printstring STRINGID_BESTOWITEMGIVING
 	waitmessage B_WAIT_TIME_LONG
+	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_MoveEnd
+	jumpifsafeguard BattleScript_SafeguardProtected
+	trypsychoshift BattleScript_MoveEnd
+	copybyte gEffectBattler, gBattlerTarget
+	printfromtable gStatusConditionsStringIds
+	waitmessage B_WAIT_TIME_LONG
+	statusanimation BS_TARGET
+	updatestatusicon BS_TARGET
+	goto BattleScript_MoveEnd
+BattleScript_EffectBestow_NoGiveItem:
+	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
+	jumpifsafeguard BattleScript_SafeguardProtected
+	trypsychoshift BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	copybyte gEffectBattler, gBattlerTarget
+	printfromtable gStatusConditionsStringIds
+	waitmessage B_WAIT_TIME_LONG
+	statusanimation BS_TARGET
+	updatestatusicon BS_TARGET
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectAfterYou:
@@ -1960,7 +1980,7 @@ BattleScript_EffectPsychoShift:
 BattleScript_EffectPsychoShiftCanWork:
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
 	jumpifsafeguard BattleScript_SafeguardProtected
-	trypsychoshift BattleScript_MoveEnd
+	trypsychoshift BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	copybyte gEffectBattler, gBattlerTarget
@@ -2384,6 +2404,13 @@ BattleScript_AngerShellTrySpeed:
 BattleScript_AngerShellEnd:
 	readattackerfromstack3
 	return
+
+BattleScript_NoTurningBack::
+	trynoretreat BS_TARGET, BattleScript_Return
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_NO_TURNING_BACK
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_AllStatsUp
 
 BattleScript_EffectLastResort:
 	attackcanceler
@@ -4722,7 +4749,9 @@ BattleScript_PowerHerbActivation:
 
 BattleScript_EffectTwoTurnSecondary::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_EffectTwoTurnSecondarySecondTurn
+	jumpifmove MOVE_SKULL_BASH, BattleScript_SetSkullBashString
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_METEOR_BEAM
+BattleScript_EffectTwoTurnSecondary_AfterSetString:
 	call BattleScriptFirstChargingTurn
 	argumenttomoveeffect
 	seteffectprimary
@@ -4735,6 +4764,9 @@ BattleScript_EffectTwoTurnSecondarySecondTurn:
 	clearstatusfromeffect BS_ATTACKER
 	orword gHitMarker, HITMARKER_NO_PPDEDUCT
 	goto BattleScript_HitFromAccCheck
+BattleScript_SetSkullBashString:
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_SKULL_BASH
+	goto BattleScript_EffectTwoTurnSecondary_AfterSetString
 
 BattleScript_EffectTwoTurnsAttack::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
@@ -12442,7 +12474,8 @@ BattleScript_GymSkillPosture::
 	end2
 	
 BattleScript_GymSkillPostureAfterAttackerSet:
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
+	@ commented out because we use raw stats now
+	@ statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
 BattleScript_GymSkillPosture_:
 	call BattleScript_GymSkillPopup	
 	printstring STRINGID_GYMSKILL_POSTURE

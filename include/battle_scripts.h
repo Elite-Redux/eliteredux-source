@@ -465,6 +465,7 @@ extern const u8 BattleScript_GooeyActivates[];
 extern const u8 BattleScript_PastelVeilActivates[];
 extern const u8 BattleScript_MimicryActivatesEnd3[];
 extern const u8 BattleScript_AngerShell[];
+extern const u8 BattleScript_NoTurningBack[];
 extern const u8 BattleScript_AttackerFormChangeEnd3NoPopup[];
 extern const u8 BattleScript_AttackerFormChangeMoveEffect[];
 extern const u8 BattleScript_BothCanNoLongerEscape[];

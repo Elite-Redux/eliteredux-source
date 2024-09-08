@@ -858,7 +858,7 @@ static const u8 sText_FogEnds[] = _("The eerie fog fades away!");
 static const u8 sText_Smokescreen[] = _("{B_ATK_NAME_WITH_PREFIX} cloaks\ntheir team in a smokescreen!");
 static const u8 sText_GymSkillTerrain[] = _("Something unusual modifies the terrain.");
 static const u8 sText_GymSkillSteadyStatsBoost[] = _("{B_OPPONENT_MON1_NAME}'s {STR_VAR_1} steadily increases.");
-static const u8 sText_GymSkillPosture[] = _("{B_ATK_NAME_WITH_PREFIX} position itself to {STR_VAR_2},\nits {STR_VAR_1} increase by {B_BUFF3}.");
+static const u8 sText_GymSkillPosture[] = _("{B_ATK_NAME_WITH_PREFIX} positioned itself to {STR_VAR_2},\nits usual {STR_VAR_1} increased by {B_BUFF3}%.");
 static const u8 sText_GymSkillStatusOnTeam[] = _("Some of your team members are affected by\n{STR_VAR_1}.");
 static const u8 sText_GymSkillLastStand[] = _("{B_OPPONENT_MON1_NAME} will not accept defeat!\nAnd its stats increase sharply.");
 static const u8 sText_GymSkillMatBlock[] = _("{B_OPPONENT_MON1_NAME} picked up a mat block\nto use as cover this turn.");
@@ -879,6 +879,7 @@ static const u8 sText_FogReturns[] = _("The eerie fog returns!");
 static const u8 sText_RecurringNightmare[] = _("{B_STACK_1_NAME_WITH_PREFIX} fades\nback into the fog!");
 static const u8 sText_PkmnHurtByFuneralPyre[] = _("{B_ATK_NAME_WITH_PREFIX} was hurt\nby the Funeral Pyre!");
 static const u8 sText_FuneralPyreEntry[] = _("{B_ATK_NAME_WITH_PREFIX} lights\na Funeral Pyre!");
+static const u8 sText_NoTurningBack[] = _("{B_DEF_NAME_WITH_PREFIX} won't\nback down from a fight!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1858,6 +1859,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_RECURRING_NIGHTMARE - 12] = sText_RecurringNightmare,
     [STRINGID_PKMNHURTBYFUNERALPYRE - 12] = sText_PkmnHurtByFuneralPyre,
     [STRINGID_FUNERAL_PYRE_ENTRY - 12] = sText_FuneralPyreEntry,
+    [STRINGID_NO_TURNING_BACK - 12] = sText_NoTurningBack,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
