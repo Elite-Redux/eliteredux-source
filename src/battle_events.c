@@ -28,8 +28,7 @@ void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventDa
         ShowFieldMessage(sText_WarnMaxBattleEventReached);
         return;
     }
-    // using a pointer over gBattleEvents would be nicer but i suppose it will stay like that because C sucks
-    gBattleEvents[gNbBattleEvents++] = (struct BattleEvent) {
+        gBattleEvents[gNbBattleEvents++] = (struct BattleEvent) {
         .id = battleEventID,
         .data0 = battleEventData0 & 0xF, // bitmasked because it's only 4 bits per data
         .data1 = battleEventData1 & 0xF,
@@ -43,10 +42,10 @@ void UnregisterBattlesEvents(){
 }
 
 /**
- * Two reasons to unregister
- * - remove the need to process the data, economising a fair share of cycles.
+ * Three reasons to unregister
+ * - remove the need to process the data, economising a fair share of cycles. (edit, this may be irrelevant)
  * - Allow for one time uses mid battle even if we could use the data for that
- *   It's just that if we unregister it with RUN_BATTLESCRIPT_UNREGISTER it lower the chances of forgetting
+ * - It's just that if we unregister it with RUN_BATTLESCRIPT_UNREGISTER it lower the chances of forgetting
  */
 void UnregisterCurrentBattleEvent(){
     gBattleEvents[gCurrBattleEvent--] = gBattleEvents[--gNbBattleEvents];
