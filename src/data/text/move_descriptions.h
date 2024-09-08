@@ -1499,8 +1499,8 @@ static const u8 sMoveTwoLineDescription_MovePsychoShift[] = _(
     "to the foe.");
 
 static const u8 sMoveTwoLineDescription_MoveTrumpCard[] = _(
-    "The less PP the move has\n"
-    "the more damage it does.");
+    "Inflicts critical damage\n"
+    "when the user's HP is low.");
 
 static const u8 sMoveTwoLineDescription_MoveHealBlock[] = _(
     "Prevents the foe from\n"
@@ -5074,7 +5074,7 @@ static const u8 sMoveFourLineDescription_MoveAssurance[] = _("Power doubles if\n
 static const u8 sMoveFourLineDescription_MoveEmbargo[] = _("Prevents the foe\nfrom using its item.\nItems cannot be\nused on it, either.");
 static const u8 sMoveFourLineDescription_MoveFling[] = _("The user flings its\nitem to attack. Outcome\nvaries with items.\nThrow-based.");
 static const u8 sMoveFourLineDescription_MovePsychoShift[] = _("The user transfers\nits status problems\nto the target using\npsychic powers.");
-static const u8 sMoveFourLineDescription_MoveTrumpCard[] = _("The fewer PP this\nmove has, the\ngreater its power.");
+static const u8 sMoveFourLineDescription_MoveTrumpCard[] = _("A desperate attack\nthat deals critical\ndamage when the user\nis below 50% HP.");
 static const u8 sMoveFourLineDescription_MoveHealBlock[] = _("The foe cannot use\nany moves, held\nitems or Abilities\nthat recover HP.");
 static const u8 sMoveFourLineDescription_MoveWringOut[] = _("This attack will\nalso negate the\nfoe's Ability if it\nhas moved already.");
 static const u8 sMoveFourLineDescription_MovePowerTrick[] = _("The user employs\nits psychic power\nto swap its Attack\nand Defense stat.");
