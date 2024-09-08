@@ -5661,7 +5661,7 @@ static const u8 sMoveFourLineDescription_MoveSmolderBash[] = _("Bashes the foe w
 static const u8 sMoveFourLineDescription_MoveBeatdown[] = _("Attacks the foe with\na flurry of blows.\nhits 2-5 times.");
 static const u8 sMoveFourLineDescription_MoveEerieFog[] = _("An eerie fog lasting\neight turns drains\nboosts from non-\nGhost and Psychic mons.");
 static const u8 sMoveFourLineDescription_MoveMysticDance[] = _("Not implemented.");
-static const u8 sMoveFourLineDescription_MoveRelentlessClobber[] = _("Pummels the target\nrepeatedly. Hammer based.");
+static const u8 sMoveFourLineDescription_MoveRelentlessClobber[] = _("Pummels the target\nrepeatedly. Hammer\nbased.");
 static const u8 sMoveFourLineDescription_MovePopMayhem[] = _("Pelts the target\nwith hot kernels.10%\nburn chance.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
