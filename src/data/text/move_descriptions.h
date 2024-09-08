@@ -1007,8 +1007,8 @@ static const u8 sMoveTwoLineDescription_MoveFakeOut[] = _(
     "that causes flinching.");
 
 static const u8 sMoveTwoLineDescription_MoveUproar[] = _(
-    "Causes an uproar for 2 to 5\n"
-    "turns and prevents sleep.");
+    "A tantrum of 2 to 3 turns\n"
+    "that confuses the user.");
 
 static const u8 sMoveTwoLineDescription_MoveStockpile[] = _(
     "Charges up power for up to\n"
@@ -4951,7 +4951,7 @@ static const u8 sMoveFourLineDescription_MoveRockSmash[] = _("An attack which al
 static const u8 sMoveFourLineDescription_MoveWhirlpool[] = _("The foe is trapped\nfor four or\nfive turns.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveBeatUp[] = _("All party Pokémon\njoin in the attack.\nThe more allies,\nthe more damage.");
 static const u8 sMoveFourLineDescription_MoveFakeOut[] = _("An attack that hits\nfirst and causes\nflinching. Usable\nonly on 1st turn.");
-static const u8 sMoveFourLineDescription_MoveUproar[] = _("The user attacks in\nan uproar that\nprevents sleep for\ntwo to five turns.");
+static const u8 sMoveFourLineDescription_MoveUproar[] = _("The user throws a\ntantrum for two to\nthree turns, then\nbecomes confused.");
 static const u8 sMoveFourLineDescription_MoveStockpile[] = _("The user charges\nup power for use\nlater. It can be\nused three times.");
 static const u8 sMoveFourLineDescription_MoveSpitUp[] = _("The power built\nusing Stockpile is\nreleased at once\nfor attack.");
 static const u8 sMoveFourLineDescription_MoveSwallow[] = _("The energy it built\nusing Stockpile is\nabsorbed to restore\nHP.");
