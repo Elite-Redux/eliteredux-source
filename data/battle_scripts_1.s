@@ -475,6 +475,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectSmokescreen			  @ EFFECT_SMOKESCREEN
 	.4byte BattleScript_EffectEerieFog			 	  @ EFFECT_EERIE_FOG
 	.4byte BattleScript_EffectMysticDance			  @ EFFECT_MYSTIC_DANCE
+	.4byte BattleScript_EffectSnapJaw   			  @ EFFECT_SNAP_JAW
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -12727,3 +12728,12 @@ BattleScript_EffectEerieFog::
 	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_STRONG_WINDS, BattleScript_MysteriousAirCurrentBlowsOn
 	setfog
 	goto BattleScript_MoveWeatherChange
+
+BattleScript_EffectSnapJaw::
+	setrandom 2
+	jumpifbyte CMP_EQUAL, gBattleCommunication, 0, BattleScript_EffectSnapJaw_RaiseSpeed
+	setmoveeffect MOVE_EFFECT_SPD_MINUS_1
+	goto BattleScript_EffectHit
+BattleScript_EffectSnapJaw_RaiseSpeed:
+	setmoveeffect MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
+	goto BattleScript_EffectHit

@@ -2318,6 +2318,11 @@
 	various \battler, VARIOUS_TRY_RECURRING_NIGHTMARE
 	.endm
 
+	.macro setrandom max:req
+	various BS_ATTACKER, VARIOUS_SET_RANDOM
+	.byte \max
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

@@ -3750,6 +3750,14 @@ static const u8 sMoveTwoLineDescription_MovePopMayhem[] = _(
     "Hits 2-5 times\n"
     "and can burn.");
 
+static const u8 sMoveTwoLineDescription_MoveSnapJaw[] = _(
+    "Rushes forward and bites\n"
+    "the foe's weak spot.");
+
+static const u8 sMoveTwoLineDescription_MoveTanglingHusk[] = _(
+    "Slows attackers while avoiding\n"
+    "damage from non-Fire moves.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4707,6 +4715,8 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_MYSTIC_DANCE - 1] = sMoveTwoLineDescription_MoveMysticDance,
     [MOVE_RELENTLESS_CLOBBER - 1] = sMoveTwoLineDescription_MoveRelentlessClobber,
     [MOVE_POP_MAYHEM - 1] = sMoveTwoLineDescription_MovePopMayhem,
+    [MOVE_SNAP_JAW - 1] = sMoveTwoLineDescription_MoveSnapJaw,
+    [MOVE_TANGLING_HUSK - 1] = sMoveTwoLineDescription_MoveTanglingHusk,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5663,6 +5673,8 @@ static const u8 sMoveFourLineDescription_MoveEerieFog[] = _("An eerie fog lastin
 static const u8 sMoveFourLineDescription_MoveMysticDance[] = _("Not implemented.");
 static const u8 sMoveFourLineDescription_MoveRelentlessClobber[] = _("Pummels the target\nrepeatedly. Hammer\nbased.");
 static const u8 sMoveFourLineDescription_MovePopMayhem[] = _("Pelts the target\nwith hot kernels.10%\nburn chance.");
+static const u8 sMoveFourLineDescription_MoveSnapJaw[] = _("Rushes forward and\nbites the foe. -1\nSpeed to foe or +1\nSpeed to user.");
+static const u8 sMoveFourLineDescription_MoveTanglingHusk[] = _("Protects against non-\nFire-type moves.\nSlows attackers on\ncontact.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6619,4 +6631,6 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_MYSTIC_DANCE - 1] = sMoveFourLineDescription_MoveMysticDance,
     [MOVE_RELENTLESS_CLOBBER - 1] = sMoveFourLineDescription_MoveRelentlessClobber,
     [MOVE_POP_MAYHEM - 1] = sMoveFourLineDescription_MovePopMayhem,
+    [MOVE_SNAP_JAW - 1] = sMoveFourLineDescription_MoveSnapJaw,
+    [MOVE_TANGLING_HUSK - 1] = sMoveFourLineDescription_MoveTanglingHusk,
 };

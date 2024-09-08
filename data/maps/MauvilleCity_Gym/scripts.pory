@@ -546,7 +546,8 @@ text MauvilleCity_Gym_Text_WattsonDefeatAll{
 	format("You practically lit up the stage with that battle hahahaha! You took your time and didn't let the high voltage change your flow of battle at all. Good job! Wahahaha!")
 }
 script MauvilleCity_Gym_EventScript_CheckTrainers{
-    if (flag(TRAINER_WATTSON_1)) {
+
+    if (defeated(TRAINER_WATTSON_1)) {
 		msgbox(MauvilleCity_Gym_Text_WattsonPostBattle, MSGBOX_DEFAULT)
 		release
 		end
@@ -571,9 +572,9 @@ script MauvilleCity_Gym_EventScript_CheckTrainers{
 script MauvilleCity_Gym_EventScript_Wattson{
     goto_if_set(FLAG_SYS_GAME_CLEAR, MauvilleCity_Gym_EventScript_WattsonRematch)
     //goto_if_set(FLAG_DAILY_REMATCH_WATTSON, MauvilleCity_Gym_EventScript_AlreadyRematched)
-    if (var(VAR_NEW_MAUVILLE_STATE) == 6){
-        goto(MauvilleCity_Gym_EventScript_CompletedNewMauville)
-    }
+    //if (var(VAR_NEW_MAUVILLE_STATE) == 6){
+    //    goto(MauvilleCity_Gym_EventScript_CompletedNewMauville)
+    //}
     call(MauvilleCity_Gym_EventScript_CheckTrainers)
     setvar(VAR_0x8004, 15)
 	registerbattleevent(BATTLE_EVENT_TENSE_BATTLE)
