@@ -17,11 +17,7 @@
 
 static u8 gNbBattleEvents;
 static u8 gCurrBattleEvent;
-EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 
-    { .id = BATTLE_EVENT_NONE, 
-    .data0=0, 
-    .data1=0 }
- };
+EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
 
 const u8 sText_WarnMaxBattleEventReached[] = _("Warning you have registered\ntoo many battle events.");
 void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventData1){
@@ -33,21 +29,17 @@ void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventDa
         return;
     }
     // using a pointer over gBattleEvents would be nicer but i suppose it will stay like that because C sucks
-    gBattleEvents[gNbBattleEvents].id = battleEventID;
-    gBattleEvents[gNbBattleEvents].data0 = battleEventData0 & 0xF;
-    gBattleEvents[gNbBattleEvents].data1 = battleEventData1 & 0xF;
-    gNbBattleEvents += 1;
+    gBattleEvents[gNbBattleEvents++] = (struct BattleEvent) {
+        .id = battleEventID,
+        .data0 = battleEventData0,
+        .data1 = battleEventData1,
+    };
 }
 
 // clear all battle Events
 void UnregisterBattlesEvents(){
     u8 i;
-    for (i = 0; i < gNbBattleEvents; i++){
-        // a dangerous alternative would be to use memset xd
-        gBattleEvents[i].id = BATTLE_EVENT_NONE;
-        gBattleEvents[i].data0 = 0;
-        gBattleEvents[i].data1 = 0;
-    }
+    ZERO(gBattleEvents)
     gNbBattleEvents = 0;
     gCurrBattleEvent = 0;
 }
@@ -59,9 +51,7 @@ void UnregisterBattlesEvents(){
  *   It's just that if we unregister it with RUN_BATTLESCRIPT_UNREGISTER it lower the chances of forgetting
  */
 void UnregisterCurrentBattleEvent(){
-    gBattleEvents[gCurrBattleEvent].id = BATTLE_EVENT_NONE;
-    gBattleEvents[gCurrBattleEvent].data0 = 0;
-    gBattleEvents[gCurrBattleEvent].data1 = 0;
+    ZERO(gBattleEvents[gCurrBattleEvent])
     // i do wonder if it's worth to shift the array afterwards so less cycles are needed for that
     // probably overkill
 }
@@ -79,7 +69,7 @@ u8 ExecBattleEvents(){
     }
     // reset so it can be reexecuted later in a battle
     gCurrBattleEvent = 0;
-    return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
+    return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 }
 
 //exec only one battle Event
