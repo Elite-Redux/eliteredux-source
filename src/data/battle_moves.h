@@ -6163,7 +6163,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SCALD] =
     {
         .effect = EFFECT_SCALD,
-        .power = 80,
+        .power = 70,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 15,
@@ -10417,7 +10417,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_CHILLING_WATER] =
     {
         .effect = EFFECT_FROSTBITE_HIT,
-        .power = 80,
+        .power = 70,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 15,
