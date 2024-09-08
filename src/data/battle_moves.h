@@ -7024,7 +7024,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_PETAL_BLIZZARD] =
     {
         .effect = EFFECT_HIT,
-        .power = 90,
+        .power = 100,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 15,
