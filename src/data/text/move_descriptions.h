@@ -1699,8 +1699,8 @@ static const u8 sMoveTwoLineDescription_MoveShadowSneak[] = _(
     "to strike first.");
 
 static const u8 sMoveTwoLineDescription_MoveMudBomb[] = _(
-    "Throws a blob of mud to\n"
-    "damage and cut accuracy.");
+    "Can hit Flying foes, then\n"
+    "knocks them to the ground.");
 
 static const u8 sMoveTwoLineDescription_MovePsychoCut[] = _(
     "Tears with psychic blades.\n"
@@ -5124,7 +5124,7 @@ static const u8 sMoveFourLineDescription_MoveThunderFang[] = _("Electrified fang
 static const u8 sMoveFourLineDescription_MoveIceFang[] = _("Frozen fangs.\n10% frostbite or\nflinch chance.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveFireFang[] = _("Fiery fangs.\n10% burn or\nflinch chance.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveShadowSneak[] = _("The user's shadow\nextends and strikes\nthe foe.\n+1 priority.");
-static const u8 sMoveFourLineDescription_MoveMudBomb[] = _("A hard-packed mud\nball is hurled at\nthe foe. 30% chance\nto drop accuracy.");
+static const u8 sMoveFourLineDescription_MoveMudBomb[] = _("This move also hits\nfoes that are in\nthe air, and knocks\nthem down.");
 static const u8 sMoveFourLineDescription_MovePsychoCut[] = _("Psychic blades\nstrike the foe.\nHigh crit ratio.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveZenHeadbutt[] = _("The user focuses,\nand strikes the\nfoe. 20% flinch\nchance. Field-based.");
 static const u8 sMoveFourLineDescription_MoveMirrorShot[] = _("A flash of energy\nis loosed at the\nfoe. Lowers Special\nDefense.");
