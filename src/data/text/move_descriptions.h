@@ -3758,6 +3758,10 @@ static const u8 sMoveTwoLineDescription_MoveTanglingHusk[] = _(
     "Slows attackers while avoiding\n"
     "damage from non-Fire moves.");
 
+static const u8 sMoveTwoLineDescription_MoveRipAndTear[] = _(
+    "The user tears into the\n"
+    "foe with its fangs.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4717,6 +4721,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_POP_MAYHEM - 1] = sMoveTwoLineDescription_MovePopMayhem,
     [MOVE_SNAP_JAW - 1] = sMoveTwoLineDescription_MoveSnapJaw,
     [MOVE_TANGLING_HUSK - 1] = sMoveTwoLineDescription_MoveTanglingHusk,
+    [MOVE_RIP_AND_TEAR - 1] = sMoveTwoLineDescription_MoveRipAndTear,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5675,6 +5680,7 @@ static const u8 sMoveFourLineDescription_MoveRelentlessClobber[] = _("Pummels th
 static const u8 sMoveFourLineDescription_MovePopMayhem[] = _("Pelts the target\nwith hot kernels.10%\nburn chance.");
 static const u8 sMoveFourLineDescription_MoveSnapJaw[] = _("Rushes forward and\nbites the foe. -1\nSpeed to foe or +1\nSpeed to user.");
 static const u8 sMoveFourLineDescription_MoveTanglingHusk[] = _("Protects against non-\nFire-type moves.\nSlows attackers on\ncontact.");
+static const u8 sMoveFourLineDescription_MoveRipAndTear[] = _("Tears into the foe.\nLowers Speed. 50%\nchance to bleed.\nStrong Jaw boost.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6633,4 +6639,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POP_MAYHEM - 1] = sMoveFourLineDescription_MovePopMayhem,
     [MOVE_SNAP_JAW - 1] = sMoveFourLineDescription_MoveSnapJaw,
     [MOVE_TANGLING_HUSK - 1] = sMoveFourLineDescription_MoveTanglingHusk,
+    [MOVE_RIP_AND_TEAR - 1] = sMoveFourLineDescription_MoveRipAndTear,
 };

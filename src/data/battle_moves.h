@@ -11714,8 +11714,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        .parentalBondBanned = TRUE,
         .split = SPLIT_PHYSICAL,
+        .parentalBondBanned = TRUE,
     },
     [MOVE_EERIE_FOG] =
     {
@@ -11791,6 +11791,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_USER,
         .priority = 4,
         .flags = FLAG_PROTECTION_MOVE,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_RIP_AND_TEAR] =
+    {
+        .effect = EFFECT_RIP_AND_TEAR,
+        .power = 100,
+        .type = TYPE_DARK,
+        .accuracy = 90,
+        .pp = 5,
+        .secondaryEffectChance = 50,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRONG_JAW_BOOST,
         .split = SPLIT_PHYSICAL,
     },
 };
