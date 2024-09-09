@@ -27064,6 +27064,8 @@ static const struct LevelUpMove sDuelumberLevelUpLearnset[] = {
 
 static const struct LevelUpMove sEscarginiteLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SHELL_SMASH),
+    LEVEL_UP_MOVE(0, MOVE_GEM_MISSILE),
+    LEVEL_UP_MOVE(0, MOVE_FLAME_BURST),
     LEVEL_UP_MOVE(1, MOVE_EARTH_POWER),
     LEVEL_UP_MOVE(1, MOVE_EMBER),
     LEVEL_UP_MOVE(1, MOVE_ROCK_THROW),
@@ -27993,7 +27995,7 @@ static const struct LevelUpMove sFlygonReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_NASTY_PLOT),
     LEVEL_UP_MOVE(1, MOVE_SWORDS_DANCE),
     LEVEL_UP_MOVE(50, MOVE_DRAGON_DANCE),
-    LEVEL_UP_MOVE(60, MOVE_QUIVER_DANCE),
+    LEVEL_UP_MOVE(50, MOVE_MYSTIC_DANCE),
     LEVEL_UP_END
 };
 
@@ -28095,6 +28097,7 @@ static const struct LevelUpMove sClefableReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_EARTH_POWER),
     LEVEL_UP_MOVE(1, MOVE_MYSTICAL_FIRE),
     LEVEL_UP_MOVE(1, MOVE_LUNAR_DANCE),
+    LEVEL_UP_MOVE(1, MOVE_MYSTIC_DANCE),
     LEVEL_UP_MOVE(1, MOVE_HYPNOSIS),
     LEVEL_UP_END
 };
