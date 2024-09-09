@@ -27324,6 +27324,7 @@ static const struct LevelUpMove sHeliosunnyLevelUpLearnset[] = {
 static const struct LevelUpMove sSopraniceLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_DRAINING_KISS),
     LEVEL_UP_MOVE(0, MOVE_LOVELY_KISS),
+    LEVEL_UP_MOVE(0, MOVE_ALLURING_VOICE),
     LEVEL_UP_MOVE(1, MOVE_LICK),
     LEVEL_UP_MOVE(1, MOVE_PERISH_SONG),
     LEVEL_UP_MOVE(1, MOVE_POUND),
@@ -27343,6 +27344,7 @@ static const struct LevelUpMove sSopraniceLevelUpLearnset[] = {
     LEVEL_UP_MOVE(35, MOVE_HYPER_VOICE),
     LEVEL_UP_MOVE(38, MOVE_PSYCHIC),
     LEVEL_UP_MOVE(40, MOVE_TRIPLE_AXEL),
+    LEVEL_UP_MOVE(40, MOVE_ECHOED_VOICE),
     LEVEL_UP_MOVE(41, MOVE_COPYCAT),
     LEVEL_UP_MOVE(42, MOVE_AFTER_YOU),
     LEVEL_UP_MOVE(44, MOVE_BODY_SLAM),

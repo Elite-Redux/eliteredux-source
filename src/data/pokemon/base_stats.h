@@ -28055,12 +28055,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_TAPU_KOKO] =
     {
-    .baseHP        =  70,
-    .baseAttack    =  95,
-    .baseDefense   =  85,
-    .baseSpeed     =  130,
-    .baseSpAttack  =  115,
-    .baseSpDefense =  75,
+    .baseHP         = 70,
+    .baseAttack     = 115,
+    .baseDefense    = 75,
+    .baseSpeed      = 130,
+    .baseSpAttack   = 115,
+    .baseSpDefense  = 65,
     .type1 = TYPE_ELECTRIC,
     .type2 = TYPE_FAIRY,
     .catchRate = 255,
