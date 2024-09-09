@@ -28043,6 +28043,9 @@ static const struct LevelUpMove sCraboninationLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_METEOR_MASH),
     LEVEL_UP_MOVE(1, MOVE_POWER_UP_PUNCH),
     LEVEL_UP_MOVE(1, MOVE_MACH_PUNCH),
+    LEVEL_UP_MOVE(1, MOVE_CRABHAMMER),
+    LEVEL_UP_MOVE(1, MOVE_DRAGON_HAMMER),
+    LEVEL_UP_MOVE(1, MOVE_SHADOW_HAMMER),
     LEVEL_UP_END
 };
 
@@ -28195,7 +28198,8 @@ static const struct LevelUpMove sPhanfernalLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sSkulberusLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(0, MOVE_SNARL),
+    LEVEL_UP_MOVE(0, MOVE_RIP_AND_TEAR),
+    LEVEL_UP_MOVE(1, MOVE_SNARL),
     LEVEL_UP_MOVE(1, MOVE_BITE),
     LEVEL_UP_MOVE(1, MOVE_FIRE_FANG),
     LEVEL_UP_MOVE(1, MOVE_HOWL),
