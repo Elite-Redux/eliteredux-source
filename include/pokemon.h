@@ -234,6 +234,7 @@ struct BattleMove
     u8 throwingBased:1;
     u8 doubleDamageVsMega:1;
     MoveSplitType splitFlag:3;
+    u8 everyOtherTurn:1;
 };
 
 struct SpindaSpot
