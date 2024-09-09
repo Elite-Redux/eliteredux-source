@@ -75,6 +75,11 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
     [SPECIES_VENUSAUR] = TMHM_LEARNSET
         TM(MOVE_ROAR)
         TM(MOVE_TOXIC)
+        TM(MOVE_ROAR)
+        TM(MOVE_HYPER_BEAM)
+        TM(MOVE_EARTHQUAKE)
+        TM(MOVE_GIGA_IMPACT)
+        TM(MOVE_BULLDOZE)
         TM(MOVE_BULLET_SEED)
         TM(MOVE_HIDDEN_POWER)
         TM(MOVE_SUNNY_DAY)
@@ -320,10 +325,6 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_RETURN)
         TM(MOVE_DIG)
         TM(MOVE_BRICK_BREAK)
-        TM(MOVE_REFLECT)
-        TM(MOVE_ROCK_TOMB)
-        TM(MOVE_FACADE)
-        TM(MOVE_SECRET_POWER)
         TM(MOVE_REST)
         TM(MOVE_ATTRACT)
         TM(MOVE_SLEEP_TALK)
@@ -344,9 +345,6 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_CURSE)
         TM(MOVE_SURF)
         TM(MOVE_STRENGTH)
-        TM(MOVE_ROCK_SMASH)
-        TM(MOVE_WATERFALL)
-        TM(MOVE_DIVE)
         TMHM_LEARNSET_END
 
     [SPECIES_CATERPIE] = TMHM_LEARNSET
