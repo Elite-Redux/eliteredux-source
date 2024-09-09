@@ -200,6 +200,7 @@ struct RoundStruct
     u8 mindReader:1;
     u8 afterYou:1;
     u8 tanglingHusked:1;
+    u8 damaged:1;
 };
 
 struct TurnStruct

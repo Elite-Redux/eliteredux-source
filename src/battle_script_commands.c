@@ -2788,6 +2788,7 @@ static void Cmd_datahpupdate(void)
                     }
                     IncrementTimesTookDamage(gActiveBattler);
                 }
+                gRoundStructs[gActiveBattler].damaged = TRUE;
             }
             gHitMarker &= ~(HITMARKER_PASSIVE_DAMAGE);
             BtlController_EmitSetMonData(0, REQUEST_HP_BATTLE, 0, 2, &gBattleMons[gActiveBattler].hp);
