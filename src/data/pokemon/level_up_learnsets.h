@@ -1,11 +1,10 @@
 #define LEVEL_UP_MOVE(lvl, moveLearned) {.move = moveLearned, .level = lvl}
 
 static const struct LevelUpMove sBulbasaurLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(0, MOVE_SLUDGE),
     LEVEL_UP_MOVE(1, MOVE_GROWL),
-    LEVEL_UP_MOVE(1, MOVE_GROWTH),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
-    LEVEL_UP_MOVE(1, MOVE_VINE_WHIP),
+    LEVEL_UP_MOVE(3, MOVE_VINE_WHIP),
+    LEVEL_UP_MOVE(6, MOVE_GROWTH),
     LEVEL_UP_MOVE(9, MOVE_LEECH_SEED),
     LEVEL_UP_MOVE(12, MOVE_RAZOR_LEAF),
     LEVEL_UP_MOVE(15, MOVE_POISON_POWDER),

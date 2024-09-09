@@ -14202,11 +14202,6 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                 && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
                 && GetHighestAttackingStatId(battler, TRUE) == statEnum)
                     statBase = statBase * 3 / 2;
-                
-            // Flare Boost
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_FLARE_BOOST)
-                && gBattleMons[battler].status1 & STATUS1_BURN)
-                    statBase = statBase * 3 / 2;
             
             // Supreme Overlord
             if (BATTLER_HAS_ABILITY(battler, ABILITY_SUPREME_OVERLORD))
@@ -14231,6 +14226,11 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
             // Special Violent Rush
             if(gVolatileStructs[battler].rapidResponse) statBase = statBase * 6 / 5;
+                
+            // Flare Boost
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_FLARE_BOOST)
+                && gBattleMons[battler].status1 & STATUS1_BURN)
+                    statBase = statBase * 3 / 2;
 
             // Flower Gift
             {
