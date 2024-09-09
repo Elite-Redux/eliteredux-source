@@ -1998,7 +1998,7 @@ u8 TrySetCantSelectMoveBattleScript(void)
     }
 
     if (move == gLastChosenMove[gActiveBattler]
-        && gBattleMoves[move].effect == EFFECT_EVERY_OTHER_TURN
+        && gBattleMoves[move].everyOtherTurn
         && !GetAbilityState(gActiveBattler, ABILITY_RAMPAGE)
         && !GetAbilityState(gActiveBattler, ABILITY_BERSERKER_RAGE))
     {
@@ -2060,7 +2060,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
         else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DISCIPLINE) && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
             unusableMoves |= 1 << i;
         else if (gBattleMons[battlerId].moves[i] == gLastChosenMove[battlerId]
-            && gBattleMoves[gBattleMons[battlerId].moves[i]].effect == EFFECT_EVERY_OTHER_TURN
+            && gBattleMoves[gBattleMons[battlerId].moves[i]].everyOtherTurn
             && !GetAbilityState(battlerId, ABILITY_RAMPAGE)
             && !GetAbilityState(battlerId, ABILITY_BERSERKER_RAGE))
             unusableMoves |= 1 << i;
@@ -5969,24 +5969,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect++;
         }
         
-        // Majestic Moth
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_MAJESTIC_MOTH)){
-            u8 statId = GetHighestStatId(battler, TRUE);
-
-            if (CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
-            {
-                s8 result = ChangeStatBuffs(battler, StatBuffValue(1), statId, MOVE_EFFECT_AFFECTS_USER, NULL);
-                if (result)
-                {
-                    SetStatChanger(statId, 1);
-                    gBattlerAttacker = battler;
-                    PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
-                    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-                    effect++;
-                }
-            }
-        }
-        
         // Sea Guardian
         if(CheckAndSetSwitchInAbility(battler, ABILITY_SEA_GUARDIAN)){
             if (IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
@@ -6269,6 +6251,24 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Monkey Business
         if(CheckAndSetSwitchInAbility(battler, ABILITY_TERRIFY)) {
             effect += UseIntimidateClone(battler, ABILITY_TERRIFY);
+        }
+        
+        // Majestic Moth
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_MAJESTIC_MOTH)){
+            u8 statId = GetHighestStatId(battler, TRUE);
+
+            if (CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
+            {
+                s8 result = ChangeStatBuffs(battler, StatBuffValue(1), statId, MOVE_EFFECT_AFFECTS_USER, NULL);
+                if (result)
+                {
+                    SetStatChanger(statId, 1);
+                    gBattlerAttacker = battler;
+                    PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
+                    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+                    effect++;
+                }
+            }
         }
         
         // Water Veil
@@ -15099,8 +15099,6 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
     if (gBattleMoves[move].effect == EFFECT_SLUDGE && defType == TYPE_WATER)
         mod = UQ_4_12(2.0);
     if (gBattleMoves[move].effect == EFFECT_POISON_GAS && defType == TYPE_FLYING)
-        mod = UQ_4_12(2.0);
-    if (move == MOVE_GIGATON_HAMMER && defType == TYPE_STEEL)
         mod = UQ_4_12(2.0);
     if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);

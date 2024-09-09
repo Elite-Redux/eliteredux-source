@@ -3752,7 +3752,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BLAST_BURN] =
     {
-        .effect = EFFECT_EVERY_OTHER_TURN,
+        .effect = EFFECT_HIT,
         .power = 130,
         .type = TYPE_FIRE,
         .accuracy = 100,
@@ -3762,10 +3762,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
         .splitFlag = USE_HIGHEST_OFFENSE,
+        .everyOtherTurn = TRUE,
     },
     [MOVE_HYDRO_CANNON] =
     {
-        .effect = EFFECT_EVERY_OTHER_TURN,
+        .effect = EFFECT_HIT,
         .power = 130,
         .type = TYPE_WATER,
         .accuracy = 100,
@@ -3775,6 +3776,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_SPECIAL,
         .splitFlag = USE_HIGHEST_OFFENSE,
+        .everyOtherTurn = TRUE,
     },
     [MOVE_METEOR_MASH] =
     {
@@ -4136,7 +4138,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_FRENZY_PLANT] =
     {
-        .effect = EFFECT_EVERY_OTHER_TURN,
+        .effect = EFFECT_HIT,
         .power = 130,
         .type = TYPE_GRASS,
         .accuracy = 100,
@@ -4146,6 +4148,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_SPECIAL,
         .splitFlag = USE_HIGHEST_OFFENSE,
+        .everyOtherTurn = TRUE,
     },
     [MOVE_BULK_UP] =
     {
@@ -5376,7 +5379,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_ROCK_WRECKER] =
     {
-        .effect = EFFECT_EVERY_OTHER_TURN,
+        .effect = EFFECT_HIT,
         .power = 120,
         .type = TYPE_ROCK,
         .accuracy = 100,
@@ -5386,6 +5389,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST | FLAG_BALLISTIC,
         .split = SPLIT_PHYSICAL,
         .throwingBased = TRUE,
+        .everyOtherTurn = TRUE,
     },
     [MOVE_CROSS_POISON] =
     {
@@ -8155,7 +8159,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_PRISMATIC_LASER] =
     {
-        .effect = EFFECT_EVERY_OTHER_TURN,
+        .effect = EFFECT_HIT,
         .power = 140,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
@@ -8165,6 +8169,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_SPECIAL,
         .splitFlag = USE_HIGHEST_OFFENSE,
+        .everyOtherTurn = TRUE,
     },
     [MOVE_SPECTRAL_THIEF] =
     {
@@ -8854,7 +8859,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_METEOR_ASSAULT] =
     {
-        .effect = EFFECT_EVERY_OTHER_TURN,
+        .effect = EFFECT_HIT,
         .power = 140,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
@@ -8863,6 +8868,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_PHYSICAL,
+        .everyOtherTurn = TRUE,
     },
     [MOVE_ETERNABEAM] =
     {
@@ -10563,7 +10569,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_GIGATON_HAMMER] =
     {
-        .effect = EFFECT_EVERY_OTHER_TURN,
+        .effect = EFFECT_SE_AGAINST_TYPE_HIT,
         .power = 140,
         .type = TYPE_STEEL,
         .accuracy = 100,
@@ -10572,7 +10578,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+        .argument = TYPE_STEEL,
         .hammerBased = TRUE,
+        .everyOtherTurn = TRUE,
     },
     [MOVE_TRIPLE_DIVE] =
     {
@@ -10992,7 +11000,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BLOOD_MOON] =
     {
-        .effect = EFFECT_EVERY_OTHER_TURN,
+        .effect = EFFECT_HIT,
         .power = 140,
         .type = TYPE_NORMAL,
         .accuracy = 100,
@@ -11001,6 +11009,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .everyOtherTurn = TRUE,
     },
     [MOVE_AXE_KICK] =
     {
@@ -11806,6 +11815,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRONG_JAW_BOOST,
         .split = SPLIT_PHYSICAL,
+        .everyOtherTurn = TRUE,
     },
 };
 

@@ -834,17 +834,29 @@ BattleScript_EffectClangorousSoul:
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectOctolock:
+	jumpifsubstituteblocks BattleScript_EffectHit
 	attackcanceler
-	jumpifsubstituteblocks BattleScript_ButItFailedAtkStringPpReduce
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	setoctolock BS_TARGET, BattleScript_ButItFailed
+	critcalc
+	damagecalc
+	adjustdamage
 	attackanimation
 	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	setoctolock BS_TARGET, BattleScript_MoveEndTryFaintTarget
 	printstring STRINGID_CANTESCAPEBECAUSEOFCURRENTMOVE
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	goto BattleScript_MoveEndTryFaintTarget
 
 BattleScript_OctolockEndTurn::
 	setbyte sSTAT_ANIM_PLAYED, FALSE

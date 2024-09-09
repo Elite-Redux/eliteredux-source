@@ -5680,7 +5680,7 @@ static const u8 sMoveFourLineDescription_MoveRelentlessClobber[] = _("Pummels th
 static const u8 sMoveFourLineDescription_MovePopMayhem[] = _("Pelts the target\nwith hot kernels.10%\nburn chance.");
 static const u8 sMoveFourLineDescription_MoveSnapJaw[] = _("Rushes forward and\nbites the foe. -1\nSpeed to foe or +1\nSpeed to user.");
 static const u8 sMoveFourLineDescription_MoveTanglingHusk[] = _("Protects against non-\nFire-type moves.\nSlows attackers on\ncontact.");
-static const u8 sMoveFourLineDescription_MoveRipAndTear[] = _("Tears into the foe.\nLowers Speed. 50%\nchance to bleed.\nStrong Jaw boost.");
+static const u8 sMoveFourLineDescription_MoveRipAndTear[] = _("Lowers Speed. 50%\nchance to bleed.\nCan't be used\ntwice in a row.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,

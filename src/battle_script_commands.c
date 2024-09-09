@@ -10641,7 +10641,7 @@ static void Cmd_various(void)
         }
         return;
     case VARIOUS_SET_OCTOLOCK:
-        if (gVolatileStructs[gActiveBattler].octolock)
+        if (gVolatileStructs[gActiveBattler].octolock || !IsBattlerAlive(gActiveBattler))
         {
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         }
