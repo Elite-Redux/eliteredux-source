@@ -3253,7 +3253,7 @@ static void BattleStartClearSetData(void)
     gHitMarker = 0;
 
     gQueuedAttackCount = 0;
-    gDelayedTurnActionId = B_ACTION_FINISHED;
+    gDelayedTurnActionId = gCurrentActionFuncId = B_ACTION_FINISHED;
 
     if (!(gBattleTypeFlags & BATTLE_TYPE_RECORDED))
     {
@@ -3899,6 +3899,28 @@ static void TryDoEventsBeforeFirstTurn(void)
     #endif
     if (gBattleControllerExecFlags)
         return;
+    
+    if (gCurrentActionFuncId != B_ACTION_FINISHED)
+    {
+        sTurnActionsFuncsTable[gCurrentActionFuncId]();
+        return;
+    }
+    else if (gBattleOutcome)
+    {
+        gBattleMainFunc = sEndTurnFuncsTable[gBattleOutcome & 0x7F];
+        return;
+    }
+    else if (gQueuedAttackCount)
+    {
+        gCurrentTurnActionNumber = 0;
+        ClearMiscTurnFlags();
+        gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];
+        if (!IsBattlerAlive(gQueuedExtraAttackData[0].attacker)) return;
+        gProcessingExtraAttacks = TRUE;
+        gCurrentActionFuncId = B_ACTION_USE_MOVE;
+        return;
+    }
+    else gProcessingExtraAttacks = FALSE;
 
 
     // Set invalid mons as absent(for example when starting a double battle with only one pokemon).
@@ -3964,7 +3986,8 @@ static void TryDoEventsBeforeFirstTurn(void)
     while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount)
     {
         gBattlerAttacker = gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter++];
-        // TODO: Refactor switch-in moves to use a proper full action
+        if (!IsBattlerAlive(gBattlerAttacker)) continue;
+
         ClearMiscTurnFlags();
         // Primal Reversion
         if (TryPrimalReversion(gBattlerAttacker, FALSE))
@@ -3981,7 +4004,8 @@ static void TryDoEventsBeforeFirstTurn(void)
     // Check all switch in items having effect from the fastest mon to slowest.
     while (gBattleStruct->switchInItemsCounter < gBattlersCount)
     {
-        if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gBattlerByTurnOrder[gBattleStruct->switchInItemsCounter++], FALSE))
+        if (!IsBattlerAlive(gBattleStruct->switchInItemsCounter++)) continue;
+        if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gBattlerByTurnOrder[gBattleStruct->switchInItemsCounter], FALSE))
             return;
     }
 
@@ -3997,10 +4021,13 @@ static void TryDoEventsBeforeFirstTurn(void)
     TurnValuesCleanUp(FALSE);
     for (i = 0; i < gBattlersCount; i++)
     {
+        if (!IsBattlerAlive(i)) continue;
         // Restore Coward for the first turn
         if (GetSingleUseAbilityCounter(i, ABILITY_COWARD) > 0) gRoundStructs[i].protected = TRUE;
     }
     TurnStructsClear();
+    gCurrentTurnActionNumber = gBattlersCount;
+    if (!gBattleOutcome && HandleFaintedMonActions()) return;
     *(&gBattleStruct->field_91) = gAbsentBattlerFlags;
     BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
     gBattleMainFunc = HandleBattleEvents;

@@ -5006,42 +5006,34 @@ void IncrementAbilityState(u8 battler, u16 ability, u32 value) {
     SetAbilityState(battler, ability, GetAbilityState(battler, ability) + value);
 }
 
-static bool8 UseEntryMove(u8 battler, u16 ability, u8 *effect, u16 extraMove, u8 movePower, u8 moveEffectPercentChance, u8 extraMoveSecondaryEffect) {
-    bool8 hasTarget      = FALSE;
+static bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) {
+    int target = gBattlersCount;
     u8 i;
     u8 opposingBattler = BATTLE_OPPOSITE(battler);
     
     if (!CheckAndSetSwitchInAbility(battler, ability)) return FALSE;
-
+    
     //Checks Target
     for (i = 0; i < 2; opposingBattler ^= BIT_FLANK, i++)
     {
         if (IsBattlerAlive(opposingBattler) && gBattleMons[opposingBattler].hp != 1)
         {
-            gBattlerTarget = opposingBattler;
-            hasTarget = TRUE;
+            target = opposingBattler;
             break;
         }
     }
 
     //This is the stuff that has to be changed for each ability
-    if(hasTarget && CanUseExtraMove(battler, gBattlerTarget)){
-        gTempMove = gCurrentMove;
-        gCurrentMove = extraMove;
-        gTurnStructs[battler].multiHitCounter = 0;
-        gRoundStructs[battler].extraMoveUsed = TRUE;
-
-        //Move Effect
-        VarSet(VAR_EXTRA_MOVE_DAMAGE,     movePower);
-        VarSet(VAR_TEMP_MOVEEFECT_CHANCE, moveEffectPercentChance);
-        VarSet(VAR_TEMP_MOVEEFFECT,       extraMoveSecondaryEffect);
-
-        gBattleScripting.replaceEndWithEnd3++;
-        BattleScriptPushCursorAndCallback(BattleScript_AttackerUsedAnExtraMoveOnSwitchIn);
-        (*effect)++;
+    if(target < gBattlersCount && CanUseExtraMove(battler, target)){
+        gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+            .ability = ability,
+            .attacker = battler,
+            .move = extraMove,
+            .movePower = movePower,
+            .target = target,
+        };
         return TRUE;
     }
-
     return FALSE;
 }
 
@@ -6139,47 +6131,50 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         // Low Blow
-        UseEntryMove(battler, ABILITY_LOW_BLOW, &effect, MOVE_FEINT_ATTACK, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_LOW_BLOW, MOVE_FEINT_ATTACK, 0);
 
         // Cheap Tactics
-        UseEntryMove(battler, ABILITY_CHEAP_TACTICS, &effect, MOVE_SCRATCH, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_CHEAP_TACTICS, MOVE_SCRATCH, 0);
         
         // Dust Cloud
-        UseEntryMove(battler, ABILITY_DUST_CLOUD, &effect, MOVE_SAND_ATTACK, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_DUST_CLOUD, MOVE_SAND_ATTACK, 0);
 
         // Trickster
-        UseEntryMove(battler, ABILITY_TRICKSTER, &effect, MOVE_DISABLE, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_TRICKSTER, MOVE_DISABLE, 0);
 
         // Suppress
-        UseEntryMove(battler, ABILITY_SUPPRESS, &effect, MOVE_TORMENT, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_SUPPRESS, MOVE_TORMENT, 0);
 
         // Doombringer
-        UseEntryMove(battler, ABILITY_DOOMBRINGER, &effect, MOVE_DOOM_DESIRE, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_DOOMBRINGER, MOVE_DOOM_DESIRE, 0);
 
         // Change of Heart
-        UseEntryMove(battler, ABILITY_CHANGE_OF_HEART, &effect, MOVE_HEART_SWAP, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_CHANGE_OF_HEART, MOVE_HEART_SWAP, 0);
 
         // Telekinetic
-        UseEntryMove(battler, ABILITY_TELEKINETIC, &effect, MOVE_TELEKINESIS, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_TELEKINETIC, MOVE_TELEKINESIS, 0);
 
         // Powder Burst
-        UseEntryMove(battler, ABILITY_POWDER_BURST, &effect, MOVE_POWDER, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_POWDER_BURST, MOVE_POWDER, 0);
 
         // Monster Mash
-        UseEntryMove(battler, ABILITY_MONSTER_MASH, &effect, MOVE_TRICK_OR_TREAT, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_MONSTER_MASH, MOVE_TRICK_OR_TREAT, 0);
 
         // Phantom Thief
-        UseEntryMove(battler, ABILITY_PHANTOM_THIEF, &effect, MOVE_SPECTRAL_THIEF, 40, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_PHANTOM_THIEF, MOVE_SPECTRAL_THIEF, 40);
 
         // Web Spinner
-        UseEntryMove(battler, ABILITY_WEB_SPINNER, &effect, MOVE_STRING_SHOT, 0, 0, 0);
+        effect += UseEntryMove(battler, ABILITY_WEB_SPINNER, MOVE_STRING_SHOT, 0);
 
         // Wishmaker
         if (CheckAndSetSwitchInAbility(battler, ABILITY_WISHMAKER)) {
             u8 counter = GetSingleUseAbilityCounter(battler, ABILITY_WISHMAKER) + 1;
             if (counter <= 3) {
-                if (UseEntryMove(battler, ABILITY_WISHMAKER, &effect, MOVE_WISH, 0, 0, 0))
+                if (UseEntryMove(battler, ABILITY_WISHMAKER, MOVE_WISH, 0))
+                {
                     SetSingleUseAbilityCounter(battler, ABILITY_WISHMAKER, counter);
+                    effect++;
+                }
             }
         }
 
@@ -10677,7 +10672,7 @@ void BattleScriptExecute(const u8 *BS_ptr)
     gBattlescriptCurrInstr = BS_ptr;
     gBattleResources->battleCallbackStack->function[gBattleResources->battleCallbackStack->size++] = gBattleMainFunc;
     gBattleMainFunc = RunBattleScriptCommands_PopCallbacksStack;
-    gCurrentActionFuncId = 0;
+    gCurrentActionFuncId = B_ACTION_USE_MOVE;
     BattleScriptSaveCurrentStackData();
 }
 
