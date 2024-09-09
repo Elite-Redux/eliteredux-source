@@ -476,6 +476,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectEerieFog			 	  @ EFFECT_EERIE_FOG
 	.4byte BattleScript_EffectMysticDance			  @ EFFECT_MYSTIC_DANCE
 	.4byte BattleScript_EffectSnapJaw   			  @ EFFECT_SNAP_JAW
+	.4byte BattleScript_EffectRipAndTear			  @ EFFECT_RIP_AND_TEAR
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -12737,3 +12738,30 @@ BattleScript_EffectSnapJaw::
 BattleScript_EffectSnapJaw_RaiseSpeed:
 	setmoveeffect MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
 	goto BattleScript_EffectHit
+
+BattleScript_EffectRipAndTear::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_SPD_MINUS_1
+	seteffectsecondary
+	setmoveeffect MOVE_EFFECT_BLEED
+	seteffectwithchance
+	tryfaintmon BS_TARGET, FALSE, NULL
+	moveendall
+	end
