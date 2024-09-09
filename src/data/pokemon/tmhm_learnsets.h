@@ -333,6 +333,10 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_ENDURE)
         TM(MOVE_DRAGON_PULSE)
         TM(MOVE_ROCK_SLIDE)
+        TM(MOVE_REFLECT)
+        TM(MOVE_ROCK_TOMB)
+        TM(MOVE_FACADE)
+        TM(MOVE_SECRET_POWER)
         TM(MOVE_GIGA_IMPACT)
         TM(MOVE_GYRO_BALL)
         TM(MOVE_BULLDOZE)
@@ -345,6 +349,9 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_CURSE)
         TM(MOVE_SURF)
         TM(MOVE_STRENGTH)
+        TM(MOVE_ROCK_SMASH)
+        TM(MOVE_WATERFALL)
+        TM(MOVE_DIVE)
         TMHM_LEARNSET_END
 
     [SPECIES_CATERPIE] = TMHM_LEARNSET
