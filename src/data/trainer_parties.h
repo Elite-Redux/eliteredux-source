@@ -33967,37 +33967,57 @@ static const struct TrainerMonItemCustomMoves sParty_Dianne[] = { // with Felix
 static const struct TrainerMonItemCustomMoves sParty_Felix[] = { // with Dianne
     {
     .lvl = 0,
-    .species = SPECIES_JYNX, // Doubles, Aurora Veil
-    .heldItem = ITEM_LIGHT_CLAY,
-    .ability = 0, // ABILITY_PSYCHIC_MIND, ABILITY_NONE, ABILITY_PSYCHIC_SURGE},
-    // .innates = {ABILITY_DRY_SKIN, ABILITY_REFRIGERATE, ABILITY_AMPLIFIER},
-    .evs = {0, 0, 0, 252, 4, 252},      // HP, Atk, Def, SpA, SpD, Spe
-	.nature = NATURE_TIMID,
-    .moves = MOVE_PSYSHOCK, MOVE_BLIZZARD, MOVE_FAKE_OUT, MOVE_AURORA_VEIL
+    .species = SPECIES_DUSKNOIR,
+    .heldItem = ITEM_SMOKE_BALL,
+    .ability = 1,
+    .evs = {252, 252, 4, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_SHADOW_PUNCH, MOVE_ICE_PUNCH, MOVE_THUNDER_PUNCH, MOVE_FIRE_PUNCH
     },
     {
     .lvl = 0,
-    .species = SPECIES_SCEPTILE, // Mega, Synthesis
-    .heldItem = ITEM_SCEPTILITE,
-    .ability = 0, // ABILITY_BIG_LEAVES, ABILITY_BIG_LEAVES, ABILITY_BIG_LEAVES},
-    // .innates = {ABILITY_OVERGROW, ABILITY_SPEED_FORCE, ABILITY_KEEN_EDGE},
-    // Pre-Mega
-    // ABILITY_CHLOROPLAST, ABILITY_PROTEAN, ABILITY_SPEED_FORCE},
-    // .innates = {ABILITY_OVERGROW, ABILITY_SKILL_LINK, ABILITY_KEEN_EDGE},
-    .evs = {0, 0, 0, 252, 4, 252},      // HP, Atk, Def, SpA, SpD, Spe
-	.nature = NATURE_TIMID,
-    .moves = MOVE_SOLAR_BEAM, MOVE_DRACO_METEOR, MOVE_FOCUS_BLAST, MOVE_SYNTHESIS
+    .species = SPECIES_ORICORIO_SENSU,
+    .heldItem = ITEM_BRIGHT_POWDER,
+    .ability = 1,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_REVELATION_DANCE, MOVE_FIERY_DANCE, MOVE_QUIVER_DANCE, MOVE_AIR_SLASH
     },
     {
     .lvl = 0,
-    .species = SPECIES_AVALUGG, // Doubles, Boots, Sturdy, Def Wall, Iron Def + Body Press
-    .heldItem = ITEM_HEAVY_DUTY_BOOTS,
-    .ability = 1, // ABILITY_STURDY, ABILITY_REGENERATOR, ABILITY_FORT_KNOX},
-    // .innates = {ABILITY_PERMAFROST, ABILITY_IMPENETRABLE, ABILITY_SELF_SUFFICIENT},
-    .zeroSpeedIvs = TRUE,
-    .evs = {252, 0, 252, 0, 4, 0},      // HP, Atk, Def, SpA, SpD, Spe
-	.nature = NATURE_RELAXED,
-    .moves = MOVE_AVALANCHE, MOVE_BODY_PRESS, MOVE_PROTECT, MOVE_IRON_DEFENSE
+    .species = SPECIES_DRAGAPULT,
+    .heldItem = ITEM_DRAGON_GEM,
+    .ability = 2,
+    .evs = {0, 252, 4, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_DRAGON_DARTS, MOVE_SHADOW_FANGS, MOVE_ACROBATICS, MOVE_U_TURN
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_PHANTOWL,
+    .heldItem = ITEM_ASSAULT_VEST,
+    .ability = 2,
+    .evs = {160, 0, 96, 252, 0, 0},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_SHADOW_BALL, MOVE_HURRICANE, MOVE_BOOMBURST, MOVE_DARK_PULSE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GENGAR,
+    .heldItem = ITEM_GENGARITE,
+    .ability = 0,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SHADOW_BALL, MOVE_SLUDGE_BOMB, MOVE_DAZZLING_GLEAM, MOVE_DESTINY_BOND
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GYARADEATH,
+    .heldItem = ITEM_GYARADEATHITE_X,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_POLTERGEIST, MOVE_CRUNCH, MOVE_FLAIL, MOVE_DRAGON_DANCE
     }
 };
 
