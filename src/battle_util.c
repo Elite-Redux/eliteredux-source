@@ -5969,24 +5969,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect++;
         }
         
-        // Majestic Moth
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_MAJESTIC_MOTH)){
-            u8 statId = GetHighestStatId(battler, TRUE);
-
-            if (CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
-            {
-                s8 result = ChangeStatBuffs(battler, StatBuffValue(1), statId, MOVE_EFFECT_AFFECTS_USER, NULL);
-                if (result)
-                {
-                    SetStatChanger(statId, 1);
-                    gBattlerAttacker = battler;
-                    PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
-                    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-                    effect++;
-                }
-            }
-        }
-        
         // Sea Guardian
         if(CheckAndSetSwitchInAbility(battler, ABILITY_SEA_GUARDIAN)){
             if (IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
@@ -6269,6 +6251,24 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Monkey Business
         if(CheckAndSetSwitchInAbility(battler, ABILITY_TERRIFY)) {
             effect += UseIntimidateClone(battler, ABILITY_TERRIFY);
+        }
+        
+        // Majestic Moth
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_MAJESTIC_MOTH)){
+            u8 statId = GetHighestStatId(battler, TRUE);
+
+            if (CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
+            {
+                s8 result = ChangeStatBuffs(battler, StatBuffValue(1), statId, MOVE_EFFECT_AFFECTS_USER, NULL);
+                if (result)
+                {
+                    SetStatChanger(statId, 1);
+                    gBattlerAttacker = battler;
+                    PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
+                    BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
+                    effect++;
+                }
+            }
         }
         
         // Water Veil
