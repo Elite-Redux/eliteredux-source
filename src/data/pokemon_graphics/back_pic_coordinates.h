@@ -4859,7 +4859,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_MEOWSCARADA] =
     {
         .size = 0,
-        .y_offset =  2
+        .y_offset =  0
     },
     [SPECIES_FUECOCO] =
     {

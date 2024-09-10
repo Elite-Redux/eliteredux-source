@@ -2106,7 +2106,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_MESPRIT] = 0,
     [SPECIES_AZELF] = 0,
     [SPECIES_DIALGA] = 2,
-    [SPECIES_DIALGA_ORIGIN] = 2,
+    [SPECIES_DIALGA_ORIGIN] = 0,
     [SPECIES_PALKIA] = 2,
     [SPECIES_PALKIA_ORIGIN] = 2,
     [SPECIES_HEATRAN] = 0,
@@ -2641,7 +2641,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_IRON_BUNDLE]  = 0,
     [SPECIES_IRON_HANDS]   = 0,
     [SPECIES_IRON_JUGULIS] = 0,
-    [SPECIES_IRON_MOTH]    = 3,
+    [SPECIES_IRON_MOTH]    = 2,
     [SPECIES_IRON_THORNS]  = 1,
 
     [SPECIES_FRIGIBAX]     = 0,
