@@ -21776,6 +21776,7 @@ static const struct LevelUpMove sKubfuLevelUpLearnset[] = {
 
 static const struct LevelUpMove sUrshifuLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_THRASH),
+    LEVEL_UP_MOVE(0, MOVE_RAGE),
     LEVEL_UP_MOVE(0, MOVE_WICKED_BLOW),
     LEVEL_UP_MOVE(1, MOVE_ENDURE),
     LEVEL_UP_MOVE(1, MOVE_FOCUS_ENERGY),
@@ -22877,6 +22878,7 @@ static const struct LevelUpMove sSimisearReduxLevelUpLearnset[] = {
 
 static const struct LevelUpMove sPansageReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_FAKE_OUT),
+    LEVEL_UP_MOVE(1, MOVE_BRAVADO),
     LEVEL_UP_MOVE(1, MOVE_DOUBLE_KICK),
     LEVEL_UP_MOVE(1, MOVE_PLAY_NICE),
     LEVEL_UP_MOVE(1, MOVE_SCRATCH),
@@ -22898,6 +22900,7 @@ static const struct LevelUpMove sPansageReduxLevelUpLearnset[] = {
 
 static const struct LevelUpMove sSimisageReduxLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_AURA_FORCE),
+    LEVEL_UP_MOVE(0, MOVE_BRAVADO),
     LEVEL_UP_MOVE(1, MOVE_FURY_SWIPES),
     LEVEL_UP_MOVE(1, MOVE_LEER),
     LEVEL_UP_MOVE(1, MOVE_LICK),
