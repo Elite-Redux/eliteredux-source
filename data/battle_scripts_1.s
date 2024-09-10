@@ -2801,6 +2801,7 @@ BattleScript_EffectHealPulse:
 	ppreduce
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
 	jumpifsubstituteblocks BattleScript_ButItFailed
+	jumpifhealingblocked BS_TARGET, BattleScript_ButItFailed
 	tryhealpulse BS_TARGET, BattleScript_AlreadyAtFullHp
 	attackanimation
 	waitanimation
@@ -4288,6 +4289,7 @@ BattleScript_EffectRestoreHp::
 	attackcanceler
 	attackstring
 	ppreduce
+	jumpifhealingblocked BS_TARGET, BattleScript_ButItFailed
 	tryhealhalfhealth BattleScript_AlreadyAtFullHp, BS_ATTACKER
 	attackanimation
 	waitanimation
@@ -6213,6 +6215,7 @@ BattleScript_EffectSoftboiled::
 	attackcanceler
 	attackstring
 	ppreduce
+	jumpifhealingblocked BS_TARGET, BattleScript_ButItFailed
 	tryhealhalfhealth BattleScript_AlreadyAtFullHp, BS_TARGET
 BattleScript_PresentHealTarget::
 	attackanimation
@@ -7689,7 +7692,7 @@ BattleScript_LeechSeedTurnDrain::
 	copyword gBattleMoveDamage, gHpDealt
 	jumpifability BS_ATTACKER, ABILITY_LIQUID_OOZE, BattleScript_LeechSeedTurnPrintLiquidOoze
 	setbyte cMULTISTRING_CHOOSER, B_MSG_LEECH_SEED_DRAIN
-	jumpifstatus3 BS_TARGET, STATUS3_HEAL_BLOCK, BattleScript_LeechSeedHealBlock
+	jumpifhealingblocked BS_TARGET, BattleScript_LeechSeedHealBlock
 	jumpifstatus BS_TARGET, STATUS1_BLEED, BattleScript_LeechSeedHealBlock
 	manipulatedamage DMG_BIG_ROOT
 	goto BattleScript_LeechSeedTurnPrintAndUpdateHp
@@ -8365,6 +8368,7 @@ BattleScript_WishComesTrue::
 	playanimation BS_TARGET, B_ANIM_WISH_HEAL, NULL
 	printstring STRINGID_PKMNWISHCAMETRUE
 	waitmessage B_WAIT_TIME_LONG
+	jumpifhealingblocked BS_TARGET, BattleScript_ButItFailed
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	jumpifstatus BS_TARGET, STATUS1_BLEED, BattleScript_MoveUsedBleedHeal
 	healthbarupdate BS_TARGET
@@ -10529,6 +10533,12 @@ BattleScript_ProteanActivates::
 BattleScript_CursedBodyActivates::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_CUSEDBODYDISABLED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_BloodStainActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_BATTLERACQUIREDABILITY
 	waitmessage B_WAIT_TIME_LONG
 	return
 

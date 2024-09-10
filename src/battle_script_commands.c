@@ -3319,7 +3319,10 @@ void SetMoveEffect(bool32 primary, u32 certain)
             {
             u16 blockingAbility = 0;
 
-            if (gBattleMons[gEffectBattler].status1 & STATUS1_ANY || BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_COMATOSE)) break;
+            if (gBattleMons[gEffectBattler].status1 & STATUS1_ANY
+                || BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_COMATOSE)
+                || BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_BLOOD_STAIN))
+                    break;
 
             if (BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_WATER_VEIL)) blockingAbility = ABILITY_WATER_VEIL;
             else if (BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_PURIFYING_WATERS)) blockingAbility = ABILITY_PURIFYING_WATERS;
@@ -3372,7 +3375,10 @@ void SetMoveEffect(bool32 primary, u32 certain)
             {
             u16 blockingAbility = 0;
 
-            if (gBattleMons[gEffectBattler].status1 & STATUS1_ANY || BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_COMATOSE)) break;
+            if (gBattleMons[gEffectBattler].status1 & STATUS1_ANY
+                || BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_COMATOSE)
+                || BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_BLOOD_STAIN))
+                    break;
 
             if (BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_LIMBER)) blockingAbility = ABILITY_LIMBER;
             else if (BattlerHasAbility(gEffectBattler, gBattleScripting.battler, ABILITY_JUGGERNAUT)) blockingAbility = ABILITY_JUGGERNAUT;
@@ -8702,6 +8708,7 @@ u32 IsAbilityStatusProtected(u32 battler)
     if (IsDesertCloakProtected(battler)) return ABILITY_DESERT_CLOAK;
     if (IsShieldsDownProtected(battler)) return ABILITY_SHIELDS_DOWN;
     if (BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE)) return ABILITY_COMATOSE;
+    if (BATTLER_HAS_ABILITY(battler, ABILITY_BLOOD_STAIN)) return ABILITY_BLOOD_STAIN;
     if (BATTLER_HAS_ABILITY(battler, ABILITY_PURIFYING_SALT)) return ABILITY_PURIFYING_SALT;
     return FALSE;
 }
@@ -13211,6 +13218,9 @@ static void Cmd_jumpifabilityonside(void) // King's wrath + intimidate
     bool32 hasAbility = FALSE;
     u32 ability = T2_READ_16(gBattlescriptCurrInstr + 2);
     u32 abilityBattlerId = 0;
+    int opposite = T1_READ_8(gBattlescriptCurrInstr + 8);
+
+    if (opposite) battlerId = BATTLE_OPPOSITE(battlerId);
 
     abilityBattlerId = IsAbilityOnSide(battlerId, ability);
     if (abilityBattlerId)

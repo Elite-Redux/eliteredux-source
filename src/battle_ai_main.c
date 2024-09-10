@@ -911,6 +911,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 if (IsStatLoweringMoveEffect(moveEffect) && !IsTargetingPartner(battlerAtk, battlerDef))
                     RETURN_SCORE_MINUS(8);
                 break;
+            case ABILITY_BLOOD_STAIN:
             case ABILITY_COMATOSE:
                 if (IsNonVolatileStatusMoveEffect(moveEffect))
                     RETURN_SCORE_MINUS(10);
@@ -1157,6 +1158,11 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
 
         //Comatose
         if(BattlerHasInnate(battlerDef, ABILITY_COMATOSE) &&
+           IsNonVolatileStatusMoveEffect(moveEffect))
+            RETURN_SCORE_MINUS(10);
+
+        //Comatose
+        if(BattlerHasInnate(battlerDef, ABILITY_BLOOD_STAIN) &&
            IsNonVolatileStatusMoveEffect(moveEffect))
             RETURN_SCORE_MINUS(10);
 

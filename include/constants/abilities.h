@@ -692,8 +692,9 @@
 #define ABILITY_DRACO_MORALE 670 // Uses Dragon Cheer on switch-in.
 #define ABILITY_BAD_OMEN 671 // Foes min roll and may miss. Takes 1/2 damage from crits.
 #define ABILITY_MOSH_PIT 672 // Ally's attacks get a 1.25x boost. 1.5x if attack causes recoil.
+#define ABILITY_BLOOD_STAIN 673 // Bleeds if not immune. Can't get other status. Spreads on contact.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_MOSH_PIT + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_BLOOD_STAIN + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

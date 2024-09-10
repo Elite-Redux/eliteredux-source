@@ -3259,7 +3259,7 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_BLEED: // bleed
-            if ((gBattleMons[gActiveBattler].status1 & STATUS1_BLEED)
+            if ((gBattleMons[gActiveBattler].status1 & STATUS1_BLEED || IsBloodStainAffected(gActiveBattler))
                 && gBattleMons[gActiveBattler].hp != 0)
             {
                 MAGIC_GUARD_CHECK;
@@ -9529,6 +9529,30 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
 
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE) && gBattleMons[battler].status1) {
+                int status1 = gBattleMons[battler].status1;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_COMATOSE;
+                if (status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON)) StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
+                else if (status1 & STATUS1_BLEED) StringCopy(gBattleTextBuff1, gStatusConditionString_BleedJpn);
+                else if (status1 & STATUS1_BURN) StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
+                else if (status1 & STATUS1_FROSTBITE) StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
+                else if (status1 & STATUS1_SLEEP) StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
+                else StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
+                effect = 1;
+            }
+
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_BLOOD_STAIN) && gBattleMons[battler].status1) {
+                int status1 = gBattleMons[battler].status1;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_COMATOSE;
+                if (status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON)) StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
+                else if (status1 & STATUS1_BLEED) StringCopy(gBattleTextBuff1, gStatusConditionString_BleedJpn);
+                else if (status1 & STATUS1_BURN) StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
+                else if (status1 & STATUS1_FROSTBITE) StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
+                else if (status1 & STATUS1_SLEEP) StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
+                else StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
+                effect = 1;
+            }
+
             //Immunity
             if(BATTLER_HAS_ABILITY(battler, ABILITY_IMMUNITY)){
                 if (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON | STATUS1_TOXIC_COUNTER))
@@ -10037,7 +10061,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         case ABILITYEFFECT_MOVE_END_EITHER:
             opponent = battler == gBattlerAttacker ? gBattlerTarget : gBattlerAttacker;
             effectTargetFlag = opponent == gBattlerAttacker ? MOVE_EFFECT_AFFECTS_USER : 0;
-		
+
+            if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BLOOD_STAIN))
+            {
+                if (ShouldApplyOnHitAffect(opponent)
+                    && IsMoveMakingContact(move, gBattlerAttacker)
+                    && !BATTLER_HAS_ABILITY(opponent, ABILITY_BLOOD_STAIN)
+                    && !IsUnsuppressableAbility(GetBattlerAbility(opponent)))
+                {
+                    if (DoesBattlerHaveAbilityShield(opponent)) break;
+                    UpdateAbilityStateIndicesForNewAbility(opponent, ABILITY_BLOOD_STAIN);
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = gBattleMons[opponent].ability = ABILITY_BLOOD_STAIN;
+                    gStackBattler1 = opponent;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_BloodStainActivates;
+                    effect++;
+                }
+            }
         
             // Innates
             // Soul Linker Attacker
@@ -10425,6 +10465,7 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_HUNGER_SWITCH:
     case ABILITY_ANTICIPATION:
     case ABILITY_RECURRING_NIGHTMARE:
+    case ABILITY_BLOOD_STAIN:
         return TRUE;
     default:
         return FALSE;
@@ -12088,7 +12129,7 @@ case ITEMEFFECT_KINGSROCK:
                 }
             }
 
-            if (gTurnStructs[gBattlerAttacker].tryLifeOrb
+            if (gTurnStructs[gBattlerAttacker].damagedMons
                 && canProc
                 && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                 && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)
@@ -13072,7 +13113,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         basePower = gNaturalGiftTable[ITEM_TO_BERRY(gBattleMons[battlerAtk].item)].power;
         break;
     case EFFECT_WAKE_UP_SLAP:
-        if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP || GetBattlerAbility(battlerDef) == ABILITY_COMATOSE)
+        if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMATOSE))
             basePower *= 2;
         break;
     case EFFECT_SMELLINGSALT:
@@ -13084,7 +13125,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         break;
     case EFFECT_HEX:
     case EFFECT_INFERNAL_PARADE:
-        if (gBattleMons[battlerDef].status1 & STATUS1_ANY || GetBattlerAbility(battlerDef) == ABILITY_COMATOSE)
+        if (gBattleMons[battlerDef].status1 & STATUS1_ANY || BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMATOSE) || IsBloodStainAffected(battlerDef))
             basePower *= 2;
         break;
     case EFFECT_ASSURANCE:
@@ -14072,7 +14113,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
             MulModifier(&modifier, UQ_4_12(2.0));
         break;
     case EFFECT_FACADE:
-        if (gBattleMons[battlerAtk].status1 & (STATUS1_BURN | STATUS1_PSN_ANY | STATUS1_PARALYSIS| STATUS1_FROSTBITE))
+        if (gBattleMons[battlerAtk].status1 & (STATUS1_BURN | STATUS1_PSN_ANY | STATUS1_PARALYSIS | STATUS1_FROSTBITE | STATUS1_BLEED) || IsBloodStainAffected(battlerAtk))
             MulModifier(&modifier, UQ_4_12(2.0));
         break;
     case EFFECT_BRINE:
@@ -14335,7 +14376,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     else if (isCrit && isAttack) statStage = max(statStage, DEFAULT_STAT_STAGE);
     else if (isCrit && !isAttack) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
-    if (gBattleMons[battler].status1 & STATUS1_BLEED) statStage = min(statStage, DEFAULT_STAT_STAGE);
+    if (gBattleMons[battler].status1 & STATUS1_BLEED || IsBloodStainAffected(battler)) statStage = min(statStage, DEFAULT_STAT_STAGE);
     
     if (!calculatingSecondary) {
         if (secondaryStat == statEnum && statEnum != STAT_SPEED) statBase = statBase * 6 / 5;
@@ -16364,7 +16405,7 @@ u8 GetHighestStatId(u8 battlerId, u8 includeStatStages)
         if (includeStatStages)
         {
             u8 statStage = gBattleMons[battlerId].statStages[i];
-            if (gBattleMons[battlerId].status1 & STATUS1_BLEED) statStage = min(statStage, DEFAULT_STAT_STAGE);
+            if (gBattleMons[battlerId].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerId)) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
             statVal = statVal * gStatStageRatios[statStage][0] / gStatStageRatios[statStage][1];
         }
@@ -16389,7 +16430,7 @@ u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages)
         if (includeStatStages)
         {
             u8 statStage = gBattleMons[battlerId].statStages[i];
-            if (gBattleMons[battlerId].status1 & STATUS1_BLEED) statStage = min(statStage, DEFAULT_STAT_STAGE);
+            if (gBattleMons[battlerId].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerId)) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
             statVal = statVal * gStatStageRatios[statStage][0] / gStatStageRatios[statStage][1];
         }
@@ -16414,7 +16455,7 @@ u8 GetHighestDefendingStatId(u8 battlerId, u8 includeStatStages)
         if (includeStatStages)
         {
             u8 statStage = gBattleMons[battlerId].statStages[i];
-            if (gBattleMons[battlerId].status1 & STATUS1_BLEED) statStage = min(statStage, DEFAULT_STAT_STAGE);
+            if (gBattleMons[battlerId].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerId)) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
             statVal = statVal * gStatStageRatios[statStage][0] / gStatStageRatios[statStage][1];
         }
@@ -16869,4 +16910,11 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
 
     gBattlerAttacker = actualAttacker;
     return effect;
+}
+
+int IsBloodStainAffected(int battler)
+{
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)) return FALSE;
+    if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)) return FALSE;
+    return BATTLER_HAS_ABILITY(battler, ABILITY_BLOOD_STAIN);
 }

@@ -641,6 +641,7 @@ static const u8 sAbilityFlammableCoatDescription[] = _("Changes forms when using
 static const u8 sAbilityDracoMoraleDescription[] = _("Uses Dragon Cheer\non switch-in.");
 static const u8 sAbilityBadOmenDescription[] = _("Foes min roll and may miss.\nTakes 1/2 damage from crits.");
 static const u8 sAbilityMoshPitDescription[] = _("Ally's attacks get a 1.25x boost.\n1.5x if attack causes recoil.");
+static const u8 sAbilityBloodStainDescription[] = _("Bleeds if not immune. Can't get\nother status. Spreads on contact.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1317,6 +1318,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DRACO_MORALE] = _("Draco Morale"),
     [ABILITY_BAD_OMEN] = _("Bad Omen"),
     [ABILITY_MOSH_PIT] = _("Mosh Pit"),
+    [ABILITY_BLOOD_STAIN] = _("Blood Stain"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1994,4 +1996,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DRACO_MORALE] = sAbilityDracoMoraleDescription,
     [ABILITY_BAD_OMEN] = sAbilityBadOmenDescription,
     [ABILITY_MOSH_PIT] = sAbilityMoshPitDescription,
+    [ABILITY_BLOOD_STAIN] = sAbilityBloodStainDescription,
 };

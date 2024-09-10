@@ -819,11 +819,12 @@
 	.4byte \ptr
 	.endm
 
-	.macro jumpifabilityonside param0:req, ability:req, ptr:req
+	.macro jumpifabilityonside param0:req, ability:req, ptr:req, opposite=FALSE
 	.byte 0x94
 	.byte \param0
 	.2byte \ability
 	.4byte \ptr
+	.byte \opposite
 	.endm
 
 	.macro setsandstorm
@@ -2366,6 +2367,20 @@ checkstatbuffonlowered_none_\@:
 	jumpifability \battler, ABILITY_MAGIC_GUARD, \ptr
 	jumpifability \battler, ABILITY_IMPENETRABLE, \ptr
 	jumpifability \battler, ABILITY_APPLE_ENLIGHTENMENT, \ptr
+	.endm
+
+	.macro jumpifhealingblocked battler:req, ptr:req
+	jumpifstatus3 \battler, STATUS3_HEAL_BLOCK, \ptr
+	jumpiftype \battler, TYPE_GHOST, jumpifhealingblocked_nobloodstain_\@
+	jumpiftype \battler, TYPE_ROCK, jumpifhealingblocked_nobloodstain_\@
+	jumpifability \battler, ABILITY_BLOOD_STAIN, jumpifhealingblocked_blockedbyability_\@
+	jumpifhealingblocked_nobloodstain_\@:
+	jumpifabilityonside \battler, ABILITY_PERMANENCE, jumpifhealingblocked_blockedbyability_\@, TRUE
+	goto jumpifhealingblocked_notblocked_\@
+	jumpifhealingblocked_blockedbyability_\@:
+	call BattleScript_AbilityPopUp
+	goto \ptr
+	jumpifhealingblocked_notblocked_\@:
 	.endm
 
 

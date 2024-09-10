@@ -301,6 +301,7 @@ extern const u8 BattleScript_AbilitySelfDamage[];
 extern const u8 BattleScript_CursedBodyActivates[];
 extern const u8 BattleScript_AbilitySpiteful[];
 extern const u8 BattleScript_MummyActivates[];
+extern const u8 BattleScript_BloodStainActivates[];
 extern const u8 BattleScript_WeakArmorActivates[];
 extern const u8 BattleScript_FellStingerRaisesStat[];
 extern const u8 BattleScript_SnowWarningActivates[];
