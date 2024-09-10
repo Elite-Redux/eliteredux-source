@@ -434,6 +434,8 @@
 #define MAP_SECRET_DUNGEON               (5 | (25 << 8))
 #define MAP_GRANITE_CAVE_PUZZLE_OUT      (6 | (25 << 8))
 #define MAP_SEAFLOOR_CAVERN_SHORTCUT     (7 | (25 << 8))
+#define MAP_VICTORY_ROAD_REWORK          (8 | (25 << 8))
+#define MAP_VICTORY_ROAD_URSHIFUS        (9 | (25 << 8))
 
 // gMapGroup_IndoorDynamic
 #define MAP_SECRET_BASE_RED_CAVE1    (0 | (26 << 8))

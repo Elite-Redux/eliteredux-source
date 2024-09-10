@@ -4730,6 +4730,26 @@
       "secondary_tileset": "gTileset_MossdeepGym",
       "border_filepath": "data/layouts/MossDeepCity_GymReworked/border.bin",
       "blockdata_filepath": "data/layouts/MossDeepCity_GymReworked/map.bin"
+    },
+    {
+      "id": "LAYOUT_VICTORY_ROAD_REWORK",
+      "name": "VictoryRoadRework_Layout",
+      "width": 60,
+      "height": 60,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/VictoryRoadRework/border.bin",
+      "blockdata_filepath": "data/layouts/VictoryRoadRework/map.bin"
+    },
+    {
+      "id": "LAYOUT_VICTORY_ROAD_URSHIFUS",
+      "name": "VictoryRoadUrshifus_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/VictoryRoadUrshifus/border.bin",
+      "blockdata_filepath": "data/layouts/VictoryRoadUrshifus/map.bin"
     }
   ]
 }

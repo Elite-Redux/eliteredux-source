@@ -465,7 +465,9 @@
     "PetalburgWoods_BreloomRoom",
     "Secret_Dungeon",
     "GraniteCave_PuzzleOut",
-    "SeafloorCavernShortcut"
+    "SeafloorCavernShortcut",
+    "VictoryRoadRework",
+    "VictoryRoadUrshifus"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",
