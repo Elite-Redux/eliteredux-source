@@ -353,8 +353,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 842
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static const struct OamData sOamData_WirelessIndicatorWindow =
@@ -406,7 +405,7 @@ static void InitContestResultsDisplay(void)
     for (i = 0; i < (int)ARRAY_COUNT(sContestResults->tilemapBuffers); i++)
         SetBgTilemapBuffer(i, sContestResults->tilemapBuffers[i]);
 
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
     SetGpuReg(REG_OFFSET_MOSAIC, 0);
     SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG_ALL | WININ_WIN0_OBJ | WININ_WIN0_CLR | WININ_WIN1_BG_ALL | WININ_WIN1_OBJ | WININ_WIN1_CLR);

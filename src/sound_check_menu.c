@@ -127,8 +127,7 @@ static const struct WindowTemplate sSoundCheckMenuWindowTemplates[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 244,
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static const struct WindowTemplate sSoundCheckMenuDriverTestWindowTemplates[] =
@@ -141,8 +140,7 @@ static const struct WindowTemplate sSoundCheckMenuDriverTestWindowTemplates[] =
         .height = 18,
         .paletteNum = 15,
         .baseBlock = 20,
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static void Task_InitSoundCheckMenu(u8 taskId);
@@ -218,7 +216,7 @@ void CB2_StartSoundCheckMenu(void) // sub_080E8320
         gMain.state++;
         break;
     case 4:
-        InitWindows(sSoundCheckMenuWindowTemplates);
+        INIT_WINDOWS(sSoundCheckMenuWindowTemplates);
         DeactivateAllTextPrinters();
         LoadMessageBoxAndBorderGfx();
         gMain.state++;
@@ -505,7 +503,7 @@ static void Task_DrawSubmenu(u8 taskId) // sub_080E89EC
     case 1:
         if (IsDma3ManagerBusyWithBgCopy() == TRUE)
             return;
-        InitWindows(sSoundCheckMenuDriverTestWindowTemplates);
+        INIT_WINDOWS(sSoundCheckMenuDriverTestWindowTemplates);
         SetStandardWindowBorderStyle(0, TRUE);
         gTasks[taskId].tState++;
         break;
@@ -913,7 +911,7 @@ static void Task_InitSoundCheckMenu(u8 taskId) // sub_080E9410
     case 1:
         if (IsDma3ManagerBusyWithBgCopy() == TRUE)
             return;
-        InitWindows(sSoundCheckMenuWindowTemplates);
+        INIT_WINDOWS(sSoundCheckMenuWindowTemplates);
         gTasks[taskId].tState++;
         break;
     case 2:

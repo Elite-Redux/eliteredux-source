@@ -1173,7 +1173,7 @@ static void Menu_InitWindows(void)
 {
     u32 i;
 
-    InitWindows(sMenuWindowTemplates);
+    INIT_WINDOWS(sMenuWindowTemplates);
     DeactivateAllTextPrinters();
     ScheduleBgCopyTilemapToVram(0);
 

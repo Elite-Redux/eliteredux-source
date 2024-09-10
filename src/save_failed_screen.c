@@ -93,8 +93,6 @@ static const struct BgTemplate sBgTemplates[3] =
     },
 };
 
-static const struct WindowTemplate sDummyWindowTemplate[] = { DUMMY_WIN_TEMPLATE };
-
 static const struct WindowTemplate sWindowTemplate_Text[] =
 {
     {
@@ -205,7 +203,8 @@ static void CB2_SaveFailedScreen(void)
         SetBgTilemapBuffer(0, (void *)&gDecompressionBuffer[0x2000]);
         CpuFill32(0, &gDecompressionBuffer[0x2000], 0x800);
         LoadBgTiles(0, gTextWindowFrame1_Gfx, 0x120, 0x214);
-        InitWindows(sDummyWindowTemplate);
+        // Window templates don't matter, just needs to be non-null to prevent bad emulators from crashing
+        InitWindows(sWindowTemplate_Text, 0);
         sWindowIds[TEXT_WIN_ID] = AddWindowWithoutTileMap(sWindowTemplate_Text);
         SetWindowAttribute(sWindowIds[TEXT_WIN_ID], 7, (u32)&gDecompressionBuffer[0x2800]);
         sWindowIds[CLOCK_WIN_ID] = AddWindowWithoutTileMap(sWindowTemplate_Clock);

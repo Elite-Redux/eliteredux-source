@@ -21,14 +21,14 @@ EWRAM_DATA static u16 sWindowSize = 0;
 static u8 GetNumActiveWindowsOnBg(u8 bgId);
 static u8 GetNumActiveWindowsOnBg8Bit(u8 bgId);
 
-static const struct WindowTemplate sDummyWindowTemplate = DUMMY_WIN_TEMPLATE;
+static const struct WindowTemplate sDummyWindowTemplate = { .bg = WINDOW_NONE };
 
 static void DummyWindowBgTilemap(void)
 {
 
 }
 
-bool16 InitWindows(const struct WindowTemplate *templates)
+bool16 InitWindows(const struct WindowTemplate *templates, int count)
 {
     int i;
     void *bgTilemapBuffer;
@@ -53,7 +53,7 @@ bool16 InitWindows(const struct WindowTemplate *templates)
         gWindows[i].tileData = NULL;
     }
 
-    for (i = 0, allocatedBaseBlock = 0, bgLayer = templates[i].bg; bgLayer != 0xFF && i < WINDOWS_MAX; ++i, bgLayer = templates[i].bg)
+    for (i = 0, allocatedBaseBlock = 0, bgLayer = templates[i].bg; bgLayer != 0xFF && i < count; ++i, bgLayer = templates[i].bg)
     {
         if (gUnneededFireRedVariable == 1)
         {

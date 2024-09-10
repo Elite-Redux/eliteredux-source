@@ -160,8 +160,7 @@ static const struct WindowTemplate sPokemonDebugWindowTemplate[] =
         .height = 2,
         .paletteNum = 0xF,
         .baseBlock = 1 + 30 + 60 + 36 + 144,
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 //Lookup tables
@@ -1000,7 +999,7 @@ static void ResetPokemonDebugWindows(void)
     u8 i;
 
     FreeAllWindowBuffers();
-    InitWindows(sPokemonDebugWindowTemplate);
+    INIT_WINDOWS(sPokemonDebugWindowTemplate);
 
     for (i = 0; i < WIN_END + 1; i++)
     {

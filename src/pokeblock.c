@@ -410,8 +410,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0x19E
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sTossPkblockWindowTemplate =
@@ -681,7 +680,7 @@ static void HandleInitWindows(void)
 {
     u8 i;
 
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 1, 0xE0);
     LoadMessageBoxGfx(0, 0xA, 0xD0);

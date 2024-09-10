@@ -126,8 +126,7 @@ static const struct WindowTemplate sMenuWindowTemplates[] =
         .height = 20,       // height (per 8 pixels)
         .paletteNum = 0,    // palette index to use for text
         .baseBlock = 1,     // tile start in VRAM
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u32 sMenuTiles[]          = INCBIN_U32("graphics/ui_menus/intro_options/tiles.4bpp.lz");
@@ -406,7 +405,7 @@ static void Menu_InitWindows(void)
 {
     u32 i;
 
-    InitWindows(sMenuWindowTemplates);
+    INIT_WINDOWS(sMenuWindowTemplates);
     DeactivateAllTextPrinters();
     ScheduleBgCopyTilemapToVram(0);
     

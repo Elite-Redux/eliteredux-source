@@ -259,8 +259,7 @@ static const struct WindowTemplate sShopBuyMenuWindowTemplates[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0x01A2,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sShopBuyMenuYesNoWindowTemplates =
@@ -1126,7 +1125,7 @@ static void BuyMenuDecompressBgGraphics(void)
 
 static void BuyMenuInitWindows(void)
 {
-    InitWindows(sShopBuyMenuWindowTemplates);
+    INIT_WINDOWS(sShopBuyMenuWindowTemplates);
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 1, 0xD0);
     LoadMessageBoxGfx(0, 0xA, 0xE0);

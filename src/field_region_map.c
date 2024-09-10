@@ -84,7 +84,6 @@ static const struct WindowTemplate sFieldRegionMapWindowTemplates[] =
         .paletteNum = 15,
         .baseBlock = 25
     },
-    DUMMY_WIN_TEMPLATE
 };
 
 // .text
@@ -113,7 +112,7 @@ static void MCB2_InitRegionMapRegisters(void)
     FreeAllSpritePalettes();
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(1, sFieldRegionMapBgTemplates, ARRAY_COUNT(sFieldRegionMapBgTemplates));
-    InitWindows(sFieldRegionMapWindowTemplates);
+    INIT_WINDOWS(sFieldRegionMapWindowTemplates);
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 0x27, 0xd0);
     ClearScheduledBgCopiesToVram();

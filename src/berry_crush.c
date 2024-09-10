@@ -477,7 +477,7 @@ static const struct WindowTemplate sWindowTemplate_Rankings =
     .baseBlock = 1
 };
 
-static const struct WindowTemplate sWindowTemplates_PlayerNames[MAX_RFU_PLAYERS + 1] =
+static const struct WindowTemplate sWindowTemplates_PlayerNames[] =
 {
     {
         .bg = 0, 
@@ -523,8 +523,7 @@ static const struct WindowTemplate sWindowTemplates_PlayerNames[MAX_RFU_PLAYERS 
         .height = 2, 
         .paletteNum = 8, 
         .baseBlock = 933
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static const struct WindowTemplate sWindowTemplates_Results[] =
@@ -555,8 +554,7 @@ static const struct WindowTemplate sWindowTemplates_Results[] =
         .height = 16, 
         .paletteNum = 15, 
         .baseBlock = 1
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 // The height of the results window depending on the number of players

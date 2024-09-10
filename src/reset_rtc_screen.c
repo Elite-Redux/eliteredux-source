@@ -96,8 +96,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 4, 
         .paletteNum = 15, 
         .baseBlock = 0xE9
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sInputTimeWindow = {
@@ -539,7 +538,7 @@ static void InitResetRtcScreenBgAndWindows(void)
     ScheduleBgCopyTilemapToVram(0);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
     ShowBg(0);
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
     LoadMessageBoxAndBorderGfx();
 }

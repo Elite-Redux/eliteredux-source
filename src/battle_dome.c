@@ -695,8 +695,7 @@ static const struct WindowTemplate sTourneyTreeWindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 272,
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static const struct WindowTemplate sInfoCardWindowTemplates[] =
@@ -862,10 +861,7 @@ static const struct WindowTemplate sInfoCardWindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 372,
-    },
-    #ifdef UBFIX
-    DUMMY_WIN_TEMPLATE,
-    #endif
+    }
 };
 
 static const struct ScanlineEffectParams sTourneyTreeScanlineEffectParams =
@@ -2979,7 +2975,7 @@ static void Task_ShowTourneyInfoCard(u8 taskId)
         CpuFill32(0, (void *)VRAM, VRAM_SIZE);
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sInfoCardBgTemplates, ARRAY_COUNT(sInfoCardBgTemplates));
-        InitWindows(sInfoCardWindowTemplates);
+        INIT_WINDOWS(sInfoCardWindowTemplates);
         DeactivateAllTextPrinters();
         gBattle_BG0_X = 0;
         gBattle_BG0_Y = 0;
@@ -5257,7 +5253,7 @@ static void Task_ShowTourneyTree(u8 taskId)
         CpuFill32(0, (void *)VRAM, VRAM_SIZE);
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sTourneyTreeBgTemplates, ARRAY_COUNT(sTourneyTreeBgTemplates));
-        InitWindows(sTourneyTreeWindowTemplates);
+        INIT_WINDOWS(sTourneyTreeWindowTemplates);
         DeactivateAllTextPrinters();
         gBattle_BG0_X = 0;
         gBattle_BG0_Y = 0;

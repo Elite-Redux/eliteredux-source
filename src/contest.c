@@ -827,8 +827,7 @@ static const struct WindowTemplate sContestWindowTemplates[] =
         .height = 4,
         .paletteNum = 0xF,
         .baseBlock = 0x2EE
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 #include "data/contest_opponents.h"
@@ -1059,7 +1058,7 @@ static void InitContestInfoBgs(void)
 
 static void InitContestWindows(void)
 {
-    InitWindows(sContestWindowTemplates);
+    INIT_WINDOWS(sContestWindowTemplates);
     DeactivateAllTextPrinters();
     if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
     {

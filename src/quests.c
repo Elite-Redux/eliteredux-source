@@ -371,8 +371,7 @@ static const struct WindowTemplate sQuestMenuHeaderWindowTemplates[] =
         .height = 0x04,
         .paletteNum = 0x0b,
         .baseBlock = 0x016f
-    }, 
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sQuestMenuSubWindowTemplates[] =
@@ -1394,7 +1393,7 @@ static void QuestMenu_InitWindows(void)
 {
     u8 i;
 
-    InitWindows(sQuestMenuHeaderWindowTemplates);
+    INIT_WINDOWS(sQuestMenuHeaderWindowTemplates);
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 0x3C0, 0xE0);
     

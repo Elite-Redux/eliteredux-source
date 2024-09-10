@@ -3391,7 +3391,7 @@ static const struct BgTemplate sBgTemplates[] =
     },
 };
 
-static const struct WindowTemplate sWindowTemplate_Dummy = DUMMY_WIN_TEMPLATE;
+static const struct WindowTemplate sWindowTemplate_Dummy = { 0 };
 
 static const struct WindowTemplate sWindowTemplates_Results[] =
 {

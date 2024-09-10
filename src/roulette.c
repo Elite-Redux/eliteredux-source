@@ -462,10 +462,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0xC5
-    },
-    #ifdef UBFIX
-    DUMMY_WIN_TEMPLATE,
-    #endif
+    }
 };
 
 static const struct GridSelection sGridSelections[NUM_GRID_SELECTIONS + 1] =
@@ -1094,7 +1091,7 @@ static void InitRouletteBgAndWindows(void)
     SetBgTilemapBuffer(0, sRoulette->tilemapBuffers[0]);
     SetBgTilemapBuffer(1, sRoulette->tilemapBuffers[2]);
     SetBgTilemapBuffer(2, sRoulette->tilemapBuffers[6]);
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     InitTextBoxGfxAndPrinters();
     sTextWindowId = 0;
     sRoulette->gridTilemap = malloc_and_decompress(sGrid_Tilemap, &size);

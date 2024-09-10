@@ -1074,8 +1074,7 @@ static const struct WindowTemplate sPokemonList_WindowTemplate[] =
         .height = 32,
         .paletteNum = 0,
         .baseBlock = 1,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u8 sText_No000[] = _("{NO}000");
@@ -1186,8 +1185,7 @@ static const struct WindowTemplate sInfoScreen_WindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 641,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct BgTemplate sNewEntryInfoScreen_BgTemplate[] =
@@ -1233,8 +1231,7 @@ static const struct WindowTemplate sNewEntryInfoScreen_WindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 641,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u8 sText_TenDashes2[] = _("----------");
@@ -1744,8 +1741,7 @@ static const struct WindowTemplate sSearchMenu_WindowTemplate[] =
         .height = 20,
         .paletteNum = 0,
         .baseBlock = 0x0001,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 // .text
@@ -2351,7 +2347,7 @@ static bool8 LoadPokedexListPage(u8 page)
         else
             sPokedexView->isSearchResults = TRUE;
         LoadPokedexBgPalette(sPokedexView->isSearchResults);
-        InitWindows(sPokemonList_WindowTemplate);
+        INIT_WINDOWS(sPokemonList_WindowTemplate);
         DeactivateAllTextPrinters();
         PutWindowTilemap(0);
         CopyWindowToVram(0, 3);
@@ -3536,7 +3532,7 @@ static u8 LoadInfoScreen(struct PokedexListItem* item, u8 monSpriteId)
     SetBgTilemapBuffer(2, AllocZeroed(BG_SCREEN_SIZE));
     SetBgTilemapBuffer(1, AllocZeroed(BG_SCREEN_SIZE));
     SetBgTilemapBuffer(0, AllocZeroed(BG_SCREEN_SIZE));
-    InitWindows(sInfoScreen_WindowTemplates);
+    INIT_WINDOWS(sInfoScreen_WindowTemplates);
     DeactivateAllTextPrinters();
 
     return taskId;
@@ -4327,7 +4323,7 @@ static void Task_DisplayCaughtMonDexPage(u8 taskId)
             InitBgsFromTemplates(0, sNewEntryInfoScreen_BgTemplate, ARRAY_COUNT(sNewEntryInfoScreen_BgTemplate));
             SetBgTilemapBuffer(3, AllocZeroed(BG_SCREEN_SIZE));
             SetBgTilemapBuffer(2, AllocZeroed(BG_SCREEN_SIZE));
-            InitWindows(sNewEntryInfoScreen_WindowTemplates);
+            INIT_WINDOWS(sNewEntryInfoScreen_WindowTemplates);
             DeactivateAllTextPrinters();
             gTasks[taskId].tState = 1;
         }
@@ -5334,7 +5330,7 @@ static void Task_LoadSearchMenu(u8 taskId)
             SetBgTilemapBuffer(2, AllocZeroed(BG_SCREEN_SIZE));
             SetBgTilemapBuffer(1, AllocZeroed(BG_SCREEN_SIZE));
             SetBgTilemapBuffer(0, AllocZeroed(BG_SCREEN_SIZE));
-            InitWindows(sSearchMenu_WindowTemplate);
+            INIT_WINDOWS(sSearchMenu_WindowTemplate);
             DeactivateAllTextPrinters();
             PutWindowTilemap(0);
             if (!HGSS_DECAPPED)

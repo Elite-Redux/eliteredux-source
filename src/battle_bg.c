@@ -359,8 +359,7 @@ const struct WindowTemplate gStandardBattleWindowTemplates[] =
         .height = 2,
         .paletteNum = 5,
         .baseBlock = 0x02a0,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate gBattleArenaWindowTemplates[] =
@@ -508,8 +507,7 @@ static const struct WindowTemplate gBattleArenaWindowTemplates[] =
         .height = 4,
         .paletteNum = 7,
         .baseBlock = 0x0090,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 void MoveIntoBattleBgWindow(u8 window){
@@ -670,7 +668,9 @@ void BattleInitBgsAndWindows(void)
         gBattleScripting.windowsType = 0;
     }
 
-    InitWindows(gBattleWindowTemplates[gBattleScripting.windowsType]);
+    if (gBattleScripting.windowsType == 0) INIT_WINDOWS(gStandardBattleWindowTemplates);
+    else INIT_WINDOWS(gBattleArenaWindowTemplates);
+    
     DeactivateAllTextPrinters();
 }
 

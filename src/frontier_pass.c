@@ -38,7 +38,6 @@ enum
     WINDOW_BATTLE_RECORD,
     WINDOW_BATTLE_POINTS,
     WINDOW_DESCRIPTION,
-    WINDOW_DUMMY,
     WINDOW_COUNT
 };
 
@@ -246,7 +245,7 @@ static const struct BgTemplate sMapBgTemplates[] =
     },
 };
 
-static const struct WindowTemplate sPassWindowTemplates[WINDOW_COUNT] =
+static const struct WindowTemplate sPassWindowTemplates[] =
 {
     [WINDOW_EARNED_SYMBOLS] = {
         .bg = 0,
@@ -284,7 +283,6 @@ static const struct WindowTemplate sPassWindowTemplates[WINDOW_COUNT] =
         .paletteNum = 15,
         .baseBlock = 0x7C,
     },
-    DUMMY_WIN_TEMPLATE
 };
 
 static const struct WindowTemplate sMapWindowTemplates[] =
@@ -315,8 +313,7 @@ static const struct WindowTemplate sMapWindowTemplates[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0xDA,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u8 sTextColors[][3] =
@@ -748,7 +745,7 @@ static bool32 InitFrontierPass(void)
         SetBgAttribute(2, BG_ATTR_WRAPAROUND, 1);
         break;
     case 5:
-        InitWindows(sPassWindowTemplates);
+        INIT_WINDOWS(sPassWindowTemplates);
         DeactivateAllTextPrinters();
         break;
     case 6:
@@ -1405,7 +1402,7 @@ static bool32 InitFrontierMap(void)
         CopyBgTilemapBufferToVram(2);
         break;
     case 4:
-        InitWindows(sMapWindowTemplates);
+        INIT_WINDOWS(sMapWindowTemplates);
         DeactivateAllTextPrinters();
         PrintOnFrontierMap();
         DecompressAndCopyTileDataToVram(1, sMapScreen_Gfx, 0, 0, 0);

@@ -243,7 +243,7 @@ static const struct BgTemplate sBgTemplates_EggHatch[2] =
     },
 };
 
-static const struct WindowTemplate sWinTemplates_EggHatch[2] =
+static const struct WindowTemplate sWinTemplates_EggHatch[] =
 {
     {
         .bg = 0,
@@ -254,7 +254,6 @@ static const struct WindowTemplate sWinTemplates_EggHatch[2] =
         .paletteNum = 0,
         .baseBlock = 64
     },
-    DUMMY_WIN_TEMPLATE
 };
 
 static const struct WindowTemplate sYesNoWinTemplate =
@@ -514,7 +513,7 @@ static void CB2_LoadEggHatch(void)
         gMain.state++;
         break;
     case 1:
-        InitWindows(sWinTemplates_EggHatch);
+        INIT_WINDOWS(sWinTemplates_EggHatch);
         sEggHatchData->windowId = 0;
         gMain.state++;
         break;

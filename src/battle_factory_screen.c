@@ -397,8 +397,7 @@ static const struct WindowTemplate sSelect_WindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 0x00bb,
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static const u16 sSelectText_Pal[] = INCBIN_U16("graphics/battle_frontier/factory_screen/text.gbapal");
@@ -1019,8 +1018,7 @@ static const struct WindowTemplate sSwap_WindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 0x00df,
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static const u16 sSwapText_Pal[] = INCBIN_U16("graphics/battle_frontier/factory_screen/text.gbapal"); // Identical to sSelectText_Pal
@@ -1138,7 +1136,7 @@ static void CB2_InitSelectScreen(void)
         CpuFill32(0, (void *)VRAM, VRAM_SIZE);
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sSelect_BgTemplates, ARRAY_COUNT(sSelect_BgTemplates));
-        InitWindows(sSelect_WindowTemplates);
+        INIT_WINDOWS(sSelect_WindowTemplates);
         DeactivateAllTextPrinters();
         gMain.state++;
         break;
@@ -3281,7 +3279,7 @@ static void CB2_InitSwapScreen(void)
         CpuFill32(0, (void *)VRAM, VRAM_SIZE);
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sSwap_BgTemplates, ARRAY_COUNT(sSwap_BgTemplates));
-        InitWindows(sSwap_WindowTemplates);
+        INIT_WINDOWS(sSwap_WindowTemplates);
         DeactivateAllTextPrinters();
         gMain.state++;
         break;

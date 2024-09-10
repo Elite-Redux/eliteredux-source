@@ -251,8 +251,7 @@ static const struct WindowTemplate sTrainerCardWindowTemplates[] =
         .height = 10,
         .paletteNum = 8,
         .baseBlock = 0x150,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u16 *const sHoennTrainerCardStarPals[] =
@@ -892,7 +891,7 @@ static void InitBgsAndWindows(void)
     ChangeBgY(2, 0, 0);
     ChangeBgX(3, 0, 0);
     ChangeBgY(3, 0, 0);
-    InitWindows(sTrainerCardWindowTemplates);
+    INIT_WINDOWS(sTrainerCardWindowTemplates);
     DeactivateAllTextPrinters();
     LoadMessageBoxAndBorderGfx();
 }

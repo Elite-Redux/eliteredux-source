@@ -170,8 +170,7 @@ static const struct WindowTemplate sMoveRelearnerWindowTemplates[] =
         .height = 4,
         .paletteNum = 0xF,
         .baseBlock = 0x25A
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sMoveRelearnerYesNoMenuTemplate =
@@ -681,7 +680,7 @@ void InitMoveRelearnerWindows(bool8 useContextWindow)
 {
     u8 i;
 
-    InitWindows(sMoveRelearnerWindowTemplates);
+    INIT_WINDOWS(sMoveRelearnerWindowTemplates);
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 1, 0xE0);
     LoadPalette(gUnknown_0860F074, 0xF0, 0x20);

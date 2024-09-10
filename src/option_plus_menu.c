@@ -100,8 +100,7 @@ static const struct WindowTemplate sOptionMenuWinTemplates[] =
         .height = 4,
         .paletteNum = 1,
         .baseBlock = 500
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct BgTemplate sOptionMenuBgTemplates[] =
@@ -704,7 +703,7 @@ void CB2_InitOptionPlusMenu(void)
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sOptionMenuBgTemplates, ARRAY_COUNT(sOptionMenuBgTemplates));
         ResetBgPositions();
-        InitWindows(sOptionMenuWinTemplates);
+        INIT_WINDOWS(sOptionMenuWinTemplates);
         DeactivateAllTextPrinters();
         SetGpuReg(REG_OFFSET_WIN0H, 0);
         SetGpuReg(REG_OFFSET_WIN0V, 0);

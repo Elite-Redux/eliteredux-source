@@ -400,7 +400,7 @@ bool32 HandleMysteryGiftOrEReaderSetup(s32 mg_or_ereader)
         SetBgTilemapBuffer(0, Alloc(BG_SCREEN_SIZE));
 
         bgid_upload_textbox_1(3);
-        InitWindows(sMainWindows);
+        INIT_WINDOWS(sMainWindows);
         DeactivateAllTextPrinters();
         ClearGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_WIN0_ON | DISPCNT_WIN1_ON);
         SetGpuReg(REG_OFFSET_BLDCNT, 0);

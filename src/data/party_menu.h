@@ -206,8 +206,7 @@ static const struct WindowTemplate sSinglePartyMenuWindowTemplate_Equal[] = //Cu
         .height = 4,
         .paletteNum = 14,
         .baseBlock = 0x21F, //0x1DF,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };//
 
 static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
@@ -274,8 +273,7 @@ static const struct WindowTemplate sSinglePartyMenuWindowTemplate[] =
         .height = 4,
         .paletteNum = 14,
         .baseBlock = 0x1DF,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sDoublePartyMenuWindowTemplate[] =
@@ -342,8 +340,7 @@ static const struct WindowTemplate sDoublePartyMenuWindowTemplate[] =
         .height = 4,
         .paletteNum = 14,
         .baseBlock = 0x1DF,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sMultiPartyMenuWindowTemplate[] =
@@ -410,8 +407,7 @@ static const struct WindowTemplate sMultiPartyMenuWindowTemplate[] =
         .height = 4,
         .paletteNum = 14,
         .baseBlock = 0x1DF,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sShowcaseMultiPartyMenuWindowTemplate[] =
@@ -469,8 +465,7 @@ static const struct WindowTemplate sShowcaseMultiPartyMenuWindowTemplate[] =
         .height = 3,
         .paletteNum = 8,
         .baseBlock = 0x1A1,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sCancelButtonWindowTemplate =

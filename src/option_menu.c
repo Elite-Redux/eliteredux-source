@@ -116,8 +116,7 @@ static const struct WindowTemplate sOptionMenuWinTemplates[] =
         .height = 14,
         .paletteNum = 1,
         .baseBlock = 0x36
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct BgTemplate sOptionMenuBgTemplates[] =
@@ -190,7 +189,7 @@ void CB2_InitOptionMenu(void)
         ChangeBgY(2, 0, 0);
         ChangeBgX(3, 0, 0);
         ChangeBgY(3, 0, 0);
-        InitWindows(sOptionMenuWinTemplates);
+        INIT_WINDOWS(sOptionMenuWinTemplates);
         DeactivateAllTextPrinters();
         SetGpuReg(REG_OFFSET_WIN0H, 0);
         SetGpuReg(REG_OFFSET_WIN0V, 0);

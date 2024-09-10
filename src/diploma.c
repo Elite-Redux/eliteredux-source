@@ -178,7 +178,7 @@ static void InitDiplomaBg(void)
     SetGpuReg(REG_OFFSET_BLDY, 0);
 }
 
-static const struct WindowTemplate sDiplomaWinTemplates[2] =
+static const struct WindowTemplate sDiplomaWinTemplates[] =
 {
     {
         .bg = 0,
@@ -188,13 +188,12 @@ static const struct WindowTemplate sDiplomaWinTemplates[2] =
         .height = 16,
         .paletteNum = 15,
         .baseBlock = 1,
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static void InitDiplomaWindow(void)
 {
-    InitWindows(sDiplomaWinTemplates);
+    INIT_WINDOWS(sDiplomaWinTemplates);
     DeactivateAllTextPrinters();
     LoadPalette(gUnknown_0860F074, 0xF0, 0x20);
     FillWindowPixelBuffer(0, PIXEL_FILL(0));

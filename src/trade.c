@@ -343,7 +343,7 @@ static void InitTradeMenu(void)
     InitBgsFromTemplates(0, sTradeMenuBgTemplates, ARRAY_COUNT(sTradeMenuBgTemplates));
     SetBgTilemapBuffer(1, sTradeMenuData->tilemapBuffer);
 
-    if (InitWindows(sTradeMenuWindowTemplates))
+    if (INIT_WINDOWS(sTradeMenuWindowTemplates))
     {
         u32 i;
 
@@ -2958,7 +2958,7 @@ static void InitTradeBgInternal(void)
     LZDecompressWram(gTheme_Dark_BattleTextboxTilemap, gDecompressionBuffer);
     CopyToBgTilemapBuffer(0, gDecompressionBuffer, 0x800, 0);
     LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette, 0, 0x20);
-    InitWindows(sTradeSequenceWindowTemplates);
+    INIT_WINDOWS(sTradeSequenceWindowTemplates);
 
     switch(getBattleInterfaceTheme()){
         case THEME_DARK:

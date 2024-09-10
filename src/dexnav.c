@@ -264,8 +264,7 @@ static const struct WindowTemplate sDexNavGuiWindowTemplates[] =
         .height = 20,       // height (per 8 pixels)
         .paletteNum = 1,    // palette index to use for text
         .baseBlock = 1,     // tile start in VRAM
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 //gui font
@@ -1982,7 +1981,7 @@ static void DexNavLoadCapturedAllSymbols(void)
 //#define WIN_DETAILS_TILE        0x3a3
 static void DexNav_InitWindows(void)
 {
-    InitWindows(sDexNavGuiWindowTemplates);
+    INIT_WINDOWS(sDexNavGuiWindowTemplates);
     DeactivateAllTextPrinters();
     ScheduleBgCopyTilemapToVram(0);
 }

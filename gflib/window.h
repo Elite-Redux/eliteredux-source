@@ -34,17 +34,6 @@ struct WindowTemplate
     u16 baseBlock;
 };
 
-#define DUMMY_WIN_TEMPLATE          \
-{                                   \
-    0xFF,                           \
-    0,                              \
-    0,                              \
-    0,                              \
-    0,                              \
-    0,                              \
-    0,                              \
-}
-
 #define WINDOW_NONE 0xFF
 
 struct Window
@@ -53,7 +42,8 @@ struct Window
     u8 *tileData;
 };
 
-bool16 InitWindows(const struct WindowTemplate *templates);
+#define INIT_WINDOWS(templates) InitWindows(templates, ARRAY_COUNT(templates))
+bool16 InitWindows(const struct WindowTemplate *templates, int count);
 u16 AddWindow(const struct WindowTemplate *template);
 int AddWindowWithoutTileMap(const struct WindowTemplate *template);
 void RemoveWindow(u8 windowId);
