@@ -21756,6 +21756,7 @@ static const struct LevelUpMove sKubfuLevelUpLearnset[] = {
 
 static const struct LevelUpMove sUrshifuLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_THRASH),
+    LEVEL_UP_MOVE(0, MOVE_RAGE),
     LEVEL_UP_MOVE(0, MOVE_WICKED_BLOW),
     LEVEL_UP_MOVE(1, MOVE_ENDURE),
     LEVEL_UP_MOVE(1, MOVE_FOCUS_ENERGY),
