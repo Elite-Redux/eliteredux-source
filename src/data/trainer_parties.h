@@ -34204,7 +34204,7 @@ static const struct TrainerMonItemCustomMoves sParty_Michelle[] = {
     .ability = 1,
     .evs = {160, 0, 96, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_PEBBLE_SHOWER, MOVE_DAZZLING_GLEAM, MOVE_EARTH_POWER, MOVE_MYSTICAL_FIRE
+    .moves = MOVE_PEBBLE_SHOWER, MOVE_DAZZLING_GLEAM, MOVE_MYSTIC_DANCE, MOVE_MYSTICAL_FIRE
     },
     {
     .lvl = 0,
@@ -39945,3 +39945,16 @@ static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fairy_Insane
     }
 };
 
+
+
+static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_WIGGLYTUFF,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 0, 0, 0},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_OUTBURST, MOVE_BODY_PRESS, MOVE_CHARM, MOVE_DEFENSE_CURL
+    }
+};

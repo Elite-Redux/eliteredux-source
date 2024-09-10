@@ -43781,12 +43781,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_RAGING_BOLT] =
     {
-    .baseHP        =  125,
-    .baseAttack    =  73,
-    .baseDefense   =  91,
-    .baseSpeed     =  75,
-    .baseSpAttack  =  137,
-    .baseSpDefense =  89,
+    .baseHP         = 125,
+    .baseAttack     = 63,
+    .baseDefense    = 91,
+    .baseSpeed      = 75,
+    .baseSpAttack   = 137,
+    .baseSpDefense  = 99,
     .type1 = TYPE_ELECTRIC,
     .type2 = TYPE_DRAGON,
         .catchRate = 255,
