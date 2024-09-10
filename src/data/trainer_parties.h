@@ -39945,3 +39945,16 @@ static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fairy_Insane
     }
 };
 
+
+
+static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_WIGGLYTUFF,
+    .heldItem = ITEM_NONE,
+    .ability = 0,
+    .evs = {0, 0, 0, 0, 0, 0},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_OUTBURST, MOVE_BODY_PRESS, MOVE_CHARM, MOVE_DEFENSE_CURL
+    }
+};
