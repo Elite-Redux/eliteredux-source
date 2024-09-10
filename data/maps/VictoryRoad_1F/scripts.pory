@@ -282,3 +282,11 @@ script VictoryRoad_1F_EventScript_Calvin {
 	release
 	end
 }
+
+script VictoryRoad_1F_EventScript_Trent {
+	trainerbattle_single(TRAINER_TRENT_5, format("Bombs? You want it? It's yours my friend."), format("I can't give credit!"))
+	msgbox(format("Come back when you're a little.. mmmmmmmm... richer!"), MSGBOX_NPC) // after player won
+	settrainerflag(TRAINER_TRENT_5)
+	release
+	end
+}
