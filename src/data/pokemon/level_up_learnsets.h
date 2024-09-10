@@ -11055,6 +11055,7 @@ static const struct LevelUpMove sGabiteLevelUpLearnset[] = {
 static const struct LevelUpMove sGarchompLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_DUAL_CHOP),
     LEVEL_UP_MOVE(0, MOVE_JAGGED_FANGS),
+    LEVEL_UP_MOVE(0, MOVE_SEISMIC_BLADE),
     LEVEL_UP_MOVE(1, MOVE_CRUNCH),
     LEVEL_UP_MOVE(1, MOVE_DRAGON_RAGE),
     LEVEL_UP_MOVE(1, MOVE_FIRE_FANG),
@@ -26335,6 +26336,7 @@ static const struct LevelUpMove sZapdosGalarianLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_JUMP_KICK),
     LEVEL_UP_MOVE(0, MOVE_ROLLING_KICK),
     LEVEL_UP_MOVE(0, MOVE_TRIPLE_KICK),
+    LEVEL_UP_MOVE(0, MOVE_WHIRLING_STRIKES),
     LEVEL_UP_MOVE(1, MOVE_FOCUS_ENERGY),
     LEVEL_UP_MOVE(1, MOVE_PECK),
     LEVEL_UP_MOVE(5, MOVE_ROCK_SMASH),
@@ -27643,6 +27645,7 @@ static const struct LevelUpMove sPopmothLevelUpLearnset[] = {
 static const struct LevelUpMove sBlizzardMawLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_ROCK_SLIDE),
     LEVEL_UP_MOVE(0, MOVE_STEALTH_ROCK),
+    LEVEL_UP_MOVE(0, MOVE_TECTONIC_FANGS),
     LEVEL_UP_MOVE(1, MOVE_ICE_SHARD),
     LEVEL_UP_MOVE(1, MOVE_LEER),
     LEVEL_UP_MOVE(1, MOVE_POWDER_SNOW),
