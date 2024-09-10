@@ -3762,6 +3762,10 @@ static const u8 sMoveTwoLineDescription_MoveRipAndTear[] = _(
     "The user tears into the\n"
     "foe with its fangs.");
 
+static const u8 sMoveTwoLineDescription_MoveBravado[] = _(
+    "Boosts SpAtk when burned,\n"
+    "paralyzed, or poisoned.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4722,6 +4726,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_SNAP_JAW - 1] = sMoveTwoLineDescription_MoveSnapJaw,
     [MOVE_TANGLING_HUSK - 1] = sMoveTwoLineDescription_MoveTanglingHusk,
     [MOVE_RIP_AND_TEAR - 1] = sMoveTwoLineDescription_MoveRipAndTear,
+    [MOVE_BRAVADO - 1] = sMoveTwoLineDescription_MoveBravado,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5681,6 +5686,7 @@ static const u8 sMoveFourLineDescription_MovePopMayhem[] = _("Pelts the target\n
 static const u8 sMoveFourLineDescription_MoveSnapJaw[] = _("Rushes forward and\nbites the foe. -1\nSpeed to foe or +1\nSpeed to user.");
 static const u8 sMoveFourLineDescription_MoveTanglingHusk[] = _("Protects against non-\nFire-type moves.\nSlows attackers on\ncontact.");
 static const u8 sMoveFourLineDescription_MoveRipAndTear[] = _("Lowers Speed. 50%\nchance to bleed.\nCan't be used\ntwice in a row.");
+static const u8 sMoveFourLineDescription_MoveBravado[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6640,4 +6646,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_SNAP_JAW - 1] = sMoveFourLineDescription_MoveSnapJaw,
     [MOVE_TANGLING_HUSK - 1] = sMoveFourLineDescription_MoveTanglingHusk,
     [MOVE_RIP_AND_TEAR - 1] = sMoveFourLineDescription_MoveRipAndTear,
+    [MOVE_BRAVADO - 1] = sMoveFourLineDescription_MoveBravado,
 };

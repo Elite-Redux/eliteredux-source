@@ -1922,4 +1922,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_SNAP_JAW] = _("Snap Jaw"),
     [MOVE_TANGLING_HUSK] = _("Tangling Husk"),
     [MOVE_RIP_AND_TEAR] = _("Rip and Tear"),
+    [MOVE_BRAVADO] = _("Bravado"),
 };

@@ -11817,6 +11817,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .everyOtherTurn = TRUE,
     },
+    [MOVE_BRAVADO] =
+    {
+        .effect = EFFECT_FACADE,
+        .power = 70,
+        .type = TYPE_NORMAL,
+        .accuracy = 100,
+        .pp = 20,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+        .split = SPLIT_SPECIAL,
+    },
 };
 
 const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES] = {
