@@ -39966,6 +39966,7 @@ static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
     .nature = NATURE_MODEST,
     .moves = MOVE_OUTBURST, MOVE_MISTY_EXPLOSION, MOVE_OUTBURST, MOVE_MISTY_EXPLOSION
     },
+    {
     .lvl = 0,
     .species = SPECIES_GOLEM_ALOLAN,
     .heldItem = ITEM_CUSTAP_BERRY,

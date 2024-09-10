@@ -4745,7 +4745,7 @@
       "id": "LAYOUT_VICTORY_ROAD_URSHIFUS",
       "name": "VictoryRoadUrshifus_Layout",
       "width": 20,
-      "height": 20,
+      "height": 21,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Cave",
       "border_filepath": "data/layouts/VictoryRoadUrshifus/border.bin",
