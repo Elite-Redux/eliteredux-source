@@ -9528,6 +9528,21 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     effect = 1;
                 }
             }
+            if (BATTLER_HAS_ABILITY(battler, ABILITY_BLOOD_STIGMA))
+            {
+                if (gBattleMons[battler].status1 & STATUS1_ANY)
+                {
+                    u32 status1 = gBattleMons[battler].status1;
+                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_BLOOD_STIGMA;
+                    if (status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON)) StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
+                    else if (status1 & STATUS1_BLEED) StringCopy(gBattleTextBuff1, gStatusConditionString_BleedJpn);
+                    else if (status1 & STATUS1_BURN) StringCopy(gBattleTextBuff1, gStatusConditionString_BurnJpn);
+                    else if (status1 & STATUS1_FROSTBITE) StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
+                    else if (status1 & STATUS1_SLEEP) StringCopy(gBattleTextBuff1, gStatusConditionString_SleepJpn);
+                    else StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
+                    effect = 1;
+                }
+            }
 
             if (BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE) && gBattleMons[battler].status1) {
                 int status1 = gBattleMons[battler].status1;
@@ -13713,6 +13728,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_GUTS:
             if (gBattleMons[battlerAtk].status1 & STATUS1_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
+            return;
+        
+        case ABILITY_BLOOD_STIGMA:
+            if (gBattleMons[battlerDef].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerDef)) MUL(2);
             return;
         
         case ABILITY_DETERMINATION:
