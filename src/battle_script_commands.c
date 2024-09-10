@@ -7438,7 +7438,7 @@ static void Cmd_yesnoboxlearnmove(void)
     switch (gBattleScripting.learnMoveState)
     {
     case 0:
-        HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
+        HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
         BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
         gBattleScripting.learnMoveState++;
         gBattleCommunication[CURSOR_POSITION] = 0;
@@ -7547,7 +7547,7 @@ static void Cmd_yesnoboxstoplearningmove(void)
     switch (gBattleScripting.learnMoveState)
     {
     case 0:
-        HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
+        HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
         BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
         gBattleScripting.learnMoveState++;
         gBattleCommunication[CURSOR_POSITION] = 0;
@@ -7864,7 +7864,7 @@ static void Cmd_yesnobox(void)
     switch (gBattleCommunication[0])
     {
     case 0:
-        HandleBattleWindow(0x18, 8, 0x1D, 0xD, 0);
+        HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
         BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
         gBattleCommunication[0]++;
         gBattleCommunication[CURSOR_POSITION] = 0;
