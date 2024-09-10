@@ -13974,6 +13974,13 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 		
 		// Power Spot
 		if(BattlerHasAbility(BATTLE_PARTNER(battlerAtk), battlerAtk, ABILITY_POWER_SPOT)) MUL_MODIFIER(&modifier, 1.3);
+		
+		// Power Spot
+		if(BattlerHasAbility(BATTLE_PARTNER(battlerAtk), battlerAtk, ABILITY_MOSH_PIT))
+        {
+            if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL_MODIFIER(&modifier, 1.25);
+            else MUL_MODIFIER(&modifier, 1.5);
+        }
     }
 	
     // Field Abilities
