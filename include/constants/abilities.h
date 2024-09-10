@@ -556,7 +556,7 @@
 #define ABILITY_COSMIC_DAZE 534 // 2x damage vs confused. Enemies take 2x confusion damage.
 #define ABILITY_MINDS_EYE 535 // Hits Ghost-type Pokémon. Accuracy can't be lowered.
 #define ABILITY_BLOOD_PRICE 536 // Does 30% more damage but lose 10% HP when attacking.
-#define ABILITY_SPIKE_ARMOR 537 // 30% chance to bleed on contact.
+#define ABILITY_SPIKE_ARMOR 537 // 30% chance to bleed on contact or offense.
 #define ABILITY_VOODOO_POWER 538 // 30% chance to bleed when hit by special attacks.
 #define ABILITY_CHROME_COAT 539 // Reduces special damage taken by 40%, but decreases Speed by 10%.
 #define ABILITY_BANSHEE 540 // Normal sound moves become Ghost and get a 1.2x boost.
@@ -689,8 +689,9 @@
 #define ABILITY_PATTERN_CHANGE 667 // Changes type depending on the move it's about to use.
 #define ABILITY_NO_TURNING_BACK 668 // Boosts all stats but can't retreat when below 1/2 max HP.
 #define ABILITY_FLAMMABLE_COAT 669 // Changes forms when using or hit by a Fire-type move.
+#define ABILITY_DRACO_MORALE 670 // Uses Dragon Cheer on switch-in.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_FLAMMABLE_COAT + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DRACO_MORALE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

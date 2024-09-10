@@ -6166,6 +6166,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Web Spinner
         effect += UseEntryMove(battler, ABILITY_WEB_SPINNER, MOVE_STRING_SHOT, 0);
 
+        // Web Spinner
+        effect += UseEntryMove(battler, ABILITY_DRACO_MORALE, MOVE_DRAGON_CHEER, 0);
+
         // Wishmaker
         if (CheckAndSetSwitchInAbility(battler, ABILITY_WISHMAKER)) {
             u8 counter = GetSingleUseAbilityCounter(battler, ABILITY_WISHMAKER) + 1;
@@ -12047,10 +12050,9 @@ case ITEMEFFECT_KINGSROCK:
         switch (atkHoldEffect)
         {
         case HOLD_EFFECT_SHELL_BELL:
-            if (gTurnStructs[gBattlerAttacker].damagedMons
+            if (gTurnStructs[gBattlerTarget].dmg != 0
                 && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                 && gBattlerAttacker != gBattlerTarget
-                && gTurnStructs[gBattlerTarget].dmg != 0
                 && gBattleMons[gBattlerAttacker].hp != gBattleMons[gBattlerAttacker].maxHP
                 && gBattleMons[gBattlerAttacker].hp != 0
                 && !BATTLER_HEALING_BLOCKED(gBattlerAttacker))
@@ -12085,7 +12087,7 @@ case ITEMEFFECT_KINGSROCK:
                 }
             }
 
-            if (gTurnStructs[gBattlerAttacker].damagedMons
+            if (gTurnStructs[gBattlerAttacker].tryLifeOrb
                 && canProc
                 && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                 && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)
