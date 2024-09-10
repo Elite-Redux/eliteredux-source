@@ -234,8 +234,7 @@ static const struct WindowTemplate sWindowTemplates_LinkBattleSave[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0x194
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sSaveInfoWindowTemplate = {
@@ -1387,7 +1386,7 @@ static bool32 InitSaveWindowAfterLinkBattle(u8 *state)
     case 2:
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sBgTemplates_LinkBattleSave, ARRAY_COUNT(sBgTemplates_LinkBattleSave));
-        InitWindows(sWindowTemplates_LinkBattleSave);
+        INIT_WINDOWS(sWindowTemplates_LinkBattleSave);
         LoadUserWindowBorderGfx_(0, 8, 224);
         Menu_LoadStdPalAt(240);
         break;

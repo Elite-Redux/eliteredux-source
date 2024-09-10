@@ -385,8 +385,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 14,
         .paletteNum = 14,
         .baseBlock = 0x60,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sYesNoWindowTemplate_ContinuePlaying =
@@ -1021,7 +1020,7 @@ static void DrawBlenderBg(void)
 
 static void InitBerryBlenderWindows(void)
 {
-    if (InitWindows(sWindowTemplates))
+    if (INIT_WINDOWS(sWindowTemplates))
     {
         s32 i;
 

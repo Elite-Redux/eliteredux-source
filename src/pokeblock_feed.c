@@ -466,8 +466,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0xA
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 // - 1 excludes PBLOCK_CLR_NONE
@@ -788,7 +787,7 @@ static bool8 LoadMonAndSceneGfx(struct Pokemon *mon)
 
 static void HandleInitWindows(void)
 {
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 1, 0xE0);
     LoadPalette(gUnknown_0860F074, 0xF0, 0x20);

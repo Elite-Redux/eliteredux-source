@@ -618,8 +618,7 @@ static const struct WindowTemplate sTradeMenuWindowTemplates[] =
         .height = 8,
         .paletteNum = 15,
         .baseBlock = 494
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static const struct WindowTemplate sTradeYesNoWindowTemplate =
@@ -1123,8 +1122,7 @@ static const struct WindowTemplate sTradeSequenceWindowTemplates[] =
         .height = 4,
         .paletteNum = 0,
         .baseBlock = 64
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 const struct WindowTemplate gTradeEvolutionSceneYesNoWindowTemplate =

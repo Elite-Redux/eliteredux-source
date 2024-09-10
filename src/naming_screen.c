@@ -233,7 +233,7 @@ static const struct BgTemplate sBgTemplates[] =
     }
 };
 
-static const struct WindowTemplate sWindowTemplates[WIN_COUNT + 1] =
+static const struct WindowTemplate sWindowTemplates[] =
 {
     [WIN_KB_PAGE_1] = {
         .bg = 1,
@@ -279,8 +279,7 @@ static const struct WindowTemplate sWindowTemplates[WIN_COUNT + 1] =
         .height = 2,
         .paletteNum = 11,
         .baseBlock = 0x074
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 // This handles what characters get inserted when a key is pressed

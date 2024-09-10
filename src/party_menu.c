@@ -2161,16 +2161,16 @@ static void InitPartyMenuWindows(u8 layout)
     switch (layout)
     {
     case PARTY_LAYOUT_SINGLE:
-        InitWindows(sSinglePartyMenuWindowTemplate_Equal); //sSinglePartyMenuWindowTemplate
+        INIT_WINDOWS(sSinglePartyMenuWindowTemplate_Equal); //sSinglePartyMenuWindowTemplate
         break;
     case PARTY_LAYOUT_DOUBLE:
-        InitWindows(sDoublePartyMenuWindowTemplate);
+        INIT_WINDOWS(sDoublePartyMenuWindowTemplate);
         break;
     case PARTY_LAYOUT_MULTI:
-        InitWindows(sMultiPartyMenuWindowTemplate);
+        INIT_WINDOWS(sMultiPartyMenuWindowTemplate);
         break;
     default: // PARTY_LAYOUT_MULTI_SHOWCASE
-        InitWindows(sShowcaseMultiPartyMenuWindowTemplate);
+        INIT_WINDOWS(sShowcaseMultiPartyMenuWindowTemplate);
         break;
     }
     DeactivateAllTextPrinters();

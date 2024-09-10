@@ -76,8 +76,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 4,
         .paletteNum = 14,
         .baseBlock = 0x0200
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static const struct WindowTemplate sWindowTemplate_ConfirmStarter =
@@ -636,7 +635,7 @@ void CB2_ChooseStarter(void)
 
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
 
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 0x2A8, 0xD0);

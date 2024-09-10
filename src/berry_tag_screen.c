@@ -137,8 +137,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 257,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u8 *const sBerryFirmnessStrings[] =
@@ -365,7 +364,7 @@ static void HandleInitWindows(void)
 {
     u16 i;
 
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
     LoadPalette(sFontPalette, 0xF0, 0x20);
     for (i = 0; i < ARRAY_COUNT(sWindowTemplates) - 1; i++)

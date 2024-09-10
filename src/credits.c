@@ -188,8 +188,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 12,
         .paletteNum = 8,
         .baseBlock = 1
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 static const u8 sMonSpritePos[][2] =
 {
@@ -367,7 +366,7 @@ static void InitCreditsBgsAndWindows(void)
     InitBgsFromTemplates(0, sBackgroundTemplates, ARRAY_COUNT(sBackgroundTemplates));
     SetBgTilemapBuffer(0, AllocZeroed(BG_SCREEN_SIZE));
     LoadPalette(sCredits_Pal, 0x80, 64);
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
     PutWindowTilemap(0);
     CopyWindowToVram(0, 3);

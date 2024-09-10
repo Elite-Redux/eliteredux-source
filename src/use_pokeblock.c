@@ -243,7 +243,7 @@ static const struct BgTemplate sBgTemplates[4] =
     }
 };
 
-static const struct WindowTemplate sWindowTemplates[WIN_COUNT + 1] = 
+static const struct WindowTemplate sWindowTemplates[] = 
 {
     [WIN_NAME] = {
         .bg = 0,
@@ -271,8 +271,7 @@ static const struct WindowTemplate sWindowTemplates[WIN_COUNT + 1] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 0x4B
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sUsePokeblockYesNoWinTemplate = 
@@ -503,7 +502,7 @@ static void LoadUsePokeblockMenu(void)
     case 3:
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
-        InitWindows(sWindowTemplates);
+        INIT_WINDOWS(sWindowTemplates);
         DeactivateAllTextPrinters();
         LoadUserWindowBorderGfx(0, 0x97, 0xE0);
         sInfo->mainState++;

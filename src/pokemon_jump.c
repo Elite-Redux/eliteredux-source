@@ -3118,8 +3118,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 2,
         .paletteNum = 2,
         .baseBlock = 0x1F,
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 struct
@@ -3181,7 +3180,7 @@ static void LoadPokeJumpGfx(void)
     case 0:
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
-        InitWindows(sWindowTemplates);
+        INIT_WINDOWS(sWindowTemplates);
         ResetTempTileDataBuffers();
         LoadSpriteSheetsAndPalettes(sPokemonJumpGfx);
         InitDigitPrinters();

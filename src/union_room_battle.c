@@ -45,8 +45,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
         .height = 4,
         .paletteNum = 0xE,
         .baseBlock = 0x014
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u8 sTextColors[] = { TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY };
@@ -123,7 +122,7 @@ void CB2_UnionRoomBattle(void)
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
         ResetTempTileDataBuffers();
-        if (!InitWindows(sWindowTemplates))
+        if (!INIT_WINDOWS(sWindowTemplates))
             return;
         DeactivateAllTextPrinters();
         ClearWindowTilemap(0);

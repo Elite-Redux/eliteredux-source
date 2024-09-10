@@ -115,8 +115,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
         .height = 15,
         .paletteNum = 15,
         .baseBlock = 1
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u8 sTextColors[] = {
@@ -297,7 +296,7 @@ static bool8 MailReadBuildGraphics(void)
             SetBgTilemapBuffer(2, sMailRead->bg2TilemapBuffer);
             break;
         case 7:
-            InitWindows(sWindowTemplates);
+            INIT_WINDOWS(sWindowTemplates);
             DeactivateAllTextPrinters();
             break;
         case 8:

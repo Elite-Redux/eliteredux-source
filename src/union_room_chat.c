@@ -581,7 +581,7 @@ static const struct WindowTemplate sWinTemplates[] = {
         .height = 0x09,
         .paletteNum = 0x0e,
         .baseBlock = 0x0013,
-    }, DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct SubtaskInfo sDisplaySubtasks[] = {
@@ -2132,7 +2132,7 @@ static bool8 TryAllocDisplay(void)
     {
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
-        InitWindows(sWinTemplates);
+        INIT_WINDOWS(sWinTemplates);
         ResetTempTileDataBuffers();
         InitScanlineEffect();
         InitDisplay(sDisplay);

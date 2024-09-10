@@ -667,8 +667,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 4, 
         .paletteNum = 15, 
         .baseBlock = 0x194
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sWindowTemplate_InfoBox =
@@ -1007,7 +1006,7 @@ static void SlotMachineSetup_InitBgsWindows(void)
     CpuFill32(0, (void *)VRAM, VRAM_SIZE);
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
 }
 

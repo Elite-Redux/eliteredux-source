@@ -88,8 +88,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 2,
         .paletteNum = 12,
         .baseBlock = 560
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sWindowTemplate_ConfirmYesNo =
@@ -650,7 +649,7 @@ static void LoadWallClockGraphics(void)
     LoadPalette(sTextPrompt_Pal, 0xc0, 8);
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 0x250, 0xd0);
     ClearScheduledBgCopiesToVram();

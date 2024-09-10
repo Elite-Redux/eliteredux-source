@@ -80,8 +80,7 @@ static const struct WindowTemplate sHelpBarWindowTemplate[] =
         .height = 2,
         .paletteNum = 0,
         .baseBlock = 0x36,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u8 *const sHelpBarTexts[HELPBAR_COUNT] =
@@ -551,7 +550,7 @@ static void InitHelpBar(void)
 {
     struct PokenavMainMenuResources *structPtr = GetSubstructPtr(POKENAV_SUBSTRUCT_MAIN_MENU);
 
-    InitWindows(&sHelpBarWindowTemplate[0]);
+    INIT_WINDOWS(sHelpBarWindowTemplate);
     structPtr->helpBarWindowId = 0;
     DrawHelpBar(structPtr->helpBarWindowId);
     PutWindowTilemap(structPtr->helpBarWindowId);

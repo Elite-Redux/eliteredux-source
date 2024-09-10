@@ -404,8 +404,7 @@ static const struct WindowTemplate sWindowTemplates_MainMenu[] =
         .height = MENU_HEIGHT_ERROR,
         .paletteNum = 15,
         .baseBlock = 0x16D
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate gNewGameBirchSpeechTextWindows[] =
@@ -463,8 +462,7 @@ static const struct WindowTemplate gNewGameBirchSpeechTextWindows[] =
         .height = 6,
         .paletteNum = 15,
         .baseBlock = 0x6D
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u16 sMainMenuBgPal[] = INCBIN_U16("graphics/misc/main_menu_bg.gbapal");
@@ -668,7 +666,7 @@ static u32 InitMainMenu(bool8 returningFromOptionsMenu)
     ChangeBgY(0, 0, 0);
     ChangeBgX(1, 0, 0);
     ChangeBgY(1, 0, 0);
-    InitWindows(sWindowTemplates_MainMenu);
+    INIT_WINDOWS(sWindowTemplates_MainMenu);
     DeactivateAllTextPrinters();
     LoadMainMenuWindowFrameTiles(0, MAIN_MENU_BORDER_TILE);
 
@@ -1430,7 +1428,7 @@ static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8 taskId)
         }
         else
         {
-            InitWindows(gNewGameBirchSpeechTextWindows);
+            INIT_WINDOWS(gNewGameBirchSpeechTextWindows);
             LoadMainMenuWindowFrameTiles(0, 0xF3);
             LoadMessageBoxGfx(0, 0xFC, 0xF0);
             NewGameBirchSpeech_ShowDialogueWindow(0, 1);
@@ -2211,7 +2209,7 @@ static void CB2_NewGameBirchSpeech_ReturnFromNamingScreen(void)
     REG_IME = savedIme;
     SetVBlankCallback(VBlankCB_MainMenu);
     SetMainCallback2(CB2_MainMenu);
-    InitWindows(gNewGameBirchSpeechTextWindows);
+    INIT_WINDOWS(gNewGameBirchSpeechTextWindows);
     LoadMainMenuWindowFrameTiles(0, 0xF3);
     LoadMessageBoxGfx(0, 0xFC, 0xF0);
     PutWindowTilemap(0);

@@ -94,7 +94,7 @@ static const struct WindowTemplate sWindowTemplates[] = {
         .height = 15,
         .paletteNum = 15,
         .baseBlock = 0x0184
-    }, DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u8 *const sHeaderTexts[NUM_GROUPTYPES + 1] = {
@@ -178,7 +178,7 @@ static void CB2_InitWirelessCommunicationScreen(void)
     SetBgTilemapBuffer(0, Alloc(BG_SCREEN_SIZE));
     DecompressAndLoadBgGfxUsingHeap(1, sBgTiles_Gfx, 0, 0, 0);
     CopyToBgTilemapBuffer(1, sBgTiles_Tilemap, 0, 0);
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
     ResetPaletteFade();
     ResetSpriteData();

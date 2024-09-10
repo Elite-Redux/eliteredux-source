@@ -423,8 +423,7 @@ static const struct WindowTemplate sFlyMapWindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 0x49
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct SpritePalette sFlyTargetIconsSpritePalette =
@@ -1696,7 +1695,7 @@ void CB2_OpenFlyMap(void)
         gMain.state++;
         break;
     case 2:
-        InitWindows(sFlyMapWindowTemplates);
+        INIT_WINDOWS(sFlyMapWindowTemplates);
         DeactivateAllTextPrinters();
         gMain.state++;
         break;

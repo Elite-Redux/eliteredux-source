@@ -102,7 +102,7 @@ enum {
     PSS_LABEL_PANE_TITLE,
     PSS_LABEL_PANE_RIGHT_BASE,
     PSS_LABEL_PANE_LEFT_MOVE_BASE,
-    PSS_LABEL_WINDOW_END
+    PSS_LABEL_WINDOW_COUNT
 };
 
 #define MOVE_SELECTOR_SPRITES_COUNT 4
@@ -213,7 +213,7 @@ static EWRAM_DATA struct PokemonSummaryScreenData
     u8 firstMoveIndex;
     u8 secondMoveIndex;
     u16 newMove;
-    u8 windowIds[PSS_LABEL_WINDOW_END - 1];
+    u8 windowIds[PSS_LABEL_WINDOW_COUNT];
     u8 spriteIds[SPRITE_ARR_ID_COUNT];
     bool8 unk40EF;
     s16 switchCounter; // Used for various switch statement cases that decompress/load graphics or pokemon data
@@ -503,8 +503,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .height = 2,
         .paletteNum = 2,
         .baseBlock = 644,
-    },
-    [PSS_LABEL_WINDOW_END] = DUMMY_WIN_TEMPLATE
+    }
 };
 
 enum
@@ -4068,9 +4067,9 @@ static void ResetWindows(void)
 {
     u8 i;
 
-    InitWindows(sSummaryTemplate);
+    INIT_WINDOWS(sSummaryTemplate);
     DeactivateAllTextPrinters();
-    for (i = 0; i < PSS_LABEL_WINDOW_END; i++)
+    for (i = 0; i < PSS_LABEL_WINDOW_COUNT; i++)
         FillWindowPixelBuffer(i, PIXEL_FILL(0));
     for (i = 0; i < ARRAY_COUNT(sMonSummaryScreen->windowIds); i++)
         sMonSummaryScreen->windowIds[i] = WINDOW_NONE;

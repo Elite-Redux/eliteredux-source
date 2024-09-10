@@ -842,7 +842,6 @@ static const struct WindowTemplate sEasyChatWindowTemplates[] = {
         .paletteNum = 3,
         .baseBlock = 0,
     },
-    DUMMY_WIN_TEMPLATE,
 };
 
 static const struct WindowTemplate sEasyChatYesNoWindowTemplate = {
@@ -3013,7 +3012,7 @@ static bool8 LoadEasyChatScreen(void)
         InitBgsFromTemplates(0, sEasyChatBgTemplates, ARRAY_COUNT(sEasyChatBgTemplates));
         SetBgTilemapBuffer(3, sScreenControl->bg3TilemapBuffer);
         SetBgTilemapBuffer(1, sScreenControl->bg1TilemapBuffer);
-        InitWindows(sEasyChatWindowTemplates);
+        INIT_WINDOWS(sEasyChatWindowTemplates);
         DeactivateAllTextPrinters();
         LoadEasyChatPalettes();
         InitEasyChatBgs();

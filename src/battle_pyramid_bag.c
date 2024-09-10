@@ -243,8 +243,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 2,
         .paletteNum = 15,
         .baseBlock = 462
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 enum {
@@ -1439,7 +1438,7 @@ static void InitPyramidBagWindows(void)
 {
     u8 i;
 
-    InitWindows(sWindowTemplates);
+    INIT_WINDOWS(sWindowTemplates);
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 0x1, 0xE0);
     LoadMessageBoxGfx(0, 0xA, 0xD0);

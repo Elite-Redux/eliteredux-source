@@ -72,8 +72,7 @@ static const struct WindowTemplate sTrainerHillRecordsWindowTemplates[] =
         .height = 18,
         .paletteNum = 15,
         .baseBlock = 20
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sLinkBattleRecordsWindow =
@@ -512,7 +511,7 @@ static void CB2_ShowTrainerHillRecords(void)
         }
         break;
     case 5:
-        InitWindows(sTrainerHillRecordsWindowTemplates);
+        INIT_WINDOWS(sTrainerHillRecordsWindowTemplates);
         DeactivateAllTextPrinters();
         gMain.state++;
         break;

@@ -218,7 +218,7 @@ static const struct WindowTemplate sLinkErrorWindowTemplates[] = {
         .height = 7,
         .paletteNum = 15,
         .baseBlock = 0x16A
-    }, DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u8 sTextColors[] = { TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY };
@@ -1614,7 +1614,7 @@ void CB2_LinkError(void)
     InitBgsFromTemplates(0, sLinkErrorBgTemplates, ARRAY_COUNT(sLinkErrorBgTemplates));
     sLinkErrorBgTilemapBuffer = tilemapBuffer = malloc(BG_SCREEN_SIZE);
     SetBgTilemapBuffer(1, tilemapBuffer);
-    if (InitWindows(sLinkErrorWindowTemplates))
+    if (INIT_WINDOWS(sLinkErrorWindowTemplates))
     {
         DeactivateAllTextPrinters();
         ResetTempTileDataBuffers();

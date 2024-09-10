@@ -54,8 +54,7 @@ static const struct WindowTemplate sClearSaveTextWindow[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 11,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sClearSaveYesNo[] =
@@ -201,7 +200,7 @@ static void CB2_FadeAndDoReset(void)
 
 static void InitClearSaveDataScreenWindows(void)
 {
-    InitWindows(sClearSaveTextWindow);
+    INIT_WINDOWS(sClearSaveTextWindow);
     DeactivateAllTextPrinters();
     FillWindowPixelBuffer(0, PIXEL_FILL(0));
     LoadWindowGfx(0, 0, 2, 224);

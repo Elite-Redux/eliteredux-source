@@ -95,8 +95,7 @@ static const struct WindowTemplate sBerryFixWindowTemplates[] = {
         .height = 2, 
         .paletteNum = 15, 
         .baseBlock = 337
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const u16 sBerryFixPalColors[] = {
@@ -283,7 +282,7 @@ static void BerryFix_GpuSet(void)
     ChangeBgY(0, 0, 0);
     ChangeBgX(1, 0, 0);
     ChangeBgY(1, 0, 0);
-    InitWindows(sBerryFixWindowTemplates);
+    INIT_WINDOWS(sBerryFixWindowTemplates);
     DeactivateAllTextPrinters();
 
     DmaCopy32(3, sBerryFixPalColors, BG_PLTT + 0x1E0, sizeof(sBerryFixPalColors));

@@ -1038,8 +1038,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 7,
         .paletteNum = 15,
         .baseBlock = 0x14,
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct BgTemplate sBgTemplates[] =
@@ -3921,7 +3920,7 @@ static void LoadPokeStorageMenuGfx(void)
 
 static bool8 InitPokeStorageWindows(void)
 {
-    if (!InitWindows(sWindowTemplates))
+    if (!INIT_WINDOWS(sWindowTemplates))
     {
         return FALSE;
     }

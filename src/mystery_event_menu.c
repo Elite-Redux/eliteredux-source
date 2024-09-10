@@ -60,8 +60,7 @@ static const struct WindowTemplate sWindowTemplates[] =
         .height = 4,
         .paletteNum = 14,
         .baseBlock = 0x6C
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 // code
@@ -85,7 +84,7 @@ void CB2_InitMysteryEventMenu(void)
     SetVBlankCallback(VBlankCB);
     ResetBgsAndClearDma3BusyFlags(0);
     InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));
-    if (InitWindows(sWindowTemplates))
+    if (INIT_WINDOWS(sWindowTemplates))
     {
         s32 i;
 

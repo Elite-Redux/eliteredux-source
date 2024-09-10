@@ -80,8 +80,7 @@ static const struct WindowTemplate sStandardTextBox_WindowTemplates[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0x194
-    },
-    DUMMY_WIN_TEMPLATE
+    }
 };
 
 static const struct WindowTemplate sYesNo_WindowTemplates =
@@ -145,7 +144,7 @@ void task_free_buf_after_copying_tile_data_to_vram(u8 taskId);
 
 void InitStandardTextBoxWindows(void)
 {
-    InitWindows(sStandardTextBox_WindowTemplates);
+    INIT_WINDOWS(sStandardTextBox_WindowTemplates);
     sStartMenuWindowId = WINDOW_NONE;
     sMapNamePopupWindowId = WINDOW_NONE;
 }

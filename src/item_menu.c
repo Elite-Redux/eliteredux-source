@@ -477,8 +477,7 @@ static const struct WindowTemplate sDefaultBagWindows[] =
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0x1B1,
-    },
-    DUMMY_WIN_TEMPLATE,
+    }
 };
 
 static const struct WindowTemplate sContextMenuWindowTemplates[] =
@@ -2588,7 +2587,7 @@ static void LoadBagMenuTextWindows(void)
 {
     u8 i;
 
-    InitWindows(sDefaultBagWindows);
+    INIT_WINDOWS(sDefaultBagWindows);
     DeactivateAllTextPrinters();
     LoadUserWindowBorderGfx(0, 1, 0xE0);
     LoadMessageBoxGfx(0, 10, 0xD0);
