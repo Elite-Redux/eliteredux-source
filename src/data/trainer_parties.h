@@ -34204,7 +34204,7 @@ static const struct TrainerMonItemCustomMoves sParty_Michelle[] = {
     .ability = 1,
     .evs = {160, 0, 96, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_PEBBLE_SHOWER, MOVE_DAZZLING_GLEAM, MOVE_EARTH_POWER, MOVE_MYSTICAL_FIRE
+    .moves = MOVE_PEBBLE_SHOWER, MOVE_DAZZLING_GLEAM, MOVE_MYSTIC_DANCE, MOVE_MYSTICAL_FIRE
     },
     {
     .lvl = 0,
