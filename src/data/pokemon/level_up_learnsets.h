@@ -1051,6 +1051,7 @@ static const struct LevelUpMove sJigglypuffLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sWigglytuffLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_OUTBURST),
     LEVEL_UP_MOVE(1, MOVE_BODY_PRESS),
     LEVEL_UP_MOVE(1, MOVE_CHARM),
     LEVEL_UP_MOVE(1, MOVE_DEFENSE_CURL),
@@ -27358,6 +27359,7 @@ static const struct LevelUpMove sBeefenderLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_DUAL_WINGBEAT),
     LEVEL_UP_MOVE(0, MOVE_POISON_JAB),
     LEVEL_UP_MOVE(1, MOVE_CONFUSE_RAY),
+    LEVEL_UP_MOVE(1, MOVE_DRILL_PECK),
     LEVEL_UP_MOVE(1, MOVE_GUST),
     LEVEL_UP_MOVE(1, MOVE_POISON_STING),
     LEVEL_UP_MOVE(1, MOVE_SLASH),
@@ -27381,6 +27383,7 @@ static const struct LevelUpMove sBeefenderLevelUpLearnset[] = {
     LEVEL_UP_MOVE(40, MOVE_ATTACK_ORDER),
     LEVEL_UP_MOVE(44, MOVE_CAPTIVATE),
     LEVEL_UP_MOVE(48, MOVE_DESTINY_BOND),
+    LEVEL_UP_MOVE(48, MOVE_MEGAHORN),
     LEVEL_UP_MOVE(54, MOVE_ZEPHYR_RUSH),
     LEVEL_UP_END
 };
