@@ -639,6 +639,7 @@ static const u8 sAbilitySnowyWrathDescription[] = _("Snow Warning + Whiteout.");
 static const u8 sAbilityNoTurningBackDescription[] = _("Boosts all stats but can't retreat\nwhen below 1/2 max HP.");
 static const u8 sAbilityFlammableCoatDescription[] = _("Changes forms when using or\nhit by a Fire-type move.");
 static const u8 sAbilityDracoMoraleDescription[] = _("Uses Dragon Cheer\non switch-in.");
+static const u8 sAbilityBadOmenDescription[] = _("Foes min roll and may miss.\nTakes 1/2 damage from crits.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1313,6 +1314,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_NO_TURNING_BACK] = _("No Turning Back"),
     [ABILITY_FLAMMABLE_COAT] = _("Flammable Coat"),
     [ABILITY_DRACO_MORALE] = _("Draco Morale"),
+    [ABILITY_BAD_OMEN] = _("Bad Omen"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1988,4 +1990,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_NO_TURNING_BACK] = sAbilityNoTurningBackDescription,
     [ABILITY_FLAMMABLE_COAT] = sAbilityFlammableCoatDescription,
     [ABILITY_DRACO_MORALE] = sAbilityDracoMoraleDescription,
+    [ABILITY_BAD_OMEN] = sAbilityBadOmenDescription,
 };

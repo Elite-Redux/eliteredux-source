@@ -690,8 +690,9 @@
 #define ABILITY_NO_TURNING_BACK 668 // Boosts all stats but can't retreat when below 1/2 max HP.
 #define ABILITY_FLAMMABLE_COAT 669 // Changes forms when using or hit by a Fire-type move.
 #define ABILITY_DRACO_MORALE 670 // Uses Dragon Cheer on switch-in.
+#define ABILITY_BAD_OMEN 671 // Foes min roll and may miss. Takes 1/2 damage from crits.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DRACO_MORALE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_BAD_OMEN + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

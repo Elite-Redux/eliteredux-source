@@ -1124,6 +1124,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_BLOOD_BATH] = 1,
     [ABILITY_BLOODLUST] = 1,
     [ABILITY_SMOKEY_MANEUVERS] = 1,
+    [ABILITY_BAD_OMEN] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -13749,7 +13750,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
     }
 }
 
-static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int battlerDef, int move, int moveType, int typeEffectivenessModifier, u16* resistance, u16* modifier)
+static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int battlerDef, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier)
 {
     switch (ability)
     {
@@ -13910,6 +13911,10 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
                     MUL(.75);
             }
             return;
+        
+        case ABILITY_BAD_OMEN:
+            if (isCrit) MUL(.5);
+            return;
     }
 }
 
@@ -13931,7 +13936,7 @@ u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int mo
     GET_ALL_BATTLER_ABILITIES(abilities, battlerDef, battlerAtk);
     for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++)
     {
-        CalculateDefensiveAbilityMultiplier(abilities[i], battlerAtk, battlerDef, move, moveType, typeEffectivenessMultiplier, resistanceMultiplier, &multiplier);
+        CalculateDefensiveAbilityMultiplier(abilities[i], battlerAtk, battlerDef, move, moveType, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier);
     }
 
     return multiplier;
@@ -14944,7 +14949,7 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType
     // Add a random factor.
     if (randomFactor)
     {
-        s32 roll = BATTLER_HAS_ABILITY(battlerDef, ABILITY_BAD_LUCK) ? 15 : Random() % 16;
+        s32 roll = (IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_OMEN)) ? 15 : Random() % 16;
         dmg *= 100 - roll;
         dmg /= 100;
     }
@@ -14959,7 +14964,7 @@ s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveT
 {
     s32 dmg = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, isCrit, FALSE, FALSE, typeEffectivenessModifier);
 
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_BAD_LUCK)) randomFactor = 16;
+    if (IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_OMEN)) randomFactor = 16;
 
     // Add a random factor.
     dmg *= 100 - randomFactor;

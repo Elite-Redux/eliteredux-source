@@ -2036,7 +2036,11 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     calc /= gAccuracyStageRatios[buff].divisor;
 
     // Bad Luck Ability lowers accuracy by 5%
-    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_BAD_LUCK, defAbility) || BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerDef), ABILITY_BAD_LUCK))
+    if (IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK))
+        calc = (calc * 95) / 100;
+
+    // Bad Luck Ability lowers accuracy by 5%
+    if (IsAbilityOnSide(battlerDef, ABILITY_BAD_OMEN))
         calc = (calc * 95) / 100;
 
     if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_COMPOUND_EYES, atkAbility))
