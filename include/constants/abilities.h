@@ -694,7 +694,7 @@
 #define ABILITY_MOSH_PIT 672 // Ally's attacks get a 1.25x boost. 1.5x if attack causes recoil.
 #define ABILITY_BLOOD_STAIN 673 // Bleeds if not immune. Can't get other status. Spreads on contact.
 #define ABILITY_BLOOD_STIGMA 674 // Immune to status. Gets a 2x boost vs bleeding foes.
-#define ABILITY_MAXIMUM_ACCELERATION 675 // Momentum + Impulse.
+#define ABILITY_MAXIMUM_ACCELERATION 675 // Moves use the Speed stat for damage calculations.
 #define ABILITY_SIDEWINDER 676 // First biting move each entry gets +1 priority. Resets on KO.
 #define ABILITY_PETRIFY 677 // Clears stat buffs then lowers speed by one stage on entry.
 
