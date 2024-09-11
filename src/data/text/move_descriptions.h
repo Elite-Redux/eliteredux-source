@@ -3766,6 +3766,10 @@ static const u8 sMoveTwoLineDescription_MoveBravado[] = _(
     "Doubles damage if burned,\n"
     "paralyzed, or poisoned.");
 
+static const u8 sMoveTwoLineDescription_MoveTerrorCharge[] = _(
+    "A frightening headbutt\n"
+    "that may bleed or fear.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4727,6 +4731,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TANGLING_HUSK - 1] = sMoveTwoLineDescription_MoveTanglingHusk,
     [MOVE_RIP_AND_TEAR - 1] = sMoveTwoLineDescription_MoveRipAndTear,
     [MOVE_BRAVADO - 1] = sMoveTwoLineDescription_MoveBravado,
+    [MOVE_TERROR_CHARGE - 1] = sMoveTwoLineDescription_MoveTerrorCharge,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5687,6 +5692,7 @@ static const u8 sMoveFourLineDescription_MoveSnapJaw[] = _("Rushes forward and\n
 static const u8 sMoveFourLineDescription_MoveTanglingHusk[] = _("Protects against non-\nFire-type moves.\nSlows attackers on\ncontact.");
 static const u8 sMoveFourLineDescription_MoveRipAndTear[] = _("Lowers Speed. 50%\nchance to bleed.\nCan't be used\ntwice in a row.");
 static const u8 sMoveFourLineDescription_MoveBravado[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
+static const u8 sMoveFourLineDescription_MoveTerrorCharge[] = _("50% chance to bleed.\n50% chance to fear.\nDouble damage\nwhen switching in.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6647,4 +6653,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_TANGLING_HUSK - 1] = sMoveFourLineDescription_MoveTanglingHusk,
     [MOVE_RIP_AND_TEAR - 1] = sMoveFourLineDescription_MoveRipAndTear,
     [MOVE_BRAVADO - 1] = sMoveFourLineDescription_MoveBravado,
+    [MOVE_TERROR_CHARGE - 1] = sMoveFourLineDescription_MoveTerrorCharge,
 };

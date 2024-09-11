@@ -978,6 +978,7 @@ gBattleAnims_Moves::
 	.4byte Move_SILK_TRAP @ MOVE_TANGLING_HUSK
 	.4byte Move_CRUNCH @ MOVE_RIP_AND_TEAR
 	.4byte Move_FACADE @ MOVE_BRAVADO
+	.4byte Move_NONE @ MOVE_TERROR_CHARGE
 
 	.align 2
 gBattleAnims_StatusConditions::

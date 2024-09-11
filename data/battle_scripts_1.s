@@ -477,6 +477,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectMysticDance			  @ EFFECT_MYSTIC_DANCE
 	.4byte BattleScript_EffectSnapJaw   			  @ EFFECT_SNAP_JAW
 	.4byte BattleScript_EffectRipAndTear			  @ EFFECT_RIP_AND_TEAR
+	.4byte BattleScript_EffectTerrorCharge			  @ EFFECT_TERROR_CHARGE
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -2972,8 +2973,16 @@ BattleScript_EffectWorrySeed:
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
 BattleScript_EffectWorrySeed_Fear:
-	call BattleScript_SetFear
+	setmoveeffect MOVE_EFFECT_FEAR
+	seteffectprimary
 	goto BattleScript_MoveEnd
+
+BattleScript_SetFearMoveEffect::
+	savetargettostack4
+	copybyte gBattlerTarget, gEffectBattler
+	call BattleScript_SetFear
+	readtargetfromstack4
+	return
 
 BattleScript_SetFear:
 	jumpifstatus4 BS_TARGET, STATUS4_FEAR, BattleScript_SetFear_Return
@@ -11007,7 +11016,8 @@ BattleScript_AbilitySetFear::
 	copybyte gBattlerAttacker, gStackBattler1
 	copybyte gBattlerTarget, gStackBattler2
 	call BattleScript_AbilityPopUp
-	call BattleScript_SetFear
+	setmoveeffect MOVE_EFFECT_FEAR
+	seteffectprimary
 BattleScript_AbilitySetFear_Return:
 	restoreattackerandtargetfrom34
 	return
@@ -12517,7 +12527,8 @@ BattleScript_EffectScaryFace::
 	printfromtable gStatDownStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_EffectScaryFace_Fear:
-	call BattleScript_SetFear
+	setmoveeffect MOVE_EFFECT_FEAR
+	seteffectprimary
 	goto BattleScript_MoveEnd
 
 @ memo of tools i need to try
@@ -12835,6 +12846,29 @@ BattleScript_EffectRipAndTear::
 	seteffectsecondary
 	setmoveeffect MOVE_EFFECT_BLEED
 	seteffectwithchance
-	tryfaintmon BS_TARGET, FALSE, NULL
-	moveendall
-	end
+	goto BattleScript_MoveEndTryFaintTarget
+
+BattleScript_EffectTerrorCharge::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_BLEED
+	seteffectwithchance
+	setmoveeffect MOVE_EFFECT_FEAR
+	seteffectwithchance
+	goto BattleScript_MoveEndTryFaintTarget

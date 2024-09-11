@@ -4110,6 +4110,12 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_AnnounceStatus;
                 }
+            case MOVE_EFFECT_FEAR:
+                if (!gVolatileStructs[gEffectBattler].fear)
+                {
+                    BattleScriptPush(gBattlescriptCurrInstr);
+                    gBattlescriptCurrInstr = BattleScript_SetFearMoveEffect;
+                }
             }
         }
     }
@@ -11452,7 +11458,7 @@ static void Cmd_various(void)
     case VARIOUS_SKY_DROP:
         {
             int clear = T1_READ_8(gBattlescriptCurrInstr + 3);
-            int failPtr = T1_READ_PTR(gBattlescriptCurrInstr + 4);
+            const u8* failPtr = T1_READ_PTR(gBattlescriptCurrInstr + 4);
 
             if (clear)
             {
