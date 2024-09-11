@@ -1041,6 +1041,7 @@ const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pT
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
 static const u8 sText_SkyDropEndsEarly[] = _("{B_STACK_1_NAME_WITH_PREFIX} falls\nback to the ground.");
 static const u8 sText_SkyDropCharge[] = _("{B_ATK_NAME_WITH_PREFIX} carries\n{B_DEF_NAME_WITH_PREFIX} into the sky!");
+static const u8 sText_SkyDropStuck[] = _("{B_ATK_NAME_WITH_PREFIX} is stuck\nin the air!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1866,6 +1867,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_BATTLERACQUIREDABILITY - 12] = sText_BattlerAcquiredAbility,
     [STRINGID_SKY_DROP_ENDS_EARLY - 12] = sText_SkyDropEndsEarly,
     [STRINGID_SKY_DROP_CHARGE - 12] = sText_SkyDropCharge,
+    [STRINGID_SKY_DROP_STUCK - 12] = sText_SkyDropStuck,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

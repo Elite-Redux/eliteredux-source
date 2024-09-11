@@ -6160,7 +6160,7 @@ BattleScript_EffectBeatUp::
 BattleScript_SkyDropInAir::
 	printstring STRINGID_SKY_DROP_STUCK
 	waitmessage B_WAIT_TIME_LONG
-	goto moveend
+	goto BattleScript_MoveEnd
 
 BattleScript_SkyDropEndsEarly::
 	printstring STRINGID_SKY_DROP_ENDS_EARLY
