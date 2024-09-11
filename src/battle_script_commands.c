@@ -14917,6 +14917,7 @@ static void Cmd_setsemiinvulnerablebit(void)
         break;
     case MOVE_PHANTOM_FORCE:
     case MOVE_SHADOW_FORCE:
+    case MOVE_CHEAP_SHOT:
         gStatuses3[gBattlerAttacker] |= STATUS3_PHANTOM_FORCE;
         break;
     }
