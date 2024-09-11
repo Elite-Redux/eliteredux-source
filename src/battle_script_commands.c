@@ -3112,6 +3112,8 @@ void StealTargetItem(u8 battlerStealer, u8 battlerItem)
     MarkBattlerForControllerExec(battlerItem);
 
     gBattleStruct->choicedMove[battlerItem] = 0;
+    
+    gWishFutureKnock.knockedOffMons[GET_BATTLER_SIDE(battlerStealer)] &= ~gBitTable[gBattlerPartyIndexes[battlerItem]];
 
     TrySaveExchangedItem(battlerItem, gLastUsedItem);
 }
