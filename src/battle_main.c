@@ -3469,6 +3469,17 @@ void SwitchInClearSetData(void)
     ClearBattlerMoveHistory(gActiveBattler);
     ClearBattlerAbilityHistory(gActiveBattler);
     ClearBattlerItemEffectHistory(gActiveBattler);
+    
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (!gVolatileStructs[i].skyDropped) continue;
+        if (gVolatileStructs[i].skyDroppedBy != gActiveBattler) continue;
+        gVolatileStructs[i].skyDropped = FALSE;
+        gStatuses3[i] &= ~STATUS3_ON_AIR;
+        gStackBattler1 = i;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_SkyDropEndsEarly;
+    }
 }
 
 void FaintClearSetData(void)
@@ -3557,6 +3568,17 @@ void FaintClearSetData(void)
     UndoFormChange(gBattlerPartyIndexes[gActiveBattler], GET_BATTLER_SIDE(gActiveBattler), FALSE);
     if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
         UndoMegaEvolution(gBattlerPartyIndexes[gActiveBattler]);
+    
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (!gVolatileStructs[i].skyDropped) continue;
+        if (gVolatileStructs[i].skyDroppedBy != gActiveBattler) continue;
+        gVolatileStructs[i].skyDropped = FALSE;
+        gStatuses3[i] &= ~STATUS3_ON_AIR;
+        gStackBattler1 = i;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_SkyDropEndsEarly;
+    }
 }
 
 static void DoBattleIntro(void)
