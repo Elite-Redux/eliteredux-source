@@ -880,6 +880,7 @@ static const u8 sText_RecurringNightmare[] = _("{B_STACK_1_NAME_WITH_PREFIX} fad
 static const u8 sText_PkmnHurtByFuneralPyre[] = _("{B_ATK_NAME_WITH_PREFIX} was hurt\nby the Funeral Pyre!");
 static const u8 sText_FuneralPyreEntry[] = _("{B_ATK_NAME_WITH_PREFIX} lights\na Funeral Pyre!");
 static const u8 sText_NoTurningBack[] = _("{B_DEF_NAME_WITH_PREFIX} won't\nback down from a fight!");
+static const u8 sText_BattlerAcquiredAbility[] = _("{B_STACK_1_NAME_WITH_PREFIX} acquired {B_LAST_ABILITY}!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1038,7 +1039,8 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_BattlerAcquiredAbility[] = _("{B_STACK_1_NAME_WITH_PREFIX} acquired {B_LAST_ABILITY}!");
+static const u8 sText_SkyDropEndsEarly[] = _("{B_STACK_1_NAME_WITH_PREFIX} falls\nback to the ground.");
+static const u8 sText_SkyDropCharge[] = _("{B_ATK_NAME_WITH_PREFIX} carries\n{B_DEF_NAME_WITH_PREFIX} into the sky!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1862,6 +1864,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_FUNERAL_PYRE_ENTRY - 12] = sText_FuneralPyreEntry,
     [STRINGID_NO_TURNING_BACK - 12] = sText_NoTurningBack,
     [STRINGID_BATTLERACQUIREDABILITY - 12] = sText_BattlerAcquiredAbility,
+    [STRINGID_SKY_DROP_ENDS_EARLY - 12] = sText_SkyDropEndsEarly,
+    [STRINGID_SKY_DROP_CHARGE - 12] = sText_SkyDropCharge,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

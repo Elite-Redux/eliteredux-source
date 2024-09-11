@@ -192,6 +192,8 @@ extern const u8 BattleScript_AbilityStatusEffectSafe[];
 extern const u8 BattleScript_ParasiticSporesSpread[];
 extern const u8 BattleScript_ParasiticSporesSpreadWithAbility[];
 extern const u8 BattleScript_ParasiticSporesDamage[];
+extern const u8 BattleScript_SkyDropEndsEarly[];
+extern const u8 BattleScript_SkyDropInAir[];
 extern const u8 BattleScript_FuneralPyreDamage[];
 extern const u8 BattleScript_MoveSecondStatusEffect[];
 extern const u8 BattleScript_SynchronizeActivates[];

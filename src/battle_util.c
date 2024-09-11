@@ -3945,6 +3945,7 @@ enum
     CANCELLER_POWDER_STATUS,
     CANCELLER_THROAT_CHOP,
     CANCELLER_MULTIHIT_MOVES,
+    CANCELLER_SKY_DROP,
     CANCELLER_END,
     CANCELLER_PSYCHIC_TERRAIN,
     CANCELLER_END2,
@@ -4026,6 +4027,15 @@ u8 AtkCanceller_UnableToUseMove(void)
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_DEFROSTED;
                     effect = 2;
                 }
+            }
+            gBattleStruct->atkCancellerTracker++;
+            break;
+        case CANCELLER_SKY_DROP:
+            if (gVolatileStructs[gBattlerAttacker].skyDropped)
+            {
+                gBattlescriptCurrInstr = BattleScript_SkyDropInAir;
+                gHitMarker |= HITMARKER_NO_ATTACKSTRING;
+                effect = 1;
             }
             gBattleStruct->atkCancellerTracker++;
             break;

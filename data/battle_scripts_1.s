@@ -6157,6 +6157,43 @@ BattleScript_EffectBeatUp::
 	goto BattleScript_HitFromAtkString
 .endif
 
+BattleScript_SkyDropInAir::
+	printstring STRINGID_SKY_DROP_STUCK
+	waitmessage B_WAIT_TIME_LONG
+	goto moveend
+
+BattleScript_SkyDropEndsEarly::
+	printstring STRINGID_SKY_DROP_ENDS_EARLY
+	makevisible BS_STACK_1
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_SkyDrop::
+	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_SkyDrop_TurnTwo
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	setskydrop BS_TARGET, BattleScript_ButItFailed
+	waitmessage B_WAIT_TIME_LONG
+	printstring STRINGID_SKY_DROP_CHARGE
+	attackanimation
+	makeinvisible BS_TARGET
+	waitmessage B_WAIT_TIME_LONG
+	setsemiinvulnerablebit
+	orword gHitMarker, HITMARKER_CHARGING
+	setmoveeffect MOVE_EFFECT_CHARGING | MOVE_EFFECT_AFFECTS_USER
+	seteffectprimary
+	twoturnmoveacceleratecheck
+BattleScript_SkyDrop_TurnTwo:
+	clearsemiinvulnerablebit
+	attackcanceler
+	attackstring
+	ppreduce
+	clearskydrop BS_TARGET, BattleScript_MoveEnd
+	makevisible BS_TARGET
+	goto BattleScript_HitFromCritCalc
+
 BattleScript_EffectSemiInvulnerable::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_SecondTurnSemiInvulnerable
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_SecondTurnSemiInvulnerable
