@@ -1248,6 +1248,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 
     [SPECIES_BUIZEL_REDUX] = _("Buizel"),
     [SPECIES_FLOATZEL_REDUX] = _("Floatzel"),
+    [SPECIES_VELOZEL] = _("Velozel"),
 
     [SPECIES_SLUGMA_REDUX] = _("Slugma"),
     [SPECIES_MAGCARGO_REDUX] = _("Magcargo"),

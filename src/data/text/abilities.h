@@ -643,6 +643,7 @@ static const u8 sAbilityBadOmenDescription[] = _("Foes min roll and may miss.\nT
 static const u8 sAbilityMoshPitDescription[] = _("Ally's attacks get a 1.25x boost.\n1.5x if attack causes recoil.");
 static const u8 sAbilityBloodStainDescription[] = _("Bleeds if not immune. Can't get\nother status. Spreads on contact.");
 static const u8 sAbilityBloodStigmaDescription[] = _("Immune to status. Gets a 2x\nboost vs bleeding foes.");
+static const u8 sAbilityMaximumAccelerationDescription[] = _("Momentum + Impulse.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1321,6 +1322,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_MOSH_PIT] = _("Mosh Pit"),
     [ABILITY_BLOOD_STAIN] = _("Blood Stain"),
     [ABILITY_BLOOD_STIGMA] = _("Blood Stigma"),
+    [ABILITY_MAXIMUM_ACCELERATION] = _("Max Acceleration"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2000,4 +2002,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_MOSH_PIT] = sAbilityMoshPitDescription,
     [ABILITY_BLOOD_STAIN] = sAbilityBloodStainDescription,
     [ABILITY_BLOOD_STIGMA] = sAbilityBloodStigmaDescription,
+    [ABILITY_MAXIMUM_ACCELERATION] = sAbilityMaximumAccelerationDescription,
 };
