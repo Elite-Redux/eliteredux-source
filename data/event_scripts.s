@@ -1153,3 +1153,7 @@ Common_Text_ClydeAskResetTrainers::
 	.include "data/maps/FortreeCity_GymReworked/scripts.inc"
 
 	.include "data/maps/MossDeepCity_GymReworked/scripts.inc"
+
+	.include "data/maps/VictoryRoadRework/scripts.inc"
+
+	.include "data/maps/VictoryRoadUrshifus/scripts.inc"

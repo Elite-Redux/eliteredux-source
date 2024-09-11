@@ -1,0 +1,75 @@
+mapscripts VictoryRoadRework_MapScripts {
+    
+}
+
+// var temp used:
+// var temp 0 => wally arrives
+// var temp 1 => 
+
+
+const LOCALID_WALLY = 1
+
+movement VictoryRoadRework_Movement_WallyComes0 {
+    walk_fast_left * 10
+    face_up
+}
+movement VictoryRoadRework_Movement_WallyComes1 {
+    walk_fast_left * 9
+    face_up
+}
+movement VictoryRoadRework_Movement_WallyComes2 {
+    walk_fast_left * 8
+    face_up
+}
+script VictoryRoadRework_EventScript_WallyComes0{
+    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyComesClean)
+    lock
+    applymovement(LOCALID_WALLY, VictoryRoadRework_Movement_WallyComes0)
+    waitmovement(LOCALID_WALLY)
+    goto(VictoryRoadRework_EventScript_Wally)
+}
+script VictoryRoadRework_EventScript_WallyComes1{
+    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyComesClean)
+    lock
+    applymovement(LOCALID_WALLY, VictoryRoadRework_Movement_WallyComes1)
+    waitmovement(LOCALID_WALLY)
+    goto(VictoryRoadRework_EventScript_Wally)
+}
+script VictoryRoadRework_EventScript_WallyComes2{
+    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyComesClean)
+    lock
+    applymovement(LOCALID_WALLY, VictoryRoadRework_Movement_WallyComes2)
+    waitmovement(LOCALID_WALLY)
+    goto(VictoryRoadRework_EventScript_Wally)
+}
+script VictoryRoadRework_EventScript_WallyComesClean{
+    setvar(VAR_TEMP_0, 1)
+}
+script VictoryRoadRework_EventScript_Wally{
+    lock
+    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyAfterBattle)
+    call(VictoryRoadRework_EventScript_WallyAfterBattle)
+    goto(VictoryRoadRework_EventScript_WallyComesClean)
+}
+
+script VictoryRoadRework_EventScript_WallyAfterBattle{
+    msgbox(format("The only wait forward it to go by this hole"), MSGBOX_NPC)
+}
+
+movement VictoryRoadRework_TeleportPlayerToTheOtherSide{
+    walk_fastest_up * 8
+}
+
+script VictoryRoadRework_EventScript_JumpInHole{
+    lock
+    fadescreen(FADE_TO_BLACK)
+    playse(SE_FALL)
+    waitse
+    //warpsilent(MAP_VICTORY_ROAD_REWORK, 255, 16, 48)
+    //waitstate
+    applymovement(OBJ_EVENT_ID_PLAYER, VictoryRoadRework_TeleportPlayerToTheOtherSide)
+    waitmovement(OBJ_EVENT_ID_PLAYER)
+    playse(SE_PUDDLE)
+    fadescreen(FADE_FROM_BLACK)
+    release
+}

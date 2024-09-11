@@ -282,3 +282,11 @@ script VictoryRoad_1F_EventScript_Calvin {
 	release
 	end
 }
+
+script VictoryRoad_1F_EventScript_Trent {
+	trainerbattle_single(TRAINER_TRENT_5, format("Hey, the kid from Mt Chimney who tanked all my explosions! Want a rematch?"), format("That's us burnt out..."))
+	msgbox(format("Good fight! ...Wait, this is Victory Road? I hiked that far? Well, good luck then! I'm rooting for you, kiddo!"), MSGBOX_NPC) // after player won
+	settrainerflag(TRAINER_TRENT_5)
+	release
+	end
+}

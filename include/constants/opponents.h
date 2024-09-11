@@ -908,6 +908,7 @@
 #define TRAINER_MONOCHAMP_DARK                         902
 #define TRAINER_MONOCHAMP_FAIRY                        903
 
+#define TRAINER_TRENT_5                                904
 #define TRAINERS_COUNT                                 1600
 #define MAX_OLD_TRAINERS_COUNT                         TRAINERS_COUNT + 1
 
