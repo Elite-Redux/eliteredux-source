@@ -528,6 +528,13 @@
       "elevation": 0,
       "dest_map": "MAP_SECRET_DUNGEON",
       "dest_warp_id": 0
+    },
+    {
+      "x": 8,
+      "y": 55,
+      "elevation": 0,
+      "dest_map": "MAP_COLD_CREVICE",
+      "dest_warp_id": 0
     }
   ],
   "coord_events": [
@@ -782,13 +789,6 @@
       "y": 75,
       "elevation": 0,
       "secret_base_id": "SECRET_BASE_BLUE_CAVE3_3"
-    },
-    {
-      "type": "secret_base",
-      "x": 16,
-      "y": 28,
-      "elevation": 0,
-      "secret_base_id": "SECRET_BASE_BLUE_CAVE4_3"
     },
     {
       "type": "hidden_item",

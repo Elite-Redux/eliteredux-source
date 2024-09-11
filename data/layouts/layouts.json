@@ -4750,6 +4750,16 @@
       "secondary_tileset": "gTileset_Cave",
       "border_filepath": "data/layouts/VictoryRoadUrshifus/border.bin",
       "blockdata_filepath": "data/layouts/VictoryRoadUrshifus/map.bin"
+    },
+    {
+      "id": "LAYOUT_COLD_CREVICE",
+      "name": "ColdCrevice_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/ColdCrevice/border.bin",
+      "blockdata_filepath": "data/layouts/ColdCrevice/map.bin"
     }
   ]
 }
