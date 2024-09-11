@@ -694,8 +694,9 @@
 #define ABILITY_MOSH_PIT 672 // Ally's attacks get a 1.25x boost. 1.5x if attack causes recoil.
 #define ABILITY_BLOOD_STAIN 673 // Bleeds if not immune. Can't get other status. Spreads on contact.
 #define ABILITY_BLOOD_STIGMA 674 // Immune to status. Gets a 2x boost vs bleeding foes.
+#define ABILITY_MAXIMUM_ACCELERATION 675 // Momentum + Impulse.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BLOOD_STIGMA + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_MAXIMUM_ACCELERATION + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

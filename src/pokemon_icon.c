@@ -2901,6 +2901,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_UXIE_REDUX]            = 1,
     [SPECIES_BUIZEL_REDUX]          = 0,
     [SPECIES_FLOATZEL_REDUX]        = 0,
+    [SPECIES_VELOZEL]               = 0,
     [SPECIES_SLUGMA_REDUX]          = 1,
     [SPECIES_MAGCARGO_REDUX]        = 1,
     [SPECIES_PANSEAR_REDUX]         = 2,
