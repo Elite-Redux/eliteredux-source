@@ -958,7 +958,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_SNAP_JAW] = _("Snap Jaw"),
     [MOVE_TANGLING_HUSK] = _("TanglingHusk"),
     [MOVE_RIP_AND_TEAR] = _("Rip and Tear"),
-    [MOVE_BRAVADO] = _("MOVEBRAVADO"),
+    [MOVE_BRAVADO] = _("Bravado"),
 };
 
 // Second table with longer move names for places where they fit.
