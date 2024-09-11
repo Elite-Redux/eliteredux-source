@@ -2324,6 +2324,18 @@
 	.byte \max
 	.endm
 
+	.macro setskydrop battler:req onFail:req
+	various \battler, VARIOUS_SKY_DROP
+	.byte FALSE
+	.4byte \onFail
+	.endm
+
+	.macro clearskydrop battler:req onFail:req
+	various \battler, VARIOUS_SKY_DROP
+	.byte TRUE
+	.4byte \onFail
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

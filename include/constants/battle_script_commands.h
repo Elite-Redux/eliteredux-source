@@ -255,6 +255,7 @@
 #define VARIOUS_SET_FOG                         173
 #define VARIOUS_TRY_RECURRING_NIGHTMARE         174
 #define VARIOUS_SET_RANDOM                      175
+#define VARIOUS_SKY_DROP                        176
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0

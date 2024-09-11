@@ -3945,6 +3945,7 @@ enum
     CANCELLER_POWDER_STATUS,
     CANCELLER_THROAT_CHOP,
     CANCELLER_MULTIHIT_MOVES,
+    CANCELLER_SKY_DROP,
     CANCELLER_END,
     CANCELLER_PSYCHIC_TERRAIN,
     CANCELLER_END2,
@@ -4026,6 +4027,15 @@ u8 AtkCanceller_UnableToUseMove(void)
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_DEFROSTED;
                     effect = 2;
                 }
+            }
+            gBattleStruct->atkCancellerTracker++;
+            break;
+        case CANCELLER_SKY_DROP:
+            if (gVolatileStructs[gBattlerAttacker].skyDropped)
+            {
+                gBattlescriptCurrInstr = BattleScript_SkyDropInAir;
+                gHitMarker |= HITMARKER_NO_ATTACKSTRING;
+                effect = 1;
             }
             gBattleStruct->atkCancellerTracker++;
             break;
@@ -16051,35 +16061,6 @@ bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item)
 
     if (!item) return FALSE;
     if (gBattleMons[battlerStealing].item) return FALSE;
-    
-    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER_HILL)
-        return FALSE;
-    
-    // Check if the battler trying to steal should be able to
-    if (stealerSide == B_SIDE_OPPONENT
-        && !(gBattleTypeFlags &
-             (BATTLE_TYPE_EREADER_TRAINER
-              | BATTLE_TYPE_FRONTIER
-              | BATTLE_TYPE_LINK
-              | BATTLE_TYPE_RECORDED_LINK
-              | BATTLE_TYPE_SECRET_BASE
-              #if B_TRAINERS_KNOCK_OFF_ITEMS
-              | BATTLE_TYPE_TRAINER
-              #endif
-              )))
-    {
-        return FALSE;
-    }
-    else if (!(gBattleTypeFlags &
-          (BATTLE_TYPE_EREADER_TRAINER
-           | BATTLE_TYPE_FRONTIER
-           | BATTLE_TYPE_LINK
-           | BATTLE_TYPE_RECORDED_LINK
-           | BATTLE_TYPE_SECRET_BASE))
-        && (gWishFutureKnock.knockedOffMons[stealerSide] & gBitTable[gBattlerPartyIndexes[battlerStealing]]))
-    {
-        return FALSE;
-    }
     
     if (!CanBattlerGetOrLoseItem(battlerItem, item)      // Battler with item cannot have it stolen
       || !CanBattlerGetOrLoseItem(battlerStealing, item)) // Stealer cannot take the item

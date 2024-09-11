@@ -1157,3 +1157,5 @@ Common_Text_ClydeAskResetTrainers::
 	.include "data/maps/VictoryRoadRework/scripts.inc"
 
 	.include "data/maps/VictoryRoadUrshifus/scripts.inc"
+
+	.include "data/maps/ColdCrevice/scripts.inc"

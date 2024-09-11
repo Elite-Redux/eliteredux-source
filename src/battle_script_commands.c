@@ -3112,6 +3112,8 @@ void StealTargetItem(u8 battlerStealer, u8 battlerItem)
     MarkBattlerForControllerExec(battlerItem);
 
     gBattleStruct->choicedMove[battlerItem] = 0;
+    
+    gWishFutureKnock.knockedOffMons[GET_BATTLER_SIDE(battlerStealer)] &= ~gBitTable[gBattlerPartyIndexes[battlerItem]];
 
     TrySaveExchangedItem(battlerItem, gLastUsedItem);
 }
@@ -4385,9 +4387,9 @@ static void Cmd_cleareffectsonfaint(void)
             BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 0x4, &gBattleMons[gActiveBattler].status1);
             MarkBattlerForControllerExec(gActiveBattler);
         }
+        gBattlescriptCurrInstr += 2;
 
         FaintClearSetData(); // Effects like attractions, trapping, etc.
-        gBattlescriptCurrInstr += 2;
     }
 }
 
@@ -11437,6 +11439,41 @@ static void Cmd_various(void)
         gBattleCommunication[MULTIUSE_STATE] = Random() % T1_READ_8(gBattlescriptCurrInstr + 3);
         gBattlescriptCurrInstr += 4;
         return;
+    case VARIOUS_SKY_DROP:
+        {
+            int clear = T1_READ_8(gBattlescriptCurrInstr + 3);
+            int failPtr = T1_READ_PTR(gBattlescriptCurrInstr + 4);
+
+            if (clear)
+            {
+                if (gVolatileStructs[gActiveBattler].skyDropped)
+                {
+                    gVolatileStructs[gActiveBattler].skyDropped = FALSE;
+                    gStatuses3[gActiveBattler] &= ~STATUS3_ON_AIR;
+                    gBattlescriptCurrInstr += 8;
+                }
+                else
+                {
+                    gBattlescriptCurrInstr = failPtr;
+                }
+            }
+            else
+            {
+                if (!gVolatileStructs[gActiveBattler].skyDropped && gActiveBattler != gBattlerAttacker)
+                {
+                    gVolatileStructs[gActiveBattler].skyDropped = TRUE;
+                    gVolatileStructs[gActiveBattler].skyDroppedBy = gActiveBattler;
+                    gStatuses3[gActiveBattler] |= STATUS3_ON_AIR;
+                    CancelMultiTurnMoves(gActiveBattler);
+                    gBattlescriptCurrInstr += 8;
+                }
+                else
+                {
+                    gBattlescriptCurrInstr = failPtr;
+                }
+            }
+        }
+        return;
     } // End of switch (gBattlescriptCurrInstr[2])
 
     gBattlescriptCurrInstr += 3;
@@ -14871,6 +14908,7 @@ static void Cmd_setsemiinvulnerablebit(void)
     {
     case MOVE_FLY:
     case MOVE_BOUNCE:
+    case MOVE_SKY_DROP:
         gStatuses3[gBattlerAttacker] |= STATUS3_ON_AIR;
         break;
     case MOVE_DIG:
@@ -14881,6 +14919,7 @@ static void Cmd_setsemiinvulnerablebit(void)
         break;
     case MOVE_PHANTOM_FORCE:
     case MOVE_SHADOW_FORCE:
+    case MOVE_CHEAP_SHOT:
         gStatuses3[gBattlerAttacker] |= STATUS3_PHANTOM_FORCE;
         break;
     }

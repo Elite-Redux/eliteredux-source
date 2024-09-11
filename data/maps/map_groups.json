@@ -467,7 +467,8 @@
     "GraniteCave_PuzzleOut",
     "SeafloorCavernShortcut",
     "VictoryRoadRework",
-    "VictoryRoadUrshifus"
+    "VictoryRoadUrshifus",
+    "ColdCrevice"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",

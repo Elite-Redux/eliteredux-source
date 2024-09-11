@@ -146,6 +146,8 @@ struct VolatileStruct
     u8 fear:1;
     u8 onTheProwl:1;
     u8 trickOrTreat:1;
+    u8 skyDropped:1;
+    u8 skyDroppedBy:2;
 };
 
 struct RoundStruct
