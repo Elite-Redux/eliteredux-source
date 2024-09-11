@@ -960,6 +960,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_RIP_AND_TEAR] = _("Rip and Tear"),
     [MOVE_BRAVADO] = _("Bravado"),
     [MOVE_TERROR_CHARGE] = _("TerrorCharge"),
+    [MOVE_TERROR_LOCKS] = _("Terror Locks"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1926,4 +1927,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_RIP_AND_TEAR] = _("Rip and Tear"),
     [MOVE_BRAVADO] = _("Bravado"),
     [MOVE_TERROR_CHARGE] = _("Terror Charge"),
+    [MOVE_TERROR_LOCKS] = _("Terror Locks"),
 };

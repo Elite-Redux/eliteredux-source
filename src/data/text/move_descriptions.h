@@ -3770,6 +3770,10 @@ static const u8 sMoveTwoLineDescription_MoveTerrorCharge[] = _(
     "A frightening headbutt\n"
     "that may bleed or fear.");
 
+static const u8 sMoveTwoLineDescription_MoveTerrorLocks[] = _(
+    "Cut the foe with long,\n"
+    "black hair.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4732,6 +4736,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_RIP_AND_TEAR - 1] = sMoveTwoLineDescription_MoveRipAndTear,
     [MOVE_BRAVADO - 1] = sMoveTwoLineDescription_MoveBravado,
     [MOVE_TERROR_CHARGE - 1] = sMoveTwoLineDescription_MoveTerrorCharge,
+    [MOVE_TERROR_LOCKS - 1] = sMoveTwoLineDescription_MoveTerrorLocks,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5693,6 +5698,7 @@ static const u8 sMoveFourLineDescription_MoveTanglingHusk[] = _("Protects agains
 static const u8 sMoveFourLineDescription_MoveRipAndTear[] = _("Lowers Speed. 50%\nchance to bleed.\nCan't be used\ntwice in a row.");
 static const u8 sMoveFourLineDescription_MoveBravado[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
 static const u8 sMoveFourLineDescription_MoveTerrorCharge[] = _("50% chance to bleed.\n50% chance to fear.\nDouble damage\nwhen switching in.");
+static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\nDouble damage if\nthe foe is bleeding.\nKeen Edge boost.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6654,4 +6660,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_RIP_AND_TEAR - 1] = sMoveFourLineDescription_MoveRipAndTear,
     [MOVE_BRAVADO - 1] = sMoveFourLineDescription_MoveBravado,
     [MOVE_TERROR_CHARGE - 1] = sMoveFourLineDescription_MoveTerrorCharge,
+    [MOVE_TERROR_LOCKS - 1] = sMoveFourLineDescription_MoveTerrorLocks,
 };
