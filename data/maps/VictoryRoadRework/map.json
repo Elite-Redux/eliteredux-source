@@ -16,15 +16,15 @@
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_WALLY",
-      "x": 27,
-      "y": 56,
+      "x": 25,
+      "y": 57,
       "elevation": 3,
       "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "NULL",
+      "script": "VictoryRoadRework_EventScript_Wally",
       "flag": "0"
     },
     {
@@ -81,10 +81,10 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MAN_3",
-      "x": 52,
-      "y": 38,
+      "x": 47,
+      "y": 42,
       "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
@@ -121,7 +121,7 @@
   ],
   "warp_events": [
     {
-      "x": 16,
+      "x": 17,
       "y": 58,
       "elevation": 0,
       "dest_map": "MAP_EVER_GRANDE_CITY",
@@ -147,10 +147,66 @@
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_URSHIFUS",
       "dest_warp_id": 1
+    },
+    {
+      "x": 16,
+      "y": 58,
+      "elevation": 0,
+      "dest_map": "MAP_LITTLEROOT_TOWN",
+      "dest_warp_id": 3
+    },
+    {
+      "x": 52,
+      "y": 43,
+      "elevation": 0,
+      "dest_map": "MAP_VICTORY_ROAD_REWORK",
+      "dest_warp_id": 6
+    },
+    {
+      "x": 54,
+      "y": 32,
+      "elevation": 0,
+      "dest_map": "MAP_VICTORY_ROAD_REWORK",
+      "dest_warp_id": 5
     }
   ],
   "coord_events": [
-
+    {
+      "type": "trigger",
+      "x": 16,
+      "y": 55,
+      "elevation": 0,
+      "var": "VAR_TEMP_1",
+      "var_value": "0",
+      "script": "VictoryRoadRework_EventScript_JumpInHole"
+    },
+    {
+      "type": "trigger",
+      "x": 16,
+      "y": 56,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "VictoryRoadRework_EventScript_WallyComes1"
+    },
+    {
+      "type": "trigger",
+      "x": 15,
+      "y": 56,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "VictoryRoadRework_EventScript_WallyComes0"
+    },
+    {
+      "type": "trigger",
+      "x": 17,
+      "y": 56,
+      "elevation": 0,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "VictoryRoadRework_EventScript_WallyComes2"
+    }
   ],
   "bg_events": [
 
