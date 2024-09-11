@@ -10491,6 +10491,7 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_ANTICIPATION:
     case ABILITY_RECURRING_NIGHTMARE:
     case ABILITY_BLOOD_STAIN:
+    case ABILITY_BLOOD_STIGMA:
         return TRUE;
     default:
         return FALSE;
