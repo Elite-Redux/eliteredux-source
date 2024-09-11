@@ -10813,6 +10813,20 @@ BattleScript_SwitchInAbilityMsg::
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
+BattleScriptPetrify::
+	call BattleScript_AbilityPopUp
+	goto BattleScript_PetrifyRemoveStats_Intimidate
+
+BattleScript_PetrifyRemoveStats::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_OPPOSING_STAT_BUFFS_GONE
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_PetrifyRemoveStats_Intimidate:
+	battlemacros MACROS_SAVE_ABILITY_TO_VARIABLE, 0, NULL
+	battlemacros MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_1, 0, BattleScript_IntimidateCloneActivated_Target_1
+	battlemacros MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_2, 0, BattleScript_IntimidateCloneActivated_Target_2
+	end3
+
 BattleScript_PressureRemoveStats::
 	call BattleScript_AbilityPopUp
 	printfromtable gSwitchInAbilityStringIds

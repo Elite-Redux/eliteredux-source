@@ -6394,7 +6394,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Pressure
         if(CheckAndSetSwitchInAbility(battler, ABILITY_PRESSURE)){
             u8 i;
-            u8 loweredStats;
+            u8 loweredStats = 0;
             for (i = 0; i < gBattlersCount; i++)
             {
                 if (!IsBattlerAlive(i)) continue;
@@ -6410,6 +6410,27 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             {
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PRESSURE;
                 BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+            }
+            effect++;
+        }
+        
+        // Pressure
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_PETRIFY)){
+            u8 i;
+            u8 loweredStats = 0;
+            for (i = BATTLE_OPPOSITE(GET_BATTLER_SIDE(battler)); i < gBattlersCount; i += 2)
+            {
+                if (!IsBattlerAlive(i)) continue;
+                loweredStats |= TryResetBattlerStatChanges(i, RESET_STAT_BUFFS);
+            }
+
+            if (loweredStats)
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_PetrifyRemoveStats);
+            }
+            else
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_Petrify);
             }
             effect++;
         }

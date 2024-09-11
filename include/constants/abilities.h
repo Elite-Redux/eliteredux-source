@@ -47,7 +47,7 @@
 #define ABILITY_SOUNDPROOF 43 // Immune to sound-based moves.
 #define ABILITY_RAIN_DISH 44 // Heals 1/8 of max HP every turn if rain is active.
 #define ABILITY_SAND_STREAM 45 // Summons a sandstorm on entry. Lasts 8 turns.
-#define ABILITY_PRESSURE 46 // Doubles foe's PP usage. Casts Haze on entry.
+#define ABILITY_PRESSURE 46 // Doubles foe's PP usage. Clears stat buffs on entry.
 #define ABILITY_THICK_FAT 47 // Takes 1/2 damage from Fire-type and Ice-type attacks.
 #define ABILITY_EARLY_BIRD 48 // Awakens twice as fast from sleep.
 #define ABILITY_FLAME_BODY 49 // 30% chance to burn on contact. Also works on offense.
@@ -696,8 +696,9 @@
 #define ABILITY_BLOOD_STIGMA 674 // Immune to status. Gets a 2x boost vs bleeding foes.
 #define ABILITY_MAXIMUM_ACCELERATION 675 // Momentum + Impulse.
 #define ABILITY_SIDEWINDER 676 // First biting move each entry gets +1 priority. Resets on KO.
+#define ABILITY_PETRIFY 677 // Clears stat buffs then lowers speed by one stage on entry.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_SIDEWINDER + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_PETRIFY + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

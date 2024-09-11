@@ -44,7 +44,7 @@ static const u8 sAbilityMagnetPullDescription[] = _("Traps opposing Steel-types.
 static const u8 sAbilitySoundproofDescription[] = _("Immune to sound-based moves.");
 static const u8 sAbilityRainDishDescription[] = _("Heals 1/8 of max HP every turn\nif rain is active.");
 static const u8 sAbilitySandStreamDescription[] = _("Summons a sandstorm on entry.\nLasts 8 turns.");
-static const u8 sAbilityPressureDescription[] = _("Doubles foe's PP usage.\nCasts Haze on entry.");
+static const u8 sAbilityPressureDescription[] = _("Doubles foe's PP usage.\nClears stat buffs on entry.");
 static const u8 sAbilityThickFatDescription[] = _("Takes 1/2 damage from Fire-type\nand Ice-type attacks.");
 static const u8 sAbilityEarlyBirdDescription[] = _("Awakens twice as fast from sleep.");
 static const u8 sAbilityFlameBodyDescription[] = _("30% chance to burn on contact.\nAlso works on offense.");
@@ -645,6 +645,7 @@ static const u8 sAbilityBloodStainDescription[] = _("Bleeds if not immune. Can't
 static const u8 sAbilityBloodStigmaDescription[] = _("Immune to status. Gets a 2x\nboost vs bleeding foes.");
 static const u8 sAbilityMaximumAccelerationDescription[] = _("Momentum + Impulse.");
 static const u8 sAbilitySidewinderDescription[] = _("First biting move each entry gets\n+1 priority. Resets on KO.");
+static const u8 sAbilityPetrifyDescription[] = _("Clears stat buffs then lowers\nspeed by one stage on entry.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1325,6 +1326,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BLOOD_STIGMA] = _("Blood Stigma"),
     [ABILITY_MAXIMUM_ACCELERATION] = _("Max Acceleration"),
     [ABILITY_SIDEWINDER] = _("Sidewinder"),
+    [ABILITY_PETRIFY] = _("Petrify"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2006,4 +2008,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_BLOOD_STIGMA] = sAbilityBloodStigmaDescription,
     [ABILITY_MAXIMUM_ACCELERATION] = sAbilityMaximumAccelerationDescription,
     [ABILITY_SIDEWINDER] = sAbilitySidewinderDescription,
+    [ABILITY_PETRIFY] = sAbilityPetrifyDescription,
 };

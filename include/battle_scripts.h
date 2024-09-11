@@ -289,6 +289,8 @@ extern const u8 BattleScript_CommanderActivates[];
 extern const u8 BattleScript_CommanderEnds[];
 extern const u8 BattleScript_CommanderEndsEnd2[];
 extern const u8 BattleScript_PressureRemoveStats[];
+extern const u8 BattleScript_PetrifyRemoveStats[];
+extern const u8 BattleScript_Petrify[];
 extern const u8 BattleScript_ParadoxBoostActivates[];
 extern const u8 BattleScript_ParadoxBoostActivatesRet[];
 extern const u8 BattleScript_AnnounceGhastlyEcho[];
