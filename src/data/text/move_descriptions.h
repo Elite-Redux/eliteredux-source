@@ -1047,7 +1047,7 @@ static const u8 sMoveTwoLineDescription_MoveMemento[] = _(
     "the foe's abilities.");
 
 static const u8 sMoveTwoLineDescription_MoveFacade[] = _(
-    "Boosts Attack when burned,\n"
+    "Doubles damage if burned,\n"
     "paralyzed, or poisoned.");
 
 static const u8 sMoveTwoLineDescription_MoveFocusPunch[] = _(
@@ -3763,7 +3763,7 @@ static const u8 sMoveTwoLineDescription_MoveRipAndTear[] = _(
     "foe with its fangs.");
 
 static const u8 sMoveTwoLineDescription_MoveBravado[] = _(
-    "Boosts SpAtk when burned,\n"
+    "Doubles damage if burned,\n"
     "paralyzed, or poisoned.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
