@@ -695,8 +695,9 @@
 #define ABILITY_BLOOD_STAIN 673 // Bleeds if not immune. Can't get other status. Spreads on contact.
 #define ABILITY_BLOOD_STIGMA 674 // Immune to status. Gets a 2x boost vs bleeding foes.
 #define ABILITY_MAXIMUM_ACCELERATION 675 // Momentum + Impulse.
+#define ABILITY_SIDEWINDER 676 // First biting move each entry gets +1 priority. Resets on KO.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_MAXIMUM_ACCELERATION + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SIDEWINDER + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

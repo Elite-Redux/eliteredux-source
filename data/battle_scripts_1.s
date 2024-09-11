@@ -2553,6 +2553,7 @@ BattleScript_EffectCoil:
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_DEF, MAX_STAT_STAGE, BattleScript_CoilDoMoveAnim
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_ACC, MAX_STAT_STAGE, BattleScript_CoilDoMoveAnim
 	jumpifability BS_ATTACKER, ABILITY_COIL_UP, BattleScript_EffectCoil_TryCoil
+	jumpifability BS_ATTACKER, ABILITY_SIDEWINDER, BattleScript_EffectCoil_TryCoil
 	goto BattleScript_ButItFailed
 BattleScript_EffectCoil_TryCoil:
 	jumpifstatus4 BS_ATTACKER, STATUS4_COILED, BattleScript_ButItFailed
@@ -2580,11 +2581,11 @@ BattleScript_CoilTryAcc:
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_CoilTryCoilUp:
 	jumpifability BS_ATTACKER, ABILITY_COIL_UP, BattleScript_CoilTryCoilUp_CheckCoiled
+	jumpifability BS_ATTACKER, ABILITY_SIDEWINDER, BattleScript_CoilTryCoilUp_CheckCoiled
 	goto BattleScript_CoilEnd
 BattleScript_CoilTryCoilUp_CheckCoiled:
 	jumpifstatus4 BS_ATTACKER, STATUS4_COILED, BattleScript_CoilEnd
 	copybyte gBattlerAbility, gBattlerAttacker
-	sethword sABILITY_OVERWRITE, ABILITY_COIL_UP
 	setstatus4 BS_ATTACKER, STATUS4_COILED
 	call BattleScript_BattlerCoiledUpReturn
 BattleScript_CoilEnd:
@@ -9393,8 +9394,7 @@ BattleScript_BattlerCoiledUp::
 	call BattleScript_BattlerCoiledUpReturn
 	end3
 
-BattleScript_BattlerCoiledUpReturn:
-	copybyte gBattlerAbility, gBattlerAttacker
+BattleScript_BattlerCoiledUpReturn::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_BATTLERCOILEDUP
 	waitmessage B_WAIT_TIME_LONG

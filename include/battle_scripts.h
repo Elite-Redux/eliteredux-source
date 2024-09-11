@@ -488,6 +488,7 @@ extern const u8 BattleScript_BattlerAddedTheType[];
 extern const u8 BattleScript_PowerOfAlchemySludge[];
 extern const u8 BattleScript_PowerOfAlchemyGold[];
 extern const u8 BattleScript_BattlerCoiledUp[];
+extern const u8 BattleScript_BattlerCoiledUpReturn[];
 extern const u8 BattleScript_AttackerBecameTheType[];
 extern const u8 BattleScript_AttackerBecameTheTypeFull[];
 extern const u8 BattleScript_DefenderBecameTheTypeFull[];

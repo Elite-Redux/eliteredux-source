@@ -9323,6 +9323,16 @@ static void Cmd_various(void)
                 gBattlescriptCurrInstr = BattleScript_AbilityBoostsCrit;
             }
 
+            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SIDEWINDER)
+                && !NoAliveMonsForEitherParty()
+                && !(gStatuses4[gActiveBattler] & STATUS4_COILED))
+            {
+                gStatuses4[gActiveBattler] |= STATUS4_COILED;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_SIDEWINDER;
+                BattleScriptPush(gBattlescriptCurrInstr);
+                gBattlescriptCurrInstr = BattleScript_BattlerCoiledUpReturn;
+            }
+
             if (checkMoxieVariants
             && activateMoxieVariant
             && !NoAliveMonsForEitherParty()

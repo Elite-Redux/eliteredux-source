@@ -644,6 +644,7 @@ static const u8 sAbilityMoshPitDescription[] = _("Ally's attacks get a 1.25x boo
 static const u8 sAbilityBloodStainDescription[] = _("Bleeds if not immune. Can't get\nother status. Spreads on contact.");
 static const u8 sAbilityBloodStigmaDescription[] = _("Immune to status. Gets a 2x\nboost vs bleeding foes.");
 static const u8 sAbilityMaximumAccelerationDescription[] = _("Momentum + Impulse.");
+static const u8 sAbilitySidewinderDescription[] = _("First biting move each entry gets\n+1 priority. Resets on KO.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1323,6 +1324,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BLOOD_STAIN] = _("Blood Stain"),
     [ABILITY_BLOOD_STIGMA] = _("Blood Stigma"),
     [ABILITY_MAXIMUM_ACCELERATION] = _("Max Acceleration"),
+    [ABILITY_SIDEWINDER] = _("Sidewinder"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2003,4 +2005,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_BLOOD_STAIN] = sAbilityBloodStainDescription,
     [ABILITY_BLOOD_STIGMA] = sAbilityBloodStigmaDescription,
     [ABILITY_MAXIMUM_ACCELERATION] = sAbilityMaximumAccelerationDescription,
+    [ABILITY_SIDEWINDER] = sAbilitySidewinderDescription,
 };

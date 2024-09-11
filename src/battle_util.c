@@ -6291,7 +6291,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
         
         // Coiled Up
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_COIL_UP)){
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_COIL_UP) || CheckAndSetSwitchInAbility(battler, ABILITY_SIDEWINDER)){
             if (!(gStatuses4[battler] & STATUS4_COILED))
             {
                 gStatuses4[battler] |= STATUS4_COILED;
