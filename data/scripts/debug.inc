@@ -178,3 +178,7 @@ Debug_Script_7::
 
 Debug_Script_8::
 	end
+
+Debug_GotoDebugMap::
+	warp MAP_DEBUG_MAP, 255, 10, 10
+	end

@@ -591,6 +591,7 @@
 #define MAP_NAVEL_ROCK_DOWN11                               (86 | (27 << 8))
 #define MAP_NAVEL_ROCK_BOTTOM                               (87 | (27 << 8))
 #define MAP_TRAINER_HILL_ELEVATOR                           (88 | (27 << 8))
+#define MAP_DEBUG_MAP                                       (89 | (27 << 8))
 
 // gMapGroup_IndoorRoute104Prototype
 #define MAP_ROUTE104_PROTOTYPE                          (0 | (28 << 8))

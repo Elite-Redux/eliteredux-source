@@ -93,6 +93,7 @@ enum { // Util
     DEBUG_UTIL_MENU_ITEM_TRAINER_ID,
     DEBUG_UTIL_MENU_ITEM_RESET_TRAINER_FLAGS,
     DEBUG_UTIL_MENU_ITEM_CHEAT,
+    DEBUG_UTIL_MENU_ITEM_DEBUG_MAP,
 };
 enum { // Scripts
     DEBUG_UTIL_MENU_ITEM_SCRIPT_1,
@@ -331,6 +332,7 @@ static void DebugAction_Util_Trainer_Gender(u8 taskId);
 static void DebugAction_Util_Trainer_Id(u8 taskId);
 static void DebugAction_Util_ResetTrainerFlags(u8 taskId);
 static void DebugAction_Util_CheatStart(u8 taskId);
+static void DebugAction_Util_GotoDebugMap(u8 taskId);
 
 static void DebugAction_FlagsVars_Flags(u8 taskId);
 static void DebugAction_FlagsVars_FlagsSelect(u8 taskId);
@@ -401,6 +403,7 @@ extern u8 Debug_Script_8[];
 
 extern u8 Debug_ShowFieldMessageStringVar4[];
 extern u8 Debug_CheatStart[];
+extern u8 Debug_GotoDebugMap[];
 extern u8 PlayersHouse_2F_EventScript_SetWallClock[];
 extern u8 PlayersHouse_2F_EventScript_CheckWallClock[];
 
@@ -467,6 +470,7 @@ static const u8 sDebugText_Util_Trainer_Gender[] =          _("Toggle T. Gender"
 static const u8 sDebugText_Util_Trainer_Id[] =              _("New Trainer Id");
 static const u8 sDebugText_Util_Reset_Trainer_Flags[] =     _("Reset Trainer Flags");
 static const u8 sDebugText_Util_CheatStart[] =              _("CHEAT Start");
+static const u8 sDebugText_Util_GotoDebugMap[] =            _("Goto DebugMap");
 // Flags/Vars Menu
 static const u8 sDebugText_FlagsVars_Flags[] =                  _("Set Flag XYZ…{CLEAR_TO 110}{RIGHT_ARROW}");
 static const u8 sDebugText_FlagsVars_Flag[] =                   _("Flag: {STR_VAR_1}{CLEAR_TO 90}\n{STR_VAR_2}{CLEAR_TO 90}\n{STR_VAR_3}");
@@ -649,6 +653,7 @@ static const struct ListMenuItem sDebugMenu_Items_Utilities[] =
     [DEBUG_UTIL_MENU_ITEM_TRAINER_ID]          = {sDebugText_Util_Trainer_Id,          DEBUG_UTIL_MENU_ITEM_TRAINER_ID},
     [DEBUG_UTIL_MENU_ITEM_RESET_TRAINER_FLAGS] = {sDebugText_Util_Reset_Trainer_Flags, DEBUG_UTIL_MENU_ITEM_RESET_TRAINER_FLAGS},
     [DEBUG_UTIL_MENU_ITEM_CHEAT]               = {sDebugText_Util_CheatStart,          DEBUG_UTIL_MENU_ITEM_CHEAT},
+    [DEBUG_UTIL_MENU_ITEM_DEBUG_MAP]           = {sDebugText_Util_GotoDebugMap,        DEBUG_UTIL_MENU_ITEM_DEBUG_MAP},
 };
 static const struct ListMenuItem sDebugMenu_Items_Scripts[] =
 {
@@ -793,6 +798,7 @@ static void (*const sDebugMenu_Actions_Utilities[])(u8) =
     [DEBUG_UTIL_MENU_ITEM_TRAINER_ID]           = DebugAction_Util_Trainer_Id,
     [DEBUG_UTIL_MENU_ITEM_RESET_TRAINER_FLAGS]  = DebugAction_Util_ResetTrainerFlags,
     [DEBUG_UTIL_MENU_ITEM_CHEAT]                = DebugAction_Util_CheatStart,
+    [DEBUG_UTIL_MENU_ITEM_DEBUG_MAP]            = DebugAction_Util_GotoDebugMap,
 };
 static void (*const sDebugMenu_Actions_Scripts[])(u8) =
 {
@@ -2116,6 +2122,12 @@ static void DebugAction_Util_CheatStart(u8 taskId)
     Debug_DestroyMenu_Full(taskId);
     ScriptContext2_Enable();
     ScriptContext1_SetupScript(Debug_CheatStart);
+}
+static void DebugAction_Util_GotoDebugMap(u8 taskId)
+{
+    Debug_DestroyMenu_Full(taskId);
+    ScriptContext2_Enable();
+    ScriptContext1_SetupScript(Debug_GotoDebugMap);
 }
 
 // *******************************
