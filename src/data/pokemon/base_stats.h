@@ -42410,12 +42410,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_SLYDUCK] =
     {
-    .baseHP        = 80,
-    .baseAttack    = 156,
-    .baseDefense   = 86,
-    .baseSpeed     = 136,
-    .baseSpAttack  = 55,
-    .baseSpDefense = 65,
+    .baseHP         = 80,
+    .baseAttack     = 156,
+    .baseDefense    = 55,
+    .baseSpeed      = 136,
+    .baseSpAttack   = 96,
+    .baseSpDefense  = 55,
     .type1 = TYPE_DARK,
     .type2 = TYPE_DARK,
     .catchRate = 255,
