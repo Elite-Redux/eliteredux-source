@@ -10822,7 +10822,7 @@ BattleScript_SwitchInAbilityMsg::
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
-BattleScriptPetrify::
+BattleScript_Petrify::
 	call BattleScript_AbilityPopUp
 	goto BattleScript_PetrifyRemoveStats_Intimidate
 
