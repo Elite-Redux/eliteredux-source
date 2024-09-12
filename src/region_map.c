@@ -439,6 +439,14 @@ static const u16 sRedOutlineFlyDestinations[][2] =
         MAPSEC_BATTLE_FRONTIER
     },
     {
+        FLAG_VISITED_MT_CHIMNEY,
+        MAPSEC_MT_CHIMNEY
+    },
+    {   
+        FLAG_VISITED_MT_PYRE, 
+        MAPSEC_MT_PYRE
+    },
+    {
         -1,
         MAPSEC_NONE
     }
