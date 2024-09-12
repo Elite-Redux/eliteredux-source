@@ -34329,12 +34329,12 @@ static const struct TrainerMonItemCustomMoves sParty_Halle[] = { // with Mitchel
     },
     {
     .lvl = 0,
-    .species = SPECIES_KINGDRA,
-    .heldItem = ITEM_KINGDRANITE,
-    .ability = 2,
-    .evs = {4, 0, 0, 252, 0, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_FLASH_CANNON, MOVE_OCTAZOOKA, MOVE_DRAGON_PULSE, MOVE_ICE_BEAM
+    .species = SPECIES_BLASTOISE,
+    .heldItem = ITEM_BLASTOISINITE,
+    .ability = 0,
+    .evs = {252, 0, 0, 252, 4, 0},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_SHELL_SMASH, MOVE_FLASH_CANNON, MOVE_ICE_BEAM, MOVE_HYDRO_PUMP
     }
 };
 
