@@ -447,9 +447,6 @@ static const u16 sRedOutlineFlyDestinations[][2] =
         MAPSEC_MT_PYRE
     },
     {
-
-    },
-    {
         -1,
         MAPSEC_NONE
     }
