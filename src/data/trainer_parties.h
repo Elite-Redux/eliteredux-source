@@ -77,7 +77,7 @@ static const struct TrainerMonItemCustomMoves sParty_WallyVR1[] = {
     {
     .lvl = 0,
     .species = SPECIES_SILVALLY_STEEL,
-    .heldItem = ITEM_STEEL_MEMORY,
+    .heldItem = ITEM_LIFE_ORB,
     .ability = 0,
     .evs = {64, 0, 0, 252, 0, 192},
     .nature = NATURE_TIMID,
