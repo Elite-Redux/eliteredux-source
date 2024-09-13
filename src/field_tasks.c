@@ -933,8 +933,7 @@ static void Task_VictoryRoadPerStepCallback(u8 taskId){
     if (x >=30 && x <=36 && y >= 22)
         return;
     if (!data[3]){
-        //data[3] = max((gSaveBlock2Ptr->playerTrainerId[0] & 32) + y - x, 4);
-        data[3] = 3;
+        data[3] = max((gSaveBlock2Ptr->playerTrainerId[0] & 32) + y - x, 4);
     }
     data[3] -= 1;
     if (!data[3]){
