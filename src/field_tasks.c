@@ -925,11 +925,16 @@ static void Task_VictoryRoadPerStepCallback(u8 taskId){
 
     if (x == data[1] && y == data[2])
         return;
-
     data[1] = x;
     data[2] = y;
+    // here are boxes where the spawn of the hiker is banned
+    if (x >= 21 && x <= 25 && y >= 54)
+        return;
+    if (x >=30 && x <=36 && y >= 22)
+        return;
     if (!data[3]){
-        data[3] = max((gSaveBlock2Ptr->playerTrainerId[0] & 32) + y - x, 4);
+        //data[3] = max((gSaveBlock2Ptr->playerTrainerId[0] & 32) + y - x, 4);
+        data[3] = 3;
     }
     data[3] -= 1;
     if (!data[3]){
