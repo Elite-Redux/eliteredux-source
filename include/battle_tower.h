@@ -28,7 +28,7 @@ struct FacilityMon
 {
     u16 species;
     u16 moves[MAX_MON_MOVES];
-    u8 itemTableId;
+    u16 itemTableId;
     u8 evSpread;
     u8 nature;
     u16 abilityNum;

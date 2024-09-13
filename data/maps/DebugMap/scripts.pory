@@ -1,0 +1,26 @@
+mapscripts DebugMap_MapScripts {}
+
+script DebugMap{
+
+}
+
+script DebugMapDewgong{
+    msgbox("Go May go!", MSGBOX_DEFAULT)
+    release
+}
+
+script DebugMapPoochyena{
+    msgbox("Brendan I choose you!", MSGBOX_DEFAULT)
+    release
+}
+
+script DebugMapMay{
+    msgbox("May! May!", MSGBOX_DEFAULT)
+    release
+}
+
+
+script DebugMapBrendan{
+    msgbox("Dan! Dan!", MSGBOX_DEFAULT)
+    release
+}

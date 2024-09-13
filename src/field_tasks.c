@@ -21,6 +21,7 @@
 #include "constants/songs.h"
 #include "constants/metatile_labels.h"
 #include "mgba_printf/mgba.h"
+#include "event_object_movement.h"
 
 struct PacifidlogMetatileOffsets
 {
@@ -37,6 +38,9 @@ static void SootopolisGymIcePerStepCallback(u8 taskId);
 static void CrackedFloorPerStepCallback(u8 taskId);
 static void Task_MuddySlope(u8 taskId);
 static void Task_MossDeepGymReworkFollowArrow(u8 taskId);
+static void Task_VictoryRoadPerStepCallback(u8 taskId);
+
+extern const u8 VictoryRoadRework_EventScript_JumpScareHiker[];
 
 static const TaskFunc sPerStepCallbacks[] =
 {
@@ -48,7 +52,8 @@ static const TaskFunc sPerStepCallbacks[] =
     [STEP_CB_TRUCK]             = EndTruckSequence,
     [STEP_CB_SECRET_BASE]       = SecretBasePerStepCallback,
     [STEP_CB_CRACKED_FLOOR]     = CrackedFloorPerStepCallback,
-    [STEP_CB_MOSSDEEP_ARROW]    = Task_MossDeepGymReworkFollowArrow
+    [STEP_CB_MOSSDEEP_ARROW]    = Task_MossDeepGymReworkFollowArrow,
+    [STEP_CB_VICTORY_ROAD]      = Task_VictoryRoadPerStepCallback,
 };
 
 // they are in pairs but declared as 1D array
@@ -907,5 +912,30 @@ static void Task_MossDeepGymReworkFollowArrow(u8 taskId){
         for(jy = y0; jy <= y1; jy++){
             MossDeepGymReworkFollowArrow_DrawTile(x, y, ix, jy);
         }
+    }
+}
+
+static void Task_VictoryRoadPerStepCallback(u8 taskId){
+    s16 x, y;
+    s16 *data = gTasks[taskId].data;
+    
+    // reminded this is executed each frame
+    // So I need to check if the player moved first
+    PlayerGetDestCoords(&x, &y);
+
+    if (x == data[1] && y == data[2])
+        return;
+
+    data[1] = x;
+    data[2] = y;
+    if (!data[3]){
+        data[3] = max((gSaveBlock2Ptr->playerTrainerId[0] & 32) + y - x, 4);
+    }
+    data[3] -= 1;
+    if (!data[3]){
+        // hardcoded the Hiker object event id 19
+        TrySpawnObjectEvent(19, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
+        TryMoveObjectEventToMapCoords(19, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->pos.x, gSaveBlock1Ptr->pos.y - 5);
+        ScriptContext1_SetupScript(VictoryRoadRework_EventScript_JumpScareHiker);
     }
 }

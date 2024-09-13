@@ -1,11 +1,55 @@
 mapscripts VictoryRoadRework_MapScripts {
-    
+    MAP_SCRIPT_ON_RESUME: VictoryRoadRework_OnResume
 }
 
+script VictoryRoadRework_OnResume {
+    if (!defeated(TRAINER_TRENT_5)){
+        setstepcallback(STEP_CB_VICTORY_ROAD)
+    }
+}
 // var temp used:
 // var temp 0 => wally arrives
 // var temp 1 => 
 
+raw `
+VictoryRoadRework_Text_WallyNotGoingToLoseAnymore: @ 8235EE6
+	.string "Wally: Hi! {PLAYER}!\p"
+	.string "I bet you're surprised to see me here!\p"
+	.string "I made it all the way here, and it's\n"
+	.string "all thanks to you!\p"
+	.string "{PLAYER}, losing to you that time\n"
+	.string "made me stronger!\p"
+	.string "But I'm not going to lose anymore!\p"
+	.string "I'm going to win! For the Pokémon who\n"
+	.string "gave me courage and strength!\p"
+	.string "Okay… Here I come!$"
+
+VictoryRoadRework_Text_WallyEntranceDefeat: @ 8235FFC
+	.string "Wow!\n"
+	.string "{PLAYER}, you are strong, after all!$"
+
+VictoryRoadRework_Text_WallyPostEntranceBattle: @ 8236020
+	.string "Wally: I couldn't beat you today,\n"
+	.string "{PLAYER}, but one of these days, I'll\l"
+	.string "catch up to you!$"
+
+VictoryRoadRework_Text_WallyIntro: @ 8236073
+	.string "Wally: Hi! {PLAYER}!\p"
+	.string "I've gotten stronger since that last\n"
+	.string "time! I wanted to show you, {PLAYER}!\p"
+	.string "Okay… Here I come!$"
+
+VictoryRoadRework_Text_WallyDefeat: @ 82360DA
+	.string "Wow!\n"
+	.string "{PLAYER}, you are strong, after all!$"
+
+VictoryRoadRework_Text_WallyPostBattle: @ 82360FE
+	.string "Wally: I couldn't beat you this time,\n"
+	.string "too… But one of these days, {PLAYER},\l"
+	.string "I'm going to catch up to you…\p"
+	.string "And challenge the Pokémon League!\n"
+    .string "Also, So you know, The only way forward\l"
+    .string "is to go by this hole.$"`
 
 const LOCALID_WALLY = 1
 
@@ -22,38 +66,48 @@ movement VictoryRoadRework_Movement_WallyComes2 {
     face_up
 }
 script VictoryRoadRework_EventScript_WallyComes0{
-    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyComesClean)
+    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyTriggerClean)
     lock
     applymovement(LOCALID_WALLY, VictoryRoadRework_Movement_WallyComes0)
     waitmovement(LOCALID_WALLY)
-    goto(VictoryRoadRework_EventScript_Wally)
+    goto(VictoryRoadRework_EventScript_WallyCatchUp)
 }
 script VictoryRoadRework_EventScript_WallyComes1{
-    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyComesClean)
+    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyTriggerClean)
     lock
     applymovement(LOCALID_WALLY, VictoryRoadRework_Movement_WallyComes1)
     waitmovement(LOCALID_WALLY)
-    goto(VictoryRoadRework_EventScript_Wally)
+    goto(VictoryRoadRework_EventScript_WallyCatchUp)
 }
 script VictoryRoadRework_EventScript_WallyComes2{
-    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyComesClean)
+    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyTriggerClean)
     lock
     applymovement(LOCALID_WALLY, VictoryRoadRework_Movement_WallyComes2)
     waitmovement(LOCALID_WALLY)
+    goto(VictoryRoadRework_EventScript_WallyCatchUp)
+}
+script VictoryRoadRework_EventScript_WallyCatchUp{
+    lockall
+    applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestDown)
+    waitmovement(0)
+    selectapproachingtrainer(LOCALID_WALLY)
+    setvar(VAR_0x8008, 2)
     goto(VictoryRoadRework_EventScript_Wally)
 }
-script VictoryRoadRework_EventScript_WallyComesClean{
-    setvar(VAR_TEMP_0, 1)
-}
-script VictoryRoadRework_EventScript_Wally{
-    lock
-    goto_if_defeated(TRAINER_WALLY_VR_1, VictoryRoadRework_EventScript_WallyAfterBattle)
-    call(VictoryRoadRework_EventScript_WallyAfterBattle)
-    goto(VictoryRoadRework_EventScript_WallyComesClean)
-}
 
-script VictoryRoadRework_EventScript_WallyAfterBattle{
-    msgbox(format("The only wait forward it to go by this hole"), MSGBOX_NPC)
+script VictoryRoadRework_EventScript_Wally {
+    setvar(VAR_0x8004, 15)
+    trainerbattle_single(TRAINER_WALLY_VR_1, VictoryRoadRework_Text_WallyNotGoingToLoseAnymore, VictoryRoadRework_Text_WallyEntranceDefeat)
+    specialvar(VAR_RESULT, ShouldTryRematchBattle)
+    if (var(VAR_RESULT)){
+        setvar(VAR_0x8004, 15)
+        trainerbattle_rematch(TRAINER_WALLY_VR_2, VictoryRoadRework_Text_WallyIntro, VictoryRoadRework_Text_WallyDefeat)
+    }
+    msgbox(VictoryRoadRework_Text_WallyPostBattle, MSGBOX_NPC)
+    goto(VictoryRoadRework_EventScript_WallyTriggerClean)
+}
+script VictoryRoadRework_EventScript_WallyTriggerClean{
+    setvar(VAR_TEMP_0, 1)
 }
 
 movement VictoryRoadRework_TeleportPlayerToTheOtherSide{
@@ -64,12 +118,55 @@ script VictoryRoadRework_EventScript_JumpInHole{
     lock
     fadescreen(FADE_TO_BLACK)
     playse(SE_FALL)
-    waitse
-    //warpsilent(MAP_VICTORY_ROAD_REWORK, 255, 16, 48)
-    //waitstate
     applymovement(OBJ_EVENT_ID_PLAYER, VictoryRoadRework_TeleportPlayerToTheOtherSide)
     waitmovement(OBJ_EVENT_ID_PLAYER)
-    playse(SE_PUDDLE)
     fadescreen(FADE_FROM_BLACK)
+    playse(SE_PUDDLE)
     release
+}
+
+movement VictoryRoadRework_Movement_JumpScareHiker {
+    face_left
+    delay_4
+    face_up
+    delay_4
+    face_right
+    delay_4
+    face_down
+    delay_4
+    jump_down
+    delay_4
+    face_left
+    delay_4
+    face_up
+    delay_4
+    face_right
+    delay_4
+    face_down
+    delay_4
+    jump_2_down
+    delay_4
+    face_left
+    delay_4
+    face_up
+    delay_4
+    face_right
+    delay_4
+    face_down
+    delay_4
+    jump_down
+}
+const LOCALID_TRENT = 19
+script VictoryRoadRework_EventScript_JumpScareHiker{
+    lock
+    playse(SE_FALL)
+    applymovement(LOCALID_TRENT, VictoryRoadRework_Movement_JumpScareHiker)
+    waitmovement(LOCALID_TRENT)
+    waitse()
+    playse(SE_NOT_EFFECTIVE)
+    trainerbattle_single(TRAINER_TRENT_5, format("Hey, the kid from Mt Chimney who tanked all my explosions! Want a rematch?"), format("That's us burnt out..."))
+	msgbox(format("Good fight! ...Wait, this is Victory Road? I hiked that far? Well, good luck then! I'm rooting for you, kiddo!"), MSGBOX_NPC) // after player won
+	settrainerflag(TRAINER_TRENT_5)
+	release
+	end
 }

@@ -4760,6 +4760,16 @@
       "secondary_tileset": "gTileset_Cave",
       "border_filepath": "data/layouts/ColdCrevice/border.bin",
       "blockdata_filepath": "data/layouts/ColdCrevice/map.bin"
+    },
+    {
+      "id": "LAYOUT_DEBUG_MAP",
+      "name": "DebugMap_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_BattleFrontierOutsideWest",
+      "border_filepath": "data/layouts/DebugMap/border.bin",
+      "blockdata_filepath": "data/layouts/DebugMap/map.bin"
     }
   ]
 }
