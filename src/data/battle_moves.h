@@ -8469,7 +8469,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_DYNAMAX_CANNON] =
     {
-        .effect = EFFECT_DYNAMAX_DOUBLE_DMG,
+        .effect = EFFECT_HIT,
         .power = 100,
         .type = TYPE_DRAGON,
         .accuracy = 100,
@@ -8478,6 +8478,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_SPECIAL,
+        .doubleDamageVsMega = TRUE,
     },
     [MOVE_SNIPE_SHOT] =
     {
@@ -8872,15 +8873,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_ETERNABEAM] =
     {
-        .effect = EFFECT_RECHARGE,
-        .power = 160,
+        .effect = EFFECT_HIT,
+        .power = 140,
         .type = TYPE_DRAGON,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_SPECIAL,
+        .everyOtherTurn = TRUE,
     },
     [MOVE_STEEL_BEAM] =
     {
