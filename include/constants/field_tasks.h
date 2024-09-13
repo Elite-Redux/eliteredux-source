@@ -10,5 +10,6 @@
 #define STEP_CB_SECRET_BASE         6
 #define STEP_CB_CRACKED_FLOOR       7
 #define STEP_CB_MOSSDEEP_ARROW      8
+#define STEP_CB_VICTORY_ROAD        9
 
 #endif // GUARD_CONSTANTS_FIELD_TASKS_H
