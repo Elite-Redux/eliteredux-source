@@ -745,7 +745,8 @@ const u16 gEggMoves[] = {
         MOVE_BODY_SLAM,
         MOVE_MUD_SHOT,
         MOVE_SKULL_BASH,
-        MOVE_SIGNAL_BEAM),
+        MOVE_SIGNAL_BEAM,
+        MOVE_SHOCKING_JAB),
 
     egg_moves(MR_MIME,
         MOVE_FUTURE_SIGHT,
