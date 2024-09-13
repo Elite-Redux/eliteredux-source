@@ -17655,7 +17655,6 @@ static const struct LevelUpMove sKlefkiLevelUpLearnset[] = {
 static const struct LevelUpMove sPhantumpLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_CONFUSE_RAY),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
-    LEVEL_UP_MOVE(5, MOVE_ASTONISH),
     LEVEL_UP_MOVE(8, MOVE_GROWTH),
     LEVEL_UP_MOVE(13, MOVE_INGRAIN),
     LEVEL_UP_MOVE(19, MOVE_FEINT_ATTACK),
@@ -17672,7 +17671,6 @@ static const struct LevelUpMove sPhantumpLevelUpLearnset[] = {
 
 static const struct LevelUpMove sTrevenantLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SHADOW_CLAW),
-    LEVEL_UP_MOVE(1, MOVE_ASTONISH),
     LEVEL_UP_MOVE(1, MOVE_CONFUSE_RAY),
     LEVEL_UP_MOVE(1, MOVE_GROWTH),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
@@ -19846,6 +19844,8 @@ static const struct LevelUpMove sPheromosaLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_QUICK_GUARD),
     LEVEL_UP_MOVE(1, MOVE_QUIVER_DANCE),
     LEVEL_UP_MOVE(1, MOVE_RAPID_SPIN),
+    LEVEL_UP_MOVE(1, MOVE_RIDER_KICK),
+    LEVEL_UP_MOVE(1, MOVE_ROLLING_KICK),
     LEVEL_UP_MOVE(7, MOVE_SWIFT),
     LEVEL_UP_MOVE(13, MOVE_STOMP),
     LEVEL_UP_MOVE(19, MOVE_FEINT),
@@ -27598,7 +27598,6 @@ static const struct LevelUpMove sBrontonanaLevelUpLearnset[] = {
 
 static const struct LevelUpMove sDredwoodLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SUCKER_PUNCH),
-    LEVEL_UP_MOVE(1, MOVE_ASTONISH),
     LEVEL_UP_MOVE(1, MOVE_CONFUSE_RAY),
     LEVEL_UP_MOVE(1, MOVE_GROWTH),
     LEVEL_UP_MOVE(1, MOVE_TACKLE),
