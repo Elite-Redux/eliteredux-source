@@ -33173,7 +33173,7 @@ static const struct TrainerMonItemCustomMoves sParty_StevenInsane[] = { // Postg
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_HEAVY_SLAM, MOVE_PSYCHOKINETIC_SLAM, MOVE_ICE_PUNCH, MOVE_BULLET_PUNCH
+    .moves = MOVE_METEOR_MASH, MOVE_PSYCHOKINETIC_SLAM, MOVE_EARTHQUAKE, MOVE_BULLET_PUNCH
     }
 };
 
@@ -34873,7 +34873,7 @@ static const struct TrainerMonItemCustomMoves sParty_SidneyInsane[] = {
     .ability = 0,
     .evs = {252, 252, 0, 0, 4, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_KOWTOW_CLEAVE, MOVE_SUCKER_PUNCH, MOVE_LEECH_BLADE, MOVE_IRON_HEAD
+    .moves = MOVE_SWORDS_DANCE, MOVE_SUCKER_PUNCH, MOVE_LEECH_BLADE, MOVE_IRON_HEAD
     },
     {
     .lvl = 0,
@@ -34967,7 +34967,7 @@ static const struct TrainerMonItemCustomMoves sParty_PhoebeInsane[] = {
     {
     .lvl = 0,
     .species = SPECIES_NECROZMA_DAWN_WINGS,
-    .heldItem = ITEM_LEFTOVERS,
+    .heldItem = ITEM_TACTICAL_VEST,
     .ability = 2,
     .evs = {252, 0, 0, 252, 4, 0},
     .nature = NATURE_MODEST,
