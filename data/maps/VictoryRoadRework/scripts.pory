@@ -158,15 +158,16 @@ movement VictoryRoadRework_Movement_JumpScareHiker {
 }
 const LOCALID_TRENT = 19
 script VictoryRoadRework_EventScript_JumpScareHiker{
-    lock
-    playse(SE_FALL)
-    applymovement(LOCALID_TRENT, VictoryRoadRework_Movement_JumpScareHiker)
-    waitmovement(LOCALID_TRENT)
-    waitse()
-    playse(SE_NOT_EFFECTIVE)
-    trainerbattle_single(TRAINER_TRENT_5, format("Hey, the kid from Mt Chimney who tanked all my explosions! Want a rematch?"), format("That's us burnt out..."))
+    if (!defeated(TRAINER_TRENT_5)){
+        lock
+        playse(SE_FALL)
+        applymovement(LOCALID_TRENT, VictoryRoadRework_Movement_JumpScareHiker)
+        waitmovement(LOCALID_TRENT)
+        waitse()
+        playse(SE_NOT_EFFECTIVE)
+        trainerbattle_single(TRAINER_TRENT_5, format("Hey, the kid from Mt Chimney who tanked all my explosions! Want a rematch?"), format("That's us burnt out..."))
+    }
 	msgbox(format("Good fight! ...Wait, this is Victory Road? I hiked that far? Well, good luck then! I'm rooting for you, kiddo!"), MSGBOX_NPC) // after player won
-	settrainerflag(TRAINER_TRENT_5)
 	release
 	end
 }
