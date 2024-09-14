@@ -6446,8 +6446,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
             else
             {
-                #warning I commented this out but mawootad you need to fix it 
-                //BattleScriptPushCursorAndCallback(BattleScript_Petrify);
+                BattleScriptPushCursorAndCallback(BattleScript_Petrify);
             }
             effect++;
         }

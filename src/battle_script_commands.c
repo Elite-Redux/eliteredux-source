@@ -2012,11 +2012,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         return 101;
     else if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY) && 
                 (gBattleMoves[move].effect == EFFECT_THUNDER
-                || gBattleMoves[move].effect == EFFECT_HURRICANE
-                || move == MOVE_BLEAKWIND_STORM
-                || move == MOVE_WILDBOLT_STORM
-                || move == MOVE_SANDSEAR_STORM
-                || move == MOVE_SPRINGTIDE_STORM))
+                || gBattleMoves[move].effect == EFFECT_HURRICANE))
         return 101;
     else if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY) && 
                 (gBattleMoves[move].effect == EFFECT_FREEZE_DRY
@@ -11428,16 +11424,40 @@ static void Cmd_various(void)
         }
         gBattlescriptCurrInstr += 7;
         return;
-    case VARIOUS_SET_FOG:
+    case VARIOUS_SET_WEATHER:
         {
-            if (!TryChangeBattleWeather(gActiveBattler, ENUM_WEATHER_FOG, FALSE))
+            int weather = T1_READ_8(gBattlescriptCurrInstr + 3);
+            if (!TryChangeBattleWeather(gActiveBattler, weather, FALSE))
             {
-                gMoveResultFlags |= MOVE_RESULT_MISSED;
+                gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 4);
                 SetActiveMultistringChooser(B_MSG_WEATHER_FAILED);
             }
             else
             {
-                SetActiveMultistringChooser(B_MSG_STARTED_FOG);
+                int stringId = 0;
+                gBattlescriptCurrInstr += 8;
+                switch (weather)
+                {
+                case ENUM_WEATHER_FOG:
+                    stringId = B_MSG_STARTED_FOG;
+                    break;
+                case ENUM_WEATHER_HAIL:
+                    stringId = B_MSG_STARTED_HAIL;
+                    break;
+                case ENUM_WEATHER_RAIN:
+                    stringId = B_MSG_STARTED_RAIN;
+                    break;
+                case ENUM_WEATHER_RAIN_PRIMAL:
+                    stringId = B_MSG_STARTED_DOWNPOUR;
+                    break;
+                case ENUM_WEATHER_SANDSTORM:
+                    stringId = B_MSG_STARTED_SANDSTORM;
+                    break;
+                case ENUM_WEATHER_SUN:
+                    stringId = B_MSG_STARTED_SUNLIGHT;
+                    break;
+                }
+                SetActiveMultistringChooser(stringId);
             }
         }
         break;
