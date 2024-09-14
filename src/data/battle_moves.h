@@ -3692,14 +3692,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_NEEDLE_ARM] =
     {
-        .effect = EFFECT_HIT,
+        .effect = EFFECT_CREEPING_THORNS_HIT,
         .power = 75,
         .type = TYPE_GRASS,
         .accuracy = 100,
-        .pp = 15,
-        .secondaryEffectChance = 0,
+        .pp = 5,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_IRON_FIST_BOOST | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_IRON_FIST_BOOST,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_SLACK_OFF] =

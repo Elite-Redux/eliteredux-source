@@ -482,6 +482,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectSandstormHit			  @ EFFECT_SANDSTORM_HIT
 	.4byte BattleScript_EffectRainHit			      @ EFFECT_RAIN_HIT
 	.4byte BattleScript_EffectFairyTerrainHit         @ EFFECT_FAIRY_TERRAIN_HIT
+	.4byte BattleScript_EffectCreepingThornsHit		  @ EFFECT_CREEPING_THORNS_HIT
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -3812,16 +3813,28 @@ BattleScript_EffectStealthRockHit::
 	trytoapplymoveeffect BattleScript_MoveEffectStealthRockHit
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectSpikeHit::
-	call BattleScript_EffectHit_Return
-	trytoapplymoveeffect BattleScript_MoveEffectSpikeHit
-	goto BattleScript_MoveEnd
-
 BattleScript_MoveEffectStealthRockHit::
 	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
 	waitanimation
 	printstring STRINGID_POINTEDSTONESFLOAT
 	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectCreepingThornsHit::
+	call BattleScript_EffectHit_Return
+	trytoapplymoveeffect BattleScript_MoveEffectCreepingThornsHit
+	goto BattleScript_MoveEnd
+
+BattleScript_MoveEffectCreepingThornsHit::
+	playmoveanimation BS_ATTACKER, MOVE_CREEPING_THORNS
+	waitanimation
+	printstring STRINGID_VICIOUSTHORNSUSED
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectSpikeHit::
+	call BattleScript_EffectHit_Return
+	trytoapplymoveeffect BattleScript_MoveEffectSpikeHit
 	goto BattleScript_MoveEnd
 
 BattleScript_MoveEffectSpikeHit::

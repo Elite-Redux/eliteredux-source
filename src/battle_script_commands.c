@@ -13757,6 +13757,7 @@ static void Cmd_trytoapplymoveeffect(void)
                 }
             }
         break;
+        case EFFECT_CREEPING_THORNS_HIT:
         case EFFECT_STEALTH_ROCK_HIT:
             if(rand <= secondaryEffectChance){
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
@@ -13765,7 +13766,7 @@ static void Cmd_trytoapplymoveeffect(void)
                 && !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK))
                 {
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STEALTH_ROCK;
-                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType = TYPE_ROCK;
+                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType = gBattleMoves[gCurrentMove].effect == EFFECT_STEALTH_ROCK ? TYPE_ROCK : TYPE_GRASS;
                     appliedEffect = TRUE;
                 }
             }
