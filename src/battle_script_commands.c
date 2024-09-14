@@ -8772,6 +8772,15 @@ static bool32 IsRototillerAffected(u32 battlerId)
     return TRUE;
 }
 
+static int ProtectSucceeds(int battler)
+{
+    if (!(gBattleMoves[gLastResultingMoves[battler]].flags & FLAG_PROTECTION_MOVE)) gVolatileStructs[battler].protectUses = 0;
+
+    if (gVolatileStructs[battler].protectUses > 3) return FALSE;
+    if (sProtectSuccessRates[gVolatileStructs[battler].protectUses] >= Random()) return TRUE;
+    return FALSE;
+}
+
 static bool32 CanTeleport(u8 battlerId)
 {
     struct Pokemon* party = NULL;
@@ -9680,8 +9689,9 @@ static void Cmd_various(void)
             gBattlescriptCurrInstr += 7;
         return;
     case VARIOUS_TRY_ELECTRIFY:
-        if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget))
+        if (!ProtectSucceeds(gActiveBattler) || gCurrentTurnActionNumber >= GetBattlerTurnOrderNum(gBattlerTarget))
         {
+            gVolatileStructs[gActiveBattler].protectUses = 0;
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         }
         else
@@ -11558,17 +11568,10 @@ static void Cmd_setprotectlike(void)
     bool32 fail = TRUE;
     bool32 notLastTurn = TRUE;
 
-    if (!(gBattleMoves[gLastResultingMoves[gBattlerAttacker]].flags & FLAG_PROTECTION_MOVE))
-        gVolatileStructs[gBattlerAttacker].protectUses = 0;
-
     if (gCurrentTurnActionNumber == (gBattlersCount - 1))
         notLastTurn = FALSE;
 
-    if (gVolatileStructs[gBattlerAttacker].protectUses > 3)
-    {
-        fail = TRUE;
-    }
-    else if (sProtectSuccessRates[gVolatileStructs[gBattlerAttacker].protectUses] >= Random() && notLastTurn)
+    if (ProtectSucceeds(gBattlerAttacker) && notLastTurn)
     {
         if (!gBattleMoves[gCurrentMove].argument) // Protects one mon only.
         {
