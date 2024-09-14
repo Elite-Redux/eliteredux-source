@@ -2185,6 +2185,22 @@ static int GetAbilityNumber(int battler, int ability)
     }
 }
 
+static int GetOncePerTurnAbilityCounter(int battler, int ability)
+{
+    int index = GetAbilityNumber(battler, ability);
+    if (index < 0) return -1;
+
+    return gTurnStructs[battler].turnAbilityTriggers[index];
+}
+
+static void SetOncePerTurnAbilityCounter(int battler, int ability, int value)
+{
+    int index = GetAbilityNumber(battler, ability);
+    if (index < 0) return;
+
+    gTurnStructs[battler].turnAbilityTriggers[index] = value;
+}
+
 static int CheckAndSetOncePerTurnAbility(int battler, int ability)
 {
     int index = GetAbilityNumber(battler, ability);
@@ -8747,12 +8763,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     && CompareStat(gBattlerTarget, STAT_DEF, MIN_STAT_STAGE, CMP_GREATER_THAN)
                     && (gBattleMoves[move].hammerBased))
 				{
-					gBattleScripting.abilityPopupOverwrite = ABILITY_DENTING_BLOWS;
-					gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
-					BattleScriptPushCursor();
-					gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
-					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-					effect++;
+                    int battlersHit = GetOncePerTurnAbilityCounter(battler, ABILITY_DENTING_BLOWS);
+                    if (!(battlersHit & (1 << gBattlerTarget)))
+                    {
+                        SetOncePerTurnAbilityCounter(battler, ABILITY_DENTING_BLOWS, battlersHit | (1 << gBattlerTarget));
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_DENTING_BLOWS;
+                        gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                        effect++;
+                    }
 				}
 		}
 		
