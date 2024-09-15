@@ -14273,7 +14273,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             return 0;
         case STAT_ATK:
             statBase = gBattleMons[battler].attack;
-            extraStatLevel = gBattleEventsStatsBoost[battler].extraAttackLevel;
+            extraStatLevel = gVolatileStructs[battler].extraAttackLevel;
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_TABLETS_OF_RUIN)
                     
@@ -14343,7 +14343,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             break;
         case STAT_SPATK:
             statBase = gBattleMons[battler].spAttack;
-            extraStatLevel = gBattleEventsStatsBoost[battler].extraSpAttackLevel;
+            extraStatLevel = gVolatileStructs[battler].extraSpAttackLevel;
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_VESSEL_OF_RUIN)
                     
@@ -14386,7 +14386,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if (isWonderRoomActive()) goto CALCULATE_STAT_SPDEF;
             CALCULATE_STAT_DEF:
             statBase = gBattleMons[battler].defense;
-            extraStatLevel = gBattleEventsStatsBoost[battler].extraDefenseLevel;
+            extraStatLevel = gVolatileStructs[battler].extraDefenseLevel;
 
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_SWORD_OF_RUIN)
@@ -14416,7 +14416,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if (isWonderRoomActive()) goto CALCULATE_STAT_DEF;
             CALCULATE_STAT_SPDEF:
             statBase = gBattleMons[battler].spDefense;
-            extraStatLevel = gBattleEventsStatsBoost[battler].extraSpDefenseLevel;
+            extraStatLevel = gVolatileStructs[battler].extraSpDefenseLevel;
 
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_BEADS_OF_RUIN)
@@ -14442,7 +14442,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             break;
         case STAT_SPEED:
             statBase = GetBattlerTotalSpeedStat(battler, calculatingSecondary ? TOTAL_SPEED_SECONDARY : TOTAL_SPEED_PRIMARY);
-            extraStatLevel = gBattleEventsStatsBoost[battler].extraSpeedLevel;
+            extraStatLevel = gVolatileStructs[battler].extraSpeedLevel;
             break;
     }
     if (statEnum != STAT_SPEED && GetAbilityStateAs(battler, ABILITY_PROTOSYNTHESIS).paradoxBoost.statId == statEnum)

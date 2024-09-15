@@ -224,7 +224,7 @@ void SetRawStats(u8 battler, u8 stat, u8 level){
     }
     *statBase = *statBase + ((*statBase / 5 ) * level);
 }*/
-#define SET_EXTRA_STATS_LEVEL_TO_BATTLER(battler, stat, level) gBattleEventsStatsBoost[battler].stat += level;
+#define SET_EXTRA_STATS_LEVEL_TO_BATTLER(battler, stat, level) gVolatileStructs[battler].stat += level;
 #define SET_EXTRA_STATS_LEVEL(stat, level)\
 SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_LEFT, stat, level)\
 if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_RIGHT].hp > 0))\
