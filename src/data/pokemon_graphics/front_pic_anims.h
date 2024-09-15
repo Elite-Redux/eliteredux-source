@@ -10875,6 +10875,12 @@ static const union AnimCmd sAnim_URSHIFU_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_URSHIFU_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_ZARUDE_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -17627,6 +17633,11 @@ static const union AnimCmd *const sAnims_URSHIFU[] ={
     sAnim_URSHIFU_1,
 };
 
+static const union AnimCmd *const sAnims_URSHIFU_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_URSHIFU_MEGA_1,
+};
+
 static const union AnimCmd *const sAnims_ZARUDE[] ={
     sAnim_GeneralFrame0,
     sAnim_ZARUDE_1,
@@ -20528,6 +20539,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ETERNATUS),
     ANIM_CMD(KUBFU),
     ANIM_CMD(URSHIFU),
+    ANIM_CMD(URSHIFU_MEGA),
     ANIM_CMD(ZARUDE),
     ANIM_CMD(REGIELEKI),
     ANIM_CMD(REGIDRAGO),
@@ -21253,6 +21265,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD_FULL(ZAMAZENTA_CROWNED_SHIELD, sAnims_ZAMAZENTA),
     ANIM_CMD_FULL(ETERNATUS_ETERNAMAX, sAnims_ETERNATUS),
     ANIM_CMD_FULL(URSHIFU_RAPID_STRIKE_STYLE, sAnims_URSHIFU),
+    ANIM_CMD_FULL(URSHIFU_RAPID_STRIKE_STYLE_MEGA, sAnims_URSHIFU_MEGA),
     ANIM_CMD_FULL(ZARUDE_DADA, sAnims_ZARUDE),
     ANIM_CMD_FULL(CALYREX_ICE_RIDER, sAnims_CALYREX),
     ANIM_CMD_FULL(CALYREX_SHADOW_RIDER, sAnims_CALYREX),

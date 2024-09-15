@@ -1676,6 +1676,10 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
 
     SPECIES_PAL(URSHIFU_RAPID_STRIKE_STYLE, gMonPalette_UrshifuRapidStrikeStyle),
 
+    SPECIES_PAL(URSHIFU_RAPID_STRIKE_STYLE_MEGA, gMonPalette_UrshifuRapidStrikeStyleMega),
+
+    SPECIES_PAL(URSHIFU_MEGA, gMonPalette_UrshifuMega),
+
     SPECIES_PAL(ZARUDE_DADA, gMonPalette_ZarudeDada),
 
     SPECIES_PAL(CALYREX_ICE_RIDER, gMonPalette_CalyrexIceRider),

@@ -1622,6 +1622,9 @@ const u32 gItemIconPalette_Rapidashite[]  = INCBIN_U32("graphics/items/icon_pale
 const u32 gItemIcon_Oricorionite[]  = INCBIN_U32("graphics/items/icons/oricorionite.4bpp.lz");
 const u32 gItemIconPalette_Oricorionite[]  = INCBIN_U32("graphics/items/icon_palettes/oricorionite.gbapal.lz");
 
+const u32 gItemIcon_Urshifite[]  = INCBIN_U32("graphics/items/icons/urshifite.4bpp.lz");
+const u32 gItemIconPalette_Urshifite[]  = INCBIN_U32("graphics/items/icon_palettes/urshifite.gbapal.lz");
+
 const u32 gItemIcon_GenericMegaStone[]      = INCBIN_U32("graphics/items/icons/generic_megastone.4bpp.lz");
 const u32 gItemIconPalette_Garchompite_R[]  = INCBIN_U32("graphics/items/icon_palettes/garchompite_r.gbapal.lz");
 const u32 gItemIconPalette_Granbullite[]    = INCBIN_U32("graphics/items/icon_palettes/granbullite.gbapal.lz");

@@ -4470,6 +4470,16 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x87,
         .y_offset = 4,
     },
+    [SPECIES_URSHIFU_MEGA] =
+    {
+        .size = 0x87,
+        .y_offset = 4,
+    },
+    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA] =
+    {
+        .size = 0x87,
+        .y_offset = 4,
+    },
     [SPECIES_ZARUDE] =
     {
         .size = 0x87,
