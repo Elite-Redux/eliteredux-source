@@ -449,5 +449,37 @@ IntroSkip_EventScript_SetIntroFlagsFemale:: @ 823BF46
 	clearflag FLAG_HIDE_LITTLEROOT_TOWN_FAT_MAN
 	clearflag FLAG_HIDE_MAP_NAME_POPUP
 	releaseall
-	end
+	return
 `
+movement IntroSkip_Movement_SetIntroFlagsFemaleFollowUpToClock0 {
+	walk_left * 2
+}
+script IntroSkip_EventScript_SetIntroFlagsFemale0 {
+	call(IntroSkip_EventScript_SetIntroFlagsFemale)
+	lock
+	applymovement(OBJ_EVENT_ID_PLAYER, IntroSkip_Movement_SetIntroFlagsFemaleFollowUpToClock0)
+	waitmovement(OBJ_EVENT_ID_PLAYER)
+	goto(IntroSkip_EventScript_SetIntroFlagsFemaleFollowUpToClock)
+}
+script IntroSkip_EventScript_SetIntroFlagsFemale1 {
+	call(IntroSkip_EventScript_SetIntroFlagsFemale)
+	lock
+	goto(IntroSkip_EventScript_SetIntroFlagsFemaleFollowUpToClock)
+}
+movement IntroSkip_Movement_SetIntroFlagsFemaleFollowUpToClock {
+	walk_left * 3
+	walk_up * 2
+}
+script IntroSkip_EventScript_SetIntroFlagsFemaleFollowUpToClock{
+	applymovement(OBJ_EVENT_ID_PLAYER, IntroSkip_Movement_SetIntroFlagsFemaleFollowUpToClock)
+	waitmovement(OBJ_EVENT_ID_PLAYER)
+	goto(IntroSkip_EventScript_FemaleForceClock)
+	release
+}
+
+script IntroSkip_EventScript_FemaleForceClock{
+	call(LittlerootTown_MaysHouse_2F_EventScript_WallClock)
+	if (!flag(FLAG_SET_WALL_CLOCK)){
+		goto(IntroSkip_EventScript_FemaleForceClock)
+	}
+}
