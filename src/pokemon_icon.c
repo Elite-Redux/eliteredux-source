@@ -982,6 +982,7 @@ const u8 *const gMonIconTable[] =
 
     [SPECIES_BUIZEL_REDUX] = gMonIcon_Buizel_Redux,
     [SPECIES_FLOATZEL_REDUX] = gMonIcon_Floatzel_Redux,
+    [SPECIES_VELOZEL] = gMonIcon_Velozel,
 
     [SPECIES_SLUGMA_REDUX] = gMonIcon_Slugma_Redux,
     [SPECIES_MAGCARGO_REDUX] = gMonIcon_Magcargo_Redux,
@@ -1272,6 +1273,8 @@ const u8 *const gMonIconTable[] =
     [SPECIES_AMPHYBUZZ] = gMonIcon_Amphybuzz,
     [SPECIES_AMPHYBUZZ_MEGA] = gMonIcon_AmphybuzzMega,
     [SPECIES_GIMMIGHOUL_ROAMING] = gMonIcon_GimmighoulRoaming,
+    [SPECIES_URSHIFU_MEGA] = gMonIcon_UrshifuMega,
+    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA] = gMonIcon_UrshifuRapidStrikeStyleMega,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,

@@ -503,6 +503,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ETERNATUS_ETERNAMAX] = sEternatusFormSpeciesIdTable,
     // Urshifu
     [SPECIES_URSHIFU_RAPID_STRIKE_STYLE] = sUrshifuFormSpeciesIdTable,
+    [SPECIES_URSHIFU_MEGA] = sUrshifuFormSpeciesIdTable,
+    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA] = sUrshifuFormSpeciesIdTable,
     // Zarude
     [SPECIES_ZARUDE_DADA] = sZarudeFormSpeciesIdTable,
     // Calyrex

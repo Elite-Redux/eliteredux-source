@@ -4470,6 +4470,16 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x87,
         .y_offset = 4,
     },
+    [SPECIES_URSHIFU_MEGA] =
+    {
+        .size = 0x87,
+        .y_offset = 4,
+    },
+    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA] =
+    {
+        .size = 0x87,
+        .y_offset = 4,
+    },
     [SPECIES_ZARUDE] =
     {
         .size = 0x87,
@@ -4701,6 +4711,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .y_offset =  0
     },
     [SPECIES_FLOATZEL_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_VELOZEL] =
     {
         .size = 0,
         .y_offset =  0

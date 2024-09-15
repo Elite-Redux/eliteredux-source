@@ -3503,12 +3503,12 @@ static const u8 sOricorioniteDesc[] = _(
 
 static const u8 sMaizemothiteDesc[] = _(
     "This stone enables\n"
-    "Maizemoth to Mega\n"
+    "Cormoth to Mega\n"
     "Evolve in battle.");
 
 static const u8 sPopmothiteDesc[] = _(
     "This stone enables\n"
-    "Popmoth to Mega\n"
+    "Popcorm to Mega\n"
     "Evolve in battle.");
 
 static const u8 sReuniclusiteRDesc[] = _(
@@ -3529,6 +3529,11 @@ static const u8 sToxtricititeRDesc[] = _(
 static const u8 sTorterraniteRDesc[] = _(
     "This stone enables\n"
     "Torterra R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sUrshifiteDesc[] = _(
+    "This stone enables\n"
+    "Urshifu to Mega\n"
     "Evolve in battle.");
 
 static const u8 sMegaBraceletDesc[] = _(

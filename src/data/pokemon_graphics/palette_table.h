@@ -939,6 +939,7 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(MESPRIT_REDUX, gMonPalette_Mesprit_Redux),
     SPECIES_PAL(AZELF_REDUX, gMonPalette_Azelf_Redux),
     SPECIES_PAL(FLOATZEL_REDUX, gMonPalette_Floatzel_Redux),
+    SPECIES_PAL(VELOZEL, gMonPalette_Velozel),
     SPECIES_PAL(BUIZEL_REDUX, gMonPalette_Buizel_Redux),
     SPECIES_PAL(MAGCARGO_REDUX, gMonPalette_Magcargo_Redux),
     SPECIES_PAL(SLUGMA_REDUX, gMonPalette_Slugma_Redux),
@@ -1675,6 +1676,10 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(ETERNATUS_ETERNAMAX, gMonPalette_EternatusEternamax),
 
     SPECIES_PAL(URSHIFU_RAPID_STRIKE_STYLE, gMonPalette_UrshifuRapidStrikeStyle),
+
+    SPECIES_PAL(URSHIFU_RAPID_STRIKE_STYLE_MEGA, gMonPalette_UrshifuRapidStrikeStyleMega),
+
+    SPECIES_PAL(URSHIFU_MEGA, gMonPalette_UrshifuMega),
 
     SPECIES_PAL(ZARUDE_DADA, gMonPalette_ZarudeDada),
 

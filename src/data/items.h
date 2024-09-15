@@ -9800,7 +9800,7 @@ const struct Item gItems[] =
     },
     [ITEM_MAIZEMOTHITE] = 
     {
-        .name = _("Maizemothite"),
+        .name = _("Cormothite"),
         .itemId = ITEM_MAIZEMOTHITE,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
@@ -9811,7 +9811,7 @@ const struct Item gItems[] =
     },
     [ITEM_POPMOTHITE] = 
     {
-        .name = _("Popmothite"),
+        .name = _("Popcormite"),
         .itemId = ITEM_POPMOTHITE,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
@@ -9838,6 +9838,17 @@ const struct Item gItems[] =
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
         .description = sRapidashiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_URSHIFITE] = 
+    {
+        .name = _("Urshifite"),
+        .itemId = ITEM_URSHIFITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sUrshifiteDesc,
         .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
