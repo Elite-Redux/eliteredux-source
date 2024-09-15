@@ -21,9 +21,9 @@ script VictoryRoadUrshifusKatsup {
 }
 script VictoryRoadUrshifusAlfredo {
     trainerbattle_single(TRAINER_ALFREDO, 
-    format("Alftredo Intro"), 
-    format("Alftredo Defeat"))
-    msgbox(format("Alftredo Post Batte"), MSGBOX_AUTOCLOSE)
+    format("Alfredo Intro"), 
+    format("Alfredo Defeat"))
+    msgbox(format("Alfredo Post Batte"), MSGBOX_AUTOCLOSE)
 }
 script VictoryRoadUrshifusTeriyaki {
     trainerbattle_single(TRAINER_TERIYAKI, 
