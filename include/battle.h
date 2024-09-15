@@ -989,7 +989,7 @@ extern u8 gBattlerByTurnOrder[MAX_BATTLERS_COUNT];
 extern u8 gCurrentTurnActionNumber;
 extern u8 gCurrentActionFuncId;
 extern struct BattlePokemon gBattleMons[MAX_BATTLERS_COUNT];
-extern struct RawStatsLevel gRawStatsLevel[MAX_BATTLERS_COUNT];
+extern struct RawStatsLevel gBattleEventsStatsBoost[MAX_BATTLERS_COUNT];
 extern u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT];
 extern u8 gCurrMovePos;
 extern u8 gChosenMovePos;

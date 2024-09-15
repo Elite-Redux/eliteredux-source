@@ -179,7 +179,7 @@ EWRAM_DATA u8 gQueuedAttackCount = 0;
 EWRAM_DATA struct ExtraAttackActionStruct gQueuedExtraAttackData[MAX_BATTLERS_COUNT + 1] = {0};
 EWRAM_DATA u8 gCurrentActionFuncId = B_ACTION_FINISHED;
 EWRAM_DATA struct BattlePokemon gBattleMons[MAX_BATTLERS_COUNT] = {0};
-EWRAM_DATA struct RawStatsLevel gRawStatsLevel[MAX_BATTLERS_COUNT] = {0};
+EWRAM_DATA struct RawStatsLevel gBattleEventsStatsBoost[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gBattlerSpriteIds[MAX_BATTLERS_COUNT] = {0};
 EWRAM_DATA u8 gCurrMovePos = 0;
 EWRAM_DATA u8 gChosenMovePos = 0;
@@ -3336,11 +3336,11 @@ void SwitchInClearSetData(void)
     ClearIllusionMon(gActiveBattler);
     if (gBattleMoves[gCurrentMove].effect != EFFECT_BATON_PASS)
     {
-        gRawStatsLevel[gActiveBattler].extraAttackLevel = 0;
-        gRawStatsLevel[gActiveBattler].extraDefenseLevel = 0;
-        gRawStatsLevel[gActiveBattler].extraSpAttackLevel = 0;
-        gRawStatsLevel[gActiveBattler].extraSpDefenseLevel = 0;
-        gRawStatsLevel[gActiveBattler].extraSpeedLevel = 0;
+        gBattleEventsStatsBoost[gActiveBattler].extraAttackLevel = 0;
+        gBattleEventsStatsBoost[gActiveBattler].extraDefenseLevel = 0;
+        gBattleEventsStatsBoost[gActiveBattler].extraSpAttackLevel = 0;
+        gBattleEventsStatsBoost[gActiveBattler].extraSpDefenseLevel = 0;
+        gBattleEventsStatsBoost[gActiveBattler].extraSpeedLevel = 0;
         for (i = 0; i < NUM_BATTLE_STATS; i++)
             gBattleMons[gActiveBattler].statStages[i] = DEFAULT_STAT_STAGE;
         for (i = 0; i < gBattlersCount; i++)

@@ -12574,7 +12574,7 @@ BattleScript_GymSkillPosture::
 	end2
 	
 BattleScript_GymSkillPostureAfterAttackerSet:
-	@ commented out because we use raw stats now
+	@ commented out because we use a special boost structure (gBattleEventsStatsBoost)
 	@ statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
 BattleScript_GymSkillPosture_:
 	call BattleScript_GymSkillPopup	
