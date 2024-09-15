@@ -7156,8 +7156,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_STATUS,
         .flags = FLAG_PROTECTION_MOVE,
+        .split = SPLIT_STATUS,
     },
     [MOVE_PLAY_ROUGH] =
     {
@@ -11356,6 +11356,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
         .airBased = TRUE,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_WILDBOLT_STORM] =
     {
@@ -11369,6 +11370,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
         .airBased = TRUE,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_SANDSEAR_STORM] =
     {
@@ -11382,6 +11384,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
         .airBased = TRUE,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_SPRINGTIDE_STORM] =
     {
@@ -11395,6 +11398,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
         .airBased = TRUE,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_DIRE_CLAW] =
     {
