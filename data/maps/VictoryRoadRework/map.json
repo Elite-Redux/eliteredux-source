@@ -296,14 +296,14 @@
       "y": 43,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_REWORK",
-      "dest_warp_id": 6
+      "dest_warp_id": 5
     },
     {
       "x": 54,
       "y": 32,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_REWORK",
-      "dest_warp_id": 5
+      "dest_warp_id": 4
     }
   ],
   "coord_events": [
