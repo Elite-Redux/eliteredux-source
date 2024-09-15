@@ -148,6 +148,11 @@ struct VolatileStruct
     u8 trickOrTreat:1;
     u8 skyDropped:1;
     u8 skyDroppedBy:2;
+    u8 extraAttackLevel;
+    u8 extraDefenseLevel;
+    u8 extraSpAttackLevel;
+    u8 extraSpDefenseLevel;
+    u8 extraSpeedLevel;
 };
 
 struct RoundStruct
