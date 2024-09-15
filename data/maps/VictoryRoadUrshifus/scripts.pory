@@ -1,1 +1,34 @@
 mapscripts VictoryRoadUrshifus_MapScripts {}
+
+
+script VictoryRoadUrshifusVinegar {
+    trainerbattle_single(TRAINER_VINEGAR, 
+    format("Vinegar Intro"), 
+    format("Vinegar Defeat"))
+    msgbox(format("Vinegar Post Batte"), MSGBOX_AUTOCLOSE)
+}
+script VictoryRoadUrshifusSalt {
+    trainerbattle_single(TRAINER_SALT, 
+    format("Salt Intro"), 
+    format("Salt Defeat"))
+    msgbox(format("Salt Post Batte"), MSGBOX_AUTOCLOSE)
+}
+script VictoryRoadUrshifusKatsup {
+    trainerbattle_single(TRAINER_KATSUP, 
+    format("Katsup Intro"), 
+    format("Katsup Defeat"))
+    msgbox(format("Katsup Post Batte"), MSGBOX_AUTOCLOSE)
+}
+script VictoryRoadUrshifusAlfredo {
+    trainerbattle_single(TRAINER_ALFREDO, 
+    format("Alftredo Intro"), 
+    format("Alftredo Defeat"))
+    msgbox(format("Alftredo Post Batte"), MSGBOX_AUTOCLOSE)
+}
+script VictoryRoadUrshifusTeriyaki {
+    trainerbattle_single(TRAINER_TERIYAKI, 
+    format("Teriyaki Intro"), 
+    format("Teriyaki Defeat"))
+    msgbox(format("Teriyaki Post Batte"), MSGBOX_AUTOCLOSE)
+}
+
