@@ -12521,8 +12521,8 @@ const struct Trainer gTrainers[] = {
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
-        .partySize = ARRAY_COUNT(sParty_NewTrainer11),
-        .party = {.ItemCustomMoves = sParty_NewTrainer11},
+        .partySize = ARRAY_COUNT(sParty_Katsup),
+        .party = {.ItemCustomMoves = sParty_Katsup},
     },
 
     [TRAINER_MONOCHAMP_NORMAL] =
