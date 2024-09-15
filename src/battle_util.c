@@ -14476,13 +14476,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     statBase *= gStatStageRatios[statStage][0];
     statBase /= gStatStageRatios[statStage][1];
     if (extraStatLevel){
-        MgbaOpen();
-        MgbaPrintf(2, "1: %d %d", statBase, extraStatLevel);
-        MgbaClose();
         statBase = statBase + ((statBase / 5 ) * extraStatLevel);
-        MgbaOpen();
-        MgbaPrintf(2, "2: %d", statBase);
-        MgbaClose();
     }
         
     return statBase;
