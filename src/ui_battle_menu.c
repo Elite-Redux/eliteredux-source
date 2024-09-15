@@ -2267,7 +2267,7 @@ const u8 sText_Title_Status_OnTheProwl_Description[]        = _("This Pokémon g
                                                                 "moves for one turn. Does not work\n"
                                                                 "on moves with negative priority.");
 const u8 sText_Title_Status_ExtraStat[]                     = _("Extra {STR_VAR_2}.");
-const u8 sText_Title_Status_ExtraStat_Description[]         = _("This pokemon usual {STR_VAR_2} is\n"
+const u8 sText_Title_Status_ExtraStat_Description[]         = _("This Pokémon usual {STR_VAR_2} is\n"
                                                                 "boosted by {STR_VAR_3}%");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
