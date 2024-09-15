@@ -4715,6 +4715,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_VELOZEL] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_BUIZEL_REDUX] =
     {
         .size = 0,

@@ -11116,6 +11116,11 @@ static const union AnimCmd sAnim_FLOATZEL_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_VELOZEL_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_BUIZEL_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -17867,6 +17872,11 @@ static const union AnimCmd *const sAnims_FLOATZEL_REDUX[] ={
     sAnim_FLOATZEL_REDUX_1,
 };
 
+static const union AnimCmd *const sAnims_VELOZEL[] ={
+    sAnim_GeneralFrame0,
+    sAnim_VELOZEL_1,
+};
+
 static const union AnimCmd *const sAnims_BUIZEL_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_BUIZEL_REDUX_1,
@@ -20586,6 +20596,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(MESPRIT_REDUX),
     ANIM_CMD(AZELF_REDUX),
     ANIM_CMD(FLOATZEL_REDUX),
+    ANIM_CMD(VELOZEL),
     ANIM_CMD(BUIZEL_REDUX),
     ANIM_CMD(MAGCARGO_REDUX),
     ANIM_CMD(SLUGMA_REDUX),

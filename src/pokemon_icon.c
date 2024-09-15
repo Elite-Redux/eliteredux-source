@@ -982,6 +982,7 @@ const u8 *const gMonIconTable[] =
 
     [SPECIES_BUIZEL_REDUX] = gMonIcon_Buizel_Redux,
     [SPECIES_FLOATZEL_REDUX] = gMonIcon_Floatzel_Redux,
+    [SPECIES_VELOZEL] = gMonIcon_Velozel,
 
     [SPECIES_SLUGMA_REDUX] = gMonIcon_Slugma_Redux,
     [SPECIES_MAGCARGO_REDUX] = gMonIcon_Magcargo_Redux,
