@@ -14265,7 +14265,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     u32 statBase = 0;
     u8 statStage = gBattleMons[battler].statStages[statEnum];
     u32 extraStat = 0;
-
+    u8 extraStatLevel = 0;
     #define RUIN_CHECK(ability) if (IsAbilityOnFieldExcept(battler, ability) && !BATTLER_HAS_ABILITY(battler, ability)) statBase = statBase * 3 / 4;
 
     switch (statEnum)
@@ -14274,7 +14274,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             return 0;
         case STAT_ATK:
             statBase = gBattleMons[battler].attack;
-
+            extraStatLevel = gRawStatsLevel[battler].extraAttackLevel;
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_TABLETS_OF_RUIN)
                     
@@ -14344,7 +14344,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             break;
         case STAT_SPATK:
             statBase = gBattleMons[battler].spAttack;
-
+            extraStatLevel = gRawStatsLevel[battler].extraSpAttackLevel;
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_VESSEL_OF_RUIN)
                     
@@ -14387,6 +14387,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if (isWonderRoomActive()) goto CALCULATE_STAT_SPDEF;
             CALCULATE_STAT_DEF:
             statBase = gBattleMons[battler].defense;
+            extraStatLevel = gRawStatsLevel[battler].extraDefenseLevel;
 
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_SWORD_OF_RUIN)
@@ -14416,7 +14417,8 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             if (isWonderRoomActive()) goto CALCULATE_STAT_DEF;
             CALCULATE_STAT_SPDEF:
             statBase = gBattleMons[battler].spDefense;
-            
+            extraStatLevel = gRawStatsLevel[battler].extraSpDefenseLevel;
+
             // Tablets of Ruin
             RUIN_CHECK(ABILITY_BEADS_OF_RUIN)
 
@@ -14441,6 +14443,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             break;
         case STAT_SPEED:
             statBase = GetBattlerTotalSpeedStat(battler, calculatingSecondary ? TOTAL_SPEED_SECONDARY : TOTAL_SPEED_PRIMARY);
+            extraStatLevel = gRawStatsLevel[battler].extraSpeedLevel;
             break;
     }
 
@@ -14472,7 +14475,16 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
     statBase *= gStatStageRatios[statStage][0];
     statBase /= gStatStageRatios[statStage][1];
-    
+    if (extraStatLevel){
+        MgbaOpen();
+        MgbaPrintf(2, "1: %d %d", statBase, extraStatLevel);
+        MgbaClose();
+        statBase = statBase + ((statBase / 5 ) * extraStatLevel);
+        MgbaOpen();
+        MgbaPrintf(2, "2: %d", statBase);
+        MgbaClose();
+    }
+        
     return statBase;
 }
 

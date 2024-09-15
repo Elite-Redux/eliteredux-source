@@ -162,6 +162,14 @@ struct BattlePokemon
     /*0x5A*/ bool8 wasalreadytotemboosted;
     /*0x5C*/ u8 hpType;
 };
+// introduced as direct stat increase, similar to stat boosts but cannot be copied or stuff like that
+struct RawStatsLevel{
+    u8 extraAttackLevel;
+    u8 extraDefenseLevel;
+    u8 extraSpAttackLevel;
+    u8 extraSpDefenseLevel;
+    u8 extraSpeedLevel;
+};
 
 struct BaseStats
 {
