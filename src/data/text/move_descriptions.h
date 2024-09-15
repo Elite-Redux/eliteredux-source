@@ -3616,20 +3616,20 @@ static const u8 sMoveTwoLineDescription_MoveVictoryDance[] = _(
     "by 1 stage.");
 
 static const u8 sMoveTwoLineDescription_MoveBleakwindStorm[] = _(
-    "30% chance to lower Defense.\n"
-    "Always hits in rain.");
+    "Attacks with savagely\n"
+    "cold winds. Sets tailwind.");
 
 static const u8 sMoveTwoLineDescription_MoveWildboltStorm[] = _(
-    "20% chance to paralyze.\n"
-    "Always hits in rain.");
+    "Savagely attacks the foe with a\n"
+    "thunderous tempest. Sets rain.");
 
 static const u8 sMoveTwoLineDescription_MoveSandsearStorm[] = _(
-    "20% chance to burn.\n"
-    "Always hits in rain.");
+    "Attacks with searing winds\n"
+    "and hot sand. Sets sandstorm.");
 
 static const u8 sMoveTwoLineDescription_MoveSpringtideStorm[] = _(
-    "30% chance to lower attack.\n"
-    "Always hits in rain.");
+    "Attacks with winds of love\n"
+    "and hate. Sets fairy terrain.");
 
 static const u8 sMoveTwoLineDescription_MoveDireClaw[] = _(
     "Deals damage and has a 50% chance\n"
@@ -5040,7 +5040,7 @@ static const u8 sMoveFourLineDescription_MoveTeeterDance[] = _("A wobbly dance\n
 static const u8 sMoveFourLineDescription_MoveBlazeKick[] = _("A fiery kick with a\nhigh crit ratio.\n10% burn chance.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveMudSport[] = _("Weakens Electric-\ntype attacks while\nthe user is in the\nbattle.");
 static const u8 sMoveFourLineDescription_MoveIceBall[] = _("A rolling attack\nthat becomes\nstronger each time\nit rolls.");
-static const u8 sMoveFourLineDescription_MoveNeedleArm[] = _("Attacks with\nthorny arms.\n30% chance to\nmake the foe flinch.");
+static const u8 sMoveFourLineDescription_MoveNeedleArm[] = _("Attacks with\nthorny arms.\nSets creeping thorns.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveSlackOff[] = _("The user slacks off\nand restores its HP\nby half its full\nHP.");
 static const u8 sMoveFourLineDescription_MoveHyperVoice[] = _("The user lets loose\na horribly loud\nshout with the\npower to damage.");
 static const u8 sMoveFourLineDescription_MovePoisonFang[] = _("The foe is bitten\nwith toxic fangs.\n50% poison chance.\nStrong Jaw boost.");
@@ -5320,7 +5320,7 @@ static const u8 sMoveFourLineDescription_MoveCraftyShield[] = _("A mysterious po
 static const u8 sMoveFourLineDescription_MoveFlowerShield[] = _("A mysterious power\nraises the Defense\nof all Grass-type\nPokémon in battle.");
 static const u8 sMoveFourLineDescription_MoveGrassyTerrain[] = _("For 8 turns, the\nground turns grassy.\nThis ups Grass-type\nmoves, and heals.");
 static const u8 sMoveFourLineDescription_MoveMistyTerrain[] = _("Weakens Dragon-type\nmoves for 8 turns,\nand prevents status\nconditions for all.");
-static const u8 sMoveFourLineDescription_MoveElectrify[] = _("This move\nelectrifies the foe,\nmaking its next\nmove Electric-type.");
+static const u8 sMoveFourLineDescription_MoveElectrify[] = _("Makes the foe's\nnext move Electric-\ntype. May fail if used\nin succession.");
 static const u8 sMoveFourLineDescription_MovePlayRough[] = _("The user and foe\nplay rough, with a\n10% chance to drop\nfoe's Attack.");
 static const u8 sMoveFourLineDescription_MoveFairyWind[] = _("A quick moving cloud\nof pixie dust.\nHas +1 Priority.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveMoonblast[] = _("The power of the\nmoon strikes the\nfoe. 20% chance to\nlower foe's SpAtk.");
@@ -5659,10 +5659,10 @@ static const u8 sMoveFourLineDescription_MoveChloroblast[] = _("The user attack 
 static const u8 sMoveFourLineDescription_MovePsyshieldBash[] = _("Deals damage. Raises\nDefense by 1 stage.\nMighty horn.");
 static const u8 sMoveFourLineDescription_MoveCeaselessEdge[] = _("The user slashes the\nfoe with shell blade.\nLeaves Splinters. A\nhigh crit hit ratio.");
 static const u8 sMoveFourLineDescription_MoveVictoryDance[] = _("An intense dance\nwhich boosts the\nuser's Attack,\nDefense and Speed.");
-static const u8 sMoveFourLineDescription_MoveBleakwindStorm[] = _("30% chance to lower\nDefense. Always hits\nin rain. Hits both targets.\nWeather-based.");
-static const u8 sMoveFourLineDescription_MoveWildboltStorm[] = _("20% chance to paralyze.\nAlways hits in rain.\nHits both targets.\nWeather-based.");
-static const u8 sMoveFourLineDescription_MoveSandsearStorm[] = _("20% chance to burn.\nAlways hits in rain.\nHits both targets.\nWeather-based.");
-static const u8 sMoveFourLineDescription_MoveSpringtideStorm[] = _("30% chance to lower\nAttack. Always hits in\nrain. Hits both targets.\nWeather-based.");
+static const u8 sMoveFourLineDescription_MoveBleakwindStorm[] = _("Attacks with savagely\ncold winds.\nSets tailwind.\nWeather-based.");
+static const u8 sMoveFourLineDescription_MoveWildboltStorm[] = _("Attacks the foe with\na thunderous\ntempest. Sets rain.\nWeather-based.");
+static const u8 sMoveFourLineDescription_MoveSandsearStorm[] = _("Attacks with searing\nwinds and sands.\nSets sandstorm.\nWeather-based.");
+static const u8 sMoveFourLineDescription_MoveSpringtideStorm[] = _("Attacks with winds of\nlove and hate.\nSets fairy terrain.\nWeather-based.");
 static const u8 sMoveFourLineDescription_MoveDireClaw[] = _("The user lashes out\nand may leave the\nfoe poisoned,\nparalyzed, or asleep.");
 static const u8 sMoveFourLineDescription_MoveShelter[] = _("Sharply raises the\nDefense of the user\nand their partner.");
 static const u8 sMoveFourLineDescription_MoveWildSwing[] = _("Forces the target to\nswitch. -6 priority.\nHammer-based.");

@@ -2311,8 +2311,15 @@
 	.4byte \status4
 	.endm
 
-	.macro setfog
-	various BS_ATTACKER, VARIOUS_SET_FOG
+	.macro setbattleweather weather:req onFail:req playAnimation:req
+	various BS_ATTACKER, VARIOUS_SET_WEATHER
+	.byte \weather
+	.4byte \onFail
+	.if \playAnimation
+	call BattleScript_MoveWeatherChangeRet_PlayAnim
+	.else
+	call BattleScript_MoveWeatherChangeRet
+	.endif
 	.endm
 
 	.macro tryrecurringnightmare battler:req
@@ -2395,6 +2402,22 @@ checkstatbuffonlowered_none_\@:
 	jumpifhealingblocked_notblocked_\@:
 	.endm
 
+	.macro checkprimalweather onFail:req
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_SUN_PRIMAL, checkprimalweather_sun_fail_\@
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_RAIN_PRIMAL, checkprimalweather_rain_fail_\@
+	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, WEATHER_STRONG_WINDS, checkprimalweather_winds_fail_\@
+	goto checkprimalweather_pass_\@
+checkprimalweather_sun_fail_\@:
+	call BattleScript_ExtremelyHarshSunlightWasNotLessenedRet
+	goto \onFail
+checkprimalweather_rain_fail_\@:
+	call BattleScript_NoReliefFromHeavyRainRet
+	goto \onFail
+checkprimalweather_winds_fail_\@:
+	call BattleScript_MysteriousAirCurrentBlowsOnRet
+	goto \onFail
+checkprimalweather_pass_\@:
+	.endm
 
 @ unused, was for an experiment
 .macro battlemacrostyped macro_type:req, type:req, data:req, ptr:req, data2

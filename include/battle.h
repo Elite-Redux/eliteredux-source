@@ -112,6 +112,11 @@ struct VolatileStruct
     u8 throatChopTimer;
     u8 encoredMovePos;
     u8 furyCutterCounter;
+    u8 extraAttackLevel;
+    u8 extraDefenseLevel;
+    u8 extraSpAttackLevel;
+    u8 extraSpDefenseLevel;
+    u8 extraSpeedLevel;
     u8 disableTimer:4;
     u8 disableTimerStartValue:4;
     u8 encoreTimer:4;

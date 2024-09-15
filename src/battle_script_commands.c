@@ -2012,11 +2012,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         return 101;
     else if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY) && 
                 (gBattleMoves[move].effect == EFFECT_THUNDER
-                || gBattleMoves[move].effect == EFFECT_HURRICANE
-                || move == MOVE_BLEAKWIND_STORM
-                || move == MOVE_WILDBOLT_STORM
-                || move == MOVE_SANDSEAR_STORM
-                || move == MOVE_SPRINGTIDE_STORM))
+                || gBattleMoves[move].effect == EFFECT_HURRICANE))
         return 101;
     else if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY) && 
                 (gBattleMoves[move].effect == EFFECT_FREEZE_DRY
@@ -2285,7 +2281,10 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
         //Boost Critical Chance
         critChance  = ((gBattleMoves[gCurrentMove].flags & FLAG_HIGH_CRIT) != 0)
                     + (holdEffectAtk == HOLD_EFFECT_SCOPE_LENS)
-                    + 2 * (holdEffectAtk == HOLD_EFFECT_LUCKY_PUNCH && gBattleMons[gBattlerAttacker].species == SPECIES_CHANSEY)
+                    + 2 * (holdEffectAtk == HOLD_EFFECT_LUCKY_PUNCH &&
+                        (GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_HAPPINY
+                        || GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_CHANSEY
+                        || GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY))
                     + BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk)
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PERFECTIONIST) && gBattleMoves[move].power <= 50 && gBattleMoves[move].power > 0)
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYPER_CUTTER))
@@ -8776,6 +8775,15 @@ static bool32 IsRototillerAffected(u32 battlerId)
     return TRUE;
 }
 
+static int ProtectSucceeds(int battler)
+{
+    if (!(gBattleMoves[gLastResultingMoves[battler]].flags & FLAG_PROTECTION_MOVE)) gVolatileStructs[battler].protectUses = 0;
+
+    if (gVolatileStructs[battler].protectUses > 3) return FALSE;
+    if (sProtectSuccessRates[gVolatileStructs[battler].protectUses] >= Random()) return TRUE;
+    return FALSE;
+}
+
 static bool32 CanTeleport(u8 battlerId)
 {
     struct Pokemon* party = NULL;
@@ -9684,8 +9692,9 @@ static void Cmd_various(void)
             gBattlescriptCurrInstr += 7;
         return;
     case VARIOUS_TRY_ELECTRIFY:
-        if (GetBattlerTurnOrderNum(gBattlerAttacker) > GetBattlerTurnOrderNum(gBattlerTarget))
+        if (!ProtectSucceeds(gActiveBattler) || gCurrentTurnActionNumber >= GetBattlerTurnOrderNum(gBattlerTarget))
         {
+            gVolatileStructs[gActiveBattler].protectUses = 0;
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
         }
         else
@@ -11428,16 +11437,40 @@ static void Cmd_various(void)
         }
         gBattlescriptCurrInstr += 7;
         return;
-    case VARIOUS_SET_FOG:
+    case VARIOUS_SET_WEATHER:
         {
-            if (!TryChangeBattleWeather(gActiveBattler, ENUM_WEATHER_FOG, FALSE))
+            int weather = T1_READ_8(gBattlescriptCurrInstr + 3);
+            if (!TryChangeBattleWeather(gActiveBattler, weather, FALSE))
             {
-                gMoveResultFlags |= MOVE_RESULT_MISSED;
+                gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 4);
                 SetActiveMultistringChooser(B_MSG_WEATHER_FAILED);
             }
             else
             {
-                SetActiveMultistringChooser(B_MSG_STARTED_FOG);
+                int stringId = 0;
+                gBattlescriptCurrInstr += 8;
+                switch (weather)
+                {
+                case ENUM_WEATHER_FOG:
+                    stringId = B_MSG_STARTED_FOG;
+                    break;
+                case ENUM_WEATHER_HAIL:
+                    stringId = B_MSG_STARTED_HAIL;
+                    break;
+                case ENUM_WEATHER_RAIN:
+                    stringId = B_MSG_STARTED_RAIN;
+                    break;
+                case ENUM_WEATHER_RAIN_PRIMAL:
+                    stringId = B_MSG_STARTED_DOWNPOUR;
+                    break;
+                case ENUM_WEATHER_SANDSTORM:
+                    stringId = B_MSG_STARTED_SANDSTORM;
+                    break;
+                case ENUM_WEATHER_SUN:
+                    stringId = B_MSG_STARTED_SUNLIGHT;
+                    break;
+                }
+                SetActiveMultistringChooser(stringId);
             }
         }
         break;
@@ -11538,17 +11571,10 @@ static void Cmd_setprotectlike(void)
     bool32 fail = TRUE;
     bool32 notLastTurn = TRUE;
 
-    if (!(gBattleMoves[gLastResultingMoves[gBattlerAttacker]].flags & FLAG_PROTECTION_MOVE))
-        gVolatileStructs[gBattlerAttacker].protectUses = 0;
-
     if (gCurrentTurnActionNumber == (gBattlersCount - 1))
         notLastTurn = FALSE;
 
-    if (gVolatileStructs[gBattlerAttacker].protectUses > 3)
-    {
-        fail = TRUE;
-    }
-    else if (sProtectSuccessRates[gVolatileStructs[gBattlerAttacker].protectUses] >= Random() && notLastTurn)
+    if (ProtectSucceeds(gBattlerAttacker) && notLastTurn)
     {
         if (!gBattleMoves[gCurrentMove].argument) // Protects one mon only.
         {
@@ -13737,6 +13763,7 @@ static void Cmd_trytoapplymoveeffect(void)
                 }
             }
         break;
+        case EFFECT_CREEPING_THORNS_HIT:
         case EFFECT_STEALTH_ROCK_HIT:
             if(rand <= secondaryEffectChance){
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
@@ -13745,7 +13772,7 @@ static void Cmd_trytoapplymoveeffect(void)
                 && !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK))
                 {
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STEALTH_ROCK;
-                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType = TYPE_ROCK;
+                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType = gBattleMoves[gCurrentMove].effect == EFFECT_STEALTH_ROCK ? TYPE_ROCK : TYPE_GRASS;
                     appliedEffect = TRUE;
                 }
             }

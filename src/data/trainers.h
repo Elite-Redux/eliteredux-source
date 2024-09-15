@@ -12483,46 +12483,46 @@ const struct Trainer gTrainers[] = {
         .trainerFlag = FLAG_TRAINER_YDA_MTPYRE,
     },
 
-    [TRAINER_NEW_TRAINER] =
+    [TRAINER_VINEGAR] =
     {
         .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
-        .trainerClass = TRAINER_CLASS_COOLTRAINER,
-        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_COOL,
-        .trainerPic = TRAINER_PIC_COOLTRAINER_M,
-        .trainerName = _("New Trainer"),
-        .items = {},
-        .doubleBattle = FALSE,
-        .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
-        .partySize = ARRAY_COUNT(sParty_NewTrainer),
-        .party = {.ItemCustomMoves = sParty_NewTrainer},
-    },
-
-    [TRAINER_NEW_TRAINER1] =
-    {
-        .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
-        .trainerClass = TRAINER_CLASS_YOUNGSTER,
+        .trainerClass = TRAINER_CLASS_BLACK_BELT,
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
-        .trainerPic = TRAINER_PIC_YOUNGSTER,
-        .trainerName = _("Timothy"),
+        .trainerPic = TRAINER_PIC_BLACK_BELT,
+        .trainerName = _("Vinegar"),
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
-        .partySize = ARRAY_COUNT(sParty_NewTrainer1),
-        .party = {.ItemCustomMoves = sParty_NewTrainer1},
+        .partySize = ARRAY_COUNT(sParty_Vinegar),
+        .party = {.ItemCustomMoves = sParty_Vinegar},
     },
 
-    [TRAINER_NEW_TRAINER11] =
+    [TRAINER_SALT] =
     {
         .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
-        .trainerClass = TRAINER_CLASS_COOLTRAINER,
-        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_COOL,
-        .trainerPic = TRAINER_PIC_COOLTRAINER_M,
-        .trainerName = _("New Trainer"),
+        .trainerClass = TRAINER_CLASS_BLACK_BELT,
+        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
+        .trainerPic = TRAINER_PIC_BLACK_BELT,
+        .trainerName = _("Salt"),
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
-        .partySize = ARRAY_COUNT(sParty_NewTrainer11),
-        .party = {.ItemCustomMoves = sParty_NewTrainer11},
+        .partySize = ARRAY_COUNT(sParty_Salt),
+        .party = {.ItemCustomMoves = sParty_Salt},
+    },
+
+    [TRAINER_KATSUP] =
+    {
+        .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
+        .trainerClass = TRAINER_CLASS_BLACK_BELT,
+        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
+        .trainerPic = TRAINER_PIC_BLACK_BELT,
+        .trainerName = _("Katsup"),
+        .items = {},
+        .doubleBattle = FALSE,
+        .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
+        .partySize = ARRAY_COUNT(sParty_Katsup),
+        .party = {.ItemCustomMoves = sParty_Katsup},
     },
 
     [TRAINER_MONOCHAMP_NORMAL] =
@@ -12810,4 +12810,33 @@ const struct Trainer gTrainers[] = {
         .partySize = ARRAY_COUNT(sParty_Trent15),
         .party = {.ItemCustomMoves = sParty_Trent15},
     },
+
+    [TRAINER_ALFREDO] =
+    {
+        .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
+        .trainerClass = TRAINER_CLASS_BLACK_BELT,
+        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
+        .trainerPic = TRAINER_PIC_BLACK_BELT,
+        .trainerName = _("Alfredo"),
+        .items = {},
+        .doubleBattle = FALSE,
+        .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
+        .partySize = ARRAY_COUNT(sParty_Alfredo),
+        .party = {.ItemCustomMoves = sParty_Alfredo},
+    },
+
+    [TRAINER_TERIYAKI] =
+    {
+        .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
+        .trainerClass = TRAINER_CLASS_BLACK_BELT,
+        .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
+        .trainerPic = TRAINER_PIC_BLACK_BELT,
+        .trainerName = _("Teriyaki"),
+        .items = {},
+        .doubleBattle = FALSE,
+        .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
+        .partySize = ARRAY_COUNT(sParty_Teriyaki),
+        .party = {.ItemCustomMoves = sParty_Teriyaki},
+    },
+
 };

@@ -15,6 +15,7 @@
 #include "constants/songs.h"
 #include "field_message_box.h"
 
+
 static u8 gNbBattleEvents;
 
 EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
@@ -190,7 +191,7 @@ bool8 DepleteTeamPowerPointOfMove(u16 moveId){
 }
 
 //#define SET_RAW_STATS_LEVEL(stat, level) gBattleMons[battler] ##stat = (gBattleMons[battler]##stat / 20 ) * level
-#define SET_RAW_STATS_LEVEL_OPPONENTS(stat, level)\
+/*#define //SET_RAW_STATS_LEVEL_OPPONENTS(stat, level)\
 SetRawStats(B_POSITION_OPPONENT_LEFT, stat, level);\
 if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_RIGHT].hp > 0))\
     SetRawStats(B_POSITION_OPPONENT_RIGHT, stat, level);
@@ -222,8 +223,12 @@ void SetRawStats(u8 battler, u8 stat, u8 level){
         return;
     }
     *statBase = *statBase + ((*statBase / 5 ) * level);
-}
-
+}*/
+#define SET_EXTRA_STATS_LEVEL_TO_BATTLER(battler, stat, level) gVolatileStructs[battler].stat += level;
+#define SET_EXTRA_STATS_LEVEL(stat, level)\
+SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_LEFT, stat, level)\
+if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_RIGHT].hp > 0))\
+    SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_RIGHT, stat, level);
 // this is run once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
     u8 data;
@@ -237,7 +242,8 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
             battleEvent->data0 = 4;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 3, battleEvent->data0 * 20);
         SET_STATCHANGER(STAT_ATK, battleEvent->data0, FALSE);
-        SET_RAW_STATS_LEVEL_OPPONENTS(STAT_ATK, battleEvent->data0)
+        //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_ATK, battleEvent->data0)
+        SET_EXTRA_STATS_LEVEL(extraAttackLevel, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_DEFENSE:
         SET_STR2(gText_Defense, sText_Defend)
@@ -245,7 +251,8 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
             battleEvent->data0 = 4;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 3, battleEvent->data0 * 20);
         SET_STATCHANGER(STAT_DEF, battleEvent->data0, FALSE);
-        SET_RAW_STATS_LEVEL_OPPONENTS(STAT_DEF, battleEvent->data0)
+        //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_DEF, battleEvent->data0)
+        SET_EXTRA_STATS_LEVEL(extraDefenseLevel, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_SPECIAL:
         SET_STR2(gText_SpAtk, sText_Strike)
@@ -253,7 +260,8 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
             battleEvent->data0 = 4;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 3, battleEvent->data0 * 20);
         SET_STATCHANGER(STAT_ATK, battleEvent->data0, FALSE);
-        SET_RAW_STATS_LEVEL_OPPONENTS(STAT_ATK, battleEvent->data0)
+        //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_ATK, battleEvent->data0)
+        SET_EXTRA_STATS_LEVEL(extraSpAttackLevel, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_SPDEF:
         SET_STR2(gText_SpDef, sText_Defend)
@@ -261,7 +269,8 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
             battleEvent->data0 = 4;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 3, battleEvent->data0 * 20);
         SET_STATCHANGER(STAT_SPDEF, battleEvent->data0, FALSE);
-        SET_RAW_STATS_LEVEL_OPPONENTS(STAT_SPDEF, battleEvent->data0)
+        //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_SPDEF, battleEvent->data0)
+        SET_EXTRA_STATS_LEVEL(extraSpDefenseLevel, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_SPEED:
         SET_STR2(gText_Speed, sText_Rush)
@@ -269,7 +278,8 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
             battleEvent->data0 = 4;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff3, 3, battleEvent->data0 * 20);
         SET_STATCHANGER(STAT_SPEED, battleEvent->data0, FALSE);
-        SET_RAW_STATS_LEVEL_OPPONENTS(STAT_SPEED, battleEvent->data0)
+        //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_SPEED, battleEvent->data0)
+        SET_EXTRA_STATS_LEVEL(extraSpeedLevel, battleEvent->data0);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
     case BATTLE_EVENT_POSTURE_ACCURACY:
         // NOT IMPLEMENTED BECAUSE OF RAW STATS
@@ -452,6 +462,11 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
     case BATTLE_EVENT_LAST_STAND:
         if (gFaintedMonCount[1] != battleEvent->data0)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        SET_EXTRA_STATS_LEVEL(extraAttackLevel, 5);
+        SET_EXTRA_STATS_LEVEL(extraDefenseLevel, 5);
+        SET_EXTRA_STATS_LEVEL(extraSpAttackLevel, 5);
+        SET_EXTRA_STATS_LEVEL(extraSpDefenseLevel, 5);
+        SET_EXTRA_STATS_LEVEL(extraSpeedLevel, 5);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLastStand);
     case BATTLE_EVENT_SUBSTITUTE:
         if (gFaintedMonCount[1] != battleEvent->data0)

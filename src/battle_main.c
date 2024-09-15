@@ -4882,6 +4882,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     u32 ability = GetBattlerAbility(battlerId);
     u32 holdEffect = GetBattlerHoldEffect(battlerId, TRUE);
     u8 statStage = gBattleMons[battlerId].statStages[STAT_SPEED];
+    u8 extraStatLevel = gVolatileStructs[battlerId].extraSpeedLevel;
 
     // weather abilities
     if (WEATHER_HAS_EFFECT)
@@ -4979,6 +4980,9 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     // stat stages
     if (gBattleMons[battlerId].status1 & STATUS1_BLEED) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
+    if (extraStatLevel){
+        speed = speed + ((speed / 5 ) * extraStatLevel);
+    }
     speed *= gStatStageRatios[statStage][0];
     speed /= gStatStageRatios[statStage][1];
 

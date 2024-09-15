@@ -174,6 +174,12 @@ enum
     STATUS_INFO_PARASITIC_SPORES,
     STATUS_INFO_FEAR,
     STATUS_INFO_ON_THE_PROWL,
+    //Battle Events (Gymskills)
+    STATUS_INFO_EXTRA_ATTACK,
+    STATUS_INFO_EXTRA_DEFENSE,
+    STATUS_INFO_EXTRA_SPATTACK,
+    STATUS_INFO_EXTRA_SPDEFENSE,
+    STATUS_INFO_EXTRA_SPEED,
     NUM_STATUS_INFO,
 };
 
@@ -886,6 +892,26 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 break;
                 case STATUS_INFO_ON_THE_PROWL:
                     if (gVolatileStructs[j].onTheProwl)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_EXTRA_ATTACK:
+                    if (gVolatileStructs[j].extraAttackLevel)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_EXTRA_DEFENSE:
+                    if (gVolatileStructs[j].extraDefenseLevel)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_EXTRA_SPATTACK:
+                    if (gVolatileStructs[j].extraSpAttackLevel)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_EXTRA_SPDEFENSE:
+                    if (gVolatileStructs[j].extraSpDefenseLevel)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_EXTRA_SPEED:
+                    if (gVolatileStructs[j].extraSpeedLevel)
                         isExtraInfoShown = TRUE;
                 break;
             }
@@ -2240,6 +2266,9 @@ const u8 sText_Title_Status_OnTheProwl[]                    = _("On the Prowl");
 const u8 sText_Title_Status_OnTheProwl_Description[]        = _("This Pokémon gains +1 priority on\n"
                                                                 "moves for one turn. Does not work\n"
                                                                 "on moves with negative priority.");
+const u8 sText_Title_Status_ExtraStat[]                     = _("Extra {STR_VAR_2}.");
+const u8 sText_Title_Status_ExtraStat_Description[]         = _("This Pokémon's usual {STR_VAR_2} is\n"
+                                                                "boosted by {STR_VAR_3}%");
 
 #define SPACE_BETWEEN_LINES_FIELD ((6 * 8) + 4)
 #define MAX_DESCRIPTION_LINES 3
@@ -2878,6 +2907,71 @@ static void PrintStatusTab(void){
 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Status_OnTheProwl_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_EXTRA_ATTACK:
+                StringCopy(gStringVar2, gStatNamesTable[STAT_ATK]);
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                {
+                ConvertIntToDecimalStringN(gStringVar3, gVolatileStructs[sMenuDataPtr->battlerId].extraAttackLevel * 20, STR_CONV_MODE_LEFT_ALIGN, 3);
+                }
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_EXTRA_DEFENSE:
+                StringCopy(gStringVar2, gStatNamesTable[STAT_DEF]);
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                {
+                ConvertIntToDecimalStringN(gStringVar3, gVolatileStructs[sMenuDataPtr->battlerId].extraDefenseLevel * 20, STR_CONV_MODE_LEFT_ALIGN, 3);
+                }
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_EXTRA_SPATTACK:
+                StringCopy(gStringVar2, gStatNamesTable[STAT_SPATK]);
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                {
+                ConvertIntToDecimalStringN(gStringVar3, gVolatileStructs[sMenuDataPtr->battlerId].extraSpAttackLevel * 20, STR_CONV_MODE_LEFT_ALIGN, 3);
+                }
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_EXTRA_SPDEFENSE:
+                StringCopy(gStringVar2, gStatNamesTable[STAT_SPDEF]);
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                {
+                ConvertIntToDecimalStringN(gStringVar3, gVolatileStructs[sMenuDataPtr->battlerId].extraSpDefenseLevel * 20, STR_CONV_MODE_LEFT_ALIGN, 3);
+                }
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_EXTRA_SPEED:
+                StringCopy(gStringVar2, gStatNamesTable[STAT_SPEED]);
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                {
+                ConvertIntToDecimalStringN(gStringVar3, gVolatileStructs[sMenuDataPtr->battlerId].extraSpeedLevel * 20, STR_CONV_MODE_LEFT_ALIGN, 3);
+                }
+                StringExpandPlaceholders(gStringVar1, sText_Title_Status_ExtraStat_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;
