@@ -172,13 +172,6 @@
       "elevation": 0,
       "dest_map": "MAP_LITTLEROOT_TOWN_PROFESSOR_BIRCHS_LAB",
       "dest_warp_id": 0
-    },
-    {
-      "x": 2,
-      "y": 1,
-      "elevation": 0,
-      "dest_map": "MAP_VICTORY_ROAD_REWORK",
-      "dest_warp_id": 4
     }
   ],
   "coord_events": [

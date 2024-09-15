@@ -264,7 +264,7 @@
   ],
   "warp_events": [
     {
-      "x": 17,
+      "x": 16,
       "y": 58,
       "elevation": 0,
       "dest_map": "MAP_EVER_GRANDE_CITY",
@@ -290,13 +290,6 @@
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_URSHIFUS",
       "dest_warp_id": 1
-    },
-    {
-      "x": 16,
-      "y": 58,
-      "elevation": 0,
-      "dest_map": "MAP_LITTLEROOT_TOWN",
-      "dest_warp_id": 3
     },
     {
       "x": 52,
