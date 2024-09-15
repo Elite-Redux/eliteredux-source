@@ -12497,7 +12497,7 @@ const struct Trainer gTrainers[] = {
         .party = {.ItemCustomMoves = sParty_Vinegar},
     },
 
-    [TRAINER_VINE] =
+    [TRAINER_SALT] =
     {
         .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
         .trainerClass = TRAINER_CLASS_BLACK_BELT,

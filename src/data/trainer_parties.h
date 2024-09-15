@@ -40198,11 +40198,56 @@ static const struct TrainerMonItemCustomMoves sParty_Alfredo[] = {
 static const struct TrainerMonItemCustomMoves sParty_Teriyaki[] = {
     {
     .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .heldItem = ITEM_NONE,
+    .species = SPECIES_PHEROMOSA,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_TRIPLE_KICK, MOVE_TRIPLE_AXEL, MOVE_STOMP, MOVE_RIDER_KICK
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_IRON_HANDS,
+    .heldItem = ITEM_ASSAULT_VEST,
+    .ability = 1,
+    .evs = {252, 252, 0, 0, 4, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_PLASMA_FISTS, MOVE_DRAIN_PUNCH, MOVE_ICE_PUNCH, MOVE_SEISMIC_FIST
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_SILVALLY_FIGHTING,
+    .heldItem = ITEM_LIFE_ORB,
     .ability = 0,
-    .evs = {},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_MULTI_ATTACK, MOVE_FLASH_CANNON, MOVE_DARK_PULSE, MOVE_POWER_GEM
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_TAUROS_PALDEAN_COMBAT_BREED,
+    .heldItem = ITEM_CHOICE_SCARF,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_RAGING_BULL, MOVE_ZEN_HEADBUTT, MOVE_HEAD_SMASH, MOVE_HEAD_CHARGE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_URSHIFU,
+    .heldItem = ITEM_NONE,
+    .ability = 1,
+    .evs = {252, 252, 0, 0, 0, 4},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_SUCKER_PUNCH, MOVE_CLOSE_COMBAT, MOVE_WICKED_BLOW, MOVE_POISON_JAB
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_URSHIFU_RAPID_STRIKE_STYLE,
+    .heldItem = ITEM_NONE,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_SURGING_STRIKES, MOVE_JET_PUNCH, MOVE_CLOSE_COMBAT, MOVE_ICE_PUNCH
     }
 };

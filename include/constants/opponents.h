@@ -886,7 +886,7 @@
 #define TRAINER_STEVEN_DOUBLES_LEGENDS                 882
 
 #define TRAINER_VINEGAR                                883
-#define TRAINER_VINE                                   884
+#define TRAINER_SALT                                   884
 #define TRAINER_KATSUP                                 885
 
 #define TRAINER_MONOCHAMP_NORMAL                       886
@@ -909,8 +909,8 @@
 #define TRAINER_MONOCHAMP_FAIRY                        903
 
 #define TRAINER_TRENT_5                                904
-#define TRAINER_ALFREDO                            905
-#define TRAINER_TERIYAKI                           906
+#define TRAINER_ALFREDO                                905
+#define TRAINER_TERIYAKI                               906
 #define TRAINERS_COUNT                                 1600
 #define MAX_OLD_TRAINERS_COUNT                         TRAINERS_COUNT + 1
 
