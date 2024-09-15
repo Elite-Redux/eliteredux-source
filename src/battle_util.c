@@ -14267,7 +14267,6 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     u32 extraStat = 0;
     u8 extraStatLevel = 0;
     #define RUIN_CHECK(ability) if (IsAbilityOnFieldExcept(battler, ability) && !BATTLER_HAS_ABILITY(battler, ability)) statBase = statBase * 3 / 4;
-
     switch (statEnum)
     {
         case STAT_HP:
@@ -14446,7 +14445,6 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             extraStatLevel = gBattleEventsStatsBoost[battler].extraSpeedLevel;
             break;
     }
-
     if (statEnum != STAT_SPEED && GetAbilityStateAs(battler, ABILITY_PROTOSYNTHESIS).paradoxBoost.statId == statEnum)
         statBase = statBase * 13 / 10;
 

@@ -224,7 +224,7 @@ void SetRawStats(u8 battler, u8 stat, u8 level){
     }
     *statBase = *statBase + ((*statBase / 5 ) * level);
 }*/
-#define SET_EXTRA_STATS_LEVEL_TO_BATTLER(battler, stat, level) gBattleEventsStatsBoost[battler].stat = level;
+#define SET_EXTRA_STATS_LEVEL_TO_BATTLER(battler, stat, level) gBattleEventsStatsBoost[battler].stat += level;
 #define SET_EXTRA_STATS_LEVEL(stat, level)\
 SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_LEFT, stat, level)\
 if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_RIGHT].hp > 0))\
@@ -460,8 +460,14 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         RUN_BATTLESCRIPT(BattleScript_GymSkillMagnetRise)
     
     case BATTLE_EVENT_LAST_STAND:
-        if (gFaintedMonCount[1] != battleEvent->data0)
+    #warning "pay attention this == it's for debug"
+        if (gFaintedMonCount[1] == battleEvent->data0)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
+        SET_EXTRA_STATS_LEVEL(extraAttackLevel, 5);
+        SET_EXTRA_STATS_LEVEL(extraDefenseLevel, 5);
+        SET_EXTRA_STATS_LEVEL(extraSpAttackLevel, 5);
+        SET_EXTRA_STATS_LEVEL(extraSpDefenseLevel, 5);
+        SET_EXTRA_STATS_LEVEL(extraSpeedLevel, 5);
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLastStand);
     case BATTLE_EVENT_SUBSTITUTE:
         if (gFaintedMonCount[1] != battleEvent->data0)

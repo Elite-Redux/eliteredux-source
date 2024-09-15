@@ -12632,7 +12632,33 @@ BattleScript_GymSkillLastStand::
 	printstring STRINGID_GYMSKILL_LASTSTAND
 	waitmessage B_WAIT_TIME_LONG
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
-	call BattleScript_AllStatsTwoUp
+
+	setstatchanger STAT_ATK, 2, FALSE
+	setgraphicalstatchangevalues
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+
+	setstatchanger STAT_DEF, 2, FALSE
+	setgraphicalstatchangevalues
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+
+	setstatchanger STAT_SPATK, 2, FALSE
+	setgraphicalstatchangevalues
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+
+	setstatchanger STAT_SPDEF, 2, FALSE
+	setgraphicalstatchangevalues
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+
+	setstatchanger STAT_SPEED, 2, FALSE
+	setgraphicalstatchangevalues
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	
+	@ call BattleScript_AllStatsTwoUp
 	end2
 
 BattleScript_GymSkillStatusOnTeam::
@@ -12644,6 +12670,7 @@ BattleScript_GymSkillStatusOnTeam::
 
 BattleScript_GymSkillTerrainStealthRock::
 	call BattleScript_GymSkillTerrain
+	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
 	waitanimation
@@ -12653,6 +12680,7 @@ BattleScript_GymSkillTerrainStealthRock::
 
 BattleScript_GymSkillTerrainSpikes::
 	call BattleScript_GymSkillTerrain
+	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_SPIKES
 	waitanimation
@@ -12662,6 +12690,7 @@ BattleScript_GymSkillTerrainSpikes::
 
 BattleScript_GymSkillTerrainToxicSpikes::
 	call BattleScript_GymSkillTerrain
+	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
 	waitanimation
@@ -12671,6 +12700,7 @@ BattleScript_GymSkillTerrainToxicSpikes::
 
 BattleScript_GymSkillTerrainStickyWeb::
 	call BattleScript_GymSkillTerrain
+	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
 	waitanimation
