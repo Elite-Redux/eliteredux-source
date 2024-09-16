@@ -1128,12 +1128,14 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_BAD_OMEN] = 1,
     [ABILITY_FLUFFIEST] = 1,
     [ABILITY_IRON_GIANT] = 1,
-    [ABILITY_BALLOON_BOMBER] = 1, //idk if this will cause bugs with aftermath
+    [ABILITY_ENLIGHTENED] = 1,
+    [ABILITY_WAY_OF_PRECISION] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
     //   Cheating Death
     //   Delta Stream
+    //   Unlocked Potential
 };
 
 static const u8 sHoldEffectToType[][2] =
@@ -8400,26 +8402,32 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2
             && (gTurnStructs[gBattlerAttacker].multiHitCounter == 0 || gTurnStructs[gBattlerAttacker].multiHitCounter == 1))
         {
-            if ((CheckAndSetSwitchInAbility(battler, ABILITY_BERSERK)
-                    || CheckAndSetSwitchInAbility(battler, ABILITY_BERSERKER_RAGE)
-                    || CheckAndSetSwitchInAbility(battler, ABILITY_UNLOCKED_POTENTIAL))
+            if (((!BattlerHasAbility(battler, battler, ABILITY_BERSERK) && (gBattleScripting.abilityPopupOverwrite = ABILITY_BERSERK))
+                    || (BattlerHasAbility(battler, battler, ABILITY_BERSERKER_RAGE) && (gBattleScripting.abilityPopupOverwrite = ABILITY_BERSERKER_RAGE))
+                    || (BattlerHasAbility(battler, battler, ABILITY_UNLOCKED_POTENTIAL) && (gBattleScripting.abilityPopupOverwrite = ABILITY_UNLOCKED_POTENTIAL)))
+                && !GetAbilityState(battler, gBattleScripting.abilityPopupOverwrite)
                 && CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
             {
+                SetAbilityState(battler, gBattleScripting.abilityPopupOverwrite, TRUE);
                 SET_STATCHANGER(STAT_SPATK, 1, FALSE);
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseOnMoveEnd;
                 effect++;
             }
 
-            if (CheckAndSetSwitchInAbility(battler, ABILITY_ANGER_SHELL))
+            if (BattlerHasAbility(battler, battler, ABILITY_ANGER_SHELL) && !GetAbilityState(battler, ABILITY_ANGER_SHELL))
             {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_ANGER_SHELL;
+                SetAbilityState(battler, ABILITY_ANGER_SHELL, TRUE);
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_AngerShell;
                 effect++;
             }
 
-            if (CheckAndSetSwitchInAbility(battler, ABILITY_NO_TURNING_BACK))
+            if (BattlerHasAbility(battler, battler, ABILITY_NO_TURNING_BACK) && !GetAbilityState(battler, ABILITY_NO_TURNING_BACK))
             {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_NO_TURNING_BACK;
+                SetAbilityState(battler, ABILITY_NO_TURNING_BACK, TRUE);
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_NoTurningBack;
                 effect++;
