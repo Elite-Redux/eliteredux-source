@@ -15089,7 +15089,7 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType
     // Add a random factor.
     if (randomFactor)
     {
-        s32 roll = (IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_OMEN)) ? 15 : Random() % 16;
+        s32 roll = (IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnSide(battlerDef, ABILITY_BAD_OMEN)) ? 15 : Random() % 16;
         dmg *= 100 - roll;
         dmg /= 100;
     }
@@ -15104,7 +15104,7 @@ s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveT
 {
     s32 dmg = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, isCrit, FALSE, FALSE, typeEffectivenessModifier);
 
-    if (IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_OMEN)) randomFactor = 16;
+    if (IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnSide(battlerDef, ABILITY_BAD_OMEN)) randomFactor = 16;
 
     // Add a random factor.
     dmg *= 100 - randomFactor;
