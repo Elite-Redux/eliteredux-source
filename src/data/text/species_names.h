@@ -810,6 +810,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_ZERAORA] = _("Zeraora"),
     [SPECIES_MELTAN] = _("Meltan"),
     [SPECIES_MELMETAL] = _("Melmetal"),
+    [SPECIES_MELMETAL_MEGA] = _("Melmetal"),
     [SPECIES_GROOKEY] = _("Grookey"),
     [SPECIES_THWACKEY] = _("Thwackey"),
     [SPECIES_RILLABOOM] = _("Rillaboom"),

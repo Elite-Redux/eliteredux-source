@@ -4907,6 +4907,9 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
 
         if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_SLUSH_RUSH, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_HAIL_ANY))
             speed = (speed * 150) / 100;
+
+        if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_WAY_OF_SWIFTNESS, ability) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+            speed = (speed * 150) / 100;
     }
     
     if (GetAbilityStateAs(battlerId, ABILITY_PROTOSYNTHESIS).paradoxBoost.statId == STAT_SPEED)

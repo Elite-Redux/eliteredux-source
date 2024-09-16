@@ -10377,6 +10377,12 @@ static const union AnimCmd sAnim_MELMETAL_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_MELMETAL_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_GROOKEY_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -12019,6 +12025,12 @@ static const union AnimCmd sAnim_QWILFISH_HISUIAN_1[] =
 };
 
 static const union AnimCmd sAnim_BASCULEGION_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_BASCULEGION_F_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -17228,6 +17240,11 @@ static const union AnimCmd *const sAnims_MELMETAL[] ={
     sAnim_MELMETAL_1,
 };
 
+static const union AnimCmd *const sAnims_MELMETAL_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MELMETAL_MEGA_1,
+};
+
 static const union AnimCmd *const sAnims_GROOKEY[] ={
     sAnim_GeneralFrame0,
     sAnim_GROOKEY_1,
@@ -18775,6 +18792,11 @@ static const union AnimCmd *const sAnims_QWILFISH_HISUIAN[] ={
 static const union AnimCmd *const sAnims_BASCULEGION[] ={
     sAnim_GeneralFrame0,
     sAnim_BASCULEGION_1,
+};
+
+static const union AnimCmd *const sAnims_BASCULEGION_F[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BASCULEGION_F_1,
 };
 
 static const union AnimCmd *const sAnims_VENUSAUR_MEGA[] ={
@@ -20476,6 +20498,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(ZERAORA),
     ANIM_CMD(MELTAN),
     ANIM_CMD(MELMETAL),
+    ANIM_CMD(MELMETAL_MEGA),
     ANIM_CMD(GROOKEY),
     ANIM_CMD(THWACKEY),
     ANIM_CMD(RILLABOOM),
@@ -20638,6 +20661,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(OVERQWIL),
     ANIM_CMD(ENAMORUS),
     ANIM_CMD(BASCULEGION),
+    ANIM_CMD(BASCULEGION_F),
     ANIM_CMD(SPRIGATITO),
     ANIM_CMD(VENUSAUR_MEGA),
     ANIM_CMD(CHARIZARD_MEGA_X),

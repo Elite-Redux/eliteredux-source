@@ -697,8 +697,14 @@
 #define ABILITY_MAXIMUM_ACCELERATION 675 // Moves use the Speed stat for damage calculations.
 #define ABILITY_SIDEWINDER 676 // First biting move each entry gets +1 priority. Resets on KO.
 #define ABILITY_PETRIFY 677 // Clears stat buffs then lowers speed by one stage on entry.
+#define ABILITY_FLUFFIEST 678 // Quarters contact damage taken. 4x weak to fire.
+#define ABILITY_WAY_OF_PRECISION 679 // Inner Focus + Precise Fist.
+#define ABILITY_WAY_OF_SWIFTNESS 680 // Pretentious + Swift Swim.
+#define ABILITY_ATOMIC_PUNCH 681 // Iron Fist + Steelworker.
+#define ABILITY_IRON_GIANT 682 // Heatproof + Juggernaut.
+#define ABILITY_MASTER_HAND 683 // Mega Launcher + Rampage
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_PETRIFY + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_MASTER_HAND + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

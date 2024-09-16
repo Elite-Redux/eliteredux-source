@@ -1933,3 +1933,8 @@ static const u16 sAmphybuzzFormSpeciesIdTable[] = {
     SPECIES_AMPHYBUZZ_MEGA,
     FORM_SPECIES_END,   
 };
+static const u16 sMelmetalFormSpeciesIdTable[] = {
+    SPECIES_MELMETAL,
+    SPECIES_MELMETAL_MEGA,
+    FORM_SPECIES_END,   
+};

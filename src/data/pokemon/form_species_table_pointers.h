@@ -1025,4 +1025,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_AMPHYBUZZ] = sAmphybuzzFormSpeciesIdTable,
 
+    [SPECIES_MELMETAL_MEGA] = sMelmetalFormSpeciesIdTable,
+    [SPECIES_MELMETAL] = sMelmetalFormSpeciesIdTable,
+
 };
