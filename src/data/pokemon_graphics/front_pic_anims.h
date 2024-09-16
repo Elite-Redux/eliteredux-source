@@ -11171,6 +11171,11 @@ static const union AnimCmd sAnim_BEWEAR_REDUX_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_BEWARDEN_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_STUFFUL_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -17927,6 +17932,11 @@ static const union AnimCmd *const sAnims_BEWEAR_REDUX[] ={
     sAnim_BEWEAR_REDUX_1,
 };
 
+static const union AnimCmd *const sAnims_BEWARDEN[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BEWARDEN_1,
+};
+
 static const union AnimCmd *const sAnims_STUFFUL_REDUX[] ={
     sAnim_GeneralFrame0,
     sAnim_STUFFUL_REDUX_1,
@@ -20607,6 +20617,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(SIMIPOUR_REDUX),
     ANIM_CMD(PANPOUR_REDUX),
     ANIM_CMD(BEWEAR_REDUX),
+    ANIM_CMD(BEWARDEN),
     ANIM_CMD(STUFFUL_REDUX),
     ANIM_CMD(BEEDRILL_REDUX),
     ANIM_CMD(KAKUNA_REDUX),

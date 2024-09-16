@@ -1264,6 +1264,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 
     [SPECIES_STUFFUL_REDUX] = _("Stufful"),
     [SPECIES_BEWEAR_REDUX] = _("Bewear"),
+    [SPECIES_BEWARDEN] = _("Bewarden"),
 
     [SPECIES_WEEDLE_REDUX] = _("Weedle"),
     [SPECIES_KAKUNA_REDUX] = _("Kakuna"),

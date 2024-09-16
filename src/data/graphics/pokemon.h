@@ -7997,6 +7997,12 @@ const u32 gMonPalette_Polartic_Bluemoon[]           = INCBIN_U32("graphics/pokem
 const u32 gMonShinyPalette_Polartic_Bluemoon[]      = INCBIN_U32("graphics/pokemon/polartic/bluemoon/shiny.gbapal.lz");
 const u8  gMonIcon_Polartic_Bluemoon[]              = INCBIN_U8("graphics/pokemon/polartic/bluemoon/icon.4bpp");
 
+const u32 gMonFrontPic_Bewarden[]          = INCBIN_U32("graphics/pokemon/bewarden/front.4bpp.lz");
+const u32 gMonBackPic_Bewarden[]           = INCBIN_U32("graphics/pokemon/bewarden/back.4bpp.lz");
+const u32 gMonPalette_Bewarden[]           = INCBIN_U32("graphics/pokemon/bewarden/normal.gbapal.lz");
+const u32 gMonShinyPalette_Bewarden[]      = INCBIN_U32("graphics/pokemon/bewarden/shiny.gbapal.lz");
+const u8  gMonIcon_Bewarden[]              = INCBIN_U8("graphics/pokemon/bewarden/icon.4bpp");
+
 //Rare Shinies
 const u32 gMonRareShinyPalette_Corphish[]       = INCBIN_U32("graphics/pokemon/corphish/shinyalt1.gbapal.lz");
 const u32 gMonRareShinyPalette_Morpeko[]        = INCBIN_U32("graphics/pokemon/morpeko/rareshiny.gbapal.lz");

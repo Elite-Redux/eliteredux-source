@@ -998,6 +998,7 @@ const u8 *const gMonIconTable[] =
 
     [SPECIES_STUFFUL_REDUX] = gMonIcon_Stufful_Redux,
     [SPECIES_BEWEAR_REDUX] = gMonIcon_Bewear_Redux,
+    [SPECIES_BEWARDEN] = gMonIcon_Bewarden,
     
     [SPECIES_WEEDLE_REDUX] = gMonIcon_Weedle_Redux,
     [SPECIES_KAKUNA_REDUX] = gMonIcon_Kakuna_Redux,
@@ -2915,6 +2916,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_SIMIPOUR_REDUX]        = 2,
     [SPECIES_STUFFUL_REDUX]         = 2,
     [SPECIES_BEWEAR_REDUX]          = 2,
+    [SPECIES_BEWARDEN]              = 2,
     [SPECIES_WEEDLE_REDUX]          = 0,
     [SPECIES_KAKUNA_REDUX]          = 0,
     [SPECIES_BEEDRILL_REDUX]        = 0,

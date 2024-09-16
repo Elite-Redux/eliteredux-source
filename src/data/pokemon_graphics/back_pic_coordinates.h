@@ -4770,6 +4770,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_BEWARDEN] =
+    {
+        .size = 0,
+        .y_offset =  10
+    },
     [SPECIES_STUFFUL_REDUX] =
     {
         .size = 0,

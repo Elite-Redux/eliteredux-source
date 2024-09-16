@@ -11130,6 +11130,11 @@ extern const u32 gMonBackPic_BasculegionF[];
 extern const u32 gMonPalette_BasculegionF[];
 extern const u32 gMonShinyPalette_BasculegionF[];
 extern const u8  gMonIcon_BasculegionF[];
+extern const u32 gMonFrontPic_Bewarden[];
+extern const u32 gMonBackPic_Bewarden[];
+extern const u32 gMonPalette_Bewarden[];
+extern const u32 gMonShinyPalette_Bewarden[];
+extern const u8  gMonIcon_Bewarden[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
