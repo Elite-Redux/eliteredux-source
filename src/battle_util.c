@@ -10923,9 +10923,9 @@ bool32 CanSleep(u8 battlerId)
     if (!CanGetStatus(battlerId)) return FALSE;
 
     if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_INSOMNIA, ability)
-      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_VITAL_SPIRIT, ability)
-      || IsAbilityOnSide(battlerId, ABILITY_SWEET_VEIL)
-      || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_ELECTRIC_TERRAIN))
+        || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_VITAL_SPIRIT, ability)
+        || IsAbilityOnSide(battlerId, ABILITY_SWEET_VEIL)
+        || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_ELECTRIC_TERRAIN))
         return FALSE;
     return TRUE;
 }
@@ -10940,7 +10940,7 @@ bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget)
     if (!CanGetStatus(battlerTarget)) return FALSE;
         
     if (!(CanPoisonType(battlerAttacker, battlerTarget))
-     || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_IMMUNITY, ability))
+        || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_IMMUNITY, ability))
         return FALSE;
     return TRUE;
 }
@@ -10955,11 +10955,11 @@ bool32 CanBeBurned(u8 battlerId)
     if (!CanGetStatus(battlerId)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FIRE)
-      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_WATER_VEIL, ability)
-      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_PURIFYING_WATERS, ability)
-      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_WATER_BUBBLE, ability)
-      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_FLAME_BUBBLE, ability)
-      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_THERMAL_EXCHANGE, ability))
+        || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_WATER_VEIL, ability)
+        || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_PURIFYING_WATERS, ability)
+        || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_WATER_BUBBLE, ability)
+        || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_FLAME_BUBBLE, ability)
+        || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_THERMAL_EXCHANGE, ability))
         return FALSE;
     return TRUE;
 }
@@ -10987,8 +10987,8 @@ bool32 CanBeParalyzedIgnoreType(u8 battlerAttacker, u8 battlerTarget)
     if (!CanGetStatus(battlerTarget)) return FALSE;
 
     if (BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_LIMBER, ability)
-     || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_JUGGERNAUT, ability)
-      || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_IRON_GIANT, ability))
+        || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_JUGGERNAUT, ability)
+        || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_IRON_GIANT, ability))
         return FALSE;
     return TRUE;
 }
@@ -11000,8 +11000,8 @@ bool32 CanBeFrozen(u8 battlerId)
     if (!CanGetStatus(battlerId)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)
-      || IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY)
-      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_MAGMA_ARMOR, battlerId))
+        || IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY)
+        || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_MAGMA_ARMOR, battlerId))
         return FALSE;
     return TRUE;
 }
@@ -11014,7 +11014,7 @@ bool32 CanGetFrostbite(u8 battlerId)
     if (!CanGetStatus(battlerId)) return FALSE;
 
     if (IS_BATTLER_OF_TYPE(battlerId, TYPE_ICE)
-      || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_MAGMA_ARMOR, battlerId))
+        || BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_MAGMA_ARMOR, battlerId))
         return FALSE;
     return TRUE;
 }
@@ -11040,9 +11040,9 @@ bool32 CanBeConfused(u8 battlerId)
         return TRUE;
 
     if (BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_OWN_TEMPO)
-      || BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_DISCIPLINE)
-      || gBattleMons[gEffectBattler].status2 & STATUS2_CONFUSION
-      || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN))
+        || BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_DISCIPLINE)
+        || gBattleMons[gEffectBattler].status2 & STATUS2_CONFUSION
+        || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN))
         return FALSE;
     return TRUE;
 }
@@ -13786,8 +13786,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
 
         case ABILITY_ATOMIC_PUNCH:
             if (moveType == TYPE_STEEL) MUL(1.3);
-            return;
-        if (IS_IRON_FIST(battlerAtk, move)) MUL(1.3);
+            if (IS_IRON_FIST(battlerAtk, move)) MUL(1.3);
             return;
         
         case ABILITY_PLUS:
