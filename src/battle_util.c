@@ -13871,6 +13871,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.25);
             return;
         
+        case ABILITY_FINAL_BLOW:
         case ABILITY_FATAL_PRECISION:
             if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.2);
             return;
