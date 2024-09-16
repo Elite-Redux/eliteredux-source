@@ -13318,7 +13318,7 @@ static void Cmd_jumpifabilityonside(void) // King's wrath + intimidate
     }
     else
     {
-        gBattlescriptCurrInstr += 8;
+        gBattlescriptCurrInstr += 9;
     }
 }
 

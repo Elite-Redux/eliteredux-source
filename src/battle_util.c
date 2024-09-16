@@ -3044,9 +3044,9 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_LEECH_SEED:  // leech seed
-            if ((gStatuses3[gActiveBattler] & STATUS3_LEECHSEED)
-             && gBattleMons[gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER].hp != 0
-             && gBattleMons[gActiveBattler].hp != 0)
+            if (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED
+                && IsBattlerAlive(gActiveBattler)
+                && IsBattlerAlive(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER))
             {
                 MAGIC_GUARD_CHECK;
 
