@@ -28,6 +28,7 @@
 #include "constants/map_types.h"
 #include "constants/rgb.h"
 #include "constants/weather.h"
+#include "mgba_printf/mgba.h"
 
 /*
  *  This file handles region maps generally, and the map used when selecting a fly destination.
@@ -115,6 +116,7 @@ static void SpriteCB_FlyDestIcon(struct Sprite *sprite);
 static void CB_FadeInFlyMap(void);
 static void CB_HandleFlyMapInput(void);
 static void CB_ExitFlyMap(void);
+static void AutoClipFlyMap(void);
 
 // .rodata
 
@@ -694,6 +696,14 @@ static u8 ProcessRegionMapInput_Full(void)
     {
         input = MAP_INPUT_B_BUTTON;
     }
+    if (JOY_NEW(L_BUTTON))
+    {
+        input = MAP_INPUT_L_BUTTON;
+    }
+    if (JOY_NEW(R_BUTTON))
+    {
+        input = MAP_INPUT_R_BUTTON;
+    }
     if (input == MAP_INPUT_MOVE_START)
     {
         gRegionMap->cursorMovementFrameCounter = 4;
@@ -772,6 +782,14 @@ static u8 ProcessRegionMapInput_Zoomed(void)
     if (JOY_NEW(B_BUTTON))
     {
         input = MAP_INPUT_B_BUTTON;
+    }
+    if (JOY_NEW(L_BUTTON))
+    {
+        input = MAP_INPUT_L_BUTTON;
+    }
+    if (JOY_NEW(R_BUTTON))
+    {
+        input = MAP_INPUT_R_BUTTON;
     }
     if (input == MAP_INPUT_MOVE_START)
     {
@@ -1987,8 +2005,41 @@ static void CB_HandleFlyMapInput(void)
             sFlyMap->choseFlyLocation = FALSE;
             SetFlyMapCallback(CB_ExitFlyMap);
             break;
+        case MAP_INPUT_L_BUTTON:
+        case MAP_INPUT_R_BUTTON:
+            AutoClipFlyMap();
+            break;
         }
     }
+}
+
+static void AutoClipFlyMap(void){
+    u8 i          = 0;
+    u8 closestMap = MAPSEC_NONE;
+    u8 closestVal = 0xFF; 
+    u8 x          = gRegionMap->cursorPosX - MAPCURSOR_X_MIN;
+    u8 y          = gRegionMap->cursorPosY - MAPCURSOR_Y_MIN;
+    u8 delta      = 0;
+    while (i != MAPSEC_NONE)
+    {
+        delta = abs(gRegionMapEntries[i].y - y) + abs(gRegionMapEntries[i].x - x);
+        // if the total stray is lower than the previous stray then it's closer
+        if (delta < closestVal){
+            // clip only it's a flying map
+            if (GetMapsecType(i) == MAPSECTYPE_CITY_CANFLY){
+                closestVal = delta;
+                closestMap = i;
+            }
+        }
+        i++;
+    }
+    // set the cursor on the clipped location
+    gRegionMap->cursorPosX = gRegionMapEntries[closestMap].x + MAPCURSOR_X_MIN;
+    gRegionMap->cursorPosY = gRegionMapEntries[closestMap].y + MAPCURSOR_Y_MIN;
+    gRegionMap->cursorSprite->x = (gRegionMap->cursorPosX * 8) + 4;
+    gRegionMap->cursorSprite->y = (gRegionMap->cursorPosY * 8) + 4;
+    gRegionMap->inputCallback = MoveRegionMapCursor_Full;
+    //gRegionMapEntries
 }
 
 static void CB_ExitFlyMap(void)

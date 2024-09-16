@@ -14,6 +14,8 @@ enum
     MAP_INPUT_MOVE_END,
     MAP_INPUT_A_BUTTON,
     MAP_INPUT_B_BUTTON,
+    MAP_INPUT_L_BUTTON,
+    MAP_INPUT_R_BUTTON,
 };
 
 enum {
