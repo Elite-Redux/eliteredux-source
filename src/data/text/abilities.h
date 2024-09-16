@@ -646,6 +646,13 @@ static const u8 sAbilityBloodStigmaDescription[] = _("Immune to status. Gets a 2
 static const u8 sAbilityMaximumAccelerationDescription[] = _("Moves use the Speed stat\nfor damage calculations.");
 static const u8 sAbilitySidewinderDescription[] = _("First biting move each entry gets\n+1 priority. Resets on KO.");
 static const u8 sAbilityPetrifyDescription[] = _("Clears stat buffs then lowers\nspeed by one stage on entry.");
+static const u8 sAbilityFluffiestDescription[] = _("Quarters contact damage taken.\n4x weak to fire.");
+static const u8 sAbilityWayOfPrecisionDescription[] = _("Inner Focus + Precise Fist.");
+static const u8 sAbilityWayOfSwiftnessDescription[] = _("Pretentious + Swift Swim.");
+static const u8 sAbilityAtomicPunchDescription[] = _("Iron Fist + Steelworker.");
+static const u8 sAbilityIronGiantDescription[] = _("Heatproof + Juggernaut.");
+static const u8 sAbilityMasterHandDescription[] = _("Mega Launcher + Rampage.");
+static const u8 sAbilityFinalBlowDescription[] = _("Unseen Fist + Fatal Precision.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1327,6 +1334,13 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_MAXIMUM_ACCELERATION] = _("Max Acceleration"),
     [ABILITY_SIDEWINDER] = _("Sidewinder"),
     [ABILITY_PETRIFY] = _("Petrify"),
+    [ABILITY_FLUFFIEST] = _("Fluffiest"),
+    [ABILITY_WAY_OF_PRECISION] = _("Way of Precision"),
+    [ABILITY_WAY_OF_SWIFTNESS] = _("Way of Swiftness"),
+    [ABILITY_ATOMIC_PUNCH] = _("Atomic Punch"),
+    [ABILITY_IRON_GIANT] = _("Iron Giant"),
+    [ABILITY_MASTER_HAND] = _("Master Hand"),
+    [ABILITY_FINAL_BLOW] = _("Final Blow"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2009,4 +2023,11 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_MAXIMUM_ACCELERATION] = sAbilityMaximumAccelerationDescription,
     [ABILITY_SIDEWINDER] = sAbilitySidewinderDescription,
     [ABILITY_PETRIFY] = sAbilityPetrifyDescription,
+    [ABILITY_FLUFFIEST] = sAbilityFluffiestDescription,
+    [ABILITY_WAY_OF_PRECISION] = sAbilityWayOfPrecisionDescription,
+    [ABILITY_WAY_OF_SWIFTNESS] = sAbilityWayOfSwiftnessDescription,
+    [ABILITY_ATOMIC_PUNCH] = sAbilityAtomicPunchDescription,
+    [ABILITY_IRON_GIANT] = sAbilityIronGiantDescription,
+    [ABILITY_MASTER_HAND] = sAbilityMasterHandDescription,
+    [ABILITY_FINAL_BLOW] = sAbilityFinalBlowDescription,
 };

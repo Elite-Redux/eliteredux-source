@@ -1938,6 +1938,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
 		return 101;
     else if(move == MOVE_FOCUS_BLAST && (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_UNLOCKED_POTENTIAL, atkAbility)))
 		return 101;
+    else if(move == MOVE_FOCUS_BLAST && (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_WAY_OF_PRECISION, atkAbility)))
+		return 101;
 
     if ((gStatuses3[battlerDef] & STATUS3_PHANTOM_FORCE)
         || (!(gBattleMoves[move].flags & FLAG_DMG_IN_AIR) && gStatuses3[battlerDef] & STATUS3_ON_AIR)
@@ -2007,6 +2009,10 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         }
     }
 	else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_FATAL_PRECISION, atkAbility)
+        && !IS_MOVE_STATUS(move)
+        && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0))
+        return 101;
+    else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_FINAL_BLOW, atkAbility)
         && !IS_MOVE_STATUS(move)
         && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0))
         return 101;
@@ -2292,6 +2298,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SUPER_LUCK))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER))
                     + 2 * (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BATTLE_AURA))
+                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WAY_OF_PRECISION)  && IS_IRON_FIST(battlerAtk, move))
                     + gVolatileStructs[battlerAtk].critBoost;
 
         if (critChance >= ARRAY_COUNT(sCriticalHitChance))
@@ -3642,7 +3649,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 }
                 break;
             case MOVE_EFFECT_FLINCH:
-                if (!BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_INNER_FOCUS) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_ENLIGHTENED) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_UNLOCKED_POTENTIAL))
+                if (!BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_INNER_FOCUS) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_ENLIGHTENED) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_UNLOCKED_POTENTIAL) && !BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_WAY_OF_PRECISION))
                 {
                     gBattleMons[gEffectBattler].status2 |= sStatusFlagsForMoveEffects[gBattleScripting.moveEffect];
                 }
@@ -4173,6 +4180,10 @@ static void Cmd_seteffectwithchance(void)
 
     //Precise fist boosts
     if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRECISE_FIST)
+             && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
+        percentChance = percentChance * 5;
+
+    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_WAY_OF_PRECISION)
              && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
         percentChance = percentChance * 5;
 
@@ -9275,13 +9286,18 @@ static void Cmd_various(void)
         MarkBattlerForControllerExec(gActiveBattler);
         break;
     case VARIOUS_TRY_ACTIVATE_RAMPAGE:
-        if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAMPAGE) || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BERSERKER_RAGE))
-          && HasAttackerFaintedTarget()
-          && !NoAliveMonsForEitherParty())
         {
-            SetAbilityState(gActiveBattler, BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAMPAGE) ? ABILITY_RAMPAGE : ABILITY_BERSERKER_RAGE, TRUE);
+        int ability = 0;
+        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAMPAGE)) ability = ABILITY_RAMPAGE;
+        else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BERSERKER_RAGE)) ability = ABILITY_BERSERKER_RAGE;
+        else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MASTER_HAND)) ability = ABILITY_MASTER_HAND;
+        
+        if (ability && HasAttackerFaintedTarget() && !NoAliveMonsForEitherParty())
+        {
+            SetAbilityState(gActiveBattler, ability, TRUE);
             gVolatileStructs[gActiveBattler].rechargeTimer = 0;
             gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
+        }
         }
         break;
     case VARIOUS_TRY_ACTIVATE_MOXIE:    // and variants
@@ -9332,6 +9348,17 @@ static void Cmd_various(void)
             {
                 gVolatileStructs[gActiveBattler].critBoost++;
                 gBattleScripting.abilityPopupOverwrite = ABILITY_PRETENTIOUS;
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
+                BattleScriptPush(gBattlescriptCurrInstr);
+                gBattlescriptCurrInstr = BattleScript_AbilityBoostsCrit;
+            }
+
+            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_WAY_OF_SWIFTNESS)  //to be compressed
+                && !NoAliveMonsForEitherParty()
+                && gVolatileStructs[gActiveBattler].critBoost < 3)
+            {
+                gVolatileStructs[gActiveBattler].critBoost++;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_WAY_OF_SWIFTNESS;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
                 BattleScriptPush(gBattlescriptCurrInstr);
                 gBattlescriptCurrInstr = BattleScript_AbilityBoostsCrit;
@@ -13089,7 +13116,8 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
                BATTLER_HAS_ABILITY(battler, ABILITY_DISCIPLINE)   ||
                BATTLER_HAS_ABILITY(battler, ABILITY_INNER_FOCUS)  ||
                BATTLER_HAS_ABILITY(battler, ABILITY_UNLOCKED_POTENTIAL)  ||
-               BATTLER_HAS_ABILITY(battler, ABILITY_ENLIGHTENED)) 
+               BATTLER_HAS_ABILITY(battler, ABILITY_ENLIGHTENED) ||
+               BATTLER_HAS_ABILITY(battler, ABILITY_WAY_OF_PRECISION))
                 return TRUE;
 
             checkOblivious = TRUE;

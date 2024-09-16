@@ -4055,6 +4055,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x85,
         .y_offset = 13,
     },
+    [SPECIES_MELMETAL_MEGA] =
+    {
+        .size = 0x85,
+        .y_offset = 14,
+    },
     [SPECIES_GROOKEY] =
     {
         .size = 0x67,
@@ -6317,6 +6322,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .y_offset =  0
     },
     [SPECIES_BASCULEGION] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_BASCULEGION_F] =
     {
         .size = 0,
         .y_offset =  0

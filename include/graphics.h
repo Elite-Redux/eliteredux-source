@@ -11135,6 +11135,11 @@ extern const u32 gMonBackPic_Bewarden[];
 extern const u32 gMonPalette_Bewarden[];
 extern const u32 gMonShinyPalette_Bewarden[];
 extern const u8  gMonIcon_Bewarden[];
+extern const u32 gMonFrontPic_MelmetalMega[];
+extern const u32 gMonBackPic_MelmetalMega[];
+extern const u32 gMonPalette_MelmetalMega[];
+extern const u32 gMonShinyPalette_MelmetalMega[];
+extern const u8  gMonIcon_MelmetalMega[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

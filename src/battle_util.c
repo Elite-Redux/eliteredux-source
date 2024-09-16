@@ -228,6 +228,7 @@ void HandleAction_UseMove(void)
     if (!gProcessingExtraAttacks)
     {
         SetAbilityState(gBattlerAttacker, ABILITY_RAMPAGE, FALSE);
+        SetAbilityState(gBattlerAttacker, ABILITY_MASTER_HAND, FALSE);
         SetAbilityState(gBattlerAttacker, ABILITY_BERSERKER_RAGE, FALSE);
     }
 
@@ -1125,6 +1126,9 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_BLOODLUST] = 1,
     [ABILITY_SMOKEY_MANEUVERS] = 1,
     [ABILITY_BAD_OMEN] = 1,
+    [ABILITY_FLUFFIEST] = 1,
+    [ABILITY_IRON_GIANT] = 1,
+    [ABILITY_BALLOON_BOMBER] = 1, //idk if this will cause bugs with aftermath
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -2001,6 +2005,7 @@ u8 TrySetCantSelectMoveBattleScript(void)
     if (move == gLastChosenMove[gActiveBattler]
         && gBattleMoves[move].everyOtherTurn
         && !GetAbilityState(gActiveBattler, ABILITY_RAMPAGE)
+        && !GetAbilityState(gActiveBattler, ABILITY_MASTER_HAND)
         && !GetAbilityState(gActiveBattler, ABILITY_BERSERKER_RAGE))
     {
         if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
@@ -2063,6 +2068,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
         else if (gBattleMons[battlerId].moves[i] == gLastChosenMove[battlerId]
             && gBattleMoves[gBattleMons[battlerId].moves[i]].everyOtherTurn
             && !GetAbilityState(battlerId, ABILITY_RAMPAGE)
+            && !GetAbilityState(battlerId, ABILITY_MASTER_HAND)
             && !GetAbilityState(battlerId, ABILITY_BERSERKER_RAGE))
             unusableMoves |= 1 << i;
         else if (IsSleepClauseDisablingMove(battlerId, gBattleMons[battlerId].moves[i])){
@@ -10981,7 +10987,8 @@ bool32 CanBeParalyzedIgnoreType(u8 battlerAttacker, u8 battlerTarget)
     if (!CanGetStatus(battlerTarget)) return FALSE;
 
     if (BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_LIMBER, ability)
-      || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_JUGGERNAUT, ability))
+     || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_JUGGERNAUT, ability)
+      || BATTLER_HAS_ABILITY_FAST(battlerTarget, ABILITY_IRON_GIANT, ability))
         return FALSE;
     return TRUE;
 }
@@ -13655,6 +13662,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_IRON_BARRAGE:
+        case ABILITY_MASTER_HAND:
         case ABILITY_MEGA_LAUNCHER:
             if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.5);
             return;
@@ -13774,6 +13782,12 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_STEELWORKER:
             if (moveType == TYPE_STEEL) MUL(1.3);
+            return;
+
+        case ABILITY_ATOMIC_PUNCH:
+            if (moveType == TYPE_STEEL) MUL(1.3);
+            return;
+        if (IS_IRON_FIST(battlerAtk, move)) MUL(1.3);
             return;
         
         case ABILITY_PLUS:
@@ -13897,6 +13911,11 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (IsMoveMakingContact(move, battlerAtk)) MUL(0.5);
             return;
         
+        case ABILITY_FLUFFIEST:
+            if (moveType == TYPE_FIRE) RESISTANCE(4.0);
+            if (IsMoveMakingContact(move, battlerAtk)) MUL(0.25);
+            return;
+        
         case ABILITY_LIQUIFIED:
             if (moveType == TYPE_WATER) RESISTANCE(2);
             if (IsMoveMakingContact(move, battlerAtk)) MUL(0.5);
@@ -13912,6 +13931,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_HEATPROOF:
         case ABILITY_WATER_BUBBLE:
         case ABILITY_FLAME_BUBBLE:
+        case ABILITY_IRON_GIANT:
             if (moveType == TYPE_FIRE) RESISTANCE(.5);
             return;
         
@@ -14314,6 +14334,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                 && gBattleMoves[move].effect != EFFECT_FACADE
                 && !BATTLER_HAS_ABILITY(battler, ABILITY_FLARE_BOOST)
                 && !BATTLER_HAS_ABILITY(battler, ABILITY_HEATPROOF)
+                && !BATTLER_HAS_ABILITY(battler, ABILITY_IRON_GIANT)
                 && !BATTLER_HAS_ABILITY(battler, ABILITY_GUTS))
                     statBase /= 2;
 
@@ -14521,6 +14542,10 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
         }
         else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_JUGGERNAUT) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        {
+            secondaryAtkStatToUse = STAT_DEF;
+        }
+        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_IRON_GIANT) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
         {
             secondaryAtkStatToUse = STAT_DEF;
         }
