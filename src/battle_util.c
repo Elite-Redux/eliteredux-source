@@ -8096,7 +8096,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 		}
 		// Aftermath
-		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_AFTERMATH) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BALLOON_BOMBER)){
+		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_AFTERMATH) || BattlerHasAbility(battler, /* Ignore mold breaker */ battler, ABILITY_BALLOON_BOMBER)){
             if (ShouldApplyOnHitAffect(gBattlerAttacker)
                 && !IsBattlerAlive(battler)
                 && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
