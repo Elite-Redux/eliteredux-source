@@ -1688,4 +1688,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_AMPHYBUZZ_MEGA] = sAmphybuzzLevelUpLearnset,
     [SPECIES_GIMMIGHOUL_ROAMING] = sGimmighoulLevelUpLearnset,
     [SPECIES_VELOZEL] = sVelozelLevelUpLearnset,
+    [SPECIES_URSHIFU_MEGA] = sUrshifuLevelUpLearnset,
+    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA] = sUrshifuLevelUpLearnset,
 };

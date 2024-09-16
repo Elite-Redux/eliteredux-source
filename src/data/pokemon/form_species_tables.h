@@ -1064,6 +1064,8 @@ static const u16 sEternatusFormSpeciesIdTable[] = {
 static const u16 sUrshifuFormSpeciesIdTable[] = {
     SPECIES_URSHIFU,
     SPECIES_URSHIFU_RAPID_STRIKE_STYLE,
+    SPECIES_URSHIFU_MEGA,
+    SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA,
     FORM_SPECIES_END,
 };
 

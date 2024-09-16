@@ -460,8 +460,7 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         RUN_BATTLESCRIPT(BattleScript_GymSkillMagnetRise)
     
     case BATTLE_EVENT_LAST_STAND:
-    #warning "pay attention this == it's for debug"
-        if (gFaintedMonCount[1] == battleEvent->data0)
+        if (gFaintedMonCount[1] != battleEvent->data0)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         SET_EXTRA_STATS_LEVEL(extraAttackLevel, 5);
         SET_EXTRA_STATS_LEVEL(extraDefenseLevel, 5);

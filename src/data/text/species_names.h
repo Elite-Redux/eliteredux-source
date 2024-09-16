@@ -1722,6 +1722,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_ETERNATUS_ETERNAMAX] = _("Eternatus"),
     // Urshifu
     [SPECIES_URSHIFU_RAPID_STRIKE_STYLE] = _("UrshifuRapid"),
+    [SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA] = _("UrshifuRapid"),
+    [SPECIES_URSHIFU_MEGA] = _("Urshifu"),
     // Zarude
     [SPECIES_ZARUDE_DADA] = _("Zarude"),
     // Calyrex
