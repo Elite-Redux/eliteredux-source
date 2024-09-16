@@ -10795,7 +10795,7 @@ static void Cmd_various(void)
         if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PROTOSYNTHESIS))
         {
             struct ParadoxBoost state = GetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS).paradoxBoost;
-            if (state.source == PARADOX_WEATHER_ACTIVE && !(gBattleWeather & WEATHER_SUN_ANY))
+            if (state.source == PARADOX_WEATHER_ACTIVE && !(WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY))
             {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_PROTOSYNTHESIS;
                 if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY)
@@ -10813,7 +10813,7 @@ static void Cmd_various(void)
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ParadoxBoostEnds;
             }
-            else if (state.source == PARADOX_BOOST_NOT_ACTIVE && (gBattleWeather & WEATHER_SUN_ANY))
+            else if (state.source == PARADOX_BOOST_NOT_ACTIVE && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY)
             {
                 struct ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
                 gBattleScripting.abilityPopupOverwrite = ABILITY_PROTOSYNTHESIS;
@@ -10865,7 +10865,7 @@ static void Cmd_various(void)
         if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_QUARK_DRIVE))
         {
             struct ParadoxBoost state = GetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE).paradoxBoost;
-            if (state.source == PARADOX_WEATHER_ACTIVE && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
+            if (state.source == PARADOX_WEATHER_ACTIVE && !(TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
             {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_QUARK_DRIVE;
                 if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY)
@@ -10883,7 +10883,7 @@ static void Cmd_various(void)
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_ParadoxBoostEnds;
             }
-            else if (state.source == PARADOX_BOOST_NOT_ACTIVE && (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
+            else if (state.source == PARADOX_BOOST_NOT_ACTIVE && TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
             {
                 struct ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
                 gBattleScripting.abilityPopupOverwrite = ABILITY_QUARK_DRIVE;
