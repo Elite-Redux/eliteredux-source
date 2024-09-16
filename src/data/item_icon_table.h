@@ -638,6 +638,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_TORTERRANITE_R]   = {gItemIcon_Torterranite_R, gItemIconPalette_Torterranite_R},
     [ITEM_REUNICLUSITE_R]   = {gItemIcon_Reuniclusite_R, gItemIconPalette_Reuniclusite_R},
     [ITEM_TOXTRICITITE_R]   = {gItemIcon_Toxtricitite_R, gItemIconPalette_Toxtricitite_R},
+    [ITEM_URSHIFITE]   = {gItemIcon_Urshifite, gItemIconPalette_Urshifite},
     
     [ITEM_HITMONCHANITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_HITMONLEENITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonlite},
