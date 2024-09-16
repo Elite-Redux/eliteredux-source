@@ -2020,13 +2020,15 @@ static void AutoClipFlyMap(void){
     u8 x          = gRegionMap->cursorPosX - MAPCURSOR_X_MIN;
     u8 y          = gRegionMap->cursorPosY - MAPCURSOR_Y_MIN;
     u8 delta      = 0;
+    u8 tempFlyT   = MAPSECTYPE_CITY_CANTFLY;
     while (i != MAPSEC_NONE)
     {
         delta = abs(gRegionMapEntries[i].y - y) + abs(gRegionMapEntries[i].x - x);
         // if the total stray is lower than the previous stray then it's closer
         if (delta < closestVal){
             // clip only it's a flying map
-            if (GetMapsecType(i) == MAPSECTYPE_CITY_CANFLY){
+            tempFlyT = GetMapsecType(i);
+            if (tempFlyT == MAPSECTYPE_CITY_CANFLY || tempFlyT == MAPSECTYPE_BATTLE_FRONTIER){
                 closestVal = delta;
                 closestMap = i;
             }
