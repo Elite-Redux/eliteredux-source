@@ -3044,9 +3044,9 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_LEECH_SEED:  // leech seed
-            if ((gStatuses3[gActiveBattler] & STATUS3_LEECHSEED)
-             && gBattleMons[gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER].hp != 0
-             && gBattleMons[gActiveBattler].hp != 0)
+            if (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED
+                && IsBattlerAlive(gActiveBattler)
+                && IsBattlerAlive(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER))
             {
                 MAGIC_GUARD_CHECK;
 
@@ -13772,6 +13772,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (moveType == TYPE_GRASS) MUL(1.2);
             return;
         
+        case ABILITY_STEELWORKER:
+            if (moveType == TYPE_STEEL) MUL(1.3);
+            return;
+        
         case ABILITY_PLUS:
         case ABILITY_MINUS:
             if (BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerAtk), ABILITY_PLUS) || BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerDef), ABILITY_PLUS)) MUL(2.0);
@@ -14371,7 +14375,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
             // Hadron Engine
             if (BATTLER_HAS_ABILITY(battler, ABILITY_HADRON_ENGINE)
-                && TERRAIN_HAS_EFFECT && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
+                && TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
                     statBase = statBase * 4 / 3;
                 
             // Frostbite
@@ -15085,7 +15089,7 @@ static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType
     // Add a random factor.
     if (randomFactor)
     {
-        s32 roll = (IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_OMEN)) ? 15 : Random() % 16;
+        s32 roll = (IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnSide(battlerDef, ABILITY_BAD_OMEN)) ? 15 : Random() % 16;
         dmg *= 100 - roll;
         dmg /= 100;
     }
@@ -15100,7 +15104,7 @@ s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveT
 {
     s32 dmg = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, isCrit, FALSE, FALSE, typeEffectivenessModifier);
 
-    if (IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnOpposingSide(battlerDef, ABILITY_BAD_OMEN)) randomFactor = 16;
+    if (IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK) || IsAbilityOnSide(battlerDef, ABILITY_BAD_OMEN)) randomFactor = 16;
 
     // Add a random factor.
     dmg *= 100 - randomFactor;
