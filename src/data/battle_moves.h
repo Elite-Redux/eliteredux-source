@@ -9683,10 +9683,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_JAGGED_PUNCH] =
     {
-        .effect = EFFECT_BLEED_HIT,
+        .effect = EFFECT_STEALTH_ROCK_HIT,
         .power = 75,
         .type = TYPE_ROCK,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 10,
         .target = MOVE_TARGET_SELECTED,

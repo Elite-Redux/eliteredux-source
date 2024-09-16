@@ -2012,6 +2012,10 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         && !IS_MOVE_STATUS(move)
         && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0))
         return 101;
+    else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_FINAL_BLOW, atkAbility)
+        && !IS_MOVE_STATUS(move)
+        && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0))
+        return 101;
     else if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY) && 
                 (gBattleMoves[move].effect == EFFECT_THUNDER
                 || gBattleMoves[move].effect == EFFECT_HURRICANE))

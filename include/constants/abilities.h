@@ -703,8 +703,9 @@
 #define ABILITY_ATOMIC_PUNCH 681 // Iron Fist + Steelworker.
 #define ABILITY_IRON_GIANT 682 // Heatproof + Juggernaut.
 #define ABILITY_MASTER_HAND 683 // Mega Launcher + Rampage
+#define ABILITY_FINAL_BLOW 684 // Unseen Fist + Fatal Precision.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_MASTER_HAND + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_FINAL_BLOW + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
