@@ -14375,7 +14375,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
             // Hadron Engine
             if (BATTLER_HAS_ABILITY(battler, ABILITY_HADRON_ENGINE)
-                && TERRAIN_HAS_EFFECT && !(gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
+                && TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
                     statBase = statBase * 4 / 3;
                 
             // Frostbite
