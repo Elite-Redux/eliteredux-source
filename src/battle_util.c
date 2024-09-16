@@ -13772,6 +13772,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (moveType == TYPE_GRASS) MUL(1.2);
             return;
         
+        case ABILITY_STEELWORKER:
+            if (moveType == TYPE_STEEL) MUL(1.3);
+            return;
+        
         case ABILITY_PLUS:
         case ABILITY_MINUS:
             if (BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerAtk), ABILITY_PLUS) || BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerDef), ABILITY_PLUS)) MUL(2.0);
