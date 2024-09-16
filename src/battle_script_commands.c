@@ -9282,13 +9282,18 @@ static void Cmd_various(void)
         MarkBattlerForControllerExec(gActiveBattler);
         break;
     case VARIOUS_TRY_ACTIVATE_RAMPAGE:
-        if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAMPAGE) || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BERSERKER_RAGE))
-          && HasAttackerFaintedTarget()
-          && !NoAliveMonsForEitherParty())
         {
-            SetAbilityState(gActiveBattler, BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAMPAGE) ? ABILITY_RAMPAGE : ABILITY_BERSERKER_RAGE, TRUE);
+        int ability = 0;
+        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAMPAGE)) ability = ABILITY_RAMPAGE;
+        else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BERSERKER_RAGE)) ability = ABILITY_BERSERKER_RAGE;
+        else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MASTER_HAND)) ability = ABILITY_MASTER_HAND;
+        
+        if (ability && HasAttackerFaintedTarget() && !NoAliveMonsForEitherParty())
+        {
+            SetAbilityState(gActiveBattler, ability, TRUE);
             gVolatileStructs[gActiveBattler].rechargeTimer = 0;
             gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
+        }
         }
         break;
     case VARIOUS_TRY_ACTIVATE_MOXIE:    // and variants

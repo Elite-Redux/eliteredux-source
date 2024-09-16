@@ -5205,7 +5205,10 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         }
         break;
     case EFFECT_RECHARGE:
-        if (BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_RAMPAGE) && CanIndexMoveFaintTarget(battlerAtk, battlerDef, AI_THINKING_STRUCT->movesetIndex, 0))
+        if ((BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_RAMPAGE)
+                || BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_BERSERKER_RAGE)
+                || BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_MASTER_HAND))
+            && CanIndexMoveFaintTarget(battlerAtk, battlerDef, AI_THINKING_STRUCT->movesetIndex, 0))
             score += 4; // No recharge if Rampage attacker KOs the target
         break;
     //case EFFECT_EXTREME_EVOBOOST: // TODO
