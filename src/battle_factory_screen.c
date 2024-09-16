@@ -41,7 +41,7 @@
 #define SWAP_PLAYER_SCREEN 0  // The screen where the player selects which of their pokemon to swap away
 #define SWAP_ENEMY_SCREEN  1  // The screen where the player selects which new pokemon from the defeated party to swap for
 
-#define SELECTABLE_MONS_COUNT 6
+#define SELECTABLE_MONS_COUNT 12
 
 enum {
     PALTAG_BALL_GRAY = 100,
@@ -1300,7 +1300,7 @@ static void Select_InitAllSprites(void)
 
     for (i = 0; i < SELECTABLE_MONS_COUNT; i++)
     {
-        sFactorySelectScreen->mons[i].ballSpriteId = CreateSprite(&sSpriteTemplate_Select_Pokeball, (35 * i) + 32, 64, 1);
+        sFactorySelectScreen->mons[i].ballSpriteId = CreateSprite(&sSpriteTemplate_Select_Pokeball, (20 * i) + 10, 64, 1);
         gSprites[sFactorySelectScreen->mons[i].ballSpriteId].data[0] = 0;
         Select_SetBallSpritePaletteNum(i);
     }
