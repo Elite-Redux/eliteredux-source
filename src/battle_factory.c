@@ -525,12 +525,12 @@ static void GenerateInitialRentalMons(void)
     u8 rentalRank;
     u16 monId;
     u16 currSpecies;
-    u16 species[PARTY_SIZE];
-    u16 monIds[PARTY_SIZE];
-    u16 heldItems[PARTY_SIZE];
+    u16 species[PARTY_SIZE * 2];
+    u16 monIds[PARTY_SIZE * 2];
+    u16 heldItems[PARTY_SIZE * 2];
 
     gFacilityTrainers = gBattleFrontierTrainers;
-    for (i = 0; i < PARTY_SIZE; i++)
+    for (i = 0; i < PARTY_SIZE * 2; i++)
     {
         species[i] = 0;
         monIds[i] = 0;
@@ -559,7 +559,7 @@ static void GenerateInitialRentalMons(void)
 
     currSpecies = SPECIES_NONE;
     i = 0;
-    while (i != PARTY_SIZE)
+    while (i != PARTY_SIZE * 2)
     {
         if (i < rentalRank) // The more times the player has rented, the more initial rentals are generated from a better set of pokemon
             monId = GetFactoryMonId(factoryLvlMode, challengeNum, TRUE);
@@ -587,15 +587,15 @@ static void GenerateInitialRentalMons(void)
             continue;
 
         // Cannot have two same held items.
-        for (j = firstMonId; j < firstMonId + i; j++)
-        {
-            if (heldItems[j] != 0 && heldItems[j] == gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId])
-            {
-                if (gFacilityTrainerMons[monId].species == currSpecies)
-                    currSpecies = SPECIES_NONE;
-                break;
-            }
-        }
+        // for (j = firstMonId; j < firstMonId + i; j++)
+        // {
+        //     if (heldItems[j] != 0 && heldItems[j] == gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId])
+        //     {
+        //         if (gFacilityTrainerMons[monId].species == currSpecies)
+        //             currSpecies = SPECIES_NONE;
+        //         break;
+        //     }
+        // }
         if (j != firstMonId + i)
             continue;
 
