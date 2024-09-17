@@ -26700,6 +26700,7 @@ static const struct LevelUpMove sAvaluggHisuianLevelUpLearnset[] = {
 static const struct LevelUpMove sDecidueyeHisuianLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_TRIPLE_ARROWS),
     LEVEL_UP_MOVE(0, MOVE_SPIRIT_SHACKLE),
+    LEVEL_UP_MOVE(1, MOVE_SUPERSONIC_SHOT),
     LEVEL_UP_MOVE(1, MOVE_ARCHER_SHOT),
     LEVEL_UP_MOVE(1, MOVE_BRAMBLE_BLAST),
     LEVEL_UP_MOVE(1, MOVE_HOMING_FLETCH),
