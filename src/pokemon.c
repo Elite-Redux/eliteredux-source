@@ -10279,6 +10279,35 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_POLTEAGEIST_ANTIQUE        ||
                 species == SPECIES_INDEEDEE_FEMALE            ||
                 species == SPECIES_SCIZOR_REDUX               ||
+                species == SPECIES_FLYGON_REDUX               ||
+                species == SPECIES_MAWILE_REDUX_B             ||
+                species == SPECIES_WIGGLYTUFF_ALPHA           ||
+                species == SPECIES_WEAVILE_REDUX              ||
+                species == SPECIES_BEWEAR_ANGRY               ||
+                species == SPECIES_POLARTIC                   ||
+                species == SPECIES_ARASHINNE                  ||
+                species == SPECIES_HELIOSUNNY                 ||
+                species == SPECIES_GUERSHOOS                  ||
+                species == SPECIES_ARACHTRES                  ||
+                species == SPECIES_FLAIRGRANCE                ||
+                species == SPECIES_LEPASTRY                   ||
+                species == SPECIES_CALYREX_CLOUD_RIDER        ||
+                species == SPECIES_ABOMASNOW_SANTA            ||
+                species == SPECIES_DREADNAUT                  ||
+                species == SPECIES_BOARLOCK                   ||
+                species == SPECIES_SOPRANICE                  ||
+                species == SPECIES_BEEFENDER                  ||
+                species == SPECIES_SALAZARUS                  ||
+                species == SPECIES_KARTANA_FALLEN             ||
+                species == SPECIES_SPECTRIER_CLOUD            ||
+                species == SPECIES_LEDIAN_PARADOX             ||
+                species == SPECIES_RIBOMBEE_REDUX             ||
+                species == SPECIES_MIMIKYU_RAYQUAZA           ||
+                species == SPECIES_RATTATA_REDUX              ||
+                species == SPECIES_RATICATE_REDUX             ||
+                species == SPECIES_ESPEON_GALAXY              ||
+                species == SPECIES_SOLROCK_SYSTEM             ||
+                species == SPECIES_DARKRAI_NIGHTMARE          ||
                 species == SPECIES_TERAPAGOS                  ||
                 species == SPECIES_TERAPAGOS_STELLAR          ||
                 species == SPECIES_LUXRAY_REDUX               ||
