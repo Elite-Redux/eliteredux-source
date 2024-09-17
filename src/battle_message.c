@@ -3572,8 +3572,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
             case B_TXT_ATK_NAME_WITH_PREFIX_MON1: // Unused, to change into sth else.
                 break;
             case B_TXT_ATK_PARTNER_NAME: // attacker partner name
-                GetBattlerNick(BATTLE_PARTNER(gBattlerAttacker), text);
-                toCpy = text;
+                HANDLE_NICKNAME_STRING_CASE(BATTLE_PARTNER(gBattlerAttacker));
                 break;
             case B_TXT_ATK_NAME_WITH_PREFIX: // attacker name with prefix
                 HANDLE_NICKNAME_STRING_CASE(gBattlerAttacker)

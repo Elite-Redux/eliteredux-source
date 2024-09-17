@@ -5638,7 +5638,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             && IsBattlerAlive(gBattlerTarget)
             && gBattleMons[gBattlerTarget].maxHP > gBattleMons[gBattlerTarget].hp)
         {
-            gBattleMoveDamage = -gBattleMons[gBattlerTarget].maxHP/3;
+            gBattleMoveDamage = -gBattleMons[gBattlerTarget].maxHP / 4;
             if (!gBattleMoveDamage) gBattleMoveDamage = -1;
             BattleScriptPushCursorAndCallback(BattleScript_Hospitality);
             effect++;
@@ -6252,6 +6252,38 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
             if (anyStatus) {
                 BattleScriptPushCursorAndCallback(BattleScript_EffectSoothingAroma);
+                effect++;
+            }
+        }
+
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_BUTTER_UP)){
+            bool8 anyStatus = FALSE;
+            struct Pokemon *party;
+
+            if (GetBattlerSide(battler) == B_SIDE_PLAYER)
+                party = gPlayerParty;
+            else
+                party = gEnemyParty;
+                
+            for (i = 0; i < PARTY_SIZE; i++) {
+                u32 status1 = GetMonData(&party[i], MON_DATA_STATUS);
+                if (status1 & STATUS1_ANY) {
+                    anyStatus = TRUE;
+                    break;
+                }
+            }
+
+            gBattlerTarget = BATTLE_PARTNER(battler);
+            gBattleMoveDamage = -gBattleMons[gBattlerTarget].maxHP / 4;
+            if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+
+            if (anyStatus) {
+                BattleScriptPushCursorAndCallback(BattleScript_EffectButterUp);
+                effect++;
+            }
+            else if (IsBattlerAlive(gBattlerTarget) && gBattleMons[gBattlerTarget].maxHP > gBattleMons[gBattlerTarget].hp)
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_Hospitality);
                 effect++;
             }
         }

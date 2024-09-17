@@ -4348,10 +4348,11 @@ BattleScript_DoubleSimpleEffect::
 
 BattleScript_Hospitality::
 	call BattleScript_AbilityPopUp
+BattleScript_Hospitality_AfterPopup:
 	printstring STRINGID_HOSPITALITY
 	waitmessage B_WAIT_TIME_LONG
-	jumpifhealingblocked BattleScript_Hospitality_CantHeal
-	jumpifstatus BS_STACK_1, STATUS1_BLEED, BattleScript_Hospitality_CantHeal
+	jumpifhealingblocked BS_TARGET, BattleScript_Hospitality_CantHeal
+	jumpifstatus BS_TARGET, STATUS1_BLEED, BattleScript_Hospitality_CantHeal
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
@@ -5305,10 +5306,20 @@ BattleScript_PartyHealEnd::
 	waitstate
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectButterUp::
+	call BattleScript_AbilityPopUp
+	call BattleScript_HealAllPartyStatus
+	jumpifabsent BS_TARGET, BattleScript_End3
+	goto BattleScript_Hospitality_AfterPopup	
+
 BattleScript_EffectSoothingAroma::
+	call BattleScript_AbilityPopUp
+	call BattleScript_HealAllPartyStatus
+	end3
+
+BattleScript_HealAllPartyStatus::
 	copyword gTempMove, gCurrentMove
 	setword gCurrentMove, MOVE_AROMATHERAPY
-	call BattleScript_AbilityPopUp
 	healpartystatus
 	waitstate
 	printfromtable gPartyStatusHealStringIds
@@ -5316,7 +5327,7 @@ BattleScript_EffectSoothingAroma::
 	updatestatusicon BS_ATTACKER_WITH_PARTNER
 	waitstate
 	copyword gCurrentMove, gTempMove
-	end3
+	return
 
 BattleScript_EffectThief::
 	setmoveeffect MOVE_EFFECT_STEAL_ITEM
@@ -12336,16 +12347,8 @@ BattleScript_SeedSowerGrassySucceeded:
 	waitmessage B_WAIT_TIME_LONG
 	call BattleScript_OnTerrainChanged
 BattleScript_SeedSowerTryCleanse:
-	copyword gTempMove, gCurrentMove
-	setword gCurrentMove, MOVE_AROMATHERAPY
 	swapbattlerandtargetvia34
-	healpartystatus
-	waitstate
-	printfromtable gPartyStatusHealStringIds
-	waitmessage B_WAIT_TIME_LONG
-	updatestatusicon BS_ATTACKER_WITH_PARTNER
-	waitstate
-	copyword gCurrentMove, gTempMove
+	call BattleScript_HealAllPartyStatus
 	restoreattackerandtargetfrom34
 BattleScript_SeedSowerEnd:
 	return
