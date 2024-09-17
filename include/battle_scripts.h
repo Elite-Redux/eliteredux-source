@@ -599,6 +599,7 @@ extern const u8 BattleScript_AngelsWrathProtectEffect[];
 extern const u8 BattleScript_IntimidateActivatedNew[];
 extern const u8 BattleScript_GeneratorActivates[];
 extern const u8 BattleScript_EffectSoothingAroma[];
+extern const u8 BattleScript_EffectButterUp[];
 extern const u8 BattleScript_MoveWasDisabledMessage[];
 extern const u8 BattleScript_AbilityBoostsCrit[];
 
