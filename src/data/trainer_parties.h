@@ -39525,7 +39525,7 @@ static const struct TrainerMonItemCustomMoves sParty_Vinegar[] = {
     {
     .lvl = 0,
     .species = SPECIES_URSHIFU,
-    .heldItem = ITEM_NONE,
+    .heldItem = ITEM_URSHIFITE,
     .ability = 1,
     .evs = {252, 252, 0, 0, 0, 4},
     .nature = NATURE_ADAMANT,
@@ -39582,7 +39582,7 @@ static const struct TrainerMonItemCustomMoves sParty_Salt[] = {
     {
     .lvl = 0,
     .species = SPECIES_URSHIFU_RAPID_STRIKE_STYLE,
-    .heldItem = ITEM_NONE,
+    .heldItem = ITEM_URSHIFITE,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
@@ -39639,7 +39639,7 @@ static const struct TrainerMonItemCustomMoves sParty_Katsup[] = {
     {
     .lvl = 0,
     .species = SPECIES_URSHIFU_RAPID_STRIKE_STYLE,
-    .heldItem = ITEM_NONE,
+    .heldItem = ITEM_URSHIFITE,
     .ability = 1,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_ADAMANT,
@@ -40187,7 +40187,7 @@ static const struct TrainerMonItemCustomMoves sParty_Alfredo[] = {
     {
     .lvl = 0,
     .species = SPECIES_URSHIFU,
-    .heldItem = ITEM_NONE,
+    .heldItem = ITEM_URSHIFITE,
     .ability = 1,
     .evs = {160, 252, 0, 0, 0, 96},
     .nature = NATURE_ADAMANT,
@@ -40235,7 +40235,7 @@ static const struct TrainerMonItemCustomMoves sParty_Teriyaki[] = {
     {
     .lvl = 0,
     .species = SPECIES_URSHIFU,
-    .heldItem = ITEM_NONE,
+    .heldItem = ITEM_URSHIFITE,
     .ability = 1,
     .evs = {252, 252, 0, 0, 0, 4},
     .nature = NATURE_ADAMANT,
@@ -40244,7 +40244,7 @@ static const struct TrainerMonItemCustomMoves sParty_Teriyaki[] = {
     {
     .lvl = 0,
     .species = SPECIES_URSHIFU_RAPID_STRIKE_STYLE,
-    .heldItem = ITEM_NONE,
+    .heldItem = ITEM_URSHIFITE,
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
