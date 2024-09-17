@@ -33624,7 +33624,7 @@ static const struct TrainerMonItemCustomMoves sParty_Albert[] = {
     .ability = 2,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_MOONBLAST, MOVE_DRAGON_BREATH, MOVE_DRAGON_PULSE, MOVE_HEAT_WAVE
+    .moves = MOVE_PIXIE_BEAM, MOVE_DRAGON_BREATH, MOVE_DRAGON_PULSE, MOVE_FOCUS_BLAST
     },
     {
     .lvl = 0,
@@ -34030,7 +34030,7 @@ static const struct TrainerMonItemCustomMoves sParty_Felix[] = { // with Dianne
     .ability = 0,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_SHADOW_BALL, MOVE_SLUDGE_BOMB, MOVE_DAZZLING_GLEAM, MOVE_DESTINY_BOND
+    .moves = MOVE_SHADOW_BALL, MOVE_SLUDGE_BOMB, MOVE_DARK_PULSE, MOVE_DESTINY_BOND
     },
     {
     .lvl = 0,
@@ -34047,12 +34047,12 @@ static const struct TrainerMonItemCustomMoves sParty_Felix[] = { // with Dianne
 static const struct TrainerMonItemCustomMoves sParty_Caroline[] = {
     {
     .lvl = 0,
-    .species = SPECIES_PINCURCHIN,
+    .species = SPECIES_TAPU_KOKO,
     .heldItem = ITEM_TERRAIN_EXTENDER,
-    .ability = 0,
-    .evs = {0, 0, 0, 0, 0, 0},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_RISING_VOLTAGE, MOVE_SCALD, MOVE_FOLLOW_ME, MOVE_THUNDER
+    .ability = 1,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_WEATHER_BALL, MOVE_THUNDER, MOVE_DAZZLING_GLEAM, MOVE_HURRICANE
     },
     {
     .lvl = 0,
