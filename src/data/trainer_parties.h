@@ -40248,6 +40248,6 @@ static const struct TrainerMonItemCustomMoves sParty_Teriyaki[] = {
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_SURGING_STRIKES, MOVE_JET_PUNCH, MOVE_CLOSE_COMBAT, MOVE_ICE_PUNCH
+    .moves = MOVE_SURGING_STRIKES, MOVE_JET_PUNCH, MOVE_DRAIN_PUNCH, MOVE_ICE_PUNCH
     }
 };
