@@ -34222,7 +34222,7 @@ static const struct TrainerMonItemCustomMoves sParty_Mitchell[] = { // with Hall
     {
     .lvl = 0,
     .species = SPECIES_TORTEMPLE,
-    .heldItem = ITEM_WISE_GLASSES,
+    .heldItem = ITEM_CHARCOAL,
     .ability = 2,
     .zeroSpeedIvs = TRUE,
     .evs = {156, 0, 100, 252, 0, 0},
@@ -34365,7 +34365,7 @@ static const struct TrainerMonItemCustomMoves sParty_Edgar[] = {
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_WICKED_BLOW, MOVE_HEAD_SMASH, MOVE_SUCKER_PUNCH, MOVE_ICE_FANG
+    .moves = MOVE_WICKED_BLOW, MOVE_HEAD_SMASH, MOVE_CLOSE_COMBAT, MOVE_ICE_FANG
     },
     {
     .lvl = 0,
@@ -34387,12 +34387,12 @@ static const struct TrainerMonItemCustomMoves sParty_Edgar[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_HITMONCHAN,
-    .heldItem = ITEM_HITMONCHANITE,
-    .ability = 1,
+    .species = SPECIES_HITMONLEE,
+    .heldItem = ITEM_HITMONLEENITE,
+    .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_DRAIN_PUNCH, MOVE_THUNDER_PUNCH, MOVE_SEISMIC_FIST, MOVE_FAKE_OUT
+    .moves = MOVE_MEGA_KICK, MOVE_TRIPLE_AXEL, MOVE_HIGH_JUMP_KICK, MOVE_BLAZE_KICK
     }
 };
 
