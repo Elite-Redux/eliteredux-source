@@ -5633,6 +5633,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect++;
         }
 
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_HOSPITALITY)
+            && (gBattlerTarget = BATTLE_PARTNER(battler))
+            && IsBattlerAlive(gBattlerTarget)
+            && gBattleMons[gBattlerTarget].maxHP > gBattleMons[gBattlerTarget].hp)
+        {
+            gBattleMoveDamage = -gBattleMons[gBattlerTarget].maxHP/3;
+            if (!gBattleMoveDamage) gBattleMoveDamage = -1;
+            BattleScriptPushCursorAndCallback(BattleScript_Hospitality);
+            effect++;
+        }
+
         if (CheckAndSetSwitchInAbility(battler, ABILITY_FAIRY_AURA))
         {
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FAIRYAURA;

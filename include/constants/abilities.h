@@ -702,10 +702,11 @@
 #define ABILITY_WAY_OF_SWIFTNESS 680 // Pretentious + Swift Swim.
 #define ABILITY_ATOMIC_PUNCH 681 // Iron Fist + Steelworker.
 #define ABILITY_IRON_GIANT 682 // Heatproof + Juggernaut.
-#define ABILITY_MASTER_HAND 683 // Mega Launcher + Rampage
+#define ABILITY_MASTER_HAND 683 // Mega Launcher + Rampage.
 #define ABILITY_FINAL_BLOW 684 // Unseen Fist + Fatal Precision.
+#define ABILITY_HOSPITALITY 685 // Heals partner for 25% of its max HP on switch-in.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_FINAL_BLOW + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_HOSPITALITY + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

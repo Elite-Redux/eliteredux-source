@@ -630,11 +630,16 @@ BattleScript_BleedTurnDmg::
 	goto BattleScript_DoStatusTurnDmg
 
 BattleScript_MoveUsedBleedHeal::
+	call BattleScript_BleedHealRet
+	goto BattleScript_MoveEnd
+
+BattleScript_BleedHealRet::
 	curestatus BS_TARGET
 	updatestatusicon BS_TARGET
 	printfromtable gBleedHealedStringIds
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
+
 
 BattleScript_MoveEffectBleed::
 	statusanimation BS_EFFECT_BATTLER
@@ -4340,6 +4345,26 @@ BattleScript_DoubleSimpleEffect::
 	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
+
+BattleScript_Hospitality::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_HOSPITALITY
+	waitmessage B_WAIT_TIME_LONG
+	jumpifhealingblocked BattleScript_Hospitality_CantHeal
+	jumpifstatus BS_STACK_1, STATUS1_BLEED, BattleScript_Hospitality_CantHeal
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	printstring STRINGID_PKMNREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
+	end3
+BattleScript_Hospitality_CantHeal:
+	printstring STRINGID_TARGET_CANT_HEAL
+	waitmessage B_WAIT_TIME_LONG
+	end3
+BattleScript_Hospitality_CureBleed:
+	call BattleScript_BleedHealRet
+	end3
 
 BattleScript_EffectRestoreHp::
 	attackcanceler

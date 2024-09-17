@@ -653,6 +653,7 @@ static const u8 sAbilityAtomicPunchDescription[] = _("Iron Fist + Steelworker.")
 static const u8 sAbilityIronGiantDescription[] = _("Heatproof + Juggernaut.");
 static const u8 sAbilityMasterHandDescription[] = _("Mega Launcher + Rampage.");
 static const u8 sAbilityFinalBlowDescription[] = _("Unseen Fist + Fatal Precision.");
+static const u8 sAbilityHospitalityDescription[] = _("Heals partner for 25% of its max\nHP on switch-in.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1341,6 +1342,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_IRON_GIANT] = _("Iron Giant"),
     [ABILITY_MASTER_HAND] = _("Master Hand"),
     [ABILITY_FINAL_BLOW] = _("Final Blow"),
+    [ABILITY_HOSPITALITY] = _("Hospitality"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2030,4 +2032,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_IRON_GIANT] = sAbilityIronGiantDescription,
     [ABILITY_MASTER_HAND] = sAbilityMasterHandDescription,
     [ABILITY_FINAL_BLOW] = sAbilityFinalBlowDescription,
+    [ABILITY_HOSPITALITY] = sAbilityHospitalityDescription,
 };
