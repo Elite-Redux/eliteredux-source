@@ -9853,5 +9853,38 @@ const struct Item gItems[] =
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
+    [ITEM_MELMETALITE] = 
+    {
+        .name = _("Melmetalite"),
+        .itemId = ITEM_MELMETALITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sMelmetaliteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_AMPHYBUZZITE] = 
+    {
+        .name = _("Amphybuzzite"),
+        .itemId = ITEM_AMPHYBUZZITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sAmphybuzziteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_DYNAMAX_ORB] = 
+    {
+        .name = _("Dynamax Orb"),
+        .itemId = ITEM_DYNAMAX_ORB,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
+        .description = sDynamaxOrbDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
     
 };

@@ -41287,7 +41287,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_MONSTER,
     .eggGroup2 = EGG_GROUP_FIELD,
     .abilities      = {ABILITY_QUEENS_MOURNING, ABILITY_QUEENLY_MAJESTY, ABILITY_MOLD_BREAKER},
-    .innates        = {ABILITY_FLUFFY, ABILITY_HONEY_GATHER, ABILITY_GIANT_WINGS},
+    .innates        = {ABILITY_FLUFFY, ABILITY_HONEY_GATHER, ABILITY_HUGE_WINGS},
     .bodyColor = BODY_COLOR_YELLOW,
     .noFlip = FALSE,
     .tier = 0,
@@ -41850,11 +41850,11 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_TSAREENA_REDUX_MEGA] =
     {
-    .baseHP        = 72,
+    .baseHP        = 68,
     .baseAttack    = 120,
     .baseDefense   = 90,
     .baseSpeed     = 108,
-    .baseSpAttack  = 50,
+    .baseSpAttack  = 140,
     .baseSpDefense = 90,
     .type1 = TYPE_PSYCHIC,
     .type2 = TYPE_FAIRY,

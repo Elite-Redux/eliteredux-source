@@ -13520,8 +13520,12 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_GIANT_WINGS:
+            if (gBattleMoves[move].airBased) MUL(1.3);
+            return;
+
         case ABILITY_HUGE_WINGS:
             if (gBattleMoves[move].airBased) MUL(1.3);
+            if (moveType == TYPE_FLYING) MUL(1.25);
             return;
         
         case ABILITY_SHEER_FORCE:
@@ -13887,7 +13891,6 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_LEVITATE:
-        case ABILITY_HUGE_WINGS:
             if (moveType == TYPE_FLYING) MUL(1.25);
             return;
         

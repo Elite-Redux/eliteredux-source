@@ -3536,6 +3536,21 @@ static const u8 sUrshifiteDesc[] = _(
     "Urshifu to Mega\n"
     "Evolve in battle.");
 
+static const u8 sMelmetaliteDesc[] = _(
+    "This stone enables\n"
+    "Melmetal to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sAmphybuzziteDesc[] = _(
+    "This stone enables\n"
+    "Amphybuzz to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sDynamaxOrbDesc[] = _(
+    "This stone enables\n"
+    "Eternatus to Primal\n"
+    "Revert in battle.");
+
 static const u8 sMegaBraceletDesc[] = _(
     "Enables {PKMN} holding\n"
     "their Mega Stone to\n"
