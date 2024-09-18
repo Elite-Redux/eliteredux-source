@@ -706,8 +706,9 @@
 #define ABILITY_FINAL_BLOW 684 // Unseen Fist + Fatal Precision.
 #define ABILITY_HOSPITALITY 685 // Heals partner for 25% of its max HP on switch-in.
 #define ABILITY_BUTTER_UP 686 // Combines Hospitality & Soothing Aroma
+#define ABILITY_HUGE_WINGS 687 // Giant Wings + Levitate.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BUTTER_UP + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_HUGE_WINGS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
