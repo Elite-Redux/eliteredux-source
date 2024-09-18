@@ -3432,7 +3432,7 @@ static const u8 sGyaradeathiteDesc[] = _(
     "Evolve in battle.");
 
 static const u8 sSenzuDesc[] = _(
-    "This stone enables\n"
+    "This bean enables\n"
     "Lucario to Mega\n"
     "Evolve in battle.");
 
