@@ -33137,7 +33137,7 @@ static const struct TrainerMonItemCustomMoves sParty_StevenInsane[] = { // Postg
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_BEHEMOTH_BLADE, MOVE_PIXIE_SLASH, MOVE_DIAMOND_BLADE, MOVE_FROST_BRAND
+    .moves = MOVE_BEHEMOTH_BLADE, MOVE_PIXIE_SLASH, MOVE_DIAMOND_BLADE, MOVE_LEECH_BLADE
     },
     {
     .lvl = 0,
@@ -34841,15 +34841,6 @@ static const struct TrainerMonItemCustomMoves sParty_Sidney[] = { // Marriland P
 static const struct TrainerMonItemCustomMoves sParty_SidneyInsane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_DARKRAI,
-    .heldItem = ITEM_FOCUS_SASH,
-    .ability = 2,
-    .evs = {0, 0, 0, 252, 4, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_DARK_VOID, MOVE_DARK_PULSE, MOVE_SLUDGE_BOMB, MOVE_NASTY_PLOT
-    },
-    {
-    .lvl = 0,
     .species = SPECIES_YVELTAL,
     .heldItem = ITEM_TACTICAL_VEST,
     .ability = 2,
@@ -34859,12 +34850,21 @@ static const struct TrainerMonItemCustomMoves sParty_SidneyInsane[] = {
     },
     {
     .lvl = 0,
+    .species = SPECIES_DARKRAI,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 2,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_DARK_VOID, MOVE_DARK_PULSE, MOVE_SLUDGE_BOMB, MOVE_NASTY_PLOT
+    },
+    {
+    .lvl = 0,
     .species = SPECIES_CHI_YU,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 1,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_NASTY_PLOT, MOVE_DARK_PULSE, MOVE_FIRE_HYDRO_STEAM, MOVE_EMBER
+    .moves = MOVE_NASTY_PLOT, MOVE_DARK_PULSE, MOVE_FIRE_HYDRO_STEAM, MOVE_FIRE_BLAST
     },
     {
     .lvl = 0,
@@ -34873,7 +34873,7 @@ static const struct TrainerMonItemCustomMoves sParty_SidneyInsane[] = {
     .ability = 0,
     .evs = {252, 252, 0, 0, 4, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_SWORDS_DANCE, MOVE_SUCKER_PUNCH, MOVE_LEECH_BLADE, MOVE_IRON_HEAD
+    .moves = MOVE_KOWTOW_CLEAVE, MOVE_SUCKER_PUNCH, MOVE_LEECH_BLADE, MOVE_CUT
     },
     {
     .lvl = 0,
@@ -35107,12 +35107,12 @@ static const struct TrainerMonItemCustomMoves sParty_GlaciaInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WEAVILE,
+    .species = SPECIES_CHIEN_PAO,
     .heldItem = ITEM_FOCUS_SASH,
-    .ability = 0,
+    .ability = 1,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_TRIPLE_AXEL, MOVE_KNOCK_OFF, MOVE_FAKE_OUT, MOVE_NIGHT_SLASH
+    .moves = MOVE_CRUNCH, MOVE_IRON_FANGS, MOVE_ICE_FANG, MOVE_SACRED_SWORD
     },
     {
     .lvl = 0,
@@ -35795,7 +35795,7 @@ static const struct TrainerMonItemCustomMoves sParty_WallaceInsane5[] = {
     .ability = 1,
     .evs = {252, 252, 0, 0, 0, 4},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_FIRST_IMPRESSION, MOVE_WAVE_CRASH, MOVE_AQUA_JET, MOVE_LEECH_LIFE
+    .moves = MOVE_FIRST_IMPRESSION, MOVE_LIQUIDATION, MOVE_AQUA_JET, MOVE_LEECH_LIFE
     },
     {
     .lvl = 0,
