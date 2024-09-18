@@ -9514,6 +9514,8 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        innate != ABILITY_CROWNED_KING           &&
        innate != ABILITY_ZERO_TO_HERO           &&
        innate != ABILITY_BAD_COMPANY            &&
+       innate != ABILITY_HONEY_GATHER           &&
+       innate != ABILITY_NEUTRALIZING_GAS       &&
        innate != ABILITY_BALLOON_BOMBER         && // remove all below from the blacklist when the species with the ability is implemented
        innate != ABILITY_APPLE_ENLIGHTENMENT    &&
        innate != ABILITY_DEMOLITIONIST          &&
@@ -9549,6 +9551,14 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
               randomizedInnate == ABILITY_AS_ONE_SHADOW_RIDER   ||
               randomizedInnate == ABILITY_CROWNED_KING          ||
               randomizedInnate == ABILITY_ZERO_TO_HERO          ||
+              randomizedInnate == ABILITY_BAD_COMPANY           ||
+              randomizedInnate == ABILITY_HONEY_GATHER          ||
+              randomizedInnate == ABILITY_NEUTRALIZING_GAS      ||
+              randomizedInnate == ABILITY_BALLOON_BOMBER        || // remove all below from the blacklist when the species with the ability is implemented
+              randomizedInnate == ABILITY_APPLE_ENLIGHTENMENT   ||
+              randomizedInnate == ABILITY_DEMOLITIONIST         ||
+              randomizedInnate == ABILITY_FLAMING_MAW           ||
+              randomizedInnate == ABILITY_ARCHMAGE              ||
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedInnate == ABILITY_COMATOSE              ||
               randomizedInnate == ABILITY_TRUANT                ||
@@ -9585,6 +9595,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
        ability != ABILITY_FLOWER_GIFT       &&
        ability != ABILITY_ZERO_TO_HERO      &&
        ability != ABILITY_BAD_COMPANY       &&
+       ability != ABILITY_HONEY_GATHER      &&
        ability != ABILITY_BALLOON_BOMBER    && // remove all below from the blacklist when the species with the ability is implemented
        ability != ABILITY_APPLE_ENLIGHTENMENT    &&
        ability != ABILITY_DEMOLITIONIST     &&
@@ -9619,6 +9630,14 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
               randomizedAbility == ABILITY_AS_ONE_SHADOW_RIDER  ||
               randomizedAbility == ABILITY_CROWNED_KING         ||
               randomizedAbility == ABILITY_ZERO_TO_HERO         ||
+              randomizedAbility == ABILITY_BAD_COMPANY          ||
+              randomizedAbility == ABILITY_HONEY_GATHER         ||
+              randomizedAbility == ABILITY_BALLOON_BOMBER       ||// remove all below from the blacklist when the species with the ability is implemented
+              randomizedAbility == ABILITY_APPLE_ENLIGHTENMENT  ||
+              randomizedAbility == ABILITY_DEMOLITIONIST        ||
+              randomizedAbility == ABILITY_FLAMING_MAW          ||
+              randomizedAbility == ABILITY_ARCHMAGE             ||
+              
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedAbility == ABILITY_COMATOSE             ||
               randomizedAbility == ABILITY_WONDER_GUARD         ||
@@ -10037,7 +10056,6 @@ u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID){
                 species == SPECIES_ZACIAN_CROWNED_SWORD       || //Unfinished
                 species == SPECIES_ZAMAZENTA_CROWNED_SHIELD   || //Unfinished
                 species == SPECIES_ETERNATUS_ETERNAMAX        || //Unfinished
-                species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Unfinished
                 species == SPECIES_ZARUDE_DADA);
     }
     return species;
@@ -10238,6 +10256,46 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_ETERNATUS_ETERNAMAX        || //Unfinished
                 species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Unfinished
                 species == SPECIES_ZARUDE_DADA                || //Unfinished
+                // unfinished content
+                species == SPECIES_INFERNAPE_REDUX            ||
+                species == SPECIES_ENAMORUS                   ||
+                species == SPECIES_ENAMORUS_THERIAN           ||
+                species == SPECIES_SINISTEA_ANTIQUE           ||
+                species == SPECIES_POLTEAGEIST_ANTIQUE        ||
+                species == SPECIES_INDEEDEE_FEMALE            ||
+                species == SPECIES_SCIZOR_REDUX               ||
+                species == SPECIES_FLYGON_REDUX               ||
+                species == SPECIES_MAWILE_REDUX_B             ||
+                species == SPECIES_WIGGLYTUFF_ALPHA           ||
+                species == SPECIES_WEAVILE_REDUX              ||
+                species == SPECIES_BEWEAR_ANGRY               ||
+                species == SPECIES_POLARTIC                   ||
+                species == SPECIES_ARASHINNE                  ||
+                species == SPECIES_HELIOSUNNY                 ||
+                species == SPECIES_GUERSHOOS                  ||
+                species == SPECIES_ARACHTRES                  ||
+                species == SPECIES_FLAIRGRANCE                ||
+                species == SPECIES_LEPASTRY                   ||
+                species == SPECIES_CALYREX_CLOUD_RIDER        ||
+                species == SPECIES_ABOMASNOW_SANTA            ||
+                species == SPECIES_DREADNAUT                  ||
+                species == SPECIES_BOARLOCK                   ||
+                species == SPECIES_SOPRANICE                  ||
+                species == SPECIES_BEEFENDER                  ||
+                species == SPECIES_SALAZARUS                  ||
+                species == SPECIES_KARTANA_FALLEN             ||
+                species == SPECIES_SPECTRIER_CLOUD            ||
+                species == SPECIES_LEDIAN_PARADOX             ||
+                species == SPECIES_RIBOMBEE_REDUX             ||
+                species == SPECIES_MIMIKYU_RAYQUAZA           ||
+                species == SPECIES_RATTATA_REDUX              ||
+                species == SPECIES_RATICATE_REDUX             ||
+                species == SPECIES_ESPEON_GALAXY              ||
+                species == SPECIES_SOLROCK_SYSTEM             ||
+                species == SPECIES_DARKRAI_NIGHTMARE          ||
+                species == SPECIES_TERAPAGOS                  ||
+                species == SPECIES_TERAPAGOS_STELLAR          ||
+                species == SPECIES_LUXRAY_REDUX               ||
 
                 #ifdef DISABLE_STUFF_FOR_PUBLIC_RELEASE
                 (species > LAST_VALID_SPECIES_PUBLIC && species < SPECIES_RATTATA_ALOLAN) || 
