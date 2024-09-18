@@ -15783,6 +15783,7 @@ static const struct LevelUpMove sHeatmorLevelUpLearnset[] = {
     LEVEL_UP_MOVE(55, MOVE_IRON_TAIL),
     LEVEL_UP_MOVE(61, MOVE_FLARE_BLITZ),
     LEVEL_UP_MOVE(66, MOVE_INFERNO),
+    LEVEL_UP_MOVE(70, MOVE_EXTREME_SPEED),
     LEVEL_UP_END
 };
 
