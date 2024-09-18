@@ -433,7 +433,15 @@ text RustboroCity_Gym_Text_Tips {
 
 script RustboroCity_Gym_EventScript_GiveRockTomb{
 	msgbox(format("Take this special Pokémon as a gift from me!"))
+	//random(3)
 	givecustommon(SPECIES_AMAURA, 14, ITEM_CHOPLE_BERRY, ITEM_CHERISH_BALL, NATURE_BOLD, 0, 252, 0, 4, 0, 252, 0, 0, 0, 0, 0, 0, 0, MOVE_FREEZE_DRY, MOVE_THUNDER_WAVE, MOVE_ANCIENT_POWER, MOVE_HYPER_VOICE, TRUE)
+	// switch (var(VAR_RESULT)){
+	// 	case 0: givecustommon(SPECIES_CORM, 14, ITEM_CHOPLE_BERRY, ITEM_CHERISH_BALL, NATURE_BOLD, 0, 252, 0, 4, 0, 252, 0, 0, 0, 0, 0, 0, 0, MOVE_FREEZE_DRY, MOVE_THUNDER_WAVE, MOVE_ANCIENT_POWER, MOVE_HYPER_VOICE, TRUE)
+	// break	
+	// 	case 1: givecustommon(SPECIES_BLASTOISE, 14, ITEM_CHOPLE_BERRY, ITEM_CHERISH_BALL, NATURE_BOLD, 0, 252, 0, 4, 0, 252, 0, 0, 0, 0, 0, 0, 0, MOVE_FREEZE_DRY, MOVE_THUNDER_WAVE, MOVE_ANCIENT_POWER, MOVE_HYPER_VOICE, TRUE)
+	// break
+	// 	case 2: givecustommon(SPECIES_CHARCADET, 14, ITEM_CHOPLE_BERRY, ITEM_CHERISH_BALL, NATURE_BOLD, 0, 252, 0, 4, 0, 252, 0, 0, 0, 0, 0, 0, 0, MOVE_FREEZE_DRY, MOVE_THUNDER_WAVE, MOVE_ANCIENT_POWER, MOVE_HYPER_VOICE, TRUE)
+	// }
 	playfanfare(MUS_OBTAIN_ITEM)
 	msgbox(format("{PLAYER} got Roxanne's {COLOR BLUE}Amaura{COLOR DARK_GRAY} as a gift!"))
 	waitfanfare

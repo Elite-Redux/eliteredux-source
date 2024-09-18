@@ -145,6 +145,16 @@ BattleFrontier_BattleFactoryLobby_EventScript_AskTakeChallenge:: @ 8258606
 	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
 
 BattleFrontier_BattleFactoryLobby_EventScript_TryEnterChallenge:: @ 8258653
+	message BattleFrontier_BattleFactoryLobby_Text_AskPartySize
+	waitmessage
+	multichoice 17, 6, MULTI_FRONTIER_PARTY_SIZE, FALSE
+	switch VAR_RESULT
+	case 0, BattleFrontier_BattleFactoryLobby_Clear6v6Flag
+	case 1, BattleFrontier_BattleFactoryLobby_Set6v6Flag
+	case 2, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
+	case MULTI_B_PRESSED, BattleFrontier_BattleFactoryLobby_EventScript_CancelChallenge
+
+BattleFrontier_BattleFactoryLobby_EventScript_TryEnterChallenge2::
 	message BattleFrontier_BattleFactoryLobby_Text_WhichLevelMode
 	waitmessage
 	multichoice 17, 6, MULTI_LEVEL_MODE, FALSE
@@ -562,3 +572,17 @@ BattleFrontier_BattleFactoryLobby_Text_ExplainOpenLvRules: @ 8259A5E
 	.string "and the opposing TRAINERS' Pokémon\l"
 	.string "are all Level 100.$"
 `
+text BattleFrontier_BattleFactoryLobby_Text_AskPartySize{
+	"Would you like 3v3 or 6v6 battles?"
+}
+
+script BattleFrontier_BattleFactoryLobby_Clear6v6Flag {
+	clearflag(FLAG_FRONTIER_6V6)
+	goto(BattleFrontier_BattleFactoryLobby_EventScript_TryEnterChallenge2)
+	return
+}
+script BattleFrontier_BattleFactoryLobby_Set6v6Flag {
+	setflag(FLAG_FRONTIER_6V6)
+	goto(BattleFrontier_BattleFactoryLobby_EventScript_TryEnterChallenge2)
+	return
+}

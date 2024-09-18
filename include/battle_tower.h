@@ -9,7 +9,7 @@ struct RSBattleTowerRecord
     /*0x04*/ u8 name[PLAYER_NAME_LENGTH + 1];
     /*0x0C*/ u8 trainerId[TRAINER_ID_LENGTH];
     /*0x10*/ u16 greeting[EASY_CHAT_BATTLE_WORDS_COUNT];
-    /*0x1C*/ struct BattleTowerPokemon party[FRONTIER_PARTY_SIZE];
+    /*0x1C*/ struct BattleTowerPokemon party[MAX_FRONTIER_PARTY_SIZE];
     /*0xA0*/ u32 checksum;
 };
 
