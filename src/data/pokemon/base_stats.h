@@ -30426,13 +30426,13 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_PINCURCHIN] =
     {
     .baseHP        = 75,
-    .baseAttack    = 91,
+    .baseAttack    = 101,
     .baseDefense   =  95,
     .baseSpeed     =  15,
     .baseSpAttack  = 101,
-    .baseSpDefense =  85,
-    .type1 = TYPE_ELECTRIC,
-    .type2 = TYPE_ELECTRIC,
+    .baseSpDefense =  95,
+    .type1          = TYPE_WATER,
+    .type2          = TYPE_ELECTRIC,
     .catchRate = 255,
     .expYield = 152,
     .evYield_Attack    = 2,

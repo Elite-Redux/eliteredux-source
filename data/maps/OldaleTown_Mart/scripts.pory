@@ -282,6 +282,7 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_POPMOTHITE
 	ITEM_MAIZEMOTHITE
 	ITEM_AMPHYBUZZITE
+	ITEM_AEGISLASHITE_R
 }
 
 script General_Adoption_Center_Mega_Stones_Script{
