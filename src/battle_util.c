@@ -1130,6 +1130,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_IRON_GIANT] = 1,
     [ABILITY_ENLIGHTENED] = 1,
     [ABILITY_WAY_OF_PRECISION] = 1,
+    [ABILITY_HUGE_WINGS] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -12931,6 +12932,8 @@ static int CheckLevitatingEffects(u8 battlerId)
         return TRUE;
     else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LEVITATE))
         return TRUE;
+    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_HUGE_WINGS))
+        return TRUE;
     else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_AERIALIST))
         return TRUE;
 	else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DRAGONFLY)) //Dragonfly
@@ -13517,6 +13520,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_GIANT_WINGS:
+        case ABILITY_HUGE_WINGS:
             if (gBattleMoves[move].airBased) MUL(1.3);
             return;
         
@@ -13883,6 +13887,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_LEVITATE:
+        case ABILITY_HUGE_WINGS:
             if (moveType == TYPE_FLYING) MUL(1.25);
             return;
         
@@ -15397,6 +15402,8 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     {
         if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_LEVITATE))
             immunityAbility = ABILITY_LEVITATE;
+        else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_HUGE_WINGS))
+            immunityAbility = ABILITY_LEVITATE;
         else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_AERIALIST))
             immunityAbility = ABILITY_AERIALIST;
         else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DRAGONFLY))
@@ -15497,7 +15504,7 @@ u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilit
         if (gBaseStats[speciesDef].type2 != gBaseStats[speciesDef].type1)
             MulByTypeEffectiveness(&modifier, move, moveType, 0, gBaseStats[speciesDef].type2, 0, FALSE);
 
-        if (moveType == TYPE_GROUND && (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_LEVITATE, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_DRAGONFLY, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_AERIALIST, abilityDef)) && !(gFieldStatuses & STATUS_FIELD_GRAVITY))
+        if (moveType == TYPE_GROUND && (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_LEVITATE, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_DRAGONFLY, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_HUGE_WINGS, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_AERIALIST, abilityDef)) && !(gFieldStatuses & STATUS_FIELD_GRAVITY))
             modifier = UQ_4_12(0.0);
 		if (moveType == TYPE_ROCK && (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_MOUNTAINEER, abilityDef)))
             modifier = UQ_4_12(0.0);

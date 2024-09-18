@@ -1161,3 +1161,5 @@ Common_Text_ClydeAskResetTrainers::
 	.include "data/maps/ColdCrevice/scripts.inc"
 
 	.include "data/maps/DebugMap/scripts.inc"
+
+	.include "data/maps/LegendaryDomain/scripts.inc"
