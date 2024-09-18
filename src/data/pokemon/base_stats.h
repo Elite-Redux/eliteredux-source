@@ -42748,12 +42748,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_POPMOTH_MEGA] =
     {
-    .baseHP        =  95,
-    .baseAttack    =  120,
-    .baseDefense   =  80,
-    .baseSpeed     =   115,
-    .baseSpAttack  =  90,
-    .baseSpDefense =  100,
+    .baseHP         = 95,
+    .baseAttack     = 120,
+    .baseDefense    = 60,
+    .baseSpeed      = 115,
+    .baseSpAttack   = 110,
+    .baseSpDefense  = 100,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_FIRE,
     .catchRate = 255,
