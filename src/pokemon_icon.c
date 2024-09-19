@@ -1684,6 +1684,58 @@ const u8 *const gMonIconTable[] =
     [SPECIES_LUXRAY_REDUX] = gMonIcon_LuxrayRedux,
     [SPECIES_LUCARIO_MEGA_Y] = gMonIcon_LucarioMegaY,
     [SPECIES_EGG] = gMonIcon_Egg,
+    
+    //PARTNER POKEMON
+    [SPECIES_AMAURA_PARTNER] = gMonIcon_Amaura,
+    [SPECIES_AMAURA_PARTNER_B] = gMonIcon_Amaura,
+    [SPECIES_AMAURA_PARTNER_C] = gMonIcon_Amaura,
+    [SPECIES_AURORUS_PARTNER] = gMonIcon_Aurorus,
+    [SPECIES_AURORUS_PARTNER_B] = gMonIcon_Aurorus,
+    [SPECIES_AURORUS_PARTNER_C] = gMonIcon_Aurorus,
+
+    [SPECIES_HITMONCHAN_PARTNER] = gMonIcon_Hitmonchan,
+    [SPECIES_HITMONCHAN_PARTNER_B] = gMonIcon_Hitmonchan,
+    [SPECIES_HITMONCHAN_PARTNER_C] = gMonIcon_Hitmonchan,
+    [SPECIES_HITMONCHAN_PARTNER_MEGA] = gMonIcon_HitmonchanMega,
+    [SPECIES_HITMONCHAN_PARTNER_MEGA_B] = gMonIcon_HitmonchanMega,
+    [SPECIES_HITMONCHAN_PARTNER_MEGA_C] = gMonIcon_HitmonchanMega,
+
+    [SPECIES_AMPHAROS_PARTNER] = gMonIcon_Ampharos,
+    [SPECIES_AMPHAROS_PARTNER_B] = gMonIcon_Ampharos,
+    [SPECIES_AMPHAROS_PARTNER_C] = gMonIcon_Ampharos,
+    [SPECIES_AMPHAROS_PARTNER_MEGA] = gMonIcon_AmpharosMega,
+    [SPECIES_AMPHAROS_PARTNER_MEGA_B] = gMonIcon_AmpharosMega,
+    [SPECIES_AMPHAROS_PARTNER_MEGA_C] = gMonIcon_AmpharosMega,
+
+    [SPECIES_VOLCARONA_PARTNER] = gMonIcon_Volcarona,
+    [SPECIES_VOLCARONA_PARTNER_B] = gMonIcon_Volcarona,
+    [SPECIES_VOLCARONA_PARTNER_C] = gMonIcon_Volcarona,
+
+    [SPECIES_KANGASKHAN_PARTNER] = gMonIcon_Kangaskhan,
+    [SPECIES_KANGASKHAN_PARTNER_B] = gMonIcon_Kangaskhan,
+    [SPECIES_KANGASKHAN_PARTNER_C] = gMonIcon_Kangaskhan,
+    [SPECIES_KANGASKHAN_PARTNER_MEGA] = gMonIcon_KangaskhanMega,
+    [SPECIES_KANGASKHAN_PARTNER_MEGA_B] = gMonIcon_KangaskhanMega,
+    [SPECIES_KANGASKHAN_PARTNER_MEGA_C] = gMonIcon_KangaskhanMega,
+
+    [SPECIES_DRAGONITE_PARTNER] = gMonIcon_Dragonite,
+    [SPECIES_DRAGONITE_PARTNER_B] = gMonIcon_Dragonite,
+    [SPECIES_DRAGONITE_PARTNER_C] = gMonIcon_Dragonite,
+    [SPECIES_DRAGONITE_PARTNER_MEGA] = gMonIcon_DragoniteMega,
+    [SPECIES_DRAGONITE_PARTNER_MEGA_B] = gMonIcon_DragoniteMega,
+    [SPECIES_DRAGONITE_PARTNER_MEGA_C] = gMonIcon_DragoniteMega,
+
+    [SPECIES_REUNICLUS_PARTNER] = gMonIcon_Reuniclus,
+    [SPECIES_REUNICLUS_PARTNER_B] = gMonIcon_Reuniclus,
+    [SPECIES_REUNICLUS_PARTNER_C] = gMonIcon_Reuniclus,
+
+    [SPECIES_KINGDRA_PARTNER] = gMonIcon_Kingdra,
+    [SPECIES_KINGDRA_PARTNER_B] = gMonIcon_Kingdra,
+    [SPECIES_KINGDRA_PARTNER_C] = gMonIcon_Kingdra,
+    [SPECIES_KINGDRA_PARTNER_MEGA] = gMonIcon_KingdraMega,
+    [SPECIES_KINGDRA_PARTNER_MEGA_B] = gMonIcon_KingdraMega,
+    [SPECIES_KINGDRA_PARTNER_MEGA_C] = gMonIcon_KingdraMega,
+
 };
 
 const u8 *const gMonIconTableFemale[] =

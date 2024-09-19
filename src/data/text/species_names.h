@@ -1740,4 +1740,55 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_NOIVERN_REDUX] = _("Noivern"),
     [SPECIES_LUXRAY_REDUX] = _("Luxray"),
     [SPECIES_CASCOON_PRIMAL] = _("Cascoon"),
+
+    // PARTNER POKEMON
+    [SPECIES_AMAURA_PARTNER] = _("Amaura"),
+    [SPECIES_AURORUS_PARTNER] = _("Aurorus"),
+    [SPECIES_AMAURA_PARTNER_B] = _("Amaura"),
+    [SPECIES_AURORUS_PARTNER_B] = _("Aurorus"),
+    [SPECIES_AMAURA_PARTNER_C] = _("Amaura"),
+    [SPECIES_AURORUS_PARTNER_C] = _("Aurorus"),
+
+    [SPECIES_HITMONCHAN_PARTNER] = _("Hitmonchan"),
+    [SPECIES_HITMONCHAN_PARTNER_MEGA] = _("Hitmonchan"),
+    [SPECIES_HITMONCHAN_PARTNER_B] = _("Hitmonchan"),
+    [SPECIES_HITMONCHAN_PARTNER_MEGA_B] = _("Hitmonchan"),
+    [SPECIES_HITMONCHAN_PARTNER_C] = _("Hitmonchan"),
+    [SPECIES_HITMONCHAN_PARTNER_MEGA_C] = _("Hitmonchan"),
+
+    [SPECIES_AMPHAROS_PARTNER] = _("Ampharos"),
+    [SPECIES_AMPHAROS_PARTNER_MEGA] = _("Ampharos"),
+    [SPECIES_AMPHAROS_PARTNER_B] = _("Ampharos"),
+    [SPECIES_AMPHAROS_PARTNER_MEGA_B] = _("Ampharos"),
+    [SPECIES_AMPHAROS_PARTNER_C] = _("Ampharos"),
+    [SPECIES_AMPHAROS_PARTNER_MEGA_C] = _("Ampharos"),
+
+    [SPECIES_VOLCARONA_PARTNER] = _("Volcarona"),
+    [SPECIES_VOLCARONA_PARTNER_B] = _("Volcarona"),
+    [SPECIES_VOLCARONA_PARTNER_C] = _("Volcarona"),
+
+    [SPECIES_KANGASKHAN_PARTNER] = _("Kangaskhan"),
+    [SPECIES_KANGASKHAN_PARTNER_MEGA] = _("Kangaskhan"),
+    [SPECIES_KANGASKHAN_PARTNER_B] = _("Kangaskhan"),
+    [SPECIES_KANGASKHAN_PARTNER_MEGA_B] = _("Kangaskhan"),
+    [SPECIES_KANGASKHAN_PARTNER_C] = _("Kangaskhan"),
+    [SPECIES_KANGASKHAN_PARTNER_MEGA_C] = _("Kangaskhan"),
+
+    [SPECIES_DRAGONITE_PARTNER] = _("Dragonite"),
+    [SPECIES_DRAGONITE_PARTNER_MEGA] = _("Dragonite"),
+    [SPECIES_DRAGONITE_PARTNER_B] = _("Dragonite"),
+    [SPECIES_DRAGONITE_PARTNER_MEGA_B] = _("Dragonite"),
+    [SPECIES_DRAGONITE_PARTNER_C] = _("Dragonite"),
+    [SPECIES_DRAGONITE_PARTNER_MEGA_C] = _("Dragonite"),
+
+    [SPECIES_REUNICLUS_PARTNER] = _("Reuniclus"),
+    [SPECIES_REUNICLUS_PARTNER_B] = _("Reuniclus"),
+    [SPECIES_REUNICLUS_PARTNER_C] = _("Reuniclus"),
+
+    [SPECIES_KINGDRA_PARTNER] = _("Kingdra"),
+    [SPECIES_KINGDRA_PARTNER_MEGA] = _("Kingdra"),
+    [SPECIES_KINGDRA_PARTNER_B] = _("Kingdra"),
+    [SPECIES_KINGDRA_PARTNER_MEGA_B] = _("Kingdra"),
+    [SPECIES_KINGDRA_PARTNER_C] = _("Kingdra"),
+    [SPECIES_KINGDRA_PARTNER_MEGA_C] = _("Kingdra"),
 };
