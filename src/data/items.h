@@ -9546,7 +9546,7 @@ const struct Item gItems[] =
 
     [ITEM_SNORLAX_ORB] = 
     {
-        .name = _("Snorlax Orb"),
+        .name = _("Dream Orb"),
         .itemId = ITEM_SNORLAX_ORB,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
