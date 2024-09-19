@@ -5739,7 +5739,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brawly1Insane[] = {
     {
     .lvl = 0,
     .species = SPECIES_BISHARP_REDUX,
-    .heldItem = ITEM_EVIOLITE,
+    .heldItem = ITEM_BRIGHT_POWDER,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
@@ -23079,12 +23079,12 @@ static const struct TrainerMonItemCustomMoves sParty_Winona1Insane[] = { // Doub
     },
     {
     .lvl = 0,
-    .species = SPECIES_KILOWATTREL,
+    .species = SPECIES_VELOZEL,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2,
-    .evs = {4, 0, 0, 252, 0, 252},
+    .evs = {252, 0, 4, 0, 0, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_RAZOR_WIND, MOVE_VOLT_SWITCH, MOVE_ELECTRO_BALL, MOVE_ROOST
+    .moves = MOVE_WHIRLING_STRIKES, MOVE_FAKE_OUT, MOVE_HEAT_WAVE, MOVE_RAZOR_WIND
     },
     {
     .lvl = 0,
