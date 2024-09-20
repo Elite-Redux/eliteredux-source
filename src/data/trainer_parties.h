@@ -40138,7 +40138,7 @@ static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
     }
 };
 
-static const struct TrainerMonItemCustomMoves sParty_Alfredo[] = {
+static const struct TrainerMonItemCustomMoves sParty_Teriyaki[] = {
     {
     .lvl = 0,
     .species = SPECIES_MELMETAL,
@@ -40195,7 +40195,7 @@ static const struct TrainerMonItemCustomMoves sParty_Alfredo[] = {
     }
 };
 
-static const struct TrainerMonItemCustomMoves sParty_Teriyaki[] = {
+static const struct TrainerMonItemCustomMoves sParty_Alfredo[] = {
     {
     .lvl = 0,
     .species = SPECIES_PHEROMOSA,
