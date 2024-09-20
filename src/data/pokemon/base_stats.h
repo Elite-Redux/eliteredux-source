@@ -198,12 +198,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_CHARIZARD_MEGA_X] =
     {
-    .baseHP         = 79, //78
-    .baseAttack     = 150,
+    .baseHP         = 79,
+    .baseAttack     = 135,
     .baseDefense    = 111,
     .baseSpeed      = 100,
-    .baseSpAttack   = 85,
-    .baseSpDefense  = 110,
+    .baseSpAttack   = 110,
+    .baseSpDefense  = 100,
     .type1 = TYPE_FIRE,
     .type2 = TYPE_DRAGON,
     .catchRate = 255,
@@ -3301,12 +3301,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_DODRIO] =
     {
-    .baseHP        = 90, // 80 vanilla
-    .baseAttack    = 110,
-    .baseDefense   = 70,
-    .baseSpAttack  = 60,
-    .baseSpDefense = 60,
-    .baseSpeed     = 120, // 110 vanilla
+    .baseHP         = 90,
+    .baseAttack     = 110,
+    .baseDefense    = 70,
+    .baseSpAttack   = 60,
+    .baseSpDefense  = 60,
+    .baseSpeed      = 120,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_FLYING,
     .catchRate = 255,
