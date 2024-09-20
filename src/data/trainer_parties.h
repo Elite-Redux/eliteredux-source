@@ -13624,40 +13624,54 @@ static const struct TrainerMonItemCustomMoves sParty_Trent1[] = {
     .lvl = 0,
     .species = SPECIES_GOLEM,
     .heldItem = ITEM_CUSTAP_BERRY,
-    .ability = 0, // ABILITY_ROCK_HEAD, ABILITY_SAND_FORCE, ABILITY_FORT_KNOX},
-    // .innates = {ABILITY_LETS_ROLL, ABILITY_STURDY, ABILITY_SOLID_ROCK},
-    .evs = {0, 252, 0, 0, 4, 252},      // HP, Atk, Def, SpA, SpD, Spe
-	.nature = NATURE_ADAMANT,
+    .ability = 2,
+    .evs = {0, 252, 0, 0, 4, 252},
+    .nature = NATURE_ADAMANT,
     .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
     },
     {
     .lvl = 0,
     .species = SPECIES_GOLEM,
     .heldItem = ITEM_CUSTAP_BERRY,
-    .ability = 0, // ABILITY_ROCK_HEAD, ABILITY_SAND_FORCE, ABILITY_FORT_KNOX},
-    // .innates = {ABILITY_LETS_ROLL, ABILITY_STURDY, ABILITY_SOLID_ROCK},
-    .evs = {0, 252, 0, 0, 4, 252},      // HP, Atk, Def, SpA, SpD, Spe
-	.nature = NATURE_ADAMANT,
+    .ability = 2,
+    .evs = {0, 252, 0, 0, 4, 252},
+    .nature = NATURE_ADAMANT,
     .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
     },
     {
     .lvl = 0,
     .species = SPECIES_GOLEM,
     .heldItem = ITEM_CUSTAP_BERRY,
-    .ability = 0, // ABILITY_ROCK_HEAD, ABILITY_SAND_FORCE, ABILITY_FORT_KNOX},
-    // .innates = {ABILITY_LETS_ROLL, ABILITY_STURDY, ABILITY_SOLID_ROCK},
-    .evs = {0, 252, 0, 0, 4, 252},      // HP, Atk, Def, SpA, SpD, Spe
-	.nature = NATURE_ADAMANT,
+    .ability = 2,
+    .evs = {0, 252, 0, 0, 4, 252},
+    .nature = NATURE_ADAMANT,
     .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
     },
     {
     .lvl = 0,
-    .species = SPECIES_GOLEM_ALOLAN, // Custap + Boom
+    .species = SPECIES_GOLEM_ALOLAN,
     .heldItem = ITEM_CUSTAP_BERRY,
-    .ability = 0, // ABILITY_MAGNET_PULL, ABILITY_GROUND_SHOCK, ABILITY_FORT_KNOX},
-    // .innates = {ABILITY_LETS_ROLL, ABILITY_STURDY, ABILITY_GALVANIZE},
-    .evs = {0, 252, 0, 0, 4, 252},      // HP, Atk, Def, SpA, SpD, Spe
-	.nature = NATURE_ADAMANT,
+    .ability = 1,
+    .evs = {0, 252, 0, 0, 4, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GOLEM_ALOLAN,
+    .heldItem = ITEM_CUSTAP_BERRY,
+    .ability = 1,
+    .evs = {0, 252, 0, 0, 4, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GOLEM_ALOLAN,
+    .heldItem = ITEM_CUSTAP_BERRY,
+    .ability = 1,
+    .evs = {0, 252, 0, 0, 4, 252},
+    .nature = NATURE_ADAMANT,
     .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
 };
@@ -40086,7 +40100,7 @@ static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
     .lvl = 0,
     .species = SPECIES_GOLEM,
     .heldItem = ITEM_CUSTAP_BERRY,
-    .ability = 0,
+    .ability = 2,
     .evs = {0, 252, 0, 0, 4, 252},
     .nature = NATURE_ADAMANT,
     .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
@@ -40104,7 +40118,7 @@ static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
     .lvl = 0,
     .species = SPECIES_GOLEM_ALOLAN,
     .heldItem = ITEM_CUSTAP_BERRY,
-    .ability = 0,
+    .ability = 1,
     .evs = {0, 252, 0, 0, 4, 252},
     .nature = NATURE_ADAMANT,
     .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
@@ -40116,7 +40130,7 @@ static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_EXPLOSION, MOVE_EXPLOSION, MOVE_REVIVAL_BLESSING, MOVE_SPORE
+    .moves = MOVE_EXPLOSION, MOVE_EXPLOSION, MOVE_REVIVAL_BLESSING, MOVE_REVIVAL_BLESSING
     },
     {
     .lvl = 0,
