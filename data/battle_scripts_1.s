@@ -11903,6 +11903,7 @@ BattleScript_HandleSoulEaterEffect::
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	tryhealpercenthealth BS_ATTACKER, 25, BattleScript_HandleSoulEaterEffect_NothingToHeal
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_ATTACKERREGAINEDHEALTH
@@ -11914,6 +11915,7 @@ BattleScript_HandleJawsOfCarnageEffect::
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	tryhealpercenthealth BS_ATTACKER, 50, BattleScript_HandleJawsOfCarnageEffect_NothingToHeal
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_ATTACKERREGAINEDHEALTH
