@@ -1028,4 +1028,55 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_MELMETAL_MEGA] = sMelmetalFormSpeciesIdTable,
     [SPECIES_MELMETAL] = sMelmetalFormSpeciesIdTable,
 
+    [SPECIES_AMAURA] = sAmauraFormSpeciesIdTable,
+    [SPECIES_AURORUS] = sAurorusFormSpeciesIdTable,
+
+    [SPECIES_VOLCARONA] = sVolcaronaFormSpeciesIdTable,
+
+    //PARTNER POKEMON
+    
+    [SPECIES_AMAURA_PARTNER] = sAmauraFormSpeciesIdTable,
+    [SPECIES_AMAURA_PARTNER_B] = sAmauraFormSpeciesIdTable,
+    [SPECIES_AMAURA_PARTNER_C] = sAmauraFormSpeciesIdTable,
+    [SPECIES_AURORUS_PARTNER] = sAurorusFormSpeciesIdTable,
+    [SPECIES_AURORUS_PARTNER_B] = sAurorusFormSpeciesIdTable,
+    [SPECIES_AURORUS_PARTNER_C] = sAurorusFormSpeciesIdTable,
+
+    [SPECIES_HITMONCHAN_PARTNER] = sHitmonchanFormSpeciesIdTable,
+    [SPECIES_HITMONCHAN_PARTNER_MEGA] = sHitmonchanFormSpeciesIdTable,
+    [SPECIES_HITMONCHAN_PARTNER_B] = sHitmonchanFormSpeciesIdTable,
+    [SPECIES_HITMONCHAN_PARTNER_MEGA_B] = sHitmonchanFormSpeciesIdTable,
+    [SPECIES_HITMONCHAN_PARTNER_C] = sHitmonchanFormSpeciesIdTable,
+    [SPECIES_HITMONCHAN_PARTNER_MEGA_C] = sHitmonchanFormSpeciesIdTable,
+
+    [SPECIES_VOLCARONA_PARTNER] = sVolcaronaFormSpeciesIdTable,
+    [SPECIES_VOLCARONA_PARTNER_B] = sVolcaronaFormSpeciesIdTable,
+    [SPECIES_VOLCARONA_PARTNER_C] = sVolcaronaFormSpeciesIdTable,
+
+    [SPECIES_KANGASKHAN_PARTNER] = sKangaskhanFormSpeciesIdTable,
+    [SPECIES_KANGASKHAN_PARTNER_B] = sKangaskhanFormSpeciesIdTable,
+    [SPECIES_KANGASKHAN_PARTNER_C] = sKangaskhanFormSpeciesIdTable,
+    [SPECIES_KANGASKHAN_PARTNER_MEGA] = sKangaskhanFormSpeciesIdTable,
+    [SPECIES_KANGASKHAN_PARTNER_MEGA_B] = sKangaskhanFormSpeciesIdTable,
+    [SPECIES_KANGASKHAN_PARTNER_MEGA_C] = sKangaskhanFormSpeciesIdTable,
+
+
+    [SPECIES_DRAGONITE_PARTNER] = sDragoniteFormSpeciesIdTable,
+    [SPECIES_DRAGONITE_PARTNER_B] = sDragoniteFormSpeciesIdTable,
+    [SPECIES_DRAGONITE_PARTNER_C] = sDragoniteFormSpeciesIdTable,
+    [SPECIES_DRAGONITE_PARTNER_MEGA] = sDragoniteFormSpeciesIdTable,
+    [SPECIES_DRAGONITE_PARTNER_MEGA_B] = sDragoniteFormSpeciesIdTable,
+    [SPECIES_DRAGONITE_PARTNER_MEGA_C] = sDragoniteFormSpeciesIdTable,
+
+    [SPECIES_REUNICLUS_PARTNER] = sReuniclusFormSpeciesIdTable,
+    [SPECIES_REUNICLUS_PARTNER_B] = sReuniclusFormSpeciesIdTable,
+    [SPECIES_REUNICLUS_PARTNER_C] = sReuniclusFormSpeciesIdTable,
+
+    [SPECIES_KINGDRA_PARTNER] = sKingdraFormSpeciesIdTable,
+    [SPECIES_KINGDRA_PARTNER_B] = sKingdraFormSpeciesIdTable,
+    [SPECIES_KINGDRA_PARTNER_C] = sKingdraFormSpeciesIdTable,
+    [SPECIES_KINGDRA_PARTNER_MEGA] = sKingdraFormSpeciesIdTable,
+    [SPECIES_KINGDRA_PARTNER_MEGA_B] = sKingdraFormSpeciesIdTable,
+    [SPECIES_KINGDRA_PARTNER_MEGA_C] = sKingdraFormSpeciesIdTable,
+
 };

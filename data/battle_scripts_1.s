@@ -630,11 +630,16 @@ BattleScript_BleedTurnDmg::
 	goto BattleScript_DoStatusTurnDmg
 
 BattleScript_MoveUsedBleedHeal::
+	call BattleScript_BleedHealRet
+	goto BattleScript_MoveEnd
+
+BattleScript_BleedHealRet::
 	curestatus BS_TARGET
 	updatestatusicon BS_TARGET
 	printfromtable gBleedHealedStringIds
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
+
 
 BattleScript_MoveEffectBleed::
 	statusanimation BS_EFFECT_BATTLER
@@ -4341,6 +4346,27 @@ BattleScript_DoubleSimpleEffect::
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 
+BattleScript_Hospitality::
+	call BattleScript_AbilityPopUp
+BattleScript_Hospitality_AfterPopup:
+	printstring STRINGID_HOSPITALITY
+	waitmessage B_WAIT_TIME_LONG
+	jumpifhealingblocked BS_TARGET, BattleScript_Hospitality_CantHeal
+	jumpifstatus BS_TARGET, STATUS1_BLEED, BattleScript_Hospitality_CantHeal
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	printstring STRINGID_PKMNREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
+	end3
+BattleScript_Hospitality_CantHeal:
+	printstring STRINGID_TARGET_CANT_HEAL
+	waitmessage B_WAIT_TIME_LONG
+	end3
+BattleScript_Hospitality_CureBleed:
+	call BattleScript_BleedHealRet
+	end3
+
 BattleScript_EffectRestoreHp::
 	attackcanceler
 	attackstring
@@ -5280,10 +5306,20 @@ BattleScript_PartyHealEnd::
 	waitstate
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectButterUp::
+	call BattleScript_AbilityPopUp
+	call BattleScript_HealAllPartyStatus
+	jumpifabsent BS_TARGET, BattleScript_End3
+	goto BattleScript_Hospitality_AfterPopup	
+
 BattleScript_EffectSoothingAroma::
+	call BattleScript_AbilityPopUp
+	call BattleScript_HealAllPartyStatus
+	end3
+
+BattleScript_HealAllPartyStatus::
 	copyword gTempMove, gCurrentMove
 	setword gCurrentMove, MOVE_AROMATHERAPY
-	call BattleScript_AbilityPopUp
 	healpartystatus
 	waitstate
 	printfromtable gPartyStatusHealStringIds
@@ -5291,7 +5327,7 @@ BattleScript_EffectSoothingAroma::
 	updatestatusicon BS_ATTACKER_WITH_PARTNER
 	waitstate
 	copyword gCurrentMove, gTempMove
-	end3
+	return
 
 BattleScript_EffectThief::
 	setmoveeffect MOVE_EFFECT_STEAL_ITEM
@@ -12311,16 +12347,8 @@ BattleScript_SeedSowerGrassySucceeded:
 	waitmessage B_WAIT_TIME_LONG
 	call BattleScript_OnTerrainChanged
 BattleScript_SeedSowerTryCleanse:
-	copyword gTempMove, gCurrentMove
-	setword gCurrentMove, MOVE_AROMATHERAPY
 	swapbattlerandtargetvia34
-	healpartystatus
-	waitstate
-	printfromtable gPartyStatusHealStringIds
-	waitmessage B_WAIT_TIME_LONG
-	updatestatusicon BS_ATTACKER_WITH_PARTNER
-	waitstate
-	copyword gCurrentMove, gTempMove
+	call BattleScript_HealAllPartyStatus
 	restoreattackerandtargetfrom34
 BattleScript_SeedSowerEnd:
 	return

@@ -286,6 +286,7 @@ extern const u8 BattleScript_AttackerAbilityStatRaiseEnd3[];
 extern const u8 BattleScript_PoisonHealActivates[];
 extern const u8 BattleScript_BadDreamsActivates[];
 extern const u8 BattleScript_SwitchInAbilityMsg[];
+extern const u8 BattleScript_Hospitality[];
 extern const u8 BattleScript_CommanderActivates[];
 extern const u8 BattleScript_CommanderEnds[];
 extern const u8 BattleScript_CommanderEndsEnd2[];
@@ -598,6 +599,7 @@ extern const u8 BattleScript_AngelsWrathProtectEffect[];
 extern const u8 BattleScript_IntimidateActivatedNew[];
 extern const u8 BattleScript_GeneratorActivates[];
 extern const u8 BattleScript_EffectSoothingAroma[];
+extern const u8 BattleScript_EffectButterUp[];
 extern const u8 BattleScript_MoveWasDisabledMessage[];
 extern const u8 BattleScript_AbilityBoostsCrit[];
 
