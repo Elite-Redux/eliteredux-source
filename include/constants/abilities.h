@@ -197,7 +197,7 @@
 #define ABILITY_AERILATE 184 // Normal-type moves become Flying- type moves and get a 1.1x boost.
 #define ABILITY_PARENTAL_BOND 185 // Moves hit twice. 1st hit at 100% power, 2nd hit at 25%.
 #define ABILITY_DARK_AURA 186 // Boosts Dark moves by 1.33x for all while this Pokémon is out.
-#define ABILITY_FAIRY_AURA 187 // Boosts Fairy moves by 1.33x for Weather-based moves are unusable.
+#define ABILITY_FAIRY_AURA 187 // Boosts Fairy moves by 1.33x for all while this Pokémon is out.
 #define ABILITY_AURA_BREAK 188 // Cancels aura abilities and makes them 25% weaker instead.
 #define ABILITY_PRIMORDIAL_SEA 189 // Heavy Rain until switched out. Fire-type moves are unusable.
 #define ABILITY_DESOLATE_LAND 190 // Intense Sun until switched out. Water-type moves are unusable.
@@ -484,7 +484,7 @@
 #define ABILITY_COMBAT_SPECIALIST 462 // Boosts the power of punching and kicking moves by 1.3x.
 #define ABILITY_JUNGLES_GUARD 463 // Grass-types on user side: immune to status/stat drops from enemy.
 #define ABILITY_HUNTERS_HORN 464 // Boost horn moves and heals 1/4 HP when defeating an enemy.
-#define ABILITY_PIXIE_POWER 465 // Boosts Fairy moves by 33% and 1.2x accuracy.
+#define ABILITY_PIXIE_POWER 465 // 1.2x accuracy. Boosts Fairy moves by 1.33x for all.
 #define ABILITY_PLASMA_LAMP 466 // Boost accuracy & power of Fire & Electric type moves by 1.2x.
 #define ABILITY_MAGMA_EATER 467 // Combines Predator & Molten Down.
 #define ABILITY_SUPER_HOT_GOO 468 // Inflicts burn and lower the speed on contact.
