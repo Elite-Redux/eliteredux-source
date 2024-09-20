@@ -33829,12 +33829,12 @@ static const struct TrainerMonItemCustomMoves sParty_Samuel[] = {
 static const struct TrainerMonItemCustomMoves sParty_Julie[] = {
     {
     .lvl = 0,
-    .species = SPECIES_ENTEI,
-    .heldItem = ITEM_ASSAULT_VEST,
-    .ability = 2,
-    .evs = {160, 252, 0, 0, 0, 96},
-    .nature = NATURE_ADAMANT,
-    .moves = MOVE_SACRED_FIRE, MOVE_THUNDER_FANG, MOVE_EXTREME_SPEED, MOVE_ICE_FANG
+    .species = SPECIES_VOLCANION,
+    .heldItem = ITEM_LIFE_ORB,
+    .ability = 1,
+    .evs = {252, 0, 0, 252, 4, 0},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_STEAM_ERUPTION, MOVE_FIRE_HYDRO_STEAM, MOVE_SCORCHING_SANDS, MOVE_SEARING_SHOT
     },
     {
     .lvl = 0,
@@ -33847,12 +33847,12 @@ static const struct TrainerMonItemCustomMoves sParty_Julie[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_VOLCANION,
-    .heldItem = ITEM_LIFE_ORB,
+    .species = SPECIES_GOUGING_FIRE,
+    .heldItem = ITEM_LUM_BERRY,
     .ability = 1,
-    .evs = {252, 0, 0, 252, 4, 0},
-    .nature = NATURE_MODEST,
-    .moves = MOVE_STEAM_ERUPTION, MOVE_FIRE_HYDRO_STEAM, MOVE_SCORCHING_SANDS, MOVE_SEARING_SHOT
+    .evs = {252, 252, 0, 0, 0, 4},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_DRAGON_CLAW, MOVE_EARTHQUAKE, MOVE_RAGING_FURY, MOVE_DRAGON_DANCE
     },
     {
     .lvl = 0,
