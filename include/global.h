@@ -1169,5 +1169,5 @@ struct MapPosition
     s16 y;
     s8 height;
 };
-
+// this is a test comment
 #endif // GUARD_GLOBAL_H
