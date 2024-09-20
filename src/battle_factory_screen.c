@@ -30,6 +30,9 @@
 #include "constants/battle_frontier.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
+#include "mgba_printf/mgba.h"
+
+static u8 getPartySize(void);
 
 // Select_ refers to the first Pokemon selection screen where you choose your initial 3 rental Pokemon.
 // Swap_   refers to the subsequent selection screens where you can swap a Pokemon with one from the beaten trainer
@@ -40,9 +43,8 @@
 
 #define SWAP_PLAYER_SCREEN 0  // The screen where the player selects which of their pokemon to swap away
 #define SWAP_ENEMY_SCREEN  1  // The screen where the player selects which new pokemon from the defeated party to swap for
-
-#define SELECTABLE_MONS_COUNT 12
-
+#define SELECTABLE_MONS_COUNT 6
+#define SELECTABLE_MONS_COUNT_6V6 12
 enum {
     PALTAG_BALL_GRAY = 100,
     PALTAG_BALL_SELECTED,
@@ -106,8 +108,8 @@ struct FactorySelectScreen
     bool8 fromSummaryScreen;
     u8 yesNoCursorPos;
     u8 unused;
-    struct FactorySelectableMon mons[SELECTABLE_MONS_COUNT];
-    struct FactoryMonPic monPics[FRONTIER_PARTY_SIZE]; // Array so all chosen mons can be shown at once
+    struct FactorySelectableMon mons[SELECTABLE_MONS_COUNT_6V6];
+    struct FactoryMonPic monPics[FRONTIER_PARTY_SIZE_6]; // Array so all chosen mons can be shown at once
     bool8 monPicAnimating;
     u8 fadeSpeciesNameTaskId;
     bool8 fadeSpeciesNameActive;
@@ -131,7 +133,7 @@ struct FactorySwapScreen
     u8 menuCursor2SpriteId;
     u8 cursorPos;
     u8 cursorSpriteId;
-    u8 ballSpriteIds[FRONTIER_PARTY_SIZE];
+    u8 ballSpriteIds[FRONTIER_PARTY_SIZE_6];
     u8 pkmnForSwapButtonSpriteIds[2][3]; // For this and sprite ID array below, [0][i] is the button background, [1][i] is the button highlight
     u8 cancelButtonSpriteIds[2][2];
     u8 playerMonId;
@@ -183,8 +185,8 @@ static void Select_Task_FadeSpeciesName(u8);
 static void Select_Task_OpenChosenMonPics(u8);
 static void Select_Task_HandleChooseMons(u8);
 static void Select_Task_HandleMenu(u8);
-static void CreateFrontierFactorySelectableMons(u8);
-static void CreateSlateportTentSelectableMons(u8);
+static void CreateFrontierFactorySelectableMons();
+static void CreateSlateportTentSelectableMons();
 static void Select_SetBallSpritePaletteNum(u8);
 static void Select_ErasePopupMenu(u8);
 static u8 Select_RunMenuOptionFunc(void);
@@ -1284,13 +1286,13 @@ static void Select_InitMonsData(void)
     sFactorySelectScreen->cursorPos = 0;
     sFactorySelectScreen->selectingMonsState = 1;
     sFactorySelectScreen->fromSummaryScreen = FALSE;
-    for (i = 0; i < SELECTABLE_MONS_COUNT; i++)
+    for (i = 0; i < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT); i++)
         sFactorySelectScreen->mons[i].selectedId = 0;
 
     if (gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_TENT)
-        CreateFrontierFactorySelectableMons(0);
+        CreateFrontierFactorySelectableMons();
     else
-        CreateSlateportTentSelectableMons(0);
+        CreateSlateportTentSelectableMons();
 }
 
 static void Select_InitAllSprites(void)
@@ -1298,9 +1300,14 @@ static void Select_InitAllSprites(void)
     u8 i, cursorPos;
     s16 x;
 
-    for (i = 0; i < SELECTABLE_MONS_COUNT; i++)
+    for (i = 0; i < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT); i++)
     {
-        sFactorySelectScreen->mons[i].ballSpriteId = CreateSprite(&sSpriteTemplate_Select_Pokeball, (20 * i) + 10, 64, 1);
+        if(!FlagGet(FLAG_FRONTIER_6V6)){
+            sFactorySelectScreen->mons[i].ballSpriteId = CreateSprite(&sSpriteTemplate_Select_Pokeball, (35 * i) + 32, 64, 1);
+        }
+        else{
+            sFactorySelectScreen->mons[i].ballSpriteId = CreateSprite(&sSpriteTemplate_Select_Pokeball, (20 * i) + 10, 64, 1);
+        }
         gSprites[sFactorySelectScreen->mons[i].ballSpriteId].data[0] = 0;
         Select_SetBallSpritePaletteNum(i);
     }
@@ -1323,7 +1330,7 @@ static void Select_DestroyAllSprites(void)
 {
     u8 i;
 
-    for (i = 0; i < SELECTABLE_MONS_COUNT; i++)
+    for (i = 0; i < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT); i++)
         DestroySprite(&gSprites[sFactorySelectScreen->mons[i].ballSpriteId]);
 
     DestroySprite(&gSprites[sFactorySelectScreen->cursorSpriteId]);
@@ -1336,7 +1343,7 @@ static void Select_UpdateBallCursorPosition(s8 direction)
     u8 cursorPos;
     if (direction > 0) // Move cursor right.
     {
-        if (sFactorySelectScreen->cursorPos != SELECTABLE_MONS_COUNT - 1)
+        if (sFactorySelectScreen->cursorPos != (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT) - 1)
             sFactorySelectScreen->cursorPos++;
         else
             sFactorySelectScreen->cursorPos = 0;
@@ -1346,7 +1353,7 @@ static void Select_UpdateBallCursorPosition(s8 direction)
         if (sFactorySelectScreen->cursorPos != 0)
             sFactorySelectScreen->cursorPos--;
         else
-            sFactorySelectScreen->cursorPos = SELECTABLE_MONS_COUNT - 1;
+            sFactorySelectScreen->cursorPos = (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT) - 1;
     }
 
     cursorPos = sFactorySelectScreen->cursorPos;
@@ -1402,15 +1409,15 @@ static void Select_HandleMonSelectionChange(void)
     if (sFactorySelectScreen->mons[cursorPos].selectedId) // Deselect a mon.
     {
         paletteNum = IndexOfSpritePaletteTag(PALTAG_BALL_GRAY);
-        if (sFactorySelectScreen->selectingMonsState == FRONTIER_PARTY_SIZE
+        if (sFactorySelectScreen->selectingMonsState == getPartySize()
          && sFactorySelectScreen->mons[cursorPos].selectedId == 1)
         {
-            for (i = 0; i < SELECTABLE_MONS_COUNT; i++)
+            for (i = 0; i < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT); i++)
             {
-                if (sFactorySelectScreen->mons[i].selectedId == FRONTIER_PARTY_SIZE - 1)
+                if (sFactorySelectScreen->mons[i].selectedId == getPartySize() - 1)
                     break;
             }
-            if (i == SELECTABLE_MONS_COUNT)
+            if (i == (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT))
                 return;
             else
                 sFactorySelectScreen->mons[i].selectedId = 1;
@@ -1471,10 +1478,10 @@ static void Select_Task_OpenSummaryScreen(u8 taskId)
         DestroyTask(taskId);
         sFactorySelectScreen->fromSummaryScreen = TRUE;
         currMonId = sFactorySelectScreen->cursorPos;
-        sFactorySelectMons = AllocZeroed(sizeof(struct Pokemon) * SELECTABLE_MONS_COUNT);
-        for (i = 0; i < SELECTABLE_MONS_COUNT; i++)
+        sFactorySelectMons = AllocZeroed(sizeof(struct Pokemon) * (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT));
+        for (i = 0; i < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT); i++)
             sFactorySelectMons[i] = sFactorySelectScreen->mons[i].monData;
-        ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, sFactorySelectMons, currMonId, SELECTABLE_MONS_COUNT - 1, CB2_InitSelectScreen);
+        ShowPokemonSummaryScreen(SUMMARY_MODE_LOCK_MOVES, sFactorySelectMons, currMonId, (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT) - 1, CB2_InitSelectScreen);
         break;
     }
 }
@@ -1720,7 +1727,7 @@ static void Select_Task_HandleChooseMons(u8 taskId)
 #undef STATE_MENU_REINIT
 #undef STATE_MENU_RESHOW
 
-static void CreateFrontierFactorySelectableMons(u8 firstMonId)
+static void CreateFrontierFactorySelectableMons()
 {
     u8 i, j = 0;
     u8 ivs = 0;
@@ -1731,6 +1738,7 @@ static void CreateFrontierFactorySelectableMons(u8 firstMonId)
     u8 lvlMode = gSaveBlock2Ptr->frontier.lvlMode;
     u8 challengeNum = gSaveBlock2Ptr->frontier.factoryWinStreaks[battleMode][lvlMode] / 7;
     u8 rentalRank = 0;
+    int selectableMons = FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT;
 
     gFacilityTrainerMons = gBattleFrontierMons;
     if (gSaveBlock2Ptr->frontier.lvlMode != FRONTIER_LVL_50)
@@ -1741,15 +1749,15 @@ static void CreateFrontierFactorySelectableMons(u8 firstMonId)
     rentalRank = GetNumPastRentalsRank(battleMode, lvlMode);
     otId = T1_READ_32(gSaveBlock2Ptr->playerTrainerId);
 
-    for (i = 0; i < SELECTABLE_MONS_COUNT; i++)
+    for (i = 0; i < selectableMons; i++)
     {
         u16 monId = gSaveBlock2Ptr->frontier.rentalMons[i].monId;
-        sFactorySelectScreen->mons[i + firstMonId].monId = monId;
+        sFactorySelectScreen->mons[i].monId = monId;
         if (i < rentalRank)
             ivs = GetFactoryMonFixedIV(challengeNum + 1, 0);
         else
             ivs = GetFactoryMonFixedIV(challengeNum, 0);
-        CreateMonWithEVSpreadNatureOTID(&sFactorySelectScreen->mons[i + firstMonId].monData,
+        CreateMonWithEVSpreadNatureOTID(&sFactorySelectScreen->mons[i].monData,
                                              gFacilityTrainerMons[monId].species,
                                              level,
                                              gFacilityTrainerMons[monId].nature,
@@ -1759,28 +1767,29 @@ static void CreateFrontierFactorySelectableMons(u8 firstMonId)
                                              gFacilityTrainerMons[monId].abilityNum);
         friendship = 0;
         for (j = 0; j < MAX_MON_MOVES; j++)
-            SetMonMoveAvoidReturn(&sFactorySelectScreen->mons[i + firstMonId].monData, gFacilityTrainerMons[monId].moves[j], j);
-        SetMonData(&sFactorySelectScreen->mons[i + firstMonId].monData, MON_DATA_FRIENDSHIP, &friendship);
-        SetMonData(&sFactorySelectScreen->mons[i + firstMonId].monData, MON_DATA_HELD_ITEM, &gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId]);
+            SetMonMoveAvoidReturn(&sFactorySelectScreen->mons[i].monData, gFacilityTrainerMons[monId].moves[j], j);
+        SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_FRIENDSHIP, &friendship);
+        SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_HELD_ITEM, &gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId]);
     }
 }
 
-static void CreateSlateportTentSelectableMons(u8 firstMonId)
+static void CreateSlateportTentSelectableMons()
 {
     u8 i, j;
     u8 ivs = 0;
     u8 level = 30;
     u8 friendship = 0;
     u32 otId = 0;
+    int selectableMons = FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT;
 
     gFacilityTrainerMons = gSlateportBattleTentMons;
     otId = T1_READ_32(gSaveBlock2Ptr->playerTrainerId);
 
-    for (i = 0; i < SELECTABLE_MONS_COUNT; i++)
+    for (i = 0; i < selectableMons; i++)
     {
         u16 monId = gSaveBlock2Ptr->frontier.rentalMons[i].monId;
-        sFactorySelectScreen->mons[i + firstMonId].monId = monId;
-        CreateMonWithEVSpreadNatureOTID(&sFactorySelectScreen->mons[i + firstMonId].monData,
+        sFactorySelectScreen->mons[i].monId = monId;
+        CreateMonWithEVSpreadNatureOTID(&sFactorySelectScreen->mons[i].monData,
                                              gFacilityTrainerMons[monId].species,
                                              level,
                                              gFacilityTrainerMons[monId].nature,
@@ -1790,9 +1799,9 @@ static void CreateSlateportTentSelectableMons(u8 firstMonId)
                                              gFacilityTrainerMons[monId].abilityNum);
         friendship = 0;
         for (j = 0; j < MAX_MON_MOVES; j++)
-            SetMonMoveAvoidReturn(&sFactorySelectScreen->mons[i + firstMonId].monData, gFacilityTrainerMons[monId].moves[j], j);
-        SetMonData(&sFactorySelectScreen->mons[i + firstMonId].monData, MON_DATA_FRIENDSHIP, &friendship);
-        SetMonData(&sFactorySelectScreen->mons[i + firstMonId].monData, MON_DATA_HELD_ITEM, &gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId]);
+            SetMonMoveAvoidReturn(&sFactorySelectScreen->mons[i].monData, gFacilityTrainerMons[monId].moves[j], j);
+        SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_FRIENDSHIP, &friendship);
+        SetMonData(&sFactorySelectScreen->mons[i].monData, MON_DATA_HELD_ITEM, &gBattleFrontierHeldItems[gFacilityTrainerMons[monId].itemTableId]);
     }
 }
 
@@ -1800,9 +1809,9 @@ static void Select_CopyMonsToPlayerParty(void)
 {
     u8 i, j;
 
-    for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+    for (i = 0; i < getPartySize(); i++)
     {
-        for (j = 0; j < SELECTABLE_MONS_COUNT; j++)
+        for (j = 0; j < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT); j++)
         {
             if (sFactorySelectScreen->mons[j].selectedId == i + 1)
             {
@@ -1951,7 +1960,7 @@ static u8 Select_OptionRentDeselect(void)
         Select_HandleMonSelectionChange();
         Select_PrintSelectMonString();
         Select_ErasePopupMenu(SELECT_WIN_OPTIONS);
-        if (sFactorySelectScreen->selectingMonsState > FRONTIER_PARTY_SIZE)
+        if (sFactorySelectScreen->selectingMonsState > getPartySize())
             return SELECT_CONFIRM_MONS;
         else
             return SELECT_CONTINUE_CHOOSING;
@@ -1964,7 +1973,7 @@ static u8 Select_DeclineChosenMons(void)
     Select_HandleMonSelectionChange();
     Select_PrintSelectMonString();
     Select_ErasePopupMenu(SELECT_WIN_OPTIONS);
-    if (sFactorySelectScreen->selectingMonsState > FRONTIER_PARTY_SIZE)
+    if (sFactorySelectScreen->selectingMonsState > getPartySize())
         return 2;
     else
         return 1;
@@ -1988,7 +1997,7 @@ static void Select_PrintMonCategory(void)
     u8 text[30];
     u8 x;
     u8 monId = sFactorySelectScreen->cursorPos;
-    if (monId < SELECTABLE_MONS_COUNT)
+    if (monId < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT))
     {
         PutWindowTilemap(SELECT_WIN_MON_CATEGORY);
         FillWindowPixelBuffer(SELECT_WIN_MON_CATEGORY, PIXEL_FILL(0));
@@ -2051,9 +2060,9 @@ static void Select_CreateChosenMonsSprites(void)
 {
     u8 i, j;
 
-    for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+    for (i = 0; i < getPartySize(); i++)
     {
-        for (j = 0; j < SELECTABLE_MONS_COUNT; j++)
+        for (j = 0; j < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT); j++)
         {
             if (sFactorySelectScreen->mons[j].selectedId == i + 1)
             {
@@ -2257,7 +2266,7 @@ static bool32 Select_AreSpeciesValid(u16 monId)
 
     for (i = 1; i < selectState; i++)
     {
-        for (j = 0; j < SELECTABLE_MONS_COUNT; j++)
+        for (j = 0; j < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT); j++)
         {
             if (sFactorySelectScreen->mons[j].selectedId == i)
             {
@@ -2351,8 +2360,8 @@ static void CopySwappedMonData(void)
     gPlayerParty[sFactorySwapScreen->playerMonId] = gEnemyParty[sFactorySwapScreen->enemyMonId];
     friendship = 0;
     SetMonData(&gPlayerParty[sFactorySwapScreen->playerMonId], MON_DATA_FRIENDSHIP, &friendship);
-    gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].monId = gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->enemyMonId + FRONTIER_PARTY_SIZE].monId;
-    gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].ivs = gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->enemyMonId + FRONTIER_PARTY_SIZE].ivs;
+    gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].monId = gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->enemyMonId + getPartySize()].monId;
+    gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].ivs = gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->enemyMonId + getPartySize()].ivs;
     gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].personality = GetMonData(&gEnemyParty[sFactorySwapScreen->enemyMonId], MON_DATA_PERSONALITY, NULL);
     gSaveBlock2Ptr->frontier.rentalMons[sFactorySwapScreen->playerMonId].abilityNum = GetBoxMonData(&gEnemyParty[sFactorySwapScreen->enemyMonId].box, MON_DATA_ABILITY_NUM, NULL);
 }
@@ -2398,7 +2407,7 @@ static void Swap_Task_OpenSummaryScreen(u8 taskId)
         DestroyTask(taskId);
         sFactorySwapScreen->fromSummaryScreen = TRUE;
         sFactorySwapScreen->speciesNameColorBackup = gPlttBufferUnfaded[244];
-        ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gPlayerParty, sFactorySwapScreen->cursorPos, FRONTIER_PARTY_SIZE - 1, CB2_InitSwapScreen);
+        ShowPokemonSummaryScreen(SUMMARY_MODE_NORMAL, gPlayerParty, sFactorySwapScreen->cursorPos, getPartySize() - 1, CB2_InitSwapScreen);
         break;
     }
 }
@@ -2797,9 +2806,9 @@ static void Swap_Task_SlideCycleBalls(u8 taskId)
         break;
     case 1:
         lastX = 0;
-        for (i = FRONTIER_PARTY_SIZE - 1; i >= 0; i--)
+        for (i = getPartySize() - 1; i >= 0; i--)
         {
-            if (i != FRONTIER_PARTY_SIZE - 1)
+            if (i != getPartySize() - 1)
             {
                 u8 posX = lastX - gSprites[sFactorySwapScreen->ballSpriteIds[i]].x;
                 if (posX == 16 || gTasks[taskId].tBallCycled(i + 1) == TRUE)
@@ -3166,7 +3175,7 @@ static void Swap_Task_ScreenInfoTransitionIn(u8 taskId)
             Swap_PrintOnInfoWindow(gText_SelectPkmnToSwap);
         else
             Swap_PrintOnInfoWindow(gText_SelectPkmnToAccept);
-        if (sFactorySwapScreen->cursorPos < FRONTIER_PARTY_SIZE)
+        if (sFactorySwapScreen->cursorPos < getPartySize())
             gSprites[sFactorySwapScreen->cursorSpriteId].invisible = FALSE;
         Swap_PrintMonCategory();
         gTasks[taskId].tState++;
@@ -3436,7 +3445,7 @@ static void Swap_InitAllSprites(void)
     spriteTemplate = sSpriteTemplate_Swap_Pokeball;
     spriteTemplate.paletteTag = PALTAG_BALL_SELECTED;
 
-    for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+    for (i = 0; i < getPartySize(); i++)
     {
         sFactorySwapScreen->ballSpriteIds[i] = CreateSprite(&spriteTemplate, (48 * i) + 72, 64, 1);
         gSprites[sFactorySwapScreen->ballSpriteIds[i]].data[0] = 0;
@@ -3525,7 +3534,7 @@ static void Swap_DestroyAllSprites(void)
 {
     u8 i, j;
 
-    for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+    for (i = 0; i < getPartySize(); i++)
         DestroySprite(&gSprites[sFactorySwapScreen->ballSpriteIds[i]]);
     DestroySprite(&gSprites[sFactorySwapScreen->cursorSpriteId]);
     DestroySprite(&gSprites[sFactorySwapScreen->menuCursor1SpriteId]);
@@ -3544,7 +3553,7 @@ static void Swap_DestroyAllSprites(void)
 
 static void Swap_HandleActionCursorChange(u8 cursorId)
 {
-    if (cursorId < FRONTIER_PARTY_SIZE)
+    if (cursorId < getPartySize())
     {
         // Cursor is on one of the pokemon
         gSprites[sFactorySwapScreen->cursorSpriteId].invisible = FALSE;
@@ -3588,8 +3597,8 @@ static void Swap_UpdateActionCursorPosition(s8 direction)
     PlaySE(SE_SELECT);
     if (direction > 0) // Move cursor down.
     {
-        if (sFactorySwapScreen->cursorPos < FRONTIER_PARTY_SIZE)
-            sFactorySwapScreen->cursorPos = FRONTIER_PARTY_SIZE;
+        if (sFactorySwapScreen->cursorPos < getPartySize())
+            sFactorySwapScreen->cursorPos = getPartySize();
         else if (sFactorySwapScreen->cursorPos + 1 != sFactorySwapScreen->actionsCount)
             sFactorySwapScreen->cursorPos++;
         else
@@ -3597,7 +3606,7 @@ static void Swap_UpdateActionCursorPosition(s8 direction)
     }
     else // Move cursor up.
     {
-        if (sFactorySwapScreen->cursorPos < FRONTIER_PARTY_SIZE)
+        if (sFactorySwapScreen->cursorPos < getPartySize())
             sFactorySwapScreen->cursorPos = sFactorySwapScreen->actionsCount - 1;
         else if (sFactorySwapScreen->cursorPos != 0)
             sFactorySwapScreen->cursorPos--;
@@ -3771,7 +3780,7 @@ static void Swap_PrintMonSpecies(void)
     u8 x;
 
     FillWindowPixelBuffer(SWAP_WIN_SPECIES, PIXEL_FILL(0));
-    if (sFactorySwapScreen->cursorPos >= FRONTIER_PARTY_SIZE)
+    if (sFactorySwapScreen->cursorPos >= getPartySize())
     {
         CopyWindowToVram(SWAP_WIN_SPECIES, 2);
     }
@@ -3880,7 +3889,7 @@ static void Swap_PrintMonSpeciesAtFade(void)
 
     PutWindowTilemap(SWAP_WIN_SPECIES_AT_FADE);
     FillWindowPixelBuffer(SWAP_WIN_SPECIES_AT_FADE, PIXEL_FILL(0));
-    if (sFactorySwapScreen->cursorPos >= FRONTIER_PARTY_SIZE)
+    if (sFactorySwapScreen->cursorPos >= getPartySize())
     {
         CopyWindowToVram(SWAP_WIN_SPECIES_AT_FADE, 3);
     }
@@ -3907,7 +3916,7 @@ static void Swap_PrintMonSpeciesForTransition(void)
     LoadPalette(sSwapText_Pal, 0xE0, sizeof(sSwapText_Pal));
     CpuCopy16(&gPlttBufferUnfaded[240], &gPlttBufferFaded[224], 10);
 
-    if (sFactorySwapScreen->cursorPos >= FRONTIER_PARTY_SIZE)
+    if (sFactorySwapScreen->cursorPos >= getPartySize())
     {
         CopyWindowToVram(SWAP_WIN_SPECIES, 2);
     }
@@ -3933,7 +3942,7 @@ static void Swap_PrintMonCategory(void)
     u8 monId = sFactorySwapScreen->cursorPos;
 
     FillWindowPixelBuffer(SWAP_WIN_MON_CATEGORY, PIXEL_FILL(0));
-    if (monId >= FRONTIER_PARTY_SIZE)
+    if (monId >= getPartySize())
     {
         CopyWindowToVram(SWAP_WIN_MON_CATEGORY, 2);
     }
@@ -4161,7 +4170,7 @@ static bool8 Swap_AlreadyHasSameSpecies(u8 monId)
     u8 i;
     u16 species = GetMonData(&gEnemyParty[monId], MON_DATA_SPECIES, NULL);
 
-    for (i = 0; i < FRONTIER_PARTY_SIZE; i++)
+    for (i = 0; i < getPartySize(); i++)
     {
         if (i != sFactorySwapScreen->playerMonId && (u16)(GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL)) == species)
             return TRUE;
@@ -4317,4 +4326,8 @@ static void Swap_CreateMonSprite(void)
     gSprites[sFactorySwapScreen->monPic.monSpriteId].centerToCornerVecY = 0;
 
     sFactorySwapScreen->monPicAnimating = FALSE;
+}
+
+static u8 getPartySize(){
+    return FlagGet(FLAG_FRONTIER_6V6) ? FRONTIER_PARTY_SIZE_6 : FRONTIER_PARTY_SIZE;
 }
