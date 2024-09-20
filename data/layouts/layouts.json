@@ -4776,7 +4776,7 @@
       "name": "LegendaryDomain_Layout",
       "width": 20,
       "height": 20,
-      "primary_tileset": "gTileset_Building",
+      "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_NavelRock",
       "border_filepath": "data/layouts/LegendaryDomain/border.bin",
       "blockdata_filepath": "data/layouts/LegendaryDomain/map.bin"
