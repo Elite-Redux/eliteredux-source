@@ -886,7 +886,7 @@
 #define TRAINER_STEVEN_DOUBLES_LEGENDS                 882
 
 #define TRAINER_VINEGAR                                883
-#define TRAINER_SALT                                   884
+#define TRAINER_SALSA                                  884
 #define TRAINER_KATSUP                                 885
 
 #define TRAINER_MONOCHAMP_NORMAL                       886

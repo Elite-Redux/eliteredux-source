@@ -12497,18 +12497,18 @@ const struct Trainer gTrainers[] = {
         .party = {.ItemCustomMoves = sParty_Vinegar},
     },
 
-    [TRAINER_SALT] =
+    [TRAINER_SALSA] =
     {
         .partyFlags = F_TRAINER_PARTY_HELD_ITEM | F_TRAINER_PARTY_CUSTOM_MOVESET,
         .trainerClass = TRAINER_CLASS_BLACK_BELT,
         .encounterMusic_gender = TRAINER_ENCOUNTER_MUSIC_MALE,
         .trainerPic = TRAINER_PIC_BLACK_BELT,
-        .trainerName = _("Salt"),
+        .trainerName = _("Salsa"),
         .items = {},
         .doubleBattle = FALSE,
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
-        .partySize = ARRAY_COUNT(sParty_Salt),
-        .party = {.ItemCustomMoves = sParty_Salt},
+        .partySize = ARRAY_COUNT(sParty_Salsa),
+        .party = {.ItemCustomMoves = sParty_Salsa},
     },
 
     [TRAINER_KATSUP] =

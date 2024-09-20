@@ -39533,7 +39533,7 @@ static const struct TrainerMonItemCustomMoves sParty_Vinegar[] = {
     }
 };
 
-static const struct TrainerMonItemCustomMoves sParty_Salt[] = {
+static const struct TrainerMonItemCustomMoves sParty_Salsa[] = {
     {
     .lvl = 0,
     .species = SPECIES_CRABONINATION,
