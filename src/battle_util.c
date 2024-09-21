@@ -9149,6 +9149,22 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+		// Frostmaw
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FROSTMAW)) {
+		    if (ShouldApplyOnHitAffect(gBattlerTarget)
+             && CanGetFrostbite(gBattlerTarget)
+			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
+             && (Random() % 2) == 0)
+            {
+				gBattleScripting.abilityPopupOverwrite = ABILITY_FROSTMAW;
+                gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                effect++;
+            }
+        }
+
         if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ASSASSINS_TOOLS)) {
             if (ShouldApplyOnHitAffect(gBattlerTarget)
                 && IsMoveMakingContact(move, gBattlerAttacker))
