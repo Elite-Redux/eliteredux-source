@@ -8184,7 +8184,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
 		// Effect Spore
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_EFFECT_SPORE)) {
-            EFFECT_SPORE:
             if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GRASS)
 			 && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_OVERCOAT)
              && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_EFFECT_SPORE)
@@ -9212,6 +9211,43 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                 gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                 effect++;
+            }
+        }
+
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ASSASSINS_TOOLS)) {
+            if (ShouldApplyOnHitAffect(gBattlerTarget)
+                && IsMoveMakingContact(move, gBattlerAttacker))
+            {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_ASSASSINS_TOOLS;
+                switch (Random() % 2)
+                {
+                    case 0:
+                        if (!CanBePoisoned(battler, gBattlerTarget)) break;
+                        gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                        effect++;
+                        break;
+                        
+                    case 1:
+                        if (!CanBeParalyzed(battler, gBattlerTarget)) break;
+                        gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                        effect++;
+                        break;
+                        
+                    case 2:
+                        if (!CanBleed(gBattlerTarget)) break;
+                        gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                        effect++;
+                        break;
+                }
             }
         }
 
