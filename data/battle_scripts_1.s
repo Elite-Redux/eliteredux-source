@@ -7100,9 +7100,21 @@ BattleScript_MysticDanceTrySpeed::
 BattleScript_MysticDanceEnd::
 	goto BattleScript_MoveEnd
 
-
-
-
+BattleScript_DragonsRitual::
+	call BattleScript_AbilityPopUp
+	playstatchangeanimation BS_ATTACKER, BIT_ATK | BIT_SPEED, 0
+	setstatchanger STAT_ATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_DragonsRitual_Speed
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_DragonsRitual_Speed
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_DragonsRitual_Speed::
+	setstatchanger STAT_SPEED, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_Return
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_Return
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_EffectDragonDance::
 	attackcanceler

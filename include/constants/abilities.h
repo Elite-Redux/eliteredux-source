@@ -713,8 +713,9 @@
 #define ABILITY_BLIND_RAGE 691 // Combines Scrappy & Mold Breaker.
 #define ABILITY_SLIPSTREAM 692 // Moves use 20% of its Speed stat additionally.
 #define ABILITY_APEX_PREDATOR 693 // Combines Tough Claws & Predator.
+#define ABILITY_DRAGONS_RITUAL 694 // Dealing a KO raises Attack and Speed by one stage.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_APEX_PREDATOR + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DRAGONS_RITUAL + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
