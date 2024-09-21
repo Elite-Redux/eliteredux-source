@@ -4272,6 +4272,8 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_FORESIGHT:
         if (AI_DATA->abilities[battlerAtk] == ABILITY_SCRAPPY)
             break;
+        if (AI_DATA->abilities[battlerAtk] == ABILITY_BLIND_RAGE)
+            break;
         else if (gBattleMons[battlerDef].statStages[STAT_EVASION] > DEFAULT_STAT_STAGE
          || (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GHOST)
          && (HasMoveWithType(battlerAtk, TYPE_NORMAL)

@@ -13137,13 +13137,14 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
         case ABILITY_YUKI_ONNA:
             //Abilities that are immune to this effect
             if(BATTLER_HAS_ABILITY(battler, ABILITY_SCRAPPY)      ||
-               BATTLER_HAS_ABILITY(battler, ABILITY_OBLIVIOUS)    ||
-               BATTLER_HAS_ABILITY(battler, ABILITY_VITAL_SPIRIT) ||
-               BATTLER_HAS_ABILITY(battler, ABILITY_DISCIPLINE)   ||
-               BATTLER_HAS_ABILITY(battler, ABILITY_INNER_FOCUS)  ||
-               BATTLER_HAS_ABILITY(battler, ABILITY_UNLOCKED_POTENTIAL)  ||
-               BATTLER_HAS_ABILITY(battler, ABILITY_ENLIGHTENED) ||
-               BATTLER_HAS_ABILITY(battler, ABILITY_WAY_OF_PRECISION))
+                BATTLER_HAS_ABILITY(battler, ABILITY_BLIND_RAGE)  ||
+                BATTLER_HAS_ABILITY(battler, ABILITY_OBLIVIOUS)    ||
+                BATTLER_HAS_ABILITY(battler, ABILITY_VITAL_SPIRIT) ||
+                BATTLER_HAS_ABILITY(battler, ABILITY_DISCIPLINE)   ||
+                BATTLER_HAS_ABILITY(battler, ABILITY_INNER_FOCUS)  ||
+                BATTLER_HAS_ABILITY(battler, ABILITY_UNLOCKED_POTENTIAL)  ||
+                BATTLER_HAS_ABILITY(battler, ABILITY_ENLIGHTENED) ||
+                BATTLER_HAS_ABILITY(battler, ABILITY_WAY_OF_PRECISION))
                 return TRUE;
 
             checkOblivious = TRUE;

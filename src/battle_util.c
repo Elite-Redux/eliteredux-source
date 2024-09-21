@@ -6644,7 +6644,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         //Mold Breaker
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_MOLD_BREAKER)){
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_MOLD_BREAKER) | CheckAndSetSwitchInAbility(battler, ABILITY_BLIND_RAGE)){
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_MOLDBREAKER;
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
@@ -10764,14 +10764,16 @@ bool8 BattlerIgnoresAbility(u8 sBattlerAttacker, u8 sBattlerTarget, u16 ability)
     //Check if the attacker has any Mold Breaker Variant
     switch(abilityAtk){
         case ABILITY_MOLD_BREAKER:
+        case ABILITY_BLIND_RAGE:
         case ABILITY_TERAVOLT:
         case ABILITY_TURBOBLAZE:
             return !(gStatuses3[sBattlerAttacker] & STATUS3_GASTRO_ACID);
         default:
             if (gStatuses3[sBattlerAttacker] & STATUS3_GASTRO_ACID && B_NEUTRALIZING_GAS_WORKS_ON_INNATES) return FALSE;
             if(SpeciesHasInnate(species, ABILITY_MOLD_BREAKER, level, personality, isEnemyMon, isEnemyMon) ||
-               SpeciesHasInnate(species, ABILITY_TERAVOLT,     level, personality, isEnemyMon, isEnemyMon) ||
-               SpeciesHasInnate(species, ABILITY_TURBOBLAZE,   level, personality, isEnemyMon, isEnemyMon))
+                SpeciesHasInnate(species, ABILITY_BLIND_RAGE, level, personality, isEnemyMon, isEnemyMon) ||
+                SpeciesHasInnate(species, ABILITY_TERAVOLT, level, personality, isEnemyMon, isEnemyMon) ||
+                SpeciesHasInnate(species, ABILITY_TURBOBLAZE, level, personality, isEnemyMon, isEnemyMon))
             return TRUE;
         break;
     }
@@ -15270,11 +15272,9 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
     {
         mod = UQ_4_12(1.0);
     }
-    else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SCRAPPY) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MINDS_EYE)) && mod == UQ_4_12(0.0))
+    else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SCRAPPY) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BLIND_RAGE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MINDS_EYE)) && mod == UQ_4_12(0.0))
     {
         mod = UQ_4_12(1.0);
-        if (recordAbilities)
-            RecordAbilityBattle(battlerAtk, ABILITY_SCRAPPY);
     }
     else if (moveType == TYPE_GHOST && defType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PHANTOM_PAIN))
     {   
@@ -16441,9 +16441,11 @@ bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler)
     u16 ability = gBattleMons[battler].ability;
 
     if( ability == ABILITY_MOLD_BREAKER                 ||
+        ability == ABILITY_BLIND_RAGE                   ||
         ability == ABILITY_TERAVOLT                     ||
         ability == ABILITY_TURBOBLAZE                   ||
         BattlerHasInnate(battler, ABILITY_MOLD_BREAKER) || 
+        BattlerHasInnate(battler, ABILITY_BLIND_RAGE)   || 
         BattlerHasInnate(battler, ABILITY_TERAVOLT)     || 
         BattlerHasInnate(battler, ABILITY_TURBOBLAZE)   ||
         (getMonotypeChampType() == TYPE_STEEL && GetBattlerSide(battler) != B_SIDE_PLAYER))
