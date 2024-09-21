@@ -2238,3 +2238,12 @@
 			goto selecttrainerdend_\@
 		selecttrainerdend_\@:
 	.endm
+
+	@ setobjectmovementtype but works with object that are currently loaded by the player
+	@  - [object_event_id] the ID target
+	@  - [movement_type] the movement type to apply
+	.macro setobjectmovementtype2 object_event_id:req, movement_type:req
+		removeobject \object_event_id
+		setobjectmovementtype \object_event_id, \movement_type
+		addobject \object_event_id
+	.endm

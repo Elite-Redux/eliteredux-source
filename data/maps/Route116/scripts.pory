@@ -590,3 +590,46 @@ script Route116_EventScript_MegaNidos_Battle {
 	release
 	end	
 }
+
+const LOCALID_JOEY = 3
+const LOCALID_JOSE = 6
+script Route116_EventScript_TriggerTrainersJoeyJose {
+	setvar(VAR_TEMP_0, 1)
+	setobjectmovementtype2(LOCALID_JOEY, MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_DOWN_RIGHT_UP)
+	setobjectmovementtype2(LOCALID_JOSE, MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_UP_LEFT_DOWN)
+}
+
+const LOCALID_DAWNSON = 20
+const LOCALID_JERRY = 15
+script Route116_EventScript_TriggerTrainersDawsonJerry {
+	setvar(VAR_TEMP_1, 1)
+	setobjectmovementtype2(LOCALID_DAWNSON, MOVEMENT_TYPE_WALK_SEQUENCE_DOWN_RIGHT_LEFT_UP)
+	setobjectmovementtype2(LOCALID_JERRY, MOVEMENT_TYPE_WALK_SEQUENCE_UP_RIGHT_DOWN_LEFT)
+}
+
+const LOCALID_JANICE = 13
+const LOCALID_SARAH = 19
+
+script Route116_EventScript_TriggerTrainersJaniceSarah {
+	setvar(VAR_TEMP_2, 1)
+	setobjectmovementtype2(LOCALID_JANICE, MOVEMENT_TYPE_WALK_SEQUENCE_UP_LEFT_DOWN_RIGHT)
+	setobjectmovementtype2(LOCALID_SARAH, MOVEMENT_TYPE_WALK_SEQUENCE_UP_LEFT_DOWN_RIGHT)
+}
+
+const LOCALID_KAREN = 14
+const LOCALID_CLARK = 11 
+
+script Route116_EventScript_TriggerTrainersKarenClark {
+	setvar(VAR_TEMP_3, 1)
+	setobjectmovementtype2(LOCALID_KAREN, MOVEMENT_TYPE_WALK_SEQUENCE_LEFT_DOWN_UP_RIGHT)
+	setobjectmovementtype2(LOCALID_CLARK, MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_UP_DOWN_LEFT)
+}
+
+const LOCALID_DEVAN = 24 
+const LOCALID_JOHNSON = 23 
+
+script Route116_EventScript_TriggerTrainersDevanJohnson {
+	setvar(VAR_TEMP_4, 1)
+	setobjectmovementtype2(LOCALID_DEVAN, MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_DOWN_UP_LEFT)
+	setobjectmovementtype2(LOCALID_JOHNSON, MOVEMENT_TYPE_WALK_SEQUENCE_RIGHT_UP_LEFT_DOWN)
+}
