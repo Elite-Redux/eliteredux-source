@@ -34137,21 +34137,21 @@ static const struct TrainerMonItemCustomMoves sParty_Vito[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_VANILLUXE,
-    .heldItem = ITEM_LIFE_ORB,
-    .ability = 1,
-    .evs = {4, 0, 0, 252, 0, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_BLIZZARD, MOVE_SHEER_COLD, MOVE_FLASH_CANNON, MOVE_POWER_GEM
-    },
-    {
-    .lvl = 0,
     .species = SPECIES_MAMOSWINE,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_TECTONIC_FANGS, MOVE_ICE_FANG, MOVE_ICE_SHARD, MOVE_JAGGED_FANGS
+    .moves = MOVE_TECTONIC_FANGS, MOVE_ICE_FANG, MOVE_JAGGED_FANGS, MOVE_ICE_SHARD
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_ARTICUNO,
+    .heldItem = ITEM_LIGHT_CLAY,
+    .ability = 0,
+    .evs = {252, 0, 0, 252, 0, 4},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_AEROBLAST, MOVE_BLIZZARD, MOVE_SHEER_COLD, MOVE_HAIL
     },
     {
     .lvl = 0,
