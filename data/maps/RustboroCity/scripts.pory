@@ -879,6 +879,7 @@ RustboroCity_EventScript_MayBrineyHint:: @ 81E10C1
 	msgbox RustboroCity_Text_MayMrBrineyHint, MSGBOX_DEFAULT
 	compare VAR_0x8008, 0
 	call_if_eq RustboroCity_EventScript_RestoreBgm
+	call RustboroCity_EventScript_BrineyWarp
 	releaseall
 	end
 
@@ -951,6 +952,7 @@ RustboroCity_EventScript_BrendanBrineyHint:: @ 81E11C0
 	msgbox RustboroCity_Text_BrendanMrBrineyHint, MSGBOX_DEFAULT
 	compare VAR_0x8008, 0
 	call_if_eq RustboroCity_EventScript_RestoreBgm
+	call RustboroCity_EventScript_BrineyWarp
 	releaseall
 	end
 
@@ -1388,3 +1390,12 @@ RustboroCity_Text_YouCanHave2On2Battle: @ 81E249D
 	.string "Don't you think it'd be cool if you\n"
 	.string "could beat two Trainers by yourself?$"
 `
+
+script RustboroCity_EventScript_BrineyWarp{
+    msgbox(format("I can bring you there if you want?"), MSGBOX_YESNO)
+    if (var(VAR_RESULT)){
+        warp(MAP_ROUTE104, 255, 18, 51)
+        waitstate
+    }
+
+}
