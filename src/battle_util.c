@@ -5973,7 +5973,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetSwitchInAbility(battler, ABILITY_DOWNLOAD)){
             u32 statId, opposingBattler;
             u32 opposingDef = 0, opposingSpDef = 0;
-            u8 isUnaware = BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT);
+            u8 isUnaware = IsUnaware(battler);
 
             opposingBattler = BATTLE_OPPOSITE(battler);
             for (i = 0; i < 2; opposingBattler ^= BIT_FLANK, i++)
@@ -14023,8 +14023,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_PRETTY_PRINCESS:
-            if (!BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNAWARE) &&
-                !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CONTEMPT) &&
+            if (!IsUnaware(battlerAtk) &&
                 HasAnyLoweredStat(battlerDef))
                     MUL(1.5);
             return;
@@ -14514,8 +14513,11 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             statBase = gBattleMons[battler].defense;
             extraStatLevel = gVolatileStructs[battler].extraDefenseLevel;
 
-            // Tablets of Ruin
+            // Sword of Ruin
             RUIN_CHECK(ABILITY_SWORD_OF_RUIN)
+
+            // Sword of Damnation
+            RUIN_CHECK(ABILITY_SWORD_OF_DAMNATION)
 
             // Last Stand
             if (BATTLER_HAS_ABILITY(battler, ABILITY_LAST_STAND))
@@ -14612,14 +14614,14 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     u8 secondaryAtkStatToUse = 0;
     u8 statBattler = battlerAtk;
     //Calculates Highest Attack Stat after stat boosts
-    bool8 isUnaware = BATTLER_HAS_ABILITY(battlerDef, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTEMPT);
+    bool8 isUnaware = IsUnaware(battlerDef);
     u8 highestAttackStat = STAT_ATK;
     u32 atkStat;
     u16 modifier;
 
     if (gBattleMoves[move].effect == EFFECT_FOUL_PLAY)
     {
-        isUnaware = BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CONTEMPT);
+        isUnaware = IsUnaware(battlerAtk);
         statBattler = battlerDef;
     }
     else if (gBattleMoves[move].effect == EFFECT_BODY_PRESS)
@@ -14764,7 +14766,7 @@ void SetSwapDamageCategory(int battler, int target, int move)
         
         case USE_HIGHEST_OFFENSE:
             {
-                int isUnaware = BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT);
+                int isUnaware = IsUnaware(battler);
                 int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
                 int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
                 if (atk > spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_SPECIAL;
@@ -14775,8 +14777,8 @@ void SetSwapDamageCategory(int battler, int target, int move)
 
         case USE_HIGHEST_DAMAGE:
             {
-                int isUnaware = BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT);
-                int isTargetUnaware = BATTLER_HAS_ABILITY(target, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(target, ABILITY_CONTEMPT);
+                int isUnaware = IsUnaware(battler);
+                int isTargetUnaware = IsUnaware(target);
                 // Atk / Def > SpAtk / SpDef is equivalent to Atk * SpDef > SpAtk * Def and doesn't have rounding issues
                 int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE) * CalculateStat(target, STAT_SPDEF, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
                 int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE) * CalculateStat(target, STAT_DEF, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
@@ -14812,7 +14814,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     u8 defStatToUse = 0;
     u32 defStat;
     u8 noPositiveStatStages = isCrit || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GRIP_PINCER));
-    u8 isUnaware = BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CONTEMPT) || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED;
+    u8 isUnaware = IsUnaware(battlerAtk) || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED;
     u16 modifier;
 
     if (gBattleMoves[move].splitFlag == HITS_SPDEF)
@@ -17108,4 +17110,13 @@ int IsBloodStainAffected(int battler)
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)) return FALSE;
     if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)) return FALSE;
     return BATTLER_HAS_ABILITY(battler, ABILITY_BLOOD_STAIN);
+}
+
+int IsUnaware(int battler)
+{
+    int ability = GetBattlerAbility(battler);
+    if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_UNAWARE, ability)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_CONTEMPT, ability)) return TRUE;
+    if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_SWORD_OF_DAMNATION, ability)) return TRUE;
+    return FALSE;
 }

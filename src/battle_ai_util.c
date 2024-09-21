@@ -3536,8 +3536,7 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
         return;
 
     if (AI_DATA->abilities[battlerAtk] == ABILITY_CONTRARY
-        || (BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_UNAWARE) && statId != STAT_SPEED)
-        || (BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_CONTEMPT) && statId != STAT_SPEED))
+        || (IsUnaware(battlerDef) && statId != STAT_SPEED))
         return;
     
     if (AI_DATA->hpPercents[battlerAtk] < 80 && AI_RandLessThan(128))

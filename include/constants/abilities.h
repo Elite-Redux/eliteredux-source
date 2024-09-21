@@ -709,8 +709,9 @@
 #define ABILITY_HUGE_WINGS 687 // Giant Wings + Levitate.
 #define ABILITY_RESTRAINING_ORDER 688 // Forces the attacker when hit once each switch-in.
 #define ABILITY_VITALITY_STRIKE 686 // Heals for 10% of the damage dealt by punching moves.
+#define ABILITY_SWORD_OF_DAMNATION 687 // Combines Unaware & Sword of Damnation.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_VITALITY_STRIKE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SWORD_OF_DAMNATION + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
