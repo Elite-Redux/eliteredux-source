@@ -6337,6 +6337,7 @@ static void Cmd_moveend(void)
                         && IsBattlerAlive(battler)
                         && CanBattlerSwitch(gBattlerAttacker))
                     {
+                        SetAbilityState(battler, ABILITY_RESTRAINING_ORDER, RESTRAINING_ORDER_DONE);
                         gBattleScripting.abilityPopupOverwrite = ABILITY_RESTRAINING_ORDER;
                         gBattlerAbility = gStackBattler1 = battler;
                         if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
@@ -6361,6 +6362,12 @@ static void Cmd_moveend(void)
                         break;  // Only fastest red card activates
                     }
                 }
+            }
+
+            for (i = 0; i < gBattlersCount; i++)
+            {
+                if (GetAbilityState(i, ABILITY_RESTRAINING_ORDER) == RESTRAINING_ORDER_ACTIVATING)
+                    SetAbilityState(i, ABILITY_RESTRAINING_ORDER, RESTRAINING_ORDER_NOT_TRIGGERED);
             }
             gBattleScripting.moveendState++;
             break;
