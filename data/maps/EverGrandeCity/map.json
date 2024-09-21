@@ -82,13 +82,6 @@
       "elevation": 0,
       "dest_map": "MAP_EVERGRANDE_CITY_MONO_CHAMP_ROOM_1",
       "dest_warp_id": 0
-    },
-    {
-      "x": 14,
-      "y": 43,
-      "elevation": 0,
-      "dest_map": "MAP_LEGENDARY_DOMAIN",
-      "dest_warp_id": 0
     }
   ],
   "coord_events": [
