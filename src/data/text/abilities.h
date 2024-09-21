@@ -656,6 +656,7 @@ static const u8 sAbilityFinalBlowDescription[] = _("Unseen Fist + Fatal Precisio
 static const u8 sAbilityRestrainingOrderDescription[] = _("Forces the attacker when hit\nonce each switch-in.");
 static const u8 sAbilityVitalityStrikeDescription[] = _("Heals for 10% of the damage\ndealt by punching moves.");
 static const u8 sAbilitySwordOfDamnationDescription[] = _("Combines Unaware &\nSword of Damnation.");
+static const u8 sAbilityAssassinsToolsDescription[] = _("Contact moves have a 30%\nchance to PSN, PRLZ, or BLD.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1347,6 +1348,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_RESTRAINING_ORDER] = _("Restraining Order"),
     [ABILITY_VITALITY_STRIKE] = _("Vitality Strike"),
     [ABILITY_SWORD_OF_DAMNATION] = _("Sword of Damnation"),
+    [ABILITY_ASSASSINS_TOOLS] = _("Assassin's Tools"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2039,4 +2041,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_RESTRAINING_ORDER] = sAbilityRestrainingOrderDescription,
     [ABILITY_VITALITY_STRIKE] = sAbilityVitalityStrikeDescription,
     [ABILITY_SWORD_OF_DAMNATION] = sAbilitySwordOfDamnationDescription,
+    [ABILITY_ASSASSINS_TOOLS] = sAbilityAssassinsToolsDescription,
 };
