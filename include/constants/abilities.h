@@ -711,8 +711,9 @@
 #define ABILITY_FROSTMAW 689 // Biting moves have a 50% chance to inflict frostbite.
 #define ABILITY_PATCHWORK 690 // Curses the opponent after its Disguise breaks.
 #define ABILITY_BLIND_RAGE 691 // Combines Scrappy & Mold Breaker.
+#define ABILITY_SLIPSTREAM 692 // Moves use 20% of its Speed stat additionally.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BLIND_RAGE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SLIPSTREAM + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

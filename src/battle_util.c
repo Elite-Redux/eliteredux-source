@@ -14629,8 +14629,13 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         {
             secondaryAtkStatToUse = STAT_SPEED;
         }
-        // Speed Force
+        // Terminal Velocity
         if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_TERMINAL_VELOCITY) && IS_MOVE_SPECIAL(move))
+        {
+            secondaryAtkStatToUse = STAT_SPEED;
+        }
+        // Slipstream
+        if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SLIPSTREAM))
         {
             secondaryAtkStatToUse = STAT_SPEED;
         }
