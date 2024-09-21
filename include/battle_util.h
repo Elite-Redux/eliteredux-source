@@ -340,6 +340,7 @@ void MulModifier(u16 *modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
 int IsBloodStainAffected(int battler);
 int IsUnaware(int battler);
+void SetOncePerTurnAbilityCounter(int battler, int ability, int value);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
