@@ -13700,6 +13700,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_TOUGH_CLAWS:
         case ABILITY_BIG_PECKS:
+        case ABILITY_APEX_PREDATOR:
             if (IsMoveMakingContact(move, battlerAtk)) MUL(1.3);
             return;
         

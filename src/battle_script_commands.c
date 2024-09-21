@@ -9454,6 +9454,7 @@ static void Cmd_various(void)
             BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SOUL_EATER)      ||
             BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SCAVENGER)       ||
             BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PREDATOR)        ||
+            BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_APEX_PREDATOR)   ||
             BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HUNTERS_HORN)    ||
             BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MAGMA_EATER)     ||
             BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LOOTER)) {
@@ -9476,6 +9477,8 @@ static void Cmd_various(void)
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_SCAVENGER;
             else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PREDATOR))
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_PREDATOR;
+            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_APEX_PREDATOR))
+                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_APEX_PREDATOR;
             else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HUNTERS_HORN))
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_HUNTERS_HORN;
             else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MAGMA_EATER))
