@@ -2199,7 +2199,7 @@ static int GetOncePerTurnAbilityCounter(int battler, int ability)
     return gTurnStructs[battler].turnAbilityTriggers[index];
 }
 
-static void SetOncePerTurnAbilityCounter(int battler, int ability, int value)
+void SetOncePerTurnAbilityCounter(int battler, int ability, int value)
 {
     int index = GetAbilityNumber(battler, ability);
     if (index < 0) return;
