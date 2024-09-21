@@ -10172,6 +10172,7 @@ BattleScript_IntimidateActivatesLoop:
 	jumpifability BS_TARGET, ABILITY_WHITE_SMOKE,  BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_IntimidatePrevented
+	jumpifability BS_TARGET, ABILITY_BLIND_RAGE,   BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO,    BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS,    BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_OVERWHELM,    BattleScript_IntimidatePrevented
@@ -10220,6 +10221,7 @@ BattleScript_ScareActivatesLoop:
 	jumpifability BS_TARGET, ABILITY_WHITE_SMOKE,  BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_ScarePrevented
+	jumpifability BS_TARGET, ABILITY_BLIND_RAGE,   BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO,    BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS,    BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_OVERWHELM,    BattleScript_ScarePrevented
