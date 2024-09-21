@@ -656,6 +656,7 @@ static const u8 sAbilityFinalBlowDescription[] = _("Unseen Fist + Fatal Precisio
 static const u8 sAbilityHospitalityDescription[] = _("Heals partner for 25% of its max\nHP on switch-in.");
 static const u8 sAbilityButterUpDescription[] = _("Combines Hospitality &\nSoothing Aroma");
 static const u8 sAbilityHugeWingsDescription[] = _("Giant Wings + Levitate.");
+static const u8 sAbilityRestrainingOrderDescription[] = _("Forces the attacker when hit\nonce each switch-in.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1347,6 +1348,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_HOSPITALITY] = _("Hospitality"),
     [ABILITY_BUTTER_UP] = _("Butter Up"),
     [ABILITY_HUGE_WINGS] = _("Huge Wings"),
+    [ABILITY_RESTRAINING_ORDER] = _("Restraining Order"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2039,4 +2041,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_HOSPITALITY] = sAbilityHospitalityDescription,
     [ABILITY_BUTTER_UP] = sAbilityButterUpDescription,
     [ABILITY_HUGE_WINGS] = sAbilityHugeWingsDescription,
+    [ABILITY_RESTRAINING_ORDER] = sAbilityRestrainingOrderDescription,
 };

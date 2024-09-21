@@ -98,18 +98,25 @@ struct TypePower
 
 typedef enum
 {
-    PARADOX_BOOST_NOT_ACTIVE = 0,
-    PARADOX_BOOSTER_ENERGY = 1,
-    PARADOX_WEATHER_ACTIVE = 2,
-} ParadoxBoostSource;
-
-typedef enum
-{
     COMMANDER_NOT_ACTIVE = 0,
     COMMANDER_ACTIVATING,
     COMMANDER_ACTIVE,
     COMMANDER_NEEDS_CANCELLING,
 } CommanderState;
+
+typedef enum
+{
+    RESTRAINING_ORDER_NOT_TRIGGERED = 0,
+    RESTRAINING_ORDER_ACTIVATING = 1,
+    RESTRAINING_ORDER_DONE = 2,
+} RestrainingOrderState;
+
+typedef enum
+{
+    PARADOX_BOOST_NOT_ACTIVE = 0,
+    PARADOX_BOOSTER_ENERGY = 1,
+    PARADOX_WEATHER_ACTIVE = 2,
+} ParadoxBoostSource;
 
 struct ParadoxBoost
 {

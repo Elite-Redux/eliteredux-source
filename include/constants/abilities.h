@@ -707,8 +707,9 @@
 #define ABILITY_HOSPITALITY 685 // Heals partner for 25% of its max HP on switch-in.
 #define ABILITY_BUTTER_UP 686 // Combines Hospitality & Soothing Aroma
 #define ABILITY_HUGE_WINGS 687 // Giant Wings + Levitate.
+#define ABILITY_RESTRAINING_ORDER 688 // Forces the attacker when hit once each switch-in.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_HUGE_WINGS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_RESTRAINING_ORDER + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

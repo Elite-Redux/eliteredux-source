@@ -11791,9 +11791,15 @@ BattleScript_StickyBarbTransfer::
 	removeitem BS_TARGET
 	return
 
+BattleScript_RestrainingOrderActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_RESTRAINING_ORDER
+	goto BattleScript_RedCardActivates_AfterPrintString
+
 BattleScript_RedCardActivates::
 	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_EFFECT, NULL
 	printstring STRINGID_REDCARDACTIVATE
+BattleScript_RedCardActivates_AfterPrintString::
 	waitmessage B_WAIT_TIME_LONG
 	saveattackerandtargetto34
 	copybyte gBattlerTarget, gBattlerAttacker
