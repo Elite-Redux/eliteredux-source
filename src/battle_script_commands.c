@@ -11504,10 +11504,12 @@ static void Cmd_various(void)
     case VARIOUS_SET_WEATHER:
         {
             int weather = T1_READ_8(gBattlescriptCurrInstr + 3);
+            MGBA_PRINT_DEBUG("Here")
             if (!TryChangeBattleWeather(gActiveBattler, weather, FALSE))
             {
                 gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 4);
                 SetActiveMultistringChooser(B_MSG_WEATHER_FAILED);
+                MGBA_PRINT_DEBUG("Failed")
             }
             else
             {
@@ -11535,9 +11537,10 @@ static void Cmd_various(void)
                     break;
                 }
                 SetActiveMultistringChooser(stringId);
+                MGBA_PRINT_DEBUG("Didn't fail")
             }
         }
-        break;
+        return;
     case VARIOUS_TRY_RECURRING_NIGHTMARE:
         if (GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE) == 1)
         {
