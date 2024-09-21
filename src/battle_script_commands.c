@@ -6330,12 +6330,26 @@ static void Cmd_moveend(void)
                 for (i = 0; i < gBattlersCount; i++)
                 {
                     u8 battler = battlers[i];
+                    RestrainingOrderState restrainingOrderState = GetAbilityState(battler, ABILITY_RESTRAINING_ORDER);
                     // Search for fastest hit pokemon with a red card
                     // Attacker is the one to be switched out, battler is one with red card
-                    if (gTurnStructs[battler].shouldTriggerSwitchItem
+                    if (restrainingOrderState == RESTRAINING_ORDER_ACTIVATING
+                        && IsBattlerAlive(battler)
+                        && CanBattlerSwitch(gBattlerAttacker))
+                    {
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_RESTRAINING_ORDER;
+                        gBattlerAbility = gStackBattler1 = battler;
+                        if (gBattleMoves[gCurrentMove].effect == EFFECT_HIT_ESCAPE)
+                            gBattlescriptCurrInstr = BattleScript_MoveEnd;  // Prevent user switch-in selection
+                        BattleScriptPushCursor();
+                        gBattlescriptCurrInstr = BattleScript_RestrainingOrderActivates;
+                        effect = TRUE;
+                        break;
+                    }
+                    else if (gTurnStructs[battler].shouldTriggerSwitchItem
                         && IsBattlerAlive(battler)
                         && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_RED_CARD
-                        && CanBattlerSwitch(battler))  // Has mon to switch into
+                        && CanBattlerSwitch(gBattlerAttacker))  // Has mon to switch into
                     {
                         gLastUsedItem = gBattleMons[battler].item;
                         gStackBattler1 = battler;

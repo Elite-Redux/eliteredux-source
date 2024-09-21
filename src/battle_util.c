@@ -7695,6 +7695,20 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 effect++;
             }
         }
+
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RESTRAINING_ORDER))
+        {
+            RestrainingOrderState state = GetAbilityState(battler, ABILITY_RESTRAINING_ORDER);
+
+            if (!state
+                && ShouldApplyOnHitAffect(battler)
+                && (CanBattlerSwitch(battler) || !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+                && !(gBattleTypeFlags & BATTLE_TYPE_ARENA)
+                && CountUsablePartyMons(battler) > 0)
+            {
+                SetAbilityState(battler, ABILITY_RESTRAINING_ORDER, RESTRAINING_ORDER_ACTIVATING);
+            }
+        }
 		
 		// Thermal Exchange
         if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_THERMAL_EXCHANGE)){
