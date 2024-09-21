@@ -711,8 +711,9 @@
 #define ABILITY_VITALITY_STRIKE 686 // Heals for 10% of the damage dealt by punching moves.
 #define ABILITY_SWORD_OF_DAMNATION 687 // Combines Unaware & Sword of Damnation.
 #define ABILITY_ASSASSINS_TOOLS 688 // Contact moves have a 30% chance to PSN, PRLZ, or BLD.
+#define ABILITY_FROSTMAW 689 // Biting moves have a 50% chance to inflict frostbite.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ASSASSINS_TOOLS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_FROSTMAW + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
