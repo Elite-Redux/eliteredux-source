@@ -656,3 +656,40 @@ script Route109_EventScript_LegendaryNPC{
     release
     end
 }
+
+script Route109_EventScript_StealBrineyBoat {
+	lock
+	if (flag(FLAG_HIDE_ROUTE_109_MR_BRINEY_BOAT)){
+		release
+		end
+	}
+	msgbox(format("Go back?"), MSGBOX_YESNO)
+	if (var(VAR_RESULT)){
+		closemessage
+		call(Route109_EventScript_StealBrineyBoatGotoDewford)
+	}
+	release
+}
+
+movement Route109_Movement_BoardBoat {
+	walk_down
+} 
+
+script Route109_EventScript_StealBrineyBoatGotoDewford{
+	applymovement(OBJ_EVENT_ID_PLAYER, Route109_Movement_BoardBoat)
+	waitmovement(0)
+	hideobjectat(OBJ_EVENT_ID_PLAYER, MAP_ROUTE109)
+	call(Common_EventScript_PlayBrineysBoatMusic)
+	applymovement(LOCALID_BOAT_R109, Route109_Movement_SailToDewford)
+	applymovement(OBJ_EVENT_ID_PLAYER, Route109_Movement_SailToDewford)
+	waitmovement(0)
+	call(Common_EventScript_StopBrineysBoatMusic)
+	showobjectat(OBJ_EVENT_ID_PLAYER, MAP_DEWFORD_TOWN)
+	applymovement(OBJ_EVENT_ID_PLAYER, Route109_Movement_PlayerExitBoat)
+	waitmovement(0)
+	addobject(LOCALID_BOAT_DEWFORD)
+	setflag(FLAG_HIDE_ROUTE_109_MR_BRINEY_BOAT)
+	hideobjectat(LOCALID_BOAT_R109, MAP_ROUTE109)
+	clearflag(FLAG_HIDE_MR_BRINEY_BOAT_DEWFORD_TOWN)
+	//copyvar VAR_BRINEY_LOCATION, VAR_0x8008
+}

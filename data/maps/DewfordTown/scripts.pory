@@ -763,3 +763,77 @@ DewfordTown_Text_BrawlyInSlateport:
 	.string "If you're after a battle, you'll have\n"
 	.string "to go find him.$"
 `
+
+script DewfordTown_EventScript_StealBrineyBoat{
+	lock
+	if (flag(FLAG_HIDE_MR_BRINEY_BOAT_DEWFORD_TOWN)){
+		release
+		end
+	}
+	msgbox(format("It's OUR boat now."))
+	if (!flag(FLAG_DELIVERED_STEVEN_LETTER)){
+		msgbox(format("Go to Petalburg?"), MSGBOX_YESNO)
+		if (var(VAR_RESULT)){
+			closemessage
+			call(DewfordTown_EventScript_StealBrineyBoatGotoPetalBurg)
+		}
+	} else {
+		multichoicedefault(21, 6, MULTI_BRINEY_ON_DEWFORD, 2, FALSE)
+		switch(var(VAR_RESULT)){
+			case 0: 
+				closemessage
+				call(DewfordTown_EventScript_StealBrineyBoatGotoPetalBurg)
+			break
+			case 1: 
+				closemessage
+				call(DewfordTown_EventScript_StealBrineyBoatGotoSlateport)
+			break
+			//case 2: DewfordTown_EventScript_CancelSailSelect
+			//break
+		}
+		
+	}
+	release
+}
+
+movement DewfordTown_Movement_StealBrineyBoatBoardBoat {
+	walk_up * 1
+}
+
+script DewfordTown_EventScript_StealBrineyBoatGotoPetalBurg{
+	applymovement( OBJ_EVENT_ID_PLAYER, DewfordTown_Movement_StealBrineyBoatBoardBoat)
+	waitmovement(0)
+	hideobjectat(OBJ_EVENT_ID_PLAYER, MAP_DEWFORD_TOWN)
+	call(Common_EventScript_PlayBrineysBoatMusic)
+	applymovement( LOCALID_BOAT_DEWFORD, DewfordTown_Movement_SailToPetalburg)
+	applymovement( OBJ_EVENT_ID_PLAYER, DewfordTown_Movement_SailToPetalburg)
+	waitmovement(0)
+	showobjectat(OBJ_EVENT_ID_PLAYER, MAP_ROUTE104)
+	call(Common_EventScript_StopBrineysBoatMusic)
+	applymovement( OBJ_EVENT_ID_PLAYER, DewfordTown_Movement_ExitBoatPetalburg)
+	waitmovement(0)
+	addobject(LOCALID_BOAT_R104)
+	showobjectat(OBJ_EVENT_ID_PLAYER, MAP_ROUTE104)
+	clearflag(FLAG_HIDE_ROUTE_104_MR_BRINEY_BOAT)
+	setflag(FLAG_HIDE_MR_BRINEY_BOAT_DEWFORD_TOWN)
+	hideobjectat(LOCALID_BOAT_DEWFORD, MAP_DEWFORD_TOWN)
+	
+}
+
+script DewfordTown_EventScript_StealBrineyBoatGotoSlateport {
+	applymovement(OBJ_EVENT_ID_PLAYER, DewfordTown_Movement_StealBrineyBoatBoardBoat)
+	waitmovement(0)
+	hideobjectat(OBJ_EVENT_ID_PLAYER, MAP_DEWFORD_TOWN)
+	call(Common_EventScript_PlayBrineysBoatMusic)
+	applymovement(LOCALID_BOAT_DEWFORD, DewfordTown_Movement_SailToSlateport)
+	applymovement(OBJ_EVENT_ID_PLAYER, DewfordTown_Movement_SailToSlateport)
+	waitmovement(0)
+	call(Common_EventScript_StopBrineysBoatMusic)
+	showobjectat(OBJ_EVENT_ID_PLAYER, MAP_ROUTE109)
+	applymovement(OBJ_EVENT_ID_PLAYER, DewfordTown_Movement_ExitBoatSlateport)
+	waitmovement(0)
+	addobject(LOCALID_BOAT_R109)
+	clearflag(FLAG_HIDE_ROUTE_109_MR_BRINEY_BOAT)
+	setflag(FLAG_HIDE_MR_BRINEY_BOAT_DEWFORD_TOWN)
+	hideobjectat(LOCALID_BOAT_DEWFORD, MAP_DEWFORD_TOWN)
+}

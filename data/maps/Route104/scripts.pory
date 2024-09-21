@@ -1246,3 +1246,50 @@ script Route104_EventScript_TrainerTemplate{
     release
     end
 }
+
+movement Route104_Movement_StealBrineyBoatStepOut {
+	walk_down * 3
+}
+
+script Route104_EventScript_StealBrineyBoat {
+	lock
+	if (flag(FLAG_HIDE_ROUTE_104_MR_BRINEY_BOAT)){
+		release
+		end
+	}
+	if (var(VAR_BRINEY_HOUSE_STATE) == 0){
+		msgbox("Missings keys on this boat", MSGBOX_SIGN)
+		release
+		end
+	}
+	msgbox("Keys are on, steal this boat?", MSGBOX_YESNO)
+	if (!var(VAR_RESULT)){
+		msgbox("Why would I?", MSGBOX_AUTOCLOSE)
+		release
+		end
+	}
+	msgbox("Team Aqua style!", MSGBOX_AUTOCLOSE)
+	setvar(VAR_RUSTBORO_CITY_STATE, 10)
+	setvar(VAR_ROUTE104_STATE, 2)
+	setflag(FLAG_HIDE_RUSTBORO_CITY_RIVAL)
+	setflag(FLAG_HIDE_ROUTE_104_RIVAL)
+	hideobjectat(OBJ_EVENT_ID_PLAYER, MAP_ROUTE104)
+	call(Common_EventScript_PlayBrineysBoatMusic)
+	if (!flag(FLAG_ENABLE_NORMAN_MATCH_CALL)){
+		setflag(FLAG_ENABLE_NORMAN_MATCH_CALL)
+	}
+	hideobjectat(LOCALID_BRINEY_R104, MAP_ROUTE104)
+	applymovement(LOCALID_BOAT_R104, Route104_Movement_SailToDewford)
+	applymovement(OBJ_EVENT_ID_PLAYER, Route104_Movement_SailToDewford)
+	waitmovement(0)
+	applymovement(OBJ_EVENT_ID_PLAYER, Route104_Movement_StealBrineyBoatStepOut)
+	waitmovement(0)
+	showobjectat(OBJ_EVENT_ID_PLAYER, MAP_DEWFORD_TOWN)
+	call(Common_EventScript_StopBrineysBoatMusic)
+	clearflag(FLAG_HIDE_MR_BRINEY_BOAT_DEWFORD_TOWN)
+	addobject(LOCALID_BOAT_DEWFORD)
+	setflag(FLAG_HIDE_ROUTE_104_MR_BRINEY_BOAT)
+	//setvar(VAR_BRINEY_LOCATION, 4) // this may cause massives issues mreow :3
+	hideobjectat(LOCALID_BOAT_R104, MAP_ROUTE104)
+	release
+}
