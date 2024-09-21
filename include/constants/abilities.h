@@ -715,8 +715,9 @@
 #define ABILITY_PATCHWORK 690 // Curses the opponent after its Disguise breaks.
 #define ABILITY_BLIND_RAGE 691 // Combines Scrappy & Mold Breaker.
 #define ABILITY_SLIPSTREAM 692 // Moves use 20% of its Speed stat additionally.
+#define ABILITY_APEX_PREDATOR 693 // Combines Tough Claws & Predator.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_SLIPSTREAM + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_APEX_PREDATOR + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

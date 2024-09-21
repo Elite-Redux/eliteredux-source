@@ -664,6 +664,7 @@ static const u8 sAbilityFrostmawDescription[] = _("Biting moves have a 50% chanc
 static const u8 sAbilityPatchworkDescription[] = _("Curses the opponent after its\nDisguise breaks.");
 static const u8 sAbilityBlindRageDescription[] = _("Combines Scrappy &\nMold Breaker.");
 static const u8 sAbilitySlipstreamDescription[] = _("Moves use 20% of its Speed\nstat additionally.");
+static const u8 sAbilityApexPredatorDescription[] = _("Combines Tough Claws &\nPredator.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1363,6 +1364,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_PATCHWORK] = _("Patchwork"),
     [ABILITY_BLIND_RAGE] = _("Blind Rage"),
     [ABILITY_SLIPSTREAM] = _("Slipstream"),
+    [ABILITY_APEX_PREDATOR] = _("Apex Predator"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2063,4 +2065,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_PATCHWORK] = sAbilityPatchworkDescription,
     [ABILITY_BLIND_RAGE] = sAbilityBlindRageDescription,
     [ABILITY_SLIPSTREAM] = sAbilitySlipstreamDescription,
+    [ABILITY_APEX_PREDATOR] = sAbilityApexPredatorDescription,
 };
