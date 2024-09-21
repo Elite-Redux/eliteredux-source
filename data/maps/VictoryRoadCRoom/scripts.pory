@@ -1,0 +1,11 @@
+mapscripts VictoryRoadCRoom_MapScripts {}
+
+
+script VictoryRoadCRoom_Braille{
+    lockall
+	braillemessage(VictoryRoad_CRoom_Braille_Do_Not_Touch)
+	waitbuttonpress
+	closebraillemessage
+	releaseall
+	end
+}

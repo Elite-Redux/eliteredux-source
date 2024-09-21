@@ -126,3 +126,8 @@ SealedChamber_InnerRoom_Braille_Regigigas:
 	.braille "THE THREE, THE\n"
 	.braille "KING SHALL\n"
 	.braille "APPEAR.$"
+
+VictoryRoad_CRoom_Braille_Do_Not_Touch:
+	brailleformat 3, 0, 25, 19, 9, 3
+	.braille "DO NOT\n"
+	.braille "TOUCH.$"

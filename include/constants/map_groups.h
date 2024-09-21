@@ -438,6 +438,8 @@
 #define MAP_VICTORY_ROAD_REWORK          (8 | (25 << 8))
 #define MAP_VICTORY_ROAD_URSHIFUS        (9 | (25 << 8))
 #define MAP_COLD_CREVICE                 (10 | (25 << 8))
+#define MAP_VICTORY_ROAD_CROOM           (11 | (25 << 8))
+#define MAP_VICTORY_ROAD_FROOM           (12 | (25 << 8))
 
 // gMapGroup_IndoorDynamic
 #define MAP_SECRET_BASE_RED_CAVE1    (0 | (26 << 8))

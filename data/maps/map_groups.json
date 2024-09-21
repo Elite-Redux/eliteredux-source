@@ -469,7 +469,9 @@
     "SeafloorCavernShortcut",
     "VictoryRoadRework",
     "VictoryRoadUrshifus",
-    "ColdCrevice"
+    "ColdCrevice",
+    "VictoryRoadCRoom",
+    "VictoryRoadFroom"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",

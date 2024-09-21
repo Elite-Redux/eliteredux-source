@@ -4780,6 +4780,26 @@
       "secondary_tileset": "gTileset_NavelRock",
       "border_filepath": "data/layouts/LegendaryDomain/border.bin",
       "blockdata_filepath": "data/layouts/LegendaryDomain/map.bin"
+    },
+    {
+      "id": "LAYOUT_VICTORY_ROAD_CROOM",
+      "name": "VictoryRoadCRoom_Layout",
+      "width": 21,
+      "height": 19,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Cave",
+      "border_filepath": "data/layouts/VictoryRoadCRoom/border.bin",
+      "blockdata_filepath": "data/layouts/VictoryRoadCRoom/map.bin"
+    },
+    {
+      "id": "LAYOUT_VICTORY_ROAD_FROOM",
+      "name": "VictoryRoadFroom_Layout",
+      "width": 23,
+      "height": 32,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_MeteorFalls",
+      "border_filepath": "data/layouts/VictoryRoadFroom/border.bin",
+      "blockdata_filepath": "data/layouts/VictoryRoadFroom/map.bin"
     }
   ]
 }
