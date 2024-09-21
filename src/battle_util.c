@@ -8657,6 +8657,21 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+        // Vitality Strike
+	    if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_VITALITY_STRIKE)){
+            if (ShouldApplyOnHitAffect(battler)
+             && !BATTLER_MAX_HP(gBattlerAttacker) 
+             && !BATTLER_HEALING_BLOCKED(gBattlerAttacker)
+             && IS_IRON_FIST(battler, move))
+            {
+                //Attacker
+				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_HYDRO_CIRCUIT;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_HydroCircuitAbsorbEffectActivated;
+                effect++;
+            }
+        }
+
         // Hydro Circuit
 	    if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PURE_LOVE)){
             if (ShouldApplyOnHitAffect(battler)

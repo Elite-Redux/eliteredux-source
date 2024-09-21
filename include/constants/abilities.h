@@ -705,8 +705,9 @@
 #define ABILITY_MASTER_HAND 683 // Mega Launcher + Rampage.
 #define ABILITY_FINAL_BLOW 684 // Unseen Fist + Fatal Precision.
 #define ABILITY_RESTRAINING_ORDER 685 // Forces the attacker when hit once each switch-in.
+#define ABILITY_VITALITY_STRIKE 686 // Heals for 10% of the damage dealt by punching moves.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_RESTRAINING_ORDER + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_VITALITY_STRIKE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
