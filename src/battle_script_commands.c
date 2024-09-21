@@ -2713,6 +2713,11 @@ static void Cmd_datahpupdate(void)
         {
             if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE))
             {
+                if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PATCHWORK)
+                    && gBattlerAttacker != gActiveBattler)
+                {
+                    SetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_PATCHWORK, gBattlerAttacker);
+                }
                 gBattleScripting.abilityPopupOverwrite = ABILITY_DISGUISE;
                 UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MIMIKYU_BUSTED);
                 gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
