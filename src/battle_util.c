@@ -8182,6 +8182,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 		}
 
+        if (GetSingleUseAbilityCounter(battler, ABILITY_PATCHWORK) > 0
+            && IsBattlerAlive(gBattlerAttacker)
+            && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_CURSED))
+        {
+            SetSingleUseAbilityCounter(battler, ABILITY_PATCHWORK, 0);
+            gBattleScripting.abilityPopupOverwrite = ABILITY_PATCHWORK;
+            gBattleScripting.moveEffect = MOVE_EFFECT_CURSE | MOVE_EFFECT_AFFECTS_USER;
+            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+            effect++;
+        }
+
 		// Effect Spore
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_EFFECT_SPORE)) {
             if (!IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_GRASS)

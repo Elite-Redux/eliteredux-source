@@ -661,6 +661,7 @@ static const u8 sAbilityVitalityStrikeDescription[] = _("Heals for 10% of the da
 static const u8 sAbilitySwordOfDamnationDescription[] = _("Combines Unaware &\nSword of Damnation.");
 static const u8 sAbilityAssassinsToolsDescription[] = _("Contact moves have a 30%\nchance to PSN, PRLZ, or BLD.");
 static const u8 sAbilityFrostmawDescription[] = _("Biting moves have a 50% chance\nto inflict frostbite.");
+static const u8 sAbilityPatchworkDescription[] = _("Curses the opponent after its\nDisguise breaks.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1357,6 +1358,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SWORD_OF_DAMNATION] = _("Sword of Damnation"),
     [ABILITY_ASSASSINS_TOOLS] = _("Assassin's Tools"),
     [ABILITY_FROSTMAW] = _("Frostmaw"),
+    [ABILITY_PATCHWORK] = _("Patchwork"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2054,4 +2056,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SWORD_OF_DAMNATION] = sAbilitySwordOfDamnationDescription,
     [ABILITY_ASSASSINS_TOOLS] = sAbilityAssassinsToolsDescription,
     [ABILITY_FROSTMAW] = sAbilityFrostmawDescription,
+    [ABILITY_PATCHWORK] = sAbilityPatchworkDescription,
 };
