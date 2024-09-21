@@ -2,7 +2,7 @@
   "id": "MAP_VICTORY_ROAD_FROOM",
   "name": "VictoryRoadFroom",
   "layout": "LAYOUT_VICTORY_ROAD_FROOM",
-  "music": "MUS_RG_SEVII_ROUTE",
+  "music": "MUS_B_PYRAMID_TOP",
   "region_map_section": "MAPSEC_VICTORY_ROAD",
   "requires_flash": false,
   "weather": "WEATHER_NONE",
