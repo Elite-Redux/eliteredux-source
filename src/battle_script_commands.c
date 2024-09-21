@@ -9374,7 +9374,7 @@ static void Cmd_various(void)
                 gVolatileStructs[gActiveBattler].critBoost++;
                 gBattleScripting.abilityPopupOverwrite = ABILITY_PRETENTIOUS;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
-                BattleScriptPush(gBattlescriptCurrInstr);
+                BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_AbilityBoostsCrit;
             }
 
@@ -9385,7 +9385,7 @@ static void Cmd_various(void)
                 gVolatileStructs[gActiveBattler].critBoost++;
                 gBattleScripting.abilityPopupOverwrite = ABILITY_WAY_OF_SWIFTNESS;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
-                BattleScriptPush(gBattlescriptCurrInstr);
+                BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_AbilityBoostsCrit;
             }
 
@@ -9395,8 +9395,18 @@ static void Cmd_various(void)
             {
                 gStatuses4[gActiveBattler] |= STATUS4_COILED;
                 gBattleScripting.abilityPopupOverwrite = ABILITY_SIDEWINDER;
-                BattleScriptPush(gBattlescriptCurrInstr);
+                BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_BattlerCoiledUpReturn;
+            }
+
+            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DRAGONS_RITUAL)
+                && !NoAliveMonsForEitherParty()
+                && (CompareStat(gBattlerAttacker, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)
+                    || CompareStat(gBattlerAttacker, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN)))
+            {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_DRAGONS_RITUAL;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_DragonsRitual;
             }
 
             if (checkMoxieVariants
@@ -9409,7 +9419,7 @@ static void Cmd_various(void)
                 SetStatChanger(statToChange, 1);
                 PREPARE_STAT_BUFFER(gBattleTextBuff1, statToChange);
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = abilityToCheck;
-                BattleScriptPush(gBattlescriptCurrInstr);
+                BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_RaiseStatOnFaintingTarget;
             }
             return;

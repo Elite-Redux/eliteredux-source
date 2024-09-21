@@ -665,6 +665,7 @@ static const u8 sAbilityPatchworkDescription[] = _("Curses the opponent after it
 static const u8 sAbilityBlindRageDescription[] = _("Combines Scrappy &\nMold Breaker.");
 static const u8 sAbilitySlipstreamDescription[] = _("Moves use 20% of its Speed\nstat additionally.");
 static const u8 sAbilityApexPredatorDescription[] = _("Combines Tough Claws &\nPredator.");
+static const u8 sAbilityDragonsRitualDescription[] = _("Dealing a KO raises Attack and\nSpeed by one stage.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1365,6 +1366,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BLIND_RAGE] = _("Blind Rage"),
     [ABILITY_SLIPSTREAM] = _("Slipstream"),
     [ABILITY_APEX_PREDATOR] = _("Apex Predator"),
+    [ABILITY_DRAGONS_RITUAL] = _("Dragon's Ritual"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2066,4 +2068,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_BLIND_RAGE] = sAbilityBlindRageDescription,
     [ABILITY_SLIPSTREAM] = sAbilitySlipstreamDescription,
     [ABILITY_APEX_PREDATOR] = sAbilityApexPredatorDescription,
+    [ABILITY_DRAGONS_RITUAL] = sAbilityDragonsRitualDescription,
 };

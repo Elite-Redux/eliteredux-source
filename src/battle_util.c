@@ -1643,17 +1643,8 @@ void UpdateSentPokesToOpponentValue(u8 battler)
 
 void BattleScriptPush(const u8 *bsPtr)
 {
-    struct SavedStackData savedStackData = 
-        {
-            .abilityOverride = gBattleScripting.abilityPopupOverwrite,
-            .multistringChooser = gBattleCommunication[MULTISTRING_CHOOSER],
-            .stackBattler1 = gStackBattler1,
-            .stackBattler2 = gStackBattler2,
-            .stackBattler3 = gStackBattler3,
-            .stackBattler4 = gStackBattler4,
-        };
     gBattleResources->battleScriptsStack->ptr[gBattleResources->battleScriptsStack->size++] = bsPtr;
-    gBattleResources->battleScriptsStack->savedStackData[gBattleResources->battleScriptsStack->size] = savedStackData;
+    BattleScriptSaveCurrentStackData();
 }
 
 void BattleScriptSaveCurrentStackData()
@@ -1672,8 +1663,7 @@ void BattleScriptSaveCurrentStackData()
 
 void BattleScriptPushCursor(void)
 {
-    gBattleResources->battleScriptsStack->ptr[gBattleResources->battleScriptsStack->size++] = gBattlescriptCurrInstr;
-    BattleScriptSaveCurrentStackData();
+    BattleScriptPush(gBattlescriptCurrInstr);
 }
 
 void BattleScriptPop(void)
