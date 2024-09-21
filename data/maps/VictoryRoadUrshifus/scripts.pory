@@ -18,33 +18,21 @@ Maybe coming here to train was worth it after all. Come on, then!"),
 
 script VictoryRoadUrshifusKatsup {
     trainerbattle_single(TRAINER_KATSUP, 
-    format("(This trainer is giving you a very intense stare.) \p
-(Looks like they're not letting you by without a fight either!)"), 
+    format("(This trainer is giving you a very intense stare.) \p(Looks like they're not letting you by without a fight either!)"), 
     format("(The trainer nods approvingly at you.)"))
-    msgbox(format("(Guess they're still not much of a talker.) \p
-(In fairness, neither are you.)"), MSGBOX_AUTOCLOSE)
+    msgbox(format("(Guess they're still not much of a talker.) \p(In fairness, neither are you.)"), MSGBOX_AUTOCLOSE)
 }
 script VictoryRoadUrshifusTeriyaki {
     trainerbattle_single(TRAINER_TERIYAKI, 
-    format("Can't believe you managed to get Katsup's attention AND defeat him! \p
-...Oh, right, I bet our names are confusing, huh? \p
-If you want me to fill you in, beat me in a battle!"), 
+    format("Can't believe you managed to get Katsup's attention AND defeat him! \p...Oh, right, I bet our names are confusing, huh? \pIf you want me to fill you in, beat me in a battle!"), 
     format("Oh, wow, that's really impressive. \pCan't believe we met someone so strong abroad!"))
-    msgbox(format("...Right, the names! We take them as 'titles' when we're abroad. \p
-The master of our dojo in Galar started the tradition."), MSGBOX_AUTOCLOSE)
+    msgbox(format("...Right, the names! We take them as 'titles' when we're abroad. \pThe master of our dojo in Galar started the tradition."), MSGBOX_AUTOCLOSE)
 }
 
 script VictoryRoadUrshifusAlfredo {
     trainerbattle_single(TRAINER_ALFREDO, 
-    format("I'm Alfredo, the leader of this group of disciples. \p
-So you managed to conquer Victory Road and all of my colleagues, hm? \p
-It's rare indeed that we see a trainer so capable! \p
-But even having defeated the others, I still doubt you're a match for me. Let's brawl!"), 
-    format("...You really did just come here and rip right through us, didn't you? \p
-Ahahaha, fantastic! I almost want to invite you back to our dojo! \p
-What do you think of Wasabi as a title?"))
-    msgbox(format("Here to take me up on my offer, Wasabi? \p
-Much as I'd like to, you have your own journey, and you're very close to the end. \p
-Go on, then! We're on your side, so don't be defeated now!"), MSGBOX_AUTOCLOSE)
+    format("I'm Alfredo, the leader of this group of disciples. \pSo you managed to conquer Victory Road and all of my colleagues, hm? \pIt's rare indeed that we see a trainer so capable! \pBut even having defeated the others, I still doubt you're a match for me. Let's brawl!"), 
+    format("...You really did just come here and rip right through us, didn't you? \pAhahaha, fantastic! I almost want to invite you back to our dojo! \pWhat do you think of Wasabi as a title?"))
+    msgbox(format("Here to take me up on my offer, Wasabi? \pMuch as I'd like to, you have your own journey, and you're very close to the end. \pGo on, then! We're on your side, so don't be defeated now!"), MSGBOX_AUTOCLOSE)
 }
 
