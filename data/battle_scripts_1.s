@@ -3165,9 +3165,7 @@ BattleScript_EffectTrickRoom:
 	setbyte gBattlerTarget, 0
 BattleScript_RoomServiceLoop:
 	copybyte sBATTLER, gBattlerTarget
-	tryroomservice BS_TARGET, BattleScript_RoomServiceLoop_NextBattler
-	removeitem BS_TARGET
-BattleScript_RoomServiceLoop_NextBattler:
+	tryroomservice BS_TARGET
 	addbyte gBattlerTarget, 0x1
 	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_RoomServiceLoop
 	restoretarget
@@ -10306,9 +10304,7 @@ BattleScript_OnTerrainChanged:
 BattleScript_OnTerrainChangedIter:
 	copybyte sBATTLER, gBattlerTarget
 	handleterrainchange BS_TARGET
-	doterrainseed BS_TARGET, BattleScript_OnTerrainChanged_NextBattler
-	removeitem BS_TARGET
-BattleScript_OnTerrainChanged_NextBattler:
+	doterrainseed BS_TARGET
 	addbyte gBattlerTarget, 0x1
 	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_OnTerrainChangedIter
 	restoretarget
@@ -11450,25 +11446,11 @@ BattleScript_BerryConfuseHealRet_Anim:
 	return
 
 BattleScript_BerryStatRaiseEnd2::
-	jumpifability BS_STACK_1, ABILITY_RIPEN, BattleScript_BerryStatRaiseEnd2_AbilityPopup
-	goto BattleScript_BerryStatRaiseEnd2_Anim
-BattleScript_BerryStatRaiseEnd2_AbilityPopup:
-	call BattleScript_AbilityPopUp
-BattleScript_BerryStatRaiseEnd2_Anim:
-	savetargettostack4
-	copybyte gBattlerTarget, gStackBattler1
-	copybyte gEffectBattler, gStackBattler1
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_BerryStatRaiseEnd2_End
-	setgraphicalstatchangevalues
-	playanimation BS_STACK_1, B_ANIM_HELD_ITEM_EFFECT, sB_ANIM_ARG1
-	setbyte cMULTISTRING_CHOOSER, B_MSG_STAT_ROSE_ITEM
-	call BattleScript_StatUp
-	removeitem BS_STACK_1
-BattleScript_BerryStatRaiseEnd2_End::
-	readtargetfromstack4
+	call BattleScript_BerryStatRaiseRet
 	end2
 
 BattleScript_BerryStatRaiseRet::
+	jumpifnotberry BS_STACK_1, BattleScript_BerryStatRaiseRet_Anim
 	jumpifability BS_STACK_1, ABILITY_RIPEN, BattleScript_BerryStatRaiseRet_AbilityPopup
 	goto BattleScript_BerryStatRaiseRet_Anim
 BattleScript_BerryStatRaiseRet_AbilityPopup:
