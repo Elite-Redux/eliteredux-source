@@ -655,6 +655,7 @@ static const u8 sAbilityMasterHandDescription[] = _("Mega Launcher + Rampage.");
 static const u8 sAbilityFinalBlowDescription[] = _("Unseen Fist + Fatal Precision.");
 static const u8 sAbilityRestrainingOrderDescription[] = _("Forces the attacker when hit\nonce each switch-in.");
 static const u8 sAbilityVitalityStrikeDescription[] = _("Heals for 10% of the damage\ndealt by punching moves.");
+static const u8 sAbilitySwordOfDamnationDescription[] = _("Combines Unaware &\nSword of Damnation.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1345,6 +1346,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_FINAL_BLOW] = _("Final Blow"),
     [ABILITY_RESTRAINING_ORDER] = _("Restraining Order"),
     [ABILITY_VITALITY_STRIKE] = _("Vitality Strike"),
+    [ABILITY_SWORD_OF_DAMNATION] = _("Sword of Damnation"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2036,4 +2038,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_FINAL_BLOW] = sAbilityFinalBlowDescription,
     [ABILITY_RESTRAINING_ORDER] = sAbilityRestrainingOrderDescription,
     [ABILITY_VITALITY_STRIKE] = sAbilityVitalityStrikeDescription,
+    [ABILITY_SWORD_OF_DAMNATION] = sAbilitySwordOfDamnationDescription,
 };

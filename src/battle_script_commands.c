@@ -1957,8 +1957,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
         evasionStage = 6;
     else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_KEEN_EYE, atkAbility)
-                || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_UNAWARE, atkAbility)
-                || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_CONTEMPT, atkAbility)
+                || IsUnaware(battlerAtk)
                 || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_MINDS_EYE, atkAbility))
         evasionStage = 6;
 
@@ -8935,7 +8934,7 @@ static void Cmd_various(void)
         return;
     case VARIOUS_GET_STAT_VALUE:
         i = gBattlescriptCurrInstr[3];
-        gBattleMoveDamage = CalculateStat(gActiveBattler, i, 0, 0, TRUE, FALSE, BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNAWARE) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CONTEMPT), FALSE);
+        gBattleMoveDamage = CalculateStat(gActiveBattler, i, 0, 0, TRUE, FALSE, IsUnaware(gBattlerAttacker), FALSE);
         gBattlescriptCurrInstr += 4;
         return;
     case VARIOUS_JUMP_IF_FULL_HP:
@@ -11276,8 +11275,7 @@ static void Cmd_various(void)
     case VARIOUS_GOTO_IF_STAT_UP:
         {
         u8 i;
-        if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNAWARE)
-            && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CONTEMPT)
+        if (!IsUnaware(gBattlerAttacker)
             && !gBattleMons[gActiveBattler].status1 & STATUS1_BLEED)
         {
             for (i = STAT_ATK; i < NUM_BATTLE_STATS; i++)
