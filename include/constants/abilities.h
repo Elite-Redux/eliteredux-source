@@ -197,7 +197,7 @@
 #define ABILITY_AERILATE 184 // Normal-type moves become Flying- type moves and get a 1.1x boost.
 #define ABILITY_PARENTAL_BOND 185 // Moves hit twice. 1st hit at 100% power, 2nd hit at 25%.
 #define ABILITY_DARK_AURA 186 // Boosts Dark moves by 1.33x for all while this Pokémon is out.
-#define ABILITY_FAIRY_AURA 187 // Boosts Fairy moves by 1.33x for Weather-based moves are unusable.
+#define ABILITY_FAIRY_AURA 187 // Boosts Fairy moves by 1.33x for all while this Pokémon is out.
 #define ABILITY_AURA_BREAK 188 // Cancels aura abilities and makes them 25% weaker instead.
 #define ABILITY_PRIMORDIAL_SEA 189 // Heavy Rain until switched out. Fire-type moves are unusable.
 #define ABILITY_DESOLATE_LAND 190 // Intense Sun until switched out. Water-type moves are unusable.
@@ -484,7 +484,7 @@
 #define ABILITY_COMBAT_SPECIALIST 462 // Boosts the power of punching and kicking moves by 1.3x.
 #define ABILITY_JUNGLES_GUARD 463 // Grass-types on user side: immune to status/stat drops from enemy.
 #define ABILITY_HUNTERS_HORN 464 // Boost horn moves and heals 1/4 HP when defeating an enemy.
-#define ABILITY_PIXIE_POWER 465 // Boosts Fairy moves by 33% and 1.2x accuracy.
+#define ABILITY_PIXIE_POWER 465 // 1.2x accuracy. Boosts Fairy moves by 1.33x for all.
 #define ABILITY_PLASMA_LAMP 466 // Boost accuracy & power of Fire & Electric type moves by 1.2x.
 #define ABILITY_MAGMA_EATER 467 // Combines Predator & Molten Down.
 #define ABILITY_SUPER_HOT_GOO 468 // Inflicts burn and lower the speed on contact.
@@ -496,7 +496,7 @@
 #define ABILITY_ACCELERATE 474 // Moves that need a charge turn are now used instantly.
 #define ABILITY_FROST_BURN 475 // Triggers 40BP Ice Beam after using a Fire-type move.
 #define ABILITY_ITCHY_DEFENSE 476 // Causes infestation when hit by a contact move.
-#define ABILITY_GENERATOR 477 // Charges up on entry.
+#define ABILITY_GENERATOR 477 // Charges up once on entry or when electric terrain is active.
 #define ABILITY_MOON_SPIRIT 478 // Fairy & Dark gains STAB. Moonlight recovers 75% HP.
 #define ABILITY_DUST_CLOUD 479 // Attacks with Sand Attack on switch-in.
 #define ABILITY_BERSERKER_RAGE 480 // Combines Berserk & Rampage.
@@ -707,8 +707,18 @@
 #define ABILITY_HOSPITALITY 685 // Heals partner for 25% of its max HP on switch-in.
 #define ABILITY_BUTTER_UP 686 // Combines Hospitality & Soothing Aroma
 #define ABILITY_HUGE_WINGS 687 // Giant Wings + Levitate.
+#define ABILITY_RESTRAINING_ORDER 688 // Forces the attacker when hit once each switch-in.
+#define ABILITY_VITALITY_STRIKE 686 // Heals for 10% of the damage dealt by punching moves.
+#define ABILITY_SWORD_OF_DAMNATION 687 // Combines Unaware & Sword of Damnation.
+#define ABILITY_ASSASSINS_TOOLS 688 // Contact moves have a 30% chance to PSN, PRLZ, or BLD.
+#define ABILITY_FROSTMAW 689 // Biting moves have a 50% chance to inflict frostbite.
+#define ABILITY_PATCHWORK 690 // Curses the opponent after its Disguise breaks.
+#define ABILITY_BLIND_RAGE 691 // Combines Scrappy & Mold Breaker.
+#define ABILITY_SLIPSTREAM 692 // Moves use 20% of its Speed stat additionally.
+#define ABILITY_APEX_PREDATOR 693 // Combines Tough Claws & Predator.
+#define ABILITY_DRAGONS_RITUAL 694 // Dealing a KO raises Attack and Speed by one stage.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_HUGE_WINGS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DRAGONS_RITUAL + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

@@ -132,7 +132,17 @@
 #define T1_READ_8(ptr)  ((ptr)[0])
 #define T1_READ_16(ptr) ((ptr)[0] | ((ptr)[1] << 8))
 #define T1_READ_32(ptr) ((ptr)[0] | ((ptr)[1] << 8) | ((ptr)[2] << 16) | ((ptr)[3] << 24))
-#define T1_READ_PTR(ptr) (u8*) T1_READ_32(ptr)
+#define T1_READ_PTR(ptr) (const void*) T1_READ_32(ptr)
+
+#define READ_8_INC T1_READ_8(gBattlescriptCurrInstr++)
+#define READ_16_INC ((gBattlescriptCurrInstr += 2), T1_READ_16(gBattlescriptCurrInstr - 2))
+#define READ_32_INC ((gBattlescriptCurrInstr += 4), T1_READ_32(gBattlescriptCurrInstr - 4))
+#define READ_PTR_INC ((gBattlescriptCurrInstr += 4), T1_READ_PTR(gBattlescriptCurrInstr - 4))
+
+#define READ_FIRST_8_INC ((gBattlescriptCurrInstr += 2), T1_READ_8(gBattlescriptCurrInstr - 1))
+#define READ_FIRST_16_INC ((gBattlescriptCurrInstr += 3), T1_READ_16(gBattlescriptCurrInstr - 2))
+#define READ_FIRST_32_INC ((gBattlescriptCurrInstr += 5), T1_READ_32(gBattlescriptCurrInstr - 4))
+#define READ_FIRST_PTR_INC ((gBattlescriptCurrInstr += 5), T1_READ_PTR(gBattlescriptCurrInstr - 4))
 
 // T2_READ_8 is a duplicate to remain consistent with each group.
 #define T2_READ_8(ptr)  ((ptr)[0])

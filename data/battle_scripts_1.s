@@ -3170,9 +3170,7 @@ BattleScript_EffectTrickRoom:
 	setbyte gBattlerTarget, 0
 BattleScript_RoomServiceLoop:
 	copybyte sBATTLER, gBattlerTarget
-	tryroomservice BS_TARGET, BattleScript_RoomServiceLoop_NextBattler
-	removeitem BS_TARGET
-BattleScript_RoomServiceLoop_NextBattler:
+	tryroomservice BS_TARGET
 	addbyte gBattlerTarget, 0x1
 	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_RoomServiceLoop
 	restoretarget
@@ -6642,12 +6640,19 @@ BattleScript_EffectChargeString:
 	goto BattleScript_MoveEnd
 
 BattleScript_GeneratorActivates::
+	call BattleScript_GeneratorActivatesRet
+	end3
+
+BattleScript_GeneratorActivatesRet::
 	call BattleScript_AbilityPopUp
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
 	setcharge
 BattleScript_GeneratorString:
 	printstring STRINGID_PKMNCHARGINGPOWER
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	readattackerfromstack3
+	return
 
 BattleScript_EffectTaunt::
 	attackcanceler
@@ -7136,9 +7141,21 @@ BattleScript_MysticDanceTrySpeed::
 BattleScript_MysticDanceEnd::
 	goto BattleScript_MoveEnd
 
-
-
-
+BattleScript_DragonsRitual::
+	call BattleScript_AbilityPopUp
+	playstatchangeanimation BS_ATTACKER, BIT_ATK | BIT_SPEED, 0
+	setstatchanger STAT_ATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_DragonsRitual_Speed
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_DragonsRitual_Speed
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_DragonsRitual_Speed::
+	setstatchanger STAT_SPEED, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_Return
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_Return
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	return
 
 BattleScript_EffectDragonDance::
 	attackcanceler
@@ -10165,6 +10182,7 @@ BattleScript_IntimidateActivatesLoop:
 	jumpifability BS_TARGET, ABILITY_WHITE_SMOKE,  BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_IntimidatePrevented
+	jumpifability BS_TARGET, ABILITY_BLIND_RAGE,   BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO,    BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS,    BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_OVERWHELM,    BattleScript_IntimidatePrevented
@@ -10213,6 +10231,7 @@ BattleScript_ScareActivatesLoop:
 	jumpifability BS_TARGET, ABILITY_WHITE_SMOKE,  BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_ScarePrevented
+	jumpifability BS_TARGET, ABILITY_BLIND_RAGE,   BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_OWN_TEMPO,    BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_OBLIVIOUS,    BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_OVERWHELM,    BattleScript_ScarePrevented
@@ -10328,9 +10347,7 @@ BattleScript_OnTerrainChanged:
 BattleScript_OnTerrainChangedIter:
 	copybyte sBATTLER, gBattlerTarget
 	handleterrainchange BS_TARGET
-	doterrainseed BS_TARGET, BattleScript_OnTerrainChanged_NextBattler
-	removeitem BS_TARGET
-BattleScript_OnTerrainChanged_NextBattler:
+	doterrainseed BS_TARGET
 	addbyte gBattlerTarget, 0x1
 	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_OnTerrainChangedIter
 	restoretarget
@@ -11472,25 +11489,11 @@ BattleScript_BerryConfuseHealRet_Anim:
 	return
 
 BattleScript_BerryStatRaiseEnd2::
-	jumpifability BS_STACK_1, ABILITY_RIPEN, BattleScript_BerryStatRaiseEnd2_AbilityPopup
-	goto BattleScript_BerryStatRaiseEnd2_Anim
-BattleScript_BerryStatRaiseEnd2_AbilityPopup:
-	call BattleScript_AbilityPopUp
-BattleScript_BerryStatRaiseEnd2_Anim:
-	savetargettostack4
-	copybyte gBattlerTarget, gStackBattler1
-	copybyte gEffectBattler, gStackBattler1
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_BerryStatRaiseEnd2_End
-	setgraphicalstatchangevalues
-	playanimation BS_STACK_1, B_ANIM_HELD_ITEM_EFFECT, sB_ANIM_ARG1
-	setbyte cMULTISTRING_CHOOSER, B_MSG_STAT_ROSE_ITEM
-	call BattleScript_StatUp
-	removeitem BS_STACK_1
-BattleScript_BerryStatRaiseEnd2_End::
-	readtargetfromstack4
+	call BattleScript_BerryStatRaiseRet
 	end2
 
 BattleScript_BerryStatRaiseRet::
+	jumpifnotberry BS_STACK_1, BattleScript_BerryStatRaiseRet_Anim
 	jumpifability BS_STACK_1, ABILITY_RIPEN, BattleScript_BerryStatRaiseRet_AbilityPopup
 	goto BattleScript_BerryStatRaiseRet_Anim
 BattleScript_BerryStatRaiseRet_AbilityPopup:
@@ -11784,9 +11787,15 @@ BattleScript_StickyBarbTransfer::
 	removeitem BS_TARGET
 	return
 
+BattleScript_RestrainingOrderActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_RESTRAINING_ORDER
+	goto BattleScript_RedCardActivates_AfterPrintString
+
 BattleScript_RedCardActivates::
 	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_EFFECT, NULL
 	printstring STRINGID_REDCARDACTIVATE
+BattleScript_RedCardActivates_AfterPrintString::
 	waitmessage B_WAIT_TIME_LONG
 	saveattackerandtargetto34
 	copybyte gBattlerTarget, gBattlerAttacker
@@ -11939,6 +11948,7 @@ BattleScript_HandleSoulEaterEffect::
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	tryhealpercenthealth BS_ATTACKER, 25, BattleScript_HandleSoulEaterEffect_NothingToHeal
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_ATTACKERREGAINEDHEALTH
@@ -11950,6 +11960,7 @@ BattleScript_HandleJawsOfCarnageEffect::
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	tryhealpercenthealth BS_ATTACKER, 50, BattleScript_HandleJawsOfCarnageEffect_NothingToHeal
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_ATTACKERREGAINEDHEALTH
