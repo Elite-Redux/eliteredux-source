@@ -5897,9 +5897,28 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Electric Surge
         if(CheckAndSetSwitchInAbility(battler, ABILITY_ELECTRIC_SURGE) || CheckAndSetSwitchInAbility(battler, ABILITY_HADRON_ENGINE)){
             if(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer)){
+                for (i = 0; i < gBattlersCount; i++)
+                {
+                    DisableSwitchInAbility(i, ABILITY_GENERATOR);
+                }
                 BattleScriptPushCursorAndCallback(BattleScript_ElectricSurgeActivates);
                 effect++;
             }
+        }
+        
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_GENERATOR) && !(gStatuses3[battler] & STATUS3_CHARGED_UP)) {
+            int activate = FALSE;
+            if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+                activate = TRUE;
+            else if (!GetSingleUseAbilityCounter(battler, ABILITY_GENERATOR))
+            {
+                activate = TRUE;
+                SetSingleUseAbilityCounter(battler, ABILITY_GENERATOR, TRUE);
+            }
+            
+            gStackBattler1 = gBattlerAttacker;
+            BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
+            effect++;
         }
 
         // Grassy Surge
@@ -6226,12 +6245,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     effect++;
                 }
             }
-        }
-
-        // Generator
-        if(CheckAndSetSwitchInAbility(battler, ABILITY_GENERATOR)){
-            BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
-            effect++;
         }
 
         if(CheckAndSetSwitchInAbility(battler, ABILITY_SOOTHING_AROMA)){

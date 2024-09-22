@@ -10921,6 +10921,18 @@ static void Cmd_various(void)
                 gBattlescriptCurrInstr = BattleScript_ParadoxBoostActivatesRet;
             }
         }
+
+        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_GENERATOR)
+            && !(gStatuses3[gActiveBattler] & STATUS3_CHARGED_UP)
+            && TERRAIN_HAS_EFFECT
+            && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+        {
+            gBattleScripting.abilityPopupOverwrite = ABILITY_GENERATOR;
+            gStackBattler1 = gBattlerAbility = gActiveBattler;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_GeneratorActivatesRet;
+            
+        }
         return;
     case VARIOUS_GET_BATTLER:
         gBattleScripting.battler = gActiveBattler;

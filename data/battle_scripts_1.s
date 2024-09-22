@@ -6642,12 +6642,19 @@ BattleScript_EffectChargeString:
 	goto BattleScript_MoveEnd
 
 BattleScript_GeneratorActivates::
+	call BattleScript_GeneratorActivatesRet
+	end3
+
+BattleScript_GeneratorActivatesRet::
 	call BattleScript_AbilityPopUp
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
 	setcharge
 BattleScript_GeneratorString:
 	printstring STRINGID_PKMNCHARGINGPOWER
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	readattackerfromstack3
+	return
 
 BattleScript_EffectTaunt::
 	attackcanceler
