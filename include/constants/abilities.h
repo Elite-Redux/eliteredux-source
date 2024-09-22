@@ -496,7 +496,7 @@
 #define ABILITY_ACCELERATE 474 // Moves that need a charge turn are now used instantly.
 #define ABILITY_FROST_BURN 475 // Triggers 40BP Ice Beam after using a Fire-type move.
 #define ABILITY_ITCHY_DEFENSE 476 // Causes infestation when hit by a contact move.
-#define ABILITY_GENERATOR 477 // Charges up on entry.
+#define ABILITY_GENERATOR 477 // Charges up once on entry or when electric terrain is active.
 #define ABILITY_MOON_SPIRIT 478 // Fairy & Dark gains STAB. Moonlight recovers 75% HP.
 #define ABILITY_DUST_CLOUD 479 // Attacks with Sand Attack on switch-in.
 #define ABILITY_BERSERKER_RAGE 480 // Combines Berserk & Rampage.
