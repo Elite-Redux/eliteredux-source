@@ -2951,8 +2951,6 @@ static const u8 sSummary_L_Arrow[]  = INCBIN_U8("graphics/summary_screen/new/l_a
 
 static void PrintMoveInfoFromReplaceTab(void){
     u16 CurrentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
-    ScheduleBgCopyTilemapToVram(1);
-    ScheduleBgCopyTilemapToVram(2);
     PrintMoveDetails(CurrentMove, TRUE);
 }
 
