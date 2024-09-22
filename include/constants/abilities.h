@@ -616,7 +616,7 @@
 #define ABILITY_HAUNTING_FRENZY 594 // 20% chance to flinch the opponent. +1 speed on kill.
 #define ABILITY_NOISE_CANCEL 595 // Protects the party from sound- based moves.
 #define ABILITY_RADIO_JAM 596 // Sound-based moves inflict disable.
-#define ABILITY_OLE 597 // 20% chance to evade physical moves.
+#define ABILITY_OLE 597 // 30% chance to evade single- target moves.
 #define ABILITY_MALICIOUS 598 // Lowers the foe's highest Attack and Defense stat.
 #define ABILITY_DEAD_POWER 599 // 1.5x Attack boost. 20% chance to curse on contact moves.
 #define ABILITY_BRAWLING_WYVERN 600 // Dragon type moves become punching moves.
