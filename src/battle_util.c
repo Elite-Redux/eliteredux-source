@@ -986,7 +986,10 @@ void TryPreemptiveActions()
 void HandleAction_NothingIsFainted(void)
 {
     RecalculateMoveOrder(++gCurrentTurnActionNumber, gBattlersCount);
-    gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
+    if (gCurrentTurnActionNumber < gBattlersCount)
+        gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
+    else
+        gCurrentActionFuncId = B_ACTION_FINISHED;
     ClearMiscTurnFlags();
     TryPreemptiveActions();
 }
@@ -995,7 +998,10 @@ void HandleAction_ActionFinished(void)
 {
     gBattleStruct->monToSwitchIntoId[gBattlerByTurnOrder[gCurrentTurnActionNumber]] = 6;
     RecalculateMoveOrder(++gCurrentTurnActionNumber, gBattlersCount);
-    gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
+    if (gCurrentTurnActionNumber < gBattlersCount)
+        gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
+    else
+        gCurrentActionFuncId = B_ACTION_FINISHED;
     TurnStructsClear();
     gRoundStructs[gBattlerAttacker].extraMoveUsed = 0;
     gLastLandedMoves[gBattlerAttacker] = 0;
