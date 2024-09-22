@@ -2074,8 +2074,17 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_SNOW_CLOAK, defAbility) && IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY))
         calc = (calc * 80) / 100; // 1.2 snow cloak loss
 
-    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_OLE, defAbility) && !IS_MOVE_STATUS(move))
-        calc = (calc * 70) / 100; // 30% Ole! loss
+    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_OLE, defAbility))
+    {
+        switch (GetBattlerBattleMoveTargetFlags(move, battlerAtk))
+        {
+            case MOVE_TARGET_SELECTED:
+            case MOVE_TARGET_USER_OR_SELECTED:
+            case MOVE_TARGET_RANDOM:
+                calc = (calc * 70) / 100; // 30% Ole! loss
+                break;
+        }
+    }
 
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_TANGLED_FEET, defAbility) && gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
         calc = (calc * 50) / 100; // 1.5 tangled feet loss

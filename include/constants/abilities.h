@@ -616,7 +616,7 @@
 #define ABILITY_HAUNTING_FRENZY 594 // 20% chance to flinch the opponent. +1 speed on kill.
 #define ABILITY_NOISE_CANCEL 595 // Protects the party from sound- based moves.
 #define ABILITY_RADIO_JAM 596 // Sound-based moves inflict disable.
-#define ABILITY_OLE 597 // 40% chance to evade moves.
+#define ABILITY_OLE 597 // 30% chance to evade single- target moves.
 #define ABILITY_MALICIOUS 598 // Lowers the foe's highest Attack and Defense stat.
 #define ABILITY_DEAD_POWER 599 // 1.5x Attack boost. 20% chance to curse on contact moves.
 #define ABILITY_BRAWLING_WYVERN 600 // Dragon type moves become punching moves.
@@ -706,17 +706,17 @@
 #define ABILITY_FINAL_BLOW 684 // Unseen Fist + Fatal Precision.
 #define ABILITY_HOSPITALITY 685 // Heals partner for 25% of its max HP on switch-in.
 #define ABILITY_BUTTER_UP 686 // Combines Hospitality & Soothing Aroma
-#define ABILITY_HUGE_WINGS 687 // Giant Wings + Levitate.
-#define ABILITY_RESTRAINING_ORDER 688 // Forces the attacker when hit once each switch-in.
-#define ABILITY_VITALITY_STRIKE 686 // Heals for 10% of the damage dealt by punching moves.
-#define ABILITY_SWORD_OF_DAMNATION 687 // Combines Unaware & Sword of Damnation.
-#define ABILITY_ASSASSINS_TOOLS 688 // Contact moves have a 30% chance to PSN, PRLZ, or BLD.
-#define ABILITY_FROSTMAW 689 // Biting moves have a 50% chance to inflict frostbite.
-#define ABILITY_PATCHWORK 690 // Curses the opponent after its Disguise breaks.
-#define ABILITY_BLIND_RAGE 691 // Combines Scrappy & Mold Breaker.
-#define ABILITY_SLIPSTREAM 692 // Moves use 20% of its Speed stat additionally.
-#define ABILITY_APEX_PREDATOR 693 // Combines Tough Claws & Predator.
-#define ABILITY_DRAGONS_RITUAL 694 // Dealing a KO raises Attack and Speed by one stage.
+#define ABILITY_VITALITY_STRIKE 687 // Heals for 10% of the damage dealt by punching moves.
+#define ABILITY_HUGE_WINGS 688 // Giant Wings + Levitate.
+#define ABILITY_SWORD_OF_DAMNATION 689 // Combines Unaware & Sword of Damnation.
+#define ABILITY_RESTRAINING_ORDER 690 // Forces the attacker when hit once each switch-in.
+#define ABILITY_ASSASSINS_TOOLS 691 // Contact moves have a 30% chance to PSN, PRLZ, or BLD.
+#define ABILITY_FROSTMAW 692 // Biting moves have a 50% chance to inflict frostbite.
+#define ABILITY_PATCHWORK 693 // Curses the opponent after its Disguise breaks.
+#define ABILITY_BLIND_RAGE 694 // Combines Scrappy & Mold Breaker.
+#define ABILITY_SLIPSTREAM 695 // Moves use 20% of its Speed stat additionally.
+#define ABILITY_APEX_PREDATOR 696 // Combines Tough Claws & Predator.
+#define ABILITY_DRAGONS_RITUAL 697 // Dealing a KO raises Attack and Speed by one stage.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_DRAGONS_RITUAL + 1)
 
