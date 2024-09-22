@@ -2,16 +2,13 @@ mapscripts VictoryRoadUrshifus_MapScripts {}
 
 script VictoryRoadUrshifusSalsa {
     trainerbattle_single(TRAINER_SALSA, 
-    format("Hi! Oh, you're on your Victory Road, challenge, right? \p
-We came here from Galar to train. I guess it's kinda similar, right? \p
-C'mon, show us how Hoenn fights!"), 
+    format("Hi! Oh, you're on your Victory Road, challenge, right? \pWe came here from Galar to train. I guess it's kinda similar, right? \pC'mon, show us how Hoenn fights!"), 
     format("Whoa, well done, trainer!"))
     msgbox(format("My travel companions are itching for a decent fight too. Go on, keep moving!"), MSGBOX_AUTOCLOSE)
 }
 script VictoryRoadUrshifusVinegar {
     trainerbattle_single(TRAINER_VINEGAR, 
-    format("...Huh, you actually managed to beat Salsa? \p
-Maybe coming here to train was worth it after all. Come on, then!"), 
+    format("...Huh, you actually managed to beat Salsa?\pMaybe coming here to train was worth it after all. Come on, then!"), 
     format("...Well. Didn't expect that."))
     msgbox(format("...What? You beat me already, move on, the others want a shot."), MSGBOX_AUTOCLOSE)
 }
