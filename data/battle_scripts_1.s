@@ -979,6 +979,11 @@ BattleScript_HyperspaceFuryRemoveProtect::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_AttackerRemovesProtect::
+	printstring STRINGID_ATTACKERBREAKSPROTECTION
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_EffectPlasmaFists:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -6766,6 +6771,12 @@ BattleScript_EffectRecycle::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
+BattleScript_AttackerShattersScreens::
+	removelightscreenreflect
+	printstring STRINGID_ATTACKERSHATTERSSCREENS
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_EffectBrickBreak::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -9366,7 +9377,7 @@ BattleScript_DefiantActivates_Effect:
 BattleScript_DefiantActivates_End:
 	return
 
-BattleScript_AbilityPopUp:
+BattleScript_AbilityPopUp::
 	.if B_ABILITY_POP_UP == TRUE
 	showabilitypopup BS_ABILITY_BATTLER
 	recordability BS_ABILITY_BATTLER
@@ -11196,6 +11207,12 @@ BattleScript_IgnoresAndHitsItself::
 	printstring STRINGID_PKMNWONTOBEY
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_DoSelfConfusionDmg
+
+BattleScript_AttackerDestroysSubstitute::
+	printstring STRINGID_ATTACKERDESTROYSSUBSTITUTE
+	playanimation BS_TARGET, B_ANIM_SUBSTITUTE_FADE, NULL
+	waitmessage B_WAIT_TIME_SHORT
+	return
 
 BattleScript_SubstituteFade::
 	playanimation BS_TARGET, B_ANIM_SUBSTITUTE_FADE, NULL

@@ -9302,6 +9302,48 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PINNACLE_BLADE)
+            && DidMoveHit()
+            && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        {
+            int shouldApply = FALSE;
+            int opposingSide = GetBattlerSide(gBattlerTarget);
+
+            if (gVolatileStructs[gBattlerTarget].substituteHP)
+            {
+                gVolatileStructs[gBattlerTarget].substituteHP = 0;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AttackerDestroysSubstitute;
+                shouldApply = TRUE;
+            }
+
+            if (IsBattlerAlive(gBattlerTarget))
+            {
+                if (gSideTimers[opposingSide].reflectTimer
+                    || gSideTimers[opposingSide].lightscreenTimer
+                    || gSideTimers[opposingSide].auroraVeilTimer)
+                {
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_AttackerShattersScreens;
+                    shouldApply = TRUE;
+                }
+
+                if (IS_BATTLER_PROTECTED(gBattlerTarget))
+                {
+                    gBattleScripting.moveEffect = MOVE_EFFECT_FEINT;
+                    SetMoveEffect(TRUE, TRUE);
+                    shouldApply = TRUE;
+                }
+            }
+
+            if (shouldApply)
+            {
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AbilityPopUp;
+                effect++;
+            }
+        }
+
         //Fearmonger Paralyze Chance
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FEARMONGER)){
             if (ShouldApplyOnHitAffect(gBattlerTarget)
@@ -12963,6 +13005,8 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
     if ((BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNSEEN_FIST) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FINAL_BLOW))
         && (gBattleMoves[move].flags & FLAG_MAKES_CONTACT || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
         return FALSE;
+    else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        return FALSE;
     else if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
         return FALSE;
     else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
@@ -15079,10 +15123,9 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
     if (((gSideStatuses[defSide] & SIDE_STATUS_REFLECT && IS_MOVE_PHYSICAL(move))
             || (gSideStatuses[defSide] & SIDE_STATUS_LIGHTSCREEN && IS_MOVE_SPECIAL(move))
             || (gSideStatuses[defSide] & SIDE_STATUS_AURORA_VEIL))
-        && abilityAtk != ABILITY_INFILTRATOR
-		&& !BattlerHasInnate(battlerAtk, ABILITY_INFILTRATOR)
-        && abilityAtk != ABILITY_MARINE_APEX
-		&& !BattlerHasInnate(battlerAtk, ABILITY_MARINE_APEX)
+        && !BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_INFILTRATOR, abilityAtk)
+        && !BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_MARINE_APEX, abilityAtk)
+        && !(BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_PINNACLE_BLADE, abilityAtk) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         && !(isCrit)
         && !gRoundStructs[gBattlerAttacker].confusionSelfDmg)
     {

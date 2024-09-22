@@ -2286,7 +2286,8 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
              (  GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_IRON_BALL)))
              || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_AMBUSH) && gVolatileStructs[battlerAtk].isFirstTurn)
              || (gVolatileStructs[battlerAtk].showdownMode)
-             || (move == MOVE_SPACIAL_REND && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER)))
+             || (move == MOVE_SPACIAL_REND && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER))
+             || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST))
     {
         critChance = -2;
     }
@@ -3947,7 +3948,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 if (IS_BATTLER_PROTECTED(gBattlerTarget))
                 {
                     gRoundStructs[gBattlerTarget].protected = FALSE;
-                    gRoundStructs[gActiveBattler].protectedThisTurn = FALSE;
+                    gRoundStructs[gBattlerTarget].protectedThisTurn = FALSE;
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_WIDE_GUARD);
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_QUICK_GUARD);
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_CRAFTY_SHIELD);
@@ -3970,6 +3971,11 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     {
                         BattleScriptPush(gBattlescriptCurrInstr);
                         gBattlescriptCurrInstr = BattleScript_HyperspaceFuryRemoveProtect;
+                    }
+                    else
+                    {
+                        BattleScriptPush(gBattlescriptCurrInstr);
+                        gBattlescriptCurrInstr = BattleScript_AttackerRemovesProtect;
                     }
                 }
                 break;
@@ -12398,7 +12404,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         if (gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
             && !certain && gCurrentMove != MOVE_CURSE
             && !(!affectsUser &&
-            (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_INFILTRATOR) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_MARINE_APEX))))
+            (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_INFILTRATOR)|| BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_MARINE_APEX))))
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {
@@ -16037,6 +16043,8 @@ bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
     else if (GetBattlerAbility(battlerAtk) == ABILITY_INFILTRATOR || BattlerHasInnate(battlerAtk, ABILITY_INFILTRATOR))
         return FALSE;
     else if (GetBattlerAbility(battlerAtk) == ABILITY_MARINE_APEX || BattlerHasInnate(battlerAtk, ABILITY_MARINE_APEX))
+        return FALSE;
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         return FALSE;
     else if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE)
         return FALSE;

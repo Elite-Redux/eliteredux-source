@@ -717,8 +717,9 @@
 #define ABILITY_SLIPSTREAM 695 // Moves use 20% of its Speed stat additionally.
 #define ABILITY_APEX_PREDATOR 696 // Combines Tough Claws & Predator.
 #define ABILITY_DRAGONS_RITUAL 697 // Dealing a KO raises Attack and Speed by one stage.
+#define ABILITY_PINNACLE_BLADE 698 // Slashing moves always hit and break protection and barriers.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DRAGONS_RITUAL + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_PINNACLE_BLADE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

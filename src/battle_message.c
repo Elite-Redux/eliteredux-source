@@ -1046,6 +1046,9 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_AttackerBreaksProtection[] = _("{B_ATK_NAME_WITH_PREFIX} breaks\n{B_DEF_NAME_WITH_PREFIX}'s protection!");
+static const u8 sText_AttackerShattersScreens[] = _("{B_ATK_NAME_WITH_PREFIX} shatters\n{B_DEF_NAME_WITH_PREFIX}'s screens!");
+static const u8 sText_AttackerDestroysSubstitute[] = _("{B_ATK_NAME_WITH_PREFIX} destroys\n{B_DEF_NAME_WITH_PREFIX}'s substitute!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1876,6 +1879,9 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_HOSPITALITY - 12] = sText_Hospitality,
     [STRINGID_TARGET_CANT_HEAL - 12] = sText_TargetCantHeal,
     [STRINGID_RESTRAINING_ORDER - 12] = sText_RestrainingOrder,
+    [STRINGID_ATTACKERBREAKSPROTECTION - 12] = sText_AttackerBreaksProtection,
+    [STRINGID_ATTACKERSHATTERSSCREENS - 12] = sText_AttackerShattersScreens,
+    [STRINGID_ATTACKERDESTROYSSUBSTITUTE - 12] = sText_AttackerDestroysSubstitute,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
