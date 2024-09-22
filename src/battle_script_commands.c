@@ -5012,12 +5012,10 @@ static void Cmd_goto(void)
 
 static void Cmd_jumpifbyte(void)
 {
-    u8 caseID = gBattlescriptCurrInstr[1];
-    const u8* memByte = T2_READ_PTR(gBattlescriptCurrInstr + 2);
-    u8 value = gBattlescriptCurrInstr[6];
-    const u8* jumpPtr = T2_READ_PTR(gBattlescriptCurrInstr + 7);
-
-    gBattlescriptCurrInstr += 11;
+    u8 caseID = READ_FIRST_8_INC;
+    const u8* memByte = READ_PTR_INC;
+    u8 value = READ_8_INC;
+    const u8* jumpPtr = READ_PTR_INC;
 
     switch (caseID)
     {
@@ -5050,12 +5048,10 @@ static void Cmd_jumpifbyte(void)
 
 static void Cmd_jumpifhalfword(void)
 {
-    u8 caseID = gBattlescriptCurrInstr[1];
-    const u16* memHword = T2_READ_PTR(gBattlescriptCurrInstr + 2);
-    u16 value = T2_READ_16(gBattlescriptCurrInstr + 6);
-    const u8* jumpPtr = T2_READ_PTR(gBattlescriptCurrInstr + 8);
-
-    gBattlescriptCurrInstr += 12;
+    u8 caseID = READ_FIRST_8_INC;
+    const u16* memHword = READ_PTR_INC;
+    u16 value = READ_16_INC;
+    const u8* jumpPtr = READ_PTR_INC;
 
     switch (caseID)
     {
@@ -5088,12 +5084,10 @@ static void Cmd_jumpifhalfword(void)
 
 static void Cmd_jumpifword(void)
 {
-    u8 caseID = gBattlescriptCurrInstr[1];
-    const u32* memWord = T2_READ_PTR(gBattlescriptCurrInstr + 2);
-    u32 value = T1_READ_32(gBattlescriptCurrInstr + 6);
-    const u8* jumpPtr = T2_READ_PTR(gBattlescriptCurrInstr + 10);
-
-    gBattlescriptCurrInstr += 14;
+    u8 caseID = READ_FIRST_8_INC;
+    const u32* memWord = READ_PTR_INC;
+    u32 value = READ_32_INC;
+    const u8* jumpPtr = READ_PTR_INC;
 
     switch (caseID)
     {
@@ -11447,12 +11441,9 @@ static void Cmd_various(void)
         }
         return;
     case VARIOUS_SET_WEATHER:
-        MGBA_PRINT_DEBUG("Print me please")
-        MGBA_PRINT_DEBUG("Expect %d %d", T1_READ_8(gBattlescriptCurrInstr), T1_READ_PTR(gBattlescriptCurrInstr + 1))
         {
             int weather = READ_8_INC;
             ptr = READ_PTR_INC;
-            MGBA_PRINT_DEBUG("Actual %d %d", weather, ptr)
             if (!TryChangeBattleWeather(gActiveBattler, weather, FALSE))
             {
                 gBattlescriptCurrInstr = ptr;
