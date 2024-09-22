@@ -2076,7 +2076,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         calc = (calc * 80) / 100; // 1.2 snow cloak loss
 
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_OLE, defAbility) && !IS_MOVE_STATUS(move))
-        calc = (calc * 60) / 100; // 40% Ole! loss
+        calc = (calc * 70) / 100; // 30% Ole! loss
 
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_TANGLED_FEET, defAbility) && gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
         calc = (calc * 50) / 100; // 1.5 tangled feet loss
