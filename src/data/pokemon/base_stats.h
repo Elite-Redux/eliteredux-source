@@ -36339,11 +36339,11 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_WO_CHIEN] =
     {
-        .baseHP        = 85,
-        .baseAttack    = 90,
+        .baseHP        = 125,
+        .baseAttack    = 70,
         .baseDefense   = 100,
-        .baseSpeed     = 70,
-        .baseSpAttack  = 100,
+        .baseSpeed     = 55,
+        .baseSpAttack  = 95,
         .baseSpDefense = 135,
         .type1 = TYPE_DARK,
         .type2 = TYPE_GRASS,
