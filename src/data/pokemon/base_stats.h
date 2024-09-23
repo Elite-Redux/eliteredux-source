@@ -9,7 +9,7 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_BULBASAUR] =
     {
     .baseHP        = 47, //45
-    .baseAttack    = 49,
+    .baseAttack    = 99, //49,
     .baseDefense   = 49,
     .baseSpeed     = 45,
     .baseSpAttack  = 65,
