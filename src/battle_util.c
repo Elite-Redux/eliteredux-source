@@ -8447,6 +8447,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 		}
 		
+		// Rage Point
+		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RAGE_POINT) && ShouldApplyOnHitAffect(battler)){
+			if (gIsCriticalHit
+                && (CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)
+                    || CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)))
+            {
+				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_RAGE_POINT;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_RagePointActivates;
+                effect++;
+            }
+		}
+		
 		// Anger Point
 		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ANGER_POINT) && ShouldApplyOnHitAffect(battler)){
 			if (gIsCriticalHit && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
@@ -14075,6 +14088,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_GUTS:
             if (gBattleMons[battlerAtk].status1 & STATUS1_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
+            return;
+        
+        case ABILITY_RAGE_POINT:
+            if (gBattleMons[battlerAtk].status1 & STATUS1_ANY) MUL(1.5);
             return;
         
         case ABILITY_BLOOD_STIGMA:

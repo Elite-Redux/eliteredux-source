@@ -9413,13 +9413,13 @@ BattleScript_FungalInfectionActivates::
 	
 BattleScript_InflatableActivates::
 	jumpifstat BS_ABILITY_BATTLER, CMP_LESS_THAN, STAT_DEF, MAX_STAT_STAGE, BattleScript_Inflatable_Def
-	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_Inflatable_End
+	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_Return
 BattleScript_Inflatable_Def::
 	call BattleScript_AbilityPopUp
 	pause B_WAIT_TIME_SHORT
 	saveattackertostack3
 	copybyte gBattlerAttacker, gBattlerTarget
-	playstatchangeanimation BS_ABILITY_BATTLER, BIT_ATK | BIT_SPEED, 0
+	playstatchangeanimation BS_ABILITY_BATTLER, BIT_DEF | BIT_SPDEF, 0
 	setstatchanger STAT_DEF, 1, FALSE
 	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_Inflatable_SpDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_Inflatable_SpDef
@@ -9432,6 +9432,30 @@ BattleScript_Inflatable_SpDef::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_Inflatable_End:
+	readattackerfromstack3
+	return
+	
+BattleScript_RagePointActivates::
+	jumpifstat BS_ABILITY_BATTLER, CMP_LESS_THAN, STAT_ATK, MAX_STAT_STAGE, BattleScript_RagePoint_Atk
+	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPATK, MAX_STAT_STAGE, BattleScript_Return
+BattleScript_RagePoint_Atk::
+	call BattleScript_AbilityPopUp
+	pause B_WAIT_TIME_SHORT
+	saveattackertostack3
+	copybyte gBattlerAttacker, gBattlerTarget
+	playstatchangeanimation BS_ABILITY_BATTLER, BIT_ATK | BIT_SPATK, 0
+	setstatchanger STAT_ATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_RagePoint_SpAtk
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RagePoint_SpAtk
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_RagePoint_SpAtk::
+	setstatchanger STAT_SPATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_RagePoint_End
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RagePoint_End
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_RagePoint_End:
 	readattackerfromstack3
 	return
 	

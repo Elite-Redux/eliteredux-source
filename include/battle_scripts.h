@@ -490,6 +490,7 @@ extern const u8 BattleScript_MultiHitPrintStrings[];
 extern const u8 BattleScript_BurnUpRemoveType[];
 extern const u8 BattleScript_AttackBoostActivates[];
 extern const u8 BattleScript_InflatableActivates[];
+extern const u8 BattleScript_RagePointActivates[];
 extern const u8 BattleScript_AngerPointsLightBoostActivates[];
 extern const u8 BattleScript_TippingPointsLightBoostActivates[];
 extern const u8 BattleScript_BattlerInnateStatRaiseOnSwitchIn[];

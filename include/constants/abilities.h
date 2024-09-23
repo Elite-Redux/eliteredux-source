@@ -722,9 +722,9 @@
 #define ABILITY_COLOR_SPECTRUM 700 // Same-type attacks get a 1.2x boost. Changes type each turn.
 #define ABILITY_STEEL_BEETLE 701 // Raging Boxer + Pollinate.
 #define ABILITY_FROM_THE_SHADOWS 702 // Attacks trap and have a 20% flinch chance when moving first.
-#define ABILITY_NEW 703 // Placeholder
+#define ABILITY_RAGE_POINT 703 // Gets a 1.5x boost while statused. Raises offenses when crit.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_NEW + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_RAGE_POINT + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

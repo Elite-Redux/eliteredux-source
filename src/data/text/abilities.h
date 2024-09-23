@@ -672,7 +672,7 @@ static const u8 sAbilityEnergizedDescription[] = _("Grants Generator. Also charg
 static const u8 sAbilityColorSpectrumDescription[] = _("Same-type attacks get a 1.2x\nboost. Changes type each turn.");
 static const u8 sAbilitySteelBeetleDescription[] = _("Raging Boxer + Pollinate.");
 static const u8 sAbilityFromTheShadowsDescription[] = _("Attacks trap and have a 20%\nflinch chance when moving first.");
-static const u8 sAbilityNewDescription[] = _("Placeholder");
+static const u8 sAbilityRagePointDescription[] = _("Gets a 1.5x boost while statused.\nRaises offenses when crit.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1379,7 +1379,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_COLOR_SPECTRUM] = _("Color Spectrum"),
     [ABILITY_STEEL_BEETLE] = _("Steel Beetle"),
     [ABILITY_FROM_THE_SHADOWS] = _("From the Shadows"),
-    [ABILITY_NEW] = _("New Ability"),
+    [ABILITY_RAGE_POINT] = _("Rage Point"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2087,5 +2087,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_COLOR_SPECTRUM] = sAbilityColorSpectrumDescription,
     [ABILITY_STEEL_BEETLE] = sAbilitySteelBeetleDescription,
     [ABILITY_FROM_THE_SHADOWS] = sAbilityFromTheShadowsDescription,
-    [ABILITY_NEW] = sAbilityNewDescription,
+    [ABILITY_RAGE_POINT] = sAbilityRagePointDescription,
 };
