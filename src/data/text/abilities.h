@@ -670,6 +670,7 @@ static const u8 sAbilityPinnacleBladeDescription[] = _("Slashing moves always hi
 static const u8 sAbilityEnergizedDescription[] = _("Grants Generator. Also charges\nup on KO with Electric move.");
 static const u8 sAbilityColorSpectrumDescription[] = _("Same-type attacks get a 1.2x\nboost. Changes type each turn.");
 static const u8 sAbilitySteelBeetleDescription[] = _("Raging Boxer + Pollinate.");
+static const u8 sAbilityFromTheShadowsDescription[] = _("Attacks trap and have a 20%\nflinch chance when moving first.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1375,6 +1376,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ENERGIZED] = _("Energized"),
     [ABILITY_COLOR_SPECTRUM] = _("Color Spectrum"),
     [ABILITY_STEEL_BEETLE] = _("Steel Beetle"),
+    [ABILITY_FROM_THE_SHADOWS] = _("From the Shadows"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2081,4 +2083,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_ENERGIZED] = sAbilityEnergizedDescription,
     [ABILITY_COLOR_SPECTRUM] = sAbilityColorSpectrumDescription,
     [ABILITY_STEEL_BEETLE] = sAbilitySteelBeetleDescription,
+    [ABILITY_FROM_THE_SHADOWS] = sAbilityFromTheShadowsDescription,
 };

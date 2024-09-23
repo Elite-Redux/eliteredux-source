@@ -721,8 +721,9 @@
 #define ABILITY_ENERGIZED 699 // Grants Generator. Also charges up on KO with Electric move.
 #define ABILITY_COLOR_SPECTRUM 700 // Same-type attacks get a 1.2x boost. Changes type each turn.
 #define ABILITY_STEEL_BEETLE 701 // Raging Boxer + Pollinate.
+#define ABILITY_FROM_THE_SHADOWS 702 // Attacks trap and have a 20% flinch chance when moving first.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_STEEL_BEETLE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_FROM_THE_SHADOWS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
