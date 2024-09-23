@@ -3397,10 +3397,9 @@ u8 DoBattlerEndTurnEffects(void)
             break;
         case ENDTURN_OCTOLOCK:
             if (gVolatileStructs[gActiveBattler].octolock 
-             && !(GetBattlerAbility(gActiveBattler)    == ABILITY_CLEAR_BODY       || BattlerHasInnate(gActiveBattler, ABILITY_CLEAR_BODY)
-                  || GetBattlerAbility(gActiveBattler) == ABILITY_FULL_METAL_BODY  || BattlerHasInnate(gActiveBattler, ABILITY_FULL_METAL_BODY)
-                  || GetBattlerAbility(gActiveBattler) == ABILITY_WHITE_SMOKE      || BattlerHasInnate(gActiveBattler, ABILITY_WHITE_SMOKE)
-                  || GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_CLEAR_AMULET))
+             && !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY)
+                || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY)
+                || GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_CLEAR_AMULET))
             {
                 gBattlerTarget = gActiveBattler;
                 BattleScriptExecute(BattleScript_OctolockEndTurn);
@@ -6483,6 +6482,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
         }
+
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_WHITE_SMOKE)
+            && !gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
+        {
+            int side = GET_BATTLER_SIDE(battler);
+            gSideTimers[side].smokescreenTimer = 5;
+            gSideTimers[side].started.smokescreen = TRUE;
+            gSideTimers[side].smokescreenBattler = battler;
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_WHITE_SMOKE;
+            BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+            effect++;
+        }
         
         // Pressure
         if(CheckAndSetSwitchInAbility(battler, ABILITY_PRESSURE)){
@@ -6507,7 +6518,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect++;
         }
         
-        // Pressure
+        // Petrify
         if(CheckAndSetSwitchInAbility(battler, ABILITY_PETRIFY)){
             u8 i;
             u8 loweredStats = 0;

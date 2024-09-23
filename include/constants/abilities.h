@@ -30,7 +30,7 @@
 #define ABILITY_LEVITATE 26 // Immune to Ground-type moves. Ups own Flying moves by 1.25x.
 #define ABILITY_EFFECT_SPORE 27 // 30% chance to inflict SLP, PARA or PSN if hit by a contact move.
 #define ABILITY_SYNCHRONIZE 28 // Enemies inflicting status on this Pokémon get same status.
-#define ABILITY_CLEAR_BODY 29 // Immune to stat drops from opponents.
+#define ABILITY_CLEAR_BODY 29 // Immune to stat drops.
 #define ABILITY_NATURAL_CURE 30 // Heals status condition upon switching out.
 #define ABILITY_LIGHTNING_ROD 31 // Redirects Electric moves. Absorbs them, ups highest Atk.
 #define ABILITY_SERENE_GRACE 32 // Doubles chance of secondary effects on its own moves.
@@ -74,7 +74,7 @@
 #define ABILITY_DROUGHT 70 // Summons sun on entry. Lasts 8 turns.
 #define ABILITY_ARENA_TRAP 71 // Enemies can't flee. Ghosts and ungrounded Pokémon are immune.
 #define ABILITY_VITAL_SPIRIT 72 // Can't fall asleep. Heals status after using Fighting-type moves.
-#define ABILITY_WHITE_SMOKE 73 // Immune to stat drops from opponents.
+#define ABILITY_WHITE_SMOKE 73 // Sets Smokescreen on switch-in.
 #define ABILITY_PURE_POWER 74 // Doubles own Attack stat. Boosts raw stat, not base stat.
 #define ABILITY_SHELL_ARMOR 75 // Immune to critical hits. Takes 20% less damage from all attacks.
 #define ABILITY_AIR_LOCK 76 // Negates weather effects as long as the Pokémon is on the field.
@@ -243,7 +243,7 @@
 #define ABILITY_PSYCHIC_SURGE 227 // Casts Psychic Terrain on entry. Lasts 8 turns.
 #define ABILITY_MISTY_SURGE 228 // Casts Misty Terrain on entry. Lasts 8 turns.
 #define ABILITY_GRASSY_SURGE 229 // Casts Grassy Terrain on entry. Lasts 8 turns.
-#define ABILITY_FULL_METAL_BODY 230 // Immune to stat drops from opponents.
+#define ABILITY_FULL_METAL_BODY 230 // Immune to stat drops.
 #define ABILITY_SHADOW_SHIELD 231 // At full HP, halves damage taken from attacks
 #define ABILITY_PRISM_ARMOR 232 // Takes 35% less damage from Super-effective moves.
 #define ABILITY_NEUROFORCE 233 // Grants an additional 1.25x boost to Super-effective moves.
@@ -722,8 +722,9 @@
 #define ABILITY_COLOR_SPECTRUM 700 // Same-type attacks get a 1.2x boost. Changes type each turn.
 #define ABILITY_STEEL_BEETLE 701 // Raging Boxer + Pollinate.
 #define ABILITY_FROM_THE_SHADOWS 702 // Attacks trap and have a 20% flinch chance when moving first.
+#define ABILITY_NEW 703 // Placeholder
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_FROM_THE_SHADOWS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_NEW + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
