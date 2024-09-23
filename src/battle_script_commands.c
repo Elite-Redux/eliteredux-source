@@ -6414,6 +6414,7 @@ static void Cmd_moveend(void)
                      && !GetSingleUseAbilityCounter(battler, ABILITY_EJECT_PACK_ABILITY)
                      && CountUsablePartyMons(battler) > 0)  // Has mon to switch into
                     {
+                        SetSingleUseAbilityCounter(battler, ABILITY_EJECT_PACK_ABILITY, TRUE);
                         gStackBattler1 = battler;
                         gRoundStructs[battler].statFell = FALSE;
                         gBattleScripting.abilityPopupOverwrite = ABILITY_EJECT_PACK_ABILITY;
@@ -7337,16 +7338,16 @@ static void Cmd_switchineffects(void)
             int level = gBattleMons[i].level;
             bool8 isPlayer = GetBattlerSide(i) == B_SIDE_PLAYER;
             u8 j = 0;
-            if (IsUnsuppressableAbility(gBattleMons[i].ability)) abilities[0] = gBattleMons[i].ability;
+            if (IsPersistentOrUnsuppressableAbility(gBattleMons[i].ability)) abilities[0] = gBattleMons[i].ability;
             for (j = 0; j < NUM_INNATE_PER_SPECIES; j++)
             {
                 u16 innate = GetInnateInSlot(level, species, j, personality, isPlayer);
-                if (IsUnsuppressableAbility(innate)) abilities[j+1] = innate;
+                if (IsPersistentOrUnsuppressableAbility(innate)) abilities[j+1] = innate;
             }
             UpdateAbilityStateIndices(i, abilities);
             }
             #else
-            if (IsBattlerAlive(i) && !IsUnsuppressableAbility(gBattleMons[i].ability))
+            if (IsBattlerAlive(i) && !IsPersistentOrUnsuppressableAbility(gBattleMons[i].ability))
             {
                 UpdateAbilityStateIndicesForNewAbility(i, ABILITY_NONE);
             }

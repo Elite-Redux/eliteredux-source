@@ -7647,7 +7647,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
              && TARGET_TURN_DAMAGED
              && IsMoveMakingContact(move, gBattlerAttacker))
             {
-                if (!IsUnsuppressableAbility(gBattleMons[gBattlerAttacker].ability))
+                if (!IsPersistentOrUnsuppressableAbility(gBattleMons[gBattlerAttacker].ability))
                 {
                     if (DoesBattlerHaveAbilityShield(gBattlerAttacker)) break;
                     UpdateAbilityStateIndicesForNewAbility(gBattlerAttacker, ABILITY_MUMMY);
@@ -7665,7 +7665,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
              && TARGET_TURN_DAMAGED
              && IsMoveMakingContact(move, gBattlerAttacker))
             {
-                if (!IsUnsuppressableAbility(gBattleMons[gBattlerAttacker].ability))
+                if (!IsPersistentOrUnsuppressableAbility(gBattleMons[gBattlerAttacker].ability))
                 {
                     if (DoesBattlerHaveAbilityShield(gBattlerAttacker)) break;
                     UpdateAbilityStateIndicesForNewAbility(gBattlerAttacker, ABILITY_LINGERING_AROMA);
@@ -7683,7 +7683,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
              && TARGET_TURN_DAMAGED
              && (gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
             {
-                if (!IsUnsuppressableAbility(gBattleMons[gBattlerAttacker].ability))
+                if (!IsPersistentOrUnsuppressableAbility(gBattleMons[gBattlerAttacker].ability))
                 {
                     if (DoesBattlerHaveAbilityShield(gBattlerAttacker)) break;
                     if (DoesBattlerHaveAbilityShield(gBattlerTarget)) break;
@@ -10337,7 +10337,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 if (ShouldApplyOnHitAffect(opponent)
                     && IsMoveMakingContact(move, gBattlerAttacker)
                     && !BATTLER_HAS_ABILITY(opponent, ABILITY_BLOOD_STAIN)
-                    && !IsUnsuppressableAbility(GetBattlerAbility(opponent)))
+                    && !IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
                 {
                     if (DoesBattlerHaveAbilityShield(opponent)) break;
                     UpdateAbilityStateIndicesForNewAbility(opponent, ABILITY_BLOOD_STAIN);
@@ -10725,21 +10725,36 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_AS_ONE_ICE_RIDER:
     case ABILITY_AS_ONE_SHADOW_RIDER:
     case ABILITY_CROWNED_KING:
-    case ABILITY_EJECT_PACK_ABILITY:
-    case ABILITY_CHEATING_DEATH:
-    case ABILITY_GALLANTRY:
-    case ABILITY_WISHMAKER:
     case ABILITY_CLUELESS:
     case ABILITY_BATTLE_BOND:
     case ABILITY_NEUTRALIZING_GAS:
     case ABILITY_HUNGER_SWITCH:
-    case ABILITY_ANTICIPATION:
-    case ABILITY_RECURRING_NIGHTMARE:
     case ABILITY_BLOOD_STAIN:
     case ABILITY_BLOOD_STIGMA:
         return TRUE;
     default:
         return FALSE;
+    }
+}
+
+int IsPersistentOrUnsuppressableAbility(int ability)
+{
+    if (IsUnsuppressableAbility(ability)) return TRUE;
+
+    switch (ability)
+    {
+        case ABILITY_EJECT_PACK_ABILITY:
+        case ABILITY_CHEATING_DEATH:
+        case ABILITY_GALLANTRY:
+        case ABILITY_WISHMAKER:
+        case ABILITY_GENERATOR:
+        case ABILITY_RECURRING_NIGHTMARE:
+        case ABILITY_ANTICIPATION:
+        case ABILITY_COWARD:
+            return TRUE;
+        
+        default:
+            return FALSE;
     }
 }
 
@@ -10893,8 +10908,7 @@ bool8 BattlerIgnoresAbility(u8 sBattlerAttacker, u8 sBattlerTarget, u16 ability)
 
 bool8 BattlerAbilityWasRemoved(u8 battlerId, u32 ability)
 {
-    if ((gStatuses3[battlerId] & STATUS3_GASTRO_ACID) ||
-       (IsNeutralizingGasOnField() && !IsUnsuppressableAbility(ability)))
+    if ((gStatuses3[battlerId] & STATUS3_GASTRO_ACID || IsNeutralizingGasOnField()) && !IsUnsuppressableAbility(ability))
         return TRUE;
     else
         return FALSE;
@@ -16225,7 +16239,7 @@ bool32 CanFling(u8 battlerId)
 bool32 IsRolePlayBannedAbilityAtk(u16 ability)
 {
     u32 i;
-    if (IsUnsuppressableAbility(ability)) return TRUE;
+    if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     return FALSE;
 }
 
@@ -16233,7 +16247,7 @@ bool32 IsRolePlayBannedAbility(u16 ability)
 {
     u32 i;
     if (!ability) return TRUE;
-    if (IsUnsuppressableAbility(ability)) return TRUE;
+    if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     for (i = 0; i < ARRAY_COUNT(sRolePlayBannedAbilities); i++)
     {
         if (ability == sRolePlayBannedAbilities[i])
@@ -16245,21 +16259,21 @@ bool32 IsRolePlayBannedAbility(u16 ability)
 bool32 IsWorrySeedBannedAbility(u16 ability)
 {
     u32 i;
-    if (IsUnsuppressableAbility(ability)) return TRUE;
+    if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     return FALSE;
 }
 
 bool32 IsGastroAcidBannedAbility(u16 ability)
 {
     u32 i;
-    if (IsUnsuppressableAbility(ability)) return TRUE;
+    if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     return FALSE;
 }
 
 bool32 IsEntrainmentBannedAbilityAttacker(u16 ability)
 {
     u32 i;
-    if (IsUnsuppressableAbility(ability)) return TRUE;
+    if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     for (i = 0; i < ARRAY_COUNT(sSkillSwapBannedAbilities); i++)
     {
         if (ability == sSkillSwapBannedAbilities[i])
@@ -16271,7 +16285,7 @@ bool32 IsEntrainmentBannedAbilityAttacker(u16 ability)
 bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability)
 {
     u32 i;
-    if (IsUnsuppressableAbility(ability)) return TRUE;
+    if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     for (i = 0; i < ARRAY_COUNT(sEntrainmentTargetSimpleBeamBannedAbilities); i++)
     {
         if (ability == sEntrainmentTargetSimpleBeamBannedAbilities[i])

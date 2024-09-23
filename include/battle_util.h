@@ -319,6 +319,7 @@ void UpdateAbilityStateIndices(u8 battler, u16 newAbilities[]);
 void UpdateAbilityStateIndicesForNewAbility(u8 battler, u16 newAbility);
 void UpdateAbilityStateIndicesForNewSpecies(u8 battler, u16 newSpecies);
 bool32 IsUnsuppressableAbility(u32 ability);
+int IsPersistentOrUnsuppressableAbility(int ability);
 bool8 CanBeDisabled(u8 battlerId);
 bool8 DoesBattlerHaveAbilityShield(u8 battlerId);
 u16 IsSoundproof(u8 battlerId);
