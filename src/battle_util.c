@@ -7456,6 +7456,23 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 					effect++;
                 }
             }
+
+            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_COLOR_SPECTRUM))
+            {
+                u8 newType;
+                do
+                {
+                    newType = Random() % NUMBER_OF_MON_TYPES;
+                } while (newType == TYPE_MYSTERY || IS_BATTLER_OF_TYPE(gActiveBattler, newType));
+
+                gBattleMons[gActiveBattler].type1 = newType;
+                gBattleMons[gActiveBattler].type2 = newType;
+                gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
+                gBattlerAbility = gActiveBattler;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_COLOR_SPECTRUM;
+                BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
+                effect++;
+            }
 			
 			// Rain Dish
 			if(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAIN_DISH)){
@@ -14125,6 +14142,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_HIGHER_RANK:
             if (GetMovePriority(battlerAtk, move, battlerDef) > 0) MUL(1.2);
+            return;
+        
+        case ABILITY_COLOR_SPECTRUM:
+            if (StabMultiplierInHalves(battlerAtk, moveType, GetBattlerAbility(battlerAtk), move) > 2) MUL(1.2);
             return;
     }
 }

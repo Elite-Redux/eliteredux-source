@@ -719,8 +719,9 @@
 #define ABILITY_DRAGONS_RITUAL 697 // Dealing a KO raises Attack and Speed by one stage.
 #define ABILITY_PINNACLE_BLADE 698 // Slashing moves always hit and break protection and barriers.
 #define ABILITY_ENERGIZED 699 // Grants Generator. Also charges up on KO with Electric move.
+#define ABILITY_COLOR_SPECTRUM 700 // Same-type attacks get a 1.2x boost. Changes type each turn.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ENERGIZED + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_COLOR_SPECTRUM + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

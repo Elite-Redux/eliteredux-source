@@ -500,6 +500,7 @@ extern const u8 BattleScript_BattlerCoiledUp[];
 extern const u8 BattleScript_BattlerCoiledUpReturn[];
 extern const u8 BattleScript_AttackerBecameTheType[];
 extern const u8 BattleScript_AttackerBecameTheTypeFull[];
+extern const u8 BattleScript_AttackerBecameTheTypeFullEnd3[];
 extern const u8 BattleScript_DefenderBecameTheTypeFull[];
 extern const u8 BattleScript_AttackerBecameInfested[];
 extern const u8 BattleScript_SelfSufficientActivates[];

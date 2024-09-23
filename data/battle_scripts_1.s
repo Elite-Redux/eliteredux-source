@@ -9500,6 +9500,10 @@ BattleScript_AttackerBecameTheType::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_AttackerBecameTheTypeFullEnd3::
+	call BattleScript_AttackerBecameTheTypeFull
+	end3
+
 BattleScript_AttackerBecameTheTypeFull::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ATTACKERTYPECHANGEDTO
@@ -10645,7 +10649,6 @@ BattleScript_StickyHoldActivates::
 	return
 
 BattleScript_ColorChangeActivates::
-	sethword sABILITY_OVERWRITE, ABILITY_COLOR_CHANGE
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNCHANGEDTYPEWITH
 	waitmessage B_WAIT_TIME_LONG

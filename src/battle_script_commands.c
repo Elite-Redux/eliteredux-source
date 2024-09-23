@@ -1690,8 +1690,10 @@ static void Cmd_attackcanceler(void)
         return;
     }
 
-    if (((GetBattlerAbility(gBattlerTarget) == ABILITY_COLOR_CHANGE) || BattlerHasInnate(gBattlerTarget, ABILITY_COLOR_CHANGE) ||
-         (GetBattlerAbility(gBattlerTarget) == ABILITY_PRISMATIC_FUR) || BattlerHasInnate(gBattlerTarget, ABILITY_PRISMATIC_FUR))
+    {
+    int ability;
+    if (((BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_COLOR_CHANGE) && (ability = ABILITY_COLOR_CHANGE)) ||
+        (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_PRISMATIC_FUR) && (ability = ABILITY_PRISMATIC_FUR)))
         && gRoundStructs[gBattlerAttacker].extraMoveUsed != TRUE
         && (gBattlerAttacker != gBattlerTarget)) {
         u32 currentType;
@@ -1709,6 +1711,7 @@ static void Cmd_attackcanceler(void)
         }
 
         if (gBattleMons[gBattlerTarget].type1 != bestType) {
+            gBattleScripting.abilityPopupOverwrite = ability;
             SET_BATTLER_TYPE(gBattlerTarget, bestType);
             PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType);
             gBattlerAbility = gBattlerTarget;
@@ -1716,6 +1719,7 @@ static void Cmd_attackcanceler(void)
             gBattlescriptCurrInstr = BattleScript_ColorChangeActivates;
             return;
         }
+    }
     }
 
     if (AtkCanceller_UnableToUseMove2())
