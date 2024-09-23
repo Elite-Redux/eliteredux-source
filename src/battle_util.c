@@ -2190,7 +2190,7 @@ static int GetAbilityNumber(int battler, int ability)
     }
 }
 
-static int GetOncePerTurnAbilityCounter(int battler, int ability)
+int GetOncePerTurnAbilityCounter(int battler, int ability)
 {
     int index = GetAbilityNumber(battler, ability);
     if (index < 0) return -1;
@@ -5896,6 +5896,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 for (i = 0; i < gBattlersCount; i++)
                 {
                     DisableSwitchInAbility(i, ABILITY_GENERATOR);
+                    DisableSwitchInAbility(i, ABILITY_ENERGIZED);
                 }
                 BattleScriptPushCursorAndCallback(BattleScript_ElectricSurgeActivates);
                 effect++;
@@ -5910,6 +5911,21 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             {
                 activate = TRUE;
                 SetSingleUseAbilityCounter(battler, ABILITY_GENERATOR, TRUE);
+            }
+            
+            gStackBattler1 = gBattlerAttacker;
+            BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
+            effect++;
+        }
+        
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_ENERGIZED) && !(gStatuses3[battler] & STATUS3_CHARGED_UP)) {
+            int activate = FALSE;
+            if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+                activate = TRUE;
+            else if (!GetSingleUseAbilityCounter(battler, ABILITY_ENERGIZED))
+            {
+                activate = TRUE;
+                SetSingleUseAbilityCounter(battler, ABILITY_ENERGIZED, TRUE);
             }
             
             gStackBattler1 = gBattlerAttacker;
@@ -10751,6 +10767,7 @@ int IsPersistentOrUnsuppressableAbility(int ability)
         case ABILITY_RECURRING_NIGHTMARE:
         case ABILITY_ANTICIPATION:
         case ABILITY_COWARD:
+        case ABILITY_ENERGIZED:
             return TRUE;
         
         default:

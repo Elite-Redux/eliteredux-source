@@ -667,6 +667,7 @@ static const u8 sAbilitySlipstreamDescription[] = _("Moves use 20% of its Speed\
 static const u8 sAbilityApexPredatorDescription[] = _("Combines Tough Claws &\nPredator.");
 static const u8 sAbilityDragonsRitualDescription[] = _("Dealing a KO raises Attack and\nSpeed by one stage.");
 static const u8 sAbilityPinnacleBladeDescription[] = _("Slashing moves always hit and\nbreak protection and barriers.");
+static const u8 sAbilityEnergizedDescription[] = _("Grants Generator. Also charges\nup on KO with Electric move.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1369,6 +1370,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_APEX_PREDATOR] = _("Apex Predator"),
     [ABILITY_DRAGONS_RITUAL] = _("Dragon's Ritual"),
     [ABILITY_PINNACLE_BLADE] = _("Pinnacle Blade"),
+    [ABILITY_ENERGIZED] = _("Energized"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2072,4 +2074,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_APEX_PREDATOR] = sAbilityApexPredatorDescription,
     [ABILITY_DRAGONS_RITUAL] = sAbilityDragonsRitualDescription,
     [ABILITY_PINNACLE_BLADE] = sAbilityPinnacleBladeDescription,
+    [ABILITY_ENERGIZED] = sAbilityEnergizedDescription,
 };

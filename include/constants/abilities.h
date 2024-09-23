@@ -718,8 +718,9 @@
 #define ABILITY_APEX_PREDATOR 696 // Combines Tough Claws & Predator.
 #define ABILITY_DRAGONS_RITUAL 697 // Dealing a KO raises Attack and Speed by one stage.
 #define ABILITY_PINNACLE_BLADE 698 // Slashing moves always hit and break protection and barriers.
+#define ABILITY_ENERGIZED 699 // Grants Generator. Also charges up on KO with Electric move.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_PINNACLE_BLADE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_ENERGIZED + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

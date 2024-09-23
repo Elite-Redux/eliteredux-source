@@ -888,6 +888,9 @@ static const u8 sText_OpposingStatBuffsGone[] = _("Opposing stat buffs were elim
 static const u8 sText_Hospitality[] = _("{B_ATK_NAME_WITH_PREFIX} offers\n{B_DEF_NAME_WITH_PREFIX} a cup of tea!");
 static const u8 sText_TargetCantHeal[] = _("{B_DEF_NAME_WITH_PREFIX} can't be\nhealed!");
 static const u8 sText_RestrainingOrder[] = _("{B_STACK_1_NAME_WITH_PREFIX} gets a\nrestraining order!");
+static const u8 sText_AttackerBreaksProtection[] = _("{B_ATK_NAME_WITH_PREFIX} breaks\n{B_DEF_NAME_WITH_PREFIX}'s protection!");
+static const u8 sText_AttackerShattersScreens[] = _("{B_ATK_NAME_WITH_PREFIX} shatters\n{B_DEF_NAME_WITH_PREFIX}'s screens!");
+static const u8 sText_AttackerDestroysSubstitute[] = _("{B_ATK_NAME_WITH_PREFIX} destroys\n{B_DEF_NAME_WITH_PREFIX}'s substitute!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1046,9 +1049,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_AttackerBreaksProtection[] = _("{B_ATK_NAME_WITH_PREFIX} breaks\n{B_DEF_NAME_WITH_PREFIX}'s protection!");
-static const u8 sText_AttackerShattersScreens[] = _("{B_ATK_NAME_WITH_PREFIX} shatters\n{B_DEF_NAME_WITH_PREFIX}'s screens!");
-static const u8 sText_AttackerDestroysSubstitute[] = _("{B_ATK_NAME_WITH_PREFIX} destroys\n{B_DEF_NAME_WITH_PREFIX}'s substitute!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {

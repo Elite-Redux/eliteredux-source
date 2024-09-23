@@ -341,6 +341,7 @@ void MulModifier(u16 *modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
 int IsBloodStainAffected(int battler);
 int IsUnaware(int battler);
+int GetOncePerTurnAbilityCounter(int battler, int ability);
 void SetOncePerTurnAbilityCounter(int battler, int ability, int value);
 
 // Ability checks

@@ -6580,7 +6580,9 @@ static void Cmd_moveend(void)
             {
                 u8 currentMoveType;
                 GET_MOVE_TYPE(gCurrentMove, currentMoveType)
-                if (currentMoveType == TYPE_ELECTRIC && gBattleMoves[gCurrentMove].power && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))
+                if (currentMoveType == TYPE_ELECTRIC && gBattleMoves[gCurrentMove].power
+                    && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
+                    && GetOncePerTurnAbilityCounter(gBattlerTarget, ABILITY_ENERGIZED) <= 0)
                 {
                     gStatuses3[gBattlerAttacker] &= ~STATUS3_CHARGED_UP;
                 }
@@ -9334,6 +9336,11 @@ static void Cmd_various(void)
             u16 abilityToCheck = ABILITY_NONE;
             bool8 checkMoxieVariants = HasAttackerFaintedTarget();
             bool8 activateMoxieVariant = FALSE;
+            int moveType;
+
+            GET_MOVE_TYPE(gCurrentMove, moveType)
+
+            gBattlerAbility = gActiveBattler;
 
             if(!checkMoxieVariants)
                 break;
@@ -9408,6 +9415,15 @@ static void Cmd_various(void)
                 gBattleScripting.abilityPopupOverwrite = ABILITY_DRAGONS_RITUAL;
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_DragonsRitual;
+            }
+
+            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ENERGIZED) && moveType == TYPE_ELECTRIC)
+            {
+                SetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_ENERGIZED, TRUE);
+                gBattleScripting.abilityPopupOverwrite = ABILITY_ENERGIZED;
+                gStackBattler1 = gActiveBattler;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_GeneratorActivatesRet;
             }
 
             if (checkMoxieVariants
@@ -10926,6 +10942,17 @@ static void Cmd_various(void)
             BattleScriptPushCursor();
             gBattlescriptCurrInstr = BattleScript_GeneratorActivatesRet;
             
+        }
+
+        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ENERGIZED)
+            && !(gStatuses3[gActiveBattler] & STATUS3_CHARGED_UP)
+            && TERRAIN_HAS_EFFECT
+            && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+        {
+            gBattleScripting.abilityPopupOverwrite = ABILITY_ENERGIZED;
+            gStackBattler1 = gBattlerAbility = gActiveBattler;
+            BattleScriptPushCursor();
+            gBattlescriptCurrInstr = BattleScript_GeneratorActivatesRet;
         }
         return;
     case VARIOUS_GET_BATTLER:
@@ -15742,6 +15769,12 @@ static void Cmd_switchoutabilities(void)
                 BattleScriptPush(gBattlescriptCurrInstr);
                 gBattlescriptCurrInstr = BattleScript_RetrieverExits;
             }
+        }
+
+        if (gStatuses3[gActiveBattler] & STATUS3_CHARGED_UP)
+        {
+            SetSingleUseAbilityCounter(gActiveBattler, ABILITY_GENERATOR, FALSE);
+            SetSingleUseAbilityCounter(gActiveBattler, ABILITY_ENERGIZED, FALSE);
         }
     }
     
