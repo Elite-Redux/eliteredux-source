@@ -891,6 +891,7 @@ static const u8 sText_RestrainingOrder[] = _("{B_STACK_1_NAME_WITH_PREFIX} gets 
 static const u8 sText_AttackerBreaksProtection[] = _("{B_ATK_NAME_WITH_PREFIX} breaks\n{B_DEF_NAME_WITH_PREFIX}'s protection!");
 static const u8 sText_AttackerShattersScreens[] = _("{B_ATK_NAME_WITH_PREFIX} shatters\n{B_DEF_NAME_WITH_PREFIX}'s screens!");
 static const u8 sText_AttackerDestroysSubstitute[] = _("{B_ATK_NAME_WITH_PREFIX} destroys\n{B_DEF_NAME_WITH_PREFIX}'s substitute!");
+static const u8 sText_WhiteSmoke[] = _("A thick smoke covers\n{B_ATK_NAME_WITH_PREFIX}'s side!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1882,6 +1883,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ATTACKERBREAKSPROTECTION - 12] = sText_AttackerBreaksProtection,
     [STRINGID_ATTACKERSHATTERSSCREENS - 12] = sText_AttackerShattersScreens,
     [STRINGID_ATTACKERDESTROYSSUBSTITUTE - 12] = sText_AttackerDestroysSubstitute,
+    [STRINGID_WHITE_SMOKE - 12] = sText_WhiteSmoke,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -1969,6 +1971,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_REJECTION] = STRINGID_QUASHSUCCESS,
     [B_MSG_SWITCHIN_ON_THE_PROWL] = STRINGID_ON_THE_PROWL,
     [B_MSG_SWITCHIN_FUNERAL_PYRE] = STRINGID_FUNERAL_PYRE_ENTRY,
+    [B_MSG_SWITCHIN_WHITE_SMOKE] = STRINGID_WHITE_SMOKE,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

@@ -3397,10 +3397,9 @@ u8 DoBattlerEndTurnEffects(void)
             break;
         case ENDTURN_OCTOLOCK:
             if (gVolatileStructs[gActiveBattler].octolock 
-             && !(GetBattlerAbility(gActiveBattler)    == ABILITY_CLEAR_BODY       || BattlerHasInnate(gActiveBattler, ABILITY_CLEAR_BODY)
-                  || GetBattlerAbility(gActiveBattler) == ABILITY_FULL_METAL_BODY  || BattlerHasInnate(gActiveBattler, ABILITY_FULL_METAL_BODY)
-                  || GetBattlerAbility(gActiveBattler) == ABILITY_WHITE_SMOKE      || BattlerHasInnate(gActiveBattler, ABILITY_WHITE_SMOKE)
-                  || GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_CLEAR_AMULET))
+             && !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY)
+                || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY)
+                || GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_CLEAR_AMULET))
             {
                 gBattlerTarget = gActiveBattler;
                 BattleScriptExecute(BattleScript_OctolockEndTurn);
@@ -6483,6 +6482,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
         }
+
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_WHITE_SMOKE)
+            && !gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
+        {
+            int side = GET_BATTLER_SIDE(battler);
+            gSideTimers[side].smokescreenTimer = 5;
+            gSideTimers[side].started.smokescreen = TRUE;
+            gSideTimers[side].smokescreenBattler = battler;
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_WHITE_SMOKE;
+            BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+            effect++;
+        }
         
         // Pressure
         if(CheckAndSetSwitchInAbility(battler, ABILITY_PRESSURE)){
@@ -6507,7 +6518,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect++;
         }
         
-        // Pressure
+        // Petrify
         if(CheckAndSetSwitchInAbility(battler, ABILITY_PETRIFY)){
             u8 i;
             u8 loweredStats = 0;
@@ -8432,6 +8443,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 SET_STATCHANGER(STAT_SPDEF, 1, FALSE);
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_TargetAbilityStatRaiseOnMoveEnd;
+                effect++;
+            }
+		}
+		
+		// Rage Point
+		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RAGE_POINT) && ShouldApplyOnHitAffect(battler)){
+			if (gIsCriticalHit
+                && (CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)
+                    || CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)))
+            {
+				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_RAGE_POINT;
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_RagePointActivates;
                 effect++;
             }
 		}
@@ -13624,6 +13648,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (gRoundStructs[battlerAtk].physicalDmg || gRoundStructs[battlerAtk].specialDmg)
             basePower *= 2;
         break;
+    case MOVE_DREAM_INVERSION:
+        if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP)
+            basePower *= 2;
+        break;
     }
 
     if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)){
@@ -14064,6 +14092,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_GUTS:
             if (gBattleMons[battlerAtk].status1 & STATUS1_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
+            return;
+        
+        case ABILITY_RAGE_POINT:
+            if (gBattleMons[battlerAtk].status1 & STATUS1_ANY) MUL(1.5);
             return;
         
         case ABILITY_BLOOD_STIGMA:

@@ -2992,6 +2992,16 @@ BattleScript_EffectWorrySeed_Fear:
 	seteffectprimary
 	goto BattleScript_MoveEnd
 
+BattleScript_SetYawnMoveEffect::
+	savetargettostack4
+	copybyte gBattlerTarget, gEffectBattler
+	setyawn BattleScript_SetYawnMoveEffect_Fail
+	printstring STRINGID_PKMNWASMADEDROWSY
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_SetYawnMoveEffect_Fail:
+	readtargetfromstack4
+	return
+
 BattleScript_SetFearMoveEffect::
 	savetargettostack4
 	copybyte gBattlerTarget, gEffectBattler
@@ -8171,7 +8181,6 @@ BattleScript_GulpMissileGulping::
 	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_GulpMissileNoSecondEffectGulping
 	jumpifability BS_ATTACKER, ABILITY_CLEAR_BODY, BattleScript_GulpMissileNoSecondEffectGulping
 	jumpifability BS_ATTACKER, ABILITY_FULL_METAL_BODY, BattleScript_GulpMissileNoSecondEffectGulping
-	jumpifability BS_ATTACKER, ABILITY_WHITE_SMOKE, BattleScript_GulpMissileNoSecondEffectGulping
 	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_GulpMissileNoSecondEffectGulping
 	jumpifflowerveilattacker BattleScript_GulpMissileNoSecondEffectGulping
 BattleScript_GulpMissileNoDmgGulping:
@@ -9414,13 +9423,13 @@ BattleScript_FungalInfectionActivates::
 	
 BattleScript_InflatableActivates::
 	jumpifstat BS_ABILITY_BATTLER, CMP_LESS_THAN, STAT_DEF, MAX_STAT_STAGE, BattleScript_Inflatable_Def
-	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_Inflatable_End
+	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_Return
 BattleScript_Inflatable_Def::
 	call BattleScript_AbilityPopUp
 	pause B_WAIT_TIME_SHORT
 	saveattackertostack3
 	copybyte gBattlerAttacker, gBattlerTarget
-	playstatchangeanimation BS_ABILITY_BATTLER, BIT_ATK | BIT_SPEED, 0
+	playstatchangeanimation BS_ABILITY_BATTLER, BIT_DEF | BIT_SPDEF, 0
 	setstatchanger STAT_DEF, 1, FALSE
 	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_Inflatable_SpDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_Inflatable_SpDef
@@ -9433,6 +9442,30 @@ BattleScript_Inflatable_SpDef::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_Inflatable_End:
+	readattackerfromstack3
+	return
+	
+BattleScript_RagePointActivates::
+	jumpifstat BS_ABILITY_BATTLER, CMP_LESS_THAN, STAT_ATK, MAX_STAT_STAGE, BattleScript_RagePoint_Atk
+	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPATK, MAX_STAT_STAGE, BattleScript_Return
+BattleScript_RagePoint_Atk::
+	call BattleScript_AbilityPopUp
+	pause B_WAIT_TIME_SHORT
+	saveattackertostack3
+	copybyte gBattlerAttacker, gBattlerTarget
+	playstatchangeanimation BS_ABILITY_BATTLER, BIT_ATK | BIT_SPATK, 0
+	setstatchanger STAT_ATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_RagePoint_SpAtk
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RagePoint_SpAtk
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_RagePoint_SpAtk::
+	setstatchanger STAT_SPATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_RagePoint_End
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RagePoint_End
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_RagePoint_End:
 	readattackerfromstack3
 	return
 	
@@ -10194,7 +10227,6 @@ BattleScript_IntimidateActivatesLoop:
 	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_IntimidateActivatesLoopIncrement
 	jumpifability BS_TARGET, ABILITY_CLEAR_BODY,   BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_WHITE_SMOKE,  BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_BLIND_RAGE,   BattleScript_IntimidatePrevented
@@ -10243,7 +10275,6 @@ BattleScript_ScareActivatesLoop:
 	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_ScareActivatesLoopIncrement
 	jumpifability BS_TARGET, ABILITY_CLEAR_BODY,   BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_WHITE_SMOKE,  BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_BLIND_RAGE,   BattleScript_ScarePrevented

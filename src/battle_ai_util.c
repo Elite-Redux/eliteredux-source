@@ -1677,7 +1677,6 @@ bool32 ShouldLowerStat(u8 battler, u16 battlerAbility, u8 stat)
       || ((BATTLER_HAS_ABILITY_FAST(battler, ABILITY_CONTRARY, battlerAbility)) && gBattleMons[battler].statStages[stat] < MAX_STAT_STAGE))
     {
         if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_CLEAR_BODY, battlerAbility)
-         || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_WHITE_SMOKE, battlerAbility)
          || BATTLER_HAS_ABILITY_FAST(battler, ABILITY_FULL_METAL_BODY, battlerAbility))
             return FALSE;
 
@@ -1771,7 +1770,6 @@ bool32 LoweringStatsPointlessOrBad(u8 battlerDef, u16 defAbility)
 {
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_CONTRARY, defAbility)) return TRUE;
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_CLEAR_BODY, defAbility)) return TRUE;
-    if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_WHITE_SMOKE, defAbility)) return TRUE;
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_FULL_METAL_BODY, defAbility)) return TRUE;
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_FORT_KNOX, defAbility)) return TRUE;
     if (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_RUN_AWAY, defAbility)) return TRUE;

@@ -4145,6 +4145,12 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_SetFearMoveEffect;
                 }
+            case MOVE_EFFECT_YAWN:
+                if (!(gStatuses3[gEffectBattler] & STATUS3_YAWN) && CanSleep(gEffectBattler))
+                {
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_SetYawnMoveEffect;
+                }
             }
         }
     }
@@ -5584,7 +5590,10 @@ static int PlayStatChangeAnimation(int battler, int statsToCheck, int flags, int
         {
             if (statsToCheck & 1)
             {
-                if (rawStatChange || flags & STAT_CHANGE_CANT_PREVENT)
+                if (rawStatChange ||
+                    (flags & STAT_CHANGE_CANT_PREVENT
+                        && !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_CLEAR_BODY, ability)
+                        && !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_FULL_METAL_BODY, ability)))
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > MIN_STAT_STAGE)
                     {
@@ -5595,7 +5604,6 @@ static int PlayStatChangeAnimation(int battler, int statsToCheck, int flags, int
                 else if (!gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
                         && !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_CLEAR_BODY, ability)
 						&& !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_FULL_METAL_BODY, ability)
-                        && !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_WHITE_SMOKE, ability)
 						&& !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_KEEN_EYE, ability) && currStat == STAT_ACC)
 						&& !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_MINDS_EYE, ability) && currStat == STAT_ACC)
                         && !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_HYPER_CUTTER, ability) && currStat == STAT_ATK)
@@ -8100,7 +8108,7 @@ static void TryCheekPouch(u32 battlerId, u32 itemId)
     {
         gBattleScripting.abilityPopupOverwrite = ABILITY_SUGAR_RUSH;
         SetStatChanger(STAT_SPEED, 2);
-        gBattlerAbility = gBattleScripting.battler = battlerId;
+        gStackBattler1 = battlerId;
         PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_SPEED);
         BattleScriptPush(gBattlescriptCurrInstr);
         gBattlescriptCurrInstr = BattleScript_ScriptingAbilityStatRaise;
@@ -12372,6 +12380,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
     u32 index;
     bool32 affectsUser = (flags & MOVE_EFFECT_AFFECTS_USER);
     bool8 dontSetBuffers = flags & STAT_BUFF_DONT_SET_BUFFERS;
+    int ability;
 
     flags &= ~STAT_BUFF_DONT_SET_BUFFERS;
     flags &= ~MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES;
@@ -12463,10 +12472,8 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
             }
             return 0;
         }
-        else if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY)
-		          || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY)
-                  || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_WHITE_SMOKE))
-                 && !affectsUser && !certain)
+        else if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) && (ability = ABILITY_CLEAR_BODY))
+                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) && (ability = ABILITY_FULL_METAL_BODY)))
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {
@@ -12476,19 +12483,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
                 }
                 else
                 {
-                    if(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY)){
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_CLEAR_BODY;
-                        gLastUsedAbility = ABILITY_CLEAR_BODY;
-                    }
-                    else if(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY)){
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_FULL_METAL_BODY;
-                        gLastUsedAbility = ABILITY_FULL_METAL_BODY;
-                    }
-                    else if(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_WHITE_SMOKE)){
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_WHITE_SMOKE;
-                        gLastUsedAbility = ABILITY_WHITE_SMOKE;
-                    }
-
+                    gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptPush(BS_ptr);
                     gBattleScripting.battler = gActiveBattler;
                     gBattlerAbility = gActiveBattler;
@@ -13116,7 +13111,6 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
     else if (BATTLER_HAS_ABILITY(battler, ABILITY_GUARD_DOG)) return FALSE;
     if (BATTLER_HAS_ABILITY(battler, ABILITY_CLEAR_BODY)     ||
        BATTLER_HAS_ABILITY(battler, ABILITY_WHITE_SMOKE)     ||
-       BATTLER_HAS_ABILITY(battler, ABILITY_FULL_METAL_BODY) ||
        BATTLER_HAS_ABILITY(battler, ABILITY_MIRROR_ARMOR))
         return TRUE;
 

@@ -27,7 +27,7 @@ static const u8 sAbilityWonderGuardDescription[] = _("Is only hit by Super-effec
 static const u8 sAbilityLevitateDescription[] = _("Immune to Ground-type moves.\nUps own Flying moves by 1.25x.");
 static const u8 sAbilityEffectSporeDescription[] = _("30% chance to inflict SLP, PARA\nor PSN if hit by a contact move.");
 static const u8 sAbilitySynchronizeDescription[] = _("Enemies inflicting status on\nthis Pokémon get same status.");
-static const u8 sAbilityClearBodyDescription[] = _("Immune to stat drops from\nopponents.");
+static const u8 sAbilityClearBodyDescription[] = _("Immune to stat drops.");
 static const u8 sAbilityNaturalCureDescription[] = _("Heals status condition upon\nswitching out.");
 static const u8 sAbilityLightningRodDescription[] = _("Redirects Electric moves.\nAbsorbs them, ups highest Atk.");
 static const u8 sAbilitySereneGraceDescription[] = _("Doubles chance of secondary\neffects on its own moves.");
@@ -70,6 +70,7 @@ static const u8 sAbilityRockHeadDescription[] = _("Immune to recoil damage, but 
 static const u8 sAbilityDroughtDescription[] = _("Summons sun on entry.\nLasts 8 turns.");
 static const u8 sAbilityArenaTrapDescription[] = _("Enemies can't flee. Ghosts and\nungrounded Pokémon are immune.");
 static const u8 sAbilityVitalSpiritDescription[] = _("Can't fall asleep. Heals status\nafter using Fighting-type moves.");
+static const u8 sAbilityWhiteSmokeDescription[] = _("Sets Smokescreen on switch-in.");
 static const u8 sAbilityTangledFeetDescription[] = _("Doubles Evasion when confused.");
 static const u8 sAbilityMotorDriveDescription[] = _("Raises Speed by one stage if hit\nby an Electric-type move.");
 static const u8 sAbilityRivalryDescription[] = _("Deals 1.25x to same gender.\nTakes .75x from opposite gender.");
@@ -670,6 +671,8 @@ static const u8 sAbilityPinnacleBladeDescription[] = _("Slashing moves always hi
 static const u8 sAbilityEnergizedDescription[] = _("Grants Generator. Also charges\nup on KO with Electric move.");
 static const u8 sAbilityColorSpectrumDescription[] = _("Same-type attacks get a 1.2x\nboost. Changes type each turn.");
 static const u8 sAbilitySteelBeetleDescription[] = _("Raging Boxer + Pollinate.");
+static const u8 sAbilityFromTheShadowsDescription[] = _("Attacks trap and have a 20%\nflinch chance when moving first.");
+static const u8 sAbilityRagePointDescription[] = _("Gets a 1.5x boost while statused.\nRaises offenses when crit.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1375,6 +1378,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ENERGIZED] = _("Energized"),
     [ABILITY_COLOR_SPECTRUM] = _("Color Spectrum"),
     [ABILITY_STEEL_BEETLE] = _("Steel Beetle"),
+    [ABILITY_FROM_THE_SHADOWS] = _("From the Shadows"),
+    [ABILITY_RAGE_POINT] = _("Rage Point"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -1452,7 +1457,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DROUGHT] = sAbilityDroughtDescription,
     [ABILITY_ARENA_TRAP] = sAbilityArenaTrapDescription,
     [ABILITY_VITAL_SPIRIT] = sAbilityVitalSpiritDescription,
-    [ABILITY_WHITE_SMOKE] = sAbilityClearBodyDescription,
+    [ABILITY_WHITE_SMOKE] = sAbilityWhiteSmokeDescription,
     [ABILITY_PURE_POWER] = sAbilityHugePowerDescription,
     [ABILITY_SHELL_ARMOR] = sAbilityBattleArmorDescription,
     [ABILITY_AIR_LOCK] = sAbilityCloudNineDescription,
@@ -2081,4 +2086,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_ENERGIZED] = sAbilityEnergizedDescription,
     [ABILITY_COLOR_SPECTRUM] = sAbilityColorSpectrumDescription,
     [ABILITY_STEEL_BEETLE] = sAbilitySteelBeetleDescription,
+    [ABILITY_FROM_THE_SHADOWS] = sAbilityFromTheShadowsDescription,
+    [ABILITY_RAGE_POINT] = sAbilityRagePointDescription,
 };
