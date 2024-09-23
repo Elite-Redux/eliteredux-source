@@ -2992,6 +2992,16 @@ BattleScript_EffectWorrySeed_Fear:
 	seteffectprimary
 	goto BattleScript_MoveEnd
 
+BattleScript_SetYawnMoveEffect::
+	savetargettostack4
+	copybyte gBattlerTarget, gEffectBattler
+	setyawn BattleScript_SetYawnMoveEffect_Fail
+	printstring STRINGID_PKMNWASMADEDROWSY
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_SetYawnMoveEffect_Fail:
+	readtargetfromstack4
+	return
+
 BattleScript_SetFearMoveEffect::
 	savetargettostack4
 	copybyte gBattlerTarget, gEffectBattler

@@ -189,6 +189,7 @@ extern const u8 BattleScript_BeautifulMusicActivates[];
 extern const u8 BattleScript_AbilityStatusEffect[];
 extern const u8 BattleScript_AbilitySetFear[];
 extern const u8 BattleScript_SetFearMoveEffect[];
+extern const u8 BattleScript_SetYawnMoveEffect[];
 extern const u8 BattleScript_AbilityStatusEffectSafe[];
 extern const u8 BattleScript_ParasiticSporesSpread[];
 extern const u8 BattleScript_ParasiticSporesSpreadWithAbility[];

@@ -13648,6 +13648,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (gRoundStructs[battlerAtk].physicalDmg || gRoundStructs[battlerAtk].specialDmg)
             basePower *= 2;
         break;
+    case MOVE_DREAM_INVERSION:
+        if (gBattleMons[battlerDef].status1 & STATUS1_SLEEP)
+            basePower *= 2;
+        break;
     }
 
     if(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)){

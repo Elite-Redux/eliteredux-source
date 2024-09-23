@@ -4145,6 +4145,12 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     BattleScriptPush(gBattlescriptCurrInstr);
                     gBattlescriptCurrInstr = BattleScript_SetFearMoveEffect;
                 }
+            case MOVE_EFFECT_YAWN:
+                if (!(gStatuses3[gEffectBattler] & STATUS3_YAWN) && CanSleep(gEffectBattler))
+                {
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_SetYawnMoveEffect;
+                }
             }
         }
     }
