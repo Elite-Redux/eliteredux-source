@@ -8108,7 +8108,7 @@ static void TryCheekPouch(u32 battlerId, u32 itemId)
     {
         gBattleScripting.abilityPopupOverwrite = ABILITY_SUGAR_RUSH;
         SetStatChanger(STAT_SPEED, 2);
-        gBattlerAbility = gBattleScripting.battler = battlerId;
+        gStackBattler1 = battlerId;
         PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_SPEED);
         BattleScriptPush(gBattlescriptCurrInstr);
         gBattlescriptCurrInstr = BattleScript_ScriptingAbilityStatRaise;
