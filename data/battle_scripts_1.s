@@ -10696,14 +10696,8 @@ BattleScript_HurtAttacker:
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
 
-BattleScript_RoughSkinActivates::
-	sethword sABILITY_OVERWRITE, ABILITY_ROUGH_SKIN
-	call BattleScript_AbilityPopUp
-	call BattleScript_HurtAttacker
-	return
-
 BattleScript_IronBarbsActivates::
-	sethword sABILITY_OVERWRITE, ABILITY_IRON_BARBS
+	jumpifabsent BS_ATTACKER, BattleScript_Return
 	call BattleScript_AbilityPopUp
 	call BattleScript_HurtAttacker
 	return
