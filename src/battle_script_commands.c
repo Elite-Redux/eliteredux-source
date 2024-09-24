@@ -14197,10 +14197,13 @@ static void Cmd_trychoosesleeptalkmove(void)
             movePosition = Random() & (MAX_MON_MOVES - 1);
         } while ((gBitTable[movePosition] & unusableMovesBits));
 
-        gCalledMove = gBattleMons[gBattlerAttacker].moves[movePosition];
-        gCurrMovePos = movePosition;
-        gHitMarker &= ~(HITMARKER_ATTACKSTRING_PRINTED);
-        gBattlerTarget = GetMoveTarget(gCalledMove, 0);
+        gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
+            .attacker = gBattlerAttacker,
+            .target = GetMoveTarget(gCalledMove, 0),
+            .move = gBattleMons[gBattlerAttacker].moves[movePosition],
+            .movePos = movePosition,
+        };
+        
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
 }
