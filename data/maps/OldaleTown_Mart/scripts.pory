@@ -283,6 +283,9 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_MAIZEMOTHITE
 	ITEM_AMPHYBUZZITE
 	ITEM_AEGISLASHITE_R
+	ITEM_ORICORIONITE
+	ITEM_GLALITITE_R
+	ITEM_FROSLASSITE_R
 }
 
 script General_Adoption_Center_Mega_Stones_Script{

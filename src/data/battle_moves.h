@@ -11877,6 +11877,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .argument = MOVE_EFFECT_YAWN,
     },
+    [MOVE_TERA_STARSTORM] =
+    {
+        .effect = EFFECT_HIT,
+        .power = 120,
+        .type = TYPE_NORMAL,
+        .accuracy = 100,
+        .pp = 5,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_BOTH,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
+    },
 };
 
 const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES] = {

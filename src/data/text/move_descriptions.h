@@ -3778,6 +3778,10 @@ static const u8 sMoveTwoLineDescription_MoveDreamInversion[] = _(
     "Strikes through dreams,\n"
     "hitting sleeping foes hard.");
 
+static const u8 sMoveTwoLineDescription_MoveTeraStarstorm[] = _(
+    "Crystals Strike the,\n"
+    "foes.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4742,6 +4746,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TERROR_CHARGE - 1] = sMoveTwoLineDescription_MoveTerrorCharge,
     [MOVE_TERROR_LOCKS - 1] = sMoveTwoLineDescription_MoveTerrorLocks,
     [MOVE_DREAM_INVERSION - 1] = sMoveTwoLineDescription_MoveDreamInversion,
+    [MOVE_TERA_STARSTORM - 1] = sMoveTwoLineDescription_MoveTeraStarstorm,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5705,6 +5710,7 @@ static const u8 sMoveFourLineDescription_MoveBravado[] = _("An attack that is\nb
 static const u8 sMoveFourLineDescription_MoveTerrorCharge[] = _("50% chance to bleed.\n50% chance to fear.\nDouble damage\nwhen switching in.");
 static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\nDouble damage if\nthe foe is bleeding.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveDreamInversion[] = _("Deals 2x damage to\nsleeping foes. 10%\nchance for drowsy.\nHits both foes.");
+static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Crystals hit both foes.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6668,4 +6674,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_TERROR_CHARGE - 1] = sMoveFourLineDescription_MoveTerrorCharge,
     [MOVE_TERROR_LOCKS - 1] = sMoveFourLineDescription_MoveTerrorLocks,
     [MOVE_DREAM_INVERSION - 1] = sMoveFourLineDescription_MoveDreamInversion,
+    [MOVE_TERA_STARSTORM - 1] = sMoveFourLineDescription_MoveTeraStarstorm,
 };
