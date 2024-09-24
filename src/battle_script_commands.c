@@ -2725,14 +2725,15 @@ static void Cmd_datahpupdate(void)
         }
         else if (DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
         {
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE))
+            int ability;
+            if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PATCHWORK) && (ability = ABILITY_PATCHWORK))
+                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE) && (ability = ABILITY_DISGUISE)))
             {
-                if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PATCHWORK)
-                    && gBattlerAttacker != gActiveBattler)
+                if (ability == ABILITY_PATCHWORK && gBattlerAttacker != gActiveBattler)
                 {
                     SetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_PATCHWORK, gBattlerAttacker);
                 }
-                gBattleScripting.abilityPopupOverwrite = ABILITY_DISGUISE;
+                gBattleScripting.abilityPopupOverwrite = ability;
                 UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MIMIKYU_BUSTED);
                 gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
             }
@@ -10885,16 +10886,20 @@ static void Cmd_various(void)
             BattleScriptPush(gBattlescriptCurrInstr);
             gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
         }
-
-        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE)
+        
+        {
+        int ability;
+        if (((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE) && (ability = ABILITY_DISGUISE))
+                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PATCHWORK) && (ability = ABILITY_PATCHWORK)))
             && gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU_BUSTED
             && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY))
         {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_DISGUISE;
+            gBattleScripting.abilityPopupOverwrite = ability;
             UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MIMIKYU);
             gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU;
             BattleScriptPush(gBattlescriptCurrInstr);
             gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
+        }
         }
 
         if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FLARE_BOOST)
@@ -16115,7 +16120,7 @@ u16 GetNoDamageAbility(u8 batter)
 
 bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
 {
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DISGUISE)){
+    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DISGUISE) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_PATCHWORK)){
         if (gBattleMons[battlerDef].species == SPECIES_MIMIKYU       &&
            !(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED) &&
            !IS_MOVE_STATUS(move) &&

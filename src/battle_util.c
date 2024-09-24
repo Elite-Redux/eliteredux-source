@@ -1137,6 +1137,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_ENLIGHTENED] = 1,
     [ABILITY_WAY_OF_PRECISION] = 1,
     [ABILITY_HUGE_WINGS] = 1,
+    [ABILITY_PATCHWORK] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -5672,7 +5673,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             effect++;
         }
         
-        if (CheckAndSetSwitchInAbility(battler, ABILITY_DISGUISE)
+        if ((CheckAndSetSwitchInAbility(battler, ABILITY_DISGUISE) | CheckAndSetSwitchInAbility(battler, ABILITY_PATCHWORK))
             && gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED
             && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
             && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
@@ -10777,6 +10778,7 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_SHIELDS_DOWN:
     case ABILITY_COMATOSE:
     case ABILITY_DISGUISE:
+    case ABILITY_PATCHWORK:
     case ABILITY_GULP_MISSILE:
     case ABILITY_ICE_FACE:
     case ABILITY_AS_ONE_ICE_RIDER:

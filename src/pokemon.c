@@ -9503,6 +9503,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        innate != ABILITY_ICE_FACE               &&
        innate != ABILITY_GULP_MISSILE           &&
        innate != ABILITY_DISGUISE               &&
+       innate != ABILITY_PATCHWORK              &&
        innate != ABILITY_FLOWER_GIFT            &&
        innate != ABILITY_AS_ONE_ICE_RIDER       &&
        innate != ABILITY_AS_ONE_SHADOW_RIDER    &&
@@ -9533,6 +9534,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
               randomizedInnate == ABILITY_MULTITYPE             ||
               randomizedInnate == ABILITY_FORECAST              ||
               randomizedInnate == ABILITY_DISGUISE              ||
+              randomizedInnate == ABILITY_PATCHWORK             ||
               randomizedInnate == ABILITY_STANCE_CHANGE         ||
               randomizedInnate == ABILITY_FLAMMABLE_COAT        ||
               randomizedInnate == ABILITY_RKS_SYSTEM            ||
@@ -9579,6 +9581,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
        ability != ABILITY_ICE_FACE          &&
        ability != ABILITY_GULP_MISSILE      &&
        ability != ABILITY_DISGUISE          &&
+       ability != ABILITY_PATCHWORK         &&
        ability != ABILITY_FLOWER_GIFT       &&
        ability != ABILITY_ZERO_TO_HERO      &&
        ability != ABILITY_BAD_COMPANY       &&
@@ -9603,6 +9606,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
               randomizedAbility == ABILITY_MULTITYPE            ||
               randomizedAbility == ABILITY_FORECAST             ||
               randomizedAbility == ABILITY_DISGUISE             ||
+              randomizedAbility == ABILITY_PATCHWORK            ||
               randomizedAbility == ABILITY_STANCE_CHANGE        ||
               randomizedAbility == ABILITY_FLAMMABLE_COAT       ||
               randomizedAbility == ABILITY_RKS_SYSTEM           ||

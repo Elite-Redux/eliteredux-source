@@ -712,13 +712,13 @@
 #define ABILITY_RESTRAINING_ORDER 690 // Forces the attacker when hit once each switch-in.
 #define ABILITY_ASSASSINS_TOOLS 691 // Contact moves have a 30% chance to PSN, PRLZ, or BLD.
 #define ABILITY_FROSTMAW 692 // Biting moves have a 50% chance to inflict frostbite.
-#define ABILITY_PATCHWORK 693 // Curses the opponent after its Disguise breaks.
+#define ABILITY_PATCHWORK 693 // Disguise + curses the opponent when its Disguise breaks.
 #define ABILITY_BLIND_RAGE 694 // Combines Scrappy & Mold Breaker.
 #define ABILITY_SLIPSTREAM 695 // Moves use 20% of its Speed stat additionally.
 #define ABILITY_APEX_PREDATOR 696 // Combines Tough Claws & Predator.
 #define ABILITY_DRAGONS_RITUAL 697 // Dealing a KO raises Attack and Speed by one stage.
 #define ABILITY_PINNACLE_BLADE 698 // Slashing moves always hit and break protection and barriers.
-#define ABILITY_ENERGIZED 699 // Grants Generator. Also charges up on KO with Electric move.
+#define ABILITY_ENERGIZED 699 // Generator + charges up on KO with an Electric-type move.
 #define ABILITY_COLOR_SPECTRUM 700 // Same-type attacks get a 1.2x boost. Changes type each turn.
 #define ABILITY_STEEL_BEETLE 701 // Raging Boxer + Pollinate.
 #define ABILITY_FROM_THE_SHADOWS 702 // Attacks trap and have a 20% flinch chance when moving first.
