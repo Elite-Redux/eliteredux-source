@@ -116,6 +116,7 @@ enum
     SIDE_INFO_SEA_OF_FIRE,
     SIDE_INFO_SWAMP,
     SIDE_INFO_SMOKESCREEN,
+    SIDE_INFO_HOT_COALS,
     NUM_SIDE_INFO,
 };
 
@@ -630,6 +631,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 if (gSideTimers[B_SIDE_PLAYER].smokescreenTimer)
                     isExtraInfoShown = TRUE;
             break;
+            case SIDE_INFO_HOT_COALS:
+                if (gSideTimers[B_SIDE_PLAYER].hotCoals)
+                    isExtraInfoShown = TRUE;
+            break;
         }
 
         if(isExtraInfoShown){
@@ -700,6 +705,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
             break;
             case SIDE_INFO_SMOKESCREEN:
                 if (gSideTimers[B_SIDE_OPPONENT].smokescreenTimer)
+                    isExtraInfoShown = TRUE;
+            break;
+            case SIDE_INFO_HOT_COALS:
+                if (gSideTimers[B_SIDE_OPPONENT].hotCoals)
                     isExtraInfoShown = TRUE;
             break;
         }
@@ -3916,12 +3925,15 @@ const u8 sText_Title_Side_FireSea_Description[]               = _("A sea of fire
                                                                "of their maximum HP each turn.");
 const u8 sText_Title_Side_Swamp[]                           = _("Swamp");
 const u8 sText_Title_Side_Swamp_Description[]               = _("A deep swamp reduces the speed\n"
-                                                               "stat of Pokémon on this side\n"
-                                                               "by 75%.");
-const u8 sText_Title_Side_Smokescreen[ ]                   = _("Smokescreen");
-const u8 sText_Title_Side_Smokescreen_Description[]        = _("Reduces the chance to hit the\n"
-                                                               "user by 25%. Can be lifted by\n"
-                                                               "moves like Defog.");
+                                                                "stat of Pokémon on this side\n"
+                                                                "by 75%.");
+const u8 sText_Title_Side_Smokescreen[ ]                    = _("Smokescreen");
+const u8 sText_Title_Side_Smokescreen_Description[]         = _("Reduces the chance to hit the\n"
+                                                                "user by 25%. Can be lifted by\n"
+                                                                "moves like Defog.");
+const u8 sText_Title_Side_HotCoals[ ]                       = _("Hot Coals");
+const u8 sText_Title_Side_HotCoals_Description[]            = _("Burns the next Pokémon that\n"
+                                                                "switches in and is then removed.");
 const u8 sText_Title_Side_No_Effect[]                       = _("No Effect");
 const u8 sText_Title_Side_No_Effect_Description[]           = _("This side has no special effect.");
 
@@ -4220,6 +4232,16 @@ static void PrintSideTab(u8 side){
                 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Side_Smokescreen_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+
+                printedInfo = TRUE;
+            break;
+            case SIDE_INFO_HOT_COALS:
+                StringCopy(gStringVar1, sText_Title_Side_HotCoals);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Description
+                StringCopy(gStringVar1, sText_Title_Side_HotCoals_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
 
                 printedInfo = TRUE;

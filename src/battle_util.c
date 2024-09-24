@@ -6166,8 +6166,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
         // Pickup
         if(CheckAndSetSwitchInAbility(battler, ABILITY_PICKUP)){
-            if((gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_HAZARDS_ANY)){
+            if((gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_HAZARDS_ANY) || gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals){
                 gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
+                gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals = FALSE;
                 BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
                 effect++;
             }
@@ -6494,6 +6495,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_WHITE_SMOKE;
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             effect++;
+        }
+
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_HOT_COALS)
+            && !gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
+        {
+            gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals = TRUE;
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_HOT_COALS;
+            BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
         }
         
         // Pressure
@@ -8850,9 +8859,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             //This is the stuff that has to be changed for each ability
             if(activateAbilty){
                 //Remove Hazards
-				if(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY){
+				if(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals){
                     //If the ability is an innate overwrite the popout
                     gSideStatuses[GetBattlerSide(battler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
+                    gSideTimers[GetBattlerSide(battler)].hotCoals = TRUE;
                     BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
                     gBattleScripting.battler = battler;
                     effect++;
