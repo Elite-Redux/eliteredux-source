@@ -1747,6 +1747,12 @@ script PetalburgCity_Gym_EventScript_Norman{
 		break
 		case 7:
 		case 8:
+			// dd changes caused VAR_PETALBURG_GYM_STATE to be incremented more than it should
+			// even if the cause was fixed eventually.
+			if (!flag(FLAG_BADGE06_GET)){
+				setvar(VAR_PETALBURG_GYM_STATE, 6)
+				goto(PetalburgCity_Gym_EventScript_Norman)
+			}
 			//Give Slakingite
 			if(flag(FLAG_BADGE06_GET) && !flag(FLAG_OBTAINED_SLAKINGITE)){ // Checking if the player has already received the item
 				msgbox(format("Take this special Item as a gift from me!"))
