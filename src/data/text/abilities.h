@@ -673,6 +673,7 @@ static const u8 sAbilityColorSpectrumDescription[] = _("Same-type attacks get a 
 static const u8 sAbilitySteelBeetleDescription[] = _("Raging Boxer + Pollinate.");
 static const u8 sAbilityFromTheShadowsDescription[] = _("Attacks trap and have a 20%\nflinch chance when moving first.");
 static const u8 sAbilityRagePointDescription[] = _("Gets a 1.5x boost while statused.\nRaises offenses when crit.");
+static const u8 sAbilityHotCoalsDescription[] = _("Sets a trap that burns the next\nfoe that switches in.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1380,6 +1381,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_STEEL_BEETLE] = _("Steel Beetle"),
     [ABILITY_FROM_THE_SHADOWS] = _("From the Shadows"),
     [ABILITY_RAGE_POINT] = _("Rage Point"),
+    [ABILITY_HOT_COALS] = _("Hot Coals"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2088,4 +2090,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_STEEL_BEETLE] = sAbilitySteelBeetleDescription,
     [ABILITY_FROM_THE_SHADOWS] = sAbilityFromTheShadowsDescription,
     [ABILITY_RAGE_POINT] = sAbilityRagePointDescription,
+    [ABILITY_HOT_COALS] = sAbilityHotCoalsDescription,
 };

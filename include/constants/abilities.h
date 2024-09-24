@@ -723,8 +723,9 @@
 #define ABILITY_STEEL_BEETLE 701 // Raging Boxer + Pollinate.
 #define ABILITY_FROM_THE_SHADOWS 702 // Attacks trap and have a 20% flinch chance when moving first.
 #define ABILITY_RAGE_POINT 703 // Gets a 1.5x boost while statused. Raises offenses when crit.
+#define ABILITY_HOT_COALS 704 // Sets a trap that burns the next foe that switches in.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_RAGE_POINT + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_HOT_COALS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

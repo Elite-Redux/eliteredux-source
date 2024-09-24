@@ -7444,6 +7444,15 @@ static void Cmd_switchineffects(void)
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_StickyWebOnSwitchIn;
     }
+    else if (gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals
+        && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
+        && IsBattlerGrounded(gActiveBattler))
+    {
+        gStackBattler1 = gActiveBattler;
+        gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals = FALSE;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_HotCoalsActivates;
+    }
     else
     {
         // There is a hack here to ensure the truant counter will be 0 when the battler's next turn starts.
@@ -11146,6 +11155,7 @@ static void Cmd_various(void)
         SWAP(gSideTimers[0].fireSeaTimer, gSideTimers[1].fireSeaTimer, temp)
         SWAP(gSideTimers[0].rainbowTimer, gSideTimers[1].rainbowTimer, temp)
         SWAP(gSideTimers[0].smokescreenTimer, gSideTimers[1].smokescreenTimer, temp)
+        SWAP(gSideTimers[0].hotCoals, gSideTimers[1].hotCoals, temp)
         SWAP(gSideTimers[0].started, gSideTimers[1].started, tempSide);
 
         #define UPDATE_COURTCHANGED_BATTLER(structField) \
@@ -14818,6 +14828,12 @@ static void Cmd_rapidspinfree(void)
         gSideTimers[atkSide].stealthRockType = 0;
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_StealthRockFree;
+    }
+    else if (gSideTimers[atkSide].hotCoals)
+    {
+        gSideTimers[atkSide].hotCoals = FALSE;
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_HotCoalsFree;
     }
     else
     {

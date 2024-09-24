@@ -1050,6 +1050,9 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_HotCoalsSet[] = _("{B_ATK_NAME_WITH_PREFIX} throws\nhot coals over the opponent's side!");
+static const u8 sText_HotCoalsBurn[] = _("{B_STACK_1_NAME_WITH_PREFIX} steps on\nthe hot coals!");
+static const u8 sText_HotCoalsExtinguish[] = _("The heat from the coals fades!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1884,6 +1887,9 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ATTACKERSHATTERSSCREENS - 12] = sText_AttackerShattersScreens,
     [STRINGID_ATTACKERDESTROYSSUBSTITUTE - 12] = sText_AttackerDestroysSubstitute,
     [STRINGID_WHITE_SMOKE - 12] = sText_WhiteSmoke,
+    [STRINGID_HOT_COALS_SET - 12] = sText_HotCoalsSet,
+    [STRINGID_HOT_COALS_BURN - 12] = sText_HotCoalsBurn,
+    [STRINGID_HOT_COALS_EXTINGUISH - 12] = sText_HotCoalsExtinguish,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -1972,6 +1978,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_ON_THE_PROWL] = STRINGID_ON_THE_PROWL,
     [B_MSG_SWITCHIN_FUNERAL_PYRE] = STRINGID_FUNERAL_PYRE_ENTRY,
     [B_MSG_SWITCHIN_WHITE_SMOKE] = STRINGID_WHITE_SMOKE,
+    [B_MSG_SWITCHIN_HOT_COALS] = STRINGID_HOT_COALS_SET,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

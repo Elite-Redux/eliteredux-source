@@ -8108,6 +8108,18 @@ BattleScript_StickyWebOnSwitchInEnd:
 	restoreattackerandtargetfrom34
 	return
 
+BattleScript_HotCoalsActivates::
+	sethword sMOVE_EFFECT, MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER
+	printstring STRINGID_HOT_COALS_BURN
+	waitmessage B_WAIT_TIME_LONG
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
+	seteffectprimary
+	readattackerfromstack3
+	printstring STRINGID_HOT_COALS_EXTINGUISH
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_PerishSongTakesLife::
 	printstring STRINGID_PKMNPERISHCOUNTFELL
 	waitmessage B_WAIT_TIME_LONG
@@ -8318,6 +8330,11 @@ BattleScript_ToxicSpikesFree::
 
 BattleScript_StickyWebFree::
 	printstring STRINGID_PKMNBLEWAWAYSTICKYWEB
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_HotCoalsFree::
+	printstring STRINGID_HOT_COALS_EXTINGUISH
 	waitmessage B_WAIT_TIME_LONG
 	return
 
