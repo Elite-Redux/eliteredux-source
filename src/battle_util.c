@@ -1138,6 +1138,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_WAY_OF_PRECISION] = 1,
     [ABILITY_HUGE_WINGS] = 1,
     [ABILITY_PATCHWORK] = 1,
+    [ABILITY_TERASTAL_TREASURE] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -13215,6 +13216,9 @@ u32 GetBattlerWeight(u8 battlerId)
 	
 	if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LEAD_COAT))
         weight *= 3;
+    
+    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_TERASTAL_TREASURE))
+        weight *= 3;
 	
 	if (BATTLER_HAS_ABILITY(battlerId, ABILITY_CHROME_COAT))
         weight *= 3;
@@ -14244,6 +14248,11 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_CHROME_COAT:
+            if (IS_MOVE_SPECIAL(move)) MUL(.6);
+            return;
+
+        case ABILITY_TERASTAL_TREASURE:
+            if (IS_MOVE_PHYSICAL(move)) MUL(.6);
             if (IS_MOVE_SPECIAL(move)) MUL(.6);
             return;
         
