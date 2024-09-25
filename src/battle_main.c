@@ -354,6 +354,7 @@ const u8 gTypeNames[NUMBER_OF_MON_TYPES][TYPE_NAME_LENGTH + 1] =
     [TYPE_DRAGON] = _("Dragon"),
     [TYPE_DARK] = _("Dark"),
     [TYPE_FAIRY] = _("Fairy"),
+    [TYPE_STELLAR] = _("Stellar"),
 };
 
 // This is a factor in how much money you get for beating a trainer.
@@ -2199,7 +2200,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 }
                 else {
                     do {
-                        hpType = Random() % NUMBER_OF_MON_TYPES;
+                        hpType = Random() % (NUMBER_OF_MON_TYPES - 1); // Don't include Stellar
                     } while (hpType == TYPE_MYSTERY);
                     
                     SetMonData(&party[i], MON_DATA_HP_TYPE, &hpType);

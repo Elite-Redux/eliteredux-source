@@ -2557,6 +2557,7 @@ static const u8 sATypeMove_Table[][NUMBER_OF_MON_TYPES - 1] =
     [TYPE_DRAGON]   _("a Dragon move"),
     [TYPE_DARK]     _("a Dark move"),
     [TYPE_FAIRY]    _("a Fairy move"),
+    [TYPE_STELLAR]  _("a Stellar move"),
 };
 
 // This is four lists of moves which use a different attack string in Japanese

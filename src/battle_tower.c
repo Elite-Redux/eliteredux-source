@@ -3631,7 +3631,7 @@ static void FillPartnerParty(u16 trainerId)
                 }
                 else {
                     do {
-                        hpType = Random() % NUMBER_OF_MON_TYPES;
+                        hpType = Random() % (NUMBER_OF_MON_TYPES - 1); // Ignore Stellar
                     } while (hpType == TYPE_MYSTERY);
                     
                     SetMonData(&gPlayerParty[i], MON_DATA_HP_TYPE, &hpType);
