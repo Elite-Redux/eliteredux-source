@@ -5999,6 +5999,8 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
         }
     }
 
+    if (move == MOVE_TERA_STARSTORM && (type1 == TYPE_STELLAR || type2 == TYPE_STELLAR)) return TYPE_STELLAR;
+
     if (gBattleMoves[move].effect == EFFECT_MISC_HIT)
     {
         if (gBattleMoves[move].argument == MISC_EFFECT_IVY_CUDGEL)
@@ -6153,6 +6155,9 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
                 return TYPE_WATER;
         }
     }
+
+    
+    if (move == MOVE_TERA_STARSTORM && IS_BATTLER_OF_TYPE(battlerAtk, TYPE_STELLAR)) return TYPE_STELLAR;
 
     if (gBattleMoves[move].effect == EFFECT_WEATHER_BALL)
     {
@@ -6318,8 +6323,9 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
                 break;
         }
     }
-
-    if (gBattleMoves[move].effect == EFFECT_WEATHER_BALL)
+    else if (move == MOVE_TERA_STARSTORM && IS_BATTLER_OF_TYPE(battlerAtk, TYPE_STELLAR))
+        gBattleStruct->dynamicMoveType = TYPE_STELLAR | 0x80;
+    else if (gBattleMoves[move].effect == EFFECT_WEATHER_BALL)
     {
         if (WEATHER_HAS_EFFECT)
         {
