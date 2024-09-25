@@ -22,7 +22,8 @@
 #define TYPE_DRAGON           16
 #define TYPE_DARK             17
 #define TYPE_FAIRY            18
-#define NUMBER_OF_MON_TYPES   19
+#define TYPE_STELLAR          19
+#define NUMBER_OF_MON_TYPES   20
 #define TYPE_CURRENT_MOVE     0x50
 
 // Pokemon egg groups

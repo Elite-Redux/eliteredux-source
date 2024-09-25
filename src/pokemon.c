@@ -3997,7 +3997,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     }
 
     do {
-        hpType = Random() % NUMBER_OF_MON_TYPES;
+        hpType = Random() % (NUMBER_OF_MON_TYPES - 1); // No stellar type
     } while (hpType == TYPE_MYSTERY);
 
     SetBoxMonData(boxMon, MON_DATA_HP_TYPE, &hpType);
@@ -9642,13 +9642,13 @@ u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType){
         //Exclude form change abilities from being randomized and other mons can't get them either
         u8 randomizedType = TYPE_MYSTERY;
         if(isFirstType)
-            randomizedType = (type + species + personality) % NUMBER_OF_MON_TYPES;
+            randomizedType = (type + species + personality) % (NUMBER_OF_MON_TYPES - 1);
         else
-            randomizedType = (personality - type - species) % NUMBER_OF_MON_TYPES;
+            randomizedType = (personality - type - species) % (NUMBER_OF_MON_TYPES - 1);
 
         do{
             randomizedType++;
-            randomizedType = randomizedType % NUMBER_OF_MON_TYPES;
+            randomizedType = randomizedType % (NUMBER_OF_MON_TYPES - 1);
         }
         while(randomizedType == TYPE_MYSTERY || randomizedType == type);
         return randomizedType;
