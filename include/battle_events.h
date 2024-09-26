@@ -6,7 +6,8 @@
 
 
 static u8 gNbBattleEvents;
-static s8 gCurrBattleEvent;
+static u8 gCurrBattleEvent;
+extern u8 gLastBattleEvent;
 
 /**
  * Structure that holds one battle event ID and two 4bits data.
@@ -40,5 +41,7 @@ enum{
     BATTLE_EVENTS_NOT_DONE,
     BATTLE_EVENTS_DONE,
 };
+
+extern const u8 gBattleEventNames[][20];
 
 #endif // GUARD_BATTLE_EVENTS_H

@@ -2,6 +2,7 @@
 #include "gba/gba.h"
 #include "battle_events.h"
 #include "constants/battle_events.h"
+#include "data/text/battle_events.h"
 #include "constants/battle_string_ids.h"
 #include "battle_main.h"
 #include "battle.h"
@@ -17,6 +18,7 @@
 
 
 static u8 gNbBattleEvents;
+u8 gLastBattleEvent;
 
 EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
 
@@ -74,7 +76,9 @@ u8 ExecBattleEvents(){
 u8 BattleEventExec(struct BattleEvent *battleEvent){
     if (battleEvent->id == BATTLE_EVENT_NONE)
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-        
+
+    gLastBattleEvent = battleEvent->id;
+
     switch (gBattleResults.battleTurnCounter)
     {
     case 0:
@@ -190,40 +194,6 @@ bool8 DepleteTeamPowerPointOfMove(u16 moveId){
     return hasBeenModified;
 }
 
-//#define SET_RAW_STATS_LEVEL(stat, level) gBattleMons[battler] ##stat = (gBattleMons[battler]##stat / 20 ) * level
-/*#define //SET_RAW_STATS_LEVEL_OPPONENTS(stat, level)\
-SetRawStats(B_POSITION_OPPONENT_LEFT, stat, level);\
-if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_RIGHT].hp > 0))\
-    SetRawStats(B_POSITION_OPPONENT_RIGHT, stat, level);
-
-void SetRawStats(u8 battler, u8 stat, u8 level){
-    u16 *statBase;
-    switch (stat)
-    {
-    case STAT_ATK:
-        statBase = &gBattleMons[battler].attack;
-        break;
-    case STAT_DEF:
-        //SET_RAW_STATS_LEVEL(defense, level);
-        statBase = &gBattleMons[battler].defense;
-        break;
-    case STAT_SPATK:
-        //SET_RAW_STATS_LEVEL(spAttack, level);
-        statBase = &gBattleMons[battler].spAttack;
-        break;
-    case STAT_SPDEF:
-        //SET_RAW_STATS_LEVEL(spDefense, level);
-        statBase = &gBattleMons[battler].spDefense;
-        break;
-    case STAT_SPEED:
-        //SET_RAW_STATS_LEVEL(speed, level);
-        statBase = &gBattleMons[battler].speed;
-        break;
-    default:
-        return;
-    }
-    *statBase = *statBase + ((*statBase / 5 ) * level);
-}*/
 #define SET_EXTRA_STATS_LEVEL_TO_BATTLER(battler, stat, level) gVolatileStructs[battler].stat += level;
 #define SET_EXTRA_STATS_LEVEL(stat, level)\
 SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_LEFT, stat, level)\
@@ -244,7 +214,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         SET_STATCHANGER(STAT_ATK, battleEvent->data0, FALSE);
         //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_ATK, battleEvent->data0)
         SET_EXTRA_STATS_LEVEL(extraAttackLevel, battleEvent->data0);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillPosture);
     case BATTLE_EVENT_POSTURE_DEFENSE:
         SET_STR2(gText_Defense, sText_Defend)
         if (battleEvent->data0 == 0)
@@ -253,7 +223,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         SET_STATCHANGER(STAT_DEF, battleEvent->data0, FALSE);
         //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_DEF, battleEvent->data0)
         SET_EXTRA_STATS_LEVEL(extraDefenseLevel, battleEvent->data0);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillPosture);
     case BATTLE_EVENT_POSTURE_SPECIAL:
         SET_STR2(gText_SpAtk, sText_Strike)
         if (battleEvent->data0 == 0)
@@ -262,7 +232,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         SET_STATCHANGER(STAT_ATK, battleEvent->data0, FALSE);
         //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_ATK, battleEvent->data0)
         SET_EXTRA_STATS_LEVEL(extraSpAttackLevel, battleEvent->data0);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillPosture);
     case BATTLE_EVENT_POSTURE_SPDEF:
         SET_STR2(gText_SpDef, sText_Defend)
         if (battleEvent->data0 == 0)
@@ -271,7 +241,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         SET_STATCHANGER(STAT_SPDEF, battleEvent->data0, FALSE);
         //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_SPDEF, battleEvent->data0)
         SET_EXTRA_STATS_LEVEL(extraSpDefenseLevel, battleEvent->data0);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillPosture);
     case BATTLE_EVENT_POSTURE_SPEED:
         SET_STR2(gText_Speed, sText_Rush)
         if (battleEvent->data0 == 0)
@@ -280,7 +250,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         SET_STATCHANGER(STAT_SPEED, battleEvent->data0, FALSE);
         //SET_RAW_STATS_LEVEL_OPPONENTS(STAT_SPEED, battleEvent->data0)
         SET_EXTRA_STATS_LEVEL(extraSpeedLevel, battleEvent->data0);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillPosture);
     case BATTLE_EVENT_POSTURE_ACCURACY:
         // NOT IMPLEMENTED BECAUSE OF RAW STATS
         //SET_STR2(gText_Accuracy2, sText_Aim)
@@ -288,59 +258,59 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
         //    battleEvent->data0 = 4;
         //PREPARE_BYTE_NUMBER_BUFFER(gStringVar3, 1, battleEvent->data0);
         //SET_STATCHANGER(STAT_ACC, battleEvent->data0, FALSE);
-        //RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPosture);
+        //RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillPosture);
         break;
     case BATTLE_EVENT_POSTURE_CRIT: // not implemented fully
         SET_STR2(gText_Critical, sText_Focus)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillPostureCrit)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillPostureCrit)
 
     case BATTLE_EVENT_LAST_PARALYZED:
         if (AffectNStatusOnTeamFromLastToFirst(STATUS1_PARALYSIS, battleEvent->data0))
             PlaySE(SE_M_THUNDERBOLT2);
         SET_STR1(gText_Paralysis)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_BURNED:
         if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BURN, battleEvent->data0))
             PlaySE(SE_M_FLAME_WHEEL);
         SET_STR1(gText_Burn)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_SLEEP:
         if (AffectNStatusOnTeamFromLastToFirst(STATUS1_SLEEP, battleEvent->data0))
             PlaySE(SE_M_SNORE);
         SET_STR1(gText_Sleep)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_FROSTBITE:
         if (AffectNStatusOnTeamFromLastToFirst(STATUS1_FROSTBITE, battleEvent->data0))
             PlaySE(SE_M_ICY_WIND); // TODO PROBABLY WRONG SE
         SET_STR1(sText_Frostbite)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_BLEED:
         if (AffectNStatusOnTeamFromLastToFirst(STATUS1_BLEED, battleEvent->data0))
             PlaySE(SE_M_BUBBLE);
         SET_STR1(gText_Bleed)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_POISONED:
         if (AffectNStatusOnTeamFromLastToFirst(STATUS1_POISON, battleEvent->data0))
             PlaySE12WithPanning(SE_M_TOXIC, 13);
         SET_STR1(gText_Poison)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
     case BATTLE_EVENT_LAST_TOXIC:
         if (AffectNStatusOnTeamFromLastToFirst(STATUS1_TOXIC_POISON, battleEvent->data0))
             PlaySE(SE_M_TOXIC);
         SET_STR1(sText_Toxic)
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillStatusOnTeam)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillStatusOnTeam)
 
     case BATTLE_EVENT_STEALTH_ROCK:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainStealthRock)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillTerrainStealthRock)
     case BATTLE_EVENT_TOXIC_SPIKES:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
         gSideTimers[B_SIDE_PLAYER].toxicSpikesAmount = 2;
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainToxicSpikes)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillTerrainToxicSpikes)
     case BATTLE_EVENT_SPIKES:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_SPIKES;
         gSideTimers[B_SIDE_PLAYER].spikesAmount = battleEvent->data0 ? battleEvent->data0 & 0x03 : 1;
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillTerrainSpikes)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillTerrainSpikes)
     case BATTLE_EVENT_EMBARGO:
         gStatuses3[B_POSITION_PLAYER_LEFT] |= STATUS3_EMBARGO;
         gVolatileStructs[B_POSITION_PLAYER_LEFT].embargoTimer = battleEvent->data0;
@@ -349,33 +319,33 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
             gVolatileStructs[B_POSITION_PLAYER_RIGHT].embargoTimer = battleEvent->data0;
         }
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillEmbargo)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillEmbargo)
     case BATTLE_EVENT_REFLECT:
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_REFLECT;
         gSideTimers[B_SIDE_OPPONENT].reflectTimer = battleEvent->data0;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillReflect)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillReflect)
     case BATTLE_EVENT_LIGHTSCREEN:
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_LIGHTSCREEN;
         gSideTimers[B_SIDE_OPPONENT].lightscreenTimer = battleEvent->data0;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLightscreen)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillLightscreen)
     case BATTLE_EVENT_LUCKY_CHANT:
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_LUCKY_CHANT;
         gSideTimers[B_SIDE_OPPONENT].luckyChantTimer = battleEvent->data0;
         PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff1, 1, battleEvent->data0);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLuckyChant)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillLuckyChant)
 
     case BATTLE_EVENT_PERMA_WIDE_GUARD:
         if (gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_WIDE_GUARD)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_WIDE_GUARD;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaWideGuard);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaWideGuard);
 
     case BATTLE_EVENT_NO_PROTECT:
         if (!DepleteTeamPowerPointOfMove(MOVE_PROTECT))
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillNoProtect)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillNoProtect)
     
 
     case BATTLE_EVENT_TENSE_BATTLE:
@@ -408,25 +378,25 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
     case BATTLE_EVENT_STEADY_OFFENSE:
         SET_STR1(gText_Attack)
         
-        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyOffense);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillSteadyOffense);
     case BATTLE_EVENT_STEADY_DEFENSE:
         SET_STR1(gText_Defense);
-        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyDefense);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillSteadyDefense);
     case BATTLE_EVENT_STEADY_SPECIAL:
         SET_STR1(gText_SpAtk);
-        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadySpecial);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillSteadySpecial);
     case BATTLE_EVENT_STEADY_SPDEF:
         SET_STR1(gText_SpDef);
-        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadySpedef);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillSteadySpedef);
     case BATTLE_EVENT_STEADY_SPEED:
         SET_STR1(gText_Speed);
-        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadySpeed);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillSteadySpeed);
     case BATTLE_EVENT_STEADY_ACCURACY:
         SET_STR1(gText_Accuracy2);
-        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyAccuracy);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillSteadyAccuracy);
     case BATTLE_EVENT_STEADY_CRIT:
         SET_STR1(gText_Critical);
-        RUN_BATTLESCRIPT(BattleScript_GymSkillSteadyCrit);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillSteadyCrit);
     
     case BATTLE_EVENT_ONSWITCH_MAT_BLOCK:
         if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn != 1){
@@ -437,27 +407,27 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         if (!battleEvent->data1 && battleEvent->data0 > 1){
             battleEvent->data1 = 1;
             battleEvent->data0--;
-            RUN_BATTLESCRIPT(BattleScript_GymSkillMatBlock)
+            RUN_BATTLESCRIPT(BattleScript_ExtraSkillMatBlock)
         }
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillMatBlock)
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillMatBlock)
     
     case BATTLE_EVENT_ONSTAY_FORESIGHT:
         if (!HasNumberOfTurnsStayedReached(battleEvent, B_POSITION_PLAYER_LEFT) || gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_FORESIGHT)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
         gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_FORESIGHT;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillForesight)  
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillForesight)  
     case BATTLE_EVENT_ONSTAY_LEECH_SEED:
         if (!HasNumberOfTurnsStayedReached(battleEvent, B_POSITION_PLAYER_LEFT) || gStatuses3[B_SIDE_PLAYER] & STATUS3_LEECHSEED)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         SET_STR1(sText_LeechSeed)
         gStatuses3[B_SIDE_PLAYER] |= STATUS3_LEECHSEED;
         gStatuses3[B_SIDE_PLAYER] |= B_SIDE_OPPONENT;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillLeechSeed)
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillLeechSeed)
     case BATTLE_EVENT_ONSTAY_MAGNET_RISE:
         if (!HasNumberOfTurnsStayedReached(battleEvent, B_POSITION_OPPONENT_LEFT) || gStatuses3[B_SIDE_OPPONENT] & STATUS3_MAGNET_RISE)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR; 
         gStatuses3[B_SIDE_OPPONENT] |= STATUS3_MAGNET_RISE;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillMagnetRise)
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillMagnetRise)
     
     case BATTLE_EVENT_LAST_STAND:
         if (gFaintedMonCount[1] != battleEvent->data0)
@@ -467,37 +437,37 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         SET_EXTRA_STATS_LEVEL(extraSpAttackLevel, 5);
         SET_EXTRA_STATS_LEVEL(extraSpDefenseLevel, 5);
         SET_EXTRA_STATS_LEVEL(extraSpeedLevel, 5);
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillLastStand);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillLastStand);
     case BATTLE_EVENT_SUBSTITUTE:
         if (gFaintedMonCount[1] != battleEvent->data0)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gBattlerAttacker = B_SIDE_OPPONENT;
         SetSubstituteBattleEvent();
-        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_GymSkillSubstitute);
+        RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillSubstitute);
 
     case BATTLE_EVENT_PERMA_HEAL_BLOCK:
         if (gStatuses3[B_SIDE_PLAYER] & STATUS3_HEAL_BLOCK)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gStatuses3[B_SIDE_PLAYER] |= STATUS3_HEAL_BLOCK;
         gVolatileStructs[B_SIDE_PLAYER].healBlockTimer = 5;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaHealBlock);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaHealBlock);
     case BATTLE_EVENT_PERMA_NIGHTMARE:
         if (gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_NIGHTMARE)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         if (!gBattleMons[B_SIDE_PLAYER].status1 & STATUS1_SLEEP)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_NIGHTMARE;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaNightmare);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaNightmare);
     case BATTLE_EVENT_PERMA_WIDE_GUARD:
         if (gSideStatuses[B_SIDE_OPPONENT] & SIDE_STATUS_WIDE_GUARD)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_WIDE_GUARD;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillPermaWideGuard);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaWideGuard);
 
     case BATTLE_EVENT_ONDS_COPY_STATS:
         if (!gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn || gSideTimers[B_POSITION_OPPONENT_LEFT].retaliateTimer != 1)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-        RUN_BATTLESCRIPT(BattleScript_GymSkillCopyStats);
+        RUN_BATTLESCRIPT(BattleScript_ExtraSkillCopyStats);
 
 
     case BATTLE_EVENT_TENSE_BATTLE:

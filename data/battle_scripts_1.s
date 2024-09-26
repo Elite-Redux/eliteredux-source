@@ -12647,130 +12647,130 @@ BattleScript_EffectScaryFace_Fear:
 	goto BattleScript_MoveEnd
 
 @ memo of tools i need to try
-@ BattleScript_GymSkill
+@ BattleScript_ExtraSkill
 @ gStackBattler1
 @ gStackBattler2
 @ saveattackertostack3
 @ readattackerfromstack3
 
-BattleScript_GymSkillEnd2:
+BattleScript_ExtraSkillEnd2:
 	end2
 
-BattleScript_GymSkillPopup:
-	various 0, VARIOUS_GYMSKILL_POPUP
+BattleScript_ExtraSkillPopup:
+	various 0, VARIOUS_EXTRASKILL_POPUP
 	return
 
-BattleScript_GymSkillSteadyPrintString:
-	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
+BattleScript_ExtraSkillSteadyPrintString:
+	printstring STRINGID_EXTRASKILL_STEADYSTATSBOOST
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillStatsCannotChange:
+BattleScript_ExtraSkillStatsCannotChange:
 	end2
 
-BattleScript_GymSkillPosture::
+BattleScript_ExtraSkillPosture::
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
-	call BattleScript_GymSkillPostureAfterAttackerSet
-	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_GymSkillPostureSetForDouble
+	call BattleScript_ExtraSkillPostureAfterAttackerSet
+	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_ExtraSkillPostureSetForDouble
 	end2
 	
-BattleScript_GymSkillPostureAfterAttackerSet:
+BattleScript_ExtraSkillPostureAfterAttackerSet:
 	@ commented out because we use a special boost structure (gBattleEventsStatsBoost)
-	@ statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillPosture_
-BattleScript_GymSkillPosture_:
-	call BattleScript_GymSkillPopup	
-	printstring STRINGID_GYMSKILL_POSTURE
+	@ statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_ExtraSkillPosture_
+BattleScript_ExtraSkillPosture_:
+	call BattleScript_ExtraSkillPopup	
+	printstring STRINGID_EXTRASKILL_POSTURE
 	setgraphicalstatchangevalues
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_ExtraSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	return
 
-BattleScript_GymSkillPostureSetForDouble:
-	jumpifhasnohp B_POSITION_PLAYER_RIGHT, BattleScript_GymSkillEnd2
+BattleScript_ExtraSkillPostureSetForDouble:
+	jumpifhasnohp B_POSITION_PLAYER_RIGHT, BattleScript_ExtraSkillEnd2
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_RIGHT
-	call BattleScript_GymSkillPostureAfterAttackerSet
+	call BattleScript_ExtraSkillPostureAfterAttackerSet
 	end2
 
-BattleScript_GymSkillPostureCrit::
+BattleScript_ExtraSkillPostureCrit::
 	end2 @not implemented yet	
 
 
-BattleScript_GymSkillSteadyStatsChange::
-	call BattleScript_GymSkillPopup	
+BattleScript_ExtraSkillSteadyStatsChange::
+	call BattleScript_ExtraSkillPopup	
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_GymSkillSteadyStatsChange_
-BattleScript_GymSkillSteadyStatsChange_:
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_ExtraSkillSteadyStatsChange_
+BattleScript_ExtraSkillSteadyStatsChange_:
 	setgraphicalstatchangevalues
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_ExtraSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printstring STRINGID_GYMSKILL_STEADYSTATSBOOST
+	printstring STRINGID_EXTRASKILL_STEADYSTATSBOOST
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillSteadyOffense::
+BattleScript_ExtraSkillSteadyOffense::
 	setstatchanger STAT_ATK, 1, FALSE
-	goto BattleScript_GymSkillSteadyStatsChange
-BattleScript_GymSkillSteadyDefense::
+	goto BattleScript_ExtraSkillSteadyStatsChange
+BattleScript_ExtraSkillSteadyDefense::
 	setstatchanger STAT_DEF, 1, FALSE
-	goto BattleScript_GymSkillSteadyStatsChange
-BattleScript_GymSkillSteadySpecial::
+	goto BattleScript_ExtraSkillSteadyStatsChange
+BattleScript_ExtraSkillSteadySpecial::
 	setstatchanger STAT_SPATK, 1, FALSE
-	goto BattleScript_GymSkillSteadyStatsChange
-BattleScript_GymSkillSteadySpedef::
+	goto BattleScript_ExtraSkillSteadyStatsChange
+BattleScript_ExtraSkillSteadySpedef::
 	setstatchanger STAT_SPDEF, 1, FALSE
-	goto BattleScript_GymSkillSteadyStatsChange
-BattleScript_GymSkillSteadySpeed::
+	goto BattleScript_ExtraSkillSteadyStatsChange
+BattleScript_ExtraSkillSteadySpeed::
 	setstatchanger STAT_SPEED, 1, FALSE
-	goto BattleScript_GymSkillSteadyStatsChange
-BattleScript_GymSkillSteadyAccuracy::
+	goto BattleScript_ExtraSkillSteadyStatsChange
+BattleScript_ExtraSkillSteadyAccuracy::
 	setstatchanger STAT_ACC, 1, FALSE
-	goto BattleScript_GymSkillSteadyStatsChange
-BattleScript_GymSkillSteadyCrit:: @ not implemented yet
+	goto BattleScript_ExtraSkillSteadyStatsChange
+BattleScript_ExtraSkillSteadyCrit:: @ not implemented yet
 	end2
 
-BattleScript_GymSkillLastStand::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_LASTSTAND
+BattleScript_ExtraSkillLastStand::
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_LASTSTAND
 	waitmessage B_WAIT_TIME_LONG
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 
 	setstatchanger STAT_ATK, 2, FALSE
 	setgraphicalstatchangevalues
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_ExtraSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 
 	setstatchanger STAT_DEF, 2, FALSE
 	setgraphicalstatchangevalues
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_ExtraSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 
 	setstatchanger STAT_SPATK, 2, FALSE
 	setgraphicalstatchangevalues
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_ExtraSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 
 	setstatchanger STAT_SPDEF, 2, FALSE
 	setgraphicalstatchangevalues
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_ExtraSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 
 	setstatchanger STAT_SPEED, 2, FALSE
 	setgraphicalstatchangevalues
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_GymSkillStatsCannotChange
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_ExtraSkillStatsCannotChange
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	
 	@ call BattleScript_AllStatsTwoUp
 	end2
 
-BattleScript_GymSkillStatusOnTeam::
+BattleScript_ExtraSkillStatusOnTeam::
 	waitse @ because inside battle_event.c there's playSE
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_STATUSONTEAM
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_STATUSONTEAM
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillTerrainStealthRock::
-	call BattleScript_GymSkillTerrain
+BattleScript_ExtraSkillTerrainStealthRock::
+	call BattleScript_ExtraSkillTerrain
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
@@ -12779,8 +12779,8 @@ BattleScript_GymSkillTerrainStealthRock::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillTerrainSpikes::
-	call BattleScript_GymSkillTerrain
+BattleScript_ExtraSkillTerrainSpikes::
+	call BattleScript_ExtraSkillTerrain
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_SPIKES
@@ -12789,8 +12789,8 @@ BattleScript_GymSkillTerrainSpikes::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillTerrainToxicSpikes::
-	call BattleScript_GymSkillTerrain
+BattleScript_ExtraSkillTerrainToxicSpikes::
+	call BattleScript_ExtraSkillTerrain
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
@@ -12799,8 +12799,8 @@ BattleScript_GymSkillTerrainToxicSpikes::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillTerrainStickyWeb::
-	call BattleScript_GymSkillTerrain
+BattleScript_ExtraSkillTerrainStickyWeb::
+	call BattleScript_ExtraSkillTerrain
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_STICKY_WEB
@@ -12809,21 +12809,21 @@ BattleScript_GymSkillTerrainStickyWeb::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillTerrain:
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_TERRAIN
+BattleScript_ExtraSkillTerrain:
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_TERRAIN
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-BattleScript_GymSkillMatBlock::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_MATBLOCK
+BattleScript_ExtraSkillMatBlock::
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_MATBLOCK
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillLeechSeed::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_WOEUPONYE
+BattleScript_ExtraSkillLeechSeed::
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_WOEUPONYE
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_LEECH_SEED
@@ -12831,17 +12831,17 @@ BattleScript_GymSkillLeechSeed::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillForesight::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_FORESIGHT
+BattleScript_ExtraSkillForesight::
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_FORESIGHT
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_FORESIGHT
 	waitanimation
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillMagnetRise::
-	call BattleScript_GymSkillPopup
+BattleScript_ExtraSkillMagnetRise::
+	call BattleScript_ExtraSkillPopup
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	printstring STRINGID_PKMNLEVITATEDONELECTROMAGNETISM
 	playmoveanimation BS_ATTACKER, MOVE_MAGNET_RISE
@@ -12849,8 +12849,8 @@ BattleScript_GymSkillMagnetRise::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillPermaHealBlock::
-	call BattleScript_GymSkillPopup
+BattleScript_ExtraSkillPermaHealBlock::
+	call BattleScript_ExtraSkillPopup
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_HEAL_BLOCK
 	waitanimation
@@ -12858,77 +12858,77 @@ BattleScript_GymSkillPermaHealBlock::
 	waitmessage B_WAIT_TIME_LONG
 	end2
 
-BattleScript_GymSkillPermaNightmare:: @ todo
+BattleScript_ExtraSkillPermaNightmare:: @ todo
 	playse SE_M_NIGHTMARE 
 	end2
 
-BattleScript_GymSkillPermaWideGuard::
-	call BattleScript_GymSkillPopup
+BattleScript_ExtraSkillPermaWideGuard::
+	call BattleScript_ExtraSkillPopup
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
-	printstring STRINGID_GYMSKILL_PERMA_WIDEGUARD
+	printstring STRINGID_EXTRASKILL_PERMA_WIDEGUARD
 	playmoveanimation BS_ATTACKER, MOVE_WIDE_GUARD
 	waitanimation
 	end2
 
-BattleScript_GymSkillCopyStats::
+BattleScript_ExtraSkillCopyStats::
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	copyfoestats BattleScript_ButItFailed
-	call BattleScript_GymSkillPopup
+	call BattleScript_ExtraSkillPopup
 	printstring STRINGID_PKMNCOPIEDSTATCHANGES
 	attackanimation
 	waitanimation
 	end2
 
-BattleScript_GymSkillSubstitute::
-	call BattleScript_GymSkillPopup
+BattleScript_ExtraSkillSubstitute::
+	call BattleScript_ExtraSkillPopup
 	printstring STRINGID_PKMNMADESUBSTITUTE
 	playmoveanimation BS_ATTACKER, MOVE_SUBSTITUTE
 	waitanimation
 	end2
 
-BattleScript_GymSkillEmbargo::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_EMBARGO
+BattleScript_ExtraSkillEmbargo::
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_EMBARGO
 	setbyte gBattlerTarget, B_POSITION_PLAYER_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_EMBARGO
-	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_GymSkillEmbargoDouble
+	jumpifbattletype BATTLE_TYPE_DOUBLE, BattleScript_ExtraSkillEmbargoDouble
 	waitanimation
 	end2
-BattleScript_GymSkillEmbargoDouble:
-	jumpifhasnohp B_POSITION_PLAYER_RIGHT, BattleScript_GymSkillEnd2
+BattleScript_ExtraSkillEmbargoDouble:
+	jumpifhasnohp B_POSITION_PLAYER_RIGHT, BattleScript_ExtraSkillEnd2
 	setbyte gBattlerTarget, B_POSITION_PLAYER_RIGHT
 	playmoveanimation BS_ATTACKER, MOVE_EMBARGO
 	waitanimation
 	end2
 
-BattleScript_GymSkillReflect::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_REFLECT
+BattleScript_ExtraSkillReflect::
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_REFLECT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_REFLECT
 	waitanimation
 	end2
 
-BattleScript_GymSkillLightscreen::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_LIGHTSCREEN
+BattleScript_ExtraSkillLightscreen::
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_LIGHTSCREEN
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_LIGHT_SCREEN
 	waitanimation
 	end2
 
-BattleScript_GymSkillLuckyChant::
-	call BattleScript_GymSkillPopup
-	printstring STRINGID_GYMSKILL_LUCKY_CHANT
+BattleScript_ExtraSkillLuckyChant::
+	call BattleScript_ExtraSkillPopup
+	printstring STRINGID_EXTRASKILL_LUCKY_CHANT
 	setbyte gBattlerAttacker B_POSITION_OPPONENT_LEFT
 	playmoveanimation BS_ATTACKER, MOVE_LUCKY_CHANT
 	waitanimation
 	end2
 
-BattleScript_GymSkillNoProtect::
-	call BattleScript_GymSkillPopup
-		printstring STRINGID_GYMSKILL_NOPROTECT
+BattleScript_ExtraSkillNoProtect::
+	call BattleScript_ExtraSkillPopup
+		printstring STRINGID_EXTRASKILL_NOPROTECT
 	playSE SE_M_DETECT
 	playSE SE_M_BRICK_BREAK
 	end2

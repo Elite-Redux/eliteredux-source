@@ -175,7 +175,7 @@ enum
     STATUS_INFO_PARASITIC_SPORES,
     STATUS_INFO_FEAR,
     STATUS_INFO_ON_THE_PROWL,
-    //Battle Events (Gymskills)
+    //Battle Events (Extraskills)
     STATUS_INFO_EXTRA_ATTACK,
     STATUS_INFO_EXTRA_DEFENSE,
     STATUS_INFO_EXTRA_SPATTACK,

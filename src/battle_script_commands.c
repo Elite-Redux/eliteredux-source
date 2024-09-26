@@ -61,6 +61,7 @@
 #include "battle_util.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "battle_events.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_BGM;
 
@@ -10112,8 +10113,8 @@ static void Cmd_various(void)
     case VARIOUS_UPDATE_ABILITY_POPUP:
         UpdateAbilityPopup(gActiveBattler);
         break;
-    case VARIOUS_GYMSKILL_POPUP:
-        CreateGymSkillPopUp(0);
+    case VARIOUS_EXTRASKILL_POPUP:
+        CreateExtraSkillPopUp();
         break;
     case VARIOUS_DEFOG:
         {

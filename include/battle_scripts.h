@@ -663,44 +663,44 @@ extern const u8 BattleScript_SetMonotypeEffect_Dragon[];
 extern const u8 BattleScript_SetMonotypeEffect_Dark[];
 extern const u8 BattleScript_SetMonotypeEffect_Fairy[];
 
-extern const u8 BattleScript_GymSkillSteadyOffense[];
-extern const u8 BattleScript_GymSkillSteadyDefense[];
-extern const u8 BattleScript_GymSkillSteadySpecial[];
-extern const u8 BattleScript_GymSkillSteadySpedef[];
-extern const u8 BattleScript_GymSkillSteadySpeed[];
-extern const u8 BattleScript_GymSkillSteadyAccuracy[];
-extern const u8 BattleScript_GymSkillSteadyCrit[]; //not implemented yet
+extern const u8 BattleScript_ExtraSkillSteadyOffense[];
+extern const u8 BattleScript_ExtraSkillSteadyDefense[];
+extern const u8 BattleScript_ExtraSkillSteadySpecial[];
+extern const u8 BattleScript_ExtraSkillSteadySpedef[];
+extern const u8 BattleScript_ExtraSkillSteadySpeed[];
+extern const u8 BattleScript_ExtraSkillSteadyAccuracy[];
+extern const u8 BattleScript_ExtraSkillSteadyCrit[]; //not implemented yet
 
-extern const u8 BattleScript_GymSkillPosture[];
-extern const u8 BattleScript_GymSkillPostureCrit[]; //not implemented yet
+extern const u8 BattleScript_ExtraSkillPosture[];
+extern const u8 BattleScript_ExtraSkillPostureCrit[]; //not implemented yet
 
-extern const u8 BattleScript_GymSkillLastStand[];
-extern const u8 BattleScript_GymSkillSubstitute[];
+extern const u8 BattleScript_ExtraSkillLastStand[];
+extern const u8 BattleScript_ExtraSkillSubstitute[];
 
-extern const u8 BattleScript_GymSkillStatusOnTeam[];
+extern const u8 BattleScript_ExtraSkillStatusOnTeam[];
 
-extern const u8 BattleScript_GymSkillTerrainStealthRock[];
-extern const u8 BattleScript_GymSkillTerrainSpikes[];
-extern const u8 BattleScript_GymSkillTerrainToxicSpikes[];
-extern const u8 BattleScript_GymSkillTerrainStickyWeb[];
-extern const u8 BattleScript_GymSkillEmbargo[];
-extern const u8 BattleScript_GymSkillReflect[];
-extern const u8 BattleScript_GymSkillLightscreen[];
-extern const u8 BattleScript_GymSkillLuckyChant[];
+extern const u8 BattleScript_ExtraSkillTerrainStealthRock[];
+extern const u8 BattleScript_ExtraSkillTerrainSpikes[];
+extern const u8 BattleScript_ExtraSkillTerrainToxicSpikes[];
+extern const u8 BattleScript_ExtraSkillTerrainStickyWeb[];
+extern const u8 BattleScript_ExtraSkillEmbargo[];
+extern const u8 BattleScript_ExtraSkillReflect[];
+extern const u8 BattleScript_ExtraSkillLightscreen[];
+extern const u8 BattleScript_ExtraSkillLuckyChant[];
 
-extern const u8 BattleScript_GymSkillNoProtect[];
+extern const u8 BattleScript_ExtraSkillNoProtect[];
 
-extern const u8 BattleScript_GymSkillMatBlock[];
+extern const u8 BattleScript_ExtraSkillMatBlock[];
 
-extern const u8 BattleScript_GymSkillForesight[];
-extern const u8 BattleScript_GymSkillLeechSeed[];
-extern const u8 BattleScript_GymSkillMagnetRise[];
+extern const u8 BattleScript_ExtraSkillForesight[];
+extern const u8 BattleScript_ExtraSkillLeechSeed[];
+extern const u8 BattleScript_ExtraSkillMagnetRise[];
 
-extern const u8 BattleScript_GymSkillPermaNightmare[]; // not implemented fully yet, missing anim
-extern const u8 BattleScript_GymSkillPermaHealBlock[];
-extern const u8 BattleScript_GymSkillPermaWideGuard[];
+extern const u8 BattleScript_ExtraSkillPermaNightmare[]; // not implemented fully yet, missing anim
+extern const u8 BattleScript_ExtraSkillPermaHealBlock[];
+extern const u8 BattleScript_ExtraSkillPermaWideGuard[];
 
-extern const u8 BattleScript_GymSkillCopyStats[];
+extern const u8 BattleScript_ExtraSkillCopyStats[];
 
 
 #endif // GUARD_BATTLE_SCRIPTS_H
