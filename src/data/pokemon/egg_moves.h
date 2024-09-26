@@ -2404,25 +2404,6 @@ const u16 gEggMoves[] = {
         MOVE_NATURAL_GIFT,
         MOVE_DRAGON_HAMMER),
 
-    egg_moves(CHIMECHO,
-        MOVE_AFTER_YOU, // new
-        MOVE_FOLLOW_ME, // new
-        MOVE_ALLY_SWITCH, // new
-        MOVE_MIRROR_SHOT, // new
-        MOVE_MISTY_EXPLOSION, // new
-        MOVE_MOONBLAST, // new
-        MOVE_DISABLE,
-        MOVE_CURSE,
-        MOVE_HYPNOSIS,
-        MOVE_WISH,
-        MOVE_FUTURE_SIGHT,
-        MOVE_RECOVER,
-        MOVE_STORED_POWER,
-        MOVE_SKILL_SWAP,
-        MOVE_COSMIC_POWER,
-        MOVE_CRAFTY_SHIELD,
-        MOVE_PERISH_SONG),
-
     egg_moves(ABSOL,
         MOVE_BATON_PASS,
         MOVE_FEINT_ATTACK,
@@ -2809,6 +2790,12 @@ const u16 gEggMoves[] = {
         MOVE_LAST_RESORT),
 
     egg_moves(CHINGLING,
+        MOVE_AFTER_YOU, // new
+        MOVE_FOLLOW_ME, // new
+        MOVE_ALLY_SWITCH, // new
+        MOVE_MIRROR_SHOT, // new
+        MOVE_MISTY_EXPLOSION, // new
+        MOVE_MOONBLAST, // new
         MOVE_DISABLE,
         MOVE_CURSE,
         MOVE_HYPNOSIS,
@@ -2817,7 +2804,9 @@ const u16 gEggMoves[] = {
         MOVE_RECOVER,
         MOVE_STORED_POWER,
         MOVE_SKILL_SWAP,
-        MOVE_COSMIC_POWER),
+        MOVE_COSMIC_POWER,
+        MOVE_CRAFTY_SHIELD,
+        MOVE_PERISH_SONG),
 
     egg_moves(STUNKY,
         MOVE_PURSUIT,
