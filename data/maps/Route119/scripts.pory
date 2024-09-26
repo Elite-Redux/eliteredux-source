@@ -785,7 +785,7 @@ movement Route119_Movement_RivalHelpWaterfall1{
 script Route119_EventScript_RivalHelpWaterfall2{
     lock
     setvar(VAR_TEMP_2, 1)
-    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)){
+    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119) || flag(FLAG_DEFEATED_RIVAL_ROUTE_104)){
         release
         end
     }
