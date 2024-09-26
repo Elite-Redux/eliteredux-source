@@ -1121,3 +1121,7 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/SeafloorCavernShortcut/scripts.inc"
 
 	.include "data/maps/EvergrandeCity_MonoChampRoom_1/scripts.inc"
+
+	.include "data/maps/Route111_Desert/scripts.inc"
+
+	.include "data/maps/DesertCity/scripts.inc"

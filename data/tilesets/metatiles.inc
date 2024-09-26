@@ -565,3 +565,11 @@ gMetatiles_SecretDungeons::
 	.align 1
 gMetatileAttributes_SecretDungeons::
 	.incbin "data/tilesets/secondary/secretdungeons/metatile_attributes.bin"
+
+	.align 1
+gMetatiles_Desert_Area::
+	.incbin "data/tilesets/secondary/desert_area/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_Desert_Area::
+	.incbin "data/tilesets/secondary/desert_area/metatile_attributes.bin"

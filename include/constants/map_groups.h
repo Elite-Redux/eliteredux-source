@@ -64,6 +64,8 @@
 #define MAP_UNDERWATER_ROUTE105 (55 | (0 << 8))
 #define MAP_UNDERWATER_ROUTE125 (56 | (0 << 8))
 #define MAP_RUSTURF_TUNNEL_2F   (57 | (0 << 8))
+#define MAP_ROUTE111_DESERT     (58 | (0 << 8))
+#define MAP_DESERT_CITY         (59 | (0 << 8))
 
 // gMapGroup_IndoorLittleroot
 #define MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F    (0 | (1 << 8))

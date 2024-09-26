@@ -4710,6 +4710,26 @@
       "secondary_tileset": "gTileset_Cave",
       "border_filepath": "data/layouts/EvergrandeCity_MonoChampRoom_1/border.bin",
       "blockdata_filepath": "data/layouts/EvergrandeCity_MonoChampRoom_1/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE111_DESERT",
+      "name": "Route111_Desert_Layout",
+      "width": 80,
+      "height": 30,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Desert_Area",
+      "border_filepath": "data/layouts/Route111_Desert/border.bin",
+      "blockdata_filepath": "data/layouts/Route111_Desert/map.bin"
+    },
+    {
+      "id": "LAYOUT_DESERT_CITY",
+      "name": "DesertCity_Layout",
+      "width": 30,
+      "height": 40,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Desert_Area",
+      "border_filepath": "data/layouts/DesertCity/border.bin",
+      "blockdata_filepath": "data/layouts/DesertCity/map.bin"
     }
   ]
 }

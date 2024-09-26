@@ -841,3 +841,14 @@ gTileset_SecretDungeons::
 	.4byte gMetatiles_SecretDungeons
 	.4byte gMetatileAttributes_SecretDungeons
 	.4byte NULL
+
+	.align 2
+gTileset_Desert_Area::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0
+	.4byte gTilesetTiles_Desert_Area
+	.4byte gTilesetPalettes_Desert_Area
+	.4byte gMetatiles_Desert_Area
+	.4byte gMetatileAttributes_Desert_Area
+	.4byte NULL
