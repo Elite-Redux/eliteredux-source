@@ -33,6 +33,7 @@
 #include "constants/items.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "battle_events.h"
 
 enum
 {   // Corresponds to gHealthboxElementsGfxTable (and the tables after it) in graphics.c
@@ -3907,8 +3908,8 @@ void TryRestoreLastUsedBall(void)
 
 #define GYMSKILL_POP_UP_TAG 0xD724 //TODO FIX ?
 
-static const u8 sGymskillPopUpGfx[] = INCBIN_U8("graphics/battle_interface/gymskill_pop_up_hardcoded.4bpp");
-static const u16 sGymskillPopUpPalette[] = INCBIN_U16("graphics/battle_interface/gymskill_pop_up.gbapal");
+static const u8 sGymskillPopUpGfx[] = INCBIN_U8("graphics/battle_interface/xtra_skill_popup.4bpp");
+static const u16 sGymskillPopUpPalette[] = INCBIN_U16("graphics/battle_interface/xtra_skill_popup.gbapal");
 
 static const struct SpriteSheet sSpriteSheet_GymSkillPopUp =
 {
@@ -4012,34 +4013,34 @@ void CreateGymSkillPopUp(u32 gymskill) // parameter unused for now
     spriteId1 = CreateSprite(&sSpriteTemplate_GymskillPopUp,
                                 coords[battlerPosition][0],
                                 0, 0);
-    /*spriteId2 = CreateSprite(&sSpriteTemplate_GymskillPopUp,
+    spriteId2 = CreateSprite(&sSpriteTemplate_GymskillPopUp,
                                 coords[battlerPosition][0] + 64,
-                                0, 1);*/
+                                0, 1);
     
     gSprites[spriteId1].tOriginalY = coords[battlerPosition][1];
-    //gSprites[spriteId2].tOriginalY = coords[battlerPosition][1];
-    //gSprites[spriteId2].oam.tileNum += (8 * 4); //Second half of pop up
+    gSprites[spriteId2].tOriginalY = coords[battlerPosition][1];
+    gSprites[spriteId2].oam.tileNum += (8 * 4); //Second half of pop up
 
     gBattleStruct->gymskillPopUpSpriteIds[0] = spriteId1;
-    //gBattleStruct->gymskillPopUpSpriteIds[1] = spriteId2;
+    gBattleStruct->gymskillPopUpSpriteIds[1] = spriteId2;
 
     taskId = CreateTask(Task_FreeGymskillPopUpGfx, 5);
     gTasks[taskId].tSpriteId1 = spriteId1;
-    //gTasks[taskId].tSpriteId2 = spriteId2;
+    gTasks[taskId].tSpriteId2 = spriteId2;
 
     gSprites[spriteId1].tIsMain = TRUE;
 
     StartSpriteAnim(&gSprites[spriteId1], 0);
-    //StartSpriteAnim(&gSprites[spriteId2], 0);
+    StartSpriteAnim(&gSprites[spriteId2], 0);
 
     //PrintGymskillOnGymskillPopUp(gymskill, spriteId1, spriteId2);
-    /*PrintOnGymskillPopUp(sGymSkillText,
-                        (void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32),
-                        (void*)(OBJ_VRAM0) + (gSprites[spriteId2].oam.tileNum * 32),
-                        10, 20,
-                        2,
-                        14, 2, 3);*/
-    //RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));
+    PrintOnAbilityPopUp(gBattleEventNames[1],
+                        (void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32) + 256,
+                        (void*)(OBJ_VRAM0) + (gSprites[spriteId2].oam.tileNum * 32) + 256,
+                        5, 12,
+                        4,
+                        7, 9, 1);
+    RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));
 }
 
 static void SpriteCb_GymskillPopUp(struct Sprite *sprite)

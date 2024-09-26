@@ -2,6 +2,7 @@
 #include "gba/gba.h"
 #include "battle_events.h"
 #include "constants/battle_events.h"
+#include "data/text/battle_events.h"
 #include "constants/battle_string_ids.h"
 #include "battle_main.h"
 #include "battle.h"

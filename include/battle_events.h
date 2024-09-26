@@ -41,4 +41,6 @@ enum{
     BATTLE_EVENTS_DONE,
 };
 
+extern const u8 gBattleEventNames[][20 + 1];
+
 #endif // GUARD_BATTLE_EVENTS_H
