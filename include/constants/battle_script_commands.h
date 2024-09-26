@@ -249,7 +249,7 @@
 #define VARIOUS_TRY_UPPER_HAND                  167
 #define VARIOUS_REQUIRE_CAN_DO_EFFECT           168
 #define VARIOUS_INCREASE_CRIT                   169
-#define VARIOUS_GYMSKILL_POPUP                  170
+#define VARIOUS_EXTRASKILL_POPUP                  170
 #define VARIOUS_DO_FOG_STAT_DROPS               171
 #define VARIOUS_SET_STATUS_4                    172
 #define VARIOUS_SET_WEATHER                         173

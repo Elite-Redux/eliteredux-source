@@ -233,8 +233,8 @@ static void SpriteCB_LastUsedBallWin(struct Sprite *sprite);
 static void SpriteCB_MoveInfoWin(struct Sprite *sprite);
 static void SpriteCB_EnemyTeamInfoWin(struct Sprite *sprite);
 
-static void SpriteCb_GymskillPopUp(struct Sprite *sprite);
-static void Task_FreeGymskillPopUpGfx(u8 taskId);
+static void SpriteCb_ExtraskillPopUp(struct Sprite *sprite);
+static void Task_FreeExtraskillPopUpGfx(u8 taskId);
 
 // const rom data
 static const struct OamData sUnknown_0832C138 =
@@ -3906,21 +3906,21 @@ void TryRestoreLastUsedBall(void)
     #endif*/
 }
 
-#define GYMSKILL_POP_UP_TAG 0xD724 //TODO FIX ?
+#define EXTRASKILL_POP_UP_TAG 0xD724 //TODO FIX ?
 
-static const u8 sGymskillPopUpGfx[] = INCBIN_U8("graphics/battle_interface/xtra_skill_popup.4bpp");
-static const u16 sGymskillPopUpPalette[] = INCBIN_U16("graphics/battle_interface/xtra_skill_popup.gbapal");
+static const u8 sExtraskillPopUpGfx[] = INCBIN_U8("graphics/battle_interface/xtra_skill_popup.4bpp");
+static const u16 sExtraskillPopUpPalette[] = INCBIN_U16("graphics/battle_interface/xtra_skill_popup.gbapal");
 
-static const struct SpriteSheet sSpriteSheet_GymSkillPopUp =
+static const struct SpriteSheet sSpriteSheet_ExtraSkillPopUp =
 {
-    sGymskillPopUpGfx, sizeof(sGymskillPopUpGfx), GYMSKILL_POP_UP_TAG
+    sExtraskillPopUpGfx, sizeof(sExtraskillPopUpGfx), EXTRASKILL_POP_UP_TAG
 };
-static const struct SpritePalette sSpritePalette_GymskillPopUp =
+static const struct SpritePalette sSpritePalette_ExtraskillPopUp =
 {
-    sGymskillPopUpPalette, GYMSKILL_POP_UP_TAG
+    sExtraskillPopUpPalette, EXTRASKILL_POP_UP_TAG
 };
 
-static const struct OamData sOamData_GymskillPopUp =
+static const struct OamData sOamData_ExtraskillPopUp =
 {
     .affineMode = ST_OAM_AFFINE_OFF,
     .objMode = ST_OAM_OBJ_NORMAL,
@@ -3929,18 +3929,18 @@ static const struct OamData sOamData_GymskillPopUp =
     .priority = 0,
 };
 
-static const struct SpriteTemplate sSpriteTemplate_GymskillPopUp =
+static const struct SpriteTemplate sSpriteTemplate_ExtraskillPopUp =
 {
-    .tileTag = GYMSKILL_POP_UP_TAG,
-    .paletteTag = GYMSKILL_POP_UP_TAG,
-    .oam = &sOamData_GymskillPopUp,
+    .tileTag = EXTRASKILL_POP_UP_TAG,
+    .paletteTag = EXTRASKILL_POP_UP_TAG,
+    .oam = &sOamData_ExtraskillPopUp,
     .anims = gDummySpriteAnimTable,
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
-    .callback = SpriteCb_GymskillPopUp
+    .callback = SpriteCb_ExtraskillPopUp
 };
 
-static u8* AddTextPrinterAndCreateWindowOnGymskillPopUp(const u8 *str, u32 x, u32 y, u32 color1, u32 color2, u32 color3, u32 *windowId)
+static u8* AddTextPrinterAndCreateWindowOnExtraskillPopUp(const u8 *str, u32 x, u32 y, u32 color1, u32 color2, u32 color3, u32 *windowId)
 {
     u8 color[3] = {color1, color2, color3};
     struct WindowTemplate winTemplate = {0};
@@ -3955,7 +3955,7 @@ static u8* AddTextPrinterAndCreateWindowOnGymskillPopUp(const u8 *str, u32 x, u3
 }
 
 
-static void TextIntoGymskillPopUp(void *dest, u8 *windowTileData, s32 xTileAmount, bool32 arg3)
+static void TextIntoExtraskillPopUp(void *dest, u8 *windowTileData, s32 xTileAmount, bool32 arg3)
 {
     CpuCopy32(windowTileData + 256, dest + 256, xTileAmount * 32);
     if (xTileAmount > 0)
@@ -3972,48 +3972,48 @@ static void TextIntoGymskillPopUp(void *dest, u8 *windowTileData, s32 xTileAmoun
     }
 }
 
-static void PrintOnGymskillPopUp(const u8 *str, u8 *spriteTileData1, u8 *spriteTileData2, u32 x1, u32 x2, u32 y, u32 color1, u32 color2, u32 color3)
+static void PrintOnExtraskillPopUp(const u8 *str, u8 *spriteTileData1, u8 *spriteTileData2, u32 x1, u32 x2, u32 y, u32 color1, u32 color2, u32 color3)
 {
     u32 windowId;
     u8 *windowTileData;
     u16 width;
 
-    windowTileData = AddTextPrinterAndCreateWindowOnGymskillPopUp(str, x1, y, color1, color2, color3, &windowId);
-    TextIntoGymskillPopUp(spriteTileData1, windowTileData, 8, (y == 0));
+    windowTileData = AddTextPrinterAndCreateWindowOnExtraskillPopUp(str, x1, y, color1, color2, color3, &windowId);
+    TextIntoExtraskillPopUp(spriteTileData1, windowTileData, 8, (y == 0));
     RemoveWindow(windowId);
 
     width = GetStringWidth(FONT_SMALL, str, 0);
 
     if (width > MAX_POPUP_STRING_WIDTH - 5)
     {
-        windowTileData = AddTextPrinterAndCreateWindowOnGymskillPopUp(str, x2 - MAX_POPUP_STRING_WIDTH, y, color1, color2, color3, &windowId);
-        TextIntoGymskillPopUp(spriteTileData2, windowTileData, 3, (y == 0));
+        windowTileData = AddTextPrinterAndCreateWindowOnExtraskillPopUp(str, x2 - MAX_POPUP_STRING_WIDTH, y, color1, color2, color3, &windowId);
+        TextIntoExtraskillPopUp(spriteTileData2, windowTileData, 3, (y == 0));
         RemoveWindow(windowId);
     }
 }
 
-static const s16 sGymSkillPopUpCoordsSingles[MAX_BATTLERS_COUNT][2] =
+static const s16 sExtraSkillPopUpCoordsSingles[MAX_BATTLERS_COUNT][2] =
 {
     {29, 93}, // player
     {149, 24}, // opponent
 };
-static const u8 sGymSkillText[] = _("Gymskill");
-void CreateGymSkillPopUp(u32 gymskill) // parameter unused for now
+static const u8 sExtraSkillText[] = _("Extraskill");
+void CreateExtraSkillPopUp(u32 extraskill) // parameter unused for now
 {
     const s16 (*coords)[2];
     u8 spriteId1, spriteId2, battlerPosition, taskId;
-    if (!gBattleStruct->activeGymskillPopUps){
-        LoadSpriteSheet(&sSpriteSheet_GymSkillPopUp);
-        LoadSpritePalette(&sSpritePalette_GymskillPopUp);
+    if (!gBattleStruct->activeExtraskillPopUps){
+        LoadSpriteSheet(&sSpriteSheet_ExtraSkillPopUp);
+        LoadSpritePalette(&sSpritePalette_ExtraskillPopUp);
     }
-    gBattleStruct->activeGymskillPopUps = 1;
+    gBattleStruct->activeExtraskillPopUps = 1;
     battlerPosition = 1;
 
-    coords = sGymSkillPopUpCoordsSingles;
-    spriteId1 = CreateSprite(&sSpriteTemplate_GymskillPopUp,
+    coords = sExtraSkillPopUpCoordsSingles;
+    spriteId1 = CreateSprite(&sSpriteTemplate_ExtraskillPopUp,
                                 coords[battlerPosition][0],
                                 0, 0);
-    spriteId2 = CreateSprite(&sSpriteTemplate_GymskillPopUp,
+    spriteId2 = CreateSprite(&sSpriteTemplate_ExtraskillPopUp,
                                 coords[battlerPosition][0] + 64,
                                 0, 1);
     
@@ -4021,10 +4021,10 @@ void CreateGymSkillPopUp(u32 gymskill) // parameter unused for now
     gSprites[spriteId2].tOriginalY = coords[battlerPosition][1];
     gSprites[spriteId2].oam.tileNum += (8 * 4); //Second half of pop up
 
-    gBattleStruct->gymskillPopUpSpriteIds[0] = spriteId1;
-    gBattleStruct->gymskillPopUpSpriteIds[1] = spriteId2;
+    gBattleStruct->extraskillPopUpSpriteIds[0] = spriteId1;
+    gBattleStruct->extraskillPopUpSpriteIds[1] = spriteId2;
 
-    taskId = CreateTask(Task_FreeGymskillPopUpGfx, 5);
+    taskId = CreateTask(Task_FreeExtraskillPopUpGfx, 5);
     gTasks[taskId].tSpriteId1 = spriteId1;
     gTasks[taskId].tSpriteId2 = spriteId2;
 
@@ -4033,7 +4033,7 @@ void CreateGymSkillPopUp(u32 gymskill) // parameter unused for now
     StartSpriteAnim(&gSprites[spriteId1], 0);
     StartSpriteAnim(&gSprites[spriteId2], 0);
 
-    //PrintGymskillOnGymskillPopUp(gymskill, spriteId1, spriteId2);
+    //PrintExtraskillOnExtraskillPopUp(extraskill, spriteId1, spriteId2);
     PrintOnAbilityPopUp(gBattleEventNames[1],
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32) + 256,
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId2].oam.tileNum * 32) + 256,
@@ -4043,7 +4043,7 @@ void CreateGymSkillPopUp(u32 gymskill) // parameter unused for now
     RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));
 }
 
-static void SpriteCb_GymskillPopUp(struct Sprite *sprite)
+static void SpriteCb_ExtraskillPopUp(struct Sprite *sprite)
 {
     if (!sprite->tHide) // Show
     {   
@@ -4073,13 +4073,13 @@ static void SpriteCb_GymskillPopUp(struct Sprite *sprite)
     }
 }
 
-static void Task_FreeGymskillPopUpGfx(u8 taskId)
+static void Task_FreeExtraskillPopUpGfx(u8 taskId)
 {
     if (!gSprites[gTasks[taskId].tSpriteId1].inUse)
     {
-        FreeSpriteTilesByTag(GYMSKILL_POP_UP_TAG);
-        FreeSpritePaletteByTag(GYMSKILL_POP_UP_TAG);
+        FreeSpriteTilesByTag(EXTRASKILL_POP_UP_TAG);
+        FreeSpritePaletteByTag(EXTRASKILL_POP_UP_TAG);
         DestroyTask(taskId);
-        gBattleStruct->activeGymskillPopUps = 0;
+        gBattleStruct->activeExtraskillPopUps = 0;
     }
 }
