@@ -3997,8 +3997,8 @@ static const s16 sExtraSkillPopUpCoordsSingles[MAX_BATTLERS_COUNT][2] =
     {29, 93}, // player
     {149, 24}, // opponent
 };
-static const u8 sExtraSkillText[] = _("Extraskill");
-void CreateExtraSkillPopUp(u8 extraskill) // parameter unused for now
+static const u8 sExtraSkillText[] = _("-tra Skill");
+void CreateExtraSkillPopUp() // parameter unused for now
 {
     const s16 (*coords)[2];
     u8 spriteId1, spriteId2, battlerPosition, taskId;
@@ -4034,10 +4034,10 @@ void CreateExtraSkillPopUp(u8 extraskill) // parameter unused for now
     StartSpriteAnim(&gSprites[spriteId2], 0);
 
     //PrintExtraskillOnExtraskillPopUp(extraskill, spriteId1, spriteId2);
-    PrintOnAbilityPopUp(gBattleEventNames[extraskill],
+    PrintOnAbilityPopUp(gBattleEventNames[gLastBattleEvent],
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32) + 256,
                         (void*)(OBJ_VRAM0) + (gSprites[spriteId2].oam.tileNum * 32) + 256,
-                        5, 12,
+                        12, 12,
                         4,
                         7, 9, 1);
     RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));

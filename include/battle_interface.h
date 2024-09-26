@@ -108,7 +108,7 @@ void TryToAddMoveInfoWindow(void);
 void TryToAddEnemyInfoWindow(void);
 void TryToHideEnemyInfoWindow(void);
 
-void CreateExtraSkillPopUp(u8 extraskill);
+void CreateExtraSkillPopUp();
 void DestroyExtraSkillPopUp();
 
 #endif // GUARD_BATTLE_INTERFACE_H

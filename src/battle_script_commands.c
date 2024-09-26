@@ -10114,7 +10114,7 @@ static void Cmd_various(void)
         UpdateAbilityPopup(gActiveBattler);
         break;
     case VARIOUS_EXTRASKILL_POPUP:
-        CreateExtraSkillPopUp(gBattleEvents[gCurrBattleEvent - 1].id);
+        CreateExtraSkillPopUp();
         break;
     case VARIOUS_DEFOG:
         {

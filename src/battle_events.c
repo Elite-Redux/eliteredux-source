@@ -18,6 +18,7 @@
 
 
 static u8 gNbBattleEvents;
+u8 gLastBattleEvent;
 
 EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
 
@@ -75,7 +76,9 @@ u8 ExecBattleEvents(){
 u8 BattleEventExec(struct BattleEvent *battleEvent){
     if (battleEvent->id == BATTLE_EVENT_NONE)
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-        
+
+    gLastBattleEvent = battleEvent->id;
+
     switch (gBattleResults.battleTurnCounter)
     {
     case 0:
