@@ -81,14 +81,12 @@
 #define DEXNAV_ENABLE_ROUTE_115_FLAG FLAG_BADGE02_GET
 
 #define DEXNAV_ENABLE_ROUTE_118_FLAG FLAG_BADGE05_GET
-#define DEXNAV_ENABLE_ROUTE_111_FLAG FLAG_BADGE04_GET
 
 #define IF_ROUTE_DISABLED(route) if (!FlagGet(DEXNAV_ENABLE_ROUTE_##route##_FLAG) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE##route))
 
 int IsDisabledForRoute(int row)
 {
     IF_ROUTE_DISABLED(115) return TRUE;
-    IF_ROUTE_DISABLED(111) return row == ROW_LAND_TOP;
     IF_ROUTE_DISABLED(118) {
         switch (row) {
             case ROW_LAND_TOP:
