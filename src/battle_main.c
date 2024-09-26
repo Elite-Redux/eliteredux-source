@@ -4947,6 +4947,9 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
 	if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_CHROME_COAT, ability))
         speed  = speed * 9 / 10;
 
+    if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_TERASTAL_TREASURE, ability))
+        speed  = speed * 8 / 10;
+
 	if (BATTLER_HAS_ABILITY_FAST(battlerId, ABILITY_LIGHT_METAL, ability))
         speed = (speed * 130) / 100;
 	

@@ -8679,6 +8679,8 @@ extern const u32 gItemIcon_Melmetalite[];
 extern const u32 gItemIconPalette_Melmetalite[];
 extern const u32 gItemIcon_Amphybuzzite[];
 extern const u32 gItemIconPalette_Amphybuzzite[];
+extern const u32 gItemIcon_TeraOrb[];
+extern const u32 gItemIconPalette_TeraOrb[];
 
 extern const u32 gItemIcon_GenericMegaStone[];
 extern const u32 gItemIconPalette_Garchompite_R[];

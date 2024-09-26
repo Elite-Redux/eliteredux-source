@@ -1634,6 +1634,9 @@ const u32 gItemIconPalette_Amphybuzzite[]  = INCBIN_U32("graphics/items/icon_pal
 const u32 gItemIcon_DynamaxOrb[]  = INCBIN_U32("graphics/items/icons/purple_orb.4bpp.lz");
 const u32 gItemIconPalette_DynamaxOrb[]  = INCBIN_U32("graphics/items/icon_palettes/purple_orb.gbapal.lz");
 
+const u32 gItemIcon_TeraOrb[]  = INCBIN_U32("graphics/items/icons/tera_orb.4bpp.lz");
+const u32 gItemIconPalette_TeraOrb[]  = INCBIN_U32("graphics/items/icon_palettes/tera_orb.gbapal.lz");
+
 const u32 gItemIcon_GenericMegaStone[]      = INCBIN_U32("graphics/items/icons/generic_megastone.4bpp.lz");
 const u32 gItemIconPalette_Garchompite_R[]  = INCBIN_U32("graphics/items/icon_palettes/garchompite_r.gbapal.lz");
 const u32 gItemIconPalette_Granbullite[]    = INCBIN_U32("graphics/items/icon_palettes/granbullite.gbapal.lz");

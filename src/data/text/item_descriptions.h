@@ -3551,6 +3551,11 @@ static const u8 sDynamaxOrbDesc[] = _(
     "Eternatus to Primal\n"
     "Revert in battle.");
 
+static const u8 sTeraOrbDesc[] = _(
+    "This stone enables\n"
+    "Terapagos to Primal\n"
+    "Revert in battle.");
+
 static const u8 sMegaBraceletDesc[] = _(
     "Enables {PKMN} holding\n"
     "their Mega Stone to\n"

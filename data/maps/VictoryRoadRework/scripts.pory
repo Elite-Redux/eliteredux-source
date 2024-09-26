@@ -168,6 +168,9 @@ script VictoryRoadRework_EventScript_JumpScareHiker{
         trainerbattle_single(TRAINER_TRENT_5, format("Hey, the kid from Mt Chimney who tanked all my explosions! Want a rematch?"), format("That's us burnt out..."))
     }
 	msgbox(format("Good fight! ...Wait, this is Victory Road? I hiked that far? Well, good luck then! I'm rooting for you, kiddo!"), MSGBOX_NPC) // after player won
+	fadescreen(FADE_TO_BLACK)
+	removeobject(LOCALID_TRENT)
+	fadescreen(FADE_FROM_BLACK)
 	release
 	end
 }

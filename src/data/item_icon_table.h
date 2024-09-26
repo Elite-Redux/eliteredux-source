@@ -642,6 +642,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_AMPHYBUZZITE]   = {gItemIcon_Amphybuzzite, gItemIconPalette_Amphybuzzite},
     [ITEM_MELMETALITE]   = {gItemIcon_Melmetalite, gItemIconPalette_Melmetalite},
     [ITEM_DYNAMAX_ORB]   = {gItemIcon_PurprleOrb, gItemIconPalette_PurprleOrb},
+    [ITEM_TERA_ORB]   = {gItemIcon_TeraOrb, gItemIconPalette_TeraOrb},
     
     [ITEM_HITMONCHANITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_HITMONLEENITE]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonlite},
@@ -693,7 +694,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_FLYGONITE_R_B]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_SNORLAX_ORB]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_VICTINI_ORB]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
-    [ITEM_WIGGLITUFF_ORB]   = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
+    [ITEM_WIGGLITUFF_ORB]   = {gItemIcon_GenericMegaStone, gItemIconPalette_TartApple},
 
     [ITEM_MEGA_BRACELET] = {gItemIcon_MegaBracelet, gItemIconPalette_MegaBracelet},
     [ITEM_ABILITY_CAPSULE] = {gItemIcon_AbilityCapsule, gItemIconPalette_AbilityCapsule},
