@@ -10703,7 +10703,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_FLOWER_TRICK] =
     {
         .effect = EFFECT_MISC_HIT,
-        .power = 60,
+        .power = 70,
         .type = TYPE_GRASS,
         .accuracy = 0,
         .pp = 5,
@@ -10711,7 +10711,6 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_PHYSICAL,
-        .argument = MISC_EFFECT_INCREASED_CRIT_DAMAGE,
         .alwaysCrit = TRUE,
     },
     [MOVE_AQUA_STEP] =
