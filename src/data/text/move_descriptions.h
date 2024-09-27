@@ -271,8 +271,8 @@ static const u8 sMoveTwoLineDescription_MoveCounter[] = _(
     "with double the power.");
 
 static const u8 sMoveTwoLineDescription_MoveSeismicToss[] = _(
-    "Inflicts damage identical\n"
-    "to the user's level.");
+    "Carries the foe into the sky\n"
+    "then deals damage based on level.");
 
 static const u8 sMoveTwoLineDescription_MoveStrength[] = _(
     "A powerful slam attack.\n"
@@ -3779,8 +3779,8 @@ static const u8 sMoveTwoLineDescription_MoveDreamInversion[] = _(
     "hitting sleeping foes hard.");
 
 static const u8 sMoveTwoLineDescription_MoveTeraStarstorm[] = _(
-    "Crystals Strike the,\n"
-    "foes.");
+    "Strikes both foes with a\n"
+    "rain of crystals.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -4817,7 +4817,7 @@ static const u8 sMoveFourLineDescription_MoveDrillPeck[] = _("A corkscrewing\nat
 static const u8 sMoveFourLineDescription_MoveSubmission[] = _("A reckless, full-\nbody throw attack.\n33% recoil damage.");
 static const u8 sMoveFourLineDescription_MoveLowKick[] = _("Inflicts more damage\non heavier foes.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveCounter[] = _("A retaliation move\nthat counters any\nphysical hit with\ndouble the damage.");
-static const u8 sMoveFourLineDescription_MoveSeismicToss[] = _("Damage is the same\nnumber as the user's\nlevel. Throw-based.");
+static const u8 sMoveFourLineDescription_MoveSeismicToss[] = _("Carries the foe into\nthe air on turn one,\nthen deals damage\nbased on level.");
 static const u8 sMoveFourLineDescription_MoveStrength[] = _("The foe is slugged\nat maximum power.\nDrops Defenses.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveAbsorb[] = _("An attack that\nabsorbs half the\ndamage it inflicted\nto restore HP.");
 static const u8 sMoveFourLineDescription_MoveMegaDrain[] = _("A tough attack that\ndrains 75% of the\ndamage it inflicted\nto restore HP.");
@@ -5710,7 +5710,7 @@ static const u8 sMoveFourLineDescription_MoveBravado[] = _("An attack that is\nb
 static const u8 sMoveFourLineDescription_MoveTerrorCharge[] = _("50% chance to bleed.\n50% chance to fear.\nDouble damage\nwhen switching in.");
 static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\nDouble damage if\nthe foe is bleeding.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveDreamInversion[] = _("Deals 2x damage to\nsleeping foes. 10%\nchance for drowsy.\nHits both foes.");
-static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Crystals hit both foes.");
+static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both foes\nwith a rain of crystals.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,

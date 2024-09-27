@@ -6272,7 +6272,16 @@ BattleScript_SkyDrop_TurnTwo:
 	ppreduce
 	clearskydrop BS_TARGET, BattleScript_MoveEnd
 	makevisible BS_TARGET
-	goto BattleScript_HitFromCritCalc
+	jumpifmove MOVE_SEISMIC_TOSS, BattleScript_SkyDrop_SeismicToss
+	critcalc
+	damagecalc
+	adjustdamage
+	goto BattleScript_HitFromAtkAnimation
+BattleScript_SkyDrop_SeismicToss:
+	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
+	calculatesetdamage
+	adjustdamage
+	goto BattleScript_HitFromAtkAnimation
 
 BattleScript_EffectSemiInvulnerable::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_SecondTurnSemiInvulnerable

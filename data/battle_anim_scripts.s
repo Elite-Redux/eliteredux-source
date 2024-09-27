@@ -981,6 +981,7 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_TERROR_CHARGE
 	.4byte Move_NONE @ MOVE_TERROR_LOCKS
 	.4byte Move_NONE @ MOVE_DREAM_INVERSION
+	.4byte Move_NONE @ MOVE_TERA_STARSTORM
 
 	.align 2
 gBattleAnims_StatusConditions::

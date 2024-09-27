@@ -674,7 +674,7 @@ static const u8 sAbilitySteelBeetleDescription[] = _("Raging Boxer + Pollinate."
 static const u8 sAbilityFromTheShadowsDescription[] = _("Attacks trap and have a 20%\nflinch chance when moving first.");
 static const u8 sAbilityRagePointDescription[] = _("Gets a 1.5x boost while statused.\nRaises offenses when crit.");
 static const u8 sAbilityHotCoalsDescription[] = _("Sets a trap that burns the next\nfoe that switches in.");
-static const u8 sAbilityTerastalTreasureDescription[] = _("Increases defenses by 40%,\nbut lowers speed by 20%.");
+static const u8 sAbilityTerastalTreasureDescription[] = _("Reduces damage taken by 40%,\nbut lowers speed by 20%.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {

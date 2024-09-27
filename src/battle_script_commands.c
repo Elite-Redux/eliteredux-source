@@ -13680,6 +13680,7 @@ static void Cmd_calculatesetdamage(void)
     //Calculate Base Damage
     switch(gBattleMoves[gCurrentMove].effect)
     {
+        case EFFECT_SKY_DROP:
         case EFFECT_LEVEL_DAMAGE:
             //Damage is the level of the Pokemon using the move
             baseDamage = gBattleMons[gBattlerAttacker].level;

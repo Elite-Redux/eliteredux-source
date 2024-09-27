@@ -962,6 +962,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_TERROR_CHARGE] = _("TerrorCharge"),
     [MOVE_TERROR_LOCKS] = _("Terror Locks"),
     [MOVE_DREAM_INVERSION] = _("DreamInversn"),
+    [MOVE_TERA_STARSTORM] = _("TeraStarstrm"),
 };
 
 // Second table with longer move names for places where they fit.

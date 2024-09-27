@@ -14252,8 +14252,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
 
         case ABILITY_TERASTAL_TREASURE:
-            if (IS_MOVE_PHYSICAL(move)) MUL(.6);
-            if (IS_MOVE_SPECIAL(move)) MUL(.6);
+            MUL(.6);
             return;
         
         case ABILITY_ULTRA_INSTINCT:
