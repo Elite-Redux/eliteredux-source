@@ -40927,7 +40927,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_GOOSCHASE] = // name is wip
+[SPECIES_GOOSCHASE] =
     {
     .baseHP        = 98,
     .baseAttack    = 120,
@@ -40948,7 +40948,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_FIELD,
     .eggGroup2 = EGG_GROUP_FIELD,
     .abilities      = {ABILITY_RESTRAINING_ORDER, ABILITY_INTIMIDATE, ABILITY_SCARE},
-    .innates = {ABILITY_STAKEOUT, ABILITY_EXPLOIT_WEAKNESS, ABILITY_SUBDUE},
+    .innates = {ABILITY_STAKEOUT, ABILITY_STRONG_JAW, ABILITY_SUBDUE},
     .bodyColor = BODY_COLOR_BROWN,
     .noFlip = FALSE,
     .tier = 0,
