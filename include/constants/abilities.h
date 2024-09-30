@@ -229,7 +229,7 @@
 #define ABILITY_COMATOSE 213 // Can move, but is always asleep. Immune to status conditions.
 #define ABILITY_QUEENLY_MAJESTY 214 // Protects itself and ally from priority moves.
 #define ABILITY_INNARDS_OUT 215 // If KO'd, deals as much damage as what the fatal attack dealt.
-#define ABILITY_DANCER 216 // Copies dance moves used by anyone else on the field.
+#define ABILITY_DANCER 216 // Copies dance moves used by others.
 #define ABILITY_BATTERY 217 // Grants a 1.3x power boost to ally's Special attacks.
 #define ABILITY_FLUFFY 218 // Takes 1/2 dmg from contact moves but Fire moves hurt it 2x more.
 #define ABILITY_DAZZLING 219 // Protects itself and ally from priority moves.
@@ -726,11 +726,13 @@
 #define ABILITY_HOT_COALS 704 // Sets a trap that burns the next foe that switches in.
 #define ABILITY_TERASTAL_TREASURE 705 // Reduces damage taken by 40%, but lowers speed by 20%.
 #define ABILITY_SHOCKING_MAW 706 // Strong Jaw + Bite moves have 50% paralysis chance.
-#define ABILITY_GLEAM_EYES 707 // Scare + Frisk.
+#define ABILITY_GLEAM_EYES 707 // Frisk + Scare.
 #define ABILITY_ROUSED_FANGS 708 // Biting moves use SpAtk and deal 50% more damage.
 #define ABILITY_DREAM_STATE 709 // Immune to critical hits. Takes 20% less damage from all attacks.
+#define ABILITY_DREAM_WHIMSY 710 // Uses Yawn on switch-in.
+#define ABILITY_LUNAR_AFFINITY 711 // Copies lunar moves used by others.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DREAM_STATE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_LUNAR_AFFINITY + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
