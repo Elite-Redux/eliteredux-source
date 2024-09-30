@@ -9443,7 +9443,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         //Shocking Jaws
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SHOCKING_JAWS)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SHOCKING_JAWS) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SHOCKING_MAW)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
              && CanBeParalyzed(gBattlerAttacker, gBattlerTarget)
 			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
@@ -13767,6 +13767,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_STRONG_JAW:
         case ABILITY_DEVOURER:
         case ABILITY_MIND_CRUSH:
+        case ABILITY_SHOCKING_MAW:
             if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.5);
             return;
 

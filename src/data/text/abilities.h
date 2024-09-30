@@ -675,6 +675,8 @@ static const u8 sAbilityFromTheShadowsDescription[] = _("Attacks trap and have a
 static const u8 sAbilityRagePointDescription[] = _("Gets a 1.5x boost while statused.\nRaises offenses when crit.");
 static const u8 sAbilityHotCoalsDescription[] = _("Sets a trap that burns the next\nfoe that switches in.");
 static const u8 sAbilityTerastalTreasureDescription[] = _("Reduces damage taken by 40%,\nbut lowers speed by 20%.");
+static const u8 sAbilityShockingMawDescription[] = _("Strong Jaw + Bite moves have\n50% paralysis chance.");
+static const u8 sAbilityGleamEyesDescription[] = _("Frisk + Scare.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1246,7 +1248,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_VENGEFUL_SPIRIT] = _("Vengeful Spirit"),
     [ABILITY_CUD_CHEW] = _("Cud Chew"),
     [ABILITY_ARMOR_TAIL] = _("Armor Tail"),
-    [ABILITY_MIND_CRUSH] = _("Mind Crush"),
+    [ABILITY_MIND_CRUSH] = _("Mind Crunch"),
     [ABILITY_SUPREME_OVERLORD] = _("Supreme Overlord"),
     [ABILITY_ILL_WILL] = _("Ill Will"),
     [ABILITY_FIRE_SCALES] = _("Fire Scales"),
@@ -1384,6 +1386,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_RAGE_POINT] = _("Rage Point"),
     [ABILITY_HOT_COALS] = _("Hot Coals"),
     [ABILITY_TERASTAL_TREASURE] = _("Terastal Treasure"),
+    [ABILITY_SHOCKING_MAW] = _("Shocking Maw"),
+    [ABILITY_GLEAM_EYES] = _("Gleam Eyes"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2094,4 +2098,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_RAGE_POINT] = sAbilityRagePointDescription,
     [ABILITY_HOT_COALS] = sAbilityHotCoalsDescription,
     [ABILITY_TERASTAL_TREASURE] = sAbilityTerastalTreasureDescription,
+    [ABILITY_SHOCKING_MAW] = sAbilityShockingMawDescription,
+    [ABILITY_GLEAM_EYES] = sAbilityGleamEyesDescription,
 };

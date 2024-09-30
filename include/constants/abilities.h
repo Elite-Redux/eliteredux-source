@@ -725,8 +725,10 @@
 #define ABILITY_RAGE_POINT 703 // Gets a 1.5x boost while statused. Raises offenses when crit.
 #define ABILITY_HOT_COALS 704 // Sets a trap that burns the next foe that switches in.
 #define ABILITY_TERASTAL_TREASURE 705 // Reduces damage taken by 40%, but lowers speed by 20%.
+#define ABILITY_SHOCKING_MAW 706 // Strong Jaw + Bite moves have 50% paralysis chance.
+#define ABILITY_GLEAM_EYES 707 // Scare + Frisk.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_TERASTAL_TREASURE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_GLEAM_EYES + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
