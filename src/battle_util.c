@@ -1139,6 +1139,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_HUGE_WINGS] = 1,
     [ABILITY_PATCHWORK] = 1,
     [ABILITY_TERASTAL_TREASURE] = 1,
+    [ABILITY_DREAM_STATE] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
