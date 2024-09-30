@@ -1930,6 +1930,6 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_BRAVADO] = _("Bravado"),
     [MOVE_TERROR_CHARGE] = _("Terror Charge"),
     [MOVE_TERROR_LOCKS] = _("Terror Locks"),
-    [MOVE_DREAM_INVERSION] = _("Dream Inversion"),
+    [MOVE_DREAM_INVERSION] = _("Dream Invasion"),
     [MOVE_TERA_STARSTORM] = _("Tera Starstorm"),
 };
