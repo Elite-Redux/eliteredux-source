@@ -1283,6 +1283,10 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_AEGISLASH_BLADE_REDUX] = _("Aegislash"),
 
     [SPECIES_RIBOMBEE_MEGA] = _("Ribombee"),
+
+    [SPECIES_BUBBLEO]      = _("Bubbleo"),
+    [SPECIES_HYDROAR]      = _("Hydroar"),
+    [SPECIES_HYDROAR_F]      = _("Hydroar"),
     
     // Megas
     [SPECIES_VENUSAUR_MEGA] = _("Venusaur"),

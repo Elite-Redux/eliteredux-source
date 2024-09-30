@@ -457,6 +457,21 @@ static const union AnimCmd sAnim_FROSLASS_REDUX_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_BUBBLEO_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_HYDROAR_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_HYDROAR_F_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_CALYREX_CLOUD_RIDER_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -1182,6 +1197,21 @@ static const union AnimCmd *const sAnims_POLARTIC[] ={
 static const union AnimCmd *const sAnims_POLARTIC_BLUEMOON[] ={
     sAnim_GeneralFrame0,
     sAnim_POLARTIC_BLUEMOON_1,
+};
+
+static const union AnimCmd *const sAnims_BUBBLEO[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BUBBLEO_1,
+};
+
+static const union AnimCmd *const sAnims_HYDROAR[] ={
+    sAnim_GeneralFrame0,
+    sAnim_HYDROAR_1,
+};
+
+static const union AnimCmd *const sAnims_HYDROAR_F[] ={
+    sAnim_GeneralFrame0,
+    sAnim_HYDROAR_F_1,
 };
 
 static const union AnimCmd *const sAnims_CALYREX_CLOUD_RIDER[] ={
@@ -20990,6 +21020,9 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(HYDREIGON_REDUX_MEGA),
     ANIM_CMD(SCIZOR_REDUX),
     ANIM_CMD(TINKATON_MEGA),
+    ANIM_CMD(BUBBLEO),
+    ANIM_CMD(HYDROAR),
+    ANIM_CMD(HYDROAR_F),
     ANIM_CMD(KARTANA_FALLEN),
     ANIM_CMD(KINGAMBIT_REDUX_MEGA),
     ANIM_CMD(YVELTAL_MEGA),

@@ -1731,6 +1731,9 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA] = sUrshifuRapidStrikeStyleLevelUpLearnset,
     [SPECIES_BEWARDEN] = sBewearReduxLevelUpLearnset,
     [SPECIES_MELMETAL_MEGA] = sMelmetalLevelUpLearnset,
+    [SPECIES_BUBBLEO] = sBubbleoLevelUpLearnset,
+    [SPECIES_HYDROAR] = sHydroarLevelUpLearnset,
+    [SPECIES_HYDROAR_F] = sHydroarLevelUpLearnset,
 
     //PARTNER POKEMON
     
