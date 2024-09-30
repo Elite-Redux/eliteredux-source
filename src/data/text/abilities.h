@@ -1389,6 +1389,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TERASTAL_TREASURE] = _("Terastal Treasure"),
     [ABILITY_SHOCKING_MAW] = _("Shocking Maw"),
     [ABILITY_GLEAM_EYES] = _("Gleam Eyes"),
+    [ABILITY_ROUSED_FANGS] = _("Roused Fangs"),
+    [ABILITY_DREAM_STATE] = _("Dream State"),
     [ABILITY_DREAM_WHIMSY] = _("Dream Whimsy"),
 };
 
@@ -2102,5 +2104,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TERASTAL_TREASURE] = sAbilityTerastalTreasureDescription,
     [ABILITY_SHOCKING_MAW] = sAbilityShockingMawDescription,
     [ABILITY_GLEAM_EYES] = sAbilityGleamEyesDescription,
+    [ABILITY_ROUSED_FANGS] = sAbilityMindCrushDescription,
+    [ABILITY_DREAM_STATE] = sAbilityBattleArmorDescription,
     [ABILITY_DREAM_WHIMSY] = sAbilityDreamWhimsyDescription,
 };
