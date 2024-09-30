@@ -13767,6 +13767,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_STRONG_JAW:
         case ABILITY_DEVOURER:
         case ABILITY_MIND_CRUSH:
+        case ABILITY_ROUSED_FANGS:
         case ABILITY_SHOCKING_MAW:
             if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.5);
             return;
@@ -13953,7 +13954,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_IRON_BARRAGE:
         case ABILITY_MASTER_HAND:
         case ABILITY_MEGA_LAUNCHER:
-            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.5);
+            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
             return;
         
         case ABILITY_HUSTLE:
@@ -14241,6 +14242,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_SHELL_ARMOR:
         case ABILITY_BATTLE_ARMOR:
+        case ABILITY_DREAM_STATE:
             MUL(.8);
             return;
         
@@ -14883,6 +14885,10 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             atkStatToUse = STAT_SPEED;
         }
         else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MIND_CRUSH) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        {
+            atkStatToUse = STAT_SPATK;
+        }
+        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ROUSED_FANGS) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         {
             atkStatToUse = STAT_SPATK;
         }

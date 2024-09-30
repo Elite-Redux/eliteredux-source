@@ -727,8 +727,10 @@
 #define ABILITY_TERASTAL_TREASURE 705 // Reduces damage taken by 40%, but lowers speed by 20%.
 #define ABILITY_SHOCKING_MAW 706 // Strong Jaw + Bite moves have 50% paralysis chance.
 #define ABILITY_GLEAM_EYES 707 // Scare + Frisk.
+#define ABILITY_ROUSED_FANGS 708 // Biting moves use SpAtk and deal 50% more damage.
+#define ABILITY_DREAM_STATE 709 // Immune to critical hits. Takes 20% less damage from all attacks.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_GLEAM_EYES + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DREAM_STATE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

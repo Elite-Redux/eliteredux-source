@@ -677,6 +677,8 @@ static const u8 sAbilityHotCoalsDescription[] = _("Sets a trap that burns the ne
 static const u8 sAbilityTerastalTreasureDescription[] = _("Reduces damage taken by 40%,\nbut lowers speed by 20%.");
 static const u8 sAbilityShockingMawDescription[] = _("Strong Jaw + Bite moves have\n50% paralysis chance.");
 static const u8 sAbilityGleamEyesDescription[] = _("Frisk + Scare.");
+static const u8 sAbilityRousedFangsDescription[] = _("Biting moves use SpAtk and\ndeal 50% more damage.");
+static const u8 sAbilityDreamStateDescription[] = _("Immune to critical hits. Takes\n20% less damage from all attacks.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1388,6 +1390,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TERASTAL_TREASURE] = _("Terastal Treasure"),
     [ABILITY_SHOCKING_MAW] = _("Shocking Maw"),
     [ABILITY_GLEAM_EYES] = _("Gleam Eyes"),
+    [ABILITY_ROUSED_FANGS] = _("Roused Fangs"),
+    [ABILITY_DREAM_STATE] = _("Dream State"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2100,4 +2104,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TERASTAL_TREASURE] = sAbilityTerastalTreasureDescription,
     [ABILITY_SHOCKING_MAW] = sAbilityShockingMawDescription,
     [ABILITY_GLEAM_EYES] = sAbilityGleamEyesDescription,
+    [ABILITY_ROUSED_FANGS] = sAbilityRousedFangsDescription,
+    [ABILITY_DREAM_STATE] = sAbilityDreamStateDescription,
 };
