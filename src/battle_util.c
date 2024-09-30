@@ -6235,6 +6235,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Web Spinner
         effect += UseEntryMove(battler, ABILITY_DRACO_MORALE, MOVE_DRAGON_CHEER, 0);
 
+        // Dream Whimsy
+        effect += UseEntryMove(battler, ABILITY_DREAM_WHIMSY, MOVE_YAWN, 0);
+
         // Wishmaker
         if (CheckAndSetSwitchInAbility(battler, ABILITY_WISHMAKER)) {
             u8 counter = GetSingleUseAbilityCounter(battler, ABILITY_WISHMAKER) + 1;
