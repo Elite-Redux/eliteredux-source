@@ -4859,7 +4859,7 @@ const struct MonCoords gMonBackPicCoords[] =
 	   [SPECIES_SNEASLER] =
     {
         .size = 0,
-        .y_offset =  6
+        .y_offset =  0
     },
 	[SPECIES_OVERQWIL] =
     {
@@ -6324,12 +6324,12 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_BASCULEGION] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  8
     },
     [SPECIES_BASCULEGION_F] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  8
     },
     [SPECIES_VENUSAUR_MEGA] =
     {
