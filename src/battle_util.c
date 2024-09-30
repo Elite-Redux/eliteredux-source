@@ -9811,6 +9811,12 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if (UseOutOfTurnAttack(battler, target, ABILITY_PARROTING, gCurrentMove, 0))
                 return TRUE;
         }
+        else if (BattlerHasAbility(battler, battler, ABILITY_LUNAR_AFFINITY) && gBattleMoves[gCurrentMove].lunar)
+        {
+            u8 target = GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker) ? gBattlerTarget : BATTLE_OPPOSITE(battler);
+            if (UseOutOfTurnAttack(battler, target, ABILITY_LUNAR_AFFINITY, gCurrentMove, 0))
+                return TRUE;
+        }
         else if(BATTLER_HAS_ABILITY(battler, ABILITY_RETRIBUTION_BLOW)){
             if(GetBattlerSide(battler) != GetBattlerSide(gBattlerAttacker)
                 && IsBattlerAlive(gBattlerAttacker)
