@@ -14893,6 +14893,10 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         {
             atkStatToUse = STAT_SPATK;
         }
+        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PONY_POWER) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        {
+            atkStatToUse = STAT_SPATK;
+        }
     }
 
     atkStat = CalculateStat(statBattler, atkStatToUse, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
