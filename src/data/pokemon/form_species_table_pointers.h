@@ -1028,6 +1028,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_MELMETAL_MEGA] = sMelmetalFormSpeciesIdTable,
     [SPECIES_MELMETAL] = sMelmetalFormSpeciesIdTable,
 
+    [SPECIES_HYDROAR] = sHydroarFormSpeciesIdTable,
+
     [SPECIES_AMAURA] = sAmauraFormSpeciesIdTable,
     [SPECIES_AURORUS] = sAurorusFormSpeciesIdTable,
 

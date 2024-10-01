@@ -1277,6 +1277,8 @@ const u8 *const gMonIconTable[] =
     [SPECIES_GIMMIGHOUL_ROAMING] = gMonIcon_GimmighoulRoaming,
     [SPECIES_URSHIFU_MEGA] = gMonIcon_UrshifuMega,
     [SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA] = gMonIcon_UrshifuRapidStrikeStyleMega,
+    [SPECIES_BUBBLEO] = gMonIcon_Bubbleo,
+    [SPECIES_HYDROAR] = gMonIcon_Hydroar,
     [SPECIES_CASTFORM_SANDY] = gMonIcon_Castform_Sandy,
 
     [SPECIES_LARVITAR_REDUX]       = gMonIcon_Larvitar_Redux,
@@ -3367,6 +3369,9 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_TYRANITAR_MEGA_REDUX] = 0,
     [SPECIES_LUCARIO_MEGA_Y] = 0,
     [SPECIES_TURTWIG_REDUX] = 0,
+    [SPECIES_BUBBLEO] = 0,
+    [SPECIES_HYDROAR] = 0,
+    [SPECIES_HYDROAR_F] = 0,
     [SPECIES_EGG] = 1,
 };
 

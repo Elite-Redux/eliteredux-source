@@ -1971,6 +1971,11 @@ static const u16 sMelmetalFormSpeciesIdTable[] = {
     SPECIES_MELMETAL_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sHydroarFormSpeciesIdTable[] = {
+    SPECIES_HYDROAR,
+    SPECIES_HYDROAR_F,
+    FORM_SPECIES_END,
+};
 static const u16 sAmauraFormSpeciesIdTable[] = {
     SPECIES_AMAURA,
     SPECIES_AMAURA_PARTNER,

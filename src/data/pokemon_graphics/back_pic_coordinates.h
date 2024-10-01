@@ -5921,6 +5921,21 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_BUBBLEO] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_HYDROAR] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
+    [SPECIES_HYDROAR_F] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_CALYREX_CLOUD_RIDER] =
     {
         .size = 0,

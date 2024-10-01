@@ -29096,6 +29096,16 @@ static const struct LevelUpMove sKingambit_ReduxLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sBubbleoLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(1, MOVE_TACKLE),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sHydroarLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(1, MOVE_TACKLE),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sLuxrayReduxLevelUpLearnset[] = {
 	LEVEL_UP_MOVE( 0, MOVE_NIGHT_SLASH),
     LEVEL_UP_MOVE( 1, MOVE_ICE_FANG),

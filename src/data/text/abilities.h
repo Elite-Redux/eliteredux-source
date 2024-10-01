@@ -205,7 +205,7 @@ static const u8 sAbilityCorrosionDescription[] = _("Steel-types take Supereffect
 static const u8 sAbilityComatoseDescription[] = _("Can move, but is always asleep.\nImmune to status conditions.");
 static const u8 sAbilityQueenlyMajestyDescription[] = _("Protects itself and ally from\npriority moves.");
 static const u8 sAbilityInnardsOutDescription[] = _("If KO'd, deals as much damage as\nwhat the fatal attack dealt.");
-static const u8 sAbilityDancerDescription[] = _("Copies dance moves used by\nanyone else on the field.");
+static const u8 sAbilityDancerDescription[] = _("Copies dance moves used by\nothers.");
 static const u8 sAbilityBatteryDescription[] = _("Grants a 1.3x power boost to\nally's Special attacks.");
 static const u8 sAbilityFluffyDescription[] = _("Takes 1/2 dmg from contact moves\nbut Fire moves hurt it 2x more.");
 static const u8 sAbilitySoulHeartDescription[] = _("KOs dealt anywhere on the field\nraise Sp. Atk by one stage.");
@@ -677,6 +677,8 @@ static const u8 sAbilityHotCoalsDescription[] = _("Sets a trap that burns the ne
 static const u8 sAbilityTerastalTreasureDescription[] = _("Reduces damage taken by 40%,\nbut lowers speed by 20%.");
 static const u8 sAbilityShockingMawDescription[] = _("Strong Jaw + Bite moves have\n50% paralysis chance.");
 static const u8 sAbilityGleamEyesDescription[] = _("Frisk + Scare.");
+static const u8 sAbilityDreamWhimsyDescription[] = _("Uses Yawn on switch-in.");
+static const u8 sAbilityLunarAffinityDescription[] = _("Copies lunar moves used by\nothers.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1388,6 +1390,10 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TERASTAL_TREASURE] = _("Terastal Treasure"),
     [ABILITY_SHOCKING_MAW] = _("Shocking Maw"),
     [ABILITY_GLEAM_EYES] = _("Gleam Eyes"),
+    [ABILITY_ROUSED_FANGS] = _("Roused Fangs"),
+    [ABILITY_DREAM_STATE] = _("Dream State"),
+    [ABILITY_DREAM_WHIMSY] = _("Dream Whimsy"),
+    [ABILITY_LUNAR_AFFINITY] = _("Lunar Affinity"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2100,4 +2106,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TERASTAL_TREASURE] = sAbilityTerastalTreasureDescription,
     [ABILITY_SHOCKING_MAW] = sAbilityShockingMawDescription,
     [ABILITY_GLEAM_EYES] = sAbilityGleamEyesDescription,
+    [ABILITY_ROUSED_FANGS] = sAbilityMindCrushDescription,
+    [ABILITY_DREAM_STATE] = sAbilityBattleArmorDescription,
+    [ABILITY_DREAM_WHIMSY] = sAbilityDreamWhimsyDescription,
+    [ABILITY_LUNAR_AFFINITY] = sAbilityLunarAffinityDescription,
 };

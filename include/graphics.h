@@ -11146,6 +11146,21 @@ extern const u32 gMonBackPic_MelmetalMega[];
 extern const u32 gMonPalette_MelmetalMega[];
 extern const u32 gMonShinyPalette_MelmetalMega[];
 extern const u8  gMonIcon_MelmetalMega[];
+extern const u32 gMonFrontPic_Bubbleo[];
+extern const u32 gMonBackPic_Bubbleo[];
+extern const u32 gMonPalette_Bubbleo[];
+extern const u32 gMonShinyPalette_Bubbleo[];
+extern const u8  gMonIcon_Bubbleo[];
+extern const u32 gMonFrontPic_Hydroar[];
+extern const u32 gMonBackPic_Hydroar[];
+extern const u32 gMonPalette_Hydroar[];
+extern const u32 gMonShinyPalette_Hydroar[];
+extern const u8  gMonIcon_Hydroar[];
+extern const u32 gMonFrontPic_HydroarF[];
+extern const u32 gMonBackPic_HydroarF[];
+extern const u32 gMonPalette_HydroarF[];
+extern const u32 gMonShinyPalette_HydroarF[];
+extern const u8  gMonIcon_HydroarF[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

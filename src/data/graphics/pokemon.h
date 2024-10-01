@@ -8009,6 +8009,24 @@ const u32 gMonPalette_MelmetalMega[]           = INCBIN_U32("graphics/pokemon/me
 const u32 gMonShinyPalette_MelmetalMega[]      = INCBIN_U32("graphics/pokemon/melmetal/mega/shiny.gbapal.lz");
 const u8  gMonIcon_MelmetalMega[]              = INCBIN_U8("graphics/pokemon/melmetal/mega/icon.4bpp");
 
+const u32 gMonFrontPic_Bubbleo[]          = INCBIN_U32("graphics/pokemon/bubbleo/front.4bpp.lz");
+const u32 gMonBackPic_Bubbleo[]           = INCBIN_U32("graphics/pokemon/bubbleo/back.4bpp.lz");
+const u32 gMonPalette_Bubbleo[]           = INCBIN_U32("graphics/pokemon/bubbleo/normal.gbapal.lz");
+const u32 gMonShinyPalette_Bubbleo[]      = INCBIN_U32("graphics/pokemon/bubbleo/shiny.gbapal.lz");
+const u8  gMonIcon_Bubbleo[]              = INCBIN_U8("graphics/pokemon/bubbleo/icon.4bpp");
+
+const u32 gMonFrontPic_Hydroar[]          = INCBIN_U32("graphics/pokemon/hydroar/front.4bpp.lz");
+const u32 gMonBackPic_Hydroar[]           = INCBIN_U32("graphics/pokemon/hydroar/back.4bpp.lz");
+const u32 gMonPalette_Hydroar[]           = INCBIN_U32("graphics/pokemon/hydroar/normal.gbapal.lz");
+const u32 gMonShinyPalette_Hydroar[]      = INCBIN_U32("graphics/pokemon/hydroar/shiny.gbapal.lz");
+const u8  gMonIcon_Hydroar[]              = INCBIN_U8("graphics/pokemon/hydroar/icon.4bpp");
+
+const u32 gMonFrontPic_HydroarF[]          = INCBIN_U32("graphics/pokemon/hydroar/female/front.4bpp.lz");
+const u32 gMonBackPic_HydroarF[]           = INCBIN_U32("graphics/pokemon/hydroar/female/back.4bpp.lz");
+const u32 gMonPalette_HydroarF[]           = INCBIN_U32("graphics/pokemon/hydroar/female/normal.gbapal.lz");
+const u32 gMonShinyPalette_HydroarF[]      = INCBIN_U32("graphics/pokemon/hydroar/female/shiny.gbapal.lz");
+const u8  gMonIcon_HydroarF[]              = INCBIN_U8("graphics/pokemon/hydroar/female/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

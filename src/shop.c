@@ -329,11 +329,6 @@ static void SetShopMenuCallback(void (* callback)(void))
 
 // 0 Badges
 static const u16 sAdoptionCenterInventory_ZeroBadges[] = {
-    SPECIES_TURTWIG_REDUX, //testing purposes
-    SPECIES_CHIMCHAR_REDUX, //testing purposes
-    SPECIES_PIPLUP_REDUX, //testing purposes
-    SPECIES_CLEFFA_REDUX, //testing purposes
-    SPECIES_CORM, //testing purposes
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
@@ -342,9 +337,6 @@ static const u16 sAdoptionCenterInventory_ZeroBadges[] = {
 
 // 1 Badge
 static const u16 sAdoptionCenterInventory_OneBadges[] = {
-    SPECIES_TURTWIG_REDUX, //testing purposes
-    SPECIES_CHIMCHAR_REDUX, //testing purposes
-    SPECIES_PIPLUP_REDUX, //testing purposes
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
@@ -361,10 +353,10 @@ static const u16 sAdoptionCenterInventory_OneBadges[] = {
 
 // 2 Badges
 static const u16 sAdoptionCenterInventory_TwoBadges[] = {
-    SPECIES_BOUNSWEET_REDUX, //testing purposes
     SPECIES_TURTWIG_REDUX, //testing purposes
     SPECIES_CHIMCHAR_REDUX, //testing purposes
     SPECIES_PIPLUP_REDUX, //testing purposes
+    SPECIES_BOUNSWEET_REDUX, //testing purposes
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes

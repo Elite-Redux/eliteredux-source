@@ -2906,6 +2906,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_USER,
         .flags = FLAG_SNATCH_AFFECTED,
         .split = SPLIT_STATUS,
+        .lunar = TRUE,
     },
     [MOVE_HIDDEN_POWER] =
     {
@@ -5663,6 +5664,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_USER,
         .flags = FLAG_SNATCH_AFFECTED | FLAG_DANCE,
         .split = SPLIT_STATUS,
+        .lunar = TRUE,
     },
     [MOVE_CRUSH_GRIP] =
     {
@@ -7197,6 +7199,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .lunar = TRUE,
     },
     [MOVE_BOOMBURST] =
     {
@@ -8211,6 +8214,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST | FLAG_TARGET_ABILITY_IGNORED,
         .split = SPLIT_SPECIAL,
+        .lunar = TRUE,
     },
     [MOVE_TEARFUL_LOOK] =
     {
@@ -11016,6 +11020,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
         .everyOtherTurn = TRUE,
+        .lunar = TRUE,
     },
     [MOVE_AXE_KICK] =
     {
@@ -11294,6 +11299,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
         .split = SPLIT_STATUS,
+        .lunar = TRUE,
     },
     [MOVE_CHLOROBLAST] =
     {

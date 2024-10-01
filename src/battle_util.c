@@ -1139,6 +1139,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_HUGE_WINGS] = 1,
     [ABILITY_PATCHWORK] = 1,
     [ABILITY_TERASTAL_TREASURE] = 1,
+    [ABILITY_DREAM_STATE] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -6235,6 +6236,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Web Spinner
         effect += UseEntryMove(battler, ABILITY_DRACO_MORALE, MOVE_DRAGON_CHEER, 0);
 
+        // Dream Whimsy
+        effect += UseEntryMove(battler, ABILITY_DREAM_WHIMSY, MOVE_YAWN, 0);
+
         // Wishmaker
         if (CheckAndSetSwitchInAbility(battler, ABILITY_WISHMAKER)) {
             u8 counter = GetSingleUseAbilityCounter(battler, ABILITY_WISHMAKER) + 1;
@@ -9805,6 +9809,12 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         {
             u8 target = GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker) ? gBattlerTarget : BATTLE_OPPOSITE(battler);
             if (UseOutOfTurnAttack(battler, target, ABILITY_PARROTING, gCurrentMove, 0))
+                return TRUE;
+        }
+        else if (BattlerHasAbility(battler, battler, ABILITY_LUNAR_AFFINITY) && gBattleMoves[gCurrentMove].lunar)
+        {
+            u8 target = GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker) ? gBattlerTarget : BATTLE_OPPOSITE(battler);
+            if (UseOutOfTurnAttack(battler, target, ABILITY_LUNAR_AFFINITY, gCurrentMove, 0))
                 return TRUE;
         }
         else if(BATTLER_HAS_ABILITY(battler, ABILITY_RETRIBUTION_BLOW)){
@@ -13767,6 +13777,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_STRONG_JAW:
         case ABILITY_DEVOURER:
         case ABILITY_MIND_CRUSH:
+        case ABILITY_ROUSED_FANGS:
         case ABILITY_SHOCKING_MAW:
             if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.5);
             return;
@@ -13953,7 +13964,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_IRON_BARRAGE:
         case ABILITY_MASTER_HAND:
         case ABILITY_MEGA_LAUNCHER:
-            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.5);
+            if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
             return;
         
         case ABILITY_HUSTLE:
@@ -14241,6 +14252,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_SHELL_ARMOR:
         case ABILITY_BATTLE_ARMOR:
+        case ABILITY_DREAM_STATE:
             MUL(.8);
             return;
         
@@ -14883,6 +14895,10 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             atkStatToUse = STAT_SPEED;
         }
         else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MIND_CRUSH) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        {
+            atkStatToUse = STAT_SPATK;
+        }
+        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ROUSED_FANGS) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         {
             atkStatToUse = STAT_SPATK;
         }

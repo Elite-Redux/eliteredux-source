@@ -9558,7 +9558,7 @@ const struct Item gItems[] =
 
     [ITEM_VICTINI_ORB] = 
     {
-        .name = _("Victini Orb"),
+        .name = _("Lucky Orb"),
         .itemId = ITEM_VICTINI_ORB,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,

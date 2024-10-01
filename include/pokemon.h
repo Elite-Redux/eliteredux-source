@@ -243,6 +243,7 @@ struct BattleMove
     u8 doubleDamageVsMega:1;
     MoveSplitType splitFlag:3;
     u8 everyOtherTurn:1;
+    u8 lunar:1;
 };
 
 struct SpindaSpot
