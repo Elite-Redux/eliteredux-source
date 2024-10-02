@@ -30190,12 +30190,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_HATTERENE] =
     {
-    .baseHP        =  57,
-    .baseAttack    =  90,
-    .baseDefense   =  95,
-    .baseSpeed     =  29,
-    .baseSpAttack  =  136,
-    .baseSpDefense =  103,
+    .baseHP         = 57,
+    .baseAttack     = 90,
+    .baseDefense    = 95,
+    .baseSpeed      = 29,
+    .baseSpAttack   = 136,
+    .baseSpDefense  = 103,
     .type1 = TYPE_PSYCHIC,
     .type2 = TYPE_FAIRY,
     .catchRate = 255,
