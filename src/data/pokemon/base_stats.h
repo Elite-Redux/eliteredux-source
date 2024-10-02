@@ -1427,12 +1427,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_NIDOKING_MEGA] =
     {
-    .baseHP        = 81,
-    .baseAttack    = 142,
-    .baseDefense   = 92,
-    .baseSpeed     = 110,
-    .baseSpAttack  = 85,
-    .baseSpDefense = 95,
+    .baseHP         = 81,
+    .baseAttack     = 142,
+    .baseDefense    = 92,
+    .baseSpeed      = 110,
+    .baseSpAttack   = 85,
+    .baseSpDefense  = 95,
     .type1 = TYPE_POISON,
     .type2 = TYPE_GROUND,
     .catchRate = 255,
@@ -1729,12 +1729,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_WIGGLYTUFF_PRIMAL] =
     {
-    .baseHP        = 120,
-    .baseAttack    = 90,
-    .baseDefense   = 65,
-    .baseSpeed     = 90,
-    .baseSpAttack  = 155,
-    .baseSpDefense = 115,
+    .baseHP         = 120,
+    .baseAttack     = 90,
+    .baseDefense    = 65,
+    .baseSpeed      = 90,
+    .baseSpAttack   = 155,
+    .baseSpDefense  = 115,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_FAIRY,
     .catchRate = 255,
@@ -8052,7 +8052,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_AMORPHOUS,
     .eggGroup2 = EGG_GROUP_AMORPHOUS,
     .abilities = {ABILITY_SIMPLE, ABILITY_FLAME_BODY, ABILITY_TURBOBLAZE},
-    .innates = {ABILITY_MOLTEN_DOWN, ABILITY_FLASH_FIRE, ABILITY_BLAZE},
+    .innates        = {ABILITY_MOLTEN_DOWN, ABILITY_SUPER_HOT_GOO, ABILITY_BLAZE},
     .bodyColor = BODY_COLOR_RED,
     .noFlip = FALSE,
     .tier = 3,
