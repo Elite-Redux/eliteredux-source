@@ -329,7 +329,7 @@ static const u8 sAbilityPoisonAbsorbDescription[] = _("Heals 25% of max HP when 
 static const u8 sAbilityTwistedDimensionDescription[] = _("Sets up Trick Room on\nentry, lasts 3 turns.");
 static const u8 sAbilityMultiHeadedDescription[] = _("Hits as many times,\nas it has heads.");
 static const u8 sAbilityNorthWindDescription[] = _("3 turns Aurora Veil on entry.\nImmune to Hail damage.");
-static const u8 sAbilityOverchargeDescription[] = _("Electric does 2x dmg to Electric.\nCan paralyze Electric.");
+static const u8 sAbilityOverchargeDescription[] = _("Electric is super effective vs Electric.\nCan paralyze Electric.");
 static const u8 sAbilityViolentRushDescription[] = _("Boosts Speed by 50% + Attack\nby 20% on first turn.");
 static const u8 sAbilityFlamingSoulDescription[] = _("At full HP, gives +1 priority to\nthis Pokémon's Fire-type moves.");
 static const u8 sAbilitySagePowerDescription[] = _("Ups Special Attack by 50%\nand locks move.");
@@ -679,6 +679,7 @@ static const u8 sAbilityShockingMawDescription[] = _("Strong Jaw + Bite moves ha
 static const u8 sAbilityGleamEyesDescription[] = _("Frisk + Scare.");
 static const u8 sAbilityDreamWhimsyDescription[] = _("Uses Yawn on switch-in.");
 static const u8 sAbilityLunarAffinityDescription[] = _("Copies lunar moves used by\nothers.");
+static const u8 sAbilityAquaticDwellerDescription[] = _("Boosts the power of Water-type\nmoves by 1.5x.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1394,6 +1395,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DREAM_STATE] = _("Dream State"),
     [ABILITY_DREAM_WHIMSY] = _("Dream Whimsy"),
     [ABILITY_LUNAR_AFFINITY] = _("Lunar Affinity"),
+    [ABILITY_FLAME_SHIELD] = _("Flame Shield"),
+    [ABILITY_AQUATIC_DWELLER] = _("Aquatic Dweller"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2110,4 +2113,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DREAM_STATE] = sAbilityBattleArmorDescription,
     [ABILITY_DREAM_WHIMSY] = sAbilityDreamWhimsyDescription,
     [ABILITY_LUNAR_AFFINITY] = sAbilityLunarAffinityDescription,
+    [ABILITY_FLAME_SHIELD] = sAbilityFilterDescription,
+    [ABILITY_AQUATIC_DWELLER] = sAbilityAquaticDwellerDescription,
 };

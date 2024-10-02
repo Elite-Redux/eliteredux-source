@@ -27651,7 +27651,7 @@ static const struct LevelUpMove sCormLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sMaizemothLevelUpLearnset[] = {
+static const struct LevelUpMove sCormothLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SEED_BOMB),
     LEVEL_UP_MOVE(0, MOVE_ENERGY_BALL),
     LEVEL_UP_MOVE(1, MOVE_HELPING_HAND),
@@ -27679,7 +27679,7 @@ static const struct LevelUpMove sMaizemothLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sPopmothLevelUpLearnset[] = {
+static const struct LevelUpMove sPopcormLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SEED_BOMB),
     LEVEL_UP_MOVE(0, MOVE_POP_MAYHEM),
     LEVEL_UP_MOVE(1, MOVE_HELPING_HAND),

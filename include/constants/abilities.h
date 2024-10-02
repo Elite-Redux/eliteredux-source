@@ -368,7 +368,7 @@
 #define ABILITY_TWISTED_DIMENSION 346 // Sets up Trick Room on entry, lasts 3 turns.
 #define ABILITY_MULTI_HEADED 347 // Hits as many times, as it has heads.
 #define ABILITY_NORTH_WIND 348 // 3 turns Aurora Veil on entry. Immune to Hail damage.
-#define ABILITY_OVERCHARGE 349 // Electric does 2x dmg to Electric. Can paralyze Electric.
+#define ABILITY_OVERCHARGE 349 // Electric is super effective vs Electric. Can paralyze Electric.
 #define ABILITY_VIOLENT_RUSH 350 // Boosts Speed by 50% + Attack by 20% on first turn.
 #define ABILITY_FLAMING_SOUL 351 // At full HP, gives +1 priority to this Pokémon's Fire-type moves.
 #define ABILITY_SAGE_POWER 352 // Ups Special Attack by 50% and locks move.
@@ -731,8 +731,10 @@
 #define ABILITY_DREAM_STATE 709 // Immune to critical hits. Takes 20% less damage from all attacks.
 #define ABILITY_DREAM_WHIMSY 710 // Uses Yawn on switch-in.
 #define ABILITY_LUNAR_AFFINITY 711 // Copies lunar moves used by others.
+#define ABILITY_FLAME_SHIELD 712 // Takes 35% less damage from Super-effective moves.
+#define ABILITY_AQUATIC_DWELLER 713 // Boosts the power of Water-type moves by 1.5x.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_LUNAR_AFFINITY + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_AQUATIC_DWELLER + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
