@@ -138,7 +138,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_PIKACHU_PARTNER_MEGA] =
     {
         .size = 0x87,
-        .y_offset = 4,
+        .y_offset = 0,
     },
     [SPECIES_RAICHU] =
     {
@@ -288,7 +288,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_MEOWTH_PARTNER_MEGA] =
     {
         .size = 0x77,
-        .y_offset = 6,
+        .y_offset = 5,
     },
     [SPECIES_PERSIAN] =
     {
@@ -703,7 +703,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_EEVEE_PARTNER_MEGA] =
     {
         .size = 0x76,
-        .y_offset = 10,
+        .y_offset = 7,
     },
     [SPECIES_VAPOREON] =
     {
