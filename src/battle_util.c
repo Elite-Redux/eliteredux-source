@@ -1140,6 +1140,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_PATCHWORK] = 1,
     [ABILITY_TERASTAL_TREASURE] = 1,
     [ABILITY_DREAM_STATE] = 1,
+    [ABILITY_FLAME_SHIELD] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -14151,6 +14152,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_COMBUSTION:
             if (moveType == TYPE_FIRE) MUL(1.5);
             return;
+
+        case ABILITY_AQUATIC_DWELLER:
+            if (moveType == TYPE_FIRE) MUL(1.5);
+            return;
         
         case ABILITY_ELECTRIC_BURST:
             if (moveType == TYPE_ELECTRIC && gBattleMons[battlerAtk].hp > 1) MUL(1.35);
@@ -14322,6 +14327,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_FILTER:
         case ABILITY_SOLID_ROCK:
         case ABILITY_PRISM_ARMOR:
+        case ABILITY_FLAME_SHIELD:
             if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
             return;
 

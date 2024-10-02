@@ -2896,6 +2896,11 @@ static const u8 sVenusauriteDesc[] = _(
     "Venusaur to Mega\n"
     "Evolve in battle.");
 
+static const u8 sVenusauriteXDesc[] = _(
+    "This stone enables\n"
+    "Venusaur to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sCharizarditeDesc[] = _(
     "This stone enables\n"
     "Charizard to Mega\n"
@@ -3501,12 +3506,12 @@ static const u8 sOricorioniteDesc[] = _(
     "Oricorio to Mega\n"
     "Evolve in battle.");
 
-static const u8 sMaizemothiteDesc[] = _(
+static const u8 sCormothiteDesc[] = _(
     "This stone enables\n"
     "Cormoth to Mega\n"
     "Evolve in battle.");
 
-static const u8 sPopmothiteDesc[] = _(
+static const u8 sPopcormiteDesc[] = _(
     "This stone enables\n"
     "Popcorm to Mega\n"
     "Evolve in battle.");
@@ -3555,6 +3560,101 @@ static const u8 sTeraOrbDesc[] = _(
     "This stone enables\n"
     "Terapagos to Primal\n"
     "Revert in battle.");
+
+static const u8 sSnorlaxiteDesc[] = _(
+    "This stone enables\n"
+    "Snorlax to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sRillaboomiteDesc[] = _(
+    "This stone enables\n"
+    "Rillaboom to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sCinderaceiteDesc[] = _(
+    "This stone enables\n"
+    "Cinderace to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sInteleoniteDesc[] = _(
+    "This stone enables\n"
+    "Inteleon to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sCorviniteDesc[] = _(
+    "This stone enables\n"
+    "Corviknight to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sDrednawiteDesc[] = _(
+    "This stone enables\n"
+    "Drednaw to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sCoalossiteDesc[] = _(
+    "This stone enables\n"
+    "Coalossal to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSandaconditeDesc[] = _(
+    "This stone enables\n"
+    "Sandaconda to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sCopperajiteDesc[] = _(
+    "This stone enables\n"
+    "Copperajah to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sHattereniteDesc[] = _(
+    "This stone enables\n"
+    "Hatterene to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sGarbodoriteDesc[] = _(
+    "This stone enables\n"
+    "Garbodor to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sOrbeetiteDesc[] = _(
+    "This stone enables\n"
+    "Orbeetle to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sGrimmsnarliteDesc[] = _(
+    "This stone enables\n"
+    "Grimmsnarl to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sCentiskiteDesc[] = _(
+    "This stone enables\n"
+    "Centiskorch to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sAlcremiteDesc[] = _(
+    "This stone enables\n"
+    "Alcremie to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sToxtricititeDesc[] = _(
+    "This stone enables\n"
+    "Toxtricity to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sEeviteDesc[] = _(
+    "This stone enables\n"
+    "P.Eevee to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sMeowthiteDesc[] = _(
+    "This stone enables\n"
+    "P.Meowth to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sPikaniteDesc[] = _(
+    "This stone enables\n"
+    "P.Pikachu to Mega\n"
+    "Evolve in battle.");
 
 static const u8 sMegaBraceletDesc[] = _(
     "Enables {PKMN} holding\n"

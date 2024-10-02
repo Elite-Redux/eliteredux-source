@@ -27651,7 +27651,7 @@ static const struct LevelUpMove sCormLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sMaizemothLevelUpLearnset[] = {
+static const struct LevelUpMove sCormothLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SEED_BOMB),
     LEVEL_UP_MOVE(0, MOVE_ENERGY_BALL),
     LEVEL_UP_MOVE(1, MOVE_HELPING_HAND),
@@ -27679,7 +27679,7 @@ static const struct LevelUpMove sMaizemothLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sPopmothLevelUpLearnset[] = {
+static const struct LevelUpMove sPopcormLevelUpLearnset[] = {
     LEVEL_UP_MOVE(0, MOVE_SEED_BOMB),
     LEVEL_UP_MOVE(0, MOVE_POP_MAYHEM),
     LEVEL_UP_MOVE(1, MOVE_HELPING_HAND),
@@ -28495,16 +28495,10 @@ static const struct LevelUpMove sFluffbeeLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sAmphybuzzLevelUpLearnset[] = {
-    LEVEL_UP_MOVE(1, MOVE_NASTY_PLOT),
-    LEVEL_UP_MOVE(1, MOVE_BUG_BUZZ),
-    LEVEL_UP_MOVE(1, MOVE_ENERGY_BALL),
     LEVEL_UP_MOVE(1, MOVE_SYRUP_BOMB),
     LEVEL_UP_MOVE(1, MOVE_FELL_STINGER),
     LEVEL_UP_MOVE(1, MOVE_HEAL_ORDER),
     LEVEL_UP_MOVE(1, MOVE_DEFEND_ORDER),
-    LEVEL_UP_MOVE(1, MOVE_AIR_SLASH),
-    LEVEL_UP_MOVE(1, MOVE_HURRICANE),
-    LEVEL_UP_MOVE(1, MOVE_DAZZLING_GLEAM),
     LEVEL_UP_MOVE(1, MOVE_MOONBLAST),
     LEVEL_UP_MOVE(50, MOVE_PIXIE_BEAM),
     LEVEL_UP_END

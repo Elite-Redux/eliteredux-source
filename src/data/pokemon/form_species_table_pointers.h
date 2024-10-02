@@ -6,6 +6,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_BEEDRILL] = sBeedrillFormSpeciesIdTable,
     [SPECIES_PIDGEOT] = sPidgeotFormSpeciesIdTable,
     [SPECIES_PIKACHU] = sPikachuFormSpeciesIdTable,
+    [SPECIES_PIKACHU_PARTNER] = sPikachuFormSpeciesIdTable,
+    [SPECIES_PIKACHU_PARTNER_MEGA] = sPikachuFormSpeciesIdTable,
     [SPECIES_RAICHU] = sRaichuFormSpeciesIdTable,
     [SPECIES_SANDSHREW] = sSandshrewFormSpeciesIdTable,
     [SPECIES_SANDSLASH] = sSandslashFormSpeciesIdTable,
@@ -14,6 +16,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_DIGLETT] = sDiglettFormSpeciesIdTable,
     [SPECIES_DUGTRIO] = sDugtrioFormSpeciesIdTable,
     [SPECIES_MEOWTH] = sMeowthFormSpeciesIdTable,
+    [SPECIES_MEOWTH_PARTNER] = sMeowthFormSpeciesIdTable,
+    [SPECIES_MEOWTH_PARTNER_MEGA] = sMeowthFormSpeciesIdTable,
     [SPECIES_PERSIAN] = sPersianFormSpeciesIdTable,
     [SPECIES_ALAKAZAM] = sAlakazamFormSpeciesIdTable,
     [SPECIES_GEODUDE] = sGeodudeFormSpeciesIdTable,
@@ -39,6 +43,9 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ZAPDOS] = sZapdosFormSpeciesIdTable,
     [SPECIES_MOLTRES] = sMoltresFormSpeciesIdTable,
     [SPECIES_MEWTWO] = sMewtwoFormSpeciesIdTable,
+    [SPECIES_EEVEE] = sEeveeFormSpeciesIdTable,
+    [SPECIES_EEVEE_PARTNER] = sEeveeFormSpeciesIdTable,
+    [SPECIES_EEVEE_PARTNER_MEGA] = sEeveeFormSpeciesIdTable,
     [SPECIES_PICHU] = sPichuFormSpeciesIdTable,
     [SPECIES_AMPHAROS] = sAmpharosFormSpeciesIdTable,
     [SPECIES_SLOWKING] = sSlowkingFormSpeciesIdTable,
@@ -871,11 +878,54 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_MILOTIC] = sMiloticFormSpeciesIdTable,
     [SPECIES_MILOTIC_MEGA] = sMiloticFormSpeciesIdTable,
 
+    [SPECIES_RILLABOOM] = sRillaboomFormSpeciesIdTable,
+    [SPECIES_RILLABOOM_MEGA] = sRillaboomFormSpeciesIdTable,
+
+    [SPECIES_CINDERACE] = sCinderaceFormSpeciesIdTable,
+    [SPECIES_CINDERACE_MEGA] = sCinderaceFormSpeciesIdTable,
+
+    [SPECIES_INTELEON] = sInteleonFormSpeciesIdTable,
+    [SPECIES_INTELEON_MEGA] = sInteleonFormSpeciesIdTable,
+
+    [SPECIES_CORVIKNIGHT] = sCorviknightFormSpeciesIdTable,
+    [SPECIES_CORVIKNIGHT_MEGA] = sCorviknightFormSpeciesIdTable,
+
+    [SPECIES_DREDNAW] = sDrednawFormSpeciesIdTable,
+    [SPECIES_DREDNAW_MEGA] = sDrednawFormSpeciesIdTable,
+
+    [SPECIES_COALOSSAL] = sCoalossalFormSpeciesIdTable,
+    [SPECIES_COALOSSAL_MEGA] = sCoalossalFormSpeciesIdTable,
+
+    [SPECIES_SANDACONDA] = sSandacondaFormSpeciesIdTable,
+    [SPECIES_SANDACONDA_MEGA] = sSandacondaFormSpeciesIdTable,
+
+    [SPECIES_COPPERAJAH] = sCopperajahFormSpeciesIdTable,
+    [SPECIES_COPPERAJAH_MEGA] = sCopperajahFormSpeciesIdTable,
+
+    [SPECIES_HATTERENE] = sHattereneFormSpeciesIdTable,
+    [SPECIES_HATTERENE_MEGA] = sHattereneFormSpeciesIdTable,
+
+    [SPECIES_GARBODOR] = sGarbodorFormSpeciesIdTable,
+    [SPECIES_GARBODOR_MEGA] = sGarbodorFormSpeciesIdTable,
+
+    [SPECIES_ORBEETLE] = sOrbeetleFormSpeciesIdTable,
+    [SPECIES_ORBEETLE_MEGA] = sOrbeetleFormSpeciesIdTable,
+
+    [SPECIES_CENTISKORCH] = sCentiskorchFormSpeciesIdTable,
+    [SPECIES_CENTISKORCH_MEGA] = sCentiskorchFormSpeciesIdTable,
+
+    [SPECIES_ALCREMIE_MEGA] = sAlcremieFormSpeciesIdTable,
+    [SPECIES_TOXTRICITY_MEGA] = sToxtricityFormSpeciesIdTable,
+
+    [SPECIES_GRIMMSNARL] = sGrimmsnarlFormSpeciesIdTable,
+    [SPECIES_GRIMMSNARL_MEGA] = sGrimmsnarlFormSpeciesIdTable,
+
     [SPECIES_CHIEN_PAO_MEGA] = sChien_PaoFormSpeciesIdTable,
     [SPECIES_DRACOVISH_MEGA] = sDracovishFormSpeciesIdTable,
 
     [SPECIES_LEDIAN_PARADOX] = sLedianFormSpeciesIdTable,
     [SPECIES_SNORLAX_PRIMAL] = sSnorlaxFormSpeciesIdTable,
+    [SPECIES_SNORLAX_MEGA] = sSnorlaxFormSpeciesIdTable,
 
     [SPECIES_VICTINI_PRIMAL] = sVictiniFormSpeciesIdTable,
 
@@ -1029,6 +1079,12 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_MELMETAL] = sMelmetalFormSpeciesIdTable,
 
     [SPECIES_HYDROAR] = sHydroarFormSpeciesIdTable,
+
+    [SPECIES_VENUSAUR_MEGA_X] = sVenusaurFormSpeciesIdTable,
+    [SPECIES_BLASTOISE_MEGA_X] = sBlastoiseFormSpeciesIdTable,
+    [SPECIES_CHARIZARD_MEGA_Z] = sCharizardFormSpeciesIdTable,
+
+    [SPECIES_GENGAR_MEGA_X] = sGengarFormSpeciesIdTable,
 
     [SPECIES_AMAURA] = sAmauraFormSpeciesIdTable,
     [SPECIES_AURORUS] = sAurorusFormSpeciesIdTable,
