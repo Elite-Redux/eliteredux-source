@@ -30777,12 +30777,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_HATTERENE] =
     {
-    .baseHP        =  57,
-    .baseAttack    =  90,
-    .baseDefense   =  95,
-    .baseSpeed     =  29,
-    .baseSpAttack  =  136,
-    .baseSpDefense =  103,
+    .baseHP         = 57,
+    .baseAttack     = 90,
+    .baseDefense    = 95,
+    .baseSpeed      = 29,
+    .baseSpAttack   = 136,
+    .baseSpDefense  = 103,
     .type1 = TYPE_PSYCHIC,
     .type2 = TYPE_FAIRY,
     .catchRate = 255,
@@ -37389,12 +37389,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_HYDRAPPLE] =
     {
-        .baseHP        = 106,
-        .baseAttack    = 80,
-        .baseDefense   = 110,
-        .baseSpeed     = 44,
-        .baseSpAttack  = 120,
-        .baseSpDefense = 80,
+    .baseHP         = 106,
+    .baseAttack     = 80,
+    .baseDefense    = 110,
+    .baseSpeed      = 44,
+    .baseSpAttack   = 135,
+    .baseSpDefense  = 80,
         .type1 = TYPE_GRASS,
         .type2 = TYPE_DRAGON,
         .catchRate = 255,
@@ -43050,12 +43050,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_MAGMENOUS] =
     {
-    .baseHP        = 90,
-    .baseAttack    = 120,
-    .baseDefense   = 125,
-    .baseSpeed     = 125,
-    .baseSpAttack  = 60,
-    .baseSpDefense = 60,
+    .baseHP         = 80,
+    .baseAttack     = 120,
+    .baseDefense    = 125,
+    .baseSpeed      = 125,
+    .baseSpAttack   = 70,
+    .baseSpDefense  = 60,
     .type1 = TYPE_POISON,
     .type2 = TYPE_FIRE,
     .catchRate = 255,
