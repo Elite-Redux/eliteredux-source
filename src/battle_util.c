@@ -1141,6 +1141,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_TERASTAL_TREASURE] = 1,
     [ABILITY_DREAM_STATE] = 1,
     [ABILITY_FLAME_SHIELD] = 1,
+    [ABILITY_HOVER] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -6986,6 +6987,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             if (!IS_BATTLER_OF_TYPE(battler, TYPE_DRAGON))
             {
                 gBattleMons[battler].type3 = TYPE_DRAGON;
+                PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
+                BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+                effect++;
+            }
+        }
+
+        // Hover
+        if(CheckAndSetSwitchInAbility(battler, ABILITY_HOVER)){
+            if (!IS_BATTLER_OF_TYPE(battler, TYPE_PSYCHIC))
+            {
+                gBattleMons[battler].type3 = TYPE_PSYCHIC;
                 PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
                 BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
                 effect++;
@@ -13169,6 +13181,8 @@ static int CheckLevitatingEffects(u8 battlerId)
         return TRUE;
 	else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DRAGONFLY)) //Dragonfly
         return TRUE;
+    else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_HOVER))
+        return TRUE;
 
     return FALSE;
 }
@@ -15528,7 +15542,7 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, ABILITY_GROUND_SHOCK);
     }
-	else if (moveType == TYPE_ELECTRIC && defType == TYPE_ELECTRIC && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_OVERCHARGE))
+	else if (moveType == TYPE_ELECTRIC && defType == TYPE_ELECTRIC && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_OVERCHARGE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEPRAVITY))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
@@ -15688,6 +15702,8 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
             immunityAbility = ABILITY_AERIALIST;
         else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DRAGONFLY))
             immunityAbility = ABILITY_DRAGONFLY;
+        else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_HOVER))
+            immunityAbility = ABILITY_HOVER;
         
         modifier = UQ_4_12(0.0);
     }
@@ -15784,7 +15800,7 @@ u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilit
         if (gBaseStats[speciesDef].type2 != gBaseStats[speciesDef].type1)
             MulByTypeEffectiveness(&modifier, move, moveType, 0, gBaseStats[speciesDef].type2, 0, FALSE);
 
-        if (moveType == TYPE_GROUND && (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_LEVITATE, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_DRAGONFLY, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_HUGE_WINGS, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_AERIALIST, abilityDef)) && !(gFieldStatuses & STATUS_FIELD_GRAVITY))
+        if (moveType == TYPE_GROUND && (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_LEVITATE, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_DRAGONFLY, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_HUGE_WINGS, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_HOVER, abilityDef) || BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_AERIALIST, abilityDef)) && !(gFieldStatuses & STATUS_FIELD_GRAVITY))
             modifier = UQ_4_12(0.0);
 		if (moveType == TYPE_ROCK && (BATTLER_HAS_ABILITY_FAST(battlerDef, ABILITY_MOUNTAINEER, abilityDef)))
             modifier = UQ_4_12(0.0);

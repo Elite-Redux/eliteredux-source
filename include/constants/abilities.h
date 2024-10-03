@@ -734,8 +734,11 @@
 #define ABILITY_FLAME_SHIELD 712 // Takes 35% less damage from Super-effective moves.
 #define ABILITY_AQUATIC_DWELLER 713 // Boosts the power of Water-type moves by 1.5x.
 #define ABILITY_APPLE_PIE 714 // Self Sufficient + Ripen.
+#define ABILITY_HOVER 715 // Psychic Type added + Levitates.
+#define ABILITY_DEPRAVITY 716 // Merciless + Overcharge.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_APPLE_PIE + 1)
+
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DEPRAVITY + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
