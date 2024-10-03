@@ -7763,6 +7763,12 @@ const u32 gMonPalette_MeowthPartnerMega[]           = INCBIN_U32("graphics/pokem
 const u32 gMonShinyPalette_MeowthPartnerMega[]      = INCBIN_U32("graphics/pokemon/meowth/partner/mega/shiny.gbapal.lz");
 const u8  gMonIcon_MeowthPartnerMega[]              = INCBIN_U8("graphics/pokemon/meowth/partner/mega/icon.4bpp");
 
+const u32 gMonFrontPic_Mimikyu_RayquazaBusted[]          = INCBIN_U32("graphics/pokemon/mimikyu/rayquaza/busted/front.4bpp.lz");
+const u32 gMonBackPic_Mimikyu_RayquazaBusted[]           = INCBIN_U32("graphics/pokemon/mimikyu/rayquaza/busted/back.4bpp.lz");
+const u32 gMonPalette_Mimikyu_RayquazaBusted[]           = INCBIN_U32("graphics/pokemon/mimikyu/rayquaza/busted/normal.gbapal.lz");
+const u32 gMonShinyPalette_Mimikyu_RayquazaBusted[]      = INCBIN_U32("graphics/pokemon/mimikyu/rayquaza/busted/shiny.gbapal.lz");
+const u8  gMonIcon_Mimikyu_RayquazaBusted[]              = INCBIN_U8("graphics/pokemon/mimikyu/rayquaza/busted/icon.4bpp");
+
 const u32 gMonFrontPic_BlizzardMaw[]          = INCBIN_U32("graphics/pokemon/blizzard_maw/front.4bpp.lz");
 const u32 gMonBackPic_BlizzardMaw[]           = INCBIN_U32("graphics/pokemon/blizzard_maw/back.4bpp.lz");
 const u32 gMonPalette_BlizzardMaw[]           = INCBIN_U32("graphics/pokemon/blizzard_maw/normal.gbapal.lz");

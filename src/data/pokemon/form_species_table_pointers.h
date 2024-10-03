@@ -130,6 +130,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SILVALLY] = sSilvallyFormSpeciesIdTable,
     [SPECIES_MINIOR] = sMiniorFormSpeciesIdTable,
     [SPECIES_MIMIKYU_RAYQUAZA] = sMimikyuFormSpeciesIdTable,
+    [SPECIES_MIMIKYU_RAYQUAZA_BUSTED] = sMimikyuFormSpeciesIdTable,
     [SPECIES_NECROZMA] = sNecrozmaFormSpeciesIdTable,
     [SPECIES_MAGEARNA] = sMagearnaFormSpeciesIdTable,
     [SPECIES_CRAMORANT] = sCramorantFormSpeciesIdTable,

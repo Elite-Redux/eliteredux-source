@@ -502,6 +502,11 @@ static const union AnimCmd sAnim_MIMIKYU_RAYQUAZA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_MIMIKYU_RAYQUAZA_BUSTED_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_BEWEAR_ANGRY_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -1247,6 +1252,11 @@ static const union AnimCmd *const sAnims_ESPEON_GALAXY[] ={
 static const union AnimCmd *const sAnims_MIMIKYU_RAYQUAZA[] ={
     sAnim_GeneralFrame0,
     sAnim_MIMIKYU_RAYQUAZA_1,
+};
+
+static const union AnimCmd *const sAnims_MIMIKYU_RAYQUAZA_BUSTED[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MIMIKYU_RAYQUAZA_BUSTED_1,
 };
 
 static const union AnimCmd *const sAnims_BEWEAR_ANGRY[] ={
@@ -21341,6 +21351,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(DARKRAI_NIGHTMARE),
     ANIM_CMD(ESPEON_GALAXY),
     ANIM_CMD(MIMIKYU_RAYQUAZA),
+    ANIM_CMD(MIMIKYU_RAYQUAZA_BUSTED),
     ANIM_CMD(BEWEAR_ANGRY),
     ANIM_CMD(ABOMASNOW_SANTA),
     ANIM_CMD(WEAVILE_REDUX_MEGA),

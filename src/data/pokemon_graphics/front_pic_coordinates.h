@@ -5997,6 +5997,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  0
     },
+    [SPECIES_MIMIKYU_RAYQUAZA_BUSTED] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_BEWEAR_ANGRY] =
     {
         .size = 0,

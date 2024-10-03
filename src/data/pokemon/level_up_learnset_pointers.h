@@ -1642,6 +1642,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_ABOMASNOW_SANTA] = sAbomasnow_SantaLevelUpLearnset,
     [SPECIES_BEWEAR_ANGRY] = sBewearLevelUpLearnset,
     [SPECIES_MIMIKYU_RAYQUAZA] = sMimikyu_RayquazaLevelUpLearnset,
+    [SPECIES_MIMIKYU_RAYQUAZA_BUSTED] = sMimikyu_RayquazaLevelUpLearnset,
     [SPECIES_ESPEON_GALAXY] = sEspeonLevelUpLearnset,
     [SPECIES_DARKRAI_NIGHTMARE] = sDarkraiLevelUpLearnset,
     [SPECIES_SOLROCK_SYSTEM] = sSolrock_SystemLevelUpLearnset,

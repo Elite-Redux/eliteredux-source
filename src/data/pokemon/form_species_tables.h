@@ -977,6 +977,7 @@ static const u16 sMiniorFormSpeciesIdTable[] = {
 static const u16 sMimikyuFormSpeciesIdTable[] = {
     SPECIES_MIMIKYU,
     SPECIES_MIMIKYU_RAYQUAZA,
+    SPECIES_MIMIKYU_RAYQUAZA_BUSTED,
     SPECIES_MIMIKYU_BUSTED,
     FORM_SPECIES_END,
 };

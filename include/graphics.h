@@ -11295,6 +11295,11 @@ extern const u32 gMonBackPic_MeowthPartnerMega[];
 extern const u32 gMonPalette_MeowthPartnerMega[];
 extern const u32 gMonShinyPalette_MeowthPartnerMega[];
 extern const u8  gMonIcon_MeowthPartnerMega[];
+extern const u32 gMonFrontPic_Mimikyu_RayquazaBusted[];
+extern const u32 gMonBackPic_Mimikyu_RayquazaBusted[];
+extern const u32 gMonPalette_Mimikyu_RayquazaBusted[];
+extern const u32 gMonShinyPalette_Mimikyu_RayquazaBusted[];
+extern const u8  gMonIcon_Mimikyu_RayquazaBusted[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
