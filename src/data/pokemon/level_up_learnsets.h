@@ -4223,7 +4223,7 @@ static const struct LevelUpMove sBayleefLevelUpLearnset[] = {
 };
 
 static const struct LevelUpMove sMeganiumLevelUpLearnset[] = {
-
+    LEVEL_UP_MOVE(1, MOVE_GROWL),
     LEVEL_UP_END
 };
 
