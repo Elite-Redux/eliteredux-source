@@ -4295,9 +4295,19 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x67,
         .y_offset = 8,
     },
+    [SPECIES_FUJIFLAP] =
+    {
+        .size = 0x67,
+        .y_offset = 8,
+    },
     [SPECIES_APPLETUN] =
     {
         .size = 0x87,
+        .y_offset = 11,
+    },
+    [SPECIES_GRANITUN] =
+    {
+        .size = 0x67,
         .y_offset = 11,
     },
     [SPECIES_SILICOBRA] =

@@ -680,6 +680,7 @@ static const u8 sAbilityGleamEyesDescription[] = _("Frisk + Scare.");
 static const u8 sAbilityDreamWhimsyDescription[] = _("Uses Yawn on switch-in.");
 static const u8 sAbilityLunarAffinityDescription[] = _("Copies lunar moves used by\nothers.");
 static const u8 sAbilityAquaticDwellerDescription[] = _("Boosts the power of Water-type\nmoves by 1.5x.");
+static const u8 sAbilityApplePieDescription[] = _("Self Sufficient + Ripen.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1397,6 +1398,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_LUNAR_AFFINITY] = _("Lunar Affinity"),
     [ABILITY_FLAME_SHIELD] = _("Flame Shield"),
     [ABILITY_AQUATIC_DWELLER] = _("Aquatic Dweller"),
+    [ABILITY_APPLE_PIE] = _("Apple Pie"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2115,4 +2117,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_LUNAR_AFFINITY] = sAbilityLunarAffinityDescription,
     [ABILITY_FLAME_SHIELD] = sAbilityFilterDescription,
     [ABILITY_AQUATIC_DWELLER] = sAbilityAquaticDwellerDescription,
+    [ABILITY_APPLE_PIE] = sAbilityApplePieDescription,
 };

@@ -11300,6 +11300,16 @@ extern const u32 gMonBackPic_Mimikyu_RayquazaBusted[];
 extern const u32 gMonPalette_Mimikyu_RayquazaBusted[];
 extern const u32 gMonShinyPalette_Mimikyu_RayquazaBusted[];
 extern const u8  gMonIcon_Mimikyu_RayquazaBusted[];
+extern const u32 gMonFrontPic_Granitun[];
+extern const u32 gMonBackPic_Granitun[];
+extern const u32 gMonPalette_Granitun[];
+extern const u32 gMonShinyPalette_Granitun[];
+extern const u8  gMonIcon_Granitun[];
+extern const u32 gMonFrontPic_Fujiflap[];
+extern const u32 gMonBackPic_Fujiflap[];
+extern const u32 gMonPalette_Fujiflap[];
+extern const u32 gMonShinyPalette_Fujiflap[];
+extern const u8  gMonIcon_Fujiflap[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

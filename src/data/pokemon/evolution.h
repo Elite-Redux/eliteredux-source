@@ -552,6 +552,8 @@ const struct Evolution gEvolutionTable[NUM_SPECIES][EVOS_PER_MON] =
                                        {EVO_LEVEL, 36, SPECIES_APPLETUN},
                                        {EVO_LEVEL, 36, SPECIES_DIPPLIN}},
     [SPECIES_DIPPLIN]               = {{EVO_LEVEL, 52, SPECIES_HYDRAPPLE}},
+    [SPECIES_FLAPPLE]               = {{EVO_LEVEL, 52, SPECIES_FUJIFLAP}},
+    [SPECIES_APPLETUN]               = {{EVO_LEVEL, 52, SPECIES_GRANITUN}},
     [SPECIES_SILICOBRA]             = {{EVO_LEVEL, 36, SPECIES_SANDACONDA}},
     [SPECIES_SANDACONDA]      = {{EVO_MEGA_EVOLUTION,   ITEM_SANDACONDITE,   SPECIES_SANDACONDA_MEGA}},
     [SPECIES_ARROKUDA]              = {{EVO_LEVEL, 26, SPECIES_BARRASKEWDA}},

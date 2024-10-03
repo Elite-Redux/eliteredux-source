@@ -7769,6 +7769,18 @@ const u32 gMonPalette_Mimikyu_RayquazaBusted[]           = INCBIN_U32("graphics/
 const u32 gMonShinyPalette_Mimikyu_RayquazaBusted[]      = INCBIN_U32("graphics/pokemon/mimikyu/rayquaza/busted/shiny.gbapal.lz");
 const u8  gMonIcon_Mimikyu_RayquazaBusted[]              = INCBIN_U8("graphics/pokemon/mimikyu/rayquaza/busted/icon.4bpp");
 
+const u32 gMonFrontPic_Granitun[]          = INCBIN_U32("graphics/pokemon/granitun/front.4bpp.lz");
+const u32 gMonBackPic_Granitun[]           = INCBIN_U32("graphics/pokemon/granitun/back.4bpp.lz");
+const u32 gMonPalette_Granitun[]           = INCBIN_U32("graphics/pokemon/granitun/normal.gbapal.lz");
+const u32 gMonShinyPalette_Granitun[]      = INCBIN_U32("graphics/pokemon/granitun/shiny.gbapal.lz");
+const u8  gMonIcon_Granitun[]              = INCBIN_U8("graphics/pokemon/granitun/icon.4bpp");
+
+const u32 gMonFrontPic_Fujiflap[]          = INCBIN_U32("graphics/pokemon/fujiflap/front.4bpp.lz");
+const u32 gMonBackPic_Fujiflap[]           = INCBIN_U32("graphics/pokemon/fujiflap/back.4bpp.lz");
+const u32 gMonPalette_Fujiflap[]           = INCBIN_U32("graphics/pokemon/fujiflap/normal.gbapal.lz");
+const u32 gMonShinyPalette_Fujiflap[]      = INCBIN_U32("graphics/pokemon/fujiflap/shiny.gbapal.lz");
+const u8  gMonIcon_Fujiflap[]              = INCBIN_U8("graphics/pokemon/fujiflap/icon.4bpp");
+
 const u32 gMonFrontPic_BlizzardMaw[]          = INCBIN_U32("graphics/pokemon/blizzard_maw/front.4bpp.lz");
 const u32 gMonBackPic_BlizzardMaw[]           = INCBIN_U32("graphics/pokemon/blizzard_maw/back.4bpp.lz");
 const u32 gMonPalette_BlizzardMaw[]           = INCBIN_U32("graphics/pokemon/blizzard_maw/normal.gbapal.lz");

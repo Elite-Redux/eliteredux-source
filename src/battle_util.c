@@ -7341,7 +7341,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             // Self Sufficient
-            if(BATTLER_HAS_ABILITY(battler, ABILITY_SELF_SUFFICIENT)){
+            if(BATTLER_HAS_ABILITY(battler, ABILITY_SELF_SUFFICIENT) || BATTLER_HAS_ABILITY(battler, ABILITY_APPLE_PIE)){
                 bool8 activateAbilty = FALSE;
                 u16 abilityToCheck = ABILITY_SELF_SUFFICIENT; //For easier copypaste
 
@@ -11364,7 +11364,7 @@ static u8 HealConfuseBerry(u32 battlerId, u32 itemId, u8 flavorId, bool32 end2)
             gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN))
+        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN) || BATTLER_HAS_ABILITY(battlerId, ABILITY_APPLE_PIE))
         {
             gBattleMoveDamage *= 2;
             gBattlerAbility = battlerId;

@@ -733,8 +733,9 @@
 #define ABILITY_LUNAR_AFFINITY 711 // Copies lunar moves used by others.
 #define ABILITY_FLAME_SHIELD 712 // Takes 35% less damage from Super-effective moves.
 #define ABILITY_AQUATIC_DWELLER 713 // Boosts the power of Water-type moves by 1.5x.
+#define ABILITY_APPLE_PIE 714 // Self Sufficient + Ripen.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_AQUATIC_DWELLER + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_APPLE_PIE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

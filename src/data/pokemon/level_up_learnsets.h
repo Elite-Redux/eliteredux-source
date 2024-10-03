@@ -20777,6 +20777,12 @@ static const struct LevelUpMove sFlappleLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sFujiflapLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_WING_ATTACK),
+    LEVEL_UP_END
+};
+
+
 static const struct LevelUpMove sAppletunLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_AMNESIA),
     LEVEL_UP_MOVE(1, MOVE_ASTONISH),
@@ -20805,6 +20811,11 @@ static const struct LevelUpMove sAppletunLevelUpLearnset[] = {
     LEVEL_UP_MOVE(45, MOVE_BERRY_SMASH),
     LEVEL_UP_MOVE(45, MOVE_DRAGON_BREATH),
     LEVEL_UP_MOVE(45, MOVE_HEAT_CRASH),
+    LEVEL_UP_END
+};
+
+static const struct LevelUpMove sGranitunLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(0, MOVE_WING_ATTACK),
     LEVEL_UP_END
 };
 

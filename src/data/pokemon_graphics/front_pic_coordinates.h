@@ -4261,7 +4261,17 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x76,
         .y_offset = 9,
     },
+    [SPECIES_FUJIFLAP] =
+    {
+        .size = 0x76,
+        .y_offset = 9,
+    },
     [SPECIES_APPLETUN] =
+    {
+        .size = 0x87,
+        .y_offset = 5,
+    },
+    [SPECIES_GRANITUN] =
     {
         .size = 0x87,
         .y_offset = 5,

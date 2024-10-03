@@ -10692,7 +10692,19 @@ static const union AnimCmd sAnim_FLAPPLE_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_FUJIFLAP_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_APPLETUN_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_GRANITUN_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -17665,9 +17677,19 @@ static const union AnimCmd *const sAnims_FLAPPLE[] ={
     sAnim_FLAPPLE_1,
 };
 
+static const union AnimCmd *const sAnims_FUJIFLAP[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FUJIFLAP_1,
+};
+
 static const union AnimCmd *const sAnims_APPLETUN[] ={
     sAnim_GeneralFrame0,
     sAnim_APPLETUN_1,
+};
+
+static const union AnimCmd *const sAnims_GRANITUN[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GRANITUN_1,
 };
 
 static const union AnimCmd *const sAnims_SILICOBRA[] ={
@@ -20869,7 +20891,9 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(COALOSSAL_MEGA),
     ANIM_CMD(APPLIN),
     ANIM_CMD(FLAPPLE),
+    ANIM_CMD(FUJIFLAP),
     ANIM_CMD(APPLETUN),
+    ANIM_CMD(GRANITUN),
     ANIM_CMD(SILICOBRA),
     ANIM_CMD(SANDACONDA),
     ANIM_CMD(SANDACONDA_MEGA),
