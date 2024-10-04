@@ -5664,12 +5664,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
         
         if ((CheckAndSetSwitchInAbility(battler, ABILITY_DISGUISE) | CheckAndSetSwitchInAbility(battler, ABILITY_PATCHWORK))
-            && gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED
+            && (gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED || gBattleMons[battler].species == SPECIES_MIMIKYU_RAYQUAZA_BUSTED)
             && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
             && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
         {
-            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_MIMIKYU);
-            gBattleMons[battler].species = SPECIES_MIMIKYU;
+            int newSpecies = gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED ? SPECIES_MIMIKYU : SPECIES_MIMIKYU_RAYQUAZA;
+            UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+            gBattleMons[battler].species = newSpecies;
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
             effect++;
         }
@@ -6241,6 +6242,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Dream Whimsy
         effect += UseEntryMove(battler, ABILITY_DREAM_WHIMSY, MOVE_YAWN, 0);
 
+        // Wildfire
+        effect += UseEntryMove(battler, ABILITY_WILDFIRE, MOVE_FIRE_SPIN, 0);
+
+        // Jump Scare
+        effect += UseEntryMove(battler, ABILITY_JUMP_SCARE, MOVE_ASTONISH, 0);
+
+        // Tar Toss
+        effect += UseEntryMove(battler, ABILITY_TAR_TOSS, MOVE_TAR_SHOT, 0);
+
         // Wishmaker
         if (CheckAndSetSwitchInAbility(battler, ABILITY_WISHMAKER)) {
             u8 counter = GetSingleUseAbilityCounter(battler, ABILITY_WISHMAKER) + 1;
@@ -6316,6 +6326,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Scare
         if(CheckAndSetSwitchInAbility(battler, ABILITY_SCARE)) {
             effect += UseIntimidateClone(battler, ABILITY_SCARE);
+        }
+
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_GLEAM_EYES))
+        {
+            if (UseIntimidateClone(battler, ABILITY_GLEAM_EYES))
+            {
+                gBattleStruct->friskedAbility = TRUE;
+            }
+            else
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_FriskActivates);
+            }
+            effect++;
         }
         
         // Fearmonger
@@ -9456,6 +9479,35 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
                 gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
                 effect++;
+            }
+        }
+
+        // Stun Shock
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_STUN_SHOCK)) {
+			if (ShouldApplyOnHitAffect(gBattlerTarget) && (Random() % 100) < 60)
+            {
+                int shouldActivate = FALSE;
+                if (Random() % 2)
+                {
+                    if (CanBePoisoned(battler, gBattlerTarget))
+                    {
+                        shouldActivate = TRUE;
+                        gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
+                    }
+                }
+                else if (CanBeParalyzed(battler, gBattlerTarget))
+                {
+                    shouldActivate = TRUE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+                }
+
+                if (shouldActivate) {
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_STUN_SHOCK;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    effect++;
+                }
             }
         }
 
@@ -16105,6 +16157,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
     {
         // Changed Form ID                      Default Form ID               Should change on switch
         {SPECIES_MIMIKYU_BUSTED,                SPECIES_MIMIKYU,                FALSE},
+        {SPECIES_MIMIKYU_RAYQUAZA_BUSTED,       SPECIES_MIMIKYU_RAYQUAZA,       FALSE},
         {SPECIES_GRENINJA_ASH,                  SPECIES_GRENINJA_BATTLE_BOND,   FALSE},
         {SPECIES_EISCUE_NOICE_FACE,             SPECIES_EISCUE,                 FALSE},
         {SPECIES_PALAFIN_HERO,                  SPECIES_PALAFIN,                FALSE},

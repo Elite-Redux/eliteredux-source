@@ -676,13 +676,17 @@ static const u8 sAbilityRagePointDescription[] = _("Gets a 1.5x boost while stat
 static const u8 sAbilityHotCoalsDescription[] = _("Sets a trap that burns the next\nfoe that switches in.");
 static const u8 sAbilityTerastalTreasureDescription[] = _("Reduces damage taken by 40%,\nbut lowers speed by 20%.");
 static const u8 sAbilityShockingMawDescription[] = _("Strong Jaw + Bite moves have\n50% paralysis chance.");
-static const u8 sAbilityGleamEyesDescription[] = _("Frisk + Scare.");
+static const u8 sAbilityGleamEyesDescription[] = _("Combines Frisk & Scare.");
 static const u8 sAbilityDreamWhimsyDescription[] = _("Uses Yawn on switch-in.");
 static const u8 sAbilityLunarAffinityDescription[] = _("Copies lunar moves used by\nothers.");
 static const u8 sAbilityAquaticDwellerDescription[] = _("Boosts the power of Water-type\nmoves by 1.5x.");
 static const u8 sAbilityApplePieDescription[] = _("Self Sufficient + Ripen.");
 static const u8 sAbilityHoverDescription[] = _("Psychic Type added + Levitates.");
 static const u8 sAbilityDepravityDescription[] = _("Merciless + Overcharge.");
+static const u8 sAbilityWildfireDescription[] = _("Attacks with Fire Spin on\nswitch-in.");
+static const u8 sAbilityJumpScareDescription[] = _("Attacks with Astonish on\nswitch-in.");
+static const u8 sAbilityTarTossDescription[] = _("Uses Tar Shot on switch-in.");
+static const u8 sAbilityStunShockDescription[] = _("Attacks have a 60% chance to\nParalyze or Poison.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1403,6 +1407,10 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_APPLE_PIE] = _("Apple Pie"),
     [ABILITY_HOVER] = _("Hover"),
     [ABILITY_DEPRAVITY] = _("Depravity"),
+    [ABILITY_WILDFIRE] = _("Wildfire"),
+    [ABILITY_JUMP_SCARE] = _("Jump Scare"),
+    [ABILITY_TAR_TOSS] = _("Tar Toss"),
+    [ABILITY_STUN_SHOCK] = _("Stun Shock"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2124,4 +2132,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_APPLE_PIE] = sAbilityApplePieDescription,
     [ABILITY_HOVER] = sAbilityHoverDescription,
     [ABILITY_DEPRAVITY] = sAbilityDepravityDescription,
+    [ABILITY_WILDFIRE] = sAbilityWildfireDescription,
+    [ABILITY_JUMP_SCARE] = sAbilityJumpScareDescription,
+    [ABILITY_TAR_TOSS] = sAbilityTarTossDescription,
+    [ABILITY_STUN_SHOCK] = sAbilityStunShockDescription,
 };

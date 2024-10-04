@@ -2731,13 +2731,14 @@ static void Cmd_datahpupdate(void)
             if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PATCHWORK) && (ability = ABILITY_PATCHWORK))
                 || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE) && (ability = ABILITY_DISGUISE)))
             {
+                int newSpecies = gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU ? SPECIES_MIMIKYU_BUSTED : SPECIES_MIMIKYU_RAYQUAZA_BUSTED;
                 if (ability == ABILITY_PATCHWORK && gBattlerAttacker != gActiveBattler)
                 {
                     SetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_PATCHWORK, gBattlerAttacker);
                 }
                 gBattleScripting.abilityPopupOverwrite = ability;
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MIMIKYU_BUSTED);
-                gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU_BUSTED;
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+                gBattleMons[gActiveBattler].species = newSpecies;
             }
             else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ICE_FACE))
             {
@@ -10891,12 +10892,13 @@ static void Cmd_various(void)
         int ability;
         if (((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE) && (ability = ABILITY_DISGUISE))
                 || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PATCHWORK) && (ability = ABILITY_PATCHWORK)))
-            && gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU_BUSTED
+            && (gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU_BUSTED || gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU_RAYQUAZA_BUSTED)
             && IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY))
         {
+            int newSpecies = gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU_BUSTED ? SPECIES_MIMIKYU : SPECIES_MIMIKYU_RAYQUAZA;
             gBattleScripting.abilityPopupOverwrite = ability;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_MIMIKYU);
-            gBattleMons[gActiveBattler].species = SPECIES_MIMIKYU;
+            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+            gBattleMons[gActiveBattler].species = newSpecies;
             BattleScriptPush(gBattlescriptCurrInstr);
             gBattlescriptCurrInstr = BattleScript_AttackerFormChange;
         }
@@ -13129,6 +13131,7 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
         case ABILITY_TERRIFY:
         case ABILITY_FEARMONGER:
         case ABILITY_YUKI_ONNA:
+        case ABILITY_GLEAM_EYES:
             //Abilities that are immune to this effect
             if(BATTLER_HAS_ABILITY(battler, ABILITY_SCRAPPY)      ||
                 BATTLER_HAS_ABILITY(battler, ABILITY_BLIND_RAGE)  ||
@@ -16129,7 +16132,7 @@ u16 GetNoDamageAbility(u8 batter)
 bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move)
 {
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DISGUISE) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_PATCHWORK)){
-        if (gBattleMons[battlerDef].species == SPECIES_MIMIKYU       &&
+        if ((gBattleMons[battlerDef].species == SPECIES_MIMIKYU || gBattleMons[battlerDef].species == SPECIES_MIMIKYU_RAYQUAZA) &&
            !(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED) &&
            !IS_MOVE_STATUS(move) &&
            !((gHitMarker & HITMARKER_IGNORE_DISGUISE) && move != MOVE_SUCKER_PUNCH)){
