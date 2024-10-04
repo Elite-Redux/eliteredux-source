@@ -736,9 +736,11 @@
 #define ABILITY_APPLE_PIE 714 // Self Sufficient + Ripen.
 #define ABILITY_HOVER 715 // Psychic Type added + Levitates.
 #define ABILITY_DEPRAVITY 716 // Merciless + Overcharge.
+#define ABILITY_WILDFIRE 717 // Attacks with Fire Spin on switch-in.
+#define ABILITY_JUMP_SCARE 718 // Attacks with Astonish on switch-in.
+#define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
 
-
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DEPRAVITY + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_TAR_TOSS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

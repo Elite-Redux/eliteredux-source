@@ -683,6 +683,9 @@ static const u8 sAbilityAquaticDwellerDescription[] = _("Boosts the power of Wat
 static const u8 sAbilityApplePieDescription[] = _("Self Sufficient + Ripen.");
 static const u8 sAbilityHoverDescription[] = _("Psychic Type added + Levitates.");
 static const u8 sAbilityDepravityDescription[] = _("Merciless + Overcharge.");
+static const u8 sAbilityWildfireDescription[] = _("Attacks with Fire Spin on\nswitch-in.");
+static const u8 sAbilityJumpScareDescription[] = _("Attacks with Astonish on\nswitch-in.");
+static const u8 sAbilityTarTossDescription[] = _("Uses Tar Shot on switch-in.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1403,6 +1406,9 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_APPLE_PIE] = _("Apple Pie"),
     [ABILITY_HOVER] = _("Hover"),
     [ABILITY_DEPRAVITY] = _("Depravity"),
+    [ABILITY_WILDFIRE] = _("Wildfire"),
+    [ABILITY_JUMP_SCARE] = _("Jump Scare"),
+    [ABILITY_TAR_TOSS] = _("Tar Toss"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2124,4 +2130,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_APPLE_PIE] = sAbilityApplePieDescription,
     [ABILITY_HOVER] = sAbilityHoverDescription,
     [ABILITY_DEPRAVITY] = sAbilityDepravityDescription,
+    [ABILITY_WILDFIRE] = sAbilityWildfireDescription,
+    [ABILITY_JUMP_SCARE] = sAbilityJumpScareDescription,
+    [ABILITY_TAR_TOSS] = sAbilityTarTossDescription,
 };
