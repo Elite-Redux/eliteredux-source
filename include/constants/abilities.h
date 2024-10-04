@@ -739,8 +739,9 @@
 #define ABILITY_WILDFIRE 717 // Attacks with Fire Spin on switch-in.
 #define ABILITY_JUMP_SCARE 718 // Attacks with Astonish on switch-in.
 #define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
+#define ABILITY_STUN_SHOCK 720 // Attacks have a 60% chance to Paralyze or Poison.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_TAR_TOSS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_STUN_SHOCK + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

@@ -686,6 +686,7 @@ static const u8 sAbilityDepravityDescription[] = _("Merciless + Overcharge.");
 static const u8 sAbilityWildfireDescription[] = _("Attacks with Fire Spin on\nswitch-in.");
 static const u8 sAbilityJumpScareDescription[] = _("Attacks with Astonish on\nswitch-in.");
 static const u8 sAbilityTarTossDescription[] = _("Uses Tar Shot on switch-in.");
+static const u8 sAbilityStunShockDescription[] = _("Attacks have a 60% chance to\nParalyze or Poison.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1409,6 +1410,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_WILDFIRE] = _("Wildfire"),
     [ABILITY_JUMP_SCARE] = _("Jump Scare"),
     [ABILITY_TAR_TOSS] = _("Tar Toss"),
+    [ABILITY_STUN_SHOCK] = _("Stun Shock"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2133,4 +2135,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_WILDFIRE] = sAbilityWildfireDescription,
     [ABILITY_JUMP_SCARE] = sAbilityJumpScareDescription,
     [ABILITY_TAR_TOSS] = sAbilityTarTossDescription,
+    [ABILITY_STUN_SHOCK] = sAbilityStunShockDescription,
 };

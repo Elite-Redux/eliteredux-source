@@ -9482,6 +9482,35 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
         }
 
+        // Stun Shock
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_STUN_SHOCK)) {
+			if (ShouldApplyOnHitAffect(gBattlerTarget) && (Random() % 100) < 60)
+            {
+                int shouldActivate = FALSE;
+                if (Random() % 2)
+                {
+                    if (CanBePoisoned(battler, gBattlerTarget))
+                    {
+                        shouldActivate = TRUE;
+                        gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
+                    }
+                }
+                else if (CanBeParalyzed(battler, gBattlerTarget))
+                {
+                    shouldActivate = TRUE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+                }
+
+                if (shouldActivate) {
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_STUN_SHOCK;
+                    BattleScriptPushCursor();
+                    gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                    effect++;
+                }
+            }
+        }
+
         //Shocking Jaws
 		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SHOCKING_JAWS) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SHOCKING_MAW)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
