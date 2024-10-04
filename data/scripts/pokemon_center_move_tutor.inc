@@ -367,18 +367,18 @@ PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 	case SPECIES_ZYGARDE_10_POWER_CONSTRUCT, PKMN_Center_EventScript_SetflagZygarde10PowerConstruct
 	case SPECIES_MELOETTA, PKMN_Center_EventScript_SetflagMeloetta
 	case SPECIES_SILVALLY, PKMN_Center_Eventscript_SetflagSilvally
-	case SPECIES_TERAPAGOS, PKMN_Center_Eventscript_SetflagTerapagos
-	case SPECIES_CHI_YU, PKMN_Center_Eventscript_SetflagChiYu
-	case SPECIES_WO_CHIEN, PKMN_Center_Eventscript_SetflagWoChien
-	case SPECIES_CHIEN_PAO, PKMN_Center_Eventscript_SetflagChienPao
-	case SPECIES_TING_LU, PKMN_Center_Eventscript_SetflagTingLu
-	case SPECIES_ZACIAN, PKMN_Center_Eventscript_SetflagZacian
-	case SPECIES_ZAMAZENTA, PKMN_Center_Eventscript_SetflagZamazenta
-	case SPECIES_ETERNATUS, PKMN_Center_Eventscript_SetflagEternatus
-	case SPECIES_KELDEO, PKMN_Center_Eventscript_SetflagKeldeo
-	case SPECIES_PIKACHU_PARTNER, PKMN_Center_Eventscript_SetflagPikachuPartner
-	case SPECIES_EEVEE_PARTNER, PKMN_Center_Eventscript_SetflagEeveePartner
-	case SPECIES_MEOWTH_PARTNER, PKMN_Center_Eventscript_SetflagMeowthPartner
+	case SPECIES_TERAPAGOS, PKMN_Center_EventScript_SetflagTerapagos
+	case SPECIES_CHI_YU, PKMN_Center_EventScript_SetflagChiYu
+	case SPECIES_WO_CHIEN, PKMN_Center_EventScript_SetflagWoChien
+	case SPECIES_CHIEN_PAO, PKMN_Center_EventScript_SetflagChienPao
+	case SPECIES_TING_LU, PKMN_Center_EventScript_SetflagTingLu
+	case SPECIES_ZACIAN, PKMN_Center_EventScript_SetflagZacian
+	case SPECIES_ZAMAZENTA, PKMN_Center_EventScript_SetflagZamazenta
+	case SPECIES_ETERNATUS, PKMN_Center_EventScript_SetflagEternatus
+	case SPECIES_KELDEO, PKMN_Center_EventScript_SetflagKeldeo
+	case SPECIES_PIKACHU_PARTNER, PKMN_Center_EventScript_SetflagPikachuPartner
+	case SPECIES_EEVEE_PARTNER, PKMN_Center_EventScript_SetflagEeveePartner
+	case SPECIES_MEOWTH_PARTNER, PKMN_Center_EventScript_SetflagMeowthPartner
 	releaseall
 	end
 
@@ -397,7 +397,7 @@ PKMN_Center_EventScript_SetflagChiYu::
 	releaseall
 	end
 
-PKMN_Center_Eventscript_SetflagChienPao::
+PKMN_Center_EventScript_SetflagChienPao::
 	setflag FLAG_RECEIVED_CHIEN_PAO
 	releaseall
 	end
@@ -469,26 +469,26 @@ PKMN_Center_Eventscript_SetflagSilvally::
 	releaseall
 	end
 
-PKMN_Center_Eventscript_SetflagPikachuPartner::
+PKMN_Center_EventScript_SetflagPikachuPartner::
 	giveitem ITEM_PIKANITE
 	setflag FLAG_RECEIVED_PIKACHU_PARTNER
 	releaseall
 	end
 
-PKMN_Center_Eventscript_SetflagEeveePartner::
+PKMN_Center_EventScript_SetflagEeveePartner::
 	giveitem ITEM_EEVITE
 	setflag FLAG_RECEIVED_EEVEE_PARTNER
 	releaseall
 	end
 
-PKMN_Center_Eventscript_SetflagMeowthPartner::
+PKMN_Center_EventScript_SetflagMeowthPartner::
 	giveitem ITEM_MEOWTHITE
 	giveitem ITEM_AMULET_COIN
 	setflag FLAG_RECEIVED_MEOWTH_PARTNER
 	releaseall
 	end
 
-PKMN_Center_Eventscript_SetflagTerapagosPartner::
+PKMN_Center_EventScript_SetflagTerapagos::
 	setflag FLAG_RECEIVED_TERAPAGOS
 	releaseall
 	end
