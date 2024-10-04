@@ -5664,12 +5664,13 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
         
         if ((CheckAndSetSwitchInAbility(battler, ABILITY_DISGUISE) | CheckAndSetSwitchInAbility(battler, ABILITY_PATCHWORK))
-            && gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED
+            && (gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED || gBattleMons[battler].species == SPECIES_MIMIKYU_RAYQUAZA_BUSTED)
             && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
             && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
         {
-            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_MIMIKYU);
-            gBattleMons[battler].species = SPECIES_MIMIKYU;
+            int newSpecies = gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED ? SPECIES_MIMIKYU : SPECIES_MIMIKYU_RAYQUAZA;
+            UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+            gBattleMons[battler].species = newSpecies;
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
             effect++;
         }
@@ -16127,6 +16128,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
     {
         // Changed Form ID                      Default Form ID               Should change on switch
         {SPECIES_MIMIKYU_BUSTED,                SPECIES_MIMIKYU,                FALSE},
+        {SPECIES_MIMIKYU_RAYQUAZA_BUSTED,       SPECIES_MIMIKYU_RAYQUAZA,       FALSE},
         {SPECIES_GRENINJA_ASH,                  SPECIES_GRENINJA_BATTLE_BOND,   FALSE},
         {SPECIES_EISCUE_NOICE_FACE,             SPECIES_EISCUE,                 FALSE},
         {SPECIES_PALAFIN_HERO,                  SPECIES_PALAFIN,                FALSE},
