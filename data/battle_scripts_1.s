@@ -9600,6 +9600,9 @@ BattleScript_IntimidateActivatedNew::
 	battlemacros MACROS_SAVE_ABILITY_TO_VARIABLE, 0, NULL
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
+	jumpifhalfword CMP_NOT_EQUAL, sABILITY_OVERWRITE, ABILITY_GLEAM_EYES, BattleScript_IntimidateActivatedNew_Continue
+	tryfriskmsg BS_ATTACKER
+BattleScript_IntimidateActivatedNew_Continue:
 	battlemacros MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_1, 0, BattleScript_IntimidateCloneActivated_Target_1
 	battlemacros MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_2, 0, BattleScript_IntimidateCloneActivated_Target_2
 	end3

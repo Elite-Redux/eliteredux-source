@@ -6326,6 +6326,19 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         if(CheckAndSetSwitchInAbility(battler, ABILITY_SCARE)) {
             effect += UseIntimidateClone(battler, ABILITY_SCARE);
         }
+
+        if (CheckAndSetSwitchInAbility(battler, ABILITY_GLEAM_EYES))
+        {
+            if (UseIntimidateClone(battler, ABILITY_GLEAM_EYES))
+            {
+                gBattleStruct->friskedAbility = TRUE;
+            }
+            else
+            {
+                BattleScriptPushCursorAndCallback(BattleScript_FriskActivates);
+            }
+            effect++;
+        }
         
         // Fearmonger
         if(CheckAndSetSwitchInAbility(battler, ABILITY_FEARMONGER)) {
