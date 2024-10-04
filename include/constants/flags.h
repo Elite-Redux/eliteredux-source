@@ -1513,6 +1513,20 @@
 #define FLAG_VISITED_MT_CHIMNEY                                     3072
 #define FLAG_VISITED_MT_PYRE                                        3073
 #define FLAG_FRONTIER_6V6                                           3074
+#define FLAG_RECEIVED_PIKACHU_PARTNER                               3075
+#define FLAG_RECEIVED_EEVEE_PARTNER                                 3076
+#define FLAG_RECEIVED_MEOWTH_PARTNER                                3077
+#define FLAG_RECEIVED_TERAPAGOS                                     3078
+#define FLAG_RECEIVED_ZYGARDE_10_POWER_CONSTRUCT                    3079
+#define FLAG_RECEIVED_ENAMORUS                                      3080
+#define FLAG_RECEIVED_CHI_YU                                        3081
+#define FLAG_RECEIVED_TING_LU                                       3082
+#define FLAG_RECEIVED_WO_CHIEN                                      3083
+#define FLAG_RECEIVED_CHIEN_PAO                                     3084
+#define FLAG_RECEIVED_ZACIAN                                        3085
+#define FLAG_RECEIVED_ZAMAZENTA                                     3086
+#define FLAG_RECEIVED_ETERNATUS                                     3087
+#define FLAG_RECEIVED_KELDEO                                        3088
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 
