@@ -1408,7 +1408,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_HOVER] = _("Hover"),
     [ABILITY_DEPRAVITY] = _("Depravity"),
     [ABILITY_WILDFIRE] = _("Wildfire"),
-    [ABILITY_JUMP_SCARE] = _("Jump Scare"),
+    [ABILITY_JUMP_SCARE] = _("Jumpscare"),
     [ABILITY_TAR_TOSS] = _("Tar Toss"),
     [ABILITY_STUN_SHOCK] = _("Stun Shock"),
 };
