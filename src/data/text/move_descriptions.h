@@ -3786,6 +3786,9 @@ static const u8 sMoveTwoLineDescription_MoveSparkleBarrage[] = _(
     "Hits 3 Times with light\n"
     "rays.");
 
+static const u8 sMoveTwoLineDescription_MoveSpectralSerenade[] = _(
+    "Not implemented.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4751,6 +4754,8 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TERROR_LOCKS - 1] = sMoveTwoLineDescription_MoveTerrorLocks,
     [MOVE_DREAM_INVERSION - 1] = sMoveTwoLineDescription_MoveDreamInversion,
     [MOVE_TERA_STARSTORM - 1] = sMoveTwoLineDescription_MoveTeraStarstorm,
+    [MOVE_SPARKLE_BARRAGE - 1] = sMoveTwoLineDescription_MoveSparkleBarrage,
+    [MOVE_SPECTRAL_SERENADE - 1] = sMoveTwoLineDescription_MoveSpectralSerenade,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5716,6 +5721,7 @@ static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\nD
 static const u8 sMoveFourLineDescription_MoveDreamInversion[] = _("Deals 2x damage to\nsleeping foes. 10%\nchance for drowsy.\nHits both foes.");
 static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both foes\nwith a rain of crystals.");
 static const u8 sMoveFourLineDescription_MoveSparkleBarrage[] = _("The user shoots\n3 beams of light\nat the target.");
+static const u8 sMoveFourLineDescription_MoveSpectralSerenade[] = _("Not implemented.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,

@@ -5394,7 +5394,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .throwingBased = TRUE,
         .everyOtherTurn = TRUE,
-        .splitFlag = HITS_DEF, USE_HIGHEST_OFFENSE,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_CROSS_POISON] =
     {
@@ -11886,15 +11886,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TERA_STARSTORM] =
     {
-        .effect = EFFECT_HIT,
-        .power = 120,
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
         .type = TYPE_NORMAL,
-        .accuracy = 100,
-        .pp = 5,
+        .accuracy = 0,
+        .pp = 0,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_BOTH,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        .split = SPLIT_SPECIAL,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
     },
     [MOVE_SPARKLE_BARRAGE] =
     {
