@@ -982,6 +982,8 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_TERROR_LOCKS
 	.4byte Move_NONE @ MOVE_DREAM_INVERSION
 	.4byte Move_NONE @ MOVE_TERA_STARSTORM
+	.4byte Move_NONE @ MOVE_SPARKLE_BARRAGE
+	.4byte Move_NONE @ MOVE_SPECTRAL_SERENADE
 
 	.align 2
 gBattleAnims_StatusConditions::

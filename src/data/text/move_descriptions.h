@@ -3786,6 +3786,9 @@ static const u8 sMoveTwoLineDescription_MoveSparkleBarrage[] = _(
     "Hits 3 Times with light\n"
     "rays.");
 
+static const u8 sMoveTwoLineDescription_MoveSpectralSerenade[] = _(
+    "Not implemented.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4751,6 +4754,8 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TERROR_LOCKS - 1] = sMoveTwoLineDescription_MoveTerrorLocks,
     [MOVE_DREAM_INVERSION - 1] = sMoveTwoLineDescription_MoveDreamInversion,
     [MOVE_TERA_STARSTORM - 1] = sMoveTwoLineDescription_MoveTeraStarstorm,
+    [MOVE_SPARKLE_BARRAGE - 1] = sMoveTwoLineDescription_MoveSparkleBarrage,
+    [MOVE_SPECTRAL_SERENADE - 1] = sMoveTwoLineDescription_MoveSpectralSerenade,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -4811,7 +4816,7 @@ static const u8 sMoveFourLineDescription_MoveWaterGun[] = _("The foe is struck\n
 static const u8 sMoveFourLineDescription_MoveHydroPump[] = _("A high volume of\nwater is blasted at\nwith high pressure.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveSurf[] = _("A big wave crashes\ndown on the foe.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveIceBeam[] = _("The foe is struck\nwith an icy beam.\n10% frostbite chance.\nMega Launcher boost");
-static const u8 sMoveFourLineDescription_MoveBlizzard[] = _("The foe is blasted\nwith a blizzard.\n10% frostbite chance.\nWeather-based.");
+static const u8 sMoveFourLineDescription_MoveBlizzard[] = _("The foe is blasted\nwith a blizzard.\n20% frostbite chance.\nWeather-based.");
 static const u8 sMoveFourLineDescription_MovePsybeam[] = _("A peculiar ray is\nshot at the foe.\nthat lowers SpAtk.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveBubbleBeam[] = _("A spray of bubbles\nstrikes the foe\n2-5 times.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveAuroraBeam[] = _("A rainbow-colored\nattack beam.\n100% attack drop.\nMega Launcher boost");
@@ -5716,6 +5721,7 @@ static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\nD
 static const u8 sMoveFourLineDescription_MoveDreamInversion[] = _("Deals 2x damage to\nsleeping foes. 10%\nchance for drowsy.\nHits both foes.");
 static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both foes\nwith a rain of crystals.");
 static const u8 sMoveFourLineDescription_MoveSparkleBarrage[] = _("The user shoots\n3 beams of light\nat the target.");
+static const u8 sMoveFourLineDescription_MoveSpectralSerenade[] = _("Not implemented.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,

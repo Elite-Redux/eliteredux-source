@@ -619,7 +619,7 @@
 #define ABILITY_OLE 597 // 30% chance to evade single- target moves.
 #define ABILITY_MALICIOUS 598 // Lowers the foe's highest Attack and Defense stat.
 #define ABILITY_DEAD_POWER 599 // 1.5x Attack boost. 20% chance to curse on contact moves.
-#define ABILITY_BRAWLING_WYVERN 600 // Dragon type moves become punching moves.
+#define ABILITY_BRAWLING_WYVERN 600 // No guard + Dragon type moves become punching moves.
 #define ABILITY_MYTHICAL_ARROWS 601 // Arrow moves become special and deal 30% more damage.
 #define ABILITY_LAWNMOWER 602 // Removes terrain on switch-in. Stat up if terrain removed.
 #define ABILITY_FLOURISH 603 // Boosts Grass moves by 50% in grassy terrain.
