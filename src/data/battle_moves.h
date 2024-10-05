@@ -5394,6 +5394,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .throwingBased = TRUE,
         .everyOtherTurn = TRUE,
+        .splitFlag = HITS_DEF, USE_HIGHEST_OFFENSE,
     },
     [MOVE_CROSS_POISON] =
     {
@@ -11907,6 +11908,20 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_PHYSICAL,
         .arrowBased = TRUE,
+    },
+    [MOVE_SPECTRAL_SERENADE] =
+    {
+        .effect = EFFECT_HIT,
+        .power = 130,
+        .type = TYPE_GHOST,
+        .accuracy = 100,
+        .pp = 5,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
+        .splitFlag = USE_HIGHEST_OFFENSE,
+        .everyOtherTurn = TRUE,
     },
 };
 

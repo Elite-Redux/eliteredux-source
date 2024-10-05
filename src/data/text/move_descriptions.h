@@ -6681,4 +6681,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_DREAM_INVERSION - 1] = sMoveFourLineDescription_MoveDreamInversion,
     [MOVE_TERA_STARSTORM - 1] = sMoveFourLineDescription_MoveTeraStarstorm,
     [MOVE_SPARKLE_BARRAGE - 1] = sMoveFourLineDescription_MoveSparkleBarrage,
+    [MOVE_SPECTRAL_SERENADE - 1] = sMoveFourLineDescription_MoveSpectralSerenade,
 };
