@@ -1933,6 +1933,10 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         return 101;
     else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_NO_GUARD))
         return 101;
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BRAWLING_WYVERN))
+        return 101;
+    else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_BRAWLING_WYVERN))
+        return 101;
     else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GRIP_PINCER) && gBattleMons[battlerDef].status2 & STATUS2_WRAPPED)
         return 101;
     else if (IsMyceliumMightActive(battlerAtk))

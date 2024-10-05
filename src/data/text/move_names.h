@@ -1932,4 +1932,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_TERROR_LOCKS] = _("Terror Locks"),
     [MOVE_DREAM_INVERSION] = _("Dream Invasion"),
     [MOVE_TERA_STARSTORM] = _("Tera Starstorm"),
+    [MOVE_SPARKLE_BARRAGE] = _("Sparkling Barrage"),
 };
