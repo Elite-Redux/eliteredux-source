@@ -376,6 +376,10 @@ PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 	case SPECIES_ZAMAZENTA, PKMN_Center_EventScript_SetflagZamazenta
 	case SPECIES_ETERNATUS, PKMN_Center_EventScript_SetflagEternatus
 	case SPECIES_KELDEO, PKMN_Center_EventScript_SetflagKeldeo
+	case SPECIES_REGIDRAGO, PKMN_Center_EventScript_SetflagRegidrago
+	case SPECIES_REGIELEKI, PKMN_Center_EventScript_SetflagRegieleki
+	case SPECIES_FLOETTE_ETERNAL_FLOWER, PKMN_Center_EventScript_SetflagFloetteEternal
+	case SPECIES_VOLCANION, PKMN_Center_EventScript_SetflagVolcanion
 	case SPECIES_PIKACHU_PARTNER, PKMN_Center_EventScript_SetflagPikachuPartner
 	case SPECIES_EEVEE_PARTNER, PKMN_Center_EventScript_SetflagEeveePartner
 	case SPECIES_MEOWTH_PARTNER, PKMN_Center_EventScript_SetflagMeowthPartner
@@ -389,6 +393,26 @@ PKMN_Center_EventScript_SetflagGreninja::
 
 PKMN_Center_EventScript_SetflagZygarde10::
 	setflag FLAG_RECEIVED_ZYGARDE_10
+	releaseall
+	end
+
+PKMN_Center_EventScript_SetflagRegidrago::
+	setflag FLAG_RECEIVED_REGIDRAGO
+	releaseall
+	end
+
+PKMN_Center_EventScript_SetflagRegieleki::
+	setflag FLAG_RECEIVED_REGIELEKI
+	releaseall
+	end
+
+PKMN_Center_EventScript_SetflagVolcanion::
+	setflag FLAG_RECEIVED_VOLCANION
+	releaseall
+	end
+
+PKMN_Center_EventScript_SetflagFloetteEternal::
+	setflag FLAG_RECEIVED_FLOETTE_ETERNAL
 	releaseall
 	end
 
@@ -470,20 +494,16 @@ PKMN_Center_Eventscript_SetflagSilvally::
 	end
 
 PKMN_Center_EventScript_SetflagPikachuPartner::
-	giveitem ITEM_PIKANITE
 	setflag FLAG_RECEIVED_PIKACHU_PARTNER
 	releaseall
 	end
 
 PKMN_Center_EventScript_SetflagEeveePartner::
-	giveitem ITEM_EEVITE
 	setflag FLAG_RECEIVED_EEVEE_PARTNER
 	releaseall
 	end
 
 PKMN_Center_EventScript_SetflagMeowthPartner::
-	giveitem ITEM_MEOWTHITE
-	giveitem ITEM_AMULET_COIN
 	setflag FLAG_RECEIVED_MEOWTH_PARTNER
 	releaseall
 	end

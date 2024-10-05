@@ -1527,6 +1527,10 @@
 #define FLAG_RECEIVED_ZAMAZENTA                                     3086
 #define FLAG_RECEIVED_ETERNATUS                                     3087
 #define FLAG_RECEIVED_KELDEO                                        3088
+#define FLAG_RECEIVED_REGIDRAGO                                     3089
+#define FLAG_RECEIVED_REGIELEKI                                     3090
+#define FLAG_RECEIVED_VOLCANION                                     3091
+#define FLAG_RECEIVED_FLOETTE_ETERNAL                               3092
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 
