@@ -12533,8 +12533,7 @@ case ITEMEFFECT_KINGSROCK:
             break;
         case HOLD_EFFECT_LIFE_ORB:
             {
-            int canProc = !gProcessingExtraAttacks;
-            if (gProcessingExtraAttacks) canProc = gBattlerAttacker == gBattlerByTurnOrder[gCurrentTurnActionNumber];
+            int canProc = gBattlerAttacker == gBattlerByTurnOrder[gCurrentTurnActionNumber];
             if (canProc && gQueuedAttackCount)
             {
                 // Delay life orb until all extra attack actions for the battler are processed
