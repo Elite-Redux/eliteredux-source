@@ -7273,7 +7273,7 @@ u16 SpeciesToNationalPokedexNum(u16 species)
     if (!species)
         return 0;
 
-    return gSpeciesToNationalPokedexNum[species - 1];
+    return gSpeciesToNationalPokedexNum[GET_BASE_SPECIES_ID(species) - 1];
 }
 
 u16 SpeciesToHoennPokedexNum(u16 species)
@@ -7281,7 +7281,7 @@ u16 SpeciesToHoennPokedexNum(u16 species)
     if (!species)
         return 0;
 
-    return gSpeciesToHoennPokedexNum[species - 1];
+    return gSpeciesToHoennPokedexNum[GET_BASE_SPECIES_ID(species) - 1];
 }
 
 u16 HoennToNationalOrder(u16 hoennNum)
