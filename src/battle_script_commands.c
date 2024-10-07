@@ -1592,7 +1592,7 @@ static void Cmd_attackcanceler(void)
     }
 	// Hyper Aggressive
 	if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-    && (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_HYPER_AGGRESSIVE) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ICE_COLD_HUNTER))
+    && (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_HYPER_AGGRESSIVE) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ICE_COLD_HUNTER) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_RAGING_GODDESS))
     && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
     && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
     {
@@ -9350,6 +9350,7 @@ static void Cmd_various(void)
         if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAMPAGE)) ability = ABILITY_RAMPAGE;
         else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BERSERKER_RAGE)) ability = ABILITY_BERSERKER_RAGE;
         else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MASTER_HAND)) ability = ABILITY_MASTER_HAND;
+        else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAGING_GODDESS)) ability = ABILITY_RAGING_GODDESS;
         
         if (ability && HasAttackerFaintedTarget() && !NoAliveMonsForEitherParty())
         {

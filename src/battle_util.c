@@ -230,6 +230,7 @@ void HandleAction_UseMove(void)
         SetAbilityState(gBattlerAttacker, ABILITY_RAMPAGE, FALSE);
         SetAbilityState(gBattlerAttacker, ABILITY_MASTER_HAND, FALSE);
         SetAbilityState(gBattlerAttacker, ABILITY_BERSERKER_RAGE, FALSE);
+        SetAbilityState(gBattlerAttacker, ABILITY_RAGING_GODDESS, FALSE);
     }
 
     gIsCriticalHit = FALSE;
@@ -1996,6 +1997,7 @@ u8 TrySetCantSelectMoveBattleScript(void)
         && gBattleMoves[move].everyOtherTurn
         && !GetAbilityState(gActiveBattler, ABILITY_RAMPAGE)
         && !GetAbilityState(gActiveBattler, ABILITY_MASTER_HAND)
+        && !GetAbilityState(gActiveBattler, ABILITY_RAGING_GODDESS)
         && !GetAbilityState(gActiveBattler, ABILITY_BERSERKER_RAGE))
     {
         if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
@@ -2059,6 +2061,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
             && gBattleMoves[gBattleMons[battlerId].moves[i]].everyOtherTurn
             && !GetAbilityState(battlerId, ABILITY_RAMPAGE)
             && !GetAbilityState(battlerId, ABILITY_MASTER_HAND)
+            && !GetAbilityState(battlerId, ABILITY_RAGING_GODDESS)
             && !GetAbilityState(battlerId, ABILITY_BERSERKER_RAGE))
             unusableMoves |= 1 << i;
         else if (IsSleepClauseDisablingMove(battlerId, gBattleMons[battlerId].moves[i])){
