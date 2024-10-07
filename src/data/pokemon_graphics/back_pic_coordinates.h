@@ -4298,7 +4298,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_FUJIFLAP] =
     {
         .size = 0x67,
-        .y_offset = 8,
+        .y_offset = 0,
     },
     [SPECIES_APPLETUN] =
     {
@@ -4308,7 +4308,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_GRANITUN] =
     {
         .size = 0x67,
-        .y_offset = 11,
+        .y_offset = 0,
     },
     [SPECIES_SILICOBRA] =
     {
@@ -5759,7 +5759,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_LUMBERING_SLOTH_ENGULFED] =
     {
         .size = 0x88,
-        .y_offset = 2,
+        .y_offset = 3,
     },
     [SPECIES_IRON_CARAPACE] =
     {
@@ -5904,7 +5904,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_CRABONINATION] =
     {
         .size = 0x88,
-        .y_offset = 3,
+        .y_offset = 2,
     },
     [SPECIES_CLEFFA_REDUX] =
     {
@@ -6044,7 +6044,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_BUBBLEO] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  2
     },
     [SPECIES_HYDROAR] =
     {

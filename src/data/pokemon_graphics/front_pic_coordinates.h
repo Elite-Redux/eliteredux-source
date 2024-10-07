@@ -5885,7 +5885,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_MAGMENOUS] =
     {
         .size = 0x76,
-        .y_offset = 7,
+        .y_offset = 0,
     },
     [SPECIES_PSYDUCK_REDUX] =
     {
@@ -5895,7 +5895,7 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_SLYDUCK] =
     {
         .size = 0x78,
-        .y_offset = 2,
+        .y_offset = 5,
     },
     [SPECIES_SHYDUCK] =
     {
@@ -5911,6 +5911,16 @@ const struct MonCoords gMonFrontPicCoords[] =
     {
         .size = 0x87,
         .y_offset = 2,
+    },
+    [SPECIES_BUBBLEO] =
+    {
+        .size = 0x56,
+        .y_offset = 12,
+    },
+    [SPECIES_HYDROAR_F] =
+    {
+        .size = 0x56,
+        .y_offset = 3,
     },
     [SPECIES_SNORUNT_REDUX] =
     {
