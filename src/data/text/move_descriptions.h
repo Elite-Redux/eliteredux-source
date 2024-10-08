@@ -3789,6 +3789,10 @@ static const u8 sMoveTwoLineDescription_MoveSparkleBarrage[] = _(
 static const u8 sMoveTwoLineDescription_MoveSpectralSerenade[] = _(
     "Not implemented.");
 
+static const u8 sMoveTwoLineDescription_MoveMerculight[] = _(
+    "Evades attacks and paralyzes\n"
+    "the attacker.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4756,6 +4760,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TERA_STARSTORM - 1] = sMoveTwoLineDescription_MoveTeraStarstorm,
     [MOVE_SPARKLE_BARRAGE - 1] = sMoveTwoLineDescription_MoveSparkleBarrage,
     [MOVE_SPECTRAL_SERENADE - 1] = sMoveTwoLineDescription_MoveSpectralSerenade,
+    [MOVE_MERCULIGHT - 1] = sMoveTwoLineDescription_MoveMerculight,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -4954,7 +4959,7 @@ static const u8 sMoveFourLineDescription_MoveForesight[] = _("Completely negates
 static const u8 sMoveFourLineDescription_MoveDestinyBond[] = _("If the user faints,\nthe foe delivering\nthe final hit also\nfaints.");
 static const u8 sMoveFourLineDescription_MovePerishSong[] = _("Any battler that\nhears this faints\nin three turns\nunless it switches.");
 static const u8 sMoveFourLineDescription_MoveIcyWind[] = _("A chilling wind is\nused to attack.\nLowers foe's Speed.\nAir-based.");
-static const u8 sMoveFourLineDescription_MoveDetect[] = _("Enables the user to\nevade all attacks.\nIt may fail if used\nin succession.");
+static const u8 sMoveFourLineDescription_MoveDetect[] = _("Evades attacks that\nmay miss. Cannot\nbe broken. May fail if\nused in succession.");
 static const u8 sMoveFourLineDescription_MoveBoneRush[] = _("Strikes with a bone\n2 to 5 times.\nHits swiftly with\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveLockOn[] = _("The user locks on\nto the foe, making\nthe next move sure\nto hit.");
 static const u8 sMoveFourLineDescription_MoveOutrage[] = _("The user thrashes\nabout for two to\nthree turns, then\nbecomes confused.");
@@ -5722,6 +5727,7 @@ static const u8 sMoveFourLineDescription_MoveDreamInversion[] = _("Deals 2x dama
 static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both foes\nwith a rain of crystals.");
 static const u8 sMoveFourLineDescription_MoveSparkleBarrage[] = _("The user shoots\n3 beams of light\nat the target.");
 static const u8 sMoveFourLineDescription_MoveSpectralSerenade[] = _("The foe is hit with\na huge explosion.\nCan only be used\nevery-other turn.");
+static const u8 sMoveFourLineDescription_MoveMerculight[] = _("Evades attacks with\ncertainty, paralyzing\nattackers. May fail if\nused in succession.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6688,4 +6694,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_TERA_STARSTORM - 1] = sMoveFourLineDescription_MoveTeraStarstorm,
     [MOVE_SPARKLE_BARRAGE - 1] = sMoveFourLineDescription_MoveSparkleBarrage,
     [MOVE_SPECTRAL_SERENADE - 1] = sMoveFourLineDescription_MoveSpectralSerenade,
+    [MOVE_MERCULIGHT - 1] = sMoveFourLineDescription_MoveMerculight,
 };

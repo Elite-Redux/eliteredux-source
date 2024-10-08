@@ -208,6 +208,8 @@ struct RoundStruct
     u8 afterYou:1;
     u8 tanglingHusked:1;
     u8 damaged:1;
+    u8 merculight:1;
+    u8 detected:1;
 };
 
 struct TurnStruct

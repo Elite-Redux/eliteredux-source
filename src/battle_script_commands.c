@@ -1040,6 +1040,7 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_SHELL_TRAP] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_SLEEP_TALK,
     [MOVE_SILK_TRAP] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_BURNING_BULWARK] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
+    [MOVE_MERCULIGHT] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
     [MOVE_SIZZLY_SLIDE] = FORBIDDEN_METRONOME,
     [MOVE_SKETCH] = FORBIDDEN_METRONOME | FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT | FORBIDDEN_MIMIC | FORBIDDEN_SLEEP_TALK,
     [MOVE_SKULL_BASH] = FORBIDDEN_SLEEP_TALK,
@@ -5753,6 +5754,14 @@ static void Cmd_moveend(void)
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
                     gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
                     PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_BURNING_BULWARK);
+                    BattleScriptCall(BattleScript_KingsShieldEffect);
+                    effect = 1;
+                }
+                else if (gRoundStructs[gBattlerTarget].merculight)
+                {
+                    gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_MERCULIGHT);
                     BattleScriptCall(BattleScript_KingsShieldEffect);
                     effect = 1;
                 }
@@ -11486,9 +11495,14 @@ static void Cmd_setprotectlike(void)
                 gRoundStructs[gBattlerAttacker].endured = TRUE;
                 SetActiveMultistringChooser(B_MSG_BRACED_ITSELF);
             }
-            else if (gCurrentMove == MOVE_DETECT || gCurrentMove == MOVE_PROTECT)
+            else if (gCurrentMove == MOVE_PROTECT)
             {
                 gRoundStructs[gBattlerAttacker].protected = TRUE;
+                SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
+            }
+            else if (gCurrentMove == MOVE_DETECT)
+            {
+                gRoundStructs[gBattlerAttacker].detected = TRUE;
                 SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
             }
             else if (gCurrentMove == MOVE_SPIKY_SHIELD)
@@ -11519,6 +11533,11 @@ static void Cmd_setprotectlike(void)
             else if (gCurrentMove == MOVE_BURNING_BULWARK)
             {
                 gRoundStructs[gBattlerAttacker].burningBulwark = TRUE;
+                SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
+            }
+            else if (gCurrentMove == MOVE_MERCULIGHT)
+            {
+                gRoundStructs[gBattlerAttacker].merculight = TRUE;
                 SetActiveMultistringChooser(B_MSG_PROTECTED_ITSELF);
             }
             else if (gCurrentMove == MOVE_MIND_READER)

@@ -965,6 +965,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_TERA_STARSTORM] = _("TeraStarstrm"),
     [MOVE_SPARKLE_BARRAGE] = _("SprklngBrrge"),
     [MOVE_SPECTRAL_SERENADE] = _("SpctrlSrnade"),
+    [MOVE_MERCULIGHT] = _("Merculight"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1936,4 +1937,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_TERA_STARSTORM] = _("Tera Starstorm"),
     [MOVE_SPARKLE_BARRAGE] = _("Sparkling Barrage"),
     [MOVE_SPECTRAL_SERENADE] = _("Spectral Serenade"),
+    [MOVE_MERCULIGHT] = _("Merculight"),
 };

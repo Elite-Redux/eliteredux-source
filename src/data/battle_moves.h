@@ -11923,6 +11923,19 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .splitFlag = USE_HIGHEST_OFFENSE,
         .everyOtherTurn = TRUE,
     },
+    [MOVE_MERCULIGHT] =
+    {
+        .effect = EFFECT_PROTECT,
+        .power = 0,
+        .type = TYPE_ELECTRIC,
+        .accuracy = 0,
+        .pp = 10,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_USER,
+        .priority = 4,
+        .flags = FLAG_PROTECTION_MOVE,
+        .split = SPLIT_STATUS,
+    },
 };
 
 const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES] = {
