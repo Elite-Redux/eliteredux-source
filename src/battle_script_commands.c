@@ -5121,15 +5121,12 @@ static void Cmd_jumpifarraynotequal(void)
     u8 i;
     for (i = 0; i < size; i++)
     {
-        if (*mem1 == *mem2)
+        if (mem1[i] != mem2[i])
         {
-            equalBytes++;
+            gBattlescriptCurrInstr = jumpPtr;
+            return;
         }
-        mem1++, mem2++;
-    }
-
-    if (equalBytes != size)
-        gBattlescriptCurrInstr = jumpPtr;
+    }        
 }
 
 static void Cmd_setbyte(void)
