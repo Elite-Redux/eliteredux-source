@@ -135,9 +135,8 @@ u32 sub_805725C(u8 battlerId)
                 {
                     gBattleMons[battlerId].status1 &= ~(STATUS1_SLEEP);
                     gBattleMons[battlerId].status2 &= ~(STATUS2_NIGHTMARE);
-                    BattleScriptPushCursor();
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_WOKE_UP_UPROAR;
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedWokeUp;
+                    BattleScriptCall(BattleScript_MoveUsedWokeUp);
                     effect = 2;
                 }
                 else
@@ -162,9 +161,8 @@ u32 sub_805725C(u8 battlerId)
                     else
                     {
                         gBattleMons[battlerId].status2 &= ~(STATUS2_NIGHTMARE);
-                        BattleScriptPushCursor();
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_WOKE_UP;
-                        gBattlescriptCurrInstr = BattleScript_MoveUsedWokeUp;
+                        BattleScriptCall(BattleScript_MoveUsedWokeUp);
                         effect = 2;
                     }
                 }

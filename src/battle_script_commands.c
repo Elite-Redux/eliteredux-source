@@ -3640,8 +3640,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_ENTRANCE);
                     gBattleMons[gEffectBattler].status2 |= STATUS2_CONFUSION_TURN(((Random()) % 4) + 2); // 2-5 turns
 
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+                    BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
                 }
                 break;
             case MOVE_EFFECT_FLINCH:
@@ -3657,8 +3656,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gLockedMoves[gEffectBattler] = gCurrentMove;
                     gBattleMons[gEffectBattler].status2 |= STATUS2_UPROAR_TURN(B_UPROAR_TURNS >= GEN_5 ? 3 : ((Random() & 3) + 2));
 
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+                    BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
                 }
                 break;
             case MOVE_EFFECT_PAYDAY:
@@ -3669,8 +3667,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     if (PayDay > gPaydayMoney)
                         gPaydayMoney = 0xFFFF;
                 }
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+                BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
                 break;
             case MOVE_EFFECT_HAPPY_HOUR:
                 if (GET_BATTLER_SIDE(gBattlerAttacker) == B_SIDE_PLAYER && !gBattleStruct->moneyMultiplierMove)
@@ -3709,8 +3706,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 if (!(gBattleMons[gEffectBattler].status2 & STATUS2_CURSED))
                 {
                     gBattleMons[gEffectBattler].status2 |= STATUS2_CURSED;
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+                    BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
                 }
                 break;
             case MOVE_EFFECT_WRAP:
@@ -3739,8 +3735,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                             break;
                     }
 
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = sMoveEffectBS_Ptrs[gBattleScripting.moveEffect];
+                    BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
                 }
                 break;
             case MOVE_EFFECT_ATK_PLUS_1:
@@ -4105,10 +4100,9 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_PSYCHIC_NOISE:
                 if (!(gStatuses3[gEffectBattler] & STATUS3_HEAL_BLOCK))
                 {
-                    BattleScriptPushCursor();
+                    BattleScriptCall(BattleScript_AnnounceHealBlock);
                     gStatuses3[gEffectBattler] |= STATUS3_HEAL_BLOCK;
                     gVolatileStructs[gEffectBattler].healBlockTimer = 2;
-                    gBattlescriptCurrInstr = BattleScript_AnnounceHealBlock;
                 }
             }
         }
@@ -4336,9 +4330,8 @@ static void Cmd_tryfaintmon(void)
             if ((gHitMarker & HITMARKER_DESTINYBOND) && gBattleMons[gBattlerAttacker].hp != 0)
             {
                 gHitMarker &= ~(HITMARKER_DESTINYBOND);
-                BattleScriptPushCursor();
+                BattleScriptCall(BattleScript_DestinyBondTakesLife);
                 gBattleMoveDamage = gBattleMons[battlerId].hp;
-                gBattlescriptCurrInstr = BattleScript_DestinyBondTakesLife;
                 // Destiny Bond disables recurring nightmare
                 SetSingleUseAbilityCounter(gBattlerAttacker, ABILITY_RECURRING_NIGHTMARE, 2);
                 SetSingleUseAbilityCounter(gBattlerTarget, ABILITY_RECURRING_NIGHTMARE, 2);
@@ -4793,9 +4786,8 @@ static void Cmd_getexp(void)
                 gStackBattler1 = gActiveBattler;
                 PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 3, GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_LEVEL));
 
-                BattleScriptPushCursor();
+                BattleScriptCall(BattleScript_LevelUp);
                 gLeveledUpInBattle |= gBitTable[gBattleStruct->expGetterMonId];
-                gBattlescriptCurrInstr = BattleScript_LevelUp;
                 gBattleMoveDamage = T1_READ_32(&gBattleResources->bufferB[gActiveBattler][2]);
                 AdjustFriendship(&gPlayerParty[gBattleStruct->expGetterMonId], FRIENDSHIP_EVENT_GROW_LEVEL);
 
@@ -8593,8 +8585,7 @@ bool32 CanUseLastResort(u8 battlerId)
                 PREPARE_MOVE_BUFFER(gBattleTextBuff1, move);\
             *sideStatuses &= ~(status);                     \
             sideTimer->structField = 0;                     \
-            BattleScriptPushCursor();                       \
-            gBattlescriptCurrInstr = battlescript;          \
+            BattleScriptCall(battlescript);           \
         }                                                   \
         return TRUE;                                        \
     }                                                       \
@@ -9448,11 +9439,7 @@ static void Cmd_various(void)
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_LOOTER;
 
             // Let the battle script handler decide the stat changes
-            BattleScriptPushCursor();
-            if(curehalfhealth)
-                gBattlescriptCurrInstr = BattleScript_HandleJawsOfCarnageEffect;
-            else
-                gBattlescriptCurrInstr = BattleScript_HandleSoulEaterEffect;
+            BattleScriptCall(curehalfhealth ? BattleScript_HandleJawsOfCarnageEffect : BattleScript_HandleSoulEaterEffect);
             return;
         }
         break;
@@ -10938,8 +10925,7 @@ static void Cmd_various(void)
                             {
                                 gBattlerAttacker = state.battler;
                                 SetStatChanger(state.stat, change);
-                                BattleScriptPushCursor();
-                                gBattlescriptCurrInstr = change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown;
+                                BattleScriptCall(change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown);
                                 if (!state.announced)
                                 {
                                     gBattlerAbility = gEffectBattler;
@@ -10981,8 +10967,7 @@ static void Cmd_various(void)
                     {
                         gBattlerAttacker = gEffectBattler;
                         SetStatChanger(stat, change);
-                        BattleScriptPushCursor();
-                        gBattlescriptCurrInstr = change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown;
+                        BattleScriptCall(change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown);
                         if (!gTurnStructs[gEffectBattler].mirrorHerbStat)
                         {
                             BattleScriptCall(BattleScript_AttackerAteItem);
@@ -13760,8 +13745,7 @@ static void Cmd_trytoapplymoveeffect(void)
 
     if (appliedEffect)
     {
-        BattleScriptPushCursor();
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        BattleScriptCall(T1_READ_PTR(gBattlescriptCurrInstr + 1));
     }
     else
     {

@@ -1653,7 +1653,7 @@ void BattleScriptSaveCurrentStackData()
     gBattleResources->battleScriptsStack->savedStackData[gBattleResources->battleScriptsStack->size] = savedStackData;
 }
 
-void BattleScriptPushCursor(void)
+void BattleScriptPushCursor()
 {
     BattleScriptPush(gBattlescriptCurrInstr);
 }
@@ -3985,9 +3985,8 @@ u8 AtkCanceller_UnableToUseMove(void)
                 {
                     gBattleMons[gBattlerAttacker].status1 &= ~(STATUS1_SLEEP);
                     gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_NIGHTMARE);
-                    BattleScriptPushCursor();
+                    BattleScriptCall(BattleScript_MoveUsedWokeUp);
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_WOKE_UP_UPROAR;
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedWokeUp;
                     effect = 2;
                 }
                 else
@@ -4015,9 +4014,8 @@ u8 AtkCanceller_UnableToUseMove(void)
                     else
                     {
                         gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_NIGHTMARE);
-                        BattleScriptPushCursor();
+                        BattleScriptCall(BattleScript_MoveUsedWokeUp);
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_WOKE_UP;
-                        gBattlescriptCurrInstr = BattleScript_MoveUsedWokeUp;
                         effect = 2;
                     }
                 }
@@ -7794,8 +7792,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                 }
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = (species == SPECIES_CRAMORANT_GORGING) ? BattleScript_GulpMissileGorging : BattleScript_GulpMissileGulping;
+                BattleScriptPushCursor((species == SPECIES_CRAMORANT_GORGING) ? BattleScript_GulpMissileGorging : BattleScript_GulpMissileGulping);
                 effect++;
             }
         }
@@ -8462,11 +8459,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			{
 				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ANGER_POINT;
 				PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-				BattleScriptPushCursor();
+				BattleScriptCall(BattleScript_AngerPointsLightBoostActivates);
 				ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
 				gBattleScripting.animArg1 = 14 + STAT_ATK;
 				gBattleScripting.animArg2 = 0;
-                BattleScriptCall(BattleScript_AngerPointsLightBoostActivates);
 				effect++;
 			}
 		}
@@ -8484,11 +8480,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			{
 				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_CROWNED_SWORD;
 				PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-				BattleScriptPushCursor();
+				BattleScriptCall(BattleScript_AngerPointsLightBoostActivates);
 				ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
 				gBattleScripting.animArg1 = 14 + STAT_ATK;
 				gBattleScripting.animArg2 = 0;
-                BattleScriptCall(BattleScript_AngerPointsLightBoostActivates);
 				effect++;
 			}
 		}
@@ -8506,11 +8501,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 			{
 				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_TIPPING_POINT;
 				PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-				BattleScriptPushCursor();
+				BattleScriptCall(BattleScript_TippingPointsLightBoostActivates);
 				ChangeStatBuffs(battler, StatBuffValue(1), STAT_SPATK, MOVE_EFFECT_AFFECTS_USER, NULL);
 				gBattleScripting.animArg1 = 14 + STAT_SPATK;
 				gBattleScripting.animArg2 = 0;
-                BattleScriptCall(BattleScript_TippingPointsLightBoostActivates);
 				effect++;
 			}
 		}
@@ -8792,7 +8786,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 					gBattleScripting.abilityPopupOverwrite = ABILITY_GROWING_TOOTH;
 					gLastUsedAbility = ABILITY_GROWING_TOOTH;
 					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-					BattleScriptPushCursor();
 					ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
                     BattleScriptCall(BattleScript_AttackBoostActivates);
 					gBattleScripting.battler = battler;
@@ -8845,7 +8838,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				{
 					gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_HARDENED_SHEATH;
 					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-					BattleScriptPushCursor();
 					ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
                     BattleScriptCall(BattleScript_AttackBoostActivates);
 					gBattleScripting.battler = battler;
@@ -10365,8 +10357,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     gBattleMons[opponent].type2 = newtype;
                     gBattleMons[opponent].type3 = TYPE_MYSTERY;
                     PREPARE_TYPE_BUFFER(gBattleTextBuff1, newtype);
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = opponent == gBattlerAttacker ? BattleScript_AttackerBecameTheTypeFull : BattleScript_DefenderBecameTheTypeFull;
+                    BattleScriptCall(opponent == gBattlerAttacker ? BattleScript_AttackerBecameTheTypeFull : BattleScript_DefenderBecameTheTypeFull);
                     effect++;
                 }
             }
@@ -10643,9 +10634,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 gVolatileStructs[opponent].parasiticSpores = TRUE;
                 gStackBattler1 = battler;
                 gStackBattler2 = opponent;
-                BattleScriptPushCursor();
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_PARASITIC_SPORES)) gBattlescriptCurrInstr = BattleScript_ParasiticSporesSpreadWithAbility;
-                else gBattlescriptCurrInstr = BattleScript_ParasiticSporesSpread;
+                BattleScriptCall(BATTLER_HAS_ABILITY(battler, ABILITY_PARASITIC_SPORES) ? BattleScript_ParasiticSporesSpreadWithAbility : BattleScript_ParasiticSporesSpread);
                 effect++;
             }
 
@@ -11285,11 +11274,7 @@ static u8 HealConfuseBerry(u32 battlerId, u32 itemId, u8 flavorId, bool32 end2)
         }
         else
         {
-            BattleScriptPushCursor();
-            if (GetFlavorRelationByNature(gBattleMons[battlerId].nature, flavorId) < 0)
-                gBattlescriptCurrInstr = BattleScript_BerryConfuseHealRet;
-            else
-                gBattlescriptCurrInstr = BattleScript_ItemHealHP_RemoveItemRet;
+            BattleScriptCall(GetFlavorRelationByNature(gBattleMons[battlerId].nature, flavorId) < 0 ? BattleScript_BerryConfuseHealRet : BattleScript_ItemHealHP_RemoveItemRet);
         }
 
         return ITEM_HP_CHANGE;
@@ -12251,9 +12236,8 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                     }
                     gBattleMons[battlerId].status1 = 0;
                     gBattleMons[battlerId].status2 &= ~(STATUS2_CONFUSION);
-                    BattleScriptPushCursor();
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CURED_PROBLEM;
-                    gBattlescriptCurrInstr = BattleScript_BerryCureChosenStatusRet;
+                    BattleScriptCall(BattleScript_BerryCureChosenStatusRet);
                     effect = ITEM_STATUS_CHANGE;
                 }
                 break;
