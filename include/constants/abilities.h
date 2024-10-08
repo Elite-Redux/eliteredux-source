@@ -741,8 +741,9 @@
 #define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
 #define ABILITY_STUN_SHOCK 720 // Attacks have a 60% chance to Paralyze or Poison.
 #define ABILITY_RAGING_GODDESS 721 // Rampage + Hyper Aggressive.
+#define ABILITY_WHIPLASH 722 // Physical attacks have a 50% chance to lower Defense.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_RAGING_GODDESS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_WHIPLASH + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

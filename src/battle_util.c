@@ -8876,7 +8876,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				}
 		}
 
-		// Loud Bang
+		// Denting Blows
 		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DENTING_BLOWS)){
 			if (ShouldApplyOnHitAffect(gBattlerTarget)
                     && CompareStat(gBattlerTarget, STAT_DEF, MIN_STAT_STAGE, CMP_GREATER_THAN)
@@ -8887,6 +8887,26 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     {
                         SetOncePerTurnAbilityCounter(battler, ABILITY_DENTING_BLOWS, battlersHit | (1 << gBattlerTarget));
                         gBattleScripting.abilityPopupOverwrite = ABILITY_DENTING_BLOWS;
+                        gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
+                        BattleScriptCall(BattleScript_AbilityStatusEffect);
+                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                        effect++;
+                    }
+				}
+		}
+
+        // Whiplash
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_WHIPLASH)){
+			if (ShouldApplyOnHitAffect(gBattlerTarget)
+                    && Random() % 2
+                    && CompareStat(gBattlerTarget, STAT_DEF, MIN_STAT_STAGE, CMP_GREATER_THAN)
+                    && IS_MOVE_PHYSICAL(move))
+				{
+                    int battlersHit = GetOncePerTurnAbilityCounter(battler, ABILITY_WHIPLASH);
+                    if (!(battlersHit & (1 << gBattlerTarget)))
+                    {
+                        SetOncePerTurnAbilityCounter(battler, ABILITY_WHIPLASH, battlersHit | (1 << gBattlerTarget));
+                        gBattleScripting.abilityPopupOverwrite = ABILITY_WHIPLASH;
                         gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
                         BattleScriptCall(BattleScript_AbilityStatusEffect);
                         gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;

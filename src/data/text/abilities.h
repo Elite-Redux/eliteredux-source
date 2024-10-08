@@ -688,6 +688,7 @@ static const u8 sAbilityJumpScareDescription[] = _("Attacks with Astonish on\nsw
 static const u8 sAbilityTarTossDescription[] = _("Uses Tar Shot on switch-in.");
 static const u8 sAbilityStunShockDescription[] = _("Attacks have a 60% chance to\nParalyze or Poison.");
 static const u8 sAbilityRagingGoddessDescription[] = _("Rampage + Hyper Aggressive.");
+static const u8 sAbilityWhiplashDescription[] = _("Physical attacks have a 50%\nchance to lower Defense.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1413,6 +1414,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TAR_TOSS] = _("Tar Toss"),
     [ABILITY_STUN_SHOCK] = _("Stun Shock"),
     [ABILITY_RAGING_GODDESS] = _("Raging Goddess"),
+    [ABILITY_WHIPLASH] = _("Whiplash"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2139,4 +2141,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TAR_TOSS] = sAbilityTarTossDescription,
     [ABILITY_STUN_SHOCK] = sAbilityStunShockDescription,
     [ABILITY_RAGING_GODDESS] = sAbilityRagingGoddessDescription,
+    [ABILITY_WHIPLASH] = sAbilityWhiplashDescription,
 };
