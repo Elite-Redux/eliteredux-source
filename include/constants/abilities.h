@@ -743,8 +743,9 @@
 #define ABILITY_RAGING_GODDESS 721 // Rampage + Hyper Aggressive.
 #define ABILITY_WHIPLASH 722 // Physical attacks have a 50% chance to lower Defense.
 #define ABILITY_SUPERSWEET_SYRUP 723 // Can't lose its item. Disables foe's item for 2 turns on contact.
+#define ABILITY_LUCKY_HALO 724 // Negates self stat drops. Survives the first hit that would KO it.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_SUPERSWEET_SYRUP + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_LUCKY_HALO + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

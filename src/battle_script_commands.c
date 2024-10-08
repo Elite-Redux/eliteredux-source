@@ -2414,17 +2414,22 @@ static void Cmd_adjustdamage(void)
         RecordItemEffectBattle(gBattlerTarget, holdEffect);
         gTurnStructs[gBattlerTarget].focusSashed = TRUE;
     }
-    else if ((GetBattlerAbility(gBattlerTarget) == ABILITY_STURDY || BattlerHasInnate(gBattlerTarget, ABILITY_STURDY)) && BATTLER_MAX_HP(gBattlerTarget))
+    else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_STURDY) && BATTLER_MAX_HP(gBattlerTarget))
     {
         RecordAbilityBattle(gBattlerTarget, ABILITY_STURDY);
         gTurnStructs[gBattlerTarget].sturdied = TRUE;
+    }
+    else if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_LUCKY_HALO) && !GetSingleUseAbilityCounter(gBattlerTarget, ABILITY_LUCKY_HALO))
+    {
+        gTurnStructs[gBattlerTarget].haloed = TRUE;
     }
 
     if ((gBattleMoves[gCurrentMove].effect != EFFECT_FALSE_SWIPE && !gBattleScripting.forceFalseSwipeEffect)
         && !gRoundStructs[gBattlerTarget].endured
         && !gTurnStructs[gBattlerTarget].focusBanded
         && !gTurnStructs[gBattlerTarget].focusSashed
-        && !gTurnStructs[gBattlerTarget].sturdied)
+        && !gTurnStructs[gBattlerTarget].sturdied
+        && !gTurnStructs[gBattlerTarget].haloed)
         goto END;
 
     // Handle reducing the dmg to 1 hp.
@@ -2444,6 +2449,11 @@ static void Cmd_adjustdamage(void)
         gMoveResultFlags |= MOVE_RESULT_STURDIED;
         gLastUsedAbility = ABILITY_STURDY;
         gBattleScripting.abilityPopupOverwrite = ABILITY_STURDY;
+    }
+    else if (gTurnStructs[gBattlerTarget].haloed)
+    {
+        gMoveResultFlags |= MOVE_RESULT_STURDIED;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_LUCKY_HALO;
     }
 
 END:
@@ -2496,6 +2506,8 @@ static void Cmd_multihitresultmessage(void)
         {
             gMoveResultFlags &= ~(MOVE_RESULT_STURDIED | MOVE_RESULT_FOE_HUNG_ON);
             gTurnStructs[gBattlerTarget].sturdied = FALSE; // Delete this line to make Sturdy last for the duration of the whole move turn.
+            if (gTurnStructs[gBattlerTarget].haloed) SetSingleUseAbilityCounter(gBattlerTarget, ABILITY_LUCKY_HALO, TRUE);
+            gTurnStructs[gBattlerTarget].haloed = FALSE;
             BattleScriptCall(BattleScript_SturdiedMsg);
             return;
         }
@@ -2945,6 +2957,8 @@ static void Cmd_resultmessage(void)
             {
                 gMoveResultFlags &= ~(MOVE_RESULT_STURDIED | MOVE_RESULT_FOE_ENDURED | MOVE_RESULT_FOE_HUNG_ON);
                 gTurnStructs[gBattlerTarget].sturdied = FALSE;
+                if (gTurnStructs[gBattlerTarget].haloed) SetSingleUseAbilityCounter(gBattlerTarget, ABILITY_LUCKY_HALO, TRUE);
+                gTurnStructs[gBattlerTarget].haloed = FALSE;
                 BattleScriptCall(BattleScript_SturdiedMsg);
                 return;
             }
@@ -5519,7 +5533,8 @@ static int PlayStatChangeAnimation(int battler, int statsToCheck, int flags, int
                 if (rawStatChange ||
                     (flags & STAT_CHANGE_CANT_PREVENT
                         && !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_CLEAR_BODY, ability)
-                        && !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_FULL_METAL_BODY, ability)))
+                        && !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_FULL_METAL_BODY, ability)
+                        && !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_LUCKY_HALO, ability) && flags & MOVE_EFFECT_AFFECTS_USER)))
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > MIN_STAT_STAGE)
                     {
@@ -5530,9 +5545,10 @@ static int PlayStatChangeAnimation(int battler, int statsToCheck, int flags, int
                 else if (!gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
                         && !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_CLEAR_BODY, ability)
 						&& !BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_FULL_METAL_BODY, ability)
-						&& !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_KEEN_EYE, ability) && currStat == STAT_ACC)
-						&& !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_MINDS_EYE, ability) && currStat == STAT_ACC)
-                        && !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_HYPER_CUTTER, ability) && currStat == STAT_ATK)
+						&& !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_KEEN_EYE, ability) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER)
+						&& !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_MINDS_EYE, ability) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER)
+                        && !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_HYPER_CUTTER, ability) && currStat == STAT_ATK && flags & MOVE_EFFECT_AFFECTS_USER)
+                        && !(BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_LUCKY_HALO, ability) && flags & MOVE_EFFECT_AFFECTS_USER)
                         && GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
                 {
                     if (gBattleMons[gActiveBattler].statStages[currStat] > MIN_STAT_STAGE)
@@ -5686,6 +5702,7 @@ static void Cmd_moveend(void)
             gBattleScripting.moveendState++;
 
             gTurnStructs[gBattlerTarget].sturdied = 0;
+            gTurnStructs[gBattlerTarget].haloed = 0;
             gTurnStructs[gBattlerTarget].focusBanded = 0;
             gTurnStructs[gBattlerTarget].focusSashed = 0;
             break;
@@ -12342,7 +12359,8 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
             return 0;
         }
         else if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) && (ability = ABILITY_CLEAR_BODY))
-                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) && (ability = ABILITY_FULL_METAL_BODY)))
+                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) && (ability = ABILITY_FULL_METAL_BODY))
+                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LUCKY_HALO) && affectsUser && (ability = ABILITY_LUCKY_HALO)))
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {
@@ -12979,7 +12997,7 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
     if (gBattleMons[battler].hp == 0 || stat == STAT_HP) return TRUE;
     else if (BATTLER_HAS_ABILITY(battler, ABILITY_GUARD_DOG)) return FALSE;
     if (BATTLER_HAS_ABILITY(battler, ABILITY_CLEAR_BODY)     ||
-       BATTLER_HAS_ABILITY(battler, ABILITY_WHITE_SMOKE)     ||
+       BATTLER_HAS_ABILITY(battler, ABILITY_FULL_METAL_BODY)     ||
        BATTLER_HAS_ABILITY(battler, ABILITY_MIRROR_ARMOR))
         return TRUE;
 

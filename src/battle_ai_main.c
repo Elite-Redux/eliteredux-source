@@ -888,7 +888,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 break;
             case ABILITY_CLEAR_BODY:
             case ABILITY_FULL_METAL_BODY:
-            case ABILITY_WHITE_SMOKE:
                 if (IsStatLoweringMoveEffect(moveEffect))
                     RETURN_SCORE_MINUS(10);
                 break;
@@ -1130,8 +1129,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
 
         //Clear Body, Full Metal Body and White Smoke
         if((BattlerHasInnate(battlerDef, ABILITY_CLEAR_BODY) ||
-            BattlerHasInnate(battlerDef, ABILITY_FULL_METAL_BODY) ||
-            BattlerHasInnate(battlerDef, ABILITY_WHITE_SMOKE)) &&
+            BattlerHasInnate(battlerDef, ABILITY_FULL_METAL_BODY)) &&
            IsStatLoweringMoveEffect(moveEffect))
             RETURN_SCORE_MINUS(10);
 

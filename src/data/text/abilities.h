@@ -690,6 +690,7 @@ static const u8 sAbilityStunShockDescription[] = _("Attacks have a 60% chance to
 static const u8 sAbilityRagingGoddessDescription[] = _("Rampage + Hyper Aggressive.");
 static const u8 sAbilityWhiplashDescription[] = _("Physical attacks have a 50%\nchance to lower Defense.");
 static const u8 sAbilitySupersweetSyrupDescription[] = _("Can't lose its item. Disables foe's\nitem for 2 turns on contact.");
+static const u8 sAbilityLuckyHaloDescription[] = _("Negates self stat drops. Survives\nthe first hit that would KO it.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1417,6 +1418,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_RAGING_GODDESS] = _("Raging Goddess"),
     [ABILITY_WHIPLASH] = _("Whiplash"),
     [ABILITY_SUPERSWEET_SYRUP] = _("Supersweet Syrup"),
+    [ABILITY_LUCKY_HALO] = _("Lucky Halo"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2145,4 +2147,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_RAGING_GODDESS] = sAbilityRagingGoddessDescription,
     [ABILITY_WHIPLASH] = sAbilityWhiplashDescription,
     [ABILITY_SUPERSWEET_SYRUP] = sAbilitySupersweetSyrupDescription,
+    [ABILITY_LUCKY_HALO] = sAbilityLuckyHaloDescription,
 };

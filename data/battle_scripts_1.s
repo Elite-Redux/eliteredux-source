@@ -10261,6 +10261,7 @@ BattleScript_IntimidateActivatesLoop:
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE,   BattleScript_IntimidateActivatesLoopIncrement
 	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_IntimidateActivatesLoopIncrement
 	jumpifability BS_TARGET, ABILITY_CLEAR_BODY,   BattleScript_IntimidatePrevented
+	jumpifability BS_TARGET, ABILITY_FULL_METAL_BODY,   BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_IntimidatePrevented
 	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_IntimidatePrevented
@@ -10309,6 +10310,7 @@ BattleScript_ScareActivatesLoop:
 	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE,   BattleScript_ScareActivatesLoopIncrement
 	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_ScareActivatesLoopIncrement
 	jumpifability BS_TARGET, ABILITY_CLEAR_BODY,   BattleScript_ScarePrevented
+	jumpifability BS_TARGET, ABILITY_FULL_METAL_BODY,   BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_ScarePrevented
 	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_ScarePrevented
