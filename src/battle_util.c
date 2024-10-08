@@ -14220,6 +14220,10 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_SHADOW_SHIELD:
             if (BATTLER_MAX_HP(battlerDef)) MUL(.5);
             return;
+        
+        case ABILITY_DRAGONSLAYER:
+            if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_DRAGON)) MUL(.5);
+            return;
             
         case ABILITY_FILTER:
         case ABILITY_SOLID_ROCK:

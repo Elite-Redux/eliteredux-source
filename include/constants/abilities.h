@@ -332,7 +332,7 @@
 #define ABILITY_HALF_DRAKE 310 // Adds Dragon type to itself.
 #define ABILITY_LIQUIFIED 311 // Takes 1/2 dmg from contact moves but Water moves hurt it 2x more.
 #define ABILITY_DRAGONFLY 312 // Combines Half Drake & Levitate.
-#define ABILITY_DRAGONSLAYER 313 // Deals 1.5x more dmg to Dragons.
+#define ABILITY_DRAGONSLAYER 313 // Deals 1.5x damage to Dragons. Takes .5x damage from Dragons.
 #define ABILITY_MOUNTAINEER 314 // Immune to Rock-type attacks and Stealth Rock damage.
 #define ABILITY_HYDRATE 315 // Normal-type moves become Water- type moves and get a 1.1x boost.
 #define ABILITY_METALLIC 316 // Adds Steel type to itself.
