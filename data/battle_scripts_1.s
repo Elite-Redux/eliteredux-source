@@ -13036,3 +13036,9 @@ BattleScript_EffectTerrorCharge::
 	setmoveeffect MOVE_EFFECT_FEAR
 	seteffectwithchance
 	goto BattleScript_MoveEndTryFaintTarget
+
+BattleScript_AnnounceAttackerItemDisabled::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_DISABLE_ATTACKER_ITEM
+	waitmessage B_WAIT_TIME_LONG
+	return

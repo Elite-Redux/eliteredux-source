@@ -8619,16 +8619,32 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
 
         // Seed Sower
-        if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SEED_SOWER)){
-            if(ShouldApplyOnHitAffect(battler)) {
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SEED_SOWER)){
+            if (ShouldApplyOnHitAffect(battler)) {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_SEED_SOWER;
 				BattleScriptCall(BattleScript_SeedSower);
                 effect++;
             }
         }
+
+        // Supersweet Syrup
+        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SUPERSWEET_SYRUP)) {
+            if (ShouldApplyOnHitAffect(gBattlerAttacker)
+                && IsMoveMakingContact(move, gBattlerAttacker)
+                && !(gStatuses3[gBattlerAttacker] & STATUS3_EMBARGO)
+                && gBattleMons[gBattlerAttacker].item)
+            {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_SUPERSWEET_SYRUP;
+                gVolatileStructs[gBattlerAttacker].embargoTimer = 2;
+                gStatuses3[gBattlerAttacker] |= STATUS3_EMBARGO;
+                gLastUsedItem = gBattleMons[gBattlerAttacker].item;
+                BattleScriptCall(BattleScript_AnnounceAttackerItemDisabled);
+                effect;
+            }
+        }
 		
 		//Cute Charm
-		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_CUTE_CHARM) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PRIM_AND_PROPER)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_CUTE_CHARM) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PRIM_AND_PROPER)){
             if (ShouldApplyOnHitAffect(gBattlerAttacker)
              && IsMoveMakingContact(move, gBattlerAttacker)
              && IsBattlerAlive(gBattlerTarget)
@@ -8648,7 +8664,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		}
 		
 		//Pure Love
-		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PURE_LOVE)){
+		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PURE_LOVE)){
             if (ShouldApplyOnHitAffect(gBattlerAttacker)
              && IsMoveMakingContact(move, gBattlerAttacker)
              && TARGET_TURN_DAMAGED

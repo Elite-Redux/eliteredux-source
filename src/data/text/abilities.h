@@ -57,7 +57,7 @@ static const u8 sAbilityHustleDescription[] = _("0. 9x accuracy.\nRaises Atk & S
 static const u8 sAbilityCuteCharmDescription[] = _("30% chance to charm attacker on\ncontact, which halves its power.");
 static const u8 sAbilityPlusDescription[] = _("Deals double damage if an ally\nPokémon has Minus or Plus.");
 static const u8 sAbilityForecastDescription[] = _("Changes form with the weather.\nWeather setting triggers attack.");
-static const u8 sAbilityStickyHoldDescription[] = _("Immune to item theft or deletion\nfrom enemies.");
+static const u8 sAbilityStickyHoldDescription[] = _("Can't lose its item.");
 static const u8 sAbilityShedSkinDescription[] = _("30% chance to heal its status\ncondition at the end of a turn.");
 static const u8 sAbilityGutsDescription[] = _("Ups Atk by 1.5x if suffering\nfrom a status condition.");
 static const u8 sAbilityMarvelScaleDescription[] = _("Ups Def by 1.5x if suffering\nfrom a status condition.");
@@ -689,6 +689,7 @@ static const u8 sAbilityTarTossDescription[] = _("Uses Tar Shot on switch-in.");
 static const u8 sAbilityStunShockDescription[] = _("Attacks have a 60% chance to\nParalyze or Poison.");
 static const u8 sAbilityRagingGoddessDescription[] = _("Rampage + Hyper Aggressive.");
 static const u8 sAbilityWhiplashDescription[] = _("Physical attacks have a 50%\nchance to lower Defense.");
+static const u8 sAbilitySupersweetSyrupDescription[] = _("Can't lose its item. Disables foe's\nitem for 2 turns on contact.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1415,6 +1416,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_STUN_SHOCK] = _("Stun Shock"),
     [ABILITY_RAGING_GODDESS] = _("Raging Goddess"),
     [ABILITY_WHIPLASH] = _("Whiplash"),
+    [ABILITY_SUPERSWEET_SYRUP] = _("Supersweet Syrup"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2142,4 +2144,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_STUN_SHOCK] = sAbilityStunShockDescription,
     [ABILITY_RAGING_GODDESS] = sAbilityRagingGoddessDescription,
     [ABILITY_WHIPLASH] = sAbilityWhiplashDescription,
+    [ABILITY_SUPERSWEET_SYRUP] = sAbilitySupersweetSyrupDescription,
 };
