@@ -11254,7 +11254,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_PSYCHIC_NOISE] =
     {
-        .effect = EFFECT_HEAL_BLOCK, //tbc to heal block + hit
+        .effect = EFFECT_ARGUMENT_HIT,
         .power = 75,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
@@ -11262,6 +11262,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_PSYCHIC_NOISE,
     },
     [MOVE_UPPER_HAND] =
     {

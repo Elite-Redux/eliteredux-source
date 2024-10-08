@@ -424,7 +424,7 @@
 #define ABILITY_TOXIC_DEBRIS 402 // Sets a layer of Toxic Spikes when hit by contact moves.
 #define ABILITY_ROUNDHOUSE 403 // Kicks always hit. Damages foes' weaker defenses.
 #define ABILITY_MINERALIZE 404 // Normal-type moves become Rock- type moves and get a 1.1x boost.
-#define ABILITY_LOOSE_ROCKS 405 // Deploys Stealth Rocks when hit.
+#define ABILITY_LOOSE_ROCKS 405 // Deploys Stealth Rocks when hit by contact.
 #define ABILITY_SPINNING_TOP 406 // Fighting moves up speed +1 and clear hazards.
 #define ABILITY_RETRIBUTION_BLOW 407 // Uses Hyper Beam if any foe uses an stat boosting move.
 #define ABILITY_FEARMONGER 408 // Intimidate + Scare; 10% para chance on contact moves.

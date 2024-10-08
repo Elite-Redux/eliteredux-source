@@ -5721,7 +5721,7 @@ static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\nD
 static const u8 sMoveFourLineDescription_MoveDreamInversion[] = _("Deals 2x damage to\nsleeping foes. 10%\nchance for drowsy.\nHits both foes.");
 static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both foes\nwith a rain of crystals.");
 static const u8 sMoveFourLineDescription_MoveSparkleBarrage[] = _("The user shoots\n3 beams of light\nat the target.");
-static const u8 sMoveFourLineDescription_MoveSpectralSerenade[] = _("Not implemented.");
+static const u8 sMoveFourLineDescription_MoveSpectralSerenade[] = _("The foe is hit with\na huge explosion.\nCan only be used\nevery-other turn.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6687,5 +6687,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_DREAM_INVERSION - 1] = sMoveFourLineDescription_MoveDreamInversion,
     [MOVE_TERA_STARSTORM - 1] = sMoveFourLineDescription_MoveTeraStarstorm,
     [MOVE_SPARKLE_BARRAGE - 1] = sMoveFourLineDescription_MoveSparkleBarrage,
-    [MOVE_SPECTRAL_SERENADE - 1] = sMoveFourLineDescription_MoveBlastBurn,
+    [MOVE_SPECTRAL_SERENADE - 1] = sMoveFourLineDescription_MoveSpectralSerenade,
 };

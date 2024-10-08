@@ -4150,7 +4150,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_FEAR:
                 if (!gVolatileStructs[gEffectBattler].fear)
                 {
-                    BattleScriptPush(gBattlescriptCurrInstr);
+                    BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_SetFearMoveEffect;
                 }
             case MOVE_EFFECT_YAWN:
@@ -4158,6 +4158,14 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 {
                     BattleScriptPushCursor();
                     gBattlescriptCurrInstr = BattleScript_SetYawnMoveEffect;
+                }
+            case MOVE_EFFECT_PSYCHIC_NOISE:
+                if (!(gStatuses3[gEffectBattler] & STATUS3_HEAL_BLOCK))
+                {
+                    BattleScriptPushCursor();
+                    gStatuses3[gEffectBattler] |= STATUS3_HEAL_BLOCK;
+                    gVolatileStructs[gEffectBattler].healBlockTimer = 2;
+                    gBattlescriptCurrInstr = BattleScript_AnnounceHealBlock;
                 }
             }
         }

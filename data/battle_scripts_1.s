@@ -3301,6 +3301,14 @@ BattleScript_EffectHealBlock:
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
+BattleScript_AnnounceHealBlock::
+	savetargettostack4
+	copybyte gBattlerTarget, gEffectBattler
+	printstring STRINGID_PKMNPREVENTEDFROMHEALING
+	waitmessage B_WAIT_TIME_LONG
+	readtargetfromstack4
+	return
+
 BattleScript_EffectThroatChop:
 	jumpifsubstituteblocks BattleScript_EffectHit
 	setmoveeffect MOVE_EFFECT_THROAT_CHOP | MOVE_EFFECT_CERTAIN
