@@ -3478,8 +3478,7 @@ void SwitchInClearSetData(void)
         gVolatileStructs[i].skyDropped = FALSE;
         gStatuses3[i] &= ~STATUS3_ON_AIR;
         gStackBattler1 = i;
-        BattleScriptPushCursor();
-        gBattlescriptCurrInstr = BattleScript_SkyDropEndsEarly;
+        BattleScriptCall(BattleScript_SkyDropEndsEarly);
     }
 }
 
@@ -3577,8 +3576,7 @@ void FaintClearSetData(void)
         gVolatileStructs[i].skyDropped = FALSE;
         gStatuses3[i] &= ~STATUS3_ON_AIR;
         gStackBattler1 = i;
-        BattleScriptPushCursor();
-        gBattlescriptCurrInstr = BattleScript_SkyDropEndsEarly;
+        BattleScriptCall(BattleScript_SkyDropEndsEarly);
     }
 }
 

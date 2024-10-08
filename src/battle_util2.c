@@ -181,8 +181,7 @@ u32 sub_805725C(u8 battlerId)
                 else
                 {
                     gBattleMons[battlerId].status1 &= ~(STATUS1_FREEZE);
-                    BattleScriptPushCursor();
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedUnfroze;
+                    BattleScriptCall(BattleScript_MoveUsedUnfroze);
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_DEFROSTED;
                 }
                 effect = 2;
