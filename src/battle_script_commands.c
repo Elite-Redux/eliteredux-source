@@ -5095,33 +5095,28 @@ static void Cmd_jumpifword(void)
 
 static void Cmd_jumpifarrayequal(void)
 {
-    const u8* mem1 = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    const u8* mem2 = T2_READ_PTR(gBattlescriptCurrInstr + 5);
-    u32 size = gBattlescriptCurrInstr[9];
-    const u8* jumpPtr = T2_READ_PTR(gBattlescriptCurrInstr + 10);
+    const u8* mem1 = READ_FIRST_PTR_INC;
+    const u8* mem2 = READ_PTR_INC;
+    u32 size = READ_8_INC;
+    const u8* jumpPtr = READ_PTR_INC;
 
     u8 i;
     for (i = 0; i < size; i++)
     {
-        if (*mem1 != *mem2)
-        {
-            gBattlescriptCurrInstr += 14;
-            break;
-        }
-        mem1++, mem2++;
+        if (mem1[i] != mem2[i])
+            return;
     }
 
-    if (i == size)
-        gBattlescriptCurrInstr = jumpPtr;
+    gBattlescriptCurrInstr = jumpPtr;
 }
 
 static void Cmd_jumpifarraynotequal(void)
 {
     u8 equalBytes = 0;
-    const u8* mem1 = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    const u8* mem2 = T2_READ_PTR(gBattlescriptCurrInstr + 5);
-    u32 size = gBattlescriptCurrInstr[9];
-    const u8* jumpPtr = T2_READ_PTR(gBattlescriptCurrInstr + 10);
+    const u8* mem1 = READ_FIRST_PTR_INC;
+    const u8* mem2 = READ_PTR_INC;
+    u32 size = READ_8_INC;
+    const u8* jumpPtr = READ_PTR_INC;
 
     u8 i;
     for (i = 0; i < size; i++)
@@ -5135,103 +5130,87 @@ static void Cmd_jumpifarraynotequal(void)
 
     if (equalBytes != size)
         gBattlescriptCurrInstr = jumpPtr;
-    else
-        gBattlescriptCurrInstr += 14;
 }
 
 static void Cmd_setbyte(void)
 {
-    u8* memByte = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    *memByte = gBattlescriptCurrInstr[5];
-
-    gBattlescriptCurrInstr += 6;
+    u8* memByte = READ_FIRST_PTR_INC;
+    *memByte = READ_8_INC;
 }
 
 static void Cmd_addbyte(void)
 {
-    u8* memByte = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    *memByte += gBattlescriptCurrInstr[5];
-    gBattlescriptCurrInstr += 6;
+    u8* memByte = READ_FIRST_PTR_INC;
+    *memByte += READ_8_INC;
 }
 
 static void Cmd_subbyte(void)
 {
-    u8* memByte = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    *memByte -= gBattlescriptCurrInstr[5];
-    gBattlescriptCurrInstr += 6;
+    u8* memByte = READ_FIRST_PTR_INC;
+    *memByte -= READ_8_INC;
 }
 
 static void Cmd_copyarray(void)
 {
-    u8* dest = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    const u8* src = T2_READ_PTR(gBattlescriptCurrInstr + 5);
-    s32 size = gBattlescriptCurrInstr[9];
+    u8* dest = READ_FIRST_PTR_INC;
+    const u8* src = READ_PTR_INC;
+    s32 size = READ_8_INC;
 
     memcpy(dest, src, size);
-
-    gBattlescriptCurrInstr += 10;
 }
 
 static void Cmd_copyarraywithindex(void)
 {
-    u8* dest = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    const u8* src = T2_READ_PTR(gBattlescriptCurrInstr + 5);
-    const u8* index = T2_READ_PTR(gBattlescriptCurrInstr + 9);
-    s32 size = gBattlescriptCurrInstr[13];
+    u8* dest = READ_FIRST_PTR_INC;
+    const u8* src = READ_PTR_INC;
+    const u8* index = READ_PTR_INC;
+    s32 size = READ_8_INC;
 
     memcpy(dest, &src[*index], size);
-
-    gBattlescriptCurrInstr += 14;
 }
 
 static void Cmd_orbyte(void)
 {
-    u8* memByte = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    *memByte |= gBattlescriptCurrInstr[5];
-    gBattlescriptCurrInstr += 6;
+    u8* memByte = READ_FIRST_PTR_INC;
+    *memByte |= READ_8_INC;
 }
 
 static void Cmd_orhalfword(void)
 {
-    u16* memHword = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    u16 val = T2_READ_16(gBattlescriptCurrInstr + 5);
+    u16* memHword = READ_FIRST_PTR_INC;
+    u16 val = READ_16_INC;
 
     *memHword |= val;
-    gBattlescriptCurrInstr += 7;
 }
 
 static void Cmd_orword(void)
 {
-    u32* memWord = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    u32 val = T2_READ_32(gBattlescriptCurrInstr + 5);
+    u32* memWord = READ_FIRST_PTR_INC;
+    u32 val = READ_32_INC;
 
     *memWord |= val;
-    gBattlescriptCurrInstr += 9;
 }
 
 static void Cmd_bicbyte(void)
 {
-    u8* memByte = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    *memByte &= ~(gBattlescriptCurrInstr[5]);
-    gBattlescriptCurrInstr += 6;
+    u8* memByte = READ_FIRST_PTR_INC;
+    *memByte &= ~(READ_8_INC);
 }
 
 static void Cmd_bichalfword(void)
 {
-    u16* memHword = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    u16 val = T2_READ_16(gBattlescriptCurrInstr + 5);
+    u16* memHword = READ_FIRST_PTR_INC;
+    u16 val = READ_16_INC;
 
     *memHword &= ~val;
-    gBattlescriptCurrInstr += 7;
 }
 
 static void Cmd_bicword(void)
 {
-    u32* memWord = T2_READ_PTR(gBattlescriptCurrInstr + 1);
-    u32 val = T2_READ_32(gBattlescriptCurrInstr + 5);
+    u32* memWord = READ_FIRST_PTR_INC;
+    u32 val = READ_32_INC;
 
     *memWord &= ~val;
-    gBattlescriptCurrInstr += 9;
 }
 
 static void Cmd_pause(void)
@@ -5302,8 +5281,7 @@ static void Cmd_end3(void) // pops the main function stack
 
 static void Cmd_call(void)
 {
-    BattleScriptPush(gBattlescriptCurrInstr + 5);
-    gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    BattleScriptCall(READ_FIRST_PTR_INC);
 }
 
 static void Cmd_setroost(void)
