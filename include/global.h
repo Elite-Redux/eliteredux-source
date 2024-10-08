@@ -132,7 +132,7 @@
 #define T1_READ_8(ptr)  ((ptr)[0])
 #define T1_READ_16(ptr) ((ptr)[0] | ((ptr)[1] << 8))
 #define T1_READ_32(ptr) ((ptr)[0] | ((ptr)[1] << 8) | ((ptr)[2] << 16) | ((ptr)[3] << 24))
-#define T1_READ_PTR(ptr) (const void*) T1_READ_32(ptr)
+#define T1_READ_PTR(ptr) (void*) T1_READ_32(ptr)
 
 #define READ_8_INC T1_READ_8(gBattlescriptCurrInstr++)
 #define READ_16_INC ((gBattlescriptCurrInstr += 2), T1_READ_16(gBattlescriptCurrInstr - 2))
