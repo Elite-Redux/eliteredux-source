@@ -16235,7 +16235,7 @@ int IsUnaware(int battler)
 }
 
 int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) {
-    int abilities[4] = {0};
+    u16 abilities[4] = {0};
     int i, ability, moveType;
 
     GET_MOVE_TYPE(move, moveType)
@@ -16359,9 +16359,11 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             break;
         
         case ABILITY_VITAL_SPIRIT:
-            i = FALSE;
-            AbilityHealMonStatus(&i, battler, ability);
-            if (i) return TRUE;
+            {
+            u8 effect = FALSE;
+            AbilityHealMonStatus(&effect, battler, ability);
+            if (effect) return TRUE;
+            }
             break;
         
         case ABILITY_HARDENED_SHEATH:
