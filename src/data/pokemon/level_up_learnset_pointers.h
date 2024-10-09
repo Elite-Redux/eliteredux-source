@@ -1598,7 +1598,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     // Urshifu
     [SPECIES_URSHIFU_RAPID_STRIKE_STYLE] = sUrshifuRapidStrikeStyleLevelUpLearnset,
     // Zarude
-    [SPECIES_ZARUDE_DADA] = sZarudeLevelUpLearnset,
+    [SPECIES_ZARUDE_DADA] = sZarudeDadaLevelUpLearnset,
     // Calyrex
     [SPECIES_CALYREX_ICE_RIDER] = sCalyrexIceRiderLevelUpLearnset,
     [SPECIES_CALYREX_SHADOW_RIDER] = sCalyrexShadowRiderLevelUpLearnset,
