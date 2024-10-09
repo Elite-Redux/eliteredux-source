@@ -3094,6 +3094,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
     u8 levelCap = GetLevelCap();
     u16 targetSpecies;
     bool8 DisableLearnMoveActions = TRUE;
+    int allowChanges = enablePokemonChanges();
 
     sPartyMenuInternal->numActions = 0;
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUMMARY);
@@ -3107,27 +3108,29 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
         else
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_ITEM);
 
-        if(GetMonData(&mons[slotId], MON_DATA_SPECIES) && enablePokemonChanges() && !DisableLearnMoveActions &&
+        if(GetMonData(&mons[slotId], MON_DATA_SPECIES) && allowChanges && !DisableLearnMoveActions &&
           (GetNumberOfRelearnableMoves(&mons[slotId]) || GetNumberOfEggMoves(&mons[slotId]) || GetNumberOfTMMoves(&mons[slotId]) || GetNumberOfTutorMoves(&mons[slotId])))
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUB_MOVES);
 
         //Evolution
-        for(i = 0; i < EVOS_PER_MON; i++){
-            targetSpecies = GetEvolutionForMon(&mons[slotId], i);
+        if (allowChanges) {
+            for (i = 0; i < EVOS_PER_MON; i++) {
+                targetSpecies = GetEvolutionForMon(&mons[slotId], i);
 
-            if (targetSpecies != SPECIES_NONE && targetSpecies != species){
-                AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUB_EVOLUTION);
-                break;
+                if (targetSpecies != SPECIES_NONE && targetSpecies != species) {
+                    AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUB_EVOLUTION);
+                    break;
+                }
             }
         }
 
         //Form change
-        if (VarGet(FLAG_BADGE02_GET))
+        if (allowChanges && VarGet(FLAG_BADGE02_GET))
         {
-            for(i = 0; i < EVOS_PER_MON; i++){
+            for (i = 0; i < EVOS_PER_MON; i++) {
                 targetSpecies = GetFormChangeForMon(&mons[slotId], i);
 
-                if (targetSpecies != SPECIES_NONE && targetSpecies != species){
+                if (targetSpecies != SPECIES_NONE && targetSpecies != species) {
                     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUB_FORM_CHANGE);
                     break;
                 }
@@ -3135,11 +3138,11 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
         }
 
         //Level Up
-        if (level < levelCap && enablePokemonChanges())
+        if (level < levelCap && allowChanges)
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUB_LEVEL_UP);
     }
 
-    if(enablePokemonChanges())
+    if (allowChanges)
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_SUB_FIELD_MOVES);
 
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_CANCEL1);
