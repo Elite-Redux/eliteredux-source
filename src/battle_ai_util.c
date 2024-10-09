@@ -2896,15 +2896,7 @@ bool32 AI_CanCauseBleed(u8 battlerAtk, u8 battlerDef, u16 defAbility, u8 battler
 
 bool32 AI_CanBeInfatuated(u8 battlerAtk, u8 battlerDef, u16 defAbility, u8 atkGender, u8 defGender)
 {
-    if ((gBattleMons[battlerDef].status2 & STATUS2_INFATUATION)
-      || AI_GetMoveEffectiveness(AI_THINKING_STRUCT->moveConsidered, battlerAtk, battlerDef) == AI_EFFECTIVENESS_x0
-      || BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_OBLIVIOUS)
-      || atkGender == defGender
-      || atkGender == MON_GENDERLESS
-      || defGender == MON_GENDERLESS
-      || AI_IsAbilityOnSide(battlerDef, ABILITY_AROMA_VEIL))
-        return FALSE;
-    return TRUE;
+    return CanInfatuate(battlerAtk, battlerDef);
 }
 
 u32 ShouldTryToFlinch(u8 battlerAtk, u8 battlerDef, u16 atkAbility, u16 defAbility, u16 move)

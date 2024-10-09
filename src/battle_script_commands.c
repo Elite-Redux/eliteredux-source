@@ -5263,12 +5263,6 @@ static void Cmd_return(void)
 
 static void Cmd_end(void)
 {
-    if (gBattleScripting.replaceEndWithEnd3 > 0) {
-        gBattleScripting.replaceEndWithEnd3--;
-        Cmd_end3();
-        return;
-    }
-
     if (gBattleTypeFlags & BATTLE_TYPE_ARENA)
         BattleArena_AddSkillPoints(gBattlerAttacker);
 
@@ -13317,46 +13311,20 @@ static void Cmd_weatherdamage(void)
 
 static void Cmd_tryinfatuating(void)
 {
-    struct Pokemon *monAttacker, *monTarget;
-    u16 speciesAttacker, speciesTarget;
-    u32 personalityAttacker, personalityTarget;
-
-    if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-        monAttacker = &gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]];
-    else
-        monAttacker = &gEnemyParty[gBattlerPartyIndexes[gBattlerAttacker]];
-
-    if (GetBattlerSide(gBattlerTarget) == B_SIDE_PLAYER)
-        monTarget = &gPlayerParty[gBattlerPartyIndexes[gBattlerTarget]];
-    else
-        monTarget = &gEnemyParty[gBattlerPartyIndexes[gBattlerTarget]];
-
-    speciesAttacker = GetMonData(monAttacker, MON_DATA_SPECIES);
-    personalityAttacker = GetMonData(monAttacker, MON_DATA_PERSONALITY);
-
-    speciesTarget = GetMonData(monTarget, MON_DATA_SPECIES);
-    personalityTarget = GetMonData(monTarget, MON_DATA_PERSONALITY);
-
     if (GetBattlerAbility(gBattlerTarget) == ABILITY_OBLIVIOUS)
     {
         gBattlescriptCurrInstr = BattleScript_NotAffectedAbilityPopUp;
         gLastUsedAbility = ABILITY_OBLIVIOUS;
         RecordAbilityBattle(gBattlerTarget, ABILITY_OBLIVIOUS);
     }
+    else if (CanInfatuate(gBattlerAttacker, gBattlerTarget))
+    {
+        gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
+        gBattlescriptCurrInstr += 5;
+    }
     else
     {
-        if (GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == GetGenderFromSpeciesAndPersonality(speciesTarget, personalityTarget)
-            || gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION
-            || GetGenderFromSpeciesAndPersonality(speciesAttacker, personalityAttacker) == MON_GENDERLESS
-            || GetGenderFromSpeciesAndPersonality(speciesTarget, personalityTarget) == MON_GENDERLESS)
-        {
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-        }
-        else
-        {
-            gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
-            gBattlescriptCurrInstr += 5;
-        }
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
 }
 
@@ -13650,26 +13618,7 @@ static void Cmd_trytoapplymoveeffect(void)
     {
         case EFFECT_ATTRACT_HIT:
             if(rand <= secondaryEffectChance){
-                u16 speciesAtk = gBattleMons[gBattlerAttacker].species;
-                u16 speciesDef = gBattleMons[gBattlerTarget].species;
-                u32 pidAtk     = gBattleMons[gBattlerAttacker].personality;
-                u32 pidDef     = gBattleMons[gBattlerTarget].personality;
-
-                if (IsMyceliumMightActive(gBattlerAttacker) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION))
-                {
-                    gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
-                    appliedEffect = TRUE;
-                }
-                else if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                && IsBattlerAlive(gBattlerTarget)
-                && !gRoundStructs[gBattlerTarget].confusionSelfDmg
-                && GetBattlerAbility(gBattlerTarget) != ABILITY_OBLIVIOUS
-                && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
-                && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != GetGenderFromSpeciesAndPersonality(speciesDef, pidDef)
-                && !(gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
-                && TARGET_TURN_DAMAGED
-                && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != MON_GENDERLESS
-                && GetGenderFromSpeciesAndPersonality(speciesDef, pidDef) != MON_GENDERLESS)
+                if (TARGET_TURN_DAMAGED && CanInfatuate(gBattlerAttacker, gBattlerTarget))
                 {
                     gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
                     appliedEffect = TRUE;
@@ -13726,6 +13675,7 @@ static void Cmd_trytoapplymoveeffect(void)
              if(rand <= secondaryEffectChance){
                 if (IsMyceliumMightActive(gBattlerAttacker) && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED))
                 {
+                    gStatuses3[gBattlerTarget] |= gBattlerAttacker;
                     gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
                     appliedEffect = TRUE;
                 }
@@ -13736,6 +13686,7 @@ static void Cmd_trytoapplymoveeffect(void)
                 && TARGET_TURN_DAMAGED
                 && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED))
                 {
+                    gStatuses3[gBattlerTarget] |= gBattlerAttacker;
                     gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
                     appliedEffect = TRUE;
                 }
@@ -13748,6 +13699,7 @@ static void Cmd_trytoapplymoveeffect(void)
                 && TARGET_TURN_DAMAGED
                 && !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB))
                 {
+                    gStatuses3[gBattlerTarget] |= gBattlerAttacker;
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STICKY_WEB;
                     appliedEffect = TRUE;
                 }

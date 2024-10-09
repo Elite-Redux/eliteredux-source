@@ -5124,16 +5124,20 @@ static bool8 CanMoveHaveExtraFlinchChance(u16 move)
     return TRUE;
 }
 
-u8 DidMoveHit()
+int WasMoveSuccessful()
 {
     return !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-        && TARGET_TURN_DAMAGED
 		&& !gRoundStructs[gBattlerAttacker].confusionSelfDmg
         && gBattlerAttacker != gBattlerTarget;
+}
+
+int DidMoveHit()
+{
+    return WasMoveSuccessful() && TARGET_TURN_DAMAGED;
 			 
 }
 
-u8 ShouldApplyOnHitAffect(u8 applyTo)
+int ShouldApplyOnHitAffect(int applyTo)
 {
     return DidMoveHit() && IsBattlerAlive(applyTo);
 }
@@ -8649,14 +8653,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_CUTE_CHARM) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PRIM_AND_PROPER)){
             if (ShouldApplyOnHitAffect(gBattlerAttacker)
              && IsMoveMakingContact(move, gBattlerAttacker)
-             && IsBattlerAlive(gBattlerTarget)
              && (Random() % 100) < 30
-             && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_OBLIVIOUS)
-             && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL)
-             && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != GetGenderFromSpeciesAndPersonality(speciesDef, pidDef)
-             && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)
-             && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != MON_GENDERLESS
-             && GetGenderFromSpeciesAndPersonality(speciesDef, pidDef) != MON_GENDERLESS)
+             && CanInfatuate(battler, gBattlerAttacker))
             {
 				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = BattlerHasAbility(battler, gBattlerAttacker, ABILITY_CUTE_CHARM) ? ABILITY_CUTE_CHARM : ABILITY_PRIM_AND_PROPER;
                 gBattleMons[gBattlerAttacker].status2 |= STATUS2_INFATUATED_WITH(gBattlerTarget);
@@ -8669,12 +8667,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PURE_LOVE)){
             if (ShouldApplyOnHitAffect(gBattlerAttacker)
              && IsMoveMakingContact(move, gBattlerAttacker)
-             && TARGET_TURN_DAMAGED
-             && IsBattlerAlive(battler)
              && (Random() % 100) < 30
-             && !BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_OBLIVIOUS)
-             && !IsAbilityOnSide(gBattlerAttacker, ABILITY_AROMA_VEIL)
-             && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION))
+             && CanInfatuate(battler, gBattlerAttacker))
             {
 				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_PURE_LOVE;
                 gBattleMons[gBattlerAttacker].status2 |= STATUS2_INFATUATED_WITH(gBattlerTarget);
@@ -8713,1051 +8707,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 		
         break;
     case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_SHIELDS_DOWN)
-            && gBattleMoves[move].effect == EFFECT_SHELL_SMASH
-            && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
+        for (i = 0; i <= NUM_ABILITY_SLOTS; i++)
         {
-            u8 i;
-            for (i = 0; i < ARRAY_COUNT(sHpTransformations); i++)
-            {
-                if (sHpTransformations[i][0] == ABILITY_SHIELDS_DOWN && gBattleMons[battler].species == sHpTransformations[i][1])
-                    break;
-            }
-            
-            if (i < ARRAY_COUNT(sHpTransformations))
-            {
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, sHpTransformations[i][2]);
-                SetAbilityState(battler, ABILITY_SHIELDS_DOWN, TRUE);
-                gBattleMons[battler].species = sHpTransformations[i][2];
-                gBattleScripting.abilityPopupOverwrite = ABILITY_SHIELDS_DOWN;
-                BattleScriptCall(BattleScript_AttackerFormChange);
-                effect++;
-            }
+            HandleAttackerAbility(i, battler, gBattlerTarget, move);
         }
-
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_GULP_MISSILE)
-            && !(gBattleMons[battler].status2 && STATUS2_TRANSFORMED))
-        {
-            if (((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED)
-                || gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER
-                || (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
-                && gBattleMons[battler].species == SPECIES_CRAMORANT)
-            {
-                u16 newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ?
-                    SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
-                gBattleMons[battler].species = newSpecies;
-                gBattleScripting.abilityPopupOverwrite = ABILITY_GULP_MISSILE;
-                BattleScriptCall(BattleScript_AttackerFormChange);
-                effect++;
-            }
-        }
-
-        // Hydro Circuit
-	    if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_HYDRO_CIRCUIT)){
-            if (ShouldApplyOnHitAffect(battler)
-             && !BATTLER_MAX_HP(gBattlerAttacker) 
-             && !BATTLER_HEALING_BLOCKED(gBattlerAttacker)
-             && gBattleMoves[move].type == TYPE_WATER)
-            {
-                //Attacker
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_HYDRO_CIRCUIT;
-                BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-                effect++;
-            }
-        }
-
-        // Vitality Strike
-	    if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_VITALITY_STRIKE)){
-            if (ShouldApplyOnHitAffect(battler)
-             && !BATTLER_MAX_HP(gBattlerAttacker) 
-             && !BATTLER_HEALING_BLOCKED(gBattlerAttacker)
-             && IS_IRON_FIST(battler, move))
-            {
-                //Attacker
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_HYDRO_CIRCUIT;
-                BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-                effect++;
-            }
-        }
-
-        // Hydro Circuit
-	    if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PURE_LOVE)){
-            if (ShouldApplyOnHitAffect(battler)
-             && !BATTLER_MAX_HP(gBattlerAttacker) 
-             && !BATTLER_HEALING_BLOCKED(gBattlerAttacker)
-             && gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
-            {
-                //Attacker
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_PURE_LOVE;
-                BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-                effect++;
-            }
-        }
-		
-		// Growing Tooth
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_GROWING_TOOTH)){
-			if (ShouldApplyOnHitAffect(battler)
-				 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-				 && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
-				{
-					gBattleScripting.abilityPopupOverwrite = ABILITY_GROWING_TOOTH;
-					gLastUsedAbility = ABILITY_GROWING_TOOTH;
-					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-					ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
-                    BattleScriptCall(BattleScript_AttackBoostActivates);
-					gBattleScripting.battler = battler;
-					effect++;
-				}
-		}
-
-        //Spinning Top
-        if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SPINNING_TOP)){
-            bool8 activateAbilty = FALSE;
-            u16 abilityToCheck = ABILITY_SPINNING_TOP; //For easier copypaste
-
-            //Checks if the ability is triggered
-            if(ShouldApplyOnHitAffect(battler) && gBattleMoves[move].type == TYPE_FIGHTING)
-                activateAbilty = CheckAndSetOncePerTurnAbility(battler, ABILITY_SPINNING_TOP);
-
-            gBattleScripting.abilityPopupOverwrite = abilityToCheck;
-
-            //This is the stuff that has to be changed for each ability
-            if(activateAbilty){
-                //Remove Hazards
-				if(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals){
-                    //If the ability is an innate overwrite the popout
-                    gSideStatuses[GetBattlerSide(battler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
-                    gSideTimers[GetBattlerSide(battler)].hotCoals = TRUE;
-                    BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
-                    gBattleScripting.battler = battler;
-                    effect++;
-                }
-                //Boosts Speed
-                if(CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN)){
-                    //If the ability is an innate overwrite the popout
-                    ChangeStatBuffs(battler, StatBuffValue(1), STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL);
-                    BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
-                    gBattleScripting.battler = battler;
-                    effect++;
-                }
-            }
-        }
-
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_VITAL_SPIRIT) && gBattleMoves[move].type == TYPE_FIGHTING)
-        {
-            AbilityHealMonStatus(&effect, battler, ABILITY_VITAL_SPIRIT);
-        }
-
-        // Hardened Sheath
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_HARDENED_SHEATH)){
-			if (ShouldApplyOnHitAffect(battler) && (gBattleMoves[move].hornBased)
-				 && CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
-				{
-					gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_HARDENED_SHEATH;
-					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-					ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL);
-                    BattleScriptCall(BattleScript_AttackBoostActivates);
-					gBattleScripting.battler = battler;
-					effect++;
-				}
-		}
-
-		// Loud Bang
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_LOUD_BANG)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-				 && CanBeConfused(gBattlerTarget)
-				 && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
-				 && (Random() % 100) < 50)
-				{
-					gBattleScripting.abilityPopupOverwrite = ABILITY_LOUD_BANG;
-					gLastUsedAbility = ABILITY_LOUD_BANG;
-					gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
-					BattleScriptCall(BattleScript_AbilityStatusEffect);
-					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-					effect++;
-				}
-		}
-
-		// Loud Bang
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PIERCING_SOLO)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-				 && CanBleed(gBattlerTarget)
-				 && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
-				 && (Random() % 100) < 30)
-				{
-					gBattleScripting.abilityPopupOverwrite = ABILITY_PIERCING_SOLO;
-					gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
-					BattleScriptCall(BattleScript_AbilityStatusEffect);
-					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-					effect++;
-				}
-		}
-
-		// Denting Blows
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DENTING_BLOWS)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-                    && CompareStat(gBattlerTarget, STAT_DEF, MIN_STAT_STAGE, CMP_GREATER_THAN)
-                    && (gBattleMoves[move].hammerBased))
-				{
-                    int battlersHit = GetOncePerTurnAbilityCounter(battler, ABILITY_DENTING_BLOWS);
-                    if (!(battlersHit & (1 << gBattlerTarget)))
-                    {
-                        SetOncePerTurnAbilityCounter(battler, ABILITY_DENTING_BLOWS, battlersHit | (1 << gBattlerTarget));
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_DENTING_BLOWS;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
-                        BattleScriptCall(BattleScript_AbilityStatusEffect);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                    }
-				}
-		}
-
-        // Whiplash
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_WHIPLASH)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-                    && Random() % 2
-                    && CompareStat(gBattlerTarget, STAT_DEF, MIN_STAT_STAGE, CMP_GREATER_THAN)
-                    && IS_MOVE_PHYSICAL(move))
-				{
-                    int battlersHit = GetOncePerTurnAbilityCounter(battler, ABILITY_WHIPLASH);
-                    if (!(battlersHit & (1 << gBattlerTarget)))
-                    {
-                        SetOncePerTurnAbilityCounter(battler, ABILITY_WHIPLASH, battlersHit | (1 << gBattlerTarget));
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_WHIPLASH;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
-                        BattleScriptCall(BattleScript_AbilityStatusEffect);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                    }
-				}
-		}
-		
-		// Beautiful Music
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BEAUTIFUL_MUSIC)) {
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-                && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
-                && IsBattlerAlive(gBattlerTarget)
-                && (Random() % 100) < 50
-                && !BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_OBLIVIOUS)
-                && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
-                && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != GetGenderFromSpeciesAndPersonality(speciesDef, pidDef)
-                && !(gBattleMons[gBattlerTarget].status2 & STATUS2_INFATUATION)
-                && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != MON_GENDERLESS
-                && GetGenderFromSpeciesAndPersonality(speciesDef, pidDef) != MON_GENDERLESS)
-            {
-				gBattleScripting.abilityPopupOverwrite = ABILITY_BEAUTIFUL_MUSIC;
-                gBattleMons[gBattlerTarget].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
-                BattleScriptCall(BattleScript_BeautifulMusicActivates);
-                effect++;
-            }
-		}
-
-        // Resonance
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RESONANCE)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-				 && CanBleed(gBattlerTarget)
-				 && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
-				 && (Random() % 100) < 100)
-				{
-					gBattleScripting.abilityPopupOverwrite = ABILITY_RESONANCE;
-					gLastUsedAbility = ABILITY_RESONANCE;
-					gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
-					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-					BattleScriptCall(BattleScript_AbilityStatusEffect);
-					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-					effect++;
-				}
-		}
-
-        // Beautiful Music // uses resonance data as a placeholder cause i'm too lazy to delete my work
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RESONANCE)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-				 && CanBleed(gBattlerTarget)
-				 && (gBattleMoves[move].flags & FLAG_SOUND)//Sound Based Move
-				 && (Random() % 100) < 100)
-				{
-					gBattleScripting.abilityPopupOverwrite = ABILITY_RESONANCE;
-					gLastUsedAbility = ABILITY_RESONANCE;
-					gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
-					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-					BattleScriptCall(BattleScript_AbilityStatusEffect);
-					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-					effect++;
-				}
-		}
-
-		// Toxic Chain
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_TOXIC_CHAIN)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-				 && CanBePoisoned(battler, gBattlerTarget)
-				 && (Random() % 100) < 30)
-				{
-					gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_TOXIC_CHAIN;
-					gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
-					PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-					BattleScriptCall(BattleScript_AbilityStatusEffect);
-					gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-					effect++;
-				}
-		}
-		
-		//Electric Burst
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ELECTRIC_BURST)){
-			if (ShouldApplyOnHitAffect(battler)
-			 && gBattleMoves[move].type == TYPE_ELECTRIC //Electric Type Moves
-             && gBattleMons[gBattlerAttacker].hp > 1
-             && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
-            {
-                gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = ABILITY_ELECTRIC_BURST;
-                gBattleMoveDamage = gTurnStructs[gBattlerTarget].dmg / 10;
-                if (gBattleMoveDamage == 0)
-                    gBattleMoveDamage = 1;
-                else if(gBattleMoveDamage >= gBattleMons[gBattlerAttacker].hp) //Make it unable to faint the user to avoid crashes
-                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp - 1;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_UserGetsReckoilDamaged);
-                effect++;
-            }
-		}
-
-        // Infernal Rage
-		if (BATTLER_HAS_ABILITY(battler, ABILITY_INFERNAL_RAGE)){
-			if (ShouldApplyOnHitAffect(battler)
-			 && gBattleMoves[move].type == TYPE_FIRE //Fire Type Moves
-             && gBattleMons[gBattlerAttacker].hp > 1
-             && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
-            {
-                gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = ABILITY_INFERNAL_RAGE;
-                gBattleMoveDamage = gTurnStructs[gBattlerTarget].dmg / 10;
-                if (gBattleMoveDamage == 0)
-                    gBattleMoveDamage = 1;
-                else if(gBattleMoveDamage >= gBattleMons[gBattlerAttacker].hp) //Make it unable to faint the user to avoid crashes
-                    gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp - 1;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_UserGetsReckoilDamaged);
-                effect++;
-            }
-		}
-
-        //Archmage
-        if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ARCHMAGE)){
-            bool8 activateAbilty = FALSE;
-            u16 abilityToCheck = ABILITY_ARCHMAGE; //For easier copypaste
-
-            //Checks if the ability is triggered
-            if(DidMoveHit() && gBattleMoves[move].split != SPLIT_STATUS && (Random() % 100) < 30){
-                activateAbilty = TRUE;
-                gBattleScripting.abilityPopupOverwrite = abilityToCheck;
-            }
-
-            //This is the stuff that has to be changed for each ability
-            if(activateAbilty){
-                //If the ability is an innate overwrite the popout
-                switch(gBattleMoves[move].type){
-                    case TYPE_POISON: // 30% chance to badly poison.
-                        if(IsBattlerAlive(gBattlerTarget) && CanBePoisoned(gBattlerAttacker, gBattlerTarget)){
-                            gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_ICE: // 30% chance to inflict frostbite.
-                        if(IsBattlerAlive(gBattlerTarget) && CanGetFrostbite(gBattlerTarget)){
-                            gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_WATER: // 30% chance to confuse.
-                        if(IsBattlerAlive(gBattlerTarget) && CanBeConfused(gBattlerTarget)){
-                            gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_FIRE: // 30% chance to burn.
-                        if(IsBattlerAlive(gBattlerTarget) && CanBeBurned(gBattlerTarget)){
-                            gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_ELECTRIC: // 30% chance to set up Electric Terrain.
-                        if(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer)){
-                            BattleScriptCall(BattleScript_Archmage_Effect_Type_Electric);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_PSYCHIC: // 30% chance to set up Psychic Terrain.
-                        if(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer)){
-                            BattleScriptCall(BattleScript_Archmage_Effect_Type_Psychic);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_FAIRY: // 30% chance to set up Misty Terrain.
-                        if(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer)){
-                            BattleScriptCall(BattleScript_Archmage_Effect_Type_Fairy);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_GRASS: // 30% chance to set up Grassy Terrain.
-                        if(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer)){
-                            BattleScriptCall(BattleScript_Archmage_Effect_Type_Grass);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_NORMAL: // 30% chance to encore.
-                    if (gVolatileStructs[gBattlerTarget].encoreTimer == 0
-                        && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
-                        && !BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_OBLIVIOUS))
-                    {
-                        u8 i;
-                        for (i = 0; i < MAX_MON_MOVES; i++)
-                        {
-                            if (gBattleMons[gBattlerTarget].moves[i] == gLastMoves[gBattlerTarget])
-                                break;
-                        }
-
-                        if (gLastMoves[gBattlerTarget] == MOVE_STRUGGLE
-                            || gLastMoves[gBattlerTarget] == MOVE_ENCORE
-                            || gLastMoves[gBattlerTarget] == MOVE_MIRROR_MOVE)
-                        {
-                            i = 4;
-                        }
-
-                        if (gVolatileStructs[gBattlerTarget].encoredMove == 0
-                            && i != 4 && gBattleMons[gBattlerTarget].pp[i] != 0)
-                        {
-                            
-                            gVolatileStructs[gBattlerTarget].encoredMove = gBattleMons[gBattlerTarget].moves[i];
-                            gVolatileStructs[gBattlerTarget].encoredMovePos = i;
-                            gVolatileStructs[gBattlerTarget].encoreTimer = 3;
-                            gVolatileStructs[gBattlerTarget].encoreTimerStartValue = gVolatileStructs[gBattlerTarget].encoreTimer;
-
-                            BattleScriptCall(BattleScript_Archmage_Effect_Type_Normal);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    }
-                    break;
-                    case TYPE_ROCK: // 30% chance to set up Stealth Rock.
-                        if(!(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK)){
-                            gSideStatuses[GetBattlerSide(gBattlerTarget)] |= (SIDE_STATUS_STEALTH_ROCK);
-                            gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType= TYPE_ROCK;
-                            BattleScriptCall(BattleScript_Archmage_Effect_Type_Rock);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_GHOST: // 30% chance to disable.
-                    if (gVolatileStructs[gBattlerTarget].disabledMove == 0)
-                    {
-                        if (IsBattlerAlive(gBattlerTarget) && CanBeDisabled(gBattlerTarget)){
-                            gBattleScripting.moveEffect = MOVE_EFFECT_DISABLE;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    }
-                    break;
-                    case TYPE_DARK: // 30% chance to inflict bleed.
-                        if(IsBattlerAlive(gBattlerTarget) && CanBleed(gBattlerTarget)){
-                            gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_FIGHTING: // 30% chance to boost the users Special Attack by 1.
-                    {
-                        if(IsBattlerAlive(battler) && CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)){
-
-                            gBattleScripting.moveEffect = MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    }  
-                    break;
-                    case TYPE_FLYING: // 30% chance to raise the users Speed by 1.
-                        if(IsBattlerAlive(battler) && CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN)){
-
-                            gBattleScripting.moveEffect = MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_BUG: // 30% chance to set Sticky Web.
-
-                    break;
-                    case TYPE_DRAGON: // 30% chance to lower the opponents attack by 1.
-                        if(IsBattlerAlive(gBattlerTarget) && CompareStat(gBattlerTarget, STAT_ATK, MIN_STAT_STAGE, CMP_GREATER_THAN)){
-
-                            gBattleScripting.moveEffect = MOVE_EFFECT_ATK_MINUS_1;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_GROUND: // 30% chance to trap.
-                        if(IsBattlerAlive(battler) && !(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION)){
-
-                            gBattleScripting.moveEffect = MOVE_EFFECT_PREVENT_ESCAPE;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                    case TYPE_STEEL: // 30% chance to increase the user's defense.
-                        if(IsBattlerAlive(battler) && CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_LESS_THAN)){
-
-                            gBattleScripting.moveEffect = MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER;
-                            BattleScriptCall(BattleScript_AbilityStatusEffect);
-                            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                            effect++;
-                        }
-                    break;
-                }
-            }
-        }
-
-		//Solenoglyphs
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SOLENOGLYPHS)) {
-		    if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && CanBePoisoned(gBattlerAttacker, gBattlerTarget)
-			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
-             && (Random() % 2) == 0)
-            {
-				gBattleScripting.abilityPopupOverwrite = ABILITY_SOLENOGLYPHS;
-				gLastUsedAbility = ABILITY_SOLENOGLYPHS;
-                gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-        }
-
-		// Frostmaw
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FROSTMAW)) {
-		    if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && CanGetFrostbite(gBattlerTarget)
-			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
-             && (Random() % 2) == 0)
-            {
-				gBattleScripting.abilityPopupOverwrite = ABILITY_FROSTMAW;
-                gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE;
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-        }
-
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ASSASSINS_TOOLS)) {
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-                && IsMoveMakingContact(move, gBattlerAttacker))
-            {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_ASSASSINS_TOOLS;
-                switch (Random() % 2)
-                {
-                    case 0:
-                        if (!CanBePoisoned(battler, gBattlerTarget)) break;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
-                        BattleScriptCall(BattleScript_AbilityStatusEffect);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                        break;
-                        
-                    case 1:
-                        if (!CanBeParalyzed(battler, gBattlerTarget)) break;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
-                        BattleScriptCall(BattleScript_AbilityStatusEffect);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                        break;
-                        
-                    case 2:
-                        if (!CanBleed(gBattlerTarget)) break;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
-                        BattleScriptCall(BattleScript_AbilityStatusEffect);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                        break;
-                }
-            }
-        }
-
-		//Flaming Jaws
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMING_JAWS) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAMING_MAW)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && CanBeBurned(gBattlerTarget)
-			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
-             && (Random() % 2) == 0)
-            {
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FLAMING_JAWS;
-                gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-        }
-
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_RADIO_JAM))
-        {
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && CanBeDisabled(gBattlerTarget)
-			 && (gBattleMoves[move].flags & FLAG_SOUND)
-             && (Random() % 100) < 20) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_RADIO_JAM;
-                gBattleScripting.moveEffect = MOVE_EFFECT_DISABLE;
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-        }
-
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_PINNACLE_BLADE)
-            && DidMoveHit()
-            && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        {
-            int shouldApply = FALSE;
-            int opposingSide = GetBattlerSide(gBattlerTarget);
-
-            if (gVolatileStructs[gBattlerTarget].substituteHP)
-            {
-                gVolatileStructs[gBattlerTarget].substituteHP = 0;
-                BattleScriptCall(BattleScript_AttackerDestroysSubstitute);
-                shouldApply = TRUE;
-            }
-
-            if (IsBattlerAlive(gBattlerTarget))
-            {
-                if (gSideTimers[opposingSide].reflectTimer
-                    || gSideTimers[opposingSide].lightscreenTimer
-                    || gSideTimers[opposingSide].auroraVeilTimer)
-                {
-                    BattleScriptCall(BattleScript_AttackerShattersScreens);
-                    shouldApply = TRUE;
-                }
-
-                if (IS_BATTLER_PROTECTED(gBattlerTarget))
-                {
-                    gBattleScripting.moveEffect = MOVE_EFFECT_FEINT;
-                    SetMoveEffect(TRUE, TRUE);
-                    shouldApply = TRUE;
-                }
-            }
-
-            if (shouldApply)
-            {
-                BattleScriptCall(BattleScript_AbilityPopUp);
-                effect++;
-            }
-        }
-
-        //Fearmonger Paralyze Chance
-		if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FEARMONGER)){
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && CanBeParalyzed(gBattlerAttacker, gBattlerTarget)
-             && IsMoveMakingContact(move, gBattlerAttacker) //Does it need to be a contact move?
-             && (Random() % 10) == 0)
-            {
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FEARMONGER;
-                gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-        }
-
-        // Yuki Onna Charm Chance
-		if(BATTLER_HAS_ABILITY(battler, ABILITY_YUKI_ONNA)){
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && gBattleMons[gBattlerAttacker].hp != 0
-             && (Random() % 10) == 0
-             && !BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_OBLIVIOUS)
-             && !IsAbilityOnSide(gBattlerTarget, ABILITY_AROMA_VEIL)
-             && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != GetGenderFromSpeciesAndPersonality(speciesDef, pidDef)
-             && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_INFATUATION)
-             && GetGenderFromSpeciesAndPersonality(speciesAtk, pidAtk) != MON_GENDERLESS
-             && GetGenderFromSpeciesAndPersonality(speciesDef, pidDef) != MON_GENDERLESS)
-            {
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_YUKI_ONNA;
-                gBattleScripting.moveEffect = MOVE_EFFECT_ATTRACT;
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-        }
-
-        // Stun Shock
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_STUN_SHOCK)) {
-			if (ShouldApplyOnHitAffect(gBattlerTarget) && (Random() % 100) < 60)
-            {
-                int shouldActivate = FALSE;
-                if (Random() % 2)
-                {
-                    if (CanBePoisoned(battler, gBattlerTarget))
-                    {
-                        shouldActivate = TRUE;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
-                    }
-                }
-                else if (CanBeParalyzed(battler, gBattlerTarget))
-                {
-                    shouldActivate = TRUE;
-                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
-                }
-
-                if (shouldActivate) {
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_STUN_SHOCK;
-                    BattleScriptCall(BattleScript_AbilityStatusEffect);
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
-                }
-            }
-        }
-
-        //Shocking Jaws
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SHOCKING_JAWS) || BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SHOCKING_MAW)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && CanBeParalyzed(gBattlerAttacker, gBattlerTarget)
-			 && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
-             && (Random() % 2) == 0)
-            {
-				gBattleScripting.abilityPopupOverwrite = ABILITY_SHOCKING_JAWS;
-				gLastUsedAbility = ABILITY_SHOCKING_JAWS;
-                gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-        }
-
-        //Shocking Jaws
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_VENOBLAZE_PINCERS)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-                && IS_MOVE_PHYSICAL(move)
-                && (Random() % 100) < 20)
-            {
-                int moveEffect = 0;
-                if (Random() % 2)
-                {
-                    if (CanBeBurned(gBattlerTarget))
-                    {
-                        moveEffect = MOVE_EFFECT_BURN;
-                    }
-                }
-                else if (CanBeParalyzed(battler, gBattlerTarget))
-                {
-                    moveEffect = MOVE_EFFECT_PARALYSIS;
-                }
-            
-                if (moveEffect)
-                {
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_VENOBLAZE_PINCERS;
-                    gBattleScripting.moveEffect = moveEffect;
-                    BattleScriptCall(BattleScript_AbilityStatusEffect);
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
-                }
-            }
-        }
-
-        //Molten Blades
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_MOLTEN_BLADES)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && CanBeBurned(gBattlerTarget)
-			 && (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) //Keen Edge
-             && (Random() % 100) < 20)
-            {
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_MOLTEN_BLADES;
-                gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-        }
-
-        //Molten Blades
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DEAD_POWER)){
-			if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && !(gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED)
-             && IsMoveMakingContact(move, battler)
-             && (Random() % 100) < 20)
-            {
-				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_DEAD_POWER;
-                gBattleScripting.moveEffect = MOVE_EFFECT_CURSE;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-        }
-
-		// Spectral Shroud
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SPECTRAL_SHROUD)){
-            u8 moveType;
-
-            GET_MOVE_TYPE(move, moveType);
-
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && CanBePoisoned(gBattlerAttacker, gBattlerTarget)
-             && gBattleStruct->ateBoost[battler]
-             && moveType == TYPE_GHOST
-             && (Random() % 100) < 30)
-            {
-				gBattleScripting.abilityPopupOverwrite = ABILITY_SPECTRAL_SHROUD;
-				gLastUsedAbility = ABILITY_SPECTRAL_SHROUD;
-                gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-		}
-
-        if(BATTLER_HAS_ABILITY(battler, ABILITY_ANGELS_WRATH)){
-            bool8 effectActivated = FALSE;
-            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ANGELS_WRATH;
-
-            switch(move){
-                case MOVE_TACKLE:
-                    if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                    && gBattleMons[gBattlerTarget].hp != 0
-                    && !gRoundStructs[gBattlerAttacker].confusionSelfDmg
-                    && gVolatileStructs[gBattlerTarget].encoreTimer  == 0
-                    && gVolatileStructs[gBattlerTarget].disableTimer == 0
-                    && TARGET_TURN_DAMAGED)
-                    {
-                        gVolatileStructs[gBattlerTarget].encoreTimer = 2;
-                        gVolatileStructs[gBattlerTarget].encoredMove = gBattleMons[gBattlerTarget].moves[0];
-
-                        gVolatileStructs[gBattlerTarget].disableTimer = gVolatileStructs[gBattlerTarget].disableTimerStartValue = 2;
-                        gVolatileStructs[gBattlerTarget].disabledMove = gBattleMons[gBattlerTarget].moves[0];
-                        
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptCall(BattleScript_AngelsWrath_Effect_Tackle);
-                        effect++;
-                    }
-                break;
-                case MOVE_STRING_SHOT:
-                    if (!gRoundStructs[gBattlerAttacker].confusionSelfDmg)
-                    {
-                        if(!(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK) ||
-                           !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_TOXIC_SPIKES) ||
-                           !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_SPIKES) ||
-                           !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB))
-                                effectActivated = TRUE;
-
-                        if(effectActivated){
-                            gSideStatuses[GetBattlerSide(gBattlerTarget)] |= (SIDE_STATUS_STEALTH_ROCK);
-                            gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType = TYPE_ROCK;
-                            gSideStatuses[GetBattlerSide(gBattlerTarget)] |= (SIDE_STATUS_TOXIC_SPIKES);
-                            gSideStatuses[GetBattlerSide(gBattlerTarget)] |= (SIDE_STATUS_SPIKES);
-                            gSideStatuses[GetBattlerSide(gBattlerTarget)] |= (SIDE_STATUS_STICKY_WEB);
-
-                            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                            BattleScriptCall(BattleScript_AngelsWrath_Effect_String_Shot);
-                            effect++;
-                        }
-                    }
-                break;
-                case MOVE_HARDEN:
-                    if (!gRoundStructs[gBattlerAttacker].confusionSelfDmg)
-                    {
-                        for(i = 1; i < NUM_STATS; i++){
-                            if(gBattleMons[battler].statStages[i] < MAX_STAT_STAGE && i != STAT_DEF){
-                                ChangeStatBuffs(battler, StatBuffValue(1), i, MOVE_EFFECT_AFFECTS_USER, NULL);
-                                effectActivated = TRUE;
-                            }
-                        }
-
-                        if(effectActivated){
-                            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                            BattleScriptCall(BattleScript_AngelsWrath_Effect_Harden);
-                            effect++;
-                        }
-                    }
-                break;
-                case MOVE_IRON_DEFENSE:
-                    if (!gRoundStructs[gBattlerAttacker].confusionSelfDmg)
-                    {
-                        gRoundStructs[gBattlerAttacker].angelsWrathProtected = TRUE;
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptCall(BattleScript_AngelsWrath_Effect_Iron_Defense);
-                        effect++;
-                    }
-                break;
-                case MOVE_ELECTROWEB:
-                    if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                    && gBattleMons[gBattlerTarget].hp != 0
-                    && !gRoundStructs[gBattlerAttacker].confusionSelfDmg
-                    && (gBattleMons[gBattlerTarget].statStages[STAT_SPEED] != 0
-                    || !(gBattleMons[gBattlerTarget].status2 & STATUS2_ESCAPE_PREVENTION))
-                    && TARGET_TURN_DAMAGED)
-                    {
-                        gBattleMons[gBattlerTarget].statStages[STAT_SPEED] = 0;
-                        gBattleMons[gBattlerTarget].status2 |= (STATUS2_ESCAPE_PREVENTION);
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptCall(BattleScript_AngelsWrath_Effect_Electroweb);
-                        effect++;
-                    }
-                break;
-                case MOVE_BUG_BITE:
-                    if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                    && !gRoundStructs[gBattlerAttacker].confusionSelfDmg
-                    && TARGET_TURN_DAMAGED)
-                    {
-                        if(CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerTarget].item) && gBattleMons[gBattlerTarget].hp != 0){
-                            gBattleMons[gBattlerTarget].item = ITEM_NONE;
-                            BattleScriptCall(BattleScript_AngelsWrath_Effect_Bug_Bite);
-                            effect++;
-                        }
-
-                        if(!BATTLER_MAX_HP(gBattlerAttacker)){
-                            BattleScriptCall(BattleScript_AngelsWrath_Effect_Bug_Bite_2);
-                            effect++;
-                        }
-                    }
-                break;
-            }
-        }
-
-        // Elemental Charge
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ELEMENTAL_CHARGE)
-            && ShouldApplyOnHitAffect(gBattlerTarget)
-            && Random() % 5 == 0){
-            u8 moveType;
-            GET_MOVE_TYPE(move, moveType)
-            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ELEMENTAL_CHARGE;
-            //Paralysis
-            if (moveType == TYPE_ELECTRIC && CanBeParalyzed(gBattlerAttacker, gBattlerTarget))
-            {
-                gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-            //Burn
-            else if (moveType == TYPE_FIRE && CanBeBurned(gBattlerTarget))
-            {
-                gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-            //Frostbite
-            else if (moveType == TYPE_ICE && CanGetFrostbite(gBattlerTarget))
-            {
-                gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                BattleScriptCall(BattleScript_AbilityStatusEffect);
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                effect++;
-            }
-		}
-	
-		// Stench
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_STENCH)){
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && (Random() % 100) < 10
-             && CanMoveHaveExtraFlinchChance(move))
-            {
-                gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = ABILITY_STENCH;
-                gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
-                BattleScriptPushCursor();
-                SetMoveEffect(FALSE, 0);
-                BattleScriptPop();
-                effect++;
-            }
-		}
-	
-		// Stench
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_HAUNTING_FRENZY)){
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && (Random() % 100) < 20
-             && !(gBattleMons[gBattlerTarget].status2 & STATUS2_FLINCHED)
-             && CanMoveHaveExtraFlinchChance(move))
-            {
-                gLastUsedAbility = gBattleScripting.abilityPopupOverwrite = ABILITY_HAUNTING_FRENZY;
-                gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
-                BattleScriptPushCursor();
-                SetMoveEffect(FALSE, 0);
-                BattleScriptPop();
-                effect++;
-            }
-		}
-
-		// Absorbant
-		if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ABSORBANT)){
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)
-             && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED)
-             && ((gBattleMoves[move].effect == EFFECT_ABSORB) || (gBattleMoves[move].effect == EFFECT_DREAM_EATER && TARGET_TURN_DAMAGED)))
-            {
-                gStatuses3[gBattlerTarget] |= gBattlerAttacker;
-                gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                gBattleScripting.abilityPopupOverwrite = ABILITY_ABSORBANT;
-                BattleScriptCall(BattleScript_AbsorbantActivated);
-                effect++;
-            }
-		}
-
-        // Fungal Infection
-        if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FUNGAL_INFECTION)){
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-             && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)
-             && IsMoveMakingContact(move, gBattlerAttacker)
-             && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED))
-            {
-                gStatuses3[gBattlerTarget] |= gBattlerAttacker;
-                gStatuses3[gBattlerTarget] |= STATUS3_LEECHSEED;
-                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_FUNGAL_INFECTION;
-                BattleScriptCall(BattleScript_FungalInfectionActivates);
-                effect++;
-            }
-        }
-
-        //Grip Pincer
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_GRIP_PINCER)){
-            if (ShouldApplyOnHitAffect(gBattlerTarget)
-                && IsBattlerAlive(battler)
-                && IsMoveMakingContact(move, battler)
-                && !(gBattleMons[gBattlerTarget].status2 & STATUS2_WRAPPED)
-                && (Random() % 2) == 0)
-                {
-                    gBattleMons[gBattlerTarget].status2 |= STATUS2_WRAPPED;
-                    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
-                        gVolatileStructs[gBattlerTarget].wrapTurns = (B_BINDING_TURNS >= GEN_5) ? 7 : 5;
-                    else
-                        gVolatileStructs[gBattlerTarget].wrapTurns = (B_BINDING_TURNS >= GEN_5) ? ((Random() % 2) + 4) : ((Random() % 4) + 2);
-
-                    gBattleStruct->wrappedMove[gBattlerTarget] = gCurrentMove;
-                    gBattleStruct->wrappedBy[gBattlerTarget] = battler;
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_GRIP_PINCER;
-                    BattleScriptCall(BattleScript_GripPincerActivated);
-                    effect++;
-                }
-        }
-		
         break;
     case ABILITYEFFECT_MOVE_END_OTHER: // Abilities that activate on *another* battler's moveend: Dancer, Soul-Heart, Receiver, Symbiosis
         // Dancer
@@ -10606,13 +9559,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 {
                     if (!(flag & (1 << i))) continue;
                     if (IsBattlerAlive(i)
-                        && IsBattlerAlive(battler)
-                        && !BATTLER_HAS_ABILITY(i, ABILITY_OBLIVIOUS)
-                        && !IsAbilityOnSide(i, ABILITY_AROMA_VEIL)
-                        && GetGenderFromSpeciesAndPersonality(gBattleMons[i].species, gBattleMons[i].personality) != GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality)
-                        && !(gBattleMons[i].status2 & STATUS2_INFATUATION)
-                        && GetGenderFromSpeciesAndPersonality(gBattleMons[i].species, pidAtk) != MON_GENDERLESS
-                        && GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, pidDef) != MON_GENDERLESS) {
+                        && CanInfatuate(battler, i)) {
                             gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ENTRANCE;
                             gBattleScripting.moveEffect = MOVE_EFFECT_ATTRACT | HITMARKER_IGNORE_SAFEGUARD;
                             PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
@@ -11259,6 +10206,27 @@ bool32 CanBeConfused(u8 battlerId)
         || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN))
         return FALSE;
     return TRUE;
+}
+
+int CanInfatuate(int battlerAtk, int battlerDef)
+{
+    int genderAtk, genderDef;
+    if (gBattleMons[battlerDef].status2 & STATUS2_INFATUATION) return FALSE;
+    if (battlerAtk == battlerDef) return FALSE;
+    if (!IsBattlerAlive(battlerAtk)) return FALSE;
+
+    if (IsMyceliumMightActive(battlerAtk)) return TRUE;
+    if (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_OBLIVIOUS)) return FALSE;
+    if (IsAbilityOnSide(battlerDef, ABILITY_OBLIVIOUS)) return FALSE;
+    
+    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PURE_LOVE)) return TRUE;
+
+    genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battlerAtk].species, gBattleMons[battlerAtk].personality);
+    genderDef = GetGenderFromSpeciesAndPersonality(gBattleMons[battlerDef].species, gBattleMons[battlerDef].personality);
+
+    if (genderAtk == MON_GENDERLESS) return FALSE;
+    if (genderDef == MON_GENDERLESS) return FALSE;
+    return genderAtk != genderDef;
 }
 
 // second argument is 1/X of current hp compared to max hp
@@ -17263,5 +16231,731 @@ int IsUnaware(int battler)
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_UNAWARE, ability)) return TRUE;
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_CONTEMPT, ability)) return TRUE;
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_SWORD_OF_DAMNATION, ability)) return TRUE;
+    return FALSE;
+}
+
+int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) {
+    int abilities[4] = {0};
+    int i, ability, moveType;
+
+    GET_MOVE_TYPE(move, moveType)
+
+    if (abilityNumber > NUM_ABILITY_SLOTS)
+    {
+        // Handle other abilities if needed
+        return FALSE;
+    }
+
+    GET_ALL_BATTLER_ABILITIES(abilities, battler, battler);
+    ability = gBattleScripting.abilityPopupOverwrite = abilities[abilityNumber];
+
+    #define ABILITY_STATUS_EFFECT(effect) \
+    gBattleScripting.moveEffect = effect; \
+    BattleScriptCall(BattleScript_AbilityStatusEffect); \
+    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+
+
+    switch (ability)
+    {
+        case ABILITY_SHIELDS_DOWN:
+            if (!IsBattlerAlive(battler)) break;
+            if (gBattleMoves[move].effect != EFFECT_SHELL_SMASH) break;
+            if (gBattleMons[battler].status2 && STATUS2_TRANSFORMED) break;
+
+            for (i = 0; i < ARRAY_COUNT(sHpTransformations); i++)
+            {
+                if (sHpTransformations[i][0] == ability && gBattleMons[battler].species == sHpTransformations[i][1])
+                    break;
+            }
+        
+            if (i < ARRAY_COUNT(sHpTransformations))
+            {
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, sHpTransformations[i][2]);
+                SetAbilityState(battler, ability, TRUE);
+                gBattleMons[battler].species = sHpTransformations[i][2];
+                BattleScriptCall(BattleScript_AttackerFormChange);
+                return TRUE;
+            }
+            break;
+
+        case ABILITY_GULP_MISSILE:
+            if (gBattleMons[battler].status2 && STATUS2_TRANSFORMED) break;
+            if (gBattleMons[battler].species != SPECIES_CRAMORANT) break;
+
+            if ((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED)
+                || gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER
+                || (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
+            {
+                u16 newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ? SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+                gBattleMons[battler].species = newSpecies;
+                BattleScriptCall(BattleScript_AttackerFormChange);
+                return TRUE;
+            }
+            break;
+
+        case ABILITY_HYDRO_CIRCUIT:
+            if (!ShouldApplyOnHitAffect(battler)) break;
+            if (BATTLER_MAX_HP(battler)) break;
+            if (BATTLER_HEALING_BLOCKED(battler)) break;
+            if (moveType != TYPE_WATER) break;
+
+            BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+            return TRUE;
+        
+        case ABILITY_VITALITY_STRIKE:
+            if (!ShouldApplyOnHitAffect(battler)) break;
+            if (BATTLER_MAX_HP(battler)) break;
+            if (BATTLER_HEALING_BLOCKED(battler)) break;
+            if (!IS_IRON_FIST(battler, move)) break;
+
+            BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+            return TRUE;
+        
+        case ABILITY_PURE_LOVE:
+            if (!ShouldApplyOnHitAffect(battler)) break;
+            if (BATTLER_MAX_HP(battler)) break;
+            if (BATTLER_HEALING_BLOCKED(battler)) break;
+            if (!(gBattleMons[target].status2 & STATUS2_INFATUATION)) break;
+
+            BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+            return TRUE;
+        
+        case ABILITY_GROWING_TOOTH:
+            if (!ShouldApplyOnHitAffect(battler)) break;
+            if (!(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) break;
+            if (!ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL)) break;
+
+            gBattleScripting.battler = battler;
+            BattleScriptCall(BattleScript_AttackBoostActivates);
+            return TRUE;
+        
+        case ABILITY_SPINNING_TOP:
+            if (!ShouldApplyOnHitAffect(battler)) break;
+            if (moveType != TYPE_FIGHTING) break;
+            if (!CheckAndSetOncePerTurnAbility(battler, ability)) break;
+            
+            i = FALSE;
+            if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals)
+            {
+                gSideStatuses[GetBattlerSide(battler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
+                gSideTimers[GetBattlerSide(battler)].hotCoals = TRUE;
+                BattleScriptCall(BattleScript_AnnounceRemovedHazards);
+                gBattleScripting.battler = battler;
+                i = TRUE;
+            }
+            if (ChangeStatBuffs(battler, StatBuffValue(1), STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
+            {
+                BattleScriptCall(BattleScript_AnnounceAbilitySpeedBoost);
+                gBattleScripting.battler = battler;
+                i = TRUE;
+            }
+
+            if (i)
+            {
+                BattleScriptCall(BattleScript_AbilityPopUp);
+                return TRUE;
+            }
+            break;
+        
+        case ABILITY_VITAL_SPIRIT:
+            i = FALSE;
+            AbilityHealMonStatus(&i, battler, ability);
+            if (i) return TRUE;
+            break;
+        
+        case ABILITY_HARDENED_SHEATH:
+            if (!ShouldApplyOnHitAffect(battler)) break;
+            if (!gBattleMoves[move].hornBased) break;
+            if (!ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL)) break;
+
+            BattleScriptCall(BattleScript_AttackBoostActivates);
+            gBattleScripting.battler = battler;
+            return TRUE;
+        
+        case ABILITY_LOUD_BANG:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBeConfused(target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_SOUND)) break;
+            if (Random() % 2) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_CONFUSION)
+            return TRUE;
+        
+        case ABILITY_PIERCING_SOLO:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBleed(target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_SOUND)) break;
+            if (Random() % 100 >= 30) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
+            return TRUE;
+        
+        case ABILITY_DENTING_BLOWS:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!gBattleMoves[move].hammerBased) break;
+            if (CompareStat(target, STAT_DEF, MIN_STAT_STAGE, CMP_EQUAL)) break;
+
+            i = GetOncePerTurnAbilityCounter(battler, ability);
+            if (i & (1 << target)) break;
+
+            SetOncePerTurnAbilityCounter(battler, ability, i | (1 << target));
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_DEF_MINUS_1)
+            return TRUE;
+
+        case ABILITY_WHIPLASH:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (Random() % 2) break;
+            if (!IS_MOVE_PHYSICAL(move)) break;
+            if (CompareStat(target, STAT_DEF, MIN_STAT_STAGE, CMP_EQUAL)) break;
+
+            i = GetOncePerTurnAbilityCounter(battler, ability);
+            if (i & (1 << target)) break;
+
+            SetOncePerTurnAbilityCounter(battler, ability, i | (1 << target));
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_DEF_MINUS_1)
+            return TRUE;
+
+        case ABILITY_BEAUTIFUL_MUSIC:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (Random() % 2) break;
+            if (!CanInfatuate(battler, target)) break;
+
+            gBattleMons[target].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
+            BattleScriptCall(BattleScript_BeautifulMusicActivates);
+            return TRUE;
+        
+        case ABILITY_RESONANCE:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBleed(target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_SOUND)) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
+            return TRUE;
+        
+        case ABILITY_TOXIC_CHAIN:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBePoisoned(battler, target)) break;
+            if (Random() % 100 >= 30) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
+            return TRUE;
+        
+        case ABILITY_ELECTRIC_BURST:
+            if (moveType != TYPE_ELECTRIC) break;
+
+        ABILITY_RECOIL_EFFECT:
+            if (!ShouldApplyOnHitAffect(battler)) break;
+            if (gBattleMons[gBattlerAttacker].hp <= 1) break;
+            if (BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)) break;
+            
+            gBattleMoveDamage = gTurnStructs[target].dmg / 10;
+            if (!gBattleMoveDamage) gBattleMoveDamage = 1;
+            else if (gBattleMoveDamage >= gBattleMons[gBattlerAttacker].hp) gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp - 1;
+            BattleScriptCall(BattleScript_UserGetsReckoilDamaged);
+            return TRUE;
+        
+        case ABILITY_INFERNAL_RAGE:
+            if (moveType != TYPE_FIRE) break;
+            goto ABILITY_RECOIL_EFFECT;
+        
+        case ABILITY_ARCHMAGE:
+            if (!DidMoveHit()) break;
+            if (IS_MOVE_STATUS(move)) break;
+            if (Random() % 100 >= 30) break;
+            
+            switch (moveType) {
+                case TYPE_POISON:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!CanBePoisoned(battler, target)) break;
+                    
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
+                    return TRUE;
+                
+                case TYPE_ICE:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!CanGetFrostbite(target)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_FROSTBITE)
+                    return TRUE;
+                
+                case TYPE_WATER:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!CanBeConfused(target)) break;
+                    
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_CONFUSION)
+                    return TRUE;
+                
+                case TYPE_FIRE:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!CanBeBurned(target)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN);
+                    return TRUE;
+                
+                case TYPE_ELECTRIC:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer)) break;
+
+                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Electric);
+                    return TRUE;
+                
+                case TYPE_PSYCHIC:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer)) break;
+
+                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Psychic);
+                    return TRUE;
+                
+                case TYPE_FAIRY:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer)) break;
+
+                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Fairy);
+                    return TRUE;
+                
+                case TYPE_GRASS:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer)) break;
+
+                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Fairy);
+                    return TRUE;
+                
+                case TYPE_NORMAL:
+                    if (!IsBattlerAlive(target)) break;
+                    if (gVolatileStructs[target].encoreTimer) break;
+                    if (IsAbilityOnSide(target, ABILITY_AROMA_VEIL)) break;
+                    if (BATTLER_HAS_ABILITY(target, ABILITY_OBLIVIOUS)) break;
+                    
+                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Normal);
+                    return TRUE;
+                
+                case TYPE_ROCK:
+                    if (gSideStatuses[GetBattlerSide(target)] & SIDE_STATUS_STEALTH_ROCK) break;
+
+                    gSideStatuses[GetBattlerSide(target)] |= (SIDE_STATUS_STEALTH_ROCK);
+                    gSideTimers[GetBattlerSide(target)].stealthRockType= TYPE_ROCK;
+                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Rock);
+                    return TRUE;
+
+                case TYPE_GHOST:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!CanBeDisabled(target)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_DISABLE)
+                    return TRUE;
+                
+                case TYPE_DARK:
+                    if (!IsBattlerAlive(target)) break;
+                    if (!CanBleed(target)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
+                    return TRUE;
+                
+                case TYPE_FIGHTING:
+                    if (!IsBattlerAlive(target)) break;
+                    if (CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_EQUAL)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER)
+                    return TRUE;
+                
+                case TYPE_FLYING:
+                    if (!IsBattlerAlive(target)) break;
+                    if (CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_EQUAL)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER)
+                    return TRUE;
+                
+                case TYPE_BUG:
+                    // TODO: Set sticky web
+                    break;
+                
+                case TYPE_DRAGON:
+                    if (!IsBattlerAlive(target)) break;
+                    if (CompareStat(target, STAT_ATK, MIN_STAT_STAGE, CMP_EQUAL)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_ATK_MINUS_1)
+                    return TRUE;
+                
+                case TYPE_GROUND:
+                    if (!IsBattlerAlive(target)) break;
+                    if (gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PREVENT_ESCAPE)
+                    return TRUE;
+                
+                case TYPE_STEEL:
+                    if (!IsBattlerAlive(target)) break;
+                    if (CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_EQUAL)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER)
+                    return TRUE;
+            }
+            break;
+
+        case ABILITY_SOLENOGLYPHS:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBePoisoned(battler, target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) break;
+            if (Random() % 2) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
+            return TRUE;
+
+        case ABILITY_FROSTMAW:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanGetFrostbite(target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) break;
+            if (Random() % 2) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_FROSTBITE)
+            return TRUE;
+        
+        case ABILITY_ASSASSINS_TOOLS:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!IsMoveMakingContact(move, battler)) break;
+
+            switch (Random() % 3)
+            {
+                case 0:
+                    if (!CanBePoisoned(battler, target)) break;
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_POISON)
+                    return TRUE;
+                
+                case 1:
+                    if (!CanBeParalyzed(battler, target)) break;
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
+                    return TRUE;
+                
+                case 2:
+                    if (!CanBleed(target)) break;
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
+                    return TRUE;
+            }
+            break;
+        
+        case ABILITY_FLAMING_JAWS:
+        case ABILITY_FLAMING_MAW:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBeBurned(target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) break;
+            if (Random() % 2) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
+            return TRUE;
+        
+        case ABILITY_RADIO_JAM:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBeDisabled(target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_SOUND)) break;
+            if (Random() % 100 >= 20) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_DISABLE)
+            return TRUE;
+        
+        case ABILITY_PINNACLE_BLADE:
+            if (!DidMoveHit()) break;
+            if (!(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)) break;
+
+            {
+            int shouldApply = FALSE;
+            int opposingSide = GetBattlerSide(target);
+
+            if (gVolatileStructs[target].substituteHP)
+            {
+                gVolatileStructs[target].substituteHP = 0;
+                BattleScriptCall(BattleScript_AttackerDestroysSubstitute);
+                shouldApply = TRUE;
+            }
+
+            if (IsBattlerAlive(target))
+            {
+                if (gSideTimers[opposingSide].reflectTimer
+                    || gSideTimers[opposingSide].lightscreenTimer
+                    || gSideTimers[opposingSide].auroraVeilTimer)
+                {
+                    BattleScriptCall(BattleScript_AttackerShattersScreens);
+                    shouldApply = TRUE;
+                }
+
+                if (IS_BATTLER_PROTECTED(target))
+                {
+                    gBattleScripting.moveEffect = MOVE_EFFECT_FEINT;
+                    SetMoveEffect(TRUE, TRUE);
+                    shouldApply = TRUE;
+                }
+            }
+
+            if (shouldApply)
+            {
+                BattleScriptCall(BattleScript_AbilityPopUp);
+                return TRUE;
+            }
+            }
+            break;
+
+        case ABILITY_FEARMONGER:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBeParalyzed(battler, target)) break;
+            if (!IsMoveMakingContact(move, battler)) break;
+            if (Random() % 100 >= 10) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
+            return TRUE;
+        
+        case ABILITY_YUKI_ONNA:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanInfatuate(battler, target)) break;
+            if (Random() % 100 >= 10) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_ATTRACT)
+            return TRUE;
+        
+        case ABILITY_STUN_SHOCK:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (Random() % 100 >= 60) break;
+            switch (Random() % 2)
+            {
+                case 0:
+                    if (!CanBePoisoned(battler, target)) break;
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_POISON)
+                    return TRUE;
+                
+                case 1:
+                    if (!CanBeParalyzed(battler, target)) break;
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
+                    return TRUE;
+            }
+            break;
+        
+        case ABILITY_SHOCKING_JAWS:
+        case ABILITY_SHOCKING_MAW:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBeParalyzed(battler, target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) break;
+            if (Random() % 2) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
+            return TRUE;
+
+        case ABILITY_VENOBLAZE_PINCERS:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!IS_MOVE_PHYSICAL(move)) break;
+            if (Random() % 100 >= 20) break;
+
+            switch (Random() % 2)
+            {
+                case 0:
+                    if (!CanBeBurned(target)) break;
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
+                    return TRUE;
+                
+                case 1:
+                    if (!CanBeParalyzed(battler, target)) break;
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
+                    return TRUE;
+            }
+        
+        case ABILITY_MOLTEN_BLADES:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBeBurned(target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)) break;
+            if (Random() % 100 >= 20) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
+            return TRUE;
+        
+        case ABILITY_DEAD_POWER:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (gBattleMons[target].status2 & STATUS2_CURSED) break;
+            if (!IsMoveMakingContact(move, battler)) break;
+            if (Random() % 100 >= 20) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_CURSE)
+            return TRUE;
+        
+        case ABILITY_SPECTRAL_SHROUD:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBePoisoned(battler, target)) break;
+            if (!gBattleStruct->ateBoost[battler]) break;
+            if (moveType != TYPE_GHOST) break;
+            if (Random() % 100 >= 30) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
+            return TRUE;
+        
+        case ABILITY_ANGELS_WRATH:
+            switch (move) {
+                case MOVE_TACKLE:
+                    if (!ShouldApplyOnHitAffect(target)) break;
+                    if (!gVolatileStructs[target].encoreTimer) break;
+                    if (!gVolatileStructs[target].disableTimer) break;
+
+                    gVolatileStructs[target].encoreTimer = 2;
+                    gVolatileStructs[target].encoredMove = gBattleMons[target].moves[0];
+
+                    gVolatileStructs[target].disableTimer = gVolatileStructs[target].disableTimerStartValue = 2;
+                    gVolatileStructs[target].disabledMove = gBattleMons[target].moves[0];
+                    
+                    BattleScriptCall(BattleScript_AngelsWrath_Effect_Tackle);
+                    return TRUE;
+                
+                case MOVE_STRING_SHOT:
+                    if (!WasMoveSuccessful()) break;
+
+                    i = GetBattlerSide(target);
+                    if (gSideStatuses[i] & SIDE_STATUS_STEALTH_ROCK
+                        && gSideStatuses[i] & SIDE_STATUS_TOXIC_SPIKES
+                        && gSideStatuses[i] & SIDE_STATUS_SPIKES
+                        && gSideStatuses[i] & SIDE_STATUS_STICKY_WEB)
+                        break;
+                        
+                    gSideStatuses[i] |= (SIDE_STATUS_STEALTH_ROCK);
+                    gSideTimers[i].stealthRockType = TYPE_ROCK;
+
+                    gSideStatuses[i] |= (SIDE_STATUS_TOXIC_SPIKES);
+                    gSideTimers[i].toxicSpikesAmount++;
+                    if (gSideTimers[i].toxicSpikesAmount > 2) gSideTimers[i].toxicSpikesAmount = 2;
+                    
+                    gSideStatuses[i] |= (SIDE_STATUS_SPIKES);
+                    gSideTimers[i].spikesAmount++;
+                    if (gSideTimers[i].spikesAmount > 3) gSideTimers[i].spikesAmount = 3;
+
+                    gSideStatuses[i] |= (SIDE_STATUS_STICKY_WEB);
+
+                    BattleScriptCall(BattleScript_AngelsWrath_Effect_String_Shot);
+                    return TRUE;
+                
+                case MOVE_HARDEN:
+                    if (!WasMoveSuccessful()) break;
+                    
+                    {
+                    int activated = FALSE;
+                    for (i = 1; i < NUM_STATS; i++)
+                    {
+                        if (i == STAT_DEF) continue;
+                        activated |= ChangeStatBuffs(battler, StatBuffValue(1), i, MOVE_EFFECT_AFFECTS_USER, NULL);
+                    }
+
+                    if (activated)
+                    {
+                        BattleScriptCall(BattleScript_AngelsWrath_Effect_Harden);
+                        return TRUE;
+                    }
+                    }
+                    break;
+                
+                case MOVE_IRON_DEFENSE:
+                    if (!WasMoveSuccessful()) break;
+
+                    gRoundStructs[battler].angelsWrathProtected = TRUE;
+                    BattleScriptCall(BattleScript_AngelsWrath_Effect_Iron_Defense);
+                    return TRUE;
+
+                case MOVE_ELECTROWEB:
+                    if (!ShouldApplyOnHitAffect(target)) break;
+                    if (gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION) break;
+                    if (gBattleMons[target].statStages[STAT_SPEED] == MIN_STAT_STAGE) break;
+
+                    gBattleMons[target].statStages[STAT_SPEED] = MIN_STAT_STAGE;
+                    gBattleMons[target].status2 |= (STATUS2_ESCAPE_PREVENTION);
+                    BattleScriptCall(BattleScript_AngelsWrath_Effect_Electroweb);
+                    return TRUE;
+                
+                case MOVE_BUG_BITE:
+                    if (!ShouldApplyOnHitAffect(battler)) break;
+                    if (BATTLER_MAX_HP(battler)) break;
+                    if (BATTLER_HEALING_BLOCKED(battler)) break;
+
+                    BattleScriptCall(BattleScript_AngelsWrath_Effect_Bug_Bite_2);
+                    return TRUE;
+            }
+            break;
+        
+        case ABILITY_ELEMENTAL_CHARGE:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (Random() % 100 >= 20) break;
+
+            switch (moveType)
+            {
+                case TYPE_ELECTRIC:
+                    if (!CanBeParalyzed(battler, target)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
+                    return TRUE;
+                
+                case TYPE_FIRE:
+                    if (!CanBeBurned(target)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
+                    return TRUE;
+                
+                case TYPE_ICE:
+                    if (!CanGetFrostbite(target)) break;
+
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_FROSTBITE)
+                    return TRUE;
+            }
+            break;
+        
+        case ABILITY_STENCH:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanMoveHaveExtraFlinchChance(move)) break;
+            if (Random() % 100 >= 10) break;
+
+            gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
+            SetMoveEffect(FALSE, 0);
+            break;
+        
+        case ABILITY_HAUNTING_FRENZY:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanMoveHaveExtraFlinchChance(move)) break;
+            if (Random() % 100 >= 20) break;
+
+            gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
+            SetMoveEffect(FALSE, 0);
+            break;
+        
+        case ABILITY_ABSORBANT:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) break;
+            if (gStatuses3[target] & STATUS3_LEECHSEED)
+            if (gBattleMoves[move].effect != EFFECT_ABSORB && gBattleMoves[move].effect != EFFECT_DREAM_EATER) break;
+
+            gStatuses3[target] |= battler;
+            gStatuses3[target] |= STATUS3_LEECHSEED;
+            BattleScriptCall(BattleScript_AbsorbantActivated);
+            return TRUE;
+        
+        case ABILITY_FUNGAL_INFECTION:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) break;
+            if (gStatuses3[target] & STATUS3_LEECHSEED)
+            if (!IsMoveMakingContact(move, battler)) break;
+
+            gStatuses3[target] |= battler;
+            gStatuses3[target] |= STATUS3_LEECHSEED;
+            BattleScriptCall(BattleScript_AbsorbantActivated);
+            return TRUE;
+        
+        case ABILITY_GRIP_PINCER:
+            if (!ShouldApplyOnHitAffect(gBattlerTarget)) break;
+            if (!IsBattlerAlive(battler)) break;
+            if (!IsMoveMakingContact(move, battler)) break;
+            if (gBattleMons[target].status2 & STATUS2_WRAPPED) break;
+            if (Random() % 2) break;
+
+            gBattleMons[target].status2 |= STATUS2_WRAPPED;
+            if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
+                gVolatileStructs[target].wrapTurns = 7;
+            else
+                gVolatileStructs[target].wrapTurns = (Random() % 2) + 4;
+
+            gBattleStruct->wrappedMove[target] = gCurrentMove;
+            gBattleStruct->wrappedBy[target] = battler;
+            BattleScriptCall(BattleScript_GripPincerActivated);
+            return TRUE;
+    }
+
     return FALSE;
 }

@@ -615,6 +615,8 @@ extern const u8 BattleScript_EffectButterUp[];
 extern const u8 BattleScript_MoveWasDisabledMessage[];
 extern const u8 BattleScript_AbilityBoostsCrit[];
 extern const u8 BattleScript_AnnounceAttackerItemDisabled[];
+extern const u8 BattleScript_AnnounceRemovedHazards[];
+extern const u8 BattleScript_AnnounceAbilitySpeedBoost[];
 
 extern const u8 BattleScript_Archmage_Effect_Type_Electric[];
 extern const u8 BattleScript_Archmage_Effect_Type_Fairy[];

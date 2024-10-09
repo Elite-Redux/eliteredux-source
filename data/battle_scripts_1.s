@@ -9435,6 +9435,19 @@ BattleScript_SpeedBoostActivates::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 	end3
+
+BattleScript_AnnounceAbilitySpeedBoost::
+	setstatchanger STAT_SPEED, 1, FALSE
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_AnnounceRemovedHazards::
+	printstring STRINGID_PICKUPACTIVATED
+	waitmessage B_WAIT_TIME_LONG
+	return
 	
 BattleScript_AttackBoostActivates::
 	call BattleScript_AbilityPopUp
@@ -12229,6 +12242,7 @@ BattleScript_Archmage_Effect_Type_Psychic::
 	return
 
 BattleScript_Archmage_Effect_Type_Normal::
+	trysetencore BattleScript_Return
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNGOTENCORE
 	waitmessage B_WAIT_TIME_LONG
