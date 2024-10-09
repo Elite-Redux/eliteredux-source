@@ -16446,7 +16446,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         case ABILITY_ELECTRIC_BURST:
             if (moveType != TYPE_ELECTRIC) break;
 
-        ABILITY_RECOIL_EFFECT:
+        HANDLE_ABILITY_RECOIL_EFFECT:
             if (!ShouldApplyOnHitAffect(battler)) break;
             if (gBattleMons[gBattlerAttacker].hp <= 1) break;
             if (BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)) break;
@@ -16459,7 +16459,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         
         case ABILITY_INFERNAL_RAGE:
             if (moveType != TYPE_FIRE) break;
-            goto ABILITY_RECOIL_EFFECT;
+            goto HANDLE_ABILITY_RECOIL_EFFECT;
         
         case ABILITY_ARCHMAGE:
             if (!DidMoveHit()) break;
@@ -16757,6 +16757,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
                     ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
                     return TRUE;
             }
+            break;
         
         case ABILITY_MOLTEN_BLADES:
             if (!ShouldApplyOnHitAffect(target)) break;
