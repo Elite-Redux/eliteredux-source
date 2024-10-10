@@ -12013,7 +12013,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_BLOOD_STIGMA:
-            if (gBattleMons[battlerDef].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerDef)) MUL(2);
+            if (gBattleMons[battlerDef].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerDef)) MUL(1.5);
             return;
         
         case ABILITY_DETERMINATION:
