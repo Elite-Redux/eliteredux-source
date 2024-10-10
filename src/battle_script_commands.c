@@ -1501,7 +1501,7 @@ static void Cmd_attackcanceler(void)
     }
 	// Raging Boxer
     if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-	&& (GetBattlerAbility(gBattlerAttacker) == ABILITY_RAGING_BOXER || BattlerHasInnate(gBattlerAttacker, ABILITY_RAGING_BOXER) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STEEL_BEETLE) || BattlerHasInnate(gBattlerAttacker, ABILITY_STEEL_BEETLE)) // Includes Innate
+	&& (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_RAGING_BOXER) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STEEL_BEETLE))
 	&& (IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
     && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
     && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
