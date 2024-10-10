@@ -692,8 +692,8 @@ static const u8 sAbilityRagingGoddessDescription[] = _("Rampage + Hyper Aggressi
 static const u8 sAbilityWhiplashDescription[] = _("Physical attacks have a 50%\nchance to lower Defense.");
 static const u8 sAbilitySupersweetSyrupDescription[] = _("Can't lose its item. Disables foe's\nitem for 2 turns on contact.");
 static const u8 sAbilityLuckyHaloDescription[] = _("Negates self stat drops. Survives\nthe first hit that would KO it.");
-static const u8 sAbilityTrashHeapDescription[] = _("Corrosion + Toxic Spill.");
-static const u8 sAbilitySludgyMixDescription[] = _("Intoxicate + Punk Rock.");
+static const u8 sAbilityTrashHeapDescription[] = _("Combines Corrosion &\nToxic Spill.");
+static const u8 sAbilitySludgyMixDescription[] = _("Combines Intoxicate &\nPunk Rock.");
 static const u8 sAbilityOverwatchDescription[] = _("Combines On the Prowl &\nStakeout.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =

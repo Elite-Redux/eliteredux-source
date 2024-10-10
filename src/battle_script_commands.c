@@ -8531,8 +8531,12 @@ static void HandleTerrainMove(u32 moveEffect)
 
 bool32 CanPoisonType(u8 battlerAttacker, u8 battlerTarget)
 {
-    return ((BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_CORROSION) || BattlerHasInnate(battlerAttacker, ABILITY_ANGELS_WRATH)) ||
-             !(IS_BATTLER_OF_TYPE(battlerTarget, TYPE_POISON) || IS_BATTLER_OF_TYPE(battlerTarget, TYPE_STEEL)));
+    if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_CORROSION)) return TRUE;
+    if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_TOXIC_SPILL)) return TRUE;
+    if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_ANGELS_WRATH)) return TRUE;
+    if (IS_BATTLER_OF_TYPE(battlerTarget, TYPE_POISON)) return FALSE;
+    if (IS_BATTLER_OF_TYPE(battlerTarget, TYPE_STEEL)) return FALSE;
+    return TRUE;
 }
 
 bool32 CanParalyzeType(u8 battlerAttacker, u8 battlerTarget)

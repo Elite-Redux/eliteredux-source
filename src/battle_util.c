@@ -3063,10 +3063,15 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_TOXIC_WASTE_DAMAGE:
-            if ((IsAbilityOnField(ABILITY_TOXIC_SPILL)) && gBattleMons[gActiveBattler].hp != 0 && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON))
+            {
+            int triggerAbility = 0;
+            if (IsAbilityOnField(ABILITY_TOXIC_SPILL)) triggerAbility = ABILITY_TOXIC_SPILL;
+            else if (IsAbilityOnField(ABILITY_TRASH_HEAP)) triggerAbility = ABILITY_TRASH_HEAP;
+            else if (getMonotypeChampType() == TYPE_POISON && GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER) triggerAbility = TRUE;
+            if (triggerAbility && gBattleMons[gActiveBattler].hp != 0 && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON))
             {
                 MAGIC_GUARD_CHECK;
-                if(ability != ABILITY_POISON_HEAL && !BattlerHasInnate(gActiveBattler, ABILITY_POISON_HEAL))
+                if(!BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_POISON_HEAL, ability))
 				    TOXIC_BOOST_CHECK;
 
                 if (BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_POISON_HEAL, ability))
@@ -3087,32 +3092,7 @@ u8 DoBattlerEndTurnEffects(void)
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     BattleScriptExecute(BattleScript_ToxicWasteTurnDmg);
-                    effect++;
-                }
-            }
-            else if(getMonotypeChampType() == TYPE_POISON && gBattleMons[gActiveBattler].hp != 0 && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON) && GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER){
-                MAGIC_GUARD_CHECK;
-                if(ability != ABILITY_POISON_HEAL && !BattlerHasInnate(gActiveBattler, ABILITY_POISON_HEAL))
-				    TOXIC_BOOST_CHECK;
-
-                if (BATTLER_HAS_ABILITY_FAST(gActiveBattler, ABILITY_POISON_HEAL, ability))
-                {
-                    if (!BATTLER_MAX_HP(gActiveBattler) && !BATTLER_HEALING_BLOCKED(gActiveBattler))
-                    {
-                        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
-                        if (gBattleMoveDamage == 0)
-                            gBattleMoveDamage = 1;
-                        gBattleMoveDamage *= -1;
-                        BattleScriptExecute(BattleScript_PoisonHealActivates);
-                        effect++;
-                    }
-                }
-                else
-                {
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
-                    BattleScriptExecute(BattleScript_ToxicWasteTurnDmg);
+                    if (triggerAbility != TRUE) BattleScriptCall(BattleScript_AbilityPopUp);
                     effect++;
                 }
             }
@@ -15568,6 +15548,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             }
             return TRUE;
         
+        case ABILITY_TRASH_HEAP:
         case ABILITY_TOXIC_SPILL:
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAnnouncedToxicSpill);
             return TRUE;

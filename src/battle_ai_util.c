@@ -2799,17 +2799,7 @@ bool32 ShouldPoisonSelf(u8 battler)
 }
 bool32 AI_CanPoison(u8 battlerAtk, u8 battlerDef, u16 defAbility, u16 move, u16 partnerMove)
 {
-    if (!CanBePoisoned(battlerAtk, battlerDef)
-      || AI_GetMoveEffectiveness(move, battlerAtk, battlerDef) == AI_EFFECTIVENESS_x0
-      || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
-      || PartnerMoveEffectIsStatusSameTarget(BATTLE_PARTNER(battlerAtk), battlerDef, partnerMove))
-        return FALSE;
-    else if (!BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CORROSION) && (IS_BATTLER_OF_TYPE(battlerDef, TYPE_POISON) || IS_BATTLER_OF_TYPE(battlerDef, TYPE_STEEL)))
-        return FALSE;
-    else if (IsValidDoubleBattle(battlerAtk) && BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerDef), ABILITY_PASTEL_VEIL))
-        return FALSE;
-
-    return TRUE;
+    return CanBePoisoned(battlerAtk, battlerDef);
 }
 
 bool32 AI_CanParalyze(u8 battlerAtk, u8 battlerDef, u16 defAbility, u16 move, u16 partnerMove)
