@@ -3101,6 +3101,7 @@ u8 DoBattlerEndTurnEffects(void)
                     effect++;
                 }
             }
+            }
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_POISON:  // poison
