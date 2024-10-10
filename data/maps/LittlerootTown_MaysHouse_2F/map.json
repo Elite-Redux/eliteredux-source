@@ -229,19 +229,10 @@
       "y": 1,
       "elevation": 0,
       "dest_map": "MAP_LITTLEROOT_TOWN_MAYS_HOUSE_1F",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     }
   ],
   "coord_events": [
-    {
-      "type": "trigger",
-      "x": 6,
-      "y": 4,
-      "elevation": 0,
-      "var": "VAR_LITTLEROOT_INTRO_STATE",
-      "var_value": "0",
-      "script": "IntroSkip_EventScript_SetIntroFlagsFemale"
-    },
     {
       "type": "trigger",
       "x": 8,
@@ -249,7 +240,16 @@
       "elevation": 0,
       "var": "VAR_LITTLEROOT_INTRO_STATE",
       "var_value": "0",
-      "script": "IntroSkip_EventScript_SetIntroFlagsFemale"
+      "script": "IntroSkip_EventScript_SetIntroFlagsFemale0"
+    },
+    {
+      "type": "trigger",
+      "x": 6,
+      "y": 4,
+      "elevation": 0,
+      "var": "VAR_LITTLEROOT_INTRO_STATE",
+      "var_value": "0",
+      "script": "IntroSkip_EventScript_SetIntroFlagsFemale1"
     }
   ],
   "bg_events": [

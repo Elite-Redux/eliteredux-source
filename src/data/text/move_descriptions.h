@@ -3305,7 +3305,7 @@ static const u8 sMoveTwoLineDescription_MoveYggdrasilForce[] = _(
     "Lowers user's Atk and Def.");
 
 static const u8 sMoveTwoLineDescription_MoveDrainBrain[] = _(
-    "Lowers targets SpDef.\n"
+    "Lowers targets SpAtk.\n"
     "Heals that much HP.");
 
 static const u8 sMoveTwoLineDescription_MovePsychokineticSlam[] = _(
@@ -5522,7 +5522,7 @@ static const u8 sMoveFourLineDescription_MoveDoubleLariat[] = _("User hits both 
 static const u8 sMoveFourLineDescription_MoveSpecialAquaJet[] = _("The user sends a\njet of water to\nattack the foe.\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveLeechBlade[] = _("Heals 50% of damage \ndone to the foe.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveYggdrasilForce[] = _("Nature's overcharges\nthe user's strike.\nLowers Atk and Def.");
-static const u8 sMoveFourLineDescription_MoveDrainBrain[] = _("Saps the foe's SpDef\nand heals HP by\nthe same amount.");
+static const u8 sMoveFourLineDescription_MoveDrainBrain[] = _("Saps the foe's SpAtk\nand heals HP by\nthe same amount.");
 static const u8 sMoveFourLineDescription_MovePsychokineticSlam[] = _("User charges, boosted\nby psychic power.\n33% recoil damage.");
 static const u8 sMoveFourLineDescription_MoveEsperWing[] = _("The user slashes the\nfoe with aura wings.\nRaises Speed.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveMortalSpin[] = _("The user spins and\nremoves all hazards.\nThis also poisons\nthe foe.");

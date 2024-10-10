@@ -229,7 +229,7 @@
       "y": 1,
       "elevation": 0,
       "dest_map": "MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     }
   ],
   "coord_events": [
@@ -240,7 +240,7 @@
       "elevation": 0,
       "var": "VAR_LITTLEROOT_INTRO_STATE",
       "var_value": "0",
-      "script": "IntroSkip_EventScript_SetIntroFlagsMale"
+      "script": "IntroSkip_EventScript_SetIntroFlagsMale1"
     },
     {
       "type": "trigger",
@@ -249,7 +249,7 @@
       "elevation": 0,
       "var": "VAR_LITTLEROOT_INTRO_STATE",
       "var_value": "0",
-      "script": "IntroSkip_EventScript_SetIntroFlagsMale"
+      "script": "IntroSkip_EventScript_SetIntroFlagsMale0"
     }
   ],
   "bg_events": [

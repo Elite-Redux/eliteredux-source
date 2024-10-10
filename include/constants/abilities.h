@@ -166,7 +166,7 @@
 #define ABILITY_MAGIC_BOUNCE 156 // Bounces back the effect of status moves to their user.
 #define ABILITY_SAP_SIPPER 157 // Absorbs Grass-type moves and raises highest Atk by one stage.
 #define ABILITY_PRANKSTER 158 // Status moves have +1 priority but fail on opposing Dark-types.
-#define ABILITY_SAND_FORCE 159 // Gives a 1.3x power boost to Rock, Ground, Steel-type moves.
+#define ABILITY_SAND_FORCE 159 // Rock, Ground, and Steel type moves are boosted by 30% in sand.
 #define ABILITY_IRON_BARBS 160 // Enemies lose 1/8 of max HP if they use a contact move.
 #define ABILITY_ZEN_MODE 161 // Transforms into Zen Mode on entry until end of battle.
 #define ABILITY_VICTORY_STAR 162 // Gives 1.2x accuracy boost to its own and its allies' moves.

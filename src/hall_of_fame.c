@@ -1645,8 +1645,8 @@ static void Task_HofPC_ExitOnButtonPress(u8 taskId)
 static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
 {
     u8 numModes = 0;
-    static const u8 gText_WelcomeToHOF[] 		        = _("Elite Redux v2.2 - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
-    static const u8 gText_WelcomeToHOF_Debug[] 		    = _("Elite Redux v2.2 Debug - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
+    static const u8 gText_WelcomeToHOF[] 		        = _("Elite Redux v2.2.1 - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
+    static const u8 gText_WelcomeToHOF_Debug[] 		    = _("Elite Redux v2.2.1 Debug - {STR_VAR_1} Mode{COLOR WHITE}{SHADOW DARK_GRAY}, {STR_VAR_2} Caps\n{COLOR WHITE}{SHADOW DARK_GRAY}{STR_VAR_3}");
     static const u8 sText_WinsLossesText[]              = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}");
     static const u8 sText_WinsLossesText_Debug[]        = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}.");
     static const u8 sText_WinsLossesLockedText[]        = _("Wins: {STR_VAR_1}      Losses: {STR_VAR_2}      {COLOR LIGHT_RED}{SHADOW RED}Locked Mode{COLOR WHITE}{SHADOW DARK_GRAY}");
@@ -1659,6 +1659,10 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
     static const u8 easyModeText[] 				  = _("{COLOR LIGHT_GREEN}{SHADOW GREEN}Easy");
 	static const u8 aceModeText[] 			      = _("{COLOR LIGHT_BLUE}{SHADOW BLUE}Ace");
 	static const u8 eliteModeText[] 			  = _("{COLOR LIGHT_BLUE}{SHADOW RED}Elite");
+
+    static const u8 easyModeAsteriscText[] 	      = _("{COLOR LIGHT_GREEN}{SHADOW GREEN}Easy{SUM_DOWN}");
+	static const u8 aceModeAsteriscText[] 		  = _("{COLOR LIGHT_BLUE}{SHADOW BLUE}Ace{SUM_DOWN}");
+	static const u8 eliteModeAsteriscText[] 	  = _("{COLOR LIGHT_BLUE}{SHADOW RED}Elite{SUM_DOWN}");
     
 	static const u8 RandomizerModeText[]               = _("Random Modes: {STR_VAR_1}{STR_VAR_2}{STR_VAR_3}$");
 	static const u8 FullRandomizerModeText[]           = _("Random Modes: Full Randomizer");
@@ -1699,13 +1703,22 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
     {
         default:
         case DIFFICULTY_EASY:
-            StringCopy(gStringVar1, easyModeText);
+            if(FlagGet(FLAG_SYS_UPPED_DIFFICULTY))
+                StringCopy(gStringVar1, easyModeAsteriscText);
+            else
+                StringCopy(gStringVar1, easyModeText);
             break;
         case DIFFICULTY_ACE:
-            StringCopy(gStringVar1, aceModeText);
+            if(FlagGet(FLAG_SYS_UPPED_DIFFICULTY))
+                StringCopy(gStringVar1, aceModeAsteriscText);
+            else
+                StringCopy(gStringVar1, aceModeText);
             break;
         case DIFFICULTY_ELITE:
-            StringCopy(gStringVar1, eliteModeText);
+            if(FlagGet(FLAG_SYS_UPPED_DIFFICULTY))
+                StringCopy(gStringVar1, eliteModeAsteriscText);
+            else
+                StringCopy(gStringVar1, eliteModeText);
             break;
     }
 	

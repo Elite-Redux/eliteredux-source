@@ -513,21 +513,21 @@
       "y": 32,
       "elevation": 0,
       "dest_map": "MAP_ROUTE119_WEATHER_INSTITUTE_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 33,
       "y": 109,
       "elevation": 0,
       "dest_map": "MAP_ROUTE119_HOUSE",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 5,
       "y": 1,
       "elevation": 0,
       "dest_map": "MAP_SECRET_DUNGEON",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

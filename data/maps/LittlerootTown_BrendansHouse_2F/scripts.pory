@@ -334,7 +334,7 @@ IntroSkip_EventScript_SetIntroFlagsMale:: @ 823BF20
 	clearflag FLAG_HIDE_LITTLEROOT_TOWN_FAT_MAN
 	clearflag FLAG_HIDE_MAP_NAME_POPUP
 	releaseall
-	end
+	return
 
 
 StarterRegionStringKanto:
@@ -411,7 +411,7 @@ StarterRegionStringSteel:
 
 `
 text LittlerootTown_BrendansHouse_2F_Text_Which_Region{
-	"Hmm. Which region was it again?"
+	"Hmm. Which region or type was it again?"
 }
 
 script LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet{
@@ -490,4 +490,36 @@ script LittlerootTown_BrendansHouse_2F_EventScript_ChooseStarterSet{
 		closemessage
 	}
 	
+}
+movement IntroSkip_Movement_SetIntroFlagsMaleFollowUpToClock0 {
+	walk_right * 2
+}
+script IntroSkip_EventScript_SetIntroFlagsMale0 {
+	call(IntroSkip_EventScript_SetIntroFlagsMale)
+	lock
+	applymovement(OBJ_EVENT_ID_PLAYER, IntroSkip_Movement_SetIntroFlagsMaleFollowUpToClock0)
+	waitmovement(OBJ_EVENT_ID_PLAYER)
+	goto(IntroSkip_EventScript_SetIntroFlagsMaleFollowUpToClock)
+}
+script IntroSkip_EventScript_SetIntroFlagsMale1 {
+	call(IntroSkip_EventScript_SetIntroFlagsMale)
+	lock
+	goto(IntroSkip_EventScript_SetIntroFlagsMaleFollowUpToClock)
+}
+movement IntroSkip_Movement_SetIntroFlagsMaleFollowUpToClock {
+	walk_right * 3
+	walk_up * 2
+}
+script IntroSkip_EventScript_SetIntroFlagsMaleFollowUpToClock{
+	applymovement(OBJ_EVENT_ID_PLAYER, IntroSkip_Movement_SetIntroFlagsMaleFollowUpToClock)
+	waitmovement(OBJ_EVENT_ID_PLAYER)
+	goto(IntroSkip_EventScript_MaleForceClock)
+	release
+}
+
+script IntroSkip_EventScript_MaleForceClock{
+	call(LittlerootTown_BrendansHouse_2F_EventScript_WallClock)
+	if (!flag(FLAG_SET_WALL_CLOCK)){
+		goto(IntroSkip_EventScript_MaleForceClock)
+	}
 }
