@@ -417,7 +417,7 @@
 #define ABILITY_IRON_BARRAGE 395 // Combines Mega Launcher with Sighting System.
 #define ABILITY_STEEL_BARREL 396 // Immune to recoil damage, but not immune to Explosion/crash dmg.
 #define ABILITY_PYRO_SHELLS 397 // Triggers 50 BP Outburst after using a Mega Launcher move.
-#define ABILITY_FUNGAL_INFECTION 398 // Every attacking move inflicts Leech Seed on the target.
+#define ABILITY_FUNGAL_INFECTION 398 // Contact moves inflict Leech Seed on the target.
 #define ABILITY_PARRY 399 // Counters contact with Mach Punch. Takes 20% less damage.
 #define ABILITY_SCRAPYARD 400 // Sets a layer of Spikes when hit (contact move).
 #define ABILITY_LOOSE_QUILLS 401 // Sets a layer of Spikes when hit (contact move).
@@ -693,7 +693,7 @@
 #define ABILITY_BAD_OMEN 671 // Foes min roll and may miss. Takes 1/2 damage from crits.
 #define ABILITY_MOSH_PIT 672 // Ally's attacks get a 1.25x boost. 1.5x if attack causes recoil.
 #define ABILITY_BLOOD_STAIN 673 // Bleeds if not immune. Can't get other status. Spreads on contact.
-#define ABILITY_BLOOD_STIGMA 674 // Immune to status. Gets a 2x boost vs bleeding foes.
+#define ABILITY_BLOOD_STIGMA 674 // Immune to status. Gets a 50% boost vs bleeding foes.
 #define ABILITY_MAXIMUM_ACCELERATION 675 // Moves use the Speed stat for damage calculations.
 #define ABILITY_SIDEWINDER 676 // First biting move each entry gets +1 priority. Resets on KO.
 #define ABILITY_PETRIFY 677 // Clears stat buffs then lowers speed by one stage on entry.
