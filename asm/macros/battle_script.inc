@@ -502,8 +502,10 @@
 	.endm
 
 	.macro switchineffects battler:req
+	setbyte sABILITY_LOOP_COUNTER, 0
 	.byte 0x52
 	.byte \battler
+	setbyte sABILITY_LOOP_COUNTER, 0
 	restoreattackerandtargetfrom34
 	.endm
 
@@ -1441,7 +1443,9 @@
 	.endm
 
 	.macro switchinabilities battler:req
+	setbyte sABILITY_LOOP_COUNTER, 0
 	various \battler, VARIOUS_SWITCHIN_ABILITIES
+	setbyte sABILITY_LOOP_COUNTER, 0
 	restoreattackerandtargetfrom34
 	.endm
 

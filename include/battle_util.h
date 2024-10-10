@@ -208,7 +208,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 special, u16 mo
 int HandleAttackerAbility(int abilityNumber, int battler, int target, int move);
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move);
 int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int move);
-int HandleMiscAbilityEffects(int battler, int opponent, int move);
+int HandleMiscAbilityMoveEffects(int battler, int opponent, int move);
+int HandleSwitchInAbility(int abilityNumber, int battler);
 
 #define GET_ALL_BATTLER_ABILITIES(abilitiesArray, battler, battlerAtk) \
 GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk) \

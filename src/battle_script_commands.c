@@ -7367,9 +7367,14 @@ static void Cmd_switchineffects(void)
         if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0))
             return;
 
-        if (TryPrimalReversion(gActiveBattler, TRUE)
-            || AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gActiveBattler, 0, 0, 0)
-            || ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gActiveBattler, FALSE)
+        if (TryPrimalReversion(gActiveBattler, TRUE)) return;
+
+        while (gBattleScripting.abilityLoopCounter <= NUM_ABILITY_SLOTS + 1)
+        {
+            if (HandleSwitchInAbility(gBattleScripting.abilityLoopCounter++, gActiveBattler)) return;
+        }
+        
+        if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gActiveBattler, FALSE)
             || AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, 0, 0, 0, 0)
             || AbilityBattleEffects(ABILITYEFFECT_TRACE2, 0, 0, 0, 0)
             || AbilityBattleEffects(ABILITYEFFECT_FORECAST, 0, 0, 0, 0))
@@ -9200,7 +9205,14 @@ static void Cmd_various(void)
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlerAttacker = gActiveBattler;
         AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, 0, 0);
-        AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gActiveBattler, 0, 0, 0);
+        while (gBattleScripting.abilityLoopCounter <= NUM_ABILITY_SLOTS + 1)
+        {
+            if (HandleSwitchInAbility(gBattleScripting.abilityLoopCounter++, gActiveBattler))
+            {
+                gBattlescriptCurrInstr = runAgain;
+                return;
+            }
+        }
         AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_TRACE2, gActiveBattler, 0, 0, 0);
         return;

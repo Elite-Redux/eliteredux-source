@@ -3899,6 +3899,7 @@ static void DoBattleIntro(void)
             }
 
             gBattleStruct->switchInAbilitiesCounter = 0;
+            gBattleStruct->firstTurnAbilityLoopCounter = 0;
             gBattleStruct->switchInItemsCounter = 0;
             gBattleStruct->overworldWeatherDone = FALSE;
 
@@ -4001,18 +4002,25 @@ static void TryDoEventsBeforeFirstTurn(void)
     // Check all switch in abilities happening from the fastest mon to slowest.
     while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount)
     {
-        gBattlerAttacker = gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter++];
-        if (!IsBattlerAlive(gBattlerAttacker)) continue;
-
-        ClearMiscTurnFlags();
-        // Primal Reversion
-        if (TryPrimalReversion(gBattlerAttacker, FALSE))
+        if (!gBattleStruct->firstTurnAbilityLoopCounter)
         {
-            gBattleStruct->switchInAbilitiesCounter--;
-            return;
+            gBattlerAttacker = gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter++];
+            if (!IsBattlerAlive(gBattlerAttacker)) continue;
+
+            ClearMiscTurnFlags();
+            // Primal Reversion
+            if (TryPrimalReversion(gBattlerAttacker, FALSE))
+            {
+                gBattleStruct->switchInAbilitiesCounter--;
+                return;
+            }
         }
-        if (AbilityBattleEffects(ABILITYEFFECT_ON_SWITCHIN, gBattlerAttacker, 0, 0, 0) != 0)
-            return;
+        while (gBattleStruct->firstTurnAbilityLoopCounter <= NUM_ABILITY_SLOTS + 1)
+        {
+            if (HandleSwitchInAbility(gBattleStruct->firstTurnAbilityLoopCounter++, gBattlerAttacker));
+                return;
+        }
+        gBattleStruct->firstTurnAbilityLoopCounter = 0;
     }
     ClearMiscTurnFlags();
     if (AbilityBattleEffects(ABILITYEFFECT_TRACE1, 0, 0, 0, 0) != 0)
@@ -4060,6 +4068,7 @@ static void TryDoEventsBeforeFirstTurn(void)
     *(&gBattleStruct->wishPerishSongState) = 0;
     *(&gBattleStruct->wishPerishSongBattlerId) = 0;
     gBattleScripting.moveendState = 0;
+    gBattleScripting.abilityLoopCounter = 0;
     gBattleStruct->faintedActionsState = 0;
     gBattleStruct->turnCountersTracker = 0;
     gMoveResultFlags = 0;
@@ -4137,6 +4146,7 @@ void BattleTurnPassed(void)
     gBattleScripting.animTurn = 0;
     gBattleScripting.animTargetsHit = 0;
     gBattleScripting.moveendState = 0;
+    gBattleScripting.abilityLoopCounter = 0;
     gBattleMoveDamage = 0;
     gMoveResultFlags = 0;
 

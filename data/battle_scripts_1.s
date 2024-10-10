@@ -4369,7 +4369,7 @@ BattleScript_DoubleSimpleEffect::
 
 BattleScript_Hospitality::
 	call BattleScript_AbilityPopUp
-BattleScript_Hospitality_AfterPopup:
+BattleScript_Hospitality_AfterPopup::
 	printstring STRINGID_HOSPITALITY
 	waitmessage B_WAIT_TIME_LONG
 	jumpifhealingblocked BS_TARGET, BattleScript_Hospitality_CantHeal
@@ -5324,12 +5324,6 @@ BattleScript_PartyHealEnd::
 	updatestatusicon BS_ATTACKER_WITH_PARTNER
 	waitstate
 	goto BattleScript_MoveEnd
-
-BattleScript_EffectButterUp::
-	call BattleScript_AbilityPopUp
-	call BattleScript_HealAllPartyStatus
-	jumpifabsent BS_TARGET, BattleScript_End3
-	goto BattleScript_Hospitality_AfterPopup	
 
 BattleScript_EffectSoothingAroma::
 	call BattleScript_AbilityPopUp
@@ -9418,6 +9412,10 @@ BattleScript_DefiantActivates_Effect:
 BattleScript_DefiantActivates_End:
 	return
 
+BattleScript_AbilityPopUpEnd3::
+	call BattleScript_AbilityPopUp
+	end3
+
 BattleScript_AbilityPopUp::
 	.if B_ABILITY_POP_UP == TRUE
 	showabilitypopup BS_ABILITY_BATTLER
@@ -9760,17 +9758,7 @@ BattleScript_BattlerHasNoDamageHits::
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
-BattleScript_AtlasStarts::
-	sethword sABILITY_OVERWRITE, ABILITY_ATLAS
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
-	printstring STRINGID_GRAVITYINTENSIFIED
-	waitmessage B_WAIT_TIME_LONG
-	end3
-
 BattleScript_GravityStarts::
-	sethword sABILITY_OVERWRITE, ABILITY_GRAVITY_WELL
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_GRAVITYINTENSIFIED
 	waitmessage B_WAIT_TIME_LONG
@@ -11042,14 +11030,6 @@ BattleScript_ParadoxBoostEnds::
 	printstring STRINGID_PARADOX_BOOST_END
 	waitmessage B_WAIT_TIME_LONG
 	return
-
-BattleScript_ActivateUnnerve::
-	sethword sABILITY_OVERWRITE, ABILITY_UNNERVE
-	setbyte cMULTISTRING_CHOOSER, B_MSG_SWITCHIN_UNNERVE
-	call BattleScript_AbilityPopUp
-	printfromtable gSwitchInAbilityStringIds
-	waitmessage B_WAIT_TIME_LONG
-	end3
 
 BattleScript_ActivateAsOne::
 	call BattleScript_AbilityPopUp
