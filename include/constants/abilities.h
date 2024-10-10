@@ -159,7 +159,7 @@
 #define ABILITY_ILLUSION 149 // Appears as last party slot and boosts power by 1.3x until hit.
 #define ABILITY_IMPOSTER 150 // Transforms into the foe on entry.
 #define ABILITY_INFILTRATOR 151 // Own moves bypass Substitutes and damage reduction screens.
-#define ABILITY_MUMMY 152 // If hit, swaps Mummy with the attacker's ability.
+#define ABILITY_MUMMY 152 // If hit, makes the attacker's ability Mummy.
 #define ABILITY_MOXIE 153 // Dealing a KO raises Attack by one stage.
 #define ABILITY_JUSTIFIED 154 // Raises Attack by one stage if hit by a Dark-type move.
 #define ABILITY_RATTLED 155 // If hit by Bug, Dark or Ghost move, or flinches: +1 Speed.
@@ -470,7 +470,7 @@
 #define ABILITY_ELECTROMORPHOSIS 448 // Charges up when getting hit.
 #define ABILITY_ROCKY_PAYLOAD 449 // Boosts the power of Rock-type and throwing moves by 1.5x.
 #define ABILITY_EARTH_EATER 450 // Heals 25% of max HP when hit by a Ground move.
-#define ABILITY_LINGERING_AROMA 451 // If hit, swaps Mummy with the attacker's ability.
+#define ABILITY_LINGERING_AROMA 451 // If hit, makes the attacker's ability Lingering Aroma.
 #define ABILITY_FAIRY_TALE 452 // Adds Fairy type to itself.
 #define ABILITY_RAGING_MOTH 453 // Fire moves hits twice, both hits at 75% power.
 #define ABILITY_ADRENALINE_RUSH 454 // KOs raise Speed by one stage.
