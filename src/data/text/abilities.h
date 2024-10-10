@@ -375,7 +375,7 @@ static const u8 sAbilitySpectralizeDescription[] = _("Normal-type moves become G
 static const u8 sAbilityLethargyDescription[] = _("Damage drops 20% each turn to 20%.\nResets on switch-in.");
 static const u8 sAbilityIronBarrageDescription[] = _("Combines Mega Launcher\nwith Sighting System.");
 static const u8 sAbilityPyroShellsDescription[] = _("Triggers 50 BP Outburst after\nusing a Mega Launcher move.");
-static const u8 sAbilityFungalInfectionDescription[] = _("Every attacking move inflicts\nLeech Seed on the target.");
+static const u8 sAbilityFungalInfectionDescription[] = _("Contact moves inflict\nLeech Seed on the target.");
 static const u8 sAbilityParryDescription[] = _("Counters contact with Mach\nPunch. Takes 20% less damage.");
 static const u8 sAbilityScrapyardDescription[] = _("Sets a layer of Spikes when hit\n(contact move).");
 static const u8 sAbilityToxicDebrisDescription[] = _("Sets a layer of Toxic Spikes\nwhen hit by contact moves.");
@@ -692,6 +692,8 @@ static const u8 sAbilityRagingGoddessDescription[] = _("Rampage + Hyper Aggressi
 static const u8 sAbilityWhiplashDescription[] = _("Physical attacks have a 50%\nchance to lower Defense.");
 static const u8 sAbilitySupersweetSyrupDescription[] = _("Can't lose its item. Disables foe's\nitem for 2 turns on contact.");
 static const u8 sAbilityLuckyHaloDescription[] = _("Negates self stat drops. Survives\nthe first hit that would KO it.");
+static const u8 sAbilityTrashHeapDescription[] = _("Corrosion + Toxic Spill.");
+static const u8 sAbilitySludgyMixDescription[] = _("Intoxicate + Punk Rock.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1420,6 +1422,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_WHIPLASH] = _("Whiplash"),
     [ABILITY_SUPERSWEET_SYRUP] = _("Supersweet Syrup"),
     [ABILITY_LUCKY_HALO] = _("Lucky Halo"),
+    [ABILITY_TRASH_HEAP] = _("Trash Heap"),
+    [ABILITY_SLUDGY_MIX] = _("Sludgy Mix"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2149,4 +2153,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_WHIPLASH] = sAbilityWhiplashDescription,
     [ABILITY_SUPERSWEET_SYRUP] = sAbilitySupersweetSyrupDescription,
     [ABILITY_LUCKY_HALO] = sAbilityLuckyHaloDescription,
+    [ABILITY_TRASH_HEAP] = sAbilityTrashHeapDescription,
+    [ABILITY_SLUDGY_MIX] = sAbilitySludgyMixDescription,
 };

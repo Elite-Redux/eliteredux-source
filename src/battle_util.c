@@ -11403,6 +11403,11 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_INTOXICATE:
             MUL_ATE(TYPE_POISON)
+
+        case ABILITY_SLUDGY_MIX:
+            MUL_ATE(TYPE_POISON)
+            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3);
+            return;
         
         #undef MUL_ATE
 
@@ -11676,7 +11681,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_BLOOD_STIGMA:
-            if (gBattleMons[battlerDef].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerDef)) MUL(2);
+            if (gBattleMons[battlerDef].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerDef)) MUL(1.5);
             return;
         
         case ABILITY_DETERMINATION:
@@ -13115,7 +13120,7 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, ABILITY_MAGMA_EATER);
     }
-	else if (moveType == TYPE_POISON && defType == TYPE_STEEL && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CORROSION) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PYROCLASTIC_FLOW)))
+	else if (moveType == TYPE_POISON && defType == TYPE_STEEL && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CORROSION) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PYROCLASTIC_FLOW) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_TRASH_HEAP)))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
