@@ -11420,7 +11420,7 @@ BattleScript_WhiteHerbRet::
 	return
 	
 BattleScript_ItemHealHP_RemoveItemRet::
-	jumpifability BS_SCRIPTING, ABILITY_RIPEN, BattleScript_ItemHealHP_RemoveItemRet_AbilityPopUp
+	jumpifripen BS_SCRIPTING, BattleScript_ItemHealHP_RemoveItemRet_AbilityPopUp
 	goto BattleScript_ItemHealHP_RemoveItemRet_Anim
 BattleScript_ItemHealHP_RemoveItemRet_AbilityPopUp:
 	call BattleScript_AbilityPopUp
@@ -11435,7 +11435,7 @@ BattleScript_ItemHealHP_RemoveItemRet_Anim:
 	return
 
 BattleScript_ItemHealHP_RemoveItemEnd2::
-	jumpifability BS_ATTACKER, ABILITY_RIPEN, BattleScript_ItemHealHP_RemoveItemEnd2_AbilityPopUp
+	jumpifripen BS_ATTACKER, BattleScript_ItemHealHP_RemoveItemEnd2_AbilityPopUp
 	goto BattleScript_ItemHealHP_RemoveItemEnd2_Anim
 BattleScript_ItemHealHP_RemoveItemEnd2_AbilityPopUp:
 	call BattleScript_AbilityPopUp
@@ -11450,7 +11450,7 @@ BattleScript_ItemHealHP_RemoveItemEnd2_Anim:
 	end2
 
 BattleScript_BerryPPHealEnd2::
-	jumpifability BS_ATTACKER, ABILITY_RIPEN, BattleScript_BerryPPHealEnd2_AbilityPopup
+	jumpifripen BS_ATTACKER, BattleScript_BerryPPHealEnd2_AbilityPopup
 	goto BattleScript_BerryPPHealEnd2_Anim
 BattleScript_BerryPPHealEnd2_AbilityPopup:
 	call BattleScript_AbilityPopUp
@@ -11526,7 +11526,7 @@ BattleScript_HangedOnMsgRet:
 	return
 
 BattleScript_BerryConfuseHealEnd2::
-	jumpifability BS_SCRIPTING, ABILITY_RIPEN, BattleScript_BerryConfuseHealEnd2_AbilityPopup
+	jumpifripen BS_SCRIPTING, BattleScript_BerryConfuseHealEnd2_AbilityPopup
 	goto BattleScript_BerryConfuseHealEnd2_Anim
 BattleScript_BerryConfuseHealEnd2_AbilityPopup:
 	call BattleScript_AbilityPopUp
@@ -11545,7 +11545,7 @@ BattleScript_BerryConfuseHealEnd2_Anim:
 	end2
 
 BattleScript_BerryConfuseHealRet::
-	jumpifability BS_SCRIPTING, ABILITY_RIPEN, BattleScript_BerryConfuseHealRet_AbilityPopup
+	jumpifripen BS_SCRIPTING, BattleScript_BerryConfuseHealRet_AbilityPopup
 	goto BattleScript_BerryConfuseHealRet_Anim
 BattleScript_BerryConfuseHealRet_AbilityPopup:
 	call BattleScript_AbilityPopUp
@@ -11569,7 +11569,7 @@ BattleScript_BerryStatRaiseEnd2::
 
 BattleScript_BerryStatRaiseRet::
 	jumpifnotberry BS_STACK_1, BattleScript_BerryStatRaiseRet_Anim
-	jumpifability BS_STACK_1, ABILITY_RIPEN, BattleScript_BerryStatRaiseRet_AbilityPopup
+	jumpifripen BS_STACK_1, BattleScript_BerryStatRaiseRet_AbilityPopup
 	goto BattleScript_BerryStatRaiseRet_Anim
 BattleScript_BerryStatRaiseRet_AbilityPopup:
 	call BattleScript_AbilityPopUp
@@ -11796,7 +11796,7 @@ BattleScript_CustapBerryActivation::
 	end2
 
 BattleScript_MicleBerryActivateEnd2::
-	jumpifability BS_ATTACKER, ABILITY_RIPEN, BattleScript_MicleBerryActivateEnd2_Ripen
+	jumpifripen BS_ATTACKER, BattleScript_MicleBerryActivateEnd2_Ripen
 	goto BattleScript_MicleBerryActivateEnd2_Anim
 BattleScript_MicleBerryActivateEnd2_Ripen:
 	call BattleScript_AbilityPopUp
@@ -11808,7 +11808,7 @@ BattleScript_MicleBerryActivateEnd2_Anim:
 	end2
 
 BattleScript_MicleBerryActivateRet::
-	jumpifability BS_SCRIPTING, ABILITY_RIPEN, BattleScript_MicleBerryActivateRet_Ripen
+	jumpifripen BS_SCRIPTING, BattleScript_MicleBerryActivateRet_Ripen
 	goto BattleScript_MicleBerryActivateRet_Anim
 BattleScript_MicleBerryActivateRet_Ripen:
 	call BattleScript_AbilityPopUp
@@ -11820,7 +11820,7 @@ BattleScript_MicleBerryActivateRet_Anim:
 	return
 
 BattleScript_JabocaRowapBerryActivates::
-	jumpifability BS_TARGET, ABILITY_RIPEN, BattleScript_JabocaRowapBerryActivate_Ripen
+	jumpifripen BS_TARGET, BattleScript_JabocaRowapBerryActivate_Ripen
 	goto BattleScript_JabocaRowapBerryActivate_Anim
 BattleScript_JabocaRowapBerryActivate_Ripen:
 	call BattleScript_AbilityPopUp

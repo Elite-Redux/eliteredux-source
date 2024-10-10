@@ -2101,7 +2101,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     if (gRoundStructs[battlerAtk].usedMicleBerry)
     {
         gRoundStructs[battlerAtk].usedMicleBerry = FALSE;
-        if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_RIPEN, atkAbility))
+        if (HasRipenEffect(battlerAtk))
             calc = (calc * 140) / 100;  // ripen gives 40% acc boost
         else
             calc = (calc * 120) / 100;  // 20% acc boost

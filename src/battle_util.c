@@ -5821,7 +5821,30 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             // Self Sufficient
-            if(BATTLER_HAS_ABILITY(battler, ABILITY_SELF_SUFFICIENT) || BATTLER_HAS_ABILITY(battler, ABILITY_APPLE_PIE)){
+            if(BATTLER_HAS_ABILITY(battler, ABILITY_APPLE_PIE)){
+                bool8 activateAbilty = FALSE;
+                u16 abilityToCheck = ABILITY_APPLE_PIE; //For easier copypaste
+
+                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = abilityToCheck;
+                
+                if(!BATTLER_MAX_HP(battler) && 
+                   !BATTLER_HEALING_BLOCKED(gActiveBattler) && 
+                   gVolatileStructs[battler].isFirstTurn != 2)
+                    activateAbilty = TRUE;
+
+                //This is the stuff that has to be changed for each ability
+                if(activateAbilty){
+				    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
+					if (gBattleMoveDamage == 0)
+						gBattleMoveDamage = 1;
+					gBattleMoveDamage *= -1;
+					BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
+					effect++;
+                }
+            }
+
+            // Self Sufficient
+            if(BATTLER_HAS_ABILITY(battler, ABILITY_SELF_SUFFICIENT)){
                 bool8 activateAbilty = FALSE;
                 u16 abilityToCheck = ABILITY_SELF_SUFFICIENT; //For easier copypaste
 
@@ -7388,6 +7411,11 @@ bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId)
     return FALSE;
 }
 
+int HasRipenEffect(int battler)
+{
+    return BATTLER_HAS_ABILITY(battler, ABILITY_RIPEN) || BATTLER_HAS_ABILITY(battler, ABILITY_APPLE_PIE);
+}
+
 static u8 HealConfuseBerry(u32 battlerId, u32 itemId, u8 flavorId, bool32 end2)
 {
     if (HasEnoughHpToEatBerry(battlerId, 4, itemId))
@@ -7399,7 +7427,7 @@ static u8 HealConfuseBerry(u32 battlerId, u32 itemId, u8 flavorId, bool32 end2)
             gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN) || BATTLER_HAS_ABILITY(battlerId, ABILITY_APPLE_PIE))
+        if (HasRipenEffect(battlerId))
         {
             gBattleMoveDamage *= 2;
             gBattlerAbility = battlerId;
@@ -7427,7 +7455,7 @@ static u8 StatRaiseBerry(u32 battlerId, u32 itemId, u32 statId, bool32 end2)
     if (CompareStat(battlerId, statId, MAX_STAT_STAGE, CMP_LESS_THAN) && HasEnoughHpToEatBerry(battlerId, GetBattlerHoldEffectParam(battlerId), itemId))
     {
         BufferStatChange(battlerId, statId, STRINGID_STATROSE);
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN))
+        if (HasRipenEffect(battlerId))
             SET_STATCHANGER(statId, 2, FALSE);
         else
             SET_STATCHANGER(statId, 1, FALSE);
@@ -7476,7 +7504,7 @@ static u8 RandomStatRaiseBerry(u32 battlerId, u32 itemId, bool32 end2)
         gBattleTextBuff2[5] = stringId;
         gBattleTextBuff2[6] = stringId >> 8;
         gBattleTextBuff2[7] = EOS;
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN))
+        if (HasRipenEffect(battlerId))
             SET_STATCHANGER(i + 1, 4, FALSE);
         else
             SET_STATCHANGER(i + 1, 2, FALSE);
@@ -7528,7 +7556,7 @@ static u8 DamagedStatBoostBerryEffect(u8 battlerId, u8 statId, u8 split)
         BufferStatChange(battlerId, statId, STRINGID_STATROSE);
 
         gEffectBattler = battlerId;
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN))
+        if (HasRipenEffect(battlerId))
             SET_STATCHANGER(statId, 2, FALSE);
         else
             SET_STATCHANGER(statId, 1, FALSE);
@@ -7578,7 +7606,7 @@ static u8 ItemHealHp(u32 battlerId, u32 itemId, bool32 end2, bool32 percentHeal)
             gBattleMoveDamage = GetBattlerHoldEffectParam(battlerId) * -1;
 
         // check ripen
-        if (ItemId_GetPocket(itemId) == POCKET_BERRIES && BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN))
+        if (ItemId_GetPocket(itemId) == POCKET_BERRIES && HasRipenEffect(battlerId))
             gBattleMoveDamage *= 2;
 
         gBattlerAbility = battlerId;    // in SWSH, berry juice shows ability pop up but has no effect. This is mimicked here
@@ -7964,7 +7992,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                         u8 maxPP = CalculatePPWithBonus(move, ppBonuses, i);
                         u8 ppRestored = GetBattlerHoldEffectParam(battlerId);
 
-                        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN))
+                        if (HasRipenEffect(battlerId))
                         {
                             ppRestored *= 2;
                             gBattlerAbility = battlerId;
@@ -8624,7 +8652,7 @@ case ITEMEFFECT_KINGSROCK:
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
-                    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN))
+                    if (HasRipenEffect(battlerId))
                         gBattleMoveDamage *= 2;
 
                     effect = ITEM_HP_CHANGE;
@@ -8643,7 +8671,7 @@ case ITEMEFFECT_KINGSROCK:
                     gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
-                    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_RIPEN))
+                    if (HasRipenEffect(battlerId))
                         gBattleMoveDamage *= 2;
 
                     effect = ITEM_HP_CHANGE;
@@ -11346,7 +11374,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             && (moveType == TYPE_NORMAL || typeEffectivenessModifier >= UQ_4_12(2.0))
             && !UnnerveOn(battlerDef, itemDef))
         {
-            if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_RIPEN))
+            if (HasRipenEffect(battlerDef))
                 MulModifier(&finalModifier, UQ_4_12(0.25));
             else
                 MulModifier(&finalModifier, UQ_4_12(0.5));

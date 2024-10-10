@@ -2467,3 +2467,8 @@ checkprimalweather_pass_\@:
 	.2byte \song_number
 	.byte \save_song
 .endm
+
+.macro jumpifripen battler:req, ptr:req
+	jumpifability \battler, ABILITY_RIPEN, \ptr
+	jumpifability \battler, ABILITY_APPLE_PIE, \ptr
+.endm

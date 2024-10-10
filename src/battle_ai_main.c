@@ -4613,7 +4613,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             score++;
         if (IsRecycleEncouragedItem(GetUsedHeldItem(battlerAtk)))
             score++;
-        if (BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_RIPEN))
+        if (HasRipenEffect(battlerAtk))
         {
             u16 item = GetUsedHeldItem(battlerAtk);
             u16 toHeal = (ItemId_GetHoldEffectParam(item) == 10) ? 10 : gBattleMons[battlerAtk].maxHP / ItemId_GetHoldEffectParam(item);

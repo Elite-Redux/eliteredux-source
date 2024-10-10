@@ -350,6 +350,7 @@ int IsBloodStainAffected(int battler);
 int IsUnaware(int battler);
 int GetOncePerTurnAbilityCounter(int battler, int ability);
 void SetOncePerTurnAbilityCounter(int battler, int ability, int value);
+int HasRipenEffect(int battler);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
