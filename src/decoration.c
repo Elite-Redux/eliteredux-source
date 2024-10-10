@@ -1185,10 +1185,10 @@ static u16 GetDecorationElevation(u8 decoration, u8 tileIndex)
     switch (decoration)
     {
     case DECOR_STAND:
-        elevation = sDecorationStandElevations[tileIndex] << METATILE_ELEVATION_SHIFT;
+        elevation = sDecorationStandElevations[tileIndex] << MAPGRID_ELEVATION_SHIFT;
         return elevation;
     case DECOR_SLIDE:
-        elevation = sDecorationSlideElevation[tileIndex] << METATILE_ELEVATION_SHIFT;
+        elevation = sDecorationSlideElevation[tileIndex] << MAPGRID_ELEVATION_SHIFT;
         return elevation;
     default:
         return elevation;
@@ -1199,7 +1199,7 @@ static void ShowDecorationOnMap_(u16 mapX, u16 mapY, u8 decWidth, u8 decHeight, 
 {
     u16 i, j;
     s16 x, y;
-    u16 behavior;
+    u16 attributes;
     u16 impassableFlag;
     u16 overlapsWall;
     u16 elevation;
@@ -1210,9 +1210,10 @@ static void ShowDecorationOnMap_(u16 mapX, u16 mapY, u8 decWidth, u8 decHeight, 
         for (i = 0; i < decWidth; i++)
         {
             x = mapX + i;
-            behavior = GetBehaviorByMetatileId(NUM_TILES_IN_PRIMARY + gDecorations[decoration].tiles[j * decWidth + i]);
-            if (MetatileBehavior_IsSecretBaseImpassable(behavior) == TRUE || (gDecorations[decoration].permission != DECORPERM_PASS_FLOOR && (behavior >> METATILE_ELEVATION_SHIFT)))
-                impassableFlag = METATILE_COLLISION_MASK;
+            attributes = GetMetatileAttributesById(NUM_TILES_IN_PRIMARY + gDecorations[decoration].tiles[j * decWidth + i]);
+            if (MetatileBehavior_IsSecretBaseImpassable(attributes & METATILE_ATTR_BEHAVIOR_MASK) == TRUE
+             || (gDecorations[decoration].permission != DECORPERM_PASS_FLOOR && (attributes >> METATILE_ATTR_LAYER_SHIFT) != METATILE_LAYER_TYPE_NORMAL))
+                impassableFlag = MAPGRID_COLLISION_MASK;
             else
                 impassableFlag = 0;
 
@@ -1471,7 +1472,6 @@ static void AttemptCancelPlaceDecoration(u8 taskId)
     DisplayItemMessageOnField(taskId, gStringVar4, CancelDecoratingPrompt);
 }
 
-// Note: behaviorBy is pre-anded with METATILE_ELEVATION_MASK.
 static bool8 IsNonBlockNonElevated(u8 behaviorAt, u16 behaviorBy)
 {
     if (MetatileBehavior_IsBlockDecoration(behaviorAt) != TRUE || behaviorBy != 0)
@@ -1524,7 +1524,7 @@ static bool8 CanPlaceDecoration(u8 taskId, const struct Decoration *decoration)
             {
                 curX = gTasks[taskId].tCursorX + j;
                 behaviorAt = MapGridGetMetatileBehaviorAt(curX, curY);
-                behaviorBy = GetBehaviorByMetatileId(NUM_TILES_IN_PRIMARY + decoration->tiles[(mapY - 1 - i) * mapX + j]) & METATILE_ELEVATION_MASK;
+                behaviorBy = GetMetatileAttributesById(NUM_TILES_IN_PRIMARY + decoration->tiles[(mapY - 1 - i) * mapX + j]) & METATILE_ATTR_LAYER_MASK;
                 if (!IsFloorOrBoardAndHole(behaviorAt, decoration))
                     return FALSE;
 
@@ -1545,7 +1545,7 @@ static bool8 CanPlaceDecoration(u8 taskId, const struct Decoration *decoration)
             {
                 curX = gTasks[taskId].tCursorX + j;
                 behaviorAt = MapGridGetMetatileBehaviorAt(curX, curY);
-                behaviorBy = GetBehaviorByMetatileId(NUM_TILES_IN_PRIMARY + decoration->tiles[(mapY - 1 - i) * mapX + j]) & METATILE_ELEVATION_MASK;
+                behaviorBy = GetMetatileAttributesById(NUM_TILES_IN_PRIMARY + decoration->tiles[(mapY - 1 - i) * mapX + j]) & METATILE_ATTR_LAYER_MASK;
                 if (!MetatileBehavior_IsNormal(behaviorAt) && !IsNonBlockNonElevated(behaviorAt, behaviorBy))
                     return FALSE;
 
@@ -1562,7 +1562,7 @@ static bool8 CanPlaceDecoration(u8 taskId, const struct Decoration *decoration)
         {
             curX = gTasks[taskId].tCursorX + j;
             behaviorAt = MapGridGetMetatileBehaviorAt(curX, curY);
-            behaviorBy = GetBehaviorByMetatileId(NUM_TILES_IN_PRIMARY + decoration->tiles[j]) & METATILE_ELEVATION_MASK;
+            behaviorBy = GetMetatileAttributesById(NUM_TILES_IN_PRIMARY + decoration->tiles[j]) & METATILE_ATTR_LAYER_MASK;
             if (!MetatileBehavior_IsNormal(behaviorAt) && !MetatileBehavior_IsSecretBaseNorthWall(behaviorAt))
                 return FALSE;
 

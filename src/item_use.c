@@ -781,7 +781,7 @@ static bool8 TryToWaterSudowoodo(void)
     u8 z;
     u8 objId;
     GetXYCoordsOneStepInFrontOfPlayer(&x, &y);
-    z = PlayerGetZCoord();
+    z = PlayerGetElevation();
     objId = GetObjectEventIdByXYZ(x, y, z);
     if (objId == OBJECT_EVENTS_COUNT || gObjectEvents[objId].graphicsId != OBJ_EVENT_GFX_SUDOWOODO)
         return FALSE;
