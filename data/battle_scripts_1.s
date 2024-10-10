@@ -9785,7 +9785,7 @@ BattleScript_BattlerAnnouncedToxicSpill::
 
 BattleScript_DefenderSetsSpikeLayer_Scrapyard::
 	swapbattlerandtargetvia34
-	checkcondition CONDITION_SPIKES, BattleScript_DefenderSetsSpikeLayer_ScrapyardEndRD
+	checkcondition CONDITION_SPIKES, BattleScript_DefenderSetsSpikeLayer_ScrapyardEnd
 	call BattleScript_AbilityPopUp
 	playmoveanimation BS_ATTACKER, MOVE_SPIKES
 	waitanimation

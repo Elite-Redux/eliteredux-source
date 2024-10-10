@@ -14816,7 +14816,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             if (gBattleMons[battler].status2 && STATUS2_TRANSFORMED) break;
             
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-            return;
+            return TRUE;
         
         case ABILITY_MIMICRY:
             if (!IsBattlerAlive(battler)) break;
