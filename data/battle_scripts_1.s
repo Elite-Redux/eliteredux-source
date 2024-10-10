@@ -8472,9 +8472,6 @@ BattleScript_DisciplineLockEnds::
 	end2
 
 BattleScript_LethargyEnters::
-	sethword sABILITY_OVERWRITE, ABILITY_LETHARGY
-	pause 5
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_LETHARGYTENTERS
 	end3
@@ -9326,8 +9323,6 @@ BattleScript_ItemSteal::
 	return
 
 BattleScript_DrizzleActivates::
-	pause B_WAIT_TIME_SHORT
-	sethword sABILITY_OVERWRITE, ABILITY_DRIZZLE
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNMADEITRAIN
 	waitstate
@@ -9453,14 +9448,6 @@ BattleScript_AttackBoostActivates::
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_PKMNRAISEDATTACK
-	waitmessage B_WAIT_TIME_LONG
-	return
-
-BattleScript_FungalInfectionActivates::
-	sethword sABILITY_OVERWRITE, ABILITY_FUNGAL_INFECTION
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
-	printstring STRINGID_PKMNSEEDED
 	waitmessage B_WAIT_TIME_LONG
 	return
 	
@@ -9652,9 +9639,7 @@ BattleScript_IntimidateCloneActivated_Target_2_AfterDefiantCheck:
 	end3
 	
 BattleScript_AirBlowerActivated::
-	copybyte gBattlerAbility, gBattlerAttacker
-	sethword sABILITY_OVERWRITE, ABILITY_AIR_BLOWER
-	showabilitypopup BS_ABILITY_BATTLER
+	call BattleScript_AbilityPopUp
 	printstring STRINGID_AIRBLOWERACTIVATED
 	waitmessage B_WAIT_TIME_LONG
 	call BattleScript_OnTailwindStart
@@ -9689,9 +9674,7 @@ BattleScript_DoWindPower::
 	return
 
 BattleScript_PastelVeilActivated::
-	copybyte gBattlerAbility, gBattlerAttacker
-	sethword sABILITY_OVERWRITE, ABILITY_PASTEL_VEIL
-	showabilitypopup BS_ABILITY_BATTLER
+	call BattleScript_AbilityPopUp
 	printstring STRINGID_PASTELVEILACTIVATED
 	waitmessage B_WAIT_TIME_LONG
 	end3
@@ -9800,23 +9783,9 @@ BattleScript_BattlerAnnouncedToxicSpill::
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
-BattleScript_DefenderSetsSpikeLayer_LooseQuills::
-	swapbattlerandtargetvia34
-	checkcondition CONDITION_SPIKES, BattleScript_DefenderSetsSpikeLayer_LooseQuillsEnd
-	sethword sABILITY_OVERWRITE, ABILITY_LOOSE_QUILLS
-	call BattleScript_AbilityPopUp
-	playmoveanimation BS_ATTACKER, MOVE_SPIKES
-	waitanimation
-	printstring STRINGID_SPIKESSCATTERED
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_DefenderSetsSpikeLayer_LooseQuillsEnd:
-	restoreattackerandtargetfrom34
-	return
-
 BattleScript_DefenderSetsSpikeLayer_Scrapyard::
 	swapbattlerandtargetvia34
-	checkcondition CONDITION_SPIKES, BattleScript_DefenderSetsSpikeLayer_ScrapyardEnd
-	sethword sABILITY_OVERWRITE, ABILITY_SCRAPYARD
+	checkcondition CONDITION_SPIKES, BattleScript_DefenderSetsSpikeLayer_ScrapyardEndRD
 	call BattleScript_AbilityPopUp
 	playmoveanimation BS_ATTACKER, MOVE_SPIKES
 	waitanimation
@@ -9838,7 +9807,6 @@ BattleScript_DoubleSpikesOnEntry::
 BattleScript_DefenderSetsToxicSpikeLayer::
 	swapbattlerandtargetvia34
 	checkcondition CONDITION_TOXIC_SPIKES, BattleScript_DefenderSetsToxicSpikeLayerEnd
-	sethword sABILITY_OVERWRITE, ABILITY_TOXIC_DEBRIS
 	call BattleScript_AbilityPopUp
 	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
 	waitanimation
@@ -9851,7 +9819,6 @@ BattleScript_DefenderSetsToxicSpikeLayerEnd:
 BattleScript_DefenderSetsStealthRock::
 	swapbattlerandtargetvia34
 	checkcondition CONDITION_STEALTH_ROCK, BattleScript_DefenderSetsStealthRockEnd
-	sethword sABILITY_OVERWRITE, ABILITY_LOOSE_ROCKS
 	call BattleScript_AbilityPopUp
 	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
 	waitanimation
@@ -10346,8 +10313,6 @@ BattleScript_ScarePrevented:
 	goto BattleScript_ScareActivatesLoopIncrement
 
 BattleScript_DroughtActivates::
-	sethword sABILITY_OVERWRITE, ABILITY_DROUGHT
-	pause B_WAIT_TIME_SHORT
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNSXINTENSIFIEDSUN
 	waitstate
@@ -10365,8 +10330,6 @@ BattleScript_BadOmensActivates::
 	end3
 
 BattleScript_DesolateLandActivates::
-	pause B_WAIT_TIME_SHORT
-	sethword sABILITY_OVERWRITE, ABILITY_DESOLATE_LAND
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_EXTREMELYHARSHSUNLIGHT
 	waitstate
@@ -10384,8 +10347,6 @@ BattleScript_DesolateLandEvaporatesWaterTypeMoves::
 	goto BattleScript_MoveEnd
 
 BattleScript_PrimordialSeaActivates::
-	pause B_WAIT_TIME_SHORT
-	sethword sABILITY_OVERWRITE, ABILITY_PRIMORDIAL_SEA
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_HEAVYRAIN
 	waitstate
@@ -10479,7 +10440,6 @@ BattleScript_PsychicSurgeActivates::
 	end3
 
 BattleScript_BadDreamsActivates::
-	sethword sABILITY_OVERWRITE, ABILITY_BAD_DREAMS
 	setbyte gBattlerTarget, 0
 BattleScript_BadDreamsLoop:
 	trygetbaddreamstarget BattleScript_BadDreamsEnd, BattleScript_BadDreamsPrevented, BattleScript_BadDreamsPreventedPeacefulSlumber
@@ -10756,7 +10716,6 @@ BattleScript_MummyActivates::
 BattleScript_WanderingSpiritActivates::
 .if B_ABILITY_POP_UP == TRUE
 	setbyte sFIXED_ABILITY_POPUP, TRUE
-	sethword sABILITY_OVERWRITE, ABILITY_WANDERING_SPIRIT
 	showabilitypopup BS_TARGET
 	pause 60
 	sethword sABILITY_OVERWRITE, 0
@@ -10811,11 +10770,6 @@ BattleScript_BattlerAbilityStatRaiseOnSwitchIn::
 	printstring STRINGID_BATTLERABILITYRAISEDSTAT
 	waitmessage B_WAIT_TIME_LONG
 	end3
-
-BattleScript_WaterCompactionActivated::
-	sethword sABILITY_OVERWRITE, ABILITY_WATER_COMPACTION
-	jumpifstat BS_TARGET, CMP_EQUAL, STAT_DEF, MAX_STAT_STAGE, BattleScript_Return
-	goto BattleScript_TargetAbilityStatRaiseOnMoveEnd
 
 BattleScript_TargetAbilityStatRaiseOnMoveEnd::
 	call BattleScript_AbilityPopUp
@@ -11056,7 +11010,6 @@ BattleScript_FriskActivates::
 	end3
 
 BattleScript_ImposterActivates::
-	sethword sABILITY_OVERWRITE, ABILITY_IMPOSTER
 	transformdataexecution
 	call BattleScript_AbilityPopUp
 	playmoveanimation BS_ATTACKER, MOVE_TRANSFORM
@@ -12052,64 +12005,48 @@ BattleScript_AttackerSoulLinker::
 	return
 	
 BattleScript_AbsorbantActivated::
-	sethword sABILITY_OVERWRITE, ABILITY_ABSORBANT
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNSEEDED
 	waitmessage B_WAIT_TIME_LONG
 	return
 	
 BattleScript_AngelsWrath_Effect_Tackle::
-	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_TACKLE_EFFECT
 	waitmessage B_WAIT_TIME_LONG
 	return
 	
 BattleScript_AngelsWrath_Effect_String_Shot::
-	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_STRING_SHOT_EFFECT
 	waitmessage B_WAIT_TIME_LONG
 	return
 	
 BattleScript_AngelsWrath_Effect_Harden::
-	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_HARDEN_EFFECT
 	waitmessage B_WAIT_TIME_LONG
 	return
 	
 BattleScript_AngelsWrath_Effect_Iron_Defense::
-	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_IRON_DEFENSE_EFFECT
 	waitmessage B_WAIT_TIME_LONG
 	return
 	
 BattleScript_AngelsWrath_Effect_Electroweb::
-	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_ELECTROWEB_EFFECT
 	waitmessage B_WAIT_TIME_LONG
 	return
 	
 BattleScript_AngelsWrath_Effect_Bug_Bite::
-	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_ANGELS_WRATH_BUG_BITE_EFFECT
 	waitmessage B_WAIT_TIME_LONG
 	return
 
 BattleScript_AngelsWrath_Effect_Bug_Bite_2::
-	sethword sABILITY_OVERWRITE, ABILITY_ANGELS_WRATH
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	manipulatedamage DMG_TO_HP_FROM_ABILITY
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
@@ -12120,8 +12057,6 @@ BattleScript_AngelsWrath_Effect_Bug_Bite_2::
 	return
 
 BattleScript_NosferatuActivated::
-	sethword sABILITY_OVERWRITE, ABILITY_NOSFERATU
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	manipulatedamage DMG_TO_HP_FROM_ABILITY
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
@@ -12305,8 +12240,6 @@ BattleScript_BerserkDNAStatMaxedNoConfusion:
 	end3
 
 BattleScript_GripPincerActivated::
-	sethword sABILITY_OVERWRITE, ABILITY_GRIP_PINCER
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_GRIPPINCERACTIVATED
 	waitmessage B_WAIT_TIME_LONG
