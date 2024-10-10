@@ -11405,8 +11405,8 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             MUL_ATE(TYPE_POISON)
 
         case ABILITY_SLUDGY_MIX:
-            MUL_ATE(TYPE_POISON)
             if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3);
+            MUL_ATE(TYPE_POISON)
             return;
         
         #undef MUL_ATE
