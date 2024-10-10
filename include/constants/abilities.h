@@ -487,7 +487,7 @@
 #define ABILITY_PIXIE_POWER 465 // 1.2x accuracy. Boosts Fairy moves by 1.33x for all.
 #define ABILITY_PLASMA_LAMP 466 // Boost accuracy & power of Fire & Electric type moves by 1.2x.
 #define ABILITY_MAGMA_EATER 467 // Combines Predator & Molten Down.
-#define ABILITY_SUPER_HOT_GOO 468 // Inflicts burn and lower the speed on contact.
+#define ABILITY_SUPER_HOT_GOO 468 // Inflicts burn and lowers Speed on contact.
 #define ABILITY_NIKA 469 // Iron fist + Water moves function normally under sun.
 #define ABILITY_ARCHER 470 // Boosts the power of arrow moves by 1.3x.
 #define ABILITY_COLD_PLASMA 471 // Electric type moves now inflict burn instead of paralysis.

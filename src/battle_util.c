@@ -7722,16 +7722,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         }
         break;
     case ABILITYEFFECT_MOVE_END: // Think contact abilities.
-        for (i = 0; i <= NUM_ABILITY_SLOTS; i++)
+        for (i = 0; i <= NUM_ABILITY_SLOTS + 1; i++)
         {
-            HandleDefenderAbility(i, battler, gBattlerAttacker, move);
+            effect += HandleDefenderAbility(i, battler, gBattlerAttacker, move);
         }
         break;
         
     case ABILITYEFFECT_MOVE_END_ATTACKER: // Same as above, but for attacker
-        for (i = 0; i <= NUM_ABILITY_SLOTS; i++)
+        for (i = 0; i <= NUM_ABILITY_SLOTS + 1; i++)
         {
-            HandleAttackerAbility(i, battler, gBattlerTarget, move);
+            effect += HandleAttackerAbility(i, battler, gBattlerTarget, move);
         }
         break;
 
@@ -8326,338 +8326,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             #undef CHECK_ABILITY
         break;
         case ABILITYEFFECT_MOVE_END_EITHER:
-            opponent = battler == gBattlerAttacker ? gBattlerTarget : gBattlerAttacker;
-            effectTargetFlag = opponent == gBattlerAttacker ? MOVE_EFFECT_AFFECTS_USER : 0;
-
-            if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_BLOOD_STAIN))
-            {
-                if (ShouldApplyOnHitAffect(opponent)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
-                    && !BATTLER_HAS_ABILITY(opponent, ABILITY_BLOOD_STAIN)
-                    && !IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
-                {
-                    if (DoesBattlerHaveAbilityShield(opponent)) break;
-                    UpdateAbilityStateIndicesForNewAbility(opponent, ABILITY_BLOOD_STAIN);
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = gBattleMons[opponent].ability = ABILITY_BLOOD_STAIN;
-                    gStackBattler1 = opponent;
-                    BattleScriptCall(BattleScript_BloodStainActivates);
-                    effect++;
-                }
-            }
-        
-            // Innates
-            // Soul Linker Attacker
-            if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SOUL_LINKER)){
-                if (ShouldApplyOnHitAffect(opponent)
-                && IsBattlerAlive(battler)
-                && !BATTLER_HAS_ABILITY(opponent, ABILITY_SOUL_LINKER)
-                && move != MOVE_PAIN_SPLIT)
-                {
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_LINKER;
-                    BattleScriptCall(BattleScript_AttackerSoulLinker);
-                    effect++;
-                }
-            }
-
-            // Damp
-            if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_DAMP)){
-                if (ShouldApplyOnHitAffect(opponent)
-                && IsMoveMakingContact(move, gBattlerAttacker)
-                && !IS_BATTLER_OF_TYPE(opponent, TYPE_WATER))
-                {
-                    u8 newtype = TYPE_WATER;
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_DAMP;
-                    gBattleMons[opponent].type1 = newtype;
-                    gBattleMons[opponent].type2 = newtype;
-                    gBattleMons[opponent].type3 = TYPE_MYSTERY;
-                    PREPARE_TYPE_BUFFER(gBattleTextBuff1, newtype);
-                    BattleScriptCall(opponent == gBattlerAttacker ? BattleScript_AttackerBecameTheTypeFull : BattleScript_DefenderBecameTheTypeFull);
-                    effect++;
-                }
-            }
-
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_STATIC)){
-                if (ShouldApplyOnHitAffect(opponent)
-                && CanBeParalyzed(battler, opponent)
-                && IsMoveMakingContact(move, gBattlerAttacker)
-                && (Random() % 100) < 30)
-                {
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_STATIC;
-                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS | effectTargetFlag;
-                    BattleScriptCall(BattleScript_AbilityStatusEffect);
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
-                }
-            }
-
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_WHITE_NOISE)){
-                if (ShouldApplyOnHitAffect(opponent)
-                && CanBeParalyzed(battler, opponent)
-                && IsMoveMakingContact(move, gBattlerAttacker)
-                && (Random() % 100) < 30)
-                {
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_WHITE_NOISE;
-                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS | effectTargetFlag;
-                    BattleScriptCall(BattleScript_AbilityStatusEffect);
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
-                }
-            }
-
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_ARC_FLASH)){
-                if (ShouldApplyOnHitAffect(opponent) && (Random() % 100) < 50)
-                {
-                    int shouldProc = FALSE;
-                    if (battler == gBattlerAttacker)
-                    {
-                        if (CanBeParalyzed(battler, opponent))
-                        {
-                            gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
-                            shouldProc = TRUE;
-                        }
-                    }
-                    else
-                    {
-                        if (CanBeBurned(opponent))
-                        {
-                            gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
-                            shouldProc = TRUE;
-                        }
-                    }
-
-                    if (shouldProc)
-                    {
-                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ARC_FLASH;
-                        gStackBattler1 = battler;
-                        gStackBattler2 = opponent;
-                        BattleScriptCall(BattleScript_AbilityStatusEffectSafe);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                    }
-                }
-            }
-            
-            // Flame Body
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FLAME_BODY)){
-                if (ShouldApplyOnHitAffect(opponent)
-                && CanBeBurned(gBattlerAttacker)
-                && IsMoveMakingContact(move, gBattlerAttacker)
-                && (Random() % 100) < 30)
-                {
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FLAME_BODY;
-                    gBattleScripting.moveEffect = MOVE_EFFECT_BURN | effectTargetFlag;
-                    BattleScriptCall(BattleScript_AbilityStatusEffect);
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
-                }
-            }
-            
-            // Super Hot Goo
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SUPER_HOT_GOO)){
-                if (ShouldApplyOnHitAffect(opponent)
-                && CanBeBurned(gBattlerAttacker)
-                && IsMoveMakingContact(move, gBattlerAttacker)
-                && (Random() % 100) < 30)
-                {
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_SUPER_HOT_GOO;
-                    gBattleScripting.moveEffect = MOVE_EFFECT_BURN | effectTargetFlag;
-                    BattleScriptCall(BattleScript_AbilityStatusEffect);
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
-                }
-            }
-
-            // Fragrant Daze
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FRAGRANT_DAZE)){
-                if (ShouldApplyOnHitAffect(opponent)
-                && CanBeConfused(gBattlerAttacker)
-                && IsMoveMakingContact(move, gBattlerAttacker)
-                && (Random() % 100) < 30)
-                {
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FRAGRANT_DAZE;
-                    gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION | effectTargetFlag;
-                    BattleScriptCall(BattleScript_AbilityStatusEffect);
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
-                }
-            }
-
-            // Poison Point
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_POISON_POINT)){
-                if (ShouldApplyOnHitAffect(opponent)
-                    && CanBePoisoned(battler, opponent)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
-                    && (Random() % 100) < 30)
-                    {
-                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_POISON_POINT;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_POISON | effectTargetFlag;
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptCall(BattleScript_AbilityStatusEffect);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                    }
-            }
-
-            // Poison Touch
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_POISON_TOUCH)){
-                if (ShouldApplyOnHitAffect(opponent)
-                    && CanBePoisoned(battler, opponent)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
-                    && (Random() % 100) < 30)
-                    {
-                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_POISON_TOUCH;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_POISON | effectTargetFlag;
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptCall(BattleScript_AbilityStatusEffect);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                    }
-            }
-
-            // Freezing Point
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_FREEZING_POINT)){
-                if (ShouldApplyOnHitAffect(opponent)
-                    && CanGetFrostbite(opponent)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
-                    && (Random() % 100) < 30)
-                    {
-                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_FREEZING_POINT;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE | effectTargetFlag;
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptCall(BattleScript_AbilityStatusEffect);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                    }
-            }
-
-            // Cryo Proficiency
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_CRYO_PROFICIENCY)){
-                if (ShouldApplyOnHitAffect(opponent)
-                    && CanGetFrostbite(opponent)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
-                    && (Random() % 100) < 30)
-                    {
-                        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_CRYO_PROFICIENCY;
-                        gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE | effectTargetFlag;
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                        BattleScriptCall(BattleScript_AbilityStatusEffect);
-                        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                        effect++;
-                    }
-            }
-            
-            // Spike Armor
-            if(BattlerHasAbility(battler, gBattlerAttacker, ABILITY_SPIKE_ARMOR)){
-                if(ShouldApplyOnHitAffect(opponent)
-                && IsMoveMakingContact(move, gBattlerAttacker)
-                && CanBleed(opponent)
-                && (Random() % 100) < 30){
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_SPIKE_ARMOR;
-                    gBattleScripting.moveEffect = MOVE_EFFECT_BLEED | effectTargetFlag;
-                    PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                    BattleScriptCall(BattleScript_AbilityStatusEffect);
-                    gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                    effect++;
-                }
-            }
-
-            // Menacing Situation
-            if (BattlerHasAbility(battler, gBattlerAttacker, ABILITY_MENACING_SITUATION)) {
-                if (ShouldApplyOnHitAffect(opponent)
-                    && IsMoveMakingContact(move, gBattlerAttacker)
-                    && !gVolatileStructs[battler].fear
-                    && (Random() % 100) < 20) {
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_MENACING_SITUATION;
-                        gStackBattler1 = battler;
-                        gStackBattler2 = opponent;
-                        BattleScriptCall(BattleScript_AbilitySetFear);
-                        effect++;
-                    }
-            }
-
-            {
-            int flag;
-            if ((flag = GetAbilityState(battler, ABILITY_ENTRANCE))) {
-                for (i = 0; i < gBattlersCount; i++)
-                {
-                    if (!(flag & (1 << i))) continue;
-                    if (IsBattlerAlive(i)
-                        && CanInfatuate(battler, i)) {
-                            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ENTRANCE;
-                            gBattleScripting.moveEffect = MOVE_EFFECT_ATTRACT | HITMARKER_IGNORE_SAFEGUARD;
-                            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                            gStackBattler1 = battler;
-                            gStackBattler2 = i;
-                            BattleScriptCall(BattleScript_AbilityStatusEffectSafe);
-                        
-                    }
-                }
-            }
-            }
-
-            {
-            int flag;
-            if ((flag = GetAbilityState(battler, ABILITY_POISON_PUPPETEER))) {
-                for (i = 0; i < gBattlersCount; i++)
-                {
-                    if (!(flag & (1 << i))) continue;
-                    if (IsBattlerAlive(i)
-                        && CanBeConfused(i)) {
-                            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_ENTRANCE;
-                            gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION | HITMARKER_IGNORE_SAFEGUARD;
-                            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
-                            gStackBattler1 = battler;
-                            gStackBattler2 = i;
-                            BattleScriptCall(BattleScript_AbilityStatusEffectSafe);
-                        
-                    }
-                }
-            }
-            }
-
-            {
-            int flag;
-            if ((flag = GetAbilityState(battler, ABILITY_BLOOD_BATH))) {
-                for (i = 0; i < gBattlersCount; i++)
-                {
-                    if (!(flag & (1 << i))) continue;
-                    if (IsBattlerAlive(i)
-                        && !gVolatileStructs[i].fear) {
-                            gBattleScripting.abilityPopupOverwrite = ABILITY_BLOOD_BATH;
-                            gStackBattler1 = battler;
-                            gStackBattler2 = i;
-                            BattleScriptCall(BattleScript_AbilitySetFear);
-                        
-                    }
-                }
-            }
-            }
-
-            if (gVolatileStructs[battler].parasiticSpores
-                && ShouldApplyOnHitAffect(opponent)
-                && IsMoveMakingContact(move, gBattlerAttacker)
-                && !gVolatileStructs[opponent].parasiticSpores)
-            {
-                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_PARASITIC_SPORES;
-                gVolatileStructs[opponent].parasiticSpores = TRUE;
-                gStackBattler1 = battler;
-                gStackBattler2 = opponent;
-                BattleScriptCall(BATTLER_HAS_ABILITY(battler, ABILITY_PARASITIC_SPORES) ? BattleScript_ParasiticSporesSpreadWithAbility : BattleScript_ParasiticSporesSpread);
-                effect++;
-            }
-
-            {
-                u8 commander = IsAbilityOnSide(battler, ABILITY_COMMANDER);
-                if (commander-- && IsBattlerAlive(commander) && GetAbilityState(commander, ABILITY_COMMANDER) == COMMANDER_NEEDS_CANCELLING)
-                {
-                    SetAbilityState(commander, ABILITY_COMMANDER, COMMANDER_NOT_ACTIVE);
-                    gStatuses3[commander] &= ~STATUS3_SEMI_INVULNERABLE;
-                    gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_COMMANDER;
-                    gStackBattler1 = commander;
-                    BattleScriptCall(BattleScript_CommanderEnds);
-                    effect++;
-                }
-            }
         break;
     }
 
@@ -15277,12 +14945,13 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
 
     if (abilityNumber > NUM_ABILITY_SLOTS)
     {
-        // Handle other abilities if needed
-        return FALSE;
+        return HandleMiscAbilityEffects(battler, target, move);
     }
 
     GET_ALL_BATTLER_ABILITIES(abilities, battler, battler);
     ability = gBattleScripting.abilityPopupOverwrite = abilities[abilityNumber];
+
+    if (HandleAttackerOrDefenderAbility(ability, battler, target, move)) return TRUE;
     
     switch (ability)
     {
@@ -15672,7 +15341,12 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             if (!(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) break;
             if (Random() % 2) break;
 
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
+        case ABILITY_ARC_FLASH:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBeParalyzed(battler, target)) break;
+            if (Random() % 2) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
             return TRUE;
         
         case ABILITY_RADIO_JAM:
@@ -16012,12 +15686,13 @@ int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move
 
     if (abilityNumber > NUM_ABILITY_SLOTS)
     {
-        // Handle other abilities if needed
-        return FALSE;
+        return HandleMiscAbilityEffects(battler, attacker, move);
     }
 
     GET_ALL_BATTLER_ABILITIES(abilities, battler, battler);
     ability = gBattleScripting.abilityPopupOverwrite = abilities[abilityNumber];
+
+    if (HandleAttackerOrDefenderAbility(ability, battler, attacker, move)) return TRUE;
 
     return HandleDefenderAbilityAs(ability, battler, attacker, move, moveType);
 }
@@ -16471,6 +16146,14 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
 
             BattleScriptCall(BattleScript_WeakArmorActivates);
             return TRUE;
+
+        case ABILITY_ARC_FLASH:
+            if (!ShouldApplyOnHitAffect(attacker)) break;
+            if (!CanBeBurned(attacker)) break;
+            if (Random() % 2) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER)
+            return TRUE;
         
         case ABILITY_CROWNED_SHIELD:
         case ABILITY_STAMINA:
@@ -16661,4 +16344,272 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     }
 
     return FALSE;
+}
+
+int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int move)
+{
+    int effectTargetFlag = opponent == gBattlerAttacker ? MOVE_EFFECT_AFFECTS_USER : 0;
+    int moveType;
+
+    GET_MOVE_TYPE(move, moveType)
+
+    switch (ability)
+    {
+        case ABILITY_BLOOD_STAIN:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (BATTLER_HAS_ABILITY(opponent, ABILITY_BLOOD_STAIN)) break;
+            if (IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent))) break;
+            if (DoesBattlerHaveAbilityShield(opponent)) break;
+
+            UpdateAbilityStateIndicesForNewAbility(opponent, ability);
+            gBattleMons[opponent].ability = ability;
+            gStackBattler1 = opponent;
+            BattleScriptCall(BattleScript_BloodStainActivates);
+            return TRUE;
+        
+        case ABILITY_SOUL_LINKER:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!IsBattlerAlive(battler)) break;
+            if (BATTLER_HAS_ABILITY(opponent, ABILITY_SOUL_LINKER)) break;
+            if (move == MOVE_PAIN_SPLIT) break;
+
+            BattleScriptCall(BattleScript_AttackerSoulLinker);
+            return TRUE;
+        
+        case ABILITY_DAMP:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (IS_BATTLER_OF_TYPE(opponent, TYPE_WATER)) break;
+
+            gBattleMons[opponent].type1 = TYPE_WATER;
+            gBattleMons[opponent].type2 = TYPE_WATER;
+            gBattleMons[opponent].type3 = TYPE_MYSTERY;
+            PREPARE_TYPE_BUFFER(gBattleTextBuff1, TYPE_WATER);
+            BattleScriptCall(opponent == gBattlerAttacker ? BattleScript_AttackerBecameTheTypeFull : BattleScript_DefenderBecameTheTypeFull);
+            return TRUE;
+        
+        case ABILITY_WHITE_NOISE:
+        case ABILITY_STATIC:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!CanBeParalyzed(battler, opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (Random() % 100 >= 30) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS | effectTargetFlag)
+            return TRUE;
+        
+        case ABILITY_SUPER_HOT_GOO:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (!CanBeBurned(opponent)) break;
+            if (Random() % 100 >= 30) break;
+
+            gBattleScripting.moveEffect = MOVE_EFFECT_BURN | effectTargetFlag;
+            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+            SetMoveEffect(FALSE, FALSE);
+
+            if (opponent != gBattlerAttacker || !HandleDefenderAbilityAs(ABILITY_SUPER_HOT_GOO, battler, opponent, move, moveType))
+                BattleScriptCall(BattleScript_AbilityPopUp);
+            
+            return TRUE;
+
+        case ABILITY_FLAME_BODY:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!CanBeBurned(opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (Random() % 100 >= 30) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | effectTargetFlag)
+            return TRUE;
+        
+        case ABILITY_FRAGRANT_DAZE:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!CanBeConfused(opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (Random() % 100 >= 30) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_CONFUSION | effectTargetFlag)
+            return TRUE;
+        
+        case ABILITY_POISON_POINT:
+        case ABILITY_POISON_TOUCH:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!CanBePoisoned(battler, opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (Random() % 100 >= 30) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_POISON | effectTargetFlag)
+            return TRUE;
+
+        case ABILITY_CRYO_PROFICIENCY:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (!CanGetFrostbite(opponent)) break;
+            if (Random() % 100 >= 30) break;
+
+            gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE | effectTargetFlag;
+            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+            SetMoveEffect(FALSE, FALSE);
+
+            if (opponent != gBattlerAttacker || !HandleDefenderAbilityAs(ABILITY_CRYO_PROFICIENCY, battler, opponent, move, moveType))
+                BattleScriptCall(BattleScript_AbilityPopUp);
+            
+            return TRUE;
+
+        case ABILITY_FREEZING_POINT:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!CanGetFrostbite(opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (Random() % 100 >= 30) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_FROSTBITE | effectTargetFlag)
+            return TRUE;
+        
+        case ABILITY_SPIKE_ARMOR:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!CanBleed(opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (Random() % 100 >= 30) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED | effectTargetFlag)
+            return TRUE;
+        
+        case ABILITY_MENACING_SITUATION:
+            if (!ShouldApplyOnHitAffect(opponent)) break;
+            if (!IsMoveMakingContact(move, gBattlerAttacker)) break;
+            if (gVolatileStructs[opponent].fear) break;
+            if (Random() % 100 >= 30) break;
+
+            gStackBattler1 = battler;
+            gStackBattler2 = opponent;
+            BattleScriptCall(BattleScript_AbilitySetFear);
+            return TRUE;
+        
+        case ABILITY_ENTRANCE:
+            {
+            int flag = GetAbilityState(battler, ability);
+            int any = FALSE;
+            int realAttacker = gBattlerAttacker;
+            int realTarget = gBattlerTarget;
+            gBattlerAttacker = battler;
+            SetAbilityState(battler, ability, 0);
+
+            for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++)
+            {
+                if (!(flag & (1 << gBattlerTarget))) continue;
+                if (!IsBattlerAlive(gBattlerTarget)) continue;
+                if (!CanInfatuate(battler, gBattlerTarget)) continue;
+
+                gBattleScripting.moveEffect = MOVE_EFFECT_ATTRACT;
+                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                SetMoveEffect(FALSE, FALSE);
+                any = TRUE;
+            }
+            gBattlerAttacker = realAttacker;
+            gBattlerTarget = realTarget;
+            if (any)
+            {
+                BattleScriptCall(BattleScript_AbilityPopUp);
+                return TRUE;
+            }
+            }
+            break;
+        
+        case ABILITY_POISON_PUPPETEER:
+            {
+            int flag = GetAbilityState(battler, ability);
+            int any = FALSE;
+            int realAttacker = gBattlerAttacker;
+            int realTarget = gBattlerTarget;
+            gBattlerAttacker = battler;
+            SetAbilityState(battler, ability, 0);
+
+            for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++)
+            {
+                if (!(flag & (1 << gBattlerTarget))) continue;
+                if (!IsBattlerAlive(gBattlerTarget)) continue;
+                if (!CanBeConfused(gBattlerTarget)) continue;
+
+                gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
+                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                SetMoveEffect(FALSE, FALSE);
+                any = TRUE;
+            }
+            gBattlerAttacker = realAttacker;
+            gBattlerTarget = realTarget;
+            if (any)
+            {
+                BattleScriptCall(BattleScript_AbilityPopUp);
+                return TRUE;
+            }
+            }
+            break;
+        
+        case ABILITY_BLOOD_BATH:
+            {
+            int flag = GetAbilityState(battler, ability);
+            int any = FALSE;
+            int realAttacker = gBattlerAttacker;
+            int realTarget = gBattlerTarget;
+            gBattlerAttacker = battler;
+            SetAbilityState(battler, ability, 0);
+
+            for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++)
+            {
+                if (!(flag & (1 << gBattlerTarget))) continue;
+                if (!IsBattlerAlive(gBattlerTarget)) continue;
+                if (!gVolatileStructs[gBattlerTarget].fear) continue;
+
+                gBattleScripting.moveEffect = MOVE_EFFECT_FEAR;
+                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                SetMoveEffect(FALSE, FALSE);
+                any = TRUE;
+            }
+            gBattlerAttacker = realAttacker;
+            gBattlerTarget = realTarget;
+            if (any)
+            {
+                BattleScriptCall(BattleScript_AbilityPopUp);
+                return TRUE;
+            }
+            }
+            break;
+        
+        case ABILITY_NONE:
+    }
+
+    return FALSE;
+}
+
+int HandleMiscAbilityEffects(int battler, int opponent, int move)
+{
+    int effect = 0;
+
+    if (gVolatileStructs[battler].parasiticSpores
+        && ShouldApplyOnHitAffect(opponent)
+        && IsMoveMakingContact(move, gBattlerAttacker)
+        && !gVolatileStructs[opponent].parasiticSpores)
+    {
+        gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_PARASITIC_SPORES;
+        gVolatileStructs[opponent].parasiticSpores = TRUE;
+        gStackBattler1 = battler;
+        gStackBattler2 = opponent;
+        BattleScriptCall(BattleScript_ParasiticSporesSpread);
+        if (BATTLER_HAS_ABILITY(battler, ABILITY_PARASITIC_SPORES)) BattleScriptCall(BattleScript_AbilityPopUp);
+        effect++;
+    }
+
+    {
+        u8 commander = IsAbilityOnSide(battler, ABILITY_COMMANDER);
+        if (commander-- && IsBattlerAlive(commander) && GetAbilityState(commander, ABILITY_COMMANDER) == COMMANDER_NEEDS_CANCELLING)
+        {
+            SetAbilityState(commander, ABILITY_COMMANDER, COMMANDER_NOT_ACTIVE);
+            gStatuses3[commander] &= ~STATUS3_SEMI_INVULNERABLE;
+            gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_COMMANDER;
+            gStackBattler1 = commander;
+            BattleScriptCall(BattleScript_CommanderEnds);
+            effect++;
+        }
+    }
 }

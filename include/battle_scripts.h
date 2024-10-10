@@ -191,7 +191,6 @@ extern const u8 BattleScript_SetFearMoveEffect[];
 extern const u8 BattleScript_SetYawnMoveEffect[];
 extern const u8 BattleScript_AbilityStatusEffectSafe[];
 extern const u8 BattleScript_ParasiticSporesSpread[];
-extern const u8 BattleScript_ParasiticSporesSpreadWithAbility[];
 extern const u8 BattleScript_ParasiticSporesDamage[];
 extern const u8 BattleScript_SkyDropEndsEarly[];
 extern const u8 BattleScript_SkyDropInAir[];

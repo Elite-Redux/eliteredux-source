@@ -12620,14 +12620,8 @@ BattleScript_EffectUpperHand::
 	setmoveeffect MOVE_EFFECT_FLINCH
 	goto BattleScript_EffectHit
 
-BattleScript_ParasiticSporesSpreadWithAbility::
-	call BattleScript_ParasiticSpores_LoadBattlers
-	call BattleScript_AbilityPopUp
-	waitmessage B_WAIT_TIME_SHORT
-	goto BattleScript_ParasiticSporesSpread_Main
 BattleScript_ParasiticSporesSpread::
 	call BattleScript_ParasiticSpores_LoadBattlers
-BattleScript_ParasiticSporesSpread_Main:
 	printstring STRINGID_PARASITIC_SPORES_SPREAD
 	waitmessage B_WAIT_TIME_LONG
 	return

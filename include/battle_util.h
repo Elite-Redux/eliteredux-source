@@ -206,6 +206,9 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
 bool32 SetPermanentWeather(u32 weatherEnumId);
 u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 special, u16 moveArg);
 int HandleAttackerAbility(int abilityNumber, int battler, int target, int move);
+int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move);
+int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int move);
+int HandleMiscAbilityEffects(int battler, int opponent, int move);
 
 #define GET_ALL_BATTLER_ABILITIES(abilitiesArray, battler, battlerAtk) \
 GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk) \
