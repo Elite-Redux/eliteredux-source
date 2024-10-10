@@ -694,6 +694,7 @@ static const u8 sAbilitySupersweetSyrupDescription[] = _("Can't lose its item. D
 static const u8 sAbilityLuckyHaloDescription[] = _("Negates self stat drops. Survives\nthe first hit that would KO it.");
 static const u8 sAbilityTrashHeapDescription[] = _("Corrosion + Toxic Spill.");
 static const u8 sAbilitySludgyMixDescription[] = _("Intoxicate + Punk Rock.");
+static const u8 sAbilityOverwatchDescription[] = _("Combines On the Prowl &\nStakeout.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1424,6 +1425,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_LUCKY_HALO] = _("Lucky Halo"),
     [ABILITY_TRASH_HEAP] = _("Trash Heap"),
     [ABILITY_SLUDGY_MIX] = _("Sludgy Mix"),
+    [ABILITY_OVERWATCH] = _("Overwatch"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2155,4 +2157,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_LUCKY_HALO] = sAbilityLuckyHaloDescription,
     [ABILITY_TRASH_HEAP] = sAbilityTrashHeapDescription,
     [ABILITY_SLUDGY_MIX] = sAbilitySludgyMixDescription,
+    [ABILITY_OVERWATCH] = sAbilityOverwatchDescription,
 };

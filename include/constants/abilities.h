@@ -746,8 +746,9 @@
 #define ABILITY_LUCKY_HALO 724 // Negates self stat drops. Survives the first hit that would KO it.
 #define ABILITY_TRASH_HEAP 725 // Corrosion + Toxic Spill.
 #define ABILITY_SLUDGY_MIX 726 // Intoxicate + Punk Rock.
+#define ABILITY_OVERWATCH 727 // Combines On the Prowl & Stakeout.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_SLUDGY_MIX + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_OVERWATCH + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

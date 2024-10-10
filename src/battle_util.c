@@ -10126,6 +10126,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_STAKEOUT:
+        case ABILITY_OVERWATCH:
             if (gVolatileStructs[battlerDef].isFirstTurn == 2) MUL(2.0);
             return;
         
@@ -16141,6 +16142,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             return TRUE;
         
         case ABILITY_ON_THE_PROWL:
+        case ABILITY_OVERWATCH:
             gVolatileStructs[battler].onTheProwl = gVolatileStructs[battler].started.onTheProwl = TRUE;
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_ON_THE_PROWL;
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
