@@ -53,35 +53,35 @@
       "y": 5,
       "elevation": 0,
       "dest_map": "MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 27,
       "y": 49,
       "elevation": 0,
       "dest_map": "MAP_EVER_GRANDE_CITY_POKEMON_CENTER_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 18,
       "y": 41,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 18,
       "y": 27,
       "elevation": 0,
       "dest_map": "MAP_VICTORY_ROAD_1F",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 25,
       "y": 43,
       "elevation": 0,
       "dest_map": "MAP_EVERGRANDE_CITY_MONO_CHAMP_ROOM_1",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [
