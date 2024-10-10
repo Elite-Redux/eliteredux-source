@@ -1,0 +1,6 @@
+mapscripts Route111_Desert_MapScripts {}
+
+text Route111_Desert_Text {
+    "Hi, I'm some text.\n"
+    "I'm global and can be accessed in C code."
+}
