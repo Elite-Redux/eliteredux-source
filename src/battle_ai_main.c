@@ -618,78 +618,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         {
             RETURN_SCORE_MINUS(20);
         }
-        
-        // Immunity checks
-        //Levitate
-        if (moveType == TYPE_GROUND && 
-           BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_LEVITATE) && 
-           //Ability Check
-           !DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move) &&
-           //Other Checks
-           !GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_IRON_BALL &&
-           !IsGravityActive() &&
-           !(gStatuses3[battlerDef] & STATUS3_ROOTED) && 
-           !(gStatuses3[battlerDef] & STATUS3_SMACKED_DOWN) &&
-           !TestMoveFlags(move, FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING) &&
-           !(BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))){
-            RETURN_SCORE_MINUS(20);
-        }
-
-        //Dragonfly
-        if (moveType == TYPE_GROUND && 
-           BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_DRAGONFLY) && 
-           //Ability Check
-           !DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move) &&
-           //Other Checks
-           !GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_IRON_BALL &&
-           !IsGravityActive() &&
-           !(gStatuses3[battlerDef] & STATUS3_ROOTED) && 
-           !(gStatuses3[battlerDef] & STATUS3_SMACKED_DOWN) &&
-           !TestMoveFlags(move, FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING) &&
-           !(BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))){
-            RETURN_SCORE_MINUS(20);
-        }
-
-        //Aerialist
-        if (moveType == TYPE_GROUND && 
-           BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_AERIALIST) && 
-           //Ability Check
-           !DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move) &&
-           //Other Checks
-           !GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_IRON_BALL &&
-           !IsGravityActive() &&
-           !(gStatuses3[battlerDef] & STATUS3_ROOTED) && 
-           !(gStatuses3[battlerDef] & STATUS3_SMACKED_DOWN) &&
-           !TestMoveFlags(move, FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING) &&
-           !(BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))){
-            RETURN_SCORE_MINUS(20);
-        }
-
-        //Air Balloon
-        if (moveType == TYPE_GROUND && 
-           AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_AIR_BALLOON && 
-           //Other Checks
-           !GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_IRON_BALL && // This is not needed but still
-           !IsGravityActive() &&
-           !(gStatuses3[battlerDef] & STATUS3_ROOTED) && 
-           !(gStatuses3[battlerDef] & STATUS3_SMACKED_DOWN) &&
-           !TestMoveFlags(move, FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING) &&
-           !(BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))){
-            RETURN_SCORE_MINUS(20);
-        }
-
-        //Magnet Rise
-        if (moveType == TYPE_GROUND && 
-           (gStatuses3[battlerDef] & (STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS)) && 
-           //Other Checks
-           !GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_IRON_BALL &&
-           !IsGravityActive() &&
-           !(gStatuses3[battlerDef] & STATUS3_ROOTED) && 
-           !(gStatuses3[battlerDef] & STATUS3_SMACKED_DOWN) &&
-           !TestMoveFlags(move, FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING) &&
-           !(BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))){
-            RETURN_SCORE_MINUS(20);
-        }
 
         if (moveType == TYPE_FLYING
           && BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_AERODYNAMICS))
@@ -1922,12 +1850,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_SAFEGUARD:
             if (gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_SAFEGUARD
               || PartnerHasSameMoveEffectWithoutTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove))
-                score -= 10;
-            break;
-        case EFFECT_MAGNITUDE:
-            if (BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_LEVITATE)
-                || BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_DRAGONFLY)
-                || BATTLER_HAS_ABILITY_FAST_AI(battlerDef, ABILITY_AERIALIST))
                 score -= 10;
             break;
         case EFFECT_PARTING_SHOT:

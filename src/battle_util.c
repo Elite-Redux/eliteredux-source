@@ -11698,7 +11698,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
         if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_LEVITATE))
             immunityAbility = ABILITY_LEVITATE;
         else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_HUGE_WINGS))
-            immunityAbility = ABILITY_LEVITATE;
+            immunityAbility = ABILITY_HUGE_WINGS;
         else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_AERIALIST))
             immunityAbility = ABILITY_AERIALIST;
         else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DRAGONFLY))

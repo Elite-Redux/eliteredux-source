@@ -1264,32 +1264,7 @@ bool32 AI_IsTerrainAffected(u8 battlerId, u32 flags)
 // different from IsBattlerGrounded in that we don't always know battler's hold effect or ability
 bool32 AI_IsBattlerGrounded(u8 battlerId)
 {
-    u32 holdEffect = AI_GetHoldEffect(battlerId);
-    
-    if (holdEffect == HOLD_EFFECT_IRON_BALL)
-        return TRUE;
-    else if (IsGravityActive())
-        return TRUE;
-    else if (gStatuses3[battlerId] & STATUS3_ROOTED)
-        return TRUE;
-    else if (gStatuses3[battlerId] & STATUS3_SMACKED_DOWN)
-        return TRUE;
-    else if (gStatuses3[battlerId] & STATUS3_TELEKINESIS)
-        return FALSE;
-    else if (gStatuses3[battlerId] & STATUS3_MAGNET_RISE)
-        return FALSE;
-    else if (holdEffect == HOLD_EFFECT_AIR_BALLOON)
-        return FALSE;
-    else if (BATTLER_HAS_ABILITY_FAST_AI(battlerId, ABILITY_LEVITATE))
-        return FALSE;
-    else if (BATTLER_HAS_ABILITY_FAST_AI(battlerId, ABILITY_DRAGONFLY))
-        return FALSE;
-    else if (BATTLER_HAS_ABILITY_FAST_AI(battlerId, ABILITY_AERIALIST))
-        return FALSE;
-    else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING))
-        return FALSE;
-    else
-        return TRUE;
+    return IsBattlerGrounded(battlerId);
 }
 
 bool32 DoesBattlerIgnoreAbilityChecks(u8 battler, u8 battlerDef, u16 move)
@@ -2546,6 +2521,7 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler)
         && (ability == ABILITY_LEVITATE || MonHasInnate(mon, ABILITY_LEVITATE, isEnemyMon)
             || ability == ABILITY_AERIALIST || MonHasInnate(mon, ABILITY_AERIALIST, isEnemyMon)
             || ability == ABILITY_DRAGONFLY || MonHasInnate(mon, ABILITY_DRAGONFLY, isEnemyMon)
+            || ability == ABILITY_HOVER || MonHasInnate(mon, ABILITY_HOVER, isEnemyMon)
             || holdEffect == HOLD_EFFECT_AIR_BALLOON
             || gBaseStats[species].type1 == TYPE_FLYING || gBaseStats[species].type2 == TYPE_FLYING))
         return FALSE;

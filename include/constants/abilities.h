@@ -331,7 +331,7 @@
 #define ABILITY_ICE_AGE 309 // Adds Ice type to itself.
 #define ABILITY_HALF_DRAKE 310 // Adds Dragon type to itself.
 #define ABILITY_LIQUIFIED 311 // Takes 1/2 dmg from contact moves but Water moves hurt it 2x more.
-#define ABILITY_DRAGONFLY 312 // Combines Half Drake & Levitate.
+#define ABILITY_DRAGONFLY 312 // Adds Dragon type to itself. Avoids Ground attacks.
 #define ABILITY_DRAGONSLAYER 313 // Deals 1.5x damage to Dragons. Takes .5x damage from Dragons.
 #define ABILITY_MOUNTAINEER 314 // Immune to Rock-type attacks and Stealth Rock damage.
 #define ABILITY_HYDRATE 315 // Normal-type moves become Water- type moves and get a 1.1x boost.
@@ -734,13 +734,13 @@
 #define ABILITY_FLAME_SHIELD 712 // Takes 35% less damage from Super-effective moves.
 #define ABILITY_AQUATIC_DWELLER 713 // Boosts the power of Water-type moves by 1.5x.
 #define ABILITY_APPLE_PIE 714 // Self Sufficient + Ripen.
-#define ABILITY_HOVER 715 // Psychic Type added + Levitates.
-#define ABILITY_DEPRAVITY 716 // Merciless + Overcharge.
+#define ABILITY_HOVER 715 // Adds Psychic type to itself. Avoids Ground attacks.
+#define ABILITY_DEPRAVITY 716 // Combines Merciless & Overcharge.
 #define ABILITY_WILDFIRE 717 // Attacks with Fire Spin on switch-in.
 #define ABILITY_JUMP_SCARE 718 // Attacks with Astonish on switch-in.
 #define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
 #define ABILITY_STUN_SHOCK 720 // Attacks have a 60% chance to Paralyze or Poison.
-#define ABILITY_RAGING_GODDESS 721 // Rampage + Hyper Aggressive.
+#define ABILITY_RAGING_GODDESS 721 // Combines Rampage & Hyper Aggressive.
 #define ABILITY_WHIPLASH 722 // Physical attacks have a 50% chance to lower Defense.
 #define ABILITY_SUPERSWEET_SYRUP 723 // Can't lose its item. Disables foe's item for 2 turns on contact.
 #define ABILITY_LUCKY_HALO 724 // Negates self stat drops. Survives the first hit that would KO it.
