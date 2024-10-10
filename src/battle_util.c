@@ -13121,7 +13121,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     
     // Aerodynamics
     if (BattlerHasAbility(battler, battlerAtk, ABILITY_AERODYNAMICS)){
-        if (move != MOVE_NONE && moveType == TYPE_FLYING){
+        if (moveType == TYPE_FLYING){
             *statId = STAT_SPEED;
             *ability = ABILITY_AERODYNAMICS;
             return 2;
@@ -13130,7 +13130,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     
     // Volt Absorb
     if (BattlerHasAbility(battler, battlerAtk, ABILITY_VOLT_ABSORB)){
-        if (move != MOVE_NONE && moveType == TYPE_ELECTRIC){
+        if (moveType == TYPE_ELECTRIC){
             *ability = ABILITY_VOLT_ABSORB;
             return 1;
         }
@@ -13138,7 +13138,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
 
     // Earth Eater
     if (BattlerHasAbility(battler, battlerAtk, ABILITY_EARTH_EATER)){
-        if (move != MOVE_NONE && moveType == TYPE_GROUND){
+        if (moveType == TYPE_GROUND){
             *ability = ABILITY_EARTH_EATER;
             return 1;
         }
@@ -13146,7 +13146,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     
     // Water Absorb
     if (BattlerHasAbility(battler, battlerAtk, ABILITY_WATER_ABSORB)){
-        if (move != MOVE_NONE && moveType == TYPE_WATER){
+        if (moveType == TYPE_WATER){
             *ability = ABILITY_WATER_ABSORB;
             return 1;
         }
@@ -13154,7 +13154,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     
     // Water Absorb
     if (BattlerHasAbility(battler, battlerAtk, ABILITY_OLD_MARINER)){
-        if (move != MOVE_NONE && moveType == TYPE_WATER){
+        if (moveType == TYPE_WATER){
             *ability = ABILITY_OLD_MARINER;
             return 1;
         }
@@ -13162,7 +13162,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     
     // Dry Skin
     if (BattlerHasAbility(battler, battlerAtk, ABILITY_DRY_SKIN)){
-        if (move != MOVE_NONE && moveType == TYPE_WATER){
+        if (moveType == TYPE_WATER){
             *ability = ABILITY_DRY_SKIN;
             return 1;
         }
@@ -13170,7 +13170,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     
     // Poison Absorb
     if (BattlerHasAbility(battler, battlerAtk, ABILITY_POISON_ABSORB)){
-        if (move != MOVE_NONE && moveType == TYPE_POISON){
+        if (moveType == TYPE_POISON){
             *ability = ABILITY_POISON_ABSORB;
             return 1;
         }
@@ -13195,8 +13195,8 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     }
     
     // Flash Fire
-    if (BattlerHasAbility(battler, battlerAtk, ABILITY_FLASH_FIRE)){
-        if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE) && B_FLASH_FIRE_FROZEN <= GEN_4))
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_FLASH_FIRE)) {
+        if (moveType == TYPE_FIRE)
         {
             *ability = ABILITY_FLASH_FIRE;
             return 3;
@@ -13204,11 +13204,16 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     }
 
     // Elemental Vortex (will also compress this into flash fire later)
-    if (BattlerHasAbility(battler, battlerAtk, ABILITY_ELEMENTAL_VORTEX)){
-        if (moveType == TYPE_FIRE && !((gBattleMons[battler].status1 & STATUS1_FREEZE) && B_FLASH_FIRE_FROZEN <= GEN_4))
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_ELEMENTAL_VORTEX)) {
+        if (moveType == TYPE_FIRE)
         {
             *ability = ABILITY_ELEMENTAL_VORTEX;
             return 3;
+        }
+
+        if (moveType == TYPE_WATER){
+            *ability = ABILITY_ELEMENTAL_VORTEX;
+            return 1;
         }
     }
 

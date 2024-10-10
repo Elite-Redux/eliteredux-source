@@ -2005,11 +2005,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
             break;
         }
     }
-	else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_FATAL_PRECISION, atkAbility)
-        && !IS_MOVE_STATUS(move)
-        && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0))
-        return 101;
-    else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_FINAL_BLOW, atkAbility)
+	else if ((BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_FATAL_PRECISION, atkAbility) || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_FINAL_BLOW, atkAbility))
         && !IS_MOVE_STATUS(move)
         && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0))
         return 101;
@@ -2302,11 +2298,11 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                     + BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk)
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PERFECTIONIST) && gBattleMoves[move].power <= 50 && gBattleMoves[move].power > 0)
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYPER_CUTTER))
-                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PRECISE_FIST)  && IS_IRON_FIST(battlerAtk, move))
+                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PRECISE_FIST) && IS_IRON_FIST(battlerAtk, move))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SUPER_LUCK))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER))
                     + 2 * (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BATTLE_AURA))
-                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WAY_OF_PRECISION)  && IS_IRON_FIST(battlerAtk, move))
+                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WAY_OF_PRECISION) && IS_IRON_FIST(battlerAtk, move))
                     + gVolatileStructs[battlerAtk].critBoost;
 
         if (critChance >= ARRAY_COUNT(sCriticalHitChance))
@@ -4176,12 +4172,10 @@ static void Cmd_seteffectwithchance(void)
         //percentChance = percentChance * 5;
 
     //Precise fist boosts
-    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRECISE_FIST)
-             && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
+    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRECISE_FIST) && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
         percentChance = percentChance * 5;
 
-    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_WAY_OF_PRECISION)
-             && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
+    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_WAY_OF_PRECISION) && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
         percentChance = percentChance * 5;
 
     //Frostbite are more likely to occour during Hail
