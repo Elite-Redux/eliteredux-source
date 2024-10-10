@@ -239,7 +239,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
 static void GetPlayerPosition(struct MapPosition *position)
 {
     PlayerGetDestCoords(&position->x, &position->y);
-    position->height = PlayerGetZCoord();
+    position->height = PlayerGetElevation();
 }
 
 static void GetInFrontOfPlayerPosition(struct MapPosition *position)
@@ -248,8 +248,8 @@ static void GetInFrontOfPlayerPosition(struct MapPosition *position)
 
     GetXYCoordsOneStepInFrontOfPlayer(&position->x, &position->y);
     PlayerGetDestCoords(&x, &y);
-    if (MapGridGetZCoordAt(x, y) != 0)
-        position->height = PlayerGetZCoord();
+    if (MapGridGetElevationAt(x, y) != 0)
+        position->height = PlayerGetElevation();
     else
         position->height = 0;
 }
@@ -455,7 +455,7 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
         return EventScript_TrainerHillTimer;
 
     height = position->height;
-    if (height == MapGridGetZCoordAt(position->x, position->y))
+    if (height == MapGridGetElevationAt(position->x, position->y))
     {
         if (MetatileBehavior_IsSecretBasePC(metatileBehavior) == TRUE)
             return SecretBase_EventScript_PC;

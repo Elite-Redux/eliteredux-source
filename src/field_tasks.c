@@ -375,7 +375,7 @@ static void PacifidlogBridgePerStepCallback(u8 taskId)
 
 static void SetLoweredForetreeBridgeMetatile(s16 x, s16 y)
 {
-    u8 z = PlayerGetZCoord();
+    u8 z = PlayerGetElevation();
     if (!(z & 1))
     {
         switch (MapGridGetMetatileIdAt(x, y))
@@ -392,7 +392,7 @@ static void SetLoweredForetreeBridgeMetatile(s16 x, s16 y)
 
 static void SetNormalFortreeBridgeMetatile(s16 x, s16 y)
 {
-    u8 z = PlayerGetZCoord();
+    u8 z = PlayerGetElevation();
     if (!(z & 1))
     {
         switch (MapGridGetMetatileIdAt(x, y))
@@ -437,7 +437,7 @@ static void FortreeBridgePerStepCallback(u8 taskId)
 
             isFortreeBridgeCur = MetatileBehavior_IsFortreeBridge(MapGridGetMetatileBehaviorAt(x, y));
             isFortreeBridgePrev = MetatileBehavior_IsFortreeBridge(MapGridGetMetatileBehaviorAt(x2, y2));
-            z = PlayerGetZCoord();
+            z = PlayerGetElevation();
             flag = 0;
             if ((u8)(z & 1) == 0)
                 flag = 1;
