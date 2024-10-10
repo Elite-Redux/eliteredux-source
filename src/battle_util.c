@@ -9124,6 +9124,8 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
     else if ((BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNSEEN_FIST) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FINAL_BLOW))
         && (gBattleMoves[move].flags & FLAG_MAKES_CONTACT || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
         return FALSE;
+    else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DEMOLITIONIST) && gVolatileStructs[gBattlerAttacker].readiedAction)
+        return FALSE;
     else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         return FALSE;
     else if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
@@ -13839,6 +13841,18 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             ABILITY_STATUS_EFFECT(MOVE_EFFECT_DISABLE)
             return TRUE;
         
+        case ABILITY_DEMOLITIONIST:
+            if (!DidMoveHit()) break;
+            if (!gVolatileStructs[battler].readiedAction) break;
+            {
+            int opposingSide = GetBattlerSide(target);
+            if (!gSideTimers[opposingSide].reflectTimer && !gSideTimers[opposingSide].lightscreenTimer && !gSideTimers[opposingSide].auroraVeilTimer) break;
+            BattleScriptCall(BattleScript_AttackerShattersScreens);
+            BattleScriptCall(BattleScript_AbilityPopUp);
+            return TRUE;
+            }
+
+        
         case ABILITY_PINNACLE_BLADE:
             if (!DidMoveHit()) break;
             if (!(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)) break;
@@ -16148,6 +16162,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
             return TRUE;
         
+        case ABILITY_DEMOLITIONIST:
         case ABILITY_READIED_ACTION:
             gVolatileStructs[battler].readiedAction = gVolatileStructs[battler].started.readiedAction = TRUE;
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_READIED_ACTION;
