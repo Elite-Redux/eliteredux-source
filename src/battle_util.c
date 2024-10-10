@@ -10402,6 +10402,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (IS_MOVE_SPECIAL(move)) MUL(.5);
             return;
         
+        case ABILITY_APPLE_ENLIGHTENMENT:
         case ABILITY_FUR_COAT:
             if (IS_MOVE_PHYSICAL(move)) MUL(.5);
             return;
