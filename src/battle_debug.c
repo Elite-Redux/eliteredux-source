@@ -213,6 +213,10 @@ static const u8 sText_MiracleEye[] = _("Miracle Eye");
 static const u8 sText_AquaRing[] = _("Aqua Ring");
 static const u8 sText_LaserFocus[] = _("Laser Focused");
 static const u8 sText_Electrified[] = _("Electrified");
+static const u8 sText_Coiled[] = _("Coiled");
+static const u8 sText_SaltCure[] = _("SaltCure");
+static const u8 sText_GhastlyEcho[] = _("GhastlyEcho");
+static const u8 sText_Fear[] = _("Fear");
 static const u8 sText_AuroraVeil[] = _("Aurora Veil");
 static const u8 sText_LuckyChant[] = _("Lucky Chant");
 static const u8 sText_Tailwind[] = _("Tailwind");
@@ -309,7 +313,11 @@ static const struct BitfieldInfo sStatus3Bitfield[] =
 
 static const struct BitfieldInfo sStatus4Bitfield[] =
 {
-    {/*Electrified*/ 1, 0,}
+    {/*Electrified*/ 1, 0},
+    {/*Coiled*/ 1, 2},
+    {/*Salt Cure*/ 1, 3},
+    {/*Ghastly Echo*/ 1, 4},
+    {/*Fear*/ 1, 7},
 };
 
 static const struct BitfieldInfo sAIBitfield[] =
@@ -432,6 +440,10 @@ static const struct ListMenuItem sStatus3ListItems[] =
 static const struct ListMenuItem sStatus4ListItems[] =
 {
     {sText_Electrified, 0},
+    {sText_Coiled, 1},
+    {sText_SaltCure, 2},
+    {sText_GhastlyEcho, 3},
+    {sText_Fear, 4},
 };
 
 static const struct ListMenuItem sSideStatusListItems[] =
