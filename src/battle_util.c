@@ -14593,10 +14593,8 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             return TRUE;
 
         case ABILITY_BALLOON_BOMBER:
-            if (HandleDefenderAbilityAs(ABILITY_INFLATABLE, battler, attacker, move, moveType)
-                || HandleDefenderAbilityAs(ABILITY_AFTERMATH, battler, attacker, move, moveType))
-                return TRUE;
-            
+            if (HandleDefenderAbilityAs(ABILITY_INFLATABLE, battler, attacker, move, moveType)) return TRUE;
+            if (HandleDefenderAbilityAs(ABILITY_AFTERMATH, battler, attacker, move, moveType)) return TRUE;
             break;
         
         case ABILITY_WATER_COMPACTION:
