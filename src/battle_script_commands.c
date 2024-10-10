@@ -2278,7 +2278,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
              || gBattleMoves[move].effect == EFFECT_ALWAYS_CRIT
              || (gBattleMoves[move].alwaysCrit)
              || (gBattleMoves[move].effect == EFFECT_FLAIL && gBattleMons[battlerAtk].hp <= gBattleMons[battlerAtk].maxHP / 2)
-             || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MERCILESS) || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEPRAVITY))  &&
+             || ((BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MERCILESS) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEPRAVITY))  &&
              (( gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY)                   ||
              (  gBattleMons[battlerDef].statStages[STAT_SPEED] < DEFAULT_STAT_STAGE) ||
              (  gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS)                 ||
@@ -8540,8 +8540,9 @@ bool32 CanParalyzeType(u8 battlerAttacker, u8 battlerTarget)
 	// New Code added for Ability Overcharge
 	if (IS_BATTLER_OF_TYPE(battlerTarget, TYPE_ELECTRIC))
 	{
-		if (((GetBattlerAbility(battlerAttacker) == ABILITY_OVERCHARGE) ||
-              BattlerHasInnate(battlerAttacker, ABILITY_OVERCHARGE)))
+		if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_OVERCHARGE))
+			return TRUE;
+		if (BATTLER_HAS_ABILITY(battlerAttacker, ABILITY_DEPRAVITY))
 			return TRUE;
 		if (B_PARALYZE_ELECTRIC >= GEN_6)
 			return FALSE;
