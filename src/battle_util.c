@@ -10193,7 +10193,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
 
         case ABILITY_AQUATIC_DWELLER:
-            if (moveType == TYPE_FIRE) MUL(1.5);
+            if (moveType == TYPE_WATER) MUL(1.5);
             return;
         
         case ABILITY_ELECTRIC_BURST:
