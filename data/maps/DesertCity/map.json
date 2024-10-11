@@ -14,9 +14,9 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "down",
-      "offset": -50,
-      "map": "MAP_ROUTE111_DESERT"
+      "map": "MAP_ROUTE111_DESERT",
+      "offset": 0,
+      "direction": "down"
     }
   ],
   "object_events": [

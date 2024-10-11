@@ -4724,7 +4724,7 @@
     {
       "id": "LAYOUT_DESERT_CITY",
       "name": "DesertCity_Layout",
-      "width": 30,
+      "width": 80,
       "height": 40,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Desert_Area",

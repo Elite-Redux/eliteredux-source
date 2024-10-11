@@ -14,19 +14,19 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "up",
+      "map": "MAP_ROUTE106",
       "offset": -60,
-      "map": "MAP_ROUTE106"
+      "direction": "up"
     },
     {
-      "direction": "right",
+      "map": "MAP_ROUTE107",
       "offset": 0,
-      "map": "MAP_ROUTE107"
+      "direction": "right"
     },
     {
-      "direction": "left",
+      "map": "MAP_DEWFORD_MEADOW",
       "offset": 10,
-      "map": "MAP_DEWFORD_MEADOW"
+      "direction": "left"
     }
   ],
   "object_events": [
