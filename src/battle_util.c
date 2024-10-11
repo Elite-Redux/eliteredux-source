@@ -1135,7 +1135,6 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_BAD_OMEN] = 1,
     [ABILITY_FLUFFIEST] = 1,
     [ABILITY_IRON_GIANT] = 1,
-    [ABILITY_ENLIGHTENED] = 1,
     [ABILITY_WAY_OF_PRECISION] = 1,
     [ABILITY_HUGE_WINGS] = 1,
     [ABILITY_PATCHWORK] = 1,
@@ -11039,7 +11038,7 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, ABILITY_GROUND_SHOCK);
     }
-	else if (moveType == TYPE_ELECTRIC && defType == TYPE_ELECTRIC && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_OVERCHARGE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEPRAVITY))
+	else if (moveType == TYPE_ELECTRIC && defType == TYPE_ELECTRIC && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_OVERCHARGE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEPRAVITY)))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective

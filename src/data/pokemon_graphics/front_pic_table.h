@@ -1748,8 +1748,6 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(AMPHAROS_PARTNER_B, gMonFrontPic_Ampharos),
     SPECIES_SPRITE(AMPHAROS_PARTNER_C, gMonFrontPic_Ampharos),
     SPECIES_SPRITE(AMPHAROS_PARTNER_MEGA_C, gMonFrontPic_AmpharosMega),
-    SPECIES_SPRITE(AMPHAROS_PARTNER_MEGA_C, gMonFrontPic_AmpharosMega),
-    SPECIES_SPRITE(AMPHAROS_PARTNER_MEGA_C, gMonFrontPic_AmpharosMega),
 
     SPECIES_SPRITE(VOLCARONA_PARTNER, gMonFrontPic_Volcarona),
     SPECIES_SPRITE(VOLCARONA_PARTNER_B, gMonFrontPic_Volcarona),
@@ -1759,14 +1757,10 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(KANGASKHAN_PARTNER_B, gMonFrontPic_Kangaskhan),
     SPECIES_SPRITE(KANGASKHAN_PARTNER_C, gMonFrontPic_Kangaskhan),
     SPECIES_SPRITE(KANGASKHAN_PARTNER_MEGA_C, gMonFrontPic_KangaskhanMega),
-    SPECIES_SPRITE(KANGASKHAN_PARTNER_MEGA_C, gMonFrontPic_KangaskhanMega),
-    SPECIES_SPRITE(KANGASKHAN_PARTNER_MEGA_C, gMonFrontPic_KangaskhanMega),
 
     SPECIES_SPRITE(DRAGONITE_PARTNER, gMonFrontPic_Dragonite),
     SPECIES_SPRITE(DRAGONITE_PARTNER_B, gMonFrontPic_Dragonite),
     SPECIES_SPRITE(DRAGONITE_PARTNER_C, gMonFrontPic_Dragonite),
-    SPECIES_SPRITE(DRAGONITE_PARTNER_MEGA_C, gMonFrontPic_DragoniteMega),
-    SPECIES_SPRITE(DRAGONITE_PARTNER_MEGA_C, gMonFrontPic_DragoniteMega),
     SPECIES_SPRITE(DRAGONITE_PARTNER_MEGA_C, gMonFrontPic_DragoniteMega),
 
     SPECIES_SPRITE(REUNICLUS_PARTNER, gMonFrontPic_Reuniclus),
@@ -1776,8 +1770,6 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(KINGDRA_PARTNER, gMonFrontPic_Kingdra),
     SPECIES_SPRITE(KINGDRA_PARTNER_B, gMonFrontPic_Kingdra),
     SPECIES_SPRITE(KINGDRA_PARTNER_C, gMonFrontPic_Kingdra),
-    SPECIES_SPRITE(KINGDRA_PARTNER_MEGA_C, gMonFrontPic_KingdraMega),
-    SPECIES_SPRITE(KINGDRA_PARTNER_MEGA_C, gMonFrontPic_KingdraMega),
     SPECIES_SPRITE(KINGDRA_PARTNER_MEGA_C, gMonFrontPic_KingdraMega),
     
 };

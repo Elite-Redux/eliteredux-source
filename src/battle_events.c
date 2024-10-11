@@ -18,7 +18,7 @@
 
 
 static u8 gNbBattleEvents;
-u8 gLastBattleEvent;
+EWRAM_DATA u8 gLastBattleEvent = 0;
 
 EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
 

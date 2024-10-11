@@ -11121,8 +11121,8 @@ static void Cmd_various(void)
         return;
     case VARIOUS_TRY_REVIVAL_BLESSING:
         {
-            ptr = READ_PTR_INC;
             u8 side = GetBattlerSide(gBattlerAttacker);
+            ptr = READ_PTR_INC;
 
             if (GetFirstFaintedPartyIndex(gActiveBattler) == PARTY_SIZE)
             {
@@ -11337,9 +11337,8 @@ static void Cmd_various(void)
             ptr = READ_PTR_INC;
 
             if (!IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)
-                || ((IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)
-                    || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC)))
-                    && !gVolatileStructs[gActiveBattler].trickOrTreat)
+                || ((IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST) || IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_PSYCHIC))
+                    && !gVolatileStructs[gActiveBattler].trickOrTreat))
             {
                 gBattlescriptCurrInstr = ptr;
                 return;

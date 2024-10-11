@@ -543,7 +543,6 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_FERALIGATR] =               &gObjectEventGraphicsInfo_Feraligatr,
     [OBJ_EVENT_GFX_BANEFUL] =                  &gObjectEventGraphicsInfo_Baneful,
     [OBJ_EVENT_GFX_HOODED] =                   &gObjectEventGraphicsInfo_Hooded,
-    [OBJ_EVENT_GFX_MAGMA_ADMIN_F] =            &gObjectEventGraphicsInfo_MagmaAdminF,
 };
 
 const struct ObjectEventGraphicsInfo *const gMauvilleOldManGraphicsInfoPointers[] = {

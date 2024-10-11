@@ -687,7 +687,6 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_BLASTOISINITE_X]  = {gItemIcon_Blastoisinite, gItemIconPalette_Blastoisinite}, // to be updated
     [ITEM_CHARIZARDITE_Z]  = {gItemIcon_CharizarditeY, gItemIconPalette_CharizarditeY}, // to be updated
     [ITEM_SNORLAXITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
-    [ITEM_GENGARITE]      = {gItemIcon_Gengarite, gItemIconPalette_Gengarite},
     [ITEM_RILLABOOMITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_CINDERACEITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_INTELEONITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
