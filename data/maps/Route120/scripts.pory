@@ -577,7 +577,7 @@ script Route120_EventScript_MawootadNPCAskQuestion{
     // the more trainers have been skipped, the harder the question will be
     faceplayer
     if (var(VAR_TEMP_2) >= 2){ // Totally unfair question
-        msgbox(format("Alright, how many letters i and o have i have been saying since now?"))
+        msgbox(format("Alright, how many i's and o's have I said since now?"))
         multichoice2(0, 0, MultiChoice_MawootadTotallyUnfairQuestion)
         switch(var(VAR_RESULT)){
             case 12:
