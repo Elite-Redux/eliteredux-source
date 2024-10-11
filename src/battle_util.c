@@ -14505,6 +14505,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
             }
             break;
         
+        case ABILITY_BLOODLUST:
         case ABILITY_BLOOD_BATH:
             {
             int flag = GetAbilityState(battler, ability);

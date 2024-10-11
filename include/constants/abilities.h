@@ -657,7 +657,7 @@
 #define ABILITY_PYROCLASTIC_FLOW 635 // Combines Molten Down & Corrosion.
 #define ABILITY_BLOOD_BATH 636 // Immune to bleed. Inflict fear when inflicting bleed.
 #define ABILITY_BATTLE_AURA 637 // Sharply increases the critical hit rate for all while on the field.
-#define ABILITY_BLOODLUST 638 // Immune to bleed. +1 priority vs bleeding foes.
+#define ABILITY_BLOODLUST 638 // Blood Bath + Jaws of Carnage.
 #define ABILITY_PIERCING_SOLO 639 // Sound moves have a 30% chance to cause bleeding.
 #define ABILITY_RHYTHMIC 640 // Deals 10% more damage for each repeated move use.
 #define ABILITY_CHUNKY_BASS_LINE 641 // Triggers a 40BP Earthquake after using a sound move.

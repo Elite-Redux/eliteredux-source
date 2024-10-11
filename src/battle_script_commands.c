@@ -9398,14 +9398,15 @@ static void Cmd_various(void)
         break;
     case VARIOUS_TRY_ACTIVATE_SOUL_EATER:
         if (BATTLER_HEALING_BLOCKED(gActiveBattler)) break;
-        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_JAWS_OF_CARNAGE) ||
-            BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SOUL_EATER)      ||
-            BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SCAVENGER)       ||
-            BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PREDATOR)        ||
-            BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_APEX_PREDATOR)   ||
-            BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HUNTERS_HORN)    ||
-            BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MAGMA_EATER)     ||
-            BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LOOTER)) {
+        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_JAWS_OF_CARNAGE)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SOUL_EATER)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BLOODLUST)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SCAVENGER)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PREDATOR)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_APEX_PREDATOR)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HUNTERS_HORN)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MAGMA_EATER)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LOOTER)) {
             bool8 curehalfhealth = FALSE;
             bool8 cureHorn = FALSE;
             if (!HasAttackerFaintedTarget() && NoAliveMonsForEitherParty())
@@ -9417,6 +9418,10 @@ static void Cmd_various(void)
 
             if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_JAWS_OF_CARNAGE)){
                 gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_JAWS_OF_CARNAGE;
+                curehalfhealth = TRUE;
+            }
+            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BLOODLUST)){
+                gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_BLOODLUST;
                 curehalfhealth = TRUE;
             }
             else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SOUL_EATER))
@@ -10722,6 +10727,7 @@ static void Cmd_various(void)
         gStatuses4[gActiveBattler] |= STATUS4_FEAR;
         gVolatileStructs[gActiveBattler].fear = gVolatileStructs[gActiveBattler].started.fear = TRUE;
         SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_BLOOD_BATH);
+        SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_BLOODLUST);
         break;
     case VARIOUS_HANDLE_WEATHER_CHANGE:
 
