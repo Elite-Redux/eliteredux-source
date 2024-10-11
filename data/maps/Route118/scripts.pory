@@ -482,7 +482,7 @@ script Route118_EventScript_StevenTrigger{
 	delay(30)
 	msgbox(format("Steven: Hi, {PLAYER}{KUN} I hope you're ready. I upgraded my team after you defeated me last time..."), MSGBOX_DEFAULT) //Intro
 	trainerbattle_no_intro(TRAINER_STEVEN_ROUTE118, format("You still have great potential.")) // in-battle, player wins
-	msgbox(format("Steven: I knew I wasn't the only one who upgraded his team. I hope we meet again."), MSGBOX_DEFAULT) // post-battle
+	msgbox(format("Steven: I knew I wasn't the only one who upgraded their team. I hope we meet again."), MSGBOX_DEFAULT) // post-battle
 	closemessage
 	applymovement(OBJ_EVENT_ID_PLAYER, Route118_Movement_PlayerWatchStevenExit)
 	switch(var(VAR_0x8008)){
@@ -518,15 +518,15 @@ script Route118_EventScript_Scott{
 
 script Route118_EventScript_ScottUnbotheredByReporters{
     msgbox(format("Hi {PLAYER}, I see we meet again."
-                  "Today, I take a little break at the sea, as I can't go to Route109.\p"
+                  "Today, I took a little break by the sea, as I can't go to Route 109.\p"
                   "Why? I can't stop being bothered by those reporters."))
 }
 
 script Route118_EventScript_ScottBotheredByReporters{
-    msgbox(format("Hey, {PLAYER}, I'm sorry but i must not stay longer here."
-                  "Those reporters are trying to pass me as a children stalker."
+    msgbox(format("Hey, {PLAYER}, I'm sorry but I can't stay here any longer."
+                  "Those reporters are trying to pass me as a child stalker."
                   "It's obviously wrong but whatever.\p"
-                  "I'll take some time in the jungle, at least there is no camera there."))
+                  "I'll take some time in the jungle, at least there's no cameras there."))
     switch(var(VAR_FACING)){
         case DIR_WEST:
            applymovement(OBJ_EVENT_ID_PLAYER, Route118_Movement_PlayerLetScottLeaveBotheredByReporters)
