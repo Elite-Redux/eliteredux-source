@@ -594,7 +594,7 @@ script Route120_EventScript_MawootadNPCAskQuestion{
         multichoice2(0, 0, MultiChoice_MawootadFinlandQuestion)
         switch(var(VAR_RESULT)){
             case 1:
-                msgbox(format("From a genetic biologist point of view, any pokemon can be at 99% a Scorbuny"))
+                msgbox(format("From a genetics point of view, all Pokémon are 99% Scorbunny."))
                 closemessage
                 call(Route120_EventScript_MawootadNPCRightAnswer)
             break
