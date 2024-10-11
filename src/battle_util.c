@@ -9259,6 +9259,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
             return;
         
+        case ABILITY_WIND_RAGE:
         case ABILITY_GIANT_WINGS:
             if (gBattleMoves[move].airBased) MUL(1.3);
             return;
@@ -15200,6 +15201,10 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         
         case ABILITY_TAR_TOSS:
             UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0);
+            break;
+        
+        case ABILITY_WIND_RAGE:
+            UseEntryMove(battler, ability, MOVE_DEFOG, 0);
             break;
         
         case ABILITY_WISHMAKER:

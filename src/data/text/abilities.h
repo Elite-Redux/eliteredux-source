@@ -695,6 +695,7 @@ static const u8 sAbilityLuckyHaloDescription[] = _("Negates self stat drops. Sur
 static const u8 sAbilityTrashHeapDescription[] = _("Combines Corrosion &\nToxic Spill.");
 static const u8 sAbilitySludgyMixDescription[] = _("Combines Intoxicate &\nPunk Rock.");
 static const u8 sAbilityOverwatchDescription[] = _("Combines On the Prowl &\nStakeout.");
+static const u8 sAbilityWindRageDescription[] = _("Uses Defog on switch-in. Air-\nbased moves get a 1.3x boost.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1426,6 +1427,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TRASH_HEAP] = _("Trash Heap"),
     [ABILITY_SLUDGY_MIX] = _("Sludgy Mix"),
     [ABILITY_OVERWATCH] = _("Overwatch"),
+    [ABILITY_WIND_RAGE] = _("Wind Rage"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2158,4 +2160,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TRASH_HEAP] = sAbilityTrashHeapDescription,
     [ABILITY_SLUDGY_MIX] = sAbilitySludgyMixDescription,
     [ABILITY_OVERWATCH] = sAbilityOverwatchDescription,
+    [ABILITY_WIND_RAGE] = sAbilityWindRageDescription,
 };
