@@ -219,7 +219,9 @@ void HandleAction_UseMove(void)
     u32 i, side, moveType, var = 4;
 
     gBattlerAttacker = GetTurnBattler();
-    if (gBattleStruct->field_91 & 1 << gBattlerAttacker || !IsBattlerAlive(gBattlerAttacker))
+    if (gBattleStruct->field_91 & 1 << gBattlerAttacker
+        || (!IsBattlerAlive(gBattlerAttacker) &&
+            !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB)))
     {
         gCurrentActionFuncId = B_ACTION_FINISHED;
         return;
@@ -456,7 +458,7 @@ void HandleAction_UseMove(void)
     }
     else
     {
-        if (gProcessingExtraAttacks && !IsBattlerAlive(gBattlerTarget))
+        if (gProcessingExtraAttacks && !IsBattlerAlive(gBattlerTarget) && gQueuedExtraAttackData[0].ability != ABILITY_VICTORY_BOMB)
         {
             gCurrentActionFuncId = B_ACTION_TRY_FINISH;
         }
@@ -911,7 +913,7 @@ void HandleAction_TryFinish(void)
     {
         ClearMiscTurnFlags();
         gQueuedExtraAttackData[0] = gQueuedExtraAttackData[gQueuedAttackCount--];
-        if (!IsBattlerAlive(gQueuedExtraAttackData[0].attacker)) return;
+        if (!IsBattlerAlive(gQueuedExtraAttackData[0].attacker) && gQueuedExtraAttackData[0].ability != ABILITY_VICTORY_BOMB) return;
         gProcessingExtraAttacks = TRUE;
         gCurrentActionFuncId = B_ACTION_USE_MOVE;
         return;
@@ -4634,7 +4636,7 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePo
     if (gTurnStructs[battler].dancerUsedMove) return FALSE;
     if (gBattleMons[battler].status1 & STATUS1_SLEEP) return FALSE;
     if (gBattleMons[battler].status1 & STATUS1_FREEZE) return FALSE;
-    if (!IsBattlerAlive(battler)) return FALSE;
+    if (!IsBattlerAlive(battler) && ability != ABILITY_VICTORY_BOMB) return FALSE;
 
     // Set bit and save Dancer mon's original target
     gTurnStructs[battler].dancerUsedMove = TRUE;
@@ -13786,6 +13788,12 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             if (!IsMoveMakingContact(move, attacker)) break;
 
             UseOutOfTurnAttack(battler, attacker, ability, MOVE_MACH_PUNCH, 0);
+            break;
+
+        case ABILITY_VICTORY_BOMB:
+            if (IsBattlerAlive(battler)) break;
+
+            UseOutOfTurnAttack(battler, attacker, ability, MOVE_EXPLOSION, 100);
             break;
         
         case ABILITY_ULTRA_INSTINCT:

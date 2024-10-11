@@ -6495,6 +6495,10 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     {
         gBattleStruct->dynamicMoveType = 0x80 | TYPE_WATER;
     }
+    else if (move == MOVE_EXPLOSION && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB)
+    {
+        gBattleStruct->dynamicMoveType = 0x80 | TYPE_FIRE;
+    }
     else if (gStatuses4[battlerAtk] & STATUS4_PLASMA_FISTS && moveType == TYPE_NORMAL)
     {
         gBattleStruct->dynamicMoveType = 0x80 | TYPE_ELECTRIC;
