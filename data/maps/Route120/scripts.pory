@@ -581,7 +581,7 @@ script Route120_EventScript_MawootadNPCAskQuestion{
         multichoice2(0, 0, MultiChoice_MawootadTotallyUnfairQuestion)
         switch(var(VAR_RESULT)){
             case 12:
-                msgbox(format("Easy enough, you follow. Lets get ahead!"))
+                msgbox(format("Easy enough, you follow. Lets go ahead!"))
                 closemessage
                 call(Route120_EventScript_MawootadNPCRightAnswer)
             break
