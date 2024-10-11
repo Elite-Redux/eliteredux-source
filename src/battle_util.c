@@ -14533,8 +14533,6 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
             }
             }
             break;
-        
-        case ABILITY_NONE:
     }
 
     return FALSE;
