@@ -5020,7 +5020,7 @@ static bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) 
     //Checks Target
     for (i = 0; i < 2; opposingBattler ^= BIT_FLANK, i++)
     {
-        if (IsBattlerAlive(opposingBattler) && gBattleMons[opposingBattler].hp != 1)
+        if (IsBattlerAlive(opposingBattler))
         {
             target = opposingBattler;
             break;
