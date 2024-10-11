@@ -618,7 +618,7 @@ script Route120_EventScript_MawootadNPCAskQuestion{
     }
 }
 script Route120_EventScript_MawootadNPCWrongAnswer{
-    msgbox(format("WROOONG! How can someone be wrong on that. That's it i leave!"))
+    msgbox(format("WROOONG! How can someone be wrong on that. That's it, I'm leaving!"))
     closemessage
     applymovement(MAWOOTAD_NPC, Route120_EventScript_MawootadNPCWalkAway)
     waitmovement(0)
@@ -689,7 +689,7 @@ text MultiChoice_MawootadFinlandQuestion{
     "Yes$"
     "A Scorbuny$"
     "50BP$"
-    "An OP Pokemon$"
+    "An OP Pokémon$"
     "$"
 }
 text MultiChoice_MawootadXDQuestion{
