@@ -5017,8 +5017,6 @@ static bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) 
     u8 i;
     u8 opposingBattler = BATTLE_OPPOSITE(battler);
     
-    if (!CheckAndSetSwitchInAbility(battler, ability)) return FALSE;
-    
     //Checks Target
     for (i = 0; i < 2; opposingBattler ^= BIT_FLANK, i++)
     {
