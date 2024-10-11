@@ -550,7 +550,7 @@ script Route120_EventScript_MawootadNPCQuestion1{
     msgbox(format("Oh, may I ask you a question before showing you my latest research?\p"
     "If you don't have the basics I'll just bore you."), MSGBOX_YESNO)
     if (var(VAR_RESULT) != 1){
-        msgbox(format("Alright, see you next time then"))
+        msgbox(format("Alright, see you next time then."))
         closemessage
         applymovement(MAWOOTAD_NPC, Route120_EventScript_MawootadNPCWalkAway)
         setflag(FLAG_HIDE_MAWOOTAD)
