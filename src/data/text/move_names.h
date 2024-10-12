@@ -966,6 +966,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_SPARKLE_BARRAGE] = _("SprklngBrrge"),
     [MOVE_SPECTRAL_SERENADE] = _("SpctrlSrnade"),
     [MOVE_MERCULIGHT] = _("Merculight"),
+    [MOVE_BIG_BLAST] = _("IncendBlast"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1938,4 +1939,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_SPARKLE_BARRAGE] = _("Sparkling Barrage"),
     [MOVE_SPECTRAL_SERENADE] = _("Spectral Serenade"),
     [MOVE_MERCULIGHT] = _("Merculight"),
+    [MOVE_BIG_BLAST] = _("Big Bang"),
 };

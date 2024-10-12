@@ -10117,9 +10117,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_ENERGY_WAVE] =
     {
         .effect = EFFECT_HIT,
-        .power = 110,
+        .power = 115,
         .type = TYPE_NORMAL,
-        .accuracy = 85,
+        .accuracy = 90,
         .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
@@ -11887,14 +11887,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TERA_STARSTORM] =
     {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
+        .effect = EFFECT_HIT,
+        .power = 120,
         .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 0,
+        .accuracy = 100,
+        .pp = 10,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_PHYSICAL,
+        .target = MOVE_TARGET_BOTH,
+        .flags = FLAG_PROTECT_AFFECTED | MOVE_TARGET_SELECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
     },
     [MOVE_SPARKLE_BARRAGE] =
     {
@@ -11935,6 +11936,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = 4,
         .flags = FLAG_PROTECTION_MOVE,
         .split = SPLIT_STATUS,
+    },
+    [MOVE_BIG_BLAST] =
+    {
+        .effect = EFFECT_BURN_HIT,
+        .power = 90,
+        .type = TYPE_NORMAL,
+        .accuracy = 100,
+        .pp = 5,
+        .secondaryEffectChance = 20,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
     },
 };
 

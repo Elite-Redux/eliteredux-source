@@ -3787,11 +3787,15 @@ static const u8 sMoveTwoLineDescription_MoveSparkleBarrage[] = _(
     "rays.");
 
 static const u8 sMoveTwoLineDescription_MoveSpectralSerenade[] = _(
-    "Not implemented.");
+    "Not Implemented.");
 
 static const u8 sMoveTwoLineDescription_MoveMerculight[] = _(
     "Evades attacks and paralyzes\n"
     "the attacker.");
+
+static const u8 sMoveTwoLineDescription_MoveBigBlast[] = _(
+    "Does Damage. Small\n"
+    "burn chance.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -4761,6 +4765,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_SPARKLE_BARRAGE - 1] = sMoveTwoLineDescription_MoveSparkleBarrage,
     [MOVE_SPECTRAL_SERENADE - 1] = sMoveTwoLineDescription_MoveSpectralSerenade,
     [MOVE_MERCULIGHT - 1] = sMoveTwoLineDescription_MoveMerculight,
+    [MOVE_BIG_BLAST - 1] = sMoveTwoLineDescription_MoveBigBlast,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5728,6 +5733,7 @@ static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both f
 static const u8 sMoveFourLineDescription_MoveSparkleBarrage[] = _("The user shoots\n3 beams of light\nat the target.");
 static const u8 sMoveFourLineDescription_MoveSpectralSerenade[] = _("The foe is hit with\na huge explosion.\nCan only be used\nevery-other turn.");
 static const u8 sMoveFourLineDescription_MoveMerculight[] = _("Evades attacks with\ncertainty, paralyzing\nattackers. May fail if\nused in succession.");
+static const u8 sMoveFourLineDescription_MoveBigBlast[] = _("The foe is hit with\na huge explosion.\n10% burn chance.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6695,4 +6701,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_SPARKLE_BARRAGE - 1] = sMoveFourLineDescription_MoveSparkleBarrage,
     [MOVE_SPECTRAL_SERENADE - 1] = sMoveFourLineDescription_MoveSpectralSerenade,
     [MOVE_MERCULIGHT - 1] = sMoveFourLineDescription_MoveMerculight,
+    [MOVE_BIG_BLAST - 1] = sMoveFourLineDescription_MoveBigBlast,
 };
