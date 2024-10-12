@@ -4903,7 +4903,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_NIGHT_SLASH] =
     {
         .effect = EFFECT_BLEED_HIT,
-        .power = 70,
+        .power = 75,
         .type = TYPE_DARK,
         .accuracy = 100,
         .pp = 15,
@@ -5069,6 +5069,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_RECKLESS_BOOST,
         .split = SPLIT_PHYSICAL,
+        .airBased = TRUE,
     },
     [MOVE_EARTH_POWER] =
     {
@@ -5236,7 +5237,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_PSYCHO_CUT] =
     {
         .effect = EFFECT_BLEED_HIT,
-        .power = 70,
+        .power = 75,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 20,
