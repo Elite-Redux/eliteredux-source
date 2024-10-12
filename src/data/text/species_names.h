@@ -1425,7 +1425,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_REUNICLUS_REDUX_MEGA]      = _("Reuniclus"),
     [SPECIES_AEGISLASH_REDUX_MEGA]      = _("Aegislash"),
     [SPECIES_AEGISLASH_BLADE_REDUX_MEGA]      = _("Aegislash"),
-    [SPECIES_CLAWITZER_REDUX]    = _("Clawitzer"),
+    [SPECIES_CLAWITZER_REDUX]    = _("Clawtificer"),
     // Special Mega + Primals
     [SPECIES_RAYQUAZA_MEGA]  = _("Rayquaza"),
     [SPECIES_KYOGRE_PRIMAL]  = _("Kyogre"),
