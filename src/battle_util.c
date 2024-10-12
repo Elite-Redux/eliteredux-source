@@ -13039,6 +13039,14 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
             return TRUE;
         
+        case ABILITY_RAZOR_SHARP:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBleed(target)) break;
+            if (!gIsCriticalHit) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
+            return TRUE;
+        
         case ABILITY_DENTING_BLOWS:
             if (!ShouldApplyOnHitAffect(target)) break;
             if (!gBattleMoves[move].hammerBased) break;

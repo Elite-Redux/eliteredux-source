@@ -749,8 +749,9 @@
 #define ABILITY_OVERWATCH 727 // Combines On the Prowl & Stakeout.
 #define ABILITY_WIND_RAGE 728 // Uses Defog on switch-in. Air- based moves get a 1.3x boost.
 #define ABILITY_VICTORY_BOMB 729 // Attacks with a 100BP Fire-type Explosion on fainting.
+#define ABILITY_RAZOR_SHARP 730 // Critical hits also inflict bleeding.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_VICTORY_BOMB + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_RAZOR_SHARP + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

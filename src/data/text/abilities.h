@@ -697,6 +697,7 @@ static const u8 sAbilitySludgyMixDescription[] = _("Combines Intoxicate &\nPunk 
 static const u8 sAbilityOverwatchDescription[] = _("Combines On the Prowl &\nStakeout.");
 static const u8 sAbilityWindRageDescription[] = _("Uses Defog on switch-in. Air-\nbased moves get a 1.3x boost.");
 static const u8 sAbilityVictoryBombDescription[] = _("Attacks with a 100BP Fire-type\nExplosion on fainting.");
+static const u8 sAbilityRazorSharpDescription[] = _("Critical hits also inflict bleeding.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1430,6 +1431,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_OVERWATCH] = _("Overwatch"),
     [ABILITY_WIND_RAGE] = _("Wind Rage"),
     [ABILITY_VICTORY_BOMB] = _("Victory Bomb"),
+    [ABILITY_RAZOR_SHARP] = _("Razor Sharp"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2164,4 +2166,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_OVERWATCH] = sAbilityOverwatchDescription,
     [ABILITY_WIND_RAGE] = sAbilityWindRageDescription,
     [ABILITY_VICTORY_BOMB] = sAbilityVictoryBombDescription,
+    [ABILITY_RAZOR_SHARP] = sAbilityRazorSharpDescription,
 };
