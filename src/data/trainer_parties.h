@@ -32409,7 +32409,7 @@ static const struct TrainerMonItemCustomMoves sParty_Juan1[] = {
     .ability = 0,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_FIRE_HYDRO_STEAM, MOVE_SCALD, MOVE_EARTH_POWER, MOVE_SLUDGE_BOMB
+    .moves = MOVE_SUPERHOT_FLAME, MOVE_SCALD, MOVE_EARTH_POWER, MOVE_SLUDGE_BOMB
     },
     {
     .lvl = 0,
@@ -33834,7 +33834,7 @@ static const struct TrainerMonItemCustomMoves sParty_Julie[] = {
     .ability = 1,
     .evs = {252, 0, 0, 252, 4, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_STEAM_ERUPTION, MOVE_FIRE_HYDRO_STEAM, MOVE_SCORCHING_SANDS, MOVE_SEARING_SHOT
+    .moves = MOVE_STEAM_ERUPTION, MOVE_SUPERHOT_FLAME, MOVE_SCORCHING_SANDS, MOVE_SEARING_SHOT
     },
     {
     .lvl = 0,
@@ -33950,7 +33950,7 @@ static const struct TrainerMonItemCustomMoves sParty_Dianne[] = { // with Felix
     .ability = 2,
     .evs = {252, 0, 0, 252, 0, 4},
     .nature = NATURE_MODEST,
-    .moves = MOVE_FIRE_HYDRO_STEAM, MOVE_HYDRO_STEAM, MOVE_FLASH_CANNON, MOVE_MAGMA_STORM
+    .moves = MOVE_SUPERHOT_FLAME, MOVE_HYDRO_STEAM, MOVE_FLASH_CANNON, MOVE_MAGMA_STORM
     },
     {
     .lvl = 0,
@@ -33995,7 +33995,7 @@ static const struct TrainerMonItemCustomMoves sParty_Dianne[] = { // with Felix
     .ability = 0,
     .evs = {252, 0, 0, 192, 0, 64},
     .nature = NATURE_MODEST,
-    .moves = MOVE_HYDRO_STEAM, MOVE_FIRE_HYDRO_STEAM, MOVE_STEAM_ERUPTION, MOVE_DRAGON_PULSE
+    .moves = MOVE_HYDRO_STEAM, MOVE_SUPERHOT_FLAME, MOVE_STEAM_ERUPTION, MOVE_DRAGON_PULSE
     }
 };
 
@@ -34878,7 +34878,7 @@ static const struct TrainerMonItemCustomMoves sParty_SidneyInsane[] = {
     .ability = 1,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_NASTY_PLOT, MOVE_DARK_PULSE, MOVE_FIRE_HYDRO_STEAM, MOVE_FIRE_BLAST
+    .moves = MOVE_NASTY_PLOT, MOVE_DARK_PULSE, MOVE_SUPERHOT_FLAME, MOVE_FIRE_BLAST
     },
     {
     .lvl = 0,

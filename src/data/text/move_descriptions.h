@@ -3126,7 +3126,7 @@ static const u8 sMoveTwoLineDescription_MoveLightingStrike[] = _(
 static const u8 sMoveTwoLineDescription_MoveVoltBolt[] = _(
     "Not done yet.");
 
-static const u8 sMoveTwoLineDescription_MovePsychokinesis[] = _(
+static const u8 sMoveTwoLineDescription_MoveKineticBarrage[] = _(
     "Lifts up nearby objects and hurls\n"
     "them at the opponent. Can Confuse.");
 
@@ -3283,7 +3283,7 @@ static const u8 sMoveTwoLineDescription_MoveHydroSteam[] = _(
     "The user blasts the target with boiling-hot water.\n"
     "Boosted by the sun.");
 
-static const u8 sMoveTwoLineDescription_MoveFireHydroSteam[] = _(
+static const u8 sMoveTwoLineDescription_MoveSuperhotFlame[] = _(
     "Deals damage.\n"
     "Does increase damage in rain.");
 
@@ -3295,7 +3295,7 @@ static const u8 sMoveTwoLineDescription_MoveDoubleLariat[] = _(
     "Hits both targets.\n"
     "Silences hit targets.");
 
-static const u8 sMoveTwoLineDescription_MoveSpecialAquaJet[] = _(
+static const u8 sMoveTwoLineDescription_MoveQuickStream[] = _(
     "+1 priority.");
 
 static const u8 sMoveTwoLineDescription_MoveLeechBlade[] = _(
@@ -3781,6 +3781,42 @@ static const u8 sMoveTwoLineDescription_MoveDreamInversion[] = _(
 static const u8 sMoveTwoLineDescription_MoveTeraStarstorm[] = _(
     "Strikes both foes with a\n"
     "rain of crystals.");
+
+static const u8 sMoveTwoLineDescription_MoveMountainGale[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveLightningStrike[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveGiantGale[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveTransmute[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveCaltrops[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveMysticalPower[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveTakeHeart[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveEsperWaltz[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveHexTrot[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveZapJive[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveEclipse[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveVexingVoid[] = _(
+    "Not implemented");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -4569,7 +4605,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_SHOCKING_EDGE - 1] = sMoveTwoLineDescription_MoveShockingEdge,
     [MOVE_LIGHTING_STRIKE - 1] = sMoveTwoLineDescription_MoveLightingStrike,
     [MOVE_VOLT_BOLT - 1] = sMoveTwoLineDescription_MoveVoltBolt,
-    [MOVE_PSYCHOKINESIS - 1] = sMoveTwoLineDescription_MovePsychokinesis,
+    [MOVE_KINETIC_BARRAGE - 1] = sMoveTwoLineDescription_MoveKineticBarrage,
     [MOVE_FERTILE_FANGS - 1] = sMoveTwoLineDescription_MoveFertileFangs,
     [MOVE_SCATTER_BLAST - 1] = sMoveTwoLineDescription_MoveScatterBlast,
     [MOVE_JAGGED_PUNCH - 1] = sMoveTwoLineDescription_MoveJaggedPunch,
@@ -4616,10 +4652,10 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_SHED_TAIL - 1] = sMoveTwoLineDescription_MoveShedTail,
     [MOVE_BERRY_SMASH - 1] = sMoveTwoLineDescription_MoveBerrySmash,
     [MOVE_HYDRO_STEAM - 1] = sMoveTwoLineDescription_MoveHydroSteam,
-    [MOVE_FIRE_HYDRO_STEAM - 1] = sMoveTwoLineDescription_MoveFireHydroSteam,
+    [MOVE_SUPERHOT_FLAME - 1] = sMoveTwoLineDescription_MoveSuperhotFlame,
     [MOVE_TRIPLE_ARROWS - 1] = sMoveTwoLineDescription_MoveTripleArrows,
     [MOVE_DOUBLE_LARIAT - 1] = sMoveTwoLineDescription_MoveDoubleLariat,
-    [MOVE_SPECIAL_AQUA_JET - 1] = sMoveTwoLineDescription_MoveSpecialAquaJet,
+    [MOVE_QUICK_STREAM - 1] = sMoveTwoLineDescription_MoveQuickStream,
     [MOVE_LEECH_BLADE - 1] = sMoveTwoLineDescription_MoveLeechBlade,
     [MOVE_YGGDRASIL_FORCE - 1] = sMoveTwoLineDescription_MoveYggdrasilForce,
     [MOVE_DRAIN_BRAIN - 1] = sMoveTwoLineDescription_MoveDrainBrain,
@@ -4747,6 +4783,18 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TERROR_LOCKS - 1] = sMoveTwoLineDescription_MoveTerrorLocks,
     [MOVE_DREAM_INVERSION - 1] = sMoveTwoLineDescription_MoveDreamInversion,
     [MOVE_TERA_STARSTORM - 1] = sMoveTwoLineDescription_MoveTeraStarstorm,
+    [MOVE_MOUNTAIN_GALE - 1] = sMoveTwoLineDescription_MoveMountainGale,
+    [MOVE_LIGHTNING_STRIKE - 1] = sMoveTwoLineDescription_MoveLightningStrike,
+    [MOVE_GIANT_GALE - 1] = sMoveTwoLineDescription_MoveGiantGale,
+    [MOVE_TRANSMUTE - 1] = sMoveTwoLineDescription_MoveTransmute,
+    [MOVE_CALTROPS - 1] = sMoveTwoLineDescription_MoveCaltrops,
+    [MOVE_MYSTICAL_POWER - 1] = sMoveTwoLineDescription_MoveMysticalPower,
+    [MOVE_TAKE_HEART - 1] = sMoveTwoLineDescription_MoveTakeHeart,
+    [MOVE_ESPER_WALTZ - 1] = sMoveTwoLineDescription_MoveEsperWaltz,
+    [MOVE_HEX_TROT - 1] = sMoveTwoLineDescription_MoveHexTrot,
+    [MOVE_ZAP_JIVE - 1] = sMoveTwoLineDescription_MoveZapJive,
+    [MOVE_ECLIPSE - 1] = sMoveTwoLineDescription_MoveEclipse,
+    [MOVE_VEXING_VOID - 1] = sMoveTwoLineDescription_MoveVexingVoid,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5533,7 +5581,7 @@ static const u8 sMoveFourLineDescription_MoveShockingJab[] = _("An electric jab\
 static const u8 sMoveFourLineDescription_MoveShockingEdge[] = _("The foe is slashed\nwith an electric\nblade. 10% paralyze\nchance. Keen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveLightingStrike[] = _("Leaps, strikes with a\nlightning bolt. 20%\nchance to raise Speed.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveVoltBolt[] = _("Doubles damage if\nfoe is paralyzed.\nArrow move.\nArcher boost.");
-static const u8 sMoveFourLineDescription_MovePsychokinesis[] = _("Lifts up objects\nand hurls them at the\nfoe. 30% confusion.\nMega Launcher boost.");
+static const u8 sMoveFourLineDescription_MoveKineticBarrage[] = _("Lifts up objects\nand hurls them at the\nfoe. 30% confusion.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveFertileFangs[] = _("Inserts ingraining fangs.\n10% chance to apply\nLeech Seed.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveScatterBlast[] = _("A blast of sand\nthat scatters Stealth\nRocks. Mega Launcher\nboost.");
 static const u8 sMoveFourLineDescription_MoveJaggedPunch[] = _("The foe is punched\nby a stony fist.\n10% chance to set\nStealth Rocks.");
@@ -5580,10 +5628,10 @@ static const u8 sMoveFourLineDescription_MoveWyrmWind[] = _("Hits 2-5 times.\nLo
 static const u8 sMoveFourLineDescription_MoveShedTail[] = _("The user creates a\nsubstitute using its own\nHP and switches with\na party Pokémon.");
 static const u8 sMoveFourLineDescription_MoveBerrySmash[] = _("User smashes its berry,\ngaining its effect.\nSuper Slammer boost.");
 static const u8 sMoveFourLineDescription_MoveHydroSteam[] = _("The user blasts the\ntarget with boiling\nhot water. Boosted\nin harsh sunlight.");
-static const u8 sMoveFourLineDescription_MoveFireHydroSteam[] = _("Deals damage. Deals\nincreased damage in\nrain.");
+static const u8 sMoveFourLineDescription_MoveSuperhotFlame[] = _("Deals damage. Deals\nincreased damage in\nrain.");
 static const u8 sMoveFourLineDescription_MoveTripleArrows[] = _("50% chance to drop\nDef. 30% chance to\nflinch. High crit.\nArrow-based.");
 static const u8 sMoveFourLineDescription_MoveDoubleLariat[] = _("User hits both foes\nwith whirling arms.\nFoes cannot use any\nsound moves after.");
-static const u8 sMoveFourLineDescription_MoveSpecialAquaJet[] = _("The user sends a\njet of water to\nattack the foe.\n+1 priority.");
+static const u8 sMoveFourLineDescription_MoveQuickStream[] = _("The user sends a\njet of water to\nattack the foe.\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveLeechBlade[] = _("Heals 50% of damage \ndone to the foe.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveYggdrasilForce[] = _("Nature's overcharges\nthe user's strike.\nLowers Atk and Def.");
 static const u8 sMoveFourLineDescription_MoveDrainBrain[] = _("Saps the foe's SpDef\nand heals HP by\nthe same amount.");
@@ -5711,6 +5759,18 @@ static const u8 sMoveFourLineDescription_MoveTerrorCharge[] = _("50% chance to b
 static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\nDouble damage if\nthe foe is bleeding.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveDreamInversion[] = _("Deals 2x damage to\nsleeping foes. 10%\nchance for drowsy.\nHits both foes.");
 static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both foes\nwith a rain of crystals.");
+static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveLightningStrike[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveGiantGale[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveTransmute[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveCaltrops[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveMysticalPower[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveTakeHeart[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveEsperWaltz[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveZapJive[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveEclipse[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveVexingVoid[] = _("Not implemented");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6497,7 +6557,7 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_SHOCKING_EDGE - 1] = sMoveFourLineDescription_MoveShockingEdge,
     [MOVE_LIGHTING_STRIKE - 1] = sMoveFourLineDescription_MoveLightingStrike,
     [MOVE_VOLT_BOLT - 1] = sMoveFourLineDescription_MoveVoltBolt,
-    [MOVE_PSYCHOKINESIS - 1] = sMoveFourLineDescription_MovePsychokinesis,
+    [MOVE_KINETIC_BARRAGE - 1] = sMoveFourLineDescription_MoveKineticBarrage,
     [MOVE_FERTILE_FANGS - 1] = sMoveFourLineDescription_MoveFertileFangs,
     [MOVE_SCATTER_BLAST - 1] = sMoveFourLineDescription_MoveScatterBlast,
     [MOVE_JAGGED_PUNCH - 1] = sMoveFourLineDescription_MoveJaggedPunch,
@@ -6544,10 +6604,10 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_SHED_TAIL - 1] = sMoveFourLineDescription_MoveShedTail,
     [MOVE_BERRY_SMASH - 1] = sMoveFourLineDescription_MoveBerrySmash,
     [MOVE_HYDRO_STEAM - 1] = sMoveFourLineDescription_MoveHydroSteam,
-    [MOVE_FIRE_HYDRO_STEAM - 1] = sMoveFourLineDescription_MoveFireHydroSteam,
+    [MOVE_SUPERHOT_FLAME - 1] = sMoveFourLineDescription_MoveSuperhotFlame,
     [MOVE_TRIPLE_ARROWS - 1] = sMoveFourLineDescription_MoveTripleArrows,
     [MOVE_DOUBLE_LARIAT - 1] = sMoveFourLineDescription_MoveDoubleLariat,
-    [MOVE_SPECIAL_AQUA_JET - 1] = sMoveFourLineDescription_MoveSpecialAquaJet,
+    [MOVE_QUICK_STREAM - 1] = sMoveFourLineDescription_MoveQuickStream,
     [MOVE_LEECH_BLADE - 1] = sMoveFourLineDescription_MoveLeechBlade,
     [MOVE_YGGDRASIL_FORCE - 1] = sMoveFourLineDescription_MoveYggdrasilForce,
     [MOVE_DRAIN_BRAIN - 1] = sMoveFourLineDescription_MoveDrainBrain,
@@ -6675,4 +6735,16 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_TERROR_LOCKS - 1] = sMoveFourLineDescription_MoveTerrorLocks,
     [MOVE_DREAM_INVERSION - 1] = sMoveFourLineDescription_MoveDreamInversion,
     [MOVE_TERA_STARSTORM - 1] = sMoveFourLineDescription_MoveTeraStarstorm,
+    [MOVE_MOUNTAIN_GALE - 1] = sMoveFourLineDescription_MoveMountainGale,
+    [MOVE_LIGHTNING_STRIKE - 1] = sMoveFourLineDescription_MoveLightningStrike,
+    [MOVE_GIANT_GALE - 1] = sMoveFourLineDescription_MoveGiantGale,
+    [MOVE_TRANSMUTE - 1] = sMoveFourLineDescription_MoveTransmute,
+    [MOVE_CALTROPS - 1] = sMoveFourLineDescription_MoveCaltrops,
+    [MOVE_MYSTICAL_POWER - 1] = sMoveFourLineDescription_MoveMysticalPower,
+    [MOVE_TAKE_HEART - 1] = sMoveFourLineDescription_MoveTakeHeart,
+    [MOVE_ESPER_WALTZ - 1] = sMoveFourLineDescription_MoveEsperWaltz,
+    [MOVE_HEX_TROT - 1] = sMoveFourLineDescription_MoveHexTrot,
+    [MOVE_ZAP_JIVE - 1] = sMoveFourLineDescription_MoveZapJive,
+    [MOVE_ECLIPSE - 1] = sMoveFourLineDescription_MoveEclipse,
+    [MOVE_VEXING_VOID - 1] = sMoveFourLineDescription_MoveVexingVoid,
 };
