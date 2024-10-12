@@ -503,8 +503,8 @@ const MAWOOTAD_NPC = 37
 script Route120_EventScript_MawootadNPC{
     lockall
     faceplayer
-    msgbox(format("Hey You're the kid who saved my research from being stolen!\p"
-    "It's perfect, follow me I need to show you something!"))
+    msgbox(format("Hey, you're the kid who saved my research from being stolen!\p"
+    "This is perfect, follow me I need to show you something!"))
     closemessage
     switch(var(VAR_FACING)){
         case DIR_WEST:
@@ -547,10 +547,10 @@ movement Route120_Movement_MawootadNPCWalk1{
     walk_right * 6
 }
 script Route120_EventScript_MawootadNPCQuestion1{
-    msgbox(format("Oh i may ask you question before showing you my latest research.\p"
-    "If you don't have the basics i'll just bore you."), MSGBOX_YESNO)
+    msgbox(format("Oh, may I ask you a question before showing you my latest research?\p"
+    "If you don't have the basics I'll just bore you."), MSGBOX_YESNO)
     if (var(VAR_RESULT) != 1){
-        msgbox(format("Alright, see you next time then"))
+        msgbox(format("Alright, see you next time then."))
         closemessage
         applymovement(MAWOOTAD_NPC, Route120_EventScript_MawootadNPCWalkAway)
         setflag(FLAG_HIDE_MAWOOTAD)
@@ -577,11 +577,11 @@ script Route120_EventScript_MawootadNPCAskQuestion{
     // the more trainers have been skipped, the harder the question will be
     faceplayer
     if (var(VAR_TEMP_2) >= 2){ // Totally unfair question
-        msgbox(format("Alright, how many letters i and o have i have been saying since now?"))
+        msgbox(format("Alright, how many i's and o's have I said since now?"))
         multichoice2(0, 0, MultiChoice_MawootadTotallyUnfairQuestion)
         switch(var(VAR_RESULT)){
             case 12:
-                msgbox(format("Easy enough, you follow. Lets get ahead!"))
+                msgbox(format("Easy enough, you follow. Lets go ahead!"))
                 closemessage
                 call(Route120_EventScript_MawootadNPCRightAnswer)
             break
@@ -594,7 +594,7 @@ script Route120_EventScript_MawootadNPCAskQuestion{
         multichoice2(0, 0, MultiChoice_MawootadFinlandQuestion)
         switch(var(VAR_RESULT)){
             case 1:
-                msgbox(format("From a genetic biologist point of view, any pokemon can be at 99% a Scorbuny"))
+                msgbox(format("From a genetics point of view, all Pokémon are 99% Scorbunny."))
                 closemessage
                 call(Route120_EventScript_MawootadNPCRightAnswer)
             break
@@ -610,7 +610,7 @@ script Route120_EventScript_MawootadNPCAskQuestion{
                 call(Route120_EventScript_MawootadNPCWrongAnswer)
             break
             default:
-                msgbox(format("As long it is not Flannery."))
+                msgbox(format("As long it's not Flannery."))
                 closemessage
                 call(Route120_EventScript_MawootadNPCRightAnswer)
         
@@ -618,7 +618,7 @@ script Route120_EventScript_MawootadNPCAskQuestion{
     }
 }
 script Route120_EventScript_MawootadNPCWrongAnswer{
-    msgbox(format("WROOONG! How can someone be wrong on that. That's it i leave!"))
+    msgbox(format("WROOONG! How can someone be wrong on that. That's it, I'm leaving!"))
     closemessage
     applymovement(MAWOOTAD_NPC, Route120_EventScript_MawootadNPCWalkAway)
     waitmovement(0)
@@ -689,7 +689,7 @@ text MultiChoice_MawootadFinlandQuestion{
     "Yes$"
     "A Scorbuny$"
     "50BP$"
-    "An OP Pokemon$"
+    "An OP Pokémon$"
     "$"
 }
 text MultiChoice_MawootadXDQuestion{

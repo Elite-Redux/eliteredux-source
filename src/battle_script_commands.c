@@ -1472,7 +1472,9 @@ static void Cmd_attackcanceler(void)
         gCurrentActionFuncId = B_ACTION_FINISHED;
         return;
     }
-    if (gBattleMons[gBattlerAttacker].hp == 0 && !(gHitMarker & HITMARKER_NO_ATTACKSTRING))
+    if (!IsBattlerAlive(gBattlerAttacker)
+        && !(gHitMarker & HITMARKER_NO_ATTACKSTRING)
+        && !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB))
     {
         gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
         gBattlescriptCurrInstr = BattleScript_MoveEnd;
@@ -1720,6 +1722,7 @@ static void Cmd_attackcanceler(void)
 
     if (AtkCanceller_UnableToUseMove2())
         return;
+
     if (AbilityBattleEffects(ABILITYEFFECT_MOVES_BLOCK, gBattlerTarget, 0, 0, 0))
     {
         CancelMultiTurnMoves(gBattlerAttacker);
@@ -4264,6 +4267,12 @@ static void Cmd_tryfaintmon(void)
     int recurringNightmare = FALSE;
     gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
 
+    if (gActiveBattler == gBattlerAttacker && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB)
+    {
+        gBattlescriptCurrInstr += 7;
+        return;
+    }
+
     if (BattlerHasAbility(gActiveBattler, gBattlerAttacker, ABILITY_RECURRING_NIGHTMARE)
         && !IsBattlerAlive(gActiveBattler)
         && !GetSingleUseAbilityCounter(gActiveBattler, ABILITY_RECURRING_NIGHTMARE)
@@ -4312,10 +4321,7 @@ static void Cmd_tryfaintmon(void)
         }
         else SetActiveMultistringChooser(B_MSG_MON_FAINTED);
 
-        
-
-        if (!(gAbsentBattlerFlags & gBitTable[gActiveBattler])
-         && gBattleMons[gActiveBattler].hp == 0)
+        if (!(gAbsentBattlerFlags & gBitTable[gActiveBattler]) && gBattleMons[gActiveBattler].hp == 0)
         {
             gHitMarker |= HITMARKER_FAINTED(gActiveBattler);
             BattleScriptPush(gBattlescriptCurrInstr + 7);
