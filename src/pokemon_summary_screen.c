@@ -2777,7 +2777,7 @@ static int IsStab(u16* abilities, int type)
     {
         PopulateAbilities(abilities);
         abilities[4] = RandomizeType(gBaseStats[sMonSummaryScreen->summary.species].type1, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, TRUE);
-        abilities[5] = RandomizeType(gBaseStats[sMonSummaryScreen->summary.species].type1, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, FALSE);
+        abilities[5] = RandomizeType(gBaseStats[sMonSummaryScreen->summary.species].type2, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, FALSE);
     }
 
     // Everything has stab so don't promote anything
@@ -2889,21 +2889,32 @@ static void GenerateMoveReplaceList(u8 keyPress){
             expectedSplit = SPLIT_STATUS;
         ADD_MOVES_TO_TAB:
             {
-            u16 boostedMoves[TM_COUNT + 1] = {0};
-            u16 otherMoves[TM_COUNT + 1] = {0};
+            u16 boostedMoves[TUTOR_COUNT + 1] = {0};
+            u16 otherMoves[TUTOR_COUNT + 1] = {0};
             u16 abilities[6] = {0};
-            for (i = 0; i < TM_COUNT; i++)
+            for (i = 0; i < TUTOR_COUNT; i++)
             {
-                newMove = GetTmMove(i);
-                if (CanSpeciesLearnTMHM(species, i) && gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE)
+                newMove = GetTutorMove(i);
+                if (CanLearnTutorMove(species, i) && gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE)
                 {
                     int isStab = FALSE;
                     newMove = RandomizeMoves(newMove, species, personality);
                     if (gBattleMoves[newMove].split != expectedSplit) continue;
                     if (expectedSplit != SPLIT_STATUS)
                     {
-                        isStab = IsStab(abilities, gBattleMoves[newMove].type);
-                        if (!isStab && gBattleMoves[newMove].type2) isStab = IsStab(abilities, gBattleMoves[newMove].type2);
+                        if (gBattleMoves[newMove].effect == EFFECT_HIDDEN_POWER)
+                        {
+                            isStab = newMove == MOVE_TECHNO_BLAST;
+                        }
+                        else if (gBattleMoves[newMove].effect != EFFECT_COUNTER
+                            && gBattleMoves[newMove].effect != EFFECT_METAL_BURST
+                            && gBattleMoves[newMove].effect != EFFECT_MIRROR_COAT
+                            && gBattleMoves[newMove].effect != EFFECT_LEVEL_DAMAGE
+                            && newMove != MOVE_SEISMIC_TOSS)
+                        {
+                            isStab = IsStab(abilities, gBattleMoves[newMove].type);
+                            if (!isStab && gBattleMoves[newMove].type2) isStab = IsStab(abilities, gBattleMoves[newMove].type2);
+                        }
                     }
                     if (isStab) boostedMoves[++boostedMoves[0]] = newMove;
                     else otherMoves[++otherMoves[0]] = newMove;
