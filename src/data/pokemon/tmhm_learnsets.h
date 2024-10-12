@@ -7089,6 +7089,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_THUNDER)
         TM(MOVE_THUNDERBOLT)
         TM(MOVE_WATER_PULSE)
+        TM(MOVE_POWER_GEM)
         TMHM_LEARNSET_END
 
     [SPECIES_KECLEON] = TMHM_LEARNSET
@@ -7609,6 +7610,7 @@ const union TmHmUnion gTMHMLearnsets[NUM_SPECIES] =
         TM(MOVE_STONE_EDGE)
         TM(MOVE_SUBSTITUTE)
         TM(MOVE_SUNNY_DAY)
+        TM(MOVE_BULK_UP)
         TMHM_LEARNSET_END
 
     [SPECIES_REGICE] = TMHM_LEARNSET
