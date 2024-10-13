@@ -14533,7 +14533,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
             {
                 if (!(flag & (1 << gBattlerTarget))) continue;
                 if (!IsBattlerAlive(gBattlerTarget)) continue;
-                if (!gVolatileStructs[gBattlerTarget].fear) continue;
+                if (gVolatileStructs[gBattlerTarget].fear) continue;
 
                 gBattleScripting.moveEffect = MOVE_EFFECT_FEAR;
                 gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
