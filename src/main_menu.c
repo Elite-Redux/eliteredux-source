@@ -736,10 +736,6 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                             for (j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++)
                             {
                                 struct OldBoxPokemon old = *((struct OldBoxPokemon*) &gPokemonStoragePtr->boxes[i][j]);
-                                u8 oldOtName[ARRAY_COUNT(old.otName)];
-                                u8 oldNickname[ARRAY_COUNT(old.nickname)];
-                                ARRAY_COPY(oldOtName, old.otName)
-                                ARRAY_COPY(oldNickname, old.nickname)
                                 gPokemonStoragePtr->boxes[i][j] = (struct BoxPokemon) {
                                     .personality = old.personality,
                                     .otId = old.otId,
@@ -768,18 +764,18 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                                     .spAttackEV = old.spAttackEV,
                                     .spDefenseEV = old.spDefenseEV,
                                     .metLocation = old.metLocation,
-                                    .otName = oldOtName,
-                                    .nickname = oldNickname,
                                     .pokeball = old.pokeball,
                                     .speedDown = old.speedDown,
                                     .otGender = old.otGender,
                                     .attackDown = old.attackDown,
                                     .markings = old.markings,
                                 };
+                                ARRAY_COPY(gPokemonStoragePtr->boxes[i][j].otName, old.otName)
+                                ARRAY_COPY(gPokemonStoragePtr->boxes[i][j].nickname, old.nickname)
                             }
                         }
                     }
-                    
+
                     //Updating Version
 					timesUpdated++;
 					VarSet(VAR_UPDATED_TIMES, timesUpdated);

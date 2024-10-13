@@ -121,12 +121,10 @@ struct BoxPokemon
     u8 attackDown:1;
 
     u8 markings:4;
-
-    // This is unused but kept to keep size in place
-    u8 align;
 };
 
 STATIC_ASSERT(sizeof(struct OldBoxPokemon) == sizeof(struct BoxPokemon), BoxPokemonSizesAlign)
+
 
 struct Pokemon
 {
