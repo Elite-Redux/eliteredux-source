@@ -5849,58 +5849,68 @@ static void Cmd_moveend(void)
             gBattleScripting.moveendState++;
             break;
         case MOVEEND_RECOIL:
-            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
-                && gBattleMoveDamage != 0
-                && IsBattlerAlive(gBattlerAttacker)
-                && gTurnStructs[gBattlerAttacker].savedDmg != 0) // Some checks may be redundant alongside this one
+            gBattleScripting.moveendState++;
+
+            if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) break;
+            if (gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE) break;
+            if (!gBattleMoveDamage) break;
+            if (!IsBattlerAlive(gBattlerAttacker)) break;
+            if (!gTurnStructs[gBattlerAttacker].savedDmg) break;
+            if (gCurrentMove != MOVE_STRUGGLE)
             {
-                switch (gBattleMoves[gCurrentMove].effect)
-                {
-                case EFFECT_RECOIL_25: // Take Down, 25% recoil
+                if (IsMagicGuardProtected(gBattlerAttacker)) break;
+                if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ROCK_HEAD)) break;
+                if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STEEL_BARREL)) break;
+            }
+            
+            switch (gBattleMoves[gCurrentMove].effect)
+            {
+                case EFFECT_RECOIL_25_STATUS:
+                case EFFECT_RECOIL_25:
                     gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 4);
-                    BattleScriptCall(BattleScript_MoveEffectRecoil);
-                    effect = TRUE;
                     break;
-                case EFFECT_RECOIL_25_STATUS: // Flare Blitz - can burn, Volt Tackle - can paralyze
-                    gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 4);
-                    BattleScriptCall(BattleScript_MoveEffectRecoilWithStatus);
-                    effect = TRUE;
-                    break;
+                case EFFECT_RECOIL_33_STATUS:
                 case EFFECT_FLINCH_RECOIL_33:
-                case EFFECT_RECOIL_33: // Double Edge, 33 % recoil
+                case EFFECT_RECOIL_33:
                     gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 3);
-                    BattleScriptCall(BattleScript_MoveEffectRecoil);
-                    effect = TRUE;
                     break;
                 case EFFECT_FLINCH_RECOIL_50:
-                case EFFECT_RECOIL_50: // Head Smash, 50 % recoil
+                case EFFECT_RECOIL_50:
                     gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 2);
-                    BattleScriptCall(BattleScript_MoveEffectRecoil);
-                    effect = TRUE;
-                    break;
-                case EFFECT_RECOIL_33_STATUS: // Flare Blitz - can burn, Volt Tackle - can paralyze
-                    gBattleMoveDamage = max(1, gTurnStructs[gBattlerAttacker].savedDmg / 3);
-                    BattleScriptCall(BattleScript_MoveEffectRecoilWithStatus);
-                    effect = TRUE;
                     break;
                 default:
                     gBattleMoveDamage = 0;
-                }
-
-                if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SUPER_STRAIN)) {
-                    gBattleMoveDamage = max(1, gBattleMoveDamage + (gTurnStructs[gBattlerAttacker].savedDmg / 4));
-                    if (!effect) {
-                        BattleScriptCall(BattleScript_MoveEffectRecoil);
-                    }
-                    effect = TRUE;
-                }
-
-				if(gBattleMons[gBattlerAttacker].ability == ABILITY_LIMBER ||
-                   BattlerHasInnate(gBattlerAttacker, ABILITY_LIMBER))
-					gBattleMoveDamage = gBattleMoveDamage * 0.5;
             }
-            gBattleScripting.moveendState++;
+
+            if (gBattleMoveDamage)
+            {
+                BattleScriptCall(BattleScript_MoveEffectRecoil);
+                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
+            }
+
+            if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SUPER_STRAIN))
+            {
+                gBattleMoveDamage = max(1, gBattleMoveDamage + (gTurnStructs[gBattlerAttacker].savedDmg / 4));
+                if (!gBattleMoveDamage)
+                {
+                    BattleScriptCall(BattleScript_MoveEffectRecoil);
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
+                }
+                BattleScriptCall(BattleScript_AbilityPopUp);
+            }
+                
+            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
+            {
+                gBattleMoveDamage = max(1, gBattleMoveDamage + (gTurnStructs[gBattlerAttacker].savedDmg / 3));
+                if (!gBattleMoveDamage)
+                {
+                    BattleScriptCall(BattleScript_MoveEffectRecoil);
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_CONFUSION;
+                }
+                BattleScriptCall(BattleScript_ConfusionAnimation);
+            }
+
+            if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_LIMBER)) gBattleMoveDamage = gBattleMoveDamage * 0.5;
             break;
         case MOVEEND_ABILITIES_AFTER_RECOIL:
             gHpDealt = gTurnStructs[gBattlerAttacker].savedDmg;

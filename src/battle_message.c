@@ -279,7 +279,7 @@ static const u8 sText_CantEscape[] = _("Can't escape!\p");
 static const u8 sText_DontLeaveBirch[] = _("Prof. Birch: Don't leave me like this!\p");
 static const u8 sText_ButNothingHappened[] = _("But nothing happened!");
 static const u8 sText_ButItFailed[] = _("But it failed!");
-static const u8 sText_ItHurtConfusion[] = _("It hurt itself in its\nconfusion!");
+static const u8 sText_ItHurtConfusion[] = _("{B_ATK_NAME_WITH_PREFIX} hurt\nitself in its confusion!");
 static const u8 sText_MirrorMoveFailed[] = _("The Mirror Move failed!");
 static const u8 sText_StartedToRain[] = _("It started to rain!");
 static const u8 sText_DownpourStarted[] = _("A downpour started!");
@@ -1054,6 +1054,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_SuperStrainRecoil[] = _("The strain takes its toll on\n{B_ATK_NAME_WITH_PREFIX}!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1892,6 +1893,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_HOT_COALS_BURN - 12] = sText_HotCoalsBurn,
     [STRINGID_HOT_COALS_EXTINGUISH - 12] = sText_HotCoalsExtinguish,
     [STRINGID_DISABLE_ATTACKER_ITEM - 12] = sText_DisableAttackerItem,
+    [STRINGID_SUPER_STRAIN_RECOIL - 12] = sText_SuperStrainRecoil,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2463,6 +2465,13 @@ const u16 gFaintMonMessage[] =
 {
     [B_MSG_MON_FAINTED] = STRINGID_ATTACKERFAINTED,
     [B_MSG_FADE_OUT] = STRINGID_RECURRING_NIGHTMARE,
+};
+
+const u16 gRecoilMessage[] = 
+{
+    [B_MSG_RECOIL_NORMAL] = STRINGID_PKMNHITWITHRECOIL,
+    [B_MSG_RECOIL_CONFUSION] = STRINGID_TRAINER1LOSETEXT,
+    [B_MSG_RECOIL_STRAIN] = STRINGID_SUPER_STRAIN_RECOIL,
 };
 
 // END OF GENERATED

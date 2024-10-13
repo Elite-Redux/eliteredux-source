@@ -4134,35 +4134,35 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_CONFUSED: // confusion
-            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
-            {
-                gBattleMons[gBattlerAttacker].status2 -= STATUS2_CONFUSION_TURN(1);
-                if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
-                {
-                    if (Random() % ((B_CONFUSION_SELF_DMG_CHANCE >= GEN_7) ? 3 : 2) == 0) // confusion dmg
-                    {
-                        u8 moveType = TYPE_MYSTERY;
-                        gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
-                        gBattlerTarget = gBattlerAttacker;
-                        gBattleMoveDamage = CalculateMoveDamage(MOVE_NONE, gBattlerAttacker, gBattlerAttacker, &moveType, IsAbilityOnSide(BATTLE_OPPOSITE(gBattlerAttacker), ABILITY_COSMIC_DAZE) ? 80 : 40, FALSE, FALSE, TRUE);
-                        gRoundStructs[gBattlerAttacker].confusionSelfDmg = TRUE;
-                        gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                        effect = 1;
-                    }
-                    else
-                    {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
-                        BattleScriptPushCursor();
-                        effect = 3;
-                    }
-                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
-                }
-                else // snapped out of confusion
-                {
-                    BattleScriptCall(BattleScript_MoveUsedIsConfusedNoMore);
-                    effect = 3;
-                }
-            }
+            // if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
+            // {
+            //     gBattleMons[gBattlerAttacker].status2 -= STATUS2_CONFUSION_TURN(1);
+            //     if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
+            //     {
+            //         if (Random() % ((B_CONFUSION_SELF_DMG_CHANCE >= GEN_7) ? 3 : 2) == 0) // confusion dmg
+            //         {
+            //             u8 moveType = TYPE_MYSTERY;
+            //             gBattleCommunication[MULTISTRING_CHOOSER] = TRUE;
+            //             gBattlerTarget = gBattlerAttacker;
+            //             gBattleMoveDamage = CalculateMoveDamage(MOVE_NONE, gBattlerAttacker, gBattlerAttacker, &moveType, IsAbilityOnSide(BATTLE_OPPOSITE(gBattlerAttacker), ABILITY_COSMIC_DAZE) ? 80 : 40, FALSE, FALSE, TRUE);
+            //             gRoundStructs[gBattlerAttacker].confusionSelfDmg = TRUE;
+            //             gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
+            //             effect = 1;
+            //         }
+            //         else
+            //         {
+            //             gBattleCommunication[MULTISTRING_CHOOSER] = FALSE;
+            //             BattleScriptPushCursor();
+            //             effect = 3;
+            //         }
+            //         gBattlescriptCurrInstr = BattleScript_MoveUsedIsConfused;
+            //     }
+            //     else // snapped out of confusion
+            //     {
+            //         BattleScriptCall(BattleScript_MoveUsedIsConfusedNoMore);
+            //         effect = 3;
+            //     }
+            // }
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_PARALYSED: // paralysis
@@ -6823,9 +6823,11 @@ bool32 CanBeConfused(u8 battlerId)
     if (!(gBattleMons[battlerId].status2 & STATUS2_CONFUSION) && IsMyceliumMightActive(gBattlerAttacker))
         return TRUE;
 
-    if (BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_OWN_TEMPO)
-        || BATTLER_HAS_ABILITY(gEffectBattler, ABILITY_DISCIPLINE)
-        || gBattleMons[gEffectBattler].status2 & STATUS2_CONFUSION
+    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_OWN_TEMPO)
+        || BATTLER_HAS_ABILITY(battlerId, ABILITY_DISCIPLINE)
+        || BATTLER_HAS_ABILITY(battlerId, ABILITY_ROCK_HEAD)
+        || BATTLER_HAS_ABILITY(battlerId, ABILITY_STEEL_BARREL)
+        || gBattleMons[battlerId].status2 & STATUS2_CONFUSION
         || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN))
         return FALSE;
     return TRUE;

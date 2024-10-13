@@ -311,7 +311,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectGrowth                  @ EFFECT_GROWTH
 	.4byte BattleScript_EffectCloseCombat             @ EFFECT_CLOSE_COMBAT
 	.4byte BattleScript_EffectLastResort              @ EFFECT_LAST_RESORT
-	.4byte BattleScript_EffectHit                     @ EFFECT_RECOIL_33_STATUS
+	.4byte BattleScript_EffectArgumentHit             @ EFFECT_RECOIL_33_STATUS
 	.4byte BattleScript_EffectFlinchWithStatus        @ EFFECT_FLINCH_STATUS
 	.4byte BattleScript_EffectHit                     @ EFFECT_RECOIL_50
 	.4byte BattleScript_EffectShellSmash              @ EFFECT_SHELL_SMASH
@@ -436,7 +436,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectInverseRoom             @ EFFECT_INVERSE_ROOM
 	.4byte BattleScript_EffectDrainBrain              @ EFFECT_DRAIN_BRAIN
 	.4byte BattleScript_EffectTripleArrows            @ EFFECT_TRIPLE_ARROWS
-	.4byte BattleScript_EffectHit                     @ EFFECT_RECOIL_25_STATUS
+	.4byte BattleScript_EffectArgumentHit             @ EFFECT_RECOIL_25_STATUS
 	.4byte BattleScript_EffectHit                     @ EFFECT_WEATHER_BOOST
 	.4byte BattleScript_EffectMortalSpin              @ EFFECT_MORTAL_SPIN
 	.4byte BattleScript_EffectKarma                   @ EFFECT_KARMA
@@ -9294,19 +9294,15 @@ BattleScript_MoveEffectConfusion::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-BattleScript_MoveEffectRecoilWithStatus::
-	argumentstatuseffect
+BattleScript_ConfusionAnimation::
+	status2animation BS_ATTACKER, STATUS2_CONFUSION
+	return
+
 BattleScript_MoveEffectRecoil::
-	jumpifmove MOVE_STRUGGLE, BattleScript_DoRecoil
-	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD,    BattleScript_RecoilEnd
-	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_RecoilEnd
-	jumpifability BS_ATTACKER, ABILITY_IMPENETRABLE, BattleScript_RecoilEnd
-	jumpifmagicguard BS_ATTACKER, BattleScript_RecoilEnd
-BattleScript_DoRecoil::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	printstring STRINGID_PKMNHITWITHRECOIL
+	printfromtable gRecoilMessage
 	waitmessage B_WAIT_TIME_LONG
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 BattleScript_RecoilEnd::

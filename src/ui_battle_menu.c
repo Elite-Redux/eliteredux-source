@@ -2096,9 +2096,8 @@ const u8 sText_Title_Status_Bleed_Description[]            = _("Prevents healing
 
 //Secondary Status
 const u8 sText_Title_Status_Confusion[]                    = _("Confused");
-const u8 sText_Title_Status_Confusion_Description[]        = _("Has a 33% chance to damage itself,\n"
-                                                               "damage is calculated as if it were a\n"
-                                                               "physical typeless move with a 40 BP.");
+const u8 sText_Title_Status_Confusion_Description[]        = _("This Pokémon takes 33% of the damage"
+                                                               "it deals as recoil.");
 const u8 sText_Title_Status_IncomingAttack[]               = _("Incoming Attack");
 const u8 sText_Title_Status_IncomingAttack_Description[]   = _("Will be hit by {STR_VAR_1}'s\n"
                                                                "{STR_VAR_2} with a power of {STR_VAR_3}\n"
@@ -2431,13 +2430,6 @@ static void PrintStatusTab(void){
             case STATUS_INFO_CONFUSION:
                 StringCopy(gStringVar1, sText_Title_Status_Confusion);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
-
-                //Turns Left
-                /*StringCopy(gStringVar1, sText_Title_Field_Turns_Left);
-                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
-                turnsLeft = gBattleMons[sMenuDataPtr->battlerId].status2 - STATUS2_CONFUSION;
-                ConvertIntToDecimalStringN(gStringVar1, turnsLeft, STR_CONV_MODE_LEFT_ALIGN, 4);
-                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);*/
                 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Status_Confusion_Description);
