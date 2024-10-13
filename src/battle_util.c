@@ -9889,7 +9889,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_BAD_OMEN:
-            if (isCrit) MUL(.5);
+            if (isCrit) MUL(.25);
             return;
     }
 }

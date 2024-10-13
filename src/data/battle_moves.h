@@ -2970,7 +2970,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_CRUNCH] =
     {
         .effect = EFFECT_DEFENSE_DOWN_HIT,
-        .power = 80,
+        .power = 90,
         .type = TYPE_DARK,
         .accuracy = 100,
         .pp = 15,
@@ -10389,7 +10389,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_AQUA_CUTTER] =
     {
         .effect = EFFECT_BLEED_HIT,
-        .power = 70,
+        .power = 75,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 20,
