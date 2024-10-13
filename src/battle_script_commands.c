@@ -5896,6 +5896,7 @@ static void Cmd_moveend(void)
                     BattleScriptCall(BattleScript_MoveEffectRecoil);
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
                 }
+                gBattleScripting.abilityPopupOverwrite = ABILITY_SUPER_STRAIN;
                 BattleScriptCall(BattleScript_AbilityPopUp);
             }
                 
