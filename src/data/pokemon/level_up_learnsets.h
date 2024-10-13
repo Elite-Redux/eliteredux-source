@@ -1391,7 +1391,6 @@ static const struct LevelUpMove sMeowthPartnerLevelUpLearnset[] = {
     LEVEL_UP_MOVE(51, MOVE_TRUMP_CARD),
     LEVEL_UP_MOVE(56, MOVE_EXTREME_SPEED),
     LEVEL_UP_MOVE(56, MOVE_SWIFT),
-    LEVEL_UP_MOVE(61, MOVE_ECHOED_VOICE),
     LEVEL_UP_END
 };
 
