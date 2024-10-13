@@ -658,119 +658,20 @@ static void InheritIVs(struct Pokemon *egg, struct DayCare *daycare)
 // the given array.
 u8 GetEggMoves(u16 species, u16 *eggMoves)
 {
-    u16 eggMoveIdx;
-    u16 numEggMoves;
-    u16 i;
-
-    numEggMoves = 0;
-    eggMoveIdx = 0;
-    for (i = 0; i < ARRAY_COUNT(gEggMoves) - 1; i++)
-    {
-        if (gEggMoves[i] == species + EGG_MOVES_SPECIES_OFFSET)
-        {
-            eggMoveIdx = i + 1;
-            break;
-        }
-    }
-
-    for (i = 0; i < EGG_MOVES_ARRAY_COUNT; i++)
-    {
-        if (gEggMoves[eggMoveIdx + i] > EGG_MOVES_SPECIES_OFFSET)
-            break;
-
-        eggMoves[i] = gEggMoves[eggMoveIdx + i];
-        numEggMoves++;
-    }
-
-    return numEggMoves;
+    return 0;
 }
 u8 GetEggMovesSpecies(u16 species, u16 *eggMoves)
 {
-    u16 eggMoveIdx;
-    u16 numEggMoves;
-    u16 i;
-
-    numEggMoves = 0;
-    eggMoveIdx = 0;
-    for (i = 0; i < ARRAY_COUNT(gEggMoves) - 1; i++)
-    {
-        if (gEggMoves[i] == species + EGG_MOVES_SPECIES_OFFSET)
-        {
-            eggMoveIdx = i + 1;
-            break;
-        }
-    }
-
-    for (i = 0; i < EGG_MOVES_ARRAY_COUNT; i++)
-    {
-        if (gEggMoves[eggMoveIdx + i] > EGG_MOVES_SPECIES_OFFSET)
-        {
-            // TODO: the curly braces around this if statement are required for a matching build.
-            break;
-        }
-
-        eggMoves[i] = gEggMoves[eggMoveIdx + i];
-        numEggMoves++;
-    }
-
-    return numEggMoves;
+    return 0;
 }
 bool8 SpeciesCanLearnEggMove(u16 species, u16 move) //Move search PokedexPlus HGSS_Ui
 {
-    u16 eggMoveIdx;
-    u16 i;
-    eggMoveIdx = 0;
-    for (i = 0; i < ARRAY_COUNT(gEggMoves) - 1; i++)
-    {
-        if (gEggMoves[i] == species + EGG_MOVES_SPECIES_OFFSET)
-        {
-            eggMoveIdx = i + 1;
-            break;
-        }
-    }
-
-    for (i = 0; i < EGG_MOVES_ARRAY_COUNT; i++)
-    {
-        if (gEggMoves[eggMoveIdx + i] > EGG_MOVES_SPECIES_OFFSET)
-            return FALSE;
-
-        if (move == gEggMoves[eggMoveIdx + i])
-            return TRUE;
-    }
-    return FALSE;
+    return 0;
 }
 
 static u8 GetBoxMonEggMoves(struct BoxPokemon *boxMon, u16 *eggMoves)
 {
-    u16 eggMoveIdx;
-    u16 numEggMoves;
-    u16 species;
-    u16 i;
-
-    numEggMoves = 0;
-    eggMoveIdx = 0;
-    species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
-    for (i = 0; i < ARRAY_COUNT(gEggMoves) - 1; i++)
-    {
-        if (gEggMoves[i] == species + EGG_MOVES_SPECIES_OFFSET)
-        {
-            eggMoveIdx = i + 1;
-            break;
-        }
-    }
-
-    for (i = 0; i < EGG_MOVES_ARRAY_COUNT; i++)
-    {
-        if (gEggMoves[eggMoveIdx + i] > EGG_MOVES_SPECIES_OFFSET)
-        {
-            break;
-        }
-
-        eggMoves[i] = gEggMoves[eggMoveIdx + i];
-        numEggMoves++;
-    }
-
-    return numEggMoves;
+    return 0;
 }
 
 static void TransferEggMoves (struct DayCare *daycare)
@@ -927,22 +828,6 @@ static void BuildEggMoveset(struct Pokemon *egg, struct BoxPokemon *father, stru
             break;
         }
     }
-
-    // Remove TM inheritance
-/*     for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        if (sHatchedEggFatherMoves[i] != MOVE_NONE)
-        {
-            for (j = 0; j < NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES; j++)
-            {
-                if (sHatchedEggFatherMoves[i] == ItemIdToBattleMoveId(ITEM_TM01_FOCUS_PUNCH + j) && CanMonLearnTMHM(egg, j))
-                {
-                    if (GiveMoveToMon(egg, sHatchedEggFatherMoves[i]) == MON_HAS_MAX_MOVES)
-                        DeleteFirstMoveAndGiveMoveToMon(egg, sHatchedEggFatherMoves[i]);
-                }
-            }
-        }
-    } */
 
     for (i = 0; i < MAX_MON_MOVES; i++)
     {

@@ -5494,7 +5494,7 @@ const struct Item gItems[] =
         .unk19 = 1,
         .pocket = POCKET_KEY_ITEMS,
         .type = ITEM_USE_BAG_MENU,
-        .fieldUseFunc = ItemUseOutOfBattle_TmCase,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
     [ITEM_BERRY_POUCH] =
