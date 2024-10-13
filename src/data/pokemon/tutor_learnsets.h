@@ -4117,6 +4117,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
 
     [SPECIES_CHANSEY] = TUTOR_LEARNSET
         TUTOR(MOVE_ATTRACT)
+        TUTOR(MOVE_BLOOD_SHOT)
         TUTOR(MOVE_CALM_MIND)
         TUTOR(MOVE_CHARM)
         TUTOR(MOVE_COUNTER)
@@ -9102,6 +9103,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
 
     [SPECIES_BLISSEY] = TUTOR_LEARNSET
         TUTOR(MOVE_ATTRACT)
+        TUTOR(MOVE_BLOOD_SHOT)
         TUTOR(MOVE_CALM_MIND)
         TUTOR(MOVE_CHARM)
         TUTOR(MOVE_COUNTER)
@@ -16082,6 +16084,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
 
     [SPECIES_HAPPINY] = TUTOR_LEARNSET
         TUTOR(MOVE_ATTRACT)
+        TUTOR(MOVE_BLOOD_SHOT)
         TUTOR(MOVE_CALM_MIND)
         TUTOR(MOVE_CHARM)
         TUTOR(MOVE_COUNTER)
