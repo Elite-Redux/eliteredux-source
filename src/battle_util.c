@@ -9677,6 +9677,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
             return;
 
+        case ABILITY_TO_THE_BONE:
         case ABILITY_SNIPER:
             if (isCrit) MUL(1.5);
             return;
@@ -13039,6 +13040,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
             return TRUE;
         
+        case ABILITY_TO_THE_BONE:
         case ABILITY_RAZOR_SHARP:
             if (!ShouldApplyOnHitAffect(target)) break;
             if (!CanBleed(target)) break;

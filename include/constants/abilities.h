@@ -690,7 +690,7 @@
 #define ABILITY_NO_TURNING_BACK 668 // Boosts all stats but can't retreat when below 1/2 max HP.
 #define ABILITY_FLAMMABLE_COAT 669 // Changes forms when using or hit by a Fire-type move.
 #define ABILITY_DRACO_MORALE 670 // Uses Dragon Cheer on switch-in.
-#define ABILITY_BAD_OMEN 671 // Foes min roll and may miss. Takes 1/2 damage from crits.
+#define ABILITY_BAD_OMEN 671 // Foes min roll and may miss. Takes 1/4 damage from crits.
 #define ABILITY_MOSH_PIT 672 // Ally's attacks get a 1.25x boost. 1.5x if attack causes recoil.
 #define ABILITY_BLOOD_STAIN 673 // Bleeds if not immune. Can't get other status. Spreads on contact.
 #define ABILITY_BLOOD_STIGMA 674 // Immune to status. Gets a 50% boost vs bleeding foes.
@@ -750,8 +750,9 @@
 #define ABILITY_WIND_RAGE 728 // Uses Defog on switch-in. Air- based moves get a 1.3x boost.
 #define ABILITY_VICTORY_BOMB 729 // Attacks with a 100BP Fire-type Explosion on fainting.
 #define ABILITY_RAZOR_SHARP 730 // Critical hits also inflict bleeding.
+#define ABILITY_TO_THE_BONE 731 // Critical hits get a 1.5x boost and inflict bleeding.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_RAZOR_SHARP + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_TO_THE_BONE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
