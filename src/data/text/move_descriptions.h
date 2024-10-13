@@ -3818,6 +3818,10 @@ static const u8 sMoveTwoLineDescription_MoveEclipse[] = _(
 static const u8 sMoveTwoLineDescription_MoveVexingVoid[] = _(
     "Not implemented");
 
+static const u8 sMoveTwoLineDescription_MoveSafePassage[] = _(
+    "Switches to an ally and\n"
+    "shields them from harm.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4795,6 +4799,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_ZAP_JIVE - 1] = sMoveTwoLineDescription_MoveZapJive,
     [MOVE_ECLIPSE - 1] = sMoveTwoLineDescription_MoveEclipse,
     [MOVE_VEXING_VOID - 1] = sMoveTwoLineDescription_MoveVexingVoid,
+    [MOVE_SAFE_PASSAGE - 1] = sMoveTwoLineDescription_MoveSafePassage,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5771,6 +5776,7 @@ static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("Not implemented");
 static const u8 sMoveFourLineDescription_MoveZapJive[] = _("Not implemented");
 static const u8 sMoveFourLineDescription_MoveEclipse[] = _("Not implemented");
 static const u8 sMoveFourLineDescription_MoveVexingVoid[] = _("Not implemented");
+static const u8 sMoveFourLineDescription_MoveSafePassage[] = _("Switches to an ally.\nThat ally takes -30%\ndamage this turn.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6747,4 +6753,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_ZAP_JIVE - 1] = sMoveFourLineDescription_MoveZapJive,
     [MOVE_ECLIPSE - 1] = sMoveFourLineDescription_MoveEclipse,
     [MOVE_VEXING_VOID - 1] = sMoveFourLineDescription_MoveVexingVoid,
+    [MOVE_SAFE_PASSAGE - 1] = sMoveFourLineDescription_MoveSafePassage,
 };
