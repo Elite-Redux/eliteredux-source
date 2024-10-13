@@ -994,6 +994,7 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_ZAP_JIVE
 	.4byte Move_NONE @ MOVE_ECLIPSE
 	.4byte Move_NONE @ MOVE_VEXING_VOID
+	.4byte Move_NONE @ MOVE_SAFE_PASSAGE
 
 	.align 2
 gBattleAnims_StatusConditions::

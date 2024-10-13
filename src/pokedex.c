@@ -5215,16 +5215,6 @@ static int DoPokedexSearch(u8 dexMode, u8 order, u8 abcGroup, u8 bodyColor, u8 t
                 break;
             }
         }
-        //Calc tm move ID
-        tmMoveId = 0xFF;
-        for (i = 0; i < TM_COUNT; i++)
-        {
-            if(move == ItemIdToBattleMoveId(ITEM_TM01_FOCUS_PUNCH + i))
-            {
-                tmMoveId = (ITEM_TM01_FOCUS_PUNCH + i);
-                break;
-            }
-        }
         
         for (i = 0, resultsCount = 0; i < sPokedexView->pokemonListCount; i++)
         {
@@ -5237,22 +5227,8 @@ static int DoPokedexSearch(u8 dexMode, u8 order, u8 abcGroup, u8 bodyColor, u8 t
                 resultsCount++;
                 continue;
             }
-            //TMHM
-            if(CanSpeciesLearnTMHM(species, tmMoveId))
-            {
-                sPokedexView->pokedexList[resultsCount] = sPokedexView->pokedexList[i];
-                resultsCount++;
-                continue;
-            }
             //Tutor
             if(CanLearnTutorMove(species, tutorMoveId))
-            {
-                sPokedexView->pokedexList[resultsCount] = sPokedexView->pokedexList[i];
-                resultsCount++;
-                continue;
-            }
-            //EGGs
-            if(SpeciesCanLearnEggMove(species, move))
             {
                 sPokedexView->pokedexList[resultsCount] = sPokedexView->pokedexList[i];
                 resultsCount++;
@@ -6486,17 +6462,6 @@ static bool8 CalculateMoves(void)
         {
             sStatsMovesTutor[numTutorMoves] = GetTutorMove(i);
             numTutorMoves++;
-        }
-    }
-
-    //TMHM moves
-    for (j = 0; j < TM_COUNT; j++)
-    {
-        if(CanSpeciesLearnTMHM(species, j))
-        {
-            sStatsMovesTMHM[numTMHMMoves] = GetTmMove(j);
-            sStatsMovesTMHM_ID[numTMHMMoves] = (ITEM_TM01_FOCUS_PUNCH + j);
-            numTMHMMoves++;
         }
     }
 

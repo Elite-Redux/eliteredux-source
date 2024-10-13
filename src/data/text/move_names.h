@@ -975,6 +975,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_ZAP_JIVE] = _("Zap Jive"),
     [MOVE_ECLIPSE] = _("Eclipse"),
     [MOVE_VEXING_VOID] = _("Vexing Void"),
+    [MOVE_SAFE_PASSAGE] = _("Safe Passage"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1956,4 +1957,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_ZAP_JIVE] = _("Zap Jive"),
     [MOVE_ECLIPSE] = _("Eclipse"),
     [MOVE_VEXING_VOID] = _("Vexing Void"),
+    [MOVE_SAFE_PASSAGE] = _("Safe Passage"),
 };

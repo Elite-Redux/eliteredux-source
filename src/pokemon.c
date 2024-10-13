@@ -7815,31 +7815,6 @@ bool8 TryIncrementMonLevel(struct Pokemon *mon)
     }
 }
 
-u32 CanMonLearnTMHM(struct Pokemon *mon, u8 tm)
-{
-    u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
-    if (species == SPECIES_EGG)
-    {
-        return 0;
-    }
-
-    species = getLearnsetMon(species);
-    
-    return gTMHMLearnsets[species].bits[tm / 32] & (1 << (tm % 32));
-}
-
-u32 CanSpeciesLearnTMHM(u16 species, u8 tm)
-{
-    if (species == SPECIES_EGG)
-    {
-        return 0;
-    }
-
-    species = getLearnsetMon(species);
-
-    return gTMHMLearnsets[species].bits[tm / 32] & (1 << (tm % 32));
-}
-
 u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves, bool8 disableLearned)
 {
     u16 learnedMoves[4];
@@ -8013,36 +7988,12 @@ u8 GetEggMoveTutorMoves(struct Pokemon *mon, u16 *moves)
 //TM Moves --------------------------------------------------------------------
 u8 GetNumberOfTMMoves(struct Pokemon *mon)
 {
-    u16 i;
-	u16 numMoves = 0;
-    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-
-    for (i = 0; i < TM_COUNT; i++)
-    {
-        if(CanSpeciesLearnTMHM(species, i) && !MonKnowsMove(mon, GetTmMove(i)))
-        {
-            numMoves++;
-        }
-    }
-    return numMoves;
+    return 0;
 }
 
 u8 GetTMMoveTutorMoves(struct Pokemon *mon, u16 *moves)
 {
-    u16 i;
-	u16 numMoves = 0;
-    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
-    u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
-
-    for (i = 0; i < TM_COUNT; i++)
-    {
-        if(CanSpeciesLearnTMHM(species, i) && !MonKnowsMove(mon, GetTmMove(i)))
-        {
-            moves[numMoves] = RandomizeMoves(GetTmMove(i), species, personality);
-            numMoves++;
-        }
-    }
-    return numMoves;
+    return 0;
 }
 //Tutor Moves --------------------------------------------------------------------
 u8 GetNumberOfTutorMoves(struct Pokemon *mon)
