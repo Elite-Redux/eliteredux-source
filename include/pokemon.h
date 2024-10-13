@@ -18,7 +18,7 @@
 
 #define REMOVE_RIBBONS
 
-struct BoxPokemon
+struct OldBoxPokemon
 {
     // Words 1 & 2: PID + Trainer ID
     u32 personality;
@@ -65,33 +65,68 @@ struct BoxPokemon
     u8 metLocation;
     u8 otName[PLAYER_NAME_LENGTH];
 
-    #ifdef REMOVE_RIBBONS
-        u8 markings:4;
-        u8 abilityNum:2;
-        u8 speedDown:1;
-        u8 otGender:1;
-	#else
-        // Word 16: ribbons and markings
-        u32 coolRibbon:3;
-        u32 beautyRibbon:3;
-        u32 cuteRibbon:3;
-        u32 smartRibbon:3;
-        u32 toughRibbon:3;
-        u32 championRibbon:1;
-        u32 winningRibbon:1;
-        u32 victoryRibbon:1;
-        u32 artistRibbon:1;
-        u32 effortRibbon:1;
-        u32 marineRibbon:1;  // never distributed
-        u32 landRibbon:1;    // never distributed
-        u32 skyRibbon:1;     // never distributed
-        u32 countryRibbon:1; // distributed during Pokémon Festa '04 and '05 to tournament winners
-        u32 nationalRibbon:1;
-        u32 earthRibbon:1;
-        u32 markings:4;
-        u32 abilityNum:2;
-	#endif
+    u8 markings:4;
+    u8 abilityNum:2;
+    u8 speedDown:1;
+    u8 otGender:1;
 };
+
+STATIC_ASSERT(MOVES_COUNT < 1 << 11, movesFitInBoxPokemon)
+struct BoxPokemon
+{
+    u32 personality;
+    u32 otId;
+
+    u32 move1:11;
+    u32 experience:21;
+
+    u32 move2:11;
+    u32 move3:11;
+    u32 friendship:8;
+    u32 isEventMon:1;
+    u32 isAlpha:1;
+
+    u32 species:16;
+    u32 move4:11;
+    u32 hpType:5; //Will be used for tera type too
+
+    // Word 12: miscellaneous data; item, nature, Egg and origin data
+    u32 heldItem:10;
+    u32 nature:5;
+    u32 isEgg:1;
+    u32 language:3;
+    u32 metLevel:7;
+    u32 isShiny:2;  //0 = not shiny, 1 = shiny, 2 = rare shiny, 3 = legendary shiny
+    u32 maxShiny:2; //0 = not shiny, 1 = shiny, 2 = rare shiny, 3 = legendary shiny
+    u32 abilityNum:2;
+
+    // Words 9 - 11: EV's
+    u8 hpEV;
+    u8 attackEV;
+    u8 defenseEV;
+    u8 speedEV;
+    u8 spAttackEV;
+    u8 spDefenseEV;
+
+    // Words 13 & 14: Trainer name + met location
+    u8 metLocation;
+    u8 otName[PLAYER_NAME_LENGTH];
+
+    // Words 3-5: Pokémon nickname (12 chars)
+    u8 nickname[POKEMON_NAME_LENGTH];
+
+    u8 pokeball:5; //31 balls
+    u8 speedDown:1;
+    u8 otGender:1;
+    u8 attackDown:1;
+
+    u8 markings:4;
+
+    // This is unused but kept to keep size in place
+    u8 align;
+};
+
+STATIC_ASSERT(sizeof(struct OldBoxPokemon) == sizeof(struct BoxPokemon), BoxPokemonSizesAlign)
 
 struct Pokemon
 {

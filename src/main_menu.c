@@ -17,6 +17,7 @@
 #include "main_menu.h"
 #include "menu.h"
 #include "list_menu.h"
+#include "load_save.h"
 #include "mystery_event_menu.h"
 #include "naming_screen.h"
 #include "option_menu.h"
@@ -25,6 +26,7 @@
 #include "pokeball.h"
 #include "pokedex.h"
 #include "pokemon.h"
+#include "pokemon_storage_system.h"
 #include "random.h"
 #include "rtc.h"
 #include "save.h"
@@ -726,6 +728,58 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
             if(VarGet(VAR_SAVE_VERSION) <= CURRENT_GAME_VERSION){
                 //No problems
                 if(VarGet(VAR_SAVE_VERSION) < CURRENT_GAME_VERSION){
+                    if (VarGet(VAR_SAVE_VERSION) <= 1042)
+                    {
+                        int i, j;
+                        for (i = 0; i < ARRAY_COUNT(gPokemonStoragePtr->boxes); i++)
+                        {
+                            for (j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++)
+                            {
+                                struct OldBoxPokemon old = *((struct OldBoxPokemon*) &gPokemonStoragePtr->boxes[i][j]);
+                                u8 oldOtName[ARRAY_COUNT(old.otName)];
+                                u8 oldNickname[ARRAY_COUNT(old.nickname)];
+                                ARRAY_COPY(oldOtName, old.otName)
+                                ARRAY_COPY(oldNickname, old.nickname)
+                                gPokemonStoragePtr->boxes[i][j] = (struct BoxPokemon) {
+                                    .personality = old.personality,
+                                    .otId = old.otId,
+                                    .move1 = old.move1,
+                                    .experience = old.experience,
+                                    .move2 = old.move2,
+                                    .move3 = old.move3,
+                                    .friendship = old.friendship,
+                                    .isEventMon = old.isEventMon,
+                                    .isAlpha = old.isAlpha,
+                                    .species = old.species,
+                                    .move4 = old.move4,
+                                    .hpType = old.hpType,
+                                    .heldItem = old.heldItem,
+                                    .nature = old.nature,
+                                    .isEgg = old.isEgg,
+                                    .language = old.language,
+                                    .metLevel = old.metLevel,
+                                    .isShiny = old.isShiny,
+                                    .maxShiny = old.maxShiny,
+                                    .abilityNum = old.abilityNum,
+                                    .hpEV = old.hpEV,
+                                    .attackEV = old.attackEV,
+                                    .defenseEV = old.defenseEV,
+                                    .speedEV = old.speedEV,
+                                    .spAttackEV = old.spAttackEV,
+                                    .spDefenseEV = old.spDefenseEV,
+                                    .metLocation = old.metLocation,
+                                    .otName = oldOtName,
+                                    .nickname = oldNickname,
+                                    .pokeball = old.pokeball,
+                                    .speedDown = old.speedDown,
+                                    .otGender = old.otGender,
+                                    .attackDown = old.attackDown,
+                                    .markings = old.markings,
+                                };
+                            }
+                        }
+                    }
+                    
                     //Updating Version
 					timesUpdated++;
 					VarSet(VAR_UPDATED_TIMES, timesUpdated);
