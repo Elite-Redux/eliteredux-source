@@ -161,45 +161,45 @@ struct RoundStruct
     u32 specialDmg;
     u8 physicalBattlerId;
     u8 specialBattlerId;
-    u32 protected:1;
-    u32 spikyShielded:1;
-    u32 kingsShielded:1;
-    u32 banefulBunkered:1;
-    u32 obstructed:1;
-    u32 endured:1;
-    u32 noValidMoves:1;
-    u32 helpingHand:1;
-    u32 bounceMove:1;
-    u32 stealMove:1;
-    u32 prlzImmobility:1;
-    u32 confusionSelfDmg:1;
-    u32 targetAffected:1;
-    u32 chargingTurn:1;
-    u32 fleeFlag:2; // For RunAway and Smoke Ball.
-    u32 usedImprisonedMove:1;
-    u32 loveImmobility:1;
-    u32 usedDisabledMove:1;
-    u32 usedTauntedMove:1;
-    u32 flag2Unknown:1; // Only set to 0 once. Checked in 'WasUnableToUseMove' function.
-    u32 flinchImmobility:1;
-    u32 notFirstStrike:1;
-    u32 palaceUnableToUseMove:1;
-    u32 usesBouncedMove:1;
+    u8 protected:1;
+    u8 spikyShielded:1;
+    u8 kingsShielded:1;
+    u8 banefulBunkered:1;
+    u8 obstructed:1;
+    u8 endured:1;
+    u8 noValidMoves:1;
+    u8 helpingHand:1;
+    u8 bounceMove:1;
+    u8 stealMove:1;
+    u8 prlzImmobility:1;
+    u8 confusionSelfDmg:1;
+    u8 targetAffected:1;
+    u8 chargingTurn:1;
+    u8 fleeFlag:2; // For RunAway and Smoke Ball.
+    u8 usedImprisonedMove:1;
+    u8 loveImmobility:1;
+    u8 usedDisabledMove:1;
+    u8 usedTauntedMove:1;
+    u8 flag2Unknown:1; // Only set to 0 once. Checked in 'WasUnableToUseMove' function.
+    u8 flinchImmobility:1;
+    u8 notFirstStrike:1;
+    u8 palaceUnableToUseMove:1;
+    u8 usesBouncedMove:1;
     u8 protectedThisTurn:1;
-    u32 usedHealBlockedMove:1;
-    u32 usedGravityPreventedMove:1;
-    u32 powderSelfDmg:1;
-    u32 usedThroatChopPreventedMove:1;
-    u32 statRaised:1;
-    u32 usedMicleBerry:1;
-    u32 usedCustapBerry:1;    // also quick claw
-    u32 touchedProtectLike:1;
-    u32 disableEjectPack:1;
-    u32 statFell:1;
-    u32 quickDraw:1;
-    u32 beakBlastCharge:1;
-    u32 extraMoveUsed:1;
-    u32 angelsWrathProtected:1;
+    u8 usedHealBlockedMove:1;
+    u8 usedGravityPreventedMove:1;
+    u8 powderSelfDmg:1;
+    u8 usedThroatChopPreventedMove:1;
+    u8 statRaised:1;
+    u8 usedMicleBerry:1;
+    u8 usedCustapBerry:1;    // also quick claw
+    u8 touchedProtectLike:1;
+    u8 disableEjectPack:1;
+    u8 statFell:1;
+    u8 quickDraw:1;
+    u8 beakBlastCharge:1;
+    u8 extraMoveUsed:1;
+    u8 angelsWrathProtected:1;
     u8 glaiveRush:1;
     u8 silkTrapped:1;
     u8 attackCancelled:1;
@@ -210,6 +210,7 @@ struct RoundStruct
     u8 damaged:1;
     u8 merculight:1;
     u8 detected:1;
+    u8 safePassage:1;
 };
 
 struct TurnStruct
@@ -247,7 +248,7 @@ struct TurnStruct
     u8 dancerUsedMove:1;
     u8 announceNeutralizingGas:1;   // See Cmd_switchineffects
     u8 neutralizingGasRemoved:1;    // See VARIOUS_TRY_END_NEUTRALIZING_GAS
-    u32 pranksterElevated:1;
+    u8 pranksterElevated:1;
     u8 mirrorHerbStat:4;
     u8 multiHitCounter:4;
     u8 shouldTriggerSwitchItem:1;

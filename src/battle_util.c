@@ -10106,6 +10106,8 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
         MulModifier(&modifier, UQ_4_12(1.5));
     if (gVolatileStructs[battlerDef].fear)
         MulModifier(&modifier, UQ_4_12(1.5));
+    if (gRoundStructs[battlerDef].safePassage)
+        MulModifier(&modifier, UQ_4_12(.65));
 
     if (GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN && moveType == TYPE_GRASS && IsBattlerGrounded(battlerAtk) && !(gStatuses3[battlerAtk] & STATUS3_SEMI_INVULNERABLE))
         MulModifier(&modifier, (B_TERRAIN_TYPE_BOOST >= GEN_8) ? UQ_4_12(1.3) : UQ_4_12(1.5));

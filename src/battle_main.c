@@ -3429,6 +3429,11 @@ void SwitchInClearSetData(void)
         gVolatileStructs[gActiveBattler].substituteHP = VolatileStructCopy.substituteHP;
     }
 
+    if (gCurrentMove == MOVE_SAFE_PASSAGE)
+    {
+        gRoundStructs[gActiveBattler].safePassage = TRUE;
+    }
+
     gMoveResultFlags = 0;
     gVolatileStructs[gActiveBattler].isFirstTurn = 2;
     gVolatileStructs[gActiveBattler].truantSwitchInHack = VolatileStructCopy.truantSwitchInHack;
