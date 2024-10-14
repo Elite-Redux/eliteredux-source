@@ -14870,6 +14870,7 @@ static void Cmd_setsemiinvulnerablebit(void)
     case MOVE_PHANTOM_FORCE:
     case MOVE_SHADOW_FORCE:
     case MOVE_CHEAP_SHOT:
+    case MOVE_READY_OR_NOT:
         gStatuses3[gBattlerAttacker] |= STATUS3_PHANTOM_FORCE;
         break;
     }

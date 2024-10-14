@@ -12020,14 +12020,17 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_READY_OR_NOT] =
     {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
-        .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 0,
-        .secondaryEffectChance = 0,
+        .effect = EFFECT_SEMI_INVULNERABLE,
+        .power = 80,
+        .type = TYPE_GHOST,
+        .accuracy = 100,
+        .pp = 15,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
+        .twoTurnMove = TRUE,
+        .argument = MOVE_EFFECT_FLINCH,
     },
     [MOVE_GIANT_GALE] =
     {

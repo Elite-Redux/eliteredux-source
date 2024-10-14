@@ -6293,6 +6293,8 @@ BattleScript_EffectSemiInvulnerable::
 	jumpifmove MOVE_BOUNCE, BattleScript_FirstTurnBounce
 	jumpifmove MOVE_PHANTOM_FORCE, BattleScript_FirstTurnPhantomForce
 	jumpifmove MOVE_SHADOW_FORCE, BattleScript_FirstTurnPhantomForce
+	jumpifmove MOVE_READY_OR_NOT, BattleScript_FirstTurnPhantomForce
+	jumpifmove MOVE_CHEAP_SHOT, BattleScript_FirstTurnPhantomForce
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_DIG
 	goto BattleScript_FirstTurnSemiInvulnerable
 BattleScript_FirstTurnBounce::
