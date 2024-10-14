@@ -7681,13 +7681,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SPIRIT_SHACKLE] =
     {
         .effect = EFFECT_HIT_PREVENT_ESCAPE,
-        .power = 90,
+        .power = 85,
         .type = TYPE_GHOST,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
         .arrowBased = TRUE,
     },
@@ -8346,15 +8346,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_PIKA_PAPOW] =
     {
-        .effect = EFFECT_RETURN,
-        .power = 1,
+        .effect = EFFECT_HIT,
+        .power = 100,
         .type = TYPE_ELECTRIC,
         .accuracy = 0,
-        .pp = 20,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_BOUNCY_BUBBLE] =
     {
@@ -8455,15 +8456,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_VEEVEE_VOLLEY] =
     {
-        .effect = EFFECT_RETURN,
-        .power = 1,
+        .effect = EFFECT_HIT,
+        .power = 100,
         .type = TYPE_NORMAL,
         .accuracy = 0,
-        .pp = 20,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+        .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_DOUBLE_IRON_BASH] =
     {
@@ -11243,15 +11245,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SUPERCELL_SLAM] =
     {
         .effect = EFFECT_RECOIL_IF_MISS,
-        .power = 130,
+        .power = 100,
         .type = TYPE_ELECTRIC,
-        .accuracy = 90,
+        .accuracy = 95,
         .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_RECKLESS_BOOST,
         .split = SPLIT_PHYSICAL,
-        .hammerBased = TRUE,
     },
     [MOVE_PSYCHIC_NOISE] =
     {

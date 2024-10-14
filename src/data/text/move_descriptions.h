@@ -2711,8 +2711,8 @@ static const u8 sMoveTwoLineDescription_MoveFloatyFall[] = _(
     "angle. May cause flinching.");
 
 static const u8 sMoveTwoLineDescription_MovePikaPapow[] = _(
-    "Pikachu's love increases its\n"
-    "power. It never misses.");
+    "A reliable and strong Electric\n"
+    "type attack. Uses best offense.");
 
 static const u8 sMoveTwoLineDescription_MoveBouncyBubble[] = _(
     "An attack that absorbs\n"
@@ -2747,8 +2747,8 @@ static const u8 sMoveTwoLineDescription_MoveSparklySwirl[] = _(
     "scent. Heals party's status.");
 
 static const u8 sMoveTwoLineDescription_MoveVeeveeVolley[] = _(
-    "Eevee's love increases its\n"
-    "power. It never misses.");
+    "A reliable and strong Normal\n"
+    "type attack. Uses best offense.");
 
 static const u8 sMoveTwoLineDescription_MoveDoubleIronBash[] = _(
     "The user spins and hits with\n"
