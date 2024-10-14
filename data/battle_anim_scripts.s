@@ -1003,6 +1003,7 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_ESPER_WALTZ
 	.4byte Move_NONE @ MOVE_ZAP_JIVE
 	.4byte Move_NONE @ MOVE_HEX_TROT
+	.4byte Move_NONE @ MOVE_MOUNTAIN_GALE
 
 	.align 2
 gBattleAnims_StatusConditions::

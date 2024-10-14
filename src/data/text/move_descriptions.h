@@ -3866,6 +3866,10 @@ static const u8 sMoveTwoLineDescription_MoveHexTrot[] = _(
     "A lively yet haunting dance\n"
     "that may raise Speed.");
 
+static const u8 sMoveTwoLineDescription_MoveMountainGale[] = _(
+    "A bone chilling wind buffets\n"
+    "foes. May flinch.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4852,6 +4856,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_ESPER_WALTZ - 1] = sMoveTwoLineDescription_MoveEsperWaltz,
     [MOVE_ZAP_JIVE - 1] = sMoveTwoLineDescription_MoveZapJive,
     [MOVE_HEX_TROT - 1] = sMoveTwoLineDescription_MoveHexTrot,
+    [MOVE_MOUNTAIN_GALE - 1] = sMoveTwoLineDescription_MoveMountainGale,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5837,6 +5842,7 @@ static const u8 sMoveFourLineDescription_MoveSafePassage[] = _("Guides an ally o
 static const u8 sMoveFourLineDescription_MoveEsperWaltz[] = _("50% chance to raise\nSpecial Attack.\nDance move.");
 static const u8 sMoveFourLineDescription_MoveZapJive[] = _("50% chance to raise\nSpeed. Dance move.");
 static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\nSpeed. Dance move.");
+static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Hits both opponents.\n30% chance to flinch.\nAir based.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6822,4 +6828,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_ESPER_WALTZ - 1] = sMoveFourLineDescription_MoveEsperWaltz,
     [MOVE_ZAP_JIVE - 1] = sMoveFourLineDescription_MoveZapJive,
     [MOVE_HEX_TROT - 1] = sMoveFourLineDescription_MoveHexTrot,
+    [MOVE_MOUNTAIN_GALE - 1] = sMoveFourLineDescription_MoveMountainGale,
 };
