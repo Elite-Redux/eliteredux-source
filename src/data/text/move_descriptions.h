@@ -3120,7 +3120,7 @@ static const u8 sMoveTwoLineDescription_MoveShockingJab[] = _(
 static const u8 sMoveTwoLineDescription_MoveShockingEdge[] = _(
     "Not done yet.");
 
-static const u8 sMoveTwoLineDescription_MoveLightingStrike[] = _(
+static const u8 sMoveTwoLineDescription_MoveLightningStrike[] = _(
     "A rapid strike with a lightning\n"
     "bolt, maybe raising Speed.");
 
@@ -4651,7 +4651,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_ZEPHYR_RUSH - 1] = sMoveTwoLineDescription_MoveZephyrRush,
     [MOVE_SHOCKING_JAB - 1] = sMoveTwoLineDescription_MoveShockingJab,
     [MOVE_SHOCKING_EDGE - 1] = sMoveTwoLineDescription_MoveShockingEdge,
-    [MOVE_LIGHTNING_STRIKE - 1] = sMoveTwoLineDescription_MoveLightingStrike,
+    [MOVE_LIGHTNING_STRIKE - 1] = sMoveTwoLineDescription_MoveLightningStrike,
     [MOVE_VOLT_BOLT - 1] = sMoveTwoLineDescription_MoveVoltBolt,
     [MOVE_PSYCHOKINESIS - 1] = sMoveTwoLineDescription_MovePsychokinesis,
     [MOVE_FERTILE_FANGS - 1] = sMoveTwoLineDescription_MoveFertileFangs,
@@ -5636,7 +5636,7 @@ static const u8 sMoveFourLineDescription_MoveSupersonicShot[] = _("Fires a high-
 static const u8 sMoveFourLineDescription_MoveZephyrRush[] = _("User fires itself\nwith a gale. Hurts\non miss. Mega Launcher\nboost. Air-based.");
 static const u8 sMoveFourLineDescription_MoveShockingJab[] = _("An electric jab\nstrikes the foe.\n20% paralysis chance.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveShockingEdge[] = _("The foe is slashed\nwith an electric\nblade. 10% paralyze\nchance. Keen Edge boost.");
-static const u8 sMoveFourLineDescription_MoveLightingStrike[] = _("Leaps, strikes with a\nlightning bolt. 20%\nchance to raise Speed.\nMega Launcher boost.");
+static const u8 sMoveFourLineDescription_MoveLightningStrike[] = _("Leaps, strikes with a\nlightning bolt. 20%\nchance to raise Speed.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveVoltBolt[] = _("Doubles damage if\nfoe is paralyzed.\nArrow move.\nArcher boost.");
 static const u8 sMoveFourLineDescription_MovePsychokinesis[] = _("Lifts up objects\nand hurls them at the\nfoe. 30% confusion.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveFertileFangs[] = _("Inserts ingraining fangs.\n10% chance to apply\nLeech Seed.\nStrong Jaw boost.");
@@ -6621,7 +6621,7 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_ZEPHYR_RUSH - 1] = sMoveFourLineDescription_MoveZephyrRush,
     [MOVE_SHOCKING_JAB - 1] = sMoveFourLineDescription_MoveShockingJab,
     [MOVE_SHOCKING_EDGE - 1] = sMoveFourLineDescription_MoveShockingEdge,
-    [MOVE_LIGHTNING_STRIKE - 1] = sMoveFourLineDescription_MoveLightingStrike,
+    [MOVE_LIGHTNING_STRIKE - 1] = sMoveFourLineDescription_MoveLightningStrike,
     [MOVE_VOLT_BOLT - 1] = sMoveFourLineDescription_MoveVoltBolt,
     [MOVE_PSYCHOKINESIS - 1] = sMoveFourLineDescription_MovePsychokinesis,
     [MOVE_FERTILE_FANGS - 1] = sMoveFourLineDescription_MoveFertileFangs,

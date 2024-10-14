@@ -802,7 +802,7 @@ gBattleAnims_Moves::
 	.4byte Move_JUMP_KICK @ MOVE_ZEPHYR_RUSH
 	.4byte Move_SHOCKING_JAB
 	.4byte Move_SHOCKING_EDGE
-	.4byte MOVE_LIGHTNING_STRIKE
+	.4byte Move_LIGHTNING_STRIKE
 	.4byte Move_VOLT_TACKLE @ MOVE_VOLT_BOLT
 	.4byte Move_STRENGTH @ MOVE_PSYCHOKINESIS
 	.4byte Move_LEECH_LIFE @ MOVE_FERTILE_FANGS
@@ -22763,7 +22763,7 @@ FlyUnleash:
 	blendoff
 	goto FlyEnd
 
-MOVE_LIGHTNING_STRIKE:
+Move_LIGHTNING_STRIKE:
 	loadspritegfx ANIM_TAG_ROUND_SHADOW
 	loadspritegfx ANIM_TAG_IMPACT
 	loadspritegfx ANIM_TAG_LIGHTNING
