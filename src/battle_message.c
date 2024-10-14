@@ -897,6 +897,7 @@ static const u8 sText_HotCoalsBurn[] = _("{B_STACK_1_NAME_WITH_PREFIX} steps on\
 static const u8 sText_HotCoalsExtinguish[] = _("The heat from the coals fades!");
 static const u8 sText_DisableAttackerItem[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nwas disabled!");
 static const u8 sText_SuperStrainRecoil[] = _("The strain takes its toll on\n{B_ATK_NAME_WITH_PREFIX}!");
+static const u8 sText_AttackerLostDarkType[] = _("{B_ATK_NAME_WITH_PREFIX} has no more\ndarkness left!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1894,6 +1895,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_HOT_COALS_EXTINGUISH - 12] = sText_HotCoalsExtinguish,
     [STRINGID_DISABLE_ATTACKER_ITEM - 12] = sText_DisableAttackerItem,
     [STRINGID_SUPER_STRAIN_RECOIL - 12] = sText_SuperStrainRecoil,
+    [STRINGID_ATTACKERLOSTDARKTYPE - 12] = sText_AttackerLostDarkType,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2114,6 +2116,7 @@ const u16 gBurnUpStringIds[] =
 {
     [B_MSG_BURNUP_FIRE] = STRINGID_ATTACKERLOSTFIRETYPE,
     [B_MSG_BURNUP_ELECTRIC] = STRINGID_ATTACKERLOSTELECTRICTYPE,
+    [B_MSG_BURNUP_DARK] = STRINGID_ATTACKERLOSTDARKTYPE,
 };
 
 const u16 gStatUpStringIds[] = 

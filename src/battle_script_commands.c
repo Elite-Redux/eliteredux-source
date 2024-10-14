@@ -10068,6 +10068,10 @@ static void Cmd_various(void)
             case TYPE_ELECTRIC:
                 SetActiveMultistringChooser(B_MSG_BURNUP_ELECTRIC);
                 break;
+            
+            case TYPE_DARK:
+                SetActiveMultistringChooser(B_MSG_BURNUP_DARK);
+                break;
 
             default:
                 SetActiveMultistringChooser(B_MSG_BURNUP_FIRE);
