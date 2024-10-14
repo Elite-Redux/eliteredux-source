@@ -5,7 +5,7 @@
 #include "constants/moves.h"
 
 #define ALL_TMS \
-TM_DECORATOR(MOVE_NONE)
+TM_DECORATOR(MOVE_PROTECT)
 
 #define TM_ENUM(tm) TM_ENUM_##tm
 #define TM_DECORATOR(tm) TM_ENUM(tm),
