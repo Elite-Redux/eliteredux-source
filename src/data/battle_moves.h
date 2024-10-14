@@ -9627,7 +9627,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_PHYSICAL,
     },
-    [MOVE_LIGHTING_STRIKE] =
+    [MOVE_LIGHTNING_STRIKE] =
     {
         .effect = EFFECT_DOUBLE_DMG_IF_STATUS1,
         .power = 70,
@@ -11950,6 +11950,193 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
         .split = SPLIT_SPECIAL,
+    },
+    [MOVE_SPECTRAL_FLAME] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_TREPIDATION] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_ASTRAL_HAND] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_FETCH] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_TRANSMUTE] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_CLEAR_SKIES] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_READY_OR_NOT] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_GIANT_GALE] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_VEXING_VOID] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_ECLIPSE] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_TAKE_OFF] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_CALTROPS] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_TAKE_HEART] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_SAFE_PASSAGE] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_ESPER_WALTZ] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_ZAP_JIVE] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
+    },
+    [MOVE_HEX_TROT] =
+    {
+        .effect = EFFECT_PLACEHOLDER,
+        .power = 0,
+        .type = TYPE_NORMAL,
+        .accuracy = 0,
+        .pp = 0,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .split = SPLIT_PHYSICAL,
     },
 };
 

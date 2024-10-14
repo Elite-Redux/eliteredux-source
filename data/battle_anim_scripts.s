@@ -802,7 +802,7 @@ gBattleAnims_Moves::
 	.4byte Move_JUMP_KICK @ MOVE_ZEPHYR_RUSH
 	.4byte Move_SHOCKING_JAB
 	.4byte Move_SHOCKING_EDGE
-	.4byte Move_LIGHTING_STRIKE
+	.4byte MOVE_LIGHTNING_STRIKE
 	.4byte Move_VOLT_TACKLE @ MOVE_VOLT_BOLT
 	.4byte Move_STRENGTH @ MOVE_PSYCHOKINESIS
 	.4byte Move_LEECH_LIFE @ MOVE_FERTILE_FANGS
@@ -986,6 +986,23 @@ gBattleAnims_Moves::
 	.4byte Move_WILL_O_WISP @ MOVE_SPECTRAL_SERENADE
 	.4byte Move_PROTECT @ MOVE_MERCULIGHT
 	.4byte Move_HYPER_BEAM @ MOVE_BIG_BLAST
+	.4byte Move_NONE @ MOVE_SPECTRAL_FLAME
+	.4byte Move_NONE @ MOVE_TREPIDATION
+	.4byte Move_NONE @ MOVE_ASTRAL_HAND
+	.4byte Move_NONE @ MOVE_FETCH
+	.4byte Move_NONE @ MOVE_TRANSMUTE
+	.4byte Move_NONE @ MOVE_CLEAR_SKIES
+	.4byte Move_NONE @ MOVE_READY_OR_NOT
+	.4byte Move_NONE @ MOVE_GIANT_GALE
+	.4byte Move_NONE @ MOVE_VEXING_VOID
+	.4byte Move_NONE @ MOVE_ECLIPSE
+	.4byte Move_NONE @ MOVE_TAKE_OFF
+	.4byte Move_NONE @ MOVE_CALTROPS
+	.4byte Move_NONE @ MOVE_TAKE_HEART
+	.4byte Move_NONE @ MOVE_SAFE_PASSAGE
+	.4byte Move_NONE @ MOVE_ESPER_WALTZ
+	.4byte Move_NONE @ MOVE_ZAP_JIVE
+	.4byte Move_NONE @ MOVE_HEX_TROT
 
 	.align 2
 gBattleAnims_StatusConditions::
@@ -22746,7 +22763,7 @@ FlyUnleash:
 	blendoff
 	goto FlyEnd
 
-Move_LIGHTING_STRIKE:
+MOVE_LIGHTNING_STRIKE:
 	loadspritegfx ANIM_TAG_ROUND_SHADOW
 	loadspritegfx ANIM_TAG_IMPACT
 	loadspritegfx ANIM_TAG_LIGHTNING

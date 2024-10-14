@@ -896,6 +896,7 @@ static const u8 sText_HotCoalsSet[] = _("{B_ATK_NAME_WITH_PREFIX} throws\nhot co
 static const u8 sText_HotCoalsBurn[] = _("{B_STACK_1_NAME_WITH_PREFIX} steps on\nthe hot coals!");
 static const u8 sText_HotCoalsExtinguish[] = _("The heat from the coals fades!");
 static const u8 sText_DisableAttackerItem[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nwas disabled!");
+static const u8 sText_SuperStrainRecoil[] = _("The strain takes its toll on\n{B_ATK_NAME_WITH_PREFIX}!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1054,7 +1055,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_SuperStrainRecoil[] = _("The strain takes its toll on\n{B_ATK_NAME_WITH_PREFIX}!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {

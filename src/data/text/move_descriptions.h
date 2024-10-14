@@ -3121,7 +3121,8 @@ static const u8 sMoveTwoLineDescription_MoveShockingEdge[] = _(
     "Not done yet.");
 
 static const u8 sMoveTwoLineDescription_MoveLightingStrike[] = _(
-    "Not done yet.");
+    "A rapid strike with a lightning\n"
+    "bolt, maybe raising Speed.");
 
 static const u8 sMoveTwoLineDescription_MoveVoltBolt[] = _(
     "Not done yet.");
@@ -3796,6 +3797,74 @@ static const u8 sMoveTwoLineDescription_MoveMerculight[] = _(
 static const u8 sMoveTwoLineDescription_MoveBigBlast[] = _(
     "Does Damage. Small\n"
     "burn chance.");
+
+static const u8 sMoveTwoLineDescription_MoveSpectralFlame[] = _(
+    "Emites a flame that moves\n"
+    "as if alive and inflicts burn.");
+
+static const u8 sMoveTwoLineDescription_MoveTrepidation[] = _(
+    "The foe falls into despair\n"
+    "and misses all Psychic moves.");
+
+static const u8 sMoveTwoLineDescription_MoveAstralHand[] = _(
+    "Projects a fist to strike the\n"
+    "foe.");
+
+static const u8 sMoveTwoLineDescription_MoveFetch[] = _(
+    "The user runs off the field\n"
+    "in search of its lost item.");
+
+static const u8 sMoveTwoLineDescription_MoveTransmute[] = _(
+    "Strikes the foe, remaking\n"
+    "the user's item on KO.");
+
+static const u8 sMoveTwoLineDescription_MoveClearSkies[] = _(
+    "Clears the weather and\n"
+    "prevents new weather.");
+
+static const u8 sMoveTwoLineDescription_MoveReadyOrNot[] = _(
+    "Hides on the first turn\n"
+    "and then surprises the foe.");
+
+static const u8 sMoveTwoLineDescription_MoveGiantGale[] = _(
+    "Strikes the foe with a mighty\n"
+    "gale, but lowers Speed.");
+
+static const u8 sMoveTwoLineDescription_MoveVexingVoid[] = _(
+    "A terrifying void engulfs\n"
+    "the foe.");
+
+static const u8 sMoveTwoLineDescription_MoveEclipse[] = _(
+    "The darkness within erupts\n"
+    "from the user for heavy damage.");
+
+static const u8 sMoveTwoLineDescription_MoveTakeOff[] = _(
+    "Blasts the foe with wind\n"
+    "and takes to the sky.");
+
+static const u8 sMoveTwoLineDescription_MoveCaltrops[] = _(
+    "Spreads dangerous spikes\n"
+    "that inflict bleeding.");
+
+static const u8 sMoveTwoLineDescription_MoveTakeHeart[] = _(
+    "Steadies itself, healing its\n"
+    "status and boosting Special.");
+
+static const u8 sMoveTwoLineDescription_MoveSafePassage[] = _(
+    "Guides an ally onto the\n"
+    "field, shielding them from harm.");
+
+static const u8 sMoveTwoLineDescription_MoveEsperWaltz[] = _(
+    "A mesmerizing waltz that\n"
+    "may raise Special Attack.");
+
+static const u8 sMoveTwoLineDescription_MoveZapJive[] = _(
+    "An electrifying dance that\n"
+    "may raise Speed.");
+
+static const u8 sMoveTwoLineDescription_MoveHexTrot[] = _(
+    "A lively yet haunting dance\n"
+    "that may raise Speed.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -4582,7 +4651,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_ZEPHYR_RUSH - 1] = sMoveTwoLineDescription_MoveZephyrRush,
     [MOVE_SHOCKING_JAB - 1] = sMoveTwoLineDescription_MoveShockingJab,
     [MOVE_SHOCKING_EDGE - 1] = sMoveTwoLineDescription_MoveShockingEdge,
-    [MOVE_LIGHTING_STRIKE - 1] = sMoveTwoLineDescription_MoveLightingStrike,
+    [MOVE_LIGHTNING_STRIKE - 1] = sMoveTwoLineDescription_MoveLightingStrike,
     [MOVE_VOLT_BOLT - 1] = sMoveTwoLineDescription_MoveVoltBolt,
     [MOVE_PSYCHOKINESIS - 1] = sMoveTwoLineDescription_MovePsychokinesis,
     [MOVE_FERTILE_FANGS - 1] = sMoveTwoLineDescription_MoveFertileFangs,
@@ -4766,6 +4835,23 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_SPECTRAL_SERENADE - 1] = sMoveTwoLineDescription_MoveSpectralSerenade,
     [MOVE_MERCULIGHT - 1] = sMoveTwoLineDescription_MoveMerculight,
     [MOVE_BIG_BLAST - 1] = sMoveTwoLineDescription_MoveBigBlast,
+    [MOVE_SPECTRAL_FLAME - 1] = sMoveTwoLineDescription_MoveSpectralFlame,
+    [MOVE_TREPIDATION - 1] = sMoveTwoLineDescription_MoveTrepidation,
+    [MOVE_ASTRAL_HAND - 1] = sMoveTwoLineDescription_MoveAstralHand,
+    [MOVE_FETCH - 1] = sMoveTwoLineDescription_MoveFetch,
+    [MOVE_TRANSMUTE - 1] = sMoveTwoLineDescription_MoveTransmute,
+    [MOVE_CLEAR_SKIES - 1] = sMoveTwoLineDescription_MoveClearSkies,
+    [MOVE_READY_OR_NOT - 1] = sMoveTwoLineDescription_MoveReadyOrNot,
+    [MOVE_GIANT_GALE - 1] = sMoveTwoLineDescription_MoveGiantGale,
+    [MOVE_VEXING_VOID - 1] = sMoveTwoLineDescription_MoveVexingVoid,
+    [MOVE_ECLIPSE - 1] = sMoveTwoLineDescription_MoveEclipse,
+    [MOVE_TAKE_OFF - 1] = sMoveTwoLineDescription_MoveTakeOff,
+    [MOVE_CALTROPS - 1] = sMoveTwoLineDescription_MoveCaltrops,
+    [MOVE_TAKE_HEART - 1] = sMoveTwoLineDescription_MoveTakeHeart,
+    [MOVE_SAFE_PASSAGE - 1] = sMoveTwoLineDescription_MoveSafePassage,
+    [MOVE_ESPER_WALTZ - 1] = sMoveTwoLineDescription_MoveEsperWaltz,
+    [MOVE_ZAP_JIVE - 1] = sMoveTwoLineDescription_MoveZapJive,
+    [MOVE_HEX_TROT - 1] = sMoveTwoLineDescription_MoveHexTrot,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5734,6 +5820,23 @@ static const u8 sMoveFourLineDescription_MoveSparkleBarrage[] = _("The user shoo
 static const u8 sMoveFourLineDescription_MoveSpectralSerenade[] = _("The foe is hit with\na huge explosion.\nCan only be used\nevery-other turn.");
 static const u8 sMoveFourLineDescription_MoveMerculight[] = _("Evades attacks with\ncertainty, paralyzing\nattackers. May fail if\nused in succession.");
 static const u8 sMoveFourLineDescription_MoveBigBlast[] = _("The foe is hit with\na huge explosion.\n10% burn chance.");
+static const u8 sMoveFourLineDescription_MoveSpectralFlame[] = _("Burns the target,\nincluding Fire types.\nSuppresses abilities\nin fog.");
+static const u8 sMoveFourLineDescription_MoveTrepidation[] = _("The foe falls into\ndespair. All Psychic-\ntype moves they use\nmiss for 3 turns.");
+static const u8 sMoveFourLineDescription_MoveAstralHand[] = _("Strikes the foe with\na projected fist.\nIgnores stat boosts.\nIron Fist boost.");
+static const u8 sMoveFourLineDescription_MoveFetch[] = _("The user retrieves\nits lost item and\nswitches to an ally.");
+static const u8 sMoveFourLineDescription_MoveTransmute[] = _("Recovers a used item\nif this attack knocks\nout the opponent.");
+static const u8 sMoveFourLineDescription_MoveClearSkies[] = _("Clears the current\nweather and prevents\nnew weather from\nbeing set for 5 turns.");
+static const u8 sMoveFourLineDescription_MoveReadyOrNot[] = _("Hides on the first\nturn scares the foe\non the second. 30%\nflinch chance.");
+static const u8 sMoveFourLineDescription_MoveGiantGale[] = _("Strikes with a mighty\ngale, but the user's\nSpeed is lowered.\nAir based.");
+static const u8 sMoveFourLineDescription_MoveVexingVoid[] = _("30% chance to lower\nSpecial Defense.\nNever misses in fog.");
+static const u8 sMoveFourLineDescription_MoveEclipse[] = _("Deals heavy damage.\nAfterwards the user\nloses its Dark typing.");
+static const u8 sMoveFourLineDescription_MoveTakeOff[] = _("Deals damage and\nthen switches out.\nAir based.");
+static const u8 sMoveFourLineDescription_MoveCaltrops[] = _("Spreads spikes that\ninflict bleeding on\nthe next opponent\nto switch in.");
+static const u8 sMoveFourLineDescription_MoveTakeHeart[] = _("Heals status and\nraises SpAtk and\nSpDef by 1 stage.");
+static const u8 sMoveFourLineDescription_MoveSafePassage[] = _("Guides an ally onto\nthe field. They take\n-35% damage this\nturn.");
+static const u8 sMoveFourLineDescription_MoveEsperWaltz[] = _("50% chance to raise\nSpecial Attack.\nDance move.");
+static const u8 sMoveFourLineDescription_MoveZapJive[] = _("50% chance to raise\nSpeed. Dance move.");
+static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\nSpeed. Dance move.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6518,7 +6621,7 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_ZEPHYR_RUSH - 1] = sMoveFourLineDescription_MoveZephyrRush,
     [MOVE_SHOCKING_JAB - 1] = sMoveFourLineDescription_MoveShockingJab,
     [MOVE_SHOCKING_EDGE - 1] = sMoveFourLineDescription_MoveShockingEdge,
-    [MOVE_LIGHTING_STRIKE - 1] = sMoveFourLineDescription_MoveLightingStrike,
+    [MOVE_LIGHTNING_STRIKE - 1] = sMoveFourLineDescription_MoveLightingStrike,
     [MOVE_VOLT_BOLT - 1] = sMoveFourLineDescription_MoveVoltBolt,
     [MOVE_PSYCHOKINESIS - 1] = sMoveFourLineDescription_MovePsychokinesis,
     [MOVE_FERTILE_FANGS - 1] = sMoveFourLineDescription_MoveFertileFangs,
@@ -6702,4 +6805,21 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_SPECTRAL_SERENADE - 1] = sMoveFourLineDescription_MoveSpectralSerenade,
     [MOVE_MERCULIGHT - 1] = sMoveFourLineDescription_MoveMerculight,
     [MOVE_BIG_BLAST - 1] = sMoveFourLineDescription_MoveBigBlast,
+    [MOVE_SPECTRAL_FLAME - 1] = sMoveFourLineDescription_MoveSpectralFlame,
+    [MOVE_TREPIDATION - 1] = sMoveFourLineDescription_MoveTrepidation,
+    [MOVE_ASTRAL_HAND - 1] = sMoveFourLineDescription_MoveAstralHand,
+    [MOVE_FETCH - 1] = sMoveFourLineDescription_MoveFetch,
+    [MOVE_TRANSMUTE - 1] = sMoveFourLineDescription_MoveTransmute,
+    [MOVE_CLEAR_SKIES - 1] = sMoveFourLineDescription_MoveClearSkies,
+    [MOVE_READY_OR_NOT - 1] = sMoveFourLineDescription_MoveReadyOrNot,
+    [MOVE_GIANT_GALE - 1] = sMoveFourLineDescription_MoveGiantGale,
+    [MOVE_VEXING_VOID - 1] = sMoveFourLineDescription_MoveVexingVoid,
+    [MOVE_ECLIPSE - 1] = sMoveFourLineDescription_MoveEclipse,
+    [MOVE_TAKE_OFF - 1] = sMoveFourLineDescription_MoveTakeOff,
+    [MOVE_CALTROPS - 1] = sMoveFourLineDescription_MoveCaltrops,
+    [MOVE_TAKE_HEART - 1] = sMoveFourLineDescription_MoveTakeHeart,
+    [MOVE_SAFE_PASSAGE - 1] = sMoveFourLineDescription_MoveSafePassage,
+    [MOVE_ESPER_WALTZ - 1] = sMoveFourLineDescription_MoveEsperWaltz,
+    [MOVE_ZAP_JIVE - 1] = sMoveFourLineDescription_MoveZapJive,
+    [MOVE_HEX_TROT - 1] = sMoveFourLineDescription_MoveHexTrot,
 };
