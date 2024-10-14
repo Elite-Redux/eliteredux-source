@@ -12048,14 +12048,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_VEXING_VOID] =
     {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
-        .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 0,
-        .secondaryEffectChance = 0,
+        .effect = EFFECT_SPECIAL_DEFENSE_DOWN_HIT,
+        .power = 110,
+        .type = TYPE_DARK,
+        .accuracy = 85,
+        .pp = 5,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_PHYSICAL,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        .split = SPLIT_SPECIAL,
     },
     [MOVE_ECLIPSE] =
     {
