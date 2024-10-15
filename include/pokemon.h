@@ -277,6 +277,10 @@ struct BattleMove
     MoveSplitType splitFlag:3;
     u8 everyOtherTurn:1;
     u8 lunar:1;
+    u8 metronomeBanned:1;
+    u8 copycatBanned:1;
+    u8 sleepTalkBanned:1;
+    u8 mimicBanned:1;
 };
 
 struct SpindaSpot
