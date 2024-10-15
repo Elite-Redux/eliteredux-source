@@ -13928,6 +13928,8 @@ static void Cmd_trychoosesleeptalkmove(void)
             {
                 case EFFECT_PLACEHOLDER:
                 case EFFECT_DO_NOTHING:
+                case EFFECT_HIT_SWITCH_TARGET:
+                case EFFECT_ROAR:
                     unusableMovesBits |= 1 << i;
                     break;
             }
