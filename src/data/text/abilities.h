@@ -699,6 +699,8 @@ static const u8 sAbilityWindRageDescription[] = _("Uses Defog on switch-in. Air-
 static const u8 sAbilityVictoryBombDescription[] = _("Attacks with a 100BP Fire-type\nExplosion on fainting.");
 static const u8 sAbilityRazorSharpDescription[] = _("Critical hits also inflict bleeding.");
 static const u8 sAbilityToTheBoneDescription[] = _("Critical hits get a 1.5x boost and\ninflict bleeding.");
+static const u8 sAbilityBladeDanceDescription[] = _("Triggers 50 BP Leaf Blade after\nusing a dance move.");
+static const u8 sAbilityTaekkyeonDescription[] = _("All attacks are dances.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1434,6 +1436,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_VICTORY_BOMB] = _("Victory Bomb"),
     [ABILITY_RAZOR_SHARP] = _("Razor Sharp"),
     [ABILITY_TO_THE_BONE] = _("To The Bone"),
+    [ABILITY_BLADE_DANCE] = _("Blade Dance"),
+    [ABILITY_TAEKKYEON] = _("Taekkyeon"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2170,4 +2174,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_VICTORY_BOMB] = sAbilityVictoryBombDescription,
     [ABILITY_RAZOR_SHARP] = sAbilityRazorSharpDescription,
     [ABILITY_TO_THE_BONE] = sAbilityToTheBoneDescription,
+    [ABILITY_BLADE_DANCE] = sAbilityBladeDanceDescription,
+    [ABILITY_TAEKKYEON] = sAbilityTaekkyeonDescription,
 };

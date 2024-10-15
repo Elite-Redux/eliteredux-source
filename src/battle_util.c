@@ -5671,7 +5671,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         // Dancer
         if(BATTLER_HAS_ABILITY(battler, ABILITY_DANCER)
             && !(gBattleStruct->lastMoveFailed & 1 << gBattlerAttacker)
-            && (gBattleMoves[gCurrentMove].flags & FLAG_DANCE))
+            && IsDance(gBattlerAttacker, move))
         {
             u8 target = GetBattlerSide(gBattlerTarget) == GetBattlerSide(gBattlerAttacker) ? gBattlerTarget : BATTLE_OPPOSITE(battler);
             if (UseOutOfTurnAttack(battler, target, ABILITY_DANCER, gCurrentMove, 0))
@@ -6155,9 +6155,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             //Two Step
-            if(CHECK_ABILITY(ABILITY_TWO_STEP)){
-                if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
-                    gBattleMoves[move].flags & FLAG_DANCE)
+            if (CHECK_ABILITY(ABILITY_TWO_STEP)){
+                if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && IsDance(gBattlerAttacker, move))
                 {
                     u8 target = gBattlerTarget;
                     if (gBattlerAttacker == gBattlerTarget
@@ -6173,10 +6172,28 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
             }
 
+            // Blade Dance
+            if (CHECK_ABILITY(ABILITY_BLADE_DANCE)){
+                if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && IsDance(gBattlerAttacker, move))
+                {
+                    u8 target = gBattlerTarget;
+                    if (gBattlerAttacker == gBattlerTarget
+                        || (gBattlerTarget == BATTLE_PARTNER(gBattlerAttacker)
+                            && gBattleMoves[move].target == MOVE_TARGET_ALLY))
+                        target = GetMoveTarget(MOVE_LEAF_BLADE, 0);
+
+                    if (CanUseExtraMove(gBattlerAttacker, target))
+                    {
+                        gBattlerTarget = target;
+                        return UseAttackerFollowUpMove(battler, target, ABILITY_BLADE_DANCE, MOVE_LEAF_BLADE, 50);
+                    }
+                }
+            }
+
             if (!CanUseExtraMove(gBattlerAttacker, gBattlerTarget)) break;
 
             //Weather Cast
-            if(CHECK_ABILITY(ABILITY_FORECAST)){
+            if (CHECK_ABILITY(ABILITY_FORECAST)){
                 switch (move) {
                     case MOVE_SUNNY_DAY:
                     case MOVE_RAIN_DANCE:
@@ -6189,7 +6206,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             //Volcano Rage
-            if(CHECK_ABILITY(ABILITY_VOLCANO_RAGE)){
+            if (CHECK_ABILITY(ABILITY_VOLCANO_RAGE)){
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     moveType == TYPE_FIRE){
@@ -6198,7 +6215,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             //Frost Burn
-            if(CHECK_ABILITY(ABILITY_FROST_BURN)){
+            if (CHECK_ABILITY(ABILITY_FROST_BURN)){
 
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
                     moveType == TYPE_FIRE){
@@ -6207,7 +6224,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             //Pryo Shells
-            if(CHECK_ABILITY(ABILITY_PYRO_SHELLS)){
+            if (CHECK_ABILITY(ABILITY_PYRO_SHELLS)){
 
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
@@ -6217,7 +6234,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             //Thundercall
-            if(CHECK_ABILITY(ABILITY_THUNDERCALL)){
+            if (CHECK_ABILITY(ABILITY_THUNDERCALL)){
 
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
@@ -6227,7 +6244,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             //Aftershock
-            if(CHECK_ABILITY(ABILITY_AFTERSHOCK)){
+            if (CHECK_ABILITY(ABILITY_AFTERSHOCK)){
 
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
@@ -6237,7 +6254,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             //High Tide
-            if(CHECK_ABILITY(ABILITY_HIGH_TIDE)){
+            if (CHECK_ABILITY(ABILITY_HIGH_TIDE)){
 
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
@@ -6247,7 +6264,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             //High Tide
-            if(CHECK_ABILITY(ABILITY_CHUNKY_BASS_LINE)){
+            if (CHECK_ABILITY(ABILITY_CHUNKY_BASS_LINE)){
 
                 //Checks if the ability is triggered
                 if(!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) &&
@@ -16106,4 +16123,10 @@ int HandleEndTurnAbilityAs(int ability, int battler)
     }
 
     return FALSE;
+}
+
+int IsDance(int attacker, int move)
+{
+    if (gBattleMoves[move].flags & FLAG_DANCE) return TRUE;
+    return BATTLER_HAS_ABILITY(attacker, ABILITY_TAEKKYEON);
 }

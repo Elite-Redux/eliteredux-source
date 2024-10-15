@@ -751,8 +751,10 @@
 #define ABILITY_VICTORY_BOMB 729 // Attacks with a 100BP Fire-type Explosion on fainting.
 #define ABILITY_RAZOR_SHARP 730 // Critical hits also inflict bleeding.
 #define ABILITY_TO_THE_BONE 731 // Critical hits get a 1.5x boost and inflict bleeding.
+#define ABILITY_BLADE_DANCE 732 // Triggers 50 BP Leaf Blade after using a dance move.
+#define ABILITY_TAEKKYEON 733 // All attacks are dances.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_TO_THE_BONE + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_TAEKKYEON + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
