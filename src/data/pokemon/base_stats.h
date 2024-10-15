@@ -8811,7 +8811,7 @@ const struct BaseStats gBaseStats[] =
     {
     .baseHP        = 255,
     .baseAttack    = 10,
-    .baseDefense   = 10,
+    .baseDefense   = 20,
     .baseSpeed     = 55,
     .baseSpAttack  = 75,
     .baseSpDefense = 135,
@@ -10881,7 +10881,7 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_SLOW,
     .eggGroup1 = EGG_GROUP_MONSTER,
     .eggGroup2 = EGG_GROUP_MONSTER,
-    .abilities = {ABILITY_STURDY, ABILITY_ROCK_HEAD, ABILITY_IRON_BARBS},
+    .abilities = {ABILITY_STURDY, ABILITY_SOUNDPROOF, ABILITY_IRON_BARBS},
     .innates = {ABILITY_LEAD_COAT, ABILITY_JUGGERNAUT, ABILITY_IMPENETRABLE},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
