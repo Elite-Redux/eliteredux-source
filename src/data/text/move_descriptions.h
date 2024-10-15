@@ -3870,6 +3870,10 @@ static const u8 sMoveTwoLineDescription_MoveMountainGale[] = _(
     "A bone chilling wind buffets\n"
     "foes. May flinch.");
 
+static const u8 sMoveTwoLineDescription_MoveBadEgg[] = _(
+    "Throws an egg filled with\n"
+    "toxins. Poisons on hit.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4857,6 +4861,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_ZAP_JIVE - 1] = sMoveTwoLineDescription_MoveZapJive,
     [MOVE_HEX_TROT - 1] = sMoveTwoLineDescription_MoveHexTrot,
     [MOVE_MOUNTAIN_GALE - 1] = sMoveTwoLineDescription_MoveMountainGale,
+    [MOVE_BAD_EGG - 1] = sMoveTwoLineDescription_MoveBadEgg,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5824,7 +5829,7 @@ static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both f
 static const u8 sMoveFourLineDescription_MoveSparkleBarrage[] = _("The user shoots\n3 beams of light\nat the target.");
 static const u8 sMoveFourLineDescription_MoveSpectralSerenade[] = _("The foe is hit with\na huge explosion.\nCan only be used\nevery-other turn.");
 static const u8 sMoveFourLineDescription_MoveMerculight[] = _("Evades attacks with\ncertainty, paralyzing\nattackers. May fail if\nused in succession.");
-static const u8 sMoveFourLineDescription_MoveBigBlast[] = _("The foe is hit with\na huge explosion.\n10% burn chance.");
+static const u8 sMoveFourLineDescription_MoveBigBlast[] = _("The foe is hit with\na huge explosion.\n20% burn chance.");
 static const u8 sMoveFourLineDescription_MoveSpectralFlame[] = _("Burns the target,\nincluding Fire types.\nSuppresses abilities\nin fog.");
 static const u8 sMoveFourLineDescription_MoveTrepidation[] = _("The foe falls into\ndespair. All Psychic-\ntype moves they use\nmiss for 3 turns.");
 static const u8 sMoveFourLineDescription_MoveAstralHand[] = _("Strikes the foe with\na projected fist.\nIgnores stat boosts.\nIron Fist boost.");
@@ -5843,6 +5848,7 @@ static const u8 sMoveFourLineDescription_MoveEsperWaltz[] = _("50% chance to rai
 static const u8 sMoveFourLineDescription_MoveZapJive[] = _("50% chance to raise\nSpeed. Dance move.");
 static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\nSpeed. Dance move.");
 static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Hits both opponents.\n30% chance to flinch.\nAir based.");
+static const u8 sMoveFourLineDescription_MoveBadEgg[] = _("Throws an egg filled\nwith toxins. Badly\npoisons the target");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6829,4 +6835,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_ZAP_JIVE - 1] = sMoveFourLineDescription_MoveZapJive,
     [MOVE_HEX_TROT - 1] = sMoveFourLineDescription_MoveHexTrot,
     [MOVE_MOUNTAIN_GALE - 1] = sMoveFourLineDescription_MoveMountainGale,
+    [MOVE_BAD_EGG - 1] = sMoveFourLineDescription_MoveBadEgg,
 };
