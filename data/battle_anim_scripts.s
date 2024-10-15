@@ -1004,6 +1004,7 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_ZAP_JIVE
 	.4byte Move_NONE @ MOVE_HEX_TROT
 	.4byte Move_NONE @ MOVE_MOUNTAIN_GALE
+	.4byte Move_NONE @ MOVE_BAD_EGG
 
 	.align 2
 gBattleAnims_StatusConditions::
