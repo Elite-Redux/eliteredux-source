@@ -14,7 +14,7 @@
 #define ABILITY_VOLT_ABSORB 10 // Heals 25% of max HP when hit by an Electric-type move.
 #define ABILITY_WATER_ABSORB 11 // Heals 25% of max HP when hit by a Water-type move.
 #define ABILITY_OBLIVIOUS 12 // Immune to infatuation, Scare, Intimidate and Taunt.
-#define ABILITY_CLOUD_NINE 13 // Negates weather effects as long as the Pokémon is on the field.
+#define ABILITY_CLOUD_NINE 13 // Clears weather and prevents its effects.
 #define ABILITY_COMPOUND_EYES 14 // Grants a 1.3x accuracy boost.
 #define ABILITY_INSOMNIA 15 // Cannot fall asleep. Rest fails if used.
 #define ABILITY_COLOR_CHANGE 16 // Changes type to a resist or an immunity before getting hit.
@@ -77,7 +77,7 @@
 #define ABILITY_WHITE_SMOKE 73 // Sets Smokescreen on switch-in.
 #define ABILITY_PURE_POWER 74 // Doubles own Attack stat. Boosts raw stat, not base stat.
 #define ABILITY_SHELL_ARMOR 75 // Immune to critical hits. Takes 20% less damage from all attacks.
-#define ABILITY_AIR_LOCK 76 // Negates weather effects as long as the Pokémon is on the field.
+#define ABILITY_AIR_LOCK 76 // Clears weather and prevents its effects.
 
 #define ABILITIES_COUNT_GEN3 (ABILITY_AIR_LOCK + 1)
 
@@ -138,7 +138,7 @@
 #define ABILITY_DEFIANT 128 // Raises Attack by two stages if stats are lowered by an enemy.
 #define ABILITY_DEFEATIST 129 // Halves Atk and Sp. Atk stats if user is below 1/3 of max HP.
 #define ABILITY_CURSED_BODY 130 // 30% chance to disable moves if enemy makes contact.
-#define ABILITY_HEALER 131 // 30% chance to heal ally's status at the end of each turn.
+#define ABILITY_HEALER 131 // 30% chance to heal user or ally's status at the end of each turn.
 #define ABILITY_FRIEND_GUARD 132 // Reduces damage that ally takes by 50% in double battles.
 #define ABILITY_WEAK_ARMOR 133 // If hit by a contact attack: -1 Defense and +2 Speed.
 #define ABILITY_HEAVY_METAL 134 // Doubles this Pokémon's weight.
@@ -236,7 +236,7 @@
 #define ABILITY_SOUL_HEART 220 // KOs dealt anywhere on the field raise Sp. Atk by one stage.
 #define ABILITY_TANGLING_HAIR 221 // Lowers Speed of enemies that make contact with this Pokémon.
 #define ABILITY_RECEIVER 222 // In Double Battles, copies its fainting partner's ability.
-#define ABILITY_POWER_OF_ALCHEMY 223 // In Double Battles, copies its fainting partner's ability.
+#define ABILITY_POWER_OF_ALCHEMY 223 // Remove or turns enemy items into Black Sludge or Big Nugget on entry.
 #define ABILITY_BEAST_BOOST 224 // Dealing a KO raises highest calculated stat by one stage.
 #define ABILITY_RKS_SYSTEM 225 // Held Memory determines its type. Also has Protean + Adaptability.
 #define ABILITY_ELECTRIC_SURGE 226 // Casts Electric Terrain on entry. Lasts 8 turns.

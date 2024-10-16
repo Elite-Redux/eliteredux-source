@@ -2253,6 +2253,7 @@ enum
     ENDTURN_SWAMP,
     ENDTURN_QUASH,
     ENDTURN_SMOKESCREEN,
+    ENDTURN_CLEARSKIES,
     ENDTURN_FIELD_COUNT,
 };
 
@@ -2861,6 +2862,31 @@ u8 DoFieldEndTurnEffects(void)
                 gBattleStruct->turnCountersTracker++;
                 gBattleStruct->turnSideTracker = 0;
             }
+            break;
+        case ENDTURN_CLEARSKIES:
+            if (gFieldTimers.clearSkiesTimer && !gFieldTimers.started.clearSkiesTimer)
+            {
+                if (!--gFieldTimers.clearSkiesTimer)
+                {
+                    int weather = -1;
+                    switch (gBattleWeather)
+                    {
+                    case WEATHER_STRONG_WINDS:
+                        weather = ENUM_WEATHER_STRONG_WINDS;
+                        break;
+                    case WEATHER_SUN_PRIMAL:
+                        weather = ENUM_WEATHER_SUN_PRIMAL;
+                        break;
+                    case WEATHER_RAIN_PRIMAL:
+                        weather = ENUM_WEATHER_RAIN_PRIMAL;
+                        break;
+                    }
+                    gBattleCommunication[MULTISTRING_CHOOSER] = GetWeatherChangeMultistringChooser(weather);
+                    BattleScriptExecute(BattleScript_ClearSkiesEnds);
+                    effect = TRUE;
+                }
+            }
+            gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_FIELD_COUNT:
             effect++;
@@ -4592,11 +4618,9 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
     {
         return FALSE;
     }
-    else if (viaAbility && B_ABILITY_WEATHER <= GEN_5
-        && !(gBattleWeather & sWeatherFlagsInfo[weatherEnumId][1]))
+    else if (weatherEnumId != ENUM_WEATHER_SUN_PRIMAL && weatherEnumId != ENUM_WEATHER_RAIN_PRIMAL && weatherEnumId != ENUM_WEATHER_STRONG_WINDS && !WEATHER_HAS_EFFECT)
     {
-        gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);
-        return TRUE;
+        return FALSE;
     }
     else if (!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
     {

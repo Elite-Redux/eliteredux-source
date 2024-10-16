@@ -483,6 +483,8 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectRainHit			      @ EFFECT_RAIN_HIT
 	.4byte BattleScript_EffectFairyTerrainHit         @ EFFECT_FAIRY_TERRAIN_HIT
 	.4byte BattleScript_EffectCreepingThornsHit		  @ EFFECT_CREEPING_THORNS_HIT
+	.4byte BattleScript_EffectTakeHeart				  @ EFFECT_TAKE_HEART
+	.4byte BattleScript_EffectClearSkies			  @ EFFECT_CLEAR_SKIES
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -7114,6 +7116,25 @@ BattleScript_BulkUpTryDef::
 BattleScript_BulkUpEnd::
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectTakeHeart:
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_EffectTakeHeart_DoAnim
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_CalmMindDoMoveAnim
+	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_CantRaiseMultipleStats
+	goto BattleScript_CalmMindDoMoveAnim
+BattleScript_EffectTakeHeart_DoAnim:
+	attackanimation
+	waitanimation
+	curestatus BS_ATTACKER
+	updatestatusicon BS_ATTACKER
+	printstring STRINGID_PKMNSTATUSNORMAL
+	waitmessage B_WAIT_TIME_LONG
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_CalmMindDoBoosts
+	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_MoveEnd
+	goto BattleScript_CalmMindDoBoosts
+
 BattleScript_EffectCalmMind::
 	attackcanceler
 	attackstring
@@ -7123,6 +7144,7 @@ BattleScript_EffectCalmMind::
 BattleScript_CalmMindDoMoveAnim::
 	attackanimation
 	waitanimation
+BattleScript_CalmMindDoBoosts:
 	setbyte sSTAT_ANIM_PLAYED, FALSE
 	playstatchangeanimation BS_ATTACKER, BIT_SPATK | BIT_SPDEF, 0
 	setstatchanger STAT_SPATK, 1, FALSE
@@ -11705,7 +11727,13 @@ BattleScript_TotemVarPrintStatMsg:
 
 BattleScript_AnnounceAirLockCloudNine::
 	call BattleScript_AbilityPopUp
+	removeweather
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
+	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_SUN_ENDS, BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
+	printfromtable gWeatherCleared
+	goto BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
 	printstring STRINGID_AIRLOCKACTIVATES
+BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged:
 	waitmessage B_WAIT_TIME_LONG
 	call BattleScript_OnWeatherChange
 	end3
@@ -12963,3 +12991,20 @@ BattleScript_AnnounceAttackerItemDisabled::
 	printstring STRINGID_DISABLE_ATTACKER_ITEM
 	waitmessage B_WAIT_TIME_LONG
 	return
+
+BattleScript_EffectClearSkies::
+	attackcanceler
+	attackstring
+	ppreduce
+	trysetclearskies BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	printstring STRINGID_CLEARSKIES
+	waitmessage B_WAIT_TIME_LONG
+	call BattleScript_OnWeatherChange
+	goto BattleScript_MoveEnd
+
+BattleScript_ClearSkiesEnds::
+	call BattleScript_MoveWeatherChangeRet
+	end2
+
