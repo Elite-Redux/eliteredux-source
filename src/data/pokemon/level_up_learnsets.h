@@ -6329,6 +6329,7 @@ static const struct LevelUpMove sTyranitarLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_LASH_OUT),
     LEVEL_UP_MOVE(46, MOVE_SCARY_FACE),
     LEVEL_UP_MOVE(51, MOVE_POWER_TRIP),
+    LEVEL_UP_MOVE(56, MOVE_ROCK_WRECKER),
     LEVEL_UP_END
 };
 
