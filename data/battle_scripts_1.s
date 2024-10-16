@@ -11726,7 +11726,13 @@ BattleScript_TotemVarPrintStatMsg:
 
 BattleScript_AnnounceAirLockCloudNine::
 	call BattleScript_AbilityPopUp
+	removeweather
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
+	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_SUN_ENDS, BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
+	printfromtable gWeatherCleared
+	goto BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
 	printstring STRINGID_AIRLOCKACTIVATES
+BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged:
 	waitmessage B_WAIT_TIME_LONG
 	call BattleScript_OnWeatherChange
 	end3
