@@ -10324,12 +10324,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_SLAKING] =
     {
-    .baseHP        = 130, // -20 nerf
-    .baseAttack    = 150, // -10 nerf
-    .baseDefense   = 100,
-    .baseSpeed     = 100,
-    .baseSpAttack  = 75, // -20 nerf
-    .baseSpDefense = 95, // +30
+    .baseHP         = 130,
+    .baseAttack     = 150,
+    .baseDefense    = 110,
+    .baseSpeed      = 80,
+    .baseSpAttack   = 75,
+    .baseSpDefense  = 105,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_NORMAL,
     .catchRate = 255,
