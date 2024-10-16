@@ -2345,6 +2345,11 @@
 	.4byte \onFail
 	.endm
 
+	.macro trysetclearskies onFail:req
+	various BS_ATTACKER, VARIOUS_SET_CLEAR_SKIES
+	.4byte \onFail
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

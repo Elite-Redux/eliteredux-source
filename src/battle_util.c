@@ -2253,6 +2253,7 @@ enum
     ENDTURN_SWAMP,
     ENDTURN_QUASH,
     ENDTURN_SMOKESCREEN,
+    ENDTURN_CLEARSKIES,
     ENDTURN_FIELD_COUNT,
 };
 
@@ -2861,6 +2862,31 @@ u8 DoFieldEndTurnEffects(void)
                 gBattleStruct->turnCountersTracker++;
                 gBattleStruct->turnSideTracker = 0;
             }
+            break;
+        case ENDTURN_CLEARSKIES:
+            if (gFieldTimers.clearSkiesTimer && !gFieldTimers.started.clearSkiesTimer)
+            {
+                if (!--gFieldTimers.clearSkiesTimer)
+                {
+                    int weather = -1;
+                    switch (gBattleWeather)
+                    {
+                    case WEATHER_STRONG_WINDS:
+                        weather = ENUM_WEATHER_STRONG_WINDS;
+                        break;
+                    case WEATHER_SUN_PRIMAL:
+                        weather = ENUM_WEATHER_SUN_PRIMAL;
+                        break;
+                    case WEATHER_RAIN_PRIMAL:
+                        weather = ENUM_WEATHER_RAIN_PRIMAL;
+                        break;
+                    }
+                    gBattleCommunication[MULTISTRING_CHOOSER] = GetWeatherChangeMultistringChooser(weather);
+                    BattleScriptExecute(BattleScript_ClearSkiesEnds);
+                    effect = TRUE;
+                }
+            }
+            gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_FIELD_COUNT:
             effect++;

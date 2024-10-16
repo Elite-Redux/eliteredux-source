@@ -148,6 +148,7 @@ extern const u8 BattleScript_MoveEffectPayDay[];
 extern const u8 BattleScript_MoveEffectWrap[];
 extern const u8 BattleScript_MoveEffectConfusion[];
 extern const u8 BattleScript_ConfusionAnimation[];
+extern const u8 BattleScript_ClearSkiesEnds[];
 extern const u8 BattleScript_MoveEffectRecoil[];
 extern const u8 BattleScript_DoRecoil33[];
 extern const u8 BattleScript_Recoil33End[];

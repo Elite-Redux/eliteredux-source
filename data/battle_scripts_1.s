@@ -484,6 +484,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectFairyTerrainHit         @ EFFECT_FAIRY_TERRAIN_HIT
 	.4byte BattleScript_EffectCreepingThornsHit		  @ EFFECT_CREEPING_THORNS_HIT
 	.4byte BattleScript_EffectTakeHeart				  @ EFFECT_TAKE_HEART
+	.4byte BattleScript_EffectClearSkies			  @ EFFECT_CLEAR_SKIES
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -12990,3 +12991,20 @@ BattleScript_AnnounceAttackerItemDisabled::
 	printstring STRINGID_DISABLE_ATTACKER_ITEM
 	waitmessage B_WAIT_TIME_LONG
 	return
+
+BattleScript_EffectClearSkies::
+	attackcanceler
+	attackstring
+	ppreduce
+	trysetclearskies BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	printstring STRINGID_CLEARSKIES
+	waitmessage B_WAIT_TIME_LONG
+	call BattleScript_OnWeatherChange
+	goto BattleScript_MoveEnd
+
+BattleScript_ClearSkiesEnds::
+	call BattleScript_MoveWeatherChangeRet
+	end2
+

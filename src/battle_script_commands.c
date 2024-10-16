@@ -11264,29 +11264,7 @@ static void Cmd_various(void)
             }
             else
             {
-                int stringId = 0;
-                switch (weather)
-                {
-                case ENUM_WEATHER_FOG:
-                    stringId = B_MSG_STARTED_FOG;
-                    break;
-                case ENUM_WEATHER_HAIL:
-                    stringId = B_MSG_STARTED_HAIL;
-                    break;
-                case ENUM_WEATHER_RAIN:
-                    stringId = B_MSG_STARTED_RAIN;
-                    break;
-                case ENUM_WEATHER_RAIN_PRIMAL:
-                    stringId = B_MSG_STARTED_DOWNPOUR;
-                    break;
-                case ENUM_WEATHER_SANDSTORM:
-                    stringId = B_MSG_STARTED_SANDSTORM;
-                    break;
-                case ENUM_WEATHER_SUN:
-                    stringId = B_MSG_STARTED_SUNLIGHT;
-                    break;
-                }
-                SetActiveMultistringChooser(stringId);
+                SetActiveMultistringChooser(GetWeatherChangeMultistringChooser(weather));
             }
         }
         return;
@@ -11334,6 +11312,18 @@ static void Cmd_various(void)
                     gBattlescriptCurrInstr = ptr;
                 }
             }
+        }
+        return;
+    case VARIOUS_SET_CLEAR_SKIES:
+        ptr = READ_PTR_INC;
+        if (gFieldTimers.clearSkiesTimer)
+        {
+            gBattlescriptCurrInstr = ptr;
+        }
+        else
+        {
+            gFieldTimers.clearSkiesTimer = 5;
+            gFieldTimers.started.clearSkiesTimer = TRUE;
         }
         return;
     } // End of switch (gBattlescriptCurrInstr[2])
@@ -16994,4 +16984,25 @@ void ClearBattlerAffectedFlag(int attacker, int target, int ability)
 {
     int flag = GetAbilityState(attacker, ability);
     SetAbilityState(attacker, ability, flag & ~(1 << target));
+}
+
+int GetWeatherChangeMultistringChooser(int weather)
+{
+    switch (weather)
+    {
+    case ENUM_WEATHER_FOG:
+        return B_MSG_STARTED_FOG;
+    case ENUM_WEATHER_HAIL:
+        return B_MSG_STARTED_HAIL;
+    case ENUM_WEATHER_RAIN:
+        return B_MSG_STARTED_RAIN;
+    case ENUM_WEATHER_RAIN_PRIMAL:
+        return B_MSG_STARTED_DOWNPOUR;
+    case ENUM_WEATHER_SANDSTORM:
+        return B_MSG_STARTED_SANDSTORM;
+    case ENUM_WEATHER_SUN:
+        return B_MSG_STARTED_SUNLIGHT;
+    default:
+        return B_MSG_WEATHER_BECAME_NORMAL;
+    }
 }

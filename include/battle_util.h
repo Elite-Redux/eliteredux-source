@@ -40,7 +40,7 @@
 #define ITEMEFFECT_LIFEORB_SHELLBELL            0x7
 #define ITEMEFFECT_BATTLER_MOVE_END             0x8 // move end effects for just the battler, not whole field
 
-#define WEATHER_HAS_EFFECT ((!IsAbilityOnField(ABILITY_CLOUD_NINE) && !IsAbilityOnField(ABILITY_AIR_LOCK) && !IsAbilityOnField(ABILITY_CLUELESS)))
+#define WEATHER_HAS_EFFECT (!gFieldTimers.clearSkiesTimer && !IsAbilityOnField(ABILITY_CLOUD_NINE) && !IsAbilityOnField(ABILITY_AIR_LOCK) && !IsAbilityOnField(ABILITY_CLUELESS))
 #define TERRAIN_HAS_EFFECT (!IsAbilityOnField(ABILITY_CLUELESS))
 #define ROOM_HAS_EFFECT    (!IsAbilityOnField(ABILITY_CLUELESS))
 

@@ -898,6 +898,8 @@ static const u8 sText_HotCoalsExtinguish[] = _("The heat from the coals fades!")
 static const u8 sText_DisableAttackerItem[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nwas disabled!");
 static const u8 sText_SuperStrainRecoil[] = _("The strain takes its toll on\n{B_ATK_NAME_WITH_PREFIX}!");
 static const u8 sText_AttackerLostDarkType[] = _("{B_ATK_NAME_WITH_PREFIX} has no more\ndarkness left!");
+static const u8 sText_ClearSkies[] = _("The sky became clear!");
+static const u8 sText_WeatherNormal[] = _("The weather returned to normal!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1896,6 +1898,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_DISABLE_ATTACKER_ITEM - 12] = sText_DisableAttackerItem,
     [STRINGID_SUPER_STRAIN_RECOIL - 12] = sText_SuperStrainRecoil,
     [STRINGID_ATTACKERLOSTDARKTYPE - 12] = sText_AttackerLostDarkType,
+    [STRINGID_CLEARSKIES - 12] = sText_ClearSkies,
+    [STRINGID_WEATHER_NORMAL - 12] = sText_WeatherNormal,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2021,6 +2025,7 @@ const u16 gMoveWeatherChangeStringIds[] =
     [B_MSG_STARTED_SUNLIGHT] = STRINGID_SUNLIGHTGOTBRIGHT,
     [B_MSG_STARTED_HAIL] = STRINGID_STARTEDHAIL,
     [B_MSG_STARTED_FOG] = STRINGID_FOG_STARTS,
+    [B_MSG_WEATHER_BECAME_NORMAL] = STRINGID_WEATHER_NORMAL,
 };
 
 const u16 gSandStormHailContinuesStringIds[] = 

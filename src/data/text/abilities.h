@@ -210,6 +210,7 @@ static const u8 sAbilityBatteryDescription[] = _("Grants a 1.3x power boost to\n
 static const u8 sAbilityFluffyDescription[] = _("Takes 1/2 dmg from contact moves\nbut Fire moves hurt it 2x more.");
 static const u8 sAbilitySoulHeartDescription[] = _("KOs dealt anywhere on the field\nraise Sp. Atk by one stage.");
 static const u8 sAbilityReceiverDescription[] = _("In Double Battles, copies its\nfainting partner's ability.");
+static const u8 sAbilityPowerOfAlchemyDescription[] = _("Remove or turns enemy items into\nBlack Sludge or Big Nugget on entry.");
 static const u8 sAbilityBeastBoostDescription[] = _("Dealing a KO raises highest\ncalculated stat by one stage.");
 static const u8 sAbilityRksSystemDescription[] = _("Held Memory determines its type.\nAlso has Protean + Adaptability.");
 static const u8 sAbilityElectricSurgeDescription[] = _("Casts Electric Terrain on entry.\nLasts 8 turns.");
@@ -701,7 +702,6 @@ static const u8 sAbilityRazorSharpDescription[] = _("Critical hits also inflict 
 static const u8 sAbilityToTheBoneDescription[] = _("Critical hits get a 1.5x boost and\ninflict bleeding.");
 static const u8 sAbilityBladeDanceDescription[] = _("Triggers 50 BP Leaf Blade after\nusing a dance move.");
 static const u8 sAbilityTaekkyeonDescription[] = _("All attacks are dances.");
-static const u8 sAbilityPowerOfAlchemyDescription[] = _("Remove or turns enemy items into\nBlack Sludge or Big Nugget on entry.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {

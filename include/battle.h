@@ -319,6 +319,7 @@ struct FieldBeganThisTurn
     u8 inverseRoom:1;
     u8 weather:1;
     u8 quash:1;
+    u8 clearSkiesTimer:1;
 };
 
 struct FieldTimer
@@ -335,6 +336,7 @@ struct FieldTimer
     u8 inverseRoomTimer;
     u8 quashTimer;
     u8 fogReturnTimer;
+    u8 clearSkiesTimer;
 };
 
 struct WishFutureKnock
