@@ -4592,11 +4592,9 @@ bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility)
     {
         return FALSE;
     }
-    else if (viaAbility && B_ABILITY_WEATHER <= GEN_5
-        && !(gBattleWeather & sWeatherFlagsInfo[weatherEnumId][1]))
+    else if (weatherEnumId != ENUM_WEATHER_SUN_PRIMAL && weatherEnumId != ENUM_WEATHER_RAIN_PRIMAL && weatherEnumId != ENUM_WEATHER_STRONG_WINDS && !WEATHER_HAS_EFFECT)
     {
-        gBattleWeather = (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1]);
-        return TRUE;
+        return FALSE;
     }
     else if (!(gBattleWeather & (sWeatherFlagsInfo[weatherEnumId][0] | sWeatherFlagsInfo[weatherEnumId][1])))
     {
