@@ -33655,7 +33655,7 @@ static const struct TrainerMonItemCustomMoves sParty_Shannon[] = {
     .ability = 0,
     .evs = {132, 0, 0, 252, 0, 124},
     .nature = NATURE_MODEST,
-    .moves = MOVE_CLANGING_SCALES, MOVE_CLANGOROUS_SOUL, MOVE_AURA_SPHERE, MOVE_FLASH_CANNON
+    .moves = MOVE_CLANGING_SCALES, MOVE_MYSTIC_DANCE, MOVE_AURA_SPHERE, MOVE_FLASH_CANNON
     },
     {
     .lvl = 0,
