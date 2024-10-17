@@ -17710,6 +17710,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_TRICK)
         TUTOR(MOVE_TRICK_ROOM)
         TUTOR(MOVE_U_TURN)
+        TUTOR(MOVE_MISTY_TERRAIN)  
         TUTOR_LEARNSET_END
 
     [SPECIES_MESPRIT] = TUTOR_LEARNSET
@@ -17751,6 +17752,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_TRICK)
         TUTOR(MOVE_TRICK_ROOM)
         TUTOR(MOVE_U_TURN)
+        TUTOR(MOVE_MISTY_TERRAIN)  
         TUTOR_LEARNSET_END
 
     [SPECIES_AZELF] = TUTOR_LEARNSET
@@ -17794,6 +17796,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WILL_O_WISP)
         TUTOR(MOVE_WORK_UP)
+        TUTOR(MOVE_MISTY_TERRAIN)  
         TUTOR_LEARNSET_END
 
     [SPECIES_DIALGA] = TUTOR_LEARNSET
