@@ -10324,12 +10324,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_SLAKING] =
     {
-    .baseHP        = 130, // -20 nerf
-    .baseAttack    = 150, // -10 nerf
-    .baseDefense   = 100,
-    .baseSpeed     = 100,
-    .baseSpAttack  = 75, // -20 nerf
-    .baseSpDefense = 95, // +30
+    .baseHP         = 130,
+    .baseAttack     = 150,
+    .baseDefense    = 110,
+    .baseSpeed      = 80,
+    .baseSpAttack   = 75,
+    .baseSpDefense  = 105,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_NORMAL,
     .catchRate = 255,
@@ -12493,7 +12493,7 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_MEDIUM_SLOW,
     .eggGroup1 = EGG_GROUP_FIELD,
     .eggGroup2 = EGG_GROUP_FIELD,
-    .abilities      = {ABILITY_DEFEATIST, ABILITY_STALL, ABILITY_KLUTZ},
+    .abilities      = {ABILITY_DEFEATIST, ABILITY_RECEIVER, ABILITY_KLUTZ},
     .innates = {ABILITY_COLOR_CHANGE, ABILITY_PROTEAN, ABILITY_CHEAP_TACTICS},
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
