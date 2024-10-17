@@ -702,6 +702,48 @@ static u32 InitMainMenu(bool8 returningFromOptionsMenu)
 
 extern const u8 EventScript_UpdateVersionFlags[];
 const u8 gText_FutureSave[] = _("The save file cannot be loaded since\nits from a future version of this game.");
+
+static void UpdateBoxMon(struct BoxPokemon* boxMon)
+{
+    struct OldBoxPokemon old = *((struct OldBoxPokemon*) boxMon);
+    *boxMon = (struct BoxPokemon) {
+        .personality = old.personality,
+        .otId = old.otId,
+        .move1 = old.move1,
+        .experience = old.experience,
+        .move2 = old.move2,
+        .move3 = old.move3,
+        .friendship = old.friendship,
+        .isEventMon = old.isEventMon,
+        .isAlpha = old.isAlpha,
+        .species = old.species,
+        .move4 = old.move4,
+        .hpType = old.hpType,
+        .heldItem = old.heldItem,
+        .nature = old.nature,
+        .isEgg = old.isEgg,
+        .language = old.language,
+        .metLevel = old.metLevel,
+        .isShiny = old.isShiny,
+        .maxShiny = old.maxShiny,
+        .abilityNum = old.abilityNum,
+        .hpEV = old.hpEV,
+        .attackEV = old.attackEV,
+        .defenseEV = old.defenseEV,
+        .speedEV = old.speedEV,
+        .spAttackEV = old.spAttackEV,
+        .spDefenseEV = old.spDefenseEV,
+        .metLocation = old.metLocation,
+        .pokeball = old.pokeball,
+        .speedDown = old.speedDown,
+        .otGender = old.otGender,
+        .attackDown = old.attackDown,
+        .markings = old.markings,
+    };
+    ARRAY_COPY(boxMon->otName, old.otName)
+    ARRAY_COPY(boxMon->nickname, old.nickname)
+}
+
 static void Task_MainMenuCheckSaveFile(u8 taskId)
 {
     u8 i, j, itemcount;
@@ -728,50 +770,22 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
             if(VarGet(VAR_SAVE_VERSION) <= CURRENT_GAME_VERSION){
                 //No problems
                 if(VarGet(VAR_SAVE_VERSION) < CURRENT_GAME_VERSION){
+
                     if (VarGet(VAR_SAVE_VERSION) <= 1042)
                     {
                         int i, j;
+
+                        for (i = 0; i < gSaveBlock1Ptr->playerPartyCount; i++)
+                        {
+                            UpdateBoxMon(&gSaveBlock1Ptr->playerParty[i].box);
+                        }
+                        LoadPlayerParty();
+                        
                         for (i = 0; i < ARRAY_COUNT(gPokemonStoragePtr->boxes); i++)
                         {
                             for (j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++)
                             {
-                                struct OldBoxPokemon old = *((struct OldBoxPokemon*) &gPokemonStoragePtr->boxes[i][j]);
-                                gPokemonStoragePtr->boxes[i][j] = (struct BoxPokemon) {
-                                    .personality = old.personality,
-                                    .otId = old.otId,
-                                    .move1 = old.move1,
-                                    .experience = old.experience,
-                                    .move2 = old.move2,
-                                    .move3 = old.move3,
-                                    .friendship = old.friendship,
-                                    .isEventMon = old.isEventMon,
-                                    .isAlpha = old.isAlpha,
-                                    .species = old.species,
-                                    .move4 = old.move4,
-                                    .hpType = old.hpType,
-                                    .heldItem = old.heldItem,
-                                    .nature = old.nature,
-                                    .isEgg = old.isEgg,
-                                    .language = old.language,
-                                    .metLevel = old.metLevel,
-                                    .isShiny = old.isShiny,
-                                    .maxShiny = old.maxShiny,
-                                    .abilityNum = old.abilityNum,
-                                    .hpEV = old.hpEV,
-                                    .attackEV = old.attackEV,
-                                    .defenseEV = old.defenseEV,
-                                    .speedEV = old.speedEV,
-                                    .spAttackEV = old.spAttackEV,
-                                    .spDefenseEV = old.spDefenseEV,
-                                    .metLocation = old.metLocation,
-                                    .pokeball = old.pokeball,
-                                    .speedDown = old.speedDown,
-                                    .otGender = old.otGender,
-                                    .attackDown = old.attackDown,
-                                    .markings = old.markings,
-                                };
-                                ARRAY_COPY(gPokemonStoragePtr->boxes[i][j].otName, old.otName)
-                                ARRAY_COPY(gPokemonStoragePtr->boxes[i][j].nickname, old.nickname)
+                                UpdateBoxMon(&gPokemonStoragePtr->boxes[i][j]);
                             }
                         }
                     }
