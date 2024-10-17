@@ -5140,6 +5140,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     u32 speedBattler1 = 0, speedBattler2 = 0;
     u32 holdEffectBattler1 = 0, holdEffectBattler2 = 0;
     s8 priority1 = 0, priority2 = 0;
+    int storedBattlerAtk;
 
     holdEffectBattler1 = GetBattlerHoldEffect(battler1, TRUE);
     holdEffectBattler2 = GetBattlerHoldEffect(battler2, TRUE);
@@ -5181,9 +5182,11 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     if (!gRoundStructs[battler1].afterYou && gRoundStructs[battler2].afterYou) return 1;
 
     // Battler 1
+    gBattlerAttacker = battler1;
     speedBattler1 = GetBattlerTotalSpeedStat(battler1, TOTAL_SPEED_FULL);
 
     // Battler 2
+    gBattlerAttacker = battler2;
     speedBattler2 = GetBattlerTotalSpeedStat(battler2, TOTAL_SPEED_FULL);
 
     if (!ignoreChosenMoves)

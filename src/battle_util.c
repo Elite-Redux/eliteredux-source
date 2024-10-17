@@ -1146,6 +1146,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_HOVER] = 1,
     [ABILITY_LUCKY_HALO] = 1,
     [ABILITY_DRAGONSLAYER] = 1,
+    [ABILITY_STALL] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -9805,6 +9806,10 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_DUNE_TERROR:
             if (IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY)) MUL(.65);
+            return;
+        
+        case ABILITY_STALL:
+            if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battlerDef)) MUL(.7);
             return;
         
         case ABILITY_SHELL_ARMOR:
