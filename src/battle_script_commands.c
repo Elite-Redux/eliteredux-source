@@ -14586,26 +14586,17 @@ static void Cmd_recoverbasedonsunlight(void)
         {
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP * 3 / 4;
         }
-        else
+        else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY)
+            || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SOLAR_FLARE)
+            || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_BIG_LEAVES)
+            || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CHLOROPLAST))
         {
-            if ((!(gBattleWeather & WEATHER_ANY) || !WEATHER_HAS_EFFECT || GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_UTILITY_UMBRELLA)
-                && GetBattlerAbility(gBattlerAttacker) != ABILITY_SOLAR_FLARE
-				&& !BattlerHasInnate(gBattlerAttacker, ABILITY_SOLAR_FLARE)
-                && GetBattlerAbility(gBattlerAttacker) != ABILITY_BIG_LEAVES
-				&& !BattlerHasInnate(gBattlerAttacker, ABILITY_BIG_LEAVES)
-                && GetBattlerAbility(gBattlerAttacker) != ABILITY_CHLOROPLAST
-				&& !BattlerHasInnate(gBattlerAttacker, ABILITY_CHLOROPLAST)) // Tidy up this block later
-                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
-            else if (gBattleWeather & WEATHER_SUN_ANY ||
-                    GetBattlerAbility(gBattlerAttacker) == ABILITY_SOLAR_FLARE || BattlerHasInnate(gBattlerAttacker, ABILITY_SOLAR_FLARE) ||
-                    GetBattlerAbility(gBattlerAttacker) == ABILITY_BIG_LEAVES  || BattlerHasInnate(gBattlerAttacker, ABILITY_BIG_LEAVES)  ||
-                    GetBattlerAbility(gBattlerAttacker) == ABILITY_CHLOROPLAST || BattlerHasInnate(gBattlerAttacker, ABILITY_CHLOROPLAST))
-                gBattleMoveDamage = 2 * gBattleMons[gBattlerAttacker].maxHP / 3;
-            else if (!(gBattleWeather & WEATHER_ANY) || !WEATHER_HAS_EFFECT)
-                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
-            else // not sunny weather
-                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP * 2 / 3;
         }
+        else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY))
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
+        else // not sunny weather
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
 
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
