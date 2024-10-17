@@ -6851,6 +6851,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x87,
         .y_offset = 0,
     },
+    [SPECIES_SLAKING_MEGA_APE_SHIFT] =
+    {
+        .size = 0x87,
+        .y_offset = 0,
+    },
     [SPECIES_HITMONLEE_MEGA] =
     {
         .size = 0x87,

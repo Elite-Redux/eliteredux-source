@@ -8201,6 +8201,12 @@ const u32 gMonPalette_CorviknightMega[]           = INCBIN_U32("graphics/pokemon
 const u32 gMonShinyPalette_CorviknightMega[]      = INCBIN_U32("graphics/pokemon/corviknight/mega/shiny.gbapal.lz");
 const u8  gMonIcon_CorviknightMega[]              = INCBIN_U8("graphics/pokemon/corviknight/mega/icon.4bpp");
 
+const u32 gMonFrontPic_SlakingMegaApeShift[]          = INCBIN_U32("graphics/pokemon/slaking/mega/ape_shift/front.4bpp.lz");
+const u32 gMonBackPic_SlakingMegaApeShift[]           = INCBIN_U32("graphics/pokemon/slaking/mega/ape_shift/back.4bpp.lz");
+const u32 gMonPalette_SlakingMegaApeShift[]           = INCBIN_U32("graphics/pokemon/slaking/mega/ape_shift/normal.gbapal.lz");
+const u32 gMonShinyPalette_SlakingMegaApeShift[]      = INCBIN_U32("graphics/pokemon/slaking/mega/ape_shift/shiny.gbapal.lz");
+const u8  gMonIcon_SlakingMegaApeShift[]              = INCBIN_U8("graphics/pokemon/slaking/mega/ape_shift/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

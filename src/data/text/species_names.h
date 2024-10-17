@@ -1386,6 +1386,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DRAGONITE_MEGA]     = _("Dragonite"),
     [SPECIES_BRELOOM_MEGA]       = _("Breloom"),
     [SPECIES_SLAKING_MEGA]       = _("Slaking"),
+    [SPECIES_SLAKING_MEGA_APE_SHIFT]       = _("Slaking"),
     [SPECIES_FERALIGATR_MEGA_X]  = _("Feraligatr"),
     [SPECIES_FERALIGATR_MEGA_Y]  = _("Feraligatr"),
     [SPECIES_GRANBULL_MEGA]      = _("Granbull"),

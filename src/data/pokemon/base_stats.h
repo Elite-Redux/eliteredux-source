@@ -10350,12 +10350,38 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_SLAKING_MEGA] =
     {
-    .baseHP        = 130, // 
-    .baseAttack    = 210, // 
+    .baseHP        = 130,
+    .baseAttack    = 210,
     .baseDefense   = 105,
     .baseSpeed     = 105,
-    .baseSpAttack  = 95, // 
-    .baseSpDefense = 105, // 
+    .baseSpAttack  = 95,
+    .baseSpDefense = 105,
+    .type1 = TYPE_NORMAL,
+    .type2 = TYPE_ICE,
+    .catchRate = 255,
+    .expYield = 252,
+    .evYield_HP    = 3,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 15,
+    .friendship = 70,
+    .growthRate = GROWTH_SLOW,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_FIELD,
+	.abilities = {ABILITY_UNSEEN_FIST, ABILITY_MOLD_BREAKER, ABILITY_UNAWARE},
+	.innates = {ABILITY_SUPER_STRAIN, ABILITY_CRYSTALLIZE, ABILITY_RAMPAGE},
+    .bodyColor = BODY_COLOR_BROWN,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
+[SPECIES_SLAKING_MEGA_APE_SHIFT] =
+    {
+    .baseHP        = 130,
+    .baseAttack    = 210,
+    .baseDefense   = 105,
+    .baseSpeed     = 105,
+    .baseSpAttack  = 95,
+    .baseSpDefense = 105,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_ICE,
     .catchRate = 255,

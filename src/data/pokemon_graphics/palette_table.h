@@ -1369,6 +1369,7 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(DRAGONITE_MEGA,    gMonPalette_DragoniteMega),
     SPECIES_PAL(BRELOOM_MEGA,      gMonPalette_BreloomMega),
     SPECIES_PAL(SLAKING_MEGA,      gMonPalette_SlakingMega),
+    SPECIES_PAL(SLAKING_MEGA_APE_SHIFT,      gMonPalette_SlakingMegaApeShift),
     SPECIES_PAL(FERALIGATR_MEGA_X, gMonPalette_FeraligatrMegaX),
     SPECIES_PAL(FERALIGATR_MEGA_Y, gMonPalette_FeraligatrMegaY),
     SPECIES_PAL(GRANBULL_MEGA,     gMonPalette_GranbullMega),

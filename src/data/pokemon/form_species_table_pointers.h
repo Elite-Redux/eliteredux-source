@@ -532,6 +532,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SKARMORY_MEGA_REDUX]   = sSkarmoryFormSpeciesIdTable,
     [SPECIES_SLAKING]               = sSlakingFormSpeciesIdTable,
     [SPECIES_SLAKING_MEGA]          = sSlakingFormSpeciesIdTable,
+    [SPECIES_SLAKING_MEGA_APE_SHIFT]          = sSlakingFormSpeciesIdTable,
     [SPECIES_HITMONLEE]             = sHitmonleeFormSpeciesIdTable,
     [SPECIES_HITMONLEE_MEGA]        = sHitmonleeFormSpeciesIdTable,
     [SPECIES_CASCOON]               = sCascoonFormSpeciesIdTable,

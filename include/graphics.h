@@ -11310,6 +11310,11 @@ extern const u32 gMonBackPic_Fujiflap[];
 extern const u32 gMonPalette_Fujiflap[];
 extern const u32 gMonShinyPalette_Fujiflap[];
 extern const u8  gMonIcon_Fujiflap[];
+extern const u32 gMonFrontPic_SlakingMegaApeShift[];
+extern const u32 gMonBackPic_SlakingMegaApeShift[];
+extern const u32 gMonPalette_SlakingMegaApeShift[];
+extern const u32 gMonShinyPalette_SlakingMegaApeShift[];
+extern const u8  gMonIcon_SlakingMegaApeShift[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

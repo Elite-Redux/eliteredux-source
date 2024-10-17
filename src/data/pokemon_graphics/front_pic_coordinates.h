@@ -6767,6 +6767,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x87,
         .y_offset = 2,
     },
+    [SPECIES_SLAKING_MEGA_APE_SHIFT] =
+    {
+        .size = 0x87,
+        .y_offset = 2,
+    },
     [SPECIES_FERALIGATR_MEGA_X] =
     {
         .size = 0x87,

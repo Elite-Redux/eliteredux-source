@@ -1253,6 +1253,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_DRAGONITE_MEGA]    = sDragoniteLevelUpLearnset,
     [SPECIES_BRELOOM_MEGA]      = sBreloomLevelUpLearnset,
     [SPECIES_SLAKING_MEGA]      = sSlakingLevelUpLearnset,
+    [SPECIES_SLAKING_MEGA_APE_SHIFT]      = sSlakingLevelUpLearnset,
     [SPECIES_FERALIGATR_MEGA_X] = sFeraligatrLevelUpLearnset,
     [SPECIES_FERALIGATR_MEGA_Y] = sFeraligatrLevelUpLearnset,
     [SPECIES_GRANBULL_MEGA] = sGranbullLevelUpLearnset,
