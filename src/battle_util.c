@@ -2075,6 +2075,8 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
                   BATTLER_HAS_ABILITY(battlerId, ABILITY_SAGE_POWER))
 			&& *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
             unusableMoves |= 1 << i;
+        else if (GetAbilityState(battlerId, ABILITY_TRUANT) && !IS_MOVE_STATUS(gBattleMons[battlerId].moves[i]))
+            unusableMoves |= 1 << i;
     }
     return unusableMoves;
 }
@@ -4067,7 +4069,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_TRUANT: // truant
-            if (GetBattlerAbility(gBattlerAttacker) == ABILITY_TRUANT && gVolatileStructs[gBattlerAttacker].truantCounter)
+            if (GetAbilityState(gBattlerAttacker, ABILITY_TRUANT) && !IS_MOVE_STATUS(gCurrentMove))
             {
                 CancelMultiTurnMoves(gBattlerAttacker);
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
@@ -15970,7 +15972,8 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             return TRUE;
         
         case ABILITY_TRUANT:
-            gVolatileStructs[battler].truantCounter ^= 1;
+            if (GetAbilityState(battler, ABILITY_TRUANT)) SetAbilityState(battler, ABILITY_TRUANT, FALSE);
+            else if (!IS_MOVE_STATUS(gChosenMoveByBattler[battler])) SetAbilityState(battler, ABILITY_TRUANT, TRUE);
             break;
         
         case ABILITY_BAD_DREAMS:

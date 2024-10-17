@@ -367,20 +367,6 @@ static u8 ChooseMoveOrAction_Singles(void)
                 return AI_CHOICE_SWITCH;
             }
         }
-
-        // Consider switching if your mon with truant is bodied by Protect spam.
-        // Or is using a double turn semi invulnerable move(such as Fly) and is faster.
-        if (BATTLER_HAS_ABILITY_FAST_AI(sBattler_AI, ABILITY_TRUANT)
-            && IsTruantMonVulnerable(sBattler_AI, gBattlerTarget)
-            && gVolatileStructs[sBattler_AI].truantCounter
-            && gBattleMons[sBattler_AI].hp >= gBattleMons[sBattler_AI].maxHP / 2)
-        {
-            if (GetMostSuitableMonToSwitchInto() != PARTY_SIZE)
-            {
-                AI_THINKING_STRUCT->switchMon = TRUE;
-                return AI_CHOICE_SWITCH;
-            }
-        }
     }
 
     numOfBestMoves = 1;

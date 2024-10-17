@@ -3436,7 +3436,6 @@ void SwitchInClearSetData(void)
 
     gMoveResultFlags = 0;
     gVolatileStructs[gActiveBattler].isFirstTurn = 2;
-    gVolatileStructs[gActiveBattler].truantSwitchInHack = VolatileStructCopy.truantSwitchInHack;
     gLastMoves[gActiveBattler] = 0;
     gLastLandedMoves[gActiveBattler] = 0;
     gLastHitByType[gActiveBattler] = 0;
@@ -4040,11 +4039,11 @@ static void TryDoEventsBeforeFirstTurn(void)
             return;
     }
 
+    ZERO(gChosenMoveByBattler)
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
     {
         *(gBattleStruct->monToSwitchIntoId + i) = PARTY_SIZE;
         gChosenActionByBattler[i] = B_ACTION_NONE;
-        gChosenMoveByBattler[i] = MOVE_NONE;
         // Record party slots of player's mons that appeared in battle
         if (!IsBattlerAIControlled(i))
             gBattleStruct->appearedInBattle |= gBitTable[gBattlerPartyIndexes[i]];
@@ -5497,7 +5496,6 @@ static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
             gActiveBattler = gBattlerAttacker = gBattleStruct->focusPunchBattlerId;
             gBattleStruct->focusPunchBattlerId++;
             if (!(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
-                && !(gVolatileStructs[gBattlerAttacker].truantCounter)
                 && !(gRoundStructs[gActiveBattler].noValidMoves))
             {
                 switch(gChosenMoveByBattler[gActiveBattler])
@@ -5533,7 +5531,6 @@ static void CheckQuickClaw_CustapBerryActivation(void)
              && gChosenMoveByBattler[gActiveBattler] != MOVE_FOCUS_PUNCH   // quick claw message doesn't need to activate here
              && (gRoundStructs[gActiveBattler].usedCustapBerry || gRoundStructs[gActiveBattler].quickDraw)
              && !(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
-             && !(gVolatileStructs[gBattlerAttacker].truantCounter)
              && !(gRoundStructs[gActiveBattler].noValidMoves))
             {
                 if (gRoundStructs[gActiveBattler].usedCustapBerry)

@@ -128,8 +128,6 @@ struct VolatileStruct
     u8 chargeTimerStartValue:4;
     u8 tauntTimer:4;
     u8 tauntTimer2:4;
-    u8 truantCounter:1;
-    u8 truantSwitchInHack:1;
     u8 mimickedMoves:4;
     u8 usedMoves:4;
     u8 wrapTurns;

@@ -7214,14 +7214,6 @@ static void Cmd_switchineffects(void)
     }
     else
     {
-        // There is a hack here to ensure the truant counter will be 0 when the battler's next turn starts.
-        // The truant counter is not updated in the case where a mon switches in after a lost judgement in the battle arena.
-        if (GetBattlerAbility(gActiveBattler) == ABILITY_TRUANT
-            && gCurrentActionFuncId != B_ACTION_USE_MOVE
-            && !gVolatileStructs[gActiveBattler].truantSwitchInHack)
-            gVolatileStructs[gActiveBattler].truantCounter = 1;
-
-        gVolatileStructs[gActiveBattler].truantSwitchInHack = 0;
         
         if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0))
             return;
@@ -8964,14 +8956,12 @@ static void Cmd_various(void)
         gBattleMons[1].hp = 0;
         gHitMarker |= HITMARKER_FAINTED(1);
         gBattleStruct->arenaLostOpponentMons |= gBitTable[gBattlerPartyIndexes[1]];
-        gVolatileStructs[1].truantSwitchInHack = 1;
         break;
     case VARIOUS_ARENA_PLAYER_MON_LOST:
         gBattleMons[0].hp = 0;
         gHitMarker |= HITMARKER_FAINTED(0);
         gHitMarker |= HITMARKER_x400000;
         gBattleStruct->arenaLostPlayerMons |= gBitTable[gBattlerPartyIndexes[0]];
-        gVolatileStructs[0].truantSwitchInHack = 1;
         break;
     case VARIOUS_ARENA_BOTH_MONS_LOST:
         gBattleMons[0].hp = 0;
@@ -8981,8 +8971,6 @@ static void Cmd_various(void)
         gHitMarker |= HITMARKER_x400000;
         gBattleStruct->arenaLostPlayerMons |= gBitTable[gBattlerPartyIndexes[0]];
         gBattleStruct->arenaLostOpponentMons |= gBitTable[gBattlerPartyIndexes[1]];
-        gVolatileStructs[0].truantSwitchInHack = 1;
-        gVolatileStructs[1].truantSwitchInHack = 1;
         break;
     case VARIOUS_EMIT_YESNOBOX:
         BtlController_EmitYesNoBox(0);
@@ -14435,7 +14423,7 @@ static void Cmd_jumpifnopursuitswitchdmg(void)
         && gBattlerAttacker == gBattleStruct->moveTarget[gBattlerTarget]
         && !(gBattleMons[gBattlerTarget].status1 & (STATUS1_SLEEP | STATUS1_FREEZE))
         && gBattleMons[gBattlerAttacker].hp
-        && !gVolatileStructs[gBattlerTarget].truantCounter
+        && !(GetAbilityState(gBattlerTarget, ABILITY_TRUANT) && !IS_MOVE_STATUS(gChosenMoveByBattler[gBattlerTarget]))
         && gChosenMoveByBattler[gBattlerTarget] == MOVE_PURSUIT)
     {
         s32 i;

@@ -55,7 +55,7 @@
 #define ABILITY_KEEN_EYE 51 // Immune to accuracy drops. Grants a 1.2x accuracy boost.
 #define ABILITY_HYPER_CUTTER 52 // Enemies can't lower Atk/Sp. Atk. Crit rate of contact moves: +1.
 #define ABILITY_PICKUP 53 // Removes all hazards on entry. Not immune to hazards.
-#define ABILITY_TRUANT 54 // Only moves every two turns.
+#define ABILITY_TRUANT 54 // Can only attack every other turn. Can use status moves every turn.
 #define ABILITY_HUSTLE 55 // 0. 9x accuracy. Raises Atk & SpAtk by 1.4x.
 #define ABILITY_CUTE_CHARM 56 // 30% chance to charm attacker on contact, which halves its power.
 #define ABILITY_PLUS 57 // Deals double damage if an ally Pokémon has Minus or Plus.
