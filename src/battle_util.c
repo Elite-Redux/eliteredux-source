@@ -446,13 +446,13 @@ void HandleAction_UseMove(void)
         }
         else if (gPalaceSelectionBattleScripts[gBattlerAttacker] != NULL)
         {
-            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_INCAPABLE_OF_POWER;
+            SetActiveMultistringChooser(B_MSG_INCAPABLE_OF_POWER);
             gBattlescriptCurrInstr = gPalaceSelectionBattleScripts[gBattlerAttacker];
             gPalaceSelectionBattleScripts[gBattlerAttacker] = NULL;
         }
         else
         {
-            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_INCAPABLE_OF_POWER;
+            SetActiveMultistringChooser(B_MSG_INCAPABLE_OF_POWER);
             gBattlescriptCurrInstr = BattleScript_MoveUsedLoafingAround;
         }
     }
@@ -2074,8 +2074,6 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
         else if ((BATTLER_HAS_ABILITY(battlerId, ABILITY_GORILLA_TACTICS) ||
                   BATTLER_HAS_ABILITY(battlerId, ABILITY_SAGE_POWER))
 			&& *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
-            unusableMoves |= 1 << i;
-        else if (GetAbilityState(battlerId, ABILITY_TRUANT) && !IS_MOVE_STATUS(gBattleMons[battlerId].moves[i]))
             unusableMoves |= 1 << i;
     }
     return unusableMoves;
@@ -4073,8 +4071,9 @@ u8 AtkCanceller_UnableToUseMove(void)
             {
                 CancelMultiTurnMoves(gBattlerAttacker);
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
-                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_LOAFING;
+                SetActiveMultistringChooser(B_MSG_LOAFING);
                 gBattlerAbility = gBattlerAttacker;
+                SetActiveAbilityPopupOverride(ABILITY_TRUANT);
                 gBattlescriptCurrInstr = BattleScript_TruantLoafingAround;
                 gMoveResultFlags |= MOVE_RESULT_MISSED;
                 effect = 1;
@@ -8479,7 +8478,7 @@ u8 IsMonDisobedient(void)
         {
             // Randomly select, then print a disobedient string
             // B_MSG_LOAFING, B_MSG_WONT_OBEY, B_MSG_TURNED_AWAY, or B_MSG_PRETEND_NOT_NOTICE
-            gBattleCommunication[MULTISTRING_CHOOSER] = Random() & (NUM_LOAF_STRINGS - 1);
+            SetActiveMultistringChooser(Random() & (NUM_LOAF_STRINGS - 1));
             gBattlescriptCurrInstr = BattleScript_MoveUsedLoafingAround;
             return 1;
         }
@@ -8531,7 +8530,7 @@ u8 IsMonDisobedient(void)
         {
             // Randomly select, then print a disobedient string
             // B_MSG_LOAFING, B_MSG_WONT_OBEY, B_MSG_TURNED_AWAY, or B_MSG_PRETEND_NOT_NOTICE
-            gBattleCommunication[MULTISTRING_CHOOSER] = Random() & (NUM_LOAF_STRINGS - 1);
+            SetActiveMultistringChooser(Random() & (NUM_LOAF_STRINGS - 1));
             gBattlescriptCurrInstr = BattleScript_MoveUsedLoafingAround;
             return 1;
         }
