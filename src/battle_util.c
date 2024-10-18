@@ -9184,6 +9184,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
                 if (gBattleMons[battlerDef].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerDef))
                     basePower *= 2;
                 break;
+            case MISC_EFFECT_50_PERCENT_PLUS_DAMAGE_VS_BLEEDING:
+                if (gBattleMons[battlerDef].status1 & STATUS1_BLEED || IsBloodStainAffected(battlerDef))
+                    basePower *= 1.5;
+                break;
         }
         break;
     }

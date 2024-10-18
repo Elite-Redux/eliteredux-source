@@ -19511,6 +19511,11 @@ static const union AnimCmd *const sAnims_SLAKING_MEGA[] ={
     sAnim_GENERIC,
 };
 
+static const union AnimCmd *const sAnims_SLAKING_MEGA_APE_SHIFT[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GENERIC,
+};
+
 static const union AnimCmd *const sAnims_INFERNAPE_REDUX_B[] ={
     sAnim_GeneralFrame0,
     sAnim_GENERIC,
@@ -21172,6 +21177,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(BRELOOM_MEGA),
     ANIM_CMD(GLIMMORA),
     ANIM_CMD(SLAKING_MEGA),
+    ANIM_CMD(SLAKING_MEGA_APE_SHIFT),
     ANIM_CMD(GREAVARD),
     ANIM_CMD(INFERNAPE_REDUX_B),
     ANIM_CMD(HOUNDSTONE),
