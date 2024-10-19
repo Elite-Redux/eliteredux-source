@@ -104,7 +104,7 @@
 #define ABILITY_SNIPER 97 // Critical hits have a 2. 25x dmg multiplier instead of 1.5x.
 #define ABILITY_MAGIC_GUARD 98 // Only damaged by attacks.
 #define ABILITY_NO_GUARD 99 // Attacks used by and on this Pokémon bypass accuracy checks.
-#define ABILITY_STALL 100 // Takes 30% damage if it hasn't moved but always moves last.
+#define ABILITY_STALL 100 // Takes 30% damage if it hasn't moved.
 #define ABILITY_TECHNICIAN 101 // Moves with 60 BP or less get a 1.5x boost.
 #define ABILITY_LEAF_GUARD 102 // Immune to status conditions if sun is active.
 #define ABILITY_KLUTZ 103 // Own held item has no effect. Mega Stones are unaffected.
@@ -155,7 +155,7 @@
 #define ABILITY_BIG_PECKS 145 // Boosts the power of contact moves by 1.3x.
 #define ABILITY_SAND_RUSH 146 // This Pokémon's Speed gets a 1.5x boost in a sandstorm.
 #define ABILITY_WONDER_SKIN 147 // Opposing status moves have their accuracy halved.
-#define ABILITY_ANALYTIC 148 // Attacks get a 1.3x power boost if it moves lasts.
+#define ABILITY_ANALYTIC 148 // Attacks get a 1.3x power boost if it moves last.
 #define ABILITY_ILLUSION 149 // Appears as last party slot and boosts power by 1.3x until hit.
 #define ABILITY_IMPOSTER 150 // Transforms into the foe on entry.
 #define ABILITY_INFILTRATOR 151 // Own moves bypass Substitutes and damage reduction screens.
@@ -753,8 +753,10 @@
 #define ABILITY_TO_THE_BONE 731 // Critical hits get a 1.5x boost and inflict bleeding.
 #define ABILITY_BLADE_DANCE 732 // Triggers 50 BP Leaf Blade after using a dance move.
 #define ABILITY_TAEKKYEON 733 // All attacks are dances.
+#define ABILITY_APE_SHIFT 734 // Anger Point + Heal status and always crits with below 50% HP.
+#define ABILITY_RUDE_AWAKENING 735 // Contact attacks make foes move last for 5 turns.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_TAEKKYEON + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_RUDE_AWAKENING + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

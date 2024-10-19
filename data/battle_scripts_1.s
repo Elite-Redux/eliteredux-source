@@ -1244,7 +1244,7 @@ BattleScript_Lawnmower_Continue:
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG, NULL
 	call BattleScript_PerformStatUp
-BattleScript_End3:
+BattleScript_End3::
 	end3
 BattleScript_Lawnmower_SpDef:
 	setstatchanger STAT_SPDEF, 1, FALSE
@@ -2021,9 +2021,9 @@ BattleScript_EffectPsychoShiftCanWork:
 	statusanimation BS_TARGET
 	updatestatusicon BS_TARGET
 	curestatus BS_ATTACKER
+	updatestatusicon BS_ATTACKER
 	printstring STRINGID_PKMNSTATUSNORMAL
 	waitmessage B_WAIT_TIME_LONG
-	updatestatusicon BS_ATTACKER
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectSynchronoise:
@@ -8827,7 +8827,22 @@ BattleScript_AttackerFormChangeNoPopup::
 	saveattackerandtargetto34
 	switchinabilities BS_ATTACKER
 	return
-	
+
+BattleScript_ApeShift::
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
+	call BattleScript_AttackerFormChangeNoPopup
+	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_ApeShift_HealStatus
+BattleScript_RestoreAttackerReturn:
+	readattackerfromstack3
+	return
+BattleScript_ApeShift_HealStatus:
+	curestatus BS_ATTACKER
+	updatestatusicon BS_ATTACKER
+	printstring STRINGID_PKMNSTATUSNORMAL
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_RestoreAttackerReturn
+
 BattleScript_AttackerFormChangeEnd3::
 	call BattleScript_AttackerFormChange
 	end3
@@ -13007,4 +13022,10 @@ BattleScript_EffectClearSkies::
 BattleScript_ClearSkiesEnds::
 	call BattleScript_MoveWeatherChangeRet
 	end2
+
+BattleScript_TargetDazed::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_RUDE_AWAKENING
+	waitmessage B_WAIT_TIME_LONG
+	return
 

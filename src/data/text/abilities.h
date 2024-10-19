@@ -94,7 +94,7 @@ static const u8 sAbilityNormalizeDescription[] = _("Its moves become Normal-type
 static const u8 sAbilitySniperDescription[] = _("Critical hits have a 2. 25x dmg\nmultiplier instead of 1.5x.");
 static const u8 sAbilityMagicGuardDescription[] = _("Only damaged by attacks.");
 static const u8 sAbilityNoGuardDescription[] = _("Attacks used by and on this\nPokémon bypass accuracy checks.");
-static const u8 sAbilityStallDescription[] = _("Takes 30% damage if it hasn't\nmoved but always moves last.");
+static const u8 sAbilityStallDescription[] = _("Takes 30% damage if it hasn't\nmoved.");
 static const u8 sAbilityTechnicianDescription[] = _("Moves with 60 BP or less get\na 1.5x boost.");
 static const u8 sAbilityLeafGuardDescription[] = _("Immune to status conditions if\nsun is active.");
 static const u8 sAbilityKlutzDescription[] = _("Own held item has no effect.\nMega Stones are unaffected.");
@@ -140,7 +140,7 @@ static const u8 sAbilityRegeneratorDescription[] = _("Heals 1/3 of max HP upon\n
 static const u8 sAbilityBigPecksDescription[] = _("Boosts the power of contact\nmoves by 1.3x.");
 static const u8 sAbilitySandRushDescription[] = _("This Pokémon's Speed gets a\n1.5x boost in a sandstorm.");
 static const u8 sAbilityWonderSkinDescription[] = _("Opposing status moves have\ntheir accuracy halved.");
-static const u8 sAbilityAnalyticDescription[] = _("Attacks get a 1.3x power boost\nif it moves lasts.");
+static const u8 sAbilityAnalyticDescription[] = _("Attacks get a 1.3x power boost\nif it moves last.");
 static const u8 sAbilityIllusionDescription[] = _("Appears as last party slot and\nboosts power by 1.3x until hit.");
 static const u8 sAbilityImposterDescription[] = _("Transforms into the foe on\nentry.");
 static const u8 sAbilityInfiltratorDescription[] = _("Own moves bypass Substitutes\nand damage reduction screens.");
@@ -702,6 +702,8 @@ static const u8 sAbilityRazorSharpDescription[] = _("Critical hits also inflict 
 static const u8 sAbilityToTheBoneDescription[] = _("Critical hits get a 1.5x boost and\ninflict bleeding.");
 static const u8 sAbilityBladeDanceDescription[] = _("Triggers 50 BP Leaf Blade after\nusing a dance move.");
 static const u8 sAbilityTaekkyeonDescription[] = _("All attacks are dances.");
+static const u8 sAbilityApeShiftDescription[] = _("Anger Point + Heal status and\nalways crits with below 50% HP.");
+static const u8 sAbilityRudeAwakeningDescription[] = _("Contact attacks make foes move\nlast for 5 turns.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1439,6 +1441,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TO_THE_BONE] = _("To The Bone"),
     [ABILITY_BLADE_DANCE] = _("Blade Dance"),
     [ABILITY_TAEKKYEON] = _("Taekkyeon"),
+    [ABILITY_APE_SHIFT] = _("Ape Shfit"),
+    [ABILITY_RUDE_AWAKENING] = _("Rude Awakening"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2177,4 +2181,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TO_THE_BONE] = sAbilityToTheBoneDescription,
     [ABILITY_BLADE_DANCE] = sAbilityBladeDanceDescription,
     [ABILITY_TAEKKYEON] = sAbilityTaekkyeonDescription,
+    [ABILITY_APE_SHIFT] = sAbilityApeShiftDescription,
+    [ABILITY_RUDE_AWAKENING] = sAbilityRudeAwakeningDescription,
 };

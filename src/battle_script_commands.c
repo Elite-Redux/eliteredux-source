@@ -2133,7 +2133,8 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
              || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_AMBUSH) && gVolatileStructs[battlerAtk].isFirstTurn)
              || (gVolatileStructs[battlerAtk].showdownMode)
              || (move == MOVE_SPACIAL_REND && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER))
-             || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST))
+             || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+             || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_APE_SHIFT) && gBattleMons[battlerAtk].species == SPECIES_SLAKING_MEGA_APE_SHIFT))
     {
         critChance = -2;
     }
@@ -14469,10 +14470,9 @@ static void Cmd_maxattackhalvehp(void) // belly drum
         halfHp = 1;
 
     // Belly Drum fails if the user's current HP is less than half its maximum, or if the user's Attack is already at +6 (even if the user has Contrary).
-    if (gBattleMons[gBattlerAttacker].statStages[STAT_ATK] < MAX_STAT_STAGE
-        && gBattleMons[gBattlerAttacker].hp > halfHp)
+    if (gBattleMons[gBattlerAttacker].hp > halfHp
+        && ChangeStatBuffs(gBattlerAttacker, StatBuffValue(12), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, 0))
     {
-        gBattleMons[gBattlerAttacker].statStages[STAT_ATK] = MAX_STAT_STAGE;
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;

@@ -12010,7 +12010,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_TERROR_LOCKS] =
     {
         .effect = EFFECT_MISC_HIT,
-        .power = 90,
+        .power = 65,
         .type = TYPE_GHOST,
         .accuracy = 100,
         .pp = 10,
@@ -12018,7 +12018,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_PHYSICAL,
-        .argument = MISC_EFFECT_50_PERCENT_PLUS_DAMAGE_VS_BLEEDING,
+        .argument = MISC_EFFECT_DOUBLE_DAMAGE_VS_BLEEDING,
     },
     [MOVE_DREAM_INVERSION] =
     {
@@ -12216,7 +12216,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
     },
-    [MOVE_TAKE_OFF] =
+    [MOVE_TAKE_FLIGHT] =
     {
         .effect = EFFECT_HIT_ESCAPE,
         .power = 60,

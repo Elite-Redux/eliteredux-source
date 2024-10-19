@@ -5196,7 +5196,11 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
             priority2 = GetChosenMovePriority(battler2, gBattleStruct->moveTarget[battler2]);
     }
 
-    if (priority1 == priority2)
+    if (!gVolatileStructs[battler1].dazed != !gVolatileStructs[battler2].dazed)
+    {
+        return gVolatileStructs[battler1].dazed > 0;
+    }
+    else if (priority1 == priority2)
     {
         u8 b1GoFirst = gRoundStructs[battler1].quickDraw + gRoundStructs[battler1].usedCustapBerry;
         u8 b2GoFirst = gRoundStructs[battler2].quickDraw + gRoundStructs[battler2].usedCustapBerry;

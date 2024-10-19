@@ -900,6 +900,7 @@ static const u8 sText_SuperStrainRecoil[] = _("The strain takes its toll on\n{B_
 static const u8 sText_AttackerLostDarkType[] = _("{B_ATK_NAME_WITH_PREFIX} has no more\ndarkness left!");
 static const u8 sText_ClearSkies[] = _("The sky became clear!");
 static const u8 sText_WeatherNormal[] = _("The weather returned to normal!");
+static const u8 sText_RudeAwakening[] = _("{B_DEF_NAME_WITH_PREFIX} is dazed\nby the blow!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1900,6 +1901,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ATTACKERLOSTDARKTYPE - 12] = sText_AttackerLostDarkType,
     [STRINGID_CLEARSKIES - 12] = sText_ClearSkies,
     [STRINGID_WEATHER_NORMAL - 12] = sText_WeatherNormal,
+    [STRINGID_RUDE_AWAKENING - 12] = sText_RudeAwakening,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
