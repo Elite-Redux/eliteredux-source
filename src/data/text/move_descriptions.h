@@ -3878,10 +3878,12 @@ static const u8 sMoveTwoLineDescription_MoveMysticalPower[] = _(
     "Not implemented");
 
 static const u8 sMoveTwoLineDescription_MoveDragonJab[] = _(
-    "Not implemented");
+    "Jabs with a horn.\n"
+    "can bleed on hit.");
 
 static const u8 sMoveTwoLineDescription_MoveIcicleImpale[] = _(
-    "Not implemented");
+    "Jabs with a horn.\n"
+    "can lower defense.");
 
 static const u8 sMoveTwoLineDescription_MoveToxicPlunge[] = _(
     "Not implemented");
@@ -5882,8 +5884,8 @@ static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\
 static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Hits both opponents.\n30% chance to flinch.\nAir based.");
 static const u8 sMoveFourLineDescription_MoveBadEgg[] = _("Throws an egg filled\nwith toxins. Badly\npoisons the target");
 static const u8 sMoveFourLineDescription_MoveMysticalPower[] = _("");
-static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("");
-static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("");
+static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("A Jabbing attack. 30% to\ninflict bleed.\nMighty Horn boost.");
+static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("A Jabbing attack. 30% to\nlower defense.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveToxicPlunge[] = _("");
 static const u8 sMoveFourLineDescription_MoveShowtime[] = _("");
 static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("");
