@@ -367,32 +367,26 @@ static u16 GetRandomAlternateMove(u8 monId)
     // This while loop contains 3 potential infinite loops, though none of them would occur in the base game
     while (i < 5)
     {
-        if (Random() % 2 == 0 || needTMs == TRUE)
+        if (numLearnsetMoves <= MAX_MON_MOVES)
         {
-            // Get TM move
-            // NOTE: Below is an infinite loop if a species that only learns TMs for moves
-            //       that are also in its level up learnset is assigned to an Apprentice
+            needTMs = TRUE;
+            continue;
+        }
+        else
+        {
+            // Get level up move
+            // NOTE: Below is an infinite loop if a mon whose last 4 moves contain
+            //       all the moves in the rest of its learnset is assigned to an Apprentice
             do
             {
-                // NOTE: Below is an infinite loop if a species which cannot learn TMs is assigned to an Apprentice
-                do
-                {
-                    id = Random() % (NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES);
-                    shouldUseMove = CanSpeciesLearnTMHM(species, id);
-                }
-                while (!shouldUseMove);
-
-                moveId = ItemIdToBattleMoveId(ITEM_TM01_FOCUS_PUNCH + id);
+                // Get a random move excluding the 4 it would know at max level
+                u8 learnsetId = Random() % (numLearnsetMoves - MAX_MON_MOVES);
+                moveId = learnset[learnsetId].move;
                 shouldUseMove = TRUE;
 
-                if (numLearnsetMoves <= MAX_MON_MOVES)
-                    j = 0;
-                else
-                    j = numLearnsetMoves - MAX_MON_MOVES;
-
-                for (; j < numLearnsetMoves; j++)
+                for (j = numLearnsetMoves - MAX_MON_MOVES; j < numLearnsetMoves; j++)
                 {
-                    // Keep looking for TMs until one not in the level up learnset is found
+                    // Keep looking for moves until one not in the last 4 is found
                     if ((learnset[j].move) == moveId)
                     {
                         shouldUseMove = FALSE;
@@ -400,37 +394,6 @@ static u16 GetRandomAlternateMove(u8 monId)
                     }
                 }
             } while (shouldUseMove != TRUE);
-        }
-        else
-        {
-            if (numLearnsetMoves <= MAX_MON_MOVES)
-            {
-                needTMs = TRUE;
-                continue;
-            }
-            else
-            {
-                // Get level up move
-                // NOTE: Below is an infinite loop if a mon whose last 4 moves contain
-                //       all the moves in the rest of its learnset is assigned to an Apprentice
-                do
-                {
-                    // Get a random move excluding the 4 it would know at max level
-                    u8 learnsetId = Random() % (numLearnsetMoves - MAX_MON_MOVES);
-                    moveId = learnset[learnsetId].move;
-                    shouldUseMove = TRUE;
-
-                    for (j = numLearnsetMoves - MAX_MON_MOVES; j < numLearnsetMoves; j++)
-                    {
-                        // Keep looking for moves until one not in the last 4 is found
-                        if ((learnset[j].move) == moveId)
-                        {
-                            shouldUseMove = FALSE;
-                            break;
-                        }
-                    }
-                } while (shouldUseMove != TRUE);
-            }
         }
 
         if (TrySetMove(monId, moveId))

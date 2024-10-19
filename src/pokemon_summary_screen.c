@@ -2746,6 +2746,79 @@ static void ChangePageTask(u8 taskId)
     }
 }
 
+static void PopulateAbilities(u16* abilities)
+{
+    int isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2;
+    int species = sMonSummaryScreen->summary.species;
+    int personality = sMonSummaryScreen->summary.pid;
+
+    abilities[0] = GetAbilityBySpecies(sMonSummaryScreen->summary.species, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+    abilities[1] = gBaseStats[species].innates[0];
+    abilities[2] = gBaseStats[species].innates[1];
+    abilities[3] = gBaseStats[species].innates[2];
+    
+    if (!isEnemyMon) { //Enemy Mons have disabled randomized innates/abilies
+        abilities[0] = RandomizeAbility(abilities[0], sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid);
+        abilities[1] = RandomizeInnate(abilities[1], species, personality);
+        abilities[2] = RandomizeInnate(abilities[2], species, personality);
+        abilities[3] = RandomizeInnate(abilities[3], species, personality);
+    }
+}
+
+static int HasAbility(int ability, u16* abilities)
+{
+    return abilities[0] == ability || abilities[1] == ability || abilities[2] == ability || abilities[3] == ability;
+}
+
+static int IsStab(u16* abilities, int type)
+{
+    // Mons always have at least one innate so checking innate slot 1 should be sufficient to test if array has been set
+    if (!abilities[1])
+    {
+        PopulateAbilities(abilities);
+        abilities[4] = RandomizeType(gBaseStats[sMonSummaryScreen->summary.species].type1, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, TRUE);
+        abilities[5] = RandomizeType(gBaseStats[sMonSummaryScreen->summary.species].type2, sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid, FALSE);
+    }
+
+    // Everything has stab so don't promote anything
+    // Omni-stab
+    if (HasAbility(ABILITY_MYSTIC_POWER, abilities)) return FALSE;
+    if (HasAbility(ABILITY_ARCANE_FORCE, abilities)) return FALSE;
+
+    // Protean
+    if (HasAbility(ABILITY_PROTEAN, abilities)) return FALSE;
+    if (HasAbility(ABILITY_LIBERO, abilities)) return FALSE;
+    if (HasAbility(ABILITY_PATTERN_CHANGE, abilities)) return FALSE;
+    if (HasAbility(ABILITY_RKS_SYSTEM, abilities)) return FALSE;
+    if (HasAbility(ABILITY_COLOR_CHANGE, abilities)) return FALSE;
+
+    #define CHECK_ABILITY(ability, checkType) if (checkType == type && HasAbility(ability, abilities)) return TRUE;
+    // Stab granting abilities
+    CHECK_ABILITY(ABILITY_LUNAR_ECLIPSE, TYPE_FAIRY)
+    CHECK_ABILITY(ABILITY_LUNAR_ECLIPSE, TYPE_DARK)
+    CHECK_ABILITY(ABILITY_MOON_SPIRIT, TYPE_FAIRY)
+    CHECK_ABILITY(ABILITY_MOON_SPIRIT, TYPE_DARK)
+    CHECK_ABILITY(ABILITY_SOLAR_FLARE, TYPE_FIRE)
+    CHECK_ABILITY(ABILITY_AURORA_BOREALIS, TYPE_ICE)
+    CHECK_ABILITY(ABILITY_AMPHIBIOUS, TYPE_WATER)
+
+    // Type changing abilities
+    CHECK_ABILITY(ABILITY_PHANTOM, TYPE_GHOST)
+    CHECK_ABILITY(ABILITY_AQUATIC, TYPE_WATER)
+    CHECK_ABILITY(ABILITY_GROUNDED, TYPE_GROUND)
+    CHECK_ABILITY(ABILITY_FAIRY_TALE, TYPE_FAIRY)
+    CHECK_ABILITY(ABILITY_ICE_AGE, TYPE_ICE)
+    CHECK_ABILITY(ABILITY_HALF_DRAKE, TYPE_DRAGON)
+    CHECK_ABILITY(ABILITY_METALLIC, TYPE_STEEL)
+    CHECK_ABILITY(ABILITY_DRAGONFLY, TYPE_DRAGON)
+    CHECK_ABILITY(ABILITY_TERAVOLT, TYPE_ELECTRIC)
+    CHECK_ABILITY(ABILITY_TURBOBLAZE, TYPE_FIRE)
+    #undef CHECK_ABILITY
+
+    if (abilities[4] == type) return TRUE;
+    return abilities[5] == type;
+}
+
 static void SwitchToMoveSelection(u8 taskId)
 {
     u32 i;
@@ -2763,9 +2836,9 @@ static void SwitchToMoveSelection(u8 taskId)
 
 enum{
     MOVE_REPLACE_TAB_LEVEL,
-    MOVE_REPLACE_TAB_TMHM,
-    MOVE_REPLACE_TAB_TUTOR,
-    MOVE_REPLACE_TAB_EGG,
+    MOVE_REPLACE_TAB_PHYSICAL,
+    MOVE_REPLACE_TAB_SPECIAL,
+    MOVE_REPLACE_TAB_STATUS,
     NUM_MOVE_REPLACE_TABS,
 };
 
@@ -2779,6 +2852,7 @@ static void GenerateMoveReplaceList(u8 keyPress){
     u16 firsStage, species, numEggMoves, newMove, i, j;
     u8  level, moveLevel;
     u16 eggMoveBuffer[EGG_MOVES_ARRAY_COUNT];
+    int expectedSplit;
 
     for(i = 0; i < MAX_LEVEL_UP_MOVES; i++)
         sMonSummaryScreen->moveReplaceList[i] = MOVE_NONE;
@@ -2805,39 +2879,55 @@ static void GenerateMoveReplaceList(u8 keyPress){
                 }
             }
         break;
-        case MOVE_REPLACE_TAB_TMHM:
-            for (i = 0; i < TM_COUNT; i++)
+        case MOVE_REPLACE_TAB_SPECIAL:
+            expectedSplit = SPLIT_SPECIAL;
+            goto ADD_MOVES_TO_TAB;
+        case MOVE_REPLACE_TAB_PHYSICAL:
+            expectedSplit = SPLIT_PHYSICAL;
+            goto ADD_MOVES_TO_TAB;
+        case MOVE_REPLACE_TAB_STATUS:
+            expectedSplit = SPLIT_STATUS;
+        ADD_MOVES_TO_TAB:
             {
-                newMove = GetTmMove(i);
-                if(CanSpeciesLearnTMHM(species, i) && gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE)
-                {
-                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(newMove, species, personality);
-                    sMonSummaryScreen->numMenuChoices++;
-                }
-            }
-        break;
-        case MOVE_REPLACE_TAB_TUTOR:
+            u16 boostedMoves[TUTOR_COUNT + 1] = {0};
+            u16 otherMoves[TUTOR_COUNT + 1] = {0};
+            u16 abilities[6] = {0};
             for (i = 0; i < TUTOR_COUNT; i++)
             {
                 newMove = GetTutorMove(i);
                 if (CanLearnTutorMove(species, i) && gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE)
                 {
-                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(newMove, species, personality);
-                    sMonSummaryScreen->numMenuChoices++;
+                    int isStab = FALSE;
+                    newMove = RandomizeMoves(newMove, species, personality);
+                    if (gBattleMoves[newMove].split != expectedSplit) continue;
+                    if (expectedSplit != SPLIT_STATUS)
+                    {
+                        if (gBattleMoves[newMove].effect == EFFECT_HIDDEN_POWER)
+                        {
+                            isStab = newMove == MOVE_TECHNO_BLAST;
+                        }
+                        else if (gBattleMoves[newMove].effect != EFFECT_COUNTER
+                            && gBattleMoves[newMove].effect != EFFECT_METAL_BURST
+                            && gBattleMoves[newMove].effect != EFFECT_MIRROR_COAT
+                            && gBattleMoves[newMove].effect != EFFECT_LEVEL_DAMAGE
+                            && newMove != MOVE_SEISMIC_TOSS)
+                        {
+                            isStab = IsStab(abilities, gBattleMoves[newMove].type);
+                            if (!isStab && gBattleMoves[newMove].type2) isStab = IsStab(abilities, gBattleMoves[newMove].type2);
+                        }
+                    }
+                    if (isStab) boostedMoves[++boostedMoves[0]] = newMove;
+                    else otherMoves[++otherMoves[0]] = newMove;
                 }
             }
-        break;
-        case MOVE_REPLACE_TAB_EGG:
-            firsStage = GetEggSpecies(species);
-            numEggMoves = GetEggMovesSpecies(firsStage, eggMoveBuffer);
-            for (i = 0; i < numEggMoves; i++)
+            for (i = 1; i <= boostedMoves[0]; i++)
             {
-                if(eggMoveBuffer[i] == MOVE_NONE)
-                    break;
-                if(gBattleMoves[eggMoveBuffer[i]].effect != EFFECT_PLACEHOLDER){
-                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(eggMoveBuffer[i], firsStage, personality);
-                    sMonSummaryScreen->numMenuChoices++;
-                }
+                sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices++] = boostedMoves[i];
+            }
+            for (i = 1; i <= otherMoves[0]; i++)
+            {
+                sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices++] = otherMoves[i];
+            }
             }
         break;
     }
@@ -2937,9 +3027,9 @@ static void Task_SwitchToReplaceMove(u8 taskId)
 const u8 sText_Move_Power[]        = _("BP");
 const u8 sText_Move_Accuracy[]      = _("Acc");
 const u8 sText_Move_Type_Level[]    = _("Level");
-const u8 sText_Move_Type_Egg[]      = _("Egg");
-const u8 sText_Move_Type_TMHM[]     = _("TMHM");
-const u8 sText_Move_Type_Tutor[]    = _("Tutor");
+const u8 sText_Move_Type_Status[]      = _("Stat");
+const u8 sText_Move_Type_Physical[]     = _("Phys");
+const u8 sText_Move_Type_Special[]    = _("Spec");
 const u8 sText_MoveToReplace[]      = _("Move to Replace");
 const u8 sText_MoveLearned[]        = _("Learned");
 static const u8 sMoveCursor[]       = INCBIN_U8("graphics/summary_screen/new/move_cursor.4bpp");
@@ -3003,14 +3093,14 @@ static void RedrawMoveTypeMenu()
             case MOVE_REPLACE_TAB_LEVEL:
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Level);
             break;
-            case MOVE_REPLACE_TAB_TMHM:
-                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_TMHM);
+            case MOVE_REPLACE_TAB_PHYSICAL:
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Physical);
             break;
-            case MOVE_REPLACE_TAB_TUTOR:
-                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Tutor);
+            case MOVE_REPLACE_TAB_SPECIAL:
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Special);
             break;
-            case MOVE_REPLACE_TAB_EGG:
-                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Egg);
+            case MOVE_REPLACE_TAB_STATUS:
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Status);
             break;
         }
 
@@ -5128,11 +5218,10 @@ static void BufferMonPokemonAbilityAndInnates(void)
     const u8 *text;
 	u8 x, y, i;
     bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
-    u16 ability = GetAbilityBySpecies(sMonSummaryScreen->summary.species, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM));
+    u16 abilities[4] = {0};
     bool8 testInnateLock = FALSE;
+
+    PopulateAbilities(abilities);
 
     DynamicPlaceholderTextUtil_Reset();
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, sMemoNatureTextColor);
@@ -5141,13 +5230,6 @@ static void BufferMonPokemonAbilityAndInnates(void)
 	
 	x = 60;
 	y = 4;
-
-    if(!isEnemyMon){ //Enemy Mons have disabled randomized innates/abilies 
-        innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
-        innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
-        innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
-        ability = RandomizeAbility(GetAbilityBySpecies(sMonSummaryScreen->summary.species, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM)), sMonSummaryScreen->summary.species, sMonSummaryScreen->summary.pid);
-    }
 	
 	if(ModifyMode)
 		BlitBitmapToWindow(PSS_LABEL_PANE_RIGHT, sSummaryAbilitySlider, (x-8), 8, 96, 8);
@@ -5156,27 +5238,27 @@ static void BufferMonPokemonAbilityAndInnates(void)
 	DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_MainAbility);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
 	// Name ---------------------------------------------------------------------------------------------------
-    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[ability]);
+    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[abilities[0]]);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
 	// Description ---------------------------------------------------------------------------------------------------
-	DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[ability]);
+	DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[0]]);
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
 
 	// Innates
 	for(i = 0; i < NUM_INNATE_PER_SPECIES; i++){
         switch(i){
             case 0:
-                if(innate1 != ABILITY_NONE){
+                if(abilities[1] != ABILITY_NONE){
                     y += 32;
                     if((level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock){
                         //Title
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[innate1]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[abilities[1]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Description ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[innate1]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[1]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
                     }
                     else{
@@ -5184,7 +5266,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[innate1]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[abilities[1]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Unlock Level ---------------------------------------------------------------------------------------------------
                         ConvertIntToDecimalStringN(gStringVar1, INNATE_1_LEVEL, STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -5194,17 +5276,17 @@ static void BufferMonPokemonAbilityAndInnates(void)
                 }
             break;
             case 1:
-                if(innate2 != ABILITY_NONE){
+                if(abilities[2] != ABILITY_NONE){
                     y += 32;
                     if((level >= INNATE_2_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock){
                         //Title
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[innate2]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[abilities[2]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Description ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[innate2]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[2]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
                     }
                     else{
@@ -5212,7 +5294,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[innate2]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[abilities[2]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Unlock Level ---------------------------------------------------------------------------------------------------
                         ConvertIntToDecimalStringN(gStringVar1, INNATE_2_LEVEL, STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -5222,17 +5304,17 @@ static void BufferMonPokemonAbilityAndInnates(void)
                 }
             break;
             case 2:
-                if(innate3 != ABILITY_NONE){
+                if(abilities[3] != ABILITY_NONE){
                     y += 32;
                     if((level >= INNATE_3_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock){
                         //Title
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[innate3]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[abilities[3]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Description ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[innate3]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[3]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
                     }
                     else{
@@ -5240,7 +5322,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Name ---------------------------------------------------------------------------------------------------
-                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[innate3]);
+                        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityNames[abilities[3]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, x, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
                         // Unlock Level ---------------------------------------------------------------------------------------------------
                         ConvertIntToDecimalStringN(gStringVar1, INNATE_3_LEVEL, STR_CONV_MODE_LEFT_ALIGN, 3);

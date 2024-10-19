@@ -451,7 +451,7 @@
 // Temp items in case new ones are added later
 #define ITEM_BATTLE_TEMP_100     (LAST_MISC_ITEM_INDEX + 300)
 
-// TMHM      
+// TMHM
 #define ITEM_TM01_FOCUS_PUNCH      (LAST_BATTLE_ITEM_INDEX + 1)
 #define ITEM_TM02_DRAGON_CLAW      (LAST_BATTLE_ITEM_INDEX + 2)
 #define ITEM_TM03_WATER_PULSE      (LAST_BATTLE_ITEM_INDEX + 3)
