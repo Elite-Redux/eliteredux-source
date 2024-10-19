@@ -703,7 +703,7 @@ static const u8 sAbilityToTheBoneDescription[] = _("Critical hits get a 1.5x boo
 static const u8 sAbilityBladeDanceDescription[] = _("Triggers 50 BP Leaf Blade after\nusing a dance move.");
 static const u8 sAbilityTaekkyeonDescription[] = _("All attacks are dances.");
 static const u8 sAbilityApeShiftDescription[] = _("Anger Point + Heal status and\nalways crits with below 50% HP.");
-static const u8 sAbilityRudeAwakeningDescription[] = _("Contact attacks make foes move\nlast for 5 turns.");
+static const u8 sAbilityKnowYourPlaceDescription[] = _("Contact attacks make foes move\nlast for 5 turns.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1442,7 +1442,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BLADE_DANCE] = _("Blade Dance"),
     [ABILITY_TAEKKYEON] = _("Taekkyeon"),
     [ABILITY_APE_SHIFT] = _("Ape Shfit"),
-    [ABILITY_RUDE_AWAKENING] = _("Know Your Place"),
+    [ABILITY_KNOW_YOUR_PLACE] = _("Know Your Place"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2182,5 +2182,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_BLADE_DANCE] = sAbilityBladeDanceDescription,
     [ABILITY_TAEKKYEON] = sAbilityTaekkyeonDescription,
     [ABILITY_APE_SHIFT] = sAbilityApeShiftDescription,
-    [ABILITY_RUDE_AWAKENING] = sAbilityRudeAwakeningDescription,
+    [ABILITY_KNOW_YOUR_PLACE] = sAbilityKnowYourPlaceDescription,
 };

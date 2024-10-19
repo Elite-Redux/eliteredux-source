@@ -277,9 +277,6 @@ bool8 AddBagItem(u16 itemId, u16 count)
         else if (pocket == TMHM_POCKET)
         {
             slotCapacity = MAX_TMHM_CAPACITY;
-
-            if (!CheckBagHasItem(ITEM_TM_CASE, 1))
-                AddBagItem(ITEM_TM_CASE, 1);
         }
         else
         {
