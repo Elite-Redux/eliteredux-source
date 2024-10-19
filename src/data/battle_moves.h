@@ -12216,7 +12216,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
     },
-    [MOVE_TAKE_OFF] =
+    [MOVE_TAKE_FLIGHT] =
     {
         .effect = EFFECT_HIT_ESCAPE,
         .power = 60,

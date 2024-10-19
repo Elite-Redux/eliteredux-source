@@ -3838,7 +3838,7 @@ static const u8 sMoveTwoLineDescription_MoveEclipse[] = _(
     "The darkness within erupts\n"
     "from the user for heavy damage.");
 
-static const u8 sMoveTwoLineDescription_MoveTakeOff[] = _(
+static const u8 sMoveTwoLineDescription_MoveTakeFlight[] = _(
     "Blasts the foe with wind\n"
     "and takes to the sky.");
 
@@ -4853,7 +4853,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_GIANT_GALE - 1] = sMoveTwoLineDescription_MoveGiantGale,
     [MOVE_VEXING_VOID - 1] = sMoveTwoLineDescription_MoveVexingVoid,
     [MOVE_ECLIPSE - 1] = sMoveTwoLineDescription_MoveEclipse,
-    [MOVE_TAKE_OFF - 1] = sMoveTwoLineDescription_MoveTakeOff,
+    [MOVE_TAKE_FLIGHT - 1] = sMoveTwoLineDescription_MoveTakeFlight,
     [MOVE_CALTROPS - 1] = sMoveTwoLineDescription_MoveCaltrops,
     [MOVE_TAKE_HEART - 1] = sMoveTwoLineDescription_MoveTakeHeart,
     [MOVE_SAFE_PASSAGE - 1] = sMoveTwoLineDescription_MoveSafePassage,
@@ -5840,7 +5840,7 @@ static const u8 sMoveFourLineDescription_MoveReadyOrNot[] = _("Hides on the firs
 static const u8 sMoveFourLineDescription_MoveGiantGale[] = _("Strikes with a mighty\ngale, but the user's\nSpeed is lowered.\nAir based.");
 static const u8 sMoveFourLineDescription_MoveVexingVoid[] = _("30% chance to lower\nSpecial Defense.\nNever misses in fog.");
 static const u8 sMoveFourLineDescription_MoveEclipse[] = _("Deals heavy damage.\nAfterwards the user\nloses its Dark typing.");
-static const u8 sMoveFourLineDescription_MoveTakeOff[] = _("Deals damage and\nthen switches out.\nAir based.");
+static const u8 sMoveFourLineDescription_MoveTakeFlight[] = _("Deals damage and\nthen switches out.\nAir based.");
 static const u8 sMoveFourLineDescription_MoveCaltrops[] = _("Spreads spikes that\ninflict bleeding on\nthe next opponent\nto switch in.");
 static const u8 sMoveFourLineDescription_MoveTakeHeart[] = _("Heals status and\nraises SpAtk and\nSpDef by 1 stage.");
 static const u8 sMoveFourLineDescription_MoveSafePassage[] = _("Guides an ally onto\nthe field. They take\n-35% damage this\nturn.");
@@ -6827,7 +6827,7 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_GIANT_GALE - 1] = sMoveFourLineDescription_MoveGiantGale,
     [MOVE_VEXING_VOID - 1] = sMoveFourLineDescription_MoveVexingVoid,
     [MOVE_ECLIPSE - 1] = sMoveFourLineDescription_MoveEclipse,
-    [MOVE_TAKE_OFF - 1] = sMoveFourLineDescription_MoveTakeOff,
+    [MOVE_TAKE_FLIGHT - 1] = sMoveFourLineDescription_MoveTakeFlight,
     [MOVE_CALTROPS - 1] = sMoveFourLineDescription_MoveCaltrops,
     [MOVE_TAKE_HEART - 1] = sMoveFourLineDescription_MoveTakeHeart,
     [MOVE_SAFE_PASSAGE - 1] = sMoveFourLineDescription_MoveSafePassage,
