@@ -12045,7 +12045,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
     },
-    [MOVE_SPARKLE_BARRAGE] =
+    [MOVE_SPARKLING_BARRAGE] =
     {
         .effect = EFFECT_TRIPLE_HIT,
         .power = 30,
@@ -12375,8 +12375,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
-        .twoTurnMove = TRUE,
         .argument = MOVE_EFFECT_POISON,
+        .twoTurnMove = TRUE,
     },
     [MOVE_SHOWTIME] =
     {
@@ -12401,17 +12401,6 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
         .splitFlag = USE_HIGHEST_OFFENSE,
-    },
-    [MOVE_SPARKLING_BARRAGE] =
-    {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
-        .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 0,
-        .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_PHYSICAL,
     },
     [MOVE_TRIPLE_TREMOR] =
     {

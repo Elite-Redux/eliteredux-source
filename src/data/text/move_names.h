@@ -963,7 +963,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_TERROR_LOCKS] = _("Terror Locks"),
     [MOVE_DREAM_INVERSION] = _("DreamInversn"),
     [MOVE_TERA_STARSTORM] = _("TeraStarstrm"),
-    [MOVE_SPARKLE_BARRAGE] = _("SprklngBrrge"),
+    [MOVE_SPARKLING_BARRAGE] = _("SprklngBrrge"),
     [MOVE_SPECTRAL_SERENADE] = _("SpctrlSrnade"),
     [MOVE_MERCULIGHT] = _("Merculight"),
     [MOVE_BIG_BLAST] = _("IncendBlast"),
@@ -992,7 +992,6 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_TOXIC_PLUNGE] = _("Toxic Plunge"),
     [MOVE_SHOWTIME] = _("Showtime"),
     [MOVE_BANISHED_POWER] = _("BanishedPowr"),
-    [MOVE_SPARKLING_BARRAGE] = _("SprklngBrrge"),
     [MOVE_TRIPLE_TREMOR] = _("TripleTremor"),
 };
 
@@ -1963,7 +1962,7 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_TERROR_LOCKS] = _("Terror Locks"),
     [MOVE_DREAM_INVERSION] = _("Dream Invasion"),
     [MOVE_TERA_STARSTORM] = _("Tera Starstorm"),
-    [MOVE_SPARKLE_BARRAGE] = _("Sparkling Barrage"),
+    [MOVE_SPARKLING_BARRAGE] = _("Sparkling Barrage"),
     [MOVE_SPECTRAL_SERENADE] = _("Spectral Serenade"),
     [MOVE_MERCULIGHT] = _("Merculight"),
     [MOVE_BIG_BLAST] = _("Big Bang"),
@@ -1992,6 +1991,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_TOXIC_PLUNGE] = _("Toxic Plunge"),
     [MOVE_SHOWTIME] = _("Showtime"),
     [MOVE_BANISHED_POWER] = _("Banished Power"),
-    [MOVE_SPARKLING_BARRAGE] = _("Sparkling Barrage"),
     [MOVE_TRIPLE_TREMOR] = _("Triple Tremor"),
 };

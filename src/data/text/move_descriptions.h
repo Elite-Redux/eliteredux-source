@@ -3783,7 +3783,7 @@ static const u8 sMoveTwoLineDescription_MoveTeraStarstorm[] = _(
     "Strikes both foes with a\n"
     "rain of crystals.");
 
-static const u8 sMoveTwoLineDescription_MoveSparkleBarrage[] = _(
+static const u8 sMoveTwoLineDescription_MoveSparklingBarrage[] = _(
     "Hits 3 Times with light\n"
     "rays.");
 
@@ -3892,9 +3892,6 @@ static const u8 sMoveTwoLineDescription_MoveShowtime[] = _(
     "Not implemented");
 
 static const u8 sMoveTwoLineDescription_MoveBanishedPower[] = _(
-    "Not implemented");
-
-static const u8 sMoveTwoLineDescription_MoveSparklingBarrage[] = _(
     "Not implemented");
 
 static const u8 sMoveTwoLineDescription_MoveTripleTremor[] = _(
@@ -4865,7 +4862,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TERROR_LOCKS - 1] = sMoveTwoLineDescription_MoveTerrorLocks,
     [MOVE_DREAM_INVERSION - 1] = sMoveTwoLineDescription_MoveDreamInversion,
     [MOVE_TERA_STARSTORM - 1] = sMoveTwoLineDescription_MoveTeraStarstorm,
-    [MOVE_SPARKLE_BARRAGE - 1] = sMoveTwoLineDescription_MoveSparkleBarrage,
+    [MOVE_SPARKLING_BARRAGE - 1] = sMoveTwoLineDescription_MoveSparklingBarrage,
     [MOVE_SPECTRAL_SERENADE - 1] = sMoveTwoLineDescription_MoveSpectralSerenade,
     [MOVE_MERCULIGHT - 1] = sMoveTwoLineDescription_MoveMerculight,
     [MOVE_BIG_BLAST - 1] = sMoveTwoLineDescription_MoveBigBlast,
@@ -4894,7 +4891,6 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TOXIC_PLUNGE - 1] = sMoveTwoLineDescription_MoveToxicPlunge,
     [MOVE_SHOWTIME - 1] = sMoveTwoLineDescription_MoveShowtime,
     [MOVE_BANISHED_POWER - 1] = sMoveTwoLineDescription_MoveBanishedPower,
-    [MOVE_SPARKLING_BARRAGE - 1] = sMoveTwoLineDescription_MoveSparklingBarrage,
     [MOVE_TRIPLE_TREMOR - 1] = sMoveTwoLineDescription_MoveTripleTremor,
 };
 
@@ -5860,7 +5856,7 @@ static const u8 sMoveFourLineDescription_MoveTerrorCharge[] = _("50% chance to b
 static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\nDouble damage if\nthe foe is bleeding.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveDreamInversion[] = _("Deals 2x damage to\nsleeping foes. 10%\nchance for drowsy.\nHits both foes.");
 static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both foes\nwith a rain of crystals.");
-static const u8 sMoveFourLineDescription_MoveSparkleBarrage[] = _("The user shoots\n3 beams of light\nat the target.");
+static const u8 sMoveFourLineDescription_MoveSparklingBarrage[] = _("The user shoots\n3 beams of light\nat the target.");
 static const u8 sMoveFourLineDescription_MoveSpectralSerenade[] = _("The foe is hit with\na huge explosion.\nCan only be used\nevery-other turn.");
 static const u8 sMoveFourLineDescription_MoveMerculight[] = _("Evades attacks with\ncertainty, paralyzing\nattackers. May fail if\nused in succession.");
 static const u8 sMoveFourLineDescription_MoveBigBlast[] = _("The foe is hit with\na huge explosion.\n20% burn chance.");
@@ -5889,7 +5885,6 @@ static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("A Jabbing attac
 static const u8 sMoveFourLineDescription_MoveToxicPlunge[] = _("");
 static const u8 sMoveFourLineDescription_MoveShowtime[] = _("");
 static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("");
-static const u8 sMoveFourLineDescription_MoveSparklingBarrage[] = _("");
 static const u8 sMoveFourLineDescription_MoveTripleTremor[] = _("");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
@@ -6855,7 +6850,7 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_TERROR_LOCKS - 1] = sMoveFourLineDescription_MoveTerrorLocks,
     [MOVE_DREAM_INVERSION - 1] = sMoveFourLineDescription_MoveDreamInversion,
     [MOVE_TERA_STARSTORM - 1] = sMoveFourLineDescription_MoveTeraStarstorm,
-    [MOVE_SPARKLE_BARRAGE - 1] = sMoveFourLineDescription_MoveSparkleBarrage,
+    [MOVE_SPARKLING_BARRAGE - 1] = sMoveFourLineDescription_MoveSparklingBarrage,
     [MOVE_SPECTRAL_SERENADE - 1] = sMoveFourLineDescription_MoveSpectralSerenade,
     [MOVE_MERCULIGHT - 1] = sMoveFourLineDescription_MoveMerculight,
     [MOVE_BIG_BLAST - 1] = sMoveFourLineDescription_MoveBigBlast,
@@ -6884,6 +6879,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_TOXIC_PLUNGE - 1] = sMoveFourLineDescription_MoveToxicPlunge,
     [MOVE_SHOWTIME - 1] = sMoveFourLineDescription_MoveShowtime,
     [MOVE_BANISHED_POWER - 1] = sMoveFourLineDescription_MoveBanishedPower,
-    [MOVE_SPARKLING_BARRAGE - 1] = sMoveFourLineDescription_MoveSparklingBarrage,
     [MOVE_TRIPLE_TREMOR - 1] = sMoveFourLineDescription_MoveTripleTremor,
 };
