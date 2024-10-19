@@ -11315,6 +11315,31 @@ static void Cmd_various(void)
             gFieldTimers.started.clearSkiesTimer = TRUE;
         }
         return;
+    case VARIOUS_SHOWTIME:
+        {
+        int mode = READ_8_INC;
+        ptr = READ_PTR_INC;
+
+        switch (mode)
+        {
+        case 0:
+            if (gFieldTimers.trickRoomTimer || gFieldTimers.wonderRoomTimer || gFieldTimers.inverseRoomTimer)
+                gFieldTimers.trickRoomTimer = gFieldTimers.wonderRoomTimer = gFieldTimers.inverseRoomTimer = 0;
+            else
+                gBattlescriptCurrInstr = ptr;
+
+        case 1:
+            if (gFieldTimers.magicRoomTimer)
+                gBattlescriptCurrInstr = ptr;
+            else
+            {
+                gFieldTimers.magicRoomTimer = MAGIC_ROOM_DURATION;
+                gFieldTimers.started.magicRoom = TRUE;
+            }
+            return;
+        }
+        return;
+        }
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 

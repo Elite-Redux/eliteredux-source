@@ -258,6 +258,7 @@
 #define VARIOUS_SET_RANDOM                      175
 #define VARIOUS_SKY_DROP                        176
 #define VARIOUS_SET_CLEAR_SKIES                 177
+#define VARIOUS_SHOWTIME                        178
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0
