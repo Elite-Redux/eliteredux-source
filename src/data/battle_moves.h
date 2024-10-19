@@ -11945,7 +11945,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .argument = MOVE_EFFECT_BURN,
         .parentalBondBanned = TRUE,
     },
-    [MOVE_SNAP_JAW] =
+    [MOVE_KILOBITE] =
     {
         .effect = EFFECT_SNAP_JAW,
         .power = 80,
@@ -12326,17 +12326,6 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .argument = MOVE_EFFECT_TOXIC,
     },
     [MOVE_MYSTICAL_POWER] =
-    {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
-        .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 0,
-        .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_PHYSICAL,
-    },
-    [MOVE_GIGABITE] =
     {
         .effect = EFFECT_PLACEHOLDER,
         .power = 0,

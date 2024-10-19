@@ -3751,7 +3751,7 @@ static const u8 sMoveTwoLineDescription_MovePopMayhem[] = _(
     "Hits 2-5 times\n"
     "and can burn.");
 
-static const u8 sMoveTwoLineDescription_MoveSnapJaw[] = _(
+static const u8 sMoveTwoLineDescription_MoveKilobite[] = _(
     "Rushes forward and bites\n"
     "the foe's weak spot.");
 
@@ -3875,9 +3875,6 @@ static const u8 sMoveTwoLineDescription_MoveBadEgg[] = _(
     "toxins. Poisons on hit.");
 
 static const u8 sMoveTwoLineDescription_MoveMysticalPower[] = _(
-    "Not implemented");
-
-static const u8 sMoveTwoLineDescription_MoveGigabite[] = _(
     "Not implemented");
 
 static const u8 sMoveTwoLineDescription_MoveDragonJab[] = _(
@@ -4858,7 +4855,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_MYSTIC_DANCE - 1] = sMoveTwoLineDescription_MoveMysticDance,
     [MOVE_RELENTLESS_CLOBBER - 1] = sMoveTwoLineDescription_MoveRelentlessClobber,
     [MOVE_POP_MAYHEM - 1] = sMoveTwoLineDescription_MovePopMayhem,
-    [MOVE_SNAP_JAW - 1] = sMoveTwoLineDescription_MoveSnapJaw,
+    [MOVE_KILOBITE - 1] = sMoveTwoLineDescription_MoveKilobite,
     [MOVE_TANGLING_HUSK - 1] = sMoveTwoLineDescription_MoveTanglingHusk,
     [MOVE_RIP_AND_TEAR - 1] = sMoveTwoLineDescription_MoveRipAndTear,
     [MOVE_BRAVADO - 1] = sMoveTwoLineDescription_MoveBravado,
@@ -4890,7 +4887,6 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_MOUNTAIN_GALE - 1] = sMoveTwoLineDescription_MoveMountainGale,
     [MOVE_BAD_EGG - 1] = sMoveTwoLineDescription_MoveBadEgg,
     [MOVE_MYSTICAL_POWER - 1] = sMoveTwoLineDescription_MoveMysticalPower,
-    [MOVE_GIGABITE - 1] = sMoveTwoLineDescription_MoveGigabite,
     [MOVE_DRAGON_JAB - 1] = sMoveTwoLineDescription_MoveDragonJab,
     [MOVE_ICICLE_IMPALE - 1] = sMoveTwoLineDescription_MoveIcicleImpale,
     [MOVE_TOXIC_PLUNGE - 1] = sMoveTwoLineDescription_MoveToxicPlunge,
@@ -5854,7 +5850,7 @@ static const u8 sMoveFourLineDescription_MoveEerieFog[] = _("An eerie fog lastin
 static const u8 sMoveFourLineDescription_MoveMysticDance[] = _("A mystic, powerful\ndance that boosts\nthe user's SpAtk\nand Speed stats.");
 static const u8 sMoveFourLineDescription_MoveRelentlessClobber[] = _("Pummels the target\nrepeatedly. Hammer\nbased.");
 static const u8 sMoveFourLineDescription_MovePopMayhem[] = _("Pelts the target\nwith hot kernels.10%\nburn chance.");
-static const u8 sMoveFourLineDescription_MoveSnapJaw[] = _("Rushes forward and\nbites the foe. -1\nSpeed to foe or +1\nSpeed to user.");
+static const u8 sMoveFourLineDescription_MoveKilobite[] = _("Rushes forward and\nbites the foe. -1\nSpeed to foe or +1\nSpeed to user.");
 static const u8 sMoveFourLineDescription_MoveTanglingHusk[] = _("Protects against non-\nFire-type moves.\nSlows attackers on\ncontact.");
 static const u8 sMoveFourLineDescription_MoveRipAndTear[] = _("Lowers Speed. 50%\nchance to bleed.\nCan't be used\ntwice in a row.");
 static const u8 sMoveFourLineDescription_MoveBravado[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
@@ -5886,7 +5882,6 @@ static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\
 static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Hits both opponents.\n30% chance to flinch.\nAir based.");
 static const u8 sMoveFourLineDescription_MoveBadEgg[] = _("Throws an egg filled\nwith toxins. Badly\npoisons the target");
 static const u8 sMoveFourLineDescription_MoveMysticalPower[] = _("");
-static const u8 sMoveFourLineDescription_MoveGigabite[] = _("");
 static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("");
 static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("");
 static const u8 sMoveFourLineDescription_MoveToxicPlunge[] = _("");
@@ -6850,7 +6845,7 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_MYSTIC_DANCE - 1] = sMoveFourLineDescription_MoveMysticDance,
     [MOVE_RELENTLESS_CLOBBER - 1] = sMoveFourLineDescription_MoveRelentlessClobber,
     [MOVE_POP_MAYHEM - 1] = sMoveFourLineDescription_MovePopMayhem,
-    [MOVE_SNAP_JAW - 1] = sMoveFourLineDescription_MoveSnapJaw,
+    [MOVE_KILOBITE - 1] = sMoveFourLineDescription_MoveKilobite,
     [MOVE_TANGLING_HUSK - 1] = sMoveFourLineDescription_MoveTanglingHusk,
     [MOVE_RIP_AND_TEAR - 1] = sMoveFourLineDescription_MoveRipAndTear,
     [MOVE_BRAVADO - 1] = sMoveFourLineDescription_MoveBravado,
@@ -6882,7 +6877,6 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_MOUNTAIN_GALE - 1] = sMoveFourLineDescription_MoveMountainGale,
     [MOVE_BAD_EGG - 1] = sMoveFourLineDescription_MoveBadEgg,
     [MOVE_MYSTICAL_POWER - 1] = sMoveFourLineDescription_MoveMysticalPower,
-    [MOVE_GIGABITE - 1] = sMoveFourLineDescription_MoveGigabite,
     [MOVE_DRAGON_JAB - 1] = sMoveFourLineDescription_MoveDragonJab,
     [MOVE_ICICLE_IMPALE - 1] = sMoveFourLineDescription_MoveIcicleImpale,
     [MOVE_TOXIC_PLUNGE - 1] = sMoveFourLineDescription_MoveToxicPlunge,
