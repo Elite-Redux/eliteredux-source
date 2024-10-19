@@ -13106,7 +13106,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
             return TRUE;
         
-        case ABILITY_RUDE_AWAKENING:
+        case ABILITY_KNOW_YOUR_PLACE:
             if (!ShouldApplyOnHitAffect(target)) break;
             if (gVolatileStructs[target].dazed) break;
             if (!IsMoveMakingContact(move, battler)) break;
