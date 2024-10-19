@@ -1978,4 +1978,6 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_HEX_TROT] = _("Hex Trot"),
     [MOVE_MOUNTAIN_GALE] = _("Mountain Gale"),
     [MOVE_BAD_EGG] = _("Bad Egg"),
+    [MOVE_DRAGON_JAB] = _("Dragon Jab"),
+    [MOVE_ICICLE_IMPALE] = _("Icicle Impale"),
 };

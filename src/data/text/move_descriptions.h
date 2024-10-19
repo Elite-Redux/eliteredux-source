@@ -3874,6 +3874,14 @@ static const u8 sMoveTwoLineDescription_MoveBadEgg[] = _(
     "Throws an egg filled with\n"
     "toxins. Poisons on hit.");
 
+static const u8 sMoveTwoLineDescription_MoveDragonJab[] = _(
+   "Jabs with a horn.\n"
+    "can bleed on hit.");
+
+static const u8 sMoveTwoLineDescription_MoveIcicleImpale[] = _(
+    "Jabs with a horn.\n"
+    "can lower defense.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4862,6 +4870,8 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_HEX_TROT - 1] = sMoveTwoLineDescription_MoveHexTrot,
     [MOVE_MOUNTAIN_GALE - 1] = sMoveTwoLineDescription_MoveMountainGale,
     [MOVE_BAD_EGG - 1] = sMoveTwoLineDescription_MoveBadEgg,
+    [MOVE_DRAGON_JAB - 1] = sMoveTwoLineDescription_MoveDragonJab,
+    [MOVE_ICICLE_IMPALE - 1] = sMoveTwoLineDescription_MoveIcicleImpale,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5849,6 +5859,8 @@ static const u8 sMoveFourLineDescription_MoveZapJive[] = _("50% chance to raise\
 static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\nSpeed. Dance move.");
 static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Hits both opponents.\n30% chance to flinch.\nAir based.");
 static const u8 sMoveFourLineDescription_MoveBadEgg[] = _("Throws an egg filled\nwith toxins. Badly\npoisons the target");
+static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("A Jabbing attack. 30% to\ninflict bleed.\nMighty Horn boost.");
+static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("A Jabbing attack. 30% to\nlower defense.\nMighty Horn boost.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6836,4 +6848,6 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_HEX_TROT - 1] = sMoveFourLineDescription_MoveHexTrot,
     [MOVE_MOUNTAIN_GALE - 1] = sMoveFourLineDescription_MoveMountainGale,
     [MOVE_BAD_EGG - 1] = sMoveFourLineDescription_MoveBadEgg,
+    [MOVE_DRAGON_JAB - 1] = sMoveFourLineDescription_MoveDragonJab,
+    [MOVE_ICICLE_IMPALE - 1] = sMoveFourLineDescription_MoveIcicleImpale,
 };
