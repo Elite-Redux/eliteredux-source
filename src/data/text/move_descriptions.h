@@ -3874,16 +3874,16 @@ static const u8 sMoveTwoLineDescription_MoveBadEgg[] = _(
     "Throws an egg filled with\n"
     "toxins. Poisons on hit.");
 
+static const u8 sMoveTwoLineDescription_MoveMysticalPower[] = _(
+    "Not implemented");
+
 static const u8 sMoveTwoLineDescription_MoveDragonJab[] = _(
-   "Jabs with a horn.\n"
+    "Jabs with a horn.\n"
     "can bleed on hit.");
 
 static const u8 sMoveTwoLineDescription_MoveIcicleImpale[] = _(
     "Jabs with a horn.\n"
     "can lower defense.");
-
-static const u8 sMoveTwoLineDescription_MoveMysticalPower[] = _(
-    "Not implemented");
 
 static const u8 sMoveTwoLineDescription_MoveToxicPlunge[] = _(
     "Not implemented");
@@ -4888,9 +4888,9 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_HEX_TROT - 1] = sMoveTwoLineDescription_MoveHexTrot,
     [MOVE_MOUNTAIN_GALE - 1] = sMoveTwoLineDescription_MoveMountainGale,
     [MOVE_BAD_EGG - 1] = sMoveTwoLineDescription_MoveBadEgg,
+    [MOVE_MYSTICAL_POWER - 1] = sMoveTwoLineDescription_MoveMysticalPower,
     [MOVE_DRAGON_JAB - 1] = sMoveTwoLineDescription_MoveDragonJab,
     [MOVE_ICICLE_IMPALE - 1] = sMoveTwoLineDescription_MoveIcicleImpale,
-    [MOVE_MYSTICAL_POWER - 1] = sMoveTwoLineDescription_MoveMysticalPower,
     [MOVE_TOXIC_PLUNGE - 1] = sMoveTwoLineDescription_MoveToxicPlunge,
     [MOVE_SHOWTIME - 1] = sMoveTwoLineDescription_MoveShowtime,
     [MOVE_BANISHED_POWER - 1] = sMoveTwoLineDescription_MoveBanishedPower,
@@ -5883,9 +5883,9 @@ static const u8 sMoveFourLineDescription_MoveZapJive[] = _("50% chance to raise\
 static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\nSpeed. Dance move.");
 static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Hits both opponents.\n30% chance to flinch.\nAir based.");
 static const u8 sMoveFourLineDescription_MoveBadEgg[] = _("Throws an egg filled\nwith toxins. Badly\npoisons the target");
+static const u8 sMoveFourLineDescription_MoveMysticalPower[] = _("");
 static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("A Jabbing attack. 30% to\ninflict bleed.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("A Jabbing attack. 30% to\nlower defense.\nMighty Horn boost.");
-static const u8 sMoveFourLineDescription_MoveMysticalPower[] = _("");
 static const u8 sMoveFourLineDescription_MoveToxicPlunge[] = _("");
 static const u8 sMoveFourLineDescription_MoveShowtime[] = _("");
 static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("");
@@ -6878,9 +6878,9 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_HEX_TROT - 1] = sMoveFourLineDescription_MoveHexTrot,
     [MOVE_MOUNTAIN_GALE - 1] = sMoveFourLineDescription_MoveMountainGale,
     [MOVE_BAD_EGG - 1] = sMoveFourLineDescription_MoveBadEgg,
+    [MOVE_MYSTICAL_POWER - 1] = sMoveFourLineDescription_MoveMysticalPower,
     [MOVE_DRAGON_JAB - 1] = sMoveFourLineDescription_MoveDragonJab,
     [MOVE_ICICLE_IMPALE - 1] = sMoveFourLineDescription_MoveIcicleImpale,
-    [MOVE_MYSTICAL_POWER - 1] = sMoveFourLineDescription_MoveMysticalPower,
     [MOVE_TOXIC_PLUNGE - 1] = sMoveFourLineDescription_MoveToxicPlunge,
     [MOVE_SHOWTIME - 1] = sMoveFourLineDescription_MoveShowtime,
     [MOVE_BANISHED_POWER - 1] = sMoveFourLineDescription_MoveBanishedPower,
