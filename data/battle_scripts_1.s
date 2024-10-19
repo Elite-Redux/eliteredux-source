@@ -13023,3 +13023,9 @@ BattleScript_ClearSkiesEnds::
 	call BattleScript_MoveWeatherChangeRet
 	end2
 
+BattleScript_TargetDazed::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_RUDE_AWAKENING
+	waitmessage B_WAIT_TIME_LONG
+	return
+

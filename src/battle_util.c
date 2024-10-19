@@ -3727,6 +3727,7 @@ u8 DoBattlerEndTurnEffects(void)
             CLEAR_ONE_TURN(violentRush)
             CLEAR_ONE_TURN(onTheProwl)
             #undef CLEAR_ONE_TURN
+            if (gVolatileStructs[gActiveBattler].dazed) gVolatileStructs[gActiveBattler].dazed--;
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_BATTLER_COUNT:  // done
@@ -13104,6 +13105,15 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
 
             ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
             return TRUE;
+        
+        case ABILITY_RUDE_AWAKENING:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (gVolatileStructs[target].dazed) break;
+            if (!IsMoveMakingContact(move, battler)) break;
+
+            gVolatileStructs[target].dazed = 5;
+            BattleScriptCall(BattleScript_TargetDazed);
+            break;
         
         case ABILITY_DENTING_BLOWS:
             if (!ShouldApplyOnHitAffect(target)) break;
