@@ -11663,6 +11663,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_GRENINJA_ASH,                  SPECIES_GRENINJA_BATTLE_BOND,   FALSE},
         {SPECIES_EISCUE_NOICE_FACE,             SPECIES_EISCUE,                 FALSE},
         {SPECIES_PALAFIN_HERO,                  SPECIES_PALAFIN,                FALSE},
+        {SPECIES_SLAKING_MEGA_APE_SHIFT,        SPECIES_SLAKING_MEGA,           FALSE},
         {SPECIES_MINIOR_CORE_RED,               SPECIES_MINIOR,                 TRUE},
         {SPECIES_MINIOR_CORE_BLUE,              SPECIES_MINIOR_METEOR_BLUE,     TRUE},
         {SPECIES_MINIOR_CORE_GREEN,             SPECIES_MINIOR_METEOR_GREEN,    TRUE},
@@ -14225,6 +14226,22 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
 
             BattleScriptCall(BattleScript_RagePointActivates);
             return TRUE;
+        
+        case ABILITY_APE_SHIFT:
+            if (!(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+                && gBattleMons[battler].species == SPECIES_SLAKING_MEGA
+                && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
+            {
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_SLAKING_MEGA_APE_SHIFT);
+                gBattleMons[battler].species = SPECIES_SLAKING_MEGA_APE_SHIFT;
+
+                BattleScriptCall(BattleScript_ApeShift);
+
+                if (!HandleDefenderAbilityAs(ABILITY_ANGER_POINT, battler, attacker, move, moveType))
+                    BattleScriptCall(BattleScript_AbilityPopUp);
+                return TRUE;
+            }
+            else return HandleDefenderAbilityAs(ABILITY_ANGER_POINT, battler, attacker, move, moveType);
             
         case ABILITY_CROWNED_SWORD:
         case ABILITY_ANGER_POINT:
@@ -14886,6 +14903,19 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             if (gBattleMons[battler].status2 && STATUS2_TRANSFORMED) break;
             
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+            return TRUE;
+        
+        case ABILITY_APE_SHIFT:
+            if (gBattleMons[battler].status2 && STATUS2_TRANSFORMED) break;
+            if (gBattleMons[battler].species != SPECIES_SLAKING_MEGA) break;
+            if (gBattleMons[battler].hp > gBattleMons[battler].maxHP / 2) break;
+
+            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_SLAKING_MEGA_APE_SHIFT);
+            gBattleMons[battler].species = SPECIES_SLAKING_MEGA_APE_SHIFT;
+
+            BattleScriptPushCursorAndCallback(BattleScript_End3);
+            BattleScriptCall(BattleScript_ApeShift);
+            BattleScriptCall(BattleScript_AbilityPopUp);
             return TRUE;
         
         case ABILITY_MIMICRY:
@@ -15889,6 +15919,19 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_ZYGARDE_COMPLETE);
             gBattleMons[battler].species = SPECIES_ZYGARDE_COMPLETE;
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+            return TRUE;
+        
+        case ABILITY_APE_SHIFT:
+            if (gBattleMons[battler].status2 && STATUS2_TRANSFORMED) break;
+            if (gBattleMons[battler].species != SPECIES_SLAKING_MEGA) break;
+            if (gBattleMons[battler].hp > gBattleMons[battler].maxHP / 2) break;
+
+            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_SLAKING_MEGA_APE_SHIFT);
+            gBattleMons[battler].species = SPECIES_SLAKING_MEGA_APE_SHIFT;
+
+            BattleScriptPushCursorAndCallback(BattleScript_End3);
+            BattleScriptCall(BattleScript_ApeShift);
+            BattleScriptCall(BattleScript_AbilityPopUp);
             return TRUE;
         
         case ABILITY_HUNGER_SWITCH:
