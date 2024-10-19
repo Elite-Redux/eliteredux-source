@@ -1442,7 +1442,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BLADE_DANCE] = _("Blade Dance"),
     [ABILITY_TAEKKYEON] = _("Taekkyeon"),
     [ABILITY_APE_SHIFT] = _("Ape Shfit"),
-    [ABILITY_RUDE_AWAKENING] = _("Rude Awakening"),
+    [ABILITY_RUDE_AWAKENING] = _("Know Your Place"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
