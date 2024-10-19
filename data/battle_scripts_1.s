@@ -6292,6 +6292,7 @@ BattleScript_EffectSemiInvulnerable::
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_SecondTurnSemiInvulnerable
 	jumpifmove MOVE_FLY, BattleScript_FirstTurnFly
 	jumpifmove MOVE_DIVE, BattleScript_FirstTurnDive
+	jumpifmove MOVE_TOXIC_PLUNGE, BattleScript_FirstTurnDive
 	jumpifmove MOVE_BOUNCE, BattleScript_FirstTurnBounce
 	jumpifmove MOVE_PHANTOM_FORCE, BattleScript_FirstTurnPhantomForce
 	jumpifmove MOVE_SHADOW_FORCE, BattleScript_FirstTurnPhantomForce

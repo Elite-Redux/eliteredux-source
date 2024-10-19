@@ -14722,6 +14722,7 @@ static void Cmd_setsemiinvulnerablebit(void)
     case MOVE_DIG:
         gStatuses3[gBattlerAttacker] |= STATUS3_UNDERGROUND;
         break;
+    case MOVE_TOXIC_PLUNGE:
     case MOVE_DIVE:
         gStatuses3[gBattlerAttacker] |= STATUS3_UNDERWATER;
         break;

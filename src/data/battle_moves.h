@@ -12366,14 +12366,17 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TOXIC_PLUNGE] =
     {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
-        .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 0,
-        .secondaryEffectChance = 0,
+        .effect = EFFECT_SEMI_INVULNERABLE,
+        .power = 110,
+        .type = TYPE_POISON,
+        .accuracy = 100,
+        .pp = 10,
+        .secondaryEffectChance = 20,
         .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
+        .twoTurnMove = TRUE,
+        .argument = MOVE_EFFECT_POISON,
     },
     [MOVE_SHOWTIME] =
     {
