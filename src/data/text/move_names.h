@@ -977,6 +977,17 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_VEXING_VOID] = _("Vexing Void"),
     [MOVE_SAFE_PASSAGE] = _("Safe Passage"),
     [MOVE_TAKE_FLIGHT] = _("Take Flight"),
+    [MOVE_TREPIDATION] = _("Trepidation"),
+    [MOVE_READY_OR_NOT] = _("Ready or Not"),
+    [MOVE_GIGABITE] = _("Gigabite"),
+    [MOVE_DRAGON_JAB] = _("Dragon Jab"),
+    [MOVE_ICICLE_IMPALE] = _("IceImpale"),
+    [MOVE_TOXIC_PLUNGE] = _("Toxic Plunge"),
+    [MOVE_SHOWTIME] = _("st"),
+    [MOVE_BANISHED_POWER] = _("BP"),
+    [MOVE_MERCULIGHT] = _("ML"),
+    [MOVE_SPARKLING_BARRAGE] = _("SB"),
+    [MOVE_TRIPLE_TREMOR] = _("TT"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1960,4 +1971,15 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_VEXING_VOID] = _("Vexing Void"),
     [MOVE_SAFE_PASSAGE] = _("Safe Passage"),
     [MOVE_TAKE_FLIGHT] = _("Take Flight"),
+    [MOVE_TREPIDATION] = _("Trepidation"),
+    [MOVE_READY_OR_NOT] = _("Ready or Not"),
+    [MOVE_GIGABITE] = _("Gigabite"),
+    [MOVE_DRAGON_JAB] = _("Dragon Jab"),
+    [MOVE_ICICLE_IMPALE] = _("Icicle Impale"),
+    [MOVE_TOXIC_PLUNGE] = _("Toxic Plunge"),
+    [MOVE_SHOWTIME] = _("st"),
+    [MOVE_BANISHED_POWER] = _("BP"),
+    [MOVE_MERCULIGHT] = _("ML"),
+    [MOVE_SPARKLING_BARRAGE] = _("SB"),
+    [MOVE_TRIPLE_TREMOR] = _("TT"),
 };

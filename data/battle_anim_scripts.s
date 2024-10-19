@@ -996,6 +996,17 @@ gBattleAnims_Moves::
 	.4byte Move_NONE @ MOVE_VEXING_VOID
 	.4byte Move_NONE @ MOVE_SAFE_PASSAGE
 	.4byte Move_NONE @ MOVE_TAKE_FLIGHT
+	.4byte Move_NONE @ MOVE_TREPIDATION
+	.4byte Move_NONE @ MOVE_READY_OR_NOT
+	.4byte Move_NONE @ MOVE_GIGABITE
+	.4byte Move_NONE @ MOVE_DRAGON_JAB
+	.4byte Move_NONE @ MOVE_ICICLE_IMPALE
+	.4byte Move_NONE @ MOVE_TOXIC_PLUNGE
+	.4byte Move_NONE @ MOVE_SHOWTIME
+	.4byte Move_NONE @ MOVE_BANISHED_POWER
+	.4byte Move_NONE @ MOVE_MERCULIGHT
+	.4byte Move_NONE @ MOVE_SPARKLING_BARRAGE
+	.4byte Move_NONE @ MOVE_TRIPLE_TREMOR
 
 	.align 2
 gBattleAnims_StatusConditions::

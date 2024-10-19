@@ -3825,6 +3825,39 @@ static const u8 sMoveTwoLineDescription_MoveSafePassage[] = _(
 static const u8 sMoveTwoLineDescription_MoveTakeFlight[] = _(
     "Not implemented");
 
+static const u8 sMoveTwoLineDescription_MoveTrepidation[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveReadyOrNot[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveGigabite[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveDragonJab[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveIcicleImpale[] = _(
+    "Not implemented");
+
+static const u8 sMoveTwoLineDescription_MoveToxicPlunge[] = _(
+    "NI");
+
+static const u8 sMoveTwoLineDescription_MoveShowtime[] = _(
+    "NI");
+
+static const u8 sMoveTwoLineDescription_MoveBanishedPower[] = _(
+    "NI");
+
+static const u8 sMoveTwoLineDescription_MoveMerculight[] = _(
+    "NI");
+
+static const u8 sMoveTwoLineDescription_MoveSparklingBarrage[] = _(
+    "NI");
+
+static const u8 sMoveTwoLineDescription_MoveTripleTremor[] = _(
+    "NI");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4804,6 +4837,17 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_VEXING_VOID - 1] = sMoveTwoLineDescription_MoveVexingVoid,
     [MOVE_SAFE_PASSAGE - 1] = sMoveTwoLineDescription_MoveSafePassage,
     [MOVE_TAKE_FLIGHT - 1] = sMoveTwoLineDescription_MoveTakeFlight,
+    [MOVE_TREPIDATION - 1] = sMoveTwoLineDescription_MoveTrepidation,
+    [MOVE_READY_OR_NOT - 1] = sMoveTwoLineDescription_MoveReadyOrNot,
+    [MOVE_GIGABITE - 1] = sMoveTwoLineDescription_MoveGigabite,
+    [MOVE_DRAGON_JAB - 1] = sMoveTwoLineDescription_MoveDragonJab,
+    [MOVE_ICICLE_IMPALE - 1] = sMoveTwoLineDescription_MoveIcicleImpale,
+    [MOVE_TOXIC_PLUNGE - 1] = sMoveTwoLineDescription_MoveToxicPlunge,
+    [MOVE_SHOWTIME - 1] = sMoveTwoLineDescription_MoveShowtime,
+    [MOVE_BANISHED_POWER - 1] = sMoveTwoLineDescription_MoveBanishedPower,
+    [MOVE_MERCULIGHT - 1] = sMoveTwoLineDescription_MoveMerculight,
+    [MOVE_SPARKLING_BARRAGE - 1] = sMoveTwoLineDescription_MoveSparklingBarrage,
+    [MOVE_TRIPLE_TREMOR - 1] = sMoveTwoLineDescription_MoveTripleTremor,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5782,6 +5826,17 @@ static const u8 sMoveFourLineDescription_MoveEclipse[] = _("Not implemented");
 static const u8 sMoveFourLineDescription_MoveVexingVoid[] = _("Not implemented");
 static const u8 sMoveFourLineDescription_MoveSafePassage[] = _("Switches to an ally.\nThat ally takes -30%\ndamage this turn.");
 static const u8 sMoveFourLineDescription_MoveTakeFlight[] = _("");
+static const u8 sMoveFourLineDescription_MoveTrepidation[] = _("");
+static const u8 sMoveFourLineDescription_MoveReadyOrNot[] = _("");
+static const u8 sMoveFourLineDescription_MoveGigabite[] = _("");
+static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("");
+static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("");
+static const u8 sMoveFourLineDescription_MoveToxicPlunge[] = _("");
+static const u8 sMoveFourLineDescription_MoveShowtime[] = _("");
+static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("");
+static const u8 sMoveFourLineDescription_MoveMerculight[] = _("");
+static const u8 sMoveFourLineDescription_MoveSparklingBarrage[] = _("");
+static const u8 sMoveFourLineDescription_MoveTripleTremor[] = _("");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6760,4 +6815,15 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_VEXING_VOID - 1] = sMoveFourLineDescription_MoveVexingVoid,
     [MOVE_SAFE_PASSAGE - 1] = sMoveFourLineDescription_MoveSafePassage,
     [MOVE_TAKE_FLIGHT - 1] = sMoveFourLineDescription_MoveTakeFlight,
+    [MOVE_TREPIDATION - 1] = sMoveFourLineDescription_MoveTrepidation,
+    [MOVE_READY_OR_NOT - 1] = sMoveFourLineDescription_MoveReadyOrNot,
+    [MOVE_GIGABITE - 1] = sMoveFourLineDescription_MoveGigabite,
+    [MOVE_DRAGON_JAB - 1] = sMoveFourLineDescription_MoveDragonJab,
+    [MOVE_ICICLE_IMPALE - 1] = sMoveFourLineDescription_MoveIcicleImpale,
+    [MOVE_TOXIC_PLUNGE - 1] = sMoveFourLineDescription_MoveToxicPlunge,
+    [MOVE_SHOWTIME - 1] = sMoveFourLineDescription_MoveShowtime,
+    [MOVE_BANISHED_POWER - 1] = sMoveFourLineDescription_MoveBanishedPower,
+    [MOVE_MERCULIGHT - 1] = sMoveFourLineDescription_MoveMerculight,
+    [MOVE_SPARKLING_BARRAGE - 1] = sMoveFourLineDescription_MoveSparklingBarrage,
+    [MOVE_TRIPLE_TREMOR - 1] = sMoveFourLineDescription_MoveTripleTremor,
 };
