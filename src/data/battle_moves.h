@@ -12356,12 +12356,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_SPECIAL_ATTACK_UP_HIT,
         .power = 70,
         .type = TYPE_PSYCHIC,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .splitFlag = USE_HIGHEST_OFFENSE
     },
     [MOVE_TOXIC_PLUNGE] =
     {
@@ -12390,12 +12391,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .effect = EFFECT_SPECIAL_ATTACK_UP_HIT,
         .power = 70,
         .type = TYPE_DARK,
-        .accuracy = 90,
+        .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .splitFlag = USE_HIGHEST_OFFENSE
     },
     [MOVE_SPARKLING_BARRAGE] =
     {
