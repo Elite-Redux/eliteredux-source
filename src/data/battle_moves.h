@@ -12155,13 +12155,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_CLEAR_SKIES] =
     {
-        .effect = EFFECT_PLACEHOLDER,
+        .effect = EFFECT_CLEAR_SKIES,
         .power = 0,
         .type = TYPE_NORMAL,
         .accuracy = 0,
-        .pp = 0,
+        .pp = 15,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
+        .target = MOVE_TARGET_ALL_BATTLERS,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_READY_OR_NOT] =
