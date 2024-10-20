@@ -4000,7 +4000,8 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_ASLEEP: // check being asleep
-            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP)
+            if (gBattleMons[gBattlerAttacker].status1 & STATUS1_SLEEP
+                && !(gProcessingExtraAttacks && gTurnStructs[gBattlerAttacker].sleepTalk))
             {
                 if (UproarWakeUpCheck(gBattlerAttacker))
                 {

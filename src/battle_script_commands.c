@@ -13960,7 +13960,8 @@ static void Cmd_trychoosesleeptalkmove(void)
         {
             movePosition = Random() & (MAX_MON_MOVES - 1);
         } while ((gBitTable[movePosition] & unusableMovesBits));
-
+        
+        gTurnStructs[gBattlerAttacker].sleepTalk = TRUE;
         gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
             .attacker = gBattlerAttacker,
             .target = GetMoveTarget(gCalledMove, 0),

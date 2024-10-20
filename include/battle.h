@@ -253,6 +253,7 @@ struct TurnStruct
     u8 multiHitCounter:4;
     u8 shouldTriggerSwitchItem:1;
     u8 haloed:1;
+    u8 sleepTalk:1;
 };
 
 struct SideBeganThisTurn
