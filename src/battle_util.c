@@ -5570,8 +5570,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     case ABILITYEFFECT_ENDTURN: // 1
         for (i = 0; i <= NUM_ABILITY_SLOTS + 1; i++)
         {
-            HandleEndTurnAbility(i, battler);
+            effect += HandleEndTurnAbility(i, battler);
         }
+        break;
     case ABILITYEFFECT_MOVES_BLOCK: // 2
         effect = TestImmunityAbilities(battler, gBattlerAttacker, move, moveType, &gBattlescriptCurrInstr, &gBattleScripting.battlerPopupOverwrite, &gBattleScripting.abilityPopupOverwrite);
 
