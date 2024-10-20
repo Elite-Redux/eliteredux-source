@@ -13678,7 +13678,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         case ABILITY_FUNGAL_INFECTION:
             if (!ShouldApplyOnHitAffect(target)) break;
             if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) break;
-            if (gStatuses3[target] & STATUS3_LEECHSEED)
+            if (gStatuses3[target] & STATUS3_LEECHSEED) break;
             if (!IsMoveMakingContact(move, battler)) break;
 
             gStatuses3[target] |= battler;
