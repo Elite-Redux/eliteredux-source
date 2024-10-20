@@ -485,6 +485,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCreepingThornsHit		  @ EFFECT_CREEPING_THORNS_HIT
 	.4byte BattleScript_EffectTakeHeart				  @ EFFECT_TAKE_HEART
 	.4byte BattleScript_EffectClearSkies			  @ EFFECT_CLEAR_SKIES
+	.4byte BattleScript_EffectTrepidation			  @ EFFECT_TREPIDATION
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -13056,4 +13057,29 @@ BattleScript_EffectShowtime_NoClearRoom:
 	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_ButItFailed
 	call BattleScript_PlayAnimation
 	goto BattleScript_MoveSwitch
+
+
+BattleScript_EffectTrepidation::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	trepidation BS_TARGET, BattleScript_MoveEndTryFaintTarget
+	printstring STRINGID_TREPIDATION
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEndTryFaintTarget
 

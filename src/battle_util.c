@@ -3731,6 +3731,7 @@ u8 DoBattlerEndTurnEffects(void)
             CLEAR_ONE_TURN(onTheProwl)
             #undef CLEAR_ONE_TURN
             if (gVolatileStructs[gActiveBattler].dazed) gVolatileStructs[gActiveBattler].dazed--;
+            if (gVolatileStructs[gActiveBattler].trepidation) gVolatileStructs[gActiveBattler].trepidation--;
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_BATTLER_COUNT:  // done
@@ -13963,7 +13964,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             if (moveType != TYPE_DARK && moveType != TYPE_BUG && moveType != TYPE_GHOST) break;
             if (CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_EQUAL)) break;
             
-            SET_STATCHANGER(STAT_SPEED, 1, FALSE);
+            SetStatChanger(STAT_SPEED, 1);
             BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
             return TRUE;
         

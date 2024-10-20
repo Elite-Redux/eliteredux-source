@@ -2356,6 +2356,11 @@
 	.4byte \onFail
 	.endm
 
+	.macro trepidation target:req, onFail:req
+	various \target, VARIOUS_TREPIDATION
+	.4byte \onFail
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

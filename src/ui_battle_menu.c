@@ -177,6 +177,7 @@ enum
     STATUS_INFO_FEAR,
     STATUS_INFO_ON_THE_PROWL,
     STATUS_INFO_DAZED,
+    STATUS_INFO_TREPIDATION,
     //Battle Events (Extraskills)
     STATUS_INFO_EXTRA_ATTACK,
     STATUS_INFO_EXTRA_DEFENSE,
@@ -911,6 +912,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 break;
                 case STATUS_INFO_DAZED:
                     if (gVolatileStructs[j].dazed)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_TREPIDATION:
+                    if (gVolatileStructs[j].trepidation)
                         isExtraInfoShown = TRUE;
                 break;
                 case STATUS_INFO_EXTRA_ATTACK:
@@ -2282,6 +2287,9 @@ const u8 sText_Title_Status_Fear_Description[]              = _("For one turn th
                                                                 "damage.");
 const u8 sText_Title_Status_Dazed[]                         = _("Dazed");
 const u8 sText_Title_Status_Dazed_Description[]             = _("This Pokémon always moves last.");
+const u8 sText_Title_Status_Trepidation[]                   = _("Trepidation");
+const u8 sText_Title_Status_Trepidation_Description[]       = _("This Pokémon misses all Psychic-"
+                                                                "type moves it uses.");
 const u8 sText_Title_Status_OnTheProwl[]                    = _("On the Prowl");
 const u8 sText_Title_Status_OnTheProwl_Description[]        = _("This Pokémon gains +1 priority on\n"
                                                                 "moves for one turn. Does not work\n"
@@ -2782,6 +2790,22 @@ static void PrintStatusTab(void){
 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Status_Dazed_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_TREPIDATION:
+                StringCopy(gStringVar1, sText_Title_Status_Trepidation);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Turns Left
+                StringCopy(gStringVar1, sText_Title_Field_Turns_Left);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                turnsLeft = gVolatileStructs[sMenuDataPtr->battlerId].trepidation;
+                ConvertIntToDecimalStringN(gStringVar1, turnsLeft, STR_CONV_MODE_LEFT_ALIGN, 4);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Description
+                StringCopy(gStringVar1, sText_Title_Status_Trepidation_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;

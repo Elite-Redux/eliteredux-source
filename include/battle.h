@@ -152,6 +152,7 @@ struct VolatileStruct
     u8 skyDropped:1;
     u8 skyDroppedBy:2;
     u8 dazed:3;
+    u8 trepidation:2;
 };
 
 struct RoundStruct
