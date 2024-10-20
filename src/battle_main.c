@@ -5607,7 +5607,7 @@ static void RunTurnActionsFunctions(void)
 
 static void HandleEndTurn_BattleWon(void)
 {
-    gCurrentActionFuncId = B_ACTION_FINISHED;
+    gCurrentActionFuncId = 0;
 
     if (GetSingleUseAbilityCounter(0, ABILITY_RECURRING_NIGHTMARE) == 1)
     {
@@ -5683,7 +5683,7 @@ static void HandleEndTurn_BattleWon(void)
 
 static void HandleEndTurn_BattleLost(void)
 {
-    gCurrentActionFuncId = B_ACTION_FINISHED;
+    gCurrentActionFuncId = 0;
 
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
     {
@@ -5719,7 +5719,7 @@ static void HandleEndTurn_BattleLost(void)
 
 static void HandleEndTurn_RanFromBattle(void)
 {
-    gCurrentActionFuncId = B_ACTION_FINISHED;
+    gCurrentActionFuncId = 0;
 
     if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
     {
@@ -5753,7 +5753,7 @@ static void HandleEndTurn_RanFromBattle(void)
 
 static void HandleEndTurn_MonFled(void)
 {
-    gCurrentActionFuncId = B_ACTION_FINISHED;
+    gCurrentActionFuncId = 0;
 
     PREPARE_MON_NICK_BUFFER(gBattleTextBuff1, gBattlerAttacker, gBattlerPartyIndexes[gBattlerAttacker]);
     gBattlescriptCurrInstr = BattleScript_WildMonFled;
