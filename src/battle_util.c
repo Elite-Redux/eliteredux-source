@@ -15778,6 +15778,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             gBattleMons[battler].type3 = TYPE_WATER;
             PREPARE_TYPE_BUFFER(gBattleTextBuff2, gBattleMons[battler].type3);
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAddedTheType);
+            return TRUE;
         
         case ABILITY_GROUNDED:
             if (IS_BATTLER_OF_TYPE(battler, TYPE_GROUND)) break;
