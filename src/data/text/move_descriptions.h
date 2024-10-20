@@ -1987,8 +1987,8 @@ static const u8 sMoveTwoLineDescription_MoveEchoedVoice[] = _(
     "with rising intensity.");
 
 static const u8 sMoveTwoLineDescription_MoveChipAway[] = _(
-    "Strikes through the foe's\n"
-    "stat changes.");
+    "Chips away at the foe's attack\n"
+    "and defense.");
 
 static const u8 sMoveTwoLineDescription_MoveClearSmog[] = _(
     "Attacks with white haze that\n"
@@ -5396,7 +5396,7 @@ static const u8 sMoveFourLineDescription_MoveEntrainment[] = _("An odd dance tha
 static const u8 sMoveFourLineDescription_MoveAfterYou[] = _("The user helps the\ntarget and forces\nit to move right\nafter the user.");
 static const u8 sMoveFourLineDescription_MoveRound[] = _("A loud song attack.\nDeals 2x damage if\nally also uses Round.\n20% flinch chance.");
 static const u8 sMoveFourLineDescription_MoveEchoedVoice[] = _("A 3-hit attack.\nMore powerful with\neach successive hit.\nSound-based.");
-static const u8 sMoveFourLineDescription_MoveChipAway[] = _("The user strikes at\nthe first opening,\nignoring its foe's\nstat changes.");
+static const u8 sMoveFourLineDescription_MoveChipAway[] = _("40% chance to lower\nAttack and/or\nDefense. Ignores\nstat changes.");
 static const u8 sMoveFourLineDescription_MoveClearSmog[] = _("A clump of special\nmud is hurled at\nthe foe, resetting\ntheir stat changes.");
 static const u8 sMoveFourLineDescription_MoveStoredPower[] = _("The more the user's\nstats are raised,\nthe greater this\nmove's power.");
 static const u8 sMoveFourLineDescription_MoveQuickGuard[] = _("The user and its\nallies are\nprotected from\npriority moves.");

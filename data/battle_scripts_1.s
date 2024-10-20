@@ -488,6 +488,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectClearSkies			  @ EFFECT_CLEAR_SKIES
 	.4byte BattleScript_EffectShowtime				  @ EFFECT_SHOWTIME
 	.4byte BattleScript_EffectTrepidation			  @ EFFECT_TREPIDATION
+	.4byte BattleScript_EffectChipAway				  @ EFFECT_CHIP_AWAY
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -13087,3 +13088,27 @@ BattleScript_EffectTrepidation::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEndTryFaintTarget
 
+BattleScript_EffectChipAway
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_ATK_MINUS_1
+	seteffectwithchance
+	setmoveeffect MOVE_EFFECT_DEF_MINUS_1
+	seteffectwithchance
+	goto BattleScript_MoveEndTryFaintTarget
