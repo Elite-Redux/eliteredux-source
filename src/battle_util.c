@@ -13667,7 +13667,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         case ABILITY_ABSORBANT:
             if (!ShouldApplyOnHitAffect(target)) break;
             if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) break;
-            if (gStatuses3[target] & STATUS3_LEECHSEED)
+            if (gStatuses3[target] & STATUS3_LEECHSEED) break;
             if (gBattleMoves[move].effect != EFFECT_ABSORB && gBattleMoves[move].effect != EFFECT_DREAM_EATER) break;
 
             gStatuses3[target] |= battler;
