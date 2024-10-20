@@ -15325,7 +15325,10 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             break;
         
         case ABILITY_WILDFIRE:
-            UseEntryMove(battler, ability, MOVE_FIRE_SPIN, 0);
+            if (!ShouldApplyOnHitAffect(attacker)) break;
+            if (!IsMoveMakingContact(move, attacker)) break;
+
+            UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
             break;
         
         case ABILITY_JUMP_SCARE:
