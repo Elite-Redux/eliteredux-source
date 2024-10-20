@@ -10745,7 +10745,7 @@ u16 getLearnsetMon(u16 species)
     }
 }
 
-u16 getBaseSpeciesFromMega(u16 species){
+u16 getBaseSpeciesFromMega(u16 species) {
     u16 baseSpecies = GetFormSpeciesId(species, 0);
 
     switch (species)
@@ -10761,8 +10761,17 @@ u16 getBaseSpeciesFromMega(u16 species){
         HANDLE_REDUX_MEGA(SPECIES_HOUNDOOM)
         HANDLE_REDUX_MEGA(SPECIES_ARCANINE)
         HANDLE_REDUX_MEGA(SPECIES_TYRANITAR)
-        // HANDLE_REDUX_MEGA(SPECIES_KINGAMBIT)
         #undef HANDLE_REDUX_MEGA
+
+        #define HANDLE_MEGA(species) case species##_MEGA: return species;
+        HANDLE_MEGA(SPECIES_TSAREENA_REDUX)
+        HANDLE_MEGA(SPECIES_HYDREIGON_REDUX)
+        HANDLE_MEGA(SPECIES_INFERNAPE_REDUX)
+        HANDLE_MEGA(SPECIES_AEGISLASH_REDUX)
+        HANDLE_MEGA(SPECIES_REUNICLUS_REDUX)
+        #undef HANDLE_MEGA
+
+        case SPECIES_RAPIDASH_MEGA_GALARIAN: return SPECIES_RAPIDASH_GALARIAN;
     }
 
     if ((species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA)
@@ -10772,12 +10781,18 @@ u16 getBaseSpeciesFromMega(u16 species){
     }
 
     // Special cases
-    switch(species){
+    switch (species) {
         case SPECIES_GIRATINA_ORIGIN:
         case SPECIES_DIALGA_ORIGIN:
         case SPECIES_PALKIA_ORIGIN:
         case SPECIES_ZAMAZENTA_CROWNED_SHIELD:
         case SPECIES_ZACIAN_CROWNED_SWORD:
+        case SPECIES_ORICORIO_MEGA:
+        case SPECIES_CORMOTH_MEGA:
+        case SPECIES_GOLISOPOD_MEGA:
+        case SPECIES_POPCORM_MEGA:
+        case SPECIES_TINKATON_MEGA:
+        case SPECIES_AMPHYBUZZ_MEGA:
             return baseSpecies;
     }
 

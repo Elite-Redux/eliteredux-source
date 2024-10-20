@@ -11409,6 +11409,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 15,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
         .argument = MOVE_EFFECT_PSYCHIC_NOISE,
     },
@@ -12112,14 +12113,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TREPIDATION] =
     {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
-        .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 0,
-        .secondaryEffectChance = 0,
+        .effect = EFFECT_TREPIDATION,
+        .power = 20,
+        .type = TYPE_POISON,
+        .accuracy = 90,
+        .pp = 20,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_PHYSICAL,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
     },
     [MOVE_ASTRAL_HAND] =
     {
@@ -12130,8 +12132,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_IRON_FIST_BOOST | FLAG_STAT_STAGES_IGNORED,
         .split = SPLIT_PHYSICAL,
-        .argument = FLAG_PROTECT_AFFECTED | FLAG_MAKES_CONTACT | FLAG_IRON_FIST_BOOST | FLAG_KINGS_ROCK_AFFECTED | FLAG_STAT_STAGES_IGNORED | FLAG_MIRROR_MOVE_AFFECTED,
     },
     [MOVE_FETCH] =
     {

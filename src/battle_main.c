@@ -917,7 +917,7 @@ static void CB2_HandleStartBattle(void)
     playerMultiplayerId = GetMultiplayerId();
     gBattleScripting.multiplayerId = playerMultiplayerId;
     enemyMultiplayerId = playerMultiplayerId ^ BIT_SIDE;
-    if(!FlagGet(FLAG_SYS_DISABLE_AUTOHEAL))
+    if (!FlagGet(FLAG_SYS_DISABLE_AUTOHEAL))
         HealPlayerParty();
 
     switch (gBattleCommunication[MULTIUSE_STATE])
@@ -1910,32 +1910,32 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     u16 move = 1;
     u16 species = 1;
 
-    if(DoubleReady && (gSaveBlock2Ptr->doubleBattleMode == TRUE || gTrainers[trainerNum].doubleBattle)){
+    if (DoubleReady && (gSaveBlock2Ptr->doubleBattleMode == TRUE || gTrainers[trainerNum].doubleBattle)) {
         // This is a copy from the code below to calculate the number of Pokemon per trainer
         // In doubles if you are on elite mode the game will try to use a Double Elite Party if there is no exclusive party it uses the 
         // Elite Single Party if there is Elite Single Party it will try to use Double Normal Party if there is no Normal Double Party it will try to
         // use the Signle Normal Party
-        if(difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsaneDouble != 0)
+        if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsaneDouble != 0)
             enemyPartySize = gTrainers[trainerNum].partySizeInsaneDouble;
-        else if(difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsane != 0)
+        else if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsane != 0)
             enemyPartySize = gTrainers[trainerNum].partySizeInsane;
-        else if(gTrainers[trainerNum].partySizeDouble != 0)
+        else if (gTrainers[trainerNum].partySizeDouble != 0)
             enemyPartySize = gTrainers[trainerNum].partySizeDouble;
         else
             enemyPartySize = gTrainers[trainerNum].partySize;
         }
-    else{
+    else {
         // In singles if you are on elite mode the game will try to use an Elite Party if there is no exclusive party it uses the normal one
-        if(difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsane != 0)
+        if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partySizeInsane != 0)
             enemyPartySize = gTrainers[trainerNum].partySizeInsane;
         else
             enemyPartySize = gTrainers[trainerNum].partySize;
     }
 
     //Double Battle Mode
-    if(DoubleReady && enemyPartySize >= 2 && gSaveBlock2Ptr->doubleBattleMode == TRUE)
+    if (DoubleReady && enemyPartySize >= 2 && gSaveBlock2Ptr->doubleBattleMode == TRUE)
 		isDoubleBattle = TRUE;
-	else if(DoubleReady && enemyPartySize >= 2 && gTrainers[trainerNum].doubleBattle)
+	else if (DoubleReady && enemyPartySize >= 2 && gTrainers[trainerNum].doubleBattle)
 		isDoubleBattle = TRUE;
 	else
 		isDoubleBattle = FALSE;
@@ -2001,7 +2001,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     for (j = 0; j < NUM_STATS; j++)
                     {
-                        switch(j){
+                        switch(j) {
                             case 0:
                                 SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
                             break;
@@ -2054,7 +2054,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     for (j = 0; j < NUM_STATS; j++)
                     {
-                        switch(j){
+                        switch(j) {
                             case 0:
                                 SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
                             break;
@@ -2102,7 +2102,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     for (j = 0; j < NUM_STATS; j++)
                     {
-                        switch(j){
+                        switch(j) {
                             case 0:
                                 SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
                             break;
@@ -2133,22 +2133,22 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
             {
                 const struct TrainerMonItemCustomMoves *partyData;
                 u8 hpType;
-                if(isDoubleBattle && gSaveBlock2Ptr->doubleBattleMode == TRUE){
+                if (isDoubleBattle && gSaveBlock2Ptr->doubleBattleMode == TRUE) {
                     // In doubles if you are on elite mode the game will try to use a Double Elite Party if there is no exclusive party it uses the 
                     // Elite Single Party if there is Elite Single Party it will try to use Double Normal Party if there is no Normal Double Party it will try to
                     // use the Signle Normal Party
-                    if(difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partyInsaneDouble.ItemCustomMoves != 0)
+                    if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partyInsaneDouble.ItemCustomMoves != 0)
                         partyData = gTrainers[trainerNum].partyInsaneDouble.ItemCustomMoves;
-                    else if(difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partyInsane.ItemCustomMoves != 0)
+                    else if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partyInsane.ItemCustomMoves != 0)
                         partyData = gTrainers[trainerNum].partyInsane.ItemCustomMoves;
-                    else if(gTrainers[trainerNum].partyDouble.ItemCustomMoves != 0)
+                    else if (gTrainers[trainerNum].partyDouble.ItemCustomMoves != 0)
                         partyData = gTrainers[trainerNum].partyDouble.ItemCustomMoves;
                     else
                         partyData = gTrainers[trainerNum].party.ItemCustomMoves;
                 }
-                else{
+                else {
                     // In singles if you are on elite mode the game will try to use an Elite Party if there is no exclusive party it uses the normal one
-                    if(difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partyInsane.ItemCustomMoves != 0)
+                    if (difficultySetting == DIFFICULTY_ELITE && gTrainers[trainerNum].partyInsane.ItemCustomMoves != 0)
                         partyData = gTrainers[trainerNum].partyInsane.ItemCustomMoves;
                     else
                         partyData = gTrainers[trainerNum].party.ItemCustomMoves;
@@ -2174,7 +2174,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 }
 
                 #ifdef DEBUG_BUILD
-                if(FlagGet(FLAG_DEBUG_GODMODE))
+                if (FlagGet(FLAG_DEBUG_GODMODE))
                     level = 1;
                 #endif
 
@@ -2207,7 +2207,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 }
 
                 #ifdef DEBUG_BUILD
-                if(FlagGet(FLAG_SYS_AUTOWIN))
+                if (FlagGet(FLAG_SYS_AUTOWIN))
                     SetTrainerFlag(trainerNum);
                 #endif
 
@@ -2218,7 +2218,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     for (j = 0; j < NUM_STATS; j++)
                     {
-                        switch(j){
+                        switch(j) {
                             case 0:
                                 SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
                             break;
@@ -2279,7 +2279,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
             SetMonData(&party[i], MON_DATA_POKEBALL, &gTrainerBallTable[j].Ball);
         }
 
-        if(isDoubleBattle)
+        if (isDoubleBattle)
 			gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
         else
             gBattleTypeFlags |= gTrainers[trainerNum].doubleBattle;
@@ -3638,7 +3638,7 @@ static void DoBattleIntro(void)
                 gBattleMons[gActiveBattler].type1 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type1, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, TRUE);
                 gBattleMons[gActiveBattler].type2 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
                 gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
-                if(GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER) //Only the player has a randomized ability
+                if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER) //Only the player has a randomized ability
                     gBattleMons[gActiveBattler].ability = RandomizeAbility(GetAbilityBySpecies(gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].abilityNum), gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality);
                 else
                     gBattleMons[gActiveBattler].ability = GetAbilityBySpecies(gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].abilityNum);
@@ -3919,7 +3919,7 @@ static void TryDoEventsBeforeFirstTurn(void)
 {
     s32 i, j;
     #ifdef DEBUG_BUILD
-    if (FlagGet(FLAG_SYS_AUTOWIN)){
+    if (FlagGet(FLAG_SYS_AUTOWIN)) {
         gBattleOutcome = B_OUTCOME_WON;
         gBattleMainFunc = HandleEndTurn_BattleWon;
         return;
@@ -4114,7 +4114,7 @@ void BattleTurnPassed(void)
 {
     s32 i;
 
-    if (gCurrentActionFuncId != B_ACTION_FINISHED)
+    if (gCurrentActionFuncId != B_ACTION_FINISHED && !(gCurrentActionFuncId == B_ACTION_TRY_FINISH && gBattleOutcome))
     {
         sTurnActionsFuncsTable[gCurrentActionFuncId]();
         return;
@@ -4133,7 +4133,7 @@ void BattleTurnPassed(void)
         if (DoBattlerEndTurnEffects())
             return;
     }
-    if (HandleFaintedMonActions()){
+    if (HandleFaintedMonActions()) {
         return;
     }
     gBattleStruct->faintedActionsState = 0;
@@ -4541,7 +4541,7 @@ static void HandleTurnActionSelectionState(void)
                     return;
                 }
                 #ifdef DEBUG_BUILD
-                else if(FlagGet(FLAG_SYS_AUTOWIN)
+                else if (FlagGet(FLAG_SYS_AUTOWIN)
                          && gBattleTypeFlags & BATTLE_TYPE_TRAINER
                          && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
                          && gBattleResources->bufferB[gActiveBattler][1] == B_ACTION_RUN)
@@ -4756,7 +4756,7 @@ static void HandleTurnActionSelectionState(void)
             }
             break;
         case STATE_SELECTION_SCRIPT_MAY_RUN:
-            if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))){
+            if (gBattleTypeFlags & BATTLE_TYPE_TRAINER && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))) {
                 //Ran from in-game Trainer
                 if (*(gBattleStruct->selectionScriptFinished + gActiveBattler))
                 {
@@ -4766,7 +4766,7 @@ static void HandleTurnActionSelectionState(void)
                         numWhiteOuts++;
                         VarSet(VAR_TIMES_WHITED_OUT, numWhiteOuts);
                         
-                        if(gActiveBattler == B_POSITION_PLAYER_LEFT){
+                        if (gActiveBattler == B_POSITION_PLAYER_LEFT) {
                             gHitMarker |= HITMARKER_RUN;
                             gChosenActionByBattler[gActiveBattler] = B_ACTION_RUN;
                             gChosenActionByBattler[B_POSITION_PLAYER_RIGHT] = B_ACTION_RUN;
@@ -4774,7 +4774,7 @@ static void HandleTurnActionSelectionState(void)
                             gBattleCommunication[gActiveBattler] = STATE_WAIT_ACTION_CONFIRMED;
                             gBattleCommunication[B_POSITION_PLAYER_RIGHT] = STATE_WAIT_ACTION_CONFIRMED;
                         }
-                        else{
+                        else {
                             gHitMarker |= HITMARKER_RUN;
                             gChosenActionByBattler[gActiveBattler] = B_ACTION_RUN;
                             gBattleOutcome = B_OUTCOME_LOST;
@@ -4799,7 +4799,7 @@ static void HandleTurnActionSelectionState(void)
                 }
                 break;
             }
-            else{
+            else {
                 if (*(gBattleStruct->selectionScriptFinished + gActiveBattler))
                 {
                     if (gBattleResources->bufferB[gActiveBattler][1] == B_ACTION_NOTHING_FAINTED)
@@ -4980,10 +4980,10 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     // various effects
     if (gSideStatuses[GET_BATTLER_SIDE(battlerId)] & SIDE_STATUS_TAILWIND)
         speed *= 2;
-    else if(GET_BATTLER_SIDE(battlerId) != B_SIDE_PLAYER && getMonotypeChampType() == TYPE_FLYING)
+    else if (GET_BATTLER_SIDE(battlerId) != B_SIDE_PLAYER && getMonotypeChampType() == TYPE_FLYING)
         speed *= 2;
 
-    if(GET_BATTLER_SIDE(battlerId) != B_SIDE_PLAYER && getMonotypeChampType() == TYPE_ICE)
+    if (GET_BATTLER_SIDE(battlerId) != B_SIDE_PLAYER && getMonotypeChampType() == TYPE_ICE)
         speed *= 2;
 
     if (gSideTimers[GET_BATTLER_SIDE2(battlerId)].swampTimer)
@@ -5004,7 +5004,7 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     // stat stages
     if (gBattleMons[battlerId].status1 & STATUS1_BLEED) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
-    if (extraStatLevel){
+    if (extraStatLevel) {
         speed = speed + ((speed / 5 ) * extraStatLevel);
     }
     speed *= gStatStageRatios[statStage][0];
@@ -5051,7 +5051,7 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
 
     priority = gBattleMoves[move].priority;
 
-    if(BATTLER_HAS_ABILITY(battlerId, ABILITY_OPPORTUNIST) && gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
+    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_OPPORTUNIST) && gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
         priority++;
 
     #define GALE_WINGS_CLONE(ability, type) if (BATTLER_HAS_ABILITY(battlerId, ability) \
@@ -5107,12 +5107,12 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
         priority++;
     }
 
-	if(BATTLER_HAS_ABILITY(battlerId, ABILITY_PERFECTIONIST) && 
+	if (BATTLER_HAS_ABILITY(battlerId, ABILITY_PERFECTIONIST) && 
        gBattleMoves[move].power <= 25 && 
        gBattleMoves[move].power > 0)
 		priority++;
 
-    if((gStatuses4[battlerId] & STATUS4_COILED) && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)){
+    if ((gStatuses4[battlerId] & STATUS4_COILED) && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) {
 		priority++;
 	}
 
@@ -5434,7 +5434,7 @@ static void CheckMegaEvolutionBeforeTurn(void)
                 gLastUsedItem = gBattleMons[gActiveBattler].item;
 
                 //Trainer Mega Evolution
-                if((gBattleTypeFlags & BATTLE_TYPE_TRAINER) || GET_BATTLER_SIDE(gActiveBattler) == B_SIDE_PLAYER){
+                if ((gBattleTypeFlags & BATTLE_TYPE_TRAINER) || GET_BATTLER_SIDE(gActiveBattler) == B_SIDE_PLAYER) {
                     if (gBattleStruct->mega.isWishMegaEvo == TRUE)
                         BattleScriptExecute(BattleScript_WishMegaEvolution);
                     else
@@ -5978,7 +5978,7 @@ void RunBattleScriptCommands(void)
 }
 
 #define HAS_ABILITY(abilityToCheck) (MonHasInnate(mon, abilityToCheck, disableRandomizer) || ability == abilityToCheck)
-u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
+u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
     u32 moveType, ateType, attackerAbility, tempstuff;
     u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     u16 holdEffect = ItemId_GetHoldEffect(item);
@@ -5989,7 +5989,7 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
     u8 type1 = gBaseStats[species].type1;
     u8 type2 = gBaseStats[species].type2;
 
-    if(!disableRandomizer){
+    if (!disableRandomizer) {
         ability =  RandomizeAbility(GetAbilityBySpecies(species, abilityNum), species, personality);
         type1 = RandomizeType(gBaseStats[species].type1, species, personality, TRUE);
         type2 = RandomizeType(gBaseStats[species].type2, species, personality, FALSE);
@@ -6067,22 +6067,22 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
     }
 
     //Sand Song
-    if (HAS_ABILITY(ABILITY_SAND_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
+    if (HAS_ABILITY(ABILITY_SAND_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
         return TYPE_GROUND;
     }
 
     // Power Metal
-    if (HAS_ABILITY(ABILITY_POWER_METAL) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
+    if (HAS_ABILITY(ABILITY_POWER_METAL) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
         return TYPE_STEEL;
     }
 
     //Snow Song
-    if(HAS_ABILITY(ABILITY_SNOW_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
+    if (HAS_ABILITY(ABILITY_SNOW_SONG) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
         return TYPE_ICE;
     }
 
     //Banshee
-    if(HAS_ABILITY(ABILITY_BANSHEE) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL){
+    if (HAS_ABILITY(ABILITY_BANSHEE) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
         return TYPE_GHOST;
     }
 
@@ -6112,34 +6112,34 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
                 || (HAS_ABILITY(ABILITY_ENLIGHTENED)       && (ateType = TYPE_PSYCHIC))
                 || (HAS_ABILITY(ABILITY_FERTILIZE)         && (ateType = TYPE_GRASS))
                 )
-            ){
+            ) {
         return ateType;
     }
 	//Superconductor
-    if(HAS_ABILITY(ABILITY_SUPERCONDUCTOR)){
-        if(gBattleMoves[move].type == TYPE_STEEL)
+    if (HAS_ABILITY(ABILITY_SUPERCONDUCTOR)) {
+        if (gBattleMoves[move].type == TYPE_STEEL)
             return TYPE_ELECTRIC;
     }
 	//Crystallize
-	if(HAS_ABILITY(ABILITY_CRYSTALLIZE)){
-		if(gBattleMoves[move].type == TYPE_ROCK)
+	if (HAS_ABILITY(ABILITY_CRYSTALLIZE)) {
+		if (gBattleMoves[move].type == TYPE_ROCK)
 			return TYPE_ICE;
 	}
     //Normalize
-    if(HAS_ABILITY(ABILITY_NORMALIZE)){
+    if (HAS_ABILITY(ABILITY_NORMALIZE)) {
         if (gBattleMoves[move].type != TYPE_NORMAL
              && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL)
         return TYPE_NORMAL;
     }
     //Liquid Voice
-    if(HAS_ABILITY(ABILITY_LIQUID_VOICE)){
+    if (HAS_ABILITY(ABILITY_LIQUID_VOICE)) {
         if (gBattleMoves[move].flags & FLAG_SOUND)
             return TYPE_WATER;
     }
 	//Fight Spirit
-	if(HAS_ABILITY(ABILITY_FIGHT_SPIRIT)){
-		if(gBattleMoves[move].type == TYPE_NORMAL
+	if (HAS_ABILITY(ABILITY_FIGHT_SPIRIT)) {
+		if (gBattleMoves[move].type == TYPE_NORMAL
              && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
              && gBattleMoves[move].effect != EFFECT_CHANGE_TYPE_ON_ITEM
@@ -6151,7 +6151,7 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer){
 }
 #undef HAS_ABILITY
 
-u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
+u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk) {
     u32 moveType, ateType, attackerAbility, tempstuff;
     u16 holdEffect = GetBattlerHoldEffect(battlerAtk, TRUE);
 
@@ -6296,9 +6296,9 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk){
                 )
              )
         return ateType;
-	else if(gBattleMoves[move].type == TYPE_ROCK && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_CRYSTALLIZE, attackerAbility))
+	else if (gBattleMoves[move].type == TYPE_ROCK && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_CRYSTALLIZE, attackerAbility))
 		return TYPE_ICE;
-    else if(gBattleMoves[move].type == TYPE_STEEL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SUPERCONDUCTOR, attackerAbility))
+    else if (gBattleMoves[move].type == TYPE_STEEL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SUPERCONDUCTOR, attackerAbility))
 		return TYPE_ELECTRIC;
     else if (gBattleMoves[move].type != TYPE_NORMAL
              && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
@@ -6478,12 +6478,12 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
         gBattleStruct->dynamicMoveType = 0x80 | ateType;
         gBattleStruct->ateBoost[battlerAtk] = 1;
     }
-	else if(gBattleMoves[move].type == TYPE_ROCK && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_CRYSTALLIZE, attackerAbility) && (ateType = TYPE_ICE)){
+	else if (gBattleMoves[move].type == TYPE_ROCK && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_CRYSTALLIZE, attackerAbility) && (ateType = TYPE_ICE)) {
 		ateType = TYPE_ICE;
 		gBattleStruct->dynamicMoveType = 0x80 | ateType;
 		gBattleStruct->ateBoost[battlerAtk] = 1;
 	}
-    else if(gBattleMoves[move].type == TYPE_STEEL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SUPERCONDUCTOR, attackerAbility) && (ateType = TYPE_ELECTRIC)){
+    else if (gBattleMoves[move].type == TYPE_STEEL && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_SUPERCONDUCTOR, attackerAbility) && (ateType = TYPE_ELECTRIC)) {
 		ateType = TYPE_ELECTRIC;
 		gBattleStruct->dynamicMoveType = 0x80 | ateType;
 		gBattleStruct->ateBoost[battlerAtk] = 1;
@@ -7090,12 +7090,12 @@ bool32 IsWildMonSmart(void)
 }
 
 
-void HandleMonoChampSpecialEffects(void){
+void HandleMonoChampSpecialEffects(void) {
     u16 champType = getMonotypeChampType();
     u32 fieldEffectId;
     bool8 setTerrain = FALSE;
 
-    switch(champType){
+    switch(champType) {
         case TYPE_DARK:
             MakePlayerTeamAsleep();
         break;
@@ -7139,8 +7139,8 @@ void HandleMonoChampSpecialEffects(void){
         break;
     }
 
-    if(setTerrain){
-        if(fieldEffectId & STATUS_FIELD_TERRAIN_ANY){
+    if (setTerrain) {
+        if (fieldEffectId & STATUS_FIELD_TERRAIN_ANY) {
             u16 terrainFlags = fieldEffectId & STATUS_FIELD_TERRAIN_ANY; // only works for status flag (1 << 15)
             gFieldStatuses = terrainFlags | STATUS_FIELD_TERRAIN_PERMANENT;            // terrain is permanent
             switch (fieldEffectId & STATUS_FIELD_TERRAIN_ANY)
@@ -7162,11 +7162,11 @@ void HandleMonoChampSpecialEffects(void){
     }
 }
 
-static void HandleBattleEvents(void){
+static void HandleBattleEvents(void) {
 
     // end of the turn, exec battle events
-    if (gBattleStruct->battleEventDone != BATTLE_EVENTS_DONE){
-        if (ExecBattleEvents() == EXEC_BATTLE_EVENTS_ALL_CLEAR){
+    if (gBattleStruct->battleEventDone != BATTLE_EVENTS_DONE) {
+        if (ExecBattleEvents() == EXEC_BATTLE_EVENTS_ALL_CLEAR) {
             gBattleStruct->battleEventDone = BATTLE_EVENTS_DONE;
         } else {
             return;

@@ -152,6 +152,7 @@ struct VolatileStruct
     u8 skyDropped:1;
     u8 skyDroppedBy:2;
     u8 dazed:3;
+    u8 trepidation:2;
 };
 
 struct RoundStruct
@@ -252,6 +253,7 @@ struct TurnStruct
     u8 multiHitCounter:4;
     u8 shouldTriggerSwitchItem:1;
     u8 haloed:1;
+    u8 sleepTalk:1;
 };
 
 struct SideBeganThisTurn

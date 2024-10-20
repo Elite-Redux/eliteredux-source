@@ -26,8 +26,8 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
     [BATTLE_EVENT_LAST_TOXIC] = _("Last Toxic"),
 
 
-    [BATTLE_EVENT_ONKILLNS_CURSE] = _("OKNS Curse"),
-    [BATTLE_EVENT_ONKILLNS_LEECHSEED] = _("OKNS L.seed"),
+    [BATTLE_EVENT_ONKILLNS_CURSE] = _("Curse"),
+    [BATTLE_EVENT_ONKILLNS_LEECHSEED] = _("Leech Seed"),
 
     [BATTLE_EVENT_ELECTRIC_SURGE] = _(""),
     [BATTLE_EVENT_PSYCHIC_SURGE] = _(""),
@@ -40,18 +40,18 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
     [BATTLE_EVENT_LAST_STAND] = _("Last Stand"),
     [BATTLE_EVENT_SUBSTITUTE] = _("Substitute"),
 
-    [BATTLE_EVENT_ONSTAY_LEECH_SEED] = _("OnS. L.seed"),
-    [BATTLE_EVENT_ONSTAY_FORESIGHT] = _("OnS. Foresight"),
-    [BATTLE_EVENT_ONSTAY_MAGNET_RISE] = _("OnS. MagnetRise"),
+    [BATTLE_EVENT_ONSTAY_LEECH_SEED] = _("Leech Seed"),
+    [BATTLE_EVENT_ONSTAY_FORESIGHT] = _("Foresight"),
+    [BATTLE_EVENT_ONSTAY_MAGNET_RISE] = _("Magnet Rise"),
 
-    [BATTLE_EVENT_ONSWITCH_MAT_BLOCK] = _("onS. Mat.Block"),
+    [BATTLE_EVENT_ONSWITCH_MAT_BLOCK] = _("Mat Block"),
 
-    [BATTLE_EVENT_PERMA_HEAL_BLOCK] = _("Perma Heal Block"),
-    [BATTLE_EVENT_PERMA_NIGHTMARE] = _("Perma Nightmare"),
-    [BATTLE_EVENT_PERMA_SMACKDOWN] = _("Perma SmackDown"), 
-    [BATTLE_EVENT_PERMA_WIDE_GUARD] = _("Perma WideGuard"),
+    [BATTLE_EVENT_PERMA_HEAL_BLOCK] = _("Heal Block"),
+    [BATTLE_EVENT_PERMA_NIGHTMARE] = _("Nightmare"),
+    [BATTLE_EVENT_PERMA_SMACKDOWN] = _("Smack Down"), 
+    [BATTLE_EVENT_PERMA_WIDE_GUARD] = _("Wide Guard"),
 
-    [BATTLE_EVENT_ONDS_COPY_STATS] = _("OnDS CopyStat"),
+    [BATTLE_EVENT_ONDS_COPY_STATS] = _("Copy Stat"),
 
     [BATTLE_EVENT_STEALTH_ROCK] = _("Stealth Rocks"),
     [BATTLE_EVENT_TOXIC_SPIKES] = _("Toxic Spikes"),
@@ -61,9 +61,9 @@ const u8 gBattleEventNames[BATTLE_EVENT_MAX_NUMBER + 1][20] = {
     [BATTLE_EVENT_TAILWIND] = _("Tailwind"),
     [BATTLE_EVENT_REFLECT] = _("Reflect"),
     [BATTLE_EVENT_LIGHTSCREEN] = _("Lightscreen"),
-    [BATTLE_EVENT_AURORAVEIL] = _("AuroraVeil"),
-    [BATTLE_EVENT_LUCKY_CHANT] = _("LuckyChant"),
-    [BATTLE_EVENT_QUICK_GUARD] = _("QuickGuard"),
+    [BATTLE_EVENT_AURORAVEIL] = _("Aurora Veil"),
+    [BATTLE_EVENT_LUCKY_CHANT] = _("Lucky Chant"),
+    [BATTLE_EVENT_QUICK_GUARD] = _("Quick Guard"),
 
     [BATTLE_EVENT_NO_PROTECT] = _("No Protect"),
 

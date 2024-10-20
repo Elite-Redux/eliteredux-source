@@ -1706,6 +1706,14 @@ script PetalburgCity_Gym_EventScript_Norman{
 			end
 		break
 		case 2:
+			//failsafe
+			if (flag(FLAG_BADGE01_GET) && flag(FLAG_BADGE02_GET) && flag(FLAG_BADGE03_GET) && flag(FLAG_BADGE04_GET)){
+				setvar(VAR_PETALBURG_GYM_STATE, 6)
+				warp(MAP_PETALBURG_CITY, 255, 15,9)
+				waitstate
+				release
+				end
+			}
 			msgbox(PetalburgCity_Gym_Text_NormanGoToRustboro, MSGBOX_DEFAULT)
 			release
 			end
