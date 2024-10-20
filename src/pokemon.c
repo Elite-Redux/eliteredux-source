@@ -10745,7 +10745,7 @@ u16 getLearnsetMon(u16 species)
     }
 }
 
-u16 getBaseSpeciesFromMega(u16 species){
+u16 getBaseSpeciesFromMega(u16 species) {
     u16 baseSpecies = GetFormSpeciesId(species, 0);
 
     switch (species)
@@ -10766,15 +10766,9 @@ u16 getBaseSpeciesFromMega(u16 species){
         #define HANDLE_MEGA(species) case species##_MEGA: return species;
         HANDLE_MEGA(SPECIES_TSAREENA_REDUX)
         HANDLE_MEGA(SPECIES_HYDREIGON_REDUX)
-        HANDLE_MEGA(SPECIES_TINKATON)
-        HANDLE_MEGA(SPECIES_AMPHYBUZZ)
         HANDLE_MEGA(SPECIES_INFERNAPE_REDUX)
         HANDLE_MEGA(SPECIES_AEGISLASH_REDUX)
-        HANDLE_MEGA(SPECIES_POPCORM)
-        HANDLE_MEGA(SPECIES_GOLISOPOD)
         HANDLE_MEGA(SPECIES_REUNICLUS_REDUX)
-        HANDLE_MEGA(SPECIES_CORMOTH)
-        HANDLE_MEGA(SPECIES_ORICORIO)
         #undef HANDLE_MEGA
 
         case SPECIES_RAPIDASH_MEGA_GALARIAN: return SPECIES_RAPIDASH_GALARIAN;
@@ -10787,12 +10781,18 @@ u16 getBaseSpeciesFromMega(u16 species){
     }
 
     // Special cases
-    switch(species){
+    switch (species) {
         case SPECIES_GIRATINA_ORIGIN:
         case SPECIES_DIALGA_ORIGIN:
         case SPECIES_PALKIA_ORIGIN:
         case SPECIES_ZAMAZENTA_CROWNED_SHIELD:
         case SPECIES_ZACIAN_CROWNED_SWORD:
+        case SPECIES_ORICORIO_MEGA:
+        case SPECIES_CORMOTH_MEGA:
+        case SPECIES_GOLISOPOD_MEGA:
+        case SPECIES_POPCORM_MEGA:
+        case SPECIES_TINKATON_MEGA:
+        case SPECIES_AMPHYBUZZ_MEGA:
             return baseSpecies;
     }
 

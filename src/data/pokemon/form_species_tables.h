@@ -860,6 +860,8 @@ static const u16 sAegislashFormSpeciesIdTable[] = {
     SPECIES_AEGISLASH_BLADE_REDUX,
     SPECIES_AEGISLASH_REDUX,
     SPECIES_AEGISLASH_BLADE,
+    SPECIES_AEGISLASH_BLADE_REDUX_MEGA,
+    SPECIES_AEGISLASH_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 
@@ -1419,6 +1421,7 @@ static const u16 sReuniclusFormSpeciesIdTable[] = {
     SPECIES_REUNICLUS_PARTNER,
     SPECIES_REUNICLUS_PARTNER_B,
     SPECIES_REUNICLUS_PARTNER_C,
+    SPECIES_REUNICLUS_REDUX_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sDuosionFormSpeciesIdTable[] = {
@@ -2076,5 +2079,20 @@ static const u16 sVolcaronaFormSpeciesIdTable[] = {
     SPECIES_VOLCARONA_PARTNER,
     SPECIES_VOLCARONA_PARTNER_B,
     SPECIES_VOLCARONA_PARTNER_C,
+    FORM_SPECIES_END,
+};
+static const u16 sCormothFormSpeciesIdTable[] = {
+    SPECIES_CORMOTH,
+    SPECIES_CORMOTH_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sGolisopodFormSpeciesIdTable[] = {
+    SPECIES_GOLISOPOD,
+    SPECIES_GOLISOPOD_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sPopcormFormSpeciesIdTable[] = {
+    SPECIES_POPCORM,
+    SPECIES_POPCORM_MEGA,
     FORM_SPECIES_END,
 };
