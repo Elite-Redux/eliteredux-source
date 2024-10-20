@@ -1778,16 +1778,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SKY_ATTACK] =
     {
-        .effect = EFFECT_TWO_TURNS_ATTACK,
+        .effect = EFFECT_TWO_TURN_SECONDARY,
         .power = 140,
         .type = TYPE_FLYING,
         .accuracy = 90,
         .pp = 5,
-        .secondaryEffectChance = 30,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-        .argument = MOVE_EFFECT_FLINCH,
+        .argument = MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER,
         .twoTurnMove = TRUE,
     },
     [MOVE_TRANSFORM] =
