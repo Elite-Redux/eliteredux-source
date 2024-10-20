@@ -52,7 +52,7 @@
     b = temp;               \
 }
 
-//#define DEBUG_BUILD
+#define DEBUG_BUILD
 #define DEBUG_POKEMON_MENU   FALSE
 #define CURRENT_GAME_VERSION 1045
 
