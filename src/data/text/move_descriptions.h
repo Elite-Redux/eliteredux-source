@@ -379,8 +379,8 @@ static const u8 sMoveTwoLineDescription_MoveHypnosis[] = _(
     "may induce sleep.");
 
 static const u8 sMoveTwoLineDescription_MoveMeditate[] = _(
-    "Meditates in a peaceful\n"
-    "fashion to raise Attack.");
+    "Meditates peacefully to\n"
+    "raise Attack and SpDef.");
 
 static const u8 sMoveTwoLineDescription_MoveAgility[] = _(
     "Relaxes the body to sharply\n"
@@ -443,8 +443,8 @@ static const u8 sMoveTwoLineDescription_MoveDefenseCurl[] = _(
     "spots and raise Defense.");
 
 static const u8 sMoveTwoLineDescription_MoveBarrier[] = _(
-    "Creates a barrier that\n"
-    "sharply raises Defense.");
+    "Forms the Psychic Terrain\n"
+    "into a powerful barrier.");
 
 static const u8 sMoveTwoLineDescription_MoveLightScreen[] = _(
     "Creates a wall of light that\n"
@@ -4994,7 +4994,7 @@ static const u8 sMoveFourLineDescription_MoveToxic[] = _("A move that badly\npoi
 static const u8 sMoveFourLineDescription_MoveConfusion[] = _("A weak telekinetic\nattack that confuses\nthe foe.");
 static const u8 sMoveFourLineDescription_MovePsychic[] = _("A strong telekinetic\nattack. 20%\nchance to drop\nfoe's SpDef stat.");
 static const u8 sMoveFourLineDescription_MoveHypnosis[] = _("Hypnotic suggestion\nis used to make the\nfoe fall into a\ndeep sleep.");
-static const u8 sMoveFourLineDescription_MoveMeditate[] = _("The user meditates\nto awaken its power\nand raise its\nAttack stat.");
+static const u8 sMoveFourLineDescription_MoveMeditate[] = _("Meditates to raise\nAttack and Special\nDefense.");
 static const u8 sMoveFourLineDescription_MoveAgility[] = _("The user relaxes\nand lightens its\nbody to sharply\nboost its Speed.");
 static const u8 sMoveFourLineDescription_MoveQuickAttack[] = _("An almost invisibly\nfast attack with\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveRage[] = _("The user thrashes\nabout for two to\nthree turns, then\nbecomes confused.");
@@ -5010,7 +5010,7 @@ static const u8 sMoveFourLineDescription_MoveSmokescreen[] = _("Obscures the use
 static const u8 sMoveFourLineDescription_MoveConfuseRay[] = _("The foe is exposed\nto a sinister ray\nthat triggers\nconfusion.");
 static const u8 sMoveFourLineDescription_MoveWithdraw[] = _("The user withdraws\nits body in its hard\nshell, raising its\nDefense stat.");
 static const u8 sMoveFourLineDescription_MoveDefenseCurl[] = _("The user curls up\nto conceal weak\nspots and raise its\nDefense stat.");
-static const u8 sMoveFourLineDescription_MoveBarrier[] = _("The user creates a\nsturdy wall that\nsharply raises its\nDefense stat.");
+static const u8 sMoveFourLineDescription_MoveBarrier[] = _("The user sets Light\nScreen and Reflect\nif Psychic Terrain\nis active.");
 static const u8 sMoveFourLineDescription_MoveLightScreen[] = _("A wall of light\ncuts damage from\nSp. Atk attacks\nfor five turns.");
 static const u8 sMoveFourLineDescription_MoveHaze[] = _("Eliminates all stat\nchanges among all\nPokémon engaged in\nbattle.");
 static const u8 sMoveFourLineDescription_MoveReflect[] = _("A wall of light\ncuts damage from\nphysical attacks\nfor five turns.");

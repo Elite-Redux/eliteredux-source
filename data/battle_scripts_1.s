@@ -490,6 +490,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectTrepidation			  @ EFFECT_TREPIDATION
 	.4byte BattleScript_EffectChipAway				  @ EFFECT_CHIP_AWAY
 	.4byte BattleScript_EffectMeditate				  @ EFFECT_MEDITATE
+	.4byte BattleScript_EffectBarrier				  @ EFFECT_BARRIER
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -4452,6 +4453,30 @@ BattleScript_EffectAuroraVeil:
 	ppreduce
 	setauroraveil BS_ATTACKER
 	goto BattleScript_PrintReflectLightScreenSafeguardString
+
+BattleScript_EffectBarrier::
+	attackcanceler
+	attackstring
+	jumpifword CMP_NO_COMMON_BITS, gFieldStatuses, STATUS_FIELD_PSYCHIC_TERRAIN, BattleScript_ButItFailed
+	setlightscreen
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_SIDE_STATUS_FAILED, BattleScript_EffectBarrierNoLightScreen
+	attackanimation
+	waitanimation
+	printfromtable gReflectLightScreenSafeguardStringIds
+	waitmessage B_WAIT_TIME_LONG
+	setreflect
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_SIDE_STATUS_FAILED, BattleScript_MoveEnd
+	printfromtable gReflectLightScreenSafeguardStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+BattleScript_EffectBarrierNoLightScreen:
+	bichalfword gMoveResultFlags, MOVE_RESULT_MISSED
+	setreflect
+	attackanimation
+	waitanimation
+	printfromtable gReflectLightScreenSafeguardStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
 
 BattleScript_EffectLightScreen::
 	attackcanceler
