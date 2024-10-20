@@ -5711,6 +5711,7 @@ static void Cmd_moveend(void)
         case MOVEEND_RECOIL:
             gBattleScripting.moveendState++;
 
+            if (IS_MOVE_STATUS(gCurrentMove)) break;
             if (gMoveResultFlags & MOVE_RESULT_NO_EFFECT) break;
             if (gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE) break;
             if (!gBattleMoveDamage) break;
