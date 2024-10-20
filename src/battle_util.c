@@ -13941,6 +13941,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
             if (gBattleMoveDamage == 0)
                 gBattleMoveDamage = 1;
+            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
             BattleScriptCall(BattleScript_IronBarbsActivates);
             return TRUE;
 
@@ -13952,6 +13953,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 6;
             if (gBattleMoveDamage == 0)
                 gBattleMoveDamage = 1;
+            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
             BattleScriptCall(BattleScript_IronBarbsActivates);
             return TRUE;
         
