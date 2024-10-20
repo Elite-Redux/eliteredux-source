@@ -5516,14 +5516,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_CAPTIVATE] =
     {
         .effect = EFFECT_CAPTIVATE,
-        .power = 0,
-        .type = TYPE_NORMAL,
+        .power = 65,
+        .type = TYPE_FAIRY,
         .accuracy = 100,
         .pp = 20,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_BOTH,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED,
-        .split = SPLIT_STATUS,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
     },
     [MOVE_STEALTH_ROCK] =
     {
@@ -6181,7 +6181,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 20,
         .secondaryEffectChance = 40,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_STAT_STAGES_IGNORED | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STAT_STAGES_IGNORED,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_CLEAR_SMOG] =
@@ -10590,7 +10590,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_GHASTLY_ECHO] =
     {
         .effect = EFFECT_GHASTLY_ECHO,
-        .power = 60,
+        .power = 20,
         .type = TYPE_GHOST,
         .accuracy = 100,
         .pp = 10,

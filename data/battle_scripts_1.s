@@ -151,7 +151,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_PURSUIT
 	.4byte BattleScript_EffectRapidSpin               @ EFFECT_RAPID_SPIN
 	.4byte BattleScript_EffectSonicboom               @ EFFECT_SONICBOOM
-	.4byte BattleScript_EffectCaptivate               @ EFFECT_CAPTIVATE
+	.4byte BattleScript_EffectHit               	  @ EFFECT_CAPTIVATE
 	.4byte BattleScript_EffectMorningSun              @ EFFECT_MORNING_SUN
 	.4byte BattleScript_EffectSynthesis               @ EFFECT_SYNTHESIS
 	.4byte BattleScript_EffectMoonlight               @ EFFECT_MOONLIGHT
@@ -3285,16 +3285,6 @@ BattleScript_EffectRoost:
 	tryhealhalfhealth BattleScript_AlreadyAtFullHp, BS_TARGET
 	setroost
 	goto BattleScript_PresentHealTarget
-
-BattleScript_EffectCaptivate:
-	setstatchanger STAT_SPATK, 2, TRUE
-	attackcanceler
-	jumpifsubstituteblocks BattleScript_ButItFailedAtkStringPpReduce
-	jumpifoppositegenders BattleScript_CaptivateCheckAcc
-	goto BattleScript_ButItFailedAtkStringPpReduce
-BattleScript_CaptivateCheckAcc:
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	goto BattleScript_StatDownFromAttackString
 
 BattleScript_EffectHealBlock:
 	attackcanceler

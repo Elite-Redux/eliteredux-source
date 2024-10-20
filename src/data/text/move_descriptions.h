@@ -1775,8 +1775,8 @@ static const u8 sMoveTwoLineDescription_MoveStoneEdge[] = _(
     "High critical-hit ratio.");
 
 static const u8 sMoveTwoLineDescription_MoveCaptivate[] = _(
-    "Makes the opposite gender\n"
-    "sharply reduce its SpAtk");
+    "Deals additional damage\n"
+    "if the target is infatuated.");
 
 static const u8 sMoveTwoLineDescription_MoveStealthRock[] = _(
     "Sets floating stones that\n"
@@ -5343,7 +5343,7 @@ static const u8 sMoveFourLineDescription_MoveGunkShot[] = _("Filthy garbage is\n
 static const u8 sMoveFourLineDescription_MoveIronHead[] = _("The user slams the\nfoe with its steel-\nhard head. 30%\nflinch chance.");
 static const u8 sMoveFourLineDescription_MoveMagnetBomb[] = _("Launches a magnetic\nbomb that is Super\nEffective vs Steel.\nNever misses.");
 static const u8 sMoveFourLineDescription_MoveStoneEdge[] = _("Sharpened stones\nstab the foe from\nbelow. Critical hits\nland more easily.");
-static const u8 sMoveFourLineDescription_MoveCaptivate[] = _("Foes of a different\ngender are charmed,\nharshly lowering\ntheir Sp. Atk stat.");
+static const u8 sMoveFourLineDescription_MoveCaptivate[] = _("Deals double damage\nvs infatuated foes.");
 static const u8 sMoveFourLineDescription_MoveStealthRock[] = _("Levitating stones\nsurround the foe.\nThis hurts foes\nthat switch in.");
 static const u8 sMoveFourLineDescription_MoveGrassKnot[] = _("A snaring grass\ntrap that inflicts\nmore damage on\nheavier foes.");
 static const u8 sMoveFourLineDescription_MoveChatter[] = _("The foe is left\nconfused by sound\nwaves of deafening\nchatter.");

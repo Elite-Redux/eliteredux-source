@@ -9044,6 +9044,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (gBattleMons[battlerDef].status1 & STATUS1_ANY || BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMATOSE) || IsBloodStainAffected(battlerDef))
             basePower *= 2;
         break;
+    case EFFECT_CAPTIVATE:
+        if (gBattleMons[battlerDef].status2 & STATUS2_INFATUATION)
+            basePower *= 2;
+        break;
     case EFFECT_ASSURANCE:
         if (gRoundStructs[battlerDef].damaged)
             basePower *= 2;
