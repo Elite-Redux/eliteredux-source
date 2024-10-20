@@ -489,6 +489,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectShowtime				  @ EFFECT_SHOWTIME
 	.4byte BattleScript_EffectTrepidation			  @ EFFECT_TREPIDATION
 	.4byte BattleScript_EffectChipAway				  @ EFFECT_CHIP_AWAY
+	.4byte BattleScript_EffectMeditate				  @ EFFECT_MEDITATE
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -7167,6 +7168,31 @@ BattleScript_EffectTakeHeart_DoAnim:
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_CalmMindDoBoosts
 	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_MoveEnd
 	goto BattleScript_CalmMindDoBoosts
+
+BattleScript_EffectMeditate:
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_EffectMeditateDoMoveAnim
+	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_CantRaiseMultipleStats
+BattleScript_EffectMeditateDoMoveAnim::
+	attackanimation
+	waitanimation
+BattleScript_EffectMeditateDoBoosts:
+	setbyte sSTAT_ANIM_PLAYED, FALSE
+	playstatchangeanimation BS_ATTACKER, BIT_ATK | BIT_SPDEF, 0
+	setstatchanger STAT_ATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_EffectMeditateTrySpDef
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_EffectMeditateTrySpDef
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_EffectMeditateTrySpDef::
+	setstatchanger STAT_SPDEF, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_MoveEnd
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_MoveEnd
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
 
 BattleScript_EffectCalmMind::
 	attackcanceler
