@@ -1485,9 +1485,12 @@ bool8 WasUnableToUseMove(u8 battler)
 
 void PrepareStringBattle(u16 stringId, u8 battler)
 {
-    bool8 hasContrary = BATTLER_HAS_ABILITY(battler, ABILITY_CONTRARY);
-    bool8 targetHasContrary = BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_CONTRARY);
-    u8 abilityBattler;
+    int hasContrary, targetHasContrary, abilityBattler;
+
+    if (battler >= gBattlersCount) battler = BATTLE_PARTNER(battler);
+
+    hasContrary = BATTLER_HAS_ABILITY(battler, ABILITY_CONTRARY);
+    targetHasContrary = BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_CONTRARY);
 
     //Overwrite
     if(VarGet(VAR_TEMP_BATTLE_STRING_OVERWRITE_1) != 0){
