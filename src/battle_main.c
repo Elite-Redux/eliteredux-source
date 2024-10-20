@@ -5185,7 +5185,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     gBattlerAttacker = battler2;
     speedBattler2 = GetBattlerTotalSpeedStat(battler2, TOTAL_SPEED_FULL);
 
-    gBattlerAttacker = gBattlerAttacker;
+    gBattlerAttacker = storedBattlerAtk;
 
     if (!ignoreChosenMoves)
     {
