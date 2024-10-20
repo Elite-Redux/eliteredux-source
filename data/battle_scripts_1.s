@@ -477,6 +477,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectMysticDance			  @ EFFECT_MYSTIC_DANCE
 	.4byte BattleScript_EffectSnapJaw   			  @ EFFECT_SNAP_JAW
 	.4byte BattleScript_EffectRipAndTear			  @ EFFECT_RIP_AND_TEAR
+	.4byte BattleScript_EffectSkyDrop				  @ EFFECT_SKY_DROP
 	.4byte BattleScript_EffectTerrorCharge			  @ EFFECT_TERROR_CHARGE
 	.4byte BattleScript_EffectTailwindHit		      @ EFFECT_TAILWIND_HIT
 	.4byte BattleScript_EffectSandstormHit			  @ EFFECT_SANDSTORM_HIT
@@ -485,6 +486,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCreepingThornsHit		  @ EFFECT_CREEPING_THORNS_HIT
 	.4byte BattleScript_EffectTakeHeart				  @ EFFECT_TAKE_HEART
 	.4byte BattleScript_EffectClearSkies			  @ EFFECT_CLEAR_SKIES
+	.4byte BattleScript_EffectShowtime				  @ EFFECT_SHOWTIME
 	.4byte BattleScript_EffectTrepidation			  @ EFFECT_TREPIDATION
 	
 BattleScript_EffectCourtChange:
@@ -6253,7 +6255,7 @@ BattleScript_SkyDropEndsEarly::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
-BattleScript_SkyDrop::
+BattleScript_EffectSkyDrop::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_SkyDrop_TurnTwo
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
