@@ -593,7 +593,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     if(gVolatileStructs[battlerAtk].disabledMove == move && gVolatileStructs[battlerAtk].disableTimer != 0)
         RETURN_SCORE_MINUS(20);
     
-    if (!IS_MOVE_STATUS(move) && GetAbilityState(battlerAtk, ABILITY_TRUANT));
+    if (!IS_MOVE_STATUS(move) && GetAbilityState(battlerAtk, ABILITY_TRUANT))
         RETURN_SCORE_MINUS(20);
 
     GET_MOVE_TYPE(move, moveType);
