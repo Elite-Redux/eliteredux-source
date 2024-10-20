@@ -12953,13 +12953,16 @@ BattleScriptCall(BattleScript_AbilityStatusEffect); \
 gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
 
 int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) {
-    u16 abilities[4] = {0};
+    u16 abilities[TOTAL_ABILITY_COUNT] = {0};
     int i, ability, moveType;
+
+    if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
+    abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
 
     GET_MOVE_TYPE(move, moveType)
     gBattlerAbility = battler;
 
-    if (abilityNumber > NUM_ABILITY_SLOTS)
+    if (abilityNumber == TOTAL_ABILITY_COUNT)
     {
         return HandleMiscAbilityMoveEffects(battler, target, move);
     }
@@ -13721,13 +13724,16 @@ static int HandleDefenderAbilityAs(int ability, int battler, int attacker, int m
 
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move)
 {
-    u16 abilities[4] = {0};
+    u16 abilities[TOTAL_ABILITY_COUNT] = {0};
     int i, ability, moveType;
+
+    if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
+    abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
 
     GET_MOVE_TYPE(move, moveType)
     gBattlerAbility = battler;
 
-    if (abilityNumber > NUM_ABILITY_SLOTS)
+    if (abilityNumber == TOTAL_ABILITY_COUNT)
     {
         return HandleMiscAbilityMoveEffects(battler, attacker, move);
     }
@@ -14683,10 +14689,13 @@ static int HandleSwitchInAbilityAs(int ability, int battler);
 
 int HandleSwitchInAbility(int abilityNumber, int battler)
 {
-    u16 abilities[4] = {0};
+    u16 abilities[TOTAL_ABILITY_COUNT] = {0};
     int ability;
 
-    if (abilityNumber > NUM_ABILITY_SLOTS)
+    if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
+    abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
+
+    if (abilityNumber == TOTAL_ABILITY_COUNT)
     {
         int effect = 0;
         {
@@ -15899,9 +15908,12 @@ int HandleEndTurnAbility(int abilityNumber, int battler)
     u16 abilities[4] = {0};
     int ability;
 
+    if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
+    abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
+
     gBattlerAttacker = gBattlerAbility = battler;
 
-    if (abilityNumber > NUM_ABILITY_SLOTS)
+    if (abilityNumber == TOTAL_ABILITY_COUNT)
     {
         // TODO: Handle non-ability actions that happen in this pass
         return FALSE;
