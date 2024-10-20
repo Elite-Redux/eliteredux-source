@@ -1441,7 +1441,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TO_THE_BONE] = _("To The Bone"),
     [ABILITY_BLADE_DANCE] = _("Blade Dance"),
     [ABILITY_TAEKKYEON] = _("Taekkyeon"),
-    [ABILITY_APE_SHIFT] = _("Ape Shfit"),
+    [ABILITY_APE_SHIFT] = _("Ape Shift"),
     [ABILITY_KNOW_YOUR_PLACE] = _("Know Your Place"),
 };
 
