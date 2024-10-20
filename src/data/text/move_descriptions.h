@@ -3884,7 +3884,7 @@ static const u8 sMoveTwoLineDescription_MoveDragonJab[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveIcicleImpale[] = _(
     "Jabs with a horn.\n"
-    "can lower defense.");
+    "May lower defense.");
 
 static const u8 sMoveTwoLineDescription_MoveToxicPlunge[] = _(
     "Dives into a pool of poison\n"
@@ -5885,8 +5885,8 @@ static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\
 static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Hits both opponents.\n30% chance to flinch.\nAir based.");
 static const u8 sMoveFourLineDescription_MoveBadEgg[] = _("Throws an egg filled\nwith toxins. Badly\npoisons the target");
 static const u8 sMoveFourLineDescription_MoveMysticalPower[] = _("Deals damage and\nraises the user's\nhighest attack or\ndefense by 1 stage.");
-static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("A Jabbing attack. 30% to\ninflict bleed.\nMighty Horn boost.");
-static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("A Jabbing attack. 30% to\nlower defense.\nMighty Horn boost.");
+static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("A jabbing attack. 30% to\nchance to inflict\nbleeding. Mighty\nHorn boost.");
+static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("A jabbing attack. 30% to\nchance to lower\nDefense. Mighty\nHorn boost.");
 static const u8 sMoveFourLineDescription_MoveToxicPlunge[] = _("Dives and then\nattacks on the next\nturn. 20% chance to\npoison.");
 static const u8 sMoveFourLineDescription_MoveShowtime[] = _("Clears other rooms\nand sets Magic Room,\nthen switches to an\nally.");
 static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("Deals damage and\nraises the user's\nhighest attack or\ndefense by 1 stage.");
