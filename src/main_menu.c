@@ -53,6 +53,7 @@
 #include "constants/rgb.h"
 #include "constants/vars.h"
 #include "script.h"
+#include "mgba_printf/mgba.h"
 
 /*
  * Main menu state machine
@@ -767,10 +768,14 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
         switch (gSaveFileStatus)
         {
             case SAVE_STATUS_OK:
-            if(VarGet(VAR_SAVE_VERSION) <= CURRENT_GAME_VERSION){
+            if (!VarGet(VAR_SAVE_VERSION))
+            {
+                // Temporary fix
+                VarSet(VAR_SAVE_VERSION, CURRENT_GAME_VERSION);
+            }
+            else if (VarGet(VAR_SAVE_VERSION) <= CURRENT_GAME_VERSION) {
                 //No problems
                 if(VarGet(VAR_SAVE_VERSION) < CURRENT_GAME_VERSION){
-
                     if (VarGet(VAR_SAVE_VERSION) <= 1042)
                     {
                         int i, j;

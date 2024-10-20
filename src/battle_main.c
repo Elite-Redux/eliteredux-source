@@ -4004,22 +4004,18 @@ static void TryDoEventsBeforeFirstTurn(void)
         return;
     }
     
-
     // Check all switch in abilities happening from the fastest mon to slowest.
     while (gBattleStruct->switchInAbilitiesCounter < gBattlersCount)
     {
         if (!gBattleStruct->firstTurnAbilityLoopCounter)
         {
-            gBattlerAttacker = gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter++];
+            gBattlerAttacker = gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter];
             if (!IsBattlerAlive(gBattlerAttacker)) continue;
 
             ClearMiscTurnFlags();
             // Primal Reversion
             if (TryPrimalReversion(gBattlerAttacker, FALSE))
-            {
-                gBattleStruct->switchInAbilitiesCounter--;
                 return;
-            }
         }
         while (gBattleStruct->firstTurnAbilityLoopCounter <= NUM_ABILITY_SLOTS + 1)
         {
@@ -4027,6 +4023,7 @@ static void TryDoEventsBeforeFirstTurn(void)
                 return;
         }
         gBattleStruct->firstTurnAbilityLoopCounter = 0;
+        gBattleStruct->switchInAbilitiesCounter++;
     }
     ClearMiscTurnFlags();
     if (AbilityBattleEffects(ABILITYEFFECT_TRACE1, 0, 0, 0, 0) != 0)
@@ -4529,8 +4526,8 @@ static void HandleTurnActionSelectionState(void)
                     #ifdef DEBUG_BUILD
                     BtlController_EmitDebugMenu(0);
                     MarkBattlerForControllerExec(gActiveBattler);
-                    break;
                     #endif
+                    break;
                 }
                 
                 if (gBattleTypeFlags & BATTLE_TYPE_TRAINER

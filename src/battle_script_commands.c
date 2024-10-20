@@ -2869,9 +2869,8 @@ static void Cmd_printstring(void)
 {
     if (gBattleControllerExecFlags == 0)
     {
-        u16 var = T2_READ_16(gBattlescriptCurrInstr + 1);
+        u16 var = READ_FIRST_16_INC;
 
-        gBattlescriptCurrInstr += 3;
         PrepareStringBattle(var, gBattlerAttacker);
         gBattleCommunication[MSG_DISPLAY] = 1;
     }
@@ -6715,13 +6714,13 @@ static void Cmd_openpartyscreen(void)
     u32 flags;
     u8 hitmarkerFaintBits;
     u8 battlerId;
-    const u8 *jumpPtr;
+    int mode = READ_FIRST_8_INC;
+    const u8 *jumpPtr = READ_PTR_INC;
 
     battlerId = 0;
     flags = 0;
-    jumpPtr = T1_READ_PTR(gBattlescriptCurrInstr + 2);
 
-    if (gBattlescriptCurrInstr[1] == BS_FAINTED_LINK_MULTIPLE_1)
+    if (mode == BS_FAINTED_LINK_MULTIPLE_1)
     {
         if ((gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_MULTI)) != BATTLE_TYPE_DOUBLE)
         {
@@ -6874,9 +6873,8 @@ static void Cmd_openpartyscreen(void)
                 }
             }
         }
-        gBattlescriptCurrInstr += 6;
     }
-    else if (gBattlescriptCurrInstr[1] == BS_FAINTED_LINK_MULTIPLE_2)
+    else if (mode == BS_FAINTED_LINK_MULTIPLE_2)
     {
         if (!(gBattleTypeFlags & BATTLE_TYPE_MULTI))
         {
@@ -6915,16 +6913,7 @@ static void Cmd_openpartyscreen(void)
                         gTurnStructs[gActiveBattler].flag40 = 1;
                     }
                 }
-                gBattlescriptCurrInstr += 6;
             }
-            else
-            {
-                gBattlescriptCurrInstr += 6;
-            }
-        }
-        else
-        {
-            gBattlescriptCurrInstr += 6;
         }
 
         hitmarkerFaintBits = gHitMarker >> 28;
@@ -6939,17 +6928,16 @@ static void Cmd_openpartyscreen(void)
     }
     else
     {
-        if (gBattlescriptCurrInstr[1] == BS_CHOOSE_FAINTED_MON)
+        if (mode == BS_CHOOSE_FAINTED_MON)
             hitmarkerFaintBits = PARTY_ACTION_CHOOSE_FAINTED_MON;
-        else if (gBattlescriptCurrInstr[1] & PARTY_SCREEN_OPTIONAL)
+        else if (mode & PARTY_SCREEN_OPTIONAL)
             hitmarkerFaintBits = PARTY_ACTION_CHOOSE_MON; // Used here as the caseId for the EmitChoose function.
         else
             hitmarkerFaintBits = PARTY_ACTION_SEND_OUT;
 
-        battlerId = GetBattlerForBattleScript(gBattlescriptCurrInstr[1] & ~(PARTY_SCREEN_OPTIONAL));
+        battlerId = GetBattlerForBattleScript(mode & ~(PARTY_SCREEN_OPTIONAL));
         if (gTurnStructs[battlerId].flag40)
         {
-            gBattlescriptCurrInstr += 6;
             return;
         }
 
@@ -6975,8 +6963,6 @@ static void Cmd_openpartyscreen(void)
 
         BtlController_EmitChoosePokemon(0, hitmarkerFaintBits, *(gBattleStruct->monToSwitchIntoId + (gActiveBattler ^ 2)), ABILITY_NONE, gBattleStruct->battlerPartyOrders[gActiveBattler]);
         MarkBattlerForControllerExec(gActiveBattler);
-
-        gBattlescriptCurrInstr += 6;
 
         if (hitmarkerFaintBits != PARTY_ACTION_CHOOSE_FAINTED_MON
             && GetBattlerPosition(gActiveBattler) == 0
@@ -8654,6 +8640,7 @@ static void Cmd_various(void)
     u8 statId;
     const u8* ptr;
     const u8* runAgain;
+    int cmd;
 
     if (gBattleControllerExecFlags)
         return;
@@ -8662,7 +8649,9 @@ static void Cmd_various(void)
 
     gActiveBattler = GetBattlerForBattleScript(READ_8_INC);
 
-    switch (READ_8_INC)
+    cmd = READ_8_INC;
+
+    switch (cmd)
     {
     // Roar will fail in a double wild battle when used by the player against one of the two alive wild mons.
     // Also when an opposing wild mon uses it againt its partner.
@@ -11315,6 +11304,31 @@ static void Cmd_various(void)
             gFieldTimers.started.clearSkiesTimer = TRUE;
         }
         return;
+    case VARIOUS_SHOWTIME:
+        {
+        int mode = READ_8_INC;
+        ptr = READ_PTR_INC;
+
+        switch (mode)
+        {
+        case 0:
+            if (gFieldTimers.trickRoomTimer || gFieldTimers.wonderRoomTimer || gFieldTimers.inverseRoomTimer)
+                gFieldTimers.trickRoomTimer = gFieldTimers.wonderRoomTimer = gFieldTimers.inverseRoomTimer = 0;
+            else
+                gBattlescriptCurrInstr = ptr;
+
+        case 1:
+            if (gFieldTimers.magicRoomTimer)
+                gBattlescriptCurrInstr = ptr;
+            else
+            {
+                gFieldTimers.magicRoomTimer = MAGIC_ROOM_DURATION;
+                gFieldTimers.started.magicRoom = TRUE;
+            }
+            return;
+        }
+        return;
+        }
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 
@@ -14722,6 +14736,7 @@ static void Cmd_setsemiinvulnerablebit(void)
     case MOVE_DIG:
         gStatuses3[gBattlerAttacker] |= STATUS3_UNDERGROUND;
         break;
+    case MOVE_TOXIC_PLUNGE:
     case MOVE_DIVE:
         gStatuses3[gBattlerAttacker] |= STATUS3_UNDERWATER;
         break;

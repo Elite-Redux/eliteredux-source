@@ -2106,8 +2106,8 @@ const u8 sText_Title_Status_Bleed_Description[]            = _("Prevents healing
 
 //Secondary Status
 const u8 sText_Title_Status_Confusion[]                    = _("Confused");
-const u8 sText_Title_Status_Confusion_Description[]        = _("This Pokémon takes 33% of the damage"
-                                                               "it deals as recoil.");
+const u8 sText_Title_Status_Confusion_Description[]        = _("This Pokémon takes 33% of the\n"
+                                                               "damage it deals as recoil.");
 const u8 sText_Title_Status_IncomingAttack[]               = _("Incoming Attack");
 const u8 sText_Title_Status_IncomingAttack_Description[]   = _("Will be hit by {STR_VAR_1}'s\n"
                                                                "{STR_VAR_2} with a power of {STR_VAR_3}\n"

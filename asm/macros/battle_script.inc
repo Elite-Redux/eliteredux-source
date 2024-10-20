@@ -2350,6 +2350,12 @@
 	.4byte \onFail
 	.endm
 
+	.macro showtime mode:req, onFail:req
+	various BS_ATTACKER, VARIOUS_SHOWTIME
+	.byte \mode
+	.4byte \onFail
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

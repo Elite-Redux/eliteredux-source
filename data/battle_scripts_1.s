@@ -6292,6 +6292,7 @@ BattleScript_EffectSemiInvulnerable::
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_SecondTurnSemiInvulnerable
 	jumpifmove MOVE_FLY, BattleScript_FirstTurnFly
 	jumpifmove MOVE_DIVE, BattleScript_FirstTurnDive
+	jumpifmove MOVE_TOXIC_PLUNGE, BattleScript_FirstTurnDive
 	jumpifmove MOVE_BOUNCE, BattleScript_FirstTurnBounce
 	jumpifmove MOVE_PHANTOM_FORCE, BattleScript_FirstTurnPhantomForce
 	jumpifmove MOVE_SHADOW_FORCE, BattleScript_FirstTurnPhantomForce
@@ -13028,4 +13029,32 @@ BattleScript_TargetDazed::
 	printstring STRINGID_RUDE_AWAKENING
 	waitmessage B_WAIT_TIME_LONG
 	return
+
+BattleScript_AnnounceRoomsCleared::
+	printstring STRINGID_ROOMS_CLEARED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_EffectShowtime::
+	attackcanceler
+	ppreduce
+	showtime 0, BattleScript_EffectShowtime_NoSetRoom
+	call BattleScript_PlayAnimation
+	printstring STRINGID_HELDITEMSLOSEEFFECTS
+	waitmessage B_WAIT_TIME_LONG
+	showtime 1, BattleScript_MoveSwitch
+	printstring STRINGID_ROOMS_CLEARED
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveSwitch
+BattleScript_EffectShowtime_NoSetRoom:
+	showtime 1, BattleScript_EffectShowtime_NoClearRoom
+	call BattleScript_PlayAnimation
+	printstring STRINGID_ROOMS_CLEARED
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveSwitch
+BattleScript_EffectShowtime_NoClearRoom:
+	jumpifbattletype BATTLE_TYPE_ARENA, BattleScript_ButItFailed
+	jumpifcantswitch SWITCH_IGNORE_ESCAPE_PREVENTION | BS_ATTACKER, BattleScript_ButItFailed
+	call BattleScript_PlayAnimation
+	goto BattleScript_MoveSwitch
 
