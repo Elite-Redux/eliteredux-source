@@ -8653,14 +8653,16 @@ static void Cmd_various(void)
     u8 statId;
     const u8* ptr;
     const u8* runAgain;
+    int battlerType;
     int cmd;
 
     if (gBattleControllerExecFlags)
         return;
     
     runAgain = gBattlescriptCurrInstr++;
+    battlerType = READ_8_INC;
 
-    gActiveBattler = GetBattlerForBattleScript(READ_8_INC);
+    gActiveBattler = GetBattlerForBattleScript(battlerType);
 
     cmd = READ_8_INC;
 
@@ -8986,7 +8988,7 @@ static void Cmd_various(void)
         RemoveArenaRefereeTextBox();
         break;
     case VARIOUS_ARENA_JUDGMENT_STRING:
-        BattleStringExpandPlaceholdersToDisplayedString(gRefereeStringsTable[gBattlescriptCurrInstr[1]]);
+        BattleStringExpandPlaceholdersToDisplayedString(gRefereeStringsTable[battlerType]);
         BattlePutTextOnWindow(gDisplayedStringBattle, ARENA_WIN_JUDGMENT_TEXT);
         break;
     case VARIOUS_ARENA_WAIT_STRING:
@@ -9600,8 +9602,10 @@ static void Cmd_various(void)
             mon = &gPlayerParty[gBattlerPartyIndexes[gActiveBattler]];
 
         // Change species.
-        if (READ_8_INC == 0)
+        switch (READ_8_INC)
         {
+        case 0:
+            {
             u16 megaSpecies;
             gBattleStruct->mega.evolvedSpecies[gActiveBattler] = gBattleMons[gActiveBattler].species;
             if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER)
@@ -9628,19 +9632,16 @@ static void Cmd_various(void)
 
             BtlController_EmitSetMonData(0, REQUEST_SPECIES_BATTLE, gBitTable[gBattlerPartyIndexes[gActiveBattler]], 2, &gBattleMons[gActiveBattler].species);
             MarkBattlerForControllerExec(gActiveBattler);
-        }
+            }
         // Change stats.
-        else if (gBattlescriptCurrInstr[3] == 1)
-        {
+        case 1:
             RecalcBattlerStats(gActiveBattler, mon);
             if (ItemId_GetHoldEffect(gBattleMons[gActiveBattler].item) != HOLD_EFFECT_PRIMAL_ORB) {
                 gBattleStruct->mega.alreadyEvolved[GetBattlerPosition(gActiveBattler)] = TRUE;
                 gBattleStruct->mega.evolvedPartyIds[GetBattlerSide(gActiveBattler)] |= gBitTable[gBattlerPartyIndexes[gActiveBattler]];
             }
-        }
         // Update healthbox and elevation.
-        else
-        {
+        case 2:
             UpdateHealthboxAttribute(gHealthboxSpriteIds[gActiveBattler], mon, HEALTHBOX_ALL);
             //CreateMegaIndicatorSprite(gActiveBattler, 0);
             if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
