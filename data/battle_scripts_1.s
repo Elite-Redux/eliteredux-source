@@ -9632,7 +9632,6 @@ BattleScript_SelfSufficientActivates::
 	end3
 	
 BattleScript_BattlerEnvelopedItselfInAVeil::
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_BATTLERENVELOPEDITSELFINAVEIL
 	waitmessage B_WAIT_TIME_LONG

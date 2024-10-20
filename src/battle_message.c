@@ -665,7 +665,7 @@ static const u8 sText_BattlerAddedTheType[] = _("{B_ACTIVE_NAME_WITH_PREFIX} add
 static const u8 sText_BattlerCoiledUp[] = _("{B_ACTIVE_NAME_WITH_PREFIX} coiled up\nand is ready to bite!");
 static const u8 sText_AttackerTypeChangedTo[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s type\nchanged to {B_BUFF1}!");
 static const u8 sText_AbilityRestoredHPALittle[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s ability\nrestored it's HP a little!");
-static const u8 sText_BattlerEnvelopedItselfInAVeil[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s enveloped itself in\na veil made of water.");
+static const u8 sText_BattlerEnvelopedItselfInAVeil[] = _("{B_ATK_NAME_WITH_PREFIX} enveloped itself in\na veil made of water.");
 static const u8 sText_BattlerAbilitySetUpTailwind[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s Air Blower set up\nTailwind!");
 static const u8 sText_TargetPkmnHurtsWith[] = _("{B_DEF_NAME_WITH_PREFIX} was hurt by\n{B_ATK_NAME_WITH_PREFIX}'s {B_BUFF1}!");
 static const u8 sText_PkmnCutsSpecialAttackWith[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s Ability\ncuts {B_DEF_NAME_WITH_PREFIX}'s Special Attack!");
@@ -2482,7 +2482,7 @@ const u16 gFaintMonMessage[] =
 const u16 gRecoilMessage[] = 
 {
     [B_MSG_RECOIL_NORMAL] = STRINGID_PKMNHITWITHRECOIL,
-    [B_MSG_RECOIL_CONFUSION] = STRINGID_TRAINER1LOSETEXT,
+    [B_MSG_RECOIL_CONFUSION] = STRINGID_ITHURTCONFUSION,
     [B_MSG_RECOIL_STRAIN] = STRINGID_SUPER_STRAIN_RECOIL,
 };
 

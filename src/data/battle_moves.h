@@ -11767,14 +11767,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BONK] =
     {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
-        .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 0,
-        .secondaryEffectChance = 0,
+        .effect = EFFECT_ARGUMENT_HIT,
+        .power = 75,
+        .type = TYPE_FAIRY,
+        .accuracy = 100,
+        .pp = 5,
+        .secondaryEffectChance = 50,
         .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
+        .argument = MOVE_EFFECT_YAWN,
         .hammerBased = TRUE,
     },
     [MOVE_MOLTEN_STRIKE] =
@@ -12327,7 +12329,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_MYSTICAL_POWER] =
     {
-        .effect = EFFECT_SPECIAL_ATTACK_UP_HIT,
+        .effect = EFFECT_ARGUMENT_HIT,
         .power = 70,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
@@ -12336,6 +12338,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1 | MOVE_EFFECT_AFFECTS_USER,
         .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_DRAGON_JAB] =
@@ -12380,13 +12383,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SHOWTIME] =
     {
-        .effect = EFFECT_PLACEHOLDER,
+        .effect = EFFECT_SHOWTIME,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_PSYCHIC,
         .accuracy = 0,
-        .pp = 0,
+        .pp = 5,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
+        .target = MOVE_TARGET_USER,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_BANISHED_POWER] =
@@ -12400,6 +12403,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1 | MOVE_EFFECT_AFFECTS_USER,
         .splitFlag = USE_HIGHEST_OFFENSE,
     },
     [MOVE_TRIPLE_TREMOR] =
