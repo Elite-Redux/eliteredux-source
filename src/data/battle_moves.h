@@ -12381,13 +12381,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SHOWTIME] =
     {
-        .effect = EFFECT_PLACEHOLDER,
+        .effect = EFFECT_SHOWTIME,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_PSYCHIC,
         .accuracy = 0,
-        .pp = 0,
+        .pp = 5,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
+        .target = MOVE_TARGET_USER,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_BANISHED_POWER] =
