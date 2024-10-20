@@ -3875,7 +3875,8 @@ static const u8 sMoveTwoLineDescription_MoveBadEgg[] = _(
     "toxins. Poisons on hit.");
 
 static const u8 sMoveTwoLineDescription_MoveMysticalPower[] = _(
-    "Not implemented");
+    "Strikes with a strange power\n"
+    "that empowers the user.");
 
 static const u8 sMoveTwoLineDescription_MoveDragonJab[] = _(
     "Jabs with a horn.\n"
@@ -3894,7 +3895,8 @@ static const u8 sMoveTwoLineDescription_MoveShowtime[] = _(
     "Room then bows out.");
 
 static const u8 sMoveTwoLineDescription_MoveBanishedPower[] = _(
-    "Not implemented");
+    "Strikes with a forbidden power\n"
+    "that empowers the user.");
 
 static const u8 sMoveTwoLineDescription_MoveTripleTremor[] = _(
     "Strikes with three intensifying\n"
@@ -5882,12 +5884,12 @@ static const u8 sMoveFourLineDescription_MoveZapJive[] = _("50% chance to raise\
 static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\nSpeed. Dance move.");
 static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Hits both opponents.\n30% chance to flinch.\nAir based.");
 static const u8 sMoveFourLineDescription_MoveBadEgg[] = _("Throws an egg filled\nwith toxins. Badly\npoisons the target");
-static const u8 sMoveFourLineDescription_MoveMysticalPower[] = _("");
+static const u8 sMoveFourLineDescription_MoveMysticalPower[] = _("Deals damage and\nraises the user's\nhighest attack or\ndefense by 1 stage.");
 static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("A Jabbing attack. 30% to\ninflict bleed.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("A Jabbing attack. 30% to\nlower defense.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveToxicPlunge[] = _("Dives and then\nattacks on the next\nturn. 20% chance to\npoison.");
 static const u8 sMoveFourLineDescription_MoveShowtime[] = _("Clears other rooms\nand sets Magic Room,\nthen switches to an\nally.");
-static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("");
+static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("Deals damage and\nraises the user's\nhighest attack or\ndefense by 1 stage.");
 static const u8 sMoveFourLineDescription_MoveTripleTremor[] = _("Hits three times.\nMore powerful with\neach successive hit.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
