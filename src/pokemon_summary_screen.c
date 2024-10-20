@@ -2859,7 +2859,7 @@ static void GenerateMoveReplaceList(u8 keyPress){
     sMonSummaryScreen->numMenuChoices = 0;
     newMove = MOVE_NONE;
 
-    species     = sMonSummaryScreen->summary.species2;
+    species     = getLearnsetMon(sMonSummaryScreen->summary.species2);
     level       = sMonSummaryScreen->summary.level;
     personality = sMonSummaryScreen->summary.pid;
 

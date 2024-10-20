@@ -3965,6 +3965,17 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gStatuses3[gEffectBattler] |= STATUS3_HEAL_BLOCK;
                     gVolatileStructs[gEffectBattler].healBlockTimer = 2;
                 }
+            case MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1:
+                {
+                int speed = gBattleMons[gEffectBattler].speed;
+                int statId;
+                gBattleMons[gEffectBattler].speed = 0;
+                statId = GetHighestStatId(gEffectBattler, FALSE);
+                gBattleMons[gEffectBattler].speed = speed;
+
+                SET_MOVE_EFFECT_AS((MOVE_EFFECT_ATK_PLUS_1 - STAT_ATK + statId) | affectsUser)
+                break;
+                }
             }
         }
     }
