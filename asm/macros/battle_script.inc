@@ -2361,6 +2361,11 @@
 	.4byte \onFail
 	.endm
 
+	.macro dohazarddamage target:req, mode=HAZARD_MODE_SPIKES
+	various \target, VARIOUS_DO_HAZARD_DAMAGE
+	.byte \mode
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

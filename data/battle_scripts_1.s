@@ -6275,13 +6275,26 @@ BattleScript_SkyDrop_TurnTwo:
 	jumpifmove MOVE_SEISMIC_TOSS, BattleScript_SkyDrop_SeismicToss
 	critcalc
 	damagecalc
-	adjustdamage
-	goto BattleScript_HitFromAtkAnimation
+	goto BattleScript_SkyDrop_DoDamage
 BattleScript_SkyDrop_SeismicToss:
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	calculatesetdamage
+BattleScript_SkyDrop_DoDamage:
 	adjustdamage
-	goto BattleScript_HitFromAtkAnimation
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	seteffectwithchance
+	dohazarddamage BS_TARGET
+	goto BattleScript_MoveEndTryFaintTarget
 
 BattleScript_EffectSemiInvulnerable::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_SecondTurnSemiInvulnerable
@@ -8068,50 +8081,37 @@ BattleScript_DestinyBondTakesLife::
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
 
-BattleScript_DmgHazardsOnAttacker::
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	call BattleScript_PrintHurtByDmgHazards
-	tryfaintmon BS_ATTACKER, FALSE, NULL
-	tryfaintmon BS_ATTACKER, TRUE, BattleScript_DmgHazardsOnAttackerFainted
+BattleScript_ResolveAllHazards::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_SPIKES
 	return
 
-BattleScript_DmgHazardsOnAttackerFainted::
-	setbyte sGIVEEXP_STATE, 0
-	getexp BS_ATTACKER
-	moveendall
-	goto BattleScript_HandleFaintedMon
+BattleScript_ResolveRocks::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_ROCKS
+	return
 
-BattleScript_DmgHazardsOnTarget::
+BattleScript_ResolvePoisonSpikes::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_WEBS
+	return
+
+BattleScript_ResolveWebs::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_POISON_SPIKES
+	return
+
+BattleScript_ResolveFireTrap::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_FIRE_TRAP
+	return
+
+BattleScript_ResolveCaltrops::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_CALTROPS
+	return
+
+BattleScript_DmgHazards::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
+	healthbarupdate BS_STACK_1
+	datahpupdate BS_STACK_1
 	call BattleScript_PrintHurtByDmgHazards
-	tryfaintmon BS_TARGET, FALSE, NULL
-	tryfaintmon BS_TARGET, TRUE, BattleScript_DmgHazardsOnTargetFainted
+	tryfaintmon BS_STACK_1, FALSE, NULL
 	return
-
-BattleScript_DmgHazardsOnTargetFainted::
-	setbyte sGIVEEXP_STATE, 0
-	getexp BS_TARGET
-	moveendall
-	goto BattleScript_HandleFaintedMon
-
-BattleScript_DmgHazardsOnFaintedBattler::
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
-	healthbarupdate BS_FAINTED
-	datahpupdate BS_FAINTED
-	call BattleScript_PrintHurtByDmgHazards
-	tryfaintmon BS_FAINTED, FALSE, NULL
-	tryfaintmon BS_FAINTED, TRUE, BattleScript_DmgHazardsOnFaintedBattlerFainted
-	return
-
-BattleScript_DmgHazardsOnFaintedBattlerFainted::
-	setbyte sGIVEEXP_STATE, 0
-	getexp BS_FAINTED
-	moveendall
-	goto BattleScript_HandleFaintedMon
 
 BattleScript_PrintHurtByDmgHazards::
 	printfromtable gDmgHazardsStringIds
@@ -8126,8 +8126,8 @@ BattleScript_ToxicSpikesAbsorbed::
 BattleScript_ToxicSpikesPoisoned::
 	printstring STRINGID_TOXICSPIKESPOISONED
 	waitmessage B_WAIT_TIME_LONG
-	statusanimation BS_SCRIPTING
-	updatestatusicon BS_SCRIPTING
+	statusanimation BS_STACK_1
+	updatestatusicon BS_STACK_1
 	waitstate
 	return
 

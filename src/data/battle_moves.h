@@ -871,6 +871,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .throwingBased = TRUE,
         .twoTurnMove = TRUE,
+        .parentalBondBanned = TRUE,
     },
     [MOVE_STRENGTH] =
     {
@@ -6295,6 +6296,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .throwingBased = TRUE,
         .twoTurnMove = TRUE,
+        .parentalBondBanned = TRUE,
     },
     [MOVE_SHIFT_GEAR] =
     {

@@ -7076,18 +7076,9 @@ static void Cmd_switchhandleorder(void)
 
 static void SetDmgHazardsBattlescript(u8 battlerId, u8 multistringId)
 {
-    gBattleMons[battlerId].status2 &= ~(STATUS2_DESTINY_BOND);
-    gHitMarker &= ~(HITMARKER_DESTINYBOND);
-    gBattleScripting.battler = battlerId;
+    gStackBattler1 = battlerId;
     gBattleCommunication[MULTISTRING_CHOOSER] = multistringId;
-
-    BattleScriptPushCursor();
-    if (gBattlescriptCurrInstr[1] == BS_TARGET)
-        gBattlescriptCurrInstr = BattleScript_DmgHazardsOnTarget;
-    else if (gBattlescriptCurrInstr[1] == BS_ATTACKER)
-        gBattlescriptCurrInstr = BattleScript_DmgHazardsOnAttacker;
-    else
-        gBattlescriptCurrInstr = BattleScript_DmgHazardsOnFaintedBattler;
+    BattleScriptCall(BattleScript_DmgHazards);
 }
 
 static void Cmd_switchineffects(void)
@@ -7095,6 +7086,11 @@ static void Cmd_switchineffects(void)
     s32 i;
 
     gBattlerAttacker = gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+    if (!IsBattlerAlive(gBattlerAttacker))
+    {
+        gBattlescriptCurrInstr += 2;
+        return;
+    }
     UpdateSentPokesToOpponentValue(gActiveBattler);
 
     gHitMarker &= ~(HITMARKER_FAINTED(gActiveBattler));
@@ -7137,80 +7133,11 @@ static void Cmd_switchineffects(void)
         gBattlerAbility = gActiveBattler;
         BattleScriptCall(BattleScript_SwitchInAbilityMsgRet);
     }
-    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES_DAMAGED)
-        && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES)
-        && !IsMagicGuardProtected(gActiveBattler)
-        && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
-        && IsBattlerGrounded(gActiveBattler))
+    if (!gVolatileStructs[gActiveBattler].hazardDamaged)
     {
-        u8 spikesDmg = (5 - gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount) * 2;
-        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / (spikesDmg);
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
-
-        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_SPIKES_DAMAGED;
-        SetDmgHazardsBattlescript(gActiveBattler, B_MSG_PKMNHURTBYSPIKES);
-    }
-    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK_DAMAGED)
-        && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK)
-        && IsBattlerAffectedByHazards(gActiveBattler, gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_ROCK)
-        && !IsMagicGuardProtected(gActiveBattler))
-    {
-        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
-        gBattleMoveDamage = GetStealthHazardDamage(gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType, gActiveBattler);
-
-        if (gBattleMoveDamage != 0)
-            SetDmgHazardsBattlescript(gActiveBattler, gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_GRASS ? B_MSG_CREEPINGTHORNSDMG : B_MSG_STEALTHROCKDMG);
-    }
-    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_TOXIC_SPIKES_DAMAGED)
-        && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_TOXIC_SPIKES)
-        && IsBattlerGrounded(gActiveBattler))
-    {
-        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_TOXIC_SPIKES_DAMAGED;
-        if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON)) // Absorb the toxic spikes.
-        {
-            gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_TOXIC_SPIKES);
-            gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount = 0;
-            gBattleScripting.battler = gActiveBattler;
-            BattleScriptCall(BattleScript_ToxicSpikesAbsorbed);
-        }
-        else if (IsBattlerAffectedByHazards(gActiveBattler, FALSE))
-        {
-            if (!(gBattleMons[gActiveBattler].status1 & STATUS1_ANY)
-                && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_STEEL)
-                && GetBattlerAbility(gActiveBattler) != ABILITY_IMMUNITY
-                && !(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SAFEGUARD)
-                && GetCurrentTerrain() != STATUS_FIELD_MISTY_TERRAIN)
-            {
-                if (gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount >= 2)
-                    gBattleMons[gActiveBattler].status1 |= STATUS1_TOXIC_POISON;
-                else
-                    gBattleMons[gActiveBattler].status1 |= STATUS1_POISON;
-
-                BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
-                MarkBattlerForControllerExec(gActiveBattler);
-                gBattleScripting.battler = gActiveBattler;
-                BattleScriptCall(BattleScript_ToxicSpikesPoisoned);
-            }
-        }
-    }
-    else if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STICKY_WEB_DAMAGED)
-        && (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STICKY_WEB)
-        && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
-        && IsBattlerGrounded(gActiveBattler))
-    {
-        gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STICKY_WEB_DAMAGED;
+        gVolatileStructs[gActiveBattler].hazardDamaged = TRUE;
         gStackBattler1 = gActiveBattler;
-        SET_STATCHANGER(STAT_SPEED, 1, TRUE);
-        BattleScriptCall(BattleScript_StickyWebOnSwitchIn);
-    }
-    else if (gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals
-        && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
-        && IsBattlerGrounded(gActiveBattler))
-    {
-        gStackBattler1 = gActiveBattler;
-        gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals = FALSE;
-        BattleScriptCall(BattleScript_HotCoalsActivates);
+        BattleScriptCall(BattleScript_ResolveAllHazards);
     }
     else
     {
@@ -11349,6 +11276,94 @@ static void Cmd_various(void)
             gBattlescriptCurrInstr = ptr;
         else
             gVolatileStructs[gActiveBattler].trepidation = 3;
+        break;
+    case VARIOUS_DO_HAZARD_DAMAGE:
+        if (!IsBattlerAlive(gActiveBattler)) break;
+        gStackBattler1 = gActiveBattler;
+        switch (READ_8_INC)
+        {
+        case HAZARD_MODE_SPIKES:
+            BattleScriptCall(BattleScript_ResolveRocks);
+
+            if (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_SPIKES
+                && !IsMagicGuardProtected(gActiveBattler)
+                && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
+                && IsBattlerGrounded(gActiveBattler))
+            {
+                u8 spikesDmg = (5 - gSideTimers[GetBattlerSide(gActiveBattler)].spikesAmount) * 2;
+                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / (spikesDmg);
+                if (gBattleMoveDamage == 0)
+                    gBattleMoveDamage = 1;
+                
+                SetDmgHazardsBattlescript(gActiveBattler, B_MSG_PKMNHURTBYSPIKES);
+            }
+            break;
+        case HAZARD_MODE_ROCKS:
+            BattleScriptCall(BattleScript_ResolvePoisonSpikes);
+
+            if (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK
+                && IsBattlerAffectedByHazards(gActiveBattler, gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_ROCK)
+                && !IsMagicGuardProtected(gActiveBattler))
+            {
+                gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STEALTH_ROCK_DAMAGED;
+                gBattleMoveDamage = GetStealthHazardDamage(gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType, gActiveBattler);
+
+                if (gBattleMoveDamage != 0)
+                    SetDmgHazardsBattlescript(gActiveBattler, gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_GRASS ? B_MSG_CREEPINGTHORNSDMG : B_MSG_STEALTHROCKDMG);
+            }
+            break;
+        case HAZARD_MODE_POISON_SPIKES:
+            BattleScriptCall(BattleScript_ResolveWebs);
+
+            if (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_TOXIC_SPIKES
+                && IsBattlerGrounded(gActiveBattler))
+            {
+                if (IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_POISON)) // Absorb the toxic spikes.
+                {
+                    gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_TOXIC_SPIKES);
+                    gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount = 0;
+                    BattleScriptCall(BattleScript_ToxicSpikesAbsorbed);
+                }
+                else if (IsBattlerAffectedByHazards(gActiveBattler, FALSE)
+                    && CanBePoisoned(BATTLE_OPPOSITE(gActiveBattler), gActiveBattler))
+                {
+                    if (gSideTimers[GetBattlerSide(gActiveBattler)].toxicSpikesAmount >= 2)
+                        gBattleMons[gActiveBattler].status1 |= STATUS1_TOXIC_POISON;
+                    else
+                        gBattleMons[gActiveBattler].status1 |= STATUS1_POISON;
+
+                    BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    BattleScriptCall(BattleScript_ToxicSpikesPoisoned);
+                }
+            }
+            break;
+        case HAZARD_MODE_WEBS:
+            BattleScriptCall(BattleScript_ResolveFireTrap);
+
+            if (gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STICKY_WEB
+                && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
+                && IsBattlerGrounded(gActiveBattler))
+            {
+                gSideStatuses[GetBattlerSide(gActiveBattler)] |= SIDE_STATUS_STICKY_WEB_DAMAGED;
+                SetStatChanger(STAT_SPEED, -1);
+                BattleScriptCall(BattleScript_StickyWebOnSwitchIn);
+            }
+            break;
+        case HAZARD_MODE_FIRE_TRAP:
+            BattleScriptCall(BattleScript_ResolveCaltrops);
+
+            if (gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals
+                && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
+                && IsBattlerGrounded(gActiveBattler))
+            {
+                gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals = FALSE;
+                BattleScriptCall(BattleScript_HotCoalsActivates);
+            }
+            break;
+        case HAZARD_MODE_CALTROPS:
+            break;
+        }
         break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
