@@ -2523,9 +2523,12 @@ void IncrementTimesTookDamage(u8 battler)
 static void Cmd_datahpupdate(void)
 {
     u32 moveType;
+    int battlerType;
 
     if (gBattleControllerExecFlags)
         return;
+
+    battlerType = READ_FIRST_8_INC;
 
     if (gBattleStruct->dynamicMoveType == 0)
         moveType = gBattleMoves[gCurrentMove].type;
@@ -2536,7 +2539,7 @@ static void Cmd_datahpupdate(void)
 
     if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) || (gHitMarker & HITMARKER_PASSIVE_DAMAGE))
     {
-        gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+        gActiveBattler = GetBattlerForBattleScript(battlerType);
         if (gBattleMoveDamage >= 0 && DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove) && gVolatileStructs[gActiveBattler].substituteHP && !(gHitMarker & HITMARKER_IGNORE_SUBSTITUTE))
         {
             if (gVolatileStructs[gActiveBattler].substituteHP >= gBattleMoveDamage)
@@ -2556,7 +2559,6 @@ static void Cmd_datahpupdate(void)
             // check substitute fading
             if (gVolatileStructs[gActiveBattler].substituteHP == 0)
             {
-                gBattlescriptCurrInstr += 2;
                 BattleScriptCall(BattleScript_SubstituteFade);
                 return;
             }
@@ -2566,7 +2568,6 @@ static void Cmd_datahpupdate(void)
             IncrementSingleUseAbilityCounter(gActiveBattler, GetNoDamageAbility(gActiveBattler), 1);
             if (RemainingNoDamageHits(gActiveBattler) <= 0)
             {
-                gBattlescriptCurrInstr += 2;
                 BattleScriptCall(BattleScript_BattlerCanNoLongerEndureHits);
             }
         }
@@ -2591,8 +2592,7 @@ static void Cmd_datahpupdate(void)
                 UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_EISCUE_NOICE_FACE);
                 gBattleMons[gActiveBattler].species = SPECIES_EISCUE_NOICE_FACE;
             }
-            BattleScriptPush(gBattlescriptCurrInstr + 2);
-            gBattlescriptCurrInstr = BattleScript_TargetFormChange;
+            BattleScriptCall(BattleScript_TargetFormChange);
         }
         else
         {
@@ -2613,7 +2613,7 @@ static void Cmd_datahpupdate(void)
                 else
                 {
                     gTakenDmg[gActiveBattler] += gBattleMoveDamage;
-                    if (gBattlescriptCurrInstr[1] == BS_TARGET)
+                    if (battlerType == BS_TARGET)
                         gTakenDmgByBattler[gActiveBattler] = gBattlerAttacker;
                     else
                         gTakenDmgByBattler[gActiveBattler] = gBattlerTarget;
@@ -2637,7 +2637,7 @@ static void Cmd_datahpupdate(void)
                 {
                     gRoundStructs[gActiveBattler].physicalDmg = gHpDealt;
                     gTurnStructs[gActiveBattler].physicalDmg = gHpDealt;
-                    if (gBattlescriptCurrInstr[1] == BS_TARGET)
+                    if (battlerType == BS_TARGET)
                     {
                         gRoundStructs[gActiveBattler].physicalBattlerId = gBattlerAttacker;
                         gTurnStructs[gActiveBattler].physicalBattlerId = gBattlerAttacker;
@@ -2653,7 +2653,7 @@ static void Cmd_datahpupdate(void)
                 {
                     gRoundStructs[gActiveBattler].specialDmg = gHpDealt;
                     gTurnStructs[gActiveBattler].specialDmg = gHpDealt;
-                    if (gBattlescriptCurrInstr[1] == BS_TARGET)
+                    if (battlerType == BS_TARGET)
                     {
                         gRoundStructs[gActiveBattler].specialBattlerId = gBattlerAttacker;
                         gTurnStructs[gActiveBattler].specialBattlerId = gBattlerAttacker;
@@ -2674,11 +2674,10 @@ static void Cmd_datahpupdate(void)
     }
     else
     {
-        gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+        gActiveBattler = GetBattlerForBattleScript(battlerType);
         if (gTurnStructs[gActiveBattler].dmg == 0)
             gTurnStructs[gActiveBattler].dmg = 0xFFFF;
     }
-    gBattlescriptCurrInstr += 2;
 }
 
 static void Cmd_critmessage(void)
@@ -9047,14 +9046,14 @@ static void Cmd_various(void)
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlerAttacker = gActiveBattler;
         AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, 0, 0);
+        ptr = gBattlescriptCurrInstr;
+        gBattlescriptCurrInstr = runAgain;
         while (gBattleScripting.abilityLoopCounter <= NUM_ABILITY_SLOTS + 1)
         {
             if (HandleSwitchInAbility(gBattleScripting.abilityLoopCounter++, gActiveBattler))
-            {
-                gBattlescriptCurrInstr = runAgain;
                 return;
-            }
         }
+        gBattlescriptCurrInstr = ptr;
         AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_TRACE2, gActiveBattler, 0, 0, 0);
         return;
