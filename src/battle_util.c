@@ -14400,6 +14400,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         case ABILITY_SUPER_HOT_GOO:
             if (!ShouldApplyOnHitAffect(attacker)) break;
             if (!StatLowerableOrMirrorArmor(attacker, STAT_SPEED)) break;
+            if (!IsMoveMakingContact(move, attacker)) break;
 
             gBattleScripting.moveEffect = MOVE_EFFECT_SPD_MINUS_1;
             BattleScriptCall(BattleScript_GooeyActivates);
