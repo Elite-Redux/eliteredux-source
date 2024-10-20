@@ -8827,7 +8827,10 @@ u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc)
 
 u32 GetMoveTargetCount(u16 move, u8 battlerAtk, u8 battlerDef)
 {
-    switch (GetBattlerBattleMoveTargetFlags(move, battlerAtk))
+    int flags = GetBattlerBattleMoveTargetFlags(move, battlerAtk);
+    if (gBattleMoves[move].effect == MOVE_SPARKLING_ARIA && flags == MOVE_TARGET_FOES_AND_ALLY)
+        flags = MOVE_TARGET_BOTH;
+    switch (flags)
     {
     case MOVE_TARGET_BOTH:
         return IsBattlerAlive(battlerDef)
