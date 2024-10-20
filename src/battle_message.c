@@ -901,6 +901,7 @@ static const u8 sText_AttackerLostDarkType[] = _("{B_ATK_NAME_WITH_PREFIX} has n
 static const u8 sText_ClearSkies[] = _("The sky became clear!");
 static const u8 sText_WeatherNormal[] = _("The weather returned to normal!");
 static const u8 sText_RudeAwakening[] = _("{B_DEF_NAME_WITH_PREFIX} is dazed\nby the blow!");
+static const u8 sText_RoomsCleared[] = _("The warped dimensions were\nreturned to normal!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1059,7 +1060,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_RoomsCleared[] = _("The warped dimensions were\nreturned to normal!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
