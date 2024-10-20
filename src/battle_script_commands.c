@@ -5742,34 +5742,35 @@ static void Cmd_moveend(void)
 
             if (gBattleMoveDamage)
             {
-                BattleScriptCall(BattleScript_MoveEffectRecoil);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
+                BattleScriptCall(BattleScript_MoveEffectRecoil);
             }
 
             if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SUPER_STRAIN))
             {
-                gBattleMoveDamage = max(1, gBattleMoveDamage + (gTurnStructs[gBattlerAttacker].savedDmg / 4));
                 if (!gBattleMoveDamage)
                 {
-                    BattleScriptCall(BattleScript_MoveEffectRecoil);
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
+                    BattleScriptCall(BattleScript_MoveEffectRecoil);
                 }
+                gBattleMoveDamage = max(1, gBattleMoveDamage + (gTurnStructs[gBattlerAttacker].savedDmg / 4));
                 gBattleScripting.abilityPopupOverwrite = ABILITY_SUPER_STRAIN;
                 BattleScriptCall(BattleScript_AbilityPopUp);
             }
                 
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
             {
-                gBattleMoveDamage = max(1, gBattleMoveDamage + (gTurnStructs[gBattlerAttacker].savedDmg / 3));
                 if (!gBattleMoveDamage)
                 {
-                    BattleScriptCall(BattleScript_MoveEffectRecoil);
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_CONFUSION;
+                    BattleScriptCall(BattleScript_MoveEffectRecoil);
                 }
+                gBattleMoveDamage = max(1, gBattleMoveDamage + (gTurnStructs[gBattlerAttacker].savedDmg / 3));
                 BattleScriptCall(BattleScript_ConfusionAnimation);
             }
 
             if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_LIMBER)) gBattleMoveDamage = gBattleMoveDamage * 0.5;
+            effect = gBattleMoveDamage;
             break;
         case MOVEEND_ABILITIES_AFTER_RECOIL:
             gHpDealt = gTurnStructs[gBattlerAttacker].savedDmg;
