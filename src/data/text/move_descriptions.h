@@ -279,8 +279,8 @@ static const u8 sMoveTwoLineDescription_MoveStrength[] = _(
     "Lowers the user's defenses.");
 
 static const u8 sMoveTwoLineDescription_MoveAbsorb[] = _(
-    "An attack that absorbs\n"
-    "half the damage inflicted.");
+    "Hits the foe with plants\n"
+    "that remove its stat changes.");
 
 static const u8 sMoveTwoLineDescription_MoveMegaDrain[] = _(
     "An attack that absorbs\n"
@@ -1575,8 +1575,8 @@ static const u8 sMoveTwoLineDescription_MoveFlareBlitz[] = _(
     "foe. Also hurts the user.");
 
 static const u8 sMoveTwoLineDescription_MoveForcePalm[] = _(
-    "A shock wave attack that\n"
-    "may paralyze the foe.");
+    "Sends a shock wave through\n"
+    "the foe, clearing their stats.");
 
 static const u8 sMoveTwoLineDescription_MoveAuraSphere[] = _(
     "Attacks with an aura blast\n"
@@ -4969,7 +4969,7 @@ static const u8 sMoveFourLineDescription_MoveLowKick[] = _("Inflicts more damage
 static const u8 sMoveFourLineDescription_MoveCounter[] = _("A retaliation move\nthat counters any\nphysical hit with\ndouble the damage.");
 static const u8 sMoveFourLineDescription_MoveSeismicToss[] = _("Carries the foe into\nthe air on turn one,\nthen deals damage\nbased on level.");
 static const u8 sMoveFourLineDescription_MoveStrength[] = _("The foe is slugged\nat maximum power.\nDrops Defenses.\nField-based.");
-static const u8 sMoveFourLineDescription_MoveAbsorb[] = _("An attack that\nabsorbs half the\ndamage it inflicted\nto restore HP.");
+static const u8 sMoveFourLineDescription_MoveAbsorb[] = _("Covers the foe with\nplants that absorb\nits stat changes.");
 static const u8 sMoveFourLineDescription_MoveMegaDrain[] = _("A tough attack that\ndrains 75% of the\ndamage it inflicted\nto restore HP.");
 static const u8 sMoveFourLineDescription_MoveLeechSeed[] = _("A seed is planted\non the foe to steal\nsome HP for the \nuser on every turn.");
 static const u8 sMoveFourLineDescription_MoveGrowth[] = _("The user's body is\nforced to grow,\nraising its Atk.\nand Sp. Atk stat.");
@@ -5293,7 +5293,7 @@ static const u8 sMoveFourLineDescription_MoveHeartSwap[] = _("The user employs\n
 static const u8 sMoveFourLineDescription_MoveAquaRing[] = _("The user envelops\nitself in a veil of\nwater. It regains\n1/8 HP every turn.");
 static const u8 sMoveFourLineDescription_MoveMagnetRise[] = _("The user levitates\nusing electrically\ngenerated magnetism\nfor five turns.");
 static const u8 sMoveFourLineDescription_MoveFlareBlitz[] = _("A ruthless, fiery\ncharge which has\n33% recoil. Has\n10% burn chance.");
-static const u8 sMoveFourLineDescription_MoveForcePalm[] = _("The foe is attacked\nwith a shock wave.\n30% paralyze chance.");
+static const u8 sMoveFourLineDescription_MoveForcePalm[] = _("The foe is attacked\nwith a shock wave.\nClears stat changes.");
 static const u8 sMoveFourLineDescription_MoveAuraSphere[] = _("A strong blast of\naura power.\nAlways hits.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveRockPolish[] = _("The user polishes\nits body to reduce\ndrag. This sharply\nraises its Speed.");
 static const u8 sMoveFourLineDescription_MovePoisonJab[] = _("A stabbing attack\nwith 30% poison\nchance. Iron Fist\n& Mighty Horn boost.");
