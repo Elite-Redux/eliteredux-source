@@ -1905,13 +1905,23 @@ BattleScript_RototillerCheckAffected:
 BattleScript_RototillerAffected:
 	setbyte sSTAT_ANIM_PLAYED, FALSE
 	playstatchangeanimation BS_TARGET, BIT_ATK | BIT_SPATK, 0
+	jumpifword CMP_COMMON_BITS, gFieldStatuses, STATUS_FIELD_GRASSY_TERRAIN, BattleScript_RototillerAffected_Atk_Grassy
 	setstatchanger STAT_ATK, 1, FALSE
+	goto BattleScript_RototillerAffected_Atk_Raise
+BattleScript_RototillerAffected_Atk_Grassy:
+	setstatchanger STAT_ATK, 2, FALSE
+BattleScript_RototillerAffected_Atk_Raise:
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_RototillerTrySpAtk
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RototillerTrySpAtk
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_RototillerTrySpAtk::
+	jumpifword CMP_COMMON_BITS, gFieldStatuses, STATUS_FIELD_GRASSY_TERRAIN, BattleScript_RototillerAffected_SpAtk_Grassy
 	setstatchanger STAT_SPATK, 1, FALSE
+	goto BattleScript_RototillerAffected_SpAtk_Raise
+BattleScript_RototillerAffected_SpAtk_Grassy:
+	setstatchanger STAT_SPATK, 2, FALSE
+BattleScript_RototillerAffected_SpAtk_Raise:
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_RototillerMoveTargetEnd
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RototillerMoveTargetEnd
 	printfromtable gStatUpStringIds
