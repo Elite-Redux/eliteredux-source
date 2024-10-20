@@ -1501,7 +1501,7 @@ static void Cmd_attackcanceler(void)
             gBattleScripting.abilityPopupOverwrite = ABILITY_PATTERN_CHANGE;
             gLastUsedAbility = ABILITY_PATTERN_CHANGE;
         }
-		else{
+		else {
 			gBattleScripting.abilityPopupOverwrite = ABILITY_LIBERO;
 			gLastUsedAbility = ABILITY_LIBERO;
 		}
@@ -1523,7 +1523,7 @@ static void Cmd_attackcanceler(void)
 			gBattleScripting.abilityPopupOverwrite = ABILITY_PRISMATIC_FUR;
 			gLastUsedAbility = ABILITY_PRISMATIC_FUR;
 		}
-		else{
+		else {
 			gBattleScripting.abilityPopupOverwrite = ABILITY_PRISMATIC_FUR;
 			gLastUsedAbility = ABILITY_PRISMATIC_FUR;
 		}
@@ -2474,7 +2474,7 @@ static void Cmd_healthbarupdate(void)
                 PrepareStringBattle(STRINGID_BATTLERCANNOLONGERENDUREHITS, gActiveBattler);
             else if (noDamageHits == 1)
                 PrepareStringBattle(STRINGID_BATTLERCANSTILLENDUREASINGLEHIT, gActiveBattler);
-            else{
+            else {
                 ConvertIntToDecimalStringN(gBattleTextBuff4, noDamageHits, STR_CONV_MODE_LEFT_ALIGN, 2);
                 PrepareStringBattle(STRINGID_BATTLERCANSTILLENDUREHITS, gActiveBattler);
             }
@@ -13113,7 +13113,7 @@ static void Cmd_battlemacros(void)
     if (tryjump) {
         gBattlescriptCurrInstr = jumpPtr;
     }
-    else{
+    else {
         gBattlescriptCurrInstr += 8;
     }
 }
@@ -16620,7 +16620,7 @@ static void Cmd_trygivecaughtmonnick(void)
         if (!gSaveBlock2Ptr->askForNickname) {
             gBattleCommunication[MULTIUSE_STATE]++;
         }
-        else{
+        else {
             HandleBattleWindow(BATTLE_BOX_YES_NO_Y, 8, BATTLE_BOX_YES_NO_Y + BATTLE_BOX_YES_NO_WIDTH, 13, 0);
             BattlePutTextOnWindow(gText_BattleYesNoChoice, B_WIN_YESNO);
             gBattleCommunication[MULTIUSE_STATE]++;
