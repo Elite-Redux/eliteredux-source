@@ -6621,9 +6621,22 @@ BattleScript_EffectFocusPunch::
 BattleScript_EffectSmellingsalt:
 BattleScript_EffectWakeUpSlap:
 BattleScript_EffectSparklingAria:
+	jumpiftargetally BattleScript_EffectSparklingAria_CureOnly
 	jumpifsubstituteblocks BattleScript_EffectHit
 	setmoveeffect MOVE_EFFECT_REMOVE_STATUS | MOVE_EFFECT_CERTAIN
 	goto BattleScript_EffectHit
+BattleScript_EffectSparklingAria_CureOnly:
+	jumpifstatus BS_TARGET, STATUS1_BURN, BattleScript_EffectSparklingAria_CureOnly_Continue
+	goto BattleScript_MoveEnd
+BattleScript_EffectSparklingAria_CureOnly_Continue:
+	attackcanceler
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	setmoveeffect MOVE_EFFECT_REMOVE_STATUS | MOVE_EFFECT_CERTAIN
+	seteffectprimary
+	goto BattleScript_MoveEnd
 
 BattleScript_EffectFollowMe::
 	attackcanceler

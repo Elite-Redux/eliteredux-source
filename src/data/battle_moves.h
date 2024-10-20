@@ -1806,7 +1806,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BUBBLE] =
     {
         .effect = EFFECT_SPEED_DOWN_HIT,
-        .power = 60,
+        .power = 55,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 15,
@@ -7794,6 +7794,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND,
         .split = SPLIT_SPECIAL,
         .argument = STATUS1_BURN,
+        .parentalBondBanned = TRUE,
     },
     [MOVE_ICE_HAMMER] =
     {
