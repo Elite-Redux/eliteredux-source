@@ -6491,7 +6491,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BULLDOZE] =
     {
         .effect = EFFECT_BULLDOZE,
-        .power = 60,
+        .power = 55,
         .type = TYPE_GROUND,
         .accuracy = 100,
         .pp = 20,
