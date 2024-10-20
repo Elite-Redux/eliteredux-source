@@ -4114,7 +4114,7 @@ void BattleTurnPassed(void)
 {
     s32 i;
 
-    if (gCurrentActionFuncId != B_ACTION_FINISHED)
+    if (gCurrentActionFuncId != B_ACTION_FINISHED && !(gCurrentActionFuncId == B_ACTION_TRY_FINISH && gBattleOutcome))
     {
         sTurnActionsFuncsTable[gCurrentActionFuncId]();
         return;
