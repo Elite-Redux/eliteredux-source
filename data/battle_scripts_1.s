@@ -2445,7 +2445,9 @@ BattleScript_NoTurningBack::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_NO_TURNING_BACK
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_AllStatsUp
+	swapbattlerandtargetvia34
+	call BattleScript_AllStatsUp
+	restoreattackerandtargetfrom34
 
 BattleScript_EffectLastResort:
 	attackcanceler
