@@ -13988,9 +13988,15 @@ static void Cmd_trychoosesleeptalkmove(void)
     }
     else // at least one move can be chosen
     {
+        int reroll = TRUE;
         do
         {
             movePosition = Random() & (MAX_MON_MOVES - 1);
+            if (reroll && gBattleMons[gBattlerAttacker].moves[movePosition] == MOVE_REST)
+            {
+                reroll = FALSE;
+                movePosition = Random() & (MAX_MON_MOVES - 1);
+            }
         } while ((gBitTable[movePosition] & unusableMovesBits));
         
         gTurnStructs[gBattlerAttacker].sleepTalk = TRUE;
