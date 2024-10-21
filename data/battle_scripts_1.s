@@ -13191,6 +13191,31 @@ BattleScript_EffectChipAway:
 	seteffectwithchance
 	goto BattleScript_MoveEndTryFaintTarget
 
+BattleScript_EffectTerrorCharge::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_BLEED
+	seteffectwithchance
+	setmoveeffect MOVE_EFFECT_FEAR
+	seteffectwithchance
+	goto BattleScript_MoveEndTryFaintTarget
+
 BattleScript_EffectKinesis:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
