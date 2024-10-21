@@ -3087,6 +3087,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
     case MOVE_EFFECT_SMACK_DOWN:
     case MOVE_EFFECT_REMOVE_STATUS:
     case MOVE_EFFECT_BURN_UP:
+    case MOVE_EFFECT_STEAL_ITEM:
         gBattleStruct->moveEffect2 = gBattleScripting.moveEffect;
         gBattlescriptCurrInstr++;
         return;
@@ -3685,22 +3686,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             case MOVE_EFFECT_RAGE:
                 gBattleMons[gBattlerAttacker].status2 |= STATUS2_RAGE;
-                break;
-            case MOVE_EFFECT_STEAL_ITEM:
-                // Don't steal on first strike of Parental Bond, unless it KO'ed the target
-                if (!(gTurnStructs[gBattlerAttacker].parentalBondOn >= 2 && gBattleMons[gBattlerTarget].hp != 0))
-                {
-                    if (!CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item))
-                    {
-                        break;
-                    }
-
-                    StealTargetItem(gBattlerAttacker, gBattlerTarget);  // Attacker steals target item
-                    gBattleMons[gBattlerAttacker].item = 0; // Item assigned later on with thief (see MOVEEND_CHANGED_ITEMS)
-                    gBattleStruct->changedItems[gBattlerAttacker] = gLastUsedItem; // Stolen item to be assigned later
-                    BattleScriptCall(BattleScript_ItemSteal);
-
-                }
                 break;
             case MOVE_EFFECT_PREVENT_ESCAPE:
                 gBattleMons[gBattlerTarget].status2 |= STATUS2_ESCAPE_PREVENTION;
@@ -5851,6 +5836,21 @@ static void Cmd_moveend(void)
         case MOVEEND_MOVE_EFFECTS2: // For effects which should happen after target items, for example Knock Off after damage from Rocky Helmet.
             switch (gBattleStruct->moveEffect2)
             {
+            case MOVE_EFFECT_STEAL_ITEM:
+                if (!gBattleMons[gBattlerAttacker].item)
+                {
+                    if (!CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item))
+                    {
+                        break;
+                    }
+                    StealTargetItem(gBattlerAttacker, gBattlerTarget);  // Attacker steals target item
+                    gBattleMons[gBattlerAttacker].item = 0; // Item assigned later on with thief (see MOVEEND_CHANGED_ITEMS)
+                    gBattleStruct->changedItems[gBattlerAttacker] = gLastUsedItem; // Stolen item to be assigned later
+                    BattleScriptCall(BattleScript_ItemSteal);
+                    effect = TRUE;
+                    break;
+                }
+                // Intentional fallthrough
             case MOVE_EFFECT_KNOCK_OFF:
                 effect = TryKnockOffBattleScript(gBattlerTarget);
                 break;
