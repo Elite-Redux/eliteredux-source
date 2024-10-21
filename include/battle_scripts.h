@@ -320,6 +320,7 @@ extern const u8 BattleScript_MummyActivates[];
 extern const u8 BattleScript_BloodStainActivates[];
 extern const u8 BattleScript_WeakArmorActivates[];
 extern const u8 BattleScript_FellStingerRaisesStat[];
+extern const u8 BattleScript_TryRecycle[];
 extern const u8 BattleScript_SnowWarningActivates[];
 extern const u8 BattleScript_HarvestActivates[];
 extern const u8 BattleScript_ImposterActivates[];

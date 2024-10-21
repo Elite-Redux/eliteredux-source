@@ -6853,6 +6853,13 @@ BattleScript_EffectMagicCoat:
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
+BattleScript_TryRecycle::
+	tryrecycleitem BattleScript_Return
+	printstring STRINGID_XFOUNDONEY
+	waitmessage B_WAIT_TIME_LONG
+	goto return
+
+
 BattleScript_EffectRecycle::
 	attackcanceler
 	attackstring

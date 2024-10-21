@@ -9299,10 +9299,9 @@ static void Cmd_various(void)
         gBattleStruct->soulheartBattlerId = 0;
         break;
     case VARIOUS_TRY_ACTIVATE_FELL_STINGER:
-        if (gBattleMoves[gCurrentMove].effect == EFFECT_FELL_STINGER
-            && HasAttackerFaintedTarget()
-            && !NoAliveMonsForEitherParty()
-            && CompareStat(gBattlerAttacker, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
+        if (!HasAttackerFaintedTarget()) break;
+        if (NoAliveMonsForEitherParty()) break;
+        if (gBattleMoves[gCurrentMove].effect == EFFECT_FELL_STINGER && CompareStat(gBattlerAttacker, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
         {
             if (B_FELL_STINGER_STAT_RAISE >= GEN_7)
                 SET_STATCHANGER(STAT_ATK, 3, FALSE);
@@ -9311,6 +9310,11 @@ static void Cmd_various(void)
 
             PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_ATK);
             BattleScriptCall(BattleScript_FellStingerRaisesStat);
+            return;
+        }
+        else if (gBattleMoves[gCurrentMove].effect == EFFECT_MISC_HIT && gBattleMoves[gCurrentMove].argument == MISC_EFFECT_TRANSMUTE)
+        {
+            BattleScriptCall(BattleScript_TryRecycle);
             return;
         }
         break;
