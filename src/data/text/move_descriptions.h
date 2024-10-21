@@ -2143,8 +2143,8 @@ static const u8 sMoveTwoLineDescription_MoveLeafTornado[] = _(
     "a tornado for 2 to 5 turns.");
 
 static const u8 sMoveTwoLineDescription_MoveSteamroller[] = _(
-    "Crushes the foe with its\n"
-    "body. May cause flinching.");
+    "A speedy attack that crushes\n"
+    "the foe with the user's body.");
 
 static const u8 sMoveTwoLineDescription_MoveCottonGuard[] = _(
     "Wraps its body in cotton.\n"
@@ -5435,7 +5435,7 @@ static const u8 sMoveFourLineDescription_MoveSacredSword[] = _("The user cuts it
 static const u8 sMoveFourLineDescription_MoveRazorShell[] = _("High crit ratio.\n50% chance to\nlower foe's Def.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveHeatCrash[] = _("The user slams\nthe foe with its\nheavy body. Heavier\nusers are stronger.");
 static const u8 sMoveFourLineDescription_MoveLeafTornado[] = _("The foe is trapped\nwith sharp leaves\nfor four or\nfive turns.");
-static const u8 sMoveFourLineDescription_MoveSteamroller[] = _("The user rolls over\nits foes. This\nattack has a 30%\nflinch chance.");
+static const u8 sMoveFourLineDescription_MoveSteamroller[] = _("Attacks as if Speed\nwas 50% higher for\ndetermining turn\norder.");
 static const u8 sMoveFourLineDescription_MoveCottonGuard[] = _("The user protects\nitself with soft\ncotton, drastically\nraising its Defense.");
 static const u8 sMoveFourLineDescription_MoveNightDaze[] = _("Strucks with a pitch-\nblack shock wave.\nHas +1 priority.");
 static const u8 sMoveFourLineDescription_MovePsystrike[] = _("The user casts an\nodd psychic wave to\nattack the foe for\nphysical damage.");

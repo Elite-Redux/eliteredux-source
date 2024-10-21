@@ -5011,6 +5011,9 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     }
     speed *= gStatStageRatios[statStage][0];
     speed /= gStatStageRatios[statStage][1];
+    
+    if (gChosenMoveByBattler[battlerId] == MOVE_STEAMROLLER)
+        speed = 3 * speed / 2;
 
     return speed;
 }
