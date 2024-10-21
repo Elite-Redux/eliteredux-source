@@ -190,7 +190,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectWillOWisp               @ EFFECT_WILL_O_WISP
 	.4byte BattleScript_EffectMemento                 @ EFFECT_MEMENTO
 	.4byte BattleScript_EffectHit                     @ EFFECT_FACADE
-	.4byte BattleScript_EffectHit                     @ EFFECT_FOCUS_PUNCH
+	.4byte BattleScript_EffectFocusPunch			  @ EFFECT_FOCUS_PUNCH
 	.4byte BattleScript_EffectSmellingsalt            @ EFFECT_SMELLINGSALT
 	.4byte BattleScript_EffectFollowMe                @ EFFECT_FOLLOW_ME
 	.4byte BattleScript_EffectNaturePower             @ EFFECT_NATURE_POWER
@@ -6659,6 +6659,12 @@ BattleScript_GuiltTripTrySpAtk:
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_GuiltTripEnd:
 	return
+
+BattleScript_EffectFocusPunch::
+	attackcanceler
+	jumpifnodamage BattleScript_HitFromAccCheck
+	printstring STRINGID_PKMNLOSTFOCUS
+	goto BattleScript_HitFromAccCheck
 
 BattleScript_EffectWakeUpSlap:
 BattleScript_EffectSparklingAria:
