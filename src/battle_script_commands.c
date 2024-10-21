@@ -3776,7 +3776,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gRoundStructs[gBattlerTarget].obstructed = FALSE;
                     gRoundStructs[gBattlerTarget].silkTrapped = FALSE;
                     gRoundStructs[gBattlerTarget].burningBulwark = FALSE;
-                    gRoundStructs[gBattlerTarget].mindReader = FALSE;
                     gRoundStructs[gBattlerTarget].tanglingHusked = FALSE;
                     if (gCurrentMove == MOVE_FEINT)
                     {

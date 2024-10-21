@@ -8640,6 +8640,8 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return TRUE;
     if (gRoundStructs[battlerId].detected && GetTotalAccuracy(gBattlerAttacker, battlerId, move) < 101)
         return TRUE;
+    else if (gRoundStructs[battlerId].mindReader && GetTotalAccuracy(gBattlerAttacker, battlerId, move) < 101)
+        return TRUE;
     else if ((BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNSEEN_FIST) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FINAL_BLOW))
         && (gBattleMoves[move].flags & FLAG_MAKES_CONTACT || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
         return FALSE;
@@ -8671,8 +8673,6 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
     else if (gRoundStructs[battlerId].kingsShielded && gBattleMoves[move].power != 0)
         return TRUE;
     else if (gRoundStructs[battlerId].angelsWrathProtected && gBattleMoves[move].power != 0)
-        return TRUE;
-    else if (gRoundStructs[battlerId].mindReader)
         return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD
              && GetChosenMovePriority(gBattlerAttacker, battlerId) > 0)
