@@ -13884,6 +13884,13 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
 
             UseOutOfTurnAttack(battler, attacker, ability, MOVE_MACH_PUNCH, 0);
             break;
+        
+        case ABILITY_WILDFIRE:
+            if (!ShouldApplyOnHitAffect(attacker)) break;
+            if (!IsMoveMakingContact(move, attacker)) break;
+
+            UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
+            break;
 
         case ABILITY_VICTORY_BOMB:
             if (IsBattlerAlive(battler)) break;
@@ -15269,7 +15276,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             return TRUE;
         
         case ABILITY_LOW_BLOW:
-            UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 20);
+            UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40);
             break;
         
         case ABILITY_CHEAP_TACTICS:
@@ -15322,13 +15329,6 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         
         case ABILITY_DREAM_WHIMSY:
             UseEntryMove(battler, ability, MOVE_YAWN, 0);
-            break;
-        
-        case ABILITY_WILDFIRE:
-            if (!ShouldApplyOnHitAffect(attacker)) break;
-            if (!IsMoveMakingContact(move, attacker)) break;
-
-            UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
             break;
         
         case ABILITY_JUMP_SCARE:
