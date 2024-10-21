@@ -1012,6 +1012,7 @@ gBattleAnims_Moves::
 	.4byte Move_MAGIC_ROOM @ MOVE_SHOWTIME
 	.4byte Move_NONE @ MOVE_BANISHED_POWER
 	.4byte Move_NONE @ MOVE_TRIPLE_TREMOR
+	.4byte Move_NONE @ MOVE_FIRE_GLAIVE
 
 	.align 2
 gBattleAnims_StatusConditions::
