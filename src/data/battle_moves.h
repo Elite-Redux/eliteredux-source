@@ -10162,12 +10162,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BITTER_MALICE] =
     {
-        .effect = EFFECT_ATTACK_DOWN_HIT,
-        .power = 75,
+        .effect = EFFECT_BITTER_MALICE,
+        .power = 85,
         .type = TYPE_GHOST,
         .accuracy = 0,
-        .pp = 10,
-        .secondaryEffectChance = 0,
+        .pp = 15,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
@@ -10175,7 +10175,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_INFERNAL_PARADE] =
     {
         .effect = EFFECT_INFERNAL_PARADE,
-        .power = 60,
+        .power = 85,
         .type = TYPE_GHOST,
         .accuracy = 0,
         .pp = 15,
@@ -11192,11 +11192,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BARB_BARRAGE] =
     {
-        .effect = EFFECT_HEX,
-        .power = 65,
+        .effect = EFFECT_50_PERCENT_PLUS_DAMAGE_VS_STATUS,
+        .power = 85,
         .type = TYPE_POISON,
         .accuracy = 100,
-        .pp = 10,
+        .pp = 15,
         .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
@@ -12009,7 +12009,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 65,
         .type = TYPE_DARK,
         .accuracy = 100,
-        .pp = 10,
+        .pp = 15,
         .secondaryEffectChance = 50,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRONG_JAW_BOOST,
@@ -12017,16 +12017,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TERROR_LOCKS] =
     {
-        .effect = EFFECT_MISC_HIT,
-        .power = 65,
+        .effect = EFFECT_BLEED_HIT,
+        .power = 85,
         .type = TYPE_GHOST,
         .accuracy = 100,
-        .pp = 10,
-        .secondaryEffectChance = 0,
+        .pp = 15,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_KEEN_EDGE_BOOST,
         .split = SPLIT_PHYSICAL,
-        .argument = MISC_EFFECT_DOUBLE_DAMAGE_VS_BLEEDING,
+        .argument = MISC_EFFECT_50_PERCENT_PLUS_DAMAGE_VS_BLEEDING,
     },
     [MOVE_DREAM_INVERSION] =
     {
