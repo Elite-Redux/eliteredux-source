@@ -11424,7 +11424,7 @@ static void Cmd_various(void)
     case VARIOUS_SWAP_WITH:
         for (i = 0; i < gBattlersCount; i++)
         {
-            int* target = &gBattleStruct->moveTarget[i];
+            u8* target = &gBattleStruct->moveTarget[i];
             if (i == gActiveBattler) continue;
             if (i == gBattlerAttacker) continue;
 
