@@ -493,6 +493,8 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectMeditate				  @ EFFECT_MEDITATE
 	.4byte BattleScript_EffectBarrier				  @ EFFECT_BARRIER
 	.4byte BattleScript_EffectKinesis				  @ EFFECT_KINESIS
+	.4byte BattleScript_EffectCaltrops				  @ EFFECT_CALTROPS
+	.4byte BattleScript_EffectKnockOff				  @ EFFECT_CORROSIVE_GAS
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -1399,18 +1401,6 @@ BattleScript_EffectRelicSong:
 	seteffectwithchance
 	argumentstatuseffect
 	tryfaintmon BS_TARGET, FALSE, NULL
-	goto BattleScript_MoveEnd
-	
-BattleScript_EffectAllySwitch:
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	jumpifnoally BS_ATTACKER, BattleScript_ButItFailed
-	attackanimation
-	waitanimation
-	printstring STRINGID_ALLYSWITCHPOSITION
-	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 	
 BattleScript_EffectFairyLock:
@@ -5548,6 +5538,17 @@ BattleScript_ProtectLikeAtkString:
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectCaltrops::
+	attackcanceler
+	trysetcaltrops BS_TARGET, BattleScript_ButItFailedAtkStringPpReduce
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	printstring STRINGID_CALTROPS_SET
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
 BattleScript_EffectSpikes::
 	attackcanceler
 	trysetspikes BattleScript_ButItFailedAtkStringPpReduce
@@ -6840,6 +6841,13 @@ BattleScript_EffectMagicCoat:
 	printstring STRINGID_PKMNSHROUDEDITSELF
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
+
+BattleScript_TryRecycle::
+	tryrecycleitem BattleScript_Return
+	printstring STRINGID_XFOUNDONEY
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 
 BattleScript_EffectRecycle::
 	attackcanceler
@@ -8198,8 +8206,18 @@ BattleScript_ToxicSpikesAbsorbed::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_CaltropsFade::
+	printstring STRINGID_CALTROPS_FADE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_CaltropsBleed::
+	printstring STRINGID_CALTROPS_DAMAGE
+	goto BattleScript_StatusHazard
+
 BattleScript_ToxicSpikesPoisoned::
 	printstring STRINGID_TOXICSPIKESPOISONED
+BattleScript_StatusHazard:
 	waitmessage B_WAIT_TIME_LONG
 	statusanimation BS_STACK_1
 	updatestatusicon BS_STACK_1
@@ -8229,13 +8247,10 @@ BattleScript_StickyWebOnSwitchInEnd:
 	return
 
 BattleScript_HotCoalsActivates::
-	sethword sMOVE_EFFECT, MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER
 	printstring STRINGID_HOT_COALS_BURN
-	waitmessage B_WAIT_TIME_LONG
-	saveattackertostack3
-	copybyte gBattlerAttacker, gStackBattler1
-	seteffectprimary
-	readattackerfromstack3
+	goto BattleScript_StatusHazard
+
+BattleScript_HotCoalsFade::
 	printstring STRINGID_HOT_COALS_EXTINGUISH
 	waitmessage B_WAIT_TIME_LONG
 	return
@@ -8454,7 +8469,12 @@ BattleScript_StickyWebFree::
 	return
 
 BattleScript_HotCoalsFree::
-	printstring STRINGID_HOT_COALS_EXTINGUISH
+	printstring STRINGID_HOT_COALS_FREE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_CaltropsFree::
+	printstring STRINGID_CALTROPS_FREE
 	waitmessage B_WAIT_TIME_LONG
 	return
 
@@ -8730,6 +8750,11 @@ BattleScript_DefSpDefDownTrySpDef::
 	printfromtable gStatDownStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_DefSpDefDownRet::
+	return
+
+BattleScript_CorrosiveGas::
+	printstring STRINGID_PKMNKNOCKEDOFF
+	waitmessage B_WAIT_TIME_LONG
 	return
 
 BattleScript_KnockedOff::
@@ -13179,3 +13204,13 @@ BattleScript_EffectKinesis:
 	seteffectprimary
 	goto BattleScript_MoveEnd
 	
+BattleScript_EffectAllySwitch:
+	attackcanceler
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	swapwith BS_TARGET
+	printstring STRINGID_SWAPWITH
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd

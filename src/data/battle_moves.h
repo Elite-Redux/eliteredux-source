@@ -4245,7 +4245,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_POISON_TAIL] =
     {
         .effect = EFFECT_HIT_SWITCH_TARGET,
-        .power = 80,
+        .power = 60,
         .type = TYPE_POISON,
         .accuracy = 100,
         .pp = 10,
@@ -6226,13 +6226,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_ALLY_SWITCH] =
     {
-        .effect = EFFECT_PLACEHOLDER,
+        .effect = EFFECT_ALLY_SWITCH,
         .power = 0,
         .type = TYPE_PSYCHIC,
         .accuracy = 0,
         .pp = 15,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_USER,
+        .target = MOVE_TARGET_ALLY,
         .priority = 2,
         .split = SPLIT_STATUS,
     },
@@ -9204,15 +9204,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_CORROSIVE_GAS] =
     {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
+        .effect = EFFECT_CORROSIVE_GAS,
+        .power = 40,
         .type = TYPE_POISON,
         .accuracy = 100,
         .pp = 20,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_FOES_AND_ALLY,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-        .split = SPLIT_STATUS,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
     },
     [MOVE_COACHING] =
     {
@@ -12153,14 +12153,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_TRANSMUTE] =
     {
-        .effect = EFFECT_PLACEHOLDER,
-        .power = 0,
-        .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 0,
+        .effect = EFFECT_MISC_HIT,
+        .power = 80,
+        .type = TYPE_PSYCHIC,
+        .accuracy = 100,
+        .pp = 5,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_PHYSICAL,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
+        .argument = MISC_EFFECT_TRANSMUTE,
     },
     [MOVE_CLEAR_SKIES] =
     {
@@ -12240,14 +12242,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_CALTROPS] =
     {
-        .effect = EFFECT_PLACEHOLDER,
+        .effect = EFFECT_CALTROPS,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_STEEL,
         .accuracy = 0,
-        .pp = 0,
+        .pp = 20,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_PHYSICAL,
+        .target = MOVE_TARGET_OPPONENTS_FIELD,
+        .flags = FLAG_MAGIC_COAT_AFFECTED,
+        .split = SPLIT_STATUS,
     },
     [MOVE_TAKE_HEART] =
     {

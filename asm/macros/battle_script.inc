@@ -2371,6 +2371,15 @@
 	.4byte \failPtr
 	.endm
 
+	.macro trysetcaltrops target:req failPtr:req
+	various \target, VARIOUS_SET_CALTROPS
+	.4byte \failPtr
+	.endm
+
+	.macro swapwith target:req
+	various \target, VARIOUS_SWAP_WITH
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd
