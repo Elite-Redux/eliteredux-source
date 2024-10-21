@@ -1402,18 +1402,6 @@ BattleScript_EffectRelicSong:
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 	
-BattleScript_EffectAllySwitch:
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	jumpifnoally BS_ATTACKER, BattleScript_ButItFailed
-	attackanimation
-	waitanimation
-	printstring STRINGID_ALLYSWITCHPOSITION
-	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
-	
 BattleScript_EffectFairyLock:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -6857,7 +6845,7 @@ BattleScript_TryRecycle::
 	tryrecycleitem BattleScript_Return
 	printstring STRINGID_XFOUNDONEY
 	waitmessage B_WAIT_TIME_LONG
-	goto return
+	return
 
 
 BattleScript_EffectRecycle::
@@ -13240,3 +13228,13 @@ BattleScript_EffectKinesis:
 	seteffectprimary
 	goto BattleScript_MoveEnd
 	
+BattleScript_EffectAllySwitch:
+	attackcanceler
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	swapwith BS_TARGET
+	printstring STRINGID_SWAPWITH
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd

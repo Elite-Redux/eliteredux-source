@@ -6226,13 +6226,13 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_ALLY_SWITCH] =
     {
-        .effect = EFFECT_PLACEHOLDER,
+        .effect = EFFECT_ALLY_SWITCH,
         .power = 0,
         .type = TYPE_PSYCHIC,
         .accuracy = 0,
         .pp = 15,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_USER,
+        .target = MOVE_TARGET_ALLY,
         .priority = 2,
         .split = SPLIT_STATUS,
     },

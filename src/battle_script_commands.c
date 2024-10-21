@@ -11421,6 +11421,31 @@ static void Cmd_various(void)
         else
             gSideTimers[GetBattlerSide(gActiveBattler)].caltrops = TRUE;
         break;
+    case VARIOUS_SWAP_WITH:
+        for (i = 0; i < gBattlersCount; i++)
+        {
+            int* target = &gBattleStruct->moveTarget[i];
+            if (i == gActiveBattler) continue;
+            if (i == gBattlerAttacker) continue;
+
+            if (*target == gBattlerAttacker)
+                *target = gActiveBattler;
+            else if (*target == gActiveBattler)
+                *target = gBattlerAttacker;
+        }
+        {
+        int temp;
+        if ((gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] ^ gSideStatuses[GET_BATTLER_SIDE(gBattlerAttacker)]) & SIDE_STATUS_FUTUREATTACK)
+        {
+            gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] ^= SIDE_STATUS_FUTUREATTACK;
+            gSideStatuses[GET_BATTLER_SIDE(gActiveBattler)] ^= SIDE_STATUS_FUTUREATTACK;
+        }
+        SWAP(gWishFutureKnock.futureSightMove[gActiveBattler], gWishFutureKnock.futureSightMove[gBattlerAttacker], temp)
+        SWAP(gWishFutureKnock.futureSightPower[gActiveBattler], gWishFutureKnock.futureSightPower[gBattlerAttacker], temp)
+        SWAP(gWishFutureKnock.futureSightAttacker[gActiveBattler], gWishFutureKnock.futureSightAttacker[gBattlerAttacker], temp)
+        SWAP(gWishFutureKnock.futureSightCounter[gActiveBattler], gWishFutureKnock.futureSightCounter[gBattlerAttacker], temp)
+        }
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 
