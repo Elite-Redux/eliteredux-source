@@ -5011,6 +5011,9 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     }
     speed *= gStatStageRatios[statStage][0];
     speed /= gStatStageRatios[statStage][1];
+    
+    if (gChosenMoveByBattler[battlerId] == MOVE_STEAMROLLER)
+        speed = 3 * speed / 2;
 
     return speed;
 }
@@ -5096,6 +5099,9 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
     {
         priority++;
     }
+
+    if (gBattleMoves[move].effect == EFFECT_THIEF && !gBattleMons[target].item)
+        priority++;
     
 	if (BattlerHasAbility(battlerId, battlerId, ABILITY_TRIAGE))
     {

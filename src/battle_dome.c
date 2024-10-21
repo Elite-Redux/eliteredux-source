@@ -2755,8 +2755,8 @@ static int GetTypeEffectivenessPoints(int move, int targetSpecies, int arg2)
     }
     else
     {
-        u32 typeEffectiveness1 = UQ_4_12_TO_INT(GetTypeModifier(moveType, defType1) * 2) * 5;
-        u32 typeEffectiveness2 = UQ_4_12_TO_INT(GetTypeModifier(moveType, defType2) * 2) * 5;
+        u32 typeEffectiveness1 = UQ_4_12_TO_INT(GetTypeModifier(moveType, defType1, gBattlerAttacker, targetSpecies) * 2) * 5;
+        u32 typeEffectiveness2 = UQ_4_12_TO_INT(GetTypeModifier(moveType, defType2, gBattlerAttacker, targetSpecies) * 2) * 5;
 
         typePower = (typeEffectiveness1 * typePower) / 10;
         if (defType2 != defType1)

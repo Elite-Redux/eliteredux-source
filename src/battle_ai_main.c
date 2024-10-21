@@ -2273,15 +2273,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 }*/
             }
             break;        
-        case EFFECT_MIRACLE_EYE:
-            if (gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED)
-                score -= 10;
-
-            if (gBattleMons[battlerDef].statStages[STAT_EVASION] <= 4
-              || !(IS_BATTLER_OF_TYPE(battlerDef, TYPE_DARK))
-              || DoesPartnerHaveSameMoveEffect(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
-                score -= 9;
-            break;
         case EFFECT_BURN_UP:
             if (!IS_BATTLER_OF_TYPE(battlerAtk, gBattleMoves[move].type))
                 score -= 10;

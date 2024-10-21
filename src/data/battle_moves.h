@@ -1668,13 +1668,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_KINESIS] =
     {
-        .effect = EFFECT_ACCURACY_DOWN,
+        .effect = EFFECT_KINESIS,
         .power = 0,
         .type = TYPE_PSYCHIC,
-        .accuracy = 80,
-        .pp = 15,
+        .accuracy = 100,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
+        .priority = 1,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MAGIC_COAT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_STATUS,
     },
@@ -2135,15 +2136,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_NIGHTMARE] =
     {
-        .effect = EFFECT_DREAM_EATER,
+        .effect = EFFECT_NIGHTMARE,
         .power = 120,
         .type = TYPE_GHOST,
         .accuracy = 100,
-        .pp = 15,
-        .secondaryEffectChance = 0,
+        .pp = 10,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-        .split = SPLIT_STATUS,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
     },
     [MOVE_FLAME_WHEEL] =
     {
@@ -3290,15 +3291,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SMELLING_SALTS] =
     {
         .effect = EFFECT_SMELLINGSALT,
-        .power = 70,
-        .type = TYPE_NORMAL,
+        .power = 75,
+        .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-        .argument = STATUS1_PARALYSIS,
     },
     [MOVE_FOLLOW_ME] =
     {
@@ -6664,14 +6664,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_STEAMROLLER] =
     {
-        .effect = EFFECT_FLINCH_HIT,
+        .effect = EFFECT_HIT,
         .power = 80,
         .type = TYPE_BUG,
         .accuracy = 100,
-        .pp = 15,
-        .secondaryEffectChance = 30,
+        .pp = 10,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_COTTON_GUARD] =

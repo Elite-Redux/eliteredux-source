@@ -11078,7 +11078,7 @@ s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, 
 
 void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities)
 {
-    u16 mod = GetTypeModifier(moveType, defType);
+    u16 mod = GetTypeModifier(moveType, defType, battlerAtk, battlerDef);
 
     if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_NORMALIZE) && moveType == TYPE_NORMAL && mod != UQ_4_12(0.0))
     {
@@ -11170,8 +11170,6 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
     }
 
     if (moveType == TYPE_GROUND && defType == TYPE_FLYING && IsBattlerGrounded(battlerDef) && mod == UQ_4_12(0.0))
-        mod = UQ_4_12(1.0);
-    if (moveType == TYPE_PSYCHIC && defType == TYPE_DARK && gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
     if (gBattleMoves[move].effect == EFFECT_IGNORE_TYPE_IMMUNITY && mod == UQ_4_12(0.0))
         mod = UQ_4_12(1.0);
@@ -11383,20 +11381,25 @@ u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilit
     return modifier;
 }
 
-u16 GetTypeModifier(u8 atkType, u8 defType)
+u16 GetTypeModifier(int atkType, int defType, int battlerAtk, int battlerDef)
 {
-    if (IsInverseRoomActive()) {
-        if (B_FLAG_INVERSE_BATTLE != 0 && FlagGet(B_FLAG_INVERSE_BATTLE))
-            return sTypeEffectivenessTable[atkType][defType];
-        else
-            return sInverseTypeEffectivenessTable[atkType][defType];
-    }
-    else {
-        if (B_FLAG_INVERSE_BATTLE != 0 && FlagGet(B_FLAG_INVERSE_BATTLE))
-            return sInverseTypeEffectivenessTable[atkType][defType];
-        else
-            return sTypeEffectivenessTable[atkType][defType];
-    }
+    int inverted = IsInverseRoomActive();
+    int miracleEyeAtk = battlerAtk < MAX_BATTLERS_COUNT ? gStatuses3[battlerAtk] & STATUS3_MIRACLE_EYED : FALSE;
+    int miracleEyeDef = gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED;
+    int ret;
+    if (miracleEyeAtk) inverted = !inverted;
+    if (miracleEyeDef) inverted = !inverted;
+    if (B_FLAG_INVERSE_BATTLE != 0 && FlagGet(B_FLAG_INVERSE_BATTLE)) inverted = !inverted;
+
+    if (inverted)
+        ret = sInverseTypeEffectivenessTable[atkType][defType];
+    else
+        ret = sTypeEffectivenessTable[atkType][defType];
+    
+    if ((miracleEyeDef || miracleEyeAtk) && atkType == TYPE_DARK && defType == TYPE_PSYCHIC)
+        ret = 0;
+    
+    return ret;
 }
 
 s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId)
@@ -11408,11 +11411,11 @@ s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId)
     s32 dmg = 0;
     u16 modifier = UQ_4_12(1.0);
 
-    MulModifier(&modifier, GetTypeModifier(hazardType, type1));
+    MulModifier(&modifier, GetTypeModifier(hazardType, type1, MAX_BATTLERS_COUNT, battlerId));
     if (type2 != type1)
-        MulModifier(&modifier, GetTypeModifier(hazardType, type2));
+        MulModifier(&modifier, GetTypeModifier(hazardType, type2, MAX_BATTLERS_COUNT, battlerId));
     if (type3 != TYPE_MYSTERY && type3 != type1 && type3 != type2)
-        MulModifier(&modifier, GetTypeModifier(hazardType, type3));
+        MulModifier(&modifier, GetTypeModifier(hazardType, type3, MAX_BATTLERS_COUNT, battlerId));
 
     switch (modifier)
     {
@@ -13891,6 +13894,13 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
 
             UseOutOfTurnAttack(battler, attacker, ability, MOVE_MACH_PUNCH, 0);
             break;
+        
+        case ABILITY_WILDFIRE:
+            if (!ShouldApplyOnHitAffect(attacker)) break;
+            if (!IsMoveMakingContact(move, attacker)) break;
+
+            UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
+            break;
 
         case ABILITY_VICTORY_BOMB:
             if (IsBattlerAlive(battler)) break;
@@ -15276,7 +15286,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             return TRUE;
         
         case ABILITY_LOW_BLOW:
-            UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 20);
+            UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40);
             break;
         
         case ABILITY_CHEAP_TACTICS:

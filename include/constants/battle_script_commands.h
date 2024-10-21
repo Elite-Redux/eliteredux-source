@@ -261,6 +261,7 @@
 #define VARIOUS_SHOWTIME                        178
 #define VARIOUS_TREPIDATION                     179
 #define VARIOUS_DO_HAZARD_DAMAGE                180
+#define VARIOUS_TRY_DESTROY_ITEM                181
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1

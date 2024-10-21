@@ -556,16 +556,16 @@ static u8 PredictFoesMoveType(u32 opposingBattler)
     u8 predictedType = atkType1;
 
     // Calculate damage modifier for foe's first type
-    typeDmg1 *= GetTypeModifier(atkType1, defType1);
+    typeDmg1 *= GetTypeModifier(atkType1, defType1, gActiveBattler, opposingBattler);
     if (defType1 != defType2)
-        typeDmg1 *= GetTypeModifier(atkType1, defType1);
+        typeDmg1 *= GetTypeModifier(atkType1, defType1, gActiveBattler, opposingBattler);
 
     // Calculate damage modifier for foe's second type, if applicable
     if (atkType1 != atkType2)
     {
-        typeDmg2 *= GetTypeModifier(atkType2, defType1);
+        typeDmg2 *= GetTypeModifier(atkType2, defType1, gActiveBattler, opposingBattler);
         if (defType1 != defType2)
-            typeDmg2 *= GetTypeModifier(atkType2, defType1);
+            typeDmg2 *= GetTypeModifier(atkType2, defType1, gActiveBattler, opposingBattler);
         
         if (typeDmg2 > typeDmg1)
         {
@@ -585,9 +585,9 @@ static u8 PredictFoesMoveType(u32 opposingBattler)
         if (moves[i] != MOVE_NONE && gBattleMoves[moves[i]].split != SPLIT_STATUS)
         {
             atkType1 = gBattleMoves[moves[i]].type;
-            typeDmg3 = GetTypeModifier(atkType1, defType1);
+            typeDmg3 = GetTypeModifier(atkType1, defType1, gActiveBattler, opposingBattler);
             if (defType1 != defType2)
-                typeDmg3 *= GetTypeModifier(atkType1, defType1);
+                typeDmg3 *= GetTypeModifier(atkType1, defType1, gActiveBattler, opposingBattler);
 
             if (typeDmg3 > bestTypeDmg)
             {
@@ -815,9 +815,9 @@ static u32 GetBestMonDefensive(struct Pokemon *party, int firstId, int lastId, u
                 u8 defType1 = gBaseStats[species].type1;
                 u8 defType2 = gBaseStats[species].type2;
 
-                typeDmg *= GetTypeModifier(predictedMoveType, defType1);
+                typeDmg *= GetTypeModifier(predictedMoveType, defType1, gActiveBattler, opposingBattler);
                 if (defType2 != defType1)
-                    typeDmg *= GetTypeModifier(predictedMoveType, defType2);
+                    typeDmg *= GetTypeModifier(predictedMoveType, defType2, gActiveBattler, opposingBattler);
 
                 if (bestDmg < typeDmg)
                 {
@@ -891,14 +891,14 @@ static u32 GetBestMonOffensive(struct Pokemon *party, int firstId, int lastId, u
                 u8 defType1 = gBattleMons[opposingBattler].type1;
                 u8 defType2 = gBattleMons[opposingBattler].type2;
 
-                typeDmg *= GetTypeModifier(atkType1, defType1);
+                typeDmg *= GetTypeModifier(atkType1, defType1, gActiveBattler, opposingBattler);
                 if (atkType2 != atkType1)
-                    typeDmg *= GetTypeModifier(atkType2, defType1);
+                    typeDmg *= GetTypeModifier(atkType2, defType1, gActiveBattler, opposingBattler);
                 if (defType2 != defType1)
                 {
-                    typeDmg *= GetTypeModifier(atkType1, defType2);
+                    typeDmg *= GetTypeModifier(atkType1, defType2, gActiveBattler, opposingBattler);
                     if (atkType2 != atkType1)
-                        typeDmg *= GetTypeModifier(atkType2, defType2);
+                        typeDmg *= GetTypeModifier(atkType2, defType2, gActiveBattler, opposingBattler);
                 }
                 if (bestDmg < typeDmg)
                 {

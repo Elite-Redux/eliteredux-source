@@ -903,6 +903,7 @@ static const u8 sText_WeatherNormal[] = _("The weather returned to normal!");
 static const u8 sText_RudeAwakening[] = _("{B_DEF_NAME_WITH_PREFIX} is dazed\nby the blow!");
 static const u8 sText_RoomsCleared[] = _("The warped dimensions were\nreturned to normal!");
 static const u8 sText_Trepidation[] = _("{B_DEF_NAME_WITH_PREFIX} becomes\nanxious!");
+static const u8 sText_Kinesis[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nsuddenly flies away!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1906,6 +1907,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_RUDE_AWAKENING - 12] = sText_RudeAwakening,
     [STRINGID_ROOMS_CLEARED - 12] = sText_RoomsCleared,
     [STRINGID_TREPIDATION - 12] = sText_Trepidation,
+    [STRINGID_KINESIS - 12] = sText_Kinesis,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

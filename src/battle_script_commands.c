@@ -1543,10 +1543,10 @@ static void Cmd_attackcanceler(void)
         && (gBattlerAttacker != gBattlerTarget)) {
         u32 currentType;
         u32 bestType = gBattleMons[gBattlerTarget].type1;
-        u16 bestModifier = GetTypeModifier(moveType, bestType);
+        u16 bestModifier = GetTypeModifier(moveType, bestType, gBattlerAttacker, gBattlerTarget);
 
         for (currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
-            u16 currentModifier = GetTypeModifier(moveType, currentType);
+            u16 currentModifier = GetTypeModifier(moveType, currentType, gBattlerAttacker, gBattlerTarget);
             if (currentModifier < bestModifier) {
                 bestModifier = currentModifier;
                 bestType = currentType;
@@ -1810,7 +1810,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
                 || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_MINDS_EYE, atkAbility))
         evasionStage = 6;
 
-    if ((gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT) || (gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED))
+    if (gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT)
         buff = accStage;
     else
         buff = accStage + 6 - evasionStage;
@@ -2157,7 +2157,8 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER))
                     + 2 * (!!IsAbilityOnField(ABILITY_BATTLE_AURA))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WAY_OF_PRECISION) && IS_IRON_FIST(battlerAtk, move))
-                    + gVolatileStructs[battlerAtk].critBoost;
+                    + gVolatileStructs[battlerAtk].critBoost
+                    + move == MOVE_VISE_GRIP;
 
         if (critChance >= ARRAY_COUNT(sCriticalHitChance))
             critChance = ARRAY_COUNT(sCriticalHitChance) - 1;
@@ -2333,11 +2334,11 @@ END:
     if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(2.0))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1, gBattlerAttacker, gBattlerTarget) >= UQ_4_12(2.0))
          || (gBattleMons[gBattlerTarget].type2 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(2.0))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2, gBattlerAttacker, gBattlerTarget) >= UQ_4_12(2.0))
          || (gBattleMons[gBattlerTarget].type3 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(2.0)))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3, gBattlerAttacker, gBattlerTarget) >= UQ_4_12(2.0)))
         {
             gBattlerAbility = gBattlerTarget;
             BattleScriptCall(BattleScript_AttackWeakenedByStrongWinds);
@@ -3086,6 +3087,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
     case MOVE_EFFECT_SMACK_DOWN:
     case MOVE_EFFECT_REMOVE_STATUS:
     case MOVE_EFFECT_BURN_UP:
+    case MOVE_EFFECT_STEAL_ITEM:
         gBattleStruct->moveEffect2 = gBattleScripting.moveEffect;
         gBattlescriptCurrInstr++;
         return;
@@ -3685,28 +3687,14 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_RAGE:
                 gBattleMons[gBattlerAttacker].status2 |= STATUS2_RAGE;
                 break;
-            case MOVE_EFFECT_STEAL_ITEM:
-                // Don't steal on first strike of Parental Bond, unless it KO'ed the target
-                if (!(gTurnStructs[gBattlerAttacker].parentalBondOn >= 2 && gBattleMons[gBattlerTarget].hp != 0))
-                {
-                    if (!CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item))
-                    {
-                        break;
-                    }
-
-                    StealTargetItem(gBattlerAttacker, gBattlerTarget);  // Attacker steals target item
-                    gBattleMons[gBattlerAttacker].item = 0; // Item assigned later on with thief (see MOVEEND_CHANGED_ITEMS)
-                    gBattleStruct->changedItems[gBattlerAttacker] = gLastUsedItem; // Stolen item to be assigned later
-                    BattleScriptCall(BattleScript_ItemSteal);
-
-                }
-                break;
             case MOVE_EFFECT_PREVENT_ESCAPE:
                 gBattleMons[gBattlerTarget].status2 |= STATUS2_ESCAPE_PREVENTION;
                 gVolatileStructs[gBattlerTarget].battlerPreventingEscape = gBattlerAttacker;
                 break;
             case MOVE_EFFECT_NIGHTMARE:
+                if (gBattleMons[gBattlerTarget].status2 && STATUS2_NIGHTMARE) break;
                 gBattleMons[gBattlerTarget].status2 |= STATUS2_NIGHTMARE;
+                BattleScriptCall(BattleScript_NightmareStarts);
                 break;
             case MOVE_EFFECT_ALL_STATS_UP:
                 if (!NoAliveMonsForEitherParty())
@@ -5848,6 +5836,21 @@ static void Cmd_moveend(void)
         case MOVEEND_MOVE_EFFECTS2: // For effects which should happen after target items, for example Knock Off after damage from Rocky Helmet.
             switch (gBattleStruct->moveEffect2)
             {
+            case MOVE_EFFECT_STEAL_ITEM:
+                if (!gBattleMons[gBattlerAttacker].item)
+                {
+                    if (!CanStealItem(gBattlerAttacker, gBattlerTarget, gBattleMons[gBattlerTarget].item))
+                    {
+                        break;
+                    }
+                    StealTargetItem(gBattlerAttacker, gBattlerTarget);  // Attacker steals target item
+                    gBattleMons[gBattlerAttacker].item = 0; // Item assigned later on with thief (see MOVEEND_CHANGED_ITEMS)
+                    gBattleStruct->changedItems[gBattlerAttacker] = gLastUsedItem; // Stolen item to be assigned later
+                    BattleScriptCall(BattleScript_ItemSteal);
+                    effect = TRUE;
+                    break;
+                }
+                // Intentional fallthrough
             case MOVE_EFFECT_KNOCK_OFF:
                 effect = TryKnockOffBattleScript(gBattlerTarget);
                 break;
@@ -11366,6 +11369,18 @@ static void Cmd_various(void)
             break;
         }
         break;
+    case VARIOUS_TRY_DESTROY_ITEM:
+        ptr = READ_PTR_INC;
+        if (!gBattleMons[gActiveBattler].item
+            || !CanBattlerGetOrLoseItem(gActiveBattler, gBattleMons[gActiveBattler].item)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_STICKY_HOLD)
+            || DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
+            gBattlescriptCurrInstr = ptr;
+        else
+        {
+            RemoveItem(gActiveBattler);
+        }
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 
@@ -13813,7 +13828,7 @@ static void Cmd_settypetorandomresistance(void) // conversion 2
 
         for (i = 0; i < NUMBER_OF_MON_TYPES; i++) // Find all types that resist.
         {
-            switch (GetTypeModifier(hitByType, i))
+            switch (GetTypeModifier(hitByType, i, gBattlerAttacker, gBattlerTarget))
             {
             case UQ_4_12(0):
             case UQ_4_12(0.5):
@@ -13973,9 +13988,15 @@ static void Cmd_trychoosesleeptalkmove(void)
     }
     else // at least one move can be chosen
     {
+        int reroll = TRUE;
         do
         {
             movePosition = Random() & (MAX_MON_MOVES - 1);
+            if (reroll && gBattleMons[gBattlerAttacker].moves[movePosition] == MOVE_REST)
+            {
+                reroll = FALSE;
+                movePosition = Random() & (MAX_MON_MOVES - 1);
+            }
         } while ((gBitTable[movePosition] & unusableMovesBits));
         
         gTurnStructs[gBattlerAttacker].sleepTalk = TRUE;

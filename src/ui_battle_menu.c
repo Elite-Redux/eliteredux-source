@@ -2216,9 +2216,9 @@ const u8 sText_Title_Status_Smack_Down_Description[]       = _("Ground moves wil
                                                                "Pokémon regardless of type,\n"
                                                                "ability, status or item.");
 const u8 sText_Title_Status_Miracle_Eye[]                  = _("Miracle Eyed");
-const u8 sText_Title_Status_Miracle_Eye_Description[]      = _("It will be hit ignoring evasion\n"
-                                                               "changes, If it has the Dark-type\n"
-                                                               "it can be hit by Psychic moves.");
+const u8 sText_Title_Status_Miracle_Eye_Description[]      = _("Inverts this Pokémon's type\n"
+                                                               "matchups. Psychic-types are\n"
+                                                               "immune to Dark.");
 const u8 sText_Title_Status_Heal_Block[]                   = _("Can't be Healed");
 const u8 sText_Title_Status_Heal_Block_Description[]       = _("This Pokémon will be unable to\n"
                                                                "be healed by any means, it will\n"

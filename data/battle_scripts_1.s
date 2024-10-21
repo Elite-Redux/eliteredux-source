@@ -259,7 +259,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_PSYSHOCK
 	.4byte BattleScript_EffectRoost                   @ EFFECT_ROOST
 	.4byte BattleScript_EffectGravity                 @ EFFECT_GRAVITY
-	.4byte BattleScript_EffectMircleEye               @ EFFECT_MIRACLE_EYE
+	.4byte BattleScript_EffectMiracleEye              @ EFFECT_MIRACLE_EYE
 	.4byte BattleScript_EffectTailwind                @ EFFECT_TAILWIND
 	.4byte BattleScript_EffectEmbargo                 @ EFFECT_EMBARGO
 	.4byte BattleScript_EffectAquaRing                @ EFFECT_AQUA_RING
@@ -491,6 +491,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectChipAway				  @ EFFECT_CHIP_AWAY
 	.4byte BattleScript_EffectMeditate				  @ EFFECT_MEDITATE
 	.4byte BattleScript_EffectBarrier				  @ EFFECT_BARRIER
+	.4byte BattleScript_EffectKinesis				  @ EFFECT_KINESIS
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -3259,7 +3260,7 @@ BattleScript_EffectTailwind:
 	call BattleScript_OnTailwindStart
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectMircleEye:
+BattleScript_EffectMiracleEye:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
@@ -3847,6 +3848,17 @@ BattleScript_MoveEffectCurse::
 BattleScript_EffectStealthRockHit::
 	call BattleScript_EffectHit_Return
 	trytoapplymoveeffect BattleScript_MoveEffectStealthRockHit
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectSmellingsalt:
+	call BattleScript_EffectHit_Return
+	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_EffectSmellingsalt_Continue
+	goto BattleScript_MoveEnd
+BattleScript_EffectSmellingsalt_Continue:
+	curestatus BS_ATTACKER
+	updatestatusicon BS_ATTACKER
+	printstring STRINGID_PKMNSTATUSNORMAL
+	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
 BattleScript_MoveEffectStealthRockHit::
@@ -5404,22 +5416,17 @@ BattleScript_EffectMeanLook::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectNightmare::
-	attackcanceler
-	attackstring
-	ppreduce
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpifstatus2 BS_TARGET, STATUS2_NIGHTMARE, BattleScript_ButItFailed
 	jumpifstatus BS_TARGET, STATUS1_SLEEP, BattleScript_NightmareWorked
 	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_NightmareWorked
 	goto BattleScript_ButItFailed
 BattleScript_NightmareWorked::
-	attackanimation
-	waitanimation
 	setmoveeffect MOVE_EFFECT_NIGHTMARE
-	seteffectprimary
+	goto BattleScript_EffectHit
+	
+BattleScript_NightmareStarts::
 	printstring STRINGID_PKMNFELLINTONIGHTMARE
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_EffectMinimize::
 	attackcanceler
@@ -6667,7 +6674,6 @@ BattleScript_EffectFocusPunch::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectSmellingsalt:
 BattleScript_EffectWakeUpSlap:
 BattleScript_EffectSparklingAria:
 	jumpiftargetally BattleScript_EffectSparklingAria_CureOnly
@@ -13176,3 +13182,17 @@ BattleScript_EffectChipAway
 	setmoveeffect MOVE_EFFECT_DEF_MINUS_1
 	seteffectwithchance
 	goto BattleScript_MoveEndTryFaintTarget
+
+BattleScript_EffectKinesis:
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	trydestroyitem BS_TARGET, BattleScript_ButItFailed
+	playanimation BS_TARGET, B_ANIM_ITEM_KNOCKOFF, NULL
+	printstring STRINGID_KINESIS
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_FLINCH
+	seteffectprimary
+	goto BattleScript_MoveEnd
+	

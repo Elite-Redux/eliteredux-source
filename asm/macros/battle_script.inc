@@ -2366,6 +2366,11 @@
 	.byte \mode
 	.endm
 
+	.macro trydestroyitem target:req, failPtr:req
+	various \target, VARIOUS_TRY_DESTROY_ITEM
+	.4byte \failPtr
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

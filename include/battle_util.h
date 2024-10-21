@@ -253,7 +253,7 @@ s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, 
 u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags);
 u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
 u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef, u8 leveldef);
-u16 GetTypeModifier(u8 atkType, u8 defType);
+u16 GetTypeModifier(int atkType, int defType, int miracleEyeAtk, int miracleEyeDef);
 s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId);
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId);
 u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId);
