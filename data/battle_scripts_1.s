@@ -430,6 +430,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectFrostbite               @ EFFECT_FROSTBITE
 	.4byte BattleScript_EffectFreeze                  @ EFFECT_FREEZE
 	.4byte BattleScript_EffectBurnHit                 @ EFFECT_INFERNAL_PARADE
+	.4byte BattleScript_EffectFrostbiteHit            @ EFFECT_BITTER_MALICE
 	.4byte BattleScript_EffectWyrmWind			  	  @ EFFECT_WYRM_WIND
 	.4byte BattleScript_EffectHit			  		  @ EFFECT_MISTY_TERRAIN_BOOST
 	.4byte BattleScript_EffectBerrySmash              @ EFFECT_BERRY_SMASH
@@ -13084,31 +13085,6 @@ BattleScript_EffectRipAndTear::
 	seteffectwithchance
 	goto BattleScript_MoveEndTryFaintTarget
 
-BattleScript_EffectTerrorCharge::
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	critcalc
-	damagecalc
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage B_WAIT_TIME_LONG
-	resultmessage
-	waitmessage B_WAIT_TIME_LONG
-	setmoveeffect MOVE_EFFECT_BLEED
-	seteffectwithchance
-	setmoveeffect MOVE_EFFECT_FEAR
-	seteffectwithchance
-	goto BattleScript_MoveEndTryFaintTarget
-
 BattleScript_AnnounceAttackerItemDisabled::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_DISABLE_ATTACKER_ITEM
@@ -13212,6 +13188,31 @@ BattleScript_EffectChipAway:
 	setmoveeffect MOVE_EFFECT_ATK_MINUS_1
 	seteffectwithchance
 	setmoveeffect MOVE_EFFECT_DEF_MINUS_1
+	seteffectwithchance
+	goto BattleScript_MoveEndTryFaintTarget
+
+BattleScript_EffectTerrorCharge::
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	critcalc
+	damagecalc
+	adjustdamage
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_BLEED
+	seteffectwithchance
+	setmoveeffect MOVE_EFFECT_FEAR
 	seteffectwithchance
 	goto BattleScript_MoveEndTryFaintTarget
 

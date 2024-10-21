@@ -3519,7 +3519,7 @@ static const u8 sMoveTwoLineDescription_MoveAxeKick[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveBarbBarrage[] = _(
     "The user launches countless toxic barbs\n"
-    "20% chance to poison");
+    "30% chance to poison");
 
 static const u8 sMoveTwoLineDescription_MoveSmashinRealities[] = _(
     "smashes the realities around it.\n"
@@ -5717,8 +5717,8 @@ static const u8 sMoveFourLineDescription_MoveBloodShot[] = _("Hurls a sphere of\
 static const u8 sMoveFourLineDescription_MoveFlashFreeze[] = _("Multiple ice cubes\nare shot at the foe.\n100% chance to\ncause frostbite.");
 static const u8 sMoveFourLineDescription_MovePhantomGloves[] = _("Throws foe with a\nghostly hand. 30% chance\nto lower Speed.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveHomingFletch[] = _("User fires a seeking\narrow. Cannot miss.\nHas +1 crit chance.\nArcher boost.");
-static const u8 sMoveFourLineDescription_MoveBitterMalice[] = _("Attacks with spine-\nchilling resentment.\n20% frostbite chance.\nPower doubles if statused.");
-static const u8 sMoveFourLineDescription_MoveInfernalParade[] = _("Attacks with spectral\nfireballs. 30%\nburn chance.\nPower doubles if statused.");
+static const u8 sMoveFourLineDescription_MoveBitterMalice[] = _("Attacks with spine-\nchilling resentment.\n30% frostbite chance.\n50%+ power if statused.");
+static const u8 sMoveFourLineDescription_MoveInfernalParade[] = _("Attacks with spectral\nfireballs. 30%\nburn chance.\n50%+ power if statused.");
 static const u8 sMoveFourLineDescription_MoveDeviousShot[] = _("A devious arrow\nstrike. +1 crit\nchance. 50% bleed\nchance. Archer boost.");
 static const u8 sMoveFourLineDescription_MoveStarburst[] = _("The user crashes a star\nshaped ray down.\n30% flinch chance.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveCheapShot[] = _("The user sneaks into\nshadows, then attacks\nwith hidden projectile.\nMega Launcher boost.");
@@ -5799,7 +5799,7 @@ static const u8 sMoveFourLineDescription_MoveDoubleShock[] = _("The user attacks
 static const u8 sMoveFourLineDescription_MoveComeuppance[] = _("The user hits with\nmuch greater force\nagainst the foe\nthat last hurt it.");
 static const u8 sMoveFourLineDescription_MoveBloodMoon[] = _("The user's spirit surges\nfrom a crimson full moon.\nCannot be used twice\nconsecutively.");
 static const u8 sMoveFourLineDescription_MoveAxeKick[] = _("Slams its heel.\n20% confusion chance.\nHurts on miss.\nStriker boost.");
-static const u8 sMoveFourLineDescription_MoveBarbBarrage[] = _("Barbs are shot at\nthe foe. Doubles the\ndamage if foe\nis poisoned.");
+static const u8 sMoveFourLineDescription_MoveBarbBarrage[] = _("Barbs are shot at\nthe foe. Does 50% more\ndamage if foe\nis poisoned.");
 static const u8 sMoveFourLineDescription_MoveSmashinRealities[] = _("Removes weather\nand terrain.\n-3 priority.\nHammer based.");
 static const u8 sMoveFourLineDescription_MoveCreepingThorns[] = _("Thorn-covered vines\nsurround the foe.\nThis hurts foes on\nswitch in.");
 static const u8 sMoveFourLineDescription_MoveMatchaGotcha[] = _("Fires a tea blast.\nAbsorbs half the\ndamage inflicted.\n20% burn chance.");
@@ -5863,7 +5863,7 @@ static const u8 sMoveFourLineDescription_MoveTanglingHusk[] = _("Protects agains
 static const u8 sMoveFourLineDescription_MoveRipAndTear[] = _("Lowers Speed. 50%\nchance to bleed.\nCan't be used\ntwice in a row.");
 static const u8 sMoveFourLineDescription_MoveBravado[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
 static const u8 sMoveFourLineDescription_MoveTerrorCharge[] = _("50% chance to bleed.\n50% chance to fear.\nDouble damage\nwhen switching in.");
-static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\nDouble damage if\nthe foe is bleeding.\nKeen Edge boost.");
+static const u8 sMoveFourLineDescription_MoveTerrorLocks[] = _("Cuts the foe.\n50% more damage if\nthe foe is bleeding.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveDreamInversion[] = _("Deals 2x damage to\nsleeping foes. 10%\nchance for drowsy.\nHits both foes.");
 static const u8 sMoveFourLineDescription_MoveTeraStarstorm[] = _("Strikes both foes\nwith a rain of crystals.");
 static const u8 sMoveFourLineDescription_MoveSparklingBarrage[] = _("The user shoots\n3 beams of light\nat the target.");
