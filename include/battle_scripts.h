@@ -101,6 +101,7 @@ extern const u8 BattleScript_IngrainTurnHeal[];
 extern const u8 BattleScript_AtkDefDown[];
 extern const u8 BattleScript_DefSpDefDown[];
 extern const u8 BattleScript_KnockedOff[];
+extern const u8 BattleScript_CorrosiveGas[];
 extern const u8 BattleScript_MoveUsedIsImprisoned[];
 extern const u8 BattleScript_SelectingImprisonedMove[];
 extern const u8 BattleScript_SelectingImprisonedMoveInPalace[];

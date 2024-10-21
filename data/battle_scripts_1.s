@@ -493,6 +493,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectBarrier				  @ EFFECT_BARRIER
 	.4byte BattleScript_EffectKinesis				  @ EFFECT_KINESIS
 	.4byte BattleScript_EffectCaltrops				  @ EFFECT_CALTROPS
+	.4byte BattleScript_EffectKnockOff				  @ EFFECT_CORROSIVE_GAS
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -8753,6 +8754,11 @@ BattleScript_DefSpDefDownTrySpDef::
 	printfromtable gStatDownStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_DefSpDefDownRet::
+	return
+
+BattleScript_CorrosiveGas::
+	printstring STRINGID_PKMNKNOCKEDOFF
+	waitmessage B_WAIT_TIME_LONG
 	return
 
 BattleScript_KnockedOff::

@@ -5487,7 +5487,11 @@ static bool32 TryKnockOffBattleScript(u32 battlerDef)
                 gWishFutureKnock.knockedOffMons[side] |= gBitTable[gBattlerPartyIndexes[battlerDef]];
                 CheckSetUnburden(battlerDef);
 
-                BattleScriptCall(BattleScript_KnockedOff);
+                if (gBattleMoves[gCurrentMove].effect == EFFECT_CORROSIVE_GAS)
+                    BattleScriptCall(BattleScript_CorrosiveGas);
+                else
+                    BattleScriptCall(BattleScript_KnockedOff);
+
             }
         }
         return TRUE;

@@ -904,6 +904,11 @@ static const u8 sText_RudeAwakening[] = _("{B_DEF_NAME_WITH_PREFIX} is dazed\nby
 static const u8 sText_RoomsCleared[] = _("The warped dimensions were\nreturned to normal!");
 static const u8 sText_Trepidation[] = _("{B_DEF_NAME_WITH_PREFIX} becomes\nanxious!");
 static const u8 sText_Kinesis[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nsuddenly flies away!");
+static const u8 sText_CaltropsSet[] = _("Razor sharp caltrops were scattered\nall around the opponent's side!");
+static const u8 sText_CaltropsDamage[] = _("The caltrops tear into\n{B_STACK_1_NAME_WITH_PREFIX}!");
+static const u8 sText_CaltropsFade[] = _("The caltrops were dulled!");
+static const u8 sText_HotCoalsFree[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nhot coals!");
+static const u8 sText_CaltropsFree[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\ncaltrops!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1062,11 +1067,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_CaltropsSet[] = _("Razor sharp caltrops were scattered\nall around the opponent's side!");
-static const u8 sText_CaltropsDamage[] = _("The caltrops tear into\n{B_STACK_1_NAME_WITH_PREFIX}!");
-static const u8 sText_CaltropsFade[] = _("The caltrops were dulled!");
-static const u8 sText_HotCoalsFree[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nhot coals!");
-static const u8 sText_CaltropsFree[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\ncaltrops!");
+static const u8 sText_ItemDestroyed[] = _("{B_ATK_NAME_WITH_PREFIX} destroyed\n{B_DEF_NAME_WITH_PREFIX}'s {B_LAST_ITEM}!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1918,6 +1919,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_CALTROPS_FADE - 12] = sText_CaltropsFade,
     [STRINGID_HOT_COALS_FREE - 12] = sText_HotCoalsFree,
     [STRINGID_CALTROPS_FREE - 12] = sText_CaltropsFree,
+    [STRINGID_ITEM_DESTROYED - 12] = sText_ItemDestroyed,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
