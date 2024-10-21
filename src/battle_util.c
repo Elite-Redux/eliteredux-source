@@ -948,6 +948,7 @@ void TryPreemptiveActions()
         int surpriser = 0;
         if ((targetFlag == MOVE_TARGET_FOES_AND_ALLY || GetBattlerSide(target) != GetBattlerSide(battler))
             && GetMovePriority(battler, move, target) > 0
+            && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
             && (surpriser = IsAbilityOnOpposingSide(battler, ABILITY_SURPRISE)))
         {
             gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
