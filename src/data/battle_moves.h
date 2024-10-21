@@ -4245,7 +4245,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_POISON_TAIL] =
     {
         .effect = EFFECT_HIT_SWITCH_TARGET,
-        .power = 80,
+        .power = 60,
         .type = TYPE_POISON,
         .accuracy = 100,
         .pp = 10,
