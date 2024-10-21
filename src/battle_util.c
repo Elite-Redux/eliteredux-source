@@ -9066,7 +9066,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         }
         break;
     case EFFECT_TERROR_CHARGE:
-        if (gVolatileStructs[battlerDef].isFirstTurn == 2)
+        if (gBattleMons[battlerDef].status1 & STATUS1_BLEED)
             basePower *= 2;
         break;
     case EFFECT_ACROBATICS:
