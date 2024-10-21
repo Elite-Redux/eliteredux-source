@@ -1052,7 +1052,7 @@ static const u8 sMoveTwoLineDescription_MoveFacade[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveFocusPunch[] = _(
     "A powerful loyalty attack.\n"
-    "The user flinches if hit.");
+    "Damage is reduced if hit.");
 
 static const u8 sMoveTwoLineDescription_MoveSmellingSalts[] = _(
     "Deals damage and cures\n"
@@ -5162,7 +5162,7 @@ static const u8 sMoveFourLineDescription_MoveFlatter[] = _("Flattery is used to\
 static const u8 sMoveFourLineDescription_MoveWillOWisp[] = _("A sinister, bluish\nwhite flame is shot\nat the foe to\ninflict a burn.");
 static const u8 sMoveFourLineDescription_MoveMemento[] = _("The user faints,\nbut sharply lowers\nthe foe's Attack\nand SpAtk");
 static const u8 sMoveFourLineDescription_MoveFacade[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
-static const u8 sMoveFourLineDescription_MoveFocusPunch[] = _("Moves last.\nThe user flinches\nif hit beforehand.\nIron Fist boost.");
+static const u8 sMoveFourLineDescription_MoveFocusPunch[] = _("Moves last.\nDamage reduced to\n40BP if hit.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveSmellingSalts[] = _("Deals damage and\ncures the user's\nstatus.");
 static const u8 sMoveFourLineDescription_MoveFollowMe[] = _("The user draws\nattention to itself,\nmaking foes attack\nonly the user.");
 static const u8 sMoveFourLineDescription_MoveNaturePower[] = _("An attack that\nchanges type\ndepending on the\nuser's location.");

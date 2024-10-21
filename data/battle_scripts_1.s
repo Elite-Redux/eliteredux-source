@@ -190,7 +190,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectWillOWisp               @ EFFECT_WILL_O_WISP
 	.4byte BattleScript_EffectMemento                 @ EFFECT_MEMENTO
 	.4byte BattleScript_EffectHit                     @ EFFECT_FACADE
-	.4byte BattleScript_EffectFocusPunch              @ EFFECT_FOCUS_PUNCH
+	.4byte BattleScript_EffectHit                     @ EFFECT_FOCUS_PUNCH
 	.4byte BattleScript_EffectSmellingsalt            @ EFFECT_SMELLINGSALT
 	.4byte BattleScript_EffectFollowMe                @ EFFECT_FOLLOW_ME
 	.4byte BattleScript_EffectNaturePower             @ EFFECT_NATURE_POWER
@@ -408,7 +408,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_BOLT_BEAK
 	.4byte BattleScript_EffectRisingVoltage			  @ EFFECT_RISING_VOLTAGE
 	.4byte BattleScript_EffectScaleShot			  	  @ EFFECT_SCALE_SHOT
-	.4byte BattleScript_EffectBeakBlast				  @ EFFECT_BEAK_BLAST
+	.4byte BattleScript_EffectHit    				  @ EFFECT_BEAK_BLAST
 	.4byte BattleScript_EffectHit                     @ EFFECT_EXCALIBUR
 	.4byte BattleScript_EffectFrostbiteHit            @ EFFECT_FROSTBITE_HIT
 	.4byte BattleScript_EffectHit                     @ EFFECT_EXPANDING_FORCE
@@ -667,14 +667,6 @@ BattleScript_BerryCureBldRet::
 	updatestatusicon BS_SCRIPTING
 	removeitem BS_SCRIPTING
 	return
-
-BattleScript_EffectBeakBlast::
-	attackcanceler
-	jumpifnodamage BattleScript_HitFromAccCheck
-	ppreduce
-	printstring STRINGID_PKMNLOSTFOCUS
-	waitmessage 0x40
-	goto BattleScript_MoveEnd
 
 BattleScript_BeakBlastSetUp::
 	setbeakblast BS_ATTACKER
@@ -6667,14 +6659,6 @@ BattleScript_GuiltTripTrySpAtk:
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_GuiltTripEnd:
 	return
-
-BattleScript_EffectFocusPunch::
-	attackcanceler
-	jumpifnodamage BattleScript_HitFromAccCheck
-	ppreduce
-	printstring STRINGID_PKMNLOSTFOCUS
-	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
 
 BattleScript_EffectWakeUpSlap:
 BattleScript_EffectSparklingAria:
