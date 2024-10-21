@@ -11366,6 +11366,18 @@ static void Cmd_various(void)
             break;
         }
         break;
+    case VARIOUS_TRY_DESTROY_ITEM:
+        ptr = READ_PTR_INC;
+        if (!gBattleMons[gActiveBattler].item
+            || !CanBattlerGetOrLoseItem(gActiveBattler, gBattleMons[gActiveBattler].item)
+            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_STICKY_HOLD)
+            || DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
+            gBattlescriptCurrInstr = ptr;
+        else
+        {
+            RemoveItem(gActiveBattler);
+        }
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 

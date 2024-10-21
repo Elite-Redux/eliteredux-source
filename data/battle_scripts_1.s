@@ -491,6 +491,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectChipAway				  @ EFFECT_CHIP_AWAY
 	.4byte BattleScript_EffectMeditate				  @ EFFECT_MEDITATE
 	.4byte BattleScript_EffectBarrier				  @ EFFECT_BARRIER
+	.4byte BattleScript_EffectKinesis				  @ EFFECT_KINESIS
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -13176,3 +13177,17 @@ BattleScript_EffectChipAway
 	setmoveeffect MOVE_EFFECT_DEF_MINUS_1
 	seteffectwithchance
 	goto BattleScript_MoveEndTryFaintTarget
+
+BattleScript_EffectKinesis:
+	attackcanceler
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	attackstring
+	ppreduce
+	trydestroyitem BS_TARGET, BattleScript_ButItFailed
+	playanimation BS_TARGET, B_ANIM_ITEM_KNOCKOFF, NULL
+	printstring STRINGID_KINESIS
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_FLINCH
+	seteffectprimary
+	goto BattleScript_MoveEnd
+	

@@ -531,8 +531,8 @@ static const u8 sMoveTwoLineDescription_MoveAmnesia[] = _(
     "and sharply raises Sp. Def.");
 
 static const u8 sMoveTwoLineDescription_MoveKinesis[] = _(
-    "Distracts the foe.\n"
-    "May lower accuracy.");
+    "Animates the foe's item,\n"
+    "surprising them.");
 
 static const u8 sMoveTwoLineDescription_MoveSoftBoiled[] = _(
     "Recovers up to half the\n"
@@ -5032,7 +5032,7 @@ static const u8 sMoveFourLineDescription_MoveSkullBash[] = _("The user raises it
 static const u8 sMoveFourLineDescription_MoveSpikeCannon[] = _("Sharp spikes are\nfired two to\nfive times.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveConstrict[] = _("The foe is attacked\nwith long tentacles\nor vines. Lowers\nfoe's Speed.");
 static const u8 sMoveFourLineDescription_MoveAmnesia[] = _("Forgets about\nsomething and\nsharply raises\nSp. Def.");
-static const u8 sMoveFourLineDescription_MoveKinesis[] = _("The user distracts\nthe foe by bending\na spoon. It\nlowers accuracy.");
+static const u8 sMoveFourLineDescription_MoveKinesis[] = _("Causes the foe's\nitem to fly away,\nremoving it and\nflinching the target.");
 static const u8 sMoveFourLineDescription_MoveSoftBoiled[] = _("Heals the user by\nup to half its full\nHP. It can be used\nto heal an ally.");
 static const u8 sMoveFourLineDescription_MoveHighJumpKick[] = _("A strong jumping\nknee kick.\nHurts on miss.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveGlare[] = _("The user intimidates\nthe foe with the\ndesign on its belly\nto cause paralysis.");
