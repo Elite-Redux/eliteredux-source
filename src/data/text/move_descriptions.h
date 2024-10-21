@@ -1423,8 +1423,8 @@ static const u8 sMoveTwoLineDescription_MoveGravity[] = _(
     "negating levitation.");
 
 static const u8 sMoveTwoLineDescription_MoveMiracleEye[] = _(
-    "Negate evasiveness and\n"
-    "Dark-type's immunities.");
+    "Inverts the target's type\n"
+    "matchups.");
 
 static const u8 sMoveTwoLineDescription_MoveWakeUpSlap[] = _(
     "Powerful against sleeping\n"
@@ -5255,7 +5255,7 @@ static const u8 sMoveFourLineDescription_MoveDoomDesire[] = _("A move that attac
 static const u8 sMoveFourLineDescription_MovePsychoBoost[] = _("An intense attack\nthat also sharply\nreduces the user's\nSp. Atk stat.");
 static const u8 sMoveFourLineDescription_MoveRoost[] = _("The user lands and\nrests its body. It\nrestores up to half\nof its max HP.");
 static const u8 sMoveFourLineDescription_MoveGravity[] = _("Gravity is upped for\nfive turns, making\nflight unusuable and\nnegating Levitate.");
-static const u8 sMoveFourLineDescription_MoveMiracleEye[] = _("Negates a foe's\nevasion, as well as\nits immunity to\nPsychic-type moves.");
+static const u8 sMoveFourLineDescription_MoveMiracleEye[] = _("The foe is treated\nas being in inverse\nroom. Psychic-type is\nimmune to Dark.");
 static const u8 sMoveFourLineDescription_MoveWakeUpSlap[] = _("This attack hits\nsleeping foes for\nbig damage. It also\nwakes the foe up.");
 static const u8 sMoveFourLineDescription_MoveHammerArm[] = _("A strong, heavy\nfist is swung. Drops\nthe user's Speed.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveGyroBall[] = _("A fast spin. The\nslower the user,\nthe greater the\ndamage.");

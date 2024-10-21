@@ -259,7 +259,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_PSYSHOCK
 	.4byte BattleScript_EffectRoost                   @ EFFECT_ROOST
 	.4byte BattleScript_EffectGravity                 @ EFFECT_GRAVITY
-	.4byte BattleScript_EffectMircleEye               @ EFFECT_MIRACLE_EYE
+	.4byte BattleScript_EffectMiracleEye              @ EFFECT_MIRACLE_EYE
 	.4byte BattleScript_EffectTailwind                @ EFFECT_TAILWIND
 	.4byte BattleScript_EffectEmbargo                 @ EFFECT_EMBARGO
 	.4byte BattleScript_EffectAquaRing                @ EFFECT_AQUA_RING
@@ -3260,7 +3260,7 @@ BattleScript_EffectTailwind:
 	call BattleScript_OnTailwindStart
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectMircleEye:
+BattleScript_EffectMiracleEye:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring

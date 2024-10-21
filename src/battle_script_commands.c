@@ -1543,10 +1543,10 @@ static void Cmd_attackcanceler(void)
         && (gBattlerAttacker != gBattlerTarget)) {
         u32 currentType;
         u32 bestType = gBattleMons[gBattlerTarget].type1;
-        u16 bestModifier = GetTypeModifier(moveType, bestType);
+        u16 bestModifier = GetTypeModifier(moveType, bestType, gBattlerAttacker, gBattlerTarget);
 
         for (currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
-            u16 currentModifier = GetTypeModifier(moveType, currentType);
+            u16 currentModifier = GetTypeModifier(moveType, currentType, gBattlerAttacker, gBattlerTarget);
             if (currentModifier < bestModifier) {
                 bestModifier = currentModifier;
                 bestType = currentType;
@@ -1810,7 +1810,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
                 || BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_MINDS_EYE, atkAbility))
         evasionStage = 6;
 
-    if ((gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT) || (gStatuses3[battlerDef] & STATUS3_MIRACLE_EYED))
+    if (gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT)
         buff = accStage;
     else
         buff = accStage + 6 - evasionStage;
@@ -2333,11 +2333,11 @@ END:
     if (gBattleWeather & WEATHER_STRONG_WINDS)
     {
         if ((gBattleMons[gBattlerTarget].type1 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1) >= UQ_4_12(2.0))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type1, gBattlerAttacker, gBattlerTarget) >= UQ_4_12(2.0))
          || (gBattleMons[gBattlerTarget].type2 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2) >= UQ_4_12(2.0))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type2, gBattlerAttacker, gBattlerTarget) >= UQ_4_12(2.0))
          || (gBattleMons[gBattlerTarget].type3 == TYPE_FLYING
-         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3) >= UQ_4_12(2.0)))
+         && GetTypeModifier(moveType, gBattleMons[gBattlerTarget].type3, gBattlerAttacker, gBattlerTarget) >= UQ_4_12(2.0)))
         {
             gBattlerAbility = gBattlerTarget;
             BattleScriptCall(BattleScript_AttackWeakenedByStrongWinds);
@@ -13825,7 +13825,7 @@ static void Cmd_settypetorandomresistance(void) // conversion 2
 
         for (i = 0; i < NUMBER_OF_MON_TYPES; i++) // Find all types that resist.
         {
-            switch (GetTypeModifier(hitByType, i))
+            switch (GetTypeModifier(hitByType, i, gBattlerAttacker, gBattlerTarget))
             {
             case UQ_4_12(0):
             case UQ_4_12(0.5):
