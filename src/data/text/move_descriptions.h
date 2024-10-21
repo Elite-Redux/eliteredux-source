@@ -679,8 +679,8 @@ static const u8 sMoveTwoLineDescription_MoveMindReader[] = _(
     "mind to dodge their attack.");
 
 static const u8 sMoveTwoLineDescription_MoveNightmare[] = _(
-    "Inflicts 1/4 damage on a\n"
-    "sleeping foe every turn.");
+    "Haunts the foe with a terrifying\n"
+    "nightmare doing heavy damage.");
 
 static const u8 sMoveTwoLineDescription_MoveFlameWheel[] = _(
     "Rolls into a wheel to strike\n"
@@ -5069,7 +5069,7 @@ static const u8 sMoveFourLineDescription_MoveTripleKick[] = _("A 3-kick attack.\
 static const u8 sMoveFourLineDescription_MoveThief[] = _("An attack that may\ntake the foe's held\nitem if the user\nisn't holding one.");
 static const u8 sMoveFourLineDescription_MoveSpiderWeb[] = _("Ensnares the foe \nwith sticky string\nso it doesn't flee\nor switch out.");
 static const u8 sMoveFourLineDescription_MoveMindReader[] = _("Dodges all attacks\nand lowers the SpDef\nof attackers. May fail\nif used in succession.");
-static const u8 sMoveFourLineDescription_MoveNightmare[] = _("A sleeping foe is\nshown a nightmare\nthat inflicts some\ndamage every turn.");
+static const u8 sMoveFourLineDescription_MoveNightmare[] = _("Deals heavy damage\nto a sleeping foe and\nmakes them lose 1/4\nHP each turn.");
 static const u8 sMoveFourLineDescription_MoveFlameWheel[] = _("A rolling attack\nthat becomes\nstronger each time\nit hits.");
 static const u8 sMoveFourLineDescription_MoveSnore[] = _("An attack that can\nbe used only while\nasleep. Has a\n30% flinch chance.");
 static const u8 sMoveFourLineDescription_MoveCurse[] = _("A move that works\ndifferently for the\nGHOST-type and all\nthe other types.");

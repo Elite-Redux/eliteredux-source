@@ -5405,22 +5405,17 @@ BattleScript_EffectMeanLook::
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectNightmare::
-	attackcanceler
-	attackstring
-	ppreduce
-	jumpifsubstituteblocks BattleScript_ButItFailed
-	jumpifstatus2 BS_TARGET, STATUS2_NIGHTMARE, BattleScript_ButItFailed
 	jumpifstatus BS_TARGET, STATUS1_SLEEP, BattleScript_NightmareWorked
 	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_NightmareWorked
 	goto BattleScript_ButItFailed
 BattleScript_NightmareWorked::
-	attackanimation
-	waitanimation
 	setmoveeffect MOVE_EFFECT_NIGHTMARE
-	seteffectprimary
+	goto BattleScript_EffectHit
+	
+BattleScript_NightmareStarts::
 	printstring STRINGID_PKMNFELLINTONIGHTMARE
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	return
 
 BattleScript_EffectMinimize::
 	attackcanceler

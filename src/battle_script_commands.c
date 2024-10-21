@@ -3707,7 +3707,9 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gVolatileStructs[gBattlerTarget].battlerPreventingEscape = gBattlerAttacker;
                 break;
             case MOVE_EFFECT_NIGHTMARE:
+                if (gBattleMons[gBattlerTarget].status2 && STATUS2_NIGHTMARE) break;
                 gBattleMons[gBattlerTarget].status2 |= STATUS2_NIGHTMARE;
+                BattleScriptCall(BattleScript_NightmareStarts);
                 break;
             case MOVE_EFFECT_ALL_STATS_UP:
                 if (!NoAliveMonsForEitherParty())
