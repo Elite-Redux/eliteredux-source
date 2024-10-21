@@ -13663,7 +13663,7 @@ static void Cmd_trytoapplymoveeffect(void)
                 && !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK))
                 {
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] |= SIDE_STATUS_STEALTH_ROCK;
-                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType = gBattleMoves[gCurrentMove].effect == EFFECT_STEALTH_ROCK ? TYPE_ROCK : TYPE_GRASS;
+                    gSideTimers[GetBattlerSide(gBattlerTarget)].stealthRockType = gBattleMoves[gCurrentMove].effect == EFFECT_STEALTH_ROCK_HIT ? TYPE_ROCK : TYPE_GRASS;
                     appliedEffect = TRUE;
                 }
             }
