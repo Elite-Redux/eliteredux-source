@@ -15269,7 +15269,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             return TRUE;
         
         case ABILITY_LOW_BLOW:
-            UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 0);
+            UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 20);
             break;
         
         case ABILITY_CHEAP_TACTICS:
