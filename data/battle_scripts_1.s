@@ -1306,6 +1306,8 @@ BattleScript_EffectRemoveTerrainNoFail:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
+	argumenttomoveeffect
+	seteffectwithchance
 	removeterrain
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS + 1, BattleScript_MoveEndTryFaintTarget
 	printfromtable gTerrainEndingStringIds

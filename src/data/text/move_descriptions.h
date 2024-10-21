@@ -87,8 +87,8 @@ static const u8 sMoveTwoLineDescription_MoveVineWhip[] = _(
     "Has 30% flinch chance.");
 
 static const u8 sMoveTwoLineDescription_MoveStomp[] = _(
-    "Stomps the enemy with a big\n"
-    "foot. May cause flinching.");
+    "Stomps the foe and terrain\n"
+    "flat. May cause flinching.");
 
 static const u8 sMoveTwoLineDescription_MoveDoubleKick[] = _(
     "A double-kicking attack\n"
@@ -4921,7 +4921,7 @@ static const u8 sMoveFourLineDescription_MoveFly[] = _("A 2-turn move.\nUse it t
 static const u8 sMoveFourLineDescription_MoveBind[] = _("A long body or\ntentacles are used\nto bind the foe for\nfour or five turns.");
 static const u8 sMoveFourLineDescription_MoveSlam[] = _("The foe is struck\nwith a long tail,\nvines, etc.");
 static const u8 sMoveFourLineDescription_MoveVineWhip[] = _("The foe is struck\nwith slender, whip-\nlike vines.\n30% flinch chance.");
-static const u8 sMoveFourLineDescription_MoveStomp[] = _("Stomps the foe.\nHas 30% flinch\nchance. Striker\nboost.");
+static const u8 sMoveFourLineDescription_MoveStomp[] = _("Destroys terrain.\n30% chance to flinch.\nStrike boost.");
 static const u8 sMoveFourLineDescription_MoveDoubleKick[] = _("Kicks the foe\nquickly twice.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveMegaKick[] = _("The foe is attacked\nby a kick with\ngreat power.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveJumpKick[] = _("The user jumps up\nhigh, then kicks.\nHurts on miss.\nStriker boost.");
