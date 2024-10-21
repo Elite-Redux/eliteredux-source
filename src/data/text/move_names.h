@@ -993,6 +993,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_SHOWTIME] = _("Showtime"),
     [MOVE_BANISHED_POWER] = _("BanishedPowr"),
     [MOVE_TRIPLE_TREMOR] = _("TripleTremor"),
+    [MOVE_FIRE_GLAIVE] = _("Fire Glaive"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1992,4 +1993,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_SHOWTIME] = _("Showtime"),
     [MOVE_BANISHED_POWER] = _("Banished Power"),
     [MOVE_TRIPLE_TREMOR] = _("Triple Tremor"),
+    [MOVE_FIRE_GLAIVE] = _("Fire Glaive"),
 };

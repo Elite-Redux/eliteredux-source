@@ -1,5 +1,5 @@
 raw `
-.set LOCALID_HIDEOUT_GUARD, 4
+.set LOCALID_HIDEOUT_GUARD, 3
 .set LOCALID_CHANSEY, 6
 
 JaggedPass_MapScripts:: @ 8230656

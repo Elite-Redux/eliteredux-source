@@ -948,6 +948,7 @@ void TryPreemptiveActions()
         int surpriser = 0;
         if ((targetFlag == MOVE_TARGET_FOES_AND_ALLY || GetBattlerSide(target) != GetBattlerSide(battler))
             && GetMovePriority(battler, move, target) > 0
+            && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
             && (surpriser = IsAbilityOnOpposingSide(battler, ABILITY_SURPRISE)))
         {
             gQueuedExtraAttackData[++gQueuedAttackCount] = (struct ExtraAttackActionStruct) {
@@ -9042,6 +9043,10 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
     case EFFECT_WRING_OUT:
         basePower = 120 * gBattleMons[battlerDef].hp / gBattleMons[battlerDef].maxHP;
         break;
+    case EFFECT_FOCUS_PUNCH:
+        if (gRoundStructs[battlerAtk].physicalDmg || gRoundStructs[battlerAtk].specialDmg)
+            basePower = 40;
+        break;
     case EFFECT_HEX:
     case EFFECT_INFERNAL_PARADE:
         if (gBattleMons[battlerDef].status1 & STATUS1_ANY || BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMATOSE) || IsBloodStainAffected(battlerDef))
@@ -9066,7 +9071,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         }
         break;
     case EFFECT_TERROR_CHARGE:
-        if (gVolatileStructs[battlerDef].isFirstTurn == 2)
+        if (gBattleMons[battlerDef].status1 & STATUS1_BLEED)
             basePower *= 2;
         break;
     case EFFECT_ACROBATICS:

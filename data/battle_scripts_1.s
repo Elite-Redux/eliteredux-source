@@ -190,7 +190,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectWillOWisp               @ EFFECT_WILL_O_WISP
 	.4byte BattleScript_EffectMemento                 @ EFFECT_MEMENTO
 	.4byte BattleScript_EffectHit                     @ EFFECT_FACADE
-	.4byte BattleScript_EffectFocusPunch              @ EFFECT_FOCUS_PUNCH
+	.4byte BattleScript_EffectFocusPunch			  @ EFFECT_FOCUS_PUNCH
 	.4byte BattleScript_EffectSmellingsalt            @ EFFECT_SMELLINGSALT
 	.4byte BattleScript_EffectFollowMe                @ EFFECT_FOLLOW_ME
 	.4byte BattleScript_EffectNaturePower             @ EFFECT_NATURE_POWER
@@ -408,7 +408,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectHit                     @ EFFECT_BOLT_BEAK
 	.4byte BattleScript_EffectRisingVoltage			  @ EFFECT_RISING_VOLTAGE
 	.4byte BattleScript_EffectScaleShot			  	  @ EFFECT_SCALE_SHOT
-	.4byte BattleScript_EffectBeakBlast				  @ EFFECT_BEAK_BLAST
+	.4byte BattleScript_EffectHit    				  @ EFFECT_BEAK_BLAST
 	.4byte BattleScript_EffectHit                     @ EFFECT_EXCALIBUR
 	.4byte BattleScript_EffectFrostbiteHit            @ EFFECT_FROSTBITE_HIT
 	.4byte BattleScript_EffectHit                     @ EFFECT_EXPANDING_FORCE
@@ -667,14 +667,6 @@ BattleScript_BerryCureBldRet::
 	updatestatusicon BS_SCRIPTING
 	removeitem BS_SCRIPTING
 	return
-
-BattleScript_EffectBeakBlast::
-	attackcanceler
-	jumpifnodamage BattleScript_HitFromAccCheck
-	ppreduce
-	printstring STRINGID_PKMNLOSTFOCUS
-	waitmessage 0x40
-	goto BattleScript_MoveEnd
 
 BattleScript_BeakBlastSetUp::
 	setbeakblast BS_ATTACKER
@@ -1306,6 +1298,8 @@ BattleScript_EffectRemoveTerrainNoFail:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
+	argumenttomoveeffect
+	seteffectwithchance
 	removeterrain
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS + 1, BattleScript_MoveEndTryFaintTarget
 	printfromtable gTerrainEndingStringIds
@@ -5378,7 +5372,7 @@ BattleScript_EffectSoothingAroma::
 
 BattleScript_HealAllPartyStatus::
 	copyword gTempMove, gCurrentMove
-	setword gCurrentMove, MOVE_AROMATHERAPY
+	setword gCurrentMove, MOVE_NONE
 	healpartystatus
 	waitstate
 	printfromtable gPartyStatusHealStringIds
@@ -6669,10 +6663,8 @@ BattleScript_GuiltTripEnd:
 BattleScript_EffectFocusPunch::
 	attackcanceler
 	jumpifnodamage BattleScript_HitFromAccCheck
-	ppreduce
 	printstring STRINGID_PKMNLOSTFOCUS
-	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	goto BattleScript_HitFromAccCheck
 
 BattleScript_EffectWakeUpSlap:
 BattleScript_EffectSparklingAria:
@@ -6974,13 +6966,28 @@ BattleScript_EffectRefresh:
 	attackcanceler
 	attackstring
 	ppreduce
-	cureifburnedparalysedorpoisoned BattleScript_ButItFailed
+	cureifburnedparalysedorpoisoned BattleScript_EffectRefresh_NoStatusHeal
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSTATUSNORMAL
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_ATTACKER
+	tryhealpercenthealth BS_ATTACKER, 25, BattleScript_MoveEnd
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_PKMNREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
+BattleScript_EffectRefresh_NoStatusHeal:
+	tryhealpercenthealth BS_ATTACKER, 25, BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_PKMNREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
 
 BattleScript_EffectGrudge:
 	attackcanceler
@@ -13158,7 +13165,7 @@ BattleScript_EffectTrepidation::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEndTryFaintTarget
 
-BattleScript_EffectChipAway
+BattleScript_EffectChipAway:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring

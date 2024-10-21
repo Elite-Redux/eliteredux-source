@@ -87,8 +87,8 @@ static const u8 sMoveTwoLineDescription_MoveVineWhip[] = _(
     "Has 30% flinch chance.");
 
 static const u8 sMoveTwoLineDescription_MoveStomp[] = _(
-    "Stomps the enemy with a big\n"
-    "foot. May cause flinching.");
+    "Stomps the foe and terrain\n"
+    "flat. May cause flinching.");
 
 static const u8 sMoveTwoLineDescription_MoveDoubleKick[] = _(
     "A double-kicking attack\n"
@@ -1052,7 +1052,7 @@ static const u8 sMoveTwoLineDescription_MoveFacade[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveFocusPunch[] = _(
     "A powerful loyalty attack.\n"
-    "The user flinches if hit.");
+    "Damage is reduced if hit.");
 
 static const u8 sMoveTwoLineDescription_MoveSmellingSalts[] = _(
     "Deals damage and cures\n"
@@ -1143,8 +1143,8 @@ static const u8 sMoveTwoLineDescription_MoveImprison[] = _(
     "moves known by the user.");
 
 static const u8 sMoveTwoLineDescription_MoveRefresh[] = _(
-    "Heals poisoning, paralysis,\n"
-    "or a burn.");
+    "Rests for a moment to cure\n"
+    "status and heal.");
 
 static const u8 sMoveTwoLineDescription_MoveGrudge[] = _(
     "If the user faints, deletes\n"
@@ -3902,6 +3902,10 @@ static const u8 sMoveTwoLineDescription_MoveTripleTremor[] = _(
     "Strikes with three intensifying\n"
     "shockwaves.");
 
+static const u8 sMoveTwoLineDescription_MoveFireGlaive[] = _(
+    "The user strikes with a\n"
+    "white hot horn.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4897,6 +4901,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_SHOWTIME - 1] = sMoveTwoLineDescription_MoveShowtime,
     [MOVE_BANISHED_POWER - 1] = sMoveTwoLineDescription_MoveBanishedPower,
     [MOVE_TRIPLE_TREMOR - 1] = sMoveTwoLineDescription_MoveTripleTremor,
+    [MOVE_FIRE_GLAIVE - 1] = sMoveTwoLineDescription_MoveFireGlaive,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -4921,7 +4926,7 @@ static const u8 sMoveFourLineDescription_MoveFly[] = _("A 2-turn move.\nUse it t
 static const u8 sMoveFourLineDescription_MoveBind[] = _("A long body or\ntentacles are used\nto bind the foe for\nfour or five turns.");
 static const u8 sMoveFourLineDescription_MoveSlam[] = _("The foe is struck\nwith a long tail,\nvines, etc.");
 static const u8 sMoveFourLineDescription_MoveVineWhip[] = _("The foe is struck\nwith slender, whip-\nlike vines.\n30% flinch chance.");
-static const u8 sMoveFourLineDescription_MoveStomp[] = _("Stomps the foe.\nHas 30% flinch\nchance. Striker\nboost.");
+static const u8 sMoveFourLineDescription_MoveStomp[] = _("Destroys terrain.\n30% chance to flinch.\nStrike boost.");
 static const u8 sMoveFourLineDescription_MoveDoubleKick[] = _("Kicks the foe\nquickly twice.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveMegaKick[] = _("The foe is attacked\nby a kick with\ngreat power.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveJumpKick[] = _("The user jumps up\nhigh, then kicks.\nHurts on miss.\nStriker boost.");
@@ -5162,7 +5167,7 @@ static const u8 sMoveFourLineDescription_MoveFlatter[] = _("Flattery is used to\
 static const u8 sMoveFourLineDescription_MoveWillOWisp[] = _("A sinister, bluish\nwhite flame is shot\nat the foe to\ninflict a burn.");
 static const u8 sMoveFourLineDescription_MoveMemento[] = _("The user faints,\nbut sharply lowers\nthe foe's Attack\nand SpAtk");
 static const u8 sMoveFourLineDescription_MoveFacade[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
-static const u8 sMoveFourLineDescription_MoveFocusPunch[] = _("Moves last.\nThe user flinches\nif hit beforehand.\nIron Fist boost.");
+static const u8 sMoveFourLineDescription_MoveFocusPunch[] = _("Moves last.\nDamage reduced to\n40BP if hit.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveSmellingSalts[] = _("Deals damage and\ncures the user's\nstatus.");
 static const u8 sMoveFourLineDescription_MoveFollowMe[] = _("The user draws\nattention to itself,\nmaking foes attack\nonly the user.");
 static const u8 sMoveFourLineDescription_MoveNaturePower[] = _("An attack that\nchanges type\ndepending on the\nuser's location.");
@@ -5185,7 +5190,7 @@ static const u8 sMoveFourLineDescription_MoveEndeavor[] = _("Gains power the\nfe
 static const u8 sMoveFourLineDescription_MoveEruption[] = _("The higher the\nuser's HP, the more\npowerful it is.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveSkillSwap[] = _("The user employs\nits psychic power\nto swap abilities\nwith the foe.");
 static const u8 sMoveFourLineDescription_MoveImprison[] = _("Prevents foes from\nusing any move\nthat is also known\nby the user.");
-static const u8 sMoveFourLineDescription_MoveRefresh[] = _("A self-healing move\nthat cures the user\nof a poisoning,\nburn, or paralysis.");
+static const u8 sMoveFourLineDescription_MoveRefresh[] = _("Cures status and\nheals the user for\n25% HP.");
 static const u8 sMoveFourLineDescription_MoveGrudge[] = _("If the user faints,\nthis move deletes\nthe PP of the move\nthat finished it.");
 static const u8 sMoveFourLineDescription_MoveSnatch[] = _("Steals the effects\nof the foe's\nhealing or status-\nchanging move.");
 static const u8 sMoveFourLineDescription_MoveSecretPower[] = _("Physical Hidden Power.\nVaries in type\ndepending on\nthe user.");
@@ -5891,6 +5896,7 @@ static const u8 sMoveFourLineDescription_MoveToxicPlunge[] = _("Dives and then\n
 static const u8 sMoveFourLineDescription_MoveShowtime[] = _("Clears other rooms\nand sets Magic Room,\nthen switches to an\nally.");
 static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("Deals damage and\nraises the user's\nhighest attack or\ndefense by 1 stage.");
 static const u8 sMoveFourLineDescription_MoveTripleTremor[] = _("Hits three times.\nMore powerful with\neach successive hit.");
+static const u8 sMoveFourLineDescription_MoveFireGlaive[] = _("Strikes with a white\nhot horn, ignoring\nstat changes.\nMight Horn boost.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6885,4 +6891,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_SHOWTIME - 1] = sMoveFourLineDescription_MoveShowtime,
     [MOVE_BANISHED_POWER - 1] = sMoveFourLineDescription_MoveBanishedPower,
     [MOVE_TRIPLE_TREMOR - 1] = sMoveFourLineDescription_MoveTripleTremor,
+    [MOVE_FIRE_GLAIVE - 1] = sMoveFourLineDescription_MoveFireGlaive,
 };

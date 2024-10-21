@@ -379,7 +379,7 @@
 #define ABILITY_MOLTEN_DOWN 357 // Fire-type is super effective against Rock-type.
 #define ABILITY_HYPER_AGGRESSIVE 358 // Moves hit twice. Second hit does 25% damage.
 #define ABILITY_FLOCK 359 // Boosts Flying-type moves by 1.2x, or 1.5x when below 1/3 HP.
-#define ABILITY_FIELD_EXPLORER 360 // Boosts field moves by 25%. Cut, Surf, Strength etc.
+#define ABILITY_FIELD_EXPLORER 360 // Boosts field moves by 50%. Cut, Surf, Strength etc.
 #define ABILITY_STRIKER 361 // Boosts the power of kicking moves by 1.3x.
 #define ABILITY_FROZEN_SOUL 362 // At full HP, gives +1 priority to this Pokémon's Ice-type moves.
 #define ABILITY_PREDATOR 363 // Dealing a KO heals 1/4 of this Pokémon's max HP.

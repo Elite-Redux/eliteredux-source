@@ -5974,6 +5974,9 @@ static void Cmd_moveend(void)
         case MOVEEND_UPDATE_LAST_MOVES:
             if (gMoveResultFlags & (MOVE_RESULT_FAILED | MOVE_RESULT_DOESNT_AFFECT_FOE))
                 gBattleStruct->lastMoveFailed |= gBitTable[gBattlerAttacker];
+            else if (gBattleMoves[gCurrentMove].effect == EFFECT_FOCUS_PUNCH
+                && (gRoundStructs[gBattlerAttacker].physicalDmg || gRoundStructs[gBattlerAttacker].specialDmg))
+                gBattleStruct->lastMoveFailed |= gBitTable[gBattlerAttacker];
             else
                 gBattleStruct->lastMoveFailed &= ~(gBitTable[gBattlerAttacker]);
 
