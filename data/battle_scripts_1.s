@@ -492,6 +492,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectMeditate				  @ EFFECT_MEDITATE
 	.4byte BattleScript_EffectBarrier				  @ EFFECT_BARRIER
 	.4byte BattleScript_EffectKinesis				  @ EFFECT_KINESIS
+	.4byte BattleScript_EffectCaltrops				  @ EFFECT_CALTROPS
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -5547,6 +5548,17 @@ BattleScript_ProtectLikeAtkString:
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectCaltrops::
+	attackcanceler
+	trysetcaltrops BS_TARGET, BattleScript_ButItFailedAtkStringPpReduce
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	printstring STRINGID_CALTROPS_SET
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
 BattleScript_EffectSpikes::
 	attackcanceler
 	trysetspikes BattleScript_ButItFailedAtkStringPpReduce
@@ -8197,8 +8209,18 @@ BattleScript_ToxicSpikesAbsorbed::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_CaltropsFade::
+	printstring STRINGID_CALTROPS_FADE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_CaltropsBleed::
+	printstring STRINGID_CALTROPS_DAMAGE
+	goto BattleScript_StatusHazard
+
 BattleScript_ToxicSpikesPoisoned::
 	printstring STRINGID_TOXICSPIKESPOISONED
+BattleScript_StatusHazard:
 	waitmessage B_WAIT_TIME_LONG
 	statusanimation BS_STACK_1
 	updatestatusicon BS_STACK_1
@@ -8228,13 +8250,10 @@ BattleScript_StickyWebOnSwitchInEnd:
 	return
 
 BattleScript_HotCoalsActivates::
-	sethword sMOVE_EFFECT, MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER
 	printstring STRINGID_HOT_COALS_BURN
-	waitmessage B_WAIT_TIME_LONG
-	saveattackertostack3
-	copybyte gBattlerAttacker, gStackBattler1
-	seteffectprimary
-	readattackerfromstack3
+	goto BattleScript_StatusHazard
+
+BattleScript_HotCoalsFade::
 	printstring STRINGID_HOT_COALS_EXTINGUISH
 	waitmessage B_WAIT_TIME_LONG
 	return
@@ -8453,7 +8472,12 @@ BattleScript_StickyWebFree::
 	return
 
 BattleScript_HotCoalsFree::
-	printstring STRINGID_HOT_COALS_EXTINGUISH
+	printstring STRINGID_HOT_COALS_FREE
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_CaltropsFree::
+	printstring STRINGID_CALTROPS_FREE
 	waitmessage B_WAIT_TIME_LONG
 	return
 

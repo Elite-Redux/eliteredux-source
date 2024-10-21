@@ -13068,10 +13068,13 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             if (!CheckAndSetOncePerTurnAbility(battler, ability)) break;
             
             i = FALSE;
-            if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals)
+            if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY
+                || gSideTimers[GetBattlerSide(battler)].hotCoals
+                || gSideTimers[GetBattlerSide(battler)].caltrops)
             {
                 gSideStatuses[GetBattlerSide(battler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
                 gSideTimers[GetBattlerSide(battler)].hotCoals = TRUE;
+                gSideTimers[GetBattlerSide(battler)].caltrops = TRUE;
                 BattleScriptCall(BattleScript_AnnounceRemovedHazards);
                 gBattleScripting.battler = battler;
                 i = TRUE;
@@ -15261,10 +15264,13 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             return TRUE;
         
         case ABILITY_PICKUP:
-            if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_HAZARDS_ANY) && !gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals) break;
+            if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_HAZARDS_ANY)
+                && !gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals
+                && !gSideTimers[GetBattlerSide(gActiveBattler)].caltrops) break;
             
             gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
             gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals = FALSE;
+            gSideTimers[GetBattlerSide(gActiveBattler)].caltrops = FALSE;
             BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
             return TRUE;
 

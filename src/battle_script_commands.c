@@ -10838,6 +10838,7 @@ static void Cmd_various(void)
         SWAP(gSideTimers[0].rainbowTimer, gSideTimers[1].rainbowTimer, temp)
         SWAP(gSideTimers[0].smokescreenTimer, gSideTimers[1].smokescreenTimer, temp)
         SWAP(gSideTimers[0].hotCoals, gSideTimers[1].hotCoals, temp)
+        SWAP(gSideTimers[0].caltrops, gSideTimers[1].caltrops, temp)
         SWAP(gSideTimers[0].started, gSideTimers[1].started, tempSide);
 
         #define UPDATE_COURTCHANGED_BATTLER(structField) \
@@ -11365,10 +11366,31 @@ static void Cmd_various(void)
                 && IsBattlerGrounded(gActiveBattler))
             {
                 gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals = FALSE;
-                BattleScriptCall(BattleScript_HotCoalsActivates);
+                if (CanBeBurned(gActiveBattler))
+                {
+                    gBattleMons[gActiveBattler].status1 |= STATUS1_BURN;
+                    BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    BattleScriptCall(BattleScript_HotCoalsActivates);
+                }
+                BattleScriptCall(BattleScript_HotCoalsFade);
             }
             break;
         case HAZARD_MODE_CALTROPS:
+            if (gSideTimers[GetBattlerSide(gActiveBattler)].caltrops
+                && IsBattlerAffectedByHazards(gActiveBattler, FALSE)
+                && IsBattlerGrounded(gActiveBattler))
+            {
+                gSideTimers[GetBattlerSide(gActiveBattler)].caltrops = FALSE;
+                if (CanBleed(gActiveBattler))
+                {
+                    gBattleMons[gActiveBattler].status1 |= STATUS1_BLEED;
+                    BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    BattleScriptCall(BattleScript_CaltropsBleed);
+                }
+                BattleScriptCall(BattleScript_CaltropsFade);
+            }
             break;
         }
         break;
@@ -11383,6 +11405,13 @@ static void Cmd_various(void)
         {
             RemoveItem(gActiveBattler);
         }
+        break;
+    case VARIOUS_SET_CALTROPS:
+        ptr = READ_PTR_INC;
+        if (gSideTimers[GetBattlerSide(gActiveBattler)].caltrops)
+            gBattlescriptCurrInstr = ptr;
+        else
+            gSideTimers[GetBattlerSide(gActiveBattler)].caltrops = TRUE;
         break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
@@ -14576,6 +14605,7 @@ static void Cmd_copyfoestats(void) // psych up
 static void Cmd_rapidspinfree(void)
 {
     u8 atkSide = GetBattlerSide(gBattlerAttacker);
+    gBattlescriptCurrInstr++;
 
     if (gBattleMons[gBattlerAttacker].status2 & STATUS2_WRAPPED)
     {
@@ -14585,31 +14615,48 @@ static void Cmd_rapidspinfree(void)
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleStruct->wrappedMove[gBattlerAttacker]);
         BattleScriptCall(BattleScript_WrapFree);
     }
-    else if (gStatuses3[gBattlerAttacker] & STATUS3_LEECHSEED)
+
+    if (gStatuses3[gBattlerAttacker] & STATUS3_LEECHSEED)
     {
         gStatuses3[gBattlerAttacker] &= ~(STATUS3_LEECHSEED);
         gStatuses3[gBattlerAttacker] &= ~(STATUS3_LEECHSEED_BATTLER);
         BattleScriptCall(BattleScript_LeechSeedFree);
     }
-    else if (gSideStatuses[atkSide] & SIDE_STATUS_SPIKES)
+    
+    if (gSideTimers[atkSide].caltrops)
     {
-        gSideStatuses[atkSide] &= ~(SIDE_STATUS_SPIKES);
-        gSideTimers[atkSide].spikesAmount = 0;
-        BattleScriptCall(BattleScript_SpikesFree);
+        gSideTimers[atkSide].caltrops = FALSE;
+        BattleScriptCall(BattleScript_CaltropsFree);
     }
-    else if (gSideStatuses[atkSide] & SIDE_STATUS_TOXIC_SPIKES)
+    
+    if (gSideTimers[atkSide].hotCoals)
     {
-        gSideStatuses[atkSide] &= ~(SIDE_STATUS_TOXIC_SPIKES);
-        gSideTimers[atkSide].toxicSpikesAmount = 0;
-        BattleScriptCall(BattleScript_ToxicSpikesFree);
+        gSideTimers[atkSide].hotCoals = FALSE;
+        BattleScriptCall(BattleScript_HotCoalsFree);
     }
-    else if (gSideStatuses[atkSide] & SIDE_STATUS_STICKY_WEB)
+
+    if (gSideStatuses[atkSide] & SIDE_STATUS_STICKY_WEB)
     {
         gSideStatuses[atkSide] &= ~(SIDE_STATUS_STICKY_WEB);
         gSideTimers[atkSide].stickyWebAmount = 0;
         BattleScriptCall(BattleScript_StickyWebFree);
     }
-    else if (gSideStatuses[atkSide] & SIDE_STATUS_STEALTH_ROCK)
+
+    if (gSideStatuses[atkSide] & SIDE_STATUS_TOXIC_SPIKES)
+    {
+        gSideStatuses[atkSide] &= ~(SIDE_STATUS_TOXIC_SPIKES);
+        gSideTimers[atkSide].toxicSpikesAmount = 0;
+        BattleScriptCall(BattleScript_ToxicSpikesFree);
+    }
+
+    if (gSideStatuses[atkSide] & SIDE_STATUS_SPIKES)
+    {
+        gSideStatuses[atkSide] &= ~(SIDE_STATUS_SPIKES);
+        gSideTimers[atkSide].spikesAmount = 0;
+        BattleScriptCall(BattleScript_SpikesFree);
+    }
+    
+    if (gSideStatuses[atkSide] & SIDE_STATUS_STEALTH_ROCK)
     {
         switch (gSideTimers[atkSide].stealthRockType)
         {
@@ -14623,15 +14670,6 @@ static void Cmd_rapidspinfree(void)
         gSideStatuses[atkSide] &= ~(SIDE_STATUS_STEALTH_ROCK);
         gSideTimers[atkSide].stealthRockType = 0;
         BattleScriptCall(BattleScript_StealthRockFree);
-    }
-    else if (gSideTimers[atkSide].hotCoals)
-    {
-        gSideTimers[atkSide].hotCoals = FALSE;
-        BattleScriptCall(BattleScript_HotCoalsFree);
-    }
-    else
-    {
-        gBattlescriptCurrInstr++;
     }
 }
 

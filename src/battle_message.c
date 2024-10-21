@@ -893,7 +893,7 @@ static const u8 sText_AttackerShattersScreens[] = _("{B_ATK_NAME_WITH_PREFIX} sh
 static const u8 sText_AttackerDestroysSubstitute[] = _("{B_ATK_NAME_WITH_PREFIX} destroys\n{B_DEF_NAME_WITH_PREFIX}'s substitute!");
 static const u8 sText_WhiteSmoke[] = _("A thick smoke covers\n{B_ATK_NAME_WITH_PREFIX}'s side!");
 static const u8 sText_HotCoalsSet[] = _("{B_ATK_NAME_WITH_PREFIX} throws\nhot coals over the opponent's side!");
-static const u8 sText_HotCoalsBurn[] = _("{B_STACK_1_NAME_WITH_PREFIX} steps on\nthe hot coals!");
+static const u8 sText_HotCoalsBurn[] = _("{B_STACK_1_NAME_WITH_PREFIX} is burned\nby the hot coals!");
 static const u8 sText_HotCoalsExtinguish[] = _("The heat from the coals fades!");
 static const u8 sText_DisableAttackerItem[] = _("{B_ATK_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nwas disabled!");
 static const u8 sText_SuperStrainRecoil[] = _("The strain takes its toll on\n{B_ATK_NAME_WITH_PREFIX}!");
@@ -1062,6 +1062,11 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_CaltropsSet[] = _("Razor sharp caltrops were scattered\nall around the opponent's side!");
+static const u8 sText_CaltropsDamage[] = _("The caltrops tear into\n{B_STACK_1_NAME_WITH_PREFIX}!");
+static const u8 sText_CaltropsFade[] = _("The caltrops were dulled!");
+static const u8 sText_HotCoalsFree[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nhot coals!");
+static const u8 sText_CaltropsFree[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\ncaltrops!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1908,6 +1913,11 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ROOMS_CLEARED - 12] = sText_RoomsCleared,
     [STRINGID_TREPIDATION - 12] = sText_Trepidation,
     [STRINGID_KINESIS - 12] = sText_Kinesis,
+    [STRINGID_CALTROPS_SET - 12] = sText_CaltropsSet,
+    [STRINGID_CALTROPS_DAMAGE - 12] = sText_CaltropsDamage,
+    [STRINGID_CALTROPS_FADE - 12] = sText_CaltropsFade,
+    [STRINGID_HOT_COALS_FREE - 12] = sText_HotCoalsFree,
+    [STRINGID_CALTROPS_FREE - 12] = sText_CaltropsFree,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

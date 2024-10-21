@@ -12240,14 +12240,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_CALTROPS] =
     {
-        .effect = EFFECT_PLACEHOLDER,
+        .effect = EFFECT_CALTROPS,
         .power = 0,
-        .type = TYPE_NORMAL,
+        .type = TYPE_STEEL,
         .accuracy = 0,
-        .pp = 0,
+        .pp = 20,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_PHYSICAL,
+        .target = MOVE_TARGET_OPPONENTS_FIELD,
+        .flags = FLAG_MAGIC_COAT_AFFECTED,
+        .split = SPLIT_STATUS,
     },
     [MOVE_TAKE_HEART] =
     {
