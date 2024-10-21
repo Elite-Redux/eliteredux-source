@@ -13158,7 +13158,7 @@ BattleScript_EffectTrepidation::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEndTryFaintTarget
 
-BattleScript_EffectChipAway
+BattleScript_EffectChipAway:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
