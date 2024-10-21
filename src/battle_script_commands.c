@@ -2157,7 +2157,8 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER))
                     + 2 * (!!IsAbilityOnField(ABILITY_BATTLE_AURA))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WAY_OF_PRECISION) && IS_IRON_FIST(battlerAtk, move))
-                    + gVolatileStructs[battlerAtk].critBoost;
+                    + gVolatileStructs[battlerAtk].critBoost
+                    + move == MOVE_VISE_GRIP;
 
         if (critChance >= ARRAY_COUNT(sCriticalHitChance))
             critChance = ARRAY_COUNT(sCriticalHitChance) - 1;
