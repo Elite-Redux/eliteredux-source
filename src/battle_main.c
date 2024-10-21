@@ -3423,6 +3423,8 @@ void SwitchInClearSetData(void)
         gVolatileStructs[gActiveBattler].battlerPreventingEscape = VolatileStructCopy.battlerPreventingEscape;
         gVolatileStructs[gActiveBattler].critBoost = VolatileStructCopy.critBoost;
         gVolatileStructs[gActiveBattler].parasiticSpores = VolatileStructCopy.parasiticSpores;
+        gVolatileStructs[gActiveBattler].dazed = VolatileStructCopy.dazed;
+        gVolatileStructs[gActiveBattler].trepidation = VolatileStructCopy.trepidation;
     }
     else if (gBattleMoves[gCurrentMove].effect == EFFECT_SHED_TAIL)
     {

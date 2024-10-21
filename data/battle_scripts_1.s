@@ -489,6 +489,8 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectShowtime				  @ EFFECT_SHOWTIME
 	.4byte BattleScript_EffectTrepidation			  @ EFFECT_TREPIDATION
 	.4byte BattleScript_EffectChipAway				  @ EFFECT_CHIP_AWAY
+	.4byte BattleScript_EffectMeditate				  @ EFFECT_MEDITATE
+	.4byte BattleScript_EffectBarrier				  @ EFFECT_BARRIER
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -1905,13 +1907,23 @@ BattleScript_RototillerCheckAffected:
 BattleScript_RototillerAffected:
 	setbyte sSTAT_ANIM_PLAYED, FALSE
 	playstatchangeanimation BS_TARGET, BIT_ATK | BIT_SPATK, 0
+	jumpifword CMP_COMMON_BITS, gFieldStatuses, STATUS_FIELD_GRASSY_TERRAIN, BattleScript_RototillerAffected_Atk_Grassy
 	setstatchanger STAT_ATK, 1, FALSE
+	goto BattleScript_RototillerAffected_Atk_Raise
+BattleScript_RototillerAffected_Atk_Grassy:
+	setstatchanger STAT_ATK, 2, FALSE
+BattleScript_RototillerAffected_Atk_Raise:
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_RototillerTrySpAtk
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RototillerTrySpAtk
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_RototillerTrySpAtk::
+	jumpifword CMP_COMMON_BITS, gFieldStatuses, STATUS_FIELD_GRASSY_TERRAIN, BattleScript_RototillerAffected_SpAtk_Grassy
 	setstatchanger STAT_SPATK, 1, FALSE
+	goto BattleScript_RototillerAffected_SpAtk_Raise
+BattleScript_RototillerAffected_SpAtk_Grassy:
+	setstatchanger STAT_SPATK, 2, FALSE
+BattleScript_RototillerAffected_SpAtk_Raise:
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_RototillerMoveTargetEnd
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RototillerMoveTargetEnd
 	printfromtable gStatUpStringIds
@@ -4442,6 +4454,30 @@ BattleScript_EffectAuroraVeil:
 	setauroraveil BS_ATTACKER
 	goto BattleScript_PrintReflectLightScreenSafeguardString
 
+BattleScript_EffectBarrier::
+	attackcanceler
+	attackstring
+	jumpifword CMP_NO_COMMON_BITS, gFieldStatuses, STATUS_FIELD_PSYCHIC_TERRAIN, BattleScript_ButItFailed
+	setlightscreen
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_SIDE_STATUS_FAILED, BattleScript_EffectBarrierNoLightScreen
+	attackanimation
+	waitanimation
+	printfromtable gReflectLightScreenSafeguardStringIds
+	waitmessage B_WAIT_TIME_LONG
+	setreflect
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_SIDE_STATUS_FAILED, BattleScript_MoveEnd
+	printfromtable gReflectLightScreenSafeguardStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+BattleScript_EffectBarrierNoLightScreen:
+	bichalfword gMoveResultFlags, MOVE_RESULT_MISSED
+	setreflect
+	attackanimation
+	waitanimation
+	printfromtable gReflectLightScreenSafeguardStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
 BattleScript_EffectLightScreen::
 	attackcanceler
 	attackstring
@@ -6275,13 +6311,26 @@ BattleScript_SkyDrop_TurnTwo:
 	jumpifmove MOVE_SEISMIC_TOSS, BattleScript_SkyDrop_SeismicToss
 	critcalc
 	damagecalc
-	adjustdamage
-	goto BattleScript_HitFromAtkAnimation
+	goto BattleScript_SkyDrop_DoDamage
 BattleScript_SkyDrop_SeismicToss:
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	calculatesetdamage
+BattleScript_SkyDrop_DoDamage:
 	adjustdamage
-	goto BattleScript_HitFromAtkAnimation
+	attackanimation
+	waitanimation
+	effectivenesssound
+	hitanimation BS_TARGET
+	waitstate
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	critmessage
+	waitmessage B_WAIT_TIME_LONG
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	seteffectwithchance
+	dohazarddamage BS_TARGET
+	goto BattleScript_MoveEndTryFaintTarget
 
 BattleScript_EffectSemiInvulnerable::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_SecondTurnSemiInvulnerable
@@ -7144,6 +7193,31 @@ BattleScript_EffectTakeHeart_DoAnim:
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_CalmMindDoBoosts
 	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_MoveEnd
 	goto BattleScript_CalmMindDoBoosts
+
+BattleScript_EffectMeditate:
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_EffectMeditateDoMoveAnim
+	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_CantRaiseMultipleStats
+BattleScript_EffectMeditateDoMoveAnim::
+	attackanimation
+	waitanimation
+BattleScript_EffectMeditateDoBoosts:
+	setbyte sSTAT_ANIM_PLAYED, FALSE
+	playstatchangeanimation BS_ATTACKER, BIT_ATK | BIT_SPDEF, 0
+	setstatchanger STAT_ATK, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_EffectMeditateTrySpDef
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_EffectMeditateTrySpDef
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_EffectMeditateTrySpDef::
+	setstatchanger STAT_SPDEF, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_MoveEnd
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_MoveEnd
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
 
 BattleScript_EffectCalmMind::
 	attackcanceler
@@ -8068,50 +8142,37 @@ BattleScript_DestinyBondTakesLife::
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
 
-BattleScript_DmgHazardsOnAttacker::
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	call BattleScript_PrintHurtByDmgHazards
-	tryfaintmon BS_ATTACKER, FALSE, NULL
-	tryfaintmon BS_ATTACKER, TRUE, BattleScript_DmgHazardsOnAttackerFainted
+BattleScript_ResolveAllHazards::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_SPIKES
 	return
 
-BattleScript_DmgHazardsOnAttackerFainted::
-	setbyte sGIVEEXP_STATE, 0
-	getexp BS_ATTACKER
-	moveendall
-	goto BattleScript_HandleFaintedMon
+BattleScript_ResolveRocks::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_ROCKS
+	return
 
-BattleScript_DmgHazardsOnTarget::
+BattleScript_ResolvePoisonSpikes::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_WEBS
+	return
+
+BattleScript_ResolveWebs::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_POISON_SPIKES
+	return
+
+BattleScript_ResolveFireTrap::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_FIRE_TRAP
+	return
+
+BattleScript_ResolveCaltrops::
+	dohazarddamage BS_STACK_1, HAZARD_MODE_CALTROPS
+	return
+
+BattleScript_DmgHazards::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
+	healthbarupdate BS_STACK_1
+	datahpupdate BS_STACK_1
 	call BattleScript_PrintHurtByDmgHazards
-	tryfaintmon BS_TARGET, FALSE, NULL
-	tryfaintmon BS_TARGET, TRUE, BattleScript_DmgHazardsOnTargetFainted
+	tryfaintmon BS_STACK_1, FALSE, NULL
 	return
-
-BattleScript_DmgHazardsOnTargetFainted::
-	setbyte sGIVEEXP_STATE, 0
-	getexp BS_TARGET
-	moveendall
-	goto BattleScript_HandleFaintedMon
-
-BattleScript_DmgHazardsOnFaintedBattler::
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
-	healthbarupdate BS_FAINTED
-	datahpupdate BS_FAINTED
-	call BattleScript_PrintHurtByDmgHazards
-	tryfaintmon BS_FAINTED, FALSE, NULL
-	tryfaintmon BS_FAINTED, TRUE, BattleScript_DmgHazardsOnFaintedBattlerFainted
-	return
-
-BattleScript_DmgHazardsOnFaintedBattlerFainted::
-	setbyte sGIVEEXP_STATE, 0
-	getexp BS_FAINTED
-	moveendall
-	goto BattleScript_HandleFaintedMon
 
 BattleScript_PrintHurtByDmgHazards::
 	printfromtable gDmgHazardsStringIds
@@ -8126,8 +8187,8 @@ BattleScript_ToxicSpikesAbsorbed::
 BattleScript_ToxicSpikesPoisoned::
 	printstring STRINGID_TOXICSPIKESPOISONED
 	waitmessage B_WAIT_TIME_LONG
-	statusanimation BS_SCRIPTING
-	updatestatusicon BS_SCRIPTING
+	statusanimation BS_STACK_1
+	updatestatusicon BS_STACK_1
 	waitstate
 	return
 

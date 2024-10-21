@@ -871,6 +871,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .throwingBased = TRUE,
         .twoTurnMove = TRUE,
+        .parentalBondBanned = TRUE,
     },
     [MOVE_STRENGTH] =
     {
@@ -886,12 +887,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_ABSORB] =
     {
-        .effect = EFFECT_ABSORB,
-        .power = 35,
+        .effect = EFFECT_CLEAR_SMOG,
+        .power = 50,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 20,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
@@ -1192,7 +1193,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_MEDITATE] =
     {
-        .effect = EFFECT_ATTACK_UP,
+        .effect = EFFECT_MEDITATE,
         .power = 0,
         .type = TYPE_PSYCHIC,
         .accuracy = 0,
@@ -1390,7 +1391,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BARRIER] =
     {
-        .effect = EFFECT_DEFENSE_UP_2,
+        .effect = EFFECT_BARRIER,
         .power = 0,
         .type = TYPE_PSYCHIC,
         .accuracy = 0,
@@ -1777,16 +1778,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SKY_ATTACK] =
     {
-        .effect = EFFECT_TWO_TURNS_ATTACK,
+        .effect = EFFECT_TWO_TURN_SECONDARY,
         .power = 140,
         .type = TYPE_FLYING,
         .accuracy = 90,
         .pp = 5,
-        .secondaryEffectChance = 30,
+        .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-        .argument = MOVE_EFFECT_FLINCH,
+        .argument = MOVE_EFFECT_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER,
         .twoTurnMove = TRUE,
     },
     [MOVE_TRANSFORM] =
@@ -4896,14 +4897,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_FORCE_PALM] =
     {
-        .effect = EFFECT_PARALYZE_HIT,
-        .power = 60,
+        .effect = EFFECT_CLEAR_SMOG,
+        .power = 50,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
-        .pp = 15,
-        .secondaryEffectChance = 30,
+        .pp = 20,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
+        .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
     },
     [MOVE_AURA_SPHERE] =
@@ -6295,6 +6296,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .throwingBased = TRUE,
         .twoTurnMove = TRUE,
+        .parentalBondBanned = TRUE,
     },
     [MOVE_SHIFT_GEAR] =
     {
@@ -6489,7 +6491,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BULLDOZE] =
     {
         .effect = EFFECT_BULLDOZE,
-        .power = 60,
+        .power = 55,
         .type = TYPE_GROUND,
         .accuracy = 100,
         .pp = 20,
