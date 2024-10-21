@@ -1143,8 +1143,8 @@ static const u8 sMoveTwoLineDescription_MoveImprison[] = _(
     "moves known by the user.");
 
 static const u8 sMoveTwoLineDescription_MoveRefresh[] = _(
-    "Heals poisoning, paralysis,\n"
-    "or a burn.");
+    "Rests for a moment to cure\n"
+    "status and heal.");
 
 static const u8 sMoveTwoLineDescription_MoveGrudge[] = _(
     "If the user faints, deletes\n"
@@ -5185,7 +5185,7 @@ static const u8 sMoveFourLineDescription_MoveEndeavor[] = _("Gains power the\nfe
 static const u8 sMoveFourLineDescription_MoveEruption[] = _("The higher the\nuser's HP, the more\npowerful it is.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveSkillSwap[] = _("The user employs\nits psychic power\nto swap abilities\nwith the foe.");
 static const u8 sMoveFourLineDescription_MoveImprison[] = _("Prevents foes from\nusing any move\nthat is also known\nby the user.");
-static const u8 sMoveFourLineDescription_MoveRefresh[] = _("A self-healing move\nthat cures the user\nof a poisoning,\nburn, or paralysis.");
+static const u8 sMoveFourLineDescription_MoveRefresh[] = _("Cures status and\nheals the user for\n25% HP.");
 static const u8 sMoveFourLineDescription_MoveGrudge[] = _("If the user faints,\nthis move deletes\nthe PP of the move\nthat finished it.");
 static const u8 sMoveFourLineDescription_MoveSnatch[] = _("Steals the effects\nof the foe's\nhealing or status-\nchanging move.");
 static const u8 sMoveFourLineDescription_MoveSecretPower[] = _("Physical Hidden Power.\nVaries in type\ndepending on\nthe user.");

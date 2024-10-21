@@ -5380,7 +5380,7 @@ BattleScript_EffectSoothingAroma::
 
 BattleScript_HealAllPartyStatus::
 	copyword gTempMove, gCurrentMove
-	setword gCurrentMove, MOVE_AROMATHERAPY
+	setword gCurrentMove, MOVE_NONE
 	healpartystatus
 	waitstate
 	printfromtable gPartyStatusHealStringIds
@@ -6976,13 +6976,28 @@ BattleScript_EffectRefresh:
 	attackcanceler
 	attackstring
 	ppreduce
-	cureifburnedparalysedorpoisoned BattleScript_ButItFailed
+	cureifburnedparalysedorpoisoned BattleScript_EffectRefresh_NoStatusHeal
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSTATUSNORMAL
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_ATTACKER
+	tryhealpercenthealth BS_ATTACKER, 25, BattleScript_MoveEnd
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_PKMNREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
+BattleScript_EffectRefresh_NoStatusHeal:
+	tryhealpercenthealth BS_ATTACKER, 25, BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_PKMNREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
 
 BattleScript_EffectGrudge:
 	attackcanceler
