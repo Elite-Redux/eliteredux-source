@@ -1055,8 +1055,8 @@ static const u8 sMoveTwoLineDescription_MoveFocusPunch[] = _(
     "The user flinches if hit.");
 
 static const u8 sMoveTwoLineDescription_MoveSmellingSalts[] = _(
-    "Powerful against paralyzed\n"
-    "foes, but also heals them.");
+    "Deals damage and cures\n"
+    "the user of their status.");
 
 static const u8 sMoveTwoLineDescription_MoveFollowMe[] = _(
     "Draws attention to make\n"
@@ -5163,7 +5163,7 @@ static const u8 sMoveFourLineDescription_MoveWillOWisp[] = _("A sinister, bluish
 static const u8 sMoveFourLineDescription_MoveMemento[] = _("The user faints,\nbut sharply lowers\nthe foe's Attack\nand SpAtk");
 static const u8 sMoveFourLineDescription_MoveFacade[] = _("An attack that is\nboosted if user is\nburned, poisoned,\nor paralyzed.");
 static const u8 sMoveFourLineDescription_MoveFocusPunch[] = _("Moves last.\nThe user flinches\nif hit beforehand.\nIron Fist boost.");
-static const u8 sMoveFourLineDescription_MoveSmellingSalts[] = _("Doubly effective on\na paralyzed foe,\nbut it also cures\nthe foe's paralysis.");
+static const u8 sMoveFourLineDescription_MoveSmellingSalts[] = _("Deals damage and\ncures the user's\nstatus.");
 static const u8 sMoveFourLineDescription_MoveFollowMe[] = _("The user draws\nattention to itself,\nmaking foes attack\nonly the user.");
 static const u8 sMoveFourLineDescription_MoveNaturePower[] = _("An attack that\nchanges type\ndepending on the\nuser's location.");
 static const u8 sMoveFourLineDescription_MoveCharge[] = _("The user charges\npower to boost the\nElectric move it\nuses next.");

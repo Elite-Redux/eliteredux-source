@@ -3291,15 +3291,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SMELLING_SALTS] =
     {
         .effect = EFFECT_SMELLINGSALT,
-        .power = 70,
-        .type = TYPE_NORMAL,
+        .power = 75,
+        .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
-        .argument = STATUS1_PARALYSIS,
     },
     [MOVE_FOLLOW_ME] =
     {

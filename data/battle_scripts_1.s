@@ -3850,6 +3850,17 @@ BattleScript_EffectStealthRockHit::
 	trytoapplymoveeffect BattleScript_MoveEffectStealthRockHit
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectSmellingsalt:
+	call BattleScript_EffectHit_Return
+	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_EffectSmellingsalt_Continue
+	goto BattleScript_MoveEnd
+BattleScript_EffectSmellingsalt_Continue:
+	curestatus BS_ATTACKER
+	updatestatusicon BS_ATTACKER
+	printstring STRINGID_PKMNSTATUSNORMAL
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
 BattleScript_MoveEffectStealthRockHit::
 	playmoveanimation BS_ATTACKER, MOVE_STEALTH_ROCK
 	waitanimation
@@ -6663,7 +6674,6 @@ BattleScript_EffectFocusPunch::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
-BattleScript_EffectSmellingsalt:
 BattleScript_EffectWakeUpSlap:
 BattleScript_EffectSparklingAria:
 	jumpiftargetally BattleScript_EffectSparklingAria_CureOnly
