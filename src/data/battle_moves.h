@@ -6212,17 +6212,16 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_QUICK_GUARD] =
     {
-        .effect = EFFECT_PROTECT,
+        .effect = EFFECT_QUICK_GUARD,
         .power = 0,
         .type = TYPE_FIGHTING,
         .accuracy = 0,
-        .pp = 15,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
-        .priority = 3,
-        .flags = FLAG_SNATCH_AFFECTED | FLAG_PROTECTION_MOVE,
+        .priority = 1,
+        .flags = FLAG_SNATCH_AFFECTED,
         .split = SPLIT_STATUS,
-        .argument = TRUE,
     },
     [MOVE_ALLY_SWITCH] =
     {

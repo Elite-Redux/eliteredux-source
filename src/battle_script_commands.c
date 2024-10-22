@@ -3770,7 +3770,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gRoundStructs[gBattlerTarget].protected = FALSE;
                     gRoundStructs[gBattlerTarget].protectedThisTurn = FALSE;
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_WIDE_GUARD);
-                    gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_QUICK_GUARD);
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_CRAFTY_SHIELD);
                     gSideStatuses[GetBattlerSide(gBattlerTarget)] &= ~(SIDE_STATUS_MAT_BLOCK);
                     gRoundStructs[gBattlerTarget].spikyShielded = FALSE;
@@ -11460,6 +11459,15 @@ static void Cmd_various(void)
         SWAP(*statPtr1, *statPtr2, temp)
         }
         break;
+    case VARIOUS_SET_QUICK_GUARD:
+        ptr = READ_PTR_INC;
+        if (gSideTimers[GetBattlerSide(gActiveBattler)].quickGuardTimer)
+            gBattlescriptCurrInstr = ptr;
+        else
+        {
+            gSideTimers[GetBattlerSide(gActiveBattler)].quickGuardTimer = 5;
+            gSideTimers[GetBattlerSide(gActiveBattler)].started.quickGuard = TRUE;
+        }
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 
@@ -11583,13 +11591,6 @@ static void Cmd_setprotectlike(void)
             if (gCurrentMove == MOVE_WIDE_GUARD && !(gSideStatuses[side] & SIDE_STATUS_WIDE_GUARD))
             {
                 gSideStatuses[side] |= SIDE_STATUS_WIDE_GUARD;
-                SetActiveMultistringChooser(B_MSG_PROTECTED_TEAM);
-                gVolatileStructs[gBattlerAttacker].protectUses++;
-                fail = FALSE;
-            }
-            else if (gCurrentMove == MOVE_QUICK_GUARD && !(gSideStatuses[side] & SIDE_STATUS_QUICK_GUARD))
-            {
-                gSideStatuses[side] |= SIDE_STATUS_QUICK_GUARD;
                 SetActiveMultistringChooser(B_MSG_PROTECTED_TEAM);
                 gVolatileStructs[gBattlerAttacker].protectUses++;
                 fail = FALSE;

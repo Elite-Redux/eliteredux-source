@@ -911,6 +911,7 @@ static const u8 sText_HotCoalsFree[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nho
 static const u8 sText_CaltropsFree[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\ncaltrops!");
 static const u8 sText_ItemDestroyed[] = _("{B_ATK_NAME_WITH_PREFIX} destroyed\n{B_DEF_NAME_WITH_PREFIX}'s {B_LAST_ITEM}!");
 static const u8 sText_SwapWith[] = _("{B_ATK_NAME_WITH_PREFIX} swapped with\n{B_DEF_NAME_WITH_PREFIX}!");
+static const u8 sText_QuickGuard[] = _("{B_ATK_NAME_WITH_PREFIX} shields\ntheir party from priority!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1922,6 +1923,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_CALTROPS_FREE - 12] = sText_CaltropsFree,
     [STRINGID_ITEM_DESTROYED - 12] = sText_ItemDestroyed,
     [STRINGID_SWAPWITH - 12] = sText_SwapWith,
+    [STRINGID_QUICKGUARD - 12] = sText_QuickGuard,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

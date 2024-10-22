@@ -2385,6 +2385,11 @@
 	.byte \stat
 	.endm
 
+	.macro setquickguard failPtr:req
+	various BS_ATTACKER, VARIOUS_SET_QUICK_GUARD
+	.4byte \failPtr
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd

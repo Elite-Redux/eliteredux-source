@@ -272,6 +272,7 @@ struct SideBeganThisTurn
     u8 fireSea:1;
     u8 rainbow:1;
     u8 smokescreen:1;
+    u8 quickGuard:1;
 };
 
 struct SideTimer
@@ -307,6 +308,7 @@ struct SideTimer
     u8 smokescreenBattler:2;
     u8 hotCoals:1;
     u8 caltrops:1;
+    u8 quickGuardTimer:3;
 };
 
 struct FieldBeganThisTurn

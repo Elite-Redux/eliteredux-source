@@ -496,6 +496,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCaltrops				  @ EFFECT_CALTROPS
 	.4byte BattleScript_EffectKnockOff				  @ EFFECT_CORROSIVE_GAS
 	.4byte BattleScript_EffectSweetKiss				  @ EFFECT_SWEET_KISS
+	.4byte BattleScript_EffectQuickGuard			  @ EFFECT_QUICK_GUARD
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -13261,5 +13262,16 @@ BattleScript_EffectAllySwitch:
 	waitanimation
 	swapwith BS_TARGET
 	printstring STRINGID_SWAPWITH
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_EffectQuickGuard:
+	attackcanceler
+	attackstring
+	ppreduce
+	setquickguard BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	printstring STRINGID_QUICKGUARD
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd

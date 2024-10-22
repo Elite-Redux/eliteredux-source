@@ -2260,6 +2260,7 @@ enum
     ENDTURN_QUASH,
     ENDTURN_SMOKESCREEN,
     ENDTURN_CLEARSKIES,
+    ENDTURN_MISC_SIDE_TIMERS,
     ENDTURN_FIELD_COUNT,
 };
 
@@ -2891,6 +2892,17 @@ u8 DoFieldEndTurnEffects(void)
                     BattleScriptExecute(BattleScript_ClearSkiesEnds);
                     effect = TRUE;
                 }
+            }
+            gBattleStruct->turnCountersTracker++;
+            break;
+        case ENDTURN_MISC_SIDE_TIMERS:
+            for (i = 0; i < 2; i++)
+            {
+                #define DECREMENT_SIDE_TIMER(type) \
+                if (!gSideTimers[i].started.type && gSideTimers[i].type ## Timer) gSideTimers[i].type ## Timer--;
+
+                DECREMENT_SIDE_TIMER(quickGuard)
+                #undef DECREMENT_SIDE_TIMER
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -3983,6 +3995,7 @@ enum
     CANCELLER_THROAT_CHOP,
     CANCELLER_MULTIHIT_MOVES,
     CANCELLER_SKY_DROP,
+    CANCELLER_QUICK_GUARD,
     CANCELLER_END,
     CANCELLER_PSYCHIC_TERRAIN,
     CANCELLER_END2,
@@ -4073,6 +4086,17 @@ u8 AtkCanceller_UnableToUseMove(void)
                 effect = 1;
             }
             gBattleStruct->atkCancellerTracker++;
+            break;
+        case CANCELLER_QUICK_GUARD:
+            if (GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget)
+                && gSideTimers[GetBattlerSide(gBattlerTarget)].quickGuardTimer
+                && !gProcessingExtraAttacks
+                && GetMovePriority(gBattlerAttacker, gCurrentMove, gBattlerTarget))
+            {
+                gBattlescriptCurrInstr = BattleScript_ButItFailed;
+                gHitMarker |= HITMARKER_NO_ATTACKSTRING;
+                effect = TRUE;
+            }
             break;
         case CANCELLER_TRUANT: // truant
             if (GetAbilityState(gBattlerAttacker, ABILITY_TRUANT) && !IS_MOVE_STATUS(gCurrentMove))
@@ -5579,7 +5603,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         break;
     case ABILITYEFFECT_MOVES_BLOCK: // 2
         effect = TestImmunityAbilities(battler, gBattlerAttacker, move, moveType, &gBattlescriptCurrInstr, &gBattleScripting.battlerPopupOverwrite, &gBattleScripting.abilityPopupOverwrite);
-
 
         if (effect)
         {
@@ -8672,9 +8695,6 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
     else if (gRoundStructs[battlerId].kingsShielded && gBattleMoves[move].power != 0)
         return TRUE;
     else if (gRoundStructs[battlerId].angelsWrathProtected && gBattleMoves[move].power != 0)
-        return TRUE;
-    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD
-             && GetChosenMovePriority(gBattlerAttacker, battlerId) > 0)
         return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD
       && IS_MOVE_STATUS(move))
