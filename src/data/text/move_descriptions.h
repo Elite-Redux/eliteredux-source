@@ -1883,7 +1883,7 @@ static const u8 sMoveTwoLineDescription_MovePowerSplit[] = _(
     "and Sp. Atk with the foe.");
 
 static const u8 sMoveTwoLineDescription_MoveWonderRoom[] = _(
-    "Defense and Sp. Def stats\n"
+    "Attack and SpAtk stats\n"
     "are swapped for 5 turns.");
 
 static const u8 sMoveTwoLineDescription_MovePsyshock[] = _(
@@ -5374,7 +5374,7 @@ static const u8 sMoveFourLineDescription_MoveHoneClaws[] = _("The user sharpens\
 static const u8 sMoveFourLineDescription_MoveWideGuard[] = _("For 1 turn, the\nuser and its allies\nare protected from\nwide-ranging moves.");
 static const u8 sMoveFourLineDescription_MoveGuardSplit[] = _("The user's Defense\nand Sp. Def stats\nare averaged with\nthose of the target.");
 static const u8 sMoveFourLineDescription_MovePowerSplit[] = _("The user's Attack\nand Sp. Atk stats\nare averaged with\nthose of the target.");
-static const u8 sMoveFourLineDescription_MoveWonderRoom[] = _("For 5 turns, all\nPokémon have their\nDefense and Sp. Def\nstats swapped.");
+static const u8 sMoveFourLineDescription_MoveWonderRoom[] = _("For 5 turns, Attack\nand SpAtk stats are\nswapped and their\nstat buffs are ignored.");
 static const u8 sMoveFourLineDescription_MovePsyshock[] = _("The user casts an\nodd psychic wave to\nattack the foe for\nphysical damage.");
 static const u8 sMoveFourLineDescription_MoveVenoshock[] = _("A special liquid\nthat damages for\ndouble the power on\npoisoned targets.");
 static const u8 sMoveFourLineDescription_MoveAutotomize[] = _("The user sheds part\nof its body to be\nlighter, sharply\nraising its Speed.");

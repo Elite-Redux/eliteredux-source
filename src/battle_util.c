@@ -10221,6 +10221,8 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
         case STAT_HP:
             return 0;
         case STAT_ATK:
+            if (isWonderRoomActive()) goto CALCULATE_STAT_SPATK;
+            CALCULATE_STAT_ATK:
             statBase = gBattleMons[battler].attack;
             extraStatLevel = gVolatileStructs[battler].extraAttackLevel;
             // Tablets of Ruin
@@ -10292,6 +10294,8 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                     statBase /= 2;
             break;
         case STAT_SPATK:
+            if (isWonderRoomActive()) goto CALCULATE_STAT_ATK;
+            CALCULATE_STAT_SPATK:
             statBase = gBattleMons[battler].spAttack;
             extraStatLevel = gVolatileStructs[battler].extraSpAttackLevel;
             // Tablets of Ruin
@@ -10333,8 +10337,6 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             goto HANDLE_STAT_CALC_ATK_OR_SPATK;
             break;
         case STAT_DEF:
-            if (isWonderRoomActive()) goto CALCULATE_STAT_SPDEF;
-            CALCULATE_STAT_DEF:
             statBase = gBattleMons[battler].defense;
             extraStatLevel = gVolatileStructs[battler].extraDefenseLevel;
 
@@ -10366,8 +10368,6 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                     statBase = statBase * 3 / 2;
             break;
         case STAT_SPDEF:
-            if (isWonderRoomActive()) goto CALCULATE_STAT_DEF;
-            CALCULATE_STAT_SPDEF:
             statBase = gBattleMons[battler].spDefense;
             extraStatLevel = gVolatileStructs[battler].extraSpDefenseLevel;
 
@@ -10407,6 +10407,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     #undef RUIN_CHECK
 
     if (isUnaware) statStage = DEFAULT_STAT_STAGE;
+    else if (isWonderRoomActive() && (statEnum == STAT_ATK || statEnum == STAT_SPATK)) statStage = DEFAULT_STAT_STAGE;
     else if (isCrit && isAttack) statStage = max(statStage, DEFAULT_STAT_STAGE);
     else if (isCrit && !isAttack) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
