@@ -120,6 +120,7 @@ static const u16 sTwoStrikeMoves[] =
     MOVE_DOUBLE_IRON_BASH,
     MOVE_TWINEEDLE,
     MOVE_CROSS_POISON,
+    MOVE_DOUBLE_SHOCK,
 };
 
 u8 CalcBeatUpPower(void)
