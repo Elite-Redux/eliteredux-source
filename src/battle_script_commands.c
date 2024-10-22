@@ -5630,9 +5630,20 @@ static void Cmd_moveend(void)
                     BattleScriptCall(BattleScript_KingsShieldEffect);
                     effect = 1;
                 }
-                else if (gRoundStructs[gBattlerTarget].beakBlastCharge)
+                else if (gRoundStructs[gBattlerTarget].iceBurnCharge)
                 {
-                    BattleScriptCall(BattleScript_BeakBlastBurn);
+                    gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_ICE_BURN);
+                    BattleScriptCall(BattleScript_KingsShieldEffect);
+                    effect = 1;
+                }
+                else if (gRoundStructs[gBattlerTarget].freezeShockCharge)
+                {
+                    gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
+                    PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_FREEZE_SHOCK);
+                    BattleScriptCall(BattleScript_KingsShieldEffect);
                     effect = 1;
                 }
                 else if (gRoundStructs[gBattlerTarget].obstructed && gCurrentMove != MOVE_SUCKER_PUNCH)
@@ -10114,7 +10125,10 @@ static void Cmd_various(void)
         }
         return;
     case VARIOUS_SET_BEAK_BLAST:
-        gRoundStructs[gActiveBattler].beakBlastCharge = 1;
+        if (gBattleMoves[gCurrentMove].argument == MOVE_EFFECT_PARALYSIS)
+            gRoundStructs[gActiveBattler].freezeShockCharge = TRUE;
+        else
+            gRoundStructs[gActiveBattler].iceBurnCharge = TRUE;
         break;
     case VARIOUS_TERRAIN_SEED:
         if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_SEEDS)

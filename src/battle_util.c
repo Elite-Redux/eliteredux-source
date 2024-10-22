@@ -8655,6 +8655,10 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
 
     // Protective Pads doesn't stop Unseen Fist from bypassing Protect effects, so IsMoveMakingContact() isn't used here.
     // This means extra logic is needed to handle Shell Side Arm.
+    if (gRoundStructs[battlerId].iceBurnCharge && IsMoveMakingContact(move, gBattlerAttacker))
+        return TRUE;
+    if (gRoundStructs[battlerId].freezeShockCharge && IsMoveMakingContact(move, gBattlerAttacker))
+        return TRUE;
     if (gRoundStructs[battlerId].merculight && !IS_MOVE_STATUS(move) && GetTotalAccuracy(gBattlerAttacker, battlerId, move) < 101)
         return TRUE;
     if (gRoundStructs[battlerId].detected && GetTotalAccuracy(gBattlerAttacker, battlerId, move) < 101)

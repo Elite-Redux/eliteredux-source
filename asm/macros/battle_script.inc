@@ -2390,9 +2390,9 @@
 	.4byte \failPtr
 	.endm
 
-	.macro twoturnmoveacceleratecheck
+	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
-	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd
+	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr
 	call BattleScript_PowerHerbActivation
 twoturnmoveacceleratecheck_\@:
 	setbyte sACCELERATED_TWO_TURN, 1

@@ -497,6 +497,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectKnockOff				  @ EFFECT_CORROSIVE_GAS
 	.4byte BattleScript_EffectSweetKiss				  @ EFFECT_SWEET_KISS
 	.4byte BattleScript_EffectQuickGuard			  @ EFFECT_QUICK_GUARD
+	.4byte BattleScript_EffectTwoTurnRetaliation	  @ EFFECT_TWO_TURN_RETALIATION
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -681,13 +682,6 @@ BattleScript_BeakBlastSetUp::
 	printstring STRINGID_HEATUPBEAK
 	waitmessage 0x40
 	end2
-
-BattleScript_BeakBlastBurn::
-	requirecandoeffect BS_TARGET, MOVE_EFFECT_BURN
-	setmoveeffect MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER
-	seteffectprimary
-BattleScript_BeakBlastBurnReturn:
-	return
 
 BattleScript_EffectScaleShot::
 	attackcanceler
@@ -4962,13 +4956,28 @@ BattleScript_SetSkullBashString:
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_SKULL_BASH
 	goto BattleScript_EffectTwoTurnSecondary_AfterSetString
 
+BattleScript_EffectTwoTurnRetaliation::
+	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
+	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_TwoTurnMovesSecondTurn
+	jumpifmove MOVE_ICE_BURN, BattleScript_EffectTwoTurnsAttackIceBurn
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_FREEZE_SHOCK
+BattleScript_EffectTwoTurnRetaliation_AfterSetString:
+	call BattleScriptFirstChargingTurn
+	twoturnmoveacceleratecheck BattleScript_EffectTwoTurnRetaliation_SetRetaliation
+	goto BattleScript_TwoTurnMovesSecondTurn
+BattleScript_EffectTwoTurnRetaliation_SetRetaliation:
+	setbeakblast BS_ATTACKER
+	goto BattleScript_MoveEnd
+BattleScript_EffectTwoTurnsAttackIceBurn:
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
+	goto BattleScript_EffectTwoTurnRetaliation_AfterSetString
+
+
 BattleScript_EffectTwoTurnsAttack::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_TwoTurnMovesSecondTurn
 	jumpifmove MOVE_SKY_ATTACK, BattleScript_EffectTwoTurnsAttackSkyAttack
 	jumpifmove MOVE_RAZOR_WIND, BattleScript_EffectTwoTurnsAttackRazorWind
-	jumpifmove MOVE_ICE_BURN, BattleScript_EffectTwoTurnsAttackIceBurn
-	jumpifmove MOVE_FREEZE_SHOCK, BattleScript_EffectTwoTurnsAttackFreezeShock
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
 BattleScript_EffectTwoTurnsAttackContinue:
 	call BattleScriptFirstChargingTurn
@@ -4981,12 +4990,6 @@ BattleScript_EffectTwoTurnsAttackSkyAttack:
 BattleScript_EffectTwoTurnsAttackRazorWind:
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
 	goto BattleScript_EffectTwoTurnsAttackContinue
-BattleScript_EffectTwoTurnsAttackIceBurn:
-	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
-	goto BattleScript_EffectTwoTurnsAttackContinue
-BattleScript_EffectTwoTurnsAttackFreezeShock:
-	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_FREEZE_SHOCK
-	goto BattleScript_EffectTwoTurnsAttackContinue	
 	
 BattleScript_EffectGeomancy:
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_GeomancySecondTurn
