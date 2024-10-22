@@ -1015,12 +1015,12 @@ static const u8 sMoveTwoLineDescription_MoveStockpile[] = _(
     "3 turns.");
 
 static const u8 sMoveTwoLineDescription_MoveSpitUp[] = _(
-    "Releases stockpiled power\n"
-    "(the more the better).");
+    "Spits up stored stockpiles\n"
+    "for heavy damage.");
 
 static const u8 sMoveTwoLineDescription_MoveSwallow[] = _(
-    "Absorbs stockpiled power\n"
-    "and restores HP.");
+    "Swallows down Stockpiles\n"
+    "to restore HP.");
 
 static const u8 sMoveTwoLineDescription_MoveHeatWave[] = _(
     "Exhales a hot breath on the\n"
@@ -5157,8 +5157,8 @@ static const u8 sMoveFourLineDescription_MoveBeatUp[] = _("All party Pokémon\nj
 static const u8 sMoveFourLineDescription_MoveFakeOut[] = _("An attack that hits\nfirst and causes\nflinching. Usable\nonly on 1st turn.");
 static const u8 sMoveFourLineDescription_MoveUproar[] = _("The user throws a\ntantrum for two to\nthree turns, then\nbecomes confused.");
 static const u8 sMoveFourLineDescription_MoveStockpile[] = _("The user charges\nup power for use\nlater. It can be\nused three times.");
-static const u8 sMoveFourLineDescription_MoveSpitUp[] = _("The power built\nusing Stockpile is\nreleased at once\nfor attack.");
-static const u8 sMoveFourLineDescription_MoveSwallow[] = _("The energy it built\nusing Stockpile is\nabsorbed to restore\nHP.");
+static const u8 sMoveFourLineDescription_MoveSpitUp[] = _("Uses the attacker's\nprimary type. Uses\nStockpiles in place of\nPP if available.");
+static const u8 sMoveFourLineDescription_MoveSwallow[] = _("Restores 50% HP.\nUses Stockpiles in\nplace of PP if\navailable.");
 static const u8 sMoveFourLineDescription_MoveHeatWave[] = _("The user exhales a\nheated breath. 10%\nburn chance.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveHail[] = _("A hailstorm lasting\neight turns damages\nall Pokémon except\nthe Ice-type.");
 static const u8 sMoveFourLineDescription_MoveTorment[] = _("It enrages the foe,\nmaking it incapable\nof using the same\nmove successively.");

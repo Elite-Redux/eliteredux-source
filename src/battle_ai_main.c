@@ -1899,10 +1899,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             if (gVolatileStructs[battlerAtk].stockpileCounter >= 3)
                 score -= 10;
             break;
-        case EFFECT_SPIT_UP:
-            if (gVolatileStructs[battlerAtk].stockpileCounter <= 1)
-                score -= 10;
-            break;
         case EFFECT_SWALLOW:
             if (gVolatileStructs[battlerAtk].stockpileCounter == 0)
             {
@@ -4334,10 +4330,6 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             
         IncreaseStatUpScore(battlerAtk, battlerDef, STAT_DEF, &score);
         IncreaseStatUpScore(battlerAtk, battlerDef, STAT_SPDEF, &score);
-        break;
-    case EFFECT_SPIT_UP:
-        if (gVolatileStructs[battlerAtk].stockpileCounter >= 2)
-            score++;
         break;
     case EFFECT_ROLLOUT:
         if (gBattleMons[battlerAtk].status2 & STATUS2_DEFENSE_CURL)

@@ -6052,7 +6052,7 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
         if (holdEffect == gBattleMoves[move].argument)
             return ItemId_GetSecondaryId(item);
     }
-    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE)
+    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE || gBattleMoves[move].effect == EFFECT_SPIT_UP)
     {
         if (type1 != TYPE_MYSTERY)
             return type1;
@@ -6221,7 +6221,7 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk) {
         if (holdEffect == gBattleMoves[move].argument)
             return ItemId_GetSecondaryId(gBattleMons[battlerAtk].item);
     }
-    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE)
+    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE || gBattleMoves[move].effect == EFFECT_SPIT_UP)
     {
         if (gBattleMons[battlerAtk].type1 != TYPE_MYSTERY)
             return gBattleMons[battlerAtk].type1;
@@ -6388,7 +6388,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
         if (holdEffect == gBattleMoves[move].argument)
             gBattleStruct->dynamicMoveType = ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) | 0x80;
     }
-    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE)
+    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE || gBattleMoves[move].effect == EFFECT_SPIT_UP)
     {
         if (gBattleMons[battlerAtk].type1 != TYPE_MYSTERY)
             gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type1 | 0x80;

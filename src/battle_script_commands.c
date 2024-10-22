@@ -563,6 +563,7 @@ static void Cmd_jumpifoppositegenders(void);
 static void Cmd_trygetbaddreamstarget(void);
 static void Cmd_tryworryseed(void);
 static void Cmd_metalburstdamagecalculator(void);
+static int TryUseStockpile(int battler);
 extern u8 gMaxPartyLevel;
 
 static const u16 sBadgeFlags[8] =
@@ -1577,7 +1578,8 @@ static void Cmd_attackcanceler(void)
     }
     if (!gBattleMons[gBattlerAttacker].pp[gCurrMovePos] && gCurrentMove != MOVE_STRUGGLE
      && !(gHitMarker & (HITMARKER_x800000 | HITMARKER_NO_ATTACKSTRING | HITMARKER_NO_PPDEDUCT))
-     && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))
+     && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
+     && !((gBattleMoves[gCurrentMove].effect == EFFECT_SPIT_UP || gBattleMoves[gCurrentMove].effect == EFFECT_SWALLOW) && gVolatileStructs[gBattlerAttacker].stockpileCounter))
     {
         gBattlescriptCurrInstr = BattleScript_NoPPForMove;
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -2055,10 +2057,32 @@ static void Cmd_ppreduce(void)
     if (gBattleControllerExecFlags)
         return;
     
+    gBattlescriptCurrInstr++;
+
+    if (gHitMarker & HITMARKER_NO_PPDEDUCT)
+    {
+        gHitMarker &= ~HITMARKER_NO_PPDEDUCT;
+        return;
+    }
+
+    if (gHitMarker & HITMARKER_NO_ATTACKSTRING)
+        return;
+    
     if (!BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRESSURE) && IsAbilityOnSide(GetBattlerSide(BATTLE_OPPOSITE(gBattlerAttacker)), ABILITY_PRESSURE))
         ppToDeduct++;
+    
+    if ((gBattleMoves[gCurrentMove].effect == EFFECT_SPIT_UP || gBattleMoves[gCurrentMove].effect == EFFECT_SWALLOW))
+    {
+        while (ppToDeduct)
+        {
+            if (!TryUseStockpile(gBattlerAttacker)) break;
+            ppToDeduct--;
+        }
+        
+        if (!ppToDeduct) return;
+    }
 
-    if (!(gHitMarker & (HITMARKER_NO_PPDEDUCT | HITMARKER_NO_ATTACKSTRING)) && gBattleMons[gBattlerAttacker].pp[gCurrMovePos])
+    if (gBattleMons[gBattlerAttacker].pp[gCurrMovePos])
     {
         gRoundStructs[gBattlerAttacker].notFirstStrike = TRUE;
         // For item Metronome, echoed voice
@@ -2084,9 +2108,6 @@ static void Cmd_ppreduce(void)
             MarkBattlerForControllerExec(gBattlerAttacker);
         }
     }
-
-    gHitMarker &= ~(HITMARKER_NO_PPDEDUCT);
-    gBattlescriptCurrInstr++;
 }
 
 // The chance is 1/N for each stage.
@@ -12038,6 +12059,25 @@ static void Cmd_stockpile(void)
     gBattlescriptCurrInstr += 2;
 }
 
+static int TryUseStockpile(int battler)
+{
+    if (!gVolatileStructs[battler].stockpileCounter) return FALSE;
+
+    gVolatileStructs[battler].stockpileCounter--;
+    if (gVolatileStructs[battler].stockpileDef)
+    {
+        gVolatileStructs[battler].stockpileDef--;
+        ChangeStatBuffs(battler, StatBuffValue(-1), STAT_DEF, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
+    }
+    if (gVolatileStructs[battler].stockpileSpDef)
+    {
+        gVolatileStructs[battler].stockpileSpDef--;
+        ChangeStatBuffs(battler, StatBuffValue(-1), STAT_SPDEF, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
+    }
+    
+    return TRUE;
+}
+
 static void Cmd_stockpiletobasedamage(void)
 {
     const u8* jumpPtr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
@@ -12053,7 +12093,7 @@ static void Cmd_stockpiletobasedamage(void)
         gVolatileStructs[gBattlerAttacker].stockpileCounter = 0;
         // Restore stat changes from stockpile.
         ChangeStatBuffs(gBattlerAttacker, StatBuffValue(-gVolatileStructs[gBattlerAttacker].stockpileDef), STAT_DEF, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
-        ChangeStatBuffs(gBattlerAttacker, StatBuffValue(-gVolatileStructs[gBattlerAttacker].stockpileDef), STAT_SPDEF, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
+        ChangeStatBuffs(gBattlerAttacker, StatBuffValue(-gVolatileStructs[gBattlerAttacker].stockpileSpDef), STAT_SPDEF, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
         gBattlescriptCurrInstr += 5;
     }
 }

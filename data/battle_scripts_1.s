@@ -181,8 +181,8 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectFakeOut                 @ EFFECT_FAKE_OUT
 	.4byte BattleScript_EffectUproar                  @ EFFECT_UPROAR
 	.4byte BattleScript_EffectStockpile               @ EFFECT_STOCKPILE
-	.4byte BattleScript_EffectSpitUp                  @ EFFECT_SPIT_UP
-	.4byte BattleScript_EffectSwallow                 @ EFFECT_SWALLOW
+	.4byte BattleScript_EffectHit                     @ EFFECT_SPIT_UP
+	.4byte BattleScript_EffectRestoreHp               @ EFFECT_SWALLOW
 	.4byte BattleScript_EffectWorrySeed               @ EFFECT_WORRY_SEED
 	.4byte BattleScript_EffectHail                    @ EFFECT_HAIL
 	.4byte BattleScript_EffectTorment                 @ EFFECT_TORMENT
@@ -5654,8 +5654,7 @@ BattleScript_EffectSwagger::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_SwaggerTryConfuse:
 	jumpifability BS_ATTACKER, ABILITY_MYCELIUM_MIGHT, BattleScript_SwaggerTryConfuseMyceliumMight
-	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_OwnTempoPrevents
-	jumpifability BS_TARGET, ABILITY_DISCIPLINE, BattleScript_Discipline
+	checktargetowntempoprotects
 	jumpifsafeguard BattleScript_SafeguardProtected
 BattleScript_SwaggerTryConfuseMyceliumMight:
 	setmoveeffect MOVE_EFFECT_CONFUSION
