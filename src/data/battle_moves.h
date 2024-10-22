@@ -9182,7 +9182,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_LASH_OUT] =
     {
         .effect = EFFECT_LASH_OUT,
-        .power = 75,
+        .power = 80,
         .type = TYPE_DARK,
         .accuracy = 100,
         .pp = 5,

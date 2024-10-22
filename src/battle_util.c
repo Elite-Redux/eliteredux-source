@@ -8825,6 +8825,20 @@ u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc)
     return count;
 }
 
+int CountBattlerStatDecreases(int battler)
+{
+    int i;
+    int count = 0;
+
+    for (i = 0; i < NUM_STATS; i++)
+    {
+        if (gBattleMons[battler].statStages[i] < DEFAULT_STAT_STAGE) // Stat is increased.
+            count += DEFAULT_STAT_STAGE - gBattleMons[battler].statStages[i];
+    }
+
+    return count;
+}
+
 u32 GetMoveTargetCount(u16 move, u8 battlerAtk, u8 battlerDef)
 {
     int flags = GetBattlerBattleMoveTargetFlags(move, battlerAtk);
@@ -9108,6 +9122,11 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (basePower > 200)
             basePower = 200;
         break;
+    case EFFECT_LASH_OUT:
+        basePower += CountBattlerStatDecreases(battlerAtk) * 20;
+        if (basePower > 200)
+            basePower = 200;
+        break;
     case EFFECT_STORED_POWER:
         basePower += (CountBattlerStatIncreases(battlerAtk, TRUE) * 20);
         break;
@@ -9146,10 +9165,6 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         break;
     case EFFECT_FUSION_COMBO:
         if (gBattleMoves[gLastUsedMove].effect == EFFECT_FUSION_COMBO && move != gLastUsedMove)
-            basePower *= 2;
-        break;
-    case EFFECT_LASH_OUT:
-        if (gRoundStructs[battlerAtk].statFell)
             basePower *= 2;
         break;
     case EFFECT_EXPLOSION:
@@ -10428,6 +10443,9 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     u8 highestAttackStat = STAT_ATK;
     u32 atkStat;
     u16 modifier;
+
+    if (gBattleMoves[move].effect == EFFECT_LASH_OUT)
+        isCrit = TRUE;
 
     if (gBattleMoves[move].effect == EFFECT_FOUL_PLAY)
     {

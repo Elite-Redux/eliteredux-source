@@ -2938,8 +2938,8 @@ static const u8 sMoveTwoLineDescription_MoveBurningJealousy[] = _(
     "50% chance to burn them.");
 
 static const u8 sMoveTwoLineDescription_MoveLashOut[] = _(
-    "If stats lowered during this\n"
-    "turn, power is doubled.");
+    "Increases in damage as the\n"
+    "user's stats are lowered");
 
 static const u8 sMoveTwoLineDescription_MovePoltergeist[] = _(
     "Control foe's item to attack.\n"
@@ -5638,7 +5638,7 @@ static const u8 sMoveFourLineDescription_MoveRisingVoltage[] = _("Its power doub
 static const u8 sMoveFourLineDescription_MoveTerrainPulse[] = _("This move's type\nand power changes\ndepending on the\nterrain when used.");
 static const u8 sMoveFourLineDescription_MoveSkitterSmack[] = _("The user skitters\nbehind the foe to\nattack. This lowers\nthe foe's SpAtk");
 static const u8 sMoveFourLineDescription_MoveBurningJealousy[] = _("Attacks both foes\njealously. Has 50%\nburn chance.");
-static const u8 sMoveFourLineDescription_MoveLashOut[] = _("If the user's stats\nwere lowered in this\nturn, the move's\npower is doubled.");
+static const u8 sMoveFourLineDescription_MoveLashOut[] = _("+20 BP for each\nnegative stat stage\nand ignores negative\nattack stages.");
 static const u8 sMoveFourLineDescription_MovePoltergeist[] = _("Controls the foe's\nitem to attack.\nIt fails if the foe\nhas no item.");
 static const u8 sMoveFourLineDescription_MoveCorrosiveGas[] = _("Highly acidic gas\nthat melts items\nheld by every\nsurrounding {PKMN}.");
 static const u8 sMoveFourLineDescription_MoveCoaching[] = _("The user properly\ncoaches its ally {PKMN},\nupping their Attack\nand Defense.");

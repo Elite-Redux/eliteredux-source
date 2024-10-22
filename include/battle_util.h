@@ -300,6 +300,7 @@ u8 GetBattleMoveTargetFlags(u16 moveId, u16 ability);
 u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler);
 bool32 ShouldChangeFormHpBased(u32 battler);
 u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc);
+int CountBattlerStatDecreases(int battler);
 bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler);
 s32 GetCurrentTerrain(void);
 u8 BattlerHasInnateOrAbility(u8 battler, u16 ability);
