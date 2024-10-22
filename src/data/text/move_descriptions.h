@@ -1531,12 +1531,12 @@ static const u8 sMoveTwoLineDescription_MoveCopycat[] = _(
     "move used by a foe.");
 
 static const u8 sMoveTwoLineDescription_MovePowerSwap[] = _(
-    "Swaps changes to Attack\n"
-    "and Sp. Atk with the foe.");
+    "Swaps Attack and Special\n"
+    "Attack with the foe.");
 
 static const u8 sMoveTwoLineDescription_MoveGuardSwap[] = _(
-    "Swaps changes to Defense\n"
-    "and Sp. Def with the foe.");
+    "Swaps Defense and Special\n"
+    "Defense with the foe.");
 
 static const u8 sMoveTwoLineDescription_MovePunishment[] = _(
     "Does more damage if the\n"
@@ -2579,8 +2579,7 @@ static const u8 sMoveTwoLineDescription_MoveBurnUp[] = _(
     "removing the Fire type.");
 
 static const u8 sMoveTwoLineDescription_MoveSpeedSwap[] = _(
-    "Swaps user's Speed with\n"
-    "the target's.");
+    "Swaps Speed with the foe.");
 
 static const u8 sMoveTwoLineDescription_MoveSmartStrike[] = _(
     "Hits with an accurate\n"
@@ -5287,8 +5286,8 @@ static const u8 sMoveFourLineDescription_MoveGastroAcid[] = _("Stomach acids are
 static const u8 sMoveFourLineDescription_MoveLuckyChant[] = _("For 5 turns, the\nfoe is prevented\nfrom landing\ncritical hits.");
 static const u8 sMoveFourLineDescription_MoveMeFirst[] = _("The foe's intended\nmove is stolen and\nused first, with\ngreater power.");
 static const u8 sMoveFourLineDescription_MoveCopycat[] = _("The user tries to\nmimic the move used\nimmediately before\nit.");
-static const u8 sMoveFourLineDescription_MovePowerSwap[] = _("The user and foe\nswap any changes\nto their Attack and\nSp. Atk stats.");
-static const u8 sMoveFourLineDescription_MoveGuardSwap[] = _("The user and foe\nswap any changes\nto their Defense\nand Sp. Def stats.");
+static const u8 sMoveFourLineDescription_MovePowerSwap[] = _("Swaps Attack and\nSpecial Attack stats\nand stat boosts with\nthe target.");
+static const u8 sMoveFourLineDescription_MoveGuardSwap[] = _("Swaps Defense and\nSpecial Defense stats\nand stat boosts with\nthe target.");
 static const u8 sMoveFourLineDescription_MovePunishment[] = _("Deals more damage\nif the user has more\nstat changes. Pierces\nincreased defenses.");
 static const u8 sMoveFourLineDescription_MoveLastResort[] = _("This fails unless\nthe user has used\nits other moves in\nthe battle already.");
 static const u8 sMoveFourLineDescription_MoveWorrySeed[] = _("A seed that is\nplanted that causes\nFear and gives\nInsomnia.");
@@ -5549,7 +5548,7 @@ static const u8 sMoveFourLineDescription_MoveLunge[] = _("The user lunges at\nth
 static const u8 sMoveFourLineDescription_MoveFireLash[] = _("The foe is struck\nwith a burning\nlash that lowers\nits Defense stat.");
 static const u8 sMoveFourLineDescription_MovePowerTrip[] = _("The more the user's\nstats are raised,\nthe greater this\nattack's power.");
 static const u8 sMoveFourLineDescription_MoveBurnUp[] = _("To strike at full\nforce, the user\nburns out and loses\nits Fire-type.");
-static const u8 sMoveFourLineDescription_MoveSpeedSwap[] = _("The user exchanges\nSpeed stats with\nthe target.");
+static const u8 sMoveFourLineDescription_MoveSpeedSwap[] = _("Swaps Speed stat\nand stat boosts with\nthe target.");
 static const u8 sMoveFourLineDescription_MoveSmartStrike[] = _("Stabs the foe\nwith a sharp horn.\nNever misses.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MovePurify[] = _("The user tries to\nheal the target's\nstatus condition to\nrestore its own HP.");
 static const u8 sMoveFourLineDescription_MoveRevelationDance[] = _("The user attacks by\ndancing. The user's\ntype determines the\ntype of this move.");

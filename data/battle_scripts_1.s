@@ -3075,6 +3075,8 @@ BattleScript_EffectPowerSwap:
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
 	swapstatstages STAT_ATK
 	swapstatstages STAT_SPATK
+	swapstat BS_TARGET, STAT_ATK
+	swapstat BS_TARGET, STAT_SPATK
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSWITCHEDSTATCHANGES
@@ -3088,6 +3090,8 @@ BattleScript_EffectGuardSwap:
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
 	swapstatstages STAT_DEF
 	swapstatstages STAT_SPDEF
+	swapstat BS_TARGET, STAT_DEF
+	swapstat BS_TARGET, STAT_SPDEF
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSWITCHEDSTATCHANGES
@@ -3100,6 +3104,7 @@ BattleScript_EffectSpeedSwap:
 	ppreduce
 	accuracycheck BattleScript_ButItFailed, NO_ACC_CALC_CHECK_LOCK_ON
 	swapstatstages STAT_SPEED
+	swapstat BS_TARGET, STAT_SPEED
 	attackanimation
 	waitanimation
 	printstring STRINGID_PKMNSWITCHEDSTATCHANGES

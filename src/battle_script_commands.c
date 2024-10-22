@@ -11430,6 +11430,15 @@ static void Cmd_various(void)
         SWAP(gWishFutureKnock.futureSightCounter[gActiveBattler], gWishFutureKnock.futureSightCounter[gBattlerAttacker], temp)
         }
         break;
+    case VARIOUS_SWAP_STAT:
+        {
+        int stat = READ_8_INC - 1;
+        u16* statPtr1 = &gBattleMons[gActiveBattler].attack;
+        u16* statPtr2 = &gBattleMons[gBattlerAttacker].attack;
+        int temp;
+        SWAP(*statPtr1, *statPtr2, temp)
+        }
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 
