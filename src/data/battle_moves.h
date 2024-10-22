@@ -10162,7 +10162,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BITTER_MALICE] =
     {
-        .effect = EFFECT_BITTER_MALICE,
+        .effect = EFFECT_INFERNAL_PARADE,
         .power = 85,
         .type = TYPE_GHOST,
         .accuracy = 0,
@@ -10171,6 +10171,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_FROSTBITE,
     },
     [MOVE_INFERNAL_PARADE] =
     {
@@ -10183,6 +10184,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_BURN,
     },
     [MOVE_DEVIOUS_SHOT] =
     {
@@ -11192,7 +11194,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BARB_BARRAGE] =
     {
-        .effect = EFFECT_50_PERCENT_PLUS_DAMAGE_VS_STATUS,
+        .effect = EFFECT_INFERNAL_PARADE,
         .power = 85,
         .type = TYPE_POISON,
         .accuracy = 100,
