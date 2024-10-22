@@ -2814,8 +2814,8 @@ static const u8 sMoveTwoLineDescription_MoveBodyPress[] = _(
     "higher the user's Def.");
 
 static const u8 sMoveTwoLineDescription_MoveDecorate[] = _(
-    "The user sharply raises\n"
-    "the target's Atk and Sp.Atk");
+    "Strikes foes with a brush or\n"
+    "decorates allies to buff them.");
 
 static const u8 sMoveTwoLineDescription_MoveDrumBeating[] = _(
     "Plays a drum to attack.\n"
@@ -5607,7 +5607,7 @@ static const u8 sMoveFourLineDescription_MoveFishiousRend[] = _("If attacking be
 static const u8 sMoveFourLineDescription_MoveCourtChange[] = _("A mysterious power\nthat swaps the\neffects on either\nside of the field.");
 static const u8 sMoveFourLineDescription_MoveClangorousSoul[] = _("The user raises all\nits stats by using\n1/3 of its HP.");
 static const u8 sMoveFourLineDescription_MoveBodyPress[] = _("A body slam attack\nwhich inflicts more\ndamage the higher\nthe user's Defense.");
-static const u8 sMoveFourLineDescription_MoveDecorate[] = _("The user sharply\nraises the target's\nAttack and Sp. Atk\nstats by decorating.");
+static const u8 sMoveFourLineDescription_MoveDecorate[] = _("Damages foes. Raises\nallies' Attack, Special\nAttack, and Crit by\n2 stages.");
 static const u8 sMoveFourLineDescription_MoveDrumBeating[] = _("The user attacks\nthe foe with its\ndrum, lowering the\nfoe's Speed stat.");
 static const u8 sMoveFourLineDescription_MoveSnapTrap[] = _("The user snares the\ntarget in a snap\ntrap for four to\nfive turns.");
 static const u8 sMoveFourLineDescription_MovePyroBall[] = _("The user launches a\nfiery ball at the\nfoe. 10% chance\nto burn the foe.");

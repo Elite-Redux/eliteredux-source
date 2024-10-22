@@ -1172,6 +1172,9 @@ BattleScript_StuffCheeksEnd:
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectDecorate:
+	jumpiftargetally BattleScript_EffectDecorate_Ally
+	goto BattleScript_EffectHit
+BattleScript_EffectDecorate_Ally:
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring

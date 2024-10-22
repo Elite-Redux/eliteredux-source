@@ -3173,7 +3173,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .pp = 2,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
     },
     [MOVE_SWALLOW] =
@@ -8779,13 +8779,14 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_DECORATE] =
     {
         .effect = EFFECT_DECORATE,
-        .power = 0,
+        .power = 80,
         .type = TYPE_FAIRY,
-        .accuracy = 0,
+        .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .split = SPLIT_STATUS,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
         .metronomeBanned = TRUE,
     },
     [MOVE_DRUM_BEATING] =
