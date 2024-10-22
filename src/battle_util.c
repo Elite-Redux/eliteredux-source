@@ -120,6 +120,7 @@ static const u16 sTwoStrikeMoves[] =
     MOVE_DOUBLE_IRON_BASH,
     MOVE_TWINEEDLE,
     MOVE_CROSS_POISON,
+    MOVE_DOUBLE_SHOCK,
 };
 
 u8 CalcBeatUpPower(void)
@@ -2259,6 +2260,7 @@ enum
     ENDTURN_QUASH,
     ENDTURN_SMOKESCREEN,
     ENDTURN_CLEARSKIES,
+    ENDTURN_MISC_SIDE_TIMERS,
     ENDTURN_FIELD_COUNT,
 };
 
@@ -2890,6 +2892,17 @@ u8 DoFieldEndTurnEffects(void)
                     BattleScriptExecute(BattleScript_ClearSkiesEnds);
                     effect = TRUE;
                 }
+            }
+            gBattleStruct->turnCountersTracker++;
+            break;
+        case ENDTURN_MISC_SIDE_TIMERS:
+            for (i = 0; i < 2; i++)
+            {
+                #define DECREMENT_SIDE_TIMER(type) \
+                if (!gSideTimers[i].started.type && gSideTimers[i].type ## Timer) gSideTimers[i].type ## Timer--;
+
+                DECREMENT_SIDE_TIMER(quickGuard)
+                #undef DECREMENT_SIDE_TIMER
             }
             gBattleStruct->turnCountersTracker++;
             break;
@@ -3982,6 +3995,7 @@ enum
     CANCELLER_THROAT_CHOP,
     CANCELLER_MULTIHIT_MOVES,
     CANCELLER_SKY_DROP,
+    CANCELLER_QUICK_GUARD,
     CANCELLER_END,
     CANCELLER_PSYCHIC_TERRAIN,
     CANCELLER_END2,
@@ -4072,6 +4086,17 @@ u8 AtkCanceller_UnableToUseMove(void)
                 effect = 1;
             }
             gBattleStruct->atkCancellerTracker++;
+            break;
+        case CANCELLER_QUICK_GUARD:
+            if (GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget)
+                && gSideTimers[GetBattlerSide(gBattlerTarget)].quickGuardTimer
+                && !gProcessingExtraAttacks
+                && GetMovePriority(gBattlerAttacker, gCurrentMove, gBattlerTarget))
+            {
+                gBattlescriptCurrInstr = BattleScript_ButItFailed;
+                gHitMarker |= HITMARKER_NO_ATTACKSTRING;
+                effect = TRUE;
+            }
             break;
         case CANCELLER_TRUANT: // truant
             if (GetAbilityState(gBattlerAttacker, ABILITY_TRUANT) && !IS_MOVE_STATUS(gCurrentMove))
@@ -5578,7 +5603,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
         break;
     case ABILITYEFFECT_MOVES_BLOCK: // 2
         effect = TestImmunityAbilities(battler, gBattlerAttacker, move, moveType, &gBattlescriptCurrInstr, &gBattleScripting.battlerPopupOverwrite, &gBattleScripting.abilityPopupOverwrite);
-
 
         if (effect)
         {
@@ -7984,9 +8008,7 @@ case ITEMEFFECT_KINGSROCK:
                 && gBattleMons[gBattlerTarget].hp)
             {
                 gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
-                BattleScriptPushCursor();
                 SetMoveEffect(FALSE, 0);
-                BattleScriptPop();
             }
             break;
         case HOLD_EFFECT_BLUNDER_POLICY:
@@ -8674,9 +8696,6 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return TRUE;
     else if (gRoundStructs[battlerId].angelsWrathProtected && gBattleMoves[move].power != 0)
         return TRUE;
-    else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_QUICK_GUARD
-             && GetChosenMovePriority(gBattlerAttacker, battlerId) > 0)
-        return TRUE;
     else if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD
       && IS_MOVE_STATUS(move))
         return TRUE;
@@ -8821,6 +8840,20 @@ u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc)
             continue;
         if (gBattleMons[battlerId].statStages[i] > DEFAULT_STAT_STAGE) // Stat is increased.
             count += gBattleMons[battlerId].statStages[i] - DEFAULT_STAT_STAGE;
+    }
+
+    return count;
+}
+
+int CountBattlerStatDecreases(int battler)
+{
+    int i;
+    int count = 0;
+
+    for (i = 0; i < NUM_STATS; i++)
+    {
+        if (gBattleMons[battler].statStages[i] < DEFAULT_STAT_STAGE) // Stat is increased.
+            count += DEFAULT_STAT_STAGE - gBattleMons[battler].statStages[i];
     }
 
     return count;
@@ -9109,6 +9142,11 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         if (basePower > 200)
             basePower = 200;
         break;
+    case EFFECT_LASH_OUT:
+        basePower += CountBattlerStatDecreases(battlerAtk) * 20;
+        if (basePower > 200)
+            basePower = 200;
+        break;
     case EFFECT_STORED_POWER:
         basePower += (CountBattlerStatIncreases(battlerAtk, TRUE) * 20);
         break;
@@ -9147,10 +9185,6 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         break;
     case EFFECT_FUSION_COMBO:
         if (gBattleMoves[gLastUsedMove].effect == EFFECT_FUSION_COMBO && move != gLastUsedMove)
-            basePower *= 2;
-        break;
-    case EFFECT_LASH_OUT:
-        if (gRoundStructs[battlerAtk].statFell)
             basePower *= 2;
         break;
     case EFFECT_EXPLOSION:
@@ -10207,6 +10241,8 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
         case STAT_HP:
             return 0;
         case STAT_ATK:
+            if (isWonderRoomActive()) goto CALCULATE_STAT_SPATK;
+            CALCULATE_STAT_ATK:
             statBase = gBattleMons[battler].attack;
             extraStatLevel = gVolatileStructs[battler].extraAttackLevel;
             // Tablets of Ruin
@@ -10278,6 +10314,8 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                     statBase /= 2;
             break;
         case STAT_SPATK:
+            if (isWonderRoomActive()) goto CALCULATE_STAT_ATK;
+            CALCULATE_STAT_SPATK:
             statBase = gBattleMons[battler].spAttack;
             extraStatLevel = gVolatileStructs[battler].extraSpAttackLevel;
             // Tablets of Ruin
@@ -10319,8 +10357,6 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             goto HANDLE_STAT_CALC_ATK_OR_SPATK;
             break;
         case STAT_DEF:
-            if (isWonderRoomActive()) goto CALCULATE_STAT_SPDEF;
-            CALCULATE_STAT_DEF:
             statBase = gBattleMons[battler].defense;
             extraStatLevel = gVolatileStructs[battler].extraDefenseLevel;
 
@@ -10352,8 +10388,6 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                     statBase = statBase * 3 / 2;
             break;
         case STAT_SPDEF:
-            if (isWonderRoomActive()) goto CALCULATE_STAT_DEF;
-            CALCULATE_STAT_SPDEF:
             statBase = gBattleMons[battler].spDefense;
             extraStatLevel = gVolatileStructs[battler].extraSpDefenseLevel;
 
@@ -10393,6 +10427,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     #undef RUIN_CHECK
 
     if (isUnaware) statStage = DEFAULT_STAT_STAGE;
+    else if (isWonderRoomActive() && (statEnum == STAT_ATK || statEnum == STAT_SPATK)) statStage = DEFAULT_STAT_STAGE;
     else if (isCrit && isAttack) statStage = max(statStage, DEFAULT_STAT_STAGE);
     else if (isCrit && !isAttack) statStage = min(statStage, DEFAULT_STAT_STAGE);
 
@@ -10429,6 +10464,9 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     u8 highestAttackStat = STAT_ATK;
     u32 atkStat;
     u16 modifier;
+
+    if (gBattleMoves[move].effect == EFFECT_LASH_OUT)
+        isCrit = TRUE;
 
     if (gBattleMoves[move].effect == EFFECT_FOUL_PLAY)
     {
@@ -15526,7 +15564,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 
             SetStatChanger(STAT_ATK, 1);
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-            break;
+            return TRUE;
         
         case ABILITY_CROWNED_SHIELD:
         case ABILITY_DAUNTLESS_SHIELD:
@@ -15534,7 +15572,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 
             SetStatChanger(STAT_DEF, 1);
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-            break;
+            return TRUE;
         
         case ABILITY_FUNERAL_PYRE:
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FUNERAL_PYRE;

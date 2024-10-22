@@ -263,7 +263,9 @@
 #define VARIOUS_DO_HAZARD_DAMAGE                180
 #define VARIOUS_TRY_DESTROY_ITEM                181
 #define VARIOUS_SET_CALTROPS                    182
-#define VARIOUS_SWAP_WITH                     183
+#define VARIOUS_SWAP_WITH                       183
+#define VARIOUS_SWAP_STAT                       184
+#define VARIOUS_SET_QUICK_GUARD                 185
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1

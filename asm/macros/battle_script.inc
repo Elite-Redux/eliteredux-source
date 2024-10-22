@@ -2380,6 +2380,16 @@
 	various \target, VARIOUS_SWAP_WITH
 	.endm
 
+	.macro swapstat target:req, stat:req
+	various \target, VARIOUS_SWAP_STAT
+	.byte \stat
+	.endm
+
+	.macro setquickguard failPtr:req
+	various BS_ATTACKER, VARIOUS_SET_QUICK_GUARD
+	.4byte \failPtr
+	.endm
+
 	.macro twoturnmoveacceleratecheck
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd
@@ -2506,4 +2516,11 @@ checkprimalweather_pass_\@:
 .macro jumpifripen battler:req, ptr:req
 	jumpifability \battler, ABILITY_RIPEN, \ptr
 	jumpifability \battler, ABILITY_APPLE_PIE, \ptr
+.endm
+
+.macro checktargetowntempoprotects ptr=BattleScript_OwnTempoPrevents
+	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, \ptr
+	jumpifability BS_TARGET, ABILITY_DISCIPLINE, \ptr
+	jumpifability BS_TARGET, ABILITY_ROCK_HEAD, \ptr
+	jumpifability BS_TARGET, ABILITY_STEEL_BARREL, \ptr
 .endm

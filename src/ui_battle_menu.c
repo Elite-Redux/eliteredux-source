@@ -119,6 +119,7 @@ enum
     SIDE_INFO_SMOKESCREEN,
     SIDE_INFO_HOT_COALS,
     SIDE_INFO_CALTROPS,
+    SIDE_INFO_QUICK_GUARD,
     NUM_SIDE_INFO,
 };
 
@@ -647,6 +648,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 if (gSideTimers[B_SIDE_PLAYER].caltrops)
                     isExtraInfoShown = TRUE;
             break;
+            case SIDE_INFO_QUICK_GUARD:
+                if (gSideTimers[B_SIDE_PLAYER].quickGuardTimer)
+                    isExtraInfoShown = TRUE;
+            break;
         }
 
         if (isExtraInfoShown) {
@@ -725,6 +730,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
             break;
             case SIDE_INFO_CALTROPS:
                 if (gSideTimers[B_SIDE_OPPONENT].caltrops)
+                    isExtraInfoShown = TRUE;
+            break;
+            case SIDE_INFO_QUICK_GUARD:
+                if (gSideTimers[B_SIDE_OPPONENT].quickGuardTimer)
                     isExtraInfoShown = TRUE;
             break;
         }
@@ -4010,6 +4019,9 @@ const u8 sText_Title_Side_HotCoals_Description[]            = _("Burns the next 
 const u8 sText_Title_Side_Caltrops[ ]                       = _("Caltrops");
 const u8 sText_Title_Side_Caltrops_Description[]            = _("Bleeds the next Pokémon that\n"
                                                                 "switches in and is then removed.");
+const u8 sText_Title_Side_QuickGuard[ ]                     = _("Quick Guard");
+const u8 sText_Title_Side_QuickGuard_Description[]          = _("Protects all Pokémon on this\n"
+                                                                "side from priority moves.");
 const u8 sText_Title_Side_No_Effect[]                       = _("No Effect");
 const u8 sText_Title_Side_No_Effect_Description[]           = _("This side has no special effect.");
 
@@ -4328,6 +4340,23 @@ static void PrintSideTab(u8 side) {
 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Side_Caltrops_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+
+                printedInfo = TRUE;
+            break;
+            case SIDE_INFO_QUICK_GUARD:
+                StringCopy(gStringVar1, sText_Title_Side_Smokescreen);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Turns Left
+                StringCopy(gStringVar1, sText_Title_Field_Turns_Left);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                turnsLeft = gSideTimers[GetBattlerSide(side)].quickGuardTimer;
+                ConvertIntToDecimalStringN(gStringVar1, turnsLeft, STR_CONV_MODE_LEFT_ALIGN, 4);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                StringCopy(gStringVar1, sText_Title_Side_Smokescreen_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
 
                 printedInfo = TRUE;

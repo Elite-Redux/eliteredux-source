@@ -397,7 +397,8 @@
 #define MOVE_EFFECT_YAWN                   89
 #define MOVE_EFFECT_PSYCHIC_NOISE          90
 #define MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1 91
-#define NUM_MOVE_EFFECTS                   91
+#define MOVE_EFFECT_MAKE_IT_RAIN           92
+#define NUM_MOVE_EFFECTS                   92
 
 #define MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES 0x2000
 #define MOVE_EFFECT_AFFECTS_USER        0x4000
