@@ -1023,6 +1023,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Randall),
         .party = {.ItemCustomMoves = sParty_Randall},
+        .partySizeInsane = ARRAY_COUNT(sParty_RandallInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_RandallInsane},
     },
 
     [TRAINER_PARKER] =
@@ -1037,6 +1039,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Parker),
         .party = {.ItemCustomMoves = sParty_Parker},
+        .partySizeInsane = ARRAY_COUNT(sParty_ParkerInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_ParkerInsane},
     },
 
     [TRAINER_GEORGE] =
@@ -1051,6 +1055,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_George),
         .party = {.ItemCustomMoves = sParty_George},
+        .partySizeInsane = ARRAY_COUNT(sParty_GeorgeInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_GeorgeInsane},
     },
 
     [TRAINER_BERKE] =
@@ -1275,6 +1281,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Mary),
         .party = {.ItemCustomMoves = sParty_Mary},
+        .partySizeInsane = ARRAY_COUNT(sParty_MaryInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_MaryInsane},
     },
 
     [TRAINER_ALEXIA] =
@@ -1289,6 +1297,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Alexia),
         .party = {.ItemCustomMoves = sParty_Alexia},
+        .partySizeInsane = ARRAY_COUNT(sParty_AlexiaInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_AlexiaInsane},
     },
 
     [TRAINER_JODY] =
