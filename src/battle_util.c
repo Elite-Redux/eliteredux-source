@@ -15525,7 +15525,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 
             SetStatChanger(STAT_ATK, 1);
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-            break;
+            return TRUE;
         
         case ABILITY_CROWNED_SHIELD:
         case ABILITY_DAUNTLESS_SHIELD:
@@ -15533,7 +15533,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 
             SetStatChanger(STAT_DEF, 1);
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
-            break;
+            return TRUE;
         
         case ABILITY_FUNERAL_PYRE:
             gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FUNERAL_PYRE;
