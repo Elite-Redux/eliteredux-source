@@ -8905,6 +8905,7 @@ BattleScript_FocusPunchSetUp::
 	end2
 
 BattleScript_MegaEvolution::
+	jumpifroom STATUS_FIELD_MAGIC_ROOM, BattleScript_End2
 	printstring STRINGID_MEGAEVOREACTING
 	waitmessage B_WAIT_TIME_LONG
 	setbyte gIsCriticalHit, 0

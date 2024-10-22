@@ -2428,11 +2428,17 @@ checkstatbuffonlowered_queensmourning_\@:
 checkstatbuffonlowered_none_\@:
 	.endm
 
+	.macro jumpifroom statusField:req, ptr:req
+	jumpifabilitypresent ABILITY_CLUELESS, jumpifroom_clueless_\@
+	jumpifword CMP_COMMON_BITS, gFieldStatuses, \statusField, \ptr
+	jumpifroom_clueless_\@:
+	.endm
 
 	.macro jumpifmagicguard battler:req, ptr:req
 	jumpifability \battler, ABILITY_MAGIC_GUARD, \ptr
 	jumpifability \battler, ABILITY_IMPENETRABLE, \ptr
 	jumpifability \battler, ABILITY_APPLE_ENLIGHTENMENT, \ptr
+	jumpifroom STATUS_FIELD_MAGIC_ROOM, \ptr
 	.endm
 
 	.macro jumpifhealingblocked battler:req, ptr:req

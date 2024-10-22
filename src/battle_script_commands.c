@@ -10462,7 +10462,6 @@ static void Cmd_various(void)
     case VARIOUS_CHECK_POLTERGEIST:
         ptr = READ_PTR_INC;
         if (gBattleMons[gActiveBattler].item == ITEM_NONE
-           || isMagicRoomActive()
            || (gStatuses3[gActiveBattler] & STATUS3_SEMI_INVULNERABLE)
            || IS_BATTLER_PROTECTED(gActiveBattler)
            || GetBattlerAbility(gActiveBattler) == ABILITY_KLUTZ)

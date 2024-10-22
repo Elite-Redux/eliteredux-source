@@ -8571,8 +8571,6 @@ bool8 IsItemNegated(u8 battlerId)
 {
     if (gStatuses3[battlerId] & STATUS3_EMBARGO)
         return TRUE;
-    if (isMagicRoomActive())
-        return TRUE;
     if (GetBattlerAbility(battlerId) == ABILITY_KLUTZ)
         return TRUE;
     return FALSE;
@@ -8597,7 +8595,6 @@ bool8 DoesBattlerHaveAbilityShield(u8 battlerId)
     u8 i;
     if (GetBattlerHoldEffect(battlerId, FALSE) != HOLD_EFFECT_ABILITY_SHIELD) return FALSE;
     if (gStatuses3[battlerId] & STATUS3_EMBARGO) return FALSE;
-    if (!(gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)) return TRUE;
     for (i = 0; i < gBattlersCount; i++)
     {
         if (GetBattlerAbilityWithoutRemoval(i) == ABILITY_CLUELESS) return TRUE;
@@ -11600,6 +11597,8 @@ bool32 CanMegaEvolve(u8 battlerId)
     // Check if there is an entry in the evolution table for regular Mega Evolution.
     if (GetMegaEvolutionSpecies(species, itemId) != SPECIES_NONE)
     {
+        if (isMagicRoomActive()) return FALSE;
+        
         if (B_ENABLE_DEBUG && gBattleStruct->debugHoldEffects[battlerId])
             holdEffect = gBattleStruct->debugHoldEffects[battlerId];
         else if (itemId == ITEM_ENIGMA_BERRY)
@@ -12704,6 +12703,7 @@ int IsMagicGuardProtected(int battler)
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_MAGIC_GUARD, ability)) return TRUE;
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_IMPENETRABLE, ability)) return TRUE;
     if (BATTLER_HAS_ABILITY_FAST(battler, ABILITY_APPLE_ENLIGHTENMENT, ability)) return TRUE;
+    if (isMagicRoomActive()) return TRUE;
 
     return FALSE;
 }
