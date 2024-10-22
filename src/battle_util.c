@@ -4097,6 +4097,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gHitMarker |= HITMARKER_NO_ATTACKSTRING;
                 effect = TRUE;
             }
+            gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_TRUANT: // truant
             if (GetAbilityState(gBattlerAttacker, ABILITY_TRUANT) && !IS_MOVE_STATUS(gCurrentMove))

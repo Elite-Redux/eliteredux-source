@@ -529,8 +529,8 @@ void sub_80A64EC(struct Sprite *sprite)
         sprite->data[0] = -sprite->data[0];
     xDiff = sprite->data[2] - sprite->data[1];
     old = sprite->data[0];
-    sprite->data[0] = abs(xDiff / sprite->data[0]);
-    sprite->data[2] = (sprite->data[4] - sprite->data[3]) / sprite->data[0];
+    sprite->data[0] = abs(SAFE_DIV(xDiff, sprite->data[0]));
+    sprite->data[2] = SAFE_DIV(sprite->data[4] - sprite->data[3], sprite->data[0]);
     sprite->data[1] = old;
 }
 
@@ -724,7 +724,7 @@ void InitAnimArcTranslation(struct Sprite *sprite)
     sprite->data[1] = sprite->x;
     sprite->data[3] = sprite->y;
     InitAnimLinearTranslation(sprite);
-    sprite->data[6] = 0x8000 / sprite->data[0];
+    sprite->data[6] = SAFE_DIV(0x8000, sprite->data[0]);
     sprite->data[7] = 0;
 }
 
@@ -1056,8 +1056,8 @@ void InitAnimLinearTranslation(struct Sprite *sprite)
     u16 xDelta = abs(x) << 8;
     u16 yDelta = abs(y) << 8;
 
-    xDelta = xDelta / sprite->data[0];
-    yDelta = yDelta / sprite->data[0];
+    xDelta = SAFE_DIV(xDelta, sprite->data[0]);
+    yDelta = SAFE_DIV(yDelta, sprite->data[0]);
 
     if (movingLeft)
         xDelta |= 1;
@@ -1139,7 +1139,7 @@ static void sub_80A6FB4(struct Sprite *sprite)
 void InitAnimLinearTranslationWithSpeed(struct Sprite *sprite)
 {
     int v1 = abs(sprite->data[2] - sprite->data[1]) << 8;
-    sprite->data[0] = v1 / sprite->data[0];
+    sprite->data[0] = SAFE_DIV(v1, sprite->data[0]);
     InitAnimLinearTranslation(sprite);
 }
 
@@ -1228,7 +1228,7 @@ static void AnimFastTranslateLinearWaitEnd(struct Sprite *sprite)
 void InitAnimFastLinearTranslationWithSpeed(struct Sprite *sprite)
 {
     int xDiff = abs(sprite->data[2] - sprite->data[1]) << 4;
-    sprite->data[0] = xDiff / sprite->data[0];
+    sprite->data[0] = SAFE_DIV(xDiff, sprite->data[0]);
     InitAnimFastLinearTranslation(sprite);
 }
 

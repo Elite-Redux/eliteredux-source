@@ -479,7 +479,7 @@ static void AnimGunkShotParticles(struct Sprite *sprite)
     sprite->data[3] = sprite->y;
     sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, 3);
     InitAnimLinearTranslation(sprite);
-    sprite->data[5] = 0xD200 / sprite->data[0];
+    sprite->data[5] = SAFE_DIV(0xD200, sprite->data[0]);
     sprite->data[7] = gBattleAnimArgs[3];
     retArg = gBattleAnimArgs[ARG_RET_ID];
     if (gBattleAnimArgs[ARG_RET_ID] > 127)
@@ -613,8 +613,8 @@ void AnimSludgeBombHitParticle(struct Sprite *sprite)
 
     InitSpriteDataForLinearTranslation(sprite);
 
-    sprite->data[5] = sprite->data[1] / gBattleAnimArgs[2];
-    sprite->data[6] = sprite->data[2] / gBattleAnimArgs[2];
+    sprite->data[5] = SAFE_DIV(sprite->data[1], gBattleAnimArgs[2]);
+    sprite->data[6] = SAFE_DIV(sprite->data[2], gBattleAnimArgs[2]);
 
     sprite->callback = AnimSludgeBombHitParticle_Step;
 }
