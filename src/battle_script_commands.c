@@ -9949,6 +9949,7 @@ static void Cmd_various(void)
     case VARIOUS_POWER_TRICK:
         gStatuses3[gActiveBattler] ^= STATUS3_POWER_TRICK;
         SWAP(gBattleMons[gActiveBattler].attack, gBattleMons[gActiveBattler].defense, i);
+        SWAP(gBattleMons[gActiveBattler].statStages[STAT_ATK], gBattleMons[gActiveBattler].statStages[STAT_DEF], i);
         break;
     case VARIOUS_AFTER_YOU:
         ptr = READ_PTR_INC;
