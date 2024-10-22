@@ -2717,11 +2717,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_FRUSTRATION] =
     {
-        .effect = EFFECT_HIT,
-        .power = 95,
+        .effect = EFFECT_STOMPING_TANTRUM,
+        .power = 75,
         .type = TYPE_DARK,
         .accuracy = 100,
-        .pp = 20,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,

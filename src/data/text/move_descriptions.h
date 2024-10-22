@@ -867,8 +867,8 @@ static const u8 sMoveTwoLineDescription_MovePresent[] = _(
     "Allies get a treat, foes get a bomb.");
 
 static const u8 sMoveTwoLineDescription_MoveFrustration[] = _(
-    "A reliable and strong\n"
-    "Dark-type attack.");
+    "The user unleashes its frustration.\n"
+    "Failing moves doubles damage.");
 
 static const u8 sMoveTwoLineDescription_MoveSafeguard[] = _(
     "A mystical force prevents\n"
@@ -5120,7 +5120,7 @@ static const u8 sMoveFourLineDescription_MoveSleepTalk[] = _("While asleep, the\
 static const u8 sMoveFourLineDescription_MoveHealBell[] = _("Heals the status\nproblems of allies\nand restores 30%\nHP to the user.");
 static const u8 sMoveFourLineDescription_MoveReturn[] = _("A strong and\nreliable attack\nthat shows the\nuser's loyalty.");
 static const u8 sMoveFourLineDescription_MovePresent[] = _("Deals typeless\ndamage to foes,\nrestores 50% HP to\nallies.");
-static const u8 sMoveFourLineDescription_MoveFrustration[] = _("A strong and\nreliable attack\nfueled by the\nuser's frustration.");
+static const u8 sMoveFourLineDescription_MoveFrustration[] = _("Deals double\ndamage if the last\nmove failed.");
 static const u8 sMoveFourLineDescription_MoveSafeguard[] = _("It protects the\nuser's party from\nall status problems\nfor five turns.");
 static const u8 sMoveFourLineDescription_MovePainSplit[] = _("The user adds its\nHP to the foe's HP,\nthen equally shares\nthe total HP.");
 static const u8 sMoveFourLineDescription_MoveSacredFire[] = _("A mystical and\npowerful fire\nattack that always\ninflicts a burn.");
