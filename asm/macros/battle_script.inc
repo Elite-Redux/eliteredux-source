@@ -2507,3 +2507,10 @@ checkprimalweather_pass_\@:
 	jumpifability \battler, ABILITY_RIPEN, \ptr
 	jumpifability \battler, ABILITY_APPLE_PIE, \ptr
 .endm
+
+.macro checktargetowntempoprotects ptr=BattleScript_OwnTempoPrevents
+	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, \ptr
+	jumpifability BS_TARGET, ABILITY_DISCIPLINE, \ptr
+	jumpifability BS_TARGET, ABILITY_ROCK_HEAD, \ptr
+	jumpifability BS_TARGET, ABILITY_STEEL_BARREL, \ptr
+.endm
