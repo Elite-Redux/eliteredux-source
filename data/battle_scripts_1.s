@@ -5353,7 +5353,12 @@ BattleScript_CheckHealBellMon2Unaffected::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_PartyHealEnd::
 	updatestatusicon BS_ATTACKER_WITH_PARTNER
-	waitstate
+	tryhealpercenthealth BS_ATTACKER, 30, BattleScript_MoveEnd
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	printstring STRINGID_PKMNREGAINEDHEALTH
+	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectSoothingAroma::
