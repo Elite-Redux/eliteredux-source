@@ -2383,8 +2383,8 @@ static const u8 sMoveTwoLineDescription_MoveSpikyShield[] = _(
     "bleeding if struck.");
 
 static const u8 sMoveTwoLineDescription_MoveAromaticMist[] = _(
-    "Raises the Sp. Def of a\n"
-    "partner Pokémon.");
+    "Raises the Special Defense\n"
+    "of the user and its partner.");
 
 static const u8 sMoveTwoLineDescription_MoveEerieImpulse[] = _(
     "Exposes the foe to a pulse\n"
@@ -5281,7 +5281,7 @@ static const u8 sMoveFourLineDescription_MovePsychoShift[] = _("The user transfe
 static const u8 sMoveFourLineDescription_MoveTrumpCard[] = _("A desperate attack\nthat deals critical\ndamage when the user\nis below 50% HP.");
 static const u8 sMoveFourLineDescription_MoveHealBlock[] = _("The foe cannot use\nany moves, held\nitems or Abilities\nthat recover HP.");
 static const u8 sMoveFourLineDescription_MoveWringOut[] = _("This attack will\nalso negate the\nfoe's Ability if it\nhas moved already.");
-static const u8 sMoveFourLineDescription_MovePowerTrick[] = _("The user employs\nits psychic power\nto swap its Attack\nand Defense stat.");
+static const u8 sMoveFourLineDescription_MovePowerTrick[] = _("The user swaps its\nAttack and Defense\nstats and stat boosts.");
 static const u8 sMoveFourLineDescription_MoveGastroAcid[] = _("Stomach acids are\nspewed at the foe,\nnegating the effect\nof its Ability.");
 static const u8 sMoveFourLineDescription_MoveLuckyChant[] = _("For 5 turns, the\nfoe is prevented\nfrom landing\ncritical hits.");
 static const u8 sMoveFourLineDescription_MoveMeFirst[] = _("The foe's intended\nmove is stolen and\nused first, with\ngreater power.");
@@ -5455,8 +5455,8 @@ static const u8 sMoveFourLineDescription_MoveGlaciate[] = _("The user blows\nfre
 static const u8 sMoveFourLineDescription_MoveBoltStrike[] = _("The user strikes\nits foe with\nelectricity. 30%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveBlueFlare[] = _("The foe is engulfed\nin a beautiful flame.\n20% burn chance.");
 static const u8 sMoveFourLineDescription_MoveFieryDance[] = _("The user flaps its\nflame-cloaked wings.\n50% chance to\nraise its SpAtk.");
-static const u8 sMoveFourLineDescription_MoveFreezeShock[] = _("Electrified ice\nhits the foe on the\n2nd turn. 30%\nparalyze chance.");
-static const u8 sMoveFourLineDescription_MoveIceBurn[] = _("Ultracold, freezing\nwind surrounds the\nfoe on the 2nd turn.\n30% burn chance.");
+static const u8 sMoveFourLineDescription_MoveFreezeShock[] = _("Paralyzes attackers\nthat make contact\nwhile charging. 30%\nparalyze chance.");
+static const u8 sMoveFourLineDescription_MoveIceBurn[] = _("Burns attackers that\nmake contact while\ncharging. 30% burn\nchance.");
 static const u8 sMoveFourLineDescription_MoveSnarl[] = _("The user yells as\nif it is ranting,\nlowering the Sp.\nAtk of its foe.");
 static const u8 sMoveFourLineDescription_MoveIcicleCrash[] = _("Sharp icicles fall\nonto the foe, with\na 30% flinch\nchance.");
 static const u8 sMoveFourLineDescription_MoveVCreate[] = _("A powerful strike\nthat lowers the\nuser's Defense, Sp.\nDef and Speed.");
@@ -5499,7 +5499,7 @@ static const u8 sMoveFourLineDescription_MoveHyperspaceHole[] = _("Using a wormh
 static const u8 sMoveFourLineDescription_MoveWaterShuriken[] = _("The user hits the\nfoe with 2 to 5\nthrowing stars.\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveMysticalFire[] = _("The user breathes a\nspecial, hot fire.\nThis lowers the\nfoe's Sp. Atk stat.");
 static const u8 sMoveFourLineDescription_MoveSpikyShield[] = _("This prickly shield\nprotects the user\nand causes bleeding\non contact.");
-static const u8 sMoveFourLineDescription_MoveAromaticMist[] = _("The user raises\nthe Sp. Def stat of\nits partner with a\nmysterious aroma.");
+static const u8 sMoveFourLineDescription_MoveAromaticMist[] = _("Sharply raises the\nSpecial Defense of\nthe user and its\npartner.");
 static const u8 sMoveFourLineDescription_MoveEerieImpulse[] = _("The foe's Sp. Atk\nis harshly lowered\nby exposure to an\neerie impulse.");
 static const u8 sMoveFourLineDescription_MoveVenomDrench[] = _("Poisoned foes\nsuffer lowered\nAttack, Sp. Atk and\nSpeed stats.");
 static const u8 sMoveFourLineDescription_MovePowder[] = _("If the foe uses a\nFire-type move, it\nwill be damaged by\nthis powder.");

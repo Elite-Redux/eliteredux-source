@@ -497,6 +497,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectKnockOff				  @ EFFECT_CORROSIVE_GAS
 	.4byte BattleScript_EffectSweetKiss				  @ EFFECT_SWEET_KISS
 	.4byte BattleScript_EffectQuickGuard			  @ EFFECT_QUICK_GUARD
+	.4byte BattleScript_EffectTwoTurnRetaliation	  @ EFFECT_TWO_TURN_RETALIATION
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -681,13 +682,6 @@ BattleScript_BeakBlastSetUp::
 	printstring STRINGID_HEATUPBEAK
 	waitmessage 0x40
 	end2
-
-BattleScript_BeakBlastBurn::
-	requirecandoeffect BS_TARGET, MOVE_EFFECT_BURN
-	setmoveeffect MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER
-	seteffectprimary
-BattleScript_BeakBlastBurnReturn:
-	return
 
 BattleScript_EffectScaleShot::
 	attackcanceler
@@ -1711,25 +1705,39 @@ BattleScript_EffectAromaticMist:
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifbyteequal gBattlerTarget, gBattlerAttacker, BattleScript_ButItFailed
-	jumpiftargetally BattleScript_EffectAromaticMistWorks
-	goto BattleScript_ButItFailed
-BattleScript_EffectAromaticMistWorks:
-	setstatchanger STAT_SPDEF, 1, FALSE
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_EffectAromaticMistEnd
-	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_AromaticMistAnim
-	pause 16
-	printstring STRINGID_TARGETSTATWONTGOHIGHER
-	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_EffectAromaticMistEnd
-BattleScript_AromaticMistAnim:
+	jumpifstat BS_ATTACKER, CMP_NOT_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_EffectAromaticMist_Works
+	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_ButItFailed
+	jumpifstat BS_ATTACKER_PARTNER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_ButItFailed
+BattleScript_EffectAromaticMist_Works:	
 	attackanimation
 	waitanimation
+	setstatchanger STAT_SPDEF, 2, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_AromaticMistPrintString
+	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_AromaticMistDoAnim
+	pause B_WAIT_TIME_SHORT
+	goto BattleScript_AromaticMistPrintString
+BattleScript_AromaticMistDoAnim::
 	setgraphicalstatchangevalues
-	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+BattleScript_AromaticMistPrintString::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
-BattleScript_EffectAromaticMistEnd:
+BattleScript_AromaticMistPartner:
+	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_MoveEnd
+	savetargettostack4
+	getbattler BS_ATTACKER_PARTNER
+	copybyte gBattlerTarget, sBATTLER
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_AromaticMistPrintStringParnter
+	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_AromaticMistDoAnimPartner
+	pause B_WAIT_TIME_SHORT
+	goto BattleScript_AromaticMistPrintString
+BattleScript_AromaticMistDoAnimPartner::
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+BattleScript_AromaticMistPrintStringParnter::
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	readtargetfromstack4
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectMagneticFlux::
@@ -4012,10 +4020,10 @@ BattleScript_EffectMindBlown::
 	faintifabilitynotdamp
 	jumpifmagicguard BS_ATTACKER, BattleScript_EffectMindBlown_NoDamage
 	dmg_1_2_attackerhp
-BattleScript_EffectMindBlown_NoDamage:
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	waitstate
+BattleScript_EffectMindBlown_NoDamage:
 	jumpifbyte CMP_NO_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_MISSED, BattleScript_ExplosionDoAnimStartLoop
 	call BattleScript_PreserveMissedBitDoMoveAnim
 	goto BattleScript_ExplosionLoop
@@ -4948,13 +4956,28 @@ BattleScript_SetSkullBashString:
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_SKULL_BASH
 	goto BattleScript_EffectTwoTurnSecondary_AfterSetString
 
+BattleScript_EffectTwoTurnRetaliation::
+	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
+	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_TwoTurnMovesSecondTurn
+	jumpifmove MOVE_ICE_BURN, BattleScript_EffectTwoTurnsAttackIceBurn
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_FREEZE_SHOCK
+BattleScript_EffectTwoTurnRetaliation_AfterSetString:
+	call BattleScriptFirstChargingTurn
+	twoturnmoveacceleratecheck BattleScript_EffectTwoTurnRetaliation_SetRetaliation
+	goto BattleScript_TwoTurnMovesSecondTurn
+BattleScript_EffectTwoTurnRetaliation_SetRetaliation:
+	setbeakblast BS_ATTACKER
+	goto BattleScript_MoveEnd
+BattleScript_EffectTwoTurnsAttackIceBurn:
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
+	goto BattleScript_EffectTwoTurnRetaliation_AfterSetString
+
+
 BattleScript_EffectTwoTurnsAttack::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_TwoTurnMovesSecondTurn
 	jumpifmove MOVE_SKY_ATTACK, BattleScript_EffectTwoTurnsAttackSkyAttack
 	jumpifmove MOVE_RAZOR_WIND, BattleScript_EffectTwoTurnsAttackRazorWind
-	jumpifmove MOVE_ICE_BURN, BattleScript_EffectTwoTurnsAttackIceBurn
-	jumpifmove MOVE_FREEZE_SHOCK, BattleScript_EffectTwoTurnsAttackFreezeShock
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
 BattleScript_EffectTwoTurnsAttackContinue:
 	call BattleScriptFirstChargingTurn
@@ -4967,12 +4990,6 @@ BattleScript_EffectTwoTurnsAttackSkyAttack:
 BattleScript_EffectTwoTurnsAttackRazorWind:
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
 	goto BattleScript_EffectTwoTurnsAttackContinue
-BattleScript_EffectTwoTurnsAttackIceBurn:
-	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
-	goto BattleScript_EffectTwoTurnsAttackContinue
-BattleScript_EffectTwoTurnsAttackFreezeShock:
-	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_FREEZE_SHOCK
-	goto BattleScript_EffectTwoTurnsAttackContinue	
 	
 BattleScript_EffectGeomancy:
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_GeomancySecondTurn
@@ -8905,6 +8922,7 @@ BattleScript_FocusPunchSetUp::
 	end2
 
 BattleScript_MegaEvolution::
+	jumpifroom STATUS_FIELD_MAGIC_ROOM, BattleScript_End2
 	printstring STRINGID_MEGAEVOREACTING
 	waitmessage B_WAIT_TIME_LONG
 	setbyte gIsCriticalHit, 0

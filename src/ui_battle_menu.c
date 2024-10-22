@@ -3560,12 +3560,12 @@ const u8 sText_Title_Field_Room_Description_Trick[]          = _("The move order
                                                                  "Pokémon will attack before faster\n"
                                                                  "Pokémon.");
 const u8 sText_Title_Field_Wonder_Room[]                     = _("Wonder Room:");
-const u8 sText_Title_Field_Room_Description_Wonder[]          = _("Swaps the Defense and Sp.Defense\n"
-                                                                  "of all Pokémon, but stat changes\n"
-                                                                  "remain on their respective stat.");
+const u8 sText_Title_Field_Room_Description_Wonder[]         = _("Swaps the Attack and Sp.Attack\n"
+                                                                 "of all Pokémon, and suppresses\n"
+                                                                 "stat buffs to those stats.");
 const u8 sText_Title_Field_Magic_Room[]                      = _("Magic Room:");
-const u8 sText_Title_Field_Room_Description_Magic[]          = _("Suppresses the effect of all items\n"
-                                                                 "held by the Pokémon on the field.");
+const u8 sText_Title_Field_Room_Description_Magic[]          = _("Prevents all passive damage and\n"
+                                                                 "disables all mega stones.");
 const u8 sText_Title_Field_Gravity[]                         = _("Gravity");
 const u8 sText_Title_Field_Gravity_Description   []         = _("The accuracy of all moves is\n"
                                                                 "multiplied by 1.67, all Pokémon on\n"
