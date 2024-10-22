@@ -34432,12 +34432,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_PAWMI] =
     {
-        .baseHP        = 45,
-        .baseAttack    = 50,
-        .baseDefense   = 20,
-        .baseSpeed     = 60,
-        .baseSpAttack  = 40,
-        .baseSpDefense = 25,
+    .baseHP         = 45,
+    .baseAttack     = 50,
+    .baseDefense    = 20,
+    .baseSpeed      = 70,
+    .baseSpAttack   = 40,
+    .baseSpDefense  = 25,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_ELECTRIC,
         .catchRate = 190,
@@ -34465,12 +34465,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_PAWMO] =
     {
-        .baseHP        = 60,
-        .baseAttack    = 75,
-        .baseDefense   = 40,
-        .baseSpeed     = 85,
-        .baseSpAttack  = 50,
-        .baseSpDefense = 40,
+    .baseHP         = 60,
+    .baseAttack     = 75,
+    .baseDefense    = 40,
+    .baseSpeed      = 95,
+    .baseSpAttack   = 50,
+    .baseSpDefense  = 40,
         .type1 = TYPE_ELECTRIC,
         .type2 = TYPE_FIGHTING,
         .catchRate = 80,
@@ -34498,12 +34498,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_PAWMOT] =
     {
-    .baseHP        =  70,
-    .baseAttack    =  115,
-    .baseDefense   =  70,
-    .baseSpeed     =  105,
-    .baseSpAttack  =  70,
-    .baseSpDefense =  60,
+    .baseHP         = 70,
+    .baseAttack     = 115,
+    .baseDefense    = 70,
+    .baseSpeed      = 115,
+    .baseSpAttack   = 70,
+    .baseSpDefense  = 60,
     .type1 = TYPE_ELECTRIC,
     .type2 = TYPE_FIGHTING,
         .catchRate = 45,
