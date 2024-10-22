@@ -4010,9 +4010,9 @@ const u8 sText_Title_Side_Swamp_Description[]               = _("A deep swamp re
                                                                 "stat of Pokémon on this side\n"
                                                                 "by 75%.");
 const u8 sText_Title_Side_Smokescreen[ ]                    = _("Smokescreen");
-const u8 sText_Title_Side_Smokescreen_Description[]         = _("Reduces the chance to hit the\n"
-                                                                "user by 25%. Can be lifted by\n"
-                                                                "moves like Defog.");
+const u8 sText_Title_Side_Smokescreen_Description[]         = _("Reduces the chance to be hit\n"
+                                                                "by 25%. Can be lifted by moves\n"
+                                                                "like Defog.");
 const u8 sText_Title_Side_HotCoals[ ]                       = _("Hot Coals");
 const u8 sText_Title_Side_HotCoals_Description[]            = _("Burns the next Pokémon that\n"
                                                                 "switches in and is then removed.");

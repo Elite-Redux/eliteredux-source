@@ -41038,3 +41038,288 @@ static const struct TrainerMonItemCustomMoves sParty_DanielleInsane[] = {
     .moves = MOVE_HEAD_SMASH, MOVE_FLARE_BLITZ, MOVE_EXTREME_SPEED, MOVE_OUTRAGE
     }
 };
+
+static const struct TrainerMonItemCustomMoves sParty_RandallInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_SWELLOW,
+    .heldItem = ITEM_FLAME_ORB,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_EXTREME_SPEED, MOVE_FLOATY_FALL, MOVE_DOUBLE_EDGE, MOVE_PROTECT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_MAUSHOLD,
+    .heldItem = ITEM_WIDE_LENS,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_POPULATION_BOMB, MOVE_SUPER_FANG, MOVE_TIDY_UP, MOVE_U_TURN
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_SAWSBUCK,
+    .heldItem = ITEM_CHOICE_SCARF,
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_HORN_LEECH, MOVE_DRILL_RUN, MOVE_MEGAHORN, MOVE_HYPER_DRILL
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_OBSTAGOON,
+    .heldItem = ITEM_TOXIC_ORB,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_CRUSH_CLAW, MOVE_OBSTRUCT, MOVE_LASH_OUT, MOVE_STRENGTH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_WYRDEER,
+    .heldItem = ITEM_LIGHT_CLAY,
+    .ability = 0,
+    .evs = {252, 252, 4, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_HORN_DRILL, MOVE_MEGAHORN, MOVE_JAGGED_HORNS, MOVE_PSYSHIELD_BASH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_LOPUNNY,
+    .heldItem = ITEM_LOPUNNITE,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_VICTORY_DANCE, MOVE_TRIPLE_KICK, MOVE_RIDER_KICK, MOVE_ICE_PUNCH
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_MaryInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_BRAVIARY,
+    .heldItem = ITEM_WHITE_HERB,
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_DUAL_WINGBEAT, MOVE_HEAD_SMASH, MOVE_DOUBLE_EDGE, MOVE_CLOSE_COMBAT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_DRAMPA,
+    .heldItem = ITEM_ASSAULT_VEST,
+    .ability = 0,
+    .evs = {252, 0, 0, 252, 0, 4},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_HYPER_BEAM, MOVE_THUNDER, MOVE_DRAGON_PULSE, MOVE_FLAMETHROWER
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_PORYGON_Z,
+    .heldItem = ITEM_LIFE_ORB,
+    .ability = 1,
+    .evs = {0, 0, 4, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_TECHNO_BLAST, MOVE_ICE_BEAM, MOVE_ZAP_CANNON, MOVE_RECOVER
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_TAUROS,
+    .heldItem = ITEM_CHOICE_BAND,
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_HEAD_CHARGE, MOVE_HEAD_SMASH, MOVE_HEADLONG_RUSH, MOVE_RAGE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_TOUCANNON,
+    .heldItem = ITEM_SCOPE_LENS,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_ROCK_BLAST, MOVE_BULLET_SEED, MOVE_BARRAGE, MOVE_PECK
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_PIDGEOT,
+    .heldItem = ITEM_PIDGEOTITE,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_HURRICANE, MOVE_HYPER_VOICE, MOVE_FOCUS_BLAST, MOVE_HEAT_WAVE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_ParkerInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_AMBIPOM,
+    .heldItem = ITEM_NORMAL_GEM,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_FAKE_OUT, MOVE_TAIL_SLAP, MOVE_ACROBATICS, MOVE_ARM_THRUST
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GOOSCHASE,
+    .heldItem = ITEM_RED_CARD,
+    .ability = 0,
+    .evs = {252, 252, 4, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_PARTING_SHOT, MOVE_CIRCLE_THROW, MOVE_LUNGE, MOVE_READY_OR_NOT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_SKULBERUS,
+    .heldItem = ITEM_LIFE_ORB,
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_ASSURANCE, MOVE_LOVELY_BITE, MOVE_PSYCHIC_FANGS, MOVE_SHADOW_FANGS
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_CHATOT,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 2,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_CHATTER, MOVE_BOOMBURST, MOVE_PARTING_SHOT, MOVE_NASTY_PLOT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_ZOROARK_HISUIAN,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 0,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_BITTER_MALICE, MOVE_HYPER_VOICE, MOVE_AURA_SPHERE, MOVE_NASTY_PLOT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_WIGGLYTUFF,
+    .heldItem = ITEM_WIGGLYTUFFITE,
+    .ability = 0,
+    .evs = {252, 0, 4, 252, 0, 0},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_UPROAR, MOVE_MOONBLAST, MOVE_YAWN, MOVE_THUNDERBOLT
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_AlexiaInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_SNORLAX,
+    .heldItem = ITEM_SNORLAXITE,
+    .ability = 0,
+    .evs = {192, 252, 64, 0, 0, 0},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_GYRO_BALL, MOVE_BODY_PRESS, MOVE_BODY_SLAM, MOVE_WOOD_HAMMER
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_DUBWOOL,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = 2,
+    .evs = {252, 96, 160, 0, 0, 0},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_DOUBLE_EDGE, MOVE_BODY_PRESS, MOVE_COTTON_GUARD, MOVE_MILK_DRINK
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_URSALUNA_BLOODMOON,
+    .heldItem = ITEM_ASSAULT_VEST,
+    .ability = 2,
+    .evs = {252, 0, 0, 252, 0, 4},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_BLOOD_MOON, MOVE_EARTH_POWER, MOVE_MOONGEIST_BEAM, MOVE_MOONBLAST
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_BOUFFALANT,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = 2,
+    .evs = {252, 252, 0, 0, 0, 4},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_SUBMISSION, MOVE_HEAD_CHARGE, MOVE_COTTON_GUARD, MOVE_HEAD_SMASH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_BEWARDEN,
+    .heldItem = ITEM_ASSAULT_VEST,
+    .ability = 0,
+    .evs = {0, 252, 128, 0, 128, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_CUTSIE_SLAP, MOVE_DYNAMIC_PUNCH, MOVE_DIZZY_PUNCH, MOVE_AXE_KICK
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_PORYGON2,
+    .heldItem = ITEM_EVIOLITE,
+    .ability = 2,
+    .evs = {188, 0, 68, 252, 0, 0},
+    .nature = NATURE_QUIET,
+    .moves = MOVE_TRI_ATTACK, MOVE_ZAP_CANNON, MOVE_ICE_BEAM, MOVE_CONVERSION_2
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_GeorgeInsane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_KOMALA,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_BODY_SLAM, MOVE_DRUM_BEATING, MOVE_SWORDS_DANCE, MOVE_ICE_SPINNER
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_ARBOLIVA,
+    .heldItem = ITEM_SITRUS_BERRY,
+    .ability = 2,
+    .evs = {252, 0, 0, 252, 4, 0},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_SOIL_DRAIN, MOVE_GIGA_DRAIN, MOVE_ENERGY_WAVE, MOVE_STRENGTH_SAP
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_MEGANIUM,
+    .heldItem = ITEM_BIG_ROOT,
+    .ability = 1,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_DRAINING_KISS, MOVE_GIGA_DRAIN, MOVE_WEATHER_BALL, MOVE_CALM_MIND
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_BLISSEY,
+    .heldItem = ITEM_BRIGHT_POWDER,
+    .ability = 2,
+    .evs = {252, 0, 0, 96, 160, 0},
+    .nature = NATURE_QUIET,
+    .moves = MOVE_SOFT_BOILED, MOVE_BAD_EGG, MOVE_MINIMIZE, MOVE_DRAINING_KISS
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_DIGGERSBY,
+    .heldItem = ITEM_LIFE_ORB,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_EXTREME_SPEED, MOVE_FERTILE_FANGS, MOVE_IRON_FANGS, MOVE_JAW_LOCK
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_AUDINO,
+    .heldItem = ITEM_AUDINITE,
+    .ability = 0,
+    .evs = {252, 0, 4, 252, 0, 0},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_CAPTIVATE, MOVE_DRAINING_KISS, MOVE_SPARKLY_SWIRL, MOVE_FAIRY_WIND
+    }
+};

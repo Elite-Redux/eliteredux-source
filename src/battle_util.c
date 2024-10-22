@@ -4097,6 +4097,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                 gHitMarker |= HITMARKER_NO_ATTACKSTRING;
                 effect = TRUE;
             }
+            gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_TRUANT: // truant
             if (GetAbilityState(gBattlerAttacker, ABILITY_TRUANT) && !IS_MOVE_STATUS(gCurrentMove))
@@ -9086,8 +9087,6 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
             basePower *= 2;
         break;
     case EFFECT_INFERNAL_PARADE:
-    case EFFECT_BITTER_MALICE:
-    case EFFECT_50_PERCENT_PLUS_DAMAGE_VS_STATUS:
         if (gBattleMons[battlerDef].status1 & STATUS1_ANY || BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMATOSE) || IsBloodStainAffected(battlerDef))
             basePower *= 1.5;
         break;
