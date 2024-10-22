@@ -4017,7 +4017,7 @@ BattleScript_EffectMindBlown::
 	attackcanceler
 	attackstring
 	ppreduce
-	faintifabilitynotdamp
+	jumpifabilitypresent ABILITY_DAMP, BattleScript_EffectMindBlown_Failed
 	jumpifmagicguard BS_ATTACKER, BattleScript_EffectMindBlown_NoDamage
 	dmg_1_2_attackerhp
 	healthbarupdate BS_ATTACKER
@@ -4027,6 +4027,9 @@ BattleScript_EffectMindBlown_NoDamage:
 	jumpifbyte CMP_NO_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_MISSED, BattleScript_ExplosionDoAnimStartLoop
 	call BattleScript_PreserveMissedBitDoMoveAnim
 	goto BattleScript_ExplosionLoop
+BattleScript_EffectMindBlown_Failed:
+	call BattleScript_AbilityPopUp
+	goto BattleScript_ButItFailed
 
 BattleScript_PreserveMissedBitDoMoveAnim:
 	bichalfword gMoveResultFlags, MOVE_RESULT_MISSED

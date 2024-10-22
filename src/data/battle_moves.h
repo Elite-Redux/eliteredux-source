@@ -8370,7 +8370,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_FOES_AND_ALLY,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
-        .argument = STATUS1_BURN,
+        .argument = MOVE_EFFECT_BURN,
         .metronomeBanned = TRUE,
     },
     [MOVE_PLASMA_FISTS] =
