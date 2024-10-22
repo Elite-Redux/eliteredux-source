@@ -4561,6 +4561,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_TRICK)
         TUTOR(MOVE_TRICK_ROOM)
         TUTOR(MOVE_WATER_PULSE)
+        TUTOR(MOVE_HYPER_VOICE)  
         TUTOR_LEARNSET_END
 
     [SPECIES_ELECTABUZZ] = TUTOR_LEARNSET
@@ -9015,6 +9016,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_TRICK)
         TUTOR(MOVE_TRICK_ROOM)
         TUTOR(MOVE_WATER_PULSE)
+        TUTOR(MOVE_HYPER_VOICE)  
         TUTOR_LEARNSET_END
 
     [SPECIES_ELEKID] = TUTOR_LEARNSET
@@ -10327,6 +10329,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WING_ATTACK)
         TUTOR(MOVE_WORK_UP)
+        TUTOR(MOVE_TAKE_DOWN)  
         TUTOR_LEARNSET_END
 
     [SPECIES_SWELLOW] = TUTOR_LEARNSET
@@ -10363,6 +10366,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WING_ATTACK)
         TUTOR(MOVE_WORK_UP)
+        TUTOR(MOVE_TAKE_DOWN)  
         TUTOR_LEARNSET_END
 
     [SPECIES_WINGULL] = TUTOR_LEARNSET
@@ -14725,6 +14729,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WHIRLWIND)
         TUTOR(MOVE_WING_ATTACK)
+        TUTOR(MOVE_TAKE_DOWN)  
         TUTOR_LEARNSET_END
 
     [SPECIES_STARAVIA] = TUTOR_LEARNSET
@@ -14755,6 +14760,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WHIRLWIND)
         TUTOR(MOVE_WING_ATTACK)
+        TUTOR(MOVE_TAKE_DOWN)  
         TUTOR_LEARNSET_END
 
     [SPECIES_STARAPTOR] = TUTOR_LEARNSET
@@ -14788,6 +14794,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WHIRLWIND)
         TUTOR(MOVE_WING_ATTACK)
+        TUTOR(MOVE_TAKE_DOWN)  
         TUTOR_LEARNSET_END
 
     [SPECIES_BIDOOF] = TUTOR_LEARNSET
@@ -15848,6 +15855,8 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_TAUNT)
         TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WORK_UP)
+        TUTOR(MOVE_HYPER_VOICE)
+        TUTOR(MOVE_SHADOW_BALL)  
         TUTOR_LEARNSET_END
 
     [SPECIES_PURUGLY] = TUTOR_LEARNSET
@@ -29832,7 +29841,6 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_TAILWIND)
         TUTOR(MOVE_TAUNT)
         TUTOR(MOVE_THIEF)
-        TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WING_ATTACK)
         TUTOR(MOVE_TAKE_FLIGHT)  
         TUTOR_LEARNSET_END
@@ -29864,7 +29872,6 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_TAILWIND)
         TUTOR(MOVE_TAUNT)
         TUTOR(MOVE_THIEF)
-        TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WING_ATTACK)
         TUTOR(MOVE_TAKE_FLIGHT)  
         TUTOR_LEARNSET_END
