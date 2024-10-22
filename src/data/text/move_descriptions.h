@@ -2383,8 +2383,8 @@ static const u8 sMoveTwoLineDescription_MoveSpikyShield[] = _(
     "bleeding if struck.");
 
 static const u8 sMoveTwoLineDescription_MoveAromaticMist[] = _(
-    "Raises the Sp. Def of a\n"
-    "partner Pokémon.");
+    "Raises the Special Defense\n"
+    "of the user and its partner.");
 
 static const u8 sMoveTwoLineDescription_MoveEerieImpulse[] = _(
     "Exposes the foe to a pulse\n"
@@ -5499,7 +5499,7 @@ static const u8 sMoveFourLineDescription_MoveHyperspaceHole[] = _("Using a wormh
 static const u8 sMoveFourLineDescription_MoveWaterShuriken[] = _("The user hits the\nfoe with 2 to 5\nthrowing stars.\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveMysticalFire[] = _("The user breathes a\nspecial, hot fire.\nThis lowers the\nfoe's Sp. Atk stat.");
 static const u8 sMoveFourLineDescription_MoveSpikyShield[] = _("This prickly shield\nprotects the user\nand causes bleeding\non contact.");
-static const u8 sMoveFourLineDescription_MoveAromaticMist[] = _("The user raises\nthe Sp. Def stat of\nits partner with a\nmysterious aroma.");
+static const u8 sMoveFourLineDescription_MoveAromaticMist[] = _("Sharply raises the\nSpecial Defense of\nthe user and its\npartner.");
 static const u8 sMoveFourLineDescription_MoveEerieImpulse[] = _("The foe's Sp. Atk\nis harshly lowered\nby exposure to an\neerie impulse.");
 static const u8 sMoveFourLineDescription_MoveVenomDrench[] = _("Poisoned foes\nsuffer lowered\nAttack, Sp. Atk and\nSpeed stats.");
 static const u8 sMoveFourLineDescription_MovePowder[] = _("If the foe uses a\nFire-type move, it\nwill be damaged by\nthis powder.");

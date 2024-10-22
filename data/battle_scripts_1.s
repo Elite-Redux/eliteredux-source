@@ -1711,25 +1711,39 @@ BattleScript_EffectAromaticMist:
 	attackcanceler
 	attackstring
 	ppreduce
-	jumpifbyteequal gBattlerTarget, gBattlerAttacker, BattleScript_ButItFailed
-	jumpiftargetally BattleScript_EffectAromaticMistWorks
-	goto BattleScript_ButItFailed
-BattleScript_EffectAromaticMistWorks:
-	setstatchanger STAT_SPDEF, 1, FALSE
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_EffectAromaticMistEnd
-	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_AromaticMistAnim
-	pause 16
-	printstring STRINGID_TARGETSTATWONTGOHIGHER
-	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_EffectAromaticMistEnd
-BattleScript_AromaticMistAnim:
+	jumpifstat BS_ATTACKER, CMP_NOT_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_EffectAromaticMist_Works
+	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_ButItFailed
+	jumpifstat BS_ATTACKER_PARTNER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_ButItFailed
+BattleScript_EffectAromaticMist_Works:	
 	attackanimation
 	waitanimation
+	setstatchanger STAT_SPDEF, 2, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_AromaticMistPrintString
+	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_AromaticMistDoAnim
+	pause B_WAIT_TIME_SHORT
+	goto BattleScript_AromaticMistPrintString
+BattleScript_AromaticMistDoAnim::
 	setgraphicalstatchangevalues
-	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+BattleScript_AromaticMistPrintString::
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
-BattleScript_EffectAromaticMistEnd:
+BattleScript_AromaticMistPartner:
+	jumpifabsent BS_ATTACKER_PARTNER, BattleScript_MoveEnd
+	savetargettostack4
+	getbattler BS_ATTACKER_PARTNER
+	copybyte gBattlerTarget, sBATTLER
+	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_AromaticMistPrintStringParnter
+	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_AromaticMistDoAnimPartner
+	pause B_WAIT_TIME_SHORT
+	goto BattleScript_AromaticMistPrintString
+BattleScript_AromaticMistDoAnimPartner::
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+BattleScript_AromaticMistPrintStringParnter::
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	readtargetfromstack4
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectMagneticFlux::
