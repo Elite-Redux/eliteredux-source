@@ -13567,6 +13567,51 @@ static void Cmd_metronome(void)
     return;
 }
 
+static int AdjustFixedDamageForParentalBond(int damage)
+{
+    //Multiplies depending on the ability and the hit number
+    if ((gTurnStructs[gBattlerAttacker].parentalBondOn == 1)) {
+        switch (gTurnStructs[gBattlerAttacker].parentalBondTrigger) {
+            case ABILITY_PARENTAL_BOND:
+            case ABILITY_HYPER_AGGRESSIVE:
+                return damage / 4;
+                break;
+            case ABILITY_RAGING_BOXER:
+            case ABILITY_PRIMAL_MAW:
+            case ABILITY_DEVOURER:
+                return damage / 2;
+                break;
+        }
+    }
+
+    if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL
+        && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
+            return damage / 10;
+
+    if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MULTI_HEADED) {
+        if (IS_THREE_HEADED(gBattlerAttacker)) {
+            switch (gTurnStructs[gBattlerAttacker].parentalBondOn) {
+                case 2:
+                    return damage / 5; // .2
+                    break;
+                case 1:
+                    return damage * 3 / 20; // .15
+                    break;
+            }
+        } else if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1) {
+            return damage / 4;
+        }
+    }
+    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_WIELD)
+        return damage * 3 / 4; // .75
+    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_RAGING_MOTH)
+        return damage * 3 / 4; // .75
+    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_HAMMER)
+        return damage * 3 / 4; // .75
+    
+    return damage;
+}
+
 static void Cmd_calculatesetdamage(void)
 {
     s32 baseDamage = 1;
@@ -13600,50 +13645,10 @@ static void Cmd_calculatesetdamage(void)
         break;
     }
 
-    gBattleMoveDamage = baseDamage;
-
-    //Multiplies depending on the ability and the hit number
-    if ((gTurnStructs[gBattlerAttacker].parentalBondOn == 1)) {
-        switch (gTurnStructs[gBattlerAttacker].parentalBondTrigger) {
-            case ABILITY_PARENTAL_BOND:
-            case ABILITY_HYPER_AGGRESSIVE:
-                gBattleMoveDamage = baseDamage / 4;
-                break;
-            case ABILITY_RAGING_BOXER:
-            case ABILITY_PRIMAL_MAW:
-            case ABILITY_DEVOURER:
-                gBattleMoveDamage = baseDamage / 2;
-                break;
-        }
-    }
-
-    if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL
-        && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
-            gBattleMoveDamage = baseDamage / 10;
-
-    if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MULTI_HEADED) {
-        if (IS_THREE_HEADED(gBattlerAttacker)) {
-            switch (gTurnStructs[gBattlerAttacker].parentalBondOn) {
-                case 2:
-                    gBattleMoveDamage = baseDamage / 5; // .2
-                    break;
-                case 1:
-                    gBattleMoveDamage = baseDamage * 3 / 20; // .15
-                    break;
-            }
-        } else if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1) {
-            gBattleMoveDamage = baseDamage / 4;
-        }
-    }
-    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_WIELD)
-        gBattleMoveDamage = baseDamage * 3 / 4; // .75
-    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_RAGING_MOTH)
-        gBattleMoveDamage = baseDamage * 3 / 4; // .75
-    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_HAMMER)
-        gBattleMoveDamage = baseDamage * 3 / 4; // .75
+    gBattleMoveDamage = AdjustFixedDamageForParentalBond(baseDamage);
 
     //Failsafe
-    if (gBattleMoveDamage == 0)
+    if (!gBattleMoveDamage)
         gBattleMoveDamage = 1;
 
     gBattlescriptCurrInstr++;
@@ -13783,6 +13788,9 @@ static void Cmd_counterdamagecalculator(void)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
+
+    gBattleMoveDamage = AdjustFixedDamageForParentalBond(gBattleMoveDamage);
+    if (!gBattleMoveDamage) gBattleMoveDamage = 1;
 }
 
 static void Cmd_mirrorcoatdamagecalculator(void) // a copy of atkA1 with the physical -> special field changes
@@ -13807,6 +13815,9 @@ static void Cmd_mirrorcoatdamagecalculator(void) // a copy of atkA1 with the phy
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
+
+    gBattleMoveDamage = AdjustFixedDamageForParentalBond(gBattleMoveDamage);
+    if (!gBattleMoveDamage) gBattleMoveDamage = 1;
 }
 
 static void Cmd_disablelastusedattack(void)
@@ -17025,6 +17036,9 @@ static void Cmd_metalburstdamagecalculator(void)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
+
+    gBattleMoveDamage = AdjustFixedDamageForParentalBond(gBattleMoveDamage);
+    if (!gBattleMoveDamage) gBattleMoveDamage = 1;
 }
 
 static bool32 CriticalCapture(u32 odds)
