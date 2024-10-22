@@ -3940,16 +3940,19 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SMOKESCREEN;
                     BattleScriptCall(BattleScript_AnnounceStatus);
                 }
+                break;
             case MOVE_EFFECT_FEAR:
                 if (!gVolatileStructs[gEffectBattler].fear)
                 {
                     BattleScriptCall(BattleScript_SetFearMoveEffect);
                 }
+                break;
             case MOVE_EFFECT_YAWN:
                 if (!(gStatuses3[gEffectBattler] & STATUS3_YAWN) && CanSleep(gEffectBattler))
                 {
                     BattleScriptCall(BattleScript_SetYawnMoveEffect);
                 }
+                break;
             case MOVE_EFFECT_PSYCHIC_NOISE:
                 if (!(gStatuses3[gEffectBattler] & STATUS3_HEAL_BLOCK))
                 {
@@ -3957,6 +3960,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gStatuses3[gEffectBattler] |= STATUS3_HEAL_BLOCK;
                     gVolatileStructs[gEffectBattler].healBlockTimer = 2;
                 }
+                break;
             case MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1:
                 {
                 int speed = gBattleMons[gEffectBattler].speed;
@@ -3966,8 +3970,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleMons[gEffectBattler].speed = speed;
 
                 SET_MOVE_EFFECT_AS((MOVE_EFFECT_ATK_PLUS_1 - STAT_ATK + statId) | affectsUser)
-                break;
                 }
+                break;
             }
         }
     }
