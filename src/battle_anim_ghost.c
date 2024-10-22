@@ -501,8 +501,8 @@ static void AnimShadowBall_Step(struct Sprite *sprite)
         sprite->data[2] = GetBattlerSpriteCoord(gBattleAnimTarget, 3);
         sprite->data[4] = sprite->x << 4;
         sprite->data[5] = sprite->y << 4;
-        sprite->data[6] = SAFE_DIV((sprite->data[1] - sprite->x) << 4, sprite->data[3]);
-        sprite->data[7] = SAFE_DIV((sprite->data[2] - sprite->y) << 4, sprite->data[3]);
+        sprite->data[6] = ((sprite->data[1] - sprite->x) << 4) / sprite->data[3];
+        sprite->data[7] = ((sprite->data[2] - sprite->y) << 4) / sprite->data[3];
         sprite->data[0] += 1;
         break;
     case 2:
@@ -829,8 +829,8 @@ static void AnimDestinyBondWhiteShadow(struct Sprite *sprite)
     yDiff = battler2Y - battler1Y;
     sprite->data[0] = battler1X * 16;
     sprite->data[1] = battler1Y * 16;
-    sprite->data[2] = SAFE_DIV((battler2X - battler1X) * 16, gBattleAnimArgs[1]);
-    sprite->data[3] = SAFE_DIV(yDiff * 16, gBattleAnimArgs[1]);
+    sprite->data[2] = ((battler2X - battler1X) * 16) / gBattleAnimArgs[1];
+    sprite->data[3] = (yDiff * 16) / gBattleAnimArgs[1];
     sprite->data[4] = gBattleAnimArgs[1];
     sprite->data[5] = battler2X;
     sprite->data[6] = battler2Y;
@@ -894,8 +894,8 @@ void AnimTask_DestinyBondWhiteShadow(u8 taskId)
                     y = GetBattlerSpriteCoordAttr(battler, BATTLER_COORD_ATTR_BOTTOM);
                     gSprites[spriteId].data[0] = baseX << 4;
                     gSprites[spriteId].data[1] = baseY << 4;
-                    gSprites[spriteId].data[2] = SAFE_DIV((x - baseX) << 4, gBattleAnimArgs[1]);
-                    gSprites[spriteId].data[3] = SAFE_DIV((y - baseY) << 4, gBattleAnimArgs[1]);
+                    gSprites[spriteId].data[2] = ((x - baseX) << 4) / gBattleAnimArgs[1];
+                    gSprites[spriteId].data[3] = ((y - baseY) << 4) / gBattleAnimArgs[1];
                     gSprites[spriteId].data[4] = gBattleAnimArgs[1];
                     gSprites[spriteId].data[5] = x;
                     gSprites[spriteId].data[6] = y;
@@ -920,8 +920,8 @@ void AnimTask_DestinyBondWhiteShadow(u8 taskId)
             y = 40;
             gSprites[spriteId].data[0] = baseX << 4;
             gSprites[spriteId].data[1] = baseY << 4;
-            gSprites[spriteId].data[2] = SAFE_DIV((x - baseX) << 4, gBattleAnimArgs[1]);
-            gSprites[spriteId].data[3] = SAFE_DIV((y - baseY) << 4, gBattleAnimArgs[1]);
+            gSprites[spriteId].data[2] = ((x - baseX) << 4) / gBattleAnimArgs[1];
+            gSprites[spriteId].data[3] = ((y - baseY) << 4) / gBattleAnimArgs[1];
             gSprites[spriteId].data[4] = gBattleAnimArgs[1];
             gSprites[spriteId].data[5] = x;
             gSprites[spriteId].data[6] = y;

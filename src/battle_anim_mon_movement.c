@@ -655,18 +655,18 @@ static void SlideMonToOffsetAndBack_End(struct Sprite *sprite)
 // arg 6: lunge duration
 void AnimTask_WindUpLunge(u8 taskId)
 {
-    s16 wavePeriod = SAFE_DIV(0x8000, gBattleAnimArgs[3]);
+    s16 wavePeriod = 0x8000 / gBattleAnimArgs[3];
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
     {
         gBattleAnimArgs[1] = -gBattleAnimArgs[1];
         gBattleAnimArgs[5] = -gBattleAnimArgs[5];
     }
     gTasks[taskId].data[0] = GetAnimBattlerSpriteId(gBattleAnimArgs[0]);
-    gTasks[taskId].data[1] = SAFE_DIV(gBattleAnimArgs[1] << 8, gBattleAnimArgs[3]);
+    gTasks[taskId].data[1] = (gBattleAnimArgs[1] << 8) / gBattleAnimArgs[3];
     gTasks[taskId].data[2] = gBattleAnimArgs[2];
     gTasks[taskId].data[3] = gBattleAnimArgs[3];
     gTasks[taskId].data[4] = gBattleAnimArgs[4];
-    gTasks[taskId].data[5] = SAFE_DIV(gBattleAnimArgs[5] << 8, gBattleAnimArgs[6]);
+    gTasks[taskId].data[5] = (gBattleAnimArgs[5] << 8) / gBattleAnimArgs[6];
     gTasks[taskId].data[6] = gBattleAnimArgs[6];
     gTasks[taskId].data[7] = wavePeriod;
     gTasks[taskId].func = AnimTask_WindUpLunge_Step1;
@@ -719,17 +719,17 @@ static void AnimTask_WindUpLunge_Step2(u8 taskId)
 
 void AnimTask_DuckDownHop(u8 taskId)
 {
-    s16 wavePeriod = SAFE_DIV(0x8000, gBattleAnimArgs[3]);
+    s16 wavePeriod = 0x8000 / gBattleAnimArgs[3];
     if (GetBattlerSide(gBattleAnimAttacker) != B_SIDE_PLAYER)
     {
         gBattleAnimArgs[1] = -gBattleAnimArgs[1];
     }
     gTasks[taskId].data[0] = GetAnimBattlerSpriteId(gBattleAnimArgs[0]);
-    gTasks[taskId].data[1] = SAFE_DIV(gBattleAnimArgs[1] << 8, gBattleAnimArgs[3]);
+    gTasks[taskId].data[1] = (gBattleAnimArgs[1] << 8) / gBattleAnimArgs[3];
     gTasks[taskId].data[2] = gBattleAnimArgs[2];
     gTasks[taskId].data[3] = gBattleAnimArgs[3];
     gTasks[taskId].data[4] = gBattleAnimArgs[4];
-    gTasks[taskId].data[5] = SAFE_DIV(gBattleAnimArgs[5] << 8, gBattleAnimArgs[6]);
+    gTasks[taskId].data[5] = (gBattleAnimArgs[5] << 8) / gBattleAnimArgs[6];
     gTasks[taskId].data[6] = gBattleAnimArgs[6];
     gTasks[taskId].data[7] = wavePeriod;
     gTasks[taskId].func = AnimTask_DuckDownHop_Step1;

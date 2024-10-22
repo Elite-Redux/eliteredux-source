@@ -619,8 +619,8 @@ void AnimDracoMeteorRock(struct Sprite *sprite)
 
 static void AnimDracoMeteorRock_Step(struct Sprite *sprite)
 {
-	sprite->x2 = SAFE_DIV((sprite->data[2] - sprite->data[0]) * sprite->data[5], sprite->data[4]);
-	sprite->y2 = SAFE_DIV((sprite->data[3] - sprite->data[1]) * sprite->data[5], sprite->data[4]);
+	sprite->x2 = ((sprite->data[2] - sprite->data[0]) * sprite->data[5]) / sprite->data[4];
+	sprite->y2 = ((sprite->data[3] - sprite->data[1]) * sprite->data[5]) / sprite->data[4];
 
 	if (sprite->data[5] == sprite->data[4])
 		DestroyAnimSprite(sprite);
