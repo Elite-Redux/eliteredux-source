@@ -739,8 +739,8 @@ static const u8 sMoveTwoLineDescription_MoveFeintAttack[] = _(
     "strikes without fail.");
 
 static const u8 sMoveTwoLineDescription_MoveSweetKiss[] = _(
-    "Demands a kiss with a cute\n"
-    "look. May cause confusion.");
+    "Demands a kiss, causing\n"
+    "confusion and infatuation.");
 
 static const u8 sMoveTwoLineDescription_MoveBellyDrum[] = _(
     "Maximizes Attack while\n"
@@ -5088,7 +5088,7 @@ static const u8 sMoveFourLineDescription_MoveProtect[] = _("Enables the user to\
 static const u8 sMoveFourLineDescription_MoveMachPunch[] = _("A punch thrown at\nblinding speed.\n+1 priority.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveScaryFace[] = _("Frightens the foe\nwith a scary face.\nInflicts fear and\nsharply lowers Speed.");
 static const u8 sMoveFourLineDescription_MoveFeintAttack[] = _("The user draws up\nclose to the foe\ndisarmingly, then\nhits without fail.");
-static const u8 sMoveFourLineDescription_MoveSweetKiss[] = _("The user kisses\nthe foe with sweet\ncuteness that\ncauses confusion.");
+static const u8 sMoveFourLineDescription_MoveSweetKiss[] = _("Kisses the foe with\na sweet cuteness that\ncauses confusion\nand infatuation.");
 static const u8 sMoveFourLineDescription_MoveBellyDrum[] = _("The user maximizes\nits Attack stat at\nthe cost of half\nits full HP.");
 static const u8 sMoveFourLineDescription_MoveSludgeBomb[] = _("Filthy sludge is\nhurled at the foe.\n30% poison\nchance.");
 static const u8 sMoveFourLineDescription_MoveMudSlap[] = _("Mud is hurled in\nthe foe's face to\ninflict damage 2-5\ntimes.");

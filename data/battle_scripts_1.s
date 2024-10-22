@@ -495,6 +495,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectKinesis				  @ EFFECT_KINESIS
 	.4byte BattleScript_EffectCaltrops				  @ EFFECT_CALTROPS
 	.4byte BattleScript_EffectKnockOff				  @ EFFECT_CORROSIVE_GAS
+	.4byte BattleScript_EffectSweetKiss				  @ EFFECT_SWEET_KISS
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -4690,6 +4691,27 @@ BattleScript_EffectFocusEnergy:
 	printstring STRINGID_PKMNGETTINGPUMPED
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
+
+BattleScript_EffectSweetKiss:
+	checktargetowntempoprotects BattleScript_EffectAttract
+	jumpifsubstituteblocks BattleScript_EffectAttract
+	jumpifstatus2 BS_TARGET, STATUS2_CONFUSION, BattleScript_EffectAttract
+	jumpifterrainaffected BS_TARGET, STATUS_FIELD_MISTY_TERRAIN, BattleScript_EffectAttract
+	jumpifsafeguard BattleScript_EffectAttract
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
+	attackcanceler
+	attackstring
+	ppreduce
+	attackanimation
+	waitanimation
+	setmoveeffect MOVE_EFFECT_CONFUSION
+	seteffectprimary
+	setmoveeffect MOVE_EFFECT_ATTRACT
+	seteffectprimary
+	resultmessage
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
 
 BattleScript_EffectConfuse:
 	attackcanceler

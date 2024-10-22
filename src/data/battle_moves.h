@@ -2321,7 +2321,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SWEET_KISS] =
     {
-        .effect = EFFECT_CONFUSE,
+        .effect = EFFECT_SWEET_KISS,
         .power = 0,
         .type = TYPE_FAIRY,
         .accuracy = 75,
