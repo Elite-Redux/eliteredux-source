@@ -1999,8 +1999,8 @@ static const u8 sMoveTwoLineDescription_MoveStoredPower[] = _(
     "the more damage caused.");
 
 static const u8 sMoveTwoLineDescription_MoveQuickGuard[] = _(
-    "Evades priority attacks\n"
-    "for one turn.");
+    "Protects against priority\n"
+    "attacks for 3 turns.");
 
 static const u8 sMoveTwoLineDescription_MoveAllySwitch[] = _(
     "The user switches places\n"
@@ -5403,7 +5403,7 @@ static const u8 sMoveFourLineDescription_MoveEchoedVoice[] = _("A 3-hit attack.\
 static const u8 sMoveFourLineDescription_MoveChipAway[] = _("40% chance to lower\nAttack and/or\nDefense. Ignores\nstat changes.");
 static const u8 sMoveFourLineDescription_MoveClearSmog[] = _("A clump of special\nmud is hurled at\nthe foe, resetting\ntheir stat changes.");
 static const u8 sMoveFourLineDescription_MoveStoredPower[] = _("The more the user's\nstats are raised,\nthe greater this\nmove's power.");
-static const u8 sMoveFourLineDescription_MoveQuickGuard[] = _("The user and its\nallies are\nprotected from\npriority moves.");
+static const u8 sMoveFourLineDescription_MoveQuickGuard[] = _("Protects the user and\nits allies from priority\nfor 3 turns.");
 static const u8 sMoveFourLineDescription_MoveAllySwitch[] = _("The user teleports\nusing a strange\npower and swaps\nwith its ally.");
 static const u8 sMoveFourLineDescription_MoveScald[] = _("Boiling hot water\nis shot at the foe.\n30% burn chance.");
 static const u8 sMoveFourLineDescription_MoveShellSmash[] = _("A broken shell ups\nAtk, Sp.Atk and Spe,\nwhile reducing Def\nand Sp.Def.");

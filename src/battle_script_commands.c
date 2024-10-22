@@ -11465,7 +11465,7 @@ static void Cmd_various(void)
             gBattlescriptCurrInstr = ptr;
         else
         {
-            gSideTimers[GetBattlerSide(gActiveBattler)].quickGuardTimer = 5;
+            gSideTimers[GetBattlerSide(gActiveBattler)].quickGuardTimer = 3;
             gSideTimers[GetBattlerSide(gActiveBattler)].started.quickGuard = TRUE;
         }
     } // End of switch (gBattlescriptCurrInstr[2])
