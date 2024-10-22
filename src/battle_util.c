@@ -7985,9 +7985,7 @@ case ITEMEFFECT_KINGSROCK:
                 && gBattleMons[gBattlerTarget].hp)
             {
                 gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
-                BattleScriptPushCursor();
                 SetMoveEffect(FALSE, 0);
-                BattleScriptPop();
             }
             break;
         case HOLD_EFFECT_BLUNDER_POLICY:
