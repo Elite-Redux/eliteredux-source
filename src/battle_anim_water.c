@@ -857,7 +857,7 @@ static void AnimToTargetInSinWave(struct Sprite *sprite)
     sprite->data[3] = sprite->y;
     sprite->data[4] = GetBattlerSpriteCoord(gBattleAnimTarget, 3);
     InitAnimLinearTranslation(sprite);
-    sprite->data[5] = 0xD200 / sprite->data[0];
+    sprite->data[5] = SAFE_DIV(0xD200, sprite->data[0]);
     sprite->data[7] = gBattleAnimArgs[3];
     retArg = gBattleAnimArgs[7];
     if (gBattleAnimArgs[7] > 127)
@@ -1742,8 +1742,8 @@ static void AnimWaterPulseRing_Step(struct Sprite *sprite)
     int xDiff = sprite->data[1] - sprite->x;
     int yDiff = sprite->data[2] - sprite->y;
 
-    sprite->x2 = (sprite->data[0] * xDiff) / sprite->data[3];
-    sprite->y2 = (sprite->data[0] * yDiff) / sprite->data[3];
+    sprite->x2 = SAFE_DIV(sprite->data[0] * xDiff, sprite->data[3]);
+    sprite->y2 = SAFE_DIV(sprite->data[0] * yDiff, sprite->data[3]);
     if (++sprite->data[5] == sprite->data[4])
     {
         sprite->data[5] = 0;
