@@ -379,7 +379,7 @@
 #define ABILITY_MOLTEN_DOWN 357 // Fire-type is super effective against Rock-type.
 #define ABILITY_HYPER_AGGRESSIVE 358 // Moves hit twice. Second hit does 25% damage.
 #define ABILITY_FLOCK 359 // Boosts Flying-type moves by 1.2x, or 1.5x when below 1/3 HP.
-#define ABILITY_FIELD_EXPLORER 360 // Boosts field moves by 25%. Cut, Surf, Strength etc.
+#define ABILITY_FIELD_EXPLORER 360 // Boosts field moves by 50%. Cut, Surf, Strength etc.
 #define ABILITY_STRIKER 361 // Boosts the power of kicking moves by 1.3x.
 #define ABILITY_FROZEN_SOUL 362 // At full HP, gives +1 priority to this Pokémon's Ice-type moves.
 #define ABILITY_PREDATOR 363 // Dealing a KO heals 1/4 of this Pokémon's max HP.
@@ -403,7 +403,7 @@
 #define ABILITY_POLLINATE 381 // Normal-type moves become Bug- type moves and get a 1.1x boost.
 #define ABILITY_VOLCANO_RAGE 382 // Triggers 50 BP Eruption after using a Fire-type move.
 #define ABILITY_COLD_REBOUND 383 // Attacks with Icy Wind when hit by a contact move.
-#define ABILITY_LOW_BLOW 384 // Attacks with Feint Attack on switch-in.
+#define ABILITY_LOW_BLOW 384 // Attacks with 40BP Feint Attack on switch-in.
 #define ABILITY_NOSFERATU 385 // Contact moves do +20% damage and heal 1/2 of damage dealt.
 #define ABILITY_SPECTRAL_SHROUD 386 // Spectralize + 30% chance to badly poison the foe.
 #define ABILITY_DISCIPLINE 387 // Rampage moves no longer trap you. Can't be confused or intimidated.
@@ -540,7 +540,7 @@
 #define ABILITY_SPITEFUL 518 // Reduces attacker's PP on contact.
 #define ABILITY_FORTITUDE 519 // Boosts SpDef +1 when hit. Maxes SpDef on crit.
 #define ABILITY_DEVOURER 520 // Combines Strong Jaw & Primal Maw.
-#define ABILITY_PHANTOM_THIEF 521 // Uses 40BP Spectral Thief on switch-in.
+#define ABILITY_PHANTOM_THIEF 521 // Attacks with 40BP Spectral Thief on switch-in.
 #define ABILITY_EARLY_GRAVE 522 // At full HP, gives +1 priority to this Pokémon's Ghost-type moves.
 #define ABILITY_GRAPPLER 523 // Trapping moves last 6 turns. Trapping deals 1/6 HP.
 #define ABILITY_BASS_BOOSTED 524 // Combines Amplifier & Punk Rock.
@@ -736,7 +736,7 @@
 #define ABILITY_APPLE_PIE 714 // Self Sufficient + Ripen.
 #define ABILITY_HOVER 715 // Adds Psychic type to itself. Avoids Ground attacks.
 #define ABILITY_DEPRAVITY 716 // Combines Merciless & Overcharge.
-#define ABILITY_WILDFIRE 717 // Attacks with Fire Spin on switch-in.
+#define ABILITY_WILDFIRE 717 // Attacks with 20BP Fire Spin when hit by a contact move.
 #define ABILITY_JUMP_SCARE 718 // Attacks with Astonish on switch-in.
 #define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
 #define ABILITY_STUN_SHOCK 720 // Attacks have a 60% chance to Paralyze or Poison.

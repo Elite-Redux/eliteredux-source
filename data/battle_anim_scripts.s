@@ -1012,6 +1012,7 @@ gBattleAnims_Moves::
 	.4byte Move_MAGIC_ROOM @ MOVE_SHOWTIME
 	.4byte Move_NONE @ MOVE_BANISHED_POWER
 	.4byte Move_NONE @ MOVE_TRIPLE_TREMOR
+	.4byte Move_NONE @ MOVE_FIRE_GLAIVE
 
 	.align 2
 gBattleAnims_StatusConditions::
@@ -24661,9 +24662,14 @@ Move_SPIT_UP:
 	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 192, 12
 	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 224, 12
 	delay 5
-	jumpifmoveturn 2, SpitUpStrong
-	jumpifmoveturn 3, SpitUpStrongest
-SpitUpContinue:
+	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 16
+	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 48
+	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 80
+	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 112
+	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 144
+	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 176
+	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 208
+	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 240
 	delay 5
 	createvisualtask AnimTask_ShakeTargetBasedOnMovePowerOrDmg, 2, FALSE, 1, 8, 1, 0
 	playsewithpan SE_M_DOUBLE_SLAP, SOUND_PAN_TARGET
@@ -24673,22 +24679,6 @@ SpitUpContinue:
 	createsprite gFlashingHitSplatSpriteTemplate, ANIM_TARGET, 3, 12, -10, ANIM_TARGET, 1
 	waitforvisualfinish
 	end
-SpitUpStrong:
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 16
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 80
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 144
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 208
-	goto SpitUpContinue
-SpitUpStrongest:
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 16
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 48
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 80
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 112
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 144
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 176
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 208
-	createsprite gSpitUpOrbSpriteTemplate, ANIM_ATTACKER, 2, 240
-	goto SpitUpContinue
 
 Move_SWALLOW:
 	loadspritegfx ANIM_TAG_BLUE_ORB
@@ -24700,9 +24690,8 @@ Move_SWALLOW:
 	playsewithpan SE_M_SPIT_UP, SOUND_PAN_ATTACKER
 	createvisualtask AnimTask_ShakeMon2, 2, ANIM_ATTACKER, 2, 0, 12, 1
 	call SwallowEffect
-	jumpifmoveturn 2, SwallowGood
-	jumpifmoveturn 3, SwallowBest
-SwallowContinue:
+	call SwallowEffect
+	call SwallowEffect
 	waitforvisualfinish
 	call HealingEffect
 	end
@@ -24718,13 +24707,6 @@ SwallowEffect:
 	createsprite gSwallowBlueOrbSpriteTemplate, ANIM_ATTACKER, 2, 24, -8
 	delay 1
 	return
-SwallowGood:
-	call SwallowEffect
-	goto SwallowContinue
-SwallowBest:
-	call SwallowEffect
-	call SwallowEffect
-	goto SwallowContinue
 
 Move_TRANSFORM:
 	monbg ANIM_ATTACKER

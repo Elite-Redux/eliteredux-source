@@ -260,6 +260,19 @@
 #define VARIOUS_SET_CLEAR_SKIES                 177
 #define VARIOUS_SHOWTIME                        178
 #define VARIOUS_TREPIDATION                     179
+#define VARIOUS_DO_HAZARD_DAMAGE                180
+#define VARIOUS_TRY_DESTROY_ITEM                181
+#define VARIOUS_SET_CALTROPS                    182
+#define VARIOUS_SWAP_WITH                       183
+#define VARIOUS_SWAP_STAT                       184
+#define VARIOUS_SET_QUICK_GUARD                 185
+
+#define HAZARD_MODE_SPIKES 0
+#define HAZARD_MODE_ROCKS 1
+#define HAZARD_MODE_WEBS 2
+#define HAZARD_MODE_POISON_SPIKES 3
+#define HAZARD_MODE_FIRE_TRAP 4
+#define HAZARD_MODE_CALTROPS 5
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0

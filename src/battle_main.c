@@ -3423,6 +3423,8 @@ void SwitchInClearSetData(void)
         gVolatileStructs[gActiveBattler].battlerPreventingEscape = VolatileStructCopy.battlerPreventingEscape;
         gVolatileStructs[gActiveBattler].critBoost = VolatileStructCopy.critBoost;
         gVolatileStructs[gActiveBattler].parasiticSpores = VolatileStructCopy.parasiticSpores;
+        gVolatileStructs[gActiveBattler].dazed = VolatileStructCopy.dazed;
+        gVolatileStructs[gActiveBattler].trepidation = VolatileStructCopy.trepidation;
     }
     else if (gBattleMoves[gCurrentMove].effect == EFFECT_SHED_TAIL)
     {
@@ -5009,6 +5011,9 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     }
     speed *= gStatStageRatios[statStage][0];
     speed /= gStatStageRatios[statStage][1];
+    
+    if (gChosenMoveByBattler[battlerId] == MOVE_STEAMROLLER)
+        speed = 3 * speed / 2;
 
     return speed;
 }
@@ -5094,6 +5099,9 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
     {
         priority++;
     }
+
+    if (gBattleMoves[move].effect == EFFECT_THIEF && !gBattleMons[target].item)
+        priority++;
     
 	if (BattlerHasAbility(battlerId, battlerId, ABILITY_TRIAGE))
     {
@@ -5404,8 +5412,8 @@ static void TurnValuesCleanUp(bool8 turnPassOnly)
         gTurnStructs[i].parentalBondOn = 0;
     }
 
-    gSideStatuses[0] &= ~(SIDE_STATUS_QUICK_GUARD | SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK);
-    gSideStatuses[1] &= ~(SIDE_STATUS_QUICK_GUARD | SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK);
+    gSideStatuses[0] &= ~(SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK);
+    gSideStatuses[1] &= ~(SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK);
     gSideTimers[0].followmeTimer = 0;
     gSideTimers[1].followmeTimer = 0;
     
@@ -6001,6 +6009,10 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
 
     if (move == MOVE_STRUGGLE)
         return TYPE_NORMAL;
+    
+    // Present looks normal but is actually typeless
+    if (move == MOVE_PRESENT)
+        return TYPE_NORMAL;
 
     if (move == MOVE_RAGING_BULL)
     {
@@ -6040,7 +6052,7 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
         if (holdEffect == gBattleMoves[move].argument)
             return ItemId_GetSecondaryId(item);
     }
-    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE)
+    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE || gBattleMoves[move].effect == EFFECT_SPIT_UP)
     {
         if (type1 != TYPE_MYSTERY)
             return type1;
@@ -6209,7 +6221,7 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk) {
         if (holdEffect == gBattleMoves[move].argument)
             return ItemId_GetSecondaryId(gBattleMons[battlerAtk].item);
     }
-    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE)
+    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE || gBattleMoves[move].effect == EFFECT_SPIT_UP)
     {
         if (gBattleMons[battlerAtk].type1 != TYPE_MYSTERY)
             return gBattleMons[battlerAtk].type1;
@@ -6376,7 +6388,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
         if (holdEffect == gBattleMoves[move].argument)
             gBattleStruct->dynamicMoveType = ItemId_GetSecondaryId(gBattleMons[battlerAtk].item) | 0x80;
     }
-    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE)
+    else if (gBattleMoves[move].effect == EFFECT_REVELATION_DANCE || gBattleMoves[move].effect == EFFECT_SPIT_UP)
     {
         if (gBattleMons[battlerAtk].type1 != TYPE_MYSTERY)
             gBattleStruct->dynamicMoveType = gBattleMons[battlerAtk].type1 | 0x80;

@@ -2361,9 +2361,38 @@
 	.4byte \onFail
 	.endm
 
-	.macro twoturnmoveacceleratecheck
+	.macro dohazarddamage target:req, mode=HAZARD_MODE_SPIKES
+	various \target, VARIOUS_DO_HAZARD_DAMAGE
+	.byte \mode
+	.endm
+
+	.macro trydestroyitem target:req, failPtr:req
+	various \target, VARIOUS_TRY_DESTROY_ITEM
+	.4byte \failPtr
+	.endm
+
+	.macro trysetcaltrops target:req failPtr:req
+	various \target, VARIOUS_SET_CALTROPS
+	.4byte \failPtr
+	.endm
+
+	.macro swapwith target:req
+	various \target, VARIOUS_SWAP_WITH
+	.endm
+
+	.macro swapstat target:req, stat:req
+	various \target, VARIOUS_SWAP_STAT
+	.byte \stat
+	.endm
+
+	.macro setquickguard failPtr:req
+	various BS_ATTACKER, VARIOUS_SET_QUICK_GUARD
+	.4byte \failPtr
+	.endm
+
+	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
-	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, BattleScript_MoveEnd
+	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr
 	call BattleScript_PowerHerbActivation
 twoturnmoveacceleratecheck_\@:
 	setbyte sACCELERATED_TWO_TURN, 1
@@ -2399,11 +2428,17 @@ checkstatbuffonlowered_queensmourning_\@:
 checkstatbuffonlowered_none_\@:
 	.endm
 
+	.macro jumpifroom statusField:req, ptr:req
+	jumpifabilitypresent ABILITY_CLUELESS, jumpifroom_clueless_\@
+	jumpifword CMP_COMMON_BITS, gFieldStatuses, \statusField, \ptr
+	jumpifroom_clueless_\@:
+	.endm
 
 	.macro jumpifmagicguard battler:req, ptr:req
 	jumpifability \battler, ABILITY_MAGIC_GUARD, \ptr
 	jumpifability \battler, ABILITY_IMPENETRABLE, \ptr
 	jumpifability \battler, ABILITY_APPLE_ENLIGHTENMENT, \ptr
+	jumpifroom STATUS_FIELD_MAGIC_ROOM, \ptr
 	.endm
 
 	.macro jumpifhealingblocked battler:req, ptr:req
@@ -2487,4 +2522,11 @@ checkprimalweather_pass_\@:
 .macro jumpifripen battler:req, ptr:req
 	jumpifability \battler, ABILITY_RIPEN, \ptr
 	jumpifability \battler, ABILITY_APPLE_PIE, \ptr
+.endm
+
+.macro checktargetowntempoprotects ptr=BattleScript_OwnTempoPrevents
+	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, \ptr
+	jumpifability BS_TARGET, ABILITY_DISCIPLINE, \ptr
+	jumpifability BS_TARGET, ABILITY_ROCK_HEAD, \ptr
+	jumpifability BS_TARGET, ABILITY_STEEL_BARREL, \ptr
 .endm

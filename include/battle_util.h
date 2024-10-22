@@ -87,6 +87,7 @@ enum MiscMoveEffects
     MISC_EFFECT_DOUBLE_DAMAGE,
     MISC_EFFECT_DOUBLE_DAMAGE_VS_BLEEDING,
     MISC_EFFECT_50_PERCENT_PLUS_DAMAGE_VS_BLEEDING,
+    MISC_EFFECT_TRANSMUTE,
 };
 
 // for Natural Gift and Fling
@@ -253,7 +254,7 @@ s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, 
 u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags);
 u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
 u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef, u8 leveldef);
-u16 GetTypeModifier(u8 atkType, u8 defType);
+u16 GetTypeModifier(int atkType, int defType, int miracleEyeAtk, int miracleEyeDef);
 s32 GetStealthHazardDamage(u8 hazardType, u8 battlerId);
 u16 GetMegaEvolutionSpecies(u16 preEvoSpecies, u16 heldItemId);
 u16 GetPrimalReversionSpecies(u16 preEvoSpecies, u16 heldItemId);
@@ -299,6 +300,7 @@ u8 GetBattleMoveTargetFlags(u16 moveId, u16 ability);
 u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler);
 bool32 ShouldChangeFormHpBased(u32 battler);
 u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc);
+int CountBattlerStatDecreases(int battler);
 bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler);
 s32 GetCurrentTerrain(void);
 u8 BattlerHasInnateOrAbility(u8 battler, u16 ability);
