@@ -6009,6 +6009,10 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
 
     if (move == MOVE_STRUGGLE)
         return TYPE_NORMAL;
+    
+    // Present looks normal but is actually typeless
+    if (move == MOVE_PRESENT)
+        return TYPE_NORMAL;
 
     if (move == MOVE_RAGING_BULL)
     {

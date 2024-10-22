@@ -2705,15 +2705,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_PRESENT] =
     {
-        .effect = EFFECT_PRESENT,
-        .power = 1,
-        .type = TYPE_NORMAL,
-        .accuracy = 90,
+        .effect = EFFECT_HIT_ENEMY_HEAL_ALLY,
+        .power = 80,
+        .type = TYPE_MYSTERY,
+        .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
-        .split = SPLIT_PHYSICAL,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
+        .split = SPLIT_SPECIAL,
     },
     [MOVE_FRUSTRATION] =
     {
