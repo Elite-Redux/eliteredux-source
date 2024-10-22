@@ -1398,7 +1398,8 @@ BattleScript_EffectRelicSong:
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	seteffectwithchance
-	argumentstatuseffect
+	argumenttomoveeffect
+	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 	
@@ -3997,7 +3998,8 @@ BattleScript_ExplosionLoop:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	argumentstatuseffect
+	argumenttomoveeffect
+	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	moveendto MOVEEND_NEXT_TARGET
 	jumpifnexttargetvalid BattleScript_ExplosionLoop
@@ -4366,7 +4368,8 @@ BattleScript_EffectFlinchWithStatus:
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	seteffectwithchance
-	argumentstatuseffect
+	argumenttomoveeffect
+	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 

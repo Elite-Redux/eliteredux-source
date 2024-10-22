@@ -1056,7 +1056,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_SPECIAL,
-        .argument = STATUS1_PARALYSIS,
+        .argument = MOVE_EFFECT_PARALYSIS,
     },
     [MOVE_THUNDERBOLT] =
     {
@@ -5238,7 +5238,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRONG_JAW_BOOST,
         .split = SPLIT_PHYSICAL,
-        .argument = STATUS1_PARALYSIS,
+        .argument = MOVE_EFFECT_PARALYSIS,
     },
     [MOVE_ICE_FANG] =
     {
@@ -5251,7 +5251,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRONG_JAW_BOOST,
         .split = SPLIT_PHYSICAL,
-        .argument = STATUS1_FROSTBITE,
+        .argument = MOVE_EFFECT_FROSTBITE,
     },
     [MOVE_FIRE_FANG] =
     {
@@ -5264,7 +5264,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_STRONG_JAW_BOOST,
         .split = SPLIT_PHYSICAL,
-        .argument = STATUS1_BURN,
+        .argument = MOVE_EFFECT_BURN,
     },
     [MOVE_SHADOW_SNEAK] =
     {
@@ -10108,7 +10108,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
-        .argument = STATUS1_BLEED,
+        .argument = MOVE_EFFECT_BLEED,
         .hornBased = TRUE,
     },
     [MOVE_BLOOD_SHOT] =
