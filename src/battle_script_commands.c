@@ -3940,16 +3940,19 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SMOKESCREEN;
                     BattleScriptCall(BattleScript_AnnounceStatus);
                 }
+                break;
             case MOVE_EFFECT_FEAR:
                 if (!gVolatileStructs[gEffectBattler].fear)
                 {
                     BattleScriptCall(BattleScript_SetFearMoveEffect);
                 }
+                break;
             case MOVE_EFFECT_YAWN:
                 if (!(gStatuses3[gEffectBattler] & STATUS3_YAWN) && CanSleep(gEffectBattler))
                 {
                     BattleScriptCall(BattleScript_SetYawnMoveEffect);
                 }
+                break;
             case MOVE_EFFECT_PSYCHIC_NOISE:
                 if (!(gStatuses3[gEffectBattler] & STATUS3_HEAL_BLOCK))
                 {
@@ -3957,6 +3960,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gStatuses3[gEffectBattler] |= STATUS3_HEAL_BLOCK;
                     gVolatileStructs[gEffectBattler].healBlockTimer = 2;
                 }
+                break;
             case MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1:
                 {
                 int speed = gBattleMons[gEffectBattler].speed;
@@ -3966,8 +3970,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 gBattleMons[gEffectBattler].speed = speed;
 
                 SET_MOVE_EFFECT_AS((MOVE_EFFECT_ATK_PLUS_1 - STAT_ATK + statId) | affectsUser)
-                break;
                 }
+                break;
             }
         }
     }
@@ -3984,6 +3988,8 @@ static void Cmd_seteffectwithchance(void)
         gBattleMoves[gCurrentMove].secondaryEffectChance;
     u8 moveType = gBattleMoves[gCurrentMove].type;
     u8 moveEffect;
+
+    gBattlescriptCurrInstr++;
 
     FlagClear(FLAG_LAST_MOVE_SECONDARY_EFFECT_ACTIVATED);
     
@@ -4053,8 +4059,6 @@ static void Cmd_seteffectwithchance(void)
             break;
         }
     }
-
-    gBattlescriptCurrInstr++;
 
     if (gBattleScripting.moveEffect & MOVE_EFFECT_CERTAIN
         && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))
@@ -5850,14 +5854,12 @@ static void Cmd_moveend(void)
                 effect = TRUE;
             gBattleScripting.moveendState++;
             break;
-        case MOVEEND_MOVE_EFFECTS2: // For effects which should happen after target items, for example Knock Off after damage from Rocky Helmet.
+        case MOVEEND_MOVE_EFFECTS2_ON_EACH: // For effects which should happen after target items, for example Knock Off after damage from Rocky Helmet.
+            {
+            int effect = gBattleStruct->moveEffect2;
+            gBattleStruct->moveEffect2 = 0;
             switch (gBattleStruct->moveEffect2)
             {
-            case MOVE_EFFECT_MAKE_IT_RAIN:
-                gBattleScripting.moveEffect = MOVE_EFFECT_SP_ATK_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN;
-                SetMoveEffect(FALSE, TRUE);
-                effect = TRUE;
-                break;
             case MOVE_EFFECT_STEAL_ITEM:
                 if (!gBattleMons[gBattlerAttacker].item)
                 {
@@ -5908,6 +5910,20 @@ static void Cmd_moveend(void)
                     }
                 }
                 break; // MOVE_EFFECT_REMOVE_STATUS
+            default:
+                gBattleStruct->moveEffect2 = effect;
+            }
+            }
+            gBattleScripting.moveendState++;
+            break; // MOVEEND_MOVE_EFFECTS2
+        case MOVEEND_MOVE_EFFECTS2: // For effects which should happen after target items, for example Knock Off after damage from Rocky Helmet.
+            switch (gBattleStruct->moveEffect2)
+            {
+            case MOVE_EFFECT_MAKE_IT_RAIN:
+                gBattleScripting.moveEffect = MOVE_EFFECT_SP_ATK_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN;
+                SetMoveEffect(FALSE, TRUE);
+                effect = TRUE;
+                break;
             case MOVE_EFFECT_BURN_UP:
                 effect = TRUE;
                 BattleScriptCall(BattleScript_BurnUpRemoveType);
@@ -9703,43 +9719,6 @@ static void Cmd_various(void)
         if (!CanUseLastResort(gActiveBattler))
             gBattlescriptCurrInstr = ptr;
         return;
-    case VARIOUS_ARGUMENT_STATUS_EFFECT:
-        switch (gBattleMoves[gCurrentMove].argument)
-        {
-        case STATUS1_SLEEP:
-            gBattleScripting.moveEffect = MOVE_EFFECT_SLEEP;
-            break;
-        case STATUS1_BURN:
-            gBattleScripting.moveEffect = MOVE_EFFECT_BURN;
-            break;
-        case STATUS1_FREEZE:
-            gBattleScripting.moveEffect = MOVE_EFFECT_FREEZE;
-            break;
-        case STATUS1_PARALYSIS:
-            gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
-            break;
-        case STATUS1_POISON:
-            gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
-            break;
-        case STATUS1_TOXIC_POISON:
-            gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
-            break;
-        case STATUS1_FROSTBITE:
-            gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE;
-            break;
-        case STATUS1_BLEED:
-            gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
-            break;
-        default:
-            gBattleScripting.moveEffect = 0;
-            break;
-        }
-        if (gBattleScripting.moveEffect != 0)
-        {
-            BattleScriptCall(BattleScript_EffectWithChance);
-            return;
-        }
-        break;
     case VARIOUS_TRY_HIT_SWITCH_TARGET:
         ptr = READ_PTR_INC;
         if (IsBattlerAlive(gBattlerAttacker)

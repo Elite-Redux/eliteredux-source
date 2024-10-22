@@ -430,7 +430,6 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectFrostbite               @ EFFECT_FROSTBITE
 	.4byte BattleScript_EffectFreeze                  @ EFFECT_FREEZE
 	.4byte BattleScript_EffectBurnHit                 @ EFFECT_INFERNAL_PARADE
-	.4byte BattleScript_EffectFrostbiteHit            @ EFFECT_BITTER_MALICE
 	.4byte BattleScript_EffectWyrmWind			  	  @ EFFECT_WYRM_WIND
 	.4byte BattleScript_EffectHit			  		  @ EFFECT_MISTY_TERRAIN_BOOST
 	.4byte BattleScript_EffectBerrySmash              @ EFFECT_BERRY_SMASH
@@ -493,8 +492,8 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectMeditate				  @ EFFECT_MEDITATE
 	.4byte BattleScript_EffectBarrier				  @ EFFECT_BARRIER
 	.4byte BattleScript_EffectKinesis				  @ EFFECT_KINESIS
-	.4byte BattleScript_EffectCaltrops				  @ EFFECT_CALTROPS
 	.4byte BattleScript_EffectKnockOff				  @ EFFECT_CORROSIVE_GAS
+	.4byte BattleScript_EffectCaltrops				  @ EFFECT_CALTROPS
 	.4byte BattleScript_EffectSweetKiss				  @ EFFECT_SWEET_KISS
 	.4byte BattleScript_EffectQuickGuard			  @ EFFECT_QUICK_GUARD
 	.4byte BattleScript_EffectTwoTurnRetaliation	  @ EFFECT_TWO_TURN_RETALIATION
@@ -1398,7 +1397,8 @@ BattleScript_EffectRelicSong:
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	seteffectwithchance
-	argumentstatuseffect
+	argumenttomoveeffect
+	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 	
@@ -3997,7 +3997,8 @@ BattleScript_ExplosionLoop:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	argumentstatuseffect
+	argumenttomoveeffect
+	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	moveendto MOVEEND_NEXT_TARGET
 	jumpifnexttargetvalid BattleScript_ExplosionLoop
@@ -4366,7 +4367,8 @@ BattleScript_EffectFlinchWithStatus:
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	seteffectwithchance
-	argumentstatuseffect
+	argumenttomoveeffect
+	seteffectwithchance
 	tryfaintmon BS_TARGET, FALSE, NULL
 	goto BattleScript_MoveEnd
 

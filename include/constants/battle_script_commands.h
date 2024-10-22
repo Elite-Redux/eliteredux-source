@@ -335,9 +335,10 @@
 #define MOVEEND_SUBSTITUTE                        MOVEEND_KINGSROCK + 1
 #define MOVEEND_UPDATE_LAST_MOVES                 MOVEEND_SUBSTITUTE + 1
 #define MOVEEND_MIRROR_MOVE                       MOVEEND_UPDATE_LAST_MOVES + 1
-#define MOVEEND_NEXT_TARGET                       MOVEEND_MIRROR_MOVE + 1    // Everything up until here is handled for each strike of a multi-hit move
-#define MOVEEND_MULTIHIT_MOVE                     MOVEEND_NEXT_TARGET + 1
-#define MOVEEND_MOVE_EFFECTS2                     MOVEEND_MULTIHIT_MOVE + 1
+#define MOVEEND_MULTIHIT_MOVE                     MOVEEND_MIRROR_MOVE + 1
+#define MOVEEND_MOVE_EFFECTS2_ON_EACH             MOVEEND_MULTIHIT_MOVE + 1
+#define MOVEEND_NEXT_TARGET                       MOVEEND_MOVE_EFFECTS2_ON_EACH + 1    // Everything up until here is handled for each strike of a multi-hit move
+#define MOVEEND_MOVE_EFFECTS2                     MOVEEND_NEXT_TARGET + 1
 #define MOVEEND_RECOIL                            MOVEEND_MOVE_EFFECTS2 + 1
 #define MOVEEND_CHARGE                            MOVEEND_RECOIL + 1
 #define MOVEEND_ATTACKER_FOLLOWUP_MOVE            MOVEEND_CHARGE + 1
