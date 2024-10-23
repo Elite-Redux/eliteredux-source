@@ -10240,6 +10240,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 //Unfinished Mons
                 species == SPECIES_INFERNAPE_REDUX            ||
                 species == SPECIES_TERAPAGOS_STELLAR          ||
+                species == SPECIES_SCIZOR_REDUX               ||
                 species == SPECIES_LUXRAY_REDUX               ||
                 species == SPECIES_CRAMORANT_GULPING          ||
                 species == SPECIES_CRAMORANT_GORGING          ||
