@@ -6777,8 +6777,8 @@ bool32 CanSleep(u8 battlerId)
 {
     u16 ability = GetBattlerAbility(battlerId);
 
-    if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
-        return TRUE;
+    if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
+    if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
     if (!CanGetStatus(battlerId)) return FALSE;
 
@@ -6794,8 +6794,8 @@ bool32 CanBePoisoned(u8 battlerAttacker, u8 battlerTarget)
 {
     u16 ability = GetBattlerAbility(battlerTarget);
 
-    if (!(gBattleMons[battlerTarget].status1 & STATUS1_ANY) && IsMyceliumMightActive(battlerAttacker))
-        return TRUE;
+    if (gBattleMons[battlerTarget].status1 & STATUS1_ANY) return FALSE;
+    if (IsMyceliumMightActive(battlerAttacker)) return TRUE;
 
     if (!CanGetStatus(battlerTarget)) return FALSE;
         
@@ -6809,8 +6809,8 @@ bool32 CanBeBurned(u8 battlerId)
 {
     u16 ability = GetBattlerAbility(battlerId);
 
-    if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
-        return TRUE;
+    if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
+    if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
     if (!CanGetStatus(battlerId)) return FALSE;
 
@@ -6868,8 +6868,8 @@ bool32 CanBeFrozen(u8 battlerId)
 
 bool32 CanGetFrostbite(u8 battlerId)
 {
-    if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
-        return TRUE;
+    if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
+    if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
     if (!CanGetStatus(battlerId)) return FALSE;
 
@@ -6881,8 +6881,8 @@ bool32 CanGetFrostbite(u8 battlerId)
 
 bool32 CanBleed(u8 battlerId)
 {
-    if (!(gBattleMons[battlerId].status1 & STATUS1_ANY) && IsMyceliumMightActive(gBattlerAttacker))
-        return TRUE;
+    if (gBattleMons[battlerId].status1 & STATUS1_ANY) return FALSE;
+    if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
     if (!CanGetStatus(battlerId)) return FALSE;
 
@@ -9083,11 +9083,11 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
             basePower = 40;
         break;
     case EFFECT_HEX:
-        if (gBattleMons[battlerDef].status1 & STATUS1_ANY || BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMATOSE) || IsBloodStainAffected(battlerDef))
+        if (HasAnyStatusOrAbility(battlerDef))
             basePower *= 2;
         break;
     case EFFECT_INFERNAL_PARADE:
-        if (gBattleMons[battlerDef].status1 & STATUS1_ANY || BATTLER_HAS_ABILITY(battlerDef, ABILITY_COMATOSE) || IsBloodStainAffected(battlerDef))
+        if (HasAnyStatusOrAbility(battlerDef))
             basePower *= 1.5;
         break;
     case EFFECT_CAPTIVATE:
@@ -9507,7 +9507,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_EXPLOIT_WEAKNESS:
-            if (gBattleMons[battlerDef].status1 & STATUS1_ANY) MUL(1.25);
+            if (HasAnyStatusOrAbility(battlerDef)) MUL(1.25);
             return;
         
         case ABILITY_AVENGER:
@@ -9723,11 +9723,11 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_GUTS:
-            if (gBattleMons[battlerAtk].status1 & STATUS1_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
+            if (HasAnyStatusOrAbility(battlerAtk) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
             return;
         
         case ABILITY_RAGE_POINT:
-            if (gBattleMons[battlerAtk].status1 & STATUS1_ANY) MUL(1.5);
+            if (HasAnyStatusOrAbility(battlerAtk)) MUL(1.5);
             return;
         
         case ABILITY_BLOOD_STIGMA:
@@ -9735,7 +9735,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_DETERMINATION:
-            if (gBattleMons[battlerAtk].status1 & STATUS1_ANY && IS_MOVE_SPECIAL(move)) MUL(1.5);
+            if (HasAnyStatusOrAbility(battlerAtk) && IS_MOVE_SPECIAL(move)) MUL(1.5);
             return;
         
         case ABILITY_LETHARGY:
@@ -10376,7 +10376,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                     
             // Marvel Scale
             if (BATTLER_HAS_ABILITY(battler, ABILITY_MARVEL_SCALE)
-                && gBattleMons[battler].status1 & STATUS1_ANY)
+                && HasAnyStatusOrAbility(battler))
                     statBase = statBase * 3 / 2;
                     
             // Grass Pelt
@@ -14152,6 +14152,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             if (move == MOVE_STRUGGLE) break;
             if (!IsMoveMakingContact(move, attacker)) break;
             if (!gBattleMons[attacker].pp[gChosenMovePos]) break;
+            if (IsBattlerAlive(battler)) break;
 
             gBattleMons[attacker].pp[gChosenMovePos] = 0;
             PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove)
@@ -14511,6 +14512,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
             gBattleMons[opponent].ability = ability;
             gStackBattler1 = opponent;
             BattleScriptCall(BattleScript_BloodStainActivates);
+            DisableSwitchInAbility(opponent, ABILITY_BLOOD_STAIN);
             return TRUE;
         
         case ABILITY_SOUL_LINKER:
@@ -14934,7 +14936,15 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         
         ANNOUNCE_SIMPLE_ABILITY(ABILITY_AURA_BREAK, B_MSG_SWITCHIN_AURABREAK)
 
-        ANNOUNCE_SIMPLE_ABILITY(ABILITY_COMATOSE, B_MSG_SWITCHIN_COMATOSE)
+        case ABILITY_BLOOD_STAIN:
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_BLOOD_STAIN;
+            BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
+            return TRUE;
+
+        case ABILITY_COMATOSE:
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COMATOSE;
+            BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
+            return TRUE;
         
         case ABILITY_AS_ONE_SHADOW_RIDER:
         ANNOUNCE_SIMPLE_ABILITY(ABILITY_AS_ONE_ICE_RIDER, B_MSG_SWITCHIN_ASONE)
@@ -16311,4 +16321,12 @@ int IsDance(int attacker, int move)
 {
     if (gBattleMoves[move].flags & FLAG_DANCE) return TRUE;
     return BATTLER_HAS_ABILITY(attacker, ABILITY_TAEKKYEON);
+}
+
+int HasAnyStatusOrAbility(int battler)
+{
+    if (gBattleMons[battler].status1 && STATUS1_ANY) return TRUE;
+    if (BattlerHasAbility(battler, battler, ABILITY_COMATOSE)) return TRUE;
+    if (IsBloodStainAffected(battler)) return TRUE;
+    return FALSE;
 }

@@ -188,7 +188,7 @@
 #define ABILITY_SWEET_VEIL 175 // This Pokémon and its ally are immune to sleep.
 #define ABILITY_STANCE_CHANGE 176 // Turns into Blade or Shield form depending on move used.
 #define ABILITY_GALE_WINGS 177 // At full HP, gives +1 priority to this Pokémon's Flying-type moves.
-#define ABILITY_MEGA_LAUNCHER 178 // Boosts Beam/Pump/Cannon/Shot/ Gun/Pulse, etc. moves by 1.5x.
+#define ABILITY_MEGA_LAUNCHER 178 // Boosts Beam/Pump/Cannon/Shot/ Gun/Pulse, etc. moves by 1.3x.
 #define ABILITY_GRASS_PELT 179 // This Pokémon's Defense gets a 1.5x boost in Grassy Terrain.
 #define ABILITY_SYMBIOSIS 180 // Passes own item to its ally if said ally consumes its item.
 #define ABILITY_TOUGH_CLAWS 181 // Boosts the power of contact moves by 1.3x.

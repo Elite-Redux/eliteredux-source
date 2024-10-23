@@ -405,6 +405,7 @@ extern const u8 BattleScript_AftermathDmg[];
 extern const u8 BattleScript_GuiltTrip[];
 extern const u8 BattleScript_AttackerFormChange[];
 extern const u8 BattleScript_AttackerFormChangeEnd3[];
+extern const u8 BattleScript_AnnounceStatusAbility[];
 extern const u8 BattleScript_TargetFormChange[];
 extern const u8 BattleScript_AnticipationActivates[];
 extern const u8 BattleScript_SlowStartEnds[];

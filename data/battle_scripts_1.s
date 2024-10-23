@@ -10897,6 +10897,7 @@ BattleScript_BloodStainActivates::
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_BATTLERACQUIREDABILITY
 	waitmessage B_WAIT_TIME_LONG
+	updatestatusicon BS_STACK_1
 	return
 
 BattleScript_MummyActivates::
@@ -11120,6 +11121,13 @@ BattleScript_CommanderEnds::
 	makevisible BS_STACK_1
 	waitmessage B_WAIT_TIME_SHORT
 	return
+
+BattleScript_AnnounceStatusAbility::
+	call BattleScript_AbilityPopUp
+	printfromtable gSwitchInAbilityStringIds
+	waitmessage B_WAIT_TIME_LONG
+	updatestatusicon BS_ATTACKER
+	end3
 
 BattleScript_SwitchInAbilityMsg::
 	call BattleScript_AbilityPopUp
