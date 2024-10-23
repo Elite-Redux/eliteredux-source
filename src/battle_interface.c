@@ -34,6 +34,7 @@
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "battle_events.h"
+#include "constants/abilities.h"
 
 enum
 {   // Corresponds to gHealthboxElementsGfxTable (and the tables after it) in graphics.c
@@ -2463,6 +2464,11 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
         status = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerId]], MON_DATA_STATUS);
         tileNumAdder = 0x11;
     }
+
+    if (BattlerHasAbility(battlerId, battlerId, ABILITY_COMATOSE))
+        status = STATUS1_SLEEP;
+    else if (BattlerHasAbility(battlerId, battlerId, ABILITY_BLOOD_STAIN) && IsBloodStainAffected(battlerId))
+        status = STATUS1_BLEED;
 
     if (status & STATUS1_SLEEP)
     {
