@@ -1142,13 +1142,13 @@ static void TilesetAnim_MauvilleGym(u16 timer)
         QueueAnimTiles_MauvilleGym_ElectricGates(0);
         break;
     
-    case 100:
-    case 104:
-    case 108:
+    case 25:
+    case 29:
+    case 33:
         QueueAnimTiles_MauvilleGym_ElectricGates(1);
         break;
-    case 102:
-    case 106:
+    case 27:
+    case 31:
         QueueAnimTiles_MauvilleGym_ElectricGates(0);
         break;
     }
