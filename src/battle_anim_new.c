@@ -7749,8 +7749,8 @@ static void AnimMindBlownBallStep(struct Sprite *sprite)
         sprite->data[2] = GetProperCentredCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET);
         sprite->data[4] = sprite->x << 4;
         sprite->data[5] = sprite->y << 4;
-        sprite->data[6] = ((sprite->data[1] - sprite->x) << 4) / sprite->data[3];
-        sprite->data[7] = ((sprite->data[2] - sprite->y) << 4) / sprite->data[3];
+        sprite->data[6] = SAFE_DIV((sprite->data[1] - sprite->x) << 4, sprite->data[3]);
+        sprite->data[7] = SAFE_DIV((sprite->data[2] - sprite->y) << 4, sprite->data[3]);
         sprite->data[0] += 1;
         break;
     case 2:
@@ -7807,8 +7807,8 @@ static void SpriteCB_MindBlownExplosion(struct Sprite* sprite)
         sprite->data[1] = x * 16;
         y = sprite->y;
         sprite->data[2] = y * 16;
-        sprite->data[3] = (sprite->data[5] - sprite->x) * 16 / gBattleAnimArgs[4];
-        sprite->data[4] = (sprite->data[6] - sprite->y) * 16 / gBattleAnimArgs[4];
+        sprite->data[3] = SAFE_DIV((sprite->data[5] - sprite->x) * 16, gBattleAnimArgs[4]);
+        sprite->data[4] = SAFE_DIV((sprite->data[6] - sprite->y) * 16, gBattleAnimArgs[4]);
 
         sprite->callback = AnimNeedleArmSpike_Step;
     }

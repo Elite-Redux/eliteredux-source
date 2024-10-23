@@ -1899,10 +1899,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             if (gVolatileStructs[battlerAtk].stockpileCounter >= 3)
                 score -= 10;
             break;
-        case EFFECT_SPIT_UP:
-            if (gVolatileStructs[battlerAtk].stockpileCounter <= 1)
-                score -= 10;
-            break;
         case EFFECT_SWALLOW:
             if (gVolatileStructs[battlerAtk].stockpileCounter == 0)
             {
@@ -2534,7 +2530,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             break;
         case EFFECT_NATURAL_GIFT:
             if (AI_DATA->abilities[battlerAtk] == ABILITY_KLUTZ
-              || gFieldStatuses & STATUS_FIELD_MAGIC_ROOM
               || GetPocketByItemId(gBattleMons[battlerAtk].item) != POCKET_BERRIES)
                 score -= 10;
             break;
@@ -2623,7 +2618,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             break;
         case EFFECT_EMBARGO:
             if (AI_DATA->abilities[battlerDef] == ABILITY_KLUTZ
-              || isMagicRoomActive()
               || gVolatileStructs[battlerDef].embargoTimer != 0
               || PartnerMoveIsSameAsAttacker(BATTLE_PARTNER(battlerAtk), battlerDef, move, AI_DATA->partnerMove))
                 score -= 10;
@@ -4334,10 +4328,6 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             
         IncreaseStatUpScore(battlerAtk, battlerDef, STAT_DEF, &score);
         IncreaseStatUpScore(battlerAtk, battlerDef, STAT_SPDEF, &score);
-        break;
-    case EFFECT_SPIT_UP:
-        if (gVolatileStructs[battlerAtk].stockpileCounter >= 2)
-            score++;
         break;
     case EFFECT_ROLLOUT:
         if (gBattleMons[battlerAtk].status2 & STATUS2_DEFENSE_CURL)

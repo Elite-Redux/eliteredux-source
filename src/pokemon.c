@@ -10213,9 +10213,32 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 species == SPECIES_ETERNATUS_ETERNAMAX        || //Legendary
                 species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Legendary
                 species == SPECIES_ZARUDE_DADA                || //Legendary
+                //Monochamp Mons
+                species == SPECIES_DRACOVISH_MEGA             ||
+                species == SPECIES_WIGGLYTUFF_APEX            ||
+                species == SPECIES_WIGGLYTUFF_PRIMAL          ||
+                species == SPECIES_CHIEN_PAO_MEGA             ||
+                species == SPECIES_SOLROCK_SYSTEM             ||
+                species == SPECIES_RIBOMBEE_REDUX             ||
+                species == SPECIES_RIBOMBEE_REDUX_MEGA        ||
+                species == SPECIES_SNORLAX_PRIMAL             ||
+                species == SPECIES_LEDIAN_PARADOX             ||
+                species == SPECIES_KARTANA_FALLEN             ||
+                species == SPECIES_YVELTAL_MEGA               ||
+                species == SPECIES_DARKRAI_NIGHTMARE          ||
+                species == SPECIES_CALYREX_CLOUD_RIDER        ||
+                species == SPECIES_SPECTRIER_CLOUD            ||
+                species == SPECIES_FLYGON_REDUX_B             ||
+                species == SPECIES_FLYGON_REDUX_B_MEGA        ||
+                species == SPECIES_MAWILE_REDUX_B             ||
+                species == SPECIES_MAWILE_REDUX_B_MEGA        ||
+                species == SPECIES_ABOMASNOW_SANTA            ||
+                species == SPECIES_BEWEAR_ANGRY               ||
+                species == SPECIES_MIMIKYU_RAYQUAZA           ||
+                species == SPECIES_MIMIKYU_RAYQUAZA_BUSTED    ||
+                species == SPECIES_VICTINI_PRIMAL             ||
                 //Unfinished Mons
                 species == SPECIES_INFERNAPE_REDUX            ||
-                species == SPECIES_TERAPAGOS                  ||
                 species == SPECIES_TERAPAGOS_STELLAR          ||
                 species == SPECIES_LUXRAY_REDUX               ||
                 species == SPECIES_CRAMORANT_GULPING          ||

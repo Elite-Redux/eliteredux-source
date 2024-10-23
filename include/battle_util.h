@@ -87,6 +87,8 @@ enum MiscMoveEffects
     MISC_EFFECT_DOUBLE_DAMAGE,
     MISC_EFFECT_DOUBLE_DAMAGE_VS_BLEEDING,
     MISC_EFFECT_50_PERCENT_PLUS_DAMAGE_VS_BLEEDING,
+    MISC_EFFECT_TRANSMUTE,
+    MISC_EFFECT_DOUBLE_DAMAGE_IN_FOG,
 };
 
 // for Natural Gift and Fling
@@ -212,6 +214,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
 int HandleMiscAbilityMoveEffects(int battler, int opponent, int move);
 int HandleSwitchInAbility(int abilityNumber, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler);
+int ShouldApplyOnHitAffect(int applyTo);
 
 #define GET_ALL_BATTLER_ABILITIES(abilitiesArray, battler, battlerAtk) \
 GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk) \
@@ -299,6 +302,7 @@ u8 GetBattleMoveTargetFlags(u16 moveId, u16 ability);
 u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler);
 bool32 ShouldChangeFormHpBased(u32 battler);
 u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc);
+int CountBattlerStatDecreases(int battler);
 bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler);
 s32 GetCurrentTerrain(void);
 u8 BattlerHasInnateOrAbility(u8 battler, u16 ability);

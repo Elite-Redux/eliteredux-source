@@ -3414,16 +3414,6 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_ALLEN)       && 
                     HasTrainerBeenFought(TRAINER_TIANA))
                     CanFindHiddenMon = TRUE;
-
-                /*
-                #ifdef DEBUG_BUILD
-                    if(FlagGet(FLAG_SYS_MGBA_PRINT)){
-                        MgbaOpen();
-                        MgbaPrintf(MGBA_LOG_WARN, "Route 102 - Map Num: %d - Map Group: %d", gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
-                        MgbaClose();
-                    }
-                #endif
-                */
             }
             else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE111)){ // Route 111 (Desert)
                 if( HasTrainerBeenFought(TRAINER_DREW)      &&

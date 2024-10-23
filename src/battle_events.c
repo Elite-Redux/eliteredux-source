@@ -359,9 +359,6 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
 // ran once the turn has reached its end before the player can get its hand on control again
 // which is the start, the end of the end is in fact the start, how philosophic. 
 u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
-    /*MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "");
-    MgbaClose();*/
     //"fainted player: %d, fainted trainer %d", gFaintedMonCount[0], gFaintedMonCount[1]
     //gQueuedExtraAttackData if I want to add attack to the queue?
     //gQuashedBattlers++; how do I use that even?

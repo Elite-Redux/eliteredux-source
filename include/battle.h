@@ -198,7 +198,7 @@ struct RoundStruct
     u8 disableEjectPack:1;
     u8 statFell:1;
     u8 quickDraw:1;
-    u8 beakBlastCharge:1;
+    u8 iceBurnCharge:1;
     u8 extraMoveUsed:1;
     u8 angelsWrathProtected:1;
     u8 glaiveRush:1;
@@ -212,6 +212,7 @@ struct RoundStruct
     u8 merculight:1;
     u8 detected:1;
     u8 safePassage:1;
+    u8 freezeShockCharge:1;
 };
 
 struct TurnStruct
@@ -272,6 +273,7 @@ struct SideBeganThisTurn
     u8 fireSea:1;
     u8 rainbow:1;
     u8 smokescreen:1;
+    u8 quickGuard:1;
 };
 
 struct SideTimer
@@ -306,6 +308,8 @@ struct SideTimer
     u8 smokescreenTimer:3;
     u8 smokescreenBattler:2;
     u8 hotCoals:1;
+    u8 caltrops:1;
+    u8 quickGuardTimer:3;
 };
 
 struct FieldBeganThisTurn

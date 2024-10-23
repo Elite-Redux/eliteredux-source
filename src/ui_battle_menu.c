@@ -118,6 +118,8 @@ enum
     SIDE_INFO_SWAMP,
     SIDE_INFO_SMOKESCREEN,
     SIDE_INFO_HOT_COALS,
+    SIDE_INFO_CALTROPS,
+    SIDE_INFO_QUICK_GUARD,
     NUM_SIDE_INFO,
 };
 
@@ -642,6 +644,14 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 if (gSideTimers[B_SIDE_PLAYER].hotCoals)
                     isExtraInfoShown = TRUE;
             break;
+            case SIDE_INFO_CALTROPS:
+                if (gSideTimers[B_SIDE_PLAYER].caltrops)
+                    isExtraInfoShown = TRUE;
+            break;
+            case SIDE_INFO_QUICK_GUARD:
+                if (gSideTimers[B_SIDE_PLAYER].quickGuardTimer)
+                    isExtraInfoShown = TRUE;
+            break;
         }
 
         if (isExtraInfoShown) {
@@ -716,6 +726,14 @@ void UI_Battle_Menu_Init(MainCallback callback)
             break;
             case SIDE_INFO_HOT_COALS:
                 if (gSideTimers[B_SIDE_OPPONENT].hotCoals)
+                    isExtraInfoShown = TRUE;
+            break;
+            case SIDE_INFO_CALTROPS:
+                if (gSideTimers[B_SIDE_OPPONENT].caltrops)
+                    isExtraInfoShown = TRUE;
+            break;
+            case SIDE_INFO_QUICK_GUARD:
+                if (gSideTimers[B_SIDE_OPPONENT].quickGuardTimer)
                     isExtraInfoShown = TRUE;
             break;
         }
@@ -2106,8 +2124,8 @@ const u8 sText_Title_Status_Bad_Poison_Description[]       = _("Takes 1/16 of it
                                                                "1/16 each time it takes poison damage.");
 const u8 sText_Title_Status_Bleed[]                        = _("Bleeding");
 const u8 sText_Title_Status_Bleed_Description[]            = _("Prevents healing, ignores stat buffs,\n"
-                                                               "and will take 6% of its HP as damage.\n"
-                                                               "Cured by healing moves.");
+                                                               "and will take 1/16 of its max HP as \n"
+                                                               "damage. Cured by healing moves.");
 
 //Secondary Status
 const u8 sText_Title_Status_Confusion[]                    = _("Confused");
@@ -3542,12 +3560,12 @@ const u8 sText_Title_Field_Room_Description_Trick[]          = _("The move order
                                                                  "Pokémon will attack before faster\n"
                                                                  "Pokémon.");
 const u8 sText_Title_Field_Wonder_Room[]                     = _("Wonder Room:");
-const u8 sText_Title_Field_Room_Description_Wonder[]          = _("Swaps the Defense and Sp.Defense\n"
-                                                                  "of all Pokémon, but stat changes\n"
-                                                                  "remain on their respective stat.");
+const u8 sText_Title_Field_Room_Description_Wonder[]         = _("Swaps the Attack and Sp.Attack\n"
+                                                                 "of all Pokémon, and suppresses\n"
+                                                                 "stat buffs to those stats.");
 const u8 sText_Title_Field_Magic_Room[]                      = _("Magic Room:");
-const u8 sText_Title_Field_Room_Description_Magic[]          = _("Suppresses the effect of all items\n"
-                                                                 "held by the Pokémon on the field.");
+const u8 sText_Title_Field_Room_Description_Magic[]          = _("Prevents all passive damage and\n"
+                                                                 "disables all mega stones.");
 const u8 sText_Title_Field_Gravity[]                         = _("Gravity");
 const u8 sText_Title_Field_Gravity_Description   []         = _("The accuracy of all moves is\n"
                                                                 "multiplied by 1.67, all Pokémon on\n"
@@ -3992,12 +4010,18 @@ const u8 sText_Title_Side_Swamp_Description[]               = _("A deep swamp re
                                                                 "stat of Pokémon on this side\n"
                                                                 "by 75%.");
 const u8 sText_Title_Side_Smokescreen[ ]                    = _("Smokescreen");
-const u8 sText_Title_Side_Smokescreen_Description[]         = _("Reduces the chance to hit the\n"
-                                                                "user by 25%. Can be lifted by\n"
-                                                                "moves like Defog.");
+const u8 sText_Title_Side_Smokescreen_Description[]         = _("Reduces the chance to be hit\n"
+                                                                "by 25%. Can be lifted by moves\n"
+                                                                "like Defog.");
 const u8 sText_Title_Side_HotCoals[ ]                       = _("Hot Coals");
 const u8 sText_Title_Side_HotCoals_Description[]            = _("Burns the next Pokémon that\n"
                                                                 "switches in and is then removed.");
+const u8 sText_Title_Side_Caltrops[ ]                       = _("Caltrops");
+const u8 sText_Title_Side_Caltrops_Description[]            = _("Bleeds the next Pokémon that\n"
+                                                                "switches in and is then removed.");
+const u8 sText_Title_Side_QuickGuard[ ]                     = _("Quick Guard");
+const u8 sText_Title_Side_QuickGuard_Description[]          = _("Protects all Pokémon on this\n"
+                                                                "side from priority moves.");
 const u8 sText_Title_Side_No_Effect[]                       = _("No Effect");
 const u8 sText_Title_Side_No_Effect_Description[]           = _("This side has no special effect.");
 
@@ -4306,6 +4330,33 @@ static void PrintSideTab(u8 side) {
 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Side_HotCoals_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+
+                printedInfo = TRUE;
+            break;
+            case SIDE_INFO_CALTROPS:
+                StringCopy(gStringVar1, sText_Title_Side_Caltrops);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Description
+                StringCopy(gStringVar1, sText_Title_Side_Caltrops_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+
+                printedInfo = TRUE;
+            break;
+            case SIDE_INFO_QUICK_GUARD:
+                StringCopy(gStringVar1, sText_Title_Side_Smokescreen);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Turns Left
+                StringCopy(gStringVar1, sText_Title_Field_Turns_Left);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                turnsLeft = gSideTimers[GetBattlerSide(side)].quickGuardTimer;
+                ConvertIntToDecimalStringN(gStringVar1, turnsLeft, STR_CONV_MODE_LEFT_ALIGN, 4);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                StringCopy(gStringVar1, sText_Title_Side_Smokescreen_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
 
                 printedInfo = TRUE;
