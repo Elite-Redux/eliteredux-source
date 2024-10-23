@@ -1,0 +1,1 @@
+const struct RecommendedLearnset gRecommendedSets[NUM_SPECIES][3] = { 0 };

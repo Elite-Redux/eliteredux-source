@@ -88,6 +88,7 @@ enum MiscMoveEffects
     MISC_EFFECT_DOUBLE_DAMAGE_VS_BLEEDING,
     MISC_EFFECT_50_PERCENT_PLUS_DAMAGE_VS_BLEEDING,
     MISC_EFFECT_TRANSMUTE,
+    MISC_EFFECT_DOUBLE_DAMAGE_IN_FOG,
 };
 
 // for Natural Gift and Fling
@@ -213,6 +214,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
 int HandleMiscAbilityMoveEffects(int battler, int opponent, int move);
 int HandleSwitchInAbility(int abilityNumber, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler);
+int ShouldApplyOnHitAffect(int applyTo);
 
 #define GET_ALL_BATTLER_ABILITIES(abilitiesArray, battler, battlerAtk) \
 GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk) \

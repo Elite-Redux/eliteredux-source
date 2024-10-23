@@ -55,6 +55,8 @@
 #include "constants/battle_move_effects.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "recommended_set_struct.h"
+#include "data/pokemon/recommended_sets.h"
 
 // Config options - Note that some config options need external modifications to fully work, such as CONFIG_CAN_FORGET_HM_MOVES, CONFIG_PHYSICAL_SPECIAL_SPLIT, and CONFIG_DECAPITALIZE_MET_LOCATION_STRINGS
 #define CONFIG_CAN_FORGET_HM_MOVES                      TRUE
@@ -2912,7 +2914,7 @@ static void GenerateMoveReplaceList(u8 keyPress){
                             && gBattleMoves[newMove].effect != EFFECT_LEVEL_DAMAGE
                             && newMove != MOVE_SEISMIC_TOSS)
                         {
-                            isStab = IsStab(abilities, gBattleMoves[newMove].type);
+                            isStab = IsStab(abilities, GetMonMoveType(newMove, &sMonSummaryScreen->currentMon, FALSE));
                             if (!isStab && gBattleMoves[newMove].type2) isStab = IsStab(abilities, gBattleMoves[newMove].type2);
                         }
                     }

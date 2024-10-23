@@ -3022,14 +3022,6 @@ void RemoveItem(u8 battler)
     gBattleStruct->choicedMove[battler] = 0;
 }
 
-#define INCREMENT_RESET_RETURN                  \
-{                                               \
-    gBattlescriptCurrInstr++;                   \
-    gBattleScripting.moveEffect = 0; \
-    gBattleScripting.moveSecondaryEffectChance = 0; \
-    return;                                     \
-}
-
 #define RESET_RETURN                            \
 {                                               \
     gBattleScripting.moveEffect = 0; \
@@ -3134,23 +3126,35 @@ void SetMoveEffect(bool32 primary, u32 certain)
         && !primary
         && !affectsUser
         && IsPreventableSecondaryEffect(gBattleScripting.moveEffect))
-        INCREMENT_RESET_RETURN
+        RESET_RETURN
 
     if (gSideStatuses[GET_BATTLER_SIDE(gEffectBattler)] & SIDE_STATUS_SAFEGUARD && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
         && !primary && gBattleScripting.moveEffect <= MOVE_EFFECT_CONFUSION)
-        INCREMENT_RESET_RETURN
+        RESET_RETURN
 
     if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
-        INCREMENT_RESET_RETURN
+        RESET_RETURN
 
-    if (gBattleMons[gEffectBattler].hp == 0
-        && gBattleScripting.moveEffect != MOVE_EFFECT_PAYDAY
-        && gBattleScripting.moveEffect != MOVE_EFFECT_STEAL_ITEM
-        && !(gBattleScripting.moveEffect >= MOVE_EFFECT_WATER_PLEDGE && gBattleScripting.moveEffect <= MOVE_EFFECT_SWAMP))
-        INCREMENT_RESET_RETURN
+    if (gBattleMons[gEffectBattler].hp == 0)
+    {
+        switch (gBattleScripting.moveEffect)
+        {
+            case MOVE_EFFECT_PAYDAY:
+            case MOVE_EFFECT_WATER_PLEDGE:
+            case MOVE_EFFECT_FIRE_PLEDGE:
+            case MOVE_EFFECT_GRASS_PLEDGE:
+            case MOVE_EFFECT_SWAMP:
+            case MOVE_EFFECT_RAINBOW:
+            case MOVE_EFFECT_FIRE_SEA:
+                break;
+            
+            default:
+                RESET_RETURN;
+        }
+    }
 
     if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER)
-        INCREMENT_RESET_RETURN
+        RESET_RETURN
 
     if (gBattleScripting.moveEffect <= PRIMARY_STATUS_MOVE_EFFECT) // status change
     {
@@ -5464,45 +5468,37 @@ static void Cmd_playstatchangeanimation(void)
 
 static bool32 TryKnockOffBattleScript(u32 battlerDef)
 {
-    if (gBattleMons[battlerDef].item != 0
-        && CanBattlerGetOrLoseItem(battlerDef, gBattleMons[battlerDef].item)
-        && !(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)
-        && !(gVolatileStructs[battlerDef].substituteDestroyedThisTurn)
-        && !NoAliveMonsForEitherParty())
+    int side;
+    if (!gBattleMons[battlerDef].item) return FALSE;
+    if (!CanBattlerGetOrLoseItem(battlerDef, gBattleMons[battlerDef].item)) return FALSE;
+    if (!ShouldApplyOnHitAffect(battlerDef)) return FALSE;
+    if (NoAliveMonsForEitherParty()) return FALSE;
+
+    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_STICKY_HOLD))
     {
-        if ((GetBattlerAbility(battlerDef) == ABILITY_STICKY_HOLD || BattlerHasInnate(battlerDef, ABILITY_STICKY_HOLD)) && IsBattlerAlive(battlerDef))
-        {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_STICKY_HOLD;
-			gLastUsedAbility = ABILITY_STICKY_HOLD;
-            gBattlerAbility = battlerDef;
-            BattleScriptCall(BattleScript_StickyHoldActivates);
-        }
-        else
-        {
-            u32 side = GetBattlerSide(battlerDef);
-            gActiveBattler = battlerDef;
-
-            // Wild Pokemon cannot remove player items.
-            if ((gBattleTypeFlags & BATTLE_TYPE_TRAINER || side == B_SIDE_OPPONENT)
-                && gBattleMons[gBattlerAttacker].hp != 0
-                && !(gBattleMons[gActiveBattler].status2 & STATUS2_SUBSTITUTE))
-            {
-                gLastUsedItem = gBattleMons[battlerDef].item;
-                gBattleMons[battlerDef].item = ITEM_NONE;
-                gBattleStruct->choicedMove[battlerDef] = 0;
-                gWishFutureKnock.knockedOffMons[side] |= gBitTable[gBattlerPartyIndexes[battlerDef]];
-                CheckSetUnburden(battlerDef);
-
-                if (gBattleMoves[gCurrentMove].effect == EFFECT_CORROSIVE_GAS)
-                    BattleScriptCall(BattleScript_CorrosiveGas);
-                else
-                    BattleScriptCall(BattleScript_KnockedOff);
-
-            }
-        }
+        gBattleScripting.abilityPopupOverwrite = ABILITY_STICKY_HOLD;
+        gBattlerAbility = battlerDef;
+        BattleScriptCall(BattleScript_StickyHoldActivates);
         return TRUE;
     }
-    return FALSE;
+
+    side = GetBattlerSide(battlerDef);
+    gActiveBattler = battlerDef;
+
+    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER)) return FALSE;
+    
+    gLastUsedItem = gBattleMons[battlerDef].item;
+    gBattleMons[battlerDef].item = ITEM_NONE;
+    gBattleStruct->choicedMove[battlerDef] = 0;
+    gWishFutureKnock.knockedOffMons[side] |= gBitTable[gBattlerPartyIndexes[battlerDef]];
+    CheckSetUnburden(battlerDef);
+
+    if (gBattleMoves[gCurrentMove].effect == EFFECT_CORROSIVE_GAS)
+        BattleScriptCall(BattleScript_CorrosiveGas);
+    else
+        BattleScriptCall(BattleScript_KnockedOff);
+
+    return TRUE;
 }
 
 static int CanPickpocket(int target, int attackerStealing)
@@ -5858,7 +5854,7 @@ static void Cmd_moveend(void)
             {
             int effect = gBattleStruct->moveEffect2;
             gBattleStruct->moveEffect2 = 0;
-            switch (gBattleStruct->moveEffect2)
+            switch (effect)
             {
             case MOVE_EFFECT_STEAL_ITEM:
                 if (!gBattleMons[gBattlerAttacker].item)
@@ -12311,14 +12307,6 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
 
     if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CONTRARY))
     {
-        #ifdef DEBUG_BUILD
-        if (FlagGet(FLAG_SYS_MGBA_PRINT)) {
-            MgbaOpen();
-            MgbaPrintf(MGBA_LOG_WARN, "Contrary Detected %d", gActiveBattler);
-            MgbaClose();
-        }
-        #endif
-
         statValue ^= STAT_BUFF_NEGATIVE;
         gBattleScripting.statChanger ^= STAT_BUFF_NEGATIVE;
         if (flags & STAT_BUFF_UPDATE_MOVE_EFFECT)
@@ -17099,43 +17087,6 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
 //#define CHECK_FOR_BAD_EGGS //Uncomment if you want to check for bad eggs after each step or after each fight (causes slowdown)
 
 void CheckForBadEggs(void) {
-    #ifdef CHECK_FOR_BAD_EGGS
-    u8 i, j;
-    //Check Party
-    for (i = 0; i < PARTY_SIZE; i++)
-    {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SANITY_IS_BAD_EGG) == TRUE) {
-            if (FlagGet(FLAG_SYS_MGBA_PRINT)) {
-                MgbaOpen();
-                MgbaPrintf(MGBA_LOG_WARN, "WARNING: Bad Egg in Party Detected %d", i);
-                MgbaClose();
-            }
-        }
-    }
-    //Check Box 1
-    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
-    {
-        for (j = 0; j < IN_BOX_COUNT; j++) {
-            if (CheckBoxMonForBadChecksum(i, j))
-            {
-                if (FlagGet(FLAG_SYS_MGBA_PRINT)) {
-                    MgbaOpen();
-                    MgbaPrintf(MGBA_LOG_WARN, "WARNING: Bad Egg Generated in Box %d slot %d", i, j);
-                    MgbaClose();
-                }
-            }
-
-            if (GetBoxMonDataAt(i, j, MON_DATA_SANITY_IS_BAD_EGG) == TRUE) { //Only Checks Box 1
-                if (FlagGet(FLAG_SYS_MGBA_PRINT)) {
-                    MgbaOpen();
-                    MgbaPrintf(MGBA_LOG_WARN, "WARNING: Bad Egg in Box %d Detected %d", i, j);
-                    MgbaClose();
-                }
-            }
-
-        }
-    }
-    #endif
 }
 
 void SetBattlerAffectedFlag(int attacker, int target, int ability)

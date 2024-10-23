@@ -1864,10 +1864,6 @@ static void HandleInputChooseActionPlayer(void)
     u8 shortcutButton = gSaveBlock2Ptr->shortcutButton;
     u8 value = 0;
 
-    /*MgbaOpen();
-    MgbaPrintf(MGBA_LOG_WARN, "HandleInputChooseActionPlayer VAR_TEMP_SPECIAL_VAR: %d gActiveBattler: %d", VarGet(VAR_TEMP_SPECIAL_VAR), gActiveBattler);
-    MgbaClose();*/
-
     DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
     DoBounceEffect(gActiveBattler, BOUNCE_MON,       7, 1);
 

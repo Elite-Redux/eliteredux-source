@@ -233,11 +233,6 @@ void HueShiftMonPalette(u16* colors, u32 personality, bool8 isAlpha) {
             //    shouldBlendColor = FALSE;
 
             if(shouldBlendColor){
-                /*#ifdef DEBUG_BUILD
-                MgbaOpen();
-                MgbaPrintf(MGBA_LOG_WARN, "HueShiftMonPalette Color %d - R: %d, G: %d, B: %d, IsAlpha: %d", i, r, g, b, isAlpha);
-                MgbaClose();
-                #endif*/
 
                 if(isAlpha){
                     r = (r + (((PokemonRGB[0] - r) * POKEMON_BLEND_INTENSITY_ALPHA) >> 4));
