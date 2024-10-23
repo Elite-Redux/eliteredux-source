@@ -2912,7 +2912,7 @@ static void GenerateMoveReplaceList(u8 keyPress){
                             && gBattleMoves[newMove].effect != EFFECT_LEVEL_DAMAGE
                             && newMove != MOVE_SEISMIC_TOSS)
                         {
-                            isStab = IsStab(abilities, gBattleMoves[newMove].type);
+                            isStab = IsStab(abilities, GetMonMoveType(newMove, &sMonSummaryScreen->currentMon, FALSE));
                             if (!isStab && gBattleMoves[newMove].type2) isStab = IsStab(abilities, gBattleMoves[newMove].type2);
                         }
                     }
