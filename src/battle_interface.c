@@ -2465,10 +2465,13 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
         tileNumAdder = 0x11;
     }
 
-    if (BattlerHasAbility(battlerId, battlerId, ABILITY_COMATOSE))
-        status = STATUS1_SLEEP;
-    else if (BattlerHasAbility(battlerId, battlerId, ABILITY_BLOOD_STAIN) && IsBloodStainAffected(battlerId))
-        status = STATUS1_BLEED;
+    if (!(status & STATUS1_ANY))
+    {
+        if (BattlerHasAbility(battlerId, battlerId, ABILITY_COMATOSE))
+            status = STATUS1_SLEEP;
+        else if (BattlerHasAbility(battlerId, battlerId, ABILITY_BLOOD_STAIN) && IsBloodStainAffected(battlerId))
+            status = STATUS1_BLEED;
+    }
 
     if (status & STATUS1_SLEEP)
     {
