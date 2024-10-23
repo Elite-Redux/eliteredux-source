@@ -3022,14 +3022,6 @@ void RemoveItem(u8 battler)
     gBattleStruct->choicedMove[battler] = 0;
 }
 
-#define INCREMENT_RESET_RETURN                  \
-{                                               \
-    gBattlescriptCurrInstr++;                   \
-    gBattleScripting.moveEffect = 0; \
-    gBattleScripting.moveSecondaryEffectChance = 0; \
-    return;                                     \
-}
-
 #define RESET_RETURN                            \
 {                                               \
     gBattleScripting.moveEffect = 0; \
@@ -3134,23 +3126,35 @@ void SetMoveEffect(bool32 primary, u32 certain)
         && !primary
         && !affectsUser
         && IsPreventableSecondaryEffect(gBattleScripting.moveEffect))
-        INCREMENT_RESET_RETURN
+        RESET_RETURN
 
     if (gSideStatuses[GET_BATTLER_SIDE(gEffectBattler)] & SIDE_STATUS_SAFEGUARD && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
         && !primary && gBattleScripting.moveEffect <= MOVE_EFFECT_CONFUSION)
-        INCREMENT_RESET_RETURN
+        RESET_RETURN
 
     if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
-        INCREMENT_RESET_RETURN
+        RESET_RETURN
 
-    if (gBattleMons[gEffectBattler].hp == 0
-        && gBattleScripting.moveEffect != MOVE_EFFECT_PAYDAY
-        && gBattleScripting.moveEffect != MOVE_EFFECT_STEAL_ITEM
-        && !(gBattleScripting.moveEffect >= MOVE_EFFECT_WATER_PLEDGE && gBattleScripting.moveEffect <= MOVE_EFFECT_SWAMP))
-        INCREMENT_RESET_RETURN
+    if (gBattleMons[gEffectBattler].hp == 0)
+    {
+        switch (gBattleScripting.moveEffect)
+        {
+            case MOVE_EFFECT_PAYDAY:
+            case MOVE_EFFECT_WATER_PLEDGE:
+            case MOVE_EFFECT_FIRE_PLEDGE:
+            case MOVE_EFFECT_GRASS_PLEDGE:
+            case MOVE_EFFECT_SWAMP:
+            case MOVE_EFFECT_RAINBOW:
+            case MOVE_EFFECT_FIRE_SEA:
+                break;
+            
+            default:
+                RESET_RETURN;
+        }
+    }
 
     if (DoesSubstituteBlockMove(gBattlerAttacker, gEffectBattler, gCurrentMove) && affectsUser != MOVE_EFFECT_AFFECTS_USER)
-        INCREMENT_RESET_RETURN
+        RESET_RETURN
 
     if (gBattleScripting.moveEffect <= PRIMARY_STATUS_MOVE_EFFECT) // status change
     {
