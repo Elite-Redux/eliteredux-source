@@ -635,8 +635,8 @@ static const u8 sMoveTwoLineDescription_MoveSharpen[] = _(
     "boosting Attack and Crit.");
 
 static const u8 sMoveTwoLineDescription_MoveConversion[] = _(
-    "Changes the user's type\n"
-    "into a known move's type.");
+    "Boosts SpAtk and Speed\n"
+    "and changes type.");
 
 static const u8 sMoveTwoLineDescription_MoveTriAttack[] = _(
     "Fires three types of beams\n"
@@ -699,8 +699,8 @@ static const u8 sMoveTwoLineDescription_MoveFlail[] = _(
     "when the user's HP is low.");
 
 static const u8 sMoveTwoLineDescription_MoveConversion2[] = _(
-    "Makes the user resistant\n"
-    "to the last attack's type.");
+    "Boosts SpAtk and Speed\n"
+    "and changes type.");
 
 static const u8 sMoveTwoLineDescription_MoveAeroblast[] = _(
     "Launches a vacuumed blast.\n"
@@ -5063,7 +5063,7 @@ static const u8 sMoveFourLineDescription_MoveRest[] = _("The user sleeps for\ntw
 static const u8 sMoveFourLineDescription_MoveRockSlide[] = _("Large boulders are\nhurled at the foe.\n20% flinch chance.\nThrow-based.");
 static const u8 sMoveFourLineDescription_MoveHyperFang[] = _("The foe is attacked\nwith sharp fangs.\n30% flinch chance.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveSharpen[] = _("The user sharpens\nits edges. Boosting\nits highest Attack\nand its Crit.");
-static const u8 sMoveFourLineDescription_MoveConversion[] = _("The user changes\nits type to match\nthe type of one of\nits moves.");
+static const u8 sMoveFourLineDescription_MoveConversion[] = _("Boosts SpAtk and\nSpeeds and changes\nits type to its first\nmove's type.");
 static const u8 sMoveFourLineDescription_MoveTriAttack[] = _("30% chance to\nparalyze, burn, or\nfrostbite foes.\nUses highest Attack.");
 static const u8 sMoveFourLineDescription_MoveSuperFang[] = _("The user attacks\nwith sharp fangs\nand halves the\nfoe's HP.");
 static const u8 sMoveFourLineDescription_MoveSlash[] = _("The foe is slashed\nwith claws, etc.\nAlways crits.\nKeen Edge boost.");
@@ -5079,7 +5079,7 @@ static const u8 sMoveFourLineDescription_MoveFlameWheel[] = _("A rolling attack\
 static const u8 sMoveFourLineDescription_MoveSnore[] = _("An attack that can\nbe used only while\nasleep. Has a\n30% flinch chance.");
 static const u8 sMoveFourLineDescription_MoveCurse[] = _("A move that works\ndifferently for the\nGHOST-type and all\nthe other types.");
 static const u8 sMoveFourLineDescription_MoveFlail[] = _("A desperate attack\nthat deals critical\ndamage when the user\nis below 50% HP.");
-static const u8 sMoveFourLineDescription_MoveConversion2[] = _("The user changes\ntype to make itself\nresistant to the\nlast attack it took.");
+static const u8 sMoveFourLineDescription_MoveConversion2[] = _("Boosts SpAtk and\nSpeed and changes\ntype to resist the\nlast attack taken.");
 static const u8 sMoveFourLineDescription_MoveAeroblast[] = _("A vortex of air is\nshot at the foe.\nHigh crit ratio.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveCottonSpore[] = _("Cotton-like spores\ncling to the foe,\nsharply reducing\nits Speed stat.");
 static const u8 sMoveFourLineDescription_MoveReversal[] = _("A desperate attack\nthat deals critical\ndamage when the user\nis below 50% HP.");

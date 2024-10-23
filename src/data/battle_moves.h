@@ -5788,8 +5788,8 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_BOTH,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
-        .airBased = TRUE,
         .argument = MISC_EFFECT_DOUBLE_DAMAGE_IN_FOG,
+        .airBased = TRUE,
     },
     [MOVE_SHADOW_FORCE] =
     {
