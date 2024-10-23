@@ -2469,7 +2469,7 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     {
         if (BattlerHasAbility(battlerId, battlerId, ABILITY_COMATOSE))
             status = STATUS1_SLEEP;
-        else if (BattlerHasAbility(battlerId, battlerId, ABILITY_BLOOD_STAIN) && IsBloodStainAffected(battlerId))
+        else if (IsBloodStainAffected(battlerId))
             status = STATUS1_BLEED;
     }
 

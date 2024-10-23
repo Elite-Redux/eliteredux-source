@@ -16327,6 +16327,6 @@ int HasAnyStatusOrAbility(int battler)
 {
     if (gBattleMons[battler].status1 && STATUS1_ANY) return TRUE;
     if (BattlerHasAbility(battler, battler, ABILITY_COMATOSE)) return TRUE;
-    if (BattlerHasAbility(battler, battler, ABILITY_BLOOD_STAIN) && IsBloodStainAffected(battler)) return TRUE;
+    if (IsBloodStainAffected(battler)) return TRUE;
     return FALSE;
 }
