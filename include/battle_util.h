@@ -213,6 +213,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
 int HandleMiscAbilityMoveEffects(int battler, int opponent, int move);
 int HandleSwitchInAbility(int abilityNumber, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler);
+int ShouldApplyOnHitAffect(int applyTo);
 
 #define GET_ALL_BATTLER_ABILITIES(abilitiesArray, battler, battlerAtk) \
 GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk) \

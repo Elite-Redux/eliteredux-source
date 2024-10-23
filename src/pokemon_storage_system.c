@@ -4457,10 +4457,6 @@ static void Task_EvolveMon(u8 taskId)
 
             targetSpecies = GetEvolutionForMon(&pokemon, targetNumEvo);
 
-            /*MgbaOpen();
-            MgbaPrintf(MGBA_LOG_WARN, "GetEvolutionForMon: %d targetSpecies: %d", targetNumEvo, targetSpecies);
-            MgbaClose();*/
-
             if (sInPartyMenu){
                 SetMonData(&gPlayerParty[pos], MON_DATA_SPECIES, &targetSpecies);
                 SetMonData(&gPlayerParty[pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
