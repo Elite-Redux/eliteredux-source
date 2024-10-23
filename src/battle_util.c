@@ -8621,7 +8621,7 @@ bool32 IsMoveMakingContact(u16 move, u8 battlerAtk)
         else
             return FALSE;
     }
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LONG_REACH))
+    else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_LONG_REACH))
     {
         return FALSE;
     }
@@ -10479,75 +10479,75 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     }
     else {
         // Speed Force
-        if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SPEED_FORCE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_SPEED_FORCE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
         {
             secondaryAtkStatToUse = STAT_SPEED;
         }
         // Terminal Velocity
-        if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_TERMINAL_VELOCITY) && IS_MOVE_SPECIAL(move))
+        if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_TERMINAL_VELOCITY) && IS_MOVE_SPECIAL(move))
         {
             secondaryAtkStatToUse = STAT_SPEED;
         }
         // Slipstream
-        if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SLIPSTREAM))
+        if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_SLIPSTREAM))
         {
             secondaryAtkStatToUse = STAT_SPEED;
         }
         // Power Core
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_POWER_CORE))
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_POWER_CORE))
         {
             secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_JUGGERNAUT) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_JUGGERNAUT) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
         {
             secondaryAtkStatToUse = STAT_DEF;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_IRON_GIANT) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_IRON_GIANT) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
         {
             secondaryAtkStatToUse = STAT_DEF;
         }
 
 	    // Equinox
-        if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_EQUINOX))
+        if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_EQUINOX))
         {
             u32 atk = CalculateStat(battlerAtk, STAT_ATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
             u32 spAtk = CalculateStat(battlerAtk, STAT_SPATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
             atkStatToUse = atk > spAtk ? STAT_ATK : STAT_SPATK;
         }
         // Ancient Idol
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANCIENT_IDOL))
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_ANCIENT_IDOL))
         {
             atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MOMENTUM) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MOMENTUM) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
         {
             atkStatToUse = STAT_SPEED;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_IMPULSE) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_IMPULSE) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
         {
             atkStatToUse = STAT_SPEED;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MAXIMUM_ACCELERATION))
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MAXIMUM_ACCELERATION))
         {
             atkStatToUse = STAT_SPEED;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MIND_CRUSH) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MIND_CRUSH) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         {
             atkStatToUse = STAT_SPATK;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ROUSED_FANGS) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_ROUSED_FANGS) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         {
             atkStatToUse = STAT_SPATK;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
         {
             atkStatToUse = STAT_SPATK;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYSTIC_BLADES) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MYSTIC_BLADES) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         {
             atkStatToUse = STAT_SPATK;
         }
-        else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PONY_POWER) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_PONY_POWER) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         {
             atkStatToUse = STAT_SPATK;
         }
@@ -10679,7 +10679,7 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
 {
     u8 defStatToUse = 0;
     u32 defStat;
-    u8 noPositiveStatStages = isCrit || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GRIP_PINCER));
+    u8 noPositiveStatStages = isCrit || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_GRIP_PINCER));
     u8 isUnaware = IsUnaware(battlerAtk) || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED;
     u16 modifier;
 
@@ -10696,27 +10696,27 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         defStatToUse = STAT_SPDEF;
     }
 
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_POWER_FISTS) && IS_IRON_FIST(battlerAtk, move))
+    if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_POWER_FISTS) && IS_IRON_FIST(battlerAtk, move))
     {
         defStatToUse = STAT_SPDEF;
     }
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
+    else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MYTHICAL_ARROWS) && gBattleMoves[move].arrowBased)
     {
         defStatToUse = STAT_SPDEF;
     }
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MYSTIC_BLADES) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
+    else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MYSTIC_BLADES) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PONY_POWER) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
+    else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_PONY_POWER) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SOUL_CRUSHER) && gBattleMoves[move].hammerBased)
+    else if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_SOUL_CRUSHER) && gBattleMoves[move].hammerBased)
     {
         defStatToUse = STAT_SPDEF;
     }
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_POWER_EDGE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
+    if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_POWER_EDGE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
@@ -11128,7 +11128,7 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
 {
     u16 mod = GetTypeModifier(moveType, defType, battlerAtk, battlerDef);
 
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_NORMALIZE) && moveType == TYPE_NORMAL && mod != UQ_4_12(0.0))
+    if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_NORMALIZE) && moveType == TYPE_NORMAL && mod != UQ_4_12(0.0))
     {
         mod = UQ_4_12(1.0);
     }
@@ -11142,23 +11142,23 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
     {
         mod = UQ_4_12(1.0);
     }
-    else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SCRAPPY) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BLIND_RAGE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MINDS_EYE)) && mod == UQ_4_12(0.0))
+    else if ((moveType == TYPE_FIGHTING || moveType == TYPE_NORMAL) && defType == TYPE_GHOST && (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_SCRAPPY) || BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_BLIND_RAGE) || BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MINDS_EYE)) && mod == UQ_4_12(0.0))
     {
         mod = UQ_4_12(1.0);
     }
-    else if (moveType == TYPE_GHOST && defType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PHANTOM_PAIN))
+    else if (moveType == TYPE_GHOST && defType == TYPE_NORMAL && BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_PHANTOM_PAIN))
     {   
         mod = UQ_4_12(1.0);
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, ABILITY_PHANTOM_PAIN);
     }
-	else if (mod == UQ_4_12(0.0) && moveType == TYPE_ELECTRIC && defType == TYPE_GROUND && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GROUND_SHOCK))
+	else if (mod == UQ_4_12(0.0) && moveType == TYPE_ELECTRIC && defType == TYPE_GROUND && BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_GROUND_SHOCK))
     {
 		mod = UQ_4_12(0.5);
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, ABILITY_GROUND_SHOCK);
     }
-	else if (moveType == TYPE_ELECTRIC && defType == TYPE_ELECTRIC && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_OVERCHARGE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEPRAVITY)))
+	else if (moveType == TYPE_ELECTRIC && defType == TYPE_ELECTRIC && (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_OVERCHARGE) || BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_DEPRAVITY)))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
@@ -11166,35 +11166,35 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
             RecordAbilityBattle(battlerAtk, ABILITY_OVERCHARGE);
     }
 	// Molten Down
-	else if (moveType == TYPE_FIRE && defType == TYPE_ROCK && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MOLTEN_DOWN) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PYROCLASTIC_FLOW)))
+	else if (moveType == TYPE_FIRE && defType == TYPE_ROCK && (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MOLTEN_DOWN) || BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_PYROCLASTIC_FLOW)))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
     }
     // Magma Eater
-    else if (moveType == TYPE_FIRE && defType == TYPE_ROCK && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MAGMA_EATER))
+    else if (moveType == TYPE_FIRE && defType == TYPE_ROCK && BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_MAGMA_EATER))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
         if (recordAbilities)
             RecordAbilityBattle(battlerAtk, ABILITY_MAGMA_EATER);
     }
-	else if (moveType == TYPE_POISON && defType == TYPE_STEEL && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CORROSION) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PYROCLASTIC_FLOW) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_TRASH_HEAP)))
+	else if (moveType == TYPE_POISON && defType == TYPE_STEEL && (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_CORROSION) || BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_PYROCLASTIC_FLOW) || BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_TRASH_HEAP)))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
     }
-	else if (move == MOVE_POISON_STING && defType == TYPE_STEEL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH))
+	else if (move == MOVE_POISON_STING && defType == TYPE_STEEL && BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_ANGELS_WRATH))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
     }
-	else if (move == MOVE_ELECTROWEB && defType == TYPE_GROUND && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH))
+	else if (move == MOVE_ELECTROWEB && defType == TYPE_GROUND && BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_ANGELS_WRATH))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(2.0); // super-effective
     }
-	else if (mod == UQ_4_12(0.0) && moveType == TYPE_DRAGON && defType == TYPE_FAIRY && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_OVERWHELM))
+	else if (mod == UQ_4_12(0.0) && moveType == TYPE_DRAGON && defType == TYPE_FAIRY && BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_OVERWHELM))
     {
 		//Has Innate Effect here too
         mod = UQ_4_12(1.0);
@@ -11306,7 +11306,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
 
     if (moveType == TYPE_GROUND && !IsBattlerGroundedIgnoreType(battlerDef)
         && !(gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING)
-        && !(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))) // Moves that ignore ground immunity
+        && !(BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))) // Moves that ignore ground immunity
     {
         if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_LEVITATE))
             immunityAbility = ABILITY_LEVITATE;
@@ -11337,7 +11337,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
         immunityAbility = ABILITY_EVAPORATE;
     }
 
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BONE_ZONE) && gBattleMoves[move].flags & FLAG_BONE_BASED && modifier < UQ_4_12(1.0)) {
+    if (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_BONE_ZONE) && gBattleMoves[move].flags & FLAG_BONE_BASED && modifier < UQ_4_12(1.0)) {
         modifier = UQ_4_12(1.0);
         if (modifier1) MulModifier(&modifier, modifier1);
         if (modifier2) MulModifier(&modifier, modifier2);
@@ -11347,7 +11347,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
 
     // Thousand Arrows ignores type modifiers for flying mons
     if (!IsBattlerGrounded(battlerDef) && (gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING
-        || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY)))
+        || (BattlerHasAbility(battlerAtk, battlerAtk, ABILITY_DESERT_SPIRIT) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY)))
         && moveType == TYPE_GROUND
         && modifier == UQ_4_12(0))
     {
