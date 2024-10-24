@@ -3966,15 +3966,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 }
                 break;
             case MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1:
-                {
-                int speed = gBattleMons[gEffectBattler].speed;
-                int statId;
-                gBattleMons[gEffectBattler].speed = 0;
-                statId = GetHighestStatId(gEffectBattler, FALSE);
-                gBattleMons[gEffectBattler].speed = speed;
-
-                SET_MOVE_EFFECT_AS((MOVE_EFFECT_ATK_PLUS_1 - STAT_ATK + statId) | affectsUser)
-                }
+                SET_MOVE_EFFECT_AS((MOVE_EFFECT_ATK_PLUS_1 - STAT_ATK + GetHighestStatIdExcept(gEffectBattler, FALSE, STAT_SPEED)) | affectsUser)
                 break;
             }
         }
@@ -15615,24 +15607,23 @@ void DoRegenerator()
 static void Cmd_switchoutabilities(void)
 {
     u8 count;
-    const u8 *startingPointer = gBattlescriptCurrInstr;
-    gActiveBattler = GetBattlerForBattleScript(gBattlescriptCurrInstr[1]);
+    gActiveBattler = GetBattlerForBattleScript(READ_FIRST_8_INC);
     gRoundStructs[gActiveBattler].protectedThisTurn = FALSE;
 
     SetSingleUseAbilityCounter(gActiveBattler, ABILITY_ZERO_TO_HERO, TRUE);
 
-    if (gBattleMons[gActiveBattler].ability == ABILITY_NEUTRALIZING_GAS || (BattlerHasInnate(gActiveBattler, ABILITY_NEUTRALIZING_GAS) && gBattleMons[gActiveBattler].ability != ABILITY_NONE))
+    if (BattlerHasAbility(gActiveBattler, gActiveBattler, ABILITY_NEUTRALIZING_GAS))
     {
         gBattleScripting.switchInBattlerOverwrite = gActiveBattler;
 
         gBattleMons[gActiveBattler].ability = ABILITY_NONE;
         BattleScriptCall(BattleScript_NeutralizingGasExits);
     }
-    else if (gBattleMons[gActiveBattler].ability == ABILITY_TOXIC_SPILL || (BattlerHasInnate(gActiveBattler, ABILITY_TOXIC_SPILL) && gBattleMons[gActiveBattler].ability != ABILITY_NONE))
+    
+    if (BattlerHasAbility(gActiveBattler, gActiveBattler, ABILITY_TOXIC_SPILL))
     {
         gBattleScripting.switchInBattlerOverwrite = gActiveBattler;
 
-        gBattleMons[gActiveBattler].ability = ABILITY_NONE;
         BattleScriptCall(BattleScript_TheToxicWasHasDissapeared);
     }
 
@@ -15699,8 +15690,6 @@ static void Cmd_switchoutabilities(void)
     }
     
     ReadActiveScriptInitialStackState();
-
-    if (gBattlescriptCurrInstr == startingPointer) gBattlescriptCurrInstr += 2;
 }
 
 static void Cmd_jumpifhasnohp(void)

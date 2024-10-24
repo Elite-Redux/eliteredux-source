@@ -12477,7 +12477,7 @@ bool8 CanUseExtraMove(u8 sBattlerAttacker, u8 sBattlerTarget) {
         return FALSE;
 }
 
-u8 GetHighestStatId(u8 battlerId, u8 includeStatStages)
+int GetHighestStatIdExcept(int battlerId, int includeStatStages, int exclude)
 {
     u8 i;
     u8 highestId = STAT_ATK;
@@ -12486,6 +12486,7 @@ u8 GetHighestStatId(u8 battlerId, u8 includeStatStages)
     for (i = STAT_ATK; i < NUM_STATS; i++)
     {
         u16 statVal = *(&gBattleMons[battlerId].attack + (i - 1));
+        if (i == exclude) continue;
         if (includeStatStages)
         {
             u8 statStage = gBattleMons[battlerId].statStages[i];
@@ -12500,6 +12501,11 @@ u8 GetHighestStatId(u8 battlerId, u8 includeStatStages)
         }
     }
     return highestId;
+}
+
+u8 GetHighestStatId(u8 battlerId, u8 includeStatStages)
+{
+    return GetHighestStatIdExcept(battlerId, includeStatStages, 0);
 }
 
 u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages)
