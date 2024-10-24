@@ -775,7 +775,7 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
             }
             else if (VarGet(VAR_SAVE_VERSION) <= CURRENT_GAME_VERSION) {
                 //No problems
-                if(VarGet(VAR_SAVE_VERSION) < CURRENT_GAME_VERSION){
+                if (VarGet(VAR_SAVE_VERSION) < CURRENT_GAME_VERSION) {
                     if (VarGet(VAR_SAVE_VERSION) <= 1042)
                     {
                         int i, j;
@@ -807,7 +807,7 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                     tMenuType++;
                 gTasks[taskId].func = Task_MainMenuCheckBattery;
             }
-            else{
+            else {
                 //People trying to downgrade their game
 				CreateMainMenuErrorWindow(gText_FutureSave);
 				tMenuType = HAS_NO_SAVED_GAME;
@@ -2133,7 +2133,7 @@ static void Task_NewGameBirchSpeech_ChooseRandomizer(u8 taskId)
 static void Task_NewGameBirchSpeech_RandomizerDesc(u8 taskId)
 {
     const u8 *str;
-    if(gSaveBlock2Ptr->innaterandomizedMode == 1)
+    if (gSaveBlock2Ptr->innaterandomizedMode == 1)
         str = gText_Pie_Randomizer_Enabled;
     else
         str = gText_Pie_Randomizer_Disabled;

@@ -44,12 +44,12 @@ bool8 FldEff_UseStrength(void)
     gTasks[taskId].data[9] = (u32)StartStrengthFieldEffect;
 
     //There was a bad egg bug here in the original code, but it's fixed now
-    if(gFieldEffectArguments[0] >= PARTY_SIZE)
+    if (gFieldEffectArguments[0] >= PARTY_SIZE)
         gFieldEffectArguments[0] = 0;
     else
         checkForNickname = TRUE;
     
-    if(checkForNickname && gFieldEffectArguments[0] < PARTY_SIZE)
+    if (checkForNickname && gFieldEffectArguments[0] < PARTY_SIZE)
         GetMonNickname(&gPlayerParty[gFieldEffectArguments[0]], gStringVar1);
     
     return FALSE;

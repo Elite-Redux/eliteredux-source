@@ -2001,7 +2001,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     for (j = 0; j < NUM_STATS; j++)
                     {
-                        switch(j) {
+                        switch (j) {
                             case 0:
                                 SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
                             break;
@@ -2054,7 +2054,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     for (j = 0; j < NUM_STATS; j++)
                     {
-                        switch(j) {
+                        switch (j) {
                             case 0:
                                 SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
                             break;
@@ -2102,7 +2102,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     for (j = 0; j < NUM_STATS; j++)
                     {
-                        switch(j) {
+                        switch (j) {
                             case 0:
                                 SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
                             break;
@@ -2218,7 +2218,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 {
                     for (j = 0; j < NUM_STATS; j++)
                     {
-                        switch(j) {
+                        switch (j) {
                             case 0:
                                 SetMonData(&party[i], MON_DATA_HP_EV, &partyData[i].evs[j]);
                             break;
@@ -5507,7 +5507,7 @@ static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
             if (!(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
                 && !(gRoundStructs[gActiveBattler].noValidMoves))
             {
-                switch(gChosenMoveByBattler[gActiveBattler])
+                switch (gChosenMoveByBattler[gActiveBattler])
                 {
                 case MOVE_FOCUS_PUNCH:
                     BattleScriptExecute(BattleScript_FocusPunchSetUp);
@@ -7109,7 +7109,7 @@ void HandleMonoChampSpecialEffects(void) {
     u32 fieldEffectId;
     bool8 setTerrain = FALSE;
 
-    switch(champType) {
+    switch (champType) {
         case TYPE_DARK:
             MakePlayerTeamAsleep();
         break;

@@ -500,13 +500,13 @@ bool8 ScrCmd_additem(struct ScriptContext *ctx)
     u16 itemId = VarGet(ScriptReadHalfword(ctx));
     u32 quantity = VarGet(ScriptReadHalfword(ctx));
 
-    if(AddBagItem(itemId, (u16)quantity)){
+    if (AddBagItem(itemId, (u16)quantity)) {
         gSpecialVar_Result = 1; //Bag
     }
-    else if(AddPCItem(itemId, (u16)quantity)){
+    else if (AddPCItem(itemId, (u16)quantity)) {
         gSpecialVar_Result = 2; //PC
     }
-    else{
+    else {
         gSpecialVar_Result = 0; //Failed
     }
 
@@ -1712,7 +1712,7 @@ bool8 ScrCmd_givemon(struct ScriptContext *ctx)
     u32 unkParam2 = ScriptReadWord(ctx);
     u8 unkParam3 = ScriptReadByte(ctx);
 
-    if(level == 0)
+    if (level == 0)
         level = GetLevelCap();
 
     gSpecialVar_Result = ScriptGiveMon(species, level, item, unkParam1, unkParam2, unkParam3);
@@ -1773,7 +1773,7 @@ bool8 ScrCmd_removemoney(struct ScriptContext *ctx)
     u32 amount = VarGet(ScriptReadWord(ctx));
     u8 ignore = ScriptReadByte(ctx);
 
-    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+    switch (VarGet(VAR_SHOP_MONEY_TYPE)) {
         case MART_MONEY_TYPE_NORMAL:
             if (!ignore)
                 RemoveMoney(&gSaveBlock1Ptr->money, amount);
@@ -1795,7 +1795,7 @@ bool8 ScrCmd_checkmoney(struct ScriptContext *ctx)
     u32 amount = VarGet(ScriptReadWord(ctx));
     u8 ignore = ScriptReadByte(ctx);
 
-    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+    switch (VarGet(VAR_SHOP_MONEY_TYPE)) {
         case MART_MONEY_TYPE_NORMAL:
             if (!ignore)
                 gSpecialVar_Result = IsEnoughMoney(&gSaveBlock1Ptr->money, amount);
@@ -1819,7 +1819,7 @@ bool8 ScrCmd_showmoneybox(struct ScriptContext *ctx)
     u8 y = ScriptReadByte(ctx);
     u8 ignore = ScriptReadByte(ctx);
 
-    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+    switch (VarGet(VAR_SHOP_MONEY_TYPE)) {
         case MART_MONEY_TYPE_NORMAL:
             if (!ignore)
                 DrawMoneyBox(GetMoney(&gSaveBlock1Ptr->money), x, y);
@@ -1852,7 +1852,7 @@ bool8 ScrCmd_updatemoneybox(struct ScriptContext *ctx)
     u8 y = ScriptReadByte(ctx);
     u8 ignore = ScriptReadByte(ctx);
 
-    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+    switch (VarGet(VAR_SHOP_MONEY_TYPE)) {
         case MART_MONEY_TYPE_NORMAL:
             if (!ignore)
                 ChangeAmountInMoneyBox(GetMoney(&gSaveBlock1Ptr->money));
@@ -1953,7 +1953,7 @@ bool8 ScrCmd_setwildbattle(struct ScriptContext *ctx)
     u16 level2 = VarGet(ScriptReadHalfword(ctx));
     u16 item2 = ScriptReadHalfword(ctx);
 
-    if(species2 == SPECIES_NONE)
+    if (species2 == SPECIES_NONE)
     {
         CreateScriptedWildMon(species, level, item);
         gIsScriptedWildDouble = FALSE;
@@ -1969,7 +1969,7 @@ bool8 ScrCmd_setwildbattle(struct ScriptContext *ctx)
 
 bool8 ScrCmd_dowildbattle(struct ScriptContext *ctx)
 {
-    if(gIsScriptedWildDouble == FALSE)
+    if (gIsScriptedWildDouble == FALSE)
     {
         BattleSetup_StartScriptedWildBattle();
         ScriptContext1_Stop();
@@ -2286,7 +2286,7 @@ bool8 ScrCmd_freerotatingtilepuzzle(struct ScriptContext *ctx)
 bool8 ScrCmd_selectapproachingtrainer(struct ScriptContext *ctx)
 {
     u8 setObjectByCommand = ScriptReadByte(ctx);
-    if (setObjectByCommand == 255){
+    if (setObjectByCommand == 255) {
         gSelectedObjectEvent = GetCurrentApproachingTrainerObjectEventId();
     } else {
         gSelectedObjectEvent = setObjectByCommand;
@@ -2452,33 +2452,33 @@ bool8 ScrCmd_isChosenMonSpecies(struct ScriptContext *ctx)
 }
 
 //Multi choice
-bool8 ScrCmd_multichoice2(struct ScriptContext *ctx){
+bool8 ScrCmd_multichoice2(struct ScriptContext *ctx) {
     u8 x = ScriptReadByte(ctx);
     u8 y = ScriptReadByte(ctx);
     char* choices = (char*)ScriptReadWord(ctx);
     bool8 ignoreBPress = ScriptReadByte(ctx);
     u8 columns = ScriptReadByte(ctx);
     u8 defaultChoice = ScriptReadByte(ctx);
-    if((u32)choices < 0x1000000){ //choices is a multichoiceId
-        if(columns > 1)
+    if ((u32)choices < 0x1000000) { //choices is a multichoiceId
+        if (columns > 1)
             ScriptMenu_MultichoiceGrid(x, y, (u32)choices, ignoreBPress, columns);
         else
             ScriptMenu_MultichoiceWithDefault(x, y, (u32)choices, ignoreBPress, defaultChoice);
         ScriptContext1_Stop();
         return TRUE;
-    }else{ //choices is a string
+    }else { //choices is a string
         struct MenuAction menuItems[16] = {NULL};
         u8 count = 0;
-        while(count < ARRAY_COUNT(menuItems)){
+        while (count < ARRAY_COUNT(menuItems)) {
 		    int len = StringLength(choices);
-		    if(!len) break;
+		    if (!len) break;
 		    menuItems[count++].text = choices;
 		    choices += len + 1;
         }
-        if(defaultChoice >= count)
+        if (defaultChoice >= count)
             defaultChoice = 0;
-        if (count > 0){
-		    if(columns > 1)
+        if (count > 0) {
+		    if (columns > 1)
 			    ScriptMenu_MultichoiceGridCustom(x, y, defaultChoice, ignoreBPress, columns, menuItems, count);
 		    else
 			    DrawMultichoiceMenuCustom(x, y, 0, ignoreBPress, defaultChoice, menuItems, count);
@@ -2733,23 +2733,23 @@ bool8 ScrCmd_giveBattleItems(struct ScriptContext *ctx)
 {
     u8 i;
     //Battle Items
-    for(i = 0; i < ARRAY_COUNT(sBattleItemList); i++){
-        if(CheckBagHasItem(ITEM_MEGA_BRACELET, 1) && FlagGet(FLAG_SYS_RECEIVED_KEYSTONE)){
+    for (i = 0; i < ARRAY_COUNT(sBattleItemList); i++) {
+        if (CheckBagHasItem(ITEM_MEGA_BRACELET, 1) && FlagGet(FLAG_SYS_RECEIVED_KEYSTONE)) {
             //With Mega Stones
-            if (!CheckBagHasItem(sBattleItemList[i][0], sBattleItemList[i][1])){
+            if (!CheckBagHasItem(sBattleItemList[i][0], sBattleItemList[i][1])) {
                 AddBagItem(sBattleItemList[i][0], sBattleItemList[i][1]);
             } 
         }
-        else{
+        else {
             //Without Mega stones
-            if (!CheckBagHasItem(sBattleItemList[i][0], sBattleItemList[i][1]) && ItemId_GetPocket(sBattleItemList[i][0]) != POCKET_MEGA_STONES){
+            if (!CheckBagHasItem(sBattleItemList[i][0], sBattleItemList[i][1]) && ItemId_GetPocket(sBattleItemList[i][0]) != POCKET_MEGA_STONES) {
                 AddBagItem(sBattleItemList[i][0], sBattleItemList[i][1]);
             } 
         }
     }
 
-    for(i = 0; i < NUM_TECHNICAL_MACHINES; i++){
-        if (!CheckBagHasItem(ITEM_TM01_FOCUS_PUNCH + i, 1)){
+    for (i = 0; i < NUM_TECHNICAL_MACHINES; i++) {
+        if (!CheckBagHasItem(ITEM_TM01_FOCUS_PUNCH + i, 1)) {
             AddBagItem(ITEM_TM01_FOCUS_PUNCH + i, 1);
         } 
     }
@@ -2786,7 +2786,7 @@ bool8 ScrCmd_givecustommon(struct ScriptContext *ctx)
     u8 ivs[NUM_STATS] = {hpIv, atkIv, defIv, speedIv, spAtkIv, spDefIv};
     u16 moves[4] = {move1, move2, move3, move4};
 
-    if(level == 0)
+    if (level == 0)
         level = GetHighestLevelInPlayerParty();
 
     gSpecialVar_Result = ScriptGiveCustomMon(species, level, item, ball, nature, abilityNum, evs, ivs, moves, isShiny);
@@ -2797,7 +2797,7 @@ bool8 ScrCmd_toggleSaveblock(struct ScriptContext *ctx)
 {
     u16 flag  = ScriptReadHalfword(ctx);
     u16 value = ScriptReadHalfword(ctx);
-    switch(flag){
+    switch (flag) {
         case SAVEBLOCK_RANDOMIZER:
             gSaveBlock2Ptr->encounterRandomizedMode = value;
         break;
@@ -2817,7 +2817,7 @@ bool8 ScrCmd_toggleSaveblock(struct ScriptContext *ctx)
 bool8 ScrCmd_checkSaveblockValue(struct ScriptContext *ctx)
 {
     u16 flag  = ScriptReadHalfword(ctx);
-    switch(flag){
+    switch (flag) {
         case SAVEBLOCK_RANDOMIZER:
             gSpecialVar_Result = gSaveBlock2Ptr->encounterRandomizedMode;
         break;
@@ -2842,17 +2842,17 @@ bool8 ScrCmd_checkpartyfortypeornumber(struct ScriptContext *ctx)
     u8 i, type1, type2;
     u16 species;
 
-    if(partySize != number && number != 0){
+    if (partySize != number && number != 0) {
         gSpecialVar_Result = FALSE;
         return FALSE;
     }
 
-    if(type != NUMBER_OF_MON_TYPES){
-        for(i = 0; i < partySize; i++){
+    if (type != NUMBER_OF_MON_TYPES) {
+        for (i = 0; i < partySize; i++) {
             species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
             type1 = gBaseStats[species].type1;
             type2 = gBaseStats[species].type2;
-            if(type1 != type && type2 != type){
+            if (type1 != type && type2 != type) {
                 gSpecialVar_Result = FALSE;
                 return FALSE;
             }
@@ -2882,7 +2882,7 @@ bool8 ScrCmd_setwildbattlewithcustommoves(struct ScriptContext *ctx)
     u16 speed_evs  = ScriptReadHalfword(ctx);
     struct Pokemon *pkmn = &gEnemyParty[0];
     
-    if(level == 0)
+    if (level == 0)
         level = GetHighestLevelInPlayerParty();
 
     CreateScriptedWildMon(species, level, item);
@@ -2971,9 +2971,9 @@ bool8 ScrCmd_getobjecteventextraid(struct ScriptContext *ctx)
     u8 caseId = ScriptReadByte(ctx);
     u16 num = gMapHeader.events->objectEvents[gSpecialVar_LastTalked - 1].trainerRange_berryTreeId;
 
-    switch(caseId){
+    switch (caseId) {
         case GET_EXTRA_ID_BATTLE_POINTS:
-            if(num == 0)
+            if (num == 0)
                 num++;
             
             ConvertIntToDecimalStringN(gStringVar1, num, STR_CONV_MODE_LEFT_ALIGN, 3);

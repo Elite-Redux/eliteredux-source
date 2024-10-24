@@ -671,7 +671,7 @@ static void AnimUnusedSmallEmber_Step(struct Sprite *sprite)
 {
     if (sprite->data[3])
     {
-        if(sprite->data[5] > 10000)
+        if (sprite->data[5] > 10000)
             sprite->subpriority = 1;
 
         sprite->x2 = Sin(sprite->data[0], sprite->data[1] + (sprite->data[5] >> 8));
@@ -913,7 +913,7 @@ static void AnimTask_EruptionLaunchRocks_Step(u8 taskId)
             }
         }
 
-        if(!UpdateEruptAnimTask(task))
+        if (!UpdateEruptAnimTask(task))
         {
             SetBattlerSpriteYOffsetFromYScale(task->data[15]);
             gSprites[task->data[15]].x2 = 0;
@@ -999,7 +999,7 @@ static void CreateEruptionLaunchRocks(u8 spriteId, u8 taskId, u8 a3)
     u16 y = GetEruptionLaunchRockInitialYPos(spriteId);
     u16 x = gSprites[spriteId].x;
 
-    if(!GetBattlerSide(gBattleAnimAttacker))
+    if (!GetBattlerSide(gBattleAnimAttacker))
     {
         x -= 0xC;
         sign = 1;

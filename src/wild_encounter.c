@@ -82,10 +82,10 @@ static bool8 CheckFeebas(void)
 u8 ChooseWildMonIndex_Land(void)
 {
     u8 rand;
-    if(!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
+    if (!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode) {
         rand = Random() % (ENCOUNTER_CHANCE_LAND_MONS_TOTAL / 2);
     }
-    else{
+    else {
          rand = Random() % ENCOUNTER_CHANCE_LAND_MONS_TOTAL;
     }
     
@@ -452,7 +452,7 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
     u16 species;
     u16 loc = gSaveBlock1Ptr->location.mapNum;
     u16 locG = gSaveBlock1Ptr->location.mapGroup;
-    if(gSaveBlock2Ptr->nuzlockeCaptures && IsRouteEncountered(loc, locG)){
+    if (gSaveBlock2Ptr->nuzlockeCaptures && IsRouteEncountered(loc, locG)) {
         return FALSE;
     }
     switch (area)
@@ -584,7 +584,7 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
             break;
 
     }
-    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+    if (CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
     {
         MarkRouteAsEncountered(loc, locG);
     }
@@ -674,20 +674,20 @@ static bool8 DoWildEncounterRateTest(u32 encounterRate, bool8 ignoreAbility)
     }
     if (encounterRate > 2880)
         encounterRate = 2880;
-    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+    // if (IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
     // {
     //     return DoWildEncounterRateDiceRoll(0);
     // }
-    // else if(!IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures){
-    //     if(DoWildEncounterRateDiceRoll(encounterRate)){
+    // else if (!IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures) {
+    //     if (DoWildEncounterRateDiceRoll(encounterRate)) {
     //         MarkRouteAsEncountered(loc, locG);
     //         return TRUE;
     //     }
-    //     else{
+    //     else {
     //         return FALSE;
     //     }
     // }
-    // else{
+    // else {
     //     return DoWildEncounterRateDiceRoll(encounterRate);
     // }
     return DoWildEncounterRateDiceRoll(encounterRate);
@@ -768,13 +768,13 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
 
             if (TryStartRoamerEncounter() == TRUE)
             {
-                if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                if (IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
                 {
                     return FALSE;
                 }
                 // else 
                 // {
-                //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                //     if (CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
                 //     {
                 //         MarkRouteAsEncountered(loc, locG);
                 //     }
@@ -797,13 +797,13 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
                 // try a regular wild land encounter
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
-                    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    // if (IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
                     // {
                     //     return FALSE;
                     // }
                     // else 
                     // {
-                    //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    //     if (CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
                     //     {
                     //         MarkRouteAsEncountered(loc, locG);
                     //     }
@@ -839,13 +839,13 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
 
             if (TryStartRoamerEncounter() == TRUE)
             {
-                if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                if (IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
                 {
                     return FALSE;
                 }
                 else 
                 {
-                    if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    if (CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
                     {
                         MarkRouteAsEncountered(loc, locG);
                     }
@@ -861,13 +861,13 @@ bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavi
             {
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].waterMonsInfo, WILD_AREA_WATER, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
-                    // if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
+                    // if (IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures)
                     // {
                     //     return FALSE;
                     // }
                     // else 
                     // {
-                    //     if(CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
+                    //     if (CheckBagHasItem(ITEM_POKE_BALL, 1) == TRUE)
                     //     {
                     //         MarkRouteAsEncountered(loc, locG);
                     //     }

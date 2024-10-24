@@ -3370,11 +3370,11 @@ static void GetBattlerNick(u32 battlerId, u8 *dst)
     if (illusionMon != NULL)
         mon = illusionMon;
 
-    if(isMonNicknamed(mon)){
+    if (isMonNicknamed(mon)) {
         GetMonData(mon, MON_DATA_NICKNAME, dst);
         StringGetEnd10(dst);
     }
-    else{
+    else {
         u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
         StringCopy(dst, gSpeciesNames[species]);
         StringGetEnd12(dst);
@@ -3654,23 +3654,23 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 toCpy = text;
                 break;
             case B_TXT_ACTIVE_NAME2: // active battlerId name with prefix, no illusion
-                if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER){
-                    if(isMonNicknamed(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]])){
+                if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER) {
+                    if (isMonNicknamed(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]])) {
                         GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_NICKNAME, text);
                         StringGetEnd10(text);
                     }
-                    else{
+                    else {
                         u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES, NULL);
                         StringCopy(text, gSpeciesNames[species]);
                         StringGetEnd12(text);
                     }
                 }
-                else{
-                    if(isMonNicknamed(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]])){
+                else {
+                    if (isMonNicknamed(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]])) {
                         GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_NICKNAME, text);
                         StringGetEnd10(text);
                     }
-                    else{
+                    else {
                         u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES, NULL);
                         StringCopy(text, gSpeciesNames[species]);
                         StringGetEnd12(text);
@@ -4258,7 +4258,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
     else
     {
         //Overrides
-        switch(getBattleInterfaceTheme()){
+        switch (getBattleInterfaceTheme()) {
             case THEME_DARK:
                 FillWindowPixelBuffer(windowId, PIXEL_FILL(3));
             break;
@@ -4286,7 +4286,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
     printerTemplate.lineSpacing   = textInfo[windowId].lineSpacing;
     printerTemplate.unk           = 0;
     //Overrides
-    switch(getBattleInterfaceTheme()){
+    switch (getBattleInterfaceTheme()) {
         case THEME_DARK:
             printerTemplate.fgColor       = 10; // Font Color
             printerTemplate.bgColor       = 3;  // Background Color

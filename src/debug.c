@@ -1213,7 +1213,7 @@ static void Debug_RefreshListMenu(u8 taskId)
     }
 
     // Copy item names for all entries but the last (which is Cancel)
-    for(i = 0; i < totalItems; i++)
+    for (i = 0; i < totalItems; i++)
     {
         
         if (sDebugMenuListData->listId == 1 && sDebugBattleData->submenu > 1)
@@ -1690,20 +1690,20 @@ static void DebugAction_Util_ResetParty(u8 taskId)
     u16 oldSpecies = SPECIES_NONE;
 
     // Party Mons
-    for(i = 0; i < gPlayerPartyCount; i++)
+    for (i = 0; i < gPlayerPartyCount; i++)
     {
         oldSpecies = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
-        if(isSpeciesPlaceholderMon(oldSpecies))
+        if (isSpeciesPlaceholderMon(oldSpecies))
             SetMonData(&gPlayerParty[i], MON_DATA_SPECIES, &species);
     }
 
     // Box Mons
-    for(i = 0; i < TOTAL_BOXES_COUNT; i++)
+    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
     {
-        for(j = 0; j < IN_BOX_COUNT; j++)
+        for (j = 0; j < IN_BOX_COUNT; j++)
         {
             oldSpecies = GetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_SPECIES);
-            if(isSpeciesPlaceholderMon(oldSpecies)){
+            if (isSpeciesPlaceholderMon(oldSpecies)) {
                 SetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_SPECIES, &species);
             }
         }
@@ -2111,7 +2111,7 @@ static void DebugAction_Util_Trainer_Id(u8 taskId)
 static void DebugAction_Util_ResetTrainerFlags(u8 taskId)
 {
     u16 i;
-    for(i = 0; i < MAX_OLD_TRAINERS_COUNT; i++){
+    for (i = 0; i < MAX_OLD_TRAINERS_COUNT; i++) {
         ClearTrainerFlag(i);
     }
     Debug_DestroyMenu_Full(taskId);
@@ -2229,7 +2229,7 @@ static void DebugAction_FlagsVars_FlagsSelect(u8 taskId)
     {
         PlaySE(SE_SELECT);
         gTasks[taskId].data[3] += sPowersOfTen[gTasks[taskId].data[4]];
-        if (gTasks[taskId].data[3] >= FLAGS_COUNT){
+        if (gTasks[taskId].data[3] >= FLAGS_COUNT) {
             gTasks[taskId].data[3] = FLAGS_COUNT - 1;
         }
     }
@@ -2237,7 +2237,7 @@ static void DebugAction_FlagsVars_FlagsSelect(u8 taskId)
     {
         PlaySE(SE_SELECT);
         gTasks[taskId].data[3] -= sPowersOfTen[gTasks[taskId].data[4]];
-        if (gTasks[taskId].data[3] < 1){
+        if (gTasks[taskId].data[3] < 1) {
             gTasks[taskId].data[3] = 1;
         }
     }
@@ -2311,14 +2311,14 @@ static void DebugAction_FlagsVars_Select(u8 taskId)
     if (gMain.newKeys & DPAD_UP)
     {
         gTasks[taskId].data[3] += sPowersOfTen[gTasks[taskId].data[4]];
-        if (gTasks[taskId].data[3] > VARS_END){
+        if (gTasks[taskId].data[3] > VARS_END) {
             gTasks[taskId].data[3] = VARS_END;
         }
     }
     if (gMain.newKeys & DPAD_DOWN)
     {
         gTasks[taskId].data[3] -= sPowersOfTen[gTasks[taskId].data[4]];
-        if (gTasks[taskId].data[3] < VARS_START){
+        if (gTasks[taskId].data[3] < VARS_START) {
             gTasks[taskId].data[3] = VARS_START;
         }
     }
@@ -2395,14 +2395,14 @@ static void DebugAction_FlagsVars_SetValue(u8 taskId)
             gTasks[taskId].data[6] += sPowersOfTen[gTasks[taskId].data[4]];
         else
             gTasks[taskId].data[6] = 32000-1;
-        if (gTasks[taskId].data[6] >= 32000){
+        if (gTasks[taskId].data[6] >= 32000) {
             gTasks[taskId].data[6] = 32000-1;
         }
     }
     if (gMain.newKeys & DPAD_DOWN)
     {
         gTasks[taskId].data[6] -= sPowersOfTen[gTasks[taskId].data[4]];
-        if (gTasks[taskId].data[6] < 0){
+        if (gTasks[taskId].data[6] < 0) {
             gTasks[taskId].data[6] = 0;
         }
     }
@@ -2512,7 +2512,7 @@ static void DebugAction_FlagsVars_SwitchNatDex(u8 taskId)
     {
         DisableNationalPokedex();
         PlaySE(SE_PC_OFF);
-    }else{
+    }else {
         EnableNationalPokedex();
         PlaySE(SE_PC_LOGIN);
     }
@@ -2634,11 +2634,11 @@ static void DebugAction_FlagsVars_MgbaPrintOnOff(u8 taskId)
 }
 static void DebugAction_FlagsVars_RandomOnOff(u8 taskId)
 {
-    if (gSaveBlock2Ptr->innaterandomizedMode == 1){
+    if (gSaveBlock2Ptr->innaterandomizedMode == 1) {
         gSaveBlock2Ptr->innaterandomizedMode = 0;
         PlaySE(SE_PC_OFF);
     }
-    else{
+    else {
         gSaveBlock2Ptr->innaterandomizedMode = 1;
         PlaySE(SE_PC_LOGIN);
     }
@@ -2973,11 +2973,11 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId)
         if (gMain.newKeys & DPAD_UP)
         {
             gTasks[taskId].data[3] += sPowersOfTen[gTasks[taskId].data[4]];
-            if(isSpeciesPlaceholderMon(gTasks[taskId].data[3])){
-                do{
+            if (isSpeciesPlaceholderMon(gTasks[taskId].data[3])) {
+                do {
                     gTasks[taskId].data[3]++;
                 }
-                while(isSpeciesPlaceholderMon(gTasks[taskId].data[3]) && gTasks[taskId].data[3] <= NUM_SPECIES);
+                while (isSpeciesPlaceholderMon(gTasks[taskId].data[3]) && gTasks[taskId].data[3] <= NUM_SPECIES);
             }
 
             if (gTasks[taskId].data[3] > SPECIES_CELEBI && gTasks[taskId].data[3] < SPECIES_TREECKO)
@@ -2988,11 +2988,11 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId)
         if (gMain.newKeys & DPAD_DOWN)
         {
             gTasks[taskId].data[3] -= sPowersOfTen[gTasks[taskId].data[4]];
-            if(isSpeciesPlaceholderMon(gTasks[taskId].data[3])){
-                do{
+            if (isSpeciesPlaceholderMon(gTasks[taskId].data[3])) {
+                do {
                     gTasks[taskId].data[3]--;
                 }
-                while(isSpeciesPlaceholderMon(gTasks[taskId].data[3]) && gTasks[taskId].data[3] != SPECIES_NONE);
+                while (isSpeciesPlaceholderMon(gTasks[taskId].data[3]) && gTasks[taskId].data[3] != SPECIES_NONE);
             }
 
             if (gTasks[taskId].data[3] < SPECIES_TREECKO && gTasks[taskId].data[3] > SPECIES_CELEBI)
@@ -3013,7 +3013,7 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId)
 
         StringCopy(gStringVar2, gText_DigitIndicator[gTasks[taskId].data[4]]);
 
-        if(!isSpeciesPlaceholderMon(gTasks[taskId].data[3]))
+        if (!isSpeciesPlaceholderMon(gTasks[taskId].data[3]))
             StringCopy(gStringVar1, gSpeciesNames[gTasks[taskId].data[3]]);
         else
             StringCopy(gStringVar1, gText_PlaceholderName);
@@ -3026,7 +3026,7 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId)
         FreeAndDestroyMonIconSprite(&gSprites[gTasks[taskId].data[6]]);
         FreeMonIconPalettes(); //Free space for new pallete
         
-        if(!isSpeciesPlaceholderMon(gTasks[taskId].data[3]))
+        if (!isSpeciesPlaceholderMon(gTasks[taskId].data[3]))
             LoadMonIconPalette(gTasks[taskId].data[3]); //Loads pallete for current mon
         else
             LoadMonIconPalette(SPECIES_NONE); //Loads pallete for current mon
@@ -3035,7 +3035,7 @@ static void DebugAction_Give_Pokemon_SelectId(u8 taskId)
             gTasks[taskId].data[6] = CreateMonIcon(gTasks[taskId].data[3], SpriteCB_MonIcon, DEBUG_NUMBER_ICON_X, DEBUG_NUMBER_ICON_Y, 4, 0, TRUE); //Create pokemon sprite
         #endif
         #ifdef POKEMON_EXPANSION
-            if(!isSpeciesPlaceholderMon(gTasks[taskId].data[3]))
+            if (!isSpeciesPlaceholderMon(gTasks[taskId].data[3]))
                 gTasks[taskId].data[6] = CreateMonIcon(gTasks[taskId].data[3], SpriteCB_MonIcon, DEBUG_NUMBER_ICON_X, DEBUG_NUMBER_ICON_Y, 4, 0); //Create pokemon sprite
             else
                 gTasks[taskId].data[6] = CreateMonIcon(SPECIES_NONE, SpriteCB_MonIcon, DEBUG_NUMBER_ICON_X, DEBUG_NUMBER_ICON_Y, 4, 0); //Create pokemon sprite
@@ -3143,7 +3143,7 @@ static void DebugAction_Give_Pokemon_SelectShiny(u8 taskId)
     u16 species = sDebugMonData->mon_speciesId;
     u8 numShinies = gBaseStats[species].numShinies;;
 
-    if(numShinies == 0)
+    if (numShinies == 0)
         numShinies = SHINY_VANILLA;
 
     if (gMain.newKeys & DPAD_ANY)
@@ -3163,7 +3163,7 @@ static void DebugAction_Give_Pokemon_SelectShiny(u8 taskId)
                 gTasks[taskId].data[3] = numShinies;
         }
 
-        switch(gTasks[taskId].data[3])
+        switch (gTasks[taskId].data[3])
         {
             case SHINY_NONE:
                 StringCopyPadded(gStringVar2, sDebugText_Not_Shiny, CHAR_SPACE, 15);
@@ -3693,7 +3693,7 @@ static void DebugAction_Give_Pokemon_ComplexCreateMon(u8 taskId) //https://githu
 
     //Pokedex entry
     nationalDexNum = SpeciesToNationalPokedexNum(species); 
-    switch(sentToPc)
+    switch (sentToPc)
     {
     case MON_GIVEN_TO_PARTY:
     case MON_GIVEN_TO_PC:

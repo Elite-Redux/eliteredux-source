@@ -1302,10 +1302,10 @@ static void Select_InitAllSprites(void)
 
     for (i = 0; i < (FlagGet(FLAG_FRONTIER_6V6) ? SELECTABLE_MONS_COUNT_6V6 : SELECTABLE_MONS_COUNT); i++)
     {
-        if(!FlagGet(FLAG_FRONTIER_6V6)){
+        if (!FlagGet(FLAG_FRONTIER_6V6)) {
             sFactorySelectScreen->mons[i].ballSpriteId = CreateSprite(&sSpriteTemplate_Select_Pokeball, (35 * i) + 32, 64, 1);
         }
-        else{
+        else {
             sFactorySelectScreen->mons[i].ballSpriteId = CreateSprite(&sSpriteTemplate_Select_Pokeball, (20 * i) + 10, 64, 1);
         }
         gSprites[sFactorySelectScreen->mons[i].ballSpriteId].data[0] = 0;
@@ -4328,6 +4328,6 @@ static void Swap_CreateMonSprite(void)
     sFactorySwapScreen->monPicAnimating = FALSE;
 }
 
-static u8 getPartySize(){
+static u8 getPartySize() {
     return FlagGet(FLAG_FRONTIER_6V6) ? FRONTIER_PARTY_SIZE_6 : FRONTIER_PARTY_SIZE;
 }

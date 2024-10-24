@@ -94,7 +94,7 @@ void HandleLoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *des
 {
     bool8 isFrontPic;
 
-    if(isSpeciesPlaceholderMon(species))
+    if (isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
     if (src == &gMonFrontPicTable[species])
@@ -107,7 +107,7 @@ void HandleLoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *des
 
 void LoadSpecialPokePic(const struct CompressedSpriteSheet *src, void *dest, s32 species, u32 personality, bool8 isFrontPic)
 {
-    if(isSpeciesPlaceholderMon(species))
+    if (isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
     if (species == SPECIES_UNOWN)

@@ -523,7 +523,7 @@ static void CB2_LoadEggHatch(void)
         CopyToBgTilemapBuffer(0, gBattleTextboxTilemap, 0, 0);
         LoadCompressedPalette(gBattleTextboxPalette, 0, 0x20);
         gMain.state++;
-        /*switch(getBattleInterfaceTheme()){
+        /*switch (getBattleInterfaceTheme()) {
             case THEME_DARK:
                 DecompressAndLoadBgGfxUsingHeap(0, gTheme_Dark_BattleTextboxTiles, 0, 0, 0);
                 CopyToBgTilemapBuffer(0, gTheme_Dark_BattleTextboxTilemap, 0, 0);

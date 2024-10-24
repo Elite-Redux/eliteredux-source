@@ -173,7 +173,7 @@ void DestroyWonderCardResources(void)
 {
     if (sWonderCardData != NULL)
     {
-        *sWonderCardData = (struct UnkStruct_203F3C8){};
+        *sWonderCardData = (struct UnkStruct_203F3C8) {};
         Free(sWonderCardData);
         sWonderCardData = NULL;
     }
@@ -183,7 +183,7 @@ s32 FadeToWonderCardMenu(void)
 {
     if (sWonderCardData == NULL)
         return -1;
-    switch(sWonderCardData->unk_0174)
+    switch (sWonderCardData->unk_0174)
     {
         case 0:
             BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
@@ -561,7 +561,7 @@ void ClearSavedWonderNewsAndRelatedResources(void)
 {
     if (sWonderNewsData != NULL)
     {
-        *sWonderNewsData = (struct UnkStruct_203F3CC){};
+        *sWonderNewsData = (struct UnkStruct_203F3CC) {};
         Free(sWonderNewsData);
         sWonderNewsData = NULL;
     }

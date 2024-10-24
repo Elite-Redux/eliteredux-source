@@ -468,7 +468,7 @@ static void SpriteCB_CeilingCrumble(struct Sprite* sprite)
 {
     sprite->data[1] += 2;
     sprite->y2 = sprite->data[1] / 2;
-    if(((sprite->y) + (sprite->y2)) >  sCeilingCrumblePositions[sprite->data[0]][2])
+    if (((sprite->y) + (sprite->y2)) >  sCeilingCrumblePositions[sprite->data[0]][2])
     {
         DestroySprite(sprite);
         IncrementCeilingCrumbleFinishedCount();

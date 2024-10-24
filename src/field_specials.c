@@ -5968,7 +5968,7 @@ bool8 CheckSpeciesInParty (void)
         }
     }
 
-    if (speciesFound == numSpecies){
+    if (speciesFound == numSpecies) {
         return TRUE;
     }
     return FALSE;

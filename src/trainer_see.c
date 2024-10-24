@@ -308,7 +308,7 @@ static u8 GetTrainerApproachDistance(struct ObjectEvent *trainerObj)
     u8 approachDistance;
     u8 approachRange;
 
-    if(trainerObj->trainerRange_berryTreeId >= MAX_SIGHT_RADIUS)
+    if (trainerObj->trainerRange_berryTreeId >= MAX_SIGHT_RADIUS)
         approachRange = MAX_SIGHT_RADIUS;
     else
         approachRange = trainerObj->trainerRange_berryTreeId;
