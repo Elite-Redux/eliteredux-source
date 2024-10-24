@@ -11982,8 +11982,8 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_FAST,
     .eggGroup1 = EGG_GROUP_FIELD,
     .eggGroup2 = EGG_GROUP_DRAGON,
-    .abilities = {ABILITY_MERCILESS, ABILITY_OPPORTUNIST, ABILITY_HYPER_AGGRESSIVE},
-    .innates = {ABILITY_STRONG_JAW, ABILITY_SOLENOGLYPHS, ABILITY_COIL_UP},
+    .abilities = {ABILITY_TIPPING_POINT, ABILITY_OPPORTUNIST, ABILITY_COIL_UP},
+    .innates = {ABILITY_KEEN_EDGE, ABILITY_DEEP_CUTS, ABILITY_HYPER_AGGRESSIVE},
     .bodyColor = BODY_COLOR_BLACK,
     .noFlip = TRUE,
     .tier = 3,
@@ -41344,7 +41344,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_TINKATON_MEGA] =
     {
-    .baseHP         = 85, // add demolitionist when it's coded
+    .baseHP         = 85,
     .baseAttack     = 110,
     .baseDefense    = 107,
     .baseSpeed      = 94,
