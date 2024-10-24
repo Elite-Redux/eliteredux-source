@@ -3845,15 +3845,15 @@ void CreateMon(struct Pokemon *mon, u16 species, u8 level, u8 fixedIV, u8 hasFix
     CalculateMonStats(mon);
 }
 
-u8 GenerateShinyForm(u16 species){
+u8 GenerateShinyForm(u16 species) {
     u8 numShinies = gBaseStats[species].numShinies;
     u8 isShiny = SHINY_VANILLA;
     u16 rand = Random(); // Max value is 65535
 
     //Rare shiny creation
-    if(rand < LEGENDARY_SHINY_ODDS && numShinies >= SHINY_LEGENDARY)
+    if (rand < LEGENDARY_SHINY_ODDS && numShinies >= SHINY_LEGENDARY)
         isShiny = SHINY_LEGENDARY;
-    else if(rand < RARE_SHINY_ODDS && numShinies >= SHINY_RARE)
+    else if (rand < RARE_SHINY_ODDS && numShinies >= SHINY_RARE)
         isShiny = SHINY_RARE;
     
     return isShiny;
@@ -3899,10 +3899,10 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
                   | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
                   | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
 
-        if (!FlagGet(FLAG_SHINY_CREATION)){
+        if (!FlagGet(FLAG_SHINY_CREATION)) {
             for (i = 0; i < shinyRolls; i++)
             {   
-                if (Random() < getShinyOdds()){
+                if (Random() < getShinyOdds()) {
                     FlagSet(FLAG_SHINY_CREATION);
                     break;
                 }
@@ -3915,7 +3915,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         FlagClear(FLAG_SHINY_CREATION);
     }
 
-    if(FlagGet(FLAG_ALPHA_CREATION))
+    if (FlagGet(FLAG_ALPHA_CREATION))
         isAlpha = TRUE;
     
     FlagClear(FLAG_ALPHA_CREATION);
@@ -3942,7 +3942,7 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
     SetBoxMonData(boxMon, MON_DATA_MAX_SHINY, &isShiny);
     SetBoxMonData(boxMon, MON_DATA_IS_ALPHA, &isAlpha);
 
-    if(isShiny != SHINY_NONE && VarGet(VAR_DEXNAV_SHINY_FLAG) == 1)
+    if (isShiny != SHINY_NONE && VarGet(VAR_DEXNAV_SHINY_FLAG) == 1)
         VarSet(VAR_DEXNAV_SHINY_FLAG, 2);
 
     if (fixedIV < USE_RANDOM_IVS)
@@ -4483,7 +4483,7 @@ void CalculateMonStats(struct Pokemon *mon)
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
-	if(B_PERFECT_IVS == TRUE){
+	if (B_PERFECT_IVS == TRUE) {
         //Ivs are Disabled
         hpIV 		= MAX_IVS;
 		attackIV 	= MAX_IVS;
@@ -4493,10 +4493,10 @@ void CalculateMonStats(struct Pokemon *mon)
 		speedIV 	= MAX_IVS;
     }
 
-    if(speedDown)
+    if (speedDown)
         speedIV = 0;
 
-    if (!gSaveBlock2Ptr->enableEvs){
+    if (!gSaveBlock2Ptr->enableEvs) {
         //Evs are Disabled
         hpEV 		= 0;
 		attackEV 	= 0;
@@ -4737,7 +4737,7 @@ u16 MonTryLearningNewEvolutionMove(struct Pokemon *mon, bool8 firstMove)
     {
         sLearningMoveTableID = 0;
     }
-    while(gLevelUpLearnsets[species][sLearningMoveTableID].move != LEVEL_UP_END)
+    while (gLevelUpLearnsets[species][sLearningMoveTableID].move != LEVEL_UP_END)
     {
         u16 moveLevel;
         moveLevel = (gLevelUpLearnsets[species][sLearningMoveTableID].level);
@@ -5024,7 +5024,7 @@ u32 GetMonData(struct Pokemon *mon, s32 field, u8* data)
     return ret;
 }
 
-bool8 CheckBoxMonForBadChecksum(u8 box, u8 slot){
+bool8 CheckBoxMonForBadChecksum(u8 box, u8 slot) {
     return FALSE;
 }
 
@@ -5052,7 +5052,7 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         {
             for (retVal = 0;
                 retVal < POKEMON_NAME_LENGTH;
-                data[retVal] = boxMon->nickname[retVal], retVal++){}
+                data[retVal] = boxMon->nickname[retVal], retVal++) {}
 
             data[retVal] = EOS;
         }
@@ -5769,7 +5769,7 @@ u8 GetMonsStateToDoubles(void)
     if (gPlayerPartyCount == 1)
         return gPlayerPartyCount; // PLAYER_HAS_ONE_MON
 
-    if(!FlagGet(FLAG_SYS_DISABLE_AUTOHEAL))
+    if (!FlagGet(FLAG_SYS_DISABLE_AUTOHEAL))
         HealPlayerParty();
 
     for (i = 0; i < gPlayerPartyCount; i++)
@@ -6048,7 +6048,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
     {
         if (gMain.inBattle)
             holdEffect = gEnigmaBerries[gBattlerInMenuId].holdEffect;
-        else{
+        else {
             #ifndef FREE_ENIGMA_BERRY
             holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
             #else
@@ -6094,7 +6094,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
     {
         if (gMain.inBattle)
             itemEffect = gEnigmaBerries[gActiveBattler].itemEffect;
-        else{
+        else {
             #ifndef FREE_ENIGMA_BERRY
             itemEffect = gSaveBlock1Ptr->enigmaBerry.itemEffect;
             #else
@@ -6303,16 +6303,16 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             // Candy Box
             if ((itemEffect[i] & ITEM3_LEVEL_UP) && GetMonData(mon, MON_DATA_LEVEL, NULL) != MAX_LEVEL && GetMonData(mon, MON_DATA_LEVEL, NULL) < GetLevelCap() && FlagGet(FLAG_USED_CANDY_BOX))
             {
-                if(VarGet(VAR_CANDY_BOX_LEVEL) == 0){
+                if (VarGet(VAR_CANDY_BOX_LEVEL) == 0) {
                     levelUp = GetLevelCap() - GetMonData(mon, MON_DATA_LEVEL, NULL);
                 }
-                else{
+                else {
                     levelUp = VarGet(VAR_CANDY_BOX_LEVEL) - 1;
-                    if(levelUp > CANDY_BOX_LEVELS)
+                    if (levelUp > CANDY_BOX_LEVELS)
                         levelUp = CANDY_BOX_LEVELS;
                 }
 
-                if((GetMonData(mon, MON_DATA_LEVEL, NULL) + levelUp) >= MAX_LEVEL)
+                if ((GetMonData(mon, MON_DATA_LEVEL, NULL) + levelUp) >= MAX_LEVEL)
                     levelUp = MAX_LEVEL - GetMonData(mon, MON_DATA_LEVEL, NULL);
 
                 dataUnsigned = gExperienceTables[gBaseStats[GetMonData(mon, MON_DATA_SPECIES, NULL)].growthRate][GetMonData(mon, MON_DATA_LEVEL, NULL) + levelUp];
@@ -6979,7 +6979,7 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
     u8 holdEffect;
     u16 currentMap;
 
-    if (heldItem == ITEM_ENIGMA_BERRY){
+    if (heldItem == ITEM_ENIGMA_BERRY) {
         #ifndef FREE_ENIGMA_BERRY
         holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
         #else
@@ -7464,7 +7464,7 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
     {
         if (gMain.inBattle)
             holdEffect = gEnigmaBerries[0].holdEffect;
-        else{
+        else {
             #ifndef FREE_ENIGMA_BERRY
             holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
             #else
@@ -7528,7 +7528,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
     {
         if (gMain.inBattle)
             holdEffect = gEnigmaBerries[0].holdEffect;
-        else{
+        else {
             #ifndef FREE_ENIGMA_BERRY
             holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
             #else
@@ -7556,7 +7556,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
     {
         if (gMain.inBattle)
             holdEffect = gEnigmaBerries[0].holdEffect;
-        else{
+        else {
             #ifndef FREE_ENIGMA_BERRY
             holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
             #else
@@ -7827,7 +7827,7 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves, bool8 disableLearned)
 
     species = getLearnsetMon(species);
 
-    if(disableLearned){
+    if (disableLearned) {
         for (i = 0; i < MAX_MON_MOVES; i++)
             learnedMoves[i] = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
     }
@@ -7843,7 +7843,7 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves, bool8 disableLearned)
 
         if (moveLevel <= level)
         {
-            if(disableLearned){
+            if (disableLearned) {
                 for (j = 0; j < MAX_MON_MOVES && learnedMoves[j] != gLevelUpLearnsets[species][i].move; j++)
                     ;
             }
@@ -7943,12 +7943,12 @@ u8 GetNumberOfEggMoves(struct Pokemon *mon)
     {
         hasMonMove = FALSE;
 
-        for (j = 0; j < MAX_MON_MOVES; j++){
-            if(learnedMoves[j] == eggMoveBuffer[i])
+        for (j = 0; j < MAX_MON_MOVES; j++) {
+            if (learnedMoves[j] == eggMoveBuffer[i])
                 hasMonMove = TRUE;
         }
 
-        if(!hasMonMove)
+        if (!hasMonMove)
             moves[numMoves++] = eggMoveBuffer[i];
     }
 
@@ -7975,12 +7975,12 @@ u8 GetEggMoveTutorMoves(struct Pokemon *mon, u16 *moves)
     {
         hasMonMove = FALSE;
 
-        for (j = 0; j < MAX_MON_MOVES; j++){
-            if(learnedMoves[j] == RandomizeMoves(eggMoveBuffer[i], firsStage, personality))
+        for (j = 0; j < MAX_MON_MOVES; j++) {
+            if (learnedMoves[j] == RandomizeMoves(eggMoveBuffer[i], firsStage, personality))
                 hasMonMove = TRUE;
         }
 
-        if(!hasMonMove)
+        if (!hasMonMove)
             moves[numMoves++] = RandomizeMoves(eggMoveBuffer[i], firsStage, personality);
     }
 
@@ -8213,18 +8213,18 @@ static void Task_PlayMapChosenOrBattleBGM(u8 taskId)
 const u32 *GetShinySpritePal(u16 species, u32 isShiny)
 {
     u8 numShinies = gBaseStats[species].numShinies;
-    switch(isShiny){
+    switch (isShiny) {
         case SHINY_VANILLA:
             return gMonShinyPaletteTable[species].data;
         break;
         case SHINY_RARE:
-            if(numShinies >= SHINY_RARE)
+            if (numShinies >= SHINY_RARE)
                 return gMonRareShinyPaletteTable[species].data;
             else
                 return gMonShinyPaletteTable[species].data;
         break;
         case SHINY_LEGENDARY:
-            if(numShinies >= SHINY_LEGENDARY)
+            if (numShinies >= SHINY_LEGENDARY)
                 return gMonLegendaryShinyPaletteTable[species].data;
             else
                 return gMonShinyPaletteTable[species].data;
@@ -8237,18 +8237,18 @@ const u32 *GetShinySpritePal(u16 species, u32 isShiny)
 const struct CompressedSpritePalette *GetShinySpritePalAddr(u16 species, u32 isShiny)
 {
     u8 numShinies = gBaseStats[species].numShinies;
-    switch(isShiny){
+    switch (isShiny) {
         case SHINY_VANILLA:
             return &gMonShinyPaletteTable[species];
         break;
         case SHINY_RARE:
-            if(numShinies >= SHINY_RARE)
+            if (numShinies >= SHINY_RARE)
                 return &gMonRareShinyPaletteTable[species];
             else
                 return &gMonShinyPaletteTable[species];
         break;
         case SHINY_LEGENDARY:
-            if(numShinies >= SHINY_RARE)
+            if (numShinies >= SHINY_RARE)
                 return &gMonLegendaryShinyPaletteTable[species];
             else
                 return &gMonShinyPaletteTable[species];
@@ -8279,7 +8279,7 @@ const u32 *GetMonFrontSpritePal(struct Pokemon *mon)
     }
 }
 
-const u32 *GetMonSpritePal(u16 species, u32 personality, u8 isShiny){
+const u32 *GetMonSpritePal(u16 species, u32 personality, u8 isShiny) {
     if (isShiny != SHINY_NONE)
     {
         if (SpeciesHasGenderDifference[species] && GetGenderFromSpeciesAndPersonality(species, personality) == MON_FEMALE)
@@ -8307,7 +8307,7 @@ const struct CompressedSpritePalette *GetMonSpritePalStruct(struct Pokemon *mon)
 
 const struct CompressedSpritePalette *GetMonSpritePalStructFromOtIdPersonality(u16 species, u32 personality, u8 isShiny)
 {
-    if(isSpeciesPlaceholderMon(species))
+    if (isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
     if (isShiny != SHINY_NONE)
@@ -9396,42 +9396,42 @@ u16 getRandomSpecies(void)
 	return species;
 }
 
-bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon){
+bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer, bool8 isEnemyMon) {
 	u8 i;
     u16 innate1 = gBaseStats[species].innates[0];
     u16 innate2 = gBaseStats[species].innates[1];
     u16 innate3 = gBaseStats[species].innates[2];
 
-    if(!disablerandomizer){
+    if (!disablerandomizer) {
         innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
         innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
         innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
     }
 
-    if(innate1 == ability      && (level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
+    if (innate1 == ability      && (level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
         return TRUE;
-    else if(innate2 == ability && (level >= INNATE_2_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
+    else if (innate2 == ability && (level >= INNATE_2_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
         return TRUE;
-    else if(innate3 == ability && (level >= INNATE_3_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
+    else if (innate3 == ability && (level >= INNATE_3_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon))
         return TRUE;
 	else
 	    return FALSE;
 }
 
-u16 RandomizeMoves(u16 moves, u16 species, u32 personality){
+u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
     u16 randomizedMove = (moves + species + personality) % MOVES_COUNT;
-    if(gSaveBlock2Ptr->moveRandomizedMode == 1 &&
-        moves != MOVE_NONE){
-            do{
+    if (gSaveBlock2Ptr->moveRandomizedMode == 1 &&
+        moves != MOVE_NONE) {
+            do {
                 randomizedMove++;
                 randomizedMove = randomizedMove % MOVES_COUNT;
             }
-            while(gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER ||
+            while (gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER ||
                   randomizedMove >= MOVES_COUNT    ||
                   randomizedMove == MOVE_DARK_VOID ||
                   randomizedMove == MOVE_NONE);
 
-            if(randomizedMove >= (MOVES_COUNT - 1))
+            if (randomizedMove >= (MOVES_COUNT - 1))
                 randomizedMove = MOVE_SPLASH;
 
             return randomizedMove;
@@ -9440,8 +9440,8 @@ u16 RandomizeMoves(u16 moves, u16 species, u32 personality){
         return moves;
 }
 
-u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
-    if(gSaveBlock2Ptr->innaterandomizedMode == 1 && 
+u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
+    if (gSaveBlock2Ptr->innaterandomizedMode == 1 && 
        innate != ABILITY_NONE                   &&
        innate != ABILITY_ZEN_MODE               &&
        innate != ABILITY_WONDER_GUARD           &&
@@ -9468,15 +9468,15 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        innate != ABILITY_ANGELS_WRATH           &&
        #endif
-       innate != ABILITY_HUNGER_SWITCH){
+       innate != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Innate Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
         u16 randomizedInnate = (innate + species + personality) % ABILITIES_COUNT;
-        do{
+        do {
             randomizedInnate++;
             randomizedInnate = randomizedInnate % ABILITIES_COUNT;
         }
-        while(randomizedInnate == ABILITY_NONE                  ||
+        while (randomizedInnate == ABILITY_NONE                  ||
               randomizedInnate == ABILITY_HUNGER_SWITCH         ||
               randomizedInnate == ABILITY_ZEN_MODE              ||
               randomizedInnate == ABILITY_WONDER_GUARD          ||
@@ -9516,8 +9516,8 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality){
 
 //#define BALANCE_RANDOMIZER_ABILITIES
 
-u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
-    if(gSaveBlock2Ptr->abilityRandomizedMode == 1 &&
+u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
+    if (gSaveBlock2Ptr->abilityRandomizedMode == 1 &&
        ability != ABILITY_NONE              &&
        ability != ABILITY_ZEN_MODE          &&
        ability != ABILITY_WONDER_GUARD      &&
@@ -9541,15 +9541,15 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        ability != ABILITY_ANGELS_WRATH      &&
        #endif
-       ability != ABILITY_HUNGER_SWITCH){
+       ability != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Ability Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
         u16 randomizedAbility = (ability + species + personality) % ABILITIES_COUNT;
-        do{
+        do {
             randomizedAbility++;
             randomizedAbility = randomizedAbility % ABILITIES_COUNT;
         }
-        while(randomizedAbility == ABILITY_NONE                 ||
+        while (randomizedAbility == ABILITY_NONE                 ||
               randomizedAbility == ABILITY_HUNGER_SWITCH        ||
               randomizedAbility == ABILITY_ZEN_MODE             ||
               randomizedAbility == ABILITY_POWER_CONSTRUCT      ||
@@ -9588,28 +9588,28 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality){
         return ability;
 }
 
-u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType){
-    if(gSaveBlock2Ptr->typeRandomizedMode == 1 && type != TYPE_MYSTERY){
+u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType) {
+    if (gSaveBlock2Ptr->typeRandomizedMode == 1 && type != TYPE_MYSTERY) {
         //Only Randomize if you have the Type Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
         u8 randomizedType = TYPE_MYSTERY;
-        if(isFirstType)
+        if (isFirstType)
             randomizedType = (type + species + personality) % (NUMBER_OF_MON_TYPES - 1);
         else
             randomizedType = (personality - type - species) % (NUMBER_OF_MON_TYPES - 1);
 
-        do{
+        do {
             randomizedType++;
             randomizedType = randomizedType % (NUMBER_OF_MON_TYPES - 1);
         }
-        while(randomizedType == TYPE_MYSTERY || randomizedType == type);
+        while (randomizedType == TYPE_MYSTERY || randomizedType == type);
         return randomizedType;
     }
     else
         return type;
 }
 
-bool8 MonHasInnate(struct Pokemon *mon, u16 ability, bool8 disableRandomizer){
+bool8 MonHasInnate(struct Pokemon *mon, u16 ability, bool8 disableRandomizer) {
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, NULL);
@@ -9617,7 +9617,7 @@ bool8 MonHasInnate(struct Pokemon *mon, u16 ability, bool8 disableRandomizer){
     return SpeciesHasInnate(species, ability, level, personality, disableRandomizer, disableRandomizer);
 }
 
-bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, u16 ability, bool8 disableRandomizer){
+bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, u16 ability, bool8 disableRandomizer) {
     u16 species = GetBoxMonData(boxmon, MON_DATA_SPECIES, NULL);
     u32 personality = GetBoxMonData(boxmon, MON_DATA_PERSONALITY, NULL);
     u8 level = GetBoxMonData(boxmon, MON_DATA_LEVEL, NULL);
@@ -9625,23 +9625,23 @@ bool8 BoxMonHasInnate(struct BoxPokemon *boxmon, u16 ability, bool8 disableRando
     return SpeciesHasInnate(species, ability, level, personality, disableRandomizer, disableRandomizer);
 }
 
-u8 GetSpeciesInnateNum(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer){
+u8 GetSpeciesInnateNum(u16 species, u16 ability, u8 level, u32 personality, bool8 disablerandomizer) {
 	u8 i;
     u16 innate1 = gBaseStats[species].innates[0];
     u16 innate2 = gBaseStats[species].innates[1];
     u16 innate3 = gBaseStats[species].innates[2];
 
-    if(!disablerandomizer){
+    if (!disablerandomizer) {
         innate1 = RandomizeInnate(gBaseStats[species].innates[0], species, personality);
         innate2 = RandomizeInnate(gBaseStats[species].innates[1], species, personality);
         innate3 = RandomizeInnate(gBaseStats[species].innates[2], species, personality);
     }
 
-    if(innate1 == ability)
+    if (innate1 == ability)
         return 0;
     else if (innate2 == ability)
         return 1;
-    else if(innate3 == ability)
+    else if (innate3 == ability)
         return 2;
     else
         return 3;
@@ -9664,17 +9664,17 @@ void CreateShinyMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 nat
 }
 
 // replaced by GetTrainerBattleWins()
-u16 getNumberOfUniqueDefeatedTrainers(void){
+u16 getNumberOfUniqueDefeatedTrainers(void) {
     u16 defeatedTrainers = 0;
     u16 i;
 
-    for(i = 0; i < TRAINERS_COUNT; i++){
-        if(i <= MAX_OLD_TRAINERS_COUNT || i == TRAINER_OLDPLAYER){
-            if(FlagGet(TRAINER_FLAGS_START + i))
+    for (i = 0; i < TRAINERS_COUNT; i++) {
+        if (i <= MAX_OLD_TRAINERS_COUNT || i == TRAINER_OLDPLAYER) {
+            if (FlagGet(TRAINER_FLAGS_START + i))
                 defeatedTrainers++;
         }
-        else{
-            if(FlagGet(gTrainers[i].trainerFlag))
+        else {
+            if (FlagGet(gTrainers[i].trainerFlag))
                 defeatedTrainers++;
         }
     }
@@ -9683,49 +9683,49 @@ u16 getNumberOfUniqueDefeatedTrainers(void){
 }
 
 
-bool8 enablePokemonChanges(void){
+bool8 enablePokemonChanges(void) {
     bool8 enable = TRUE;
 
-    if(FlagGet(FLAG_SYS_LOCKED_MODE)){
-        switch(gSaveBlock1Ptr->location.mapNum){
+    if (FlagGet(FLAG_SYS_LOCKED_MODE)) {
+        switch (gSaveBlock1Ptr->location.mapNum) {
             case MAP_NUM(EVER_GRANDE_CITY_SIDNEYS_ROOM):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_SIDNEYS_ROOM))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_SIDNEYS_ROOM))
                     enable = FALSE;
             break;
             case MAP_NUM(EVER_GRANDE_CITY_PHOEBES_ROOM):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_PHOEBES_ROOM))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_PHOEBES_ROOM))
                     enable = FALSE;
             break;
             case MAP_NUM(EVER_GRANDE_CITY_GLACIAS_ROOM):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_GLACIAS_ROOM))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_GLACIAS_ROOM))
                     enable = FALSE;
             break;
             case MAP_NUM(EVER_GRANDE_CITY_DRAKES_ROOM):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_DRAKES_ROOM))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_DRAKES_ROOM))
                     enable = FALSE;
             break;
             case MAP_NUM(EVER_GRANDE_CITY_CHAMPIONS_ROOM):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_CHAMPIONS_ROOM))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_CHAMPIONS_ROOM))
                     enable = FALSE;
             break;
             case MAP_NUM(EVER_GRANDE_CITY_HALL1):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL1))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL1))
                     enable = FALSE;
             break;
             case MAP_NUM(EVER_GRANDE_CITY_HALL2):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL2))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL2))
                     enable = FALSE;
             break;
             case MAP_NUM(EVER_GRANDE_CITY_HALL3):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL3))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL3))
                     enable = FALSE;
             break;
             case MAP_NUM(EVER_GRANDE_CITY_HALL4):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL4))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL4))
                     enable = FALSE;
             break;
             case MAP_NUM(EVER_GRANDE_CITY_HALL5):
-                if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL5))
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL5))
                     enable = FALSE;
             break;
         }
@@ -9734,7 +9734,7 @@ bool8 enablePokemonChanges(void){
     return enable;
 }
 
-bool8 isMonNicknamed(struct Pokemon *mon){
+bool8 isMonNicknamed(struct Pokemon *mon) {
     u8 i;
     bool8 nicknamed = FALSE;
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -9744,8 +9744,8 @@ bool8 isMonNicknamed(struct Pokemon *mon){
     StringCopy(strArray, gSpeciesNames[species]);
     GetMonData(mon, MON_DATA_NICKNAME, strNickname);
 
-    for(i = 0; i < POKEMON_NAME_LENGTH; i++){
-        if(strNickname[i] != strArray[i]){
+    for (i = 0; i < POKEMON_NAME_LENGTH; i++) {
+        if (strNickname[i] != strArray[i]) {
             nicknamed = TRUE;
         }
     }
@@ -9753,7 +9753,7 @@ bool8 isMonNicknamed(struct Pokemon *mon){
     return nicknamed;
 }
 
-bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon){
+bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon) {
     u8 i;
     bool8 nicknamed = FALSE;
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES, NULL);
@@ -9763,8 +9763,8 @@ bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon){
     StringCopy(strArray, gSpeciesNames[species]);
     GetBoxMonData(boxMon, MON_DATA_NICKNAME, strNickname);
 
-    for(i = 0; i < POKEMON_NAME_LENGTH; i++){
-        if(strNickname[i] != strArray[i]){
+    for (i = 0; i < POKEMON_NAME_LENGTH; i++) {
+        if (strNickname[i] != strArray[i]) {
             nicknamed = TRUE;
         }
     }
@@ -9775,31 +9775,31 @@ bool8 isBoxMonNicknamed(struct BoxPokemon *boxMon){
 
 
 
-u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG){
+u16 GetRandomPokemonFromTag(u16 rndseed, s8 loc, s8 locG) {
     u8 i, j = 0;
     u32 tags = 0;
     u32 mask = getMask(loc, locG);
     u8 tag;
-    if (mask == 0){
+    if (mask == 0) {
         return ARRAY_MODULO(gAllFirstStage_species, rndseed);
     }
-    for(i = 0; i < 21; i++){
-        if((mask >> i) & 1){
+    for (i = 0; i < 21; i++) {
+        if ((mask >> i) & 1) {
             tags = (tags << 5) + i;
             j++;
         } 
     }
     tag = (tags >> ((rndseed % j) * 5)) & 31;
     mask = rndseed;
-    if(RandRangeDeterministic(0, 8, &mask) == 0){
+    if (RandRangeDeterministic(0, 8, &mask) == 0) {
         return GetRandomPokemonFromDiffTag(rndseed, tags, j, getTier(loc, locG));
     }
-    else{
+    else {
         return tagSwitch(tag, rndseed);
     }
 }
 
-u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier){
+u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier) {
     u32 rand = rndseed;
     bool8 valid = FALSE;
     u8 tag, cur, i = 0;
@@ -9807,18 +9807,18 @@ u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier){
     u8 mon_tier;
     do {
         tag = RandRangeDeterministic(0, 21, &rand);
-        for(i = 0; i < total; i++){
+        for (i = 0; i < total; i++) {
             cur = tags >> (i * 5);
-            if(cur == tag){
+            if (cur == tag) {
                 continue;
             }
         }
         mon = tagSwitch(tag, rand >> 16);
         mon_tier = gBaseStats[mon].tier;
-        if(tier == 2 && mon_tier == 1){
+        if (tier == 2 && mon_tier == 1) {
             mon_tier = 2;
         }
-        if(tier == 1 && mon_tier == 2){
+        if (tier == 1 && mon_tier == 2) {
             mon_tier = 1;
         }
     } while (mon_tier != tier);
@@ -9826,7 +9826,7 @@ u16 GetRandomPokemonFromDiffTag(u16 rndseed, u32 tags, u8 total, u8 tier){
 }
 
 u16 tagSwitch(u8 tag, u16 rndseed) {
-    switch(tag) {
+    switch (tag) {
         case 0:
             return ARRAY_MODULO(gForest_species, rndseed);
         case 1:
@@ -9871,31 +9871,31 @@ u16 tagSwitch(u8 tag, u16 rndseed) {
             return ARRAY_MODULO(gBeach_species, rndseed);
     }
 }
-u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID){
+u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID) {
     u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     u16 min, max = 0;
     u16 species;
-    if(rndSeed == 0){
+    if (rndSeed == 0) {
         u16 newseed = Random();
         VarSet(VAR_RANDOMIZED_SEED, newseed);
         rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     }
     rndSeed ^= starterID;
     getGenRange(gen, &min, &max);
-    if(!enc && leg){
-        do{
+    if (!enc && leg) {
+        do {
             species = RandRangeDeterministic(min, max, &rndSeed);
         }
-        while(gBaseStats[species].tier != 3);
+        while (gBaseStats[species].tier != 3);
     }
-    else if(enc && leg){
+    else if (enc && leg) {
         return RandRangeDeterministic(min, max, &rndSeed);
     }
-    else{
-        do{
+    else {
+        do {
             species = RandRangeDeterministic(min, max, &rndSeed);
         }
-        while(species == SPECIES_ARTICUNO                   || 
+        while (species == SPECIES_ARTICUNO                   || 
                 species == SPECIES_ZAPDOS                     || 
                 species == SPECIES_MOLTRES                    || 
                 species == SPECIES_RAIKOU                     || 
@@ -9997,8 +9997,8 @@ u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID){
     return species;
 }
 
-void getGenRange(u8 gen, u16* min, u16* max){
-    switch(gen){
+void getGenRange(u8 gen, u16* min, u16* max) {
+    switch (gen) {
         case 0:
         case 3:
             *min = GEN3_START;
@@ -10043,7 +10043,7 @@ void getGenRange(u8 gen, u16* min, u16* max){
     }
     *max-=2;
 }
-u16 GetRandomPokemonFromSpecies(u16 basespecies){
+u16 GetRandomPokemonFromSpecies(u16 basespecies) {
 	u16 species = basespecies;
     u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     u16 i = 0;
@@ -10051,15 +10051,15 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
     u16 locG = gSaveBlock1Ptr->location.mapGroup;
     u8 map_tier = getTier(loc, locG);
     u8 map_tier_extra = map_tier;
-    if(VarGet(VAR_RANDOMIZED_SEED) == 0){
+    if (VarGet(VAR_RANDOMIZED_SEED) == 0) {
         u16 newseed = Random();
         VarSet(VAR_RANDOMIZED_SEED, newseed);
         rndSeed = VarGet(VAR_RANDOMIZED_SEED);
     }
-    if(map_tier == 2){
+    if (map_tier == 2) {
         map_tier_extra = 1;
     }
-    if(map_tier == 1){
+    if (map_tier == 1) {
         map_tier_extra = 2;
     }
     
@@ -10068,25 +10068,25 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
 
     rndSeed ^= basespecies;
     rndSeed = ISO_RANDOMIZE1(rndSeed) >> 16;
-    if(rndSeed % 10 == 0 && map_tier < 5){
+    if (rndSeed % 10 == 0 && map_tier < 5) {
         map_tier++;
     }
-    if(!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode && basespecies != SPECIES_NONE){
-            do{
+    if (!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode && basespecies != SPECIES_NONE) {
+            do {
                 rndSeed = ISO_RANDOMIZE1(rndSeed);
                 species = GetRandomPokemonFromTag(rndSeed >> 16, loc, locG);
             }
-            while(species == SPECIES_NONE || (gBaseStats[species].tier != map_tier && gBaseStats[species].tier != map_tier_extra));
+            while (species == SPECIES_NONE || (gBaseStats[species].tier != map_tier && gBaseStats[species].tier != map_tier_extra));
         return species;
     }
-    if(gSaveBlock2Ptr->encounterRandomizedMode == TRUE && basespecies != SPECIES_NONE){
-        if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE){
+    if (gSaveBlock2Ptr->encounterRandomizedMode == TRUE && basespecies != SPECIES_NONE) {
+        if (gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE) {
             //Legendary Mons Enabled
 
-            do{
+            do {
                 species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
             }
-            while(species == SPECIES_NONE                     ||
+            while (species == SPECIES_NONE                     ||
                 //Sub-Legendary
                 species == SPECIES_ARTICUNO                   ||
                 species == SPECIES_ZAPDOS                     ||
@@ -10191,12 +10191,12 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
                 (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KECLEONG) 
                 );
         }
-        else{
+        else {
             //Legendary Mons Disabled
-            do{
+            do {
                 species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
             }
-            while(species == SPECIES_NONE                     ||
+            while (species == SPECIES_NONE                     ||
                 species == SPECIES_ZACIAN                     || //Legendary
                 species == SPECIES_ZAMAZENTA                  || //Legendary
                 species == SPECIES_ETERNATUS                  || //Legendary
@@ -10266,8 +10266,8 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies){
 
 	return species;
 }
-u8 getTier(s8 loc, s8 locG){
-    if((loc == MAP_NUM(PETALBURG_CITY) && locG == MAP_GROUP(PETALBURG_CITY)) ||
+u8 getTier(s8 loc, s8 locG) {
+    if ((loc == MAP_NUM(PETALBURG_CITY) && locG == MAP_GROUP(PETALBURG_CITY)) ||
         (loc == MAP_NUM(SLATEPORT_CITY) && locG == MAP_GROUP(SLATEPORT_CITY)) ||
         (loc == MAP_NUM(RUSTBORO_CITY) && locG == MAP_GROUP(RUSTBORO_CITY)) ||
         (loc == MAP_NUM(LITTLEROOT_TOWN) && locG == MAP_GROUP(LITTLEROOT_TOWN)) ||
@@ -10293,10 +10293,10 @@ u8 getTier(s8 loc, s8 locG){
         (loc == MAP_NUM(SEASPRAY_CAVE) && locG == MAP_GROUP(SEASPRAY_CAVE)) ||
         (loc == MAP_NUM(SEASPRAY_CAVE_B1F) && locG == MAP_GROUP(SEASPRAY_CAVE_B1F)) ||
         (loc == MAP_NUM(DEWFORD_MEADOW) && locG == MAP_GROUP(DEWFORD_MEADOW)) ||
-        (loc == MAP_NUM(DEWFORD_MANOR_1F) && locG == MAP_GROUP(DEWFORD_MANOR_1F))){
+        (loc == MAP_NUM(DEWFORD_MANOR_1F) && locG == MAP_GROUP(DEWFORD_MANOR_1F))) {
             return 1;
         }
-    if((loc == MAP_NUM(MAUVILLE_CITY) && locG == MAP_GROUP(MAUVILLE_CITY)) ||
+    if ((loc == MAP_NUM(MAUVILLE_CITY) && locG == MAP_GROUP(MAUVILLE_CITY)) ||
         (loc == MAP_NUM(FALLARBOR_TOWN) && locG == MAP_GROUP(FALLARBOR_TOWN)) ||
         (loc == MAP_NUM(VERDANTURF_TOWN) && locG == MAP_GROUP(VERDANTURF_TOWN)) ||
         (loc == MAP_NUM(ROUTE111) && locG == MAP_GROUP(ROUTE111)) ||
@@ -10316,7 +10316,7 @@ u8 getTier(s8 loc, s8 locG){
         {
             return 2;
         }
-    if((loc == MAP_NUM(FORTREE_CITY) && locG == MAP_GROUP(FORTREE_CITY)) ||
+    if ((loc == MAP_NUM(FORTREE_CITY) && locG == MAP_GROUP(FORTREE_CITY)) ||
         (loc == MAP_NUM(LILYCOVE_CITY) && locG == MAP_GROUP(LILYCOVE_CITY)) ||
         (loc == MAP_NUM(LAVARIDGE_TOWN) && locG == MAP_GROUP(LAVARIDGE_TOWN)) ||
         (loc == MAP_NUM(ROUTE105) && locG == MAP_GROUP(ROUTE105)) ||
@@ -10357,10 +10357,10 @@ u8 getTier(s8 loc, s8 locG){
         (loc == MAP_NUM(SANDSTREWN_RUINS_B1F) && locG == MAP_GROUP(SANDSTREWN_RUINS_B1F)) ||
         (loc == MAP_NUM(ROUTE111_RUINS_EXTERIOR) && locG == MAP_GROUP(ROUTE111_RUINS_EXTERIOR)) ||
         (loc == MAP_NUM(SANDSTREWN_RUINS_2F) && locG == MAP_GROUP(SANDSTREWN_RUINS_2F)) ||
-        (loc == MAP_NUM(SANDSTREWN_RUINS_3F) && locG == MAP_GROUP(SANDSTREWN_RUINS_3F))){
+        (loc == MAP_NUM(SANDSTREWN_RUINS_3F) && locG == MAP_GROUP(SANDSTREWN_RUINS_3F))) {
             return 3;
         }
-    if((loc == MAP_NUM(MOSSDEEP_CITY) && locG == MAP_GROUP(MOSSDEEP_CITY)) ||
+    if ((loc == MAP_NUM(MOSSDEEP_CITY) && locG == MAP_GROUP(MOSSDEEP_CITY)) ||
         (loc == MAP_NUM(SOOTOPOLIS_CITY) && locG == MAP_GROUP(SOOTOPOLIS_CITY)) ||
         (loc == MAP_NUM(ROUTE124) && locG == MAP_GROUP(ROUTE124)) ||
         (loc == MAP_NUM(ROUTE125) && locG == MAP_GROUP(ROUTE125)) ||
@@ -10405,10 +10405,10 @@ u8 getTier(s8 loc, s8 locG){
         (loc == MAP_NUM(MAGMA_HIDEOUT_2F_3R) && locG == MAP_GROUP(MAGMA_HIDEOUT_2F_3R)) ||
         (loc == MAP_NUM(SCORCHED_SLAB_B1F) && locG == MAP_GROUP(SCORCHED_SLAB_B1F)) ||
         (loc == MAP_NUM(SCORCHED_SLAB_B2F) && locG == MAP_GROUP(SCORCHED_SLAB_B2F)) ||
-        (loc == MAP_NUM(SCORCHED_SLAB_HEATRANS_ROOM) && locG == MAP_GROUP(SCORCHED_SLAB_HEATRANS_ROOM))){
+        (loc == MAP_NUM(SCORCHED_SLAB_HEATRANS_ROOM) && locG == MAP_GROUP(SCORCHED_SLAB_HEATRANS_ROOM))) {
             return 4;
         }
-    if((loc == MAP_NUM(EVER_GRANDE_CITY) && locG == MAP_GROUP(EVER_GRANDE_CITY)) ||
+    if ((loc == MAP_NUM(EVER_GRANDE_CITY) && locG == MAP_GROUP(EVER_GRANDE_CITY)) ||
         (loc == MAP_NUM(PACIFIDLOG_TOWN) && locG == MAP_GROUP(PACIFIDLOG_TOWN)) ||
         (loc == MAP_NUM(METEOR_FALLS_B1F_1R) && locG == MAP_GROUP(METEOR_FALLS_B1F_1R)) ||
         (loc == MAP_NUM(METEOR_FALLS_B1F_2R) && locG == MAP_GROUP(METEOR_FALLS_B1F_2R)) ||
@@ -10430,24 +10430,24 @@ u8 getTier(s8 loc, s8 locG){
         (loc == MAP_NUM(CAVE_OF_ORIGIN_DIANCIES_ROOM) && locG == MAP_GROUP(CAVE_OF_ORIGIN_DIANCIES_ROOM)) ||
         (loc == MAP_NUM(METEOR_FALLS_JIRACHIS_ROOM) && locG == MAP_GROUP(METEOR_FALLS_JIRACHIS_ROOM)) ||
         (loc == MAP_NUM(ALTERING_CAVE_1F) && locG == MAP_GROUP(ALTERING_CAVE_1F)) ||
-        (loc == MAP_NUM(ALTERING_CAVE_B1F) && locG == MAP_GROUP(ALTERING_CAVE_B1F))){
+        (loc == MAP_NUM(ALTERING_CAVE_B1F) && locG == MAP_GROUP(ALTERING_CAVE_B1F))) {
             return 5;
         }
     return 1;
 }
-u32 getMask(s8 loc, s8 locG){
-    if( (MAP_NUM(PETALBURG_CITY) == loc && MAP_GROUP(PETALBURG_CITY) == locG) ||
+u32 getMask(s8 loc, s8 locG) {
+    if ( (MAP_NUM(PETALBURG_CITY) == loc && MAP_GROUP(PETALBURG_CITY) == locG) ||
 	    (MAP_NUM(NEW_MAUVILLE_ENTRANCE) == loc && MAP_GROUP(NEW_MAUVILLE_ENTRANCE) == locG) ||
-	    (MAP_NUM(NEW_MAUVILLE_INSIDE) == loc && MAP_GROUP(NEW_MAUVILLE_INSIDE) == locG)){
+	    (MAP_NUM(NEW_MAUVILLE_INSIDE) == loc && MAP_GROUP(NEW_MAUVILLE_INSIDE) == locG)) {
 	    return 532480;
     }
-    if(MAP_NUM(SLATEPORT_CITY) == loc && MAP_GROUP(SLATEPORT_CITY) == locG){
+    if (MAP_NUM(SLATEPORT_CITY) == loc && MAP_GROUP(SLATEPORT_CITY) == locG) {
         return 1581056;
     }
-    if(MAP_NUM(RUSTBORO_CITY) == loc && MAP_GROUP(RUSTBORO_CITY) == locG){
+    if (MAP_NUM(RUSTBORO_CITY) == loc && MAP_GROUP(RUSTBORO_CITY) == locG) {
         return 794624;
     }
-    if(	(MAP_NUM(LITTLEROOT_TOWN) == loc && MAP_GROUP(LITTLEROOT_TOWN) == locG) ||
+    if (	(MAP_NUM(LITTLEROOT_TOWN) == loc && MAP_GROUP(LITTLEROOT_TOWN) == locG) ||
         (MAP_NUM(OLDALE_TOWN) == loc && MAP_GROUP(OLDALE_TOWN) == locG) ||
         (MAP_NUM(MAUVILLE_CITY) == loc && MAP_GROUP(MAUVILLE_CITY) == locG) ||
         (MAP_NUM(FALLARBOR_TOWN) == loc && MAP_GROUP(FALLARBOR_TOWN) == locG) ||
@@ -10455,26 +10455,26 @@ u32 getMask(s8 loc, s8 locG){
         (MAP_NUM(FORTREE_CITY) == loc && MAP_GROUP(FORTREE_CITY) == locG) ||
         (MAP_NUM(LILYCOVE_CITY) == loc && MAP_GROUP(LILYCOVE_CITY) == locG) ||
         (MAP_NUM(LAVARIDGE_TOWN) == loc && MAP_GROUP(LAVARIDGE_TOWN) == locG) ||
-        (MAP_NUM(EVER_GRANDE_CITY) == loc && MAP_GROUP(EVER_GRANDE_CITY) == locG)){
+        (MAP_NUM(EVER_GRANDE_CITY) == loc && MAP_GROUP(EVER_GRANDE_CITY) == locG)) {
         return 8192;
     }
-    if(MAP_NUM(DEWFORD_TOWN) == loc && MAP_GROUP(DEWFORD_TOWN) == locG){
+    if (MAP_NUM(DEWFORD_TOWN) == loc && MAP_GROUP(DEWFORD_TOWN) == locG) {
         return 1058816;
     }
-    if(	(MAP_NUM(ROUTE101) == loc && MAP_GROUP(ROUTE101) == locG) ||
+    if (	(MAP_NUM(ROUTE101) == loc && MAP_GROUP(ROUTE101) == locG) ||
         (MAP_NUM(ROUTE102) == loc && MAP_GROUP(ROUTE102) == locG) ||
         (MAP_NUM(ROUTE103) == loc && MAP_GROUP(ROUTE103) == locG) ||
-        (MAP_NUM(ROUTE121) == loc && MAP_GROUP(ROUTE121) == locG)){
+        (MAP_NUM(ROUTE121) == loc && MAP_GROUP(ROUTE121) == locG)) {
         return 2;
     }
-    if(MAP_NUM(ROUTE104) == loc && MAP_GROUP(ROUTE104) == locG){
+    if (MAP_NUM(ROUTE104) == loc && MAP_GROUP(ROUTE104) == locG) {
         return 3;
     }
-    if(	(MAP_NUM(ROUTE106) == loc && MAP_GROUP(ROUTE106) == locG) ||
-        (MAP_NUM(ROUTE109) == loc && MAP_GROUP(ROUTE109) == locG)){
+    if (	(MAP_NUM(ROUTE106) == loc && MAP_GROUP(ROUTE106) == locG) ||
+        (MAP_NUM(ROUTE109) == loc && MAP_GROUP(ROUTE109) == locG)) {
         return 1050628;
     }
-    if(	(MAP_NUM(ROUTE107) == loc && MAP_GROUP(ROUTE107) == locG) ||
+    if (	(MAP_NUM(ROUTE107) == loc && MAP_GROUP(ROUTE107) == locG) ||
         (MAP_NUM(ROUTE108) == loc && MAP_GROUP(ROUTE108) == locG) ||
         (MAP_NUM(ROUTE124) == loc && MAP_GROUP(ROUTE124) == locG) ||
         (MAP_NUM(ROUTE125) == loc && MAP_GROUP(ROUTE125) == locG) ||
@@ -10486,91 +10486,91 @@ u32 getMask(s8 loc, s8 locG){
         (MAP_NUM(ROUTE131) == loc && MAP_GROUP(ROUTE131) == locG) ||
         (MAP_NUM(ROUTE132) == loc && MAP_GROUP(ROUTE132) == locG) ||
         (MAP_NUM(ROUTE133) == loc && MAP_GROUP(ROUTE133) == locG) ||
-        (MAP_NUM(ROUTE134) == loc && MAP_GROUP(ROUTE134) == locG)){
+        (MAP_NUM(ROUTE134) == loc && MAP_GROUP(ROUTE134) == locG)) {
         return 4;
     }
-    if(MAP_NUM(ROUTE110) == loc && MAP_GROUP(ROUTE110) == locG){
+    if (MAP_NUM(ROUTE110) == loc && MAP_GROUP(ROUTE110) == locG) {
         return 8194;
     }
-    if(MAP_NUM(ROUTE116) == loc && MAP_GROUP(ROUTE116) == locG){
+    if (MAP_NUM(ROUTE116) == loc && MAP_GROUP(ROUTE116) == locG) {
         return 32769;
     }
-    if(	(MAP_NUM(RUSTURF_TUNNEL) == loc && MAP_GROUP(RUSTURF_TUNNEL) == locG) ||
+    if (	(MAP_NUM(RUSTURF_TUNNEL) == loc && MAP_GROUP(RUSTURF_TUNNEL) == locG) ||
         (MAP_NUM(VICTORY_ROAD_1F) == loc && MAP_GROUP(VICTORY_ROAD_1F) == locG) ||
         (MAP_NUM(VICTORY_ROAD_B1F) == loc && MAP_GROUP(VICTORY_ROAD_B1F) == locG) ||
-        (MAP_NUM(VICTORY_ROAD_B2F) == loc && MAP_GROUP(VICTORY_ROAD_B2F) == locG)){
+        (MAP_NUM(VICTORY_ROAD_B2F) == loc && MAP_GROUP(VICTORY_ROAD_B2F) == locG)) {
         return 72;
     }
-    if(MAP_NUM(GRANITE_CAVE_1F) == loc && MAP_GROUP(GRANITE_CAVE_1F) == locG){
+    if (MAP_NUM(GRANITE_CAVE_1F) == loc && MAP_GROUP(GRANITE_CAVE_1F) == locG) {
         return 8;
     }
-    if(	(MAP_NUM(GRANITE_CAVE_B1F) == loc && MAP_GROUP(GRANITE_CAVE_B1F) == locG) ||
-        (MAP_NUM(GRANITE_CAVE_B2F) == loc && MAP_GROUP(GRANITE_CAVE_B2F) == locG)){
+    if (	(MAP_NUM(GRANITE_CAVE_B1F) == loc && MAP_GROUP(GRANITE_CAVE_B1F) == locG) ||
+        (MAP_NUM(GRANITE_CAVE_B2F) == loc && MAP_GROUP(GRANITE_CAVE_B2F) == locG)) {
         return 328;
     }
-    if(MAP_NUM(GRANITE_CAVE_STEVENS_ROOM) == loc && MAP_GROUP(GRANITE_CAVE_STEVENS_ROOM) == locG){
+    if (MAP_NUM(GRANITE_CAVE_STEVENS_ROOM) == loc && MAP_GROUP(GRANITE_CAVE_STEVENS_ROOM) == locG) {
         return 264;
     }
-    if(	(MAP_NUM(PETALBURG_WOODS) == loc && MAP_GROUP(PETALBURG_WOODS) == locG) ||
-        (MAP_NUM(PETALBURG_WOODS_2) == loc && MAP_GROUP(PETALBURG_WOODS_2) == locG)){
+    if (	(MAP_NUM(PETALBURG_WOODS) == loc && MAP_GROUP(PETALBURG_WOODS) == locG) ||
+        (MAP_NUM(PETALBURG_WOODS_2) == loc && MAP_GROUP(PETALBURG_WOODS_2) == locG)) {
         return 1;
     }
-    if(MAP_NUM(PETALBURG_WOODS_3) == loc && MAP_GROUP(PETALBURG_WOODS_3) == locG){
+    if (MAP_NUM(PETALBURG_WOODS_3) == loc && MAP_GROUP(PETALBURG_WOODS_3) == locG) {
         return 65;
     }
-    if(MAP_NUM(SEASPRAY_CAVE) == loc && MAP_GROUP(SEASPRAY_CAVE) == locG){
+    if (MAP_NUM(SEASPRAY_CAVE) == loc && MAP_GROUP(SEASPRAY_CAVE) == locG) {
         return 12;
     }
-    if(MAP_NUM(SEASPRAY_CAVE_B1F) == loc && MAP_GROUP(SEASPRAY_CAVE_B1F) == locG){
+    if (MAP_NUM(SEASPRAY_CAVE_B1F) == loc && MAP_GROUP(SEASPRAY_CAVE_B1F) == locG) {
         return 24;
     }
-    if(MAP_NUM(DEWFORD_MEADOW) == loc && MAP_GROUP(DEWFORD_MEADOW) == locG){
+    if (MAP_NUM(DEWFORD_MEADOW) == loc && MAP_GROUP(DEWFORD_MEADOW) == locG) {
         return 1050626;
     }
-    if(MAP_NUM(DEWFORD_MANOR_1F) == loc && MAP_GROUP(DEWFORD_MANOR_1F) == locG){
+    if (MAP_NUM(DEWFORD_MANOR_1F) == loc && MAP_GROUP(DEWFORD_MANOR_1F) == locG) {
         return 1024;
     }
-    if(MAP_NUM(ROUTE111) == loc && MAP_GROUP(ROUTE111) == locG){
+    if (MAP_NUM(ROUTE111) == loc && MAP_GROUP(ROUTE111) == locG) {
         return 36864;
     }
-    if(MAP_NUM(ROUTE112) == loc && MAP_GROUP(ROUTE112) == locG){
+    if (MAP_NUM(ROUTE112) == loc && MAP_GROUP(ROUTE112) == locG) {
         return 34;
     }
-    if(MAP_NUM(ROUTE113) == loc && MAP_GROUP(ROUTE113) == locG){
+    if (MAP_NUM(ROUTE113) == loc && MAP_GROUP(ROUTE113) == locG) {
         return 546;
     }
-    if(MAP_NUM(ROUTE114) == loc && MAP_GROUP(ROUTE114) == locG){
+    if (MAP_NUM(ROUTE114) == loc && MAP_GROUP(ROUTE114) == locG) {
         return 32770;
     }
-    if(	(MAP_NUM(ROUTE117) == loc && MAP_GROUP(ROUTE117) == locG) ||
+    if (	(MAP_NUM(ROUTE117) == loc && MAP_GROUP(ROUTE117) == locG) ||
         (MAP_NUM(ROUTE119) == loc && MAP_GROUP(ROUTE119) == locG) ||
         (MAP_NUM(ROUTE120) == loc && MAP_GROUP(ROUTE120) == locG) ||
-        (MAP_NUM(ROUTE123) == loc && MAP_GROUP(ROUTE123) == locG)){
+        (MAP_NUM(ROUTE123) == loc && MAP_GROUP(ROUTE123) == locG)) {
         return 2050;
     }
-    if(	(MAP_NUM(METEOR_FALLS_1F_1R) == loc && MAP_GROUP(METEOR_FALLS_1F_1R) == locG) ||
+    if (	(MAP_NUM(METEOR_FALLS_1F_1R) == loc && MAP_GROUP(METEOR_FALLS_1F_1R) == locG) ||
         (MAP_NUM(METEOR_FALLS_1F_2R) == loc && MAP_GROUP(METEOR_FALLS_1F_2R) == locG) ||
         (MAP_NUM(METEOR_FALLS_B1F_1R) == loc && MAP_GROUP(METEOR_FALLS_B1F_1R) == locG) ||
         (MAP_NUM(METEOR_FALLS_B1F_2R) == loc && MAP_GROUP(METEOR_FALLS_B1F_2R) == locG) ||
         (MAP_NUM(METEOR_FALLS_STEVENS_CAVE) == loc && MAP_GROUP(METEOR_FALLS_STEVENS_CAVE) == locG) ||
-        (MAP_NUM(METEOR_FALLS_JIRACHIS_ROOM) == loc && MAP_GROUP(METEOR_FALLS_JIRACHIS_ROOM) == locG)){
+        (MAP_NUM(METEOR_FALLS_JIRACHIS_ROOM) == loc && MAP_GROUP(METEOR_FALLS_JIRACHIS_ROOM) == locG)) {
         return 98312;
     }
-    if(MAP_NUM(DESERT_RUINS) == loc && MAP_GROUP(DESERT_RUINS) == locG){
+    if (MAP_NUM(DESERT_RUINS) == loc && MAP_GROUP(DESERT_RUINS) == locG) {
         return 69920;
     }
-    if(	(MAP_NUM(MT_CHIMNEY) == loc && MAP_GROUP(MT_CHIMNEY) == locG) ||
-        (MAP_NUM(JAGGED_PASS) == loc && MAP_GROUP(JAGGED_PASS) == locG)){
+    if (	(MAP_NUM(MT_CHIMNEY) == loc && MAP_GROUP(MT_CHIMNEY) == locG) ||
+        (MAP_NUM(JAGGED_PASS) == loc && MAP_GROUP(JAGGED_PASS) == locG)) {
         return 33312;
     }
-    if(	(MAP_NUM(FIERY_PATH) == loc && MAP_GROUP(FIERY_PATH) == locG) ||
+    if (	(MAP_NUM(FIERY_PATH) == loc && MAP_GROUP(FIERY_PATH) == locG) ||
         (MAP_NUM(SCORCHED_SLAB) == loc && MAP_GROUP(SCORCHED_SLAB) == locG) ||
         (MAP_NUM(SCORCHED_SLAB_B1F) == loc && MAP_GROUP(SCORCHED_SLAB_B1F) == locG) ||
         (MAP_NUM(SCORCHED_SLAB_B2F) == loc && MAP_GROUP(SCORCHED_SLAB_B2F) == locG) ||
-        (MAP_NUM(SCORCHED_SLAB_HEATRANS_ROOM) == loc && MAP_GROUP(SCORCHED_SLAB_HEATRANS_ROOM) == locG)){
+        (MAP_NUM(SCORCHED_SLAB_HEATRANS_ROOM) == loc && MAP_GROUP(SCORCHED_SLAB_HEATRANS_ROOM) == locG)) {
         return 40;
     }
-    if(	(MAP_NUM(EMBER_PATH) == loc && MAP_GROUP(EMBER_PATH) == locG) ||
+    if (	(MAP_NUM(EMBER_PATH) == loc && MAP_GROUP(EMBER_PATH) == locG) ||
         (MAP_NUM(SANDSTREWN_RUINS) == loc && MAP_GROUP(SANDSTREWN_RUINS) == locG) ||
         (MAP_NUM(SANDSTREWN_RUINS_B1F) == loc && MAP_GROUP(SANDSTREWN_RUINS_B1F) == locG) ||
         (MAP_NUM(SANDSTREWN_RUINS_2F) == loc && MAP_GROUP(SANDSTREWN_RUINS_2F) == locG) ||
@@ -10588,72 +10588,72 @@ u32 getMask(s8 loc, s8 locG){
         (MAP_NUM(ARTISAN_CAVE_1F) == loc && MAP_GROUP(ARTISAN_CAVE_1F) == locG) ||
         (MAP_NUM(ALTERING_CAVE) == loc && MAP_GROUP(ALTERING_CAVE) == locG) ||
         (MAP_NUM(ALTERING_CAVE_1F) == loc && MAP_GROUP(ALTERING_CAVE_1F) == locG) ||
-        (MAP_NUM(ALTERING_CAVE_B1F) == loc && MAP_GROUP(ALTERING_CAVE_B1F) == locG)){
+        (MAP_NUM(ALTERING_CAVE_B1F) == loc && MAP_GROUP(ALTERING_CAVE_B1F) == locG)) {
         return 0;
     }
-    if(MAP_NUM(ASHEN_WOODS) == loc && MAP_GROUP(ASHEN_WOODS) == locG){
+    if (MAP_NUM(ASHEN_WOODS) == loc && MAP_GROUP(ASHEN_WOODS) == locG) {
         return 33313;
     }
-    if(MAP_NUM(VERDANTURF_MEADOW) == loc && MAP_GROUP(VERDANTURF_MEADOW) == locG){
+    if (MAP_NUM(VERDANTURF_MEADOW) == loc && MAP_GROUP(VERDANTURF_MEADOW) == locG) {
         return 10242;
     }
-    if(	(MAP_NUM(ROUTE105) == loc && MAP_GROUP(ROUTE105) == locG) ||
-        (MAP_NUM(ROUTE118) == loc && MAP_GROUP(ROUTE118) == locG)){
+    if (	(MAP_NUM(ROUTE105) == loc && MAP_GROUP(ROUTE105) == locG) ||
+        (MAP_NUM(ROUTE118) == loc && MAP_GROUP(ROUTE118) == locG)) {
         return 1048580;
     }
-    if(MAP_NUM(ROUTE115) == loc && MAP_GROUP(ROUTE115) == locG){
+    if (MAP_NUM(ROUTE115) == loc && MAP_GROUP(ROUTE115) == locG) {
         return 1081346;
     }
-    if(MAP_NUM(ROUTE122) == loc && MAP_GROUP(ROUTE122) == locG){
+    if (MAP_NUM(ROUTE122) == loc && MAP_GROUP(ROUTE122) == locG) {
         return 1028;
     }
-    if(	(MAP_NUM(MT_PYRE_1F) == loc && MAP_GROUP(MT_PYRE_1F) == locG) ||
+    if (	(MAP_NUM(MT_PYRE_1F) == loc && MAP_GROUP(MT_PYRE_1F) == locG) ||
         (MAP_NUM(MT_PYRE_2F) == loc && MAP_GROUP(MT_PYRE_2F) == locG) ||
         (MAP_NUM(MT_PYRE_3F) == loc && MAP_GROUP(MT_PYRE_3F) == locG) ||
         (MAP_NUM(MT_PYRE_4F) == loc && MAP_GROUP(MT_PYRE_4F) == locG) ||
         (MAP_NUM(MT_PYRE_5F) == loc && MAP_GROUP(MT_PYRE_5F) == locG) ||
-        (MAP_NUM(MT_PYRE_6F) == loc && MAP_GROUP(MT_PYRE_6F) == locG)){
+        (MAP_NUM(MT_PYRE_6F) == loc && MAP_GROUP(MT_PYRE_6F) == locG)) {
         return 1088;
     }
-    if(	(MAP_NUM(MT_PYRE_EXTERIOR) == loc && MAP_GROUP(MT_PYRE_EXTERIOR) == locG) ||
-        (MAP_NUM(MT_PYRE_SUMMIT) == loc && MAP_GROUP(MT_PYRE_SUMMIT) == locG)){
+    if (	(MAP_NUM(MT_PYRE_EXTERIOR) == loc && MAP_GROUP(MT_PYRE_EXTERIOR) == locG) ||
+        (MAP_NUM(MT_PYRE_SUMMIT) == loc && MAP_GROUP(MT_PYRE_SUMMIT) == locG)) {
         return 33792;
     }
-    if(	(MAP_NUM(SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM) == locG) ||
+    if (	(MAP_NUM(SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_ENTRANCE_ROOM) == locG) ||
         (MAP_NUM(SHOAL_CAVE_LOW_TIDE_INNER_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_INNER_ROOM) == locG) ||
         (MAP_NUM(SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_STAIRS_ROOM) == locG) ||
-        (MAP_NUM(SHOAL_CAVE_LOW_TIDE_LOWER_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_LOWER_ROOM) == locG)){
+        (MAP_NUM(SHOAL_CAVE_LOW_TIDE_LOWER_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_LOWER_ROOM) == locG)) {
         return 1048600;
     }
-    if(	(MAP_NUM(SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM) == locG) ||
-        (MAP_NUM(SHOAL_CAVE_HIGH_TIDE_INNER_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_HIGH_TIDE_INNER_ROOM) == locG)){
+    if (	(MAP_NUM(SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_HIGH_TIDE_ENTRANCE_ROOM) == locG) ||
+        (MAP_NUM(SHOAL_CAVE_HIGH_TIDE_INNER_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_HIGH_TIDE_INNER_ROOM) == locG)) {
         return 28;
     }
-    if(	(MAP_NUM(ABANDONED_SHIP_ROOMS_1F) == loc && MAP_GROUP(ABANDONED_SHIP_ROOMS_1F) == locG) ||
+    if (	(MAP_NUM(ABANDONED_SHIP_ROOMS_1F) == loc && MAP_GROUP(ABANDONED_SHIP_ROOMS_1F) == locG) ||
         (MAP_NUM(ABANDONED_SHIP_CORRIDORS_B1F) == loc && MAP_GROUP(ABANDONED_SHIP_CORRIDORS_B1F) == locG) ||
-        (MAP_NUM(ABANDONED_SHIP_UNDERWATER1) == loc && MAP_GROUP(ABANDONED_SHIP_UNDERWATER1) == locG)){
+        (MAP_NUM(ABANDONED_SHIP_UNDERWATER1) == loc && MAP_GROUP(ABANDONED_SHIP_UNDERWATER1) == locG)) {
         return 1152;
     }
-    if(	(MAP_NUM(MIRAGE_TOWER_1F) == loc && MAP_GROUP(MIRAGE_TOWER_1F) == locG) ||
+    if (	(MAP_NUM(MIRAGE_TOWER_1F) == loc && MAP_GROUP(MIRAGE_TOWER_1F) == locG) ||
         (MAP_NUM(MIRAGE_TOWER_2F) == loc && MAP_GROUP(MIRAGE_TOWER_2F) == locG) ||
         (MAP_NUM(MIRAGE_TOWER_3F) == loc && MAP_GROUP(MIRAGE_TOWER_3F) == locG) ||
         (MAP_NUM(MIRAGE_TOWER_4F) == loc && MAP_GROUP(MIRAGE_TOWER_4F) == locG) ||
-        (MAP_NUM(MIRAGE_TOWER_B1F) == loc && MAP_GROUP(MIRAGE_TOWER_B1F) == locG)){
+        (MAP_NUM(MIRAGE_TOWER_B1F) == loc && MAP_GROUP(MIRAGE_TOWER_B1F) == locG)) {
         return 5376;
     }
-    if(MAP_NUM(DESERT_UNDERPASS) == loc && MAP_GROUP(DESERT_UNDERPASS) == locG){
+    if (MAP_NUM(DESERT_UNDERPASS) == loc && MAP_GROUP(DESERT_UNDERPASS) == locG) {
         return 4104;
     }
-    if(MAP_NUM(ROUTE111_RUINS_EXTERIOR) == loc && MAP_GROUP(ROUTE111_RUINS_EXTERIOR) == locG){
+    if (MAP_NUM(ROUTE111_RUINS_EXTERIOR) == loc && MAP_GROUP(ROUTE111_RUINS_EXTERIOR) == locG) {
         return 6144;
     }
-    if(MAP_NUM(MOSSDEEP_CITY) == loc && MAP_GROUP(MOSSDEEP_CITY) == locG){
+    if (MAP_NUM(MOSSDEEP_CITY) == loc && MAP_GROUP(MOSSDEEP_CITY) == locG) {
         return 73732;
     }
-    if(MAP_NUM(SOOTOPOLIS_CITY) == loc && MAP_GROUP(SOOTOPOLIS_CITY) == locG){
+    if (MAP_NUM(SOOTOPOLIS_CITY) == loc && MAP_GROUP(SOOTOPOLIS_CITY) == locG) {
         return 8324;
     }
-    if(	(MAP_NUM(UNDERWATER_ROUTE124) == loc && MAP_GROUP(UNDERWATER_ROUTE124) == locG) ||
+    if (	(MAP_NUM(UNDERWATER_ROUTE124) == loc && MAP_GROUP(UNDERWATER_ROUTE124) == locG) ||
         (MAP_NUM(UNDERWATER_ROUTE126) == loc && MAP_GROUP(UNDERWATER_ROUTE126) == locG) ||
         (MAP_NUM(UNDERWATER_ROUTE127) == loc && MAP_GROUP(UNDERWATER_ROUTE127) == locG) ||
         (MAP_NUM(UNDERWATER_ROUTE128) == loc && MAP_GROUP(UNDERWATER_ROUTE128) == locG) ||
@@ -10661,62 +10661,62 @@ u32 getMask(s8 loc, s8 locG){
         (MAP_NUM(UNDERWATER_ROUTE105) == loc && MAP_GROUP(UNDERWATER_ROUTE105) == locG) ||
         (MAP_NUM(UNDERWATER_ROUTE125) == loc && MAP_GROUP(UNDERWATER_ROUTE125) == locG) ||
         (MAP_NUM(UNDERWATER_SOOTOPOLIS_CITY) == loc && MAP_GROUP(UNDERWATER_SOOTOPOLIS_CITY) == locG) ||
-        (MAP_NUM(UNDERWATER_ROUTE134) == loc && MAP_GROUP(UNDERWATER_ROUTE134) == locG)){
+        (MAP_NUM(UNDERWATER_ROUTE134) == loc && MAP_GROUP(UNDERWATER_ROUTE134) == locG)) {
         return 128;
     }
-    if(MAP_NUM(AQUA_HIDEOUT_1F) == loc && MAP_GROUP(AQUA_HIDEOUT_1F) == locG){
+    if (MAP_NUM(AQUA_HIDEOUT_1F) == loc && MAP_GROUP(AQUA_HIDEOUT_1F) == locG) {
         return 524292;
     }
-    if(MAP_NUM(SEAFLOOR_CAVERN_ENTRANCE) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ENTRANCE) == locG){
+    if (MAP_NUM(SEAFLOOR_CAVERN_ENTRANCE) == loc && MAP_GROUP(SEAFLOOR_CAVERN_ENTRANCE) == locG) {
         return 140;
     }
-    if(MAP_NUM(SHOAL_CAVE_LOW_TIDE_ICE_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_ICE_ROOM) == locG){
+    if (MAP_NUM(SHOAL_CAVE_LOW_TIDE_ICE_ROOM) == loc && MAP_GROUP(SHOAL_CAVE_LOW_TIDE_ICE_ROOM) == locG) {
         return 16;
     }
-    if(	(MAP_NUM(MAGMA_HIDEOUT_1F) == loc && MAP_GROUP(MAGMA_HIDEOUT_1F) == locG) ||
+    if (	(MAP_NUM(MAGMA_HIDEOUT_1F) == loc && MAP_GROUP(MAGMA_HIDEOUT_1F) == locG) ||
         (MAP_NUM(MAGMA_HIDEOUT_2F_1R) == loc && MAP_GROUP(MAGMA_HIDEOUT_2F_1R) == locG) ||
         (MAP_NUM(MAGMA_HIDEOUT_2F_2R) == loc && MAP_GROUP(MAGMA_HIDEOUT_2F_2R) == locG) ||
         (MAP_NUM(MAGMA_HIDEOUT_3F_1R) == loc && MAP_GROUP(MAGMA_HIDEOUT_3F_1R) == locG) ||
         (MAP_NUM(MAGMA_HIDEOUT_3F_2R) == loc && MAP_GROUP(MAGMA_HIDEOUT_3F_2R) == locG) ||
         (MAP_NUM(MAGMA_HIDEOUT_4F) == loc && MAP_GROUP(MAGMA_HIDEOUT_4F) == locG) ||
         (MAP_NUM(MAGMA_HIDEOUT_3F_3R) == loc && MAP_GROUP(MAGMA_HIDEOUT_3F_3R) == locG) ||
-        (MAP_NUM(MAGMA_HIDEOUT_2F_3R) == loc && MAP_GROUP(MAGMA_HIDEOUT_2F_3R) == locG)){
+        (MAP_NUM(MAGMA_HIDEOUT_2F_3R) == loc && MAP_GROUP(MAGMA_HIDEOUT_2F_3R) == locG)) {
         return 104;
     }
-    if(MAP_NUM(PACIFIDLOG_TOWN) == loc && MAP_GROUP(PACIFIDLOG_TOWN) == locG){
+    if (MAP_NUM(PACIFIDLOG_TOWN) == loc && MAP_GROUP(PACIFIDLOG_TOWN) == locG) {
         return 8196;
     }
-    if(	(MAP_NUM(CAVE_OF_ORIGIN_ENTRANCE) == loc && MAP_GROUP(CAVE_OF_ORIGIN_ENTRANCE) == locG) ||
+    if (	(MAP_NUM(CAVE_OF_ORIGIN_ENTRANCE) == loc && MAP_GROUP(CAVE_OF_ORIGIN_ENTRANCE) == locG) ||
         (MAP_NUM(CAVE_OF_ORIGIN_1F) == loc && MAP_GROUP(CAVE_OF_ORIGIN_1F) == locG) ||
-        (MAP_NUM(CAVE_OF_ORIGIN_B1F) == loc && MAP_GROUP(CAVE_OF_ORIGIN_B1F) == locG)){
+        (MAP_NUM(CAVE_OF_ORIGIN_B1F) == loc && MAP_GROUP(CAVE_OF_ORIGIN_B1F) == locG)) {
         return 65864;
     }
-    if(	(MAP_NUM(SKY_PILLAR_1F) == loc && MAP_GROUP(SKY_PILLAR_1F) == locG) ||
+    if (	(MAP_NUM(SKY_PILLAR_1F) == loc && MAP_GROUP(SKY_PILLAR_1F) == locG) ||
         (MAP_NUM(SKY_PILLAR_2F) == loc && MAP_GROUP(SKY_PILLAR_2F) == locG) ||
         (MAP_NUM(SKY_PILLAR_3F) == loc && MAP_GROUP(SKY_PILLAR_3F) == locG) ||
         (MAP_NUM(SKY_PILLAR_4F) == loc && MAP_GROUP(SKY_PILLAR_4F) == locG) ||
-        (MAP_NUM(SKY_PILLAR_5F) == loc && MAP_GROUP(SKY_PILLAR_5F) == locG)){
+        (MAP_NUM(SKY_PILLAR_5F) == loc && MAP_GROUP(SKY_PILLAR_5F) == locG)) {
         return 525320;
     }
-    if(MAP_NUM(CAVE_OF_ORIGIN_DIANCIES_ROOM) == loc && MAP_GROUP(CAVE_OF_ORIGIN_DIANCIES_ROOM) == locG){
+    if (MAP_NUM(CAVE_OF_ORIGIN_DIANCIES_ROOM) == loc && MAP_GROUP(CAVE_OF_ORIGIN_DIANCIES_ROOM) == locG) {
         return 65800;
     }
 
     return 0;
 }
-bool8 isSpeciesPlaceholderMon(u16 species){
+bool8 isSpeciesPlaceholderMon(u16 species) {
     //Special Cases
-    switch(species){
+    switch (species) {
         case SPECIES_SCIZOR_REDUX:
             return TRUE;
         break;
     }
 
-    if(species == SPECIES_NONE)
+    if (species == SPECIES_NONE)
         return FALSE;
-    else if(species <= LAST_VALID_SPECIES)
+    else if (species <= LAST_VALID_SPECIES)
         return FALSE;
-    else if(species <= FORMS_START)
+    else if (species <= FORMS_START)
         return TRUE;
     else if (species <= LAST_VALID_STANDARD_FORM)
         return FALSE;
@@ -10838,10 +10838,10 @@ u16 GetFormShiftSpecies(u16 species)
             return baseSpecies;
     }
 
-    if(canMegaEvolve) //Permanent mega mode only
+    if (canMegaEvolve) //Permanent mega mode only
     {
         u16 notMegaSpecies = getBaseSpeciesFromMega(species);
-        if(notMegaSpecies != SPECIES_NONE && notMegaSpecies != species)
+        if (notMegaSpecies != SPECIES_NONE && notMegaSpecies != species)
             return notMegaSpecies;
     }
 
@@ -11077,9 +11077,9 @@ const u8* GetSpeciesLongName(u16 species)
     }
 }
 
-u16 GetRandomSpeciesFromPool(u8 id){
+u16 GetRandomSpeciesFromPool(u8 id) {
 	u8 rand = Random();
-    switch(id){
+    switch (id) {
         case POKEMON_POOL_STARTERS:{
 			u16 PossibleSpecies[] = {
 				SPECIES_BULBASAUR,  SPECIES_CHARMANDER, SPECIES_SQUIRTLE,
@@ -11113,7 +11113,7 @@ u16 GetRandomSpeciesFromPool(u8 id){
     }
 }
 
-u16 GetFormChangeForMon(struct Pokemon *mon, u8 num){
+u16 GetFormChangeForMon(struct Pokemon *mon, u8 num) {
     u8 i, j;
 	u16 species 		    = GetMonData(mon, MON_DATA_SPECIES, NULL);
 	u8 level 			    = GetMonData(mon, MON_DATA_LEVEL, NULL);
@@ -11133,10 +11133,10 @@ u16 GetFormChangeForMon(struct Pokemon *mon, u8 num){
 
     i = num;
 
-    //if(!FlagGet(FLAG_BADGE02_GET))
+    //if (!FlagGet(FLAG_BADGE02_GET))
 	//    return SPECIES_NONE;
 	
-    switch(gFormChangeTable[species][i].method)
+    switch (gFormChangeTable[species][i].method)
     {
         case EVO_FORM_SHIFT:
             if (gFormChangeTable[species][i].targetSpecies != actualSpecies)
@@ -11148,9 +11148,9 @@ u16 GetFormChangeForMon(struct Pokemon *mon, u8 num){
         break;
     }
 
-    if(canMegaEvolve && notMegaSpecies == SPECIES_NONE) //Permanent mega mode only
+    if (canMegaEvolve && notMegaSpecies == SPECIES_NONE) //Permanent mega mode only
     {
-        switch(gEvolutionTable[species][i].method)
+        switch (gEvolutionTable[species][i].method)
         {
         case EVO_MEGA_EVOLUTION:
         case EVO_PRIMAL_REVERSION:
@@ -11172,25 +11172,25 @@ u16 GetFormChangeForMon(struct Pokemon *mon, u8 num){
         break;
         }
     }
-    else if(num == 0 && notMegaSpecies != SPECIES_NONE)
+    else if (num == 0 && notMegaSpecies != SPECIES_NONE)
         return notMegaSpecies;
 
 	return SPECIES_NONE;
 }
 
-u8 getNumofAvailableEvos(struct Pokemon *mon){
+u8 getNumofAvailableEvos(struct Pokemon *mon) {
     u8 i;
     u8 count = 0;
 
-    for(i = 0; i < EVOS_PER_MON; i++){
-        if(GetEvolutionForMon(mon, i) != SPECIES_NONE)
+    for (i = 0; i < EVOS_PER_MON; i++) {
+        if (GetEvolutionForMon(mon, i) != SPECIES_NONE)
             count++;
     }
 
     return count;
 }
 
-u16 GetEvolutionForMon(struct Pokemon *mon, u8 num){
+u16 GetEvolutionForMon(struct Pokemon *mon, u8 num) {
     u8 i, j;
 	u16 species 		    = GetMonData(mon, MON_DATA_SPECIES, NULL);
 	u8 level 			    = GetMonData(mon, MON_DATA_LEVEL, NULL);
@@ -11205,12 +11205,12 @@ u16 GetEvolutionForMon(struct Pokemon *mon, u8 num){
     i = num;
 
     //Eevee is handled similar to evolution but will be handled separately, I need to add an special animation for de-evolution
-    if(IsEeveelution(species) && num == 0)
+    if (IsEeveelution(species) && num == 0)
         return SPECIES_EEVEE;
 
     if ((species == SPECIES_NECROZMA_DUSK_MANE || species == SPECIES_NECROZMA_DAWN_WINGS) && num == 0) return SPECIES_NECROZMA;
 	
-    switch(gEvolutionTable[species][i].method)
+    switch (gEvolutionTable[species][i].method)
     {
     case EVO_FRIENDSHIP:
         if (friendship >= 220)
@@ -11223,7 +11223,7 @@ u16 GetEvolutionForMon(struct Pokemon *mon, u8 num){
     break;
     case EVO_LEVEL_DUSK:
         RtcCalcLocalTime();
-        if(IsCurrentlyDusk() && gEvolutionTable[species][i].param <= level)
+        if (IsCurrentlyDusk() && gEvolutionTable[species][i].param <= level)
             return gEvolutionTable[species][i].targetSpecies; // Get base species
     break;
     case EVO_LEVEL_DAY:
@@ -11389,10 +11389,10 @@ static const struct ShinyUnlock sShinyUnlock[NUM_SPECIES][NEW_SHINY_VARIANTS] =
     },
 };
 
-bool8 isShinyVariantUnlocked(u16 species, u8 variant){
+bool8 isShinyVariantUnlocked(u16 species, u8 variant) {
     struct ShinyUnlock sSpeciesShinyUnlock = sShinyUnlock[species][variant];
 
-    if(sSpeciesShinyUnlock.flag != 0 && !FlagGet(sSpeciesShinyUnlock.flag))
+    if (sSpeciesShinyUnlock.flag != 0 && !FlagGet(sSpeciesShinyUnlock.flag))
         return FALSE;
     else if (sSpeciesShinyUnlock.questComplete != 0 && GetSetQuestFlag(sSpeciesShinyUnlock.questComplete, FLAG_GET_COMPLETED))
         return FALSE;
