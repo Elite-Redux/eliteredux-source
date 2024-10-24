@@ -13433,12 +13433,25 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             }
             break;
         
+        case ABILITY_DEEP_CUTS:
+            if (!ShouldApplyOnHitAffect(target)) break;
+            if (!CanBleed(target)) break;
+            if (!(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)) break;
+            if (Random() % 2) break;
+
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
+            return TRUE;
+
+        
         case ABILITY_FLAMING_JAWS:
         case ABILITY_FLAMING_MAW:
             if (!ShouldApplyOnHitAffect(target)) break;
             if (!CanBeBurned(target)) break;
             if (!(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) break;
             if (Random() % 2) break;
+            
+            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
+            return TRUE;
 
         case ABILITY_ARC_FLASH:
             if (!ShouldApplyOnHitAffect(target)) break;
