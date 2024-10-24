@@ -16305,7 +16305,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         case ABILITY_BLOOD_PRICE:
             if (IS_MOVE_STATUS(gLastResultingMoves[battler])) break;
             if (BATTLER_HAS_MAGIC_GUARD(battler)) break;
-            if (gRoundStructs[battler].confusionSelfDmg) break;
+            if (!IsBattlerAlive(battler)) break;
 
             gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 10;
             if (gBattleMoveDamage == 0)
