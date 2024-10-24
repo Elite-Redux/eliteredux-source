@@ -306,6 +306,7 @@ mart AdoptionCenter_Mega_Stones {
 	ITEM_HATTERENITE
 	ITEM_COPPERAJITE
 	ITEM_TOXTRICITITE
+	ITEM_KINGAMBITITE_R
 }
 
 script General_Adoption_Center_Mega_Stones_Script{
