@@ -13568,7 +13568,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
                 
                 case 1:
                     if (!CanBeParalyzed(battler, target)) break;
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_POISON)
                     return TRUE;
             }
             break;
