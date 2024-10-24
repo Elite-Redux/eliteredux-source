@@ -168,6 +168,7 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_CHARGE 0
 #define AI_SCORE_TAUNT 0
 #define AI_SCORE_HELPING_HAND 0
+#define AI_SCORE_GHASTLY_ECHO 0
 #define AI_SCORE_LOSE_ITEM(battler) 0
 #define AI_SCORE_SWAP_ITEMS 0
 #define AI_SCORE_INGRAIN 0
@@ -212,6 +213,7 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_REMOVE_TERRAIN 0
 #define AI_SCORE_PARALYSIS_IGNORE_TYPE 0
 #define AI_SCORE_REMOVE_WEATHER 0
+#define AI_SCORE_SAFE_PASSAGE 0
 
 static int SeesSunlight(int battler, struct AiData* aiData)
 {
@@ -781,7 +783,8 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_SWITCH_ARGUMENT)
         // TODO: Safe passage
-        return AI_SCORE_SWITCH;
+        if (move == MOVE_SAFE_PASSAGE) score = AI_SCORE_SAFE_PASSAGE;
+        return score + AI_SCORE_SWITCH;
 
     CASE_AND_LABEL(EFFECT_BEAT_UP)
         // TODO: Beat up
@@ -1830,7 +1833,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     CASE_AND_LABEL(EFFECT_GHASTLY_ECHO)
         AI_CALC_DAMAGE;
         // TODO: Make sure this makes sense
-        return score + AI_SCORE_SWITCH + AI_SCORE_HELPING_HAND;
+        return score + AI_SCORE_SWITCH + AI_SCORE_GHASTLY_ECHO;
 
     CASE_AND_LABEL(EFFECT_REVIVAL_BLESSING)
         // TODO: Revival Blessing
