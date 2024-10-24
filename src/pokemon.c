@@ -9419,12 +9419,13 @@ bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool
 }
 
 u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
-    u16 randomizedMove = (moves + species + personality) % MOVES_COUNT;
+    u16 randomizedMoveSeed = (moves ^ species ^ personality);
+    u16 randomizedMove;
     if (gSaveBlock2Ptr->moveRandomizedMode == 1 &&
         moves != MOVE_NONE) {
             do {
-                randomizedMove++;
-                randomizedMove = randomizedMove % MOVES_COUNT;
+                randomizedMoveSeed = ISO_RANDOMIZE1(randomizedMoveSeed);
+                randomizedMove = randomizedMoveSeed % MOVES_COUNT;
             }
             while (gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER ||
                   randomizedMove >= MOVES_COUNT    ||
@@ -9471,10 +9472,11 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
        innate != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Innate Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        u16 randomizedInnate = (innate + species + personality) % ABILITIES_COUNT;
+        u16 randomizedInnateSeed = (innate ^ species ^ personality);
+        u16 randomizedInnate;
         do {
-            randomizedInnate++;
-            randomizedInnate = randomizedInnate % ABILITIES_COUNT;
+            randomizedInnateSeed = ISO_RANDOMIZE1(randomizedInnateSeed);
+            randomizedInnate = randomizedInnateSeed % TOTAL_ABILITY_COUNT;
         }
         while (randomizedInnate == ABILITY_NONE                  ||
               randomizedInnate == ABILITY_HUNGER_SWITCH         ||
@@ -9544,10 +9546,11 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
        ability != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Ability Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        u16 randomizedAbility = (ability + species + personality) % ABILITIES_COUNT;
+        u16 randomizedAbilitySeed = ability ^ species ^ personality;
+        u16 randomizedAbility;
         do {
-            randomizedAbility++;
-            randomizedAbility = randomizedAbility % ABILITIES_COUNT;
+            randomizedAbilitySeed = ISO_RANDOMIZE1(randomizedAbilitySeed);
+            randomizedAbility = randomizedAbilitySeed % ABILITIES_COUNT;
         }
         while (randomizedAbility == ABILITY_NONE                 ||
               randomizedAbility == ABILITY_HUNGER_SWITCH        ||
