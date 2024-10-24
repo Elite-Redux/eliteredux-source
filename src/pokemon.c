@@ -9419,13 +9419,12 @@ bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool
 }
 
 u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
-    u16 randomizedMoveSeed = (moves ^ ISO_RANDOMIZE1(species) ^ personality);
+    int randomizedMoveSeed = moves ^ ISO_RANDOMIZE1(species) ^ personality;
     u16 randomizedMove;
     if (gSaveBlock2Ptr->moveRandomizedMode == 1 &&
         moves != MOVE_NONE) {
             do {
-                randomizedMoveSeed = ISO_RANDOMIZE1(randomizedMoveSeed);
-                randomizedMove = randomizedMoveSeed % MOVES_COUNT;
+                randomizedMove = RandRangeDeterministic(0, MOVES_COUNT - 1, &randomizedMoveSeed);
             }
             while (gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER ||
                   randomizedMove >= MOVES_COUNT    ||
@@ -9472,11 +9471,10 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
        innate != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Innate Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        u16 randomizedInnateSeed = (innate ^ ISO_RANDOMIZE1(species) ^ personality);
+        int randomizedInnateSeed = (innate ^ ISO_RANDOMIZE1(species) ^ personality);
         u16 randomizedInnate;
         do {
-            randomizedInnateSeed = ISO_RANDOMIZE1(randomizedInnateSeed);
-            randomizedInnate = randomizedInnateSeed % TOTAL_ABILITY_COUNT;
+            randomizedInnate = RandRangeDeterministic(0, TOTAL_ABILITY_COUNT - 1, &randomizedInnateSeed);
         }
         while (randomizedInnate == ABILITY_NONE                  ||
               randomizedInnate == ABILITY_HUNGER_SWITCH         ||
@@ -9546,11 +9544,10 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
        ability != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Ability Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        u16 randomizedAbilitySeed = ability ^ ISO_RANDOMIZE1(species) ^ personality;
+        int randomizedAbilitySeed = ability ^ ISO_RANDOMIZE1(species) ^ personality;
         u16 randomizedAbility;
         do {
-            randomizedAbilitySeed = ISO_RANDOMIZE1(randomizedAbilitySeed);
-            randomizedAbility = randomizedAbilitySeed % ABILITIES_COUNT;
+            randomizedAbility = RandRangeDeterministic(0, ABILITIES_COUNT - 1, &randomizedAbilitySeed);
         }
         while (randomizedAbility == ABILITY_NONE                 ||
               randomizedAbility == ABILITY_HUNGER_SWITCH        ||
@@ -9599,8 +9596,7 @@ u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType) {
         u8 randomizedType;
 
         do {
-            randomizedTypeSeed = ISO_RANDOMIZE1(randomizedTypeSeed);
-            randomizedType = randomizedTypeSeed % (NUMBER_OF_MON_TYPES - 1);
+            randomizedType = RandRangeDeterministic(0, NUMBER_OF_MON_TYPES - 1, &randomizedTypeSeed);
         }
         while (randomizedType == TYPE_MYSTERY || randomizedType == type);
         return randomizedType;
