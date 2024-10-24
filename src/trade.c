@@ -2940,7 +2940,7 @@ static void InitTradeBgInternal(void)
     SetBgTilemapBuffer(3, Alloc(BG_SCREEN_SIZE));
     DeactivateAllTextPrinters();
     
-    switch(getBattleInterfaceTheme()){
+    switch (getBattleInterfaceTheme()) {
         case THEME_DARK:
             DecompressAndLoadBgGfxUsingHeap(0, gTheme_Dark_BattleTextboxTiles, 0, 0, 0);
         break;
@@ -2960,7 +2960,7 @@ static void InitTradeBgInternal(void)
     LoadCompressedPalette(gTheme_Dark_BattleTextboxPalette, 0, 0x20);
     INIT_WINDOWS(sTradeSequenceWindowTemplates);
 
-    switch(getBattleInterfaceTheme()){
+    switch (getBattleInterfaceTheme()) {
         case THEME_DARK:
             DecompressAndLoadBgGfxUsingHeap(0, gTheme_Dark_BattleTextboxTiles, 0, 0, 0);
         break;

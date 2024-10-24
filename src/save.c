@@ -654,9 +654,9 @@ u8 HandleSavingData(u8 saveType)
     case SAVE_LINK:  // Link and Battle Frontier
     case SAVE_LINK2: // Unused
         SaveSerializedGame();
-        for(i = SECTOR_ID_SAVEBLOCK2_START; i <= SECTOR_ID_SAVEBLOCK1_END; i++)
+        for (i = SECTOR_ID_SAVEBLOCK2_START; i <= SECTOR_ID_SAVEBLOCK1_END; i++)
             HandleReplaceSector(i, gRamSaveSectionLocations);
-        for(i = SECTOR_ID_SAVEBLOCK2_START; i <= SECTOR_ID_SAVEBLOCK1_END; i++)
+        for (i = SECTOR_ID_SAVEBLOCK2_START; i <= SECTOR_ID_SAVEBLOCK1_END; i++)
             WriteSectorSignatureByte_NoOffset(i, gRamSaveSectionLocations);
         break;
     // Support for Ereader was removed in Emerald.

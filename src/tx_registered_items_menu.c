@@ -222,7 +222,7 @@ static void TxRegItemsMenu_ProcessInput(u8 taskId)
     {
         id = ListMenu_ProcessInput(data[5]); //fine
         ListMenuGetScrollAndRow(data[5], &(TxRegItemsMenuItemPageInfo.itemsAbove), &(TxRegItemsMenuItemPageInfo.cursorPos)); //fine
-        switch(id)
+        switch (id)
         {
         case LIST_NOTHING_CHOSEN:
             break;
@@ -296,7 +296,7 @@ static void TxRegItemsMenu_HandleSwapInput(u8 taskId)
     ListMenuGetScrollAndRow(data[5], &(TxRegItemsMenuItemPageInfo.itemsAbove), &(TxRegItemsMenuItemPageInfo.cursorPos));
     SetSwapLineSpritesInvisibility(gTxRegItemsMenu->swapLineSpriteIds, 7, FALSE); //fine
     TxRegItemsMenu_UpdateSwapLinePos(TxRegItemsMenuItemPageInfo.cursorPos);
-    switch(id)
+    switch (id)
     {
     case LIST_NOTHING_CHOSEN:
         break;
@@ -357,7 +357,7 @@ static void TxRegItemsMenu_RefreshListMenu(void)
     LoadMessageBoxAndBorderGfx();
     SetStandardWindowBorderStyle(windowId , 0);
 
-    for(i = 0; i < TxRegItemsMenuItemPageInfo.count - 1; i++)
+    for (i = 0; i < TxRegItemsMenuItemPageInfo.count - 1; i++)
     {
         TxRegItemsMenu_CopyItemName(&(gTxRegItemsMenu->itemNames[i][0]), gSaveBlock1Ptr->registeredItems[i].itemId);
         gTxRegItemsMenu->listItems[i].name = &(gTxRegItemsMenu->itemNames[i][0]);

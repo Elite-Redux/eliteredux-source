@@ -2223,7 +2223,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
 
     nicknamed = isMonNicknamed(mon);
     
-    switch(species){
+    switch (species) {
         case SPECIES_ABOMASNOW_MEGA:
         case SPECIES_ABSOL_MEGA:
         case SPECIES_AERODACTYL_MEGA:
@@ -2318,37 +2318,37 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_SLOWKING_MEGA:
         case SPECIES_RIBOMBEE_MEGA:
             isMega = TRUE;
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_MegaSymbolBefore);
         break;
         case SPECIES_GROUDON_PRIMAL:
             isPrimal = TRUE;
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_OmegaSymbolBefore);
         case SPECIES_KYOGRE_PRIMAL:
             isPrimal = TRUE;
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_AlphaSymbolBefore);
         case SPECIES_CASCOON_PRIMAL:
             isPrimal = TRUE;
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_CascoonSymbolBefore);
         break;
         default:
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
             StringCopy(gDisplayedStringBattle, gText_HighlightDarkGray);
         break;
     }
 
-    if(!DrawMegaSymbolBeforeName)
+    if (!DrawMegaSymbolBeforeName)
         StringCopy(gDisplayedStringBattle, gText_HighlightDarkGray);
     
-    if(nicknamed){
+    if (nicknamed) {
         GetMonData(mon, MON_DATA_NICKNAME, nickname);
         StringGetEnd10(nickname);
         ptr = StringAppend(gDisplayedStringBattle, nickname);
     }
-    else{
+    else {
         StringCopy(nickname, gSpeciesNames[species]);
         StringGetEnd12(nickname);
         ptr = StringAppend(gDisplayedStringBattle, nickname);
@@ -2372,11 +2372,11 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
             break;
     }
 
-    if(isMega && !DrawMegaSymbolBeforeName){
+    if (isMega && !DrawMegaSymbolBeforeName) {
         ptr = StringAppend(ptr, gText_MegaSymbol);
     }
-    else if(isPrimal && !DrawMegaSymbolBeforeName){
-        switch(species){
+    else if (isPrimal && !DrawMegaSymbolBeforeName) {
+        switch (species) {
             case SPECIES_GROUDON_PRIMAL:
                 ptr = StringAppend(ptr, gText_OmegaSymbol);
             break;
@@ -3409,7 +3409,7 @@ void CreateAbilityPopUp(u8 battlerId, u32 ability, bool32 isDoubleBattle)
     if (gBattleScripting.abilityPopupOverwrite != 0)
         ability = gBattleScripting.abilityPopupOverwrite;
 
-    if(gBattleScripting.battlerPopupOverwrite != MAX_BATTLERS_COUNT){
+    if (gBattleScripting.battlerPopupOverwrite != MAX_BATTLERS_COUNT) {
         battlerId = gBattleScripting.battlerPopupOverwrite;
         gBattleScripting.battlerPopupOverwrite = MAX_BATTLERS_COUNT;
     }
@@ -3707,7 +3707,7 @@ void TryToAddMoveInfoWindow(void)
 {
     /*u8 x2 = 32;
 
-    if(IsDoubleBattle())
+    if (IsDoubleBattle())
         x2 = 24;
 
     // window
@@ -3736,10 +3736,10 @@ void TryToAddEnemyInfoWindow(void)
 {
     /*u8 x2 = 32;
 
-    if((gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+    if ((gBattleTypeFlags & BATTLE_TYPE_TRAINER))
         return;
 
-    if(IsDoubleBattle())
+    if (IsDoubleBattle())
         x2 = 24;
 
     // window
@@ -3998,7 +3998,7 @@ void CreateExtraSkillPopUp() // parameter unused for now
 {
     const s16 (*coords)[2];
     u8 spriteId1, spriteId2, battlerPosition, taskId;
-    if (!gBattleStruct->activeExtraskillPopUps){
+    if (!gBattleStruct->activeExtraskillPopUps) {
         LoadSpriteSheet(&sSpriteSheet_ExtraSkillPopUp);
         LoadSpritePalette(&sSpritePalette_ExtraskillPopUp);
     }

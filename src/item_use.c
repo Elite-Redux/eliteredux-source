@@ -1108,7 +1108,7 @@ static void Task_UseRepel(u8 taskId)
 
 static void Task_UsedBlackWhiteFlute(u8 taskId)
 {
-    if(++gTasks[taskId].data[8] > 7)
+    if (++gTasks[taskId].data[8] > 7)
     {
         PlaySE(SE_GLASS_FLUTE);
         if (!InBattlePyramid())
@@ -1290,7 +1290,7 @@ static const u8 sText_CantThrowPokeBall_SemiInvulnerable[] = _("Cannot throw a b
 void ItemUseInBattle_PokeBall(u8 taskId)
 {
 	#if B_ENABLE_DEBUG == TRUE
-    if (FlagGet(FLAG_SYS_NO_CATCHING)){
+    if (FlagGet(FLAG_SYS_NO_CATCHING)) {
         static const u8 sText_BallsCannotBeUsed[] = _("Poké Balls cannot be used\nright now!\p");
         DisplayItemMessage(taskId, 1, sText_BallsCannotBeUsed, CloseItemMessage);
         return;
@@ -1343,7 +1343,7 @@ static void Task_CloseStatIncreaseMessage(u8 taskId)
 
 static void Task_UseStatIncreaseItem(u8 taskId)
 {
-    if(++gTasks[taskId].data[8] > 7)
+    if (++gTasks[taskId].data[8] > 7)
     {
         PlaySE(SE_USE_ITEM);
         RemoveBagItem(gSpecialVar_ItemId, 1);
@@ -1410,7 +1410,7 @@ void ItemUseInBattle_PPRecovery(u8 taskId)
 void ItemUseInBattle_Escape(u8 taskId)
 {
 
-    if((gBattleTypeFlags & BATTLE_TYPE_TRAINER) == FALSE)
+    if ((gBattleTypeFlags & BATTLE_TYPE_TRAINER) == FALSE)
     {
         RemoveUsedItem();
         if (!InBattlePyramid())

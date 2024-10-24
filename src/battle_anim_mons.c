@@ -2039,7 +2039,7 @@ u8 GetBattlerSpriteSubpriority(u8 battlerId)
         position = GetBattlerPosition(battlerId);
         subpriority = 50;
 
-        switch(position)
+        switch (position)
         {
             case B_POSITION_PLAYER_LEFT:
                 return 30;

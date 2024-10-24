@@ -1098,7 +1098,7 @@ static u8 TrainerBattleLoadArg8(const u8 *ptr)
 
 static u16 GetTrainerAFlag(void)
 {
-    if(gTrainerBattleOpponent_A <= MAX_OLD_TRAINERS_COUNT || gTrainerBattleOpponent_A == TRAINER_OLDPLAYER)
+    if (gTrainerBattleOpponent_A <= MAX_OLD_TRAINERS_COUNT || gTrainerBattleOpponent_A == TRAINER_OLDPLAYER)
         return TRAINER_FLAGS_START + gTrainerBattleOpponent_A;
     else
         return gTrainers[gTrainerBattleOpponent_A].trainerFlag;
@@ -1106,7 +1106,7 @@ static u16 GetTrainerAFlag(void)
 
 static u16 GetTrainerBFlag(void)
 {
-    if(gTrainerBattleOpponent_B <= MAX_OLD_TRAINERS_COUNT || gTrainerBattleOpponent_B == TRAINER_OLDPLAYER)
+    if (gTrainerBattleOpponent_B <= MAX_OLD_TRAINERS_COUNT || gTrainerBattleOpponent_B == TRAINER_OLDPLAYER)
         return TRAINER_FLAGS_START + gTrainerBattleOpponent_B;
     else
         return gTrainers[gTrainerBattleOpponent_B].trainerFlag;
@@ -1344,12 +1344,12 @@ void SetUpTwoTrainersBattle(void)
 bool32 GetTrainerFlagFromScriptPointer(const u8 *data)
 {
     u32 flag = TrainerBattleLoadArg16(data + 2);
-    if (flag != sPrevTrainerSeeing){
+    if (flag != sPrevTrainerSeeing) {
         sPrevTrainerSeeing = flag;
         FlagClear(FLAG_RAN_FROM_TRAINER);
     }
 
-    if(flag <= MAX_OLD_TRAINERS_COUNT || flag == TRAINER_OLDPLAYER)
+    if (flag <= MAX_OLD_TRAINERS_COUNT || flag == TRAINER_OLDPLAYER)
         return (FlagGet(TRAINER_FLAGS_START + flag)  || FlagGet(FLAG_RAN_FROM_TRAINER));
     else
         return (FlagGet(gTrainers[flag].trainerFlag) || FlagGet(FLAG_RAN_FROM_TRAINER));
@@ -1380,10 +1380,10 @@ bool8 GetTrainerFlag(void)
 }
 // uncomment this if two opponent must give two wins
 //#define TWO_TRAINERS_IN_DOUBLE_EQUALS_2_WINS
-void AddTrainerBattleWin(void){
+void AddTrainerBattleWin(void) {
     u16 nbBattles;
     #ifdef TWO_TRAINERS_IN_DOUBLE_EQUALS_2_WINS
-    if (gTrainerBattleOpponent_B != 0){
+    if (gTrainerBattleOpponent_B != 0) {
         nbBattles =  GetTrainerBattleWins() + 2;
     } else {
         nbBattles =  GetTrainerBattleWins() + 1;
@@ -1395,7 +1395,7 @@ void AddTrainerBattleWin(void){
     VarSet(VAR_TRACKCOUNT_WINS_LOW, nbBattles & 0XFF);
 }
 
-u16 GetTrainerBattleWins(void){
+u16 GetTrainerBattleWins(void) {
     return (VarGet(VAR_TRACKCOUNT_WINS_HIGH) << 8) | (VarGet(VAR_TRACKCOUNT_WINS_LOW));
 }
 
@@ -1414,7 +1414,7 @@ static void SetBattledTrainerFlag(void)
 
 bool8 HasTrainerBeenFought(u16 trainerId)
 {
-    if(trainerId <= MAX_OLD_TRAINERS_COUNT || trainerId == TRAINER_OLDPLAYER)
+    if (trainerId <= MAX_OLD_TRAINERS_COUNT || trainerId == TRAINER_OLDPLAYER)
         return FlagGet(TRAINER_FLAGS_START + trainerId);
     else
         return FlagGet(gTrainers[trainerId].trainerFlag);
@@ -1422,7 +1422,7 @@ bool8 HasTrainerBeenFought(u16 trainerId)
 
 void SetTrainerFlag(u16 trainerId)
 {
-    if(trainerId <= MAX_OLD_TRAINERS_COUNT || trainerId == TRAINER_OLDPLAYER)
+    if (trainerId <= MAX_OLD_TRAINERS_COUNT || trainerId == TRAINER_OLDPLAYER)
         FlagSet(TRAINER_FLAGS_START + trainerId);
     else
         FlagSet(gTrainers[trainerId].trainerFlag);
@@ -1430,7 +1430,7 @@ void SetTrainerFlag(u16 trainerId)
 
 void ClearTrainerFlag(u16 trainerId)
 {
-    if(trainerId <= MAX_OLD_TRAINERS_COUNT || trainerId == TRAINER_OLDPLAYER)
+    if (trainerId <= MAX_OLD_TRAINERS_COUNT || trainerId == TRAINER_OLDPLAYER)
         FlagClear(TRAINER_FLAGS_START + trainerId);
     else
         FlagClear(gTrainers[trainerId].trainerFlag);
@@ -1522,7 +1522,7 @@ static void CB2_EndTrainerBattle(void)
         SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
         if (!InBattlePyramid() && !InTrainerHillChallenge())
         {
-            if (gBattleOutcome == B_OUTCOME_RAN){
+            if (gBattleOutcome == B_OUTCOME_RAN) {
                 FlagSet(FLAG_RAN_FROM_TRAINER);
             }
             else
@@ -1632,7 +1632,7 @@ void PlayTrainerEncounterMusic(void)
     u16 trainerId;
     u16 music;
 
-    if(gTrainerBattleOpponent_A == TRAINER_NONE){
+    if (gTrainerBattleOpponent_A == TRAINER_NONE) {
         u16 TrainerNum = gMapHeader.events->objectEvents[gSpecialVar_LastTalked - 1].trainerRange_berryTreeId;
         gTrainerBattleOpponent_A = TrainerNum;
     }
@@ -1715,7 +1715,7 @@ const u8 *GetTrainerALoseText(void)
 
     if (gTrainerBattleOpponent_A == TRAINER_SECRET_BASE)
         string = GetSecretBaseTrainerLoseText();
-    else if(FlagGet(FLAG_TAG_BATTLE))
+    else if (FlagGet(FLAG_TAG_BATTLE))
         string = GetTagTeamTrainerLoseText(FALSE);
     else
         string = sTrainerADefeatSpeech;
@@ -1726,7 +1726,7 @@ const u8 *GetTrainerALoseText(void)
 
 const u8 *GetTrainerBLoseText(void)
 {
-    if(FlagGet(FLAG_TAG_BATTLE))
+    if (FlagGet(FLAG_TAG_BATTLE))
         StringExpandPlaceholders(gStringVar4, ReturnEmptyStringIfNull(GetTagTeamTrainerLoseText(TRUE)));
     else
         StringExpandPlaceholders(gStringVar4, ReturnEmptyStringIfNull(sTrainerBDefeatSpeech));

@@ -1468,7 +1468,7 @@ s8 GetSetQuestFlag(u8 quest, u8 caseId)
         #endif
     break;
     case FLAG_SET_UNLOCKED:
-        if(gSaveBlock2Ptr->questStatus[quest] == QUEST_STATUS_LOCKED)
+        if (gSaveBlock2Ptr->questStatus[quest] == QUEST_STATUS_LOCKED)
             gSaveBlock2Ptr->questStatus[quest] = QUEST_STATUS_UNLOCKED;
         return 1;
     break;
@@ -1476,7 +1476,7 @@ s8 GetSetQuestFlag(u8 quest, u8 caseId)
         return (gSaveBlock2Ptr->questStatus[quest] >= QUEST_STATUS_COMPLETED);
     break;
     case FLAG_SET_COMPLETED:
-        if(gSaveBlock2Ptr->questStatus[quest] < QUEST_STATUS_COMPLETED)
+        if (gSaveBlock2Ptr->questStatus[quest] < QUEST_STATUS_COMPLETED)
             gSaveBlock2Ptr->questStatus[quest] = QUEST_STATUS_COMPLETED;
         return 1;
     break;

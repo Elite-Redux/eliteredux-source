@@ -1068,7 +1068,7 @@ void BtlController_EmitPause(u8 bufferId, u8 toWait, void *data)
 
 void BtlController_EmitMoveAnimation(u8 bufferId, u16 move, u8 turnOfMove, u16 movePower, s32 dmg, u8 friendship, struct VolatileStruct *volatileStructPtr, u8 multihit)
 {
-    if(move == MOVE_NONE && gTempMove != MOVE_NONE){
+    if (move == MOVE_NONE && gTempMove != MOVE_NONE) {
         move = gCurrentMove;
         gCurrentMove = gTempMove;
         gTempMove = MOVE_NONE;

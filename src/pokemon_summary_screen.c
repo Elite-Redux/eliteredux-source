@@ -1968,7 +1968,7 @@ static void Task_HandleInput(u8 taskId)
 			}
 			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY && ModifyMode) { 
                 //Ability Modifier
-                do{
+                do {
                     if (abilityNum != 0)
                         abilityNum--;
                     else
@@ -2119,7 +2119,7 @@ static void Task_HandleInput(u8 taskId)
 			}
 			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY && ModifyMode) { 
                 //Ability Modifier
-                do{
+                do {
                     if (abilityNum < NUM_ABILITY_SLOTS - 1)
                         abilityNum++;
                     else

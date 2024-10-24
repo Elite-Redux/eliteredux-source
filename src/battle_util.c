@@ -5191,7 +5191,7 @@ bool8 UseIntimidateClone(u8 battler, u16 abilityToCheck)
     u8 numAbility, numStats, statToLower, i, target;
     bool8 canLowerStat = FALSE;
     
-    for(numAbility = 0; i < NUM_INTIMIDATE_CLONES; i++) {
+    for (numAbility = 0; i < NUM_INTIMIDATE_CLONES; i++) {
         if (gIntimidateCloneData[numAbility].ability == abilityToCheck)
             break;
     }
@@ -5200,7 +5200,7 @@ bool8 UseIntimidateClone(u8 battler, u16 abilityToCheck)
     
     numStats = gIntimidateCloneData[numAbility].numStatsLowered;
 
-    for(i = 0; i < numStats; i++) {
+    for (i = 0; i < numStats; i++) {
         statToLower = gIntimidateCloneData[numAbility].statsLowered[i];
         target = BATTLE_OPPOSITE(battler);
         //Target 1
@@ -5238,7 +5238,7 @@ bool8 TryToSetMonotypeChampEffect(u8 battler) {
     //Mainly to announce the effect
     u16 champType = getMonotypeChampType();
 
-    switch(champType) {
+    switch (champType) {
         case TYPE_NORMAL:
             BattleScriptPushCursorAndCallback(BattleScript_SetMonotypeEffect_Normal);
             return TRUE;
@@ -5323,7 +5323,7 @@ bool8 TryToSetFieldEffect(u8 battler) {
     //VarSet(VAR_BATTLE_FIELD_EFFECT_TYPE, 0);
     //VarSet(VAR_BATTLE_FIELD_ID, 0);
     
-    switch(effect) {
+    switch (effect) {
         //Weather
         case BATTLE_FIELD_EFFECT_WEATHER:
             switch (fieldEffectId)
@@ -6528,7 +6528,7 @@ bool8 BattlerIgnoresAbility(u8 sBattlerAttacker, u8 sBattlerTarget, u16 ability)
         return TRUE;
 
     //Check if the attacker has any Mold Breaker Variant
-    switch(abilityAtk) {
+    switch (abilityAtk) {
         case ABILITY_MOLD_BREAKER:
         case ABILITY_BLIND_RAGE:
         case ABILITY_TERAVOLT:
@@ -6728,7 +6728,7 @@ bool8 IsSleepClauseDisablingMove(u8 battlerId, u16 move)
     if (!IsBattlerAlive(BATTLE_PARTNER(battlerId)) || !IsDoubleBattle)
         partnerchosenmove = MOVE_NONE;
 
-    switch(moveEffect) {
+    switch (moveEffect) {
         case EFFECT_SLEEP:
         case EFFECT_YAWN:
             isSleepingMove = TRUE;
@@ -6739,7 +6739,7 @@ bool8 IsSleepClauseDisablingMove(u8 battlerId, u16 move)
     }
 
     if (IsDoubleBattle) {
-        switch(gBattleMoves[partnerchosenmove].effect) {
+        switch (gBattleMoves[partnerchosenmove].effect) {
             case EFFECT_SLEEP:
             case EFFECT_YAWN:
                 partnerChoseSleepMove = TRUE;
@@ -9278,7 +9278,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
     }
 
     if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)) {
-        switch(move) {
+        switch (move) {
         case MOVE_TACKLE:
             basePower = 100;
             break;
@@ -11017,7 +11017,7 @@ s32 DoMoveDamageCalcInternal(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType
     dmg = CalcFinalDmg(dmg, move, battlerAtk, battlerDef, moveType, typeEffectivenessModifier, isCrit, updateFlags);
 
     // Monotype Champ
-    switch(getMonotypeChampType()) {
+    switch (getMonotypeChampType()) {
         case TYPE_GRASS:
         case TYPE_PSYCHIC:
         case TYPE_ELECTRIC:
@@ -12345,7 +12345,7 @@ bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler)
 }
 
 static bool8 DoesMoveBoostStats(u16 move) {
-    switch(gBattleMoves[move].effect) {
+    switch (gBattleMoves[move].effect) {
         //Multiple Stats Up
         case EFFECT_CALM_MIND:
         //Attack
@@ -12382,7 +12382,7 @@ static bool8 DoesMoveBoostStats(u16 move) {
 
 bool8 HasAnyLoweredStat(u8 battler) {
     u8 i;
-    for(i = STAT_ATK; i < NUM_BATTLE_STATS; i++) {
+    for (i = STAT_ATK; i < NUM_BATTLE_STATS; i++) {
         if (CompareStat(battler, i, DEFAULT_STAT_STAGE, CMP_LESS_THAN))
             return TRUE;
     }
@@ -12695,7 +12695,7 @@ void MakePlayerTeamAsleep(void) {
     u8 i;
     u32 status = STATUS1_SLEEP_TURN(3);
 
-    for(i = 0; i < PARTY_SIZE; i++) {
+    for (i = 0; i < PARTY_SIZE; i++) {
         if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL) != SPECIES_NONE && !GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG, NULL))
             SetMonData(&gPlayerParty[i], MON_DATA_STATUS, &status);
     }
@@ -14832,7 +14832,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler)
             gBattleMons[battler].statStages[STAT_EVASION] = gBattleMons[battler].statStages[STAT_EVASION] + VarGet(VAR_TOTEM_POKEMON_EVASION_BOOST);
 
             SET_STATCHANGER(STAT_ATK, 1, FALSE); //Just for the animation
-            switch(VarGet(VAR_TOTEM_MESSAGE)) {
+            switch (VarGet(VAR_TOTEM_MESSAGE)) {
                 case TOTEM_FIGHT_HAXORUS:
                     BattleScriptPushCursorAndCallback(BattleScript_HaxorusTotemBoostActivated);
                 break;

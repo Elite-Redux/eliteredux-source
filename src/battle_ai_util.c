@@ -832,7 +832,7 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness)
 
         gBattleStruct->dynamicMoveType = moveType | 0x80;
 
-        if(critChance == -1)
+        if (critChance == -1)
             dmg = normalDmg;
         else
             dmg = (critDmg + normalDmg * (critChance - 1)) / critChance;
@@ -1288,7 +1288,7 @@ bool32 DoesBattlerIgnoreAbilityChecks(u8 battler, u8 battlerDef, u16 move)
       || atkAbility == ABILITY_TURBOBLAZE)
         return TRUE;
 
-    if(BattlerHasInnate(battler, ABILITY_MOLD_BREAKER) || 
+    if (BattlerHasInnate(battler, ABILITY_MOLD_BREAKER) || 
        BattlerHasInnate(battler, ABILITY_TERAVOLT) || 
        BattlerHasInnate(battler, ABILITY_TURBOBLAZE))
         return TRUE;
@@ -1447,10 +1447,10 @@ bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move)
     if ((BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_SWEEPING_EDGE_PLUS)) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
         return TRUE;
 
-    if(BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_SIGHTING_SYSTEM))
+    if (BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_SIGHTING_SYSTEM))
         return TRUE;   
 
-    if(BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_IRON_BARRAGE))
+    if (BATTLER_HAS_ABILITY_FAST_AI(battlerAtk, ABILITY_IRON_BARRAGE))
         return TRUE;   
     
     //TODO - anticipate protect move?
@@ -3505,11 +3505,11 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
         return;
 
     // Set up on sleeping foe, but don't go too far
-    if((gBattleMons[battlerDef].status1 & STATUS1_SLEEP) && gBattleMons[battlerAtk].statStages[statId] < STAT_UP_2_STAGE)
+    if ((gBattleMons[battlerDef].status1 & STATUS1_SLEEP) && gBattleMons[battlerAtk].statStages[statId] < STAT_UP_2_STAGE)
         *score += 5;
 
     //If the mon has stored power make it so it uses Stat up moves more likely, but don't go too far
-    if(HasMoveEffect(battlerAtk, EFFECT_STORED_POWER) && gBattleMons[battlerAtk].statStages[statId] < STAT_UP_2_STAGE && AI_DATA->hpPercents[battlerAtk] > 40)
+    if (HasMoveEffect(battlerAtk, EFFECT_STORED_POWER) && gBattleMons[battlerAtk].statStages[statId] < STAT_UP_2_STAGE && AI_DATA->hpPercents[battlerAtk] > 40)
         *score += 5;
 
     switch (statId)

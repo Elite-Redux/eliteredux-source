@@ -419,7 +419,7 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
     gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 1;
     if (!isStatus2)
     {
-        switch(status)
+        switch (status)
         {
             case STATUS1_FREEZE:
             case STATUS1_FROSTBITE:
@@ -731,7 +731,7 @@ void LoadHealthBoxesPalette(void)
     LoadSpritePalette(&sSpritePalettes_HealthBoxHealthBar[0]);
 }
 
-u8 getBattleInterfaceTheme(void){
+u8 getBattleInterfaceTheme(void) {
     return gSaveBlock2Ptr->battleInterfaceTheme;
 }
 
@@ -923,12 +923,12 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
     {
         position = GetBattlerPosition(battlerAtk);
 
-        if (GetBattlerSide(battlerDef) == B_SIDE_OPPONENT){
+        if (GetBattlerSide(battlerDef) == B_SIDE_OPPONENT) {
             isAlpha = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_IS_ALPHA);
             isShiny = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_IS_SHINY);
             targetSpecies = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_SPECIES);
         }
-        else{
+        else {
             isAlpha = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_IS_ALPHA);
             isShiny = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_IS_SHINY);
             targetSpecies = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerDef]], MON_DATA_SPECIES);

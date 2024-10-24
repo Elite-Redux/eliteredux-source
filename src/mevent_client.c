@@ -205,7 +205,7 @@ static u32 Client_Run(struct mevent_client * svr)
             SaveWonderNews(svr->recvBuffer);
             MysteryGiftClient_InitSendWord(svr, 0x13, 0);
         }
-        else{
+        else {
             // Wonder News has already been saved (or is invalid).
             // Prepare a signal to indicate it was not saved.
             MysteryGiftClient_InitSendWord(svr, 0x13, 1);

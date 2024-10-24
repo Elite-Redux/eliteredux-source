@@ -329,7 +329,7 @@ static bool8 CheckConditions(int selection)
     switch (sOptions->submenu)
     {
     case MENU_MAIN:
-        switch(selection)
+        switch (selection)
         {
         case MENUITEM_MAIN_TEXTSPEED:       return TRUE;
         case MENUITEM_MAIN_HPBARSPEED:      return TRUE;
@@ -341,7 +341,7 @@ static bool8 CheckConditions(int selection)
         case MENUITEM_MAIN_COUNT:           return TRUE;
         }
     case MENU_CUSTOM:
-        switch(selection)
+        switch (selection)
         {
         case MENUITEM_CUSTOM_BATTLE_UI_THEME:     return TRUE;
         case MENUITEM_CUSTOM_SHORTCUT_BUTTON:     return TRUE;
@@ -1412,7 +1412,7 @@ static void DrawChoices_BattleInterfaceShortcut(int selection, int y)
     u8 styles[2] = {0};
     styles[selection] = 1;
 
-    if(B_ENABLE_DEBUG)
+    if (B_ENABLE_DEBUG)
         DrawOptionMenuChoice(sShortcutNames_Debug[selection], 104, y, 0, active);
     else
         DrawOptionMenuChoice(sShortcutNames[selection], 104, y, styles[0], active);

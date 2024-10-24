@@ -521,7 +521,7 @@ static void DoMoveRelearnerMain(void)
                 if (GiveMoveToMon(&gPlayerParty[sMoveRelearnerStruct->partyMon], GetCurrentSelectedMove()) != MON_HAS_MAX_MOVES)
                 {
                     FormatAndPrintText(gText_MoveRelearnerPkmnLearnedMove);
-                    if(FlagGet(FLAG_MOVE_RELEARNER) == TRUE)
+                    if (FlagGet(FLAG_MOVE_RELEARNER) == TRUE)
                         gSpecialVar_0x8004 = TRUE;
                     sMoveRelearnerStruct->state = MENU_STATE_PRINT_TEXT_THEN_FANFARE;
                 }
@@ -556,7 +556,7 @@ static void DoMoveRelearnerMain(void)
 
             if (selection == 0)
             {
-                if(FlagGet(FLAG_MOVE_RELEARNER) == TRUE)
+                if (FlagGet(FLAG_MOVE_RELEARNER) == TRUE)
                     gSpecialVar_0x8004 = FALSE;
                 sMoveRelearnerStruct->state = MENU_STATE_FADE_AND_RETURN;
             }
@@ -676,7 +676,7 @@ static void DoMoveRelearnerMain(void)
 		break;
     case MENU_STATE_FADE_AND_RETURN:
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
-        if(FlagGet(FLAG_MOVE_RELEARNER) == TRUE){
+        if (FlagGet(FLAG_MOVE_RELEARNER) == TRUE) {
             sMoveRelearnerStruct->state++;
         } else {
             sMoveRelearnerStruct->state = MENU_STATE_RETURN_TO_PARTY_MENU;
@@ -721,7 +721,7 @@ static void DoMoveRelearnerMain(void)
                 FormatAndPrintText(gText_MoveRelearnerPkmnForgotMoveAndLearnedNew);
                 sMoveRelearnerStruct->state = MENU_STATE_PRINT_TEXT_THEN_FANFARE;
                 PlayFanfare(MUS_LEVEL_UP);
-                if(FlagGet(FLAG_MOVE_RELEARNER) == TRUE)
+                if (FlagGet(FLAG_MOVE_RELEARNER) == TRUE)
                     gSpecialVar_0x8004 = TRUE;
             }
         }
@@ -751,7 +751,7 @@ static void DoMoveRelearnerMain(void)
         if (JOY_NEW(A_BUTTON))
         {
             PlaySE(SE_SELECT);
-            if(FlagGet(FLAG_MOVE_RELEARNER) == TRUE){
+            if (FlagGet(FLAG_MOVE_RELEARNER) == TRUE) {
                 sMoveRelearnerStruct->state = MENU_STATE_FADE_AND_RETURN;
             } else {
                 sMoveRelearnerStruct->state = MENU_STATE_RETURN_TO_PARTY_MENU;
@@ -882,7 +882,7 @@ static void CreateLearnableMovesList(void)
     s32 i;
     u8 nickname[POKEMON_NAME_LENGTH + 1];
 
-	switch(VarGet(VAR_PARTY_MENU_TUTOR_STATE)){
+	switch (VarGet(VAR_PARTY_MENU_TUTOR_STATE)) {
 		case MOVE_TUTOR_LEVEL_UP_MOVES:
 			sMoveRelearnerStruct->numMenuChoices = GetMoveRelearnerMoves(&gPlayerParty[sMoveRelearnerStruct->partyMon], sMoveRelearnerStruct->movesToLearn, TRUE);
 		break;
@@ -903,11 +903,11 @@ static void CreateLearnableMovesList(void)
         sMoveRelearnerStruct->menuItems[i].id = sMoveRelearnerStruct->movesToLearn[i];
     }
 
-    if(isMonNicknamed(&gPlayerParty[sMoveRelearnerStruct->partyMon])){
+    if (isMonNicknamed(&gPlayerParty[sMoveRelearnerStruct->partyMon])) {
         GetMonData(&gPlayerParty[sMoveRelearnerStruct->partyMon], MON_DATA_NICKNAME, nickname); 
         StringCopy10(gStringVar1, nickname);
     }
-    else{
+    else {
         u16 species = GetMonData(&gPlayerParty[sMoveRelearnerStruct->partyMon], MON_DATA_SPECIES, NULL);
         StringCopy(gStringVar1, gSpeciesNames[species]);
     }

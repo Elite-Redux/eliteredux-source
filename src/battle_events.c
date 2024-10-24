@@ -23,7 +23,7 @@ EWRAM_DATA u8 gLastBattleEvent = 0;
 EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
 
 const u8 sText_WarnMaxBattleEventReached[] = _("Warning you have registered\ntoo many battle events.");
-void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventData1){
+void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventData1) {
     //reached the limit
     if (gNbBattleEvents == BATTLE_EVENTS_MAX_REGISTERABLE) {
         //I sure hope this will trigger well enough so it may warn the user.
@@ -39,7 +39,7 @@ void RegisterBattleEvent(u8 battleEventID, u8 battleEventData0, u8 battleEventDa
 }
 
 // clear all battle Events
-void UnregisterBattlesEvents(){
+void UnregisterBattlesEvents() {
     gNbBattleEvents = 0;
     gCurrBattleEvent = 0;
 }
@@ -50,17 +50,17 @@ void UnregisterBattlesEvents(){
  * - Allow for one time uses mid battle even if we could use the data for that
  * - It's just that if we unregister it with RUN_BATTLESCRIPT_UNREGISTER it lower the chances of forgetting
  */
-void UnregisterCurrentBattleEvent(){
+void UnregisterCurrentBattleEvent() {
     gBattleEvents[gCurrBattleEvent--] = gBattleEvents[--gNbBattleEvents];
     // i do wonder if it's worth to shift the array afterwards so less cycles are needed for that
     // probably overkill
 }
 
 // entry point of battleEvents in battle.
-u8 ExecBattleEvents(){
+u8 ExecBattleEvents() {
     // it goes by the principle that it will be executed in loop until it returns ALL CLEAR
-    while (gCurrBattleEvent < gNbBattleEvents){
-        if (BattleEventExec(&gBattleEvents[gCurrBattleEvent]) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL){
+    while (gCurrBattleEvent < gNbBattleEvents) {
+        if (BattleEventExec(&gBattleEvents[gCurrBattleEvent]) == EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL) {
             gCurrBattleEvent++;
             return EXEC_BATTLE_EVENTS_NEEDS_SCRIPT_CALL;
         } 
@@ -73,7 +73,7 @@ u8 ExecBattleEvents(){
 }
 
 //exec only one battle Event
-u8 BattleEventExec(struct BattleEvent *battleEvent){
+u8 BattleEventExec(struct BattleEvent *battleEvent) {
     if (battleEvent->id == BATTLE_EVENT_NONE)
         return EXEC_BATTLE_EVENTS_ALL_CLEAR;
 
@@ -135,13 +135,13 @@ bool8 IsBattleEventForbiddenOnSwitchIn(u8 battleEventID)
     return FALSE;
 }
 
-bool8 AffectNStatusOnTeamFromLastToFirst(u32 status, u8 n){
+bool8 AffectNStatusOnTeamFromLastToFirst(u32 status, u8 n) {
     u8 i;
     if (n == 0)
         n = 1;
-    for (i = gPlayerPartyCount - 1; i > 0 ; i--){
+    for (i = gPlayerPartyCount - 1; i > 0 ; i--) {
         // do not overwrite a status already existing if we want to have multiple possible status registerable.
-        if (gPlayerParty[i].status == STATUS1_NONE){
+        if (gPlayerParty[i].status == STATUS1_NONE) {
             gPlayerParty[i].status = status;
             if ((--n) == 0)
                 return TRUE;
@@ -151,8 +151,8 @@ bool8 AffectNStatusOnTeamFromLastToFirst(u32 status, u8 n){
 }
 
 // will always set the data in slot 2 (data1) of the battleEvent
-bool8 HasNumberOfTurnsStayedReached(struct BattleEvent *battleEvent, u8 pos){
-    if (gVolatileStructs[pos].isFirstTurn){
+bool8 HasNumberOfTurnsStayedReached(struct BattleEvent *battleEvent, u8 pos) {
+    if (gVolatileStructs[pos].isFirstTurn) {
         battleEvent->data1 = 0;
     } else {
         battleEvent->data1 += 1;
@@ -171,13 +171,13 @@ void SetSubstituteBattleEvent(void)
     gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE;
 }
 
-bool8 DepleteTeamPowerPointOfMove(u16 moveId){
+bool8 DepleteTeamPowerPointOfMove(u16 moveId) {
     bool8 hasBeenModified;
     u8 i, j;
     u32 move, wtf;
-    for (i = 0; i < gPlayerPartyCount; i++){
+    for (i = 0; i < gPlayerPartyCount; i++) {
         // if the move is the one targetted it totally depletes its PP
-        for (j = 0; j < MAX_MON_MOVES; j++){
+        for (j = 0; j < MAX_MON_MOVES; j++) {
             move = GetMonData(&gPlayerParty[i], MON_DATA_MOVE1 + j);
             if (move != moveId)
                 continue;
@@ -200,7 +200,7 @@ SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_LEFT, stat, level)\
 if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_RIGHT].hp > 0))\
     SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_RIGHT, stat, level);
 // this is run once pokemon have landed before their ability have popped
-u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
+u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
     u8 data;
     switch (battleEvent->id)
     {
@@ -314,7 +314,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
     case BATTLE_EVENT_EMBARGO:
         gStatuses3[B_POSITION_PLAYER_LEFT] |= STATUS3_EMBARGO;
         gVolatileStructs[B_POSITION_PLAYER_LEFT].embargoTimer = battleEvent->data0;
-        if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && gPlayerPartyCount >= 2){
+        if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && gPlayerPartyCount >= 2) {
             gStatuses3[B_POSITION_PLAYER_RIGHT] |= STATUS3_EMBARGO;
             gVolatileStructs[B_POSITION_PLAYER_RIGHT].embargoTimer = battleEvent->data0;
         }
@@ -358,7 +358,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent){
 
 // ran once the turn has reached its end before the player can get its hand on control again
 // which is the start, the end of the end is in fact the start, how philosophic. 
-u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
+u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent) {
     //"fainted player: %d, fainted trainer %d", gFaintedMonCount[0], gFaintedMonCount[1]
     //gQueuedExtraAttackData if I want to add attack to the queue?
     //gQuashedBattlers++; how do I use that even?
@@ -396,12 +396,12 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
         RUN_BATTLESCRIPT(BattleScript_ExtraSkillSteadyCrit);
     
     case BATTLE_EVENT_ONSWITCH_MAT_BLOCK:
-        if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn != 1){
+        if (gVolatileStructs[B_POSITION_OPPONENT_LEFT].isFirstTurn != 1) {
             battleEvent->data1 = 0;
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         }
         gSideStatuses[B_SIDE_OPPONENT] |= SIDE_STATUS_MAT_BLOCK;
-        if (!battleEvent->data1 && battleEvent->data0 > 1){
+        if (!battleEvent->data1 && battleEvent->data0 > 1) {
             battleEvent->data1 = 1;
             battleEvent->data0--;
             RUN_BATTLESCRIPT(BattleScript_ExtraSkillMatBlock)
@@ -470,12 +470,12 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent){
     case BATTLE_EVENT_TENSE_BATTLE:
         // play the gym battle music of gen 4 in tense moments  
         // if 50% or more of the pokemon in battle on both sides have been defeated, then play the music 
-        if (gFaintedMonCount[1] >= (gEnemyPartyCount / 2) && gFaintedMonCount[0] >= (gPlayerPartyCount / 2) ){
+        if (gFaintedMonCount[1] >= (gEnemyPartyCount / 2) && gFaintedMonCount[0] >= (gPlayerPartyCount / 2) ) {
             PlayBGM(DP_SEQ_BA_GYM);
             UnregisterCurrentBattleEvent();
         } 
         // if the player have 3 pokemon less than the gym leader then play the music
-        else if ((gPlayerPartyCount - gFaintedMonCount[0]) <= ((gEnemyPartyCount - gFaintedMonCount[1]) - 3)){
+        else if ((gPlayerPartyCount - gFaintedMonCount[0]) <= ((gEnemyPartyCount - gFaintedMonCount[1]) - 3)) {
             PlayBGM(DP_SEQ_BA_GYM);
             UnregisterCurrentBattleEvent();
         }

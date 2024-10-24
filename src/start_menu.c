@@ -356,45 +356,45 @@ static void BuildNormalStartMenu(void)
         AddStartMenuAction(MENU_ACTION_POKENAV);
     }
 
-    switch(gSaveBlock1Ptr->location.mapNum){
+    switch (gSaveBlock1Ptr->location.mapNum) {
 		case MAP_NUM(EVER_GRANDE_CITY_SIDNEYS_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_SIDNEYS_ROOM))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_SIDNEYS_ROOM))
 				disablePC = TRUE;
 		break;
 		case MAP_NUM(EVER_GRANDE_CITY_PHOEBES_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_PHOEBES_ROOM))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_PHOEBES_ROOM))
 				disablePC = TRUE;
 		break;
 		case MAP_NUM(EVER_GRANDE_CITY_GLACIAS_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_GLACIAS_ROOM))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_GLACIAS_ROOM))
 				disablePC = TRUE;
 		break;
 		case MAP_NUM(EVER_GRANDE_CITY_DRAKES_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_DRAKES_ROOM))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_DRAKES_ROOM))
 				disablePC = TRUE;
 		break;
 		case MAP_NUM(EVER_GRANDE_CITY_CHAMPIONS_ROOM):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_CHAMPIONS_ROOM))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_CHAMPIONS_ROOM))
 				disablePC = TRUE;
 		break;
 		case MAP_NUM(EVER_GRANDE_CITY_HALL1):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL1))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL1))
 				disablePC = TRUE;
 		break;
 		case MAP_NUM(EVER_GRANDE_CITY_HALL2):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL2))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL2))
 				disablePC = TRUE;
 		break;
 		case MAP_NUM(EVER_GRANDE_CITY_HALL3):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL3))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL3))
 				disablePC = TRUE;
 		break;
 		case MAP_NUM(EVER_GRANDE_CITY_HALL4):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL4))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL4))
 				disablePC = TRUE;
 		break;
 		case MAP_NUM(EVER_GRANDE_CITY_HALL5):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL5))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(EVER_GRANDE_CITY_HALL5))
 				disablePC = TRUE;
 		break;
 	}
@@ -406,7 +406,7 @@ static void BuildNormalStartMenu(void)
     //AddStartMenuAction(MENU_ACTION_SAVE);
     AddStartMenuAction(MENU_ACTION_OPTION);
 
-    if(!disablePC && FlagGet(FLAG_SYS_POKEMON_GET))
+    if (!disablePC && FlagGet(FLAG_SYS_POKEMON_GET))
 	    AddStartMenuAction(MENU_ACTION_ACCESS_PC);
     else
         AddStartMenuAction(MENU_ACTION_EXIT);
@@ -681,7 +681,7 @@ void Task_ShowStartMenu(u8 taskId)
 {
     struct Task* task = &gTasks[taskId];
 
-    switch(task->data[0])
+    switch (task->data[0])
     {
     case 0:
         if (InUnionRoom() == TRUE)
@@ -1630,7 +1630,7 @@ static void ShowGameVersionWindow(void)
     PutWindowTilemap(sSafariBallsWindowId);
     DrawStdWindowFrame(sSafariBallsWindowId, FALSE);
 
-    if(levelCap > MAX_LEVEL)
+    if (levelCap > MAX_LEVEL)
         levelCap = MAX_LEVEL;
 
     //Level Cap
@@ -1642,7 +1642,7 @@ static void ShowGameVersionWindow(void)
     //Number of Losses
     ConvertIntToDecimalStringN(gStringVar3, losses, STR_CONV_MODE_RIGHT_ALIGN, 3);
 
-    if(canSave)
+    if (canSave)
         StringExpandPlaceholders(gStringVar4, sText_Message_Save);
     else
         StringExpandPlaceholders(gStringVar4, sText_Message_No_Save);

@@ -1849,7 +1849,7 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     else if (IS_MOVE_STATUS(move) && BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_GIFTED_MIND, atkAbility))
         return 101;
     else if (BATTLER_HAS_ABILITY_FAST(battlerAtk, ABILITY_ANGELS_WRATH, atkAbility)) {
-        switch(move) {
+        switch (move) {
             case MOVE_TACKLE:
             case MOVE_POISON_STING:
             case MOVE_ELECTROWEB:
@@ -4047,7 +4047,7 @@ static void Cmd_seteffectwithchance(void)
 
     //Angel's Wrath
     if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ANGELS_WRATH)) {
-        switch(gCurrentMove) {
+        switch (gCurrentMove) {
         case MOVE_POISON_STING:
             percentChance = 100;
             break;
@@ -4057,7 +4057,7 @@ static void Cmd_seteffectwithchance(void)
     //Parental Bond
     if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) {
         //These moves don't trigger flinch after the first hit
-        switch(moveEffect) {
+        switch (moveEffect) {
             case MOVE_EFFECT_FLINCH:
                 percentChance = 0;
             break;
@@ -5582,7 +5582,7 @@ static void Cmd_moveend(void)
                     gBattlerAttacker = gStackBattler4;
                     gBattlerTarget = gStackBattler3;
 
-                    for(j = 1; j < NUM_STATS; j++) {
+                    for (j = 1; j < NUM_STATS; j++) {
                         if (gBattleMons[gBattlerTarget].statStages[j] > 0)
                             change = change || ChangeStatBuffs(gBattlerTarget, StatBuffValue(-1), j, STAT_BUFF_DONT_SET_BUFFERS, NULL);
                     }
@@ -8484,7 +8484,7 @@ u32 IsDesertCloakProtected(u32 battler)
 
 bool32 IsShieldsDownProtected(u32 battler)
 {
-    switch(gBattleMons[battler].species) {
+    switch (gBattleMons[battler].species) {
         case SPECIES_MINIOR:
         case SPECIES_MINIOR_METEOR_ORANGE:
         case SPECIES_MINIOR_METEOR_YELLOW:
@@ -12149,7 +12149,7 @@ static void Cmd_checkcondition(void)
         targetSide = GetBattlerSide(gBattlerTarget);
     }
 
-    switch(condition) {
+    switch (condition) {
         case CONDITION_SPIKES:
             if (gSideTimers[targetSide].spikesAmount < 3)
             {
@@ -13011,7 +13011,7 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
     if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_CLEAR_AMULET)
         return TRUE;
 
-    switch(ability) {
+    switch (ability) {
         case ABILITY_INTIMIDATE:
         case ABILITY_SCARE:
         case ABILITY_TERRIFY:
@@ -13042,7 +13042,7 @@ bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ab
             return TRUE;
     }
 
-    switch(TranslateStatId(stat, battler)) {
+    switch (TranslateStatId(stat, battler)) {
         case STAT_ATK:
             if (BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER))
                 return TRUE;
@@ -13060,7 +13060,7 @@ static void Cmd_battlemacros(void)
     const u8 *jumpPtr = T1_READ_PTR(gBattlescriptCurrInstr + 4);//+4
     bool8 tryjump = FALSE;
 
-    switch(type) {
+    switch (type) {
         case MACROS_PRINT_MGBA_MESSAGE:
             #ifdef DEBUG_BUILD
                 if (FlagGet(FLAG_SYS_MGBA_PRINT)) {
@@ -13087,7 +13087,7 @@ static void Cmd_battlemacros(void)
             u8 statslowered = 0;
             u8 numAbility = 0;
 
-            for(i = 0; i < NUM_INTIMIDATE_CLONES; i++) {
+            for (i = 0; i < NUM_INTIMIDATE_CLONES; i++) {
                 if (gIntimidateCloneData[i].ability == ability)
                     break;
             }
@@ -13099,7 +13099,7 @@ static void Cmd_battlemacros(void)
             numAbility = i;
             numStats = gIntimidateCloneData[numAbility].numStatsLowered;
 
-            for(i = 0; i < numStats; i++) {
+            for (i = 0; i < numStats; i++) {
                 statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], opposingBattler);
                 if (!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE) {
                     s8 change = -1;
@@ -13151,7 +13151,7 @@ static void Cmd_battlemacros(void)
             if (!IsBattlerAlive(opposingBattler))
                 break;
 
-            for(i = 0; i < NUM_INTIMIDATE_CLONES; i++) {
+            for (i = 0; i < NUM_INTIMIDATE_CLONES; i++) {
                 if (gIntimidateCloneData[i].ability == ability)
                     break;
             }
@@ -13166,7 +13166,7 @@ static void Cmd_battlemacros(void)
             if (!gIntimidateCloneData[numAbility].targetBoth && targetNum != 0)
                 break;
 
-            for(i = 0; i < numStats; i++) {
+            for (i = 0; i < numStats; i++) {
                 statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], opposingBattler);
                 if (!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE) {
                     s8 change = -1;
@@ -13600,7 +13600,7 @@ static void Cmd_calculatesetdamage(void)
     s32 randDamage;
 
     //Calculate Base Damage
-    switch(gBattleMoves[gCurrentMove].effect)
+    switch (gBattleMoves[gCurrentMove].effect)
     {
         case EFFECT_SKY_DROP:
         case EFFECT_LEVEL_DAMAGE:
@@ -13645,7 +13645,7 @@ static void Cmd_trytoapplymoveeffect(void)
     u8 secondaryEffectChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
     u8 rand = (Random() % 100);
 
-    switch(gBattleMoves[gCurrentMove].effect)
+    switch (gBattleMoves[gCurrentMove].effect)
     {
         case EFFECT_ATTRACT_HIT:
             if (rand <= secondaryEffectChance) {
@@ -16078,7 +16078,7 @@ bool32 CanCamouflage(u8 battlerId)
 static void Cmd_settypetoterrain(void)
 {
     u8 terrainType;
-    switch(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
+    switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
     {
     case STATUS_FIELD_ELECTRIC_TERRAIN:
         terrainType = TYPE_ELECTRIC;

@@ -441,7 +441,7 @@ void CB2_DoHallOfFameScreenDontSaveData(void)
     }
 }
 
-u16 getHallofFameSpecies(u8 num){
+u16 getHallofFameSpecies(u8 num) {
     u8 i, j;
     u16 item = GetMonData(&gPlayerParty[num], MON_DATA_HELD_ITEM);
     u16 species = GetMonData(&gPlayerParty[num], MON_DATA_SPECIES);
@@ -467,10 +467,10 @@ u16 getHallofFameSpecies(u8 num){
         }
     }
 
-    switch(species){
+    switch (species) {
         case SPECIES_DARMANITAN_GALARIAN:
         case SPECIES_DARMANITAN:
-            if(GetAbilityBySpecies(species, GetMonData(&gPlayerParty[num], MON_DATA_ABILITY_NUM)) == ABILITY_ZEN_MODE ||
+            if (GetAbilityBySpecies(species, GetMonData(&gPlayerParty[num], MON_DATA_ABILITY_NUM)) == ABILITY_ZEN_MODE ||
                SpeciesHasInnate(species, ABILITY_ZEN_MODE, GetMonData(&gPlayerParty[num], MON_DATA_LEVEL), GetMonData(&gPlayerParty[num], MON_DATA_PERSONALITY), FALSE, FALSE))
                return species == SPECIES_DARMANITAN ? SPECIES_DARMANITAN_ZEN_MODE : SPECIES_DARMANITAN_ZEN_MODE_GALARIAN;
             break;
@@ -1201,11 +1201,11 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
 	//Number of Losses
 	ConvertIntToDecimalStringN(gStringVar2, losses, STR_CONV_MODE_RIGHT_ALIGN, 3);
 
-    if(FlagGet(FLAG_SYS_LOCKED_MODE)){
+    if (FlagGet(FLAG_SYS_LOCKED_MODE)) {
         StringExpandPlaceholders(gStringVar3, sText_WinsLossesLockedText);
         FlagClear(FLAG_SYS_LOCKED_MODE); //This seems to not be saved upon reloading the game, the game probably saves before calling this funcition and restarts without saving
     }
-    else{
+    else {
         StringExpandPlaceholders(gStringVar3, sText_WinsLossesText);
     }
 	
@@ -1246,63 +1246,63 @@ static void HallOfFame_PrintWelcomeText(u8 unusedPossiblyWindowId, u8 unused2)
     PutWindowTilemap(0);
     AddTextPrinterParameterized3(0, FONT_SMALL_NARROW, GetStringCenterAlignXOffset(1, gStringVar4, 0xD0), 0, sMonInfoTextColors, 0, gStringVar4);
     
-    if(gSaveBlock2Ptr->encounterRandomizedMode ||
+    if (gSaveBlock2Ptr->encounterRandomizedMode ||
        gSaveBlock2Ptr->encounterRandomizedLegendaryMode ||
        gSaveBlock2Ptr->typeRandomizedMode      ||
        gSaveBlock2Ptr->abilityRandomizedMode   ||
-       gSaveBlock2Ptr->innaterandomizedMode){
+       gSaveBlock2Ptr->innaterandomizedMode) {
 
         //Encounter Randomizer
-        if(gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
+        if (gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode) {
             StringCopy(gStringVar1, encounterRandomizerModeText);
             numModes++;
         }
-        else{
+        else {
             StringCopy(gStringVar1, noText);
         }
 
         //Type Randomizer
-        if(gSaveBlock2Ptr->typeRandomizedMode){
+        if (gSaveBlock2Ptr->typeRandomizedMode) {
             StringCopy(gStringVar2, typeRandomizerModeText);
             numModes++;
         }
-        else{
+        else {
             StringCopy(gStringVar2, noText);
         }
 
-        if(gSaveBlock2Ptr->abilityRandomizedMode && !gSaveBlock2Ptr->innaterandomizedMode){
+        if (gSaveBlock2Ptr->abilityRandomizedMode && !gSaveBlock2Ptr->innaterandomizedMode) {
             //Only ability randomizer
             StringCopy(gStringVar3, abilityRandomizerModeText);
             numModes++;
         }      
-        else if(!gSaveBlock2Ptr->abilityRandomizedMode && gSaveBlock2Ptr->innaterandomizedMode){
+        else if (!gSaveBlock2Ptr->abilityRandomizedMode && gSaveBlock2Ptr->innaterandomizedMode) {
             //Only innate randomizer
             StringCopy(gStringVar3, innateRandomizerModeText);
             numModes++;
         } 
-        else if(gSaveBlock2Ptr->abilityRandomizedMode && gSaveBlock2Ptr->innaterandomizedMode){
+        else if (gSaveBlock2Ptr->abilityRandomizedMode && gSaveBlock2Ptr->innaterandomizedMode) {
             //Both
             StringCopy(gStringVar3, innateabilityRandomizerModeText);
             numModes = numModes + 2;
         }  
-        else{
+        else {
             //Neither
             StringCopy(gStringVar3, noText);
         }                
 
-        if(numModes == 1){
-            if(gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
+        if (numModes == 1) {
+            if (gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode) {
                 StringCopy(gStringVar1, encounterRandomizerModeTextNo);
             }
-            else if(gSaveBlock2Ptr->typeRandomizedMode){
+            else if (gSaveBlock2Ptr->typeRandomizedMode) {
                 StringCopy(gStringVar2, typeRandomizerModeTextNo);
             }
         }
-        else if(numModes == 2 && gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->typeRandomizedMode){
+        else if (numModes == 2 && gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->typeRandomizedMode) {
             StringCopy(gStringVar2, typeRandomizerModeTextNo);
         }
             
-        if((gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode) &&
+        if ((gSaveBlock2Ptr->encounterRandomizedMode || gSaveBlock2Ptr->encounterRandomizedLegendaryMode) &&
            gSaveBlock2Ptr->typeRandomizedMode      &&
            gSaveBlock2Ptr->abilityRandomizedMode   &&
            gSaveBlock2Ptr->innaterandomizedMode)

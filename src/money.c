@@ -163,7 +163,7 @@ void PrintMoneyAmount(u8 windowId, u8 x, u8 y, int amount, u8 speed)
     while (strLength-- > 0)
         *(txtPtr++) = 0x77;
 
-    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+    switch (VarGet(VAR_SHOP_MONEY_TYPE)) {
         case MART_MONEY_TYPE_NORMAL:
             StringExpandPlaceholders(txtPtr, gText_PokedollarVar1);
         break;
@@ -209,7 +209,7 @@ void HideMoneyBox(void)
 
 void AddMoneyLabelObject(u16 x, u16 y)
 {
-    switch(VarGet(VAR_SHOP_MONEY_TYPE)){
+    switch (VarGet(VAR_SHOP_MONEY_TYPE)) {
         case MART_MONEY_TYPE_NORMAL:
             LoadCompressedSpriteSheet(&sSpriteSheet_MoneyLabel);
         break;
