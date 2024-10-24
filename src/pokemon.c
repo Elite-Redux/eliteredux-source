@@ -9419,7 +9419,7 @@ bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool
 }
 
 u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
-    int randomizedMoveSeed = moves ^ ISO_RANDOMIZE1(species) ^ personality;
+    u32 randomizedMoveSeed = moves ^ ISO_RANDOMIZE1(species) ^ personality;
     u16 randomizedMove;
     if (gSaveBlock2Ptr->moveRandomizedMode == 1 &&
         moves != MOVE_NONE) {
@@ -9471,7 +9471,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
        innate != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Innate Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        int randomizedInnateSeed = (innate ^ ISO_RANDOMIZE1(species) ^ personality);
+        u32 randomizedInnateSeed = (innate ^ ISO_RANDOMIZE1(species) ^ personality);
         u16 randomizedInnate;
         do {
             randomizedInnate = RandRangeDeterministic(0, TOTAL_ABILITY_COUNT - 1, &randomizedInnateSeed);
@@ -9544,7 +9544,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
        ability != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Ability Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        int randomizedAbilitySeed = ability ^ ISO_RANDOMIZE1(species) ^ personality;
+        u32 randomizedAbilitySeed = ability ^ ISO_RANDOMIZE1(species) ^ personality;
         u16 randomizedAbility;
         do {
             randomizedAbility = RandRangeDeterministic(0, ABILITIES_COUNT - 1, &randomizedAbilitySeed);
@@ -9592,7 +9592,7 @@ u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType) {
     if (gSaveBlock2Ptr->typeRandomizedMode == 1 && type != TYPE_MYSTERY) {
         //Only Randomize if you have the Type Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        int randomizedTypeSeed = type ^ ISO_RANDOMIZE1(species) ^ personality ^ isFirstType;
+        u32 randomizedTypeSeed = type ^ ISO_RANDOMIZE1(species) ^ personality ^ isFirstType;
         u8 randomizedType;
 
         do {
