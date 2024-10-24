@@ -13588,8 +13588,8 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
                     return TRUE;
                 
                 case 1:
-                    if (!CanBeParalyzed(battler, target)) break;
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_POISON)
+                    if (!CanBePoisoned(battler, target)) break;
+                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
                     return TRUE;
             }
             break;
