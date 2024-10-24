@@ -6673,14 +6673,16 @@ enum
     ITEM_STATS_CHANGE, // 5
 };
 
+int IsTerrainActive(int terrainFlag)
+{
+    if (!TERRAIN_HAS_EFFECT) return FALSE;
+    return gFieldStatuses & terrainFlag != 0;
+}
+
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag)
 {
-    if (!TERRAIN_HAS_EFFECT)
-        return FALSE;
-    else if (!(gFieldStatuses & terrainFlag))
-        return FALSE;
-    else if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE)
-        return FALSE;
+    if (!IsTerrainActive(terrainFlag)) return FALSE;
+    if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE) return FALSE;
     
     return IsBattlerGrounded(battlerId);
 }
@@ -12311,6 +12313,12 @@ bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 chec
 u16 GetUsedHeldItem(u8 battler)
 {
     return gBattleStruct->usedHeldItems[gBattlerPartyIndexes[battler]][GetBattlerSide(battler)];
+}
+
+int IsWeatherActive(int weather)
+{
+    if (!(gBattleWeather & weather)) return FALSE;
+    return WEATHER_HAS_EFFECT;
 }
 
 bool32 IsBattlerWeatherAffected(u8 battlerId, u32 weatherFlags)

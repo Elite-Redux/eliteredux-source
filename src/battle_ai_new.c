@@ -1,0 +1,2028 @@
+#include "global.h"
+#include "battle.h"
+#include "battle_util.h"
+#include "battle_scripts.h"
+#include "battle_main.h"
+#include "mgba_printf/mgba.h"
+#include "constants/abilities.h"
+#include "constants/species.h"
+#include "constants/battle_move_effects.h"
+#include "constants/items.h"
+#include "constants/item.h"
+
+#define AI_SCORE(value) (value * 1024)
+#define AI_SCORE_UNUSABLE AI_SCORE(-100)
+#define AI_SCORE_IMMUNE AI_SCORE_UNUSABLE
+
+struct MoveState {
+    u8 falseSwipe:1;
+};
+
+struct AiData {
+    int speed[MAX_BATTLERS_COUNT];
+    u16 abilities[MAX_BATTLERS_COUNT][TOTAL_ABILITY_COUNT];
+    u8 activeBattler;
+    struct MoveState moveState;
+};
+
+struct DisguiseSimulation {
+    int ability;
+};
+
+int BelowHalfHp(int battler)
+{
+    return gBattleMons[battler].hp <= gBattleMons[battler].maxHP;
+}
+
+int HasAbility(int battler, int ability, struct AiData* aiData)
+{
+    int i;
+    if (!aiData->abilities[battler][1])
+    {
+        GET_ALL_BATTLER_ABILITIES(aiData->abilities[battler], battler, aiData->activeBattler);
+    }
+    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
+    {
+        if (aiData->abilities[battler][i] == ability) return TRUE;
+    }
+    return FALSE;
+}
+
+int AiIsUnaware(int battler, struct AiData* aiData)
+{
+    if (HasAbility(battler, ABILITY_UNAWARE, aiData)) return TRUE;
+    if (HasAbility(battler, ABILITY_CONTEMPT, aiData)) return TRUE;
+    if (HasAbility(battler, ABILITY_SWORD_OF_DAMNATION, aiData)) return TRUE;
+    return FALSE;
+}
+
+void ReplaceDisguise(struct DisguiseSimulation* actual)
+{
+
+}
+
+void RestoreDisguise(struct DisguiseSimulation* actual)
+{
+
+}
+
+int AreSameSide(int battler1, int battler2)
+{
+    return GET_BATTLER_SIDE(battler1) == GET_BATTLER_SIDE(battler2);
+}
+
+int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* effectiveness, struct AiData* aiData)
+{
+    int damage;
+    int ignored;
+    // TODO: Handle fixed damage
+    damage = CalculateMoveDamageAndEffectiveness(move, battlerAtk, battlerDef, moveType, effectiveness);
+    if (!*effectiveness) return 0;
+    if (TestImmunityAbilities(battlerDef, battlerAtk, move, *moveType, (const u8**) &ignored, (u8*) &ignored, (u16*) ignored))
+    {
+        effectiveness = 0;
+        return 0;
+    }
+    if (TestAbsorbingAbilities(battlerDef, battlerAtk, move, *moveType, &ignored, (u16*) &ignored))
+    {
+        // TODO: Handle absorbing scoring
+    }
+    return damage;
+}
+
+int IsSleeping(int battler, struct AiData* aiData)
+{
+    return gBattleMons[battler].status1 & STATUS1_SLEEP || HasAbility(battler, ABILITY_COMATOSE, aiData);
+}
+
+#define AI_CALC_DAMAGE \
+score = ScoreDamage(battlerAtk, battlerDef, move, &moveType, &effectiveness, aiData); \
+if (!effectiveness) return AI_SCORE_IMMUNE
+
+#define AI_SCORE_POISON_MOVE 0
+#define AI_SCORE_SLEEP_MOVE 0
+#define AI_SCORE_SLEEP_SELF 0
+#define AI_GET_MOVE_EFFECT_CHANCE 0
+#define AI_SCORE_ABSORB_MOVE 0
+#define AI_SCORE_BURN_MOVE 0
+#define AI_SCORE_FROSTBITE_MOVE 0
+#define AI_SCORE_PARALYSIS_MOVE 0
+#define AI_SCORE_ATTACK_UP(battler, stages) 0
+#define AI_SCORE_DEFENSE_UP(battler, stages) 0
+#define AI_SCORE_SPEED_UP(battler, stages) 0
+#define AI_SCORE_SPATK_UP(battler, stages) 0
+#define AI_SCORE_SPDEF_UP(battler, stages) 0
+#define AI_SCORE_ACC_UP(battler, stages) 0
+#define AI_SCORE_EVASION_UP(battler, stages) 0
+#define AI_SCORE_CRIT_UP(battler, stages) 0
+#define AI_SCORE_RESET_STAT_CHANGES(battler) 0
+#define AI_SCORE_FORCE_SWITCH 0
+#define AI_SCORE_FLINCH 0
+#define AI_SCORE_HEAL(battler, percent) 0
+#define AI_SCORE_TOXIC 0
+#define AI_SCORE_LIGHTSCREEN 0
+#define AI_SCORE_CURE_STATUS(battler) 0
+#define AI_SCORE_WRAP 0
+#define AI_SCORE_HEAL_BLOCK 0
+#define AI_SCORE_MIST 0
+#define AI_SCORE_RECOIL(percent) 0
+#define AI_SCORE_CONFUSION 0
+#define AI_SCORE_TRANSFORM 0
+#define AI_SCORE_REFLECT 0
+#define AI_SCORE_SUBSTITUTE 0
+#define AI_SCORE_LOSE_HP(percent) 0
+#define AI_SCORE_LEECH_SEED 0
+#define AI_SCORE_DISABLE 0
+#define AI_SCORE_COUNTER 0
+#define AI_SCORE_ENCORE 0
+#define AI_SCORE_PAIN_SPLIT 0
+#define AI_SCORE_LOCK_ON 0
+#define AI_SCORE_DESTINY_BOND 0
+#define AI_SCORE_PP_DOWN(amount) 0
+#define AI_SCORE_CURE_PARTY_STATUS 0
+#define AI_SCORE_THIEF 0
+#define AI_SCORE_TRAP 0
+#define AI_SCORE_NIGHTMARE 0
+#define AI_SCORE_CURSE 0
+#define AI_SCORE_PROTECT 0
+#define AI_SCORE_SPIKES 0
+#define AI_SCORE_PERISH_SONG 0
+#define AI_SCORE_SANDSTORM 0
+#define AI_SCORE_ENDURE 0
+#define AI_SCORE_ATTRACT 0
+#define AI_SCORE_SAFEGUARD 0
+#define AI_SCORE_SWITCH 0
+#define AI_SCORE_CLEAR_HAZARDS(side) 0
+#define AI_SCORE_RAIN 0
+#define AI_SCORE_SUN 0
+#define AI_SCORE_HAIL 0
+#define AI_SCORE_GET_STATS_OF(to, from) 0
+#define AI_SCORE_MIRROR_COAT 0
+#define AI_SCORE_FUTURE_SIGHT 0
+#define AI_SCORE_DEFENSE_CURL 0
+#define AI_SCORE_REPLACE_ABILITY(battler, ability) 0
+#define AI_SCORE_SUPPRESS_ABILITY 0
+#define AI_SCORE_FEAR 0
+#define AI_SCORE_TORMENT 0
+#define AI_SCORE_FOLLOW_ME 0
+#define AI_SCORE_CHARGE 0
+#define AI_SCORE_TAUNT 0
+#define AI_SCORE_HELPING_HAND 0
+#define AI_SCORE_LOSE_ITEM(battler) 0
+#define AI_SCORE_SWAP_ITEMS 0
+#define AI_SCORE_INGRAIN 0
+#define AI_SCORE_RECYCLE 0
+#define AI_SCORE_BREAK_SCREENS 0
+#define AI_SCORE_DROWSY 0
+#define AI_SCORE_ENDEAVOR 0
+#define AI_SCORE_IMPRISON 0
+#define AI_SCORE_CURE_STATUS_AND_HEAL(battler, percent) 0
+#define AI_SCORE_GRAVITY 0
+#define AI_SCORE_TAILWIND 0
+#define AI_SCORE_AQUA_RING 0
+#define AI_SCORE_TRICK_ROOM 0
+#define AI_SCORE_WONDER_ROOM 0
+#define AI_SCORE_MAGIC_ROOM 0
+#define AI_SCORE_MAGNET_RISE 0
+#define AI_SCORE_TOXIC_SPIKES 0
+#define AI_SCORE_STEALTH_ROCK 0
+#define AI_SCORE_TELEKINESIS 0
+#define AI_SCORE_STICKY_WEB 0
+#define AI_SCORE_METAL_BURST 0
+#define AI_SCORE_LUCKY_CHANT 0
+#define AI_SCORE_QUASH 0
+#define AI_SCORE_INVERT_STAT_CHANGES 0
+#define AI_SCORE_PSYCHIC_TERRAIN 0
+#define AI_SCORE_MISTY_TERRAIN 0
+#define AI_SCORE_ELECTRIC_TERRAIN 0
+#define AI_SCORE_GRASSY_TERRAIN 0
+#define AI_SCORE_FOG 0
+#define AI_SCORE_COILED_UP 0
+#define AI_SCORE_ARGUMENT_MOVE_EFFECT 0
+#define AI_SCORE_BLEED 0
+#define AI_SCORE_AURORA_VEIL 0
+#define AI_SCORE_BREAK_PROTECT 0
+#define AI_SCORE_POWDER 0
+#define AI_SCORE_THROAT_CHOP 0
+#define AI_SCORE_EAT_BERRY(battler) 0
+#define AI_SCORE_HEAL_FIXED(amount) 0
+#define AI_SCORE_HAZE 0
+#define AI_SCORE_NO_ESCAPE 0
+#define AI_SCORE_INVERSE_ROOM 0
+#define AI_SCORE_REMOVE_TERRAIN 0
+#define AI_SCORE_PARALYSIS_IGNORE_TYPE 0
+#define AI_SCORE_REMOVE_WEATHER 0
+
+static int SeesSunlight(int battler, struct AiData* aiData)
+{
+    if (HasAbility(battler, ABILITY_CHLOROPLAST, aiData)) return TRUE;
+    if (HasAbility(battler, ABILITY_BIG_LEAVES, aiData)) return TRUE;
+    if (HasAbility(battler, ABILITY_SOLAR_FLARE, aiData)) return TRUE;
+    return IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY);
+}
+
+int GetFullChance(int chance, struct AiData* aiData)
+{
+    // TODO: Finish this
+    return chance;
+}
+
+static int AdjustForChance(int chance, int score)
+{
+    if (chance > 100) chance = 100;
+    if (chance < 0) chance = 0;
+    return chance * score / 100;
+}
+
+int ScoreMove(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
+{
+
+}
+
+#define LOCAL_LABEL(label) __LOCAL_LABEL__(label)
+#define __LOCAL_LABEL__(label) AI_ScoreMoveHit_ ## label
+#define CASE_AND_LABEL(label) \
+case label: \
+LOCAL_LABEL(label):
+#define GOTO(label) goto LOCAL_LABEL(label)
+
+int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int turn, u8 moveType, struct AiData* aiData)
+{
+    int i, score;
+    u16 effectiveness;
+
+    if (move == MOVE_NONE) return AI_SCORE_UNUSABLE;
+    if (!IsBattlerAlive(battlerDef)) return AI_SCORE_UNUSABLE;
+
+    switch (gBattleMoves[move].effect)
+    {
+    CASE_AND_LABEL(EFFECT_MIRROR_MOVE)
+    CASE_AND_LABEL(EFFECT_BIDE)
+        // TODO: Handle weird moves
+    CASE_AND_LABEL(EFFECT_PLACEHOLDER)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_MULTI_HIT)
+    CASE_AND_LABEL(EFFECT_RAMPAGE) // TODO: Negative score for locking
+    CASE_AND_LABEL(EFFECT_HIT)
+        AI_CALC_DAMAGE;
+        return score;
+    
+    CASE_AND_LABEL(EFFECT_SLEEP)
+        return AI_SCORE_SLEEP_MOVE;
+    
+    CASE_AND_LABEL(EFFECT_POISON_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_POISON_MOVE);
+    
+    CASE_AND_LABEL(EFFECT_ABSORB)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_ABSORB_MOVE;
+    
+    CASE_AND_LABEL(EFFECT_BURN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BURN_MOVE);
+    
+    CASE_AND_LABEL(EFFECT_FREEZE_HIT)
+    CASE_AND_LABEL(EFFECT_FROSTBITE_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FROSTBITE_MOVE);
+    
+    CASE_AND_LABEL(EFFECT_PARALYZE_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_PARALYSIS_MOVE);
+        
+    CASE_AND_LABEL(EFFECT_REVENGE)
+        // TODO: Handle
+        AI_CALC_DAMAGE;
+        return score;
+    
+    CASE_AND_LABEL(EFFECT_EXPLOSION) // TODO: Negative score for dying
+        if (move == MOVE_SELF_DESTRUCT)
+            GOTO(EFFECT_REVENGE);
+        AI_CALC_DAMAGE;
+        return score;
+    
+    CASE_AND_LABEL(EFFECT_DREAM_EATER)
+        if (!IsSleeping(battlerDef, aiData)) return AI_SCORE_IMMUNE;
+        GOTO(EFFECT_ABSORB);
+        
+    CASE_AND_LABEL(EFFECT_ATTACK_UP)
+        return AI_SCORE_ATTACK_UP(battlerAtk, 1);
+    
+    CASE_AND_LABEL(EFFECT_SPEED_UP)
+        return AI_SCORE_SPEED_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_ATTACK_UP)
+        return AI_SCORE_SPATK_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_DEFENSE_UP)
+        return AI_SCORE_SPDEF_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_ACCURACY_UP)
+        return AI_SCORE_ACC_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_EVASION_UP)
+        return AI_SCORE_EVASION_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_ATTACK_UP_3)
+        return AI_SCORE_SPATK_UP(battlerAtk, 3);
+
+    CASE_AND_LABEL(EFFECT_ATTACK_DOWN)
+        return AI_SCORE_ATTACK_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_DEFENSE_DOWN)
+        return AI_SCORE_DEFENSE_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_SPEED_DOWN)
+        return AI_SCORE_SPEED_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_ATTACK_DOWN)
+        return AI_SCORE_SPATK_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_DEFENSE_DOWN)
+        return AI_SCORE_SPDEF_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_ACCURACY_DOWN)
+        return AI_SCORE_ACC_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_EVASION_DOWN)
+        return AI_SCORE_EVASION_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_HAZE)
+        return AI_SCORE_HAZE;
+
+    CASE_AND_LABEL(EFFECT_ROAR)
+        return AI_SCORE_FORCE_SWITCH;
+
+    CASE_AND_LABEL(EFFECT_CONVERSION) // TODO: Score for type change
+        return AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_FLINCH_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FLINCH);
+
+    CASE_AND_LABEL(EFFECT_RESTORE_HP) // TODO: Heal block
+        return AI_SCORE_HEAL(battlerAtk, 50);
+
+    CASE_AND_LABEL(EFFECT_TOXIC)
+        return AI_SCORE_TOXIC;
+
+    CASE_AND_LABEL(EFFECT_PAY_DAY)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_LIGHT_SCREEN)
+        return AI_SCORE_LIGHTSCREEN;
+
+    CASE_AND_LABEL(EFFECT_TRI_ATTACK)
+        AI_CALC_DAMAGE;
+        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_PARALYSIS_MOVE);
+        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BURN_MOVE);
+        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FROSTBITE_MOVE);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_REST)
+        if (IsSleeping(battlerAtk, aiData)) return AI_SCORE_UNUSABLE;
+        score = AI_SCORE_HEAL(battlerAtk, 100);
+        score += AI_SCORE_CURE_STATUS(battlerAtk);
+        score += AI_SCORE_SLEEP_SELF;
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_OHKO)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_DRAGON_RAGE)
+    CASE_AND_LABEL(EFFECT_SUPER_FANG)
+    CASE_AND_LABEL(EFFECT_FUSION_COMBO)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_TRAP)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_WRAP;
+
+    CASE_AND_LABEL(EFFECT_HEAL_BLOCK)
+        return AI_SCORE_HEAL_BLOCK;
+
+    CASE_AND_LABEL(EFFECT_DOUBLE_HIT)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_RECOIL_IF_MISS)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_MIST)
+        return AI_SCORE_MIST;
+
+    CASE_AND_LABEL(EFFECT_FOCUS_ENERGY)
+        return AI_SCORE_CRIT_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_RECOIL_25)
+        AI_CALC_DAMAGE;
+        score += AI_SCORE_RECOIL(25);
+
+    CASE_AND_LABEL(EFFECT_CONFUSE)
+        return AI_SCORE_CONFUSION;
+
+    CASE_AND_LABEL(EFFECT_ATTACK_UP_2)
+        return AI_SCORE_ATTACK_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_DEFENSE_UP_2)
+        return AI_SCORE_DEFENSE_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_SPEED_UP_2)
+        return AI_SCORE_SPEED_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_ATTACK_UP_2)
+        return AI_SCORE_SPATK_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_DEFENSE_UP_2)
+        return AI_SCORE_SPDEF_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_ACCURACY_UP_2)
+        return AI_SCORE_ACC_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_EVASION_UP_2)
+        return AI_SCORE_EVASION_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_TRANSFORM)
+        return AI_SCORE_TRANSFORM;
+
+    CASE_AND_LABEL(EFFECT_ATTACK_DOWN_2)
+        return AI_SCORE_ATTACK_UP(battlerDef, -2);
+
+    CASE_AND_LABEL(EFFECT_DEFENSE_DOWN_2)
+        return AI_SCORE_DEFENSE_UP(battlerDef, -2);
+
+    CASE_AND_LABEL(EFFECT_SPEED_DOWN_2)
+        return AI_SCORE_SPEED_UP(battlerDef, -2);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_ATTACK_DOWN_2)
+        return AI_SCORE_SPATK_UP(battlerDef, -2);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_DEFENSE_DOWN_2)
+        return AI_SCORE_SPDEF_UP(battlerDef, -2);
+
+    CASE_AND_LABEL(EFFECT_ACCURACY_DOWN_2)
+        return AI_SCORE_ACC_UP(battlerDef, -2);
+
+    CASE_AND_LABEL(EFFECT_EVASION_DOWN_2)
+        return AI_SCORE_EVASION_UP(battlerDef, -2);
+
+    CASE_AND_LABEL(EFFECT_REFLECT)
+        return AI_SCORE_REFLECT;
+
+    CASE_AND_LABEL(EFFECT_POISON)
+        return AI_SCORE_POISON_MOVE;
+
+    CASE_AND_LABEL(EFFECT_PARALYZE)
+        return AI_SCORE_PARALYSIS_MOVE;
+
+    CASE_AND_LABEL(EFFECT_ATTACK_DOWN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ATTACK_UP(battlerDef, -1));
+
+    CASE_AND_LABEL(EFFECT_DEFENSE_DOWN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_DEFENSE_UP(battlerDef, -1));
+
+    CASE_AND_LABEL(EFFECT_SPEED_DOWN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPEED_UP(battlerDef, -1));
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_ATTACK_DOWN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPATK_UP(battlerDef, -1));
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_DEFENSE_DOWN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPDEF_UP(battlerDef, -1));
+
+    CASE_AND_LABEL(EFFECT_ACCURACY_DOWN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ACC_UP(battlerDef, -1));
+
+    CASE_AND_LABEL(EFFECT_EVASION_DOWN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_EVASION_UP(battlerDef, -1));
+
+    CASE_AND_LABEL(EFFECT_TWO_TURNS_ATTACK)
+        // TODO: Two-turn attacks
+        if (turn == 0) return AI_SCORE_IMMUNE;
+        GOTO(EFFECT_ARGUMENT_HIT);
+
+    CASE_AND_LABEL(EFFECT_CONFUSE_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_CONFUSION);
+
+    CASE_AND_LABEL(EFFECT_TWINEEDLE)
+        GOTO(EFFECT_POISON_HIT);
+
+    CASE_AND_LABEL(EFFECT_VITAL_THROW)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SUBSTITUTE)
+        return AI_SCORE_LOSE_HP(25) + AI_SCORE_SUBSTITUTE;
+
+    CASE_AND_LABEL(EFFECT_RECHARGE) // TODO: Handle recharge
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_RAGE)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_MIMIC)
+        return AI_SCORE_UNUSABLE; // TODO: Mimic
+
+    CASE_AND_LABEL(EFFECT_METRONOME)
+        return AI_SCORE_UNUSABLE; // TODO: Metronome
+
+    CASE_AND_LABEL(EFFECT_LEECH_SEED)
+        return AI_SCORE_LEECH_SEED;
+
+    CASE_AND_LABEL(EFFECT_DO_NOTHING)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_DISABLE)
+        return AI_SCORE_DISABLE;
+
+    CASE_AND_LABEL(EFFECT_LEVEL_DAMAGE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_PSYWAVE)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_COUNTER)
+        return AI_SCORE_COUNTER;
+
+    CASE_AND_LABEL(EFFECT_ENCORE)
+        return AI_SCORE_ENCORE;
+
+    CASE_AND_LABEL(EFFECT_PAIN_SPLIT)
+        return AI_SCORE_PAIN_SPLIT;
+
+    CASE_AND_LABEL(EFFECT_SNORE)
+        if (!IsSleeping(battlerAtk, aiData)) return AI_SCORE_UNUSABLE;
+        GOTO(EFFECT_FLINCH_HIT);
+
+    CASE_AND_LABEL(EFFECT_CONVERSION_2)
+        // TODO: Handle type conversion
+        return AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_LOCK_ON)
+        return AI_SCORE_LOCK_ON;
+
+    CASE_AND_LABEL(EFFECT_SKETCH)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_HAMMER_ARM)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_SPEED_UP(battlerAtk, -1);
+
+    CASE_AND_LABEL(EFFECT_SLEEP_TALK)
+        // TODO: Resolve this last so that it can just add up the scores of the other moves on the mon
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_DESTINY_BOND)
+        return AI_SCORE_DESTINY_BOND;
+
+    CASE_AND_LABEL(EFFECT_FLAIL)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SPITE)
+        return AI_SCORE_PP_DOWN(4);
+
+    CASE_AND_LABEL(EFFECT_FALSE_SWIPE)
+        aiData->moveState.falseSwipe = TRUE;
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_HEAL_BELL)
+        return AI_SCORE_HEAL(battlerAtk, 30) + AI_SCORE_CURE_PARTY_STATUS;
+
+    CASE_AND_LABEL(EFFECT_ALWAYS_CRIT)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_TRIPLE_KICK)
+        GOTO(EFFECT_HIT); // TODO: Handle triple kick
+
+    CASE_AND_LABEL(EFFECT_THIEF)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_THIEF;
+
+    CASE_AND_LABEL(EFFECT_MEAN_LOOK)
+        return AI_SCORE_TRAP;
+
+    CASE_AND_LABEL(EFFECT_NIGHTMARE)
+        if (!IsSleeping(battlerDef, aiData)) return AI_SCORE_UNUSABLE;
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_NIGHTMARE;
+
+    CASE_AND_LABEL(EFFECT_MINIMIZE)
+        return AI_SCORE_EVASION_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_CURSE)
+        if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST) || IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY))
+        {
+            return AI_SCORE_LOSE_HP(50) + AI_SCORE_CURSE;
+        }
+        else
+        {
+            return AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_DEFENSE_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, -1);
+        }
+
+    CASE_AND_LABEL(EFFECT_HEALING_WISH)
+        // TODO: Healing wish
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_PROTECT)
+        return AI_SCORE_PROTECT;
+
+    CASE_AND_LABEL(EFFECT_SPIKES)
+        return AI_SCORE_SPIKES;
+
+    CASE_AND_LABEL(EFFECT_FORESIGHT)
+        // TODO: Foresight
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_PERISH_SONG)
+        return AI_SCORE_PERISH_SONG;
+
+    CASE_AND_LABEL(EFFECT_SANDSTORM)
+        return AI_SCORE_SANDSTORM;
+
+    CASE_AND_LABEL(EFFECT_ENDURE)
+        return AI_SCORE_ENDURE;
+
+    CASE_AND_LABEL(EFFECT_ROLLOUT)
+        // TODO: Rollout
+        GOTO(EFFECT_ARGUMENT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SWAGGER)
+        return AI_SCORE_ATTACK_UP(battlerDef, 2) + AI_SCORE_CONFUSION;
+
+    CASE_AND_LABEL(EFFECT_FURY_CUTTER)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_ATTRACT)
+        return AI_SCORE_ATTRACT;
+
+    CASE_AND_LABEL(EFFECT_RETURN)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_PRESENT)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_FRUSTRATION)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SAFEGUARD)
+        return AI_SCORE_SAFEGUARD;
+
+    CASE_AND_LABEL(EFFECT_UNUSED_125)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_MAGNITUDE)
+        // TODO: Magnitude
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_BATON_PASS)
+        // TODO: Baton Pass
+        return AI_SCORE_SWITCH;
+
+    CASE_AND_LABEL(EFFECT_PURSUIT)
+        AI_CALC_DAMAGE;
+        // TODO: Pursuit
+        return score;
+
+    CASE_AND_LABEL(EFFECT_RAPID_SPIN)
+        AI_CALC_DAMAGE;
+        // TODO: Add hazard clearing
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPEED_UP(battlerAtk, 1));
+
+    CASE_AND_LABEL(EFFECT_SONICBOOM)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CAPTIVATE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_MORNING_SUN)
+        if (SeesSunlight(battlerAtk, aiData)) return AI_SCORE_HEAL(battlerAtk, 66);
+        if (IsBattlerWeatherAffected(battlerAtk, WEATHER_RAIN_ANY)) return AI_SCORE_HEAL(battlerAtk, 25);
+        return AI_SCORE_HEAL(battlerAtk, 50);
+
+    CASE_AND_LABEL(EFFECT_SYNTHESIS)
+        GOTO(EFFECT_MORNING_SUN);
+
+    CASE_AND_LABEL(EFFECT_MOONLIGHT)
+        if (HasAbility(battlerAtk, ABILITY_MOON_SPIRIT, aiData)) return AI_SCORE_HEAL(battlerAtk, 66);
+        GOTO(EFFECT_MORNING_SUN);
+
+    CASE_AND_LABEL(EFFECT_HIDDEN_POWER)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_RAIN_DANCE)
+        return AI_SCORE_RAIN;
+
+    CASE_AND_LABEL(EFFECT_SUNNY_DAY)
+        return AI_SCORE_SUN;
+
+    CASE_AND_LABEL(EFFECT_DEFENSE_UP_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_DEFENSE_UP(battlerAtk, 1));
+
+    CASE_AND_LABEL(EFFECT_ATTACK_UP_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ATTACK_UP(battlerAtk, 1));
+
+    CASE_AND_LABEL(EFFECT_ALL_STATS_UP_HIT)
+        AI_CALC_DAMAGE;
+        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ATTACK_UP(battlerAtk, 1));
+        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_DEFENSE_UP(battlerAtk, 1));
+        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPEED_UP(battlerAtk, 1));
+        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPATK_UP(battlerAtk, 1));
+        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPDEF_UP(battlerAtk, 1));
+        return score;
+
+    CASE_AND_LABEL(EFFECT_FELL_STINGER)
+        // TODO: Fell Stinger
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_BELLY_DRUM)
+        return AI_SCORE_ATTACK_UP(battlerAtk, 12) + AI_SCORE_LOSE_HP(50);
+
+    CASE_AND_LABEL(EFFECT_PSYCH_UP)
+        return AI_SCORE_GET_STATS_OF(battlerAtk, battlerDef);
+
+    CASE_AND_LABEL(EFFECT_MIRROR_COAT)
+        return AI_SCORE_MIRROR_COAT;
+
+    CASE_AND_LABEL(EFFECT_SKULL_BASH)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_TWISTER)
+        // TODO: Make Twister trap
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_EARTHQUAKE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_FUTURE_SIGHT)
+        return AI_SCORE_FUTURE_SIGHT;
+
+    CASE_AND_LABEL(EFFECT_GUST)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_FLINCH_MINIMIZE_HIT)
+        GOTO(EFFECT_FLINCH_HIT);
+
+    CASE_AND_LABEL(EFFECT_SOLARBEAM)
+        // TODO: Solarbeam
+        GOTO(EFFECT_TWO_TURNS_ATTACK);
+
+    CASE_AND_LABEL(EFFECT_THUNDER)
+        GOTO(EFFECT_PARALYZE_HIT);
+
+    CASE_AND_LABEL(EFFECT_SWITCH_ARGUMENT)
+        // TODO: Safe passage
+        return AI_SCORE_SWITCH;
+
+    CASE_AND_LABEL(EFFECT_BEAT_UP)
+        // TODO: Beat up
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SEMI_INVULNERABLE)
+        if (turn == 0) return AI_SCORE_PROTECT;
+        GOTO(EFFECT_ARGUMENT_HIT);
+
+    CASE_AND_LABEL(EFFECT_DEFENSE_CURL)
+        return AI_SCORE_DEFENSE_CURL + AI_SCORE_DEFENSE_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_SOFTBOILED)
+        GOTO(EFFECT_RESTORE_HP);
+
+    CASE_AND_LABEL(EFFECT_FAKE_OUT)
+        // TODO: Check usable
+        GOTO(EFFECT_FLINCH_HIT);
+
+    CASE_AND_LABEL(EFFECT_UPROAR)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_STOCKPILE)
+        // TODO: Stockpile Spit Up/Swallow interaction
+        return AI_SCORE_DEFENSE_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_SPIT_UP)
+        AI_CALC_DAMAGE;
+        if (gVolatileStructs[battlerAtk].stockpileDef) score += AI_SCORE_DEFENSE_UP(battlerAtk, -1);
+        if (gVolatileStructs[battlerAtk].stockpileSpDef) score += AI_SCORE_SPDEF_UP(battlerAtk, -1);
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SWALLOW)
+        if (gVolatileStructs[battlerAtk].stockpileDef) score += AI_SCORE_DEFENSE_UP(battlerAtk, -1);
+        if (gVolatileStructs[battlerAtk].stockpileSpDef) score += AI_SCORE_SPDEF_UP(battlerAtk, -1);
+        return AI_SCORE_HEAL(battlerAtk, 50);
+
+    CASE_AND_LABEL(EFFECT_WORRY_SEED)
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, ABILITY_INSOMNIA) + AI_SCORE_FEAR;
+
+    CASE_AND_LABEL(EFFECT_HAIL)
+        return AI_SCORE_HAIL;
+
+    CASE_AND_LABEL(EFFECT_TORMENT)
+        return AI_SCORE_TORMENT;
+
+    CASE_AND_LABEL(EFFECT_FLATTER)
+        return AI_SCORE_SPATK_UP(battlerDef, 2) + AI_SCORE_CONFUSION;
+
+    CASE_AND_LABEL(EFFECT_WILL_O_WISP)
+        return AI_SCORE_BURN_MOVE;
+
+    CASE_AND_LABEL(EFFECT_MEMENTO)
+        // TODO: Memento
+        return AI_SCORE_SPATK_UP(battlerDef, -2) + AI_SCORE_SPDEF_UP(battlerDef, -2);
+
+    CASE_AND_LABEL(EFFECT_FACADE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_FOCUS_PUNCH)
+        // TODO: Focus Punch
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SMELLINGSALT)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_CURE_STATUS(battlerAtk);
+
+    CASE_AND_LABEL(EFFECT_FOLLOW_ME)
+        return AI_SCORE_FOLLOW_ME;
+
+    CASE_AND_LABEL(EFFECT_NATURE_POWER)
+        // TODO: Nature Power
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CHARGE)
+        return AI_SCORE_SPDEF_UP(battlerAtk, 1) + AI_SCORE_CHARGE;
+
+    CASE_AND_LABEL(EFFECT_TAUNT)
+        return AI_SCORE_TAUNT;
+
+    CASE_AND_LABEL(EFFECT_HELPING_HAND)
+        return AI_SCORE_HELPING_HAND;
+
+    CASE_AND_LABEL(EFFECT_TRICK)
+        return AI_SCORE_SWAP_ITEMS;
+
+    CASE_AND_LABEL(EFFECT_ROLE_PLAY)
+        // TODO: Role Play
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_WISH)
+        // TODO: Wish
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_ASSIST)
+        // TODO: Assist
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_INGRAIN)
+        return AI_SCORE_INGRAIN;
+
+    CASE_AND_LABEL(EFFECT_SUPERPOWER)
+        AI_CALC_DAMAGE;
+        score += AI_SCORE_ATTACK_UP(battlerAtk, -1);
+        score += AI_SCORE_DEFENSE_UP(battlerAtk, -1);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_MAGIC_COAT)
+        // TODO: Magic Coat
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_RECYCLE)
+        return AI_SCORE_RECYCLE;
+
+    CASE_AND_LABEL(EFFECT_BRICK_BREAK)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_BREAK_SCREENS;
+
+    CASE_AND_LABEL(EFFECT_YAWN)
+        return AI_SCORE_DROWSY;
+
+    CASE_AND_LABEL(EFFECT_KNOCK_OFF)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_LOSE_ITEM(battlerDef);
+
+    CASE_AND_LABEL(EFFECT_ENDEAVOR)
+        return AI_SCORE_ENDEAVOR;
+
+    CASE_AND_LABEL(EFFECT_ERUPTION)
+        // TODO: Eruption
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SKILL_SWAP)
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, gBattleMons[battlerDef].ability) + AI_SCORE_REPLACE_ABILITY(battlerDef, gBattleMons[battlerAtk].ability);
+
+    CASE_AND_LABEL(EFFECT_IMPRISON)
+        return AI_SCORE_IMPRISON;
+
+    CASE_AND_LABEL(EFFECT_REFRESH)
+        return AI_SCORE_CURE_STATUS_AND_HEAL(battlerAtk, 25);
+
+    CASE_AND_LABEL(EFFECT_GRUDGE)
+        // TODO: Grudge
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SNATCH)
+        // TODO: Snatch
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_LOW_KICK)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SECRET_POWER)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_RECOIL_33)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_RECOIL(33);
+
+    CASE_AND_LABEL(EFFECT_TEETER_DANCE)
+        GOTO(EFFECT_CONFUSE);
+
+    CASE_AND_LABEL(EFFECT_HIT_ESCAPE)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_SWITCH;
+
+    CASE_AND_LABEL(EFFECT_MUD_SPORT)
+        // TODO: Mud Sport
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_POISON_FANG)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_TOXIC);
+
+    CASE_AND_LABEL(EFFECT_WEATHER_BALL)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_OVERHEAT)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_SPATK_UP(battlerAtk, -2);
+
+    CASE_AND_LABEL(EFFECT_TICKLE)
+        return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_DEFENSE_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_COSMIC_POWER)
+        return AI_SCORE_DEFENSE_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_SKY_UPPERCUT)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_BULK_UP)
+        return AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_DEFENSE_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_WATER_SPORT)
+        // TODO: Water Sport
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CALM_MIND)
+        return AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_DRAGON_DANCE)
+        return AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_CAMOUFLAGE)
+        // TODO: Camouflage
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_PLEDGE)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_FLING)
+        // TODO: Verify that fling doesn't need state set
+        // TODO: Flinch canceller
+        AI_CALC_DAMAGE;
+        switch (gBattleMons[battlerAtk].item)
+        {
+        case ITEM_FLAME_ORB:
+            score += AI_SCORE_BURN_MOVE;
+            break;
+        case ITEM_RAZOR_FANG:
+        case ITEM_KINGS_ROCK:
+            score += AI_SCORE_FLINCH;
+            break;
+        case ITEM_TOXIC_ORB:
+            score += AI_SCORE_TOXIC;
+            break;
+        case ITEM_FROST_ORB:
+            score += AI_SCORE_FROSTBITE_MOVE;
+            break;
+        case ITEM_LIGHT_BALL:
+            score += AI_SCORE_PARALYSIS_MOVE;
+            break;
+        case ITEM_POISON_BARB:
+            score += AI_SCORE_POISON_MOVE;
+            break;
+        }
+        return score + AI_SCORE_LOSE_ITEM(battlerAtk);
+
+    CASE_AND_LABEL(EFFECT_NATURAL_GIFT)
+        // TODO: Natural Gift
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_WAKE_UP_SLAP)
+        AI_CALC_DAMAGE;
+        if (gBattleMons[battlerDef].status1 & gBattleMoves[move].argument) score += AI_SCORE_CURE_STATUS(battlerDef);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_WRING_OUT)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_HEX)
+        GOTO(EFFECT_ARGUMENT_HIT);
+
+    CASE_AND_LABEL(EFFECT_ASSURANCE)
+        // TODO: Assurance
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_TRUMP_CARD)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_ACROBATICS)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_HEAT_CRASH)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_PUNISHMENT)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_STORED_POWER)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_ELECTRO_BALL)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_GYRO_BALL)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_ECHOED_VOICE)
+        // TODO: Handle multiple echoed voice
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_PAYBACK)
+        // TODO: Payback
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_ROUND)
+        // TODO: Handle multiple rounds 
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_BRINE)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_VENOSHOCK)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_RETALIATE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_BULLDOZE)
+        GOTO(EFFECT_SPEED_DOWN_HIT);
+
+    CASE_AND_LABEL(EFFECT_FOUL_PLAY)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_PSYSHOCK)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_ROOST)
+        // TODO: Roost flying removal
+        return AI_SCORE_HEAL(battlerAtk, 50);
+
+    CASE_AND_LABEL(EFFECT_GRAVITY)
+        return AI_SCORE_GRAVITY;
+
+    CASE_AND_LABEL(EFFECT_MIRACLE_EYE)
+        // TODO: Miracle eye
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_TAILWIND)
+        return AI_SCORE_TAILWIND;
+
+    CASE_AND_LABEL(EFFECT_EMBARGO)
+        return AI_SCORE_LOSE_ITEM(battlerDef);
+
+    CASE_AND_LABEL(EFFECT_AQUA_RING)
+        return AI_SCORE_AQUA_RING;
+
+    CASE_AND_LABEL(EFFECT_TRICK_ROOM)
+        return AI_SCORE_TRICK_ROOM;
+
+    CASE_AND_LABEL(EFFECT_WONDER_ROOM)
+        return AI_SCORE_WONDER_ROOM;
+
+    CASE_AND_LABEL(EFFECT_MAGIC_ROOM)
+        return AI_SCORE_MAGIC_ROOM;
+
+    CASE_AND_LABEL(EFFECT_MAGNET_RISE)
+        return AI_SCORE_MAGNET_RISE;
+
+    CASE_AND_LABEL(EFFECT_TOXIC_SPIKES)
+        return AI_SCORE_TOXIC_SPIKES;
+
+    CASE_AND_LABEL(EFFECT_GASTRO_ACID)
+        return AI_SCORE_SUPPRESS_ABILITY;
+
+    CASE_AND_LABEL(EFFECT_STEALTH_ROCK)
+        return AI_SCORE_STEALTH_ROCK;
+
+    CASE_AND_LABEL(EFFECT_TELEKINESIS)
+        return AI_SCORE_TELEKINESIS;
+
+    CASE_AND_LABEL(EFFECT_POWER_SWAP)
+        // TODO: Power Swap
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_GUARD_SWAP)
+        // TODO: Guard Swap
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_HEART_SWAP)
+        score = AI_SCORE_GET_STATS_OF(battlerAtk, battlerDef);
+        score += AI_SCORE_GET_STATS_OF(battlerDef, battlerAtk);
+        score += AI_SCORE_RESET_STAT_CHANGES(battlerAtk);
+        score += AI_SCORE_RESET_STAT_CHANGES(battlerDef);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_POWER_SPLIT)
+        // TODO: Power Split
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_GUARD_SPLIT)
+        // TODO: Guard Split
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_STICKY_WEB)
+        return AI_SCORE_STICKY_WEB;
+
+    CASE_AND_LABEL(EFFECT_METAL_BURST)
+        return AI_SCORE_METAL_BURST;
+
+    CASE_AND_LABEL(EFFECT_LUCKY_CHANT)
+        return AI_SCORE_LUCKY_CHANT;
+
+    CASE_AND_LABEL(EFFECT_SUCKER_PUNCH)
+        // TODO: Sucker Punch legality check
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_DEFENSE_DOWN_HIT_2)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPDEF_UP(battlerDef, -2));
+
+    CASE_AND_LABEL(EFFECT_SIMPLE_BEAM)
+        return AI_SCORE_REPLACE_ABILITY(battlerDef, ABILITY_SIMPLE);
+
+    CASE_AND_LABEL(EFFECT_ENTRAINMENT)
+        return AI_SCORE_REPLACE_ABILITY(battlerDef, gBattleMons[battlerAtk].ability);
+
+    CASE_AND_LABEL(EFFECT_HEAL_PULSE)
+        return AI_SCORE_HEAL(battlerDef, 50);
+
+    CASE_AND_LABEL(EFFECT_QUASH)
+        return AI_SCORE_QUASH;
+
+    CASE_AND_LABEL(EFFECT_ION_DELUGE)
+        // TODO: Ion Deluge
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_FREEZE_DRY)
+        GOTO(EFFECT_FROSTBITE_HIT);
+
+    CASE_AND_LABEL(EFFECT_TOPSY_TURVY)
+        return AI_SCORE_INVERT_STAT_CHANGES;
+
+    CASE_AND_LABEL(EFFECT_MISTY_TERRAIN)
+        return AI_SCORE_MISTY_TERRAIN;
+
+    CASE_AND_LABEL(EFFECT_GRASSY_TERRAIN)
+        return AI_SCORE_GRASSY_TERRAIN;
+
+    CASE_AND_LABEL(EFFECT_ELECTRIC_TERRAIN)
+        return AI_SCORE_ELECTRIC_TERRAIN;
+
+    CASE_AND_LABEL(EFFECT_PSYCHIC_TERRAIN)
+        return AI_SCORE_PSYCHIC_TERRAIN;
+
+    CASE_AND_LABEL(EFFECT_ATTACK_ACCURACY_UP)
+        return AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_ACC_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_ATTACK_SPATK_UP)
+        return AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_SPATK_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_HURRICANE)
+        GOTO(EFFECT_CONFUSE_HIT);
+
+    CASE_AND_LABEL(EFFECT_TWO_TYPED_MOVE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_ME_FIRST)
+        // TODO: Me First
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SPEED_UP_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPEED_UP(battlerAtk, 1));
+
+    CASE_AND_LABEL(EFFECT_QUIVER_DANCE)
+        return AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_COIL)
+        if ((HasAbility(battlerAtk, ABILITY_COIL_UP, aiData) || HasAbility(battlerAtk, ABILITY_SIDEWINDER, aiData))
+            && !(gStatuses4[battlerAtk] & STATUS4_COILED))
+            score += AI_SCORE_COILED_UP;
+        return score + AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_DEFENSE_UP(battlerAtk, 1) + AI_SCORE_ACC_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_ELECTRIFY)
+        // TODO: Electrify
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SCALD)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BURN_MOVE);
+
+    CASE_AND_LABEL(EFFECT_REFLECT_TYPE)
+        // TODO: Reflect Type
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SOAK)
+        // TODO: Soak
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_GROWTH)
+        {
+        int boost = SeesSunlight(battlerAtk, aiData) ? 2 : 1;
+        return AI_SCORE_ATTACK_UP(battlerAtk, boost) + AI_SCORE_SPATK_UP(battlerAtk, boost);
+        }
+
+    CASE_AND_LABEL(EFFECT_CLOSE_COMBAT)
+        AI_CALC_DAMAGE;
+        return AI_SCORE_DEFENSE_UP(battlerAtk, -1) + AI_SCORE_SPDEF_UP(battlerAtk, -1);
+
+    CASE_AND_LABEL(EFFECT_LAST_RESORT)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_RECOIL_33_STATUS)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_RECOIL(33) + AI_SCORE_ARGUMENT_MOVE_EFFECT;
+
+    CASE_AND_LABEL(EFFECT_FLINCH_STATUS)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FLINCH + AI_SCORE_ARGUMENT_MOVE_EFFECT);
+
+    CASE_AND_LABEL(EFFECT_RECOIL_50)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_RECOIL(50);
+
+    CASE_AND_LABEL(EFFECT_SHELL_SMASH)
+        score = AI_SCORE_ATTACK_UP(battlerAtk, 2);
+        score += AI_SCORE_SPATK_UP(battlerAtk, 2);
+        score += AI_SCORE_SPEED_UP(battlerAtk, 2);
+        score += AI_SCORE_SPDEF_UP(battlerAtk, -1);
+        score += AI_SCORE_DEFENSE_UP(battlerAtk, -1);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_SHIFT_GEAR)
+        return AI_SCORE_SPEED_UP(battlerAtk, 2) + AI_SCORE_ATTACK_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_DEFENSE_UP_3)
+        return AI_SCORE_DEFENSE_UP(battlerAtk, 3);
+
+    CASE_AND_LABEL(EFFECT_NOBLE_ROAR)
+        return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_DEFENSE_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_VENOM_DRENCH)
+        if (!(gBattleMons[battlerDef].status1 & STATUS1_POISON)) return AI_SCORE_UNUSABLE;
+        return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_DEFENSE_UP(battlerDef, -1) + AI_SCORE_SPEED_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_TOXIC_THREAD)
+        return AI_SCORE_SPEED_UP(battlerDef, -3) + AI_SCORE_TOXIC;
+
+    CASE_AND_LABEL(EFFECT_CLEAR_SMOG)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_RESET_STAT_CHANGES(battlerDef);
+
+    CASE_AND_LABEL(EFFECT_HIT_SWITCH_TARGET)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_FORCE_SWITCH;
+
+    CASE_AND_LABEL(EFFECT_FINAL_GAMBIT)
+        // TODO: Final Gambit
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CHANGE_TYPE_ON_ITEM)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_AUTOTOMIZE)
+        GOTO(EFFECT_SPEED_UP_2);
+
+    CASE_AND_LABEL(EFFECT_COPYCAT)
+        // TODO: Copycat
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_DEFOG)
+        // TODO: Defog
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_HIT_ENEMY_HEAL_ALLY)
+        if (AreSameSide(battlerAtk, battlerDef)) return AI_SCORE_HEAL(battlerDef, 50);
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SMACK_DOWN)
+        // TODO: Smack Down
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SYNCHRONOISE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_PSYCHO_SHIFT)
+        {
+        int status = gBattleMons[battlerAtk].status1;
+        if (status & STATUS1_SLEEP) score = AI_SCORE_SLEEP_MOVE;
+        else if (status & STATUS1_BLEED) score = AI_SCORE_BLEED;
+        else if (status & STATUS1_BURN) score = AI_SCORE_BURN_MOVE;
+        else if (status & STATUS1_FROSTBITE) score = AI_SCORE_FROSTBITE_MOVE;
+        else if (status & STATUS1_PARALYSIS) score = AI_SCORE_PARALYSIS_MOVE;
+        else if (status & STATUS1_TOXIC_POISON) score = AI_SCORE_TOXIC;
+        else if (status & STATUS1_POISON) score = AI_SCORE_POISON_MOVE;
+        else return AI_SCORE_UNUSABLE;
+        }
+        // TODO: Make sure this is the right number
+        if (score > AI_SCORE_IMMUNE) return score + AI_SCORE_CURE_STATUS(battlerAtk);
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_POWER_TRICK)
+        // TODO: Power Trick
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_FLAME_BURST)
+        // TODO: Flame Burst
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_AFTER_YOU)
+        // TODO: After You
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_BESTOW)
+        if (gBattleMons[battlerDef].item) return AI_SCORE_UNUSABLE;
+        return AI_SCORE_SWAP_ITEMS;
+
+    CASE_AND_LABEL(EFFECT_ROTOTILLER)
+        if (!IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)) return AI_SCORE_UNUSABLE;
+        {
+        int boost = IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN) ? 2 : 1;
+        return AI_SCORE_SPATK_UP(battlerAtk, boost);
+        }
+
+    CASE_AND_LABEL(EFFECT_FLOWER_SHIELD)
+        if (!IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)) return AI_SCORE_UNUSABLE;
+        {
+        return AI_SCORE_DEFENSE_UP(battlerAtk, 1);
+        }
+
+    CASE_AND_LABEL(EFFECT_HIT_PREVENT_ESCAPE)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_TRAP;
+
+    CASE_AND_LABEL(EFFECT_SPEED_SWAP)
+        // TODO: Speed Swap
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_DEFENSE_UP2_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_DEFENSE_UP(battlerAtk, 2));
+
+    CASE_AND_LABEL(EFFECT_REVELATION_DANCE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_AURORA_VEIL)
+        if (!IsWeatherActive(WEATHER_HAIL_ANY)) return AI_SCORE_UNUSABLE;
+        return AI_SCORE_AURORA_VEIL;
+
+    CASE_AND_LABEL(EFFECT_THIRD_TYPE)
+        // TODO: Third Type (Trick Or Treat)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_FEINT)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_BREAK_PROTECT;
+
+    CASE_AND_LABEL(EFFECT_SPARKLING_ARIA)
+        if (!AreSameSide(battlerAtk, battlerDef))
+        {
+            AI_CALC_DAMAGE;
+        }
+        if (gBattleMons[battlerDef].status1 & STATUS1_BURN) score += AI_SCORE_CURE_STATUS(battlerDef);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_ACUPRESSURE)
+        score = AI_SCORE_ATTACK_UP(battlerDef, 2);
+        score += AI_SCORE_DEFENSE_UP(battlerDef, 2);
+        score += AI_SCORE_SPEED_UP(battlerDef, 2);
+        score += AI_SCORE_SPATK_UP(battlerDef, 2);
+        score += AI_SCORE_SPDEF_UP(battlerDef, 2);
+        return score / 5;
+
+    CASE_AND_LABEL(EFFECT_AROMATIC_MIST)
+        return AI_SCORE_DEFENSE_UP(battlerAtk, 2) +  AI_SCORE_DEFENSE_UP(BATTLE_PARTNER(battlerAtk), 2);
+
+    CASE_AND_LABEL(EFFECT_POWDER)
+        return AI_SCORE_POWDER;
+
+    CASE_AND_LABEL(EFFECT_SP_ATTACK_UP_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPATK_UP(battlerAtk, 2));
+
+    CASE_AND_LABEL(EFFECT_BELCH)
+        // TODO: Check berry
+        GOTO(EFFECT_BERRY_SMASH);
+
+    CASE_AND_LABEL(EFFECT_PARTING_SHOT)
+        return AI_SCORE_SWITCH + AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_SPATK_UP(battlerDef, -1);
+
+    CASE_AND_LABEL(EFFECT_SPECTRAL_THIEF)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_GET_STATS_OF(battlerAtk, battlerDef) + AI_SCORE_RESET_STAT_CHANGES(battlerDef);
+
+    CASE_AND_LABEL(EFFECT_V_CREATE)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_DEFENSE_UP(battlerAtk, -1) + AI_SCORE_SPDEF_UP(battlerAtk, -1) + AI_SCORE_SPEED_UP(battlerAtk, -1);
+
+    CASE_AND_LABEL(EFFECT_MAT_BLOCK)
+        GOTO(EFFECT_PROTECT);
+
+    CASE_AND_LABEL(EFFECT_STOMPING_TANTRUM)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_CORE_ENFORCER)
+        // TODO: Core Enforcer
+        AI_CALC_DAMAGE;
+        return score;
+
+    CASE_AND_LABEL(EFFECT_INSTRUCT)
+        // TODO: Instruct
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_THROAT_CHOP)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_THROAT_CHOP;
+
+    CASE_AND_LABEL(EFFECT_LASER_FOCUS)
+        // TODO: Laser Focus
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_MAGNETIC_FLUX)
+        // if (IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) score += AI_SCORE_PARALYSIS_MOVE;
+        if (HasAbility(battlerAtk, ABILITY_PLUS, aiData) || HasAbility(battlerAtk, ABILITY_MINUS, aiData))
+            score += AI_SCORE_DEFENSE_UP(battlerDef, 1) + AI_SCORE_SPDEF_UP(battlerDef, 1);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_GEAR_UP)
+        return AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_INCINERATE)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_BUG_BITE)
+        AI_CALC_DAMAGE;
+        if (ItemId_GetPocket(gBattleMons[battlerDef].item) == POCKET_BERRIES) score += AI_SCORE_EAT_BERRY(battlerDef);
+        else score += AI_SCORE_LOSE_ITEM(battlerDef);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_STRENGTH_SAP)
+        return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_ATK, 0, 0, TRUE, FALSE, AiIsUnaware(gBattlerAttacker), FALSE););
+
+    CASE_AND_LABEL(EFFECT_MIND_BLOWN)
+        // TODO: Score damage loss
+        GOTO(EFFECT_ARGUMENT_HIT);
+
+    CASE_AND_LABEL(EFFECT_PURIFY)
+        if (!(gBattleMons[battlerDef].status1 & STATUS1_ANY)) return AI_SCORE_UNUSABLE;
+        return AI_SCORE_HEAL(battlerAtk, 50) + AI_SCORE_CURE_STATUS(battlerDef);
+
+    CASE_AND_LABEL(EFFECT_BURN_UP)
+        // TODO: Score losing type
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SHORE_UP)
+        if (IsBattlerWeatherAffected(battlerAtk, WEATHER_SANDSTORM_ANY)) return AI_SCORE_HEAL(battlerAtk, 66);
+        return AI_SCORE_HEAL(battlerAtk, 50);
+
+    CASE_AND_LABEL(EFFECT_GEOMANCY)
+        if (turn == 0) return AI_SCORE_UNUSABLE;
+        return AI_SCORE_SPATK_UP(battlerAtk, 2) + AI_SCORE_SPATK_UP(battlerAtk, 2) + AI_SCORE_SPEED_UP(battlerAtk, 2);
+
+    CASE_AND_LABEL(EFFECT_FAIRY_LOCK)
+        // TODO: Fairy Lock
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_ALLY_SWITCH)
+        // TODO: Ally Switch
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_RELIC_SONG)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_ATTACKER_DEFENSE_DOWN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_DEFENSE_UP(battlerAtk, -1);
+
+    CASE_AND_LABEL(EFFECT_BODY_PRESS)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_EERIE_SPELL)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_PP_DOWN(6);
+
+    CASE_AND_LABEL(EFFECT_JUNGLE_HEALING)
+        return AI_SCORE_CURE_STATUS_AND_HEAL(battlerAtk, 25) + AI_SCORE_CURE_STATUS_AND_HEAL(BATTLE_PARTNER(battlerAtk), 25);
+
+    CASE_AND_LABEL(EFFECT_COACHING)
+        return AI_SCORE_DEFENSE_UP(battlerDef, 1) + AI_SCORE_ATTACK_UP(battlerDef, 1);
+
+    CASE_AND_LABEL(EFFECT_LASH_OUT)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_GRASSY_GLIDE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_REMOVE_TERRAIN)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_DYNAMAX_DOUBLE_DMG)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_DECORATE)
+        if (!AreSameSide(battlerAtk, battlerDef)) GOTO(EFFECT_HIT);
+        return AI_SCORE_ATTACK_UP(battlerDef, 2) + AI_SCORE_SPATK_UP(battlerDef, 2) + AI_SCORE_CRIT_UP(battlerDef, 2);
+
+    CASE_AND_LABEL(EFFECT_SNIPE_SHOT)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_TRIPLE_HIT)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_RECOIL_HP_25)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_LOSE_HP(25);
+
+    CASE_AND_LABEL(EFFECT_STUFF_CHEEKS)
+        return AI_SCORE_DEFENSE_UP(battlerAtk, 2) + AI_SCORE_EAT_BERRY(battlerAtk);
+
+    CASE_AND_LABEL(EFFECT_GRAV_APPLE)
+        GOTO(EFFECT_ARGUMENT_HIT);
+
+    CASE_AND_LABEL(EFFECT_EVASION_UP_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_EVASION_UP(battlerAtk, 1));
+
+    CASE_AND_LABEL(EFFECT_GLITZY_GLOW)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_LIGHTSCREEN;
+
+    CASE_AND_LABEL(EFFECT_BADDY_BAD)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_REFLECT;
+
+    CASE_AND_LABEL(EFFECT_SAPPY_SEED)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_LEECH_SEED;
+
+    CASE_AND_LABEL(EFFECT_FREEZY_FROST)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_HAZE;
+
+    CASE_AND_LABEL(EFFECT_SPARKLY_SWIRL)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_CURE_PARTY_STATUS;
+
+    CASE_AND_LABEL(EFFECT_PLASMA_FISTS)
+        // TODO: Plasma Fists
+        AI_CALC_DAMAGE;
+        return score;
+
+    CASE_AND_LABEL(EFFECT_HYPERSPACE_FURY)
+        GOTO(EFFECT_FEINT);
+
+    CASE_AND_LABEL(EFFECT_AURA_WHEEL)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_PHOTON_GEYSER)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SHELL_SIDE_ARM)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_TERRAIN_PULSE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_JAW_LOCK)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_TRAP + AI_SCORE_NO_ESCAPE;
+
+    CASE_AND_LABEL(EFFECT_NO_RETREAT)
+        // TODO: Check that you can actually use no retreat
+        score = AI_SCORE_NO_ESCAPE;
+        score += AI_SCORE_ATTACK_UP(battlerAtk, 1);
+        score += AI_SCORE_DEFENSE_UP(battlerAtk, 1);
+        score += AI_SCORE_SPEED_UP(battlerAtk, 1);
+        score += AI_SCORE_SPATK_UP(battlerAtk, 1);
+        score += AI_SCORE_SPDEF_UP(battlerAtk, 1);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_TAR_SHOT)
+        // TODO: Tar Shot
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_POLTERGEIST)
+        if (!gBattleMons[battlerDef].item) return AI_SCORE_UNUSABLE;
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_OCTOLOCK)
+        // TODO: Octolock
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CLANGOROUS_SOUL)
+        score = AI_SCORE_LOSE_HP(33);
+        score += AI_SCORE_ATTACK_UP(battlerAtk, 1);
+        score += AI_SCORE_DEFENSE_UP(battlerAtk, 1);
+        score += AI_SCORE_SPEED_UP(battlerAtk, 1);
+        score += AI_SCORE_SPATK_UP(battlerAtk, 1);
+        score += AI_SCORE_SPDEF_UP(battlerAtk, 1);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_BOLT_BEAK)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_RISING_VOLTAGE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SCALE_SHOT)
+        // TODO: Scale Shot
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_BEAK_BLAST)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_EXCALIBUR)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_EXPANDING_FORCE)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_STEEL_BEAM)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_LOSE_HP(50);
+
+    CASE_AND_LABEL(EFFECT_HOWL)
+        return AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_ATTACK_UP(BATTLE_PARTNER(battlerAtk), 1);
+
+    CASE_AND_LABEL(EFFECT_ATTRACT_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ATTRACT);
+
+    CASE_AND_LABEL(EFFECT_CURSE_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_CURSE);
+
+    CASE_AND_LABEL(EFFECT_FLINCH_RECOIL_33)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_RECOIL(33) + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FLINCH);
+
+    CASE_AND_LABEL(EFFECT_FLINCH_RECOIL_50)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_RECOIL(50) + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FLINCH);
+
+    CASE_AND_LABEL(EFFECT_IGNORE_TYPE_IMMUNITY)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SE_AGAINST_TYPE_HIT)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_DOUBLE_DMG_IF_STATUS1)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_STEALTH_ROCK_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STEALTH_ROCK);
+
+    CASE_AND_LABEL(EFFECT_LEECH_SEED_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_LEECH_SEED);
+
+    CASE_AND_LABEL(EFFECT_STICKY_WEB_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STICKY_WEB);
+
+    CASE_AND_LABEL(EFFECT_BLEED_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BLEED);
+
+    CASE_AND_LABEL(EFFECT_SLEEP_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SLEEP_MOVE);
+
+    CASE_AND_LABEL(EFFECT_BLEED)
+        return AI_SCORE_BLEED;
+
+    CASE_AND_LABEL(EFFECT_FROSTBITE)
+        return AI_SCORE_FROSTBITE_MOVE;
+
+    CASE_AND_LABEL(EFFECT_FREEZE)
+        return AI_SCORE_FROSTBITE_MOVE;
+
+    CASE_AND_LABEL(EFFECT_INFERNAL_PARADE)
+        GOTO(EFFECT_ARGUMENT_HIT);
+
+    CASE_AND_LABEL(EFFECT_WYRM_WIND)
+        // TODO: Wyrm Wind
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_MISTY_TERRAIN_BOOST)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_BERRY_SMASH)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_EAT_BERRY(battlerAtk);
+
+    CASE_AND_LABEL(EFFECT_INVERSE_ROOM)
+        return AI_SCORE_INVERSE_ROOM;
+
+    CASE_AND_LABEL(EFFECT_DRAIN_BRAIN)
+        return AI_SCORE_SPATK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_SPATK, 0, 0, TRUE, FALSE, AiIsUnaware(gBattlerAttacker), FALSE););
+
+    CASE_AND_LABEL(EFFECT_TRIPLE_ARROWS)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_DEFENSE_UP(battlerDef, -1)) + AdjustForChance(GetFullChance(30, aiData), AI_SCORE_FLINCH);
+
+    CASE_AND_LABEL(EFFECT_RECOIL_25_STATUS)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_RECOIL(25) + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ARGUMENT_MOVE_EFFECT);
+
+    CASE_AND_LABEL(EFFECT_WEATHER_BOOST)
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_MORTAL_SPIN)
+        // TODO: Add hazard clearing
+        GOTO(EFFECT_ARGUMENT_HIT);
+
+    CASE_AND_LABEL(EFFECT_KARMA)
+        return AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, -1);
+
+    CASE_AND_LABEL(EFFECT_REMOVE_TERRAIN_NO_FAIL)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_REMOVE_TERRAIN + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ARGUMENT_MOVE_EFFECT);
+
+    CASE_AND_LABEL(EFFECT_TEN_HITS)
+        // TODO: Special handling
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_TWO_TURN_SECONDARY)
+        if (turn == 0) return AI_SCORE_ARGUMENT_MOVE_EFFECT;
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_SPECIAL_ATTACK_UP_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPATK_UP(battlerAtk, 1));
+
+    CASE_AND_LABEL(EFFECT_ARGUMENT_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ARGUMENT_MOVE_EFFECT);
+
+    CASE_AND_LABEL(EFFECT_EVERY_OTHER_TURN)
+        // TODO: Every other turn scoring
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_MISC_HIT)
+        switch (gBattleMoves[move].argument)
+        {
+            case MISC_EFFECT_TRANSMUTE:
+                // TODO: Handle item recovery
+                GOTO(EFFECT_HIT);
+            
+            case MISC_EFFECT_DOUBLE_DAMAGE:
+                // TODO: Handle 30% chance
+                GOTO(EFFECT_HIT);
+        }
+        GOTO(EFFECT_HIT);
+
+    CASE_AND_LABEL(EFFECT_FILLET_AWAY)
+        score = AI_SCORE_LOSE_HP(50);
+        score += AI_SCORE_ATTACK_UP(battlerAtk, 2);
+        score += AI_SCORE_SPEED_UP(battlerAtk, 2);
+        score += AI_SCORE_SPATK_UP(battlerAtk, 2);
+        return score;
+
+    CASE_AND_LABEL(EFFECT_COURT_CHANGE)
+        // TODO: Court Change
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CHILLY_RECEPTION)
+        return AI_SCORE_HAIL + AI_SCORE_SWITCH;
+
+    CASE_AND_LABEL(EFFECT_SHED_TAIL)
+        return AI_SCORE_SUBSTITUTE + AI_SCORE_LOSE_HP(50) + AI_SCORE_SWITCH;
+
+    CASE_AND_LABEL(EFFECT_GHASTLY_ECHO)
+        AI_CALC_DAMAGE;
+        // TODO: Make sure this makes sense
+        return score + AI_SCORE_SWITCH + AI_SCORE_HELPING_HAND;
+
+    CASE_AND_LABEL(EFFECT_REVIVAL_BLESSING)
+        // TODO: Revival Blessing
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_TIDY_UP)
+        return AI_SCORE_CLEAR_HAZARDS(GET_BATTLER_SIDE(battlerAtk)) + AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_ACID)
+        GOTO(EFFECT_SPECIAL_DEFENSE_DOWN_HIT);
+
+    CASE_AND_LABEL(EFFECT_SLUDGE)
+        GOTO(EFFECT_POISON_HIT);
+
+    CASE_AND_LABEL(EFFECT_POISON_GAS)
+        GOTO(EFFECT_POISON_HIT);
+
+    CASE_AND_LABEL(EFFECT_PARALYZE_IGNORE_TYPE)
+        return AI_SCORE_PARALYSIS_IGNORE_TYPE;
+
+    CASE_AND_LABEL(EFFECT_SUPER_FANG_HAZE)
+        AI_CALC_DAMAGE;
+        // TODO: Move haze out of this layer.
+        return score + AI_SCORE_RESET_STAT_CHANGES(battlerDef);
+
+    CASE_AND_LABEL(EFFECT_SPICY_EXTRACT)
+        return AI_SCORE_CONFUSION + AI_SCORE_ATTACK_UP(battlerAtk, 2) + AI_SCORE_ATTACK_UP(battlerDef, 2);
+
+    CASE_AND_LABEL(EFFECT_CLEAR_WEATHER_AND_TERRAIN_HIT)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_REMOVE_TERRAIN + AI_SCORE_REMOVE_WEATHER;
+
+    CASE_AND_LABEL(EFFECT_MATCHA_GOTCHA)
+        AI_CALC_DAMAGE;
+        return score + AI_SCORE_ABSORB_MOVE + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BURN_MOVE);
+
+    CASE_AND_LABEL(EFFECT_DOODLE)
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, gBattleMons[battlerDef].ability) + AI_SCORE_REPLACE_ABILITY(BATTLE_PARTNER(battlerAtk), gBattleMons[battlerDef].ability);
+
+    CASE_AND_LABEL(EFFECT_SPIKE_HIT)
+        AI_CALC_DAMAGE;
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPIKES);
+
+    CASE_AND_LABEL(EFFECT_VICTORY_DANCE)
+        return AI_SCORE_SPEED_UP(battlerAtk, 1) + AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_DEFENSE_UP(battlerAtk, 1);
+
+    CASE_AND_LABEL(EFFECT_DRAGON_CHEER)
+        return AI_SCORE_CRIT_UP(battlerAtk, 1 + IS_BATTLER_OF_TYPE(battlerAtk, TYPE_DRAGON))
+            + AI_SCORE_CRIT_UP(BATTLE_PARTNER(battlerAtk), 1 + IS_BATTLER_OF_TYPE(BATTLE_PARTNER(battlerAtk), TYPE_DRAGON));
+
+    CASE_AND_LABEL(EFFECT_SHELTER)
+        return AI_SCORE_DEFENSE_UP(battlerAtk, 2) + AI_SCORE_DEFENSE_UP(BATTLE_PARTNER(battlerAtk), 2);
+
+    CASE_AND_LABEL(EFFECT_ARGUMENT_HIT_IF_STAT_UP)
+        // TODO: EFFECT_ARGUMENT_HIT_IF_STAT_UP
+        GOTO(EFFECT_ARGUMENT_HIT);
+
+    CASE_AND_LABEL(EFFECT_UPPER_HAND)
+        // TODO: Upper Hand
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_ELECTRO_SHOT)
+        // TODO: Electro Shot
+        GOTO(EFFECT_TWO_TURN_SECONDARY);
+
+    CASE_AND_LABEL(EFFECT_SHARPEN)
+        // TODO: Sharpen
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SCARY_FACE)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SMOKESCREEN)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_EERIE_FOG)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_MYSTIC_DANCE)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SNAP_JAW)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_RIP_AND_TEAR)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SKY_DROP)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_TERROR_CHARGE)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_TAILWIND_HIT)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SANDSTORM_HIT)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_RAIN_HIT)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_FAIRY_TERRAIN_HIT)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CREEPING_THORNS_HIT)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_TAKE_HEART)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CLEAR_SKIES)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SHOWTIME)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_TREPIDATION)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CHIP_AWAY)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_MEDITATE)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_BARRIER)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_KINESIS)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CORROSIVE_GAS)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_CALTROPS)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_SWEET_KISS)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_QUICK_GUARD)
+        return AI_SCORE_UNUSABLE;
+
+    CASE_AND_LABEL(EFFECT_TWO_TURN_RETALIATION)
+        return AI_SCORE_UNUSABLE;
+    }
+
+
+    return AI_SCORE_UNUSABLE;
+}
+
+int GetAiDecision(int battler)
+{
+    struct DisguiseSimulation disguise0 = { 0 }, disguise2 = { 0 };
+    int unusableMoves, i, j;
+    int moveScores[4][2] = { 0 };
+    int switchScore = 0;
+    struct AiData aiData = { 0 };
+    int flags;
+    
+    if (IsBattlerAlive(0)) ReplaceDisguise(&disguise0);
+    if (IsBattlerAlive(2)) ReplaceDisguise(&disguise2);
+
+    unusableMoves = CheckMoveLimitations(battler, 0, 0xFF);
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        for (j = 0; j < 2; j++)
+        {
+            if (j == 2)
+            {
+                flags = GetBattlerBattleMoveTargetFlags(gBattleMons[battler].moves[i], battler);
+                switch (flags)
+                {
+                case MOVE_TARGET_SELECTED:
+                case MOVE_TARGET_USER_OR_SELECTED:
+                    break;
+                
+                default:
+                    moveScores[i][j] = AI_SCORE_UNUSABLE;
+                    continue;
+                }
+            }
+            if (unusableMoves & (1 << i))
+            {
+                moveScores[i][j] = AI_SCORE_UNUSABLE;
+                continue;
+            }
+            moveScores[i][j] = ScoreMove(battler, j * 2, gBattleMons[battler].moves[i], &aiData);
+        }
+    }
+    
+    if (IsBattlerAlive(0)) RestoreDisguise(&disguise0);
+    if (IsBattlerAlive(2)) RestoreDisguise(&disguise2);
+}

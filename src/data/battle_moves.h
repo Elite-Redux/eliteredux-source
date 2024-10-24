@@ -5882,7 +5882,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_VENOSHOCK] =
     {
-        .effect = EFFECT_HEX,
+        .effect = EFFECT_DOUBLE_DMG_IF_STATUS1,
         .power = 65,
         .type = TYPE_POISON,
         .accuracy = 100,
@@ -5891,6 +5891,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_SPECIAL,
+        .argument = STATUS1_POISON,
     },
     [MOVE_AUTOTOMIZE] =
     {

@@ -379,6 +379,8 @@ bool32 CanBeConfused(u8 battlerId);
 bool32 CanBleed(u8 battlerId);
 int CanInfatuate(int battlerAtk, int battlerDef);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
+int IsTerrainActive(int terrainFlag);
+int IsWeatherActive(int weather);
 u8 getMonotypeChampType(void);
 
 // Move checks

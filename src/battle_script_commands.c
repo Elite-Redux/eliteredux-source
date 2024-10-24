@@ -8433,6 +8433,24 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
         DEFOG_CLEAR(SIDE_STATUS_STEALTH_ROCK, stealthRockType, BattleScript_StealthRockFree, 0);
         DEFOG_CLEAR(SIDE_STATUS_TOXIC_SPIKES, toxicSpikesAmount, BattleScript_ToxicSpikesFree, 0);
         DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebAmount, BattleScript_StickyWebFree, 0);
+        if (gSideTimers[i].caltrops)
+        {
+            if (clear)
+            {
+                gSideTimers[i].caltrops = FALSE;
+                BattleScriptCall(BattleScript_CaltropsFree);
+            }
+            return TRUE;
+        }
+        if (gSideTimers[i].hotCoals)
+        {
+            if (clear)
+            {
+                gSideTimers[i].hotCoals = FALSE;
+                BattleScriptCall(BattleScript_HotCoalsFree);
+            }
+            return TRUE;
+        }
     }
     if (gBattleWeather & WEATHER_FOG_ANY)
     {
