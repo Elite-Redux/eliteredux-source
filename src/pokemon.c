@@ -9419,7 +9419,7 @@ bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool
 }
 
 u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
-    u16 randomizedMoveSeed = (moves ^ species ^ personality);
+    u16 randomizedMoveSeed = (moves ^ ISO_RANDOMIZE1(species) ^ personality);
     u16 randomizedMove;
     if (gSaveBlock2Ptr->moveRandomizedMode == 1 &&
         moves != MOVE_NONE) {
@@ -9472,7 +9472,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
        innate != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Innate Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        u16 randomizedInnateSeed = (innate ^ species ^ personality);
+        u16 randomizedInnateSeed = (innate ^ ISO_RANDOMIZE1(species) ^ personality);
         u16 randomizedInnate;
         do {
             randomizedInnateSeed = ISO_RANDOMIZE1(randomizedInnateSeed);
@@ -9546,7 +9546,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
        ability != ABILITY_HUNGER_SWITCH) {
         //Only Randomize if you have the Ability Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        u16 randomizedAbilitySeed = ability ^ species ^ personality;
+        u16 randomizedAbilitySeed = ability ^ ISO_RANDOMIZE1(species) ^ personality;
         u16 randomizedAbility;
         do {
             randomizedAbilitySeed = ISO_RANDOMIZE1(randomizedAbilitySeed);
@@ -9595,15 +9595,12 @@ u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType) {
     if (gSaveBlock2Ptr->typeRandomizedMode == 1 && type != TYPE_MYSTERY) {
         //Only Randomize if you have the Type Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
-        u8 randomizedType = TYPE_MYSTERY;
-        if (isFirstType)
-            randomizedType = (type + species + personality) % (NUMBER_OF_MON_TYPES - 1);
-        else
-            randomizedType = (personality - type - species) % (NUMBER_OF_MON_TYPES - 1);
+        int randomizedTypeSeed = type ^ ISO_RANDOMIZE1(species) ^ personality ^ isFirstType;
+        u8 randomizedType;
 
         do {
-            randomizedType++;
-            randomizedType = randomizedType % (NUMBER_OF_MON_TYPES - 1);
+            randomizedTypeSeed = ISO_RANDOMIZE1(randomizedTypeSeed);
+            randomizedType = randomizedTypeSeed % (NUMBER_OF_MON_TYPES - 1);
         }
         while (randomizedType == TYPE_MYSTERY || randomizedType == type);
         return randomizedType;
