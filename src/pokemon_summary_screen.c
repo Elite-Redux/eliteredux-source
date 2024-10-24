@@ -1798,7 +1798,7 @@ static void Task_HandleInput(u8 taskId)
 		break;
 	}
 	
-	for(i = 0; i < 6; i++) {
+	for (i = 0; i < 6; i++) {
 		if (!sMonSummaryScreen->isBoxMon) {
             TotalEvs = TotalEvs + GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV + i);
         }
@@ -1974,7 +1974,7 @@ static void Task_HandleInput(u8 taskId)
                     else
                         abilityNum = NUM_ABILITY_SLOTS - 1;
                 }
-                while(gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
+                while (gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
 
                 if (!sMonSummaryScreen->isBoxMon) {
                     SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
@@ -2125,7 +2125,7 @@ static void Task_HandleInput(u8 taskId)
                     else
                         abilityNum = 0;
                 }
-                while(gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
+                while (gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
 
                 if (!sMonSummaryScreen->isBoxMon) {
                     SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
@@ -2856,7 +2856,7 @@ static void GenerateMoveReplaceList(u8 keyPress) {
     u16 eggMoveBuffer[EGG_MOVES_ARRAY_COUNT];
     int expectedSplit;
 
-    for(i = 0; i < MAX_LEVEL_UP_MOVES; i++)
+    for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
         sMonSummaryScreen->moveReplaceList[i] = MOVE_NONE;
     sMonSummaryScreen->numMenuChoices = 0;
     newMove = MOVE_NONE;
@@ -3088,7 +3088,7 @@ static void RedrawMoveTypeMenu()
     PosX = 4;
     PosY = 1;
 
-    for(i = 0; i < MAX_MOVE_TABS; i++) {
+    for (i = 0; i < MAX_MOVE_TABS; i++) {
         tabNum = (NUM_MOVE_REPLACE_TABS - 1 + (sMonSummaryScreen->moveReplaceTabNum + i)) % NUM_MOVE_REPLACE_TABS;
 
         switch (tabNum) {
@@ -3133,7 +3133,7 @@ static void PrintMoveReplaceTab(void)
     //Move List
     PosX = 4;
     PosY = 3;
-    for(i = 0; i < numMoves; i++) {
+    for (i = 0; i < numMoves; i++) {
         hasMonMove = FALSE;
         if (sMonSummaryScreen->moveReplaceFirstMove + i == sMonSummaryScreen->moveReplaceCurrentIdx)
             BlitBitmapToWindow(windowId, sMoveCursor, ((PosX - 1) * 8), (PosY * 8), 8, 16);
@@ -4803,7 +4803,7 @@ static void PrintSkillsPage(void)
     FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
 	
 	//Ev Modifier ---------------------------------------------------------------
-	for(j = 0; j < 7; j++) {
+	for (j = 0; j < 7; j++) {
 		x = 15;
 		
 		if (j == gCurrentModifyIndex && ModifyMode) {
@@ -4840,7 +4840,7 @@ static void PrintSkillsPage(void)
 	y = 0;
 	PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, gText_HP3, 12, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++) {
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
 		switch (i) {
 			case 0:
 				ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP), STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -4882,7 +4882,7 @@ static void PrintSkillsPage(void)
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_NatureDown, 0, y, 0, COLOR_STAT_ARROWS);
     PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_Attack, 12, y, 0, 1);  
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++) {
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
 		switch (i) {
 			case 0:
                 ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK), STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -4917,7 +4917,7 @@ static void PrintSkillsPage(void)
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_NatureDown, 0, y, 0, COLOR_STAT_ARROWS);
     PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_Defense, 12, y, 0, 1);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++) {
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
 		switch (i) {
 			case 0:
 				ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF), STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -4952,7 +4952,7 @@ static void PrintSkillsPage(void)
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_NatureDown, 0, y, 0, COLOR_STAT_ARROWS);
     PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_SpecialAttack, 12, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++) {
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
 		switch (i) {
 			case 0:
                 ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK), STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -4987,7 +4987,7 @@ static void PrintSkillsPage(void)
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_NatureDown, 0, y, 0, COLOR_STAT_ARROWS);
     PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_SpecialDefense, 12, y, 0, 1);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++) {
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
 		switch (i) {
 			case 0:
                 ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF), STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -5025,7 +5025,7 @@ static void PrintSkillsPage(void)
     else
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_Speed, 12, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++) {
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
 		switch (i) {
 			case 0:
                 ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED), STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -5053,7 +5053,7 @@ static void PrintSkillsPage(void)
 	
 	//---------------------------------------------------------------------------------------------------------
 	y = 100;
-	for(i = 0; i < NUM_STAT_TYPES; i++) {
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
 		switch (i) {
 			case 0:
 				x = 8;
@@ -5247,7 +5247,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
 
 	// Innates
-	for(i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
+	for (i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
         switch (i) {
             case 0:
                 if (abilities[1] != ABILITY_NONE) {
@@ -6374,7 +6374,7 @@ static void RedrawMoveDetailsBase(bool8 moveReplaceMode)
         PosY = 64 - 16;
 
         //Moves
-        for(i = 0; i < MAX_MON_MOVES; i++) {
+        for (i = 0; i < MAX_MON_MOVES; i++) {
             currentMove = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
 
             if (currentMove != MOVE_NONE)
@@ -6490,7 +6490,7 @@ static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
         PosY = 64 - 16;
 
         //Moves
-        for(i = 0; i < MAX_MON_MOVES; i++) {
+        for (i = 0; i < MAX_MON_MOVES; i++) {
             currentMove = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
             if (i == sMonSummaryScreen->moveReplaceMoveNum)
                 BlitBitmapToWindow(PSS_LABEL_PANE_LEFT_MOVE, sMoveCursorDark, PosX - 12, PosY, 8, 16);
