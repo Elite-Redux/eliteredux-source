@@ -323,6 +323,7 @@ void SetAbilityState(u8 battler, u16 ability, u32 value);
 union AbilityStates GetAbilityStateAs(u8 battler, u16 ability);
 void SetAbilityStateAs(u8 battler, u16 ability, union AbilityStates value);
 void IncrementAbilityState(u8 battler, u16 ability, u32 value);
+int GetHighestStatIdExcept(int battlerId, int includeStatStages, int exclude);
 u8 GetHighestStatId(u8 battlerId, u8 includeStatStages);
 u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages);
 u8 GetHighestDefendingStatId(u8 battlerId, u8 includeStatStages);
