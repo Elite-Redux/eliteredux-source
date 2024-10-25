@@ -11,6 +11,7 @@
 #include "item.h"
 #include "constants/moves.h"
 #include "battle_anim.h"
+#include "constants/hold_effects.h"
 
 #define AI_SCORE(value) (value * 1024)
 #define AI_SCORE_UNUSABLE AI_SCORE(-100)
@@ -21,7 +22,10 @@ struct MoveState {
     u8 critChance;
     u8 falseSwipe:1;
     u8 contact:1;
-
+    u8 seeKo:1;
+    u8 superEffective:1;
+    u8 breakSubstitute:1;
+    u8 breakDisguise:1;
 };
 
 struct AiData {
@@ -116,7 +120,7 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_ABSORB_MOVE(percent) 0
 #define AI_SCORE_BURN_MOVE(battler) 0
 #define AI_SCORE_FROSTBITE_MOVE(battler) 0
-#define AI_SCORE_PARALYSIS_MOVE(battler) 0
+#define AI_SCORE_PARALYSIS(battler) 0
 #define AI_SCORE_ATTACK_UP(battler, stages) 0
 #define AI_SCORE_DEFENSE_UP(battler, stages) 0
 #define AI_SCORE_SPEED_UP(battler, stages) 0
@@ -127,17 +131,18 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_CRIT_UP(battler, stages) 0
 #define AI_SCORE_STAT(battler, stat, stage) 0
 #define AI_SCORE_RESET_STAT_CHANGES(battler) 0
+#define AI_SCORE_APE_SHIFT(battler) 0
 #define AI_SCORE_MAKE_IT_RAIN 0
 #define AI_SCORE_RAINBOW 0
 #define AI_SCORE_SWAMP 0
 #define AI_SCORE_FIRE_SEA 0
-#define AI_SCORE_FORCE_SWITCH 0
+#define AI_SCORE_RANDOM_SWITCH(battlerDef) 0
 #define AI_SCORE_FLINCH(battler) 0
 #define AI_SCORE_HEAL(battler, percent) 0
 #define AI_SCORE_TOXIC(battler) 0
 #define AI_SCORE_LIGHTSCREEN 0
 #define AI_SCORE_CURE_STATUS(battler) 0
-#define AI_SCORE_WRAP 0
+#define AI_SCORE_WRAP(battlerAtk, battlerDef) 0
 #define AI_SCORE_HEAL_BLOCK(duration) 0
 #define AI_SCORE_MIST 0
 #define AI_SCORE_RECOIL(percent) 0
@@ -145,28 +150,30 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_TRANSFORM 0
 #define AI_SCORE_REFLECT 0
 #define AI_SCORE_SUBSTITUTE 0
-#define AI_SCORE_LOSE_HP(percent) 0
+#define AI_SCORE_LOSE_HP(battlerDef, percent) 0
 #define AI_SCORE_LEECH_SEED 0
-#define AI_SCORE_DISABLE 0
+#define AI_SCORE_DISABLE(battlerDef) 0
 #define AI_SCORE_COUNTER 0
 #define AI_SCORE_ENCORE 0
 #define AI_SCORE_PAIN_SPLIT 0
 #define AI_SCORE_LOCK_ON 0
 #define AI_SCORE_DESTINY_BOND 0
-#define AI_SCORE_PP_DOWN(amount) 0
-#define AI_SCORE_CURE_PARTY_STATUS 0
+#define AI_SCORE_PP_DOWN(battlerDef, amount) 0
+#define AI_SCORE_INNARDS_OUT(battlerAtk, battlerDef) 0
+#define AI_SCORE_CURE_PARTY_STATUS(battlerAtk) 0
 #define AI_SCORE_THIEF 0
 #define AI_SCORE_TRAP 0
 #define AI_SCORE_NIGHTMARE 0
-#define AI_SCORE_CURSE 0
+#define AI_SCORE_CURSE(battlerDef) 0
+#define AI_SCORE_ADD_TYPE(battler, type) 0
 #define AI_SCORE_PROTECT 0
-#define AI_SCORE_SPIKES 0
-#define AI_SCORE_PERISH_SONG 0
+#define AI_SCORE_SPIKES(battlerAtk) 0
+#define AI_SCORE_PERISH_SONG(battlerDef) 0
 #define AI_SCORE_SANDSTORM 0
 #define AI_SCORE_ENDURE 0
-#define AI_SCORE_ATTRACT 0
+#define AI_SCORE_ATTRACT(battlerAtk, battlerDef) 0
 #define AI_SCORE_SAFEGUARD 0
-#define AI_SCORE_SWITCH 0
+#define AI_SCORE_SWITCH(battlerAtk) 0
 #define AI_SCORE_CLEAR_HAZARDS(side) 0
 #define AI_SCORE_RAIN 0
 #define AI_SCORE_SUN 0
@@ -180,12 +187,14 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_FEAR 0
 #define AI_SCORE_TORMENT 0
 #define AI_SCORE_FOLLOW_ME 0
-#define AI_SCORE_CHARGE 0
+#define AI_SCORE_CHARGE(battlerAtk) 0
+#define AI_SCORE_LUMBERING_SLOTH_ENGULFED
 #define AI_SCORE_TAUNT 0
 #define AI_SCORE_SYRUP 0
 #define AI_SCORE_HELPING_HAND 0
 #define AI_SCORE_GHASTLY_ECHO 0
 #define AI_SCORE_LOSE_ITEM(battler) 0
+#define AI_SCORE_EMBARGO(battler) 0
 #define AI_SCORE_SWAP_ITEMS 0
 #define AI_SCORE_QUICK_GUARD 0
 #define AI_SCORE_INGRAIN 0
@@ -203,8 +212,8 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_WONDER_ROOM 0
 #define AI_SCORE_MAGIC_ROOM 0
 #define AI_SCORE_MAGNET_RISE 0
-#define AI_SCORE_TOXIC_SPIKES 0
-#define AI_SCORE_STEALTH_ROCK(type) 0
+#define AI_SCORE_TOXIC_SPIKES(battlerAtk) 0
+#define AI_SCORE_STEALTH_ROCK(battlerAtk, type) 0
 #define AI_SCORE_TELEKINESIS 0
 #define AI_SCORE_STICKY_WEB 0
 #define AI_SCORE_METAL_BURST 0
@@ -214,7 +223,8 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_QUASH 0
 #define AI_SCORE_INVERT_STAT_CHANGES 0
 #define AI_SCORE_PSYCHIC_TERRAIN 0
-#define AI_SCORE_MISTY_TERRAIN 0
+#define AI_SCORE_MISTY_TERRAIN(battlerAtk) 0
+#define AI_SCORE_EXTRA_MOVE(battlerAtk, battlerDef, move, power) 0
 #define AI_SCORE_ELECTRIC_TERRAIN 0
 #define AI_SCORE_GRASSY_TERRAIN 0
 #define AI_SCORE_FOG 0
@@ -229,7 +239,7 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_EAT_BERRY(battler) 0
 #define AI_SCORE_HEAL_FIXED(amount) 0
 #define AI_SCORE_HAZE 0
-#define AI_SCORE_NO_ESCAPE 0
+#define AI_SCORE_NO_ESCAPE(battlerAtk) 0
 #define AI_SCORE_INVERSE_ROOM 0
 #define AI_SCORE_REMOVE_TERRAIN 0
 #define AI_SCORE_PARALYSIS_IGNORE_TYPE 0
@@ -284,7 +294,7 @@ int ScoreArgument(int battlerAtk, int battlerDef, int move, struct AiData* aiDat
     case MOVE_EFFECT_FROSTBITE:
         return AI_SCORE_FROSTBITE_MOVE(applyTo);
     case MOVE_EFFECT_PARALYSIS:
-        return AI_SCORE_PARALYSIS_MOVE(applyTo);
+        return AI_SCORE_PARALYSIS(applyTo);
     case MOVE_EFFECT_TOXIC:
         return AI_SCORE_TOXIC(battlerDef);
     case MOVE_EFFECT_BLEED:
@@ -345,7 +355,7 @@ int ScoreArgument(int battlerAtk, int battlerDef, int move, struct AiData* aiDat
         return AI_SCORE_SYRUP;
         break;
     case MOVE_EFFECT_DIRE_CLAW:
-        return (AI_SCORE_POISON_MOVE(applyTo) + AI_SCORE_BLEED(applyTo) + AI_SCORE_PARALYSIS_MOVE(applyTo)) / 3;
+        return (AI_SCORE_POISON_MOVE(applyTo) + AI_SCORE_BLEED(applyTo) + AI_SCORE_PARALYSIS(applyTo)) / 3;
     case MOVE_EFFECT_YAWN:
         return AI_SCORE_DROWSY;
     case MOVE_EFFECT_PSYCHIC_NOISE:
@@ -409,7 +419,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     
     CASE_AND_LABEL(EFFECT_PARALYZE_HIT)
         AI_CALC_DAMAGE;
-        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_PARALYSIS_MOVE(battlerDef));
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_PARALYSIS(battlerDef));
         
     CASE_AND_LABEL(EFFECT_REVENGE)
         // TODO: Handle
@@ -472,7 +482,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_HAZE;
 
     CASE_AND_LABEL(EFFECT_ROAR)
-        return AI_SCORE_FORCE_SWITCH;
+        return AI_SCORE_RANDOM_SWITCH(battlerDef);
 
     CASE_AND_LABEL(EFFECT_CONVERSION) // TODO: Score for type change
         return AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
@@ -495,7 +505,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_TRI_ATTACK)
         AI_CALC_DAMAGE;
-        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_PARALYSIS_MOVE(battlerDef));
+        score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_PARALYSIS(battlerDef));
         score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BURN_MOVE(battlerDef));
         score += AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_FROSTBITE_MOVE(battlerDef));
         return score;
@@ -517,7 +527,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_TRAP)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_WRAP;
+        return score + AI_SCORE_WRAP(battlerAtk, battlerDef);
 
     CASE_AND_LABEL(EFFECT_HEAL_BLOCK)
         return AI_SCORE_HEAL_BLOCK(5);
@@ -593,7 +603,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_POISON_MOVE(battlerDef);
 
     CASE_AND_LABEL(EFFECT_PARALYZE)
-        return AI_SCORE_PARALYSIS_MOVE(battlerDef);
+        return AI_SCORE_PARALYSIS(battlerDef);
 
     CASE_AND_LABEL(EFFECT_ATTACK_DOWN_HIT)
         AI_CALC_DAMAGE;
@@ -639,7 +649,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_SUBSTITUTE)
-        return AI_SCORE_LOSE_HP(25) + AI_SCORE_SUBSTITUTE;
+        return AI_SCORE_LOSE_HP(battlerDef, 25) + AI_SCORE_SUBSTITUTE;
 
     CASE_AND_LABEL(EFFECT_RECHARGE) // TODO: Handle recharge
         GOTO(EFFECT_HIT);
@@ -660,7 +670,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_UNUSABLE;
 
     CASE_AND_LABEL(EFFECT_DISABLE)
-        return AI_SCORE_DISABLE;
+        return AI_SCORE_DISABLE(battlerDef);
 
     CASE_AND_LABEL(EFFECT_LEVEL_DAMAGE)
         GOTO(EFFECT_HIT);
@@ -706,14 +716,14 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_SPITE)
-        return AI_SCORE_PP_DOWN(4);
+        return AI_SCORE_PP_DOWN(battlerDef, 4);
 
     CASE_AND_LABEL(EFFECT_FALSE_SWIPE)
         aiData->moveState.falseSwipe = TRUE;
         GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_HEAL_BELL)
-        return AI_SCORE_HEAL(battlerAtk, 30) + AI_SCORE_CURE_PARTY_STATUS;
+        return AI_SCORE_HEAL(battlerAtk, 30) + AI_SCORE_CURE_PARTY_STATUS(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_ALWAYS_CRIT)
         GOTO(EFFECT_HIT);
@@ -739,7 +749,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     CASE_AND_LABEL(EFFECT_CURSE)
         if (IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GHOST) || IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY))
         {
-            return AI_SCORE_LOSE_HP(50) + AI_SCORE_CURSE;
+            return AI_SCORE_LOSE_HP(battlerDef, 50) + AI_SCORE_CURSE(battlerDef);
         }
         else
         {
@@ -754,14 +764,14 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_PROTECT;
 
     CASE_AND_LABEL(EFFECT_SPIKES)
-        return AI_SCORE_SPIKES;
+        return AI_SCORE_SPIKES(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_FORESIGHT)
         // TODO: Foresight
         return AI_SCORE_UNUSABLE;
 
     CASE_AND_LABEL(EFFECT_PERISH_SONG)
-        return AI_SCORE_PERISH_SONG;
+        return AI_SCORE_PERISH_SONG(battlerDef);
 
     CASE_AND_LABEL(EFFECT_SANDSTORM)
         return AI_SCORE_SANDSTORM;
@@ -780,7 +790,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_UNUSABLE;
 
     CASE_AND_LABEL(EFFECT_ATTRACT)
-        return AI_SCORE_ATTRACT;
+        return AI_SCORE_ATTRACT(battlerAtk, battlerDef);
 
     CASE_AND_LABEL(EFFECT_RETURN)
         GOTO(EFFECT_HIT);
@@ -803,7 +813,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_BATON_PASS)
         // TODO: Baton Pass
-        return AI_SCORE_SWITCH;
+        return AI_SCORE_SWITCH(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_PURSUIT)
         AI_CALC_DAMAGE;
@@ -864,7 +874,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_BELLY_DRUM)
-        return AI_SCORE_ATTACK_UP(battlerAtk, 12) + AI_SCORE_LOSE_HP(50);
+        return AI_SCORE_ATTACK_UP(battlerAtk, 12) + AI_SCORE_LOSE_HP(battlerDef, 50);
 
     CASE_AND_LABEL(EFFECT_PSYCH_UP)
         return AI_SCORE_GET_STATS_OF(battlerAtk, battlerDef);
@@ -901,7 +911,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     CASE_AND_LABEL(EFFECT_SWITCH_ARGUMENT)
         // TODO: Safe passage
         if (move == MOVE_SAFE_PASSAGE) score = AI_SCORE_SAFE_PASSAGE;
-        return score + AI_SCORE_SWITCH;
+        return score + AI_SCORE_SWITCH(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_BEAT_UP)
         // TODO: Beat up
@@ -977,7 +987,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_UNUSABLE;
 
     CASE_AND_LABEL(EFFECT_CHARGE)
-        return AI_SCORE_SPDEF_UP(battlerAtk, 1) + AI_SCORE_CHARGE;
+        return AI_SCORE_SPDEF_UP(battlerAtk, 1) + AI_SCORE_CHARGE(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_TAUNT)
         return AI_SCORE_TAUNT;
@@ -1066,7 +1076,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_HIT_ESCAPE)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_SWITCH;
+        return score + AI_SCORE_SWITCH(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_MUD_SPORT)
         // TODO: Mud Sport
@@ -1132,7 +1142,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
             score += AI_SCORE_FROSTBITE_MOVE(battlerDef);
             break;
         case ITEM_LIGHT_BALL:
-            score += AI_SCORE_PARALYSIS_MOVE(battlerDef);
+            score += AI_SCORE_PARALYSIS(battlerDef);
             break;
         case ITEM_POISON_BARB:
             score += AI_SCORE_POISON_MOVE(battlerDef);
@@ -1225,7 +1235,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_TAILWIND;
 
     CASE_AND_LABEL(EFFECT_EMBARGO)
-        return AI_SCORE_LOSE_ITEM(battlerDef);
+        return AI_SCORE_EMBARGO(battlerDef);
 
     CASE_AND_LABEL(EFFECT_AQUA_RING)
         return AI_SCORE_AQUA_RING;
@@ -1243,13 +1253,13 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_MAGNET_RISE;
 
     CASE_AND_LABEL(EFFECT_TOXIC_SPIKES)
-        return AI_SCORE_TOXIC_SPIKES;
+        return AI_SCORE_TOXIC_SPIKES(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_GASTRO_ACID)
         return AI_SCORE_SUPPRESS_ABILITY;
 
     CASE_AND_LABEL(EFFECT_STEALTH_ROCK)
-        return AI_SCORE_STEALTH_ROCK(gBattleMoves[move].type);
+        return AI_SCORE_STEALTH_ROCK(battlerAtk, gBattleMoves[move].type);
 
     CASE_AND_LABEL(EFFECT_TELEKINESIS)
         return AI_SCORE_TELEKINESIS;
@@ -1317,7 +1327,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_INVERT_STAT_CHANGES;
 
     CASE_AND_LABEL(EFFECT_MISTY_TERRAIN)
-        return AI_SCORE_MISTY_TERRAIN;
+        return AI_SCORE_MISTY_TERRAIN(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_GRASSY_TERRAIN)
         return AI_SCORE_GRASSY_TERRAIN;
@@ -1428,7 +1438,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_HIT_SWITCH_TARGET)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_FORCE_SWITCH;
+        return score + AI_SCORE_RANDOM_SWITCH(battlerDef);
 
     CASE_AND_LABEL(EFFECT_FINAL_GAMBIT)
         // TODO: Final Gambit
@@ -1466,7 +1476,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         else if (status & STATUS1_BLEED) score = AI_SCORE_BLEED(battlerDef);
         else if (status & STATUS1_BURN) score = AI_SCORE_BURN_MOVE(battlerDef);
         else if (status & STATUS1_FROSTBITE) score = AI_SCORE_FROSTBITE_MOVE(battlerDef);
-        else if (status & STATUS1_PARALYSIS) score = AI_SCORE_PARALYSIS_MOVE(battlerDef);
+        else if (status & STATUS1_PARALYSIS) score = AI_SCORE_PARALYSIS(battlerDef);
         else if (status & STATUS1_TOXIC_POISON) score = AI_SCORE_TOXIC(battlerDef);
         else if (status & STATUS1_POISON) score = AI_SCORE_POISON_MOVE(battlerDef);
         else return AI_SCORE_UNUSABLE;
@@ -1562,7 +1572,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_BERRY_SMASH);
 
     CASE_AND_LABEL(EFFECT_PARTING_SHOT)
-        return AI_SCORE_SWITCH + AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_SPATK_UP(battlerDef, -1);
+        return AI_SCORE_SWITCH(battlerAtk) + AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_SPATK_UP(battlerDef, -1);
 
     CASE_AND_LABEL(EFFECT_SPECTRAL_THIEF)
         AI_CALC_DAMAGE;
@@ -1596,7 +1606,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_UNUSABLE;
 
     CASE_AND_LABEL(EFFECT_MAGNETIC_FLUX)
-        // if (IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) score += AI_SCORE_PARALYSIS_MOVE(battlerDef);
+        // if (IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) score += AI_SCORE_PARALYSIS(battlerDef);
         if (HasAbility(battlerAtk, ABILITY_PLUS, aiData) || HasAbility(battlerAtk, ABILITY_MINUS, aiData))
             score += AI_SCORE_DEFENSE_UP(battlerDef, 1) + AI_SCORE_SPDEF_UP(battlerDef, 1);
         return score;
@@ -1656,7 +1666,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_EERIE_SPELL)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_PP_DOWN(6);
+        return score + AI_SCORE_PP_DOWN(battlerDef, 6);
 
     CASE_AND_LABEL(EFFECT_JUNGLE_HEALING)
         return AI_SCORE_CURE_STATUS_AND_HEAL(battlerAtk, 25) + AI_SCORE_CURE_STATUS_AND_HEAL(BATTLE_PARTNER(battlerAtk), 25);
@@ -1688,7 +1698,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_RECOIL_HP_25)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_LOSE_HP(25);
+        return score + AI_SCORE_LOSE_HP(battlerDef, 25);
 
     CASE_AND_LABEL(EFFECT_STUFF_CHEEKS)
         return AI_SCORE_DEFENSE_UP(battlerAtk, 2) + AI_SCORE_EAT_BERRY(battlerAtk);
@@ -1718,7 +1728,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_SPARKLY_SWIRL)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_CURE_PARTY_STATUS;
+        return score + AI_SCORE_CURE_PARTY_STATUS(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_PLASMA_FISTS)
         // TODO: Plasma Fists
@@ -1742,11 +1752,11 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_JAW_LOCK)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_TRAP + AI_SCORE_NO_ESCAPE;
+        return score + AI_SCORE_TRAP + AI_SCORE_NO_ESCAPE(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_NO_RETREAT)
         // TODO: Check that you can actually use no retreat
-        score = AI_SCORE_NO_ESCAPE;
+        score = AI_SCORE_NO_ESCAPE(battlerAtk);
         score += AI_SCORE_ATTACK_UP(battlerAtk, 1);
         score += AI_SCORE_DEFENSE_UP(battlerAtk, 1);
         score += AI_SCORE_SPEED_UP(battlerAtk, 1);
@@ -1767,7 +1777,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_UNUSABLE;
 
     CASE_AND_LABEL(EFFECT_CLANGOROUS_SOUL)
-        score = AI_SCORE_LOSE_HP(33);
+        score = AI_SCORE_LOSE_HP(battlerDef, 33);
         score += AI_SCORE_ATTACK_UP(battlerAtk, 1);
         score += AI_SCORE_DEFENSE_UP(battlerAtk, 1);
         score += AI_SCORE_SPEED_UP(battlerAtk, 1);
@@ -1796,18 +1806,18 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_STEEL_BEAM)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_LOSE_HP(50);
+        return score + AI_SCORE_LOSE_HP(battlerDef, 50);
 
     CASE_AND_LABEL(EFFECT_HOWL)
         return AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_ATTACK_UP(BATTLE_PARTNER(battlerAtk), 1);
 
     CASE_AND_LABEL(EFFECT_ATTRACT_HIT)
         AI_CALC_DAMAGE;
-        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ATTRACT);
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_ATTRACT(battlerAtk, battlerDef));
 
     CASE_AND_LABEL(EFFECT_CURSE_HIT)
         AI_CALC_DAMAGE;
-        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_CURSE);
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_CURSE(battlerDef));
 
     CASE_AND_LABEL(EFFECT_FLINCH_RECOIL_33)
         AI_CALC_DAMAGE;
@@ -1828,7 +1838,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_STEALTH_ROCK_HIT)
         AI_CALC_DAMAGE;
-        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STEALTH_ROCK(TYPE_ROCK));
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STEALTH_ROCK(battlerAtk, TYPE_ROCK));
 
     CASE_AND_LABEL(EFFECT_LEECH_SEED_HIT)
         AI_CALC_DAMAGE;
@@ -1931,7 +1941,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_FILLET_AWAY)
-        score = AI_SCORE_LOSE_HP(50);
+        score = AI_SCORE_LOSE_HP(battlerDef, 50);
         score += AI_SCORE_ATTACK_UP(battlerAtk, 2);
         score += AI_SCORE_SPEED_UP(battlerAtk, 2);
         score += AI_SCORE_SPATK_UP(battlerAtk, 2);
@@ -1942,15 +1952,15 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_UNUSABLE;
 
     CASE_AND_LABEL(EFFECT_CHILLY_RECEPTION)
-        return AI_SCORE_HAIL + AI_SCORE_SWITCH;
+        return AI_SCORE_HAIL + AI_SCORE_SWITCH(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_SHED_TAIL)
-        return AI_SCORE_SUBSTITUTE + AI_SCORE_LOSE_HP(50) + AI_SCORE_SWITCH;
+        return AI_SCORE_SUBSTITUTE + AI_SCORE_LOSE_HP(battlerDef, 50) + AI_SCORE_SWITCH(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_GHASTLY_ECHO)
         AI_CALC_DAMAGE;
         // TODO: Make sure this makes sense
-        return score + AI_SCORE_SWITCH + AI_SCORE_GHASTLY_ECHO;
+        return score + AI_SCORE_SWITCH(battlerAtk) + AI_SCORE_GHASTLY_ECHO;
 
     CASE_AND_LABEL(EFFECT_REVIVAL_BLESSING)
         // TODO: Revival Blessing
@@ -1992,7 +2002,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_SPIKE_HIT)
         AI_CALC_DAMAGE;
-        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPIKES);
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPIKES(battlerAtk));
 
     CASE_AND_LABEL(EFFECT_VICTORY_DANCE)
         return AI_SCORE_SPEED_UP(battlerAtk, 1) + AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_DEFENSE_UP(battlerAtk, 1);
@@ -2063,11 +2073,11 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_FAIRY_TERRAIN_HIT)
         AI_CALC_DAMAGE;
-        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_MISTY_TERRAIN);
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_MISTY_TERRAIN(battlerAtk));
 
     CASE_AND_LABEL(EFFECT_CREEPING_THORNS_HIT)
         AI_CALC_DAMAGE;
-        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STEALTH_ROCK(TYPE_GRASS));
+        return score + AdjustForChance(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STEALTH_ROCK(battlerAtk, TYPE_GRASS));
 
     CASE_AND_LABEL(EFFECT_TAKE_HEART)
         return AI_SCORE_CURE_STATUS(battlerAtk) + AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1);
@@ -2080,7 +2090,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         if (gFieldStatuses & STATUS_FIELD_WONDER_ROOM) score += AI_SCORE_WONDER_ROOM;
         if (gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) score += AI_SCORE_INVERSE_ROOM;
         if (!(gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)) score += AI_SCORE_MAGIC_ROOM;
-        return score + AI_SCORE_SWITCH;
+        return score + AI_SCORE_SWITCH(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_TREPIDATION)
         AI_CALC_DAMAGE;
@@ -2108,7 +2118,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_CALTROPS;
 
     CASE_AND_LABEL(EFFECT_SWEET_KISS)
-        return AI_SCORE_CONFUSION(battlerDef) + AI_SCORE_ATTRACT;
+        return AI_SCORE_CONFUSION(battlerDef) + AI_SCORE_ATTRACT(battlerAtk, battlerDef);
 
     CASE_AND_LABEL(EFFECT_QUICK_GUARD)
         return AI_SCORE_QUICK_GUARD;
@@ -2267,7 +2277,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
 
     case ABILITY_BEAUTIFUL_MUSIC:
         REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-        return AdjustForChance(50, AI_SCORE_ATTRACT);
+        return AdjustForChance(50, AI_SCORE_ATTRACT(battlerAtk, battlerDef));
     
     case ABILITY_RESONANCE:
         REQUIRE((gBattleMoves[move].flags & FLAG_SOUND))
@@ -2314,7 +2324,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
             break;
         
         case TYPE_FAIRY:
-            score = AI_SCORE_MISTY_TERRAIN;
+            score = AI_SCORE_MISTY_TERRAIN(battlerAtk);
             break;
         
         case TYPE_GRASS:
@@ -2326,11 +2336,11 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
             break;
         
         case TYPE_ROCK:
-            score = AI_SCORE_STEALTH_ROCK(TYPE_ROCK);
+            score = AI_SCORE_STEALTH_ROCK(battlerAtk, TYPE_ROCK);
             break;
 
         case TYPE_GHOST:
-            score = AI_SCORE_DISABLE;
+            score = AI_SCORE_DISABLE(battlerDef);
             break;
         
         case TYPE_DARK:
@@ -2373,7 +2383,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
     
     case ABILITY_ASSASSINS_TOOLS:
         REQUIRE(aiData->moveState.contact)
-        return AdjustForChance(10, AI_SCORE_POISON_MOVE(battlerDef) + AI_SCORE_PARALYSIS_MOVE(battlerDef) + AI_SCORE_BLEED(battlerDef));
+        return AdjustForChance(10, AI_SCORE_POISON_MOVE(battlerDef) + AI_SCORE_PARALYSIS(battlerDef) + AI_SCORE_BLEED(battlerDef));
     
     case ABILITY_DEEP_CUTS:
         REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
@@ -2385,11 +2395,11 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         return AdjustForChance(50, AI_SCORE_BURN_MOVE(battlerDef));
 
     case ABILITY_ARC_FLASH:
-        return AdjustForChance(50, AI_SCORE_PARALYSIS_MOVE(battlerDef));
+        return AdjustForChance(50, AI_SCORE_PARALYSIS(battlerDef));
     
     case ABILITY_RADIO_JAM:
         REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-        return AdjustForChance(20, AI_SCORE_DISABLE);
+        return AdjustForChance(20, AI_SCORE_DISABLE(battlerDef));
     
     case ABILITY_DEMOLITIONIST:
         REQUIRE(gVolatileStructs[battlerAtk].readiedAction)
@@ -2401,18 +2411,18 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
 
     case ABILITY_FEARMONGER:
         REQUIRE(aiData->moveState.contact)
-        return AdjustForChance(10, AI_SCORE_PARALYSIS_MOVE(battlerDef));
+        return AdjustForChance(10, AI_SCORE_PARALYSIS(battlerDef));
     
     case ABILITY_YUKI_ONNA:
-        return AdjustForChance(10, AI_SCORE_ATTRACT);
+        return AdjustForChance(10, AI_SCORE_ATTRACT(battlerAtk, battlerDef));
     
     case ABILITY_STUN_SHOCK:
-        return AdjustForChance(30, AI_SCORE_POISON_MOVE(battlerDef) + AI_SCORE_PARALYSIS_MOVE(battlerDef));
+        return AdjustForChance(30, AI_SCORE_POISON_MOVE(battlerDef) + AI_SCORE_PARALYSIS(battlerDef));
     
     case ABILITY_SHOCKING_JAWS:
     case ABILITY_SHOCKING_MAW:
         REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        return AdjustForChance(50, AI_SCORE_PARALYSIS_MOVE(battlerDef));
+        return AdjustForChance(50, AI_SCORE_PARALYSIS(battlerDef));
 
     case ABILITY_VENOBLAZE_PINCERS:
         REQUIRE(IS_MOVE_PHYSICAL(move))
@@ -2424,7 +2434,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
     
     case ABILITY_DEAD_POWER:
         REQUIRE(aiData->moveState.contact)
-        return AdjustForChance(20, AI_SCORE_CURSE);
+        return AdjustForChance(20, AI_SCORE_CURSE(battlerDef));
     
     case ABILITY_SPECTRAL_SHROUD:
         REQUIRE(gBattleStruct->ateBoost[battlerAtk])
@@ -2435,14 +2445,14 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         switch (move) {
         case MOVE_TACKLE:
             REQUIRE(aiData->moveState.damage)
-            return AI_SCORE_DISABLE + AI_SCORE_ENCORE;
+            return AI_SCORE_DISABLE(battlerDef) + AI_SCORE_ENCORE;
         
         case MOVE_STRING_SHOT:
             REQUIRE_NOT(gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_STEALTH_ROCK
                 || gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_TOXIC_SPIKES
                 || gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_SPIKES
                 || gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_STICKY_WEB)
-            return AI_SCORE_STEALTH_ROCK(TYPE_ROCK) + AI_SCORE_TOXIC_SPIKES + AI_SCORE_SPIKES + AI_SCORE_STICKY_WEB;
+            return AI_SCORE_STEALTH_ROCK(battlerAtk, TYPE_ROCK) + AI_SCORE_TOXIC_SPIKES(battlerAtk) + AI_SCORE_SPIKES(battlerAtk) + AI_SCORE_STICKY_WEB;
         
         case MOVE_HARDEN:
             return AI_SCORE_STAT(battlerAtk, STAT_ATK, 1) + AI_SCORE_STAT(battlerAtk, STAT_SPEED, 1) + AI_SCORE_STAT(battlerAtk, STAT_SPATK, 1) + AI_SCORE_STAT(battlerAtk, STAT_SPDEF, 1);
@@ -2465,7 +2475,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         switch (moveType)
         {
         case TYPE_ELECTRIC:
-            score = AI_SCORE_PARALYSIS_MOVE(battlerDef);
+            score = AI_SCORE_PARALYSIS(battlerDef);
             break;
             
         case TYPE_FIRE:
@@ -2496,7 +2506,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
     
     case ABILITY_GRIP_PINCER:
         REQUIRE(aiData->moveState.contact)
-        return AdjustForChance(50, AI_SCORE_WRAP);
+        return AdjustForChance(50, AI_SCORE_WRAP(battlerAtk, battlerDef));
     }
 
     return 0;
@@ -2512,9 +2522,303 @@ int CheckAttackerAbility(int battlerAtk, int battlerDef, int move, int moveType,
     }
 }
 
+#define REQUIRE_HALF_HP
+
 int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
 {
+    int i, score = 0;
+
+    if (!aiData->moveState.damage) return 0;
+
     switch (ability)
     {
+    case ABILITY_LINGERING_AROMA:
+    case ABILITY_MUMMY:
+        REQUIRE(aiData->moveState.contact)
+        REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(gBattleMons[battlerAtk].ability))
+        REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability);
+    
+    case ABILITY_WANDERING_SPIRIT:
+        REQUIRE(aiData->moveState.contact)
+        REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(gBattleMons[battlerAtk].ability))
+        REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
+        REQUIRE_NOT(HasAbility(battlerDef, gBattleMons[battlerAtk].ability, aiData))
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability) + AI_SCORE_REPLACE_ABILITY(battlerDef, gBattleMons[battlerAtk].ability);
+    
+    case ABILITY_GULP_MISSILE:
+        {
+        int species = gBattleMons[battlerDef].species;
+        REQUIRE(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
+        // TODO: Score turning back into normal cramorant
+        return AI_SCORE_LOSE_HP(battlerAtk, 25)
+            + (species == SPECIES_CRAMORANT_GORGING ? AI_SCORE_STAT(battlerAtk, STAT_DEF, -1) : AI_SCORE_PARALYSIS(battlerDef));
+        }
+    
+    case ABILITY_EMERGENCY_EXIT:
+    case ABILITY_WIMP_OUT:
+        REQUIRE_HALF_HP
+        REQUIRE_NOT(TestSheerForceFlag(battlerAtk, gCurrentMove))
+        return AI_SCORE_SWITCH(battlerDef);
+    
+    case ABILITY_RESTRAINING_ORDER:
+        REQUIRE(!GetAbilityState(battlerDef, ability))
+        return AI_SCORE_RANDOM_SWITCH(battlerAtk);
+    
+    case ABILITY_THERMAL_EXCHANGE:
+        REQUIRE(moveType == TYPE_FIRE)
+        return AI_SCORE_STAT(battlerDef, STAT_ATK, 1);
+    
+    case ABILITY_FURNACE:
+        REQUIRE(moveType == TYPE_ROCK)
+        return AI_SCORE_STAT(battlerDef, STAT_SPEED, 2);
+    
+    case ABILITY_WELL_BAKED_BODY:
+        REQUIRE(moveType == TYPE_FIRE)
+        return AI_SCORE_STAT(battlerDef, STAT_DEF, 1);
+    
+    case ABILITY_EVAPORATE:
+        REQUIRE(moveType == TYPE_WATER)
+        return AI_SCORE_MISTY_TERRAIN(battlerDef);
+    
+    case ABILITY_COLD_REBOUND:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_ICY_WIND, 0);
+
+    case ABILITY_WILDFIRE:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_FIRE_SPIN, 0);
+    
+    case ABILITY_SNAP_TRAP_WHEN_HIT:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_SNAP_TRAP, 50);
+    
+    case ABILITY_PARRY:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_MACH_PUNCH, 0);
+
+    case ABILITY_VICTORY_BOMB:
+        REQUIRE(aiData->moveState.seeKo)
+        return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_EXPLOSION, 0);
+    
+    case ABILITY_ULTRA_INSTINCT:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_VACUUM_WAVE, 0);
+    
+    case ABILITY_ICE_DOWNFALL:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_ICICLE_CRASH, 60);
+    
+    case ABILITY_ATOMIC_BURST:
+        REQUIRE(aiData->moveState.superEffective)
+        return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_HYPER_BEAM, 50);
+    
+    case ABILITY_LOOSE_ROCKS:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_STEALTH_ROCK(battlerDef, TYPE_ROCK);
+    
+    case ABILITY_WIND_POWER:
+        REQUIRE(gBattleMoves[move].airBased)
+        return AI_SCORE_CHARGE(battlerDef);
+    
+    case ABILITY_ELECTROMORPHOSIS:
+        return AI_SCORE_CHARGE(battlerDef);
+
+    case ABILITY_FLAMMABLE_COAT:
+        REQUIRE(moveType == TYPE_FIRE)
+        REQUIRE(gBattleMons[battlerDef].species == SPECIES_LUMBERING_SLOTH)
+        REQUIRE_NOT(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED)
+
+        return AI_SCORE_LUMBERING_SLOTH_ENGULFED;
+    
+    case ABILITY_ROUGH_SKIN:
+    case ABILITY_IRON_BARBS:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_LOSE_HP(battlerAtk, 13);
+
+    case ABILITY_DOUBLE_IRON_BARBS:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_LOSE_HP(battlerAtk, 17);
+    
+    case ABILITY_RATTLED:
+        REQUIRE(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
+        return AI_SCORE_STAT(battlerDef, STAT_SPEED, 1);
+    
+    case ABILITY_CURSED_BODY:
+        REQUIRE(aiData->moveState.contact)
+        return AdjustForChance(30, AI_SCORE_DISABLE(battlerAtk));
+    
+    case ABILITY_SPITEFUL:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_PP_DOWN(battlerAtk, 5);
+    
+    case ABILITY_COTTON_DOWN:
+        for (i = 0; i < gBattlersCount; i++)
+        {
+            if (i == battlerDef) continue;
+            score += AI_SCORE_STAT(i, STAT_SPEED, -1);
+        }
+        return score;
+    
+    case ABILITY_STEAM_ENGINE:
+        REQUIRE(moveType == TYPE_FIRE || moveType == TYPE_WATER)
+        return AI_SCORE_SPEED_UP(battlerDef, 12);
+    
+    case ABILITY_SAND_SPIT:
+        return AI_SCORE_SANDSTORM;
+    
+    case ABILITY_CRYO_PROFICIENCY:
+        return AI_SCORE_HAIL;
+    
+    case ABILITY_PERISH_BODY:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_PERISH_SONG(battlerAtk) + AI_SCORE_PERISH_SONG(battlerDef);
+    
+    case ABILITY_GUILT_TRIP:
+        REQUIRE(aiData->moveState.seeKo)
+        return AI_SCORE_ATTACK_UP(battlerAtk, -2) + AI_SCORE_SPATK_UP(battlerAtk, -2);
+    
+    case ABILITY_ILL_WILL:
+        REQUIRE(aiData->moveState.seeKo)
+        return AI_SCORE_PP_DOWN(battlerAtk, 100);
+    
+    case ABILITY_INNARDS_OUT:
+        REQUIRE(aiData->moveState.seeKo)
+        return AI_SCORE_INNARDS_OUT(battlerAtk, battlerDef);
+    
+    case ABILITY_AFTERMATH:
+        REQUIRE(aiData->moveState.seeKo)
+        return AI_SCORE_LOSE_HP(battlerAtk, 25);
+    
+    case ABILITY_PATCHWORK:
+        REQUIRE(aiData->moveState.breakDisguise);
+        return AI_SCORE_CURSE(battlerAtk);
+    
+    case ABILITY_EFFECT_SPORE:
+        REQUIRE(aiData->moveState.contact)
+        REQUIRE_NOT(IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GRASS))
+        REQUIRE_NOT(HasAbility(battlerAtk, ABILITY_OVERCOAT, aiData))
+        REQUIRE_NOT(HasAbility(battlerAtk, ABILITY_EFFECT_SPORE, aiData))
+        REQUIRE(GetBattlerHoldEffect(battlerAtk, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
+        return AdjustForChance(10, AI_SCORE_PARALYSIS(battlerAtk) + AI_SCORE_POISON_MOVE(battlerAtk) + AI_SCORE_PARALYSIS(battlerAtk));
+    
+    case ABILITY_INFLATABLE:
+        REQUIRE(moveType == TYPE_FIRE || moveType == TYPE_FLYING)
+        return AI_SCORE_DEFENSE_UP(battlerDef, 1) + AI_SCORE_SPDEF_UP(battlerDef, 1);
+
+    case ABILITY_BALLOON_BOMBER:
+        return ScoreDefenseAbility(ABILITY_INFLATABLE, battlerAtk, battlerDef, move, moveType, aiData)
+            + ScoreDefenseAbility(ABILITY_AFTERMATH, battlerAtk, battlerDef, move, moveType, aiData);
+    
+    case ABILITY_WATER_COMPACTION:
+        REQUIRE(moveType == TYPE_WATER)
+        return AI_SCORE_STAT(battlerDef, STAT_DEF, 2);
+    
+    case ABILITY_VENGEFUL_SPIRIT:
+    case ABILITY_HAUNTED_SPIRIT:
+        REQUIRE(aiData->moveState.seeKo)
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_CURSE(battlerAtk);
+    
+    case ABILITY_MAGICAL_DUST:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_PSYCHIC);
+    
+    case ABILITY_WEAK_ARMOR:
+        REQUIRE(IS_MOVE_PHYSICAL(move))
+        return AI_SCORE_STAT(battlerDef, STAT_SPEED, 2) + AI_SCORE_STAT(battlerDef, STAT_DEF, -1);
+
+    case ABILITY_ARC_FLASH:
+        return AdjustForChance(50, AI_SCORE_BURN_MOVE(battlerAtk));
+    
+    case ABILITY_CROWNED_SHIELD:
+    case ABILITY_STAMINA:
+        return AI_SCORE_STAT(battlerDef, STAT_DEF, 1) + AdjustForChance(aiData->moveState.critChance, AI_SCORE_STAT(battlerDef, STAT_DEF, 12));
+        
+    case ABILITY_FORTITUDE:
+        return AI_SCORE_STAT(battlerDef, STAT_SPDEF, 1) + AdjustForChance(aiData->moveState.critChance, AI_SCORE_STAT(battlerDef, STAT_SPDEF, 12));
+    
+    case ABILITY_RAGE_POINT:
+        return AdjustForChance(aiData->moveState.critChance, AI_SCORE_STAT(battlerDef, STAT_ATK, 1) + AI_SCORE_STAT(battlerDef, STAT_SPATK, 1));
+    
+    case ABILITY_APE_SHIFT:
+        score = ScoreAttackAbility(ABILITY_ANGER_POINT, battlerAtk, battlerDef, move, moveType, aiData);
+        REQUIRE(gBattleMons[battlerDef].species == SPECIES_SLAKING_MEGA)
+        REQUIRE_NOT(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED)
+        REQUIRE_HALF_HP
+        return score + AI_SCORE_APE_SHIFT(battlerDef);
+        
+    case ABILITY_CROWNED_SWORD:
+    case ABILITY_ANGER_POINT:
+        return AI_SCORE_STAT(battlerDef, STAT_ATK, 1) + AdjustForChance(aiData->moveState.critChance, AI_SCORE_STAT(battlerDef, STAT_ATK, 12));
+
+    case ABILITY_TIPPING_POINT:
+        return AI_SCORE_STAT(battlerDef, STAT_SPATK, 1) + AdjustForChance(aiData->moveState.critChance, AI_SCORE_STAT(battlerDef, STAT_SPATK, 12));
+    
+    case ABILITY_BERSERK:
+    case ABILITY_BERSERKER_RAGE:
+    case ABILITY_UNLOCKED_POTENTIAL:
+        REQUIRE_HALF_HP
+        REQUIRE_NOT(GetAbilityState(battlerDef, ability))
+        return AI_SCORE_STAT(battlerDef, STAT_SPATK, 1);
+    
+    case ABILITY_ANGER_SHELL:
+        REQUIRE_HALF_HP
+        REQUIRE_NOT(GetAbilityState(battlerDef, ability))
+        score += AI_SCORE_STAT(battlerDef, STAT_ATK, 2);
+        score += AI_SCORE_STAT(battlerDef, STAT_SPATK, 2);
+        score += AI_SCORE_STAT(battlerDef, STAT_SPEED, 2);
+        score += AI_SCORE_STAT(battlerDef, STAT_DEF, -1);
+        score += AI_SCORE_STAT(battlerDef, STAT_SPDEF, -1);
+        return score;
+    
+    case ABILITY_NO_TURNING_BACK:
+        REQUIRE_HALF_HP
+        REQUIRE_NOT(GetAbilityState(battlerDef, ability))
+        score += AI_SCORE_STAT(battlerDef, STAT_ATK, 1);
+        score += AI_SCORE_STAT(battlerDef, STAT_SPATK, 1);
+        score += AI_SCORE_STAT(battlerDef, STAT_SPEED, 1);
+        score += AI_SCORE_STAT(battlerDef, STAT_DEF, 1);
+        score += AI_SCORE_STAT(battlerDef, STAT_SPDEF, 1);
+        return score + AI_SCORE_NO_ESCAPE(battlerDef);
+    
+    case ABILITY_ITCHY_DEFENSE:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_WRAP(battlerDef, battlerAtk);
+    
+    case ABILITY_LOOSE_QUILLS:
+    case ABILITY_SCRAPYARD:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_SPIKES(battlerDef);
+
+    case ABILITY_TOXIC_DEBRIS:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_TOXIC_SPIKES(battlerDef);
+    
+    case ABILITY_VOODOO_POWER:
+        REQUIRE(IS_MOVE_SPECIAL(move))
+        return AdjustForChance(30, AI_SCORE_BLEED(battlerAtk));
+    
+    case ABILITY_SEED_SOWER:
+        REQUIRE_NOT(IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN))
+        return AI_SCORE_GRASSY_TERRAIN + AI_SCORE_CURE_PARTY_STATUS(battlerDef);
+    
+    case ABILITY_SUPERSWEET_SYRUP:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_EMBARGO(battlerAtk);
+    
+    case ABILITY_CUTE_CHARM:
+    case ABILITY_PRIM_AND_PROPER:
+    case ABILITY_PURE_LOVE:
+        REQUIRE(aiData->moveState.contact)
+        return AdjustForChance(30, AI_SCORE_ATTRACT(battlerDef, battlerAtk));
+    
+    case ABILITY_GOOEY:
+    case ABILITY_TANGLING_HAIR:
+    case ABILITY_SUPER_HOT_GOO:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_SPEED_UP(battlerAtk, -1);
     }
+
+    return score;
 }

@@ -14084,7 +14084,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         case ABILITY_CURSED_BODY:
             REQUIRE(ShouldApplyOnHitAffect(attacker))
             REQUIRE_NOT(gVolatileStructs[attacker].disabledMove)
-            REQUIRE(attacker != battler)
+            REQUIRE(IsMoveMakingContact(move, attacker))
             REQUIRE_NOT(IsAbilityOnSide(attacker, ABILITY_AROMA_VEIL))
             REQUIRE(gBattleMons[attacker].pp[gChosenMovePos])
             REQUIRE(Random() % 100 < 30)
