@@ -9424,15 +9424,10 @@ u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
     if (gSaveBlock2Ptr->moveRandomizedMode == 1 &&
         moves != MOVE_NONE) {
             do {
-                randomizedMove = RandRangeDeterministic(0, MOVES_COUNT - 1, &randomizedMoveSeed);
+                randomizedMove = RandRangeDeterministic(1, MOVES_COUNT - 1, &randomizedMoveSeed);
             }
             while (gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER ||
-                  randomizedMove >= MOVES_COUNT    ||
-                  randomizedMove == MOVE_DARK_VOID ||
-                  randomizedMove == MOVE_NONE);
-
-            if (randomizedMove >= (MOVES_COUNT - 1))
-                randomizedMove = MOVE_SPLASH;
+                  randomizedMove == MOVE_DARK_VOID);
 
             return randomizedMove;
     }
@@ -9474,7 +9469,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
         u32 randomizedInnateSeed = (innate ^ ISO_RANDOMIZE1(species) ^ personality);
         u16 randomizedInnate;
         do {
-            randomizedInnate = RandRangeDeterministic(0, TOTAL_ABILITY_COUNT - 1, &randomizedInnateSeed);
+            randomizedInnate = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedInnateSeed);
         }
         while (randomizedInnate == ABILITY_NONE                  ||
               randomizedInnate == ABILITY_HUNGER_SWITCH         ||
@@ -9547,7 +9542,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
         u32 randomizedAbilitySeed = ability ^ ISO_RANDOMIZE1(species) ^ personality;
         u16 randomizedAbility;
         do {
-            randomizedAbility = RandRangeDeterministic(0, ABILITIES_COUNT - 1, &randomizedAbilitySeed);
+            randomizedAbility = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedAbilitySeed);
         }
         while (randomizedAbility == ABILITY_NONE                 ||
               randomizedAbility == ABILITY_HUNGER_SWITCH        ||
