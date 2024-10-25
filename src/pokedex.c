@@ -5209,7 +5209,7 @@ static int DoPokedexSearch(u8 dexMode, u8 order, u8 abcGroup, u8 bodyColor, u8 t
         tutorMoveId = 0xFF;
         for (i = 0; i < TUTOR_COUNT; i++)
         {
-            if(move == GetTutorMove(i))
+            if (move == GetTutorMove(i))
             {
                 tutorMoveId = i;
                 break;
@@ -5228,7 +5228,7 @@ static int DoPokedexSearch(u8 dexMode, u8 order, u8 abcGroup, u8 bodyColor, u8 t
                 continue;
             }
             //Tutor
-            if(CanLearnTutorMove(species, tutorMoveId))
+            if (CanLearnTutorMove(species, tutorMoveId))
             {
                 sPokedexView->pokedexList[resultsCount] = sPokedexView->pokedexList[i];
                 resultsCount++;
@@ -6261,7 +6261,7 @@ static void Task_LoadStatsScreen(u8 taskId)
         sPokedexView->numEggMoves = 0;
         sPokedexView->numLevelUpMoves = 0;
         sPokedexView->numTMHMMoves = 0;
-        if(CalculateMoves())
+        if (CalculateMoves())
             gMain.state++;
         break;
     case 5:
@@ -6388,23 +6388,23 @@ static void Task_HandleStatsScreenInput(u8 taskId)
     if ((JOY_REPEAT(R_BUTTON)))
     {
         u16 species = NationalPokedexNumToSpecies(sPokedexListItem->dexNum);
-        if(gTasks[taskId].data[5] == 0){
-            do{
-                if(sPokedexView->abilitynum < (NUM_ABILITY_SLOTS - 1))
+        if (gTasks[taskId].data[5] == 0) {
+            do {
+                if (sPokedexView->abilitynum < (NUM_ABILITY_SLOTS - 1))
                     sPokedexView->abilitynum++;
                 else
                     sPokedexView->abilitynum = 0;
             }
-            while(gBaseStats[species].abilities[sPokedexView->abilitynum] == ABILITY_NONE);
+            while (gBaseStats[species].abilities[sPokedexView->abilitynum] == ABILITY_NONE);
         }
-        else{
-            do{
-                if(sPokedexView->innatenum < (NUM_ABILITY_SLOTS - 1))
+        else {
+            do {
+                if (sPokedexView->innatenum < (NUM_ABILITY_SLOTS - 1))
                     sPokedexView->innatenum++;
                 else
                     sPokedexView->innatenum = 0;
             }
-            while(gBaseStats[species].innates[sPokedexView->innatenum] == ABILITY_NONE);
+            while (gBaseStats[species].innates[sPokedexView->innatenum] == ABILITY_NONE);
         }
 
         FillWindowPixelRect(0, PIXEL_FILL(0), 0, 48, 240, 130);
@@ -7174,7 +7174,7 @@ static void PrintStatsScreen_Left(u8 taskId)
         PrintInfoScreenTextSmallWhite(gAbilityNames[ability0], abilities_x, abilities_y);
         PrintInfoScreenTextSmall(gAbilityDescriptionPointers[ability0], abilities_x, abilities_y + 14);
     }
-    else{
+    else {
         //Innates
         ability0 = gBaseStats[species].innates[sPokedexView->innatenum];
         PrintInfoScreenTextSmallWhite(gAbilityNames[ability0], abilities_x, abilities_y);
@@ -7440,7 +7440,7 @@ static void handleTargetSpeciesPrint(u8 taskId, u16 targetSpecies, u8 base_x, u8
     StringExpandPlaceholders(gStringVar3, gText_EVO_Name); //evolution mon name
     PrintInfoScreenTextSmall(gStringVar3, base_x, base_y + base_y_offset*base_i); //evolution mon name
 
-    if(base_i < 6)
+    if (base_i < 6)
     {
         LoadMonIconPalette(targetSpecies); //Loads pallete for current mon
         #ifndef POKEMON_EXPANSION
@@ -7494,11 +7494,11 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
     for (i = 0; i < EVOS_PER_MON; i++)
     {
         #ifndef POKEMON_EXPANSION
-            if(gEvolutionTable[species][i].method != 0)
+            if (gEvolutionTable[species][i].method != 0)
                 times += 1;
         #endif
         #ifdef POKEMON_EXPANSION
-            if(gEvolutionTable[species][i].method != 0 && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION)
+            if (gEvolutionTable[species][i].method != 0 && gEvolutionTable[species][i].method != EVO_MEGA_EVOLUTION)
                 times += 1;
         #endif
     }

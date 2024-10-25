@@ -55,6 +55,8 @@
 #include "constants/battle_move_effects.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "recommended_set_struct.h"
+#include "data/pokemon/recommended_sets.h"
 
 // Config options - Note that some config options need external modifications to fully work, such as CONFIG_CAN_FORGET_HM_MOVES, CONFIG_PHYSICAL_SPECIAL_SPLIT, and CONFIG_DECAPITALIZE_MET_LOCATION_STRINGS
 #define CONFIG_CAN_FORGET_HM_MOVES                      TRUE
@@ -1729,78 +1731,78 @@ static void Task_HandleInput(u8 taskId)
 	u8 nature;
 	data[0] = 0;
 
-    if (!sMonSummaryScreen->isBoxMon){
+    if (!sMonSummaryScreen->isBoxMon) {
 	    abilityNum = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM);
 	    nature = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_NATURE);
     }
-    else{
+    else {
         struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
 	    abilityNum = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM);
 	    nature = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_NATURE);
     }
 	
-	switch(gCurrentModifyIndex){
+	switch (gCurrentModifyIndex) {
 		case 0:
-			if (!sMonSummaryScreen->isBoxMon){
+			if (!sMonSummaryScreen->isBoxMon) {
                 CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV);
             }
-            else{
+            else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
 				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
             }
 		break;
 		case 1:
-			if (!sMonSummaryScreen->isBoxMon){
+			if (!sMonSummaryScreen->isBoxMon) {
                 CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV);
             }
-            else{
+            else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
 				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
             }
 		break;
 		case 2:
-			if (!sMonSummaryScreen->isBoxMon){
+			if (!sMonSummaryScreen->isBoxMon) {
                 CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV);
             }
-            else{
+            else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
 				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
             }
 		break;
 		case 3:
-			if (!sMonSummaryScreen->isBoxMon){
+			if (!sMonSummaryScreen->isBoxMon) {
                 CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV);
             }
-            else{
+            else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
 				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
             }
 		break;
 		case 4:
-			if (!sMonSummaryScreen->isBoxMon){
+			if (!sMonSummaryScreen->isBoxMon) {
                 CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV);
             }
-            else{
+            else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
 				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
             }
 		break;
 		case 5:
-			if (!sMonSummaryScreen->isBoxMon){
+			if (!sMonSummaryScreen->isBoxMon) {
                 CurrentEv = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV);
             }
-            else{
+            else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
 				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
             }
 		break;
 	}
 	
-	for(i = 0; i < 6; i++){
-		if (!sMonSummaryScreen->isBoxMon){
+	for (i = 0; i < 6; i++) {
+		if (!sMonSummaryScreen->isBoxMon) {
             TotalEvs = TotalEvs + GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV + i);
         }
-        else{
+        else {
             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
             TotalEvs = TotalEvs + GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV + i);
         }
@@ -1812,14 +1814,14 @@ static void Task_HandleInput(u8 taskId)
         if (JOY_NEW(DPAD_UP))
         {
 			
-            if(!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES){
+            if (!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
                 //Change Page
 				gCurrentModifyIndex = 0;
 				ChangeSummaryPokemon(taskId, -1);
 			}
-			else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS){
+			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS) {
                 //Ev Changes
-				if(gCurrentModifyIndex != 0)
+				if (gCurrentModifyIndex != 0)
 					gCurrentModifyIndex--;
 				else
 					gCurrentModifyIndex = 5;
@@ -1828,14 +1830,14 @@ static void Task_HandleInput(u8 taskId)
         }
         else if (JOY_NEW(DPAD_DOWN))
         {
-			if(!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES){
+			if (!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
                 //Change Page
 				gCurrentModifyIndex = 0;
 				ChangeSummaryPokemon(taskId, 1);
 			}
-			else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS){
+			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS) {
                 //Ev Changes
-				if(gCurrentModifyIndex != 5)
+				if (gCurrentModifyIndex != 5)
 					gCurrentModifyIndex++;
 				else
 					gCurrentModifyIndex = 0;
@@ -1844,18 +1846,18 @@ static void Task_HandleInput(u8 taskId)
         }
         else if ((JOY_NEW(DPAD_LEFT)) || GetLRKeysPressed() == MENU_L_PRESSED)
         {
-            if(!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES){
+            if (!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
                 //Change Page
 				ChangePage(taskId, -1);
 			}
-			else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_MEMO && ModifyMode){
+			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_MEMO && ModifyMode) {
 				//Change Nature
 
-                if (!sMonSummaryScreen->isBoxMon){
+                if (!sMonSummaryScreen->isBoxMon) {
                     CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
                     CalculateMonStats(&sMonSummaryScreen->currentMon);
                             
-                    if(nature == 0)
+                    if (nature == 0)
                         nature = NATURE_QUIRKY;
                     else
                         nature--;
@@ -1863,10 +1865,10 @@ static void Task_HandleInput(u8 taskId)
                     SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_NATURE, &nature);
                     SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_NATURE, &nature);
                 }
-                else{
+                else {
                     struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
 						
-                    if(nature == 0)
+                    if (nature == 0)
                         nature = NATURE_QUIRKY;
                     else
                         nature--;
@@ -1879,76 +1881,76 @@ static void Task_HandleInput(u8 taskId)
 				PlaySE(SE_SELECT);
 				PrintMemoPage();
 			}
-			else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS && ModifyMode && gSaveBlock2Ptr->enableEvs){ 
+			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS && ModifyMode && gSaveBlock2Ptr->enableEvs) { 
                 //Change Evs
-				if(CurrentEv != 0){
-                    if(CurrentEv >= LEFTRIGHT_EV_AMOUNT_CHANGE)
+				if (CurrentEv != 0) {
+                    if (CurrentEv >= LEFTRIGHT_EV_AMOUNT_CHANGE)
 					    CurrentEv = CurrentEv - LEFTRIGHT_EV_AMOUNT_CHANGE;
                     else
                         CurrentEv = 0;
                     
-					switch(gCurrentModifyIndex){
+					switch (gCurrentModifyIndex) {
                     case 0:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
                         }
                     break;
                     case 1:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
                         }
                     break;
                     case 2:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
                         }
                     break;
                     case 3:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
                         }
                     break;
                     case 4:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
                         }
                     break;
                     case 5:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
@@ -1956,7 +1958,7 @@ static void Task_HandleInput(u8 taskId)
                     break;
                     }
 
-                    if(!sMonSummaryScreen->isBoxMon)
+                    if (!sMonSummaryScreen->isBoxMon)
                         CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
                     CalculateMonStats(&sMonSummaryScreen->currentMon);
                     ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
@@ -1964,23 +1966,23 @@ static void Task_HandleInput(u8 taskId)
 				    RefreshPageAfterChange(0);
                 }
 			}
-			else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY && ModifyMode){ 
+			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY && ModifyMode) { 
                 //Ability Modifier
-                do{
-                    if(abilityNum != 0)
+                do {
+                    if (abilityNum != 0)
                         abilityNum--;
                     else
                         abilityNum = NUM_ABILITY_SLOTS - 1;
                 }
-                while(gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
+                while (gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
 
-                if (!sMonSummaryScreen->isBoxMon){
+                if (!sMonSummaryScreen->isBoxMon) {
                     SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
                     SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, &abilityNum);
                     CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
 				    CalculateMonStats(&sMonSummaryScreen->currentMon);
                 }
-                else{
+                else {
                     struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                     SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, &abilityNum);
                     SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
@@ -1993,15 +1995,15 @@ static void Task_HandleInput(u8 taskId)
         }
         else if ((JOY_NEW(DPAD_RIGHT)) || GetLRKeysPressed() == MENU_R_PRESSED)
         {
-            if(!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES){ 
+            if (!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) { 
                 //Page Change
 				ChangePage(taskId, 1);
 			}
             
-			else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_MEMO && ModifyMode){	
+			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_MEMO && ModifyMode) {	
                 //Nature Change
-                if (!sMonSummaryScreen->isBoxMon){
-                    if(nature != NATURE_QUIRKY)
+                if (!sMonSummaryScreen->isBoxMon) {
+                    if (nature != NATURE_QUIRKY)
                         nature++;
                     else
                         nature = NATURE_HARDY;
@@ -2011,10 +2013,10 @@ static void Task_HandleInput(u8 taskId)
                     CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
                     CalculateMonStats(&sMonSummaryScreen->currentMon);
                 }
-                else{
+                else {
                     struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
 						
-                    if(nature != NATURE_QUIRKY)
+                    if (nature != NATURE_QUIRKY)
                         nature++;
                     else
                         nature = NATURE_HARDY;
@@ -2028,79 +2030,79 @@ static void Task_HandleInput(u8 taskId)
 				PlaySE(SE_SELECT);
 				PrintMemoPage();
 			}
-            else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS && ModifyMode && gSaveBlock2Ptr->enableEvs){
+            else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS && ModifyMode && gSaveBlock2Ptr->enableEvs) {
                 //Ev Changer
-				if((CurrentEv != MAX_PER_STAT_EVS && TotalEvs < MAX_TOTAL_EVS) || gCurrentModifyIndex == 6){
+				if ((CurrentEv != MAX_PER_STAT_EVS && TotalEvs < MAX_TOTAL_EVS) || gCurrentModifyIndex == 6) {
 					CurrentEv = CurrentEv + LEFTRIGHT_EV_AMOUNT_CHANGE;
 
-                    if(CurrentEv > MAX_PER_STAT_EVS)
+                    if (CurrentEv > MAX_PER_STAT_EVS)
                         CurrentEv = MAX_PER_STAT_EVS;
 
-                    if((TotalEvs + LEFTRIGHT_EV_AMOUNT_CHANGE) > MAX_TOTAL_EVS)
+                    if ((TotalEvs + LEFTRIGHT_EV_AMOUNT_CHANGE) > MAX_TOTAL_EVS)
                         CurrentEv = CurrentEv - ((TotalEvs + LEFTRIGHT_EV_AMOUNT_CHANGE) - MAX_TOTAL_EVS);
                     
-					switch(gCurrentModifyIndex){
+					switch (gCurrentModifyIndex) {
                     case 0:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
                         }
                     break;
                     case 1:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
                         }
                     break;
                     case 2:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
                         }
                     break;
                     case 3:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
                         }
                     break;
                     case 4:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
                         }
                     break;
                     case 5:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
@@ -2108,30 +2110,30 @@ static void Task_HandleInput(u8 taskId)
                     break;
                     }
 
-                    if(!sMonSummaryScreen->isBoxMon)
+                    if (!sMonSummaryScreen->isBoxMon)
                         CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
                     CalculateMonStats(&sMonSummaryScreen->currentMon);
                     ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
 				    RefreshPageAfterChange(0);
                 }
 			}
-			else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY && ModifyMode){ 
+			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY && ModifyMode) { 
                 //Ability Modifier
-                do{
-                    if(abilityNum < NUM_ABILITY_SLOTS - 1)
+                do {
+                    if (abilityNum < NUM_ABILITY_SLOTS - 1)
                         abilityNum++;
                     else
                         abilityNum = 0;
                 }
-                while(gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
+                while (gBaseStats[sMonSummaryScreen->summary.species].abilities[abilityNum] == ABILITY_NONE);
 
-                if (!sMonSummaryScreen->isBoxMon){
+                if (!sMonSummaryScreen->isBoxMon) {
                     SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
                     SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, &abilityNum);
                     CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
 				    CalculateMonStats(&sMonSummaryScreen->currentMon);
                 }
-                else{
+                else {
                     struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                     SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ABILITY_NUM, &abilityNum);
                     SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ABILITY_NUM, &abilityNum);
@@ -2143,10 +2145,10 @@ static void Task_HandleInput(u8 taskId)
         }
 		else if (gMain.newKeys & R_BUTTON)
 		{
-            if(sMonSummaryScreen->currPageIndex == PSS_PAGE_EVOLUTION && enablePokemonChanges() && !gMain.inBattle){
+            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_EVOLUTION && enablePokemonChanges() && !gMain.inBattle) {
                 u8 pokeball = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, NULL);
 
-                if(pokeball < LAST_BALL_INDEX)
+                if (pokeball < LAST_BALL_INDEX)
                     pokeball++;
                 else
                     pokeball = FIRST_BALL_INDEX;
@@ -2155,91 +2157,91 @@ static void Task_HandleInput(u8 taskId)
                 RefreshPageAfterChange(2);
                 CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
             }
-			else if(!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && enablePokemonChanges() && !gMain.inBattle){
+			else if (!ModifyMode && sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES && enablePokemonChanges() && !gMain.inBattle) {
                 PlaySE(SE_SELECT);
                 SwitchToMoveReplaceMenu(taskId);
             }
-			else if(!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES){
+			else if (!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES) {
                 ChangePage(taskId, 1);
             }
-			else if((CurrentEv != MAX_PER_STAT_EVS && 
+			else if ((CurrentEv != MAX_PER_STAT_EVS && 
                      TotalEvs < MAX_TOTAL_EVS && 
                      gSaveBlock2Ptr->enableEvs && 
-                     sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)){
+                     sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS)) {
                 //Ev Changer
                 RemainingEvs = CurrentEv;
 				CurrentEv = CurrentEv + LR_EV_AMOUNT_CHANGE;
 
-                if(CurrentEv > MAX_PER_STAT_EVS)
+                if (CurrentEv > MAX_PER_STAT_EVS)
                     CurrentEv = MAX_PER_STAT_EVS;
 
                 RemainingEvs = CurrentEv - RemainingEvs;
 
-                if((TotalEvs + RemainingEvs) > MAX_TOTAL_EVS)
+                if ((TotalEvs + RemainingEvs) > MAX_TOTAL_EVS)
                     CurrentEv = CurrentEv - ((TotalEvs + RemainingEvs) - MAX_TOTAL_EVS);
                     
-				switch(gCurrentModifyIndex){
+				switch (gCurrentModifyIndex) {
                     case 0:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
                         }
                     break;
                     case 1:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
                         }
                     break;
                     case 2:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
                         }
                     break;
                     case 3:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
                         }
                     break;
                     case 4:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
                         }
                     break;
                     case 5:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
@@ -2247,18 +2249,18 @@ static void Task_HandleInput(u8 taskId)
                     break;
                 }
 
-				if(!sMonSummaryScreen->isBoxMon)
+				if (!sMonSummaryScreen->isBoxMon)
                     CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
                 CalculateMonStats(&sMonSummaryScreen->currentMon);
                 ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
                 RefreshPageAfterChange(0);
 			}
 		}
-		else if (gMain.newKeys & L_BUTTON){
-            if(sMonSummaryScreen->currPageIndex == PSS_PAGE_EVOLUTION && enablePokemonChanges() && !gMain.inBattle){
+		else if (gMain.newKeys & L_BUTTON) {
+            if (sMonSummaryScreen->currPageIndex == PSS_PAGE_EVOLUTION && enablePokemonChanges() && !gMain.inBattle) {
                 u8 pokeball = GetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_POKEBALL, NULL);
 
-                if(pokeball != FIRST_BALL_INDEX)
+                if (pokeball != FIRST_BALL_INDEX)
                     pokeball--;
                 else
                     pokeball =  LAST_BALL_INDEX;
@@ -2267,78 +2269,78 @@ static void Task_HandleInput(u8 taskId)
                 RefreshPageAfterChange(2);
                 CreateCaughtBallSprite(&sMonSummaryScreen->currentMon);
             }
-			else if(!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
+			else if (!ModifyMode || sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
 				ChangePage(taskId, -1);
-			else if(CurrentEv != 0 && 
+			else if (CurrentEv != 0 && 
                     gSaveBlock2Ptr->enableEvs && 
-                    sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS){ //Ev modifier
-                if(CurrentEv >= LR_EV_AMOUNT_CHANGE)
+                    sMonSummaryScreen->currPageIndex == PSS_PAGE_SKILLS) { //Ev modifier
+                if (CurrentEv >= LR_EV_AMOUNT_CHANGE)
 					CurrentEv = CurrentEv - LR_EV_AMOUNT_CHANGE;
                 else
                     CurrentEv = 0;
                     
-				switch(gCurrentModifyIndex){
+				switch (gCurrentModifyIndex) {
                     case 0:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
                         }
                     break;
                     case 1:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
                         }
                     break;
                     case 2:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
                         }
                     break;
                     case 3:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
                         }
                     break;
                     case 4:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
                         }
                     break;
                     case 5:
-                        if (!sMonSummaryScreen->isBoxMon){
+                        if (!sMonSummaryScreen->isBoxMon) {
                             SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
                         }
-                        else{
+                        else {
                             struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                             SetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV, &CurrentEv);
                             SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
@@ -2347,7 +2349,7 @@ static void Task_HandleInput(u8 taskId)
                 }
 
                 
-                if(!sMonSummaryScreen->isBoxMon)
+                if (!sMonSummaryScreen->isBoxMon)
                     CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
                 CalculateMonStats(&sMonSummaryScreen->currentMon);
                 ExtractMonDataToSummaryStruct(&sMonSummaryScreen->currentMon);
@@ -2366,16 +2368,16 @@ static void Task_HandleInput(u8 taskId)
                enablePokemonChanges())
             {
                 // Start EVs Modifier
-                if(gSaveBlock2Ptr->enableEvs){
+                if (gSaveBlock2Ptr->enableEvs) {
                     ModifyMode = !ModifyMode;
-                    if(!sMonSummaryScreen->isBoxMon)
+                    if (!sMonSummaryScreen->isBoxMon)
                         CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
                     CalculateMonStats(&sMonSummaryScreen->currentMon);
                     RefreshPageAfterChange(0);
                     PlaySE(SE_SELECT);
                 }
             }
-			else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_MEMO &&
+			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_MEMO &&
 				!sMonSummaryScreen->lockMovesFlag &&
                 enablePokemonChanges())
 			{
@@ -2384,7 +2386,7 @@ static void Task_HandleInput(u8 taskId)
 				PlaySE(SE_SELECT);
 			}
 			
-			else if(sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY &&
+			else if (sMonSummaryScreen->currPageIndex == PSS_PAGE_ABILITY &&
 				!sMonSummaryScreen->lockMovesFlag &&
                 enablePokemonChanges())
 			{
@@ -2395,14 +2397,14 @@ static void Task_HandleInput(u8 taskId)
         }
         else if (JOY_NEW(B_BUTTON))
         {
-            if(!ModifyMode){
+            if (!ModifyMode) {
                 StopPokemonAnimations();
                 PlaySE(SE_SELECT);
                 BeginCloseSummaryScreen(taskId);
             }
-            else{
+            else {
                 ModifyMode = !ModifyMode;
-                switch(sMonSummaryScreen->currPageIndex){
+                switch (sMonSummaryScreen->currPageIndex) {
                     case PSS_PAGE_ABILITY:
                         PrintAbilityAndInnates();
                     break;
@@ -2410,7 +2412,7 @@ static void Task_HandleInput(u8 taskId)
                         PrintMemoPage();
                     break;
                     case PSS_PAGE_SKILLS:
-                        if(!sMonSummaryScreen->isBoxMon)
+                        if (!sMonSummaryScreen->isBoxMon)
                             CalculateMonStats(&gPlayerParty[sMonSummaryScreen->curMonIndex]);
                         CalculateMonStats(&sMonSummaryScreen->currentMon);
                         RefreshPageAfterChange(0);
@@ -2431,8 +2433,8 @@ static void Task_HandleInput(u8 taskId)
     }
 }
 
-static void RefreshPageAfterChange(u8 mode){
-	switch(mode){
+static void RefreshPageAfterChange(u8 mode) {
+	switch (mode) {
 		case 0:
 			ClearWindowTilemap(PSS_LABEL_PANE_RIGHT);
             ScheduleBgCopyTilemapToVram(0);
@@ -2847,14 +2849,14 @@ enum{
     MOVE_REPLACE_LIST_LEFT,
 };
 
-static void GenerateMoveReplaceList(u8 keyPress){
+static void GenerateMoveReplaceList(u8 keyPress) {
     u32 personality;
     u16 firsStage, species, numEggMoves, newMove, i, j;
     u8  level, moveLevel;
     u16 eggMoveBuffer[EGG_MOVES_ARRAY_COUNT];
     int expectedSplit;
 
-    for(i = 0; i < MAX_LEVEL_UP_MOVES; i++)
+    for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
         sMonSummaryScreen->moveReplaceList[i] = MOVE_NONE;
     sMonSummaryScreen->numMenuChoices = 0;
     newMove = MOVE_NONE;
@@ -2863,17 +2865,17 @@ static void GenerateMoveReplaceList(u8 keyPress){
     level       = sMonSummaryScreen->summary.level;
     personality = sMonSummaryScreen->summary.pid;
 
-    switch(sMonSummaryScreen->moveReplaceTabNum){
+    switch (sMonSummaryScreen->moveReplaceTabNum) {
         case MOVE_REPLACE_TAB_LEVEL:
-            for (i = 0; i < MAX_LEVEL_UP_MOVES; i++){
+            for (i = 0; i < MAX_LEVEL_UP_MOVES; i++) {
                 newMove   = gLevelUpLearnsets[species][i].move;
                 moveLevel = gLevelUpLearnsets[species][i].level;
 
                 if (newMove == LEVEL_UP_END)
                     break;
-                else if(moveLevel > level)
+                else if (moveLevel > level)
                     break;
-                else if(gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE){
+                else if (gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE) {
                     sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = newMove;
                     sMonSummaryScreen->numMenuChoices++;
                 }
@@ -2912,7 +2914,7 @@ static void GenerateMoveReplaceList(u8 keyPress){
                             && gBattleMoves[newMove].effect != EFFECT_LEVEL_DAMAGE
                             && newMove != MOVE_SEISMIC_TOSS)
                         {
-                            isStab = IsStab(abilities, gBattleMoves[newMove].type);
+                            isStab = IsStab(abilities, GetMonMoveType(newMove, &sMonSummaryScreen->currentMon, FALSE));
                             if (!isStab && gBattleMoves[newMove].type2) isStab = IsStab(abilities, gBattleMoves[newMove].type2);
                         }
                     }
@@ -2933,16 +2935,16 @@ static void GenerateMoveReplaceList(u8 keyPress){
     }
 
     //In case that there are no moves on that list
-    if(sMonSummaryScreen->numMenuChoices == 0){
-        switch(keyPress){
+    if (sMonSummaryScreen->numMenuChoices == 0) {
+        switch (keyPress) {
             case MOVE_REPLACE_LIST_LEFT:
-                if(sMonSummaryScreen->moveReplaceTabNum > 0)
+                if (sMonSummaryScreen->moveReplaceTabNum > 0)
                     sMonSummaryScreen->moveReplaceTabNum--;
                 else
                     sMonSummaryScreen->moveReplaceTabNum = NUM_MOVE_REPLACE_TABS - 1;
             break;
             case MOVE_REPLACE_LIST_RIGHT:
-                if(sMonSummaryScreen->moveReplaceTabNum < NUM_MOVE_REPLACE_TABS - 1)
+                if (sMonSummaryScreen->moveReplaceTabNum < NUM_MOVE_REPLACE_TABS - 1)
                     sMonSummaryScreen->moveReplaceTabNum++;
                 else
                     sMonSummaryScreen->moveReplaceTabNum = 0;
@@ -3045,7 +3047,7 @@ static const u8 sSummary_L_Arrow[]  = INCBIN_U8("graphics/summary_screen/new/l_a
 #define SPACE_BETWEEN_MOVES_AND_BPACC (10 * 8)
 #define SPACE_BETWEEN_MOVES_AND_BPACC_2 (2 * 8) + 3
 
-static void PrintMoveInfoFromReplaceTab(void){
+static void PrintMoveInfoFromReplaceTab(void) {
     u16 CurrentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
     PrintMoveDetails(CurrentMove, TRUE);
 }
@@ -3086,10 +3088,10 @@ static void RedrawMoveTypeMenu()
     PosX = 4;
     PosY = 1;
 
-    for(i = 0; i < MAX_MOVE_TABS; i++){
+    for (i = 0; i < MAX_MOVE_TABS; i++) {
         tabNum = (NUM_MOVE_REPLACE_TABS - 1 + (sMonSummaryScreen->moveReplaceTabNum + i)) % NUM_MOVE_REPLACE_TABS;
 
-        switch(tabNum){
+        switch (tabNum) {
             case MOVE_REPLACE_TAB_LEVEL:
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8), (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, sText_Move_Type_Level);
             break;
@@ -3104,7 +3106,7 @@ static void RedrawMoveTypeMenu()
             break;
         }
 
-        if(i == 1)
+        if (i == 1)
             BlitBitmapToWindow(windowId, sMoveTabCursor, (PosX * 8) - 4, (PosY * 8) - 1, 32, 16);
 
         PosX = PosX + 4;
@@ -3125,30 +3127,30 @@ static void PrintMoveReplaceTab(void)
 
     CopyWindowToWindow(PSS_LABEL_PANE_RIGHT_BASE, windowId);
 
-    if(numMoves > MAX_MOVE_REPLACE_MOVES)
+    if (numMoves > MAX_MOVE_REPLACE_MOVES)
         numMoves = MAX_MOVE_REPLACE_MOVES;
 
     //Move List
     PosX = 4;
     PosY = 3;
-    for(i = 0; i < numMoves; i++){
+    for (i = 0; i < numMoves; i++) {
         hasMonMove = FALSE;
-        if(sMonSummaryScreen->moveReplaceFirstMove + i == sMonSummaryScreen->moveReplaceCurrentIdx)
+        if (sMonSummaryScreen->moveReplaceFirstMove + i == sMonSummaryScreen->moveReplaceCurrentIdx)
             BlitBitmapToWindow(windowId, sMoveCursor, ((PosX - 1) * 8), (PosY * 8), 8, 16);
 
         moveNum = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceFirstMove + i];
         AddTextPrinterParameterized4(windowId, FONT_NARROW, (PosX * 8), (PosY * 8), 0, 0, sTextColors[PSS_COLOR_WHITE_BLACK_SHADOW], 0xFF, gMoveNamesLong[moveNum]);
 
-        for (j = 0; j < MAX_MON_MOVES; j++){
-            if(moveNum == GetMonData(mon, MON_DATA_MOVE1 + j, 0))
+        for (j = 0; j < MAX_MON_MOVES; j++) {
+            if (moveNum == GetMonData(mon, MON_DATA_MOVE1 + j, 0))
                 hasMonMove = TRUE;
         }
 
-        if(hasMonMove){
+        if (hasMonMove) {
             AddTextPrinterParameterized4(windowId, FONT_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC, (PosY * 8), 0, 0, sTextColors[PSS_COLOR_MALE_GENDER_SYMBOL], 0xFF, sText_MoveLearned);
         }
-        else{
-            if(gBattleMoves[moveNum].power >= 10)
+        else {
+            if (gBattleMoves[moveNum].power >= 10)
                 ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveNum].power, STR_CONV_MODE_RIGHT_ALIGN, 3);
             else
                 StringCopy(gStringVar1, gText_ThreeDashes);
@@ -3156,7 +3158,7 @@ static void PrintMoveReplaceTab(void)
             AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC, (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, sText_Move_Power);
             AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (PosX * 8) + SPACE_BETWEEN_MOVES_AND_BPACC + SPACE_BETWEEN_MOVES_AND_BPACC_2, (PosY * 8) - 4, 0, 0, sTextColors[PSS_COLOR_BLACK_GRAY_SHADOW], 0xFF, gStringVar1);
             
-            if(gBattleMoves[moveNum].accuracy >= 10)
+            if (gBattleMoves[moveNum].accuracy >= 10)
                 ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveNum].accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
             else
                 StringCopy(gStringVar1, gText_ThreeDashes);
@@ -3183,62 +3185,62 @@ enum
 #define LEFTRIGHT_ITEM_NUMBER_CHANGE 5 5
 #define NUM_OF_POSSIBLE_OPTIONS_THAT_FIT_ON_SCREEN 7
 
-static void PressedDownButton_ReplaceMoves(){
+static void PressedDownButton_ReplaceMoves() {
     u8 halfScreen = ((MAX_MOVE_REPLACE_MOVES) - 1) / 2;
     u8 finalhalfScreen = sMonSummaryScreen->numMenuChoices - halfScreen;
     u8 numMoves = sMonSummaryScreen->numMenuChoices;
 
-    if(numMoves < MAX_MOVE_REPLACE_MOVES){
+    if (numMoves < MAX_MOVE_REPLACE_MOVES) {
         //Disables Scrolling if there are less moves than the screen can show
-        if(sMonSummaryScreen->moveReplaceCurrentIdx >= numMoves - 1)
+        if (sMonSummaryScreen->moveReplaceCurrentIdx >= numMoves - 1)
             sMonSummaryScreen->moveReplaceCurrentIdx = 0;
         else
             sMonSummaryScreen->moveReplaceCurrentIdx++;
 
         sMonSummaryScreen->moveReplaceFirstMove = 0;
     }
-    else{
-        if(sMonSummaryScreen->moveReplaceCurrentIdx < halfScreen){
+    else {
+        if (sMonSummaryScreen->moveReplaceCurrentIdx < halfScreen) {
             sMonSummaryScreen->moveReplaceCurrentIdx++;
         }
-        else if(sMonSummaryScreen->moveReplaceCurrentIdx >= (numMoves - 1)){ //If you are in the last option go to the first one
+        else if (sMonSummaryScreen->moveReplaceCurrentIdx >= (numMoves - 1)) { //If you are in the last option go to the first one
             sMonSummaryScreen->moveReplaceCurrentIdx = 0;
             sMonSummaryScreen->moveReplaceFirstMove = 0;
         }
-        else if(sMonSummaryScreen->moveReplaceCurrentIdx >= (finalhalfScreen - 1)){
+        else if (sMonSummaryScreen->moveReplaceCurrentIdx >= (finalhalfScreen - 1)) {
             sMonSummaryScreen->moveReplaceCurrentIdx++;
         }
-        else{
+        else {
             sMonSummaryScreen->moveReplaceCurrentIdx++;
             sMonSummaryScreen->moveReplaceFirstMove++;
         }
     }
 }
 
-static void PressedUpButton_ReplaceMoves(){
+static void PressedUpButton_ReplaceMoves() {
     u8 halfScreen = ((MAX_MOVE_REPLACE_MOVES) - 1) / 2;
     u8 finalhalfScreen = sMonSummaryScreen->numMenuChoices - halfScreen;
     u8 numMoves = sMonSummaryScreen->numMenuChoices;
 
-    if(numMoves < MAX_MOVE_REPLACE_MOVES){
+    if (numMoves < MAX_MOVE_REPLACE_MOVES) {
         //Disables Scrolling if there are less moves than the screen can show
-        if(sMonSummaryScreen->moveReplaceCurrentIdx == 0)
+        if (sMonSummaryScreen->moveReplaceCurrentIdx == 0)
             sMonSummaryScreen->moveReplaceCurrentIdx = numMoves - 1;
         else
             sMonSummaryScreen->moveReplaceCurrentIdx--;
 
         sMonSummaryScreen->moveReplaceFirstMove = 0;
     }
-    else{
-        if(sMonSummaryScreen->moveReplaceCurrentIdx > halfScreen && sMonSummaryScreen->moveReplaceCurrentIdx <= (finalhalfScreen - 1)){
+    else {
+        if (sMonSummaryScreen->moveReplaceCurrentIdx > halfScreen && sMonSummaryScreen->moveReplaceCurrentIdx <= (finalhalfScreen - 1)) {
             sMonSummaryScreen->moveReplaceCurrentIdx--;
             sMonSummaryScreen->moveReplaceFirstMove--;
         }
-        else if(sMonSummaryScreen->moveReplaceCurrentIdx == 0){ //If you are in the first option go to the last one
+        else if (sMonSummaryScreen->moveReplaceCurrentIdx == 0) { //If you are in the first option go to the last one
             sMonSummaryScreen->moveReplaceCurrentIdx = sMonSummaryScreen->numMenuChoices - 1;
             sMonSummaryScreen->moveReplaceFirstMove = sMonSummaryScreen->numMenuChoices - MAX_MOVE_REPLACE_MOVES;
         }
-        else{
+        else {
             sMonSummaryScreen->moveReplaceCurrentIdx--;
         }
     }
@@ -3255,8 +3257,8 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
 
     if (JOY_NEW(DPAD_UP) || (JOY_REPEAT(DPAD_UP) && !sMonSummaryScreen->replaceMoveMode))
     {
-        if(sMonSummaryScreen->replaceMoveMode){
-            if(sMonSummaryScreen->moveReplaceMoveNum != 0)
+        if (sMonSummaryScreen->replaceMoveMode) {
+            if (sMonSummaryScreen->moveReplaceMoveNum != 0)
                 sMonSummaryScreen->moveReplaceMoveNum--;
             else
                 sMonSummaryScreen->moveReplaceMoveNum = MAX_MON_MOVES;
@@ -3270,8 +3272,8 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
     }
     if (JOY_NEW(DPAD_DOWN) || (JOY_REPEAT(DPAD_DOWN) && !sMonSummaryScreen->replaceMoveMode))
     {
-        if(sMonSummaryScreen->replaceMoveMode){
-            if(sMonSummaryScreen->moveReplaceMoveNum < MAX_MON_MOVES)
+        if (sMonSummaryScreen->replaceMoveMode) {
+            if (sMonSummaryScreen->moveReplaceMoveNum < MAX_MON_MOVES)
                 sMonSummaryScreen->moveReplaceMoveNum++;
             else
                 sMonSummaryScreen->moveReplaceMoveNum = 0;
@@ -3285,8 +3287,8 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
     }
     else if (JOY_NEW(DPAD_LEFT))
     {
-        if(!sMonSummaryScreen->replaceMoveMode){
-            if(sMonSummaryScreen->moveReplaceTabNum > 0)
+        if (!sMonSummaryScreen->replaceMoveMode) {
+            if (sMonSummaryScreen->moveReplaceTabNum > 0)
                 sMonSummaryScreen->moveReplaceTabNum--;
             else
                 sMonSummaryScreen->moveReplaceTabNum = NUM_MOVE_REPLACE_TABS - 1;
@@ -3301,8 +3303,8 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
     }
     else if (JOY_NEW(DPAD_RIGHT))
     {
-        if(!sMonSummaryScreen->replaceMoveMode){
-            if(sMonSummaryScreen->moveReplaceTabNum < NUM_MOVE_REPLACE_TABS - 1)
+        if (!sMonSummaryScreen->replaceMoveMode) {
+            if (sMonSummaryScreen->moveReplaceTabNum < NUM_MOVE_REPLACE_TABS - 1)
                 sMonSummaryScreen->moveReplaceTabNum++;
             else
                 sMonSummaryScreen->moveReplaceTabNum = 0;
@@ -3315,29 +3317,29 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             PrintMoveInfoFromReplaceTab();
         }
     }
-    else if(JOY_NEW(L_BUTTON) && !sMonSummaryScreen->replaceMoveMode){
-        if(gCurrentModifyIndex > 0)
+    else if (JOY_NEW(L_BUTTON) && !sMonSummaryScreen->replaceMoveMode) {
+        if (gCurrentModifyIndex > 0)
             gCurrentModifyIndex--;
         else
             gCurrentModifyIndex = NUM_MOVE_INFO_TABS - 1;
         PrintMoveInfoFromReplaceTab();
     }
-    else if(JOY_NEW(R_BUTTON) && !sMonSummaryScreen->replaceMoveMode){
-        if(gCurrentModifyIndex < NUM_MOVE_INFO_TABS - 1)
+    else if (JOY_NEW(R_BUTTON) && !sMonSummaryScreen->replaceMoveMode) {
+        if (gCurrentModifyIndex < NUM_MOVE_INFO_TABS - 1)
             gCurrentModifyIndex++;
         else
             gCurrentModifyIndex = 0;
         PrintMoveInfoFromReplaceTab();
     }
-    else if(JOY_NEW(A_BUTTON)){
+    else if (JOY_NEW(A_BUTTON)) {
         u8 moveToReplace = sMonSummaryScreen->moveReplaceMoveNum;
         u16 moveToLearn  = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
         u8 ppBonuses, movetype, ppNum;
         bool8 reload = TRUE;
         bool8 cancel = FALSE;
 
-        if(sMonSummaryScreen->replaceMoveMode){
-            if(sMonSummaryScreen->moveReplaceMoveNum == MAX_MON_MOVES){
+        if (sMonSummaryScreen->replaceMoveMode) {
+            if (sMonSummaryScreen->moveReplaceMoveNum == MAX_MON_MOVES) {
                 //Cancel
                 sMonSummaryScreen->moveReplaceMoveNum = 0;
                 sMonSummaryScreen->replaceMoveMode = FALSE;
@@ -3346,12 +3348,12 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
                 SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
             }
-            else{
+            else {
                 //Teach Move
-                if (!sMonSummaryScreen->isBoxMon){
+                if (!sMonSummaryScreen->isBoxMon) {
                     SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
                 }
-                else{
+                else {
                     struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                     SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
                 }
@@ -3377,36 +3379,36 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 DestroyMoveTypeIcon();
             }
         }
-        else{
+        else {
             u8 learnedMove = FALSE;
 
-            if (!sMonSummaryScreen->isBoxMon){
-                for (i = 0; i < MAX_MON_MOVES; i++){
-                    if(moveToLearn == GetMonData(mon, MON_DATA_MOVE1 + i, 0)){
+            if (!sMonSummaryScreen->isBoxMon) {
+                for (i = 0; i < MAX_MON_MOVES; i++) {
+                    if (moveToLearn == GetMonData(mon, MON_DATA_MOVE1 + i, 0)) {
                         hasMonMove = TRUE;
                         break;
                     }
                 }
 
-                for (i = 0; i < MAX_MON_MOVES; i++){
-                    if(GetMonData(mon, MON_DATA_MOVE1 + i, 0) == MOVE_NONE){
+                for (i = 0; i < MAX_MON_MOVES; i++) {
+                    if (GetMonData(mon, MON_DATA_MOVE1 + i, 0) == MOVE_NONE) {
                         moveToReplace = i;
                         learnedMove = TRUE;
                         break;
                     }
                 }
             }
-            else{
+            else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-                for (i = 0; i < MAX_MON_MOVES; i++){
-                    if(moveToLearn == GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + i, 0)){
+                for (i = 0; i < MAX_MON_MOVES; i++) {
+                    if (moveToLearn == GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + i, 0)) {
                         hasMonMove = TRUE;
                         break;
                     }
                 }
 
-                for (i = 0; i < MAX_MON_MOVES; i++){
-                    if(GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + i, 0) == MOVE_NONE){
+                for (i = 0; i < MAX_MON_MOVES; i++) {
+                    if (GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + i, 0) == MOVE_NONE) {
                         moveToReplace = i;
                         learnedMove = TRUE;
                         break;
@@ -3414,12 +3416,12 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 }
             }
 
-            if(learnedMove && !hasMonMove){
+            if (learnedMove && !hasMonMove) {
                 //Teach Move
-                if (!sMonSummaryScreen->isBoxMon){
+                if (!sMonSummaryScreen->isBoxMon) {
                     SetMonData(&gPlayerParty[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
                 }
-                else{
+                else {
                     struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
                     SetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_MOVE1 + moveToReplace, &moveToLearn);
                 }
@@ -3440,13 +3442,13 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
                 PlaySE(SE_SELECT);
                 DestroyMoveTypeIcon();
             }
-            else if(!hasMonMove){
+            else if (!hasMonMove) {
                 PlaySE(SE_SELECT);
                 sMonSummaryScreen->moveReplaceMoveNum = 0;
                 sMonSummaryScreen->replaceMoveMode = TRUE;
                 DestroyMoveTypeIcon();
             }
-            else{
+            else {
                 PlaySE(SE_FAILURE);
                 reload = FALSE;
             }
@@ -3458,15 +3460,15 @@ static void Task_HandleInput_ReplaceMoves(u8 taskId)
             PrintMoveInfoFromReplaceTab();
         }
     }
-    else if(JOY_NEW(B_BUTTON)){
-        if(sMonSummaryScreen->replaceMoveMode){
+    else if (JOY_NEW(B_BUTTON)) {
+        if (sMonSummaryScreen->replaceMoveMode) {
             sMonSummaryScreen->moveReplaceMoveNum = 0;
             sMonSummaryScreen->replaceMoveMode = FALSE;
             PrintMoveInfoFromReplaceTab();
             LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
             SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
         }
-        else{
+        else {
             PlaySE(SE_SELECT);
             CloseMoveReplaceMode(taskId);
         }
@@ -3553,18 +3555,18 @@ static void Task_HandleInput_MoveSelect(u8 taskId)
             PlaySE(SE_SELECT);
             CloseMoveSelectMode(taskId);
         }
-        else if(gMain.newKeys & L_BUTTON){
+        else if (gMain.newKeys & L_BUTTON) {
             PlaySE(SE_SELECT);
-            if(gCurrentModifyIndex > 0)
+            if (gCurrentModifyIndex > 0)
                 gCurrentModifyIndex--;
             else
                 gCurrentModifyIndex = NUM_MOVE_INFO_TABS - 1;
             data[0] = 4;
             ChangeSelectedMove(data, 0, &sMonSummaryScreen->firstMoveIndex);
         }
-        else if(gMain.newKeys & R_BUTTON){
+        else if (gMain.newKeys & R_BUTTON) {
             PlaySE(SE_SELECT);
-            if(gCurrentModifyIndex < NUM_MOVE_INFO_TABS - 1)
+            if (gCurrentModifyIndex < NUM_MOVE_INFO_TABS - 1)
                 gCurrentModifyIndex++;
             else
                 gCurrentModifyIndex = 0;
@@ -3766,7 +3768,7 @@ static void Task_SwitchFromMoveReplaceMenu(u8 taskId)
     {
         case 0:
             SetMoveTypeIcons();
-            for (i = 0; i < MAX_MON_MOVES; i++){
+            for (i = 0; i < MAX_MON_MOVES; i++) {
                 if (summary->moves[i] != MOVE_NONE)
                     SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 2 + i, FALSE);
             }
@@ -4216,10 +4218,10 @@ static void PrintNotEggInfo(void)
     #if CONFIG_FATEFUL_ENCOUNTER_MARK
     if (summary->isEventMon)
         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Fateful, 52, 18, 0, PSS_COLOR_FATEFUL_TRIANGLE);
-    if(isAlpha)
+    if (isAlpha)
         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 43, 18, 0, PSS_COLOR_SHINY_STARS);
     #else
-    if(isAlpha)
+    if (isAlpha)
         PrintTextOnWindow(PSS_LABEL_PANE_LEFT_TOP, sText_Alpha, 52, 18, 0, PSS_COLOR_SHINY_STARS);
     #endif
 
@@ -4550,7 +4552,7 @@ static void BufferNatureString(void)
 	//Nature Modifier ---------------------------------------------------------------
     FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
 	
-	if(ModifyMode)
+	if (ModifyMode)
 		BlitBitmapToWindow(PSS_LABEL_PANE_RIGHT, sSummaryNatureSlider, 4, 16, 120, 16);
 	
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(2, gNatureNameWithEffectPointers[GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_NATURE)]);
@@ -4801,11 +4803,11 @@ static void PrintSkillsPage(void)
     FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
 	
 	//Ev Modifier ---------------------------------------------------------------
-	for(j = 0; j < 7; j++){
+	for (j = 0; j < 7; j++) {
 		x = 15;
 		
-		if(j == gCurrentModifyIndex && ModifyMode){
-			switch(j){
+		if (j == gCurrentModifyIndex && ModifyMode) {
+			switch (j) {
 				case 0:
 					y = 0;
 					BlitBitmapToWindow(PSS_LABEL_PANE_RIGHT, sSummaryEVIcon, (x * 8), (y * 8), 24, 16);
@@ -4838,8 +4840,8 @@ static void PrintSkillsPage(void)
 	y = 0;
 	PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, gText_HP3, 12, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++){
-		switch(i){
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
+		switch (i) {
 			case 0:
 				ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP), STR_CONV_MODE_LEFT_ALIGN, 3);
 				StringAppend(gStringVar1, gText_Slash);
@@ -4854,7 +4856,7 @@ static void PrintSkillsPage(void)
 		        PrintNarrowTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, gStringVar1, ((x - 1)* 8) + offset, y, 0, 0);
 			break;
 			case 2:
-                if(gSaveBlock2Ptr->enableEvs)
+                if (gSaveBlock2Ptr->enableEvs)
                     ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_HP_EV), STR_CONV_MODE_LEFT_ALIGN, 3);
 				else
                     StringCopy(gStringVar1, sText_Evs_Disabled);
@@ -4880,8 +4882,8 @@ static void PrintSkillsPage(void)
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_NatureDown, 0, y, 0, COLOR_STAT_ARROWS);
     PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_Attack, 12, y, 0, 1);  
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++){
-		switch(i){
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
+		switch (i) {
 			case 0:
                 ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK), STR_CONV_MODE_LEFT_ALIGN, 3);
 				x = 10;
@@ -4895,7 +4897,7 @@ static void PrintSkillsPage(void)
 		        PrintNarrowTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, gStringVar1, ((x - 1)* 8) + offset, y, 0, 1);
 			break;
 			case 2:
-                if(gSaveBlock2Ptr->enableEvs)
+                if (gSaveBlock2Ptr->enableEvs)
                     ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_ATK_EV), STR_CONV_MODE_LEFT_ALIGN, 3);
                 else
                     StringCopy(gStringVar1, sText_Evs_Disabled);
@@ -4915,8 +4917,8 @@ static void PrintSkillsPage(void)
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_NatureDown, 0, y, 0, COLOR_STAT_ARROWS);
     PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_Defense, 12, y, 0, 1);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++){
-		switch(i){
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
+		switch (i) {
 			case 0:
 				ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF), STR_CONV_MODE_LEFT_ALIGN, 3);
 				x = 10;
@@ -4930,7 +4932,7 @@ static void PrintSkillsPage(void)
                 PrintNarrowTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, gStringVar1, ((x - 1)* 8) + offset, y, 0, 1);
 			break;
 			case 2:
-                if(gSaveBlock2Ptr->enableEvs)
+                if (gSaveBlock2Ptr->enableEvs)
                     ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_DEF_EV), STR_CONV_MODE_LEFT_ALIGN, 3);
 				else
                     StringCopy(gStringVar1, sText_Evs_Disabled);
@@ -4950,8 +4952,8 @@ static void PrintSkillsPage(void)
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_NatureDown, 0, y, 0, COLOR_STAT_ARROWS);
     PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_SpecialAttack, 12, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++){
-		switch(i){
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
+		switch (i) {
 			case 0:
                 ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK), STR_CONV_MODE_LEFT_ALIGN, 3);
 				x = 10;
@@ -4965,7 +4967,7 @@ static void PrintSkillsPage(void)
                 PrintNarrowTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, gStringVar1, ((x - 1)* 8) + offset, y, 0, 1);
 			break;
 			case 2:
-                if(gSaveBlock2Ptr->enableEvs)
+                if (gSaveBlock2Ptr->enableEvs)
                     ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPATK_EV), STR_CONV_MODE_LEFT_ALIGN, 3);
 				else
                     StringCopy(gStringVar1, sText_Evs_Disabled);
@@ -4985,8 +4987,8 @@ static void PrintSkillsPage(void)
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_NatureDown, 0, y, 0, COLOR_STAT_ARROWS);
     PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_SpecialDefense, 12, y, 0, 1);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++){
-		switch(i){
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
+		switch (i) {
 			case 0:
                 ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF), STR_CONV_MODE_LEFT_ALIGN, 3);
 				x = 10;
@@ -5000,7 +5002,7 @@ static void PrintSkillsPage(void)
                 PrintNarrowTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, gStringVar1, ((x - 1)* 8) + offset, y, 0, 1);
 			break;
 			case 2:
-                if(gSaveBlock2Ptr->enableEvs)
+                if (gSaveBlock2Ptr->enableEvs)
                     ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPDEF_EV), STR_CONV_MODE_LEFT_ALIGN, 3);
 				else
                     StringCopy(gStringVar1, sText_Evs_Disabled);
@@ -5018,13 +5020,13 @@ static void PrintSkillsPage(void)
     else if (natureMod[STAT_SPEED - 1] < 0)
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_NatureDown, 0, y, 0, COLOR_STAT_ARROWS);
 
-    if(GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_DOWN))
+    if (GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_DOWN))
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_Speed, 12, y, 0, PSS_COLOR_BLUE);
     else
         PrintTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, sText_Speed, 12, y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
 	
-	for(i = 0; i < NUM_STAT_TYPES; i++){
-		switch(i){
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
+		switch (i) {
 			case 0:
                 ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED), STR_CONV_MODE_LEFT_ALIGN, 3);
 				x = 10;
@@ -5038,7 +5040,7 @@ static void PrintSkillsPage(void)
                 PrintNarrowTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, gStringVar1, ((x - 1)* 8) + offset, y, 0, 1);
 			break;
 			case 2:
-                if(gSaveBlock2Ptr->enableEvs)
+                if (gSaveBlock2Ptr->enableEvs)
                     ConvertIntToDecimalStringN(gStringVar1, GetMonData(&sMonSummaryScreen->currentMon, MON_DATA_SPEED_EV), STR_CONV_MODE_LEFT_ALIGN, 3);
 				else
                     StringCopy(gStringVar1, sText_Evs_Disabled);
@@ -5051,8 +5053,8 @@ static void PrintSkillsPage(void)
 	
 	//---------------------------------------------------------------------------------------------------------
 	y = 100;
-	for(i = 0; i < NUM_STAT_TYPES; i++){
-		switch(i){
+	for (i = 0; i < NUM_STAT_TYPES; i++) {
+		switch (i) {
 			case 0:
 				x = 8;
 				PrintSmallTextOnWindowNoRender(PSS_LABEL_PANE_RIGHT, gText_Stats, (x * 8), y, 0, PSS_COLOR_WHITE_BLACK_SHADOW);
@@ -5146,7 +5148,7 @@ static void PrintBattleMovesFromReplaceMenu(void)
 
     FillWindowPixelBuffer(PSS_LABEL_PANE_RIGHT, PIXEL_FILL(0));
 
-    for (i = 0; i < MAX_MON_MOVES; i++){
+    for (i = 0; i < MAX_MON_MOVES; i++) {
         PrintMoveNameAndPP(i);
     }
 
@@ -5231,7 +5233,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
 	x = 60;
 	y = 4;
 	
-	if(ModifyMode)
+	if (ModifyMode)
 		BlitBitmapToWindow(PSS_LABEL_PANE_RIGHT, sSummaryAbilitySlider, (x-8), 8, 96, 8);
 
 	// Main Ability
@@ -5245,12 +5247,12 @@ static void BufferMonPokemonAbilityAndInnates(void)
     PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
 
 	// Innates
-	for(i = 0; i < NUM_INNATE_PER_SPECIES; i++){
-        switch(i){
+	for (i = 0; i < NUM_INNATE_PER_SPECIES; i++) {
+        switch (i) {
             case 0:
-                if(abilities[1] != ABILITY_NONE){
+                if (abilities[1] != ABILITY_NONE) {
                     y += 32;
-                    if((level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock){
+                    if ((level >= INNATE_1_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock) {
                         //Title
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
@@ -5261,7 +5263,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[1]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
                     }
-                    else{
+                    else {
                         //Title
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
@@ -5276,9 +5278,9 @@ static void BufferMonPokemonAbilityAndInnates(void)
                 }
             break;
             case 1:
-                if(abilities[2] != ABILITY_NONE){
+                if (abilities[2] != ABILITY_NONE) {
                     y += 32;
-                    if((level >= INNATE_2_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock){
+                    if ((level >= INNATE_2_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock) {
                         //Title
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
@@ -5289,7 +5291,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[2]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
                     }
-                    else{
+                    else {
                         //Title
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
@@ -5304,9 +5306,9 @@ static void BufferMonPokemonAbilityAndInnates(void)
                 }
             break;
             case 2:
-                if(abilities[3] != ABILITY_NONE){
+                if (abilities[3] != ABILITY_NONE) {
                     y += 32;
-                    if((level >= INNATE_3_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock){
+                    if ((level >= INNATE_3_LEVEL || gSaveBlock2Ptr->gameDifficulty != DIFFICULTY_ELITE || isEnemyMon) && !testInnateLock) {
                         //Title
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
@@ -5317,7 +5319,7 @@ static void BufferMonPokemonAbilityAndInnates(void)
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gAbilityDescriptionPointers[abilities[3]]);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0,  (y + 12), 0, PSS_COLOR_BLACK_GRAY_SHADOW);
                     }
-                    else{
+                    else {
                         //Title
                         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sText_Innate1);
                         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, 4, PSS_COLOR_WHITE_BLACK_SHADOW);
@@ -5373,75 +5375,75 @@ const u8 gText_Dusk[] = _("(Dusk Form)");
 const u8 gText_X[] = _("X");
 const u8 gText_Y[] = _("Y");
 
-const u8* SaveSpeciesWithSurname(u16 species){
-    if(species == SPECIES_CHARIZARD_MEGA_X || species == SPECIES_MEWTWO_MEGA_X){ //Mega X
+const u8* SaveSpeciesWithSurname(u16 species) {
+    if (species == SPECIES_CHARIZARD_MEGA_X || species == SPECIES_MEWTWO_MEGA_X) { //Mega X
         StringCopy(gStringVar1, gText_Mega);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringCopy(gStringVar3, gText_X);
         StringExpandPlaceholders(gStringVar4, gText_Subname2);
     }
-    else if(species == SPECIES_CHARIZARD_MEGA_Y || species == SPECIES_MEWTWO_MEGA_Y){ //Mega Y
+    else if (species == SPECIES_CHARIZARD_MEGA_Y || species == SPECIES_MEWTWO_MEGA_Y) { //Mega Y
         StringCopy(gStringVar1, gText_Mega);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringCopy(gStringVar3, gText_Y);
         StringExpandPlaceholders(gStringVar4, gText_Subname2);
     }
-    else if(species >= SPECIES_VENUSAUR_MEGA && species <= SPECIES_RAYQUAZA_MEGA){ //Megas
+    else if (species >= SPECIES_VENUSAUR_MEGA && species <= SPECIES_RAYQUAZA_MEGA) { //Megas
         StringCopy(gStringVar1, gText_Mega);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species == SPECIES_KYOGRE_PRIMAL || species == SPECIES_GROUDON_PRIMAL || species == SPECIES_CASCOON_PRIMAL){ //Primals
+    else if (species == SPECIES_KYOGRE_PRIMAL || species == SPECIES_GROUDON_PRIMAL || species == SPECIES_CASCOON_PRIMAL) { //Primals
         StringCopy(gStringVar1, gText_Primal);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA){ //Custom Mega
+    else if (species >= CUSTOM_MEGA_START && species <= LAST_CUSTOM_MEGA) { //Custom Mega
         StringCopy(gStringVar1, gText_Mega);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species == SPECIES_NECROZMA_ULTRA){ //Ultra Necrozma
+    else if (species == SPECIES_NECROZMA_ULTRA) { //Ultra Necrozma
         StringCopy(gStringVar1, gText_Ultra);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species >= SPECIES_RATTATA_ALOLAN && species <= SPECIES_MAROWAK_ALOLAN){ //Alolan
+    else if (species >= SPECIES_RATTATA_ALOLAN && species <= SPECIES_MAROWAK_ALOLAN) { //Alolan
         StringCopy(gStringVar1, gText_Alolan);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species >= SPECIES_MEOWTH_GALARIAN && species <= SPECIES_STUNFISK_GALARIAN){ //Galarian
+    else if (species >= SPECIES_MEOWTH_GALARIAN && species <= SPECIES_STUNFISK_GALARIAN) { //Galarian
         StringCopy(gStringVar1, gText_Galarian);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species >= SPECIES_QWILFISH_HISUIAN && species <= SPECIES_ZOROARK_HISUIAN){ //Hisuian
+    else if (species >= SPECIES_QWILFISH_HISUIAN && species <= SPECIES_ZOROARK_HISUIAN) { //Hisuian
         StringCopy(gStringVar1, gText_Hisuian);
         StringCopy(gStringVar2, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species >= SPECIES_INFERNAPE_REDUX && species <= SPECIES_SCIZOR_REDUX){ //Redux
+    else if (species >= SPECIES_INFERNAPE_REDUX && species <= SPECIES_SCIZOR_REDUX) { //Redux
         StringCopy(gStringVar2, gText_Redux);
         StringCopy(gStringVar1, gSpeciesNames[species]);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species == SPECIES_LYCANROC){ //Midday Lycanroc
+    else if (species == SPECIES_LYCANROC) { //Midday Lycanroc
         StringCopy(gStringVar1, gSpeciesNames[species]);
         StringCopy(gStringVar2, gText_Midday);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species == SPECIES_LYCANROC_MIDNIGHT){ //Midnight Lycanroc
+    else if (species == SPECIES_LYCANROC_MIDNIGHT) { //Midnight Lycanroc
         StringCopy(gStringVar1, gSpeciesNames[species]);
         StringCopy(gStringVar2, gText_Midnight);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else if(species == SPECIES_LYCANROC_DUSK){ //Dusk Lycanroc
+    else if (species == SPECIES_LYCANROC_DUSK) { //Dusk Lycanroc
         StringCopy(gStringVar1, gSpeciesNames[species]);
         StringCopy(gStringVar2, gText_Dusk);
         StringExpandPlaceholders(gStringVar4, gText_Subname);
     }
-    else{//Normal
+    else {//Normal
         const u8* longName = GetSpeciesLongName(species);
         if (longName)
             StringCopy(gStringVar4, longName);
@@ -5453,7 +5455,7 @@ const u8* SaveSpeciesWithSurname(u16 species){
 }
 
 const u8 gText_Eeveevolution[] = _("Any Eeveelution");
-static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 personality){
+static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 personality) {
     u8 i = num;
     bool8 skipPrintingEvo = FALSE;
     const struct MapHeader *mapHeader;
@@ -5464,12 +5466,12 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
     {
     case EVO_LEVEL:
     case EVO_LEVEL_NINJASK:
-        if(species != SPECIES_EEVEE){
+        if (species != SPECIES_EEVEE) {
             //Target Species
             targetSpecies = gEvolutionTable[species][i].targetSpecies;
             SaveSpeciesWithSurname(targetSpecies);
         }
-        else{
+        else {
             //Target Species
             StringCopy(gStringVar4, gText_Eeveevolution);
         }
@@ -5599,7 +5601,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         break;
     case EVO_LEVEL_SILCOON:
-        if((upperPersonality % 10) <= 4){
+        if ((upperPersonality % 10) <= 4) {
             //Target Species
             targetSpecies = gEvolutionTable[species][i].targetSpecies;
             SaveSpeciesWithSurname(targetSpecies);
@@ -5609,12 +5611,12 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
             StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_SILCOON );
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         }
-        else{
+        else {
             skipPrintingEvo = TRUE;
         }
         break;
     case EVO_LEVEL_CASCOON:
-        if((upperPersonality % 10) > 4){
+        if ((upperPersonality % 10) > 4) {
             //Target Species
             targetSpecies = gEvolutionTable[species][i].targetSpecies;
         SaveSpeciesWithSurname(targetSpecies);
@@ -5624,7 +5626,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
             StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_CASCOON );
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         }
-        else{
+        else {
             skipPrintingEvo = TRUE;
         }
         break;
@@ -5648,7 +5650,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         break;
     case EVO_LEVEL_FEMALE:
-        if(gender == MON_FEMALE){
+        if (gender == MON_FEMALE) {
             //Target Species
             targetSpecies = gEvolutionTable[species][i].targetSpecies;
             SaveSpeciesWithSurname(targetSpecies);
@@ -5658,12 +5660,12 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
             StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_FEMALE );
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         }
-        else{
+        else {
             skipPrintingEvo = TRUE;
         }
         break;
     case EVO_LEVEL_MALE:
-        if(gender == MON_MALE){
+        if (gender == MON_MALE) {
             //Target Species
             targetSpecies = gEvolutionTable[species][i].targetSpecies;
             SaveSpeciesWithSurname(targetSpecies);
@@ -5673,7 +5675,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
             StringExpandPlaceholders(gStringVar4, gText_EVO_LEVEL_MALE );
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         }
-        else{
+        else {
             skipPrintingEvo = TRUE;
         }
         break;
@@ -5771,7 +5773,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         break;
     case EVO_ITEM_MALE:
-        if(gender == MON_MALE){
+        if (gender == MON_MALE) {
             //Target Species
             targetSpecies = gEvolutionTable[species][i].targetSpecies;
             SaveSpeciesWithSurname(targetSpecies);
@@ -5782,12 +5784,12 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
             StringExpandPlaceholders(gStringVar4, gText_EVO_ITEM_MALE );
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         }
-        else{
+        else {
             skipPrintingEvo = TRUE;
         }
         break;
     case EVO_ITEM_FEMALE:
-        if(gender == MON_FEMALE){
+        if (gender == MON_FEMALE) {
             //Target Species
             targetSpecies = gEvolutionTable[species][i].targetSpecies;
             SaveSpeciesWithSurname(targetSpecies);
@@ -5798,7 +5800,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
             StringExpandPlaceholders(gStringVar4, gText_EVO_ITEM_FEMALE );
             PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, EVOLUTION_METHOD_X, y + EVOLUTION_METHOD_Y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         }
-        else{
+        else {
             skipPrintingEvo = TRUE;
         }
         break;
@@ -5923,7 +5925,7 @@ static void BufferMonPokemonEvolutionData(void)
     //Calculate number of possible direct evolutions (e.g. Eevee has 8 but torchic has 1)
     for (i = 0; i < EVOS_PER_MON; i++)
     {
-        if(gEvolutionTable[species][i].method != 0 && gEvolutionTable[species][i].targetSpecies != actualSpecies)
+        if (gEvolutionTable[species][i].method != 0 && gEvolutionTable[species][i].targetSpecies != actualSpecies)
             times = i + 1;
     }
 
@@ -5935,15 +5937,15 @@ static void BufferMonPokemonEvolutionData(void)
         PrintSmallTextOnWindow(PSS_LABEL_PANE_RIGHT, gStringVar4, 0, y, EVOLUTION_METHOD_LINE_SPACING, PSS_COLOR_WHITE_BLACK_SHADOW);
         y +=24;
     }
-    else{
-        if(species == SPECIES_EEVEE)
+    else {
+        if (species == SPECIES_EEVEE)
             times = 1;
 
-        for (i = 0; i < times; i++){
-            if(PrintMonEvolution(species, i, y, gender, personality)){
-                if(species == SPECIES_FURFROU) //Tons of evolutions
+        for (i = 0; i < times; i++) {
+            if (PrintMonEvolution(species, i, y, gender, personality)) {
+                if (species == SPECIES_FURFROU) //Tons of evolutions
                     y +=16;
-                else if(species == SPECIES_CHARIZARD || species == SPECIES_MEWTWO) //Extra Megas
+                else if (species == SPECIES_CHARIZARD || species == SPECIES_MEWTWO) //Extra Megas
                     y +=32;
                 else
                     y +=24;
@@ -5983,8 +5985,8 @@ static u8 GetBattleMoveCategory(u16 move)
     }
 }
 
-static void MoveEffectIntoStringVar1(u16 move){
-    switch(gBattleMoves[move].effect){
+static void MoveEffectIntoStringVar1(u16 move) {
+    switch (gBattleMoves[move].effect) {
 		case EFFECT_BURN_HIT:
 		case EFFECT_SCALD:
 			StringCopy(gStringVar1, gText_Effect_Burn_Hit);
@@ -6137,11 +6139,11 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
     u8 numHits = 1;
     u8 numBoosts = 0;
 
-    if(moveReplaceMode){
+    if (moveReplaceMode) {
         PrintSmallTextOnWindow(windowId, sText_Power,    4, POWER_AND_ACCURACY_Y,   0, 1);
         PrintSmallTextOnWindow(windowId, sText_Accuracy, 4, POWER_AND_ACCURACY_Y_2, 0, 1);
     }
-    else{
+    else {
         PrintNarrowTextOnWindow(windowId, sText_Power,    8, POWER_AND_ACCURACY_Y,   0, 1);
         PrintNarrowTextOnWindow(windowId, sText_Accuracy, 8, POWER_AND_ACCURACY_Y_2, 0, 1);
     }
@@ -6160,7 +6162,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 
     PrintNarrowTextOnWindow(windowId, gStringVar1, 84 + 2, POWER_AND_ACCURACY_Y_2, 0, 0);
 
-    switch(tabNum){
+    switch (tabNum) {
         case MOVE_INFO_DESCRIPTION:
 			PrintNarrowTextOnWindow(windowId, gMoveFourLineDescriptionPointers[move - 1], 2, PosX, 0, 0);
         break;
@@ -6169,7 +6171,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			PrintSmallTextOnWindow(windowId, gText_Effect, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
 			StringCopy(gStringVar1, gText_Effect_Hit);
 				
-			if(gBattleMoves[move].target == MOVE_TARGET_USER || gBattleMoves[move].target == MOVE_TARGET_ALL_BATTLERS)
+			if (gBattleMoves[move].target == MOVE_TARGET_USER || gBattleMoves[move].target == MOVE_TARGET_ALL_BATTLERS)
 				StringCopy(gStringVar1, gText_Effect_Misc);
 
 			//Status Effects
@@ -6185,7 +6187,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			// Priority -------------------------------------------------------------------------------------------
 			PosX = PosX + 16;
 			PrintSmallTextOnWindow(windowId, gText_Priority, MOVE_EFFECT_TEXT_Y,   PosX, 0, 0);
-            if(gBattleMoves[move].priority < 0)
+            if (gBattleMoves[move].priority < 0)
             {
                 StringCopy(gStringVar1, gText_Stats_Minus);
 			    ConvertIntToDecimalStringN(gStringVar2, -gBattleMoves[move].priority, STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -6199,7 +6201,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			PosX = PosX + 16;
             PrintSmallTextOnWindow(windowId, gText_Contact, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
 
-            if(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+            if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
                 PrintSmallTextOnWindow(windowId, gText_Effect_ContactYes, MOVE_EFFECT_Y, PosX, 0, 0);
             else
                 PrintSmallTextOnWindow(windowId, gText_Effect_ContactNo, MOVE_EFFECT_Y, PosX, 0, 0);
@@ -6207,13 +6209,13 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
         case MOVE_INFO_EFFECT_2:
             // Target -------------------------------------------------------------------------------------------
 			PrintSmallTextOnWindow(windowId, gText_Target, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-			if(gBattleMoves[move].target == MOVE_TARGET_FOES_AND_ALLY)
+			if (gBattleMoves[move].target == MOVE_TARGET_FOES_AND_ALLY)
 				PrintSmallTextOnWindow(windowId, gText_Effect_FoeAndAlly, MOVE_EFFECT_Y,  PosX, 0, 0);
-			else if(gBattleMoves[move].target == MOVE_TARGET_BOTH)
+			else if (gBattleMoves[move].target == MOVE_TARGET_BOTH)
 				PrintSmallTextOnWindow(windowId, gText_Effect_BothFoes, MOVE_EFFECT_Y,  PosX, 0, 0);
-			else if(gBattleMoves[move].target == MOVE_TARGET_USER)
+			else if (gBattleMoves[move].target == MOVE_TARGET_USER)
 			    PrintSmallTextOnWindow(windowId, gText_Effect_Self, MOVE_EFFECT_Y,  PosX, 0, 0);
-			else if(gBattleMoves[move].target == MOVE_TARGET_ALL_BATTLERS)
+			else if (gBattleMoves[move].target == MOVE_TARGET_ALL_BATTLERS)
 				PrintSmallTextOnWindow(windowId, gText_Effect_Field, MOVE_EFFECT_Y,  PosX, 0, 0);
 			else
 				PrintSmallTextOnWindow(windowId, gText_Effect_OneFoe, MOVE_EFFECT_Y,  PosX, 0, 0);
@@ -6222,9 +6224,9 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			PosX = PosX + 16;
 			PrintSmallTextOnWindow(windowId, gText_Critical, MOVE_EFFECT_TEXT_Y,  PosX, 0, 0);
 
-			if(gBattleMoves[move].flags & FLAG_HIGH_CRIT)
+			if (gBattleMoves[move].flags & FLAG_HIGH_CRIT)
 				PrintSmallTextOnWindow(windowId, gText_Effect_Critical_High, MOVE_EFFECT_Y, PosX, 0, 0);
-            else if(gBattleMoves[move].alwaysCrit == TRUE)
+            else if (gBattleMoves[move].alwaysCrit == TRUE)
                 PrintSmallTextOnWindow(windowId, gText_Effect_Critical_Always, MOVE_EFFECT_Y, PosX, 0, 0);
 			else
 				PrintSmallTextOnWindow(windowId, gText_ThreeDashes, MOVE_EFFECT_Y, PosX, 0, 0);
@@ -6236,7 +6238,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			PrintSmallTextOnWindow(windowId, gText_Effect_Hit_Number, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
             
             // For Twineedle 
-            if(gBattleMoves[move].flags & FLAG_TWO_STRIKES)
+            if (gBattleMoves[move].flags & FLAG_TWO_STRIKES)
                 numHits = 2;
 
 			ConvertIntToDecimalStringN(gStringVar1, numHits, STR_CONV_MODE_LEFT_ALIGN, 2);
@@ -6245,7 +6247,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			// Sheer Force -------------------------------------------------------------------------------------------
 			PosX = PosX + 16;
 			PrintSmallTextOnWindow(windowId, gText_Effect_Sheer_Force_Boosted, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-            if((gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST))
+            if ((gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_ContactYes);
             else
 			    StringCopy(gStringVar1, gText_Effect_ContactNo);
@@ -6254,19 +6256,19 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
         case MOVE_INFO_BOOSTS:
 			// Boosted -------------------------------------------------------------------------------------------
 			PrintSmallTextOnWindow(windowId, gText_Effect_Boost_Type, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-            if((gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST))
+            if ((gBattleMoves[move].flags & FLAG_IRON_FIST_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Fist);
-            else if((gBattleMoves[move].flags & FLAG_STRIKER_BOOST))
+            else if ((gBattleMoves[move].flags & FLAG_STRIKER_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Kick);
-            else if((gBattleMoves[move].flags & FLAG_BONE_BASED))
+            else if ((gBattleMoves[move].flags & FLAG_BONE_BASED))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Bone);
-            else if((gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST))
+            else if ((gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Cannon);
-            else if((gBattleMoves[move].flags & FLAG_DANCE))
+            else if ((gBattleMoves[move].flags & FLAG_DANCE))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Dance);
-            else if((gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST))
+            else if ((gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Slash);
-            else if((gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
+            else if ((gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Bite);
             else if (gBattleMoves[move].airBased)
                 StringCopy(gStringVar1, gText_Effect_Boost_Type_Air);
@@ -6278,7 +6280,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
                 StringCopy(gStringVar1, gText_Effect_Boost_Type_Arrow);
             else if (gBattleMoves[move].throwingBased)
                 StringCopy(gStringVar1, gText_Effect_Boost_Type_Throw);
-            else if((gBattleMoves[move].flags & FLAG_RECKLESS_BOOST))
+            else if ((gBattleMoves[move].flags & FLAG_RECKLESS_BOOST))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Reckless);
             else
 			    StringCopy(gStringVar1, gText_ThreeDashes);
@@ -6287,13 +6289,13 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			// Based -------------------------------------------------------------------------------------------
 			PosX = PosX + 16;
 			PrintSmallTextOnWindow(windowId, gText_Effect_Based_Type, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-            if((gBattleMoves[move].flags & FLAG_WEATHER_BASED))
+            if ((gBattleMoves[move].flags & FLAG_WEATHER_BASED))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Weather);
-            else if((gBattleMoves[move].flags & FLAG_FIELD_BASED))
+            else if ((gBattleMoves[move].flags & FLAG_FIELD_BASED))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Field);
-            else if((gBattleMoves[move].flags & FLAG_BONE_BASED))
+            else if ((gBattleMoves[move].flags & FLAG_BONE_BASED))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Bone);
-            else if((gBattleMoves[move].flags & FLAG_SOUND))
+            else if ((gBattleMoves[move].flags & FLAG_SOUND))
 			    StringCopy(gStringVar1, gText_Effect_Boost_Type_Sound);
             else
 			    StringCopy(gStringVar1, gText_ThreeDashes);
@@ -6302,7 +6304,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			// Ignores Ability -------------------------------------------------------------------------------------------
 			PosX = PosX + 16;
 			PrintSmallTextOnWindow(windowId, gText_Effect_Ignores_Ability, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-            if((gBattleMoves[move].flags & FLAG_TARGET_ABILITY_IGNORED))
+            if ((gBattleMoves[move].flags & FLAG_TARGET_ABILITY_IGNORED))
 			    StringCopy(gStringVar1, gText_Effect_ContactYes);
             else
 			    StringCopy(gStringVar1, gText_Effect_ContactNo);
@@ -6311,7 +6313,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
 			// Ignores Stats -------------------------------------------------------------------------------------------
 			PosX = PosX + 16;
 			PrintSmallTextOnWindow(windowId, gText_Effect_Ignores_Stats, MOVE_EFFECT_TEXT_Y, PosX, 0, 0);
-            if((gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED))
+            if ((gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED))
 			    StringCopy(gStringVar1, gText_Effect_ContactYes);
             else
 			    StringCopy(gStringVar1, gText_Effect_ContactNo);
@@ -6320,7 +6322,7 @@ static void PrintMoveInfo(u16 move, u8 tabNum, bool8 moveReplaceMode)
     }
     ShowSplitIcon(gBattleMoves[move].split);
 
-    if(moveReplaceMode){
+    if (moveReplaceMode) {
         // Move Type Icon
         ShowMoveTypeIcon(move);
         UpdateTypeIcon(move);
@@ -6357,7 +6359,7 @@ static void RedrawMoveDetailsBase(bool8 moveReplaceMode)
         SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);
     }
 
-    if(sMonSummaryScreen->replaceMoveMode){
+    if (sMonSummaryScreen->replaceMoveMode) {
         int currentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
         LZDecompressWram(gSummaryScreenPageMoveDetailsReplaceTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
         SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
@@ -6372,10 +6374,10 @@ static void RedrawMoveDetailsBase(bool8 moveReplaceMode)
         PosY = 64 - 16;
 
         //Moves
-        for(i = 0; i < MAX_MON_MOVES; i++){
+        for (i = 0; i < MAX_MON_MOVES; i++) {
             currentMove = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
 
-            if(currentMove != MOVE_NONE)
+            if (currentMove != MOVE_NONE)
                 StringCopy(gStringVar1, gMoveNamesLong[currentMove]);
             else
                 StringCopy(gStringVar1, gText_ThreeDashes);
@@ -6389,7 +6391,7 @@ static void RedrawMoveDetailsBase(bool8 moveReplaceMode)
 
         PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
-    // else if(move != MOVE_NONE){
+    // else if (move != MOVE_NONE) {
     //     if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
     //     {
 	// 		PrintMoveInfo(move, gCurrentModifyIndex, moveReplaceMode);
@@ -6433,7 +6435,7 @@ static void RedrawMoveDetailsBase(bool8 moveReplaceMode)
 
     //     PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     // }
-    // else{
+    // else {
     //     if (sMonSummaryScreen->currPageIndex == PSS_PAGE_CONTEST_MOVES)
     //     {
     //         FillBgTilemapBufferRect(1, 109, 9, 8, 4, 4, 3);
@@ -6473,7 +6475,7 @@ static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
         SetSpriteInvisibility(SPRITE_ARR_ID_TYPE + 1, TRUE);
     }
 
-    if(sMonSummaryScreen->replaceMoveMode){
+    if (sMonSummaryScreen->replaceMoveMode) {
         u16 currentMove = sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->moveReplaceCurrentIdx];
         LZDecompressWram(gSummaryScreenPageMoveDetailsReplaceTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
         SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
@@ -6488,12 +6490,12 @@ static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
         PosY = 64 - 16;
 
         //Moves
-        for(i = 0; i < MAX_MON_MOVES; i++){
+        for (i = 0; i < MAX_MON_MOVES; i++) {
             currentMove = GetMonData(mon, MON_DATA_MOVE1 + i, 0);
-            if(i == sMonSummaryScreen->moveReplaceMoveNum)
+            if (i == sMonSummaryScreen->moveReplaceMoveNum)
                 BlitBitmapToWindow(PSS_LABEL_PANE_LEFT_MOVE, sMoveCursorDark, PosX - 12, PosY, 8, 16);
 
-            if(currentMove != MOVE_NONE)
+            if (currentMove != MOVE_NONE)
                 StringCopy(gStringVar1, gMoveNamesLong[currentMove]);
             else
                 StringCopy(gStringVar1, gText_ThreeDashes);
@@ -6503,7 +6505,7 @@ static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
         }
 
         //Cancel
-        if(sMonSummaryScreen->moveReplaceMoveNum == MAX_MON_MOVES)
+        if (sMonSummaryScreen->moveReplaceMoveNum == MAX_MON_MOVES)
             BlitBitmapToWindow(PSS_LABEL_PANE_LEFT_MOVE, sMoveCursorDark, PosX - 12, PosY, 8, 16);
 
         StringCopy(gStringVar1, gText_Cancel);
@@ -6511,11 +6513,11 @@ static void PrintMoveDetails(u16 move, bool8 moveReplaceMode)
 
         PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
-    else if(move != MOVE_NONE){
+    else if (move != MOVE_NONE) {
         PrintMoveInfo(move, gCurrentModifyIndex, moveReplaceMode);
         PutWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
-    else{
+    else {
         ClearWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
     }
 
@@ -6540,7 +6542,7 @@ static void PrintNewMoveDetailsOrCancelText(void)
     }
     else
     {
-        //if(sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
+        //if (sMonSummaryScreen->mode == SUMMARY_MODE_SELECT_MOVE)
         PrintTextOnWindow(PSS_LABEL_PANE_RIGHT, sText_Cancel, 64, 116, 0, 1);
     }
 }
@@ -7319,8 +7321,8 @@ static void PrintInfoBar(u8 pageIndex, bool8 detailsShown)
             StringCopy(gStringVar1, sText_TitleBattleMoves);
             if (detailsShown)
                 StringCopy(gStringVar2, sText_TitlePickSwitch);
-            else{
-                if(enablePokemonChanges() && !gMain.inBattle)
+            else {
+                if (enablePokemonChanges() && !gMain.inBattle)
                     StringCopy(gStringVar2, sText_TitlePageDetail);
                 else
                     StringCopy(gStringVar2, sText_TitlePageDetail_Boxmon);

@@ -496,7 +496,7 @@ static void PrintDigitChars(struct PokemonDebugMenu *data)
     bool8 hasGenderDifferences = SpeciesHasGenderDifference[species];
     bool8 isPlaceHolderMon = isSpeciesPlaceholderMon(species);
 
-    if(isPlaceHolderMon)
+    if (isPlaceHolderMon)
         species = PLACEHOLDER_SPECIES;
 
     for (i = 0; i < data->modifyArrows.maxDigits; i++)
@@ -515,7 +515,7 @@ static void PrintDigitChars(struct PokemonDebugMenu *data)
     }
 
     text[i++] = CHAR_SPACE;
-    if(isPlaceHolderMon)
+    if (isPlaceHolderMon)
         StringCopy(&text[i], gSpeciesNames[SPECIES_NONE]);
     else
         StringCopy(&text[i], gSpeciesNames[species]);
@@ -682,20 +682,20 @@ static bool32 TryMoveDigit(struct PokemonDebugModifyArrows *modArrows, bool32 mo
 
     newValue = CharDigitsToValue(charDigits, modArrows->maxDigits);
 
-    if(moveUp){
-        if(isSpeciesPlaceholderMon(newValue)){
-            do{
+    if (moveUp) {
+        if (isSpeciesPlaceholderMon(newValue)) {
+            do {
                 newValue++;
                 }
-                while(isSpeciesPlaceholderMon(newValue) && newValue <= modArrows->maxValue);
+                while (isSpeciesPlaceholderMon(newValue) && newValue <= modArrows->maxValue);
         }
     }
-    else{
-        if(isSpeciesPlaceholderMon(newValue)){
-            do{
+    else {
+        if (isSpeciesPlaceholderMon(newValue)) {
+            do {
                 newValue--;
             }
-            while(isSpeciesPlaceholderMon(newValue) && newValue != SPECIES_NONE);
+            while (isSpeciesPlaceholderMon(newValue) && newValue != SPECIES_NONE);
         }
     }
 
@@ -725,7 +725,7 @@ static void UpdateBattlerValue(struct PokemonDebugMenu *data)
 //Sprite functions
 static const u32 *GetMonSpritePalStructCustom(u16 species, bool8 isFemale, u8 isShiny)
 {
-    if(isSpeciesPlaceholderMon(species))
+    if (isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
     if (isShiny != SHINY_NONE)
@@ -749,7 +749,7 @@ static void BattleLoadOpponentMonSpriteGfxCustom(u16 species, bool8 isFemale, u8
     const void *lzPaletteData;
     u16 paletteOffset = 0x100 + battlerId * 16;;
 
-    if(isSpeciesPlaceholderMon(species))
+    if (isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
     if (isShiny != SHINY_NONE)
@@ -1433,7 +1433,7 @@ static void Handle_Input_Debug_Pokemon(u8 taskId)
     {
         data->isShiny = !data->isShiny;
 
-        if(data->isShiny)
+        if (data->isShiny)
             PlaySE(SE_SHINY);
 
         ReloadPokemonSprites(data);
@@ -1622,7 +1622,7 @@ static void ReloadPokemonSprites(struct PokemonDebugMenu *data)
     u8 front_x = sBattlerCoordsDebug[0][1].x;
     u8 front_y;
 
-    if(isSpeciesPlaceholderMon(species))
+    if (isSpeciesPlaceholderMon(species))
         species = PLACEHOLDER_SPECIES;
 
     DestroySprite(&gSprites[data->frontspriteId]);

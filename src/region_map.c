@@ -2024,7 +2024,7 @@ static void CB_HandleFlyMapInput(void)
     }
 }
 
-static void AutoClipFlyMap(void){
+static void AutoClipFlyMap(void) {
     u8 i          = 0;
     u8 closestMap = MAPSEC_NONE;
     u8 closestVal = 0xFF; 
@@ -2036,10 +2036,10 @@ static void AutoClipFlyMap(void){
     {
         delta = abs(gRegionMapEntries[i].y - y) + abs(gRegionMapEntries[i].x - x);
         // if the total stray is lower than the previous stray then it's closer
-        if (delta < closestVal){
+        if (delta < closestVal) {
             // clip only it's a flying map
             tempFlyT = GetMapsecType(i);
-            if (tempFlyT == MAPSECTYPE_CITY_CANFLY || tempFlyT == MAPSECTYPE_BATTLE_FRONTIER){
+            if (tempFlyT == MAPSECTYPE_CITY_CANFLY || tempFlyT == MAPSECTYPE_BATTLE_FRONTIER) {
                 closestVal = delta;
                 closestMap = i;
             }

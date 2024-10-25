@@ -867,7 +867,7 @@ void InitTilesetAnim_EliteFour(void)
 void InitTilesetAnim_MauvilleGym(void)
 {
     sSecondaryTilesetAnimCounter = 0;
-    sSecondaryTilesetAnimCounterMax = 125;
+    sSecondaryTilesetAnimCounterMax = -1;
     sSecondaryTilesetAnimCallback = TilesetAnim_MauvilleGym;
 }
 
@@ -1130,18 +1130,39 @@ static void QueueAnimTiles_Slateport_Balloons(u16 timer)
 
 static void TilesetAnim_MauvilleGym(u16 timer)
 {
-    if (timer % 2 == 0)
-        QueueAnimTiles_MauvilleGym_ElectricGates(timer >> 1);
-    if(timer % 5 == 0){
-        QueueAnimTiles_MauvilleGym_TrippingFloor(timer);
+    switch (timer % 125)
+    {
+    case 0:
+    case 4:
+    case 8:
+        QueueAnimTiles_MauvilleGym_ElectricGates(1);
+        break;
+    case 2:
+    case 6:
+        QueueAnimTiles_MauvilleGym_ElectricGates(0);
+        break;
+    
+    case 25:
+    case 29:
+    case 33:
+        QueueAnimTiles_MauvilleGym_ElectricGates(1);
+        break;
+    case 27:
+    case 31:
+        QueueAnimTiles_MauvilleGym_ElectricGates(0);
+        break;
     }
-    if(timer % 8 == 0){
-        QueueAnimTiles_MauvilleGym_GearsGround(timer % 64);
+
+    if (timer % 10 == 0) {
+        QueueAnimTiles_MauvilleGym_TrippingFloor(timer / 10);
+    }
+    if (timer % 8 == 0) {
+        QueueAnimTiles_MauvilleGym_GearsGround(timer / 8);
     }
 }
 
-static void TilesetAnim_FortreeGym(u16 timer){
-    if (timer % 5 == 0){
+static void TilesetAnim_FortreeGym(u16 timer) {
+    if (timer % 5 == 0) {
         QueueAnimTiles_FortreeGym_Turbine(timer);
     }
 }
@@ -1212,29 +1233,29 @@ static void QueueAnimTiles_EliteFour_GroundLights(u16 timer)
     AppendTilesetAnimToBuffer(gTilesetAnims_EliteFour_FloorLight[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 480)), 0x80);
 }
 
-static void QueueAnimTiles_MauvilleGym_ElectricGates(u16 timer)
+static void QueueAnimTiles_MauvilleGym_ElectricGates(u16 step)
 {
-    u16 i = timer % 2;
+    u16 i = step % ARRAY_COUNT(gTilesetAnims_MauvilleGym_ElectricGates);
     AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_ElectricGates[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 144)), 0x200);
 }
 
-static void QueueAnimTiles_MauvilleGym_TrippingFloor(u16 timer)
+static void QueueAnimTiles_MauvilleGym_TrippingFloor(u16 step)
 {
     
     // since QueueAnimTiles_MauvilleGym_TrippingFloor( timer % 25); it's understandly safe
-    u16 i = (timer % 25) / 5; 
+    u16 i = step % ARRAY_COUNT(gTilesetAnims_MauvilleGym_TrippingFloor); 
     // the 0x100 here is calculated by (widthpx * heightpx) / 2 of one animated frame (the png file 0 for example)
     // beware that your tiles must be sliced from top left to bottom right in the tileset
     AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_TrippingFloor[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 4)), 0x100);
 }
 
-static void QueueAnimTiles_MauvilleGym_GearsGround(u16 timer){
-    u16 i = timer / 8;
+static void QueueAnimTiles_MauvilleGym_GearsGround(u16 step) {
+    u16 i = step % ARRAY_COUNT(gTilesetAnims_MauvilleGym_GrearGround);
     AppendTilesetAnimToBuffer(gTilesetAnims_MauvilleGym_GrearGround[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 20)), 126);
 }
 
 
-static void QueueAnimTiles_FortreeGym_Turbine(u16 timer){
+static void QueueAnimTiles_FortreeGym_Turbine(u16 timer) {
     u16 i = (timer % 25) / 5;
     AppendTilesetAnimToBuffer(gTilesetAnims_FortreeGym_Turbine[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 64)), 512);
 }

@@ -169,7 +169,7 @@ static const u8 sAbilityRefrigerateDescription[] = _("Normal-type moves become I
 static const u8 sAbilitySweetVeilDescription[] = _("This Pokémon and its ally are\nimmune to sleep.");
 static const u8 sAbilityStanceChangeDescription[] = _("Turns into Blade or Shield form\ndepending on move used.");
 static const u8 sAbilityGaleWingsDescription[] = _("At full HP, gives +1 priority to\nthis Pokémon's Flying-type moves.");
-static const u8 sAbilityMegaLauncherDescription[] = _("Boosts Beam/Pump/Cannon/Shot/\nGun/Pulse, etc. moves by 1.5x.");
+static const u8 sAbilityMegaLauncherDescription[] = _("Boosts Beam/Pump/Cannon/Shot/\nGun/Pulse, etc. moves by 1.3x.");
 static const u8 sAbilityGrassPeltDescription[] = _("This Pokémon's Defense gets a\n1.5x boost in Grassy Terrain.");
 static const u8 sAbilitySymbiosisDescription[] = _("Passes own item to its ally if\nsaid ally consumes its item.");
 static const u8 sAbilityPixilateDescription[] = _("Normal-type moves become Fairy-\ntype moves and get a 1.1x boost.");
@@ -704,6 +704,7 @@ static const u8 sAbilityBladeDanceDescription[] = _("Triggers 50 BP Leaf Blade a
 static const u8 sAbilityTaekkyeonDescription[] = _("All attacks are dances.");
 static const u8 sAbilityApeShiftDescription[] = _("Anger Point + Heal status and\nalways crits with below 50% HP.");
 static const u8 sAbilityKnowYourPlaceDescription[] = _("Contact attacks make foes move\nlast for 5 turns.");
+static const u8 sAbilityDeepCutsDescription[] = _("Slashing moves have a 50%\nchance to inflict bleeding.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1443,6 +1444,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TAEKKYEON] = _("Taekkyeon"),
     [ABILITY_APE_SHIFT] = _("Ape Shift"),
     [ABILITY_KNOW_YOUR_PLACE] = _("Know Your Place"),
+    [ABILITY_DEEP_CUTS] = _("Deep Cuts"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2183,4 +2185,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TAEKKYEON] = sAbilityTaekkyeonDescription,
     [ABILITY_APE_SHIFT] = sAbilityApeShiftDescription,
     [ABILITY_KNOW_YOUR_PLACE] = sAbilityKnowYourPlaceDescription,
+    [ABILITY_DEEP_CUTS] = sAbilityDeepCutsDescription,
 };

@@ -510,11 +510,11 @@ static const struct WindowTemplate gBattleArenaWindowTemplates[] =
     }
 };
 
-void MoveIntoBattleBgWindow(u8 window){
+void MoveIntoBattleBgWindow(u8 window) {
     /*u8 bgNum      = B_WIN_DEFAULT_BG_1; //gStandardBattleWindowTemplates[window].bg;
     u8 tilemapTop = gStandardBattleWindowTemplates[window].tilemapTop;
 
-    switch(window){
+    switch (window) {
         case B_WIN_ACTION_PROMPT:
             ChangeBgX(bgNum, 0, 0);
         break;
@@ -523,7 +523,7 @@ void MoveIntoBattleBgWindow(u8 window){
         break;
     }*/
 
-    /*switch(tilemapTop){
+    /*switch (tilemapTop) {
         case BATTLE_WINDOW_DEFAULT_TOP_1 - 1:
         break;
         case BATTLE_WINDOW_DEFAULT_TOP_2 - 1:
@@ -886,7 +886,7 @@ void LoadBattleTextboxAndBackground(void)
     //Loads Tiles and Tilemap for the Battle Textbox
     bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
 
-    switch(getBattleInterfaceTheme()){
+    switch (getBattleInterfaceTheme()) {
         case THEME_DARK:
             LZDecompressVram(gTheme_Dark_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
             CopyToBgTilemapBuffer(BG_TEXTBOX, gTheme_Dark_BattleTextboxTilemap, 0, 0);
@@ -1281,7 +1281,7 @@ bool8 LoadChosenBattleElement(u8 caseId)
     switch (caseId)
     {
     case 0:
-        switch(getBattleInterfaceTheme()){
+        switch (getBattleInterfaceTheme()) {
             case THEME_DARK:
                 LZDecompressVram(gTheme_Dark_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));
             break;

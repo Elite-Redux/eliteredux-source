@@ -88,6 +88,7 @@ enum MiscMoveEffects
     MISC_EFFECT_DOUBLE_DAMAGE_VS_BLEEDING,
     MISC_EFFECT_50_PERCENT_PLUS_DAMAGE_VS_BLEEDING,
     MISC_EFFECT_TRANSMUTE,
+    MISC_EFFECT_DOUBLE_DAMAGE_IN_FOG,
 };
 
 // for Natural Gift and Fling
@@ -213,6 +214,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
 int HandleMiscAbilityMoveEffects(int battler, int opponent, int move);
 int HandleSwitchInAbility(int abilityNumber, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler);
+int ShouldApplyOnHitAffect(int applyTo);
 
 #define GET_ALL_BATTLER_ABILITIES(abilitiesArray, battler, battlerAtk) \
 GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk) \
@@ -321,8 +323,10 @@ void SetAbilityState(u8 battler, u16 ability, u32 value);
 union AbilityStates GetAbilityStateAs(u8 battler, u16 ability);
 void SetAbilityStateAs(u8 battler, u16 ability, union AbilityStates value);
 void IncrementAbilityState(u8 battler, u16 ability, u32 value);
+int GetHighestStatIdExcept(int battlerId, int includeStatStages, int exclude);
 u8 GetHighestStatId(u8 battlerId, u8 includeStatStages);
 u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages);
+bool8 CanMoveHaveExtraFlinchChance(u16 move);
 u8 GetHighestDefendingStatId(u8 battlerId, u8 includeStatStages);
 u8 TranslateStatId(u8 statId, u8 battlerId);
 bool32 IsAlly(u32 battlerAtk, u32 battlerDef);
@@ -356,6 +360,7 @@ int GetOncePerTurnAbilityCounter(int battler, int ability);
 void SetOncePerTurnAbilityCounter(int battler, int ability, int value);
 int HasRipenEffect(int battler);
 int IsDance(int attacker, int move);
+int HasAnyStatusOrAbility(int battler);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
@@ -376,6 +381,8 @@ bool32 CanBeConfused(u8 battlerId);
 bool32 CanBleed(u8 battlerId);
 int CanInfatuate(int battlerAtk, int battlerDef);
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag);
+int IsTerrainActive(int terrainFlag);
+int IsWeatherActive(int weather);
 u8 getMonotypeChampType(void);
 
 // Move checks

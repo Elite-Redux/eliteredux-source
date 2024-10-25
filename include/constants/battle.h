@@ -113,7 +113,7 @@
 #define STATUS1_BLEED            (1 << 13)
 #define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON | STATUS1_FROSTBITE | STATUS1_BLEED)
 
-#define BLEED_DAMAGE(hp) (hp * 6 / 100)
+#define BLEED_DAMAGE(hp) (hp / 16)
 
 // Volatile status ailments
 // These are removed after exiting the battle or switching out

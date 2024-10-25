@@ -3296,11 +3296,11 @@ void BufferMonNickname(void)
     bool8 nicknamed = isMonNicknamed(mon);
     u16 species = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPECIES, NULL);
     
-    if(nicknamed){
+    if (nicknamed) {
         GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_NICKNAME, gStringVar1);
         StringGetEnd10(gStringVar1);
     }
-    else{
+    else {
         StringCopy(gStringVar1, gSpeciesNames[species]);
         StringGetEnd12(gStringVar1);
     }
@@ -4047,7 +4047,7 @@ static void TranslateJapaneseEmeraldShows(TVShow *shows)
 
     for (curShow = shows; curShow < shows + LAST_TVSHOW_IDX; curShow++)
     {
-        switch(curShow->common.kind)
+        switch (curShow->common.kind)
         {
         case TVSHOW_FAN_CLUB_LETTER:
             curShow->fanclubLetter.language = GetStringLanguage(curShow->fanclubLetter.playerName);
@@ -4357,7 +4357,7 @@ static void DoTVShowBravoTrainerBattleTower(void)
     show = &gSaveBlock1Ptr->tvShows[gSpecialVar_0x8004];
     gSpecialVar_Result = FALSE;
     state = sTVShowState;
-    switch(state)
+    switch (state)
     {
     case 0:
         TVShowConvertInternationalString(gStringVar1, show->bravoTrainerTower.trainerName, show->bravoTrainerTower.language);
@@ -4454,7 +4454,7 @@ static void DoTVShowTodaysSmartShopper(void)
     show = &gSaveBlock1Ptr->tvShows[gSpecialVar_0x8004];
     gSpecialVar_Result = FALSE;
     state = sTVShowState;
-    switch(state)
+    switch (state)
     {
     case SMARTSHOPPER_STATE_INTRO:
         TVShowConvertInternationalString(gStringVar1, show->smartshopperShow.playerName, show->smartshopperShow.language);

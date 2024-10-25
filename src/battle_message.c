@@ -912,6 +912,7 @@ static const u8 sText_CaltropsFree[] = _("{B_ATK_NAME_WITH_PREFIX} blew away\nca
 static const u8 sText_ItemDestroyed[] = _("{B_ATK_NAME_WITH_PREFIX} destroyed\n{B_DEF_NAME_WITH_PREFIX}'s {B_LAST_ITEM}!");
 static const u8 sText_SwapWith[] = _("{B_ATK_NAME_WITH_PREFIX} swapped with\n{B_DEF_NAME_WITH_PREFIX}!");
 static const u8 sText_QuickGuard[] = _("{B_ATK_NAME_WITH_PREFIX} shields\ntheir party from priority!");
+static const u8 sText_BloodStainAnnounce[] = _("{B_ATK_NAME_WITH_PREFIX} is bleeding!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1070,6 +1071,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_Trapped[] = _("{B_DEF_NAME_WITH_PREFIX} is trapped!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1924,6 +1926,8 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ITEM_DESTROYED - 12] = sText_ItemDestroyed,
     [STRINGID_SWAPWITH - 12] = sText_SwapWith,
     [STRINGID_QUICKGUARD - 12] = sText_QuickGuard,
+    [STRINGID_BLOOD_STAIN_ANNOUNCE - 12] = sText_BloodStainAnnounce,
+    [STRINGID_TRAPPED - 12] = sText_Trapped,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2013,6 +2017,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_FUNERAL_PYRE] = STRINGID_FUNERAL_PYRE_ENTRY,
     [B_MSG_SWITCHIN_WHITE_SMOKE] = STRINGID_WHITE_SMOKE,
     [B_MSG_SWITCHIN_HOT_COALS] = STRINGID_HOT_COALS_SET,
+    [B_MSG_SWITCHIN_BLOOD_STAIN] = STRINGID_BLOOD_STAIN_ANNOUNCE,
 };
 
 const u16 gParadoxBoostSourceIds[] = 
@@ -3367,11 +3372,11 @@ static void GetBattlerNick(u32 battlerId, u8 *dst)
     if (illusionMon != NULL)
         mon = illusionMon;
 
-    if(isMonNicknamed(mon)){
+    if (isMonNicknamed(mon)) {
         GetMonData(mon, MON_DATA_NICKNAME, dst);
         StringGetEnd10(dst);
     }
-    else{
+    else {
         u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
         StringCopy(dst, gSpeciesNames[species]);
         StringGetEnd12(dst);
@@ -3651,23 +3656,23 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 toCpy = text;
                 break;
             case B_TXT_ACTIVE_NAME2: // active battlerId name with prefix, no illusion
-                if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER){
-                    if(isMonNicknamed(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]])){
+                if (GetBattlerSide(gActiveBattler) == B_SIDE_PLAYER) {
+                    if (isMonNicknamed(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]])) {
                         GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_NICKNAME, text);
                         StringGetEnd10(text);
                     }
-                    else{
+                    else {
                         u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES, NULL);
                         StringCopy(text, gSpeciesNames[species]);
                         StringGetEnd12(text);
                     }
                 }
-                else{
-                    if(isMonNicknamed(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]])){
+                else {
+                    if (isMonNicknamed(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]])) {
                         GetMonData(&gEnemyParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_NICKNAME, text);
                         StringGetEnd10(text);
                     }
-                    else{
+                    else {
                         u16 species = GetMonData(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], MON_DATA_SPECIES, NULL);
                         StringCopy(text, gSpeciesNames[species]);
                         StringGetEnd12(text);
@@ -4255,7 +4260,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
     else
     {
         //Overrides
-        switch(getBattleInterfaceTheme()){
+        switch (getBattleInterfaceTheme()) {
             case THEME_DARK:
                 FillWindowPixelBuffer(windowId, PIXEL_FILL(3));
             break;
@@ -4283,7 +4288,7 @@ void BattlePutTextOnWindow(const u8 *text, u8 windowId)
     printerTemplate.lineSpacing   = textInfo[windowId].lineSpacing;
     printerTemplate.unk           = 0;
     //Overrides
-    switch(getBattleInterfaceTheme()){
+    switch (getBattleInterfaceTheme()) {
         case THEME_DARK:
             printerTemplate.fgColor       = 10; // Font Color
             printerTemplate.bgColor       = 3;  // Background Color

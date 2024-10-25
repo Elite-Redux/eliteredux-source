@@ -168,15 +168,15 @@ static void SaveOptionsData()
 {
     gSaveBlock2Ptr->gameDifficulty          = sMenuDataPtr->temporal_settings[SETTING_DIFFICULTY];
     gSaveBlock2Ptr->levelCaps               = sMenuDataPtr->temporal_settings[SETTING_LEVEL_CAP];
-    if(sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] < 2){
+    if (sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] < 2) {
         gSaveBlock2Ptr->encounterRandomizedMode = sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE];
         gSaveBlock2Ptr->encounterRandomizedLegendaryMode = FALSE;
     }
-    else if(sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] == 2){
+    else if (sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] == 2) {
         gSaveBlock2Ptr->encounterRandomizedMode = TRUE;
         gSaveBlock2Ptr->encounterRandomizedLegendaryMode = TRUE;
     }
-    else{
+    else {
         gSaveBlock2Ptr->encounterRandomizedMode = FALSE;
         gSaveBlock2Ptr->encounterRandomizedLegendaryMode = TRUE;
     }
@@ -193,16 +193,16 @@ static void LoadOptionsData()
 {
     sMenuDataPtr->temporal_settings[SETTING_DIFFICULTY] = gSaveBlock2Ptr->gameDifficulty;
     sMenuDataPtr->temporal_settings[SETTING_LEVEL_CAP] = gSaveBlock2Ptr->levelCaps;
-    if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE && gSaveBlock2Ptr->encounterRandomizedMode == TRUE){
+    if (gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE && gSaveBlock2Ptr->encounterRandomizedMode == TRUE) {
         sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 1;
     }
-    else if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == TRUE && gSaveBlock2Ptr->encounterRandomizedMode == TRUE){
+    else if (gSaveBlock2Ptr->encounterRandomizedLegendaryMode == TRUE && gSaveBlock2Ptr->encounterRandomizedMode == TRUE) {
         sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 2;
     }
-    else if(gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE && gSaveBlock2Ptr->encounterRandomizedMode == FALSE){
+    else if (gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE && gSaveBlock2Ptr->encounterRandomizedMode == FALSE) {
         sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 0;
     }
-    else{
+    else {
         sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_MODE] = 3;
     }
     sMenuDataPtr->temporal_settings[SETTING_RANDOMIZER_INNATE_MODE]  = gSaveBlock2Ptr->innaterandomizedMode;
@@ -229,7 +229,7 @@ void Intro_Options_Menu_Init(MainCallback callback)
     sMenuDataPtr->currentOptionId = 0;
     sMenuDataPtr->currentFirstOption = 0;
 
-    for(i = 0; i < NUM_INTRO_OPTIONS; i++){
+    for (i = 0; i < NUM_INTRO_OPTIONS; i++) {
         sMenuDataPtr->temporal_settings[i] = 0; 
     }
 
@@ -418,46 +418,46 @@ static void Menu_InitWindows(void)
 }
 
 
-static void PressedDownButton(){
+static void PressedDownButton() {
     u8 halfScreen      = (NUM_OPTIONS_ON_SCREEN) / 2;    //When it starts scrolling the options
     u8 finalhalfScreen = NUM_INTRO_OPTIONS - halfScreen; //When it stops 5
 
-    if(sMenuDataPtr->currentOptionId < halfScreen){
+    if (sMenuDataPtr->currentOptionId < halfScreen) {
         //If you are below the option where it starts scrolling
         sMenuDataPtr->currentOptionId++;
     }
-	else if(sMenuDataPtr->currentOptionId >= (NUM_INTRO_OPTIONS - 1)){ 
+	else if (sMenuDataPtr->currentOptionId >= (NUM_INTRO_OPTIONS - 1)) { 
         //If you are in the last option go to the first one
 		sMenuDataPtr->currentOptionId    = 0;
 		sMenuDataPtr->currentFirstOption = 0;
     }
-    else if(sMenuDataPtr->currentOptionId >= (finalhalfScreen - 1)){
+    else if (sMenuDataPtr->currentOptionId >= (finalhalfScreen - 1)) {
         //If you are near the end of the options
         sMenuDataPtr->currentOptionId++;
     }
-	else{
+	else {
         //Start Scrolling
         sMenuDataPtr->currentOptionId++;
         sMenuDataPtr->currentFirstOption++;
     }
 }
 
-static void PressedUpButton(){
+static void PressedUpButton() {
     u8 halfScreen      = (NUM_OPTIONS_ON_SCREEN) / 2;    //When it starts scrolling the options
     u8 finalhalfScreen = NUM_INTRO_OPTIONS - halfScreen; //When it stops 5
 
-    if(sMenuDataPtr->currentOptionId > halfScreen &&            //You are after it starts scrolling
-       sMenuDataPtr->currentOptionId <= (finalhalfScreen - 1)){ //You are below it stops scrolling
+    if (sMenuDataPtr->currentOptionId > halfScreen &&            //You are after it starts scrolling
+       sMenuDataPtr->currentOptionId <= (finalhalfScreen - 1)) { //You are below it stops scrolling
         //Scrolls
         sMenuDataPtr->currentOptionId--;
         sMenuDataPtr->currentFirstOption--;
     }
-	else if(sMenuDataPtr->currentOptionId == 0){ 
+	else if (sMenuDataPtr->currentOptionId == 0) { 
         //If you are in the first option go to the last one
 		sMenuDataPtr->currentOptionId    = NUM_INTRO_OPTIONS - 1;
 		sMenuDataPtr->currentFirstOption = NUM_INTRO_OPTIONS - NUM_OPTIONS_ON_SCREEN;
     }
-    else{
+    else {
         sMenuDataPtr->currentOptionId--;
     }
 }
@@ -635,7 +635,7 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
 
     x = 3;
     y = 3;
-    for(i = 0; i < NUM_OPTIONS_ON_SCREEN; i++){
+    for (i = 0; i < NUM_OPTIONS_ON_SCREEN; i++) {
         //Title
         AddTextPrinterParameterized4(windowId, FONT_NORMAL, (x * 8) + x2, (y * 8), 0, 0, sMenuWindowFontColors[colorIdx], 0xFF,  Intro_Options[currentFirstOption + i].title);
         //Current Option
@@ -674,7 +674,7 @@ static void Task_MenuTurnOff(u8 taskId)
 
     if (!gPaletteFade.active)
     {
-        if(FlagGet(FLAG_SYS_DEBUG_MENU_OPENED))
+        if (FlagGet(FLAG_SYS_DEBUG_MENU_OPENED))
             SetMainCallback2(sMenuDataPtr->savedCallback);
         else
             DoNamingScreen(0, gSaveBlock2Ptr->playerName, gSaveBlock2Ptr->playerGender, 0, 0, sMenuDataPtr->savedCallback);
@@ -697,10 +697,10 @@ static void Task_MenuMain(u8 taskId)
     
     if (JOY_NEW(DPAD_LEFT))
     {
-        if(sMenuDataPtr->temporal_settings[sMenuDataPtr->currentOptionId] == 0){
+        if (sMenuDataPtr->temporal_settings[sMenuDataPtr->currentOptionId] == 0) {
             sMenuDataPtr->temporal_settings[sMenuDataPtr->currentOptionId] = Intro_Options[sMenuDataPtr->currentOptionId].numOptions - 1;
         }
-        else{
+        else {
             sMenuDataPtr->temporal_settings[sMenuDataPtr->currentOptionId]--;
         }
         PlaySE(SE_SELECT);
@@ -709,10 +709,10 @@ static void Task_MenuMain(u8 taskId)
 
     if (JOY_NEW(DPAD_RIGHT))
     {
-        if(sMenuDataPtr->temporal_settings[sMenuDataPtr->currentOptionId] == Intro_Options[sMenuDataPtr->currentOptionId].numOptions - 1){
+        if (sMenuDataPtr->temporal_settings[sMenuDataPtr->currentOptionId] == Intro_Options[sMenuDataPtr->currentOptionId].numOptions - 1) {
             sMenuDataPtr->temporal_settings[sMenuDataPtr->currentOptionId] = 0;
         }
-        else{
+        else {
             sMenuDataPtr->temporal_settings[sMenuDataPtr->currentOptionId]++;
         }
         PlaySE(SE_SELECT);

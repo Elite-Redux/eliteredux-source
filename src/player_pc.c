@@ -359,7 +359,7 @@ void NewGameInitPCItems(void)
 {
     u8 i = 0;
     ClearItemSlots(gSaveBlock1Ptr->pcItems, PC_ITEMS_COUNT);
-    for(; sNewGamePCItems[i].itemId != ITEM_NONE && GET_QUANTITY(i) &&
+    for (; sNewGamePCItems[i].itemId != ITEM_NONE && GET_QUANTITY(i) &&
         AddPCItem(sNewGamePCItems[i].itemId, GET_QUANTITY(i)) == TRUE; i++);
 }
 #undef GET_QUANTITY
@@ -972,7 +972,7 @@ void ItemStorage_RefreshListMenu(void)
     u16 i;
 
     // Copy item names for all entries but the last (which is Cancel)
-    for(i = 0; i < gPlayerPCItemPageInfo.count - 1; i++)
+    for (i = 0; i < gPlayerPCItemPageInfo.count - 1; i++)
     {
         CopyItemName_PlayerPC(&sItemStorageMenu->itemNames[i][0], gSaveBlock1Ptr->pcItems[i].itemId);
         sItemStorageMenu->listItems[i].name = &sItemStorageMenu->itemNames[i][0];
@@ -1150,7 +1150,7 @@ static const u8* ItemStorage_GetMessage(u16 itemId)
 {
     const u8 *string;
 
-    switch(itemId)
+    switch (itemId)
     {
     case MSG_GO_BACK_TO_PREV:
         string = gText_GoBackPrevMenu;

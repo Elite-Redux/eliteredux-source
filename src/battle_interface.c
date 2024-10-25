@@ -34,6 +34,7 @@
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "battle_events.h"
+#include "constants/abilities.h"
 
 enum
 {   // Corresponds to gHealthboxElementsGfxTable (and the tables after it) in graphics.c
@@ -2222,62 +2223,101 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
 
     nicknamed = isMonNicknamed(mon);
     
-    switch(species){
-        case SPECIES_ABOMASNOW_MEGA:
-        case SPECIES_ABSOL_MEGA:
-        case SPECIES_AERODACTYL_MEGA:
-        case SPECIES_AGGRON_MEGA:
-        case SPECIES_ALAKAZAM_MEGA:
-        case SPECIES_ALTARIA_MEGA:
-        case SPECIES_AMPHAROS_MEGA:
-        case SPECIES_AUDINO_MEGA:
-        case SPECIES_BANETTE_MEGA:
-        case SPECIES_BEEDRILL_MEGA:
-        case SPECIES_BLASTOISE_MEGA:
-        case SPECIES_BLAZIKEN_MEGA:
-        case SPECIES_CAMERUPT_MEGA:
+    switch (species) {
+        case SPECIES_VENUSAUR_MEGA:
+        case SPECIES_VENUSAUR_MEGA_X:
         case SPECIES_CHARIZARD_MEGA_X:
         case SPECIES_CHARIZARD_MEGA_Y:
-        case SPECIES_DIANCIE_MEGA:
-        case SPECIES_GALLADE_MEGA:
-        case SPECIES_GARCHOMP_MEGA:
-        case SPECIES_GARDEVOIR_MEGA:
+        case SPECIES_CHARIZARD_MEGA_Z:
+        case SPECIES_BLASTOISE_MEGA:
+        case SPECIES_BLASTOISE_MEGA_X:
+        case SPECIES_BUTTERFREE_MEGA:
+        case SPECIES_BEEDRILL_MEGA:
+        case SPECIES_PIDGEOT_MEGA:
+        case SPECIES_ARBOK_MEGA:
+        case SPECIES_PIKACHU_PARTNER_MEGA:
+        case SPECIES_WIGGLYTUFF_MEGA:
+        case SPECIES_MEOWTH_PARTNER_MEGA:
+        case SPECIES_ARCANINE_MEGA_REDUX:
+        case SPECIES_ALAKAZAM_MEGA:
+        case SPECIES_MACHAMP_MEGA:
+        case SPECIES_RAPIDASH_MEGA:
+        case SPECIES_SLOWBRO_MEGA:
+        case SPECIES_DEWGONG_MEGA:
         case SPECIES_GENGAR_MEGA:
-        case SPECIES_GLALIE_MEGA:
-        case SPECIES_GYARADOS_MEGA:
-        case SPECIES_HERACROSS_MEGA:
-        case SPECIES_HOUNDOOM_MEGA:
+        case SPECIES_GENGAR_MEGA_X:
+        case SPECIES_KINGLER_MEGA:
         case SPECIES_KANGASKHAN_MEGA:
-        case SPECIES_LATIAS_MEGA:
-        case SPECIES_LATIOS_MEGA:
-        case SPECIES_LOPUNNY_MEGA:
-        case SPECIES_LUCARIO_MEGA:
-        case SPECIES_MANECTRIC_MEGA:
-        case SPECIES_MAWILE_MEGA:
-        case SPECIES_MEDICHAM_MEGA:
-        case SPECIES_METAGROSS_MEGA:
+        case SPECIES_PINSIR_MEGA:
+        case SPECIES_GYARADOS_MEGA:
+        case SPECIES_GYARADOS_MEGA_Y:
+        case SPECIES_LAPRAS_MEGA:
+        case SPECIES_LAPRAS_MEGA_X:
+        case SPECIES_EEVEE_PARTNER_MEGA:
+        case SPECIES_AERODACTYL_MEGA:
         case SPECIES_MEWTWO_MEGA_X:
         case SPECIES_MEWTWO_MEGA_Y:
-        case SPECIES_PIDGEOT_MEGA:
-        case SPECIES_PINSIR_MEGA:
-        case SPECIES_SABLEYE_MEGA:
-        case SPECIES_SALAMENCE_MEGA:
-        case SPECIES_SCEPTILE_MEGA:
-        case SPECIES_SCIZOR_MEGA:
-        case SPECIES_SHARPEDO_MEGA:
-        case SPECIES_SLOWBRO_MEGA:
+        case SPECIES_AMPHAROS_MEGA:
         case SPECIES_STEELIX_MEGA:
-        case SPECIES_SWAMPERT_MEGA:
-        case SPECIES_TYRANITAR_MEGA:
-        case SPECIES_VENUSAUR_MEGA:
-        case SPECIES_MILOTIC_MEGA:
-        case SPECIES_FLYGON_MEGA:
-        case SPECIES_BUTTERFREE_MEGA:
-        case SPECIES_LAPRAS_MEGA:
-        case SPECIES_MACHAMP_MEGA:
-        case SPECIES_KINGLER_MEGA:
+        case SPECIES_SCIZOR_MEGA:
+        case SPECIES_HERACROSS_MEGA:
+        case SPECIES_URSALUNA_MEGA:
+        case SPECIES_HOUNDOOM_MEGA:
         case SPECIES_KINGDRA_MEGA:
-        case SPECIES_DEWGONG_MEGA:
+        case SPECIES_KINGDRA_MEGA_Y:
+        case SPECIES_TYRANITAR_MEGA:
+        case SPECIES_SCEPTILE_MEGA:
+        case SPECIES_BLAZIKEN_MEGA:
+        case SPECIES_SWAMPERT_MEGA:
+        case SPECIES_SABLEYE_MEGA:
+        case SPECIES_MILOTIC_MEGA:
+        case SPECIES_SHARPEDO_MEGA:
+        case SPECIES_FLYGON_MEGA:
+        case SPECIES_MANECTRIC_MEGA:
+        case SPECIES_CAMERUPT_MEGA:
+        case SPECIES_GLALIE_MEGA:
+        case SPECIES_MAWILE_MEGA:
+        case SPECIES_MEDICHAM_MEGA:
+        case SPECIES_ALTARIA_MEGA:
+        case SPECIES_ABSOL_MEGA:
+        case SPECIES_BANETTE_MEGA:
+        case SPECIES_AGGRON_MEGA:
+        case SPECIES_GARDEVOIR_MEGA:
+        case SPECIES_SALAMENCE_MEGA:
+        case SPECIES_METAGROSS_MEGA:
+        case SPECIES_LATIAS_MEGA:
+        case SPECIES_LATIOS_MEGA:
+        case SPECIES_RAYQUAZA_MEGA:
+        case SPECIES_LOPUNNY_MEGA:
+        case SPECIES_GARCHOMP_MEGA:
+        case SPECIES_LUCARIO_MEGA:
+        case SPECIES_LUCARIO_MEGA_Y:
+        case SPECIES_ABOMASNOW_MEGA:
+        case SPECIES_GALLADE_MEGA:
+        case SPECIES_AUDINO_MEGA:
+        case SPECIES_GARBODOR_MEGA:
+        case SPECIES_DIANCIE_MEGA:
+        case SPECIES_GOLISOPOD_MEGA:
+        case SPECIES_MELMETAL_MEGA:
+        case SPECIES_RILLABOOM_MEGA:
+        case SPECIES_CINDERACE_MEGA:
+        case SPECIES_INTELEON_MEGA:
+        case SPECIES_CORVIKNIGHT_MEGA:
+        case SPECIES_ORBEETLE_MEGA:
+        case SPECIES_DREDNAW_MEGA:
+        case SPECIES_COALOSSAL_MEGA:
+        case SPECIES_SANDACONDA_MEGA:
+        case SPECIES_TOXTRICITY_MEGA:
+        case SPECIES_CENTISKORCH_MEGA:
+        case SPECIES_HATTERENE_MEGA:
+        case SPECIES_GRIMMSNARL_MEGA:
+        case SPECIES_ALCREMIE_MEGA:
+        case SPECIES_COPPERAJAH_MEGA:
+        case SPECIES_ETERNATUS_ETERNAMAX:
+        case SPECIES_URSHIFU_MEGA:
+        case SPECIES_URSHIFU_RAPID_STRIKE_STYLE_MEGA:
+        case SPECIES_RAPIDASH_MEGA_GALARIAN:
+        case SPECIES_NECROZMA_ULTRA:
         case SPECIES_HITMONCHAN_MEGA:
         case SPECIES_HITMONLEE_MEGA:
         case SPECIES_HITMONTOP_MEGA:
@@ -2295,13 +2335,10 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_DRAGONITE_MEGA:
         case SPECIES_BRELOOM_MEGA:
         case SPECIES_SLAKING_MEGA:
-        case SPECIES_RAYQUAZA_MEGA:
         case SPECIES_FERALIGATR_MEGA_X:
         case SPECIES_FERALIGATR_MEGA_Y:
         case SPECIES_GRANBULL_MEGA:
-        case SPECIES_GYARADOS_MEGA_Y:
         case SPECIES_HAXORUS_MEGA:
-        case SPECIES_KINGDRA_MEGA_Y:
         case SPECIES_LUXRAY_MEGA:
         case SPECIES_NIDOKING_MEGA:
         case SPECIES_NIDOQUEEN_MEGA:
@@ -2313,41 +2350,94 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_SHEDINJA_MEGA:
         case SPECIES_SWALOT_MEGA:
         case SPECIES_LANTURN_MEGA:
-        case SPECIES_LAPRAS_MEGA_X:
         case SPECIES_SLOWKING_MEGA:
         case SPECIES_RIBOMBEE_MEGA:
+        case SPECIES_TINKATON_MEGA:
+        case SPECIES_AEGISLASH_REDUX_MEGA:
+        case SPECIES_ALAKAZAM_MEGA_REDUX:
+        case SPECIES_BEEDRILL_MEGA_REDUX:
+        case SPECIES_MACHAMP_MEGA_REDUX:
+        case SPECIES_SKARMORY_MEGA_REDUX:
+        case SPECIES_REUNICLUS_REDUX_MEGA:
+        case SPECIES_GARCHOMP_MEGA_REDUX:
+        case SPECIES_HYDREIGON_REDUX_MEGA:
+        case SPECIES_KINGAMBIT_REDUX_MEGA:
+        case SPECIES_MAWILE_MEGA_REDUX:
+        case SPECIES_SABLEYE_MEGA_REDUX:
+        case SPECIES_HOUNDOOM_MEGA_REDUX:
+        case SPECIES_FROSLASS_MEGA:
+        case SPECIES_SCRAFTY_MEGA:
+        case SPECIES_TYRANITAR_MEGA_REDUX:
+        case SPECIES_TORTERRA_REDUX_MEGA:
+        case SPECIES_INFERNAPE_REDUX_MEGA:
+        case SPECIES_EMPOLEON_REDUX_MEGA:
+        case SPECIES_TSAREENA_REDUX_MEGA:
+        case SPECIES_TOXTRICITY_REDUX_MEGA:
+        case SPECIES_TOXTRICITY_REDUX_FUZZ_MEGA:
+        case SPECIES_FLYGON_REDUX_MEGA:
+        case SPECIES_CLEFABLE_REDUX_MEGA:
+        case SPECIES_GLALIE_REDUX_MEGA:
+        case SPECIES_FROSLASS_REDUX_MEGA:
+        case SPECIES_GYARADEATH_MEGA_X:
+        case SPECIES_GYARADEATH_MEGA_Y:
+        case SPECIES_CORMOTH_MEGA:
+        case SPECIES_POPCORM_MEGA:
+        case SPECIES_AMPHYBUZZ_MEGA:
+        case SPECIES_TERAPAGOS_STELLAR:
+        case SPECIES_ORICORIO_MEGA:
+        case SPECIES_CHIEN_PAO_MEGA:
+        case SPECIES_DRACOVISH_MEGA:
+        case SPECIES_RIBOMBEE_REDUX_MEGA:
+        case SPECIES_WEAVILE_REDUX_MEGA:
+        case SPECIES_SNORLAX_MEGA:
+        case SPECIES_MAWILE_REDUX_B_MEGA:
+        case SPECIES_HITMONCHAN_PARTNER_MEGA:
+        case SPECIES_HITMONCHAN_PARTNER_MEGA_B:
+        case SPECIES_HITMONCHAN_PARTNER_MEGA_C:
+        case SPECIES_AMPHAROS_PARTNER_MEGA:
+        case SPECIES_AMPHAROS_PARTNER_MEGA_B:
+        case SPECIES_AMPHAROS_PARTNER_MEGA_C:
+        case SPECIES_KANGASKHAN_PARTNER_MEGA:
+        case SPECIES_KANGASKHAN_PARTNER_MEGA_B:
+        case SPECIES_KANGASKHAN_PARTNER_MEGA_C:
+        case SPECIES_DRAGONITE_PARTNER_MEGA:
+        case SPECIES_DRAGONITE_PARTNER_MEGA_B:
+        case SPECIES_DRAGONITE_PARTNER_MEGA_C:
+        case SPECIES_KINGDRA_PARTNER_MEGA:
+        case SPECIES_KINGDRA_PARTNER_MEGA_B:
+        case SPECIES_KINGDRA_PARTNER_MEGA_C:
             isMega = TRUE;
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_MegaSymbolBefore);
         break;
         case SPECIES_GROUDON_PRIMAL:
             isPrimal = TRUE;
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_OmegaSymbolBefore);
         case SPECIES_KYOGRE_PRIMAL:
             isPrimal = TRUE;
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_AlphaSymbolBefore);
         case SPECIES_CASCOON_PRIMAL:
             isPrimal = TRUE;
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_CascoonSymbolBefore);
         break;
         default:
-            if(DrawMegaSymbolBeforeName)
+            if (DrawMegaSymbolBeforeName)
             StringCopy(gDisplayedStringBattle, gText_HighlightDarkGray);
         break;
     }
 
-    if(!DrawMegaSymbolBeforeName)
+    if (!DrawMegaSymbolBeforeName)
         StringCopy(gDisplayedStringBattle, gText_HighlightDarkGray);
     
-    if(nicknamed){
+    if (nicknamed) {
         GetMonData(mon, MON_DATA_NICKNAME, nickname);
         StringGetEnd10(nickname);
         ptr = StringAppend(gDisplayedStringBattle, nickname);
     }
-    else{
+    else {
         StringCopy(nickname, gSpeciesNames[species]);
         StringGetEnd12(nickname);
         ptr = StringAppend(gDisplayedStringBattle, nickname);
@@ -2371,11 +2461,11 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
             break;
     }
 
-    if(isMega && !DrawMegaSymbolBeforeName){
+    if (isMega && !DrawMegaSymbolBeforeName) {
         ptr = StringAppend(ptr, gText_MegaSymbol);
     }
-    else if(isPrimal && !DrawMegaSymbolBeforeName){
-        switch(species){
+    else if (isPrimal && !DrawMegaSymbolBeforeName) {
+        switch (species) {
             case SPECIES_GROUDON_PRIMAL:
                 ptr = StringAppend(ptr, gText_OmegaSymbol);
             break;
@@ -2462,6 +2552,14 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     {
         status = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerId]], MON_DATA_STATUS);
         tileNumAdder = 0x11;
+    }
+
+    if (!(status & STATUS1_ANY))
+    {
+        if (BattlerHasAbility(battlerId, battlerId, ABILITY_COMATOSE))
+            status = STATUS1_SLEEP;
+        else if (IsBloodStainAffected(battlerId))
+            status = STATUS1_BLEED;
     }
 
     if (status & STATUS1_SLEEP)
@@ -3399,21 +3497,8 @@ void CreateAbilityPopUp(u8 battlerId, u32 ability, bool32 isDoubleBattle)
         return;
     if (gBattleScripting.abilityPopupOverwrite != 0)
         ability = gBattleScripting.abilityPopupOverwrite;
-    /*else if (newAbility != 0){
-        //if(FlagGet(FLAG_SYS_MGBA_PRINT)){
-            #ifdef DEBUG_BUILD
-            MgbaOpen();
-            MgbaPrintf(MGBA_LOG_WARN, "CreateAbilityPopUp abilityoverwrite[%d] = %d", size, newAbility);
-            MgbaClose();
-            #endif
-        //}
 
-        ability = newAbility;   
-        gBattleResources->battleScriptsStack->abilityoverwrite[size] = 0;
-        gBattleResources->battleScriptsStack->abilityOverwriteNum--;
-    } */
-
-    if(gBattleScripting.battlerPopupOverwrite != MAX_BATTLERS_COUNT){
+    if (gBattleScripting.battlerPopupOverwrite != MAX_BATTLERS_COUNT) {
         battlerId = gBattleScripting.battlerPopupOverwrite;
         gBattleScripting.battlerPopupOverwrite = MAX_BATTLERS_COUNT;
     }
@@ -3711,7 +3796,7 @@ void TryToAddMoveInfoWindow(void)
 {
     /*u8 x2 = 32;
 
-    if(IsDoubleBattle())
+    if (IsDoubleBattle())
         x2 = 24;
 
     // window
@@ -3740,10 +3825,10 @@ void TryToAddEnemyInfoWindow(void)
 {
     /*u8 x2 = 32;
 
-    if((gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+    if ((gBattleTypeFlags & BATTLE_TYPE_TRAINER))
         return;
 
-    if(IsDoubleBattle())
+    if (IsDoubleBattle())
         x2 = 24;
 
     // window
@@ -4002,7 +4087,7 @@ void CreateExtraSkillPopUp() // parameter unused for now
 {
     const s16 (*coords)[2];
     u8 spriteId1, spriteId2, battlerPosition, taskId;
-    if (!gBattleStruct->activeExtraskillPopUps){
+    if (!gBattleStruct->activeExtraskillPopUps) {
         LoadSpriteSheet(&sSpriteSheet_ExtraSkillPopUp);
         LoadSpritePalette(&sSpritePalette_ExtraskillPopUp);
     }

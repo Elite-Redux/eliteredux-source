@@ -844,34 +844,34 @@ static const int mossDeepGymReworkFollowArrowTable[5][9] = {
     },
 };
 
-static void MossDeepGymReworkFollowArrow_DrawTile(s16 x, s16 y, s16 ix, s16 jy){
+static void MossDeepGymReworkFollowArrow_DrawTile(s16 x, s16 y, s16 ix, s16 jy) {
     s16 xDelta, yDelta;
     u16 tile;
     u8  tileColor, tileAngle;
     xDelta = ix - x;
     yDelta = jy - y;
-    if (xDelta == 0 && yDelta == 0){
+    if (xDelta == 0 && yDelta == 0) {
         tileAngle = 4;
-    } else if (xDelta == 0){
-        if (yDelta > 0){
+    } else if (xDelta == 0) {
+        if (yDelta > 0) {
             tileAngle = 1;
         } else {
             tileAngle = 7;
         }
-    } else if (yDelta == 0){
-        if (xDelta < 1){
+    } else if (yDelta == 0) {
+        if (xDelta < 1) {
             tileAngle = 5;
         } else {
             tileAngle = 3;
         }
-    } else if (yDelta < 0){
-        if (xDelta < 0){
+    } else if (yDelta < 0) {
+        if (xDelta < 0) {
             tileAngle = 8;
         } else {
             tileAngle = 6;
         }
     } else {
-        if (xDelta < 0){
+        if (xDelta < 0) {
             tileAngle = 2;
         } else {
             tileAngle = 0;
@@ -883,7 +883,7 @@ static void MossDeepGymReworkFollowArrow_DrawTile(s16 x, s16 y, s16 ix, s16 jy){
 
 }
 
-static void Task_MossDeepGymReworkFollowArrow(u8 taskId){
+static void Task_MossDeepGymReworkFollowArrow(u8 taskId) {
     s16 x, y, x0, y0, x1, y1, ix, jy;
     s16 *data = gTasks[taskId].data;
     
@@ -908,14 +908,14 @@ static void Task_MossDeepGymReworkFollowArrow(u8 taskId){
     x1 = min(MOSSDEEPGYMREWORKGROUND_X1, x + MOSSDEEPGYMREWORKGROUND_RANGE);
     y1 = min(MOSSDEEPGYMREWORKGROUND_Y1, y + MOSSDEEPGYMREWORKGROUND_RANGE);
     //loop and replace the tiles to point to the player
-    for (ix = x0; ix <= x1; ix++){
-        for(jy = y0; jy <= y1; jy++){
+    for (ix = x0; ix <= x1; ix++) {
+        for (jy = y0; jy <= y1; jy++) {
             MossDeepGymReworkFollowArrow_DrawTile(x, y, ix, jy);
         }
     }
 }
 
-static void Task_VictoryRoadPerStepCallback(u8 taskId){
+static void Task_VictoryRoadPerStepCallback(u8 taskId) {
     s16 x, y;
     s16 *data = gTasks[taskId].data;
     
@@ -934,11 +934,11 @@ static void Task_VictoryRoadPerStepCallback(u8 taskId){
         return; // box of the shortcut
     /*if (x >= 17 && x <=37 &&(y == 40 || y == 41))
         return; // box of the bridge*/
-    if (!data[3]){
+    if (!data[3]) {
         data[3] = max((gSaveBlock2Ptr->playerTrainerId[0] & 32) + y - x, 4);
     }
     data[3] -= 1;
-    if (!data[3]){
+    if (!data[3]) {
         // hardcoded the Hiker object event id 19
         TrySpawnObjectEvent(19, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
         TryMoveObjectEventToMapCoords(19, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->pos.x, gSaveBlock1Ptr->pos.y - 5);

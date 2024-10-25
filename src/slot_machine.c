@@ -3235,7 +3235,7 @@ static void ReelTime_PikachuReact(struct Task *task)
         DestroyReelTimeBoltSprites();
         DestroyReelTimePikachuAuraSprites();
         task->tState++;
-        if(sSlotMachine->reelTimeDraw == 0)
+        if (sSlotMachine->reelTimeDraw == 0)
         {
             task->data[4] = 0xa0;
             StartSpriteAnimIfDifferent(&gSprites[sSlotMachine->reelTimePikachuSpriteId], 5);

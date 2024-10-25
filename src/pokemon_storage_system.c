@@ -1626,7 +1626,7 @@ static void Task_PCMainMenu(u8 taskId)
         break;
     case STATE_HANDLE_INPUT:
         task->tInput = Menu_ProcessInput();
-        switch(task->tInput)
+        switch (task->tInput)
         {
         case MENU_NOTHING_CHOSEN:
             task->tNextOption = task->tSelectedOption;
@@ -1916,7 +1916,7 @@ static void ChooseBoxMenu_CreateSprites(u8 curBox)
     struct OamData oamData = {};
     oamData.size = SPRITE_SIZE(64x64);
     oamData.paletteNum = 1;
-    template = (struct SpriteTemplate){
+    template = (struct SpriteTemplate) {
         0, 0, &oamData, gDummySpriteAnimTable, NULL, gDummySpriteAffineAnimTable, SpriteCallbackDummy
     };
 
@@ -4446,10 +4446,10 @@ static void Task_EvolveMon(u8 taskId)
             else
                 BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][pos], &pokemon);
 
-            for(i = 0; i < MAX_LEVEL_UP_OPTIONS; i++){
+            for (i = 0; i < MAX_LEVEL_UP_OPTIONS; i++) {
                 targetSpecies = GetEvolutionForMon(&pokemon, i);
-                if(targetSpecies != SPECIES_NONE){
-                    if(numEvo == Menu_ProcessInputNoWrapClearOnChoose())
+                if (targetSpecies != SPECIES_NONE) {
+                    if (numEvo == Menu_ProcessInputNoWrapClearOnChoose())
                         targetNumEvo = i;
                     numEvo++;
                 }
@@ -4457,17 +4457,13 @@ static void Task_EvolveMon(u8 taskId)
 
             targetSpecies = GetEvolutionForMon(&pokemon, targetNumEvo);
 
-            /*MgbaOpen();
-            MgbaPrintf(MGBA_LOG_WARN, "GetEvolutionForMon: %d targetSpecies: %d", targetNumEvo, targetSpecies);
-            MgbaClose();*/
-
-            if (sInPartyMenu){
+            if (sInPartyMenu) {
                 SetMonData(&gPlayerParty[pos], MON_DATA_SPECIES, &targetSpecies);
                 SetMonData(&gPlayerParty[pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
                 CalculateMonStats(&gPlayerParty[pos]);
                 UpdateSpeciesSpritePSS_Mon(&gPlayerParty[pos]);
             }
-            else{
+            else {
                 SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_SPECIES, &targetSpecies);
                 SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_NICKNAME, gSpeciesNames[targetSpecies]);
                 UpdateSpeciesSpritePSS(&gPokemonStoragePtr->boxes[boxId][pos]);
@@ -4512,22 +4508,22 @@ static void Task_LevelUpMon(u8 taskId)
         case  3:
         case  4:
         case  5:
-            if(Menu_ProcessInputNoWrapClearOnChoose() != 0)
+            if (Menu_ProcessInputNoWrapClearOnChoose() != 0)
                 newLevel = sStorage->displayMonLevel + Menu_ProcessInputNoWrapClearOnChoose();
             else
                 newLevel = GetLevelCap(); // Level Cap
 
-            if(newLevel > 100)
+            if (newLevel > 100)
                 newLevel = 100;
 
             experience = gExperienceTables[gBaseStats[sStorage->displayMonSpecies].growthRate][newLevel];
 
-            if (sInPartyMenu){
+            if (sInPartyMenu) {
                 SetMonData(&gPlayerParty[pos], MON_DATA_EXP,   &experience);
                 SetMonData(&gPlayerParty[pos], MON_DATA_LEVEL, &newLevel);
                 CalculateMonStats(&gPlayerParty[pos]);
             }
-            else{
+            else {
                 SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_EXP, &experience);
                 SetBoxMonData(&gPokemonStoragePtr->boxes[boxId][pos], MON_DATA_LEVEL, &newLevel);
             }
@@ -4557,22 +4553,22 @@ void CreateLevelUpMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 
     windowId = setYesNoWindowId(AddWindow(window));
     DrawStdFrameWithCustomTileAndPalette(windowId, TRUE, baseTileNum, paletteNum);
 
-    if(levelcap >= 100) //MAX_LEVEL
+    if (levelcap >= 100) //MAX_LEVEL
         levelcap = 100;
 
     numlevels = levelcap - monlevel;
 
-    if(numlevels >= MAX_LEVEL_UP_OPTIONS)
+    if (numlevels >= MAX_LEVEL_UP_OPTIONS)
         numlevels = MAX_LEVEL_UP_OPTIONS;
 
     nextlevel = monlevel;
 
-    for(i = 0; i < numlevels; i++)
+    for (i = 0; i < numlevels; i++)
     {
-        if(i == 0){
+        if (i == 0) {
             StringCopy(gStringVar1, sText_levelCap);
         }
-        else{
+        else {
             nextlevel++;
             ConvertIntToDecimalStringN(gStringVar1, nextlevel, STR_CONV_MODE_RIGHT_ALIGN, 3);
         }
@@ -4605,10 +4601,10 @@ void CreateEvolveMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 p
     else
         BoxMonToMon(&gPokemonStoragePtr->boxes[boxId][pos], &pokemon);
 
-    for(i = 0; i < MAX_LEVEL_UP_OPTIONS; i++)
+    for (i = 0; i < MAX_LEVEL_UP_OPTIONS; i++)
     {
         targetSpecies = GetEvolutionForMon(&pokemon, i);
-        if(targetSpecies != SPECIES_NONE){
+        if (targetSpecies != SPECIES_NONE) {
             AddTextPrinterParameterized(windowId, FONT_NORMAL, SaveSpeciesWithSurname(targetSpecies), 8, (numEvolutions * 16) + 1, TEXT_SPEED_FF, NULL);
             numEvolutions++;
         }
@@ -5048,7 +5044,7 @@ static void CreatePartyMonsSprites(bool8 visible)
     count = 1;
     for (i = 1; i < PARTY_SIZE; i++)
     {
-        if(CreatePartyMonSprite(i))
+        if (CreatePartyMonSprite(i))
             count++;
     }
 
@@ -7190,7 +7186,7 @@ void SetArceusFormPSS(struct BoxPokemon *boxMon)
         SetBoxMonData(boxMon, MON_DATA_SPECIES, &forme);
         sStorage->displayMonSpecies = forme;
     }
-    else if(GET_BASE_SPECIES_ID(species) == SPECIES_SILVALLY && (ability == ABILITY_RKS_SYSTEM || BoxMonHasInnate(boxMon, ABILITY_RKS_SYSTEM, FALSE)))
+    else if (GET_BASE_SPECIES_ID(species) == SPECIES_SILVALLY && (ability == ABILITY_RKS_SYSTEM || BoxMonHasInnate(boxMon, ABILITY_RKS_SYSTEM, FALSE)))
     {
         forme = GetSilvallyFormPSS(boxMon);
         SetBoxMonData(boxMon, MON_DATA_SPECIES, &forme);
@@ -7327,11 +7323,11 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
                 GET_BASE_SPECIES_ID(sStorage->displayMonSpecies) == SPECIES_SILVALLY)
                 SetArceusFormPSS(pokemon);
 
-            if(isMonNicknamed(mon)){
+            if (isMonNicknamed(mon)) {
                 GetMonData(mon, MON_DATA_NICKNAME, sStorage->displayMonName);
                 StringGetEnd10(sStorage->displayMonName);
             }
-            else{
+            else {
                 StringCopy(sStorage->displayMonName, gSpeciesNames[sStorage->displayMonSpecies]);
                 StringGetEnd12(sStorage->displayMonName);
             }
@@ -7362,11 +7358,11 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
                 GET_BASE_SPECIES_ID(sStorage->displayMonSpecies) == SPECIES_SILVALLY)
                 SetArceusFormPSS(pokemon);
 
-            if(isBoxMonNicknamed(boxMon)){
+            if (isBoxMonNicknamed(boxMon)) {
                 GetBoxMonData(boxMon, MON_DATA_NICKNAME, sStorage->displayMonName);
                 StringGetEnd10(sStorage->displayMonName);
             }
-            else{
+            else {
                 StringCopy(sStorage->displayMonName, gSpeciesNames[sStorage->displayMonSpecies]);
                 StringGetEnd12(sStorage->displayMonName);
             }

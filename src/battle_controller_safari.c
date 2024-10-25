@@ -217,7 +217,7 @@ static void HandleInputChooseAction(void)
     else if (JOY_NEW(DPAD_RIGHT))
     {
         PlaySE(SE_SELECT);
-        switch(gActionSelectionCursor[gActiveBattler]){
+        switch (gActionSelectionCursor[gActiveBattler]) {
             case BATTLE_ACTION_SAFARI_CATCH:
                 gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_POKEBLOCK;
             break;
@@ -225,11 +225,11 @@ static void HandleInputChooseAction(void)
                 gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_RUN;
             break;
             case BATTLE_ACTION_SAFARI_POKEBLOCK:
-                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                if (ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                     gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_CATCH;
             break;
             case BATTLE_ACTION_SAFARI_RUN:
-                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                if (ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                     gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_GO_NEAR;
             break;
         }
@@ -238,13 +238,13 @@ static void HandleInputChooseAction(void)
     else if (JOY_NEW(DPAD_LEFT))
     {
         PlaySE(SE_SELECT);
-        switch(gActionSelectionCursor[gActiveBattler]){
+        switch (gActionSelectionCursor[gActiveBattler]) {
             case BATTLE_ACTION_SAFARI_CATCH:
-                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                if (ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                     gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_POKEBLOCK;
             break;
             case BATTLE_ACTION_SAFARI_GO_NEAR:
-                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                if (ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                     gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_RUN;
             break;
             case BATTLE_ACTION_SAFARI_POKEBLOCK:
@@ -259,16 +259,16 @@ static void HandleInputChooseAction(void)
     else if (JOY_NEW(DPAD_UP))
     {
         PlaySE(SE_SELECT);
-        switch(gActionSelectionCursor[gActiveBattler]){
+        switch (gActionSelectionCursor[gActiveBattler]) {
             case BATTLE_ACTION_SAFARI_CATCH:
-                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                if (ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                     gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_GO_NEAR;
             break;
             case BATTLE_ACTION_SAFARI_GO_NEAR:
                 gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_CATCH;
             break;
             case BATTLE_ACTION_SAFARI_POKEBLOCK:
-                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                if (ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                     gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_RUN;
             break;
             case BATTLE_ACTION_SAFARI_RUN:
@@ -280,19 +280,19 @@ static void HandleInputChooseAction(void)
     else if (JOY_NEW(DPAD_DOWN))
     {
         PlaySE(SE_SELECT);
-        switch(gActionSelectionCursor[gActiveBattler]){
+        switch (gActionSelectionCursor[gActiveBattler]) {
             case BATTLE_ACTION_SAFARI_CATCH:
                 gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_GO_NEAR;
             break;
             case BATTLE_ACTION_SAFARI_GO_NEAR:
-                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                if (ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                     gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_CATCH;
             break;
             case BATTLE_ACTION_SAFARI_POKEBLOCK:
                 gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_RUN;
             break;
             case BATTLE_ACTION_SAFARI_RUN:
-                if(ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
+                if (ENABLE_BATTLE_INPUT_GOING_BEYOND_SCREEN)
                     gActionSelectionCursor[gActiveBattler] = BATTLE_ACTION_SAFARI_POKEBLOCK;
             break;
         }

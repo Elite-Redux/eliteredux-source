@@ -205,13 +205,13 @@ void HueShiftMonPalette(u16* colors, u32 personality, bool8 isAlpha) {
     if (!gSaveBlock2Ptr->individualColors && !isAlpha)
         shouldBlend = FALSE;
 
-    if(shouldBlend){
-        if(isAlpha){
+    if (shouldBlend) {
+        if (isAlpha) {
             PokemonRGB[0] = 31;
             PokemonRGB[1] = 0;
             PokemonRGB[2] = 0;
         }
-        else{
+        else {
             PokemonRGB[0] = GET_R(personality);
             PokemonRGB[1] = GET_G(personality);
             PokemonRGB[2] = GET_B(personality);
@@ -224,27 +224,22 @@ void HueShiftMonPalette(u16* colors, u32 personality, bool8 isAlpha) {
             g = GET_G(*colors);
             b = GET_B(*colors);
 
-            /*if((r <= MIN_COLOR_VALUE || r >= MAX_COLOR_VALUE) && 
+            /*if ((r <= MIN_COLOR_VALUE || r >= MAX_COLOR_VALUE) && 
                (g <= MIN_COLOR_VALUE || g >= MAX_COLOR_VALUE) && 
                (b <= MIN_COLOR_VALUE || b >= MAX_COLOR_VALUE)) // Check if the color is complete Black or White
                 shouldBlendColor = FALSE;*/
 
-            //if((r <= MIN_COLOR_VALUE || r >= MAX_COLOR_VALUE) && r == g && g == b) // Check if the color is complete Black or White
+            //if ((r <= MIN_COLOR_VALUE || r >= MAX_COLOR_VALUE) && r == g && g == b) // Check if the color is complete Black or White
             //    shouldBlendColor = FALSE;
 
-            if(shouldBlendColor){
-                /*#ifdef DEBUG_BUILD
-                MgbaOpen();
-                MgbaPrintf(MGBA_LOG_WARN, "HueShiftMonPalette Color %d - R: %d, G: %d, B: %d, IsAlpha: %d", i, r, g, b, isAlpha);
-                MgbaClose();
-                #endif*/
+            if (shouldBlendColor) {
 
-                if(isAlpha){
+                if (isAlpha) {
                     r = (r + (((PokemonRGB[0] - r) * POKEMON_BLEND_INTENSITY_ALPHA) >> 4));
                     g = (g + (((PokemonRGB[1] - g) * POKEMON_BLEND_INTENSITY_ALPHA) >> 4));
                     b = (b + (((PokemonRGB[2] - b) * POKEMON_BLEND_INTENSITY_ALPHA) >> 4));
                 }
-                else{
+                else {
                     r = (r + (((PokemonRGB[0] - r) * POKEMON_BLEND_INTENSITY) >> 4));
                     g = (g + (((PokemonRGB[1] - g) * POKEMON_BLEND_INTENSITY) >> 4));
                     b = (b + (((PokemonRGB[2] - b) * POKEMON_BLEND_INTENSITY) >> 4));

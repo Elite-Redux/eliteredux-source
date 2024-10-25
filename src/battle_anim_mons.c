@@ -17,6 +17,7 @@
 #include "trig.h"
 #include "util.h"
 #include "constants/battle_anim.h"
+#include "mgba_printf/mgba.h"
 
 #define IS_DOUBLE_BATTLE() ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE))
 
@@ -2039,7 +2040,7 @@ u8 GetBattlerSpriteSubpriority(u8 battlerId)
         position = GetBattlerPosition(battlerId);
         subpriority = 50;
 
-        switch(position)
+        switch (position)
         {
             case B_POSITION_PLAYER_LEFT:
                 return 30;

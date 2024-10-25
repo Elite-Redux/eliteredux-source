@@ -1085,14 +1085,14 @@ static void InitContestResources(void)
 {
     s32 i;
 
-    eContest = (struct Contest){};
+    eContest = (struct Contest) {};
     for (i = 0; i < CONTESTANT_COUNT; i++)
     {
         eContest.unk[i] = 0xFF;
     }
     for (i = 0; i < CONTESTANT_COUNT; i++)
     {
-        eContestantStatus[i] = (struct ContestantStatus){};
+        eContestantStatus[i] = (struct ContestantStatus) {};
     }
     for (i = 0; i < CONTESTANT_COUNT; i++)
     {
@@ -1100,9 +1100,9 @@ static void InitContestResources(void)
         eContestantStatus[i].effectStringId = CONTEST_STRING_NONE;
         eContestantStatus[i].effectStringId2 = CONTEST_STRING_NONE;
     }
-    eContestAppealResults = (struct ContestAppealMoveResults){};
-    eContestAI = (struct ContestAIInfo){};
-    *gContestResources->excitement = (struct ContestExcitement){};
+    eContestAppealResults = (struct ContestAppealMoveResults) {};
+    eContestAI = (struct ContestAIInfo) {};
+    *gContestResources->excitement = (struct ContestExcitement) {};
     memset(eContestGfxState, 0, CONTESTANT_COUNT * sizeof(struct ContestGraphicsState));
     
     if (!(gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK))
@@ -3672,7 +3672,7 @@ static void FillContestantWindowBgs(void)
 {
     int i;
 
-    for(i = 0; i < CONTESTANT_COUNT; i++)
+    for (i = 0; i < CONTESTANT_COUNT; i++)
         ContestBG_FillBoxWithTile(0, 0, 0x16, 2 + i * 5, 8, 2, 0x11);
 }
 
@@ -4222,12 +4222,12 @@ static void SpriteCB_EndBlinkContestantBox(struct Sprite *sprite)
 // Unused.
 static void ContestDebugTogglePointTotal(void)
 {
-    if(eContestDebugMode == CONTEST_DEBUG_MODE_PRINT_POINT_TOTAL)
+    if (eContestDebugMode == CONTEST_DEBUG_MODE_PRINT_POINT_TOTAL)
         eContestDebugMode = CONTEST_DEBUG_MODE_OFF;
     else
         eContestDebugMode = CONTEST_DEBUG_MODE_PRINT_POINT_TOTAL;
 
-    if(eContestDebugMode == CONTEST_DEBUG_MODE_OFF)
+    if (eContestDebugMode == CONTEST_DEBUG_MODE_OFF)
     {
         DrawContestantWindowText();
         SwapMoveDescAndContestTilemaps();
@@ -5512,8 +5512,8 @@ void ResetContestLinkResults(void)
     s32 i;
     s32 j;
 
-    for(i = 0; i < CONTEST_CATEGORIES_COUNT; i++)
-        for(j = 0; j < CONTESTANT_COUNT; j++)
+    for (i = 0; i < CONTEST_CATEGORIES_COUNT; i++)
+        for (j = 0; j < CONTESTANT_COUNT; j++)
             gSaveBlock2Ptr->contestLinkResults[i][j] = 0;
 }
 
@@ -5562,7 +5562,7 @@ bool8 SaveContestWinner(u8 rank)
         gSaveBlock1Ptr->contestWinners[id].trainerId = gContestMons[i].otId;
         StringCopy(gSaveBlock1Ptr->contestWinners[id].monName, gContestMons[i].nickname);
         StringCopy(gSaveBlock1Ptr->contestWinners[id].trainerName, gContestMons[i].trainerName);
-        if(gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
+        if (gLinkContestFlags & LINK_CONTEST_FLAG_IS_LINK)
             gSaveBlock1Ptr->contestWinners[id].contestRank = CONTEST_RANK_LINK;
         else
             gSaveBlock1Ptr->contestWinners[id].contestRank = gSpecialVar_ContestRank;

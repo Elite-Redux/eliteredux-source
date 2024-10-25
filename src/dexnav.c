@@ -653,7 +653,7 @@ static void DexNavProximityUpdate(void)
     sDexNavSearchDataPtr->proximity = GetPlayerDistance(sDexNavSearchDataPtr->tileX, sDexNavSearchDataPtr->tileY);
 }
 
-static bool8 DexnavIsTileUsable(u8 environment){
+static bool8 DexnavIsTileUsable(u8 environment) {
     s16 posX;
     s16 posY;
     u8 tileBehaviour;
@@ -747,7 +747,7 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
                         scale = 440 - (smallScan * 200) - (GetPlayerDistance(topX, topY) / 2)  - (2 * (topX + topY));
                         weight = ((Random() % scale) < 1) && !MapGridIsImpassableAt(topX, topY);
                         //Check if it's possible to find a mon there
-                        if(!MapGridIsImpassableAt(topX, topY)){
+                        if (!MapGridIsImpassableAt(topX, topY)) {
                             correctTile = TRUE;
                         }
                     }
@@ -756,7 +756,7 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
                         scale = 100 - (GetPlayerDistance(topX, topY) * 2);
                         weight = (Random() % scale <= 5) && !MapGridIsImpassableAt(topX, topY);
                         //Check if it's possible to find a mon there
-                        if(!MapGridIsImpassableAt(topX, topY)){
+                        if (!MapGridIsImpassableAt(topX, topY)) {
                             correctTile = TRUE;
                         }
                     }
@@ -771,7 +771,7 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
 
                     weight = (Random() % scale <= 1) && !MapGridIsImpassableAt(topX, topY);
                     //Check if it's possible to find a mon there
-                    if(!MapGridIsImpassableAt(topX, topY)){
+                    if (!MapGridIsImpassableAt(topX, topY)) {
                         correctTile = TRUE;
                     }
                 }
@@ -836,7 +836,7 @@ static bool8 TryStartHiddenMonFieldEffect(u8 environment, u8 xSize, u8 ySize, bo
                     fldEffId = FLDEFF_SAND_HOLE;
                 else if (MetatileBehavior_IsMountain(metatileBehaviour)) //Rough Terrain
                     fldEffId = FLDEFF_CAVE_DUST;
-                else if(MetatileBehavior_IsAshGrass(metatileBehaviour))//Ash Grass
+                else if (MetatileBehavior_IsAshGrass(metatileBehaviour))//Ash Grass
                     fldEffId = FLDEFF_CAVE_DUST;
                 else
                     fldEffId = FLDEFF_BERRY_TREE_GROWTH_SPARKLE; //default
@@ -965,7 +965,7 @@ static void Task_InitDexNavSearch(u8 taskId)
         DestroyTask(taskId);
         return;
     }
-    else{
+    else {
         //Start Encounter
         CreateDexNavWildMon(sDexNavSearchDataPtr->species, sDexNavSearchDataPtr->potential, sDexNavSearchDataPtr->monLevel, 
           sDexNavSearchDataPtr->abilityNum, sDexNavSearchDataPtr->heldItem, sDexNavSearchDataPtr->moves);
@@ -1347,8 +1347,8 @@ static void CreateDexNavWildMon(u16 species, u8 potential, u8 level, u8 abilityN
         SetMonData(mon, MON_DATA_HELD_ITEM, &item);
 
     //Set moves
-    for (i = 0; i < MAX_MON_MOVES; i++){
-        if(moves[i] != MOVE_NONE)
+    for (i = 0; i < MAX_MON_MOVES; i++) {
+        if (moves[i] != MOVE_NONE)
             SetMonMoveSlot(mon, moves[i], i);
     }
 
@@ -1369,7 +1369,7 @@ static u8 DexNavTryGenerateMonLevel(u16 species, u8 environment)
     if (Random() % 100 < 4)
         levelBonus += 10; //4% chance of having a +10 level
 
-    if(levelBase + levelBonus > GetLevelCap() && GetLevelCap() < MAX_LEVEL)
+    if (levelBase + levelBonus > GetLevelCap() && GetLevelCap() < MAX_LEVEL)
         return GetLevelCap();
     else if (levelBase + levelBonus > MAX_LEVEL)
         return MAX_LEVEL;
@@ -2069,18 +2069,18 @@ static void DexNavLoadEncounterData(void)
     // nop struct data
     memset(sDexNavUiDataPtr->routeSpecies, 0, sizeof(sDexNavUiDataPtr->routeSpecies));
 
-    for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
+    for (i = 0; i < DEXNAV_ROWS_COUNT; i++) {
         index = 0;
         sDexNavUiDataPtr->routeSpeciesNum[i] = 0;
 
         if (IsDisabledForRoute(i)) continue;
 
-        switch(i){
+        switch (i) {
             case ROW_LAND_TOP:
                 // Land mons
                 if (landMonsInfo != NULL && landMonsInfo->encounterRate != 0)
                 {
-                    if(!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode){
+                    if (!gSaveBlock2Ptr->encounterRandomizedMode && gSaveBlock2Ptr->encounterRandomizedLegendaryMode) {
                         for (j = 0; j < LAND_WILD_COUNT / 2; j++)
                         {
                             species = GetSpecies(landMonsInfo, j);
@@ -2088,7 +2088,7 @@ static void DexNavLoadEncounterData(void)
                                 sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                         }
                     }
-                    else{
+                    else {
                         for (j = 0; j < LAND_WILD_COUNT; j++)
                         {
                             species = GetSpecies(landMonsInfo, j);
@@ -2111,7 +2111,7 @@ static void DexNavLoadEncounterData(void)
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
 
-                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                    if (newEnviorment == DEXNAV_ROWS_COUNT)
                         newEnviorment = i;
                 }
             break;
@@ -2126,7 +2126,7 @@ static void DexNavLoadEncounterData(void)
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
 
-                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                    if (newEnviorment == DEXNAV_ROWS_COUNT)
                         newEnviorment = i;
                 }
             break;
@@ -2141,7 +2141,7 @@ static void DexNavLoadEncounterData(void)
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
                     
-                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                    if (newEnviorment == DEXNAV_ROWS_COUNT)
                         newEnviorment = i;
                 }
             break;
@@ -2156,7 +2156,7 @@ static void DexNavLoadEncounterData(void)
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
                     
-                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                    if (newEnviorment == DEXNAV_ROWS_COUNT)
                         newEnviorment = i;
                 }
             break;
@@ -2171,14 +2171,14 @@ static void DexNavLoadEncounterData(void)
                             sDexNavUiDataPtr->routeSpecies[i][index++] = species;
                     }
                     
-                    if(newEnviorment == DEXNAV_ROWS_COUNT)
+                    if (newEnviorment == DEXNAV_ROWS_COUNT)
                         newEnviorment = i;
                 }
             break;
         }
 
         // Set the used rows in an array
-        if(index != 0){
+        if (index != 0) {
             sDexNavUiDataPtr->routeRows[sDexNavUiDataPtr->rowNum] = i;
             sDexNavUiDataPtr->rowNum++;
         }
@@ -2204,7 +2204,7 @@ static void DestroyAllMonIcons(void)
 {
     u32 i, j;
 
-    for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
+    for (i = 0; i < DEXNAV_ROWS_COUNT; i++) {
         for (j = 0; j < NUM_POKEMON_ICONS; j++)
         {
            sDexNavUiDataPtr->DexnavSpeciesIconsSprites[i][j] = 0xFF;
@@ -2216,7 +2216,7 @@ static u8 TryDrawIconInSlot(u8 enviorment, u8 num, s16 x, s16 y)
 {
     u16 species = sDexNavUiDataPtr->routeSpecies[enviorment][num];
 
-    if(sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num] != 0xFF) //Already created
+    if (sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num] != 0xFF) //Already created
         return sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num];
     else if (species == SPECIES_NONE || species > NUM_SPECIES || sDexNavUiDataPtr->routeSpeciesNum[enviorment] == 0) //No species or enviorment locked
         return 0xFF;
@@ -2229,14 +2229,14 @@ static u8 TryDrawIconInSlot(u8 enviorment, u8 num, s16 x, s16 y)
     return sDexNavUiDataPtr->DexnavSpeciesIconsSprites[enviorment][num];
 }
 
-static void HideSpeciesIcons(void){
+static void HideSpeciesIcons(void) {
     u8 i, j, spriteId;
-    for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
+    for (i = 0; i < DEXNAV_ROWS_COUNT; i++) {
         for (j = 0; j < NUM_POKEMON_ICONS; j++)
         {
             spriteId = sDexNavUiDataPtr->DexnavSpeciesIconsSprites[i][j];
-            if(spriteId != 0xFF){
-                if(i == sDexNavUiDataPtr->currentEnviorment)
+            if (spriteId != 0xFF) {
+                if (i == sDexNavUiDataPtr->currentEnviorment)
                     gSprites[spriteId].invisible = FALSE;
                 else
                     gSprites[spriteId].invisible = TRUE;
@@ -2253,7 +2253,7 @@ static void DrawSpeciesIcons(void)
     DestroyAllMonIcons();
     //LoadCompressedSpriteSheetUsingHeap(&sNoDataIconSpriteSheet);
 
-    for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
+    for (i = 0; i < DEXNAV_ROWS_COUNT; i++) {
         for (j = 0; j < NUM_POKEMON_ICONS; j++)
         {
             x = ROW_LAND_ICON_X     + (24 * (j % 3));
@@ -2377,27 +2377,27 @@ static const u8  gDexnavFieldIcon_Selector[] = INCBIN_U8("graphics/ui_menus/dexn
 
 #define DEFAULT_DEXNAV_ROW 2
 
-static u8 getEnviormentAt(u8 row){
+static u8 getEnviormentAt(u8 row) {
     u8 currentrow = 0;
     u8 rowToReturn = DEFAULT_DEXNAV_ROW;
     u8 numRows = sDexNavUiDataPtr->rowNum;
 
-    do{
+    do {
         currentrow = (currentrow + 1) % numRows;
     }
-    while(sDexNavUiDataPtr->routeRows[currentrow] != sDexNavUiDataPtr->currentEnviorment);
+    while (sDexNavUiDataPtr->routeRows[currentrow] != sDexNavUiDataPtr->currentEnviorment);
 
-    if(row == DEFAULT_DEXNAV_ROW)
+    if (row == DEFAULT_DEXNAV_ROW)
         rowToReturn = sDexNavUiDataPtr->currentEnviorment;
-    else if(row == DEFAULT_DEXNAV_ROW + 1)
+    else if (row == DEFAULT_DEXNAV_ROW + 1)
         rowToReturn = sDexNavUiDataPtr->routeRows[(currentrow + 1) % numRows];
-    else if(row == DEFAULT_DEXNAV_ROW + 2)
+    else if (row == DEFAULT_DEXNAV_ROW + 2)
         rowToReturn = sDexNavUiDataPtr->routeRows[(currentrow + 2) % numRows];
-    else if(row == DEFAULT_DEXNAV_ROW - 1){
+    else if (row == DEFAULT_DEXNAV_ROW - 1) {
         rowToReturn = ((currentrow + numRows - 1)) % numRows;
         rowToReturn = sDexNavUiDataPtr->routeRows[rowToReturn];
     }
-    else if(row == DEFAULT_DEXNAV_ROW - 2){
+    else if (row == DEFAULT_DEXNAV_ROW - 2) {
         rowToReturn = ((currentrow + numRows - 2)) % numRows;
         rowToReturn = sDexNavUiDataPtr->routeRows[rowToReturn];
     }
@@ -2411,9 +2411,9 @@ u8 getMonPrice(u16 species)
     return DEFAULT_DEXNAV_MON_PRICE;
 }
 
-static void EnviormentToStringVar(u8 enviorment){
+static void EnviormentToStringVar(u8 enviorment) {
     //This only copies to gStringVar3
-    switch(enviorment){
+    switch (enviorment) {
         case ROW_LAND_TOP:
             StringCopy(gStringVar3, sText_DexNav_Land);
         break;
@@ -2451,13 +2451,13 @@ static void PrintCurrentSpeciesInfo(void)
     // Clear windows
     FillWindowPixelBuffer(WINDOW_INFO, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     
-    for(i = 0; i < DEXNAV_MAX_SHOWN_ROWS; i++){
+    for (i = 0; i < DEXNAV_MAX_SHOWN_ROWS; i++) {
         j = getEnviormentAt(i);
 
-        if((numRows < 5 && (i == 0 || i == DEXNAV_MAX_SHOWN_ROWS - 1)) || (numRows == 1 && i != DEFAULT_DEXNAV_ROW))
+        if ((numRows < 5 && (i == 0 || i == DEXNAV_MAX_SHOWN_ROWS - 1)) || (numRows == 1 && i != DEFAULT_DEXNAV_ROW))
             j++; //This does nothing
-        else{
-            switch(j){
+        else {
+            switch (j) {
                 case ROW_LAND_TOP:
                     BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Forest, 0, (i * 32), 48, 32);
                 break;
@@ -2478,7 +2478,7 @@ static void PrintCurrentSpeciesInfo(void)
                 break;
             }
 
-            if(i == DEFAULT_DEXNAV_ROW)
+            if (i == DEFAULT_DEXNAV_ROW)
                 BlitBitmapToWindow(WINDOW_INFO, gDexnavFieldIcon_Selector, 0, (i * 32), 48, 32);
         }
     }
@@ -2486,7 +2486,7 @@ static void PrintCurrentSpeciesInfo(void)
     //Title
     x = 9;
     y = 0;
-    if(!FlagGet(DEXNAV_PLUS_UNLOCK_FLAG))
+    if (!FlagGet(DEXNAV_PLUS_UNLOCK_FLAG))
         AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8), sFontColor_White, TEXT_SKIP_DRAW, sText_DexNav_Title);
     else
         AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8), sFontColor_White, TEXT_SKIP_DRAW, sText_DexNav_Plus_Title);
@@ -2497,7 +2497,7 @@ static void PrintCurrentSpeciesInfo(void)
     GetMapName(gStringVar1, GetCurrentRegionMapSectionId(), 0);
     EnviormentToStringVar(sDexNavUiDataPtr->currentEnviorment);
 
-    if(isEverythingCaught)
+    if (isEverythingCaught)
         StringCopy(gStringVar2, sText_DexNav_Caught_Type_Yes);
     else
         StringCopy(gStringVar2, sText_DexNav_Caught_Type_No);
@@ -2508,7 +2508,7 @@ static void PrintCurrentSpeciesInfo(void)
 
     // BP
     x = 21;
-    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !DEXNAV_MON_FREE){
+    if (FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !DEXNAV_MON_FREE) {
         ConvertIntToDecimalStringN(gStringVar1, gSaveBlock2Ptr->frontier.battlePoints, STR_CONV_MODE_LEFT_ALIGN, 3);
         StringExpandPlaceholders(gStringVar4, sText_DexNav_CurrentBP);
         AddTextPrinterParameterized3(WINDOW_INFO, font, (x * 8), (y * 8) - 4, sFontColor_White, 0, gStringVar4);
@@ -2527,9 +2527,9 @@ static void PrintCurrentSpeciesInfo(void)
     y++;
     if (species == SPECIES_NONE)
         StringCopy(gStringVar4, sText_DexNav_SpeciesName_None);
-    else{
+    else {
         StringCopy(gStringVar1, gSpeciesNames[species]);
-        if(GetSetPokedexFlag(species, FLAG_GET_CAUGHT))
+        if (GetSetPokedexFlag(species, FLAG_GET_CAUGHT))
             StringCopy(gStringVar3, sText_DexNav_Caught_Type_Yes);
         else
             StringCopy(gStringVar3, sText_DexNav_Caught_Type_No);
@@ -2542,11 +2542,11 @@ static void PrintCurrentSpeciesInfo(void)
         
     //Price
     y++;
-    if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !DEXNAV_MON_FREE){
+    if (FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !DEXNAV_MON_FREE) {
         ConvertIntToDecimalStringN(gStringVar1, price, STR_CONV_MODE_LEFT_ALIGN, 3);
         StringExpandPlaceholders(gStringVar4, sText_DexNav_Price);
     }
-    else{
+    else {
         StringCopy(gStringVar4, sText_DexNav_Type);
     }
 
@@ -2591,15 +2591,15 @@ static void PrintCurrentSpeciesInfo(void)
     x = 9;
     y = 17;
 
-    switch(sDexNavUiDataPtr->currentMessage)
+    switch (sDexNavUiDataPtr->currentMessage)
     {
         default:
-            if(!isEverythingCaught)
+            if (!isEverythingCaught)
                 StringCopy(gStringVar1, sText_DexNav_Plus_Message_1);
             else
                 StringCopy(gStringVar1, sText_DexNav_Plus_Message_2);
 
-            if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) == TRUE)
+            if (FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) == TRUE)
                 StringExpandPlaceholders(gStringVar4, sText_DexNav_Plus_Message_Default);
             else
                 StringExpandPlaceholders(gStringVar4, sText_DexNav_Message_Default);
@@ -2608,10 +2608,10 @@ static void PrintCurrentSpeciesInfo(void)
         break;
         case DEXNAV_MESSAGE_BUY_ALL_NOT_OWNED:
             price = 0;
-            for(i = 0; i < NUM_POKEMON_ICONS; i++)
+            for (i = 0; i < NUM_POKEMON_ICONS; i++)
             {
                 species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
-                if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
+                if (species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
                     price += getMonPrice(species);
             }
 
@@ -2623,10 +2623,10 @@ static void PrintCurrentSpeciesInfo(void)
         break;
         case DEXNAV_MESSAGE_BUY_ALL:
             price = 0;
-            for(i = 0; i < NUM_POKEMON_ICONS; i++)
+            for (i = 0; i < NUM_POKEMON_ICONS; i++)
             {
                 species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
-                if(species != SPECIES_NONE)
+                if (species != SPECIES_NONE)
                     price += getMonPrice(species);
             }
 
@@ -2816,28 +2816,28 @@ static void Task_DexNavMain(u8 taskId)
     if (IsSEPlaying())
         return;
 
-    if(sDexNavUiDataPtr->currentMessage == DEXNAV_MESSAGE_NONE && !(JOY_NEW(A_BUTTON)) && !(JOY_NEW(B_BUTTON)))
+    if (sDexNavUiDataPtr->currentMessage == DEXNAV_MESSAGE_NONE && !(JOY_NEW(A_BUTTON)) && !(JOY_NEW(B_BUTTON)))
     {
         if (JOY_NEW(DPAD_UP))
         {
-            do{
-                if(sDexNavUiDataPtr->cursorRow > 0)
+            do {
+                if (sDexNavUiDataPtr->cursorRow > 0)
                     sDexNavUiDataPtr->cursorRow--;
-                else{
-                    if(sDexNavUiDataPtr->currentEnviorment == 0)
+                else {
+                    if (sDexNavUiDataPtr->currentEnviorment == 0)
                         sDexNavUiDataPtr->currentEnviorment = DEXNAV_ROWS_COUNT - 1;
                     else
                         sDexNavUiDataPtr->currentEnviorment--;
 
-                    if(DexNavGetSpecies() == SPECIES_NONE)
+                    if (DexNavGetSpecies() == SPECIES_NONE)
                         sDexNavUiDataPtr->cursorRow = 0;
 
                     windowChanged = TRUE;
                 }
             }
-            while(sDexNavUiDataPtr->routeSpeciesNum[sDexNavUiDataPtr->currentEnviorment] == 0 || DexNavGetSpecies() == SPECIES_NONE);
+            while (sDexNavUiDataPtr->routeSpeciesNum[sDexNavUiDataPtr->currentEnviorment] == 0 || DexNavGetSpecies() == SPECIES_NONE);
 
-            if(windowChanged)
+            if (windowChanged)
                 HideSpeciesIcons();
 
             PlaySE(SE_RG_BAG_CURSOR);
@@ -2845,11 +2845,11 @@ static void Task_DexNavMain(u8 taskId)
         }
         else if (JOY_NEW(DPAD_DOWN))
         {
-            do{
-                if(sDexNavUiDataPtr->cursorRow < DEXNAV_NUM_SPECIES_ROWS - 1)
+            do {
+                if (sDexNavUiDataPtr->cursorRow < DEXNAV_NUM_SPECIES_ROWS - 1)
                     sDexNavUiDataPtr->cursorRow++;
-                else{
-                    if(sDexNavUiDataPtr->currentEnviorment < DEXNAV_ROWS_COUNT - 1)
+                else {
+                    if (sDexNavUiDataPtr->currentEnviorment < DEXNAV_ROWS_COUNT - 1)
                         sDexNavUiDataPtr->currentEnviorment++;
                     else
                         sDexNavUiDataPtr->currentEnviorment = 0;
@@ -2858,9 +2858,9 @@ static void Task_DexNavMain(u8 taskId)
                     windowChanged = TRUE;
                 }
             }
-            while(sDexNavUiDataPtr->routeSpeciesNum[sDexNavUiDataPtr->currentEnviorment] == 0 || DexNavGetSpecies() == SPECIES_NONE);
+            while (sDexNavUiDataPtr->routeSpeciesNum[sDexNavUiDataPtr->currentEnviorment] == 0 || DexNavGetSpecies() == SPECIES_NONE);
 
-            if(windowChanged)
+            if (windowChanged)
                 HideSpeciesIcons();
             
             PlaySE(SE_RG_BAG_CURSOR);
@@ -2869,26 +2869,26 @@ static void Task_DexNavMain(u8 taskId)
         else if (JOY_NEW(DPAD_LEFT))
         {
             
-            do{
-                if(sDexNavUiDataPtr->cursorCol > 0)
+            do {
+                if (sDexNavUiDataPtr->cursorCol > 0)
                     sDexNavUiDataPtr->cursorCol--;
                 else
                     sDexNavUiDataPtr->cursorCol = DEXNAV_NUM_SPECIES_PER_ROW - 1;
             }
-            while(DexNavGetSpecies() == SPECIES_NONE);
+            while (DexNavGetSpecies() == SPECIES_NONE);
             
             PlaySE(SE_RG_BAG_CURSOR);
             UpdateCursorPosition();
         }
         else if (JOY_NEW(DPAD_RIGHT))
         {
-            do{
-                if(sDexNavUiDataPtr->cursorCol < DEXNAV_NUM_SPECIES_PER_ROW - 1)
+            do {
+                if (sDexNavUiDataPtr->cursorCol < DEXNAV_NUM_SPECIES_PER_ROW - 1)
                     sDexNavUiDataPtr->cursorCol++;
                 else
                     sDexNavUiDataPtr->cursorCol = 0;
             }
-            while(DexNavGetSpecies() == SPECIES_NONE);
+            while (DexNavGetSpecies() == SPECIES_NONE);
             
             PlaySE(SE_RG_BAG_CURSOR);
             UpdateCursorPosition();
@@ -2919,14 +2919,14 @@ static void Task_DexNavMain(u8 taskId)
                 PlaySE(SE_FAILURE);
             }
         }
-        else if(JOY_NEW(START_BUTTON) && FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
-            if(sDexNavUiDataPtr->currentMessage == DEXNAV_MESSAGE_NONE){
+        else if (JOY_NEW(START_BUTTON) && FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)) {
+            if (sDexNavUiDataPtr->currentMessage == DEXNAV_MESSAGE_NONE) {
                 sDexNavUiDataPtr->currentMessage = DEXNAV_MESSAGE_BUY_ALL;
                 UpdateCursorPosition();
             }
         }
-        else if(JOY_NEW(SELECT_BUTTON) && FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !hasAllMonsInEnviorment()){
-            if(sDexNavUiDataPtr->currentMessage == DEXNAV_MESSAGE_NONE){
+        else if (JOY_NEW(SELECT_BUTTON) && FlagGet(DEXNAV_PLUS_UNLOCK_FLAG) && !hasAllMonsInEnviorment()) {
+            if (sDexNavUiDataPtr->currentMessage == DEXNAV_MESSAGE_NONE) {
                 sDexNavUiDataPtr->currentMessage = DEXNAV_MESSAGE_BUY_ALL_NOT_OWNED;
                 UpdateCursorPosition();
             }
@@ -2938,8 +2938,8 @@ static void Task_DexNavMain(u8 taskId)
         u8 level = GetLevelCap();
         u16 loc = gSaveBlock1Ptr->location.mapNum;
         u16 locG = gSaveBlock1Ptr->location.mapGroup;
-        if(FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)){
-            switch(sDexNavUiDataPtr->currentMessage){
+        if (FlagGet(DEXNAV_PLUS_UNLOCK_FLAG)) {
+            switch (sDexNavUiDataPtr->currentMessage) {
                 default:
                     sDexNavUiDataPtr->currentMessage = DEXNAV_MESSAGE_NONE;
                     UpdateCursorPosition();
@@ -2950,31 +2950,31 @@ static void Task_DexNavMain(u8 taskId)
                 break;
                 case DEXNAV_MESSAGE_BUY:
                     species = DexNavGetSpecies();
-                    if (gSaveBlock2Ptr->frontier.battlePoints < getMonPrice(species) && !DEXNAV_MON_FREE){
+                    if (gSaveBlock2Ptr->frontier.battlePoints < getMonPrice(species) && !DEXNAV_MON_FREE) {
                         sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_ENOUGH_FUNDS;
                         UpdateCursorPosition();
                     }
-                    else{
+                    else {
                         bool8 couldGiveMon = FALSE;
-                        if(level >= MAX_LEVEL)
+                        if (level >= MAX_LEVEL)
                             level = MAX_LEVEL;
                         
                         VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
-                        if(!IsRouteEncountered(loc, locG) || !gSaveBlock2Ptr->nuzlockeCaptures){
+                        if (!IsRouteEncountered(loc, locG) || !gSaveBlock2Ptr->nuzlockeCaptures) {
                             couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
                         }
                         else {
                             couldGiveMon = 3;
                         }
-                        if(couldGiveMon < 2){
+                        if (couldGiveMon < 2) {
                             MarkRouteAsEncountered(loc, locG);
-                            if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
+                            if (VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
                                 gotShiny = TRUE;
                             VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
 
-                            if(!DEXNAV_MON_FREE)
+                            if (!DEXNAV_MON_FREE)
                                 gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - getMonPrice(species);
-                            if(gotShiny)
+                            if (gotShiny)
                                 sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE_SHINY;
                             else
                                 sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
@@ -2987,48 +2987,48 @@ static void Task_DexNavMain(u8 taskId)
                 case DEXNAV_MESSAGE_BUY_ALL_NOT_OWNED:{
                     u16 price = 0;
                     u8 i;
-                    for(i = 0; i < NUM_POKEMON_ICONS; i++)
+                    for (i = 0; i < NUM_POKEMON_ICONS; i++)
                     {
                         species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
-                        if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
+                        if (species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT))
                             price += getMonPrice(species);
                     }
                     price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
 
-                    if (gSaveBlock2Ptr->frontier.battlePoints < price && !DEXNAV_MON_FREE){
+                    if (gSaveBlock2Ptr->frontier.battlePoints < price && !DEXNAV_MON_FREE) {
                         sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_ENOUGH_FUNDS;
                         UpdateCursorPosition();
                     }
-                    else{
+                    else {
                         bool8 couldGiveMon = FALSE;
                         price = 0;
 
-                        if(level >= MAX_LEVEL)
+                        if (level >= MAX_LEVEL)
                             level = MAX_LEVEL;
 
-                        for(i = 0; i < NUM_POKEMON_ICONS; i++)
+                        for (i = 0; i < NUM_POKEMON_ICONS; i++)
                         {
                             couldGiveMon = FALSE;
                             species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
-                            if(species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT) && !gSaveBlock2Ptr->nuzlockeCaptures){
+                            if (species != SPECIES_NONE && !GetSetPokedexFlag(SpeciesToNationalPokedexNum(species), FLAG_GET_CAUGHT) && !gSaveBlock2Ptr->nuzlockeCaptures) {
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
-                                if(couldGiveMon < 2){
+                                if (couldGiveMon < 2) {
                                     VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                                     price += getMonPrice(species);
-                                    if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
+                                    if (VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
                                         gotShiny = TRUE;
                                     VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
                                 }
                             }
                         }
 
-                        if(price != 0){
-                            if(!DEXNAV_MON_FREE)
+                        if (price != 0) {
+                            if (!DEXNAV_MON_FREE)
                                 price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
                             else
                                 price = 0;
                             gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - price;
-                            if(gotShiny)
+                            if (gotShiny)
                                 sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE_SHINY;
                             else
                                 sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
@@ -3042,49 +3042,49 @@ static void Task_DexNavMain(u8 taskId)
                 case DEXNAV_MESSAGE_BUY_ALL:{
                     u16 price = 0;
                     u8 i;
-                    for(i = 0; i < NUM_POKEMON_ICONS; i++)
+                    for (i = 0; i < NUM_POKEMON_ICONS; i++)
                     {
                         species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
-                        if(species != SPECIES_NONE)
+                        if (species != SPECIES_NONE)
                             price += getMonPrice(species);
                     }
                     price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
 
-                    if (gSaveBlock2Ptr->frontier.battlePoints < price && !DEXNAV_MON_FREE){
+                    if (gSaveBlock2Ptr->frontier.battlePoints < price && !DEXNAV_MON_FREE) {
                         sDexNavUiDataPtr->currentMessage = DEXNAV_COULD_NOT_ENOUGH_FUNDS;
                         UpdateCursorPosition();
                     }
-                    else{
+                    else {
                         bool8 couldGiveMon = FALSE;
                         u8 level = GetLevelCap();
                         price = 0;
 
-                        if(level >= MAX_LEVEL)
+                        if (level >= MAX_LEVEL)
                             level = MAX_LEVEL;
 
-                        for(i = 0; i < NUM_POKEMON_ICONS; i++)
+                        for (i = 0; i < NUM_POKEMON_ICONS; i++)
                         {
                             couldGiveMon = FALSE;
                             species = sDexNavUiDataPtr->routeSpecies[sDexNavUiDataPtr->currentEnviorment][i];
-                            if(species != SPECIES_NONE && !gSaveBlock2Ptr->nuzlockeCaptures){
+                            if (species != SPECIES_NONE && !gSaveBlock2Ptr->nuzlockeCaptures) {
                                 VarSet(VAR_DEXNAV_SHINY_FLAG, 1);
                                 couldGiveMon = ScriptGiveMon(species, level, ITEM_NONE, 0, 0, 0);
-                                if(couldGiveMon < 2){
+                                if (couldGiveMon < 2) {
                                     price += getMonPrice(species);
-                                    if(VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
+                                    if (VarGet(VAR_DEXNAV_SHINY_FLAG) == 2)
                                         gotShiny = TRUE;
                                     VarSet(VAR_DEXNAV_SHINY_FLAG, 0);
                                 }
                             }
                         }
 
-                        if(price != 0){
-                            if(!DEXNAV_MON_FREE)
+                        if (price != 0) {
+                            if (!DEXNAV_MON_FREE)
                                 price = (price * DEXNAV_BUY_ALL_DISCOUNT) / 100;
                             else
                                 price = 0;
                             gSaveBlock2Ptr->frontier.battlePoints = gSaveBlock2Ptr->frontier.battlePoints - price;
-                            if(gotShiny)
+                            if (gotShiny)
                                 sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE_SHINY;
                             else
                                 sDexNavUiDataPtr->currentMessage = DEXNAV_THANKS_FOR_PURCHASE;
@@ -3123,7 +3123,7 @@ static void Task_DexNavMain(u8 taskId)
                 break;
             }
         }
-        else{
+        else {
             //Regular Dexnav can only search
             species = DexNavGetSpecies();
             if (species != SPECIES_NONE)
@@ -3152,7 +3152,7 @@ static void Task_DexNavMain(u8 taskId)
     }
     else if (JOY_NEW(B_BUTTON))
     {
-        switch(sDexNavUiDataPtr->currentMessage){
+        switch (sDexNavUiDataPtr->currentMessage) {
             default:
                 sDexNavUiDataPtr->currentMessage = DEXNAV_MESSAGE_NONE;
                 UpdateCursorPosition();
@@ -3405,28 +3405,18 @@ void IncrementDexNavChain(void)
 bool8 CanFindHiddenPokemon(void)
 {
     bool8 CanFindHiddenMon = FALSE;
-    switch(gSaveBlock1Ptr->location.mapGroup){
+    switch (gSaveBlock1Ptr->location.mapGroup) {
 		case MAP_GROUP_ROUTES_AND_TOWNS:
-			if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE102)){ // Route 102
-                if( HasTrainerBeenFought(TRAINER_RICK)        && 
+			if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE102)) { // Route 102
+                if ( HasTrainerBeenFought(TRAINER_RICK)        && 
                     //HasTrainerBeenFought(TRAINER_OLDPLAYER) && 
                     HasTrainerBeenFought(TRAINER_CALVIN_1)    &&
                     HasTrainerBeenFought(TRAINER_ALLEN)       && 
                     HasTrainerBeenFought(TRAINER_TIANA))
                     CanFindHiddenMon = TRUE;
-
-                /*
-                #ifdef DEBUG_BUILD
-                    if(FlagGet(FLAG_SYS_MGBA_PRINT)){
-                        MgbaOpen();
-                        MgbaPrintf(MGBA_LOG_WARN, "Route 102 - Map Num: %d - Map Group: %d", gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
-                        MgbaClose();
-                    }
-                #endif
-                */
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE111)){ // Route 111 (Desert)
-                if( HasTrainerBeenFought(TRAINER_DREW)      &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE111)) { // Route 111 (Desert)
+                if ( HasTrainerBeenFought(TRAINER_DREW)      &&
                     HasTrainerBeenFought(TRAINER_BEAU)   &&
                     HasTrainerBeenFought(TRAINER_HEIDI)    &&
                     HasTrainerBeenFought(TRAINER_BECKY)  &&
@@ -3436,8 +3426,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_BRYAN))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE109)){ // Route 109 (Beach)
-                if( HasTrainerBeenFought(TRAINER_HUEY)      &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE109)) { // Route 109 (Beach)
+                if ( HasTrainerBeenFought(TRAINER_HUEY)      &&
                     HasTrainerBeenFought(TRAINER_RICKY_1)   &&
                     HasTrainerBeenFought(TRAINER_LOLA_1)    &&
                     HasTrainerBeenFought(TRAINER_CHANDLER)  &&
@@ -3446,8 +3436,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_TIANA))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE113)){ // Route 113
-                if( HasTrainerBeenFought(TRAINER_JAYLEN)        &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE113)) { // Route 113
+                if ( HasTrainerBeenFought(TRAINER_JAYLEN)        &&
                     HasTrainerBeenFought(TRAINER_DILLON)        &&
                     HasTrainerBeenFought(TRAINER_MADELINE_1)    &&
                     HasTrainerBeenFought(TRAINER_LAO_1)         &&
@@ -3459,8 +3449,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_WYATT))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE114)){ // Route 114
-                if( HasTrainerBeenFought(TRAINER_LENNY)         &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE114)) { // Route 114
+                if ( HasTrainerBeenFought(TRAINER_LENNY)         &&
                     HasTrainerBeenFought(TRAINER_LUCAS_1)       &&
                     HasTrainerBeenFought(TRAINER_SHANE)         &&
                     HasTrainerBeenFought(TRAINER_NANCY)         &&
@@ -3474,8 +3464,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_KAI))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE115)){ // Route 115
-                if( HasTrainerBeenFought(TRAINER_TIMOTHY_1) &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE115)) { // Route 115
+                if ( HasTrainerBeenFought(TRAINER_TIMOTHY_1) &&
                     HasTrainerBeenFought(TRAINER_KOICHI)    &&
                     HasTrainerBeenFought(TRAINER_NOB_1)     &&
                     HasTrainerBeenFought(TRAINER_CYNDY_1)   &&
@@ -3487,8 +3477,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_MARLENE))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE116)){ // Route 116
-                if( HasTrainerBeenFought(TRAINER_JOEY)      &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE116)) { // Route 116
+                if ( HasTrainerBeenFought(TRAINER_JOEY)      &&
                     HasTrainerBeenFought(TRAINER_JOSE)      &&
                     HasTrainerBeenFought(TRAINER_JERRY_1)   &&
                     HasTrainerBeenFought(TRAINER_CLARK)     &&
@@ -3500,8 +3490,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_JOHNSON))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE117)){ // Route 117
-                if( HasTrainerBeenFought(TRAINER_ISAAC_1)           &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE117)) { // Route 117
+                if ( HasTrainerBeenFought(TRAINER_ISAAC_1)           &&
                     HasTrainerBeenFought(TRAINER_LYDIA_1)           &&
                     HasTrainerBeenFought(TRAINER_DYLAN_1)           &&
                     HasTrainerBeenFought(TRAINER_MARIA_1)           &&
@@ -3512,8 +3502,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_AISHA))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE118)){ // Route 118
-                if( HasTrainerBeenFought(TRAINER_ROSE_1)    &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE118)) { // Route 118
+                if ( HasTrainerBeenFought(TRAINER_ROSE_1)    &&
                     HasTrainerBeenFought(TRAINER_BARNY)     &&
                     HasTrainerBeenFought(TRAINER_WADE)      &&
                     HasTrainerBeenFought(TRAINER_DALTON_1)  &&
@@ -3522,8 +3512,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_DEANDRE))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE119)){ // Route 119
-                if( HasTrainerBeenFought(TRAINER_BRENT)         &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE119)) { // Route 119
+                if ( HasTrainerBeenFought(TRAINER_BRENT)         &&
                     HasTrainerBeenFought(TRAINER_DONALD)        &&
                     HasTrainerBeenFought(TRAINER_TAYLOR)        &&
                     HasTrainerBeenFought(TRAINER_DOUG)          &&
@@ -3542,8 +3532,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_RACHEL))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE120)){ // Route 120
-                if( HasTrainerBeenFought(TRAINER_COLIN)     &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE120)) { // Route 120
+                if ( HasTrainerBeenFought(TRAINER_COLIN)     &&
                     HasTrainerBeenFought(TRAINER_ROBERT_1)  &&
                     HasTrainerBeenFought(TRAINER_LORENZO)   &&
                     HasTrainerBeenFought(TRAINER_JENNA)     &&
@@ -3558,8 +3548,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_CALLIE))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE121)){ // Route 121
-                if( HasTrainerBeenFought(TRAINER_VANESSA)       &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE121)) { // Route 121
+                if ( HasTrainerBeenFought(TRAINER_VANESSA)       &&
                     HasTrainerBeenFought(TRAINER_WALTER_1)      &&
                     HasTrainerBeenFought(TRAINER_TAMMY)         &&
                     HasTrainerBeenFought(TRAINER_KATE_AND_JOY)  &&
@@ -3571,8 +3561,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_CRISTIN_1))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE123)){ // Route 123
-                if( HasTrainerBeenFought(TRAINER_WENDY)         &&
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE123)) { // Route 123
+                if ( HasTrainerBeenFought(TRAINER_WENDY)         &&
                     HasTrainerBeenFought(TRAINER_BRAXTON)       &&
                     HasTrainerBeenFought(TRAINER_VIOLET)        &&
                     HasTrainerBeenFought(TRAINER_CAMERON_1)     &&
@@ -3589,8 +3579,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_FERNANDO_1))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE127)){ // Route 127
-                if( HasTrainerBeenFought(TRAINER_KOJI_1) && 
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE127)) { // Route 127
+                if ( HasTrainerBeenFought(TRAINER_KOJI_1) && 
                     HasTrainerBeenFought(TRAINER_ATHENA) && 
                     HasTrainerBeenFought(TRAINER_AIDAN)  &&
                     HasTrainerBeenFought(TRAINER_ROGER)  && 
@@ -3600,8 +3590,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_DONNY))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE128)){ // Route 128
-                if( HasTrainerBeenFought(TRAINER_CARLEE)    && 
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE128)) { // Route 128
+                if ( HasTrainerBeenFought(TRAINER_CARLEE)    && 
                     HasTrainerBeenFought(TRAINER_HARRISON)  && 
                     HasTrainerBeenFought(TRAINER_WAYNE)     &&
                     HasTrainerBeenFought(TRAINER_RUBEN)     && 
@@ -3610,8 +3600,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_ISAIAH_1))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE131)){ // Route 131
-                if( HasTrainerBeenFought(TRAINER_RICHARD)      && 
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE131)) { // Route 131
+                if ( HasTrainerBeenFought(TRAINER_RICHARD)      && 
                     HasTrainerBeenFought(TRAINER_HERMAN)       && 
                     HasTrainerBeenFought(TRAINER_SUSIE)        &&
                     HasTrainerBeenFought(TRAINER_KARA)         && 
@@ -3620,8 +3610,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_KEVIN))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE132)){ // Route 132
-                if( HasTrainerBeenFought(TRAINER_MAKAYLA)  && 
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE132)) { // Route 132
+                if ( HasTrainerBeenFought(TRAINER_MAKAYLA)  && 
                     HasTrainerBeenFought(TRAINER_JONATHAN) && 
                     HasTrainerBeenFought(TRAINER_DARCY)    &&
                     HasTrainerBeenFought(TRAINER_PAXTON)   && 
@@ -3631,8 +3621,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_GILBERT))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE133)){ // Route 133
-                if( HasTrainerBeenFought(TRAINER_CONOR)  && 
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE133)) { // Route 133
+                if ( HasTrainerBeenFought(TRAINER_CONOR)  && 
                     HasTrainerBeenFought(TRAINER_MOLLIE) && 
                     HasTrainerBeenFought(TRAINER_BECK)   &&
                     HasTrainerBeenFought(TRAINER_WARREN) && 
@@ -3640,8 +3630,8 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_DEBRA))
                     CanFindHiddenMon = TRUE;
             }
-            else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE134)){ // Route 134
-                if( HasTrainerBeenFought(TRAINER_KELVIN)  && 
+            else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE134)) { // Route 134
+                if ( HasTrainerBeenFought(TRAINER_KELVIN)  && 
                     HasTrainerBeenFought(TRAINER_MARLEY)  && 
                     HasTrainerBeenFought(TRAINER_REYNA)   &&
                     HasTrainerBeenFought(TRAINER_HUDSON)  && 
@@ -3654,8 +3644,8 @@ bool8 CanFindHiddenPokemon(void)
             }
 		break;
         case MAP_GROUP_DUNGEONS:
-            if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(VICTORY_ROAD_1F)){ //Victory Road 1F
-                if( HasTrainerBeenFought(TRAINER_WALLY_VR_1) && 
+            if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(VICTORY_ROAD_1F)) { //Victory Road 1F
+                if ( HasTrainerBeenFought(TRAINER_WALLY_VR_1) && 
                     HasTrainerBeenFought(TRAINER_EDGAR)      && 
                     HasTrainerBeenFought(TRAINER_ALBERT)     &&
                     HasTrainerBeenFought(TRAINER_HOPE)       &&
@@ -3663,15 +3653,15 @@ bool8 CanFindHiddenPokemon(void)
                     HasTrainerBeenFought(TRAINER_KATELYNN))
                     CanFindHiddenMon = TRUE;
             }
-			else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(VICTORY_ROAD_B1F)){ //Victory Road B1F
-                if( HasTrainerBeenFought(TRAINER_HALLE)    && 
+			else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(VICTORY_ROAD_B1F)) { //Victory Road B1F
+                if ( HasTrainerBeenFought(TRAINER_HALLE)    && 
                     HasTrainerBeenFought(TRAINER_MITCHELL) && 
                     HasTrainerBeenFought(TRAINER_SHANNON)  &&
                     HasTrainerBeenFought(TRAINER_SAMUEL))
                     CanFindHiddenMon = TRUE;
             }
-			else if(gSaveBlock1Ptr->location.mapNum == MAP_NUM(VICTORY_ROAD_B2F)){ //Victory Road B2F
-                if( HasTrainerBeenFought(TRAINER_JULIE)    && 
+			else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(VICTORY_ROAD_B2F)) { //Victory Road B2F
+                if ( HasTrainerBeenFought(TRAINER_JULIE)    && 
                     HasTrainerBeenFought(TRAINER_CAROLINE) && 
                     HasTrainerBeenFought(TRAINER_OWEN)     &&
                     HasTrainerBeenFought(TRAINER_VITO)     && 
@@ -3682,41 +3672,41 @@ bool8 CanFindHiddenPokemon(void)
 		break;
     }
 
-    if(!FlagGet(FLAG_SYS_GAME_CLEAR))
+    if (!FlagGet(FLAG_SYS_GAME_CLEAR))
         CanFindHiddenMon = FALSE;
 
     return CanFindHiddenMon;
 }
 
-bool8 hasAllMonsInEnviorment(void){
+bool8 hasAllMonsInEnviorment(void) {
     u8 i, j;
     u8 enviorment = sDexNavUiDataPtr->currentEnviorment;
     u16 species;
-    for(i = 0; i < NUM_POKEMON_ICONS; i++){
+    for (i = 0; i < NUM_POKEMON_ICONS; i++) {
         species = sDexNavUiDataPtr->routeSpecies[enviorment][i];
-        if(species != SPECIES_NONE && !GetSetPokedexFlag(species, FLAG_GET_CAUGHT))
+        if (species != SPECIES_NONE && !GetSetPokedexFlag(species, FLAG_GET_CAUGHT))
             return  FALSE;
     }
     return TRUE;
 }
 
-bool8 IsRouteDexnavLocked(){
+bool8 IsRouteDexnavLocked() {
     bool8 disableDexnav = FALSE;
     u16 loc = gSaveBlock1Ptr->location.mapNum;
     u16 locG = gSaveBlock1Ptr->location.mapGroup;
-    switch(gSaveBlock1Ptr->location.mapNum){
+    switch (gSaveBlock1Ptr->location.mapNum) {
 		case MAP_NUM(ROUTE115):
-			if(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE115) && !FlagGet(DEXNAV_ENABLE_ROUTE_115_FLAG))
+			if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE115) && !FlagGet(DEXNAV_ENABLE_ROUTE_115_FLAG))
 				disableDexnav = TRUE;
 		break;
     }
-    if(IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures){
+    if (IsRouteEncountered(loc, locG) && gSaveBlock2Ptr->nuzlockeCaptures) {
         disableDexnav = TRUE;
     }
     return disableDexnav;
 }
 
-bool8 MapHasMons(void){
+bool8 MapHasMons(void) {
 	u16 i;
 
     for (i = 0; ; i++)
@@ -3735,7 +3725,7 @@ bool8 MapHasMons(void){
     return FALSE;
 }
 
-bool8 canOpenDexnav(void){
+bool8 canOpenDexnav(void) {
     u16 headerId = GetCurrentMapWildMonHeaderId();
     u8 i;
     const struct WildPokemonInfo *landMonsInfo      = gWildMonHeaders[headerId].landMonsInfo;
@@ -3745,16 +3735,16 @@ bool8 canOpenDexnav(void){
     const struct WildPokemonInfo* rockSmashMonsInfo = gWildMonHeaders[headerId].rockSmashMonsInfo;
     const struct WildPokemonInfo* fishingMonsInfo   = gWildMonHeaders[headerId].fishingMonsInfo;
 
-    if(IsRouteDexnavLocked() || !MapHasMons())
+    if (IsRouteDexnavLocked() || !MapHasMons())
         return FALSE;
 
-    for(i = 0; i < DEXNAV_ROWS_COUNT; i++){
+    for (i = 0; i < DEXNAV_ROWS_COUNT; i++) {
         if (IsDisabledForRoute(i)) continue;
-        switch(i){
+        switch (i) {
             case ROW_LAND_TOP:    
                 // Land Encounters
                 if (landMonsInfo != NULL && 
-                    landMonsInfo->encounterRate != 0){
+                    landMonsInfo->encounterRate != 0) {
                     return TRUE;
                 }
             break;

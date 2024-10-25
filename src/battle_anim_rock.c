@@ -1005,6 +1005,27 @@ void AnimTask_GetSeismicTossDamageLevel(u8 taskId)
     DestroyAnimVisualTask(taskId);
 }
 
+void AnimTask_MoveSeismicTossBgUp(u8 taskId)
+{
+    if (gTasks[taskId].data[0] == 0)
+    {
+        UpdateAnimBg3ScreenSize(FALSE);
+        gTasks[taskId].data[1] = 170;
+    }
+
+    gBattle_BG3_Y += gTasks[taskId].data[1] / 10;
+    if (gTasks[taskId].data[1] < 200) gTasks[taskId].data[1] += 3;
+
+    if (gTasks[taskId].data[0] == 60)
+    {
+        gBattle_BG3_Y = 0;
+        UpdateAnimBg3ScreenSize(TRUE);
+        DestroyAnimVisualTask(taskId);
+    }
+
+    gTasks[taskId].data[0]++;
+}
+
 void AnimTask_MoveSeismicTossBg(u8 taskId)
 {
     if (gTasks[taskId].data[0] == 0)

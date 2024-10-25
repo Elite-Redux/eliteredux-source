@@ -5369,7 +5369,11 @@ Move_SMACK_DOWN::
 	waitbgfadeout
 	createvisualtask AnimTask_StartSlidingBg, 5, 0x0, 0x0, 0x0, 0xffff
 	createvisualtask AnimTask_SeismicTossBgAccelerateDownAtEnd, 3
-	goto SeismicTossWeak
+SeismicTossWeak:
+	call SeismicTossRockScatter1
+	delay 16
+	call SeismicTossRockScatter2
+	goto SeismicTossContinue
 
 Move_STORM_THROW:
 	call StormThorwAnim
@@ -6073,7 +6077,7 @@ SkyDropSetup:
 	launchtemplate gSkyDropTargetFlyingTemplate 0x2 0x4 0x0 0x0 0xd 0x150
 	end
 SkyDropUnleash:
-	visible ANIM_TARGET
+	invisible ANIM_TARGET
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
 	playsewithpan SE_M_SWAGGER, SOUND_PAN_TARGET
@@ -6082,6 +6086,8 @@ SkyDropUnleash:
 	playsewithpan SE_M_MEGA_KICK2, SOUND_PAN_TARGET
 	launchtemplate gBasicHitSplatSpriteTemplate 0x82, 0x4, 0x0 0x0 0x1 0x0
 	launchtask AnimTask_ShakeMon 0x5 0x5 0x1 0x0 0x5 0xb 0x1
+	waitforvisualfinish
+	visible ANIM_TARGET
 	waitforvisualfinish
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
@@ -25869,24 +25875,43 @@ Move_ASTONISH:
 	end
 
 Move_SEISMIC_TOSS:
+	loadspritegfx ANIM_TAG_ROUND_SHADOW
 	loadspritegfx ANIM_TAG_IMPACT
 	loadspritegfx ANIM_TAG_ROCKS
 	setarg 7, 0
 	monbg ANIM_DEF_PARTNER
 	setalpha 12, 8
 	waitforvisualfinish
-	createvisualtask AnimTask_GetSeismicTossDamageLevel, 3
-	delay 1
 	fadetobg BG_IN_AIR
 	waitbgfadeout
+	visible ANIM_ATTACKER
+	visible ANIM_TARGET
+	choosetwoturnanim SeismicTossSetup SeismicTossUnleash
+	end
+SeismicTossSetup:
+	fadetobg BG_IN_AIR
+	waitbgfadeout
+	createvisualtask AnimTask_MoveSeismicTossBgUp, 3
+	playsewithpan SE_M_SKY_UPPERCUT, 0
+	waitbgfadein
+	waitforvisualfinish
+	invisible ANIM_ATTACKER
+	invisible ANIM_TARGET
+	goto SeismicTossContinue
+SeismicTossUnleash:
 	createvisualtask AnimTask_MoveSeismicTossBg, 3
 	playsewithpan SE_M_SKY_UPPERCUT, 0
 	waitbgfadein
 	waitforvisualfinish
 	createvisualtask AnimTask_SeismicTossBgAccelerateDownAtEnd, 3
-	jumpreteq 0, SeismicTossWeak
-	jumpreteq 1, SeismicTossMedium
-	jumpreteq 2, SeismicTossStrong
+	call SeismicTossRockScatter2
+	delay 10
+	call SeismicTossRockScatter1
+	delay 10
+	call SeismicTossRockScatter2
+	delay 10
+	call SeismicTossRockScatter1
+	goto SeismicTossContinue
 SeismicTossContinue:
 	restorebg
 	waitbgfadeout
@@ -25895,27 +25920,6 @@ SeismicTossContinue:
 	clearmonbg ANIM_DEF_PARTNER
 	blendoff
 	end
-SeismicTossWeak:
-	call SeismicTossRockScatter1
-	delay 16
-	call SeismicTossRockScatter2
-	goto SeismicTossContinue
-SeismicTossMedium:
-	call SeismicTossRockScatter1
-	delay 14
-	call SeismicTossRockScatter2
-	delay 14
-	call SeismicTossRockScatter1
-	goto SeismicTossContinue
-SeismicTossStrong:
-	call SeismicTossRockScatter2
-	delay 10
-	call SeismicTossRockScatter1
-	delay 10
-	call SeismicTossRockScatter2
-	delay 10
-	call SeismicTossRockScatter1
-	goto SeismicTossContinue
 SeismicTossRockScatter1:
 	createsprite gBasicHitSplatSpriteTemplate, ANIM_TARGET, 3, -10, -8, ANIM_TARGET, 1
 	playsewithpan SE_M_STRENGTH, SOUND_PAN_TARGET

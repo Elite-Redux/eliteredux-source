@@ -2253,7 +2253,7 @@ u16 GetRandomFrontierMonFromSet(u16 trainerId)
     do
     {
         monId = monSet[Random() % numMons];
-    } while((level == 50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER);
+    } while ((level == 50 || level == 20) && monId > FRONTIER_MONS_HIGH_TIER);
 
     return monId;
 }
@@ -3540,7 +3540,7 @@ static void FillPartnerParty(u16 trainerId)
 
                 for (j = 0; j < NUM_STATS; j++)
                 {
-                    switch(j){
+                    switch (j) {
                         case 0:
                             SetMonData(&gPlayerParty[i + 3], MON_DATA_HP_EV, &partyData[i].evs[j]);
                         break;
@@ -3577,7 +3577,7 @@ static void FillPartnerParty(u16 trainerId)
 
                 for (j = 0; j < NUM_STATS; j++)
                 {
-                    switch(j){
+                    switch (j) {
                         case 0:
                             SetMonData(&gPlayerParty[i + 3], MON_DATA_HP_EV, &partyData[i].evs[j]);
                         break;
@@ -3641,7 +3641,7 @@ static void FillPartnerParty(u16 trainerId)
 
                 for (j = 0; j < NUM_STATS; j++)
                 {
-                    switch(j){
+                    switch (j) {
                         case 0:
                             SetMonData(&gPlayerParty[i + 3], MON_DATA_HP_EV, &partyData[i].evs[j]);
                         break;

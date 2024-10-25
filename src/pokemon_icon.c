@@ -3704,7 +3704,7 @@ void LoadGenderedMonIconPalette(u16 species, u32 personality)
     else
         palIndex = gMonIconPaletteIndices[species];
 
-    if (IndexOfSpritePaletteTag(gMonIconPaletteTable[palIndex].tag) == 0xFF){
+    if (IndexOfSpritePaletteTag(gMonIconPaletteTable[palIndex].tag) == 0xFF) {
         LoadSpritePalette(&gMonIconPaletteTable[palIndex]);
     }
 }
@@ -3756,7 +3756,7 @@ void sub_80D304C(u16 offset)
     if (offset <= 0xA0)
     {
         monIconPalettePtr = gMonIconPaletteTable;
-        for(i = 5; i >= 0; i--)
+        for (i = 5; i >= 0; i--)
         {
             LoadPalette(monIconPalettePtr->data, offset, 0x20);
             offset += 0x10;

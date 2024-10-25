@@ -1160,7 +1160,7 @@ const u8 gUnknown_0850DC3F[][4] = {
 
 static void ClearObjectEvent(struct ObjectEvent *objectEvent)
 {
-    *objectEvent = (struct ObjectEvent){};
+    *objectEvent = (struct ObjectEvent) {};
     objectEvent->localId = 0xFF;
     objectEvent->mapNum = 0xFF;
     objectEvent->mapGroup = 0xFF;
@@ -2678,7 +2678,7 @@ bool8 ObjectEventIsTrainerAndCloseToPlayer(struct ObjectEvent *objectEvent)
         return FALSE;
     }
 
-    if(objectEvent->trainerRange_berryTreeId >= MAX_SIGHT_RADIUS)
+    if (objectEvent->trainerRange_berryTreeId >= MAX_SIGHT_RADIUS)
         approachRange = MAX_SIGHT_RADIUS;
     else
         approachRange = objectEvent->trainerRange_berryTreeId;
@@ -8488,7 +8488,7 @@ static bool8 AnimateSpriteInFigure8(struct Sprite *sprite)
 {
     bool8 finished = FALSE;
 
-    switch(sprite->data[7])
+    switch (sprite->data[7])
     {
     case 0:
         sprite->x2 += GetFigure8XOffset(sprite->data[6]);
@@ -8686,7 +8686,7 @@ static void DestroyObjectEventSprites(void)
     for (i = 0; i < MAX_SPRITES; i++)
     {
         struct Sprite *sprite = &gSprites[i];
-        if(sprite->inUse && sprite->callback == UpdateObjectEventSprite)
+        if (sprite->inUse && sprite->callback == UpdateObjectEventSprite)
             DestroySprite(sprite);
     }
 }
@@ -8778,7 +8778,7 @@ void SetObjectEventSpriteAnim(u8 objectEventId, u8 animNum)
 
 static void MoveUnionRoomObjectUp(struct Sprite *sprite)
 {
-    switch(sprite->sAnimState)
+    switch (sprite->sAnimState)
     {
         case 0:
             sprite->y2 = 0;
@@ -8797,14 +8797,14 @@ static void MoveUnionRoomObjectUp(struct Sprite *sprite)
 
 static void MoveUnionRoomObjectDown(struct Sprite *sprite)
 {
-    switch(sprite->sAnimState)
+    switch (sprite->sAnimState)
     {
         case 0:
             sprite->y2 = -DISPLAY_HEIGHT;
             sprite->sAnimState++;
         case 1:
             sprite->y2 += 8;
-            if(sprite->y2 == 0)
+            if (sprite->y2 == 0)
             {
                 sprite->sAnimNum = 0;
                 sprite->sAnimState = 0;
@@ -8814,7 +8814,7 @@ static void MoveUnionRoomObjectDown(struct Sprite *sprite)
 
 static void UpdateObjectEventSpritePosition(struct Sprite *sprite)
 {
-    switch(sprite->sAnimNum)
+    switch (sprite->sAnimNum)
     {
         case UNION_ROOM_SPAWN_IN:
             MoveUnionRoomObjectDown(sprite);
@@ -8995,10 +8995,10 @@ static void ApplyLevitateMovement(u8 taskId)
     LoadWordFromTwoHalfwords(&task->data[0], (u32 *)&objectEvent); // load the map object pointer.
     sprite = &gSprites[objectEvent->spriteId];
 
-    if(!(task->data[2] & 3))
+    if (!(task->data[2] & 3))
         sprite->y2 += task->data[3];
 
-    if(!(task->data[2] & 15))
+    if (!(task->data[2] & 15))
         task->data[3] = -task->data[3];
 
     task->data[2]++;
@@ -9018,9 +9018,9 @@ void FreezeObjectEventsExceptTwo(u8 objectEventId1, u8 objectEventId2)
 {
     u8 i;
 
-    for(i = 0; i < OBJECT_EVENTS_COUNT; i++)
+    for (i = 0; i < OBJECT_EVENTS_COUNT; i++)
     {
-        if(i != objectEventId1 && i != objectEventId2 &&
+        if (i != objectEventId1 && i != objectEventId2 &&
             gObjectEvents[i].active && i != gPlayerAvatar.objectEventId)
                 FreezeObjectEvent(&gObjectEvents[i]);
     }
@@ -9037,7 +9037,7 @@ u8 MovementAction_FlyUp_Step1(struct ObjectEvent *objectEvent, struct Sprite *sp
 {
     sprite->y2 -= 8;
 
-    if(sprite->y2 == -DISPLAY_HEIGHT)
+    if (sprite->y2 == -DISPLAY_HEIGHT)
         sprite->sActionFuncId++;
     return FALSE;
 }
@@ -9053,7 +9053,7 @@ u8 MovementAction_FlyDown_Step1(struct ObjectEvent *objectEvent, struct Sprite *
 {
     sprite->y2 += 8;
 
-    if(!sprite->y2)
+    if (!sprite->y2)
         sprite->sActionFuncId++;
     return FALSE;
 }

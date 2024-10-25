@@ -1158,140 +1158,140 @@ const u8 *GetSecretBaseTrainerLoseText(void)
 const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
 {
     u8 tagTeam = VarGet(VAR_TAG_TEAM_ID);
-    switch(tagTeam){
+    switch (tagTeam) {
         case TAG_TEAM_WALLACE_JUAN:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return SootopolisCity_Gym_1F_Text_JuanDefeat;
             else
                 return SootopolisCity_Gym_1F_Text_WallaceDefeat;
         break;
         case TAG_TEAM_WALLACE_JUAN_2:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return SootopolisCity_Gym_1F_Text_Juan_Round_2;
             else
                 return SootopolisCity_Gym_1F_Text_Wallace_Round_2;
         case TAG_TEAM_WALLACE_JUAN_REMATCH:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return SootopolisCity_Gym_1F_Text_JuanDefeatRematch;
             else
                 return SootopolisCity_Gym_1F_Text_WallaceDefeatRematch;
         break;
         case TAG_TEAM_BRENDEN_LILITH:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return DewfordTown_Gym_Text_LilithDefeat;
             else
                 return DewfordTown_Gym_Text_BrendenDefeat;
         break;
         case TAG_TEAM_SHAWN_ANGELO:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return MauvilleCity_Gym_Text_ShawnDefeat;
             else
                 return MauvilleCity_Gym_Text_AngeloDefeat;
         break;
         case TAG_TEAM_EDUARDO_FLINT:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return FortreeCity_Gym_Text_EdwardoDefeat;
             else
                 return FortreeCity_Gym_Text_FlintDefeat;
         break;
         case TAG_TEAM_ASHLEY_JARED:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return FortreeCity_Gym_Text_AshleyDefeat;
             else
                 return FortreeCity_Gym_Text_JaredDefeat;
         break;
         case TAG_TEAM_SAMANTHA_BLAKE:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return MossdeepCity_Gym_Text_SamanthaDefeat;
             else
                 return MossdeepCity_Gym_Text_BlakeDefeat;
         break;
         case TAG_TEAM_MAURA_PRESTON:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return MossdeepCity_Gym_Text_MauraDefeat;
             else
                 return MossdeepCity_Gym_Text_PrestonDefeat;
         break;
         case TAG_TEAM_SYLVIA_HANNAH:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return MossdeepCity_Gym_Text_SylviaDefeat;
             else
                 return MossdeepCity_Gym_Text_HannahDefeat;
         break;
         case TAG_TEAM_KATHLEEN_NICHOLAS:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return MossdeepCity_Gym_Text_KathleenDefeat;
             else
                 return MossdeepCity_Gym_Text_NicholasDefeat;
         break;
         case TAG_TEAM_MACEY_CLIFFORD:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return MossdeepCity_Gym_Text_MaceyDefeat;
             else
                 return MossdeepCity_Gym_Text_CliffordDefeat;
         break;
         case TAG_TEAM_NATE_VIRGIL:
-            if(!isTrainerB)
+            if (!isTrainerB)
                 return MossdeepCity_Gym_Text_NateDefeat;
             else
                 return MossdeepCity_Gym_Text_VirgilDefeat;
         break;
         case TAG_TEAM_BRIDGET_CRISSY:
-        if(!isTrainerB)
+        if (!isTrainerB)
             return SootopolisCity_Gym_B1F_Text_BridgetDefeat;
         else
             return SootopolisCity_Gym_B1F_Text_CrissyDefeat;
         break;
         case TAG_TEAM_CRISSY_BETHANY:
-        	if(!isTrainerB)
+        	if (!isTrainerB)
 		        return SootopolisCity_Gym_B1F_Text_CrissyDefeat;
 	        else
 		        return SootopolisCity_Gym_B1F_Text_BethanyDefeat;
         break;	
         case TAG_TEAM_BRIDGET_BETHANY:
-        	if(!isTrainerB)
+        	if (!isTrainerB)
 		        return SootopolisCity_Gym_B1F_Text_BridgetDefeat;
 	        else
 		        return SootopolisCity_Gym_B1F_Text_BethanyDefeat;
         break;
         case TAG_TEAM_ANNIKA_BRIANNA:
-        	if(!isTrainerB)
+        	if (!isTrainerB)
 		        return SootopolisCity_Gym_B1F_Text_AnnikaDefeat;
 	        else
 		        return SootopolisCity_Gym_B1F_Text_BriannaDefeat;
         break;
         case TAG_TEAM_BRIANNA_OLIVIA:
-        	if(!isTrainerB)
+        	if (!isTrainerB)
 		        return SootopolisCity_Gym_B1F_Text_BriannaDefeat;
 	        else
 		        return SootopolisCity_Gym_B1F_Text_OliviaDefeat;
         break;
         case TAG_TEAM_OLIVIA_ANNIKA:
-        	if(!isTrainerB)
+        	if (!isTrainerB)
 		        return SootopolisCity_Gym_B1F_Text_OliviaDefeat;
 	        else
 		        return SootopolisCity_Gym_B1F_Text_AnnikaDefeat;
         break;	
         case TAG_TEAM_DAPHNE_CONNIE:
-        	if(!isTrainerB)
+        	if (!isTrainerB)
 		        return SootopolisCity_Gym_B1F_Text_DaphneDefeat;
 	        else
 		        return SootopolisCity_Gym_B1F_Text_ConnieDefeat;
         break;
         case TAG_TEAM_CONNIE_ANDREA:
-        	if(!isTrainerB)
+        	if (!isTrainerB)
 		        return SootopolisCity_Gym_B1F_Text_ConnieDefeat;
 	        else
 		        return SootopolisCity_Gym_B1F_Text_AndreaDefeat;
         break;
         case TAG_TEAM_ANDREA_DAPHNE:
-        	if(!isTrainerB)
+        	if (!isTrainerB)
 		        return SootopolisCity_Gym_B1F_Text_AndreaDefeat;
 	        else
 		        return SootopolisCity_Gym_B1F_Text_DaphneDefeat;
         break;	
         case TAG_TEAM_COLE_KEEGAN:
-        	if(!isTrainerB)
+        	if (!isTrainerB)
 		        return LavaridgeTown_Gym_1F_Text_ColeDefeat;
 	        else
 		        return LavaridgeTown_Gym_B1F_Text_KeeganDefeat;
@@ -1443,7 +1443,7 @@ void SecretBasePerStepCallback(u8 taskId)
 
                 ShatterSecretBaseBreakableDoor(x, y);
             }
-            else if (MetatileBehavior_IsSecretBaseSoundMat(behavior) == TRUE){
+            else if (MetatileBehavior_IsSecretBaseSoundMat(behavior) == TRUE) {
                 if (sInFriendSecretBase == TRUE)
                     VarSet(VAR_SECRET_BASE_LOW_TV_FLAGS, VarGet(VAR_SECRET_BASE_LOW_TV_FLAGS) | SECRET_BASE_USED_NOTE_MAT);
             }

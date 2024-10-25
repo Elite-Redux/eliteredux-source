@@ -383,7 +383,7 @@ static void GenerateOpponentMons(void)
     }
 }
 
-static u8 getPartySize(){
+static u8 getPartySize() {
     return FlagGet(FLAG_FRONTIER_6V6) ? FRONTIER_PARTY_SIZE_6 : FRONTIER_PARTY_SIZE;
 }
 
