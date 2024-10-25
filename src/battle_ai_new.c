@@ -2262,7 +2262,6 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
 
     case ABILITY_WHIPLASH:
         REQUIRE(IS_MOVE_PHYSICAL(move))
-        REQUIRE(Random() % 2)
         // TODO: Once per turn
         return AdjustForChance(50, AI_SCORE_STAT(battlerDef, STAT_DEF, -1));
 
@@ -2510,5 +2509,12 @@ int CheckAttackerAbility(int battlerAtk, int battlerDef, int move, int moveType,
     for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
     {
         score += ScoreAttackAbility(aiData->abilities[battlerAtk][i], battlerAtk, battlerDef, move, moveType, aiData);
+    }
+}
+
+int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
+{
+    switch (ability)
+    {
     }
 }

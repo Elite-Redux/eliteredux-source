@@ -5144,7 +5144,7 @@ static int AbilityHealMonStatus(u8 battler, u16 ability) {
     return TRUE;
 }
 
-static bool8 CanMoveHaveExtraFlinchChance(u16 move)
+bool8 CanMoveHaveExtraFlinchChance(u16 move)
 {
     switch (gBattleMoves[move].effect)
     {

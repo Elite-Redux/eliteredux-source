@@ -8222,7 +8222,7 @@ BattleScript_DestinyBondTakesLife::
 	return
 
 BattleScript_ResolveAllHazards::
-	dohazarddamage BS_STACK_1, HAZARD_MODE_SPIKES
+	dohazarddamage BS_STACK_1
 	return
 
 BattleScript_ResolveRocks::
@@ -8230,11 +8230,11 @@ BattleScript_ResolveRocks::
 	return
 
 BattleScript_ResolvePoisonSpikes::
-	dohazarddamage BS_STACK_1, HAZARD_MODE_WEBS
+	dohazarddamage BS_STACK_1, HAZARD_MODE_POISON_SPIKES
 	return
 
 BattleScript_ResolveWebs::
-	dohazarddamage BS_STACK_1, HAZARD_MODE_POISON_SPIKES
+	dohazarddamage BS_STACK_1, HAZARD_MODE_WEBS
 	return
 
 BattleScript_ResolveFireTrap::
