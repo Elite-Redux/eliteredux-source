@@ -17,7 +17,11 @@
 #define AI_SCORE_IMMUNE AI_SCORE_UNUSABLE
 
 struct MoveState {
+    int damage;
+    u8 critChance;
     u8 falseSwipe:1;
+    u8 contact:1;
+
 };
 
 struct AiData {
@@ -110,9 +114,9 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_SLEEP_MOVE(battler) 0
 #define AI_GET_MOVE_EFFECT_CHANCE 0
 #define AI_SCORE_ABSORB_MOVE(percent) 0
-#define AI_SCORE_BURN_MOVE(battlerDef) 0
-#define AI_SCORE_FROSTBITE_MOVE(battlerDef) 0
-#define AI_SCORE_PARALYSIS_MOVE(battlerDef) 0
+#define AI_SCORE_BURN_MOVE(battler) 0
+#define AI_SCORE_FROSTBITE_MOVE(battler) 0
+#define AI_SCORE_PARALYSIS_MOVE(battler) 0
 #define AI_SCORE_ATTACK_UP(battler, stages) 0
 #define AI_SCORE_DEFENSE_UP(battler, stages) 0
 #define AI_SCORE_SPEED_UP(battler, stages) 0
@@ -128,16 +132,16 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_SWAMP 0
 #define AI_SCORE_FIRE_SEA 0
 #define AI_SCORE_FORCE_SWITCH 0
-#define AI_SCORE_FLINCH(battlerDef) 0
+#define AI_SCORE_FLINCH(battler) 0
 #define AI_SCORE_HEAL(battler, percent) 0
-#define AI_SCORE_TOXIC(battlerDef) 0
+#define AI_SCORE_TOXIC(battler) 0
 #define AI_SCORE_LIGHTSCREEN 0
 #define AI_SCORE_CURE_STATUS(battler) 0
 #define AI_SCORE_WRAP 0
 #define AI_SCORE_HEAL_BLOCK(duration) 0
 #define AI_SCORE_MIST 0
 #define AI_SCORE_RECOIL(percent) 0
-#define AI_SCORE_CONFUSION(battlerDef) 0
+#define AI_SCORE_CONFUSION(battler) 0
 #define AI_SCORE_TRANSFORM 0
 #define AI_SCORE_REFLECT 0
 #define AI_SCORE_SUBSTITUTE 0
@@ -187,6 +191,7 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_INGRAIN 0
 #define AI_SCORE_RECYCLE 0
 #define AI_SCORE_BREAK_SCREENS 0
+#define AI_SCORE_BREAK_SUBSTITUTE 0
 #define AI_SCORE_DROWSY 0
 #define AI_SCORE_ENDEAVOR 0
 #define AI_SCORE_IMPRISON 0
@@ -215,7 +220,7 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_FOG 0
 #define AI_SCORE_COILED_UP 0
 #define AI_SCORE_ARGUMENT_MOVE_EFFECT 0
-#define AI_SCORE_BLEED(battlerDef) 0
+#define AI_SCORE_BLEED(battler) 0
 #define AI_SCORE_AURORA_VEIL 0
 #define AI_SCORE_BREAK_PROTECT 0
 #define AI_SCORE_GLAIVE_RUSH 0
@@ -234,6 +239,7 @@ if (!effectiveness) return AI_SCORE_IMMUNE
 #define AI_SCORE_CLEAR_SKIES 0
 #define AI_SCORE_TREPIDATION 0
 #define AI_SCORE_SALT_CURE 0
+#define AI_SCORE_DAZE(battler) 0
 
 static int SeesSunlight(int battler, struct AiData* aiData)
 {
@@ -2165,6 +2171,21 @@ int GetAiDecision(int battler)
 
 int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
 {
+    int score = 0;
+
+    switch (ability)
+    {
+    case ABILITY_VITAL_SPIRIT:
+    case ABILITY_GULP_MISSILE:
+    case ABILITY_SHIELDS_DOWN:
+    case ABILITY_ANGELS_WRATH:
+        break;
+    
+    default:
+        if (!aiData->moveState.damage) return 0;
+        break;
+    }
+
     switch (ability)
     {
     case ABILITY_SHIELDS_DOWN:
@@ -2210,8 +2231,273 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         // TODO: Once per turn
         return AI_SCORE_CLEAR_HAZARDS(battlerAtk) + AI_SCORE_STAT(battlerAtk, STAT_SPEED, 1);
     
-    default:
-        break;
+    case ABILITY_VITAL_SPIRIT:
+        REQUIRE(moveType == TYPE_FIGHTING)
+        return AI_SCORE_CURE_STATUS(battlerAtk);
+    
+    case ABILITY_HARDENED_SHEATH:
+        REQUIRE(gBattleMoves[move].hornBased)
+        return AI_SCORE_ATTACK_UP(battlerAtk, 1);
+    
+    case ABILITY_LOUD_BANG:
+        REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
+        return AdjustForChance(50, AI_SCORE_CONFUSION(battlerDef));
+    
+    case ABILITY_PIERCING_SOLO:
+        REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
+        return AdjustForChance(30, AI_SCORE_BLEED(battlerDef));
+    
+    case ABILITY_TO_THE_BONE:
+    case ABILITY_RAZOR_SHARP:
+        return AdjustForChance(aiData->moveState.critChance, AI_SCORE_BLEED(battlerDef));
+    
+    case ABILITY_KNOW_YOUR_PLACE:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_DAZE(battlerDef);
+    
+    case ABILITY_DENTING_BLOWS:
+        REQUIRE(gBattleMoves[move].hammerBased)
+        // TODO: Once per turn
+        return AI_SCORE_STAT(battlerDef, STAT_DEF, -1);
+
+    case ABILITY_WHIPLASH:
+        REQUIRE(IS_MOVE_PHYSICAL(move))
+        REQUIRE(Random() % 2)
+        // TODO: Once per turn
+        return AdjustForChance(50, AI_SCORE_STAT(battlerDef, STAT_DEF, -1));
+
+    case ABILITY_BEAUTIFUL_MUSIC:
+        REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
+        return AdjustForChance(50, AI_SCORE_ATTRACT);
+    
+    case ABILITY_RESONANCE:
+        REQUIRE((gBattleMoves[move].flags & FLAG_SOUND))
+        return AI_SCORE_BLEED(battlerDef);
+    
+    case ABILITY_TOXIC_CHAIN:
+        return AdjustForChance(30, AI_SCORE_TOXIC(battlerDef));
+    
+    case ABILITY_ELECTRIC_BURST:
+        REQUIRE(moveType == TYPE_ELECTRIC)
+        // TODO: Can't faint
+        return AI_SCORE_RECOIL(10);
+    
+    case ABILITY_INFERNAL_RAGE:
+        REQUIRE(moveType == TYPE_FIRE)
+        return AI_SCORE_RECOIL(10);
+    
+    case ABILITY_ARCHMAGE:
+        REQUIRE_NOT(IS_MOVE_STATUS(move))
+        switch (moveType)
+        {
+        case TYPE_POISON:
+            score = AI_SCORE_TOXIC(battlerDef);
+            break;
+        
+        case TYPE_ICE:
+            score = AI_SCORE_FROSTBITE_MOVE(battlerDef);
+            break;
+        
+        case TYPE_WATER:
+            score = AI_SCORE_CONFUSION(battlerDef);
+            break;
+        
+        case TYPE_FIRE:
+            score = AI_SCORE_BURN_MOVE(battlerDef);
+            break;
+        
+        case TYPE_ELECTRIC:
+            score = AI_SCORE_ELECTRIC_TERRAIN;
+            break;
+        
+        case TYPE_PSYCHIC:
+            score = AI_SCORE_PSYCHIC_TERRAIN;
+            break;
+        
+        case TYPE_FAIRY:
+            score = AI_SCORE_MISTY_TERRAIN;
+            break;
+        
+        case TYPE_GRASS:
+            score = AI_SCORE_GRASSY_TERRAIN;
+            break;
+        
+        case TYPE_NORMAL:
+            score = AI_SCORE_ENCORE;
+            break;
+        
+        case TYPE_ROCK:
+            score = AI_SCORE_STEALTH_ROCK(TYPE_ROCK);
+            break;
+
+        case TYPE_GHOST:
+            score = AI_SCORE_DISABLE;
+            break;
+        
+        case TYPE_DARK:
+            score = AI_SCORE_BLEED(battlerDef);
+            break;
+        
+        case TYPE_FIGHTING:
+            score = AI_SCORE_STAT(battlerAtk, STAT_SPATK, 1);
+            break;
+        
+        case TYPE_FLYING:
+            score = AI_SCORE_STAT(battlerAtk, STAT_SPEED, 1);
+            break;
+        
+        case TYPE_BUG:
+            // TODO: Set sticky web
+            break;
+        
+        case TYPE_DRAGON:
+            score = AI_SCORE_STAT(battlerDef, STAT_ATK, -1);
+            break;
+        
+        case TYPE_GROUND:
+            score = AI_SCORE_TRAP;
+            break;
+        
+        case TYPE_STEEL:
+            score = AI_SCORE_STAT(battlerAtk, STAT_DEF, 1);
+            break;
+        }
+        return AdjustForChance(30, score);
+
+    case ABILITY_SOLENOGLYPHS:
+        REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        return AdjustForChance(50, AI_SCORE_TOXIC(battlerDef));
+
+    case ABILITY_FROSTMAW:
+        REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        return AdjustForChance(50, AI_SCORE_FROSTBITE_MOVE(battlerDef));
+    
+    case ABILITY_ASSASSINS_TOOLS:
+        REQUIRE(aiData->moveState.contact)
+        return AdjustForChance(10, AI_SCORE_POISON_MOVE(battlerDef) + AI_SCORE_PARALYSIS_MOVE(battlerDef) + AI_SCORE_BLEED(battlerDef));
+    
+    case ABILITY_DEEP_CUTS:
+        REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        return AdjustForChance(50, AI_SCORE_BLEED(battlerDef));
+    
+    case ABILITY_FLAMING_JAWS:
+    case ABILITY_FLAMING_MAW:
+        REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        return AdjustForChance(50, AI_SCORE_BURN_MOVE(battlerDef));
+
+    case ABILITY_ARC_FLASH:
+        return AdjustForChance(50, AI_SCORE_PARALYSIS_MOVE(battlerDef));
+    
+    case ABILITY_RADIO_JAM:
+        REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
+        return AdjustForChance(20, AI_SCORE_DISABLE);
+    
+    case ABILITY_DEMOLITIONIST:
+        REQUIRE(gVolatileStructs[battlerAtk].readiedAction)
+        return AI_SCORE_BREAK_SCREENS;
+    
+    case ABILITY_PINNACLE_BLADE:
+        REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        return AI_SCORE_BREAK_PROTECT + AI_SCORE_BREAK_SCREENS + AI_SCORE_BREAK_SUBSTITUTE;
+
+    case ABILITY_FEARMONGER:
+        REQUIRE(aiData->moveState.contact)
+        return AdjustForChance(10, AI_SCORE_PARALYSIS_MOVE(battlerDef));
+    
+    case ABILITY_YUKI_ONNA:
+        return AdjustForChance(10, AI_SCORE_ATTRACT);
+    
+    case ABILITY_STUN_SHOCK:
+        return AdjustForChance(30, AI_SCORE_POISON_MOVE(battlerDef) + AI_SCORE_PARALYSIS_MOVE(battlerDef));
+    
+    case ABILITY_SHOCKING_JAWS:
+    case ABILITY_SHOCKING_MAW:
+        REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        return AdjustForChance(50, AI_SCORE_PARALYSIS_MOVE(battlerDef));
+
+    case ABILITY_VENOBLAZE_PINCERS:
+        REQUIRE(IS_MOVE_PHYSICAL(move))
+        return AdjustForChance(10, AI_SCORE_TOXIC(battlerDef) + AI_SCORE_BURN_MOVE(battlerDef));
+    
+    case ABILITY_MOLTEN_BLADES:
+        REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        return AdjustForChance(20, AI_SCORE_BURN_MOVE(battlerDef));
+    
+    case ABILITY_DEAD_POWER:
+        REQUIRE(aiData->moveState.contact)
+        return AdjustForChance(20, AI_SCORE_CURSE);
+    
+    case ABILITY_SPECTRAL_SHROUD:
+        REQUIRE(gBattleStruct->ateBoost[battlerAtk])
+        REQUIRE(moveType == TYPE_GHOST)
+        return AdjustForChance(30, AI_SCORE_TOXIC(battlerDef));
+    
+    case ABILITY_ANGELS_WRATH:
+        switch (move) {
+        case MOVE_TACKLE:
+            REQUIRE(aiData->moveState.damage)
+            return AI_SCORE_DISABLE + AI_SCORE_ENCORE;
+        
+        case MOVE_STRING_SHOT:
+            REQUIRE_NOT(gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_STEALTH_ROCK
+                || gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_TOXIC_SPIKES
+                || gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_SPIKES
+                || gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_STICKY_WEB)
+            return AI_SCORE_STEALTH_ROCK(TYPE_ROCK) + AI_SCORE_TOXIC_SPIKES + AI_SCORE_SPIKES + AI_SCORE_STICKY_WEB;
+        
+        case MOVE_HARDEN:
+            return AI_SCORE_STAT(battlerAtk, STAT_ATK, 1) + AI_SCORE_STAT(battlerAtk, STAT_SPEED, 1) + AI_SCORE_STAT(battlerAtk, STAT_SPATK, 1) + AI_SCORE_STAT(battlerAtk, STAT_SPDEF, 1);
+        
+        case MOVE_IRON_DEFENSE:
+            return AI_SCORE_PROTECT;
+
+        case MOVE_ELECTROWEB:
+            REQUIRE(aiData->moveState.damage);
+            // TODO: Raw stat change
+            return AI_SCORE_TRAP + AI_SCORE_STAT(battlerDef, STAT_SPEED, -12);
+        
+        case MOVE_BUG_BITE:
+            REQUIRE(aiData->moveState.damage);
+            return AI_SCORE_ABSORB_MOVE(100);
+        }
+        return 0;
+    
+    case ABILITY_ELEMENTAL_CHARGE:
+        switch (moveType)
+        {
+        case TYPE_ELECTRIC:
+            score = AI_SCORE_PARALYSIS_MOVE(battlerDef);
+            break;
+            
+        case TYPE_FIRE:
+            score = AI_SCORE_BURN_MOVE(battlerDef);
+            break;
+            
+        case TYPE_ICE:
+            score = AI_SCORE_FROSTBITE_MOVE(battlerDef);
+            break;
+        }
+        return AdjustForChance(20, score);
+    
+    case ABILITY_STENCH:
+        REQUIRE(CanMoveHaveExtraFlinchChance(move))
+        return AdjustForChance(10, AI_SCORE_FLINCH(battlerDef));
+    
+    case ABILITY_HAUNTING_FRENZY:
+        REQUIRE(CanMoveHaveExtraFlinchChance(move))
+        return AdjustForChance(20, AI_SCORE_FLINCH(battlerDef));
+    
+    case ABILITY_ABSORBANT:
+        REQUIRE(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
+        return AI_SCORE_LEECH_SEED;
+    
+    case ABILITY_FUNGAL_INFECTION:
+        REQUIRE(aiData->moveState.contact)
+        return AI_SCORE_LEECH_SEED;
+    
+    case ABILITY_GRIP_PINCER:
+        REQUIRE(aiData->moveState.contact)
+        return AdjustForChance(50, AI_SCORE_WRAP);
     }
 
     return 0;

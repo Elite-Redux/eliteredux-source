@@ -13160,6 +13160,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             break;
         
         case ABILITY_VITAL_SPIRIT:
+            REQUIRE(moveType == TYPE_FIGHTING)
             if (AbilityHealMonStatus(battler, ability)) return TRUE;
             break;
         
@@ -13237,6 +13238,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             REQUIRE(ShouldApplyOnHitAffect(target))
             REQUIRE(Random() % 2)
             REQUIRE(CanInfatuate(battler, target))
+            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
 
             gBattleMons[target].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
             BattleScriptCall(BattleScript_BeautifulMusicActivates);
