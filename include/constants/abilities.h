@@ -56,7 +56,7 @@
 #define ABILITY_HYPER_CUTTER 52 // Enemies can't lower Atk/Sp. Atk. Crit rate of contact moves: +1.
 #define ABILITY_PICKUP 53 // Removes all hazards on entry. Not immune to hazards.
 #define ABILITY_TRUANT 54 // Can only attack every other turn. Can use status moves every turn.
-#define ABILITY_HUSTLE 55 // 0. 9x accuracy. Raises Atk & SpAtk by 1.4x.
+#define ABILITY_HUSTLE 55 // 0.9x accuracy. Raises Atk & SpAtk by 1.4x.
 #define ABILITY_CUTE_CHARM 56 // 30% chance to charm attacker on contact, which halves its power.
 #define ABILITY_PLUS 57 // Deals double damage if an ally Pokémon has Minus or Plus.
 #define ABILITY_MINUS 58 // Deals double damage if an ally Pokémon has Minus or Plus.
@@ -101,7 +101,7 @@
 #define ABILITY_SOLAR_POWER 94 // Ups highest attacking stat by 1.5x in sun.
 #define ABILITY_QUICK_FEET 95 // Ups Speed by 1.5x if suffering from a status condition.
 #define ABILITY_NORMALIZE 96 // Its moves become Normal-type, get 1.1x boost, ignore resists.
-#define ABILITY_SNIPER 97 // Critical hits have a 2. 25x dmg multiplier instead of 1.5x.
+#define ABILITY_SNIPER 97 // Critical hits have a 2.25x dmg multiplier instead of 1.5x.
 #define ABILITY_MAGIC_GUARD 98 // Only damaged by attacks.
 #define ABILITY_NO_GUARD 99 // Attacks used by and on this Pokémon bypass accuracy checks.
 #define ABILITY_STALL 100 // Takes 30% damage if it hasn't moved.
@@ -282,8 +282,8 @@
 #define ABILITY_DRAGONS_MAW 263 // Boosts the power of Dragon-type moves by 1.5x.
 #define ABILITY_CHILLING_NEIGH 264 // KOs raise Attack by one stage.
 #define ABILITY_GRIM_NEIGH 265 // KOs raise Sp. Atk by one stage.
-#define ABILITY_AS_ONE_ICE_RIDER 266 // Combines Unnerve & Chilling Neigh.
-#define ABILITY_AS_ONE_SHADOW_RIDER 267 // Combines Unnerve & Grim Neigh.
+#define ABILITY_AS_ONE_ICE_RIDER 266 // Unnerve + Chilling Neigh.
+#define ABILITY_AS_ONE_SHADOW_RIDER 267 // Unnerve + Grim Neigh.
 
 #define ABILITIES_COUNT_LATEST_GEN (ABILITY_AS_ONE_SHADOW_RIDER + 1)
 
@@ -315,7 +315,7 @@
 #define ABILITY_LETS_ROLL 293 // Casts Defense Curl on entry.
 #define ABILITY_AQUATIC 294 // Adds Water type to itself.
 #define ABILITY_LOUD_BANG 295 // Sound-based moves have 50% chance to confuse the foe.
-#define ABILITY_LEAD_COAT 296 // Takes 40% less from Phys. moves. This Pokémon's Speed is 0. 9x.
+#define ABILITY_LEAD_COAT 296 // Takes 40% less from Phys. moves. This Pokémon's Speed is 0.9x.
 #define ABILITY_AMPHIBIOUS 297 // Boosts the power of Water-type moves by 1.5x (due to STAB).
 #define ABILITY_GROUNDED 298 // Adds Ground type to itself.
 #define ABILITY_EARTHBOUND 299 // Boosts the power of Ground-type moves by 1.25x.
@@ -393,7 +393,7 @@
 #define ABILITY_GIANT_WINGS 371 // Boosts the power of wing, wind or air-based moves by 1.3x.
 #define ABILITY_MOMENTUM 372 // Contact moves use the Speed stat for damage calculation.
 #define ABILITY_GRIP_PINCER 373 // 50% chance to trap. Then ignores Defense & accuracy checks.
-#define ABILITY_BIG_LEAVES 374 // Chloroplast/phyll, Harvest, Leaf Guard and Solar Power.
+#define ABILITY_BIG_LEAVES 374 // Chloroplast + Chlorophyll + Leaf Guard + Harvest + Solar Power.
 #define ABILITY_PRECISE_FIST 375 // Punching moves get +1 crit and 5x effect chance.
 #define ABILITY_DEADEYE 376 // Never misses.
 #define ABILITY_ARTILLERY 377 // Mega Launcher moves always hit. Single-target now hits both foes.
@@ -459,7 +459,7 @@
 #define ABILITY_RADIANCE 437 // +20% accuracy; Dark moves fail when user is present.
 #define ABILITY_JAWS_OF_CARNAGE 438 // Devours 1/2 of the foe when defeating it.
 #define ABILITY_ANGELS_WRATH 439 // Drastically alters all of the users moves.
-#define ABILITY_PRISMATIC_FUR 440 // Combines Color Change & Protean & Fur Coat & Ice Scales.
+#define ABILITY_PRISMATIC_FUR 440 // Color Change + Protean + Fur Coat + Ice Scales.
 #define ABILITY_SHOCKING_JAWS 441 // Biting moves have 50% chance to paralyze the target.
 #define ABILITY_FAE_HUNTER 442 // Does 50% more damage to Fairy-types.
 #define ABILITY_GRAVITY_WELL 443 // Sets Gravity on entry for 5 turns.
@@ -486,7 +486,7 @@
 #define ABILITY_HUNTERS_HORN 464 // Boost horn moves and heals 1/4 HP when defeating an enemy.
 #define ABILITY_PIXIE_POWER 465 // 1.2x accuracy. Boosts Fairy moves by 1.33x for all.
 #define ABILITY_PLASMA_LAMP 466 // Boost accuracy & power of Fire & Electric type moves by 1.2x.
-#define ABILITY_MAGMA_EATER 467 // Combines Predator & Molten Down.
+#define ABILITY_MAGMA_EATER 467 // Predator + Molten Down.
 #define ABILITY_SUPER_HOT_GOO 468 // Inflicts burn and lowers Speed on contact.
 #define ABILITY_NIKA 469 // Iron fist + Water moves function normally under sun.
 #define ABILITY_ARCHER 470 // Boosts the power of arrow moves by 1.3x.
@@ -499,17 +499,17 @@
 #define ABILITY_GENERATOR 477 // Charges up once on entry or when electric terrain is active.
 #define ABILITY_MOON_SPIRIT 478 // Fairy & Dark gains STAB. Moonlight recovers 75% HP.
 #define ABILITY_DUST_CLOUD 479 // Attacks with Sand Attack on switch-in.
-#define ABILITY_BERSERKER_RAGE 480 // Combines Berserk & Rampage.
+#define ABILITY_BERSERKER_RAGE 480 // Berserk + Rampage.
 #define ABILITY_TRICKSTER 481 // Uses Disable on switch-in.
 #define ABILITY_SAND_GUARD 482 // Blocks priority and reduces special damage by 1/2 in sand.
 #define ABILITY_NATURAL_RECOVERY 483 // Combines Natural Cure & Regenerator.
 #define ABILITY_WIND_RIDER 484 // Increases attack in tailwind or when hit by wind move.
 #define ABILITY_SOOTHING_AROMA 485 // Cures party status on entry.
-#define ABILITY_PRIM_AND_PROPER 486 // Combines Wonder Skin & Cute Charm.
+#define ABILITY_PRIM_AND_PROPER 486 // Wonder Skin + Cute Charm.
 #define ABILITY_SUPER_STRAIN 487 // KOs lower Attack by +1. Take 25% recoil damage.
 #define ABILITY_TIPPING_POINT 488 // Getting hit raises Sp.Atk. Critical hits maximize Sp.Atk.
-#define ABILITY_ENLIGHTENED 489 // Combines Emanate & Inner Focus.
-#define ABILITY_PEACEFUL_SLUMBER 490 // Combines Sweet Dreams & Self Sufficient.
+#define ABILITY_ENLIGHTENED 489 // Emanate + Inner Focus.
+#define ABILITY_PEACEFUL_SLUMBER 490 // Sweet Dreams + Self Sufficient.
 #define ABILITY_AFTERSHOCK 491 // Triggers Magnitude 4-7 after using a damaging move.
 #define ABILITY_FREEZING_POINT 492 // 30% chance to get frostbitten on contact.
 #define ABILITY_CRYO_PROFICIENCY 493 // Triggers hail when hit. 30% chance to frostbite on contact.
@@ -520,8 +520,8 @@
 #define ABILITY_SUPPRESS 498 // Casts Torment on entry.
 #define ABILITY_REFRIGERATOR 499 // Combines Refrigerate & Illuminate.
 #define ABILITY_HEAVEN_ASUNDER 500 // Spacial Rend always crits. Ups crit level by +1.
-#define ABILITY_PURIFYING_WATERS 501 // Combines Hydration & Water Veil.
-#define ABILITY_SEABORNE 502 // Combines Drizzle & Swift Swim.
+#define ABILITY_PURIFYING_WATERS 501 // Hydration + Water Veil.
+#define ABILITY_SEABORNE 502 // Drizzle + Swift Swim.
 #define ABILITY_HIGH_TIDE 503 // Triggers 50 BP Surf after using a Water-type move.
 #define ABILITY_CHANGE_OF_HEART 504 // Uses Heart Swap on switch-in.
 #define ABILITY_MYSTIC_BLADES 505 // Keen edge moves become special and deal 30% more damage.
@@ -532,24 +532,24 @@
 #define ABILITY_MYCELIUM_MIGHT 510 // Status moves ignore immunities but go last.
 #define ABILITY_TELEKINETIC 511 // Casts Telekinesis on entry.
 #define ABILITY_COMBUSTION 512 // Boosts the power of Fire-type moves by 1.5x.
-#define ABILITY_PONY_POWER 513 // Combines Keen Edge & Mystic Blades.
+#define ABILITY_PONY_POWER 513 // Keen Edge + Mystic Blades.
 #define ABILITY_POWDER_BURST 514 // Casts Powder on entry.
 #define ABILITY_RETRIEVER 515 // Retrieves item on switch-out.
 #define ABILITY_MONSTER_MASH 516 // Casts Trick-or-Treat on entry.
 #define ABILITY_TWO_STEP 517 // Triggers 50BP Revelation Dance after using a Dance move.
 #define ABILITY_SPITEFUL 518 // Reduces attacker's PP on contact.
 #define ABILITY_FORTITUDE 519 // Boosts SpDef +1 when hit. Maxes SpDef on crit.
-#define ABILITY_DEVOURER 520 // Combines Strong Jaw & Primal Maw.
+#define ABILITY_DEVOURER 520 // Strong Jaw + Primal Maw.
 #define ABILITY_PHANTOM_THIEF 521 // Attacks with 40BP Spectral Thief on switch-in.
 #define ABILITY_EARLY_GRAVE 522 // At full HP, gives +1 priority to this Pokémon's Ghost-type moves.
 #define ABILITY_GRAPPLER 523 // Trapping moves last 6 turns. Trapping deals 1/6 HP.
-#define ABILITY_BASS_BOOSTED 524 // Combines Amplifier & Punk Rock.
+#define ABILITY_BASS_BOOSTED 524 // Amplifier + Punk Rock.
 #define ABILITY_FLAMING_JAWS 525 // Biting moves have 50% chance to burn the target.
 #define ABILITY_MONSTER_HUNTER 526 // Deals 1.5x more damage to Dark-types.
-#define ABILITY_CROWNED_SWORD 527 // Combines Intrepid Sword & Anger Point.
-#define ABILITY_CROWNED_SHIELD 528 // Combines Dauntless Shield & Stamina.
+#define ABILITY_CROWNED_SWORD 527 // Intrepid Sword + Anger Point.
+#define ABILITY_CROWNED_SHIELD 528 // Dauntless Shield + Stamina.
 #define ABILITY_BERSERK_DNA 529 // Sharply ups highest attacking stat but confuses on entry.
-#define ABILITY_CROWNED_KING 530 // Combines Unnerve & Grim Neigh & Chilling Neigh.
+#define ABILITY_CROWNED_KING 530 // Unnerve + Grim Neigh + Chilling Neigh.
 #define ABILITY_SNAP_TRAP_WHEN_HIT 531 // Counters contact with 50BP Snap Trap.
 #define ABILITY_PERMANENCE 532 // Foes can't heal in any way.
 #define ABILITY_HUBRIS 533 // KOs raise Sp.Atk by one stage.
@@ -561,7 +561,7 @@
 #define ABILITY_CHROME_COAT 539 // Reduces special damage taken by 40%, but decreases Speed by 10%.
 #define ABILITY_BANSHEE 540 // Normal sound moves become Ghost and get a 1.2x boost.
 #define ABILITY_WEB_SPINNER 541 // Uses String Shot on switch-in.
-#define ABILITY_SHOWDOWN_MODE 542 // Combines Ambush & Violent Rush.
+#define ABILITY_SHOWDOWN_MODE 542 // Ambush + Violent Rush.
 #define ABILITY_SEED_SOWER 543 // Sets Grassy Terrain when hit. Heals party status when it does.
 #define ABILITY_AIRBORNE 544 // Boosts own & ally's Flying-type moves by 1.3x.
 #define ABILITY_PARROTING 545 // Copies sound moves used by others. Immune to sound.
@@ -609,7 +609,7 @@
 #define ABILITY_HADRON_ENGINE 587 // Field becomes Electric. +33% SpAtk in Electric Terrain.
 #define ABILITY_IRON_SERPENT 588 // Ups “supereffective” by 33%.
 #define ABILITY_WEATHER_DOUBLE_BOOST 589 // Sun boosts Water. Rain boosts Fire.
-#define ABILITY_SWEEPING_EDGE_PLUS 590 // Combines Sweeping Edge & Keen Edge.
+#define ABILITY_SWEEPING_EDGE_PLUS 590 // Sweeping Edge + Keen Edge.
 #define ABILITY_CELESTIAL_BLESSING 591 // Recovers 1/12 of its health each turn under Misty Terrain.
 #define ABILITY_MINION_CONTROL 592 // Moves hit an extra time for each healthy party member.
 #define ABILITY_MOLTEN_BLADES 593 // Keen Edge + Keen Edge moves have a 20% chance to burn.
@@ -625,7 +625,7 @@
 #define ABILITY_FLOURISH 603 // Boosts Grass moves by 50% in grassy terrain.
 #define ABILITY_DESERT_SPIRIT 604 // Summons sand on entry. Ground moves hit airborne in sand.
 #define ABILITY_CONTEMPT 605 // Ignores opposing stat changes. Boosts Attack when stat lowered.
-#define ABILITY_AERIALIST 606 // Combines Levitate & Flock.
+#define ABILITY_AERIALIST 606 // Levitate + Flock.
 #define ABILITY_TERA_SHELL 607 // All hits will be not very effective while at full HP.
 #define ABILITY_TOXIC_CHAIN 608 // Moves have a 30% chance to badly poison the foe.
 #define ABILITY_PARASITIC_SPORES 609 // Deals 1/8 HP damage to non- Ghost. Spreads on contact.
@@ -726,7 +726,7 @@
 #define ABILITY_HOT_COALS 704 // Sets a trap that burns the next foe that switches in.
 #define ABILITY_TERASTAL_TREASURE 705 // Reduces damage taken by 40%, but lowers speed by 20%.
 #define ABILITY_SHOCKING_MAW 706 // Strong Jaw + Bite moves have 50% paralysis chance.
-#define ABILITY_GLEAM_EYES 707 // Combines Frisk & Scare.
+#define ABILITY_GLEAM_EYES 707 // Frisk + Scare.
 #define ABILITY_ROUSED_FANGS 708 // Biting moves use SpAtk and deal 50% more damage.
 #define ABILITY_DREAM_STATE 709 // Immune to critical hits. Takes 20% less damage from all attacks.
 #define ABILITY_DREAM_WHIMSY 710 // Uses Yawn on switch-in.
