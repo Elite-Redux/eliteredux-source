@@ -13114,7 +13114,7 @@ static void Cmd_battlemacros(void)
                 if (!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE) {
                     s8 change = -1;
                     if (BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG)) change *= -1;
-                    if (gIntimidateCloneData->statChange) change *= gIntimidateCloneData->statChange;
+                    if (gIntimidateCloneData[numAbility].statChange) change *= gIntimidateCloneData[numAbility].statChange;
                     if (!ChangeStatBuffs(opposingBattler, StatBuffValue(change), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
                     statslowered++;
                     gBattlerTarget = opposingBattler;
@@ -13181,7 +13181,7 @@ static void Cmd_battlemacros(void)
                 if (!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE) {
                     s8 change = -1;
                     if (BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG)) change *= -1;
-                    if (gIntimidateCloneData->statChange) change *= gIntimidateCloneData->statChange;
+                    if (gIntimidateCloneData[numAbility].statChange) change *= gIntimidateCloneData[numAbility].statChange;
                     if (!ChangeStatBuffs(opposingBattler, StatBuffValue(change), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
                     statslowered++;
                     gBattlerTarget = opposingBattler;
