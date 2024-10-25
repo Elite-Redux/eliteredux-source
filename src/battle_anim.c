@@ -19,6 +19,7 @@
 #include "constants/battle_anim.h"
 #include "constants/battle_config.h"
 #include "constants/moves.h"
+#include "mgba_printf/mgba.h"
 
 #define ANIM_SPRITE_INDEX_COUNT 8
 

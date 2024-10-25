@@ -1460,7 +1460,8 @@ void CancelMultiTurnMoves(u8 battler)
     gBattleMons[battler].status2 &= ~(STATUS2_UPROAR);
     gBattleMons[battler].status2 &= ~(STATUS2_BIDE);
 
-    gStatuses3[battler] &= ~(STATUS3_SEMI_INVULNERABLE);
+    if (!gVolatileStructs[battler].skyDropped)
+        gStatuses3[battler] &= ~STATUS3_SEMI_INVULNERABLE;
 
     gVolatileStructs[battler].rolloutCounter = 0;
     gVolatileStructs[battler].furyCutterCounter = 0;
@@ -5623,7 +5624,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             if (gStatuses3[gBattlerAttacker] & STATUS3_SEMI_INVULNERABLE)
-                gStatuses3[gBattlerAttacker] &= ~(STATUS3_SEMI_INVULNERABLE);
+                gStatuses3[gBattlerAttacker] &= ~STATUS3_SEMI_INVULNERABLE;
         }
         else if (effect == 2)
         {
