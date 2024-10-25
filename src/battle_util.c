@@ -1460,7 +1460,8 @@ void CancelMultiTurnMoves(u8 battler)
     gBattleMons[battler].status2 &= ~(STATUS2_UPROAR);
     gBattleMons[battler].status2 &= ~(STATUS2_BIDE);
 
-    gStatuses3[battler] &= ~(STATUS3_SEMI_INVULNERABLE);
+    if (!gVolatileStructs[battler].skyDropped)
+        gStatuses3[battler] &= ~STATUS3_SEMI_INVULNERABLE;
 
     gVolatileStructs[battler].rolloutCounter = 0;
     gVolatileStructs[battler].furyCutterCounter = 0;
@@ -1488,8 +1489,6 @@ bool8 WasUnableToUseMove(u8 battler)
 void PrepareStringBattle(u16 stringId, u8 battler)
 {
     int hasContrary, targetHasContrary, abilityBattler;
-
-    if (battler >= gBattlersCount) battler = BATTLE_PARTNER(battler);
 
     hasContrary = BATTLER_HAS_ABILITY(battler, ABILITY_CONTRARY);
     targetHasContrary = BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_CONTRARY);
@@ -1589,6 +1588,7 @@ void PrepareStringBattle(u16 stringId, u8 battler)
     }
     
     gActiveBattler = battler;
+    if (gActiveBattler >= gBattlersCount) gActiveBattler = 0;
     BtlController_EmitPrintString(0, stringId);
     MarkBattlerForControllerExec(gActiveBattler);
 }
@@ -5145,7 +5145,7 @@ static int AbilityHealMonStatus(u8 battler, u16 ability) {
     return TRUE;
 }
 
-static bool8 CanMoveHaveExtraFlinchChance(u16 move)
+bool8 CanMoveHaveExtraFlinchChance(u16 move)
 {
     switch (gBattleMoves[move].effect)
     {
@@ -5624,7 +5624,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
             }
 
             if (gStatuses3[gBattlerAttacker] & STATUS3_SEMI_INVULNERABLE)
-                gStatuses3[gBattlerAttacker] &= ~(STATUS3_SEMI_INVULNERABLE);
+                gStatuses3[gBattlerAttacker] &= ~STATUS3_SEMI_INVULNERABLE;
         }
         else if (effect == 2)
         {
@@ -13161,6 +13161,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             break;
         
         case ABILITY_VITAL_SPIRIT:
+            REQUIRE(moveType == TYPE_FIGHTING)
             if (AbilityHealMonStatus(battler, ability)) return TRUE;
             break;
         
@@ -13238,6 +13239,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             REQUIRE(ShouldApplyOnHitAffect(target))
             REQUIRE(Random() % 2)
             REQUIRE(CanInfatuate(battler, target))
+            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
 
             gBattleMons[target].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
             BattleScriptCall(BattleScript_BeautifulMusicActivates);
@@ -13765,6 +13767,22 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             SetMoveEffect(FALSE, 0);
             break;
         
+        case ABILITY_FROM_THE_SHADOWS:
+            REQUIRE(ShouldApplyOnHitAffect(target))
+            REQUIRE(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
+
+            if (CanMoveHaveExtraFlinchChance(move) && Random() % 100 < 20)
+            {
+                gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
+                SetMoveEffect(FALSE, 0);
+            }
+
+            REQUIRE_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
+            gBattleMons[target].status2 |= STATUS2_ESCAPE_PREVENTION;
+            gVolatileStructs[target].battlerPreventingEscape = battler;
+            BattleScriptCall(BattleScript_AnnounceTargetTrapped);
+            return TRUE;
+        
         case ABILITY_ABSORBANT:
             REQUIRE(ShouldApplyOnHitAffect(target))
             REQUIRE_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
@@ -14083,7 +14101,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         case ABILITY_CURSED_BODY:
             REQUIRE(ShouldApplyOnHitAffect(attacker))
             REQUIRE_NOT(gVolatileStructs[attacker].disabledMove)
-            REQUIRE(attacker != battler)
+            REQUIRE(IsMoveMakingContact(move, attacker))
             REQUIRE_NOT(IsAbilityOnSide(attacker, ABILITY_AROMA_VEIL))
             REQUIRE(gBattleMons[attacker].pp[gChosenMovePos])
             REQUIRE(Random() % 100 < 30)

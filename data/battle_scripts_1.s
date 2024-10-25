@@ -6349,6 +6349,8 @@ BattleScript_SkyDropEndsEarly::
 BattleScript_EffectSkyDrop::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_SkyDrop_TurnTwo
 	attackcanceler
+	typecalc
+	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
@@ -6356,8 +6358,8 @@ BattleScript_EffectSkyDrop::
 	waitmessage B_WAIT_TIME_LONG
 	printstring STRINGID_SKY_DROP_CHARGE
 	attackanimation
-	makeinvisible BS_TARGET
 	waitmessage B_WAIT_TIME_LONG
+	makeinvisible BS_TARGET
 	setsemiinvulnerablebit
 	orword gHitMarker, HITMARKER_CHARGING
 	setmoveeffect MOVE_EFFECT_CHARGING | MOVE_EFFECT_AFFECTS_USER
@@ -6368,8 +6370,10 @@ BattleScript_SkyDrop_TurnTwo:
 	attackcanceler
 	attackstring
 	ppreduce
-	clearskydrop BS_TARGET, BattleScript_MoveEnd
-	makevisible BS_TARGET
+	setmoveeffect MOVE_EFFECT_CHARGING
+	setbyte sB_ANIM_TURN, 1
+	clearstatusfromeffect BS_ATTACKER
+	orword gHitMarker, HITMARKER_NO_PPDEDUCT
 	jumpifmove MOVE_SEISMIC_TOSS, BattleScript_SkyDrop_SeismicToss
 	critcalc
 	damagecalc
@@ -6381,6 +6385,8 @@ BattleScript_SkyDrop_DoDamage:
 	adjustdamage
 	attackanimation
 	waitanimation
+	clearskydrop BS_TARGET, BattleScript_MoveEnd
+	makevisible BS_TARGET
 	effectivenesssound
 	hitanimation BS_TARGET
 	waitstate
@@ -8221,8 +8227,14 @@ BattleScript_DestinyBondTakesLife::
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
 
+BattleScript_AnnounceTargetTrapped::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_TRAPPED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_ResolveAllHazards::
-	dohazarddamage BS_STACK_1, HAZARD_MODE_SPIKES
+	dohazarddamage BS_STACK_1
 	return
 
 BattleScript_ResolveRocks::
@@ -8230,11 +8242,11 @@ BattleScript_ResolveRocks::
 	return
 
 BattleScript_ResolvePoisonSpikes::
-	dohazarddamage BS_STACK_1, HAZARD_MODE_WEBS
+	dohazarddamage BS_STACK_1, HAZARD_MODE_POISON_SPIKES
 	return
 
 BattleScript_ResolveWebs::
-	dohazarddamage BS_STACK_1, HAZARD_MODE_POISON_SPIKES
+	dohazarddamage BS_STACK_1, HAZARD_MODE_WEBS
 	return
 
 BattleScript_ResolveFireTrap::

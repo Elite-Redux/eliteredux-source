@@ -326,6 +326,7 @@ void IncrementAbilityState(u8 battler, u16 ability, u32 value);
 int GetHighestStatIdExcept(int battlerId, int includeStatStages, int exclude);
 u8 GetHighestStatId(u8 battlerId, u8 includeStatStages);
 u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages);
+bool8 CanMoveHaveExtraFlinchChance(u16 move);
 u8 GetHighestDefendingStatId(u8 battlerId, u8 includeStatStages);
 u8 TranslateStatId(u8 statId, u8 battlerId);
 bool32 IsAlly(u32 battlerAtk, u32 battlerDef);

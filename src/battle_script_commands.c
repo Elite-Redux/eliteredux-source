@@ -2176,10 +2176,10 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PRECISE_FIST) && IS_IRON_FIST(battlerAtk, move))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SUPER_LUCK))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER))
-                    + 2 * (!!IsAbilityOnField(ABILITY_BATTLE_AURA))
+                    + 2 * (IsAbilityOnField(ABILITY_BATTLE_AURA) > 0)
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WAY_OF_PRECISION) && IS_IRON_FIST(battlerAtk, move))
                     + gVolatileStructs[battlerAtk].critBoost
-                    + move == MOVE_VISE_GRIP;
+                    + (move == MOVE_VISE_GRIP);
 
         if (critChance >= ARRAY_COUNT(sCriticalHitChance))
             critChance = ARRAY_COUNT(sCriticalHitChance) - 1;
@@ -5961,13 +5961,16 @@ static void Cmd_moveend(void)
                 || !(gStatuses3[gBattlerAttacker] & (STATUS3_SEMI_INVULNERABLE))
                 || WasUnableToUseMove(gBattlerAttacker))
             {
-                gActiveBattler = gBattlerAttacker;
-                BtlController_EmitSpriteInvisibility(0, FALSE);
-                MarkBattlerForControllerExec(gActiveBattler);
-                gStatuses3[gBattlerAttacker] &= ~(STATUS3_SEMI_INVULNERABLE);
-                gTurnStructs[gBattlerAttacker].restoredBattlerSprite = TRUE;
-                gBattleScripting.moveendState++;
-                return;
+                if (!gVolatileStructs[gBattlerAttacker].skyDropped)
+                {
+                    gActiveBattler = gBattlerAttacker;
+                    BtlController_EmitSpriteInvisibility(0, FALSE);
+                    MarkBattlerForControllerExec(gActiveBattler);
+                    gStatuses3[gBattlerAttacker] &= ~STATUS3_SEMI_INVULNERABLE;
+                    gTurnStructs[gBattlerAttacker].restoredBattlerSprite = TRUE;
+                    gBattleScripting.moveendState++;
+                    return;
+                }
             }
             gBattleScripting.moveendState++;
             break;
@@ -5978,7 +5981,7 @@ static void Cmd_moveend(void)
                 gActiveBattler = gBattlerTarget;
                 BtlController_EmitSpriteInvisibility(0, FALSE);
                 MarkBattlerForControllerExec(gActiveBattler);
-                gStatuses3[gBattlerTarget] &= ~(STATUS3_SEMI_INVULNERABLE);
+                gStatuses3[gBattlerTarget] &= ~STATUS3_SEMI_INVULNERABLE;
                 gBattleScripting.moveendState++;
                 return;
             }
@@ -11243,7 +11246,7 @@ static void Cmd_various(void)
                 if (!gVolatileStructs[gActiveBattler].skyDropped && gActiveBattler != gBattlerAttacker)
                 {
                     gVolatileStructs[gActiveBattler].skyDropped = TRUE;
-                    gVolatileStructs[gActiveBattler].skyDroppedBy = gActiveBattler;
+                    gVolatileStructs[gActiveBattler].skyDroppedBy = gBattlerAttacker;
                     gStatuses3[gActiveBattler] |= STATUS3_ON_AIR;
                     CancelMultiTurnMoves(gActiveBattler);
                 }
@@ -14898,9 +14901,10 @@ static void Cmd_setsemiinvulnerablebit(void)
 {
     switch (gCurrentMove)
     {
+    case MOVE_SKY_DROP:
+    case MOVE_SEISMIC_TOSS:
     case MOVE_FLY:
     case MOVE_BOUNCE:
-    case MOVE_SKY_DROP:
         gStatuses3[gBattlerAttacker] |= STATUS3_ON_AIR;
         break;
     case MOVE_DIG:
@@ -14923,7 +14927,7 @@ static void Cmd_setsemiinvulnerablebit(void)
 
 static void Cmd_clearsemiinvulnerablebit(void)
 {
-    gStatuses3[gBattlerAttacker] &= ~(STATUS3_SEMI_INVULNERABLE);
+    gStatuses3[gBattlerAttacker] &= ~STATUS3_SEMI_INVULNERABLE;
     gBattlescriptCurrInstr++;
 }
 
