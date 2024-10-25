@@ -8036,6 +8036,7 @@ case ITEMEFFECT_KINGSROCK:
         {
         case HOLD_EFFECT_SHELL_BELL:
             if (gTurnStructs[gBattlerTarget].dmg != 0
+                && gTurnStructs[gBattlerTarget].dmg != 0xFFFF
                 && !(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
                 && gBattlerAttacker != gBattlerTarget
                 && gBattleMons[gBattlerAttacker].hp != gBattleMons[gBattlerAttacker].maxHP
