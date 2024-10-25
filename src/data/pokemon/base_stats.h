@@ -30275,7 +30275,7 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_GRASS,
     .eggGroup2 = EGG_GROUP_DRAGON,
     .abilities = {ABILITY_UNAWARE, ABILITY_PREDATOR, ABILITY_SOLAR_FLARE},
-    .innates = {ABILITY_HARVEST, ABILITY_RIPEN, ABILITY_THICK_FAT},
+    .innates        = {ABILITY_RIPEN, ABILITY_HARVEST, ABILITY_THICK_FAT},
     .bodyColor = BODY_COLOR_GREEN,
     .noFlip = FALSE,
     .tier = 0,
@@ -30283,12 +30283,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_GRANITUN] =
     {
-    .baseHP        = 120,
-    .baseAttack    = 90,
-    .baseDefense   = 100,
-    .baseSpeed     = 10,
-    .baseSpAttack  = 105,
-    .baseSpDefense = 130, 
+    .baseHP         = 110,
+    .baseAttack     = 100,
+    .baseDefense    = 90,
+    .baseSpeed      = 30,
+    .baseSpAttack   = 105,
+    .baseSpDefense  = 120,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_DRAGON,
     .catchRate = 255,

@@ -18663,11 +18663,11 @@ static const struct TrainerMonItemCustomMoves sParty_Norman1Insane[] = {
     {
     .lvl = 0,
     .species = SPECIES_KANGASKHAN,
-    .heldItem = ITEM_KANGASKHANITE,
+    .heldItem = ITEM_FLAME_ORB,
     .ability = 2,
     .evs = {0, 252, 4, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_FAKE_OUT, MOVE_DRAIN_PUNCH, MOVE_DIZZY_PUNCH, MOVE_POWER_UP_PUNCH
+    .moves = MOVE_FAKE_OUT, MOVE_DRAIN_PUNCH, MOVE_COMET_PUNCH, MOVE_POWER_UP_PUNCH
     },
     {
     .lvl = 0,
@@ -18698,12 +18698,12 @@ static const struct TrainerMonItemCustomMoves sParty_Norman1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_SILVALLY,
-    .heldItem = ITEM_LIFE_ORB,
-    .ability = 1,
-    .evs = {0, 252, 4, 0, 0, 252},
-    .nature = NATURE_JOLLY,
-    .moves = MOVE_RECOVER, MOVE_EXTREME_SPEED, MOVE_SWORDS_DANCE, MOVE_SHADOW_CLAW
+    .species = SPECIES_URSALUNA,
+    .heldItem = ITEM_URSALUNITE,
+    .ability = 2,
+    .evs = {252, 252, 4, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_STOMPING_TANTRUM, MOVE_PLAY_ROUGH, MOVE_SLASH, MOVE_HAMMER_ARM
     },
     {
     .lvl = 0,
@@ -40993,7 +40993,7 @@ static const struct TrainerMonItemCustomMoves sParty_DanielleInsane[] = {
     .ability = 1,
     .evs = {124, 0, 0, 252, 132, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_SHELL_TRAP, MOVE_SOLAR_BEAM, MOVE_SCORCHING_SANDS, MOVE_FLAME_BURST
+    .moves = MOVE_HEAT_WAVE, MOVE_SOLAR_BEAM, MOVE_SCORCHING_SANDS, MOVE_FLAME_BURST
     },
     {
     .lvl = 0,
@@ -41682,7 +41682,7 @@ static const struct TrainerMonItemCustomMoves sParty_PrestonInsane[] = {
     .lvl = 0,
     .species = SPECIES_SLOWKING_GALARIAN,
     .heldItem = ITEM_SITRUS_BERRY,
-    .ability = 2,
+    .ability = 1,
     .zeroSpeedIvs = TRUE,
     .evs = {252, 0, 0, 252, 4, 0},
     .nature = NATURE_QUIET,
