@@ -708,7 +708,7 @@
 #define ABILITY_BUTTER_UP 686 // Combines Hospitality & Soothing Aroma
 #define ABILITY_VITALITY_STRIKE 687 // Heals for 10% of the damage dealt by punching moves.
 #define ABILITY_HUGE_WINGS 688 // Giant Wings + Levitate.
-#define ABILITY_SWORD_OF_DAMNATION 689 // Combines Unaware & Sword of Damnation.
+#define ABILITY_SWORD_OF_DAMNATION 689 // Unaware + Sword of Ruin.
 #define ABILITY_RESTRAINING_ORDER 690 // Forces the attacker when hit once each switch-in.
 #define ABILITY_ASSASSINS_TOOLS 691 // Contact moves have a 30% chance to PSN, PRLZ, or BLD.
 #define ABILITY_FROSTMAW 692 // Biting moves have a 50% chance to inflict frostbite.
