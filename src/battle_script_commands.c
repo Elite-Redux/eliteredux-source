@@ -9158,9 +9158,11 @@ static void Cmd_various(void)
 
             if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SIDEWINDER)
                 && !NoAliveMonsForEitherParty()
-                && !(gStatuses4[gActiveBattler] & STATUS4_COILED))
+                && (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST
+                    || !(gStatuses4[gActiveBattler] & STATUS4_COILED)))
             {
                 gStatuses4[gActiveBattler] |= STATUS4_COILED;
+                SetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_SIDEWINDER, TRUE);
                 gBattleScripting.abilityPopupOverwrite = ABILITY_SIDEWINDER;
                 BattleScriptCall(BattleScript_BattlerCoiledUpReturn);
             }

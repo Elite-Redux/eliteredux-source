@@ -2160,9 +2160,8 @@ int GetAiDecision(int battler)
     if (IsBattlerAlive(2)) RestoreDisguise(&disguise2);
 }
 
-#define REQUIRE(check) if (check) break;
-#define REQUIRE_NOT(check) REQUIRE(!(check))
-#define REQUIRE_NOT_TRANSFORMED REQUIRE_NOT(gBattleMons[battlerAtk].status2 && STATUS2_TRANSFORMED)
+#define REQUIRE(check) if (!(check)) break;
+#define REQUIRE_NOT(check) if (check) break;
 
 int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
 {
@@ -2170,7 +2169,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
     {
     case ABILITY_SHIELDS_DOWN:
         REQUIRE(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
-        REQUIRE_NOT_TRANSFORMED
+        REQUIRE_NOT(gBattleMons[battlerAtk].status2 && STATUS2_TRANSFORMED)
         switch (gBattleMons[battlerAtk].species)
         {
         case SPECIES_MINIOR_CORE_BLUE:
@@ -2185,7 +2184,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         break;
     
     case ABILITY_GULP_MISSILE:
-        REQUIRE_NOT_TRANSFORMED
+        REQUIRE_NOT(gBattleMons[battlerAtk].status2 && STATUS2_TRANSFORMED)
         REQUIRE(gBattleMons[battlerAtk].species == SPECIES_CRAMORANT)
         REQUIRE(move == MOVE_SURF || move == MOVE_DIVE)
         return 0; // TODO: Cramorant scoring
