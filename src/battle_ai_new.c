@@ -2496,6 +2496,10 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         REQUIRE(CanMoveHaveExtraFlinchChance(move))
         return AdjustForChance(20, AI_SCORE_FLINCH(battlerDef));
     
+    case ABILITY_FROM_THE_SHADOWS:
+        // TODO: From the Shadows
+        return 0;
+    
     case ABILITY_ABSORBANT:
         REQUIRE(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
         return AI_SCORE_LEECH_SEED;

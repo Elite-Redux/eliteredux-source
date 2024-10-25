@@ -8221,6 +8221,12 @@ BattleScript_DestinyBondTakesLife::
 	tryfaintmon BS_ATTACKER, FALSE, NULL
 	return
 
+BattleScript_AnnounceTargetTrapped::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_TRAPPED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_ResolveAllHazards::
 	dohazarddamage BS_STACK_1
 	return

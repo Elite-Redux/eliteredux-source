@@ -13766,6 +13766,22 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             SetMoveEffect(FALSE, 0);
             break;
         
+        case ABILITY_FROM_THE_SHADOWS:
+            REQUIRE(ShouldApplyOnHitAffect(target))
+            REQUIRE(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
+
+            if (CanMoveHaveExtraFlinchChance(move) && Random() % 100 < 20)
+            {
+                gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
+                SetMoveEffect(FALSE, 0);
+            }
+
+            REQUIRE_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
+            gBattleMons[target].status2 |= STATUS2_ESCAPE_PREVENTION;
+            gVolatileStructs[target].battlerPreventingEscape = battler;
+            BattleScriptCall(BattleScript_AnnounceTargetTrapped);
+            return TRUE;
+        
         case ABILITY_ABSORBANT:
             REQUIRE(ShouldApplyOnHitAffect(target))
             REQUIRE_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
