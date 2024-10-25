@@ -1489,8 +1489,6 @@ void PrepareStringBattle(u16 stringId, u8 battler)
 {
     int hasContrary, targetHasContrary, abilityBattler;
 
-    if (battler >= gBattlersCount) battler = BATTLE_PARTNER(battler);
-
     hasContrary = BATTLER_HAS_ABILITY(battler, ABILITY_CONTRARY);
     targetHasContrary = BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_CONTRARY);
 
@@ -1589,6 +1587,7 @@ void PrepareStringBattle(u16 stringId, u8 battler)
     }
     
     gActiveBattler = battler;
+    if (gActiveBattler >= gBattlersCount) gActiveBattler = 0;
     BtlController_EmitPrintString(0, stringId);
     MarkBattlerForControllerExec(gActiveBattler);
 }
