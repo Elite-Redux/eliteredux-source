@@ -4754,6 +4754,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
     u32 i;
 
     if (gBattleMons[battler].status2 & STATUS2_TRANSFORMED) return FALSE;
+    if (!IsBattlerAlive(battler)) return FALSE;
 
     for (i = 0; i < ARRAY_COUNT(sHpTransformations); i++)
     {
@@ -14378,6 +14379,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             return TRUE;
         
         case ABILITY_APE_SHIFT:
+            REQUIRE(IsBattlerAlive(battler))
             if (!(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
                 && gBattleMons[battler].species == SPECIES_SLAKING_MEGA
                 && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
