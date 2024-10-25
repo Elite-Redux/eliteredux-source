@@ -1689,7 +1689,7 @@ static void Cmd_attackcanceler(void)
      && ((!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)))
      && gBattleMoves[gCurrentMove].effect != EFFECT_SUCKER_PUNCH)
     {
-        if (IsMoveMakingContact(gCurrentMove, gBattlerAttacker))
+        if (IsMoveMakingContact(gCurrentMove, gBattlerAttacker) || gRoundStructs[gBattlerTarget].merculight)
             gRoundStructs[gBattlerAttacker].touchedProtectLike = TRUE;
         CancelMultiTurnMoves(gBattlerAttacker);
         gMoveResultFlags |= MOVE_RESULT_MISSED;
