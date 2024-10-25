@@ -12059,7 +12059,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SPARKLING_BARRAGE] =
     {
-        .effect = EFFECT_TRIPLE_HIT,
+        .effect = EFFECT_DOUBLE_HIT,
         .power = 30,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
@@ -12068,6 +12068,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+        .argument = 3,
         .arrowBased = TRUE,
     },
     [MOVE_SPECTRAL_SERENADE] =
