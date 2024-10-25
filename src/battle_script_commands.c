@@ -9537,6 +9537,7 @@ static void Cmd_various(void)
         }
         else
         {
+            gVolatileStructs[gActiveBattler].protectUses++;
             gStatuses4[gBattlerTarget] |= STATUS4_ELECTRIFIED;
         }
         return;
