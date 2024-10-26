@@ -3976,6 +3976,45 @@ void SetMoveEffect(bool32 primary, u32 certain)
     gBattleScripting.moveSecondaryEffectChance = 0;
 }
 
+int GetMoveEffectChance(int battler, int move, int moveEffect, int baseChance)
+{
+    switch (moveEffect)
+    {
+    case MOVE_EFFECT_BURN:
+        if (BATTLER_HAS_ABILITY(battler, ABILITY_PYROMANCY))
+            baseChance *= 5;
+        break;
+    
+    case MOVE_EFFECT_FROSTBITE:
+        if (BATTLER_HAS_ABILITY(battler, ABILITY_CRYOMANCY))
+            baseChance *= 5;
+        break;
+    
+    case MOVE_EFFECT_FLINCH:
+        if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
+            baseChance *= 0;
+        break;
+    }
+
+    if (BATTLER_HAS_ABILITY(battler, ABILITY_SERENE_GRACE))
+        baseChance *= 2;
+    
+    if (gSideTimers[GetBattlerSide(battler)].rainbowTimer)
+        baseChance *= 2;
+    
+    if (BATTLER_HAS_ABILITY(battler, ABILITY_PRECISE_FIST) && IS_IRON_FIST(battler, move))
+        baseChance *= 5;
+
+    if (BATTLER_HAS_ABILITY(battler, ABILITY_WAY_OF_PRECISION) && IS_IRON_FIST(battler, move))
+        baseChance *= 5;
+
+    //Angel's Wrath
+    if (BATTLER_HAS_ABILITY(battler, ABILITY_ANGELS_WRATH) && move == MOVE_POISON_STING) 
+        baseChance = 100;
+    
+    return min(baseChance, 100);
+}
+
 static void Cmd_seteffectwithchance(void)
 {
     u32 percentChance = gBattleScripting.moveSecondaryEffectChance ?
@@ -3991,70 +4030,7 @@ static void Cmd_seteffectwithchance(void)
     
     moveEffect = gBattleScripting.moveEffect & 0xFF;
 
-    if (gRoundStructs[gBattlerAttacker].extraMoveUsed) {
-        if (VarGet(VAR_TEMP_MOVEEFECT_CHANCE) != 0) {
-            percentChance = VarGet(VAR_TEMP_MOVEEFECT_CHANCE);
-            VarSet(VAR_TEMP_MOVEEFECT_CHANCE, 0);
-        }
-
-        if (VarGet(VAR_TEMP_MOVEEFFECT) != 0) {
-            gBattleScripting.moveEffect = VarGet(VAR_TEMP_MOVEEFFECT);
-            VarSet(VAR_TEMP_MOVEEFFECT, 0);
-        }
-    }
-
-    //Serene Grace boost
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE || BattlerHasInnate(gBattlerAttacker, ABILITY_SERENE_GRACE))
-        percentChance = percentChance * 2;
-
-    if (gSideTimers[GetBattlerSide(gBattlerAttacker)].rainbowTimer)
-        percentChance = percentChance * 2;
-
-    //Pyromancy boost
-    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PYROMANCY)
-             && moveEffect == MOVE_EFFECT_BURN)
-        percentChance = percentChance * 5;
-
-    //Cryomancy boost
-    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CRYOMANCY)
-             && moveEffect == MOVE_EFFECT_FROSTBITE)
-        percentChance = percentChance * 5;
-
-    //Shocking Jaws boost - not in use this way
-    //if ((GetBattlerAbility(gBattlerAttacker) == ABILITY_SHOCKING_JAWS || BattlerHasInnate(gBattlerAttacker, ABILITY_SHOCKING_JAWS))
-             //&& (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
-             //&& moveEffect == EFFECT_PARALYZE_HIT)
-        //percentChance = percentChance * 5;
-
-    //Precise fist boosts
-    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRECISE_FIST) && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
-        percentChance = percentChance * 5;
-
-    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_WAY_OF_PRECISION) && IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
-        percentChance = percentChance * 5;
-
-    //Frostbite are more likely to occour during Hail
-    if (moveEffect == MOVE_EFFECT_FROSTBITE && IsBattlerWeatherAffected(gBattlerTarget, WEATHER_HAIL_ANY))
-        percentChance = percentChance * 3;
-
-    //Angel's Wrath
-    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ANGELS_WRATH)) {
-        switch (gCurrentMove) {
-        case MOVE_POISON_STING:
-            percentChance = 100;
-            break;
-        }
-    }
-
-    //Parental Bond
-    if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) {
-        //These moves don't trigger flinch after the first hit
-        switch (moveEffect) {
-            case MOVE_EFFECT_FLINCH:
-                percentChance = 0;
-            break;
-        }
-    }
+    percentChance = GetMoveEffectChance(gBattlerAttacker, gCurrentMove, moveEffect, percentChance);
 
     if (gBattleScripting.moveEffect & MOVE_EFFECT_CERTAIN
         && !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT))

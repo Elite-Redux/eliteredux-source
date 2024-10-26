@@ -4093,7 +4093,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             if (GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget)
                 && gSideTimers[GetBattlerSide(gBattlerTarget)].quickGuardTimer
                 && !gProcessingExtraAttacks
-                && GetMovePriority(gBattlerAttacker, gCurrentMove, gBattlerTarget))
+                && GetMovePriority(gBattlerAttacker, gCurrentMove, gBattlerTarget) > 0)
             {
                 gBattlescriptCurrInstr = BattleScript_ButItFailed;
                 gHitMarker |= HITMARKER_NO_ATTACKSTRING;
