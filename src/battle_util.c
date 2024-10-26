@@ -13928,17 +13928,14 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             break;
         
         case ABILITY_RESTRAINING_ORDER:
-            {
-            RestrainingOrderState state = GetAbilityState(battler, ABILITY_RESTRAINING_ORDER);
-
+            REQUIRE(GetAbilityState(battler, ABILITY_RESTRAINING_ORDER) == RESTRAINING_ORDER_NOT_TRIGGERED);
             REQUIRE(ShouldApplyOnHitAffect(battler))
             REQUIRE(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
             REQUIRE_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
             REQUIRE(CountUsablePartyMons(battler))
 
             SetAbilityState(battler, ABILITY_RESTRAINING_ORDER, RESTRAINING_ORDER_ACTIVATING);
-            break;            
-            }
+            break;
         
         case ABILITY_THERMAL_EXCHANGE:
             REQUIRE(ShouldApplyOnHitAffect(battler))
