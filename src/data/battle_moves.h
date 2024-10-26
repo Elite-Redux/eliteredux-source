@@ -1109,7 +1109,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_EARTHQUAKE] =
     {
-        .effect = EFFECT_EARTHQUAKE,
+        .effect = EFFECT_HIT,
         .power = 100,
         .type = TYPE_GROUND,
         .accuracy = 100,
@@ -1121,7 +1121,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_FISSURE] =
     {
-        .effect = EFFECT_EARTHQUAKE,
+        .effect = EFFECT_HIT,
         .power = 120,
         .type = TYPE_GROUND,
         .accuracy = 85,
@@ -5311,7 +5311,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 15,
-        .secondaryEffectChance = 20,
+        .secondaryEffectChance = 30,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_FIELD_BASED,
         .split = SPLIT_PHYSICAL,
@@ -9293,7 +9293,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_WICKED_BLOW] =
     {
         .effect = EFFECT_HIT,
-        .power = 70,
+        .power = 80,
         .type = TYPE_DARK,
         .accuracy = 100,
         .pp = 5,
