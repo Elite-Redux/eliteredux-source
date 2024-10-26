@@ -622,6 +622,8 @@ bool32 ShouldSwitch(void)
         return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_ARENA)
         return FALSE;
+    if (gVolatileStructs[gActiveBattler].skyDropped)
+        return FALSE;
 
     availableToSwitch = 0;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
