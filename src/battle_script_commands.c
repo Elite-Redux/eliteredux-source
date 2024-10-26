@@ -5820,9 +5820,9 @@ static void Cmd_moveend(void)
             break;
         case MOVEEND_MOVE_EFFECTS2_ON_EACH: // For effects which should happen after target items, for example Knock Off after damage from Rocky Helmet.
             {
-            int effect = gBattleStruct->moveEffect2;
+            int moveEffect = gBattleStruct->moveEffect2;
             gBattleStruct->moveEffect2 = 0;
-            switch (effect)
+            switch (moveEffect)
             {
             case MOVE_EFFECT_STEAL_ITEM:
                 if (!gBattleMons[gBattlerAttacker].item)
