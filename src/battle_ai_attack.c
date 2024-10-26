@@ -34,6 +34,12 @@ int CheckCancelledForTarget(int battlerAtk, int battlerDef, int move, struct AiD
             return TRUE;
     }
 
+    if (!AreSameSide(battlerAtk, battlerDef)
+        && !gProcessingExtraAttacks
+        && IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)
+        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
+        return TRUE;
+
     return FALSE;
 }
 

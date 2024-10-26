@@ -4468,6 +4468,7 @@ u8 AtkCanceller_UnableToUseMove2(void)
             gBattleStruct->atkCancellerTracker++;
         case CANCELLER_PSYCHIC_TERRAIN:
             if (IsBattlerTerrainAffected(gBattlerTarget, STATUS_FIELD_PSYCHIC_TERRAIN)
+                && !gProcessingExtraAttacks
                 && GetChosenMovePriority(gBattlerAttacker, gBattlerTarget) > 0
                 && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gBattlerTarget))
             {
