@@ -913,6 +913,7 @@ static const u8 sText_ItemDestroyed[] = _("{B_ATK_NAME_WITH_PREFIX} destroyed\n{
 static const u8 sText_SwapWith[] = _("{B_ATK_NAME_WITH_PREFIX} swapped with\n{B_DEF_NAME_WITH_PREFIX}!");
 static const u8 sText_QuickGuard[] = _("{B_ATK_NAME_WITH_PREFIX} shields\ntheir party from priority!");
 static const u8 sText_BloodStainAnnounce[] = _("{B_ATK_NAME_WITH_PREFIX} is bleeding!");
+static const u8 sText_Trapped[] = _("{B_DEF_NAME_WITH_PREFIX} is trapped!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1071,7 +1072,6 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_Trapped[] = _("{B_DEF_NAME_WITH_PREFIX} is trapped!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {

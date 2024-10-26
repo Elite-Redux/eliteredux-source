@@ -1689,7 +1689,7 @@ static void Cmd_attackcanceler(void)
      && ((!IsTwoTurnsMove(gCurrentMove) || (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)))
      && gBattleMoves[gCurrentMove].effect != EFFECT_SUCKER_PUNCH)
     {
-        if (IsMoveMakingContact(gCurrentMove, gBattlerAttacker))
+        if (IsMoveMakingContact(gCurrentMove, gBattlerAttacker) || gRoundStructs[gBattlerTarget].merculight)
             gRoundStructs[gBattlerAttacker].touchedProtectLike = TRUE;
         CancelMultiTurnMoves(gBattlerAttacker);
         gMoveResultFlags |= MOVE_RESULT_MISSED;
@@ -9537,6 +9537,7 @@ static void Cmd_various(void)
         }
         else
         {
+            gVolatileStructs[gActiveBattler].protectUses++;
             gStatuses4[gBattlerTarget] |= STATUS4_ELECTRIFIED;
         }
         return;
@@ -15615,6 +15616,7 @@ static void Cmd_switchoutabilities(void)
     u8 count;
     gActiveBattler = GetBattlerForBattleScript(READ_FIRST_8_INC);
     gRoundStructs[gActiveBattler].protectedThisTurn = FALSE;
+    ZERO(gVolatileStructs[gActiveBattler].switchInAbilityDone);
 
     SetSingleUseAbilityCounter(gActiveBattler, ABILITY_ZERO_TO_HERO, TRUE);
 

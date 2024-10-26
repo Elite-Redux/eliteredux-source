@@ -722,6 +722,9 @@ SECTIONS {
         src/script.o(.rodata);
         src/pokemon_debug.o(.rodata);
         src/battle_events.o(.rodata);
+        src/battle_ai_new.o(.rodata);
+        src/battle_ai_attack.o(.rodata);
+        src/battle_ai_ability.o(.rodata);
     } > ROM =0
 
     song_data :

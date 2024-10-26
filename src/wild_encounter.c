@@ -549,10 +549,10 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
             }
             break;
         case SPECIES_SHELLOS:
-            if (Random() % 2) species == SPECIES_SHELLOS_EAST_SEA;
+            if (Random() % 2) species = SPECIES_SHELLOS_EAST_SEA;
             break;
         case SPECIES_GASTRODON:
-            if (Random() % 2) species == SPECIES_GASTRODON_EAST_SEA;
+            if (Random() % 2) species = SPECIES_GASTRODON_EAST_SEA;
             break;
         case SPECIES_SQUAWKABILLY:
             switch (Random() % 4)
@@ -580,6 +580,135 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 area, u8 
                     species = SPECIES_BASCULIN_BLUE_STRIPED;
                 case 2:
                     species = SPECIES_BASCULIN_WHITESTRIPED;
+            }
+            break;
+        case SPECIES_DUDUNSPARCE:
+            if (Random() % 2) species = SPECIES_DUDUNSPARCE_THREE_SEGMENT;
+            break;
+        case SPECIES_MAUSHOLD:
+            if (Random() % 2) species = SPECIES_MAUSHOLD_FOUR;
+            break;
+        case SPECIES_GIMMIGHOUL:
+            if (Random() % 2) species = SPECIES_GIMMIGHOUL_ROAMING;
+            break;
+        case SPECIES_FLABEBE:
+            switch (Random() % 5)
+            {
+            case 0: species = SPECIES_FLABEBE;
+                break;
+            case 1: species = SPECIES_FLABEBE_BLUE_FLOWER;
+                break;
+            case 2: species = SPECIES_FLABEBE_ORANGE_FLOWER;
+                break;
+            case 3: species = SPECIES_FLABEBE_YELLOW_FLOWER;
+                break;
+            case 4: species = SPECIES_FLABEBE_WHITE_FLOWER;
+                break;
+            }
+            break;
+        case SPECIES_FLOETTE:
+            switch (Random() % 5)
+            {
+            case 0: species = SPECIES_FLOETTE;
+                break;
+            case 1: species = SPECIES_FLOETTE_BLUE_FLOWER;
+                break;
+            case 2: species = SPECIES_FLOETTE_ORANGE_FLOWER;
+                break;
+            case 3: species = SPECIES_FLOETTE_YELLOW_FLOWER;
+                break;
+            case 4: species = SPECIES_FLOETTE_WHITE_FLOWER;
+                break;
+            }
+            break;
+        case SPECIES_FLORGES:
+            switch (Random() % 5)
+            {
+            case 0: species = SPECIES_FLORGES;
+                break;
+            case 1: species = SPECIES_FLORGES_BLUE_FLOWER;
+                break;
+            case 2: species = SPECIES_FLORGES_ORANGE_FLOWER;
+                break;
+            case 3: species = SPECIES_FLORGES_YELLOW_FLOWER;
+                break;
+            case 4: species = SPECIES_FLORGES_WHITE_FLOWER;
+                break;
+            }
+            break;
+        case SPECIES_DEERLING:
+            switch (Random() % 4)
+            {
+            case 0: species = SPECIES_DEERLING;
+                break;
+            case 1: species = SPECIES_DEERLING_AUTUMN;
+                break;
+            case 2: species = SPECIES_DEERLING_SUMMER;
+                break;
+            case 3: species = SPECIES_DEERLING_WINTER;
+                break;
+            }
+            break;
+        case SPECIES_SAWSBUCK:
+            switch (Random() % 4)
+            {
+            case 0: species = SPECIES_SAWSBUCK;
+                break;
+            case 1: species = SPECIES_SAWSBUCK_AUTUMN;
+                break;
+            case 2: species = SPECIES_SAWSBUCK_SUMMER;
+                break;
+            case 3: species = SPECIES_SAWSBUCK_WINTER;
+                break;
+            }
+            break;
+        case SPECIES_ALCREMIE:
+            switch (Random() % 8)
+            {
+            case 0: species = SPECIES_ALCREMIE;
+                break;
+            case 1: species = SPECIES_ALCREMIE_CARAMEL_SWIRL;
+                break;
+            case 2: species = SPECIES_ALCREMIE_LEMON_CREAM;
+                break;
+            case 3: species = SPECIES_ALCREMIE_MINT_CREAM;
+                break;
+            case 4: species = SPECIES_ALCREMIE_RAINBOW_SWIRL;
+                break;
+            case 5: species = SPECIES_ALCREMIE_RUBY_CREAM;
+                break;
+            case 6: species = SPECIES_ALCREMIE_RUBY_SWIRL;
+                break;
+            case 7: species = SPECIES_ALCREMIE_MATCHA_CREAM;
+                break;
+            }
+            break;
+        case SPECIES_PICHU:
+            if (Random() % 2) species = SPECIES_PICHU_SPIKY_EARED;
+            break;
+        case SPECIES_VIVILLON:
+            switch (Random() % 10)
+            {
+            case 0: species = SPECIES_VIVILLON;
+                break;
+            case 1: species = SPECIES_VIVILLON_SUN;
+                break;
+            case 2: species = SPECIES_VIVILLON_FANCY;
+                break;
+            case 3: species = SPECIES_VIVILLON_POKE_BALL;
+                break;
+            case 4: species = SPECIES_VIVILLON_POLAR;
+                break;
+            case 5: species = SPECIES_VIVILLON_TUNDRA;
+                break;
+            case 6: species = SPECIES_VIVILLON_CONTINENTAL;
+                break;
+            case 7: species = SPECIES_VIVILLON_HIGH_PLAINS;
+                break;
+            case 8: species = SPECIES_VIVILLON_GARDEN;
+                break;
+            case 9: species = SPECIES_VIVILLON_ELEGANT;
+                break;
             }
             break;
 

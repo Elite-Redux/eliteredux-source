@@ -1236,7 +1236,6 @@ BattleScript_Lawnmower::
 	printfromtable gTerrainEndingStringIds
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS, BattleScript_Lawnmower_SpDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MISTYTERRAINENDS, BattleScript_Lawnmower_SpDef
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS + 1, BattleScript_End3
 	setstatchanger STAT_DEF, 1, FALSE
 	goto BattleScript_Lawnmower_Continue
 BattleScript_Lawnmower_Continue:
@@ -12041,6 +12040,7 @@ BattleScript_RestrainingOrderActivates::
 BattleScript_RedCardActivates::
 	playanimation BS_SCRIPTING, B_ANIM_HELD_ITEM_EFFECT, NULL
 	printstring STRINGID_REDCARDACTIVATE
+	removeitem BS_STACK_1
 BattleScript_RedCardActivates_AfterPrintString::
 	waitmessage B_WAIT_TIME_LONG
 	saveattackerandtargetto34
@@ -12060,19 +12060,16 @@ BattleScript_RedCardEnd:
 BattleScript_RedCardIngrain:
 	printstring STRINGID_PKMNANCHOREDITSELF
 	waitmessage B_WAIT_TIME_LONG
-	removeitem BS_ATTACKER
 	restoreattackerandtargetfrom34
 	return
 BattleScript_RedCardSuctionCups:
 	printstring STRINGID_PKMNANCHORSITSELFWITH	
 	waitmessage B_WAIT_TIME_LONG
-	removeitem BS_ATTACKER
 	restoreattackerandtargetfrom34
 	return
 BattleScript_RedCardCommander:
 	printstring STRINGID_COMMANDER_CANT_SWITCH
 	waitmessage B_WAIT_TIME_LONG
-	removeitem BS_ATTACKER
 	restoreattackerandtargetfrom34
 	return
 
