@@ -6679,7 +6679,7 @@ enum
 int IsTerrainActive(int terrainFlag)
 {
     if (!TERRAIN_HAS_EFFECT) return FALSE;
-    return gFieldStatuses & terrainFlag != 0;
+    return (gFieldStatuses & terrainFlag) != 0;
 }
 
 bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag)
