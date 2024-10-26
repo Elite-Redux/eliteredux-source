@@ -15616,6 +15616,7 @@ static void Cmd_switchoutabilities(void)
     u8 count;
     gActiveBattler = GetBattlerForBattleScript(READ_FIRST_8_INC);
     gRoundStructs[gActiveBattler].protectedThisTurn = FALSE;
+    ZERO(gVolatileStructs[gActiveBattler].switchInAbilityDone);
 
     SetSingleUseAbilityCounter(gActiveBattler, ABILITY_ZERO_TO_HERO, TRUE);
 
