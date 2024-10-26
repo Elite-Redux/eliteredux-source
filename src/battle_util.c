@@ -13680,8 +13680,8 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
                     return TRUE;
                 
                 case MOVE_HARDEN:
-                    REQUIRE(WasMoveSuccessful())
-                    
+                    REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+
                     {
                     int activated = FALSE;
                     for (i = 1; i < NUM_STATS; i++)
@@ -13699,7 +13699,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
                     break;
                 
                 case MOVE_IRON_DEFENSE:
-                    REQUIRE(WasMoveSuccessful())
+                    REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
 
                     gRoundStructs[battler].angelsWrathProtected = TRUE;
                     BattleScriptCall(BattleScript_AngelsWrath_Effect_Iron_Defense);
