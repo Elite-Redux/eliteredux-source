@@ -13071,7 +13071,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         
             if (i < ARRAY_COUNT(sHpTransformations))
             {
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, sHpTransformations[i][2]);
+                UpdateAbilityStateIndicesForNewSpecies(battler, sHpTransformations[i][2]);
                 SetAbilityState(battler, ability, TRUE);
                 gBattleMons[battler].species = sHpTransformations[i][2];
                 BattleScriptCall(BattleScript_AttackerFormChange);
@@ -13088,7 +13088,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
                 || (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
             {
                 u16 newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ? SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+                UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
                 gBattleMons[battler].species = newSpecies;
                 BattleScriptCall(BattleScript_AttackerFormChange);
                 return TRUE;
@@ -13250,7 +13250,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         case ABILITY_RESONANCE:
             REQUIRE(ShouldApplyOnHitAffect(target))
             REQUIRE(CanBleed(target))
-            REQUIRE((gBattleMoves[move].flags & FLAG_SOUND))
+            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
 
             ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
             return TRUE;
@@ -14025,7 +14025,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         
         case ABILITY_ATOMIC_BURST:
             REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE((gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE))
+            REQUIRE(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
 
             UseOutOfTurnAttack(battler, attacker, ability, MOVE_HYPER_BEAM, 50);
             break;
@@ -14209,7 +14209,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             gBattleMons[attacker].pp[gChosenMovePos] = 0;
             PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove)
             gActiveBattler = battler;
-            BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[gActiveBattler].pp[gChosenMovePos]);
+            BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[battler].pp[gChosenMovePos]);
             BattleScriptCall(BattleScript_IllWillTakesPp);
             return TRUE;
         
@@ -14384,7 +14384,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
                 && gBattleMons[battler].species == SPECIES_SLAKING_MEGA
                 && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
             {
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_SLAKING_MEGA_APE_SHIFT);
+                UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_SLAKING_MEGA_APE_SHIFT);
                 gBattleMons[battler].species = SPECIES_SLAKING_MEGA_APE_SHIFT;
 
                 BattleScriptCall(BattleScript_ApeShift);
@@ -15075,7 +15075,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA)
             REQUIRE(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
 
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_SLAKING_MEGA_APE_SHIFT);
+            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_SLAKING_MEGA_APE_SHIFT);
             gBattleMons[battler].species = SPECIES_SLAKING_MEGA_APE_SHIFT;
 
             BattleScriptPushCursorAndCallback(BattleScript_End3);
@@ -15085,7 +15085,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         
         case ABILITY_MIMICRY:
             REQUIRE(IsBattlerAlive(battler))
-            REQUIRE((gFieldStatuses & STATUS_FIELD_TERRAIN_ANY))
+            REQUIRE(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
             TryToApplyMimicry(battler, FALSE);
             return TRUE;
@@ -15231,9 +15231,9 @@ int HandleSwitchInAbilityAs(int ability, int battler)
                 BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
                 return TRUE;
             }
-            else if (!GetSingleUseAbilityCounter(battler, ABILITY_GENERATOR))
+            else if (!GetSingleUseAbilityCounter(battler, ability))
             {
-                SetSingleUseAbilityCounter(battler, ABILITY_GENERATOR, TRUE);
+                SetSingleUseAbilityCounter(battler, ability, TRUE);
                 BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
                 return TRUE;
             }
@@ -15249,7 +15249,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         ANNOUNCE_SIMPLE_ABILITY(ABILITY_UNNERVE, B_MSG_SWITCHIN_UNNERVE)
 
         case ABILITY_WIND_RIDER:
-            REQUIRE((gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND))
+            REQUIRE(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
 
             BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityHighestAttackingStatRaiseOnSwitchIn);
             return TRUE;
@@ -15260,7 +15260,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             REQUIRE(IsBattlerAlive(battler))
 
             {
-            int stat = GetHighestDefendingStatId(battler, TRUE) == STAT_DEF ? STAT_SPATK : STAT_ATK;
+            int stat = GetHighestDefendingStatId(gBattlerTarget, TRUE) == STAT_DEF ? STAT_SPATK : STAT_ATK;
             REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
             SetStatChanger(stat, 1);
             PREPARE_STAT_BUFFER(gBattleTextBuff1, stat);
@@ -15352,7 +15352,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         case ABILITY_COWARD:
             REQUIRE_NOT(GetSingleUseAbilityCounter(battler, ability))
             
-            SetSingleUseAbilityCounter(battler, ABILITY_COWARD, TRUE);
+            SetSingleUseAbilityCounter(battler, ability, TRUE);
             gRoundStructs[battler].protectedThisTurn = TRUE;
             BattleScriptPushCursorAndCallback(BattleScript_BattlerIsProtectedForThisTurn);
             return TRUE;
@@ -15376,13 +15376,13 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             return TRUE;
         
         case ABILITY_PICKUP:
-            if (!(gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_HAZARDS_ANY)
-                && !gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals
-                && !gSideTimers[GetBattlerSide(gActiveBattler)].caltrops) break;
+            REQUIRE(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY
+                || gSideTimers[GetBattlerSide(battler)].hotCoals
+                || gSideTimers[GetBattlerSide(battler)].caltrops)
             
-            gSideStatuses[GetBattlerSide(gActiveBattler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
-            gSideTimers[GetBattlerSide(gActiveBattler)].hotCoals = FALSE;
-            gSideTimers[GetBattlerSide(gActiveBattler)].caltrops = FALSE;
+            gSideStatuses[GetBattlerSide(battler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
+            gSideTimers[GetBattlerSide(battler)].hotCoals = FALSE;
+            gSideTimers[GetBattlerSide(battler)].caltrops = FALSE;
             BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
             return TRUE;
 
@@ -15471,11 +15471,11 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         
         case ABILITY_WISHMAKER:
             {
-            int counter = GetSingleUseAbilityCounter(battler, ABILITY_WISHMAKER);
+            int counter = GetSingleUseAbilityCounter(battler, ability);
             REQUIRE(counter < 3)
-            REQUIRE(UseEntryMove(battler, ABILITY_WISHMAKER, MOVE_WISH, 0))
+            REQUIRE(UseEntryMove(battler, ability, MOVE_WISH, 0))
             
-            SetSingleUseAbilityCounter(battler, ABILITY_WISHMAKER, counter + 1);
+            SetSingleUseAbilityCounter(battler, ability, counter + 1);
             return TRUE;
             }
         
@@ -15536,7 +15536,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             break;
         
         case ABILITY_GLEAM_EYES:
-            if (UseIntimidateClone(battler, ABILITY_GLEAM_EYES))
+            if (UseIntimidateClone(battler, ability))
             {
                 gBattleStruct->friskedAbility = TRUE;
             }
@@ -15785,7 +15785,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
             {
                 struct ParadoxBoost boost = { .statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
-                SetAbilityStateAs(battler, ABILITY_PROTOSYNTHESIS, (union AbilityStates) { .paradoxBoost = boost });
+                SetAbilityStateAs(battler, ability, (union AbilityStates) { .paradoxBoost = boost });
                 PREPARE_STAT_BUFFER(gBattleTextBuff1, boost.statId);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
                 BattleScriptPushCursorAndCallback(BattleScript_ParadoxBoostActivates);
@@ -15795,7 +15795,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY)
             {
                 struct ParadoxBoost boost = { .statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY };
-                SetAbilityStateAs(battler, ABILITY_PROTOSYNTHESIS, (union AbilityStates) { .paradoxBoost = boost });
+                SetAbilityStateAs(battler, ability, (union AbilityStates) { .paradoxBoost = boost });
                 PREPARE_STAT_BUFFER(gBattleTextBuff1, boost.statId);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
                 RemoveItem(battler);
@@ -15808,7 +15808,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
             {
                 struct ParadoxBoost boost = { .statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
-                SetAbilityStateAs(battler, ABILITY_QUARK_DRIVE, (union AbilityStates) { .paradoxBoost = boost });
+                SetAbilityStateAs(battler, ability, (union AbilityStates) { .paradoxBoost = boost });
                 PREPARE_STAT_BUFFER(gBattleTextBuff1, boost.statId);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_TERRAIN;
                 BattleScriptPushCursorAndCallback(BattleScript_ParadoxBoostActivates);
@@ -15818,7 +15818,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY)
             {
                 struct ParadoxBoost boost = { .statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY };
-                SetAbilityStateAs(battler, ABILITY_QUARK_DRIVE, (union AbilityStates) { .paradoxBoost = boost });
+                SetAbilityStateAs(battler, ability, (union AbilityStates) { .paradoxBoost = boost });
                 PREPARE_STAT_BUFFER(gBattleTextBuff1, boost.statId);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
                 RemoveItem(battler);
@@ -15828,8 +15828,8 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             break;
         
         case ABILITY_FURNACE:
-            REQUIRE((gSideStatuses[GetBattlerSide(gActiveBattler)] & SIDE_STATUS_STEALTH_ROCK))
-            REQUIRE(gSideTimers[GetBattlerSide(gActiveBattler)].stealthRockType == TYPE_ROCK)
+            REQUIRE(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
+            REQUIRE(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
             REQUIRE(IsBattlerAlive(battler))
             REQUIRE(ChangeStatBuffs(battler, StatBuffValue(2), STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
 
@@ -15878,7 +15878,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             return TRUE;
         
         case ABILITY_LAWNMOWER:
-            REQUIRE((gFieldStatuses & STATUS_FIELD_TERRAIN_ANY))
+            REQUIRE(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
 
             BattleScriptPushCursorAndCallback(BattleScript_Lawnmower);
             return TRUE;
@@ -16084,7 +16084,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
 
             gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_ZYGARDE_COMPLETE);
+            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_ZYGARDE_COMPLETE);
             gBattleMons[battler].species = SPECIES_ZYGARDE_COMPLETE;
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
             return TRUE;
@@ -16094,7 +16094,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA)
             REQUIRE(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
 
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_SLAKING_MEGA_APE_SHIFT);
+            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_SLAKING_MEGA_APE_SHIFT);
             gBattleMons[battler].species = SPECIES_SLAKING_MEGA_APE_SHIFT;
 
             BattleScriptPushCursorAndCallback(BattleScript_End3);
@@ -16110,7 +16110,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             else if (gBattleMons[battler].species == SPECIES_MORPEKO_HANGRY) species = SPECIES_MORPEKO;
             else break;
 
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, species);
+            UpdateAbilityStateIndicesForNewSpecies(battler, species);
             gBattleMons[battler].species = species;
             BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
             }
@@ -16132,13 +16132,13 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         case ABILITY_HYDRATION:
             REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
 
-            if (AbilityHealMonStatus(gActiveBattler, ABILITY_PURIFYING_WATERS)) return TRUE;
+            if (AbilityHealMonStatus(battler, ability)) return TRUE;
             break;
         
         case ABILITY_SHED_SKIN:
             REQUIRE(Random() % 100 < 30)
 
-            if (AbilityHealMonStatus(gActiveBattler, ABILITY_SHED_SKIN)) return TRUE;
+            if (AbilityHealMonStatus(battler, ability)) return TRUE;
             break;
         
         case ABILITY_SPEED_BOOST:
@@ -16162,7 +16162,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
                     validToRaise |= 1 << i;
             }
 
-            REQUIRE(validToLower && !validToRaise)
+            REQUIRE(validToLower || validToRaise)
 
             if (validToRaise)
             {
@@ -16186,8 +16186,8 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             return TRUE;
         
         case ABILITY_TRUANT:
-            if (GetAbilityState(battler, ABILITY_TRUANT)) SetAbilityState(battler, ABILITY_TRUANT, FALSE);
-            else if (!IS_MOVE_STATUS(gChosenMoveByBattler[battler])) SetAbilityState(battler, ABILITY_TRUANT, TRUE);
+            if (GetAbilityState(battler, ability)) SetAbilityState(battler, ability, FALSE);
+            else if (!IS_MOVE_STATUS(gChosenMoveByBattler[battler])) SetAbilityState(battler, ability, TRUE);
             break;
         
         case ABILITY_BAD_DREAMS:
@@ -16197,7 +16197,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         case ABILITY_SWEET_DREAMS:
             REQUIRE_NOT(BATTLER_MAX_HP(battler))
             REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE((gBattleMons[battler].status1 & STATUS1_SLEEP) && !BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
+            REQUIRE(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
 
             gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
             if (gBattleMoveDamage == 0)
@@ -16319,19 +16319,18 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         
         case ABILITY_CUD_CHEW:
             {
-            struct CudChewState state = GetAbilityStateAs(battler, ABILITY_CUD_CHEW).cudChewState;
+            struct CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
             if (state.setThisTurn)
             {
-                SetAbilityStateAs(battler, ABILITY_CUD_CHEW, (union AbilityStates) { .cudChewState = { .itemId = state.itemId } });
+                SetAbilityStateAs(battler, ability, (union AbilityStates) { .cudChewState = { .itemId = state.itemId } });
             }
             else if (state.itemId)
             {
                 // attacker temporarily gains their item
                 gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
                 gBattleMons[battler].item = state.itemId;
-                gBattleScripting.abilityPopupOverwrite = ABILITY_CUD_CHEW;
 
-                SetAbilityStateAs(battler, ABILITY_CUD_CHEW, (union AbilityStates) { .cudChewState = { .activating = TRUE } });
+                SetAbilityStateAs(battler, ability, (union AbilityStates) { .cudChewState = { .activating = TRUE } });
                 
                 BattleScriptPushCursorAndCallback(BattleScript_CudChew);
                 return TRUE;
@@ -16345,12 +16344,12 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             do
             {
                 newType = Random() % NUMBER_OF_MON_TYPES;
-            } while (newType == TYPE_MYSTERY || newType == TYPE_STELLAR || IS_BATTLER_OF_TYPE(gActiveBattler, newType));
+            } while (newType == TYPE_MYSTERY || newType == TYPE_STELLAR || IS_BATTLER_OF_TYPE(battler, newType));
 
-            gBattleMons[gActiveBattler].type1 = newType;
-            gBattleMons[gActiveBattler].type2 = newType;
-            gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
-            gBattlerAbility = gActiveBattler;
+            gBattleMons[battler].type1 = newType;
+            gBattleMons[battler].type2 = newType;
+            gBattleMons[battler].type3 = TYPE_MYSTERY;
+            gBattlerAbility = battler;
             gBattleScripting.abilityPopupOverwrite = ABILITY_COLOR_SPECTRUM;
             BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
             }
@@ -16361,7 +16360,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(battler))
             REQUIRE(IsBattlerAlive(battler))
 
-            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 10;
+            gBattleMoveDamage = gBattleMons[battler].maxHP / 10;
             if (gBattleMoveDamage == 0)
                 gBattleMoveDamage = 1;
             BattleScriptPushCursorAndCallback(BattleScript_AbilitySelfDamage);

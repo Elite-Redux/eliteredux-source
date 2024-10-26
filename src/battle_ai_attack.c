@@ -505,7 +505,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return score + AI_SCORE_THIEF;
 
     CASE_AND_LABEL(EFFECT_MEAN_LOOK)
-        return AI_SCORE_TRAP;
+        return AI_SCORE_TRAP(battlerDef);
 
     CASE_AND_LABEL(EFFECT_NIGHTMARE)
         if (!IsSleeping(battlerDef, aiData)) return AI_SCORE_UNUSABLE;
@@ -533,7 +533,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_PROTECT;
 
     CASE_AND_LABEL(EFFECT_SPIKES)
-        return AI_SCORE_SPIKES(battlerAtk);
+        return AI_SCORE_SPIKES(battlerDef);
 
     CASE_AND_LABEL(EFFECT_FORESIGHT)
         // TODO: Foresight
@@ -797,7 +797,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_BRICK_BREAK)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_BREAK_SCREENS;
+        return score + AI_SCORE_BREAK_SCREENS(battlerDef);
 
     CASE_AND_LABEL(EFFECT_YAWN)
         return AI_SCORE_DROWSY;
@@ -1010,7 +1010,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_AQUA_RING;
 
     CASE_AND_LABEL(EFFECT_TRICK_ROOM)
-        return AI_SCORE_TRICK_ROOM;
+        return AI_SCORE_TRICK_ROOM(TRICK_ROOM_DURATION);
 
     CASE_AND_LABEL(EFFECT_WONDER_ROOM)
         return AI_SCORE_WONDER_ROOM;
@@ -1022,13 +1022,13 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_MAGNET_RISE;
 
     CASE_AND_LABEL(EFFECT_TOXIC_SPIKES)
-        return AI_SCORE_TOXIC_SPIKES(battlerAtk);
+        return AI_SCORE_TOXIC_SPIKES(battlerDef);
 
     CASE_AND_LABEL(EFFECT_GASTRO_ACID)
         return AI_SCORE_SUPPRESS_ABILITY;
 
     CASE_AND_LABEL(EFFECT_STEALTH_ROCK)
-        return AI_SCORE_STEALTH_ROCK(battlerAtk, gBattleMoves[move].type);
+        return AI_SCORE_STEALTH_ROCK(battlerDef, gBattleMoves[move].type);
 
     CASE_AND_LABEL(EFFECT_TELEKINESIS)
         return AI_SCORE_TELEKINESIS;
@@ -1096,7 +1096,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_INVERT_STAT_CHANGES;
 
     CASE_AND_LABEL(EFFECT_MISTY_TERRAIN)
-        return AI_SCORE_MISTY_TERRAIN(battlerAtk);
+        return AI_SCORE_MISTY_TERRAIN;
 
     CASE_AND_LABEL(EFFECT_GRASSY_TERRAIN)
         return AI_SCORE_GRASSY_TERRAIN;
@@ -1285,7 +1285,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_HIT_PREVENT_ESCAPE)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_TRAP;
+        return score + AI_SCORE_TRAP(battlerDef);
 
     CASE_AND_LABEL(EFFECT_SPEED_SWAP)
         // TODO: Speed Swap
@@ -1300,7 +1300,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_AURORA_VEIL)
         if (!IsWeatherActive(WEATHER_HAIL_ANY)) return AI_SCORE_UNUSABLE;
-        return AI_SCORE_AURORA_VEIL;
+        return AI_SCORE_AURORA_VEIL(battlerAtk, SCREEN_DURATION_SHORT);
 
     CASE_AND_LABEL(EFFECT_THIRD_TYPE)
         // TODO: Trick or Treat fog
@@ -1521,7 +1521,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_JAW_LOCK)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_TRAP + AI_SCORE_NO_ESCAPE(battlerAtk);
+        return score + AI_SCORE_TRAP(battlerDef) + AI_SCORE_NO_ESCAPE(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_NO_RETREAT)
         // TODO: Check that you can actually use no retreat
@@ -1607,7 +1607,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_STEALTH_ROCK_HIT)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STEALTH_ROCK(battlerAtk, TYPE_ROCK));
+        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STEALTH_ROCK(battlerDef, TYPE_ROCK));
 
     CASE_AND_LABEL(EFFECT_LEECH_SEED_HIT)
         AI_CALC_DAMAGE;
@@ -1649,7 +1649,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return score + AI_SCORE_EAT_BERRY(battlerAtk);
 
     CASE_AND_LABEL(EFFECT_INVERSE_ROOM)
-        return AI_SCORE_INVERSE_ROOM;
+        return AI_SCORE_INVERSE_ROOM(INVERSE_ROOM_DURATION);
 
     CASE_AND_LABEL(EFFECT_DRAIN_BRAIN)
         return AI_SCORE_SPATK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_SPATK, 0, 0, TRUE, FALSE, AiIsUnaware(gBattlerAttacker), FALSE););
@@ -1770,7 +1770,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_SPIKE_HIT)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPIKES(battlerAtk));
+        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_SPIKES(battlerDef));
 
     CASE_AND_LABEL(EFFECT_VICTORY_DANCE)
         return AI_SCORE_SPEED_UP(battlerAtk, 1) + AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_DEFENSE_UP(battlerAtk, 1);
@@ -1841,11 +1841,11 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_FAIRY_TERRAIN_HIT)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_MISTY_TERRAIN(battlerAtk));
+        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_MISTY_TERRAIN);
 
     CASE_AND_LABEL(EFFECT_CREEPING_THORNS_HIT)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STEALTH_ROCK(battlerAtk, TYPE_GRASS));
+        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_STEALTH_ROCK(battlerDef, TYPE_GRASS));
 
     CASE_AND_LABEL(EFFECT_TAKE_HEART)
         return AI_SCORE_CURE_STATUS(battlerAtk) + AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1);
@@ -1854,9 +1854,9 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_CLEAR_SKIES;
 
     CASE_AND_LABEL(EFFECT_SHOWTIME)
-        if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM) score += AI_SCORE_TRICK_ROOM;
+        if (gFieldStatuses & STATUS_FIELD_TRICK_ROOM) score += AI_SCORE_TRICK_ROOM(TRICK_ROOM_DURATION);
         if (gFieldStatuses & STATUS_FIELD_WONDER_ROOM) score += AI_SCORE_WONDER_ROOM;
-        if (gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) score += AI_SCORE_INVERSE_ROOM;
+        if (gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) score += AI_SCORE_INVERSE_ROOM(INVERSE_ROOM_DURATION);
         if (!(gFieldStatuses & STATUS_FIELD_MAGIC_ROOM)) score += AI_SCORE_MAGIC_ROOM;
         return score + AI_SCORE_SWITCH(battlerAtk);
 

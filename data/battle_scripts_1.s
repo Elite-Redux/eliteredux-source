@@ -1236,7 +1236,6 @@ BattleScript_Lawnmower::
 	printfromtable gTerrainEndingStringIds
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS, BattleScript_Lawnmower_SpDef
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_MISTYTERRAINENDS, BattleScript_Lawnmower_SpDef
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS + 1, BattleScript_End3
 	setstatchanger STAT_DEF, 1, FALSE
 	goto BattleScript_Lawnmower_Continue
 BattleScript_Lawnmower_Continue:

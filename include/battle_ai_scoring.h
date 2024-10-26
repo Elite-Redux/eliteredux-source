@@ -49,12 +49,12 @@
 #define AI_SCORE_INNARDS_OUT(battlerAtk, battlerDef) 0
 #define AI_SCORE_CURE_PARTY_STATUS(battlerAtk) 0
 #define AI_SCORE_THIEF 0
-#define AI_SCORE_TRAP 0
+#define AI_SCORE_TRAP(battler) 0
 #define AI_SCORE_NIGHTMARE 0
 #define AI_SCORE_CURSE(battlerDef) 0
 #define AI_SCORE_ADD_TYPE(battler, type) 0
 #define AI_SCORE_PROTECT 0
-#define AI_SCORE_SPIKES(battlerAtk) 0
+#define AI_SCORE_SPIKES(battler) 0
 #define AI_SCORE_PERISH_SONG(battlerDef) 0
 #define AI_SCORE_SANDSTORM 0
 #define AI_SCORE_ENDURE 0
@@ -66,6 +66,9 @@
 #define AI_SCORE_RAIN 0
 #define AI_SCORE_SUN 0
 #define AI_SCORE_HAIL 0
+#define AI_SCORE_PRIMAL_SUN 0
+#define AI_SCORE_PRIMAL_RAIN 0
+#define AI_SCORE_STRONG_WINDS 0
 #define AI_SCORE_GET_STATS_OF(to, from) 0
 #define AI_SCORE_MIRROR_COAT 0
 #define AI_SCORE_FUTURE_SIGHT 0
@@ -82,12 +85,13 @@
 #define AI_SCORE_HELPING_HAND 0
 #define AI_SCORE_GHASTLY_ECHO 0
 #define AI_SCORE_LOSE_ITEM(battler) 0
+#define AI_SCORE_GIVE_ITEM(battler, item) 0
 #define AI_SCORE_EMBARGO(battler) 0
 #define AI_SCORE_SWAP_ITEMS 0
 #define AI_SCORE_QUICK_GUARD 0
 #define AI_SCORE_INGRAIN 0
 #define AI_SCORE_RECYCLE 0
-#define AI_SCORE_BREAK_SCREENS 0
+#define AI_SCORE_BREAK_SCREENS(battlerDef) 0
 #define AI_SCORE_BREAK_SUBSTITUTE 0
 #define AI_SCORE_DROWSY 0
 #define AI_SCORE_ENDEAVOR 0
@@ -96,7 +100,7 @@
 #define AI_SCORE_GRAVITY 0
 #define AI_SCORE_TAILWIND 0
 #define AI_SCORE_AQUA_RING 0
-#define AI_SCORE_TRICK_ROOM 0
+#define AI_SCORE_TRICK_ROOM(duration) 0
 #define AI_SCORE_WONDER_ROOM 0
 #define AI_SCORE_MAGIC_ROOM 0
 #define AI_SCORE_MAGNET_RISE 0
@@ -111,7 +115,7 @@
 #define AI_SCORE_QUASH 0
 #define AI_SCORE_INVERT_STAT_CHANGES 0
 #define AI_SCORE_PSYCHIC_TERRAIN 0
-#define AI_SCORE_MISTY_TERRAIN(battlerAtk) 0
+#define AI_SCORE_MISTY_TERRAIN 0
 #define AI_SCORE_EXTRA_MOVE(battlerAtk, battlerDef, move, power) 0
 #define AI_SCORE_ELECTRIC_TERRAIN 0
 #define AI_SCORE_GRASSY_TERRAIN 0
@@ -119,7 +123,7 @@
 #define AI_SCORE_COILED_UP 0
 #define AI_SCORE_ARGUMENT_MOVE_EFFECT 0
 #define AI_SCORE_BLEED(battler) 0
-#define AI_SCORE_AURORA_VEIL 0
+#define AI_SCORE_AURORA_VEIL(battler, duration) 0
 #define AI_SCORE_BREAK_PROTECT 0
 #define AI_SCORE_GLAIVE_RUSH 0
 #define AI_SCORE_POWDER 0
@@ -128,7 +132,7 @@
 #define AI_SCORE_HEAL_FIXED(amount) 0
 #define AI_SCORE_HAZE 0
 #define AI_SCORE_NO_ESCAPE(battlerAtk) 0
-#define AI_SCORE_INVERSE_ROOM 0
+#define AI_SCORE_INVERSE_ROOM(duration) 0
 #define AI_SCORE_REMOVE_TERRAIN 0
 #define AI_SCORE_PARALYSIS_IGNORE_TYPE 0
 #define AI_SCORE_REMOVE_WEATHER 0
@@ -138,5 +142,15 @@
 #define AI_SCORE_TREPIDATION 0
 #define AI_SCORE_SALT_CURE 0
 #define AI_SCORE_DAZE(battler) 0
+#define AI_SCORE_GET_PARASITIC_SPORES(battler) 0
+#define AI_SCORE_SET_ANTICIPATION 0
+#define AI_SCORE_FORM_CHANGE(battler, species) 0
+#define AI_SCORE_HOT_COALS 0
+#define AI_SCORE_CLEAR_STAT_BUFFS(battler) 0
+#define AI_SCORE_PARADOX_BOOST 0
+#define AI_SCORE_VIOLENT_RUSH 0
+#define AI_SCORE_RAPID_RESPONSE 0
+#define AI_SCORE_READIED_ACTION 0
+#define AI_SCORE_ON_THE_PROWL 0
 
 #endif
