@@ -2948,7 +2948,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_HIDDEN_POWER] =
     {
         .effect = EFFECT_HIDDEN_POWER,
-        .power = 70,
+        .power = 80,
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 15,
@@ -3601,7 +3601,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SECRET_POWER] =
     {
         .effect = EFFECT_HIDDEN_POWER,
-        .power = 70,
+        .power = 80,
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 20,
@@ -4911,7 +4911,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_AURA_SPHERE] =
     {
         .effect = EFFECT_HIT,
-        .power = 80,
+        .power = 85,
         .type = TYPE_FIGHTING,
         .accuracy = 0,
         .pp = 20,

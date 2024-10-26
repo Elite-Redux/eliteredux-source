@@ -61,6 +61,7 @@
 #define AI_SCORE_ATTRACT(battlerAtk, battlerDef) 0
 #define AI_SCORE_SAFEGUARD 0
 #define AI_SCORE_SWITCH(battlerAtk) 0
+#define AI_SCORE_REVIVE(battler, percent) 0
 #define AI_SCORE_CLEAR_HAZARDS(side) 0
 #define AI_SCORE_RAIN 0
 #define AI_SCORE_SUN 0

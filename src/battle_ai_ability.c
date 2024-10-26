@@ -368,6 +368,12 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
 
     switch (ability)
     {
+    case ABILITY_RECURRING_NIGHTMARE:
+        REQUIRE(IsWeatherActive(WEATHER_FOG_ANY))
+        REQUIRE(!GetSingleUseAbilityCounter(battlerDef, ability))
+        REQUIRE(aiData->moveState.seeKo)
+        return AI_SCORE_SWITCH(battlerDef) + AI_SCORE_REVIVE(battlerDef, 25);
+
     case ABILITY_LINGERING_AROMA:
     case ABILITY_MUMMY:
         REQUIRE(aiData->moveState.contact)

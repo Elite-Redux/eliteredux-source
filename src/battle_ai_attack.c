@@ -1732,8 +1732,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return score + AI_SCORE_SWITCH(battlerAtk) + AI_SCORE_GHASTLY_ECHO;
 
     CASE_AND_LABEL(EFFECT_REVIVAL_BLESSING)
-        // TODO: Revival Blessing
-        return AI_SCORE_UNUSABLE;
+        return AI_SCORE_REVIVE(battlerAtk, 50);
 
     CASE_AND_LABEL(EFFECT_TIDY_UP)
         return AI_SCORE_CLEAR_HAZARDS(GetBattlerSide(battlerAtk)) + AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
