@@ -13928,13 +13928,13 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             break;
         
         case ABILITY_RESTRAINING_ORDER:
-            REQUIRE(GetAbilityState(battler, ABILITY_RESTRAINING_ORDER) == RESTRAINING_ORDER_NOT_TRIGGERED);
+            REQUIRE(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED);
             REQUIRE(ShouldApplyOnHitAffect(battler))
             REQUIRE(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
             REQUIRE_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
             REQUIRE(CountUsablePartyMons(battler))
 
-            SetAbilityState(battler, ABILITY_RESTRAINING_ORDER, RESTRAINING_ORDER_ACTIVATING);
+            SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
             break;
         
         case ABILITY_THERMAL_EXCHANGE:
@@ -14230,8 +14230,8 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             return TRUE;
         
         case ABILITY_PATCHWORK:
-            REQUIRE(GetSingleUseAbilityCounter(battler, ABILITY_PATCHWORK))
-            SetSingleUseAbilityCounter(battler, ABILITY_PATCHWORK, 0);
+            REQUIRE(GetSingleUseAbilityCounter(battler, ability))
+            SetSingleUseAbilityCounter(battler, ability, 0);
 
             REQUIRE(IsBattlerAlive(attacker))
             REQUIRE_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
@@ -14563,7 +14563,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
             gBattleMons[opponent].ability = ability;
             gStackBattler1 = opponent;
             BattleScriptCall(BattleScript_BloodStainActivates);
-            DisableSwitchInAbility(opponent, ABILITY_BLOOD_STAIN);
+            DisableSwitchInAbility(opponent, ability);
             return TRUE;
         
         case ABILITY_SOUL_LINKER:
