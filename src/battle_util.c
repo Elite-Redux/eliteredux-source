@@ -5683,7 +5683,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                     else
                         gBattlescriptCurrInstr = BattleScript_MoveStatDrain_PPLoss;
 
-                    SET_STATCHANGER(statId, 1, FALSE);
+                    SET_STATCHANGER(statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1, FALSE);
                     gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
                     ChangeStatBuffs(battler, StatBuffValue(1), statId, MOVE_EFFECT_AFFECTS_USER, NULL);
                     PREPARE_STAT_BUFFER(gBattleTextBuff1, statId);
@@ -9835,10 +9835,6 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
 		    if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)) RESISTANCE(0.5);
             return;
         
-        case ABILITY_WELL_BAKED_BODY:
-            if (moveType == TYPE_FIRE) MUL(0.5);
-            return;
-        
         case ABILITY_DRY_SKIN:
         if (moveType == TYPE_FIRE) MUL(1.25);
             return;
@@ -12841,6 +12837,15 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
         }
     }
 
+    // Well Baked Body
+    if (BattlerHasAbility(battler, battlerAtk, ABILITY_WELL_BAKED_BODY)) {
+        if (moveType == TYPE_FIRE) {
+            *ability = ABILITY_WELL_BAKED_BODY;
+            *statId = STAT_DEF;
+            return 2;
+        }
+    }
+
     // Ice Dew
     if (BattlerHasAbility(battler, battlerAtk, ABILITY_ICE_DEW)) {
         if (moveType == TYPE_ICE) {
@@ -13952,15 +13957,6 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             REQUIRE_NOT(CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_EQUAL))
 
             SetStatChanger(STAT_SPEED, 2);
-            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            return TRUE;
-        
-        case ABILITY_WELL_BAKED_BODY:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(moveType == TYPE_FIRE)
-            REQUIRE_NOT(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_EQUAL))
-
-            SetStatChanger(STAT_DEF, 1);
             BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
             return TRUE;
         

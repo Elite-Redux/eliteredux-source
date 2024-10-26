@@ -82,7 +82,7 @@
 #define ABILITIES_COUNT_GEN3 (ABILITY_AIR_LOCK + 1)
 
 #define ABILITY_TANGLED_FEET 77 // Doubles Evasion when confused.
-#define ABILITY_MOTOR_DRIVE 78 // Raises Speed by one stage if hit by an Electric-type move.
+#define ABILITY_MOTOR_DRIVE 78 // Boosts Speed instead of being hit by Electric-type moves.
 #define ABILITY_RIVALRY 79 // Deals 1.25x to same gender. Takes .75x from opposite gender.
 #define ABILITY_STEADFAST 80 // Raises Speed by one stage if this Pokémon flinches.
 #define ABILITY_SNOW_CLOAK 81 // Evasion is boosted by 1.25x under hail.
@@ -161,10 +161,10 @@
 #define ABILITY_INFILTRATOR 151 // Own moves bypass Substitutes and damage reduction screens.
 #define ABILITY_MUMMY 152 // If hit, makes the attacker's ability Mummy.
 #define ABILITY_MOXIE 153 // Dealing a KO raises Attack by one stage.
-#define ABILITY_JUSTIFIED 154 // Raises Attack by one stage if hit by a Dark-type move.
+#define ABILITY_JUSTIFIED 154 // Boosts Attack instead of being hit by Dark-type moves.
 #define ABILITY_RATTLED 155 // If hit by Bug, Dark or Ghost move, or flinches: +1 Speed.
 #define ABILITY_MAGIC_BOUNCE 156 // Bounces back the effect of status moves to their user.
-#define ABILITY_SAP_SIPPER 157 // Absorbs Grass-type moves and raises highest Atk by one stage.
+#define ABILITY_SAP_SIPPER 157 // Boosts highest Atk instead of being hit by Grass-type moves.
 #define ABILITY_PRANKSTER 158 // Status moves have +1 priority but fail on opposing Dark-types.
 #define ABILITY_SAND_FORCE 159 // Ups highest attacking stat by 1.5x in sand.
 #define ABILITY_IRON_BARBS 160 // Enemies lose 1/8 of max HP if they use a contact move.
@@ -262,7 +262,7 @@
 #define ABILITY_STEAM_ENGINE 243 // Maximizes Speed if hit by a Fire-type or Water-type attack.
 #define ABILITY_PUNK_ROCK 244 // Sound moves deal 1.3x more dmg. Takes -50% dmg from sound moves.
 #define ABILITY_SAND_SPIT 245 // If hit, summons a sandstorm that lasts 8 turns.
-#define ABILITY_ICE_SCALES 246 // Halves damage taken by Special moves. Does NOT double Sp.Def.
+#define ABILITY_ICE_SCALES 246 // Halves damage taken by Special moves. Does NOT double SpDef.
 #define ABILITY_RIPEN 247 // Doubles resistance, healing and stat raises provided by Berries.
 #define ABILITY_ICE_FACE 248 // Protects once against an attack. Restores protection under hail.
 #define ABILITY_POWER_SPOT 249 // Grants a 1.3x boost to ally's attacks.
@@ -301,7 +301,7 @@
 #define ABILITY_IMMOLATE 279 // Normal-type moves become Fire- type moves and get a 1.1x boost.
 #define ABILITY_CRYSTALLIZE 280 // Rock-type moves become Ice-type moves and get a 1.1x boost.
 #define ABILITY_ELECTROCYTES 281 // Boosts the power of Electric- type moves by 1.25x.
-#define ABILITY_AERODYNAMICS 282 // Raises Speed by one stage when hit by a Flying-type move.
+#define ABILITY_AERODYNAMICS 282 // Boosts Speed instead of being hit by Flying-type moves.
 #define ABILITY_CHRISTMAS_SPIRIT 283 // Takes 50% less damage if hail is active.
 #define ABILITY_EXPLOIT_WEAKNESS 284 // Moves are 1.25x stronger on foes affected by a status condition.
 #define ABILITY_GROUND_SHOCK 285 // Target Grounds aren't immune to Electric but resist it instead.
@@ -398,7 +398,7 @@
 #define ABILITY_DEADEYE 376 // Never misses.
 #define ABILITY_ARTILLERY 377 // Mega Launcher moves always hit. Single-target now hits both foes.
 #define ABILITY_AMPLIFIER 378 // Ups sound moves by 30% and makes them hit both foes.
-#define ABILITY_ICE_DEW 379 // Ice ups Atk or SpAtk by +1.
+#define ABILITY_ICE_DEW 379 // Boosts SpAtk instead of being hit by Ice-type moves.
 #define ABILITY_SUN_WORSHIP 380 // Ups highest stat by +1 on entry when sunny.
 #define ABILITY_POLLINATE 381 // Normal-type moves become Bug- type moves and get a 1.1x boost.
 #define ABILITY_VOLCANO_RAGE 382 // Triggers 50 BP Eruption after using a Fire-type move.
@@ -465,7 +465,7 @@
 #define ABILITY_GRAVITY_WELL 443 // Sets Gravity on entry for 5 turns.
 #define ABILITY_EVAPORATE 444 // Takes no damage and sets Mist if hit by water.
 #define ABILITY_LUMBERJACK 445 // 1.5x damage to Grass types.
-#define ABILITY_WELL_BAKED_BODY 446 // Halves damage and +2 defense when hit by a Fire type move.
+#define ABILITY_WELL_BAKED_BODY 446 // Boosts Defense sharply instead of being hit by Fire-type moves.
 #define ABILITY_FURNACE 447 // User gains +2 Speed when when hit by rocks.
 #define ABILITY_ELECTROMORPHOSIS 448 // Charges up when getting hit.
 #define ABILITY_ROCKY_PAYLOAD 449 // Boosts the power of Rock-type and throwing moves by 1.5x.
@@ -507,7 +507,7 @@
 #define ABILITY_SOOTHING_AROMA 485 // Cures party status on entry.
 #define ABILITY_PRIM_AND_PROPER 486 // Wonder Skin + Cute Charm.
 #define ABILITY_SUPER_STRAIN 487 // KOs lower Attack by +1. Take 25% recoil damage.
-#define ABILITY_TIPPING_POINT 488 // Getting hit raises Sp.Atk. Critical hits maximize Sp.Atk.
+#define ABILITY_TIPPING_POINT 488 // Getting hit raises SpAtk. Critical hits maximize SpAtk.
 #define ABILITY_ENLIGHTENED 489 // Emanate + Inner Focus.
 #define ABILITY_PEACEFUL_SLUMBER 490 // Sweet Dreams + Self Sufficient.
 #define ABILITY_AFTERSHOCK 491 // Triggers Magnitude 4-7 after using a damaging move.
@@ -552,7 +552,7 @@
 #define ABILITY_CROWNED_KING 530 // Unnerve + Grim Neigh + Chilling Neigh.
 #define ABILITY_SNAP_TRAP_WHEN_HIT 531 // Counters contact with 50BP Snap Trap.
 #define ABILITY_PERMANENCE 532 // Foes can't heal in any way.
-#define ABILITY_HUBRIS 533 // KOs raise Sp.Atk by one stage.
+#define ABILITY_HUBRIS 533 // KOs raise SpAtk by one stage.
 #define ABILITY_COSMIC_DAZE 534 // 2x damage vs confused. Enemies take 2x confusion damage.
 #define ABILITY_MINDS_EYE 535 // Hits Ghost-type Pokémon. Accuracy can't be lowered.
 #define ABILITY_BLOOD_PRICE 536 // Does 30% more damage but lose 10% HP when attacking.
@@ -590,7 +590,7 @@
 #define ABILITY_MIND_CRUSH 568 // Biting moves use SpAtk and deal 50% more damage.
 #define ABILITY_SUPREME_OVERLORD 569 // Each fainted ally increases Attack and SpAtk by 10%.
 #define ABILITY_ILL_WILL 570 // Deletes the PP of the move that faints this Pokemon.
-#define ABILITY_FIRE_SCALES 571 // Halves damage taken by Special moves. Does NOT double Sp.Def.
+#define ABILITY_FIRE_SCALES 571 // Halves damage taken by Special moves. Does NOT double SpDef.
 #define ABILITY_WATCH_YOUR_STEP 572 // Spreads two layers of Spikes on switch-in.
 #define ABILITY_RAPID_RESPONSE 573 // Boosts Speed by 50% + SpAtk by 20% on first turn.
 #define ABILITY_DOUBLE_IRON_BARBS 574 // 1/6 HP damage when touched.
