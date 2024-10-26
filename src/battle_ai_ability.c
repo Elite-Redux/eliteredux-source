@@ -15,9 +15,6 @@
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
 
-#define REQUIRE(check) if (!(check)) break;
-#define REQUIRE_NOT(check) if (check) break;
-
 // TODO: Gym Skill
 // TODO: Commander
 

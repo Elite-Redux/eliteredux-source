@@ -1180,7 +1180,7 @@ static const u8 sHoldEffectToType[][2] =
 };
 
 // percent in UQ_4_12 format
-static const u16 sPercentToModifier[] =
+const u16 gPercentToModifier[] =
 {
     UQ_4_12(0.00), // 0
     UQ_4_12(0.01), // 1
@@ -8897,6 +8897,11 @@ u32 GetMoveTargetCount(u16 move, u8 battlerAtk, u8 battlerDef)
 
 #define MUL_MODIFIER(modifier, val) MulModifier(modifier, UQ_4_12(val))
 
+u16 MulModifierDirect(u16 modifier, u16 val)
+{
+    return UQ_4_12_TO_INT((modifier * val) + UQ_4_12_ROUND);
+}
+
 void MulModifier(u16 *modifier, u16 val)
 {
     *modifier = UQ_4_12_TO_INT((*modifier * val) + UQ_4_12_ROUND);
@@ -10099,7 +10104,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
     if (holdEffectParamAtk > 100)
         holdEffectParamAtk = 100;
 
-    holdEffectModifier = UQ_4_12(1.0) + sPercentToModifier[holdEffectParamAtk];
+    holdEffectModifier = UQ_4_12(1.0) + gPercentToModifier[holdEffectParamAtk];
 
     // attacker's hold effect
     switch (holdEffectAtk)
@@ -10120,7 +10125,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
         break;
     case HOLD_EFFECT_GEMS:
         if (gTurnStructs[battlerAtk].gemBoost && gBattleMons[battlerAtk].item)
-            MulModifier(&modifier, UQ_4_12(1.0) + sPercentToModifier[gTurnStructs[battlerAtk].gemParam]);
+            MulModifier(&modifier, UQ_4_12(1.0) + gPercentToModifier[gTurnStructs[battlerAtk].gemParam]);
         break;
     case HOLD_EFFECT_BUG_POWER:
     case HOLD_EFFECT_STEEL_POWER:
@@ -10941,7 +10946,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
     {
     case HOLD_EFFECT_METRONOME:
         percentBoost = min((gBattleStruct->sameMoveTurns[battlerAtk] * GetBattlerHoldEffectParam(battlerAtk)), 100);
-        MulModifier(&finalModifier, UQ_4_12(1.0) + sPercentToModifier[percentBoost]);
+        MulModifier(&finalModifier, UQ_4_12(1.0) + gPercentToModifier[percentBoost]);
         break;
     case HOLD_EFFECT_EXPERT_BELT:
         if (typeEffectivenessModifier >= UQ_4_12(2.0))

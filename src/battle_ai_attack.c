@@ -23,28 +23,184 @@ int GetFullChance(int chance, struct AiData* aiData)
     return chance;
 }
 
+int HasSkillLink(int battler, struct AiData* aiData)
+{
+    return HasAbility(battler, ABILITY_SKILL_LINK, aiData) || HasAbility(battler, ABILITY_KUNOICHI_BLADE, aiData);
+}
+
+int AdjustForMultihit(int damage, int battlerAtk, int move, struct AiData* aiData)
+{
+    int i, count = 0;
+    // TODO: Handle substitute
+    aiData->moveState.multiHitExpect = UQ_4_12(1);
+
+    switch (move)
+    {
+    case MOVE_WATER_SHURIKEN:
+        REQUIRE(gBattleMons[battlerAtk].species == SPECIES_GRENINJA_ASH || gBattleMons[battlerAtk].species == SPECIES_GRENINJA_BATTLE_BOND)
+        aiData->moveState.multiHitExpect = UQ_4_12(5);
+        return damage * 5;
+    }
+    switch (gBattleMoves[move].effect)
+    {
+    case EFFECT_WYRM_WIND:
+    case EFFECT_SCALE_SHOT:
+    case EFFECT_MULTI_HIT:
+        if (HasSkillLink(battlerAtk, aiData))
+            aiData->moveState.multiHitExpect = UQ_4_12(5);
+        else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_LOADED_DICE)
+            aiData->moveState.multiHitExpect = UQ_4_12(4.5);
+        else
+            aiData->moveState.multiHitExpect = UQ_4_12(3.17);
+        return ApplyModifier(aiData->moveState.multiHitExpect, damage);
+
+    case EFFECT_DOUBLE_HIT:
+        count = gBattleMoves[move].argument;
+        if (!count) count = 2;
+        aiData->moveState.multiHitExpect = UQ_4_12(count);
+        return damage * count;
+    
+    case EFFECT_TRIPLE_KICK:
+        if (HasSkillLink(battlerAtk, aiData))
+        {
+            aiData->moveState.multiHitExpect = UQ_4_12(3);
+            return damage * 6;
+        }
+        else
+        {
+            int accMul = gPercentToModifier[min(aiData->moveState.accuracy, 100)];
+            aiData->moveState.multiHitExpect = UQ_4_12(1) + MulModifierDirect(UQ_4_12(1) + accMul, accMul);
+            return damage + ApplyModifier(2 * damage + ApplyModifier(accMul, damage), accMul);
+        }
+    
+    case EFFECT_TEN_HITS:
+        if (HasSkillLink(battlerAtk, aiData))
+        {
+            aiData->moveState.multiHitExpect = UQ_4_12(10);
+            return damage * 10;
+        }
+        else
+        {
+            int accMul = gPercentToModifier[min(aiData->moveState.accuracy, 100)];
+            for (i = 0; i < 9; i++)
+            {
+                aiData->moveState.multiHitExpect = UQ_4_12(1) + MulModifierDirect(aiData->moveState.multiHitExpect, accMul);
+            }
+            return ApplyModifier(aiData->moveState.multiHitExpect, damage);
+        }
+    }
+    
+    if (!IsMoveAffectedByParentalBond(move, battlerAtk))
+        return damage;
+
+    PopulateAbilities(battlerAtk, aiData);
+    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
+    {
+        switch (aiData->abilities[battlerAtk][i])
+        {
+        case ABILITY_PARENTAL_BOND:
+        case ABILITY_HYPER_AGGRESSIVE:
+        case ABILITY_ICE_COLD_HUNTER:
+        case ABILITY_RAGING_GODDESS:
+            aiData->moveState.multiHitExpect = UQ_4_12(2);
+            return damage * 125 / 100;
+            
+        case ABILITY_RAGING_BOXER:
+        case ABILITY_STEEL_BEETLE:
+            REQUIRE(IS_IRON_FIST(battlerAtk, move))
+            aiData->moveState.multiHitExpect = UQ_4_12(2);
+            return damage * 150 / 100;
+        
+        case ABILITY_DUAL_WIELD:
+            REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+            aiData->moveState.multiHitExpect = UQ_4_12(2);
+            return damage * 150 / 100;
+        
+        case ABILITY_DUAL_HAMMER:
+            REQUIRE(gBattleMoves[move].hammerBased)
+            aiData->moveState.multiHitExpect = UQ_4_12(2);
+            return damage * 150 / 100;
+            
+        case ABILITY_RAGING_MOTH:
+            REQUIRE(gBattleMoves[move].type == TYPE_FIRE)
+            aiData->moveState.multiHitExpect = UQ_4_12(2);
+            return damage * 150 / 100;
+        
+        case ABILITY_DEVOURER:
+        case ABILITY_PRIMAL_MAW:
+            REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+            aiData->moveState.multiHitExpect = UQ_4_12(2);
+            return damage * 150 / 100;
+        
+        case ABILITY_MULTI_HEADED:
+            if (gBaseStats[gBattleMons[battlerAtk].species].flags & F_TWO_HEADED)
+            {
+                aiData->moveState.multiHitExpect = UQ_4_12(2);
+                return damage * 125 / 100;
+            }
+            if (gBaseStats[gBattleMons[battlerAtk].species].flags & F_THREE_HEADED)
+            {
+                aiData->moveState.multiHitExpect = UQ_4_12(3);
+                return damage * 135 / 100;
+            }
+            break;
+        
+        case ABILITY_MINION_CONTROL:
+            {
+            int j;
+            struct Pokemon *party;
+            if (GetBattlerSide(battlerAtk) == B_SIDE_PLAYER)
+                party = gPlayerParty;
+            else
+                party = gEnemyParty;
+
+            for (j = 0; j < PARTY_SIZE; j++)
+            {
+                if (gBattlerPartyIndexes[battlerAtk] == j) continue;
+                if (GetMonData(&party[j], MON_DATA_HP)
+                    && GetMonData(&party[j], MON_DATA_SPECIES2)
+                    && GetMonData(&party[j], MON_DATA_SPECIES2) != SPECIES_EGG
+                    && !GetMonData(&party[j], MON_DATA_STATUS))
+                        count++;
+            }
+            aiData->moveState.multiHitExpect = UQ_4_12(1 + count);
+            return damage * (100 + 10 * count) / 100;
+            }
+        }
+    }
+
+    return damage;
+}
+
 int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* effectiveness, struct AiData* aiData)
 {
-    int damage;
-    int ignored;
+    int damage, ignored, absorption, statId;
+    u16 ability;
     // TODO: Handle fixed damage
     damage = CalculateMoveDamageAndEffectiveness(move, battlerAtk, battlerDef, moveType, effectiveness);
+    absorption = TestAbsorbingAbilities(battlerDef, battlerAtk, move, *moveType, &statId, &ability);
+    if (absorption) *effectiveness = 0;
+    switch (absorption)
+    {
+    case 1:
+        return AI_SCORE_HEAL(battlerDef, 25);
+    case 2:
+        return AI_SCORE_STAT(battlerDef, statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
+    case 3:
+        return AI_SCORE_FLASH_FIRE;
+    }
     if (!*effectiveness) return 0;
     if (TestImmunityAbilities(battlerDef, battlerAtk, move, *moveType, (const u8**) &ignored, (u8*) &ignored, (u16*) ignored))
     {
-        effectiveness = 0;
+        *effectiveness = 0;
         return 0;
     }
-    if (TestAbsorbingAbilities(battlerDef, battlerAtk, move, *moveType, &ignored, (u16*) &ignored))
-    {
-        // TODO: Handle absorbing scoring
-    }
-    return damage;
+    return (aiData->moveState.damage = AdjustForMultihit(damage, battlerAtk, move, aiData));
 }
 
 #define AI_CALC_DAMAGE \
 score = ScoreDamage(battlerAtk, battlerDef, move, &moveType, &effectiveness, aiData); \
-if (!effectiveness) return AI_SCORE_IMMUNE
+if (!effectiveness) return score;
 
 int ScoreArgument(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
 {
