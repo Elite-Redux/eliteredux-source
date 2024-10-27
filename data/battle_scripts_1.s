@@ -407,7 +407,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectClangorousSoul          @ EFFECT_CLANGOROUS_SOUL
 	.4byte BattleScript_EffectHit                     @ EFFECT_BOLT_BEAK
 	.4byte BattleScript_EffectRisingVoltage			  @ EFFECT_RISING_VOLTAGE
-	.4byte BattleScript_EffectScaleShot			  	  @ EFFECT_SCALE_SHOT
+	.4byte BattleScript_EffectPlaceholder    	  	  @ EFFECT_SCALE_SHOT
 	.4byte BattleScript_EffectHit    				  @ EFFECT_BEAK_BLAST
 	.4byte BattleScript_EffectHit                     @ EFFECT_EXCALIBUR
 	.4byte BattleScript_EffectFrostbiteHit            @ EFFECT_FROSTBITE_HIT
@@ -430,7 +430,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectFrostbite               @ EFFECT_FROSTBITE
 	.4byte BattleScript_EffectFreeze                  @ EFFECT_FREEZE
 	.4byte BattleScript_EffectBurnHit                 @ EFFECT_INFERNAL_PARADE
-	.4byte BattleScript_EffectWyrmWind			  	  @ EFFECT_WYRM_WIND
+	.4byte BattleScript_EffectPlaceholder		  	  @ EFFECT_WYRM_WIND
 	.4byte BattleScript_EffectHit			  		  @ EFFECT_MISTY_TERRAIN_BOOST
 	.4byte BattleScript_EffectBerrySmash              @ EFFECT_BERRY_SMASH
 	.4byte BattleScript_EffectInverseRoom             @ EFFECT_INVERSE_ROOM
@@ -682,117 +682,20 @@ BattleScript_BeakBlastSetUp::
 	waitmessage 0x40
 	end2
 
-BattleScript_EffectScaleShot::
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	setmultihitcounter 0x0
-	initmultihitstring
-	sethword sMULTIHIT_EFFECT, 0x0
-BattleScript_ScaleShotLoop::
-	jumpifhasnohp BS_ATTACKER, BattleScript_ScaleShotEnd
-	jumpifhasnohp BS_TARGET, BattleScript_ScaleShotPrintStrings
-	jumpifhalfword CMP_EQUAL, gChosenMove, MOVE_SLEEP_TALK, BattleScript_ScaleShotDoMultiHit
-	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_ScaleShotPrintStrings
-BattleScript_ScaleShotDoMultiHit::
-	movevaluescleanup
-	copyhword sMOVE_EFFECT, sMULTIHIT_EFFECT
-	critcalc
-	damagecalc
-	jumpifmovehadnoeffect BattleScript_ScaleShotMultiHitNoMoreHits
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage 0x40
-	multihitresultmessage
-	printstring STRINGID_EMPTYSTRING3
-	waitmessage 0x1
-	addbyte sMULTIHIT_STRING + 4, 0x1
-	moveendto MOVEEND_NEXT_TARGET
-	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_ScaleShotPrintStrings
-	decrementmultihit BattleScript_ScaleShotLoop
-	goto BattleScript_ScaleShotPrintStrings
-BattleScript_ScaleShotMultiHitNoMoreHits::
-	pause 0x20
-BattleScript_ScaleShotPrintStrings::
-	resultmessage
-	waitmessage 0x40
-	jumpifmovehadnoeffect BattleScript_ScaleShotEnd
-	copyarray gBattleTextBuff1, sMULTIHIT_STRING, 0x6
-	printstring STRINGID_HITXTIMES
-	waitmessage 0x40
-BattleScript_ScaleShotEnd::
+BattleScript_MoveEffectScaleShot::
+	setmoveeffect MOVE_EFFECT_DEF_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	seteffectsecondary
 	setmoveeffect MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
-	seteffectwithchance
-	setmoveeffect MOVE_EFFECT_DEF_MINUS_1 | MOVE_EFFECT_AFFECTS_USER
-	seteffectwithchance
-	tryfaintmon BS_TARGET, FALSE, NULL
-	moveendcase MOVEEND_SYNCHRONIZE_TARGET
-	moveendfrom MOVEEND_STATUS_IMMUNITY_ABILITIES
-	end
+	seteffectsecondary
+	return
+	
 
-BattleScript_EffectWyrmWind::
-	attackcanceler
-	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
-	attackstring
-	ppreduce
-	setmultihitcounter 0x0
-	initmultihitstring
-	sethword sMULTIHIT_EFFECT, 0x0
-BattleScript_WyrmWindLoop::
-	jumpifhasnohp BS_ATTACKER, BattleScript_WyrmWindEnd
-	jumpifhasnohp BS_TARGET, BattleScript_WyrmWindPrintStrings
-	jumpifhalfword CMP_EQUAL, gChosenMove, MOVE_SLEEP_TALK, BattleScript_WyrmWindDoMultiHit
-	jumpifstatus BS_ATTACKER, STATUS1_SLEEP, BattleScript_WyrmWindPrintStrings
-BattleScript_WyrmWindDoMultiHit::
-	movevaluescleanup
-	copyhword sMOVE_EFFECT, sMULTIHIT_EFFECT
-	critcalc
-	damagecalc
-	jumpifmovehadnoeffect BattleScript_WyrmWindMultiHitNoMoreHits
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage 0x40
-	multihitresultmessage
-	printstring STRINGID_EMPTYSTRING3
-	waitmessage 0x1
-	addbyte sMULTIHIT_STRING + 4, 0x1
-	moveendto MOVEEND_NEXT_TARGET
-	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_FOE_ENDURED, BattleScript_WyrmWindPrintStrings
-	decrementmultihit BattleScript_WyrmWindLoop
-	goto BattleScript_WyrmWindPrintStrings
-BattleScript_WyrmWindMultiHitNoMoreHits::
-	pause 0x20
-BattleScript_WyrmWindPrintStrings::
-	resultmessage
-	waitmessage 0x40
-	jumpifmovehadnoeffect BattleScript_WyrmWindEnd
-	copyarray gBattleTextBuff1, sMULTIHIT_STRING, 0x6
-	printstring STRINGID_HITXTIMES
-	waitmessage 0x40
-BattleScript_WyrmWindEnd::
+BattleScript_MoveEffectWyrmWind::
+	setmoveeffect MOVE_EFFECT_SP_DEF_MINUS_1 | MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN
+	seteffectsecondary
 	setmoveeffect MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER
-	seteffectwithchance
-	setmoveeffect MOVE_EFFECT_SP_DEF_MINUS_1 | MOVE_EFFECT_AFFECTS_USER
-	seteffectwithchance
-	tryfaintmon BS_TARGET, FALSE, NULL
-	moveendcase MOVEEND_SYNCHRONIZE_TARGET
-	moveendfrom MOVEEND_STATUS_IMMUNITY_ABILITIES
-	end
+	seteffectsecondary
+	return
 
 BattleScript_EffectShellSideArm:
 	shellsidearmcheck

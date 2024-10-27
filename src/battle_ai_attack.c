@@ -68,8 +68,6 @@ int AdjustForMultihit(int damage, int battlerAtk, int move, struct AiData* aiDat
     }
     switch (gBattleMoves[move].effect)
     {
-    case EFFECT_WYRM_WIND:
-    case EFFECT_SCALE_SHOT:
     case EFFECT_MULTI_HIT:
         if (HasSkillLink(battlerAtk, aiData))
             aiData->moveState.multiHitExpect = UQ_4_12(5);
@@ -326,7 +324,13 @@ int ScoreArgument(int battlerAtk, int battlerDef, int move, struct AiData* aiDat
         return AI_SCORE_STAT(applyTo, GetHighestStatIdExcept(applyTo, FALSE, STAT_SPEED), 1);
     case MOVE_EFFECT_MAKE_IT_RAIN:
         // TODO: Delay
-        return AI_SCORE_MAKE_IT_RAIN;
+        return AI_SCORE_SPATK_UP(battlerAtk, -1);
+    case MOVE_EFFECT_SCALE_SHOT:
+        // TODO: Delay
+        return AI_SCORE_STAT(battlerAtk, STAT_SPEED, 1) + AI_SCORE_STAT(battlerAtk, STAT_DEF, -1);
+    case MOVE_EFFECT_WYRM_WIND:
+        // TODO: Delay
+        return AI_SCORE_STAT(battlerAtk, STAT_SPEED, 1) + AI_SCORE_STAT(battlerAtk, STAT_SPDEF, -1);
     }
 }
 
@@ -1765,10 +1769,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     CASE_AND_LABEL(EFFECT_RISING_VOLTAGE)
         GOTO(EFFECT_HIT);
 
-    CASE_AND_LABEL(EFFECT_SCALE_SHOT)
-        // TODO: Scale Shot
-        GOTO(EFFECT_HIT);
-
     CASE_AND_LABEL(EFFECT_BEAK_BLAST)
         return AI_SCORE_UNUSABLE;
 
@@ -1841,10 +1841,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_INFERNAL_PARADE)
         GOTO(EFFECT_ARGUMENT_HIT);
-
-    CASE_AND_LABEL(EFFECT_WYRM_WIND)
-        // TODO: Wyrm Wind
-        GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_MISTY_TERRAIN_BOOST)
         return AI_SCORE_UNUSABLE;

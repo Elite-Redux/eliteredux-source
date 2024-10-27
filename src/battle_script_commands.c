@@ -3094,6 +3094,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
     case MOVE_EFFECT_BURN_UP:
     case MOVE_EFFECT_STEAL_ITEM:
     case MOVE_EFFECT_MAKE_IT_RAIN:
+    case MOVE_EFFECT_WYRM_WIND:
+    case MOVE_EFFECT_SCALE_SHOT:
         gBattleStruct->moveEffect2 = gBattleScripting.moveEffect;
         return;
     }
@@ -5856,7 +5858,7 @@ static void Cmd_moveend(void)
                 }
                 break; // MOVE_EFFECT_REMOVE_STATUS
             default:
-                gBattleStruct->moveEffect2 = effect;
+                gBattleStruct->moveEffect2 = moveEffect;
             }
             }
             gBattleScripting.moveendState++;
@@ -5872,6 +5874,14 @@ static void Cmd_moveend(void)
             case MOVE_EFFECT_BURN_UP:
                 effect = TRUE;
                 BattleScriptCall(BattleScript_BurnUpRemoveType);
+                break;
+            case MOVE_EFFECT_SCALE_SHOT:
+                effect = TRUE;
+                BattleScriptCall(BattleScript_MoveEffectScaleShot);
+                break;
+            case MOVE_EFFECT_WYRM_WIND:
+                effect = TRUE;
+                BattleScriptCall(BattleScript_MoveEffectWyrmWind);
                 break;
             }
             gBattleStruct->moveEffect2 = 0;
@@ -12278,7 +12288,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         if (gSideTimers[GET_BATTLER_SIDE(gActiveBattler)].mistTimer
             && !certain && gCurrentMove != MOVE_CURSE
             && !(!affectsUser &&
-            (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_INFILTRATOR)|| BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_MARINE_APEX))))
+            (BattlerHasAbility(gBattlerAttacker, ABILITY_INFILTRATOR, FALSE) || BattlerHasAbility(gBattlerAttacker, ABILITY_MARINE_APEX, FALSE))))
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {

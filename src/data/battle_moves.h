@@ -9069,7 +9069,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SCALE_SHOT] =
     {
-        .effect = EFFECT_SCALE_SHOT,
+        .effect = EFFECT_MULTI_HIT,
         .power = 25,
         .type = TYPE_DRAGON,
         .accuracy = 100,
@@ -9078,6 +9078,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST | FLAG_BALLISTIC,
         .split = SPLIT_PHYSICAL,
+        .argument = MOVE_EFFECT_SCALE_SHOT,
         .parentalBondBanned = TRUE,
     },
     [MOVE_METEOR_BEAM] =
@@ -10338,7 +10339,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_WYRM_WIND] =
     {
-        .effect = EFFECT_WYRM_WIND,
+        .effect = EFFECT_MULTI_HIT,
         .power = 25,
         .type = TYPE_DRAGON,
         .accuracy = 100,
@@ -10347,6 +10348,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST | FLAG_BALLISTIC,
         .split = SPLIT_SPECIAL,
+        .argument = MOVE_EFFECT_WYRM_WIND,
         .parentalBondBanned = TRUE,
     },
     [MOVE_SHED_TAIL] =
