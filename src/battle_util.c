@@ -2198,7 +2198,7 @@ void SetOncePerTurnAbilityCounter(int battler, int ability, int value)
 static int CheckAndSetOncePerTurnAbility(int battler, int ability)
 {
     int index = GetAbilityIndex(battler, ability, TRUE);
-    if (index == TOTAL_ABILITY_COUNT) FALSE;
+    if (index == TOTAL_ABILITY_COUNT) return FALSE;
 
     if (!gTurnStructs[battler].turnAbilityTriggers[index])
     {
