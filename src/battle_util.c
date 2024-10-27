@@ -9026,7 +9026,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_MIND_CRUSH:
         case ABILITY_ROUSED_FANGS:
         case ABILITY_SHOCKING_MAW:
-            if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.5);
+            if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.3);
             return;
 
         #define MUL_ATE(type) \
@@ -10543,12 +10543,12 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         case ABILITY_DEVOURER:
         case ABILITY_RAGING_BOXER:
             if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
-                MulModifier(&finalModifier, UQ_4_12(0.5));
+                MulModifier(&finalModifier, UQ_4_12(0.4));
             break;
         case ABILITY_DUAL_HAMMER:
         case ABILITY_DUAL_WIELD:
         case ABILITY_RAGING_MOTH:
-		    MulModifier(&finalModifier, UQ_4_12(0.75));
+		    MulModifier(&finalModifier, UQ_4_12(0.7));
             break;
     }
 	

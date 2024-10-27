@@ -13513,7 +13513,7 @@ static int AdjustFixedDamageForParentalBond(int damage)
             case ABILITY_RAGING_BOXER:
             case ABILITY_PRIMAL_MAW:
             case ABILITY_DEVOURER:
-                return damage / 2;
+                return damage * 4 / 10;
                 break;
         }
     }
@@ -13537,11 +13537,11 @@ static int AdjustFixedDamageForParentalBond(int damage)
         }
     }
     else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_WIELD)
-        return damage * 3 / 4; // .75
+        return damage * 7 / 10; // .7
     else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_RAGING_MOTH)
-        return damage * 3 / 4; // .75
+        return damage * 7 / 10; // .7
     else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_HAMMER)
-        return damage * 3 / 4; // .75
+        return damage * 7 / 10; // .7
     
     return damage;
 }

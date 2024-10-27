@@ -153,7 +153,7 @@ int AdjustForMultihit(int damage, int battlerAtk, int move, struct AiData* aiDat
         case ABILITY_PRIMAL_MAW:
             REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
         
         case ABILITY_MULTI_HEADED:
             if (gBaseStats[gBattleMons[battlerAtk].species].flags & F_TWO_HEADED)

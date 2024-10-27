@@ -183,7 +183,7 @@
 #define ABILITY_MAGICIAN 170 // Steals the foe's held item after using a non-contact move.
 #define ABILITY_BULLETPROOF 171 // Immune to projectile, ball, or bomb-based moves.
 #define ABILITY_COMPETITIVE 172 // Raises Sp. Atk by two stages if stats are lowered by an enemy.
-#define ABILITY_STRONG_JAW 173 // Boosts the power of bite/fang moves by 1.5x.
+#define ABILITY_STRONG_JAW 173 // Boosts the power of bite/fang moves by 1.3x.
 #define ABILITY_REFRIGERATE 174 // Normal-type moves become Ice- type moves and get a 1.1x boost.
 #define ABILITY_SWEET_VEIL 175 // This Pokémon and its ally are immune to sleep.
 #define ABILITY_STANCE_CHANGE 176 // Turns into Blade or Shield form depending on move used.
@@ -338,7 +338,7 @@
 #define ABILITY_METALLIC 316 // Adds Steel type to itself.
 #define ABILITY_PERMAFROST 317 // Takes 25% less damage from Super-effective moves.
 #define ABILITY_PRIMAL_ARMOR 318 // Takes 50% less damage from Super-effective moves.
-#define ABILITY_RAGING_BOXER 319 // Punching moves hit twice. 1st hit at 100% power, 2nd hit at 50%.
+#define ABILITY_RAGING_BOXER 319 // Punching moves hit twice. 1st hit at 100% power, 2nd hit at 40%.
 #define ABILITY_AIR_BLOWER 320 // Casts a 3-turn Tailwind on entry.
 #define ABILITY_JUGGERNAUT 321 // Paralysis-immune. Uses 20% of its Def when using a contact move.
 #define ABILITY_SHORT_CIRCUIT 322 // Boosts Elec.-type moves by 1.2x, or 1.5x when below 1/3 HP.
@@ -439,7 +439,7 @@
 #define ABILITY_HELLBLAZE 417 // Boosts Fire-type moves by 1.3x, or 1.8x when below 1/3 HP.
 #define ABILITY_RIPTIDE 418 // Boosts Water-type moves by 1.3x, or 1.8x when below 1/3 HP.
 #define ABILITY_FOREST_RAGE 419 // Boosts Grass-type moves by 1.3x, or 1.8x when below 1/3 HP.
-#define ABILITY_PRIMAL_MAW 420 // Biting moves hit twice. 2nd hit does 0.5x damage.
+#define ABILITY_PRIMAL_MAW 420 // Biting moves hit twice. 2nd hit does 0.4x damage.
 #define ABILITY_SWEEPING_EDGE 421 // Keen Edge moves always hit. Single-target now hits both foes.
 #define ABILITY_GIFTED_MIND 422 // Nulls Psychic weakness; status moves always hit.
 #define ABILITY_HYDRO_CIRCUIT 423 // Electric moves +50%; Water moves siphon 25% damage.
@@ -452,7 +452,7 @@
 #define ABILITY_VOLT_RUSH 430 // At full HP, gives +1 priority to its Electric-type moves.
 #define ABILITY_DUNE_TERROR 431 // Sand reduces damage by 35%. Boosts Ground moves by 20%.
 #define ABILITY_INFERNAL_RAGE 432 // Fire-type moves are boosted by 35% with 5% recoil.
-#define ABILITY_DUAL_WIELD 433 // Mega Launcher and Keen Edge moves hit twice for 75% damage.
+#define ABILITY_DUAL_WIELD 433 // Mega Launcher and Keen Edge moves hit twice for 70% damage.
 #define ABILITY_ELEMENTAL_CHARGE 434 // 20% chance to BRN/FRZ/PARA with respective types.
 #define ABILITY_AMBUSH 435 // Guaranteed critical hit on first turn.
 #define ABILITY_ATLAS 436 // Sets Gravity on entry for 8 turns.
@@ -472,7 +472,7 @@
 #define ABILITY_EARTH_EATER 450 // Heals 25% of max HP when hit by a Ground move.
 #define ABILITY_LINGERING_AROMA 451 // If hit, makes the attacker's ability Lingering Aroma.
 #define ABILITY_FAIRY_TALE 452 // Adds Fairy type to itself.
-#define ABILITY_RAGING_MOTH 453 // Fire moves hits twice, both hits at 75% power.
+#define ABILITY_RAGING_MOTH 453 // Fire moves hits twice, both hits at 70% power.
 #define ABILITY_ADRENALINE_RUSH 454 // KOs raise Speed by one stage.
 #define ABILITY_ARCHMAGE 455 // 30% chance of adding a type related effect to each move.
 #define ABILITY_CRYOMANCY 456 // Moves inflict frostbite 5x as often.
@@ -587,7 +587,7 @@
 #define ABILITY_VENGEFUL_SPIRIT 565 // Combines Haunted Spirit & Vengeance.
 #define ABILITY_CUD_CHEW 566 // Eats berries again at the end of the next turn.
 #define ABILITY_ARMOR_TAIL 567 // Protects itself and ally from priority moves.
-#define ABILITY_MIND_CRUSH 568 // Biting moves use SpAtk and deal 50% more damage.
+#define ABILITY_MIND_CRUSH 568 // Biting moves use SpAtk and deal 30% more damage.
 #define ABILITY_SUPREME_OVERLORD 569 // Each fainted ally increases Attack and SpAtk by 10%.
 #define ABILITY_ILL_WILL 570 // Deletes the PP of the move that faints this Pokemon.
 #define ABILITY_FIRE_SCALES 571 // Halves damage taken by Special moves. Does NOT double SpDef.
@@ -661,7 +661,7 @@
 #define ABILITY_PIERCING_SOLO 639 // Sound moves have a 30% chance to cause bleeding.
 #define ABILITY_RHYTHMIC 640 // Deals 10% more damage for each repeated move use.
 #define ABILITY_CHUNKY_BASS_LINE 641 // Triggers a 40BP Earthquake after using a sound move.
-#define ABILITY_DUAL_HAMMER 642 // Super Slammer moves hit twice for 75% damage.
+#define ABILITY_DUAL_HAMMER 642 // Super Slammer moves hit twice for 70% damage.
 #define ABILITY_DENTING_BLOWS 643 // Hammer moves lower Defense.
 #define ABILITY_ICE_COLD_HUNTER 644 // Combines Hyper Aggressive and Whiteout.
 #define ABILITY_SOUL_CRUSHER 645 // Hammer moves become Special and get a 1.1x power boost.
@@ -727,7 +727,7 @@
 #define ABILITY_TERASTAL_TREASURE 705 // Reduces damage taken by 40%, but lowers speed by 20%.
 #define ABILITY_SHOCKING_MAW 706 // Strong Jaw + Bite moves have 50% paralysis chance.
 #define ABILITY_GLEAM_EYES 707 // Frisk + Scare.
-#define ABILITY_ROUSED_FANGS 708 // Biting moves use SpAtk and deal 50% more damage.
+#define ABILITY_ROUSED_FANGS 708 // Biting moves use SpAtk and deal 30% more damage.
 #define ABILITY_DREAM_STATE 709 // Immune to critical hits. Takes 20% less damage from all attacks.
 #define ABILITY_DREAM_WHIMSY 710 // Uses Yawn on switch-in.
 #define ABILITY_LUNAR_AFFINITY 711 // Copies lunar moves used by others.
