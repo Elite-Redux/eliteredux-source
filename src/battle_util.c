@@ -16131,16 +16131,19 @@ void RepopulateAbilities(int battler)
 int GetAbilityIndex(int battler, int ability, int checkMoldBreaker)
 {
     int i;
-    int moldBreaker = checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && sAbilitiesAffectedByMoldBreaker[ability];
+    int moldBreaker;
+    
+    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
+        if (gBattleMons[battler].abilities[i] == ability) break;
+    
+    if (i == MAX_MON_MOVES) return i;
 
+    moldBreaker = checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && sAbilitiesAffectedByMoldBreaker[ability];
     if (moldBreaker || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
     {
         if (DoesBattlerHaveAbilityShield(battler))
             return TOTAL_ABILITY_COUNT;
     }
-    
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
-        if (gBattleMons[battler].abilities[i] == ability) break;
 
     return i;
 }

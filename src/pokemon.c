@@ -9458,6 +9458,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
        innate != ABILITY_ARCHMAGE               &&
        innate != ABILITY_NEUTRALIZING_GAS       &&
        innate != ABILITY_FLAMMABLE_COAT         &&
+       innate != ABILITY_APE_SHIFT              &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        innate != ABILITY_ANGELS_WRATH           &&
        #endif
@@ -9492,6 +9493,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
               randomizedInnate == ABILITY_ZERO_TO_HERO          ||
               randomizedInnate == ABILITY_BAD_COMPANY           ||
               randomizedInnate == ABILITY_ARCHMAGE              ||
+              randomizedInnate == ABILITY_APE_SHIFT             ||
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedInnate == ABILITY_COMATOSE              ||
               randomizedInnate == ABILITY_TRUANT                ||
@@ -9531,6 +9533,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
        ability != ABILITY_ZERO_TO_HERO      &&
        ability != ABILITY_BAD_COMPANY       &&
        ability != ABILITY_ARCHMAGE          &&
+       ability != ABILITY_APE_SHIFT              &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
        ability != ABILITY_ANGELS_WRATH      &&
        #endif
@@ -9564,6 +9567,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
               randomizedAbility == ABILITY_ZERO_TO_HERO         ||
               randomizedAbility == ABILITY_BAD_COMPANY          ||
               randomizedAbility == ABILITY_ARCHMAGE             ||
+              randomizedAbility == ABILITY_APE_SHIFT             ||
               
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedAbility == ABILITY_COMATOSE             ||
