@@ -5,6 +5,7 @@
 #include "pokemon_icon.h"
 #include "sprite.h"
 #include "data.h"
+#include "mgba_printf/mgba.h"
 
 #define POKE_ICON_BASE_PAL_TAG 56000
 

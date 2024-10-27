@@ -15,6 +15,33 @@
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
 
+int CheckCancelledAlways(int battlerAtk, int move, struct AiData* aiData)
+{
+    if (gBattleMons[battlerAtk].status1 & STATUS1_SLEEP)
+    {
+        // TODO: Handle not knowing the sleep timer
+    }
+
+    if (GetAbilityState(battlerAtk, ABILITY_TRUANT) && !IS_MOVE_STATUS(move))
+        return AI_SCORE_LOSE_TURN(100);
+
+    if (gVolatileStructs[battlerAtk].skyDropped)
+    {
+        // TODO: Handle Sky Drop
+    }
+
+    if (gBattleMons[battlerAtk].status2 & STATUS2_RECHARGE)
+        return AI_SCORE_LOSE_TURN(100);
+    
+    if (gVolatileStructs[battlerAtk].throatChopTimer && gBattleMoves[move].flags & FLAG_SOUND)
+        return AI_SCORE_LOSE_TURN(100);
+
+    if (gBattleMons[battlerAtk].status1 & STATUS1_PARALYSIS)
+        return AI_SCORE_LOSE_TURN(25);
+    
+    return 0;
+}
+
 int BelowHalfHp(int battler)
 {
     return gBattleMons[battler].hp <= gBattleMons[battler].maxHP;

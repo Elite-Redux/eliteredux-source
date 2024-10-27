@@ -691,6 +691,7 @@ bool32 AtMaxHp(u8 battlerId)
 bool32 IsBattlerTrapped(u8 battler, bool8 checkSwitch)
 {
     u8 holdEffect = AI_GetHoldEffect(battler);
+    if (gVolatileStructs[battler].skyDropped) return TRUE;
     if (IS_BATTLER_OF_TYPE(battler, TYPE_GHOST)
       || (holdEffect == HOLD_EFFECT_SHED_SHELL)
       || (!checkSwitch && GetBattlerAbility(battler) == ABILITY_RUN_AWAY))
@@ -703,7 +704,7 @@ bool32 IsBattlerTrapped(u8 battler, bool8 checkSwitch)
           || gStatuses4[gActiveBattler] & STATUS4_COMMANDED
           || gVolatileStructs[gActiveBattler].fear
           || IsAbilityPreventingEscape(battler)
-          || gStatuses3[battler] & (STATUS3_ROOTED)    // TODO: sky drop target in air
+          || gStatuses3[battler] & (STATUS3_ROOTED)
           || (gFieldStatuses & STATUS_FIELD_FAIRY_LOCK))
             return TRUE;
     }

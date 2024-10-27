@@ -1085,9 +1085,17 @@ static void BuyMenuRemoveItemIcon(u16 item, u8 iconSlot)
     if (*spriteIdPtr == SPRITE_NONE)
         return;
 
-    FreeSpriteTilesByTag(iconSlot + TAG_ITEM_ICON_BASE);
-    FreeSpritePaletteByTag(iconSlot + TAG_ITEM_ICON_BASE);
-    DestroySprite(&gSprites[*spriteIdPtr]);
+    if (sMartInfo.martType == MART_TYPE_MONS && item > SPECIES_NONE && item < NUM_SPECIES)
+    {
+        FreeMonIconPalette(GetIconSpeciesNoPersonality(item));
+        FreeAndDestroyMonIconSprite(&gSprites[*spriteIdPtr]);
+    }
+    else
+    {
+        FreeSpriteTilesByTag(iconSlot + TAG_ITEM_ICON_BASE);
+        FreeSpritePaletteByTag(iconSlot + TAG_ITEM_ICON_BASE);
+        DestroySprite(&gSprites[*spriteIdPtr]);
+    }
     *spriteIdPtr = SPRITE_NONE;
 }
 

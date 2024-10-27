@@ -17,10 +17,35 @@
 
 #define AI_GET_MOVE_EFFECT_CHANCE 0
 
-int GetFullChance(int chance, struct AiData* aiData)
+int CheckCancelledForTarget(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
 {
-    // TODO: Finish this
-    return chance;
+    if (!AreSameSide(battlerAtk, battlerDef)
+        && gSideTimers[GetBattlerSide(battlerDef)].quickGuardTimer
+        // TODO: Set gProcessingExtraAttacks when scoring extra moves
+        && !gProcessingExtraAttacks
+        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
+    {
+        return TRUE;
+    }
+    
+    if (gBattleMoves[move].flags & FLAG_POWDER && battlerAtk != battlerDef && !HasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, aiData))
+    {
+        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) || GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES)
+            return TRUE;
+    }
+
+    if (!AreSameSide(battlerAtk, battlerDef)
+        && !gProcessingExtraAttacks
+        && IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)
+        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
+        return TRUE;
+
+    return FALSE;
+}
+
+int GetFullChance(int battlerAttack, int move, int moveEffect, int chance, struct AiData* aiData)
+{
+    return GetMoveEffectChance(battlerAttack, move, moveEffect, chance);
 }
 
 int HasSkillLink(int battler, struct AiData* aiData)
@@ -172,12 +197,24 @@ int AdjustForMultihit(int damage, int battlerAtk, int move, struct AiData* aiDat
     return damage;
 }
 
+int CheckPowder(int battlerAtk, int move)
+{
+    int type;
+    GET_MOVE_TYPE(move, type)
+    return (type == TYPE_FIRE && gBattleMons[battlerAtk].status2 & STATUS2_POWDER);
+}
+
 int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* effectiveness, struct AiData* aiData)
 {
     int damage, ignored, absorption, statId;
     u16 ability;
     // TODO: Handle fixed damage
     damage = CalculateMoveDamageAndEffectiveness(move, battlerAtk, battlerDef, moveType, effectiveness);
+    if (CheckPowder(battlerAtk, move))
+    {
+        *effectiveness = 0;
+        return AI_SCORE_LOSE_HP(battlerAtk, 25);
+    }
     absorption = TestAbsorbingAbilities(battlerDef, battlerAtk, move, *moveType, &statId, &ability);
     if (absorption) *effectiveness = 0;
     switch (absorption)
@@ -305,8 +342,20 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     int i, score;
     u16 effectiveness;
 
-    if (move == MOVE_NONE) return AI_SCORE_UNUSABLE;
-    if (!IsBattlerAlive(battlerDef)) return AI_SCORE_UNUSABLE;
+    if (move == MOVE_NONE) return 0;
+    if (!IsBattlerAlive(battlerDef)) return 0;
+
+    if (CheckCancelledForTarget(battlerAtk, battlerDef, move, aiData))
+    {
+        aiData->moveState.cancelled = TRUE;
+        return 0;
+    }
+
+    SetTypeBeforeUsingMove(move, battlerAtk);
+    if (IS_MOVE_STATUS(move) && CheckPowder(battlerAtk, move))
+    {
+        return AI_SCORE_LOSE_HP(battlerAtk, 25);
+    }
 
     switch (gBattleMoves[move].effect)
     {
@@ -1812,7 +1861,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_TRIPLE_ARROWS)
         AI_CALC_DAMAGE;
-        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_DEFENSE_UP(battlerDef, -1)) + AI_SCORE_ADJUST(GetFullChance(30, aiData), AI_SCORE_FLINCH(battlerDef));
+        return score + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_DEFENSE_UP(battlerDef, -1)) + AI_SCORE_ADJUST(GetFullChance(battlerAtk, move, moveEffect, 30, aiData), AI_SCORE_FLINCH(battlerDef));
 
     CASE_AND_LABEL(EFFECT_RECOIL_25_STATUS)
         AI_CALC_DAMAGE;

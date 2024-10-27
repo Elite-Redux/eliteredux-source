@@ -28,6 +28,7 @@ struct MoveState {
     u8 superEffective:1;
     u8 breakSubstitute:1;
     u8 breakDisguise:1;
+    u8 cancelled:1;
 };
 
 struct AiData {
