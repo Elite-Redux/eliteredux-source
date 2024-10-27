@@ -12305,9 +12305,9 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
             }
             return 0;
         }
-        else if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY) && (ability = ABILITY_CLEAR_BODY))
-                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY) && (ability = ABILITY_FULL_METAL_BODY))
-                || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LUCKY_HALO) && affectsUser && (ability = ABILITY_LUCKY_HALO)))
+        else if ((ability = BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CLEAR_BODY))
+                || (ability = BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY))
+                || (ability = BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LUCKY_HALO)))
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {

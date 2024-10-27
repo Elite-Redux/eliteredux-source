@@ -16113,9 +16113,11 @@ int BattlerHasAbility(int battler, int ability, int checkMoldBreaker)
 {
     if (GetAbilityIndex(battler, ability, checkMoldBreaker) != TOTAL_ABILITY_COUNT)
         return ability;
+    
+    return FALSE;
 }
 
-int RepopulateAbilities(int battler)
+void RepopulateAbilities(int battler)
 {
     int isPlayer = GET_BATTLER_SIDE(battler) == B_SIDE_PLAYER;
     gBattleMons[battler].abilities[0] = GetAbilityBySpecies(gBattleMons[battler].species, gBattleMons[battler].abilityNum);
@@ -16139,8 +16141,6 @@ int GetAbilityIndex(int battler, int ability, int checkMoldBreaker)
     
     for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
         if (gBattleMons[battler].abilities[i] == ability) break;
-    
-    if (i == TOTAL_ABILITY_COUNT) return TOTAL_ABILITY_COUNT;
 
     return i;
 }

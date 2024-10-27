@@ -71,7 +71,7 @@
 #define QUASH_DURATION                  5
 
 #define IS_WHOLE_SIDE_ALIVE(battler)((IsBattlerAlive(battler) && IsBattlerAlive(BATTLE_PARTNER(battler))))
-#define BATTLER_HAS_ABILITY(battlerId, ability) BattlerHasAbility(battlerId, ability, TRUE)
+#define BATTLER_HAS_ABILITY(battlerId, ability) BattlerHasAbility((battlerId), (ability), TRUE)
 #define BATTLER_HAS_ABILITY_AND_ALIVE(battlerId, ability, checkMoldBreaker) (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, ability, checkMoldBreaker))
 
 #define BATTLER_HEALING_BLOCKED(battlerId) (gStatuses3[battlerId] & STATUS3_HEAL_BLOCK || gBattleMons[battlerId].status1 & STATUS1_BLEED || IsAbilityOnOpposingSide(battlerId, ABILITY_PERMANENCE) || IsBloodStainAffected(battlerId))
@@ -360,7 +360,7 @@ void SetOncePerTurnAbilityCounter(int battler, int ability, int value);
 int HasRipenEffect(int battler);
 int IsDance(int attacker, int move);
 int HasAnyStatusOrAbility(int battler);
-int RepopulateAbilities(int battler);
+void RepopulateAbilities(int battler);
 int GetBattlerAbility(int battler);
 
 // Ability checks
