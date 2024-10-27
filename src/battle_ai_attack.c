@@ -1019,7 +1019,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_SKILL_SWAP)
-        return AI_SCORE_REPLACE_ABILITY(battlerAtk, gBattleMons[battlerDef].ability) + AI_SCORE_REPLACE_ABILITY(battlerDef, gBattleMons[battlerAtk].ability);
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, GetBattlerAbility(battlerDef)) + AI_SCORE_REPLACE_ABILITY(battlerDef, GetBattlerAbility(battlerAtk));
 
     CASE_AND_LABEL(EFFECT_IMPRISON)
         return AI_SCORE_IMPRISON;
@@ -1282,7 +1282,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_REPLACE_ABILITY(battlerDef, ABILITY_SIMPLE);
 
     CASE_AND_LABEL(EFFECT_ENTRAINMENT)
-        return AI_SCORE_REPLACE_ABILITY(battlerDef, gBattleMons[battlerAtk].ability);
+        return AI_SCORE_REPLACE_ABILITY(battlerDef, GetBattlerAbility(battlerAtk));
 
     CASE_AND_LABEL(EFFECT_HEAL_PULSE)
         return AI_SCORE_HEAL(battlerDef, 50);
@@ -1971,7 +1971,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return score + AI_SCORE_ABSORB_MOVE(50) + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BURN_MOVE(battlerDef));
 
     CASE_AND_LABEL(EFFECT_DOODLE)
-        return AI_SCORE_REPLACE_ABILITY(battlerAtk, gBattleMons[battlerDef].ability) + AI_SCORE_REPLACE_ABILITY(BATTLE_PARTNER(battlerAtk), gBattleMons[battlerDef].ability);
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, GetBattlerAbility(battlerDef)) + AI_SCORE_REPLACE_ABILITY(BATTLE_PARTNER(battlerAtk), GetBattlerAbility(battlerDef));
 
     CASE_AND_LABEL(EFFECT_SPIKE_HIT)
         AI_CALC_DAMAGE;

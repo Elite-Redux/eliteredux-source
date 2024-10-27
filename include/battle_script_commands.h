@@ -86,6 +86,7 @@ void SetCudChew(u32 battlerId, u32 itemId);
 void SetBattlerAffectedFlag(int attacker, int target, int ability);
 void ClearBattlerAffectedFlag(int attacker, int target, int ability);
 int GetWeatherChangeMultistringChooser(int weather);
+int ShouldSetMoldBreaker(int battler, int move);
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];

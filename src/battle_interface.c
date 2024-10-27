@@ -2556,7 +2556,7 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
 
     if (!(status & STATUS1_ANY))
     {
-        if (BattlerHasAbility(battlerId, battlerId, ABILITY_COMATOSE))
+        if (BattlerHasAbility(battlerId, ABILITY_COMATOSE, TRUE))
             status = STATUS1_SLEEP;
         else if (IsBloodStainAffected(battlerId))
             status = STATUS1_BLEED;
@@ -3568,7 +3568,7 @@ void UpdateAbilityPopup(u8 battlerId)
 {
     u8 spriteId1 = gBattleStruct->abilityPopUpSpriteIds[battlerId][0];
     u8 spriteId2 = gBattleStruct->abilityPopUpSpriteIds[battlerId][1];
-    u16 ability = (gBattleScripting.abilityPopupOverwrite != 0) ? gBattleScripting.abilityPopupOverwrite : gBattleMons[battlerId].ability;
+    u16 ability = (gBattleScripting.abilityPopupOverwrite != 0) ? gBattleScripting.abilityPopupOverwrite : GetBattlerAbility(battlerId);
     
     PrintAbilityOnAbilityPopUp(ability, spriteId1, spriteId2);
     RestoreOverwrittenPixels((void*)(OBJ_VRAM0) + (gSprites[spriteId1].oam.tileNum * 32));

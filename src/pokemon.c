@@ -5806,15 +5806,16 @@ u8 GetMonsStateToDoubles_2(void)
 
 u16 GetAbilityBySpecies(u16 species, u8 abilityNum)
 {
+    int ability;
     if (abilityNum < NUM_ABILITY_SLOTS)
-        gLastUsedAbility = gBaseStats[species].abilities[abilityNum];
+        ability = gBaseStats[species].abilities[abilityNum];
     else
-        gLastUsedAbility = gBaseStats[species].abilities[0];
+        ability = gBaseStats[species].abilities[0];
 
-    if (gLastUsedAbility == ABILITY_NONE)
-        gLastUsedAbility = gBaseStats[species].abilities[0];
+    if (ability == ABILITY_NONE)
+        ability = gBaseStats[species].abilities[0];
 
-    return gLastUsedAbility;
+    return ability;
 }
 
 u16 GetMonAbility(struct Pokemon *mon)
@@ -5945,12 +5946,6 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
     dst->ppBonuses = GetMonData(src, MON_DATA_PP_BONUSES, NULL);
     dst->friendship = GetMonData(src, MON_DATA_FRIENDSHIP, NULL);
     dst->experience = GetMonData(src, MON_DATA_EXP, NULL);
-    dst->hpIV = GetMonData(src, MON_DATA_HP_IV, NULL);
-    dst->attackIV = GetMonData(src, MON_DATA_ATK_IV, NULL);
-    dst->defenseIV = GetMonData(src, MON_DATA_DEF_IV, NULL);
-    dst->speedIV = GetMonData(src, MON_DATA_SPEED_IV, NULL);
-    dst->spAttackIV = GetMonData(src, MON_DATA_SPATK_IV, NULL);
-    dst->spDefenseIV = GetMonData(src, MON_DATA_SPDEF_IV, NULL);
     dst->personality = GetMonData(src, MON_DATA_PERSONALITY, NULL);
     dst->status1 = GetMonData(src, MON_DATA_STATUS, NULL);
     dst->level = GetMonData(src, MON_DATA_LEVEL, NULL);
@@ -5967,7 +5962,10 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
     dst->type1 = gBaseStats[dst->species].type1;
     dst->type2 = gBaseStats[dst->species].type2;
     dst->type3 = TYPE_MYSTERY;
-    dst->ability = GetAbilityBySpecies(dst->species, dst->abilityNum);
+    dst->abilities[0] = GetAbilityBySpecies(dst->species, dst->abilityNum);
+    dst->abilities[1] = GetInnateInSlot(dst->level, dst->species, 0, dst->personality, FALSE);
+    dst->abilities[2] = GetInnateInSlot(dst->level, dst->species, 1, dst->personality, FALSE);
+    dst->abilities[3] = GetInnateInSlot(dst->level, dst->species, 2, dst->personality, FALSE);
     dst->nature = GetMonData(src, MON_DATA_NATURE, NULL);
     GetMonData(src, MON_DATA_NICKNAME, nickname);
     StringCopy10(dst->nickname, nickname);

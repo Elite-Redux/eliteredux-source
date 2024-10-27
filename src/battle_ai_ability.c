@@ -401,16 +401,16 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
     case ABILITY_LINGERING_AROMA:
     case ABILITY_MUMMY:
         REQUIRE(aiData->moveState.contact)
-        REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(gBattleMons[battlerAtk].ability))
+        REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerAtk)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
         return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability);
     
     case ABILITY_WANDERING_SPIRIT:
         REQUIRE(aiData->moveState.contact)
-        REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(gBattleMons[battlerAtk].ability))
+        REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerAtk)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
-        REQUIRE_NOT(HasAbility(battlerDef, gBattleMons[battlerAtk].ability, aiData))
-        return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability) + AI_SCORE_REPLACE_ABILITY(battlerDef, gBattleMons[battlerAtk].ability);
+        REQUIRE_NOT(HasAbility(battlerDef, GetBattlerAbility(battlerAtk), aiData))
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability) + AI_SCORE_REPLACE_ABILITY(battlerDef, GetBattlerAbility(battlerAtk));
     
     case ABILITY_GULP_MISSILE:
         {
@@ -698,7 +698,7 @@ int ScoreEitherAbility(int ability, int battlerAtk, int battlerDef, int move, in
     case ABILITY_BLOOD_STAIN:
         REQUIRE(aiData->moveState.contact)
         REQUIRE_NOT(HasAbility(battlerDef, ABILITY_BLOOD_STAIN, aiData))
-        REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(gBattleMons[battlerDef].ability))
+        REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerDef)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerDef))
         return AI_SCORE_REPLACE_ABILITY(battlerDef, ABILITY_BLOOD_STAIN);
     
@@ -830,8 +830,8 @@ int ScoreSwitchInAbility(int ability, int battlerAtk, int battlerDef, int move, 
         return AI_SCORE_TRANSFORM;
     
     case ABILITY_TRACE:
-        REQUIRE_NOT(IsRolePlayBannedAbility(gBattleMons[battlerDef].ability))
-        return AI_SCORE_REPLACE_ABILITY(battlerAtk, gBattleMons[battlerDef].ability);
+        REQUIRE_NOT(IsRolePlayBannedAbility(GetBattlerAbility(battlerDef)))
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, GetBattlerAbility(battlerDef));
     
     case ABILITY_MIMICRY:
         REQUIRE(TERRAIN_HAS_EFFECT)

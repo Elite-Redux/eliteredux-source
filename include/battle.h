@@ -343,6 +343,7 @@ struct FieldTimer
     u8 quashTimer;
     u8 fogReturnTimer;
     u8 clearSkiesTimer;
+    u8 neutralizingGas:1;
 };
 
 struct WishFutureKnock
@@ -1018,7 +1019,6 @@ extern s32 gBattleMoveDamage;
 extern s32 gHpDealt;
 extern s32 gTakenDmg[MAX_BATTLERS_COUNT];
 extern u16 gLastUsedItem;
-extern u16 gLastUsedAbility;
 extern u8 gBattlerAttacker;
 extern u8 gBattlerTarget;
 extern u8 gBattlerFainted;

@@ -7,8 +7,6 @@
 #define AI_CHOICE_WATCH 5
 #define AI_CHOICE_SWITCH 7
 
-#define BATTLER_HAS_ABILITY_FAST_AI(battlerId, abilityToCheck) ((AI_DATA->abilities[battlerId] == abilityToCheck || BattlerHasInnate(battlerId, abilityToCheck))) //Useful to make calculations faster, used only for AI stuff
-
 #define RETURN_SCORE_PLUS(val)      \
 {                                   \
     score += val;                   \
@@ -27,11 +25,6 @@ void BattleAI_SetupFlags(void);
 void BattleAI_SetupAIData(u8 defaultScoreMoves);
 u8 BattleAI_ChooseMoveOrAction(void);
 void GetAiLogicData(void);
-
-bool8 BattlerHasInnate(u8 battlerId, u16 ability);
-bool8 BattlerInnatesSuppressed(u8 battlerId, u8 attacker, u16 ability);
-bool8 BattlerHasInnateWithoutRemoval(u8 battlerId, u16 ability);
-bool8 GetBattlerInnateNum(u8 battlerId, u16 ability);
 
 extern u8 sBattler_AI;
 

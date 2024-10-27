@@ -3031,7 +3031,7 @@ void BufferStringBattle(u16 stringID)
 
     gBattleMsgDataPtr = (struct BattleMsgData*)(&gBattleResources->bufferA[gActiveBattler][4]);
     gLastUsedItem = gBattleMsgDataPtr->lastItem;
-    gLastUsedAbility = gBattleMsgDataPtr->lastAbility;
+    gBattleScripting.abilityPopupOverwrite = gBattleMsgDataPtr->lastAbility;
     gBattleScripting.battler = gBattleMsgDataPtr->scrActive;
     gBattleStruct->field_52 = gBattleMsgDataPtr->unk1605E;
     gBattleStruct->hpScale = gBattleMsgDataPtr->hpScale;
@@ -3757,7 +3757,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 }
                 break;
             case B_TXT_LAST_ABILITY: // last used ability
-                toCpy = gAbilityNames[gLastUsedAbility];
+                toCpy = gAbilityNames[gBattleScripting.abilityPopupOverwrite];
                 break;
             case B_TXT_ATK_ABILITY: // attacker ability
                 toCpy = gAbilityNames[sBattlerAbilities[gBattlerAttacker]];

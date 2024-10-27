@@ -71,8 +71,8 @@
 #define QUASH_DURATION                  5
 
 #define IS_WHOLE_SIDE_ALIVE(battler)((IsBattlerAlive(battler) && IsBattlerAlive(BATTLE_PARTNER(battler))))
-#define BATTLER_HAS_ABILITY(battlerId, ability) (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, gBattlerAttacker, ability))
-#define BATTLER_HAS_ABILITY_FAST(battlerId, abilityToCheck, battlerAbility) ((battlerAbility == abilityToCheck || BattlerHasInnate(battlerId, abilityToCheck))) //Useful to make calculations faster
+#define BATTLER_HAS_ABILITY(battlerId, ability) BattlerHasAbility(battlerId, ability, TRUE)
+#define BATTLER_HAS_ABILITY_AND_ALIVE(battlerId, ability, checkMoldBreaker) (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, ability, checkMoldBreaker))
 
 #define BATTLER_HEALING_BLOCKED(battlerId) (gStatuses3[battlerId] & STATUS3_HEAL_BLOCK || gBattleMons[battlerId].status1 & STATUS1_BLEED || IsAbilityOnOpposingSide(battlerId, ABILITY_PERMANENCE) || IsBloodStainAffected(battlerId))
 
@@ -150,11 +150,16 @@ union AbilityStates
     u32 intValue;
 };
 
+#define ABILITY_SUPPRESSION_PERSISTENT (1 << 14)
+#define ABILITY_SUPPRESSION_ABILITY (1 << 15)
+#define ABILITY_SUPPRESSION_MASK (ABILITY_SUPPRESSION_ABILITY | ABILITY_SUPPRESSION_PERSISTENT)
+
 #define IS_IRON_FIST(attacker, moveToCheck) (gBattleMoves[moveToCheck].flags & FLAG_IRON_FIST_BOOST || (BATTLER_HAS_ABILITY(attacker, ABILITY_BRAWLING_WYVERN) && IS_MOVE_TYPE(moveToCheck, TYPE_DRAGON)))
 
 extern const struct TypePower gNaturalGiftTable[];
 extern const u16 gPercentToModifier[];
 
+int GetAbilityIndex(int battler, int ability, int checkMoldBreaker);
 s32 CountUsablePartyMons(u8 battlerId);
 void HandleAction_ThrowBall(void);
 void HandleAction_ShowBattleInfo(void);
@@ -216,18 +221,11 @@ int HandleMiscAbilityMoveEffects(int battler, int opponent, int move);
 int HandleSwitchInAbility(int abilityNumber, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler);
 int ShouldApplyOnHitAffect(int applyTo);
-
-#define GET_ALL_BATTLER_ABILITIES(abilitiesArray, battler, battlerAtk) \
-GetAllBattlerAbilities(abilitiesArray, battler, battlerAtk) \
-// STATIC_ASSERT(ARRAY_COUNT(abilitiesArray) == 4, AbilitiesArrayShouldBeSize4 ## __counter__) \
-// STATIC_ASSERT(sizeof(abilitiesArray[0]) == sizeof(u16), AbilitiesArrayShouldBeArrayOfU16 ## __counter__) \
+void ReplaceAbility(int battler, int ability);
+int HasAbilityIgnoringSuppression(int battler, int ability);
+int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
 
 void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
-u32 GetBattlerAbility(u8 battlerId);
-bool8 BattlerAbilityIsSuppressed(u8 battlerId, u8 attacker);
-u32 GetBattlerAbilityWithoutRemoval(u8 battlerId);
-bool8 BattlerIgnoresAbility(u8 sBattlerAttacker, u8 sBattlerTarget, u16 ability);
-bool8 BattlerAbilityWasRemoved(u8 battlerId, u32 ability);
 u32 IsAbilityOnSide(u32 battlerId, u32 ability);
 u32 IsAbilityOnOpposingSide(u32 battlerId, u32 ability);
 u32 IsAbilityOnField(u32 ability);
@@ -267,6 +265,7 @@ void UndoMegaEvolution(u32 monId);
 void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut);
 bool32 DoBattlersShareType(u32 battler1, u32 battler2);
 bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId);
+bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler);
 struct Pokemon *GetIllusionMonPtr(u32 battlerId);
 void ClearIllusionMon(u32 battlerId);
 bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
@@ -304,9 +303,7 @@ u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler);
 bool32 ShouldChangeFormHpBased(u32 battler);
 u32 CountBattlerStatIncreases(u8 battlerId, bool32 countEvasionAcc);
 int CountBattlerStatDecreases(int battler);
-bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler);
 s32 GetCurrentTerrain(void);
-u8 BattlerHasInnateOrAbility(u8 battler, u16 ability);
 bool8 IsTrickRoomActive(void);
 bool8 IsInverseRoomActive(void);
 bool8 IsGravityActive(void);
@@ -339,7 +336,7 @@ int IsPersistentOrUnsuppressableAbility(int ability);
 bool8 CanBeDisabled(u8 battlerId);
 bool8 DoesBattlerHaveAbilityShield(u8 battlerId);
 u16 IsSoundproof(u8 battlerId);
-bool8 BattlerHasAbility(u8 battlerId, u8 attacker, u16 ability);
+int BattlerHasAbility(int battler, int ability, int checkMoldBreaker);
 u8 GetTurnBattler();
 void ReadActiveScriptInitialStackState();
 void SetActiveMultistringChooser(u8 messageId);
@@ -347,7 +344,7 @@ void SetActiveAbilityPopupOverride(u16 messageId);
 void SetActiveStackBattler(u8 battler, u8 number);
 u16 GetInnateInSlot(int level, u16 species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
-u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 ability, u16 move);
+u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move);
 bool32 IsHealingMoveEffect(u16 effect);
 int IsMagicGuardProtected(int battler);
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
@@ -363,6 +360,8 @@ void SetOncePerTurnAbilityCounter(int battler, int ability, int value);
 int HasRipenEffect(int battler);
 int IsDance(int attacker, int move);
 int HasAnyStatusOrAbility(int battler);
+int RepopulateAbilities(int battler);
+int GetBattlerAbility(int battler);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
