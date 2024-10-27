@@ -546,11 +546,6 @@ void RecordKnownMove(u8 battlerId, u32 move)
     }
 }
 
-void ClearBattlerAbilityHistory(u8 battlerId)
-{
-    BATTLE_HISTORY->abilities[battlerId] = ABILITY_NONE;
-}
-
 void RecordItemEffectBattle(u8 battlerId, u8 itemEffect)
 {
     BATTLE_HISTORY->itemEffects[battlerId] = itemEffect;
@@ -580,36 +575,7 @@ void SaveBattlerData(u8 battlerId)
 
 static bool32 ShouldFailForIllusion(u16 illusionSpecies, u32 battlerId)
 {
-    u32 i, j;
-
-    if (BATTLE_HISTORY->abilities[battlerId] == ABILITY_ILLUSION)
-        return FALSE;
-
-    // Don't fall for Illusion if the mon used a move it cannot know.
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        u16 move = BATTLE_HISTORY->usedMoves[battlerId][i];
-        if (move == MOVE_NONE)
-            continue;
-
-        for (j = 0; gLevelUpLearnsets[illusionSpecies][j].move != LEVEL_UP_END; j++)
-        {
-            if (gLevelUpLearnsets[illusionSpecies][j].move == move)
-                break;
-        }
-        // The used move is in the learnsets of the fake species.
-        if (gLevelUpLearnsets[illusionSpecies][j].move != LEVEL_UP_END)
-            continue;
-
-        // The used move can be learned from Tm/Hm or Move Tutors.
-        //if (CanLearnTeachableMove(illusionSpecies, move))
-        //    continue;
-
-        // 'Illegal move', AI won't fail for the illusion.
-        return FALSE;
-    }
-
-    return TRUE;
+    return FALSE;
 }
 
 void SetBattlerData(u8 battlerId)
@@ -634,16 +600,7 @@ void SetBattlerData(u8 battlerId)
             species = illusionSpecies;
         }
 
-        // Use the known battler's ability.
-        if (BATTLE_HISTORY->abilities[battlerId] != ABILITY_NONE)
-            ReplaceAbility(battlerId, BATTLE_HISTORY->abilities[battlerId]);
-        // Check if mon can only have one ability.
-        else if (gBaseStats[species].abilities[1] == ABILITY_NONE
-                 || gBaseStats[species].abilities[1] == gBaseStats[species].abilities[0])
-            ReplaceAbility(battlerId, gBaseStats[species].abilities[0]);
-        // The ability is unknown.
-        else
-            ReplaceAbility(battlerId, ABILITY_NONE);
+        // TODO: Do something to fix AI not understanding illusion
         if (BATTLE_HISTORY->itemEffects[battlerId] == 0)
             gBattleMons[battlerId].item = 0;
         for (i = 0; i < 4; i++)

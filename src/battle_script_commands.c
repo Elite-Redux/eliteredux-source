@@ -1546,7 +1546,6 @@ static void Cmd_attackcanceler(void)
     int ability;
     if (((BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_COLOR_CHANGE) && (ability = ABILITY_COLOR_CHANGE)) ||
         (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_PRISMATIC_FUR) && (ability = ABILITY_PRISMATIC_FUR)))
-        && gRoundStructs[gBattlerAttacker].extraMoveUsed != TRUE
         && (gBattlerAttacker != gBattlerTarget)) {
         u32 currentType;
         u32 bestType = gBattleMons[gBattlerTarget].type1;
@@ -2220,10 +2219,6 @@ static void Cmd_damagecalc(void)
     if (gProcessingExtraAttacks)
     {
         movePower = gQueuedExtraAttackData[0].movePower;
-    }
-    else if (gRoundStructs[gBattlerAttacker].extraMoveUsed) {
-        movePower = VarGet(VAR_EXTRA_MOVE_DAMAGE);
-        VarSet(VAR_EXTRA_MOVE_DAMAGE, 0);
     }
 
     //to enable changing the power of a Future Sight
@@ -14464,11 +14459,6 @@ static void Cmd_magnitudedamagecalculation(void)
     if (gProcessingExtraAttacks) {
         maxRoll = gQueuedExtraAttackData[0].movePower;
         if (!maxRoll) maxRoll = 100;
-    }
-    else if (gRoundStructs[gBattlerAttacker].extraMoveUsed) {
-        maxRoll = VarGet(VAR_EXTRA_MOVE_DAMAGE);
-        if (!maxRoll) maxRoll = 100;
-        VarSet(VAR_EXTRA_MOVE_DAMAGE, 0);
     }
 
     magnitude = Random() % maxRoll;

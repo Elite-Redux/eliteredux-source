@@ -362,6 +362,7 @@ int IsDance(int attacker, int move);
 int HasAnyStatusOrAbility(int battler);
 void RepopulateAbilities(int battler);
 int GetBattlerAbility(int battler);
+void HandleFollowupAttackAbilities(int battler, int target, int move);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
