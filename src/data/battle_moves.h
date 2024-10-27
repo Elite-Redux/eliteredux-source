@@ -11988,7 +11988,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_RIP_AND_TEAR] =
     {
         .effect = EFFECT_RIP_AND_TEAR,
-        .power = 100,
+        .power = 110,
         .type = TYPE_DARK,
         .accuracy = 90,
         .pp = 5,
