@@ -5201,10 +5201,8 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
         u8 b1GoFirst = gRoundStructs[battler1].quickDraw + gRoundStructs[battler1].usedCustapBerry;
         u8 b2GoFirst = gRoundStructs[battler2].quickDraw + gRoundStructs[battler2].usedCustapBerry;
         u8 b1GoLast  = (holdEffectBattler1 == HOLD_EFFECT_LAGGING_TAIL)
-                        + BATTLER_HAS_ABILITY(battler1, ABILITY_ATLAS)
                         + MYCELIUM_MIGHT_AFFECTED(battler1, GetChosenMove(battler1));
         u8 b2GoLast  = (holdEffectBattler2 == HOLD_EFFECT_LAGGING_TAIL)
-                        + BATTLER_HAS_ABILITY(battler2, ABILITY_ATLAS)
                         + MYCELIUM_MIGHT_AFFECTED(battler2, GetChosenMove(battler2));
 
         if (b1GoFirst > b2GoFirst)
