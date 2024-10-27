@@ -1886,7 +1886,7 @@ BattleScript_EffectAfterYou:
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
 	attackstring
 	ppreduce
-	tryafteryou BattleScript_ButItFailed
+	tryafteryou BS_TARGET, BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	printstring STRINGID_KINDOFFER

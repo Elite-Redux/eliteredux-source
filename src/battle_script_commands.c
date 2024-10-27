@@ -9894,7 +9894,7 @@ static void Cmd_various(void)
         break;
     case VARIOUS_AFTER_YOU:
         ptr = READ_PTR_INC;
-        if (gCurrentTurnActionNumber >= GetBattlerTurnOrderNum(gBattlerTarget))
+        if (gCurrentTurnActionNumber >= GetBattlerTurnOrderNum(gActiveBattler))
         {
             gBattlescriptCurrInstr = ptr;
         }
