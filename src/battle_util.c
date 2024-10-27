@@ -2040,7 +2040,16 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
         else if (gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
             unusableMoves |= 1 << i;
         else if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP)
-            unusableMoves |= 1 << i;
+        {
+            int effect = gBattleMoves[gBattleMons[battlerId].moves[i]].effect;
+            if (effect == EFFECT_SPIT_UP || effect == EFFECT_SWALLOW)
+            {
+                if (!gVolatileStructs[battlerId].stockpileCounter)
+                    unusableMoves |= 1 << i;
+            }
+            else
+                unusableMoves |= 1 << i;
+        }
         else if (gBattleMons[battlerId].moves[i] == gVolatileStructs[battlerId].disabledMove && check & MOVE_LIMITATION_DISABLED)
             unusableMoves |= 1 << i;
         else if (gBattleMons[battlerId].moves[i] == gLastMoves[battlerId] && check & MOVE_LIMITATION_TORMENTED && gBattleMons[battlerId].status2 & STATUS2_TORMENT)
