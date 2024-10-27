@@ -9104,20 +9104,12 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         #undef MUL_ATE
 
-        case ABILITY_SAND_SONG:
-            if (moveType == TYPE_GROUND && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
-            return;
-
-        case ABILITY_POWER_METAL:
-            if (moveType == TYPE_STEEL && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
-            return;
-
-        case ABILITY_SNOW_SONG:
-            if (moveType == TYPE_ICE && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
-            return;
-
+        case ABILITY_LIQUID_VOICE:
         case ABILITY_BANSHEE:
-            if (moveType == TYPE_GHOST && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
+        case ABILITY_SNOW_SONG:
+        case ABILITY_POWER_METAL:
+        case ABILITY_SAND_SONG:
+            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
             return;
         
         case ABILITY_AMPLIFIER:
@@ -9136,10 +9128,6 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_DRAGONS_MAW:
             if (moveType == TYPE_DRAGON) MUL(1.5);
-            return;
-        
-        case ABILITY_LIQUID_VOICE:
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
             return;
         
         case ABILITY_GORILLA_TACTICS:

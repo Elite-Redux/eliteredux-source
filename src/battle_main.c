@@ -6084,6 +6084,11 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
         return TYPE_GHOST;
     }
 
+    //Banshee
+    if (HAS_ABILITY(ABILITY_LIQUID_VOICE) && gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL) {
+        return TYPE_WATER;
+    }
+
     if (gBattleMoves[move].type == TYPE_NORMAL
             && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
             && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
@@ -6129,11 +6134,6 @@ u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
              && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL)
         return TYPE_NORMAL;
-    }
-    //Liquid Voice
-    if (HAS_ABILITY(ABILITY_LIQUID_VOICE)) {
-        if (gBattleMoves[move].flags & FLAG_SOUND)
-            return TYPE_WATER;
     }
 	//Fight Spirit
 	if (HAS_ABILITY(ABILITY_FIGHT_SPIRIT)) {
@@ -6265,6 +6265,8 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk) {
         return TYPE_ICE;
     else if (gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BANSHEE))
         return TYPE_GHOST;
+    else if (gBattleMoves[move].flags & FLAG_SOUND && moveType == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LIQUID_VOICE))
+        return TYPE_WATER;
     else if (gBattleMoves[move].type == TYPE_NORMAL
              && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
@@ -6302,9 +6304,6 @@ u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk) {
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
              && attackerAbility == ABILITY_NORMALIZE)
         return TYPE_NORMAL;
-    else if (gBattleMoves[move].flags & FLAG_SOUND &&
-             BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LIQUID_VOICE))
-        return TYPE_WATER;
     else if (gStatuses4[battlerAtk] & STATUS4_PLASMA_FISTS && moveType == TYPE_NORMAL)
         return TYPE_ELECTRIC;
 
@@ -6442,6 +6441,11 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
         gBattleStruct->dynamicMoveType = 0x80 | TYPE_GHOST;
         gBattleStruct->ateBoost[battlerAtk] = 1;
     }
+    else if (gBattleMoves[move].flags & FLAG_SOUND && gBattleMoves[move].type == TYPE_NORMAL && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LIQUID_VOICE))
+    {
+        gBattleStruct->dynamicMoveType = 0x80 | TYPE_WATER;
+        gBattleStruct->ateBoost[battlerAtk] = 1;
+    }
     else if (gBattleMoves[move].type == TYPE_NORMAL
              && gBattleMoves[move].effect != EFFECT_HIDDEN_POWER
              && gBattleMoves[move].effect != EFFECT_WEATHER_BALL
@@ -6491,11 +6495,6 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     {
         gBattleStruct->dynamicMoveType = 0x80 | TYPE_NORMAL;
         gBattleStruct->ateBoost[battlerAtk] = 1;
-    }
-    else if (gBattleMoves[move].flags & FLAG_SOUND &&
-            BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LIQUID_VOICE))
-    {
-        gBattleStruct->dynamicMoveType = 0x80 | TYPE_WATER;
     }
     else if (move == MOVE_EXPLOSION && gProcessingExtraAttacks && gQueuedExtraAttackData[0].ability == ABILITY_VICTORY_BOMB)
     {
