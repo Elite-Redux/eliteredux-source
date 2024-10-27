@@ -3617,8 +3617,8 @@ static const u8 sMoveTwoLineDescription_MoveVictoryDance[] = _(
     "by 1 stage.");
 
 static const u8 sMoveTwoLineDescription_MoveBleakwindStorm[] = _(
-    "Attacks with savagely\n"
-    "cold winds. Sets tailwind.");
+    "Attacks with savage, roaring\n"
+    "winds. Sets tailwind.");
 
 static const u8 sMoveTwoLineDescription_MoveWildboltStorm[] = _(
     "Savagely attacks the foe with a\n"
@@ -5824,7 +5824,7 @@ static const u8 sMoveFourLineDescription_MoveChloroblast[] = _("The user attack 
 static const u8 sMoveFourLineDescription_MovePsyshieldBash[] = _("Deals damage. Raises\nDefense by 1 stage.\nMighty horn.");
 static const u8 sMoveFourLineDescription_MoveCeaselessEdge[] = _("The user slashes the\nfoe with shell blade.\nLeaves Splinters. A\nhigh crit hit ratio.");
 static const u8 sMoveFourLineDescription_MoveVictoryDance[] = _("An intense dance\nwhich boosts the\nuser's Attack,\nDefense and Speed.");
-static const u8 sMoveFourLineDescription_MoveBleakwindStorm[] = _("Attacks with savagely\ncold winds.\nSets tailwind.\nWeather-based.");
+static const u8 sMoveFourLineDescription_MoveBleakwindStorm[] = _("Attacks with savage,\nroaring winds.\nSets tailwind.\nWeather-based.");
 static const u8 sMoveFourLineDescription_MoveWildboltStorm[] = _("Attacks the foe with\na thunderous\ntempest. Sets rain.\nWeather-based.");
 static const u8 sMoveFourLineDescription_MoveSandsearStorm[] = _("Attacks with searing\nwinds and sands.\nSets sandstorm.\nWeather-based.");
 static const u8 sMoveFourLineDescription_MoveSpringtideStorm[] = _("Attacks with winds of\nlove and hate.\nSets fairy terrain.\nWeather-based.");
