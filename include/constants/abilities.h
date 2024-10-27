@@ -455,7 +455,7 @@
 #define ABILITY_DUAL_WIELD 433 // Mega Launcher and Keen Edge moves hit twice for 75% damage.
 #define ABILITY_ELEMENTAL_CHARGE 434 // 20% chance to BRN/FRZ/PARA with respective types.
 #define ABILITY_AMBUSH 435 // Guaranteed critical hit on first turn.
-#define ABILITY_ATLAS 436 // Sets Gravity on entry for 8 turns. User moves last.
+#define ABILITY_ATLAS 436 // Sets Gravity on entry for 8 turns.
 #define ABILITY_RADIANCE 437 // +20% accuracy; Dark moves fail when user is present.
 #define ABILITY_JAWS_OF_CARNAGE 438 // Devours 1/2 of the foe when defeating it.
 #define ABILITY_ANGELS_WRATH 439 // Drastically alters all of the users moves.
