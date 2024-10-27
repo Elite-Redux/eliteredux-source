@@ -91,7 +91,7 @@ static bool8 ShouldSwitchIfWonderGuard(void)
 
     opposingPosition = BATTLE_OPPOSITE(GetBattlerPosition(gActiveBattler));
 
-    if (GetBattlerAbility(GetBattlerAtPosition(opposingPosition)) != ABILITY_WONDER_GUARD)
+    if (!BattlerHasAbility(GetBattlerAtPosition(opposingPosition), ABILITY_WONDER_GUARD, FALSE))
         return FALSE;
 
     // Check if Pokemon has a super effective move.
@@ -212,7 +212,7 @@ static bool8 FindMonThatAbsorbsOpponentsMove(void)
     // Check for all absorbing abilities
     for (i = 0; i < numAbsorbingAbilities; i++)
     {
-        if (gBattleMons[gActiveBattler].ability == absorbingTypeAbilities[i])
+        if (GetBattlerAbility(gActiveBattler) == absorbingTypeAbilities[i])
         return FALSE;
     }
 
@@ -266,7 +266,7 @@ static bool8 ShouldSwitchIfNaturalCure(void)
 {
     if (!(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP))
         return FALSE;
-    if (!BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_NATURAL_CURE) && !BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_SELF_REPAIR) && !BATTLER_HAS_ABILITY_FAST_AI(gActiveBattler, ABILITY_NATURAL_RECOVERY))
+    if (!BattlerHasAbility(gActiveBattler, ABILITY_NATURAL_CURE, FALSE) && !BattlerHasAbility(gActiveBattler, ABILITY_SELF_REPAIR, FALSE) && !BattlerHasAbility(gActiveBattler, ABILITY_NATURAL_RECOVERY, FALSE))
         return FALSE;
 
     if ((gLastLandedMoves[gActiveBattler] == 0 || gLastLandedMoves[gActiveBattler] == 0xFFFF) && Random() & 1)
@@ -504,7 +504,7 @@ static bool8 IsMonHealthyEnoughToSwitch(void)
 {
     u32 battlerHp = gBattleMons[gActiveBattler].hp;
 
-    if (gBattleMons[gActiveBattler].ability == ABILITY_REGENERATOR)
+    if (GetBattlerAbility(gActiveBattler) == ABILITY_REGENERATOR)
         battlerHp = (battlerHp * 133) / 100; // Account for Regenerator healing
     
     if (CalculateHazardDamage() > battlerHp) // Battler will die to hazards

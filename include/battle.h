@@ -199,7 +199,6 @@ struct RoundStruct
     u8 statFell:1;
     u8 quickDraw:1;
     u8 iceBurnCharge:1;
-    u8 extraMoveUsed:1;
     u8 angelsWrathProtected:1;
     u8 glaiveRush:1;
     u8 silkTrapped:1;
@@ -343,6 +342,7 @@ struct FieldTimer
     u8 quashTimer;
     u8 fogReturnTimer;
     u8 clearSkiesTimer;
+    u8 neutralizingGas:1;
 };
 
 struct WishFutureKnock
@@ -400,7 +400,6 @@ struct AI_ThinkingStruct
 
 struct BattleHistory
 {
-    u16 abilities[MAX_BATTLERS_COUNT];
     u8 itemEffects[MAX_BATTLERS_COUNT];
     u16 usedMoves[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
     u16 moveHistory[MAX_BATTLERS_COUNT][AI_MOVE_HISTORY_COUNT]; // 3 last used moves for each battler
@@ -1018,7 +1017,6 @@ extern s32 gBattleMoveDamage;
 extern s32 gHpDealt;
 extern s32 gTakenDmg[MAX_BATTLERS_COUNT];
 extern u16 gLastUsedItem;
-extern u16 gLastUsedAbility;
 extern u8 gBattlerAttacker;
 extern u8 gBattlerTarget;
 extern u8 gBattlerFainted;

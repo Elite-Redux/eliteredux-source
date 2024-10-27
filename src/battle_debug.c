@@ -873,7 +873,7 @@ static void PutAiInfoText(struct BattleDebugMenu *data)
     {
         if (GET_BATTLER_SIDE(i) == B_SIDE_PLAYER && IsBattlerAlive(i))
         {
-            u16 ability = AI_GetAbility(i);
+            u16 ability = GetBattlerAbility(i);
             u16 holdEffect = AI_GetHoldEffect(i);
             u16 item = gBattleMons[i].item;
             u8 x = (i == B_POSITION_PLAYER_LEFT) ? 83 + (i) * 75 : 83 + (i-1) * 75;
@@ -1315,7 +1315,7 @@ static void PrintSecondaryEntries(struct BattleDebugMenu *data)
         }
         break;
     case LIST_ITEM_ABILITY:
-        PadString(gAbilityNames[gBattleMons[data->battlerId].ability], text);
+        PadString(gAbilityNames[gBattleMons[data->battlerId].abilities[0]], text);
         printer.currentY = printer.y = sSecondaryListTemplate.upText_Y;
         AddTextPrinter(&printer, 0, NULL);
         break;
@@ -1649,9 +1649,9 @@ static void SetUpModifyArrows(struct BattleDebugMenu *data)
         data->modifyArrows.minValue = 0;
         data->modifyArrows.maxValue = ABILITIES_COUNT - 1;
         data->modifyArrows.maxDigits = 3;
-        data->modifyArrows.modifiedValPtr = &gBattleMons[data->battlerId].ability;
+        data->modifyArrows.modifiedValPtr = &gBattleMons[data->battlerId].abilities[0];
         data->modifyArrows.typeOfVal = VAL_U16;
-        data->modifyArrows.currValue = gBattleMons[data->battlerId].ability;
+        data->modifyArrows.currValue = gBattleMons[data->battlerId].abilities[0];
         break;
     case LIST_ITEM_MOVES:
         data->modifyArrows.minValue = 0;

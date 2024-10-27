@@ -1615,7 +1615,7 @@ void PrintBattleWindow_MoveSelection(void)
             AddTextPrinterParameterized4(windowId, font, (x * 8) + x2 - (extraX / 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_MoveInfo_Type_Null);
             StringCopy(gStringVar1, gTypeNames[moveType]);
             //Stab
-            if (StabMultiplierInHalves(gActiveBattler, moveType, GetBattlerAbility(gActiveBattler), move) > 2)
+            if (StabMultiplierInHalves(gActiveBattler, moveType, move) > 2)
                 StringCopy(gStringVar2, gStabIcon);
             else
                 StringCopy(gStringVar2, gNoStabIcon);
@@ -1664,7 +1664,7 @@ void PrintBattleWindow_MoveSelection(void)
             {
                 u16 multiplier = CalculateAbilityMultipliers(gActiveBattler, target, move, moveType, movePower, typeEffectivenessMultiplier, FALSE, (u16*)&ignored);
                 MulModifier(&multiplier, typeEffectivenessMultiplier);
-                movePower *= StabMultiplierInHalves(gActiveBattler, moveType, GetBattlerAbility(gActiveBattler), move);
+                movePower *= StabMultiplierInHalves(gActiveBattler, moveType, move);
                 movePower /= 2;
                 movePower = ApplyModifier(multiplier, movePower);
             }
@@ -3540,10 +3540,6 @@ static void MoveSelectionDisplayPpNumber(void)
 
 }
 
-bool8 DoesTargetHaveAbilityOrInnate(u8 targetId, u8 userId, u16 ability, u16 moveNum) {
-    return (gBattleMons[targetId].ability == ability || BattlerHasInnate(targetId, ability)) && !DoesBattlerIgnoreAbilityChecks(userId, targetId, moveNum);
-}
-
 u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId, u16 moveType, u16 typeEffectivenessMultiplier)
 {
     int abilityNullifiesDamage = FALSE;
@@ -3554,10 +3550,10 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId, u16 moveType, u
     if (gBattleMoves[moveNum].split == SPLIT_STATUS)
         return GetMoveTypeEffectivenessStatus(moveNum, targetId, userId);
 
-    if (IsBattlerAlive(BATTLE_PARTNER(targetId)) && moveType == TYPE_ELECTRIC && target == MOVE_TARGET_SELECTED && BattlerHasAbility(BATTLE_PARTNER(targetId), userId, ABILITY_LIGHTNING_ROD))
+    if (IsBattlerAlive(BATTLE_PARTNER(targetId)) && moveType == TYPE_ELECTRIC && target == MOVE_TARGET_SELECTED && BattlerHasAbility(BATTLE_PARTNER(targetId), ABILITY_LIGHTNING_ROD, TRUE))
         abilityNullifiesDamage = TRUE;
 
-    if (IsBattlerAlive(BATTLE_PARTNER(targetId)) && moveType == TYPE_WATER && target == MOVE_TARGET_SELECTED && BattlerHasAbility(BATTLE_PARTNER(targetId), userId, ABILITY_STORM_DRAIN))
+    if (IsBattlerAlive(BATTLE_PARTNER(targetId)) && moveType == TYPE_WATER && target == MOVE_TARGET_SELECTED && BattlerHasAbility(BATTLE_PARTNER(targetId), ABILITY_STORM_DRAIN, TRUE))
         abilityNullifiesDamage = TRUE;
     
     if (!abilityNullifiesDamage) CalculateAbilityMultipliers(userId, targetId, moveNum, moveType, 100, typeEffectivenessMultiplier, FALSE, &mod);
@@ -3578,7 +3574,7 @@ static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId)
     u16 userSpecies = gBattleMons[userId].species;
     u16 targetSpecies = gBattleMons[targetId].species;
 
-    if (BattlerHasAbility(userId, userId, ABILITY_MYCELIUM_MIGHT) && gBattleMoves[moveNum].split == SPLIT_STATUS && gBattleMoves[moveNum].target & !MOVE_TARGET_USER) {
+    if (BattlerHasAbility(userId, ABILITY_MYCELIUM_MIGHT, TRUE) && gBattleMoves[moveNum].split == SPLIT_STATUS && gBattleMoves[moveNum].target & !MOVE_TARGET_USER) {
         switch (gBattleMoves[moveNum].effect) {
             case EFFECT_SLEEP:
             case EFFECT_TOXIC:
@@ -3752,12 +3748,7 @@ static u32 CopyPlayerMonData(u8 monId, u8 *dst)
         battleMon.ppBonuses = GetMonData(&gPlayerParty[monId], MON_DATA_PP_BONUSES);
         battleMon.friendship = GetMonData(&gPlayerParty[monId], MON_DATA_FRIENDSHIP);
         battleMon.experience = GetMonData(&gPlayerParty[monId], MON_DATA_EXP);
-        battleMon.hpIV = GetMonData(&gPlayerParty[monId], MON_DATA_HP_IV);
-        battleMon.attackIV = GetMonData(&gPlayerParty[monId], MON_DATA_ATK_IV);
-        battleMon.defenseIV = GetMonData(&gPlayerParty[monId], MON_DATA_DEF_IV);
-        battleMon.speedIV = GetMonData(&gPlayerParty[monId], MON_DATA_SPEED_IV);
-        battleMon.spAttackIV = GetMonData(&gPlayerParty[monId], MON_DATA_SPATK_IV);
-        battleMon.spDefenseIV = GetMonData(&gPlayerParty[monId], MON_DATA_SPDEF_IV);
+        battleMon.speedDown = !GetMonData(&gPlayerParty[monId], MON_DATA_SPEED_IV);
         battleMon.personality = GetMonData(&gPlayerParty[monId], MON_DATA_PERSONALITY);
         battleMon.status1 = GetMonData(&gPlayerParty[monId], MON_DATA_STATUS);
         battleMon.level = GetMonData(&gPlayerParty[monId], MON_DATA_LEVEL);
@@ -3772,6 +3763,10 @@ static u32 CopyPlayerMonData(u8 monId, u8 *dst)
         battleMon.otId = GetMonData(&gPlayerParty[monId], MON_DATA_OT_ID);
         battleMon.nature = GetMonData(&gPlayerParty[monId], MON_DATA_NATURE);
         battleMon.hpType = GetMonData(&gPlayerParty[monId], MON_DATA_HP_TYPE);
+        battleMon.abilities[0] = RandomizeAbility(GetAbilityBySpecies(battleMon.species, battleMon.abilityNum), battleMon.species, battleMon.personality);
+        battleMon.abilities[1] = GetInnateInSlot(battleMon.level, battleMon.species, 0, battleMon.personality, TRUE);
+        battleMon.abilities[2] = GetInnateInSlot(battleMon.level, battleMon.species, 1, battleMon.personality, TRUE);
+        battleMon.abilities[3] = GetInnateInSlot(battleMon.level, battleMon.species, 2, battleMon.personality, TRUE);
         GetMonData(&gPlayerParty[monId], MON_DATA_NICKNAME, nickname);
         StringCopy10(battleMon.nickname, nickname);
         GetMonData(&gPlayerParty[monId], MON_DATA_OT_NAME, battleMon.otName);
@@ -4098,17 +4093,6 @@ static void SetPlayerMonData(u8 monId)
             SetMonData(&gPlayerParty[monId], MON_DATA_PP_BONUSES, &battlePokemon->ppBonuses);
             SetMonData(&gPlayerParty[monId], MON_DATA_FRIENDSHIP, &battlePokemon->friendship);
             SetMonData(&gPlayerParty[monId], MON_DATA_EXP, &battlePokemon->experience);
-            iv = battlePokemon->hpIV;
-            SetMonData(&gPlayerParty[monId], MON_DATA_HP_IV, &iv);
-            iv = battlePokemon->attackIV;
-            SetMonData(&gPlayerParty[monId], MON_DATA_ATK_IV, &iv);
-            iv = battlePokemon->defenseIV;
-            SetMonData(&gPlayerParty[monId], MON_DATA_DEF_IV, &iv);
-            iv = battlePokemon->speedIV;
-            SetMonData(&gPlayerParty[monId], MON_DATA_SPEED_IV, &iv);
-            iv = battlePokemon->spAttackIV;
-            SetMonData(&gPlayerParty[monId], MON_DATA_SPATK_IV, &iv);
-            iv = battlePokemon->spDefenseIV;
             SetMonData(&gPlayerParty[monId], MON_DATA_SPDEF_IV, &iv);
             SetMonData(&gPlayerParty[monId], MON_DATA_PERSONALITY, &battlePokemon->personality);
             SetMonData(&gPlayerParty[monId], MON_DATA_STATUS, &battlePokemon->status1);

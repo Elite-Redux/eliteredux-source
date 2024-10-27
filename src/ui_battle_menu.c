@@ -1736,7 +1736,7 @@ static void PrintAbilityTab() {
     u16 innate1 = gBaseStats[species].innates[0];
     u16 innate2 = gBaseStats[species].innates[1];
     u16 innate3 = gBaseStats[species].innates[2];
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].ability;
+    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
     u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
     u8 statStage;
@@ -1840,7 +1840,7 @@ static void PrintMoveTab(void) {
     u16 move2   = gBattleMons[sMenuDataPtr->battlerId].moves[1];
     u16 move3   = gBattleMons[sMenuDataPtr->battlerId].moves[2];
     u16 move4   = gBattleMons[sMenuDataPtr->battlerId].moves[3];
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].ability;
+    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
     u16 gBattleMoveDamage;
     u8 target = 1;
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
@@ -1905,7 +1905,7 @@ static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
     u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].ability;
+    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
     u16 gBattleMoveDamage;
     bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
     u8 mode = sMenuDataPtr->moveModeId;
@@ -1946,7 +1946,7 @@ static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
     }
 
     //Check Stab
-    stab = StabMultiplierInHalves(sMenuDataPtr->battlerId, moveType, GetBattlerAbility(sMenuDataPtr->battlerId), move);
+    stab = StabMultiplierInHalves(sMenuDataPtr->battlerId, moveType, move);
     
     //Move Name
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gMoveNamesLong[move]);
@@ -2332,7 +2332,7 @@ static void PrintStatusTab(void) {
     u16 move2   = gBattleMons[sMenuDataPtr->battlerId].moves[1];
     u16 move3   = gBattleMons[sMenuDataPtr->battlerId].moves[2];
     u16 move4   = gBattleMons[sMenuDataPtr->battlerId].moves[3];
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].ability;
+    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
     u16 gBattleMoveDamage;
     u8 target = 1;
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
@@ -3065,7 +3065,7 @@ static void PrintDamageCalulatorTab(void) {
                                 gBattleMons[sMenuDataPtr->battlerId].moves[1],
                                 gBattleMons[sMenuDataPtr->battlerId].moves[2], 
                                 gBattleMons[sMenuDataPtr->battlerId].moves[3]};
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].ability;
+    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
     u16 gBattleMoveDamage;
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
     u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
@@ -4624,7 +4624,7 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
     x = 15;
     y = 7;
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Ability);
-    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilityNames[gBattleMons[sMenuDataPtr->battlerId].ability]);
+    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, ((x + 5) * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gAbilityNames[gBattleMons[sMenuDataPtr->battlerId].abilities[0]]);
     y++;
     //Innate 1
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, sText_Innate);

@@ -1546,8 +1546,8 @@
 	.4byte \ptr
 	.endm
 
-	.macro tryafteryou ptr:req
-	various BS_ATTACKER, VARIOUS_AFTER_YOU
+	.macro tryafteryou target:req, ptr:req
+	various \target, VARIOUS_AFTER_YOU
 	.4byte \ptr
 	.endm
 

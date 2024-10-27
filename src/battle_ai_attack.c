@@ -68,8 +68,6 @@ int AdjustForMultihit(int damage, int battlerAtk, int move, struct AiData* aiDat
     }
     switch (gBattleMoves[move].effect)
     {
-    case EFFECT_WYRM_WIND:
-    case EFFECT_SCALE_SHOT:
     case EFFECT_MULTI_HIT:
         if (HasSkillLink(battlerAtk, aiData))
             aiData->moveState.multiHitExpect = UQ_4_12(5);
@@ -134,28 +132,28 @@ int AdjustForMultihit(int damage, int battlerAtk, int move, struct AiData* aiDat
         case ABILITY_STEEL_BEETLE:
             REQUIRE(IS_IRON_FIST(battlerAtk, move))
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
         
         case ABILITY_DUAL_WIELD:
             REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
         
         case ABILITY_DUAL_HAMMER:
             REQUIRE(gBattleMoves[move].hammerBased)
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
             
         case ABILITY_RAGING_MOTH:
             REQUIRE(gBattleMoves[move].type == TYPE_FIRE)
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
         
         case ABILITY_DEVOURER:
         case ABILITY_PRIMAL_MAW:
             REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
         
         case ABILITY_MULTI_HEADED:
             if (gBaseStats[gBattleMons[battlerAtk].species].flags & F_TWO_HEADED)
@@ -326,7 +324,13 @@ int ScoreArgument(int battlerAtk, int battlerDef, int move, struct AiData* aiDat
         return AI_SCORE_STAT(applyTo, GetHighestStatIdExcept(applyTo, FALSE, STAT_SPEED), 1);
     case MOVE_EFFECT_MAKE_IT_RAIN:
         // TODO: Delay
-        return AI_SCORE_MAKE_IT_RAIN;
+        return AI_SCORE_SPATK_UP(battlerAtk, -1);
+    case MOVE_EFFECT_SCALE_SHOT:
+        // TODO: Delay
+        return AI_SCORE_STAT(battlerAtk, STAT_SPEED, 1) + AI_SCORE_STAT(battlerAtk, STAT_DEF, -1);
+    case MOVE_EFFECT_WYRM_WIND:
+        // TODO: Delay
+        return AI_SCORE_STAT(battlerAtk, STAT_SPEED, 1) + AI_SCORE_STAT(battlerAtk, STAT_SPDEF, -1);
     }
 }
 
@@ -1019,7 +1023,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_SKILL_SWAP)
-        return AI_SCORE_REPLACE_ABILITY(battlerAtk, gBattleMons[battlerDef].ability) + AI_SCORE_REPLACE_ABILITY(battlerDef, gBattleMons[battlerAtk].ability);
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, GetBattlerAbility(battlerDef)) + AI_SCORE_REPLACE_ABILITY(battlerDef, GetBattlerAbility(battlerAtk));
 
     CASE_AND_LABEL(EFFECT_IMPRISON)
         return AI_SCORE_IMPRISON;
@@ -1282,7 +1286,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_REPLACE_ABILITY(battlerDef, ABILITY_SIMPLE);
 
     CASE_AND_LABEL(EFFECT_ENTRAINMENT)
-        return AI_SCORE_REPLACE_ABILITY(battlerDef, gBattleMons[battlerAtk].ability);
+        return AI_SCORE_REPLACE_ABILITY(battlerDef, GetBattlerAbility(battlerAtk));
 
     CASE_AND_LABEL(EFFECT_HEAL_PULSE)
         return AI_SCORE_HEAL(battlerDef, 50);
@@ -1765,10 +1769,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     CASE_AND_LABEL(EFFECT_RISING_VOLTAGE)
         GOTO(EFFECT_HIT);
 
-    CASE_AND_LABEL(EFFECT_SCALE_SHOT)
-        // TODO: Scale Shot
-        GOTO(EFFECT_HIT);
-
     CASE_AND_LABEL(EFFECT_BEAK_BLAST)
         return AI_SCORE_UNUSABLE;
 
@@ -1841,10 +1841,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_INFERNAL_PARADE)
         GOTO(EFFECT_ARGUMENT_HIT);
-
-    CASE_AND_LABEL(EFFECT_WYRM_WIND)
-        // TODO: Wyrm Wind
-        GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_MISTY_TERRAIN_BOOST)
         return AI_SCORE_UNUSABLE;
@@ -1971,7 +1967,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return score + AI_SCORE_ABSORB_MOVE(50) + AI_SCORE_ADJUST(AI_GET_MOVE_EFFECT_CHANCE, AI_SCORE_BURN_MOVE(battlerDef));
 
     CASE_AND_LABEL(EFFECT_DOODLE)
-        return AI_SCORE_REPLACE_ABILITY(battlerAtk, gBattleMons[battlerDef].ability) + AI_SCORE_REPLACE_ABILITY(BATTLE_PARTNER(battlerAtk), gBattleMons[battlerDef].ability);
+        return AI_SCORE_REPLACE_ABILITY(battlerAtk, GetBattlerAbility(battlerDef)) + AI_SCORE_REPLACE_ABILITY(BATTLE_PARTNER(battlerAtk), GetBattlerAbility(battlerDef));
 
     CASE_AND_LABEL(EFFECT_SPIKE_HIT)
         AI_CALC_DAMAGE;

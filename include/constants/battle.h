@@ -202,12 +202,12 @@
 // 3 free spots because of change in handling of UNDERGROUND/UNDERWATER/ON AIR
 #define HITMARKER_UNABLE_TO_USE_MOVE    (1 << 19)
 #define HITMARKER_PASSIVE_DAMAGE        (1 << 20)
-#define HITMARKER_x200000               (1 << 21)
+#define HITMARKER_MOLD_BREAKER          (1 << 21)
 #define HITMARKER_x400000               (1 << 22)
 #define HITMARKER_x800000               (1 << 23)
 #define HITMARKER_GRUDGE                (1 << 24)
 #define HITMARKER_OBEYS                 (1 << 25)
-#define HITMARKER_x4000000              (1 << 26)
+#define HITMARKER_MYCELIUM_MIGHT        (1 << 26)
 #define HITMARKER_CHARGING              (1 << 27)
 #define HITMARKER_FAINTED(battler)      (gBitTable[battler] << 28)
 #define HITMARKER_FAINTED2(battler)     ((1 << 28) << battler)
@@ -398,7 +398,9 @@
 #define MOVE_EFFECT_PSYCHIC_NOISE          90
 #define MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1 91
 #define MOVE_EFFECT_MAKE_IT_RAIN           92
-#define NUM_MOVE_EFFECTS                   92
+#define MOVE_EFFECT_WYRM_WIND              93
+#define MOVE_EFFECT_SCALE_SHOT             94
+#define NUM_MOVE_EFFECTS                   94
 
 #define MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES 0x2000
 #define MOVE_EFFECT_AFFECTS_USER        0x4000

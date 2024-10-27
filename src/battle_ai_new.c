@@ -49,10 +49,6 @@ int BelowHalfHp(int battler)
 
 void PopulateAbilities(int battler, struct AiData* aiData)
 {
-    if (!aiData->abilities[battler][1])
-    {
-        GET_ALL_BATTLER_ABILITIES(aiData->abilities[battler], battler, aiData->activeBattler);
-    }
 }
 
 int HasAbility(int battler, int ability, struct AiData* aiData)

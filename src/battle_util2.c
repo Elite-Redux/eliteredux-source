@@ -143,7 +143,7 @@ u32 sub_805725C(u8 battlerId)
                 {
                     u32 toSub;
 
-                    if (GetBattlerAbility(battlerId) == ABILITY_EARLY_BIRD)
+                    if (BattlerHasAbility(battlerId, ABILITY_EARLY_BIRD, FALSE))
                         toSub = 2;
                     else
                         toSub = 1;
