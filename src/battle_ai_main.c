@@ -731,68 +731,25 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         // target ability checks
         if (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move))
         {
+            int ignored;
+            if (TestAbsorbingAbilities(battlerDef, battlerAtk, move, moveType, &ignored, (u16*)&ignored))
+                RETURN_SCORE_MINUS(20);
+            if (TestImmunityAbilities(battlerDef, battlerAtk, move, moveType, (const u8**)&ignored, (u8*)&ignored, (u16*)&ignored))
+                RETURN_SCORE_MINUS(20);
             
 
             for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
             {
             switch (gBattleMons[battlerDef].abilities[i])
             {
-                case ABILITY_EARTH_EATER:
-                    if (moveType == TYPE_GROUND)
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_VOLT_ABSORB:
-                case ABILITY_MOTOR_DRIVE:
-                case ABILITY_LIGHTNING_ROD:
-                    if (moveType == TYPE_ELECTRIC)
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_WATER_ABSORB:
-                case ABILITY_DRY_SKIN:
-                case ABILITY_STORM_DRAIN:
-                    if (moveType == TYPE_WATER)
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_FLASH_FIRE:
-                    if (moveType == TYPE_FIRE)
-                        RETURN_SCORE_MINUS(20);
-                    break;
                 case ABILITY_GIFTED_MIND:
                     if (moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG)
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_SAP_SIPPER:
-                    if (moveType == TYPE_GRASS)
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_JUSTIFIED:
-                    if (moveType == TYPE_DARK && !IS_MOVE_STATUS(move))
                         RETURN_SCORE_MINUS(20);
                     break;
                 case ABILITY_RATTLED:
                     if (!IS_MOVE_STATUS(move)
                     && (moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG))
                         RETURN_SCORE_MINUS(10);
-                    break;
-                case ABILITY_SOUNDPROOF:
-                    if (TestMoveFlags(move, FLAG_SOUND))
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_NOISE_CANCEL:
-                    if (TestMoveFlags(move, FLAG_SOUND))
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_PARROTING:
-                    if (TestMoveFlags(move, FLAG_SOUND))
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_BULLETPROOF:
-                    if (TestMoveFlags(move, FLAG_BALLISTIC))
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_GOOD_AS_GOLD:
-                    if (IS_MOVE_STATUS(move) && battlerAtk != battlerDef)
-                        RETURN_SCORE_MINUS(20);
                     break;
                 case ABILITY_FLOWER_VEIL:
                     if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) && (IsNonVolatileStatusMoveEffect(moveEffect) || IsStatLoweringMoveEffect(moveEffect)))
@@ -849,14 +806,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_UTILITY_UMBRELLA
                     && IsNonVolatileStatusMoveEffect(moveEffect))
                         RETURN_SCORE_MINUS(10);
-                    break;
-                case ABILITY_WEATHER_CONTROL:
-                    if (TestMoveFlags(move, FLAG_WEATHER_BASED))
-                        RETURN_SCORE_MINUS(20);
-                    break;
-                case ABILITY_DELTA_STREAM:
-                    if (TestMoveFlags(move, FLAG_WEATHER_BASED))
-                        RETURN_SCORE_MINUS(20);
                     break;
                 } // def ability checks
             }
@@ -926,25 +875,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             if (effectiveness > AI_EFFECTIVENESS_x2 && gBattleMoves[move].power > 0)
                 RETURN_SCORE_MINUS(20);
         }
-
-        //Dazzling and Queenly Majesty
-        if ((BattlerHasAbility(battlerDef, ABILITY_DAZZLING, TRUE)                   ||
-            BattlerHasAbility(battlerDef, ABILITY_QUEENLY_MAJESTY, TRUE)            ||
-            BattlerHasAbility(battlerDef, ABILITY_ARMOR_TAIL, TRUE)                 ||
-            BattlerHasAbility(battlerDef, ABILITY_UNICORN, TRUE)                    ||
-            BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_DAZZLING, TRUE)   ||
-            BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_QUEENLY_MAJESTY, TRUE) ||
-            BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_ARMOR_TAIL, TRUE) ||
-            BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_UNICORN, TRUE)
-                || (BattlerHasAbility(battlerDef, ABILITY_SAND_GUARD, TRUE) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))
-                || (!IS_BATTLER_OF_TYPE(battlerAtk, TYPE_NORMAL)
-                    && !BattlerHasAbility(battlerAtk, ABILITY_INNER_FOCUS, TRUE)
-                    && !BattlerHasAbility(battlerAtk, ABILITY_UNLOCKED_POTENTIAL, TRUE)
-                    && !BattlerHasAbility(battlerAtk, ABILITY_ENLIGHTENED, TRUE)
-                    && IsBattlerWeatherAffected(battlerAtk, WEATHER_FOG_ANY)
-                    && (BattlerHasAbility(battlerDef, ABILITY_SURPRISE, TRUE) || BATTLER_HAS_ABILITY_AND_ALIVE(BATTLE_PARTNER(battlerDef), ABILITY_SURPRISE, TRUE)))) &&
-           atkPriority > 0)
-            RETURN_SCORE_MINUS(20);
 
         //Aroma Veil
         if (BattlerHasAbility(battlerDef, ABILITY_AROMA_VEIL, TRUE) &&
