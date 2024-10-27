@@ -16098,11 +16098,11 @@ int HasAnyStatusOrAbility(int battler)
 int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker)
 {
     int ability = gBattleMons[battler].abilities[abilityNumber];
-    int moldBreaker = checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && sAbilitiesAffectedByMoldBreaker[ability];
 
-    if (moldBreaker || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
+    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && sAbilitiesAffectedByMoldBreaker[ability])
+        || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
     {
-        if (DoesBattlerHaveAbilityShield(battler))
+        if (!DoesBattlerHaveAbilityShield(battler))
             return TOTAL_ABILITY_COUNT;
     }
 
@@ -16131,17 +16131,16 @@ void RepopulateAbilities(int battler)
 int GetAbilityIndex(int battler, int ability, int checkMoldBreaker)
 {
     int i;
-    int moldBreaker;
     
     for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
         if (gBattleMons[battler].abilities[i] == ability) break;
     
-    if (i == MAX_MON_MOVES) return i;
+    if (i == TOTAL_ABILITY_COUNT) return TOTAL_ABILITY_COUNT;
 
-    moldBreaker = checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && sAbilitiesAffectedByMoldBreaker[ability];
-    if (moldBreaker || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
+    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && sAbilitiesAffectedByMoldBreaker[ability])
+        || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
     {
-        if (DoesBattlerHaveAbilityShield(battler))
+        if (!DoesBattlerHaveAbilityShield(battler))
             return TOTAL_ABILITY_COUNT;
     }
 
