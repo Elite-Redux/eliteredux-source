@@ -132,22 +132,22 @@ int AdjustForMultihit(int damage, int battlerAtk, int move, struct AiData* aiDat
         case ABILITY_STEEL_BEETLE:
             REQUIRE(IS_IRON_FIST(battlerAtk, move))
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
         
         case ABILITY_DUAL_WIELD:
             REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
         
         case ABILITY_DUAL_HAMMER:
             REQUIRE(gBattleMoves[move].hammerBased)
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
             
         case ABILITY_RAGING_MOTH:
             REQUIRE(gBattleMoves[move].type == TYPE_FIRE)
             aiData->moveState.multiHitExpect = UQ_4_12(2);
-            return damage * 150 / 100;
+            return damage * 140 / 100;
         
         case ABILITY_DEVOURER:
         case ABILITY_PRIMAL_MAW:
