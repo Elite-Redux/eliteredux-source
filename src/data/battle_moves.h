@@ -11963,7 +11963,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_KILOBITE] =
     {
         .effect = EFFECT_SNAP_JAW,
-        .power = 80,
+        .power = 85,
         .type = TYPE_STEEL,
         .accuracy = 100,
         .pp = 10,
