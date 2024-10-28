@@ -1546,7 +1546,8 @@ static void Cmd_attackcanceler(void)
     int ability;
     if (((BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_COLOR_CHANGE) && (ability = ABILITY_COLOR_CHANGE)) ||
         (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_PRISMATIC_FUR) && (ability = ABILITY_PRISMATIC_FUR)))
-        && (gBattlerAttacker != gBattlerTarget)) {
+        && (gBattlerAttacker != gBattlerTarget)
+        && CheckAndSetOncePerTurnAbility(gBattlerTarget, ability)) {
         u32 currentType;
         u32 bestType = gBattleMons[gBattlerTarget].type1;
         u16 bestModifier = GetTypeModifier(moveType, bestType, gBattlerAttacker, gBattlerTarget);

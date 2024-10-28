@@ -2206,7 +2206,7 @@ void SetOncePerTurnAbilityCounter(int battler, int ability, int value)
     gTurnStructs[battler].turnAbilityTriggers[index] = value;
 }
 
-static int CheckAndSetOncePerTurnAbility(int battler, int ability)
+int CheckAndSetOncePerTurnAbility(int battler, int ability)
 {
     int index = GetAbilityIndex(battler, ability, TRUE);
     if (index == TOTAL_ABILITY_COUNT) return FALSE;
@@ -2958,6 +2958,7 @@ enum
     ENDTURN_COMMANDER,
     ENDTURN_PARASITIC_SPORES_DAMAGE,
     ENDTURN_FUNERAL_PYRE_DAMAGE,
+    ENDTURN_LIFE_STEAL_DAMAGE,
     ENDTURN_GENERIC_BATTLER_TIMERS,
     ENDTURN_BATTLER_COUNT,
 };

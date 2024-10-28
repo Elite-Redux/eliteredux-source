@@ -756,8 +756,9 @@
 #define ABILITY_APE_SHIFT 734 // Anger Point + Heal status and always crits with below 50% HP.
 #define ABILITY_KNOW_YOUR_PLACE 735 // Contact attacks make foes move last for 5 turns.
 #define ABILITY_DEEP_CUTS 736 // Slashing moves have a 50% chance to inflict bleeding.
+#define ABILITY_LIFE_STEAL 737 // Steals 1/10 HP from foes each turn.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DEEP_CUTS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_LIFE_STEAL + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
