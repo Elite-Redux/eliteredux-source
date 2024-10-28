@@ -7952,8 +7952,8 @@ BattleScript_LeechSeedTurnDrain::
 	copyword gBattleMoveDamage, gHpDealt
 	jumpifability BS_ATTACKER, ABILITY_LIQUID_OOZE, BattleScript_LeechSeedTurnPrintLiquidOoze
 	setbyte cMULTISTRING_CHOOSER, B_MSG_LEECH_SEED_DRAIN
-	jumpifhealingblocked BS_TARGET, BattleScript_LeechSeedHealBlock
-	jumpifstatus BS_TARGET, STATUS1_BLEED, BattleScript_LeechSeedHealBlock
+	jumpifhealingblocked BS_ATTACKER, BattleScript_LeechSeedHealBlock
+	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_LeechSeedHealBlock
 	manipulatedamage DMG_BIG_ROOT
 	goto BattleScript_LeechSeedTurnPrintAndUpdateHp
 BattleScript_LeechSeedTurnPrintLiquidOoze::
