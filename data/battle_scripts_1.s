@@ -8950,6 +8950,19 @@ BattleScript_ApeShift_HealStatus:
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_RestoreAttackerReturn
 
+BattleScript_TeraformZero::
+	call BattleScript_AbilityPopUp
+	removeweather
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_TeraformZero_ClearTerrain
+	printfromtable gWeatherCleared
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_TeraformZero_ClearTerrain:
+	removeterrain
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS + 1, BattleScript_End3
+	printfromtable gTerrainEndingStringIds
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
 BattleScript_AttackerFormChangeEnd3::
 	call BattleScript_AttackerFormChange
 	end3
@@ -11834,9 +11847,10 @@ BattleScript_AnnounceAirLockCloudNine::
 	call BattleScript_AbilityPopUp
 	removeweather
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
-	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_SUN_ENDS, BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
+	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_SUN_ENDS, BattleScript_AnnounceAirLockCloudNine_Primal
 	printfromtable gWeatherCleared
 	goto BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
+BattleScript_AnnounceAirLockCloudNine_Primal:
 	printstring STRINGID_AIRLOCKACTIVATES
 BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged:
 	waitmessage B_WAIT_TIME_LONG

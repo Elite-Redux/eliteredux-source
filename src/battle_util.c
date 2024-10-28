@@ -1153,6 +1153,8 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_LUCKY_HALO] = 1,
     [ABILITY_DRAGONSLAYER] = 1,
     [ABILITY_STALL] = 1,
+    [ABILITY_TERA_SHELL] = 1,
+    [ABILITY_TERAFORM_ZERO] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -4977,7 +4979,7 @@ void DisableSwitchInAbility(u8 battlerId, u16 ability)
 
 bool8 CheckAndSetSwitchInAbility(u8 battlerId, u16 ability)
 {
-    int index = GetAbilityIndex(battlerId, ability, TRUE);
+    int index = GetAbilityIndex(battlerId, ability, FALSE);
     if (index == TOTAL_ABILITY_COUNT) return FALSE;
 
     if (!gVolatileStructs[battlerId].switchInAbilityDone[index]) {
@@ -11037,7 +11039,7 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
 
     if (modifier > UQ_4_12(0.5)
         && gBattleMons[battlerDef].hp == gBattleMons[battlerDef].maxHP
-        && BATTLER_HAS_ABILITY(battlerDef, ABILITY_TERA_SHELL))
+        && (BATTLER_HAS_ABILITY(battlerDef, ABILITY_TERA_SHELL) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_TERAFORM_ZERO)))
         modifier = UQ_4_12(0.5);
 
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_WONDER_GUARD) && modifier <= UQ_4_12(1.0) && gBattleMoves[move].power)
@@ -14566,6 +14568,13 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 
     switch (ability)
     {
+        case ABILITY_TERAFORM_ZERO:
+            REQUIRE(!GetSingleUseAbilityCounter(battler, ability))
+            SetSingleUseAbilityCounter(battler, ability, TRUE);
+            REQUIRE(IsWeatherActive(WEATHER_ANY) || IsTerrainActive(STATUS_FIELD_TERRAIN_ANY))
+            BattleScriptPushCursorAndCallback(BattleScript_TeraformZero);
+            return TRUE;
+
         case ABILITY_ZERO_TO_HERO:
             REQUIRE(gBattleMons[battler].species == SPECIES_PALAFIN)
             REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
