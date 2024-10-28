@@ -41487,12 +41487,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_POLARTIC_BLUEMOON] =
     {
-    .baseHP        = 130,
-    .baseAttack    = 145,
-    .baseDefense   = 70,
-    .baseSpeed     = 55,
-    .baseSpAttack  = 65,
-    .baseSpDefense = 105,
+    .baseHP         = 130,
+    .baseAttack     = 145,
+    .baseDefense    = 70,
+    .baseSpeed      = 55,
+    .baseSpAttack   = 50,
+    .baseSpDefense  = 105,
     .type1 = TYPE_ICE,
     .type2 = TYPE_FIGHTING,
     .catchRate = 255,

@@ -12189,7 +12189,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     {
         .effect = EFFECT_SEMI_INVULNERABLE,
         .power = 80,
-        .type = TYPE_GHOST,
+        .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 15,
         .secondaryEffectChance = 30,
