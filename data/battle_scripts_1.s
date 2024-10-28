@@ -3741,10 +3741,8 @@ BattleScript_EffectParalyzeHit::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectAttracttHit::
-	argumenttomoveeffect
-	call BattleScript_EffectHit_Return
-	trytoapplymoveeffect BattleScript_MoveEffectAttract
-	goto BattleScript_MoveEnd
+	setmoveeffect MOVE_EFFECT_ATTRACT
+	goto BattleScript_EffectHit
 	
 BattleScript_MoveEffectAttract::
 	statusanimation BS_EFFECT_BATTLER

@@ -3575,6 +3575,12 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
                 }
                 break;
+            case MOVE_EFFECT_ATTRACT:
+                if (CanInfatuate(gBattleScripting.battler, gEffectBattler))
+                {
+                    gBattleMons[gEffectBattler].status2 |= STATUS2_INFATUATED_WITH(gBattleScripting.battler);
+                    BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
+                }
             case MOVE_EFFECT_WRAP:
                 if (!(gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED))
                 {
