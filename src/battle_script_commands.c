@@ -10997,6 +10997,11 @@ static void Cmd_various(void)
                     SetActiveAbilityPopupOverride(ABILITY_VITAL_SPIRIT);
                     gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
                 }
+                else if (GetAbilityState(gActiveBattler, ABILITY_RUDE_AWAKENING))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_RUDE_AWAKENING);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
                 else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN)) gBattlescriptCurrInstr = BattleScript_ElectricTerrainPrevents;
                 else if ((ability = IsAbilityOnSide(gActiveBattler, ABILITY_SWEET_VEIL)))
                 {
@@ -11416,6 +11421,16 @@ static void Cmd_various(void)
             gSideTimers[GetBattlerSide(gActiveBattler)].quickGuardTimer = 3;
             gSideTimers[GetBattlerSide(gActiveBattler)].started.quickGuard = TRUE;
         }
+    case VARIOUS_RUDE_AWAKENING:
+        ptr = READ_PTR_INC;
+        REQUIRE(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
+        REQUIRE(BattlerHasAbility(gActiveBattler, ABILITY_RUDE_AWAKENING, FALSE))
+        SetAbilityState(gActiveBattler, ABILITY_RUDE_AWAKENING, TRUE);
+        gBattleScripting.abilityPopupOverwrite = ABILITY_RUDE_AWAKENING;
+        gBattlerAbility = gActiveBattler;
+        BattleScriptPush(ptr);
+        gBattlescriptCurrInstr = BattleScript_DoRudeAwakening;
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 

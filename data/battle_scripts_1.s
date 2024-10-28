@@ -8925,6 +8925,14 @@ BattleScript_AttackerFormChangeNoPopup::
 	switchinabilities BS_ATTACKER
 	return
 
+BattleScript_DoRudeAwakening::
+	curestatus BS_ATTACKER
+	updatestatusicon BS_ATTACKER
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_RUDE_AWAKENING
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_AllStatsUp @ implicit return
+
 BattleScript_ApeShift::
 	saveattackertostack3
 	copybyte gBattlerAttacker, gStackBattler1
@@ -8934,6 +8942,7 @@ BattleScript_RestoreAttackerReturn:
 	readattackerfromstack3
 	return
 BattleScript_ApeShift_HealStatus:
+	checkrudeawakening BattleScript_RestoreAttackerReturn
 	curestatus BS_ATTACKER
 	updatestatusicon BS_ATTACKER
 	printstring STRINGID_PKMNSTATUSNORMAL
@@ -9046,6 +9055,8 @@ BattleScript_MoveUsedIsAsleep::
 	goto BattleScript_MoveEnd
 
 BattleScript_MoveUsedWokeUp::
+	checkrudeawakening BattleScript_Return
+	curestatus BS_ATTACKER
 	bicword gHitMarker, HITMARKER_x10
 	printfromtable gWokeUpStringIds
 	waitmessage B_WAIT_TIME_LONG
@@ -13076,7 +13087,7 @@ BattleScript_ClearSkiesEnds::
 
 BattleScript_TargetDazed::
 	call BattleScript_AbilityPopUp
-	printstring STRINGID_RUDE_AWAKENING
+	printstring STRINGID_KNOW_YOUR_PLACE
 	waitmessage B_WAIT_TIME_LONG
 	return
 

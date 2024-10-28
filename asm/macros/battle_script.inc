@@ -2390,6 +2390,11 @@
 	.4byte \failPtr
 	.endm
 
+	.macro checkrudeawakening returnPtr:req
+	various BS_ATTACKER, VARIOUS_RUDE_AWAKENING
+	.4byte \returnPtr
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr

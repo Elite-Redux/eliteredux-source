@@ -757,8 +757,9 @@
 #define ABILITY_KNOW_YOUR_PLACE 735 // Contact attacks make foes move last for 5 turns.
 #define ABILITY_DEEP_CUTS 736 // Slashing moves have a 50% chance to inflict bleeding.
 #define ABILITY_LIFE_STEAL 737 // Steals 1/10 HP from foes each turn.
+#define ABILITY_RUDE_AWAKENING 738 // Raises all stats becomes immune to sleep after waking up.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_LIFE_STEAL + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_RUDE_AWAKENING + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

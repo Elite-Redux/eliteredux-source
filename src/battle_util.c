@@ -4033,7 +4033,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                     gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_NIGHTMARE);
                     BattleScriptCall(BattleScript_MoveUsedWokeUp);
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_WOKE_UP_UPROAR;
-                    effect = 2;
+                    effect = 3;
                 }
                 else
                 {
@@ -4062,7 +4062,7 @@ u8 AtkCanceller_UnableToUseMove(void)
                         gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_NIGHTMARE);
                         BattleScriptCall(BattleScript_MoveUsedWokeUp);
                         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_WOKE_UP;
-                        effect = 2;
+                        effect = 3;
                     }
                 }
             }
@@ -6461,6 +6461,7 @@ bool32 CanSleep(u8 battlerId)
 
     if (BATTLER_HAS_ABILITY(battlerId, ABILITY_INSOMNIA)
         || BATTLER_HAS_ABILITY(battlerId, ABILITY_VITAL_SPIRIT)
+        || GetAbilityState(battlerId, ABILITY_RUDE_AWAKENING)
         || IsAbilityOnSide(battlerId, ABILITY_SWEET_VEIL)
         || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_ELECTRIC_TERRAIN))
         return FALSE;

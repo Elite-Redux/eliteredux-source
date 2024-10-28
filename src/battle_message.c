@@ -900,7 +900,7 @@ static const u8 sText_SuperStrainRecoil[] = _("The strain takes its toll on\n{B_
 static const u8 sText_AttackerLostDarkType[] = _("{B_ATK_NAME_WITH_PREFIX} has no more\ndarkness left!");
 static const u8 sText_ClearSkies[] = _("The sky became clear!");
 static const u8 sText_WeatherNormal[] = _("The weather returned to normal!");
-static const u8 sText_RudeAwakening[] = _("{B_DEF_NAME_WITH_PREFIX} is dazed\nby the blow!");
+static const u8 sText_KnowYourPlace[] = _("{B_DEF_NAME_WITH_PREFIX} is dazed\nby the blow!");
 static const u8 sText_RoomsCleared[] = _("The warped dimensions were\nreturned to normal!");
 static const u8 sText_Trepidation[] = _("{B_DEF_NAME_WITH_PREFIX} becomes\nanxious!");
 static const u8 sText_Kinesis[] = _("{B_DEF_NAME_WITH_PREFIX}'s {B_LAST_ITEM}\nsuddenly flies away!");
@@ -915,6 +915,7 @@ static const u8 sText_QuickGuard[] = _("{B_ATK_NAME_WITH_PREFIX} shields\ntheir 
 static const u8 sText_BloodStainAnnounce[] = _("{B_ATK_NAME_WITH_PREFIX} is bleeding!");
 static const u8 sText_Trapped[] = _("{B_DEF_NAME_WITH_PREFIX} is trapped!");
 static const u8 sText_HoneyGather[] = _("{B_ATK_NAME_WITH_PREFIX} found some\n{B_LAST_ITEM}!");
+static const u8 sText_LifeSteal[] = _("{B_ATK_NAME_WITH_PREFIX} drains\n{B_DEF_NAME_WITH_PREFIX}'s health!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1073,7 +1074,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
-static const u8 sText_LifeSteal[] = _("{B_ATK_NAME_WITH_PREFIX} drains\n{B_DEF_NAME_WITH_PREFIX}'s health!");
+static const u8 sText_RudeAwakening[] = _("{B_ATK_NAME_WITH_PREFIX} wakes up\nenraged!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1916,7 +1917,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ATTACKERLOSTDARKTYPE - 12] = sText_AttackerLostDarkType,
     [STRINGID_CLEARSKIES - 12] = sText_ClearSkies,
     [STRINGID_WEATHER_NORMAL - 12] = sText_WeatherNormal,
-    [STRINGID_RUDE_AWAKENING - 12] = sText_RudeAwakening,
+    [STRINGID_KNOW_YOUR_PLACE - 12] = sText_KnowYourPlace,
     [STRINGID_ROOMS_CLEARED - 12] = sText_RoomsCleared,
     [STRINGID_TREPIDATION - 12] = sText_Trepidation,
     [STRINGID_KINESIS - 12] = sText_Kinesis,
@@ -1932,6 +1933,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_TRAPPED - 12] = sText_Trapped,
     [STRINGID_HONEYGATHER - 12] = sText_HoneyGather,
     [STRINGID_LIFE_STEAL - 12] = sText_LifeSteal,
+    [STRINGID_RUDE_AWAKENING - 12] = sText_RudeAwakening,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

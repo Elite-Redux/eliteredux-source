@@ -705,6 +705,7 @@ static const u8 sAbilityApeShiftDescription[] = _("Anger Point + Heal status and
 static const u8 sAbilityKnowYourPlaceDescription[] = _("Contact attacks make foes move\nlast for 5 turns.");
 static const u8 sAbilityDeepCutsDescription[] = _("Slashing moves have a 50%\nchance to inflict bleeding.");
 static const u8 sAbilityLifeStealDescription[] = _("Steals 1/10 HP from foes each\nturn.");
+static const u8 sAbilityRudeAwakeningDescription[] = _("Raises all stats becomes immune\nto sleep after waking up.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1446,6 +1447,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_KNOW_YOUR_PLACE] = _("Know Your Place"),
     [ABILITY_DEEP_CUTS] = _("Deep Cuts"),
     [ABILITY_LIFE_STEAL] = _("Life Steal"),
+    [ABILITY_RUDE_AWAKENING] = _("Rude Awakening"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2188,4 +2190,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_KNOW_YOUR_PLACE] = sAbilityKnowYourPlaceDescription,
     [ABILITY_DEEP_CUTS] = sAbilityDeepCutsDescription,
     [ABILITY_LIFE_STEAL] = sAbilityLifeStealDescription,
+    [ABILITY_RUDE_AWAKENING] = sAbilityRudeAwakeningDescription,
 };

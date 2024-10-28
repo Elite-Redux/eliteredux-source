@@ -110,8 +110,8 @@ typedef enum
 typedef enum
 {
     RESTRAINING_ORDER_NOT_TRIGGERED = 0,
-    RESTRAINING_ORDER_ACTIVATING = 1,
-    RESTRAINING_ORDER_DONE = 2,
+    RESTRAINING_ORDER_ACTIVATING,
+    RESTRAINING_ORDER_DONE,
 } RestrainingOrderState;
 
 typedef enum
