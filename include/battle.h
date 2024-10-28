@@ -124,8 +124,6 @@ struct VolatileStruct
     u8 perishSongTimer:4;
     u8 perishSongTimerStartValue:4;
     u8 rolloutCounter:2;
-    u8 chargeTimer:4;
-    u8 chargeTimerStartValue:4;
     u8 tauntTimer:4;
     u8 tauntTimer2:4;
     u8 mimickedMoves:4;
@@ -227,6 +225,12 @@ struct TurnStruct
     u8 physicalBattlerId;
     u8 specialBattlerId;
     u8 changedStatsBattlerId; // Battler that was responsible for the latest stat change. Can be self.
+    u8 multiHitsUsed:4;
+    u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
+    u8 mirrorHerbStat:4;
+    u8 multiHitCounter:4;
+    u8 parentalBondOn:3;
+    u8 parentalBondInitialCount:3;
     u8 statLowered:1;
     u8 lightningRodRedirected:1;
     u8 restoredBattlerSprite: 1;
@@ -242,16 +246,10 @@ struct TurnStruct
     u8 berryReduced:1;
     u8 gemBoost:1;
     u8 rototillerAffected:1;  // to be affected by rototiller
-    u8 parentalBondOn:3;
-    u8 parentalBondInitialCount:3;
-    u8 multiHitOn:1;
-    u8 damagedMons:4; // Mons that have been damaged directly by using a move, includes substitute.
     u8 dancerUsedMove:1;
     u8 announceNeutralizingGas:1;   // See Cmd_switchineffects
     u8 neutralizingGasRemoved:1;    // See VARIOUS_TRY_END_NEUTRALIZING_GAS
     u8 pranksterElevated:1;
-    u8 mirrorHerbStat:4;
-    u8 multiHitCounter:4;
     u8 shouldTriggerSwitchItem:1;
     u8 haloed:1;
     u8 sleepTalk:1;
@@ -302,10 +300,10 @@ struct SideTimer
     u8 swampTimer;
     u8 fireSeaTimer;
     u8 rainbowTimer;
-    u8 followmeTarget:3;
-    u8 followmePowder:1; // Rage powder, does not affect grass type pokemon.
     u8 smokescreenTimer:3;
     u8 smokescreenBattler:2;
+    u8 followmeTarget:3;
+    u8 followmePowder:1; // Rage powder, does not affect grass type pokemon.
     u8 hotCoals:1;
     u8 caltrops:1;
     u8 quickGuardTimer:3;

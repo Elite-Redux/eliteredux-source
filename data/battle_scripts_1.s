@@ -121,7 +121,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectDestinyBond             @ EFFECT_DESTINY_BOND
 	.4byte BattleScript_EffectHit                     @ EFFECT_FLAIL
 	.4byte BattleScript_EffectSpite                   @ EFFECT_SPITE
-	.4byte BattleScript_EffectHit                     @ EFFECT_FALSE_SWIPE
+	.4byte BattleScript_EffectArgumentHit             @ EFFECT_FALSE_SWIPE
 	.4byte BattleScript_EffectHealBell                @ EFFECT_HEAL_BELL
 	.4byte BattleScript_EffectHit                     @ EFFECT_ALWAYS_CRIT
 	.4byte BattleScript_EffectHit                     @ EFFECT_TRIPLE_KICK
@@ -3628,6 +3628,17 @@ BattleScript_EffectToxicHit:
 	setmoveeffect MOVE_EFFECT_TOXIC
 	goto BattleScript_EffectHit
 
+BattleScript_AbilityDrainsHp::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_LIFE_STEAL
+	waitmessage B_WAIT_TIME_LONG
+	healthbarupdate BS_TARGET
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	manipulatedamage DMG_CHANGE_SIGN
+	call BattleScript_AbsorbLeech
+	end2
+
 BattleScript_EffectAbsorb::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -3649,6 +3660,10 @@ BattleScript_EffectAbsorb::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_AbsorbHeal:
 	manipulatedamage DMG_TO_HP_FROM_MOVE
+	call BattleScript_AbsorbLeech
+	goto BattleScript_MoveEnd
+
+BattleScript_AbsorbLeech:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
 	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze
 	jumpifability BS_ATTACKER, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinker
@@ -3656,7 +3671,6 @@ BattleScript_AbsorbHeal:
 	setbyte cMULTISTRING_CHOOSER, B_MSG_ABSORB
 	goto BattleScript_AbsorbUpdateHp
 BattleScript_AbsorbSoulLinker::
-	sethword sABILITY_OVERWRITE, ABILITY_SOUL_LINKER
 	call BattleScript_AbilityPopUp
     orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
 	healthbarupdate BS_TARGET
@@ -3679,10 +3693,10 @@ BattleScript_AbsorbTryFainting::
 	tryfaintmon BS_TARGET, FALSE, NULL
 	jumpifability BS_ATTACKER, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinkerChangeSign
 	jumpifability BS_TARGET, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinkerChangeSign
-	goto BattleScript_MoveEnd
+	return
 BattleScript_AbsorbSoulLinkerChangeSign::
 	manipulatedamage DMG_CHANGE_SIGN
-	goto BattleScript_MoveEnd
+	return
 
 
 BattleScript_EffectMatchaGotcha::
@@ -3727,10 +3741,8 @@ BattleScript_EffectParalyzeHit::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectAttracttHit::
-	argumenttomoveeffect
-	call BattleScript_EffectHit_Return
-	trytoapplymoveeffect BattleScript_MoveEffectAttract
-	goto BattleScript_MoveEnd
+	setmoveeffect MOVE_EFFECT_ATTRACT
+	goto BattleScript_EffectHit
 	
 BattleScript_MoveEffectAttract::
 	statusanimation BS_EFFECT_BATTLER
@@ -7938,8 +7950,8 @@ BattleScript_LeechSeedTurnDrain::
 	copyword gBattleMoveDamage, gHpDealt
 	jumpifability BS_ATTACKER, ABILITY_LIQUID_OOZE, BattleScript_LeechSeedTurnPrintLiquidOoze
 	setbyte cMULTISTRING_CHOOSER, B_MSG_LEECH_SEED_DRAIN
-	jumpifhealingblocked BS_TARGET, BattleScript_LeechSeedHealBlock
-	jumpifstatus BS_TARGET, STATUS1_BLEED, BattleScript_LeechSeedHealBlock
+	jumpifhealingblocked BS_ATTACKER, BattleScript_LeechSeedHealBlock
+	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_LeechSeedHealBlock
 	manipulatedamage DMG_BIG_ROOT
 	goto BattleScript_LeechSeedTurnPrintAndUpdateHp
 BattleScript_LeechSeedTurnPrintLiquidOoze::
@@ -8854,6 +8866,7 @@ BattleScript_MegaEvolution::
 	waitmessage B_WAIT_TIME_LONG
 	saveattackerandtargetto34
 	switchinabilities BS_ATTACKER
+BattleScript_End2::
 	end2
 
 BattleScript_WishMegaEvolution::
@@ -8910,20 +8923,43 @@ BattleScript_AttackerFormChangeNoPopup::
 	switchinabilities BS_ATTACKER
 	return
 
+BattleScript_DoRudeAwakening::
+	curestatus BS_ATTACKER
+	updatestatusicon BS_ATTACKER
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_RUDE_AWAKENING
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_AllStatsUp @ implicit return
+
 BattleScript_ApeShift::
 	saveattackertostack3
 	copybyte gBattlerAttacker, gStackBattler1
 	call BattleScript_AttackerFormChangeNoPopup
+	jumpifspecies BS_ATTACKER, SPECIES_SLAKING_MEGA, BattleScript_RestoreAttackerReturn
 	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_ApeShift_HealStatus
 BattleScript_RestoreAttackerReturn:
 	readattackerfromstack3
 	return
 BattleScript_ApeShift_HealStatus:
+	checkrudeawakening BattleScript_RestoreAttackerReturn
 	curestatus BS_ATTACKER
 	updatestatusicon BS_ATTACKER
 	printstring STRINGID_PKMNSTATUSNORMAL
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_RestoreAttackerReturn
+
+BattleScript_TeraformZero::
+	call BattleScript_AbilityPopUp
+	removeweather
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_TeraformZero_ClearTerrain
+	printfromtable gWeatherCleared
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_TeraformZero_ClearTerrain:
+	removeterrain
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PSYCHICTERRAINENDS + 1, BattleScript_End3
+	printfromtable gTerrainEndingStringIds
+	waitmessage B_WAIT_TIME_LONG
+	end3
 
 BattleScript_AttackerFormChangeEnd3::
 	call BattleScript_AttackerFormChange
@@ -9031,6 +9067,8 @@ BattleScript_MoveUsedIsAsleep::
 	goto BattleScript_MoveEnd
 
 BattleScript_MoveUsedWokeUp::
+	checkrudeawakening BattleScript_Return
+	curestatus BS_ATTACKER
 	bicword gHitMarker, HITMARKER_x10
 	printfromtable gWokeUpStringIds
 	waitmessage B_WAIT_TIME_LONG
@@ -9062,27 +9100,14 @@ BattleScript_FuneralPyreDamage::
 	printstring STRINGID_PKMNHURTBYFUNERALPYRE
 	waitmessage B_WAIT_TIME_LONG
 	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	tryfaintmon BS_ATTACKER, FALSE, NULL
-	atk24 BattleScript_End2
-BattleScript_End2::
-	end2
+	goto BattleScript_DoTurnDmg
 
 BattleScript_ToxicWasteTurnDmg::
 	printstring STRINGID_PKMNHURTBYTOXICWASTE
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_DoToxicWasteTurnDmg::
 	chosenstatus1animation BS_ATTACKER, STATUS1_POISON
-BattleScript_ToxicWasteDoTurnDmg:
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	tryfaintmon BS_ATTACKER, FALSE, NULL
-	atk24 BattleScript_ToxicWasteDoTurnDmgEnd
-BattleScript_ToxicWasteDoTurnDmgEnd:
-	end2
+	goto BattleScript_DoTurnDmg
 
 BattleScript_PoisonHealActivates::
 	printstring STRINGID_POISONHEALHPUP
@@ -10051,6 +10076,12 @@ BattleScript_CheekPouchActivates::
 	call BattleScript_AbilityHpHeal
 	readattackerfromstack3
 	return
+
+BattleScript_HoneyGatherActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_HONEYGATHER
+	waitmessage B_WAIT_TIME_LONG
+	end3
 
 BattleScript_HarvestActivates::
 	tryrecycleitem BattleScript_HarvestActivatesEnd
@@ -11814,9 +11845,10 @@ BattleScript_AnnounceAirLockCloudNine::
 	call BattleScript_AbilityPopUp
 	removeweather
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_REMOVE_WEATHER_FAILED, BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
-	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_SUN_ENDS, BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
+	jumpifbyte CMP_LESS_THAN, cMULTISTRING_CHOOSER, B_MSG_SUN_ENDS, BattleScript_AnnounceAirLockCloudNine_Primal
 	printfromtable gWeatherCleared
 	goto BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged
+BattleScript_AnnounceAirLockCloudNine_Primal:
 	printstring STRINGID_AIRLOCKACTIVATES
 BattleScript_AnnounceAirLockCloudNine_OnWeatherChanged:
 	waitmessage B_WAIT_TIME_LONG
@@ -13068,7 +13100,7 @@ BattleScript_ClearSkiesEnds::
 
 BattleScript_TargetDazed::
 	call BattleScript_AbilityPopUp
-	printstring STRINGID_RUDE_AWAKENING
+	printstring STRINGID_KNOW_YOUR_PLACE
 	waitmessage B_WAIT_TIME_LONG
 	return
 

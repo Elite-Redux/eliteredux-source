@@ -400,7 +400,8 @@
 #define MOVE_EFFECT_MAKE_IT_RAIN           92
 #define MOVE_EFFECT_WYRM_WIND              93
 #define MOVE_EFFECT_SCALE_SHOT             94
-#define NUM_MOVE_EFFECTS                   94
+#define MOVE_EFFECT_DOUBLESLAP             95
+#define NUM_MOVE_EFFECTS                   95
 
 #define MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES 0x2000
 #define MOVE_EFFECT_AFFECTS_USER        0x4000

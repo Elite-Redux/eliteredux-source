@@ -1546,7 +1546,8 @@ static void Cmd_attackcanceler(void)
     int ability;
     if (((BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_COLOR_CHANGE) && (ability = ABILITY_COLOR_CHANGE)) ||
         (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_PRISMATIC_FUR) && (ability = ABILITY_PRISMATIC_FUR)))
-        && (gBattlerAttacker != gBattlerTarget)) {
+        && (gBattlerAttacker != gBattlerTarget)
+        && CheckAndSetOncePerTurnAbility(gBattlerTarget, ability)) {
         u32 currentType;
         u32 bestType = gBattleMons[gBattlerTarget].type1;
         u16 bestModifier = GetTypeModifier(moveType, bestType, gBattlerAttacker, gBattlerTarget);
@@ -1985,7 +1986,7 @@ static void Cmd_accuracycheck(void)
             gBattlescriptCurrInstr += 7;
     }
     else if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount
-        || (gTurnStructs[gBattlerAttacker].multiHitOn &&
+        || (gTurnStructs[gBattlerAttacker].multiHitsUsed &&
             (!(gBattleMoves[move].effect == EFFECT_TRIPLE_KICK ||
                gBattleMoves[move].effect == EFFECT_TEN_HITS)
         || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_KUNOICHI_BLADE)
@@ -3395,6 +3396,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
             
             if (gBattleScripting.moveEffect == MOVE_EFFECT_POISON || gBattleScripting.moveEffect == MOVE_EFFECT_TOXIC)
                 SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_POISON_PUPPETEER);
+            else if (gBattleScripting.moveEffect == MOVE_EFFECT_BURN)
+                SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_SET_ABLAZE);
             return;
         }
         else if (statusChanged == FALSE)
@@ -3526,6 +3529,11 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         gPaydayMoney = 0xFFFF;
                 }
                 BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
+                if (IsBattlerAlive(gBattlerTarget) && GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_AMULET_COIN
+                    && (gBattleMons[gBattlerAttacker].species == SPECIES_MEOWTH_PARTNER || gBattleMons[gBattlerAttacker].species == SPECIES_MEOWTH_PARTNER_MEGA))
+                {
+                    SET_MOVE_EFFECT_AS(MOVE_EFFECT_MAKE_IT_RAIN)
+                }
                 break;
             case MOVE_EFFECT_HAPPY_HOUR:
                 if (GET_BATTLER_SIDE(gBattlerAttacker) == B_SIDE_PLAYER && !gBattleStruct->moneyMultiplierMove)
@@ -3567,6 +3575,12 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
                 }
                 break;
+            case MOVE_EFFECT_ATTRACT:
+                if (CanInfatuate(gBattleScripting.battler, gEffectBattler))
+                {
+                    gBattleMons[gEffectBattler].status2 |= STATUS2_INFATUATED_WITH(gBattleScripting.battler);
+                    BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
+                }
             case MOVE_EFFECT_WRAP:
                 if (!(gBattleMons[gEffectBattler].status2 & STATUS2_WRAPPED))
                 {
@@ -3949,6 +3963,10 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             case MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1:
                 SET_MOVE_EFFECT_AS((MOVE_EFFECT_ATK_PLUS_1 - STAT_ATK + GetHighestStatIdExcept(gEffectBattler, FALSE, STAT_SPEED)) | affectsUser)
+                break;
+            case MOVE_EFFECT_DOUBLESLAP:
+                REQUIRE(gTurnStructs[gBattlerAttacker].multiHitsUsed >= 2)
+                SET_MOVE_EFFECT_AS(MOVE_EFFECT_CONFUSION | affectsUser)
                 break;
             }
         }
@@ -6316,8 +6334,7 @@ static void Cmd_moveend(void)
         case MOVEEND_MULTIHIT_MOVE:
             if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
             && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
-            && gTurnStructs[gBattlerAttacker].multiHitCounter
-            && !(gCurrentMove == MOVE_PRESENT && gBattleStruct->presentBasePower == 0)) // Silly edge case
+            && gTurnStructs[gBattlerAttacker].multiHitCounter) // Silly edge case
             {
                 gBattleScripting.multihitString[4]++;
                 if (--gTurnStructs[gBattlerAttacker].multiHitCounter == 0)
@@ -6343,7 +6360,7 @@ static void Cmd_moveend(void)
                         gHitMarker |= (HITMARKER_NO_PPDEDUCT | HITMARKER_NO_ATTACKSTRING);
                         gBattleScripting.animTargetsHit = 0;
                         gBattleScripting.moveendState = 0;
-                        gTurnStructs[gBattlerAttacker].multiHitOn = TRUE;
+                        gTurnStructs[gBattlerAttacker].multiHitsUsed++;
                         MoveValuesCleanUp();
                         BattleScriptPush(gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect]);
 						gBattlescriptCurrInstr = BattleScript_FlushMessageBox;
@@ -6358,7 +6375,7 @@ static void Cmd_moveend(void)
             }
             gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
             gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 0;
-            gTurnStructs[gBattlerAttacker].multiHitOn = 0;
+            gTurnStructs[gBattlerAttacker].multiHitsUsed = 0;
             gBattleScripting.moveendState++;
             break;
         case MOVEEND_CHARGE:
@@ -10991,6 +11008,11 @@ static void Cmd_various(void)
                     SetActiveAbilityPopupOverride(ABILITY_VITAL_SPIRIT);
                     gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
                 }
+                else if (GetAbilityState(gActiveBattler, ABILITY_RUDE_AWAKENING))
+                {
+                    SetActiveAbilityPopupOverride(ABILITY_RUDE_AWAKENING);
+                    gBattlescriptCurrInstr = BattleScript_LeafGuardProtects;
+                }
                 else if (IsBattlerTerrainAffected(gActiveBattler, STATUS_FIELD_ELECTRIC_TERRAIN)) gBattlescriptCurrInstr = BattleScript_ElectricTerrainPrevents;
                 else if ((ability = IsAbilityOnSide(gActiveBattler, ABILITY_SWEET_VEIL)))
                 {
@@ -11410,6 +11432,16 @@ static void Cmd_various(void)
             gSideTimers[GetBattlerSide(gActiveBattler)].quickGuardTimer = 3;
             gSideTimers[GetBattlerSide(gActiveBattler)].started.quickGuard = TRUE;
         }
+    case VARIOUS_RUDE_AWAKENING:
+        ptr = READ_PTR_INC;
+        REQUIRE(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
+        REQUIRE(BattlerHasAbility(gActiveBattler, ABILITY_RUDE_AWAKENING, FALSE))
+        SetAbilityState(gActiveBattler, ABILITY_RUDE_AWAKENING, TRUE);
+        gBattleScripting.abilityPopupOverwrite = ABILITY_RUDE_AWAKENING;
+        gBattlerAbility = gActiveBattler;
+        BattleScriptPush(ptr);
+        gBattlescriptCurrInstr = BattleScript_DoRudeAwakening;
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 

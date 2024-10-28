@@ -3391,6 +3391,7 @@ void SwitchInClearSetData(void)
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_POISON_PUPPETEER);
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_BLOODLUST);
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_BLOOD_BATH);
+        ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_SET_ABLAZE);
     }
 
     // Remove any queued out-of-turn attacks

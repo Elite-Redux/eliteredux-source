@@ -7,8 +7,8 @@ static const u8 sMoveTwoLineDescription_MoveKarateChop[] = _(
     "high critical-hit ratio.");
 
 static const u8 sMoveTwoLineDescription_MoveDoubleSlap[] = _(
-    "Repeatedly slaps the foe\n"
-    "2 to 5 times.");
+    "Slaps the foe at least twice.\n"
+    "May cause confusion.");
 
 static const u8 sMoveTwoLineDescription_MoveCometPunch[] = _(
     "Repeatedly punches the foe\n"
@@ -3141,7 +3141,8 @@ static const u8 sMoveTwoLineDescription_MoveJaggedPunch[] = _(
     "Not done yet.");
 
 static const u8 sMoveTwoLineDescription_MoveCutsieSlap[] = _(
-    "Not done yet.");
+    "Slaps the foe cutely.\n"
+    "May cause infatuation.");
 
 static const u8 sMoveTwoLineDescription_MoveFairySpheres[] = _(
     "Not done yet.");
@@ -4906,7 +4907,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
 static const u8 sMoveFourLineDescription_MoveKarateChop[] = _("The foe is attacked\nwith a sharp chop.\nIt has a high\ncritical-hit ratio.");
-static const u8 sMoveFourLineDescription_MoveDoubleSlap[] = _("The foe is slapped\nrepeatedly, back\nand forth, two to\nfive times.");
+static const u8 sMoveFourLineDescription_MoveDoubleSlap[] = _("Repeatedly slaps the\nfoe. Each hit after the\nsecond has a 10%\nconfusion chance.");
 static const u8 sMoveFourLineDescription_MoveCometPunch[] = _("Hits 2 to 5 times.\nHas +1 priority.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveMegaPunch[] = _("The foe is slugged\nby a punch with\ngreat power.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MovePayDay[] = _("Numerous coins are\nhurled at the foe.\nMoney is earned\nafter battle.");
@@ -5109,7 +5110,7 @@ static const u8 sMoveFourLineDescription_MoveGigaDrain[] = _("A harsh attack tha
 static const u8 sMoveFourLineDescription_MoveEndure[] = _("The user endures\nany hit with 1 HP\nleft. It may fail if\nused in succession.");
 static const u8 sMoveFourLineDescription_MoveCharm[] = _("The foe is charmed\nby the user's cute\nappeals, sharply\ncutting its Attack.");
 static const u8 sMoveFourLineDescription_MoveRollout[] = _("A rolling attack\nthat becomes\nstronger each time\nit hits.");
-static const u8 sMoveFourLineDescription_MoveFalseSwipe[] = _("Always leaves the\nfoe with at\nleast 1 HP.\nKeen Edge boost.");
+static const u8 sMoveFourLineDescription_MoveFalseSwipe[] = _("Can't KO the foe.\n50% chance to inflict\nbleed.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveSwagger[] = _("A move that makes\nthe foe confused,\nbut also sharply\nraises its Attack.");
 static const u8 sMoveFourLineDescription_MoveMilkDrink[] = _("Heals the user by\nup to half its full\nHP. It can be used\nto heal an ally.");
 static const u8 sMoveFourLineDescription_MoveSpark[] = _("Rapid electrical\ntackle. Has 10%\nparalyze chance.\nHas +2 priority.");
@@ -5281,7 +5282,7 @@ static const u8 sMoveFourLineDescription_MoveFling[] = _("The user flings its\ni
 static const u8 sMoveFourLineDescription_MovePsychoShift[] = _("The user transfers\nits status problems\nto the target using\npsychic powers.");
 static const u8 sMoveFourLineDescription_MoveTrumpCard[] = _("A desperate attack\nthat deals critical\ndamage when the user\nis below 50% HP.");
 static const u8 sMoveFourLineDescription_MoveHealBlock[] = _("The foe cannot use\nany moves, held\nitems or Abilities\nthat recover HP.");
-static const u8 sMoveFourLineDescription_MoveWringOut[] = _("This attack will\nalso negate the\nfoe's Ability if it\nhas moved already.");
+static const u8 sMoveFourLineDescription_MoveWringOut[] = _("Negates abilities\nuntil switch out if the\nfoe moves first.\nIgnores abilities.");
 static const u8 sMoveFourLineDescription_MovePowerTrick[] = _("The user swaps its\nAttack and Defense\nstats and stat boosts.");
 static const u8 sMoveFourLineDescription_MoveGastroAcid[] = _("Stomach acids are\nspewed at the foe,\nnegating the effect\nof its Ability.");
 static const u8 sMoveFourLineDescription_MoveLuckyChant[] = _("For 5 turns, the\nfoe is prevented\nfrom landing\ncritical hits.");
@@ -5513,7 +5514,7 @@ static const u8 sMoveFourLineDescription_MoveCelebrate[] = _("The Pokémon\ncong
 static const u8 sMoveFourLineDescription_MoveHoldHands[] = _("The user and ally\nhold hands. This\nmakes them very\nhappy.");
 static const u8 sMoveFourLineDescription_MoveBabyDollEyes[] = _("Before it can move,\nthe foe's Attack\nstat is lowered by\nan adorable stare.");
 static const u8 sMoveFourLineDescription_MoveNuzzle[] = _("The user's\nelectrified cheeks\nnuzzle the foe,\nparalyzing the foe.");
-static const u8 sMoveFourLineDescription_MoveHoldBack[] = _("Always leaves the\nfoe with at\nleast 1 HP.\nKeen Edge boost.");
+static const u8 sMoveFourLineDescription_MoveHoldBack[] = _("Can't KO the foe.\n50% chance to cause\nconfusion.");
 static const u8 sMoveFourLineDescription_MoveInfestation[] = _("The foe is infested\nfor 4 or 5 turns.\nThe foe cannot flee\nduring this time.");
 static const u8 sMoveFourLineDescription_MovePowerUpPunch[] = _("The user strikes,\nstrengthening its\nfists. This raises\ntheir Attack stat.");
 static const u8 sMoveFourLineDescription_MoveOblivionWing[] = _("The user absorbs\nover 75% of the\ndamage inflicted.\nAir-based.");
@@ -5692,7 +5693,7 @@ static const u8 sMoveFourLineDescription_MoveKineticBarrage[] = _("Lifts up obje
 static const u8 sMoveFourLineDescription_MoveFertileFangs[] = _("Inserts ingraining fangs.\n10% chance to apply\nLeech Seed.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveScatterBlast[] = _("A blast of sand\nthat scatters Stealth\nRocks. Mega Launcher\nboost.");
 static const u8 sMoveFourLineDescription_MoveJaggedPunch[] = _("The foe is punched\nby a stony fist.\n10% chance to set\nStealth Rocks.");
-static const u8 sMoveFourLineDescription_MoveCutsieSlap[] = _("The foe is slapped\nlovely. 10%\ninfatuation chance.\nIron Fist boost.");
+static const u8 sMoveFourLineDescription_MoveCutsieSlap[] = _("The foe is slapped\ncutely. 10%\ninfatuation chance.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveFairySpheres[] = _("Magical spheres hit\n2 to 5 times.\nHits SpDef.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveBrambleBlast[] = _("Fires thorny brambles.\n20% chance to\napply Leech Seed.\nArcher boost.");
 static const u8 sMoveFourLineDescription_MoveAsteroidDownfall[] = _("Launches a small\nasteroid onto the\ntarget. Cannot miss.\nMega Launcher boost.");

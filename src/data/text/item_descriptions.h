@@ -1138,9 +1138,9 @@ static const u8 sSilverPowderDesc[] = _(
     "Bug-type moves.");
 
 static const u8 sAmuletCoinDesc[] = _(
-    "Doubles money in\n"
-    "battle if the\n"
-    "holder takes part.");
+    "Increases the power\n"
+    "of Partner Meowth"
+    "and boosts Pay Day.");
 
 static const u8 sCleanseTagDesc[] = _(
     "A hold item that\n"
@@ -3702,9 +3702,9 @@ static const u8 sAdrenalineOrbDesc[] = _(
     "but only one time.");
 
 static const u8 sHoneyDesc[] = _(
-    "Sweet honey that\n"
-    "attracts wild\n"
-    "Pokémon when used.");
+    "Attracts wild Pokemon.\n"
+    "Can be used by bees\n"
+    "to restore HP.");
 
 static const u8 sIronPillDesc[] = _(
     "Sets Speed IVs\n"

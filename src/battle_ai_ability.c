@@ -741,19 +741,6 @@ int ScoreEitherAbility(int ability, int battlerAtk, int battlerDef, int move, in
     case ABILITY_MENACING_SITUATION:
         REQUIRE(aiData->moveState.contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_FEAR(battlerDef));
-    
-    case ABILITY_ENTRANCE:
-        // TODO: Entrance handled in confusion scoring
-        return 0;
-    
-    case ABILITY_POISON_PUPPETEER:
-        // TODO: Poison Puppeteer handled in poison scoring
-        return 0;
-    
-    case ABILITY_BLOODLUST:
-    case ABILITY_BLOOD_BATH:
-        // TODO: Bloodlust/Blood Bath handled in bleed scoring
-        return 0;
     }
     return 0;
 }

@@ -110,8 +110,8 @@ typedef enum
 typedef enum
 {
     RESTRAINING_ORDER_NOT_TRIGGERED = 0,
-    RESTRAINING_ORDER_ACTIVATING = 1,
-    RESTRAINING_ORDER_DONE = 2,
+    RESTRAINING_ORDER_ACTIVATING,
+    RESTRAINING_ORDER_DONE,
 } RestrainingOrderState;
 
 typedef enum
@@ -363,6 +363,7 @@ int HasAnyStatusOrAbility(int battler);
 void RepopulateAbilities(int battler);
 int GetBattlerAbility(int battler);
 void HandleFollowupAttackAbilities(int battler, int target, int move);
+int CheckAndSetOncePerTurnAbility(int battler, int ability);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);

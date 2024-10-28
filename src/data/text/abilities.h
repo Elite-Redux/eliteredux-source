@@ -111,7 +111,7 @@ static const u8 sAbilityScrappyDescription[] = _("Normal/Fighting can hit Ghosts
 static const u8 sAbilityStormDrainDescription[] = _("Redirects Water moves.\nAbsorbs them, ups highest Atk.");
 static const u8 sAbilityIceBodyDescription[] = _("Heals 1/8 of max HP every turn\nin hail.");
 static const u8 sAbilitySnowWarningDescription[] = _("Summons hail on entry.\nLasts 8 turns.");
-static const u8 sAbilityHoneyGatherDescription[] = _("May hold Honey after battle.\nNo use in battle.");
+static const u8 sAbilityHoneyGatherDescription[] = _("Has a 50% chance to find Honey\neach turn.");
 static const u8 sAbilityFriskDescription[] = _("Checks foes' item and disables\ntheir items for two turns.");
 static const u8 sAbilityRecklessDescription[] = _("Moves causing recoil damage\ndeal 1.2x more damage.");
 static const u8 sAbilityMultitypeDescription[] = _("Held Plate item decides holder's\ntype.");
@@ -704,6 +704,10 @@ static const u8 sAbilityTaekkyeonDescription[] = _("All attacks are dances.");
 static const u8 sAbilityApeShiftDescription[] = _("Anger Point + Heal status and\nalways crits with below 50% HP.");
 static const u8 sAbilityKnowYourPlaceDescription[] = _("Contact attacks make foes move\nlast for 5 turns.");
 static const u8 sAbilityDeepCutsDescription[] = _("Slashing moves have a 50%\nchance to inflict bleeding.");
+static const u8 sAbilityLifeStealDescription[] = _("Steals 1/10 HP from foes each\nturn.");
+static const u8 sAbilityRudeAwakeningDescription[] = _("Raises all stats becomes immune\nto sleep after waking up.");
+static const u8 sAbilityTeraformZeroDescription[] = _("Tera Shell + clears weather and\nterrain on first entry.");
+static const u8 sAbilitySetAblazeDescription[] = _("Inflicting burn also inflicts fear.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1444,6 +1448,10 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_APE_SHIFT] = _("Ape Shift"),
     [ABILITY_KNOW_YOUR_PLACE] = _("Know Your Place"),
     [ABILITY_DEEP_CUTS] = _("Deep Cuts"),
+    [ABILITY_LIFE_STEAL] = _("Life Steal"),
+    [ABILITY_RUDE_AWAKENING] = _("Rude Awakening"),
+    [ABILITY_TERAFORM_ZERO] = _("Teraform Zero"),
+    [ABILITY_SET_ABLAZE] = _("Set Ablaze"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2185,4 +2193,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_APE_SHIFT] = sAbilityApeShiftDescription,
     [ABILITY_KNOW_YOUR_PLACE] = sAbilityKnowYourPlaceDescription,
     [ABILITY_DEEP_CUTS] = sAbilityDeepCutsDescription,
+    [ABILITY_LIFE_STEAL] = sAbilityLifeStealDescription,
+    [ABILITY_RUDE_AWAKENING] = sAbilityRudeAwakeningDescription,
+    [ABILITY_TERAFORM_ZERO] = sAbilityTeraformZeroDescription,
+    [ABILITY_SET_ABLAZE] = sAbilitySetAblazeDescription,
 };
