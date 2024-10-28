@@ -9200,10 +9200,8 @@ static void Cmd_various(void)
                 gBattleScripting.abilityPopupOverwrite = ABILITY_JAWS_OF_CARNAGE;
                 curehalfhealth = TRUE;
             }
-            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BLOODLUST)) {
+            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BLOODLUST))
                 gBattleScripting.abilityPopupOverwrite = ABILITY_BLOODLUST;
-                curehalfhealth = TRUE;
-            }
             else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SOUL_EATER))
                 gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_EATER;
             else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SCAVENGER))
