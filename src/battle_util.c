@@ -14333,96 +14333,50 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
             BattleScriptCall(BattleScript_AbilitySetFear);
             return TRUE;
         
-        case ABILITY_ENTRANCE:
-            {
-            int flag = GetAbilityState(battler, ability);
-            int any = FALSE;
-            int realAttacker = gBattlerAttacker;
-            int realTarget = gBattlerTarget;
-            gBattlerAttacker = battler;
-            SetAbilityState(battler, ability, 0);
-
-            for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++)
-            {
-                if (!(flag & (1 << gBattlerTarget))) continue;
-                if (!IsBattlerAlive(gBattlerTarget)) continue;
-                if (!CanInfatuate(battler, gBattlerTarget)) continue;
-
-                gBattleScripting.moveEffect = MOVE_EFFECT_ATTRACT;
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                SetMoveEffect(FALSE, FALSE);
-                any = TRUE;
-            }
-            gBattlerAttacker = realAttacker;
-            gBattlerTarget = realTarget;
-            if (any)
-            {
-                BattleScriptCall(BattleScript_AbilityPopUp);
-                return TRUE;
-            }
-            }
+        #define POISON_PUPPETEER_CLONE(validCheck, effect) \
+            { \
+            int flag = GetAbilityState(battler, ability); \
+            int any = FALSE; \
+            int realAttacker = gBattlerAttacker; \
+            int realTarget = gBattlerTarget; \
+            gBattlerAttacker = battler; \
+            SetAbilityState(battler, ability, 0); \
+            \
+            for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++) \
+            { \
+                if (!(flag & (1 << gBattlerTarget))) continue; \
+                if (!IsBattlerAlive(gBattlerTarget)) continue; \
+                if (!(validCheck)) continue; \
+                \
+                gBattleScripting.moveEffect = effect; \
+                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD; \
+                SetMoveEffect(FALSE, FALSE); \
+                any = TRUE; \
+            } \
+            gBattlerAttacker = realAttacker; \
+            gBattlerTarget = realTarget; \
+            if (any) \
+            { \
+                BattleScriptCall(BattleScript_AbilityPopUp); \
+                return TRUE; \
+            } \
+            } \
             break;
         
+        case ABILITY_ENTRANCE:
+            POISON_PUPPETEER_CLONE(CanInfatuate(battler, gBattlerTarget), MOVE_EFFECT_ATTRACT)
+        
         case ABILITY_POISON_PUPPETEER:
-            {
-            int flag = GetAbilityState(battler, ability);
-            int any = FALSE;
-            int realAttacker = gBattlerAttacker;
-            int realTarget = gBattlerTarget;
-            gBattlerAttacker = battler;
-            SetAbilityState(battler, ability, 0);
-
-            for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++)
-            {
-                if (!(flag & (1 << gBattlerTarget))) continue;
-                if (!IsBattlerAlive(gBattlerTarget)) continue;
-                if (!CanBeConfused(gBattlerTarget)) continue;
-
-                gBattleScripting.moveEffect = MOVE_EFFECT_CONFUSION;
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                SetMoveEffect(FALSE, FALSE);
-                any = TRUE;
-            }
-            gBattlerAttacker = realAttacker;
-            gBattlerTarget = realTarget;
-            if (any)
-            {
-                BattleScriptCall(BattleScript_AbilityPopUp);
-                return TRUE;
-            }
-            }
-            break;
+            POISON_PUPPETEER_CLONE(CanBeConfused(gBattlerTarget), MOVE_EFFECT_CONFUSION)
         
         case ABILITY_BLOODLUST:
         case ABILITY_BLOOD_BATH:
-            {
-            int flag = GetAbilityState(battler, ability);
-            int any = FALSE;
-            int realAttacker = gBattlerAttacker;
-            int realTarget = gBattlerTarget;
-            gBattlerAttacker = battler;
-            SetAbilityState(battler, ability, 0);
-
-            for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++)
-            {
-                if (!(flag & (1 << gBattlerTarget))) continue;
-                if (!IsBattlerAlive(gBattlerTarget)) continue;
-                if (gVolatileStructs[gBattlerTarget].fear) continue;
-
-                gBattleScripting.moveEffect = MOVE_EFFECT_FEAR;
-                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-                SetMoveEffect(FALSE, FALSE);
-                any = TRUE;
-            }
-            gBattlerAttacker = realAttacker;
-            gBattlerTarget = realTarget;
-            if (any)
-            {
-                BattleScriptCall(BattleScript_AbilityPopUp);
-                return TRUE;
-            }
-            }
-            break;
+            POISON_PUPPETEER_CLONE(!gVolatileStructs[gBattlerTarget].fear, MOVE_EFFECT_FEAR)
+        
+        case ABILITY_SET_ABLAZE:
+            POISON_PUPPETEER_CLONE(CanBeBurned(gBattlerTarget), MOVE_EFFECT_FEAR)
+        
+        #undef POISON_PUPPETEER_CLONE
     }
 
     return FALSE;

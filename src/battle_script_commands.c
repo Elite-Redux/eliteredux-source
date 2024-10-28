@@ -3396,6 +3396,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
             
             if (gBattleScripting.moveEffect == MOVE_EFFECT_POISON || gBattleScripting.moveEffect == MOVE_EFFECT_TOXIC)
                 SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_POISON_PUPPETEER);
+            else if (gBattleScripting.moveEffect == MOVE_EFFECT_BURN)
+                SetBattlerAffectedFlag(gBattleScripting.battler, gEffectBattler, ABILITY_SET_ABLAZE);
             return;
         }
         else if (statusChanged == FALSE)
