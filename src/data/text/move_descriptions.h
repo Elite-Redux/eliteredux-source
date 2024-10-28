@@ -7,8 +7,8 @@ static const u8 sMoveTwoLineDescription_MoveKarateChop[] = _(
     "high critical-hit ratio.");
 
 static const u8 sMoveTwoLineDescription_MoveDoubleSlap[] = _(
-    "Repeatedly slaps the foe\n"
-    "2 to 5 times.");
+    "Slaps the foe at least twice.\n"
+    "May cause confusion.");
 
 static const u8 sMoveTwoLineDescription_MoveCometPunch[] = _(
     "Repeatedly punches the foe\n"
@@ -4907,7 +4907,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
 static const u8 sMoveFourLineDescription_MoveKarateChop[] = _("The foe is attacked\nwith a sharp chop.\nIt has a high\ncritical-hit ratio.");
-static const u8 sMoveFourLineDescription_MoveDoubleSlap[] = _("The foe is slapped\nrepeatedly, back\nand forth, two to\nfive times.");
+static const u8 sMoveFourLineDescription_MoveDoubleSlap[] = _("Repeatedly slaps the\nfoe. Each hit after the\nsecond has a 10%\nconfusion chance.");
 static const u8 sMoveFourLineDescription_MoveCometPunch[] = _("Hits 2 to 5 times.\nHas +1 priority.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveMegaPunch[] = _("The foe is slugged\nby a punch with\ngreat power.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MovePayDay[] = _("Numerous coins are\nhurled at the foe.\nMoney is earned\nafter battle.");

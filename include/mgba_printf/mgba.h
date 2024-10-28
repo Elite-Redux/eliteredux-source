@@ -46,9 +46,9 @@ void MgbaPrintEncoded(s32 level, const char *encodedString);
 #define MGBA_ASSERT(exp) (exp) ? ((void*)0) : MgbaAssert(__FILE__, __LINE__, #exp, 1);
 #define MGBA_WARNING(exp) (exp) ? ((void*)0) : MgbaAssert(__FILE__, __LINE__, #exp, 0);
 
-#define MGBA_PRINT_DEBUG(...) \
+#define MGBA_PRINT_DEBUG(string, ...) \
 MgbaOpen(); \
-MgbaPrintf(MGBA_LOG_DEBUG, __VA_ARGS__); \
+MgbaPrintf(MGBA_LOG_DEBUG, "Line %d: " string, __LINE__, 0 + __VA_ARGS__ + 0); \
 MgbaClose();
 
 #ifdef __cplusplus

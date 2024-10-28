@@ -996,8 +996,6 @@ void BattleTv_SetDataBasedOnMove(u16 move, u16 weatherFlags, struct VolatileStru
     tvPtr->side[atkSide].usedMoveSlot = moveSlot;
     AddMovePoints(PTS_MOVE_EFFECT, moveSlot, gBattleMoves[move].effect, 0);
     AddPointsBasedOnWeather(weatherFlags, move, moveSlot);
-    if (volatileStructPtr->chargeTimer != 0)
-        AddMovePoints(PTS_ELECTRIC, move, moveSlot, 0);
 
     if (move == MOVE_WISH)
     {

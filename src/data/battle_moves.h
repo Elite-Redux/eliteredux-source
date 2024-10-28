@@ -42,11 +42,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 10,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 10,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
         .parentalBondBanned = TRUE,
+        .argument = MOVE_EFFECT_DOUBLESLAP,
     },
     [MOVE_COMET_PUNCH] =
     {

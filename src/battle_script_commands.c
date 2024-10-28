@@ -1986,7 +1986,7 @@ static void Cmd_accuracycheck(void)
             gBattlescriptCurrInstr += 7;
     }
     else if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount
-        || (gTurnStructs[gBattlerAttacker].multiHitOn &&
+        || (gTurnStructs[gBattlerAttacker].multiHitsUsed &&
             (!(gBattleMoves[move].effect == EFFECT_TRIPLE_KICK ||
                gBattleMoves[move].effect == EFFECT_TEN_HITS)
         || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_KUNOICHI_BLADE)
@@ -3963,6 +3963,10 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 break;
             case MOVE_EFFECT_HIGHEST_STAT_EXCEPT_SPEED_PLUS_1:
                 SET_MOVE_EFFECT_AS((MOVE_EFFECT_ATK_PLUS_1 - STAT_ATK + GetHighestStatIdExcept(gEffectBattler, FALSE, STAT_SPEED)) | affectsUser)
+                break;
+            case MOVE_EFFECT_DOUBLESLAP:
+                REQUIRE(gTurnStructs[gBattlerAttacker].multiHitsUsed >= 2)
+                SET_MOVE_EFFECT_AS(MOVE_EFFECT_CONFUSION | affectsUser)
                 break;
             }
         }
@@ -6330,8 +6334,7 @@ static void Cmd_moveend(void)
         case MOVEEND_MULTIHIT_MOVE:
             if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
             && !(gHitMarker & HITMARKER_UNABLE_TO_USE_MOVE)
-            && gTurnStructs[gBattlerAttacker].multiHitCounter
-            && !(gCurrentMove == MOVE_PRESENT && gBattleStruct->presentBasePower == 0)) // Silly edge case
+            && gTurnStructs[gBattlerAttacker].multiHitCounter) // Silly edge case
             {
                 gBattleScripting.multihitString[4]++;
                 if (--gTurnStructs[gBattlerAttacker].multiHitCounter == 0)
@@ -6357,7 +6360,7 @@ static void Cmd_moveend(void)
                         gHitMarker |= (HITMARKER_NO_PPDEDUCT | HITMARKER_NO_ATTACKSTRING);
                         gBattleScripting.animTargetsHit = 0;
                         gBattleScripting.moveendState = 0;
-                        gTurnStructs[gBattlerAttacker].multiHitOn = TRUE;
+                        gTurnStructs[gBattlerAttacker].multiHitsUsed++;
                         MoveValuesCleanUp();
                         BattleScriptPush(gBattleScriptsForMoveEffects[gBattleMoves[gCurrentMove].effect]);
 						gBattlescriptCurrInstr = BattleScript_FlushMessageBox;
@@ -6372,7 +6375,7 @@ static void Cmd_moveend(void)
             }
             gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
             gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 0;
-            gTurnStructs[gBattlerAttacker].multiHitOn = 0;
+            gTurnStructs[gBattlerAttacker].multiHitsUsed = 0;
             gBattleScripting.moveendState++;
             break;
         case MOVEEND_CHARGE:
