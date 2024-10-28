@@ -3526,6 +3526,11 @@ void SetMoveEffect(bool32 primary, u32 certain)
                         gPaydayMoney = 0xFFFF;
                 }
                 BattleScriptCall(sMoveEffectBS_Ptrs[gBattleScripting.moveEffect]);
+                if (IsBattlerAlive(gBattlerTarget) && GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_AMULET_COIN
+                    && (gBattleMons[gBattlerAttacker].species == SPECIES_MEOWTH_PARTNER || gBattleMons[gBattlerAttacker].species == SPECIES_MEOWTH_PARTNER_MEGA))
+                {
+                    SET_MOVE_EFFECT_AS(MOVE_EFFECT_MAKE_IT_RAIN)
+                }
                 break;
             case MOVE_EFFECT_HAPPY_HOUR:
                 if (GET_BATTLER_SIDE(gBattlerAttacker) == B_SIDE_PLAYER && !gBattleStruct->moneyMultiplierMove)
