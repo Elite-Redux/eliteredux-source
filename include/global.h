@@ -41,6 +41,9 @@
 #define ZERO(arr) memset(&arr, 0, sizeof(arr));
 #define ARRAY_MODULO(array, index) (array)[(index) % ARRAY_COUNT(array)]
 
+#define REQUIRE(effect) if (!(effect)) break;
+#define REQUIRE_NOT(effect) if (effect) break;
+
 // GameFreak used a macro called "NELEMS", as evidenced by
 // AgbAssert calls.
 #define NELEMS(arr) (sizeof(arr)/sizeof(*(arr)))

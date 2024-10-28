@@ -7074,6 +7074,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                     effect = ITEM_STATUS_CHANGE;
                 }
                 break;
+            case HOLD_EFFECT_HONEY:
             case HOLD_EFFECT_RESTORE_HP:
                 if (B_BERRIES_INSTANT >= GEN_4)
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
@@ -7155,6 +7156,18 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
         {
             switch (battlerHoldEffect)
             {
+            case HOLD_EFFECT_HONEY:
+                if (!moveTurn && ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE))
+                {
+                    effect = TRUE;
+                    break;
+                }
+                else
+                {
+                    int species = GET_BASE_SPECIES_ID(gBattleMons[battlerId].spDefense);
+                    REQUIRE(species == SPECIES_COMBEE || species == SPECIES_VESPIQUEN || species == SPECIES_BEEFENDER)
+                    goto LEFTOVERS;
+                }
             case HOLD_EFFECT_RESTORE_HP:
                 if (!moveTurn)
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
@@ -7453,6 +7466,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 if (B_HP_BERRIES >= GEN_4)
                     effect = TrySetMicleBerry(battlerId, gLastUsedItem, FALSE);
                 break;
+            case HOLD_EFFECT_HONEY:
             case HOLD_EFFECT_RESTORE_HP:
                 if (B_HP_BERRIES >= GEN_4)
                     effect = ItemHealHp(battlerId, gLastUsedItem, FALSE, FALSE);
@@ -12630,9 +12644,6 @@ gBattleScripting.moveEffect = effect; \
 BattleScriptCall(BattleScript_AbilityStatusEffect); \
 gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
 
-#define REQUIRE(effect) if (!(effect)) break;
-#define REQUIRE_NOT(effect) if (effect) break;
-
 int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) {
     int i, ability, moveType;
 
@@ -15810,6 +15821,15 @@ int HandleEndTurnAbilityAs(int ability, int battler)
                 if (AbilityHealMonStatus(battler, ability)) return TRUE;
             }
             break;
+        
+        case ABILITY_HONEY_GATHER:
+            REQUIRE_NOT(gBattleMons[battler].item)
+            REQUIRE(Random() % 2)
+
+            gBattleMons[battler].item = gLastUsedItem = ITEM_HONEY;
+            BattleScriptPushCursorAndCallback(BattleScript_HoneyGatherActivates);
+            return TRUE;
+
         
         case ABILITY_HARVEST:
         case ABILITY_BIG_LEAVES:

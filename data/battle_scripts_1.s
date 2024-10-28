@@ -10052,6 +10052,12 @@ BattleScript_CheekPouchActivates::
 	readattackerfromstack3
 	return
 
+BattleScript_HoneyGatherActivates::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_HONEYGATHER
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
 BattleScript_HarvestActivates::
 	tryrecycleitem BattleScript_HarvestActivatesEnd
 	call BattleScript_AbilityPopUp

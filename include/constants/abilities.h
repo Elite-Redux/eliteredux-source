@@ -122,7 +122,7 @@
 #define ABILITY_ICE_BODY 115 // Heals 1/8 of max HP every turn in hail.
 #define ABILITY_SOLID_ROCK 116 // Takes 35% less damage from Super-effective moves.
 #define ABILITY_SNOW_WARNING 117 // Summons hail on entry. Lasts 8 turns.
-#define ABILITY_HONEY_GATHER 118 // May hold Honey after battle. No use in battle.
+#define ABILITY_HONEY_GATHER 118 // Has a 50% chance to find Honey each turn.
 #define ABILITY_FRISK 119 // Checks foes' item and disables their items for two turns.
 #define ABILITY_RECKLESS 120 // Moves causing recoil damage deal 1.2x more damage.
 #define ABILITY_MULTITYPE 121 // Held Plate item decides holder's type.
