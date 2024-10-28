@@ -758,8 +758,10 @@
 #define ABILITY_DEEP_CUTS 736 // Slashing moves have a 50% chance to inflict bleeding.
 #define ABILITY_LIFE_STEAL 737 // Steals 1/10 HP from foes each turn.
 #define ABILITY_RUDE_AWAKENING 738 // Raises all stats becomes immune to sleep after waking up.
+#define ABILITY_TERAFORM_ZERO 739 // Tera Shell + clears weather and terrain on first entry.
+#define ABILITY_SET_ABLAZE 740 // Inflicting burn also inflicts fear.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_RUDE_AWAKENING + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SET_ABLAZE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

@@ -706,6 +706,8 @@ static const u8 sAbilityKnowYourPlaceDescription[] = _("Contact attacks make foe
 static const u8 sAbilityDeepCutsDescription[] = _("Slashing moves have a 50%\nchance to inflict bleeding.");
 static const u8 sAbilityLifeStealDescription[] = _("Steals 1/10 HP from foes each\nturn.");
 static const u8 sAbilityRudeAwakeningDescription[] = _("Raises all stats becomes immune\nto sleep after waking up.");
+static const u8 sAbilityTeraformZeroDescription[] = _("Tera Shell + clears weather and\nterrain on first entry.");
+static const u8 sAbilitySetAblazeDescription[] = _("Inflicting burn also inflicts fear.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1448,6 +1450,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DEEP_CUTS] = _("Deep Cuts"),
     [ABILITY_LIFE_STEAL] = _("Life Steal"),
     [ABILITY_RUDE_AWAKENING] = _("Rude Awakening"),
+    [ABILITY_TERAFORM_ZERO] = _("Teraform Zero"),
+    [ABILITY_SET_ABLAZE] = _("Set Ablaze"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2191,4 +2195,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DEEP_CUTS] = sAbilityDeepCutsDescription,
     [ABILITY_LIFE_STEAL] = sAbilityLifeStealDescription,
     [ABILITY_RUDE_AWAKENING] = sAbilityRudeAwakeningDescription,
+    [ABILITY_TERAFORM_ZERO] = sAbilityTeraformZeroDescription,
+    [ABILITY_SET_ABLAZE] = sAbilitySetAblazeDescription,
 };
