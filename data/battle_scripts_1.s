@@ -3628,6 +3628,17 @@ BattleScript_EffectToxicHit:
 	setmoveeffect MOVE_EFFECT_TOXIC
 	goto BattleScript_EffectHit
 
+BattleScript_AbilityDrainsHp::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_LIFE_STEAL
+	waitmessage B_WAIT_TIME_LONG
+	healthbarupdate BS_TARGET
+	healthbarupdate BS_TARGET
+	datahpupdate BS_TARGET
+	manipulatedamage DMG_CHANGE_SIGN
+	call BattleScript_AbsorbLeech
+	end2
+
 BattleScript_EffectAbsorb::
 	attackcanceler
 	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
@@ -3649,6 +3660,10 @@ BattleScript_EffectAbsorb::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_AbsorbHeal:
 	manipulatedamage DMG_TO_HP_FROM_MOVE
+	call BattleScript_AbsorbLeech
+	goto BattleScript_MoveEnd
+
+BattleScript_AbsorbLeech:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
 	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze
 	jumpifability BS_ATTACKER, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinker
@@ -3656,7 +3671,6 @@ BattleScript_AbsorbHeal:
 	setbyte cMULTISTRING_CHOOSER, B_MSG_ABSORB
 	goto BattleScript_AbsorbUpdateHp
 BattleScript_AbsorbSoulLinker::
-	sethword sABILITY_OVERWRITE, ABILITY_SOUL_LINKER
 	call BattleScript_AbilityPopUp
     orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
 	healthbarupdate BS_TARGET
@@ -3679,10 +3693,10 @@ BattleScript_AbsorbTryFainting::
 	tryfaintmon BS_TARGET, FALSE, NULL
 	jumpifability BS_ATTACKER, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinkerChangeSign
 	jumpifability BS_TARGET, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinkerChangeSign
-	goto BattleScript_MoveEnd
+	return
 BattleScript_AbsorbSoulLinkerChangeSign::
 	manipulatedamage DMG_CHANGE_SIGN
-	goto BattleScript_MoveEnd
+	return
 
 
 BattleScript_EffectMatchaGotcha::
@@ -8854,6 +8868,7 @@ BattleScript_MegaEvolution::
 	waitmessage B_WAIT_TIME_LONG
 	saveattackerandtargetto34
 	switchinabilities BS_ATTACKER
+BattleScript_End2::
 	end2
 
 BattleScript_WishMegaEvolution::
@@ -9062,27 +9077,14 @@ BattleScript_FuneralPyreDamage::
 	printstring STRINGID_PKMNHURTBYFUNERALPYRE
 	waitmessage B_WAIT_TIME_LONG
 	chosenstatus2animation BS_ATTACKER, STATUS2_CURSED
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	tryfaintmon BS_ATTACKER, FALSE, NULL
-	atk24 BattleScript_End2
-BattleScript_End2::
-	end2
+	goto BattleScript_DoTurnDmg
 
 BattleScript_ToxicWasteTurnDmg::
 	printstring STRINGID_PKMNHURTBYTOXICWASTE
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_DoToxicWasteTurnDmg::
 	chosenstatus1animation BS_ATTACKER, STATUS1_POISON
-BattleScript_ToxicWasteDoTurnDmg:
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	tryfaintmon BS_ATTACKER, FALSE, NULL
-	atk24 BattleScript_ToxicWasteDoTurnDmgEnd
-BattleScript_ToxicWasteDoTurnDmgEnd:
-	end2
+	goto BattleScript_DoTurnDmg
 
 BattleScript_PoisonHealActivates::
 	printstring STRINGID_POISONHEALHPUP

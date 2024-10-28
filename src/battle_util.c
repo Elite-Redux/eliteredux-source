@@ -3213,6 +3213,7 @@ u8 DoBattlerEndTurnEffects(void)
                 gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                 if (gBattleMoveDamage == 0)
                     gBattleMoveDamage = 1;
+                gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
                 BtlController_EmitStatusAnimation(0, FALSE, STATUS1_BURN);
                 MarkBattlerForControllerExec(gActiveBattler);
                 BattleScriptExecute(BattleScript_HurtByTheSeaOfFire);
@@ -3254,12 +3255,29 @@ u8 DoBattlerEndTurnEffects(void)
                 MAGIC_GUARD_CHECK;
 
                 gBattleScripting.abilityPopupOverwrite = ABILITY_FUNERAL_PYRE;
-                gBattleScripting.battlerPopupOverwrite = source;
+                gBattlerAbility = source - 1;
                 gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
                 gBattleMoveDamage = max(gBattleMoveDamage, 1);
                 BattleScriptExecute(BattleScript_FuneralPyreDamage);
                 effect++;
             }
+            }
+            gBattleStruct->turnEffectsTracker++;
+            break;
+        case ENDTURN_LIFE_STEAL_DAMAGE:
+            int source;
+            if (IsBattlerAlive(gActiveBattler) && (source = IsAbilityOnOpposingSide(gActiveBattler, ABILITY_LIFE_STEAL)))
+            {
+                MAGIC_GUARD_CHECK;
+
+                gBattleScripting.abilityPopupOverwrite = ABILITY_LIFE_STEAL;
+                gBattlerAbility = gBattlerAttacker = source - 1;
+                gBattlerTarget = gActiveBattler;
+                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 10;
+                if (!gBattleMoveDamage) gBattleMoveDamage = 1;
+                else if (gBattleMoveDamage > gBattleMons[gBattlerTarget].hp) gBattleMoveDamage = gBattleMons[gBattlerTarget].hp;
+                gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
+                BattleScriptExecute(BattleScript_AbilityDrainsHp);
             }
             gBattleStruct->turnEffectsTracker++;
             break;
