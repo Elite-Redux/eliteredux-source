@@ -2040,7 +2040,16 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
         else if (gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
             unusableMoves |= 1 << i;
         else if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP)
-            unusableMoves |= 1 << i;
+        {
+            int effect = gBattleMoves[gBattleMons[battlerId].moves[i]].effect;
+            if (effect == EFFECT_SPIT_UP || effect == EFFECT_SWALLOW)
+            {
+                if (!gVolatileStructs[battlerId].stockpileCounter)
+                    unusableMoves |= 1 << i;
+            }
+            else
+                unusableMoves |= 1 << i;
+        }
         else if (gBattleMons[battlerId].moves[i] == gVolatileStructs[battlerId].disabledMove && check & MOVE_LIMITATION_DISABLED)
             unusableMoves |= 1 << i;
         else if (gBattleMons[battlerId].moves[i] == gLastMoves[battlerId] && check & MOVE_LIMITATION_TORMENTED && gBattleMons[battlerId].status2 & STATUS2_TORMENT)
@@ -9095,20 +9104,12 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         #undef MUL_ATE
 
-        case ABILITY_SAND_SONG:
-            if (moveType == TYPE_GROUND && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
-            return;
-
-        case ABILITY_POWER_METAL:
-            if (moveType == TYPE_STEEL && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
-            return;
-
-        case ABILITY_SNOW_SONG:
-            if (moveType == TYPE_ICE && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
-            return;
-
+        case ABILITY_LIQUID_VOICE:
         case ABILITY_BANSHEE:
-            if (moveType == TYPE_GHOST && gBattleMoves[move].flags & FLAG_SOUND && gBattleStruct->ateBoost[battlerAtk]) MUL(1.2);
+        case ABILITY_SNOW_SONG:
+        case ABILITY_POWER_METAL:
+        case ABILITY_SAND_SONG:
+            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
             return;
         
         case ABILITY_AMPLIFIER:
@@ -9127,10 +9128,6 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         
         case ABILITY_DRAGONS_MAW:
             if (moveType == TYPE_DRAGON) MUL(1.5);
-            return;
-        
-        case ABILITY_LIQUID_VOICE:
-            if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
             return;
         
         case ABILITY_GORILLA_TACTICS:

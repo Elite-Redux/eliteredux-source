@@ -217,7 +217,7 @@
 #define ABILITY_BERSERK 201 // Boosts Sp. Atk by one stage when at 1/2 of max HP or lower.
 #define ABILITY_SLUSH_RUSH 202 // This Pokémon's Speed gets a 1.5x boost in hail.
 #define ABILITY_LONG_REACH 203 // Doesn't make contact. Boosts Phys. non-contact moves by 1.2x.
-#define ABILITY_LIQUID_VOICE 204 // Boosts own sound-based moves by 1.2x and makes them Water-type.
+#define ABILITY_LIQUID_VOICE 204 // Sound moves get a 1.2x boost and become Ground if Normal.
 #define ABILITY_TRIAGE 205 // Moves that have a healing effect gain +3 priority.
 #define ABILITY_GALVANIZE 206 // Normal-type moves become Elec.- type moves and get a 1.1x boost.
 #define ABILITY_SURGE_SURFER 207 // If Electric Terrain is active, gets a 1.5x Speed boost.
@@ -293,7 +293,7 @@
 #define ABILITY_KEEN_EDGE 271 // Boosts the power of slashing moves by 1.3x.
 #define ABILITY_PRISM_SCALES 272 // Takes 30% less damage from Special attacks.
 #define ABILITY_POWER_FISTS 273 // Iron Fist moves target Special Defense and get a 1.3x boost.
-#define ABILITY_SAND_SONG 274 // Normal sound moves become Ground and get a 1.2x boost.
+#define ABILITY_SAND_SONG 274 // Sound moves get a 1.2x boost and become Ground if Normal.
 #define ABILITY_RAMPAGE 275 // No recharge after a KO, if it usually would need to recharge.
 #define ABILITY_VENGEANCE 276 // Boosts Ghost-type moves by 1.2x, or 1.5x when below 1/3 HP.
 #define ABILITY_BLITZ_BOXER 277 // At full HP, gives +1 priority to this Pokémon's punching moves.
@@ -559,7 +559,7 @@
 #define ABILITY_SPIKE_ARMOR 537 // 30% chance to bleed on contact or offense.
 #define ABILITY_VOODOO_POWER 538 // 30% chance to bleed when hit by special attacks.
 #define ABILITY_CHROME_COAT 539 // Reduces special damage taken by 40%, but decreases Speed by 10%.
-#define ABILITY_BANSHEE 540 // Normal sound moves become Ghost and get a 1.2x boost.
+#define ABILITY_BANSHEE 540 // Sound moves get a 1.2x boost and become Ghost if Normal.
 #define ABILITY_WEB_SPINNER 541 // Uses String Shot on switch-in.
 #define ABILITY_SHOWDOWN_MODE 542 // Ambush + Violent Rush.
 #define ABILITY_SEED_SOWER 543 // Sets Grassy Terrain when hit. Heals party status when it does.
@@ -643,7 +643,7 @@
 #define ABILITY_ECTOPLASM 621 // Ups highest attacking stat by 1.5x in fog.
 #define ABILITY_BEAUTIFUL_MUSIC 622 // Sound-based moves have 50% chance to infatuate the foe.
 #define ABILITY_SURPRISE 623 // Astonishes enemy priority users in fog.
-#define ABILITY_SNOW_SONG 624 // Normal sound moves become Ice and get a 1.2x boost.
+#define ABILITY_SNOW_SONG 624 // Sound moves get a 1.2x boost and become Ice if Normal.
 #define ABILITY_GREATER_SPIRIT 625 // Ups highest stat by +1 on entry in fog.
 #define ABILITY_RESONANCE 626 // Sound moves cause the target to  bleed.
 #define ABILITY_ETHEREAL_RUSH 627 // This Pokémon's Speed gets a 1.5x boost in fog.
@@ -676,7 +676,7 @@
 #define ABILITY_WHITE_NOISE 654 // Combines Static and Rest in Peace.
 #define ABILITY_SMOKEY_MANEUVERS 655 // Evasion is boosted by 1.25x in fog.
 #define ABILITY_TAG 656 // Attacks switching opponents with a 20BP Pursuit.
-#define ABILITY_POWER_METAL 657 // Normal sound moves become Steel and get a 1.2x boost.
+#define ABILITY_POWER_METAL 657 // Sound moves get a 1.2x boost and become Steel if Normal.
 #define ABILITY_POWER_EDGE 658 // Keen Edge moves target Special Defense and get a 1.3x boost.
 #define ABILITY_SUPERCONDUCTOR 659 // Steel-type moves become Electric -type moves and get a 1.1x boost.
 #define ABILITY_ULTRA_INSTINCT 660 // Counters contact with Vacuum Wave. Takes 20% less damage.

@@ -9419,7 +9419,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 110,
         .type = TYPE_PSYCHIC,
         .accuracy = 80,
-        .pp = 5,
+        .pp = 10,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND | FLAG_WEATHER_BASED,
@@ -11606,6 +11606,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .priority = -6,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+        .hammerBased = TRUE,
     },
     [MOVE_FEMUR_BREAKER] =
     {
