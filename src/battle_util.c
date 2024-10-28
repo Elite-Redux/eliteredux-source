@@ -16153,7 +16153,7 @@ int HandleFollowupAttackAbilityAs(int ability, int battler, int target, int move
     switch (ability)
     {
     case ABILITY_BLADE_DANCE:
-        move = MOVE_LEAF_BLADE;
+        followupMove = MOVE_LEAF_BLADE;
     case ABILITY_TWO_STEP:
         REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
         REQUIRE(IsDance(gBattlerAttacker, move))
