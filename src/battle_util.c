@@ -14028,11 +14028,8 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             REQUIRE(IsBattlerAlive(battler))
             if (!(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
                 && gBattleMons[battler].species == SPECIES_SLAKING_MEGA
-                && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
+                && ShouldChangeFormHpBased(battler))
             {
-                UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_SLAKING_MEGA_APE_SHIFT);
-                gBattleMons[battler].species = SPECIES_SLAKING_MEGA_APE_SHIFT;
-
                 BattleScriptCall(BattleScript_ApeShift);
 
                 if (!HandleDefenderAbilityAs(ABILITY_ANGER_POINT, battler, attacker, move, moveType))
@@ -14718,10 +14715,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         case ABILITY_APE_SHIFT:
             REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
             REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA)
-            REQUIRE(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
-
-            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_SLAKING_MEGA_APE_SHIFT);
-            gBattleMons[battler].species = SPECIES_SLAKING_MEGA_APE_SHIFT;
+            REQUIRE(ShouldChangeFormHpBased(battler))
 
             BattleScriptPushCursorAndCallback(BattleScript_End3);
             BattleScriptCall(BattleScript_ApeShift);
@@ -15735,10 +15729,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         case ABILITY_APE_SHIFT:
             REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
             REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA)
-            REQUIRE(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
-
-            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_SLAKING_MEGA_APE_SHIFT);
-            gBattleMons[battler].species = SPECIES_SLAKING_MEGA_APE_SHIFT;
+            REQUIRE(ShouldChangeFormHpBased(battler))
 
             BattleScriptPushCursorAndCallback(BattleScript_End3);
             BattleScriptCall(BattleScript_ApeShift);

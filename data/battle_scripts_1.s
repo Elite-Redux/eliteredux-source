@@ -8937,6 +8937,7 @@ BattleScript_ApeShift::
 	saveattackertostack3
 	copybyte gBattlerAttacker, gStackBattler1
 	call BattleScript_AttackerFormChangeNoPopup
+	jumpifspecies BS_ATTACKER, SPECIES_SLAKING_MEGA, BattleScript_RestoreAttackerReturn
 	jumpifstatus BS_ATTACKER, STATUS1_ANY, BattleScript_ApeShift_HealStatus
 BattleScript_RestoreAttackerReturn:
 	readattackerfromstack3

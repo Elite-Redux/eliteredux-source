@@ -207,6 +207,7 @@ extern const u8 BattleScript_FuneralPyreDamage[];
 extern const u8 BattleScript_AbilityDrainsHp[];
 extern const u8 BattleScript_MoveSecondStatusEffect[];
 extern const u8 BattleScript_DoRudeAwakening[];
+extern const u8 BattleScript_AttackerFormChangeNoPopup[];
 extern const u8 BattleScript_SynchronizeActivates[];
 extern const u8 BattleScript_NoItemSteal[];
 extern const u8 BattleScript_AbilityCuredStatus[];
