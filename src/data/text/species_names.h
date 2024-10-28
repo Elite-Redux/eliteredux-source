@@ -123,6 +123,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_STARMIE] = _("Starmie"),
     [SPECIES_MR_MIME] = _("Mr. Mime"),
     [SPECIES_SCYTHER] = _("Scyther"),
+    [SPECIES_KNAIVER] = _("Knaiver"),
     [SPECIES_JYNX] = _("Jynx"),
     [SPECIES_ELECTABUZZ] = _("Electabuzz"),
     [SPECIES_MAGMAR] = _("Magmar"),
@@ -904,6 +905,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DRACOVISH] = _("Dracovish"),
     [SPECIES_ARCTOVISH] = _("Arctovish"),
     [SPECIES_DURALUDON] = _("Duraludon"),
+    [SPECIES_DURALUDON_PARTNER] = _("Duraludon"),
+    [SPECIES_DURALUDON_PARTNER_MEGA] = _("Duraludon"),
     [SPECIES_DREEPY] = _("Dreepy"),
     [SPECIES_DRAKLOAK] = _("Drakloak"),
     [SPECIES_DRAGAPULT] = _("Dragapult"),
@@ -1530,6 +1533,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     // Burmy
     [SPECIES_BURMY_SANDY_CLOAK] = _("Burmy"),
     [SPECIES_BURMY_TRASH_CLOAK] = _("Burmy"),
+    [SPECIES_BURMY_ETERNA] = _("Eternaburmy"),
     // Wormadam
     [SPECIES_WORMADAM_SANDY_CLOAK] = _("Wormadam"),
     [SPECIES_WORMADAM_TRASH_CLOAK] = _("Wormadam"),

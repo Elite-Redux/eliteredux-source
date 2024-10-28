@@ -133,6 +133,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_STARYU] = sStaryuLevelUpLearnset,
     [SPECIES_STARMIE] = sStarmieLevelUpLearnset,
     [SPECIES_MR_MIME] = sMrMimeLevelUpLearnset,
+    [SPECIES_KNAIVER] = sKnaiverLevelUpLearnset,
     [SPECIES_SCYTHER] = sScytherLevelUpLearnset,
     [SPECIES_JYNX] = sJynxLevelUpLearnset,
     [SPECIES_ELECTABUZZ] = sElectabuzzLevelUpLearnset,
@@ -937,6 +938,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_DRACOVISH] = sDracovishLevelUpLearnset,
     [SPECIES_ARCTOVISH] = sArctovishLevelUpLearnset,
     [SPECIES_DURALUDON] = sDuraludonLevelUpLearnset,
+    [SPECIES_DURALUDON_PARTNER] = sDuraludonPartnerLevelUpLearnset,
+    [SPECIES_DURALUDON_PARTNER_MEGA] = sDuraludonPartnerLevelUpLearnset,
     [SPECIES_DREEPY] = sDreepyLevelUpLearnset,
     [SPECIES_DRAKLOAK] = sDrakloakLevelUpLearnset,
     [SPECIES_DRAGAPULT] = sDragapultLevelUpLearnset,
@@ -1382,6 +1385,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     // Burmy
     [SPECIES_BURMY_SANDY_CLOAK] = sBurmyLevelUpLearnset,
     [SPECIES_BURMY_TRASH_CLOAK] = sBurmyLevelUpLearnset,
+    [SPECIES_BURMY_ETERNA] = sBurmyEternaLevelUpLearnset,
     // Wormadam
     [SPECIES_WORMADAM_SANDY_CLOAK] = sWormadamSandyCloakLevelUpLearnset,
     [SPECIES_WORMADAM_TRASH_CLOAK] = sWormadamTrashCloakLevelUpLearnset,

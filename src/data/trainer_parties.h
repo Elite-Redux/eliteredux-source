@@ -3476,12 +3476,12 @@ static const struct TrainerMonItemCustomMoves sParty_Lyle[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_BURMY,
+    .species = SPECIES_BURMY_ETERNA,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 0,
-    .evs = {252, 4, 0, 252, 0, 0},
-    .nature = NATURE_QUIET,
-    .moves = MOVE_ETERNABEAM, MOVE_ETERNABEAM, MOVE_ETERNABEAM, MOVE_BUG_BITE
+    .evs = {252, 0, 252, 252, 252, 252},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_ETERNABEAM, MOVE_ETERNABEAM, MOVE_ETERNABEAM, MOVE_BUG_BUZZ
     },
     {
     .lvl = 0,

@@ -706,6 +706,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_EEVITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_MEOWTHITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
     [ITEM_SENZU]           = {gItemIcon_Senzu, gItemIconPalette_Senzu},
+    [ITEM_DURALUDITE]      = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},
 
     //Monotype Mega Stones
     [ITEM_CHIEN_PAOITE]     = {gItemIcon_GenericMegaStone, gItemIconPalette_Hitmonchanite},

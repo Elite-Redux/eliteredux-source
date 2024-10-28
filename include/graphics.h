@@ -11315,6 +11315,26 @@ extern const u32 gMonBackPic_SlakingMegaApeShift[];
 extern const u32 gMonPalette_SlakingMegaApeShift[];
 extern const u32 gMonShinyPalette_SlakingMegaApeShift[];
 extern const u8  gMonIcon_SlakingMegaApeShift[];
+extern const u32 gMonFrontPic_BurmyEterna[];
+extern const u32 gMonBackPic_BurmyEterna[];
+extern const u32 gMonPalette_BurmyEterna[];
+extern const u32 gMonShinyPalette_BurmyEterna[];
+extern const u8  gMonIcon_BurmyEterna[];
+extern const u32 gMonFrontPic_Knaiver[];
+extern const u32 gMonBackPic_Knaiver[];
+extern const u32 gMonPalette_Knaiver[];
+extern const u32 gMonShinyPalette_Knaiver[];
+extern const u8  gMonIcon_Knaiver[];
+extern const u32 gMonFrontPic_DuraludonPartner[];
+extern const u32 gMonBackPic_DuraludonPartner[];
+extern const u32 gMonPalette_DuraludonPartner[];
+extern const u32 gMonShinyPalette_DuraludonPartner[];
+extern const u8  gMonIcon_DuraludonPartner[];
+extern const u32 gMonFrontPic_DuraludonPartnerMega[];
+extern const u32 gMonBackPic_DuraludonPartnerMega[];
+extern const u32 gMonPalette_DuraludonPartnerMega[];
+extern const u32 gMonShinyPalette_DuraludonPartnerMega[];
+extern const u8  gMonIcon_DuraludonPartnerMega[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

@@ -785,6 +785,7 @@
 #define ITEM_PIKANITE           (LAST_KEY_ITEM_INDEX + 158)
 #define ITEM_MEOWTHITE          (LAST_KEY_ITEM_INDEX + 159)
 #define ITEM_EEVITE             (LAST_KEY_ITEM_INDEX + 160)
+#define ITEM_DURALUDITE         (LAST_KEY_ITEM_INDEX + 160)
 
 
 

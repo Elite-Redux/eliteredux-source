@@ -640,6 +640,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x86,
         .y_offset = 8,
     },
+    [SPECIES_KNAIVER] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
     [SPECIES_SCYTHER] =
     {
         .size = 0x88,
@@ -2104,6 +2109,11 @@ const struct MonCoords gMonBackPicCoords[] =
     {
         .size = 0x57,
         .y_offset = 6,
+    },
+    [SPECIES_BURMY_ETERNA] =
+    {
+        .size = 0x57,
+        .y_offset = 0,
     },
     [SPECIES_WORMADAM] =
     {
@@ -4551,6 +4561,16 @@ const struct MonCoords gMonBackPicCoords[] =
         .y_offset = 11,
     },
     [SPECIES_DURALUDON] =
+    {
+        .size = 0x88,
+        .y_offset = 1,
+    },
+    [SPECIES_DURALUDON_PARTNER] =
+    {
+        .size = 0x88,
+        .y_offset = 1,
+    },
+    [SPECIES_DURALUDON_PARTNER_MEGA] =
     {
         .size = 0x88,
         .y_offset = 1,

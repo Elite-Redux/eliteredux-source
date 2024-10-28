@@ -4521,6 +4521,16 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
+    [SPECIES_DURALUDON_PARTNER] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_DURALUDON_PARTNER_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
     [SPECIES_DREEPY] =
     {
         .size = 0x65,
@@ -6453,6 +6463,16 @@ const struct MonCoords gMonFrontPicCoords[] =
         .y_offset = 8,
     },
     [SPECIES_GENGAR_MEGA_X] =
+    {
+        .size = 0,
+        .y_offset = 11,
+    },
+    [SPECIES_KNAIVER] =
+    {
+        .size = 0,
+        .y_offset = 11,
+    },
+    [SPECIES_BURMY_ETERNA] =
     {
         .size = 0,
         .y_offset = 11,

@@ -8207,6 +8207,30 @@ const u32 gMonPalette_SlakingMegaApeShift[]           = INCBIN_U32("graphics/pok
 const u32 gMonShinyPalette_SlakingMegaApeShift[]      = INCBIN_U32("graphics/pokemon/slaking/mega/ape_shift/shiny.gbapal.lz");
 const u8  gMonIcon_SlakingMegaApeShift[]              = INCBIN_U8("graphics/pokemon/slaking/mega/ape_shift/icon.4bpp");
 
+const u32 gMonFrontPic_BurmyEterna[]          = INCBIN_U32("graphics/pokemon/burmy/eterna/front.4bpp.lz");
+const u32 gMonBackPic_BurmyEterna[]           = INCBIN_U32("graphics/pokemon/burmy/eterna/back.4bpp.lz");
+const u32 gMonPalette_BurmyEterna[]           = INCBIN_U32("graphics/pokemon/burmy/eterna/normal.gbapal.lz");
+const u32 gMonShinyPalette_BurmyEterna[]      = INCBIN_U32("graphics/pokemon/burmy/eterna/shiny.gbapal.lz");
+const u8  gMonIcon_BurmyEterna[]              = INCBIN_U8("graphics/pokemon/burmy/eterna/icon.4bpp");
+
+const u32 gMonFrontPic_Knaiver[]          = INCBIN_U32("graphics/pokemon/knaiver/front.4bpp.lz");
+const u32 gMonBackPic_Knaiver[]           = INCBIN_U32("graphics/pokemon/knaiver/back.4bpp.lz");
+const u32 gMonPalette_Knaiver[]           = INCBIN_U32("graphics/pokemon/knaiver/normal.gbapal.lz");
+const u32 gMonShinyPalette_Knaiver[]      = INCBIN_U32("graphics/pokemon/knaiver/shiny.gbapal.lz");
+const u8  gMonIcon_Knaiver[]              = INCBIN_U8("graphics/pokemon/knaiver/icon.4bpp");
+
+const u32 gMonFrontPic_DuraludonPartner[]          = INCBIN_U32("graphics/pokemon/duraludon/partner/front.4bpp.lz");
+const u32 gMonBackPic_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/back.4bpp.lz");
+const u32 gMonPalette_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/normal.gbapal.lz");
+const u32 gMonShinyPalette_DuraludonPartner[]      = INCBIN_U32("graphics/pokemon/duraludon/partner/shiny.gbapal.lz");
+const u8  gMonIcon_DuraludonPartner[]              = INCBIN_U8("graphics/pokemon/duraludon/partner/icon.4bpp");
+
+const u32 gMonFrontPic_DuraludonPartnerMega[]          = INCBIN_U32("graphics/pokemon/duraludon/partner/mega/front.4bpp.lz");
+const u32 gMonBackPic_DuraludonPartnerMega[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/mega/back.4bpp.lz");
+const u32 gMonPalette_DuraludonPartnerMega[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_DuraludonPartnerMega[]      = INCBIN_U32("graphics/pokemon/duraludon/partner/mega/shiny.gbapal.lz");
+const u8  gMonIcon_DuraludonPartnerMega[]              = INCBIN_U8("graphics/pokemon/duraludon/partner/mega/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

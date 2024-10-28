@@ -11004,6 +11004,18 @@ static const union AnimCmd sAnim_DURALUDON_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_DURALUDON_PARTNER_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_DURALUDON_PARTNER_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_DREEPY_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -12280,6 +12292,19 @@ static const union AnimCmd sAnim_GENGAR_MEGA_1[] =
 };
 
 static const union AnimCmd sAnim_GENGAR_MEGA_X_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_KNAIVER_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+
+static const union AnimCmd sAnim_BURMY_ETERNA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -17937,6 +17962,16 @@ static const union AnimCmd *const sAnims_DURALUDON[] ={
     sAnim_DURALUDON_1,
 };
 
+static const union AnimCmd *const sAnims_DURALUDON_PARTNER[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DURALUDON_PARTNER_1,
+};
+
+static const union AnimCmd *const sAnims_DURALUDON_PARTNER_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DURALUDON_PARTNER_MEGA_1,
+};
+
 static const union AnimCmd *const sAnims_DREEPY[] ={
     sAnim_GeneralFrame0,
     sAnim_DREEPY_1,
@@ -19181,6 +19216,16 @@ static const union AnimCmd *const sAnims_GENGAR_MEGA_X[] ={
     sAnim_GENGAR_MEGA_X_1,
 };
 
+static const union AnimCmd *const sAnims_KNAIVER[] ={
+    sAnim_GeneralFrame0,
+    sAnim_KNAIVER_1,
+};
+
+static const union AnimCmd *const sAnims_BURMY_ETERNA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BURMY_ETERNA_1,
+};
+
 static const union AnimCmd *const sAnims_KANGASKHAN_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_KANGASKHAN_MEGA_1,
@@ -20165,6 +20210,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(STARYU),
     ANIM_CMD(STARMIE),
     ANIM_CMD(MR_MIME),
+    ANIM_CMD(KNAIVER),
     ANIM_CMD(SCYTHER),
     ANIM_CMD(JYNX),
     ANIM_CMD(ELECTABUZZ),
@@ -20948,6 +20994,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(DRACOVISH),
     ANIM_CMD(ARCTOVISH),
     ANIM_CMD(DURALUDON),
+    ANIM_CMD(DURALUDON_PARTNER),
+    ANIM_CMD(DURALUDON_PARTNER_MEGA),
     ANIM_CMD(DREEPY),
     ANIM_CMD(DRAKLOAK),
     ANIM_CMD(DRAGAPULT),
@@ -21051,6 +21099,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(FLORAGATO),
     ANIM_CMD(GENGAR_MEGA),
     ANIM_CMD(GENGAR_MEGA_X),
+    ANIM_CMD(BURMY_ETERNA),
     ANIM_CMD(MEOWSCARADA),
     ANIM_CMD(KANGASKHAN_MEGA),
     ANIM_CMD(FUECOCO),

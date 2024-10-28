@@ -8184,6 +8184,18 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
+    [ITEM_DURALUDITE] =
+    {
+        .name = _("Duraludite"),
+        .itemId = ITEM_DURALUDITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sDuraluditeDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+
     [ITEM_RIBOMBITE] =
     {
         .name = _("Ribombite"),
