@@ -3141,7 +3141,8 @@ static const u8 sMoveTwoLineDescription_MoveJaggedPunch[] = _(
     "Not done yet.");
 
 static const u8 sMoveTwoLineDescription_MoveCutsieSlap[] = _(
-    "Not done yet.");
+    "Slaps the foe cutely.\n"
+    "May cause infatuation.");
 
 static const u8 sMoveTwoLineDescription_MoveFairySpheres[] = _(
     "Not done yet.");
@@ -5692,7 +5693,7 @@ static const u8 sMoveFourLineDescription_MoveKineticBarrage[] = _("Lifts up obje
 static const u8 sMoveFourLineDescription_MoveFertileFangs[] = _("Inserts ingraining fangs.\n10% chance to apply\nLeech Seed.\nStrong Jaw boost.");
 static const u8 sMoveFourLineDescription_MoveScatterBlast[] = _("A blast of sand\nthat scatters Stealth\nRocks. Mega Launcher\nboost.");
 static const u8 sMoveFourLineDescription_MoveJaggedPunch[] = _("The foe is punched\nby a stony fist.\n10% chance to set\nStealth Rocks.");
-static const u8 sMoveFourLineDescription_MoveCutsieSlap[] = _("The foe is slapped\nlovely. 10%\ninfatuation chance.\nIron Fist boost.");
+static const u8 sMoveFourLineDescription_MoveCutsieSlap[] = _("The foe is slapped\ncutely. 10%\ninfatuation chance.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveFairySpheres[] = _("Magical spheres hit\n2 to 5 times.\nHits SpDef.\nMega Launcher boost.");
 static const u8 sMoveFourLineDescription_MoveBrambleBlast[] = _("Fires thorny brambles.\n20% chance to\napply Leech Seed.\nArcher boost.");
 static const u8 sMoveFourLineDescription_MoveAsteroidDownfall[] = _("Launches a small\nasteroid onto the\ntarget. Cannot miss.\nMega Launcher boost.");
