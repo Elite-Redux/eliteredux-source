@@ -6877,6 +6877,28 @@ static bool32 GetMentalHerbEffect(u8 battlerId)
     return ret;
 }
 
+static int CanUseHoney(int battler)
+{
+    
+    int species = GET_BASE_SPECIES_ID(gBattleMons[battler].spDefense);
+    switch (species)
+    {
+    case SPECIES_COMBEE:
+    case SPECIES_VESPIQUEN:
+    case SPECIES_BEEFENDER:
+    case SPECIES_MARBEEP:
+    case SPECIES_FLUFFBEE:
+    case SPECIES_AMPHYBUZZ:
+    case SPECIES_WEEDLE:
+    case SPECIES_KAKUNA:
+    case SPECIES_BEEDRILL:
+        return TRUE;
+    
+    default:
+        return FALSE;
+    }
+}
+
 u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
 {
     int i = 0, moveType;
@@ -7075,6 +7097,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 break;
             case HOLD_EFFECT_HONEY:
+                REQUIRE(CanUseHoney(battlerId))
             case HOLD_EFFECT_RESTORE_HP:
                 if (B_BERRIES_INSTANT >= GEN_4)
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
@@ -7157,6 +7180,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
             switch (battlerHoldEffect)
             {
             case HOLD_EFFECT_HONEY:
+                REQUIRE(CanUseHoney(battlerId))
                 if (!moveTurn && ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE))
                 {
                     effect = TRUE;
@@ -7164,8 +7188,6 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 }
                 else
                 {
-                    int species = GET_BASE_SPECIES_ID(gBattleMons[battlerId].spDefense);
-                    REQUIRE(species == SPECIES_COMBEE || species == SPECIES_VESPIQUEN || species == SPECIES_BEEFENDER)
                     goto LEFTOVERS;
                 }
             case HOLD_EFFECT_RESTORE_HP:
@@ -7467,6 +7489,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                     effect = TrySetMicleBerry(battlerId, gLastUsedItem, FALSE);
                 break;
             case HOLD_EFFECT_HONEY:
+                REQUIRE(CanUseHoney(battlerId))
             case HOLD_EFFECT_RESTORE_HP:
                 if (B_HP_BERRIES >= GEN_4)
                     effect = ItemHealHp(battlerId, gLastUsedItem, FALSE, FALSE);
