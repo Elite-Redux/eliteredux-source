@@ -12,9 +12,6 @@
 #define AI_SCORE_IMMUNE AI_SCORE_UNUSABLE
 #define AI_SCORE_ADJUST(percent, score) AdjustForChance(percent, score)
 
-#define REQUIRE(check) if (!(check)) break;
-#define REQUIRE_NOT(check) if (check) break;
-
 struct MoveState {
     u16 damage;
     u16 multiHitExpect;
