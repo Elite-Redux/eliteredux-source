@@ -3491,6 +3491,9 @@ static void Task_SwitchToMoveDetails(u8 taskId)
             sMonSummaryScreen->markingsSprite->x = 257;
             sMonSummaryScreen->markingsSprite->y = 332;
             ClearWindowTilemap(PSS_LABEL_PANE_LEFT_MOVE);
+            LZDecompressWram(gSummaryScreenPageMoveDetailsTilemap, sMonSummaryScreen->moveDetailTilemapBuffer);
+            SetBgTilemapBuffer(1, sMonSummaryScreen->moveDetailTilemapBuffer);
+            ScheduleBgCopyTilemapToVram(1);
             ScheduleBgCopyTilemapToVram(0);
             data[0]++;
             break;
