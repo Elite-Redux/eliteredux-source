@@ -1139,8 +1139,8 @@ static const u8 sSilverPowderDesc[] = _(
 
 static const u8 sAmuletCoinDesc[] = _(
     "Increases the power\n"
-    "of Partner Meowth
-    and boosts Pay Day.");
+    "of Partner Meowth"
+    "and boosts Pay Day.");
 
 static const u8 sCleanseTagDesc[] = _(
     "A hold item that\n"
