@@ -1219,10 +1219,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_QUICK_ATTACK] =
     {
         .effect = EFFECT_HIT,
-        .power = 65,
+        .power = 40,
         .type = TYPE_NORMAL,
         .accuracy = 100,
-        .pp = 5,
+        .pp = 20,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .priority = 2,
