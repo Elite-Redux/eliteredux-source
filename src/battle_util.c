@@ -3149,7 +3149,7 @@ u8 DoBattlerEndTurnEffects(void)
             if ((gBattleMons[gActiveBattler].status1 & STATUS1_POISON)
                 && gBattleMons[gActiveBattler].hp != 0)
             {
-                if (BattlerHasAbility(ability, ABILITY_POISON_HEAL, FALSE))
+                if (BattlerHasAbility(gActiveBattler, ABILITY_POISON_HEAL, FALSE))
                 {
                     if (!BATTLER_MAX_HP(gActiveBattler) && !BATTLER_HEALING_BLOCKED(gActiveBattler))
                     {
