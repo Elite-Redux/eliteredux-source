@@ -395,7 +395,7 @@
 #define ABILITY_GRIP_PINCER 373 // 50% chance to trap. Then ignores Defense & accuracy checks.
 #define ABILITY_BIG_LEAVES 374 // Chloroplast + Chlorophyll + Leaf Guard + Harvest + Solar Power.
 #define ABILITY_PRECISE_FIST 375 // Punching moves get +1 crit and 5x effect chance.
-#define ABILITY_DEADEYE 376 // Never misses.
+#define ABILITY_DEADEYE 376 // Never misses. Arrow and cannon moves hit weakest defense.
 #define ABILITY_ARTILLERY 377 // Mega Launcher moves always hit. Single-target now hits both foes.
 #define ABILITY_AMPLIFIER 378 // Ups sound moves by 30% and makes them hit both foes.
 #define ABILITY_ICE_DEW 379 // Boosts SpAtk instead of being hit by Ice-type moves.

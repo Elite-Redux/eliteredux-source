@@ -3909,7 +3909,7 @@ static const u8 sMoveTwoLineDescription_MoveFireGlaive[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveDepletionBeam[] = _(
     "Attacks with metallic power.\n"
-    "Foe's last move has 3 PP cut."););
+    "Foe's last move has 3 PP cut.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
