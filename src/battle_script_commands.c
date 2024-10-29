@@ -11262,9 +11262,10 @@ static void Cmd_various(void)
             gVolatileStructs[gActiveBattler].trepidation = 3;
         break;
     case VARIOUS_DO_HAZARD_DAMAGE:
+        i = READ_8_INC;
         if (!IsBattlerAlive(gActiveBattler)) break;
         gStackBattler1 = gActiveBattler;
-        switch (READ_8_INC)
+        switch (i)
         {
         case HAZARD_MODE_SPIKES:
             BattleScriptCall(BattleScript_ResolveRocks);
