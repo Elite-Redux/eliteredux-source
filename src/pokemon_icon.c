@@ -152,6 +152,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_STARMIE] = gMonIcon_Starmie,
     [SPECIES_MR_MIME] = gMonIcon_MrMime,
     [SPECIES_SCYTHER] = gMonIcon_Scyther,
+    [SPECIES_KNAIVER] = gMonIcon_Knaiver,
     [SPECIES_JYNX] = gMonIcon_Jynx,
     [SPECIES_ELECTABUZZ] = gMonIcon_Electabuzz,
     [SPECIES_MAGMAR] = gMonIcon_Magmar,
