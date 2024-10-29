@@ -994,6 +994,8 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_BANISHED_POWER] = _("BanishedPowr"),
     [MOVE_TRIPLE_TREMOR] = _("TripleTremor"),
     [MOVE_FIRE_GLAIVE] = _("Fire Glaive"),
+    [MOVE_DEPLETION_BEAM] = _("DepltionBeam"),
+    [MOVE_ONE_INCH_PUNCH] = _("OneInchPunch"),
 };
 
 // Second table with longer move names for places where they fit.
@@ -1995,4 +1997,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_TRIPLE_TREMOR] = _("Triple Tremor"),
     [MOVE_FIRE_GLAIVE] = _("Fire Glaive"),
     [MOVE_DEPLETION_BEAM] = _("Depletion Beam"),
+    [MOVE_ONE_INCH_PUNCH] = _("One-Inch Punch"),
 };

@@ -3149,7 +3149,7 @@ u8 DoBattlerEndTurnEffects(void)
             if ((gBattleMons[gActiveBattler].status1 & STATUS1_POISON)
                 && gBattleMons[gActiveBattler].hp != 0)
             {
-                if (BattlerHasAbility(ability, ABILITY_POISON_HEAL, FALSE))
+                if (BattlerHasAbility(gActiveBattler, ABILITY_POISON_HEAL, FALSE))
                 {
                     if (!BATTLER_MAX_HP(gActiveBattler) && !BATTLER_HEALING_BLOCKED(gActiveBattler))
                     {
@@ -10415,6 +10415,13 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         defStatToUse = STAT_SPDEF;
     }
     else if (BattlerHasAbility(battlerAtk, ABILITY_ROUNDHOUSE, FALSE) && gBattleMoves[move].flags & FLAG_STRIKER_BOOST) 
+    {
+        u32 def = CalculateStat(battlerDef, STAT_DEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
+        u32 spDef = CalculateStat(battlerDef, STAT_SPDEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
+        defStat = min(def, spDef);
+        defStatToUse = defStat == def ? STAT_DEF : STAT_SPDEF;
+    }
+    else if (BattlerHasAbility(battlerAtk, ABILITY_DEADEYE, FALSE) && (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].arrowBased))
     {
         u32 def = CalculateStat(battlerDef, STAT_DEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
         u32 spDef = CalculateStat(battlerDef, STAT_SPDEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);

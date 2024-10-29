@@ -1014,6 +1014,7 @@ gBattleAnims_Moves::
 	.4byte Move_TRIPLE_KICK @ MOVE_TRIPLE_TREMOR
 	.4byte Move_FLARE_BLITZ @ MOVE_FIRE_GLAIVE
 	.4byte Move_STEEL_BEAM @ MOVE_DEPLETION_BEAM
+	.4byte Move_MEGA_PUNCH @ MOVE_ONE_INCH_PUNCH
 
 	.align 2
 gBattleAnims_StatusConditions::

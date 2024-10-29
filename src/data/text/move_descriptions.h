@@ -3909,7 +3909,11 @@ static const u8 sMoveTwoLineDescription_MoveFireGlaive[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveDepletionBeam[] = _(
     "Attacks with metallic power.\n"
-    "Foe's last move has 3 PP cut."););
+    "Foe's last move has 3 PP cut.");
+
+static const u8 sMoveTwoLineDescription_MoveOneInchPunch[] = _(
+    "Picks a weak spot and then\n"
+    "strikes with immense force.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -4908,6 +4912,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_TRIPLE_TREMOR - 1] = sMoveTwoLineDescription_MoveTripleTremor,
     [MOVE_FIRE_GLAIVE - 1] = sMoveTwoLineDescription_MoveFireGlaive,
     [MOVE_DEPLETION_BEAM - 1] = sMoveTwoLineDescription_MoveDepletionBeam,
+    [MOVE_ONE_INCH_PUNCH - 1] = sMoveTwoLineDescription_MoveOneInchPunch,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5904,6 +5909,7 @@ static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("Deals damage a
 static const u8 sMoveFourLineDescription_MoveTripleTremor[] = _("Hits three times.\nMore powerful with\neach successive hit.");
 static const u8 sMoveFourLineDescription_MoveFireGlaive[] = _("Strikes with a white\nhot horn, ignoring\nstat changes.\nMight Horn boost.");
 static const u8 sMoveFourLineDescription_MoveDepletionBeam[] = _("Foe's last move has\n3 PP cut. Mega\nlauncher boost.");
+static const u8 sMoveFourLineDescription_MoveOneInchPunch[] = _("A powerful punch\nthat never misses.\nHigh crit rate.\nIron Fist boost.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6900,4 +6906,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_TRIPLE_TREMOR - 1] = sMoveFourLineDescription_MoveTripleTremor,
     [MOVE_FIRE_GLAIVE - 1] = sMoveFourLineDescription_MoveFireGlaive,
     [MOVE_DEPLETION_BEAM - 1] = sMoveFourLineDescription_MoveDepletionBeam,
+    [MOVE_ONE_INCH_PUNCH - 1] = sMoveFourLineDescription_MoveOneInchPunch,
 };
