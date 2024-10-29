@@ -3907,6 +3907,10 @@ static const u8 sMoveTwoLineDescription_MoveFireGlaive[] = _(
     "The user strikes with a\n"
     "white hot horn.");
 
+static const u8 sMoveTwoLineDescription_MoveDepletionBeam[] = _(
+    "Attacks with metallic power.\n"
+    "Foe's last move has 3 PP cut."););
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4903,6 +4907,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_BANISHED_POWER - 1] = sMoveTwoLineDescription_MoveBanishedPower,
     [MOVE_TRIPLE_TREMOR - 1] = sMoveTwoLineDescription_MoveTripleTremor,
     [MOVE_FIRE_GLAIVE - 1] = sMoveTwoLineDescription_MoveFireGlaive,
+    [MOVE_DEPLETION_BEAM - 1] = sMoveTwoLineDescription_MoveDepletionBeam,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5898,6 +5903,7 @@ static const u8 sMoveFourLineDescription_MoveShowtime[] = _("Clears other rooms\
 static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("Deals damage and\nraises the user's\nhighest attack or\ndefense by 1 stage.");
 static const u8 sMoveFourLineDescription_MoveTripleTremor[] = _("Hits three times.\nMore powerful with\neach successive hit.");
 static const u8 sMoveFourLineDescription_MoveFireGlaive[] = _("Strikes with a white\nhot horn, ignoring\nstat changes.\nMight Horn boost.");
+static const u8 sMoveFourLineDescription_MoveDepletionBeam[] = _("Foe's last move has\n3 PP cut. Mega\nlauncher boost.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6893,4 +6899,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_BANISHED_POWER - 1] = sMoveFourLineDescription_MoveBanishedPower,
     [MOVE_TRIPLE_TREMOR - 1] = sMoveFourLineDescription_MoveTripleTremor,
     [MOVE_FIRE_GLAIVE - 1] = sMoveFourLineDescription_MoveFireGlaive,
+    [MOVE_DEPLETION_BEAM - 1] = sMoveFourLineDescription_MoveDepletionBeam,
 };

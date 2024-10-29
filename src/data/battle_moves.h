@@ -9428,6 +9428,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_SOUND | FLAG_WEATHER_BASED,
         .split = SPLIT_SPECIAL,
     },
+    [MOVE_DEPLETION_BEAM] =
+    {
+        .effect = EFFECT_EERIE_SPELL,
+        .power = 85,
+        .type = TYPE_DRAGON,
+        .accuracy = 100,
+        .pp = 10,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST | FLAG_MEGA_LAUNCHER_BOOST | FLAG_WEATHER_BASED,
+        .split = SPLIT_PHYSICAL,
+    },
     [MOVE_DEATHROLL] =
     {
         .effect = EFFECT_CONFUSE_HIT,

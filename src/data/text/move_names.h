@@ -1994,4 +1994,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_BANISHED_POWER] = _("Banished Power"),
     [MOVE_TRIPLE_TREMOR] = _("Triple Tremor"),
     [MOVE_FIRE_GLAIVE] = _("Fire Glaive"),
+    [MOVE_DEPLETION_BEAM] = _("Depletion Beam"),
 };

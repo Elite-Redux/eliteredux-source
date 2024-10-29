@@ -40169,12 +40169,57 @@ static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Dark_Insane[
 static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fairy[] = {
     {
     .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .heldItem = ITEM_NONE,
+    .species = SPECIES_HO_OH,
+    .heldItem = ITEM_CHOICE_SCARF,
+    .ability = 1,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_HEAT_WAVE, MOVE_EARTH_POWER, MOVE_LIGHT_OF_RUIN, MOVE_BLEAKWIND_STORM
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_FLUTTER_MANE,
+    .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
-    .evs = {0, 0, 0, 252, 4, 252},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_TACKLE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_ASTONISH, MOVE_DAZZLING_GLEAM, MOVE_REQUIEM, MOVE_PROTECT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_DIANCIE,
+    .heldItem = ITEM_DIANCITE,
+    .ability = 2,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_DIAMOND_STORM, MOVE_FAIRY_WIND, MOVE_PROTECT, MOVE_LIGHT_OF_RUIN
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_TINKATON,
+    .heldItem = ITEM_TINKATITE,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_GIGATON_HAMMER, MOVE_BONK, MOVE_FEMUR_BREAKER, MOVE_PARTING_SHOT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_SCREAM_TAIL,
+    .heldItem = ITEM_SHELL_BELL,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_STAR_CRASH, MOVE_PSYCHOKINETIC_SLAM, MOVE_FOLLOW_ME, MOVE_CRUNCH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_WIGGLYTUFF_APEX,
+    .heldItem = ITEM_WIGGLITUFF_ORB,
+    .ability = 1,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_LIGHT_OF_RUIN, MOVE_BOOMBURST, MOVE_PROTECT, MOVE_MOONLIGHT
     }
 };
 
@@ -40198,8 +40243,26 @@ static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
     .species = SPECIES_GOLEM,
     .heldItem = ITEM_CUSTAP_BERRY,
     .ability = 2,
-    .evs = {0, 252, 0, 0, 4, 252},
-    .nature = NATURE_ADAMANT,
+    .evs = {252, 252, 0, 0, 4, 0},
+    .nature = NATURE_BRAVE,
+    .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_HATTERENE,
+    .heldItem = ITEM_HATTERENITE,
+    .ability = 1,
+    .evs = {252, 0, 4, 252, 0, 0},
+    .nature = NATURE_QUIET,
+    .moves = MOVE_OUTBURST, MOVE_OUTBURST, MOVE_OUTBURST, MOVE_OUTBURST
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GOLEM_ALOLAN,
+    .heldItem = ITEM_CUSTAP_BERRY,
+    .ability = 1,
+    .evs = {252, 252, 0, 0, 4, 0},
+    .nature = NATURE_BRAVE,
     .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
     },
     {
@@ -40210,24 +40273,6 @@ static const struct TrainerMonItemCustomMoves sParty_Trent15[] = {
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
     .moves = MOVE_OUTBURST, MOVE_MISTY_EXPLOSION, MOVE_OUTBURST, MOVE_MISTY_EXPLOSION
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_GOLEM_ALOLAN,
-    .heldItem = ITEM_CUSTAP_BERRY,
-    .ability = 1,
-    .evs = {0, 252, 0, 0, 4, 252},
-    .nature = NATURE_ADAMANT,
-    .moves = MOVE_EXPLOSION, MOVE_NONE, MOVE_NONE, MOVE_NONE
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_GRAFAIAI,
-    .heldItem = ITEM_NONE,
-    .ability = 2,
-    .evs = {4, 252, 0, 0, 0, 252},
-    .nature = NATURE_JOLLY,
-    .moves = MOVE_EXPLOSION, MOVE_EXPLOSION, MOVE_REVIVAL_BLESSING, MOVE_REVIVAL_BLESSING
     },
     {
     .lvl = 0,
