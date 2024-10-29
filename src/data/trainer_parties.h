@@ -40178,12 +40178,12 @@ static const struct TrainerMonItemCustomMoves sParty_Monotype_Champ_Fairy[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_FLUTTER_MANE,
-    .heldItem = ITEM_FOCUS_SASH,
-    .ability = 0,
+    .species = SPECIES_AMPHYBUZZ,
+    .heldItem = ITEM_AMPHYBUZZITE,
+    .ability = 1,
     .evs = {4, 0, 0, 252, 0, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_ASTONISH, MOVE_DAZZLING_GLEAM, MOVE_REQUIEM, MOVE_PROTECT
+    .nature = NATURE_MODEST,
+    .moves = MOVE_FIRST_IMPRESSION, MOVE_ATTACK_ORDER, MOVE_HURRICANE, MOVE_DAZZLING_GLEAM
     },
     {
     .lvl = 0,
