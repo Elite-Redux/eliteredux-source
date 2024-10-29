@@ -9191,7 +9191,7 @@ BattleScript_TryActivateSteadFast:
 BattleScript_FlinchedDoRattled:
 	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPEED, MAX_STAT_STAGE, BattleScript_MoveUsedFlinched_CheckSteadfast
 	setstatchanger STAT_SPEED, 1, FALSE
-	call BattleScript_TargetAbilityStatRaiseOnMoveEnd
+	call BattleScript_AttackerAbilityStatRaise
 	goto BattleScript_MoveUsedFlinched_CheckSteadfast
 
 BattleScript_PrintUproarOverTurns::

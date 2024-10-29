@@ -12468,6 +12468,18 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .split = SPLIT_PHYSICAL,
         .argument = 3,
     },
+    [MOVE_ONE_INCH_PUNCH] =
+    {
+        .effect = EFFECT_HIT,
+        .power = 90,
+        .type = TYPE_FIGHTING,
+        .accuracy = 0,
+        .pp = 10,
+        .secondaryEffectChance = 0,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_HIGH_CRIT | FLAG_IRON_FIST_BOOST,
+        .split = SPLIT_PHYSICAL,
+    },
 };
 
 const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES] = {
