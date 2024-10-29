@@ -10410,21 +10410,19 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     {
         defStatToUse = STAT_SPDEF;
     }
-    if (BattlerHasAbility(battlerAtk, ABILITY_POWER_EDGE, TRUE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
+    else if (BattlerHasAbility(battlerAtk, ABILITY_POWER_EDGE, TRUE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
-    
-    if (BattlerHasAbility(battlerAtk, ABILITY_ROUNDHOUSE, FALSE) && gBattleMoves[move].flags & FLAG_STRIKER_BOOST) 
+    else if (BattlerHasAbility(battlerAtk, ABILITY_ROUNDHOUSE, FALSE) && gBattleMoves[move].flags & FLAG_STRIKER_BOOST) 
     {
         u32 def = CalculateStat(battlerDef, STAT_DEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
         u32 spDef = CalculateStat(battlerDef, STAT_SPDEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
         defStat = min(def, spDef);
         defStatToUse = defStat == def ? STAT_DEF : STAT_SPDEF;
     }
-    else {
-        defStat = CalculateStat(battlerDef, defStatToUse, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
-    }
+
+    defStat = CalculateStat(battlerDef, defStatToUse, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
 
     // apply defense stat modifiers
     modifier = UQ_4_12(1.0);
