@@ -703,7 +703,7 @@ Common_EventScript_ReadyPetalburgGymForBattle_AllClear:
 	setvar VAR_PETALBURG_GYM_STATE, 6
 	clearflag FLAG_HIDE_PETALBURG_GYM_GREETER
 	setflag FLAG_PETALBURG_MART_EXPANDED_ITEMS
-Common_EventScript_Return
+Common_EventScript_Return:
 	return
 
 Common_EventScript_BufferTrendyPhrase:: @ 8271E8B
