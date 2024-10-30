@@ -745,6 +745,12 @@ static void UpdateBoxMon(struct BoxPokemon* boxMon)
     ARRAY_COPY(boxMon->nickname, old.nickname)
 }
 
+#define UPDATE_QUICK_STREAM(move) \
+{ \
+    if (move == 865) move = MOVE_WATER_GUN; \
+    if (move > 865) move--; \
+}
+
 static void Task_MainMenuCheckSaveFile(u8 taskId)
 {
     u8 i, j, itemcount;
@@ -791,6 +797,31 @@ static void Task_MainMenuCheckSaveFile(u8 taskId)
                             for (j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++)
                             {
                                 UpdateBoxMon(&gPokemonStoragePtr->boxes[i][j]);
+                            }
+                        }
+                    }
+
+                    if (VarGet(VAR_SAVE_VERSION) <= 1045)
+                    {
+                        int i, j;
+
+                        for (i = 0; i < gSaveBlock1Ptr->playerPartyCount; i++)
+                        {
+                            UPDATE_QUICK_STREAM(gSaveBlock1Ptr->playerParty[i].box.move1)
+                            UPDATE_QUICK_STREAM(gSaveBlock1Ptr->playerParty[i].box.move2)
+                            UPDATE_QUICK_STREAM(gSaveBlock1Ptr->playerParty[i].box.move3)
+                            UPDATE_QUICK_STREAM(gSaveBlock1Ptr->playerParty[i].box.move4)
+                        }
+                        LoadPlayerParty();
+                        
+                        for (i = 0; i < ARRAY_COUNT(gPokemonStoragePtr->boxes); i++)
+                        {
+                            for (j = 0; j < ARRAY_COUNT(gPokemonStoragePtr->boxes[i]); j++)
+                            {
+                                UPDATE_QUICK_STREAM(gPokemonStoragePtr->boxes[i][j].move1)
+                                UPDATE_QUICK_STREAM(gPokemonStoragePtr->boxes[i][j].move2)
+                                UPDATE_QUICK_STREAM(gPokemonStoragePtr->boxes[i][j].move3)
+                                UPDATE_QUICK_STREAM(gPokemonStoragePtr->boxes[i][j].move4)
                             }
                         }
                     }
