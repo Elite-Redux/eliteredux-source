@@ -2371,7 +2371,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_OCTAZOOKA] =
     {
         .effect = EFFECT_ACCURACY_DOWN_HIT,
-        .power = 100,
+        .power = 120,
         .type = TYPE_WATER,
         .accuracy = 50,
         .pp = 10,
@@ -4021,7 +4021,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SIGNAL_BEAM] =
     {
         .effect = EFFECT_CONFUSE_HIT,
-        .power = 75,
+        .power = 85,
         .type = TYPE_BUG,
         .accuracy = 100,
         .pp = 15,
@@ -10675,7 +10675,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_TWIN_BEAM] =
     {
         .effect = EFFECT_DOUBLE_HIT,
-        .power = 40,
+        .power = 45,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 10,
