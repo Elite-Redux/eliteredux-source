@@ -10532,7 +10532,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         else if (moveType == TYPE_WATER)
             dmg = ApplyModifier(UQ_4_12(1.2), dmg);
     }
-    else if (IsBattlerWeatherAffected(battlerAtk, WEATHER_RAIN_TEMPORARY))
+    else if (IsBattlerWeatherAffected(battlerAtk, WEATHER_RAIN_TEMPORARY | WEATHER_RAIN_PRIMAL))
     {
         if (gBattleMoves[move].effect == EFFECT_WEATHER_BOOST)
             dmg = ApplyModifier(CHECK_WEATHER_DOUBLE_BOOST(1.5 * 1.5, 1.5), dmg);
@@ -10550,7 +10550,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         else if (moveType == TYPE_WATER && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_NIKA))
             dmg = ApplyModifier(CHECK_WEATHER_DOUBLE_BOOST(1.2, 0.5), dmg);
     }
-    else if (IsBattlerWeatherAffected(battlerAtk, WEATHER_SUN_TEMPORARY))
+    else if (IsBattlerWeatherAffected(battlerAtk, WEATHER_SUN_TEMPORARY | WEATHER_SUN_PRIMAL))
     {
         if (gBattleMoves[move].effect == EFFECT_WEATHER_BOOST)
             dmg = ApplyModifier(CHECK_WEATHER_DOUBLE_BOOST(1.5 * 1.5, 1.5), dmg);
