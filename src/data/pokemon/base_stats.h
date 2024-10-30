@@ -42060,6 +42060,7 @@ const struct BaseStats gBaseStats[] =
     .innates        = {ABILITY_MULTI_HEADED, ABILITY_STRONG_JAW, ABILITY_GUARD_DOG},
     .bodyColor = BODY_COLOR_GRAY,
     .noFlip = FALSE,
+    .flags = F_THREE_HEADED,
     .tier = 0,
     },
 
