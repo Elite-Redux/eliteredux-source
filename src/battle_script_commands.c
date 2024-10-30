@@ -9053,6 +9053,7 @@ static void Cmd_various(void)
         }
         break;
     case VARIOUS_TRY_ACTIVATE_MOXIE:    // and variants
+        REQUIRE(IsBattlerAlive(gActiveBattler))
         {
             u8 statToChange = NUM_BATTLE_STATS;
             u16 abilityToCheck = ABILITY_NONE;
@@ -9161,6 +9162,7 @@ static void Cmd_various(void)
         }
         break;
     case VARIOUS_TRY_ACTIVATE_SUPER_STRAIN:    // and variants
+        REQUIRE(IsBattlerAlive(gActiveBattler))
         {
             u8 statToChange = NUM_BATTLE_STATS;
             u16 abilityToCheck = ABILITY_NONE;
@@ -9193,6 +9195,7 @@ static void Cmd_various(void)
         }
         break;
     case VARIOUS_TRY_ACTIVATE_SOUL_EATER:
+        REQUIRE(IsBattlerAlive(gActiveBattler))
         if (BATTLER_HEALING_BLOCKED(gActiveBattler)) break;
         if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_JAWS_OF_CARNAGE)
             || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SOUL_EATER)
@@ -9239,6 +9242,7 @@ static void Cmd_various(void)
         }
         break;
     case VARIOUS_TRY_ACTIVATE_GRIM_NEIGH:
+        REQUIRE(IsBattlerAlive(gActiveBattler))
         if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CROWNED_KING)
             && HasAttackerFaintedTarget()
             && !NoAliveMonsForEitherParty())
@@ -9249,6 +9253,7 @@ static void Cmd_various(void)
         break;
     case VARIOUS_TRY_ACTIVATE_RECEIVER: // Partner gets fainted's ally ability
         gBattlerAbility = BATTLE_PARTNER(gActiveBattler);
+        REQUIRE(IsBattlerAlive(gBattlerAbility))
         if (IsBattlerAlive(gBattlerAbility)
             && GetBattlerAbility(gBattlerAbility) == ABILITY_RECEIVER
             && !HasAbilityIgnoringSuppression(gBattlerAbility, GetBattlerAbility(gActiveBattler)))
@@ -9263,6 +9268,7 @@ static void Cmd_various(void)
         }
         break;
     case VARIOUS_TRY_ACTIVATE_BEAST_BOOST:
+        REQUIRE(IsBattlerAlive(gActiveBattler))
         i = GetHighestStatId(gActiveBattler, FALSE);
         if (BattlerHasAbility(gActiveBattler, ABILITY_BEAST_BOOST, FALSE)
             && HasAttackerFaintedTarget()
@@ -9281,6 +9287,7 @@ static void Cmd_various(void)
         while (gBattleStruct->soulheartBattlerId < gBattlersCount)
         {
             gStackBattler1 = gBattleStruct->soulheartBattlerId++;
+            if (!IsBattlerAlive(gStackBattler1)) continue;
             if (BATTLER_HAS_ABILITY(gStackBattler1, ABILITY_SOUL_HEART)
                 && !NoAliveMonsForEitherParty()
                 && CompareStat(gBattleScripting.battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
@@ -9296,6 +9303,7 @@ static void Cmd_various(void)
         gBattleStruct->soulheartBattlerId = 0;
         break;
     case VARIOUS_TRY_ACTIVATE_FELL_STINGER:
+        REQUIRE(IsBattlerAlive(gActiveBattler))
         if (!HasAttackerFaintedTarget()) break;
         if (NoAliveMonsForEitherParty()) break;
         if (gBattleMoves[gCurrentMove].effect == EFFECT_FELL_STINGER && CompareStat(gBattlerAttacker, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
