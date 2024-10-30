@@ -2508,6 +2508,8 @@ u8 DoFieldEndTurnEffects(void)
             }
             break;
         case ENDTURN_RAIN:
+            gBattleStruct->turnCountersTracker++;
+            REQUIRE(!gFieldTimers.clearSkiesTimer)
             if (gBattleWeather & WEATHER_RAIN_ANY)
             {
                 if (!(gBattleWeather & WEATHER_RAIN_PERMANENT)
@@ -2536,7 +2538,6 @@ u8 DoFieldEndTurnEffects(void)
                 BattleScriptExecute(BattleScript_RainContinuesOrEnds);
                 effect++;
             }
-            gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_SANDSTORM:
             if (gBattleWeather & WEATHER_SANDSTORM_ANY)
@@ -2559,6 +2560,8 @@ u8 DoFieldEndTurnEffects(void)
             gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_SUN:
+            gBattleStruct->turnCountersTracker++;
+            REQUIRE(!gFieldTimers.clearSkiesTimer)
             if (gBattleWeather & WEATHER_SUN_ANY)
             {
                 if (!(gBattleWeather & WEATHER_SUN_PERMANENT)
@@ -2577,7 +2580,6 @@ u8 DoFieldEndTurnEffects(void)
                 BattleScriptExecute(gBattlescriptCurrInstr);
                 effect++;
             }
-            gBattleStruct->turnCountersTracker++;
             break;
         case ENDTURN_HAIL:
             if (gBattleWeather & WEATHER_HAIL_ANY)
