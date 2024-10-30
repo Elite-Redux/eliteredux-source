@@ -139,8 +139,8 @@ static const u8 sMoveTwoLineDescription_MoveWrap[] = _(
     "2 to 5 times with vines, etc.");
 
 static const u8 sMoveTwoLineDescription_MoveTakeDown[] = _(
-    "A reckless charge attack\n"
-    "that also hurts the user.");
+    "Slams into the foe, knocking\n"
+    "them back and lowering speed.");
 
 static const u8 sMoveTwoLineDescription_MoveThrash[] = _(
     "A rampage of 2 to 3 turns\n"
@@ -4950,7 +4950,7 @@ static const u8 sMoveFourLineDescription_MoveHornDrill[] = _("Ignores the target
 static const u8 sMoveFourLineDescription_MoveTackle[] = _("A physical attack\nin which the user\ncharges, full body,\ninto the foe.");
 static const u8 sMoveFourLineDescription_MoveBodySlam[] = _("The user drops its\nfull body on the\nfoe. 30% paralyze\nchance.");
 static const u8 sMoveFourLineDescription_MoveWrap[] = _("A long body or\nvines are used to\nwrap the foe for\nfour or five turns.");
-static const u8 sMoveFourLineDescription_MoveTakeDown[] = _("A reckless, full-\nbody charge attack.\nHas 25% recoil\ndamage.");
+static const u8 sMoveFourLineDescription_MoveTakeDown[] = _("Slams the foe back.\n20% chance to lower\nSpeed.");
 static const u8 sMoveFourLineDescription_MoveThrash[] = _("The user rampages\nabout for two to\nthree turns, then\nbecomes confused.");
 static const u8 sMoveFourLineDescription_MoveDoubleEdge[] = _("A reckless, life-\nrisking tackle that\nalso has 33%\nrecoil damage.");
 static const u8 sMoveFourLineDescription_MoveTailWhip[] = _("The user wags its\ntail cutely, making\nthe foe lower its\nDefense stat.");
