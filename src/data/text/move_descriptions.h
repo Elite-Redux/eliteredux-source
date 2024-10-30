@@ -3297,6 +3297,9 @@ static const u8 sMoveTwoLineDescription_MoveDoubleLariat[] = _(
     "Hits both targets.\n"
     "Silences hit targets.");
 
+static const u8 sMoveTwoLineDescription_MoveQuickStream[] = _(
+    "+1 priority.");
+
 static const u8 sMoveTwoLineDescription_MoveLeechBlade[] = _(
     "Heals 50% damage done.");
 
@@ -4749,6 +4752,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_SUPERHOT_FLAME - 1] = sMoveTwoLineDescription_MoveSuperhotFlame,
     [MOVE_TRIPLE_ARROWS - 1] = sMoveTwoLineDescription_MoveTripleArrows,
     [MOVE_DOUBLE_LARIAT - 1] = sMoveTwoLineDescription_MoveDoubleLariat,
+    [MOVE_QUICK_STREAM - 1] = sMoveTwoLineDescription_MoveQuickStream,
     [MOVE_LEECH_BLADE - 1] = sMoveTwoLineDescription_MoveLeechBlade,
     [MOVE_YGGDRASIL_FORCE - 1] = sMoveTwoLineDescription_MoveYggdrasilForce,
     [MOVE_DRAIN_BRAIN - 1] = sMoveTwoLineDescription_MoveDrainBrain,
@@ -4965,7 +4969,7 @@ static const u8 sMoveFourLineDescription_MoveAcid[] = _("Super effective vs\nSte
 static const u8 sMoveFourLineDescription_MoveEmber[] = _("The foe is attacked\nwith small flames.\n100% burn chance.");
 static const u8 sMoveFourLineDescription_MoveFlamethrower[] = _("The foe is scorched\nwith intense flames.\n10% burn chance.");
 static const u8 sMoveFourLineDescription_MoveMist[] = _("The ally party is\nprotected by a\nmist that prevents\nstat reductions.");
-static const u8 sMoveFourLineDescription_MoveWaterGun[] = _("The foe is struck\nwith a lot of water.\n+1 priority.\nMega Launcher boost.");
+static const u8 sMoveFourLineDescription_MoveWaterGun[] = _("The foe is struck\nwith a lot of water\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveHydroPump[] = _("A high volume of\nwater is blasted at\nwith high pressure.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MoveSurf[] = _("A big wave crashes\ndown on the foe.\nField-based.");
 static const u8 sMoveFourLineDescription_MoveIceBeam[] = _("The foe is struck\nwith an icy beam.\n10% frostbite chance.\nMega Launcher boost");
@@ -5745,6 +5749,7 @@ static const u8 sMoveFourLineDescription_MoveHydroSteam[] = _("The user blasts t
 static const u8 sMoveFourLineDescription_MoveSuperhotFlame[] = _("Deals damage. Deals\nincreased damage in\nrain.");
 static const u8 sMoveFourLineDescription_MoveTripleArrows[] = _("50% chance to drop\nDef. 30% chance to\nflinch. High crit.\nArrow-based.");
 static const u8 sMoveFourLineDescription_MoveDoubleLariat[] = _("User hits both foes\nwith whirling arms.\nFoes cannot use any\nsound moves after.");
+static const u8 sMoveFourLineDescription_MoveQuickStream[] = _("The user sends a\njet of water to\nattack the foe.\n+1 priority.");
 static const u8 sMoveFourLineDescription_MoveLeechBlade[] = _("Heals 50% of damage \ndone to the foe.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveYggdrasilForce[] = _("Nature's overcharges\nthe user's strike.\nLowers Atk and Def.");
 static const u8 sMoveFourLineDescription_MoveDrainBrain[] = _("Saps the foe's SpDef\nand heals HP by\nthe same amount.");
@@ -6741,6 +6746,7 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_SUPERHOT_FLAME - 1] = sMoveFourLineDescription_MoveSuperhotFlame,
     [MOVE_TRIPLE_ARROWS - 1] = sMoveFourLineDescription_MoveTripleArrows,
     [MOVE_DOUBLE_LARIAT - 1] = sMoveFourLineDescription_MoveDoubleLariat,
+    [MOVE_QUICK_STREAM - 1] = sMoveFourLineDescription_MoveQuickStream,
     [MOVE_LEECH_BLADE - 1] = sMoveFourLineDescription_MoveLeechBlade,
     [MOVE_YGGDRASIL_FORCE - 1] = sMoveFourLineDescription_MoveYggdrasilForce,
     [MOVE_DRAIN_BRAIN - 1] = sMoveFourLineDescription_MoveDrainBrain,
