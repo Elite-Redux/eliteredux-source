@@ -17,32 +17,6 @@
 
 #define AI_GET_MOVE_EFFECT_CHANCE 0
 
-int CheckCancelledForTarget(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
-{
-    if (!AreSameSide(battlerAtk, battlerDef)
-        && gSideTimers[GetBattlerSide(battlerDef)].quickGuardTimer
-        // TODO: Set gProcessingExtraAttacks when scoring extra moves
-        && !gProcessingExtraAttacks
-        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
-    {
-        return TRUE;
-    }
-    
-    if (gBattleMoves[move].flags & FLAG_POWDER && battlerAtk != battlerDef && !HasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, aiData))
-    {
-        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) || GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES)
-            return TRUE;
-    }
-
-    if (!AreSameSide(battlerAtk, battlerDef)
-        && !gProcessingExtraAttacks
-        && IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)
-        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
-        return TRUE;
-
-    return FALSE;
-}
-
 int GetFullChance(int battlerAttack, int move, int moveEffect, int chance, struct AiData* aiData)
 {
     return GetMoveEffectChance(battlerAttack, move, moveEffect, chance);

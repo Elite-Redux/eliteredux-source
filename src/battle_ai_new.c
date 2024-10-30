@@ -15,7 +15,7 @@
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
 
-int CheckCancelledAlways(int battlerAtk, int move, struct AiData* aiData)
+int CheckCancelledAlways(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
 {
     if (gBattleMons[battlerAtk].status1 & STATUS1_SLEEP)
     {
@@ -29,6 +29,27 @@ int CheckCancelledAlways(int battlerAtk, int move, struct AiData* aiData)
     {
         // TODO: Handle Sky Drop
     }
+
+    if (!AreSameSide(battlerAtk, battlerDef)
+        && gSideTimers[GetBattlerSide(battlerDef)].quickGuardTimer
+        // TODO: Set gProcessingExtraAttacks when scoring extra moves
+        && !gProcessingExtraAttacks
+        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
+    {
+        return AI_SCORE_LOSE_TURN(100);
+    }
+    
+    if (gBattleMoves[move].flags & FLAG_POWDER && battlerAtk != battlerDef && !HasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, aiData))
+    {
+        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) || GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES)
+            return AI_SCORE_LOSE_TURN(100);
+    }
+
+    if (!AreSameSide(battlerAtk, battlerDef)
+        && !gProcessingExtraAttacks
+        && IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)
+        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
+        return AI_SCORE_LOSE_TURN(100);
 
     if (gBattleMons[battlerAtk].status2 & STATUS2_RECHARGE)
         return AI_SCORE_LOSE_TURN(100);
