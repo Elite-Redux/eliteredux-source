@@ -267,6 +267,7 @@
 #define VARIOUS_SWAP_STAT                       184
 #define VARIOUS_SET_QUICK_GUARD                 185
 #define VARIOUS_RUDE_AWAKENING                  186
+#define VARIOUS_SHELL_TRAP_CHOICE                187
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1
