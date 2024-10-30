@@ -497,6 +497,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectSweetKiss				  @ EFFECT_SWEET_KISS
 	.4byte BattleScript_EffectQuickGuard			  @ EFFECT_QUICK_GUARD
 	.4byte BattleScript_EffectTwoTurnRetaliation	  @ EFFECT_TWO_TURN_RETALIATION
+	.4byte BattleScript_EffectShellTrap				  @ EFFECT_SHELL_TRAP
 	
 BattleScript_EffectCourtChange:
 	attackcanceler
@@ -5130,6 +5131,12 @@ BattleScript_EffectCounter::
 	bichalfword gMoveResultFlags, MOVE_RESULT_NOT_VERY_EFFECTIVE | MOVE_RESULT_SUPER_EFFECTIVE
 	adjustdamage
 	goto BattleScript_HitFromAtkAnimation
+
+BattleScript_EffectShellTrap:
+	attackcanceler
+	shelltraptarget BattleScript_ButItFailedAtkStringPpReduce
+	accuracycheck BattleScript_PrintMoveMissed, ACC_CURR_MOVE
+	goto BattleScript_HitFromAtkString
 
 BattleScript_EffectEncore::
 	attackcanceler

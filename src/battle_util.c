@@ -16003,7 +16003,7 @@ int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker)
         || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
     {
         if (!DoesBattlerHaveAbilityShield(battler))
-            return TOTAL_ABILITY_COUNT;
+            return ABILITY_NONE;
     }
 
     return ability;

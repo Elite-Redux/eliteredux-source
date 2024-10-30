@@ -11450,6 +11450,20 @@ static void Cmd_various(void)
         BattleScriptPush(ptr);
         gBattlescriptCurrInstr = BattleScript_DoRudeAwakening;
         break;
+    case VARIOUS_SHELL_TRAP_CHOICE:
+        ptr = READ_PTR_INC;
+        REQUIRE_NOT(gTurnStructs[gActiveBattler].multiHitsUsed)
+        if (gRoundStructs[gBattlerAttacker].physicalDmg
+            && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(gRoundStructs[gBattlerAttacker].physicalBattlerId)
+            && IsBattlerAlive(gRoundStructs[gBattlerAttacker].physicalBattlerId))
+        {
+            gBattlerTarget = gRoundStructs[gBattlerAttacker].physicalBattlerId;
+        }
+        else
+        {
+            gBattlescriptCurrInstr = ptr;
+        }
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 
@@ -15255,7 +15269,7 @@ static void Cmd_settoxicspikes(void)
 
 static void Cmd_setgastroacid(void)
 {
-    if (IsGastroAcidBannedAbility(GetBattlerAbility(gBattlerTarget)))
+    if (gStatuses3[gBattlerTarget] & STATUS3_GASTRO_ACID)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }

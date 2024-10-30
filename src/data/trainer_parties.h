@@ -3454,7 +3454,7 @@ static const struct TrainerMonItemCustomMoves sParty_Lyle[] = {
     .ability = 0,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_ICE_BEAM, MOVE_HYDRO_PUMP, MOVE_QUICK_STREAM, MOVE_BUG_BUZZ
+    .moves = MOVE_ICE_BEAM, MOVE_HYDRO_PUMP, MOVE_WATER_GUN, MOVE_BUG_BUZZ
     },
     {
     .lvl = 0,
@@ -42303,7 +42303,7 @@ static const struct TrainerMonItemCustomMoves sParty_TiffanyInsane[] = {
     .ability = 2,
     .evs = {252, 0, 0, 252, 0, 4},
     .nature = NATURE_MODEST,
-    .moves = MOVE_DAZZLING_GLEAM, MOVE_SPARKLING_ARIA, MOVE_MAKE_IT_RAIN, MOVE_QUICK_STREAM
+    .moves = MOVE_DAZZLING_GLEAM, MOVE_SPARKLING_ARIA, MOVE_MAKE_IT_RAIN, MOVE_WATER_GUN
     },
     {
     .lvl = 0,

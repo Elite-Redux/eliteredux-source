@@ -2371,7 +2371,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_OCTAZOOKA] =
     {
         .effect = EFFECT_ACCURACY_DOWN_HIT,
-        .power = 100,
+        .power = 120,
         .type = TYPE_WATER,
         .accuracy = 50,
         .pp = 10,
@@ -4021,7 +4021,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_SIGNAL_BEAM] =
     {
         .effect = EFFECT_CONFUSE_HIT,
-        .power = 75,
+        .power = 85,
         .type = TYPE_BUG,
         .accuracy = 100,
         .pp = 15,
@@ -8171,7 +8171,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_SHELL_TRAP] =
     {
-        .effect = EFFECT_PLACEHOLDER,
+        .effect = EFFECT_SHELL_TRAP,
         .power = 150,
         .type = TYPE_FIRE,
         .accuracy = 100,
@@ -10426,19 +10426,6 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_SHEER_FORCE_BOOST,
         .split = SPLIT_PHYSICAL,
     },
-    [MOVE_QUICK_STREAM] =
-    {
-        .effect = EFFECT_HIT,
-        .power = 40,
-        .type = TYPE_WATER,
-        .accuracy = 100,
-        .pp = 20,
-        .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_SELECTED,
-        .priority = 1,
-        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
-        .split = SPLIT_SPECIAL,
-    },
     [MOVE_LEECH_BLADE] =
     {
         .effect = EFFECT_ABSORB,
@@ -10675,7 +10662,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_TWIN_BEAM] =
     {
         .effect = EFFECT_DOUBLE_HIT,
-        .power = 40,
+        .power = 45,
         .type = TYPE_PSYCHIC,
         .accuracy = 100,
         .pp = 10,

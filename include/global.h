@@ -57,7 +57,7 @@
 
 #define DEBUG_BUILD
 #define DEBUG_POKEMON_MENU   TRUE
-#define CURRENT_GAME_VERSION 1045
+#define CURRENT_GAME_VERSION 1046
 
 // free saveblock 1 defines             If defined it will free the space
 #define FREE_TRAINER_HILL               //frees up trainer hill data. 28 bytes.                        WARNING THIS HAS BEEN SHOWN TO BREAK MULTI BATTLES
