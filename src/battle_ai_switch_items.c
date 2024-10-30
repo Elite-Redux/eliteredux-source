@@ -1154,8 +1154,7 @@ static bool8 ShouldUseItem(void)
                 *(gBattleStruct->AI_itemFlags + gActiveBattler / 2) |= (1 << AI_HEAL_SLEEP);
                 shouldUse = TRUE;
             }
-            if (itemEffects[3] & ITEM3_POISON && (gBattleMons[gActiveBattler].status1 & STATUS1_POISON 
-                                               || gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_POISON))
+            if (itemEffects[3] & ITEM3_POISON && gBattleMons[gActiveBattler].status1 & STATUS1_PSN_ANY)
             {
                 *(gBattleStruct->AI_itemFlags + gActiveBattler / 2) |= (1 << AI_HEAL_POISON);
                 shouldUse = TRUE;

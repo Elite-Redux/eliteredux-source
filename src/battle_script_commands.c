@@ -8391,7 +8391,7 @@ static bool32 ClearDefogHazards(u8 battlerAtk, bool32 clear)
         }
         DEFOG_CLEAR(SIDE_STATUS_STEALTH_ROCK, stealthRockType, BattleScript_StealthRockFree, 0);
         DEFOG_CLEAR(SIDE_STATUS_TOXIC_SPIKES, toxicSpikesAmount, BattleScript_ToxicSpikesFree, 0);
-        DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebAmount, BattleScript_StickyWebFree, 0);
+        DEFOG_CLEAR(SIDE_STATUS_STICKY_WEB, stickyWebTimer, BattleScript_StickyWebFree, 0);
         if (gSideTimers[i].caltrops)
         {
             if (clear)
@@ -10806,11 +10806,10 @@ static void Cmd_various(void)
         SWAP(gSideTimers[0].spikesAmount, gSideTimers[1].spikesAmount, temp)
         SWAP(gSideTimers[0].toxicSpikesAmount, gSideTimers[1].toxicSpikesAmount, temp)
         SWAP(gSideTimers[0].stealthRockType, gSideTimers[1].stealthRockType, temp)
-        SWAP(gSideTimers[0].stickyWebAmount, gSideTimers[1].stickyWebAmount, temp)
+        SWAP(gSideTimers[0].stickyWebTimer, gSideTimers[1].stickyWebTimer, temp)
         SWAP(gSideTimers[0].auroraVeilTimer, gSideTimers[1].auroraVeilTimer, temp)
         SWAP(gSideTimers[0].tailwindTimer, gSideTimers[1].tailwindTimer, temp)
         SWAP(gSideTimers[0].luckyChantTimer, gSideTimers[1].luckyChantTimer, temp)
-        SWAP(gSideTimers[0].spiderWebTimer, gSideTimers[1].spiderWebTimer, temp)
         SWAP(gSideTimers[0].swampTimer, gSideTimers[1].swampTimer, temp)
         SWAP(gSideTimers[0].fireSeaTimer, gSideTimers[1].fireSeaTimer, temp)
         SWAP(gSideTimers[0].rainbowTimer, gSideTimers[1].rainbowTimer, temp)
@@ -14693,7 +14692,7 @@ static void Cmd_rapidspinfree(void)
     if (gSideStatuses[atkSide] & SIDE_STATUS_STICKY_WEB)
     {
         gSideStatuses[atkSide] &= ~(SIDE_STATUS_STICKY_WEB);
-        gSideTimers[atkSide].stickyWebAmount = 0;
+        gSideTimers[atkSide].stickyWebTimer = 0;
         BattleScriptCall(BattleScript_StickyWebFree);
     }
 
@@ -14789,7 +14788,7 @@ static void Cmd_setstickyweb(void)
     else
     {
         gSideStatuses[targetSide] |= SIDE_STATUS_STICKY_WEB;
-        gSideTimers[targetSide].stickyWebAmount = 1;
+        gSideTimers[targetSide].stickyWebTimer = 0;
         gBattleStruct->stickyWebUser = gBattlerAttacker;    // For Mirror Armor
         gBattlescriptCurrInstr += 5;
     }

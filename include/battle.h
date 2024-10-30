@@ -288,7 +288,6 @@ struct SideTimer
     u8 spikesAmount;
     u8 toxicSpikesAmount;
     u8 stealthRockType;
-    u8 stickyWebAmount;
     u8 auroraVeilTimer;
     u8 auroraVeilBattlerId;
     u8 tailwindTimer;
@@ -296,7 +295,7 @@ struct SideTimer
     u8 luckyChantTimer;
     u8 luckyChantBattlerId;
     u8 retaliateTimer;
-    u8 spiderWebTimer;
+    u8 stickyWebTimer;
     u8 swampTimer;
     u8 fireSeaTimer;
     u8 rainbowTimer;

@@ -174,3 +174,36 @@ int GetAiDecision(int battler)
     if (IsBattlerAlive(0)) RestoreDisguise(&disguise0);
     if (IsBattlerAlive(2)) RestoreDisguise(&disguise2);
 }
+
+/*
+Plan:
+Calc accuracy for each move on battler and opponent
+If acc > 0 calc damage for each move
+
+Calculate move scores
+Add KO scores
+Fuzz values
+Check for KO chance
+Best move follows this:
+* Skip protect for now
+* For each move find the move that the opponent has that matches up the best
+** If move has a KO chance reduce values of moves by KO percents
+** If opponent has move that goes first and disables move assume they use it
+
+Switch math:
+* Don't evaluate double-switching
+* Use above process assuming opponent picks optimal move
+* Then evaluate actual turn scores ignoring protect
+* Optimal switch combines low score this turn and high score on following turns
+
+* Evaluate protect:
+** Choose move or switch with the highest score vs protect
+** If moves differ pick a winning mixed strategy according to https://www3.nd.edu/~andyp/teaching/2023SpringMath10120/Schedule/Lecture29.pdf
+* Idk what to do about encore
+
+Calc move orders for each battler
+Calc damage for each move on battler and opponent
+If KO -> SCORE_KO
+If not record damage
+
+*/

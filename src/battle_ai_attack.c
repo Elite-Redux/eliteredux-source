@@ -323,12 +323,6 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     if (move == MOVE_NONE) return 0;
     if (!IsBattlerAlive(battlerDef)) return 0;
 
-    if (CheckCancelledForTarget(battlerAtk, battlerDef, move, aiData))
-    {
-        aiData->moveState.cancelled = TRUE;
-        return 0;
-    }
-
     SetTypeBeforeUsingMove(move, battlerAtk);
     if (IS_MOVE_STATUS(move) && CheckPowder(battlerAtk, move))
     {
@@ -1378,7 +1372,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_DEFENSE_UP(battlerDef, -1);
 
     CASE_AND_LABEL(EFFECT_VENOM_DRENCH)
-        if (!(gBattleMons[battlerDef].status1 & STATUS1_POISON)) return AI_SCORE_UNUSABLE;
+        if (!(gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY)) return AI_SCORE_UNUSABLE;
         return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_DEFENSE_UP(battlerDef, -1) + AI_SCORE_SPEED_UP(battlerDef, -1);
 
     CASE_AND_LABEL(EFFECT_TOXIC_THREAD)
