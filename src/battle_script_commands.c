@@ -15255,7 +15255,7 @@ static void Cmd_settoxicspikes(void)
 
 static void Cmd_setgastroacid(void)
 {
-    if (IsGastroAcidBannedAbility(GetBattlerAbility(gBattlerTarget)))
+    if (gStatuses3[gBattlerTarget] & STATUS3_GASTRO_ACID)
     {
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
     }
