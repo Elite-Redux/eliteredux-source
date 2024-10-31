@@ -7805,7 +7805,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_ICE_HAMMER] =
     {
-        .effect = EFFECT_HAMMER_ARM,
+        .effect = EFFECT_HIT,
         .power = 100,
         .type = TYPE_ICE,
         .accuracy = 100,
