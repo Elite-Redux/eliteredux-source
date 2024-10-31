@@ -5520,8 +5520,7 @@ static void Cmd_moveend(void)
         case MOVEEND_PROTECT_LIKE_EFFECT:
             if (gRoundStructs[gBattlerAttacker].touchedProtectLike)
             {
-                if (gRoundStructs[gBattlerTarget].spikyShielded &&
-					!IsMagicGuardProtected(gBattlerAttacker))
+                if (gRoundStructs[gBattlerTarget].spikyShielded)
                 {
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
                     gBattleScripting.moveEffect = MOVE_EFFECT_BLEED;
