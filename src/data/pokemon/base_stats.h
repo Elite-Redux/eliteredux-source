@@ -19664,6 +19664,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 3,
     },
 
+    [SPECIES_SAGARACAS] =
+    {
+    .baseHP        =  90,
+    .baseAttack    =  66,
+    .baseDefense   =  92,
+    .baseSpeed     =  75,
+    .baseSpAttack  =  106,
+    .baseSpDefense =  92,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_GRASS,
+    .catchRate = 255,
+    .expYield = 161,
+    .evYield_SpAttack  = 2,
+    .item2 = ITEM_MIRACLE_SEED,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_GRASS,
+    .eggGroup2 = EGG_GROUP_GRASS,
+	.abilities = {ABILITY_CHLOROPHYLL, ABILITY_SELF_SUFFICIENT, ABILITY_SUPER_SLAMMER},
+	.innates = {ABILITY_ROUGH_SKIN, ABILITY_WATER_ABSORB, ABILITY_HUGE_POWER},
+    .bodyColor = BODY_COLOR_GREEN,
+    .noFlip = FALSE,
+    .tier = 3,
+    },
+
 [SPECIES_DWEBBLE] =
     {
     .baseHP        = 50,

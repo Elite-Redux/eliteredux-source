@@ -11016,6 +11016,12 @@ static const union AnimCmd sAnim_DURALUDON_PARTNER_MEGA_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_SAGARACAS_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_DREEPY_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -16215,6 +16221,11 @@ static const union AnimCmd *const sAnims_MARACTUS[] ={
     sAnim_MARACTUS_1,
 };
 
+static const union AnimCmd *const sAnims_SAGARACAS[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SAGARACAS_1,
+};
+
 static const union AnimCmd *const sAnims_DWEBBLE[] ={
     sAnim_GeneralFrame0,
     sAnim_DWEBBLE_1,
@@ -20648,6 +20659,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(DARUMAKA),
     ANIM_CMD(DARMANITAN),
     ANIM_CMD(MARACTUS),
+    ANIM_CMD(SAGARACAS),
     ANIM_CMD(DWEBBLE),
     ANIM_CMD(CRUSTLE),
     ANIM_CMD(SCRAGGY),

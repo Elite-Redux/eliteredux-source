@@ -559,6 +559,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DARUMAKA] = _("Darumaka"),
     [SPECIES_DARMANITAN] = _("Darmanitan"),
     [SPECIES_MARACTUS] = _("Maractus"),
+    [SPECIES_SAGARACAS] = _("Sagaracas"),
     [SPECIES_DWEBBLE] = _("Dwebble"),
     [SPECIES_CRUSTLE] = _("Crustle"),
     [SPECIES_SCRAGGY] = _("Scraggy"),
