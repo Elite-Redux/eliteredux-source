@@ -3289,6 +3289,7 @@ u8 DoBattlerEndTurnEffects(void)
             gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
             BattleScriptExecute(BattleScript_AbilityDrainsHp);
             effect++;
+            }
             break;
         case ENDTURN_BURN:  // burn
             if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0 &&
