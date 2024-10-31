@@ -2370,7 +2370,7 @@ u8 DoFieldEndTurnEffects(void)
                 //Spider Web
                 if (gSideStatuses[side] & SIDE_STATUS_STICKY_WEB)
                 {
-                    if (!gSideTimers[side].started.spiderWeb && --gSideTimers[side].spiderWebTimer == 1)
+                    if (!gSideTimers[side].started.spiderWeb && gSideTimers[side].stickyWebTimer && --gSideTimers[side].stickyWebTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_STICKY_WEB;
                         BattleScriptExecute(BattleScript_SideStatusWoreOff);
@@ -3148,94 +3148,98 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_POISON:  // poison
-            if ((gBattleMons[gActiveBattler].status1 & STATUS1_POISON)
-                && gBattleMons[gActiveBattler].hp != 0)
-            {
-                if (BattlerHasAbility(gActiveBattler, ABILITY_POISON_HEAL, FALSE))
-                {
-                    if (!BATTLER_MAX_HP(gActiveBattler) && !BATTLER_HEALING_BLOCKED(gActiveBattler))
-                    {
-                        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
-                        if (gBattleMoveDamage == 0)
-                            gBattleMoveDamage = 1;
-                        gBattleMoveDamage *= -1;
-                        BattleScriptExecute(BattleScript_PoisonHealActivates);
-                        effect++;
-                    }
-                }
-                else
-                {
-				    TOXIC_BOOST_CHECK;
-                    MAGIC_GUARD_CHECK;
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
-                    BattleScriptExecute(BattleScript_PoisonTurnDmg);
-                    effect++;
-                }
-            }
             gBattleStruct->turnEffectsTracker++;
-            break;
-        case ENDTURN_BAD_POISON:  // toxic poison
-            if ((gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_POISON)
-                && gBattleMons[gActiveBattler].hp != 0)
+            REQUIRE(gBattleMons[gActiveBattler].status1 & STATUS1_POISON)
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+
+            if (BattlerHasAbility(gActiveBattler, ABILITY_POISON_HEAL, FALSE))
             {
-                if (BattlerHasAbility(ability, ABILITY_POISON_HEAL, FALSE))
-                {
-                    if (!BATTLER_MAX_HP(gActiveBattler) && !BATTLER_HEALING_BLOCKED(gActiveBattler))
-                    {
-                        TOXIC_BOOST_CHECK;
-                        MAGIC_GUARD_CHECK;
-                        gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
-                        if (gBattleMoveDamage == 0)
-                            gBattleMoveDamage = 1;
-                        gBattleMoveDamage *= -1;
-                        BattleScriptExecute(BattleScript_PoisonHealActivates);
-                        effect++;
-                    }
-                }
-                else
-                {
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
-                    if (gBattleMoveDamage == 0)
-                        gBattleMoveDamage = 1;
-                    if ((gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_COUNTER) != STATUS1_TOXIC_TURN(15)) // not 16 turns
-                        gBattleMons[gActiveBattler].status1 += STATUS1_TOXIC_TURN(1);
-                    gBattleMoveDamage *= (gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_COUNTER) >> 8;
-                    BattleScriptExecute(BattleScript_PoisonTurnDmg);
-                    effect++;
-                }
-            }
-            gBattleStruct->turnEffectsTracker++;
-            break;
-        case ENDTURN_SEA_OF_FIRE_DAMAGE:
-            if (IsBattlerAlive(gActiveBattler) && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FIRE) && gSideTimers[GetBattlerSide(gActiveBattler)].fireSeaTimer)
-            {
-                MAGIC_GUARD_CHECK;
-				FLARE_BOOST_CHECK;
+                REQUIRE_NOT(BATTLER_MAX_HP(gActiveBattler))
+                REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gActiveBattler))
 
                 gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                 if (gBattleMoveDamage == 0)
                     gBattleMoveDamage = 1;
-                gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
-                BtlController_EmitStatusAnimation(0, FALSE, STATUS1_BURN);
-                MarkBattlerForControllerExec(gActiveBattler);
-                BattleScriptExecute(BattleScript_HurtByTheSeaOfFire);
+                gBattleMoveDamage *= -1;
+                BattleScriptExecute(BattleScript_PoisonHealActivates);
                 effect++;
             }
+            else
+            {
+                REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
+                REQUIRE_NOT(BattlerHasAbility(gActiveBattler, ABILITY_TOXIC_BOOST, FALSE))
+
+                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+                if (gBattleMoveDamage == 0)
+                    gBattleMoveDamage = 1;
+                BattleScriptExecute(BattleScript_PoisonTurnDmg);
+                effect++;
+            }
+            break;
+        case ENDTURN_BAD_POISON:  // toxic poison
             gBattleStruct->turnEffectsTracker++;
+            
+            REQUIRE(gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_POISON)
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+            
+            if (BattlerHasAbility(gActiveBattler, ABILITY_POISON_HEAL, FALSE))
+            {
+                REQUIRE_NOT(BATTLER_MAX_HP(gActiveBattler))
+                REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gActiveBattler))
+
+                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+                if (gBattleMoveDamage == 0)
+                    gBattleMoveDamage = 1;
+                gBattleMoveDamage *= -1;
+                BattleScriptExecute(BattleScript_PoisonHealActivates);
+                effect++;
+            }
+            else
+            {
+                if ((gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_COUNTER) != STATUS1_TOXIC_TURN(15)) // not 16 turns
+                    gBattleMons[gActiveBattler].status1 += STATUS1_TOXIC_TURN(1);
+                
+                REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
+                REQUIRE_NOT(BattlerHasAbility(gActiveBattler, ABILITY_TOXIC_BOOST, FALSE))
+
+                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
+                if (gBattleMoveDamage == 0)
+                    gBattleMoveDamage = 1;
+                gBattleMoveDamage = (gBattleMons[gActiveBattler].status1 & STATUS1_TOXIC_COUNTER) * gBattleMoveDamage >> 8;
+                BattleScriptExecute(BattleScript_PoisonTurnDmg);
+                effect++;
+            }
+            break;
+        case ENDTURN_SEA_OF_FIRE_DAMAGE:
+            gBattleStruct->turnEffectsTracker++;
+
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+            REQUIRE_NOT(IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_FIRE))
+            REQUIRE(gSideTimers[GetBattlerSide(gActiveBattler)].fireSeaTimer)
+            REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
+            REQUIRE_NOT(BattlerHasAbility(gActiveBattler, ABILITY_FLARE_BOOST, FALSE))
+            
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+            if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = 1;
+            gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
+            BtlController_EmitStatusAnimation(0, FALSE, STATUS1_BURN);
+            MarkBattlerForControllerExec(gActiveBattler);
+            BattleScriptExecute(BattleScript_HurtByTheSeaOfFire);
+            effect++;
             break;
         case ENDTURN_COMMANDER:
-            if (IsBattlerAlive(gActiveBattler) && GetAbilityState(gActiveBattler, ABILITY_COMMANDER) == COMMANDER_NEEDS_CANCELLING)
-            {
-                SetAbilityState(gActiveBattler, ABILITY_COMMANDER, COMMANDER_NOT_ACTIVE);
-                gStatuses3[gActiveBattler] &= ~STATUS3_SEMI_INVULNERABLE;
-                gBattleScripting.abilityPopupOverwrite = ABILITY_COMMANDER;
-                gStackBattler1 = gActiveBattler;
-                BattleScriptExecute(BattleScript_CommanderEndsEnd2);
-                effect++;
-            }
             gBattleStruct->turnEffectsTracker++;
+
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+            REQUIRE(GetAbilityState(gActiveBattler, ABILITY_COMMANDER) == COMMANDER_NEEDS_CANCELLING)
+
+            SetAbilityState(gActiveBattler, ABILITY_COMMANDER, COMMANDER_NOT_ACTIVE);
+            gStatuses3[gActiveBattler] &= ~STATUS3_SEMI_INVULNERABLE;
+            gBattleScripting.abilityPopupOverwrite = ABILITY_COMMANDER;
+            gStackBattler1 = gActiveBattler;
+            BattleScriptExecute(BattleScript_CommanderEndsEnd2);
+            effect++;
             break;
         case ENDTURN_PARASITIC_SPORES_DAMAGE:
             if (IsBattlerAlive(gActiveBattler) && gVolatileStructs[gActiveBattler].parasiticSpores && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST))
@@ -15231,7 +15235,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             int side = BATTLE_OPPOSITE(battler);
             gSideTimers[side].started.spiderWeb = TRUE;
             gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
-            gSideTimers[side].spiderWebTimer = 5;
+            gSideTimers[side].stickyWebTimer = 5;
             BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);
             }
             return TRUE;

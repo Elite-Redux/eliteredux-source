@@ -15,7 +15,7 @@
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
 
-int CheckCancelledAlways(int battlerAtk, int move, struct AiData* aiData)
+int CheckCancelledAlways(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
 {
     if (gBattleMons[battlerAtk].status1 & STATUS1_SLEEP)
     {
@@ -29,6 +29,27 @@ int CheckCancelledAlways(int battlerAtk, int move, struct AiData* aiData)
     {
         // TODO: Handle Sky Drop
     }
+
+    if (!AreSameSide(battlerAtk, battlerDef)
+        && gSideTimers[GetBattlerSide(battlerDef)].quickGuardTimer
+        // TODO: Set gProcessingExtraAttacks when scoring extra moves
+        && !gProcessingExtraAttacks
+        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
+    {
+        return AI_SCORE_LOSE_TURN(100);
+    }
+    
+    if (gBattleMoves[move].flags & FLAG_POWDER && battlerAtk != battlerDef && !HasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, aiData))
+    {
+        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) || GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES)
+            return AI_SCORE_LOSE_TURN(100);
+    }
+
+    if (!AreSameSide(battlerAtk, battlerDef)
+        && !gProcessingExtraAttacks
+        && IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)
+        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
+        return AI_SCORE_LOSE_TURN(100);
 
     if (gBattleMons[battlerAtk].status2 & STATUS2_RECHARGE)
         return AI_SCORE_LOSE_TURN(100);
@@ -153,3 +174,36 @@ int GetAiDecision(int battler)
     if (IsBattlerAlive(0)) RestoreDisguise(&disguise0);
     if (IsBattlerAlive(2)) RestoreDisguise(&disguise2);
 }
+
+/*
+Plan:
+Calc accuracy for each move on battler and opponent
+If acc > 0 calc damage for each move
+
+Calculate move scores
+Add KO scores
+Fuzz values
+Check for KO chance
+Best move follows this:
+* Skip protect for now
+* For each move find the move that the opponent has that matches up the best
+** If move has a KO chance reduce values of moves by KO percents
+** If opponent has move that goes first and disables move assume they use it
+
+Switch math:
+* Don't evaluate double-switching
+* Use above process assuming opponent picks optimal move
+* Then evaluate actual turn scores ignoring protect
+* Optimal switch combines low score this turn and high score on following turns
+
+* Evaluate protect:
+** Choose move or switch with the highest score vs protect
+** If moves differ pick a winning mixed strategy according to https://www3.nd.edu/~andyp/teaching/2023SpringMath10120/Schedule/Lecture29.pdf
+* Idk what to do about encore
+
+Calc move orders for each battler
+Calc damage for each move on battler and opponent
+If KO -> SCORE_KO
+If not record damage
+
+*/

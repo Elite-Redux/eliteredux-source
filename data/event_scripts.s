@@ -682,8 +682,28 @@ Common_ShowEasyChatScreen:: @ 8271E7C
 	return
 
 Common_EventScript_ReadyPetalburgGymForBattle:: @ 8271E84
+	compare VAR_PETALBURG_GYM_STATE, 6
+	goto_if_gt Common_EventScript_Return
+	goto_if_set FLAG_BADGE01_GET, Common_EventScript_ReadyPetalburgGymForBattle_CheckBrawly
+	setvar VAR_PETALBURG_GYM_STATE, 2
+	return
+Common_EventScript_ReadyPetalburgGymForBattle_CheckBrawly:
+	goto_if_set FLAG_BADGE02_GET, Common_EventScript_ReadyPetalburgGymForBattle_CheckWattson
+	setvar VAR_PETALBURG_GYM_STATE, 3
+	return
+Common_EventScript_ReadyPetalburgGymForBattle_CheckWattson:
+	goto_if_set FLAG_BADGE03_GET, Common_EventScript_ReadyPetalburgGymForBattle_CheckFlannery
+	setvar VAR_PETALBURG_GYM_STATE, 4
+	return
+Common_EventScript_ReadyPetalburgGymForBattle_CheckFlannery:
+	goto_if_set FLAG_BADGE04_GET, Common_EventScript_ReadyPetalburgGymForBattle_AllClear
+	setvar VAR_PETALBURG_GYM_STATE, 5
+	return
+Common_EventScript_ReadyPetalburgGymForBattle_AllClear:
+	setvar VAR_PETALBURG_GYM_STATE, 6
 	clearflag FLAG_HIDE_PETALBURG_GYM_GREETER
 	setflag FLAG_PETALBURG_MART_EXPANDED_ITEMS
+Common_EventScript_Return:
 	return
 
 Common_EventScript_BufferTrendyPhrase:: @ 8271E8B

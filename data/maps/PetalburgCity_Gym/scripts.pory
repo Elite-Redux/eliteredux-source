@@ -1755,6 +1755,7 @@ script PetalburgCity_Gym_EventScript_Norman{
 		break
 		case 7:
 		case 8:
+		default:
 			// dd changes caused VAR_PETALBURG_GYM_STATE to be incremented more than it should
 			// even if the cause was fixed eventually.
 			if (!flag(FLAG_BADGE06_GET)){
