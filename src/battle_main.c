@@ -4006,7 +4006,11 @@ static void TryDoEventsBeforeFirstTurn(void)
         if (!gBattleStruct->firstTurnAbilityLoopCounter)
         {
             gBattlerAttacker = gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter];
-            if (!IsBattlerAlive(gBattlerAttacker)) continue;
+            if (!IsBattlerAlive(gBattlerAttacker))
+            {
+                gBattleStruct->switchInAbilitiesCounter++;
+                continue;
+            }
 
             ClearMiscTurnFlags();
             // Primal Reversion
