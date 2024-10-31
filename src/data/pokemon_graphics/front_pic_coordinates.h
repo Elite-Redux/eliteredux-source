@@ -5687,16 +5687,6 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset = 0,
     },
-    [SPECIES_AMPHYBUZZ] =
-    {
-        .size = 0x77,
-        .y_offset = 2,
-    },
-    [SPECIES_AMPHYBUZZ_MEGA] =
-    {
-        .size = 0,
-        .y_offset = 2,
-    },
     [SPECIES_CORM] =
     {
         .size = 0x45,
@@ -5935,7 +5925,12 @@ const struct MonCoords gMonFrontPicCoords[] =
     [SPECIES_AMPHYBUZZ] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 2,
+    },
+    [SPECIES_AMPHYBUZZ_MEGA] =
+    {
+        .size = 0,
+        .y_offset = 2,
     },
     [SPECIES_SEEL_REDUX] =
     {
