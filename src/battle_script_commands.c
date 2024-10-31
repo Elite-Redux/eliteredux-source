@@ -5584,8 +5584,10 @@ static void Cmd_moveend(void)
                     BattleScriptCall(BattleScript_KingsShieldEffect);
                     effect = 1;
                 }
-                else if (gRoundStructs[gBattlerTarget].merculight)
+                else if (gRoundStructs[gBattlerTarget].merculight
+                    && CalcTypeEffectivenessMultiplier(MOVE_MERCULIGHT, TYPE_ELECTRIC, gBattlerTarget, gBattlerAttacker, TRUE))
                 {
+                    
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
                     gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
                     PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_MERCULIGHT);
