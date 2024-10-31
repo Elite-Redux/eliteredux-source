@@ -12396,159 +12396,88 @@ int IsMagicGuardProtected(int battler)
 
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability)
 {
-    
-    // Aerodynamics
-    if (BattlerHasAbility(battler, ABILITY_AERODYNAMICS, TRUE)) {
-        if (moveType == TYPE_FLYING) {
+    int i;
+    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
+    {
+        *ability = GetAbilityAtIndex(battler, i, TRUE);
+        switch (*ability)
+        {
+        case ABILITY_AERODYNAMICS:
+            REQUIRE(moveType == TYPE_FLYING)
             *statId = STAT_SPEED;
-            *ability = ABILITY_AERODYNAMICS;
             return 2;
-        }
-    }
-    
-    // Volt Absorb
-    if (BattlerHasAbility(battler, ABILITY_VOLT_ABSORB, TRUE)) {
-        if (moveType == TYPE_ELECTRIC) {
-            *ability = ABILITY_VOLT_ABSORB;
+            
+        case ABILITY_VOLT_ABSORB:
+            REQUIRE(moveType == TYPE_ELECTRIC)
             return 1;
-        }
-    }
 
-    // Earth Eater
-    if (BattlerHasAbility(battler, ABILITY_EARTH_EATER, TRUE)) {
-        if (moveType == TYPE_GROUND) {
-            *ability = ABILITY_EARTH_EATER;
+        case ABILITY_EARTH_EATER:
+            REQUIRE(moveType == TYPE_GROUND)
             return 1;
-        }
-    }
-    
-    // Water Absorb
-    if (BattlerHasAbility(battler, ABILITY_WATER_ABSORB, TRUE)) {
-        if (moveType == TYPE_WATER) {
-            *ability = ABILITY_WATER_ABSORB;
+
+        case ABILITY_WATER_ABSORB:
+        case ABILITY_OLD_MARINER:
+        case ABILITY_DRY_SKIN:
+        ABSORB_WATER_ABSORB:
+            REQUIRE(moveType == TYPE_WATER)
             return 1;
-        }
-    }
-    
-    // Water Absorb
-    if (BattlerHasAbility(battler, ABILITY_OLD_MARINER, TRUE)) {
-        if (moveType == TYPE_WATER) {
-            *ability = ABILITY_OLD_MARINER;
+            
+        case ABILITY_POISON_ABSORB:
+            REQUIRE(moveType == TYPE_POISON)
             return 1;
-        }
-    }
-    
-    // Dry Skin
-    if (BattlerHasAbility(battler, ABILITY_DRY_SKIN, TRUE)) {
-        if (moveType == TYPE_WATER) {
-            *ability = ABILITY_DRY_SKIN;
-            return 1;
-        }
-    }
-    
-    // Poison Absorb
-    if (BattlerHasAbility(battler, ABILITY_POISON_ABSORB, TRUE)) {
-        if (moveType == TYPE_POISON) {
-            *ability = ABILITY_POISON_ABSORB;
-            return 1;
-        }
-    }
-    
-    // Lighting Rod
-    if (BattlerHasAbility(battler, ABILITY_LIGHTNING_ROD, TRUE)) {
-        if (moveType == TYPE_ELECTRIC) {
-            *ability = ABILITY_LIGHTNING_ROD;
+            
+        case ABILITY_LIGHTNING_ROD:
+            REQUIRE(moveType == TYPE_ELECTRIC)
             *statId = GetHighestAttackingStatId(battler, TRUE);
             return 2;
-        }
-    }
-
-    // Storm Drain
-    if (BattlerHasAbility(battler, ABILITY_STORM_DRAIN, TRUE)) {
-        if (moveType == TYPE_WATER) {
-            *ability = ABILITY_STORM_DRAIN;
+            
+        case ABILITY_STORM_DRAIN:
+            REQUIRE(moveType == TYPE_WATER)
             *statId = GetHighestAttackingStatId(battler, TRUE);
             return 2;
-        }
-    }
-    
-    // Flash Fire
-    if (BattlerHasAbility(battler, ABILITY_FLASH_FIRE, TRUE)) {
-        if (moveType == TYPE_FIRE)
-        {
-            *ability = ABILITY_FLASH_FIRE;
-            return 3;
-        }
-    }
-
-    // Elemental Vortex (will also compress this into flash fire later)
-    if (BattlerHasAbility(battler, ABILITY_ELEMENTAL_VORTEX, TRUE)) {
-        if (moveType == TYPE_FIRE)
-        {
-            *ability = ABILITY_ELEMENTAL_VORTEX;
-            return 3;
-        }
-
-        if (moveType == TYPE_WATER) {
-            *ability = ABILITY_ELEMENTAL_VORTEX;
-            return 1;
-        }
-    }
-
-    // Sap Sipper
-    if (BattlerHasAbility(battler, ABILITY_SAP_SIPPER, TRUE)) {
-        if (moveType == TYPE_GRASS) {
-            *ability = ABILITY_SAP_SIPPER;
+            
+        case ABILITY_ELEMENTAL_VORTEX:
+            if (moveType == TYPE_WATER) goto ABSORB_WATER_ABSORB;
+        case ABILITY_FLASH_FIRE:
+            REQUIRE(moveType == TYPE_FIRE)
+            return 2;
+        
+        case ABILITY_SAP_SIPPER:
+            REQUIRE(moveType == TYPE_GRASS)
             *statId = GetHighestAttackingStatId(battler, TRUE);
             return 2;
-        }
-    }
-
-    // Well Baked Body
-    if (BattlerHasAbility(battler, ABILITY_WELL_BAKED_BODY, TRUE)) {
-        if (moveType == TYPE_FIRE) {
-            *ability = ABILITY_WELL_BAKED_BODY;
+        
+        case ABILITY_ICE_DEW:
+            REQUIRE(moveType == TYPE_ICE)
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return 2;
+        
+        case ABILITY_JUSTIFIED:
+            REQUIRE(moveType == TYPE_DARK)
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return 2;
+        
+        case ABILITY_WELL_BAKED_BODY:
+            REQUIRE(moveType == TYPE_FIRE)
             *statId = STAT_DEF;
             return 2;
-        }
-    }
-
-    // Ice Dew
-    if (BattlerHasAbility(battler, ABILITY_ICE_DEW, TRUE)) {
-        if (moveType == TYPE_ICE) {
-            *ability = ABILITY_ICE_DEW;
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
-        }
-    }
-    
-    //Motor Drive
-    if (BattlerHasAbility(battler, ABILITY_MOTOR_DRIVE, TRUE)) {
-        if (moveType == TYPE_ELECTRIC) {
-            *ability = ABILITY_MOTOR_DRIVE;
+        
+        case ABILITY_MOTOR_DRIVE:
+            REQUIRE(moveType == TYPE_ELECTRIC)
             *statId = STAT_SPEED;
             return 2;
-        }
-    }
-
-    // Wind Rider
-    if (BattlerHasAbility(battler, ABILITY_WIND_RIDER, TRUE)) {
-        if (gBattleMoves[move].airBased) {
-            *ability = ABILITY_WIND_RIDER;
+        
+        case ABILITY_WIND_RIDER:
+            REQUIRE(gBattleMoves[move].airBased)
             *statId = GetHighestAttackingStatId(battler, TRUE);
             return 2;
+        
+        default:
+            break;
         }
     }
     
-    // Justified
-    if (BattlerHasAbility(battler, ABILITY_JUSTIFIED, TRUE)) {
-        if (moveType == TYPE_DARK) {
-            *ability = ABILITY_JUSTIFIED;
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
-        }
-    }
-
+    *ability = ABILITY_NONE;
     return 0;
 }
 
