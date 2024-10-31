@@ -42504,7 +42504,7 @@ static const struct TrainerMonItemCustomMoves sParty_NewTrainer[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43418,7 +43418,7 @@ static const struct TrainerMonItemCustomMoves sParty_DaytonInsane[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43430,7 +43430,7 @@ static const struct TrainerMonItemCustomMoves sParty_TakashiInsane[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43442,7 +43442,7 @@ static const struct TrainerMonItemCustomMoves sParty_HughInsane[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43454,7 +43454,7 @@ static const struct TrainerMonItemCustomMoves sParty_FabianInsane[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43466,7 +43466,7 @@ static const struct TrainerMonItemCustomMoves sParty_YasuInsane[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43478,7 +43478,7 @@ static const struct TrainerMonItemCustomMoves sParty_HideoInsane[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43490,7 +43490,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt12Insane[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43502,7 +43502,7 @@ static const struct TrainerMonItemCustomMoves sParty_BrentInsane[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43514,7 +43514,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brendanroute119mudkipInsane
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43526,7 +43526,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brendanroute119treeckoInsan
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43538,7 +43538,7 @@ static const struct TrainerMonItemCustomMoves sParty_Brendanroute119torchicInsan
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43550,7 +43550,7 @@ static const struct TrainerMonItemCustomMoves sParty_Mayroute119mudkipInsane[] =
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43562,7 +43562,7 @@ static const struct TrainerMonItemCustomMoves sParty_Mayroute119torchicInsane[] 
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43574,7 +43574,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt37Insane[] = {
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
@@ -43586,7 +43586,7 @@ static const struct TrainerMonItemCustomMoves sParty_Mayroute119treeckoInsane[] 
     .species = SPECIES_BULBASAUR,
     .heldItem = ITEM_NONE,
     .ability = 0,
-    .evs = {},
+    .evs = { 0 },
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
