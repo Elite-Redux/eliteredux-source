@@ -2835,6 +2835,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x88,
         .y_offset = 2,
     },
+    [SPECIES_SAGARACAS] =
+    {
+        .size = 0x88,
+        .y_offset = 2,
+    },
     [SPECIES_DWEBBLE] =
     {
         .size = 0x74,
