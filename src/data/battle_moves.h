@@ -3479,7 +3479,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_BRICK_BREAK] =
     {
         .effect = EFFECT_BRICK_BREAK,
-        .power = 90,
+        .power = 85,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 15,
