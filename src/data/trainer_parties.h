@@ -42566,8 +42566,6 @@ static const struct TrainerMonItemCustomMoves sParty_CrissyInsane[] = {
     .moves = MOVE_WHIRLING_STRIKES, MOVE_TRIPLE_AXEL, MOVE_TRIPLE_DIVE, MOVE_VICTORY_DANCE
     }
 };
-
-<<<<<<< Updated upstream
 static const struct TrainerMonItemCustomMoves sParty_Juan5Insane[] = {
     {
     .lvl = 0,
@@ -42581,7 +42579,23 @@ static const struct TrainerMonItemCustomMoves sParty_Juan5Insane[] = {
     {
     .lvl = 0,
     .species = SPECIES_LUDICOLO,
-=======
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 0,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_QUIVER_DANCE, MOVE_SURF, MOVE_ICE_BEAM, MOVE_GIGA_DRAIN
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_KILOWATTREL,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 2,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_HURRICANE, MOVE_ELECTRO_BALL, MOVE_WEATHER_BALL, MOVE_VOLT_SWITCH
+    }
+};
+
 static const struct TrainerMonItemCustomMoves sParty_Sawyer1Insane[] = {
     {
     .lvl = 0,
@@ -42682,23 +42696,10 @@ static const struct TrainerMonItemCustomMoves sParty_SheilaInsane[] = {
     {
     .lvl = 0,
     .species = SPECIES_GARDEVOIR,
->>>>>>> Stashed changes
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 0,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
-<<<<<<< Updated upstream
-    .moves = MOVE_QUIVER_DANCE, MOVE_SURF, MOVE_ICE_BEAM, MOVE_GIGA_DRAIN
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_KILOWATTREL,
-    .heldItem = ITEM_FOCUS_SASH,
-    .ability = 2,
-    .evs = {4, 0, 0, 252, 0, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_HURRICANE, MOVE_ELECTRO_BALL, MOVE_WEATHER_BALL, MOVE_VOLT_SWITCH
-=======
     .moves = MOVE_DRAINING_KISS, MOVE_THUNDERBOLT, MOVE_ESPER_WALTZ, MOVE_LUMINA_CRASH
     },
     {
@@ -43588,6 +43589,5 @@ static const struct TrainerMonItemCustomMoves sParty_Mayroute119treeckoInsane[] 
     .evs = {},
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
->>>>>>> Stashed changes
     }
 };
