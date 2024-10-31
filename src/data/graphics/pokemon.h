@@ -8219,6 +8219,12 @@ const u32 gMonPalette_Knaiver[]           = INCBIN_U32("graphics/pokemon/knaiver
 const u32 gMonShinyPalette_Knaiver[]      = INCBIN_U32("graphics/pokemon/knaiver/shiny.gbapal.lz");
 const u8  gMonIcon_Knaiver[]              = INCBIN_U8("graphics/pokemon/knaiver/icon.4bpp");
 
+const u32 gMonFrontPic_Sagaracas[]          = INCBIN_U32("graphics/pokemon/sagaracas/front.4bpp.lz");
+const u32 gMonBackPic_Sagaracas[]           = INCBIN_U32("graphics/pokemon/sagaracas/back.4bpp.lz");
+const u32 gMonPalette_Sagaracas[]           = INCBIN_U32("graphics/pokemon/sagaracas/normal.gbapal.lz");
+const u32 gMonShinyPalette_Sagaracas[]      = INCBIN_U32("graphics/pokemon/sagaracas/shiny.gbapal.lz");
+const u8  gMonIcon_Sagaracas[]              = INCBIN_U8("graphics/pokemon/sagaracas/icon.4bpp");
+
 const u32 gMonFrontPic_DuraludonPartner[]          = INCBIN_U32("graphics/pokemon/duraludon/partner/front.4bpp.lz");
 const u32 gMonBackPic_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/back.4bpp.lz");
 const u32 gMonPalette_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/normal.gbapal.lz");
