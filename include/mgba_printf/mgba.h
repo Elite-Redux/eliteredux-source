@@ -48,7 +48,7 @@ void MgbaPrintEncoded(s32 level, const char *encodedString);
 
 #define MGBA_PRINT_DEBUG(string, ...) \
 MgbaOpen(); \
-MgbaPrintf(MGBA_LOG_DEBUG, "Line %d: " string, __LINE__, 0 + __VA_ARGS__ + 0); \
+MgbaPrintf(MGBA_LOG_DEBUG, __BASE_FILE__ ":%d: " string, __LINE__, 0 + __VA_ARGS__ + 0); \
 MgbaClose();
 
 #ifdef __cplusplus

@@ -3273,21 +3273,22 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_LIFE_STEAL_DAMAGE:
-            int source;
-            if (IsBattlerAlive(gActiveBattler) && (source = IsAbilityOnOpposingSide(gActiveBattler, ABILITY_LIFE_STEAL)))
-            {
-                MAGIC_GUARD_CHECK;
-
-                gBattleScripting.abilityPopupOverwrite = ABILITY_LIFE_STEAL;
-                gBattlerAbility = gBattlerAttacker = source - 1;
-                gBattlerTarget = gActiveBattler;
-                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 10;
-                if (!gBattleMoveDamage) gBattleMoveDamage = 1;
-                else if (gBattleMoveDamage > gBattleMons[gBattlerTarget].hp) gBattleMoveDamage = gBattleMons[gBattlerTarget].hp;
-                gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
-                BattleScriptExecute(BattleScript_AbilityDrainsHp);
-            }
             gBattleStruct->turnEffectsTracker++;
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+            {
+            int source;
+            REQUIRE(source = IsAbilityOnOpposingSide(gActiveBattler, ABILITY_LIFE_STEAL))
+            REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
+
+            gBattleScripting.abilityPopupOverwrite = ABILITY_LIFE_STEAL;
+            gBattlerAbility = gBattlerAttacker = source - 1;
+            gBattlerTarget = gActiveBattler;
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 10;
+            if (!gBattleMoveDamage) gBattleMoveDamage = 1;
+            else if (gBattleMoveDamage > gBattleMons[gBattlerTarget].hp) gBattleMoveDamage = gBattleMons[gBattlerTarget].hp;
+            gHitMarker |= HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE;
+            BattleScriptExecute(BattleScript_AbilityDrainsHp);
+            effect++;
             break;
         case ENDTURN_BURN:  // burn
             if ((gBattleMons[gActiveBattler].status1 & STATUS1_BURN) && gBattleMons[gActiveBattler].hp != 0 &&
