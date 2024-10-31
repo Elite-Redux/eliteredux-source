@@ -7107,12 +7107,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_JUMPLUFF] =
     {
-    .baseHP        = 75,
-    .baseAttack    = 75,
-    .baseDefense   = 70,
-    .baseSpeed     = 130,
-    .baseSpAttack  = 55,
-    .baseSpDefense = 95,
+    .baseHP         = 75,
+    .baseAttack     = 105,
+    .baseDefense    = 70,
+    .baseSpeed      = 130,
+    .baseSpAttack   = 55,
+    .baseSpDefense  = 95,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_FLYING,
     .catchRate = 255,
@@ -7124,7 +7124,7 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_MEDIUM_SLOW,
     .eggGroup1 = EGG_GROUP_FAIRY,
     .eggGroup2 = EGG_GROUP_GRASS,
-    .abilities      = {ABILITY_FRIEND_GUARD, ABILITY_WIND_RIDER, ABILITY_SOOTHING_AROMA},
+    .abilities      = {ABILITY_FRIEND_GUARD, ABILITY_WIND_RIDER, ABILITY_MEGA_LAUNCHER},
     .innates = {ABILITY_FLUFFY, ABILITY_AERODYNAMICS, ABILITY_COTTON_DOWN},
     .bodyColor = BODY_COLOR_BLUE,
     .noFlip = FALSE,
