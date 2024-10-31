@@ -633,6 +633,13 @@ script DewfordTown_Gym_Movement_BrawlyEntersTheRing{
 
 script DewfordTown_Gym_EventScript_EnteredTheRing{
     lock
+    if (defeated(TRAINER_BRAWLY_1)){
+        msgbox(format("I'm already beaten, go find someone else."))
+        applymovement(OBJ_EVENT_ID_PLAYER, DewfordTown_Gym_Movement_PlayerWalksOut)
+        waitmovement(0)
+        release
+        end
+    }
 	playSE(SE_LEDGE)
     applymovement(LOCALID_BRAWLY, DewfordTown_Gym_Movement_BrawlyAskPlayer)
     waitmovement(0)
