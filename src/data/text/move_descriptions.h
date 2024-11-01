@@ -4910,6 +4910,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_DEPLETION_BEAM - 1] = sMoveTwoLineDescription_MoveDepletionBeam,
     [MOVE_ONE_INCH_PUNCH - 1] = sMoveTwoLineDescription_MoveOneInchPunch,
     [MOVE_BERSERKER_HORN - 1] = sMoveTwoLineDescription_MoveDrillRun
+    [MOVE_ONI_FIST - 1] = sMoveTwoLineDescription_MoveShadowPunch
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -6903,4 +6904,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_DEPLETION_BEAM - 1] = sMoveFourLineDescription_MoveDepletionBeam,
     [MOVE_ONE_INCH_PUNCH - 1] = sMoveFourLineDescription_MoveOneInchPunch,
     [MOVE_BERSERKER_HORN - 1] = sMoveFourLineDescription_MoveDrillRun,
+    [MOVE_ONI_FIST - 1] = sMoveFourLineDescription_MoveShadowPunch,
 };
