@@ -318,7 +318,7 @@
 #define ABILITY_LEAD_COAT 296 // Takes 40% less from Phys. moves. This Pokémon's Speed is 0.9x.
 #define ABILITY_AMPHIBIOUS 297 // Boosts the power of Water-type moves by 1.5x (due to STAB).
 #define ABILITY_GROUNDED 298 // Adds Ground type to itself.
-#define ABILITY_EARTHBOUND 299 // Boosts the power of Ground-type moves by 1.25x.
+#define ABILITY_EARTHBOUND 299 // Boosts Ground-type moves by 1.2x, or 1.5x when under 1/3 HP.
 #define ABILITY_FIGHT_SPIRIT 300 // Normal-type moves become Fight.- type moves and get a 1.1x boost.
 #define ABILITY_FELINE_PROWESS 301 // Doubles own Sp. Atk stat. Boosts raw stat, not base stat.
 #define ABILITY_COIL_UP 302 // On entry, gives +1 priority once to the first biting move used.
@@ -760,7 +760,7 @@
 #define ABILITY_RUDE_AWAKENING 738 // Raises all stats becomes immune to sleep after waking up.
 #define ABILITY_TERAFORM_ZERO 739 // Tera Shell + clears weather and terrain on first entry.
 #define ABILITY_SET_ABLAZE 740 // Inflicting burn also inflicts fear.
-#define ABILITY_BREAKWATER 741 //  Swift Swim + Stall.
+#define ABILITY_BREAKWATER 741 // Swift Swim + Stall.
 
 #define ABILITIES_COUNT_CUSTOM (ABILITY_BREAKWATER + 1)
 
