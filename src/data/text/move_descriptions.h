@@ -3920,6 +3920,14 @@ static const u8 sMoveTwoLineDescription_MoveOniFist[] = _(
     "An unavoidable punch that\n"
     "is thrown from shadows.");
 
+static const u8 sMoveTwoLineDescription_MoveBerserkerHorn[] = _(
+    "Spins its body like a drill.\n"
+    "High critical-hit ratio.");
+
+static const u8 sMoveTwoLineDescription_MoveOniFist[] = _(
+    "An unavoidable punch that\n"
+    "is thrown from shadows.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
