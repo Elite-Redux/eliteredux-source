@@ -12443,7 +12443,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
             if (moveType == TYPE_WATER) goto ABSORB_WATER_ABSORB;
         case ABILITY_FLASH_FIRE:
             REQUIRE(moveType == TYPE_FIRE)
-            return 2;
+            return 3;
         
         case ABILITY_SAP_SIPPER:
             REQUIRE(moveType == TYPE_GRASS)
