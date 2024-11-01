@@ -11343,12 +11343,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_SWALOT_MEGA] =
     {
-        .baseHP        = 100,
-        .baseAttack    = 108,
-        .baseDefense   = 118,
-        .baseSpeed     = 55,
-        .baseSpAttack  = 108,
-        .baseSpDefense = 118,
+    .baseHP         = 100,
+    .baseAttack     = 88,
+    .baseDefense    = 138,
+    .baseSpeed      = 43,
+    .baseSpAttack   = 128,
+    .baseSpDefense  = 110,
         .type1 = TYPE_POISON,
         .type2 = TYPE_POISON,
         .catchRate = 75,
