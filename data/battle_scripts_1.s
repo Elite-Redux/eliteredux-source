@@ -1383,6 +1383,8 @@ BattleScript_EffectStrengthSap:
 BattleScript_StrengthSapTryLower:
 	getstatvalue BS_TARGET, STAT_ATK
 	jumpiffullhp BS_ATTACKER, BattleScript_StrengthSapMustLower
+	jumpifhealingblocked BS_ATTACKER, BattleScript_StrengthSapMustLower
+	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_StrengthSapMustLower
 	attackanimation
 	waitanimation
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_StrengthSapHp
@@ -1429,6 +1431,8 @@ BattleScript_EffectDrainBrain:
 BattleScript_DrainBrainTryLower:
 	getstatvalue BS_TARGET, STAT_SPATK
 	jumpiffullhp BS_ATTACKER, BattleScript_DrainBrainMustLower
+	jumpifhealingblocked BS_ATTACKER, BattleScript_StrengthSapMustLower
+	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_StrengthSapMustLower
 	attackanimation
 	waitanimation
 	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_DrainBrainHp
@@ -7957,8 +7961,8 @@ BattleScript_LeechSeedTurnDrain::
 	copyword gBattleMoveDamage, gHpDealt
 	jumpifability BS_ATTACKER, ABILITY_LIQUID_OOZE, BattleScript_LeechSeedTurnPrintLiquidOoze
 	setbyte cMULTISTRING_CHOOSER, B_MSG_LEECH_SEED_DRAIN
-	jumpifhealingblocked BS_ATTACKER, BattleScript_LeechSeedHealBlock
-	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_LeechSeedHealBlock
+	jumpifhealingblocked BS_TARGET, BattleScript_LeechSeedHealBlock
+	jumpifstatus BS_TARGET, STATUS1_BLEED, BattleScript_LeechSeedHealBlock
 	manipulatedamage DMG_BIG_ROOT
 	goto BattleScript_LeechSeedTurnPrintAndUpdateHp
 BattleScript_LeechSeedTurnPrintLiquidOoze::

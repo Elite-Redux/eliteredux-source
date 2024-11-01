@@ -3088,22 +3088,20 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_LEECH_SEED:  // leech seed
-            if (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED
-                && IsBattlerAlive(gActiveBattler)
-                && IsBattlerAlive(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER))
-            {
-                MAGIC_GUARD_CHECK;
-
-                gBattlerTarget = gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER; // Notice gBattlerTarget is actually the HP receiver.
-                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
-                if (gBattleMoveDamage == 0)
-                    gBattleMoveDamage = 1;
-                gBattleScripting.animArg1 = gBattlerTarget;
-                gBattleScripting.animArg2 = gBattlerAttacker;
-                BattleScriptExecute(BattleScript_LeechSeedTurnDrain);
-                effect++;
-            }
             gBattleStruct->turnEffectsTracker++;
+            REQUIRE(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED)
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+            REQUIRE(IsBattlerAlive(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER))
+            REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
+
+            gBattlerTarget = gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER; // Notice gBattlerTarget is actually the HP receiver.
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+            if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = 1;
+            gBattleScripting.animArg1 = gBattlerTarget;
+            gBattleScripting.animArg2 = gBattlerAttacker;
+            BattleScriptExecute(BattleScript_LeechSeedTurnDrain);
+            effect++;
             break;
         case ENDTURN_TOXIC_WASTE_DAMAGE:
             {

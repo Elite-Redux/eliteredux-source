@@ -11844,11 +11844,6 @@ static void Cmd_manipulatedamage(void)
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp;
         break;
     case DMG_BIG_ROOT:
-        if (BATTLER_HEALING_BLOCKED(gBattlerAttacker))
-        {
-            gBattleMoveDamage = 0;
-            break;
-        }
         gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
         break;
     case DMG_1_2_ATTACKER_HP:
