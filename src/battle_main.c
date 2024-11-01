@@ -4008,6 +4008,7 @@ static void TryDoEventsBeforeFirstTurn(void)
             gBattlerAttacker = gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter];
             if (!IsBattlerAlive(gBattlerAttacker))
             {
+                gBattleStruct->firstTurnAbilityLoopCounter = 0;
                 gBattleStruct->switchInAbilitiesCounter++;
                 continue;
             }
