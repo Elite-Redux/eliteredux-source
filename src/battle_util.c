@@ -9578,6 +9578,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
             return;
         
         case ABILITY_STALL:
+        case ABILITY_BREAKWATER:
             if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battlerDef)) MUL(.7);
             return;
         

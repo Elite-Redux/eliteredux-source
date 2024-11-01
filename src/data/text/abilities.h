@@ -709,6 +709,7 @@ static const u8 sAbilityLifeStealDescription[] = _("Steals 1/10 HP from foes eac
 static const u8 sAbilityRudeAwakeningDescription[] = _("Raises all stats becomes immune\nto sleep after waking up.");
 static const u8 sAbilityTeraformZeroDescription[] = _("Tera Shell + clears weather and\nterrain on first entry.");
 static const u8 sAbilitySetAblazeDescription[] = _("Inflicting burn also inflicts fear.");
+static const u8 sAbilityBreakwaterDescription[] = _("Swift Swim + Stall.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1453,6 +1454,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_RUDE_AWAKENING] = _("Rude Awakening"),
     [ABILITY_TERAFORM_ZERO] = _("Teraform Zero"),
     [ABILITY_SET_ABLAZE] = _("Set Ablaze"),
+    [ABILITY_BREAKWATER] = _("Breakwater"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2198,4 +2200,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_RUDE_AWAKENING] = sAbilityRudeAwakeningDescription,
     [ABILITY_TERAFORM_ZERO] = sAbilityTeraformZeroDescription,
     [ABILITY_SET_ABLAZE] = sAbilitySetAblazeDescription,
+    [ABILITY_BREAKWATER] = sAbilityBreakwaterDescription,
 };

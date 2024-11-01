@@ -4908,6 +4908,9 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
         if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SWIFT_SWIM) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
             speed = (speed * 150) / 100;
 
+        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_BREAKWATER) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+            speed = (speed * 150) / 100;
+
         if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SEABORNE) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
             speed = (speed * 150) / 100;
 
