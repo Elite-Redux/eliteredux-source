@@ -1997,4 +1997,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_DEPLETION_BEAM] = _("Depletion Beam"),
     [MOVE_ONE_INCH_PUNCH] = _("One-Inch Punch"),
     [MOVE_BERSERKER_HORN] = _("Berserker Horn"),
+    [MOVE_ONI_FIST] = _("Oni Fist"),
 };
