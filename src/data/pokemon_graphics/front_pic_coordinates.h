@@ -2320,6 +2320,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x77,
         .y_offset = 6,
     },
+    [SPECIES_LUMINOSITEON] =
+    {
+        .size = 0x77,
+        .y_offset = 6,
+    },
     [SPECIES_MANTYKE] =
     {
         .size = 0x46,

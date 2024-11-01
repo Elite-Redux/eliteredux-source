@@ -12309,6 +12309,11 @@ static const union AnimCmd sAnim_KNAIVER_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_LUMINOSITEON_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 
 static const union AnimCmd sAnim_BURMY_ETERNA_1[] =
 {
@@ -19227,6 +19232,11 @@ static const union AnimCmd *const sAnims_GENGAR_MEGA_X[] ={
     sAnim_GENGAR_MEGA_X_1,
 };
 
+static const union AnimCmd *const sAnims_LUMINOSITEON[] ={
+    sAnim_GeneralFrame0,
+    sAnim_LUMINOSITEON_1,
+};
+
 static const union AnimCmd *const sAnims_KNAIVER[] ={
     sAnim_GeneralFrame0,
     sAnim_KNAIVER_1,
@@ -21111,6 +21121,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(FLORAGATO),
     ANIM_CMD(GENGAR_MEGA),
     ANIM_CMD(GENGAR_MEGA_X),
+    ANIM_CMD(LUMINOSITEON),
     ANIM_CMD(BURMY_ETERNA),
     ANIM_CMD(MEOWSCARADA),
     ANIM_CMD(KANGASKHAN_MEGA),
