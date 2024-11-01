@@ -11376,6 +11376,7 @@ static const struct LevelUpMove sToxicroakLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_DRAIN_PUNCH),
     LEVEL_UP_MOVE(46, MOVE_VENOSHOCK),
     LEVEL_UP_MOVE(51, MOVE_CROSS_CHOP),
+    LEVEL_UP_MOVE(51, MOVE_CROSS_POISON),
     LEVEL_UP_END
 };
 
