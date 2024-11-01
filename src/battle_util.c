@@ -3012,7 +3012,7 @@ u8 DoBattlerEndTurnEffects(void)
 {
     u32 ability, i, effect = 0;
 
-    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0))
+    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_EXECUTE, 0))
     {
         BattleScriptExecute(gBattlescriptCurrInstr);
         return TRUE;
@@ -5471,7 +5471,7 @@ bool8 TryToSetFieldEffect(u8 battler) {
     return FALSE;
 }
 
-u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 moveArg)
+u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 moveArg)
 {
     u8 effect = 0;
     u32 speciesAtk, speciesDef;
@@ -5479,7 +5479,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     u32 moveType, move;
     u32 i, j;
     u16 trainerNum;
-    bool8 abilityEffect = FALSE;
     u8 opponent;
     u16 effectTargetFlag;
 
@@ -5494,8 +5493,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
     speciesDef = gBattleMons[gBattlerTarget].species;
     pidDef = gBattleMons[gBattlerTarget].personality;
-
-    if (!special) abilityEffect = TRUE;
 
     if (moveArg)
         move = moveArg;
@@ -6164,6 +6161,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
             if (found)
             {
+                if (extraArg == ABILITY_BS_PUSH_CURSOR_AND_CALLBACK)
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_End3);
+                }
+                else if (extraArg == ABILITY_BS_EXECUTE)
+                {
+                    BattleScriptExecute(BattleScript_End2);
+                }
                 BattleScriptCall(BattleScript_PerformCopyStatEffects);
                 effect++;
             }

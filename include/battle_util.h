@@ -213,7 +213,12 @@ u8 AtkCanceller_UnableToUseMove2(void);
 bool8 HasNoMonsToSwitch(u8 battlerId, u8 r1, u8 r2);
 bool32 TryChangeBattleWeather(u8 battler, u32 weatherEnumId, bool32 viaAbility);
 bool32 SetPermanentWeather(u32 weatherEnumId);
-u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 special, u16 moveArg);
+enum {
+    ABILITY_BS_PUSH_CURSOR_AND_CALLBACK,
+    ABILITY_BS_CALL,
+    ABILITY_BS_EXECUTE,
+};
+u8 AbilityBattleEffects(u8 caseID, u8 battlerId, u16 ability, u8 extraArg, u16 moveArg);
 int HandleAttackerAbility(int abilityNumber, int battler, int target, int move);
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move);
 int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int move);

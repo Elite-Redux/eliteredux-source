@@ -5502,7 +5502,7 @@ static void Cmd_moveend(void)
     choicedMoveAtk = &gBattleStruct->choicedMove[gBattlerAttacker];
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
-    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0)) return;
+    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_CALL, 0)) return;
 
     do
     {
@@ -7141,7 +7141,7 @@ static void Cmd_switchineffects(void)
     else
     {
         
-        if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0))
+        if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0))
             return;
 
         if (TryPrimalReversion(gActiveBattler, TRUE)) return;
