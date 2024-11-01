@@ -5502,7 +5502,7 @@ static void Cmd_moveend(void)
     choicedMoveAtk = &gBattleStruct->choicedMove[gBattlerAttacker];
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
-    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0)) return;
+    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_CALL, 0)) return;
 
     do
     {
@@ -7141,7 +7141,7 @@ static void Cmd_switchineffects(void)
     else
     {
         
-        if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0))
+        if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0))
             return;
 
         if (TryPrimalReversion(gActiveBattler, TRUE)) return;
@@ -11844,11 +11844,6 @@ static void Cmd_manipulatedamage(void)
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp;
         break;
     case DMG_BIG_ROOT:
-        if (BATTLER_HEALING_BLOCKED(gBattlerAttacker))
-        {
-            gBattleMoveDamage = 0;
-            break;
-        }
         gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
         break;
     case DMG_1_2_ATTACKER_HP:

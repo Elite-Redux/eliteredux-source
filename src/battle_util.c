@@ -3012,7 +3012,7 @@ u8 DoBattlerEndTurnEffects(void)
 {
     u32 ability, i, effect = 0;
 
-    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, 0, 0))
+    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_EXECUTE, 0))
     {
         BattleScriptExecute(gBattlescriptCurrInstr);
         return TRUE;
@@ -3088,22 +3088,20 @@ u8 DoBattlerEndTurnEffects(void)
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_LEECH_SEED:  // leech seed
-            if (gStatuses3[gActiveBattler] & STATUS3_LEECHSEED
-                && IsBattlerAlive(gActiveBattler)
-                && IsBattlerAlive(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER))
-            {
-                MAGIC_GUARD_CHECK;
-
-                gBattlerTarget = gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER; // Notice gBattlerTarget is actually the HP receiver.
-                gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
-                if (gBattleMoveDamage == 0)
-                    gBattleMoveDamage = 1;
-                gBattleScripting.animArg1 = gBattlerTarget;
-                gBattleScripting.animArg2 = gBattlerAttacker;
-                BattleScriptExecute(BattleScript_LeechSeedTurnDrain);
-                effect++;
-            }
             gBattleStruct->turnEffectsTracker++;
+            REQUIRE(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED)
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+            REQUIRE(IsBattlerAlive(gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER))
+            REQUIRE_NOT(IsMagicGuardProtected(gActiveBattler))
+
+            gBattlerTarget = gStatuses3[gActiveBattler] & STATUS3_LEECHSEED_BATTLER; // Notice gBattlerTarget is actually the HP receiver.
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+            if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = 1;
+            gBattleScripting.animArg1 = gBattlerTarget;
+            gBattleScripting.animArg2 = gBattlerAttacker;
+            BattleScriptExecute(BattleScript_LeechSeedTurnDrain);
+            effect++;
             break;
         case ENDTURN_TOXIC_WASTE_DAMAGE:
             {
@@ -5471,7 +5469,7 @@ bool8 TryToSetFieldEffect(u8 battler) {
     return FALSE;
 }
 
-u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 moveArg)
+u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 moveArg)
 {
     u8 effect = 0;
     u32 speciesAtk, speciesDef;
@@ -5479,7 +5477,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
     u32 moveType, move;
     u32 i, j;
     u16 trainerNum;
-    bool8 abilityEffect = FALSE;
     u8 opponent;
     u16 effectTargetFlag;
 
@@ -5494,8 +5491,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
     speciesDef = gBattleMons[gBattlerTarget].species;
     pidDef = gBattleMons[gBattlerTarget].personality;
-
-    if (!special) abilityEffect = TRUE;
 
     if (moveArg)
         move = moveArg;
@@ -6164,6 +6159,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 
             if (found)
             {
+                if (extraArg == ABILITY_BS_PUSH_CURSOR_AND_CALLBACK)
+                {
+                    BattleScriptPushCursorAndCallback(BattleScript_End3);
+                }
+                else if (extraArg == ABILITY_BS_EXECUTE)
+                {
+                    BattleScriptExecute(BattleScript_End2);
+                }
                 BattleScriptCall(BattleScript_PerformCopyStatEffects);
                 effect++;
             }
@@ -12440,7 +12443,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
             if (moveType == TYPE_WATER) goto ABSORB_WATER_ABSORB;
         case ABILITY_FLASH_FIRE:
             REQUIRE(moveType == TYPE_FIRE)
-            return 2;
+            return 3;
         
         case ABILITY_SAP_SIPPER:
             REQUIRE(moveType == TYPE_GRASS)
