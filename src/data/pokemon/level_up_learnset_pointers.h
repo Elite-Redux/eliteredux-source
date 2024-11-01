@@ -1638,6 +1638,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_DRAGONITE_DELIVERY] = sDragoniteLevelUpLearnset,
     [SPECIES_LEDIAN_PARADOX] = sLedian_ParadoxLevelUpLearnset,
     [SPECIES_FLYGON_REDUX_B] = sFlygon_Redux_BLevelUpLearnset,
+    [SPECIES_FLYGON_REDUX_B_MEGA] = sFlygon_Redux_BLevelUpLearnset,
     [SPECIES_MAWILE_REDUX_B] = sMawile_Redux_BLevelUpLearnset,
     [SPECIES_MAWILE_REDUX_B_MEGA] = sMawile_Redux_BLevelUpLearnset,
     [SPECIES_RIBOMBEE_REDUX] = sRibombee_ReduxLevelUpLearnset,

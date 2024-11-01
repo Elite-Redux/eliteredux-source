@@ -8450,7 +8450,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_PIKA_PAPOW] =
     {
         .effect = EFFECT_HIT,
-        .power = 100,
+        .power = 110,
         .type = TYPE_ELECTRIC,
         .accuracy = 0,
         .pp = 10,
@@ -8569,7 +8569,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_VEEVEE_VOLLEY] =
     {
         .effect = EFFECT_HIT,
-        .power = 100,
+        .power = 110,
         .type = TYPE_NORMAL,
         .accuracy = 0,
         .pp = 10,
