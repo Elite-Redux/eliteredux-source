@@ -3912,6 +3912,14 @@ static const u8 sMoveTwoLineDescription_MoveOneInchPunch[] = _(
     "Picks a weak spot and then\n"
     "strikes with immense force.");
 
+static const u8 sMoveTwoLineDescription_MoveBerserkerHorn[] = _(
+    "Spins its body like a drill.\n"
+    "High critical-hit ratio.");
+
+static const u8 sMoveTwoLineDescription_MoveOniFist[] = _(
+    "An unavoidable punch that\n"
+    "is thrown from shadows.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4909,8 +4917,8 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_FIRE_GLAIVE - 1] = sMoveTwoLineDescription_MoveFireGlaive,
     [MOVE_DEPLETION_BEAM - 1] = sMoveTwoLineDescription_MoveDepletionBeam,
     [MOVE_ONE_INCH_PUNCH - 1] = sMoveTwoLineDescription_MoveOneInchPunch,
-    [MOVE_BERSERKER_HORN - 1] = sMoveTwoLineDescription_MoveDrillRun
-    [MOVE_ONI_FIST - 1] = sMoveTwoLineDescription_MoveShadowPunch
+    [MOVE_BERSERKER_HORN - 1] = sMoveTwoLineDescription_MoveBerserkerHorn,
+    [MOVE_ONI_FIST - 1] = sMoveTwoLineDescription_MoveOniFist,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5907,6 +5915,8 @@ static const u8 sMoveFourLineDescription_MoveTripleTremor[] = _("Hits three time
 static const u8 sMoveFourLineDescription_MoveFireGlaive[] = _("Strikes with a white\nhot horn, ignoring\nstat changes.\nMight Horn boost.");
 static const u8 sMoveFourLineDescription_MoveDepletionBeam[] = _("Foe's last move has\n3 PP cut. Mega\nlauncher boost.");
 static const u8 sMoveFourLineDescription_MoveOneInchPunch[] = _("A powerful punch\nthat never misses.\nHigh crit rate.\nIron Fist boost.");
+static const u8 sMoveFourLineDescription_MoveBerserkerHorn[] = _("Rotating its body\nlike a drill.\nHigh crit ratio.\nMighty Horn boost.");
+static const u8 sMoveFourLineDescription_MoveOniFist[] = _("A strong punch from\nthe shadows.\nAlways hits.\nIron Fist boost.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6903,6 +6913,6 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_FIRE_GLAIVE - 1] = sMoveFourLineDescription_MoveFireGlaive,
     [MOVE_DEPLETION_BEAM - 1] = sMoveFourLineDescription_MoveDepletionBeam,
     [MOVE_ONE_INCH_PUNCH - 1] = sMoveFourLineDescription_MoveOneInchPunch,
-    [MOVE_BERSERKER_HORN - 1] = sMoveFourLineDescription_MoveDrillRun,
-    [MOVE_ONI_FIST - 1] = sMoveFourLineDescription_MoveShadowPunch,
+    [MOVE_BERSERKER_HORN - 1] = sMoveFourLineDescription_MoveBerserkerHorn,
+    [MOVE_ONI_FIST - 1] = sMoveFourLineDescription_MoveOniFist,
 };
