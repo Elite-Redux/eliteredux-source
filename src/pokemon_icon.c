@@ -2213,7 +2213,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_SHIELDON] = 1,
     [SPECIES_BASTIODON] = 1,
     [SPECIES_BURMY] = 1,
-    [SPECIES_BURMY_ETERNA] = 0,
+    [SPECIES_BURMY_ETERNA] = 2,
     [SPECIES_WORMADAM] = 1,
     [SPECIES_MOTHIM] = 0,
     [SPECIES_COMBEE] = 0,
@@ -3434,9 +3434,9 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_TYRANITAR_REDUX] = 1,
     [SPECIES_TYRANITAR_MEGA_REDUX] = 0,
     [SPECIES_LUCARIO_MEGA_Y] = 0,
-    [SPECIES_BUBBLEO] = 0,
-    [SPECIES_HYDROAR] = 0,
-    [SPECIES_HYDROAR_F] = 0,
+    [SPECIES_BUBBLEO] = 3,
+    [SPECIES_HYDROAR] = 3,
+    [SPECIES_HYDROAR_F] = 3,
     [SPECIES_EGG] = 1,
 };
 

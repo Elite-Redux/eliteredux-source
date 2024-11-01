@@ -18077,6 +18077,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_U_TURN)
         TUTOR(MOVE_WILL_O_WISP)
         TUTOR(MOVE_WORK_UP)
+        TUTOR(MOVE_BRAVADO)  
         TUTOR_LEARNSET_END
 
     [SPECIES_DIALGA] = TUTOR_LEARNSET
@@ -19360,6 +19361,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_TAUNT)
         TUTOR(MOVE_WORK_UP)
         TUTOR(MOVE_WORRY_SEED)
+        TUTOR(MOVE_BRAVADO)  
         TUTOR_LEARNSET_END
 
     [SPECIES_SIMISAGE] = TUTOR_LEARNSET
@@ -19400,6 +19402,7 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_TAUNT)
         TUTOR(MOVE_WORK_UP)
         TUTOR(MOVE_WORRY_SEED)
+        TUTOR(MOVE_BRAVADO)  
         TUTOR_LEARNSET_END
 
     [SPECIES_PANSEAR] = TUTOR_LEARNSET
