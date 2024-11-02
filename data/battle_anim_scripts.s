@@ -1016,6 +1016,7 @@ gBattleAnims_Moves::
 	.4byte Move_MEGA_PUNCH @ MOVE_ONE_INCH_PUNCH
 	.4byte Move_NONE @ MOVE_BERSERKER_HORN
 	.4byte Move_NONE @ MOVE_ONI_FIST
+	.4byte Move_NONE @ MOVE_INSECT_IMPACT
 
 	.align 2
 gBattleAnims_StatusConditions::
