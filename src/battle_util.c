@@ -15587,6 +15587,8 @@ int HandleEndTurnAbility(int abilityNumber, int battler)
 {
     int ability;
 
+    if (!IsBattlerAlive(battler)) return FALSE;
+
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
     abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
 
