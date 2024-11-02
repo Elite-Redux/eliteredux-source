@@ -878,10 +878,10 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_STRENGTH] =
     {
         .effect = EFFECT_CLOSE_COMBAT,
-        .power = 100,
+        .power = 110,
         .type = TYPE_ROCK,
         .accuracy = 100,
-        .pp = 10,
+        .pp = 5,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_FIELD_BASED,
@@ -7381,7 +7381,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_WATER_SHURIKEN] =
     {
         .effect = EFFECT_MULTI_HIT,
-        .power = 20,
+        .power = 18,
         .type = TYPE_WATER,
         .accuracy = 100,
         .pp = 20,

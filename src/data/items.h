@@ -3695,6 +3695,18 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
     },
 
+    [ITEM_ULTRANECROZIUM_P] =
+    {
+        .name = _("U-Necrozium Z"),
+        .itemId = ITEM_ULTRANECROZIUM_P,
+        .price = 0,
+        .description = sUltranecroziumZDesc,
+        .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+
     [ITEM_BLUE_ORB] =
     {
         .name = _("Blue Orb"),
@@ -8972,13 +8984,13 @@ const struct Item gItems[] =
         .name = _("U-Necrozium Z"),
         .itemId = ITEM_ULTRANECROZIUM_Z,
         .price = 0,
-        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .holdEffect = HOLD_EFFECT_PRIMAL_ORB,
         .description = sUltranecroziumZDesc,
-        .pocket = POCKET_ITEMS,
+        .pocket = POCKET_MEGA_STONES,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
-        .secondaryId = 255  //signature z move
     },
+    
     // Gen 8 items
     [ITEM_BERRY_SWEET] =
     {
