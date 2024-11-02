@@ -15000,6 +15000,8 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             break;
         
         case ABILITY_JUMP_SCARE:
+            REQUIRE_NOT(GetSingleUseAbilityCounter(battler, ability))
+            SetSingleUseAbilityCounter(battler, ability, TRUE);
             UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
             break;
         
