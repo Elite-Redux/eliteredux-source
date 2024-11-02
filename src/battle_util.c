@@ -8309,12 +8309,7 @@ bool8 DoesBattlerHaveAbilityShield(u8 battlerId)
 {
     u8 i;
     if (GetBattlerHoldEffect(battlerId, FALSE) != HOLD_EFFECT_ABILITY_SHIELD) return FALSE;
-    if (gStatuses3[battlerId] & STATUS3_EMBARGO) return FALSE;
-    for (i = 0; i < gBattlersCount; i++)
-    {
-        if (HasAbilityIgnoringSuppression(battlerId, ABILITY_CLUELESS)) return TRUE;
-    }
-    return FALSE;
+    return !(gStatuses3[battlerId] & STATUS3_EMBARGO);
 }
 
 u32 GetBattlerHoldEffectParam(u8 battlerId)

@@ -74,13 +74,7 @@ void PopulateAbilities(int battler, struct AiData* aiData)
 
 int HasAbility(int battler, int ability, struct AiData* aiData)
 {
-    int i;
-    PopulateAbilities(battler, aiData);
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
-    {
-        if (aiData->abilities[battler][i] == ability) return TRUE;
-    }
-    return FALSE;
+    return BattlerHasAbility(battler, ability, TRUE);
 }
 
 int AiIsUnaware(int battler, struct AiData* aiData)
@@ -174,6 +168,48 @@ int GetAiDecision(int battler)
     if (IsBattlerAlive(0)) RestoreDisguise(&disguise0);
     if (IsBattlerAlive(2)) RestoreDisguise(&disguise2);
 }
+
+int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
+{
+    return FALSE;
+}
+
+int ComputeMoveScoring(struct MoveState* moveState,  struct MoveState* opponentModifiedState, struct BattlerState* resultAttackerData, struct BattlerState* resultTargetData, int* koMultiplier, struct AiData* aiData)
+{
+
+}
+
+#define AI_BATTLER 1
+#define PLAYER_BATTLER 0
+int GetSinglesDecision(struct AiData* aiData)
+{
+    int i, j, maxScore, bestMove;
+    int moveScores[MAX_MON_MOVES] = { 0 };
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData)) continue;
+
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            int score, koScore, koMultiplier;
+            int relativeSpeed = aiData->moveState[AI_BATTLER][i].speedValue.comparable - aiData->moveState[PLAYER_BATTLER][j].speedValue.comparable;
+            struct MoveState modifiedState;
+            struct BattlerState resultingAttackerState, resultingDefenderState;
+            if (ShouldEvaluateSpecial(PLAYER_BATTLER, j, aiData)) continue;
+            if (relativeSpeed > 0)
+            {
+                // score = ComputeMoveScoring(&aiData->moveState[AI_BATTLER][i], &modifiedState, &resultingAttackerState, &resultingDefenderState, AI_BATTLER, PLAYER_BATTLER, j, &koMultiplier, aiData);
+                if (!koMultiplier)
+                    goto AI_GET_SINGLES_DECISION_OPPONENT_MOVE_BREAK;
+                // score -= ComputeMoveScoring()
+            }
+            AI_GET_SINGLES_DECISION_OPPONENT_MOVE_BREAK:
+        }
+    }
+}
+#undef AI_BATTLER
+#undef PLAYER_BATTLER
 
 /*
 Plan:
