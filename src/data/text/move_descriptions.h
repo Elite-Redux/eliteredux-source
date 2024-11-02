@@ -3920,6 +3920,10 @@ static const u8 sMoveTwoLineDescription_MoveOniFist[] = _(
     "An unavoidable punch that\n"
     "is thrown from shadows.");
 
+static const u8 sMoveTwoLineDescription_MoveInsectImpact[] = _(
+    "A punch that may drop the\n"
+    "target's defense stat.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4919,6 +4923,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_ONE_INCH_PUNCH - 1] = sMoveTwoLineDescription_MoveOneInchPunch,
     [MOVE_BERSERKER_HORN - 1] = sMoveTwoLineDescription_MoveBerserkerHorn,
     [MOVE_ONI_FIST - 1] = sMoveTwoLineDescription_MoveOniFist,
+    [MOVE_INSECT_IMPACT - 1] = sMoveTwoLineDescription_MoveInsectImpact,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5906,8 +5911,8 @@ static const u8 sMoveFourLineDescription_MoveHexTrot[] = _("50% chance to raise\
 static const u8 sMoveFourLineDescription_MoveMountainGale[] = _("Hits both opponents.\n30% chance to flinch.\nAir based.");
 static const u8 sMoveFourLineDescription_MoveBadEgg[] = _("Throws an egg filled\nwith toxins. Badly\npoisons the target");
 static const u8 sMoveFourLineDescription_MoveMysticalPower[] = _("Deals damage and\nraises the user's\nhighest attack or\ndefense by 1 stage.");
-static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("A jabbing attack. 30% to\nchance to inflict\nbleeding. Mighty\nHorn boost.");
-static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("A jabbing attack. 30% to\nchance to lower\nDefense. Mighty\nHorn boost.");
+static const u8 sMoveFourLineDescription_MoveDragonJab[] = _("A jabbing attack. 30% \nchance to inflict\nbleeding. Mighty\nHorn boost.");
+static const u8 sMoveFourLineDescription_MoveIcicleImpale[] = _("A jabbing attack. 30% \nchance to lower\nDefense. Mighty\nHorn boost.");
 static const u8 sMoveFourLineDescription_MoveToxicPlunge[] = _("Dives and then\nattacks on the next\nturn. 20% chance to\npoison.");
 static const u8 sMoveFourLineDescription_MoveShowtime[] = _("Clears other rooms\nand sets Magic Room,\nthen switches to an\nally.");
 static const u8 sMoveFourLineDescription_MoveBanishedPower[] = _("Deals damage and\nraises the user's\nhighest attack or\ndefense by 1 stage.");
@@ -5917,6 +5922,7 @@ static const u8 sMoveFourLineDescription_MoveDepletionBeam[] = _("Foe's last mov
 static const u8 sMoveFourLineDescription_MoveOneInchPunch[] = _("A powerful punch\nthat never misses.\nHigh crit rate.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveBerserkerHorn[] = _("Rotates its body\nlike a drill.\nHigh crit ratio.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveOniFist[] = _("A strong punch from\nthe shadows.\nAlways hits.\nIron Fist boost.");
+static const u8 sMoveFourLineDescription_MoveInsectImpact[] = _("A powerful punch. 30%\nchance to drop\ndefense. Iron\nFist boost.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6915,4 +6921,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_ONE_INCH_PUNCH - 1] = sMoveFourLineDescription_MoveOneInchPunch,
     [MOVE_BERSERKER_HORN - 1] = sMoveFourLineDescription_MoveBerserkerHorn,
     [MOVE_ONI_FIST - 1] = sMoveFourLineDescription_MoveOniFist,
+    [MOVE_INSECT_IMPACT - 1] = sMoveFourLineDescription_MoveInsectImpact,
 };
