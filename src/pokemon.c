@@ -9593,7 +9593,7 @@ u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType) {
         u8 randomizedType;
 
         do {
-            randomizedType = RandRangeDeterministic(0, NUMBER_OF_MON_TYPES - 1, &randomizedTypeSeed);
+            randomizedType = RandRangeDeterministic(0, NUMBER_OF_MON_TYPES - 2, &randomizedTypeSeed);
         }
         while (randomizedType == TYPE_MYSTERY || randomizedType == type);
         return randomizedType;
