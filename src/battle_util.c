@@ -1484,7 +1484,6 @@ bool8 WasUnableToUseMove(u8 battler)
         || gRoundStructs[battler].usedHealBlockedMove
         || gRoundStructs[battler].flag2Unknown
         || gRoundStructs[battler].flinchImmobility
-        || gRoundStructs[battler].confusionSelfDmg
         || gRoundStructs[battler].powderSelfDmg
         || gRoundStructs[battler].usedThroatChopPreventedMove)
         return TRUE;
@@ -5145,7 +5144,6 @@ bool8 CanMoveHaveExtraFlinchChance(u16 move)
 int WasMoveSuccessful()
 {
     return !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-		&& !gRoundStructs[gBattlerAttacker].confusionSelfDmg
         && gBattlerAttacker != gBattlerTarget;
 }
 
@@ -6102,7 +6100,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             //Checks if the ability is triggered
             if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
              && IsBattlerAlive(gBattlerAttacker)
-             && !gRoundStructs[gBattlerAttacker].confusionSelfDmg
              && !BATTLER_HEALING_BLOCKED(gBattlerAttacker)
              && IsMoveMakingContact(move, gBattlerAttacker)
              && !BATTLER_MAX_HP(gBattlerAttacker) 
@@ -8309,12 +8306,7 @@ bool8 DoesBattlerHaveAbilityShield(u8 battlerId)
 {
     u8 i;
     if (GetBattlerHoldEffect(battlerId, FALSE) != HOLD_EFFECT_ABILITY_SHIELD) return FALSE;
-    if (gStatuses3[battlerId] & STATUS3_EMBARGO) return FALSE;
-    for (i = 0; i < gBattlersCount; i++)
-    {
-        if (HasAbilityIgnoringSuppression(battlerId, ABILITY_CLUELESS)) return TRUE;
-    }
-    return FALSE;
+    return !(gStatuses3[battlerId] & STATUS3_EMBARGO);
 }
 
 u32 GetBattlerHoldEffectParam(u8 battlerId)
@@ -10591,8 +10583,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_INFILTRATOR)
         && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MARINE_APEX)
         && !(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        && !(isCrit)
-        && !gRoundStructs[gBattlerAttacker].confusionSelfDmg)
+        && !isCrit)
     {
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
             MulModifier(&finalModifier, UQ_4_12(0.66));
@@ -12156,7 +12147,7 @@ int GetHighestStatIdExcept(int battlerId, int includeStatStages, int exclude)
 
     for (i = STAT_ATK; i < NUM_STATS; i++)
     {
-        u16 statVal = *(&gBattleMons[battlerId].attack + (i - 1));
+        u16 statVal = (&gBattleMons[battlerId].attack)[i - 1];
         if (i == exclude) continue;
         if (includeStatStages)
         {
@@ -12187,7 +12178,7 @@ u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages)
 
     for (i = STAT_ATK; i <= STAT_SPATK; i += STAT_SPATK - STAT_ATK)
     {
-        u16 statVal = *(&gBattleMons[battlerId].attack + (i - 1));
+        u16 statVal = (&gBattleMons[battlerId].attack)[i - 1];
         if (includeStatStages)
         {
             u8 statStage = gBattleMons[battlerId].statStages[i];
@@ -12210,9 +12201,9 @@ u8 GetHighestDefendingStatId(u8 battlerId, u8 includeStatStages)
     u8 highestId = STAT_DEF;
     u32 highestStat = 0;
 
-    for (i = STAT_DEF; i > STAT_SPDEF; i += STAT_SPDEF - STAT_DEF)
+    for (i = STAT_DEF; i <= STAT_SPDEF; i += STAT_SPDEF - STAT_DEF)
     {
-        u16 statVal = *(&gBattleMons[battlerId].attack + (i - 1));
+        u16 statVal = (&gBattleMons[battlerId].attack)[i - 1];
         if (includeStatStages)
         {
             u8 statStage = gBattleMons[battlerId].statStages[i];
@@ -15005,6 +14996,8 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             break;
         
         case ABILITY_JUMP_SCARE:
+            REQUIRE_NOT(GetSingleUseAbilityCounter(battler, ability))
+            SetSingleUseAbilityCounter(battler, ability, TRUE);
             UseEntryMove(battler, ability, MOVE_ASTONISH, 0);
             break;
         
@@ -15589,6 +15582,8 @@ static int HandleEndTurnAbilityAs(int ability, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler)
 {
     int ability;
+
+    if (!IsBattlerAlive(battler)) return FALSE;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
     abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;

@@ -737,7 +737,7 @@
 #define ABILITY_HOVER 715 // Adds Psychic type to itself. Avoids Ground attacks.
 #define ABILITY_DEPRAVITY 716 // Combines Merciless & Overcharge.
 #define ABILITY_WILDFIRE 717 // Attacks with 20BP Fire Spin when hit by a contact move.
-#define ABILITY_JUMP_SCARE 718 // Attacks with Astonish on switch-in.
+#define ABILITY_JUMP_SCARE 718 // Attacks with Astonish on first switch-in.
 #define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
 #define ABILITY_STUN_SHOCK 720 // Attacks have a 60% chance to Paralyze or Poison.
 #define ABILITY_RAGING_GODDESS 721 // Combines Rampage & Hyper Aggressive.

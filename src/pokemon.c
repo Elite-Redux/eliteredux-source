@@ -7005,11 +7005,6 @@ u16 GetEvolutionTargetSpecies(struct Pokemon *mon, u8 mode, u16 evolutionItem, u
         {
             switch (gEvolutionTable[species][i].method)
             {
-            // 
-            // case EVO_FORM_SHIFT:
-            //     if (FlagGet(FLAG_BADGE02_GET) && gEvolutionTable[species][i].targetSpecies != actualSpecies)
-            //         targetSpecies = gEvolutionTable[species][i].targetSpecies;
-            //     break;
             case EVO_FRIENDSHIP:
                 if (friendship >= 160)
                     targetSpecies = gEvolutionTable[species][i].targetSpecies;
@@ -9593,7 +9588,7 @@ u8 RandomizeType(u8 type, u16 species, u32 personality, bool8 isFirstType) {
         u8 randomizedType;
 
         do {
-            randomizedType = RandRangeDeterministic(0, NUMBER_OF_MON_TYPES - 1, &randomizedTypeSeed);
+            randomizedType = RandRangeDeterministic(0, NUMBER_OF_MON_TYPES - 2, &randomizedTypeSeed);
         }
         while (randomizedType == TYPE_MYSTERY || randomizedType == type);
         return randomizedType;
@@ -10968,7 +10963,16 @@ u16 GetFormShiftSpecies(u16 species)
     u16 baseSpecies;
     u8 i;
 
-    baseSpecies = GetFormSpeciesId(species, 0);
+    switch (species)
+    {
+    case SPECIES_DARMANITAN_GALARIAN:
+    case SPECIES_DARMANITAN_ZEN_MODE_GALARIAN:
+        baseSpecies = SPECIES_DARMANITAN_GALARIAN;
+        break;
+    default:
+        baseSpecies = GetFormSpeciesId(species, 0);
+        break;
+    }
     if (!baseSpecies) return SPECIES_NONE;
 
     for (i = 0; gFormChangeTable[baseSpecies][i].method == EVO_FORM_SHIFT || gFormChangeTable[baseSpecies][i].method == EVO_FORM_SHIFT_GENDER; i++)

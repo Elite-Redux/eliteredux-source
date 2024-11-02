@@ -171,7 +171,6 @@ struct RoundStruct
     u8 bounceMove:1;
     u8 stealMove:1;
     u8 prlzImmobility:1;
-    u8 confusionSelfDmg:1;
     u8 targetAffected:1;
     u8 chargingTurn:1;
     u8 fleeFlag:2; // For RunAway and Smoke Ball.
