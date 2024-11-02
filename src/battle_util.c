@@ -12156,7 +12156,7 @@ int GetHighestStatIdExcept(int battlerId, int includeStatStages, int exclude)
 
     for (i = STAT_ATK; i < NUM_STATS; i++)
     {
-        u16 statVal = *(&gBattleMons[battlerId].attack + (i - 1));
+        u16 statVal = (&gBattleMons[battlerId].attack)[i - 1];
         if (i == exclude) continue;
         if (includeStatStages)
         {
@@ -12187,7 +12187,7 @@ u8 GetHighestAttackingStatId(u8 battlerId, u8 includeStatStages)
 
     for (i = STAT_ATK; i <= STAT_SPATK; i += STAT_SPATK - STAT_ATK)
     {
-        u16 statVal = *(&gBattleMons[battlerId].attack + (i - 1));
+        u16 statVal = (&gBattleMons[battlerId].attack)[i - 1];
         if (includeStatStages)
         {
             u8 statStage = gBattleMons[battlerId].statStages[i];
@@ -12210,9 +12210,9 @@ u8 GetHighestDefendingStatId(u8 battlerId, u8 includeStatStages)
     u8 highestId = STAT_DEF;
     u32 highestStat = 0;
 
-    for (i = STAT_DEF; i > STAT_SPDEF; i += STAT_SPDEF - STAT_DEF)
+    for (i = STAT_DEF; i <= STAT_SPDEF; i += STAT_SPDEF - STAT_DEF)
     {
-        u16 statVal = *(&gBattleMons[battlerId].attack + (i - 1));
+        u16 statVal = (&gBattleMons[battlerId].attack)[i - 1];
         if (includeStatStages)
         {
             u8 statStage = gBattleMons[battlerId].statStages[i];
