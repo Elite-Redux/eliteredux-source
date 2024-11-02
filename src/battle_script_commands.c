@@ -12605,6 +12605,12 @@ bool32 TryResetBattlerStatChanges(u8 battler, s8 comparison)
         gBattleMons[battler].statStages[j] = DEFAULT_STAT_STAGE;
     }
 
+    if ((comparison == RESET_ALL_STATS || comparison == RESET_STAT_BUFFS) && gVolatileStructs[battler].critBoost)
+    {
+        ret = TRUE;
+        gVolatileStructs[battler].critBoost = 0;
+    }
+
     return ret;
 }
 
