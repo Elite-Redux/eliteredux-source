@@ -1317,6 +1317,9 @@ const u32 gItemIconPalette_Gengarite[] = INCBIN_U32("graphics/items/icon_palette
 const u32 gItemIcon_GengariteX[] = INCBIN_U32("graphics/items/icons/gengarite.4bpp.lz");
 const u32 gItemIconPalette_GengariteX[] = INCBIN_U32("graphics/items/icon_palettes/gengarite.gbapal.lz");
 
+const u32 gItemIcon_UltranecroziumP[] = INCBIN_U32("graphics/items/icons/ultranecrozium_z.4bpp.lz");
+const u32 gItemIconPalette_UltranecroziumP[] = INCBIN_U32("graphics/items/icon_palettes/ultranecrozium_z.gbapal.lz");
+
 const u32 gItemIcon_Gardevoirite[] = INCBIN_U32("graphics/items/icons/gardevoirite.4bpp.lz");
 const u32 gItemIconPalette_Gardevoirite[] = INCBIN_U32("graphics/items/icon_palettes/gardevoirite.gbapal.lz");
 
