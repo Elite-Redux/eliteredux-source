@@ -2500,7 +2500,6 @@ static void Cmd_healthbarupdate(void)
                 !(gMoveResultFlags & MOVE_RESULT_FOE_ENDURED) &&
                 !(gMoveResultFlags & MOVE_RESULT_FAILED) &&
                 !(gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE) &&
-                !gRoundStructs[gBattlerAttacker].confusionSelfDmg &&
                 !IS_BATTLER_PROTECTED(gActiveBattler) &&
                 gVolatileStructs[gActiveBattler].substituteHP == 0 &&
                 gBattleMoves[gCurrentMove].split != SPLIT_STATUS &&
@@ -13670,7 +13669,6 @@ static void Cmd_trytoapplymoveeffect(void)
                 }
                 else if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                 && IsBattlerAlive(gBattlerTarget)
-                && !gRoundStructs[gBattlerTarget].confusionSelfDmg
                 && TARGET_TURN_DAMAGED
                 && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)
                 && !(gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED))
@@ -13684,7 +13682,6 @@ static void Cmd_trytoapplymoveeffect(void)
         case EFFECT_STEALTH_ROCK_HIT:
             if (rand <= secondaryEffectChance) {
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                && !gRoundStructs[gBattlerTarget].confusionSelfDmg
                 && TARGET_TURN_DAMAGED
                 && !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK))
                 {
@@ -13697,7 +13694,6 @@ static void Cmd_trytoapplymoveeffect(void)
         case EFFECT_SPIKE_HIT:
             if (rand <= secondaryEffectChance) {
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                && !gRoundStructs[gBattlerTarget].confusionSelfDmg
                 && TARGET_TURN_DAMAGED
                 && gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount < 3)
                 {
@@ -13717,7 +13713,6 @@ static void Cmd_trytoapplymoveeffect(void)
                 }
                 else if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                 && gBattleMons[gBattlerTarget].hp != 0
-                && !gRoundStructs[gBattlerAttacker].confusionSelfDmg
                 && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)
                 && TARGET_TURN_DAMAGED
                 && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED))
@@ -13731,7 +13726,6 @@ static void Cmd_trytoapplymoveeffect(void)
         case EFFECT_STICKY_WEB_HIT:
             if (rand <= secondaryEffectChance) {
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                && !gRoundStructs[gBattlerTarget].confusionSelfDmg
                 && TARGET_TURN_DAMAGED
                 && !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB))
                 {

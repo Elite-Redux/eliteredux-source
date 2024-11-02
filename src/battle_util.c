@@ -1484,7 +1484,6 @@ bool8 WasUnableToUseMove(u8 battler)
         || gRoundStructs[battler].usedHealBlockedMove
         || gRoundStructs[battler].flag2Unknown
         || gRoundStructs[battler].flinchImmobility
-        || gRoundStructs[battler].confusionSelfDmg
         || gRoundStructs[battler].powderSelfDmg
         || gRoundStructs[battler].usedThroatChopPreventedMove)
         return TRUE;
@@ -5145,7 +5144,6 @@ bool8 CanMoveHaveExtraFlinchChance(u16 move)
 int WasMoveSuccessful()
 {
     return !(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-		&& !gRoundStructs[gBattlerAttacker].confusionSelfDmg
         && gBattlerAttacker != gBattlerTarget;
 }
 
@@ -6102,7 +6100,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             //Checks if the ability is triggered
             if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
              && IsBattlerAlive(gBattlerAttacker)
-             && !gRoundStructs[gBattlerAttacker].confusionSelfDmg
              && !BATTLER_HEALING_BLOCKED(gBattlerAttacker)
              && IsMoveMakingContact(move, gBattlerAttacker)
              && !BATTLER_MAX_HP(gBattlerAttacker) 
@@ -10586,8 +10583,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_INFILTRATOR)
         && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MARINE_APEX)
         && !(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        && !(isCrit)
-        && !gRoundStructs[gBattlerAttacker].confusionSelfDmg)
+        && !isCrit)
     {
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
             MulModifier(&finalModifier, UQ_4_12(0.66));
