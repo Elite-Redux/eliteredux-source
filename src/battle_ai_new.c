@@ -291,7 +291,7 @@ int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, in
         return score;
 }
 
-int CalcTurnSelectionScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, struct AiData* aiData)
+int CalcTurnSelectionScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, AiScoreEvaluationResult* noEval, struct AiData* aiData)
 {
     struct AiData mutableAiData, mutableAiDataMaybeKo;
     AiScoreEvaluationResult updateState;
@@ -320,6 +320,7 @@ int CalcTurnSelectionScore(int battlerFirst, int moveFirst, int battlerSecond, i
 
     if (updateState & AI_UPDATE_BOTH_FAINT_ON_ATTACK)
     {
+        noEval = updateState;
         score += endTurnScore;
         if (updateState == AI_UPDATE_B1_FAINTS_ON_ATTACK)
             return score - AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerSecond, battlerFirst, aiData));
@@ -364,28 +365,64 @@ int CalcTurnSelectionScore(int battlerFirst, int moveFirst, int battlerSecond, i
 #define PLAYER_BATTLER 0
 int GetSinglesDecision(struct AiData* aiData)
 {
-    int i, j, maxScore, bestMove;
+    int i, j, maxScore, bestMove, evaluated = MAX_MON_MOVES;
     int moveScores[MAX_MON_MOVES] = { 0 };
     struct AiData mutableAiData, mutableAiDataKoUncertain;
 
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
-        if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData)) continue;
+        int playerMoved, minScore;
+        if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData))
+        {
+            evaluated--;
+            continue;
+        }
+        
+        playerMoved = MAX_MON_MOVES;
+        minScore = 2 * AI_SCORE_KO;
 
         for (j = 0; j < MAX_MON_MOVES; j++)
         {
             int score;
             int relativeSpeed = SpeedDifference(AI_BATTLER, i, PLAYER_BATTLER, j, aiData);
+            AiScoreEvaluationResult noEval;
 
-            if (ShouldEvaluateSpecial(PLAYER_BATTLER, j, aiData)) continue;
+            if (ShouldEvaluateSpecial(PLAYER_BATTLER, j, aiData))
+            {
+                playerMoved--;
+                continue;
+            }
 
             STRUCT_COPY(mutableAiData, *aiData)
 
             if (relativeSpeed > 0)
-                score = CalcTurnSelectionScore(AI_BATTLER, i, PLAYER_BATTLER, j, aiData);
+            {
+                score = CalcTurnSelectionScore(AI_BATTLER, i, PLAYER_BATTLER, j, &noEval, aiData);
+                if (noEval & AI_UPDATE_B2_FAINTS_ON_ATTACK) playerMoved--;
+            }
             // For simplicity assume we lose speed ties, helps mitigate save scumming, if we are always dead we will pick a different option later
             else
-                score = -CalcTurnSelectionScore(PLAYER_BATTLER, j, AI_BATTLER, i, aiData);
+            {
+                score = -CalcTurnSelectionScore(PLAYER_BATTLER, j, AI_BATTLER, i, &noEval, aiData);
+                if (noEval & AI_UPDATE_B2_FAINTS_ON_ATTACK) playerMoved--;
+            }
+
+            if (score < minScore) minScore = score;
+        }
+
+        moveScores[i] = AI_SCORE_FUZZ(minScore);
+        if (!playerMoved) evaluated--;
+    }
+
+    if (!evaluated)
+    {
+        int faintScore = AI_SCORE_KO + AI_SCORE_DAMAGE(100 * aiData->battlerState[AI_BATTLER].hp / gBattleMons[AI_BATTLER].maxHP);
+        for (i = 0; i < MAX_MON_MOVES; i++)
+        {
+            if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData))
+                continue;
+            
+            moveScores[i] = AI_SCORE_FUZZ(ComputeAttackPrimaryScoring(AI_BATTLER, PLAYER_BATTLER, i, aiData)) - faintScore;            
         }
     }
 }
