@@ -3669,8 +3669,15 @@ BattleScript_AbsorbHeal:
 	goto BattleScript_MoveEnd
 
 BattleScript_AbsorbLeech:
+	call BattleScript_AbsorbLeech_Test
+	tryfaintmon BS_ATTACKER, FALSE, NULL
+	tryfaintmon BS_TARGET, FALSE, NULL
+	return
+BattleScript_AbsorbLeech_Test:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
 	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze
+	jumpifhealingblocked BS_ATTACKER, BattleScript_Return
+	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_Return
 	jumpifabsent BS_TARGET, BattleScript_AbsorbLeech_SkipSoulLinker
 	jumpifability BS_ATTACKER, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinker
 	jumpifability BS_TARGET, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinker
@@ -3678,12 +3685,12 @@ BattleScript_AbsorbLeech_SkipSoulLinker:
 	setbyte cMULTISTRING_CHOOSER, B_MSG_ABSORB
 	goto BattleScript_AbsorbUpdateHp
 BattleScript_AbsorbSoulLinker::
+	call BattleScript_AbsorbUpdateHp
+	copybyte sABILITY_OVERWRITE, ABILITY_SOUL_LINKER
 	call BattleScript_AbilityPopUp
     orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
-	tryfaintmon BS_TARGET, FALSE, NULL
-	call BattleScript_AbsorbUpdateHp
 	manipulatedamage DMG_CHANGE_SIGN
 	return
 BattleScript_AbsorbLiquidOoze::
@@ -3699,8 +3706,6 @@ BattleScript_AbsorbUpdateHp::
 	printfromtable gAbsorbDrainStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_AbsorbTryFainting::
-	tryfaintmon BS_ATTACKER, FALSE, NULL
-	tryfaintmon BS_TARGET, FALSE, NULL
 	return
 
 
