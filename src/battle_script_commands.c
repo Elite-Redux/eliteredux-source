@@ -7127,8 +7127,8 @@ static void Cmd_switchineffects(void)
             UpdateAbilityStateIndices(i, abilities);
         }
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_NEUTRALIZING_GAS;
-        gTurnStructs[gActiveBattler].announceNeutralizingGas = TRUE;
         gBattlerAbility = gActiveBattler;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_NEUTRALIZING_GAS;
         BattleScriptCall(BattleScript_SwitchInAbilityMsgRet);
     }
     if (!gVolatileStructs[gActiveBattler].hazardDamaged)
