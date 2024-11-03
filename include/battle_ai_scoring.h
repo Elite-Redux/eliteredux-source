@@ -2,6 +2,7 @@
 #define GUARD_BATTLE_AI_SCORING_H
 
 #include "battle_ai_new.h"
+#include "random.h"
 
 #define AI_SCORE_KO AI_SCORE(100)
 #define AI_SCORE_DAMAGE(percent) AI_SCORE(percent)

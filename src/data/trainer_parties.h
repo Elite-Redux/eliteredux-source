@@ -43759,66 +43759,6 @@ static const struct TrainerMonItemCustomMoves sParty_BrentInsane[] = {
     }
 };
 
-static const struct TrainerMonItemCustomMoves sParty_Brendanroute119mudkipInsane[] = {
-    {
-    .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .heldItem = ITEM_NONE,
-    .ability = 0,
-    .evs = { 0 },
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
-    }
-};
-
-static const struct TrainerMonItemCustomMoves sParty_Brendanroute119treeckoInsane[] = {
-    {
-    .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .heldItem = ITEM_NONE,
-    .ability = 0,
-    .evs = { 0 },
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
-    }
-};
-
-static const struct TrainerMonItemCustomMoves sParty_Brendanroute119torchicInsane[] = {
-    {
-    .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .heldItem = ITEM_NONE,
-    .ability = 0,
-    .evs = { 0 },
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
-    }
-};
-
-static const struct TrainerMonItemCustomMoves sParty_Mayroute119mudkipInsane[] = {
-    {
-    .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .heldItem = ITEM_NONE,
-    .ability = 0,
-    .evs = { 0 },
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
-    }
-};
-
-static const struct TrainerMonItemCustomMoves sParty_Mayroute119torchicInsane[] = {
-    {
-    .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .heldItem = ITEM_NONE,
-    .ability = 0,
-    .evs = { 0 },
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
-    }
-};
-
 static const struct TrainerMonItemCustomMoves sParty_Grunt37Insane[] = {
     {
     .lvl = 0,
@@ -43864,18 +43804,6 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt37Insane[] = {
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_DRAGON_DANCE, MOVE_DRACONIC_FANGS, MOVE_DEATHROLL, MOVE_CRUNCH
-    }
-};
-
-static const struct TrainerMonItemCustomMoves sParty_Mayroute119treeckoInsane[] = {
-    {
-    .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .heldItem = ITEM_NONE,
-    .ability = 0,
-    .evs = { 0 },
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
 };
 

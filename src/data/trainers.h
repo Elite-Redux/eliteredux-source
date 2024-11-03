@@ -7539,8 +7539,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_BrendanRoute119Mudkip),
         .party = {.ItemCustomMoves = sParty_BrendanRoute119Mudkip},
-        .partySizeInsane = ARRAY_COUNT(sParty_Brendanroute119mudkipInsane),
-        .partyInsane = {.ItemCustomMoves = sParty_Brendanroute119mudkipInsane},
+        .partySizeInsane = ARRAY_COUNT(sParty_BrendanRoute119Mudkip),
+        .partyInsane = {.ItemCustomMoves = sParty_BrendanRoute119Mudkip},
     },
 
     [TRAINER_BRENDAN_ROUTE_103_TREECKO] =
@@ -7583,8 +7583,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_BrendanRoute119Treecko),
         .party = {.ItemCustomMoves = sParty_BrendanRoute119Treecko},
-        .partySizeInsane = ARRAY_COUNT(sParty_Brendanroute119treeckoInsane),
-        .partyInsane = {.ItemCustomMoves = sParty_Brendanroute119treeckoInsane},
+        .partySizeInsane = ARRAY_COUNT(sParty_BrendanRoute119Treecko),
+        .partyInsane = {.ItemCustomMoves = sParty_BrendanRoute119Treecko},
     },
 
     [TRAINER_BRENDAN_ROUTE_103_TORCHIC] =
@@ -7627,8 +7627,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_BrendanRoute119Torchic),
         .party = {.ItemCustomMoves = sParty_BrendanRoute119Torchic},
-        .partySizeInsane = ARRAY_COUNT(sParty_Brendanroute119torchicInsane),
-        .partyInsane = {.ItemCustomMoves = sParty_Brendanroute119torchicInsane},
+        .partySizeInsane = ARRAY_COUNT(sParty_BrendanRoute119Torchic),
+        .partyInsane = {.ItemCustomMoves = sParty_BrendanRoute119Torchic},
     },
 
     [TRAINER_MAY_ROUTE_103_MUDKIP] =
@@ -7671,8 +7671,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_MayRoute119Mudkip),
         .party = {.ItemCustomMoves = sParty_MayRoute119Mudkip},
-        .partySizeInsane = ARRAY_COUNT(sParty_Mayroute119mudkipInsane),
-        .partyInsane = {.ItemCustomMoves = sParty_Mayroute119mudkipInsane},
+        .partySizeInsane = ARRAY_COUNT(sParty_MayRoute119Mudkip),
+        .partyInsane = {.ItemCustomMoves = sParty_MayRoute119Mudkip},
     },
 
     [TRAINER_MAY_ROUTE_103_TREECKO] =
@@ -7715,8 +7715,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_MayRoute119Treecko),
         .party = {.ItemCustomMoves = sParty_MayRoute119Treecko},
-        .partySizeInsane = ARRAY_COUNT(sParty_Mayroute119treeckoInsane),
-        .partyInsane = {.ItemCustomMoves = sParty_Mayroute119treeckoInsane},
+        .partySizeInsane = ARRAY_COUNT(sParty_MayRoute119Treecko),
+        .partyInsane = {.ItemCustomMoves = sParty_MayRoute119Treecko},
     },
 
     [TRAINER_MAY_ROUTE_103_TORCHIC] =
@@ -7759,8 +7759,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_MayRoute119Torchic),
         .party = {.ItemCustomMoves = sParty_MayRoute119Torchic},
-        .partySizeInsane = ARRAY_COUNT(sParty_Mayroute119torchicInsane),
-        .partyInsane = {.ItemCustomMoves = sParty_Mayroute119torchicInsane},
+        .partySizeInsane = ARRAY_COUNT(sParty_MayRoute119Torchic),
+        .partyInsane = {.ItemCustomMoves = sParty_MayRoute119Torchic},
     },
 
     [TRAINER_ISAAC_1] =
