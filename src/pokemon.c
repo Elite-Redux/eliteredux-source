@@ -9412,17 +9412,16 @@ bool8 SpeciesHasInnate(u16 species, u16 ability, u8 level, u32 personality, bool
 }
 
 u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
-    u32 randomizedMoveSeed = moves ^ ISO_RANDOMIZE1(species) ^ personality;
-    u16 randomizedMove;
-    if (gSaveBlock2Ptr->moveRandomizedMode == 1 &&
-        moves != MOVE_NONE) {
-            do {
-                randomizedMove = RandRangeDeterministic(1, MOVES_COUNT - 1, &randomizedMoveSeed);
-            }
-            while (gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER ||
-                  randomizedMove == MOVE_DARK_VOID);
+    if (gSaveBlock2Ptr->moveRandomizedMode == 1 && moves != MOVE_NONE)
+    {
+        u32 randomizedMoveSeed = moves ^ ISO_RANDOMIZE1(species) ^ personality;
+        u16 randomizedMove;
+        do {
+            randomizedMove = RandRangeDeterministic(1, MOVES_COUNT - 1, &randomizedMoveSeed);
+        }
+        while (gBattleMoves[randomizedMove].effect == EFFECT_PLACEHOLDER || randomizedMove == MOVE_DARK_VOID);
 
-            return randomizedMove;
+        return randomizedMove;
     }
     else
         return moves;

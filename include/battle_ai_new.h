@@ -25,6 +25,7 @@ union SpeedValue {
 
 struct MoveState {
     union SpeedValue speedValue;
+    u16 koChance;
     u16 damage;
     u16 multiHitExpect;
     u8 multiplier;
@@ -42,14 +43,13 @@ struct MoveState {
 
 struct BattlerState
 {
-    u8 hpPercent;
+    u16 hp;
 };
 
 
 struct AiData {
     struct MoveState moveState[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
     struct BattlerState battlerState[MAX_BATTLERS_COUNT];
-    u8 hpPercent[MAX_BATTLERS_COUNT];
 };
 
 struct DisguiseSimulation {
