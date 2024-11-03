@@ -6081,14 +6081,33 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             if (!gFieldTimers.neutralizingGas && BattlerHasAbility(i, ABILITY_NEUTRALIZING_GAS, FALSE))
             {
                 gFieldTimers.neutralizingGas = TRUE;
-                gBattlerAbility = i;
+                battler = i;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_NEUTRALIZING_GAS;
-                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                gBattleScripting.abilityPopupOverwrite = ABILITY_NEUTRALIZING_GAS;
+                if (extraArg == ABILITY_BS_PUSH_CURSOR_AND_CALLBACK) BattleScriptPushCursorAndCallback(BattleScript_End3);
+                BattleScriptCall(BattleScript_SwitchInAbilityMsgRet);
                 effect++;
-            }
-            
-            if (effect)
+
+                for (i = 0; i < gBattlersCount; i++)
+                {
+                    u16 abilities[TOTAL_ABILITY_COUNT];
+                    u16 species = gBattleMons[i].species;
+                    u32 personality = gBattleMons[i].personality;
+                    int level = gBattleMons[i].level;
+                    bool8 isPlayer = GetBattlerSide(i) == B_SIDE_PLAYER;
+                    u8 j = 0;
+                    if (DoesBattlerHaveAbilityShield(i)) continue;
+                    ARRAY_COPY(abilities, gBattleMons[i].abilities)
+                    for (j = 0; j < TOTAL_ABILITY_COUNT; j++)
+                    {
+                        if (!IsPersistentOrUnsuppressableAbility(abilities[j]))
+                            abilities[j] = ABILITY_NONE;
+                    }
+                    UpdateAbilityStateIndices(i, abilities);
+                }
+
                 break;
+            }
         }
         break;
     case ABILITYEFFECT_AFTER_RECOIL:

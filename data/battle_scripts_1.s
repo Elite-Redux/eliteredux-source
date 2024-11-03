@@ -580,6 +580,8 @@ BattleScript_SteelBeamMiss::
 	effectivenesssound
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
+	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_SteelBeamAfterSelfDamage
+	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_SteelBeamAfterSelfDamage
 	jumpifmagicguard BS_ATTACKER, BattleScript_MoveEnd
 	bichalfword gMoveResultFlags, MOVE_RESULT_MISSED
 	call BattleScript_SteelBeamSelfDamage
@@ -3669,24 +3671,36 @@ BattleScript_AbsorbHeal:
 	goto BattleScript_MoveEnd
 
 BattleScript_AbsorbLeech:
+	call BattleScript_AbsorbLeech_Test
+	tryfaintmon BS_ATTACKER, FALSE, NULL
+	tryfaintmon BS_TARGET, FALSE, NULL
+	return
+BattleScript_AbsorbLeech_Test:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
 	jumpifability BS_TARGET, ABILITY_LIQUID_OOZE, BattleScript_AbsorbLiquidOoze
+	jumpifhealingblocked BS_ATTACKER, BattleScript_Return
+	jumpifstatus BS_ATTACKER, STATUS1_BLEED, BattleScript_Return
+	jumpifabsent BS_TARGET, BattleScript_AbsorbLeech_SkipSoulLinker
 	jumpifability BS_ATTACKER, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinker
 	jumpifability BS_TARGET, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinker
+BattleScript_AbsorbLeech_SkipSoulLinker:
 	setbyte cMULTISTRING_CHOOSER, B_MSG_ABSORB
 	goto BattleScript_AbsorbUpdateHp
 BattleScript_AbsorbSoulLinker::
+	call BattleScript_AbsorbUpdateHp
+	copybyte sABILITY_OVERWRITE, ABILITY_SOUL_LINKER
 	call BattleScript_AbilityPopUp
     orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
 	healthbarupdate BS_TARGET
 	datahpupdate BS_TARGET
-	tryfaintmon BS_TARGET, FALSE, NULL
-	goto BattleScript_AbsorbUpdateHp
+	manipulatedamage DMG_CHANGE_SIGN
+	return
 BattleScript_AbsorbLiquidOoze::
 	copybyte gBattlerAbility, gBattlerTarget
 	call BattleScript_AbilityPopUp
 	manipulatedamage DMG_CHANGE_SIGN
 	setbyte cMULTISTRING_CHOOSER, B_MSG_ABSORB_OOZE
+	@ Intentional fallthrough
 BattleScript_AbsorbUpdateHp::
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
@@ -3694,13 +3708,6 @@ BattleScript_AbsorbUpdateHp::
 	printfromtable gAbsorbDrainStringIds
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_AbsorbTryFainting::
-	tryfaintmon BS_ATTACKER, FALSE, NULL
-	tryfaintmon BS_TARGET, FALSE, NULL
-	jumpifability BS_ATTACKER, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinkerChangeSign
-	jumpifability BS_TARGET, ABILITY_SOUL_LINKER, BattleScript_AbsorbSoulLinkerChangeSign
-	return
-BattleScript_AbsorbSoulLinkerChangeSign::
-	manipulatedamage DMG_CHANGE_SIGN
 	return
 
 
@@ -3938,6 +3945,8 @@ BattleScript_EffectMindBlown::
 	attackstring
 	ppreduce
 	jumpifabilitypresent ABILITY_DAMP, BattleScript_EffectMindBlown_Failed
+	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_EffectMindBlown_NoDamage
+	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_EffectMindBlown_NoDamage
 	jumpifmagicguard BS_ATTACKER, BattleScript_EffectMindBlown_NoDamage
 	dmg_1_2_attackerhp
 	healthbarupdate BS_ATTACKER

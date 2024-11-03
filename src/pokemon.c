@@ -10740,6 +10740,12 @@ bool8 IsEeveelution(u16 species)
 u16 getLearnsetMon(u16 species)
 {
     u16 baseSpecies = GetFormShiftSpecies(species);
+    switch (species)
+    {
+        case SPECIES_URSALUNA_BLOODMOON:
+        case SPECIES_POLARTIC_BLUEMOON:
+            return species;
+    }
     switch (baseSpecies)
     {
         // Deoxys, Wormadam, and Burmy forms have different learnsets
@@ -10747,8 +10753,6 @@ u16 getLearnsetMon(u16 species)
         case SPECIES_DEOXYS:
         case SPECIES_WORMADAM:
         case SPECIES_BURMY:
-        case SPECIES_URSALUNA_BLOODMOON:
-        case SPECIES_POLARTIC_BLUEMOON:
             return species;
         
         default:

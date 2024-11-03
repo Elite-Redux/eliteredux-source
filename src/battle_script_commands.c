@@ -7126,9 +7126,10 @@ static void Cmd_switchineffects(void)
             }
             UpdateAbilityStateIndices(i, abilities);
         }
+        gFieldTimers.neutralizingGas = TRUE;
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_NEUTRALIZING_GAS;
-        gTurnStructs[gActiveBattler].announceNeutralizingGas = TRUE;
         gBattlerAbility = gActiveBattler;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_NEUTRALIZING_GAS;
         BattleScriptCall(BattleScript_SwitchInAbilityMsgRet);
     }
     if (!gVolatileStructs[gActiveBattler].hazardDamaged)
@@ -7151,7 +7152,6 @@ static void Cmd_switchineffects(void)
         }
         
         if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gActiveBattler, FALSE)
-            || AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, 0, 0, 0, 0)
             || AbilityBattleEffects(ABILITYEFFECT_TRACE2, 0, 0, 0, 0)
             || AbilityBattleEffects(ABILITYEFFECT_FORECAST, 0, 0, 0, 0))
             return;
@@ -8997,7 +8997,7 @@ static void Cmd_various(void)
         break;
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlerAttacker = gActiveBattler;
-        AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, 0, 0);
+        AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, ABILITY_BS_CALL, 0);
         ptr = gBattlescriptCurrInstr;
         gBattlescriptCurrInstr = runAgain;
         while (gBattleScripting.abilityLoopCounter <= NUM_ABILITY_SLOTS + 1)
@@ -9006,7 +9006,6 @@ static void Cmd_various(void)
                 return;
         }
         gBattlescriptCurrInstr = ptr;
-        AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_TRACE2, gActiveBattler, 0, 0, 0);
         return;
     case VARIOUS_SAVE_TARGET:
@@ -9296,7 +9295,8 @@ static void Cmd_various(void)
                 SetStatChanger(STAT_SPATK, 1);
                 gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_HEART;
                 PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_SPATK);
-                BattleScriptCall(BattleScript_ScriptingAbilityStatRaise);
+                BattleScriptPush(runAgain);
+                gBattlescriptCurrInstr = BattleScript_ScriptingAbilityStatRaise;
                 return;
             }
         }
