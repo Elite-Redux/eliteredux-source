@@ -174,7 +174,7 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
     return FALSE;
 }
 
-// Effects which are applied regardless of defender's survival
+// Effects which are applied regardless of defender's survival. Calculates KO percent.
 int ComputeAttackPrimaryScoring(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
 {
 
@@ -185,9 +185,19 @@ int AdjustStateForMove(int battlerAtk, int battlerUpdated, int move, struct AiDa
     
 }
 
+int AdjustHpForMove(int battlerAtk, int battlerUpdated, int move, struct AiData* aiData)
+{
+    
+}
+
 int SpeedDifference(int battler1, int move1, int battler2, int move2, struct AiData* aiData)
 {
     return aiData->moveState[battler1][move1].speedValue.comparable - aiData->moveState[battler2][move2].speedValue.comparable;
+}
+
+int CalcEndTurnScore(int battler, struct AiData* aiData)
+{
+
 }
 
 typedef enum {
@@ -200,11 +210,36 @@ typedef enum {
     AI_UPDATE_BOTH_FAINT_AFTER = AI_UPDATE_B1_FAINTS_AFTER | AI_UPDATE_B2_FAINTS_AFTER,
 } AiScoreEvaluationResult;
 
-int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, AiScoreEvaluationResult* updateState, struct AiData* aiData, struct AiData* aiDataKo)
+int CalcMaxDamageScore(int battlerAtk, int battlerDef, struct AiData* aiData)
+{
+    int i, maxScore = 0;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        int score = ComputeAttackPrimaryScoring(battlerAtk, battlerDef, i, aiData);
+        if (score > maxScore) maxScore = score;
+    }
+    return maxScore;
+}
+
+int GetMaxSpeedOfFaintingMove(int battlerAtk, struct AiData* aiData)
+{
+    int i, maxSpeed = 0;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (aiData->moveState[battlerAtk][i].koChance)
+        {
+            int speed = aiData->moveState[battlerAtk][i].speedValue.comparable;
+            if (speed > maxSpeed) maxSpeed = speed;
+        }
+    }
+}
+
+int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, int doUpdates, AiScoreEvaluationResult* updateState, struct AiData* aiData, struct AiData* aiDataKo)
 {
     int scoreBefore;
     int score = ComputeAttackPrimaryScoring(battlerFirst, battlerSecond, moveFirst, aiData);
-    AdjustStateForMove(battlerFirst, battlerFirst, moveFirst, aiData);
+    if (doUpdates) AdjustStateForMove(battlerFirst, battlerFirst, moveFirst, aiData);
+    else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
 
     *updateState = AI_UPDATE_BOTH;
 
@@ -225,9 +260,11 @@ int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, in
     if (*updateState) return score;
     scoreBefore = score;
     
-    AdjustStateForMove(battlerFirst, battlerSecond, moveFirst, aiData);
+    if (doUpdates) AdjustStateForMove(battlerFirst, battlerSecond, moveFirst, aiData);
+    else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
     score -= ComputeAttackPrimaryScoring(battlerSecond, battlerFirst, moveSecond, aiData);
-    AdjustStateForMove(battlerSecond, battlerSecond, moveSecond, aiData);
+    if (doUpdates) AdjustStateForMove(battlerSecond, battlerSecond, moveSecond, aiData);
+    else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
 
     if (aiData->moveState[battlerSecond][moveSecond].koChance >= UQ_4_12(1.0))
     {
@@ -236,7 +273,8 @@ int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, in
     }
     else
     {
-        AdjustStateForMove(battlerSecond, battlerFirst, moveSecond, aiData);
+        if (doUpdates) AdjustStateForMove(battlerSecond, battlerFirst, moveSecond, aiData);
+        else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
         if (aiData->moveState[battlerSecond][moveSecond].koChance)
             score -= ApplyModifier(aiData->moveState[battlerSecond][moveSecond].koChance, AI_SCORE_KO);
     }
@@ -251,6 +289,75 @@ int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, in
         return ApplyModifier(aiData->moveState[battlerFirst][moveFirst].koChance, scoreBefore) + ApplyModifier(UQ_4_12(1.0) - aiData->moveState[battlerFirst][moveFirst].koChance, score);
     else
         return score;
+}
+
+int CalcTurnSelectionScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, struct AiData* aiData)
+{
+    struct AiData mutableAiData, mutableAiDataMaybeKo;
+    AiScoreEvaluationResult updateState;
+    int score, endTurnScore, i, maybeKoModifier;
+
+    STRUCT_COPY(mutableAiData, *aiData)
+    
+    score = CalcRelativeMoveScore(battlerFirst, moveFirst, battlerSecond, moveSecond, TRUE, &updateState, &mutableAiData, &mutableAiDataMaybeKo);
+
+    switch (updateState)
+    {
+    case AI_UPDATE_B1_FAINTS_AFTER:
+    case AI_UPDATE_B1_FAINTS_ON_ATTACK:
+        endTurnScore = -CalcEndTurnScore(battlerSecond, &mutableAiData);
+        break;
+
+    case AI_UPDATE_B2_FAINTS_AFTER:
+    case AI_UPDATE_B2_FAINTS_ON_ATTACK:
+        endTurnScore = CalcEndTurnScore(battlerFirst, &mutableAiData);
+        break;
+    
+    case AI_UPDATE_BOTH:
+        endTurnScore = CalcEndTurnScore(battlerFirst, &mutableAiData) - CalcEndTurnScore(battlerSecond, &mutableAiData);
+        break;
+    }
+
+    if (updateState & AI_UPDATE_BOTH_FAINT_ON_ATTACK)
+    {
+        score += endTurnScore;
+        if (updateState == AI_UPDATE_B1_FAINTS_ON_ATTACK)
+            return score - AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerSecond, battlerFirst, aiData));
+        else if (updateState == AI_UPDATE_B2_FAINTS_AFTER)
+            return score + AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerFirst, battlerSecond, aiData));
+        else return score;
+    }
+
+    maybeKoModifier = aiData->moveState[battlerFirst][moveFirst].koChance;
+
+    if (!aiData->battlerState[battlerFirst].hp)
+        endTurnScore -= AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerSecond, battlerFirst, aiData));
+    else if (!aiData->battlerState[battlerSecond].hp)
+        endTurnScore += AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerFirst, battlerSecond, aiData));
+    else
+    {
+        int damageScoreFirst = CalcMaxDamageScore(battlerFirst, battlerSecond, aiData);
+        int damageScoreSecond = CalcMaxDamageScore(battlerSecond, battlerFirst, aiData);
+        int speed = GetMaxSpeedOfFaintingMove(battlerFirst, aiData) - GetMaxSpeedOfFaintingMove(battlerSecond, aiData);
+        if (speed >= 0) endTurnScore += AI_SCORE_TURN_TWO_DAMAGE(damageScoreFirst);
+        if (speed <= 0) endTurnScore -= AI_SCORE_TURN_TWO_DAMAGE(damageScoreSecond);
+    }
+
+    if (maybeKoModifier)
+    {
+        int maybeKoScore = 0;
+        if (mutableAiDataMaybeKo.battlerState[battlerFirst].hp)
+        {
+            maybeKoScore += CalcEndTurnScore(battlerFirst, &mutableAiDataMaybeKo);
+        }
+        if (mutableAiDataMaybeKo.battlerState[battlerFirst].hp)
+        {
+            maybeKoScore += CalcMaxDamageScore(battlerFirst, battlerSecond, &mutableAiDataMaybeKo);
+        }
+        return score + ApplyModifier(maybeKoModifier, maybeKoScore) + ApplyModifier(UQ_4_12(1) - maybeKoModifier, endTurnScore);
+    }
+
+    return score + endTurnScore;
 }
 
 #define AI_BATTLER 1
@@ -268,7 +375,6 @@ int GetSinglesDecision(struct AiData* aiData)
         for (j = 0; j < MAX_MON_MOVES; j++)
         {
             int score;
-            AiScoreEvaluationResult evalResult;
             int relativeSpeed = SpeedDifference(AI_BATTLER, i, PLAYER_BATTLER, j, aiData);
 
             if (ShouldEvaluateSpecial(PLAYER_BATTLER, j, aiData)) continue;
@@ -276,10 +382,10 @@ int GetSinglesDecision(struct AiData* aiData)
             STRUCT_COPY(mutableAiData, *aiData)
 
             if (relativeSpeed > 0)
-                score = CalcRelativeMoveScore(AI_BATTLER, i, PLAYER_BATTLER, j, &evalResult, &mutableAiData, &mutableAiDataKoUncertain);
+                score = CalcTurnSelectionScore(AI_BATTLER, i, PLAYER_BATTLER, j, aiData);
             // For simplicity assume we lose speed ties, helps mitigate save scumming, if we are always dead we will pick a different option later
             else
-                score = -CalcRelativeMoveScore(PLAYER_BATTLER, j, AI_BATTLER, i, &evalResult, &mutableAiData, &mutableAiDataKoUncertain);
+                score = -CalcTurnSelectionScore(PLAYER_BATTLER, j, AI_BATTLER, i, aiData);
         }
     }
 }

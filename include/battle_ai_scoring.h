@@ -5,6 +5,7 @@
 
 #define AI_SCORE_KO AI_SCORE(100)
 #define AI_SCORE_DAMAGE(percent) AI_SCORE(percent)
+#define AI_SCORE_TURN_TWO_DAMAGE(score) ((score) / 3)
 
 #define AI_SCORE_POISON_MOVE(battler) 0
 #define AI_SCORE_SLEEP_MOVE(battler) 0
