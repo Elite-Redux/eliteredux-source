@@ -13830,6 +13830,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             REQUIRE(ShouldApplyOnHitAffect(attacker))
             REQUIRE_NOT(IsBattlerAlive(battler))
             REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(attacker))
+            REQUIRE(IsMoveMakingContact(move, attacker))
 
             gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
             if (!gBattleMoveDamage) gBattleMoveDamage = 1;
