@@ -3129,6 +3129,7 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 else
                 {
+                    gBattleScripting.abilityPopupOverwrite = triggerAbility;
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
