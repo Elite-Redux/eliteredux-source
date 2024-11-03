@@ -22554,6 +22554,7 @@ static const struct LevelUpMove sGrafaiaiLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_TRUMP_CARD),
     LEVEL_UP_MOVE(46, MOVE_VENOSHOCK),
     LEVEL_UP_MOVE(51, MOVE_NATURAL_GIFT),
+    LEVEL_UP_MOVE(71, MOVE_SKETCH),
     LEVEL_UP_END
 };
 
