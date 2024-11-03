@@ -9295,7 +9295,8 @@ static void Cmd_various(void)
                 SetStatChanger(STAT_SPATK, 1);
                 gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_HEART;
                 PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_SPATK);
-                BattleScriptCall(BattleScript_ScriptingAbilityStatRaise);
+                BattleScriptPush(runAgain);
+                gBattlescriptCurrInstr = BattleScript_ScriptingAbilityStatRaise;
                 return;
             }
         }
