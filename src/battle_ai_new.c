@@ -74,13 +74,7 @@ void PopulateAbilities(int battler, struct AiData* aiData)
 
 int HasAbility(int battler, int ability, struct AiData* aiData)
 {
-    int i;
-    PopulateAbilities(battler, aiData);
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
-    {
-        if (aiData->abilities[battler][i] == ability) return TRUE;
-    }
-    return FALSE;
+    return BattlerHasAbility(battler, ability, TRUE);
 }
 
 int AiIsUnaware(int battler, struct AiData* aiData)
@@ -174,6 +168,123 @@ int GetAiDecision(int battler)
     if (IsBattlerAlive(0)) RestoreDisguise(&disguise0);
     if (IsBattlerAlive(2)) RestoreDisguise(&disguise2);
 }
+
+int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
+{
+    return FALSE;
+}
+
+// Effects which are applied regardless of defender's survival
+int ComputeAttackPrimaryScoring(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
+{
+
+}
+
+int AdjustStateForMove(int battlerAtk, int battlerUpdated, int move, struct AiData* aiData)
+{
+    
+}
+
+int SpeedDifference(int battler1, int move1, int battler2, int move2, struct AiData* aiData)
+{
+    return aiData->moveState[battler1][move1].speedValue.comparable - aiData->moveState[battler2][move2].speedValue.comparable;
+}
+
+typedef enum {
+    AI_UPDATE_BOTH = 0,
+    AI_UPDATE_B1_FAINTS_ON_ATTACK = 1 << 0,
+    AI_UPDATE_B2_FAINTS_ON_ATTACK = 1 << 1,
+    AI_UPDATE_BOTH_FAINT_ON_ATTACK = AI_UPDATE_B1_FAINTS_ON_ATTACK | AI_UPDATE_B2_FAINTS_ON_ATTACK,
+    AI_UPDATE_B1_FAINTS_AFTER = 1 << 2,
+    AI_UPDATE_B2_FAINTS_AFTER = 1 << 3,
+    AI_UPDATE_BOTH_FAINT_AFTER = AI_UPDATE_B1_FAINTS_AFTER | AI_UPDATE_B2_FAINTS_AFTER,
+} AiScoreEvaluationResult;
+
+int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, AiScoreEvaluationResult* updateState, struct AiData* aiData, struct AiData* aiDataKo)
+{
+    int scoreBefore;
+    int score = ComputeAttackPrimaryScoring(battlerFirst, battlerSecond, moveFirst, aiData);
+    AdjustStateForMove(battlerFirst, battlerFirst, moveFirst, aiData);
+
+    *updateState = AI_UPDATE_BOTH;
+
+    if (aiData->moveState[battlerFirst][moveFirst].koChance >= UQ_4_12(1.0))
+    {
+        *updateState |= AI_UPDATE_B2_FAINTS_ON_ATTACK;
+        score += AI_SCORE_KO;
+    }
+    else if (aiData->moveState[battlerFirst][moveFirst].koChance)
+    {
+        STRUCT_COPY(aiData, aiDataKo)
+    }
+    if (!aiData->battlerState[battlerFirst].hp)
+    {
+        *updateState |= AI_UPDATE_B1_FAINTS_ON_ATTACK;
+        score -= AI_SCORE_KO;
+    }
+    if (*updateState) return score;
+    scoreBefore = score;
+    
+    AdjustStateForMove(battlerFirst, battlerSecond, moveFirst, aiData);
+    score -= ComputeAttackPrimaryScoring(battlerSecond, battlerFirst, moveSecond, aiData);
+    AdjustStateForMove(battlerSecond, battlerSecond, moveSecond, aiData);
+
+    if (aiData->moveState[battlerSecond][moveSecond].koChance >= UQ_4_12(1.0))
+    {
+        *updateState |= AI_UPDATE_B1_FAINTS_AFTER;
+        score -= AI_SCORE_KO;
+    }
+    else
+    {
+        AdjustStateForMove(battlerSecond, battlerFirst, moveSecond, aiData);
+        if (aiData->moveState[battlerSecond][moveSecond].koChance)
+            score -= ApplyModifier(aiData->moveState[battlerSecond][moveSecond].koChance, AI_SCORE_KO);
+    }
+
+    if (!aiData->battlerState[battlerSecond].hp)
+    {
+        *updateState |= AI_UPDATE_B2_FAINTS_AFTER;
+        score += AI_SCORE_KO;
+    }
+    
+    if (aiData->moveState[battlerFirst][moveFirst].koChance)
+        return ApplyModifier(aiData->moveState[battlerFirst][moveFirst].koChance, scoreBefore) + ApplyModifier(UQ_4_12(1.0) - aiData->moveState[battlerFirst][moveFirst].koChance, score);
+    else
+        return score;
+}
+
+#define AI_BATTLER 1
+#define PLAYER_BATTLER 0
+int GetSinglesDecision(struct AiData* aiData)
+{
+    int i, j, maxScore, bestMove;
+    int moveScores[MAX_MON_MOVES] = { 0 };
+    struct AiData mutableAiData, mutableAiDataKoUncertain;
+
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData)) continue;
+
+        for (j = 0; j < MAX_MON_MOVES; j++)
+        {
+            int score;
+            AiScoreEvaluationResult evalResult;
+            int relativeSpeed = SpeedDifference(AI_BATTLER, i, PLAYER_BATTLER, j, aiData);
+
+            if (ShouldEvaluateSpecial(PLAYER_BATTLER, j, aiData)) continue;
+
+            STRUCT_COPY(mutableAiData, *aiData)
+
+            if (relativeSpeed > 0)
+                score = CalcRelativeMoveScore(AI_BATTLER, i, PLAYER_BATTLER, j, &evalResult, &mutableAiData, &mutableAiDataKoUncertain);
+            // For simplicity assume we lose speed ties, helps mitigate save scumming, if we are always dead we will pick a different option later
+            else
+                score = -CalcRelativeMoveScore(PLAYER_BATTLER, j, AI_BATTLER, i, &evalResult, &mutableAiData, &mutableAiDataKoUncertain);
+        }
+    }
+}
+#undef AI_BATTLER
+#undef PLAYER_BATTLER
 
 /*
 Plan:

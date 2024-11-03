@@ -40,6 +40,7 @@
 #define ARRAY_COPY(to, from) { STATIC_ASSERT(sizeof(to) == sizeof(from), ARRAY_COPY); memcpy(&to, &from, sizeof(to)); }
 #define ZERO(arr) memset(&arr, 0, sizeof(arr));
 #define ARRAY_MODULO(array, index) (array)[(index) % ARRAY_COUNT(array)]
+#define STRUCT_COPY(to, from) ARRAY_COPY(to, from)
 
 #define REQUIRE(effect) if (!(effect)) break;
 #define REQUIRE_NOT(effect) if (effect) break;

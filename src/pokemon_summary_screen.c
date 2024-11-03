@@ -2876,7 +2876,7 @@ static void GenerateMoveReplaceList(u8 keyPress) {
                 else if (moveLevel > level)
                     break;
                 else if (gBattleMoves[newMove].effect != EFFECT_PLACEHOLDER && newMove != MOVE_NONE) {
-                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = newMove;
+                    sMonSummaryScreen->moveReplaceList[sMonSummaryScreen->numMenuChoices] = RandomizeMoves(newMove, species, personality);
                     sMonSummaryScreen->numMenuChoices++;
                 }
             }
@@ -3144,6 +3144,40 @@ static void PrintMoveReplaceTab(void)
         for (j = 0; j < MAX_MON_MOVES; j++) {
             if (moveNum == GetMonData(mon, MON_DATA_MOVE1 + j, 0))
                 hasMonMove = TRUE;
+        }
+
+        if (moveNum == MOVE_SKETCH && !hasMonMove && getLearnsetMon(sMonSummaryScreen->summary.species2) != SPECIES_SMEARGLE) {
+            int k, level = sMonSummaryScreen->summary.level, personality = sMonSummaryScreen->summary.pid, species = getLearnsetMon(sMonSummaryScreen->summary.species2);
+            int foundAll = FALSE;
+            u16 moves[4];
+            ARRAY_COPY(moves, sMonSummaryScreen->summary.moves)
+            for (j = 0; j < MAX_LEVEL_UP_MOVES; j++) {
+                int newMove = gLevelUpLearnsets[species][j].move;
+                int moveLevel = gLevelUpLearnsets[species][j].level;
+                REQUIRE(newMove != LEVEL_UP_END)
+                REQUIRE(moveLevel <= level)
+                newMove = RandomizeMoves(newMove, species, personality);
+                for (k = 0; k < MAX_MON_MOVES; k++) REQUIRE(moves[k] != newMove)
+                if (k < MAX_MON_MOVES) moves[k] = 0;
+            }
+            for (j = 0; j < MAX_MON_MOVES; j++) REQUIRE_NOT(moves[j])
+            if (j < MAX_MON_MOVES) foundAll = TRUE;
+            if (!foundAll)
+            {
+                for (i = 0; i < TUTOR_COUNT; i++)
+                {
+                    int newMove;
+                    if (!CanLearnTutorMove(species, i)) continue;
+                    newMove = GetTutorMove(i);
+                    if (!newMove || gBattleMoves[newMove].effect == EFFECT_PLACEHOLDER) continue;
+                    newMove = RandomizeMoves(newMove, species, personality);
+                    for (k = 0; k < MAX_MON_MOVES; k++) REQUIRE(moves[k] != newMove)
+                    if (k < MAX_MON_MOVES) moves[k] = 0;
+                }
+                for (j = 0; j < MAX_MON_MOVES; j++) REQUIRE_NOT(moves[j])
+                if (j < MAX_MON_MOVES) foundAll = TRUE;
+            }
+            if (!foundAll) hasMonMove = TRUE;
         }
 
         if (hasMonMove) {

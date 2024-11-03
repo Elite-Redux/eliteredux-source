@@ -8,11 +8,24 @@
 #define AI_CHOICE_SWITCH 7
 
 #define AI_SCORE(value) (value * 1024)
-#define AI_SCORE_UNUSABLE AI_SCORE(-100)
-#define AI_SCORE_IMMUNE AI_SCORE_UNUSABLE
+#define AI_SCORE_UNUSABLE AI_SCORE(-1000)
+#define AI_SCORE_IMMUNE 0
 #define AI_SCORE_ADJUST(percent, score) AdjustForChance(percent, score)
 
+union SpeedValue {
+    struct SpeedStruct {
+        u16 afterYou:1;
+        u16 dazedNegation:1;
+        u16 goesFirst:2;
+        u16 goesLastNegation:2;
+        u16 effectiveSpeed;
+    } speedStruct;
+    u32 comparable;
+};
+
 struct MoveState {
+    union SpeedValue speedValue;
+    u16 koChance;
     u16 damage;
     u16 multiHitExpect;
     u8 multiplier;
@@ -28,11 +41,15 @@ struct MoveState {
     u8 cancelled:1;
 };
 
+struct BattlerState
+{
+    u16 hp;
+};
+
+
 struct AiData {
-    int speed[MAX_BATTLERS_COUNT];
-    u16 abilities[MAX_BATTLERS_COUNT][TOTAL_ABILITY_COUNT];
-    u8 activeBattler;
-    struct MoveState moveState;
+    struct MoveState moveState[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
+    struct BattlerState battlerState[MAX_BATTLERS_COUNT];
 };
 
 struct DisguiseSimulation {

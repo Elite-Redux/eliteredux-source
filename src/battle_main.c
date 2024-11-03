@@ -3991,7 +3991,7 @@ static void TryDoEventsBeforeFirstTurn(void)
     ZERO(gTotemBoosts)
 
     // Check neutralizing gas
-    if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, 0, 0) != 0)
+    if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0) != 0)
         return;
 
     if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0))

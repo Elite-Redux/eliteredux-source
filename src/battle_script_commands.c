@@ -2500,7 +2500,6 @@ static void Cmd_healthbarupdate(void)
                 !(gMoveResultFlags & MOVE_RESULT_FOE_ENDURED) &&
                 !(gMoveResultFlags & MOVE_RESULT_FAILED) &&
                 !(gMoveResultFlags & MOVE_RESULT_DOESNT_AFFECT_FOE) &&
-                !gRoundStructs[gBattlerAttacker].confusionSelfDmg &&
                 !IS_BATTLER_PROTECTED(gActiveBattler) &&
                 gVolatileStructs[gActiveBattler].substituteHP == 0 &&
                 gBattleMoves[gCurrentMove].split != SPLIT_STATUS &&
@@ -7127,9 +7126,10 @@ static void Cmd_switchineffects(void)
             }
             UpdateAbilityStateIndices(i, abilities);
         }
+        gFieldTimers.neutralizingGas = TRUE;
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_NEUTRALIZING_GAS;
-        gTurnStructs[gActiveBattler].announceNeutralizingGas = TRUE;
         gBattlerAbility = gActiveBattler;
+        gBattleScripting.abilityPopupOverwrite = ABILITY_NEUTRALIZING_GAS;
         BattleScriptCall(BattleScript_SwitchInAbilityMsgRet);
     }
     if (!gVolatileStructs[gActiveBattler].hazardDamaged)
@@ -7152,7 +7152,6 @@ static void Cmd_switchineffects(void)
         }
         
         if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gActiveBattler, FALSE)
-            || AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, 0, 0, 0, 0)
             || AbilityBattleEffects(ABILITYEFFECT_TRACE2, 0, 0, 0, 0)
             || AbilityBattleEffects(ABILITYEFFECT_FORECAST, 0, 0, 0, 0))
             return;
@@ -8998,7 +8997,7 @@ static void Cmd_various(void)
         break;
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlerAttacker = gActiveBattler;
-        AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, 0, 0);
+        AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, ABILITY_BS_CALL, 0);
         ptr = gBattlescriptCurrInstr;
         gBattlescriptCurrInstr = runAgain;
         while (gBattleScripting.abilityLoopCounter <= NUM_ABILITY_SLOTS + 1)
@@ -9007,7 +9006,6 @@ static void Cmd_various(void)
                 return;
         }
         gBattlescriptCurrInstr = ptr;
-        AbilityBattleEffects(ABILITYEFFECT_INTIMIDATE2, gActiveBattler, 0, 0, 0);
         AbilityBattleEffects(ABILITYEFFECT_TRACE2, gActiveBattler, 0, 0, 0);
         return;
     case VARIOUS_SAVE_TARGET:
@@ -13670,7 +13668,6 @@ static void Cmd_trytoapplymoveeffect(void)
                 }
                 else if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                 && IsBattlerAlive(gBattlerTarget)
-                && !gRoundStructs[gBattlerTarget].confusionSelfDmg
                 && TARGET_TURN_DAMAGED
                 && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GHOST)
                 && !(gBattleMons[gBattlerTarget].status2 & STATUS2_CURSED))
@@ -13684,7 +13681,6 @@ static void Cmd_trytoapplymoveeffect(void)
         case EFFECT_STEALTH_ROCK_HIT:
             if (rand <= secondaryEffectChance) {
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                && !gRoundStructs[gBattlerTarget].confusionSelfDmg
                 && TARGET_TURN_DAMAGED
                 && !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STEALTH_ROCK))
                 {
@@ -13697,7 +13693,6 @@ static void Cmd_trytoapplymoveeffect(void)
         case EFFECT_SPIKE_HIT:
             if (rand <= secondaryEffectChance) {
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                && !gRoundStructs[gBattlerTarget].confusionSelfDmg
                 && TARGET_TURN_DAMAGED
                 && gSideTimers[GetBattlerSide(gBattlerTarget)].spikesAmount < 3)
                 {
@@ -13717,7 +13712,6 @@ static void Cmd_trytoapplymoveeffect(void)
                 }
                 else if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
                 && gBattleMons[gBattlerTarget].hp != 0
-                && !gRoundStructs[gBattlerAttacker].confusionSelfDmg
                 && !IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_GRASS)
                 && TARGET_TURN_DAMAGED
                 && !(gStatuses3[gBattlerTarget] & STATUS3_LEECHSEED))
@@ -13731,7 +13725,6 @@ static void Cmd_trytoapplymoveeffect(void)
         case EFFECT_STICKY_WEB_HIT:
             if (rand <= secondaryEffectChance) {
                 if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-                && !gRoundStructs[gBattlerTarget].confusionSelfDmg
                 && TARGET_TURN_DAMAGED
                 && !(gSideStatuses[GetBattlerSide(gBattlerTarget)] & SIDE_STATUS_STICKY_WEB))
                 {
