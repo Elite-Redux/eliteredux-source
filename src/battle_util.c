@@ -13095,7 +13095,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             REQUIRE(ShouldApplyOnHitAffect(target))
             REQUIRE(CanBeDisabled(target))
             REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-            REQUIRE(Random() % 100 >= 20)
+            REQUIRE(Random() % 100 < 20)
 
             ABILITY_STATUS_EFFECT(MOVE_EFFECT_DISABLE)
             return TRUE;
