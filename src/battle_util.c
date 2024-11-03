@@ -6084,9 +6084,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                 battler = i;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_NEUTRALIZING_GAS;
                 gBattleScripting.abilityPopupOverwrite = ABILITY_NEUTRALIZING_GAS;
-                BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+                if (extraArg == ABILITY_BS_PUSH_CURSOR_AND_CALLBACK) BattleScriptPushCursorAndCallback(BattleScript_End3);
+                BattleScriptCall(BattleScript_SwitchInAbilityMsgRet);
                 effect++;
-                
+
                 for (i = 0; i < gBattlersCount; i++)
                 {
                     u16 abilities[TOTAL_ABILITY_COUNT];
