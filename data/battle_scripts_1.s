@@ -580,6 +580,8 @@ BattleScript_SteelBeamMiss::
 	effectivenesssound
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
+	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_SteelBeamAfterSelfDamage
+	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_SteelBeamAfterSelfDamage
 	jumpifmagicguard BS_ATTACKER, BattleScript_MoveEnd
 	bichalfword gMoveResultFlags, MOVE_RESULT_MISSED
 	call BattleScript_SteelBeamSelfDamage
@@ -3943,6 +3945,8 @@ BattleScript_EffectMindBlown::
 	attackstring
 	ppreduce
 	jumpifabilitypresent ABILITY_DAMP, BattleScript_EffectMindBlown_Failed
+	jumpifability BS_ATTACKER, ABILITY_STEEL_BARREL, BattleScript_EffectMindBlown_NoDamage
+	jumpifability BS_ATTACKER, ABILITY_ROCK_HEAD, BattleScript_EffectMindBlown_NoDamage
 	jumpifmagicguard BS_ATTACKER, BattleScript_EffectMindBlown_NoDamage
 	dmg_1_2_attackerhp
 	healthbarupdate BS_ATTACKER
