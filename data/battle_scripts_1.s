@@ -9039,12 +9039,10 @@ BattleScript_CottonDownActivates::
 	call BattleScript_AbilityPopUp
 	saveattackerandtargetto34
 	copybyte gBattlerAttacker, gBattlerTarget
-	setbyte gBattlerTarget, 0
+	copybyte gBattlerTarget, gStackBattler1
 BattleScript_CottonDownLoop:
-	getbattlerfainted BS_TARGET
-	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_CottonDownLoopIncrement
+	jumpifabsent BS_TARGET, BattleScript_CottonDownLoopIncrement
 	setstatchanger STAT_SPEED, 1, TRUE
-	jumpifbyteequal gBattlerTarget, gBattlerAttacker, BattleScript_CottonDownLoopIncrement
 	statbuffchange STAT_BUFF_NOT_PROTECT_AFFECTED, BattleScript_CottonDownTargetSpeedCantGoLower
 	setgraphicalstatchangevalues
 	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
@@ -9055,8 +9053,8 @@ BattleScript_CottonDownTargetSpeedCantGoLower:
 	printstring STRINGID_STATSWONTDECREASE
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_CottonDownLoopIncrement:
-	addbyte gBattlerTarget, 1
-	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_CottonDownLoop
+	addbyte gBattlerTarget, 2
+	jumpifbyte CMP_LESS_THAN, gBattlerTarget, MAX_BATTLERS_COUNT + 1, BattleScript_CottonDownLoop
 BattleScript_CottonDownReturn:
 	restoreattackerandtargetfrom34
 	destroyabilitypopup

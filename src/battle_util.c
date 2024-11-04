@@ -13728,7 +13728,9 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             return TRUE;
         
         case ABILITY_COTTON_DOWN:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(DidMoveHit())
+            gStackBattler1 = BATTLE_OPPOSITE(battler);
+            REQUIRE(IsBattlerAlive(gStackBattler1) || IsBattlerAlive(BATTLE_PARTNER(gStackBattler1)))
 
             gEffectBattler = battler;
             BattleScriptCall(BattleScript_CottonDownActivates);

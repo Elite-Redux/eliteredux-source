@@ -519,7 +519,7 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         return AI_SCORE_PP_DOWN(battlerAtk, 5);
     
     case ABILITY_COTTON_DOWN:
-        for (i = 0; i < gBattlersCount; i++)
+        for (i = GET_BATTLER_SIDE(BATTLE_OPPOSITE(battlerDef)); i < gBattlersCount; i += 2)
         {
             if (i == battlerDef) continue;
             score += AI_SCORE_STAT(i, STAT_SPEED, -1);
