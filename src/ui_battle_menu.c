@@ -180,6 +180,7 @@ enum
     STATUS_INFO_ON_THE_PROWL,
     STATUS_INFO_DAZED,
     STATUS_INFO_TREPIDATION,
+    STATUS_INFO_STOCKPILE,
     //Battle Events (Extraskills)
     STATUS_INFO_EXTRA_ATTACK,
     STATUS_INFO_EXTRA_DEFENSE,
@@ -934,6 +935,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 break;
                 case STATUS_INFO_TREPIDATION:
                     if (gVolatileStructs[j].trepidation)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_STOCKPILE:
+                    if (gVolatileStructs[j].stockpileCounter)
                         isExtraInfoShown = TRUE;
                 break;
                 case STATUS_INFO_EXTRA_ATTACK:
@@ -2087,6 +2092,7 @@ static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
 const u8 sText_Title_Field_Turns_Left[]                   = _("Turns Left:");
 const u8 sText_Title_Field_Turns[]                        = _("Turns:");
 const u8 sText_Title_Field_Layers[]                       = _("Layers:");
+const u8 sText_Title_Field_Charges[]                      = _("Charges:");
 const u8 sText_Title_Field_Nature_Power[]                 = _("Nature Power:");
 const u8 sText_Title_Field_Secret_Power[]                 = _("Secret Power:");
 const u8 sText_Title_Field_Paralysis[]                    = _("Causes Paralysis");
@@ -2312,6 +2318,9 @@ const u8 sText_Title_Status_OnTheProwl[]                    = _("On the Prowl");
 const u8 sText_Title_Status_OnTheProwl_Description[]        = _("This Pokémon gains +1 priority on\n"
                                                                 "moves for one turn. Does not work\n"
                                                                 "on moves with negative priority.");
+const u8 sText_Title_Status_Stockpile[]                     = _("Stockpile");
+const u8 sText_Title_Status_Stockpile_Description[]         = _("This Pokémon has stored up reserves\n"
+                                                                "that it can Swallow or Spit Up.");
 const u8 sText_Title_Status_ExtraStat[]                     = _("Extra {STR_VAR_2}.");
 const u8 sText_Title_Status_ExtraStat_Description[]         = _("This Pokémon's usual {STR_VAR_2} is\n"
                                                                 "boosted by {STR_VAR_3}%");
@@ -2824,6 +2833,22 @@ static void PrintStatusTab(void) {
 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Status_Trepidation_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_STOCKPILE:
+                StringCopy(gStringVar1, sText_Title_Status_Stockpile);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Turns Left
+                StringCopy(gStringVar1, sText_Title_Field_Charges);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 2), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                turnsLeft = gVolatileStructs[sMenuDataPtr->battlerId].stockpileCounter;
+                ConvertIntToDecimalStringN(gStringVar1, turnsLeft, STR_CONV_MODE_LEFT_ALIGN, 4);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2 + (SPACE_BETWEEN_LINES_FIELD * 3), (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+
+                //Description
+                StringCopy(gStringVar1, sText_Title_Status_Stockpile_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;
