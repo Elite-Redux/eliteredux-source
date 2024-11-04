@@ -4104,6 +4104,7 @@ static void HandleEndTurn_ContinueBattle(void)
         gBattleStruct->wishPerishSongState = 0;
         gBattleStruct->wishPerishSongBattlerId = 0;
         gBattleStruct->turnCountersTracker = 0;
+        gBattleStruct->ranEndTurnEffects = FALSE;
         gMoveResultFlags = 0;
     }
 }
@@ -4124,12 +4125,13 @@ void BattleTurnPassed(void)
     }
 
     TurnValuesCleanUp(TRUE);
-    if (gBattleOutcome == 0)
+    if (gBattleOutcome == 0 && !gBattleStruct->ranEndTurnEffects)
     {
         if (DoFieldEndTurnEffects())
             return;
         if (DoBattlerEndTurnEffects())
             return;
+        gBattleStruct->ranEndTurnEffects = TRUE;
     }
     if (HandleFaintedMonActions()) {
         return;
@@ -4174,9 +4176,9 @@ void BattleTurnPassed(void)
     }
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
-        *(gBattleStruct->monToSwitchIntoId + i) = PARTY_SIZE;
+        gBattleStruct->monToSwitchIntoId[i] = PARTY_SIZE;
 
-    *(&gBattleStruct->field_91) = gAbsentBattlerFlags;
+    gBattleStruct->field_91 = gAbsentBattlerFlags;
     BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
     GetAiLogicData(); // get assumed abilities, hold effects, etc of all battlers
     gBattleMainFunc = HandleBattleEvents;
@@ -4187,7 +4189,8 @@ void BattleTurnPassed(void)
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
     else if (ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), gTrainerBattleOpponent_A, TRAINER_SLIDE_LAST_LOW_HP))
         BattleScriptExecute(BattleScript_TrainerSlideMsgEnd2);
-
+    
+    gBattleStruct->ranEndTurnEffects = FALSE;
 }
 
 u8 IsRunningFromBattleImpossible(void)
@@ -4902,31 +4905,31 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
     // weather abilities
     if (WEATHER_HAS_EFFECT)
     {
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SWIFT_SWIM) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+        if (BattlerHasAbility(battlerId, ABILITY_SWIFT_SWIM, FALSE) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_BREAKWATER) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+        if (BattlerHasAbility(battlerId, ABILITY_BREAKWATER, FALSE) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SEABORNE) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+        if (BattlerHasAbility(battlerId, ABILITY_SEABORNE, FALSE) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_CHLOROPHYLL) && IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
+        if (BattlerHasAbility(battlerId, ABILITY_CHLOROPHYLL, FALSE) && IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_BIG_LEAVES) && IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
+        if (BattlerHasAbility(battlerId, ABILITY_BIG_LEAVES, FALSE) && IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SAND_RUSH) && IsBattlerWeatherAffected(battlerId, WEATHER_SANDSTORM_ANY))
+        if (BattlerHasAbility(battlerId, ABILITY_SAND_RUSH, FALSE) && IsBattlerWeatherAffected(battlerId, WEATHER_SANDSTORM_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_ETHEREAL_RUSH) && IsBattlerWeatherAffected(battlerId, WEATHER_FOG_ANY))
+        if (BattlerHasAbility(battlerId, ABILITY_ETHEREAL_RUSH, FALSE) && IsBattlerWeatherAffected(battlerId, WEATHER_FOG_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SLUSH_RUSH) && IsBattlerWeatherAffected(battlerId, WEATHER_HAIL_ANY))
+        if (BattlerHasAbility(battlerId, ABILITY_SLUSH_RUSH, FALSE) && IsBattlerWeatherAffected(battlerId, WEATHER_HAIL_ANY))
             speed = (speed * 150) / 100;
 
-        if (BATTLER_HAS_ABILITY(battlerId, ABILITY_WAY_OF_SWIFTNESS) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+        if (BattlerHasAbility(battlerId, ABILITY_WAY_OF_SWIFTNESS, FALSE) && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
             speed = (speed * 150) / 100;
     }
     
@@ -4937,13 +4940,13 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
         speed = speed * 3 / 2;
 
     // other abilities
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_QUICK_FEET) && gBattleMons[battlerId].status1 & STATUS1_ANY)
+    if (BattlerHasAbility(battlerId, ABILITY_QUICK_FEET, FALSE) && gBattleMons[battlerId].status1 & STATUS1_ANY)
         speed = (speed * 150) / 100;
 
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SURGE_SURFER) && GetCurrentTerrain() == STATUS_FIELD_ELECTRIC_TERRAIN)
+    if (BattlerHasAbility(battlerId, ABILITY_SURGE_SURFER, FALSE) && GetCurrentTerrain() == STATUS_FIELD_ELECTRIC_TERRAIN)
         speed = (speed * 150) / 100;
 
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SLOW_START) && gVolatileStructs[battlerId].slowStartTimer != 0)
+    if (BattlerHasAbility(battlerId, ABILITY_SLOW_START, FALSE) && gVolatileStructs[battlerId].slowStartTimer != 0)
         speed /= 2;
 
     if (gVolatileStructs[battlerId].violentRush) speed = (speed * 150) / 100;
@@ -4952,16 +4955,16 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType)
 
     if (gVolatileStructs[battlerId].showdownMode) speed = (speed * 150) / 100;
 	
-	if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LEAD_COAT))
+	if (BattlerHasAbility(battlerId, ABILITY_LEAD_COAT, FALSE))
         speed  = speed * 9 / 10;
 	
-	if (BATTLER_HAS_ABILITY(battlerId, ABILITY_CHROME_COAT))
+	if (BattlerHasAbility(battlerId, ABILITY_CHROME_COAT, FALSE))
         speed  = speed * 9 / 10;
 
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_TERASTAL_TREASURE))
+    if (BattlerHasAbility(battlerId, ABILITY_TERASTAL_TREASURE, FALSE))
         speed  = speed * 8 / 10;
 
-	if (BATTLER_HAS_ABILITY(battlerId, ABILITY_LIGHT_METAL))
+	if (BattlerHasAbility(battlerId, ABILITY_LIGHT_METAL, FALSE))
         speed = (speed * 130) / 100;
 	
 	/*if (BATTLER_HAS_ABILITY(battlerId, ABILITY_NOCTURNAL) && !IsCurrentlyDay())

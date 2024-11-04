@@ -320,7 +320,7 @@ int CalcTurnSelectionScore(int battlerFirst, int moveFirst, int battlerSecond, i
 
     if (updateState & AI_UPDATE_BOTH_FAINT_ON_ATTACK)
     {
-        noEval = updateState;
+        *noEval = updateState;
         score += endTurnScore;
         if (updateState == AI_UPDATE_B1_FAINTS_ON_ATTACK)
             return score - AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerSecond, battlerFirst, aiData));
