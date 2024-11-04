@@ -1535,7 +1535,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     // Burmy
     [SPECIES_BURMY_SANDY_CLOAK] = _("Burmy"),
     [SPECIES_BURMY_TRASH_CLOAK] = _("Burmy"),
-    [SPECIES_BURMY_ETERNA] = _("Eternaburmy"),
+    [SPECIES_BURMY_ETERNA] = _("Eternaburm"),
     // Wormadam
     [SPECIES_WORMADAM_SANDY_CLOAK] = _("Wormadam"),
     [SPECIES_WORMADAM_TRASH_CLOAK] = _("Wormadam"),
