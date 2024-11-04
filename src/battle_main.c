@@ -4104,6 +4104,7 @@ static void HandleEndTurn_ContinueBattle(void)
         gBattleStruct->wishPerishSongState = 0;
         gBattleStruct->wishPerishSongBattlerId = 0;
         gBattleStruct->turnCountersTracker = 0;
+        gBattleStruct->ranEndTurnEffects = FALSE;
         gMoveResultFlags = 0;
     }
 }
@@ -4124,12 +4125,13 @@ void BattleTurnPassed(void)
     }
 
     TurnValuesCleanUp(TRUE);
-    if (gBattleOutcome == 0)
+    if (gBattleOutcome == 0 && !gBattleStruct->ranEndTurnEffects)
     {
         if (DoFieldEndTurnEffects())
             return;
         if (DoBattlerEndTurnEffects())
             return;
+        gBattleStruct->ranEndTurnEffects = TRUE;
     }
     if (HandleFaintedMonActions()) {
         return;
@@ -4174,9 +4176,9 @@ void BattleTurnPassed(void)
     }
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++)
-        *(gBattleStruct->monToSwitchIntoId + i) = PARTY_SIZE;
+        gBattleStruct->monToSwitchIntoId[i] = PARTY_SIZE;
 
-    *(&gBattleStruct->field_91) = gAbsentBattlerFlags;
+    gBattleStruct->field_91 = gAbsentBattlerFlags;
     BattlePutTextOnWindow(gText_EmptyString3, B_WIN_MSG);
     GetAiLogicData(); // get assumed abilities, hold effects, etc of all battlers
     gBattleMainFunc = HandleBattleEvents;
@@ -4187,7 +4189,8 @@ void BattleTurnPassed(void)
         BattleScriptExecute(BattleScript_ArenaTurnBeginning);
     else if (ShouldDoTrainerSlide(GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT), gTrainerBattleOpponent_A, TRAINER_SLIDE_LAST_LOW_HP))
         BattleScriptExecute(BattleScript_TrainerSlideMsgEnd2);
-
+    
+    gBattleStruct->ranEndTurnEffects = FALSE;
 }
 
 u8 IsRunningFromBattleImpossible(void)
