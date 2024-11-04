@@ -976,7 +976,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_TAUROS_PALDEAN_BLAZE_BREED] = sTaurosPaldeanBlazeBreedLevelUpLearnset,
     [SPECIES_TAUROS_PALDEAN_COMBAT_BREED] = sTaurosPaldeanCombatBreedLevelUpLearnset,
     [SPECIES_URSALUNA_BLOODMOON] = sUrsalunaBloodmoonLevelUpLearnset,
-    [SPECIES_PALAFIN_HERO] = sPalafinHeroLevelUpLearnset,
+    [SPECIES_PALAFIN_HERO] = sPalafinLevelUpLearnset,
     [SPECIES_DUDUNSPARCE_THREE_SEGMENT] = sDudunsparceLevelUpLearnset,
     [SPECIES_MAUSHOLD_FOUR] = sMausholdLevelUpLearnset,
     [SPECIES_TATSUGIRI_CURLY] = sTatsugiriLevelUpLearnset,
@@ -1400,7 +1400,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     // Giratina
     [SPECIES_GIRATINA_ORIGIN] = sGiratinaLevelUpLearnset,
     // Shaymin
-    [SPECIES_SHAYMIN_SKY] = sShayminSkyLevelUpLearnset,
+    [SPECIES_SHAYMIN_SKY] = sShayminLevelUpLearnset,
     // Arceus
     [SPECIES_ARCEUS_FIGHTING] = sArceusLevelUpLearnset,
     [SPECIES_ARCEUS_FLYING] = sArceusLevelUpLearnset,
