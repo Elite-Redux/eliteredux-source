@@ -10256,18 +10256,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         {
             atkStatToUse = STAT_SPATK;
         }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MYTHICAL_ARROWS, FALSE) && gBattleMoves[move].arrowBased)
-        {
-            atkStatToUse = STAT_SPATK;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MYSTIC_BLADES, FALSE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        {
-            atkStatToUse = STAT_SPATK;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_PONY_POWER, FALSE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        {
-            atkStatToUse = STAT_SPATK;
-        }
     }
 
     atkStat = CalculateStat(statBattler, atkStatToUse, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
@@ -10344,6 +10332,21 @@ void SetSwapDamageCategory(int battler, int target, int move)
     switch (gBattleMoves[move].splitFlag)
     {
         default:
+            if (gBattleMoves[move].split == SPLIT_PHYSICAL)
+            {
+                if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST
+                    && (BattlerHasAbility(battler, ABILITY_MYSTIC_BLADES, FALSE) || BattlerHasAbility(battler, ABILITY_PONY_POWER, FALSE)))
+                {
+                    gSwapDamageCategory = TRUE;
+                    return;
+                }
+
+                if (gBattleMoves[move].arrowBased && BattlerHasAbility(battler, ABILITY_MYTHICAL_ARROWS, FALSE))
+                {
+                    gSwapDamageCategory = TRUE;
+                    return;
+                }
+            }
             gSwapDamageCategory = FALSE;
             return;
         
@@ -10414,18 +10417,6 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     }
 
     if (BattlerHasAbility(battlerAtk, ABILITY_POWER_FISTS, FALSE) && IS_IRON_FIST(battlerAtk, move))
-    {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_MYTHICAL_ARROWS, FALSE) && gBattleMoves[move].arrowBased)
-    {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_MYSTIC_BLADES, FALSE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
-    {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_PONY_POWER, FALSE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
