@@ -11734,7 +11734,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_PITFALL] =
     {
-        .effect = EFFECT_MEAN_LOOK,
+        .effect = EFFECT_ARGUMENT_HIT,
         .power = 80,
         .type = TYPE_GROUND,
         .accuracy = 100,
@@ -11743,6 +11743,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
+        .argument = MOVE_EFFECT_PREVENT_ESCAPE,
         .hammerBased = TRUE,
     },
     [MOVE_VIRAL_STRIKE] =
