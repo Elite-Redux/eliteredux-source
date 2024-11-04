@@ -554,6 +554,7 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
     
     case ABILITY_AFTERMATH:
         REQUIRE(aiData->moveState[battlerAtk][move].seeKo)
+        REQUIRE(aiData->moveState[battlerAtk][move].contact)
         return AI_SCORE_LOSE_HP(battlerAtk, 25);
     
     case ABILITY_PATCHWORK:

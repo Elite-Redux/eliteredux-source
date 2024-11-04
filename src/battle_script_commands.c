@@ -2024,7 +2024,7 @@ static void Cmd_accuracycheck(void)
                 gBattleStruct->blunderPolicy = TRUE;    // Only activates from missing through acc/evasion checks
 
             if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE &&
-                (GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker) == MOVE_TARGET_BOTH || GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker) == MOVE_TARGET_FOES_AND_ALLY))
+                GetBattlerBattleMoveTargetFlags(move, gBattlerAttacker) & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY))
                 gBattleCommunication[MISS_TYPE] = B_MSG_AVOIDED_ATK;
             else
                 gBattleCommunication[MISS_TYPE] = B_MSG_MISSED;
@@ -4078,6 +4078,18 @@ static void Cmd_clearstatusfromeffect(void)
         gBattleMons[gActiveBattler].status1 &= (~sStatusFlagsForMoveEffects[gBattleScripting.moveEffect]);
     else
         gBattleMons[gActiveBattler].status2 &= (~sStatusFlagsForMoveEffects[gBattleScripting.moveEffect]);
+    
+    if (gBattleScripting.moveEffect == MOVE_EFFECT_CHARGING)
+    {
+        if (gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM
+            && (IsBattlerWeatherAffected(gActiveBattler, WEATHER_SUN_ANY)
+                || BattlerHasAbility(gActiveBattler, ABILITY_CHLOROPLAST, FALSE)
+                || BattlerHasAbility(gActiveBattler, ABILITY_SOLAR_FLARE, FALSE)
+                || BattlerHasAbility(gActiveBattler, ABILITY_BIG_LEAVES, FALSE)))
+            gRoundStructs[gActiveBattler].chargingTurn = FALSE;
+        else if (BattlerHasAbility(gActiveBattler, ABILITY_ACCELERATE, FALSE))
+            gRoundStructs[gActiveBattler].chargingTurn = FALSE;
+    }
 
     gBattleScripting.moveEffect = 0;
     gBattlescriptCurrInstr += 2;

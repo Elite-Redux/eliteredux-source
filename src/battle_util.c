@@ -3129,6 +3129,7 @@ u8 DoBattlerEndTurnEffects(void)
                 }
                 else
                 {
+                    gBattleScripting.abilityPopupOverwrite = triggerAbility;
                     gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
@@ -13094,7 +13095,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             REQUIRE(ShouldApplyOnHitAffect(target))
             REQUIRE(CanBeDisabled(target))
             REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-            REQUIRE(Random() % 100 >= 20)
+            REQUIRE(Random() % 100 < 20)
 
             ABILITY_STATUS_EFFECT(MOVE_EFFECT_DISABLE)
             return TRUE;
@@ -13829,6 +13830,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             REQUIRE(ShouldApplyOnHitAffect(attacker))
             REQUIRE_NOT(IsBattlerAlive(battler))
             REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(attacker))
+            REQUIRE(IsMoveMakingContact(move, attacker))
 
             gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
             if (!gBattleMoveDamage) gBattleMoveDamage = 1;
