@@ -2360,9 +2360,9 @@ u8 DoFieldEndTurnEffects(void)
                     if (!gSideTimers[side].started.auroraVeil && --gSideTimers[side].auroraVeilTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_AURORA_VEIL;
-                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
                         gBattleCommunication[MULTISTRING_CHOOSER] = side;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_AURORA_VEIL);
+                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
                         effect++;
                     }
                 }
@@ -2372,9 +2372,9 @@ u8 DoFieldEndTurnEffects(void)
                     if (!gSideTimers[side].started.spiderWeb && gSideTimers[side].stickyWebTimer && --gSideTimers[side].stickyWebTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_STICKY_WEB;
-                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
-                        gBattleCommunication[MULTISTRING_CHOOSER] = side;
+                        gBattleCommunication[MULTISTRING_CHOOSER] = BATTLE_OPPOSITE(side);
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_STICKY_WEB);
+                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
                         effect++;
                     }
                 }
