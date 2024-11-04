@@ -1730,7 +1730,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             break;
         case EFFECT_TRICK:
         case EFFECT_KNOCK_OFF:
-            if (BattlerHasAbility(battlerDef, ABILITY_STICKY_HOLD, TRUE))
+            if (IsStickyHold(battlerDef))
                 score -= 10;
             break;
         case EFFECT_POLTERGEIST:
@@ -3810,7 +3810,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
               && CanBattlerGetOrLoseItem(battlerDef, AI_DATA->items[battlerDef])
               && CanBattlerGetOrLoseItem(battlerAtk, AI_DATA->items[battlerDef])
               && !HasMoveEffect(battlerAtk, EFFECT_ACROBATICS)
-              && !BattlerHasAbility(battlerDef, ABILITY_STICKY_HOLD, TRUE))
+              && !IsStickyHold(battlerDef))
             {
                 switch (AI_DATA->holdEffects[battlerDef])
                 {
@@ -4578,13 +4578,13 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         }
         break;
     case EFFECT_BUG_BITE:   // And pluck
-        if (gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE || BattlerHasAbility(battlerDef, ABILITY_STICKY_HOLD, TRUE))
+        if (gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE || IsStickyHold(battlerDef))
             break;
         else if (ItemId_GetPocket(AI_DATA->items[battlerDef]) == POCKET_BERRIES)
             score += 3;
         break;
     case EFFECT_INCINERATE:
-        if (gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE || BattlerHasAbility(battlerDef, ABILITY_STICKY_HOLD, TRUE))
+        if (gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE || IsStickyHold(battlerDef))
             break;
         else if (ItemId_GetPocket(AI_DATA->items[battlerDef]) == POCKET_BERRIES || AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_GEMS)
             score += 3;

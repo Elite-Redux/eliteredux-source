@@ -1155,6 +1155,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_STALL] = 1,
     [ABILITY_TERA_SHELL] = 1,
     [ABILITY_TERAFORM_ZERO] = 1,
+    [ABILITY_SUPERSWEET_SYRUP] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -12809,6 +12810,12 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             BattleScriptCall(BattleScript_TargetDazed);
             break;
         
+        case ABILITY_SUGAR_RUSH:
+            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(IsMoveMakingContact(move, battler))
+            REQUIRE(EatTargetBerry(battler, target))
+            return TRUE;
+        
         case ABILITY_DENTING_BLOWS:
             REQUIRE(ShouldApplyOnHitAffect(target))
             REQUIRE(gBattleMoves[move].hammerBased)
@@ -16120,4 +16127,11 @@ int HandleFollowupAttackAbilityAs(int ability, int battler, int target, int move
     }
 
     return FALSE;
+}
+
+int IsStickyHold(int battler)
+{
+    int ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);
+    if (!ability) ability = BattlerHasAbility(battler, ABILITY_SUPERSWEET_SYRUP, TRUE);
+    return ability;
 }

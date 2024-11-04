@@ -2611,7 +2611,7 @@ bool32 CanKnockOffItem(u8 battler, u16 item)
       )) && GetBattlerSide(battler) == B_SIDE_PLAYER)
         return FALSE;
     
-    if (BattlerHasAbility(battler, ABILITY_STICKY_HOLD, FALSE))
+    if (IsStickyHold(battler))
         return FALSE;
 
     if (!CanBattlerGetOrLoseItem(battler, item))

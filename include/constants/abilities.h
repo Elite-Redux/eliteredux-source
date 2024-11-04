@@ -671,7 +671,7 @@
 #define ABILITY_PRETENTIOUS 649 // Dealing a KO raises Crit by one stage.
 #define ABILITY_VENOBLAZE_PINCERS 650 // 1.2x boost to physical moves and 20% chance to Burn or Poison.
 #define ABILITY_ETERNAL_BLESSING 651 // Combines Celestial Blessing and Regenerator.
-#define ABILITY_SUGAR_RUSH 652 // Sharply raises Speed when eating a berry.
+#define ABILITY_SUGAR_RUSH 652 // Gluttony + eats foe's berry when hitting with contact move.
 #define ABILITY_PEACEFUL_REST 653 // Heals 1/8 of max HP every turn in fog.
 #define ABILITY_WHITE_NOISE 654 // Combines Static and Rest in Peace.
 #define ABILITY_SMOKEY_MANEUVERS 655 // Evasion is boosted by 1.25x in fog.
