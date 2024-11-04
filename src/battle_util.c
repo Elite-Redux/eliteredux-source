@@ -15920,6 +15920,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             gBattleMons[battler].type3 = TYPE_MYSTERY;
             gBattlerAbility = battler;
             gBattleScripting.abilityPopupOverwrite = ABILITY_COLOR_SPECTRUM;
+            PREPARE_TYPE_BUFFER(gBattleTextBuff1, newType);
             BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
             }
             return TRUE;
