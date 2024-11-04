@@ -1156,6 +1156,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_TERA_SHELL] = 1,
     [ABILITY_TERAFORM_ZERO] = 1,
     [ABILITY_SUPERSWEET_SYRUP] = 1,
+    [ABILITY_BREAKWATER] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
