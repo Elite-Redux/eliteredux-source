@@ -11441,7 +11441,6 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_AEGISLASH_BLADE,               SPECIES_AEGISLASH,              TRUE},
         {SPECIES_AEGISLASH_BLADE_REDUX,         SPECIES_AEGISLASH_REDUX,        TRUE},
         {SPECIES_AEGISLASH_BLADE_REDUX_MEGA,    SPECIES_AEGISLASH_REDUX_MEGA,   TRUE},
-        {SPECIES_DARMANITAN_ZEN_MODE,           SPECIES_DARMANITAN,             TRUE},
         {SPECIES_WISHIWASHI_SCHOOL,             SPECIES_WISHIWASHI,             TRUE},
         {SPECIES_CRAMORANT_GORGING,             SPECIES_CRAMORANT,              TRUE},
         {SPECIES_CRAMORANT_GULPING,             SPECIES_CRAMORANT,              TRUE},
@@ -11450,7 +11449,6 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_CASTFORM_SNOWY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SUNNY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SANDY,                SPECIES_CASTFORM,               TRUE},
-        {SPECIES_DARMANITAN_ZEN_MODE_GALARIAN,  SPECIES_DARMANITAN_GALARIAN,    TRUE},
         {SPECIES_LUMBERING_SLOTH_ENGULFED,      SPECIES_LUMBERING_SLOTH,        TRUE},
     };
 
