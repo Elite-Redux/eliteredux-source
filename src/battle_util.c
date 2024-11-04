@@ -4752,14 +4752,15 @@ static bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer)
 // Ability,     form >, form <=, hp divided
 static const u16 sHpTransformations[][4] =
 {
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR,               SPECIES_MINIOR_CORE_RED,              2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_BLUE,   SPECIES_MINIOR_CORE_BLUE,             2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_GREEN,  SPECIES_MINIOR_CORE_GREEN,            2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_INDIGO, SPECIES_MINIOR_CORE_INDIGO,           2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_ORANGE, SPECIES_MINIOR_CORE_ORANGE,           2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_VIOLET, SPECIES_MINIOR_CORE_VIOLET,           2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_YELLOW, SPECIES_MINIOR_CORE_YELLOW,           2},
-    {ABILITY_SCHOOLING,    SPECIES_WISHIWASHI_SCHOOL,    SPECIES_WISHIWASHI,                   4},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR, SPECIES_MINIOR_CORE_RED, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_BLUE, SPECIES_MINIOR_CORE_BLUE, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_GREEN, SPECIES_MINIOR_CORE_GREEN, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_INDIGO, SPECIES_MINIOR_CORE_INDIGO, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_ORANGE, SPECIES_MINIOR_CORE_ORANGE, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_VIOLET, SPECIES_MINIOR_CORE_VIOLET, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_YELLOW, SPECIES_MINIOR_CORE_YELLOW, 2},
+    {ABILITY_SCHOOLING, SPECIES_WISHIWASHI_SCHOOL, SPECIES_WISHIWASHI, 4},
+    {ABILITY_APE_SHIFT, SPECIES_SLAKING_MEGA, SPECIES_SLAKING_MEGA_APE_SHIFT, 2},
 };
 
 bool32 ShouldChangeFormHpBased(u32 battler)
@@ -14625,11 +14626,11 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         
         case ABILITY_APE_SHIFT:
             REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA)
+            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
             REQUIRE(ShouldChangeFormHpBased(battler))
 
             BattleScriptPushCursorAndCallback(BattleScript_End3);
-            BattleScriptCall(BattleScript_ApeShift);
+            BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
             BattleScriptCall(BattleScript_AbilityPopUp);
             return TRUE;
         
@@ -15643,11 +15644,11 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         
         case ABILITY_APE_SHIFT:
             REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA)
+            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
             REQUIRE(ShouldChangeFormHpBased(battler))
 
             BattleScriptPushCursorAndCallback(BattleScript_End3);
-            BattleScriptCall(BattleScript_ApeShift);
+            BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
             BattleScriptCall(BattleScript_AbilityPopUp);
             return TRUE;
         
