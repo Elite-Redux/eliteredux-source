@@ -1143,8 +1143,9 @@
 	.4byte \param0
 	.endm
 
-	.macro setroom
+	.macro setroom ptr:req
 	.byte 0xd9
+	.4byte \ptr
 	.endm
 
 	.macro tryswapabilities param0:req

@@ -1290,7 +1290,7 @@ int ShouldSetMoldBreaker(int battler, int move)
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MOLD_BREAKER, FALSE)) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_TERAVOLT, FALSE)) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_TURBOBLAZE, FALSE)) return TRUE;
-    if (BattlerHasAbility(gBattlerAttacker, ABILITY_MOLD_BREAKER, FALSE)) return TRUE;
+    if (BattlerHasAbility(gBattlerAttacker, ABILITY_BLIND_RAGE, FALSE)) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MYCELIUM_MIGHT, FALSE) && IS_MOVE_STATUS(gCurrentMove)) return TRUE;
     return FALSE;
 }
@@ -14017,6 +14017,10 @@ static u8 AttacksThisTurn(u8 battlerId, u16 move) // Note: returns 1 if it's a c
         || BattlerHasAbility(gBattlerAttacker, ABILITY_CHLOROPLAST, FALSE)
         || BattlerHasAbility(gBattlerAttacker, ABILITY_BIG_LEAVES, FALSE)))
         return 2;
+    
+    if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT
+        && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+        return 2;
 
     if (gBattleMoves[move].effect == EFFECT_SKULL_BASH
         || gBattleMoves[move].effect == EFFECT_TWO_TURNS_ATTACK
@@ -15317,26 +15321,67 @@ static void Cmd_setroom(void)
     switch (gBattleMoves[gCurrentMove].effect)
     {
     case EFFECT_TRICK_ROOM:
-        HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, B_MSG_TRICKROOMSTARTS, TRICK_ROOM_DURATION);
-        gFieldTimers.started.trickRoom = TRUE;
+        //Permanent
+        if((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) && gFieldTimers.trickRoomTimer > 10){
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else{
+            HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, B_MSG_TRICKROOMSTARTS, TRICK_ROOM_DURATION);
+            gFieldTimers.started.trickRoom = TRUE;
+        }
         break;
     case EFFECT_WONDER_ROOM:
-        HandleRoomMove(STATUS_FIELD_WONDER_ROOM, &gFieldTimers.wonderRoomTimer, B_MSG_WONDERROOMSTARTS, WONDER_ROOM_DURATION);
-        gFieldTimers.started.wonderRoom = TRUE;
+        //Permanent
+        if((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) && gFieldTimers.wonderRoomTimer > 10){
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else{
+            HandleRoomMove(STATUS_FIELD_WONDER_ROOM, &gFieldTimers.wonderRoomTimer, B_MSG_WONDERROOMSTARTS, WONDER_ROOM_DURATION);
+            gFieldTimers.started.wonderRoom = TRUE;
+        }
         break;
     case EFFECT_MAGIC_ROOM:
-        HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, B_MSG_MAGICROOMSTARTS, MAGIC_ROOM_DURATION);
-        gFieldTimers.started.magicRoom = TRUE;
+        //Permanent
+        if((gFieldStatuses & STATUS_FIELD_MAGIC_ROOM) && gFieldTimers.magicRoomTimer > 10){
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else{
+            HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, B_MSG_MAGICROOMSTARTS, MAGIC_ROOM_DURATION);
+            gFieldTimers.started.magicRoom = TRUE;
+        }
         break;
     case EFFECT_INVERSE_ROOM:
-        HandleRoomMove(STATUS_FIELD_INVERSE_ROOM, &gFieldTimers.inverseRoomTimer, B_MSG_INVERSEROOMSTARTS, INVERSE_ROOM_DURATION);
-        gFieldTimers.started.inverseRoom = TRUE;
+        //Permanent
+        if((gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) && gFieldTimers.inverseRoomTimer > 10){
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else{
+            HandleRoomMove(STATUS_FIELD_INVERSE_ROOM, &gFieldTimers.inverseRoomTimer, B_MSG_INVERSEROOMSTARTS, INVERSE_ROOM_DURATION);
+            gFieldTimers.started.inverseRoom = TRUE;
+        }
         break;
     default:
         SetActiveMultistringChooser(B_MSG_ROOMEMPTYSTRING);
         break;
     }
     gBattlescriptCurrInstr++;
+
+    /*
+    u8 side = GetBattlerSide(gBattlerAttacker);
+
+    if (!(gSideStatuses[side] & SIDE_STATUS_TAILWIND))
+    {
+        gSideTimers[side].started.tailwind = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[side].tailwindBattlerId = gBattlerAttacker;
+        gSideTimers[side].tailwindTimer = TAILWIND_DURATION;
+        gBattlescriptCurrInstr += 5;
+    }
+    else
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    */
 }
 
 static void Cmd_tryswapabilities(void) // skill swap
@@ -17035,6 +17080,7 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
             || BATTLER_HAS_ABILITY(battlerId, ABILITY_CHLOROPLAST)
             || BATTLER_HAS_ABILITY(battlerId, ABILITY_BIG_LEAVES)))
         return TRUE;
+    if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY)) return TRUE;
     if (gBattleMoves[move].twoTurnMove && !BATTLER_HAS_ABILITY(battlerId, ABILITY_ACCELERATE)) return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
     {
