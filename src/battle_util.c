@@ -12861,7 +12861,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             return TRUE;
         
         case ABILITY_TOXIC_CHAIN:
-            REQUIRE(ShouldApplyOnHitAffect(target))
+            REQUIRE(WasMoveSuccessful())
             REQUIRE(CanBePoisoned(battler, target))
             REQUIRE(Random() % 100 < 30)
 
