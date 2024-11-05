@@ -1290,7 +1290,7 @@ int ShouldSetMoldBreaker(int battler, int move)
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MOLD_BREAKER, FALSE)) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_TERAVOLT, FALSE)) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_TURBOBLAZE, FALSE)) return TRUE;
-    if (BattlerHasAbility(gBattlerAttacker, ABILITY_MOLD_BREAKER, FALSE)) return TRUE;
+    if (BattlerHasAbility(gBattlerAttacker, ABILITY_BLIND_RAGE, FALSE)) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MYCELIUM_MIGHT, FALSE) && IS_MOVE_STATUS(gCurrentMove)) return TRUE;
     return FALSE;
 }
