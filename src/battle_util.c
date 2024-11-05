@@ -13633,7 +13633,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             break;
         
         case ABILITY_LOOSE_ROCKS:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(DidMoveHit())
             REQUIRE(IsMoveMakingContact(move, attacker))
             REQUIRE_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
 
@@ -14077,7 +14077,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         
         case ABILITY_LOOSE_QUILLS:
         case ABILITY_SCRAPYARD:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(DidMoveHit())
             REQUIRE(IsMoveMakingContact(move, attacker))
             REQUIRE(gSideTimers[GetBattlerSide(attacker)].spikesAmount < 3)
 
@@ -14085,7 +14085,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             return TRUE;
 
         case ABILITY_TOXIC_DEBRIS:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(DidMoveHit())
             REQUIRE(IsMoveMakingContact(move, attacker))
             REQUIRE(gSideTimers[GetBattlerSide(attacker)].toxicSpikesAmount < 2)
 
