@@ -3169,6 +3169,7 @@ const u8 gText_SmogonDamageCalculator_FifthPart_Guaranteed[] = _("{STR_VAR_1} {S
 //{STR_VAR_1} = Foruth Part {STR_VAR_2} = Max Percent, {STR_VAR_3} = Chance
 const u8 gText_SmogonDamageCalculator_SixthPart[] = _("{STR_VAR_1} {STR_VAR_2}HKO");
 const u8 gText_SmogonDamageCalculator_SixthPart_OHKO[] = _("{STR_VAR_1} OHKO");
+const u8 gText_SmogonDamageCalculator_SixthPart_OHKO_Focus_Sash[] = _("{STR_VAR_1} 2HKO-");
 //{STR_VAR_1} = Fifth Part {STR_VAR_2} = 2HKO or 3HKO
 const u8 gText_SmogonDamageCalculator_FastPart[]            = _("{STR_VAR_1}% Chances to {STR_VAR_2}HKO");
 const u8 gText_SmogonDamageCalculator_FastPart_Guaranteed[] = _("Guaranteed {STR_VAR_2}HKO");
@@ -3323,7 +3324,9 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
     u8 statUpAtk, statUpDef;
     u8 statDownAtk, statDownDef;
     u8 i, j;
+    u16 targetMaxHp = gBattleMons[target].maxHP;
     u16 targetCurrentHp = gBattleMons[target].hp;
+    u16 targetHeldItem  = gBattleMons[target].item;
     bool8 isCrit = FALSE;
     u16 typeEffectivenessModifier;
     const s8 *natureMod;
@@ -3422,6 +3425,8 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
         ConvertIntToDecimalStringN(gStringVar2, (damageCalculation->hits2KO + 1), STR_CONV_MODE_LEFT_ALIGN, 3);
         StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_SixthPart);
     }
+    else if(targetHeldItem == ITEM_FOCUS_SASH && targetCurrentHp == targetMaxHp)
+        StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_SixthPart_OHKO_Focus_Sash);
     else
         StringExpandPlaceholders(gStringVar4, gText_SmogonDamageCalculator_SixthPart_OHKO);
 }
