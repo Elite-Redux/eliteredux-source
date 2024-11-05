@@ -9093,7 +9093,7 @@ static const struct TrainerMonItemCustomMoves sParty_Joshua[] = { // with Patric
     },
     {
     .lvl = 0,
-    .species = SPECIES_DARMANITAN, // Zen Mode
+    .species = SPECIES_DARMANITAN_ZEN_MODE, // Zen Mode
     .heldItem = ITEM_LEFTOVERS,
     .ability = 2, // ABILITY_SHEER_FORCE, ABILITY_PSYCHIC_MIND, ABILITY_ZEN_MODE},
     // .innates = {ABILITY_INNER_FOCUS, ABILITY_IMPENETRABLE, ABILITY_CLEAR_BODY},
@@ -17632,7 +17632,7 @@ static const struct TrainerMonItemCustomMoves sParty_Danielle[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_DARMANITAN,
+    .species = SPECIES_DARMANITAN_ZEN_MODE,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 2,
     .evs = {0, 0, 0, 252, 4, 252},
@@ -30569,7 +30569,7 @@ static const struct TrainerMonItemCustomMoves sParty_TateAndLiza1[] = { // Inver
     },
     {
     .lvl = 0,
-    .species = SPECIES_DARMANITAN,
+    .species = SPECIES_DARMANITAN_ZEN_MODE,
     .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {252, 0, 4, 252, 0, 0},
@@ -31119,7 +31119,7 @@ static const struct TrainerMonItemCustomMoves sParty_TabithaMossdeep[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_DARMANITAN_GALARIAN, // Tabitha, Zen, Sash
+    .species = SPECIES_DARMANITAN_ZEN_MODE_GALARIAN, // Tabitha, Zen, Sash
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2, // ABILITY_GORILLA_TACTICS, ABILITY_SHEER_FORCE, ABILITY_ZEN_MODE},
     // .innates = {ABILITY_MOLD_BREAKER, ABILITY_POWER_FISTS, ABILITY_HEATPROOF},
@@ -31186,7 +31186,7 @@ static const struct TrainerMonItemCustomMoves sParty_TabithaMossdeepInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_DARMANITAN_GALARIAN, // Tabitha-E, Zen, Sash
+    .species = SPECIES_DARMANITAN_ZEN_MODE_GALARIAN, // Tabitha-E, Zen, Sash
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2, // ABILITY_GORILLA_TACTICS, ABILITY_SHEER_FORCE, ABILITY_ZEN_MODE},
     // .innates = {ABILITY_MOLD_BREAKER, ABILITY_POWER_FISTS, ABILITY_HEATPROOF},
@@ -40629,7 +40629,7 @@ static const struct TrainerMonItemCustomMoves sParty_EliInsane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_DARMANITAN,
+    .species = SPECIES_DARMANITAN_ZEN_MODE,
     .heldItem = ITEM_ASSAULT_VEST,
     .ability = 2,
     .evs = {252, 0, 4, 252, 0, 0},
