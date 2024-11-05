@@ -14017,6 +14017,10 @@ static u8 AttacksThisTurn(u8 battlerId, u16 move) // Note: returns 1 if it's a c
         || BattlerHasAbility(gBattlerAttacker, ABILITY_CHLOROPLAST, FALSE)
         || BattlerHasAbility(gBattlerAttacker, ABILITY_BIG_LEAVES, FALSE)))
         return 2;
+    
+    if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT
+        && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+        return 2;
 
     if (gBattleMoves[move].effect == EFFECT_SKULL_BASH
         || gBattleMoves[move].effect == EFFECT_TWO_TURNS_ATTACK
@@ -17035,6 +17039,7 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
             || BATTLER_HAS_ABILITY(battlerId, ABILITY_CHLOROPLAST)
             || BATTLER_HAS_ABILITY(battlerId, ABILITY_BIG_LEAVES)))
         return TRUE;
+    if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY)) return TRUE;
     if (gBattleMoves[move].twoTurnMove && !BATTLER_HAS_ABILITY(battlerId, ABILITY_ACCELERATE)) return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
     {
