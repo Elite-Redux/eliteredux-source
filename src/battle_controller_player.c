@@ -82,6 +82,7 @@ static const u8 sTheme_Dark_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_m
 static const u8 sTheme_Dark_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_desc.4bpp");
 static const u8 sTheme_Dark_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_info.4bpp");
 static const u8 sTheme_Dark_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_spd_order.4bpp");
+static const u8 sTheme_Dark_Title_Enemy_Dmg[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_enemy_dmg.4bpp");
 
 static const u8 sTheme_Dark_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_name.4bpp");
 static const u8 sTheme_Dark_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/move_info_icons/text_move_pp.4bpp");
@@ -121,6 +122,7 @@ static const u8 sTheme_Light_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_
 static const u8 sTheme_Light_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_desc.4bpp");
 static const u8 sTheme_Light_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_info.4bpp");
 static const u8 sTheme_Light_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_spd_order.4bpp");
+static const u8 sTheme_Light_Title_Enemy_Dmg[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_enemy_dmg.4bpp");
 
 static const u8 sTheme_Light_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_name.4bpp");
 static const u8 sTheme_Light_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/move_info_icons/text_move_pp.4bpp");
@@ -160,6 +162,7 @@ static const u8 sTheme_DPPt_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/ui_m
 static const u8 sTheme_DPPt_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_desc.4bpp");
 static const u8 sTheme_DPPt_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_info.4bpp");
 static const u8 sTheme_DPPt_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_spd_order.4bpp");
+static const u8 sTheme_DPPt_Title_Enemy_Dmg[]         = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_enemy_dmg.4bpp");
 
 static const u8 sTheme_DPPt_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_name.4bpp");
 static const u8 sTheme_DPPt_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/move_info_icons/text_move_pp.4bpp");
@@ -199,6 +202,7 @@ static const u8 sTheme_Classic_Title_Dmg_Calculation[]   = INCBIN_U8("graphics/u
 static const u8 sTheme_Classic_Title_Move_Description[]  = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_move_desc.4bpp");
 static const u8 sTheme_Classic_Title_Move_Info[]         = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_move_info.4bpp");
 static const u8 sTheme_Classic_Title_Speed_Order[]       = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_spd_order.4bpp");
+static const u8 sTheme_Classic_Title_Enemy_Dmg[]         = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_enemy_dmg.4bpp");
 
 static const u8 sTheme_Classic_Title_Move_Name[]         = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_move_name.4bpp");
 static const u8 sTheme_Classic_Title_Move_PP[]           = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/move_info_icons/text_move_pp.4bpp");
@@ -1191,6 +1195,7 @@ enum{
     MOVE_INFO_POWER_ACC_PRIO_TYPE_2,
     MOVE_SPEED_CALCULATION,
     MOVE_INFO_DAMAGE_CALCULATION,
+    MOVE_INFO_DAMAGE_ENEMY,
     NUM_MOVE_INFO_TYPES,
 };
 
@@ -1291,6 +1296,10 @@ static bool8 HasPriorityMove(u8 battler, int target)
 
 #define MOVE_INFO_WINDOW_SIZE 80
 
+static const u8 sTheme_Classic_Can_KO_Mark_Gfx[] = INCBIN_U8("graphics/ui_menus/battle_interface/classic_theme/check.4bpp");
+static const u8 sTheme_DPPt_Can_KO_Mark_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/dppt_theme/check.4bpp");
+static const u8 sTheme_Dark_Can_KO_Mark_Gfx[]    = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_dark/check.4bpp");
+static const u8 sTheme_Light_Can_KO_Mark_Gfx[]   = INCBIN_U8("graphics/ui_menus/battle_interface/theme_1_light/check.4bpp");
 void PrintBattleWindow_MoveSelection(void)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
@@ -1456,6 +1465,16 @@ void PrintBattleWindow_MoveSelection(void)
                 BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
             else if (battleTheme == THEME_CLASSIC)
                 BlitBitmapToWindow(windowId, sTheme_Classic_Title_Dmg_Calculation, (x * 8) + x2, (y * 8) + y2, 56, 8);
+        break;
+        case MOVE_INFO_DAMAGE_ENEMY:
+            if (battleTheme == THEME_DARK)
+                BlitBitmapToWindow(windowId, sTheme_Dark_Title_Enemy_Dmg, (x * 8) + x2, (y * 8) + y2, 96, 8);
+            else if (battleTheme == THEME_LIGHT)
+                BlitBitmapToWindow(windowId, sTheme_Light_Title_Enemy_Dmg, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if (battleTheme == THEME_DPPT)
+                BlitBitmapToWindow(windowId, sTheme_DPPt_Title_Enemy_Dmg, (x * 8) + x2, (y * 8) + y2, 56, 8);
+            else if (battleTheme == THEME_CLASSIC)
+                BlitBitmapToWindow(windowId, sTheme_Classic_Title_Enemy_Dmg, (x * 8) + x2, (y * 8) + y2, 56, 8);
         break;
     }
 
@@ -1791,6 +1810,8 @@ void PrintBattleWindow_MoveSelection(void)
                 u16 targetCurrentHp = gBattleMons[target].hp;
                 u16 minDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
                 u8 moveIndex = gMoveSelectionCursor[gActiveBattler];
+                u16 heldItem = gBattleMons[target].item;
+
                 if (immune) minDamage = maxDamage = 0;
                 x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION + 4;
                 StringCopy(gStringVar3, gSpeciesNames[gBattleMons[target].species]);
@@ -1814,6 +1835,11 @@ void PrintBattleWindow_MoveSelection(void)
                     percentage = (percentage / MAX_PERCENT);
                     if (percentage > MAX_PERCENT)
                         percentage = MAX_PERCENT;
+
+                    //Focus Sash Check
+                    if(heldItem == ITEM_FOCUS_SASH && MAX_PERCENT == 100 && targetCurrentHp == gBattleMons[target].maxHP)
+                        percentage = 99;
+
                     ConvertIntToDecimalStringN(gStringVar2, percentage, STR_CONV_MODE_LEFT_ALIGN, 3);
 
                     StringExpandPlaceholders(gStringVar4, sText_Effect_DamageDone);
@@ -1829,6 +1855,54 @@ void PrintBattleWindow_MoveSelection(void)
             }
             else {
                 AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, sText_DamageCalculation_Status);
+            }
+        break;
+        case MOVE_INFO_DAMAGE_ENEMY:
+            for (i = 0; i < MAX_MON_MOVES; i++){
+                u16 newMove = gBattleMons[target].moves[i];
+                u16 priority = gBattleMoves[newMove].priority;
+                u16 targetCurrentHp = gBattleMons[gActiveBattler].hp;
+                u16 heldItem = gBattleMons[gActiveBattler].item;
+                u16 moveDamage;
+
+                if(newMove != MOVE_NONE){
+                    //Move Name
+                    AddTextPrinterParameterized4(windowId, font, (x * 8) + x2, ((y + i)* 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gMoveNames[newMove]);
+
+                    //Move Priority
+                    if (gBattleMoves[newMove].priority >= 0)
+                        ConvertIntToDecimalStringN(gStringVar4, priority, STR_CONV_MODE_LEFT_ALIGN, 3);
+                    else
+                        ConvertIntToDecimalStringN(gStringVar4, 0, STR_CONV_MODE_LEFT_ALIGN, 3);
+                    
+                    AddTextPrinterParameterized4(windowId, font, ((x + 8) * 8) + x2, ((y + i)* 8) + y2, 0, 0, sMenuWindowFontColors[fontColor], 0xFF, gStringVar4);
+
+                    //Can KO - Todo: Check calculation
+                    if (gBattleMoves[newMove].split != SPLIT_STATUS && gBattleMoves[newMove].power > 0) {
+                        u8 moveType = gBattleMoves[newMove].type;
+                        SetTypeBeforeUsingMove(newMove, target);
+                        GET_MOVE_TYPE(newMove, moveType);
+                        moveDamage = CalculateMoveDamage(newMove, target, gActiveBattler, &moveType, 0, FALSE, FALSE, FALSE);
+                        //gSwapDamageCategory = FALSE;
+                        
+                        if (targetCurrentHp <= moveDamage && heldItem != ITEM_FOCUS_SASH && targetCurrentHp == gBattleMons[gActiveBattler].maxHP){
+                            switch (battleTheme){
+                                case THEME_DARK:
+                                    BlitBitmapToWindow(windowId, sTheme_Dark_Can_KO_Mark_Gfx,    ((x + 10) * 8) + x2 + 4, ((y + i) * 8) + y2 + 4, 8, 8);
+                                break;
+                                case THEME_LIGHT:
+                                    BlitBitmapToWindow(windowId, sTheme_Light_Can_KO_Mark_Gfx,   ((x + 9) * 8) + x2 + 4, ((y + i) * 8) + y2 + 4, 8, 8);
+                                break;
+                                case THEME_DPPT:
+                                    BlitBitmapToWindow(windowId, sTheme_DPPt_Can_KO_Mark_Gfx,    ((x + 9) * 8) + x2 + 4, ((y + i) * 8) + y2 + 4, 8, 8);
+                                break;
+                                case THEME_CLASSIC:
+                                    BlitBitmapToWindow(windowId, sTheme_Classic_Can_KO_Mark_Gfx, ((x + 9) * 8) + x2 + 4, ((y + i) * 8) + y2 + 4, 8, 8);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         break;
     }

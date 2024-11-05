@@ -1290,7 +1290,7 @@ int ShouldSetMoldBreaker(int battler, int move)
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MOLD_BREAKER, FALSE)) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_TERAVOLT, FALSE)) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_TURBOBLAZE, FALSE)) return TRUE;
-    if (BattlerHasAbility(gBattlerAttacker, ABILITY_MOLD_BREAKER, FALSE)) return TRUE;
+    if (BattlerHasAbility(gBattlerAttacker, ABILITY_BLIND_RAGE, FALSE)) return TRUE;
     if (BattlerHasAbility(gBattlerAttacker, ABILITY_MYCELIUM_MIGHT, FALSE) && IS_MOVE_STATUS(gCurrentMove)) return TRUE;
     return FALSE;
 }
@@ -3090,6 +3090,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
     case MOVE_EFFECT_MAKE_IT_RAIN:
     case MOVE_EFFECT_WYRM_WIND:
     case MOVE_EFFECT_SCALE_SHOT:
+    case MOVE_EFFECT_BUG_BITE:
         gBattleStruct->moveEffect2 = gBattleScripting.moveEffect;
         return;
     }
@@ -3855,27 +3856,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gEffectBattler].item);
                     MarkBattlerForControllerExec(gActiveBattler);
                     BattleScriptCall(BattleScript_MoveEffectIncinerate);
-                }
-                break;
-            case MOVE_EFFECT_BUG_BITE:
-                if (ItemId_GetPocket(gBattleMons[gEffectBattler].item) == POCKET_BERRIES
-                    && (!BattlerHasAbility(gEffectBattler, ABILITY_STICKY_HOLD, TRUE))
-                    && !(gTurnStructs[gBattlerAttacker].parentalBondOn >= 2 && gBattleMons[gBattlerTarget].hp != 0)) // Steal berry on final hit
-                {
-                    // target loses their berry
-                    gLastUsedItem = gBattleMons[gEffectBattler].item;
-                    gBattleMons[gEffectBattler].item = 0;
-                    CheckSetUnburden(gEffectBattler);
-                    gActiveBattler = gEffectBattler;
-
-                    BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gEffectBattler].item);
-                    MarkBattlerForControllerExec(gActiveBattler);
-
-                    // attacker temporarily gains their item
-                    gBattleStruct->changedItems[gBattlerAttacker] = gBattleMons[gBattlerAttacker].item;
-                    gBattleMons[gBattlerAttacker].item = gLastUsedItem;
-
-                    BattleScriptCall(BattleScript_MoveEffectBugBite);
                 }
                 break;
             case MOVE_EFFECT_TRAP_BOTH:
@@ -5448,9 +5428,8 @@ static bool32 TryKnockOffBattleScript(u32 battlerDef)
     if (!ShouldApplyOnHitAffect(battlerDef)) return FALSE;
     if (NoAliveMonsForEitherParty()) return FALSE;
 
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_STICKY_HOLD))
+    if ((gBattleScripting.abilityPopupOverwrite = IsStickyHold(battlerDef)))
     {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_STICKY_HOLD;
         gBattlerAbility = battlerDef;
         BattleScriptCall(BattleScript_StickyHoldActivates);
         return TRUE;
@@ -5486,7 +5465,7 @@ static int CanPickpocket(int target, int attackerStealing)
     if (!BATTLER_HAS_ABILITY(stealer, ability)) return FALSE;
     if (DoesSubstituteBlockMove(gBattlerAttacker, target, gCurrentMove)) return FALSE;
     if (!CanStealItem(stealer, stolen, gBattleMons[stolen].item)) return FALSE;
-    if (BattlerHasAbility(stolen, ABILITY_STICKY_HOLD, TRUE)) return FALSE;
+    if (IsStickyHold(target)) return FALSE;
     if (TestSheerForceFlag(gBattlerAttacker, gCurrentMove)) return FALSE;
     return ability;
 }
@@ -5848,6 +5827,9 @@ static void Cmd_moveend(void)
                 // Intentional fallthrough
             case MOVE_EFFECT_KNOCK_OFF:
                 effect = TryKnockOffBattleScript(gBattlerTarget);
+                break;
+            case MOVE_EFFECT_BUG_BITE:
+                effect = EatTargetBerry(gBattlerAttacker, gBattlerTarget);
                 break;
             case MOVE_EFFECT_SMACK_DOWN:
                 if (!IsBattlerGrounded(gBattlerTarget) && IsBattlerAlive(gBattlerTarget))
@@ -7788,31 +7770,20 @@ static void Cmd_setgravity(void)
 
 static void TryCheekPouch(u32 battlerId, u32 itemId)
 {
+    int ability;
     if (ItemId_GetPocket(itemId) == POCKET_BERRIES
-        && BATTLER_HAS_ABILITY(battlerId, ABILITY_GLUTTONY)
+        && ((ability = BattlerHasAbility(battlerId, ABILITY_GLUTTONY, FALSE)) || (ability = BattlerHasAbility(battlerId, ABILITY_SUGAR_RUSH, FALSE)))
         && !BATTLER_HEALING_BLOCKED(battlerId)
         && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]]
         && !BATTLER_MAX_HP(battlerId))
     {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_GLUTTONY;
+        gBattleScripting.abilityPopupOverwrite = ability;
         gBattleMoveDamage = gBattleMons[battlerId].maxHP / 3;
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
         gBattleMoveDamage *= -1;
         gBattlerAbility = battlerId;
         BattleScriptCall(BattleScript_CheekPouchActivates);
-    }
-
-    if (ItemId_GetPocket(itemId) == POCKET_BERRIES
-        && BATTLER_HAS_ABILITY(battlerId, ABILITY_SUGAR_RUSH)
-        && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]]
-        && CompareStat(battlerId, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
-    {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_SUGAR_RUSH;
-        SetStatChanger(STAT_SPEED, 2);
-        gStackBattler1 = battlerId;
-        PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_SPEED);
-        BattleScriptCall(BattleScript_ScriptingAbilityStatRaise);
     }
 }
 
@@ -11393,7 +11364,7 @@ static void Cmd_various(void)
         ptr = READ_PTR_INC;
         if (!gBattleMons[gActiveBattler].item
             || !CanBattlerGetOrLoseItem(gActiveBattler, gBattleMons[gActiveBattler].item)
-            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_STICKY_HOLD)
+            || IsStickyHold(gActiveBattler)
             || DoesSubstituteBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove))
             gBattlescriptCurrInstr = ptr;
         else
@@ -14046,6 +14017,10 @@ static u8 AttacksThisTurn(u8 battlerId, u16 move) // Note: returns 1 if it's a c
         || BattlerHasAbility(gBattlerAttacker, ABILITY_CHLOROPLAST, FALSE)
         || BattlerHasAbility(gBattlerAttacker, ABILITY_BIG_LEAVES, FALSE)))
         return 2;
+    
+    if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT
+        && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY))
+        return 2;
 
     if (gBattleMoves[move].effect == EFFECT_SKULL_BASH
         || gBattleMoves[move].effect == EFFECT_TWO_TURNS_ATTACK
@@ -15133,9 +15108,8 @@ static void Cmd_tryswapitems(void) // trick
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         }
         // check if ability prevents swapping
-        else if ((BattlerHasAbility(gBattlerTarget, ABILITY_STICKY_HOLD, TRUE)))
+        else if ((gBattleScripting.abilityPopupOverwrite = IsStickyHold(gBattlerTarget)))
         {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_STICKY_HOLD;
             gBattlescriptCurrInstr = BattleScript_MoveEnd;
             BattleScriptCall(BattleScript_StickyHoldActivates);
         }
@@ -15347,26 +15321,67 @@ static void Cmd_setroom(void)
     switch (gBattleMoves[gCurrentMove].effect)
     {
     case EFFECT_TRICK_ROOM:
-        HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, B_MSG_TRICKROOMSTARTS, TRICK_ROOM_DURATION);
-        gFieldTimers.started.trickRoom = TRUE;
+        //Permanent
+        if((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) && gFieldTimers.trickRoomTimer > 10){
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else{
+            HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, B_MSG_TRICKROOMSTARTS, TRICK_ROOM_DURATION);
+            gFieldTimers.started.trickRoom = TRUE;
+        }
         break;
     case EFFECT_WONDER_ROOM:
-        HandleRoomMove(STATUS_FIELD_WONDER_ROOM, &gFieldTimers.wonderRoomTimer, B_MSG_WONDERROOMSTARTS, WONDER_ROOM_DURATION);
-        gFieldTimers.started.wonderRoom = TRUE;
+        //Permanent
+        if((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) && gFieldTimers.wonderRoomTimer > 10){
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else{
+            HandleRoomMove(STATUS_FIELD_WONDER_ROOM, &gFieldTimers.wonderRoomTimer, B_MSG_WONDERROOMSTARTS, WONDER_ROOM_DURATION);
+            gFieldTimers.started.wonderRoom = TRUE;
+        }
         break;
     case EFFECT_MAGIC_ROOM:
-        HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, B_MSG_MAGICROOMSTARTS, MAGIC_ROOM_DURATION);
-        gFieldTimers.started.magicRoom = TRUE;
+        //Permanent
+        if((gFieldStatuses & STATUS_FIELD_MAGIC_ROOM) && gFieldTimers.magicRoomTimer > 10){
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else{
+            HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, B_MSG_MAGICROOMSTARTS, MAGIC_ROOM_DURATION);
+            gFieldTimers.started.magicRoom = TRUE;
+        }
         break;
     case EFFECT_INVERSE_ROOM:
-        HandleRoomMove(STATUS_FIELD_INVERSE_ROOM, &gFieldTimers.inverseRoomTimer, B_MSG_INVERSEROOMSTARTS, INVERSE_ROOM_DURATION);
-        gFieldTimers.started.inverseRoom = TRUE;
+        //Permanent
+        if((gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) && gFieldTimers.inverseRoomTimer > 10){
+            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        }
+        else{
+            HandleRoomMove(STATUS_FIELD_INVERSE_ROOM, &gFieldTimers.inverseRoomTimer, B_MSG_INVERSEROOMSTARTS, INVERSE_ROOM_DURATION);
+            gFieldTimers.started.inverseRoom = TRUE;
+        }
         break;
     default:
         SetActiveMultistringChooser(B_MSG_ROOMEMPTYSTRING);
         break;
     }
     gBattlescriptCurrInstr++;
+
+    /*
+    u8 side = GetBattlerSide(gBattlerAttacker);
+
+    if (!(gSideStatuses[side] & SIDE_STATUS_TAILWIND))
+    {
+        gSideTimers[side].started.tailwind = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
+        gSideTimers[side].tailwindBattlerId = gBattlerAttacker;
+        gSideTimers[side].tailwindTimer = TAILWIND_DURATION;
+        gBattlescriptCurrInstr += 5;
+    }
+    else
+    {
+        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    }
+    */
 }
 
 static void Cmd_tryswapabilities(void) // skill swap
@@ -17065,6 +17080,7 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
             || BATTLER_HAS_ABILITY(battlerId, ABILITY_CHLOROPLAST)
             || BATTLER_HAS_ABILITY(battlerId, ABILITY_BIG_LEAVES)))
         return TRUE;
+    if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY)) return TRUE;
     if (gBattleMoves[move].twoTurnMove && !BATTLER_HAS_ABILITY(battlerId, ABILITY_ACCELERATE)) return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
     {
@@ -17122,4 +17138,26 @@ int GetWeatherChangeMultistringChooser(int weather)
     default:
         return B_MSG_WEATHER_BECAME_NORMAL;
     }
+}
+
+int EatTargetBerry(int battler, int target)
+{
+    if (ItemId_GetPocket(gBattleMons[target].item) != POCKET_BERRIES) return FALSE;
+    if (IsStickyHold(target)) return FALSE;
+
+    // target loses their berry
+    gLastUsedItem = gBattleMons[target].item;
+    gBattleMons[target].item = 0;
+    CheckSetUnburden(target);
+    gActiveBattler = target;
+
+    BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[target].item);
+    MarkBattlerForControllerExec(gActiveBattler);
+
+    // attacker temporarily gains their item
+    gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
+    gBattleMons[battler].item = gLastUsedItem;
+
+    BattleScriptCall(BattleScript_MoveEffectBugBite);
+    return TRUE;
 }

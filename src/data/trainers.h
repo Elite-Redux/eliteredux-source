@@ -331,6 +331,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Grunt16),
         .party = {.ItemCustomMoves = sParty_Grunt16},
+        .partySizeInsane = ARRAY_COUNT(sParty_Grunt16Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Grunt16Insane},
     },
 
     [TRAINER_GRUNT_MT_PYRE_1] =
@@ -1677,6 +1679,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Grunt23),
         .party = {.ItemCustomMoves = sParty_Grunt23},
+        .partySizeInsane = ARRAY_COUNT(sParty_Grunt23Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Grunt23Insane},
     },
 
     [TRAINER_CINDY_2] =
@@ -8477,6 +8481,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Grunt32),
         .party = {.ItemCustomMoves = sParty_Grunt32},
+        .partySizeInsane = ARRAY_COUNT(sParty_Grunt32Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Grunt32Insane},
     },
 
     [TRAINER_GRUNT_SPACE_CENTER_4] =
@@ -8491,6 +8497,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Grunt33),
         .party = {.ItemCustomMoves = sParty_Grunt33},
+        .partySizeInsane = ARRAY_COUNT(sParty_Grunt33Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Grunt33Insane},
     },
 
     [TRAINER_GRUNT_SPACE_CENTER_5] =
@@ -8505,6 +8513,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Grunt34),
         .party = {.ItemCustomMoves = sParty_Grunt34},
+        .partySizeInsane = ARRAY_COUNT(sParty_Grunt34Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Grunt34Insane},
     },
 
     [TRAINER_GRUNT_SPACE_CENTER_6] =
@@ -8519,6 +8529,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Grunt35),
         .party = {.ItemCustomMoves = sParty_Grunt35},
+        .partySizeInsane = ARRAY_COUNT(sParty_Grunt35Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Grunt35Insane},
     },
 
     [TRAINER_GRUNT_SPACE_CENTER_7] =
@@ -8533,6 +8545,8 @@ const struct Trainer gTrainers[] = {
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY | AI_FLAG_CHECK_FOE | AI_FLAG_SMART_SWITCHING | AI_FLAG_HP_AWARE,
         .partySize = ARRAY_COUNT(sParty_Grunt36),
         .party = {.ItemCustomMoves = sParty_Grunt36},
+        .partySizeInsane = ARRAY_COUNT(sParty_Grunt36Insane),
+        .partyInsane = {.ItemCustomMoves = sParty_Grunt36Insane},
     },
 
     [TRAINER_MACEY] =

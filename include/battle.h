@@ -758,6 +758,7 @@ struct BattleStruct
     u8 timesDamaged[PARTY_SIZE][2];
     u8 battleEventDone;
     u8 firstTurnAbilityLoopCounter:3;
+    u8 ranEndTurnEffects:1;
 };
 
 #define GET_MOVE_TYPE(move, typeArg)                        \

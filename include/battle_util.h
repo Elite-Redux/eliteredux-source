@@ -369,6 +369,7 @@ void RepopulateAbilities(int battler);
 int GetBattlerAbility(int battler);
 void HandleFollowupAttackAbilities(int battler, int target, int move);
 int CheckAndSetOncePerTurnAbility(int battler, int ability);
+int IsStickyHold(int battler);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);

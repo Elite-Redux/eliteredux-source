@@ -1155,6 +1155,8 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_STALL] = 1,
     [ABILITY_TERA_SHELL] = 1,
     [ABILITY_TERAFORM_ZERO] = 1,
+    [ABILITY_SUPERSWEET_SYRUP] = 1,
+    [ABILITY_BREAKWATER] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -2360,9 +2362,9 @@ u8 DoFieldEndTurnEffects(void)
                     if (!gSideTimers[side].started.auroraVeil && --gSideTimers[side].auroraVeilTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_AURORA_VEIL;
-                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
                         gBattleCommunication[MULTISTRING_CHOOSER] = side;
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_AURORA_VEIL);
+                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
                         effect++;
                     }
                 }
@@ -2372,9 +2374,9 @@ u8 DoFieldEndTurnEffects(void)
                     if (!gSideTimers[side].started.spiderWeb && gSideTimers[side].stickyWebTimer && --gSideTimers[side].stickyWebTimer == 0)
                     {
                         gSideStatuses[side] &= ~SIDE_STATUS_STICKY_WEB;
-                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
-                        gBattleCommunication[MULTISTRING_CHOOSER] = side;
+                        gBattleCommunication[MULTISTRING_CHOOSER] = BATTLE_OPPOSITE(side);
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_STICKY_WEB);
+                        BattleScriptExecute(BattleScript_SideStatusWoreOff);
                         effect++;
                     }
                 }
@@ -4131,7 +4133,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_RECHARGE: // recharge
-            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RECHARGE)
+            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_RECHARGE && !gProcessingExtraAttacks)
             {
                 gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_RECHARGE);
                 gVolatileStructs[gBattlerAttacker].rechargeTimer = 0;
@@ -4143,7 +4145,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_FLINCH: // flinch
-            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED)
+            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_FLINCHED && !gProcessingExtraAttacks)
             {
                 gRoundStructs[gBattlerAttacker].flinchImmobility = TRUE;
                 CancelMultiTurnMoves(gBattlerAttacker);
@@ -4244,7 +4246,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_PARALYSED: // paralysis
-            if ((gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0)
+            if (!gProcessingExtraAttacks && (gBattleMons[gBattlerAttacker].status1 & STATUS1_PARALYSIS) && (Random() % 4) == 0)
             {
                 gRoundStructs[gBattlerAttacker].prlzImmobility = TRUE;
                 // This is removed in Emerald for some reason
@@ -4256,7 +4258,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_BIDE: // bide
-            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE)
+            if (!gProcessingExtraAttacks && gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE)
             {
                 gBattleMons[gBattlerAttacker].status2 -= STATUS2_BIDE_TURN(1);
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_BIDE)
@@ -4752,14 +4754,15 @@ static bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer)
 // Ability,     form >, form <=, hp divided
 static const u16 sHpTransformations[][4] =
 {
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR,               SPECIES_MINIOR_CORE_RED,              2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_BLUE,   SPECIES_MINIOR_CORE_BLUE,             2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_GREEN,  SPECIES_MINIOR_CORE_GREEN,            2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_INDIGO, SPECIES_MINIOR_CORE_INDIGO,           2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_ORANGE, SPECIES_MINIOR_CORE_ORANGE,           2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_VIOLET, SPECIES_MINIOR_CORE_VIOLET,           2},
-    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_YELLOW, SPECIES_MINIOR_CORE_YELLOW,           2},
-    {ABILITY_SCHOOLING,    SPECIES_WISHIWASHI_SCHOOL,    SPECIES_WISHIWASHI,                   4},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR, SPECIES_MINIOR_CORE_RED, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_BLUE, SPECIES_MINIOR_CORE_BLUE, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_GREEN, SPECIES_MINIOR_CORE_GREEN, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_INDIGO, SPECIES_MINIOR_CORE_INDIGO, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_ORANGE, SPECIES_MINIOR_CORE_ORANGE, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_VIOLET, SPECIES_MINIOR_CORE_VIOLET, 2},
+    {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_YELLOW, SPECIES_MINIOR_CORE_YELLOW, 2},
+    {ABILITY_SCHOOLING, SPECIES_WISHIWASHI_SCHOOL, SPECIES_WISHIWASHI, 4},
+    {ABILITY_APE_SHIFT, SPECIES_SLAKING_MEGA, SPECIES_SLAKING_MEGA_APE_SHIFT, 2},
 };
 
 bool32 ShouldChangeFormHpBased(u32 battler)
@@ -10196,75 +10199,63 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     }
     else {
         // Speed Force
-        if (BattlerHasAbility(battlerAtk, ABILITY_SPEED_FORCE, TRUE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        if (BattlerHasAbility(battlerAtk, ABILITY_SPEED_FORCE, FALSE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
         {
             secondaryAtkStatToUse = STAT_SPEED;
         }
         // Terminal Velocity
-        if (BattlerHasAbility(battlerAtk, ABILITY_TERMINAL_VELOCITY, TRUE) && IS_MOVE_SPECIAL(move))
+        if (BattlerHasAbility(battlerAtk, ABILITY_TERMINAL_VELOCITY, FALSE) && IS_MOVE_SPECIAL(move))
         {
             secondaryAtkStatToUse = STAT_SPEED;
         }
         // Slipstream
-        if (BattlerHasAbility(battlerAtk, ABILITY_SLIPSTREAM, TRUE))
+        if (BattlerHasAbility(battlerAtk, ABILITY_SLIPSTREAM, FALSE))
         {
             secondaryAtkStatToUse = STAT_SPEED;
         }
         // Power Core
-        else if (BattlerHasAbility(battlerAtk, ABILITY_POWER_CORE, TRUE))
+        else if (BattlerHasAbility(battlerAtk, ABILITY_POWER_CORE, FALSE))
         {
             secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
         }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_JUGGERNAUT, TRUE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        else if (BattlerHasAbility(battlerAtk, ABILITY_JUGGERNAUT, FALSE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
         {
             secondaryAtkStatToUse = STAT_DEF;
         }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_IRON_GIANT, TRUE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        else if (BattlerHasAbility(battlerAtk, ABILITY_IRON_GIANT, FALSE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
         {
             secondaryAtkStatToUse = STAT_DEF;
         }
 
 	    // Equinox
-        if (BattlerHasAbility(battlerAtk, ABILITY_EQUINOX, TRUE))
+        if (BattlerHasAbility(battlerAtk, ABILITY_EQUINOX, FALSE))
         {
             u32 atk = CalculateStat(battlerAtk, STAT_ATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
             u32 spAtk = CalculateStat(battlerAtk, STAT_SPATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
             atkStatToUse = atk > spAtk ? STAT_ATK : STAT_SPATK;
         }
         // Ancient Idol
-        else if (BattlerHasAbility(battlerAtk, ABILITY_ANCIENT_IDOL, TRUE))
+        else if (BattlerHasAbility(battlerAtk, ABILITY_ANCIENT_IDOL, FALSE))
         {
             atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
         }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MOMENTUM, TRUE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        else if (BattlerHasAbility(battlerAtk, ABILITY_MOMENTUM, FALSE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
         {
             atkStatToUse = STAT_SPEED;
         }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_IMPULSE, TRUE) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
+        else if (BattlerHasAbility(battlerAtk, ABILITY_IMPULSE, FALSE) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
         {
             atkStatToUse = STAT_SPEED;
         }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MAXIMUM_ACCELERATION, TRUE))
+        else if (BattlerHasAbility(battlerAtk, ABILITY_MAXIMUM_ACCELERATION, FALSE))
         {
             atkStatToUse = STAT_SPEED;
         }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MIND_CRUSH, TRUE) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+        else if (BattlerHasAbility(battlerAtk, ABILITY_MIND_CRUSH, FALSE) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         {
             atkStatToUse = STAT_SPATK;
         }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_ROUSED_FANGS, TRUE) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        {
-            atkStatToUse = STAT_SPATK;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MYTHICAL_ARROWS, TRUE) && gBattleMoves[move].arrowBased)
-        {
-            atkStatToUse = STAT_SPATK;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MYSTIC_BLADES, TRUE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        {
-            atkStatToUse = STAT_SPATK;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_PONY_POWER, TRUE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        else if (BattlerHasAbility(battlerAtk, ABILITY_ROUSED_FANGS, FALSE) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
         {
             atkStatToUse = STAT_SPATK;
         }
@@ -10344,6 +10335,21 @@ void SetSwapDamageCategory(int battler, int target, int move)
     switch (gBattleMoves[move].splitFlag)
     {
         default:
+            if (gBattleMoves[move].split == SPLIT_PHYSICAL)
+            {
+                if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST
+                    && (BattlerHasAbility(battler, ABILITY_MYSTIC_BLADES, FALSE) || BattlerHasAbility(battler, ABILITY_PONY_POWER, FALSE)))
+                {
+                    gSwapDamageCategory = TRUE;
+                    return;
+                }
+
+                if (gBattleMoves[move].arrowBased && BattlerHasAbility(battler, ABILITY_MYTHICAL_ARROWS, FALSE))
+                {
+                    gSwapDamageCategory = TRUE;
+                    return;
+                }
+            }
             gSwapDamageCategory = FALSE;
             return;
         
@@ -10413,27 +10419,15 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         defStatToUse = STAT_SPDEF;
     }
 
-    if (BattlerHasAbility(battlerAtk, ABILITY_POWER_FISTS, TRUE) && IS_IRON_FIST(battlerAtk, move))
+    if (BattlerHasAbility(battlerAtk, ABILITY_POWER_FISTS, FALSE) && IS_IRON_FIST(battlerAtk, move))
     {
         defStatToUse = STAT_SPDEF;
     }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_MYTHICAL_ARROWS, TRUE) && gBattleMoves[move].arrowBased)
+    else if (BattlerHasAbility(battlerAtk, ABILITY_SOUL_CRUSHER, FALSE) && gBattleMoves[move].hammerBased)
     {
         defStatToUse = STAT_SPDEF;
     }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_MYSTIC_BLADES, TRUE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
-    {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_PONY_POWER, TRUE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
-    {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_SOUL_CRUSHER, TRUE) && gBattleMoves[move].hammerBased)
-    {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_POWER_EDGE, TRUE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
+    else if (BattlerHasAbility(battlerAtk, ABILITY_POWER_EDGE, FALSE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
     {
         defStatToUse = STAT_SPDEF;
     }
@@ -11450,7 +11444,6 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_AEGISLASH_BLADE,               SPECIES_AEGISLASH,              TRUE},
         {SPECIES_AEGISLASH_BLADE_REDUX,         SPECIES_AEGISLASH_REDUX,        TRUE},
         {SPECIES_AEGISLASH_BLADE_REDUX_MEGA,    SPECIES_AEGISLASH_REDUX_MEGA,   TRUE},
-        {SPECIES_DARMANITAN_ZEN_MODE,           SPECIES_DARMANITAN,             TRUE},
         {SPECIES_WISHIWASHI_SCHOOL,             SPECIES_WISHIWASHI,             TRUE},
         {SPECIES_CRAMORANT_GORGING,             SPECIES_CRAMORANT,              TRUE},
         {SPECIES_CRAMORANT_GULPING,             SPECIES_CRAMORANT,              TRUE},
@@ -11459,7 +11452,6 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_CASTFORM_SNOWY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SUNNY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SANDY,                SPECIES_CASTFORM,               TRUE},
-        {SPECIES_DARMANITAN_ZEN_MODE_GALARIAN,  SPECIES_DARMANITAN_GALARIAN,    TRUE},
         {SPECIES_LUMBERING_SLOTH_ENGULFED,      SPECIES_LUMBERING_SLOTH,        TRUE},
     };
 
@@ -12819,6 +12811,12 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             BattleScriptCall(BattleScript_TargetDazed);
             break;
         
+        case ABILITY_SUGAR_RUSH:
+            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(IsMoveMakingContact(move, battler))
+            REQUIRE(EatTargetBerry(battler, target))
+            return TRUE;
+        
         case ABILITY_DENTING_BLOWS:
             REQUIRE(ShouldApplyOnHitAffect(target))
             REQUIRE(gBattleMoves[move].hammerBased)
@@ -12863,7 +12861,8 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             return TRUE;
         
         case ABILITY_TOXIC_CHAIN:
-            REQUIRE(ShouldApplyOnHitAffect(target))
+            REQUIRE(WasMoveSuccessful())
+            REQUIRE(IsBattlerAlive(target))
             REQUIRE(CanBePoisoned(battler, target))
             REQUIRE(Random() % 100 < 30)
 
@@ -13635,7 +13634,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             break;
         
         case ABILITY_LOOSE_ROCKS:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(DidMoveHit())
             REQUIRE(IsMoveMakingContact(move, attacker))
             REQUIRE_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
 
@@ -13728,7 +13727,9 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             return TRUE;
         
         case ABILITY_COTTON_DOWN:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(DidMoveHit())
+            gStackBattler1 = BATTLE_OPPOSITE(battler);
+            REQUIRE(IsBattlerAlive(gStackBattler1) || IsBattlerAlive(BATTLE_PARTNER(gStackBattler1)))
 
             gEffectBattler = battler;
             BattleScriptCall(BattleScript_CottonDownActivates);
@@ -14077,7 +14078,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         
         case ABILITY_LOOSE_QUILLS:
         case ABILITY_SCRAPYARD:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(DidMoveHit())
             REQUIRE(IsMoveMakingContact(move, attacker))
             REQUIRE(gSideTimers[GetBattlerSide(attacker)].spikesAmount < 3)
 
@@ -14085,7 +14086,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
             return TRUE;
 
         case ABILITY_TOXIC_DEBRIS:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
+            REQUIRE(DidMoveHit())
             REQUIRE(IsMoveMakingContact(move, attacker))
             REQUIRE(gSideTimers[GetBattlerSide(attacker)].toxicSpikesAmount < 2)
 
@@ -14634,11 +14635,11 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         
         case ABILITY_APE_SHIFT:
             REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA)
+            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
             REQUIRE(ShouldChangeFormHpBased(battler))
 
             BattleScriptPushCursorAndCallback(BattleScript_End3);
-            BattleScriptCall(BattleScript_ApeShift);
+            BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
             BattleScriptCall(BattleScript_AbilityPopUp);
             return TRUE;
         
@@ -15652,11 +15653,11 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         
         case ABILITY_APE_SHIFT:
             REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA)
+            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
             REQUIRE(ShouldChangeFormHpBased(battler))
 
             BattleScriptPushCursorAndCallback(BattleScript_End3);
-            BattleScriptCall(BattleScript_ApeShift);
+            BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
             BattleScriptCall(BattleScript_AbilityPopUp);
             return TRUE;
         
@@ -15918,6 +15919,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
             gBattleMons[battler].type3 = TYPE_MYSTERY;
             gBattlerAbility = battler;
             gBattleScripting.abilityPopupOverwrite = ABILITY_COLOR_SPECTRUM;
+            PREPARE_TYPE_BUFFER(gBattleTextBuff1, newType);
             BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
             }
             return TRUE;
@@ -16127,4 +16129,11 @@ int HandleFollowupAttackAbilityAs(int ability, int battler, int target, int move
     }
 
     return FALSE;
+}
+
+int IsStickyHold(int battler)
+{
+    int ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);
+    if (!ability) ability = BattlerHasAbility(battler, ABILITY_SUPERSWEET_SYRUP, TRUE);
+    return ability;
 }
