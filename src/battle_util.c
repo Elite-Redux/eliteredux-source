@@ -5967,8 +5967,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             {
                 if (ShouldChangeFormHpBased(battler))
                 {
-                    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-                    return effect;
+                    gStackBattler1 = battler;
+                    BattleScriptCall(BattleScript_StackBattlerFormChange);
+                    effect = TRUE;
                 }
             }
         }
