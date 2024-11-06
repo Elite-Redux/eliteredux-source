@@ -9701,6 +9701,10 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_SAND_GUARD:
             if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(battlerAtk, WEATHER_SANDSTORM_ANY)) MUL(.5);
             return;
+
+        case ABILITY_LEAF_GUARD_CLONE:
+            if (IS_MOVE_PHYSICAL(move) && IsBattlerWeatherAffected(battlerAtk, WEATHER_SUN_ANY)) MUL(.5);
+            return;
         
         case ABILITY_RIVALRY:
             {
