@@ -9055,6 +9055,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         }
         return;
     
+    case ABILITY_MAGICAL_FISTS:
     case ABILITY_NIKA:
     case ABILITY_POWER_FISTS:
     case ABILITY_IRON_FIST:
@@ -10177,6 +10178,7 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     u8 highestAttackStat = STAT_ATK;
     u32 atkStat;
     u16 modifier;
+    int i;
 
     if (gBattleMoves[move].effect == EFFECT_LASH_OUT)
         isCrit = TRUE;
@@ -10191,66 +10193,71 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         atkStatToUse = STAT_DEF;
     }
     else {
-        // Speed Force
-        if (BattlerHasAbility(battlerAtk, ABILITY_SPEED_FORCE, FALSE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+        for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
         {
-            secondaryAtkStatToUse = STAT_SPEED;
-        }
-        // Terminal Velocity
-        if (BattlerHasAbility(battlerAtk, ABILITY_TERMINAL_VELOCITY, FALSE) && IS_MOVE_SPECIAL(move))
-        {
-            secondaryAtkStatToUse = STAT_SPEED;
-        }
-        // Slipstream
-        if (BattlerHasAbility(battlerAtk, ABILITY_SLIPSTREAM, FALSE))
-        {
-            secondaryAtkStatToUse = STAT_SPEED;
-        }
-        // Power Core
-        else if (BattlerHasAbility(battlerAtk, ABILITY_POWER_CORE, FALSE))
-        {
-            secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_JUGGERNAUT, FALSE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-        {
-            secondaryAtkStatToUse = STAT_DEF;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_IRON_GIANT, FALSE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-        {
-            secondaryAtkStatToUse = STAT_DEF;
-        }
-
-	    // Equinox
-        if (BattlerHasAbility(battlerAtk, ABILITY_EQUINOX, FALSE))
-        {
-            u32 atk = CalculateStat(battlerAtk, STAT_ATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
-            u32 spAtk = CalculateStat(battlerAtk, STAT_SPATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
-            atkStatToUse = atk > spAtk ? STAT_ATK : STAT_SPATK;
-        }
-        // Ancient Idol
-        else if (BattlerHasAbility(battlerAtk, ABILITY_ANCIENT_IDOL, FALSE))
-        {
-            atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MOMENTUM, FALSE) && gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
-        {
-            atkStatToUse = STAT_SPEED;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_IMPULSE, FALSE) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT))
-        {
-            atkStatToUse = STAT_SPEED;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MAXIMUM_ACCELERATION, FALSE))
-        {
-            atkStatToUse = STAT_SPEED;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_MIND_CRUSH, FALSE) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        {
-            atkStatToUse = STAT_SPATK;
-        }
-        else if (BattlerHasAbility(battlerAtk, ABILITY_ROUSED_FANGS, FALSE) && gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        {
-            atkStatToUse = STAT_SPATK;
+            switch (GetAbilityAtIndex(battlerAtk, i, FALSE))
+            {
+            // Secondary stat
+            case ABILITY_SPEED_FORCE:
+                REQUIRE(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+                secondaryAtkStatToUse = STAT_SPEED;
+                break;
+                
+            case ABILITY_TERMINAL_VELOCITY:
+                REQUIRE(IS_MOVE_SPECIAL(move))
+                secondaryAtkStatToUse = STAT_SPEED;
+                break;
+            
+            case ABILITY_SLIPSTREAM:
+                secondaryAtkStatToUse = STAT_SPEED;
+                break;
+            
+            case ABILITY_POWER_CORE:
+                secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
+                break;
+            
+            case ABILITY_IRON_GIANT:
+            case ABILITY_JUGGERNAUT:
+                REQUIRE(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+                secondaryAtkStatToUse = STAT_DEF;
+                break;
+            
+            // Primary stat
+            case ABILITY_EQUINOX:
+                u32 atk = CalculateStat(battlerAtk, STAT_ATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
+                u32 spAtk = CalculateStat(battlerAtk, STAT_SPATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
+                atkStatToUse = atk > spAtk ? STAT_ATK : STAT_SPATK;
+                break;
+            
+            case ABILITY_ANCIENT_IDOL:
+                atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF;
+                break;
+            
+            case ABILITY_MOMENTUM:
+                REQUIRE(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+                atkStatToUse = STAT_SPEED;
+                break;
+            
+            case ABILITY_IMPULSE:
+                REQUIRE_NOT(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)
+                atkStatToUse = STAT_SPEED;
+                break;
+            
+            case ABILITY_MAXIMUM_ACCELERATION:
+                atkStatToUse = STAT_SPEED;
+                break;
+            
+            case ABILITY_MIND_CRUSH:
+            case ABILITY_ROUSED_FANGS:
+                REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+                atkStatToUse = STAT_SPATK;
+                break;
+            
+            case ABILITY_MAGICAL_FISTS:
+                REQUIRE(IS_IRON_FIST(battlerAtk, move))
+                atkStatToUse = STAT_SPATK;
+                break;
+            }
         }
     }
 
@@ -10398,45 +10405,58 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
     u8 noPositiveStatStages = isCrit || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, TRUE));
     u8 isUnaware = IsUnaware(battlerAtk) || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED;
     u16 modifier;
+    int i;
 
-    if (gBattleMoves[move].splitFlag == HITS_SPDEF)
+    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
     {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (gBattleMoves[move].splitFlag == HITS_DEF || IS_MOVE_PHYSICAL(move))
-    {
-        defStatToUse = STAT_DEF;
-    }
-    else // is special
-    {
-        defStatToUse = STAT_SPDEF;
+        switch (GetAbilityAtIndex(battlerAtk, i, FALSE))
+        {
+        case ABILITY_POWER_FISTS:
+            REQUIRE(IS_IRON_FIST(battlerAtk, move))
+            defStatToUse = STAT_SPDEF;
+            break;
+        
+        case ABILITY_SOUL_CRUSHER:
+            REQUIRE(gBattleMoves[move].hammerBased)
+            defStatToUse = STAT_SPDEF;
+            break;
+        
+        case ABILITY_POWER_EDGE:
+            REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+            defStatToUse = STAT_SPDEF;
+            break;
+        
+        case ABILITY_ROUNDHOUSE:
+            REQUIRE(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+            CHOOSE_HIGHEST_DEFENSE:
+            u32 def = CalculateStat(battlerDef, STAT_DEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
+            u32 spDef = CalculateStat(battlerDef, STAT_SPDEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
+            defStat = min(def, spDef);
+            defStatToUse = defStat == def ? STAT_DEF : STAT_SPDEF;
+            break;
+        
+        case ABILITY_DEADEYE:
+            REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].arrowBased)
+            goto CHOOSE_HIGHEST_DEFENSE;
+        }
+
+        REQUIRE_NOT(defStatToUse)
     }
 
-    if (BattlerHasAbility(battlerAtk, ABILITY_POWER_FISTS, FALSE) && IS_IRON_FIST(battlerAtk, move))
+    if (!defStatToUse)
     {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_SOUL_CRUSHER, FALSE) && gBattleMoves[move].hammerBased)
-    {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_POWER_EDGE, FALSE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) 
-    {
-        defStatToUse = STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_ROUNDHOUSE, FALSE) && gBattleMoves[move].flags & FLAG_STRIKER_BOOST) 
-    {
-        u32 def = CalculateStat(battlerDef, STAT_DEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
-        u32 spDef = CalculateStat(battlerDef, STAT_SPDEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
-        defStat = min(def, spDef);
-        defStatToUse = defStat == def ? STAT_DEF : STAT_SPDEF;
-    }
-    else if (BattlerHasAbility(battlerAtk, ABILITY_DEADEYE, FALSE) && (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].arrowBased))
-    {
-        u32 def = CalculateStat(battlerDef, STAT_DEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
-        u32 spDef = CalculateStat(battlerDef, STAT_SPDEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
-        defStat = min(def, spDef);
-        defStatToUse = defStat == def ? STAT_DEF : STAT_SPDEF;
+        if (gBattleMoves[move].splitFlag == HITS_SPDEF)
+        {
+            defStatToUse = STAT_SPDEF;
+        }
+        else if (gBattleMoves[move].splitFlag == HITS_DEF || IS_MOVE_PHYSICAL(move))
+        {
+            defStatToUse = STAT_DEF;
+        }
+        else // is special
+        {
+            defStatToUse = STAT_SPDEF;
+        }
     }
 
     defStat = CalculateStat(battlerDef, defStatToUse, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);

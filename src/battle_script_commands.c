@@ -10278,16 +10278,32 @@ static void Cmd_various(void)
         }
         return;
     case VARIOUS_TRY_ACTIVATE_BATTLE_BOND:
-        if (gBattleMons[gBattlerAttacker].species == SPECIES_GRENINJA_BATTLE_BOND
+        if (BattlerHasAbility(gBattlerAttacker, ABILITY_BATTLE_BOND, FALSE)
             && HasAttackerFaintedTarget()
             && CalculateEnemyPartyCount() > 1)
         {
-            PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerAttacker].species);
-            gBattleStruct->changedSpecies[gBattlerPartyIndexes[gBattlerAttacker]] = gBattleMons[gBattlerAttacker].species;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_GRENINJA_ASH);
-            gBattleMons[gBattlerAttacker].species = SPECIES_GRENINJA_ASH;
-            BattleScriptCall(BattleScript_BattleBondActivatesOnMoveEndAttacker);
-            return;
+            int species = gBattleMons[gBattlerAttacker].species;
+            int newSpecies = 0;
+            switch (species)
+            {
+            case SPECIES_GRENINJA_BATTLE_BOND:
+                newSpecies = SPECIES_GRENINJA_ASH;
+                break;
+
+            case SPECIES_DARMANITAN_REDUX:
+                newSpecies = SPECIES_DARMANITAN_REDUX_BOND;
+                break;
+            }
+
+            if (newSpecies)
+            {
+                PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerAttacker].species);
+                gBattleStruct->changedSpecies[gBattlerPartyIndexes[gBattlerAttacker]] = gBattleMons[gBattlerAttacker].species;
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+                gBattleMons[gBattlerAttacker].species = newSpecies;
+                BattleScriptCall(BattleScript_BattleBondActivatesOnMoveEndAttacker);
+                return;
+            }
         }
         break;
     case VARIOUS_CONSUME_BERRY:
