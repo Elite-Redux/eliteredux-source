@@ -761,8 +761,9 @@
 #define ABILITY_TERAFORM_ZERO 739 // Tera Shell + clears weather and terrain on first entry.
 #define ABILITY_SET_ABLAZE 740 // Inflicting burn also inflicts fear.
 #define ABILITY_BREAKWATER 741 // Swift Swim + Stall.
+#define ABILITY_MAGICAL_FISTS 742 // Punching moves use Special Attack and get a 1.3x boost.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BREAKWATER + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_MAGICAL_FISTS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
