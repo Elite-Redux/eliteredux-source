@@ -1125,7 +1125,7 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_BASS_BOOSTED] = 1,
     [ABILITY_CHROME_COAT] = 1,
     [ABILITY_PURIFYING_SALT] = 1,
-    [ABILITY_LEAF_GUARD_CLONE] = 1,
+    [ABILITY_SUN_BASKING] = 1,
     [ABILITY_GOOD_AS_GOLD] = 1,
     [ABILITY_THERMAL_EXCHANGE] = 1,
     [ABILITY_NOISE_CANCEL] = 1,
@@ -5580,20 +5580,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                 gBattleScripting.battler = BATTLE_PARTNER(battler);
             else
                 gBattleScripting.battler = battler;
-        }
 
-        if (effect == 1)
-        {
-            if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS) {
-                gHitMarker |= HITMARKER_NO_PPDEDUCT;
-                gBattleMons[gBattlerAttacker].status2 &= ~(STATUS2_MULTIPLETURNS);
-            }
-
-            if (gStatuses3[gBattlerAttacker] & STATUS3_SEMI_INVULNERABLE)
-                gStatuses3[gBattlerAttacker] &= ~STATUS3_SEMI_INVULNERABLE;
-        }
-        else if (effect == 2)
-        {
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
                 gHitMarker |= HITMARKER_NO_PPDEDUCT;
         }
@@ -9728,6 +9715,12 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         case ABILITY_BAD_OMEN:
             if (isCrit) MUL(.25);
             return;
+        
+        case ABILITY_SUN_BASKING:
+            REQUIRE(IsBattlerWeatherAffected(battlerDef, WEATHER_SUN_ANY))
+            REQUIRE(IS_MOVE_PHYSICAL(move))
+            MUL(.5);
+            return;
     }
 }
 
@@ -12487,134 +12480,139 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     return 0;
 }
 
+static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup);
+static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup);
+static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup);
+
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u8* overrideBattler, u16* abilityPopup)
 {
-    int ability;
-    int actualAttacker = gBattlerAttacker;
-    int triggeringBattler;
-    int effect = 0;
-    gBattlerAttacker = attacker;
+    int i, j;
 
-    if ((ability = IsSoundproof(battler))
-        && !(gBattleMoves[move].target & MOVE_TARGET_USER)
-        && gBattleMoves[move].flags & FLAG_SOUND)
+    for (i = 0; i < gBattlersCount; i++)
     {
-        if (ability == ABILITY_NOISE_CANCEL && !BATTLER_HAS_ABILITY(battler, ABILITY_NOISE_CANCEL)) {
-            *overrideBattler = BATTLE_PARTNER(battler) + 1;
+        int testBattler = (battler + i) % gBattlersCount;
+        if (!IsBattlerAlive(testBattler)) continue;
+        for (j = 0; j < TOTAL_ABILITY_COUNT; j++)
+        {
+            int ability = GetAbilityAtIndex(testBattler, j, TRUE);
+            switch (i)
+            {
+            case 0:
+                if (HandleImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+                    return TRUE;
+                break;
+            
+            case 2:
+                if (HandleAlliedImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+                {
+                    *overrideBattler = testBattler;
+                    return TRUE;
+                }
+                break;
+            
+            default:
+                if (HandleAnyImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+                {
+                    *overrideBattler = testBattler;
+                    return TRUE;
+                }
+                break;
+            }
         }
+    }
 
-        *abilityPopup = ability;
-        *immunityScript = BattleScript_SoundproofProtected;
-        effect = 2;
-    }
-    else if (BATTLER_HAS_ABILITY(battler, ABILITY_WEATHER_CONTROL)
-        && !(GetBattlerBattleMoveTargetFlags(move, battler) & MOVE_TARGET_USER)
-        && gBattleMoves[move].flags & FLAG_WEATHER_BASED)
-    {
-        *abilityPopup = ABILITY_WEATHER_CONTROL;
-        *immunityScript = BattleScript_SoundproofProtected;
-        effect = 2;
-    }
-    else if (BATTLER_HAS_ABILITY(battler, ABILITY_DELTA_STREAM)
-        && !(gBattleMoves[move].target & MOVE_TARGET_USER)
-        && gBattleMoves[move].flags & FLAG_WEATHER_BASED)
-    {
-        *abilityPopup = ABILITY_DELTA_STREAM;
-        *immunityScript = BattleScript_SoundproofProtected;
-        effect = 2;
-    }
-    else if (BATTLER_HAS_ABILITY(battler, ABILITY_BULLETPROOF)
-        && gBattleMoves[move].flags & FLAG_BALLISTIC)
-    {
-        *abilityPopup = ABILITY_BULLETPROOF;
-        *immunityScript = BattleScript_SoundproofProtected;
-        effect = 2;
-    }
-    else if ((triggeringBattler = IsAbilityOnField(ABILITY_RADIANCE)) && moveType == TYPE_DARK)
-    {
-        triggeringBattler--;
-        *abilityPopup = ABILITY_RADIANCE;
-        if (triggeringBattler != battler) *overrideBattler = triggeringBattler;
-        *immunityScript = BattleScript_RadianceProtected;
-        effect = 1;
-    }
-    //Queenly Majesty
-    else if (!gProcessingExtraAttacks
-        && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_QUEENLY_MAJESTY))
-        && GetMovePriority(gBattlerAttacker, move, battler) > 0
-        && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
-    {
-        triggeringBattler--;
-        *abilityPopup = ABILITY_QUEENLY_MAJESTY;
-        if (triggeringBattler != battler) *overrideBattler = triggeringBattler;
-        *immunityScript = BattleScript_DazzlingProtected;
-        effect = 1;
-    }
-    //Dazzling
-    else if (!gProcessingExtraAttacks
-        && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_DAZZLING))
-        && GetMovePriority(gBattlerAttacker, move, battler) > 0
-        && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
-    {
-        triggeringBattler--;
-        *abilityPopup = ABILITY_DAZZLING;
-        if (triggeringBattler != battler) *overrideBattler = triggeringBattler;
-        *immunityScript = BattleScript_DazzlingProtected;
-        effect = 2;
-    }
-    //Unicorn
-    else if (!gProcessingExtraAttacks
-        && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_UNICORN))
-        && GetMovePriority(gBattlerAttacker, move, battler) > 0
-        && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
-    {
-        triggeringBattler--;
-        *abilityPopup = ABILITY_UNICORN;
-        if (triggeringBattler != battler) *overrideBattler = triggeringBattler;
-        *immunityScript = BattleScript_DazzlingProtected;
-        effect = 2;
-    }
-    //Armor Tail
-    else if (!gProcessingExtraAttacks
-        && (triggeringBattler = IsAbilityOnSide(battler, ABILITY_ARMOR_TAIL))
-        && GetMovePriority(gBattlerAttacker, move, battler) > 0
-        && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
-    {
-        triggeringBattler--;
-        *abilityPopup = ABILITY_ARMOR_TAIL;
-        if (triggeringBattler != battler) *overrideBattler = triggeringBattler;
-        *immunityScript = BattleScript_DazzlingProtected;
-        effect = 1;
-    }
-    //Sand Guard
-    else if (!gProcessingExtraAttacks
-        && BATTLER_HAS_ABILITY(battler, ABILITY_SAND_GUARD)
-        && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)
-        && GetMovePriority(gBattlerAttacker, move, battler) > 0
-        && GetBattlerSide(gBattlerAttacker) != GetBattlerSide(battler))
-    {
-        *abilityPopup = ABILITY_SAND_GUARD;
-        *immunityScript = BattleScript_DazzlingProtected;
-        effect = 2;
-    }
-    else if (!gProcessingExtraAttacks
-        && BlocksPrankster(move, gBattlerAttacker, gBattlerTarget, TRUE)
-        && !(IS_MOVE_STATUS(move) && BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_MAGIC_BOUNCE)))
+    if (!gProcessingExtraAttacks
+        && BlocksPrankster(move, attacker, battler, TRUE)
+        && !(IS_MOVE_STATUS(move) && BATTLER_HAS_ABILITY(battler, ABILITY_MAGIC_BOUNCE)))
     {
         *immunityScript = BattleScript_DarkTypePreventsPrankster;
-        effect = 2;
+        return TRUE;
     }
-    else if (BATTLER_HAS_ABILITY(battler, ABILITY_GOOD_AS_GOLD)
-        && battler != gBattlerAttacker
-        && IS_MOVE_STATUS(move))
+    
+    return FALSE;
+}
+
+static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
+{
+    switch (ability)
     {
-        *abilityPopup = ABILITY_GOOD_AS_GOLD;
+    case ABILITY_SOUNDPROOF:
+    case ABILITY_PARROTING:
+    case ABILITY_NOISE_CANCEL:
+        REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
+        REQUIRE_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
         *immunityScript = BattleScript_SoundproofProtected;
-        effect = 2;
+        return TRUE;
+
+    case ABILITY_DELTA_STREAM:
+    case ABILITY_WEATHER_CONTROL:
+        REQUIRE(gBattleMoves[move].flags & FLAG_WEATHER_BASED)
+        REQUIRE_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
+        *immunityScript = BattleScript_SoundproofProtected;
+        return TRUE;
+
+    case ABILITY_BULLETPROOF:
+        REQUIRE(gBattleMoves[move].flags & FLAG_BALLISTIC)
+        REQUIRE_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
+        *immunityScript = BattleScript_SoundproofProtected;
+        return TRUE;
+
+    case ABILITY_RADIANCE:
+        REQUIRE(moveType == TYPE_DARK)
+        *immunityScript = BattleScript_RadianceProtected;
+        return TRUE;
+
+    case ABILITY_SAND_GUARD:
+        REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
+        goto CHECK_DAZZLING_IMMUNITY;
+    
+    case ABILITY_SUN_BASKING:
+        REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
+        goto CHECK_DAZZLING_IMMUNITY;
+    
+    case ABILITY_QUEENLY_MAJESTY:
+    case ABILITY_UNICORN:
+    case ABILITY_ARMOR_TAIL:
+    case ABILITY_DAZZLING:
+    CHECK_DAZZLING_IMMUNITY:
+        REQUIRE_NOT(gProcessingExtraAttacks)
+        REQUIRE(attacker)
+        REQUIRE(GetBattlerSide(attacker) != GetBattlerSide(battler))
+        REQUIRE(GetMovePriority(attacker, move, battler))
+        *immunityScript = BattleScript_DazzlingProtected;
+        return TRUE;
+    
+    case ABILITY_GOOD_AS_GOLD:
+        REQUIRE(battler != attacker)
+        REQUIRE(IS_MOVE_STATUS(move))
+        *immunityScript = BattleScript_SoundproofProtected;
+        return TRUE;
     }
 
-    gBattlerAttacker = actualAttacker;
-    return effect;
+    return FALSE;
+}
+
+static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
+{
+    switch (ability)
+    {
+    case ABILITY_RADIANCE:
+        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript, abilityPopup);
+    }
+}
+
+static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
+{
+    switch (ability)
+    {
+    case ABILITY_NOISE_CANCEL:
+    case ABILITY_RADIANCE:
+    case ABILITY_QUEENLY_MAJESTY:
+    case ABILITY_UNICORN:
+    case ABILITY_ARMOR_TAIL:
+    case ABILITY_DAZZLING:
+        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript, abilityPopup);
+    }
 }
 
 int IsBloodStainAffected(int battler)

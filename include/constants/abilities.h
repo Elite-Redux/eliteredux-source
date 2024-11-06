@@ -604,7 +604,7 @@
 #define ABILITY_PERMAFROST_CLONE 582 // Takes 25% less damage from Super-effective moves.
 #define ABILITY_GALLANTRY 583 // Gets no damage for first hit.
 #define ABILITY_ORICHALCUM_PULSE 584 // Summons sun on entry. Raises Atk by 1.33x in sun.
-#define ABILITY_LEAF_GUARD_CLONE 585 // Immune to status conditions if sun is active.
+#define ABILITY_SUN_BASKING 585 // Blocks priority and reduces physical damage by 1/2 in sun.
 #define ABILITY_WINGED_KING 586 // Ups “supereffective” by 33%.
 #define ABILITY_HADRON_ENGINE 587 // Field becomes Electric. +33% SpAtk in Electric Terrain.
 #define ABILITY_IRON_SERPENT 588 // Ups “supereffective” by 33%.

@@ -8427,7 +8427,6 @@ u32 IsLeafGuardProtected(u32 battler)
         if (BATTLER_HAS_ABILITY(battler, ABILITY_LEAF_GUARD)) return ABILITY_LEAF_GUARD;
         if (BATTLER_HAS_ABILITY(battler, ABILITY_BIG_LEAVES)) return ABILITY_BIG_LEAVES;
         if (BATTLER_HAS_ABILITY(battler, ABILITY_JUNGLES_GUARD)) return ABILITY_JUNGLES_GUARD;
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_LEAF_GUARD_CLONE)) return ABILITY_LEAF_GUARD_CLONE;
     }
     
     return FALSE;

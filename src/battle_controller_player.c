@@ -1539,7 +1539,9 @@ void PrintBattleWindow_MoveSelection(void)
     move = moveInfo->moves[gMoveSelectionCursor[gActiveBattler]];
     movePower = gBattleMoves[move].power;
     isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
-    moveType  = gBattleMoves[move].type;
+    moveType = gBattleMoves[move].type;
+    gBattlerAttacker = gActiveBattler;
+    gHitMarker |= (ShouldSetMoldBreaker(gActiveBattler, move) && HITMARKER_MOLD_BREAKER);
     SetTypeBeforeUsingMove(move, gActiveBattler);
     GET_MOVE_TYPE(move, moveType);
     maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
