@@ -12819,7 +12819,31 @@ static const union AnimCmd sAnim_DARUMAKA_GALARIAN_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_DARUMAKA_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_DARMANITAN_GALARIAN_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_DARMANITAN_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_DARMANITAN_REDUX_BOND_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_DARMANITAN_REDUX_AURA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
@@ -19882,9 +19906,29 @@ static const union AnimCmd *const sAnims_DARUMAKA_GALARIAN[] ={
     sAnim_DARUMAKA_GALARIAN_1,
 };
 
+static const union AnimCmd *const sAnims_DARUMAKA_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DARUMAKA_REDUX_1,
+};
+
 static const union AnimCmd *const sAnims_DARMANITAN_GALARIAN[] ={
     sAnim_GeneralFrame0,
     sAnim_DARMANITAN_GALARIAN_1,
+};
+
+static const union AnimCmd *const sAnims_DARMANITAN_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DARMANITAN_REDUX_1,
+};
+
+static const union AnimCmd *const sAnims_DARMANITAN_REDUX_BOND[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DARMANITAN_REDUX_BOND_1,
+};
+
+static const union AnimCmd *const sAnims_DARMANITAN_REDUX_AURA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DARMANITAN_REDUX_AURA_1,
 };
 
 static const union AnimCmd *const sAnims_YAMASK_GALARIAN[] ={
@@ -20668,6 +20712,10 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(KROOKODILE),
     ANIM_CMD(DARUMAKA),
     ANIM_CMD(DARMANITAN),
+    ANIM_CMD(DARUMAKA_REDUX),
+    ANIM_CMD(DARMANITAN_REDUX),
+    ANIM_CMD(DARMANITAN_REDUX_AURA),
+    ANIM_CMD(DARMANITAN_REDUX_BOND),
     ANIM_CMD(MARACTUS),
     ANIM_CMD(SAGARACAS),
     ANIM_CMD(DWEBBLE),

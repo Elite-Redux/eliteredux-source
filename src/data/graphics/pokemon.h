@@ -8231,6 +8231,30 @@ const u32 gMonPalette_Luminositeon[]           = INCBIN_U32("graphics/pokemon/lu
 const u32 gMonShinyPalette_Luminositeon[]      = INCBIN_U32("graphics/pokemon/luminositeon/shiny.gbapal.lz");
 const u8  gMonIcon_Luminositeon[]              = INCBIN_U8("graphics/pokemon/luminositeon/icon.4bpp");
 
+const u32 gMonFrontPic_DarumakaRedux[]          = INCBIN_U32("graphics/pokemon/darumaka/redux/front.4bpp.lz");
+const u32 gMonBackPic_DarumakaRedux[]           = INCBIN_U32("graphics/pokemon/darumaka/redux/back.4bpp.lz");
+const u32 gMonPalette_DarumakaRedux[]           = INCBIN_U32("graphics/pokemon/darumaka/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_DarumakaRedux[]      = INCBIN_U32("graphics/pokemon/darumaka/redux/shiny.gbapal.lz");
+const u8  gMonIcon_DarumakaRedux[]              = INCBIN_U8("graphics/pokemon/darumaka/redux/icon.4bpp");
+
+const u32 gMonFrontPic_DarmanitanRedux[]          = INCBIN_U32("graphics/pokemon/darmanitan/redux/front.4bpp.lz");
+const u32 gMonBackPic_DarmanitanRedux[]           = INCBIN_U32("graphics/pokemon/darmanitan/redux/back.4bpp.lz");
+const u32 gMonPalette_DarmanitanRedux[]           = INCBIN_U32("graphics/pokemon/darmanitan/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_DarmanitanRedux[]      = INCBIN_U32("graphics/pokemon/darmanitan/redux/shiny.gbapal.lz");
+const u8  gMonIcon_DarmanitanRedux[]              = INCBIN_U8("graphics/pokemon/darmanitan/redux/icon.4bpp");
+
+const u32 gMonFrontPic_DarmanitanReduxAura[]          = INCBIN_U32("graphics/pokemon/darmanitan/redux/aura_mode/front.4bpp.lz");
+const u32 gMonBackPic_DarmanitanReduxAura[]           = INCBIN_U32("graphics/pokemon/darmanitan/redux/aura_mode/back.4bpp.lz");
+const u32 gMonPalette_DarmanitanReduxAura[]           = INCBIN_U32("graphics/pokemon/darmanitan/redux/aura_mode/normal.gbapal.lz");
+const u32 gMonShinyPalette_DarmanitanReduxAura[]      = INCBIN_U32("graphics/pokemon/darmanitan/redux/aura_mode/shiny.gbapal.lz");
+const u8  gMonIcon_DarmanitanReduxAura[]              = INCBIN_U8("graphics/pokemon/darmanitan/redux/aura_mode/icon.4bpp");
+
+const u32 gMonFrontPic_DarmanitanReduxBond[]          = INCBIN_U32("graphics/pokemon/darmanitan/redux/battle_bond/front.4bpp.lz");
+const u32 gMonBackPic_DarmanitanReduxBond[]           = INCBIN_U32("graphics/pokemon/darmanitan/redux/battle_bond/back.4bpp.lz");
+const u32 gMonPalette_DarmanitanReduxBond[]           = INCBIN_U32("graphics/pokemon/darmanitan/redux/battle_bond/normal.gbapal.lz");
+const u32 gMonShinyPalette_DarmanitanReduxBond[]      = INCBIN_U32("graphics/pokemon/darmanitan/redux/battle_bond/shiny.gbapal.lz");
+const u8  gMonIcon_DarmanitanReduxBond[]              = INCBIN_U8("graphics/pokemon/darmanitan/redux/battle_bond/icon.4bpp");
+
 const u32 gMonFrontPic_DuraludonPartner[]          = INCBIN_U32("graphics/pokemon/duraludon/partner/front.4bpp.lz");
 const u32 gMonBackPic_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/back.4bpp.lz");
 const u32 gMonPalette_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/normal.gbapal.lz");
