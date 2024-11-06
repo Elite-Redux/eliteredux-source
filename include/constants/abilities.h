@@ -753,7 +753,7 @@
 #define ABILITY_TO_THE_BONE 731 // Critical hits get a 1.5x boost and inflict bleeding.
 #define ABILITY_BLADE_DANCE 732 // Triggers 50 BP Leaf Blade after using a dance move.
 #define ABILITY_TAEKKYEON 733 // All attacks are dances.
-#define ABILITY_APE_SHIFT 734 // Anger Point + Heal status and always crits with below 50% HP.
+#define ABILITY_APE_SHIFT 734 // Transforms when below 50% HP, curing status and always critting.
 #define ABILITY_KNOW_YOUR_PLACE 735 // Contact attacks make foes move last for 5 turns.
 #define ABILITY_DEEP_CUTS 736 // Slashing moves have a 50% chance to inflict bleeding.
 #define ABILITY_LIFE_STEAL 737 // Steals 1/10 HP from foes each turn.

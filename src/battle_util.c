@@ -14001,18 +14001,13 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         return TRUE;
     
     case ABILITY_APE_SHIFT:
-        REQUIRE(IsBattlerAlive(battler))
-        if (!(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-            && gBattleMons[battler].species == SPECIES_SLAKING_MEGA
-            && ShouldChangeFormHpBased(battler))
-        {
-            BattleScriptCall(BattleScript_ApeShift);
+        REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+        REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
+        REQUIRE(ShouldChangeFormHpBased(battler))
 
-            if (!HandleDefenderAbilityAs(ABILITY_ANGER_POINT, battler, attacker, move, moveType))
-                BattleScriptCall(BattleScript_AbilityPopUp);
-            return TRUE;
-        }
-        else return HandleDefenderAbilityAs(ABILITY_ANGER_POINT, battler, attacker, move, moveType);
+        BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
+        BattleScriptCall(BattleScript_AbilityPopUp);
+        return TRUE;
         
     case ABILITY_CROWNED_SWORD:
     case ABILITY_ANGER_POINT:
