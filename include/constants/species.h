@@ -1889,8 +1889,12 @@
 #define SPECIES_SNORUNT_REDUX               REDUX_FORMS_START + 124
 #define SPECIES_GLALIE_REDUX                REDUX_FORMS_START + 125
 #define SPECIES_FROSLASS_REDUX              REDUX_FORMS_START + 126
+#define SPECIES_DARUMAKA_REDUX              REDUX_FORMS_START + 127
+#define SPECIES_DARMANITAN_REDUX            REDUX_FORMS_START + 128
+#define SPECIES_DARMANITAN_REDUX_AURA       REDUX_FORMS_START + 129
+#define SPECIES_DARMANITAN_REDUX_BOND       REDUX_FORMS_START + 130
 
-#define LAST_REDUX_FORM                     SPECIES_FROSLASS_REDUX
+#define LAST_REDUX_FORM                     SPECIES_DARMANITAN_REDUX_BOND
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1
