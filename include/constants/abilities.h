@@ -604,7 +604,7 @@
 #define ABILITY_PERMAFROST_CLONE 582 // Takes 25% less damage from Super-effective moves.
 #define ABILITY_GALLANTRY 583 // Gets no damage for first hit.
 #define ABILITY_ORICHALCUM_PULSE 584 // Summons sun on entry. Raises Atk by 1.33x in sun.
-#define ABILITY_LEAF_GUARD_CLONE 585 // Immune to status conditions if sun is active.
+#define ABILITY_SUN_BASKING 585 // Blocks priority and reduces physical damage by 1/2 in sun.
 #define ABILITY_WINGED_KING 586 // Ups “supereffective” by 33%.
 #define ABILITY_HADRON_ENGINE 587 // Field becomes Electric. +33% SpAtk in Electric Terrain.
 #define ABILITY_IRON_SERPENT 588 // Ups “supereffective” by 33%.
@@ -753,7 +753,7 @@
 #define ABILITY_TO_THE_BONE 731 // Critical hits get a 1.5x boost and inflict bleeding.
 #define ABILITY_BLADE_DANCE 732 // Triggers 50 BP Leaf Blade after using a dance move.
 #define ABILITY_TAEKKYEON 733 // All attacks are dances.
-#define ABILITY_APE_SHIFT 734 // Anger Point + Heal status and always crits with below 50% HP.
+#define ABILITY_APE_SHIFT 734 // Transforms when below 50% HP, curing status and always critting.
 #define ABILITY_KNOW_YOUR_PLACE 735 // Contact attacks make foes move last for 5 turns.
 #define ABILITY_DEEP_CUTS 736 // Slashing moves have a 50% chance to inflict bleeding.
 #define ABILITY_LIFE_STEAL 737 // Steals 1/10 HP from foes each turn.
@@ -761,8 +761,9 @@
 #define ABILITY_TERAFORM_ZERO 739 // Tera Shell + clears weather and terrain on first entry.
 #define ABILITY_SET_ABLAZE 740 // Inflicting burn also inflicts fear.
 #define ABILITY_BREAKWATER 741 // Swift Swim + Stall.
+#define ABILITY_MAGICAL_FISTS 742 // Punching moves use Special Attack and get a 1.3x boost.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_BREAKWATER + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_MAGICAL_FISTS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

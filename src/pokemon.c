@@ -10965,18 +10965,15 @@ u16 GetFormShiftSpecies(u16 species)
     bool8 canMegaEvolve = gSaveBlock2Ptr->permanentMegaMode && CheckBagHasItem(ITEM_MEGA_BRACELET, 1) && FlagGet(FLAG_SYS_RECEIVED_KEYSTONE); //Check if the player has the Mega Bracelet and the Keystone
     u16 baseSpecies;
     u8 i;
-
-    switch (species)
+    
+    if (gFormChangeTable[species][0].method == EVO_FORM_SHIFT || gFormChangeTable[species][0].method == EVO_FORM_SHIFT_GENDER)
     {
-    case SPECIES_DARMANITAN_GALARIAN:
-    case SPECIES_DARMANITAN_ZEN_MODE_GALARIAN:
-        baseSpecies = SPECIES_DARMANITAN_GALARIAN;
-        break;
-    default:
-        baseSpecies = GetFormSpeciesId(species, 0);
-        break;
+        baseSpecies = species;
     }
-    if (!baseSpecies) return SPECIES_NONE;
+    else
+    {
+        baseSpecies = GetFormSpeciesId(species, 0);
+    }
 
     for (i = 0; gFormChangeTable[baseSpecies][i].method == EVO_FORM_SHIFT || gFormChangeTable[baseSpecies][i].method == EVO_FORM_SHIFT_GENDER; i++)
     {
@@ -11144,6 +11141,10 @@ SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_CONTINENTAL, "Vivillon Continental")
 SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_HIGH_PLAINS, "Vivillon High Plains")
 SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_GARDEN, "Vivillon Gardens")
 SPECIES_NAME_LONG_VALUE(SPECIES_VIVILLON_ELEGANT, "Vivillon Elegant")
+
+SPECIES_NAME_LONG_VALUE(SPECIES_DARMANITAN_ZEN_MODE, "Darmanitan Zen")
+
+SPECIES_NAME_LONG_VALUE(SPECIES_DARMANITAN_REDUX_AURA, "Darmanitan Aura")
 
 const u8* GetSpeciesLongName(u16 species)
 {
@@ -11358,6 +11359,11 @@ const u8* GetSpeciesLongName(u16 species)
         RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_HIGH_PLAINS)
         RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_GARDEN)
         RETURN_SPECIES_NAME_LONG(SPECIES_VIVILLON_ELEGANT)
+
+        case SPECIES_DARMANITAN_ZEN_MODE_GALARIAN:
+        RETURN_SPECIES_NAME_LONG(SPECIES_DARMANITAN_ZEN_MODE)
+
+        RETURN_SPECIES_NAME_LONG(SPECIES_DARMANITAN_REDUX_AURA)
 
         default:
             return NULL;

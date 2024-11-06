@@ -559,6 +559,7 @@ static const u8 sAbilityVesselOfRuinDescription[] = _("Lowers the Special Attack
 static const u8 sAbilityBeadsOfRuinDescription[] = _("Lowers the Special Defense\nof other Pokemon by 25%.");
 static const u8 sAbilityGallantryDescription[] = _("Gets no damage for\nfirst hit.");
 static const u8 sAbilityOrichalcumPulseDescription[] = _("Summons sun on entry.\nRaises Atk by 1.33x in sun.");
+static const u8 sAbilitySunBaskingDescription[] = _("Blocks priority and reduces\nphysical damage by 1/2 in sun.");
 static const u8 sAbilityWingedKingDescription[] = _("Ups “supereffective” by 33%.");
 static const u8 sAbilityHadronEngineDescription[] = _("Field becomes Electric.\n+33% SpAtk in Electric Terrain.");
 static const u8 sAbilityWeatherDoubleBoostDescription[] = _("Sun boosts Water.\nRain boosts Fire.");
@@ -702,7 +703,7 @@ static const u8 sAbilityRazorSharpDescription[] = _("Critical hits also inflict 
 static const u8 sAbilityToTheBoneDescription[] = _("Critical hits get a 1.5x boost and\ninflict bleeding.");
 static const u8 sAbilityBladeDanceDescription[] = _("Triggers 50 BP Leaf Blade after\nusing a dance move.");
 static const u8 sAbilityTaekkyeonDescription[] = _("All attacks are dances.");
-static const u8 sAbilityApeShiftDescription[] = _("Anger Point + Heal status and\nalways crits with below 50% HP.");
+static const u8 sAbilityApeShiftDescription[] = _("Transforms when below 50% HP,\ncuring status and always critting.");
 static const u8 sAbilityKnowYourPlaceDescription[] = _("Contact attacks make foes move\nlast for 5 turns.");
 static const u8 sAbilityDeepCutsDescription[] = _("Slashing moves have a 50%\nchance to inflict bleeding.");
 static const u8 sAbilityLifeStealDescription[] = _("Steals 1/10 HP from foes each\nturn.");
@@ -710,6 +711,7 @@ static const u8 sAbilityRudeAwakeningDescription[] = _("Raises all stats becomes
 static const u8 sAbilityTeraformZeroDescription[] = _("Tera Shell + clears weather and\nterrain on first entry.");
 static const u8 sAbilitySetAblazeDescription[] = _("Inflicting burn also inflicts fear.");
 static const u8 sAbilityBreakwaterDescription[] = _("Swift Swim + Stall.");
+static const u8 sAbilityMagicalFistsDescription[] = _("Punching moves use Special\nAttack and get a 1.3x boost.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1298,7 +1300,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_PERMAFROST_CLONE] = _("Thick Skin"),
     [ABILITY_GALLANTRY] = _("Gallantry"),
     [ABILITY_ORICHALCUM_PULSE] = _("Orichalcum Pulse"),
-    [ABILITY_LEAF_GUARD_CLONE] = _("Sun Basking"),
+    [ABILITY_SUN_BASKING] = _("Sun Basking"),
     [ABILITY_WINGED_KING] = _("Winged King"),
     [ABILITY_HADRON_ENGINE] = _("Hadron Engine"),
     [ABILITY_IRON_SERPENT] = _("Iron Serpent"),
@@ -1455,6 +1457,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_TERAFORM_ZERO] = _("Teraform Zero"),
     [ABILITY_SET_ABLAZE] = _("Set Ablaze"),
     [ABILITY_BREAKWATER] = _("Breakwater"),
+    [ABILITY_MAGICAL_FISTS] = _("Magical Fists"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2044,7 +2047,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_PERMAFROST_CLONE] = sAbilityPermafrostDescription,
     [ABILITY_GALLANTRY] = sAbilityGallantryDescription,
     [ABILITY_ORICHALCUM_PULSE] = sAbilityOrichalcumPulseDescription,
-    [ABILITY_LEAF_GUARD_CLONE] = sAbilityLeafGuardDescription,
+    [ABILITY_SUN_BASKING] = sAbilitySunBaskingDescription,
     [ABILITY_WINGED_KING] = sAbilityWingedKingDescription,
     [ABILITY_HADRON_ENGINE] = sAbilityHadronEngineDescription,
     [ABILITY_IRON_SERPENT] = sAbilityWingedKingDescription,
@@ -2201,4 +2204,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_TERAFORM_ZERO] = sAbilityTeraformZeroDescription,
     [ABILITY_SET_ABLAZE] = sAbilitySetAblazeDescription,
     [ABILITY_BREAKWATER] = sAbilityBreakwaterDescription,
+    [ABILITY_MAGICAL_FISTS] = sAbilityMagicalFistsDescription,
 };

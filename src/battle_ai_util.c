@@ -123,7 +123,7 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_KEEN_EYE] = 1,
     [ABILITY_KLUTZ] = -1,
     [ABILITY_LEAF_GUARD] = 2,
-    [ABILITY_LEAF_GUARD_CLONE] = 2,
+    [ABILITY_SUN_BASKING] = 2,
     [ABILITY_LEVITATE] = 7,
     [ABILITY_LIGHT_METAL] = 2,
     [ABILITY_LIGHTNING_ROD] = 7,
@@ -1488,7 +1488,6 @@ bool32 ShouldSetSun(u8 battlerAtk, u16 holdEffect)
       || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FLOWER_GIFT)
       || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FORECAST)
       || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LEAF_GUARD)
-      || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LEAF_GUARD_CLONE)
       || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SOLAR_POWER)
       || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HARVEST)
       || HasMoveWithType(battlerAtk, TYPE_FIRE)

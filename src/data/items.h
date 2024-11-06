@@ -9572,7 +9572,7 @@ const struct Item gItems[] =
 
     [ITEM_MAWILITE_R_B] = 
     {
-        .name = _("Mawilite R"), //ToChange
+        .name = _("Mawilite R B"), //ToChange
         .itemId = ITEM_MAWILITE_R_B,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,
