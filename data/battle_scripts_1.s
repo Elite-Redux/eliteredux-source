@@ -8981,6 +8981,14 @@ BattleScript_TeraformZero_ClearTerrain:
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
+BattleScript_StackBattlerFormChange::
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
+	copybyte gBattlerAbility, gStackBattler1
+	call BattleScript_AttackerFormChange
+	readattackerfromstack3
+	return
+
 BattleScript_AttackerFormChangeEnd3::
 	call BattleScript_AttackerFormChange
 	end3
