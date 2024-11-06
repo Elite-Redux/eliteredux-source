@@ -3109,7 +3109,7 @@ BattleScript_EffectTrickRoom:
 	attackcanceler
 	attackstring
 	ppreduce
-	setroom
+	setroom BattleScript_ButItFailedAtkStringPpReduce
 	attackanimation
 	waitanimation
 	printfromtable gRoomsStringIds
@@ -3130,7 +3130,7 @@ BattleScript_EffectMagicRoom:
 	attackcanceler
 	attackstring
 	ppreduce
-	setroom
+	setroom BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	printfromtable gRoomsStringIds
