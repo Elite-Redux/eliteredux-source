@@ -6586,15 +6586,13 @@ bool32 CanBleed(u8 battlerId)
 
 bool32 CanBeConfused(u8 battlerId)
 {
-    if (!(gBattleMons[battlerId].status2 & STATUS2_CONFUSION) && IsMyceliumMightActive(gBattlerAttacker))
-        return TRUE;
+    if (gBattleMons[battlerId].status2 & STATUS2_CONFUSION) return FALSE;
+    if (IsMyceliumMightActive(gBattlerAttacker)) return TRUE;
 
     if (BATTLER_HAS_ABILITY(battlerId, ABILITY_OWN_TEMPO)
         || BATTLER_HAS_ABILITY(battlerId, ABILITY_DISCIPLINE)
         || BATTLER_HAS_ABILITY(battlerId, ABILITY_ROCK_HEAD)
-        || BATTLER_HAS_ABILITY(battlerId, ABILITY_STEEL_BARREL)
-        || gBattleMons[battlerId].status2 & STATUS2_CONFUSION
-        || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN))
+        || BATTLER_HAS_ABILITY(battlerId, ABILITY_STEEL_BARREL))
         return FALSE;
     return TRUE;
 }
