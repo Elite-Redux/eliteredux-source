@@ -476,8 +476,6 @@ u16 getHallofFameSpecies(u8 num) {
             break;
         case SPECIES_GRENINJA_BATTLE_BOND:
             return SPECIES_GRENINJA_ASH;
-        case SPECIES_TERAPAGOS:
-            return SPECIES_TERAPAGOS_STELLAR;
         break;
     }
 
