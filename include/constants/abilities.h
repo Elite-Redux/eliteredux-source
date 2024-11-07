@@ -74,7 +74,7 @@
 #define ABILITY_DROUGHT 70 // Summons sun on entry. Lasts 8 turns.
 #define ABILITY_ARENA_TRAP 71 // Enemies can't flee. Ghosts and ungrounded Pokémon are immune.
 #define ABILITY_VITAL_SPIRIT 72 // Can't fall asleep. Heals status after using Fighting-type moves.
-#define ABILITY_WHITE_SMOKE 73 // Sets Smokescreen on switch-in.
+#define ABILITY_WHITE_SMOKE 73 // Sets Smokescreen for 3 turns on switch-in.
 #define ABILITY_PURE_POWER 74 // Doubles own Attack stat. Boosts raw stat, not base stat.
 #define ABILITY_SHELL_ARMOR 75 // Immune to critical hits. Takes 20% less damage from all attacks.
 #define ABILITY_AIR_LOCK 76 // Clears weather and prevents its effects.

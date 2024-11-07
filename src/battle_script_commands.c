@@ -3911,7 +3911,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 if (!gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].smokescreenTimer)
                 {
                     int side = GET_BATTLER_SIDE(gBattlerAttacker);
-                    gSideTimers[side].smokescreenTimer = 5;
+                    gSideTimers[side].smokescreenTimer = GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LIGHT_CLAY ? SCREEN_DURATION_EXTENDED : SCREEN_DURATION;
                     gSideTimers[side].started.smokescreen = TRUE;
                     gSideTimers[side].smokescreenBattler = gBattlerAttacker;
                     gSideStatuses[side] |= SIDE_STATUS_SMOKESCREEN;
