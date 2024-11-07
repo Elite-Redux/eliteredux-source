@@ -236,7 +236,7 @@
 #define ABILITY_SOUL_HEART 220 // KOs dealt anywhere on the field raise Sp. Atk by one stage.
 #define ABILITY_TANGLING_HAIR 221 // Lowers Speed of enemies that make contact with this Pokémon.
 #define ABILITY_RECEIVER 222 // In Double Battles, copies its fainting partner's ability.
-#define ABILITY_POWER_OF_ALCHEMY 223 // Remove or turns enemy items into Black Sludge or Big Nugget on entry.
+#define ABILITY_POWER_OF_ALCHEMY 223 // Turns foe's item into Sludge and Sludge into Nuggets on entry.
 #define ABILITY_BEAST_BOOST 224 // Dealing a KO raises highest calculated stat by one stage.
 #define ABILITY_RKS_SYSTEM 225 // Held Memory determines its type. Also has Protean + Adaptability.
 #define ABILITY_ELECTRIC_SURGE 226 // Casts Electric Terrain on entry. Lasts 8 turns.
