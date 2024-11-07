@@ -917,6 +917,7 @@ static const u8 sText_Trapped[] = _("{B_DEF_NAME_WITH_PREFIX} is trapped!");
 static const u8 sText_HoneyGather[] = _("{B_ATK_NAME_WITH_PREFIX} found some\n{B_LAST_ITEM}!");
 static const u8 sText_LifeSteal[] = _("{B_ATK_NAME_WITH_PREFIX} drains\n{B_DEF_NAME_WITH_PREFIX}'s health!");
 static const u8 sText_RudeAwakening[] = _("{B_ATK_NAME_WITH_PREFIX} wakes up\nenraged!");
+static const u8 sText_Cutthroat[] = _("{B_ATK_NAME_WITH_PREFIX} readies\ntheir blade!");
 const u8 gText_PkmnsXPreventsSwitching[] = _("{STR_VAR_1}'s Ability\nprevents switching!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_PlayerDefeatedLinkTrainer[] = _("Player defeated\n{B_LINK_OPPONENT1_NAME}!");
 static const u8 sText_TwoLinkTrainersDefeated[] = _("Player beat {B_LINK_OPPONENT1_NAME}\nand {B_LINK_OPPONENT2_NAME}!");
@@ -1934,6 +1935,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_HONEYGATHER - 12] = sText_HoneyGather,
     [STRINGID_LIFE_STEAL - 12] = sText_LifeSteal,
     [STRINGID_RUDE_AWAKENING - 12] = sText_RudeAwakening,
+    [STRINGID_CUTTHROAT - 12] = sText_Cutthroat,
 };
 
 const u16 gMentalHerbCureStringIds[] = 
@@ -2024,6 +2026,7 @@ const u16 gSwitchInAbilityStringIds[] =
     [B_MSG_SWITCHIN_WHITE_SMOKE] = STRINGID_WHITE_SMOKE,
     [B_MSG_SWITCHIN_HOT_COALS] = STRINGID_HOT_COALS_SET,
     [B_MSG_SWITCHIN_BLOOD_STAIN] = STRINGID_BLOOD_STAIN_ANNOUNCE,
+    [B_MSG_SWITCHIN_CUTTHROAT] = STRINGID_CUTTHROAT,
 };
 
 const u16 gParadoxBoostSourceIds[] = 

@@ -3911,7 +3911,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 if (!gSideTimers[GET_BATTLER_SIDE(gBattlerAttacker)].smokescreenTimer)
                 {
                     int side = GET_BATTLER_SIDE(gBattlerAttacker);
-                    gSideTimers[side].smokescreenTimer = 5;
+                    gSideTimers[side].smokescreenTimer = GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LIGHT_CLAY ? SCREEN_DURATION_EXTENDED : SCREEN_DURATION;
                     gSideTimers[side].started.smokescreen = TRUE;
                     gSideTimers[side].smokescreenBattler = gBattlerAttacker;
                     gSideStatuses[side] |= SIDE_STATUS_SMOKESCREEN;
@@ -11461,6 +11461,62 @@ static void Cmd_various(void)
             gBattlescriptCurrInstr = ptr;
         }
         break;
+    case VARIOUS_JUMP_IF_ABILITY_STATE:
+        {
+        int type = READ_8_INC;
+        int ability = READ_16_INC;
+        int state = READ_32_INC;
+        ptr = READ_PTR_INC;
+        REQUIRE(BattlerHasAbility(gActiveBattler, ability, TRUE))
+        switch (type)
+        {
+            case CMP_COMMON_BITS:
+                REQUIRE(state & GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+                
+            case CMP_NO_COMMON_BITS:
+                REQUIRE_NOT(state & GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+                
+            case CMP_EQUAL:
+                REQUIRE(state == GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+                
+            case CMP_NOT_EQUAL:
+                REQUIRE(state != GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+                
+            case CMP_GREATER_THAN:
+                REQUIRE(state > GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+
+            case CMP_LESS_THAN:
+                REQUIRE(state < GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+        }
+        break;
+        }
+    case VARIOUS_SET_ABILITY_STATE:
+        {
+        int ability = READ_16_INC;
+        int state = READ_32_INC;
+        ptr = READ_PTR_INC;
+        if (!BattlerHasAbility(gActiveBattler, ability, TRUE) || GetAbilityState(gActiveBattler, ability) == state)
+        {
+            gBattlescriptCurrInstr = ptr;
+        }
+        else
+        {
+            SetAbilityState(gActiveBattler, ability, state);
+        }
+        break;
+        }
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 

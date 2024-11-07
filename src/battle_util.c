@@ -15153,6 +15153,14 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         BattleScriptPushCursorAndCallback(BattleScript_BattlerCoiledUp);
         return TRUE;
     
+    case ABILITY_CUTTHROAT:
+        REQUIRE_NOT(GetAbilityState(battler, ability))
+
+        SetAbilityState(battler, ability, TRUE);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CUTTHROAT;
+        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
+        return TRUE;
+    
     case ABILITY_AIR_BLOWER:
         REQUIRE_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
         {
@@ -15231,7 +15239,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         REQUIRE_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
         {
         int side = GET_BATTLER_SIDE(battler);
-        gSideTimers[side].smokescreenTimer = 5;
+        gSideTimers[side].smokescreenTimer = GetBattlerHoldEffect(battler, TRUE) == ITEM_LIGHT_CLAY ? SCREEN_DURATION : SCREEN_DURATION_SHORT;
         gSideTimers[side].started.smokescreen = TRUE;
         gSideTimers[side].smokescreenBattler = battler;
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_WHITE_SMOKE;

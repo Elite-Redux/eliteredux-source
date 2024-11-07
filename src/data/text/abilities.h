@@ -70,7 +70,7 @@ static const u8 sAbilityRockHeadDescription[] = _("Immune to recoil damage, but 
 static const u8 sAbilityDroughtDescription[] = _("Summons sun on entry.\nLasts 8 turns.");
 static const u8 sAbilityArenaTrapDescription[] = _("Enemies can't flee. Ghosts and\nungrounded Pokémon are immune.");
 static const u8 sAbilityVitalSpiritDescription[] = _("Can't fall asleep. Heals status\nafter using Fighting-type moves.");
-static const u8 sAbilityWhiteSmokeDescription[] = _("Sets Smokescreen on switch-in.");
+static const u8 sAbilityWhiteSmokeDescription[] = _("Sets Smokescreen for 3 turns\non switch-in.");
 static const u8 sAbilityTangledFeetDescription[] = _("Doubles Evasion when confused.");
 static const u8 sAbilityMotorDriveDescription[] = _("Boosts Speed instead of being\nhit by Electric-type moves.");
 static const u8 sAbilityRivalryDescription[] = _("Deals 1.25x to same gender.\nTakes .75x from opposite gender.");
@@ -210,7 +210,7 @@ static const u8 sAbilityBatteryDescription[] = _("Grants a 1.3x power boost to\n
 static const u8 sAbilityFluffyDescription[] = _("Takes 1/2 dmg from contact moves\nbut Fire moves hurt it 2x more.");
 static const u8 sAbilitySoulHeartDescription[] = _("KOs dealt anywhere on the field\nraise Sp. Atk by one stage.");
 static const u8 sAbilityReceiverDescription[] = _("In Double Battles, copies its\nfainting partner's ability.");
-static const u8 sAbilityPowerOfAlchemyDescription[] = _("Remove or turns enemy items into\nBlack Sludge or Big Nugget on entry.");
+static const u8 sAbilityPowerOfAlchemyDescription[] = _("Turns foe's item into Sludge and\nSludge into Nuggets on entry.");
 static const u8 sAbilityBeastBoostDescription[] = _("Dealing a KO raises highest\ncalculated stat by one stage.");
 static const u8 sAbilityRksSystemDescription[] = _("Held Memory determines its type.\nAlso has Protean + Adaptability.");
 static const u8 sAbilityElectricSurgeDescription[] = _("Casts Electric Terrain on entry.\nLasts 8 turns.");
@@ -714,6 +714,7 @@ static const u8 sAbilityBreakwaterDescription[] = _("Swift Swim + Stall.");
 static const u8 sAbilityMagicalFistsDescription[] = _("Punching moves use Special\nAttack and get a 1.3x boost.");
 static const u8 sAbilitySandPitDescription[] = _("Uses Sand Tomb on entry.");
 static const u8 sAbilitySandBenderDescription[] = _("Sand Stream + Sand Force.");
+static const u8 sAbilityCutthroatDescription[] = _("The first slicing move used on\neach entry in gets +1 priority.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1462,6 +1463,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_MAGICAL_FISTS] = _("Magical Fists"),
     [ABILITY_SAND_PIT] = _("Sand Pit"),
     [ABILITY_SAND_BENDER] = _("Sand Bender"),
+    [ABILITY_CUTTHROAT] = _("Cutthroat"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2211,4 +2213,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_MAGICAL_FISTS] = sAbilityMagicalFistsDescription,
     [ABILITY_SAND_PIT] = sAbilitySandPitDescription,
     [ABILITY_SAND_BENDER] = sAbilitySandBenderDescription,
+    [ABILITY_CUTTHROAT] = sAbilityCutthroatDescription,
 };

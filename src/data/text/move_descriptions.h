@@ -631,8 +631,8 @@ static const u8 sMoveTwoLineDescription_MoveHyperFang[] = _(
     "May cause flinching.");
 
 static const u8 sMoveTwoLineDescription_MoveSharpen[] = _(
-    "Reduces the polygon count\n"
-    "boosting Attack and Crit.");
+    "Sharpens its edges to\n"
+    "boost Attack and Crit.");
 
 static const u8 sMoveTwoLineDescription_MoveConversion[] = _(
     "Boosts SpAtk and Speed\n"
@@ -5084,7 +5084,7 @@ static const u8 sMoveFourLineDescription_MoveBonemerang[] = _("The user throws a
 static const u8 sMoveFourLineDescription_MoveRest[] = _("The user sleeps for\ntwo turns to fully\nrestore HP and heal\nany status problem.");
 static const u8 sMoveFourLineDescription_MoveRockSlide[] = _("Large boulders are\nhurled at the foe.\n20% flinch chance.\nThrow-based.");
 static const u8 sMoveFourLineDescription_MoveHyperFang[] = _("The foe is attacked\nwith sharp fangs.\n30% flinch chance.\nStrong Jaw boost.");
-static const u8 sMoveFourLineDescription_MoveSharpen[] = _("The user sharpens\nits edges. Boosting\nits highest Attack\nand its Crit.");
+static const u8 sMoveFourLineDescription_MoveSharpen[] = _("The user sharpens its\nedges. Raises highest\nAttack and Crit and\nsets Cutthroat.");
 static const u8 sMoveFourLineDescription_MoveConversion[] = _("Boosts SpAtk and\nSpeeds and changes\nits type to its first\nmove's type.");
 static const u8 sMoveFourLineDescription_MoveTriAttack[] = _("30% chance to\nparalyze, burn, or\nfrostbite foes.\nUses highest Attack.");
 static const u8 sMoveFourLineDescription_MoveSuperFang[] = _("The user attacks\nwith sharp fangs\nand halves the\nfoe's HP.");

@@ -74,7 +74,7 @@
 #define ABILITY_DROUGHT 70 // Summons sun on entry. Lasts 8 turns.
 #define ABILITY_ARENA_TRAP 71 // Enemies can't flee. Ghosts and ungrounded Pokémon are immune.
 #define ABILITY_VITAL_SPIRIT 72 // Can't fall asleep. Heals status after using Fighting-type moves.
-#define ABILITY_WHITE_SMOKE 73 // Sets Smokescreen on switch-in.
+#define ABILITY_WHITE_SMOKE 73 // Sets Smokescreen for 3 turns on switch-in.
 #define ABILITY_PURE_POWER 74 // Doubles own Attack stat. Boosts raw stat, not base stat.
 #define ABILITY_SHELL_ARMOR 75 // Immune to critical hits. Takes 20% less damage from all attacks.
 #define ABILITY_AIR_LOCK 76 // Clears weather and prevents its effects.
@@ -236,7 +236,7 @@
 #define ABILITY_SOUL_HEART 220 // KOs dealt anywhere on the field raise Sp. Atk by one stage.
 #define ABILITY_TANGLING_HAIR 221 // Lowers Speed of enemies that make contact with this Pokémon.
 #define ABILITY_RECEIVER 222 // In Double Battles, copies its fainting partner's ability.
-#define ABILITY_POWER_OF_ALCHEMY 223 // Remove or turns enemy items into Black Sludge or Big Nugget on entry.
+#define ABILITY_POWER_OF_ALCHEMY 223 // Turns foe's item into Sludge and Sludge into Nuggets on entry.
 #define ABILITY_BEAST_BOOST 224 // Dealing a KO raises highest calculated stat by one stage.
 #define ABILITY_RKS_SYSTEM 225 // Held Memory determines its type. Also has Protean + Adaptability.
 #define ABILITY_ELECTRIC_SURGE 226 // Casts Electric Terrain on entry. Lasts 8 turns.
@@ -762,10 +762,9 @@
 #define ABILITY_SET_ABLAZE 740 // Inflicting burn also inflicts fear.
 #define ABILITY_BREAKWATER 741 // Swift Swim + Stall.
 #define ABILITY_MAGICAL_FISTS 742 // Punching moves use Special Attack and get a 1.3x boost.
-#define ABILITY_SAND_PIT 743 // Uses Sand Tomb on entry.
-#define ABILITY_SAND_BENDER 744 // Sand Stream + Sand Force
+#define ABILITY_CUTTHROAT 743 // The first slicing move used on each entry in gets +1 priority.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_SAND_BENDER + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_CUTTHROAT + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
