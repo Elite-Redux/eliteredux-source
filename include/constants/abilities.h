@@ -762,8 +762,10 @@
 #define ABILITY_SET_ABLAZE 740 // Inflicting burn also inflicts fear.
 #define ABILITY_BREAKWATER 741 // Swift Swim + Stall.
 #define ABILITY_MAGICAL_FISTS 742 // Punching moves use Special Attack and get a 1.3x boost.
+#define ABILITY_SAND_PIT 743 // Uses Sand Tomb on entry.
+#define ABILITY_SAND_BENDER 744 // Sand Stream + Sand Force
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_MAGICAL_FISTS + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SAND_BENDER + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
