@@ -2416,8 +2416,6 @@
 	.4byte \failPtr
 	.endm
 
-	VARIOUS_SET_ABILITY_STATE
-
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr
