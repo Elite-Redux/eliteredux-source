@@ -712,6 +712,7 @@ static const u8 sAbilityTeraformZeroDescription[] = _("Tera Shell + clears weath
 static const u8 sAbilitySetAblazeDescription[] = _("Inflicting burn also inflicts fear.");
 static const u8 sAbilityBreakwaterDescription[] = _("Swift Swim + Stall.");
 static const u8 sAbilityMagicalFistsDescription[] = _("Punching moves use Special\nAttack and get a 1.3x boost.");
+static const u8 sAbilityCutthroatDescription[] = _("The first slicing move used on\neach entry in gets +1 priority.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1458,6 +1459,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SET_ABLAZE] = _("Set Ablaze"),
     [ABILITY_BREAKWATER] = _("Breakwater"),
     [ABILITY_MAGICAL_FISTS] = _("Magical Fists"),
+    [ABILITY_CUTTHROAT] = _("Cutthroat"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2205,4 +2207,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SET_ABLAZE] = sAbilitySetAblazeDescription,
     [ABILITY_BREAKWATER] = sAbilityBreakwaterDescription,
     [ABILITY_MAGICAL_FISTS] = sAbilityMagicalFistsDescription,
+    [ABILITY_CUTTHROAT] = sAbilityCutthroatDescription,
 };

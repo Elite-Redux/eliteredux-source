@@ -12734,11 +12734,24 @@ BattleScript_EffectSharpen_AfterCrit:
 	getbattler BS_ATTACKER
 	printfromtable gCritRaisedStrings
 	waitmessage B_WAIT_TIME_LONG
+BattleScript_EffectSharpen_DoCutthroat:
+	setabilitystate BS_ATTACKER, ABILITY_CUTTHROAT, TRUE, BattleScript_MoveEnd
+BattleScript_EffectSharpen_AfterCutthroat:
+	printstring STRINGID_CUTTHROAT
+	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
-
 BattleScript_EffectSharpen_CritOnly:
-	increasecrit BS_ATTACKER, 1, BattleScript_ButItFailed
+	increasecrit BS_ATTACKER, 1, BattleScript_EffectSharpen_CutthroatOnly
+	attackanimation
+	waitanimation
 	goto BattleScript_EffectSharpen_AfterCrit
+BattleScript_EffectSharpen_CutthroatOnly:
+	setabilitystate BS_ATTACKER, ABILITY_CUTTHROAT, TRUE, BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	goto BattleScript_EffectSharpen_AfterCutthroat
+
+
 
 BattleScript_EffectScaryFace::
 	attackcanceler

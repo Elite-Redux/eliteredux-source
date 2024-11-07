@@ -2409,6 +2409,15 @@
 	.4byte \jumpptr
 	.endm
 
+	.macro setabilitystate battler:req, ability:req, state:req, failPtr:req
+	various \battler, VARIOUS_SET_ABILITY_STATE
+	.2byte \ability
+	.4byte \state
+	.4byte \failPtr
+	.endm
+
+	VARIOUS_SET_ABILITY_STATE
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr

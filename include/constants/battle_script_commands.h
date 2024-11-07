@@ -269,6 +269,7 @@
 #define VARIOUS_RUDE_AWAKENING                  186
 #define VARIOUS_SHELL_TRAP_CHOICE               187
 #define VARIOUS_JUMP_IF_ABILITY_STATE           188
+#define VARIOUS_SET_ABILITY_STATE               189
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1

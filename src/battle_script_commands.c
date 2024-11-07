@@ -11502,6 +11502,21 @@ static void Cmd_various(void)
         }
         break;
         }
+    case VARIOUS_SET_ABILITY_STATE:
+        {
+        int ability = READ_16_INC;
+        int state = READ_32_INC;
+        ptr = READ_PTR_INC;
+        if (!BattlerHasAbility(gActiveBattler, ability, TRUE) || GetAbilityState(gActiveBattler, ability) == state)
+        {
+            gBattlescriptCurrInstr = ptr;
+        }
+        else
+        {
+            SetAbilityState(gActiveBattler, ability, state);
+        }
+        break;
+        }
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 
