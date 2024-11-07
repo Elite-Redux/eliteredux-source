@@ -11461,6 +11461,47 @@ static void Cmd_various(void)
             gBattlescriptCurrInstr = ptr;
         }
         break;
+    case VARIOUS_JUMP_IF_ABILITY_STATE:
+        {
+        int type = READ_8_INC;
+        int ability = READ_16_INC;
+        int state = READ_32_INC;
+        ptr = READ_PTR_INC;
+        REQUIRE(BattlerHasAbility(gActiveBattler, ability, TRUE))
+        switch (type)
+        {
+            case CMP_COMMON_BITS:
+                REQUIRE(state & GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+                
+            case CMP_NO_COMMON_BITS:
+                REQUIRE_NOT(state & GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+                
+            case CMP_EQUAL:
+                REQUIRE(state == GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+                
+            case CMP_NOT_EQUAL:
+                REQUIRE(state != GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+                
+            case CMP_GREATER_THAN:
+                REQUIRE(state > GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+
+            case CMP_LESS_THAN:
+                REQUIRE(state < GetAbilityState(gActiveBattler, ability))
+                gBattleScripting.battlerPopupOverwrite = ptr;
+                break;
+        }
+        break;
+        }
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 
