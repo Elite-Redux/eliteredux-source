@@ -3244,7 +3244,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
         tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i, (u16*) &ignored);
         tempchance = (targetCurrentHp / tempdamage);
 
-        if (tempchance == hits2KO) {
+        if (tempchance <= sMenuDataPtr->damageCalculation[battler][target][moveIndex].hits2KO) {
             percentage = (MIN_DAMAGE_FACTOR - i);
             break;
         }
