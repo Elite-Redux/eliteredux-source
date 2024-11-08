@@ -11472,32 +11472,32 @@ static void Cmd_various(void)
         {
             case CMP_COMMON_BITS:
                 REQUIRE(state & GetAbilityState(gActiveBattler, ability))
-                gBattleScripting.battlerPopupOverwrite = ptr;
+                gBattlescriptCurrInstr = ptr;
                 break;
                 
             case CMP_NO_COMMON_BITS:
                 REQUIRE_NOT(state & GetAbilityState(gActiveBattler, ability))
-                gBattleScripting.battlerPopupOverwrite = ptr;
+                gBattlescriptCurrInstr = ptr;
                 break;
                 
             case CMP_EQUAL:
                 REQUIRE(state == GetAbilityState(gActiveBattler, ability))
-                gBattleScripting.battlerPopupOverwrite = ptr;
+                gBattlescriptCurrInstr = ptr;
                 break;
                 
             case CMP_NOT_EQUAL:
                 REQUIRE(state != GetAbilityState(gActiveBattler, ability))
-                gBattleScripting.battlerPopupOverwrite = ptr;
+                gBattlescriptCurrInstr = ptr;
                 break;
                 
             case CMP_GREATER_THAN:
                 REQUIRE(state > GetAbilityState(gActiveBattler, ability))
-                gBattleScripting.battlerPopupOverwrite = ptr;
+                gBattlescriptCurrInstr = ptr;
                 break;
 
             case CMP_LESS_THAN:
                 REQUIRE(state < GetAbilityState(gActiveBattler, ability))
-                gBattleScripting.battlerPopupOverwrite = ptr;
+                gBattlescriptCurrInstr = ptr;
                 break;
         }
         break;
