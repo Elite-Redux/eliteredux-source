@@ -3483,6 +3483,7 @@ void SwitchInClearSetData(void)
         if (!gVolatileStructs[i].skyDropped) continue;
         if (gVolatileStructs[i].skyDroppedBy != gActiveBattler) continue;
         gVolatileStructs[i].skyDropped = FALSE;
+        gVolatileStructs[i].shouldClearSkyDrop = FALSE;
         gStatuses3[i] &= ~STATUS3_ON_AIR;
         gStackBattler1 = i;
         BattleScriptCall(BattleScript_SkyDropEndsEarly);
@@ -3580,6 +3581,7 @@ void FaintClearSetData(void)
         if (!gVolatileStructs[i].skyDropped) continue;
         if (gVolatileStructs[i].skyDroppedBy != gActiveBattler) continue;
         gVolatileStructs[i].skyDropped = FALSE;
+        gVolatileStructs[i].shouldClearSkyDrop = FALSE;
         gStatuses3[i] &= ~STATUS3_ON_AIR;
         gStackBattler1 = i;
         BattleScriptCall(BattleScript_SkyDropEndsEarly);

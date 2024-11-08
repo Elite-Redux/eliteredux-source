@@ -1463,6 +1463,14 @@ void MarkBattlerReceivedLinkData(u8 battlerId)
 
 void CancelMultiTurnMoves(u8 battler)
 {
+    int i;
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        if (gVolatileStructs[battler].skyDropped && gVolatileStructs[battler].skyDroppedBy == battler)
+        {
+            gVolatileStructs[battler].shouldClearSkyDrop = TRUE;
+        }
+    }
     gBattleMons[battler].status2 &= ~(STATUS2_MULTIPLETURNS);
     gBattleMons[battler].status2 &= ~(STATUS2_LOCK_CONFUSE);
     gBattleMons[battler].status2 &= ~(STATUS2_UPROAR);
@@ -2919,6 +2927,7 @@ u8 DoFieldEndTurnEffects(void)
 
 enum
 {
+    ENDTURN_SKY_DROP,
     ENDTURN_INGRAIN,
     ENDTURN_AQUA_RING,
     ENDTURN_ABILITIES,
@@ -3031,6 +3040,17 @@ u8 DoBattlerEndTurnEffects(void)
 
         switch (gBattleStruct->turnEffectsTracker)
         {
+        case ENDTURN_SKY_DROP:
+            gBattleStruct->turnEffectsTracker++;
+            REQUIRE(gVolatileStructs[gActiveBattler].shouldClearSkyDrop)
+
+            gStackBattler1 = gActiveBattler;
+            gVolatileStructs[gActiveBattler].skyDropped = FALSE;
+            gVolatileStructs[gActiveBattler].shouldClearSkyDrop = FALSE;
+            BattleScriptExecute(BattleScript_End2);
+            BattleScriptCall(BattleScript_SkyDropEndsEarly);
+            effect++;
+            break;
         case ENDTURN_INGRAIN:  // ingrain
             if ((gStatuses3[gActiveBattler] & STATUS3_ROOTED)
              && !BATTLER_MAX_HP(gActiveBattler)
@@ -4919,8 +4939,8 @@ static u8 ForewarnChooseMove(u32 battler)
         {
             for (j = 0; j < MAX_MON_MOVES; j++)
             {
-                if (gBattleMons[i].moves[j] == MOVE_NONE)
-                    continue;
+                FILTER(gBattleMons[i].moves[j] != MOVE_NONE)
+                
                 data[count].moveId = gBattleMons[i].moves[j];
                 data[count].battlerId = i;
                 switch (gBattleMoves[data[count].moveId].effect)

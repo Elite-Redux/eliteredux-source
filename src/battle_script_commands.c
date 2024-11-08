@@ -11198,6 +11198,7 @@ static void Cmd_various(void)
                 if (gVolatileStructs[gActiveBattler].skyDropped)
                 {
                     gVolatileStructs[gActiveBattler].skyDropped = FALSE;
+                    gVolatileStructs[i].shouldClearSkyDrop = FALSE;
                     gStatuses3[gActiveBattler] &= ~STATUS3_ON_AIR;
                 }
                 else
