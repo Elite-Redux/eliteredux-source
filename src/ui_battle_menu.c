@@ -3179,6 +3179,14 @@ const u8 gText_SmogonDamageCalculator_FastPart_Guaranteed[] = _("Guaranteed {STR
 #define MAX_PERCENT 100
 #define MAX_PERCENT_2 10000
 
+// Rough probability of an N hit KO needing an average roll
+static const u8 sConvolutionTable[][MIN_DAMAGE_FACTOR] = {
+    {100, 97, 92, 86, 79, 70, 59, 47, 36, 26, 18, 11, 6, 3, 1, 1}, // N = 2
+    {100, 99, 96, 92, 84, 73, 60, 46, 32, 20, 12, 6, 3, 1, 1, 1},
+    {100, 100, 98, 95, 87, 76, 61, 44, 29, 16, 8, 3, 1, 1, 1, 1},
+    {100, 100, 99, 96, 90, 78, 62, 43, 26, 13, 6, 2, 1, 1, 1, 1},
+};
+
 static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     u32 minDamage, maxDamage, midDamage, tempdamage;
     s32 dmg, critDmg, critChance, tempchance, minHits2KOChance;
@@ -3238,20 +3246,27 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamagePercentage = percentage;
     
     //Chances To KO
-    sMenuDataPtr->damageCalculation[battler][target][moveIndex].hits2KO = (targetCurrentHp / sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamage);
+    hits2KO = sMenuDataPtr->damageCalculation[battler][target][moveIndex].hits2KO = (targetCurrentHp / sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamage);
+    hits2KO++;
 
     for (i = 0; i < MIN_DAMAGE_FACTOR; i++) {
         tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i, (u16*) &ignored);
-        tempchance = (targetCurrentHp / tempdamage);
 
-        if (tempchance <= sMenuDataPtr->damageCalculation[battler][target][moveIndex].hits2KO) {
-            percentage = (MIN_DAMAGE_FACTOR - i);
+        if (tempdamage * hits2KO >= targetCurrentHp) {
             break;
         }
     }
 
-    minHits2KOChance = (percentage * (MAX_PERCENT_2 / MIN_DAMAGE_FACTOR));
-    sMenuDataPtr->damageCalculation[battler][target][moveIndex].chance2KO = minHits2KOChance / MAX_PERCENT;
+    if (hits2KO <= 1)
+    {
+        minHits2KOChance = (MIN_DAMAGE_FACTOR - i) * MAX_PERCENT_2 / MIN_DAMAGE_FACTOR / MAX_PERCENT;
+    }
+    else
+    {
+        if (hits2KO > 5) hits2KO = 5;
+        minHits2KOChance = sConvolutionTable[hits2KO - 2][i];
+    }
+    sMenuDataPtr->damageCalculation[battler][target][moveIndex].chance2KO = minHits2KOChance;
 
     //Nature Stuff
     if (GetBattlerSide(battler) == B_SIDE_PLAYER)
