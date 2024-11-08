@@ -1887,7 +1887,7 @@ void PrintBattleWindow_MoveSelection(void)
                         moveDamage = CalculateMoveDamage(newMove, target, gActiveBattler, &moveType, 0, FALSE, FALSE, FALSE);
                         //gSwapDamageCategory = FALSE;
                         
-                        if (targetCurrentHp <= moveDamage && heldItem != ITEM_FOCUS_SASH && targetCurrentHp == gBattleMons[gActiveBattler].maxHP){
+                        if (targetCurrentHp <= moveDamage && !(heldItem == ITEM_FOCUS_SASH && targetCurrentHp == gBattleMons[gActiveBattler].maxHP)){
                             switch (battleTheme){
                                 case THEME_DARK:
                                     BlitBitmapToWindow(windowId, sTheme_Dark_Can_KO_Mark_Gfx,    ((x + 10) * 8) + x2 + 4, ((y + i) * 8) + y2 + 4, 8, 8);
