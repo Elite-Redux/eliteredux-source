@@ -16249,17 +16249,16 @@ static void Cmd_removelightscreenreflect(void) // brick break
         failed = FALSE;
     #endif
 
-    if (!failed
-     && (gSideTimers[side].reflectTimer
-      || gSideTimers[side].lightscreenTimer
-      || gSideTimers[side].auroraVeilTimer))
+    if (!failed && gSideStatuses[side] & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL | SIDE_STATUS_SMOKESCREEN))
     {
         gSideStatuses[side] &= ~(SIDE_STATUS_REFLECT);
         gSideStatuses[side] &= ~(SIDE_STATUS_LIGHTSCREEN);
         gSideStatuses[side] &= ~(SIDE_STATUS_AURORA_VEIL);
+        gSideStatuses[side] &= ~(SIDE_STATUS_SMOKESCREEN);
         gSideTimers[side].reflectTimer = 0;
         gSideTimers[side].lightscreenTimer = 0;
         gSideTimers[side].auroraVeilTimer = 0;
+        gSideTimers[side].smokescreenTimer = 0;
         gBattleScripting.animTurn = 1;
         gBattleScripting.animTargetsHit = 1;
     }
