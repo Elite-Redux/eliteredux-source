@@ -358,7 +358,7 @@ static const u8 sAbilityPreciseFistDescription[] = _("Punching moves get +1 crit
 static const u8 sAbilityDeadeyeDescription[] = _("Never misses. Arrow and cannon\nmoves hit weakest defense.");
 static const u8 sAbilityArtilleryDescription[] = _("Mega Launcher moves always hit.\nSingle-target now hits both foes.");
 static const u8 sAbilityAmplifierDescription[] = _("Ups sound moves by 30% and\nmakes them hit both foes.");
-static const u8 sAbilityIceDewDescription[] = _("Boosts higer offense instead of\nbeing hit by Ice-type moves.");
+static const u8 sAbilityIceDewDescription[] = _("Boosts highest Atk instead of\nbeing hit by Ice-type moves.");
 static const u8 sAbilitySunWorshipDescription[] = _("Ups highest stat by +1\non entry when sunny.");
 static const u8 sAbilityPollinateDescription[] = _("Normal-type moves become Bug-\ntype moves and get a 1.1x boost.");
 static const u8 sAbilityVolcanoRageDescription[] = _("Triggers 50 BP Eruption after\nusing a Fire-type move.");
@@ -712,9 +712,9 @@ static const u8 sAbilityTeraformZeroDescription[] = _("Tera Shell + clears weath
 static const u8 sAbilitySetAblazeDescription[] = _("Inflicting burn also inflicts fear.");
 static const u8 sAbilityBreakwaterDescription[] = _("Swift Swim + Stall.");
 static const u8 sAbilityMagicalFistsDescription[] = _("Punching moves use Special\nAttack and get a 1.3x boost.");
-static const u8 sAbilitySandPitDescription[] = _("Uses Sand Tomb on entry.");
-static const u8 sAbilitySandBenderDescription[] = _("Sand Stream + Sand Force.");
 static const u8 sAbilityCutthroatDescription[] = _("The first slicing move used on\neach entry in gets +1 priority.");
+static const u8 sAbilitySandBenderDescription[] = _("Sand Stream + Sand Force.");
+static const u8 sAbilitySandPitDescription[] = _("Uses Sand Tomb on entry.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1461,9 +1461,9 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SET_ABLAZE] = _("Set Ablaze"),
     [ABILITY_BREAKWATER] = _("Breakwater"),
     [ABILITY_MAGICAL_FISTS] = _("Magical Fists"),
-    [ABILITY_SAND_PIT] = _("Sand Pit"),
-    [ABILITY_SAND_BENDER] = _("Sand Bender"),
     [ABILITY_CUTTHROAT] = _("Cutthroat"),
+    [ABILITY_SAND_BENDER] = _("Sand Bender"),
+    [ABILITY_SAND_PIT] = _("Sand Pit"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2211,7 +2211,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SET_ABLAZE] = sAbilitySetAblazeDescription,
     [ABILITY_BREAKWATER] = sAbilityBreakwaterDescription,
     [ABILITY_MAGICAL_FISTS] = sAbilityMagicalFistsDescription,
-    [ABILITY_SAND_PIT] = sAbilitySandPitDescription,
-    [ABILITY_SAND_BENDER] = sAbilitySandBenderDescription,
     [ABILITY_CUTTHROAT] = sAbilityCutthroatDescription,
+    [ABILITY_SAND_BENDER] = sAbilitySandBenderDescription,
+    [ABILITY_SAND_PIT] = sAbilitySandPitDescription,
 };

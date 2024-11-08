@@ -398,7 +398,7 @@
 #define ABILITY_DEADEYE 376 // Never misses. Arrow and cannon moves hit weakest defense.
 #define ABILITY_ARTILLERY 377 // Mega Launcher moves always hit. Single-target now hits both foes.
 #define ABILITY_AMPLIFIER 378 // Ups sound moves by 30% and makes them hit both foes.
-#define ABILITY_ICE_DEW 379 // Boosts SpAtk instead of being hit by Ice-type moves.
+#define ABILITY_ICE_DEW 379 // Boosts highest Atk instead of being hit by Ice-type moves.
 #define ABILITY_SUN_WORSHIP 380 // Ups highest stat by +1 on entry when sunny.
 #define ABILITY_POLLINATE 381 // Normal-type moves become Bug- type moves and get a 1.1x boost.
 #define ABILITY_VOLCANO_RAGE 382 // Triggers 50 BP Eruption after using a Fire-type move.
