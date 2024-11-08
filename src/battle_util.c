@@ -10873,7 +10873,7 @@ void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef,
 {
     u16 mod = GetTypeModifier(moveType, defType, battlerAtk, battlerDef);
 
-    if (BattlerHasAbility(battlerAtk, ABILITY_NORMALIZE, TRUE) && moveType == TYPE_NORMAL && mod != UQ_4_12(0.0))
+    if (BattlerHasAbility(battlerAtk, ABILITY_NORMALIZE, TRUE) && moveType == TYPE_NORMAL && mod && mod < UQ_4_12(1.0))
     {
         mod = UQ_4_12(1.0);
     }
