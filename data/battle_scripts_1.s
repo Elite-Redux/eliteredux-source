@@ -4871,6 +4871,7 @@ BattleScript_PowerHerbActivation:
 BattleScript_EffectTwoTurnSecondary::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_EffectTwoTurnSecondarySecondTurn
 	jumpifmove MOVE_SKULL_BASH, BattleScript_SetSkullBashString
+	jumpifmove MOVE_SKY_ATTACK, BattleScript_EffectTwoTurnsAttackSkyAttack
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_METEOR_BEAM
 BattleScript_EffectTwoTurnSecondary_AfterSetString:
 	call BattleScriptFirstChargingTurn
@@ -4887,6 +4888,9 @@ BattleScript_EffectTwoTurnSecondarySecondTurn:
 	goto BattleScript_HitFromAccCheck
 BattleScript_SetSkullBashString:
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_SKULL_BASH
+	goto BattleScript_EffectTwoTurnSecondary_AfterSetString
+BattleScript_EffectTwoTurnsAttackSkyAttack:
+	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_SKY_ATTACK
 	goto BattleScript_EffectTwoTurnSecondary_AfterSetString
 
 BattleScript_EffectTwoTurnRetaliation::
@@ -4909,7 +4913,6 @@ BattleScript_EffectTwoTurnsAttackIceBurn:
 BattleScript_EffectTwoTurnsAttack::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_TwoTurnMovesSecondTurn
 	jumpifword CMP_COMMON_BITS, gHitMarker, HITMARKER_NO_ATTACKSTRING, BattleScript_TwoTurnMovesSecondTurn
-	jumpifmove MOVE_SKY_ATTACK, BattleScript_EffectTwoTurnsAttackSkyAttack
 	jumpifmove MOVE_RAZOR_WIND, BattleScript_EffectTwoTurnsAttackRazorWind
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
 BattleScript_EffectTwoTurnsAttackContinue:
@@ -4917,9 +4920,6 @@ BattleScript_EffectTwoTurnsAttackContinue:
 BattleScript_EffectTwoTurnsAttackCheckSkipCharge:
 	twoturnmoveacceleratecheck
 	goto BattleScript_TwoTurnMovesSecondTurn
-BattleScript_EffectTwoTurnsAttackSkyAttack:
-	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_SKY_ATTACK
-	goto BattleScript_EffectTwoTurnsAttackContinue
 BattleScript_EffectTwoTurnsAttackRazorWind:
 	setbyte sTWOTURN_STRINGID, B_MSG_TURN1_RAZOR_WIND
 	goto BattleScript_EffectTwoTurnsAttackContinue
