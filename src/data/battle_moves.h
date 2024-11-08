@@ -3318,17 +3318,15 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_NATURE_POWER] =
     {
-        .effect = EFFECT_NATURE_POWER,
-        .power = 0,
+        .effect = EFFECT_TERRAIN_PULSE,
+        .power = 50,
         .type = TYPE_NORMAL,
-        .accuracy = 0,
-        .pp = 20,
+        .accuracy = 100,
+        .pp = 15,
         .secondaryEffectChance = 0,
-        .target = MOVE_TARGET_DEPENDS,
-        .split = SPLIT_STATUS,
-        .metronomeBanned = TRUE,
-        .copycatBanned = TRUE,
-        .sleepTalkBanned = TRUE,
+        .target = MOVE_TARGET_SELECTED,
+        .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,
+        .split = SPLIT_PHYSICAL,
     },
     [MOVE_CHARGE] =
     {
@@ -3899,7 +3897,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_AIR_CUTTER] =
     {
         .effect = EFFECT_HIT,
-        .power = 70,
+        .power = 75,
         .type = TYPE_FLYING,
         .accuracy = 100,
         .pp = 20,
@@ -9155,7 +9153,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .power = 50,
         .type = TYPE_NORMAL,
         .accuracy = 100,
-        .pp = 10,
+        .pp = 15,
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_SELECTED,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED | FLAG_MEGA_LAUNCHER_BOOST,

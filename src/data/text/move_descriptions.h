@@ -2834,8 +2834,8 @@ static const u8 sMoveTwoLineDescription_MoveBehemothBlade[] = _(
     "2x damage to Dynamaxed foes.");
 
 static const u8 sMoveTwoLineDescription_MoveBehemothBash[] = _(
-    "Attacks as a sheild. Deals\n"
-    "2x damage to Dynamaxed foes.");
+    "Does more damage the\n"
+    "higher the user's Def.");
 
 static const u8 sMoveTwoLineDescription_MoveAuraWheel[] = _(
     "Raises Speed to attack. Both\n"
@@ -4193,7 +4193,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_FOCUS_PUNCH - 1] = sMoveTwoLineDescription_MoveFocusPunch,
     [MOVE_SMELLING_SALTS - 1] = sMoveTwoLineDescription_MoveSmellingSalts,
     [MOVE_FOLLOW_ME - 1] = sMoveTwoLineDescription_MoveFollowMe,
-    [MOVE_NATURE_POWER - 1] = sMoveTwoLineDescription_MoveNaturePower,
+    [MOVE_NATURE_POWER - 1] = sMoveTwoLineDescription_MoveTerrainPulse,
     [MOVE_CHARGE - 1] = sMoveTwoLineDescription_MoveCharge,
     [MOVE_TAUNT - 1] = sMoveTwoLineDescription_MoveTaunt,
     [MOVE_HELPING_HAND - 1] = sMoveTwoLineDescription_MoveHelpingHand,
@@ -5634,8 +5634,8 @@ static const u8 sMoveFourLineDescription_MoveDecorate[] = _("Damages foes. Raise
 static const u8 sMoveFourLineDescription_MoveDrumBeating[] = _("The user attacks\nthe foe with its\ndrum, lowering the\nfoe's Speed stat.");
 static const u8 sMoveFourLineDescription_MoveSnapTrap[] = _("The user snares the\ntarget in a snap\ntrap for four to\nfive turns.");
 static const u8 sMoveFourLineDescription_MovePyroBall[] = _("The user launches a\nfiery ball at the\nfoe. 10% chance\nto burn the foe.");
-static const u8 sMoveFourLineDescription_MoveBehemothBlade[] = _("The user strikes as\na sword, dealing\ndouble the damage\nto Dynamaxed foes.");
-static const u8 sMoveFourLineDescription_MoveBehemothBash[] = _("The user strikes as\na shield, dealing\ndouble the damage\nto Dynamaxed foes.");
+static const u8 sMoveFourLineDescription_MoveBehemothBlade[] = _("The user strikes as\na sword, dealing\ndouble the damage\nto Mega Pokemon.");
+static const u8 sMoveFourLineDescription_MoveBehemothBash[] = _("Uses defense for\ndamage calculation.\nDouble damage vs\nMega Pokemon.");
 static const u8 sMoveFourLineDescription_MoveAuraWheel[] = _("Electric- and Dark-\ntype at the same\ntime.\nRaises Speed.");
 static const u8 sMoveFourLineDescription_MoveBreakingSwipe[] = _("The user swings at\nboth foes with its\ntail, lowering the\nfoes' Attack stat.");
 static const u8 sMoveFourLineDescription_MoveBranchPoke[] = _("The user attacks\nthe foe by poking\nit with a sharply\npointed branch.");
@@ -6191,7 +6191,7 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_FOCUS_PUNCH - 1] = sMoveFourLineDescription_MoveFocusPunch,
     [MOVE_SMELLING_SALTS - 1] = sMoveFourLineDescription_MoveSmellingSalts,
     [MOVE_FOLLOW_ME - 1] = sMoveFourLineDescription_MoveFollowMe,
-    [MOVE_NATURE_POWER - 1] = sMoveFourLineDescription_MoveNaturePower,
+    [MOVE_NATURE_POWER - 1] = sMoveFourLineDescription_MoveTerrainPulse,
     [MOVE_CHARGE - 1] = sMoveFourLineDescription_MoveCharge,
     [MOVE_TAUNT - 1] = sMoveFourLineDescription_MoveTaunt,
     [MOVE_HELPING_HAND - 1] = sMoveFourLineDescription_MoveHelpingHand,

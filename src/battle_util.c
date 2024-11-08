@@ -10006,7 +10006,7 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
                     statBase = statBase * 3 / 2;
 
             // Sand Force
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_SAND_FORCE))
+            if ((BATTLER_HAS_ABILITY(battler, ABILITY_SAND_FORCE) || BATTLER_HAS_ABILITY(battler, ABILITY_SAND_BENDER))
                 && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)
                 && GetHighestAttackingStatId(battler, TRUE) == statEnum)
                     statBase = statBase * 3 / 2;
@@ -14691,6 +14691,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         break;
     
     case ABILITY_SAND_STREAM:
+    case ABILITY_SAND_BENDER:
     case ABILITY_DESERT_SPIRIT:
         if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE))
         {
@@ -14975,6 +14976,10 @@ int HandleSwitchInAbilityAs(int ability, int battler)
     
     case ABILITY_LOW_BLOW:
         UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40);
+        break;
+
+    case ABILITY_SAND_PIT:
+        UseEntryMove(battler, ability, MOVE_SAND_TOMB, 50);
         break;
     
     case ABILITY_CHEAP_TACTICS:

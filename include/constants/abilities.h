@@ -763,8 +763,10 @@
 #define ABILITY_BREAKWATER 741 // Swift Swim + Stall.
 #define ABILITY_MAGICAL_FISTS 742 // Punching moves use Special Attack and get a 1.3x boost.
 #define ABILITY_CUTTHROAT 743 // The first slicing move used on each entry in gets +1 priority.
+#define ABILITY_SAND_BENDER 744 // Sand Stream + Sand Force.
+#define ABILITY_SAND_PIT 745 // Uses Sand Tomb on entry.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_CUTTHROAT + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_SAND_PIT + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
