@@ -3263,7 +3263,7 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     }
     else
     {
-        if (hits2KO > 5) hits2KO = 5;
+        if (hits2KO > ARRAY_COUNT(sConvolutionTable) + 1) hits2KO = ARRAY_COUNT(sConvolutionTable) + 1;
         minHits2KOChance = sConvolutionTable[hits2KO - 2][i];
     }
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].chance2KO = minHits2KOChance;
