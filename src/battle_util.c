@@ -12432,6 +12432,12 @@ int IsMagicGuardProtected(int battler)
     return FALSE;
 }
 
+int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType)
+{
+    int ignored;
+    return TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16*) &ignored);
+}
+
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability)
 {
     int i;
@@ -12522,6 +12528,12 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
 static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup);
 static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup);
 static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup);
+
+int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType)
+{
+    int ignored;
+    return TestImmunityAbilities(battler, attacker, move, moveType, (const u8**)&ignored, (u8*)&ignored, (u16*)&ignored);
+}
 
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u8* overrideBattler, u16* abilityPopup)
 {

@@ -3216,7 +3216,8 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR, (u16*) &ignored);
     maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, (u16*) &ignored);
 
-    immune = TestAbsorbingAbilities(target, battler, move, moveType, &ignored, (u16*) &ignored);
+    immune = TestImmunityAbilitiesOnly(target, battler, move, moveType);
+    if (!immune) immune = TestAbsorbingAbilitiesOnly(target, battler, move, moveType);
     if (immune) minDamage = maxDamage = 0;
 
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].minDamage = minDamage;
