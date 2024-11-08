@@ -7140,7 +7140,7 @@ static void Cmd_switchineffects(void)
 
         if (TryPrimalReversion(gActiveBattler, TRUE)) return;
 
-        while (gBattleScripting.abilityLoopCounter <= NUM_ABILITY_SLOTS + 1)
+        while (gBattleScripting.abilityLoopCounter <= TOTAL_ABILITY_COUNT)
         {
             if (HandleSwitchInAbility(gBattleScripting.abilityLoopCounter++, gActiveBattler)) return;
         }

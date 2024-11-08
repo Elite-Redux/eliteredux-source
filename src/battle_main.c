@@ -4017,7 +4017,7 @@ static void TryDoEventsBeforeFirstTurn(void)
             if (TryPrimalReversion(gBattlerAttacker, FALSE))
                 return;
         }
-        while (gBattleStruct->firstTurnAbilityLoopCounter <= NUM_ABILITY_SLOTS + 1)
+        while (gBattleStruct->firstTurnAbilityLoopCounter <= TOTAL_ABILITY_COUNT)
         {
             if (HandleSwitchInAbility(gBattleStruct->firstTurnAbilityLoopCounter++, gBattlerAttacker));
                 return;
