@@ -5604,8 +5604,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS)
                 gHitMarker |= HITMARKER_NO_PPDEDUCT;
         }
-
-        
         break;
     case ABILITYEFFECT_ABSORBING: // 3
         if (move != MOVE_NONE)
@@ -12615,7 +12613,6 @@ static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int m
     case ABILITY_DAZZLING:
     CHECK_DAZZLING_IMMUNITY:
         REQUIRE_NOT(gProcessingExtraAttacks)
-        REQUIRE(attacker)
         REQUIRE(GetBattlerSide(attacker) != GetBattlerSide(battler))
         REQUIRE(GetMovePriority(attacker, move, battler))
         *immunityScript = BattleScript_DazzlingProtected;
