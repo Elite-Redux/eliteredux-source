@@ -2,6 +2,7 @@
 #define GUARD_BATTLE_AI_MAIN_H
 
 #include "global.h"
+#include "battle_main.h"
 
 #define AI_CHOICE_FLEE 4
 #define AI_CHOICE_WATCH 5
@@ -11,17 +12,6 @@
 #define AI_SCORE_UNUSABLE AI_SCORE(-1000)
 #define AI_SCORE_IMMUNE 0
 #define AI_SCORE_ADJUST(percent, score) AdjustForChance(percent, score)
-
-union SpeedValue {
-    struct SpeedStruct {
-        u16 afterYou:1;
-        u16 dazedNegation:1;
-        u16 goesFirst:2;
-        u16 goesLastNegation:2;
-        u16 effectiveSpeed;
-    } speedStruct;
-    u32 comparable;
-};
 
 struct MoveState {
     union SpeedValue speedValue;
