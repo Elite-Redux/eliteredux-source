@@ -11652,22 +11652,24 @@ static bool32 TryRemoveScreens(u8 battler)
     u8 enemySide = GetBattlerSide(BATTLE_OPPOSITE(battler));
 
     // try to remove from battler's side
-    if (gSideStatuses[battlerSide] & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL))
+    if (gSideStatuses[battlerSide] & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL | SIDE_STATUS_SMOKESCREEN))
     {
-        gSideStatuses[battlerSide] &= ~(SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL);
+        gSideStatuses[battlerSide] &= ~(SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL | SIDE_STATUS_SMOKESCREEN);
         gSideTimers[battlerSide].reflectTimer = 0;
         gSideTimers[battlerSide].lightscreenTimer = 0;
         gSideTimers[battlerSide].auroraVeilTimer = 0;
+        gSideTimers[battlerSide].smokescreenTimer = 0;
         removed = TRUE;
     }
 
     // try to remove from battler opponent's side
-    if (gSideStatuses[enemySide] & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL))
+    if (gSideStatuses[enemySide] & (SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL | SIDE_STATUS_SMOKESCREEN))
     {
-        gSideStatuses[enemySide] &= ~(SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL);
+        gSideStatuses[enemySide] &= ~(SIDE_STATUS_REFLECT | SIDE_STATUS_LIGHTSCREEN | SIDE_STATUS_AURORA_VEIL | SIDE_STATUS_SMOKESCREEN);
         gSideTimers[enemySide].reflectTimer = 0;
         gSideTimers[enemySide].lightscreenTimer = 0;
         gSideTimers[enemySide].auroraVeilTimer = 0;
+        gSideTimers[enemySide].smokescreenTimer = 0;
         removed = TRUE;
     }
 
