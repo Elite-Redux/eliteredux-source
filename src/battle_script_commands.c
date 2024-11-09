@@ -1720,7 +1720,10 @@ static bool32 JumpIfMoveFailed(u8 adder, u16 move)
     {
         TrySetDestinyBondToHappen();
         if (AbilityBattleEffects(ABILITYEFFECT_ABSORBING, gBattlerTarget, 0, 0, move))
+        {
+            gMoveResultFlags |= MOVE_RESULT_DOESNT_AFFECT_FOE;
             return TRUE;
+        }
     }
     gBattlescriptCurrInstr += adder;
     return FALSE;
