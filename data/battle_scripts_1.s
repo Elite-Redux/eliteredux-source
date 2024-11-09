@@ -9693,20 +9693,22 @@ BattleScript_BattlerInnateStatRaiseOnSwitchIn::
 	end3
 
 BattleScript_PowerOfAlchemySludge::
+	copybyte gBattlerAbility, gStackBattler1
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_POWER_OF_ALCHEMY
 	waitmessage B_WAIT_TIME_LONG
 	printstring STRINGID_POWER_OF_ALCHEMY_SLUDGE
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 
 BattleScript_PowerOfAlchemyGold::
+	copybyte gBattlerAbility, gStackBattler1
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_POWER_OF_ALCHEMY
 	waitmessage B_WAIT_TIME_LONG
 	printstring STRINGID_POWER_OF_ALCHEMY_GOLD
 	waitmessage B_WAIT_TIME_LONG
-	end3
+	return
 	
 BattleScript_BattlerAddedTheType::
 	copybyte gBattlerAbility, gBattlerAttacker
@@ -12234,6 +12236,13 @@ BattleScript_NosferatuActivated::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_NosferatuActivated_NothingToHeal:
     return
+
+BattleScript_HandlePowerOfAlchemy::
+	setbyte gBattlerTarget, 0
+BattleScript_HandlePowerOfAlchemy_Loop:
+	addbyte gBattlerTarget, 1
+	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_HandlePowerOfAlchemy_Loop
+	return
 
 BattleScript_PerformCopyStatEffects::
 	saveattackertostack3

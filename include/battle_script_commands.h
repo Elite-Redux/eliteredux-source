@@ -88,6 +88,8 @@ void ClearBattlerAffectedFlag(int attacker, int target, int ability);
 int GetWeatherChangeMultistringChooser(int weather);
 int ShouldSetMoldBreaker(int battler, int move);
 int EatTargetBerry(int battler, int target);
+void ClearPowerOfAlchemyState(int alchemyBattler, int battler);
+int UpdateBattlerItem(int battler, int newItem);
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];

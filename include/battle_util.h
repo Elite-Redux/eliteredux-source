@@ -25,7 +25,7 @@
 #define ABILITYEFFECT_MOVE_END_OTHER             14
 #define ABILITYEFFECT_NEUTRALIZINGGAS            15
 #define ABILITYEFFECT_AFTER_RECOIL               16
-#define ABILITYEFFECT_COPY_STATS                 17
+#define ABILITYEFFECT_REACTIVE                 17
 #define ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE     18
 #define ABILITYEFFECT_MOVE_END_EITHER            19
 // Special cases

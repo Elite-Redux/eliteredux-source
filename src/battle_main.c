@@ -3392,6 +3392,7 @@ void SwitchInClearSetData(void)
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_BLOODLUST);
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_BLOOD_BATH);
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_SET_ABLAZE);
+        ClearPowerOfAlchemyState(i, gActiveBattler);
     }
 
     // Remove any queued out-of-turn attacks
@@ -3996,7 +3997,7 @@ static void TryDoEventsBeforeFirstTurn(void)
     if (AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0) != 0)
         return;
 
-    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0))
+    if (AbilityBattleEffects(ABILITYEFFECT_REACTIVE, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0))
         return;
     
     // Check all switch in abilities happening from the fastest mon to slowest.
@@ -4968,7 +4969,7 @@ static u32 GetSpeedFromAbilities(u8 battlerId, int speed)
         speed *= 1.1;
     */
 
-    if (gBattleResources->flags->flags[battlerId] & RESOURCE_FLAG_UNBURDEN)
+    if (GetAbilityState(battlerId, ABILITY_UNBURDEN))
         speed *= 2;
 
     // paralysis drop

@@ -2958,54 +2958,60 @@ u8 GetBattlerTurnOrderNum(u8 battlerId)
     return i;
 }
 
-static void CheckSetUnburden(u8 battlerId)
+void ClearPowerOfAlchemyState(int alchemyBattler, int battler)
 {
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_UNBURDEN))
-    {
-        gBattleResources->flags->flags[battlerId] |= RESOURCE_FLAG_UNBURDEN;
-    }
+    int state;
+    if (!BattlerHasAbility(alchemyBattler, ABILITY_POWER_OF_ALCHEMY, FALSE)) return;
+    alchemyBattler--;
+    state = GetAbilityState(alchemyBattler, ABILITY_POWER_OF_ALCHEMY);
+    state &= ~(3 << (2 * battler));
+    SetAbilityState(alchemyBattler, ABILITY_POWER_OF_ALCHEMY, state);
+}
+
+void SetPowerOfAlchemyState(int alchemyBattler, int battler, int item)
+{
+    int state, num;
+    state = GetAbilityState(alchemyBattler, ABILITY_POWER_OF_ALCHEMY);
+    state &= ~(3 << (2 * battler));
+    state |= ((item == ITEM_BLACK_SLUDGE || item == ITEM_BIG_NUGGET ? 2 : 1) << (2 * battler));
+    SetAbilityState(alchemyBattler, ABILITY_POWER_OF_ALCHEMY, state);    
+}
+
+int UpdateBattlerItem(int battler, int newItem)
+{
+    int oldItem = gBattleMons[battler].item;
+    int alchemyBattler;
+    if (oldItem == newItem) return 0;
+    if (oldItem == ITEM_NONE)
+        SetAbilityState(battler, ABILITY_UNBURDEN, FALSE);
+    else if (newItem == ITEM_NONE)
+        SetAbilityState(battler, ABILITY_UNBURDEN, TRUE);
+    
+    if (newItem == ITEM_NONE && oldItem != ITEM_BIG_NUGGET && (alchemyBattler = IsAbilityOnField(ABILITY_POWER_OF_ALCHEMY)))
+        SetPowerOfAlchemyState(alchemyBattler - 1, battler, oldItem);
+    
+    if (newItem == ITEM_NONE) gBattleStruct->choicedMove[battler] = 0;
+
+    gActiveBattler = battler;
+    gBattleMons[battler].item = newItem;
+    BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[battler].item);  // remove target item
+    MarkBattlerForControllerExec(battler);
+    return oldItem;
 }
 
 // battlerStealer steals the item of battlerItem
 void StealTargetItem(u8 battlerStealer, u8 battlerItem)
 {
-    gLastUsedItem = gBattleMons[battlerItem].item;
-    gBattleMons[battlerItem].item = 0;
-
-    RecordItemEffectBattle(battlerItem, 0);
-    RecordItemEffectBattle(battlerStealer, ItemId_GetHoldEffect(gLastUsedItem));
-    gBattleMons[battlerStealer].item = gLastUsedItem;
-
-    CheckSetUnburden(battlerItem);
-    gBattleResources->flags->flags[battlerStealer] &= ~(RESOURCE_FLAG_UNBURDEN);
-
-    gActiveBattler = battlerStealer;
-    BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gLastUsedItem); // set attacker item
-    MarkBattlerForControllerExec(battlerStealer);
-
-    gActiveBattler = battlerItem;
-    BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[battlerItem].item);  // remove target item
-    MarkBattlerForControllerExec(battlerItem);
-
-    gBattleStruct->choicedMove[battlerItem] = 0;
-    
-    gWishFutureKnock.knockedOffMons[GET_BATTLER_SIDE(battlerStealer)] &= ~gBitTable[gBattlerPartyIndexes[battlerItem]];
+    int stealing = gBattleMons[battlerItem].item;
+    gLastUsedItem = UpdateBattlerItem(battlerItem, ITEM_NONE);
+    UpdateBattlerItem(battlerStealer, gLastUsedItem);
 
     TrySaveExchangedItem(battlerItem, gLastUsedItem);
 }
 
 void RemoveItem(u8 battler)
 {
-    gLastUsedItem = gBattleMons[battler].item;
-    gBattleMons[battler].item = 0;
-    RecordItemEffectBattle(battler, 0);
-    CheckSetUnburden(battler);
-
-    gActiveBattler = battler;
-    BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[battler].item); // set attacker item
-    MarkBattlerForControllerExec(battler);
-
-    gBattleStruct->choicedMove[battler] = 0;
+    gLastUsedItem = UpdateBattlerItem(battler, ITEM_NONE);
 }
 
 #define RESET_RETURN                            \
@@ -3848,13 +3854,7 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 if ((B_INCINERATE_GEMS >= GEN_6 && GetBattlerHoldEffect(gEffectBattler, FALSE) == HOLD_EFFECT_GEMS)
                     || (gBattleMons[gEffectBattler].item >= FIRST_BERRY_INDEX && gBattleMons[gEffectBattler].item <= LAST_BERRY_INDEX))
                 {
-                    gLastUsedItem = gBattleMons[gEffectBattler].item;
-                    gBattleMons[gEffectBattler].item = 0;
-                    CheckSetUnburden(gEffectBattler);
-
-                    gActiveBattler = gEffectBattler;
-                    BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gEffectBattler].item);
-                    MarkBattlerForControllerExec(gActiveBattler);
+                    gLastUsedItem = UpdateBattlerItem(gEffectBattler, ITEM_NONE);
                     BattleScriptCall(BattleScript_MoveEffectIncinerate);
                 }
                 break;
@@ -5435,16 +5435,7 @@ static bool32 TryKnockOffBattleScript(u32 battlerDef)
         return TRUE;
     }
 
-    side = GetBattlerSide(battlerDef);
-    gActiveBattler = battlerDef;
-
-    if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER)) return FALSE;
-    
-    gLastUsedItem = gBattleMons[battlerDef].item;
-    gBattleMons[battlerDef].item = ITEM_NONE;
-    gBattleStruct->choicedMove[battlerDef] = 0;
-    gWishFutureKnock.knockedOffMons[side] |= gBitTable[gBattlerPartyIndexes[battlerDef]];
-    CheckSetUnburden(battlerDef);
+    gLastUsedItem = UpdateBattlerItem(battlerDef, ITEM_NONE);
 
     if (gBattleMoves[gCurrentMove].effect == EFFECT_CORROSIVE_GAS)
         BattleScriptCall(BattleScript_CorrosiveGas);
@@ -5492,7 +5483,7 @@ static void Cmd_moveend(void)
     choicedMoveAtk = &gBattleStruct->choicedMove[gBattlerAttacker];
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
-    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_CALL, 0)) return;
+    if (AbilityBattleEffects(ABILITYEFFECT_REACTIVE, 0, 0, ABILITY_BS_CALL, 0)) return;
 
     do
     {
@@ -6486,13 +6477,6 @@ static void Cmd_switchindataupdate(void)
     gBattleMons[gActiveBattler].type2 = RandomizeType(gBaseStats[gBattleMons[gActiveBattler].species].type2, gBattleMons[gActiveBattler].species, gBattleMons[gActiveBattler].personality, FALSE);
     gBattleMons[gActiveBattler].type3 = TYPE_MYSTERY;
 
-    // check knocked off item
-    i = GetBattlerSide(gActiveBattler);
-    if (gWishFutureKnock.knockedOffMons[i] & gBitTable[gBattlerPartyIndexes[gActiveBattler]])
-    {
-        gBattleMons[gActiveBattler].item = 0;
-    }
-
     if (gBattleMoves[gCurrentMove].effect == EFFECT_BATON_PASS || gBattleMoves[gCurrentMove].effect == EFFECT_SHED_TAIL)
     {
         ARRAY_COPY(gBattleMons[gActiveBattler].statStages, oldData.statStages)
@@ -7135,7 +7119,7 @@ static void Cmd_switchineffects(void)
     else
     {
         
-        if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0))
+        if (AbilityBattleEffects(ABILITYEFFECT_REACTIVE, 0, 0, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK, 0))
             return;
 
         if (TryPrimalReversion(gActiveBattler, TRUE)) return;
@@ -7815,14 +7799,8 @@ static void Cmd_removeitem(void)
     // Popped Air Balloon cannot be restored by any means.
     if (GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_AIR_BALLOON)
         gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)] = itemId; // Remember if switched out
-
-    gBattleMons[gActiveBattler].item = 0;
-    CheckSetUnburden(gActiveBattler);
-
-    BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
-    MarkBattlerForControllerExec(gActiveBattler);
-
-    ClearBattlerItemEffectHistory(gActiveBattler);
+    
+    gLastUsedItem = UpdateBattlerItem(gActiveBattler, ITEM_NONE);
     gBattlescriptCurrInstr += 2;
     TryCheekPouch(gActiveBattler, itemId);
 }
@@ -9917,19 +9895,8 @@ static void Cmd_various(void)
         }
         else
         {
-            gLastUsedItem = gBattleMons[gBattlerAttacker].item;
-
-            gActiveBattler = gBattlerAttacker;
-            gBattleMons[gActiveBattler].item = ITEM_NONE;
-            BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
-            MarkBattlerForControllerExec(gActiveBattler);
-            CheckSetUnburden(gBattlerAttacker);
-
-            gActiveBattler = gBattlerTarget;
-            gBattleMons[gActiveBattler].item = gLastUsedItem;
-            BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
-            MarkBattlerForControllerExec(gActiveBattler);
-            gBattleResources->flags->flags[gBattlerTarget] &= ~(RESOURCE_FLAG_UNBURDEN);
+            gLastUsedItem = UpdateBattlerItem(gBattlerAttacker, ITEM_NONE);
+            UpdateBattlerItem(gBattlerTarget, gLastUsedItem);
         }
         return;
     case VARIOUS_ARGUMENT_TO_MOVE_EFFECT:
@@ -15157,25 +15124,14 @@ static void Cmd_tryswapitems(void) // trick
     {
         u8 sideAttacker = GetBattlerSide(gBattlerAttacker);
         u8 sideTarget = GetBattlerSide(gBattlerTarget);
-
-        // you can't swap items if they were knocked off in regular battles
-        if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK
-                             | BATTLE_TYPE_EREADER_TRAINER
-                             | BATTLE_TYPE_FRONTIER
-                             | BATTLE_TYPE_SECRET_BASE
-                             | BATTLE_TYPE_RECORDED_LINK))
-            && (gWishFutureKnock.knockedOffMons[sideAttacker] & gBitTable[gBattlerPartyIndexes[gBattlerAttacker]]
-                || gWishFutureKnock.knockedOffMons[sideTarget] & gBitTable[gBattlerPartyIndexes[gBattlerTarget]]))
-        {
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-        }
-        // can't swap if two pokemon don't have an item
+        
+        // can't swap if two pokemon have the same item
         // or if either of them is an enigma berry or a mail
-        else if ((gBattleMons[gBattlerAttacker].item == 0 && gBattleMons[gBattlerTarget].item == 0)
-                 || !CanBattlerGetOrLoseItem(gBattlerAttacker, gBattleMons[gBattlerAttacker].item)
-                 || !CanBattlerGetOrLoseItem(gBattlerAttacker, gBattleMons[gBattlerTarget].item)
-                 || !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerTarget].item)
-                 || !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerAttacker].item))
+        if (gBattleMons[gBattlerAttacker].item == gBattleMons[gBattlerTarget].item
+            || !CanBattlerGetOrLoseItem(gBattlerAttacker, gBattleMons[gBattlerAttacker].item)
+            || !CanBattlerGetOrLoseItem(gBattlerAttacker, gBattleMons[gBattlerTarget].item)
+            || !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerTarget].item)
+            || !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerAttacker].item))
         {
             gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
         }
@@ -15188,56 +15144,29 @@ static void Cmd_tryswapitems(void) // trick
         // took a while, but all checks passed and items can be safely swapped
         else
         {
-            u16 oldItemAtk, *newItemAtk;
-
-            newItemAtk = &gBattleStruct->changedItems[gBattlerAttacker];
-            oldItemAtk = gBattleMons[gBattlerAttacker].item;
-            *newItemAtk = gBattleMons[gBattlerTarget].item;
-
-            gBattleMons[gBattlerAttacker].item = 0;
-            gBattleMons[gBattlerTarget].item = oldItemAtk;
-
-            RecordItemEffectBattle(gBattlerAttacker, 0);
-            RecordItemEffectBattle(gBattlerTarget, ItemId_GetHoldEffect(oldItemAtk));
-
-            gActiveBattler = gBattlerAttacker;
-            BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, newItemAtk);
-            MarkBattlerForControllerExec(gBattlerAttacker);
-
-            gActiveBattler = gBattlerTarget;
-            BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gBattlerTarget].item);
-            MarkBattlerForControllerExec(gBattlerTarget);
-
-            gBattleStruct->choicedMove[gBattlerTarget] = 0;
-            gBattleStruct->choicedMove[gBattlerAttacker] = 0;
+            gLastUsedItem = UpdateBattlerItem(gBattlerAttacker, gBattleMons[gBattlerTarget].item);
+            gBattleStruct->changedItems[gBattlerAttacker] = UpdateBattlerItem(gBattlerTarget, gLastUsedItem);
 
             gBattlescriptCurrInstr += 5;
 
-            PREPARE_ITEM_BUFFER(gBattleTextBuff1, *newItemAtk)
-            PREPARE_ITEM_BUFFER(gBattleTextBuff2, oldItemAtk)
+            PREPARE_ITEM_BUFFER(gBattleTextBuff1, gBattleStruct->changedItems[gBattlerAttacker])
+            PREPARE_ITEM_BUFFER(gBattleTextBuff2, gLastUsedItem)
 
             if (!(sideAttacker == sideTarget && IsPartnerMonFromSameTrainer(gBattlerAttacker)))
             {
                 // if targeting your own side and you aren't in a multi battle, don't save items as stolen
                 if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-                    TrySaveExchangedItem(gBattlerAttacker, oldItemAtk);
+                    TrySaveExchangedItem(gBattlerAttacker, gLastUsedItem);
                 if (GetBattlerSide(gBattlerTarget) == B_SIDE_PLAYER)
-                    TrySaveExchangedItem(gBattlerTarget, *newItemAtk);
+                    TrySaveExchangedItem(gBattlerTarget, gBattleStruct->changedItems[gBattlerAttacker]);
             }
 
-            if (oldItemAtk != 0 && *newItemAtk != 0)
+            if (gLastUsedItem != 0 && gBattleStruct->changedItems[gBattlerAttacker] != 0)
                 SetActiveMultistringChooser(B_MSG_ITEM_SWAP_BOTH);  // attacker's item -> <- target's item
-            else if (oldItemAtk == 0 && *newItemAtk != 0)
-                {
-                    gBattleResources->flags->flags[gBattlerAttacker] &= ~(RESOURCE_FLAG_UNBURDEN);
-
-                    SetActiveMultistringChooser(B_MSG_ITEM_SWAP_TAKEN); // nothing -> <- target's item
-                }
+            else if (gLastUsedItem == 0 && gBattleStruct->changedItems[gBattlerAttacker] != 0)
+                SetActiveMultistringChooser(B_MSG_ITEM_SWAP_TAKEN); // nothing -> <- target's item
             else
-            {
-                CheckSetUnburden(gBattlerAttacker);
                 SetActiveMultistringChooser(B_MSG_ITEM_SWAP_GIVEN); // attacker's item -> <- nothing
-            }
         }
     }
 }
@@ -15752,10 +15681,8 @@ static void Cmd_switchoutabilities(void)
             if (originalItem)
             {
                 gBattleStruct->usedHeldItems[index][side] = ITEM_NONE;
-                gBattleMons[gActiveBattler].item = gLastUsedItem = originalItem;
 
-                BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
-                MarkBattlerForControllerExec(gActiveBattler);
+                UpdateBattlerItem(gActiveBattler, originalItem);
 
                 BattleScriptCall(BattleScript_RetrieverExits);
             }
@@ -16139,12 +16066,8 @@ static void Cmd_tryrecycleitem(void)
 
     if (*usedHeldItem != 0 && gBattleMons[gActiveBattler].item == 0)
     {
-        gLastUsedItem = *usedHeldItem;
+        UpdateBattlerItem(gActiveBattler, *usedHeldItem);
         *usedHeldItem = 0;
-        gBattleMons[gActiveBattler].item = gLastUsedItem;
-
-        BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[gActiveBattler].item);
-        MarkBattlerForControllerExec(gActiveBattler);
 
         gBattlescriptCurrInstr += 5;
     }
@@ -17217,13 +17140,7 @@ int EatTargetBerry(int battler, int target)
     if (IsStickyHold(target)) return FALSE;
 
     // target loses their berry
-    gLastUsedItem = gBattleMons[target].item;
-    gBattleMons[target].item = 0;
-    CheckSetUnburden(target);
-    gActiveBattler = target;
-
-    BtlController_EmitSetMonData(0, REQUEST_HELDITEM_BATTLE, 0, 2, &gBattleMons[target].item);
-    MarkBattlerForControllerExec(gActiveBattler);
+    UpdateBattlerItem(target, ITEM_NONE);
 
     // attacker temporarily gains their item
     gBattleStruct->changedItems[battler] = gBattleMons[battler].item;

@@ -3022,7 +3022,7 @@ u8 DoBattlerEndTurnEffects(void)
 {
     u32 ability, i, effect = 0;
 
-    if (AbilityBattleEffects(ABILITYEFFECT_COPY_STATS, 0, 0, ABILITY_BS_EXECUTE, 0))
+    if (AbilityBattleEffects(ABILITYEFFECT_REACTIVE, 0, 0, ABILITY_BS_EXECUTE, 0))
     {
         BattleScriptExecute(gBattlescriptCurrInstr);
         return TRUE;
@@ -6145,7 +6145,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             }
         }
         break;
-    case ABILITYEFFECT_COPY_STATS:
+    case ABILITYEFFECT_REACTIVE:
         if (gBattleStruct->statStageCheckState == STAT_STAGE_CHECK_NEEDED)
         {
             u8 i, statId, j;
@@ -6201,6 +6201,44 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                 ZERO(gBattleStruct->statChangesToCheck)
                 gBattleStruct->statStageCheckState = STAT_STAGE_CHECK_NOT_NEEDED;
             }
+        }
+
+        for (i = 0; i < gBattlersCount; i++)
+        {
+            int j, state = GetAbilityState(i, ABILITY_POWER_OF_ALCHEMY);
+            FILTER(state)
+            for (j = 0; j < gBattlersCount; j++)
+            {
+                int item = state & 3;
+                state = state >> 2;
+                FILTER(item)
+                FILTER(gBattleMons[j].item == ITEM_NONE)
+                gStackBattler1 = i;
+                gStackBattler2 = j;
+                if (!effect)
+                {
+                    if (extraArg == ABILITY_BS_PUSH_CURSOR_AND_CALLBACK)
+                    {
+                        BattleScriptPushCursorAndCallback(BattleScript_End3);
+                    }
+                    else if (extraArg == ABILITY_BS_EXECUTE)
+                    {
+                        BattleScriptExecute(BattleScript_End2);
+                    }
+                }
+                if (item == 1)
+                {
+                    UpdateBattlerItem(j, ITEM_BLACK_SLUDGE);
+                    BattleScriptCall(BattleScript_PowerOfAlchemySludge);
+                }
+                else
+                {
+                    UpdateBattlerItem(j, ITEM_BIG_NUGGET);
+                    BattleScriptCall(BattleScript_PowerOfAlchemyGold);
+                }
+                effect++;
+            }
+            SetAbilityState(i, ABILITY_POWER_OF_ALCHEMY, 0);
         }
         break;
         case ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE:
@@ -15615,31 +15653,20 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         return TRUE;
     
     case ABILITY_POWER_OF_ALCHEMY:
-        gBattlerTarget = BATTLE_OPPOSITE(battler);
-        if (!IsBattlerAlive(gBattlerTarget)
-            || !gBattleMons[gBattlerTarget].item
-            || gBattleMons[gBattlerTarget].item == ITEM_BIG_NUGGET
-            || !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerTarget].item))
-            gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
-        if (!IsBattlerAlive(gBattlerTarget)
-            || !gBattleMons[gBattlerTarget].item
-            || gBattleMons[gBattlerTarget].item == ITEM_BIG_NUGGET
-            || !CanBattlerGetOrLoseItem(gBattlerTarget, gBattleMons[gBattlerTarget].item))
-            break;
-
-        gStackBattler2 = gBattlerTarget;
-        gLastUsedItem = gBattleMons[gBattlerTarget].item;
-        if (gBattleMons[gBattlerTarget].item == ITEM_BLACK_SLUDGE)
         {
-            gBattleMons[gBattlerTarget].item = ITEM_BIG_NUGGET;
-            BattleScriptPushCursorAndCallback(BattleScript_PowerOfAlchemyGold);
-        }
-        else
+        int any = FALSE;
+        for (i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2)
         {
-            gBattleMons[gBattlerTarget].item = ITEM_BLACK_SLUDGE;
-            BattleScriptPushCursorAndCallback(BattleScript_PowerOfAlchemySludge);
+            FILTER(IsBattlerAlive)
+            FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
+            any = TRUE;
+            UpdateBattlerItem(i, ITEM_BLACK_SLUDGE);
+            BattleScriptPushCursorAndCallback(BattleScript_End3);
+            BattleScriptCall(BattleScript_PowerOfAlchemySludge);
         }
+        REQUIRE(any)
         return TRUE;
+        }
     
     case ABILITY_REJECTION:
         REQUIRE_NOT(gFieldTimers.quashTimer)

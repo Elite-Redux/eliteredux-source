@@ -542,6 +542,7 @@ extern const u8 BattleScript_HandleSoulEaterEffect[];
 extern const u8 BattleScript_AttackerSoulLinker[];
 extern const u8 BattleScript_NosferatuActivated[];
 extern const u8 BattleScript_PerformCopyStatEffects[];
+extern const u8 BattleScript_HandlePowerOfAlchemy[];
 extern const u8 BattleScript_PerformStatDown[];
 extern const u8 BattleScript_PerformStatUp[];
 extern const u8 BattleScript_Lawnmower[];
