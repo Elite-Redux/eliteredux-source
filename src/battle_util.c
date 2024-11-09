@@ -15878,7 +15878,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         REQUIRE_NOT(gBattleMons[battler].item)
         REQUIRE_NOT(gBattleStruct->changedItems[battler])
         REQUIRE(ItemId_GetPocket(GetUsedHeldItem(battler)) == POCKET_BERRIES)
-        REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && Random() % 2)
+        REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) || Random() % 2)
 
         BattleScriptPushCursorAndCallback(BattleScript_HarvestActivates);
         return TRUE;
