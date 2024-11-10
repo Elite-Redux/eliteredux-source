@@ -347,6 +347,7 @@ void ReadActiveScriptInitialStackState();
 void SetActiveMultistringChooser(u8 messageId);
 void SetActiveAbilityPopupOverride(u16 messageId);
 void SetActiveStackBattler(u8 battler, u8 number);
+void SetActiveStatChanger(int stat, s8 change);
 u16 GetInnateInSlot(int level, u16 species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move);

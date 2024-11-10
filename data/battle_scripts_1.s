@@ -8122,6 +8122,12 @@ BattleScript_MistProtected::
 	waitmessage B_WAIT_TIME_LONG
 	return
 
+BattleScript_ItemStatsProtected::
+	pause B_WAIT_TIME_SHORT
+	printstring STRINGID_ITEM_STAT_PROTECTED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
 BattleScript_RageIsBuilding::
 	printstring STRINGID_PKMNRAGEBUILDING
 	waitmessage B_WAIT_TIME_LONG
@@ -9209,8 +9215,6 @@ BattleScript_TryActivateSteadFast:
 	call BattleScript_AbilityPopUp
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	setbyte gBattleCommunication STAT_SPEED
-	stattextbuffer BS_ATTACKER
 	printstring STRINGID_ATTACKERABILITYSTATRAISE
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveUsedFlinchedEnd
@@ -9579,6 +9583,11 @@ BattleScript_AbilityPopUpEnd3::
 	call BattleScript_AbilityPopUp
 	end3
 
+BattleScript_PauseAndAbilityPopup::
+	waitmessage B_WAIT_TIME_SHORT
+	call BattleScript_AbilityPopUp
+	return
+
 BattleScript_AbilityPopUp::
 	.if B_ABILITY_POP_UP == TRUE
 	showabilitypopup BS_ABILITY_BATTLER
@@ -9771,41 +9780,35 @@ BattleScript_BattlerEnvelopedItselfInAVeil::
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
+BattleScript_Petrify::
+	call BattleScript_AbilityPopUp
+	goto BattleScript_Intimidate_NoPause
+
+BattleScript_PetrifyRemoveStats::
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_OPPOSING_STAT_BUFFS_GONE
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_Intimidate_NoPause
+
 BattleScript_IntimidateActivatedNew::
-	battlemacros MACROS_SAVE_ABILITY_TO_VARIABLE, 0, NULL
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	jumpifhalfword CMP_NOT_EQUAL, sABILITY_OVERWRITE, ABILITY_GLEAM_EYES, BattleScript_IntimidateActivatedNew_Continue
 	tryfriskmsg BS_ATTACKER
+	goto BattleScript_Intimidate_NoPause
 BattleScript_IntimidateActivatedNew_Continue:
-	battlemacros MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_1, 0, BattleScript_IntimidateCloneActivated_Target_1
-	battlemacros MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_2, 0, BattleScript_IntimidateCloneActivated_Target_2
+	waitmessage B_WAIT_TIME_SHORT
+BattleScript_Intimidate_NoPause::
+	dointimidate BS_TARGET
+	dointimidate BS_TARGET_PARTNER
 	end3
 
-BattleScript_IntimidateCloneActivated_Target_1:
-	playstatchangeanimation BS_TARGET, BIT_ATK, STAT_CHANGE_NEGATIVE
-	waitanimation
-	printstring STRINGID_PKMNCUTSSTATWITHINTIMIDATECLONE
+BattleScript_IntimidatePrevented::
+	pause B_WAIT_TIME_SHORT
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_STATWASNOTLOWERED
 	waitmessage B_WAIT_TIME_LONG
-BattleScript_Intimidate_DefiantClonesCheck_Target1:
-	checkstatbuffonlowered
-BattleScript_IntimidateCloneActivated_Target_1_AfterDefiantCheck::
-	battlemacros MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_2, 0, BattleScript_IntimidateCloneActivated_Target_2
-	battlemacros MACROS_SAVE_ABILITY_TO_VARIABLE, 0, NULL
-	battlemacros MACROS_CLEAN_OVERWRITEN_STRINGS, 0, NULL
-	end3
-
-BattleScript_IntimidateCloneActivated_Target_2:
-	playstatchangeanimation BS_TARGET, BIT_ATK, STAT_CHANGE_NEGATIVE
-	waitanimation
-	printstring STRINGID_PKMNCUTSSTATWITHINTIMIDATECLONE
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_Intimidate_DefiantClonesCheck_Target2:
-	checkstatbuffonlowered
-BattleScript_IntimidateCloneActivated_Target_2_AfterDefiantCheck:
-	battlemacros MACROS_SAVE_ABILITY_TO_VARIABLE, 0, NULL
-	battlemacros MACROS_CLEAN_OVERWRITEN_STRINGS, 0, NULL
-	end3
+	return
 	
 BattleScript_AirBlowerActivated::
 	call BattleScript_AbilityPopUp
@@ -10388,104 +10391,6 @@ BattleScript_TryAdrenalineOrb:
 	removeitem BS_TARGET
 BattleScript_TryAdrenalineOrbRet:
 	return
-
-BattleScript_IntimidateActivatesEnd3::
-	call BattleScript_PauseIntimidateActivates
-	end3
-
-BattleScript_PauseIntimidateActivates:
-	pause B_WAIT_TIME_SHORT
-BattleScript_IntimidateActivates::
-	setbyte gBattlerTarget, 0
-	call BattleScript_AbilityPopUp
-BattleScript_IntimidateActivatesLoop:
-	setstatchanger STAT_ATK, 1, TRUE
-	trygetintimidatetarget BattleScript_IntimidateActivatesReturn
-	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE,   BattleScript_IntimidateActivatesLoopIncrement
-	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_IntimidateActivatesLoopIncrement
-	jumpifability BS_TARGET, ABILITY_CLEAR_BODY,   BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_FULL_METAL_BODY,   BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_BLIND_RAGE,   BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_OWN_TEMPO,    BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_OBLIVIOUS,    BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_OVERWHELM,    BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_MIRROR_ARMOR, BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_DISCIPLINE,   BattleScript_IntimidatePrevented
-	jumpifability BS_TARGET, ABILITY_WAY_OF_PRECISION,  BattleScript_IntimidatePrevented
-	statbuffchange STAT_BUFF_NOT_PROTECT_AFFECTED | STAT_BUFF_ALLOW_PTR, BattleScript_IntimidateActivatesLoopIncrement
-	jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, 1, BattleScript_IntimidateActivatesLoopIncrement
-	setgraphicalstatchangevalues
-	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printstring STRINGID_PKMNCUTSATTACKWITH
-	waitmessage B_WAIT_TIME_LONG
-	call BattleScript_TryAdrenalineOrb
-	checkstatbuffonlowered
-BattleScript_IntimidateActivatesLoopIncrement:
-	addbyte gBattlerTarget, 1
-	goto BattleScript_IntimidateActivatesLoop
-BattleScript_IntimidateActivatesReturn:
-	return
-BattleScript_IntimidatePrevented:
-	pause B_WAIT_TIME_SHORT
-	call BattleScript_AbilityPopUp
-	setbyte gBattleCommunication STAT_ATK
-	stattextbuffer BS_ATTACKER
-	printstring STRINGID_STATWASNOTLOWERED
-	waitmessage B_WAIT_TIME_LONG
-	call BattleScript_TryAdrenalineOrb
-	goto BattleScript_IntimidateActivatesLoopIncrement
-	
-BattleScript_ScareActivatesEnd3::
-	call BattleScript_PauseScareActivates
-	end3
-
-BattleScript_PauseScareActivates:
-	pause B_WAIT_TIME_SHORT
-BattleScript_ScareActivates::
-	setbyte gBattlerTarget, 0
-	call BattleScript_AbilityPopUp
-BattleScript_ScareActivatesLoop:
-	setstatchanger STAT_SPATK, 1, TRUE
-	trygetintimidatetarget BattleScript_ScareActivatesReturn
-	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE,   BattleScript_ScareActivatesLoopIncrement
-	jumpifholdeffect BS_ATTACKER, HOLD_EFFECT_CLEAR_AMULET, BattleScript_ScareActivatesLoopIncrement
-	jumpifability BS_TARGET, ABILITY_CLEAR_BODY,   BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_FULL_METAL_BODY,   BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_HYPER_CUTTER, BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_INNER_FOCUS,  BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_SCRAPPY,      BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_BLIND_RAGE,   BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_OWN_TEMPO,    BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_OBLIVIOUS,    BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_OVERWHELM,    BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_MIRROR_ARMOR, BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_DISCIPLINE,   BattleScript_ScarePrevented
-	jumpifability BS_TARGET, ABILITY_WAY_OF_PRECISION,  BattleScript_ScarePrevented
-	statbuffchange STAT_BUFF_NOT_PROTECT_AFFECTED | STAT_BUFF_ALLOW_PTR, BattleScript_ScareActivatesLoopIncrement
-	jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, 1, BattleScript_ScareActivatesLoopIncrement
-	setgraphicalstatchangevalues
-	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printstring STRINGID_PKMNCUTSSPATTACKWITH
-	waitmessage B_WAIT_TIME_LONG
-	call BattleScript_TryAdrenalineOrb
-	checkstatbuffonlowered
-BattleScript_ScareActivatesLoopIncrement:
-	addbyte gBattlerTarget, 1
-	goto BattleScript_ScareActivatesLoop
-BattleScript_ScareActivatesReturn:
-	return
-BattleScript_ScarePrevented:
-	pause B_WAIT_TIME_SHORT
-	call BattleScript_AbilityPopUp
-	setbyte gBattleCommunication STAT_SPATK
-	stattextbuffer BS_ATTACKER
-	printstring STRINGID_STATWASNOTLOWERED
-	waitmessage B_WAIT_TIME_LONG
-	call BattleScript_TryAdrenalineOrb
-	goto BattleScript_ScareActivatesLoopIncrement
 
 BattleScript_DroughtActivates::
 	call BattleScript_AbilityPopUp
@@ -11097,20 +11002,6 @@ BattleScript_SwitchInAbilityMsg::
 	call BattleScript_AbilityPopUp
 	printfromtable gSwitchInAbilityStringIds
 	waitmessage B_WAIT_TIME_LONG
-	end3
-
-BattleScript_Petrify::
-	call BattleScript_AbilityPopUp
-	goto BattleScript_PetrifyRemoveStats_Intimidate
-
-BattleScript_PetrifyRemoveStats::
-	call BattleScript_AbilityPopUp
-	printstring STRINGID_OPPOSING_STAT_BUFFS_GONE
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_PetrifyRemoveStats_Intimidate:
-	battlemacros MACROS_SAVE_ABILITY_TO_VARIABLE, 0, NULL
-	battlemacros MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_1, 0, BattleScript_IntimidateCloneActivated_Target_1
-	battlemacros MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_2, 0, BattleScript_IntimidateCloneActivated_Target_2
 	end3
 
 BattleScript_PressureRemoveStats::

@@ -25,14 +25,14 @@ int ScoreIntimidate(int battlerDef, int stat, int change, int ability, int both)
 
     if (statActual == STAT_HIGHEST_ATTACKING) stat = GetHighestAttackingStatId(battlerDef, TRUE);
     if (statActual == STAT_HIGHEST_DEFENDING) stat = GetHighestDefendingStatId(battlerDef, TRUE);
-    if (IsBattlerImmuneToLowerStatsFromIntimidateClone(battlerDef, stat, ability))
+    if (IsBattlerImmuneToLowerStatsFromIntimidateClone(battlerDef))
         score += AI_SCORE_STAT(battlerDef, stat, change);
     
     if (both)
     {
         if (statActual == STAT_HIGHEST_ATTACKING) stat = GetHighestAttackingStatId(BATTLE_PARTNER(battlerDef), TRUE);
         if (statActual == STAT_HIGHEST_DEFENDING) stat = GetHighestDefendingStatId(BATTLE_PARTNER(battlerDef), TRUE);
-        if (IsBattlerImmuneToLowerStatsFromIntimidateClone(BATTLE_PARTNER(battlerDef), stat, ability))
+        if (IsBattlerImmuneToLowerStatsFromIntimidateClone(BATTLE_PARTNER(battlerDef)))
             score += AI_SCORE_STAT(BATTLE_PARTNER(battlerDef), stat, change);
     }
     

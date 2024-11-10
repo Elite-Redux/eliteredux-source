@@ -407,6 +407,7 @@ struct SavedStackData
 {
     u16 abilityOverride;
     u8 multistringChooser;
+    u8 statChanger;
     u8 stackBattler1:2;
     u8 stackBattler2:2;
     u8 stackBattler3:2;

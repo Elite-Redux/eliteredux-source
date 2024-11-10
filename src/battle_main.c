@@ -4020,7 +4020,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         }
         while (gBattleStruct->firstTurnAbilityLoopCounter <= TOTAL_ABILITY_COUNT)
         {
-            if (HandleSwitchInAbility(gBattleStruct->firstTurnAbilityLoopCounter++, gBattlerAttacker));
+            if (HandleSwitchInAbility(gBattleStruct->firstTurnAbilityLoopCounter++, gBattlerAttacker))
                 return;
         }
         gBattleStruct->firstTurnAbilityLoopCounter = 0;

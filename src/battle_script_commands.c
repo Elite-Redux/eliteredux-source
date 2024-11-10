@@ -8774,7 +8774,7 @@ static void Cmd_various(void)
                 statId = (Random() % (NUM_BATTLE_STATS - 1)) + 1;
             } while (!(bits & gBitTable[statId]));
 
-            SET_STATCHANGER(statId, 2, FALSE);
+            SetActiveStatChanger(statId, 2);
         }
         else
         {
@@ -8955,8 +8955,8 @@ static void Cmd_various(void)
         BtlController_EmitPlayFanfareOrBGM(0, MUS_VICTORY_TRAINER, TRUE);
         MarkBattlerForControllerExec(gActiveBattler);
         break;
-    case VARIOUS_STAT_TEXT_BUFFER:
-        PREPARE_STAT_BUFFER(gBattleTextBuff1, gBattleCommunication[0]);
+    case VARIOUS_SET_ACTIVE_STAT_CHANGER:
+        SetActiveStatChanger(GET_STAT_BUFF_ID(i), GET_STAT_BUFF_VALUE_WITH_SIGN(i));
         break;
     case VARIOUS_SWITCHIN_ABILITIES:
         gBattlerAttacker = gActiveBattler;
@@ -9116,7 +9116,6 @@ static void Cmd_various(void)
             {
                 ChangeStatBuffsImplicit(StatBuffValue(1), statToChange, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
                 SetStatChanger(statToChange, 1);
-                PREPARE_STAT_BUFFER(gBattleTextBuff1, statToChange);
                 gBattleScripting.abilityPopupOverwrite = abilityToCheck;
                 BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
             }
@@ -9149,7 +9148,6 @@ static void Cmd_various(void)
             {
                 ChangeStatBuffsImplicit(StatBuffValue(-1), statToChange, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL);
                 SetStatChanger(statToChange, -1);
-                PREPARE_STAT_BUFFER(gBattleTextBuff1, statToChange);
                 gBattleScripting.abilityPopupOverwrite = abilityToCheck;
                 BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
                 return;
@@ -9240,7 +9238,6 @@ static void Cmd_various(void)
             gBattleScripting.abilityPopupOverwrite = ABILITY_BEAST_BOOST;
             ChangeStatBuffsImplicit(StatBuffValue(1), i, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
             SetStatChanger(i, 1);
-            PREPARE_STAT_BUFFER(gBattleTextBuff1, i);
             BattleScriptCall(BattleScript_AttackerAbilityStatRaise);
             return;
         }
@@ -9257,7 +9254,6 @@ static void Cmd_various(void)
                 ChangeStatBuffs(gStackBattler1, StatBuffValue(1), STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
                 SetStatChanger(STAT_SPATK, 1);
                 gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_HEART;
-                PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_SPATK);
                 BattleScriptPush(runAgain);
                 gBattlescriptCurrInstr = BattleScript_ScriptingAbilityStatRaise;
                 return;
@@ -9271,12 +9267,8 @@ static void Cmd_various(void)
         if (NoAliveMonsForEitherParty()) break;
         if (gBattleMoves[gCurrentMove].effect == EFFECT_FELL_STINGER && CompareStat(gBattlerAttacker, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN))
         {
-            if (B_FELL_STINGER_STAT_RAISE >= GEN_7)
-                SET_STATCHANGER(STAT_ATK, 3, FALSE);
-            else
-                SET_STATCHANGER(STAT_ATK, 2, FALSE);
+            SetStatChanger(STAT_ATK, 3);
 
-            PREPARE_STAT_BUFFER(gBattleTextBuff1, STAT_ATK);
             BattleScriptCall(BattleScript_FellStingerRaisesStat);
             return;
         }
@@ -9998,7 +9990,7 @@ static void Cmd_various(void)
             {
                 if (gTotemBoosts[gActiveBattler].stats & (1 << i))
                 {
-                    SetStatChanger(i + 1, gTotemBoosts[gActiveBattler].statChanges[i]);
+                    SetActiveStatChanger(i + 1, gTotemBoosts[gActiveBattler].statChanges[i]);
 
                     gTotemBoosts[gActiveBattler].stats &= ~(1 << i);
                     gBattleScripting.battler = gActiveBattler;
@@ -10353,7 +10345,7 @@ static void Cmd_various(void)
         // For Mirror Armor: "If the Pokémon with this Ability is affected by Sticky Web, the effect is reflected back to the Pokémon which set it up.
         //  If Pokémon which set up Sticky Web is not on the field, no Pokémon have their Speed lowered."
         gBattlerAttacker = gBattlerTarget;  // Initialize 'fail' condition
-        SET_STATCHANGER(STAT_SPEED, 1, TRUE);
+        SetActiveStatChanger(STAT_SPEED, -1);
         if (gBattleStruct->stickyWebUser != 0xFF)
             gBattlerAttacker = gBattleStruct->stickyWebUser;
         break;
@@ -10463,7 +10455,7 @@ static void Cmd_various(void)
 
         statId = GetHighestAttackingStatId(gActiveBattler, TRUE);
 
-        SetStatChanger(statId, increase);
+        SetActiveStatChanger(statId, increase);
 
         if (!CompareStat(gActiveBattler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
             gBattlescriptCurrInstr = ptr;
@@ -10498,7 +10490,7 @@ static void Cmd_various(void)
                     SetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS, (union AbilityStates) { .paradoxBoost = boost });
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
                     RemoveItem(gActiveBattler);
-                    PREPARE_STAT_BUFFER(gBattleTextBuff1, boost.statId);
+                    SetStatChanger(boost.statId, 0);
                     BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
                 }
                 else SetAbilityState(gActiveBattler, ABILITY_PROTOSYNTHESIS, 0);
@@ -10509,7 +10501,7 @@ static void Cmd_various(void)
                 struct ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
                 gBattleScripting.abilityPopupOverwrite = ABILITY_PROTOSYNTHESIS;
                 SetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS, (union AbilityStates) { .paradoxBoost = boost });
-                PREPARE_STAT_BUFFER(gBattleTextBuff1, boost.statId);
+                SetStatChanger(boost.statId, 0);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
                 BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
             }
@@ -10566,7 +10558,7 @@ static void Cmd_various(void)
                     SetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE, (union AbilityStates) { .paradoxBoost = boost });
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
                     RemoveItem(gActiveBattler);
-                    PREPARE_STAT_BUFFER(gBattleTextBuff1, boost.statId);
+                    SetStatChanger(boost.statId, 0);
                     BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
                 }
                 else SetAbilityState(gActiveBattler, ABILITY_QUARK_DRIVE, 0);
@@ -10577,7 +10569,7 @@ static void Cmd_various(void)
                 struct ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
                 gBattleScripting.abilityPopupOverwrite = ABILITY_QUARK_DRIVE;
                 SetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE, (union AbilityStates) { .paradoxBoost = boost });
-                PREPARE_STAT_BUFFER(gBattleTextBuff1, boost.statId);
+                SetStatChanger(boost.statId, 0);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_TERRAIN;
                 BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
             }
@@ -11488,6 +11480,68 @@ static void Cmd_various(void)
         }
         break;
         }
+    case VARIOUS_DO_INTIMIDATE:
+        {
+            u16 ability = gBattleScripting.abilityPopupOverwrite;
+            u8 numAbility = 0;
+            int immunityAbility = IsBattlerImmuneToLowerStatsFromIntimidateClone(gActiveBattler);
+
+            gBattlerTarget = gActiveBattler;
+
+            REQUIRE(IsBattlerAlive(gActiveBattler))
+
+            if (immunityAbility)
+            {
+                gBattlerAbility = gBattlerTarget;
+                gBattleScripting.abilityPopupOverwrite = immunityAbility;
+                BattleScriptCall(BattleScript_IntimidatePrevented);
+                break;
+            }
+
+            //Monotype Stuff
+            if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(gBattlerAttacker) != B_SIDE_PLAYER && ability == ABILITY_NONE)
+                ability = ABILITY_FEARMONGER;
+
+            for (i = 0; i < NUM_INTIMIDATE_CLONES; i++) {
+                if (gIntimidateCloneData[i].ability == ability)
+                    break;
+            }
+            
+            REQUIRE(i < NUM_INTIMIDATE_CLONES)
+
+            numAbility = i;
+
+            for (i = gIntimidateCloneData[numAbility].numStatsLowered - 1; i >= 0; i--)
+            {
+                int moveEffect;
+                int statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], gBattlerTarget);
+                if (gIntimidateCloneData[numAbility].statChange == 2)
+                {
+                    if (BattlerHasAbility(gBattlerTarget, ABILITY_GUARD_DOG, TRUE))
+                        moveEffect = MOVE_EFFECT_ATK_PLUS_2;
+                    else
+                        moveEffect = MOVE_EFFECT_ATK_MINUS_2;
+                }
+                else
+                {
+                    if (BattlerHasAbility(gBattlerTarget, ABILITY_GUARD_DOG, TRUE))
+                        moveEffect = MOVE_EFFECT_ATK_PLUS_1;
+                    else
+                        moveEffect = MOVE_EFFECT_ATK_MINUS_1;
+                }
+                moveEffect += statToLower - 1;
+                gBattleScripting.moveEffect = moveEffect;
+                SetMoveEffect(TRUE, FALSE);
+
+                if (BattlerHasAbility(gBattlerTarget, ABILITY_GUARD_DOG, TRUE))
+                {
+                    gBattleScripting.abilityPopupOverwrite = ABILITY_GUARD_DOG;
+                    gBattlerAbility = gBattlerTarget;
+                    BattleScriptCall(BattleScript_AbilityPopUp);
+                }
+            }
+        }
+        break;
     } // End of switch (gBattlescriptCurrInstr[2])
 }
 
@@ -12297,6 +12351,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
     u32 index;
     bool32 affectsUser = (flags & MOVE_EFFECT_AFFECTS_USER);
     bool8 dontSetBuffers = flags & STAT_BUFF_DONT_SET_BUFFERS;
+    int updateMoveEffect;
     int ability;
 
     flags &= ~STAT_BUFF_DONT_SET_BUFFERS;
@@ -12321,17 +12376,18 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         notProtectAffected++;
     flags &= ~(STAT_BUFF_NOT_PROTECT_AFFECTED);
 
+    updateMoveEffect = flags & STAT_BUFF_UPDATE_MOVE_EFFECT;
+    flags &= ~(STAT_BUFF_UPDATE_MOVE_EFFECT);
+
     if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CONTRARY))
     {
         statValue ^= STAT_BUFF_NEGATIVE;
         gBattleScripting.statChanger ^= STAT_BUFF_NEGATIVE;
-        if (flags & STAT_BUFF_UPDATE_MOVE_EFFECT)
+        if (updateMoveEffect)
         {
             gBattleScripting.moveEffect = ReverseStatChangeMoveEffect(gBattleScripting.moveEffect);
         }
     }
-
-    flags &= ~(STAT_BUFF_UPDATE_MOVE_EFFECT);
 
     if (dontSetBuffers) flags = 0;
 
@@ -12346,8 +12402,6 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         statValue = StatBuffValue(-2 * GET_STAT_BUFF_VALUE(statValue));
         gBattleScripting.statChanger = statValue;
     }
-
-    if (!dontSetBuffers) { PREPARE_STAT_BUFFER(gBattleTextBuff1, statId); }
 
     if (statValue <= -1) // Stat decrease.
     {
@@ -12364,13 +12418,18 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
                 }
                 else
                 {
-                    BattleScriptPush(BS_ptr);
                     gBattleScripting.battler = gActiveBattler;
+                    BattleScriptPush(BS_ptr);
                     gBattlescriptCurrInstr = BattleScript_MistProtected;
                     gTurnStructs[gActiveBattler].statLowered = TRUE;
                 }
             }
-            return 0;
+            else if (updateMoveEffect && !gTurnStructs[gActiveBattler].statLowered)
+            {
+                gBattleScripting.battler = gActiveBattler;
+                gTurnStructs[gActiveBattler].statLowered = TRUE;
+                BattleScriptCall(BattleScript_MistProtected);
+            }
         }
         else if (gCurrentMove != MOVE_CURSE
                  && notProtectAffected != TRUE && JumpIfMoveAffectedByProtect(0))
@@ -12394,12 +12453,19 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
                 else
                 {
                     gBattleScripting.abilityPopupOverwrite = ability;
-                    BattleScriptPush(BS_ptr);
                     gBattleScripting.battler = gActiveBattler;
                     gBattlerAbility = gActiveBattler;
+                    BattleScriptPush(BS_ptr);
                     gBattlescriptCurrInstr = BattleScript_AbilityNoStatLoss;
-                    gTurnStructs[gActiveBattler].statLowered = TRUE;
                 }
+            }
+            else if (updateMoveEffect && !gTurnStructs[gActiveBattler].statLowered)
+            {
+                gBattleScripting.abilityPopupOverwrite = ability;
+                gBattleScripting.battler = gActiveBattler;
+                gBattlerAbility = gActiveBattler;
+                gTurnStructs[gActiveBattler].statLowered = TRUE;
+                BattleScriptCall(BattleScript_AbilityNoStatLoss);
             }
             return 0;
         }
@@ -12414,12 +12480,20 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
                 else
                 {
                     gBattleScripting.abilityPopupOverwrite = ABILITY_FLOWER_VEIL;
-                    BattleScriptPush(BS_ptr);
                     gBattleScripting.battler = gActiveBattler;
                     gBattlerAbility = index - 1;
+                    BattleScriptPush(BS_ptr);
                     gBattlescriptCurrInstr = BattleScript_FlowerVeilProtectsRet;
                     gTurnStructs[gActiveBattler].statLowered = TRUE;
                 }
+            }
+            else if (updateMoveEffect && !gTurnStructs[gActiveBattler].statLowered)
+            {
+                gBattleScripting.abilityPopupOverwrite = ability;
+                gBattleScripting.battler = gActiveBattler;
+                gBattlerAbility = gActiveBattler;
+                gTurnStructs[gActiveBattler].statLowered = TRUE;
+                BattleScriptCall(BattleScript_AbilityNoStatLoss);
             }
             return 0;
         }
@@ -12433,13 +12507,21 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
                 }
                 else
                 {
-                    BattleScriptPush(BS_ptr);
                     gBattleScripting.battler = gActiveBattler;
                     gBattlerAbility = index - 1;
                     gBattleScripting.abilityPopupOverwrite = ABILITY_DESERT_CLOAK;
+                    BattleScriptPush(BS_ptr);
                     gBattlescriptCurrInstr = BattleScript_DesertCloakProtectsRet;
                     gTurnStructs[gActiveBattler].statLowered = TRUE;
                 }
+            }
+            else if (updateMoveEffect && !gTurnStructs[gActiveBattler].statLowered)
+            {
+                gBattleScripting.battler = gActiveBattler;
+                gBattlerAbility = index - 1;
+                gBattleScripting.abilityPopupOverwrite = ABILITY_DESERT_CLOAK;
+                gTurnStructs[gActiveBattler].statLowered = TRUE;
+                BattleScriptCall(BattleScript_DesertCloakProtectsRet);
             }
             return 0;
         }
@@ -12450,11 +12532,16 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {
-                
-                BattleScriptPush(BS_ptr);
                 gBattleScripting.battler = gActiveBattler;
                 gBattlerAbility = gActiveBattler;
+                BattleScriptPush(BS_ptr);
                 gBattlescriptCurrInstr = BattleScript_AbilityNoSpecificStatLoss;
+            }
+            else if (updateMoveEffect && !gTurnStructs[gActiveBattler].statLowered)
+            {
+                gBattleScripting.battler = gActiveBattler;
+                gBattlerAbility = gActiveBattler;
+                BattleScriptCall(BattleScript_AbilityNoSpecificStatLoss);
             }
             return 0;
         }
@@ -12465,10 +12552,18 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
             {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_MIRROR_ARMOR;
                 SET_STATCHANGER(statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
-                BattleScriptPush(BS_ptr);
                 gBattleScripting.battler = gActiveBattler;
                 gBattlerAbility = gActiveBattler;
+                BattleScriptPush(BS_ptr);
                 gBattlescriptCurrInstr = BattleScript_MirrorArmorReflect;
+            }
+            else if (updateMoveEffect && !gTurnStructs[gActiveBattler].statLowered)
+            {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_MIRROR_ARMOR;
+                SET_STATCHANGER(statId, GET_STAT_BUFF_VALUE(statValue) | STAT_BUFF_NEGATIVE, TRUE);
+                gBattleScripting.battler = gActiveBattler;
+                gBattlerAbility = gActiveBattler;
+                BattleScriptCall(BattleScript_MirrorArmorReflect);
             }
             return 0;
         }
@@ -12476,7 +12571,24 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {
-                gBattlescriptCurrInstr = BattleScript_ButItFailed;
+                if (gTurnStructs[gActiveBattler].statLowered)
+                {
+                    gBattlescriptCurrInstr = BS_ptr;
+                }
+                else
+                {
+                    gBattleScripting.battler = gActiveBattler;
+                    BattleScriptPush(BS_ptr);
+                    gBattlescriptCurrInstr = BattleScript_ItemStatsProtected;
+                    gTurnStructs[gActiveBattler].statLowered = TRUE;
+                }
+            }
+            else if (updateMoveEffect && !gTurnStructs[gActiveBattler].statLowered)
+            {
+                gLastUsedItem = gBattleMons[gActiveBattler].item;
+                gBattleScripting.battler = gActiveBattler;
+                gTurnStructs[gActiveBattler].statLowered = TRUE;
+                BattleScriptCall(BattleScript_ItemStatsProtected);
             }
             return 0;
         }
@@ -13017,57 +13129,30 @@ static void Cmd_setlightscreen(void)
     gBattlescriptCurrInstr++;
 }
 
-bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ability) {
-    bool8 checkOblivious = FALSE;
-    //Check if the opposing battler is immune to stat lowering in general or if the mon is not alive
-    if (gBattleMons[battler].hp == 0 || stat == STAT_HP) return TRUE;
-    else if (BATTLER_HAS_ABILITY(battler, ABILITY_GUARD_DOG)) return FALSE;
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_CLEAR_BODY)     ||
-       BATTLER_HAS_ABILITY(battler, ABILITY_FULL_METAL_BODY)     ||
-       BATTLER_HAS_ABILITY(battler, ABILITY_MIRROR_ARMOR))
-        return TRUE;
+bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler) {
+    int i;
 
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_CLEAR_AMULET)
-        return TRUE;
+    if (BattlerHasAbility(battler, ABILITY_GUARD_DOG, TRUE)) return FALSE;
 
-    switch (ability) {
-        case ABILITY_INTIMIDATE:
-        case ABILITY_SCARE:
-        case ABILITY_TERRIFY:
-        case ABILITY_FEARMONGER:
-        case ABILITY_YUKI_ONNA:
-        case ABILITY_GLEAM_EYES:
-            //Abilities that are immune to this effect
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_SCRAPPY)      ||
-                BATTLER_HAS_ABILITY(battler, ABILITY_BLIND_RAGE)  ||
-                BATTLER_HAS_ABILITY(battler, ABILITY_OBLIVIOUS)    ||
-                BATTLER_HAS_ABILITY(battler, ABILITY_VITAL_SPIRIT) ||
-                BATTLER_HAS_ABILITY(battler, ABILITY_DISCIPLINE)   ||
-                BATTLER_HAS_ABILITY(battler, ABILITY_INNER_FOCUS)  ||
-                BATTLER_HAS_ABILITY(battler, ABILITY_UNLOCKED_POTENTIAL)  ||
-                BATTLER_HAS_ABILITY(battler, ABILITY_ENLIGHTENED) ||
-                BATTLER_HAS_ABILITY(battler, ABILITY_WAY_OF_PRECISION))
-                return TRUE;
-
-            checkOblivious = TRUE;
-        break;
+    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
+    {
+        int ability = GetAbilityAtIndex(battler, i, TRUE);
+        switch (ability)
+        {
+        case ABILITY_SCRAPPY:
+        case ABILITY_BLIND_RAGE:
+        case ABILITY_OBLIVIOUS:
+        case ABILITY_VITAL_SPIRIT:
+        case ABILITY_DISCIPLINE:
+        case ABILITY_INNER_FOCUS:
+        case ABILITY_UNLOCKED_POTENTIAL:
+        case ABILITY_ENLIGHTENED:
+        case ABILITY_WAY_OF_PRECISION:
+        case ABILITY_OWN_TEMPO:
+        case ABILITY_OVERWHELM:
+            return ability;
+        }
     }
-
-    //For specific abilities like intimidate
-    if (checkOblivious) {
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_OBLIVIOUS) ||
-           BATTLER_HAS_ABILITY(battler, ABILITY_OWN_TEMPO) ||
-           BATTLER_HAS_ABILITY(battler, ABILITY_OVERWHELM))
-            return TRUE;
-    }
-
-    switch (TranslateStatId(stat, battler)) {
-        case STAT_ATK:
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER))
-                return TRUE;
-        break;
-    }
-
     return FALSE;
 }
 
@@ -13097,123 +13182,9 @@ static void Cmd_battlemacros(void)
         break;
         break;
         case MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_1:
-        {
-            u8 i;
-            u8 opposingBattler = BATTLE_OPPOSITE(gBattlerAttacker);
-            u16 ability = VarGet(VAR_SAVED_ABILITY);
-            u16 numStats;
-            u8 statToLower;
-            u8 statslowered = 0;
-            u8 numAbility = 0;
-
-            for (i = 0; i < NUM_INTIMIDATE_CLONES; i++) {
-                if (gIntimidateCloneData[i].ability == ability)
-                    break;
-            }
-
-            //Monotype Stuff
-            if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(gBattlerAttacker) != B_SIDE_PLAYER && ability == ABILITY_NONE)
-                ability = ABILITY_FEARMONGER;
-
-            numAbility = i;
-            numStats = gIntimidateCloneData[numAbility].numStatsLowered;
-
-            for (i = 0; i < numStats; i++) {
-                statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], opposingBattler);
-                if (!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE) {
-                    s8 change = -1;
-                    if (BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG)) change *= -1;
-                    if (gIntimidateCloneData[numAbility].statChange) change *= gIntimidateCloneData[numAbility].statChange;
-                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(change), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
-                    statslowered++;
-                    gBattlerTarget = opposingBattler;
-                    //For Abilities with multiple stats to lower - {} are necessary since this is a macro
-                    if (statslowered == 1) {
-                        PREPARE_STAT_BUFFER(gBattleTextBuff1, statToLower);
-                    }
-                    else if (statslowered == 2) {
-                        PREPARE_STAT_BUFFER(gBattleTextBuff2, statToLower);
-                    }
-                    else if (statslowered == 3) {
-                        PREPARE_STAT_BUFFER(gBattleTextBuff3, statToLower);
-                    }
-
-                    if (statslowered == 2)
-                        VarSet(VAR_TEMP_BATTLE_STRING_OVERWRITE_1, STRINGID_PKMNCUTSSTATWITHINTIMIDATECLONE2);
-                    else if (statslowered == 3)
-                        VarSet(VAR_TEMP_BATTLE_STRING_OVERWRITE_1, STRINGID_PKMNCUTSSTATWITHINTIMIDATECLONE3);
-                }
-            }
-
-            if (statslowered) {
-                u8 targetnum = VarGet(VAR_INTIMIDATED_TARGETS);
-                targetnum++;
-                VarSet(VAR_INTIMIDATED_TARGETS, targetnum);
-                tryjump = TRUE;
-            }
-        }
+            break;
         break;
         case MACROS_TRY_TO_ACTIVATE_INTIMIDATE_CLONE_TARGET_2:
-        {
-            u8 i;
-            u8 opposingBattler = BATTLE_PARTNER(BATTLE_OPPOSITE(gBattlerAttacker));
-            u16 ability = VarGet(VAR_SAVED_ABILITY);
-            u16 numStats;
-            u8 statToLower;
-            u8 statslowered = 0;
-            u8 targetNum = VarGet(VAR_INTIMIDATED_TARGETS);
-            u8 numAbility = 0;
-
-            //Reset the number of targets
-            VarSet(VAR_INTIMIDATED_TARGETS, 0);
-
-            if (!IsBattlerAlive(opposingBattler))
-                break;
-
-            for (i = 0; i < NUM_INTIMIDATE_CLONES; i++) {
-                if (gIntimidateCloneData[i].ability == ability)
-                    break;
-            }
-
-            //Monotype Stuff
-            if (getMonotypeChampType() == TYPE_DRAGON && GetBattlerSide(gBattlerAttacker) != B_SIDE_PLAYER && ability == ABILITY_NONE)
-                ability = ABILITY_FEARMONGER;
-
-            numAbility = i;
-            numStats = gIntimidateCloneData[numAbility].numStatsLowered;
-
-            if (!gIntimidateCloneData[numAbility].targetBoth && targetNum != 0)
-                break;
-
-            for (i = 0; i < numStats; i++) {
-                statToLower = TranslateStatId(gIntimidateCloneData[numAbility].statsLowered[i], opposingBattler);
-                if (!IsBattlerImmuneToLowerStatsFromIntimidateClone(opposingBattler, statToLower, ability) && ability != ABILITY_NONE) {
-                    s8 change = -1;
-                    if (BATTLER_HAS_ABILITY(opposingBattler, ABILITY_GUARD_DOG)) change *= -1;
-                    if (gIntimidateCloneData[numAbility].statChange) change *= gIntimidateCloneData[numAbility].statChange;
-                    if (!ChangeStatBuffs(opposingBattler, StatBuffValue(change), statToLower, STAT_BUFF_DONT_SET_BUFFERS, NULL)) continue;
-                    statslowered++;
-                    gBattlerTarget = opposingBattler;
-                    //For Abilities with multiple stats to lower - {} are necessary since this is a macro
-                    if (statslowered == 1) {
-                        PREPARE_STAT_BUFFER(gBattleTextBuff1, statToLower);
-                    }
-                    else if (statslowered == 2) {
-                        PREPARE_STAT_BUFFER(gBattleTextBuff2, statToLower);
-                    }
-                    else if (statslowered == 3) {
-                        PREPARE_STAT_BUFFER(gBattleTextBuff3, statToLower);
-                    }
-
-                    if (statslowered == 2)
-                        VarSet(VAR_TEMP_BATTLE_STRING_OVERWRITE_1, STRINGID_PKMNCUTSSTATWITHINTIMIDATECLONE2);
-                    else if (statslowered == 3)
-                        VarSet(VAR_TEMP_BATTLE_STRING_OVERWRITE_1, STRINGID_PKMNCUTSSTATWITHINTIMIDATECLONE3);
-
-                    tryjump = TRUE;
-                }
-            }
-        }
         break;
         case MACROS_SAVE_ABILITY_TO_VARIABLE:
             VarSet(VAR_SAVED_ABILITY, gBattleScripting.abilityPopupOverwrite);
