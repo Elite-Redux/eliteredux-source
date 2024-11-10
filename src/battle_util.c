@@ -2051,61 +2051,39 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
 
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
-        if (gBattleMoves[gBattleMons[battlerId].moves[i]].split == SPLIT_STATUS && getMonotypeChampType() == TYPE_FIGHTING && GetBattlerSide(battlerId) == B_SIDE_PLAYER)
-            unusableMoves |= 1 << i;
-        else if (gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
-            unusableMoves |= 1 << i;
-        else if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP)
+        FILTER_NOT(unusableMoves & (1 << i))
+        FILTER_NOT(gBattleMoves[gBattleMons[battlerId].moves[i]].split == SPLIT_STATUS && getMonotypeChampType() == TYPE_FIGHTING && GetBattlerSide(battlerId) == B_SIDE_PLAYER)
+        FILTER_NOT(gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
+        if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP)
         {
             int effect = gBattleMoves[gBattleMons[battlerId].moves[i]].effect;
-            if (effect == EFFECT_SPIT_UP || effect == EFFECT_SWALLOW)
-            {
-                if (!gVolatileStructs[battlerId].stockpileCounter)
-                    unusableMoves |= 1 << i;
-            }
-            else
-                unusableMoves |= 1 << i;
+            FILTER(effect == EFFECT_SPIT_UP || effect == EFFECT_SWALLOW)
+            FILTER(gVolatileStructs[battlerId].stockpileCounter)
         }
-        else if (gBattleMons[battlerId].moves[i] == gVolatileStructs[battlerId].disabledMove && check & MOVE_LIMITATION_DISABLED)
-            unusableMoves |= 1 << i;
-        else if (gBattleMons[battlerId].moves[i] == gLastMoves[battlerId] && check & MOVE_LIMITATION_TORMENTED && gBattleMons[battlerId].status2 & STATUS2_TORMENT)
-            unusableMoves |= 1 << i;
-        else if (gVolatileStructs[battlerId].tauntTimer && check & MOVE_LIMITATION_TAUNT && gBattleMoves[gBattleMons[battlerId].moves[i]].power == 0)
-            unusableMoves |= 1 << i;
-        else if (GetImprisonedMovesCount(battlerId, gBattleMons[battlerId].moves[i]) && check & MOVE_LIMITATION_IMPRISON)
-            unusableMoves |= 1 << i;
-        else if (gVolatileStructs[battlerId].encoreTimer && gVolatileStructs[battlerId].encoredMove != gBattleMons[battlerId].moves[i])
-            unusableMoves |= 1 << i;
-        else if (HOLD_EFFECT_CHOICE(holdEffect) && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
-            unusableMoves |= 1 << i;
-        else if ((holdEffect == HOLD_EFFECT_ASSAULT_VEST || holdEffect == HOLD_EFFECT_TACTICAL_VEST) && IS_MOVE_STATUS(gBattleMons[battlerId].moves[i]) && gBattleMons[battlerId].moves[i] != MOVE_ME_FIRST)
-            unusableMoves |= 1 << i;
-        else if (IsGravityPreventingMove(gBattleMons[battlerId].moves[i]))
-            unusableMoves |= 1 << i;
-        else if (IsHealBlockPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
-            unusableMoves |= 1 << i;
-        else if (IsBelchPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
-            unusableMoves |= 1 << i;
-        else if (gVolatileStructs[battlerId].throatChopTimer && gBattleMoves[gBattleMons[battlerId].moves[i]].flags & FLAG_SOUND)
-            unusableMoves |= 1 << i;
-        else if (gBattleMons[battlerId].moves[i] == MOVE_STUFF_CHEEKS && ItemId_GetPocket(gBattleMons[gActiveBattler].item) != POCKET_BERRIES)
-            unusableMoves |= 1 << i;
-        else if (BATTLER_HAS_ABILITY(battlerId, ABILITY_DISCIPLINE) && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
-            unusableMoves |= 1 << i;
-        else if (gBattleMons[battlerId].moves[i] == gLastChosenMove[battlerId]
+        FILTER_NOT(gBattleMons[battlerId].moves[i] == gVolatileStructs[battlerId].disabledMove && check & MOVE_LIMITATION_DISABLED)
+        FILTER_NOT(gBattleMons[battlerId].moves[i] == gLastMoves[battlerId] && check & MOVE_LIMITATION_TORMENTED && gBattleMons[battlerId].status2 & STATUS2_TORMENT)
+        FILTER_NOT(gVolatileStructs[battlerId].tauntTimer && check & MOVE_LIMITATION_TAUNT && gBattleMoves[gBattleMons[battlerId].moves[i]].power == 0)
+        FILTER_NOT(GetImprisonedMovesCount(battlerId, gBattleMons[battlerId].moves[i]) && check & MOVE_LIMITATION_IMPRISON)
+        FILTER_NOT(gVolatileStructs[battlerId].encoreTimer && gVolatileStructs[battlerId].encoredMove != gBattleMons[battlerId].moves[i])
+        FILTER_NOT(HOLD_EFFECT_CHOICE(holdEffect) && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
+        FILTER_NOT((holdEffect == HOLD_EFFECT_ASSAULT_VEST || holdEffect == HOLD_EFFECT_TACTICAL_VEST) && IS_MOVE_STATUS(gBattleMons[battlerId].moves[i]) && gBattleMons[battlerId].moves[i] != MOVE_ME_FIRST)
+        FILTER_NOT(IsGravityPreventingMove(gBattleMons[battlerId].moves[i]))
+        FILTER_NOT(IsHealBlockPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
+        FILTER_NOT(IsBelchPreventingMove(battlerId, gBattleMons[battlerId].moves[i]))
+        FILTER_NOT(gVolatileStructs[battlerId].throatChopTimer && gBattleMoves[gBattleMons[battlerId].moves[i]].flags & FLAG_SOUND)
+        FILTER_NOT(gBattleMons[battlerId].moves[i] == MOVE_STUFF_CHEEKS && ItemId_GetPocket(gBattleMons[gActiveBattler].item) != POCKET_BERRIES)
+        FILTER_NOT(BattlerHasAbility(battlerId, ABILITY_DISCIPLINE, FALSE) && *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
+        FILTER_NOT(gBattleMons[battlerId].moves[i] == gLastChosenMove[battlerId]
             && gBattleMoves[gBattleMons[battlerId].moves[i]].everyOtherTurn
             && !GetAbilityState(battlerId, ABILITY_RAMPAGE)
             && !GetAbilityState(battlerId, ABILITY_MASTER_HAND)
             && !GetAbilityState(battlerId, ABILITY_RAGING_GODDESS)
             && !GetAbilityState(battlerId, ABILITY_BERSERKER_RAGE))
-            unusableMoves |= 1 << i;
-        else if (IsSleepClauseDisablingMove(battlerId, gBattleMons[battlerId].moves[i])) {
-            unusableMoves |= 1 << i;
-        }
-        else if ((BATTLER_HAS_ABILITY(battlerId, ABILITY_GORILLA_TACTICS) ||
-                  BATTLER_HAS_ABILITY(battlerId, ABILITY_SAGE_POWER))
+        FILTER_NOT(IsSleepClauseDisablingMove(battlerId, gBattleMons[battlerId].moves[i]))
+        FILTER_NOT((BATTLER_HAS_ABILITY(battlerId, ABILITY_GORILLA_TACTICS) || BATTLER_HAS_ABILITY(battlerId, ABILITY_SAGE_POWER))
 			&& *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
-            unusableMoves |= 1 << i;
+        
+        unusableMoves |= 1 << i;
     }
     return unusableMoves;
 }

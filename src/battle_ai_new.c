@@ -15,15 +15,29 @@
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
 
-int CheckCancelledAlways(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
+static int AlwaysCancelled(int battlerAtk, int move, struct MoveContainer* moveContainer)
 {
-    if (gBattleMons[battlerAtk].status1 & STATUS1_SLEEP)
+    if (gVolatileStructs[battlerAtk].throatChopTimer && gBattleMoves[move].flags & FLAG_SOUND)
+        return TRUE;
+
+    if (GetAbilityState(battlerAtk, ABILITY_TRUANT) && !IS_MOVE_STATUS(move))
+        return TRUE;
+
+    if (gBattleMons[battlerAtk].status1 & STATUS1_PARALYSIS)
+        moveContainer->cancellationState = AI_CANCEL_25;
+    else if (gBattleMons[battlerAtk].status1 & STATUS1_SLEEP)
     {
         // TODO: Handle not knowing the sleep timer
     }
 
+    return FALSE;
+}
+
+int CheckCancelled(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
+{
+
     if (GetAbilityState(battlerAtk, ABILITY_TRUANT) && !IS_MOVE_STATUS(move))
-        return AI_SCORE_LOSE_TURN(100);
+        return TRUE;
 
     if (gVolatileStructs[battlerAtk].skyDropped)
     {
@@ -35,32 +49,21 @@ int CheckCancelledAlways(int battlerAtk, int battlerDef, int move, struct AiData
         // TODO: Set gProcessingExtraAttacks when scoring extra moves
         && !gProcessingExtraAttacks
         && GetMovePriority(battlerAtk, move, battlerDef) > 0)
-    {
-        return AI_SCORE_LOSE_TURN(100);
-    }
+        return TRUE;
     
     if (gBattleMoves[move].flags & FLAG_POWDER && battlerAtk != battlerDef && !HasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, aiData))
     {
         if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) || GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES)
-            return AI_SCORE_LOSE_TURN(100);
+            return TRUE;
     }
 
     if (!AreSameSide(battlerAtk, battlerDef)
         && !gProcessingExtraAttacks
         && IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)
         && GetMovePriority(battlerAtk, move, battlerDef) > 0)
-        return AI_SCORE_LOSE_TURN(100);
-
-    if (gBattleMons[battlerAtk].status2 & STATUS2_RECHARGE)
-        return AI_SCORE_LOSE_TURN(100);
+        return TRUE;
     
-    if (gVolatileStructs[battlerAtk].throatChopTimer && gBattleMoves[move].flags & FLAG_SOUND)
-        return AI_SCORE_LOSE_TURN(100);
-
-    if (gBattleMons[battlerAtk].status1 & STATUS1_PARALYSIS)
-        return AI_SCORE_LOSE_TURN(25);
-    
-    return 0;
+    return FALSE;
 }
 
 int BelowHalfHp(int battler)
@@ -125,43 +128,95 @@ int ScoreMove(int battlerAtk, int battlerDef, int move, int targets, struct AiDa
 
 }
 
+enum AiProcessingPhase {
+    AI_PHASE_DAMAGE,
+    AI_PHASE_RETALIATION,
+    AI_PHASE_TURN_TWO,
+    AI_PHASE_SECONDARY,
+    AI_PHASE_DISABLE,
+    AI_PHASE_FLINCH,
+    AI_PHASE_PROTECT,
+    AI_PHASE_END_TURN,
+    AI_PHASE_COUNT,
+};
+
+struct MoveState* SetMoveVs(int battlerAtk, int battlerTarget, int moveNum, struct AiData* aiData)
+{
+    int targetCount;
+    struct MoveState* moveData;
+    if (!IsBattlerAlive(battlerTarget)) return NULL;
+    targetCount = aiData->moveState[battlerAtk][moveNum].count++;
+    moveData = &aiData->moveState[battlerAtk][moveNum].targetData[targetCount];
+    moveData->target = battlerTarget;
+    return moveData;
+}
+
+void CalculateBasicMoveInfo(int battlerAtk, int move, struct MoveState* moveState, struct AiData* aiData)
+{
+    if (!moveState) return;
+    CheckCancelled(battlerAtk, moveState->target, move, aiData);
+}
+
 int GetAiDecision(int battler)
 {
     struct DisguiseSimulation disguise0 = { 0 }, disguise2 = { 0 };
-    int unusableMoves, i, j;
-    int moveScores[4][2] = { 0 };
+    int unusableMoves, battlerAtk, moveNum, battlerDef;
     int switchScore = 0;
     struct AiData aiData = { 0 };
-    int flags;
+    int isDoubles;
     
     if (IsBattlerAlive(0)) ReplaceDisguise(&disguise0);
     if (IsBattlerAlive(2)) ReplaceDisguise(&disguise2);
 
-    unusableMoves = CheckMoveLimitations(battler, 0, 0xFF);
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    for (battlerAtk = 0; battlerAtk < gBattlersCount; battlerAtk++)
     {
-        flags = GetBattlerBattleMoveTargetFlags(gBattleMons[battler].moves[i], battler);
-        for (j = 0; j < 2; j++)
+        int unusableMoves;
+        FILTER(IsBattlerAlive(battlerAtk))
+        unusableMoves = CheckMoveLimitations(battler, 0, -1);
+        for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++)
         {
-            if (j == 2)
+            int move;
+            FILTER_NOT(unusableMoves & (1 << moveNum))
+            move = aiData.moveState[battlerAtk][moveNum].move = gBattleMons[battlerAtk].moves[moveNum];
+            FILTER(move != MOVE_NONE)
+            aiData.moveState[battlerAtk][moveNum].targetFlags = GetBattlerBattleMoveTargetFlags(move, battler);
+            switch (aiData.moveState[battlerAtk][moveNum].targetFlags)
             {
-                switch (flags)
-                {
-                case MOVE_TARGET_SELECTED:
-                case MOVE_TARGET_USER_OR_SELECTED:
-                    break;
+            case MOVE_TARGET_ALLY:
+                REQUIRE(!AlwaysCancelled(battlerAtk, move, &aiData.moveState[battlerAtk][moveNum]))
+                SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, &aiData);
+                break;
+            
+            case MOVE_TARGET_RANDOM:
+                SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, &aiData);
+                SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, &aiData);
+                break;
                 
-                default:
-                    moveScores[i][j] = AI_SCORE_UNUSABLE;
-                    continue;
-                }
+            case MOVE_TARGET_BOTH:
+                SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_OPPOSITE(battlerAtk)), moveNum, &aiData);
+                break;
+            
+            case MOVE_TARGET_USER_OR_SELECTED:
+            case MOVE_TARGET_DEPENDS:
+                break;
+            
+            case MOVE_TARGET_USER:
+            case MOVE_TARGET_OPPONENTS_FIELD:
+            case MOVE_TARGET_FOES_AND_ALLY:
+                SetMoveVs(battlerAtk, battlerAtk, moveNum, &aiData);
+                break;
+            
+            case MOVE_TARGET_SELECTED:
+                SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, &aiData);
+                SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, &aiData);
+                SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, &aiData);
+                break;
             }
-            if (unusableMoves & (1 << i))
+
+            for (battlerDef = 0; battlerDef < aiData.moveState[battlerAtk][moveNum].count; battlerDef++)
             {
-                moveScores[i][j] = AI_SCORE_UNUSABLE;
-                continue;
+                CheckCancelled(battlerAtk, battlerDef, aiData.moveState[battlerAtk][moveNum].move, &aiData);
             }
-            moveScores[i][j] = ScoreMove(battler, j * 2, gBattleMons[battler].moves[i], flags, &aiData);
         }
     }
     
@@ -190,244 +245,244 @@ int AdjustHpForMove(int battlerAtk, int battlerUpdated, int move, struct AiData*
     
 }
 
-int SpeedDifference(int battler1, int move1, int battler2, int move2, struct AiData* aiData)
-{
-    return aiData->moveState[battler1][move1].speedValue.comparable - aiData->moveState[battler2][move2].speedValue.comparable;
-}
+// int SpeedDifference(int battler1, int move1, int battler2, int move2, struct AiData* aiData)
+// {
+//     return aiData->moveState[battler1][move1].speedValue.comparable - aiData->moveState[battler2][move2].speedValue.comparable;
+// }
 
-int CalcEndTurnScore(int battler, struct AiData* aiData)
-{
+// int CalcEndTurnScore(int battler, struct AiData* aiData)
+// {
 
-}
+// }
 
-typedef enum {
-    AI_UPDATE_BOTH = 0,
-    AI_UPDATE_B1_FAINTS_ON_ATTACK = 1 << 0,
-    AI_UPDATE_B2_FAINTS_ON_ATTACK = 1 << 1,
-    AI_UPDATE_BOTH_FAINT_ON_ATTACK = AI_UPDATE_B1_FAINTS_ON_ATTACK | AI_UPDATE_B2_FAINTS_ON_ATTACK,
-    AI_UPDATE_B1_FAINTS_AFTER = 1 << 2,
-    AI_UPDATE_B2_FAINTS_AFTER = 1 << 3,
-    AI_UPDATE_BOTH_FAINT_AFTER = AI_UPDATE_B1_FAINTS_AFTER | AI_UPDATE_B2_FAINTS_AFTER,
-} AiScoreEvaluationResult;
+// typedef enum {
+//     AI_UPDATE_BOTH = 0,
+//     AI_UPDATE_B1_FAINTS_ON_ATTACK = 1 << 0,
+//     AI_UPDATE_B2_FAINTS_ON_ATTACK = 1 << 1,
+//     AI_UPDATE_BOTH_FAINT_ON_ATTACK = AI_UPDATE_B1_FAINTS_ON_ATTACK | AI_UPDATE_B2_FAINTS_ON_ATTACK,
+//     AI_UPDATE_B1_FAINTS_AFTER = 1 << 2,
+//     AI_UPDATE_B2_FAINTS_AFTER = 1 << 3,
+//     AI_UPDATE_BOTH_FAINT_AFTER = AI_UPDATE_B1_FAINTS_AFTER | AI_UPDATE_B2_FAINTS_AFTER,
+// } AiScoreEvaluationResult;
 
-int CalcMaxDamageScore(int battlerAtk, int battlerDef, struct AiData* aiData)
-{
-    int i, maxScore = 0;
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        int score = ComputeAttackPrimaryScoring(battlerAtk, battlerDef, i, aiData);
-        if (score > maxScore) maxScore = score;
-    }
-    return maxScore;
-}
+// int CalcMaxDamageScore(int battlerAtk, int battlerDef, struct AiData* aiData)
+// {
+//     int i, maxScore = 0;
+//     for (i = 0; i < MAX_MON_MOVES; i++)
+//     {
+//         int score = ComputeAttackPrimaryScoring(battlerAtk, battlerDef, i, aiData);
+//         if (score > maxScore) maxScore = score;
+//     }
+//     return maxScore;
+// }
 
-int GetMaxSpeedOfFaintingMove(int battlerAtk, struct AiData* aiData)
-{
-    int i, maxSpeed = 0;
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        if (aiData->moveState[battlerAtk][i].koChance)
-        {
-            int speed = aiData->moveState[battlerAtk][i].speedValue.comparable;
-            if (speed > maxSpeed) maxSpeed = speed;
-        }
-    }
-}
+// int GetMaxSpeedOfFaintingMove(int battlerAtk, struct AiData* aiData)
+// {
+//     int i, maxSpeed = 0;
+//     for (i = 0; i < MAX_MON_MOVES; i++)
+//     {
+//         if (aiData->moveState[battlerAtk][i].koChance)
+//         {
+//             int speed = aiData->moveState[battlerAtk][i].speedValue.comparable;
+//             if (speed > maxSpeed) maxSpeed = speed;
+//         }
+//     }
+// }
 
-int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, int doUpdates, AiScoreEvaluationResult* updateState, struct AiData* aiData, struct AiData* aiDataKo)
-{
-    int scoreBefore;
-    int score = ComputeAttackPrimaryScoring(battlerFirst, battlerSecond, moveFirst, aiData);
-    if (doUpdates) AdjustStateForMove(battlerFirst, battlerFirst, moveFirst, aiData);
-    else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
+// int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, int doUpdates, AiScoreEvaluationResult* updateState, struct AiData* aiData, struct AiData* aiDataKo)
+// {
+//     int scoreBefore;
+//     int score = ComputeAttackPrimaryScoring(battlerFirst, battlerSecond, moveFirst, aiData);
+//     if (doUpdates) AdjustStateForMove(battlerFirst, battlerFirst, moveFirst, aiData);
+//     else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
 
-    *updateState = AI_UPDATE_BOTH;
+//     *updateState = AI_UPDATE_BOTH;
 
-    if (aiData->moveState[battlerFirst][moveFirst].koChance >= UQ_4_12(1.0))
-    {
-        *updateState |= AI_UPDATE_B2_FAINTS_ON_ATTACK;
-        score += AI_SCORE_KO;
-    }
-    else if (aiData->moveState[battlerFirst][moveFirst].koChance)
-    {
-        STRUCT_COPY(aiData, aiDataKo)
-    }
-    if (!aiData->battlerState[battlerFirst].hp)
-    {
-        *updateState |= AI_UPDATE_B1_FAINTS_ON_ATTACK;
-        score -= AI_SCORE_KO;
-    }
-    if (*updateState) return score;
-    scoreBefore = score;
+//     if (aiData->moveState[battlerFirst][moveFirst].koChance >= UQ_4_12(1.0))
+//     {
+//         *updateState |= AI_UPDATE_B2_FAINTS_ON_ATTACK;
+//         score += AI_SCORE_KO;
+//     }
+//     else if (aiData->moveState[battlerFirst][moveFirst].koChance)
+//     {
+//         STRUCT_COPY(aiData, aiDataKo)
+//     }
+//     if (!aiData->battlerState[battlerFirst].hp)
+//     {
+//         *updateState |= AI_UPDATE_B1_FAINTS_ON_ATTACK;
+//         score -= AI_SCORE_KO;
+//     }
+//     if (*updateState) return score;
+//     scoreBefore = score;
     
-    if (doUpdates) AdjustStateForMove(battlerFirst, battlerSecond, moveFirst, aiData);
-    else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
-    score -= ComputeAttackPrimaryScoring(battlerSecond, battlerFirst, moveSecond, aiData);
-    if (doUpdates) AdjustStateForMove(battlerSecond, battlerSecond, moveSecond, aiData);
-    else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
+//     if (doUpdates) AdjustStateForMove(battlerFirst, battlerSecond, moveFirst, aiData);
+//     else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
+//     score -= ComputeAttackPrimaryScoring(battlerSecond, battlerFirst, moveSecond, aiData);
+//     if (doUpdates) AdjustStateForMove(battlerSecond, battlerSecond, moveSecond, aiData);
+//     else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
 
-    if (aiData->moveState[battlerSecond][moveSecond].koChance >= UQ_4_12(1.0))
-    {
-        *updateState |= AI_UPDATE_B1_FAINTS_AFTER;
-        score -= AI_SCORE_KO;
-    }
-    else
-    {
-        if (doUpdates) AdjustStateForMove(battlerSecond, battlerFirst, moveSecond, aiData);
-        else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
-        if (aiData->moveState[battlerSecond][moveSecond].koChance)
-            score -= ApplyModifier(aiData->moveState[battlerSecond][moveSecond].koChance, AI_SCORE_KO);
-    }
+//     if (aiData->moveState[battlerSecond][moveSecond].koChance >= UQ_4_12(1.0))
+//     {
+//         *updateState |= AI_UPDATE_B1_FAINTS_AFTER;
+//         score -= AI_SCORE_KO;
+//     }
+//     else
+//     {
+//         if (doUpdates) AdjustStateForMove(battlerSecond, battlerFirst, moveSecond, aiData);
+//         else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
+//         if (aiData->moveState[battlerSecond][moveSecond].koChance)
+//             score -= ApplyModifier(aiData->moveState[battlerSecond][moveSecond].koChance, AI_SCORE_KO);
+//     }
 
-    if (!aiData->battlerState[battlerSecond].hp)
-    {
-        *updateState |= AI_UPDATE_B2_FAINTS_AFTER;
-        score += AI_SCORE_KO;
-    }
+//     if (!aiData->battlerState[battlerSecond].hp)
+//     {
+//         *updateState |= AI_UPDATE_B2_FAINTS_AFTER;
+//         score += AI_SCORE_KO;
+//     }
     
-    if (aiData->moveState[battlerFirst][moveFirst].koChance)
-        return ApplyModifier(aiData->moveState[battlerFirst][moveFirst].koChance, scoreBefore) + ApplyModifier(UQ_4_12(1.0) - aiData->moveState[battlerFirst][moveFirst].koChance, score);
-    else
-        return score;
-}
+//     if (aiData->moveState[battlerFirst][moveFirst].koChance)
+//         return ApplyModifier(aiData->moveState[battlerFirst][moveFirst].koChance, scoreBefore) + ApplyModifier(UQ_4_12(1.0) - aiData->moveState[battlerFirst][moveFirst].koChance, score);
+//     else
+//         return score;
+// }
 
-int CalcTurnSelectionScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, AiScoreEvaluationResult* noEval, struct AiData* aiData)
-{
-    struct AiData mutableAiData, mutableAiDataMaybeKo;
-    AiScoreEvaluationResult updateState;
-    int score, endTurnScore, i, maybeKoModifier;
+// int CalcTurnSelectionScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, AiScoreEvaluationResult* noEval, struct AiData* aiData)
+// {
+//     struct AiData mutableAiData, mutableAiDataMaybeKo;
+//     AiScoreEvaluationResult updateState;
+//     int score, endTurnScore, i, maybeKoModifier;
 
-    STRUCT_COPY(mutableAiData, *aiData)
+//     STRUCT_COPY(mutableAiData, *aiData)
     
-    score = CalcRelativeMoveScore(battlerFirst, moveFirst, battlerSecond, moveSecond, TRUE, &updateState, &mutableAiData, &mutableAiDataMaybeKo);
+//     score = CalcRelativeMoveScore(battlerFirst, moveFirst, battlerSecond, moveSecond, TRUE, &updateState, &mutableAiData, &mutableAiDataMaybeKo);
 
-    switch (updateState)
-    {
-    case AI_UPDATE_B1_FAINTS_AFTER:
-    case AI_UPDATE_B1_FAINTS_ON_ATTACK:
-        endTurnScore = -CalcEndTurnScore(battlerSecond, &mutableAiData);
-        break;
+//     switch (updateState)
+//     {
+//     case AI_UPDATE_B1_FAINTS_AFTER:
+//     case AI_UPDATE_B1_FAINTS_ON_ATTACK:
+//         endTurnScore = -CalcEndTurnScore(battlerSecond, &mutableAiData);
+//         break;
 
-    case AI_UPDATE_B2_FAINTS_AFTER:
-    case AI_UPDATE_B2_FAINTS_ON_ATTACK:
-        endTurnScore = CalcEndTurnScore(battlerFirst, &mutableAiData);
-        break;
+//     case AI_UPDATE_B2_FAINTS_AFTER:
+//     case AI_UPDATE_B2_FAINTS_ON_ATTACK:
+//         endTurnScore = CalcEndTurnScore(battlerFirst, &mutableAiData);
+//         break;
     
-    case AI_UPDATE_BOTH:
-        endTurnScore = CalcEndTurnScore(battlerFirst, &mutableAiData) - CalcEndTurnScore(battlerSecond, &mutableAiData);
-        break;
-    }
+//     case AI_UPDATE_BOTH:
+//         endTurnScore = CalcEndTurnScore(battlerFirst, &mutableAiData) - CalcEndTurnScore(battlerSecond, &mutableAiData);
+//         break;
+//     }
 
-    if (updateState & AI_UPDATE_BOTH_FAINT_ON_ATTACK)
-    {
-        *noEval = updateState;
-        score += endTurnScore;
-        if (updateState == AI_UPDATE_B1_FAINTS_ON_ATTACK)
-            return score - AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerSecond, battlerFirst, aiData));
-        else if (updateState == AI_UPDATE_B2_FAINTS_AFTER)
-            return score + AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerFirst, battlerSecond, aiData));
-        else return score;
-    }
+//     if (updateState & AI_UPDATE_BOTH_FAINT_ON_ATTACK)
+//     {
+//         *noEval = updateState;
+//         score += endTurnScore;
+//         if (updateState == AI_UPDATE_B1_FAINTS_ON_ATTACK)
+//             return score - AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerSecond, battlerFirst, aiData));
+//         else if (updateState == AI_UPDATE_B2_FAINTS_AFTER)
+//             return score + AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerFirst, battlerSecond, aiData));
+//         else return score;
+//     }
 
-    maybeKoModifier = aiData->moveState[battlerFirst][moveFirst].koChance;
+//     maybeKoModifier = aiData->moveState[battlerFirst][moveFirst].koChance;
 
-    if (!aiData->battlerState[battlerFirst].hp)
-        endTurnScore -= AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerSecond, battlerFirst, aiData));
-    else if (!aiData->battlerState[battlerSecond].hp)
-        endTurnScore += AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerFirst, battlerSecond, aiData));
-    else
-    {
-        int damageScoreFirst = CalcMaxDamageScore(battlerFirst, battlerSecond, aiData);
-        int damageScoreSecond = CalcMaxDamageScore(battlerSecond, battlerFirst, aiData);
-        int speed = GetMaxSpeedOfFaintingMove(battlerFirst, aiData) - GetMaxSpeedOfFaintingMove(battlerSecond, aiData);
-        if (speed >= 0) endTurnScore += AI_SCORE_TURN_TWO_DAMAGE(damageScoreFirst);
-        if (speed <= 0) endTurnScore -= AI_SCORE_TURN_TWO_DAMAGE(damageScoreSecond);
-    }
+//     if (!aiData->battlerState[battlerFirst].hp)
+//         endTurnScore -= AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerSecond, battlerFirst, aiData));
+//     else if (!aiData->battlerState[battlerSecond].hp)
+//         endTurnScore += AI_SCORE_TURN_TWO_DAMAGE(CalcMaxDamageScore(battlerFirst, battlerSecond, aiData));
+//     else
+//     {
+//         int damageScoreFirst = CalcMaxDamageScore(battlerFirst, battlerSecond, aiData);
+//         int damageScoreSecond = CalcMaxDamageScore(battlerSecond, battlerFirst, aiData);
+//         int speed = GetMaxSpeedOfFaintingMove(battlerFirst, aiData) - GetMaxSpeedOfFaintingMove(battlerSecond, aiData);
+//         if (speed >= 0) endTurnScore += AI_SCORE_TURN_TWO_DAMAGE(damageScoreFirst);
+//         if (speed <= 0) endTurnScore -= AI_SCORE_TURN_TWO_DAMAGE(damageScoreSecond);
+//     }
 
-    if (maybeKoModifier)
-    {
-        int maybeKoScore = 0;
-        if (mutableAiDataMaybeKo.battlerState[battlerFirst].hp)
-        {
-            maybeKoScore += CalcEndTurnScore(battlerFirst, &mutableAiDataMaybeKo);
-        }
-        if (mutableAiDataMaybeKo.battlerState[battlerFirst].hp)
-        {
-            maybeKoScore += CalcMaxDamageScore(battlerFirst, battlerSecond, &mutableAiDataMaybeKo);
-        }
-        return score + ApplyModifier(maybeKoModifier, maybeKoScore) + ApplyModifier(UQ_4_12(1) - maybeKoModifier, endTurnScore);
-    }
+//     if (maybeKoModifier)
+//     {
+//         int maybeKoScore = 0;
+//         if (mutableAiDataMaybeKo.battlerState[battlerFirst].hp)
+//         {
+//             maybeKoScore += CalcEndTurnScore(battlerFirst, &mutableAiDataMaybeKo);
+//         }
+//         if (mutableAiDataMaybeKo.battlerState[battlerFirst].hp)
+//         {
+//             maybeKoScore += CalcMaxDamageScore(battlerFirst, battlerSecond, &mutableAiDataMaybeKo);
+//         }
+//         return score + ApplyModifier(maybeKoModifier, maybeKoScore) + ApplyModifier(UQ_4_12(1) - maybeKoModifier, endTurnScore);
+//     }
 
-    return score + endTurnScore;
-}
+//     return score + endTurnScore;
+// }
 
-#define AI_BATTLER 1
-#define PLAYER_BATTLER 0
-int GetSinglesDecision(struct AiData* aiData)
-{
-    int i, j, maxScore, bestMove, evaluated = MAX_MON_MOVES;
-    int moveScores[MAX_MON_MOVES] = { 0 };
-    struct AiData mutableAiData, mutableAiDataKoUncertain;
+// #define AI_BATTLER 1
+// #define PLAYER_BATTLER 0
+// int GetSinglesDecision(struct AiData* aiData)
+// {
+//     int i, j, maxScore, bestMove, evaluated = MAX_MON_MOVES;
+//     int moveScores[MAX_MON_MOVES] = { 0 };
+//     struct AiData mutableAiData, mutableAiDataKoUncertain;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        int playerMoved, minScore;
-        if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData))
-        {
-            evaluated--;
-            continue;
-        }
+//     for (i = 0; i < MAX_MON_MOVES; i++)
+//     {
+//         int playerMoved, minScore;
+//         if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData))
+//         {
+//             evaluated--;
+//             continue;
+//         }
         
-        playerMoved = MAX_MON_MOVES;
-        minScore = 2 * AI_SCORE_KO;
+//         playerMoved = MAX_MON_MOVES;
+//         minScore = 2 * AI_SCORE_KO;
 
-        for (j = 0; j < MAX_MON_MOVES; j++)
-        {
-            int score;
-            int relativeSpeed = SpeedDifference(AI_BATTLER, i, PLAYER_BATTLER, j, aiData);
-            AiScoreEvaluationResult noEval;
+//         for (j = 0; j < MAX_MON_MOVES; j++)
+//         {
+//             int score;
+//             int relativeSpeed = SpeedDifference(AI_BATTLER, i, PLAYER_BATTLER, j, aiData);
+//             AiScoreEvaluationResult noEval;
 
-            if (ShouldEvaluateSpecial(PLAYER_BATTLER, j, aiData))
-            {
-                playerMoved--;
-                continue;
-            }
+//             if (ShouldEvaluateSpecial(PLAYER_BATTLER, j, aiData))
+//             {
+//                 playerMoved--;
+//                 continue;
+//             }
 
-            STRUCT_COPY(mutableAiData, *aiData)
+//             STRUCT_COPY(mutableAiData, *aiData)
 
-            if (relativeSpeed > 0)
-            {
-                score = CalcTurnSelectionScore(AI_BATTLER, i, PLAYER_BATTLER, j, &noEval, aiData);
-                if (noEval & AI_UPDATE_B2_FAINTS_ON_ATTACK) playerMoved--;
-            }
-            // For simplicity assume we lose speed ties, helps mitigate save scumming, if we are always dead we will pick a different option later
-            else
-            {
-                score = -CalcTurnSelectionScore(PLAYER_BATTLER, j, AI_BATTLER, i, &noEval, aiData);
-                if (noEval & AI_UPDATE_B2_FAINTS_ON_ATTACK) playerMoved--;
-            }
+//             if (relativeSpeed > 0)
+//             {
+//                 score = CalcTurnSelectionScore(AI_BATTLER, i, PLAYER_BATTLER, j, &noEval, aiData);
+//                 if (noEval & AI_UPDATE_B2_FAINTS_ON_ATTACK) playerMoved--;
+//             }
+//             // For simplicity assume we lose speed ties, helps mitigate save scumming, if we are always dead we will pick a different option later
+//             else
+//             {
+//                 score = -CalcTurnSelectionScore(PLAYER_BATTLER, j, AI_BATTLER, i, &noEval, aiData);
+//                 if (noEval & AI_UPDATE_B2_FAINTS_ON_ATTACK) playerMoved--;
+//             }
 
-            if (score < minScore) minScore = score;
-        }
+//             if (score < minScore) minScore = score;
+//         }
 
-        moveScores[i] = AI_SCORE_FUZZ(minScore);
-        if (!playerMoved) evaluated--;
-    }
+//         moveScores[i] = AI_SCORE_FUZZ(minScore);
+//         if (!playerMoved) evaluated--;
+//     }
 
-    if (!evaluated)
-    {
-        int faintScore = AI_SCORE_KO + AI_SCORE_DAMAGE(100 * aiData->battlerState[AI_BATTLER].hp / gBattleMons[AI_BATTLER].maxHP);
-        for (i = 0; i < MAX_MON_MOVES; i++)
-        {
-            if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData))
-                continue;
+//     if (!evaluated)
+//     {
+//         int faintScore = AI_SCORE_KO + AI_SCORE_DAMAGE(100 * aiData->battlerState[AI_BATTLER].hp / gBattleMons[AI_BATTLER].maxHP);
+//         for (i = 0; i < MAX_MON_MOVES; i++)
+//         {
+//             if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData))
+//                 continue;
             
-            moveScores[i] = AI_SCORE_FUZZ(ComputeAttackPrimaryScoring(AI_BATTLER, PLAYER_BATTLER, i, aiData)) - faintScore;            
-        }
-    }
-}
-#undef AI_BATTLER
-#undef PLAYER_BATTLER
+//             moveScores[i] = AI_SCORE_FUZZ(ComputeAttackPrimaryScoring(AI_BATTLER, PLAYER_BATTLER, i, aiData)) - faintScore;            
+//         }
+//     }
+// }
+// #undef AI_BATTLER
+// #undef PLAYER_BATTLER
 
 /*
 Plan:

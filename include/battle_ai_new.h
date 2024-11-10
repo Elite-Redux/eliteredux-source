@@ -20,8 +20,8 @@ struct MoveState {
     u16 multiHitExpect;
     u8 multiplier;
     u8 critChance;
-    u8 targetFlags;
     u8 accuracy;
+    u8 target:2;
     u8 falseSwipe:1;
     u8 contact:1;
     u8 seeKo:1;
@@ -31,6 +31,24 @@ struct MoveState {
     u8 cancelled:1;
 };
 
+enum
+{
+    AI_CANCEL_DETERMINISTIC,
+    AI_CANCEL_25,
+    AI_CANCEL_33,
+    AI_CANCEL_50,
+};
+
+struct MoveContainer
+{
+    struct MoveState targetData[3];
+    u16 move;
+    u8 targetFlags;
+    u8 count:2;
+    u8 cancellationState:2;
+};
+
+
 struct BattlerState
 {
     u16 hp;
@@ -38,7 +56,7 @@ struct BattlerState
 
 
 struct AiData {
-    struct MoveState moveState[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
+    struct MoveContainer moveState[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
     struct BattlerState battlerState[MAX_BATTLERS_COUNT];
 };
 
