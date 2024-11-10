@@ -6258,35 +6258,27 @@ static void Cmd_moveend(void)
             break;
         case MOVEEND_DANCER: // Special case because it's so annoying
             {
-                u8 i, j = 0;
-                u8 possibleDancers = 0;
-                u8 battlers[MAX_BATTLERS_COUNT] = {0};
+                u8 i, dancersCount, include;
+                u8 battlers[MAX_BATTLERS_COUNT];
+
+
 
                 // Get list of battlers that can dance
                 for (i = 0; i < gBattlersCount - 1; i++)
                 {
-                    if (gTurnStructs[i].dancerUsedMove || !IsBattlerAlive(i)) continue;
-                    battlers[possibleDancers++] = i;
+                    FILTER_NOT(gTurnStructs[i].dancerUsedMove)
+                    FILTER(IsBattlerAlive(i))
+                    include |= 1 << i;
+                    dancersCount++;
                 }
 
-                // Bubble sort possible dancers
-                for (i = 0; i < possibleDancers - 1; i++)
-                {
-                    for (j = i + 1; j < possibleDancers; j++)
-                    {
-                        if (GetWhoStrikesFirst(i, j, TRUE))
-                        {
-                            u8 temp;
-                            SWAP(battlers[i], battlers[j], temp)
-                        }
-                    }
-                }
+                SortBattlersExcept(battlers, TRUE, ~include);
 
                 // Reverse order so faster battlers resolve first
-                for (i = possibleDancers; i > 0; i--)
+                for (i = dancersCount - 1; i >= 0; i--)
                 {
                     // Out of turn moves do not use battle scripting so there's no point in pausing
-                    AbilityBattleEffects(ABILITYEFFECT_MOVE_END_OTHER, i - 1, 0, 0, 0);
+                    AbilityBattleEffects(ABILITYEFFECT_MOVE_END_OTHER, battlers[i], 0, 0, 0);
                 }
             }
             gBattleScripting.moveendState++;
@@ -10136,10 +10128,19 @@ static void Cmd_various(void)
     }
     case VARIOUS_TRY_END_NEUTRALIZING_GAS:
         REQUIRE(gFieldTimers.neutralizingGas)
-        REQUIRE_NOT(IsAbilityOnField(ABILITY_NEUTRALIZING_GAS))
-
+        REQUIRE(BattlerHasAbility(gActiveBattler, ABILITY_NEUTRALIZING_GAS, FALSE))
+        REQUIRE_NOT(IsAbilityOnFieldExcept(gActiveBattler, ABILITY_NEUTRALIZING_GAS))
         gFieldTimers.neutralizingGas = FALSE;
+        {
+        u8 battlers[MAX_BATTLERS_COUNT - 1];
+        int count = SortBattlersExcept(battlers, TRUE, 1 << gActiveBattler);
+        for (i = count - 1; i >= 0; i--)
+        {
+            gStackBattler1 = i;
+            BattleScriptCall(BattleScript_DoSingleSwitchIn);
+        }
         BattleScriptCall(BattleScript_NeutralizingGasExits);
+        }
         break;
     case VARIOUS_GET_ROTOTILLER_TARGETS:
         // Gets the battlers to be affected by rototiller. If there are none, print 'But it failed!'
@@ -15498,13 +15499,6 @@ static void Cmd_switchoutabilities(void)
     ZERO(gVolatileStructs[gActiveBattler].switchInAbilityDone);
 
     SetSingleUseAbilityCounter(gActiveBattler, ABILITY_ZERO_TO_HERO, TRUE);
-
-    if (BattlerHasAbility(gActiveBattler, ABILITY_NEUTRALIZING_GAS, TRUE))
-    {
-        gBattleScripting.switchInBattlerOverwrite = gActiveBattler;
-
-        BattleScriptCall(BattleScript_NeutralizingGasExits);
-    }
     
     if (BattlerHasAbility(gActiveBattler, ABILITY_TOXIC_SPILL, TRUE))
     {

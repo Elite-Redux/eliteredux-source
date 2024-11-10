@@ -985,7 +985,8 @@ void TryPreemptiveActions()
 
 void HandleAction_NothingIsFainted(void)
 {
-    RecalculateMoveOrder(++gCurrentTurnActionNumber, gBattlersCount);
+    gCurrentTurnActionNumber++;
+    RecalculateMoveOrder(gCurrentTurnActionNumber, FALSE);
     if (gCurrentTurnActionNumber < gBattlersCount)
         gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     else
@@ -997,7 +998,8 @@ void HandleAction_NothingIsFainted(void)
 void HandleAction_ActionFinished(void)
 {
     gBattleStruct->monToSwitchIntoId[gBattlerByTurnOrder[gCurrentTurnActionNumber]] = 6;
-    RecalculateMoveOrder(++gCurrentTurnActionNumber, gBattlersCount);
+    gCurrentTurnActionNumber++;
+    RecalculateMoveOrder(gCurrentTurnActionNumber, FALSE);
     if (gCurrentTurnActionNumber < gBattlersCount)
         gCurrentActionFuncId = gActionsByTurnOrder[gCurrentTurnActionNumber];
     else
@@ -2261,19 +2263,7 @@ u8 DoFieldEndTurnEffects(void)
         switch (gBattleStruct->turnCountersTracker)
         {
         case ENDTURN_ORDER:
-            for (i = 0; i < gBattlersCount; i++)
-            {
-                gBattlerByTurnOrder[i] = i;
-            }
-            for (i = 0; i < gBattlersCount - 1; i++)
-            {
-                s32 j;
-                for (j = i + 1; j < gBattlersCount; j++)
-                {
-                    if (GetWhoStrikesFirst(gBattlerByTurnOrder[i], gBattlerByTurnOrder[j], 0))
-                        SwapTurnOrder(i, j);
-                }
-            }
+            SortBattlersBySpeed(gBattlerByTurnOrder, FALSE);
 
             gBattleStruct->turnCountersTracker++;
             gBattleStruct->turnSideTracker = 0;
@@ -11760,41 +11750,16 @@ bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability)
 
 // Sort an array of battlers by speed
 // Useful for effects like pickpocket, eject button, red card, dancer
-void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast)
+int SortBattlersBySpeed(u8 *battlers, bool8 slowToFast)
 {
-    int i, j, currSpeed, currBattler;
-    u16 speeds[4] = {0};
-    
-    for (i = 0; i < gBattlersCount; i++)
-        speeds[i] = GetBattlerTotalSpeedStat(battlers[i], TOTAL_SPEED_FULL);
-
-    for (i = 1; i < gBattlersCount; i++)
+    int i, count = SortBattlersExcept(battlers, TRUE, 0);
+    if (slowToFast)
     {
-        currBattler = battlers[i];
-        currSpeed = speeds[i];
-        j = i - 1;
-
-        if (slowToFast)
+        int temp;
+        for (i = 0; i < count / 2; i++)
         {
-            while (j >= 0 && speeds[j] > currSpeed)
-            {
-                battlers[j + 1] = battlers[j];
-                speeds[j + 1] = speeds[j];
-                j = j - 1;
-            }
+            SWAP(battlers[i], battlers[count - i - 1], temp)
         }
-        else
-        {
-            while (j >= 0 && speeds[j] < currSpeed)
-            {
-                battlers[j + 1] = battlers[j];
-                speeds[j + 1] = speeds[j];
-                j = j - 1;
-            }
-        }
-
-        battlers[j + 1] = currBattler;
-        speeds[j + 1] = currSpeed;
     }
 }
 

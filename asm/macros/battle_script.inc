@@ -1192,6 +1192,7 @@
 	.macro switchoutabilities battler:req
 	.byte 0xe2
 	.byte \battler
+	tryendneutralizinggas \battler
 	restoreattackerandtargetfrom34
 	.endm
 
@@ -1957,8 +1958,8 @@
 	.4byte \ptr
 	.endm
 	
-	.macro tryendneutralizinggas
-	various 0, VARIOUS_TRY_END_NEUTRALIZING_GAS
+	.macro tryendneutralizinggas battler:req
+	various \battler, VARIOUS_TRY_END_NEUTRALIZING_GAS
 	.endm
 
 	.macro trytoapplymimicry battler:req, ptr:req

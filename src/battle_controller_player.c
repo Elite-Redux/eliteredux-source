@@ -1767,22 +1767,7 @@ void PrintBattleWindow_MoveSelection(void)
         case MOVE_SPEED_CALCULATION:{
             u16 battlertoCheck, monSpeed;
             u8 sBattlerByTurnOrder[gBattlersCount];
-
-            for (i = 0; i < gBattlersCount; i++)
-                sBattlerByTurnOrder[i] = i;
-
-            for (i = 0; i < gBattlersCount - 1; i++)
-            {
-                for (j = i + 1; j < gBattlersCount; j++)
-                {
-                    if (GetWhoStrikesFirst(sBattlerByTurnOrder[i], sBattlerByTurnOrder[j], TRUE) != 0)
-                    {
-                        u8 temp = sBattlerByTurnOrder[i];
-                        sBattlerByTurnOrder[i] = sBattlerByTurnOrder[j];
-                        sBattlerByTurnOrder[j] = temp;
-                    }
-                }
-            }
+            SortBattlersBySpeed(sBattlerByTurnOrder, FALSE);
 
             for (i = 0; i < gBattlersCount; i++)
             {

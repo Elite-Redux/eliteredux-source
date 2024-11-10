@@ -4462,21 +4462,7 @@ static void PrintSpeedTab(void)
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
     //Calculate Order
-    for (i = 0; i < gBattlersCount; i++)
-        sBattlerByTurnOrder[i] = i;
-
-    for (i = 0; i < gBattlersCount - 1; i++)
-    {
-        for (j = i + 1; j < gBattlersCount; j++)
-        {
-            if (GetWhoStrikesFirst(sBattlerByTurnOrder[i], sBattlerByTurnOrder[j], TRUE) != 0)
-            {
-                u8 temp = sBattlerByTurnOrder[i];
-                sBattlerByTurnOrder[i] = sBattlerByTurnOrder[j];
-                sBattlerByTurnOrder[j] = temp;
-            }
-        }
-    }
+    SortBattlersBySpeed(sBattlerByTurnOrder, FALSE);
 
     //Mon Icon
     for (i = 0; i < MAX_SPEED_MONS_SHOWN; i++) {

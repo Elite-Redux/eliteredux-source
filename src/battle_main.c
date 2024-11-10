@@ -3954,20 +3954,7 @@ static void TryDoEventsBeforeFirstTurn(void)
                 gAbsentBattlerFlags |= gBitTable[i];
         }
     }
-
-    if (gBattleStruct->switchInAbilitiesCounter == 0)
-    {
-        for (i = 0; i < gBattlersCount; i++)
-            gBattlerByTurnOrder[i] = i;
-        for (i = 0; i < gBattlersCount - 1; i++)
-        {
-            for (j = i + 1; j < gBattlersCount; j++)
-            {
-                if (GetWhoStrikesFirst(gBattlerByTurnOrder[i], gBattlerByTurnOrder[j], TRUE) != 0)
-                    SwapTurnOrder(i, j);
-            }
-        }
-    }
+    
     if (!gBattleStruct->overworldWeatherDone
         && AbilityBattleEffects(ABILITYEFFECT_SWITCH_IN_WEATHER, 0, 0, TRUE, 0) != 0)
     {
@@ -4005,6 +3992,7 @@ static void TryDoEventsBeforeFirstTurn(void)
     {
         if (!gBattleStruct->firstTurnAbilityLoopCounter)
         {
+            RecalculateMoveOrder(gBattleStruct->switchInAbilitiesCounter, TRUE);
             gBattlerAttacker = gBattlerByTurnOrder[gBattleStruct->switchInAbilitiesCounter];
             if (!IsBattlerAlive(gBattlerAttacker))
             {
@@ -5175,6 +5163,76 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove)
     if (IsTrickRoomActive()) speedValue.speedStruct.effectiveSpeed = ~speedValue.speedStruct.effectiveSpeed;
 }
 
+int GetFastestBattler(int ignoreChosenMoves, int except)
+{
+    int i, maxBattler, maxSpeed = 0, dupeCount = 2;
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        int speed;
+        FILTER_NOT(except & (1 << i))
+        speed = GetMoveSpeed(i, ignoreChosenMoves).comparable;
+        if (speed > maxSpeed)
+        {
+            maxSpeed = speed;
+            maxBattler = i;
+            dupeCount = 2;
+        }
+        // This ensures that if there is more than a two-way tie there is an even chance of each entrant being picked.
+        else if (speed == maxSpeed && Random() % dupeCount++ == 0)
+        {
+            maxBattler = i;
+        }
+    }
+
+    return i;
+}
+
+int SortBattlersExcept(u8* battlerArray, int ignoreChosenMoves, int except)
+{
+    u8 battlers[] = { 0, 1, 2, 3 };
+    union SpeedValue speeds[MAX_BATTLERS_COUNT] = { 0 };
+    int i, j, temp;
+    int dupeSpeed, dupeCount = 2;
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        FILTER_NOT(except & (1 << i))
+        speeds[i] = GetMoveSpeed(i, ignoreChosenMoves);
+    }
+
+    for (i = 0; i < gBattlersCount - 1; i++)
+    {
+        FILTER(speeds[i].comparable)
+        for (j = i + 1; j < gBattlersCount; j++)
+        {
+            FILTER(speeds[j].comparable);
+            if (speeds[j].comparable > speeds[i].comparable)
+            {
+                SWAP(battlers[i], battlers[j], temp)
+                SWAP(speeds[i].comparable, speeds[j].comparable, temp)
+            }
+            else if (speeds[i].comparable == speeds[j].comparable)
+            {
+                // If there is more than a two-way tie there can only be one duplicated speed
+                if (!dupeSpeed) dupeSpeed = speeds[i].comparable;
+                if (Random() % (dupeSpeed == speeds[i].comparable ? dupeCount++ : 2))
+                {
+                    SWAP(battlers[i], battlers[j], temp)
+                    SWAP(speeds[i].comparable, speeds[j].comparable, temp)
+                }
+            }
+        }
+    }
+
+    j = 0;
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        FILTER(speeds[i].comparable)
+        battlerArray[j++] = battlers[i];
+    }
+    return j;
+}
+
 u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
 {
     u32 battler1Speed, battler2Speed;
@@ -5264,6 +5322,7 @@ static void SetActionsAndBattlersTurnOrder(void)
         }
         else
         {
+            int except = 0;
             for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
             {
                 if (gChosenActionByBattler[gActiveBattler] == B_ACTION_USE_ITEM
@@ -5273,6 +5332,7 @@ static void SetActionsAndBattlersTurnOrder(void)
                     gActionsByTurnOrder[turnOrderId] = gChosenActionByBattler[gActiveBattler];
                     gBattlerByTurnOrder[turnOrderId] = gActiveBattler;
                     turnOrderId++;
+                    except |= 1 << gActiveBattler;
                 }
             }
             for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
@@ -5284,25 +5344,13 @@ static void SetActionsAndBattlersTurnOrder(void)
                     gActionsByTurnOrder[turnOrderId] = gChosenActionByBattler[gActiveBattler];
                     gBattlerByTurnOrder[turnOrderId] = gActiveBattler;
                     turnOrderId++;
+                    except |= 1 << gActiveBattler;
                 }
             }
-            for (i = 0; i < gBattlersCount - 1; i++)
+            SortBattlersExcept(&gActionsByTurnOrder[turnOrderId], FALSE, except);
+            for (i = turnOrderId; i < gBattlersCount; i++)
             {
-                for (j = i + 1; j < gBattlersCount; j++)
-                {
-                    u8 battler1 = gBattlerByTurnOrder[i];
-                    u8 battler2 = gBattlerByTurnOrder[j];
-                    if (gActionsByTurnOrder[i] != B_ACTION_USE_ITEM
-                        && gActionsByTurnOrder[j] != B_ACTION_USE_ITEM
-                        && gActionsByTurnOrder[i] != B_ACTION_SWITCH
-                        && gActionsByTurnOrder[j] != B_ACTION_SWITCH
-                        && gActionsByTurnOrder[i] != B_ACTION_THROW_BALL
-                        && gActionsByTurnOrder[j] != B_ACTION_THROW_BALL)
-                    {
-                        if (GetWhoStrikesFirst(battler1, battler2, FALSE))
-                            SwapTurnOrder(i, j);
-                    }
-                }
+                gActionsByTurnOrder[i] = gChosenActionByBattler[gBattlerByTurnOrder[i]];
             }
         }
     }
@@ -5394,27 +5442,26 @@ static void CheckMegaEvolutionBeforeTurn(void)
 // In gen7, priority and speed are recalculated during the turn in which a pokemon mega evolves
 static void TryChangeTurnOrder(void)
 {
-    RecalculateMoveOrder(0, gBattlersCount);
+    RecalculateMoveOrder(gCurrentTurnActionNumber, FALSE);
     gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;
     gBattleStruct->focusPunchBattlerId = 0;
 }
 
-void RecalculateMoveOrder(u8 startingFrom, u8 processTo)
+void RecalculateMoveOrder(int index, int ignoreChosenMove)
 {
-    s32 i, j;
-    for (i = startingFrom; i < processTo - 1; i++)
+    int i, exclude = 0, fastest;
+    for (i = 0; i < index; i++)
     {
-        if (gActionsByTurnOrder[i] != B_ACTION_USE_MOVE)
-            continue;
+        exclude |= 1 << gBattlerByTurnOrder[i];
+    }
+    fastest = GetFastestBattler(ignoreChosenMove, exclude);
+    if (gBattlerByTurnOrder[index] == fastest) return;
 
-        for (j = i + 1; j < processTo; j++)
-        {
-            if (gActionsByTurnOrder[j] != B_ACTION_USE_MOVE)
-                continue;
-            
-            if (GetWhoStrikesFirst(gBattlerByTurnOrder[i], gBattlerByTurnOrder[j], FALSE))
-                SwapTurnOrder(i, j);
-        }
+    for (i = index + 1; i < gBattlersCount; i++)
+    {
+        FILTER(gBattlerByTurnOrder[i] == fastest)
+        SwapTurnOrder(index, i);
+        return;
     }
 }
 

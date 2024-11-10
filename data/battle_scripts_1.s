@@ -7359,7 +7359,7 @@ BattleScript_FaintAttacker::
 	call BattleScript_AbilityPopUp
 BattleScript_FaintAttacker_NoPopup:
 	printfromtable gFaintMonMessage
-	tryendneutralizinggas
+	tryendneutralizinggas BS_ATTACKER
 	cleareffectsonfaint BS_ATTACKER
 	tryactivatesoulheart
 	tryactivatereceiver BS_ATTACKER
@@ -7378,7 +7378,7 @@ BattleScript_FaintTarget::
 	call BattleScript_AbilityPopUp
 BattleScript_FaintTarget_NoPopup:
 	printfromtable gFaintMonMessage
-	tryendneutralizinggas
+	tryendneutralizinggas BS_TARGET
 	cleareffectsonfaint BS_TARGET
 	tryactivatefellstinger BS_ATTACKER
 	tryactivatesoulheart
@@ -11683,7 +11683,7 @@ BattleScript_ArenaDoJudgment::
 	playfaintcry BS_OPPONENT1
 	waitcry BS_ATTACKER
 	dofaintanimation BS_OPPONENT1
-	tryendneutralizinggas
+	cleareffectsonfaint BS_OPPONENT1
 	arenaopponentmonlost
 	end2
 
@@ -11997,15 +11997,11 @@ sByteFour:
 BattleScript_NeutralizingGasExits::
 	printstring STRINGID_NEUTRALIZINGGASOVER
 	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_DoSingleSwitchIn::
 	saveattackerandtargetto34
-	setbyte gBattlerAttacker, 0
-	writestackbattler BS_ATTACKER, 1
-BattleScript_NeutralizingGasExitsLoop:
 	switchinabilities BS_STACK_1
-	restorestackstate
-	addbyte gStackBattler1, 1
-	writestackbattler BS_STACK_1, 1
-	jumpifbytenotequal gStackBattler1, gBattlersCount, BattleScript_NeutralizingGasExitsLoop
 	return
 
 BattleScript_NaturalCureExits::
