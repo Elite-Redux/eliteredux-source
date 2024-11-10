@@ -5456,6 +5456,8 @@ static void TryChangeTurnOrder(void)
 void RecalculateMoveOrder(int index, int ignoreChosenMove)
 {
     int i, exclude = 0, fastest;
+    if (!ignoreChosenMove && gActionsByTurnOrder[index] != B_ACTION_USE_MOVE) return;
+
     for (i = 0; i < index; i++)
     {
         exclude |= 1 << gBattlerByTurnOrder[i];
