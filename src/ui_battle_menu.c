@@ -3208,6 +3208,8 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
 
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].calculated = TRUE;
 
+    if (ShouldSetMoldBreaker(battler, move)) gHitMarker |= HITMARKER_MOLD_BREAKER;
+
     //Sets move type depending on the mon ability/stats
     SetTypeBeforeUsingMove(move, battler);
     GET_MOVE_TYPE(move, moveType);
