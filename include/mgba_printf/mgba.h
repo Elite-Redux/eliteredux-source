@@ -51,6 +51,14 @@ MgbaOpen(); \
 MgbaPrintf(MGBA_LOG_DEBUG, __BASE_FILE__ ":%d: " string, __LINE__, 0 + __VA_ARGS__ + 0); \
 MgbaClose();
 
+#define __PICK_MACRO5(_5, _4, _3, _2, _1, NAME, ...) NAME
+#define MGBA_PRINT_VALUES(...) __PICK_MACRO5(0 + __VA_ARGS__ + 0, __MGBA_PRINT_VALUES5, __MGBA_PRINT_VALUES4, __MGBA_PRINT_VALUES3, __MGBA_PRINT_VALUES2, __MGBA_PRINT_VALUES1)(__VA_ARGS__)
+#define __MGBA_PRINT_VALUES1(...) MGBA_PRINT_DEBUG("%d", __VA_ARGS__)
+#define __MGBA_PRINT_VALUES2(...) MGBA_PRINT_DEBUG("%d %d", __VA_ARGS__)
+#define __MGBA_PRINT_VALUES3(...) MGBA_PRINT_DEBUG("%d %d %d", __VA_ARGS__)
+#define __MGBA_PRINT_VALUES4(...) MGBA_PRINT_DEBUG("%d %d %d %d", __VA_ARGS__)
+#define __MGBA_PRINT_VALUES5(...) MGBA_PRINT_DEBUG("%d %d %d %d %d", __VA_ARGS__)
+
 #ifdef __cplusplus
 }
 #endif
