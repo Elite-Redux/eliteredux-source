@@ -5846,11 +5846,13 @@ static void HandleEndTurn_FinishBattle(void)
     }
     else
     {
-        #if PRINT_BATTLE_SCRIPT_TRACING
-        MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d", gBattleControllerExecFlags, gBattlescriptCurrInstr, gBattlescriptCurrInstr[0], gBattlescriptCurrInstr[1], gBattlescriptCurrInstr[2])
-        #endif
         if (gBattleControllerExecFlags == 0)
+        {
+            #if PRINT_BATTLE_SCRIPT_TRACING
+            MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d", gBattleControllerExecFlags, gBattlescriptCurrInstr, gBattlescriptCurrInstr[0], gBattlescriptCurrInstr[1], gBattlescriptCurrInstr[2])
+            #endif
             gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
+        }
     }
 
     //reset battle Events at the end of the battle
