@@ -30608,13 +30608,13 @@ static const struct TrainerMonItemCustomMoves sParty_TateAndLiza1[] = { // Inver
 static const struct TrainerMonItemCustomMoves sParty_TateAndLiza1Insane[] = { // Inverse Battle!
     {
     .lvl = 0,
-    .species = SPECIES_MUSHARNA,
+    .species = SPECIES_TAPU_LELE,
     .heldItem = ITEM_TACTICAL_VEST,
-    .ability = 2,
+    .ability = 0,
     .zeroSpeedIvs = TRUE,
-    .evs = {252, 0, 4, 252, 0, 0},
-    .nature = NATURE_RELAXED,
-    .moves = MOVE_MOONBLAST, MOVE_EXPANDING_FORCE, MOVE_THUNDERBOLT, MOVE_PSYCHIC
+    .evs = {64, 0, 192, 252, 0, 0},
+    .nature = NATURE_QUIET,
+    .moves = MOVE_EXPANDING_FORCE, MOVE_DAZZLING_GLEAM, MOVE_ATTACK_ORDER, MOVE_PSYSTRIKE
     },
     {
     .lvl = 0,
