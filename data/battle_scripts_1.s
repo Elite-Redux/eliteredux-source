@@ -6331,8 +6331,9 @@ BattleScript_SkyDrop_DoDamage:
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 	seteffectwithchance
+	tryfaintmon BS_TARGET, FALSE, NULL
 	dohazarddamage BS_TARGET
-	goto BattleScript_MoveEndTryFaintTarget
+	goto BattleScript_MoveEnd
 
 BattleScript_EffectSemiInvulnerable::
 	jumpifstatus2 BS_ATTACKER, STATUS2_MULTIPLETURNS, BattleScript_SecondTurnSemiInvulnerable
