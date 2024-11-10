@@ -63,6 +63,8 @@
 #define DEBUG_POKEMON_MENU   TRUE
 #define CURRENT_GAME_VERSION 1046
 
+#define PRINT_BATTLE_SCRIPT_TRACING FALSE
+
 // free saveblock 1 defines             If defined it will free the space
 #define FREE_TRAINER_HILL               //frees up trainer hill data. 28 bytes.                        WARNING THIS HAS BEEN SHOWN TO BREAK MULTI BATTLES
 #define FREE_MYSTERY_EVENT_BUFFERS      //frees up mystery event and ramScript. roughly 1880 bytes     Needed by FREE_BATTLE_TOWER_E_READER

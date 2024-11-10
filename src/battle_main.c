@@ -4739,6 +4739,9 @@ static void HandleTurnActionSelectionState(void)
             {
                 gBattlerAttacker = gActiveBattler;
                 gBattlescriptCurrInstr = gSelectionBattleScripts[gActiveBattler];
+                #if PRINT_BATTLE_SCRIPT_TRACING
+                MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d", gBattleControllerExecFlags, gBattlescriptCurrInstr, gBattlescriptCurrInstr[0], gBattlescriptCurrInstr[1], gBattlescriptCurrInstr[2])
+                #endif
                 if (!(gBattleControllerExecFlags & ((gBitTable[gActiveBattler]) | (0xF << 28) | (gBitTable[gActiveBattler] << 4) | (gBitTable[gActiveBattler] << 8) | (gBitTable[gActiveBattler] << 12))))
                 {
                     gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
@@ -4788,6 +4791,9 @@ static void HandleTurnActionSelectionState(void)
                 {
                     gBattlerAttacker = gActiveBattler;
                     gBattlescriptCurrInstr = gSelectionBattleScripts[gActiveBattler];
+                    #if PRINT_BATTLE_SCRIPT_TRACING
+                    MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d", gBattleControllerExecFlags, gBattlescriptCurrInstr, gBattlescriptCurrInstr[0], gBattlescriptCurrInstr[1], gBattlescriptCurrInstr[2])
+                    #endif
                     if (!(gBattleControllerExecFlags & ((gBitTable[gActiveBattler]) | (0xF << 28) | (gBitTable[gActiveBattler] << 4) | (gBitTable[gActiveBattler] << 8) | (gBitTable[gActiveBattler] << 12))))
                     {
                         gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
@@ -4815,6 +4821,9 @@ static void HandleTurnActionSelectionState(void)
                 {
                     gBattlerAttacker = gActiveBattler;
                     gBattlescriptCurrInstr = gSelectionBattleScripts[gActiveBattler];
+                    #if PRINT_BATTLE_SCRIPT_TRACING
+                    MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d", gBattleControllerExecFlags, gBattlescriptCurrInstr, gBattlescriptCurrInstr[0], gBattlescriptCurrInstr[1], gBattlescriptCurrInstr[2])
+                    #endif
                     if (!(gBattleControllerExecFlags & ((gBitTable[gActiveBattler]) | (0xF << 28) | (gBitTable[gActiveBattler] << 4) | (gBitTable[gActiveBattler] << 8) | (gBitTable[gActiveBattler] << 12))))
                     {
                         gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
@@ -5837,6 +5846,9 @@ static void HandleEndTurn_FinishBattle(void)
     }
     else
     {
+        #if PRINT_BATTLE_SCRIPT_TRACING
+        MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d", gBattleControllerExecFlags, gBattlescriptCurrInstr, gBattlescriptCurrInstr[0], gBattlescriptCurrInstr[1], gBattlescriptCurrInstr[2])
+        #endif
         if (gBattleControllerExecFlags == 0)
             gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
     }
@@ -5955,6 +5967,9 @@ void RunBattleScriptCommands_PopCallbacksStack(void)
     }
     else
     {
+        #if PRINT_BATTLE_SCRIPT_TRACING
+        MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d", gBattleControllerExecFlags, gBattlescriptCurrInstr, gBattlescriptCurrInstr[0], gBattlescriptCurrInstr[1], gBattlescriptCurrInstr[2])
+        #endif
         if (gBattleControllerExecFlags == 0)
             gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
     }
@@ -5962,6 +5977,9 @@ void RunBattleScriptCommands_PopCallbacksStack(void)
 
 void RunBattleScriptCommands(void)
 {
+    #if PRINT_BATTLE_SCRIPT_TRACING
+    MGBA_PRINT_DEBUG("Exec: %d Addr: %d Cmd: %d Bytes: %d %d", gBattleControllerExecFlags, gBattlescriptCurrInstr, gBattlescriptCurrInstr[0], gBattlescriptCurrInstr[1], gBattlescriptCurrInstr[2])
+    #endif
     if (gBattleControllerExecFlags == 0)
         gBattleScriptingCommandsTable[gBattlescriptCurrInstr[0]]();
 }
