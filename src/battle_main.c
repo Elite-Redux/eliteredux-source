@@ -5044,7 +5044,7 @@ u16 GetChosenMove(u32 battlerId)
     if (gRoundStructs[battlerId].noValidMoves)
         return MOVE_STRUGGLE;
     else
-        return gBattleMons[battlerId].moves[gBattleStruct->chosenMovePositions[battlerId]];
+        return gChosenMoveByBattler[battlerId];
 }
 
 u16 IsMyceliumMightActive(u32 battlerId)

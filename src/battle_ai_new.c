@@ -14,6 +14,7 @@
 #include "constants/hold_effects.h"
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
+#include "battle_main.h"
 
 static int AlwaysCancelled(int battlerAtk, int move, struct MoveContainer* moveContainer)
 {
@@ -33,7 +34,14 @@ static int AlwaysCancelled(int battlerAtk, int move, struct MoveContainer* moveC
     return FALSE;
 }
 
-int CheckCancelled(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
+union SpeedValue AiPerformMoveSpeedCalculation(int battlerAtk, int battlerDef, int move)
+{
+    gChosenMoveByBattler[battlerAtk] = move;
+    gBattleStruct->moveTarget[battlerAtk] = battlerDef;
+    return GetMoveSpeed(battlerAtk, move);
+}
+
+int CheckCancelled(int battlerAtk, int battlerDef, int move, struct MoveState* moveState, struct AiData* aiData)
 {
 
     if (GetAbilityState(battlerAtk, ABILITY_TRUANT) && !IS_MOVE_STATUS(move))
@@ -41,7 +49,7 @@ int CheckCancelled(int battlerAtk, int battlerDef, int move, struct AiData* aiDa
 
     if (gVolatileStructs[battlerAtk].skyDropped)
     {
-        // TODO: Handle Sky Drop
+        // TODO: Calculate sky drop speed and cancel if selected move speed > sky drop speed
     }
 
     if (!AreSameSide(battlerAtk, battlerDef)
@@ -140,21 +148,27 @@ enum AiProcessingPhase {
     AI_PHASE_COUNT,
 };
 
-struct MoveState* SetMoveVs(int battlerAtk, int battlerTarget, int moveNum, struct AiData* aiData)
+void CalculateBasicMoveInfo(int battlerAtk, int battlerDef, int move, struct MoveState* moveState, struct AiData* aiData)
+{
+    if (!moveState) return;
+    moveState->speedValue = AiPerformMoveSpeedCalculation(battlerAtk, battlerDef, move);
+    if (CheckCancelled(battlerAtk, battlerDef, move, moveState, aiData))
+    {
+        moveState->cancelled = TRUE;
+        return;
+    }
+}
+
+struct MoveState* SetMoveVs(int battlerAtk, int battlerDef, int moveNum, struct AiData* aiData)
 {
     int targetCount;
     struct MoveState* moveData;
-    if (!IsBattlerAlive(battlerTarget)) return NULL;
+    if (!IsBattlerAlive(battlerDef)) return NULL;
     targetCount = aiData->moveState[battlerAtk][moveNum].count++;
     moveData = &aiData->moveState[battlerAtk][moveNum].targetData[targetCount];
-    moveData->target = battlerTarget;
+    moveData->target = battlerDef;
+    CalculateBasicMoveInfo(battlerAtk, battlerDef, aiData->moveState[battlerAtk][moveNum].move, moveData, aiData);
     return moveData;
-}
-
-void CalculateBasicMoveInfo(int battlerAtk, int move, struct MoveState* moveState, struct AiData* aiData)
-{
-    if (!moveState) return;
-    CheckCancelled(battlerAtk, moveState->target, move, aiData);
 }
 
 int GetAiDecision(int battler)
@@ -176,14 +190,17 @@ int GetAiDecision(int battler)
         for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++)
         {
             int move;
-            FILTER_NOT(unusableMoves & (1 << moveNum))
+            if (move == MOVE_NONE || unusableMoves & (1 << moveNum))
+            {
+                aiData.moveState[battlerAtk][moveNum].unusable = TRUE;
+                continue;
+            }
             move = aiData.moveState[battlerAtk][moveNum].move = gBattleMons[battlerAtk].moves[moveNum];
-            FILTER(move != MOVE_NONE)
+            FILTER(!AlwaysCancelled(battlerAtk, move, &aiData.moveState[battlerAtk][moveNum]))
             aiData.moveState[battlerAtk][moveNum].targetFlags = GetBattlerBattleMoveTargetFlags(move, battler);
             switch (aiData.moveState[battlerAtk][moveNum].targetFlags)
             {
             case MOVE_TARGET_ALLY:
-                REQUIRE(!AlwaysCancelled(battlerAtk, move, &aiData.moveState[battlerAtk][moveNum]))
                 SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, &aiData);
                 break;
             
@@ -211,11 +228,6 @@ int GetAiDecision(int battler)
                 SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, &aiData);
                 SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, &aiData);
                 break;
-            }
-
-            for (battlerDef = 0; battlerDef < aiData.moveState[battlerAtk][moveNum].count; battlerDef++)
-            {
-                CheckCancelled(battlerAtk, battlerDef, aiData.moveState[battlerAtk][moveNum].move, &aiData);
             }
         }
     }

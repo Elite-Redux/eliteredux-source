@@ -1759,6 +1759,7 @@ bool32 IsGravityPreventingMove(u32 move)
     case MOVE_SPLASH:
     case MOVE_TELEKINESIS:
     case MOVE_FLOATY_FALL:
+    case MOVE_SEISMIC_TOSS:
         return TRUE;
     default:
         return FALSE;

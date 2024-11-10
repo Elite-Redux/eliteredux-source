@@ -46,6 +46,7 @@ struct MoveContainer
     u8 targetFlags;
     u8 count:2;
     u8 cancellationState:2;
+    u8 unusable:1;
 };
 
 
