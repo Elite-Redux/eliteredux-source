@@ -1,5 +1,5 @@
-#ifndef GUARD_BATTLE_AI_MAIN_H
-#define GUARD_BATTLE_AI_MAIN_H
+#ifndef GUARD_BATTLE_AI_NEW_H
+#define GUARD_BATTLE_AI_NEW_H
 
 #include "global.h"
 #include "battle_main.h"
