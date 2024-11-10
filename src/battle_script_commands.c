@@ -8959,6 +8959,7 @@ static void Cmd_various(void)
         SetActiveStatChanger(GET_STAT_BUFF_ID(i), GET_STAT_BUFF_VALUE_WITH_SIGN(i));
         break;
     case VARIOUS_SWITCHIN_ABILITIES:
+        REQUIRE(IsBattlerAlive(gActiveBattler))
         gBattlerAttacker = gActiveBattler;
         AbilityBattleEffects(ABILITYEFFECT_NEUTRALIZINGGAS, gActiveBattler, 0, ABILITY_BS_CALL, 0);
         ptr = gBattlescriptCurrInstr;
@@ -10134,12 +10135,11 @@ static void Cmd_various(void)
         break;
     }
     case VARIOUS_TRY_END_NEUTRALIZING_GAS:
-        if (gTurnStructs[gActiveBattler].neutralizingGasRemoved)
-        {
-            gTurnStructs[gActiveBattler].neutralizingGasRemoved = FALSE;
-            BattleScriptCall(BattleScript_NeutralizingGasExits);
-            return;
-        }
+        REQUIRE(gFieldTimers.neutralizingGas)
+        REQUIRE_NOT(IsAbilityOnField(ABILITY_NEUTRALIZING_GAS))
+
+        gFieldTimers.neutralizingGas = FALSE;
+        BattleScriptCall(BattleScript_NeutralizingGasExits);
         break;
     case VARIOUS_GET_ROTOTILLER_TARGETS:
         // Gets the battlers to be affected by rototiller. If there are none, print 'But it failed!'

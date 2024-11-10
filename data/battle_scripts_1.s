@@ -2822,7 +2822,6 @@ BattleScript_EffectSimpleBeam:
 	trytoclearprimalweather
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
-	tryendneutralizinggas BS_TARGET
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectSuckerPunch:
@@ -3080,7 +3079,6 @@ BattleScript_EffectGastroAcid:
 	trytoclearprimalweather
 	printstring STRINGID_EMPTYSTRING3
 	waitmessage 1
-	tryendneutralizinggas BS_TARGET
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectToxicSpikes:
@@ -7361,6 +7359,7 @@ BattleScript_FaintAttacker::
 	call BattleScript_AbilityPopUp
 BattleScript_FaintAttacker_NoPopup:
 	printfromtable gFaintMonMessage
+	tryendneutralizinggas
 	cleareffectsonfaint BS_ATTACKER
 	tryactivatesoulheart
 	tryactivatereceiver BS_ATTACKER
@@ -7379,6 +7378,7 @@ BattleScript_FaintTarget::
 	call BattleScript_AbilityPopUp
 BattleScript_FaintTarget_NoPopup:
 	printfromtable gFaintMonMessage
+	tryendneutralizinggas
 	cleareffectsonfaint BS_TARGET
 	tryactivatefellstinger BS_ATTACKER
 	tryactivatesoulheart
@@ -11683,7 +11683,7 @@ BattleScript_ArenaDoJudgment::
 	playfaintcry BS_OPPONENT1
 	waitcry BS_ATTACKER
 	dofaintanimation BS_OPPONENT1
-	cleareffectsonfaint BS_OPPONENT1
+	tryendneutralizinggas
 	arenaopponentmonlost
 	end2
 
