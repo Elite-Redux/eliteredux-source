@@ -2085,7 +2085,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
         
         unusableMoves ^= 1 << i;
     }
-    return ~unusableMoves;
+    return unusableMoves;
 }
 
 bool8 AreAllMovesUnusable(void)
