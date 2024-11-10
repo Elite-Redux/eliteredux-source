@@ -57,7 +57,7 @@ struct BattlerState
 
 
 struct AiData {
-    struct MoveContainer moveState[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
+    struct MoveContainer moveState[MAX_BATTLERS_COUNT][MAX_MON_MOVES + 1];
     struct BattlerState battlerState[MAX_BATTLERS_COUNT];
 };
 
@@ -66,14 +66,5 @@ struct DisguiseSimulation {
 };
 
 int GetAiDecision(int battler);
-int AdjustForChance(int chance, int score);
-int BelowHalfHp(int battler);
-void PopulateAbilities(int battler, struct AiData* aiData);
-int HasAbility(int battler, int ability, struct AiData* aiData);
-int AiIsUnaware(int battler, struct AiData* aiData);
-int AreSameSide(int battler1, int battler2);
-int IsSleeping(int battler, struct AiData* aiData);
-int SeesSunlight(int battler, struct AiData* aiData);
-int AdjustForChance(int chance, int score);
 
 #endif

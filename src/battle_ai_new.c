@@ -15,121 +15,7 @@
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
 #include "battle_main.h"
-
-static int AlwaysCancelled(int battlerAtk, int move, struct MoveContainer* moveContainer)
-{
-    if (gVolatileStructs[battlerAtk].throatChopTimer && gBattleMoves[move].flags & FLAG_SOUND)
-        return TRUE;
-
-    if (GetAbilityState(battlerAtk, ABILITY_TRUANT) && !IS_MOVE_STATUS(move))
-        return TRUE;
-
-    if (gBattleMons[battlerAtk].status1 & STATUS1_PARALYSIS)
-        moveContainer->cancellationState = AI_CANCEL_25;
-    else if (gBattleMons[battlerAtk].status1 & STATUS1_SLEEP)
-    {
-        // TODO: Handle not knowing the sleep timer
-    }
-
-    return FALSE;
-}
-
-union SpeedValue AiPerformMoveSpeedCalculation(int battlerAtk, int battlerDef, int move)
-{
-    gChosenMoveByBattler[battlerAtk] = move;
-    gBattleStruct->moveTarget[battlerAtk] = battlerDef;
-    return GetMoveSpeed(battlerAtk, move);
-}
-
-int CheckCancelled(int battlerAtk, int battlerDef, int move, struct MoveState* moveState, struct AiData* aiData)
-{
-
-    if (GetAbilityState(battlerAtk, ABILITY_TRUANT) && !IS_MOVE_STATUS(move))
-        return TRUE;
-
-    if (gVolatileStructs[battlerAtk].skyDropped)
-    {
-        // TODO: Calculate sky drop speed and cancel if selected move speed > sky drop speed
-    }
-
-    if (!AreSameSide(battlerAtk, battlerDef)
-        && gSideTimers[GetBattlerSide(battlerDef)].quickGuardTimer
-        // TODO: Set gProcessingExtraAttacks when scoring extra moves
-        && !gProcessingExtraAttacks
-        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
-        return TRUE;
-    
-    if (gBattleMoves[move].flags & FLAG_POWDER && battlerAtk != battlerDef && !HasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, aiData))
-    {
-        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) || GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES)
-            return TRUE;
-    }
-
-    if (!AreSameSide(battlerAtk, battlerDef)
-        && !gProcessingExtraAttacks
-        && IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)
-        && GetMovePriority(battlerAtk, move, battlerDef) > 0)
-        return TRUE;
-    
-    return FALSE;
-}
-
-int BelowHalfHp(int battler)
-{
-    return gBattleMons[battler].hp <= gBattleMons[battler].maxHP;
-}
-
-void PopulateAbilities(int battler, struct AiData* aiData)
-{
-}
-
-int HasAbility(int battler, int ability, struct AiData* aiData)
-{
-    return BattlerHasAbility(battler, ability, TRUE);
-}
-
-int AiIsUnaware(int battler, struct AiData* aiData)
-{
-    if (HasAbility(battler, ABILITY_UNAWARE, aiData)) return TRUE;
-    if (HasAbility(battler, ABILITY_CONTEMPT, aiData)) return TRUE;
-    if (HasAbility(battler, ABILITY_SWORD_OF_DAMNATION, aiData)) return TRUE;
-    return FALSE;
-}
-
-void ReplaceDisguise(struct DisguiseSimulation* actual)
-{
-
-}
-
-void RestoreDisguise(struct DisguiseSimulation* actual)
-{
-
-}
-
-int AreSameSide(int battler1, int battler2)
-{
-    return GetBattlerSide(battler1) == GetBattlerSide(battler2);
-}
-
-int IsSleeping(int battler, struct AiData* aiData)
-{
-    return gBattleMons[battler].status1 & STATUS1_SLEEP || HasAbility(battler, ABILITY_COMATOSE, aiData);
-}
-
-int SeesSunlight(int battler, struct AiData* aiData)
-{
-    if (HasAbility(battler, ABILITY_CHLOROPLAST, aiData)) return TRUE;
-    if (HasAbility(battler, ABILITY_BIG_LEAVES, aiData)) return TRUE;
-    if (HasAbility(battler, ABILITY_SOLAR_FLARE, aiData)) return TRUE;
-    return IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY);
-}
-
-int AdjustForChance(int chance, int score)
-{
-    if (chance > 100) chance = 100;
-    if (chance < 0) chance = 0;
-    return chance * score / 100;
-}
+#include "battle_ai_new_util.h"
 
 int ScoreMove(int battlerAtk, int battlerDef, int move, int targets, struct AiData* aiData)
 {
@@ -147,6 +33,16 @@ enum AiProcessingPhase {
     AI_PHASE_END_TURN,
     AI_PHASE_COUNT,
 };
+
+void ReplaceDisguise(struct DisguiseSimulation* actual)
+{
+
+}
+
+void RestoreDisguise(struct DisguiseSimulation* actual)
+{
+
+}
 
 void CalculateBasicMoveInfo(int battlerAtk, int battlerDef, int move, struct MoveState* moveState, struct AiData* aiData)
 {

@@ -13,6 +13,7 @@
 #include "battle_anim.h"
 #include "constants/hold_effects.h"
 #include "battle_ai_new.h"
+#include "battle_ai_new_util.h"
 #include "battle_ai_scoring.h"
 
 // TODO: Gym Skill
@@ -403,13 +404,15 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         REQUIRE(moveState->contact)
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerAtk)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
+        REQUIRE_NOT(BattlerHasAbility(battlerAtk, ability, FALSE))
         return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability);
     
     case ABILITY_WANDERING_SPIRIT:
         REQUIRE(moveState->contact)
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerAtk)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
-        REQUIRE_NOT(HasAbility(battlerDef, GetBattlerAbility(battlerAtk), aiData))
+        REQUIRE_NOT(BattlerHasAbility(battlerAtk, ability, FALSE))
+        REQUIRE_NOT(BattlerHasAbility(battlerDef, GetBattlerAbility(battlerAtk), FALSE))
         return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability) + AI_SCORE_REPLACE_ABILITY(battlerDef, GetBattlerAbility(battlerAtk));
     
     case ABILITY_GULP_MISSILE:
@@ -564,8 +567,8 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
     case ABILITY_EFFECT_SPORE:
         REQUIRE(moveState->contact)
         REQUIRE_NOT(IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GRASS))
-        REQUIRE_NOT(HasAbility(battlerAtk, ABILITY_OVERCOAT, aiData))
-        REQUIRE_NOT(HasAbility(battlerAtk, ABILITY_EFFECT_SPORE, aiData))
+        REQUIRE_NOT(BattlerHasAbility(battlerAtk, ABILITY_OVERCOAT, FALSE))
+        REQUIRE_NOT(BattlerHasAbility(battlerAtk, ABILITY_EFFECT_SPORE, FALSE))
         REQUIRE(GetBattlerHoldEffect(battlerAtk, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
         return AI_SCORE_ADJUST(10, AI_SCORE_PARALYSIS(battlerAtk) + AI_SCORE_POISON_MOVE(battlerAtk) + AI_SCORE_PARALYSIS(battlerAtk));
     
@@ -698,7 +701,7 @@ int ScoreEitherAbility(int ability, int battlerAtk, int battlerDef, int move, in
     {
     case ABILITY_BLOOD_STAIN:
         REQUIRE(moveState->contact)
-        REQUIRE_NOT(HasAbility(battlerDef, ABILITY_BLOOD_STAIN, aiData))
+        REQUIRE_NOT(BattlerHasAbility(battlerDef, ABILITY_BLOOD_STAIN, FALSE))
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerDef)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerDef))
         return AI_SCORE_REPLACE_ABILITY(battlerDef, ABILITY_BLOOD_STAIN);

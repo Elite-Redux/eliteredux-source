@@ -14,6 +14,7 @@
 #include "constants/hold_effects.h"
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
+#include "battle_ai_new_util.h"
 
 #define AI_GET_MOVE_EFFECT_CHANCE 0
 
@@ -24,7 +25,7 @@ int GetFullChance(int battlerAttack, int move, int moveEffect, int chance, struc
 
 int HasSkillLink(int battler, struct AiData* aiData)
 {
-    return HasAbility(battler, ABILITY_SKILL_LINK, aiData) || HasAbility(battler, ABILITY_KUNOICHI_BLADE, aiData);
+    return BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE) || BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE);
 }
 
 int AdjustForMultihit(int damage, int battlerAtk, int move, struct MoveState* moveState, struct AiData* aiData)
@@ -90,10 +91,9 @@ int AdjustForMultihit(int damage, int battlerAtk, int move, struct MoveState* mo
     if (!IsMoveAffectedByParentalBond(move, battlerAtk))
         return damage;
 
-    PopulateAbilities(battlerAtk, aiData);
     for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
     {
-        switch (0 /* TODO: Fix */)
+        switch (GetAbilityAtIndex(battlerAtk, i, FALSE))
         {
         case ABILITY_PARENTAL_BOND:
         case ABILITY_HYPER_AGGRESSIVE:
@@ -786,7 +786,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_MORNING_SUN);
 
     CASE_AND_LABEL(EFFECT_MOONLIGHT)
-        if (HasAbility(battlerAtk, ABILITY_MOON_SPIRIT, aiData)) return AI_SCORE_HEAL(battlerAtk, 66);
+        if (BattlerHasAbility(battlerAtk, ABILITY_MOON_SPIRIT, FALSE)) return AI_SCORE_HEAL(battlerAtk, 66);
         GOTO(EFFECT_MORNING_SUN);
 
     CASE_AND_LABEL(EFFECT_HIDDEN_POWER)
@@ -1308,7 +1308,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
 
     CASE_AND_LABEL(EFFECT_COIL)
-        if ((HasAbility(battlerAtk, ABILITY_COIL_UP, aiData) || HasAbility(battlerAtk, ABILITY_SIDEWINDER, aiData))
+        if ((BattlerHasAbility(battlerAtk, ABILITY_COIL_UP, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SIDEWINDER, FALSE))
             && !(gStatuses4[battlerAtk] & STATUS4_COILED))
             score += AI_SCORE_COILED_UP;
         return score + AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_DEFENSE_UP(battlerAtk, 1) + AI_SCORE_ACC_UP(battlerAtk, 1);
@@ -1553,7 +1553,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_MAGNETIC_FLUX)
         // if (IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) score += AI_SCORE_PARALYSIS(battlerDef);
-        if (HasAbility(battlerAtk, ABILITY_PLUS, aiData) || HasAbility(battlerAtk, ABILITY_MINUS, aiData))
+        if (BattlerHasAbility(battlerAtk, ABILITY_PLUS, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_MINUS, FALSE))
             score += AI_SCORE_DEFENSE_UP(battlerDef, 1) + AI_SCORE_SPDEF_UP(battlerDef, 1);
         return score;
 
@@ -1570,7 +1570,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return score;
 
     CASE_AND_LABEL(EFFECT_STRENGTH_SAP)
-        return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_ATK, 0, 0, TRUE, FALSE, AiIsUnaware(gBattlerAttacker), FALSE););
+        return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_ATK, 0, 0, TRUE, FALSE, IsUnaware(gBattlerAttacker), FALSE););
 
     CASE_AND_LABEL(EFFECT_MIND_BLOWN)
         // TODO: Score damage loss
@@ -1821,7 +1821,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_INVERSE_ROOM(INVERSE_ROOM_DURATION);
 
     CASE_AND_LABEL(EFFECT_DRAIN_BRAIN)
-        return AI_SCORE_SPATK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_SPATK, 0, 0, TRUE, FALSE, AiIsUnaware(gBattlerAttacker), FALSE););
+        return AI_SCORE_SPATK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_SPATK, 0, 0, TRUE, FALSE, IsUnaware(gBattlerAttacker), FALSE););
 
     CASE_AND_LABEL(EFFECT_TRIPLE_ARROWS)
         AI_CALC_DAMAGE;
