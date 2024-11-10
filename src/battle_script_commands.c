@@ -1883,13 +1883,9 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     // Check Wonder Skin.
     if ((BATTLER_HAS_ABILITY(battlerDef, ABILITY_WONDER_SKIN) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_PRIM_AND_PROPER)) && IS_MOVE_STATUS(move))
         moveAcc = 50;
-    
-    MGBA_PRINT_DEBUG("calc %d %d", battlerAtk, buff)
 
     calc = gAccuracyStageRatios[buff].dividend * moveAcc;
     calc /= gAccuracyStageRatios[buff].divisor;
-    
-    MGBA_PRINT_DEBUG("calc %d %d", battlerAtk, buff)
 
     // Bad Luck Ability lowers accuracy by 5%
     if (IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK))
