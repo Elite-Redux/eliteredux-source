@@ -14494,7 +14494,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler)
     }
 
     ability = gBattleScripting.abilityPopupOverwrite = GetAbilityAtIndex(battler, abilityNumber, FALSE);
-    gBattlerAbility = battler;
+    gBattlerAbility = gBattleScripting.battler = battler;
 
     switch (ability)
     {
