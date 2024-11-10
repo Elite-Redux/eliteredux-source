@@ -1881,6 +1881,7 @@ void PrintBattleWindow_MoveSelection(void)
                     //Can KO - Todo: Check calculation
                     if (gBattleMoves[newMove].split != SPLIT_STATUS && gBattleMoves[newMove].power > 0) {
                         u8 moveType = gBattleMoves[newMove].type;
+                        if (ShouldSetMoldBreaker(target, newMove)) gHitMarker |= HITMARKER_MOLD_BREAKER;
                         SetTypeBeforeUsingMove(newMove, target);
                         GET_MOVE_TYPE(newMove, moveType);
                         moveDamage = CalculateMoveDamageAndEffectiveness(newMove, target, gActiveBattler, &moveType, &typeEffectivenessMultiplier);
