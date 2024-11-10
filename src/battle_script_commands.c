@@ -8999,217 +8999,161 @@ static void Cmd_various(void)
         MarkBattlerForControllerExec(gActiveBattler);
         break;
     case VARIOUS_TRY_ACTIVATE_RAMPAGE:
-        {
-        int ability = 0;
-        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAMPAGE)) ability = ABILITY_RAMPAGE;
-        else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BERSERKER_RAGE)) ability = ABILITY_BERSERKER_RAGE;
-        else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MASTER_HAND)) ability = ABILITY_MASTER_HAND;
-        else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_RAGING_GODDESS)) ability = ABILITY_RAGING_GODDESS;
-        
-        if (ability && HasAttackerFaintedTarget() && !NoAliveMonsForEitherParty())
-        {
-            SetAbilityState(gActiveBattler, ability, TRUE);
-            gVolatileStructs[gActiveBattler].rechargeTimer = 0;
-            gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
-        }
-        }
         break;
     case VARIOUS_TRY_ACTIVATE_MOXIE:    // and variants
         REQUIRE(IsBattlerAlive(gActiveBattler))
+        REQUIRE_NOT(NoAliveMonsForEitherParty())
+        REQUIRE(HasAttackerFaintedTarget())
         {
-            u8 statToChange = NUM_BATTLE_STATS;
-            u16 abilityToCheck = ABILITY_NONE;
-            bool8 checkMoxieVariants = HasAttackerFaintedTarget();
-            bool8 activateMoxieVariant = FALSE;
-            int moveType;
+        int moveType;
+        GET_MOVE_TYPE(gCurrentMove, moveType)
+        gBattlerAbility = gActiveBattler;
 
-            GET_MOVE_TYPE(gCurrentMove, moveType)
-
-            gBattlerAbility = gActiveBattler;
-
-            if (!checkMoxieVariants)
+        for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
+        {
+            int ability = GetAbilityAtIndex(gActiveBattler, i, FALSE);
+            int stat;
+            switch (ability)
+            {
+            case ABILITY_AS_ONE_ICE_RIDER:
+                ability = ABILITY_CHILLING_NEIGH;
+            case ABILITY_CHILLING_NEIGH:
+            case ABILITY_MOXIE:
+                stat = STAT_ATK;
+                HANDLE_MOXIE:
+                REQUIRE(ChangeStatBuffs(gActiveBattler, 1, stat, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
+                gBattleScripting.abilityPopupOverwrite = ability;
+                SetStatChanger(stat, 1);
+                BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
                 break;
 
-            #define MOXIE_CHECK_OTHER(ability, stat, abilityToReport) if (BATTLER_HAS_ABILITY(gActiveBattler, ability)) { \
-                statToChange = stat; \
-                abilityToCheck = abilityToReport; \
-                activateMoxieVariant = TRUE; \
-            }
-
-            #define MOXIE_CHECK(ability, stat) MOXIE_CHECK_OTHER(ability, stat, ability)
-
-            //Moxie
-            MOXIE_CHECK(ABILITY_MOXIE, STAT_ATK)
-
-            //Chilling Neigh
-            MOXIE_CHECK(ABILITY_CHILLING_NEIGH, STAT_ATK)
-            MOXIE_CHECK_OTHER(ABILITY_AS_ONE_ICE_RIDER, STAT_ATK, ABILITY_CHILLING_NEIGH)
-
-            //Grim Neigh
-            MOXIE_CHECK(ABILITY_GRIM_NEIGH, STAT_SPATK)
-            MOXIE_CHECK_OTHER(ABILITY_AS_ONE_SHADOW_RIDER, STAT_SPATK, ABILITY_GRIM_NEIGH)
-
-            //Adrenaline Rush
-            MOXIE_CHECK(ABILITY_ADRENALINE_RUSH, STAT_SPEED)
-
-            //Hubris
-            MOXIE_CHECK(ABILITY_HUBRIS, STAT_SPATK)
-
-            // Haunting Frenzy
-            MOXIE_CHECK(ABILITY_HAUNTING_FRENZY, STAT_SPEED)
-
-            #undef MOXIE_CHECK
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PRETENTIOUS)
-                && !NoAliveMonsForEitherParty()
-                && gVolatileStructs[gActiveBattler].critBoost < 3)
-            {
+            case ABILITY_AS_ONE_SHADOW_RIDER:
+                ability = ABILITY_GRIM_NEIGH;
+            case ABILITY_HUBRIS:
+            case ABILITY_GRIM_NEIGH:
+                stat = STAT_SPATK;
+                goto HANDLE_MOXIE;
+            
+            case ABILITY_HAUNTING_FRENZY:
+            case ABILITY_ADRENALINE_RUSH:
+                stat = STAT_SPEED;
+                goto HANDLE_MOXIE;
+            
+            case ABILITY_BEAST_BOOST:
+                stat = GetHighestStatId(gActiveBattler, FALSE);
+                goto HANDLE_MOXIE;
+            
+            case ABILITY_WAY_OF_SWIFTNESS:
+            case ABILITY_PRETENTIOUS:
+                REQUIRE(gVolatileStructs[gActiveBattler].critBoost < 3)
                 gVolatileStructs[gActiveBattler].critBoost++;
-                gBattleScripting.abilityPopupOverwrite = ABILITY_PRETENTIOUS;
+                gBattleScripting.abilityPopupOverwrite = ability;
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
                 BattleScriptCall(BattleScript_AbilityBoostsCrit);
-            }
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_WAY_OF_SWIFTNESS)  //to be compressed
-                && !NoAliveMonsForEitherParty()
-                && gVolatileStructs[gActiveBattler].critBoost < 3)
-            {
-                gVolatileStructs[gActiveBattler].critBoost++;
-                gBattleScripting.abilityPopupOverwrite = ABILITY_WAY_OF_SWIFTNESS;
-                gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
-                BattleScriptCall(BattleScript_AbilityBoostsCrit);
-            }
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SIDEWINDER)
-                && !NoAliveMonsForEitherParty()
-                && (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST
-                    || !(gStatuses4[gActiveBattler] & STATUS4_COILED)))
-            {
+                break;
+            
+            case ABILITY_SIDEWINDER:
+                REQUIRE(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST
+                    || !(gStatuses4[gActiveBattler] & STATUS4_COILED))
                 gStatuses4[gActiveBattler] |= STATUS4_COILED;
-                SetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_SIDEWINDER, TRUE);
-                gBattleScripting.abilityPopupOverwrite = ABILITY_SIDEWINDER;
+                SetOncePerTurnAbilityCounter(gActiveBattler, ability, TRUE);
+                gBattleScripting.abilityPopupOverwrite = ability;
                 BattleScriptCall(BattleScript_BattlerCoiledUpReturn);
-            }
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DRAGONS_RITUAL)
-                && !NoAliveMonsForEitherParty()
-                && (CompareStat(gBattlerAttacker, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)
-                    || CompareStat(gBattlerAttacker, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN)))
-            {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_DRAGONS_RITUAL;
+                break;
+                
+            case ABILITY_DRAGONS_RITUAL:
+                REQUIRE(CompareStat(gBattlerAttacker, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN)
+                    || CompareStat(gBattlerAttacker, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
+                gBattleScripting.abilityPopupOverwrite = ability;
                 BattleScriptCall(BattleScript_DragonsRitual);
-            }
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ENERGIZED) && moveType == TYPE_ELECTRIC)
-            {
-                SetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_ENERGIZED, TRUE);
-                gBattleScripting.abilityPopupOverwrite = ABILITY_ENERGIZED;
+                break;
+            
+            case ABILITY_ENERGIZED:
+                REQUIRE(moveType == TYPE_ELECTRIC)
+                SetOncePerTurnAbilityCounter(gActiveBattler, ability, TRUE);
+                gBattleScripting.abilityPopupOverwrite = ability;
                 gStackBattler1 = gActiveBattler;
                 BattleScriptCall(BattleScript_GeneratorActivatesRet);
-            }
+                break;
+            
+            case ABILITY_SUPER_STRAIN:
+                REQUIRE(ChangeStatBuffs(gActiveBattler, StatBuffValue(-1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL))
+                SetStatChanger(STAT_ATK, -1);
+                gBattleScripting.abilityPopupOverwrite = ability;
+                BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
+                return;
+            
+            case ABILITY_CROWNED_KING:
+                BattleScriptCall(BattleScript_CrownedKing);
+                return;
+            
+            case ABILITY_JAWS_OF_CARNAGE:
+                REQUIRE_NOT(BATTLER_MAX_HP(gActiveBattler))
+                REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gActiveBattler))
+                gBattleScripting.abilityPopupOverwrite = ability;
+                if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
+                    BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
+                else
+                    BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+                break;
 
-            if (checkMoxieVariants
-            && activateMoxieVariant
-            && !NoAliveMonsForEitherParty()
-            && statToChange != NUM_BATTLE_STATS
-            && CompareStat(gBattlerAttacker, statToChange, MAX_STAT_STAGE, CMP_LESS_THAN))
-            {
-                ChangeStatBuffsImplicit(StatBuffValue(1), statToChange, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
-                SetStatChanger(statToChange, 1);
-                gBattleScripting.abilityPopupOverwrite = abilityToCheck;
-                BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
+            case ABILITY_SOUL_EATER:
+            case ABILITY_BLOODLUST:
+            case ABILITY_SCAVENGER:
+            case ABILITY_PREDATOR:
+            case ABILITY_APEX_PREDATOR:
+            case ABILITY_HUNTERS_HORN:
+            case ABILITY_MAGMA_EATER:
+            case ABILITY_LOOTER:
+                REQUIRE_NOT(BATTLER_MAX_HP(gActiveBattler))
+                REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gActiveBattler))
+                gBattleScripting.abilityPopupOverwrite = ability;
+                BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+                break;
+            
+            case ABILITY_RAMPAGE:
+            case ABILITY_BERSERKER_RAGE:
+            case ABILITY_MASTER_HAND:
+            case ABILITY_RAGING_GODDESS:
+                SetAbilityState(gActiveBattler, ability, TRUE);
+                gVolatileStructs[gActiveBattler].rechargeTimer = 0;
+                gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
+                break;
+            
+            case ABILITY_BATTLE_BOND:
+                {
+                int species = gBattleMons[gBattlerAttacker].species;
+                int newSpecies = 0;
+                switch (species)
+                {
+                case SPECIES_GRENINJA_BATTLE_BOND:
+                    newSpecies = SPECIES_GRENINJA_ASH;
+                    break;
+
+                case SPECIES_DARMANITAN_REDUX:
+                    newSpecies = SPECIES_DARMANITAN_REDUX_BOND;
+                    break;
+                }
+
+                REQUIRE(newSpecies)
+                
+                PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gActiveBattler].species);
+                gBattleStruct->changedSpecies[gBattlerPartyIndexes[gActiveBattler]] = gBattleMons[gActiveBattler].species;
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+                gBattleMons[gActiveBattler].species = newSpecies;
+                gBattleScripting.abilityPopupOverwrite = ability;
+                BattleScriptCall(BattleScript_BattleBondActivatesOnMoveEndAttacker);
+                }
+                break;
             }
-            return;
+        }
         }
         break;
     case VARIOUS_TRY_ACTIVATE_SUPER_STRAIN:    // and variants
-        REQUIRE(IsBattlerAlive(gActiveBattler))
-        {
-            u8 statToChange = NUM_BATTLE_STATS;
-            u16 abilityToCheck = ABILITY_NONE;
-            bool8 checkMoxieVariants = HasAttackerFaintedTarget();
-            bool8 activateMoxieVariant = FALSE;
-
-            if (!checkMoxieVariants)
-                break;
-
-            // Super Strain
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SUPER_STRAIN)) {
-                statToChange = STAT_ATK;
-                abilityToCheck = ABILITY_SUPER_STRAIN;
-                activateMoxieVariant = TRUE;
-            }
-
-            if (checkMoxieVariants
-            && activateMoxieVariant
-            && !NoAliveMonsForEitherParty()
-            && statToChange != NUM_BATTLE_STATS
-            && CompareStat(gBattlerAttacker, statToChange, MIN_STAT_STAGE, CMP_GREATER_THAN))
-            {
-                ChangeStatBuffsImplicit(StatBuffValue(-1), statToChange, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL);
-                SetStatChanger(statToChange, -1);
-                gBattleScripting.abilityPopupOverwrite = abilityToCheck;
-                BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
-                return;
-            }
-        }
         break;
     case VARIOUS_TRY_ACTIVATE_SOUL_EATER:
-        REQUIRE(IsBattlerAlive(gActiveBattler))
-        if (BATTLER_HEALING_BLOCKED(gActiveBattler)) break;
-        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_JAWS_OF_CARNAGE)
-            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SOUL_EATER)
-            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BLOODLUST)
-            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SCAVENGER)
-            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PREDATOR)
-            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_APEX_PREDATOR)
-            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HUNTERS_HORN)
-            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MAGMA_EATER)
-            || BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LOOTER)) {
-            bool8 curehalfhealth = FALSE;
-            bool8 cureHorn = FALSE;
-            if (!HasAttackerFaintedTarget() && NoAliveMonsForEitherParty())
-                break;
-
-            // Only run script if there is something to do and the attacker is alive
-            if (BATTLER_MAX_HP(gBattlerAttacker) || !IsBattlerAlive(gBattlerAttacker))
-                break;
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_JAWS_OF_CARNAGE)) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_JAWS_OF_CARNAGE;
-                curehalfhealth = TRUE;
-            }
-            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_BLOODLUST))
-                gBattleScripting.abilityPopupOverwrite = ABILITY_BLOODLUST;
-            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SOUL_EATER))
-                gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_EATER;
-            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SCAVENGER))
-                gBattleScripting.abilityPopupOverwrite = ABILITY_SCAVENGER;
-            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PREDATOR))
-                gBattleScripting.abilityPopupOverwrite = ABILITY_PREDATOR;
-            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_APEX_PREDATOR))
-                gBattleScripting.abilityPopupOverwrite = ABILITY_APEX_PREDATOR;
-            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HUNTERS_HORN))
-                gBattleScripting.abilityPopupOverwrite = ABILITY_HUNTERS_HORN;
-            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MAGMA_EATER))
-                gBattleScripting.abilityPopupOverwrite = ABILITY_MAGMA_EATER;
-            else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LOOTER))
-                gBattleScripting.abilityPopupOverwrite = ABILITY_LOOTER;
-
-            // Let the battle script handler decide the stat changes
-            BattleScriptCall(curehalfhealth ? BattleScript_HandleJawsOfCarnageEffect : BattleScript_HandleSoulEaterEffect);
-            return;
-        }
         break;
     case VARIOUS_TRY_ACTIVATE_GRIM_NEIGH:
-        REQUIRE(IsBattlerAlive(gActiveBattler))
-        if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_CROWNED_KING)
-            && HasAttackerFaintedTarget()
-            && !NoAliveMonsForEitherParty())
-        {
-            BattleScriptCall(BattleScript_CrownedKing);
-            return;
-        }
         break;
     case VARIOUS_TRY_ACTIVATE_RECEIVER: // Partner gets fainted's ally ability
         gBattlerAbility = BATTLE_PARTNER(gActiveBattler);
@@ -9228,19 +9172,6 @@ static void Cmd_various(void)
         }
         break;
     case VARIOUS_TRY_ACTIVATE_BEAST_BOOST:
-        REQUIRE(IsBattlerAlive(gActiveBattler))
-        i = GetHighestStatId(gActiveBattler, FALSE);
-        if (BattlerHasAbility(gActiveBattler, ABILITY_BEAST_BOOST, FALSE)
-            && HasAttackerFaintedTarget()
-            && !NoAliveMonsForEitherParty()
-            && CompareStat(gBattlerAttacker, i, MAX_STAT_STAGE, CMP_LESS_THAN))
-        {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_BEAST_BOOST;
-            ChangeStatBuffsImplicit(StatBuffValue(1), i, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
-            SetStatChanger(i, 1);
-            BattleScriptCall(BattleScript_AttackerAbilityStatRaise);
-            return;
-        }
         break;
     case VARIOUS_TRY_ACTIVATE_SOULHEART:
         while (gBattleStruct->soulheartBattlerId < gBattlersCount)
@@ -10240,33 +10171,6 @@ static void Cmd_various(void)
         }
         return;
     case VARIOUS_TRY_ACTIVATE_BATTLE_BOND:
-        if (BattlerHasAbility(gBattlerAttacker, ABILITY_BATTLE_BOND, FALSE)
-            && HasAttackerFaintedTarget()
-            && CalculateEnemyPartyCount() > 1)
-        {
-            int species = gBattleMons[gBattlerAttacker].species;
-            int newSpecies = 0;
-            switch (species)
-            {
-            case SPECIES_GRENINJA_BATTLE_BOND:
-                newSpecies = SPECIES_GRENINJA_ASH;
-                break;
-
-            case SPECIES_DARMANITAN_REDUX:
-                newSpecies = SPECIES_DARMANITAN_REDUX_BOND;
-                break;
-            }
-
-            if (newSpecies)
-            {
-                PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerAttacker].species);
-                gBattleStruct->changedSpecies[gBattlerPartyIndexes[gBattlerAttacker]] = gBattleMons[gBattlerAttacker].species;
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
-                gBattleMons[gBattlerAttacker].species = newSpecies;
-                BattleScriptCall(BattleScript_BattleBondActivatesOnMoveEndAttacker);
-                return;
-            }
-        }
         break;
     case VARIOUS_CONSUME_BERRY:
         {

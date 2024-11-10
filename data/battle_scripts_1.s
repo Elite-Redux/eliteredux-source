@@ -7383,12 +7383,6 @@ BattleScript_FaintTarget_NoPopup:
 	tryactivatesoulheart
 	tryactivatereceiver BS_TARGET
 	tryactivatemoxie BS_ATTACKER		@ and chilling neigh, as one ice rider
-	tryactivatesuperstrain BS_ATTACKER
-	tryactivatesouleater BS_ATTACKER
-	tryactivatebeastboost BS_ATTACKER
-	tryactivategrimneigh BS_ATTACKER	@ and as one shadow rider
-	tryactivatebattlebond BS_ATTACKER
-	tryactivaterampage BS_ATTACKER
 	trytrainerslidefirstdownmsg BS_TARGET
 	readtargetfromstack4
 	return

@@ -434,7 +434,7 @@
 #define ABILITY_DESERT_CLOAK 412 // Protects its side from status and secondary effects in sand.
 #define ABILITY_DRACONIZE 413 // Normal-type moves become Dragon- type moves and get a 1.1x boost.
 #define ABILITY_PRETTY_PRINCESS 414 // Does 50% more damage if the target has any lowered stat.
-#define ABILITY_SELF_REPAIR 415 // Combines Self Sufficient & Natural Cure.
+#define ABILITY_SELF_REPAIR 415 // Self Sufficient + Natural Cure.
 #define ABILITY_ATOMIC_BURST 416 // When hit super-effectively, triggers 50 BP Hyper Beam.
 #define ABILITY_HELLBLAZE 417 // Boosts Fire-type moves by 1.3x, or 1.8x when below 1/3 HP.
 #define ABILITY_RIPTIDE 418 // Boosts Water-type moves by 1.3x, or 1.8x when below 1/3 HP.
@@ -502,7 +502,7 @@
 #define ABILITY_BERSERKER_RAGE 480 // Berserk + Rampage.
 #define ABILITY_TRICKSTER 481 // Uses Disable on switch-in.
 #define ABILITY_SAND_GUARD 482 // Blocks priority and reduces special damage by 1/2 in sand.
-#define ABILITY_NATURAL_RECOVERY 483 // Combines Natural Cure & Regenerator.
+#define ABILITY_NATURAL_RECOVERY 483 // Natural Cure + Regenerator.
 #define ABILITY_WIND_RIDER 484 // Increases attack in tailwind or when hit by wind move.
 #define ABILITY_SOOTHING_AROMA 485 // Cures party status on entry.
 #define ABILITY_PRIM_AND_PROPER 486 // Wonder Skin + Cute Charm.
@@ -518,7 +518,7 @@
 #define ABILITY_WISHMAKER 496 // Uses Wish on switch-in. Three uses per battle.
 #define ABILITY_YUKI_ONNA 497 // Scare + Intimidate. 10% chance to infatuate on hit.
 #define ABILITY_SUPPRESS 498 // Casts Torment on entry.
-#define ABILITY_REFRIGERATOR 499 // Combines Refrigerate & Illuminate.
+#define ABILITY_REFRIGERATOR 499 // Refrigerate + Illuminate.
 #define ABILITY_HEAVEN_ASUNDER 500 // Spacial Rend always crits. Ups crit level by +1.
 #define ABILITY_PURIFYING_WATERS 501 // Hydration + Water Veil.
 #define ABILITY_SEABORNE 502 // Drizzle + Swift Swim.
@@ -584,7 +584,7 @@
 #define ABILITY_COSTAR 562 // Copies its ally's stat changes on switch-in.
 #define ABILITY_COMMANDER 563 // Hops inside an allied Dondozo. Boosts its ally but can't act.
 #define ABILITY_EJECT_PACK_ABILITY 564 // Flees when stats are lowered.
-#define ABILITY_VENGEFUL_SPIRIT 565 // Combines Haunted Spirit & Vengeance.
+#define ABILITY_VENGEFUL_SPIRIT 565 // Haunted Spirit + Vengeance.
 #define ABILITY_CUD_CHEW 566 // Eats berries again at the end of the next turn.
 #define ABILITY_ARMOR_TAIL 567 // Protects itself and ally from priority moves.
 #define ABILITY_MIND_CRUSH 568 // Biting moves use SpAtk and deal 30% more damage.
@@ -654,26 +654,26 @@
 #define ABILITY_TERRIFY 632 // Lowers foes' Sp. Atk by two stages on entry.
 #define ABILITY_ICE_DOWNFALL 633 // Counters contact with 60BP Icicle Crash.
 #define ABILITY_LAST_STAND 634 // Def and SpDef increase as HP drops. Max 1.6x.
-#define ABILITY_PYROCLASTIC_FLOW 635 // Combines Molten Down & Corrosion.
+#define ABILITY_PYROCLASTIC_FLOW 635 // Molten Down + Corrosion.
 #define ABILITY_BLOOD_BATH 636 // Immune to bleed. Inflict fear when inflicting bleed.
 #define ABILITY_BATTLE_AURA 637 // Sharply increases the critical hit rate for all while on the field.
-#define ABILITY_BLOODLUST 638 // Blood Bath + Jaws of Carnage.
+#define ABILITY_BLOODLUST 638 // Blood Bath + Soul Eater.
 #define ABILITY_PIERCING_SOLO 639 // Sound moves have a 30% chance to cause bleeding.
 #define ABILITY_RHYTHMIC 640 // Deals 10% more damage for each repeated move use.
 #define ABILITY_CHUNKY_BASS_LINE 641 // Triggers a 40BP Earthquake after using a sound move.
 #define ABILITY_DUAL_HAMMER 642 // Super Slammer moves hit twice for 70% damage.
 #define ABILITY_DENTING_BLOWS 643 // Hammer moves lower Defense.
-#define ABILITY_ICE_COLD_HUNTER 644 // Combines Hyper Aggressive and Whiteout.
+#define ABILITY_ICE_COLD_HUNTER 644 // Hyper Aggressive + Whiteout.
 #define ABILITY_SOUL_CRUSHER 645 // Hammer moves become Special and get a 1.1x power boost.
 #define ABILITY_ARC_FLASH 646 // 50% chance to burn when hit or paralyze when dealing damage.
 #define ABILITY_UNICORN 647 // Mighty Horn + Dazzling.
 #define ABILITY_ON_THE_PROWL 648 // +1 priority for the first turn. Negative priority becomes +0.
 #define ABILITY_PRETENTIOUS 649 // Dealing a KO raises Crit by one stage.
 #define ABILITY_VENOBLAZE_PINCERS 650 // 1.2x boost to physical moves and 20% chance to Burn or Poison.
-#define ABILITY_ETERNAL_BLESSING 651 // Combines Celestial Blessing and Regenerator.
+#define ABILITY_ETERNAL_BLESSING 651 // Celestial Blessing + Regenerator.
 #define ABILITY_SUGAR_RUSH 652 // Gluttony + eats foe's berry when hitting with contact move.
 #define ABILITY_PEACEFUL_REST 653 // Heals 1/8 of max HP every turn in fog.
-#define ABILITY_WHITE_NOISE 654 // Combines Static and Rest in Peace.
+#define ABILITY_WHITE_NOISE 654 // Static + Rest in Peace.
 #define ABILITY_SMOKEY_MANEUVERS 655 // Evasion is boosted by 1.25x in fog.
 #define ABILITY_TAG 656 // Attacks switching opponents with a 20BP Pursuit.
 #define ABILITY_POWER_METAL 657 // Sound moves get a 1.2x boost and become Steel if Normal.
@@ -705,7 +705,7 @@
 #define ABILITY_MASTER_HAND 683 // Mega Launcher + Rampage.
 #define ABILITY_FINAL_BLOW 684 // Unseen Fist + Fatal Precision.
 #define ABILITY_HOSPITALITY 685 // Heals partner for 25% of its max HP on switch-in.
-#define ABILITY_BUTTER_UP 686 // Combines Hospitality & Soothing Aroma
+#define ABILITY_BUTTER_UP 686 // Hospitality + Soothing Aroma
 #define ABILITY_VITALITY_STRIKE 687 // Heals for 10% of the damage dealt by punching moves.
 #define ABILITY_HUGE_WINGS 688 // Giant Wings + Levitate.
 #define ABILITY_SWORD_OF_DAMNATION 689 // Unaware + Sword of Ruin.
@@ -713,9 +713,9 @@
 #define ABILITY_ASSASSINS_TOOLS 691 // Contact moves have a 30% chance to PSN, PRLZ, or BLD.
 #define ABILITY_FROSTMAW 692 // Biting moves have a 50% chance to inflict frostbite.
 #define ABILITY_PATCHWORK 693 // Disguise + curses the opponent when its Disguise breaks.
-#define ABILITY_BLIND_RAGE 694 // Combines Scrappy & Mold Breaker.
+#define ABILITY_BLIND_RAGE 694 // Scrappy + Mold Breaker.
 #define ABILITY_SLIPSTREAM 695 // Moves use 20% of its Speed stat additionally.
-#define ABILITY_APEX_PREDATOR 696 // Combines Tough Claws & Predator.
+#define ABILITY_APEX_PREDATOR 696 // Tough Claws + Predator.
 #define ABILITY_DRAGONS_RITUAL 697 // Dealing a KO raises Attack and Speed by one stage.
 #define ABILITY_PINNACLE_BLADE 698 // Slashing moves always hit and break protection and barriers.
 #define ABILITY_ENERGIZED 699 // Generator + charges up on KO with an Electric-type move.
@@ -735,18 +735,18 @@
 #define ABILITY_AQUATIC_DWELLER 713 // Boosts the power of Water-type moves by 1.5x.
 #define ABILITY_APPLE_PIE 714 // Self Sufficient + Ripen.
 #define ABILITY_HOVER 715 // Adds Psychic type to itself. Avoids Ground attacks.
-#define ABILITY_DEPRAVITY 716 // Combines Merciless & Overcharge.
+#define ABILITY_DEPRAVITY 716 // Merciless + Overcharge.
 #define ABILITY_WILDFIRE 717 // Attacks with 20BP Fire Spin when hit by a contact move.
 #define ABILITY_JUMP_SCARE 718 // Attacks with Astonish on first switch-in.
 #define ABILITY_TAR_TOSS 719 // Uses Tar Shot on switch-in.
 #define ABILITY_STUN_SHOCK 720 // Attacks have a 60% chance to Paralyze or Poison.
-#define ABILITY_RAGING_GODDESS 721 // Combines Rampage & Hyper Aggressive.
+#define ABILITY_RAGING_GODDESS 721 // Rampage + Hyper Aggressive.
 #define ABILITY_WHIPLASH 722 // Physical attacks have a 50% chance to lower Defense.
 #define ABILITY_SUPERSWEET_SYRUP 723 // Can't lose its item. Disables foe's item for 2 turns on contact.
 #define ABILITY_LUCKY_HALO 724 // Negates self stat drops. Survives the first hit that would KO it.
-#define ABILITY_TRASH_HEAP 725 // Combines Corrosion & Toxic Spill.
-#define ABILITY_SLUDGY_MIX 726 // Combines Intoxicate & Punk Rock.
-#define ABILITY_OVERWATCH 727 // Combines On the Prowl & Stakeout.
+#define ABILITY_TRASH_HEAP 725 // Corrosion + Toxic Spill.
+#define ABILITY_SLUDGY_MIX 726 // Intoxicate + Punk Rock.
+#define ABILITY_OVERWATCH 727 // On the Prowl + Stakeout.
 #define ABILITY_WIND_RAGE 728 // Uses Defog on switch-in. Air- based moves get a 1.3x boost.
 #define ABILITY_VICTORY_BOMB 729 // Attacks with a 100BP Fire-type Explosion on fainting.
 #define ABILITY_RAZOR_SHARP 730 // Critical hits also inflict bleeding.
