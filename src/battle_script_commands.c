@@ -8947,6 +8947,7 @@ static void Cmd_various(void)
         MarkBattlerForControllerExec(gActiveBattler);
         break;
     case VARIOUS_SET_ACTIVE_STAT_CHANGER:
+        i = READ_8_INC;
         SetActiveStatChanger(GET_STAT_BUFF_ID(i), GET_STAT_BUFF_VALUE_WITH_SIGN(i));
         break;
     case VARIOUS_SWITCHIN_ABILITIES:
@@ -10130,12 +10131,13 @@ static void Cmd_various(void)
         REQUIRE(BattlerHasAbility(gActiveBattler, ABILITY_NEUTRALIZING_GAS, FALSE))
         REQUIRE_NOT(IsAbilityOnFieldExcept(gActiveBattler, ABILITY_NEUTRALIZING_GAS))
         gFieldTimers.neutralizingGas = FALSE;
+        gBattleMons[gActiveBattler].abilities[GetAbilityIndex(gActiveBattler, ABILITY_NEUTRALIZING_GAS, FALSE)] = ABILITY_NONE;
         {
         u8 battlers[MAX_BATTLERS_COUNT - 1];
         int count = SortBattlersExcept(battlers, TRUE, 1 << gActiveBattler);
         for (i = count - 1; i >= 0; i--)
         {
-            gStackBattler1 = i;
+            gStackBattler1 = battlers[i];
             BattleScriptCall(BattleScript_DoSingleSwitchIn);
         }
         BattleScriptCall(BattleScript_NeutralizingGasExits);
@@ -14295,10 +14297,10 @@ static void Cmd_handlerollout(void)
 
 static void Cmd_jumpifconfusedandstatmaxed(void)
 {
-    if (!CanBeConfused(gBattlerTarget) && !CompareStat(gBattlerTarget, gBattlescriptCurrInstr[1], MAX_STAT_STAGE, CMP_LESS_THAN))
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 2); // Fails if we're confused AND stat cannot be raised
-    else
-        gBattlescriptCurrInstr += 6;
+    int stat = READ_FIRST_8_INC;
+    u8* ptr = READ_PTR_INC;
+    if (!CanBeConfused(gBattlerTarget) && !CompareStat(gBattlerTarget, stat, MAX_STAT_STAGE, CMP_LESS_THAN))
+        gBattlescriptCurrInstr = ptr; // Fails if we're confused AND stat cannot be raised
 }
 
 static void Cmd_handlefurycutter(void)
