@@ -7797,43 +7797,40 @@ case ITEMEFFECT_KINGSROCK:
                 int i;
                 for (i = 1; i <= gQueuedAttackCount; i++)
                 {
-                    if (gQueuedExtraAttackData[i].attacker == gBattlerAttacker)
-                    {
-                        canProc = FALSE;
-                        break;
-                    }
+                    FILTER(gQueuedExtraAttackData[i].attacker == gBattlerAttacker)
+                    
+                    canProc = FALSE;
+                    break;
                 }
             }
 
-            if (gTurnStructs[gBattlerAttacker].damagedMons
-                && canProc
-                && !TestSheerForceFlag(gBattlerAttacker, gCurrentMove)
-                && !BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker)
-                && gBattlerAttacker != gBattlerTarget
-                && gBattleMons[gBattlerAttacker].hp != 0)
-            {
-                gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 10;
-                if (gBattleMoveDamage == 0)
-                    gBattleMoveDamage = 1;
-                effect = ITEM_HP_CHANGE;
-                BattleScriptCall(BattleScript_ItemHurtRet);
-                gLastUsedItem = gBattleMons[gBattlerAttacker].item;
-            }
+            REQUIRE(canProc)
+            REQUIRE(gTurnStructs[gBattlerAttacker].damagedMons)
+            REQUIRE(IsBattlerAlive(gBattlerAttacker))
+            REQUIRE_NOT(TestSheerForceFlag(gBattlerAttacker, gCurrentMove))
+            REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
+            REQUIRE(gBattlerAttacker != gBattlerTarget)
+            
+            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 10;
+            if (gBattleMoveDamage == 0)
+                gBattleMoveDamage = 1;
+            effect = ITEM_HP_CHANGE;
+            BattleScriptCall(BattleScript_ItemHurtRet);
+            gLastUsedItem = gBattleMons[gBattlerAttacker].item;
             }
             break;
         case HOLD_EFFECT_THROAT_SPRAY:  // Does NOT need to be a damaging move
-            if (gRoundStructs[gBattlerAttacker].targetAffected
-             && gBattleMons[gBattlerAttacker].hp != 0
-             && gBattleMoves[gCurrentMove].flags & FLAG_SOUND
-             && CompareStat(gBattlerAttacker, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)
-             && !NoAliveMonsForEitherParty())   // Don't activate if battle will end
-            {
-                gLastUsedItem = atkItem;
-                gBattleScripting.battler = gBattlerAttacker;
-                gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPATK, 1, FALSE);
-                effect = ITEM_STATS_CHANGE;
-                BattleScriptCall(BattleScript_AttackerItemStatRaise);
-            }
+            REQUIRE(IsBattlerAlive(gBattlerAttacker))
+            REQUIRE(gRoundStructs[gBattlerAttacker].targetAffected || gTurnStructs[gBattlerAttacker].damagedMons)
+            REQUIRE(gBattleMoves[gCurrentMove].flags & FLAG_SOUND)
+            REQUIRE(CompareStat(gBattlerAttacker, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
+            REQUIRE_NOT(NoAliveMonsForEitherParty())
+
+            gLastUsedItem = atkItem;
+            gBattleScripting.battler = gBattlerAttacker;
+            gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPATK, 1, FALSE);
+            effect = ITEM_STATS_CHANGE;
+            BattleScriptCall(BattleScript_AttackerItemStatRaise);
             break;
         }
         break;
