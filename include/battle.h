@@ -149,6 +149,7 @@ struct VolatileStruct
     u8 trickOrTreat:1;
     u8 skyDropped:1;
     u8 skyDroppedBy:2;
+    u8 shouldClearSkyDrop:1;
     u8 dazed:3;
     u8 trepidation:2;
     u8 hazardDamaged:1;
@@ -349,7 +350,6 @@ struct WishFutureKnock
     u8 wishCounter[MAX_BATTLERS_COUNT];
     u8 wishPartyId[MAX_BATTLERS_COUNT];
     u8 weatherDuration;
-    u8 knockedOffMons[2]; // Each battler is represented by a bit. The array entry is dependent on the battler's side.
 };
 
 struct AI_SavedBattleMon
@@ -407,6 +407,7 @@ struct SavedStackData
 {
     u16 abilityOverride;
     u8 multistringChooser;
+    u8 statChanger;
     u8 stackBattler1:2;
     u8 stackBattler2:2;
     u8 stackBattler3:2;

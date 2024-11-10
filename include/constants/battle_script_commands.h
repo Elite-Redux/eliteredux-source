@@ -107,7 +107,7 @@
 #define VARIOUS_SET_ALREADY_STATUS_MOVE_ATTEMPT 23
 #define VARIOUS_SET_TELEPORT_OUTCOME            25
 #define VARIOUS_PLAY_TRAINER_DEFEATED_MUSIC     26
-#define VARIOUS_STAT_TEXT_BUFFER                27
+#define VARIOUS_SET_ACTIVE_STAT_CHANGER                27
 #define VARIOUS_SWITCHIN_ABILITIES              28
 #define VARIOUS_SAVE_TARGET                     29
 #define VARIOUS_RESTORE_TARGET                  30
@@ -267,7 +267,10 @@
 #define VARIOUS_SWAP_STAT                       184
 #define VARIOUS_SET_QUICK_GUARD                 185
 #define VARIOUS_RUDE_AWAKENING                  186
-#define VARIOUS_SHELL_TRAP_CHOICE                187
+#define VARIOUS_SHELL_TRAP_CHOICE               187
+#define VARIOUS_JUMP_IF_ABILITY_STATE           188
+#define VARIOUS_SET_ABILITY_STATE               189
+#define VARIOUS_DO_INTIMIDATE                   190
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1

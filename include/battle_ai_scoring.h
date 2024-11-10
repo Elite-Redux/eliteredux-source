@@ -161,6 +161,5 @@
 #define AI_SCORE_READIED_ACTION 0
 #define AI_SCORE_ON_THE_PROWL 0
 #define AI_SCORE_FLASH_FIRE 0
-#define AI_SCORE_LOSE_TURN(odds) 0
 
 #endif

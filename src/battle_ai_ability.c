@@ -25,14 +25,14 @@ int ScoreIntimidate(int battlerDef, int stat, int change, int ability, int both)
 
     if (statActual == STAT_HIGHEST_ATTACKING) stat = GetHighestAttackingStatId(battlerDef, TRUE);
     if (statActual == STAT_HIGHEST_DEFENDING) stat = GetHighestDefendingStatId(battlerDef, TRUE);
-    if (IsBattlerImmuneToLowerStatsFromIntimidateClone(battlerDef, stat, ability))
+    if (IsBattlerImmuneToLowerStatsFromIntimidateClone(battlerDef))
         score += AI_SCORE_STAT(battlerDef, stat, change);
     
     if (both)
     {
         if (statActual == STAT_HIGHEST_ATTACKING) stat = GetHighestAttackingStatId(BATTLE_PARTNER(battlerDef), TRUE);
         if (statActual == STAT_HIGHEST_DEFENDING) stat = GetHighestDefendingStatId(BATTLE_PARTNER(battlerDef), TRUE);
-        if (IsBattlerImmuneToLowerStatsFromIntimidateClone(BATTLE_PARTNER(battlerDef), stat, ability))
+        if (IsBattlerImmuneToLowerStatsFromIntimidateClone(BATTLE_PARTNER(battlerDef)))
             score += AI_SCORE_STAT(BATTLE_PARTNER(battlerDef), stat, change);
     }
     
@@ -44,7 +44,7 @@ int GetHpFormChangeSpecies(int battler, struct AiData* aiData)
     return SPECIES_NONE;
 }
 
-int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
+int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData)
 {
     int score = 0;
 
@@ -57,7 +57,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         break;
     
     default:
-        if (!aiData->moveState[battlerAtk][move].damage) return 0;
+        if (!moveState->damage) return 0;
         break;
     }
 
@@ -125,10 +125,10 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
     
     case ABILITY_TO_THE_BONE:
     case ABILITY_RAZOR_SHARP:
-        return AI_SCORE_ADJUST(aiData->moveState[battlerAtk][move].critChance, AI_SCORE_BLEED(battlerDef));
+        return AI_SCORE_ADJUST(moveState->critChance, AI_SCORE_BLEED(battlerDef));
     
     case ABILITY_KNOW_YOUR_PLACE:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_DAZE(battlerDef);
     
     case ABILITY_DENTING_BLOWS:
@@ -248,7 +248,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         return AI_SCORE_ADJUST(50, AI_SCORE_FROSTBITE_MOVE(battlerDef));
     
     case ABILITY_ASSASSINS_TOOLS:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(10, AI_SCORE_POISON_MOVE(battlerDef) + AI_SCORE_PARALYSIS(battlerDef) + AI_SCORE_BLEED(battlerDef));
     
     case ABILITY_DEEP_CUTS:
@@ -276,7 +276,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         return AI_SCORE_BREAK_PROTECT + AI_SCORE_BREAK_SCREENS(battlerDef) + AI_SCORE_BREAK_SUBSTITUTE;
 
     case ABILITY_FEARMONGER:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(10, AI_SCORE_PARALYSIS(battlerDef));
     
     case ABILITY_YUKI_ONNA:
@@ -299,7 +299,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         return AI_SCORE_ADJUST(20, AI_SCORE_BURN_MOVE(battlerDef));
     
     case ABILITY_DEAD_POWER:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(20, AI_SCORE_CURSE(battlerDef));
     
     case ABILITY_SPECTRAL_SHROUD:
@@ -310,7 +310,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
     case ABILITY_ANGELS_WRATH:
         switch (move) {
         case MOVE_TACKLE:
-            REQUIRE(aiData->moveState[battlerAtk][move].damage)
+            REQUIRE(moveState->damage)
             return AI_SCORE_DISABLE(battlerDef) + AI_SCORE_ENCORE;
         
         case MOVE_STRING_SHOT:
@@ -327,12 +327,12 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
             return AI_SCORE_PROTECT;
 
         case MOVE_ELECTROWEB:
-            REQUIRE(aiData->moveState[battlerAtk][move].damage);
+            REQUIRE(moveState->damage);
             // TODO: Raw stat change
             return AI_SCORE_TRAP(battlerDef) + AI_SCORE_STAT(battlerDef, STAT_SPEED, -12);
         
         case MOVE_BUG_BITE:
-            REQUIRE(aiData->moveState[battlerAtk][move].damage);
+            REQUIRE(moveState->damage);
             return AI_SCORE_ABSORB_MOVE(100);
         }
         return 0;
@@ -371,11 +371,11 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
         return AI_SCORE_LEECH_SEED;
     
     case ABILITY_FUNGAL_INFECTION:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_LEECH_SEED;
     
     case ABILITY_GRIP_PINCER:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(50, AI_SCORE_WRAP(battlerAtk, battlerDef));
     }
 
@@ -384,29 +384,29 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
 
 #define REQUIRE_HALF_HP
 
-int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
+int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData)
 {
     int i, score = 0;
 
-    if (!aiData->moveState[battlerAtk][move].damage) return 0;
+    if (!moveState->damage) return 0;
 
     switch (ability)
     {
     case ABILITY_RECURRING_NIGHTMARE:
         REQUIRE(IsWeatherActive(WEATHER_FOG_ANY))
         REQUIRE(!GetSingleUseAbilityCounter(battlerDef, ability))
-        REQUIRE(aiData->moveState[battlerAtk][move].seeKo)
+        REQUIRE(moveState->seeKo)
         return AI_SCORE_SWITCH(battlerDef) + AI_SCORE_REVIVE(battlerDef, 25);
 
     case ABILITY_LINGERING_AROMA:
     case ABILITY_MUMMY:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerAtk)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
         return AI_SCORE_REPLACE_ABILITY(battlerAtk, ability);
     
     case ABILITY_WANDERING_SPIRIT:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerAtk)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerAtk))
         REQUIRE_NOT(HasAbility(battlerDef, GetBattlerAbility(battlerAtk), aiData))
@@ -448,39 +448,39 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         return AI_SCORE_MISTY_TERRAIN;
     
     case ABILITY_COLD_REBOUND:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_ICY_WIND, 0);
 
     case ABILITY_WILDFIRE:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_FIRE_SPIN, 0);
     
     case ABILITY_SNAP_TRAP_WHEN_HIT:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_SNAP_TRAP, 50);
     
     case ABILITY_PARRY:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_MACH_PUNCH, 0);
 
     case ABILITY_VICTORY_BOMB:
-        REQUIRE(aiData->moveState[battlerAtk][move].seeKo)
+        REQUIRE(moveState->seeKo)
         return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_EXPLOSION, 0);
     
     case ABILITY_ULTRA_INSTINCT:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_VACUUM_WAVE, 0);
     
     case ABILITY_ICE_DOWNFALL:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_ICICLE_CRASH, 60);
     
     case ABILITY_ATOMIC_BURST:
-        REQUIRE(aiData->moveState[battlerAtk][move].superEffective)
+        REQUIRE(moveState->superEffective)
         return AI_SCORE_EXTRA_MOVE(battlerDef, battlerAtk, MOVE_HYPER_BEAM, 50);
     
     case ABILITY_LOOSE_ROCKS:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_STEALTH_ROCK(battlerDef, TYPE_ROCK);
     
     case ABILITY_WIND_POWER:
@@ -499,11 +499,11 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
     
     case ABILITY_ROUGH_SKIN:
     case ABILITY_IRON_BARBS:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_LOSE_HP(battlerAtk, 13);
 
     case ABILITY_DOUBLE_IRON_BARBS:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_LOSE_HP(battlerAtk, 17);
     
     case ABILITY_RATTLED:
@@ -511,11 +511,11 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         return AI_SCORE_STAT(battlerDef, STAT_SPEED, 1);
     
     case ABILITY_CURSED_BODY:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_DISABLE(battlerAtk));
     
     case ABILITY_SPITEFUL:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_PP_DOWN(battlerAtk, 5);
     
     case ABILITY_COTTON_DOWN:
@@ -537,32 +537,32 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         return AI_SCORE_HAIL;
     
     case ABILITY_PERISH_BODY:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_PERISH_SONG(battlerAtk) + AI_SCORE_PERISH_SONG(battlerDef);
     
     case ABILITY_GUILT_TRIP:
-        REQUIRE(aiData->moveState[battlerAtk][move].seeKo)
+        REQUIRE(moveState->seeKo)
         return AI_SCORE_ATTACK_UP(battlerAtk, -2) + AI_SCORE_SPATK_UP(battlerAtk, -2);
     
     case ABILITY_ILL_WILL:
-        REQUIRE(aiData->moveState[battlerAtk][move].seeKo)
+        REQUIRE(moveState->seeKo)
         return AI_SCORE_PP_DOWN(battlerAtk, 100);
     
     case ABILITY_INNARDS_OUT:
-        REQUIRE(aiData->moveState[battlerAtk][move].seeKo)
+        REQUIRE(moveState->seeKo)
         return AI_SCORE_INNARDS_OUT(battlerAtk, battlerDef);
     
     case ABILITY_AFTERMATH:
-        REQUIRE(aiData->moveState[battlerAtk][move].seeKo)
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->seeKo)
+        REQUIRE(moveState->contact)
         return AI_SCORE_LOSE_HP(battlerAtk, 25);
     
     case ABILITY_PATCHWORK:
-        REQUIRE(aiData->moveState[battlerAtk][move].breakDisguise);
+        REQUIRE(moveState->breakDisguise);
         return AI_SCORE_CURSE(battlerAtk);
     
     case ABILITY_EFFECT_SPORE:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         REQUIRE_NOT(IS_BATTLER_OF_TYPE(battlerAtk, TYPE_GRASS))
         REQUIRE_NOT(HasAbility(battlerAtk, ABILITY_OVERCOAT, aiData))
         REQUIRE_NOT(HasAbility(battlerAtk, ABILITY_EFFECT_SPORE, aiData))
@@ -574,8 +574,8 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         return AI_SCORE_DEFENSE_UP(battlerDef, 1) + AI_SCORE_SPDEF_UP(battlerDef, 1);
 
     case ABILITY_BALLOON_BOMBER:
-        return ScoreDefenseAbility(ABILITY_INFLATABLE, battlerAtk, battlerDef, move, moveType, aiData)
-            + ScoreDefenseAbility(ABILITY_AFTERMATH, battlerAtk, battlerDef, move, moveType, aiData);
+        return ScoreDefenseAbility(ABILITY_INFLATABLE, battlerAtk, battlerDef, move, moveType, moveState, aiData)
+            + ScoreDefenseAbility(ABILITY_AFTERMATH, battlerAtk, battlerDef, move, moveType, moveState, aiData);
     
     case ABILITY_WATER_COMPACTION:
         REQUIRE(moveType == TYPE_WATER)
@@ -583,12 +583,12 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
     
     case ABILITY_VENGEFUL_SPIRIT:
     case ABILITY_HAUNTED_SPIRIT:
-        REQUIRE(aiData->moveState[battlerAtk][move].seeKo)
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->seeKo)
+        REQUIRE(moveState->contact)
         return AI_SCORE_CURSE(battlerAtk);
     
     case ABILITY_MAGICAL_DUST:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADD_TYPE(battlerAtk, TYPE_PSYCHIC);
     
     case ABILITY_WEAK_ARMOR:
@@ -600,16 +600,16 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
     
     case ABILITY_CROWNED_SHIELD:
     case ABILITY_STAMINA:
-        return AI_SCORE_STAT(battlerDef, STAT_DEF, 1) + AI_SCORE_ADJUST(aiData->moveState[battlerAtk][move].critChance, AI_SCORE_STAT(battlerDef, STAT_DEF, 12));
+        return AI_SCORE_STAT(battlerDef, STAT_DEF, 1) + AI_SCORE_ADJUST(moveState->critChance, AI_SCORE_STAT(battlerDef, STAT_DEF, 12));
         
     case ABILITY_FORTITUDE:
-        return AI_SCORE_STAT(battlerDef, STAT_SPDEF, 1) + AI_SCORE_ADJUST(aiData->moveState[battlerAtk][move].critChance, AI_SCORE_STAT(battlerDef, STAT_SPDEF, 12));
+        return AI_SCORE_STAT(battlerDef, STAT_SPDEF, 1) + AI_SCORE_ADJUST(moveState->critChance, AI_SCORE_STAT(battlerDef, STAT_SPDEF, 12));
     
     case ABILITY_RAGE_POINT:
-        return AI_SCORE_ADJUST(aiData->moveState[battlerAtk][move].critChance, AI_SCORE_STAT(battlerDef, STAT_ATK, 1) + AI_SCORE_STAT(battlerDef, STAT_SPATK, 1));
+        return AI_SCORE_ADJUST(moveState->critChance, AI_SCORE_STAT(battlerDef, STAT_ATK, 1) + AI_SCORE_STAT(battlerDef, STAT_SPATK, 1));
     
     case ABILITY_APE_SHIFT:
-        score = ScoreAttackAbility(ABILITY_ANGER_POINT, battlerAtk, battlerDef, move, moveType, aiData);
+        score = ScoreAttackAbility(ABILITY_ANGER_POINT, battlerAtk, battlerDef, move, moveType, moveState, aiData);
         {
         int species = GetHpFormChangeSpecies(battlerAtk, aiData);
         if (species == SPECIES_SLAKING_MEGA_APE_SHIFT) score += AI_SCORE_CURE_STATUS(battlerAtk);
@@ -618,10 +618,10 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         
     case ABILITY_CROWNED_SWORD:
     case ABILITY_ANGER_POINT:
-        return AI_SCORE_STAT(battlerDef, STAT_ATK, 1) + AI_SCORE_ADJUST(aiData->moveState[battlerAtk][move].critChance, AI_SCORE_STAT(battlerDef, STAT_ATK, 12));
+        return AI_SCORE_STAT(battlerDef, STAT_ATK, 1) + AI_SCORE_ADJUST(moveState->critChance, AI_SCORE_STAT(battlerDef, STAT_ATK, 12));
 
     case ABILITY_TIPPING_POINT:
-        return AI_SCORE_STAT(battlerDef, STAT_SPATK, 1) + AI_SCORE_ADJUST(aiData->moveState[battlerAtk][move].critChance, AI_SCORE_STAT(battlerDef, STAT_SPATK, 12));
+        return AI_SCORE_STAT(battlerDef, STAT_SPATK, 1) + AI_SCORE_ADJUST(moveState->critChance, AI_SCORE_STAT(battlerDef, STAT_SPATK, 12));
     
     case ABILITY_BERSERK:
     case ABILITY_BERSERKER_RAGE:
@@ -651,16 +651,16 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         return score + AI_SCORE_NO_ESCAPE(battlerDef);
     
     case ABILITY_ITCHY_DEFENSE:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_WRAP(battlerDef, battlerAtk);
     
     case ABILITY_LOOSE_QUILLS:
     case ABILITY_SCRAPYARD:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_SPIKES(battlerDef);
 
     case ABILITY_TOXIC_DEBRIS:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_TOXIC_SPIKES(battlerDef);
     
     case ABILITY_VOODOO_POWER:
@@ -672,19 +672,19 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         return AI_SCORE_GRASSY_TERRAIN + AI_SCORE_CURE_PARTY_STATUS(battlerDef);
     
     case ABILITY_SUPERSWEET_SYRUP:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_EMBARGO(battlerAtk);
     
     case ABILITY_CUTE_CHARM:
     case ABILITY_PRIM_AND_PROPER:
     case ABILITY_PURE_LOVE:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_ATTRACT(battlerDef, battlerAtk));
     
     case ABILITY_GOOEY:
     case ABILITY_TANGLING_HAIR:
     case ABILITY_SUPER_HOT_GOO:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_SPEED_UP(battlerAtk, -1);
     }
 
@@ -692,55 +692,55 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
 }
 
 // battlerAtk: battler with ability
-int ScoreEitherAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct AiData* aiData)
+int ScoreEitherAbility(int ability, int battlerAtk, int battlerDef, int move, int moveType, struct MoveState* moveState, struct AiData* aiData)
 {
     switch (ability)
     {
     case ABILITY_BLOOD_STAIN:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         REQUIRE_NOT(HasAbility(battlerDef, ABILITY_BLOOD_STAIN, aiData))
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(battlerDef)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(battlerDef))
         return AI_SCORE_REPLACE_ABILITY(battlerDef, ABILITY_BLOOD_STAIN);
     
     case ABILITY_SOUL_LINKER:
-        REQUIRE_NOT(aiData->moveState[battlerAtk][move].seeKo)
+        REQUIRE_NOT(moveState->seeKo)
         return AI_SCORE_RECOIL(battlerDef, 100, TRUE);
     
     case ABILITY_DAMP:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_SET_TYPE(battlerDef, TYPE_WATER);
     
     case ABILITY_WHITE_NOISE:
     case ABILITY_STATIC:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_PARALYSIS(battlerDef));
     
     case ABILITY_FLAME_BODY:
     case ABILITY_SUPER_HOT_GOO:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_BURN_MOVE(battlerDef));
     
     case ABILITY_FRAGRANT_DAZE:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_CONFUSION(battlerDef));
     
     case ABILITY_POISON_POINT:
     case ABILITY_POISON_TOUCH:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_POISON_MOVE(battlerDef));
 
     case ABILITY_FREEZING_POINT:
     case ABILITY_CRYO_PROFICIENCY:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_FROSTBITE_MOVE(battlerDef));
     
     case ABILITY_SPIKE_ARMOR:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_BLEED(battlerDef));
     
     case ABILITY_MENACING_SITUATION:
-        REQUIRE(aiData->moveState[battlerAtk][move].contact)
+        REQUIRE(moveState->contact)
         return AI_SCORE_ADJUST(30, AI_SCORE_FEAR(battlerDef));
     }
     return 0;

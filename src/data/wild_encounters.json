@@ -1474,7 +1474,7 @@
               {
                 "min_level": 16,
                 "max_level": 16,
-                "species": "SPECIES_INDEEDEE"
+                "species": "SPECIES_EISCUE"
               },
               {
                 "min_level": 16,
@@ -6032,7 +6032,7 @@
               {
                 "min_level": 29,
                 "max_level": 29,
-                "species": "SPECIES_DRIFBLIM"
+                "species": "SPECIES_ROTOM"
               },
               {
                 "min_level": 27,
@@ -6042,7 +6042,7 @@
               {
                 "min_level": 29,
                 "max_level": 29,
-                "species": "SPECIES_GROWLITHE"
+                "species": "SPECIES_CHANDELURE"
               },
               {
                 "min_level": 25,
@@ -6062,12 +6062,12 @@
               {
                 "min_level": 26,
                 "max_level": 26,
-                "species": "SPECIES_HOUNDSTONE"
+                "species": "SPECIES_DRAGAPULT"
               },
               {
                 "min_level": 28,
                 "max_level": 28,
-                "species": "SPECIES_BRONZONG"
+                "species": "SPECIES_SPIRITOMB"
               }
             ]
           },
@@ -14487,7 +14487,7 @@
               {
                 "min_level": 41,
                 "max_level": 43,
-                "species": "SPECIES_FLABEBE_WHITE_FLOWER"
+                "species": "SPECIES_MARACTUS"
               },
               {
                 "min_level": 41,

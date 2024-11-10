@@ -25,7 +25,7 @@
 #define ABILITYEFFECT_MOVE_END_OTHER             14
 #define ABILITYEFFECT_NEUTRALIZINGGAS            15
 #define ABILITYEFFECT_AFTER_RECOIL               16
-#define ABILITYEFFECT_COPY_STATS                 17
+#define ABILITYEFFECT_REACTIVE                 17
 #define ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE     18
 #define ABILITYEFFECT_MOVE_END_EITHER            19
 // Special cases
@@ -347,13 +347,16 @@ void ReadActiveScriptInitialStackState();
 void SetActiveMultistringChooser(u8 messageId);
 void SetActiveAbilityPopupOverride(u16 messageId);
 void SetActiveStackBattler(u8 battler, u8 number);
+void SetActiveStatChanger(int stat, s8 change);
 u16 GetInnateInSlot(int level, u16 species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move);
 bool32 IsHealingMoveEffect(u16 effect);
 int IsMagicGuardProtected(int battler);
+int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType);
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
 u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
+int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType);
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u8* overrideBattler, u16* abilityPopup);
 u16 MulModifierDirect(u16 modifier, u16 val);
 void MulModifier(u16 *modifier, u16 val);

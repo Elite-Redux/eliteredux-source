@@ -1439,10 +1439,6 @@
 	various \battler, VARIOUS_PLAY_TRAINER_DEFEATED_MUSIC
 	.endm
 
-	.macro stattextbuffer battler:req
-	various \battler, VARIOUS_STAT_TEXT_BUFFER
-	.endm
-
 	.macro switchinabilities battler:req
 	setbyte sABILITY_LOOP_COUNTER, 0
 	various \battler, VARIOUS_SWITCHIN_ABILITIES
@@ -2026,7 +2022,8 @@
 
 @ helpful macros
 	.macro setstatchanger stat:req, stages:req, down:req
-	setbyte sSTATCHANGER \stat | \stages << 3 | \down << 7
+	various 0, VARIOUS_SET_ACTIVE_STAT_CHANGER
+	.byte \stat | \stages << 3 | \down << 7
 	.endm
 
 	.macro setmoveeffect effect:req
@@ -2399,6 +2396,25 @@
 	.macro shelltraptarget returnPtr:req
 	various BS_ATTACKER, VARIOUS_SHELL_TRAP_CHOICE
 	.4byte \returnPtr
+	.endm
+
+	.macro jumpifhasabilityandstate cmpType:req, battler:req, ability:req, state:req, ptr:req
+	various \battler, VARIOUS_JUMP_IF_ABILITY_STATE
+	.byte \cmpType
+	.2byte \ability
+	.4byte \state
+	.4byte \jumpptr
+	.endm
+
+	.macro setabilitystate battler:req, ability:req, state:req, failPtr:req
+	various \battler, VARIOUS_SET_ABILITY_STATE
+	.2byte \ability
+	.4byte \state
+	.4byte \failPtr
+	.endm
+
+	.macro dointimidate battler:req
+	various \battler, VARIOUS_DO_INTIMIDATE
 	.endm
 
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd

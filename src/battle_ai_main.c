@@ -732,9 +732,9 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         if (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move))
         {
             int ignored;
-            if (TestAbsorbingAbilities(battlerDef, battlerAtk, move, moveType, &ignored, (u16*)&ignored))
+            if (TestAbsorbingAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
                 RETURN_SCORE_MINUS(20);
-            if (TestImmunityAbilities(battlerDef, battlerAtk, move, moveType, (const u8**)&ignored, (u8*)&ignored, (u16*)&ignored))
+            if (TestImmunityAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
                 RETURN_SCORE_MINUS(20);
             
 

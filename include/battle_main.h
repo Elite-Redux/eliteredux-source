@@ -27,6 +27,18 @@ struct UnknownPokemonStruct4
     /*0x1D*/ u8 language;
 };
 
+union SpeedValue {
+    struct SpeedStruct {
+        u16 afterYou:1;
+        u16 dazedNegation:1;
+        u16 priority:4;
+        u16 goesFirst:2;
+        u16 goesLastNegation:2;
+        u16 effectiveSpeed;
+    } speedStruct;
+    u32 comparable;
+};
+
 #define TYPE_NAME_LENGTH 6
 #define ABILITY_NAME_LENGTH 20
 
@@ -51,6 +63,7 @@ void SpriteCB_FaintOpponentMon(struct Sprite *sprite);
 void SpriteCb_ShowAsMoveTarget(struct Sprite *sprite);
 void SpriteCb_HideAsMoveTarget(struct Sprite *sprite);
 void SpriteCb_OpponentMonFromBall(struct Sprite *sprite);
+union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove);
 void SpriteCB_BattleSpriteStartSlideLeft(struct Sprite *sprite);
 void SpriteCB_FaintSlideAnim(struct Sprite *sprite);
 void DoBounceEffect(u8 battlerId, u8 b, s8 c, s8 d);
@@ -70,6 +83,7 @@ void SwapTurnOrder(u8 id1, u8 id2);
 #define TOTAL_SPEED_FULL 0
 #define TOTAL_SPEED_PRIMARY 1
 #define TOTAL_SPEED_SECONDARY 2
+#define TOTAL_SPEED_QUASH 3
 u32 GetBattlerTotalSpeedStat(u8 battlerId, u8 calcType);
 u16 GetChosenMove(u32 battlerId);
 u16 IsMyceliumMightActive(u32 battlerId);

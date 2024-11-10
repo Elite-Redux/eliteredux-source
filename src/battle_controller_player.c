@@ -1545,8 +1545,7 @@ void PrintBattleWindow_MoveSelection(void)
     SetTypeBeforeUsingMove(move, gActiveBattler);
     GET_MOVE_TYPE(move, moveType);
     maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
-    immune = TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16*) &ignored);
-    if (!immune) immune = TestImmunityAbilities(target, gActiveBattler, move, moveType, (const u8**)&ignored, (u8*)&ignored, (u16*)&ignored);
+    immune = !typeEffectivenessMultiplier || TestAbsorbingAbilitiesOnly(target, gActiveBattler, move, moveType) || TestImmunityAbilitiesOnly(target, gActiveBattler, move, moveType);
     x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION; //Default
 
     if (gBattleMoves[move].type != gBattleMoves[move].type2 && gBattleMoves[move].type2 != TYPE_NORMAL && gBattleMoves[move].type2 != TYPE_NONE)
@@ -1884,10 +1883,14 @@ void PrintBattleWindow_MoveSelection(void)
                         u8 moveType = gBattleMoves[newMove].type;
                         SetTypeBeforeUsingMove(newMove, target);
                         GET_MOVE_TYPE(newMove, moveType);
-                        moveDamage = CalculateMoveDamage(newMove, target, gActiveBattler, &moveType, 0, FALSE, FALSE, FALSE);
+                        moveDamage = CalculateMoveDamageAndEffectiveness(newMove, target, gActiveBattler, &moveType, &typeEffectivenessMultiplier);
+                        if (!typeEffectivenessMultiplier
+                            || TestAbsorbingAbilitiesOnly(gActiveBattler, target, newMove, moveType)
+                            || TestImmunityAbilitiesOnly(gActiveBattler, target, newMove, moveType))
+                            moveDamage = 0;
                         //gSwapDamageCategory = FALSE;
                         
-                        if (targetCurrentHp <= moveDamage && heldItem != ITEM_FOCUS_SASH && targetCurrentHp == gBattleMons[gActiveBattler].maxHP){
+                        if (targetCurrentHp <= moveDamage && !(heldItem == ITEM_FOCUS_SASH && targetCurrentHp == gBattleMons[gActiveBattler].maxHP)){
                             switch (battleTheme){
                                 case THEME_DARK:
                                     BlitBitmapToWindow(windowId, sTheme_Dark_Can_KO_Mark_Gfx,    ((x + 10) * 8) + x2 + 4, ((y + i) * 8) + y2 + 4, 8, 8);
