@@ -5161,6 +5161,7 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove)
 
     speedValue.speedStruct.effectiveSpeed = GetBattlerTotalSpeedStat(battler, quash ? TOTAL_SPEED_QUASH : TOTAL_SPEED_FULL);
     if (IsTrickRoomActive()) speedValue.speedStruct.effectiveSpeed = ~speedValue.speedStruct.effectiveSpeed;
+    return speedValue;
 }
 
 int GetFastestBattler(int ignoreChosenMoves, int except)
