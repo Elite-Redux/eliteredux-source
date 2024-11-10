@@ -223,8 +223,6 @@ u8 BattleAI_ChooseMoveOrAction(void)
     else
         ret = ChooseMoveOrAction_Doubles();
     
-    // Clear protect structures, some flags may be set during AI calcs
-    // e.g. pranksterElevated from GetMovePriority
     memset(&gRoundStructs[gActiveBattler], 0, sizeof(struct RoundStruct));
     gRoundStructs[gActiveBattler].protected = protected;
     

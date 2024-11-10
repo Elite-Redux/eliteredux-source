@@ -9364,6 +9364,7 @@ static void Cmd_various(void)
                     .move = move,
                     .target = GetMoveTarget(gCalledMove, 0),
                     .movePos = MAX_MON_MOVES,
+                    .prankster = BattlerHasAbility(gBattlerAttacker, ABILITY_PRANKSTER, FALSE),
                 };
                 gStatuses3[gBattlerAttacker] |= STATUS3_ME_FIRST;
                 break;
@@ -10842,9 +10843,7 @@ static void Cmd_various(void)
             return;
         }
         {
-            u8 pranksterElevated = gTurnStructs[gActiveBattler].pranksterElevated;
             s8 chosenMovePriority = GetChosenMovePriority(gActiveBattler, gBattleStruct->moveTarget[gActiveBattler]);
-            gTurnStructs[gActiveBattler].pranksterElevated = pranksterElevated;
             if (chosenMovePriority > 0)
             {
                 return;
@@ -13448,6 +13447,7 @@ static void Cmd_metronome(void)
         .move = move,
         .target = GetMoveTarget(move, 0),
         .movePos = MAX_MON_MOVES,
+        .prankster = BattlerHasAbility(gBattlerAttacker, ABILITY_PRANKSTER, FALSE),
     };
     gBattlescriptCurrInstr++;
     return;

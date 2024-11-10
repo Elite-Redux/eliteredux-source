@@ -5056,8 +5056,6 @@ s8 GetChosenMovePriority(u32 battlerId, u32 target)
 {
     u16 move = GetChosenMove(battlerId);
 
-    gTurnStructs[battlerId].pranksterElevated = 0;
-
     return GetMovePriority(battlerId, move, target);
 }
 
@@ -5091,10 +5089,7 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
 
     // Prankster
 	if (BattlerHasAbility(battlerId, ABILITY_PRANKSTER, FALSE) && IS_MOVE_STATUS(move))
-    {
-        gTurnStructs[battlerId].pranksterElevated = 1;
         priority++;
-    }
 
     // Sighting System
 	if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SIGHTING_SYSTEM) && gBattleMoves[move].accuracy && gBattleMoves[move].accuracy <= 75)

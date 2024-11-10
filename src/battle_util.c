@@ -494,16 +494,6 @@ void HandleAction_UseMove(void)
     for (i = 0; i < gBattlersCount; i++)
         gBattleStruct->hpBefore[i] = gBattleMons[i].hp;
 
-    if (gProcessingExtraAttacks)
-    {
-        gTurnStructs[gBattlerAttacker].pranksterElevated = FALSE;
-    }
-    else
-    {
-        // Sets prankster elevated
-        GetMovePriority(gBattlerAttacker, gCurrentMove, gBattlerTarget);
-    }
-
     gCurrentActionFuncId = B_ACTION_EXEC_SCRIPT;
 }
 
@@ -12014,9 +12004,18 @@ bool8 IsTwoStrikesMove(u16 move)
 
 bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 checkTarget)
 {
-    #if B_PRANKSTER_DARK_TYPES >= GEN_7
-    if (!gTurnStructs[battlerPrankster].pranksterElevated)
-        return FALSE;
+    if (gProcessingExtraAttacks)
+    {
+        if (!gQueuedExtraAttackData[0].prankster)
+            return FALSE;
+    }
+    else
+    {
+        if (!IS_MOVE_STATUS(move))
+            return FALSE;
+        if (!BattlerHasAbility(battlerPrankster, ABILITY_PRANKSTER, FALSE))
+            return FALSE;
+    }
     if (GetBattlerSide(battlerPrankster) == GetBattlerSide(battlerDef))
         return FALSE;
     if (checkTarget && (gBattleMoves[move].target & (MOVE_TARGET_OPPONENTS_FIELD | MOVE_TARGET_DEPENDS)))
@@ -12027,8 +12026,6 @@ bool32 BlocksPrankster(u16 move, u8 battlerPrankster, u8 battlerDef, bool32 chec
         return FALSE;
     
     return TRUE;
-    #endif
-    return FALSE;
 }
 
 u16 GetUsedHeldItem(u8 battler)
@@ -12565,9 +12562,10 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
         }
     }
 
-    if (!gProcessingExtraAttacks
-        && BlocksPrankster(move, attacker, battler, TRUE)
-        && !(IS_MOVE_STATUS(move) && BATTLER_HAS_ABILITY(battler, ABILITY_MAGIC_BOUNCE)))
+    if (BlocksPrankster(move, attacker, battler, TRUE)
+        && !(gBattleMoves[move].flags & FLAG_MAGIC_COAT_AFFECTED
+            && !gRoundStructs[attacker].usesBouncedMove
+            && BATTLER_HAS_ABILITY(battler, ABILITY_MAGIC_BOUNCE)))
     {
         *immunityScript = BattleScript_DarkTypePreventsPrankster;
         return TRUE;

@@ -248,7 +248,6 @@ struct TurnStruct
     u8 rototillerAffected:1;  // to be affected by rototiller
     u8 dancerUsedMove:1;
     u8 neutralizingGasRemoved:1;    // See VARIOUS_TRY_END_NEUTRALIZING_GAS
-    u8 pranksterElevated:1;
     u8 shouldTriggerSwitchItem:1;
     u8 haloed:1;
     u8 sleepTalk:1;
@@ -616,12 +615,13 @@ typedef enum
 
 struct ExtraAttackActionStruct
 {
-    u8 attacker:2;
-    u8 target:2;
-    u8 movePos:3;
     u16 ability;
     u16 move;
     u8 movePower;
+    u8 attacker:2;
+    u8 target:2;
+    u8 movePos:3;
+    u8 prankster:1;
 };
 
 struct BattleStruct
