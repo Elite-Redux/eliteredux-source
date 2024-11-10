@@ -6261,8 +6261,6 @@ static void Cmd_moveend(void)
                 u8 i, dancersCount, include;
                 u8 battlers[MAX_BATTLERS_COUNT];
 
-
-
                 // Get list of battlers that can dance
                 for (i = 0; i < gBattlersCount - 1; i++)
                 {

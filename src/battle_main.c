@@ -3321,6 +3321,11 @@ static void BattleStartClearSetData(void)
     gChosenMove = gCurrentMove = MOVE_NONE;
 
     gSwapDamageCategory = FALSE; // Photon Geyser, Shell Side Arm, Light That Burns the Sky
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        gBattlerByTurnOrder[i] = i;
+    }
 }
 
 void SwitchInClearSetData(void)
@@ -5185,7 +5190,7 @@ int GetFastestBattler(int ignoreChosenMoves, int except)
         }
     }
 
-    return i;
+    return maxBattler;
 }
 
 int SortBattlersExcept(u8* battlerArray, int ignoreChosenMoves, int except)
@@ -5443,7 +5448,7 @@ static void CheckMegaEvolutionBeforeTurn(void)
 // In gen7, priority and speed are recalculated during the turn in which a pokemon mega evolves
 static void TryChangeTurnOrder(void)
 {
-    RecalculateMoveOrder(gCurrentTurnActionNumber, FALSE);
+    RecalculateMoveOrder(0, FALSE);
     gBattleMainFunc = CheckFocusPunch_ClearVarsBeforeTurnStarts;
     gBattleStruct->focusPunchBattlerId = 0;
 }
