@@ -1466,10 +1466,8 @@ void CancelMultiTurnMoves(u8 battler)
     int i;
     for (i = 0; i < gBattlersCount; i++)
     {
-        if (gVolatileStructs[battler].skyDropped && gVolatileStructs[battler].skyDroppedBy == battler)
-        {
-            gVolatileStructs[battler].shouldClearSkyDrop = TRUE;
-        }
+        FILTER(gVolatileStructs[i].skyDropped && gVolatileStructs[battler].skyDroppedBy == battler)
+        gVolatileStructs[i].shouldClearSkyDrop = TRUE;
     }
     gBattleMons[battler].status2 &= ~(STATUS2_MULTIPLETURNS);
     gBattleMons[battler].status2 &= ~(STATUS2_LOCK_CONFUSE);
@@ -2053,6 +2051,7 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
     for (i = 0; i < MAX_MON_MOVES; i++)
     {
         FILTER_NOT(unusableMoves & (1 << i))
+        unusableMoves |= 1 << i;
         FILTER_NOT(gBattleMoves[gBattleMons[battlerId].moves[i]].split == SPLIT_STATUS && getMonotypeChampType() == TYPE_FIGHTING && GetBattlerSide(battlerId) == B_SIDE_PLAYER)
         FILTER_NOT(gBattleMons[battlerId].moves[i] == 0 && check & MOVE_LIMITATION_ZEROMOVE)
         if (gBattleMons[battlerId].pp[i] == 0 && check & MOVE_LIMITATION_PP)
@@ -2084,9 +2083,9 @@ u8 CheckMoveLimitations(u8 battlerId, u8 unusableMoves, u8 check)
         FILTER_NOT((BATTLER_HAS_ABILITY(battlerId, ABILITY_GORILLA_TACTICS) || BATTLER_HAS_ABILITY(battlerId, ABILITY_SAGE_POWER))
 			&& *choicedMove != 0 && *choicedMove != 0xFFFF && *choicedMove != gBattleMons[battlerId].moves[i])
         
-        unusableMoves |= 1 << i;
+        unusableMoves ^= 1 << i;
     }
-    return unusableMoves;
+    return ~unusableMoves;
 }
 
 bool8 AreAllMovesUnusable(void)
