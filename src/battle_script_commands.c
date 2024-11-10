@@ -6258,12 +6258,13 @@ static void Cmd_moveend(void)
             break;
         case MOVEEND_DANCER: // Special case because it's so annoying
             {
-                u8 i, dancersCount, include;
+                int i, dancersCount, include;
                 u8 battlers[MAX_BATTLERS_COUNT];
 
                 // Get list of battlers that can dance
-                for (i = 0; i < gBattlersCount - 1; i++)
+                for (i = 0; i < gBattlersCount; i++)
                 {
+                    FILTER(i != gBattlerAttacker)
                     FILTER_NOT(gTurnStructs[i].dancerUsedMove)
                     FILTER(IsBattlerAlive(i))
                     include |= 1 << i;
