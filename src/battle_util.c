@@ -15943,7 +15943,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
 int IsDance(int attacker, int move)
 {
     if (gBattleMoves[move].flags & FLAG_DANCE) return TRUE;
-    return BATTLER_HAS_ABILITY(attacker, ABILITY_TAEKKYEON);
+    return !IS_MOVE_STATUS(move) && BattlerHasAbility(attacker, ABILITY_TAEKKYEON, FALSE);
 }
 
 int HasAnyStatusOrAbility(int battler)
