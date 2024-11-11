@@ -55,22 +55,17 @@ int CheckCancelled(int battlerAtk, int battlerDef, int move, struct MoveState* m
 
     if (!AreSameSide(battlerAtk, battlerDef)
         && !gProcessingExtraAttacks
-        && gSideTimers[GetBattlerSide(battlerDef)].quickGuardTimer
-        // TODO: Set gProcessingExtraAttacks when scoring extra moves
         && moveState->speedValue.speedStruct.priority > 6)
-        return TRUE;
+    {
+        if (gSideTimers[GetBattlerSide(battlerDef)].quickGuardTimer) return TRUE;
+        if (IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)) return TRUE;
+    }
     
     if (gBattleMoves[move].flags & FLAG_POWDER && battlerAtk != battlerDef && !BattlerHasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, FALSE))
     {
-        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS) || GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES)
-            return TRUE;
+        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)) return TRUE;
+        if (GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_SAFETY_GOGGLES) return TRUE;
     }
-
-    if (!AreSameSide(battlerAtk, battlerDef)
-        && !gProcessingExtraAttacks
-        && IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)
-        && moveState->speedValue.speedStruct.priority > 6)
-        return TRUE;
     
     return FALSE;
 }
