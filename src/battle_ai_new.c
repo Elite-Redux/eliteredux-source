@@ -22,17 +22,19 @@ int ScoreMove(int battlerAtk, int battlerDef, int move, int targets, struct AiDa
 
 }
 
-enum AiProcessingPhase {
+typedef enum {
+    AI_PHASE_BASIC,
+    AI_PHASE_ACCURACY,
     AI_PHASE_DAMAGE,
-    AI_PHASE_RETALIATION,
-    AI_PHASE_TURN_TWO,
-    AI_PHASE_SECONDARY,
-    AI_PHASE_DISABLE,
-    AI_PHASE_FLINCH,
-    AI_PHASE_PROTECT,
-    AI_PHASE_END_TURN,
+    // AI_PHASE_RETALIATION,
+    // AI_PHASE_TURN_TWO,
+    // AI_PHASE_SECONDARY,
+    // AI_PHASE_DISABLE,
+    // AI_PHASE_FLINCH,
+    // AI_PHASE_PROTECT,
+    // AI_PHASE_END_TURN,
     AI_PHASE_COUNT,
-};
+} AiProcessingPhase;
 
 void ReplaceDisguise(struct DisguiseSimulation* actual)
 {
@@ -44,14 +46,57 @@ void RestoreDisguise(struct DisguiseSimulation* actual)
 
 }
 
-void CalculateBasicMoveInfo(int battlerAtk, int battlerDef, int move, struct MoveState* moveState, struct AiData* aiData)
+int CalculateAccuracy(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData)
 {
-    if (!moveState) return;
+    // TODO: Anticipation
+    int accuracy = GetTotalAccuracy(battlerAtk, battlerDef, move, moveState);
+    if (!accuracy)
+        moveState->cancelled = TRUE;
+    else
+        moveState->accuracy = accuracy;
+    return 0;
+}
+
+int CalculateBasicMoveInfo(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData)
+{
     moveState->speedValue = AiPerformMoveSpeedCalculation(battlerAtk, battlerDef, move);
     if (CheckCancelled(battlerAtk, battlerDef, move, moveState, aiData))
-    {
         moveState->cancelled = TRUE;
-        return;
+    
+    return 0;
+}
+
+static int (* const sPhaseHandlersTable[AI_PHASE_COUNT])(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData) =
+{
+    [AI_PHASE_BASIC] = CalculateBasicMoveInfo,
+    [AI_PHASE_ACCURACY] = CalculateAccuracy,
+    [AI_PHASE_DAMAGE] = NULL,
+};
+
+void SetDamage()
+{
+
+}
+
+void IterateForPhase(AiProcessingPhase phase, struct AiData* aiData)
+{
+    int battlerAtk, targetNum, moveNum;
+    for (battlerAtk = 0; battlerAtk < gBattlersCount; battlerAtk++)
+    {
+        for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++)
+        {
+            struct MoveContainer* container = &aiData->moveState[battlerAtk][moveNum];
+            FILTER_NOT(container->unusable)
+            gHitMarker &= ~(HITMARKER_MOLD_BREAKER | HITMARKER_MYCELIUM_MIGHT);
+            if (ShouldSetMoldBreaker(battlerAtk, container->move)) gHitMarker |= HITMARKER_MOLD_BREAKER;
+            if (BattlerHasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, FALSE)) gHitMarker |= HITMARKER_MYCELIUM_MIGHT;
+            for (targetNum = 0; targetNum < container->count; targetNum++)
+            {
+                struct MoveState* state = &container->targetData[targetNum];
+                FILTER_NOT(state->cancelled)
+                state->score += sPhaseHandlersTable[phase](battlerAtk, state->target, container->move, phase, state, aiData);
+            }
+        }
     }
 }
 
@@ -63,8 +108,57 @@ struct MoveState* SetMoveVs(int battlerAtk, int battlerDef, int moveNum, struct 
     targetCount = aiData->moveState[battlerAtk][moveNum].count++;
     moveData = &aiData->moveState[battlerAtk][moveNum].targetData[targetCount];
     moveData->target = battlerDef;
-    CalculateBasicMoveInfo(battlerAtk, battlerDef, aiData->moveState[battlerAtk][moveNum].move, moveData, aiData);
     return moveData;
+}
+
+void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData)
+{
+    int moveNum;
+    for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++)
+    {
+        int move;
+        if (move == MOVE_NONE || unusableMoves & (1 << moveNum))
+        {
+            aiData->moveState[battlerAtk][moveNum].unusable = TRUE;
+            continue;
+        }
+        move = aiData->moveState[battlerAtk][moveNum].move = gBattleMons[battlerAtk].moves[moveNum];
+        FILTER(!AlwaysCancelled(battlerAtk, move, &aiData->moveState[battlerAtk][moveNum]))
+        aiData->moveState[battlerAtk][moveNum].targetFlags = GetBattlerBattleMoveTargetFlags(move, battlerAtk);
+        switch (aiData->moveState[battlerAtk][moveNum].targetFlags)
+        {
+        case MOVE_TARGET_ALLY:
+            SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, aiData);
+            break;
+        
+        case MOVE_TARGET_BOTH:
+        case MOVE_TARGET_RANDOM:
+            SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, aiData);
+            SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData);
+            break;
+            
+        case MOVE_TARGET_OPPONENTS_FIELD:
+            SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData)
+                || SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk))), moveNum, aiData);
+            break;
+        
+        case MOVE_TARGET_USER_OR_SELECTED:
+        case MOVE_TARGET_DEPENDS:
+            // These aren't real
+            break;
+        
+        case MOVE_TARGET_USER:
+            SetMoveVs(battlerAtk, battlerAtk, moveNum, aiData);
+            break;
+        
+        case MOVE_TARGET_SELECTED:
+        case MOVE_TARGET_FOES_AND_ALLY:
+            SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, aiData);
+            SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData);
+            SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, aiData);
+            break;
+        }
+    }
 }
 
 int GetAiDecision(int battler)
@@ -83,49 +177,7 @@ int GetAiDecision(int battler)
         int unusableMoves;
         FILTER(IsBattlerAlive(battlerAtk))
         unusableMoves = CheckMoveLimitations(battler, 0, -1);
-        for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++)
-        {
-            int move;
-            if (move == MOVE_NONE || unusableMoves & (1 << moveNum))
-            {
-                aiData.moveState[battlerAtk][moveNum].unusable = TRUE;
-                continue;
-            }
-            move = aiData.moveState[battlerAtk][moveNum].move = gBattleMons[battlerAtk].moves[moveNum];
-            FILTER(!AlwaysCancelled(battlerAtk, move, &aiData.moveState[battlerAtk][moveNum]))
-            aiData.moveState[battlerAtk][moveNum].targetFlags = GetBattlerBattleMoveTargetFlags(move, battler);
-            switch (aiData.moveState[battlerAtk][moveNum].targetFlags)
-            {
-            case MOVE_TARGET_ALLY:
-                SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, &aiData);
-                break;
-            
-            case MOVE_TARGET_RANDOM:
-                SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, &aiData);
-                SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, &aiData);
-                break;
-                
-            case MOVE_TARGET_BOTH:
-                SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_OPPOSITE(battlerAtk)), moveNum, &aiData);
-                break;
-            
-            case MOVE_TARGET_USER_OR_SELECTED:
-            case MOVE_TARGET_DEPENDS:
-                break;
-            
-            case MOVE_TARGET_USER:
-            case MOVE_TARGET_OPPONENTS_FIELD:
-            case MOVE_TARGET_FOES_AND_ALLY:
-                SetMoveVs(battlerAtk, battlerAtk, moveNum, &aiData);
-                break;
-            
-            case MOVE_TARGET_SELECTED:
-                SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, &aiData);
-                SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, &aiData);
-                SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, &aiData);
-                break;
-            }
-        }
+        ConfigureMoves(battlerAtk, unusableMoves, &aiData);
     }
     
     if (IsBattlerAlive(0)) RestoreDisguise(&disguise0);

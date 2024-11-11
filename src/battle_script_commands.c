@@ -62,6 +62,7 @@
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
 #include "battle_events.h"
+#include "battle_ai_new.h"
 
 extern struct MusicPlayerInfo gMPlayInfo_BGM;
 
@@ -1756,7 +1757,7 @@ bool8 JumpIfMoveAffectedByProtect(u16 move)
     return affected;
 }
 
-u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
+u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState* moveState)
 {
     u32 calc, moveAcc;
     s8 buff, accStage, evasionStage;
@@ -1769,7 +1770,10 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
     if (gStatuses3[battlerDef] & STATUS3_ALWAYS_HITS && gVolatileStructs[battlerDef].battlerWithSureHit == battlerAtk)
         return 101;
     if (gVolatileStructs[battlerAtk].trepidation && moveType == TYPE_PSYCHIC)
-        return 0;
+    {
+        if (moveState && gVolatileStructs[battlerAtk].trepidation == 1) moveState->missesThisTurn = AI_MISSES_THIS_TURN;
+        else return 0;
+    }
     if (gStatuses3[battlerDef] & STATUS3_TELEKINESIS && !IsBattlerGrounded(battlerDef))
         return 101;
     if (B_TOXIC_NEVER_MISS >= GEN_6 && gBattleMoves[move].effect == EFFECT_TOXIC && IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON))
@@ -1799,8 +1803,13 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move)
         || (!(gBattleMoves[move].flags & FLAG_DMG_IN_AIR) && gStatuses3[battlerDef] & STATUS3_ON_AIR)
         || (!(gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR) && gStatuses3[battlerDef] & STATUS3_ON_AIR)
         || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERGROUND) && gStatuses3[battlerDef] & STATUS3_UNDERGROUND)
-        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERWATER) && gStatuses3[battlerDef] & STATUS3_UNDERWATER)
-        || GetAbilityState(battlerDef, ABILITY_COMMANDER) >= COMMANDER_ACTIVE)
+        || (!(gBattleMoves[move].flags & FLAG_DMG_UNDERWATER) && gStatuses3[battlerDef] & STATUS3_UNDERWATER))
+    {
+        if (moveState) moveState->missesThisTurn = AI_MISSES_THIS_TURN_IF_FIRST;
+        else return 0;
+    }
+    
+    if (GetAbilityState(battlerDef, ABILITY_COMMANDER) >= COMMANDER_ACTIVE)
         return 0;
 
     GET_MOVE_TYPE(move, moveType)
@@ -2007,7 +2016,7 @@ static void Cmd_accuracycheck(void)
         if (JumpIfMoveAffectedByProtect(move))
             return;
 
-        accuracy = GetTotalAccuracy(gBattlerAttacker, gBattlerTarget, move);
+        accuracy = GetTotalAccuracy(gBattlerAttacker, gBattlerTarget, move, NULL);
 
         // final calculation
         if (accuracy <= 100

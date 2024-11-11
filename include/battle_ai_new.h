@@ -2,6 +2,7 @@
 #define GUARD_BATTLE_AI_NEW_H
 
 #include "global.h"
+#include "battle.h"
 #include "battle_main.h"
 
 #define AI_CHOICE_FLEE 4
@@ -13,8 +14,14 @@
 #define AI_SCORE_IMMUNE 0
 #define AI_SCORE_ADJUST(percent, score) AdjustForChance(percent, score)
 
+enum {
+    AI_MISSES_THIS_TURN = 1,
+    AI_MISSES_THIS_TURN_IF_FIRST = 2,
+};
+
 struct MoveState {
     union SpeedValue speedValue;
+    int score;
     u16 koChance;
     u16 damage;
     u16 multiHitExpect;
@@ -29,6 +36,7 @@ struct MoveState {
     u8 breakSubstitute:1;
     u8 breakDisguise:1;
     u8 cancelled:1;
+    u8 missesThisTurn:2;
 };
 
 enum

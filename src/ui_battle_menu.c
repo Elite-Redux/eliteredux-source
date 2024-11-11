@@ -1918,7 +1918,7 @@ static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
     u8 y2 = -4;
     u8 target = BATTLE_OPPOSITE(sMenuDataPtr->battlerId);
     u32 movePower = gBattleMoves[move].power;
-    u32 moveAccuracy = GetTotalAccuracy(sMenuDataPtr->battlerId, target, move);
+    u32 moveAccuracy = GetTotalAccuracy(sMenuDataPtr->battlerId, target, move, NULL);
     u8 moveType  = gBattleMoves[move].type;
     u8 moveType2 = TYPE_MYSTERY;
     bool32 updateFlags = FALSE;

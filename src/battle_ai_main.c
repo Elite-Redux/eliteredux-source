@@ -864,7 +864,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_ANTICIPATION)
             && !GetSingleUseAbilityCounter(battlerDef, ABILITY_ANTICIPATION)
             && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0)
-            && GetTotalAccuracy(battlerAtk, battlerDef, move) <= 100)
+            && GetTotalAccuracy(battlerAtk, battlerDef, move, NULL) <= 100)
             RETURN_SCORE_MINUS(5);
         
         //Wonder Guard

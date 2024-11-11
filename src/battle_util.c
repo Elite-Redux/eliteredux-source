@@ -8368,11 +8368,11 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
         return TRUE;
     if (gRoundStructs[battlerId].freezeShockCharge && IsMoveMakingContact(move, gBattlerAttacker))
         return TRUE;
-    if (gRoundStructs[battlerId].merculight && !IS_MOVE_STATUS(move) && GetTotalAccuracy(gBattlerAttacker, battlerId, move) < 101)
+    if (gRoundStructs[battlerId].merculight && !IS_MOVE_STATUS(move) && GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101)
         return TRUE;
-    if (gRoundStructs[battlerId].detected && GetTotalAccuracy(gBattlerAttacker, battlerId, move) < 101)
+    if (gRoundStructs[battlerId].detected && GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101)
         return TRUE;
-    else if (gRoundStructs[battlerId].mindReader && GetTotalAccuracy(gBattlerAttacker, battlerId, move) < 101)
+    else if (gRoundStructs[battlerId].mindReader && GetTotalAccuracy(gBattlerAttacker, battlerId, move, NULL) < 101)
         return TRUE;
     else if ((BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_UNSEEN_FIST) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_FINAL_BLOW))
         && (gBattleMoves[move].flags & FLAG_MAKES_CONTACT || (move == MOVE_SHELL_SIDE_ARM && gSwapDamageCategory)))
