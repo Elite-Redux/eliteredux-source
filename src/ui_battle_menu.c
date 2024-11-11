@@ -1918,7 +1918,7 @@ static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
     u8 y2 = -4;
     u8 target = BATTLE_OPPOSITE(sMenuDataPtr->battlerId);
     u32 movePower = gBattleMoves[move].power;
-    u32 moveAccuracy = GetTotalAccuracy(sMenuDataPtr->battlerId, target, move);
+    u32 moveAccuracy = GetTotalAccuracy(sMenuDataPtr->battlerId, target, move, NULL);
     u8 moveType  = gBattleMoves[move].type;
     u8 moveType2 = TYPE_MYSTERY;
     bool32 updateFlags = FALSE;
@@ -3179,6 +3179,14 @@ const u8 gText_SmogonDamageCalculator_FastPart_Guaranteed[] = _("Guaranteed {STR
 #define MAX_PERCENT 100
 #define MAX_PERCENT_2 10000
 
+// Rough probability of an N hit KO needing an average roll
+static const u8 sConvolutionTable[][MIN_DAMAGE_FACTOR] = {
+    {100, 97, 92, 86, 79, 70, 59, 47, 36, 26, 18, 11, 6, 3, 1, 1}, // N = 2
+    {100, 99, 96, 92, 84, 73, 60, 46, 32, 20, 12, 6, 3, 1, 1, 1},
+    {100, 100, 98, 95, 87, 76, 61, 44, 29, 16, 8, 3, 1, 1, 1, 1},
+    {100, 100, 99, 96, 90, 78, 62, 43, 26, 13, 6, 2, 1, 1, 1, 1},
+};
+
 static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     u32 minDamage, maxDamage, midDamage, tempdamage;
     s32 dmg, critDmg, critChance, tempchance, minHits2KOChance;
@@ -3200,6 +3208,8 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
 
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].calculated = TRUE;
 
+    if (ShouldSetMoldBreaker(battler, move)) gHitMarker |= HITMARKER_MOLD_BREAKER;
+
     //Sets move type depending on the mon ability/stats
     SetTypeBeforeUsingMove(move, battler);
     GET_MOVE_TYPE(move, moveType);
@@ -3208,7 +3218,8 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     minDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR, (u16*) &ignored);
     maxDamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, (u16*) &ignored);
 
-    immune = TestAbsorbingAbilities(target, battler, move, moveType, &ignored, (u16*) &ignored);
+    immune = TestImmunityAbilitiesOnly(target, battler, move, moveType);
+    if (!immune) immune = TestAbsorbingAbilitiesOnly(target, battler, move, moveType);
     if (immune) minDamage = maxDamage = 0;
 
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].minDamage = minDamage;
@@ -3238,20 +3249,27 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
     sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamagePercentage = percentage;
     
     //Chances To KO
-    sMenuDataPtr->damageCalculation[battler][target][moveIndex].hits2KO = (targetCurrentHp / sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamage);
+    hits2KO = sMenuDataPtr->damageCalculation[battler][target][moveIndex].hits2KO = (targetCurrentHp / sMenuDataPtr->damageCalculation[battler][target][moveIndex].maxDamage);
+    hits2KO++;
 
     for (i = 0; i < MIN_DAMAGE_FACTOR; i++) {
         tempdamage = DoMoveDamageCalcBattleMenu(move, battler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR - i, (u16*) &ignored);
-        tempchance = (targetCurrentHp / tempdamage);
 
-        if (tempchance == hits2KO) {
-            percentage = (MIN_DAMAGE_FACTOR - i);
+        if (tempdamage * hits2KO >= targetCurrentHp) {
             break;
         }
     }
 
-    minHits2KOChance = (percentage * (MAX_PERCENT_2 / MIN_DAMAGE_FACTOR));
-    sMenuDataPtr->damageCalculation[battler][target][moveIndex].chance2KO = minHits2KOChance / MAX_PERCENT;
+    if (hits2KO <= 1)
+    {
+        minHits2KOChance = (MIN_DAMAGE_FACTOR - i) * MAX_PERCENT_2 / MIN_DAMAGE_FACTOR / MAX_PERCENT;
+    }
+    else
+    {
+        if (hits2KO > ARRAY_COUNT(sConvolutionTable) + 1) hits2KO = ARRAY_COUNT(sConvolutionTable) + 1;
+        minHits2KOChance = sConvolutionTable[hits2KO - 2][i];
+    }
+    sMenuDataPtr->damageCalculation[battler][target][moveIndex].chance2KO = minHits2KOChance;
 
     //Nature Stuff
     if (GetBattlerSide(battler) == B_SIDE_PLAYER)
@@ -4444,21 +4462,7 @@ static void PrintSpeedTab(void)
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
     //Calculate Order
-    for (i = 0; i < gBattlersCount; i++)
-        sBattlerByTurnOrder[i] = i;
-
-    for (i = 0; i < gBattlersCount - 1; i++)
-    {
-        for (j = i + 1; j < gBattlersCount; j++)
-        {
-            if (GetWhoStrikesFirst(sBattlerByTurnOrder[i], sBattlerByTurnOrder[j], TRUE) != 0)
-            {
-                u8 temp = sBattlerByTurnOrder[i];
-                sBattlerByTurnOrder[i] = sBattlerByTurnOrder[j];
-                sBattlerByTurnOrder[j] = temp;
-            }
-        }
-    }
+    SortBattlersBySpeed(sBattlerByTurnOrder, FALSE);
 
     //Mon Icon
     for (i = 0; i < MAX_SPEED_MONS_SHOWN; i++) {

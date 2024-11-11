@@ -1,7 +1,9 @@
-#ifndef GUARD_BATTLE_AI_MAIN_H
-#define GUARD_BATTLE_AI_MAIN_H
+#ifndef GUARD_BATTLE_AI_NEW_H
+#define GUARD_BATTLE_AI_NEW_H
 
 #include "global.h"
+#include "battle.h"
+#include "battle_main.h"
 
 #define AI_CHOICE_FLEE 4
 #define AI_CHOICE_WATCH 5
@@ -12,26 +14,35 @@
 #define AI_SCORE_IMMUNE 0
 #define AI_SCORE_ADJUST(percent, score) AdjustForChance(percent, score)
 
-union SpeedValue {
-    struct SpeedStruct {
-        u16 afterYou:1;
-        u16 dazedNegation:1;
-        u16 goesFirst:2;
-        u16 goesLastNegation:2;
-        u16 effectiveSpeed;
-    } speedStruct;
-    u32 comparable;
+enum {
+    AI_MISSES_THIS_TURN = 1,
+    AI_MISSES_THIS_TURN_IF_FIRST = 2,
 };
+
+typedef enum {
+    AI_PHASE_BASIC,
+    AI_PHASE_ACCURACY,
+    AI_PHASE_DAMAGE,
+    // AI_PHASE_RETALIATION,
+    // AI_PHASE_TURN_TWO,
+    // AI_PHASE_SECONDARY,
+    // AI_PHASE_DISABLE,
+    // AI_PHASE_FLINCH,
+    // AI_PHASE_PROTECT,
+    // AI_PHASE_END_TURN,
+    AI_PHASE_COUNT,
+} AiProcessingPhase;
 
 struct MoveState {
     union SpeedValue speedValue;
+    int score;
     u16 koChance;
     u16 damage;
     u16 multiHitExpect;
     u8 multiplier;
     u8 critChance;
-    u8 targetFlags;
     u8 accuracy;
+    u8 target:2;
     u8 falseSwipe:1;
     u8 contact:1;
     u8 seeKo:1;
@@ -39,7 +50,27 @@ struct MoveState {
     u8 breakSubstitute:1;
     u8 breakDisguise:1;
     u8 cancelled:1;
+    u8 missesThisTurn:2;
 };
+
+enum
+{
+    AI_CANCEL_DETERMINISTIC,
+    AI_CANCEL_25,
+    AI_CANCEL_33,
+    AI_CANCEL_50,
+};
+
+struct MoveContainer
+{
+    struct MoveState targetData[3];
+    u16 move;
+    u8 targetFlags;
+    u8 count:2;
+    u8 cancellationState:2;
+    u8 unusable:1;
+};
+
 
 struct BattlerState
 {
@@ -48,7 +79,7 @@ struct BattlerState
 
 
 struct AiData {
-    struct MoveState moveState[MAX_BATTLERS_COUNT][MAX_MON_MOVES];
+    struct MoveContainer moveState[MAX_BATTLERS_COUNT][MAX_MON_MOVES + 1];
     struct BattlerState battlerState[MAX_BATTLERS_COUNT];
 };
 
@@ -57,14 +88,5 @@ struct DisguiseSimulation {
 };
 
 int GetAiDecision(int battler);
-int AdjustForChance(int chance, int score);
-int BelowHalfHp(int battler);
-void PopulateAbilities(int battler, struct AiData* aiData);
-int HasAbility(int battler, int ability, struct AiData* aiData);
-int AiIsUnaware(int battler, struct AiData* aiData);
-int AreSameSide(int battler1, int battler2);
-int IsSleeping(int battler, struct AiData* aiData);
-int SeesSunlight(int battler, struct AiData* aiData);
-int AdjustForChance(int chance, int score);
 
 #endif

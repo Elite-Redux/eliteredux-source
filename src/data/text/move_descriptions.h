@@ -1063,8 +1063,8 @@ static const u8 sMoveTwoLineDescription_MoveFollowMe[] = _(
     "foes attack only the user.");
 
 static const u8 sMoveTwoLineDescription_MoveNaturePower[] = _(
-    "The type of attack varies\n"
-    "depending on the location.");
+    "Type and power changes\n"
+    "depending on the terrain.");
 
 static const u8 sMoveTwoLineDescription_MoveCharge[] = _(
     "Charges power to boost the\n"
@@ -3304,7 +3304,7 @@ static const u8 sMoveTwoLineDescription_MoveYggdrasilForce[] = _(
     "Lowers user's Atk and Def.");
 
 static const u8 sMoveTwoLineDescription_MoveDrainBrain[] = _(
-    "Lowers targets SpDef.\n"
+    "Lowers targets SpAtk.\n"
     "Heals that much HP.");
 
 static const u8 sMoveTwoLineDescription_MovePsychokineticSlam[] = _(
@@ -4193,7 +4193,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_FOCUS_PUNCH - 1] = sMoveTwoLineDescription_MoveFocusPunch,
     [MOVE_SMELLING_SALTS - 1] = sMoveTwoLineDescription_MoveSmellingSalts,
     [MOVE_FOLLOW_ME - 1] = sMoveTwoLineDescription_MoveFollowMe,
-    [MOVE_NATURE_POWER - 1] = sMoveTwoLineDescription_MoveTerrainPulse,
+    [MOVE_NATURE_POWER - 1] = sMoveTwoLineDescription_MoveNaturePower,
     [MOVE_CHARGE - 1] = sMoveTwoLineDescription_MoveCharge,
     [MOVE_TAUNT - 1] = sMoveTwoLineDescription_MoveTaunt,
     [MOVE_HELPING_HAND - 1] = sMoveTwoLineDescription_MoveHelpingHand,
@@ -5009,7 +5009,7 @@ static const u8 sMoveFourLineDescription_MovePetalDance[] = _("The user attacks\
 static const u8 sMoveFourLineDescription_MoveStringShot[] = _("The foe is bound\nwith strings shot\nfrom the mouth to\nreduce its Speed.");
 static const u8 sMoveFourLineDescription_MoveDragonRage[] = _("The foe is hit with\na shock wave that\ncan damage Fairy\nPokémon neutrally.");
 static const u8 sMoveFourLineDescription_MoveFireSpin[] = _("The foe is trapped\nin an intense spiral\nof fire that rages\nfour or five turns.");
-static const u8 sMoveFourLineDescription_MoveThunderShock[] = _("An electric shock\nattack with a 10%\nparalyze chance.");
+static const u8 sMoveFourLineDescription_MoveThunderShock[] = _("An electric shock\nattack with a 30%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveThunderbolt[] = _("A strong electrical\nattack with a\n10% paralyze\nchance.");
 static const u8 sMoveFourLineDescription_MoveThunderWave[] = _("A weak electric\nshock that is sure\nto cause paralysis\nif it hits.");
 static const u8 sMoveFourLineDescription_MoveThunder[] = _("A brutal lightning\nattack. 30%\nparalyze chance.\nWeather-based.");
@@ -5192,7 +5192,7 @@ static const u8 sMoveFourLineDescription_MoveFacade[] = _("An attack that is\nbo
 static const u8 sMoveFourLineDescription_MoveFocusPunch[] = _("Moves last.\nDamage reduced to\n40BP if hit.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveSmellingSalts[] = _("Deals damage and\ncures the user's\nstatus.");
 static const u8 sMoveFourLineDescription_MoveFollowMe[] = _("The user draws\nattention to itself,\nmaking foes attack\nonly the user.");
-static const u8 sMoveFourLineDescription_MoveNaturePower[] = _("An attack that\nchanges type\ndepending on the\nuser's location.");
+static const u8 sMoveFourLineDescription_MoveNaturePower[] = _("This move's type\nand power changes\ndepending on the\nterrain when used.");
 static const u8 sMoveFourLineDescription_MoveCharge[] = _("The user charges\npower to boost the\nElectric move it\nuses next.");
 static const u8 sMoveFourLineDescription_MoveTaunt[] = _("The foe is taunted\ninto a rage that\nallows it to use\nonly attack moves.");
 static const u8 sMoveFourLineDescription_MoveHelpingHand[] = _("A move that boosts\nthe power of the\nally's attack in a\nbattle.");
@@ -5762,7 +5762,7 @@ static const u8 sMoveFourLineDescription_MoveTripleArrows[] = _("50% chance to d
 static const u8 sMoveFourLineDescription_MoveDoubleLariat[] = _("User hits both foes\nwith whirling arms.\nFoes cannot use any\nsound moves after.");
 static const u8 sMoveFourLineDescription_MoveLeechBlade[] = _("Heals 50% of damage \ndone to the foe.\nKeen Edge boost.");
 static const u8 sMoveFourLineDescription_MoveYggdrasilForce[] = _("Nature's overcharges\nthe user's strike.\nLowers Atk and Def.");
-static const u8 sMoveFourLineDescription_MoveDrainBrain[] = _("Saps the foe's SpDef\nand heals HP by\nthe same amount.");
+static const u8 sMoveFourLineDescription_MoveDrainBrain[] = _("Saps the foe's SpAtk\nand heals HP by\nthe same amount.");
 static const u8 sMoveFourLineDescription_MovePsychokineticSlam[] = _("User charges, boosted\nby psychic power.\n33% recoil damage.");
 static const u8 sMoveFourLineDescription_MoveEsperWing[] = _("The user slashes the\nfoe with aura wings.\nDrains 50% HP.\nAir-based.");
 static const u8 sMoveFourLineDescription_MoveMortalSpin[] = _("The user spins and\nremoves all hazards.\nThis also poisons\nthe foe.");
@@ -6191,7 +6191,7 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_FOCUS_PUNCH - 1] = sMoveFourLineDescription_MoveFocusPunch,
     [MOVE_SMELLING_SALTS - 1] = sMoveFourLineDescription_MoveSmellingSalts,
     [MOVE_FOLLOW_ME - 1] = sMoveFourLineDescription_MoveFollowMe,
-    [MOVE_NATURE_POWER - 1] = sMoveFourLineDescription_MoveTerrainPulse,
+    [MOVE_NATURE_POWER - 1] = sMoveFourLineDescription_MoveNaturePower,
     [MOVE_CHARGE - 1] = sMoveFourLineDescription_MoveCharge,
     [MOVE_TAUNT - 1] = sMoveFourLineDescription_MoveTaunt,
     [MOVE_HELPING_HAND - 1] = sMoveFourLineDescription_MoveHelpingHand,

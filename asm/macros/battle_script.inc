@@ -1192,6 +1192,7 @@
 	.macro switchoutabilities battler:req
 	.byte 0xe2
 	.byte \battler
+	tryendneutralizinggas \battler
 	restoreattackerandtargetfrom34
 	.endm
 
@@ -1437,10 +1438,6 @@
 
 	.macro playtrainerdefeatbgm battler:req
 	various \battler, VARIOUS_PLAY_TRAINER_DEFEATED_MUSIC
-	.endm
-
-	.macro stattextbuffer battler:req
-	various \battler, VARIOUS_STAT_TEXT_BUFFER
 	.endm
 
 	.macro switchinabilities battler:req
@@ -2026,7 +2023,8 @@
 
 @ helpful macros
 	.macro setstatchanger stat:req, stages:req, down:req
-	setbyte sSTATCHANGER \stat | \stages << 3 | \down << 7
+	various 0, VARIOUS_SET_ACTIVE_STAT_CHANGER
+	.byte \stat | \stages << 3 | \down << 7
 	.endm
 
 	.macro setmoveeffect effect:req
@@ -2416,7 +2414,9 @@
 	.4byte \failPtr
 	.endm
 
-	VARIOUS_SET_ABILITY_STATE
+	.macro dointimidate battler:req
+	various \battler, VARIOUS_DO_INTIMIDATE
+	.endm
 
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@

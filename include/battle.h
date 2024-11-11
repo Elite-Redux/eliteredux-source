@@ -149,6 +149,7 @@ struct VolatileStruct
     u8 trickOrTreat:1;
     u8 skyDropped:1;
     u8 skyDroppedBy:2;
+    u8 shouldClearSkyDrop:1;
     u8 dazed:3;
     u8 trepidation:2;
     u8 hazardDamaged:1;
@@ -247,7 +248,6 @@ struct TurnStruct
     u8 rototillerAffected:1;  // to be affected by rototiller
     u8 dancerUsedMove:1;
     u8 neutralizingGasRemoved:1;    // See VARIOUS_TRY_END_NEUTRALIZING_GAS
-    u8 pranksterElevated:1;
     u8 shouldTriggerSwitchItem:1;
     u8 haloed:1;
     u8 sleepTalk:1;
@@ -349,7 +349,6 @@ struct WishFutureKnock
     u8 wishCounter[MAX_BATTLERS_COUNT];
     u8 wishPartyId[MAX_BATTLERS_COUNT];
     u8 weatherDuration;
-    u8 knockedOffMons[2]; // Each battler is represented by a bit. The array entry is dependent on the battler's side.
 };
 
 struct AI_SavedBattleMon
@@ -407,6 +406,7 @@ struct SavedStackData
 {
     u16 abilityOverride;
     u8 multistringChooser;
+    u8 statChanger;
     u8 stackBattler1:2;
     u8 stackBattler2:2;
     u8 stackBattler3:2;
@@ -615,12 +615,13 @@ typedef enum
 
 struct ExtraAttackActionStruct
 {
-    u8 attacker:2;
-    u8 target:2;
-    u8 movePos:3;
     u16 ability;
     u16 move;
     u8 movePower;
+    u8 attacker:2;
+    u8 target:2;
+    u8 movePos:3;
+    u8 prankster:1;
 };
 
 struct BattleStruct

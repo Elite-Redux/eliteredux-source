@@ -25,7 +25,7 @@
 #define ABILITYEFFECT_MOVE_END_OTHER             14
 #define ABILITYEFFECT_NEUTRALIZINGGAS            15
 #define ABILITYEFFECT_AFTER_RECOIL               16
-#define ABILITYEFFECT_COPY_STATS                 17
+#define ABILITYEFFECT_REACTIVE                 17
 #define ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE     18
 #define ABILITYEFFECT_MOVE_END_EITHER            19
 // Special cases
@@ -282,7 +282,7 @@ bool32 CanFling(u8 battlerId);
 bool32 IsTelekinesisBannedSpecies(u16 species);
 bool32 IsHealBlockPreventingMove(u8 battler, u32 move);
 bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId);
-void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast);
+int SortBattlersBySpeed(u8 *battlers, bool8 slowToFast);
 bool32 TestSheerForceFlag(u8 battler, u16 move);
 void TryRestoreStolenItems(void);
 bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item);
@@ -290,7 +290,6 @@ void TrySaveExchangedItem(u8 battlerId, u16 stolenItem);
 bool32 IsPartnerMonFromSameTrainer(u8 battlerId);
 u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 execute);
 bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock);
-void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast);
 bool32 CompareStat(u8 battlerId, u8 statId, u8 cmpTo, u8 cmpKind);
 int StatLowerableOrMirrorArmor(int battler, int stat);
 bool32 TryRoomService(u8 battlerId);
@@ -347,13 +346,16 @@ void ReadActiveScriptInitialStackState();
 void SetActiveMultistringChooser(u8 messageId);
 void SetActiveAbilityPopupOverride(u16 messageId);
 void SetActiveStackBattler(u8 battler, u8 number);
+void SetActiveStatChanger(int stat, s8 change);
 u16 GetInnateInSlot(int level, u16 species, u8 position, u32 personality, u8 isPlayer);
 void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move);
 bool32 IsHealingMoveEffect(u16 effect);
 int IsMagicGuardProtected(int battler);
+int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType);
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
 u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
+int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType);
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u8* overrideBattler, u16* abilityPopup);
 u16 MulModifierDirect(u16 modifier, u16 val);
 void MulModifier(u16 *modifier, u16 val);
@@ -370,6 +372,20 @@ int GetBattlerAbility(int battler);
 void HandleFollowupAttackAbilities(int battler, int target, int move);
 int CheckAndSetOncePerTurnAbility(int battler, int ability);
 int IsStickyHold(int battler);
+
+typedef enum {
+    MULTIHIT_SINGLE,
+    MULTIHIT_TWO_TO_FIVE,
+    MULTIHIT_FOUR_OR_FIVE,
+    MULTIHIT_TWO,
+    MULTIHIT_THREE,
+    MULTIHIT_FIVE,
+    MULTIHIT_TRIPLE_KICK,
+    MULTIHIT_TEN_CAN_MISS,
+    MULTIHIT_TEN,
+    MULTIHIT_BEAT_UP,
+} MultiHitType;
+MultiHitType GetMultiHitType(int battler, int move);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);

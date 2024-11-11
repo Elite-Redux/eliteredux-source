@@ -14,6 +14,8 @@
 #include "constants/hold_effects.h"
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
+#include "battle_ai_new_util.h"
+#include "battle_ai_attack.h"
 
 #define AI_GET_MOVE_EFFECT_CHANCE 0
 
@@ -24,120 +26,119 @@ int GetFullChance(int battlerAttack, int move, int moveEffect, int chance, struc
 
 int HasSkillLink(int battler, struct AiData* aiData)
 {
-    return HasAbility(battler, ABILITY_SKILL_LINK, aiData) || HasAbility(battler, ABILITY_KUNOICHI_BLADE, aiData);
+    return BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE) || BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE);
 }
 
-int AdjustForMultihit(int damage, int battlerAtk, int move, struct AiData* aiData)
+int AdjustForMultihit(int damage, int battlerAtk, int move, struct MoveState* moveState, struct AiData* aiData)
 {
     int i, count = 0;
     // TODO: Handle substitute
-    aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(1);
+    moveState->multiHitExpect = UQ_4_12(1);
 
     switch (move)
     {
     case MOVE_WATER_SHURIKEN:
         REQUIRE(gBattleMons[battlerAtk].species == SPECIES_GRENINJA_ASH || gBattleMons[battlerAtk].species == SPECIES_GRENINJA_BATTLE_BOND)
-        aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(5);
+        moveState->multiHitExpect = UQ_4_12(5);
         return damage * 5;
     }
     switch (gBattleMoves[move].effect)
     {
     case EFFECT_MULTI_HIT:
         if (HasSkillLink(battlerAtk, aiData))
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(5);
+            moveState->multiHitExpect = UQ_4_12(5);
         else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_LOADED_DICE)
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(4.5);
+            moveState->multiHitExpect = UQ_4_12(4.5);
         else
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(3.17);
-        return ApplyModifier(aiData->moveState[battlerAtk][move].multiHitExpect, damage);
+            moveState->multiHitExpect = UQ_4_12(3.17);
+        return ApplyModifier(moveState->multiHitExpect, damage);
 
     case EFFECT_DOUBLE_HIT:
         count = gBattleMoves[move].argument;
         if (!count) count = 2;
-        aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(count);
+        moveState->multiHitExpect = UQ_4_12(count);
         return damage * count;
     
     case EFFECT_TRIPLE_KICK:
         if (HasSkillLink(battlerAtk, aiData))
         {
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(3);
+            moveState->multiHitExpect = UQ_4_12(3);
             return damage * 6;
         }
         else
         {
-            int accMul = gPercentToModifier[min(aiData->moveState[battlerAtk][move].accuracy, 100)];
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(1) + MulModifierDirect(UQ_4_12(1) + accMul, accMul);
+            int accMul = gPercentToModifier[min(moveState->accuracy, 100)];
+            moveState->multiHitExpect = UQ_4_12(1) + MulModifierDirect(UQ_4_12(1) + accMul, accMul);
             return damage + ApplyModifier(2 * damage + ApplyModifier(accMul, damage), accMul);
         }
     
     case EFFECT_TEN_HITS:
         if (HasSkillLink(battlerAtk, aiData))
         {
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(10);
+            moveState->multiHitExpect = UQ_4_12(10);
             return damage * 10;
         }
         else
         {
-            int accMul = gPercentToModifier[min(aiData->moveState[battlerAtk][move].accuracy, 100)];
+            int accMul = gPercentToModifier[min(moveState->accuracy, 100)];
             for (i = 0; i < 9; i++)
             {
-                aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(1) + MulModifierDirect(aiData->moveState[battlerAtk][move].multiHitExpect, accMul);
+                moveState->multiHitExpect = UQ_4_12(1) + MulModifierDirect(moveState->multiHitExpect, accMul);
             }
-            return ApplyModifier(aiData->moveState[battlerAtk][move].multiHitExpect, damage);
+            return ApplyModifier(moveState->multiHitExpect, damage);
         }
     }
     
     if (!IsMoveAffectedByParentalBond(move, battlerAtk))
         return damage;
 
-    PopulateAbilities(battlerAtk, aiData);
     for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
     {
-        switch (0 /* TODO: Fix */)
+        switch (GetAbilityAtIndex(battlerAtk, i, FALSE))
         {
         case ABILITY_PARENTAL_BOND:
         case ABILITY_HYPER_AGGRESSIVE:
         case ABILITY_ICE_COLD_HUNTER:
         case ABILITY_RAGING_GODDESS:
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(2);
+            moveState->multiHitExpect = UQ_4_12(2);
             return damage * 125 / 100;
             
         case ABILITY_RAGING_BOXER:
         case ABILITY_STEEL_BEETLE:
             REQUIRE(IS_IRON_FIST(battlerAtk, move))
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(2);
+            moveState->multiHitExpect = UQ_4_12(2);
             return damage * 140 / 100;
         
         case ABILITY_DUAL_WIELD:
             REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(2);
+            moveState->multiHitExpect = UQ_4_12(2);
             return damage * 140 / 100;
         
         case ABILITY_DUAL_HAMMER:
             REQUIRE(gBattleMoves[move].hammerBased)
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(2);
+            moveState->multiHitExpect = UQ_4_12(2);
             return damage * 140 / 100;
             
         case ABILITY_RAGING_MOTH:
             REQUIRE(gBattleMoves[move].type == TYPE_FIRE)
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(2);
+            moveState->multiHitExpect = UQ_4_12(2);
             return damage * 140 / 100;
         
         case ABILITY_DEVOURER:
         case ABILITY_PRIMAL_MAW:
             REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(2);
+            moveState->multiHitExpect = UQ_4_12(2);
             return damage * 140 / 100;
         
         case ABILITY_MULTI_HEADED:
             if (gBaseStats[gBattleMons[battlerAtk].species].flags & F_TWO_HEADED)
             {
-                aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(2);
+                moveState->multiHitExpect = UQ_4_12(2);
                 return damage * 125 / 100;
             }
             if (gBaseStats[gBattleMons[battlerAtk].species].flags & F_THREE_HEADED)
             {
-                aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(3);
+                moveState->multiHitExpect = UQ_4_12(3);
                 return damage * 135 / 100;
             }
             break;
@@ -160,7 +161,7 @@ int AdjustForMultihit(int damage, int battlerAtk, int move, struct AiData* aiDat
                     && !GetMonData(&party[j], MON_DATA_STATUS))
                         count++;
             }
-            aiData->moveState[battlerAtk][move].multiHitExpect = UQ_4_12(1 + count);
+            moveState->multiHitExpect = UQ_4_12(1 + count);
             return damage * (100 + 10 * count) / 100;
             }
         }
@@ -176,7 +177,7 @@ int CheckPowder(int battlerAtk, int move)
     return (type == TYPE_FIRE && gBattleMons[battlerAtk].status2 & STATUS2_POWDER);
 }
 
-int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* effectiveness, struct AiData* aiData)
+int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* effectiveness, struct MoveState* moveState, struct AiData* aiData)
 {
     int damage, ignored, absorption, statId;
     u16 ability;
@@ -204,14 +205,14 @@ int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* eff
         *effectiveness = 0;
         return 0;
     }
-    return (aiData->moveState[battlerAtk][move].damage = AdjustForMultihit(damage, battlerAtk, move, aiData));
+    return (moveState->damage = AdjustForMultihit(damage, battlerAtk, move, moveState, aiData));
 }
 
 #define AI_CALC_DAMAGE \
-score = ScoreDamage(battlerAtk, battlerDef, move, &moveType, &effectiveness, aiData); \
+score = ScoreDamage(battlerAtk, battlerDef, move, &moveType, &effectiveness, moveState, aiData); \
 if (!effectiveness) return score;
 
-int ScoreArgument(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
+int ScoreArgument(int battlerAtk, int battlerDef, int move, struct MoveState* moveState, struct AiData* aiData)
 {
     int argument = gBattleMoves[move].argument;
     int certain = argument & MOVE_EFFECT_CERTAIN;
@@ -315,7 +316,7 @@ case label: \
 LOCAL_LABEL(label):
 #define GOTO(label) goto LOCAL_LABEL(label)
 
-int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int turn, u8 moveType, struct AiData* aiData)
+int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int turn, u8 moveType, struct MoveState* moveState, struct AiData* aiData)
 {
     int i, score;
     u16 effectiveness;
@@ -665,7 +666,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_PP_DOWN(battlerDef, 4);
 
     CASE_AND_LABEL(EFFECT_FALSE_SWIPE)
-        aiData->moveState[battlerAtk][move].falseSwipe = TRUE;
+        moveState->falseSwipe = TRUE;
         GOTO(EFFECT_HIT);
 
     CASE_AND_LABEL(EFFECT_HEAL_BELL)
@@ -786,7 +787,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         GOTO(EFFECT_MORNING_SUN);
 
     CASE_AND_LABEL(EFFECT_MOONLIGHT)
-        if (HasAbility(battlerAtk, ABILITY_MOON_SPIRIT, aiData)) return AI_SCORE_HEAL(battlerAtk, 66);
+        if (BattlerHasAbility(battlerAtk, ABILITY_MOON_SPIRIT, FALSE)) return AI_SCORE_HEAL(battlerAtk, 66);
         GOTO(EFFECT_MORNING_SUN);
 
     CASE_AND_LABEL(EFFECT_HIDDEN_POWER)
@@ -1308,7 +1309,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_SPATK_UP(battlerAtk, 1) + AI_SCORE_SPDEF_UP(battlerAtk, 1) + AI_SCORE_SPEED_UP(battlerAtk, 1);
 
     CASE_AND_LABEL(EFFECT_COIL)
-        if ((HasAbility(battlerAtk, ABILITY_COIL_UP, aiData) || HasAbility(battlerAtk, ABILITY_SIDEWINDER, aiData))
+        if ((BattlerHasAbility(battlerAtk, ABILITY_COIL_UP, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_SIDEWINDER, FALSE))
             && !(gStatuses4[battlerAtk] & STATUS4_COILED))
             score += AI_SCORE_COILED_UP;
         return score + AI_SCORE_ATTACK_UP(battlerAtk, 1) + AI_SCORE_DEFENSE_UP(battlerAtk, 1) + AI_SCORE_ACC_UP(battlerAtk, 1);
@@ -1553,7 +1554,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_MAGNETIC_FLUX)
         // if (IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) score += AI_SCORE_PARALYSIS(battlerDef);
-        if (HasAbility(battlerAtk, ABILITY_PLUS, aiData) || HasAbility(battlerAtk, ABILITY_MINUS, aiData))
+        if (BattlerHasAbility(battlerAtk, ABILITY_PLUS, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_MINUS, FALSE))
             score += AI_SCORE_DEFENSE_UP(battlerDef, 1) + AI_SCORE_SPDEF_UP(battlerDef, 1);
         return score;
 
@@ -1570,7 +1571,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return score;
 
     CASE_AND_LABEL(EFFECT_STRENGTH_SAP)
-        return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_ATK, 0, 0, TRUE, FALSE, AiIsUnaware(gBattlerAttacker), FALSE););
+        return AI_SCORE_ATTACK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_ATK, 0, 0, TRUE, FALSE, IsUnaware(gBattlerAttacker), FALSE););
 
     CASE_AND_LABEL(EFFECT_MIND_BLOWN)
         // TODO: Score damage loss
@@ -1821,7 +1822,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
         return AI_SCORE_INVERSE_ROOM(INVERSE_ROOM_DURATION);
 
     CASE_AND_LABEL(EFFECT_DRAIN_BRAIN)
-        return AI_SCORE_SPATK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_SPATK, 0, 0, TRUE, FALSE, AiIsUnaware(gBattlerAttacker), FALSE););
+        return AI_SCORE_SPATK_UP(battlerDef, -1) + AI_SCORE_HEAL_FIXED(CalculateStat(battlerAtk, STAT_SPATK, 0, 0, TRUE, FALSE, IsUnaware(gBattlerAttacker), FALSE););
 
     CASE_AND_LABEL(EFFECT_TRIPLE_ARROWS)
         AI_CALC_DAMAGE;
@@ -2066,4 +2067,23 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     }
 
     return AI_SCORE_IMMUNE;
+}
+
+int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData)
+{
+    u16 parentalBondSpread[6] = { 1 };
+
+
+    if (IS_MOVE_STATUS(move)) return 0;
+
+    switch (gBattleMoves[move].effect)
+    {
+    case EFFECT_SUPER_FANG:
+    case EFFECT_SUPER_FANG_HAZE:
+        /* code */
+        break;
+    
+    default:
+        break;
+    }
 }

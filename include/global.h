@@ -45,6 +45,9 @@
 #define REQUIRE(effect) if (!(effect)) break;
 #define REQUIRE_NOT(effect) if (effect) break;
 
+#define FILTER(effect) if (!(effect)) continue;
+#define FILTER_NOT(effect) if (effect) continue;
+
 // GameFreak used a macro called "NELEMS", as evidenced by
 // AgbAssert calls.
 #define NELEMS(arr) (sizeof(arr)/sizeof(*(arr)))
@@ -59,6 +62,8 @@
 #define DEBUG_BUILD
 #define DEBUG_POKEMON_MENU   TRUE
 #define CURRENT_GAME_VERSION 1046
+
+#define PRINT_BATTLE_SCRIPT_TRACING FALSE
 
 // free saveblock 1 defines             If defined it will free the space
 #define FREE_TRAINER_HILL               //frees up trainer hill data. 28 bytes.                        WARNING THIS HAS BEEN SHOWN TO BREAK MULTI BATTLES

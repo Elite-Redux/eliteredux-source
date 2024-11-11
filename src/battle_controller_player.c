@@ -1545,8 +1545,7 @@ void PrintBattleWindow_MoveSelection(void)
     SetTypeBeforeUsingMove(move, gActiveBattler);
     GET_MOVE_TYPE(move, moveType);
     maxDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MAX_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
-    immune = TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16*) &ignored);
-    if (!immune) immune = TestImmunityAbilities(target, gActiveBattler, move, moveType, (const u8**)&ignored, (u8*)&ignored, (u16*)&ignored);
+    immune = !typeEffectivenessMultiplier || TestAbsorbingAbilitiesOnly(target, gActiveBattler, move, moveType) || TestImmunityAbilitiesOnly(target, gActiveBattler, move, moveType);
     x2 = SPACE_BETWEEN_MOVE_NAME_AND_DESCRIPTION; //Default
 
     if (gBattleMoves[move].type != gBattleMoves[move].type2 && gBattleMoves[move].type2 != TYPE_NORMAL && gBattleMoves[move].type2 != TYPE_NONE)
@@ -1768,22 +1767,7 @@ void PrintBattleWindow_MoveSelection(void)
         case MOVE_SPEED_CALCULATION:{
             u16 battlertoCheck, monSpeed;
             u8 sBattlerByTurnOrder[gBattlersCount];
-
-            for (i = 0; i < gBattlersCount; i++)
-                sBattlerByTurnOrder[i] = i;
-
-            for (i = 0; i < gBattlersCount - 1; i++)
-            {
-                for (j = i + 1; j < gBattlersCount; j++)
-                {
-                    if (GetWhoStrikesFirst(sBattlerByTurnOrder[i], sBattlerByTurnOrder[j], TRUE) != 0)
-                    {
-                        u8 temp = sBattlerByTurnOrder[i];
-                        sBattlerByTurnOrder[i] = sBattlerByTurnOrder[j];
-                        sBattlerByTurnOrder[j] = temp;
-                    }
-                }
-            }
+            SortBattlersBySpeed(sBattlerByTurnOrder, FALSE);
 
             for (i = 0; i < gBattlersCount; i++)
             {
@@ -1882,12 +1866,17 @@ void PrintBattleWindow_MoveSelection(void)
                     //Can KO - Todo: Check calculation
                     if (gBattleMoves[newMove].split != SPLIT_STATUS && gBattleMoves[newMove].power > 0) {
                         u8 moveType = gBattleMoves[newMove].type;
+                        if (ShouldSetMoldBreaker(target, newMove)) gHitMarker |= HITMARKER_MOLD_BREAKER;
                         SetTypeBeforeUsingMove(newMove, target);
                         GET_MOVE_TYPE(newMove, moveType);
-                        moveDamage = CalculateMoveDamage(newMove, target, gActiveBattler, &moveType, 0, FALSE, FALSE, FALSE);
+                        moveDamage = CalculateMoveDamageAndEffectiveness(newMove, target, gActiveBattler, &moveType, &typeEffectivenessMultiplier);
+                        if (!typeEffectivenessMultiplier
+                            || TestAbsorbingAbilitiesOnly(gActiveBattler, target, newMove, moveType)
+                            || TestImmunityAbilitiesOnly(gActiveBattler, target, newMove, moveType))
+                            moveDamage = 0;
                         //gSwapDamageCategory = FALSE;
                         
-                        if (targetCurrentHp <= moveDamage && heldItem != ITEM_FOCUS_SASH && targetCurrentHp == gBattleMons[gActiveBattler].maxHP){
+                        if (targetCurrentHp <= moveDamage && !(heldItem == ITEM_FOCUS_SASH && targetCurrentHp == gBattleMons[gActiveBattler].maxHP)){
                             switch (battleTheme){
                                 case THEME_DARK:
                                     BlitBitmapToWindow(windowId, sTheme_Dark_Can_KO_Mark_Gfx,    ((x + 10) * 8) + x2 + 4, ((y + i) * 8) + y2 + 4, 8, 8);

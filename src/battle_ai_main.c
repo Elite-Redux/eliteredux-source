@@ -223,8 +223,6 @@ u8 BattleAI_ChooseMoveOrAction(void)
     else
         ret = ChooseMoveOrAction_Doubles();
     
-    // Clear protect structures, some flags may be set during AI calcs
-    // e.g. pranksterElevated from GetMovePriority
     memset(&gRoundStructs[gActiveBattler], 0, sizeof(struct RoundStruct));
     gRoundStructs[gActiveBattler].protected = protected;
     
@@ -732,9 +730,9 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         if (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move))
         {
             int ignored;
-            if (TestAbsorbingAbilities(battlerDef, battlerAtk, move, moveType, &ignored, (u16*)&ignored))
+            if (TestAbsorbingAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
                 RETURN_SCORE_MINUS(20);
-            if (TestImmunityAbilities(battlerDef, battlerAtk, move, moveType, (const u8**)&ignored, (u8*)&ignored, (u16*)&ignored))
+            if (TestImmunityAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
                 RETURN_SCORE_MINUS(20);
             
 
@@ -866,7 +864,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_ANTICIPATION)
             && !GetSingleUseAbilityCounter(battlerDef, ABILITY_ANTICIPATION)
             && CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0)
-            && GetTotalAccuracy(battlerAtk, battlerDef, move) <= 100)
+            && GetTotalAccuracy(battlerAtk, battlerDef, move, NULL) <= 100)
             RETURN_SCORE_MINUS(5);
         
         //Wonder Guard

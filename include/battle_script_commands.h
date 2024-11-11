@@ -2,6 +2,7 @@
 #define GUARD_BATTLE_SCRIPT_COMMANDS_H
 
 #include "constants/pokemon.h"
+#include "battle_ai_new.h"
 
 #define WINDOW_CLEAR            0x1
 #define WINDOW_x80              0x80
@@ -40,7 +41,7 @@ extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLON
 void CheckForBadEggs(void);
 s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility);
 s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move);
-u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move);
+u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState* moveState);
 u8 GetBattlerTurnOrderNum(u8 battlerId);
 bool32 NoAliveMonsForEitherParty(void);
 void SetMoveEffect(bool32 primary, u32 certain);
@@ -76,7 +77,7 @@ void RemoveItem(u8 battler);
 u8 GetCatchingBattler(void);
 u32 IsDesertCloakProtected(u32 battler);
 u8 getStatToLowerFromIntimidateClone(u16 ability, u8 num);
-bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler, u8 stat, u16 ability);
+bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler);
 void SetStatChanger(u8 statId, s8 change);
 u8 StatBuffValue(s8 change);
 s8 ChangeStatBuffsImplicit(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
@@ -88,6 +89,8 @@ void ClearBattlerAffectedFlag(int attacker, int target, int ability);
 int GetWeatherChangeMultistringChooser(int weather);
 int ShouldSetMoldBreaker(int battler, int move);
 int EatTargetBerry(int battler, int target);
+void ClearPowerOfAlchemyState(int alchemyBattler, int battler);
+int UpdateBattlerItem(int battler, int newItem);
 
 extern void (* const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];
