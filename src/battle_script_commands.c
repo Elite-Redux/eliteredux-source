@@ -8957,7 +8957,7 @@ static void Cmd_various(void)
         break;
     case VARIOUS_SET_ACTIVE_STAT_CHANGER:
         i = READ_8_INC;
-        SetActiveStatChanger(GET_STAT_BUFF_ID(i), GET_STAT_BUFF_VALUE_WITH_SIGN(i));
+        SetActiveStatChanger(GET_STAT_BUFF_ID(i), (i & STAT_BUFF_NEGATIVE ? -1 : 1) * (GET_STAT_BUFF_VALUE(i)));
         break;
     case VARIOUS_SWITCHIN_ABILITIES:
         REQUIRE(IsBattlerAlive(gActiveBattler))
