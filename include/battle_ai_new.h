@@ -19,6 +19,20 @@ enum {
     AI_MISSES_THIS_TURN_IF_FIRST = 2,
 };
 
+typedef enum {
+    AI_PHASE_BASIC,
+    AI_PHASE_ACCURACY,
+    AI_PHASE_DAMAGE,
+    // AI_PHASE_RETALIATION,
+    // AI_PHASE_TURN_TWO,
+    // AI_PHASE_SECONDARY,
+    // AI_PHASE_DISABLE,
+    // AI_PHASE_FLINCH,
+    // AI_PHASE_PROTECT,
+    // AI_PHASE_END_TURN,
+    AI_PHASE_COUNT,
+} AiProcessingPhase;
+
 struct MoveState {
     union SpeedValue speedValue;
     int score;

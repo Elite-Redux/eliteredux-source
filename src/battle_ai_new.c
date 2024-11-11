@@ -22,20 +22,6 @@ int ScoreMove(int battlerAtk, int battlerDef, int move, int targets, struct AiDa
 
 }
 
-typedef enum {
-    AI_PHASE_BASIC,
-    AI_PHASE_ACCURACY,
-    AI_PHASE_DAMAGE,
-    // AI_PHASE_RETALIATION,
-    // AI_PHASE_TURN_TWO,
-    // AI_PHASE_SECONDARY,
-    // AI_PHASE_DISABLE,
-    // AI_PHASE_FLINCH,
-    // AI_PHASE_PROTECT,
-    // AI_PHASE_END_TURN,
-    AI_PHASE_COUNT,
-} AiProcessingPhase;
-
 void ReplaceDisguise(struct DisguiseSimulation* actual)
 {
 

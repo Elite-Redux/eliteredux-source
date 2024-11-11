@@ -15,6 +15,7 @@
 #include "battle_ai_new.h"
 #include "battle_ai_scoring.h"
 #include "battle_ai_new_util.h"
+#include "battle_ai_attack.h"
 
 #define AI_GET_MOVE_EFFECT_CHANCE 0
 
@@ -2066,4 +2067,23 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     }
 
     return AI_SCORE_IMMUNE;
+}
+
+int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData)
+{
+    u16 parentalBondSpread[6] = { 1 };
+
+
+    if (IS_MOVE_STATUS(move)) return 0;
+
+    switch (gBattleMoves[move].effect)
+    {
+    case EFFECT_SUPER_FANG:
+    case EFFECT_SUPER_FANG_HAZE:
+        /* code */
+        break;
+    
+    default:
+        break;
+    }
 }

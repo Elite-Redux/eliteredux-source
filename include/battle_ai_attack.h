@@ -1,0 +1,4 @@
+#ifndef GUARD_BATTLE_AI_ATTACK_H
+#define GUARD_BATTLE_AI_ATTACK_H
+
+#endif

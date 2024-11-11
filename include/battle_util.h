@@ -373,6 +373,20 @@ void HandleFollowupAttackAbilities(int battler, int target, int move);
 int CheckAndSetOncePerTurnAbility(int battler, int ability);
 int IsStickyHold(int battler);
 
+typedef enum {
+    MULTIHIT_SINGLE,
+    MULTIHIT_TWO_TO_FIVE,
+    MULTIHIT_FOUR_OR_FIVE,
+    MULTIHIT_TWO,
+    MULTIHIT_THREE,
+    MULTIHIT_FIVE,
+    MULTIHIT_TRIPLE_KICK,
+    MULTIHIT_TEN_CAN_MISS,
+    MULTIHIT_TEN,
+    MULTIHIT_BEAT_UP,
+} MultiHitType;
+MultiHitType GetMultiHitType(int battler, int move);
+
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
 bool32 IsRolePlayBannedAbility(u16 ability);

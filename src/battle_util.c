@@ -115,14 +115,6 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
     ABILITY_TRUANT,
 };
 
-static const u16 sTwoStrikeMoves[] =
-{
-    MOVE_DOUBLE_IRON_BASH,
-    MOVE_TWINEEDLE,
-    MOVE_CROSS_POISON,
-    MOVE_DOUBLE_SHOCK,
-};
-
 u8 CalcBeatUpPower(void)
 {
     struct Pokemon *party;
@@ -4338,98 +4330,62 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_MULTIHIT_MOVES:
+        gBattleStruct->atkCancellerTracker++;
+        switch (GetMultiHitType(gBattlerAttacker, gCurrentMove))
         {
-            if (gBattleMoves[gCurrentMove].effect == EFFECT_MULTI_HIT)
+        default:
+            continue;
+        
+        case MULTIHIT_TWO:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 2;
+            break;
+        
+        case MULTIHIT_THREE:
+        case MULTIHIT_TRIPLE_KICK:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 3;
+            break;
+        
+        case MULTIHIT_FIVE:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 5;
+            break;
+        
+        case MULTIHIT_TEN:
+        case MULTIHIT_TEN_CAN_MISS:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 10;
+            break;
+        
+        case MULTIHIT_FOUR_OR_FIVE:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 4 + (Random() % 2);
+            break;
+        
+        case MULTIHIT_TWO_TO_FIVE:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 2 + (Random() % 2) + 2 * (Random() % 3 == 0);
+            break;
+        
+        case MULTIHIT_BEAT_UP:
             {
-                u16 ability = GetBattlerAbility(gBattlerAttacker);
+            struct Pokemon* party;
+            int i;
 
-                if (BattlerHasAbility(gBattlerAttacker, ABILITY_SKILL_LINK, FALSE))
-                {
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 5;
-                }
-                else if (BattlerHasAbility(gBattlerAttacker, ABILITY_KUNOICHI_BLADE, FALSE))
-                {
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 5;
-                } 
-                else if (ability == ABILITY_BATTLE_BOND
-                && gCurrentMove == MOVE_WATER_SHURIKEN
-                && gBattleMons[gBattlerAttacker].species == SPECIES_GRENINJA_ASH)
-                {
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 3;
-                }
-                else
-                {
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LOADED_DICE)
-                    {
-                        gTurnStructs[gBattlerAttacker].multiHitCounter = 4 + (Random() % 2);
-                    }
-                    else
-                    {
-                        // 2 and 3 hits: 33.3%
-                        // 4 and 5 hits: 16.7%
-                        gTurnStructs[gBattlerAttacker].multiHitCounter = Random() % 4;
-                        if (gTurnStructs[gBattlerAttacker].multiHitCounter > 2)
-                        {
-                            gTurnStructs[gBattlerAttacker].multiHitCounter = (Random() % 3);
-                            if (gTurnStructs[gBattlerAttacker].multiHitCounter < 2)
-                                gTurnStructs[gBattlerAttacker].multiHitCounter = 2;
-                            else
-                                gTurnStructs[gBattlerAttacker].multiHitCounter = 3;
-                        }
-                        else
-                            gTurnStructs[gBattlerAttacker].multiHitCounter += 3;
-                    }
-                }
-
-                PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-            }
-            else if (IsTwoStrikesMove(gCurrentMove))
+            if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+                party = gPlayerParty;
+            else
+                party = gEnemyParty;
+            
+            for (i = 0; i < PARTY_SIZE; i++)
             {
-                gTurnStructs[gBattlerAttacker].multiHitCounter = 2;
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
+                if (GetMonData(&party[i], MON_DATA_HP)
+                && GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
+                && !GetMonData(&party[i], MON_DATA_IS_EGG)
+                && !GetMonData(&party[i], MON_DATA_STATUS))
+                    gTurnStructs[gBattlerAttacker].multiHitCounter++;
             }
-            else if (gBattleMoves[gCurrentMove].effect == EFFECT_DOUBLE_HIT)
-            {
-                gTurnStructs[gBattlerAttacker].multiHitCounter = gBattleMoves[gCurrentMove].argument ? gBattleMoves[gCurrentMove].argument : 2;
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
+            gBattleCommunication[0] = 0; // For later
             }
-            else if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK)
-            {
-                gTurnStructs[gBattlerAttacker].multiHitCounter = 3;
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-            }
-            else if (gBattleMoves[gCurrentMove].effect == EFFECT_TEN_HITS)
-            {
-                gTurnStructs[gBattlerAttacker].multiHitCounter = 10;
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 2, 0)
-            }
-            #if B_BEAT_UP_DMG >= GEN_5
-            else if (gBattleMoves[gCurrentMove].effect == EFFECT_BEAT_UP)
-            {
-                struct Pokemon* party;
-                int i;
-
-                if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-                    party = gPlayerParty;
-                else
-                    party = gEnemyParty;
-                
-                for (i = 0; i < PARTY_SIZE; i++)
-				{
-					if (GetMonData(&party[i], MON_DATA_HP)
-					&& GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
-					&& !GetMonData(&party[i], MON_DATA_IS_EGG)
-					&& !GetMonData(&party[i], MON_DATA_STATUS))
-						gTurnStructs[gBattlerAttacker].multiHitCounter++;
-				}
-
-				gBattleCommunication[0] = 0; // For later
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-            }
-            #endif
-            gBattleStruct->atkCancellerTracker++;
             break;
         }
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1 + (gTurnStructs[gBattlerAttacker].multiHitCounter >= 10), 0)
+        break;
         case CANCELLER_END:
             break;
         }
@@ -4448,6 +4404,45 @@ u8 AtkCanceller_UnableToUseMove(void)
     }
     return effect;
 }
+
+MultiHitType GetMultiHitType(int battler, int move)
+{
+    if (IsTwoStrikesMove(move))
+        return MULTIHIT_TWO;
+    
+    switch (gBattleMoves[gCurrentMove].effect)
+    {
+    case EFFECT_MULTI_HIT:
+        if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_FIVE;
+        if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_FIVE;
+        if (move == MOVE_WATER_SHURIKEN
+            && BattlerHasAbility(battler, ABILITY_BATTLE_BOND, FALSE)
+            && gBattleMons[battler].species == SPECIES_GRENINJA_ASH)
+            return MULTIHIT_THREE;
+        if (GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE) return MULTIHIT_FOUR_OR_FIVE;
+        return MULTIHIT_TWO_TO_FIVE;
+    
+    case EFFECT_DOUBLE_HIT:
+        if (gBattleMoves[move].argument == 3) return MULTIHIT_THREE;
+        return MULTIHIT_TWO;
+    
+    case EFFECT_TRIPLE_KICK:
+        if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_THREE;
+        if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_THREE;
+        return MULTIHIT_TRIPLE_KICK;
+    
+    case EFFECT_TEN_HITS:
+        if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_TEN;
+        if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_TEN;
+        return MULTIHIT_TEN_CAN_MISS;
+    
+    case EFFECT_BEAT_UP:
+        return MULTIHIT_BEAT_UP;
+    }
+
+    return MULTIHIT_SINGLE;
+}
+
 
 // After Protean Activation.
 u8 AtkCanceller_UnableToUseMove2(void)
@@ -11962,11 +11957,15 @@ bool8 IsTwoStrikesMove(u16 move)
 {
     u32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sTwoStrikeMoves); i++)
+    switch (move)
     {
-        if (move == sTwoStrikeMoves[i])
-            return TRUE;
+    case MOVE_DOUBLE_IRON_BASH:
+    case MOVE_TWINEEDLE:
+    case MOVE_CROSS_POISON:
+    case MOVE_DOUBLE_SHOCK:
+        return TRUE;
     }
+
     return FALSE;
 }
 
