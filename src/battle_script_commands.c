@@ -6267,7 +6267,7 @@ static void Cmd_moveend(void)
             break;
         case MOVEEND_DANCER: // Special case because it's so annoying
             {
-                int i, dancersCount, include;
+                int i, dancersCount = 0, include = 0;
                 u8 battlers[MAX_BATTLERS_COUNT];
 
                 // Get list of battlers that can dance
