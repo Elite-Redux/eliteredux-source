@@ -14824,7 +14824,6 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         {
         int stat = GetHighestDefendingStatId(gBattlerTarget, TRUE) == STAT_DEF ? STAT_SPATK : STAT_ATK;
         REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-        SetStatChanger(stat, 1);
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         }
         return TRUE;
@@ -14866,7 +14865,6 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         {
         int stat = GetHighestStatId(battler, TRUE);
         REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-        SetStatChanger(stat, 1);
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         }
         return TRUE;
@@ -14877,7 +14875,6 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         {
         int stat = GetHighestStatId(battler, TRUE);
         REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-        SetStatChanger(stat, 1);
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         }
         return TRUE;
@@ -15118,7 +15115,6 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         int stat = GetHighestStatId(battler, TRUE);
         REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
         
-        SetStatChanger(stat, 1);
         gBattlerAttacker = battler;
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         return TRUE;
@@ -15407,7 +15403,6 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         REQUIRE(IsBattlerAlive(battler))
         REQUIRE(ChangeStatBuffs(battler, StatBuffValue(2), STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
 
-        SetStatChanger(STAT_SPEED, 2);
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         return TRUE;
     

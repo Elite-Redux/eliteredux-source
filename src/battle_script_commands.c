@@ -3635,9 +3635,9 @@ void SetMoveEffect(bool32 primary, u32 certain)
             case MOVE_EFFECT_ACC_PLUS_1:
             case MOVE_EFFECT_EVS_PLUS_1:
                 if (!NoAliveMonsForEitherParty()
-                  && ChangeStatBuffsImplicit(SET_STAT_BUFF_VALUE(1),
-                                    gBattleScripting.moveEffect - MOVE_EFFECT_ATK_PLUS_1 + 1,
-                                    affectsUser | STAT_BUFF_UPDATE_MOVE_EFFECT, 0))
+                    && ChangeStatBuffsImplicit(SET_STAT_BUFF_VALUE(1),
+                        gBattleScripting.moveEffect - MOVE_EFFECT_ATK_PLUS_1 + 1,
+                        affectsUser | STAT_BUFF_UPDATE_MOVE_EFFECT, 0))
                 {
                     gBattleScripting.animArg1 = gBattleScripting.moveEffect & ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                     gBattleScripting.animArg2 = 0;
@@ -3656,8 +3656,8 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     flags |= STAT_BUFF_ALLOW_PTR;
 
                 if (ChangeStatBuffsImplicit(StatBuffValue(-1),
-                  gBattleScripting.moveEffect - MOVE_EFFECT_ATK_MINUS_1 + 1,
-                  flags | STAT_BUFF_UPDATE_MOVE_EFFECT, gBattlescriptCurrInstr))
+                        gBattleScripting.moveEffect - MOVE_EFFECT_ATK_MINUS_1 + 1,
+                        flags | STAT_BUFF_UPDATE_MOVE_EFFECT, gBattlescriptCurrInstr))
                 {
                     gBattleScripting.animArg1 = gBattleScripting.moveEffect & ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                     gBattleScripting.animArg2 = 0;
@@ -3691,9 +3691,10 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 flags = affectsUser;
                 if (mirrorArmorReflected && !affectsUser)
                     flags |= STAT_BUFF_ALLOW_PTR;
+                
                 if (ChangeStatBuffsImplicit(StatBuffValue(-2),
-                                    gBattleScripting.moveEffect - MOVE_EFFECT_ATK_MINUS_2 + 1,
-                                    flags | STAT_BUFF_UPDATE_MOVE_EFFECT, gBattlescriptCurrInstr))
+                        gBattleScripting.moveEffect - MOVE_EFFECT_ATK_MINUS_2 + 1,
+                        flags | STAT_BUFF_UPDATE_MOVE_EFFECT, gBattlescriptCurrInstr))
                 {
                     gBattleScripting.animArg1 = gBattleScripting.moveEffect & ~(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN);
                     gBattleScripting.animArg2 = 0;
@@ -9025,7 +9026,6 @@ static void Cmd_various(void)
                 HANDLE_MOXIE:
                 REQUIRE(ChangeStatBuffs(gActiveBattler, 1, stat, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
                 gBattleScripting.abilityPopupOverwrite = ability;
-                SetStatChanger(stat, 1);
                 BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
                 break;
 
@@ -9080,7 +9080,6 @@ static void Cmd_various(void)
             
             case ABILITY_SUPER_STRAIN:
                 REQUIRE(ChangeStatBuffs(gActiveBattler, StatBuffValue(-1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL))
-                SetStatChanger(STAT_ATK, -1);
                 gBattleScripting.abilityPopupOverwrite = ability;
                 BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
                 return;
@@ -9185,7 +9184,6 @@ static void Cmd_various(void)
                 && CompareStat(gBattleScripting.battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
             {
                 ChangeStatBuffs(gStackBattler1, StatBuffValue(1), STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
-                SetStatChanger(STAT_SPATK, 1);
                 gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_HEART;
                 BattleScriptPush(runAgain);
                 gBattlescriptCurrInstr = BattleScript_ScriptingAbilityStatRaise;
@@ -10544,7 +10542,6 @@ static void Cmd_various(void)
                 {
                     if (ChangeStatBuffs(battler, StatBuffValue(change), state.stat, MOVE_EFFECT_AFFECTS_USER, NULL))
                     {
-                        SetStatChanger(state.stat, change);
                         BattleScriptCall(BattleScript_PerformStatUp);
                         if (!state.announced)
                         {
@@ -10588,7 +10585,6 @@ static void Cmd_various(void)
                             if (ChangeStatBuffs(state.battler, StatBuffValue(change), state.stat, MOVE_EFFECT_AFFECTS_USER, NULL))
                             {
                                 gBattlerAttacker = state.battler;
-                                SetStatChanger(state.stat, change);
                                 BattleScriptCall(change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown);
                                 if (!state.announced)
                                 {
@@ -10630,7 +10626,6 @@ static void Cmd_various(void)
                     if (ChangeStatBuffs(gEffectBattler, StatBuffValue(change), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
                     {
                         gBattlerAttacker = gEffectBattler;
-                        SetStatChanger(stat, change);
                         BattleScriptCall(change > 0 ? BattleScript_PerformStatUp : BattleScript_PerformStatDown);
                         if (!gTurnStructs[gEffectBattler].mirrorHerbStat)
                         {
@@ -12267,6 +12262,8 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
     bool8 dontSetBuffers = flags & STAT_BUFF_DONT_SET_BUFFERS;
     int updateMoveEffect;
     int ability;
+
+    SetStatChanger(statId, statValue & STAT_BUFF_NEGATIVE ? -(statValue & ~STAT_BUFF_NEGATIVE) : statValue);
 
     flags &= ~STAT_BUFF_DONT_SET_BUFFERS;
     flags &= ~MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES;
