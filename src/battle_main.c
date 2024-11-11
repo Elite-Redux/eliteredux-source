@@ -4018,6 +4018,7 @@ static void TryDoEventsBeforeFirstTurn(void)
         }
         gBattleStruct->firstTurnAbilityLoopCounter = 0;
         gBattleStruct->switchInAbilitiesCounter++;
+        if (gQueuedAttackCount) return;
     }
     ClearMiscTurnFlags();
     if (AbilityBattleEffects(ABILITYEFFECT_TRACE1, 0, 0, 0, 0) != 0)
