@@ -9906,7 +9906,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
     case EFFECT_MAGNITUDE:
     case EFFECT_EARTHQUAKE:
         if (GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN && !(gStatuses3[battlerDef] & STATUS3_SEMI_INVULNERABLE))
-            MulModifier(&modifier, UQ_4_12(0.5));
+            MulModifier(&modifier, UQ_4_12(1.0));
         break;
     case EFFECT_KNOCK_OFF:
         #if B_KNOCK_OFF_DMG >= GEN_6
