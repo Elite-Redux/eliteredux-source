@@ -184,9 +184,6 @@ int IsSleeping(int battler, struct AiData* aiData)
 
 int SeesSunlight(int battler, struct AiData* aiData)
 {
-    if (BattlerHasAbility(battler, ABILITY_CHLOROPLAST, FALSE)) return TRUE;
-    if (BattlerHasAbility(battler, ABILITY_BIG_LEAVES, FALSE)) return TRUE;
-    if (BattlerHasAbility(battler, ABILITY_SOLAR_FLARE, FALSE)) return TRUE;
     return IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY);
 }
 

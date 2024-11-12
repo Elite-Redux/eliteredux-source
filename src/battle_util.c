@@ -10508,32 +10508,28 @@ u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move)
     return 2;
 }
 
-u16 GetParentalBondMultiplier(int parentalBondType, int turn)
+u16 GetParentalBondMultiplier(MultihitType parentalBondType, int turn)
 {
     switch (parentalBondType)
     {
-    case ABILITY_PARENTAL_BOND:
+    case PARENTAL_BOND_HYPER_AGGRESSIVE:
         REQUIRE(turn)
         return UQ_4_12(0.25);
     
-    case ABILITY_MULTI_HEADED:
+    case PARENTAL_BOND_THREE_HEADED:
         if (turn == 1) return UQ_4_12(0.2);
         if (turn == 2) return UQ_4_12(0.15);
         break;
     
-    case ABILITY_MINION_CONTROL:
+    case PARENTAL_BOND_MINION_CONTROL:
         REQUIRE(turn)
         return UQ_4_12(0.1);
     
-    case ABILITY_PRIMAL_MAW:
-    case ABILITY_DEVOURER:
-    case ABILITY_RAGING_BOXER:
+    case PARENTAL_BOND_PRIMAL_MAW:
         REQUIRE(turn)
         return UQ_4_12(0.4);
 
-    case ABILITY_DUAL_HAMMER:
-    case ABILITY_DUAL_WIELD:
-    case ABILITY_RAGING_MOTH:
+    case PARENTAL_BOND_DUAL_WIELD:
         return UQ_4_12(0.7);
     }
     
@@ -10842,6 +10838,19 @@ s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, 
 {
     int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, FALSE, FALSE, FALSE, typeEffectivenessModifier);
     gSwapDamageCategory = FALSE;
+    return val;
+}
+
+int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, int fixedBasePower, struct MoveState* moveState, struct MoveContainer* moveContainer)
+{
+    u8 moveType = moveContainer->startingMoveType;
+    u16 typeEffectivenessModifier;
+    int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, &moveType, fixedBasePower, FALSE, 0, FALSE, &typeEffectivenessModifier);
+
+    if (typeEffectivenessModifier > UQ_4_12(1.0)) moveState->effectiveness = AI_EFFECTIVENESS_SE;
+    else if (typeEffectivenessModifier < UQ_4_12(1.0)) moveState->effectiveness = AI_EFFECTIVENESS_NVE;
+    
+    moveState->type = moveType;
     return val;
 }
 
@@ -16137,4 +16146,12 @@ int IsStickyHold(int battler)
     int ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);
     if (!ability) ability = BattlerHasAbility(battler, ABILITY_SUPERSWEET_SYRUP, TRUE);
     return ability;
+}
+
+int HasChloroplast(int battler)
+{
+    if (BattlerHasAbility(battler, ABILITY_CHLOROPLAST, FALSE)) return TRUE;
+    if (BattlerHasAbility(battler, ABILITY_BIG_LEAVES, FALSE)) return TRUE;
+    if (BattlerHasAbility(battler, ABILITY_SOLAR_FLARE, FALSE)) return TRUE;
+    return FALSE;
 }

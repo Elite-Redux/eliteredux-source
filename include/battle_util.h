@@ -76,6 +76,25 @@
 
 #define BATTLER_HEALING_BLOCKED(battlerId) (gStatuses3[battlerId] & STATUS3_HEAL_BLOCK || gBattleMons[battlerId].status1 & STATUS1_BLEED || IsAbilityOnOpposingSide(battlerId, ABILITY_PERMANENCE) || IsBloodStainAffected(battlerId))
 
+typedef enum {
+    MULTIHIT_SINGLE,
+    MULTIHIT_TWO_TO_FIVE,
+    MULTIHIT_FOUR_OR_FIVE,
+    MULTIHIT_TWO,
+    MULTIHIT_THREE,
+    MULTIHIT_FIVE,
+    MULTIHIT_TRIPLE_KICK,
+    MULTIHIT_TEN_CAN_MISS,
+    MULTIHIT_TEN,
+    MULTIHIT_BEAT_UP,
+    PARENTAL_BOND_START,
+    PARENTAL_BOND_HYPER_AGGRESSIVE = PARENTAL_BOND_START,
+    PARENTAL_BOND_PRIMAL_MAW,
+    PARENTAL_BOND_DUAL_WIELD,
+    PARENTAL_BOND_MINION_CONTROL,
+    PARENTAL_BOND_THREE_HEADED,
+} MultihitType;
+
 enum MiscMoveEffects
 {
     MISC_EFFECT_SUPEREFFECTIVE_BOOST = 1,
@@ -182,7 +201,7 @@ void HandleAction_ActionFinished(void);
 u8 GetBattlerForBattleScript(u8 caseId);
 bool8 IsSleepDisabled(u8 battlerId);
 bool8 IsSleepClauseDisablingMove(u8 battlerId, u16 move);
-u16 GetParentalBondMultiplier(int parentalBondType, int turn);
+u16 GetParentalBondMultiplier(MultihitType parentalBondType, int turn);
 void MarkAllBattlersForControllerExec(void); // unused
 bool32 IsBattlerMarkedForControllerExec(u8 battlerId);
 void MarkBattlerForControllerExec(u8 battlerId);
@@ -373,19 +392,8 @@ int GetBattlerAbility(int battler);
 void HandleFollowupAttackAbilities(int battler, int target, int move);
 int CheckAndSetOncePerTurnAbility(int battler, int ability);
 int IsStickyHold(int battler);
+int HasChloroplast(int battler);
 
-typedef enum {
-    MULTIHIT_SINGLE,
-    MULTIHIT_TWO_TO_FIVE,
-    MULTIHIT_FOUR_OR_FIVE,
-    MULTIHIT_TWO,
-    MULTIHIT_THREE,
-    MULTIHIT_FIVE,
-    MULTIHIT_TRIPLE_KICK,
-    MULTIHIT_TEN_CAN_MISS,
-    MULTIHIT_TEN,
-    MULTIHIT_BEAT_UP,
-} MultihitType;
 MultihitType GetMultihitType(int battler, int move);
 
 // Ability checks

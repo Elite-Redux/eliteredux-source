@@ -29,147 +29,6 @@ int HasSkillLink(int battler, struct AiData* aiData)
     return BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE) || BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE);
 }
 
-int AdjustForMultihit(int damage, int battlerAtk, int move, struct MoveState* moveState, struct AiData* aiData)
-{
-    int i, count = 0;
-    // TODO: Handle substitute
-    moveState->multiHitExpect = UQ_4_12(1);
-
-    switch (move)
-    {
-    case MOVE_WATER_SHURIKEN:
-        REQUIRE(gBattleMons[battlerAtk].species == SPECIES_GRENINJA_ASH || gBattleMons[battlerAtk].species == SPECIES_GRENINJA_BATTLE_BOND)
-        moveState->multiHitExpect = UQ_4_12(5);
-        return damage * 5;
-    }
-    switch (gBattleMoves[move].effect)
-    {
-    case EFFECT_MULTI_HIT:
-        if (HasSkillLink(battlerAtk, aiData))
-            moveState->multiHitExpect = UQ_4_12(5);
-        else if (GetBattlerHoldEffect(battlerAtk, TRUE) == HOLD_EFFECT_LOADED_DICE)
-            moveState->multiHitExpect = UQ_4_12(4.5);
-        else
-            moveState->multiHitExpect = UQ_4_12(3.17);
-        return ApplyModifier(moveState->multiHitExpect, damage);
-
-    case EFFECT_DOUBLE_HIT:
-        count = gBattleMoves[move].argument;
-        if (!count) count = 2;
-        moveState->multiHitExpect = UQ_4_12(count);
-        return damage * count;
-    
-    case EFFECT_TRIPLE_KICK:
-        if (HasSkillLink(battlerAtk, aiData))
-        {
-            moveState->multiHitExpect = UQ_4_12(3);
-            return damage * 6;
-        }
-        else
-        {
-            int accMul = gPercentToModifier[min(moveState->accuracy, 100)];
-            moveState->multiHitExpect = UQ_4_12(1) + MulModifierDirect(UQ_4_12(1) + accMul, accMul);
-            return damage + ApplyModifier(2 * damage + ApplyModifier(accMul, damage), accMul);
-        }
-    
-    case EFFECT_TEN_HITS:
-        if (HasSkillLink(battlerAtk, aiData))
-        {
-            moveState->multiHitExpect = UQ_4_12(10);
-            return damage * 10;
-        }
-        else
-        {
-            int accMul = gPercentToModifier[min(moveState->accuracy, 100)];
-            for (i = 0; i < 9; i++)
-            {
-                moveState->multiHitExpect = UQ_4_12(1) + MulModifierDirect(moveState->multiHitExpect, accMul);
-            }
-            return ApplyModifier(moveState->multiHitExpect, damage);
-        }
-    }
-    
-    if (!IsMoveAffectedByParentalBond(move, battlerAtk))
-        return damage;
-
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
-    {
-        switch (GetAbilityAtIndex(battlerAtk, i, FALSE))
-        {
-        case ABILITY_PARENTAL_BOND:
-        case ABILITY_HYPER_AGGRESSIVE:
-        case ABILITY_ICE_COLD_HUNTER:
-        case ABILITY_RAGING_GODDESS:
-            moveState->multiHitExpect = UQ_4_12(2);
-            return damage * 125 / 100;
-            
-        case ABILITY_RAGING_BOXER:
-        case ABILITY_STEEL_BEETLE:
-            REQUIRE(IS_IRON_FIST(battlerAtk, move))
-            moveState->multiHitExpect = UQ_4_12(2);
-            return damage * 140 / 100;
-        
-        case ABILITY_DUAL_WIELD:
-            REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-            moveState->multiHitExpect = UQ_4_12(2);
-            return damage * 140 / 100;
-        
-        case ABILITY_DUAL_HAMMER:
-            REQUIRE(gBattleMoves[move].hammerBased)
-            moveState->multiHitExpect = UQ_4_12(2);
-            return damage * 140 / 100;
-            
-        case ABILITY_RAGING_MOTH:
-            REQUIRE(gBattleMoves[move].type == TYPE_FIRE)
-            moveState->multiHitExpect = UQ_4_12(2);
-            return damage * 140 / 100;
-        
-        case ABILITY_DEVOURER:
-        case ABILITY_PRIMAL_MAW:
-            REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-            moveState->multiHitExpect = UQ_4_12(2);
-            return damage * 140 / 100;
-        
-        case ABILITY_MULTI_HEADED:
-            if (gBaseStats[gBattleMons[battlerAtk].species].flags & F_TWO_HEADED)
-            {
-                moveState->multiHitExpect = UQ_4_12(2);
-                return damage * 125 / 100;
-            }
-            if (gBaseStats[gBattleMons[battlerAtk].species].flags & F_THREE_HEADED)
-            {
-                moveState->multiHitExpect = UQ_4_12(3);
-                return damage * 135 / 100;
-            }
-            break;
-        
-        case ABILITY_MINION_CONTROL:
-            {
-            int j;
-            struct Pokemon *party;
-            if (GetBattlerSide(battlerAtk) == B_SIDE_PLAYER)
-                party = gPlayerParty;
-            else
-                party = gEnemyParty;
-
-            for (j = 0; j < PARTY_SIZE; j++)
-            {
-                if (gBattlerPartyIndexes[battlerAtk] == j) continue;
-                if (GetMonData(&party[j], MON_DATA_HP)
-                    && GetMonData(&party[j], MON_DATA_SPECIES2)
-                    && GetMonData(&party[j], MON_DATA_SPECIES2) != SPECIES_EGG
-                    && !GetMonData(&party[j], MON_DATA_STATUS))
-                        count++;
-            }
-            moveState->multiHitExpect = UQ_4_12(1 + count);
-            return damage * (100 + 10 * count) / 100;
-            }
-        }
-    }
-
-    return damage;
-}
-
 int CheckPowder(int battlerAtk, int move)
 {
     int type;
@@ -179,33 +38,34 @@ int CheckPowder(int battlerAtk, int move)
 
 int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* effectiveness, struct MoveState* moveState, struct AiData* aiData)
 {
-    int damage, ignored, absorption, statId;
-    u16 ability;
-    // TODO: Handle fixed damage
-    damage = CalculateMoveDamageAndEffectiveness(move, battlerAtk, battlerDef, moveType, effectiveness);
-    if (CheckPowder(battlerAtk, move))
-    {
-        *effectiveness = 0;
-        return AI_SCORE_LOSE_HP(battlerAtk, 25);
-    }
-    absorption = TestAbsorbingAbilities(battlerDef, battlerAtk, move, *moveType, &statId, &ability);
-    if (absorption) *effectiveness = 0;
-    switch (absorption)
-    {
-    case 1:
-        return AI_SCORE_HEAL(battlerDef, 25);
-    case 2:
-        return AI_SCORE_STAT(battlerDef, statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
-    case 3:
-        return AI_SCORE_FLASH_FIRE;
-    }
-    if (!*effectiveness) return 0;
-    if (TestImmunityAbilities(battlerDef, battlerAtk, move, *moveType, (const u8**) &ignored, (u8*) &ignored, (u16*) ignored))
-    {
-        *effectiveness = 0;
-        return 0;
-    }
-    return (moveState->damage = AdjustForMultihit(damage, battlerAtk, move, moveState, aiData));
+    // int damage, ignored, absorption, statId;
+    // u16 ability;
+    // // TODO: Handle fixed damage
+    // damage = CalculateMoveDamageAndEffectiveness(move, battlerAtk, battlerDef, moveType, effectiveness);
+    // if (CheckPowder(battlerAtk, move))
+    // {
+    //     *effectiveness = 0;
+    //     return AI_SCORE_LOSE_HP(battlerAtk, 25);
+    // }
+    // absorption = TestAbsorbingAbilities(battlerDef, battlerAtk, move, *moveType, &statId, &ability);
+    // if (absorption) *effectiveness = 0;
+    // switch (absorption)
+    // {
+    // case 1:
+    //     return AI_SCORE_HEAL(battlerDef, 25);
+    // case 2:
+    //     return AI_SCORE_STAT(battlerDef, statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
+    // case 3:
+    //     return AI_SCORE_FLASH_FIRE;
+    // }
+    // if (!*effectiveness) return 0;
+    // if (TestImmunityAbilities(battlerDef, battlerAtk, move, *moveType, (const u8**) &ignored, (u8*) &ignored, (u16*) ignored))
+    // {
+    //     *effectiveness = 0;
+    //     return 0;
+    // }
+    // return (moveState->damage = AdjustForMultihit(damage, battlerAtk, move, moveState, aiData));
+    return 0;
 }
 
 #define AI_CALC_DAMAGE \
@@ -2069,21 +1929,68 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     return AI_SCORE_IMMUNE;
 }
 
-int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData)
+int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData)
 {
-    u16 parentalBondSpread[6] = { 1 };
+    u16 parentalBondSpread[6];
+    int multiTotal = 0;
+    int hitCount = 1;
+    int hitsEffective = 0;
     MultihitType multihit;
+    int i;
+    int damageShield = aiData->battlerState[battlerDef].shield;
+    int scoreOther = 0;
 
-    if (IS_MOVE_STATUS(move)) return 0;
+    if (moveContainer->multihitType >= PARENTAL_BOND_START)
+    {
+        hitCount = GetParentalBondCount(battlerAtk, moveContainer->multihitType);
+        if (hitCount == 1) moveContainer->multihitType = 0;
+        else
+        {
+            for (i = 0; i < hitCount; i++)
+            {
+                parentalBondSpread[i] = GetParentalBondMultiplier(moveContainer->multihitType, i);
+            }
+        }
+    }
 
     switch (gBattleMoves[move].effect)
     {
     case EFFECT_SUPER_FANG:
     case EFFECT_SUPER_FANG_HAZE:
-        /* code */
+        moveContainer->fixedDamage = TRUE;
+        for (i = 0; i < hitCount; i++)
+        {
+            if (damageShield)
+            {
+                damageShield -= ApplyModifier(parentalBondSpread[i], aiData->battlerState[battlerDef].hp / 2);
+                if (damageShield <= 0)
+                {
+                    damageShield = 0;
+                    moveState->breakShield = TRUE;
+                }
+            }
+            else
+            {
+                moveState->damage += aiData->battlerState[battlerDef].hp / 2;
+                hitsEffective++;
+            }
+        }
+        moveState->multiHitExpect = UQ_4_12(hitCount);
+        return AI_SCORE_DAMAGE(moveState->damage / aiData->battlerState[battlerDef].hp);
+    
+    case EFFECT_LEVEL_DAMAGE:
+        moveContainer->fixedDamage = TRUE;
+        moveState->damage = gBattleMons[gBattlerAttacker].level;
         break;
     
     default:
+        if (move == MOVE_SEISMIC_TOSS)
+        {
+            moveContainer->fixedDamage = TRUE;
+            moveState->damage = gBattleMons[gBattlerAttacker].level;
+            break;
+        }
+        // moveState->damage = CalculateMoveDamage()
         break;
     }
 }

@@ -1296,7 +1296,7 @@ int ShouldSetMoldBreaker(int battler, int move)
     return FALSE;
 }
 
-int CheckParentalBond(int battler, int move)
+MultihitType GetParentalBondType(int battler, int move)
 {
     int i;
 
@@ -1310,59 +1310,56 @@ int CheckParentalBond(int battler, int move)
         case ABILITY_HYPER_AGGRESSIVE:
         case ABILITY_ICE_COLD_HUNTER:
         case ABILITY_RAGING_GODDESS:
-            return ABILITY_PARENTAL_BOND;
+            return PARENTAL_BOND_HYPER_AGGRESSIVE;
         
         case ABILITY_STEEL_BEETLE:
         case ABILITY_RAGING_BOXER:
             REQUIRE(IS_IRON_FIST(battler, move))
-            return ABILITY_RAGING_BOXER;
+            return PARENTAL_BOND_PRIMAL_MAW;
         
         case ABILITY_DUAL_WIELD:
             REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-            return ABILITY_DUAL_WIELD;
+            return PARENTAL_BOND_DUAL_WIELD;
         
         case ABILITY_DUAL_HAMMER:
             REQUIRE(gBattleMoves[move].hammerBased)
-            return ABILITY_DUAL_HAMMER;
+            return PARENTAL_BOND_DUAL_WIELD;
         
         case ABILITY_RAGING_MOTH:
             REQUIRE(gBattleMoves[move].type == TYPE_FIRE)
-            return ABILITY_RAGING_MOTH;
+            return PARENTAL_BOND_DUAL_WIELD;
         
         case ABILITY_DEVOURER:
         case ABILITY_PRIMAL_MAW:
             REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-            return ABILITY_PRIMAL_MAW;
+            return PARENTAL_BOND_PRIMAL_MAW;
         
         case ABILITY_MULTI_HEADED:
-            if (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_TWO_HEADED) return ABILITY_PARENTAL_BOND;
-            if (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_THREE_HEADED) return ABILITY_MULTI_HEADED;
+            if (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
+            if (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
             break;
         
         case ABILITY_MINION_CONTROL:
-            return ABILITY_MINION_CONTROL;
+            return PARENTAL_BOND_MINION_CONTROL;
         }
     }
 
     return ABILITY_NONE;
 }
 
-int GetParentalBondCount(int battler, int parentalBondType)
+int GetParentalBondCount(int battler, MultihitType parentalBondType)
 {
     switch (parentalBondType)
     {
-    case ABILITY_PARENTAL_BOND:
-    case ABILITY_RAGING_BOXER:
-    case ABILITY_DUAL_WIELD:
-    case ABILITY_DUAL_HAMMER:
-    case ABILITY_RAGING_MOTH:
-    case ABILITY_PRIMAL_MAW:
+    case PARENTAL_BOND_HYPER_AGGRESSIVE:
+    case PARENTAL_BOND_PRIMAL_MAW:
+    case PARENTAL_BOND_DUAL_WIELD:
         return 2;
     
-    case ABILITY_MULTI_HEADED:
+    case PARENTAL_BOND_THREE_HEADED:
         return 3;
 
-    case ABILITY_MINION_CONTROL:
+    case PARENTAL_BOND_MINION_CONTROL:
         {
         struct Pokemon *party;
         int i;
@@ -1443,7 +1440,7 @@ static void Cmd_attackcanceler(void)
 
     if (!gTurnStructs[gBattlerAttacker].parentalBondOn)
     {
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = CheckParentalBond(gBattlerAttacker, gCurrentMove);
+        gTurnStructs[gBattlerAttacker].parentalBondTrigger = GetParentalBondType(gBattlerAttacker, gCurrentMove);
         i = GetParentalBondCount(gBattlerAttacker, gTurnStructs[gBattlerAttacker].parentalBondTrigger);
         if (i > 1)
         {
