@@ -93,6 +93,9 @@
 #define Q_4_12(n)  ((s16)((n) * (1 << Q_4_12_PRECISION)))
 #define UQ_4_12(n)  ((u16)((n) * (1 << UQ_4_12_PRECISION)))
 
+#define UQ_4_12_FLOOR(uq) ((uq) >> UQ_4_12_PRECISION)
+#define UQ_4_12_DECIMAL(uq) ((uq) & ~(-1 << UQ_4_12_PRECISION))
+
 // Converts a number to Q24.8 fixed-point format
 #define Q_24_8(n)  ((s32)((n) << 8))
 

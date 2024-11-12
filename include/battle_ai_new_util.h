@@ -4,6 +4,10 @@
 #include "global.h"
 #include "battle_main.h"
 
+extern const u16 gHitOdds[8][99];
+extern const u16 gTripleKickMultiplier[99];
+extern const u16 gCompoundOdds[8][9];
+
 int AdjustForChance(int chance, int score);
 int BelowHalfHp(int battler);
 int AreSameSide(int battler1, int battler2);
