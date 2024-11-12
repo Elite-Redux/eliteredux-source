@@ -3,6 +3,7 @@
 
 #include "constants/pokemon.h"
 #include "battle_ai_new.h"
+#include "battle_util.h"
 
 #define WINDOW_CLEAR            0x1
 #define WINDOW_x80              0x80

@@ -5,6 +5,8 @@
 #include "battle_main.h"
 
 extern const u16 gHitOdds[8][99];
+extern const u16 gTenHitsMultiplier[99];
+extern const u8 gTripleKickHitExpected[99];
 extern const u16 gTripleKickMultiplier[99];
 extern const u16 gCompoundOdds[8][9];
 

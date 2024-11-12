@@ -2,7 +2,6 @@
 #define GUARD_BATTLE_AI_NEW_H
 
 #include "global.h"
-#include "battle.h"
 #include "battle_main.h"
 
 #define AI_CHOICE_FLEE 4
@@ -37,6 +36,7 @@ typedef enum {
     // AI_PHASE_PROTECT,
     // AI_PHASE_END_TURN,
     AI_PHASE_COUNT,
+    AI_PHASE_DAMAGE_ROUGH,
 } AiProcessingPhase;
 
 #define UQ_CLAMP_EXPECT(value) ((value) >> ((4 + UQ_4_12_PRECISION) - 8))
@@ -48,11 +48,11 @@ struct MoveState {
     u16 koChance;
     u16 damage;
     u8 multiHitExpect;
+    u8 accuracy;
+    u8 overkill:2;
     u8 type:5;
     u8 effectiveness:2;
-    u8 multiplier;
-    u8 critChance;
-    u8 accuracy;
+    u8 critChance:3;
     u8 target:2;
     u8 falseSwipe:1;
     u8 contact:1;
@@ -60,7 +60,9 @@ struct MoveState {
     u8 superEffective:1;
     u8 breakShield:1;
     u8 cancelled:1;
+    u8 noVariance:1;
     u8 missesThisTurn:2;
+    u8 critKo:1;
 };
 
 enum
@@ -82,6 +84,7 @@ struct MoveContainer
     u8 unusable:1;
     u8 fixedDamage:1;
     u8 multihitType:4;
+    u8 isTwoTurn:1;
 };
 
 

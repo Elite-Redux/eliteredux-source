@@ -4787,9 +4787,6 @@ BattleScript_EffectParalyzeIgnoreType:
 	attackstring
 	ppreduce
 	requirecandoeffect BS_TARGET, MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES
-	jumpifmove MOVE_GLARE, BattleScript_BattleScript_EffectParalyzeNoTypeCalc
-	typecalc
-BattleScript_BattleScript_EffectParalyzeNoTypeCalc:
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE

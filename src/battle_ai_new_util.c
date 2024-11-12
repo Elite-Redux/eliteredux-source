@@ -68,6 +68,26 @@ const u16 gHitOdds[8][99] = {
     #undef TABLE_FUNCTION
 };
 
+#define AVERAGE_2(value) 1 + value
+#define AVERAGE_3(value) 1 + value * (AVERAGE_2(value))
+#define AVERAGE_4(value) 1 + value * (AVERAGE_3(value))
+#define AVERAGE_5(value) 1 + value * (AVERAGE_4(value))
+#define AVERAGE_6(value) 1 + value * (AVERAGE_5(value))
+#define AVERAGE_7(value) 1 + value * (AVERAGE_6(value))
+#define AVERAGE_8(value) 1 + value * (AVERAGE_7(value))
+#define AVERAGE_9(value) 1 + value * (AVERAGE_8(value))
+#define AVERAGE_10(value) 1 + value * (AVERAGE_9(value))
+
+// gHitOdds[n - 2][p - 1] gives the odds of n rolls at probably p% in a row
+#define TABLE_FUNCTION(value) UQ_4_12(AVERAGE_10(value))
+const u16 gTenHitsMultiplier[99] = LOOKUP_PERCENTILE;
+#undef TABLE_FUNCTION
+
+// gHitOdds[n - 2][p - 1] gives the odds of n rolls at probably p% in a row
+#define TABLE_FUNCTION(value) UQ_CLAMP_EXPECT(UQ_4_12(AVERAGE_3(value)))
+const u8 gTripleKickHitExpected[99] = LOOKUP_PERCENTILE;
+#undef TABLE_FUNCTION
+
 #define TABLE_FUNCTION(value) UQ_4_12(1.0 + 2.0 * (value) + 3.0 * (value * value))
 // gTripleKickMultiplier[acc - 1] gives the average damage multiplier of triple kick at accuracy acc
 const u16 gTripleKickMultiplier[99] = LOOKUP_PERCENTILE;

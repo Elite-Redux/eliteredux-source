@@ -10841,16 +10841,15 @@ s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, 
     return val;
 }
 
-int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, int fixedBasePower, struct MoveState* moveState, struct MoveContainer* moveContainer)
+int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, u8* moveType, int fixedBasePower, struct MoveState* moveState)
 {
-    u8 moveType = moveContainer->startingMoveType;
     u16 typeEffectivenessModifier;
-    int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, &moveType, fixedBasePower, FALSE, 0, FALSE, &typeEffectivenessModifier);
+    int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, fixedBasePower, FALSE, 0, FALSE, &typeEffectivenessModifier);
 
     if (typeEffectivenessModifier > UQ_4_12(1.0)) moveState->effectiveness = AI_EFFECTIVENESS_SE;
     else if (typeEffectivenessModifier < UQ_4_12(1.0)) moveState->effectiveness = AI_EFFECTIVENESS_NVE;
     
-    moveState->type = moveType;
+    moveState->type = *moveType;
     return val;
 }
 

@@ -1,6 +1,8 @@
 #ifndef GUARD_BATTLE_UTIL_H
 #define GUARD_BATTLE_UTIL_H
 
+#include "battle_ai_new.h"
+
 #define MOVE_LIMITATION_ZEROMOVE                (1 << 0)
 #define MOVE_LIMITATION_PP                      (1 << 1)
 #define MOVE_LIMITATION_DISABLED                (1 << 2)
@@ -278,6 +280,7 @@ u32 GetBattlerWeight(u8 battlerId);
 s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
 s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, u16 *typeEffectivenessModifier);
 u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags);
+int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, u8* moveType, int fixedBasePower, struct MoveState* moveState);
 u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
 u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef, u8 leveldef);
 u16 GetTypeModifier(int atkType, int defType, int miracleEyeAtk, int miracleEyeDef);

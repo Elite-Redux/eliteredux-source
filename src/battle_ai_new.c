@@ -16,6 +16,7 @@
 #include "battle_ai_scoring.h"
 #include "battle_main.h"
 #include "battle_ai_new_util.h"
+#include "battle_ai_attack.h"
 
 int ScoreMove(int battlerAtk, int battlerDef, int move, int targets, struct AiData* aiData)
 {
@@ -58,7 +59,7 @@ static int (* const sPhaseHandlersTable[AI_PHASE_COUNT])(int battlerAtk, int bat
 {
     [AI_PHASE_BASIC] = CalculateBasicMoveInfo,
     [AI_PHASE_ACCURACY] = CalculateAccuracy,
-    [AI_PHASE_DAMAGE] = NULL,
+    [AI_PHASE_DAMAGE] = ScoreMoveDamage,
 };
 
 void SetDamage()

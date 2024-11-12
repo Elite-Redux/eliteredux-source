@@ -36,41 +36,32 @@ int CheckPowder(int battlerAtk, int move)
     return (type == TYPE_FIRE && gBattleMons[battlerAtk].status2 & STATUS2_POWDER);
 }
 
-int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* effectiveness, struct MoveState* moveState, struct AiData* aiData)
-{
-    // int damage, ignored, absorption, statId;
-    // u16 ability;
-    // // TODO: Handle fixed damage
-    // damage = CalculateMoveDamageAndEffectiveness(move, battlerAtk, battlerDef, moveType, effectiveness);
-    // if (CheckPowder(battlerAtk, move))
-    // {
-    //     *effectiveness = 0;
-    //     return AI_SCORE_LOSE_HP(battlerAtk, 25);
-    // }
-    // absorption = TestAbsorbingAbilities(battlerDef, battlerAtk, move, *moveType, &statId, &ability);
-    // if (absorption) *effectiveness = 0;
-    // switch (absorption)
-    // {
-    // case 1:
-    //     return AI_SCORE_HEAL(battlerDef, 25);
-    // case 2:
-    //     return AI_SCORE_STAT(battlerDef, statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
-    // case 3:
-    //     return AI_SCORE_FLASH_FIRE;
-    // }
-    // if (!*effectiveness) return 0;
-    // if (TestImmunityAbilities(battlerDef, battlerAtk, move, *moveType, (const u8**) &ignored, (u8*) &ignored, (u16*) ignored))
-    // {
-    //     *effectiveness = 0;
-    //     return 0;
-    // }
-    // return (moveState->damage = AdjustForMultihit(damage, battlerAtk, move, moveState, aiData));
-    return 0;
-}
+// int ScoreDamage(int battlerAtk, int battlerDef, int move, u8* moveType, u16* effectiveness, struct MoveState* moveState, struct AiData* aiData)
+// {
+//     int damage, ignored, absorption, statId;
+//     u16 ability;
+//     // TODO: Handle fixed damage
+//     damage = CalculateMoveDamageAndEffectiveness(move, battlerAtk, battlerDef, moveType, effectiveness);
+//     switch (absorption)
+//     {
+//     case 1:
+//         return AI_SCORE_HEAL(battlerDef, 25);
+//     case 2:
+//         return AI_SCORE_STAT(battlerDef, statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
+//     case 3:
+//         return AI_SCORE_FLASH_FIRE;
+//     }
+//     if (!*effectiveness) return 0;
+//     if (TestImmunityAbilities(battlerDef, battlerAtk, move, *moveType, (const u8**) &ignored, (u8*) &ignored, (u16*) ignored))
+//     {
+//         *effectiveness = 0;
+//         return 0;
+//     }
+//     return (moveState->damage = AdjustForMultihit(damage, battlerAtk, move, moveState, aiData));
+//     return 0;
+// }
 
-#define AI_CALC_DAMAGE \
-score = ScoreDamage(battlerAtk, battlerDef, move, &moveType, &effectiveness, moveState, aiData); \
-if (!effectiveness) return score;
+#define AI_CALC_DAMAGE 
 
 int ScoreArgument(int battlerAtk, int battlerDef, int move, struct MoveState* moveState, struct AiData* aiData)
 {
@@ -1929,16 +1920,77 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     return AI_SCORE_IMMUNE;
 }
 
+int CheckImmunities(int battlerAtk, int battlerDef, int move, int moveType, int effectiveness, int* score, struct MoveState* moveState)
+{
+    int statId, absorbing;
+    u16 ability;
+    if (effectiveness == -1)
+    {
+        effectiveness = CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, FALSE);
+    }
+    if (!effectiveness)
+    {
+        moveState->cancelled = TRUE;
+        *score = 0;
+        return TRUE;
+    }
+    if (TestImmunityAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
+    {
+        moveState->cancelled = TRUE;
+        *score = 0;
+        return TRUE;
+    }
+    if ((absorbing = TestAbsorbingAbilities(battlerDef, battlerAtk, move, moveType, &statId, &ability)))
+    {
+        moveState->cancelled = TRUE;
+        switch (absorbing)
+        {
+        case 1:
+            *score = AI_SCORE_HEAL(battlerDef, 25);
+            return TRUE;
+        
+        case 2:
+            *score = AI_SCORE_STAT(battlerDef, statId, 1);
+            return TRUE;
+        
+        case 3:
+            *score = AI_SCORE_FLASH_FIRE;
+            return TRUE;
+        }
+    }
+    if (CheckPowder(battlerAtk, move))
+    {
+        moveState->missesThisTurn = AI_MISSES_THIS_TURN;
+        *score = AI_SCORE_LOSE_HP(battlerAtk, 25);
+        return FALSE;
+    }
+    return FALSE;
+}
+
+const u8 sCritChance[] = {24, 8, 2, 1};
+
 int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData)
 {
     u16 parentalBondSpread[6];
     int multiTotal = 0;
     int hitCount = 1;
-    int hitsEffective = 0;
     MultihitType multihit;
     int i;
-    int damageShield = aiData->battlerState[battlerDef].shield;
+    int damageShield = phase == AI_PHASE_DAMAGE_ROUGH ? aiData->battlerState[battlerDef].shield : 0;
     int scoreOther = 0;
+    u8 moveType;
+    int baseDamage = 0;
+    int defenderHp = gBattleMons[battlerDef].hp;
+    u16 critMultiplier = UQ_4_12(1.5);
+    int doubleDamageChance = 0;
+
+    GET_MOVE_TYPE(move, moveType)
+
+    if (IS_MOVE_STATUS(move))
+    {
+        CheckImmunities(battlerAtk, battlerDef, move, moveType, -2 + (gBattleMoves[move].effect == EFFECT_PARALYZE), &scoreOther, moveState);
+        return scoreOther;
+    }
 
     if (moveContainer->multihitType >= PARENTAL_BOND_START)
     {
@@ -1957,13 +2009,14 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
     {
     case EFFECT_SUPER_FANG:
     case EFFECT_SUPER_FANG_HAZE:
+        if (CheckImmunities(battlerAtk, battlerDef, move, moveType, -1, &scoreOther, moveState)) return scoreOther;
         moveContainer->fixedDamage = TRUE;
         for (i = 0; i < hitCount; i++)
         {
             if (damageShield)
             {
-                damageShield -= ApplyModifier(parentalBondSpread[i], aiData->battlerState[battlerDef].hp / 2);
-                if (damageShield <= 0)
+                moveState->damage += ApplyModifier(parentalBondSpread[i], defenderHp / 2);
+                if (moveState->damage >= damageShield)
                 {
                     damageShield = 0;
                     moveState->breakShield = TRUE;
@@ -1971,26 +2024,227 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
             }
             else
             {
-                moveState->damage += aiData->battlerState[battlerDef].hp / 2;
-                hitsEffective++;
+                baseDamage += ApplyModifier(parentalBondSpread[i], (defenderHp - baseDamage) / 2);
             }
         }
-        moveState->multiHitExpect = UQ_4_12(hitCount);
-        return AI_SCORE_DAMAGE(moveState->damage / aiData->battlerState[battlerDef].hp);
+        moveState->damage += baseDamage;
+        moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(hitCount));
+        if (moveState->missesThisTurn) return scoreOther;
+        return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
     
     case EFFECT_LEVEL_DAMAGE:
+        if (CheckImmunities(battlerAtk, battlerDef, move, moveType, -1, &scoreOther, moveState)) return scoreOther;
         moveContainer->fixedDamage = TRUE;
-        moveState->damage = gBattleMons[gBattlerAttacker].level;
+        baseDamage = gBattleMons[gBattlerAttacker].level;
+        moveState->noVariance;
         break;
     
     default:
         if (move == MOVE_SEISMIC_TOSS)
         {
+            if (CheckImmunities(battlerAtk, battlerDef, move, moveType, -1, &scoreOther, moveState)) return scoreOther;
             moveContainer->fixedDamage = TRUE;
-            moveState->damage = gBattleMons[gBattlerAttacker].level;
+            baseDamage = gBattleMons[gBattlerAttacker].level;
+            moveState->noVariance;
             break;
         }
-        // moveState->damage = CalculateMoveDamage()
+        baseDamage = CalcMoveDamageAi(move, battlerAtk, battlerDef, &moveType, moveContainer->fixedDamage, moveState);
+        if (CheckImmunities(battlerAtk, battlerDef, move, moveType, -1, &scoreOther, moveState)) return scoreOther;
         break;
+    }
+
+    if (moveContainer->multihitType >= PARENTAL_BOND_START)
+    {
+        int multi = parentalBondSpread[0];
+        for (i = 1; i < hitCount; i++)
+        {
+            multi += parentalBondSpread[i];
+        }
+        moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(hitCount));
+        moveState->damage = ApplyModifier(baseDamage, multi);
+    }
+    else
+    {
+        switch (moveContainer->multihitType)
+        {
+        case MULTIHIT_BEAT_UP:
+            // TODO: Beat up
+        case MULTIHIT_FIVE:
+            moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(5));
+            moveState->damage = baseDamage * 5;
+            hitCount = 5;
+            break;
+        
+        case MULTIHIT_FOUR_OR_FIVE:
+            moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(4.5));
+            moveState->damage = baseDamage * 9 / 5;
+            hitCount = 5;
+            break;
+        
+        case MULTIHIT_SINGLE:
+            moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(1));
+            moveState->damage = baseDamage;
+            hitCount = 1;
+            break;
+        
+        case MULTIHIT_TEN:
+            moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(10));
+            moveState->damage = baseDamage * 10;
+            hitCount = 10;
+            break;
+        
+        case MULTIHIT_TEN_CAN_MISS:
+            if (moveState->accuracy >= 100)
+            {
+                moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(10));
+                moveState->damage = baseDamage * 10;
+            }
+            else
+            {
+                moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(gTenHitsMultiplier[moveState->accuracy - 1]));
+                moveState->damage = ApplyModifier(gTenHitsMultiplier[moveState->accuracy - 1], baseDamage);
+            }
+            hitCount = 10;
+            break;
+        
+        case MULTIHIT_THREE:
+            if (gBattleMoves[move].effect == EFFECT_TRIPLE_KICK) baseDamage *= 2;
+            moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(3));
+            moveState->damage = baseDamage * 3;
+            hitCount = 3;
+            break;
+        
+        case MULTIHIT_TRIPLE_KICK:
+            if (moveState->accuracy >= 100)
+            {
+                moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(3));
+                moveState->damage = baseDamage * 6;
+            }
+            else
+            {
+                moveState->multiHitExpect = gTripleKickHitExpected[moveState->accuracy - 1];
+                moveState->damage = ApplyModifier(gTripleKickMultiplier[moveState->accuracy - 1], baseDamage);
+            }
+            hitCount = 3;
+            break;
+        
+        case MULTIHIT_TWO:
+            moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(2));
+            moveState->damage = baseDamage * 2;
+            hitCount = 2;
+            break;
+        
+        case MULTIHIT_TWO_TO_FIVE:
+            moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12((2.0 + 3.0) / 3.0 + (4.0 + 5.0) / 6.0));
+            moveState->damage = ApplyModifier(UQ_4_12((2.0 + 3.0) / 3.0 + (4.0 + 5.0) / 6.0), baseDamage);
+            hitCount = 5;
+            break;
+        }
+    }
+
+    if (!moveContainer->fixedDamage && moveState->critChance)
+    {
+        moveState->damage += ApplyModifier((critMultiplier - UQ_4_12(1.0)) / sCritChance[moveState->critChance - 1], moveState->damage);
+    }
+
+    if (!moveState->noVariance)
+    {
+        moveState->damage = ApplyModifier(UQ_4_12((1.0 + .85) / 2), moveState->damage);
+    }
+
+    if (gBattleMoves[move].effect == EFFECT_MISC_HIT && gBattleMoves[move].argument == MISC_EFFECT_DOUBLE_DAMAGE)
+    {
+        doubleDamageChance = gPercentToModifier[gBattleMoves[move].secondaryEffectChance];
+        moveState->damage += ApplyModifier(doubleDamageChance, moveState->damage);
+    }
+
+    if (phase == AI_PHASE_DAMAGE_ROUGH || moveContainer->isTwoTurn) return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
+
+    if (moveState->missesThisTurn) return scoreOther;
+
+    // Fail to break shield
+    if (damageShield && damageShield > moveState->damage) return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
+
+    if (hitCount == 1)
+    {
+        if (moveState->critChance <= 3 && baseDamage > defenderHp)
+        {
+            int minDamage = moveState->noVariance ? baseDamage : ApplyModifier(UQ_4_12(.85), baseDamage);
+            if (minDamage >= defenderHp)
+            {
+                int overkill = minDamage * 2 / defenderHp - 2;
+                moveState->overkill = min(overkill, 3);
+                moveState->koChance = 100;
+                moveState->critKo = moveState->critChance >= 3;
+                return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
+            }
+            moveState->koChance = 100 * (defenderHp - minDamage) / (baseDamage - minDamage);
+            moveState->koChance = max(moveState->koChance, 6);
+        }
+        if (moveState->critChance <= 3 && doubleDamageChance)
+        {
+            int modifiedDamage = baseDamage * 2;
+            if (modifiedDamage > defenderHp)
+            {
+                int minDamage = moveState->noVariance ? modifiedDamage : ApplyModifier(UQ_4_12(.85), modifiedDamage);
+                int koChance;
+                if (minDamage >= defenderHp)
+                {
+                    int overkill = minDamage * 2 / defenderHp - 2;
+                    koChance = 100;
+                }
+                else
+                {
+                    koChance = 100 * (defenderHp - minDamage) / (modifiedDamage - minDamage);
+                    koChance = max(koChance, 6);
+                }
+                koChance = ApplyModifier(doubleDamageChance, koChance);
+                moveState->koChance = 100 - (100 - moveState->koChance) * (100 - koChance) / 100;
+            }
+        }
+        if (moveState->critChance > 0)
+        {
+            int modifiedDamage = ApplyModifier(critMultiplier, baseDamage);
+            if (modifiedDamage > defenderHp)
+            {
+                int minDamage = moveState->noVariance ? modifiedDamage : ApplyModifier(UQ_4_12(.85), modifiedDamage);
+                int koChance;
+                if (minDamage >= defenderHp)
+                {
+                    koChance = 100;
+                }
+                else
+                {
+                    koChance = 100 * (defenderHp - minDamage) / (modifiedDamage - minDamage);
+                    koChance = max(koChance, 6);
+                }
+                moveState->critKo |= !moveState->koChance || moveState->critChance >= 3;
+                koChance = ApplyModifier(sCritChance[moveState->critChance - 1], koChance);
+                moveState->koChance = 100 - (100 - moveState->koChance) * (100 - koChance) / 100;
+                if (moveState->koChance >= 100) AI_SCORE_DAMAGE(moveState->damage, battlerDef);
+            }
+        }
+        if (doubleDamageChance && moveState->critChance > 0)
+        {
+            int modifiedDamage = ApplyModifier(critMultiplier, baseDamage * 2);
+            if (modifiedDamage > defenderHp)
+            {
+                int minDamage = moveState->noVariance ? modifiedDamage : ApplyModifier(UQ_4_12(.85), modifiedDamage);
+                int koChance;
+                if (minDamage >= defenderHp)
+                {
+                    koChance = 100;
+                }
+                else
+                {
+                    koChance = 100 * (defenderHp - minDamage) / (modifiedDamage - minDamage);
+                    koChance = max(koChance, 6);
+                }
+                moveState->critKo |= !moveState->koChance || moveState->critChance >= 3;
+                koChance = ApplyModifier(doubleDamageChance, ApplyModifier(sCritChance[moveState->critChance - 1], koChance));
+                moveState->koChance = 100 - (100 - moveState->koChance) * (100 - koChance) / 100;
+            }
+        }
+        return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
     }
 }
