@@ -134,6 +134,26 @@ const u16 gCompoundOdds[8][9] = {
     #undef TABLE_FUNCTION
 };
 
+int CalculateCompoundOdds(int probability, struct MoveState* moveState)
+{
+    u16 p, unclamp, p2;
+    if (probability <= 10) return probability;
+    if (probability > 90) return probability;
+    if (moveState->multiHitExpect == UQ_CLAMP_EXPECT(UQ_4_12(1))) return probability;
+    unclamp = UQ_UNCLAMP_EXPECT(moveState->multiHitExpect);
+    p2 = UQ_4_12_FLOOR(unclamp);
+    if (p2 == 1) p = gPercentToModifier[probability];
+    else p = gCompoundOdds[p2 - 2][(probability / 10) - 1];
+    p2 = UQ_4_12_DECIMAL(unclamp);
+    if (p2)
+    {
+        p = UQ_4_12(1) - p;
+        MulModifier(&p, UQ_4_12(1) - p2);
+        p = UQ_4_12(1) - p;
+    }
+    return ApplyModifier(100, p);
+}
+
 int AlwaysCancelled(int battlerAtk, int move, struct MoveContainer* moveContainer)
 {
     if (gVolatileStructs[battlerAtk].throatChopTimer && gBattleMoves[move].flags & FLAG_SOUND)

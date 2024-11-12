@@ -19,5 +19,6 @@ int AdjustForChance(int chance, int score);
 int AlwaysCancelled(int battlerAtk, int move, struct MoveContainer* moveContainer);
 union SpeedValue AiPerformMoveSpeedCalculation(int battlerAtk, int battlerDef, int move);
 int CheckCancelled(int battlerAtk, int battlerDef, int move, struct MoveState* moveState, struct AiData* aiData);
+int CalculateCompoundOdds(int probability, struct MoveState* moveState);
 
 #endif
