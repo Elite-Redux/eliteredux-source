@@ -4331,7 +4331,7 @@ u8 AtkCanceller_UnableToUseMove(void)
             break;
         case CANCELLER_MULTIHIT_MOVES:
         gBattleStruct->atkCancellerTracker++;
-        switch (GetMultiHitType(gBattlerAttacker, gCurrentMove))
+        switch (GetMultihitType(gBattlerAttacker, gCurrentMove))
         {
         default:
             continue;
@@ -4405,7 +4405,7 @@ u8 AtkCanceller_UnableToUseMove(void)
     return effect;
 }
 
-MultiHitType GetMultiHitType(int battler, int move)
+MultihitType GetMultihitType(int battler, int move)
 {
     if (IsTwoStrikesMove(move))
         return MULTIHIT_TWO;
@@ -10508,6 +10508,38 @@ u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move)
     return 2;
 }
 
+u16 GetParentalBondMultiplier(int parentalBondType, int turn)
+{
+    switch (parentalBondType)
+    {
+    case ABILITY_PARENTAL_BOND:
+        REQUIRE(turn)
+        return UQ_4_12(0.25);
+    
+    case ABILITY_MULTI_HEADED:
+        if (turn == 1) return UQ_4_12(0.2);
+        if (turn == 2) return UQ_4_12(0.15);
+        break;
+    
+    case ABILITY_MINION_CONTROL:
+        REQUIRE(turn)
+        return UQ_4_12(0.1);
+    
+    case ABILITY_PRIMAL_MAW:
+    case ABILITY_DEVOURER:
+    case ABILITY_RAGING_BOXER:
+        REQUIRE(turn)
+        return UQ_4_12(0.4);
+
+    case ABILITY_DUAL_HAMMER:
+    case ABILITY_DUAL_WIELD:
+    case ABILITY_RAGING_MOTH:
+        return UQ_4_12(0.7);
+    }
+    
+    return UQ_4_12(1.0);
+}
+
 u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 typeEffectivenessModifier, bool32 isCrit, bool32 updateFlags)
 {
     u32 percentBoost;
@@ -10606,38 +10638,11 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             MulModifier(&finalModifier, UQ_4_12(0.5));
     }
     
-    switch (gTurnStructs[gBattlerAttacker].parentalBondTrigger) {
-        case ABILITY_HYPER_AGGRESSIVE:
-        case ABILITY_PARENTAL_BOND:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
-                MulModifier(&finalModifier, UQ_4_12(0.25));
-            break;
-        case ABILITY_MULTI_HEADED:
-            if (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_TWO_HEADED) {
-                if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
-                    MulModifier(&finalModifier, UQ_4_12(0.25));
-            } else {
-                if (gTurnStructs[gBattlerAttacker].parentalBondOn == 2)
-                    MulModifier(&finalModifier, UQ_4_12(0.2));
-                else if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
-                    MulModifier(&finalModifier, UQ_4_12(0.15));
-            }
-            break;
-        case ABILITY_MINION_CONTROL:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
-                MulModifier(&finalModifier, UQ_4_12(0.1));
-            break;
-        case ABILITY_PRIMAL_MAW:
-        case ABILITY_DEVOURER:
-        case ABILITY_RAGING_BOXER:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
-                MulModifier(&finalModifier, UQ_4_12(0.4));
-            break;
-        case ABILITY_DUAL_HAMMER:
-        case ABILITY_DUAL_WIELD:
-        case ABILITY_RAGING_MOTH:
-		    MulModifier(&finalModifier, UQ_4_12(0.7));
-            break;
+    if (gTurnStructs[battlerAtk].parentalBondOn)
+    {
+        MulModifier(&finalModifier,
+            GetParentalBondMultiplier(gTurnStructs[battlerAtk].parentalBondTrigger,
+                gTurnStructs[battlerAtk].parentalBondInitialCount - gTurnStructs[battlerAtk].parentalBondOn));
     }
 	
     // target's ally's abilities

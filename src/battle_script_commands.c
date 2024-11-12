@@ -1296,6 +1296,100 @@ int ShouldSetMoldBreaker(int battler, int move)
     return FALSE;
 }
 
+int CheckParentalBond(int battler, int move)
+{
+    int i;
+
+    if (!IsMoveAffectedByParentalBond(move, battler)) return ABILITY_NONE;
+
+    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
+    {
+        switch (GetAbilityAtIndex(battler, i, FALSE))
+        {
+        case ABILITY_PARENTAL_BOND:
+        case ABILITY_HYPER_AGGRESSIVE:
+        case ABILITY_ICE_COLD_HUNTER:
+        case ABILITY_RAGING_GODDESS:
+            return ABILITY_PARENTAL_BOND;
+        
+        case ABILITY_STEEL_BEETLE:
+        case ABILITY_RAGING_BOXER:
+            REQUIRE(IS_IRON_FIST(battler, move))
+            return ABILITY_RAGING_BOXER;
+        
+        case ABILITY_DUAL_WIELD:
+            REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+            return ABILITY_DUAL_WIELD;
+        
+        case ABILITY_DUAL_HAMMER:
+            REQUIRE(gBattleMoves[move].hammerBased)
+            return ABILITY_DUAL_HAMMER;
+        
+        case ABILITY_RAGING_MOTH:
+            REQUIRE(gBattleMoves[move].type == TYPE_FIRE)
+            return ABILITY_RAGING_MOTH;
+        
+        case ABILITY_DEVOURER:
+        case ABILITY_PRIMAL_MAW:
+            REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+            return ABILITY_PRIMAL_MAW;
+        
+        case ABILITY_MULTI_HEADED:
+            if (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_TWO_HEADED) return ABILITY_PARENTAL_BOND;
+            if (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_THREE_HEADED) return ABILITY_MULTI_HEADED;
+            break;
+        
+        case ABILITY_MINION_CONTROL:
+            return ABILITY_MINION_CONTROL;
+        }
+    }
+
+    return ABILITY_NONE;
+}
+
+int GetParentalBondCount(int battler, int parentalBondType)
+{
+    switch (parentalBondType)
+    {
+    case ABILITY_PARENTAL_BOND:
+    case ABILITY_RAGING_BOXER:
+    case ABILITY_DUAL_WIELD:
+    case ABILITY_DUAL_HAMMER:
+    case ABILITY_RAGING_MOTH:
+    case ABILITY_PRIMAL_MAW:
+        return 2;
+    
+    case ABILITY_MULTI_HEADED:
+        return 3;
+
+    case ABILITY_MINION_CONTROL:
+        {
+        struct Pokemon *party;
+        int i;
+        u8 count = 1;
+        if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+            party = gPlayerParty;
+        else
+            party = gEnemyParty;
+
+        for (i = 0; i < PARTY_SIZE; i++)
+        {
+            int species2;
+            FILTER(gBattlerPartyIndexes[gBattlerAttacker] != i)
+            FILTER(GetMonData(&party[i], MON_DATA_HP))
+            FILTER(GetMonData(&party[i], MON_DATA_SPECIES2))
+            FILTER(GetMonData(&party[i], MON_DATA_SPECIES2) != SPECIES_EGG)
+            FILTER_NOT(GetMonData(&party[i], MON_DATA_STATUS))
+            count++;
+        }
+
+        return count;
+        }
+    }
+
+    return 1;
+}
+
 static void Cmd_attackcanceler(void)
 {
     s32 i;
@@ -1348,149 +1442,13 @@ static void Cmd_attackcanceler(void)
         return;
 
     if (!gTurnStructs[gBattlerAttacker].parentalBondOn)
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_NONE;
-
-	// Parental Bond
-    if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-    && (BattlerHasAbility(gBattlerAttacker, ABILITY_PARENTAL_BOND, FALSE)) // Includes Innate
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
     {
-		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_PARENTAL_BOND;
-        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-        return;
-    }
-	// Raging Boxer
-    if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-	&& (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_RAGING_BOXER) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STEEL_BEETLE))
-	&& (IS_IRON_FIST(gBattlerAttacker, gCurrentMove))
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-    {
-		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_RAGING_BOXER;
-        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-        return;
-    }
-    // Dual Wield
-    if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-	&& (BattlerHasAbility(gBattlerAttacker, ABILITY_DUAL_WIELD, FALSE)) // Includes Innate
-	&& (gBattleMoves[gCurrentMove].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[gCurrentMove].flags & FLAG_KEEN_EDGE_BOOST)
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-    {
-		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_DUAL_WIELD;
-        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-        return;
-    }
-    // Dual Hammer
-    if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-	&& (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DUAL_HAMMER))
-	&& (gBattleMoves[gCurrentMove].hammerBased)
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-    {
-		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_DUAL_HAMMER;
-        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-        return;
-    }
-    //Raging Moth
-    if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-	&& (BattlerHasAbility(gBattlerAttacker, ABILITY_RAGING_MOTH, FALSE)) // Includes Innate
-	&& (gBattleMoves[gCurrentMove].type == TYPE_FIRE)
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-    {
-		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_RAGING_MOTH;
-        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-        return;
-    }
-    // Primal Maw
-    if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-	&& (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PRIMAL_MAW)) // Includes Innate
-	&& (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-    {
-		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_PRIMAL_MAW;
-        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-        return;
-    }
-    // Devourer
-    if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-	&& (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DEVOURER)) // Includes Innate
-	&& (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-    {
-		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_DEVOURER;
-        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-        return;
-    }
-	// Multi Headed
-	if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-    && BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_MULTI_HEADED)
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-	&& (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & (F_TWO_HEADED | F_THREE_HEADED))
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-    {
-		if (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_TWO_HEADED)
-			gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
-		else
-			gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 3;
-
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_MULTI_HEADED;
-
-        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-        return;
-    }
-	// Hyper Aggressive
-	if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-    && (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_HYPER_AGGRESSIVE) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ICE_COLD_HUNTER) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_RAGING_GODDESS))
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-    {
-		gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = 2;
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_HYPER_AGGRESSIVE;
-        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-        return;
-    }
-
-	// Minion Control
-	if (!gTurnStructs[gBattlerAttacker].parentalBondOn
-    && BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_MINION_CONTROL) // Includes Innate
-    && IsMoveAffectedByParentalBond(gCurrentMove, gBattlerAttacker)
-    && !(gAbsentBattlerFlags & gBitTable[gBattlerTarget]))
-    {
-        struct Pokemon *party;
-        u8 count = 1;
-        if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-            party = gPlayerParty;
-        else
-            party = gEnemyParty;
-
-        for (i = 0; i < PARTY_SIZE; i++)
+        gTurnStructs[gBattlerAttacker].parentalBondTrigger = CheckParentalBond(gBattlerAttacker, gCurrentMove);
+        i = GetParentalBondCount(gBattlerAttacker, gTurnStructs[gBattlerAttacker].parentalBondTrigger);
+        if (i > 1)
         {
-            if (gBattlerPartyIndexes[gBattlerAttacker] == i) continue;
-            if (GetMonData(&party[i], MON_DATA_HP)
-                && GetMonData(&party[i], MON_DATA_SPECIES2)
-                && GetMonData(&party[i], MON_DATA_SPECIES2) != SPECIES_EGG
-                && !GetMonData(&party[i], MON_DATA_STATUS))
-                    count++;
-        }
-
-        if (count > 1)
-        {
-            gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = count;
-            gTurnStructs[gBattlerAttacker].parentalBondTrigger = ABILITY_MINION_CONTROL;
+            gTurnStructs[gBattlerAttacker].multiHitCounter = gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondInitialCount = i;
             PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-            return;
         }
     }
 
@@ -13463,46 +13421,13 @@ static void Cmd_metronome(void)
 
 static int AdjustFixedDamageForParentalBond(int damage)
 {
-    //Multiplies depending on the ability and the hit number
-    if ((gTurnStructs[gBattlerAttacker].parentalBondOn == 1)) {
-        switch (gTurnStructs[gBattlerAttacker].parentalBondTrigger) {
-            case ABILITY_PARENTAL_BOND:
-            case ABILITY_HYPER_AGGRESSIVE:
-                return damage / 4;
-                break;
-            case ABILITY_RAGING_BOXER:
-            case ABILITY_PRIMAL_MAW:
-            case ABILITY_DEVOURER:
-                return damage * 4 / 10;
-                break;
-        }
+    if (gTurnStructs[gBattlerAttacker].parentalBondOn)
+    {
+        return ApplyModifier(damage,
+            GetParentalBondMultiplier(gTurnStructs[gBattlerAttacker].parentalBondTrigger,
+                gTurnStructs[gBattlerAttacker].parentalBondInitialCount - gTurnStructs[gBattlerAttacker].parentalBondOn));
     }
 
-    if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MINION_CONTROL
-        && gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
-            return damage / 10;
-
-    if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_MULTI_HEADED) {
-        if (IS_THREE_HEADED(gBattlerAttacker)) {
-            switch (gTurnStructs[gBattlerAttacker].parentalBondOn) {
-                case 2:
-                    return damage / 5; // .2
-                    break;
-                case 1:
-                    return damage * 3 / 20; // .15
-                    break;
-            }
-        } else if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1) {
-            return damage / 4;
-        }
-    }
-    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_WIELD)
-        return damage * 7 / 10; // .7
-    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_RAGING_MOTH)
-        return damage * 7 / 10; // .7
-    else if (gTurnStructs[gBattlerAttacker].parentalBondTrigger == ABILITY_DUAL_HAMMER)
-        return damage * 7 / 10; // .7
-    
     return damage;
 }
 
@@ -16949,22 +16874,22 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId)
     if (gBattleMoves[move].parentalBondBanned) return FALSE;
     if (gBattleMoves[move].effect == EFFECT_SOLARBEAM
         && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY)
-            || BATTLER_HAS_ABILITY(battlerId, ABILITY_SOLAR_FLARE)
-            || BATTLER_HAS_ABILITY(battlerId, ABILITY_CHLOROPLAST)
-            || BATTLER_HAS_ABILITY(battlerId, ABILITY_BIG_LEAVES)))
+            || BattlerHasAbility(battlerId, ABILITY_SOLAR_FLARE, FALSE)
+            || BattlerHasAbility(battlerId, ABILITY_CHLOROPLAST, FALSE)
+            || BattlerHasAbility(battlerId, ABILITY_BIG_LEAVES, FALSE)))
         return TRUE;
     if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY)) return TRUE;
-    if (gBattleMoves[move].twoTurnMove && !BATTLER_HAS_ABILITY(battlerId, ABILITY_ACCELERATE)) return FALSE;
+    if (gBattleMoves[move].twoTurnMove && !BattlerHasAbility(battlerId, ABILITY_ACCELERATE, FALSE)) return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
     {
         switch (GetBattlerBattleMoveTargetFlags(move, battlerId))
         {
             case MOVE_TARGET_BOTH:
-                if (CountAliveMonsInBattle(BATTLE_ALIVE_DEF_SIDE) >= 2) // Check for single target
+                if (IsBattlerAlive(BATTLE_OPPOSITE(battlerId)) && IsBattlerAlive(BATTLE_OPPOSITE(BATTLE_PARTNER(battlerId))))
                     return FALSE;
                 break;
             case MOVE_TARGET_FOES_AND_ALLY:
-                if (CountAliveMonsInBattle(BATTLE_ALIVE_EXCEPT_ACTIVE) >= 2) // Count mons on both sides; ignore attacker
+                if (IsBattlerAlive(BATTLE_OPPOSITE(battlerId)) + IsBattlerAlive(BATTLE_OPPOSITE(BATTLE_PARTNER(battlerId))) + IsBattlerAlive(BATTLE_PARTNER(battlerId)) > 1) // Count mons on both sides; ignore attacker
                     return FALSE;
                 break;
         }

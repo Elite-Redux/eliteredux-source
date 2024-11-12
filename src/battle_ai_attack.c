@@ -2072,7 +2072,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData)
 {
     u16 parentalBondSpread[6] = { 1 };
-
+    MultihitType multihit;
 
     if (IS_MOVE_STATUS(move)) return 0;
 

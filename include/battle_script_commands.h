@@ -38,6 +38,8 @@ struct IntimidateCloneData
 
 extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES];
 
+int GetParentalBondCount(int battler, int parentalBondType);
+int CheckParentalBond(int battler, int move);
 void CheckForBadEggs(void);
 s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility);
 s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move);

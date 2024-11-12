@@ -182,6 +182,7 @@ void HandleAction_ActionFinished(void);
 u8 GetBattlerForBattleScript(u8 caseId);
 bool8 IsSleepDisabled(u8 battlerId);
 bool8 IsSleepClauseDisablingMove(u8 battlerId, u16 move);
+u16 GetParentalBondMultiplier(int parentalBondType, int turn);
 void MarkAllBattlersForControllerExec(void); // unused
 bool32 IsBattlerMarkedForControllerExec(u8 battlerId);
 void MarkBattlerForControllerExec(u8 battlerId);
@@ -384,8 +385,8 @@ typedef enum {
     MULTIHIT_TEN_CAN_MISS,
     MULTIHIT_TEN,
     MULTIHIT_BEAT_UP,
-} MultiHitType;
-MultiHitType GetMultiHitType(int battler, int move);
+} MultihitType;
+MultihitType GetMultihitType(int battler, int move);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);
