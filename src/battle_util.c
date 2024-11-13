@@ -14241,6 +14241,15 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
 
         ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | effectTargetFlag)
         return TRUE;
+
+    case ABILITY_DAYBREAK:
+        REQUIRE(ShouldApplyOnHitAffect(opponent))
+        REQUIRE(CanBeBurned(opponent))
+        REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
+        REQUIRE(Random() % 100 < 100)
+
+        ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | effectTargetFlag)
+        return TRUE;
     
     case ABILITY_FRAGRANT_DAZE:
         REQUIRE(ShouldApplyOnHitAffect(opponent))

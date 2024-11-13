@@ -716,6 +716,7 @@ static const u8 sAbilityCutthroatDescription[] = _("The first slicing move used 
 static const u8 sAbilitySandBenderDescription[] = _("Sand Stream + Sand Force.");
 static const u8 sAbilitySandPitDescription[] = _("Uses Sand Tomb on entry.");
 static const u8 sAbilityDesolateSunDescription[] = _("Desolate Land + Earth Eater.");
+static const u8 sAbilityDaybreakDescription[] = _("Burns the foe on contact.\nAlso works on offense.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1466,6 +1467,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SAND_BENDER] = _("Sand Bender"),
     [ABILITY_SAND_PIT] = _("Sand Pit"),
     [ABILITY_DESOLATE_SUN] = _("Desolate Sun"),
+    [ABILITY_DAYBREAK] = _("Daybreak"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2217,4 +2219,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SAND_BENDER] = sAbilitySandBenderDescription,
     [ABILITY_SAND_PIT] = sAbilitySandPitDescription,
     [ABILITY_DESOLATE_SUN] = sAbilityDesolateSunDescription,
+    [ABILITY_DAYBREAK] = sAbilityDaybreakDescription,
 };

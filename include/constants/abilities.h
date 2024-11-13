@@ -766,8 +766,9 @@
 #define ABILITY_SAND_BENDER 744 // Sand Stream + Sand Force.
 #define ABILITY_SAND_PIT 745 // Uses Sand Tomb on entry.
 #define ABILITY_DESOLATE_SUN 746 // Desolate Land + Earth Eater
+#define ABILITY_DAYBREAK 747 // Burns the foe on contact. Also works on offense.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DESOLATE_SUN + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DAYBREAK + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
