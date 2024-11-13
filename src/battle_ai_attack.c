@@ -1967,7 +1967,65 @@ int CheckImmunities(int battlerAtk, int battlerDef, int move, int moveType, int 
     return FALSE;
 }
 
-const u8 sCritChance[] = {24, 8, 2, 1};
+const u16 sCritChance[] = {UQ_4_12(1.0/24), UQ_4_12(1.0/8), UQ_4_12(1.0/2), UQ_4_12(1)};
+
+void CheckSingleHitKo(int baseDamage, int defenderHp, int multiplier, int procChance, int flatDamage, int setCrit, struct MoveState* moveState)
+{
+    if (multiplier) ApplyModifier(multiplier, baseDamage);
+    if (baseDamage + flatDamage > defenderHp)
+    {
+        int minDamage = moveState->noVariance ? baseDamage : ApplyModifier(UQ_4_12(.85), baseDamage);
+        int koChance;
+        if (minDamage + flatDamage >= defenderHp)
+        {
+            int overkill = minDamage * 2 / defenderHp - 2;
+            koChance = 100;
+        }
+        else
+        {
+            // Clamp to 1/16 steps
+            koChance = (16 * (defenderHp - minDamage) / (baseDamage - minDamage) + 1) * (100 / 16);
+        }
+        if (procChance)
+        {
+            koChance = ApplyModifier(procChance, koChance);
+            moveState->koChance -= ApplyModifier(procChance, moveState->koChance);
+        }
+        moveState->koChance = 100 - (100 - moveState->koChance) * (100 - koChance) / 100;
+        moveState->koChance |= setCrit;
+    }
+}
+
+int CalculateKoChanceFine(int baseDamage, int bonusDamage, int critMultiplier, int doubleDamageChance, int battlerDef, int defenderHp, struct MoveState* moveState)
+{
+    
+
+    if (moveState->critChance <= 3 && baseDamage > defenderHp)
+    {
+        CheckSingleHitKo(baseDamage, defenderHp, 0, 0, bonusDamage, moveState->critChance >= 3, moveState);
+        if (moveState->koChance && !moveState->critChance)
+        {
+            int minDamage = moveState->noVariance ? baseDamage : ApplyModifier(UQ_4_12(.85), baseDamage);
+            int overkillInHalves = minDamage * 2 / defenderHp - 2;
+            moveState->overkillInHalves = min(overkillInHalves, 3);
+            return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
+        }
+    }
+    if (moveState->critChance <= 3 && doubleDamageChance)
+    {
+        CheckSingleHitKo(baseDamage, defenderHp, UQ_4_12(2), doubleDamageChance, bonusDamage, moveState->critChance >= 3, moveState);
+    }
+    if (moveState->critChance > 0)
+    {
+        CheckSingleHitKo(baseDamage, defenderHp, critMultiplier, sCritChance[moveState->critChance - 1], bonusDamage, !moveState->koChance || moveState->critChance >= 3, moveState);
+        if (moveState->koChance >= 100) return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
+    }
+    if (doubleDamageChance && moveState->critChance > 0)
+    {
+        CheckSingleHitKo(baseDamage, defenderHp, ApplyModifier(critMultiplier, UQ_4_12(2)), ApplyModifier(sCritChance[moveState->critChance - 1], doubleDamageChance), bonusDamage, !moveState->koChance || moveState->critChance >= 3, moveState);
+    }
+    return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
+}
 
 int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData)
 {
@@ -1980,6 +2038,8 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
     int scoreOther = 0;
     u8 moveType;
     int baseDamage = 0;
+    int baseDamageAverage = 0;
+    int extraDamage = 0;
     int defenderHp = gBattleMons[battlerDef].hp;
     u16 critMultiplier = UQ_4_12(1.5);
     int doubleDamageChance = 0;
@@ -2015,7 +2075,9 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
         {
             if (damageShield)
             {
-                moveState->damage += ApplyModifier(parentalBondSpread[i], defenderHp / 2);
+                int damage = ApplyModifier(parentalBondSpread[i], defenderHp / 2);
+                moveState->damage += damage;
+                moveState->negatedDamage += damage;
                 if (moveState->damage >= damageShield)
                 {
                     damageShield = 0;
@@ -2053,6 +2115,24 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
         break;
     }
 
+    baseDamageAverage = baseDamage;
+
+    if (!moveContainer->fixedDamage && moveState->critChance)
+    {
+        baseDamageAverage += ApplyModifier(ApplyModifier((critMultiplier - UQ_4_12(1.0)), sCritChance[moveState->critChance - 1]), baseDamageAverage);
+    }
+
+    if (!moveState->noVariance)
+    {
+        baseDamageAverage = ApplyModifier(UQ_4_12((1.0 + .85) / 2), baseDamageAverage);
+    }
+
+    if (gBattleMoves[move].effect == EFFECT_MISC_HIT && gBattleMoves[move].argument == MISC_EFFECT_DOUBLE_DAMAGE)
+    {
+        doubleDamageChance = UQ_4_12_PERCENT(gBattleMoves[move].secondaryEffectChance);
+        baseDamageAverage += ApplyModifier(doubleDamageChance, baseDamageAverage);
+    }
+
     if (moveContainer->multihitType >= PARENTAL_BOND_START)
     {
         int multi = parentalBondSpread[0];
@@ -2071,25 +2151,25 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
             // TODO: Beat up
         case MULTIHIT_FIVE:
             moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(5));
-            moveState->damage = baseDamage * 5;
+            moveState->damage = baseDamageAverage * 5;
             hitCount = 5;
             break;
         
         case MULTIHIT_FOUR_OR_FIVE:
             moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(4.5));
-            moveState->damage = baseDamage * 9 / 5;
+            moveState->damage = baseDamageAverage * 9 / 5;
             hitCount = 5;
             break;
         
         case MULTIHIT_SINGLE:
             moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(1));
-            moveState->damage = baseDamage;
+            moveState->damage = baseDamageAverage;
             hitCount = 1;
             break;
         
         case MULTIHIT_TEN:
             moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(10));
-            moveState->damage = baseDamage * 10;
+            moveState->damage = baseDamageAverage * 10;
             hitCount = 10;
             break;
         
@@ -2097,20 +2177,20 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
             if (moveState->accuracy >= 100)
             {
                 moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(10));
-                moveState->damage = baseDamage * 10;
+                moveState->damage = baseDamageAverage * 10;
             }
             else
             {
                 moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(gTenHitsMultiplier[moveState->accuracy - 1]));
-                moveState->damage = ApplyModifier(gTenHitsMultiplier[moveState->accuracy - 1], baseDamage);
+                moveState->damage = ApplyModifier(gTenHitsMultiplier[moveState->accuracy - 1], baseDamageAverage);
             }
             hitCount = 10;
             break;
         
         case MULTIHIT_THREE:
-            if (gBattleMoves[move].effect == EFFECT_TRIPLE_KICK) baseDamage *= 2;
+            if (gBattleMoves[move].effect == EFFECT_TRIPLE_KICK) baseDamageAverage *= 2;
             moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(3));
-            moveState->damage = baseDamage * 3;
+            moveState->damage = baseDamageAverage * 3;
             hitCount = 3;
             break;
         
@@ -2118,44 +2198,28 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
             if (moveState->accuracy >= 100)
             {
                 moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(3));
-                moveState->damage = baseDamage * 6;
+                moveState->damage = baseDamageAverage * 6;
             }
             else
             {
                 moveState->multiHitExpect = gTripleKickHitExpected[moveState->accuracy - 1];
-                moveState->damage = ApplyModifier(gTripleKickMultiplier[moveState->accuracy - 1], baseDamage);
+                moveState->damage = ApplyModifier(gTripleKickMultiplier[moveState->accuracy - 1], baseDamageAverage);
             }
             hitCount = 3;
             break;
         
         case MULTIHIT_TWO:
             moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12(2));
-            moveState->damage = baseDamage * 2;
+            moveState->damage = baseDamageAverage * 2;
             hitCount = 2;
             break;
         
         case MULTIHIT_TWO_TO_FIVE:
             moveState->multiHitExpect = UQ_CLAMP_EXPECT(UQ_4_12((2.0 + 3.0) / 3.0 + (4.0 + 5.0) / 6.0));
-            moveState->damage = ApplyModifier(UQ_4_12((2.0 + 3.0) / 3.0 + (4.0 + 5.0) / 6.0), baseDamage);
+            moveState->damage = ApplyModifier(UQ_4_12((2.0 + 3.0) / 3.0 + (4.0 + 5.0) / 6.0), baseDamageAverage);
             hitCount = 5;
             break;
         }
-    }
-
-    if (!moveContainer->fixedDamage && moveState->critChance)
-    {
-        moveState->damage += ApplyModifier((critMultiplier - UQ_4_12(1.0)) / sCritChance[moveState->critChance - 1], moveState->damage);
-    }
-
-    if (!moveState->noVariance)
-    {
-        moveState->damage = ApplyModifier(UQ_4_12((1.0 + .85) / 2), moveState->damage);
-    }
-
-    if (gBattleMoves[move].effect == EFFECT_MISC_HIT && gBattleMoves[move].argument == MISC_EFFECT_DOUBLE_DAMAGE)
-    {
-        doubleDamageChance = gPercentToModifier[gBattleMoves[move].secondaryEffectChance];
-        moveState->damage += ApplyModifier(doubleDamageChance, moveState->damage);
     }
 
     if (phase == AI_PHASE_DAMAGE_ROUGH || moveContainer->isTwoTurn) return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
@@ -2164,87 +2228,52 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
 
     // Fail to break shield
     if (damageShield && damageShield > moveState->damage) return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
+    else if (damageShield) moveState->breakShield = TRUE;
 
     if (hitCount == 1)
     {
-        if (moveState->critChance <= 3 && baseDamage > defenderHp)
+        if (damageShield) return AI_SCORE_BREAK_SUBSTITUTE;
+
+        if (aiData->battlerState[battlerDef].sash)
         {
-            int minDamage = moveState->noVariance ? baseDamage : ApplyModifier(UQ_4_12(.85), baseDamage);
-            if (minDamage >= defenderHp)
-            {
-                int overkill = minDamage * 2 / defenderHp - 2;
-                moveState->overkill = min(overkill, 3);
-                moveState->koChance = 100;
-                moveState->critKo = moveState->critChance >= 3;
-                return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
-            }
-            moveState->koChance = 100 * (defenderHp - minDamage) / (baseDamage - minDamage);
-            moveState->koChance = max(moveState->koChance, 6);
+            moveState->breakShield = TRUE;
+            return AI_SCORE_DAMAGE(max(defenderHp - 1, moveState->damage), battlerDef);
         }
-        if (moveState->critChance <= 3 && doubleDamageChance)
+
+        return CalculateKoChanceFine(baseDamage, 0, critMultiplier, doubleDamageChance, battlerDef, defenderHp, moveState);
+    }
+
+    if (moveContainer->multihitType > PARENTAL_BOND_START)
+    {
+        int bonusMultiplier = parentalBondSpread[1];
+        int bonusDamage;
+        for (i = 1; i < hitCount; i++)
         {
-            int modifiedDamage = baseDamage * 2;
-            if (modifiedDamage > defenderHp)
-            {
-                int minDamage = moveState->noVariance ? modifiedDamage : ApplyModifier(UQ_4_12(.85), modifiedDamage);
-                int koChance;
-                if (minDamage >= defenderHp)
-                {
-                    int overkill = minDamage * 2 / defenderHp - 2;
-                    koChance = 100;
-                }
-                else
-                {
-                    koChance = 100 * (defenderHp - minDamage) / (modifiedDamage - minDamage);
-                    koChance = max(koChance, 6);
-                }
-                koChance = ApplyModifier(doubleDamageChance, koChance);
-                moveState->koChance = 100 - (100 - moveState->koChance) * (100 - koChance) / 100;
-            }
+            bonusMultiplier += parentalBondSpread[i];
         }
-        if (moveState->critChance > 0)
+        bonusDamage = ApplyModifier(bonusMultiplier, baseDamageAverage);
+        baseDamage = ApplyModifier(parentalBondSpread[0], baseDamage);
+
+        if (damageShield)
         {
-            int modifiedDamage = ApplyModifier(critMultiplier, baseDamage);
-            if (modifiedDamage > defenderHp)
-            {
-                int minDamage = moveState->noVariance ? modifiedDamage : ApplyModifier(UQ_4_12(.85), modifiedDamage);
-                int koChance;
-                if (minDamage >= defenderHp)
-                {
-                    koChance = 100;
-                }
-                else
-                {
-                    koChance = 100 * (defenderHp - minDamage) / (modifiedDamage - minDamage);
-                    koChance = max(koChance, 6);
-                }
-                moveState->critKo |= !moveState->koChance || moveState->critChance >= 3;
-                koChance = ApplyModifier(sCritChance[moveState->critChance - 1], koChance);
-                moveState->koChance = 100 - (100 - moveState->koChance) * (100 - koChance) / 100;
-                if (moveState->koChance >= 100) AI_SCORE_DAMAGE(moveState->damage, battlerDef);
-            }
+            moveState->breakShield = TRUE;
+            moveState->koChance = 100 * (baseDamage > damageShield && bonusDamage >= defenderHp);
+            return AI_SCORE_BREAK_SUBSTITUTE + (moveState->koChance ? AI_SCORE_DAMAGE(bonusDamage, battlerDef) : 0);
         }
-        if (doubleDamageChance && moveState->critChance > 0)
+
+        return CalculateKoChanceFine(baseDamage, bonusDamage, critMultiplier, doubleDamageChance, battlerDef, defenderHp, moveState);
+    }
+
+    if (gBattleMoves[move].effect != EFFECT_TRIPLE_KICK)
+    {
+        if (damageShield)
         {
-            int modifiedDamage = ApplyModifier(critMultiplier, baseDamage * 2);
-            if (modifiedDamage > defenderHp)
-            {
-                int minDamage = moveState->noVariance ? modifiedDamage : ApplyModifier(UQ_4_12(.85), modifiedDamage);
-                int koChance;
-                if (minDamage >= defenderHp)
-                {
-                    koChance = 100;
-                }
-                else
-                {
-                    koChance = 100 * (defenderHp - minDamage) / (modifiedDamage - minDamage);
-                    koChance = max(koChance, 6);
-                }
-                moveState->critKo |= !moveState->koChance || moveState->critChance >= 3;
-                koChance = ApplyModifier(doubleDamageChance, ApplyModifier(sCritChance[moveState->critChance - 1], koChance));
-                moveState->koChance = 100 - (100 - moveState->koChance) * (100 - koChance) / 100;
-            }
+            hitCount -= damageShield / baseDamageAverage + 1;
+            if (!hitCount) return AI_SCORE_BREAK_SUBSTITUTE;
+            scoreOther = AI_SCORE_BREAK_SUBSTITUTE;
         }
-        return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
+
+        hitCount -= defenderHp / baseDamageAverage;
+        if (hitCount <= 0) return scoreOther + AI_SCORE_DAMAGE(hitCount * baseDamageAverage, battlerDef);
     }
 }

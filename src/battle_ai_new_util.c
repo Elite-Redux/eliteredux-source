@@ -142,7 +142,7 @@ int CalculateCompoundOdds(int probability, struct MoveState* moveState)
     if (moveState->multiHitExpect == UQ_CLAMP_EXPECT(UQ_4_12(1))) return probability;
     unclamp = UQ_UNCLAMP_EXPECT(moveState->multiHitExpect);
     p2 = UQ_4_12_FLOOR(unclamp);
-    if (p2 == 1) p = gPercentToModifier[probability];
+    if (p2 == 1) p = UQ_4_12_PERCENT(probability);
     else p = gCompoundOdds[p2 - 2][(probability / 10) - 1];
     p2 = UQ_4_12_DECIMAL(unclamp);
     if (p2)

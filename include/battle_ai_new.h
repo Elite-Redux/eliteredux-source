@@ -47,9 +47,10 @@ struct MoveState {
     int score;
     u16 koChance;
     u16 damage;
+    u16 negatedDamage;
     u8 multiHitExpect;
     u8 accuracy;
-    u8 overkill:2;
+    u8 overkillInHalves:2;
     u8 type:5;
     u8 effectiveness:2;
     u8 critChance:3;
@@ -92,6 +93,7 @@ struct BattlerState
 {
     u16 hp;
     u16 shield;
+    u8 sash:1;
 };
 
 

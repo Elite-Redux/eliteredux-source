@@ -380,7 +380,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
 u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
 int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType);
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u8* overrideBattler, u16* abilityPopup);
-u16 MulModifierDirect(u16 modifier, u16 val);
+u16 DivideModifier(u16 mod1, u16 mod2);
 void MulModifier(u16 *modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
 int IsBloodStainAffected(int battler);
