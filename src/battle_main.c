@@ -5151,14 +5151,14 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
 
 union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove)
 {
-    union SpeedValue speedValue = { .speedStruct = { .priority = 0 } };
+    union SpeedValue speedValue = { .priority = 0 };
     int quash = gFieldTimers.quashTimer;
     int priority = 6;
 
     if (!quash)
     {
-        speedValue.speedStruct.afterYou = gRoundStructs[battler].afterYou;
-        speedValue.speedStruct.dazedNegation = !gVolatileStructs[battler].dazed;
+        speedValue.afterYou = gRoundStructs[battler].afterYou;
+        speedValue.dazedNegation = !gVolatileStructs[battler].dazed;
     }
 
     if (!ignoreChosenMove)
@@ -5167,15 +5167,15 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove)
         if (priority > 15) priority = 15;
         else if (priority < 0) priority = 0;
     }
-    speedValue.speedStruct.priority = priority;
+    speedValue.priority = priority;
 
-    speedValue.speedStruct.goesFirst = gRoundStructs[battler].quickDraw + gRoundStructs[battler].usedCustapBerry;
-    speedValue.speedStruct.goesLastNegation = GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LAGGING_TAIL;
-    if (!ignoreChosenMove && !quash) speedValue.speedStruct.goesLastNegation += MYCELIUM_MIGHT_AFFECTED(battler, GetChosenMove(battler));
-    speedValue.speedStruct.goesLastNegation = ~speedValue.speedStruct.goesLastNegation;
+    speedValue.goesFirst = gRoundStructs[battler].quickDraw + gRoundStructs[battler].usedCustapBerry;
+    speedValue.goesLastNegation = GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_LAGGING_TAIL;
+    if (!ignoreChosenMove && !quash) speedValue.goesLastNegation += MYCELIUM_MIGHT_AFFECTED(battler, GetChosenMove(battler));
+    speedValue.goesLastNegation = ~speedValue.goesLastNegation;
 
-    speedValue.speedStruct.effectiveSpeed = GetBattlerTotalSpeedStat(battler, quash ? TOTAL_SPEED_QUASH : TOTAL_SPEED_FULL);
-    if (IsTrickRoomActive()) speedValue.speedStruct.effectiveSpeed = ~speedValue.speedStruct.effectiveSpeed;
+    speedValue.effectiveSpeed = GetBattlerTotalSpeedStat(battler, quash ? TOTAL_SPEED_QUASH : TOTAL_SPEED_FULL);
+    if (IsTrickRoomActive()) speedValue.effectiveSpeed = ~speedValue.effectiveSpeed;
     return speedValue;
 }
 

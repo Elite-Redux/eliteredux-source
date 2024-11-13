@@ -192,7 +192,7 @@ int CheckCancelled(int battlerAtk, int battlerDef, int move, struct MoveState* m
 
     if (!AreSameSide(battlerAtk, battlerDef)
         && !gProcessingExtraAttacks
-        && moveState->speedValue.speedStruct.priority > 6)
+        && moveState->speedValue.priority > 6)
     {
         if (gSideTimers[GetBattlerSide(battlerDef)].quickGuardTimer) return TRUE;
         if (IsBattlerTerrainAffected(battlerDef, STATUS_FIELD_PSYCHIC_TERRAIN)) return TRUE;

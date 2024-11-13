@@ -28,7 +28,7 @@ struct UnknownPokemonStruct4
 };
 
 union SpeedValue {
-    struct SpeedStruct {
+    struct {
         // Compiler lays this out in reverse order
         u16 effectiveSpeed;
         u16 goesLastNegation:2;
@@ -36,7 +36,7 @@ union SpeedValue {
         u16 priority:4;
         u16 dazedNegation:1;
         u16 afterYou:1;
-    } speedStruct;
+    };
     u32 comparable;
 };
 
