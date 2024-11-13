@@ -44200,7 +44200,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_UNDISCOVERED,
         .eggGroup2 = EGG_GROUP_UNDISCOVERED,
     .abilities      = {ABILITY_PHANTOM, ABILITY_FEARMONGER, ABILITY_MYSTIC_POWER},
-    .innates        = {ABILITY_DESOLATE_SUN, ABILITY_DAYBREAK, ABILITY_RADIANCE},
+    .innates        = {ABILITY_DESOLATE_LAND, ABILITY_DAYBREAK, ABILITY_RADIANCE},
         .bodyColor = BODY_COLOR_PINK,
         .noFlip = FALSE,
     },
