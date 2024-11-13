@@ -3,6 +3,7 @@
 
 #include "constants/pokemon.h"
 #include "battle_ai_new.h"
+#include "battle_util.h"
 
 #define WINDOW_CLEAR            0x1
 #define WINDOW_x80              0x80
@@ -38,6 +39,8 @@ struct IntimidateCloneData
 
 extern const struct IntimidateCloneData gIntimidateCloneData[NUM_INTIMIDATE_CLONES];
 
+int GetParentalBondCount(int battler, MultihitType parentalBondType);
+MultihitType GetParentalBondType(int battler, int move);
 void CheckForBadEggs(void);
 s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbility);
 s8 GetInverseCritChance(u8 battlerAtk, u8 battlerDef, u32 move);
@@ -79,7 +82,6 @@ u32 IsDesertCloakProtected(u32 battler);
 u8 getStatToLowerFromIntimidateClone(u16 ability, u8 num);
 bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler);
 void SetStatChanger(u8 statId, s8 change);
-u8 StatBuffValue(s8 change);
 s8 ChangeStatBuffsImplicit(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
 s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
 u8 GetFirstFaintedPartyIndex(u8 battler);

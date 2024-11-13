@@ -561,7 +561,7 @@ int ScoreDefenseAbility(int ability, int battlerAtk, int battlerDef, int move, i
         return AI_SCORE_LOSE_HP(battlerAtk, 25);
     
     case ABILITY_PATCHWORK:
-        REQUIRE(moveState->breakDisguise);
+        REQUIRE(moveState->breakShield);
         return AI_SCORE_CURSE(battlerAtk);
     
     case ABILITY_EFFECT_SPORE:

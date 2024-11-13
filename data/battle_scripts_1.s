@@ -4787,9 +4787,6 @@ BattleScript_EffectParalyzeIgnoreType:
 	attackstring
 	ppreduce
 	requirecandoeffect BS_TARGET, MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES
-	jumpifmove MOVE_GLARE, BattleScript_BattleScript_EffectParalyzeNoTypeCalc
-	typecalc
-BattleScript_BattleScript_EffectParalyzeNoTypeCalc:
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
 	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
 	bichalfword gMoveResultFlags, MOVE_RESULT_SUPER_EFFECTIVE | MOVE_RESULT_NOT_VERY_EFFECTIVE
@@ -9197,27 +9194,18 @@ BattleScript_PowderMoveNoEffectWaitMsg:
 BattleScript_MoveUsedFlinched::
 	printstring STRINGID_PKMNFLINCHED
 	waitmessage B_WAIT_TIME_LONG
-	jumpifability BS_ATTACKER, ABILITY_RATTLED, BattleScript_FlinchedDoRattled
+	setstatchanger STAT_SPEED, 1, FALSE
+	callifability BS_ATTACKER, ABILITY_RATTLED, BattleScript_AttackerAbilityStatRaiseAndDoStatBuff
 BattleScript_MoveUsedFlinched_CheckSteadfast:
-	jumpifability BS_ATTACKER ABILITY_STEADFAST BattleScript_TryActivateSteadFast
+	callifability BS_ATTACKER ABILITY_STEADFAST BattleScript_AttackerAbilityStatRaiseAndDoStatBuff
 BattleScript_MoveUsedFlinchedEnd:
 	goto BattleScript_MoveEnd
-BattleScript_TryActivateSteadFast:
-	setstatchanger STAT_SPEED, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_MoveUsedFlinchedEnd
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_MoveUsedFlinchedEnd
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
-	setgraphicalstatchangevalues
-	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	printstring STRINGID_ATTACKERABILITYSTATRAISE
-	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveUsedFlinchedEnd
-BattleScript_FlinchedDoRattled:
-	jumpifstat BS_ABILITY_BATTLER, CMP_EQUAL, STAT_SPEED, MAX_STAT_STAGE, BattleScript_MoveUsedFlinched_CheckSteadfast
-	setstatchanger STAT_SPEED, 1, FALSE
+
+BattleScript_AttackerAbilityStatRaiseAndDoStatBuff:
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_ALLOW_PTR, BattleScript_Return
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_Return
 	call BattleScript_AttackerAbilityStatRaise
-	goto BattleScript_MoveUsedFlinched_CheckSteadfast
+	return
 
 BattleScript_PrintUproarOverTurns::
 	printfromtable gUproarOverTurnStringIds

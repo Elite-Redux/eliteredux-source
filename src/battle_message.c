@@ -3701,7 +3701,7 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 HANDLE_NICKNAME_STRING_CASE(gStackBattler4)
                 break;
             case B_TXT_STAT_CHANGER:
-                toCpy = gStatNamesTable[GET_STAT_BUFF_ID(gBattleScripting.statChanger)];
+                toCpy = gStatNamesTable[gBattleScripting.statChanger.statId];
                 break;
             case B_TXT_CURRENT_MOVE: // current move name
                 if (gBattleMsgDataPtr->currentMove >= MOVES_COUNT)

@@ -803,15 +803,22 @@ struct BattleStruct
                                         || gRoundStructs[battlerId].silkTrapped                                      \
                                         || gRoundStructs[battlerId].mindReader)
 
-#define GET_STAT_BUFF_ID(n)((n & 7))              // first three bits 0x1, 0x2, 0x4
-#define GET_STAT_BUFF_VALUE_WITH_SIGN(n)((n & 0xF8))
-#define GET_STAT_BUFF_VALUE(n)(((n >> 3) & 0xF))      // 0x8, 0x10, 0x20, 0x40
-#define STAT_BUFF_NEGATIVE 0x80                     // 0x80, the sign bit
-
 #define SET_STAT_BUFF_VALUE(n)((((n) << 3) & 0xF8))
 
-#define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger = (statId) + ((stage) << 3) + (goesDown << 7))
-#define SET_STATCHANGER2(dst, statId, stage, goesDown)(dst = (statId) + ((stage) << 3) + (goesDown << 7))
+union StatChanger {
+    u8 value;
+    struct {
+        u8 statId:3;
+        u8 stage:4;
+        u8 goesDown:1;
+    };
+};
+
+#define GET_STAT_BUFF_VALUE_WITH_SIGN(statChanger) (((statChanger).goesDown ? -1 : 1) * ((int) (statChanger).stage))
+
+#define SET_STATCHANGER(statId, stage, goesDown)(gBattleScripting.statChanger.value = (statId) + ((stage) << 3) + ((goesDown) << 7))
+#define SET_STATCHANGER_WITH_SIGN(statId, stage) SET_STATCHANGER(statId, (stage) < 0 ? -(stage) : (stage), (stage) < 0)
+#define SET_STATCHANGER2(dst, statId, stage, goesDown)(dst.value = (statId) + ((stage) << 3) + ((goesDown) << 7))
 
 struct BattleScripting
 {
@@ -828,12 +835,12 @@ struct BattleScripting
     u8 animArg1;
     u8 animArg2;
     u8 moveendState;
-    u8 savedStatChanger;
+    union StatChanger savedStatChanger;
     u8 shiftSwitched;
     u8 battler;
     u8 animTurn;
     u8 animTargetsHit;
-    u8 statChanger;
+    union StatChanger statChanger;
     bool8 statAnimPlayed;
     u8 getexpState;
     u8 drawlvlupboxState;

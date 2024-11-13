@@ -61,6 +61,8 @@
 #define PYRAMID_BAG_ITEMS_COUNT 10
 #define HALL_FACILITIES_COUNT 9 // 7 facilities for single mode + tower double mode + tower multi mode.
 
+#define MAX_BATTLERS_COUNT  4
+
 #define TRAINER_ID_LENGTH 4
 #define MAX_MON_MOVES 4
 #define NUM_STATS 6

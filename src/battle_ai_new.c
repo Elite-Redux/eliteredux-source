@@ -16,6 +16,7 @@
 #include "battle_ai_scoring.h"
 #include "battle_main.h"
 #include "battle_ai_new_util.h"
+#include "battle_ai_attack.h"
 
 int ScoreMove(int battlerAtk, int battlerDef, int move, int targets, struct AiData* aiData)
 {
@@ -32,7 +33,7 @@ void RestoreDisguise(struct DisguiseSimulation* actual)
 
 }
 
-int CalculateAccuracy(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData)
+int CalculateAccuracy(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData)
 {
     // TODO: Anticipation
     int accuracy = GetTotalAccuracy(battlerAtk, battlerDef, move, moveState);
@@ -43,20 +44,22 @@ int CalculateAccuracy(int battlerAtk, int battlerDef, int move, AiProcessingPhas
     return 0;
 }
 
-int CalculateBasicMoveInfo(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData)
+int CalculateBasicMoveInfo(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData)
 {
     moveState->speedValue = AiPerformMoveSpeedCalculation(battlerAtk, battlerDef, move);
     if (CheckCancelled(battlerAtk, battlerDef, move, moveState, aiData))
+    {
         moveState->cancelled = TRUE;
+    }
     
     return 0;
 }
 
-static int (* const sPhaseHandlersTable[AI_PHASE_COUNT])(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct AiData* aiData) =
+static int (* const sPhaseHandlersTable[AI_PHASE_COUNT])(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData) =
 {
     [AI_PHASE_BASIC] = CalculateBasicMoveInfo,
     [AI_PHASE_ACCURACY] = CalculateAccuracy,
-    [AI_PHASE_DAMAGE] = NULL,
+    [AI_PHASE_DAMAGE] = ScoreMoveDamage,
 };
 
 void SetDamage()
@@ -80,7 +83,7 @@ void IterateForPhase(AiProcessingPhase phase, struct AiData* aiData)
             {
                 struct MoveState* state = &container->targetData[targetNum];
                 FILTER_NOT(state->cancelled)
-                state->score += sPhaseHandlersTable[phase](battlerAtk, state->target, container->move, phase, state, aiData);
+                state->score += sPhaseHandlersTable[phase](battlerAtk, state->target, container->move, phase, state, container, aiData);
             }
         }
     }
@@ -103,15 +106,16 @@ void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData)
     for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++)
     {
         int move;
+        struct MoveContainer* moveContainer = &aiData->moveState[battlerAtk][moveNum];
         if (move == MOVE_NONE || unusableMoves & (1 << moveNum))
         {
-            aiData->moveState[battlerAtk][moveNum].unusable = TRUE;
+            moveContainer->unusable = TRUE;
             continue;
         }
-        move = aiData->moveState[battlerAtk][moveNum].move = gBattleMons[battlerAtk].moves[moveNum];
-        FILTER(!AlwaysCancelled(battlerAtk, move, &aiData->moveState[battlerAtk][moveNum]))
-        aiData->moveState[battlerAtk][moveNum].targetFlags = GetBattlerBattleMoveTargetFlags(move, battlerAtk);
-        switch (aiData->moveState[battlerAtk][moveNum].targetFlags)
+        move = moveContainer->move = gBattleMons[battlerAtk].moves[moveNum];
+        FILTER(!AlwaysCancelled(battlerAtk, move, moveContainer))
+        moveContainer->targetFlags = GetBattlerBattleMoveTargetFlags(move, battlerAtk);
+        switch (moveContainer->targetFlags)
         {
         case MOVE_TARGET_ALLY:
             SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, aiData);
@@ -144,6 +148,15 @@ void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData)
             SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, aiData);
             break;
         }
+
+        FILTER(moveContainer->count)
+
+        moveContainer->startingMoveType = GetTypeBeforeUsingMove(move, battlerAtk);
+
+        FILTER_NOT(IS_MOVE_STATUS(move))
+
+        moveContainer->multihitType = GetMultihitType(battlerAtk, move);
+        if (!moveContainer->multihitType) moveContainer->multihitType = GetParentalBondType(battlerAtk, move);
     }
 }
 

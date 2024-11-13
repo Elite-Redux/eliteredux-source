@@ -28,14 +28,15 @@ struct UnknownPokemonStruct4
 };
 
 union SpeedValue {
-    struct SpeedStruct {
-        u16 afterYou:1;
-        u16 dazedNegation:1;
-        u16 priority:4;
-        u16 goesFirst:2;
-        u16 goesLastNegation:2;
+    struct {
+        // Compiler lays this out in reverse order
         u16 effectiveSpeed;
-    } speedStruct;
+        u16 goesLastNegation:2;
+        u16 goesFirst:2;
+        u16 priority:4;
+        u16 dazedNegation:1;
+        u16 afterYou:1;
+    };
     u32 comparable;
 };
 
@@ -98,6 +99,7 @@ bool8 TryRunFromBattle(u8 battlerId);
 void TurnStructsClear(void);
 void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk);
 u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk);
+void ApplyTypeOverrideInformation(int move, int battlerAtk, int moveType, int ateBoost);
 s32 GetHighestLevelInPlayerParty(void);
 u16 selectMoves (u16 species, u8 i, u16 atk, u16 spAtk);
 u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer);
