@@ -765,8 +765,9 @@
 #define ABILITY_CUTTHROAT 743 // The first slicing move used on each entry in gets +1 priority.
 #define ABILITY_SAND_BENDER 744 // Sand Stream + Sand Force.
 #define ABILITY_SAND_PIT 745 // Uses Sand Tomb on entry.
+#define ABILITY_DESOLATE_SUN 746 // Desolate Land + Earth Eater
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_SAND_PIT + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_DESOLATE_SUN + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

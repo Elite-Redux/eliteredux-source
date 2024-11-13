@@ -2508,7 +2508,7 @@ static const u8 sMoveTwoLineDescription_MoveSparklingAria[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveIceHammer[] = _(
     "Swings a fist to strike.\n"
-    "Lowers the user's Speed.");
+    "Deals good, consistent damage.");
 
 static const u8 sMoveTwoLineDescription_MoveFloralHealing[] = _(
     "Restores an ally's HP.\n"
@@ -5553,7 +5553,7 @@ static const u8 sMoveFourLineDescription_MoveBanefulBunker[] = _("This move prot
 static const u8 sMoveFourLineDescription_MoveSpiritShackle[] = _("The foe's shadow is\npinned down when it\nis hit, preventing\nit from escaping.");
 static const u8 sMoveFourLineDescription_MoveDarkestLariat[] = _("The foe swings both\narms to hit its\nfoe, ignoring any\nstat changes.");
 static const u8 sMoveFourLineDescription_MoveSparklingAria[] = _("Musical bubbles hit\nthose around the\nuser, healing the\nburn of those hit.");
-static const u8 sMoveFourLineDescription_MoveIceHammer[] = _("A strong, heavy\nfist is swung. Drops\nthe user's Speed.\nIron Fist boost.");
+static const u8 sMoveFourLineDescription_MoveIceHammer[] = _("A strong, heavy\nfist is swung. Iron\nFist boost.");
 static const u8 sMoveFourLineDescription_MoveFloralHealing[] = _("Heals the target by\nup to half its max\nHP. It heals more\nin grassy terrain.");
 static const u8 sMoveFourLineDescription_MoveHighHorsepower[] = _("The user fiercely\nattacks the foe.\nStriker boost.");
 static const u8 sMoveFourLineDescription_MoveStrengthSap[] = _("Restores HP by the\namount of the foe's\nAttack stat, and\ndrops their Attack.");
