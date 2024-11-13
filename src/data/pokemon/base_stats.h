@@ -12073,12 +12073,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_BARBOACH] =
     {
-    .baseHP        = 50,
-    .baseAttack    = 68, //48
-    .baseDefense   = 73, //43
-    .baseSpeed     = 60,
-    .baseSpAttack  = 46,
-    .baseSpDefense = 41,
+    .baseHP         = 50,
+    .baseAttack     = 68,
+    .baseDefense    = 73,
+    .baseSpeed      = 60,
+    .baseSpAttack   = 68,
+    .baseSpDefense  = 41,
     .type1 = TYPE_WATER,
     .type2 = TYPE_GROUND,
     .catchRate = 190,
@@ -12099,12 +12099,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_WHISCASH] =
     {
-    .baseHP        =  110,
-    .baseAttack    =  98,
-    .baseDefense   = 103,
-    .baseSpeed     =  60,
-    .baseSpAttack  =  76,
-    .baseSpDefense =  71,
+    .baseHP         = 110,
+    .baseAttack     = 98,
+    .baseDefense    = 103,
+    .baseSpeed      = 60,
+    .baseSpAttack   = 98,
+    .baseSpDefense  = 71,
     .type1 = TYPE_WATER,
     .type2 = TYPE_GROUND,
     .catchRate = 255,
