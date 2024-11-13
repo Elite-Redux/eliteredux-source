@@ -5151,7 +5151,7 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
 
 union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove)
 {
-    union SpeedValue speedValue = { .priority = 0 };
+    union SpeedValue speedValue = { 0 };
     int quash = gFieldTimers.quashTimer;
     int priority = 6;
 
