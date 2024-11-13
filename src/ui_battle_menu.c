@@ -1936,34 +1936,24 @@ static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
     SetTypeBeforeUsingMove(move, sMenuDataPtr->battlerId);
     GET_MOVE_TYPE(move, moveType);
 
-    //Sets move power depending on the mon ability/stats
-    movePower = CalcMoveBasePowerAfterModifiers(move, 0, sMenuDataPtr->battlerId, target, moveType, FALSE);
-
-    moveType2 = gBattleMoves[move].type2;
-    if (moveType2)
-    {
-        u32 movePower2 = CalcMoveBasePowerAfterModifiers(move, 0, sMenuDataPtr->battlerId, target, moveType2, FALSE);
-        if (movePower2 > movePower)
-        {
-            moveType = moveType2;
-            movePower = movePower2;
-        }
-    }
-
     //Check Stab
     stab = StabMultiplierInHalves(sMenuDataPtr->battlerId, moveType, move);
     
     //Move Name
     AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gMoveNamesLong[move]);
     //Type
-    if (gBattleMoves[move].type2 == TYPE_MYSTERY || gBattleMoves[move].type2 == TYPE_NORMAL)
+    if (move)
+    {
         StringCopy(gStringVar4, gTypeNames[moveType]);
-    else {
+        AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, ((x + 1) * 8) + SPACE_BETWEEN_ABILITY_AND_NAME + 16, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar4);
+    }
+    else if (gBattleMoves[move].type2 != TYPE_MYSTERY && gBattleMoves[move].type2 != TYPE_NORMAL)
+    {
         StringCopy(gStringVar1, gTypeNames[moveType]);
         StringCopy(gStringVar2, gTypeNames[gBattleMoves[move].type2]);
         StringExpandPlaceholders(gStringVar4, gText_Move_Type_TwoTypedMoves);
+        AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, ((x + 1) * 8) + SPACE_BETWEEN_ABILITY_AND_NAME + 16, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar4);
     }
-    AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, ((x + 1) * 8) + SPACE_BETWEEN_ABILITY_AND_NAME + 16, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar4);
     y++;
 
     //Stab Boost
@@ -1972,6 +1962,12 @@ static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
     
     switch (mode) {
         case MOVE_MODE_NORMAL:
+            if (!move)
+            {
+                StringCopy(gStringVar4, gText_Target_Nothing);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[colorIdx], 0xFF, gStringVar4);
+                break;
+            }
             // Move Power ---------------------------------------------------------------------------------------------------
             if (!isStatusMove)
                 ConvertIntToDecimalStringN(gStringVar1, movePower, STR_CONV_MODE_LEFT_ALIGN, 3);

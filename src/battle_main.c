@@ -6439,7 +6439,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
     moveType = GetMoveTypeInternal(move, battlerAtk, &gBattleStruct->ateBoost[battlerAtk], &realType);
     if (realType >= 0) moveType = realType;
 
-    if (realType != -1) gBattleStruct->dynamicMoveType = 0x80 | realType;
+    if (realType != -1) gBattleStruct->dynamicMoveType = 0x80 | moveType;
     else gBattleStruct->dynamicMoveType = 0;
 
     // Check if a gem should activate.
