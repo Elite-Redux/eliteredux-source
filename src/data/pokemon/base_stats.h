@@ -91,12 +91,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_VENUSAUR_MEGA] =
     {
-    .baseHP        = 90, //80
-    .baseAttack    = 100,
-    .baseDefense   = 123,
-    .baseSpeed     = 80,
-    .baseSpAttack  = 122,
-    .baseSpDefense = 120,
+    .baseHP         = 90,
+    .baseAttack     = 100,
+    .baseDefense    = 123,
+    .baseSpeed      = 80,
+    .baseSpAttack   = 122,
+    .baseSpDefense  = 120,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_POISON,
     .catchRate = 255,
@@ -119,12 +119,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_VENUSAUR_MEGA_X] =
     {
-    .baseHP        = 90,
-    .baseAttack    = 125,
-    .baseDefense   = 130,
-    .baseSpeed     = 60,
-    .baseSpAttack  = 100,
-    .baseSpDefense = 130,
+    .baseHP         = 90,
+    .baseAttack     = 125,
+    .baseDefense    = 130,
+    .baseSpeed      = 60,
+    .baseSpAttack   = 100,
+    .baseSpDefense  = 130,
     .type1 = TYPE_GRASS,
     .type2 = TYPE_POISON,
     .catchRate = 255,

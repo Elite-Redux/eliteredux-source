@@ -767,8 +767,9 @@
 #define ABILITY_SAND_PIT 745 // Uses Sand Tomb on entry.
 #define ABILITY_DESOLATE_SUN 746 // Desolate Land + Earth Eater
 #define ABILITY_DAYBREAK 747 // Burns the foe on contact. Also works on offense.
+#define ABILITY_ENERGY_SIPHON 748 // Heals the user for 1/4 of the damage they deal.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DAYBREAK + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_ENERGY_SIPHON + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

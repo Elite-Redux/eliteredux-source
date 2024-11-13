@@ -185,7 +185,7 @@ static const u8 sAbilityDeltaStreamDescription[] = _("Strong Winds until switche
 static const u8 sAbilityStaminaDescription[] = _("Getting hit raises Def by +1.\nCritical hits maximize Defense.");
 static const u8 sAbilityWimpOutDescription[] = _("At 1/2 of max HP or below,\ninstantly switches out.");
 static const u8 sAbilityWaterCompactionDescription[] = _("Takes 1/2 dmg from Water-type\nmoves. +2 Def when hit by those.");
-static const u8 sAbilityMercilessDescription[] = _("100% crit if targetting slowed,\npoisoned or paralyzed foes.");
+static const u8 sAbilityMercilessDescription[] = _("100% crit if targetting slowed,\npoisoned, paralyzed, or bleeding foes.");
 static const u8 sAbilityShieldsDownDescription[] = _("At 1/2 of max HP or below,\ntransforms into Core form.");
 static const u8 sAbilityStakeoutDescription[] = _("Deals double damage to opponents\nbeing switched in.");
 static const u8 sAbilityWaterBubbleDescription[] = _("Halves Fire dmg taken, no burns,\ndoubles power of its Water moves.");
@@ -717,6 +717,7 @@ static const u8 sAbilitySandBenderDescription[] = _("Sand Stream + Sand Force.")
 static const u8 sAbilitySandPitDescription[] = _("Uses Sand Tomb on entry.");
 static const u8 sAbilityDesolateSunDescription[] = _("Desolate Land + Earth Eater.");
 static const u8 sAbilityDaybreakDescription[] = _("Burns the foe on contact.\nAlso works on offense.");
+static const u8 sAbilityEnergySiphonDescription[] = _("Heals the user for 1/4\nof the damage they deal.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1468,6 +1469,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_SAND_PIT] = _("Sand Pit"),
     [ABILITY_DESOLATE_SUN] = _("Desolate Sun"),
     [ABILITY_DAYBREAK] = _("Daybreak"),
+    [ABILITY_ENERGY_SIPHON] = _("Energy Siphon"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2220,4 +2222,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_SAND_PIT] = sAbilitySandPitDescription,
     [ABILITY_DESOLATE_SUN] = sAbilityDesolateSunDescription,
     [ABILITY_DAYBREAK] = sAbilityDaybreakDescription,
+    [ABILITY_ENERGY_SIPHON] = sAbilityEnergySiphonDescription,
 };

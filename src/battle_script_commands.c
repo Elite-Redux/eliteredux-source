@@ -2112,7 +2112,8 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
              || ((BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MERCILESS) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEPRAVITY))  &&
              (( gBattleMons[battlerDef].status1 & STATUS1_PSN_ANY)                   ||
              (  gBattleMons[battlerDef].statStages[STAT_SPEED] < DEFAULT_STAT_STAGE) ||
-             (  gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS)                 ||
+             (  gBattleMons[battlerDef].status1 & STATUS1_PARALYSIS)
+             (  gBattleMons[battlerDef].status1 & STATUS1_BLEED)               ||
              (  GetBattlerHoldEffect(battlerDef, TRUE) == HOLD_EFFECT_IRON_BALL)))
              || (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_AMBUSH) && gVolatileStructs[battlerAtk].isFirstTurn)
              || (gVolatileStructs[battlerAtk].showdownMode)
