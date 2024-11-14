@@ -17710,12 +17710,12 @@ static const struct TrainerMonItemCustomMoves sParty_Flannery1[] = {
 static const struct TrainerMonItemCustomMoves sParty_Flannery1Insane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_CHARIZARD,
-    .heldItem = ITEM_CHARIZARDITE_Y,
+    .species = SPECIES_WALKING_WAKE,
+    .heldItem = ITEM_ASSAULT_VEST,
     .ability = 0,
-    .evs = {0, 0, 0, 252, 4, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_FLAMETHROWER, MOVE_WYRM_WIND, MOVE_AIR_SLASH, MOVE_SOLAR_BEAM
+    .evs = {252, 0, 0, 252, 0, 4},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_HYDRO_STEAM, MOVE_SUPERHOT_FLAME, MOVE_SOLAR_BEAM, MOVE_DRAGON_PULSE
     },
     {
     .lvl = 0,
@@ -17737,12 +17737,12 @@ static const struct TrainerMonItemCustomMoves sParty_Flannery1Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_WALKING_WAKE,
-    .heldItem = ITEM_ASSAULT_VEST,
+    .species = SPECIES_CHARIZARD,
+    .heldItem = ITEM_CHARIZARDITE_Y,
     .ability = 0,
-    .evs = {252, 0, 0, 252, 0, 4},
-    .nature = NATURE_MODEST,
-    .moves = MOVE_HYDRO_STEAM, MOVE_FLAMETHROWER, MOVE_MUDDY_WATER, MOVE_DRAGON_PULSE
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_FLAMETHROWER, MOVE_WYRM_WIND, MOVE_AIR_SLASH, MOVE_SOLAR_BEAM
     },
     {
     .lvl = 0,
@@ -21741,21 +21741,21 @@ static const struct TrainerMonItemCustomMoves sParty_ShellyWeatherInstitute[] = 
 static const struct TrainerMonItemCustomMoves sParty_ShellyWeatherInstituteInsane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_VAPOREON,
-    .heldItem = ITEM_LEFTOVERS,
+    .species = SPECIES_SUICUNE,
+    .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
-    .evs = {252, 0, 0, 132, 124, 0},
-    .nature = NATURE_MODEST,
-    .moves = MOVE_SCALD, MOVE_FLAMETHROWER, MOVE_THUNDERCLAP, MOVE_MOONBLAST
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_FREEZY_FROST, MOVE_HURRICANE, MOVE_SPARKLING_ARIA, MOVE_AURA_SPHERE
     },
     {
     .lvl = 0,
-    .species = SPECIES_WISHIWASHI,
-    .heldItem = ITEM_LEFTOVERS,
+    .species = SPECIES_KAIOSEA,
+    .heldItem = ITEM_TACTICAL_VEST,
     .ability = 0,
-    .evs = {252, 252, 0, 0, 4, 0},
-    .nature = NATURE_ADAMANT,
-    .moves = MOVE_IRON_HEAD, MOVE_TRIPLE_DIVE, MOVE_FLIP_TURN, MOVE_EARTHQUAKE
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_AQUA_BASH, MOVE_PECK, MOVE_SHOCKING_JAB, MOVE_DRILL_RUN
     },
     {
     .lvl = 0,
@@ -21773,16 +21773,16 @@ static const struct TrainerMonItemCustomMoves sParty_ShellyWeatherInstituteInsan
     .ability = 2,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_DARK_PULSE, MOVE_SHEER_COLD, MOVE_ENERGY_WAVE, MOVE_CHILLING_WATER
+    .moves = MOVE_DARK_PULSE, MOVE_SHEER_COLD, MOVE_SHADOW_BALL, MOVE_CHILLING_WATER
     },
     {
     .lvl = 0,
     .species = SPECIES_ABSOL,
-    .heldItem = ITEM_SCOPE_LENS,
-    .ability = 0,
+    .heldItem = ITEM_ABSOLITE,
+    .ability = 1,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_PIXIE_SLASH, MOVE_SLASH, MOVE_PSYBLADE, MOVE_KOWTOW_CLEAVE
+    .moves = MOVE_KOWTOW_CLEAVE, MOVE_PIXIE_SLASH, MOVE_FLAMETHROWER, MOVE_LIGHT_OF_RUIN
     },
     {
     .lvl = 0,
@@ -42635,7 +42635,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt31Insane[] = {
     {
     .lvl = 0,
     .species = SPECIES_CROBAT,
-    .heldItem = ITEM_FOCUS_SASH,
+    .heldItem = ITEM_FLYING_GEM,
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
