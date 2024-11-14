@@ -1125,3 +1125,7 @@ Common_EventScript_LegendaryFlewAway:: @ 8273776
 	.include "data/maps/Route111_Desert/scripts.inc"
 
 	.include "data/maps/DesertCity/scripts.inc"
+
+	.include "data/maps/DessertCity_Pokemon_Center/scripts.inc"
+
+	.include "data/maps/DesertCity_Museum/scripts.inc"

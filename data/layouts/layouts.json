@@ -4730,6 +4730,26 @@
       "secondary_tileset": "gTileset_Desert_Area",
       "border_filepath": "data/layouts/DesertCity/border.bin",
       "blockdata_filepath": "data/layouts/DesertCity/map.bin"
+    },
+    {
+      "id": "LAYOUT_DESSERT_CITY_POKEMON_CENTER",
+      "name": "DessertCity_Pokemon_Center_Layout",
+      "width": 16,
+      "height": 9,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_PokemonCenter",
+      "border_filepath": "data/layouts/DessertCity_Pokemon_Center/border.bin",
+      "blockdata_filepath": "data/layouts/DessertCity_Pokemon_Center/map.bin"
+    },
+    {
+      "id": "LAYOUT_DESERT_CITY_MUSEUM",
+      "name": "DesertCity_Museum_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_PokemonCenter",
+      "border_filepath": "data/layouts/DesertCity_Museum/border.bin",
+      "blockdata_filepath": "data/layouts/DesertCity_Museum/map.bin"
     }
   ]
 }
