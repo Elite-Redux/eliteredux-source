@@ -1,6 +1,8 @@
 #ifndef GUARD_BATTLE_UTIL_H
 #define GUARD_BATTLE_UTIL_H
 
+#include "battle_ai_new.h"
+
 #define MOVE_LIMITATION_ZEROMOVE                (1 << 0)
 #define MOVE_LIMITATION_PP                      (1 << 1)
 #define MOVE_LIMITATION_DISABLED                (1 << 2)
@@ -75,6 +77,25 @@
 #define BATTLER_HAS_ABILITY_AND_ALIVE(battlerId, ability, checkMoldBreaker) (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, ability, checkMoldBreaker))
 
 #define BATTLER_HEALING_BLOCKED(battlerId) (gStatuses3[battlerId] & STATUS3_HEAL_BLOCK || gBattleMons[battlerId].status1 & STATUS1_BLEED || IsAbilityOnOpposingSide(battlerId, ABILITY_PERMANENCE) || IsBloodStainAffected(battlerId))
+
+typedef enum {
+    MULTIHIT_SINGLE,
+    MULTIHIT_TWO_TO_FIVE,
+    MULTIHIT_FOUR_OR_FIVE,
+    MULTIHIT_TWO,
+    MULTIHIT_THREE,
+    MULTIHIT_FIVE,
+    MULTIHIT_TRIPLE_KICK,
+    MULTIHIT_TEN_CAN_MISS,
+    MULTIHIT_TEN,
+    MULTIHIT_BEAT_UP,
+    PARENTAL_BOND_START,
+    PARENTAL_BOND_HYPER_AGGRESSIVE = PARENTAL_BOND_START,
+    PARENTAL_BOND_PRIMAL_MAW,
+    PARENTAL_BOND_DUAL_WIELD,
+    PARENTAL_BOND_MINION_CONTROL,
+    PARENTAL_BOND_THREE_HEADED,
+} MultihitType;
 
 enum MiscMoveEffects
 {
@@ -182,6 +203,7 @@ void HandleAction_ActionFinished(void);
 u8 GetBattlerForBattleScript(u8 caseId);
 bool8 IsSleepDisabled(u8 battlerId);
 bool8 IsSleepClauseDisablingMove(u8 battlerId, u16 move);
+u16 GetParentalBondMultiplier(MultihitType parentalBondType, int turn);
 void MarkAllBattlersForControllerExec(void); // unused
 bool32 IsBattlerMarkedForControllerExec(u8 battlerId);
 void MarkBattlerForControllerExec(u8 battlerId);
@@ -258,6 +280,7 @@ u32 GetBattlerWeight(u8 battlerId);
 s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
 s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, u16 *typeEffectivenessModifier);
 u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags);
+int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, u8* moveType, int fixedBasePower, struct MoveState* moveState);
 u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
 u16 CalcPartyMonTypeEffectivenessMultiplier(u16 move, u16 speciesDef, u16 abilityDef, u8 leveldef);
 u16 GetTypeModifier(int atkType, int defType, int miracleEyeAtk, int miracleEyeDef);
@@ -352,12 +375,15 @@ void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move);
 bool32 IsHealingMoveEffect(u16 effect);
 int IsMagicGuardProtected(int battler);
+#define ABSORB_RESULT_HEAL 1 << 0
+#define ABSORB_RESULT_STAT 1 << 1
+#define ABSORB_RESULT_FLASH_FIRE 1 << 2
 int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType);
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
 u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
 int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType);
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u8* overrideBattler, u16* abilityPopup);
-u16 MulModifierDirect(u16 modifier, u16 val);
+u16 DivideModifier(u16 mod1, u16 mod2);
 void MulModifier(u16 *modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
 int IsBloodStainAffected(int battler);
@@ -372,6 +398,10 @@ int GetBattlerAbility(int battler);
 void HandleFollowupAttackAbilities(int battler, int target, int move);
 int CheckAndSetOncePerTurnAbility(int battler, int ability);
 int IsStickyHold(int battler);
+int HasChloroplast(int battler);
+int HasStormDrain(int battler);
+
+MultihitType GetMultihitType(int battler, int move);
 
 // Ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability);

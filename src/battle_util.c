@@ -115,14 +115,6 @@ static const u16 sEntrainmentTargetSimpleBeamBannedAbilities[] =
     ABILITY_TRUANT,
 };
 
-static const u16 sTwoStrikeMoves[] =
-{
-    MOVE_DOUBLE_IRON_BASH,
-    MOVE_TWINEEDLE,
-    MOVE_CROSS_POISON,
-    MOVE_DOUBLE_SHOCK,
-};
-
 u8 CalcBeatUpPower(void)
 {
     struct Pokemon *party;
@@ -324,7 +316,7 @@ void HandleAction_UseMove(void)
         && gSideTimers[side].followmeTimer == 0
         && (gBattleMoves[gCurrentMove].power != 0 || GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker) != MOVE_TARGET_USER)
         && ((!BattlerHasAbility(gBattlerTarget, ABILITY_LIGHTNING_ROD, TRUE) && moveType == TYPE_ELECTRIC)
-            || (!BattlerHasAbility(gBattlerTarget, ABILITY_STORM_DRAIN, TRUE) && moveType == TYPE_WATER)))
+            || (!HasStormDrain(gBattlerTarget) && moveType == TYPE_WATER)))
     {
         side = GetBattlerSide(gBattlerAttacker);
         for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
@@ -332,7 +324,7 @@ void HandleAction_UseMove(void)
             if (side != GetBattlerSide(gActiveBattler)
                 && gBattlerTarget != gActiveBattler
                 && ((BattlerHasAbility(gActiveBattler, ABILITY_LIGHTNING_ROD, TRUE) && moveType == TYPE_ELECTRIC)
-                 || (BattlerHasAbility(gActiveBattler, ABILITY_STORM_DRAIN, TRUE) && moveType == TYPE_WATER))
+                 || (HasStormDrain(gActiveBattler) && moveType == TYPE_WATER))
                 && GetBattlerTurnOrderNum(gActiveBattler) < var
                 && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT
                 && !(BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PROPELLER_TAIL)
@@ -376,7 +368,7 @@ void HandleAction_UseMove(void)
             gActiveBattler = gBattlerByTurnOrder[var];
             if (BattlerHasAbility(gActiveBattler, ABILITY_LIGHTNING_ROD, TRUE))
                 gTurnStructs[gActiveBattler].lightningRodRedirected = TRUE;
-            else if (BattlerHasAbility(gActiveBattler, ABILITY_STORM_DRAIN, TRUE))
+            else if (HasStormDrain(gActiveBattler))
                 gTurnStructs[gActiveBattler].stormDrainRedirected = TRUE;
             gBattlerTarget = gActiveBattler;
         }
@@ -1519,9 +1511,9 @@ void PrepareStringBattle(u16 stringId, u8 battler)
     // Support for Contrary ability.
     // If a move attempted to raise stat - print "won't increase".
     // If a move attempted to lower stat - print "won't decrease".
-    if (stringId == STRINGID_STATSWONTDECREASE && !(gBattleScripting.statChanger & STAT_BUFF_NEGATIVE))
+    if (stringId == STRINGID_STATSWONTDECREASE && !gBattleScripting.statChanger.goesDown)
         stringId = STRINGID_STATSWONTINCREASE;
-    else if (stringId == STRINGID_STATSWONTINCREASE && gBattleScripting.statChanger & STAT_BUFF_NEGATIVE)
+    else if (stringId == STRINGID_STATSWONTINCREASE && gBattleScripting.statChanger.goesDown)
         stringId = STRINGID_STATSWONTDECREASE;
     else if (stringId == STRINGID_STATSWONTDECREASE2 && hasContrary)
         stringId = STRINGID_STATSWONTINCREASE2;
@@ -1657,7 +1649,7 @@ void BattleScriptSaveCurrentStackData()
             .stackBattler2 = gStackBattler2,
             .stackBattler3 = gStackBattler3,
             .stackBattler4 = gStackBattler4,
-            .statChanger = gBattleScripting.statChanger,
+            .statChanger = gBattleScripting.statChanger.value,
         };
     gBattleResources->battleScriptsStack->savedStackData[gBattleResources->battleScriptsStack->size] = savedStackData;
 }
@@ -1688,13 +1680,13 @@ void ReadActiveScriptInitialStackState()
     gStackBattler2 = data->stackBattler2;
     gStackBattler3 = data->stackBattler3;
     gStackBattler4 = data->stackBattler4;
-    gBattleScripting.statChanger = data->statChanger;
+    gBattleScripting.statChanger.value = data->statChanger;
 }
 
 void SetActiveStatChanger(int stat, s8 change)
 {
     SetStatChanger(stat, change);
-    gBattleResources->battleScriptsStack->savedStackData[gBattleResources->battleScriptsStack->size].statChanger = gBattleScripting.statChanger;
+    gBattleResources->battleScriptsStack->savedStackData[gBattleResources->battleScriptsStack->size].statChanger = gBattleScripting.statChanger.value;
 }
 
 void SetActiveMultistringChooser(u8 messageId)
@@ -4338,98 +4330,62 @@ u8 AtkCanceller_UnableToUseMove(void)
             gBattleStruct->atkCancellerTracker++;
             break;
         case CANCELLER_MULTIHIT_MOVES:
+        gBattleStruct->atkCancellerTracker++;
+        switch (GetMultihitType(gBattlerAttacker, gCurrentMove))
         {
-            if (gBattleMoves[gCurrentMove].effect == EFFECT_MULTI_HIT)
+        default:
+            continue;
+        
+        case MULTIHIT_TWO:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 2;
+            break;
+        
+        case MULTIHIT_THREE:
+        case MULTIHIT_TRIPLE_KICK:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 3;
+            break;
+        
+        case MULTIHIT_FIVE:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 5;
+            break;
+        
+        case MULTIHIT_TEN:
+        case MULTIHIT_TEN_CAN_MISS:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 10;
+            break;
+        
+        case MULTIHIT_FOUR_OR_FIVE:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 4 + (Random() % 2);
+            break;
+        
+        case MULTIHIT_TWO_TO_FIVE:
+            gTurnStructs[gBattlerAttacker].multiHitCounter = 2 + (Random() % 2) + 2 * (Random() % 3 == 0);
+            break;
+        
+        case MULTIHIT_BEAT_UP:
             {
-                u16 ability = GetBattlerAbility(gBattlerAttacker);
+            struct Pokemon* party;
+            int i;
 
-                if (BattlerHasAbility(gBattlerAttacker, ABILITY_SKILL_LINK, FALSE))
-                {
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 5;
-                }
-                else if (BattlerHasAbility(gBattlerAttacker, ABILITY_KUNOICHI_BLADE, FALSE))
-                {
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 5;
-                } 
-                else if (ability == ABILITY_BATTLE_BOND
-                && gCurrentMove == MOVE_WATER_SHURIKEN
-                && gBattleMons[gBattlerAttacker].species == SPECIES_GRENINJA_ASH)
-                {
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 3;
-                }
-                else
-                {
-                    if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_LOADED_DICE)
-                    {
-                        gTurnStructs[gBattlerAttacker].multiHitCounter = 4 + (Random() % 2);
-                    }
-                    else
-                    {
-                        // 2 and 3 hits: 33.3%
-                        // 4 and 5 hits: 16.7%
-                        gTurnStructs[gBattlerAttacker].multiHitCounter = Random() % 4;
-                        if (gTurnStructs[gBattlerAttacker].multiHitCounter > 2)
-                        {
-                            gTurnStructs[gBattlerAttacker].multiHitCounter = (Random() % 3);
-                            if (gTurnStructs[gBattlerAttacker].multiHitCounter < 2)
-                                gTurnStructs[gBattlerAttacker].multiHitCounter = 2;
-                            else
-                                gTurnStructs[gBattlerAttacker].multiHitCounter = 3;
-                        }
-                        else
-                            gTurnStructs[gBattlerAttacker].multiHitCounter += 3;
-                    }
-                }
-
-                PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-            }
-            else if (IsTwoStrikesMove(gCurrentMove))
+            if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
+                party = gPlayerParty;
+            else
+                party = gEnemyParty;
+            
+            for (i = 0; i < PARTY_SIZE; i++)
             {
-                gTurnStructs[gBattlerAttacker].multiHitCounter = 2;
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
+                if (GetMonData(&party[i], MON_DATA_HP)
+                && GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
+                && !GetMonData(&party[i], MON_DATA_IS_EGG)
+                && !GetMonData(&party[i], MON_DATA_STATUS))
+                    gTurnStructs[gBattlerAttacker].multiHitCounter++;
             }
-            else if (gBattleMoves[gCurrentMove].effect == EFFECT_DOUBLE_HIT)
-            {
-                gTurnStructs[gBattlerAttacker].multiHitCounter = gBattleMoves[gCurrentMove].argument ? gBattleMoves[gCurrentMove].argument : 2;
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
+            gBattleCommunication[0] = 0; // For later
             }
-            else if (gBattleMoves[gCurrentMove].effect == EFFECT_TRIPLE_KICK)
-            {
-                gTurnStructs[gBattlerAttacker].multiHitCounter = 3;
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-            }
-            else if (gBattleMoves[gCurrentMove].effect == EFFECT_TEN_HITS)
-            {
-                gTurnStructs[gBattlerAttacker].multiHitCounter = 10;
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 2, 0)
-            }
-            #if B_BEAT_UP_DMG >= GEN_5
-            else if (gBattleMoves[gCurrentMove].effect == EFFECT_BEAT_UP)
-            {
-                struct Pokemon* party;
-                int i;
-
-                if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER)
-                    party = gPlayerParty;
-                else
-                    party = gEnemyParty;
-                
-                for (i = 0; i < PARTY_SIZE; i++)
-				{
-					if (GetMonData(&party[i], MON_DATA_HP)
-					&& GetMonData(&party[i], MON_DATA_SPECIES) != SPECIES_NONE
-					&& !GetMonData(&party[i], MON_DATA_IS_EGG)
-					&& !GetMonData(&party[i], MON_DATA_STATUS))
-						gTurnStructs[gBattlerAttacker].multiHitCounter++;
-				}
-
-				gBattleCommunication[0] = 0; // For later
-				PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1, 0)
-            }
-            #endif
-            gBattleStruct->atkCancellerTracker++;
             break;
         }
+        PREPARE_BYTE_NUMBER_BUFFER(gBattleScripting.multihitString, 1 + (gTurnStructs[gBattlerAttacker].multiHitCounter >= 10), 0)
+        break;
         case CANCELLER_END:
             break;
         }
@@ -4448,6 +4404,45 @@ u8 AtkCanceller_UnableToUseMove(void)
     }
     return effect;
 }
+
+MultihitType GetMultihitType(int battler, int move)
+{
+    if (IsTwoStrikesMove(move))
+        return MULTIHIT_TWO;
+    
+    switch (gBattleMoves[gCurrentMove].effect)
+    {
+    case EFFECT_MULTI_HIT:
+        if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_FIVE;
+        if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_FIVE;
+        if (move == MOVE_WATER_SHURIKEN
+            && BattlerHasAbility(battler, ABILITY_BATTLE_BOND, FALSE)
+            && gBattleMons[battler].species == SPECIES_GRENINJA_ASH)
+            return MULTIHIT_THREE;
+        if (GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE) return MULTIHIT_FOUR_OR_FIVE;
+        return MULTIHIT_TWO_TO_FIVE;
+    
+    case EFFECT_DOUBLE_HIT:
+        if (gBattleMoves[move].argument == 3) return MULTIHIT_THREE;
+        return MULTIHIT_TWO;
+    
+    case EFFECT_TRIPLE_KICK:
+        if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_THREE;
+        if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_THREE;
+        return MULTIHIT_TRIPLE_KICK;
+    
+    case EFFECT_TEN_HITS:
+        if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_TEN;
+        if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_TEN;
+        return MULTIHIT_TEN_CAN_MISS;
+    
+    case EFFECT_BEAT_UP:
+        return MULTIHIT_BEAT_UP;
+    }
+
+    return MULTIHIT_SINGLE;
+}
+
 
 // After Protean Activation.
 u8 AtkCanceller_UnableToUseMove2(void)
@@ -5549,78 +5544,50 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
         if (move != MOVE_NONE)
         {
             int statId;
+            int any = FALSE;
 			
 			effect = TestAbsorbingAbilities(battler, gBattlerAttacker, move, moveType, &statId, &gBattleScripting.abilityPopupOverwrite);
 
-            if (effect == 1) // Drain Hp ability.
+            if (effect)
             {
+                gBattlescriptCurrInstr = BattleScript_AfterAbsorbEffect;
                 SetActiveAbilityPopupOverride(gBattleScripting.abilityPopupOverwrite);
-                if (BATTLER_MAX_HP(battler) || BATTLER_HEALING_BLOCKED(battler))
-                {
-                    if ((gRoundStructs[gBattlerAttacker].notFirstStrike))
-                        gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
-                }
-                else
-                {
-                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                        gBattlescriptCurrInstr = BattleScript_MoveHPDrain;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_MoveHPDrain_PPLoss;
 
+                if (effect & ABSORB_RESULT_HEAL && !BATTLER_MAX_HP(battler) && !BATTLER_HEALING_BLOCKED(battler)) // Drain Hp ability.
+                {
+                    any = TRUE;
                     gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     gBattleMoveDamage *= -1;
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
+                    BattleScriptCall(BattleScript_MoveHPDrain);
                 }
-            }
-            else if (effect == 2) // Boost Stat ability;
-            {
-                SetActiveAbilityPopupOverride(gBattleScripting.abilityPopupOverwrite);
-                if (!CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
+                
+                if (effect & ABSORB_RESULT_STAT && CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN)) // Boost Stat ability;
                 {
-                    if ((gRoundStructs[gBattlerAttacker].notFirstStrike))
-                        gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
-                }
-                else
-                {
-                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                        gBattlescriptCurrInstr = BattleScript_MoveStatDrain;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_MoveStatDrain_PPLoss;
-
+                    any = TRUE;
                     SetActiveStatChanger(statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
                     ChangeStatBuffs(battler, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1, statId, MOVE_EFFECT_AFFECTS_USER, NULL);
+                    BattleScriptCall(BattleScript_MoveStatDrain);
                 }
-            }
-            else if (effect == 3) // Flash Fire special case
-            {
-                if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
+                else if (effect & ABSORB_RESULT_FLASH_FIRE) // Flash Fire special case
                 {
-                    SetActiveMultistringChooser(B_MSG_FLASH_FIRE_BOOST);
-                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
+                    any = TRUE;
+                    if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
+                        SetActiveMultistringChooser(B_MSG_FLASH_FIRE_BOOST);
                     else
-                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
+                        SetActiveMultistringChooser(B_MSG_FLASH_FIRE_NO_BOOST);
 
                     gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_FLASH_FIRE;
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
+                    BattleScriptCall(BattleScript_FlashFireBoost);
                 }
-                else
-                {
-                    SetActiveMultistringChooser(B_MSG_FLASH_FIRE_NO_BOOST);
-                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
-                        
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
-                }
+
+                if (!any) BattleScriptCall(BattleScript_MonMadeMoveUseless);
+
+                BattleScriptCall(BattleScript_AttackStringAbilityPopUp);
+
+                gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
+                if (!gRoundStructs[gBattlerAttacker].notFirstStrike) BattleScriptCall(BattleScript_PPReduce);
             }
         }
         break;
@@ -6682,9 +6649,9 @@ static u8 StatRaiseBerry(u32 battlerId, u32 itemId, u32 statId, bool32 end2)
     {
         BufferStatChange(battlerId, statId, STRINGID_STATROSE);
         if (HasRipenEffect(battlerId))
-            SET_STATCHANGER(statId, 2, FALSE);
+            SetStatChanger(statId, 2);
         else
-            SET_STATCHANGER(statId, 1, FALSE);
+            SetStatChanger(statId, 1);
 
         gBattleScripting.animArg1 = 14 + statId;
         gBattleScripting.animArg2 = 0;
@@ -6730,9 +6697,9 @@ static u8 RandomStatRaiseBerry(u32 battlerId, u32 itemId, bool32 end2)
         gBattleTextBuff2[6] = stringId >> 8;
         gBattleTextBuff2[7] = EOS;
         if (HasRipenEffect(battlerId))
-            SET_STATCHANGER(i + 1, 4, FALSE);
+            SET_STATCHANGER_WITH_SIGN(i + 1, 4);
         else
-            SET_STATCHANGER(i + 1, 2, FALSE);
+            SET_STATCHANGER_WITH_SIGN(i + 1, 2);
 
         gBattleScripting.animArg1 = 0x21 + i + 6;
         gBattleScripting.animArg2 = 0;
@@ -6782,9 +6749,9 @@ static u8 DamagedStatBoostBerryEffect(u8 battlerId, u8 statId, u8 split)
 
         gEffectBattler = battlerId;
         if (HasRipenEffect(battlerId))
-            SET_STATCHANGER(statId, 2, FALSE);
+            SetStatChanger(statId, 2);
         else
-            SET_STATCHANGER(statId, 1, FALSE);
+            SetStatChanger(statId, 1);
 
         gBattleScripting.animArg1 = 14 + statId;
         gBattleScripting.animArg2 = 0;
@@ -6801,7 +6768,7 @@ u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 exec
     {
         BufferStatChange(battler, statId, STRINGID_STATROSE);
         gLastUsedItem = itemId; // For surge abilities
-        SET_STATCHANGER(statId, 1, FALSE);
+        SetStatChanger(statId, 1);
         gBattleScripting.animArg1 = 0xE + statId;
         gBattleScripting.animArg2 = 0;
         gStackBattler1 = battler;
@@ -7737,7 +7704,7 @@ case ITEMEFFECT_KINGSROCK:
             {
                 gBattleStruct->blunderPolicy = FALSE;
                 gLastUsedItem = atkItem;
-                gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPEED, 2, FALSE);
+                SetStatChanger(STAT_SPEED, 2);
                 effect = ITEM_STATS_CHANGE;
                 BattleScriptCall(BattleScript_AttackerItemStatRaise);
             }
@@ -7808,7 +7775,7 @@ case ITEMEFFECT_KINGSROCK:
 
             gLastUsedItem = atkItem;
             gBattleScripting.battler = gBattlerAttacker;
-            gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPATK, 1, FALSE);
+            SetStatChanger(STAT_SPATK, 1);
             effect = ITEM_STATS_CHANGE;
             BattleScriptCall(BattleScript_AttackerItemStatRaise);
             break;
@@ -7864,7 +7831,7 @@ case ITEMEFFECT_KINGSROCK:
                     && moveType == TYPE_ICE)
                 {
                     effect = ITEM_STATS_CHANGE;
-                    gBattleScripting.statChanger = SET_STATCHANGER(STAT_ATK, 1, FALSE);
+                    SetStatChanger(STAT_ATK, 1);
                     BattleScriptCall(BattleScript_TargetItemStatRaise);
                 }
                 break;
@@ -7874,7 +7841,7 @@ case ITEMEFFECT_KINGSROCK:
                     && moveType == TYPE_WATER)
                 {
                     effect = ITEM_STATS_CHANGE;
-                    gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPDEF, 1, FALSE);
+                    SetStatChanger(STAT_SPDEF, 1);
                     BattleScriptCall(BattleScript_TargetItemStatRaise);
                 }
                 break;
@@ -7884,7 +7851,7 @@ case ITEMEFFECT_KINGSROCK:
                     && moveType == TYPE_ELECTRIC)
                 {
                     effect = ITEM_STATS_CHANGE;
-                    gBattleScripting.statChanger = SET_STATCHANGER(STAT_ATK, 1, FALSE);
+                    SetStatChanger(STAT_ATK, 1);
                     BattleScriptCall(BattleScript_TargetItemStatRaise);
                 }
                 break;
@@ -7894,7 +7861,7 @@ case ITEMEFFECT_KINGSROCK:
                     && moveType == TYPE_WATER)
                 {
                     effect = ITEM_STATS_CHANGE;
-                    gBattleScripting.statChanger = SET_STATCHANGER(STAT_SPATK, 1, FALSE);
+                    SetStatChanger(STAT_SPATK, 1);
                     BattleScriptCall(BattleScript_TargetItemStatRaise);
                 }
                 break;
@@ -8103,8 +8070,9 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
                 gTurnStructs[targetBattler].lightningRodRedirected = TRUE;
             }
             else if (gBattleMoves[move].type == TYPE_WATER
-                && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN)
-                && !BATTLER_HAS_ABILITY(targetBattler, ABILITY_STORM_DRAIN))
+                && !HasStormDrain(targetBattler)
+                && (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN)
+                    || IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_RESERVOIR)))
             {
                 targetBattler ^= BIT_FLANK;
                 gTurnStructs[targetBattler].stormDrainRedirected = TRUE;
@@ -8598,9 +8566,9 @@ u32 GetMoveTargetCount(u16 move, u8 battlerAtk, u8 battlerDef)
 
 #define MUL_MODIFIER(modifier, val) MulModifier(modifier, UQ_4_12(val))
 
-u16 MulModifierDirect(u16 modifier, u16 val)
+u16 DivideModifier(u16 mod1, u16 mod2)
 {
-    return UQ_4_12_TO_INT((modifier * val) + UQ_4_12_ROUND);
+    return (((u32) mod1) << UQ_4_12_PRECISION) / mod2;
 }
 
 void MulModifier(u16 *modifier, u16 val)
@@ -9900,7 +9868,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
     case EFFECT_MAGNITUDE:
     case EFFECT_EARTHQUAKE:
         if (GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN && !(gStatuses3[battlerDef] & STATUS3_SEMI_INVULNERABLE))
-            MulModifier(&modifier, UQ_4_12(0.5));
+            MulModifier(&modifier, UQ_4_12(1.0));
         break;
     case EFFECT_KNOCK_OFF:
         #if B_KNOCK_OFF_DMG >= GEN_6
@@ -10513,6 +10481,34 @@ u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move)
     return 2;
 }
 
+u16 GetParentalBondMultiplier(MultihitType parentalBondType, int turn)
+{
+    switch (parentalBondType)
+    {
+    case PARENTAL_BOND_HYPER_AGGRESSIVE:
+        REQUIRE(turn)
+        return UQ_4_12(0.25);
+    
+    case PARENTAL_BOND_THREE_HEADED:
+        if (turn == 1) return UQ_4_12(0.2);
+        if (turn == 2) return UQ_4_12(0.15);
+        break;
+    
+    case PARENTAL_BOND_MINION_CONTROL:
+        REQUIRE(turn)
+        return UQ_4_12(0.1);
+    
+    case PARENTAL_BOND_PRIMAL_MAW:
+        REQUIRE(turn)
+        return UQ_4_12(0.4);
+
+    case PARENTAL_BOND_DUAL_WIELD:
+        return UQ_4_12(0.7);
+    }
+    
+    return UQ_4_12(1.0);
+}
+
 u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 typeEffectivenessModifier, bool32 isCrit, bool32 updateFlags)
 {
     u32 percentBoost;
@@ -10611,38 +10607,11 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
             MulModifier(&finalModifier, UQ_4_12(0.5));
     }
     
-    switch (gTurnStructs[gBattlerAttacker].parentalBondTrigger) {
-        case ABILITY_HYPER_AGGRESSIVE:
-        case ABILITY_PARENTAL_BOND:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
-                MulModifier(&finalModifier, UQ_4_12(0.25));
-            break;
-        case ABILITY_MULTI_HEADED:
-            if (gBaseStats[gBattleMons[gBattlerAttacker].species].flags & F_TWO_HEADED) {
-                if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
-                    MulModifier(&finalModifier, UQ_4_12(0.25));
-            } else {
-                if (gTurnStructs[gBattlerAttacker].parentalBondOn == 2)
-                    MulModifier(&finalModifier, UQ_4_12(0.2));
-                else if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
-                    MulModifier(&finalModifier, UQ_4_12(0.15));
-            }
-            break;
-        case ABILITY_MINION_CONTROL:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount)
-                MulModifier(&finalModifier, UQ_4_12(0.1));
-            break;
-        case ABILITY_PRIMAL_MAW:
-        case ABILITY_DEVOURER:
-        case ABILITY_RAGING_BOXER:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn == 1)
-                MulModifier(&finalModifier, UQ_4_12(0.4));
-            break;
-        case ABILITY_DUAL_HAMMER:
-        case ABILITY_DUAL_WIELD:
-        case ABILITY_RAGING_MOTH:
-		    MulModifier(&finalModifier, UQ_4_12(0.7));
-            break;
+    if (gTurnStructs[battlerAtk].parentalBondOn)
+    {
+        MulModifier(&finalModifier,
+            GetParentalBondMultiplier(gTurnStructs[battlerAtk].parentalBondTrigger,
+                gTurnStructs[battlerAtk].parentalBondInitialCount - gTurnStructs[battlerAtk].parentalBondOn));
     }
 	
     // target's ally's abilities
@@ -10842,6 +10811,18 @@ s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, 
 {
     int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, 0, FALSE, FALSE, FALSE, typeEffectivenessModifier);
     gSwapDamageCategory = FALSE;
+    return val;
+}
+
+int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, u8* moveType, int fixedBasePower, struct MoveState* moveState)
+{
+    u16 typeEffectivenessModifier;
+    int val = DoMoveDamageCalc(move, battlerAtk, battlerDef, moveType, fixedBasePower, FALSE, 0, FALSE, &typeEffectivenessModifier);
+
+    if (typeEffectivenessModifier > UQ_4_12(1.0)) moveState->effectiveness = AI_EFFECTIVENESS_SE;
+    else if (typeEffectivenessModifier < UQ_4_12(1.0)) moveState->effectiveness = AI_EFFECTIVENESS_NVE;
+    
+    moveState->type = *moveType;
     return val;
 }
 
@@ -11962,11 +11943,15 @@ bool8 IsTwoStrikesMove(u16 move)
 {
     u32 i;
 
-    for (i = 0; i < ARRAY_COUNT(sTwoStrikeMoves); i++)
+    switch (move)
     {
-        if (move == sTwoStrikeMoves[i])
-            return TRUE;
+    case MOVE_DOUBLE_IRON_BASH:
+    case MOVE_TWINEEDLE:
+    case MOVE_CROSS_POISON:
+    case MOVE_DOUBLE_SHOCK:
+        return TRUE;
     }
+
     return FALSE;
 }
 
@@ -12407,72 +12392,77 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
         case ABILITY_AERODYNAMICS:
             REQUIRE(moveType == TYPE_FLYING)
             *statId = STAT_SPEED;
-            return 2;
+            return ABSORB_RESULT_STAT;
             
         case ABILITY_VOLT_ABSORB:
             REQUIRE(moveType == TYPE_ELECTRIC)
-            return 1;
+            return ABSORB_RESULT_HEAL;
 
         case ABILITY_EARTH_EATER:
             REQUIRE(moveType == TYPE_GROUND)
-            return 1;
+            return ABSORB_RESULT_HEAL;
 
         case ABILITY_WATER_ABSORB:
         case ABILITY_OLD_MARINER:
         case ABILITY_DRY_SKIN:
         ABSORB_WATER_ABSORB:
             REQUIRE(moveType == TYPE_WATER)
-            return 1;
+            return ABSORB_RESULT_HEAL;
             
         case ABILITY_POISON_ABSORB:
             REQUIRE(moveType == TYPE_POISON)
-            return 1;
+            return ABSORB_RESULT_HEAL;
             
         case ABILITY_LIGHTNING_ROD:
             REQUIRE(moveType == TYPE_ELECTRIC)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
             
         case ABILITY_STORM_DRAIN:
             REQUIRE(moveType == TYPE_WATER)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
+            
+        case ABILITY_RESERVOIR:
+            REQUIRE(moveType == TYPE_WATER)
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return ABSORB_RESULT_STAT | ABSORB_RESULT_HEAL;
             
         case ABILITY_ELEMENTAL_VORTEX:
             if (moveType == TYPE_WATER) goto ABSORB_WATER_ABSORB;
         case ABILITY_FLASH_FIRE:
             REQUIRE(moveType == TYPE_FIRE)
-            return 3;
+            return ABSORB_RESULT_FLASH_FIRE;
         
         case ABILITY_SAP_SIPPER:
             REQUIRE(moveType == TYPE_GRASS)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_ICE_DEW:
             REQUIRE(moveType == TYPE_ICE)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_JUSTIFIED:
             REQUIRE(moveType == TYPE_DARK)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_WELL_BAKED_BODY:
             REQUIRE(moveType == TYPE_FIRE)
             *statId = STAT_DEF;
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_MOTOR_DRIVE:
             REQUIRE(moveType == TYPE_ELECTRIC)
             *statId = STAT_SPEED;
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_WIND_RIDER:
             REQUIRE(gBattleMoves[move].airBased)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         default:
             break;
@@ -12700,6 +12690,14 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             return TRUE;
         }
         break;
+    
+    case ABILITY_ENERGY_SIPHON:
+        REQUIRE(ShouldApplyOnHitAffect(battler))
+        REQUIRE_NOT(BATTLER_MAX_HP(battler))
+        REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
+
+        BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+        return TRUE;
 
     case ABILITY_HYDRO_CIRCUIT:
         REQUIRE(ShouldApplyOnHitAffect(battler))
@@ -12731,7 +12729,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
     case ABILITY_GROWING_TOOTH:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-        REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
+        REQUIRE(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
 
         gBattleScripting.battler = battler;
         BattleScriptCall(BattleScript_AttackBoostActivates);
@@ -12754,7 +12752,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             gBattleScripting.battler = battler;
             i = TRUE;
         }
-        if (ChangeStatBuffs(battler, StatBuffValue(1), STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
+        if (ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
         {
             BattleScriptCall(BattleScript_AnnounceAbilitySpeedBoost);
             gBattleScripting.battler = battler;
@@ -12776,7 +12774,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
     case ABILITY_HARDENED_SHEATH:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(gBattleMoves[move].hornBased)
-        REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
+        REQUIRE(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
 
         BattleScriptCall(BattleScript_AttackBoostActivates);
         gBattleScripting.battler = battler;
@@ -13300,7 +13298,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
                 for (i = 1; i < NUM_STATS; i++)
                 {
                     if (i == STAT_DEF) continue;
-                    activated |= ChangeStatBuffs(battler, StatBuffValue(1), i, MOVE_EFFECT_AFFECTS_USER, NULL);
+                    activated |= ChangeStatBuffs(battler, 1, i, MOVE_EFFECT_AFFECTS_USER, NULL);
                 }
 
                 if (activated)
@@ -14229,6 +14227,14 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
 
         ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | effectTargetFlag)
         return TRUE;
+
+    case ABILITY_DAYBREAK:
+        REQUIRE(ShouldApplyOnHitAffect(opponent))
+        REQUIRE(CanBeBurned(opponent))
+        REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
+
+        ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | effectTargetFlag)
+        return TRUE;
     
     case ABILITY_FRAGRANT_DAZE:
         REQUIRE(ShouldApplyOnHitAffect(opponent))
@@ -14431,7 +14437,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler)
             gBattleMons[battler].statStages[STAT_ACC]     = gBattleMons[battler].statStages[STAT_ACC]     + VarGet(VAR_TOTEM_POKEMON_ACCURACY_BOOST);
             gBattleMons[battler].statStages[STAT_EVASION] = gBattleMons[battler].statStages[STAT_EVASION] + VarGet(VAR_TOTEM_POKEMON_EVASION_BOOST);
 
-            SET_STATCHANGER(STAT_ATK, 1, FALSE); //Just for the animation
+            SetStatChanger(STAT_ATK, 1); //Just for the animation
             switch (VarGet(VAR_TOTEM_MESSAGE)) {
                 case TOTEM_FIGHT_HAXORUS:
                     BattleScriptPushCursorAndCallback(BattleScript_HaxorusTotemBoostActivated);
@@ -14824,8 +14830,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 
         {
         int stat = GetHighestDefendingStatId(gBattlerTarget, TRUE) == STAT_DEF ? STAT_SPATK : STAT_ATK;
-        REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-        SetStatChanger(stat, 1);
+        REQUIRE(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         }
         return TRUE;
@@ -14855,7 +14860,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 
         {
         int stat = GetHighestStatId(battler, TRUE);
-        REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+        REQUIRE(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
         SetStatChanger(stat, 1);
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         }
@@ -14866,8 +14871,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 
         {
         int stat = GetHighestStatId(battler, TRUE);
-        REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-        SetStatChanger(stat, 1);
+        REQUIRE(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         }
         return TRUE;
@@ -14877,8 +14881,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 
         {
         int stat = GetHighestStatId(battler, TRUE);
-        REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
-        SetStatChanger(stat, 1);
+        REQUIRE(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         }
         return TRUE;
@@ -14965,7 +14968,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         break;
 
     case ABILITY_SAND_PIT:
-        UseEntryMove(battler, ability, MOVE_SAND_TOMB, 50);
+        UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20);
         break;
     
     case ABILITY_CHEAP_TACTICS:
@@ -15117,9 +15120,8 @@ int HandleSwitchInAbilityAs(int ability, int battler)
     case ABILITY_MAJESTIC_MOTH:
         {
         int stat = GetHighestStatId(battler, TRUE);
-        REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+        REQUIRE(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
         
-        SetStatChanger(stat, 1);
         gBattlerAttacker = battler;
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         return TRUE;
@@ -15406,9 +15408,8 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         REQUIRE(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
         REQUIRE(gSideTimers[GetBattlerSide(battler)].stealthRockType == TYPE_ROCK)
         REQUIRE(IsBattlerAlive(battler))
-        REQUIRE(ChangeStatBuffs(battler, StatBuffValue(2), STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
+        REQUIRE(ChangeStatBuffs(battler, 2, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
 
-        SetStatChanger(STAT_SPEED, 2);
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         return TRUE;
     
@@ -15704,7 +15705,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
     
     case ABILITY_SPEED_BOOST:
         REQUIRE(gVolatileStructs[battler].isFirstTurn != 2)
-        REQUIRE(ChangeStatBuffs(battler, StatBuffValue(1), STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
+        REQUIRE(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
         
         BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
         gBattleScripting.battler = battler;
@@ -15944,7 +15945,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
 int IsDance(int attacker, int move)
 {
     if (gBattleMoves[move].flags & FLAG_DANCE) return TRUE;
-    return BATTLER_HAS_ABILITY(attacker, ABILITY_TAEKKYEON);
+    return !IS_MOVE_STATUS(move) && BattlerHasAbility(attacker, ABILITY_TAEKKYEON, FALSE);
 }
 
 int HasAnyStatusOrAbility(int battler)
@@ -16138,4 +16139,19 @@ int IsStickyHold(int battler)
     int ability = BattlerHasAbility(battler, ABILITY_STICKY_HOLD, TRUE);
     if (!ability) ability = BattlerHasAbility(battler, ABILITY_SUPERSWEET_SYRUP, TRUE);
     return ability;
+}
+
+int HasChloroplast(int battler)
+{
+    if (BattlerHasAbility(battler, ABILITY_CHLOROPLAST, FALSE)) return TRUE;
+    if (BattlerHasAbility(battler, ABILITY_BIG_LEAVES, FALSE)) return TRUE;
+    if (BattlerHasAbility(battler, ABILITY_SOLAR_FLARE, FALSE)) return TRUE;
+    return FALSE;
+}
+
+int HasStormDrain(int battler)
+{
+    if (BattlerHasAbility(battler, ABILITY_STORM_DRAIN, TRUE)) return ABILITY_STORM_DRAIN;
+    if (BattlerHasAbility(battler, ABILITY_RESERVOIR, TRUE)) return ABILITY_RESERVOIR;
+    return FALSE;
 }
