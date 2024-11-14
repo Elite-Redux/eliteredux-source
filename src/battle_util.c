@@ -12712,6 +12712,14 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             return TRUE;
         }
         break;
+    
+    case ABILITY_ENERGY_SIPHON:
+        REQUIRE(ShouldApplyOnHitAffect(battler))
+        REQUIRE_NOT(BATTLER_MAX_HP(battler))
+        REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
+
+        BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
+        return TRUE;
 
     case ABILITY_HYDRO_CIRCUIT:
         REQUIRE(ShouldApplyOnHitAffect(battler))
