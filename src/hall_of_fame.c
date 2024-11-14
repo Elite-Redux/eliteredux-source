@@ -469,6 +469,12 @@ u16 getHallofFameSpecies(u8 num) {
     }
 
     switch (species) {
+        case SPECIES_WISHIWASHI:
+            return SPECIES_WISHIWASHI_SCHOOL;
+        
+        case SPECIES_CHERRIM:
+            return SPECIES_CHERRIM_SUNSHINE;
+
         case SPECIES_DARMANITAN_REDUX:
             return SPECIES_DARMANITAN_REDUX_BOND;
             
