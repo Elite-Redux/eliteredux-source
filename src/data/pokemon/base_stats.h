@@ -227,10 +227,10 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_CHARIZARD_MEGA_X] =
     {
     .baseHP         = 79,
-    .baseAttack     = 135,
+    .baseAttack     = 140,
     .baseDefense    = 111,
     .baseSpeed      = 100,
-    .baseSpAttack   = 110,
+    .baseSpAttack   = 105,
     .baseSpDefense  = 100,
     .type1 = TYPE_FIRE,
     .type2 = TYPE_DRAGON,
