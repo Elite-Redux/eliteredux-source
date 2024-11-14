@@ -14246,7 +14246,6 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
         REQUIRE(ShouldApplyOnHitAffect(opponent))
         REQUIRE(CanBeBurned(opponent))
         REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-        REQUIRE(Random() % 100 < 100)
 
         ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | effectTargetFlag)
         return TRUE;
