@@ -209,7 +209,7 @@
 #define ABILITY_WIMP_OUT 193 // At 1/2 of max HP or below, instantly switches out.
 #define ABILITY_EMERGENCY_EXIT 194 // At 1/2 of max HP or below, instantly switches out.
 #define ABILITY_WATER_COMPACTION 195 // Takes 1/2 dmg from Water-type moves. +2 Def when hit by those.
-#define ABILITY_MERCILESS 196 // 100% crit if targetting slowed, poisoned or paralyzed foes.
+#define ABILITY_MERCILESS 196 // 100% crit if targetting slowed, poisoned, paralyzed, or bleeding foes.
 #define ABILITY_SHIELDS_DOWN 197 // At 1/2 of max HP or below, transforms into Core form.
 #define ABILITY_STAKEOUT 198 // Deals double damage to opponents being switched in.
 #define ABILITY_WATER_BUBBLE 199 // Halves Fire dmg taken, no burns, doubles power of its Water moves.
@@ -764,12 +764,13 @@
 #define ABILITY_MAGICAL_FISTS 742 // Punching moves use Special Attack and get a 1.3x boost.
 #define ABILITY_CUTTHROAT 743 // The first slicing move used on each entry in gets +1 priority.
 #define ABILITY_SAND_BENDER 744 // Sand Stream + Sand Force.
-#define ABILITY_SAND_PIT 745 // Uses Sand Tomb on entry.
-#define ABILITY_DESOLATE_SUN 746 // Desolate Land + Earth Eater
+#define ABILITY_SAND_PIT 745 // Attacks with 20BP Sand Tomb on switch-in.
+#define ABILITY_DESOLATE_SUN 746 // Desolate Land + Earth Eater.
 #define ABILITY_DAYBREAK 747 // Burns the foe on contact. Also works on offense.
 #define ABILITY_ENERGY_SIPHON 748 // Heals the user for 1/4 of the damage they deal.
+#define ABILITY_RESERVOIR 749 // Water Absorb + Storm Drain.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ENERGY_SIPHON + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_RESERVOIR + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 
