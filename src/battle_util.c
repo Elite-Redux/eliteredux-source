@@ -316,7 +316,7 @@ void HandleAction_UseMove(void)
         && gSideTimers[side].followmeTimer == 0
         && (gBattleMoves[gCurrentMove].power != 0 || GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker) != MOVE_TARGET_USER)
         && ((!BattlerHasAbility(gBattlerTarget, ABILITY_LIGHTNING_ROD, TRUE) && moveType == TYPE_ELECTRIC)
-            || (!BattlerHasAbility(gBattlerTarget, ABILITY_STORM_DRAIN, TRUE) && moveType == TYPE_WATER)))
+            || (!HasStormDrain(gBattlerTarget) && moveType == TYPE_WATER)))
     {
         side = GetBattlerSide(gBattlerAttacker);
         for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
@@ -324,7 +324,7 @@ void HandleAction_UseMove(void)
             if (side != GetBattlerSide(gActiveBattler)
                 && gBattlerTarget != gActiveBattler
                 && ((BattlerHasAbility(gActiveBattler, ABILITY_LIGHTNING_ROD, TRUE) && moveType == TYPE_ELECTRIC)
-                 || (BattlerHasAbility(gActiveBattler, ABILITY_STORM_DRAIN, TRUE) && moveType == TYPE_WATER))
+                 || (HasStormDrain(gActiveBattler) && moveType == TYPE_WATER))
                 && GetBattlerTurnOrderNum(gActiveBattler) < var
                 && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT
                 && !(BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PROPELLER_TAIL)
@@ -368,7 +368,7 @@ void HandleAction_UseMove(void)
             gActiveBattler = gBattlerByTurnOrder[var];
             if (BattlerHasAbility(gActiveBattler, ABILITY_LIGHTNING_ROD, TRUE))
                 gTurnStructs[gActiveBattler].lightningRodRedirected = TRUE;
-            else if (BattlerHasAbility(gActiveBattler, ABILITY_STORM_DRAIN, TRUE))
+            else if (HasStormDrain(gActiveBattler))
                 gTurnStructs[gActiveBattler].stormDrainRedirected = TRUE;
             gBattlerTarget = gActiveBattler;
         }
@@ -5544,78 +5544,50 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
         if (move != MOVE_NONE)
         {
             int statId;
+            int any = FALSE;
 			
 			effect = TestAbsorbingAbilities(battler, gBattlerAttacker, move, moveType, &statId, &gBattleScripting.abilityPopupOverwrite);
 
-            if (effect == 1) // Drain Hp ability.
+            if (effect)
             {
+                gBattlescriptCurrInstr = BattleScript_AfterAbsorbEffect;
                 SetActiveAbilityPopupOverride(gBattleScripting.abilityPopupOverwrite);
-                if (BATTLER_MAX_HP(battler) || BATTLER_HEALING_BLOCKED(battler))
-                {
-                    if ((gRoundStructs[gBattlerAttacker].notFirstStrike))
-                        gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
-                }
-                else
-                {
-                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                        gBattlescriptCurrInstr = BattleScript_MoveHPDrain;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_MoveHPDrain_PPLoss;
 
+                if (effect & ABSORB_RESULT_HEAL && !BATTLER_MAX_HP(battler) && !BATTLER_HEALING_BLOCKED(battler)) // Drain Hp ability.
+                {
+                    any = TRUE;
                     gBattleMoveDamage = gBattleMons[battler].maxHP / 4;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     gBattleMoveDamage *= -1;
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
+                    BattleScriptCall(BattleScript_MoveHPDrain);
                 }
-            }
-            else if (effect == 2) // Boost Stat ability;
-            {
-                SetActiveAbilityPopupOverride(gBattleScripting.abilityPopupOverwrite);
-                if (!CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
+                
+                if (effect & ABSORB_RESULT_STAT && CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN)) // Boost Stat ability;
                 {
-                    if ((gRoundStructs[gBattlerAttacker].notFirstStrike))
-                        gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_MonMadeMoveUseless_PPLoss;
-                }
-                else
-                {
-                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                        gBattlescriptCurrInstr = BattleScript_MoveStatDrain;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_MoveStatDrain_PPLoss;
-
+                    any = TRUE;
                     SetActiveStatChanger(statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
                     ChangeStatBuffs(battler, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1, statId, MOVE_EFFECT_AFFECTS_USER, NULL);
+                    BattleScriptCall(BattleScript_MoveStatDrain);
                 }
-            }
-            else if (effect == 3) // Flash Fire special case
-            {
-                if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
+                else if (effect & ABSORB_RESULT_FLASH_FIRE) // Flash Fire special case
                 {
-                    SetActiveMultistringChooser(B_MSG_FLASH_FIRE_BOOST);
-                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
+                    any = TRUE;
+                    if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
+                        SetActiveMultistringChooser(B_MSG_FLASH_FIRE_BOOST);
                     else
-                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
+                        SetActiveMultistringChooser(B_MSG_FLASH_FIRE_NO_BOOST);
 
                     gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_FLASH_FIRE;
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
+                    BattleScriptCall(BattleScript_FlashFireBoost);
                 }
-                else
-                {
-                    SetActiveMultistringChooser(B_MSG_FLASH_FIRE_NO_BOOST);
-                    if (gRoundStructs[gBattlerAttacker].notFirstStrike)
-                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost;
-                    else
-                        gBattlescriptCurrInstr = BattleScript_FlashFireBoost_PPLoss;
-                        
-                    gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
-                }
+
+                if (!any) BattleScriptCall(BattleScript_MonMadeMoveUseless);
+
+                BattleScriptCall(BattleScript_AttackStringAbilityPopUp);
+
+                gTurnStructs[gBattlerAttacker].multiHitCounter = 0;
+                if (!gRoundStructs[gBattlerAttacker].notFirstStrike) BattleScriptCall(BattleScript_PPReduce);
             }
         }
         break;
@@ -8098,8 +8070,9 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
                 gTurnStructs[targetBattler].lightningRodRedirected = TRUE;
             }
             else if (gBattleMoves[move].type == TYPE_WATER
-                && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN)
-                && !BATTLER_HAS_ABILITY(targetBattler, ABILITY_STORM_DRAIN))
+                && !HasStormDrain(targetBattler)
+                && (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN)
+                    || IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_RESERVOIR)))
             {
                 targetBattler ^= BIT_FLANK;
                 gTurnStructs[targetBattler].stormDrainRedirected = TRUE;
@@ -12419,72 +12392,77 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
         case ABILITY_AERODYNAMICS:
             REQUIRE(moveType == TYPE_FLYING)
             *statId = STAT_SPEED;
-            return 2;
+            return ABSORB_RESULT_STAT;
             
         case ABILITY_VOLT_ABSORB:
             REQUIRE(moveType == TYPE_ELECTRIC)
-            return 1;
+            return ABSORB_RESULT_HEAL;
 
         case ABILITY_EARTH_EATER:
             REQUIRE(moveType == TYPE_GROUND)
-            return 1;
+            return ABSORB_RESULT_HEAL;
 
         case ABILITY_WATER_ABSORB:
         case ABILITY_OLD_MARINER:
         case ABILITY_DRY_SKIN:
         ABSORB_WATER_ABSORB:
             REQUIRE(moveType == TYPE_WATER)
-            return 1;
+            return ABSORB_RESULT_HEAL;
             
         case ABILITY_POISON_ABSORB:
             REQUIRE(moveType == TYPE_POISON)
-            return 1;
+            return ABSORB_RESULT_HEAL;
             
         case ABILITY_LIGHTNING_ROD:
             REQUIRE(moveType == TYPE_ELECTRIC)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
             
         case ABILITY_STORM_DRAIN:
             REQUIRE(moveType == TYPE_WATER)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
+            
+        case ABILITY_RESERVOIR:
+            REQUIRE(moveType == TYPE_WATER)
+            *statId = GetHighestAttackingStatId(battler, TRUE);
+            return ABSORB_RESULT_STAT | ABSORB_RESULT_HEAL;
             
         case ABILITY_ELEMENTAL_VORTEX:
             if (moveType == TYPE_WATER) goto ABSORB_WATER_ABSORB;
         case ABILITY_FLASH_FIRE:
             REQUIRE(moveType == TYPE_FIRE)
-            return 3;
+            return ABSORB_RESULT_FLASH_FIRE;
         
         case ABILITY_SAP_SIPPER:
             REQUIRE(moveType == TYPE_GRASS)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_ICE_DEW:
             REQUIRE(moveType == TYPE_ICE)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_JUSTIFIED:
             REQUIRE(moveType == TYPE_DARK)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_WELL_BAKED_BODY:
             REQUIRE(moveType == TYPE_FIRE)
             *statId = STAT_DEF;
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_MOTOR_DRIVE:
             REQUIRE(moveType == TYPE_ELECTRIC)
             *statId = STAT_SPEED;
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         case ABILITY_WIND_RIDER:
             REQUIRE(gBattleMoves[move].airBased)
             *statId = GetHighestAttackingStatId(battler, TRUE);
-            return 2;
+            return ABSORB_RESULT_STAT;
         
         default:
             break;
@@ -16168,5 +16146,12 @@ int HasChloroplast(int battler)
     if (BattlerHasAbility(battler, ABILITY_CHLOROPLAST, FALSE)) return TRUE;
     if (BattlerHasAbility(battler, ABILITY_BIG_LEAVES, FALSE)) return TRUE;
     if (BattlerHasAbility(battler, ABILITY_SOLAR_FLARE, FALSE)) return TRUE;
+    return FALSE;
+}
+
+int HasStormDrain(int battler)
+{
+    if (BattlerHasAbility(battler, ABILITY_STORM_DRAIN, TRUE)) return ABILITY_STORM_DRAIN;
+    if (BattlerHasAbility(battler, ABILITY_RESERVOIR, TRUE)) return ABILITY_RESERVOIR;
     return FALSE;
 }

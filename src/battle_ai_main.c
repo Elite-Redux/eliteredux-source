@@ -829,6 +829,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                         if (moveType == TYPE_ELECTRIC && !IsMoveRedirectionPrevented(move, BATTLE_PARTNER(battlerDef)))
                             RETURN_SCORE_MINUS(20);
                         break;
+                    case ABILITY_RESERVOIR:
                     case ABILITY_STORM_DRAIN:
                         if (moveType == TYPE_WATER && !IsMoveRedirectionPrevented(move, BATTLE_PARTNER(battlerDef)))
                             RETURN_SCORE_MINUS(20);
@@ -2864,6 +2865,7 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                             RETURN_SCORE_MINUS(10);
                         }
                         break;  // handled in AI_HPAware
+                    case ABILITY_RESERVOIR:
                     case ABILITY_STORM_DRAIN:
                         if (moveType == TYPE_WATER
                         && HasMoveWithSplit(battlerAtkPartner, SPLIT_SPECIAL)

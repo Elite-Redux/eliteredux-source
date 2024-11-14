@@ -375,6 +375,9 @@ void ClearMiscTurnFlags();
 u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move);
 bool32 IsHealingMoveEffect(u16 effect);
 int IsMagicGuardProtected(int battler);
+#define ABSORB_RESULT_HEAL 1 << 0
+#define ABSORB_RESULT_STAT 1 << 1
+#define ABSORB_RESULT_FLASH_FIRE 1 << 2
 int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType);
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
 u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
@@ -396,6 +399,7 @@ void HandleFollowupAttackAbilities(int battler, int target, int move);
 int CheckAndSetOncePerTurnAbility(int battler, int ability);
 int IsStickyHold(int battler);
 int HasChloroplast(int battler);
+int HasStormDrain(int battler);
 
 MultihitType GetMultihitType(int battler, int move);
 

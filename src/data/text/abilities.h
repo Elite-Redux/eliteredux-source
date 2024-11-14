@@ -718,6 +718,7 @@ static const u8 sAbilitySandPitDescription[] = _("Attacks with 20BP Sand Tomb\no
 static const u8 sAbilityDesolateSunDescription[] = _("Desolate Land + Earth Eater.");
 static const u8 sAbilityDaybreakDescription[] = _("Burns the foe on contact.\nAlso works on offense.");
 static const u8 sAbilityEnergySiphonDescription[] = _("Heals the user for 1/4\nof the damage they deal.");
+static const u8 sAbilityReservoirDescription[] = _("Water Absorb + Storm Drain.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1470,6 +1471,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DESOLATE_SUN] = _("Desolate Sun"),
     [ABILITY_DAYBREAK] = _("Daybreak"),
     [ABILITY_ENERGY_SIPHON] = _("Energy Siphon"),
+    [ABILITY_RESERVOIR] = _("Reservoir"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2223,4 +2225,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DESOLATE_SUN] = sAbilityDesolateSunDescription,
     [ABILITY_DAYBREAK] = sAbilityDaybreakDescription,
     [ABILITY_ENERGY_SIPHON] = sAbilityEnergySiphonDescription,
+    [ABILITY_RESERVOIR] = sAbilityReservoirDescription,
 };
