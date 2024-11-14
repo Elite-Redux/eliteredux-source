@@ -2002,7 +2002,7 @@ int CalculateKoChanceFine(int baseDamage, int bonusDamage, int critMultiplier, i
 
     if (moveState->critChance <= 3 && baseDamage > defenderHp)
     {
-        CheckSingleHitKo(baseDamage, defenderHp, 0, 0, bonusDamage, moveState->critChance >= 3, moveState);
+        CheckSingleHitKo(baseDamage, defenderHp, 0, 0, bonusDamage, FALSE, moveState);
         if (moveState->koChance && !moveState->critChance)
         {
             int minDamage = moveState->noVariance ? baseDamage : ApplyModifier(UQ_4_12(.85), baseDamage);
@@ -2013,16 +2013,16 @@ int CalculateKoChanceFine(int baseDamage, int bonusDamage, int critMultiplier, i
     }
     if (moveState->critChance <= 3 && doubleDamageChance)
     {
-        CheckSingleHitKo(baseDamage, defenderHp, UQ_4_12(2), doubleDamageChance, bonusDamage, moveState->critChance >= 3, moveState);
+        CheckSingleHitKo(baseDamage, defenderHp, UQ_4_12(2), doubleDamageChance, bonusDamage, FALSE, moveState);
     }
     if (moveState->critChance > 0)
     {
-        CheckSingleHitKo(baseDamage, defenderHp, critMultiplier, sCritChance[moveState->critChance - 1], bonusDamage, !moveState->koChance || moveState->critChance >= 3, moveState);
+        CheckSingleHitKo(baseDamage, defenderHp, critMultiplier, sCritChance[moveState->critChance - 1], bonusDamage, !moveState->koChance, moveState);
         if (moveState->koChance >= 100) return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
     }
     if (doubleDamageChance && moveState->critChance > 0)
     {
-        CheckSingleHitKo(baseDamage, defenderHp, ApplyModifier(critMultiplier, UQ_4_12(2)), ApplyModifier(sCritChance[moveState->critChance - 1], doubleDamageChance), bonusDamage, !moveState->koChance || moveState->critChance >= 3, moveState);
+        CheckSingleHitKo(baseDamage, defenderHp, ApplyModifier(critMultiplier, UQ_4_12(2)), ApplyModifier(sCritChance[moveState->critChance - 1], doubleDamageChance), bonusDamage, !moveState->koChance, moveState);
     }
     return AI_SCORE_DAMAGE(moveState->damage, battlerDef);
 }
@@ -2043,6 +2043,8 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
     int defenderHp = gBattleMons[battlerDef].hp;
     u16 critMultiplier = UQ_4_12(1.5);
     int doubleDamageChance = 0;
+    int isTripleKick;
+    int requiredHits;
 
     GET_MOVE_TYPE(move, moveType)
 
@@ -2264,16 +2266,122 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
         return CalculateKoChanceFine(baseDamage, bonusDamage, critMultiplier, doubleDamageChance, battlerDef, defenderHp, moveState);
     }
 
-    if (gBattleMoves[move].effect != EFFECT_TRIPLE_KICK)
+    isTripleKick = gBattleMoves[move].effect == EFFECT_TRIPLE_KICK;
+    if (isTripleKick) hitCount *= 2;
+    
+    requiredHits = 0;
+    if (damageShield)
     {
-        if (damageShield)
-        {
-            hitCount -= damageShield / baseDamageAverage + 1;
-            if (!hitCount) return AI_SCORE_BREAK_SUBSTITUTE;
-            scoreOther = AI_SCORE_BREAK_SUBSTITUTE;
-        }
-
-        hitCount -= defenderHp / baseDamageAverage;
-        if (hitCount <= 0) return scoreOther + AI_SCORE_DAMAGE(hitCount * baseDamageAverage, battlerDef);
+        requiredHits += damageShield / baseDamageAverage + 1;
+        if (requiredHits >= hitCount) return AI_SCORE_BREAK_SUBSTITUTE;
+        scoreOther = AI_SCORE_BREAK_SUBSTITUTE;
     }
+
+    if ((hitCount - requiredHits) * baseDamageAverage <= defenderHp) return scoreOther + AI_SCORE_DAMAGE((hitCount - requiredHits) * baseDamageAverage, battlerDef);
+
+    switch (moveContainer->multihitType)
+    {
+    case MULTIHIT_THREE:
+        if (isTripleKick)
+        {
+            if (requiredHits == 2) requiredHits++;
+            else if (requiredHits > 3) return AI_SCORE_BREAK_SUBSTITUTE;
+        }
+    case MULTIHIT_BEAT_UP:
+        // TODO: Beat up
+    case MULTIHIT_FIVE:
+    case MULTIHIT_TEN:
+    case MULTIHIT_TWO:
+    HANDLE_KO_MULTIHIT:
+        moveState->koChance = 100;
+        i = (hitCount - requiredHits) * baseDamageAverage * 2 / defenderHp - 2;
+        moveState->overkillInHalves = min(i, 3);
+        break;
+    
+    case MULTIHIT_TWO_TO_FIVE:
+        switch (requiredHits + defenderHp / baseDamageAverage + 1)
+        {
+        case 1:
+        case 2:
+            moveState->koChance = 100;
+            moveState->overkillInHalves = 3;
+            break;
+        
+        case 3:
+            moveState->koChance = 66;
+            moveState->overkillInHalves = 1;
+            break;
+        
+        case 4:
+            moveState->koChance = 33;
+            break;
+        
+        case 5:
+            moveState->koChance = 16;
+            break;
+        }
+        break;
+    
+    case MULTIHIT_FOUR_OR_FIVE:
+        switch (requiredHits + defenderHp / baseDamageAverage + 1)
+        {
+        case 1:
+        case 2:
+            moveState->koChance = 100;
+            moveState->overkillInHalves = 3;
+            break;
+        
+        case 3:
+            moveState->koChance = 100;
+            moveState->overkillInHalves = 1;
+            break;
+        
+        case 4:
+            moveState->koChance = 100;
+            break;
+        
+        case 5:
+            moveState->koChance = 50;
+            break;
+        }
+        break;
+    
+    case MULTIHIT_TEN_CAN_MISS:
+        if (moveState->accuracy >= 100) goto HANDLE_KO_MULTIHIT;
+        {
+        int hitsToKo = requiredHits + defenderHp / baseDamageAverage + 1;
+        if (hitsToKo == 1) moveState->koChance = 100;
+        else if (hitsToKo == 2) moveState->koChance = UQ_4_12_PERCENT(moveState->accuracy);
+        else moveState->koChance = ApplyModifier(100, gHitOdds[hitsToKo - 3][moveState->accuracy - 1]);
+        i = hitCount * 2 / hitsToKo - 2;
+        moveState->overkillInHalves = min(i, 3);
+        }
+        break;
+
+    case MULTIHIT_TRIPLE_KICK:
+        if (requiredHits == 2) requiredHits++;
+        else if (requiredHits > 3) return AI_SCORE_BREAK_SUBSTITUTE;
+        if (moveState->accuracy >= 100) goto HANDLE_KO_MULTIHIT;
+        {
+        int hitsToKo = requiredHits + defenderHp / baseDamageAverage + 1;
+        if (hitsToKo == 1)
+        {
+            moveState->koChance = 100;
+            moveState->overkillInHalves = 3;
+        }
+        else if (hitsToKo <= 3)
+        {
+            moveState->koChance = moveState->accuracy;
+            moveState->overkillInHalves = 2 + (hitsToKo == 2);
+        }
+        else
+        {
+            moveState->koChance = ApplyModifier(100, gHitOdds[0][moveState->accuracy - 1]);
+            moveState->overkillInHalves = 2 * hitCount / requiredHits - 2;
+        }
+        }
+        break;
+    }
+
+    return scoreOther + AI_SCORE_DAMAGE((hitCount - requiredHits) * baseDamageAverage, battlerDef);
 }
