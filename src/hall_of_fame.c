@@ -449,9 +449,10 @@ u16 getHallofFameSpecies(u8 num) {
 
     for (i = 0; i < ARRAY_COUNT(gEvolutionTable[species]); i++)
     {
-        if (!gEvolutionTable[species][i].method) break;
+        REQUIRE(gEvolutionTable[species][i].method)
+
         if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION
-            || gEvolutionTable[species][i].method != EVO_PRIMAL_REVERSION)
+            || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION)
         {
             if (gEvolutionTable[species][i].param == item)
                 return gEvolutionTable[species][i].targetSpecies;
@@ -468,12 +469,15 @@ u16 getHallofFameSpecies(u8 num) {
     }
 
     switch (species) {
-        case SPECIES_DARMANITAN_GALARIAN:
-        case SPECIES_DARMANITAN:
-            if (GetAbilityBySpecies(species, GetMonData(&gPlayerParty[num], MON_DATA_ABILITY_NUM)) == ABILITY_ZEN_MODE ||
-               SpeciesHasInnate(species, ABILITY_ZEN_MODE, GetMonData(&gPlayerParty[num], MON_DATA_LEVEL), GetMonData(&gPlayerParty[num], MON_DATA_PERSONALITY), FALSE, FALSE))
-               return species == SPECIES_DARMANITAN ? SPECIES_DARMANITAN_ZEN_MODE : SPECIES_DARMANITAN_ZEN_MODE_GALARIAN;
-            break;
+        case SPECIES_WISHIWASHI:
+            return SPECIES_WISHIWASHI_SCHOOL;
+        
+        case SPECIES_CHERRIM:
+            return SPECIES_CHERRIM_SUNSHINE;
+
+        case SPECIES_DARMANITAN_REDUX:
+            return SPECIES_DARMANITAN_REDUX_BOND;
+            
         case SPECIES_GRENINJA_BATTLE_BOND:
             return SPECIES_GRENINJA_ASH;
         break;
