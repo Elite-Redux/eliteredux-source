@@ -14982,7 +14982,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         break;
 
     case ABILITY_SAND_PIT:
-        UseEntryMove(battler, ability, MOVE_SAND_TOMB, 50);
+        UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20);
         break;
     
     case ABILITY_CHEAP_TACTICS:
