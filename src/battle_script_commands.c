@@ -15461,7 +15461,7 @@ static void Cmd_switchoutabilities(void)
         {
             u8 side = GetBattlerSide(gActiveBattler);
             u8 index = gBattlerPartyIndexes[gActiveBattler];
-            u16 originalItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
+            u16 originalItem = gLastUsedItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
 
             if (originalItem)
             {
@@ -15847,7 +15847,7 @@ static void Cmd_tryrecycleitem(void)
     u16 *usedHeldItem;
 
     gActiveBattler = gBattlerAttacker;
-    usedHeldItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)];
+    usedHeldItem = gLastUsedItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)];
 
     if (*usedHeldItem != 0 && gBattleMons[gActiveBattler].item == 0)
     {
@@ -16925,7 +16925,7 @@ int EatTargetBerry(int battler, int target)
     if (IsStickyHold(target)) return FALSE;
 
     // target loses their berry
-    UpdateBattlerItem(target, ITEM_NONE);
+    gLastUsedItem = UpdateBattlerItem(target, ITEM_NONE);
 
     // attacker temporarily gains their item
     gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
