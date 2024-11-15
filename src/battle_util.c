@@ -5566,8 +5566,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                 if (effect & ABSORB_RESULT_STAT && CanRaiseStat(battler, statId)) // Boost Stat ability;
                 {
                     any = TRUE;
-                    SetActiveStatChanger(statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
-                    ChangeStatBuffs(battler, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1, statId, MOVE_EFFECT_AFFECTS_USER, NULL);
+                    SetActiveStatChanger(statId, gBattleScripting.abilityPopupOverwrite == ABILITY_WELL_BAKED_BODY ? 2 : 1);
+                    ChangeStatBuffs(battler, gBattleScripting.abilityPopupOverwrite == ABILITY_WELL_BAKED_BODY ? 2 : 1, statId, MOVE_EFFECT_AFFECTS_USER, NULL);
                     BattleScriptCall(BattleScript_MoveStatDrain);
                 }
                 else if (effect & ABSORB_RESULT_FLASH_FIRE) // Flash Fire special case
