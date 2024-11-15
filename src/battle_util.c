@@ -10471,7 +10471,8 @@ u8 StabMultiplierInHalves(u8 battler, u8 moveType, u16 move)
         || (BATTLER_HAS_ABILITY(battler, ABILITY_MOON_SPIRIT) && (moveType == TYPE_FAIRY || moveType == TYPE_DARK))
         || (BATTLER_HAS_ABILITY(battler, ABILITY_SOLAR_FLARE) && moveType == TYPE_FIRE)
 		|| (BATTLER_HAS_ABILITY(battler, ABILITY_AURORA_BOREALIS) && moveType == TYPE_ICE)
-        || (BATTLER_HAS_ABILITY(battler, ABILITY_AMPHIBIOUS) && moveType == TYPE_WATER))
+        || (BATTLER_HAS_ABILITY(battler, ABILITY_AMPHIBIOUS) && moveType == TYPE_WATER)
+        || (BATTLER_HAS_ABILITY(battler, ABILITY_OLD_MARINER) && moveType == TYPE_WATER))
     {
         if (BATTLER_HAS_ABILITY(battler, ABILITY_ADAPTABILITY) || BATTLER_HAS_ABILITY(battler, ABILITY_RKS_SYSTEM))
             return 4;
@@ -12403,7 +12404,6 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
             return ABSORB_RESULT_HEAL;
 
         case ABILITY_WATER_ABSORB:
-        case ABILITY_OLD_MARINER:
         case ABILITY_DRY_SKIN:
         ABSORB_WATER_ABSORB:
             REQUIRE(moveType == TYPE_WATER)
