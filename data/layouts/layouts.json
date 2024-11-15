@@ -4745,9 +4745,9 @@
       "id": "LAYOUT_DESERT_CITY_MUSEUM",
       "name": "DesertCity_Museum_Layout",
       "width": 20,
-      "height": 20,
+      "height": 80,
       "primary_tileset": "gTileset_Building",
-      "secondary_tileset": "gTileset_PokemonCenter",
+      "secondary_tileset": "gTileset_BattlePyramid",
       "border_filepath": "data/layouts/DesertCity_Museum/border.bin",
       "blockdata_filepath": "data/layouts/DesertCity_Museum/map.bin"
     }
