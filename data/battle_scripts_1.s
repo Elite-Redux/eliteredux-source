@@ -7335,7 +7335,7 @@ BattleScript_DragonDanceTrySpeed::
 BattleScript_DragonDanceEnd::
 	goto BattleScript_MoveEnd
 
-BattleScript_Neurotoxin:
+BattleScript_Neurotoxin::
 	saveattackerandtargetto34
 	copybyte gBattlerAttacker, gStackBattler1
 	copybyte gBattlerTarget, gStackBattler2
