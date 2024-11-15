@@ -15847,10 +15847,11 @@ static void Cmd_tryrecycleitem(void)
     u16 *usedHeldItem;
 
     gActiveBattler = gBattlerAttacker;
-    usedHeldItem = gLastUsedItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)];
+    usedHeldItem = &gBattleStruct->usedHeldItems[gBattlerPartyIndexes[gActiveBattler]][GetBattlerSide(gActiveBattler)];
 
     if (*usedHeldItem != 0 && gBattleMons[gActiveBattler].item == 0)
     {
+        gLastUsedItem = *usedHeldItem;
         UpdateBattlerItem(gActiveBattler, *usedHeldItem);
         *usedHeldItem = 0;
 
