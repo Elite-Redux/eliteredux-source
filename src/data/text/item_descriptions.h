@@ -3702,7 +3702,7 @@ static const u8 sAdrenalineOrbDesc[] = _(
     "but only one time.");
 
 static const u8 sHoneyDesc[] = _(
-    "Attracts wild Pokemon.\n"
+    "Attracts wild mons.\n"
     "Can be used by bees\n"
     "to restore HP.");
 

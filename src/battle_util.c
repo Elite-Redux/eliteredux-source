@@ -5566,8 +5566,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                 if (effect & ABSORB_RESULT_STAT && CanRaiseStat(battler, statId)) // Boost Stat ability;
                 {
                     any = TRUE;
-                    SetActiveStatChanger(statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
-                    ChangeStatBuffs(battler, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1, statId, MOVE_EFFECT_AFFECTS_USER, NULL);
+                    SetActiveStatChanger(statId, gBattleScripting.abilityPopupOverwrite == ABILITY_WELL_BAKED_BODY ? 2 : 1);
+                    ChangeStatBuffs(battler, gBattleScripting.abilityPopupOverwrite == ABILITY_WELL_BAKED_BODY ? 2 : 1, statId, MOVE_EFFECT_AFFECTS_USER, NULL);
                     BattleScriptCall(BattleScript_MoveStatDrain);
                 }
                 else if (effect & ABSORB_RESULT_FLASH_FIRE) // Flash Fire special case
@@ -13478,8 +13478,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_LINGERING_AROMA:
     case ABILITY_MUMMY:
         REQUIRE(ShouldApplyOnHitAffect(attacker))
-        REQUIRE(GetBattlerAbility(battler) == ability)
-        REQUIRE_NOT(BattlerHasAbility(battler, ability, FALSE))
+        REQUIRE_NOT(BattlerHasAbility(attacker, ability, FALSE))
         REQUIRE(IsMoveMakingContact(move, attacker))
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(attacker))
@@ -13492,7 +13491,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_WANDERING_SPIRIT:
         REQUIRE(ShouldApplyOnHitAffect(attacker))
         REQUIRE(GetBattlerAbility(battler) == ability)
-        REQUIRE_NOT(BattlerHasAbility(battler, ability, FALSE))
+        REQUIRE_NOT(BattlerHasAbility(attacker, ability, FALSE))
         REQUIRE(IsMoveMakingContact(move, attacker))
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(attacker))
@@ -14322,17 +14321,17 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
         break;
     
     case ABILITY_ENTRANCE:
-        POISON_PUPPETEER_CLONE(CanInfatuate(battler, gBattlerTarget), ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_ATTRACT))
+        POISON_PUPPETEER_CLONE(CanInfatuate(battler, gBattlerTarget), BattleScriptCall(BattleScript_Entrance))
     
     case ABILITY_POISON_PUPPETEER:
-        POISON_PUPPETEER_CLONE(CanBeConfused(gBattlerTarget), ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_CONFUSION))
+        POISON_PUPPETEER_CLONE(CanBeConfused(gBattlerTarget), BattleScriptCall(BattleScript_PoisonPuppeteer))
     
     case ABILITY_BLOODLUST:
     case ABILITY_BLOOD_BATH:
-        POISON_PUPPETEER_CLONE(!gVolatileStructs[gBattlerTarget].fear, ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FEAR))
+        POISON_PUPPETEER_CLONE(!gVolatileStructs[gBattlerTarget].fear, BattleScriptCall(BattleScript_Bloodlust))
     
     case ABILITY_SET_ABLAZE:
-        POISON_PUPPETEER_CLONE(CanBeBurned(gBattlerTarget), ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FEAR))
+        POISON_PUPPETEER_CLONE(CanBeBurned(gBattlerTarget), BattleScriptCall(BattleScript_Bloodlust))
     
     case ABILITY_NEUROTOXIN:
         POISON_PUPPETEER_CLONE(CanLowerStat(gBattlerTarget, STAT_ATK) || CanLowerStat(gBattlerTarget, STAT_DEF) || CanLowerStat(gBattlerTarget, STAT_SPEED),

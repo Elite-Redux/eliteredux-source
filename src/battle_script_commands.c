@@ -12446,7 +12446,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         }
         else // try to decrease
         {
-            statValue = -min(statValue, gBattleMons[gActiveBattler].statStages[statId]);
+            statValue = max(statValue, -gBattleMons[gActiveBattler].statStages[statId]);
 
             if (!dontSetBuffers)
             {
@@ -15461,7 +15461,7 @@ static void Cmd_switchoutabilities(void)
         {
             u8 side = GetBattlerSide(gActiveBattler);
             u8 index = gBattlerPartyIndexes[gActiveBattler];
-            u16 originalItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
+            u16 originalItem = gLastUsedItem = side == B_SIDE_PLAYER ? gBattleStruct->itemStolen[index].originalItem : gBattleStruct->opposingOriginalItems[index];
 
             if (originalItem)
             {
@@ -15851,6 +15851,7 @@ static void Cmd_tryrecycleitem(void)
 
     if (*usedHeldItem != 0 && gBattleMons[gActiveBattler].item == 0)
     {
+        gLastUsedItem = *usedHeldItem;
         UpdateBattlerItem(gActiveBattler, *usedHeldItem);
         *usedHeldItem = 0;
 
@@ -16925,7 +16926,7 @@ int EatTargetBerry(int battler, int target)
     if (IsStickyHold(target)) return FALSE;
 
     // target loses their berry
-    UpdateBattlerItem(target, ITEM_NONE);
+    gLastUsedItem = UpdateBattlerItem(target, ITEM_NONE);
 
     // attacker temporarily gains their item
     gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
