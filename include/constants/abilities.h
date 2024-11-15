@@ -769,8 +769,9 @@
 #define ABILITY_DAYBREAK 747 // Burns the foe on contact. Also works on offense.
 #define ABILITY_ENERGY_SIPHON 748 // Heals the user for 1/4 of the damage they deal.
 #define ABILITY_RESERVOIR 749 // Water Absorb + Storm Drain.
+#define ABILITY_NEUROTOXIN 750 // Inflicting poison also lowers Attack, Defense, and Speed.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_RESERVOIR + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_NEUROTOXIN + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

@@ -547,6 +547,7 @@ extern const u8 BattleScript_PerformStatDown[];
 extern const u8 BattleScript_PerformStatUp[];
 extern const u8 BattleScript_Lawnmower[];
 extern const u8 BattleScript_AbilityPopUp[];
+extern const u8 BattleScript_Neurotoxin[];
 extern const u8 BattleScript_PauseAndAbilityPopup[];
 extern const u8 BattleScript_ApeShift[];
 extern const u8 BattleScript_AbilityPopUpEnd3[];

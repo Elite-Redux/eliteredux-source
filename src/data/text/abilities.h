@@ -719,6 +719,7 @@ static const u8 sAbilityDesolateSunDescription[] = _("Desolate Land + Earth Eate
 static const u8 sAbilityDaybreakDescription[] = _("Burns the foe on contact.\nAlso works on offense.");
 static const u8 sAbilityEnergySiphonDescription[] = _("Heals the user for 1/4\nof the damage they deal.");
 static const u8 sAbilityReservoirDescription[] = _("Water Absorb + Storm Drain.");
+static const u8 sAbilityNeurotoxinDescription[] = _("Inflicting poison also lowers\nAttack, Defense, and Speed.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1472,6 +1473,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DAYBREAK] = _("Daybreak"),
     [ABILITY_ENERGY_SIPHON] = _("Energy Siphon"),
     [ABILITY_RESERVOIR] = _("Reservoir"),
+    [ABILITY_NEUROTOXIN] = _("Neurotoxin"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2226,4 +2228,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DAYBREAK] = sAbilityDaybreakDescription,
     [ABILITY_ENERGY_SIPHON] = sAbilityEnergySiphonDescription,
     [ABILITY_RESERVOIR] = sAbilityReservoirDescription,
+    [ABILITY_NEUROTOXIN] = sAbilityNeurotoxinDescription,
 };
