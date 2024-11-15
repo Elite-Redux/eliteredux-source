@@ -11109,6 +11109,30 @@ BattleScript_SpikyShieldEffect::
 BattleScript_SpikyShieldRet::
 	return
 
+BattleScript_PoisonPuppeteer::
+	setmoveeffect MOVE_EFFECT_CONFUSION
+	call BattleScript_PoisonPuppeteer_Internal
+	return
+
+BattleScript_Bloodlust::
+	setmoveeffect MOVE_EFFECT_FEAR
+	call BattleScript_PoisonPuppeteer_Internal
+	return
+
+BattleScript_Entrance::
+	setmoveeffect MOVE_EFFECT_ATTRACT
+	call BattleScript_PoisonPuppeteer_Internal
+	return
+
+BattleScript_PoisonPuppeteer_Internal:
+	swapbattlerandtargetvia34
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_SAFEGUARD
+	bichalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
+	seteffectsecondary
+	setmoveeffect 0
+	restoreattackerandtargetfrom34
+	return	
+
 BattleScript_KingsShieldEffect::
 	swapbattlerandtargetvia34
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_SAFEGUARD

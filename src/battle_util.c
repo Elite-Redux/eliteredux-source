@@ -14322,17 +14322,17 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
         break;
     
     case ABILITY_ENTRANCE:
-        POISON_PUPPETEER_CLONE(CanInfatuate(battler, gBattlerTarget), ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_ATTRACT))
+        POISON_PUPPETEER_CLONE(CanInfatuate(battler, gBattlerTarget), BattleScriptCall(BattleScript_Entrance))
     
     case ABILITY_POISON_PUPPETEER:
-        POISON_PUPPETEER_CLONE(CanBeConfused(gBattlerTarget), ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_CONFUSION))
+        POISON_PUPPETEER_CLONE(CanBeConfused(gBattlerTarget), BattleScriptCall(BattleScript_PoisonPuppeteer))
     
     case ABILITY_BLOODLUST:
     case ABILITY_BLOOD_BATH:
-        POISON_PUPPETEER_CLONE(!gVolatileStructs[gBattlerTarget].fear, ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FEAR))
+        POISON_PUPPETEER_CLONE(!gVolatileStructs[gBattlerTarget].fear, BattleScriptCall(BattleScript_Bloodlust))
     
     case ABILITY_SET_ABLAZE:
-        POISON_PUPPETEER_CLONE(CanBeBurned(gBattlerTarget), ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FEAR))
+        POISON_PUPPETEER_CLONE(CanBeBurned(gBattlerTarget), BattleScriptCall(BattleScript_Bloodlust))
     
     case ABILITY_NEUROTOXIN:
         POISON_PUPPETEER_CLONE(CanLowerStat(gBattlerTarget, STAT_ATK) || CanLowerStat(gBattlerTarget, STAT_DEF) || CanLowerStat(gBattlerTarget, STAT_SPEED),
