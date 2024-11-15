@@ -400,6 +400,8 @@ int CheckAndSetOncePerTurnAbility(int battler, int ability);
 int IsStickyHold(int battler);
 int HasChloroplast(int battler);
 int HasStormDrain(int battler);
+int CanRaiseStat(int battler, int stat);
+int CanLowerStat(int battler, int stat);
 
 MultihitType GetMultihitType(int battler, int move);
 

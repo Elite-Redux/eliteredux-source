@@ -5563,7 +5563,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                     BattleScriptCall(BattleScript_MoveHPDrain);
                 }
                 
-                if (effect & ABSORB_RESULT_STAT && CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN)) // Boost Stat ability;
+                if (effect & ABSORB_RESULT_STAT && CanRaiseStat(battler, statId)) // Boost Stat ability;
                 {
                     any = TRUE;
                     SetActiveStatChanger(statId, ability == ABILITY_WELL_BAKED_BODY ? 2 : 1);
@@ -6645,7 +6645,7 @@ static u8 HealConfuseBerry(u32 battlerId, u32 itemId, u8 flavorId, bool32 end2)
 
 static u8 StatRaiseBerry(u32 battlerId, u32 itemId, u32 statId, bool32 end2)
 {
-    if (CompareStat(battlerId, statId, MAX_STAT_STAGE, CMP_LESS_THAN) && HasEnoughHpToEatBerry(battlerId, GetBattlerHoldEffectParam(battlerId), itemId))
+    if (CanRaiseStat(battlerId, statId) && HasEnoughHpToEatBerry(battlerId, GetBattlerHoldEffectParam(battlerId), itemId))
     {
         BufferStatChange(battlerId, statId, STRINGID_STATROSE);
         if (HasRipenEffect(battlerId))
@@ -6677,7 +6677,7 @@ static u8 RandomStatRaiseBerry(u32 battlerId, u32 itemId, bool32 end2)
 
     for (i = 0; i < 5; i++)
     {
-        if (CompareStat(battlerId, STAT_ATK + i, MAX_STAT_STAGE, CMP_LESS_THAN))
+        if (CanRaiseStat(battlerId, STAT_ATK + i))
             break;
     }
     if (i != 5 && HasEnoughHpToEatBerry(battlerId, GetBattlerHoldEffectParam(battlerId), itemId))
@@ -6685,7 +6685,7 @@ static u8 RandomStatRaiseBerry(u32 battlerId, u32 itemId, bool32 end2)
         do
         {
             i = Random() % 5;
-        } while (!CompareStat(battlerId, STAT_ATK + i, MAX_STAT_STAGE, CMP_LESS_THAN));
+        } while (!CanRaiseStat(battlerId, STAT_ATK + i));
 
         stringId = (BATTLER_HAS_ABILITY(battlerId, ABILITY_CONTRARY)) ? STRINGID_STATFELL : STRINGID_STATROSE;
         gBattleTextBuff2[0] = B_BUFF_PLACEHOLDER_BEGIN;
@@ -6741,7 +6741,7 @@ static u8 DamagedStatBoostBerryEffect(u8 battlerId, u8 statId, u8 split)
 {
     if (IsBattlerAlive(battlerId)
      && TARGET_TURN_DAMAGED
-     && CompareStat(battlerId, statId, MAX_STAT_STAGE, CMP_LESS_THAN)
+     && CanRaiseStat(battlerId, statId)
      && !DoesSubstituteBlockMove(gBattlerAttacker, battlerId, gCurrentMove)
      && GetBattleMoveSplit(gCurrentMove) == split)
     {
@@ -6764,7 +6764,7 @@ static u8 DamagedStatBoostBerryEffect(u8 battlerId, u8 statId, u8 split)
 
 u8 TryHandleSeed(u8 battler, u32 terrainFlag, u8 statId, u16 itemId, bool32 execute)
 {
-    if (gFieldStatuses & terrainFlag && CompareStat(battler, statId, MAX_STAT_STAGE, CMP_LESS_THAN))
+    if (gFieldStatuses & terrainFlag && CanRaiseStat(battler, statId))
     {
         BufferStatChange(battler, statId, STRINGID_STATROSE);
         gLastUsedItem = itemId; // For surge abilities
@@ -7700,7 +7700,7 @@ case ITEMEFFECT_KINGSROCK:
         case HOLD_EFFECT_BLUNDER_POLICY:
             if (gBattleStruct->blunderPolicy
              && gBattleMons[gBattlerAttacker].hp != 0
-             && CompareStat(gBattlerAttacker, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
+             && CanRaiseStat(gBattlerAttacker, STAT_SPEED))
             {
                 gBattleStruct->blunderPolicy = FALSE;
                 gLastUsedItem = atkItem;
@@ -7770,7 +7770,7 @@ case ITEMEFFECT_KINGSROCK:
             REQUIRE(IsBattlerAlive(gBattlerAttacker))
             REQUIRE(gRoundStructs[gBattlerAttacker].targetAffected || gTurnStructs[gBattlerAttacker].damagedMons)
             REQUIRE(gBattleMoves[gCurrentMove].flags & FLAG_SOUND)
-            REQUIRE(CompareStat(gBattlerAttacker, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN))
+            REQUIRE(CanRaiseStat(gBattlerAttacker, STAT_SPATK))
             REQUIRE_NOT(NoAliveMonsForEitherParty())
 
             gLastUsedItem = atkItem;
@@ -11835,7 +11835,7 @@ bool32 TestSheerForceFlag(u8 battler, u16 move)
 
 int StatLowerableOrMirrorArmor(int battler, int stat)
 {
-    if (CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN)) return TRUE;
+    if (CanLowerStat(battler, stat)) return TRUE;
     
     return BATTLER_HAS_ABILITY(battler, ABILITY_MIRROR_ARMOR);
 }
@@ -11922,7 +11922,7 @@ void BufferStatChange(u8 battlerId, u8 statId, u8 stringId)
 
 bool32 TryRoomService(u8 battlerId)
 {
-    if (IsTrickRoomActive() && CompareStat(battlerId, STAT_SPEED, MIN_STAT_STAGE, CMP_GREATER_THAN))
+    if (IsTrickRoomActive() && CanLowerStat(battlerId, STAT_SPEED))
     {
         BufferStatChange(battlerId, STAT_SPEED, STRINGID_STATFELL);
         gEffectBattler = gBattleScripting.battler = battlerId;
@@ -12634,6 +12634,11 @@ gBattleScripting.moveEffect = effect; \
 BattleScriptCall(BattleScript_AbilityStatusEffect); \
 gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
 
+#define ABILITY_STATUS_EFFECT_DIRECT(effect) \
+gBattleScripting.moveEffect = effect; \
+gHitMarker |= HITMARKER_IGNORE_SAFEGUARD; \
+SetMoveEffect(FALSE, FALSE);
+
 int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) {
     int i, ability, moveType;
 
@@ -12678,18 +12683,15 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
     case ABILITY_GULP_MISSILE:
         REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
         REQUIRE(gBattleMons[battler].species == SPECIES_CRAMORANT)
-
-        if ((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED)
-            || gStatuses3[gBattlerAttacker] & STATUS3_UNDERWATER
+        REQUIRE((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED)
+            || gStatuses3[battler] & STATUS3_UNDERWATER
             || (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
-        {
-            u16 newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ? SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
-            UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
-            gBattleMons[battler].species = newSpecies;
-            BattleScriptCall(BattleScript_AttackerFormChange);
-            return TRUE;
-        }
-        break;
+            
+        u16 newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ? SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptCall(BattleScript_AttackerFormChange);
+        return TRUE;
     
     case ABILITY_ENERGY_SIPHON:
         REQUIRE(ShouldApplyOnHitAffect(battler))
@@ -12853,7 +12855,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         REQUIRE(CanInfatuate(battler, target))
         REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
 
-        gBattleMons[target].status2 |= STATUS2_INFATUATED_WITH(gBattlerAttacker);
+        gBattleMons[target].status2 |= STATUS2_INFATUATED_WITH(battler);
         BattleScriptCall(BattleScript_BeautifulMusicActivates);
         return TRUE;
     
@@ -12879,12 +12881,12 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
 
     HANDLE_ABILITY_RECOIL_EFFECT:
         REQUIRE(ShouldApplyOnHitAffect(battler))
-        REQUIRE(gBattleMons[gBattlerAttacker].hp > 1)
-        REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(gBattlerAttacker))
+        REQUIRE(gBattleMons[battler].hp > 1)
+        REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(battler))
         
         gBattleMoveDamage = gTurnStructs[target].dmg / 10;
         if (!gBattleMoveDamage) gBattleMoveDamage = 1;
-        else if (gBattleMoveDamage >= gBattleMons[gBattlerAttacker].hp) gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp - 1;
+        else if (gBattleMoveDamage >= gBattleMons[battler].hp) gBattleMoveDamage = gBattleMons[battler].hp - 1;
         BattleScriptCall(BattleScript_UserGetsReckoilDamaged);
         return TRUE;
     
@@ -12987,14 +12989,14 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             
             case TYPE_FIGHTING:
                 REQUIRE(IsBattlerAlive(target))
-                REQUIRE_NOT(CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_EQUAL))
+                REQUIRE(CanRaiseStat(battler, STAT_SPATK))
 
                 ABILITY_STATUS_EFFECT(MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER)
                 return TRUE;
             
             case TYPE_FLYING:
                 REQUIRE(IsBattlerAlive(target))
-                REQUIRE_NOT(CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_EQUAL))
+                REQUIRE(CanRaiseStat(battler, STAT_SPEED))
 
                 ABILITY_STATUS_EFFECT(MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER)
                 return TRUE;
@@ -13019,7 +13021,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
             
             case TYPE_STEEL:
                 REQUIRE(IsBattlerAlive(target))
-                REQUIRE_NOT(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_EQUAL))
+                REQUIRE(CanRaiseStat(battler, STAT_DEF))
 
                 ABILITY_STATUS_EFFECT(MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER)
                 return TRUE;
@@ -13143,8 +13145,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
 
             if (IS_BATTLER_PROTECTED(target))
             {
-                gBattleScripting.moveEffect = MOVE_EFFECT_FEINT;
-                SetMoveEffect(TRUE, TRUE);
+                ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FEINT)
                 shouldApply = TRUE;
             }
         }
@@ -13367,8 +13368,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         REQUIRE(CanMoveHaveExtraFlinchChance(move))
         REQUIRE(Random() % 100 < 10)
 
-        gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
-        SetMoveEffect(FALSE, 0);
+        ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FLINCH)
         break;
     
     case ABILITY_HAUNTING_FRENZY:
@@ -13376,8 +13376,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         REQUIRE(CanMoveHaveExtraFlinchChance(move))
         REQUIRE(Random() % 100 < 20)
 
-        gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
-        SetMoveEffect(FALSE, 0);
+        ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FLINCH)
         break;
     
     case ABILITY_FROM_THE_SHADOWS:
@@ -13386,8 +13385,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
 
         if (CanMoveHaveExtraFlinchChance(move) && Random() % 100 < 20)
         {
-            gBattleScripting.moveEffect = MOVE_EFFECT_FLINCH;
-            SetMoveEffect(FALSE, 0);
+            ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FLINCH)
         }
 
         REQUIRE_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
@@ -13522,7 +13520,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         REQUIRE(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
         gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = species;
         UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_CRAMORANT);
-        gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
+        gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
         BattleScriptCall(species == SPECIES_CRAMORANT_GORGING ? BattleScript_GulpMissileGorging : BattleScript_GulpMissileGulping);
@@ -13560,7 +13558,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_THERMAL_EXCHANGE:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(moveType == TYPE_FIRE)
-        REQUIRE_NOT(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_ATK))
 
         SetStatChanger(STAT_ATK, 1);
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
@@ -13569,7 +13567,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_FURNACE:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(moveType == TYPE_ROCK)
-        REQUIRE_NOT(CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_SPEED))
 
         SetStatChanger(STAT_SPEED, 2);
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
@@ -13680,7 +13678,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(attacker))
         REQUIRE(IsMoveMakingContact(move, attacker))
 
-        gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 8;
+        gBattleMoveDamage = gBattleMons[attacker].maxHP / 8;
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
         PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
@@ -13692,7 +13690,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(attacker))
         REQUIRE(IsMoveMakingContact(move, attacker))
 
-        gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 6;
+        gBattleMoveDamage = gBattleMons[attacker].maxHP / 6;
         if (gBattleMoveDamage == 0)
             gBattleMoveDamage = 1;
         PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
@@ -13702,7 +13700,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_RATTLED:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
-        REQUIRE_NOT(CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_SPEED))
         
         SetStatChanger(STAT_SPEED, 1);
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
@@ -13742,7 +13740,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     
     case ABILITY_STEAM_ENGINE:
         REQUIRE(ShouldApplyOnHitAffect(battler))
-        REQUIRE_NOT(CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_SPEED))
         REQUIRE(moveType == TYPE_FIRE || moveType == TYPE_WATER)
 
         SetStatChanger(STAT_SPEED, 12);
@@ -13802,9 +13800,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_GUILT_TRIP:
         REQUIRE(ShouldApplyOnHitAffect(attacker))
         REQUIRE_NOT(IsBattlerAlive(battler))
-        if (CompareStat(gBattlerAttacker, STAT_ATK, MIN_STAT_STAGE, CMP_EQUAL)
-            && CompareStat(gBattlerAttacker, STAT_SPATK, MIN_STAT_STAGE, CMP_EQUAL))
-            break;
+        REQUIRE(CanLowerStat(attacker, STAT_ATK) || CanLowerStat(attacker, STAT_SPATK))
 
         BattleScriptCall(BattleScript_GuiltTrip);
         return TRUE;
@@ -13886,7 +13882,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     
     case ABILITY_INFLATABLE:
         REQUIRE(ShouldApplyOnHitAffect(battler))
-        REQUIRE_NOT(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_EQUAL) && CompareStat(battler, STAT_SPDEF, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
         REQUIRE(moveType == TYPE_FIRE || moveType == TYPE_FLYING)
         BattleScriptCall(BattleScript_InflatableActivates);
         gBattleScripting.battler = battler;
@@ -13900,7 +13896,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_WATER_COMPACTION:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(moveType == TYPE_WATER)
-        REQUIRE_NOT(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_DEF))
 
         SetStatChanger(STAT_DEF, 2);
         BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
@@ -13932,7 +13928,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_WEAK_ARMOR:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(IS_MOVE_PHYSICAL(move))
-        REQUIRE_NOT(CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_EQUAL) && CompareStat(battler, STAT_DEF, MIN_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_SPEED) || CanLowerStat(battler, STAT_DEF))
 
         if (gBattleMoves[move].effect == EFFECT_HIT_ESCAPE && CanBattlerSwitch(attacker))
             gRoundStructs[battler].disableEjectPack = TRUE;  // Set flag for target
@@ -13951,7 +13947,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_CROWNED_SHIELD:
     case ABILITY_STAMINA:
         REQUIRE(ShouldApplyOnHitAffect(battler))
-        REQUIRE_NOT(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_DEF))
 
         if (gIsCriticalHit)
         {
@@ -13967,7 +13963,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         
     case ABILITY_FORTITUDE:
         REQUIRE(ShouldApplyOnHitAffect(battler))
-        REQUIRE_NOT(CompareStat(battler, STAT_SPDEF, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_SPDEF))
 
         if (gIsCriticalHit)
         {
@@ -13984,7 +13980,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_RAGE_POINT:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(gIsCriticalHit)
-        REQUIRE_NOT(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_EQUAL) && CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK))
 
         BattleScriptCall(BattleScript_RagePointActivates);
         return TRUE;
@@ -14001,7 +13997,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_CROWNED_SWORD:
     case ABILITY_ANGER_POINT:
         REQUIRE(ShouldApplyOnHitAffect(battler))
-        REQUIRE_NOT(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_ATK))
 
         if (gIsCriticalHit)
         {
@@ -14017,7 +14013,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
 
     case ABILITY_TIPPING_POINT:
         REQUIRE(ShouldApplyOnHitAffect(battler))
-        REQUIRE_NOT(CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_SPATK))
 
         if (gIsCriticalHit)
         {
@@ -14036,7 +14032,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_UNLOCKED_POTENTIAL:
         REQUIRE(CheckHalfHpAbility(battler, attacker))
         REQUIRE_NOT(GetAbilityState(battler, ability))
-        REQUIRE_NOT(CompareStat(battler, STAT_SPATK, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_SPATK))
 
         SetAbilityState(battler, ability, TRUE);
         SetStatChanger(STAT_SPATK, 1);
@@ -14210,9 +14206,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
         REQUIRE(CanBeBurned(opponent))
         REQUIRE(Random() % 100 < 30)
 
-        gBattleScripting.moveEffect = MOVE_EFFECT_BURN | effectTargetFlag;
-        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-        SetMoveEffect(FALSE, FALSE);
+        ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_BURN | effectTargetFlag)
 
         if (opponent != gBattlerAttacker || !HandleDefenderAbilityAs(ABILITY_SUPER_HOT_GOO, battler, opponent, move, moveType))
             BattleScriptCall(BattleScript_AbilityPopUp);
@@ -14261,9 +14255,7 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
         REQUIRE(CanGetFrostbite(opponent))
         REQUIRE(Random() % 100 < 30)
 
-        gBattleScripting.moveEffect = MOVE_EFFECT_FROSTBITE | effectTargetFlag;
-        gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-        SetMoveEffect(FALSE, FALSE);
+        ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FROSTBITE | effectTargetFlag)
 
         if (opponent != gBattlerAttacker || !HandleDefenderAbilityAs(ABILITY_CRYO_PROFICIENCY, battler, opponent, move, moveType))
             BattleScriptCall(BattleScript_AbilityPopUp);
@@ -14314,9 +14306,9 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
             if (!IsBattlerAlive(gBattlerTarget)) continue; \
             if (!(validCheck)) continue; \
             \
-            gBattleScripting.moveEffect = effect; \
-            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD; \
-            SetMoveEffect(FALSE, FALSE); \
+            gStackBattler1 = gBattlerAttacker; \
+            gStackBattler2 = gBattlerTarget; \
+            effect; \
             any = TRUE; \
         } \
         gBattlerAttacker = realAttacker; \
@@ -14330,17 +14322,21 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
         break;
     
     case ABILITY_ENTRANCE:
-        POISON_PUPPETEER_CLONE(CanInfatuate(battler, gBattlerTarget), MOVE_EFFECT_ATTRACT)
+        POISON_PUPPETEER_CLONE(CanInfatuate(battler, gBattlerTarget), ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_ATTRACT))
     
     case ABILITY_POISON_PUPPETEER:
-        POISON_PUPPETEER_CLONE(CanBeConfused(gBattlerTarget), MOVE_EFFECT_CONFUSION)
+        POISON_PUPPETEER_CLONE(CanBeConfused(gBattlerTarget), ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_CONFUSION))
     
     case ABILITY_BLOODLUST:
     case ABILITY_BLOOD_BATH:
-        POISON_PUPPETEER_CLONE(!gVolatileStructs[gBattlerTarget].fear, MOVE_EFFECT_FEAR)
+        POISON_PUPPETEER_CLONE(!gVolatileStructs[gBattlerTarget].fear, ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FEAR))
     
     case ABILITY_SET_ABLAZE:
-        POISON_PUPPETEER_CLONE(CanBeBurned(gBattlerTarget), MOVE_EFFECT_FEAR)
+        POISON_PUPPETEER_CLONE(CanBeBurned(gBattlerTarget), ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FEAR))
+    
+    case ABILITY_NEUROTOXIN:
+        POISON_PUPPETEER_CLONE(CanLowerStat(gBattlerTarget, STAT_ATK) || CanLowerStat(gBattlerTarget, STAT_DEF) || CanLowerStat(gBattlerTarget, STAT_SPEED),
+            BattleScriptCall(BattleScript_Neurotoxin))
     
     #undef POISON_PUPPETEER_CLONE
     }
@@ -14794,7 +14790,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
     case ABILITY_GENERATOR:
         REQUIRE_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
-        gStackBattler1 = gBattlerAttacker;
+        gStackBattler1 = battler;
         if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
         {
             BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
@@ -14836,7 +14832,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         return TRUE;
     
     case ABILITY_LETS_ROLL:
-        REQUIRE_NOT(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_DEF))
 
         SetStatChanger(STAT_DEF, 1);
         gBattleMons[battler].status2 = STATUS2_DEFENSE_CURL;
@@ -15118,14 +15114,10 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         return TRUE;
     
     case ABILITY_MAJESTIC_MOTH:
-        {
-        int stat = GetHighestStatId(battler, TRUE);
-        REQUIRE(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
+        REQUIRE(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
         
-        gBattlerAttacker = battler;
         BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
         return TRUE;
-        }
     
     case ABILITY_PURIFYING_WATERS:
     case ABILITY_WATER_VEIL:
@@ -15157,7 +15149,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         int side = GetBattlerSide(battler);
         gSideTimers[side].started.tailwind = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
-        gSideTimers[side].tailwindBattlerId = gBattlerAttacker;
+        gSideTimers[side].tailwindBattlerId = battler;
         gSideTimers[side].tailwindTimer = TAILWIND_DURATION_SHORT;
         
         DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
@@ -15173,7 +15165,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         int side = GetBattlerSide(battler);
         gSideTimers[side].started.safeguard = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_SAFEGUARD;
-        gSideTimers[side].safeguardBattlerId = gBattlerAttacker;
+        gSideTimers[side].safeguardBattlerId = battler;
         gSideTimers[side].safeguardTimer = SCREEN_DURATION;
         BattleScriptPushCursorAndCallback(BattleScript_PastelVeilActivated);
         }
@@ -15206,7 +15198,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
     
     case ABILITY_INTREPID_SWORD:
     case ABILITY_CROWNED_SWORD:
-        REQUIRE_NOT(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_ATK))
 
         SetStatChanger(STAT_ATK, 1);
         BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
@@ -15214,7 +15206,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
     
     case ABILITY_CROWNED_SHIELD:
     case ABILITY_DAUNTLESS_SHIELD:
-        REQUIRE_NOT(CompareStat(battler, STAT_DEF, MAX_STAT_STAGE, CMP_EQUAL))
+        REQUIRE(CanRaiseStat(battler, STAT_DEF))
 
         SetStatChanger(STAT_DEF, 1);
         BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityStatRaiseOnSwitchIn);
@@ -15718,9 +15710,9 @@ int HandleEndTurnAbilityAs(int ability, int battler)
 
         for (i = STAT_ATK; i < NUM_STATS; i++)
         {
-            if (CompareStat(battler, i, MIN_STAT_STAGE, CMP_GREATER_THAN))
+            if (CanLowerStat(battler, i))
                 validToLower |= 1 << i;
-            if (CompareStat(battler, i, MAX_STAT_STAGE, CMP_LESS_THAN))
+            if (CanRaiseStat(battler, i))
                 validToRaise |= 1 << i;
         }
 
@@ -16154,4 +16146,14 @@ int HasStormDrain(int battler)
     if (BattlerHasAbility(battler, ABILITY_STORM_DRAIN, TRUE)) return ABILITY_STORM_DRAIN;
     if (BattlerHasAbility(battler, ABILITY_RESERVOIR, TRUE)) return ABILITY_RESERVOIR;
     return FALSE;
+}
+
+int CanRaiseStat(int battler, int stat)
+{
+    return CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN);
+}
+
+int CanLowerStat(int battler, int stat)
+{
+    return CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN);
 }

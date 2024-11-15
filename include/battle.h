@@ -811,8 +811,8 @@ union StatChanger {
         u8 statId:3;
         u8 stage:4;
         u8 goesDown:1;
-    };
-};
+    } __attribute__((packed));
+} __attribute__((packed));
 
 #define GET_STAT_BUFF_VALUE_WITH_SIGN(statChanger) (((statChanger).goesDown ? -1 : 1) * ((int) (statChanger).stage))
 

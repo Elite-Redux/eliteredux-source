@@ -3394,6 +3394,7 @@ void SwitchInClearSetData(void)
             gBattleMons[i].status2 &= ~(STATUS2_WRAPPED);
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_ENTRANCE);
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_POISON_PUPPETEER);
+        ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_NEUROTOXIN);
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_BLOODLUST);
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_BLOOD_BATH);
         ClearBattlerAffectedFlag(i, gActiveBattler, ABILITY_SET_ABLAZE);
