@@ -12446,7 +12446,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         }
         else // try to decrease
         {
-            statValue = -min(statValue, gBattleMons[gActiveBattler].statStages[statId]);
+            statValue = max(statValue, -gBattleMons[gActiveBattler].statStages[statId]);
 
             if (!dontSetBuffers)
             {

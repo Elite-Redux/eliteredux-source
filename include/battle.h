@@ -805,6 +805,11 @@ struct BattleStruct
 
 #define SET_STAT_BUFF_VALUE(n)((((n) << 3) & 0xF8))
 
+// Fixes standard autocomplete detection
+#ifndef __GNUC__
+#define __attribute__(value)
+#endif
+
 union StatChanger {
     u8 value;
     struct {
@@ -813,6 +818,8 @@ union StatChanger {
         u8 goesDown:1;
     } __attribute__((packed));
 } __attribute__((packed));
+
+STATIC_ASSERT(sizeof(union StatChanger) == 1, statChangerIsSizeOfChar)
 
 #define GET_STAT_BUFF_VALUE_WITH_SIGN(statChanger) (((statChanger).goesDown ? -1 : 1) * ((int) (statChanger).stage))
 
