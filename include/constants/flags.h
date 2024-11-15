@@ -1531,6 +1531,7 @@
 #define FLAG_RECEIVED_REGIELEKI                                     3090
 #define FLAG_RECEIVED_VOLCANION                                     3091
 #define FLAG_RECEIVED_FLOETTE_ETERNAL                               3092
+#define FLAG_RECEIVED_DURALUDON_PARTNER                             3093
 
 #define FLAGS_COUNT                                                 6135 //Added 3000 new flags
 

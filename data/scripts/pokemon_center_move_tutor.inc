@@ -383,11 +383,17 @@ PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 	case SPECIES_PIKACHU_PARTNER, PKMN_Center_EventScript_SetflagPikachuPartner
 	case SPECIES_EEVEE_PARTNER, PKMN_Center_EventScript_SetflagEeveePartner
 	case SPECIES_MEOWTH_PARTNER, PKMN_Center_EventScript_SetflagMeowthPartner
+	case SPECIES_DURALUDON_PARTNER, PKMN_Center_EventScript_SetflagDuraludonPartner
 	releaseall
 	end
 
 PKMN_Center_EventScript_SetflagGreninja::
 	setflag FLAG_RECEIVED_ASH_GRENINJA
+	releaseall
+	end
+
+PKMN_Center_EventScript_SetflagDuraludonPartner::
+	setflag FLAG_RECEIVED_DURALUDON_PARTNER
 	releaseall
 	end
 
