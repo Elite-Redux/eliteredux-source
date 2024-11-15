@@ -13478,8 +13478,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_LINGERING_AROMA:
     case ABILITY_MUMMY:
         REQUIRE(ShouldApplyOnHitAffect(attacker))
-        REQUIRE(GetBattlerAbility(battler) == ability)
-        REQUIRE_NOT(BattlerHasAbility(battler, ability, FALSE))
+        REQUIRE_NOT(BattlerHasAbility(attacker, ability, FALSE))
         REQUIRE(IsMoveMakingContact(move, attacker))
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(attacker))
@@ -13492,7 +13491,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_WANDERING_SPIRIT:
         REQUIRE(ShouldApplyOnHitAffect(attacker))
         REQUIRE(GetBattlerAbility(battler) == ability)
-        REQUIRE_NOT(BattlerHasAbility(battler, ability, FALSE))
+        REQUIRE_NOT(BattlerHasAbility(attacker, ability, FALSE))
         REQUIRE(IsMoveMakingContact(move, attacker))
         REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
         REQUIRE_NOT(DoesBattlerHaveAbilityShield(attacker))
