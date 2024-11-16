@@ -2543,7 +2543,7 @@ static void Cmd_datahpupdate(void)
                 return;
             }
         }
-        else if (gBattleMoveDamage > 0 && RemainingNoDamageHits(gActiveBattler) > 0)
+        else if (gBattleMoveDamage > 0 && !(gHitMarker & HITMARKER_PASSIVE_DAMAGE) && RemainingNoDamageHits(gActiveBattler) > 0)
         {
             IncrementSingleUseAbilityCounter(gActiveBattler, GetNoDamageAbility(gActiveBattler), 1);
             if (RemainingNoDamageHits(gActiveBattler) <= 0)
