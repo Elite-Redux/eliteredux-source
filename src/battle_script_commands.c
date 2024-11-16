@@ -2254,6 +2254,7 @@ static void Cmd_adjustdamage(void)
     }
 
     if ((gBattleMoves[gCurrentMove].effect != EFFECT_FALSE_SWIPE && !gBattleScripting.forceFalseSwipeEffect)
+        && !(gProcessingExtraAttacks && gQueuedExtraAttackData[0].falseSwipe)
         && !gRoundStructs[gBattlerTarget].endured
         && !gTurnStructs[gBattlerTarget].focusBanded
         && !gTurnStructs[gBattlerTarget].focusSashed

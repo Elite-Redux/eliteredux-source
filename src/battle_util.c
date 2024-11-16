@@ -5049,6 +5049,7 @@ static bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower) 
             .move = extraMove,
             .movePower = movePower,
             .target = target,
+            .falseSwipe = TRUE,
         };
         return TRUE;
     }
