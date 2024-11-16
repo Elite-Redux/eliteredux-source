@@ -31360,59 +31360,30 @@ static const struct TrainerMonItemCustomMoves sParty_CourtneyMossdeepInsane[] = 
 static const struct TrainerMonItemCustomMoves sParty_StevenMossdeep[] = { // Double against Team Magma
     {
     .lvl = 0,
-    .species = SPECIES_MAGNEZONE,
-    .heldItem = ITEM_TACTICAL_VEST,
-    .ability = 2,
-    .evs = {252, 0, 0, 252, 0, 4},
-    .nature = NATURE_MODEST,
-    .moves = MOVE_CHARGE_BEAM, MOVE_TRI_ATTACK, MOVE_THUNDER_SHOCK, MOVE_FLASH_CANNON
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_AGGRON,
-    .heldItem = ITEM_LEFTOVERS,
-    .ability = 1,
-    .evs = {252, 252, 0, 0, 4, 0},
-    .nature = NATURE_ADAMANT,
-    .moves = MOVE_HEAVY_SLAM, MOVE_BODY_PRESS, MOVE_SLACK_OFF, MOVE_HEAD_SMASH
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_SKARMORY,
-    .heldItem = ITEM_SKARMORITE,
-    .ability = 2,
-    .evs = {4, 0, 252, 0, 252, 0},
-    .nature = NATURE_CAREFUL,
-    .moves = MOVE_BODY_PRESS, MOVE_DUAL_WINGBEAT, MOVE_STEALTH_ROCK, MOVE_ROOST
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_MELMETAL,
-    .heldItem = ITEM_ASSAULT_VEST,
-    .ability = 0,
-    .zeroSpeedIvs = TRUE,
-    .evs = {4, 252, 0, 0, 252, 0},
-    .nature = NATURE_BRAVE,
-    .moves = MOVE_DOUBLE_IRON_BASH, MOVE_HIGH_HORSEPOWER, MOVE_ICE_PUNCH, MOVE_MEGA_PUNCH
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_TINKATON,
-    .heldItem = ITEM_FOCUS_SASH,
+    .species = SPECIES_IRON_TREADS,
+    .heldItem = ITEM_BOOSTER_ENERGY,
     .ability = 1,
     .evs = {4, 252, 0, 0, 0, 252},
-    .nature = NATURE_ADAMANT,
-    .moves = MOVE_SUCKER_PUNCH, MOVE_ICE_HAMMER, MOVE_DRAGON_HAMMER, MOVE_GIGATON_HAMMER
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_MOUNTAIN_CHUNK, MOVE_HEAD_SMASH, MOVE_ZIPPY_ZAP, MOVE_FISSURE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_GOODRA_HISUIAN,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = 1,
+    .evs = {252, 0, 88, 168, 0, 0},
+    .nature = NATURE_BOLD,
+    .moves = MOVE_MUDDY_WATER, MOVE_DRAGON_PULSE, MOVE_SHELTER, MOVE_LIFE_DEW
     },
     {
     .lvl = 0,
     .species = SPECIES_METAGROSS,
     .heldItem = ITEM_METAGROSSITE,
-    .ability = 2,
-    .zeroSpeedIvs = TRUE,
-    .evs = {0, 252, 0, 0, 4, 252},
-    .nature = NATURE_JOLLY,
-    .moves = MOVE_METEOR_MASH, MOVE_ZEN_HEADBUTT, MOVE_BULLET_PUNCH, MOVE_ICE_PUNCH
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_PSYCHOKINETIC_SLAM, MOVE_HIGH_HORSEPOWER, MOVE_BULLET_PUNCH, MOVE_ICE_PUNCH
     }
 };
 

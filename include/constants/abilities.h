@@ -639,7 +639,7 @@
 #define ABILITY_ROCKHARD_WILL 617 // Boosts Rock-type moves by 1.2x, or 1.5x when under 1/3 HP.
 #define ABILITY_FRAGRANT_DAZE 618 // 30% chance to confuse on contact.
 #define ABILITY_LOW_VISIBILITY 619 // Summons Eerie Fog on entry.
-#define ABILITY_OLD_MARINER 620 // Seaweed + Water Absorb.
+#define ABILITY_OLD_MARINER 620 // Seaweed + Water STAB.
 #define ABILITY_ECTOPLASM 621 // Ups highest attacking stat by 1.5x in fog.
 #define ABILITY_BEAUTIFUL_MUSIC 622 // Sound-based moves have 50% chance to infatuate the foe.
 #define ABILITY_SURPRISE 623 // Astonishes enemy priority users in fog.
