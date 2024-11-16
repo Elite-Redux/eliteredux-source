@@ -5509,19 +5509,19 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         SET8(boxMon->isEgg);
         break;
     case MON_DATA_IS_ALPHA:
-        SET32(boxMon->isAlpha);
+        SET8(boxMon->isAlpha);
         break;
     case MON_DATA_HP_TYPE:
-        SET32(boxMon->hpType);
+        SET8(boxMon->hpType);
         break;
     case MON_DATA_IS_SHINY:
-        SET32(boxMon->isShiny);
+        SET8(boxMon->isShiny);
         break;
     case MON_DATA_MAX_SHINY:
-        SET32(boxMon->maxShiny);
+        SET8(boxMon->maxShiny);
         break;
     case MON_DATA_SPEED_DOWN:
-        SET32(boxMon->speedDown);
+        SET8(boxMon->speedDown);
         break;
     case MON_DATA_ABILITY_NUM:
         #ifdef REMOVE_RIBBONS
@@ -5604,7 +5604,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         SET8(boxMon->nature);
         break;
     case MON_DATA_IS_EVENT_MON:
-        SET32(boxMon->isEventMon);
+        SET8(boxMon->isEventMon);
         break;
     case MON_DATA_HP_IV:
     case MON_DATA_ATK_IV:
