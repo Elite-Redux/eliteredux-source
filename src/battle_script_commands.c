@@ -12244,17 +12244,11 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
 
     if (dontSetBuffers) flags = 0;
 
-    if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SIMPLE))
-    {
-        if (gBattleScripting.statChanger.stage < 6) gBattleScripting.statChanger.stage *= 2;
-        else gBattleScripting.statChanger.stage = 12;
-    }
+    if (BattlerHasAbility(gActiveBattler, ABILITY_SIMPLE, FALSE))
+        statValue *= 2;
 
-    if (!affectsUser && BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SUBDUE) && statValue <= -1)
-    {
-        if (gBattleScripting.statChanger.stage < 6) gBattleScripting.statChanger.stage *= 2;
-        else gBattleScripting.statChanger.stage = 12;
-    }
+    if (!affectsUser && BattlerHasAbility(gBattlerAttacker, ABILITY_SUBDUE, FALSE) && statValue <= -1)
+        statValue *= 2;
 
     if (statValue <= -1) // Stat decrease.
     {
