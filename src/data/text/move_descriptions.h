@@ -3632,7 +3632,7 @@ static const u8 sMoveTwoLineDescription_MoveSpringtideStorm[] = _(
 
 static const u8 sMoveTwoLineDescription_MoveDireClaw[] = _(
     "Deals damage and has a 50% chance\n"
-    "to poison, paralyze, or sleep the target.");
+    "to poison, paralyze, or bleed the target.");
 
 static const u8 sMoveTwoLineDescription_MoveShelter[] = _(
     "Sharply raises the Defense of\n"
@@ -5849,7 +5849,7 @@ static const u8 sMoveFourLineDescription_MoveBleakwindStorm[] = _("Attacks with 
 static const u8 sMoveFourLineDescription_MoveWildboltStorm[] = _("Attacks the foe with\na thunderous\ntempest. Sets rain.\nWeather-based.");
 static const u8 sMoveFourLineDescription_MoveSandsearStorm[] = _("Attacks with searing\nwinds and sands.\nSets sandstorm.\nWeather-based.");
 static const u8 sMoveFourLineDescription_MoveSpringtideStorm[] = _("Attacks with winds of\nlove and hate.\nSets fairy terrain.\nWeather-based.");
-static const u8 sMoveFourLineDescription_MoveDireClaw[] = _("The user lashes out\nand may leave the\nfoe poisoned,\nparalyzed, or asleep.");
+static const u8 sMoveFourLineDescription_MoveDireClaw[] = _("The user lashes out\nand may inflict\nparalysis, poison, or\nbleed.");
 static const u8 sMoveFourLineDescription_MoveShelter[] = _("Sharply raises the\nDefense of the user\nand their partner.");
 static const u8 sMoveFourLineDescription_MoveWildSwing[] = _("Forces the target to\nswitch. -6 priority.\nHammer-based.");
 static const u8 sMoveFourLineDescription_MoveFemurBreaker[] = _("The user strikes\nthe foe's legs.\nAlways paralyzes.\nHammer-based.");
