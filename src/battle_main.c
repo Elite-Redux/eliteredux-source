@@ -5154,7 +5154,7 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove)
 {
     union SpeedValue speedValue = { 0 };
     int quash = gFieldTimers.quashTimer;
-    int priority = 6;
+    int priority = 7;
 
     if (!quash)
     {
