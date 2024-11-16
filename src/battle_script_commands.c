@@ -9037,11 +9037,11 @@ static void Cmd_various(void)
                 REQUIRE(ChangeStatBuffs(gActiveBattler, -1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL))
                 gBattleScripting.abilityPopupOverwrite = ability;
                 BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
-                return;
+                break;
             
             case ABILITY_CROWNED_KING:
                 BattleScriptCall(BattleScript_CrownedKing);
-                return;
+                break;
             
             case ABILITY_JAWS_OF_CARNAGE:
                 REQUIRE_NOT(BATTLER_MAX_HP(gActiveBattler))
