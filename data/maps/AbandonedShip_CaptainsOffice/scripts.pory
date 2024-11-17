@@ -48,3 +48,11 @@ script Debug_Script_2_Pory{
 	giveegg(SPECIES_PICHU)
 	end
 }
+
+script Debug_Script_Magma{
+	lock
+	faceplayer
+	msgbox(format("This is Fine."), MSGBOX_NPC)
+	release
+	end
+}
