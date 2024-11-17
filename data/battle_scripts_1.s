@@ -6296,6 +6296,7 @@ BattleScript_EffectSkyDrop::
 	twoturnmoveacceleratecheck
 BattleScript_SkyDrop_TurnTwo:
 	clearsemiinvulnerablebit
+	orword gHitMarker, HITMARKER_NO_PPDEDUCT
 	attackcanceler
 	attackstring
 	ppreduce

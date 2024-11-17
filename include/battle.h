@@ -622,6 +622,7 @@ struct ExtraAttackActionStruct
     u8 target:2;
     u8 movePos:3;
     u8 prankster:1;
+    u8 falseSwipe:1;
 };
 
 struct BattleStruct
