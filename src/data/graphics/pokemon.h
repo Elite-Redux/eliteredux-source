@@ -8255,11 +8255,17 @@ const u32 gMonPalette_DarmanitanReduxBond[]           = INCBIN_U32("graphics/pok
 const u32 gMonShinyPalette_DarmanitanReduxBond[]      = INCBIN_U32("graphics/pokemon/darmanitan/redux/battle_bond/shiny.gbapal.lz");
 const u8  gMonIcon_DarmanitanReduxBond[]              = INCBIN_U8("graphics/pokemon/darmanitan/redux/battle_bond/icon.4bpp");
 
-const u32 gMonFrontPic_DuraludonPartner[]          = INCBIN_U32("graphics/pokemon/duraludon/partner/front.4bpp.lz");
-const u32 gMonBackPic_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/back.4bpp.lz");
-const u32 gMonPalette_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/normal.gbapal.lz");
-const u32 gMonShinyPalette_DuraludonPartner[]      = INCBIN_U32("graphics/pokemon/duraludon/partner/shiny.gbapal.lz");
-const u8  gMonIcon_DuraludonPartner[]              = INCBIN_U8("graphics/pokemon/duraludon/partner/icon.4bpp");
+const u32 gMonFrontPic_Crawdauntles[]          = INCBIN_U32("graphics/pokemon/crawdauntles/front.4bpp.lz");
+const u32 gMonBackPic_Crawdauntles[]           = INCBIN_U32("graphics/pokemon/crawdauntles/back.4bpp.lz");
+const u32 gMonPalette_Crawdauntles[]           = INCBIN_U32("graphics/pokemon/crawdauntles/normal.gbapal.lz");
+const u32 gMonShinyPalette_Crawdauntles[]      = INCBIN_U32("graphics/pokemon/crawdauntles/shiny.gbapal.lz");
+const u8  gMonIcon_Crawdauntles[]              = INCBIN_U8("graphics/pokemon/crawdauntles/icon.4bpp");
+
+const u32 gMonFrontPic_DuraludonPartner[]          = INCBIN_U32("graphics/pokemon/duraludon/front.4bpp.lz");
+const u32 gMonBackPic_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/back.4bpp.lz");
+const u32 gMonPalette_DuraludonPartner[]           = INCBIN_U32("graphics/pokemon/duraludon/normal.gbapal.lz");
+const u32 gMonShinyPalette_DuraludonPartner[]      = INCBIN_U32("graphics/pokemon/duraludon/shiny.gbapal.lz");
+const u8  gMonIcon_DuraludonPartner[]              = INCBIN_U8("graphics/pokemon/duraludon/icon.4bpp");
 
 const u32 gMonFrontPic_DuraludonPartnerMega[]          = INCBIN_U32("graphics/pokemon/duraludon/partner/mega/front.4bpp.lz");
 const u32 gMonBackPic_DuraludonPartnerMega[]           = INCBIN_U32("graphics/pokemon/duraludon/partner/mega/back.4bpp.lz");
