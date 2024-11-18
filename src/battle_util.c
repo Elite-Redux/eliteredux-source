@@ -2932,16 +2932,15 @@ enum
 // Ingrain, Leech Seed, Strength Sap and Aqua Ring
 s32 GetDrainedBigRootHp(u32 battler, s32 hp)
 {
+    if (!hp) return -1;
+
     if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BIG_ROOT)
         hp = (hp * 3) / 2; // Buff Big Root's additional healing from 30% to 50%
 
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_ABSORBANT))
-        gBattleMoveDamage = (gBattleMoveDamage * 3) / 2; // Buff Absorbant additional healing from 30% to 50%
+    if (BattlerHasAbility(battler, ABILITY_ABSORBANT, FALSE))
+        hp = (hp * 3) / 2; // Buff Absorbant additional healing from 30% to 50%
 
-    if (hp == 0)
-        hp = 1;
-
-    return hp * -1;
+    return hp;
 }
 
 #define BATTLER_HAS_MAGIC_GUARD(battlerId) IsMagicGuardProtected(battlerId)
@@ -3009,7 +3008,7 @@ u8 DoBattlerEndTurnEffects(void)
              && !BATTLER_HEALING_BLOCKED(gActiveBattler)
              && gBattleMons[gActiveBattler].hp != 0)
             {
-                gBattleMoveDamage = GetDrainedBigRootHp(gActiveBattler, gBattleMons[gActiveBattler].maxHP / 8);
+                gBattleMoveDamage = GetDrainedBigRootHp(gActiveBattler, -gBattleMons[gActiveBattler].maxHP / 8);
                 BattleScriptExecute(BattleScript_IngrainTurnHeal);
                 effect++;
             }
@@ -3021,7 +3020,7 @@ u8 DoBattlerEndTurnEffects(void)
              && !BATTLER_HEALING_BLOCKED(gActiveBattler)
              && gBattleMons[gActiveBattler].hp != 0)
             {
-                gBattleMoveDamage = GetDrainedBigRootHp(gActiveBattler, gBattleMons[gActiveBattler].maxHP / 16);
+                gBattleMoveDamage = GetDrainedBigRootHp(gActiveBattler, -gBattleMons[gActiveBattler].maxHP / 16);
                 BattleScriptExecute(BattleScript_AquaRingHeal);
                 effect++;
             }
@@ -6029,27 +6028,17 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
         break;
     case ABILITYEFFECT_AFTER_RECOIL:
         //Nosferatu
-        if (BATTLER_HAS_ABILITY(battler, ABILITY_NOSFERATU)) {
-            bool8 activateAbilty = FALSE;
-            u16 abilityToCheck = ABILITY_NOSFERATU; //For easier copypaste
-
-            //Checks if the ability is triggered
-            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-             && IsBattlerAlive(gBattlerAttacker)
-             && !BATTLER_HEALING_BLOCKED(gBattlerAttacker)
-             && IsMoveMakingContact(move, gBattlerAttacker)
-             && !BATTLER_MAX_HP(gBattlerAttacker) 
-             && TARGET_TURN_DAMAGED) {
-                activateAbilty = TRUE;
-            }
-
-            //This is the stuff that has to be changed for each ability
-            if (activateAbilty) {
-                gBattleScripting.abilityPopupOverwrite = abilityToCheck;
-
+        if (BATTLER_HAS_ABILITY(battler, ABILITY_NOSFERATU)
+            && ShouldApplyOnHitAffect(battler)
+            && IsMoveMakingContact(move, battler)
+            && !BATTLER_MAX_HP(battler)
+            && !BATTLER_HEALING_BLOCKED(battler))
+        {
+                gBattleScripting.abilityPopupOverwrite = ABILITY_NOSFERATU;
+                gBattleMoveDamage = -gHpDealt / 2;
+                if (!gBattleMoveDamage) gBattleMoveDamage = -1;
                 BattleScriptCall(BattleScript_NosferatuActivated);
                 effect++;
-            }
         }
         break;
     case ABILITYEFFECT_REACTIVE:
@@ -12699,6 +12688,8 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         REQUIRE_NOT(BATTLER_MAX_HP(battler))
         REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
 
+        gBattleMoveDamage = -gHpDealt / 4;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
 
@@ -12708,6 +12699,8 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
         REQUIRE(moveType == TYPE_WATER)
 
+        gBattleMoveDamage = -gHpDealt / 4;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     
@@ -12717,6 +12710,8 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
         REQUIRE(IS_IRON_FIST(battler, move))
 
+        gBattleMoveDamage = -gHpDealt / 10;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     
@@ -12726,6 +12721,8 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
         REQUIRE(gBattleMons[target].status2 & STATUS2_INFATUATION)
 
+        gBattleMoveDamage = -gHpDealt / 4;
+        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
         BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
         return TRUE;
     
@@ -13332,6 +13329,8 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
                 REQUIRE_NOT(BATTLER_MAX_HP(battler))
                 REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
 
+                gBattleMoveDamage = -gHpDealt;
+                if (!gBattleMoveDamage) gBattleMoveDamage = -1;
                 BattleScriptCall(BattleScript_AngelsWrath_Effect_Bug_Bite_2);
                 return TRUE;
         }
