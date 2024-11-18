@@ -11365,6 +11365,11 @@ extern const u32 gMonBackPic_DuraludonPartnerMega[];
 extern const u32 gMonPalette_DuraludonPartnerMega[];
 extern const u32 gMonShinyPalette_DuraludonPartnerMega[];
 extern const u8  gMonIcon_DuraludonPartnerMega[];
+extern const u32 gMonFrontPic_Crawdauntles[];
+extern const u32 gMonBackPic_Crawdauntles[];
+extern const u32 gMonPalette_Crawdauntles[];
+extern const u32 gMonShinyPalette_Crawdauntles[];
+extern const u8  gMonIcon_Crawdauntles[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

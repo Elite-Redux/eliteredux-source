@@ -11022,6 +11022,12 @@ static const union AnimCmd sAnim_SAGARACAS_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_CRAWDAUNTLES_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_DREEPY_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -14782,6 +14788,11 @@ static const union AnimCmd *const sAnims_CORPHISH[] ={
 static const union AnimCmd *const sAnims_CRAWDAUNT[] ={
     sAnim_GeneralFrame0,
     sAnim_CRAWDAUNT_1,
+};
+
+static const union AnimCmd *const sAnims_CRAWDAUNTLES[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CRAWDAUNTLES_1,
 };
 
 static const union AnimCmd *const sAnims_FEEBAS[] ={
@@ -20459,6 +20470,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(LUVDISC),
     ANIM_CMD(CORPHISH),
     ANIM_CMD(CRAWDAUNT),
+    ANIM_CMD(CRAWDAUNTLES),
     ANIM_CMD(FEEBAS),
     ANIM_CMD(MILOTIC),
     ANIM_CMD(CARVANHA),
