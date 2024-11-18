@@ -1054,6 +1054,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_CLEFAIRY] = sClefairyFormSpeciesIdTable,
 
     [SPECIES_CLEFABLE_REDUX_MEGA] = sClefableFormSpeciesIdTable,
+    [SPECIES_CLEFABLE_REDUX] = sClefableFormSpeciesIdTable,
     [SPECIES_CLEFABLE] = sClefableFormSpeciesIdTable,
 
     [SPECIES_GLIGAR_REDUX] = sGligarFormSpeciesIdTable,
