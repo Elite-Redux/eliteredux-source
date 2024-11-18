@@ -10175,9 +10175,11 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
             
             // Primary stat
             case ABILITY_EQUINOX:
+                {
                 u32 atk = CalculateStat(battlerAtk, STAT_ATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
                 u32 spAtk = CalculateStat(battlerAtk, STAT_SPATK, secondaryAtkStatToUse, move, TRUE, isCrit, isUnaware, FALSE);
                 atkStatToUse = atk > spAtk ? STAT_ATK : STAT_SPATK;
+                }
                 break;
             
             case ABILITY_ANCIENT_IDOL:
