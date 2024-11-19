@@ -10382,10 +10382,12 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
         case ABILITY_ROUNDHOUSE:
             REQUIRE(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
             CHOOSE_HIGHEST_DEFENSE:
+            {
             u32 def = CalculateStat(battlerDef, STAT_DEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
             u32 spDef = CalculateStat(battlerDef, STAT_SPDEF, 0, move, FALSE, noPositiveStatStages, isUnaware, FALSE);
             defStat = min(def, spDef);
             defStatToUse = defStat == def ? STAT_DEF : STAT_SPDEF;
+            }
             break;
         
         case ABILITY_DEADEYE:
