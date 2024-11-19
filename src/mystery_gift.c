@@ -725,7 +725,6 @@ s8 mevent_message_print_and_prompt_yes_no(u8 * textState, u16 * windowId, bool8 
 
 static s32 HandleMysteryGiftListMenu(u8 * textState, u16 * windowId, bool32 cannotToss, bool32 cannotSend)
 {
-    struct WindowTemplate windowTemplate;
     s32 input;
 
     switch (*textState)
@@ -748,7 +747,6 @@ static s32 HandleMysteryGiftListMenu(u8 * textState, u16 * windowId, bool32 cann
         (*textState)++;
         break;
     case 1:
-        windowTemplate = sWindowTemplate_YesNoBox;
         if (cannotSend)
         {
             if (cannotToss == 0)

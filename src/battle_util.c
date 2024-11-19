@@ -1485,10 +1485,9 @@ bool8 WasUnableToUseMove(u8 battler)
 
 void PrepareStringBattle(u16 stringId, u8 battler)
 {
-    int hasContrary, targetHasContrary, abilityBattler;
+    int hasContrary, abilityBattler;
 
     hasContrary = BATTLER_HAS_ABILITY(battler, ABILITY_CONTRARY);
-    targetHasContrary = BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_CONTRARY);
 
     //Overwrite
     if (VarGet(VAR_TEMP_BATTLE_STRING_OVERWRITE_1) != 0) {
@@ -5429,8 +5428,6 @@ bool8 TryToSetFieldEffect(u8 battler) {
 u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 moveArg)
 {
     u8 effect = 0;
-    u32 speciesAtk, speciesDef;
-    u32 pidAtk, pidDef;
     u32 moveType, move;
     u32 i, j;
     u16 trainerNum;
@@ -5442,12 +5439,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
 
     if (gBattlerAttacker >= gBattlersCount)
         gBattlerAttacker = battler;
-
-    speciesAtk = gBattleMons[gBattlerAttacker].species;
-    pidAtk = gBattleMons[gBattlerAttacker].personality;
-
-    speciesDef = gBattleMons[gBattlerTarget].species;
-    pidDef = gBattleMons[gBattlerTarget].personality;
 
     if (moveArg)
         move = moveArg;
@@ -10970,11 +10961,10 @@ static void UpdateMoveResultFlags(u16 modifier)
 static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities, u16 modifier)
 {
     u32 illusionSpecies;
-    u16 modifier1, modifier2, modifier3, modifierInitial;
+    u16 modifier1, modifier2, modifier3;
     u8 currentAttackBattler = gBattlerAttacker;
     u16 immunityAbility = 0;
     gBattlerAttacker = battlerAtk;
-    modifierInitial = modifier;
     modifier1 = modifier2 = modifier3 = UQ_4_12(1.0);
     MulByTypeEffectiveness(&modifier1, move, moveType, battlerDef, gBattleMons[battlerDef].type1, battlerAtk, recordAbilities);
     if (gBattleMons[battlerDef].type2 != gBattleMons[battlerDef].type1)
@@ -11242,7 +11232,7 @@ u16 GetWishMegaEvolutionSpecies(u16 preEvoSpecies, u16 moveId1, u16 moveId2, u16
 
 bool32 CanMegaEvolve(u8 battlerId)
 {
-    u32 itemId, holdEffect, species;
+    u32 itemId, species;
     struct Pokemon *mon;
     u8 battlerPosition = GetBattlerPosition(battlerId);
     u8 partnerPosition = GetBattlerPosition(BATTLE_PARTNER(battlerId));
@@ -11286,13 +11276,6 @@ bool32 CanMegaEvolve(u8 battlerId)
     if (GetMegaEvolutionSpecies(species, itemId) != SPECIES_NONE)
     {
         if (isMagicRoomActive()) return FALSE;
-        
-        if (B_ENABLE_DEBUG && gBattleStruct->debugHoldEffects[battlerId])
-            holdEffect = gBattleStruct->debugHoldEffects[battlerId];
-        else if (itemId == ITEM_ENIGMA_BERRY)
-            holdEffect = gEnigmaBerries[battlerId].holdEffect;
-        else
-            holdEffect = ItemId_GetHoldEffect(itemId);
 
         gBattleStruct->mega.isWishMegaEvo = FALSE;
         gBattleStruct->mega.isPrimalReversion = FALSE;
@@ -11302,12 +11285,6 @@ bool32 CanMegaEvolve(u8 battlerId)
     // Check if there is an entry in the evolution table for regular Primal Reversion.
     if (GetPrimalReversionSpecies(species, itemId) != SPECIES_NONE)
     {
-        if (B_ENABLE_DEBUG && gBattleStruct->debugHoldEffects[battlerId])
-            holdEffect = gBattleStruct->debugHoldEffects[battlerId];
-        else if (itemId == ITEM_ENIGMA_BERRY)
-            holdEffect = gEnigmaBerries[battlerId].holdEffect;
-        else
-            holdEffect = ItemId_GetHoldEffect(itemId);
 
         gBattleStruct->mega.isWishMegaEvo = FALSE;
         gBattleStruct->mega.isPrimalReversion = TRUE;

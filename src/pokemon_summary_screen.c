@@ -5916,14 +5916,13 @@ static void BufferMonPokemonEvolutionData(void)
 	u8 level = sum->level;
     u8 gender = GetMonGender(mon);
     const u8 *text;
-	u8 x, y, i;
+	u8 y, i;
     bool8 isEnemyMon = VarGet(VAR_BATTLE_CONTROLLER_PLAYER_F) == 2; //checks if you are looking into the summary screen for the enemy
     u16 targetSpecies = 0;
     u8 times = 0;
     u16 pokeball = GetMonData(mon, MON_DATA_POKEBALL, NULL);
     u16 actualSpecies = species;
     u16 formSpecies = GetFormShiftSpecies(species);
-	x = 60;
 	y = 4;
 
     if (formSpecies) species = formSpecies;

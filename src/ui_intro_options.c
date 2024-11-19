@@ -267,7 +267,6 @@ static void Menu_VBlankCB(void)
 
 static bool8 Menu_DoGfxSetup(void)
 {
-    u8 taskId;
     switch (gMain.state)
     {
     case 0:
@@ -307,7 +306,7 @@ static bool8 Menu_DoGfxSetup(void)
         break;
     case 5:
         PrintToWindow(WINDOW_1, FONT_BLACK);
-        taskId = CreateTask(Task_MenuWaitFadeIn, 0);
+        CreateTask(Task_MenuWaitFadeIn, 0);
         BlendPalettes(0xFFFFFFFF, 16, RGB_BLACK);
         gMain.state++;
         break;

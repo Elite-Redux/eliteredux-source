@@ -722,7 +722,7 @@ static void HandleInitBackgrounds(void)
 static bool8 LoadMonAndSceneGfx(struct Pokemon *mon)
 {
     u16 species;
-    u32 personality, trainerId;
+    u32 personality;
     const struct CompressedSpritePalette *palette;
     u8 isShiny;
 
@@ -740,7 +740,6 @@ static bool8 LoadMonAndSceneGfx(struct Pokemon *mon)
         // Load mon palette
         species = GetMonData(mon, MON_DATA_SPECIES2);
         personality = GetMonData(mon, MON_DATA_PERSONALITY);
-        trainerId = GetMonData(mon, MON_DATA_OT_ID);
         palette = GetMonSpritePalStructFromOtIdPersonality(species, personality, isShiny);
         
         LoadHueShiftedMonSpritePalette(palette, personality);

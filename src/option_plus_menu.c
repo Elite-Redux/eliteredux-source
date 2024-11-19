@@ -687,7 +687,7 @@ static void HighlightOptionMenuItem(void)
 
 void CB2_InitOptionPlusMenu(void)
 {
-    u32 i, taskId;
+    u32 i;
     switch (gMain.state)
     {
     default:
@@ -787,7 +787,7 @@ void CB2_InitOptionPlusMenu(void)
         gMain.state++;
         break;
     case 10:
-        taskId = CreateTask(Task_OptionMenuFadeIn, 0);
+        CreateTask(Task_OptionMenuFadeIn, 0);
         
         sOptions->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 240 / 2, 20, 110, MENUITEM_MAIN_COUNT - 1, 110, 110, 0);
 
@@ -1400,8 +1400,6 @@ static const u8 *const sShortcutNames_Debug[] = {gText_Shortuct_01, gText_Shortu
 static void DrawChoices_BattleInterfaceTheme(int selection, int y)
 {
     bool8 active = CheckConditions(MENUITEM_CUSTOM_BATTLE_UI_THEME);
-    u8 styles[2] = {0};
-    styles[selection] = 1;
     
     DrawOptionMenuChoice(sThemeNames[selection], 104, y, 0, active);
 }

@@ -7513,8 +7513,6 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
     u8 powerItemBonus;
     u8 powerItemStat;
     int i, multiplier;
-    u8 stat;
-    u8 bonus;
 
     heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
     if (heldItem == ITEM_ENIGMA_BERRY)
@@ -7533,9 +7531,6 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
     {
         holdEffect = ItemId_GetHoldEffect(heldItem);
     }
-
-    stat = ItemId_GetSecondaryId(heldItem);
-    bonus = ItemId_GetHoldEffectParam(heldItem);
 
     for (i = 0; i < NUM_STATS; i++)
     {
@@ -7922,7 +7917,6 @@ u8 GetNumberOfEggMoves(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES2, 0);
     u16 firstStage = GetEggSpecies(species);
     u8 numEggMoves = GetEggMovesSpecies(firstStage, eggMoveBuffer);
-    u16 moves[numEggMoves];
     int i, j;
     bool8 hasMonMove = FALSE;
 
@@ -7941,8 +7935,7 @@ u8 GetNumberOfEggMoves(struct Pokemon *mon)
                 hasMonMove = TRUE;
         }
 
-        if (!hasMonMove)
-            moves[numMoves++] = eggMoveBuffer[i];
+        if (!hasMonMove) numMoves++;
     }
 
     return numMoves;

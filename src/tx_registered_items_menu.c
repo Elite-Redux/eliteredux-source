@@ -241,10 +241,8 @@ static void TxRegItemsMenu_ProcessInput(u8 taskId)
 
 static void TxRegItemsMenu_DoItemAction(u8 taskId)
 {
-    s16 *data;
     u16 pos;
 
-    data = gTasks[taskId].data;
     pos = (TxRegItemsMenuItemPageInfo.cursorPos + TxRegItemsMenuItemPageInfo.itemsAbove);
     TxRegItemsMenu_RemoveScrollIndicator();
 

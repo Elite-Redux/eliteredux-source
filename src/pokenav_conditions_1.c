@@ -518,7 +518,7 @@ void GetMonConditionGraphData(s16 id, u8 arg1)
 void ConditionGraphDrawMonPic(s16 index, u8 arg1)
 {
     u16 boxId, monId, species;
-    u32 personality, tid;
+    u32 personality;
     struct PokenavSub11 *structPtr = GetSubstructPtr(POKENAV_SUBSTRUCT_CONDITION_GRAPH);
     struct PokenavSub18 *monListPtr = GetSubstructPtr(POKENAV_SUBSTRUCT_MON_LIST);
     u8 isShiny;
@@ -532,7 +532,6 @@ void ConditionGraphDrawMonPic(s16 index, u8 arg1)
     species = GetBoxOrPartyMonData(boxId, monId, MON_DATA_SPECIES2, NULL);
     isShiny = GetBoxOrPartyMonData(boxId, monId, MON_DATA_IS_SHINY, NULL);
     isAlpha = GetBoxOrPartyMonData(boxId, monId, MON_DATA_IS_ALPHA, NULL);
-    tid = GetBoxOrPartyMonData(boxId, monId, MON_DATA_OT_ID, NULL);
     personality = GetBoxOrPartyMonData(boxId, monId, MON_DATA_PERSONALITY, NULL);
     LoadSpecialPokePic(&gMonFrontPicTable[species], structPtr->monPicGfx[arg1], species, personality, TRUE);
     LZ77UnCompWram(GetMonSpritePal(species, personality, isShiny), structPtr->monPal[arg1]);

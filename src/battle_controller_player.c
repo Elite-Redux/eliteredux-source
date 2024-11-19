@@ -1312,7 +1312,6 @@ void PrintBattleWindow_MoveSelection(void)
     u8 target = gMultiUsePlayerCursor;
     u8 battleTheme = getBattleInterfaceTheme();
     int maxDamage;
-    bool32 copyToVram;
     bool8 isStatusMove;
     bool8 isDoubleTypedMove = FALSE;
     struct TextPrinterTemplate printerTemplate;
@@ -1343,7 +1342,6 @@ void PrintBattleWindow_MoveSelection(void)
     //Fill the window with the fill value
     MoveIntoBattleBgWindow(windowId);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
-    copyToVram = TRUE;
 
     gBattle_BG1_X = 0;
     gBattle_BG1_Y = 0;

@@ -2717,8 +2717,6 @@ static u8 DisplaySelectionWindow(u8 windowType)
 static u8 DisplaySelectionWindowNew(u8 windowType)
 {
     struct WindowTemplate window;
-    u8 cursorDimension;
-    u8 fontAttribute;
     u8 i;
 
     switch (windowType)
@@ -2744,8 +2742,6 @@ static u8 DisplaySelectionWindowNew(u8 windowType)
     DrawStdFrameWithCustomTileAndPalette(sPartyMenuInternal->windowId[0], FALSE, 0x4F, 13);
     if (windowType == SELECTWINDOW_MOVES)
         return sPartyMenuInternal->windowId[0];
-    cursorDimension = GetMenuCursorDimensionByFont(1, 0);
-    fontAttribute = GetFontAttribute(1, 2);
 
     InitMenuInUpperLeftCorner(sPartyMenuInternal->windowId[0], sPartyMenuInternal->numActions, 0, 1);
     ScheduleBgCopyTilemapToVram(2);

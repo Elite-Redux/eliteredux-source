@@ -3088,9 +3088,6 @@ static void LoadKeyboardWindow(void)
 static void LoadTextEntryWindow(void)
 {
     int i;
-    u8 unused[2];
-    unused[0] = 0;
-    unused[1] = 0xFF;
 
     for (i = 0; i < MAX_MESSAGE_LENGTH; i++)
         BlitBitmapToWindow(1, sDisplay->unk2128, i * 8, 0, 8, 16);

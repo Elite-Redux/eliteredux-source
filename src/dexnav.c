@@ -687,11 +687,8 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
     s16 botY = topY + areaY;
     u8 i;
     bool8 nextIter;
-    u8 scale = 0;
-    u8 weight = 0;
     u8 currMapType = GetCurrentMapType();
     u8 tileBehaviour;
-    u8 tileBuffer = 2;
     bool8 correctTile = FALSE;
     
     // loop through every tile in area and evaluate
@@ -706,10 +703,6 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
             
             //Check for objects
             nextIter = FALSE;
-            if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_BIKE))
-                tileBuffer = SNEAKING_PROXIMITY + 3;
-            else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_DASH))
-                tileBuffer = SNEAKING_PROXIMITY + 1;
             
             /*if (GetPlayerDistance(topX, topY) <= tileBuffer)
             {
@@ -744,8 +737,6 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
                         if (IsZCoordMismatchAt(gObjectEvents[gPlayerAvatar.spriteId].currentElevation, topX, topY))
                             break; //occurs at same z coord
                         
-                        scale = 440 - (smallScan * 200) - (GetPlayerDistance(topX, topY) / 2)  - (2 * (topX + topY));
-                        weight = ((Random() % scale) < 1) && !MapGridIsImpassableAt(topX, topY);
                         //Check if it's possible to find a mon there
                         if (!MapGridIsImpassableAt(topX, topY)) {
                             correctTile = TRUE;
@@ -753,8 +744,6 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
                     }
                     else
                     { // outdoors: grass
-                        scale = 100 - (GetPlayerDistance(topX, topY) * 2);
-                        weight = (Random() % scale <= 5) && !MapGridIsImpassableAt(topX, topY);
                         //Check if it's possible to find a mon there
                         if (!MapGridIsImpassableAt(topX, topY)) {
                             correctTile = TRUE;
@@ -769,7 +758,6 @@ static bool8 DexNavPickTile(u8 environment, u8 areaX, u8 areaY, bool8 smallScan)
                     if (IsZCoordMismatchAt(gObjectEvents[gPlayerAvatar.spriteId].currentElevation, topX, topY))
                         break;
 
-                    weight = (Random() % scale <= 1) && !MapGridIsImpassableAt(topX, topY);
                     //Check if it's possible to find a mon there
                     if (!MapGridIsImpassableAt(topX, topY)) {
                         correctTile = TRUE;

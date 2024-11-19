@@ -774,11 +774,8 @@ static void SpriteCB_Egg_2(struct Sprite* sprite)
     {
         if (++sprite->data[0] > 38)
         {
-            u16 species;
-
             sprite->callback = SpriteCB_Egg_3;
             sprite->data[0] = 0;
-            species = GetMonData(&gPlayerParty[sEggHatchData->eggPartyID], MON_DATA_SPECIES);
             gSprites[sEggHatchData->pokeSpriteID].x2 = 0;
             gSprites[sEggHatchData->pokeSpriteID].y2 = 0;
         }

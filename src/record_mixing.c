@@ -749,9 +749,6 @@ static void ReceiveDaycareMailData(struct RecordMixingDaycareMail *src, size_t r
     struct RecordMixingDaycareMail *_src;
     u8 which0, which1;
     void *ptr;
-    u8 sp04[4];
-    u8 sp08[4];
-    struct RecordMixingDaycareMail *sp0c[4];
     u8 sp1c[4][2];
     u8 sp24[4][2];
     u8 sp34;
@@ -763,8 +760,6 @@ static void ReceiveDaycareMailData(struct RecordMixingDaycareMail *src, size_t r
     linkPlayerCount = GetLinkPlayerCount();
     for (i = 0; i < 4; i++)
     {
-        sp04[i] = 0xFF;
-        sp08[i] = 0;
         sp1c[i][0] = 0;
         sp1c[i][1] = 0;
     }
@@ -887,7 +882,6 @@ static void ReceiveDaycareMailData(struct RecordMixingDaycareMail *src, size_t r
     for (i = 0; i < 4; i++)
     {
         _src = &src[which * recordSize];
-        sp0c[i] = _src;
     }
 
     tableId = sub_80E7B54() % 3;

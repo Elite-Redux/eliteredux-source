@@ -1493,11 +1493,6 @@ u8 AnimDummyReturnArg(u8 battler)
     return battler;
 }
 
-static u8 GetBattlerAtPosition_(u8 position)
-{
-    return GetBattlerAtPosition(position);
-}
-
 void AnimSpriteOnMonPos(struct Sprite *sprite)
 {
     bool8 var;

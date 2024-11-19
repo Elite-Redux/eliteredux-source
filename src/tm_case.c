@@ -1155,11 +1155,9 @@ static void DrawPartyMonIcons(void)
 static void TintPartyMonIcons(u8 tm)
 {
     u8 i;
-    u16 species;
 
     for (i = 0; i < gPlayerPartyCount; i++)
     {
-        species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
         gSprites[spriteIdData[i]].oam.paletteNum = 6;
     }
     

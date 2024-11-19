@@ -4074,12 +4074,9 @@ static void AnimConstrictBinding(struct Sprite* sprite)
 
 static void AnimConstrictBinding_Step1(struct Sprite* sprite)
 {
-    u8 spriteId;
-
     if ((u16)gBattleAnimArgs[7] == 0xFFFF)
     {
         sprite->affineAnimPaused = 0;
-        spriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
         sprite->data[0] = 0x100;
         sprite->callback = AnimConstrictBinding_Step2;
     }

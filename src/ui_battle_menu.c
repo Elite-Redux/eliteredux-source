@@ -1024,7 +1024,6 @@ static void Menu_VBlankCB(void)
 
 static bool8 Menu_DoGfxSetup(void)
 {
-    u8 taskId;
     switch (gMain.state)
     {
     case 0:
@@ -1063,7 +1062,7 @@ static bool8 Menu_DoGfxSetup(void)
         gMain.state++;
         break;
     case 5:
-        taskId = CreateTask(Task_MenuWaitFadeIn, 0);
+        CreateTask(Task_MenuWaitFadeIn, 0);
         BlendPalettes(0xFFFFFFFF, 16, RGB_BLACK);
         gMain.state++;
         break;
@@ -1837,7 +1836,7 @@ const u8 sText_Title_Controllers_Move[]      = _("{DPAD_UPDOWN}Switch {DPAD_LEFT
 #define ENABLE_DAMAGE_CALCULATION FALSE
 static void PrintMoveTab(void) {
     u8 i, j;
-    u8 x, y, x2, y2;
+    u8 x, y;
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
     u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
@@ -1860,8 +1859,6 @@ static void PrintMoveTab(void) {
     //Title
     x  = 9;
     y  = 0;
-    x2 = 0;
-    y2 = 0;
     AddTextPrinterParameterized4(windowId, FONT_SMALL, (x * 8), (y * 8), 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_Title_Battler_Moves);
     x  = 16;
     AddTextPrinterParameterized4(windowId, FONT_SMALL, (x * 8), (y * 8), 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_Title_Controllers_Move);
@@ -3333,7 +3330,7 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
     s32 dmg, critDmg, critChance, tempchance;
     double minHits2KOChance;
     u16 hits2KO, hits2KOmin, percentage;
-    u8 chance, moveType;
+    u8 chance;
     u8 natureAtk, natureDef;
     u8 statUpAtk, statUpDef;
     u8 statDownAtk, statDownDef;
@@ -3342,7 +3339,6 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
     u16 targetCurrentHp = gBattleMons[target].hp;
     u16 targetHeldItem  = gBattleMons[target].item;
     bool8 isCrit = FALSE;
-    u16 typeEffectivenessModifier;
     const s8 *natureMod;
     u16 move = gBattleMons[battler].moves[moveIdx];
     struct DamageCalculation *damageCalculation;
@@ -3350,9 +3346,6 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
 
     //Sets move type depending on the mon ability/stats
     SetTypeBeforeUsingMove(move, battler);
-    GET_MOVE_TYPE(move, moveType);
-    
-    typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(move, moveType, battler, target, FALSE);
 
     if (sMenuDataPtr->damageCalculation[battler][target][moveIdx].noDamage) {
         StringCopy(gStringVar4, gText_Target_Nothing);
@@ -3450,14 +3443,13 @@ void PrintDamageCalculationExported(u8 battler, u8 target, u8 moveIdx) {
     s32 dmg, critDmg, critChance, tempchance;
     double minHits2KOChance;
     u16 hits2KO, hits2KOmin, percentage, chance2KO;
-    u8 chance, moveType;
+    u8 chance;
     u8 natureAtk, natureDef;
     u8 statUpAtk, statUpDef;
     u8 statDownAtk, statDownDef;
     u8 i, j;
     u16 targetCurrentHp = gBattleMons[target].hp;
     bool8 isCrit = FALSE;
-    u16 typeEffectivenessModifier;
     const s8 *natureMod;
     u16 move = gBattleMons[battler].moves[moveIdx];
     struct DamageCalculation *damageCalculation;
@@ -3465,9 +3457,6 @@ void PrintDamageCalculationExported(u8 battler, u8 target, u8 moveIdx) {
 
     //Sets move type depending on the mon ability/stats
     SetTypeBeforeUsingMove(move, battler);
-    GET_MOVE_TYPE(move, moveType);
-    
-    typeEffectivenessModifier = CalcTypeEffectivenessMultiplier(move, moveType, battler, target, FALSE);
 
     CalculateDamage(battler, target, moveIdx);
     damageCalculation = &sMenuDataPtr->damageCalculation[battler][target][moveIdx];
@@ -3489,7 +3478,7 @@ void PrintDamageCalculationExported(u8 battler, u8 target, u8 moveIdx) {
 
 static void PrintPartyTab() {
     u8 i, j;
-    u8 x, y, x2, y2;
+    u8 x, y;
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
     u8 turnsLeft = 5;
@@ -3502,8 +3491,6 @@ static void PrintPartyTab() {
     //Title
     x  = 9;
     y  = 0;
-    x2 = 0;
-    y2 = -4;
     AddTextPrinterParameterized4(windowId, FONT_SMALL, (x * 8), (y * 8), 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, sText_Title_Field_Party);
     x  = 15;
     if (sMenuDataPtr->partySelectorMode)

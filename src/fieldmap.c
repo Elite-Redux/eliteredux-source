@@ -48,15 +48,14 @@ static struct MapConnection *GetIncomingConnection(u8 direction, int x, int y);
 static bool8 IsPosInIncomingConnectingMap(u8 direction, int x, int y, struct MapConnection *connection);
 static bool8 IsCoordInIncomingConnectingMap(int coord, int srcMax, int destMax, int offset);
 
-#define MapGridGetBorderTileAt(x, y) ({                                                            \
-    u16 block;                                                                                     \
-    int i;                                                                                         \
-    u16 *border = gMapHeader.mapLayout->border;                                                    \
-                                                                                                   \
-    i = (x + 1) & 1;                                                                               \
-    i += ((y + 1) & 1) * 2;                                                                        \
-                                                                                                   \
-    block = gMapHeader.mapLayout->border[i] | METATILE_COLLISION_MASK;                             \
+#define MapGridGetBorderTileAt(x, y) ({                                                             \
+    int i;                                                                                          \
+    u16 *border = gMapHeader.mapLayout->border;                                                     \
+                                                                                                    \
+    i = (x + 1) & 1;                                                                                \
+    i += ((y + 1) & 1) * 2;                                                                         \
+                                                                                                    \
+    gMapHeader.mapLayout->border[i] | METATILE_COLLISION_MASK;                                      \
 })
 
 #define AreCoordsWithinMapGridBounds(x, y) (x >= 0 && x < gBackupMapLayout.width && y >= 0 && y < gBackupMapLayout.height)
