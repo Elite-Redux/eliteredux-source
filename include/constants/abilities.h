@@ -104,7 +104,7 @@
 #define ABILITY_SNIPER 97 // Critical hits have a 2.25x dmg multiplier instead of 1.5x.
 #define ABILITY_MAGIC_GUARD 98 // Only damaged by attacks.
 #define ABILITY_NO_GUARD 99 // Attacks used by and on this Pokémon bypass accuracy checks.
-#define ABILITY_STALL 100 // Takes 30% damage if it hasn't moved.
+#define ABILITY_STALL 100 // Takes 30% less damage if it hasn't moved yet.
 #define ABILITY_TECHNICIAN 101 // Moves with 60 BP or less get a 1.5x boost.
 #define ABILITY_LEAF_GUARD 102 // Immune to status conditions if sun is active.
 #define ABILITY_KLUTZ 103 // Own held item has no effect. Mega Stones are unaffected.
