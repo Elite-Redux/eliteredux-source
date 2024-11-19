@@ -770,8 +770,9 @@
 #define ABILITY_ENERGY_SIPHON 748 // Heals the user for 1/4 of the damage they deal.
 #define ABILITY_RESERVOIR 749 // Water Absorb + Storm Drain.
 #define ABILITY_NEUROTOXIN 750 // Inflicting poison also lowers Attack, Defense, and Speed.
+#define ABILITY_ENERGIZED_HORNS 751 // Mighty horn moves become special and deal 30% more damage.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_NEUROTOXIN + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_ENERGIZED_HORNS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

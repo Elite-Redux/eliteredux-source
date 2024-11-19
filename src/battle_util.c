@@ -9030,6 +9030,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
     case ABILITY_HUNTERS_HORN:
     case ABILITY_MIGHTY_HORN:
     case ABILITY_UNICORN:
+    case ABILITY_ENERGIZED_HORNS:
         if (gBattleMoves[move].hornBased) MUL(1.3);
         return;
     
@@ -10298,6 +10299,12 @@ void SetSwapDamageCategory(int battler, int target, int move)
                 }
 
                 if (gBattleMoves[move].arrowBased && BattlerHasAbility(battler, ABILITY_MYTHICAL_ARROWS, FALSE))
+                {
+                    gSwapDamageCategory = TRUE;
+                    return;
+                }
+
+                if (gBattleMoves[move].hornBased && BattlerHasAbility(battler, ABILITY_ENERGIZED_HORNS, FALSE))
                 {
                     gSwapDamageCategory = TRUE;
                     return;

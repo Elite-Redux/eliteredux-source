@@ -720,6 +720,7 @@ static const u8 sAbilityDaybreakDescription[] = _("Burns the foe on contact.\nAl
 static const u8 sAbilityEnergySiphonDescription[] = _("Heals the user for 1/4\nof the damage they deal.");
 static const u8 sAbilityReservoirDescription[] = _("Water Absorb + Storm Drain.");
 static const u8 sAbilityNeurotoxinDescription[] = _("Inflicting poison also lowers\nAttack, Defense, and Speed.");
+static const u8 sAbilityEnergizedHornsDescription[] = _("Mighty horn moves become special\nand deal 30% more damage.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1474,6 +1475,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ENERGY_SIPHON] = _("Energy Siphon"),
     [ABILITY_RESERVOIR] = _("Reservoir"),
     [ABILITY_NEUROTOXIN] = _("Neurotoxin"),
+    [ABILITY_ENERGIZED_HORNS] = _("Energy Horns"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2229,4 +2231,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_ENERGY_SIPHON] = sAbilityEnergySiphonDescription,
     [ABILITY_RESERVOIR] = sAbilityReservoirDescription,
     [ABILITY_NEUROTOXIN] = sAbilityNeurotoxinDescription,
+    [ABILITY_ENERGIZED_HORNS] = sAbilityEnergizedHornsDescription,
 };

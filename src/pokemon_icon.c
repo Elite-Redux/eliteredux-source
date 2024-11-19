@@ -937,6 +937,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_ARCTOVISH] = gMonIcon_Arctovish,
     [SPECIES_DURALUDON] = gMonIcon_Duraludon,
     [SPECIES_DURALUDON_PARTNER] = gMonIcon_Duraludon,
+    [SPECIES_DURALUDON_PARTNER_MEGA] = gMonIcon_DuraludonPartnerMega,
     [SPECIES_DREEPY] = gMonIcon_Dreepy,
     [SPECIES_DRAKLOAK] = gMonIcon_Drakloak,
     [SPECIES_DRAGAPULT] = gMonIcon_Dragapult,
