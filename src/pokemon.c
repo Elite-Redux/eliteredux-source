@@ -7505,57 +7505,13 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
     u8 evs[NUM_STATS];
     u16 evIncrease = 0;
     u16 totalEVs = 0;
-    u16 heldItem;
-    u8 holdEffect;
-    u8 powerItemBonus;
-    u8 powerItemStat;
     int i, multiplier;
-
-    heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
-    if (heldItem == ITEM_ENIGMA_BERRY)
-    {
-        if (gMain.inBattle)
-            holdEffect = gEnigmaBerries[0].holdEffect;
-        else {
-            #ifndef FREE_ENIGMA_BERRY
-            holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
-            #else
-            holdEffect = 0;
-            #endif
-        }
-    }
-    else
-    {
-        holdEffect = ItemId_GetHoldEffect(heldItem);
-    }
 
     for (i = 0; i < NUM_STATS; i++)
     {
         evs[i] = GetMonData(mon, MON_DATA_HP_EV + i, 0);
         totalEVs += evs[i];
     }
-
-    heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
-
-    if (heldItem == ITEM_ENIGMA_BERRY)
-    {
-        if (gMain.inBattle)
-            holdEffect = gEnigmaBerries[0].holdEffect;
-        else {
-            #ifndef FREE_ENIGMA_BERRY
-            holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
-            #else
-            holdEffect = 0;
-            #endif
-        }
-    }
-    else
-    {
-        holdEffect = ItemId_GetHoldEffect(heldItem);
-        powerItemStat = ItemId_GetSecondaryId(heldItem);
-    }
-
-    powerItemBonus = ItemId_GetHoldEffectParam(heldItem);
 
     for (i = 0; i < NUM_STATS; i++)
     {
@@ -7567,41 +7523,27 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
         else
             multiplier = 1;
 
-        // Power items prevent EV gain from Pokemon
-        if (holdEffect == HOLD_EFFECT_POWER_ITEM)
+        switch (i)
         {
-            if (powerItemStat == (STAT_HP + i))
-                evIncrease = powerItemBonus * multiplier;
-            else
-                evIncrease = 0;
+        case STAT_HP:
+            evIncrease = gBaseStats[defeatedSpecies].evYield_HP * multiplier;
+            break;
+        case STAT_ATK:
+            evIncrease = gBaseStats[defeatedSpecies].evYield_Attack * multiplier;
+            break;
+        case STAT_DEF:
+            evIncrease = gBaseStats[defeatedSpecies].evYield_Defense * multiplier;
+            break;
+        case STAT_SPEED:
+            evIncrease = gBaseStats[defeatedSpecies].evYield_Speed * multiplier;
+            break;
+        case STAT_SPATK:
+            evIncrease = gBaseStats[defeatedSpecies].evYield_SpAttack * multiplier;
+            break;
+        case STAT_SPDEF:
+            evIncrease = gBaseStats[defeatedSpecies].evYield_SpDefense * multiplier;
+            break;
         }
-        else
-        {
-            switch (i)
-            {
-            case STAT_HP:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_HP * multiplier;
-                break;
-            case STAT_ATK:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_Attack * multiplier;
-                break;
-            case STAT_DEF:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_Defense * multiplier;
-                break;
-            case STAT_SPEED:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_Speed * multiplier;
-                break;
-            case STAT_SPATK:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_SpAttack * multiplier;
-                break;
-            case STAT_SPDEF:
-                evIncrease = gBaseStats[defeatedSpecies].evYield_SpDefense * multiplier;
-                break;
-            }
-        }
-
-        if (holdEffect == HOLD_EFFECT_MACHO_BRACE)
-            evIncrease *= 2;
 
         if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS)
             evIncrease = ((s16)evIncrease + MAX_TOTAL_EVS) - (totalEVs + evIncrease);
@@ -7808,7 +7750,7 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves, bool8 disableLearned)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, 0);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, 0);
-    int i, j, k;
+    int i, j = 0, k;
 
     species = getLearnsetMon(species);
 

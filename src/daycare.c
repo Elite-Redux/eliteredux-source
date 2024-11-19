@@ -465,7 +465,7 @@ static void TryInheritAbility(struct Pokemon *egg, struct DayCare *daycare)
 {
     s32 i;
     s32 parent = -1;
-    u8 femaleCount, abilitySlot = 0;
+    u8 femaleCount = 0, abilitySlot = 0;
 
     // search for female
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
@@ -848,7 +848,7 @@ static void InheritPokeBall(struct Pokemon *egg, struct DayCare *daycare)
 {
     u16 ball;
     u8 parent, i;
-    u8 femaleCount;
+    u8 femaleCount = 0;
 
     // search for female
     for (i = 0; i < DAYCARE_MON_COUNT; i++)

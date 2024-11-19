@@ -798,76 +798,77 @@ static u32 GetBestMonBatonPass(struct Pokemon *party, int firstId, int lastId, u
 
 static u32 GetBestMonDefensive(struct Pokemon *party, int firstId, int lastId, u8 invalidMons, u32 opposingBattler)
 {
-    int i, bits = 0;
-    u16 chosenSpecies;
-    u8 predictedMoveType = PredictFoesMoveType(opposingBattler);
+    // This was changed at some point and does nothing
+    // int i, bits = 0;
+    // u16 chosenSpecies;
+    // u8 predictedMoveType = PredictFoesMoveType(opposingBattler);
 
-    while (bits != 0x3F) // All mons were checked.
-    {
-        int bestDmg = UQ_4_12(1.0);
-        int bestMonId = PARTY_SIZE;
-        // Find the mon whose type is the most suitable defensively.
-        for (i = firstId; i < lastId; i++)
-        {
-            if (!(gBitTable[i] & invalidMons) && !(gBitTable[i] & bits))
-            {
-                u16 species = GetMonData(&party[i], MON_DATA_SPECIES);
-                u32 typeDmg = UQ_4_12(1.0);
+    // while (bits != 0x3F) // All mons were checked.
+    // {
+    //     int bestDmg = UQ_4_12(1.0);
+    //     int bestMonId = PARTY_SIZE;
+    //     // Find the mon whose type is the most suitable defensively.
+    //     for (i = firstId; i < lastId; i++)
+    //     {
+    //         if (!(gBitTable[i] & invalidMons) && !(gBitTable[i] & bits))
+    //         {
+    //             u16 species = GetMonData(&party[i], MON_DATA_SPECIES);
+    //             u32 typeDmg = UQ_4_12(1.0);
 
-                u8 defType1 = gBaseStats[species].type1;
-                u8 defType2 = gBaseStats[species].type2;
+    //             u8 defType1 = gBaseStats[species].type1;
+    //             u8 defType2 = gBaseStats[species].type2;
 
-                typeDmg *= GetTypeModifier(predictedMoveType, defType1, gActiveBattler, opposingBattler);
-                if (defType2 != defType1)
-                    typeDmg *= GetTypeModifier(predictedMoveType, defType2, gActiveBattler, opposingBattler);
+    //             typeDmg *= GetTypeModifier(predictedMoveType, defType1, gActiveBattler, opposingBattler);
+    //             if (defType2 != defType1)
+    //                 typeDmg *= GetTypeModifier(predictedMoveType, defType2, gActiveBattler, opposingBattler);
 
-                if (bestDmg < typeDmg)
-                {
-                    bestDmg = typeDmg;
-                    bestMonId = i;
-                }
-                if (typeDmg >= UQ_4_12(2.0))
-                {
-                    bits |= gBitTable[bestMonId];
-                }
-            }
-        }
+    //             if (bestDmg < typeDmg)
+    //             {
+    //                 bestDmg = typeDmg;
+    //                 bestMonId = i;
+    //             }
+    //             if (typeDmg >= UQ_4_12(2.0))
+    //             {
+    //                 bits |= gBitTable[bestMonId];
+    //             }
+    //         }
+    //     }
 
-        // Make sure player's last attack won't be SE, as they're probably going to use it again.
-/*         if (bestMonId != PARTY_SIZE)
-        {
-            u16 move = gLastLandedMoves[gActiveBattler];
-            chosenSpecies = GetMonData(&party[bestMonId], MON_DATA_SPECIES);
+    //     // Make sure player's last attack won't be SE, as they're probably going to use it again.
+    //     //  if (bestMonId != PARTY_SIZE)
+    //     // {
+    //     //     u16 move = gLastLandedMoves[gActiveBattler];
+    //     //     chosenSpecies = GetMonData(&party[bestMonId], MON_DATA_SPECIES);
 
-            if (move != MOVE_NONE)
-            {
-                if (gBattleMoves[move].split != SPLIT_STATUS && AI_GetTypeEffectiveness(move, opposingBattler, chosenSpecies) >= UQ_4_12(1.0))
-                {
-                    bits |= gBitTable[bestMonId];
-                }
-            }
-        } */
+    //     //     if (move != MOVE_NONE)
+    //     //     {
+    //     //         if (gBattleMoves[move].split != SPLIT_STATUS && AI_GetTypeEffectiveness(move, opposingBattler, chosenSpecies) >= UQ_4_12(1.0))
+    //     //         {
+    //     //             bits |= gBitTable[bestMonId];
+    //     //         }
+    //     //     }
+    //     // }
 
-        // Ok, we know the mon has the right typing but does it have at least one super effective move?
-        if (bestMonId != PARTY_SIZE && bits != gBitTable[bestMonId])
-        {
-            for (i = 0; i < MAX_MON_MOVES; i++)
-            {
-                u32 move = GetMonData(&party[bestMonId], MON_DATA_MOVE1 + i);
-                if (move != MOVE_NONE && AI_GetTypeEffectiveness(move, chosenSpecies, opposingBattler) >= UQ_4_12(2.0))
-                    break;
-            }
+    //     // Ok, we know the mon has the right typing but does it have at least one super effective move?
+    //     if (bestMonId != PARTY_SIZE && bits != gBitTable[bestMonId])
+    //     {
+    //         for (i = 0; i < MAX_MON_MOVES; i++)
+    //         {
+    //             u32 move = GetMonData(&party[bestMonId], MON_DATA_MOVE1 + i);
+    //             if (move != MOVE_NONE && AI_GetTypeEffectiveness(move, chosenSpecies, opposingBattler) >= UQ_4_12(2.0))
+    //                 break;
+    //         }
 
-            if (i != MAX_MON_MOVES)
-                return bestMonId; // Has both the typing and at least one super effective move.
+    //         if (i != MAX_MON_MOVES)
+    //             return bestMonId; // Has both the typing and at least one super effective move.
 
-            // bits |= gBitTable[bestMonId]; // Sorry buddy, we want something better.
-        }
-        else
-        {
-            bits = 0x3F; // No viable mon to switch.
-        }
-    }
+    //         // bits |= gBitTable[bestMonId]; // Sorry buddy, we want something better.
+    //     }
+    //     else
+    //     {
+    //         bits = 0x3F; // No viable mon to switch.
+    //     }
+    // }
 
     return PARTY_SIZE;
 }

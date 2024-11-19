@@ -3868,6 +3868,8 @@ static void Blender_AddTextPrinter(u8 windowId, const u8 *string, u8 x, u8 y, s3
         txtColor[1] = TEXT_COLOR_RED;
         txtColor[2] = TEXT_COLOR_LIGHT_RED;
         break;
+    default:
+        return;
     }
 
     if (caseId != 3)

@@ -1145,12 +1145,12 @@ bool32 CanAIFaintTarget(u8 battlerAtk, u8 battlerDef, u8 numHits)
 
 bool32 CanMoveFaintBattler(u16 move, u8 battlerDef, u8 battlerAtk, u8 nHits)
 {
-    s32 i;
+    // s32 i;
     u8 effectiveness;
-    u32 unusable = AI_DATA->moveLimitations[battlerDef];
+    // u32 unusable = AI_DATA->moveLimitations[battlerDef];
     if (move != MOVE_NONE
       && move != 0xFFFF
-      && !(unusable & gBitTable[i])
+    //   && !(unusable & gBitTable[i])
       && AI_CalcDamage(move, battlerDef, battlerAtk, &effectiveness) >= gBattleMons[battlerAtk].hp)
         return TRUE;
 

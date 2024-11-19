@@ -6481,7 +6481,7 @@ static void PrintStatsScreen_MoveNameAndInfo(u8 taskId)
     u8 selected = sPokedexView->moveSelected;
     u8 total = sPokedexView->moveMax;
 
-    u16 move;
+    u16 move = 0;
     u16 item;
 
     u8 moves_x = 101;

@@ -978,6 +978,8 @@ void PrintBattleWindow_ActionPromt_Safari(void)
     x  = 15;
     y  = 1;
     y2 = 0;
+    // Not sure if this is correct, it was unset
+    x2 = 0;
 
     // Fight Button
     switch (getBattleInterfaceTheme()) {

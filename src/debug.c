@@ -1191,8 +1191,8 @@ static void Debug_RefreshListMenu(u8 taskId)
     u16 i;
     const u8 sColor_Red[] = _("{COLOR RED}");
     const u8 sColor_Green[] = _("{COLOR GREEN}");
-    u8 totalItems, flagResult;
-    u8 const * name;
+    u8 totalItems = 0, flagResult = 0xFF;
+    u8 const * name = NULL;
 
     if (sDebugMenuListData->listId == 0)
     {
