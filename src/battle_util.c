@@ -16030,7 +16030,7 @@ int AdjustTarget(int battler, int target, int move)
     {
         // Move doesn't matter, just pick a single target move
         int newTarget = GetMoveTarget(MOVE_POUND, MOVE_TARGET_SELECTED + 1);
-        if (GetBattlerSide(newTarget) != GetBattlerSide(battler));
+        if (GetBattlerSide(newTarget) != GetBattlerSide(battler))
             return newTarget;
     }
     return target;
