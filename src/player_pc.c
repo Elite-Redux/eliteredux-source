@@ -664,6 +664,9 @@ static u8 GetMailboxMailCount(void)
     return 0;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
 static void Mailbox_CompactMailList(void)
 {
     struct MailStruct temp;
@@ -926,6 +929,8 @@ static void Mailbox_Cancel(u8 taskId)
     ScheduleBgCopyTilemapToVram(0);
     gTasks[taskId].func = Mailbox_ProcessInput;
 }
+
+#pragma GCC diagnostic pop
 
 static void ItemStorage_Init(void)
 {

@@ -603,6 +603,8 @@ static void sub_81D24A4(struct ConditionGraph *graph)
     }
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
 static void sub_81D2634(struct ConditionGraph *graph)
 {
     s32 i, r6, varMax;
@@ -645,6 +647,7 @@ static void sub_81D2634(struct ConditionGraph *graph)
         }
     }
 }
+#pragma GCC diagnostic pop
 
 void sub_81D2754(u8 *arg0, struct UnknownSubStruct_81D1ED4 *arg1)
 {

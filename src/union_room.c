@@ -4047,7 +4047,7 @@ static s32 UnionRoomGetPlayerInteractionResponse(struct UnkStruct_Main0 *main0, 
         IntlConvPartnerUname7(gStringVar1, r5);
         if (overrideGender)
         {
-            playerGender = (r5->gname_uname.gname.unk_00.playerTrainerId[overrideGender + 1] >> 3) & 1;
+            playerGender = (r5->gname_uname.gname.unk_00.playerTrainerId[overrideGender] >> 3) & 1;
         }
         switch (r5->gname_uname.gname.activity & 0x3F)
         {
