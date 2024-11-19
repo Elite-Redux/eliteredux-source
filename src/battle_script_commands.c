@@ -13151,7 +13151,7 @@ static void Cmd_setmist(void)
     else
     {
         int side = GET_BATTLER_SIDE(gBattlerAttacker);
-        gSideTimers[side].started.mist;
+        gSideTimers[side].started.mist = TRUE;
         gSideTimers[side].mistTimer = SCREEN_DURATION;
         gSideTimers[side].mistBattlerId = gBattlerAttacker;
         gSideStatuses[side] |= SIDE_STATUS_MIST;
@@ -15681,7 +15681,7 @@ static void Cmd_settypebasedhalvers(void) // water and mud sport
         if (!(gFieldStatuses & STATUS_FIELD_WATERSPORT))
         {
             gFieldStatuses |= STATUS_FIELD_WATERSPORT;
-            gFieldTimers.started.waterSport;
+            gFieldTimers.started.waterSport = TRUE;
             gFieldTimers.waterSportTimer = SPORT_DURATION;
             SetActiveMultistringChooser(B_MSG_WEAKEN_FIRE);
             worked = TRUE;

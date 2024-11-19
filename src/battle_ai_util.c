@@ -3395,10 +3395,10 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
             if (gBattleMons[battlerAtk].statStages[STAT_ATK] < STAT_UP_2_STAGE)
                 *score += 2;
             else if (gBattleMons[battlerAtk].statStages[STAT_ATK] < STAT_UP_STAGE)
-                *(score)++;
+                (*score)++;
         }
         if (HasMoveEffect(battlerAtk, EFFECT_FOUL_PLAY))
-            *(score)++;
+            (*score)++;
         break;
     case STAT_DEF:
         if ((HasMoveWithSplit(battlerDef, SPLIT_PHYSICAL)|| IS_MOVE_PHYSICAL(gLastMoves[battlerDef]))
@@ -3407,7 +3407,7 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
             if (gBattleMons[battlerAtk].statStages[STAT_DEF] < STAT_UP_2_STAGE)
                 *score += 2; // seems better to raise def at higher HP
             else if (gBattleMons[battlerAtk].statStages[STAT_DEF] < STAT_UP_STAGE)
-                *(score)++;
+                (*score)++;
         }
         break;
     case STAT_SPEED:
@@ -3416,7 +3416,7 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
             if (gBattleMons[battlerAtk].statStages[STAT_SPEED] < STAT_UP_2_STAGE)
                 *score += 2;
             else if (gBattleMons[battlerAtk].statStages[STAT_SPEED] < STAT_UP_STAGE)
-                *(score)++;
+                (*score)++;
         }
         break;
     case STAT_SPATK:
@@ -3425,7 +3425,7 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
             if (gBattleMons[battlerAtk].statStages[STAT_SPATK] < STAT_UP_2_STAGE)
                 *score += 2;
             else if (gBattleMons[battlerAtk].statStages[STAT_SPATK] < STAT_UP_STAGE)
-                *(score)++;
+                (*score)++;
         }
         break;
     case STAT_SPDEF:
@@ -3435,14 +3435,14 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
             if (gBattleMons[battlerAtk].statStages[STAT_SPDEF] < STAT_UP_2_STAGE)
                 *score += 2; // seems better to raise spdef at higher HP
             else if (gBattleMons[battlerAtk].statStages[STAT_SPDEF] < STAT_UP_STAGE)
-                *(score)++;
+                (*score)++;
         }
         break;
     case STAT_ACC:
         if (HasMoveWithLowAccuracy(battlerAtk, battlerDef, 80, TRUE, AI_GetHoldEffect(battlerAtk), AI_GetHoldEffect(battlerDef)))
             *score += 2; // has moves with less than 80% accuracy
         else if (HasMoveWithLowAccuracy(battlerAtk, battlerDef, 90, TRUE, AI_GetHoldEffect(battlerAtk), AI_GetHoldEffect(battlerDef)))
-            *(score)++;
+            (*score)++;
         break;
     case STAT_EVASION:
         if (!BattlerWillFaintFromWeather(battlerAtk))
@@ -3450,7 +3450,7 @@ void IncreaseStatUpScore(u8 battlerAtk, u8 battlerDef, u8 statId, s16 *score)
             if (!GetBattlerSecondaryDamage(battlerAtk) && !(gStatuses3[battlerAtk] & STATUS3_ROOTED))
                 *score += 2;
             else
-                *(score)++;
+                (*score)++;
         }
         break;
     }
@@ -3473,9 +3473,9 @@ void IncreasePoisonScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score)
           || HasMoveEffect(battlerAtk, EFFECT_HEX)
           || HasMoveEffect(battlerAtk, EFFECT_VENOM_DRENCH)
           || BattlerHasAbility(battlerAtk, ABILITY_MERCILESS, FALSE))
-            *(score) += 2;
+            (*score) += 2;
         else
-            *(score)++;
+            (*score)++;
     }
 }
 

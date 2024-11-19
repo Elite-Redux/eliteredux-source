@@ -15264,7 +15264,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
             BattleScriptPushCursorAndCallback(BattleScript_BerserkDNA);
         }
-        else BattleScript_BerserkDNANoConfusion;
+        else BattleScriptPushCursorAndCallback(BattleScript_BerserkDNANoConfusion);
         return TRUE;
     
     case ABILITY_PROTOSYNTHESIS:

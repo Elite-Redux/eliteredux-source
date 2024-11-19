@@ -1104,7 +1104,6 @@ static void Menu_FreeResources(void)
 void LoadTilemapFromMode(void)
 {
     try_free(sBg1TilemapBuffer);
-    sBg1TilemapBuffer == NULL;
 
     sBg1TilemapBuffer = Alloc(0x800);
 

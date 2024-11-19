@@ -2098,7 +2098,7 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
         if (CheckImmunities(battlerAtk, battlerDef, move, moveType, -1, &scoreOther, moveState)) return scoreOther;
         moveContainer->fixedDamage = TRUE;
         baseDamage = gBattleMons[gBattlerAttacker].level;
-        moveState->noVariance;
+        moveState->noVariance = TRUE;
         break;
     
     default:
@@ -2107,7 +2107,7 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
             if (CheckImmunities(battlerAtk, battlerDef, move, moveType, -1, &scoreOther, moveState)) return scoreOther;
             moveContainer->fixedDamage = TRUE;
             baseDamage = gBattleMons[gBattlerAttacker].level;
-            moveState->noVariance;
+            moveState->noVariance = TRUE;
             break;
         }
         baseDamage = CalcMoveDamageAi(move, battlerAtk, battlerDef, &moveType, moveContainer->fixedDamage, moveState);

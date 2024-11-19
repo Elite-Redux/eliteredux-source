@@ -1244,7 +1244,7 @@ static void Debug_RefreshListMenu(u8 taskId)
             {
                 flagResult = sDebugBattleData->aiFlags[i-1];
                 if (i == 0)
-                    flagResult == 0xFF;
+                    flagResult = 0xFF;
                 name = sDebugMenu_Items_Battle_1[i].name;
             }
         
