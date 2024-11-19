@@ -31,18 +31,24 @@ typedef vu8  vbool8;
 typedef vu16 vbool16;
 typedef vu32 vbool32;
 
-struct BgCnt
+#ifndef __GNUC__
+#define __attribute__(value)
+#endif
+typedef union
 {
-    u16 priority:2;
-    u16 charBaseBlock:2;
-    u16 dummy:2;
-    u16 mosaic:1;
-    u16 palettes:1;
-    u16 screenBaseBlock:5;
-    u16 areaOverflowMode:1;
-    u16 screenSize:2;
-};
-typedef volatile struct BgCnt vBgCnt;
+    struct {
+        u16 priority:2;
+        u16 charBaseBlock:2;
+        u16 dummy:2;
+        u16 mosaic:1;
+        u16 palettes:1;
+        u16 screenBaseBlock:5;
+        u16 areaOverflowMode:1;
+        u16 screenSize:2;
+    } __attribute__((packed, aligned(2)));
+    u16 bits;
+} __attribute__((packed, aligned(2))) BgCnt;
+typedef volatile BgCnt vBgCnt;
 
 struct PlttData
 {

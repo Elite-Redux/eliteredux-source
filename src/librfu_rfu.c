@@ -558,6 +558,9 @@ void rfu_REQ_endSearchChild(void)
     STWI_send_SC_EndREQ();
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+
 static void rfu_CB_pollAndEndSearchChild(u8 reqCommand, u16 reqResult)
 {
     if (reqResult == 0)
@@ -1763,6 +1766,8 @@ static void rfu_constructSendLLFrame(void)
         gRfuStatic->totalPacketSize = pakcketSize;
     }
 }
+
+#pragma GCC diagnostic pop
 
 static u16 rfu_STC_NI_constructLLSF(u8 bm_slot_id, u8 **dest_pp, struct NIComm *NI_comm)
 {

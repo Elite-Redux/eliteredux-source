@@ -795,6 +795,9 @@ void EReaderHelper_Timer3Callback(void)
     EnableSio();
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+
 void EReaderHelper_SerialCallback(void)
 {
     u16 i, cnt1, cnt2;
@@ -883,6 +886,8 @@ void EReaderHelper_SerialCallback(void)
         break;
     }
 }
+
+#pragma GCC diagnostic pop
 
 static void EnableSio(void)
 {

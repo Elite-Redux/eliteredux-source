@@ -2196,8 +2196,7 @@ static bool8 Phase2_Mugshot_Func3(struct Task *task)
         task->tData2 = 0xF0;
     if (task->tData3 < 0)
         task->tData3 = 0;
-    mergedValue = *(s32*)(&task->tData2);
-    if (mergedValue == 0xF0)
+    if (task->tData2 == 0xF0 && task->tData3 == 0)
         task->tState++;
 
     sTransitionStructPtr->BG0HOFS_1 -= 8;
