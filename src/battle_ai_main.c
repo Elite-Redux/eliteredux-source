@@ -3666,7 +3666,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
           || HasMoveEffect(battlerDef, EFFECT_CONFUSE)
           || HasMoveEffect(battlerDef, EFFECT_LEECH_SEED))
             score += 2;
-        if ((!gBattleMons[battlerDef].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION) || !(gStatuses4[battlerDef] & STATUS4_COMMANDED)) && GetHealthPercentage(battlerAtk) > 70)
+        if ((!(gBattleMons[battlerDef].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION)) || !(gStatuses4[battlerDef] & STATUS4_COMMANDED)) && GetHealthPercentage(battlerAtk) > 70)
             score++;
         break;
     case EFFECT_MIMIC:
