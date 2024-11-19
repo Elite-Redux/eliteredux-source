@@ -482,8 +482,8 @@ void TradeEvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, u8 preEvoSprit
     bool8 isAlpha;
 
     GetMonData(mon, MON_DATA_NICKNAME, name);
-    GetMonData(mon, MON_DATA_IS_SHINY, isShiny);
-    GetMonData(mon, MON_DATA_IS_ALPHA, isAlpha);
+    isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
+    isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA);
     StringCopy10(gStringVar1, name);
     StringCopy(gStringVar2, gSpeciesNames[postEvoSpecies]);
 

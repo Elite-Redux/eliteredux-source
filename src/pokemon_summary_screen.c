@@ -85,13 +85,6 @@ enum {
     PSS_PAGE_CONDITION,
     PSS_PAGE_COUNT,
 };
-
-enum {
-    PP_FEW,
-    PP_SOME,
-    PP_NO_PP,
-    PP_MANY
-};
 // Text Windows
 enum {
     PSS_LABEL_PANE_LEFT_TOP,
@@ -1745,7 +1738,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV);
             }
 		break;
 		case 1:
@@ -1754,7 +1747,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV);
             }
 		break;
 		case 2:
@@ -1763,7 +1756,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV);
             }
 		break;
 		case 3:
@@ -1772,7 +1765,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV);
             }
 		break;
 		case 4:
@@ -1781,7 +1774,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV);
             }
 		break;
 		case 5:
@@ -1790,7 +1783,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV);
             }
 		break;
 	}
@@ -3045,7 +3038,7 @@ static void PrintMoveInfoFromReplaceTab(void) {
 
 static void RedrawMoveTypeMenu()
 {
-    int i, windowId, type1, type2, PosX, PosY, tabNum;
+    int i, windowId, type1 = 0, type2 = 0, PosX, PosY, tabNum;
 
 
     SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, FALSE);
@@ -3109,7 +3102,7 @@ static void PrintMoveReplaceTab(void)
 {
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
     u8 numMoves = sMonSummaryScreen->numMenuChoices;
-    u8 i, j, windowId, PosX, PosY;
+    int i, j, windowId, PosX, PosY;
     u16 moveNum;
     bool8 hasMonMove = FALSE;
 
@@ -4595,7 +4588,7 @@ static void BufferCharacteristicString(void)
     iv[5] = GetMonData(mon, MON_DATA_SPDEF_IV);
     index = sum->pid % 6;
 
-    highestValue = iv[0];
+    highestValue = highestIV = iv[0];
 
     for (i = 0; i < 6; i++)
     {
@@ -5169,7 +5162,7 @@ static void PrintBattleMovesFromReplaceMenu(void)
 
 static void PrintMoveNameAndPP(u8 moveIndex)
 {
-    u32 pp, color, x;
+    u32 pp, color = 0, x;
     struct PokeSummary *summary = &sMonSummaryScreen->summary;
 
     if (summary->moves[moveIndex] != MOVE_NONE)
@@ -5188,6 +5181,7 @@ static void PrintMoveNameAndPP(u8 moveIndex)
             case PP_SOME:
                 color = PSS_COLOR_ORANGE;
                 break;
+            default:
             case PP_NO_PP:
                 color = PSS_COLOR_FEMALE_GENDER_SYMBOL;
                 break;
@@ -5466,7 +5460,7 @@ static bool8 PrintMonEvolution(u16 species, u8 num, u8 y, bool8 gender, u32 pers
     bool8 skipPrintingEvo = FALSE;
     const struct MapHeader *mapHeader;
     u16 upperPersonality = personality >> 16;
-    u16 item, targetSpecies;
+    u16 item, targetSpecies = 0;
 
     switch (gEvolutionTable[species][i].method)
     {

@@ -105,14 +105,13 @@ void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData)
     int moveNum;
     for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++)
     {
-        int move;
         struct MoveContainer* moveContainer = &aiData->moveState[battlerAtk][moveNum];
+        int move = moveContainer->move = gBattleMons[battlerAtk].moves[moveNum];
         if (move == MOVE_NONE || unusableMoves & (1 << moveNum))
         {
             moveContainer->unusable = TRUE;
             continue;
         }
-        move = moveContainer->move = gBattleMons[battlerAtk].moves[moveNum];
         FILTER(!AlwaysCancelled(battlerAtk, move, moveContainer))
         moveContainer->targetFlags = GetBattlerBattleMoveTargetFlags(move, battlerAtk);
         switch (moveContainer->targetFlags)
@@ -128,8 +127,8 @@ void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData)
             break;
             
         case MOVE_TARGET_OPPONENTS_FIELD:
-            SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData)
-                || SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk))), moveNum, aiData);
+            if (SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData)) break;
+            SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk))), moveNum, aiData);
             break;
         
         case MOVE_TARGET_USER_OR_SELECTED:

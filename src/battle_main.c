@@ -5182,7 +5182,7 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove)
 
 int GetFastestBattler(int ignoreChosenMoves, int except)
 {
-    int i, maxBattler, maxSpeed = 0, dupeCount = 2;
+    int i, maxBattler = 0, maxSpeed = 0, dupeCount = 2;
     for (i = 0; i < gBattlersCount; i++)
     {
         int speed;
@@ -5209,7 +5209,7 @@ int SortBattlersExcept(u8* battlerArray, int ignoreChosenMoves, int except)
     u8 battlers[] = { 0, 1, 2, 3 };
     union SpeedValue speeds[MAX_BATTLERS_COUNT] = { 0 };
     int i, j, temp;
-    int dupeSpeed, dupeCount = 2;
+    int dupeSpeed = 0, dupeCount = 2;
 
     for (i = 0; i < gBattlersCount; i++)
     {

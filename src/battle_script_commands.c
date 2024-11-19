@@ -1721,6 +1721,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState*
     u32 defHoldEffect = GetBattlerHoldEffect(battlerDef, TRUE);
     u8 moveType;
 
+    GET_MOVE_TYPE(move, moveType)
+
     if (gStatuses3[battlerDef] & STATUS3_ALWAYS_HITS && gVolatileStructs[battlerDef].battlerWithSureHit == battlerAtk)
         return 101;
     if (gVolatileStructs[battlerAtk].trepidation && moveType == TYPE_PSYCHIC)
@@ -3036,7 +3038,7 @@ bool8 IsPreventableSecondaryEffect(u8 moveEffect)
 
 void SetMoveEffect(bool32 primary, u32 certain)
 {
-    s32 i, byTwo, affectsUser = 0;
+    s32 i, byTwo = 0, affectsUser = 0;
     bool32 statusChanged = FALSE;
     bool32 mirrorArmorReflected = BattlerHasAbility(gBattlerTarget, ABILITY_MIRROR_ARMOR, TRUE);
     u32 flags = 0;
@@ -8445,7 +8447,7 @@ static int ProtectSucceeds(int battler)
 static bool32 CanTeleport(u8 battlerId)
 {
     struct Pokemon* party = NULL;
-    u32 species, count, i;
+    u32 species, count = 0, i;
 
     if (GetBattlerSide(battlerId) == B_SIDE_PLAYER)
         party = gPlayerParty;
@@ -9412,7 +9414,6 @@ static void Cmd_various(void)
         // Update healthbox and elevation.
         case 2:
             UpdateHealthboxAttribute(gHealthboxSpriteIds[gActiveBattler], mon, HEALTHBOX_ALL);
-            //CreateMegaIndicatorSprite(gActiveBattler, 0);
             if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
                 SetBattlerShadowSpriteCallback(gActiveBattler, gBattleMons[gActiveBattler].species);
             break;
@@ -9480,7 +9481,6 @@ static void Cmd_various(void)
         // Update healthbox and elevation.
         default:
             UpdateHealthboxAttribute(gHealthboxSpriteIds[gActiveBattler], mon, HEALTHBOX_ALL);
-            //CreateMegaIndicatorSprite(gActiveBattler, 0);
             if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
                 SetBattlerShadowSpriteCallback(gActiveBattler, gBattleMons[gActiveBattler].species);
             break;
@@ -11000,7 +11000,7 @@ static void Cmd_various(void)
                 if (gVolatileStructs[gActiveBattler].skyDropped)
                 {
                     gVolatileStructs[gActiveBattler].skyDropped = FALSE;
-                    gVolatileStructs[i].shouldClearSkyDrop = FALSE;
+                    gVolatileStructs[gActiveBattler].shouldClearSkyDrop = FALSE;
                     gStatuses3[gActiveBattler] &= ~STATUS3_ON_AIR;
                 }
                 else
@@ -13151,7 +13151,7 @@ static void Cmd_setmist(void)
     else
     {
         int side = GET_BATTLER_SIDE(gBattlerAttacker);
-        gSideTimers[side].started.mist;
+        gSideTimers[side].started.mist = TRUE;
         gSideTimers[side].mistTimer = SCREEN_DURATION;
         gSideTimers[side].mistBattlerId = gBattlerAttacker;
         gSideStatuses[side] |= SIDE_STATUS_MIST;
@@ -15540,7 +15540,7 @@ static void Cmd_pickup(void)
     s32 i;
     u16 species, heldItem;
     u16 ability;
-    u8 lvlDivBy10;
+    u8 lvlDivBy10 = 0;
 
     if (InBattlePike())
     {
@@ -15681,7 +15681,7 @@ static void Cmd_settypebasedhalvers(void) // water and mud sport
         if (!(gFieldStatuses & STATUS_FIELD_WATERSPORT))
         {
             gFieldStatuses |= STATUS_FIELD_WATERSPORT;
-            gFieldTimers.started.waterSport;
+            gFieldTimers.started.waterSport = TRUE;
             gFieldTimers.waterSportTimer = SPORT_DURATION;
             SetActiveMultistringChooser(B_MSG_WEAKEN_FIRE);
             worked = TRUE;

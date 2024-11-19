@@ -83,11 +83,11 @@ static u16 GetPrizeItemId(void);
 // const data
 #include "data/battle_frontier/trainer_hill.h"
 
-struct
+static const struct
 {
     u8 trainerClass;
     u8 musicId;
-} static const sTrainerClassesAndMusic[] =
+} sTrainerClassesAndMusic[] =
 {
     {TRAINER_CLASS_TEAM_AQUA, TRAINER_ENCOUNTER_MUSIC_AQUA},
     {TRAINER_CLASS_AQUA_ADMIN, TRAINER_ENCOUNTER_MUSIC_AQUA},
@@ -1047,6 +1047,7 @@ static u8 GetPrizeListId(bool8 maxTrainers)
 
 static u16 GetPrizeItemId(void)
 {
+    #ifndef FREE_TRAINER_HILL
     u8 i;
     const u16 *prizeList;
     s32 var = 0, prizeListSetId, id;
@@ -1063,7 +1064,6 @@ static u16 GetPrizeItemId(void)
         i = GetPrizeListId(TRUE);
     else
         i = GetPrizeListId(FALSE);
-    #ifndef FREE_TRAINER_HILL
     if (gSaveBlock1Ptr->trainerHill.tag == HILL_TAG_EXPERT)
         i = (i + 1) % NUM_TRAINER_HILL_PRIZE_LISTS;
 
@@ -1081,6 +1081,8 @@ static u16 GetPrizeItemId(void)
         id = 4;
     else
         id = 5;
-    #endif
     return prizeList[id];
+    #else
+    return 0;
+    #endif
 }

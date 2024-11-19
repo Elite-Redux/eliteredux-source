@@ -768,6 +768,9 @@ bool8 IsRouteEncountered(s8 loc, s8 locG) {
         case 4:
             mask = gSaveBlock2Ptr->encounteredroutes5;
             break;
+        // This shouldn't happen
+        default:
+            return TRUE;
     }
     return (mask >> bitIndex) & 1;
 }

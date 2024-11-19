@@ -2919,7 +2919,7 @@ static void SetPartyMonHeldItemSelectionActions(struct Pokemon *mons, u8 slotId)
 
     for (i = 0; i < EVOS_PER_MON; i++)
     {
-        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][j].method == EVO_PRIMAL_REVERSION) {
+        if (gEvolutionTable[species][i].method == EVO_MEGA_EVOLUTION || gEvolutionTable[species][i].method == EVO_PRIMAL_REVERSION) {
             canMegaEvolve = TRUE;
             megaEvoItem = gEvolutionTable[species][i].param;
             break;
@@ -3638,7 +3638,7 @@ static void CursorCb_GiveMegaStone(u8 taskId)
     u8 i;
     u16 species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES, NULL);
     u16 helditem = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_HELD_ITEM, NULL);
-    u16 megaEvoItem;
+    u16 megaEvoItem = 0;
 
     for (i = 0; i < EVOS_PER_MON; i++)
     {
@@ -3666,7 +3666,7 @@ static void CursorCb_GiveMegaStone2(u8 taskId)
     u8 i, j;
     u16 species = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_SPECIES, NULL);
     u16 helditem = GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_HELD_ITEM, NULL);
-    u16 megaEvoItem;
+    u16 megaEvoItem = 0;
 
     for (i = 0; i < EVOS_PER_MON; i++)
     {
@@ -5498,7 +5498,7 @@ static void ShowMoveSelectWindow(u8 slot)
 
 static void ShowLevelUpSelectWindow(u8 slot)
 {
-    u8 nextlevel, numlevels, i;
+    u8 nextlevel, numlevels, i = 0;
     u8 fontId = 1;
     u8 windowId = DisplaySelectionWindowNew(SELECTWINDOW_LEVEL_UP);
     u8 level = GetMonData(&gPlayerParty[slot], MON_DATA_LEVEL);

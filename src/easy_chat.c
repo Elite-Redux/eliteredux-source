@@ -391,11 +391,11 @@ enum {
 #define FRAME_TILE_BOTTOM_EDGE     0xA
 #define FRAME_TILE_BOTTOM_R_CORNER 0xB
 
-struct
+static struct
 {
     u16 funcId;
     MainCallback callback;
-} static const sQuizLadyEasyChatScreens[] = {
+} const sQuizLadyEasyChatScreens[] = {
     {
         .funcId = ECFUNC_QUIZ_ANSWER,
         .callback = DoQuizAnswerEasyChatScreen,

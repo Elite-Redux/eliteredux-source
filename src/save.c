@@ -609,7 +609,7 @@ static void UpdateSaveAddresses(void)
         gRamSaveSectionLocations[i].size = sSaveSectionOffsets[i].size;
     }
 
-    for (SECTOR_ID_PKMN_STORAGE_START; i <= SECTOR_ID_PKMN_STORAGE_END; i++)
+    for (i = SECTOR_ID_PKMN_STORAGE_START; i <= SECTOR_ID_PKMN_STORAGE_END; i++)
     {
         gRamSaveSectionLocations[i].data = (void*)(gPokemonStoragePtr) + sSaveSectionOffsets[i].toAdd;
         gRamSaveSectionLocations[i].size = sSaveSectionOffsets[i].size;

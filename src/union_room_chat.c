@@ -1928,7 +1928,7 @@ static u8 *GetLimitedMessageStartPtr(void)
     for (i = 0; i < numChars; i++)
     {
         if (*str == CHAR_EXTRA_SYMBOL)
-            *str++;
+            (*str)++;
 
         str++;
     }

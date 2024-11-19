@@ -916,6 +916,8 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
                                  gMonSpritesGfxPtr->sprites.ptr[0],
                                  targetSpecies,
                                  gContestResources->moveAnim->targetPersonality);
+
+        isShiny = isAlpha = FALSE;
     }
     else
     {

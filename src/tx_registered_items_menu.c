@@ -538,7 +538,7 @@ static void TxRegItemsMenu_RemoveRegisteredItemIndex(u8 index)
 void TxRegItemsMenu_RemoveRegisteredItem(u16 itemId)
 {
     u8 i;
-    for (i = i ; i < REGISTERED_ITEMS_MAX; i++)
+    for (i = 0; i < REGISTERED_ITEMS_MAX; i++)
         {
             if (gSaveBlock1Ptr->registeredItems[i].itemId == itemId)
             {
@@ -655,7 +655,7 @@ bool8 TxRegItemsMenu_AddRegisteredItem(u16 itemId)
 void TxRegItemsMenu_RegisteredItemsMenuNewGame(void)
 {
     u8 i;
-    for (i = i ; i < REGISTERED_ITEMS_MAX; i++)
+    for (i = 0; i < REGISTERED_ITEMS_MAX; i++)
     {
         gSaveBlock1Ptr->registeredItems[i].itemId = ITEM_NONE;
     }

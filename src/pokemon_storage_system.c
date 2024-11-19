@@ -900,10 +900,10 @@ const u8 gPCText_Evolve[] = _("Evolve");
 const u8 gText_MoveLevelUpDescription[] = _("Level Up to what level?");
 const u8 gText_MoveEvolveDescription[] = _("Evolve into what?");
 
-struct {
+static struct {
     const u8 *text;
     const u8 *desc;
-} static const sMainMenuTexts[OPTIONS_COUNT] =
+} const sMainMenuTexts[OPTIONS_COUNT] =
 {
     [OPTION_WITHDRAW]      = {gText_WithdrawPokemon, gText_WithdrawMonDescription},
     [OPTION_DEPOSIT]       = {gText_DepositPokemon,  gText_DepositMonDescription},
@@ -4420,7 +4420,7 @@ static void Task_EvolveMon(u8 taskId)
     u8 boxId = StorageGetCurrentBox();
     u16 targetSpecies = SPECIES_NONE;
     u8 numEvo = 0;
-    u8 targetNumEvo;
+    u8 targetNumEvo = 0;
 
     switch (sStorage->state)
     {
@@ -6807,12 +6807,12 @@ static void TrySetCursorFistAnim(void)
 // they may not release their last Pokémon that knows the specified move.
 // This is to stop the player from softlocking themselves by not having
 // a Pokémon that knows a required field move.
-struct
+static struct
 {
     s8 mapGroup;
     s8 mapNum;
     u16 move;
-} static const sRestrictedReleaseMoves[] =
+} const sRestrictedReleaseMoves[] =
 {
     {MAP_GROUPS_COUNT, 0, MOVE_SURF},
     {MAP_GROUPS_COUNT, 0, MOVE_DIVE},
@@ -7173,9 +7173,9 @@ static void ReshowDisplayMon(void)
 
 void SetArceusFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 species = GetMonData(boxMon, MON_DATA_SPECIES);
+    u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     u16 forme;
-    u8 abilityNum = GetMonData(boxMon, MON_DATA_ABILITY_NUM);
+    u8 abilityNum = GetBoxMonData(boxMon, MON_DATA_ABILITY_NUM);
     u16 ability = GetAbilityBySpecies(species, abilityNum);
 
     if (GET_BASE_SPECIES_ID(species) == SPECIES_ARCEUS && (ability == ABILITY_MULTITYPE  || BoxMonHasInnate(boxMon, ABILITY_MULTITYPE, FALSE)))
@@ -7194,7 +7194,7 @@ void SetArceusFormPSS(struct BoxPokemon *boxMon)
 
 u16 GetArceusFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 item = GetMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
+    u16 item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
 
     switch (item)
     {
@@ -7239,7 +7239,7 @@ u16 GetArceusFormPSS(struct BoxPokemon *boxMon)
 
 u16 GetSilvallyFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 item = GetMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
+    u16 item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
 
     switch (item)
     {
@@ -7284,7 +7284,7 @@ u16 GetSilvallyFormPSS(struct BoxPokemon *boxMon)
 
 u16 GetGiratinaFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 item = GetMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
+    u16 item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
 
     switch (item)
     {
@@ -8041,11 +8041,11 @@ static u8 HandleInput_OnButtons(void)
 
 static u8 HandleInput(void)
 {
-    struct
+    static const struct
     {
         u8 (*func)(void);
         s8 area;
-    } static const inputFuncs[] =
+    } inputFuncs[] =
     {
         {HandleInput_InBox,     CURSOR_AREA_IN_BOX},
         {HandleInput_InParty,   CURSOR_AREA_IN_PARTY},
@@ -10027,7 +10027,7 @@ static void SetBoxWallpaper(u8 boxId, u8 wallpaperId)
 // For moving to the next Pokémon while viewing the summary screen
 s16 AdvanceStorageMonIndex(struct BoxPokemon *boxMons, u8 currIndex, u8 maxIndex, u8 mode)
 {
-    s16 i, j;
+    s16 i, j = 0;
     s16 direction = -1;
 
     if (mode == 0 || mode == 1)
@@ -10302,11 +10302,11 @@ static void TilemapUtil_UpdateAll(void)
     }
 }
 
-struct
+static const struct
 {
     u16 width;
     u16 height;
-} static const sTilemapDimensions[][4] =
+} sTilemapDimensions[][4] =
 {
     {
         { 256,  256},
