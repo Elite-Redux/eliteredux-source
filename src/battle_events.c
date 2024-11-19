@@ -451,7 +451,7 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent) {
     case BATTLE_EVENT_PERMA_NIGHTMARE:
         if (gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_NIGHTMARE)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-        if (!gBattleMons[B_SIDE_PLAYER].status1 & STATUS1_SLEEP)
+        if (!(gBattleMons[B_SIDE_PLAYER].status1 & STATUS1_SLEEP))
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_NIGHTMARE;
         RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaNightmare);

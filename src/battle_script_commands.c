@@ -10782,18 +10782,14 @@ static void Cmd_various(void)
         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleMons[gActiveBattler].moves[gVolatileStructs[gActiveBattler].disabledMove])
         break;
     case VARIOUS_GOTO_IF_STAT_UP:
-        {
-        u8 i;
         ptr = READ_PTR_INC;
-        if (!IsUnaware(gBattlerAttacker)
-            && !gBattleMons[gActiveBattler].status1 & STATUS1_BLEED)
+        REQUIRE_NOT(IsUnaware(gBattlerAttacker))
+        REQUIRE_NOT(gBattleMons[gActiveBattler].status1 & STATUS1_BLEED)
+        for (i = STAT_ATK; i < NUM_BATTLE_STATS; i++)
         {
-            for (i = STAT_ATK; i < NUM_BATTLE_STATS; i++)
-            {
-                if (gBattleMons[gActiveBattler].statStages[i] > DEFAULT_STAT_STAGE) break;
-            }
-        }
-        if (i && i < NUM_BATTLE_STATS) gBattlescriptCurrInstr = ptr;
+            FILTER(gBattleMons[gActiveBattler].statStages[i] > DEFAULT_STAT_STAGE)
+            gBattlescriptCurrInstr = ptr;
+            break;
         }
         return;
     case VARIOUS_TRY_UPPER_HAND:
