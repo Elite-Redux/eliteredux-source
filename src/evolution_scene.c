@@ -920,6 +920,7 @@ static void Task_EvolutionScene(u8 taskId)
                 gTasks[taskId].tLearnMoveNoState = MVSTATE_ASK_CANCEL;
                 gTasks[taskId].tLearnMoveState++;
             }
+            FALLTHROUGH
         case MVSTATE_PRINT_YES_NO:
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
             {
@@ -1313,6 +1314,7 @@ static void Task_TradeEvolutionScene(u8 taskId)
                 gTasks[taskId].tLearnMoveNoState = T_MVSTATE_ASK_CANCEL;
                 gTasks[taskId].tLearnMoveState++;
             }
+            FALLTHROUGH
         case T_MVSTATE_PRINT_YES_NO:
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
             {

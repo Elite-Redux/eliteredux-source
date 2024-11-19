@@ -596,7 +596,7 @@ static void CB2_CreateTradeMenu(void)
         SetTradePartyLiveStatuses(TRADE_PARTNER);
         PrintPartyNicknamesForTradeMenu(TRADE_PARTNER);
         gMain.state++;
-        // fallthrough
+        FALLTHROUGH
     case 16:
         LoadTradeBgGfx(0);
         gMain.state++;
@@ -3125,7 +3125,7 @@ static void TrySendTradeFinishData(void)
             SendBlock(bitmask_all_link_players_but_self(), sTradeData->linkData, sizeof(sTradeData->linkData));
             sTradeData->sendTradeFinishState++;
         }
-        // fallthrough
+        FALLTHROUGH
     case 2:
         sTradeData->sendTradeFinishState = 0;
         break;

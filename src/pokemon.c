@@ -6780,7 +6780,7 @@ u8 GetItemEffectParamOffset(u16 itemId, u8 effectByte, u8 effectBit)
                     case 2: // ITEM4_HEAL_HP
                         if (effectFlags & (ITEM4_REVIVE >> 2))
                             effectFlags &= ~(ITEM4_REVIVE >> 2);
-                        // fallthrough
+                        FALLTHROUGH
                     case 0: // ITEM4_EV_HP
                         if (i == effectByte && (effectFlags & effectBit))
                             return offset;

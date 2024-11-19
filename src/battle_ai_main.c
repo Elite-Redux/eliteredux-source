@@ -1017,7 +1017,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_STUFF_CHEEKS:
             if (ItemId_GetPocket(gBattleMons[battlerAtk].item) != POCKET_BERRIES)
                 return 0;   // cannot even select
-            //fallthrough
+        FALLTHROUGH
         case EFFECT_DEFENSE_UP:
         case EFFECT_DEFENSE_UP_2:
         case EFFECT_DEFENSE_UP_3:
@@ -1373,7 +1373,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_TOXIC_THREAD:
             if (!ShouldLowerStat(battlerDef, STAT_SPEED))
                 score--;    // may still want to just poison
-            //fallthrough
+        FALLTHROUGH
         case EFFECT_POISON:
         case EFFECT_TOXIC:
             if (!AI_CanPoison(battlerAtk, battlerDef, move, AI_DATA->partnerMove))
@@ -1826,7 +1826,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_REST:
             if (!AI_CanSleep(battlerAtk))
                 score -= 10;
-            //fallthrough
+        FALLTHROUGH
         case EFFECT_RESTORE_HP:
         case EFFECT_SOFTBOILED:
         case EFFECT_ROOST:
@@ -2450,7 +2450,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     score -= 5;
                 break;
             }
-            // fallthrough
+        FALLTHROUGH
         case EFFECT_HEAL_PULSE: // and floral healing
             if (!IsTargetingPartner(battlerAtk, battlerDef)) // Don't heal enemies
             {
@@ -3462,7 +3462,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         if (!(gBattleMons[battlerDef].status1 & STATUS1_SLEEP))
             break;
         score++;    // if target is asleep, dream eater is a pretty good move even without draining
-        // fallthrough
+        FALLTHROUGH
     case EFFECT_ACUPRESSURE:
         break;
     case EFFECT_ATTACK_ACCURACY_UP: // hone claws
@@ -3473,7 +3473,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             if ((AI_WeatherHasEffect() && gBattleWeather & WEATHER_SUN_ANY && AI_DATA->holdEffects[battlerAtk] != HOLD_EFFECT_UTILITY_UMBRELLA)
               || BattlerHasAbility(battlerAtk, ABILITY_CHLOROPLAST, TRUE))
               score++;
-              // fallthrough
+        FALLTHROUGH
     case EFFECT_ATTACK_SPATK_UP:    // work up
         if (GetHealthPercentage(battlerAtk) <= 40 || BattlerHasAbility(battlerAtk, ABILITY_CONTRARY, TRUE))
             break;
@@ -3488,7 +3488,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
           || PartnerHasSameMoveEffectWithoutTarget(BATTLE_PARTNER(battlerAtk), move, AI_DATA->partnerMove))
             score -= 3;
             break;
-        // fallthrough
+        FALLTHROUGH
     case EFFECT_ROAR:
     case EFFECT_CLEAR_SMOG:
         if (isDoubleBattle)
@@ -3616,14 +3616,13 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_CONFUSE_HIT:
         if (BattlerHasAbility(battlerAtk, ABILITY_SERENE_GRACE, TRUE))
             score++;
-        //fallthrough
+        FALLTHROUGH
     case EFFECT_CONFUSE:
         IncreaseConfusionScore(battlerAtk, battlerDef, move, &score);
         break;
     case EFFECT_PARALYZE:
         IncreaseParalyzeScore(battlerAtk, battlerDef, move, &score);
         break;
-        // fall through
     case EFFECT_ATTACK_DOWN_HIT:
     case EFFECT_DEFENSE_DOWN_HIT:
     case EFFECT_SPECIAL_ATTACK_DOWN_HIT:
@@ -3691,7 +3690,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_SWITCH_ARGUMENT:
         if (!(gBattleTypeFlags & BATTLE_TYPE_TRAINER) || GetBattlerSide(battlerAtk) != B_SIDE_PLAYER)
             break;
-        //fallthrough
+        FALLTHROUGH
     case EFFECT_HIT_ESCAPE:
     case EFFECT_PARTING_SHOT:
         if (!IsDoubleBattle())
@@ -3918,7 +3917,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score += 3;
                 break;
             }
-            //fallthrough
+        FALLTHROUGH
         default: // protect
             ProtectChecks(battlerAtk, battlerDef, move, predictedMove, &score);
             break;
@@ -4167,7 +4166,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         break;
     case EFFECT_RAPID_SPIN:
         IncreaseStatUpScore(battlerAtk, battlerDef, STAT_SPEED, &score);    // Gen 8 increases speed
-        //fallthrough
+        FALLTHROUGH
     case EFFECT_DEFOG:
         if (gSideStatuses[GetBattlerSide(battlerAtk)] & SIDE_STATUS_HAZARDS_ANY && CountUsablePartyMons(battlerAtk) != 0)
         {
@@ -4484,7 +4483,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_GEOMANCY:
         if (AI_DATA->holdEffects[battlerAtk] == HOLD_EFFECT_POWER_HERB && !CanTargetFaintAi(battlerDef, battlerAtk))
             score += 10;
-        //fallthrough
+        FALLTHROUGH
     case EFFECT_QUIVER_DANCE:
         IncreaseStatUpScore(battlerAtk, battlerDef, STAT_SPEED, &score);
         IncreaseStatUpScore(battlerAtk, battlerDef, STAT_SPATK, &score);
@@ -4594,7 +4593,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_MISTY_TERRAIN:
         if (gStatuses3[battlerAtk] & STATUS3_YAWN && IsBattlerGrounded(battlerAtk))
             score += 10;
-        //fallthrough
+        FALLTHROUGH
     case EFFECT_GRASSY_TERRAIN:    
     case EFFECT_PSYCHIC_TERRAIN:
         score += 2;

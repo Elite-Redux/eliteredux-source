@@ -450,6 +450,7 @@ void PlayCryInternal(u16 species, s8 pan, s8 volume, u8 priority, u8 mode)
     case 12:
         length = 20;
         release = 225;
+        FALLTHROUGH
     case 11:
         pitch = 15000;
         break;

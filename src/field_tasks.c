@@ -470,7 +470,7 @@ static void FortreeBridgePerStepCallback(u8 taskId)
 
             data[6] = 16;
             data[1] = 2;
-            // fallthrough
+            FALLTHROUGH
         case 2:
             data[6]--;
             x2 = data[4];

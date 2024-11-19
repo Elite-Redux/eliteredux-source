@@ -321,6 +321,7 @@ static void SoundTask_PlayCryWithEcho_Step(u8 taskId)
     case 5:
         if (IsCryPlaying())
             break;
+        FALLTHROUGH
     case 0:
         StopCryAndClearCrySongs();
         gTasks[taskId].data[9]++;

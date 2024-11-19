@@ -341,6 +341,7 @@ static bool8 CheckConditions(int selection)
         case MENUITEM_MAIN_CANCEL:          return TRUE;
         case MENUITEM_MAIN_COUNT:           return TRUE;
         }
+        break;
     case MENU_CUSTOM:
         switch (selection)
         {
@@ -366,6 +367,7 @@ static bool8 CheckConditions(int selection)
         case MENUITEM_CUSTOM_CANCEL:              return TRUE;
         case MENUITEM_CUSTOM_COUNT:               return TRUE;
         }
+        break;
     }
     return FALSE;
 }

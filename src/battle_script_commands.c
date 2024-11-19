@@ -4407,7 +4407,7 @@ static void Cmd_getexp(void)
             gBattleStruct->expGetterMonId = 0;
             gBattleStruct->sentInPokes = sentIn;
         }
-        // fall through
+        FALLTHROUGH
     case 2: // set exp value to the poke in expgetter_id and print message
         if (gBattleControllerExecFlags == 0)
         {
@@ -5764,7 +5764,7 @@ static void Cmd_moveend(void)
                     effect = TRUE;
                     break;
                 }
-                // Intentional fallthrough
+                FALLTHROUGH
             case MOVE_EFFECT_KNOCK_OFF:
                 effect = TryKnockOffBattleScript(gBattlerTarget);
                 break;
@@ -6966,7 +6966,7 @@ static void Cmd_switchhandleorder(void)
             RecordedBattle_SetBattlerAction(gActiveBattler, gBattleResources->bufferB[gActiveBattler][1]);
             gBattleStruct->field_93 |= gBitTable[gActiveBattler];
         }
-        // fall through
+        FALLTHROUGH
     case 3:
         gBattleCommunication[0] = gBattleResources->bufferB[gActiveBattler][1];
         *(gBattleStruct->monToSwitchIntoId + gActiveBattler) = gBattleResources->bufferB[gActiveBattler][1];
@@ -8952,6 +8952,7 @@ static void Cmd_various(void)
             {
             case ABILITY_AS_ONE_ICE_RIDER:
                 ability = ABILITY_CHILLING_NEIGH;
+                FALLTHROUGH
             case ABILITY_CHILLING_NEIGH:
             case ABILITY_MOXIE:
                 stat = STAT_ATK;
@@ -8963,6 +8964,7 @@ static void Cmd_various(void)
 
             case ABILITY_AS_ONE_SHADOW_RIDER:
                 ability = ABILITY_GRIM_NEIGH;
+                FALLTHROUGH
             case ABILITY_HUBRIS:
             case ABILITY_GRIM_NEIGH:
                 stat = STAT_SPATK;
@@ -9398,6 +9400,7 @@ static void Cmd_various(void)
             BtlController_EmitSetMonData(0, REQUEST_SPECIES_BATTLE, gBitTable[gBattlerPartyIndexes[gActiveBattler]], 2, &gBattleMons[gActiveBattler].species);
             MarkBattlerForControllerExec(gActiveBattler);
             }
+            break;
         // Change stats.
         case 1:
             RecalcBattlerStats(gActiveBattler, mon);
@@ -9405,12 +9408,14 @@ static void Cmd_various(void)
                 gBattleStruct->mega.alreadyEvolved[GetBattlerPosition(gActiveBattler)] = TRUE;
                 gBattleStruct->mega.evolvedPartyIds[GetBattlerSide(gActiveBattler)] |= gBitTable[gBattlerPartyIndexes[gActiveBattler]];
             }
+            break;
         // Update healthbox and elevation.
         case 2:
             UpdateHealthboxAttribute(gHealthboxSpriteIds[gActiveBattler], mon, HEALTHBOX_ALL);
             //CreateMegaIndicatorSprite(gActiveBattler, 0);
             if (GetBattlerSide(gActiveBattler) == B_SIDE_OPPONENT)
                 SetBattlerShadowSpriteCallback(gActiveBattler, gBattleMons[gActiveBattler].species);
+            break;
         }
         return;
     case VARIOUS_HANDLE_PRIMAL_REVERSION:
@@ -11043,6 +11048,7 @@ static void Cmd_various(void)
                 gFieldTimers.trickRoomTimer = gFieldTimers.wonderRoomTimer = gFieldTimers.inverseRoomTimer = 0;
             else
                 gBattlescriptCurrInstr = ptr;
+            break;
 
         case 1:
             if (gFieldTimers.magicRoomTimer)
@@ -11052,7 +11058,7 @@ static void Cmd_various(void)
                 gFieldTimers.magicRoomTimer = MAGIC_ROOM_DURATION;
                 gFieldTimers.started.magicRoom = TRUE;
             }
-            return;
+            break;
         }
         return;
         }
@@ -11235,6 +11241,7 @@ static void Cmd_various(void)
             gSideTimers[GetBattlerSide(gActiveBattler)].quickGuardTimer = 3;
             gSideTimers[GetBattlerSide(gActiveBattler)].started.quickGuard = TRUE;
         }
+        break;
     case VARIOUS_RUDE_AWAKENING:
         ptr = READ_PTR_INC;
         REQUIRE(gBattleMons[gActiveBattler].status1 & STATUS1_SLEEP)
@@ -13307,6 +13314,7 @@ static void Cmd_metronome(void)
             case EFFECT_FOLLOW_ME:
             case EFFECT_TRICK:
                 allowed = FALSE;
+                break;
         
             default:
                 allowed = TRUE;
@@ -15964,12 +15972,14 @@ static void Cmd_handleballthrow(void)
         {
         case ITEM_ULTRA_BALL:
             ballMultiplier = 20;
+            break;
         case ITEM_GREAT_BALL:
         case ITEM_SAFARI_BALL:
         #ifdef ITEM_EXPANSION
         case ITEM_SPORT_BALL:
         #endif
             ballMultiplier = 15;
+            break;
         case ITEM_NET_BALL:
             if (IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_WATER) || IS_BATTLER_OF_TYPE(gBattlerTarget, TYPE_BUG))
                 #if B_NET_BALL_MODIFIER >= GEN_7

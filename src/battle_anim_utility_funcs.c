@@ -67,13 +67,13 @@ void AnimTask_BlendBattleAnimPalExclude(u8 taskId)
     {
     case 2:
         selectedPalettes = 0;
-        // fall through
+        FALLTHROUGH
     case ANIM_ATTACKER:
         animBattlers[0] = gBattleAnimAttacker;
         break;
     case 3:
         selectedPalettes = 0;
-        // fall through
+        FALLTHROUGH
     case ANIM_TARGET:
         animBattlers[0] = gBattleAnimTarget;
         break;

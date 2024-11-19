@@ -1039,6 +1039,7 @@ static void UpdateMonAnim(void)
             InitSpriteAffineAnim(pokeblockFeed->monSpritePtr);
         }
         pokeblockFeed->animRunState = 50;
+        FALLTHROUGH
     case 50:
         if (sNatureToMonPokeblockAnim[pokeblockFeed->nature][1] != AFFINE_NONE)
         {

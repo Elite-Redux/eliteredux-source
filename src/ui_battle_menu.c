@@ -759,6 +759,7 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 case STATUS_INFO_FUTURE_SIGHT:
                     if (gWishFutureKnock.futureSightCounter[j] != 0)
                         isExtraInfoShown = TRUE;
+                break;
                 case STATUS_INFO_UPROAR:
                     if (gBattleMons[j].status2 & STATUS2_UPROAR)
                         isExtraInfoShown = TRUE;

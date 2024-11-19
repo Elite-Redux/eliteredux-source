@@ -2257,7 +2257,7 @@ u8 DoFieldEndTurnEffects(void)
 
             gBattleStruct->turnCountersTracker++;
             gBattleStruct->turnSideTracker = 0;
-            // fall through
+            FALLTHROUGH
         case ENDTURN_REFLECT:
             while (gBattleStruct->turnSideTracker < 2)
             {
@@ -3669,9 +3669,11 @@ u8 DoBattlerEndTurnEffects(void)
         case ENDTURN_ELECTRIFY:
             gStatuses4[gActiveBattler] &= ~(STATUS4_ELECTRIFIED);
             gBattleStruct->turnEffectsTracker++;
+            break;
         case ENDTURN_POWDER:
             gBattleMons[gActiveBattler].status2 &= ~(STATUS2_POWDER);
             gBattleStruct->turnEffectsTracker++;
+            break;
         case ENDTURN_THROAT_CHOP:
             if (gVolatileStructs[gActiveBattler].throatChopTimer && --gVolatileStructs[gActiveBattler].throatChopTimer == 0)
             {
@@ -3796,7 +3798,7 @@ bool8 HandleWishPerishSongOnTurnEnd(void)
         }
         gBattleStruct->wishPerishSongState = 1;
         gBattleStruct->wishPerishSongBattlerId = 0;
-        // fall through
+        FALLTHROUGH
     case 1:
         while (gBattleStruct->wishPerishSongBattlerId < gBattlersCount)
         {
@@ -3831,7 +3833,7 @@ bool8 HandleWishPerishSongOnTurnEnd(void)
             *state = 2;
             gBattleStruct->wishPerishSongBattlerId = 0;
         }
-        // fall through
+        FALLTHROUGH
     case 2:
         if ((gBattleTypeFlags & BATTLE_TYPE_ARENA)
          && gBattleStruct->arenaTurnCounter == 2
@@ -3874,7 +3876,7 @@ bool8 HandleFaintedMonActions(void)
                 if (gAbsentBattlerFlags & 1 << i && !HasNoMonsToSwitch(i, PARTY_SIZE, PARTY_SIZE))
                     gAbsentBattlerFlags &= ~(1 << i);
             }
-            // fall through
+            FALLTHROUGH
         case 1:
             do
             {
@@ -3916,7 +3918,7 @@ bool8 HandleFaintedMonActions(void)
             }
             gBattleStruct->faintedActionsBattlerId = 0;
             gBattleStruct->faintedActionsState++;
-            // fall through
+            FALLTHROUGH
         case 4:
             do
             {
@@ -4452,6 +4454,7 @@ u8 AtkCanceller_UnableToUseMove2(void)
         {
         case CANCELLER_END:
             gBattleStruct->atkCancellerTracker++;
+            break;
         case CANCELLER_PSYCHIC_TERRAIN:
             if (IsBattlerTerrainAffected(gBattlerTarget, STATUS_FIELD_PSYCHIC_TERRAIN)
                 && !gProcessingExtraAttacks
@@ -7011,6 +7014,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 break;
             case HOLD_EFFECT_HONEY:
                 REQUIRE(CanUseHoney(battlerId))
+                FALLTHROUGH
             case HOLD_EFFECT_RESTORE_HP:
                 if (B_BERRIES_INSTANT >= GEN_4)
                     effect = ItemHealHp(battlerId, gLastUsedItem, TRUE, FALSE);
@@ -7403,6 +7407,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                 break;
             case HOLD_EFFECT_HONEY:
                 REQUIRE(CanUseHoney(battlerId))
+                FALLTHROUGH
             case HOLD_EFFECT_RESTORE_HP:
                 if (B_HP_BERRIES >= GEN_4)
                     effect = ItemHealHp(battlerId, gLastUsedItem, FALSE, FALSE);
@@ -12321,6 +12326,7 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
             
         case ABILITY_ELEMENTAL_VORTEX:
             if (moveType == TYPE_WATER) goto ABSORB_WATER_ABSORB;
+            FALLTHROUGH
         case ABILITY_FLASH_FIRE:
             REQUIRE(moveType == TYPE_FIRE)
             return ABSORB_RESULT_FLASH_FIRE;
@@ -14530,6 +14536,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
     
     case ABILITY_SCHOOLING:
         REQUIRE(gBattleMons[battler].level >= 20)
+        FALLTHROUGH
     case ABILITY_SHIELDS_DOWN:
     case ABILITY_FORECAST:
     case ABILITY_FLOWER_GIFT:
@@ -15529,6 +15536,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
     {
     case ABILITY_SCHOOLING:
         REQUIRE(gBattleMons[battler].level >= 20)
+        FALLTHROUGH
     case ABILITY_FLOWER_GIFT:
     case ABILITY_FORECAST:
     case ABILITY_SHIELDS_DOWN:
@@ -15978,6 +15986,7 @@ int HandleFollowupAttackAbilityAs(int ability, int battler, int target, int move
     {
     case ABILITY_BLADE_DANCE:
         followupMove = MOVE_LEAF_BLADE;
+        FALLTHROUGH
     case ABILITY_TWO_STEP:
         REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
         REQUIRE(IsDance(gBattlerAttacker, move))

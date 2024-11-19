@@ -772,16 +772,21 @@ int ScoreSwitchInFormShift(int ability, int battlerAtk, int battlerDef, int move
     
     case ABILITY_SCHOOLING:
         REQUIRE(gBattleMons[battlerAtk].level >= 20)
+        FALLTHROUGH
     case ABILITY_SHIELDS_DOWN:
         return AI_SCORE_FORM_CHANGE(battlerAtk, GetHpFormChangeSpecies(battlerAtk, aiData));
         
     case ABILITY_FLOWER_GIFT:
-        if (IsWeatherActive(WEATHER_SUN_ANY))
+        REQUIRE(IsWeatherActive(WEATHER_SUN_ANY))
         return AI_SCORE_FORM_CHANGE(battlerAtk, SPECIES_CHERRIM_SUNSHINE);
     
     case ABILITY_FORECAST:
+        // TODO
+        return 0;
 
     case ABILITY_ZEN_MODE:
+        // TODO
+        return 0;
     
     case ABILITY_APE_SHIFT:
         {

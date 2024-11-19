@@ -2412,10 +2412,12 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
             isPrimal = TRUE;
             if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_OmegaSymbolBefore);
+        break;
         case SPECIES_KYOGRE_PRIMAL:
             isPrimal = TRUE;
             if (DrawMegaSymbolBeforeName)
                 StringCopy(gDisplayedStringBattle, gText_AlphaSymbolBefore);
+        break;
         case SPECIES_CASCOON_PRIMAL:
             isPrimal = TRUE;
             if (DrawMegaSymbolBeforeName)

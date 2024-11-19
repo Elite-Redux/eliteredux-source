@@ -1090,6 +1090,7 @@ static void CB2_HandleStartBattle(void)
     case 13:
         gBattleCommunication[MULTIUSE_STATE]++;
         gBattleCommunication[1] = 1;
+        FALLTHROUGH
     case 6:
     case 10:
     case 14:
@@ -1126,7 +1127,7 @@ static void CB2_HandleStartMultiPartnerBattle(void)
         }
         if (gWirelessCommType)
             LoadWirelessStatusIndicatorSpriteGfx();
-        // fall through
+        FALLTHROUGH
     case 1:
         if (gBattleTypeFlags & BATTLE_TYPE_LINK)
         {
@@ -1593,7 +1594,7 @@ static void CB2_HandleStartMultiBattle(void)
         }
         else
             break;
-        // fall through
+        FALLTHROUGH
     case 3:
         if (IsLinkTaskFinished())
         {
@@ -1856,7 +1857,7 @@ static void sub_8038538(struct Sprite *sprite)
         sprite->data[2] = 0x281;
         sprite->data[3] = 0;
         sprite->data[4] = 1;
-        // fall through
+        FALLTHROUGH
     case 1:
         sprite->data[4]--;
         if (sprite->data[4] == 0)
@@ -3811,6 +3812,7 @@ static void DoBattleIntro(void)
         break;
     case 12: // nothing
         (*state)++;
+        FALLTHROUGH
     case 13: // second opponent's mon send out
         if (gBattleTypeFlags & (BATTLE_TYPE_MULTI | BATTLE_TYPE_TWO_OPPONENTS) && !BATTLE_TWO_VS_ONE_OPPONENT)
         {

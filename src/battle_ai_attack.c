@@ -345,7 +345,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_RECOIL_25)
         AI_CALC_DAMAGE;
-        score += AI_SCORE_RECOIL(battlerAtk, 25, FALSE);
+        return score + AI_SCORE_RECOIL(battlerAtk, 25, FALSE);
 
     CASE_AND_LABEL(EFFECT_CONFUSE)
         return AI_SCORE_CONFUSION(battlerDef);
@@ -2285,6 +2285,7 @@ int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase 
             if (requiredHits == 2) requiredHits++;
             else if (requiredHits > 3) return AI_SCORE_BREAK_SUBSTITUTE;
         }
+        FALLTHROUGH
     case MULTIHIT_BEAT_UP:
         // TODO: Beat up
     case MULTIHIT_FIVE:

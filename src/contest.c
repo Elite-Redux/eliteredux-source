@@ -1241,7 +1241,7 @@ static void Task_TryStartLinkContest(u8 taskId)
             case 0:
                 ContestPrintLinkStandby();
                 gTasks[taskId].data[0]++;
-                // fallthrough
+                FALLTHROUGH
             case 1:
                 if (IsLinkTaskFinished())
                 {

@@ -273,6 +273,7 @@ static void SpriteCB_StaticCountdown(struct Sprite *sprite)
     {
     case ANIM_THREE:
         sprite->invisible = FALSE;
+        FALLTHROUGH
     case ANIM_TWO:
     case ANIM_ONE:
         // Set sprite to a number
@@ -449,7 +450,7 @@ static bool32 RunMinigameCountdownDigitsAnim(u8 spriteId)
     case 0:
         sub_8007E18(sprite, 0x800, 0x1A);
         sprite->sState++;
-        // fallthrough
+        FALLTHROUGH
     case 1:
         if (sprite->sTimer == 0)
             PlaySE(SE_BALL_BOUNCE_2);
@@ -557,6 +558,7 @@ static void SpriteCB_Start(struct Sprite *sprite)
         sYSpeed = 64;
         sY = sprite->y2 << 4;
         sState++;
+        FALLTHROUGH
     case 1:
         sY += sYSpeed;
         sYSpeed++;

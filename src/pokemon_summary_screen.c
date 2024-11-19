@@ -1416,6 +1416,7 @@ static bool8 LoadGraphics(void)
     case 20:
         CreateExpBarSprites(TAG_EXP_BAR, TAG_HEALTH_BAR);
         gMain.state++;
+        FALLTHROUGH
     case 21:
         CreateSetStatusSprite();
         gMain.state++;
@@ -6046,7 +6047,7 @@ static void MoveEffectIntoStringVar1(u16 move) {
 		break;
 		case EFFECT_ALWAYS_CRIT:
 			StringCopy(gStringVar1, gText_Effect_Always_Crit);
-		//Multi Hit Moves
+        break;
 		case EFFECT_MULTI_HIT:
 			StringCopy(gStringVar1, gText_Effect_Multi_Hit);
 		break;

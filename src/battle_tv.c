@@ -861,6 +861,7 @@ void BattleTv_SetDataBasedOnString(u16 stringId)
         break;
     case STRINGID_ATTACKERFAINTED:
         AddPointsOnFainting(FALSE);
+        FALLTHROUGH
     case STRINGID_RETURNMON:
         if (tvPtr->pos[atkSide][atkFlank].waterSportMonId != 0)
         {
@@ -1192,7 +1193,7 @@ static void AddMovePoints(u8 caseId, u16 arg1, u8 arg2, u8 arg3)
         break;
     case PTS_FAINT_SET_UP:
         tvPtr->side[arg2].faintCause = FNT_NONE;
-        // fallthrough
+        FALLTHROUGH
     case PTS_SET_UP:
         movePoints->points[arg2][0 * 4 + arg3] += sPointsArray[caseId][arg1];
         break;

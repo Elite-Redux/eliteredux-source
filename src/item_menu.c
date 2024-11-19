@@ -2490,6 +2490,7 @@ static void Task_WallyTutorialBagMenu(u8 taskId)
             DestroyListMenuTask(tListTaskId, 0, 0);
             RestoreBagAfterWallyTutorial();
             Task_FadeAndCloseBagMenu(taskId);
+            FALLTHROUGH
         default:
             tTimer++;
             break;

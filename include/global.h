@@ -12,7 +12,7 @@
 #include "constants/berry.h"
 #include "constants/expansion_branches.h"
 
-// #define RECOMPILE_ME
+#define RECOMPILE_ME
 
 // Prevent cross-jump optimization.
 #define BLOCK_CROSS_JUMP asm("");
@@ -49,6 +49,12 @@
 
 #define FILTER(effect) if (!(effect)) continue;
 #define FILTER_NOT(effect) if (effect) continue;
+
+#ifndef __GNUC__
+#define FALLTHROUGH
+#else
+#define FALLTHROUGH __attribute__ ((fallthrough));
+#endif
 
 // GameFreak used a macro called "NELEMS", as evidenced by
 // AgbAssert calls.

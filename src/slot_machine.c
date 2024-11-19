@@ -4237,7 +4237,7 @@ static void SpriteCB_DigitalDisplay_ReelTimeNumber(struct Sprite *sprite)
     case 0:
         StartSpriteAnim(sprite, sSlotMachine->reelTimeSpinsLeft - 1);
         sprite->sState++;
-        // fallthrough
+        FALLTHROUGH
     case 1:
         if (++sprite->sCounter >= 4)
         {
@@ -4275,7 +4275,7 @@ static void SpriteCB_DigitalDisplay_PokeballRocking(struct Sprite *sprite)
     case 0:
         sprite->animPaused = TRUE;
         sprite->sState++;
-        // fallthrough
+        FALLTHROUGH
     case 1:
         sprite->y += 8;
         if (sprite->y >= 0x70)
@@ -4400,7 +4400,7 @@ static void SpriteCB_DigitalDisplay_RegBonus(struct Sprite *sprite)
         sprite->y2 = letterYOffset[sprite->sSpriteId];
         sprite->sCounter = letterDelay[sprite->sSpriteId];
         sprite->sState++;
-        // fallthrough
+        FALLTHROUGH
     case 1:
         if (sprite->sCounter-- == 0)
             sprite->sState++;
@@ -4449,7 +4449,7 @@ static void SpriteCB_DigitalDisplay_AButtonStart(struct Sprite *sprite)
             sSlotMachine->win0v = WIN_RANGE(32, 136);
             sprite->invisible = TRUE;
             sprite->sState++;
-            // fallthrough
+            FALLTHROUGH
         case 1:
             sprite->sCounter += 2;
             sprite->data[2] = sprite->sCounter + 176;
@@ -4474,7 +4474,7 @@ static void SpriteCB_DigitalDisplay_AButtonStart(struct Sprite *sprite)
             sSlotMachine->winIn = WININ_WIN0_BG_ALL | WININ_WIN0_CLR;
             sprite->sState++;
             sprite->sCounter = 0;
-            // fallthrough
+            FALLTHROUGH
         case 3:
             sprite->sCounter += 2;
             sprite->data[2] = sprite->sCounter + 192;

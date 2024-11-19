@@ -953,6 +953,7 @@ u8 GetMoveDamageResult(u16 move)
                 case 2:
                     if (Random() & 1)
                         break;
+                    FALLTHROUGH
                 case 1:
                     bestId = i;
                     break;

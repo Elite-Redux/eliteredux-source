@@ -974,7 +974,7 @@ static void BufferEnhancedStatText(u8 *dest, u8 statId, s16 enhancement)
     {
     case 1 ... 32767: // if > 0
         enhancement = 0;
-        // fallthrough
+        FALLTHROUGH
     case -32768 ... -1: // if < 0
         if (enhancement)
             dest[(u16)enhancement] += 0; // something you can't imagine

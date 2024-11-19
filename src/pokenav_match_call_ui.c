@@ -507,7 +507,7 @@ u32 LoopedTask_sub_81C8870(s32 state)
     {
     case 0:
         ToggleMatchCallArrows(&structPtr->list, 1);
-        // fall-through
+        FALLTHROUGH
     case 1:
         if (structPtr->unk89C != structPtr->unk888.selectedIndexOffset)
             sub_81C8B70(&structPtr->list.listWindow, structPtr->unk89C, 1);

@@ -1281,11 +1281,7 @@ static s32 HideGameDisplay(void)
     case 1:
         if (!IsLinkTaskFinished())
             return 0;
-        // fall through
-        // This will call BeginNormalPaletteFade() twice.
-#ifdef BUGFIX
         break;
-#endif
     case 2:
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
         UpdatePaletteFade();
@@ -2524,7 +2520,7 @@ static u32 Cmd_Countdown(struct BerryCrushGame *game,  u8 *args)
     case 2:
         if (IsMinigameCountdownRunning())
             return 0;
-        // fallthrough
+        FALLTHROUGH
     case 0:
         Rfu_SetLinkStandbyCallback();
         break;

@@ -235,6 +235,7 @@ void CB2_InitOptionMenu(void)
         PutWindowTilemap(1);
         DrawOptionMenuTexts();
         gMain.state++;
+        FALLTHROUGH
     case 9:
         DrawBgWindowFrames();
         gMain.state++;

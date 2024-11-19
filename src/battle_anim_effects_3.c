@@ -2207,7 +2207,7 @@ static void AnimBatonPassPokeball(struct Sprite *sprite)
 
         if (++sprite->data[3] == 5)
             sprite->data[0]++;
-        // fall through
+        FALLTHROUGH
     case 2:
         sprite->data[1] += 96;
         sprite->data[2] += 48;
@@ -4691,6 +4691,7 @@ static void AnimForesightMagnifyingGlass_Step(struct Sprite *sprite)
         {
         default:
             sprite->data[6] = 0;
+            FALLTHROUGH
         case 0:
         case 4:
             x = GetBattlerSpriteCoordAttr(sprite->data[7], 5) - 4;

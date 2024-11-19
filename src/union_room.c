@@ -1744,6 +1744,7 @@ static void Task_RunScriptAndFadeToActivity(u8 taskId)
         case ACTIVITY_CONTEST_TOUGH:
             RecordMixTrainerNames();
             DestroyTask(taskId);
+            FALLTHROUGH
         default:
             EnableBothScriptContexts();
             data[0] = 1;
@@ -2107,6 +2108,7 @@ static void Task_CardOrNewsWithFriend(u8 taskId)
         {
         case 1:
             PlaySE(SE_PC_LOGIN);
+            FALLTHROUGH
         default:
             RedrawListMenu(data->listTaskId);
             break;
@@ -2266,6 +2268,7 @@ static void Task_CardOrNewsOverWireless(u8 taskId)
         {
         case 1:
             PlaySE(SE_PC_LOGIN);
+            FALLTHROUGH
         default:
             if (data->field_13 != 0)
                 RedrawListMenu(data->listTaskId);
@@ -2576,6 +2579,7 @@ static void Task_RunUnionRoom(u8 taskId)
             {
             case 1:
                 PlaySE(SE_PC_LOGIN);
+                FALLTHROUGH
             case 2:
                 ScheduleUnionRoomPlayerRefresh(uroom);
                 break;

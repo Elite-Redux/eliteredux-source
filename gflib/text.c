@@ -1223,9 +1223,11 @@ u32 GetStringWidthFixedWidthFont(const u8 *str, u8 fontId, u8 letterSpacing)
             {
             case EXT_CTRL_CODE_COLOR_HIGHLIGHT_SHADOW:
                 ++strPos;
+                FALLTHROUGH
             case EXT_CTRL_CODE_PLAY_BGM:
             case EXT_CTRL_CODE_PLAY_SE:
                 ++strPos;
+                FALLTHROUGH
             case EXT_CTRL_CODE_COLOR:
             case EXT_CTRL_CODE_HIGHLIGHT:
             case EXT_CTRL_CODE_SHADOW:
@@ -1261,6 +1263,7 @@ u32 GetStringWidthFixedWidthFont(const u8 *str, u8 fontId, u8 letterSpacing)
         case CHAR_KEYPAD_ICON:
         case CHAR_EXTRA_SYMBOL:
             ++strPos;
+            FALLTHROUGH
         default:
             ++width;
             break;
@@ -1349,6 +1352,7 @@ s32 GetStringWidth(u8 fontId, const u8 *str, s16 letterSpacing)
                 default:
                     return 0;
             }
+            FALLTHROUGH
         case CHAR_DYNAMIC:
             if (bufferPointer == NULL)
                 bufferPointer = DynamicPlaceholderTextUtil_GetPlaceholderPtr(*++str);
@@ -1375,9 +1379,11 @@ s32 GetStringWidth(u8 fontId, const u8 *str, s16 letterSpacing)
             {
             case EXT_CTRL_CODE_COLOR_HIGHLIGHT_SHADOW:
                 ++str;
+                FALLTHROUGH
             case EXT_CTRL_CODE_PLAY_BGM:
             case EXT_CTRL_CODE_PLAY_SE:
                 ++str;
+                FALLTHROUGH
             case EXT_CTRL_CODE_COLOR:
             case EXT_CTRL_CODE_HIGHLIGHT:
             case EXT_CTRL_CODE_SHADOW:
@@ -1524,6 +1530,7 @@ u8 RenderTextFont9(u8 *pixels, u8 fontId, u8 *str)
             case EXT_CTRL_CODE_PLAY_BGM:
             case EXT_CTRL_CODE_PLAY_SE:
                 ++strPos;
+                FALLTHROUGH
             case EXT_CTRL_CODE_PALETTE:
             case EXT_CTRL_CODE_PAUSE:
             case EXT_CTRL_CODE_ESCAPE:

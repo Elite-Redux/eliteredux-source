@@ -5283,7 +5283,7 @@ static void PlayerHandleLinkStandbyMsg(void)
     {
     case 0:
         PrintLinkStandbyMsg();
-        // fall through
+        FALLTHROUGH
     case 1:
         EndBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX);
         EndBounceEffect(gActiveBattler, BOUNCE_MON);
