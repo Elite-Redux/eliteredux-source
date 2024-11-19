@@ -4583,7 +4583,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DURALUDON_PARTNER] =
     {
         .size = 0x88,
-        .y_offset = 1,
+        .y_offset = 0,
     },
     [SPECIES_DURALUDON_PARTNER_MEGA] =
     {
