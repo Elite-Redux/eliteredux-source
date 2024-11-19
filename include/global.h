@@ -103,7 +103,7 @@
 #define UQ_4_12_PERCENT(p) ((u16)((((u32) p) << UQ_4_12_PRECISION) / 100))
 
 #define UQ_4_12_FLOOR(uq) ((uq) >> UQ_4_12_PRECISION)
-#define UQ_4_12_DECIMAL(uq) ((uq) & ~(-1 << UQ_4_12_PRECISION))
+#define UQ_4_12_DECIMAL(uq) ((uq) & ((1 << UQ_4_12_PRECISION) - 1))
 
 // Converts a number to Q24.8 fixed-point format
 #define Q_24_8(n)  ((s32)((n) << 8))
