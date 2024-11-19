@@ -3109,7 +3109,7 @@ static void PrintMoveReplaceTab(void)
 {
     struct Pokemon *mon = &sMonSummaryScreen->currentMon;
     u8 numMoves = sMonSummaryScreen->numMenuChoices;
-    u8 i, j, windowId, PosX, PosY;
+    int i, j, windowId, PosX, PosY;
     u16 moveNum;
     bool8 hasMonMove = FALSE;
 
