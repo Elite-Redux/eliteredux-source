@@ -360,6 +360,7 @@ static const u16 sAdoptionCenterInventory_TwoBadges[] = {
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
     SPECIES_MARBEEP, //testing purposes
+    SPECIES_MARBEEP, //testing purposes
     SPECIES_PAWNIARD_REDUX,
     SPECIES_MACHOP_REDUX,
     SPECIES_BUIZEL_REDUX,

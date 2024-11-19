@@ -5560,7 +5560,7 @@ static void Cmd_moveend(void)
                 else if (gRoundStructs[gBattlerTarget].obstructed && gCurrentMove != MOVE_SUCKER_PUNCH)
                 {
                     gRoundStructs[gBattlerAttacker].touchedProtectLike = FALSE;
-                    gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_2;
+                    gBattleScripting.moveEffect = MOVE_EFFECT_DEF_MINUS_1;
                     PREPARE_MOVE_BUFFER(gBattleTextBuff1, MOVE_OBSTRUCT);
                     BattleScriptCall(BattleScript_KingsShieldEffect);
                     effect = 1;
