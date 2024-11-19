@@ -15568,7 +15568,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         int any = FALSE;
         for (i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2)
         {
-            FILTER(IsBattlerAlive)
+            FILTER(IsBattlerAlive(i))
             FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
             any = TRUE;
             UpdateBattlerItem(i, ITEM_BLACK_SLUDGE);

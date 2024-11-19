@@ -9514,7 +9514,7 @@ static void Cmd_various(void)
         switch (READ_8_INC)
         {
             case 0:
-            if (!gBattleTextBuff1)
+            if (!gBattleTextBuff1[0])
                 PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gActiveBattler].species);
             BtlController_EmitSetMonData(0, REQUEST_SPECIES_BATTLE, gBitTable[gBattlerPartyIndexes[gActiveBattler]], 2, &gBattleMons[gActiveBattler].species);
             MarkBattlerForControllerExec(gActiveBattler);
@@ -14763,7 +14763,7 @@ u16 GetNaturePowerMove(void)
         return MOVE_ENERGY_BALL;
     else if (GetCurrentTerrain() == STATUS_FIELD_PSYCHIC_TERRAIN)
         return MOVE_PSYCHIC;
-    else if (sNaturePowerMoves == MOVE_NONE)
+    else if (sNaturePowerMoves[gBattleTerrain] == MOVE_NONE)
         return MOVE_TRI_ATTACK;
     return sNaturePowerMoves[gBattleTerrain];
 }

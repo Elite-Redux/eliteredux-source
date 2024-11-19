@@ -12,6 +12,8 @@
 #include "constants/berry.h"
 #include "constants/expansion_branches.h"
 
+// #define RECOMPILE_ME
+
 // Prevent cross-jump optimization.
 #define BLOCK_CROSS_JUMP asm("");
 
