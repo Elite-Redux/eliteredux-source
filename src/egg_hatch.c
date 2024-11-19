@@ -355,7 +355,6 @@ static void AddHatchedMonToParty(u8 id)
     u8 isEgg = 0x46; // ?
     u16 pokeNum;
     u8 name[12];
-    u16 ball;
     u16 caughtLvl;
     u8 mapNameID;
     struct Pokemon* mon = &gPlayerParty[id];
@@ -774,11 +773,8 @@ static void SpriteCB_Egg_2(struct Sprite* sprite)
     {
         if (++sprite->data[0] > 38)
         {
-            u16 species;
-
             sprite->callback = SpriteCB_Egg_3;
             sprite->data[0] = 0;
-            species = GetMonData(&gPlayerParty[sEggHatchData->eggPartyID], MON_DATA_SPECIES);
             gSprites[sEggHatchData->pokeSpriteID].x2 = 0;
             gSprites[sEggHatchData->pokeSpriteID].y2 = 0;
         }

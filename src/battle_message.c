@@ -3325,7 +3325,7 @@ void BufferStringBattle(u16 stringID)
 
 u32 BattleStringExpandPlaceholdersToDisplayedString(const u8* src)
 {
-    BattleStringExpandPlaceholders(src, gDisplayedStringBattle);
+    return BattleStringExpandPlaceholders(src, gDisplayedStringBattle);
 }
 
 static const u8* TryGetStatusString(u8 *src)
@@ -3539,7 +3539,6 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
     const u8 *toCpy = NULL;
     u8 text[30];
     u8 multiplayerId;
-    s32 i;
 
     if (gBattleTypeFlags & BATTLE_TYPE_RECORDED_LINK)
         multiplayerId = gRecordedBattleMultiplayerId;

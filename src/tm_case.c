@@ -919,8 +919,6 @@ static void TMHMContextMenuAction_Exit(u8 taskId)
 
 static void Task_SelectTMAction_Type1(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
-
     PrintError_ItemCantBeHeld(taskId);
 }
 
@@ -1155,11 +1153,9 @@ static void DrawPartyMonIcons(void)
 static void TintPartyMonIcons(u8 tm)
 {
     u8 i;
-    u16 species;
 
     for (i = 0; i < gPlayerPartyCount; i++)
     {
-        species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES);
         gSprites[spriteIdData[i]].oam.paletteNum = 6;
     }
     

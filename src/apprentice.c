@@ -338,7 +338,6 @@ static u16 GetRandomAlternateMove(u8 monId)
     u8 numLearnsetMoves;
     u16 species;
     const struct LevelUpMove *learnset;
-    bool32 needTMs = FALSE;
     u16 moveId = MOVE_NONE;
     bool32 shouldUseMove;
     u8 level;
@@ -367,34 +366,28 @@ static u16 GetRandomAlternateMove(u8 monId)
     // This while loop contains 3 potential infinite loops, though none of them would occur in the base game
     while (i < 5)
     {
-        if (numLearnsetMoves <= MAX_MON_MOVES)
+        if (numLearnsetMoves <= MAX_MON_MOVES) continue;
+        
+        // Get level up move
+        // NOTE: Below is an infinite loop if a mon whose last 4 moves contain
+        //       all the moves in the rest of its learnset is assigned to an Apprentice
+        do
         {
-            needTMs = TRUE;
-            continue;
-        }
-        else
-        {
-            // Get level up move
-            // NOTE: Below is an infinite loop if a mon whose last 4 moves contain
-            //       all the moves in the rest of its learnset is assigned to an Apprentice
-            do
-            {
-                // Get a random move excluding the 4 it would know at max level
-                u8 learnsetId = Random() % (numLearnsetMoves - MAX_MON_MOVES);
-                moveId = learnset[learnsetId].move;
-                shouldUseMove = TRUE;
+            // Get a random move excluding the 4 it would know at max level
+            u8 learnsetId = Random() % (numLearnsetMoves - MAX_MON_MOVES);
+            moveId = learnset[learnsetId].move;
+            shouldUseMove = TRUE;
 
-                for (j = numLearnsetMoves - MAX_MON_MOVES; j < numLearnsetMoves; j++)
+            for (j = numLearnsetMoves - MAX_MON_MOVES; j < numLearnsetMoves; j++)
+            {
+                // Keep looking for moves until one not in the last 4 is found
+                if ((learnset[j].move) == moveId)
                 {
-                    // Keep looking for moves until one not in the last 4 is found
-                    if ((learnset[j].move) == moveId)
-                    {
-                        shouldUseMove = FALSE;
-                        break;
-                    }
+                    shouldUseMove = FALSE;
+                    break;
                 }
-            } while (shouldUseMove != TRUE);
-        }
+            }
+        } while (shouldUseMove != TRUE);
 
         if (TrySetMove(monId, moveId))
         {

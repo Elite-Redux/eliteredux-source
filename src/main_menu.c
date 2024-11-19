@@ -753,7 +753,6 @@ static void UpdateBoxMon(struct BoxPokemon* boxMon)
 
 static void Task_MainMenuCheckSaveFile(u8 taskId)
 {
-    u8 i, j, itemcount;
     s16* data = gTasks[taskId].data;
 	u16 timesUpdated = 0 + VarGet(VAR_UPDATED_TIMES);
 	FlagClear(FLAG_TAG_BATTLE);
@@ -2636,7 +2635,6 @@ static void MainMenu_FormatSavegamePlayer(void)
 
 static void MainMenu_FormatSavegameTime(void)
 {
-	static const u8 sText_GameVersion[] =  _("Game Version$");
     u8 str[0x20];
     u8* ptr;
 

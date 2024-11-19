@@ -126,8 +126,6 @@ static const char str_checkMbootLL[] = "RFU-MBOOT";
 u16 rfu_initializeAPI(u32 *APIBuffer, u16 buffByteSize, IntrFunc *sioIntrTable_p, bool8 copyInterruptToRam)
 {
     u16 i;
-    u16 *dst;
-    const u16 *src;
     u16 buffByteSizeMax;
 
     // is in EWRAM?
@@ -558,6 +556,9 @@ void rfu_REQ_endSearchChild(void)
     STWI_send_SC_EndREQ();
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+
 static void rfu_CB_pollAndEndSearchChild(u8 reqCommand, u16 reqResult)
 {
     if (reqResult == 0)
@@ -583,10 +584,8 @@ static void rfu_CB_pollAndEndSearchChild(u8 reqCommand, u16 reqResult)
 
 static void rfu_STC_readChildList(void)
 {
-    u32 stwiParam;
     u8 numSlots = gRfuFixed->STWIBuffer->rxPacketAlloc.rfuPacket8.data[1];
     u8 *data_p;
-    u8 i;
     u8 bm_slot_id;
 #if LIBRFU_VERSION < 1026
     u8 true_slots[RFU_CHILD_MAX];
@@ -1763,6 +1762,8 @@ static void rfu_constructSendLLFrame(void)
         gRfuStatic->totalPacketSize = pakcketSize;
     }
 }
+
+#pragma GCC diagnostic pop
 
 static u16 rfu_STC_NI_constructLLSF(u8 bm_slot_id, u8 **dest_pp, struct NIComm *NI_comm)
 {

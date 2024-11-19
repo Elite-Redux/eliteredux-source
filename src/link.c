@@ -1332,7 +1332,6 @@ bool8 DoesLinkPlayerCountMatchSaved(void)
 
 void ClearSavedLinkPlayers(void)
 {
-    int i;
     // The CpuSet loop below is incorrectly writing to NULL
     // instead of sSavedLinkPlayers.
     // Additionally it's using the wrong array size.
@@ -2185,6 +2184,9 @@ static void StartTransfer(void)
     REG_SIOCNT |= SIO_START;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+
 static bool8 DoHandshake(void)
 {
     u8 i;
@@ -2287,6 +2289,8 @@ static void DoRecv(void)
         }
     }
 }
+
+#pragma GCC diagnostic pop
 
 static void DoSend(void)
 {

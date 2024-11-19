@@ -163,7 +163,6 @@ static EWRAM_DATA u16 *sSlot1TilemapBuffer = 0; // for switching party slots
 static EWRAM_DATA u16 *sSlot2TilemapBuffer = 0; //
 EWRAM_DATA u8 gSelectedOrderFromParty[MAX_FRONTIER_PARTY_SIZE] = {0};
 static EWRAM_DATA u16 sPartyMenuItemId = 0;
-static EWRAM_DATA u16 sUnused = 0;
 EWRAM_DATA u8 gBattlePartyCurrentOrder[PARTY_SIZE / 2] = {0}; // bits 0-3 are the current pos of Slot 1, 4-7 are Slot 2, and so on
 
 // IWRAM common
@@ -2717,9 +2716,6 @@ static u8 DisplaySelectionWindow(u8 windowType)
 static u8 DisplaySelectionWindowNew(u8 windowType)
 {
     struct WindowTemplate window;
-    u8 cursorDimension;
-    u8 fontAttribute;
-    u8 i;
 
     switch (windowType)
     {
@@ -2744,8 +2740,6 @@ static u8 DisplaySelectionWindowNew(u8 windowType)
     DrawStdFrameWithCustomTileAndPalette(sPartyMenuInternal->windowId[0], FALSE, 0x4F, 13);
     if (windowType == SELECTWINDOW_MOVES)
         return sPartyMenuInternal->windowId[0];
-    cursorDimension = GetMenuCursorDimensionByFont(1, 0);
-    fontAttribute = GetFontAttribute(1, 2);
 
     InitMenuInUpperLeftCorner(sPartyMenuInternal->windowId[0], sPartyMenuInternal->numActions, 0, 1);
     ScheduleBgCopyTilemapToVram(2);
@@ -2845,7 +2839,7 @@ static void SetPartyMonFieldMoveSelectionActions(struct Pokemon *mons, u8 slotId
 
 static void SetPartyMonFormChangeSelectionActions(struct Pokemon *mons, u8 slotId)
 {
-    u32 i,j, targetspecies;
+    u32 i, targetspecies;
     u32 species = GetMonData(&mons[slotId], MON_DATA_SPECIES, NULL);
 
     // Add Forms to action list
@@ -2864,7 +2858,7 @@ static void SetPartyMonFormChangeSelectionActions(struct Pokemon *mons, u8 slotI
 
 static void SetPartyMonEvolutionSelectionActions(struct Pokemon *mons, u8 slotId)
 {
-    u32 i,j, targetspecies;
+    u32 i, targetspecies;
     u32 species = GetMonData(&mons[slotId], MON_DATA_SPECIES, NULL);
 
     // Add Evolutions to action list
@@ -2883,9 +2877,6 @@ static void SetPartyMonEvolutionSelectionActions(struct Pokemon *mons, u8 slotId
 
 static void SetPartyMonLearnMoveSelectionActions(struct Pokemon *mons, u8 slotId)
 {
-    u32 i,j, targetspecies;
-    u32 species = GetMonData(&mons[slotId], MON_DATA_SPECIES, NULL);
-
     //Level Up Moves
 	if (GetMonData(&mons[slotId], MON_DATA_SPECIES) != SPECIES_NONE && GetNumberOfRelearnableMoves(&mons[slotId]) > 0 && enablePokemonChanges())
         AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_MOVES);
@@ -3033,7 +3024,6 @@ static void CursorCb_FormChange(u8 taskId)
 static void PartyMenuTryFormChangeFromSubMenu(u8 taskId)
 {
     u8 evolutionNum = sPartyMenuInternal->actions[Menu_GetCursorPos()] - MENU_FORM_CHANGE;
-    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     u16 targetSpecies = GetFormChangeForMon(&gPlayerParty[gPartyMenu.slotId], evolutionNum);
 
     if (targetSpecies != SPECIES_NONE)
@@ -3057,7 +3047,6 @@ static void PartyMenuTryFormChangeFromSubMenu(u8 taskId)
 void BeginFormChangeScene(u8 taskId, u16 targetSpecies)
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
-    u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
 
     PlayCry2(targetSpecies, 0, 0x7D, 0xA);
     SetMonData(mon, MON_DATA_SPECIES, &targetSpecies);
@@ -3075,8 +3064,7 @@ void BeginFormChangeScene(u8 taskId, u16 targetSpecies)
 
 static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
 {
-    u8 i, j;
-    u16 move;
+    u8 i;
     u16 species 		    = GetMonData(&mons[slotId], MON_DATA_SPECIES,  		 NULL);
     u8 level                = GetMonData(&mons[slotId], MON_DATA_LEVEL,          NULL);
     u8 levelCap = GetLevelCap();
@@ -5710,7 +5698,6 @@ static void Task_LearnedMove(u8 taskId)
 {
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     s16 *move = &gPartyMenu.data1;
-    u16 item = gSpecialVar_ItemId;
 
     if (move[1] == 0)
     {
@@ -5996,7 +5983,6 @@ void ItemUseCB_CandyBox(u8 taskId, TaskFunc task)
     struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
     struct PartyMenuInternal *ptr = sPartyMenuInternal;
     s16 *arrayPtr = ptr->data;
-    u16 *itemPtr = &gSpecialVar_ItemId;
     bool8 cannotUseEffect;
     u8 level = GetMonData(mon, MON_DATA_LEVEL);
 
@@ -6050,7 +6036,6 @@ void Task_ChangeMonForm(u8 taskId)
     static const u8 askText[] = _("Would you like to change {STR_VAR_1}'s\nForm?");
     static const u8 doneText[] = _("{STR_VAR_1}'s Form Changed!{PAUSE_UNTIL_PRESS}");
     s16 *data = gTasks[taskId].data;
-    u16 item = gSpecialVar_ItemId;
 
     switch (tState)
     {
@@ -8151,7 +8136,6 @@ void Task_TypeGems(u8 taskId)
     static const u8 askText[] = _("Would you like to change {STR_VAR_1}'s\nHidden Power Type to {STR_VAR_2}?");
     static const u8 doneText[] = _("{STR_VAR_1}'s Hidden Power Type became\n{STR_VAR_2}!{PAUSE_UNTIL_PRESS}");
     s16 *data = gTasks[taskId].data;
-    u16 item = gSpecialVar_ItemId;
 
     switch (tState)
     {
@@ -8234,7 +8218,6 @@ void SetArceusForm(struct Pokemon *mon)
     u16 forme;
     u8 abilityNum = GetMonData(mon, MON_DATA_ABILITY_NUM);
     u16 ability = GetAbilityBySpecies(species, abilityNum);
-    u8 level = GetMonData(mon, MON_DATA_LEVEL);
 
     if (GET_BASE_SPECIES_ID(species) == SPECIES_ARCEUS && (ability == ABILITY_MULTITYPE || MonHasInnate(mon, ABILITY_MULTITYPE, FALSE)))
     {

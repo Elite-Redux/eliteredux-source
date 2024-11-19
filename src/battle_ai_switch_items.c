@@ -968,13 +968,12 @@ static u32 GetBestMonDmg(struct Pokemon *party, int firstId, int lastId, u8 inva
 u8 GetMostSuitableMonToSwitchInto(void)
 {
     u32 opposingBattler = 0;
-    u32 bestDmg = 0;
     u32 bestMonId = 0;
     u8 battlerIn1 = 0, battlerIn2 = 0;
     s32 firstId = 0;
     s32 lastId = 0; // + 1
     struct Pokemon *party;
-    s32 i, j, aliveCount = 0;
+    s32 i, aliveCount = 0;
     u8 invalidMons = 0;
 
     if (*(gBattleStruct->monToSwitchIntoId + gActiveBattler) != PARTY_SIZE)
@@ -1064,8 +1063,6 @@ static u8 GetAI_ItemType(u16 itemId, const u8 *itemEffect)
 
 static bool32 AiExpectsToFaintPlayer(void)
 {
-    bool32 canFaintPlayer;
-    u32 i;
     u8 target = gBattleStruct->aiChosenTarget[gActiveBattler];
 
     if (gBattleStruct->aiMoveOrAction[gActiveBattler] > 3)
@@ -1116,7 +1113,6 @@ static bool8 ShouldUseItem(void)
     {
         u16 item;
         const u8 *itemEffects;
-        u8 paramOffset;
         u8 battlerSide;
 
         if (i != 0 && validMons > (gBattleResources->battleHistory->itemsNo - i) + 1)

@@ -883,9 +883,6 @@ void LoadBattleBg(u8 battleBgType, u8 battleTerrain)
 //Testo
 void LoadBattleTextboxAndBackground(void)
 {
-    //Loads Tiles and Tilemap for the Battle Textbox
-    bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
-
     switch (getBattleInterfaceTheme()) {
         case THEME_DARK:
             LZDecompressVram(gTheme_Dark_BattleTextboxTiles, (void*)(BG_CHAR_ADDR(BG_TEXTBOX)));

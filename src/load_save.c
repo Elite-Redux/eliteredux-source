@@ -97,8 +97,6 @@ void MoveSaveBlocks_ResetHeap(void)
     void *vblankCB, *hblankCB;
     u32 encryptionKey;
     struct SaveBlock2 *saveBlock2Copy;
-    struct SaveBlock1 *saveBlock1Copy;
-    struct PokemonStorage *pokemonStorageCopy;
 
     // save interrupt functions and turn them off
     vblankCB = gMain.vblankCallback;
@@ -108,8 +106,6 @@ void MoveSaveBlocks_ResetHeap(void)
     gTrainerHillVBlankCounter = NULL;
 
     saveBlock2Copy = (struct SaveBlock2 *)(gHeap);
-    saveBlock1Copy = (struct SaveBlock1 *)(gHeap + sizeof(struct SaveBlock2));
-    pokemonStorageCopy = (struct PokemonStorage *)(gHeap + sizeof(struct SaveBlock2) + sizeof(struct SaveBlock1));
 
     { STATIC_ASSERT(HEAP_SIZE >= sizeof(struct SaveBlock1) + sizeof(struct SaveBlock2) + sizeof(struct PokemonStorage), heapCannotStoreSaveBlock) }
 

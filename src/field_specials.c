@@ -5552,7 +5552,6 @@ void ResetChosenMonEVs (void)
  */
 void ChangeChosenMonHiddenPower (void) 
 {
-    int i;
     u8 hiddenPowerType = gSpecialVar_0x8007;
   
     SetMonData(&gPlayerParty[gSpecialVar_0x800A], MON_DATA_HP_TYPE, &hiddenPowerType);
@@ -5768,7 +5767,7 @@ void GetRotomState (void)
 // Returns TRUE if the moove was forgotten, false if not
 void RotomForgetSpecialMove (void)
 {
-    u8 i, forgotSpecialMove = 0;
+    u8 i;
     u16 currentMove;
     u16 moveNone = MOVE_NONE;
 
@@ -5780,7 +5779,6 @@ void RotomForgetSpecialMove (void)
         {
             RemoveMonPPBonus (&gPlayerParty[gSpecialVar_0x8004], i);
             SetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_MOVE1 + i, &moveNone);
-            forgotSpecialMove = TRUE;
             break;
         }
     }

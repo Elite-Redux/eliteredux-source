@@ -1297,8 +1297,9 @@ const u8 *GetTagTeamTrainerLoseText(bool8 isTrainerB)
 		        return LavaridgeTown_Gym_B1F_Text_KeeganDefeat;
         break;	
     }
-        
+    return NULL;        
 }
+
 void PrepSecretBaseBattleFlags(void)
 {
     TryGainNewFanFromCounter(FANCOUNTER_BATTLED_AT_BASE);

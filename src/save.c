@@ -189,7 +189,6 @@ static u8 WriteSaveSectorOrSlot(u16 sectorId, const struct SaveSectionLocation *
 
 static u8 HandleWriteSector(u16 sectorId, const struct SaveSectionLocation *location)
 {
-    u16 i;
     u16 sector;
     u8 *data;
     u16 size;

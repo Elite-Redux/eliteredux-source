@@ -1190,7 +1190,7 @@ void ColosseumPlayerSpotTriggered(void)
 // Unused
 static void CreateTask_EnterCableClubSeatNoFollowup(void)
 {
-    u8 taskId = CreateTask(Task_EnterCableClubSeat, 80);
+    CreateTask(Task_EnterCableClubSeat, 80);
     ScriptContext1_Stop();
 }
 

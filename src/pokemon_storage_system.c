@@ -4414,7 +4414,7 @@ static void ShowYesNoWindow(s8 cursorPos)
 static void Task_EvolveMon(u8 taskId)
 {
     struct Pokemon pokemon;
-    u8 newLevel, i;
+    u8 i;
     u8 pos = GetCursorPosition();
     u8 boxId = StorageGetCurrentBox();
     u16 targetSpecies = SPECIES_NONE;
@@ -4542,11 +4542,8 @@ static void Task_LevelUpMon(u8 taskId)
 void CreateLevelUpMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 paletteNum, u8 initialCursorPos)
 {
     u8 nextlevel, numlevels, i, levelcap, windowId;
-    struct TextPrinterTemplate printer;
-    const u8 gText_YesNo123[] = _("");
 	static const u8 sText_levelCap[] =  _("Level Cap$");
     u8 monlevel = sStorage->displayMonLevel;
-    u16 species = sStorage->displayMonSpecies;
 
     levelcap = GetLevelCap();
 
@@ -4587,7 +4584,7 @@ static void ShowLevelUpWindow(s8 cursorPos)
 void CreateEvolveMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 paletteNum, u8 initialCursorPos)
 {
     struct Pokemon pokemon;
-    u8 i, levelcap, windowId;
+    u8 i, windowId;
     u16 targetSpecies;
     u8 pos = GetCursorPosition();
     u8 boxId = StorageGetCurrentBox();
@@ -7178,7 +7175,6 @@ void SetArceusFormPSS(struct BoxPokemon *boxMon)
     u16 forme;
     u8 abilityNum = GetMonData(boxMon, MON_DATA_ABILITY_NUM);
     u16 ability = GetAbilityBySpecies(species, abilityNum);
-    u8 level = GetMonData(boxMon, MON_DATA_LEVEL);
 
     if (GET_BASE_SPECIES_ID(species) == SPECIES_ARCEUS && (ability == ABILITY_MULTITYPE  || BoxMonHasInnate(boxMon, ABILITY_MULTITYPE, FALSE)))
     {
@@ -7346,7 +7342,6 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
         sStorage->displayMonSpecies = GetBoxMonData(pokemon, MON_DATA_SPECIES2);
         if (sStorage->displayMonSpecies != SPECIES_NONE)
         {
-            u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
             u8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
             sanityIsBadEgg = GetBoxMonData(boxMon, MON_DATA_SANITY_IS_BAD_EGG);
             if (sanityIsBadEgg)
@@ -10568,7 +10563,6 @@ void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
 {
     u8 pos = GetCursorPosition();
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
-    u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
     u32 pid = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
     u8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
 
@@ -10586,7 +10580,6 @@ void UpdateSpeciesSpritePSS_Mon(struct Pokemon *mon)
 {
     u8 pos = GetCursorPosition();
     u16 species = GetMonData(mon, MON_DATA_SPECIES);
-    u32 otId = GetMonData(mon, MON_DATA_OT_ID);
     u32 pid = GetMonData(mon, MON_DATA_PERSONALITY);
     u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
 

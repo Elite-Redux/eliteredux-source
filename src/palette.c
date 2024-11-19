@@ -62,7 +62,6 @@ ALIGNED(4) EWRAM_DATA u16 gPlttBufferUnfaded[PLTT_BUFFER_SIZE] = {0};
 ALIGNED(4) EWRAM_DATA u16 gPlttBufferFaded[PLTT_BUFFER_SIZE] = {0};
 EWRAM_DATA struct PaletteStruct sPaletteStructs[0x10] = {0};
 EWRAM_DATA struct PaletteFadeControl gPaletteFade = {0};
-static EWRAM_DATA u32 sFiller = 0;
 static EWRAM_DATA u32 sPlttBufferTransferPending = 0;
 EWRAM_DATA u8 gPaletteDecompressionBuffer[PLTT_DECOMP_BUFFER_SIZE] = {0};
 
@@ -197,7 +196,6 @@ static inline s32 RoundClampShift(fixed v) {
 void HueShiftMonPalette(u16* colors, u32 personality, bool8 isAlpha) {
     s32 r, g, b, i;
     u8 count = 16;
-    u8 tone = Q_8_8(0.6);
     u8 PokemonRGB[] = {0,0,0};
     bool8 shouldBlend = TRUE;
     bool8 shouldBlendColor = TRUE;

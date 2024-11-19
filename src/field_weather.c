@@ -26,12 +26,19 @@ enum
     GAMMA_ALT,
 };
 
-struct RGBColor
+#ifndef __GNUC__
+#define __attribute__(value)
+#endif
+
+typedef union
 {
-    u16 r:5;
-    u16 g:5;
-    u16 b:5;
-};
+    struct {
+        u16 r:5;
+        u16 g:5;
+        u16 b:5;
+    } __attribute__((packed, aligned(2)));
+    u16 bits;
+} __attribute__((packed, aligned(2))) RGBColor;
 
 struct WeatherPaletteData
 {
@@ -489,7 +496,7 @@ static void ApplyGammaShift(u8 startPalIndex, u8 numPalettes, s8 gammaIndex)
                 for (i = 0; i < 16; i++)
                 {
                     // Apply gamma shift to the original color.
-                    struct RGBColor baseColor = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                    RGBColor baseColor = { .bits = gPlttBufferUnfaded[palOffset] };
                     r = gammaTable[baseColor.r];
                     g = gammaTable[baseColor.g];
                     b = gammaTable[baseColor.b];
@@ -540,7 +547,7 @@ static void ApplyGammaShiftWithBlend(u8 startPalIndex, u8 numPalettes, s8 gammaI
     u16 palOffset;
     u16 curPalIndex;
     u16 i;
-    struct RGBColor color = *(struct RGBColor *)&blendColor;
+    RGBColor color = { .bits = blendColor };
     u8 rBlend = color.r;
     u8 gBlend = color.g;
     u8 bBlend = color.b;
@@ -569,7 +576,7 @@ static void ApplyGammaShiftWithBlend(u8 startPalIndex, u8 numPalettes, s8 gammaI
 
             for (i = 0; i < 16; i++)
             {
-                struct RGBColor baseColor = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                RGBColor baseColor = { .bits = gPlttBufferUnfaded[palOffset] };
                 u8 r = gammaTable[baseColor.r];
                 u8 g = gammaTable[baseColor.g];
                 u8 b = gammaTable[baseColor.b];
@@ -588,7 +595,7 @@ static void ApplyGammaShiftWithBlend(u8 startPalIndex, u8 numPalettes, s8 gammaI
 
 static void ApplyDroughtGammaShiftWithBlend(s8 gammaIndex, u8 blendCoeff, u16 blendColor)
 {
-    struct RGBColor color;
+    RGBColor color;
     u8 rBlend;
     u8 gBlend;
     u8 bBlend;
@@ -597,7 +604,7 @@ static void ApplyDroughtGammaShiftWithBlend(s8 gammaIndex, u8 blendCoeff, u16 bl
     u16 i;
 
     gammaIndex = -gammaIndex - 1;
-    color = *(struct RGBColor *)&blendColor;
+    color.bits = blendColor;
     rBlend = color.r;
     gBlend = color.g;
     bBlend = color.b;
@@ -615,18 +622,18 @@ static void ApplyDroughtGammaShiftWithBlend(s8 gammaIndex, u8 blendCoeff, u16 bl
             for (i = 0; i < 16; i++)
             {
                 u32 offset;
-                struct RGBColor color1;
-                struct RGBColor color2;
+                RGBColor color1;
+                RGBColor color2;
                 u8 r1, g1, b1;
                 u8 r2, g2, b2;
 
-                color1 = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                color1.bits = gPlttBufferUnfaded[palOffset];
                 r1 = color1.r;
                 g1 = color1.g;
                 b1 = color1.b;
 
                 offset = ((b1 & 0x1E) << 7) | ((g1 & 0x1E) << 3) | ((r1 & 0x1E) >> 1);
-                color2 = *(struct RGBColor *)&sDroughtWeatherColors[gammaIndex][offset];
+                color2.bits = sDroughtWeatherColors[gammaIndex][offset];
                 r2 = color2.r;
                 g2 = color2.g;
                 b2 = color2.b;
@@ -643,14 +650,14 @@ static void ApplyDroughtGammaShiftWithBlend(s8 gammaIndex, u8 blendCoeff, u16 bl
 
 static void ApplyFogBlend(u8 blendCoeff, u16 blendColor)
 {
-    struct RGBColor color;
+    RGBColor color;
     u8 rBlend;
     u8 gBlend;
     u8 bBlend;
     u16 curPalIndex;
 
     BlendPalette(0, 256, blendCoeff, blendColor);
-    color = *(struct RGBColor *)&blendColor;
+    color.bits = blendColor;
     rBlend = color.r;
     gBlend = color.g;
     bBlend = color.b;
@@ -664,7 +671,7 @@ static void ApplyFogBlend(u8 blendCoeff, u16 blendColor)
 
             while (palOffset < palEnd)
             {
-                struct RGBColor color = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                RGBColor color = { .bits = gPlttBufferUnfaded[palOffset] };
                 u8 r = color.r;
                 u8 g = color.g;
                 u8 b = color.b;
