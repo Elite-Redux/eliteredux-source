@@ -4084,7 +4084,6 @@ static void AnimConstrictBinding_Step1(struct Sprite* sprite)
 
 static void AnimConstrictBinding_Step2(struct Sprite* sprite)
 {
-    u8 spriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
     if (!sprite->data[2])
         sprite->data[0] += 11;
     else
@@ -6041,7 +6040,7 @@ static void AnimFalseSwipeSlice(struct Sprite* sprite)
 
 static void AnimFalseSwipePositionedSlice(struct Sprite* sprite)
 {
-    sprite->x = sprite->x = GetBattlerSpriteCoord(gBattleAnimTarget, 2) + 0xFFD0 + gBattleAnimArgs[0];
+    sprite->x = GetBattlerSpriteCoord(gBattleAnimTarget, 2) + 0xFFD0 + gBattleAnimArgs[0];
     sprite->y = GetBattlerSpriteCoord(gBattleAnimTarget, 3);
     StartSpriteAnim(sprite, 1);
     sprite->data[0] = 0;

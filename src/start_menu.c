@@ -1619,8 +1619,6 @@ static bool8 StartMenuDexNavCallback(void)
 
 static void ShowGameVersionWindow(void)
 {
-	static const u8 sText_cantSave[]        =  _("You can't save here$");
-	static const u8 sText_GameVersion[]     =  _("{STR_VAR_1}\nGame Version {STR_VAR_2}$");
 	static const u8 sText_Message_Save[]    =  _("{COLOR GREEN}Press SELECT to save{COLOR DARK_GRAY}\nLevel Cap: {STR_VAR_1}\nWins: {STR_VAR_2} Losses: {STR_VAR_3}$");
     static const u8 sText_Message_No_Save[] =  _("You can't save here\nLevel Cap: {STR_VAR_1}\nWins: {STR_VAR_2} Losses: {STR_VAR_3}$");
     u16 levelCap = GetLevelCap();

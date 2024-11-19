@@ -163,10 +163,8 @@ void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData)
 int GetAiDecision(int battler)
 {
     struct DisguiseSimulation disguise0 = { 0 }, disguise2 = { 0 };
-    int unusableMoves, battlerAtk, moveNum, battlerDef;
-    int switchScore = 0;
+    int battlerAtk;
     struct AiData aiData = { 0 };
-    int isDoubles;
     
     if (IsBattlerAlive(0)) ReplaceDisguise(&disguise0);
     if (IsBattlerAlive(2)) ReplaceDisguise(&disguise2);

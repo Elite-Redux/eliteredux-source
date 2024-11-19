@@ -66,10 +66,10 @@ int CheckPowder(int battlerAtk, int move)
 int ScoreArgument(int battlerAtk, int battlerDef, int move, struct MoveState* moveState, struct AiData* aiData)
 {
     int argument = gBattleMoves[move].argument;
-    int certain = argument & MOVE_EFFECT_CERTAIN;
+    // int certain = argument & MOVE_EFFECT_CERTAIN;
     // TODO: Handle this if needed
-    int ignoreTypeImmunities = argument & MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES;
-    int applyTo = argument & MOVE_EFFECT_AFFECTS_USER ? battlerAtk : battlerDef;
+    // int ignoreTypeImmunities = argument & MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES;
+    // int applyTo = argument & MOVE_EFFECT_AFFECTS_USER ? battlerAtk : battlerDef;
     argument &= ~(MOVE_EFFECT_CERTAIN | MOVE_EFFECT_IGNORE_TYPE_IMMUNITIES | MOVE_EFFECT_AFFECTS_USER);
     switch (argument)
     {
@@ -169,8 +169,7 @@ LOCAL_LABEL(label):
 
 int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int turn, u8 moveType, struct MoveState* moveState, struct AiData* aiData)
 {
-    int i, score;
-    u16 effectiveness;
+    int score;
 
     if (move == MOVE_NONE) return 0;
     if (!IsBattlerAlive(battlerDef)) return 0;
@@ -1183,7 +1182,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
 
     CASE_AND_LABEL(EFFECT_GROWTH)
         {
-        int boost = SeesSunlight(battlerAtk, aiData) ? 2 : 1;
+        // int boost = SeesSunlight(battlerAtk, aiData) ? 2 : 1;
         return AI_SCORE_ATTACK_UP(battlerAtk, boost) + AI_SCORE_SPATK_UP(battlerAtk, boost);
         }
 
@@ -1302,7 +1301,7 @@ int ScoreMoveHit(int battlerAtk, int battlerDef, int moveEffect, int move, int t
     CASE_AND_LABEL(EFFECT_ROTOTILLER)
         if (!IS_BATTLER_OF_TYPE(battlerDef, TYPE_GRASS)) return AI_SCORE_IMMUNE;
         {
-        int boost = IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN) ? 2 : 1;
+        // int boost = IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN) ? 2 : 1;
         return AI_SCORE_SPATK_UP(battlerAtk, boost);
         }
 
@@ -1978,7 +1977,7 @@ void CheckSingleHitKo(int baseDamage, int defenderHp, int multiplier, int procCh
         int koChance;
         if (minDamage + flatDamage >= defenderHp)
         {
-            int overkill = minDamage * 2 / defenderHp - 2;
+            if (!setCrit && !moveState->overkillInHalves) moveState->overkillInHalves = minDamage * 2 / defenderHp - 2;
             koChance = 100;
         }
         else
@@ -2030,16 +2029,13 @@ int CalculateKoChanceFine(int baseDamage, int bonusDamage, int critMultiplier, i
 int ScoreMoveDamage(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData)
 {
     u16 parentalBondSpread[6];
-    int multiTotal = 0;
     int hitCount = 1;
-    MultihitType multihit;
     int i;
     int damageShield = phase == AI_PHASE_DAMAGE_ROUGH ? aiData->battlerState[battlerDef].shield : 0;
     int scoreOther = 0;
     u8 moveType;
     int baseDamage = 0;
     int baseDamageAverage = 0;
-    int extraDamage = 0;
     int defenderHp = gBattleMons[battlerDef].hp;
     u16 critMultiplier = UQ_4_12(1.5);
     int doubleDamageChance = 0;

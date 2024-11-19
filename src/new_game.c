@@ -240,7 +240,6 @@ static void ResetMiniGamesRecords(void)
 // Determines whether or not the player should encounter a Pokemon in new game berry trees
 static void RandomizeBerryEncounters(void)
 {
-    u8 treeId = 0;
     int i = 0;
 
     struct BerryTree *tree;

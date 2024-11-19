@@ -215,7 +215,6 @@ void EvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u
     const struct CompressedSpritePalette* pokePal;
     u8 ID, isShiny;
     bool8 isAlpha;
-    const u8* longName;
 
     SetHBlankCallback(NULL);
     SetVBlankCallback(NULL);
@@ -430,7 +429,6 @@ static void CB2_TradeEvolutionSceneLoadGraphics(void)
     case 4:
         {
             const struct CompressedSpritePalette* pokePal;
-            u32 trainerId = GetMonData(mon, MON_DATA_OT_ID);
             u32 personality = GetMonData(mon, MON_DATA_PERSONALITY);
             DecompressPicFromTableGender(gMonSpritesGfxPtr->sprites.ptr[3],
                                         postEvoSpecies,
@@ -648,7 +646,6 @@ static void Task_EvolutionScene(u8 taskId)
 {
     u32 var;
     struct Pokemon* mon = &gPlayerParty[gTasks[taskId].tPartyId];
-    u16 species = GetMonData(mon, MON_DATA_SPECIES);
 
     // check if B Button was held, so the evolution gets stopped
     if (gMain.heldKeys == B_BUTTON

@@ -164,11 +164,16 @@ struct BattlePokemon
     u32 status2;
     u32 otId;
     u16 species;
-    u16 attack;
-    u16 defense;
-    u16 speed;
-    u16 spAttack;
-    u16 spDefense;
+    union {
+        struct {
+            u16 attack;
+            u16 defense;
+            u16 speed;
+            u16 spAttack;
+            u16 spDefense;
+        } __attribute__((packed, aligned(2)));
+        u16 stats[5];
+    } __attribute__((packed, aligned(2)));
     u16 moves[MAX_MON_MOVES];
     u16 abilities[TOTAL_ABILITY_COUNT];
     u16 hp;

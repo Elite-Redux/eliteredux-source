@@ -721,7 +721,6 @@ static void BufferPartyVsScreenHealth_AtStart(void)
 
 static void SetPlayerBerryDataInBattleStruct(void)
 {
-    s32 i;
     struct BattleStruct *battleStruct = gBattleStruct;
     struct BattleEnigmaBerry *battleBerry = &battleStruct->multiBuffer.linkBattlerHeader.battleEnigmaBerry;
 
@@ -758,7 +757,6 @@ static void SetPlayerBerryDataInBattleStruct(void)
 static void SetAllPlayersBerryData(void)
 {
     s32 i;
-    s32 j;
 
     if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
     {
@@ -3330,7 +3328,7 @@ static void BattleStartClearSetData(void)
 
 void SwitchInClearSetData(void)
 {
-    s32 i, j;
+    s32 i;
     struct VolatileStruct VolatileStructCopy = gVolatileStructs[gActiveBattler];
 
     gActionsByTurnOrder[GetBattlerTurnOrderNum(gActiveBattler)] = B_ACTION_TRY_FINISH;
@@ -3499,7 +3497,7 @@ void SwitchInClearSetData(void)
 
 void FaintClearSetData(void)
 {
-    s32 i, j;
+    s32 i;
 
     for (i = 0; i < NUM_BATTLE_STATS; i++)
         gBattleMons[gActiveBattler].statStages[i] = DEFAULT_STAT_STAGE;
@@ -3922,7 +3920,7 @@ static void DoBattleIntro(void)
 
 static void TryDoEventsBeforeFirstTurn(void)
 {
-    s32 i, j;
+    s32 i;
     #ifdef DEBUG_BUILD
     if (FlagGet(FLAG_SYS_AUTOWIN)) {
         gBattleOutcome = B_OUTCOME_WON;
@@ -5265,7 +5263,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
 static void SetActionsAndBattlersTurnOrder(void)
 {
     s32 turnOrderId = 0;
-    s32 i, j;
+    s32 i;
 
     for (i = 0; i < gBattlersCount; i++)
     {
@@ -5487,8 +5485,6 @@ void RecalculateMoveOrder(int index, int ignoreChosenMove)
 
 static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
 {
-    u32 i;
-
     if (!(gHitMarker & HITMARKER_RUN))
     {
         while (gBattleStruct->focusPunchBattlerId < gBattlersCount)
@@ -5990,7 +5986,7 @@ void RunBattleScriptCommands(void)
 
 #define HAS_ABILITY(abilityToCheck) (MonHasInnate(mon, abilityToCheck, disableRandomizer) || ability == abilityToCheck)
 u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
-    u32 moveType, ateType, tempstuff;
+    u32 moveType, ateType;
     u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     u16 holdEffect = ItemId_GetHoldEffect(item);
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -6929,7 +6925,6 @@ u16 selectMoves (u16 species, u8 i, u16 atk, u16 spAtk)
     u8 type2 = gBaseStats[species].type2;
     u16 moveTypeArraysID = (type1 * 19) + type2;
     u8 randomMove = Random() % 3;
-    u8 role = getRole(species);
     u8 split = 0;
     u32 caster = 1;
     

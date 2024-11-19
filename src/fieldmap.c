@@ -29,7 +29,11 @@ EWRAM_DATA static u16 gBackupMapData[MAX_MAP_DATA_SIZE] = {0};
 EWRAM_DATA struct MapHeader gMapHeader = {0};
 EWRAM_DATA struct Camera gCamera = {0};
 EWRAM_DATA static struct ConnectionFlags gMapConnectionFlags = {0};
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
 EWRAM_DATA static u32 sFiller = 0; // without this, the next file won't align properly
+#pragma GCC diagnostic pop
 
 struct BackupMapLayout gBackupMapLayout;
 
@@ -50,7 +54,6 @@ static bool8 IsCoordInIncomingConnectingMap(int coord, int srcMax, int destMax, 
 
 #define MapGridGetBorderTileAt(x, y) ({                                                             \
     int i;                                                                                          \
-    u16 *border = gMapHeader.mapLayout->border;                                                     \
                                                                                                     \
     i = (x + 1) & 1;                                                                                \
     i += ((y + 1) & 1) * 2;                                                                         \

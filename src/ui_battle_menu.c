@@ -433,7 +433,6 @@ static const u8 sMenuWindowFontColors[][3] =
 // UI loader template
 void Task_OpenBattleMenuFromStartMenu(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
@@ -444,7 +443,6 @@ void Task_OpenBattleMenuFromStartMenu(u8 taskId)
 
 static void Task_CalculateDamage(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
     u8 i, j , k;
 
     for (i = 0; i < MAX_BATTLERS_COUNT; i++) {
@@ -1243,8 +1241,6 @@ static bool8 Menu_LoadGraphics(void)
 
 static void Menu_InitWindows(void)
 {
-    u32 i;
-
     INIT_WINDOWS(sMenuWindowTemplates);
     DeactivateAllTextPrinters();
     ScheduleBgCopyTilemapToVram(0);
@@ -1466,16 +1462,11 @@ static void PrintStatsTab() {
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
     u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
-    u16 innate1 = gBaseStats[species].innates[0];
-    u16 innate2 = gBaseStats[species].innates[1];
-    u16 innate3 = gBaseStats[species].innates[2];
-    u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
     u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
     u8 statStage;
     bool8 statStageUp = FALSE;
-    bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
     u8 numtypes = 1;
-    struct Pokemon *party, *targetParty;
+    struct Pokemon *party;
     u8 nature;
     const s8 *natureMod;
 
@@ -1732,7 +1723,6 @@ const u8 sText_PrintAbilityTab_Innate[] = _("Innate");
 #define SPACE_BETWEEN_ABILITY_AND_NAME (8 * 8)
 #define SPACE_BETWEEN_ABILITIES 3
 static void PrintAbilityTab() {
-    u8 i, j;
     u8 x, y, x2, y2;
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
@@ -1742,9 +1732,6 @@ static void PrintAbilityTab() {
     u16 innate3 = gBaseStats[species].innates[2];
     u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
     u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
-    u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
-    u8 statStage;
-    bool8 statStageUp = FALSE;
     bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
 
     if (!isEnemyMon) { //Enemy Mons have disabled randomized innates/abilies 
@@ -1835,24 +1822,12 @@ const u8 sText_Title_Controllers_Move[]      = _("{DPAD_UPDOWN}Switch {DPAD_LEFT
 #define MIN_MOVE_DAMAGE 4
 #define ENABLE_DAMAGE_CALCULATION FALSE
 static void PrintMoveTab(void) {
-    u8 i, j;
     u8 x, y;
     u8 windowId = WINDOW_1;
-    u8 colorIdx = FONT_BLACK;
-    u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
     u16 move1   = gBattleMons[sMenuDataPtr->battlerId].moves[0];
     u16 move2   = gBattleMons[sMenuDataPtr->battlerId].moves[1];
     u16 move3   = gBattleMons[sMenuDataPtr->battlerId].moves[2];
     u16 move4   = gBattleMons[sMenuDataPtr->battlerId].moves[3];
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
-    u16 gBattleMoveDamage;
-    u8 target = 1;
-    u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
-    u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
-    u8 statStage;
-    bool8 statStageUp = FALSE;
-    bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
-    u8 mode = sMenuDataPtr->moveModeId;
 
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
     
@@ -1903,12 +1878,8 @@ const u8 gText_Boost_False[]         = _("False");
 const u8 gText_Move_Type_TwoTypedMoves[] = _("{STR_VAR_1}/{STR_VAR_2}");
 
 static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
-    u8 i, j;
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
-    u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
-    u16 gBattleMoveDamage;
     bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
     u8 mode = sMenuDataPtr->moveModeId;
     u8 x2 = 0;
@@ -1917,8 +1888,6 @@ static void PrintMoveInfo(u16 move, u8 x, u8 y, u8 moveIdx) {
     u32 movePower = gBattleMoves[move].power;
     u32 moveAccuracy = GetTotalAccuracy(sMenuDataPtr->battlerId, target, move, NULL);
     u8 moveType  = gBattleMoves[move].type;
-    u8 moveType2 = TYPE_MYSTERY;
-    bool32 updateFlags = FALSE;
     bool8 isStatusMove = gBattleMoves[move].split == SPLIT_STATUS;
     u8 stab = 2;
     struct Pokemon *party;
@@ -2328,20 +2297,6 @@ static void PrintStatusTab(void) {
     u8 i, j;
     u8 x, y, x2, y2;
     u8 windowId = WINDOW_1;
-    u8 colorIdx = FONT_BLACK;
-    u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
-    u16 move1   = gBattleMons[sMenuDataPtr->battlerId].moves[0];
-    u16 move2   = gBattleMons[sMenuDataPtr->battlerId].moves[1];
-    u16 move3   = gBattleMons[sMenuDataPtr->battlerId].moves[2];
-    u16 move4   = gBattleMons[sMenuDataPtr->battlerId].moves[3];
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
-    u16 gBattleMoveDamage;
-    u8 target = 1;
-    u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
-    u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
-    u8 statStage;
-    bool8 statStageUp = FALSE;
-    bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
     u8 maxLines = 3;
     bool8 printedInfo = FALSE;
     u8 turnsLeft = 0;
@@ -3074,23 +3029,14 @@ static void PrintStatusTab(void) {
 }
 
 static void PrintDamageCalulatorTab(void) {
-    u8 i, j;
+    u8 i;
     u8 x, y, x2, y2;
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
-    u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
     u16 moves[MAX_MON_MOVES] = {gBattleMons[sMenuDataPtr->battlerId].moves[0], 
                                 gBattleMons[sMenuDataPtr->battlerId].moves[1],
                                 gBattleMons[sMenuDataPtr->battlerId].moves[2], 
                                 gBattleMons[sMenuDataPtr->battlerId].moves[3]};
-    u16 ability = gBattleMons[sMenuDataPtr->battlerId].abilities[0];
-    u16 gBattleMoveDamage;
-    u32 personality = gBattleMons[sMenuDataPtr->battlerId].personality;
-    u8 gender = GetGenderFromSpeciesAndPersonality(gBattleMons[sMenuDataPtr->battlerId].species, gBattleMons[sMenuDataPtr->battlerId].personality);
-    u8 statStage;
-    bool8 statStageUp = FALSE;
-    bool8 isEnemyMon = GetBattlerSide(sMenuDataPtr->battlerId) == B_SIDE_OPPONENT;
-    u16 move;
     u8 target = BATTLE_OPPOSITE(sMenuDataPtr->battlerId);
     
     if (sMenuDataPtr->dmgCalculatorTarget != 0 && sMenuDataPtr->isDoubleBattle)
@@ -3181,17 +3127,14 @@ static const u8 sConvolutionTable[][MIN_DAMAGE_FACTOR] = {
 };
 
 static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
-    u32 minDamage, maxDamage, midDamage, tempdamage;
-    s32 dmg, critDmg, critChance, tempchance, minHits2KOChance;
-    u32 hits2KO, hits2KOmin, percentage;
-    u8 chance, moveType;
+    u32 minDamage, maxDamage, tempdamage;
+    s32 minHits2KOChance;
+    u32 hits2KO, percentage;
+    u8 moveType;
     u8 natureAtk, natureDef;
-    u8 statUpAtk, statUpDef;
-    u8 statDownAtk, statDownDef;
-    u8 i, j;
+    u8 i;
     struct Pokemon *party, *targetParty;
     u16 targetCurrentHp = gBattleMons[target].hp;
-    bool8 isCrit = FALSE;
     u16 move = gBattleMons[battler].moves[moveIndex];
     const s8 *natureMod;
     int ignored, immune;
@@ -3326,23 +3269,12 @@ static void CalculateDamage(u8 battler, u8 target, u8 moveIndex) {
 }
 
 void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
-    u32 minDamage, maxDamage, midDamage, tempdamage;
-    s32 dmg, critDmg, critChance, tempchance;
-    double minHits2KOChance;
-    u16 hits2KO, hits2KOmin, percentage;
-    u8 chance;
-    u8 natureAtk, natureDef;
-    u8 statUpAtk, statUpDef;
-    u8 statDownAtk, statDownDef;
-    u8 i, j;
+    u32 minDamage, maxDamage;
     u16 targetMaxHp = gBattleMons[target].maxHP;
     u16 targetCurrentHp = gBattleMons[target].hp;
     u16 targetHeldItem  = gBattleMons[target].item;
-    bool8 isCrit = FALSE;
-    const s8 *natureMod;
     u16 move = gBattleMons[battler].moves[moveIdx];
     struct DamageCalculation *damageCalculation;
-    u8 *DamageCalculationText;
 
     //Sets move type depending on the mon ability/stats
     SetTypeBeforeUsingMove(move, battler);
@@ -3439,21 +3371,9 @@ void PrintDamageCalculation(u8 battler, u8 target, u8 moveIdx) {
 }
 
 void PrintDamageCalculationExported(u8 battler, u8 target, u8 moveIdx) {
-    u32 minDamage, maxDamage, midDamage, tempdamage;
-    s32 dmg, critDmg, critChance, tempchance;
-    double minHits2KOChance;
-    u16 hits2KO, hits2KOmin, percentage, chance2KO;
-    u8 chance;
-    u8 natureAtk, natureDef;
-    u8 statUpAtk, statUpDef;
-    u8 statDownAtk, statDownDef;
-    u8 i, j;
-    u16 targetCurrentHp = gBattleMons[target].hp;
-    bool8 isCrit = FALSE;
-    const s8 *natureMod;
+    u32 minDamage, maxDamage;
     u16 move = gBattleMons[battler].moves[moveIdx];
     struct DamageCalculation *damageCalculation;
-    u8 *DamageCalculationText;
 
     //Sets move type depending on the mon ability/stats
     SetTypeBeforeUsingMove(move, battler);
@@ -3477,13 +3397,9 @@ void PrintDamageCalculationExported(u8 battler, u8 target, u8 moveIdx) {
 #define PARTY_POKEMON_SPACE_Y  (3 * 8)
 
 static void PrintPartyTab() {
-    u8 i, j;
+    u8 i;
     u8 x, y;
     u8 windowId = WINDOW_1;
-    u8 colorIdx = FONT_BLACK;
-    u8 turnsLeft = 5;
-    bool8 printedInfo = FALSE;
-    u8 maxLines = 3;
     u8 partyIndex = sMenuDataPtr->partyMenuSelectorID_X + (sMenuDataPtr->partyMenuSelectorID_Y * 3);
 
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
@@ -3633,10 +3549,9 @@ const u8 sText_Title_Field_No_Effect[]                      = _("Field has no ef
 const u8 sText_Title_Field_No_Effect_Description[]          = _("The field has no special effect.");
 static void PrintFieldTab(void)
 {
-    u8 i, j;
+    u8 i;
     u8 x, y, x2, y2;
     u8 windowId = WINDOW_1;
-    u8 colorIdx = FONT_BLACK;
     u8 turnsLeft = 5;
     bool8 printedInfo = FALSE;
     u8 maxLines = 3;
@@ -4060,7 +3975,6 @@ static void PrintSideTab(u8 side) {
     u8 i, j;
     u8 x, y, x2, y2;
     u8 windowId = WINDOW_1;
-    u8 colorIdx = FONT_BLACK;
     u8 turnsLeft = 5;
     bool8 printedInfo = FALSE;
     u8 maxLines = 3;
@@ -4434,7 +4348,7 @@ const u8 gText_PrintSpeedTabStats[] = _("Total Speed: {STR_VAR_1}");
 static void PrintSpeedTab(void)
 {
     //Single Battle Only
-    u16 targetCurrentHp, move, moveDamage, species, targetSpecies;
+    u16 targetCurrentHp, move, moveDamage, species;
     u8 i, j, target, x, y, x2, y2;
     u8 windowId = WINDOW_1;
     u8 colorIdx = FONT_BLACK;
@@ -4542,7 +4456,6 @@ static void PrintSpeedTab(void)
 
 static void PrintToWindow(u8 windowId, u8 colorIdx)
 {
-    const u8 *str = sText_MyMenu;
     u8 i, j;
     u8 x, y, x2, y2;
     u16 species = gBattleMons[sMenuDataPtr->battlerId].species;
@@ -4721,8 +4634,6 @@ static void Task_MenuWaitFadeIn(u8 taskId)
 
 static void Task_MenuTurnOff(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-
     if (!gPaletteFade.active)
     {
         SetMainCallback2(sMenuDataPtr->savedCallback);

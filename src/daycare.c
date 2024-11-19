@@ -250,7 +250,6 @@ static u16 TakeSelectedPokemonFromDaycare(struct DaycareMon *daycareMon)
 {
     u16 species;
     u16 newSpecies;
-    u32 experience;
     struct Pokemon pokemon;
 
     GetBoxMonNickname(&daycareMon->mon, gStringVar1);
@@ -849,7 +848,7 @@ static void InheritPokeBall(struct Pokemon *egg, struct DayCare *daycare)
 {
     u16 ball;
     u8 parent, i;
-    u8 femaleCount, abilitySlot = 0;
+    u8 femaleCount;
 
     // search for female
     for (i = 0; i < DAYCARE_MON_COUNT; i++)

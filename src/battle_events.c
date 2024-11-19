@@ -17,7 +17,8 @@
 #include "field_message_box.h"
 
 
-static u8 gNbBattleEvents;
+static u8 gNbBattleEvents = 0;
+static u8 gCurrBattleEvent = 0;
 EWRAM_DATA u8 gLastBattleEvent = 0;
 
 EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
@@ -201,7 +202,6 @@ if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_
     SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_RIGHT, stat, level);
 // this is run once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
-    u8 data;
     switch (battleEvent->id)
     {
     case BATTLE_EVENT_NONE:

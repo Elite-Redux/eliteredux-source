@@ -888,8 +888,6 @@ void EnterUnionRoomChat(void)
 
 static void InitUnionRoomChat(struct UnionRoomChat *chat)
 {
-    int i;
-
     chat->funcId = 0;
     chat->funcState = 0;
     chat->currentPage = 0;

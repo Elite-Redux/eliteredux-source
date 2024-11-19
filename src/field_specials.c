@@ -5552,7 +5552,6 @@ void ResetChosenMonEVs (void)
  */
 void ChangeChosenMonHiddenPower (void) 
 {
-    int i;
     u8 hiddenPowerType = gSpecialVar_0x8007;
   
     SetMonData(&gPlayerParty[gSpecialVar_0x800A], MON_DATA_HP_TYPE, &hiddenPowerType);

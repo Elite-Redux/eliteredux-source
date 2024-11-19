@@ -1127,8 +1127,6 @@ static bool8 IsPCScreenEffectRunning_TurnOn(void)
 static void Task_QuestMenuMain(u8 taskId)
 {
     s16 * data = gTasks[taskId].data;
-    u16 scroll;
-    u16 row;
     s32 input;
 
     if (!gPaletteFade.active && !IsPCScreenEffectRunning_TurnOn())
@@ -1329,7 +1327,6 @@ static void Task_QuestMenuBeginQuest(u8 taskId)
 
 static void QuestMenu_DisplaySubMenuMessage(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
     u8 windowId;
     
     windowId = QuestMenu_GetOrCreateSubwindow(2);

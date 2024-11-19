@@ -2163,7 +2163,6 @@ static bool8 Phase2_Mugshot_Func3(struct Task *task)
     u8 i, r5;
     u16* toStore;
     s16 value;
-    s32 mergedValue;
 
     sTransitionStructPtr->VBlank_DMA = FALSE;
 

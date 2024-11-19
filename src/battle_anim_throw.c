@@ -2489,7 +2489,6 @@ void AnimTask_SetTargetToEffectBattler(u8 taskId)
 void TryShinyAnimation(u8 battler, struct Pokemon *mon)
 {
     u8 isShiny;
-    u32 shinyValue;
     u8 taskCirc, taskDgnl;
 
     gBattleSpritesDataPtr->healthBoxesData[battler].triedShinyMonAnim = TRUE;

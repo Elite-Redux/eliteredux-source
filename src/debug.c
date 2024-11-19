@@ -1191,8 +1191,6 @@ static void Debug_RefreshListMenu(u8 taskId)
     u16 i;
     const u8 sColor_Red[] = _("{COLOR RED}");
     const u8 sColor_Green[] = _("{COLOR GREEN}");
-    u8 listTaskId = gTasks[taskId].data[0];
-    struct ListMenu *list = (void*) gTasks[listTaskId].data;
     u8 totalItems, flagResult;
     u8 const * name;
 
@@ -1409,10 +1407,9 @@ static void DebugTask_HandleBattleMenuReDraw(u8 taskId)
 }
 static void DebugTask_HandleMenuInput_Battle(u8 taskId)
 {
-    void (*func)(u8);
     u8 listTaskId = gTasks[taskId].data[0];
-    u32 input = ListMenu_ProcessInput(listTaskId);
     u16 idx;
+    ListMenu_ProcessInput(listTaskId);
 
     ListMenuGetCurrentItemArrayId(listTaskId, &idx);
 
@@ -1943,8 +1940,6 @@ static void DebugAction_Util_PoisonMons(u8 taskId)
 static void DebugAction_Util_CheckSaveBlock(u8 taskId)
 {
     static const u8 sDebugText_SaveBlockSize[] =  _("SaveBlock1 is {STR_VAR_1} bytes long.\nMax size is 15872 bytes.\pSaveBlock2 is {STR_VAR_2} bytes long.\nMax size is 3968 bytes.\pPokemonStorage is {STR_VAR_3} bytes long.\nMax size is 35712 bytes.");
-    static const u8 sDebugText_NumFlagBytes[]  =  _("Num Flag Bytes is: {STR_VAR_1}\pDex Flags No is: {STR_VAR_2}\pTrainers count is {STR_VAR_3}.");
-    static const u8 sDebugText_PokemonSize[]   =  _("Pokemon data is {STR_VAR_1} bytes long.\nBoxMon is {STR_VAR_2} bytes long.\pPokemonStorage is {STR_VAR_3} bytes long.\nMax size is 35712 bytes.");
 
     ConvertIntToDecimalStringN(gStringVar1, sizeof(struct SaveBlock1), STR_CONV_MODE_LEFT_ALIGN, 6);
     ConvertIntToDecimalStringN(gStringVar2, sizeof(struct SaveBlock2), STR_CONV_MODE_LEFT_ALIGN, 6);
@@ -2083,7 +2078,6 @@ static void DebugAction_Util_SetWallClock(u8 taskId)
 }
 static void DebugAction_Util_WatchCredits(u8 taskId)
 {
-    struct Task* task = &gTasks[taskId];
     Debug_DestroyMenu_Full(taskId);
     SetMainCallback2(CB2_StartCreditsSequence);
 }

@@ -919,8 +919,6 @@ static void TMHMContextMenuAction_Exit(u8 taskId)
 
 static void Task_SelectTMAction_Type1(u8 taskId)
 {
-    s16 * data = gTasks[taskId].data;
-
     PrintError_ItemCantBeHeld(taskId);
 }
 

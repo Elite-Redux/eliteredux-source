@@ -178,7 +178,7 @@ void BattleAI_SetupFlags(void)
 // sBattler_AI set in ComputeBattleAiScores
 void BattleAI_SetupAIData(u8 defaultScoreMoves)
 {
-    s32 i, move, dmg;
+    s32 i;
     u8 moveLimitations;
 
     // Clear AI data but preserve the flags.
@@ -308,7 +308,7 @@ static u8 ChooseMoveOrAction_Singles(void)
     u8 currentMoveArray[MAX_MON_MOVES];
     u8 consideredMoveArray[MAX_MON_MOVES];
     u32 numOfBestMoves;
-    s32 i, id;
+    s32 i;
     u32 flags = AI_THINKING_STRUCT->aiFlags;
 
     AI_DATA->partnerMove = 0; // no ally
@@ -729,7 +729,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         // target ability checks
         if (!DoesBattlerIgnoreAbilityChecks(battlerAtk, battlerDef, move))
         {
-            int ignored;
             if (TestAbsorbingAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
                 RETURN_SCORE_MINUS(20);
             if (TestImmunityAbilitiesOnly(battlerDef, battlerAtk, move, moveType))
@@ -2718,7 +2717,6 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     // move data
     u8 moveType = gBattleMoves[move].type;
     u16 effect = gBattleMoves[move].effect;
-    u16 target = gBattleMoves[move].target;
     // ally data
     u8 battlerAtkPartner = BATTLE_PARTNER(battlerAtk);
     u16 atkPartnerHoldEffect = AI_DATA->holdEffects[BATTLE_PARTNER(battlerAtk)];

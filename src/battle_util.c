@@ -929,7 +929,6 @@ void TryPreemptiveActions()
     int battler = gBattlerByTurnOrder[gCurrentTurnActionNumber];
     if (gCurrentActionFuncId == B_ACTION_USE_MOVE)
     {
-        int i;
         int move = GetChosenMove(battler);
         int target = GetMoveTarget(move, FALSE);
         int targetFlag = GetBattlerBattleMoveTargetFlags(move, battler);
@@ -2970,7 +2969,7 @@ if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FLARE_BOOST)) \
 
 u8 DoBattlerEndTurnEffects(void)
 {
-    u32 ability, i, effect = 0;
+    u32 i, effect = 0;
 
     if (AbilityBattleEffects(ABILITYEFFECT_REACTIVE, 0, 0, ABILITY_BS_EXECUTE, 0))
     {
@@ -5138,8 +5137,7 @@ int ShouldApplyOnHitAffect(int applyTo)
 
 bool8 UseIntimidateClone(u8 battler, u16 abilityToCheck)
 {
-    u8 numAbility, numStats, statToLower, i, target;
-    bool8 canLowerStat = FALSE;
+    u8 numAbility, i;
     
     for (numAbility = 0; i < NUM_INTIMIDATE_CLONES; i++) {
         if (gIntimidateCloneData[numAbility].ability == abilityToCheck)
@@ -5429,10 +5427,7 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
 {
     u8 effect = 0;
     u32 moveType, move;
-    u32 i, j;
-    u16 trainerNum;
-    u8 opponent;
-    u16 effectTargetFlag;
+    u32 i;
 
     if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
         return 0;
@@ -5998,10 +5993,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                 for (i = 0; i < gBattlersCount; i++)
                 {
                     u16 abilities[TOTAL_ABILITY_COUNT];
-                    u16 species = gBattleMons[i].species;
-                    u32 personality = gBattleMons[i].personality;
-                    int level = gBattleMons[i].level;
-                    bool8 isPlayer = GetBattlerSide(i) == B_SIDE_PLAYER;
                     u8 j = 0;
                     if (DoesBattlerHaveAbilityShield(i)) continue;
                     ARRAY_COPY(abilities, gBattleMons[i].abilities)
@@ -6045,7 +6036,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                     bool8 foundForBattler = FALSE;
                     for (statId = STAT_ATK; statId < NUM_BATTLE_STATS; statId++)
                     {
-                        u8 change = 0;
                         for (j = 0; j < gBattlersCount; j++)
                         {
                             if (GetBattlerSide(i) == GetBattlerSide(j)) continue;
@@ -8014,7 +8004,7 @@ u32 SetRandomTarget(u32 battlerId)
 u32 GetMoveTarget(u16 move, u8 setTarget)
 {
     u8 targetBattler = 0;
-    u32 i, moveTarget, side;
+    u32 moveTarget, side;
 
     if (setTarget)
         moveTarget = setTarget - 1;
@@ -8256,7 +8246,6 @@ u32 GetBattlerHoldEffect(u8 battlerId, bool32 checkNegating)
 
 bool8 DoesBattlerHaveAbilityShield(u8 battlerId)
 {
-    u8 i;
     if (GetBattlerHoldEffect(battlerId, FALSE) != HOLD_EFFECT_ABILITY_SHIELD) return FALSE;
     return !(gStatuses3[battlerId] & STATUS3_EMBARGO);
 }
@@ -8662,7 +8651,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
 {
     u32 i;
     u16 basePower = gBattleMoves[move].power;
-    u32 weight, hpFraction, speed;
+    u32 weight, speed;
 
     switch (gBattleMoves[move].effect)
     {
@@ -9673,7 +9662,6 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
 u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier)
 {
     u16 multiplier = UQ_4_12(1.0);
-    u16 abilities[4] = {0};
     int i = 0;
 
     for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++)
@@ -9691,7 +9679,7 @@ u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int mo
 
 u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags)
 {
-    u32 i, ability;
+    u32 i;
     u32 holdEffectAtk, holdEffectParamAtk;
     u16 basePower = CalcMoveBasePower(move, battlerAtk, battlerDef);
     u16 actualPower = fixedPower ? fixedPower : basePower;
@@ -9889,7 +9877,6 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
 u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isAttack, bool8 isCrit, bool8 isUnaware, bool8 calculatingSecondary) {
     u32 statBase = 0;
     u8 statStage = gBattleMons[battler].statStages[statEnum];
-    u32 extraStat = 0;
     u8 extraStatLevel = 0;
     #define RUIN_CHECK(ability) if (IsAbilityOnFieldExcept(battler, ability) && !BATTLER_HAS_ABILITY(battler, ability)) statBase = statBase * 3 / 4;
     switch (statEnum)
@@ -10117,7 +10104,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     u8 statBattler = battlerAtk;
     //Calculates Highest Attack Stat after stat boosts
     bool8 isUnaware = IsUnaware(battlerDef);
-    u8 highestAttackStat = STAT_ATK;
     u32 atkStat;
     u16 modifier;
     int i;
@@ -11236,7 +11222,6 @@ bool32 CanMegaEvolve(u8 battlerId)
     struct Pokemon *mon;
     u8 battlerPosition = GetBattlerPosition(battlerId);
     u8 partnerPosition = GetBattlerPosition(BATTLE_PARTNER(battlerId));
-    u8 step = 0;
     struct MegaEvolutionData *mega = &(((struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][4]))->mega);
 
     // Check if Player has a Mega Ring and the appropriate flag is set
@@ -11648,7 +11633,6 @@ bool32 CanFling(u8 battlerId)
 // ability checks
 bool32 IsRolePlayBannedAbilityAtk(u16 ability)
 {
-    u32 i;
     if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     return FALSE;
 }
@@ -11668,14 +11652,12 @@ bool32 IsRolePlayBannedAbility(u16 ability)
 
 bool32 IsWorrySeedBannedAbility(u16 ability)
 {
-    u32 i;
     if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     return FALSE;
 }
 
 bool32 IsGastroAcidBannedAbility(u16 ability)
 {
-    u32 i;
     if (IsPersistentOrUnsuppressableAbility(ability)) return TRUE;
     return FALSE;
 }
@@ -11751,8 +11733,6 @@ void TryRestoreStolenItems(void)
 
 bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item)
 {
-    u8 stealerSide = GetBattlerSide(battlerStealing);
-
     if (!item) return FALSE;
     if (gBattleMons[battlerStealing].item) return FALSE;
     
@@ -11913,8 +11893,6 @@ bool32 TryRoomService(u8 battlerId)
 // Move Checks
 bool8 IsTwoStrikesMove(u16 move)
 {
-    u32 i;
-
     switch (move)
     {
     case MOVE_DOUBLE_IRON_BASH:
@@ -13431,7 +13409,7 @@ static int HandleDefenderAbilityAs(int ability, int battler, int attacker, int m
 
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move)
 {
-    int i, ability, moveType;
+    int ability, moveType;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
     abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;

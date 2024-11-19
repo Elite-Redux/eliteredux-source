@@ -846,8 +846,6 @@ s32 AI_CalcDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8 *typeEffectiveness)
 // Checks if one of the moves has side effects or perks
 static u32 WhichMoveBetter(u32 move1, u32 move2)
 {
-    s32 defAbility = GetBattlerAbility(gBattlerTarget);
-
     // Check if physical moves hurt.
     if (AI_GetHoldEffect(gBattlerTarget) != HOLD_EFFECT_PROTECTIVE_PADS
         && (BATTLE_HISTORY->itemEffects[gBattlerTarget] == HOLD_EFFECT_ROCKY_HELMET
@@ -907,7 +905,6 @@ u8 GetMoveDamageResult(u16 move)
 {
     s32 i, checkedMove, bestId, currId, hp;
     s32 moveDmgs[MAX_MON_MOVES];
-    u8 result;
 
     for (i = 0; sDiscouragedPowerfulMoveEffects[i] != 0xFFFF; i++)
     {
@@ -1012,8 +1009,6 @@ u16 AI_GetTypeEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef)
 
 u8 AI_GetMoveEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef)
 {
-    u8 damageVar;
-
     if (gBattleMoves[move].split == SPLIT_STATUS)
         return AI_EFFECTIVENESS_x1;
 
@@ -1103,7 +1098,7 @@ bool32 IsAiFaster(u8 battler)
 // Check if target has means to faint ai mon.
 bool32 CanTargetFaintAi(u8 battlerDef, u8 battlerAtk)
 {
-    s32 i, dmg;
+    s32 i;
     u32 unusable = AI_DATA->moveLimitations[battlerDef];
     u16 *moves = GetMovesArray(battlerDef);
     
@@ -1147,7 +1142,7 @@ bool32 CanAIFaintTarget(u8 battlerAtk, u8 battlerDef, u8 numHits)
 
 bool32 CanMoveFaintBattler(u16 move, u8 battlerDef, u8 battlerAtk, u8 nHits)
 {
-    s32 i, dmg;
+    s32 i;
     u8 effectiveness;
     u32 unusable = AI_DATA->moveLimitations[battlerDef];
     if (move != MOVE_NONE
@@ -1215,9 +1210,6 @@ bool32 AI_IsBattlerGrounded(u8 battlerId)
 
 bool32 DoesBattlerIgnoreAbilityChecks(u8 battler, u8 battlerDef, u16 move)
 {
-    u32 i;
-    u16 atkAbility = GetBattlerAbility(battler);
-
     if (battler == battlerDef)
         return FALSE;
 
@@ -1234,8 +1226,6 @@ bool32 AI_WeatherHasEffect(void)
 
 bool32 IsAromaVeilProtectedMove(u16 move)
 {
-    u32 i;
-    
     switch (move)
     {
     case MOVE_DISABLE:
@@ -1533,8 +1523,6 @@ int ShouldSetFog(int battlerAtk, int holdEffect)
 void ProtectChecks(u8 battlerAtk, u8 battlerDef, u16 move, u16 predictedMove, s16 *score)
 {
     // TODO more sophisticated logic
-    u16 predictedEffect = gBattleMoves[predictedMove].effect;
-    u8 defAbility = GetBattlerAbility(battlerDef);
     u32 uses = gVolatileStructs[battlerAtk].protectUses;
     
     /*if (GetMoveResultFlags(predictedMove) & (MOVE_RESULT_NO_EFFECT | MOVE_RESULT_MISSED))
@@ -1931,7 +1919,6 @@ bool32 HasHealingEffect(u32 battlerId)
 
 bool32 HasHealingItem(u32 battlerId)
 {
-    s32 i;
     u32 heldItemEffect = GetBattlerHoldEffect(battlerId, TRUE);
 
     switch (heldItemEffect)
@@ -3248,7 +3235,6 @@ bool32 IsPartyFullyHealedExceptBattler(u8 battlerId)
 
 bool32 PartyHasMoveSplit(u8 battlerId, u8 split)
 {
-    u8 firstId, lastId;
     struct Pokemon* party = GetBattlerPartyData(battlerId);
     u32 i, j;
 

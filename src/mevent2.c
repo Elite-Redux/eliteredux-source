@@ -349,10 +349,10 @@ static bool32 ValidateStamp(const u16 *data)
 
 static int GetNumStampsInSavedCard(void)
 {
+    #ifndef FREE_MYSTERY_EVENT_BUFFERS
     struct WonderCard *data;
     if (!ValidateReceivedWonderCard())
         return 0;
-    #ifndef FREE_MYSTERY_EVENT_BUFFERS
     data = &gSaveBlock1Ptr->mysteryGift.wonderCard.data;
     if (data->unk_08_0 != 1)
         return 0;
