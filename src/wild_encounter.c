@@ -1337,6 +1337,7 @@ bool8 StandardWildEncounter_Debug(void)
         return FALSE;
 
     DoStandardWildBattle_Debug();
+    return TRUE;
 }
 
 bool8 TryDoDoubleWildBattle(void)

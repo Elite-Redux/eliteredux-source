@@ -337,7 +337,7 @@ static void SetSpriteInvisibility(u8 spriteArrayId, bool8 invisible);
 static void SetMonTypeIcons(void);
 static void SetTypeIconSpritePosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId);
 static void CreateSetStatusSprite(void);
-static u8 DestroyBattleMenuSprite(u8 spriteArrayId);
+static void DestroyBattleMenuSprite(u8 spriteArrayId);
 static void setBattler(void);
 static void LoadTilemapFromMode(void);
 static void PrintPage(void);
@@ -4742,7 +4742,7 @@ static void CreateSetStatusSprite(void)
     }
 }
 
-static u8 DestroyBattleMenuSprite(u8 spriteArrayId)
+static void DestroyBattleMenuSprite(u8 spriteArrayId)
 {
     struct Sprite *sprite = &gSprites[sMenuDataPtr->spriteIds[spriteArrayId]];
     sMenuDataPtr->spriteIds[spriteArrayId] = SPRITE_NONE;
@@ -4785,6 +4785,7 @@ static u8 ShowSpeciesIcon(u8 num)
             return sMenuDataPtr->spriteIds[SPRITE_ARR_ID_MON_ICON_4];
         break;
     }
+    return 0;
 }
 
 static void FreeEveryMonIconSprite(void)
@@ -4844,6 +4845,7 @@ static u8 ShowSpeciesIconSpeed(u8 battler, u8 x, u8 y)
             return sMenuDataPtr->spriteIds[SPRITE_ARR_ID_MON_ICON_4_SPEED];
         break;
     }
+    return 0;
 }
 
 static u8 ShowSpeciesIconParty(u8 num, bool8 isEnemyParty, u8 x, u8 y)

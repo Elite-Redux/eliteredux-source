@@ -1176,4 +1176,6 @@ int ScoreSwitchInAbility(int ability, int battlerAtk, int battlerDef, int move, 
     case ABILITY_REJECTION:
         return AI_SCORE_QUASH;
     }
+
+    return 0;
 }

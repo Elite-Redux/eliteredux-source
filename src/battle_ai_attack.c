@@ -158,6 +158,8 @@ int ScoreArgument(int battlerAtk, int battlerDef, int move, struct MoveState* mo
         // TODO: Delay
         return AI_SCORE_STAT(battlerAtk, STAT_SPEED, 1) + AI_SCORE_STAT(battlerAtk, STAT_SPDEF, -1);
     }
+
+    return 0;
 }
 
 #define LOCAL_LABEL(label) __LOCAL_LABEL__(label)

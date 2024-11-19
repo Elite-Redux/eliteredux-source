@@ -5253,7 +5253,7 @@ static void Cmd_setgraphicalstatchangevalues(void)
     gBattlescriptCurrInstr++;
 }
 
-static int PlayStatChangeAnimation(int battler, int statsToCheck, int flags, int rawStatChange)
+static void PlayStatChangeAnimation(int battler, int statsToCheck, int flags, int rawStatChange)
 {
     u32 currStat = 0;
     u32 statAnimId = 0;
@@ -12114,6 +12114,8 @@ static u16 ReverseStatChangeMoveEffect(u16 moveEffect)
     case MOVE_EFFECT_EVS_MINUS_2:
         return MOVE_EFFECT_EVS_PLUS_2;
     }
+
+    return moveEffect;
 }
 
 void SetStatChanger(u8 statId, s8 change)

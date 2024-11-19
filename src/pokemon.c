@@ -9839,6 +9839,7 @@ u16 tagSwitch(u8 tag, u16 rndseed) {
         case 20:
             return ARRAY_MODULO(gBeach_species, rndseed);
     }
+    return 0;
 }
 u16 GetRandomStarter(u8 gen, bool8 enc, bool8 leg, u8 starterID) {
     u32 rndSeed = VarGet(VAR_RANDOMIZED_SEED);

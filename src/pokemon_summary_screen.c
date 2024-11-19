@@ -369,8 +369,8 @@ static void DestroyExpBarSprites(void);
 static void SetExpBarSprites(void);
 static void PrintInfoBar(u8 pageIndex, bool8 detailsShown);
 static u8 WhatRegionWasMonCaughtIn(struct Pokemon *mon);
-static u8 *GetMapNameHoennKanto(u8 *dest, u16 mapSecId);
-static u8 *GetMapNameOrre(u8 *dest, u16 mapSecId, bool8 isXD);
+static void GetMapNameHoennKanto(u8 *dest, u16 mapSecId);
+static void GetMapNameOrre(u8 *dest, u16 mapSecId, bool8 isXD);
 static void DestroyMoveTypeIcon(void);
 static void UpdateTypeIcon(u16 move);
 static u8 ShowMoveTypeIcon(u16 move);
@@ -7325,7 +7325,7 @@ static u8 WhatRegionWasMonCaughtIn(struct Pokemon *mon)
         return REGION_HOENN;
 }
 
-static u8 *GetMapNameHoennKanto(u8 *dest, u16 regionMapId)
+static void GetMapNameHoennKanto(u8 *dest, u16 regionMapId)
 {
     if (regionMapId < MAPSEC_NONE && gRegionMapEntries[regionMapId].name != 0)
     {
@@ -7337,7 +7337,7 @@ static u8 *GetMapNameHoennKanto(u8 *dest, u16 regionMapId)
     }
 }
 
-static u8 *GetMapNameOrre(u8 *dest, u16 regionMapId, bool8 isXD)
+static void GetMapNameOrre(u8 *dest, u16 regionMapId, bool8 isXD)
 {
     if (!isXD)
     {

@@ -20,7 +20,7 @@
 
 int ScoreMove(int battlerAtk, int battlerDef, int move, int targets, struct AiData* aiData)
 {
-
+    return 0;
 }
 
 void ReplaceDisguise(struct DisguiseSimulation* actual)
@@ -179,6 +179,8 @@ int GetAiDecision(int battler)
     
     if (IsBattlerAlive(0)) RestoreDisguise(&disguise0);
     if (IsBattlerAlive(2)) RestoreDisguise(&disguise2);
+
+    return 0;
 }
 
 int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
@@ -186,21 +188,21 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
     return FALSE;
 }
 
-// Effects which are applied regardless of defender's survival. Calculates KO percent.
-int ComputeAttackPrimaryScoring(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
-{
+// // Effects which are applied regardless of defender's survival. Calculates KO percent.
+// int ComputeAttackPrimaryScoring(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
+// {
 
-}
+// }
 
-int AdjustStateForMove(int battlerAtk, int battlerUpdated, int move, struct AiData* aiData)
-{
+// int AdjustStateForMove(int battlerAtk, int battlerUpdated, int move, struct AiData* aiData)
+// {
     
-}
+// }
 
-int AdjustHpForMove(int battlerAtk, int battlerUpdated, int move, struct AiData* aiData)
-{
+// int AdjustHpForMove(int battlerAtk, int battlerUpdated, int move, struct AiData* aiData)
+// {
     
-}
+// }
 
 // int SpeedDifference(int battler1, int move1, int battler2, int move2, struct AiData* aiData)
 // {

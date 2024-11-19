@@ -4874,64 +4874,6 @@ bool32 ShouldChangeFormHpBased(u32 battler)
     return FALSE;
 }
 
-static u8 ForewarnChooseMove(u32 battler)
-{
-    struct Forewarn {
-        u8 battlerId;
-        u8 power;
-        u16 moveId;
-    };
-    u32 i, j, bestId, count;
-    struct Forewarn *data = malloc(sizeof(struct Forewarn) * gBattlersCount * MAX_MON_MOVES);
-
-    // Put all moves
-    for (count = 0, i = 0; i < gBattlersCount; i++)
-    {
-        if (IsBattlerAlive(i) && GetBattlerSide(i) != GetBattlerSide(battler))
-        {
-            for (j = 0; j < MAX_MON_MOVES; j++)
-            {
-                FILTER(gBattleMons[i].moves[j] != MOVE_NONE)
-                
-                data[count].moveId = gBattleMons[i].moves[j];
-                data[count].battlerId = i;
-                switch (gBattleMoves[data[count].moveId].effect)
-                {
-                case EFFECT_OHKO:
-                    data[count].power = 150;
-                    break;
-                case EFFECT_COUNTER:
-                case EFFECT_MIRROR_COAT:
-                case EFFECT_METAL_BURST:
-                    data[count].power = 120;
-                    break;
-                default:
-                    if (gBattleMoves[data[count].moveId].power == 1)
-                        data[count].power = 80;
-                    else
-                        data[count].power = gBattleMoves[data[count].moveId].power;
-                    break;
-                }
-                count++;
-            }
-        }
-    }
-
-    for (bestId = 0, i = 1; i < count; i++)
-    {
-        if (data[i].power > data[bestId].power)
-            bestId = i;
-        else if (data[i].power == data[bestId].power && Random() & 1)
-            bestId = i;
-    }
-
-    gBattlerTarget = data[bestId].battlerId;
-    PREPARE_MOVE_BUFFER(gBattleTextBuff1, data[bestId].moveId)
-    RecordKnownMove(gBattlerTarget, data[bestId].moveId);
-
-    free(data);
-}
-
 bool32 TryPrimalReversion(u8 battlerId, int useReturn)
 {
     if (GetBattlerHoldEffect(battlerId, FALSE) == HOLD_EFFECT_PRIMAL_ORB
@@ -11688,7 +11630,7 @@ bool32 IsEntrainmentTargetOrSimpleBeamBannedAbility(u16 ability)
 
 // Sort an array of battlers by speed
 // Useful for effects like pickpocket, eject button, red card, dancer
-int SortBattlersBySpeed(u8 *battlers, bool8 slowToFast)
+void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast)
 {
     int i, count = SortBattlersExcept(battlers, TRUE, 0);
     if (slowToFast)
@@ -12547,6 +12489,7 @@ static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, in
     case ABILITY_RADIANCE:
         return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript, abilityPopup);
     }
+    return FALSE;
 }
 
 static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
@@ -12561,6 +12504,7 @@ static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker,
     case ABILITY_DAZZLING:
         return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript, abilityPopup);
     }
+    return FALSE;
 }
 
 int IsBloodStainAffected(int battler)
@@ -14331,6 +14275,8 @@ int HandleMiscAbilityMoveEffects(int battler, int opponent, int move)
             effect++;
         }
     }
+
+    return effect;
 }
 
 static int HandleSwitchInAbilityAs(int ability, int battler);

@@ -1517,6 +1517,8 @@ int ShouldSetFog(int battlerAtk, int holdEffect)
     {
         if (BATTLER_HAS_ABILITY(battlerAtk, sFogAbilities[i])) return TRUE;
     }
+
+    return FALSE;
 }
 
 

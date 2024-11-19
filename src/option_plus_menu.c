@@ -321,6 +321,7 @@ static const u8 *const OptionTextRight(u8 menuItem)
     case MENU_MAIN:     return sOptionMenuItemsNamesMain[menuItem];
     case MENU_CUSTOM:   return sOptionMenuItemsNamesCustom[menuItem];
     }
+    return NULL;
 }
 
 // Menu left side text conditions
@@ -366,6 +367,7 @@ static bool8 CheckConditions(int selection)
         case MENUITEM_CUSTOM_COUNT:               return TRUE;
         }
     }
+    return FALSE;
 }
 
 // Descriptions
@@ -531,6 +533,7 @@ static const u8 *const OptionTextDescription(void)
             selection = 0;
         return sOptionMenuItemDescriptionsCustom[menuItem][selection];
     }
+    return NULL;
 }
 
 static u8 MenuItemCount(void)
@@ -540,6 +543,7 @@ static u8 MenuItemCount(void)
     case MENU_MAIN:     return MENUITEM_MAIN_COUNT;
     case MENU_CUSTOM:   return MENUITEM_CUSTOM_COUNT;
     }
+    return 0;
 }
 
 static u8 MenuItemCancel(void)
@@ -549,6 +553,7 @@ static u8 MenuItemCancel(void)
     case MENU_MAIN:     return MENUITEM_MAIN_CANCEL;
     case MENU_CUSTOM:   return MENUITEM_CUSTOM_CANCEL;
     }
+    return 0;
 }
 
 // Main code
