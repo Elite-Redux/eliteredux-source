@@ -11786,7 +11786,7 @@ static void Cmd_manipulatedamage(void)
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].hp;
         break;
     case DMG_BIG_ROOT:
-        gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
+        gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, -gBattleMoveDamage);
         break;
     case DMG_1_2_ATTACKER_HP:
         gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
@@ -11798,34 +11798,7 @@ static void Cmd_manipulatedamage(void)
 			gBattleMoveDamage = gBattleMoveDamage * 0.5;
         break;
     case DMG_TO_HP_FROM_ABILITY:
-        if (BATTLER_HEALING_BLOCKED(gBattlerAttacker))
-        {
-            gBattleMoveDamage = 0;
-            break;
-        }
-        if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_NOSFERATU))
-            gBattleMoveDamage = (gHpDealt / 2);
-        else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_HYDRO_CIRCUIT))
-            gBattleMoveDamage = (gHpDealt / 4);
-        else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ANGELS_WRATH))
-            gBattleMoveDamage = gHpDealt;
-        else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PURE_LOVE))
-            gBattleMoveDamage = (gHpDealt / 4);
-        else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_VITALITY_STRIKE))
-            gBattleMoveDamage = (gHpDealt / 10);
-        else
-            gBattleMoveDamage = (gHpDealt / 2);
-
-        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_BIG_ROOT)
-            gBattleMoveDamage = (gBattleMoveDamage * 3) / 2; // Buff Big Root's additional healing from 30% to 50%
-
-        if (BattlerHasAbility(gBattlerAttacker, ABILITY_ABSORBANT, FALSE))
-            gBattleMoveDamage = (gBattleMoveDamage * 3) / 2; // Buff Absorbant additional healing from 30% to 50%
-
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
-
-        gBattleMoveDamage = gBattleMoveDamage * -1;
+        gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, gBattleMoveDamage);
         break;
     case DMG_TO_HP_FROM_MOVE:
         if (BATTLER_HEALING_BLOCKED(gBattlerAttacker))
@@ -11837,17 +11810,8 @@ static void Cmd_manipulatedamage(void)
             gBattleMoveDamage = (gHpDealt * gBattleMoves[gCurrentMove].argument / 100);
         else
             gBattleMoveDamage = (gHpDealt / 2);
-
-        if (GetBattlerHoldEffect(gBattlerAttacker, TRUE) == HOLD_EFFECT_BIG_ROOT)
-            gBattleMoveDamage = (gBattleMoveDamage * 3) / 2; // Buff Big Root's additional healing from 30% to 50%
-
-        if (BattlerHasAbility(gBattlerAttacker, ABILITY_ABSORBANT, FALSE))
-            gBattleMoveDamage = (gBattleMoveDamage * 3) / 2; // Buff Absorbant additional healing from 30% to 50%
-
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
-
-        gBattleMoveDamage = gBattleMoveDamage * -1;
+        
+        gBattleMoveDamage = GetDrainedBigRootHp(gBattlerAttacker, -gBattleMoveDamage);
         break;
     }
 
@@ -12546,17 +12510,14 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
 
 static void Cmd_statbuffchange(void)
 {
-    u16 flags = T1_READ_16(gBattlescriptCurrInstr + 1);
-    u8 result;
+    u16 flags = READ_FIRST_16_INC;
+    const u8 *jumpPtr = READ_PTR_INC;
     const u8 *ptrBefore = gBattlescriptCurrInstr;
-    const u8 *jumpPtr = T1_READ_PTR(gBattlescriptCurrInstr + 3);
 
-    result = ChangeStatBuffsImplicit(GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger), gBattleScripting.statChanger.statId, flags, jumpPtr);
+    u8 result = ChangeStatBuffsImplicit(GET_STAT_BUFF_VALUE_WITH_SIGN(gBattleScripting.statChanger), gBattleScripting.statChanger.statId, flags, jumpPtr);
     SetActiveMultistringChooser(gBattleCommunication[MULTISTRING_CHOOSER]);
 
-    if (result)
-        gBattlescriptCurrInstr += 7;
-    else if (gBattlescriptCurrInstr == ptrBefore) // Prevent infinite looping.
+    if (!result && jumpPtr && gBattlescriptCurrInstr == ptrBefore)
         gBattlescriptCurrInstr = jumpPtr;
 }
 
