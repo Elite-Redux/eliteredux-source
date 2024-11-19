@@ -2433,7 +2433,7 @@ static bool32 PartyBattlerShouldAvoidHazards(u8 currBattler, u8 switchBattler)
 
     if (!(flags & SIDE_STATUS_STEALTH_ROCK)
         && !IsGravityActive()
-        && !holdEffect == HOLD_EFFECT_IRON_BALL
+        && holdEffect != HOLD_EFFECT_IRON_BALL
         && (ability == ABILITY_LEVITATE || MonHasInnate(mon, ABILITY_LEVITATE, isEnemyMon)
             || ability == ABILITY_AERIALIST || MonHasInnate(mon, ABILITY_AERIALIST, isEnemyMon)
             || ability == ABILITY_DRAGONFLY || MonHasInnate(mon, ABILITY_DRAGONFLY, isEnemyMon)
