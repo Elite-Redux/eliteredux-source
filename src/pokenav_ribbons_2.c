@@ -113,13 +113,13 @@ static u32 LoopedTask_MoveRibbonsCursorExpanded(s32);
 static u32 LoopedTask_ShrinkExpandedRibbon(s32);
 static u32 LoopedTask_ExitRibbonsSummaryMenu(s32);
 
-struct
+static const struct
 {
     u8 numBits; // The number of bits needed to represent numRibbons
     u8 numRibbons; // Never read. The contest ribbons have 4 (1 for each rank), the rest are just 1 ribbon
     u8 ribbonId;
     bool8 isGiftRibbon;
-} static  const sRibbonData[] =
+} sRibbonData[] =
 {
     {1, 1, CHAMPION_RIBBON,      FALSE},
     {3, 4, COOL_RIBBON_NORMAL,   FALSE},
@@ -1083,11 +1083,11 @@ enum {
 
 #define TO_PAL_OFFSET(palNum)((palNum) - PALTAG_RIBBON_ICONS_1)
 
-struct
+static const struct
 {
     u16 tileNumOffset;
     u16 palNumOffset;
-} static const sRibbonGfxData[] =
+} sRibbonGfxData[] =
 {
     [CHAMPION_RIBBON]      = { RIBBONGFX_CHAMPION,       TO_PAL_OFFSET(PALTAG_RIBBON_ICONS_1)},
     [COOL_RIBBON_NORMAL]   = { RIBBONGFX_CONTEST_NORMAL, TO_PAL_OFFSET(PALTAG_RIBBON_ICONS_1)},

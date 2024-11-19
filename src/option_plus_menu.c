@@ -213,11 +213,11 @@ static const u16 sOptionMenuText_Culstom_Pal[] = INCBIN_U16("graphics/interface/
 #define TEXT_COLOR_OPTIONS_RED_DARK_SHADOW      14
 
 // Menu draw and input functions
-struct // MENU_MAIN
+static struct // MENU_MAIN
 {
     void (*drawChoices)(int selection, int y);
     int (*processInput)(int selection);
-} static const sItemFunctionsMain[MENUITEM_MAIN_COUNT] =
+} const sItemFunctionsMain[MENUITEM_MAIN_COUNT] =
 {
     [MENUITEM_MAIN_TEXTSPEED]    = {DrawChoices_TextSpeed,   ProcessInput_Options_Four},
     [MENUITEM_MAIN_HPBARSPEED]   = {DrawChoices_BarSpeed,    ProcessInput_Options_Four},
@@ -228,11 +228,11 @@ struct // MENU_MAIN
     [MENUITEM_MAIN_CANCEL]       = {NULL, NULL},
 };
 
-struct // MENU_CUSTOM
+static struct // MENU_CUSTOM
 {
     void (*drawChoices)(int selection, int y);
     int (*processInput)(int selection);
-} static const sItemFunctionsCustom[MENUITEM_CUSTOM_COUNT] =
+} const sItemFunctionsCustom[MENUITEM_CUSTOM_COUNT] =
 {
     [MENUITEM_CUSTOM_BATTLE_UI_THEME]     = {DrawChoices_BattleInterfaceTheme,     ProcessInput_Options_Four},
     [MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = {DrawChoices_BattleInterfaceShortcut,  ProcessInput_Options_Five},

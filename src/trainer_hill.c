@@ -83,11 +83,11 @@ static u16 GetPrizeItemId(void);
 // const data
 #include "data/battle_frontier/trainer_hill.h"
 
-struct
+static const struct
 {
     u8 trainerClass;
     u8 musicId;
-} static const sTrainerClassesAndMusic[] =
+} sTrainerClassesAndMusic[] =
 {
     {TRAINER_CLASS_TEAM_AQUA, TRAINER_ENCOUNTER_MUSIC_AQUA},
     {TRAINER_CLASS_AQUA_ADMIN, TRAINER_ENCOUNTER_MUSIC_AQUA},

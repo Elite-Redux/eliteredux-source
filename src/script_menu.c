@@ -980,11 +980,11 @@ static const struct ListMenuItem sTutorialNPCOptions[] =
 };
 
 // Table of your multichoice sets.
-struct
+static const struct
 {
     const struct ListMenuItem *set;
     int count;
-} static const sScrollingSets[] =
+} sScrollingSets[] =
 {
     {sTutorialNPCOptions, ARRAY_COUNT(sTutorialNPCOptions)},
 };

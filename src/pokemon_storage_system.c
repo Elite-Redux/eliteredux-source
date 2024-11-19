@@ -900,10 +900,10 @@ const u8 gPCText_Evolve[] = _("Evolve");
 const u8 gText_MoveLevelUpDescription[] = _("Level Up to what level?");
 const u8 gText_MoveEvolveDescription[] = _("Evolve into what?");
 
-struct {
+static struct {
     const u8 *text;
     const u8 *desc;
-} static const sMainMenuTexts[OPTIONS_COUNT] =
+} const sMainMenuTexts[OPTIONS_COUNT] =
 {
     [OPTION_WITHDRAW]      = {gText_WithdrawPokemon, gText_WithdrawMonDescription},
     [OPTION_DEPOSIT]       = {gText_DepositPokemon,  gText_DepositMonDescription},
@@ -6807,12 +6807,12 @@ static void TrySetCursorFistAnim(void)
 // they may not release their last Pokémon that knows the specified move.
 // This is to stop the player from softlocking themselves by not having
 // a Pokémon that knows a required field move.
-struct
+static struct
 {
     s8 mapGroup;
     s8 mapNum;
     u16 move;
-} static const sRestrictedReleaseMoves[] =
+} const sRestrictedReleaseMoves[] =
 {
     {MAP_GROUPS_COUNT, 0, MOVE_SURF},
     {MAP_GROUPS_COUNT, 0, MOVE_DIVE},
@@ -8041,11 +8041,11 @@ static u8 HandleInput_OnButtons(void)
 
 static u8 HandleInput(void)
 {
-    struct
+    static const struct
     {
         u8 (*func)(void);
         s8 area;
-    } static const inputFuncs[] =
+    } inputFuncs[] =
     {
         {HandleInput_InBox,     CURSOR_AREA_IN_BOX},
         {HandleInput_InParty,   CURSOR_AREA_IN_PARTY},
@@ -10302,11 +10302,11 @@ static void TilemapUtil_UpdateAll(void)
     }
 }
 
-struct
+static const struct
 {
     u16 width;
     u16 height;
-} static const sTilemapDimensions[][4] =
+} sTilemapDimensions[][4] =
 {
     {
         { 256,  256},
