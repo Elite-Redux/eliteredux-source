@@ -39128,21 +39128,12 @@ static const struct TrainerMonItemCustomMoves sParty_StevenRoute118Insane[] = {
 static const struct TrainerMonItemCustomMoves sParty_YdaMtPyre[] = {
     {
     .lvl = 0,
-    .species = SPECIES_SAMUROTT_HISUIAN,
+    .species = SPECIES_WEAVILE,
     .heldItem = ITEM_FOCUS_SASH,
-    .ability = 1,
-    .evs = {0, 252, 4, 0, 0, 252},
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_CEASELESS_EDGE, MOVE_TAUNT, MOVE_RAZOR_SHELL, MOVE_AQUA_JET
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_ORICORIO_SENSU,
-    .heldItem = ITEM_ORICORIONITE,
-    .ability = 2,
-    .evs = {0, 0, 4, 252, 0, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_REVELATION_DANCE, MOVE_QUIVER_DANCE, MOVE_AIR_SLASH, MOVE_PROTECT
+    .moves = MOVE_TRIPLE_AXEL, MOVE_KNOCK_OFF, MOVE_SWORDS_DANCE, MOVE_ICE_SHARD
     },
     {
     .lvl = 0,
@@ -39155,21 +39146,21 @@ static const struct TrainerMonItemCustomMoves sParty_YdaMtPyre[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_JOLTEON,
-    .heldItem = ITEM_EXPERT_BELT,
-    .ability = 0,
-    .evs = {0, 0, 4, 252, 0, 252},
-    .nature = NATURE_MODEST,
-    .moves = MOVE_THUNDER, MOVE_BLIZZARD, MOVE_PROTECT, MOVE_HYDRO_PUMP
+    .species = SPECIES_HARIYAMA,
+    .heldItem = ITEM_ASSAULT_VEST,
+    .ability = 2,
+    .evs = {252, 252, 4, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_ONE_INCH_PUNCH, MOVE_FIRST_IMPRESSION, MOVE_AURA_FORCE, MOVE_SEISMIC_FIST
     },
     {
     .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF,
-    .heldItem = ITEM_WIGGLYTUFFITE,
-    .ability = 1,
-    .evs = {252, 0, 136, 120, 0, 0},
-    .nature = NATURE_MODEST,
-    .moves = MOVE_DRAINING_KISS, MOVE_ENERGY_WAVE, MOVE_THUNDERBOLT, MOVE_CALM_MIND
+    .species = SPECIES_ORICORIO_SENSU,
+    .heldItem = ITEM_ORICORIONITE,
+    .ability = 2,
+    .evs = {0, 0, 4, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_REVELATION_DANCE, MOVE_QUIVER_DANCE, MOVE_AIR_SLASH, MOVE_PROTECT
     },
     {
     .lvl = 0,
@@ -39179,6 +39170,15 @@ static const struct TrainerMonItemCustomMoves sParty_YdaMtPyre[] = {
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_ADAMANT,
     .moves = MOVE_DRAGON_DANCE, MOVE_RAGING_FURY, MOVE_DUAL_WINGBEAT, MOVE_OUTRAGE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_MAWILE,
+    .heldItem = ITEM_MAWILITE,
+    .ability = 0,
+    .evs = {252, 252, 4, 0, 0, 0},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_SNAP_TRAP, MOVE_LOVELY_BITE, MOVE_SWORDS_DANCE, MOVE_SUCKER_PUNCH
     }
 };
 
