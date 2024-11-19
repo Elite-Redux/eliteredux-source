@@ -546,7 +546,7 @@ static u8 PredictFoesMoveType(u32 opposingBattler)
 {
     int i;
     u16 species = gBattleMons[gActiveBattler].species;
-    u32 typeDmg1, typeDmg2, typeDmg3, bestTypeDmg = UQ_4_12(1.0);
+    u32 typeDmg1 = UQ_4_12(1.0), typeDmg2 = UQ_4_12(1.0), typeDmg3, bestTypeDmg = UQ_4_12(1.0);
     u16 *moves = GetMovesArray(opposingBattler);
 
     u8 defType1 = gBaseStats[species].type1;

@@ -4958,7 +4958,7 @@ void SetMultiuseSpriteTemplateToTrainerFront(u16 arg0, u8 battlerPosition)
     gMultiuseSpriteTemplate.anims = gTrainerFrontAnimsPtrTable[arg0];
 }
 
-u32 GetMonData(struct Pokemon *mon, s32 field, u8* data)
+u32 GetMonDataInternal(struct Pokemon *mon, s32 field, u8* data)
 {
     u32 ret;
 
@@ -5026,7 +5026,7 @@ bool8 CheckBoxMonForBadChecksum(u8 box, u8 slot) {
     return FALSE;
 }
 
-u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
+u32 GetBoxMonDataInternal(struct BoxPokemon *boxMon, s32 field, u8 *data)
 {
     u32 retVal = 0;
 
@@ -5039,6 +5039,7 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         retVal = boxMon->otId;
         break;
     case MON_DATA_NICKNAME:
+        REQUIRE(data)
     {
         if (boxMon->isEgg)
         {
@@ -5068,6 +5069,7 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
         retVal = boxMon->isEgg;
         break;
     case MON_DATA_OT_NAME:
+        REQUIRE(data)
     {
         retVal = 0;
 

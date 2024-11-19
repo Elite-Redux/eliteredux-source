@@ -129,7 +129,7 @@ void BattleAI_SetupItems(void)
 static u32 GetWildAiFlags(void)
 {
     u8 avgLevel = GetMonData(&gEnemyParty[0], MON_DATA_LEVEL);
-    u32 flags;
+    u32 flags = 0;
 
     if (IsDoubleBattle())
         avgLevel = (GetMonData(&gEnemyParty[0], MON_DATA_LEVEL) + GetMonData(&gEnemyParty[1], MON_DATA_LEVEL)) / 2;

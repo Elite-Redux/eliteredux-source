@@ -7173,9 +7173,9 @@ static void ReshowDisplayMon(void)
 
 void SetArceusFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 species = GetMonData(boxMon, MON_DATA_SPECIES);
+    u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     u16 forme;
-    u8 abilityNum = GetMonData(boxMon, MON_DATA_ABILITY_NUM);
+    u8 abilityNum = GetBoxMonData(boxMon, MON_DATA_ABILITY_NUM);
     u16 ability = GetAbilityBySpecies(species, abilityNum);
 
     if (GET_BASE_SPECIES_ID(species) == SPECIES_ARCEUS && (ability == ABILITY_MULTITYPE  || BoxMonHasInnate(boxMon, ABILITY_MULTITYPE, FALSE)))
@@ -7194,7 +7194,7 @@ void SetArceusFormPSS(struct BoxPokemon *boxMon)
 
 u16 GetArceusFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 item = GetMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
+    u16 item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
 
     switch (item)
     {
@@ -7239,7 +7239,7 @@ u16 GetArceusFormPSS(struct BoxPokemon *boxMon)
 
 u16 GetSilvallyFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 item = GetMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
+    u16 item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
 
     switch (item)
     {
@@ -7284,7 +7284,7 @@ u16 GetSilvallyFormPSS(struct BoxPokemon *boxMon)
 
 u16 GetGiratinaFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 item = GetMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
+    u16 item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
 
     switch (item)
     {

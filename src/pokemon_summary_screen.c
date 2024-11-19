@@ -1745,7 +1745,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_HP_EV);
             }
 		break;
 		case 1:
@@ -1754,7 +1754,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_ATK_EV);
             }
 		break;
 		case 2:
@@ -1763,7 +1763,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_DEF_EV);
             }
 		break;
 		case 3:
@@ -1772,7 +1772,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPATK_EV);
             }
 		break;
 		case 4:
@@ -1781,7 +1781,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPDEF_EV);
             }
 		break;
 		case 5:
@@ -1790,7 +1790,7 @@ static void Task_HandleInput(u8 taskId)
             }
             else {
                 struct BoxPokemon *boxMon = sMonSummaryScreen->monList.boxMons;
-				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV, &CurrentEv);
+				CurrentEv = GetBoxMonData(&boxMon[sMonSummaryScreen->curMonIndex], MON_DATA_SPEED_EV);
             }
 		break;
 	}
@@ -3045,7 +3045,7 @@ static void PrintMoveInfoFromReplaceTab(void) {
 
 static void RedrawMoveTypeMenu()
 {
-    int i, windowId, type1, type2, PosX, PosY, tabNum;
+    int i, windowId, type1 = 0, type2 = 0, PosX, PosY, tabNum;
 
 
     SetSpriteInvisibility(SPRITE_ARR_ID_MON_ICON, FALSE);

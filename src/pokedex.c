@@ -6447,7 +6447,7 @@ static bool8 CalculateMoves(void)
     u16 species = NationalPokedexNumToSpecies(sPokedexListItem->dexNum);
     u8 numEggMoves = GetEggMovesSpecies(species, sStatsMovesEgg);
     u8 numLevelUpMoves = GetLevelUpMovesBySpecies(species, sStatsMovesLevelUp);
-    u8 numTMHMMoves;
+    u8 numTMHMMoves = 0;
     u8 numTutorMoves = 0;
     u16 movestotal;
     u8 i;

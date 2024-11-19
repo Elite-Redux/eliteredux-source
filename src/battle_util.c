@@ -5082,9 +5082,9 @@ int ShouldApplyOnHitAffect(int applyTo)
 
 bool8 UseIntimidateClone(u8 battler, u16 abilityToCheck)
 {
-    u8 numAbility, i;
+    u8 numAbility;
     
-    for (numAbility = 0; i < NUM_INTIMIDATE_CLONES; i++) {
+    for (numAbility = 0; numAbility < NUM_INTIMIDATE_CLONES; numAbility++) {
         if (gIntimidateCloneData[numAbility].ability == abilityToCheck)
             break;
     }
