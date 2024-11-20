@@ -345,6 +345,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_WHISCASH] = _("Whiscash"),
     [SPECIES_CORPHISH] = _("Corphish"),
     [SPECIES_CRAWDAUNT] = _("Crawdaunt"),
+    [SPECIES_CRAWDAUNTLES] = _("Crawdauntles"),
     [SPECIES_BALTOY] = _("Baltoy"),
     [SPECIES_CLAYDOL] = _("Claydol"),
     [SPECIES_LILEEP] = _("Lileep"),

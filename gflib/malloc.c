@@ -5,8 +5,10 @@ static void *sHeapStart;
 static u32 sHeapSize;
 __attribute__((section("__EWRAM_HEAP"))) u8 gHeap[HEAP_SIZE] = {0};
 
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
 static u32 sFiller; // needed to align dma3_manager.o(.bss)
+#pragma GCC diagnostic pop
 
 #define MALLOC_SYSTEM_ID 0xA3A3
 

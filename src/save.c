@@ -189,7 +189,6 @@ static u8 WriteSaveSectorOrSlot(u16 sectorId, const struct SaveSectionLocation *
 
 static u8 HandleWriteSector(u16 sectorId, const struct SaveSectionLocation *location)
 {
-    u16 i;
     u16 sector;
     u8 *data;
     u16 size;
@@ -610,7 +609,7 @@ static void UpdateSaveAddresses(void)
         gRamSaveSectionLocations[i].size = sSaveSectionOffsets[i].size;
     }
 
-    for (SECTOR_ID_PKMN_STORAGE_START; i <= SECTOR_ID_PKMN_STORAGE_END; i++)
+    for (i = SECTOR_ID_PKMN_STORAGE_START; i <= SECTOR_ID_PKMN_STORAGE_END; i++)
     {
         gRamSaveSectionLocations[i].data = (void*)(gPokemonStoragePtr) + sSaveSectionOffsets[i].toAdd;
         gRamSaveSectionLocations[i].size = sSaveSectionOffsets[i].size;
@@ -632,7 +631,7 @@ u8 HandleSavingData(u8 saveType)
         // before overwriting HOF.
         for (i = SECTOR_ID_HOF_1; i < SECTORS_COUNT; i++)
             EraseFlashSector(i);
-        // fallthrough
+        FALLTHROUGH
     case SAVE_HALL_OF_FAME: // hall of fame.
         if (GetGameStat(GAME_STAT_ENTERED_HOF) < 999)
             IncrementGameStat(GAME_STAT_ENTERED_HOF);

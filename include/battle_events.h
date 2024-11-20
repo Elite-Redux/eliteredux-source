@@ -5,8 +5,6 @@
 #define BATTLE_EVENTS_MAX_REGISTERABLE 16
 
 
-static u8 gNbBattleEvents;
-static u8 gCurrBattleEvent;
 extern u8 gLastBattleEvent;
 
 /**

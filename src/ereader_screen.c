@@ -93,6 +93,9 @@ static void OpenEReaderLink(void)
     SetSuppressLinkErrorMessage(TRUE);
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+
 static bool32 sub_81D4E60(void)
 {
     volatile u16 backupIME;
@@ -110,6 +113,8 @@ static bool32 sub_81D4E60(void)
 
     return FALSE;
 }
+
+#pragma GCC diagnostic pop
 
 static bool32 sub_81D4EC0(void)
 {

@@ -3325,7 +3325,7 @@ void BufferStringBattle(u16 stringID)
 
 u32 BattleStringExpandPlaceholdersToDisplayedString(const u8* src)
 {
-    BattleStringExpandPlaceholders(src, gDisplayedStringBattle);
+    return BattleStringExpandPlaceholders(src, gDisplayedStringBattle);
 }
 
 static const u8* TryGetStatusString(u8 *src)
@@ -3453,7 +3453,7 @@ static const u8 *BattleStringGetOpponentNameByTrainerId(u16 trainerId, u8 *text,
 
 static const u8 *BattleStringGetOpponentName(u8 *text, u8 multiplayerId, u8 battlerId)
 {
-    const u8 *toCpy;
+    const u8 *toCpy = NULL;
 
     switch (GetBattlerPosition(battlerId))
     {
@@ -3473,7 +3473,7 @@ static const u8 *BattleStringGetOpponentName(u8 *text, u8 multiplayerId, u8 batt
 
 static const u8 *BattleStringGetPlayerName(u8 *text, u8 battlerId)
 {
-    const u8 *toCpy;
+    const u8 *toCpy = NULL;
 
     switch (GetBattlerPosition(battlerId))
     {
@@ -3539,7 +3539,6 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
     const u8 *toCpy = NULL;
     u8 text[30];
     u8 multiplayerId;
-    s32 i;
 
     if (gBattleTypeFlags & BATTLE_TYPE_RECORDED_LINK)
         multiplayerId = gRecordedBattleMultiplayerId;
@@ -4371,37 +4370,37 @@ void SetPpNumbersPaletteInMoveSelection(void)
     CpuCopy16(&gPlttBufferUnfaded[91], &gPlttBufferFaded[91], sizeof(u16));
 }
 
-u8 GetCurrentPpToMaxPpState(u8 currentPp, u8 maxPp)
+PpCountQuality GetCurrentPpToMaxPpState(u8 currentPp, u8 maxPp)
 {
     if (maxPp == currentPp)
     {
-        return 3;
+        return PP_MANY;
     }
     else if (maxPp <= 2)
     {
         if (currentPp > 1)
-            return 3;
+            return PP_MANY;
         else
             return 2 - currentPp;
     }
     else if (maxPp <= 7)
     {
         if (currentPp > 2)
-            return 3;
+            return PP_MANY;
         else
             return 2 - currentPp;
     }
     else
     {
         if (currentPp == 0)
-            return 2;
+            return PP_NO_PP;
         if (currentPp <= maxPp / 4)
-            return 1;
+            return PP_SOME;
         if (currentPp > maxPp / 2)
-            return 3;
+            return PP_MANY;
     }
 
-    return 0;
+    return PP_FEW;
 }
 
 struct TrainerSlide

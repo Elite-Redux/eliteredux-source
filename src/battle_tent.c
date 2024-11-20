@@ -60,7 +60,7 @@ static void GenerateInitialRentalMons(void);
 static u16 sRandMonSetId;
 
 // const rom data
-void static (*const sVerdanturfTentFuncs[])(void) =
+static void (*const sVerdanturfTentFuncs[])(void) =
 {
     [VERDANTURF_TENT_FUNC_INIT]               = InitVerdanturfTentChallenge,
     [VERDANTURF_TENT_FUNC_GET_PRIZE]          = GetVerdanturfTentPrize,
@@ -74,7 +74,7 @@ void static (*const sVerdanturfTentFuncs[])(void) =
 
 static const u16 sVerdanturfTentRewards[] = {ITEM_BOTTLE_CAP};
 
-void static (*const sFallarborTentFuncs[])(void) =
+static void (*const sFallarborTentFuncs[])(void) =
 {
     [FALLARBOR_TENT_FUNC_INIT]              = InitFallarborTentChallenge,
     [FALLARBOR_TENT_FUNC_GET_PRIZE]         = GetFallarborTentPrize,
@@ -87,7 +87,7 @@ void static (*const sFallarborTentFuncs[])(void) =
 
 static const u16 sFallarborTentRewards[] = {ITEM_BOTTLE_CAP};
 
-void static (*const sSlateportTentFuncs[])(void) =
+static void (*const sSlateportTentFuncs[])(void) =
 {
     [SLATEPORT_TENT_FUNC_INIT]                   = InitSlateportTentChallenge,
     [SLATEPORT_TENT_FUNC_GET_PRIZE]              = GetSlateportTentPrize,
@@ -315,7 +315,6 @@ static void GenerateInitialRentalMons(void)
         monSetId = Random() % NUM_SLATEPORT_TENT_MONS;
         for (j = firstMonId; j < firstMonId + i; j++)
         {
-            u16 monId = monIds[j];
             if (monIds[j] == monSetId)
                 break;
             if (species[j] == gFacilityTrainerMons[monSetId].species)

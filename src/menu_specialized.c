@@ -603,6 +603,8 @@ static void sub_81D24A4(struct ConditionGraph *graph)
     }
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
 static void sub_81D2634(struct ConditionGraph *graph)
 {
     s32 i, r6, varMax;
@@ -645,6 +647,7 @@ static void sub_81D2634(struct ConditionGraph *graph)
         }
     }
 }
+#pragma GCC diagnostic pop
 
 void sub_81D2754(u8 *arg0, struct UnknownSubStruct_81D1ED4 *arg1)
 {
@@ -1019,7 +1022,6 @@ void GetConditionMenuMonGfx(void *tilesDst, void *palDst, u16 boxId, u16 monId, 
     if (partyId != numMons)
     {
         u16 species = GetBoxOrPartyMonData(boxId, monId, MON_DATA_SPECIES2, NULL);
-        u32 trainerId = GetBoxOrPartyMonData(boxId, monId, MON_DATA_OT_ID, NULL);
         u32 personality = GetBoxOrPartyMonData(boxId, monId, MON_DATA_PERSONALITY, NULL);
         u8 isShiny = GetBoxOrPartyMonData(boxId, monId, MON_DATA_IS_SHINY, NULL);
         bool8 isAlpha = GetBoxOrPartyMonData(boxId, monId, MON_DATA_IS_ALPHA, NULL);

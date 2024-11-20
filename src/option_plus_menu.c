@@ -213,11 +213,11 @@ static const u16 sOptionMenuText_Culstom_Pal[] = INCBIN_U16("graphics/interface/
 #define TEXT_COLOR_OPTIONS_RED_DARK_SHADOW      14
 
 // Menu draw and input functions
-struct // MENU_MAIN
+static struct // MENU_MAIN
 {
     void (*drawChoices)(int selection, int y);
     int (*processInput)(int selection);
-} static const sItemFunctionsMain[MENUITEM_MAIN_COUNT] =
+} const sItemFunctionsMain[MENUITEM_MAIN_COUNT] =
 {
     [MENUITEM_MAIN_TEXTSPEED]    = {DrawChoices_TextSpeed,   ProcessInput_Options_Four},
     [MENUITEM_MAIN_HPBARSPEED]   = {DrawChoices_BarSpeed,    ProcessInput_Options_Four},
@@ -228,11 +228,11 @@ struct // MENU_MAIN
     [MENUITEM_MAIN_CANCEL]       = {NULL, NULL},
 };
 
-struct // MENU_CUSTOM
+static struct // MENU_CUSTOM
 {
     void (*drawChoices)(int selection, int y);
     int (*processInput)(int selection);
-} static const sItemFunctionsCustom[MENUITEM_CUSTOM_COUNT] =
+} const sItemFunctionsCustom[MENUITEM_CUSTOM_COUNT] =
 {
     [MENUITEM_CUSTOM_BATTLE_UI_THEME]     = {DrawChoices_BattleInterfaceTheme,     ProcessInput_Options_Four},
     [MENUITEM_CUSTOM_SHORTCUT_BUTTON]     = {DrawChoices_BattleInterfaceShortcut,  ProcessInput_Options_Five},
@@ -321,6 +321,7 @@ static const u8 *const OptionTextRight(u8 menuItem)
     case MENU_MAIN:     return sOptionMenuItemsNamesMain[menuItem];
     case MENU_CUSTOM:   return sOptionMenuItemsNamesCustom[menuItem];
     }
+    return NULL;
 }
 
 // Menu left side text conditions
@@ -340,6 +341,7 @@ static bool8 CheckConditions(int selection)
         case MENUITEM_MAIN_CANCEL:          return TRUE;
         case MENUITEM_MAIN_COUNT:           return TRUE;
         }
+        break;
     case MENU_CUSTOM:
         switch (selection)
         {
@@ -365,7 +367,9 @@ static bool8 CheckConditions(int selection)
         case MENUITEM_CUSTOM_CANCEL:              return TRUE;
         case MENUITEM_CUSTOM_COUNT:               return TRUE;
         }
+        break;
     }
+    return FALSE;
 }
 
 // Descriptions
@@ -509,6 +513,8 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledCustom[MENUITEM_CUSTOM
     [MENUITEM_CUSTOM_CANCEL]            = sText_Empty,
 };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
 static const u8 *const OptionTextDescription(void)
 {
     u8 menuItem = sOptions->menuCursor[sOptions->submenu];
@@ -531,6 +537,7 @@ static const u8 *const OptionTextDescription(void)
             selection = 0;
         return sOptionMenuItemDescriptionsCustom[menuItem][selection];
     }
+    return NULL;
 }
 
 static u8 MenuItemCount(void)
@@ -540,6 +547,7 @@ static u8 MenuItemCount(void)
     case MENU_MAIN:     return MENUITEM_MAIN_COUNT;
     case MENU_CUSTOM:   return MENUITEM_CUSTOM_COUNT;
     }
+    return 0;
 }
 
 static u8 MenuItemCancel(void)
@@ -549,6 +557,7 @@ static u8 MenuItemCancel(void)
     case MENU_MAIN:     return MENUITEM_MAIN_CANCEL;
     case MENU_CUSTOM:   return MENUITEM_CUSTOM_CANCEL;
     }
+    return 0;
 }
 
 // Main code
@@ -687,7 +696,7 @@ static void HighlightOptionMenuItem(void)
 
 void CB2_InitOptionPlusMenu(void)
 {
-    u32 i, taskId;
+    u32 i;
     switch (gMain.state)
     {
     default:
@@ -787,7 +796,7 @@ void CB2_InitOptionPlusMenu(void)
         gMain.state++;
         break;
     case 10:
-        taskId = CreateTask(Task_OptionMenuFadeIn, 0);
+        CreateTask(Task_OptionMenuFadeIn, 0);
         
         sOptions->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 240 / 2, 20, 110, MENUITEM_MAIN_COUNT - 1, 110, 110, 0);
 
@@ -819,7 +828,6 @@ static void Task_OptionMenuFadeIn(u8 taskId)
 
 static void Task_OptionMenuProcessInput(u8 taskId)
 {
-    int i = 0;
     u8 optionsToDraw = min(OPTIONS_ON_SCREEN , MenuItemCount());
     if (JOY_NEW(A_BUTTON))
     {
@@ -1183,7 +1191,7 @@ static void ReDrawAll(void)
     else
     {
         if (sOptions->arrowTaskId == TASK_NONE)
-            sOptions->arrowTaskId = sOptions->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 240 / 2, 20, 110, MenuItemCount() - 1, 110, 110, 0);
+            sOptions->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 240 / 2, 20, 110, MenuItemCount() - 1, 110, 110, 0);
 
     }
 
@@ -1400,8 +1408,6 @@ static const u8 *const sShortcutNames_Debug[] = {gText_Shortuct_01, gText_Shortu
 static void DrawChoices_BattleInterfaceTheme(int selection, int y)
 {
     bool8 active = CheckConditions(MENUITEM_CUSTOM_BATTLE_UI_THEME);
-    u8 styles[2] = {0};
-    styles[selection] = 1;
     
     DrawOptionMenuChoice(sThemeNames[selection], 104, y, 0, active);
 }
@@ -1471,6 +1477,7 @@ static void DrawChoices_MatchCall(int selection, int y)
     DrawOptionMenuChoice(gText_BattleSceneOn, 104, y, styles[0], active);
     DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(1, gText_BattleSceneOff, 198), y, styles[1], active);
 }
+#pragma GCC diagnostic pop
 
 
 // Background tilemap

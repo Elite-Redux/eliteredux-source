@@ -155,7 +155,6 @@ static const u8 sMenuWindowFontColors[][3] =
 // UI loader template
 void Task_OpenIntroOptionMenuFromStartMenu(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
     if (!gPaletteFade.active)
     {
         CleanupOverworldWindowsAndTilemaps();
@@ -267,7 +266,6 @@ static void Menu_VBlankCB(void)
 
 static bool8 Menu_DoGfxSetup(void)
 {
-    u8 taskId;
     switch (gMain.state)
     {
     case 0:
@@ -307,7 +305,7 @@ static bool8 Menu_DoGfxSetup(void)
         break;
     case 5:
         PrintToWindow(WINDOW_1, FONT_BLACK);
-        taskId = CreateTask(Task_MenuWaitFadeIn, 0);
+        CreateTask(Task_MenuWaitFadeIn, 0);
         BlendPalettes(0xFFFFFFFF, 16, RGB_BLACK);
         gMain.state++;
         break;
@@ -403,8 +401,6 @@ static bool8 Menu_LoadGraphics(void)
 
 static void Menu_InitWindows(void)
 {
-    u32 i;
-
     INIT_WINDOWS(sMenuWindowTemplates);
     DeactivateAllTextPrinters();
     ScheduleBgCopyTilemapToVram(0);
@@ -622,11 +618,9 @@ static void PrintToWindow(u8 windowId, u8 colorIdx)
     u8 currentOption      = sMenuDataPtr->currentOptionId;
     u8 currentFirstOption = sMenuDataPtr->currentFirstOption;
     u8 cursorHeight       = (sMenuDataPtr->currentOptionId - sMenuDataPtr->currentFirstOption) * 2;
-    const u8 *str = sText_Menu_Title;
     u8 x = 2;
     u8 y = 0;
     u8 x2 = 0;
-    u8 y2 = 0;
     
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
 
@@ -670,8 +664,6 @@ static void Task_MenuWaitFadeIn(u8 taskId)
 
 static void Task_MenuTurnOff(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-
     if (!gPaletteFade.active)
     {
         if (FlagGet(FLAG_SYS_DEBUG_MENU_OPENED))

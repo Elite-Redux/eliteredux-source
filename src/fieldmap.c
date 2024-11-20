@@ -29,7 +29,11 @@ EWRAM_DATA static u16 gBackupMapData[MAX_MAP_DATA_SIZE] = {0};
 EWRAM_DATA struct MapHeader gMapHeader = {0};
 EWRAM_DATA struct Camera gCamera = {0};
 EWRAM_DATA static struct ConnectionFlags gMapConnectionFlags = {0};
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
 EWRAM_DATA static u32 sFiller = 0; // without this, the next file won't align properly
+#pragma GCC diagnostic pop
 
 struct BackupMapLayout gBackupMapLayout;
 
@@ -48,15 +52,13 @@ static struct MapConnection *GetIncomingConnection(u8 direction, int x, int y);
 static bool8 IsPosInIncomingConnectingMap(u8 direction, int x, int y, struct MapConnection *connection);
 static bool8 IsCoordInIncomingConnectingMap(int coord, int srcMax, int destMax, int offset);
 
-#define MapGridGetBorderTileAt(x, y) ({                                                            \
-    u16 block;                                                                                     \
-    int i;                                                                                         \
-    u16 *border = gMapHeader.mapLayout->border;                                                    \
-                                                                                                   \
-    i = (x + 1) & 1;                                                                               \
-    i += ((y + 1) & 1) * 2;                                                                        \
-                                                                                                   \
-    block = gMapHeader.mapLayout->border[i] | METATILE_COLLISION_MASK;                             \
+#define MapGridGetBorderTileAt(x, y) ({                                                             \
+    int i;                                                                                          \
+                                                                                                    \
+    i = (x + 1) & 1;                                                                                \
+    i += ((y + 1) & 1) * 2;                                                                         \
+                                                                                                    \
+    gMapHeader.mapLayout->border[i] | METATILE_COLLISION_MASK;                                      \
 })
 
 #define AreCoordsWithinMapGridBounds(x, y) (x >= 0 && x < gBackupMapLayout.width && y >= 0 && y < gBackupMapLayout.height)

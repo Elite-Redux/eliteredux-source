@@ -693,7 +693,7 @@ int EReaderHandleTransfer(u8 mode, size_t size, const void * data, void * recvBu
         OpenSerial32();
         SetUpTransferManager(size, data, recvBuffer);
         sSendRecvMgr.state = EREADER_XFR_STATE_TRANSFER;
-        // fall through
+        FALLTHROUGH
     case EREADER_XFR_STATE_TRANSFER:
         if (gShouldAdvanceLinkState == 2)
         {
@@ -795,6 +795,9 @@ void EReaderHelper_Timer3Callback(void)
     EnableSio();
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+
 void EReaderHelper_SerialCallback(void)
 {
     u16 i, cnt1, cnt2;
@@ -883,6 +886,8 @@ void EReaderHelper_SerialCallback(void)
         break;
     }
 }
+
+#pragma GCC diagnostic pop
 
 static void EnableSio(void)
 {

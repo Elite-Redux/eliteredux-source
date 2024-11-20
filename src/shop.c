@@ -282,7 +282,7 @@ static const u8 sShopBuyMenuTextColors[][3] =
 
 static u8 CreateShopMenu(u8 martType)
 {
-    int numMenuItems;
+    int numMenuItems = 0;
     struct WindowTemplate winTemplate;
 
     ScriptContext2_Enable();
@@ -359,6 +359,7 @@ static const u16 sAdoptionCenterInventory_TwoBadges[] = {
     SPECIES_BOUNSWEET_REDUX, //testing purposes
     SPECIES_CLEFFA_REDUX, //testing purposes
     SPECIES_CORM, //testing purposes
+    SPECIES_MARBEEP, //testing purposes
     SPECIES_MARBEEP, //testing purposes
     SPECIES_PAWNIARD_REDUX,
     SPECIES_MACHOP_REDUX,
@@ -884,7 +885,7 @@ const u8 sText_Title_PokemonDescription[] = _("The {STR_VAR_2}\nPokémon {STR_VA
 
 static void BuyMenuPrintItemDescriptionAndShowItemIcon(s32 item, bool8 onInit, struct ListMenu *list)
 {
-    const u8 *description;
+    const u8 *description = NULL;
     u8 level = GetLevelCap();
 
     if (level >= MAX_LEVEL)
@@ -1555,7 +1556,7 @@ static void Task_BuyHowManyDialogueInit(u8 taskId)
     s16 *data = gTasks[taskId].data;
 
     u16 quantityInBag = CountTotalItemQuantityInBag(tItemId);
-    u16 maxQuantity;
+    u16 maxQuantity = 0;
 
     DrawStdFrameWithCustomTileAndPalette(3, FALSE, 1, 13);
     ConvertIntToDecimalStringN(gStringVar1, quantityInBag, STR_CONV_MODE_RIGHT_ALIGN, MAX_ITEM_DIGITS + 1);

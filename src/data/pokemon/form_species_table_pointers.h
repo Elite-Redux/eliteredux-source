@@ -902,6 +902,9 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_DREDNAW] = sDrednawFormSpeciesIdTable,
     [SPECIES_DREDNAW_MEGA] = sDrednawFormSpeciesIdTable,
 
+    [SPECIES_DURALUDON_PARTNER] = sDuraludonFormSpeciesIdTable,
+    [SPECIES_DURALUDON_PARTNER_MEGA] = sDuraludonFormSpeciesIdTable,
+
     [SPECIES_COALOSSAL] = sCoalossalFormSpeciesIdTable,
     [SPECIES_COALOSSAL_MEGA] = sCoalossalFormSpeciesIdTable,
 
@@ -1054,6 +1057,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_CLEFAIRY] = sClefairyFormSpeciesIdTable,
 
     [SPECIES_CLEFABLE_REDUX_MEGA] = sClefableFormSpeciesIdTable,
+    [SPECIES_CLEFABLE_REDUX] = sClefableFormSpeciesIdTable,
     [SPECIES_CLEFABLE] = sClefableFormSpeciesIdTable,
 
     [SPECIES_GLIGAR_REDUX] = sGligarFormSpeciesIdTable,

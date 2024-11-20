@@ -277,7 +277,7 @@ static bool32 AnimateUnionRoomPlayerSpawn(s8 * state, u32 playerIdx, struct Unio
         CreateUnionRoomPlayerObjectEvent(playerIdx);
         ShowUnionRoomPlayer(playerIdx);
         (*state)++;
-        // fallthrough
+        FALLTHROUGH
     case 3: // incorrect?
         if (SetUnionRoomPlayerEnterExitMovement(playerIdx, sMovement_UnionPlayerEnter) == TRUE)
         {
@@ -332,7 +332,7 @@ static void AnimateUnionRoomPlayer(u32 playerIdx, struct UnionRoomObject * ptr)
         {
             break;
         }
-        // fallthrough
+        FALLTHROUGH
     case 2:
         if (!IsUnionRoomPlayerInvisible(playerIdx, 0) && ptr->schedAnim == UNION_ROOM_SPAWN_OUT)
         {
@@ -356,7 +356,7 @@ static void AnimateUnionRoomPlayer(u32 playerIdx, struct UnionRoomObject * ptr)
         {
             break;
         }
-        // fallthrough
+        FALLTHROUGH
     case 3:
         if (AnimateUnionRoomPlayerDespawn(&ptr->animState, playerIdx, ptr) == 1)
         {

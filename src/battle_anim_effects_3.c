@@ -2207,7 +2207,7 @@ static void AnimBatonPassPokeball(struct Sprite *sprite)
 
         if (++sprite->data[3] == 5)
             sprite->data[0]++;
-        // fall through
+        FALLTHROUGH
     case 2:
         sprite->data[1] += 96;
         sprite->data[2] += 48;
@@ -4691,6 +4691,7 @@ static void AnimForesightMagnifyingGlass_Step(struct Sprite *sprite)
         {
         default:
             sprite->data[6] = 0;
+            FALLTHROUGH
         case 0:
         case 4:
             x = GetBattlerSpriteCoordAttr(sprite->data[7], 5) - 4;
@@ -4819,9 +4820,6 @@ static void AnimMeteorMashStar_Step(struct Sprite *sprite)
 // arg 4: duration
 static void AnimMeteorMashStar(struct Sprite *sprite)
 {
-    s16 y = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_X_2);          // unused local variable
-    s16 x = GetBattlerSpriteCoord(gBattleAnimTarget, BATTLER_COORD_Y_PIC_OFFSET); // unused local variable
-
     if (GetBattlerSide(gBattleAnimTarget) == B_SIDE_PLAYER || IsContest())
     {
         sprite->data[0] = sprite->x - gBattleAnimArgs[0];

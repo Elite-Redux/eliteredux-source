@@ -310,7 +310,7 @@ static void UpdateDroughtBlend(u8 taskId)
         SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG1 | BLDCNT_TGT1_BG2 | BLDCNT_TGT1_BG3 | BLDCNT_TGT1_OBJ | BLDCNT_EFFECT_LIGHTEN);
         SetGpuReg(REG_OFFSET_BLDY, 0);
         task->tState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         task->tBlendY += 3;
         if (task->tBlendY > 16)
@@ -528,7 +528,7 @@ bool8 Rain_Finish(void)
             gWeatherPtr->targetRainSpriteCount = 0;
             gWeatherPtr->finishStep++;
         }
-        // fall through
+        FALLTHROUGH
     case 1:
         if (!UpdateVisibleRainSprites())
         {
@@ -805,7 +805,7 @@ bool8 Snow_Finish(void)
         gWeatherPtr->targetSnowflakeSpriteCount = 0;
         gWeatherPtr->snowflakeVisibleCounter = 0;
         gWeatherPtr->finishStep++;
-        // fall through
+        FALLTHROUGH
     case 1:
         if (!UpdateVisibleSnowflakeSprites())
         {
@@ -1113,7 +1113,7 @@ void Thunderstorm_Main(void)
         gWeatherPtr->thunderAllowEnd = TRUE;
         gWeatherPtr->thunderDelay = (Random() % 360) + 360;
         gWeatherPtr->initStep++;
-        // fall through
+        FALLTHROUGH
     case TSTORM_STATE_LOOP_WAIT:
         // Wait between 360-720 frames before trying thunder again
         if (--gWeatherPtr->thunderDelay == 0)
@@ -1127,7 +1127,7 @@ void Thunderstorm_Main(void)
     case TSTORM_STATE_INIT_THUNDER_SHORT_2:
         gWeatherPtr->thunderShortRetries = (Random() & 1) + 1;
         gWeatherPtr->initStep++;
-        // fall through
+        FALLTHROUGH
     case TSTORM_STATE_TRY_THUNDER_SHORT:
         ApplyWeatherGammaShiftIfIdle(19);
         if (!gWeatherPtr->thunderSkipShort && gWeatherPtr->thunderShortRetries == 1)
@@ -1201,7 +1201,7 @@ bool8 Thunderstorm_Finish(void)
     case 0:
         gWeatherPtr->thunderAllowEnd = FALSE;
         gWeatherPtr->finishStep++;
-        // fall through
+        FALLTHROUGH
     case 1:
         Thunderstorm_Main();
         if (gWeatherPtr->thunderAllowEnd)

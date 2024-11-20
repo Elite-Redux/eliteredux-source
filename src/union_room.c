@@ -178,7 +178,6 @@ static EWRAM_DATA u8 sUnionRoomPlayerName[12] = {};
 EWRAM_DATA u8 gPlayerCurrActivity = 0;
 static EWRAM_DATA u8 sPlayerActivityGroupSize = 0;
 static EWRAM_DATA union WirelessLink_Main sWirelessLinkMain = {};
-static EWRAM_DATA u32 sUnused = 0;
 EWRAM_DATA struct GFtgtGnameSub gPartnerTgtGnameSub = {};
 EWRAM_DATA u16 gUnionRoomOfferedSpecies = 0;
 EWRAM_DATA u8 gUnionRoomRequestedMonType = 0;
@@ -1015,9 +1014,6 @@ static void Task_TryJoinLinkGroup(u8 taskId)
             id = ListMenu_ProcessInput(data->listTaskId);
             if (JOY_NEW(A_BUTTON) && id != -1)
             {
-                // this unused variable along with the assignment is needed to match
-                u32 activity = data->field_0->arr[id].gname_uname.gname.activity;
-
                 if (data->field_0->arr[id].groupScheduledAnim == UNION_ROOM_SPAWN_IN && !data->field_0->arr[id].gname_uname.gname.started)
                 {
                     u32 readyStatus = IsTryingToTradeAcrossVersionTooSoon(data, id);
@@ -1748,6 +1744,7 @@ static void Task_RunScriptAndFadeToActivity(u8 taskId)
         case ACTIVITY_CONTEST_TOUGH:
             RecordMixTrainerNames();
             DestroyTask(taskId);
+            FALLTHROUGH
         default:
             EnableBothScriptContexts();
             data[0] = 1;
@@ -2111,6 +2108,7 @@ static void Task_CardOrNewsWithFriend(u8 taskId)
         {
         case 1:
             PlaySE(SE_PC_LOGIN);
+            FALLTHROUGH
         default:
             RedrawListMenu(data->listTaskId);
             break;
@@ -2118,9 +2116,6 @@ static void Task_CardOrNewsWithFriend(u8 taskId)
             id = ListMenu_ProcessInput(data->listTaskId);
             if (JOY_NEW(A_BUTTON) && id != -1)
             {
-                // this unused variable along with the assignment is needed to match
-                u32 unusedVar;
-                unusedVar  = data->field_0->arr[id].gname_uname.gname.activity;
 
                 if (data->field_0->arr[id].groupScheduledAnim == UNION_ROOM_SPAWN_IN && !data->field_0->arr[id].gname_uname.gname.started)
                 {
@@ -2273,6 +2268,7 @@ static void Task_CardOrNewsOverWireless(u8 taskId)
         {
         case 1:
             PlaySE(SE_PC_LOGIN);
+            FALLTHROUGH
         default:
             if (data->field_13 != 0)
                 RedrawListMenu(data->listTaskId);
@@ -2583,6 +2579,7 @@ static void Task_RunUnionRoom(u8 taskId)
             {
             case 1:
                 PlaySE(SE_PC_LOGIN);
+                FALLTHROUGH
             case 2:
                 ScheduleUnionRoomPlayerRefresh(uroom);
                 break;
@@ -4050,7 +4047,7 @@ static s32 UnionRoomGetPlayerInteractionResponse(struct UnkStruct_Main0 *main0, 
         IntlConvPartnerUname7(gStringVar1, r5);
         if (overrideGender)
         {
-            playerGender = (r5->gname_uname.gname.unk_00.playerTrainerId[overrideGender + 1] >> 3) & 1;
+            playerGender = (r5->gname_uname.gname.unk_00.playerTrainerId[overrideGender] >> 3) & 1;
         }
         switch (r5->gname_uname.gname.activity & 0x3F)
         {

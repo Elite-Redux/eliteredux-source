@@ -493,7 +493,7 @@ static u32 LoopedTask_MoveSearchListCursorUp(s32 state)
     case 1:
         if (IsMonListLoopedTaskActive())
             return LT_PAUSE;
-        // fallthrough
+        FALLTHROUGH
     case 2:
         PrintSearchResultListMenuItems(searchList);
         return LT_INC_AND_PAUSE;
@@ -526,7 +526,7 @@ static u32 LoopedTask_MoveSearchListCursorDown(s32 state)
     case 1:
         if (IsMonListLoopedTaskActive())
             return LT_PAUSE;
-        // fallthrough
+        FALLTHROUGH
     case 2:
         PrintSearchResultListMenuItems(searchList);
         return LT_INC_AND_PAUSE;
@@ -559,7 +559,7 @@ static u32 LoopedTask_MoveSearchListPageUp(s32 state)
     case 1:
         if (IsMonListLoopedTaskActive())
             return LT_PAUSE;
-        // fallthrough
+        FALLTHROUGH
     case 2:
         PrintSearchResultListMenuItems(searchList);
         return LT_INC_AND_PAUSE;
@@ -592,7 +592,7 @@ static u32 LoopedTask_MoveSearchListPageDown(s32 state)
     case 1:
         if (IsMonListLoopedTaskActive())
             return LT_PAUSE;
-        // fallthrough
+        FALLTHROUGH
     case 2:
         PrintSearchResultListMenuItems(searchList);
         return LT_INC_AND_PAUSE;

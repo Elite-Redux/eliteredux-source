@@ -600,6 +600,7 @@ static void CB2_InitTrainerCard(void)
         FreeAllSpritePalettes();
         ResetPaletteFade();
         gMain.state++;
+        FALLTHROUGH
     case 4:
         InitBgsAndWindows();
         gMain.state++;
@@ -730,7 +731,7 @@ static void SetPlayerCardData(struct TrainerCard *trainerCard, u8 cardType)
     case CARD_TYPE_EMERALD:
         trainerCard->battleTowerWins = 0;
         trainerCard->battleTowerStraightWins = 0;
-    // Seems like GF got CARD_TYPE_FRLG and CARD_TYPE_RS wrong.
+        FALLTHROUGH
     case CARD_TYPE_FRLG:
         trainerCard->contestsWithFriends = GetCappedGameStat(GAME_STAT_WON_LINK_CONTEST, 999);
         trainerCard->pokeblocksWithFriends = GetCappedGameStat(GAME_STAT_POKEBLOCKS_WITH_FRIENDS, 0xFFFF);
@@ -771,7 +772,7 @@ void TrainerCard_GenerateCardForPlayer(struct TrainerCard *trainerCard)
     trainerCard->version = GAME_VERSION;
     SetPlayerCardData(trainerCard, CARD_TYPE_EMERALD);
     trainerCard->hasAllFrontierSymbols = HasAllFrontierSymbols();
-    *((u16*)&trainerCard->berryCrushPoints) = gSaveBlock2Ptr->frontier.cardBattlePoints;
+    trainerCard->berryCrushPoints = gSaveBlock2Ptr->frontier.cardBattlePoints;
     if (trainerCard->hasAllFrontierSymbols)
         trainerCard->stars++;
 
@@ -1447,6 +1448,7 @@ static u8 SetCardBgsAndPals(void)
         FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 32, 32);
         FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 32, 32);
         FillBgTilemapBufferRect_Palette0(3, 0, 0, 0, 32, 32);
+        FALLTHROUGH
     default:
         return 1;
     }

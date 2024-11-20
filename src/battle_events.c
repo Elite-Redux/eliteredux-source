@@ -17,7 +17,8 @@
 #include "field_message_box.h"
 
 
-static u8 gNbBattleEvents;
+static u8 gNbBattleEvents = 0;
+static u8 gCurrBattleEvent = 0;
 EWRAM_DATA u8 gLastBattleEvent = 0;
 
 EWRAM_DATA struct BattleEvent gBattleEvents[BATTLE_EVENTS_MAX_REGISTERABLE] = { 0 };
@@ -201,7 +202,6 @@ if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && (gBattleMons[B_POSITION_OPPONENT_
     SET_EXTRA_STATS_LEVEL_TO_BATTLER(B_POSITION_OPPONENT_RIGHT, stat, level);
 // this is run once pokemon have landed before their ability have popped
 u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
-    u8 data;
     switch (battleEvent->id)
     {
     case BATTLE_EVENT_NONE:
@@ -451,7 +451,7 @@ u8 BattleEventStartTurnExec(struct BattleEvent *battleEvent) {
     case BATTLE_EVENT_PERMA_NIGHTMARE:
         if (gBattleMons[B_SIDE_PLAYER].status2 & STATUS2_NIGHTMARE)
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
-        if (!gBattleMons[B_SIDE_PLAYER].status1 & STATUS1_SLEEP)
+        if (!(gBattleMons[B_SIDE_PLAYER].status1 & STATUS1_SLEEP))
             return EXEC_BATTLE_EVENTS_ALL_CLEAR;
         gBattleMons[B_SIDE_PLAYER].status2 |= STATUS2_NIGHTMARE;
         RUN_BATTLESCRIPT(BattleScript_ExtraSkillPermaNightmare);

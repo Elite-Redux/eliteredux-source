@@ -3084,7 +3084,6 @@ static void CreateInterfaceSprites(u8 page)
 {
     u8 spriteId;
     u16 digitNum;
-    u8 color[3];
     bool32 drawNextDigit;
 
     // Scroll arrows
@@ -4408,7 +4407,6 @@ static void Task_ExitCaughtMonPage(u8 taskId)
     if (!gPaletteFade.active)
     {
         u16 species;
-        u32 otId;
         u32 personality;
         u8 paletteNum;
         const u32 *lzPaletteData;
@@ -4507,8 +4505,6 @@ static void SetTypeIconPosAndPal(u8 typeId, u8 x, u8 y, u8 spriteArrayId)
 static void PrintCurrentSpeciesTypeInfo(void)
 {
     u16 species = NationalPokedexNumToSpecies(sPokedexListItem->dexNum);
-    u32 i;
-    u16 dexNum = SpeciesToNationalPokedexNum(species);
     u8 type1, type2;
 
     //type icon(s)
@@ -5101,11 +5097,11 @@ bool8  SpeciesCanLearnLvlUpMove(u16 species, u16 move) //Move search PokedexPlus
 static int DoPokedexSearch(u8 dexMode, u8 order, u8 abcGroup, u8 bodyColor, u8 type1, u8 type2) // ,u16 move)
 {
     u16 species;
-    u16 i,j;
+    u16 i;
     u16 resultsCount;
     u8 types[2];
 
-    u8 tutorMoveId, tmMoveId; //PokedexPlus HGSS_Ui
+    u8 tutorMoveId; //PokedexPlus HGSS_Ui
     u16 move = 0xFFFF;
 
     CreatePokedexList(dexMode, order);
@@ -5775,7 +5771,7 @@ static void DrawSearchMenuItemBgHighlight(u8 searchBg, bool8 unselected, bool8 d
     case SEARCH_BG_ORDER:
     case SEARCH_BG_MODE:
         SetSearchRectHighlight(highlightFlags, sSearchMenuItems[searchBg - SEARCH_TOPBAR_COUNT].titleBgX, sSearchMenuItems[searchBg - SEARCH_TOPBAR_COUNT].titleBgY, sSearchMenuItems[searchBg - SEARCH_TOPBAR_COUNT].titleBgWidth);
-        // fall through, draw selectionBg for above
+        FALLTHROUGH
     case SEARCH_BG_TYPE_SELECTION_LEFT:
     case SEARCH_BG_TYPE_SELECTION_RIGHT:
         SetSearchRectHighlight(highlightFlags, sSearchMenuItems[searchBg - SEARCH_TOPBAR_COUNT].selectionBgX, sSearchMenuItems[searchBg - SEARCH_TOPBAR_COUNT].selectionBgY, sSearchMenuItems[searchBg - SEARCH_TOPBAR_COUNT].selectionBgWidth);
@@ -6451,10 +6447,10 @@ static bool8 CalculateMoves(void)
     u16 species = NationalPokedexNumToSpecies(sPokedexListItem->dexNum);
     u8 numEggMoves = GetEggMovesSpecies(species, sStatsMovesEgg);
     u8 numLevelUpMoves = GetLevelUpMovesBySpecies(species, sStatsMovesLevelUp);
-    u8 numTMHMMoves;
+    u8 numTMHMMoves = 0;
     u8 numTutorMoves = 0;
     u16 movestotal;
-    u8 i,j;
+    u8 i;
 
     for (i=0; i < TUTOR_COUNT; i++)
     {
@@ -6485,7 +6481,7 @@ static void PrintStatsScreen_MoveNameAndInfo(u8 taskId)
     u8 selected = sPokedexView->moveSelected;
     u8 total = sPokedexView->moveMax;
 
-    u16 move;
+    u16 move = 0;
     u16 item;
 
     u8 moves_x = 101;
@@ -6651,21 +6647,9 @@ static void PrintStatsScreen_MoveNameAndInfo(u8 taskId)
 static void PrintStatsScreen_NameGender(u8 taskId, u32 num, u32 value, u32 owned, u32 newEntry) //HGSS_Ui
 {
     u8 str[16];
-    u8 str2[32];
-    u8 strEV[25];
     u16 species = NationalPokedexNumToSpecies(sPokedexListItem->dexNum);
-    u16 natNum;
-    u8 evVal;
-    const u8 *category;
-    const u8 *description;
-    const u8 *strEVtype;
 
     u8 gender_x, gender_y;
-
-    u8 base_i = 0;
-    u8 base_y_offset = 11;
-    u8 base_x = 8;
-    u8 base_y = 52;
 
     //Name
     PrintInfoScreenTextSmall(gSpeciesNames[species], 38, 16);
@@ -6743,7 +6727,6 @@ static void PrintStatsScreen_Left(u8 taskId)
 {
     u8 base_x = 8;
     u8 x_offset_column = 43;
-    u8 x_offset_value = 26;
     u8 column = 0;
     u8 base_x_offset = 70;
     u8 base_x_first_row = 23;
@@ -7468,7 +7451,6 @@ static u8 PrintEvolutionTargetSpeciesAndMethod(u8 taskId, u16 species, u8 depth,
 {
     int i;
     #ifdef POKEMON_EXPANSION
-        int j;
         const struct MapHeader *mapHeader;
     #endif
     u16 targetSpecies = 0;
@@ -8175,23 +8157,19 @@ static void PrintForms(u8 taskId, u16 species)
 {
     int i;
     u16 speciesForm;
-
-
-    bool8 left = TRUE;
     u8 base_x = 5;
-    u8 base_x_offset = 54;
     u8 base_y = 52;
     u8 base_y_offset = 9;
-    u8 base_i = 0;
     u8 times = 0;
     u8 y_offset_icons = 0; //For unown only
+    
 
     if (species == SPECIES_UNOWN)
         y_offset_icons = 8;
 
     StringCopy(gStringVar1, gSpeciesNames[species]);
 
-    for (i=0; i < 30; i++)
+    for (i=0; i < 11; i++)
     {
         speciesForm = GetFormSpeciesId(species, i);
         if (speciesForm == FORM_SPECIES_END)
@@ -8204,12 +8182,12 @@ static void PrintForms(u8 taskId, u16 species)
             LoadMonIconPalette(speciesForm); //Loads pallete for current mon
             if (times < 7)
                 gTasks[taskId].data[4+times] = CreateMonIcon(speciesForm, SpriteCB_MonIcon, 52 + 34*(times-1), 31, 4, 0); //Create pokemon sprite
-            else if (times < 14)
+            else // if (times < 14)
                 gTasks[taskId].data[4+times] = CreateMonIcon(speciesForm, SpriteCB_MonIcon, 18 + 34*(times-7), 70 - y_offset_icons, 4, 0); //Create pokemon sprite
-            else if (times < 21)
-                gTasks[taskId].data[4+times] = CreateMonIcon(speciesForm, SpriteCB_MonIcon, 18 + 34*(times-14), 104 - y_offset_icons, 4, 0); //Create pokemon sprite
-            else
-                gTasks[taskId].data[4+times] = CreateMonIcon(speciesForm, SpriteCB_MonIcon, 18 + 34*(times-21), 138 - y_offset_icons, 4, 0); //Create pokemon sprite
+            // else if (times < 21)
+            //     gTasks[taskId].data[4+times] = CreateMonIcon(speciesForm, SpriteCB_MonIcon, 18 + 34*(times-14), 104 - y_offset_icons, 4, 0); //Create pokemon sprite
+            // else
+            //     gTasks[taskId].data[4+times] = CreateMonIcon(speciesForm, SpriteCB_MonIcon, 18 + 34*(times-21), 138 - y_offset_icons, 4, 0); //Create pokemon sprite
             gSprites[gTasks[taskId].data[4+times]].oam.priority = 0;
         }
     }

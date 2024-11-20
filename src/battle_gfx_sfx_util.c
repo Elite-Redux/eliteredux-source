@@ -595,7 +595,7 @@ bool8 IsBattleSEPlaying(u8 battlerId)
 
 static void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battlerId, bool32 opponent)
 {
-    u32 monsPersonality, currentPersonality, otId, species, paletteOffset, position;
+    u32 monsPersonality, currentPersonality, species, paletteOffset, position;
     const void *lzPaletteData;
     struct Pokemon *illusionMon = GetIllusionMonPtr(battlerId);
     bool8 isAlpha;
@@ -615,7 +615,6 @@ static void BattleLoadMonSpriteGfx(struct Pokemon *mon, u32 battlerId, bool32 op
         currentPersonality = gTransformedPersonalities[battlerId];
     }
 
-    otId = GetMonData(mon, MON_DATA_OT_ID);
     position = GetBattlerPosition(battlerId);
     if (opponent)
     {
@@ -901,7 +900,7 @@ void CopyBattleSpriteInvisibility(u8 battlerId)
 
 void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform, bool32 megaEvo)
 {
-    u32 personalityValue, otId, position, paletteOffset, targetSpecies;
+    u32 personalityValue, position, paletteOffset, targetSpecies;
     const void *lzPaletteData, *src;
     void *dst;
     bool8 isAlpha;
@@ -912,12 +911,13 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
         position = 0;
         targetSpecies = gContestResources->moveAnim->targetSpecies;
         personalityValue = gContestResources->moveAnim->personality;
-        otId = gContestResources->moveAnim->otId;
 
         HandleLoadSpecialPokePic(&gMonBackPicTable[targetSpecies],
                                  gMonSpritesGfxPtr->sprites.ptr[0],
                                  targetSpecies,
                                  gContestResources->moveAnim->targetPersonality);
+
+        isShiny = isAlpha = FALSE;
     }
     else
     {
@@ -937,7 +937,6 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
         if (GetBattlerSide(battlerAtk) == B_SIDE_PLAYER)
         {
             personalityValue = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY);
-            otId = GetMonData(&gPlayerParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_OT_ID);
 
             HandleLoadSpecialPokePic(&gMonBackPicTable[targetSpecies],
                                      gMonSpritesGfxPtr->sprites.ptr[position],
@@ -947,7 +946,6 @@ void HandleSpeciesGfxDataChange(u8 battlerAtk, u8 battlerDef, bool8 notTransform
         else
         {
             personalityValue = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_PERSONALITY);
-            otId = GetMonData(&gEnemyParty[gBattlerPartyIndexes[battlerAtk]], MON_DATA_OT_ID);
 
             HandleLoadSpecialPokePic(&gMonFrontPicTable[targetSpecies],
                                      gMonSpritesGfxPtr->sprites.ptr[position],

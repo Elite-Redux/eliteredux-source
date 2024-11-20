@@ -3112,14 +3112,14 @@ BattleScript_EffectTrickRoom:
 	waitanimation
 	printfromtable gRoomsStringIds
 	waitmessage B_WAIT_TIME_LONG
-	savetarget
+	savetargettostack4
 	setbyte gBattlerTarget, 0
 BattleScript_RoomServiceLoop:
 	copybyte sBATTLER, gBattlerTarget
 	tryroomservice BS_TARGET
 	addbyte gBattlerTarget, 0x1
 	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_RoomServiceLoop
-	restoretarget
+	readtargetfromstack4
 	goto BattleScript_MoveEnd
 	
 BattleScript_EffectInverseRoom:
@@ -4566,10 +4566,8 @@ BattleScript_EffectDoubleHit::
 BattleScript_EffectRecoilIfMiss::
 	attackcanceler
 	accuracycheck BattleScript_MoveMissedDoDamage, ACC_CURR_MOVE
-.if B_CRASH_IF_TARGET_IMMUNE >= GEN_4
 	typecalc
 	jumpifhalfword CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_MoveMissedDoDamage
-.endif
 	argumenttomoveeffect
 	goto BattleScript_HitFromAtkString
 BattleScript_MoveMissedDoDamage::
@@ -4579,34 +4577,16 @@ BattleScript_MoveMissedDoDamage::
 	pause B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-.if B_CRASH_IF_TARGET_IMMUNE < GEN_4
-	jumpifhalfword CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_DOESNT_AFFECT_FOE, BattleScript_MoveEnd
-.endif
+BattleScript_RecoilIfMissCrashed::
 	printstring STRINGID_PKMNCRASHED
 	waitmessage B_WAIT_TIME_LONG
-	damagecalc
-	typecalc
-	adjustdamage
-.if B_CRASH_IF_TARGET_IMMUNE == GEN_4
-	manipulatedamage DMG_RECOIL_FROM_IMMUNE
-.else
 	manipulatedamage DMG_RECOIL_FROM_MISS
-.endif
-.if B_CRASH_IF_TARGET_IMMUNE >= GEN_4
 	bichalfword gMoveResultFlags, MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE
-.else
-	bichalfword gMoveResultFlags, MOVE_RESULT_MISSED
-.endif
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
-	seteffectwithchance
 	tryfaintmon BS_ATTACKER, FALSE, NULL
-.if B_CRASH_IF_TARGET_IMMUNE >= GEN_4
 	orhalfword gMoveResultFlags, MOVE_RESULT_MISSED | MOVE_RESULT_DOESNT_AFFECT_FOE
-.else
-	orhalfword gMoveResultFlags, MOVE_RESULT_MISSED
-.endif
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectMist::
@@ -6296,6 +6276,7 @@ BattleScript_EffectSkyDrop::
 	twoturnmoveacceleratecheck
 BattleScript_SkyDrop_TurnTwo:
 	clearsemiinvulnerablebit
+	orword gHitMarker, HITMARKER_NO_PPDEDUCT
 	attackcanceler
 	attackstring
 	ppreduce

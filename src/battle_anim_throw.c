@@ -1465,7 +1465,7 @@ static void SpriteCB_Ball_Wobble_Step(struct Sprite *sprite)
             ChangeSpriteAffineAnim(sprite, BALL_ROTATE_LEFT);
         else
             ChangeSpriteAffineAnim(sprite, BALL_ROTATE_RIGHT);
-        // fall through
+        FALLTHROUGH
     case BALL_ROLL_3:
         if (gBattleSpritesDataPtr->animationData->ballSubpx > 0xFF)
         {
@@ -2489,13 +2489,9 @@ void AnimTask_SetTargetToEffectBattler(u8 taskId)
 void TryShinyAnimation(u8 battler, struct Pokemon *mon)
 {
     u8 isShiny;
-    u32 otId, personality;
-    u32 shinyValue;
     u8 taskCirc, taskDgnl;
 
     gBattleSpritesDataPtr->healthBoxesData[battler].triedShinyMonAnim = TRUE;
-    otId = GetMonData(mon, MON_DATA_OT_ID);
-    personality = GetMonData(mon, MON_DATA_PERSONALITY);
     isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
 
     if (IsBattlerSpriteVisible(battler))
@@ -2658,11 +2654,8 @@ static void SpriteCB_ShinyStars_Diagonal(struct Sprite *sprite)
 
 void AnimTask_LoadPokeblockGfx(u8 taskId)
 {
-    u8 paletteIndex;
-
     LoadCompressedSpriteSheetUsingHeap(&gBattleAnimPicTable[ANIM_TAG_POKEBLOCK - ANIM_SPRITES_START]);
     LoadCompressedSpritePaletteUsingHeap(&gBattleAnimPaletteTable[ANIM_TAG_POKEBLOCK - ANIM_SPRITES_START]);
-    paletteIndex = IndexOfSpritePaletteTag(ANIM_TAG_POKEBLOCK); // unused
     DestroyAnimVisualTask(taskId);
 }
 

@@ -322,7 +322,6 @@ static const struct ScanlineEffectParams sPokenavMainMenuScanlineEffectParams =
 
 static bool32 AreAnyTrainerRematchesNearby(void)
 {
-    s32 i;
     #ifndef FREE_MATCH_CALL
     for (i = 0; i < REMATCH_TABLE_ENTRIES; i++)
     {
@@ -472,7 +471,7 @@ static u32 LoopedTask_OpenMenu(s32 state)
         {
         case POKENAV_MENU_TYPE_CONDITION_SEARCH:
             LoadLeftHeaderGfxForIndex(7);
-            // fallthrough
+            FALLTHROUGH
         case POKENAV_MENU_TYPE_CONDITION:
             LoadLeftHeaderGfxForIndex(1);
             break;
@@ -488,7 +487,7 @@ static u32 LoopedTask_OpenMenu(s32 state)
         {
         case POKENAV_MENU_TYPE_CONDITION_SEARCH:
             ShowLeftHeaderGfx(7, FALSE, FALSE);
-            // fallthrough
+            FALLTHROUGH
         case POKENAV_MENU_TYPE_CONDITION:
             ShowLeftHeaderGfx(1, FALSE, FALSE);
             break;
@@ -721,7 +720,7 @@ static u32 LoopedTask_OpenPokenavFeature(s32 state)
         {
         case POKENAV_MENU_TYPE_CONDITION_SEARCH:
             HideMainOrSubMenuLeftHeader(POKENAV_GFX_SEARCH_MENU, FALSE);
-            // fallthrough
+            FALLTHROUGH
         case POKENAV_MENU_TYPE_CONDITION:
             HideMainOrSubMenuLeftHeader(POKENAV_GFX_CONDITION_MENU, FALSE);
             break;

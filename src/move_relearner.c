@@ -840,8 +840,6 @@ static void ShowTeachMoveText(bool8 shouldDoNothingInstead)
 
 static void CreateUISprites(void)
 {
-    int i;
-
     sMoveRelearnerStruct->moveDisplayArrowTask = TASK_NONE;
     sMoveRelearnerStruct->moveListScrollArrowTask = TASK_NONE;
     AddScrollArrows();

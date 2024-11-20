@@ -211,11 +211,10 @@ void EvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u
 {
     u8 name[20];
     u16 currSpecies;
-    u32 trainerId, personality;
+    u32 personality;
     const struct CompressedSpritePalette* pokePal;
     u8 ID, isShiny;
     bool8 isAlpha;
-    const u8* longName;
 
     SetHBlankCallback(NULL);
     SetVBlankCallback(NULL);
@@ -260,7 +259,6 @@ void EvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u
 
     // preEvo sprite
     currSpecies = GetMonData(mon, MON_DATA_SPECIES);
-    trainerId = GetMonData(mon, MON_DATA_OT_ID);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
     isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
     isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA);
@@ -318,13 +316,12 @@ static void CB2_EvolutionSceneLoadGraphics(void)
     u8 ID;
     const struct CompressedSpritePalette* pokePal;
     u16 postEvoSpecies;
-    u32 trainerId, personality;
+    u32 personality;
     struct Pokemon* mon = &gPlayerParty[gTasks[sEvoStructPtr->evoTaskId].tPartyId];
     u8 isShiny;
     bool8 isAlpha;
 
     postEvoSpecies = gTasks[sEvoStructPtr->evoTaskId].tPostEvoSpecies;
-    trainerId = GetMonData(mon, MON_DATA_OT_ID);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
     isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
     isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA);
@@ -432,7 +429,6 @@ static void CB2_TradeEvolutionSceneLoadGraphics(void)
     case 4:
         {
             const struct CompressedSpritePalette* pokePal;
-            u32 trainerId = GetMonData(mon, MON_DATA_OT_ID);
             u32 personality = GetMonData(mon, MON_DATA_PERSONALITY);
             DecompressPicFromTableGender(gMonSpritesGfxPtr->sprites.ptr[3],
                                         postEvoSpecies,
@@ -480,14 +476,14 @@ void TradeEvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, u8 preEvoSprit
 {
     u8 name[20];
     u16 currSpecies;
-    u32 trainerId, personality;
+    u32 personality;
     const struct CompressedSpritePalette* pokePal;
     u8 ID, isShiny;
     bool8 isAlpha;
 
     GetMonData(mon, MON_DATA_NICKNAME, name);
-    GetMonData(mon, MON_DATA_IS_SHINY, isShiny);
-    GetMonData(mon, MON_DATA_IS_ALPHA, isAlpha);
+    isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
+    isAlpha = GetMonData(mon, MON_DATA_IS_ALPHA);
     StringCopy10(gStringVar1, name);
     StringCopy(gStringVar2, gSpeciesNames[postEvoSpecies]);
 
@@ -496,7 +492,6 @@ void TradeEvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, u8 preEvoSprit
     // preEvo sprite
     currSpecies = GetMonData(mon, MON_DATA_SPECIES);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
-    trainerId = GetMonData(mon, MON_DATA_OT_ID);
 
     sEvoStructPtr = AllocZeroed(sizeof(struct EvoInfo));
     sEvoStructPtr->preEvoSpriteId = preEvoSpriteId;
@@ -651,7 +646,6 @@ static void Task_EvolutionScene(u8 taskId)
 {
     u32 var;
     struct Pokemon* mon = &gPlayerParty[gTasks[taskId].tPartyId];
-    u16 species = GetMonData(mon, MON_DATA_SPECIES);
 
     // check if B Button was held, so the evolution gets stopped
     if (gMain.heldKeys == B_BUTTON
@@ -926,6 +920,7 @@ static void Task_EvolutionScene(u8 taskId)
                 gTasks[taskId].tLearnMoveNoState = MVSTATE_ASK_CANCEL;
                 gTasks[taskId].tLearnMoveState++;
             }
+            FALLTHROUGH
         case MVSTATE_PRINT_YES_NO:
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
             {
@@ -1319,6 +1314,7 @@ static void Task_TradeEvolutionScene(u8 taskId)
                 gTasks[taskId].tLearnMoveNoState = T_MVSTATE_ASK_CANCEL;
                 gTasks[taskId].tLearnMoveState++;
             }
+            FALLTHROUGH
         case T_MVSTATE_PRINT_YES_NO:
             if (!IsTextPrinterActive(0) && !IsSEPlaying())
             {

@@ -1560,6 +1560,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x87,
         .y_offset = 7,
     },
+    [SPECIES_CRAWDAUNTLES] =
+    {
+        .size = 0x87,
+        .y_offset = 0,
+    },
     [SPECIES_FEEBAS] =
     {
         .size = 0x67,
@@ -4578,7 +4583,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DURALUDON_PARTNER] =
     {
         .size = 0x88,
-        .y_offset = 1,
+        .y_offset = 0,
     },
     [SPECIES_DURALUDON_PARTNER_MEGA] =
     {

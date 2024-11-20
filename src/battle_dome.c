@@ -2737,7 +2737,6 @@ static int SelectOpponentMonsFromParty(int *partyMovePoints, bool8 allowRandom)
 static int GetTypeEffectivenessPoints(int move, int targetSpecies, int arg2)
 {
     int defType1, defType2, defAbility, moveType;
-    int i = 0;
     int typePower = TYPE_x1;
 
     if (move == MOVE_NONE || move == 0xFFFF || gBattleMoves[move].power == 0)
@@ -5946,7 +5945,7 @@ static void DecideRoundWinners(u8 roundId)
             gSaveBlock2Ptr->frontier.domeWinningMoves[tournamentId2] = GetWinningMove(tournamentId1, tournamentId2, roundId);
         }
         // Frontier Brain always wins, check tournamentId2.
-        else if (DOME_TRAINERS[tournamentId2].trainerId == TRAINER_FRONTIER_BRAIN && tournamentId1 != 0xFF)
+        else if (tournamentId2 < ARRAY_COUNT(DOME_TRAINERS) && DOME_TRAINERS[tournamentId2].trainerId == TRAINER_FRONTIER_BRAIN && tournamentId1 != 0xFF)
         {
             DOME_TRAINERS[tournamentId1].isEliminated = TRUE;
             DOME_TRAINERS[tournamentId1].eliminatedAt = roundId;

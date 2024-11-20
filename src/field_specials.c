@@ -2247,6 +2247,8 @@ void ShowFrontierManiacMessage(void)
             break;
     }
 
+    if (facility > ARRAY_COUNT(sFrontierManiacStreakThresholds)) return;
+
     for (i = 0; i < FRONTIER_MANIAC_MESSAGE_COUNT - 1 && sFrontierManiacStreakThresholds[facility][i] < winStreak; i++);
 
     ShowFieldMessage(sFrontierManiacMessages[facility][i]);
@@ -5235,6 +5237,8 @@ void IncreaseChosenMonEVs (void)
        break;
     case STAT_SPDEF: oldEV = GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_SPDEF_EV, NULL);
        break;
+    default:
+        return;
     }
 
     // Should replace 252 here with symbol for max EVs in a stat
@@ -5316,8 +5320,8 @@ void SetSettingsMonStats (void)
 				}
 				for (i = 0; i < PARTY_SIZE; i++)
 				{
-					if (GetBoxMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
-					   && GetBoxMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_EGG)
+					if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
+					   && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_EGG)
 					{
 						SetMonData(&gPlayerParty[i], MON_DATA_HP_IV, &value);
 						SetMonData(&gPlayerParty[i], MON_DATA_ATK_IV, &value);
@@ -5353,8 +5357,8 @@ void SetSettingsMonStats (void)
 				}
 				for (i = 0; i < PARTY_SIZE; i++)
 				{
-					if (GetBoxMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
-					   && GetBoxMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_EGG)
+					if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_NONE
+					   && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) != SPECIES_EGG)
 					{
 						SetMonData(&gPlayerParty[i], MON_DATA_HP_EV, &value);
 						SetMonData(&gPlayerParty[i], MON_DATA_ATK_EV, &value);
@@ -5552,7 +5556,6 @@ void ResetChosenMonEVs (void)
  */
 void ChangeChosenMonHiddenPower (void) 
 {
-    int i;
     u8 hiddenPowerType = gSpecialVar_0x8007;
   
     SetMonData(&gPlayerParty[gSpecialVar_0x800A], MON_DATA_HP_TYPE, &hiddenPowerType);
@@ -5724,30 +5727,7 @@ u8 CountRotomInParty (void)
 // Takes a Rotom form as input and returns its special move
 u16 RotomFormToMove (u16 species)
 {
-    u16 move;
-
-    switch (species)
-    {
-        case SPECIES_ROTOM_HEAT:
-            move = MOVE_OVERHEAT;
-            break;
-        case SPECIES_ROTOM_WASH:
-            move = MOVE_HYDRO_PUMP;
-            break;
-        case SPECIES_ROTOM_FROST:
-            move = MOVE_FREEZE_DRY;
-            break;
-        case SPECIES_ROTOM_FAN:
-            move = MOVE_HURRICANE;
-            break;
-        case SPECIES_ROTOM_MOW:
-            move = MOVE_LEAF_STORM;
-            break;
-        case SPECIES_ROTOM:
-            move = MOVE_THUNDER_SHOCK;
-            break;
-    }
-    return move;
+    return MOVE_NONE;
 }
 
 // Stores the special move of the Rotom form in gSpecialVar_0x8005 in gSpecialVar_0x8006
@@ -5768,22 +5748,6 @@ void GetRotomState (void)
 // Returns TRUE if the moove was forgotten, false if not
 void RotomForgetSpecialMove (void)
 {
-    u8 i, forgotSpecialMove = 0;
-    u16 currentMove;
-    u16 moveNone = MOVE_NONE;
-
-    currentMove = RotomFormToMove(gSpecialVar_0x8007);
-
-    for (i = 0; i < MAX_MON_MOVES; i++)
-    {
-        if (GetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_MOVE1 + i, NULL) == currentMove)
-        {
-            RemoveMonPPBonus (&gPlayerParty[gSpecialVar_0x8004], i);
-            SetMonData(&gPlayerParty[gSpecialVar_0x8004], MON_DATA_MOVE1 + i, &moveNone);
-            forgotSpecialMove = TRUE;
-            break;
-        }
-    }
 }
 
 // Changes the chosen party mon's species to the one stored in gSpecialVar_0x8005

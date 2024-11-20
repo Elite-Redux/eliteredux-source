@@ -17,13 +17,6 @@
 #include "constants/songs.h"
 #include "constants/moves.h"
 
-struct {
-    s16 startX;
-    s16 startY;
-    s16 targetX;
-    s16 targetY;
-} static EWRAM_DATA sFrenzyPlantRootData = {0}; // Debug? Written to but never read.
-
 static void AnimWoodHammerHammer(struct Sprite *);
 static void AnimWoodHammerHammer_WaitForPunch(struct Sprite *);
 static void AnimWoodHammerHammer_WaitForDestruction(struct Sprite *);
@@ -4074,12 +4067,9 @@ static void AnimConstrictBinding(struct Sprite* sprite)
 
 static void AnimConstrictBinding_Step1(struct Sprite* sprite)
 {
-    u8 spriteId;
-
     if ((u16)gBattleAnimArgs[7] == 0xFFFF)
     {
         sprite->affineAnimPaused = 0;
-        spriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
         sprite->data[0] = 0x100;
         sprite->callback = AnimConstrictBinding_Step2;
     }
@@ -4087,7 +4077,6 @@ static void AnimConstrictBinding_Step1(struct Sprite* sprite)
 
 static void AnimConstrictBinding_Step2(struct Sprite* sprite)
 {
-    u8 spriteId = GetAnimBattlerSpriteId(ANIM_TARGET);
     if (!sprite->data[2])
         sprite->data[0] += 11;
     else
@@ -4255,10 +4244,6 @@ static void AnimFrenzyPlantRoot(struct Sprite *sprite)
     StartSpriteAnim(sprite, gBattleAnimArgs[4]);
     sprite->data[2] = gBattleAnimArgs[5];
     sprite->callback = AnimRootFlickerOut;
-    sFrenzyPlantRootData.startX = sprite->x;
-    sFrenzyPlantRootData.startY = sprite->y;
-    sFrenzyPlantRootData.targetX = targetX;
-    sFrenzyPlantRootData.targetY = targetY;
 }
 
 static void AnimRootFlickerOut(struct Sprite* sprite)
@@ -5844,7 +5829,7 @@ static void AnimTipMon_Step(struct Sprite *sprite)
         sprite->data[5] = 0;
         PrepareBattlerSpriteForRotScale(sprite->data[2], ST_OAM_OBJ_NORMAL);
         sprite->data[0]++;
-        // fall through
+        FALLTHROUGH
     case 1:
         sprite->data[5] += sprite->data[4];
         SetSpriteRotScale(sprite->data[2], 0x100, 0x100, sprite->data[5]);
@@ -6044,7 +6029,7 @@ static void AnimFalseSwipeSlice(struct Sprite* sprite)
 
 static void AnimFalseSwipePositionedSlice(struct Sprite* sprite)
 {
-    sprite->x = sprite->x = GetBattlerSpriteCoord(gBattleAnimTarget, 2) + 0xFFD0 + gBattleAnimArgs[0];
+    sprite->x = GetBattlerSpriteCoord(gBattleAnimTarget, 2) + 0xFFD0 + gBattleAnimArgs[0];
     sprite->y = GetBattlerSpriteCoord(gBattleAnimTarget, 3);
     StartSpriteAnim(sprite, 1);
     sprite->data[0] = 0;

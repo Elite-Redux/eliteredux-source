@@ -14,12 +14,12 @@
 #include "m4a.h"
 #include "constants/rgb.h"
 
-struct {
+static struct {
     u8 state;
     u8 curScene;
     u16 timer;
     struct MultiBootParam mb;
-} static * sBerryFix;
+} * sBerryFix;
 
 static void BerryFix_Main(void);
 static void BerryFix_GpuSet(void);

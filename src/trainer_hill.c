@@ -83,11 +83,11 @@ static u16 GetPrizeItemId(void);
 // const data
 #include "data/battle_frontier/trainer_hill.h"
 
-struct
+static const struct
 {
     u8 trainerClass;
     u8 musicId;
-} static const sTrainerClassesAndMusic[] =
+} sTrainerClassesAndMusic[] =
 {
     {TRAINER_CLASS_TEAM_AQUA, TRAINER_ENCOUNTER_MUSIC_AQUA},
     {TRAINER_CLASS_AQUA_ADMIN, TRAINER_ENCOUNTER_MUSIC_AQUA},
@@ -285,14 +285,14 @@ void CallTrainerHillFunction(void)
 
 void ResetTrainerHillResults(void)
 {
+    #ifndef FREE_TRAINER_HILL
     s32 i;
 
-    gSaveBlock2Ptr->frontier.savedGame = 0;
-    #ifndef FREE_TRAINER_HILL
     gSaveBlock1Ptr->trainerHill.bestTime = 0;
     for (i = 0; i < 4; i++)
         SetTimerValue(&gSaveBlock1Ptr->trainerHillTimes[i], HILL_MAX_TIME);
     #endif
+    gSaveBlock2Ptr->frontier.savedGame = 0;
 }
 
 static u8 GetFloorId(void)
@@ -527,8 +527,8 @@ static void TrainerHillGetChallengeStatus(void)
 
 static void BufferChallengeTime(void)
 {
-    s32 total, minutes, secondsWhole, secondsFraction;
     #ifndef FREE_TRAINER_HILL
+    s32 total, minutes, secondsWhole, secondsFraction;
     total = gSaveBlock1Ptr->trainerHill.timer;
     if (total >= HILL_MAX_TIME)
         total = HILL_MAX_TIME;
@@ -607,9 +607,9 @@ static void TrainerHillDummy(void)
 
 void PrintOnTrainerHillRecordsWindow(void)
 {
+    #ifndef FREE_TRAINER_HILL
     s32 i, x, y;
     u32 total, minutes, secondsWhole, secondsFraction;
-    #ifndef FREE_TRAINER_HILL
     SetUpDataStruct();
     FillWindowPixelBuffer(0, PIXEL_FILL(0));
     x = GetStringCenterAlignXOffset(1, gText_TimeBoard, 0xD0);
@@ -1047,9 +1047,10 @@ static u8 GetPrizeListId(bool8 maxTrainers)
 
 static u16 GetPrizeItemId(void)
 {
+    #ifndef FREE_TRAINER_HILL
     u8 i;
     const u16 *prizeList;
-    s32 var = 0, prizeListSetId, minutes, id;
+    s32 var = 0, prizeListSetId, id;
 
     for (i = 0; i < NUM_TRAINER_HILL_FLOORS; i++)
     {
@@ -1063,7 +1064,6 @@ static u16 GetPrizeItemId(void)
         i = GetPrizeListId(TRUE);
     else
         i = GetPrizeListId(FALSE);
-    #ifndef FREE_TRAINER_HILL
     if (gSaveBlock1Ptr->trainerHill.tag == HILL_TAG_EXPERT)
         i = (i + 1) % NUM_TRAINER_HILL_PRIZE_LISTS;
 
@@ -1081,6 +1081,8 @@ static u16 GetPrizeItemId(void)
         id = 4;
     else
         id = 5;
-    #endif
     return prizeList[id];
+    #else
+    return 0;
+    #endif
 }

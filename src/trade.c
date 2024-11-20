@@ -596,7 +596,7 @@ static void CB2_CreateTradeMenu(void)
         SetTradePartyLiveStatuses(TRADE_PARTNER);
         PrintPartyNicknamesForTradeMenu(TRADE_PARTNER);
         gMain.state++;
-        // fallthrough
+        FALLTHROUGH
     case 16:
         LoadTradeBgGfx(0);
         gMain.state++;
@@ -3080,7 +3080,7 @@ static void UpdatePokedexForReceivedMon(u8 partyIdx)
 // Functionally nop after commented code
 static void TryEnableNationalDexFromLinkPartner(void)
 {
-    u8 mpId = GetMultiplayerId();
+    // u8 mpId = GetMultiplayerId();
     // Originally in Ruby but commented out
     /*if (gLinkPlayers[mpId ^ 1].lp_field_2 == 0x8000)
         EnableNationalPokedex();*/
@@ -3125,7 +3125,7 @@ static void TrySendTradeFinishData(void)
             SendBlock(bitmask_all_link_players_but_self(), sTradeData->linkData, sizeof(sTradeData->linkData));
             sTradeData->sendTradeFinishState++;
         }
-        // fallthrough
+        FALLTHROUGH
     case 2:
         sTradeData->sendTradeFinishState = 0;
         break;

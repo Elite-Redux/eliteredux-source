@@ -893,6 +893,7 @@ static void AnimTask_EruptionLaunchRocks_Step(u8 taskId)
     case 0:
         PrepareEruptAnimTaskData(task, task->data[15], 0x100, 0x100, 0xE0, 0x200, 32);
         task->data[0]++;
+        FALLTHROUGH
     case 1:
         if (++task->data[1] > 1)
         {
@@ -1110,7 +1111,7 @@ static void AnimEruptionFallingRock_Step(struct Sprite *sprite)
         }
 
         sprite->data[0]++;
-        // fall through
+        FALLTHROUGH
     case 1:
         sprite->y += 8;
         if (sprite->y >= sprite->data[7])

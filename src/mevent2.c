@@ -36,6 +36,7 @@ struct WonderNews *GetSavedWonderNews(void)
     #ifndef FREE_MYSTERY_EVENT_BUFFERS
     return &gSaveBlock1Ptr->mysteryGift.wonderNews.data;
     #endif
+    return NULL;
 }
 
 struct WonderCard *GetSavedWonderCard(void)
@@ -43,6 +44,7 @@ struct WonderCard *GetSavedWonderCard(void)
     #ifndef FREE_MYSTERY_EVENT_BUFFERS
     return &gSaveBlock1Ptr->mysteryGift.wonderCard.data;
     #endif
+    return NULL;
 }
 
 struct WonderCardMetadata *GetSavedWonderCardMetadata(void)
@@ -50,6 +52,7 @@ struct WonderCardMetadata *GetSavedWonderCardMetadata(void)
     #ifndef FREE_MYSTERY_EVENT_BUFFERS
     return &gSaveBlock1Ptr->mysteryGift.cardMetadata.data;
     #endif
+    return NULL;
 }
 
 struct MysteryEventStruct *GetSavedWonderNewsMetadata(void)
@@ -57,6 +60,7 @@ struct MysteryEventStruct *GetSavedWonderNewsMetadata(void)
     #ifndef FREE_MYSTERY_EVENT_BUFFERS
     return &gSaveBlock1Ptr->mysteryGift.newsMetadata;
     #endif
+    return NULL;
 }
 
 u16 *GetQuestionnaireWordsPtr(void)
@@ -64,6 +68,7 @@ u16 *GetQuestionnaireWordsPtr(void)
     #ifndef FREE_MYSTERY_EVENT_BUFFERS
     return gSaveBlock1Ptr->mysteryGift.questionnaireWords;
     #endif
+    return NULL;
 }
 
 void ClearSavedWonderNewsAndRelated(void)
@@ -349,10 +354,10 @@ static bool32 ValidateStamp(const u16 *data)
 
 static int GetNumStampsInSavedCard(void)
 {
+    #ifndef FREE_MYSTERY_EVENT_BUFFERS
     struct WonderCard *data;
     if (!ValidateReceivedWonderCard())
         return 0;
-    #ifndef FREE_MYSTERY_EVENT_BUFFERS
     data = &gSaveBlock1Ptr->mysteryGift.wonderCard.data;
     if (data->unk_08_0 != 1)
         return 0;

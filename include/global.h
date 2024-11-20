@@ -12,6 +12,8 @@
 #include "constants/berry.h"
 #include "constants/expansion_branches.h"
 
+// #define RECOMPILE_ME
+
 // Prevent cross-jump optimization.
 #define BLOCK_CROSS_JUMP asm("");
 
@@ -47,6 +49,12 @@
 
 #define FILTER(effect) if (!(effect)) continue;
 #define FILTER_NOT(effect) if (effect) continue;
+
+#ifndef __GNUC__
+#define FALLTHROUGH
+#else
+#define FALLTHROUGH __attribute__ ((fallthrough));
+#endif
 
 // GameFreak used a macro called "NELEMS", as evidenced by
 // AgbAssert calls.
@@ -95,7 +103,7 @@
 #define UQ_4_12_PERCENT(p) ((u16)((((u32) p) << UQ_4_12_PRECISION) / 100))
 
 #define UQ_4_12_FLOOR(uq) ((uq) >> UQ_4_12_PRECISION)
-#define UQ_4_12_DECIMAL(uq) ((uq) & ~(-1 << UQ_4_12_PRECISION))
+#define UQ_4_12_DECIMAL(uq) ((uq) & ((1 << UQ_4_12_PRECISION) - 1))
 
 // Converts a number to Q24.8 fixed-point format
 #define Q_24_8(n)  ((s32)((n) << 8))
@@ -123,7 +131,7 @@
 
 // Used in cases where division by 0 can occur in the retail version.
 // Avoids invalid opcodes on some emulators, and the otherwise UB.
-#define SAFE_DIV(a, b) ((b) ? (a) / (b) : 0)
+#define SAFE_DIV(a, b) (((b) != 0) ? (a) / (b) : 0)
 
 // Extracts the upper 16 bits of a 32-bit number
 #define HIHALF(n) (((n) & 0xFFFF0000) >> 16)

@@ -2100,3 +2100,9 @@ static const u16 sPopcormFormSpeciesIdTable[] = {
     SPECIES_POPCORM_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sDuraludonFormSpeciesIdTable[] = {
+    SPECIES_DURALUDON,
+    SPECIES_DURALUDON_PARTNER,
+    SPECIES_DURALUDON_PARTNER_MEGA,
+    FORM_SPECIES_END,
+};

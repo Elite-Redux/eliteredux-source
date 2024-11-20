@@ -888,8 +888,6 @@ void EnterUnionRoomChat(void)
 
 static void InitUnionRoomChat(struct UnionRoomChat *chat)
 {
-    int i;
-
     chat->funcId = 0;
     chat->funcState = 0;
     chat->currentPage = 0;
@@ -997,7 +995,7 @@ static void Chat_Join(void)
     case 0:
         PrepareSendBuffer_Join(sChat->sendMessageBuffer);
         sChat->funcState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         if (IsLinkTaskFinished() && !sub_8011A9C())
         {
@@ -1384,7 +1382,7 @@ static void Chat_SendMessage(void)
 
         PrepareSendBuffer_Chat(sChat->sendMessageBuffer);
         sChat->funcState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         if (IsLinkTaskFinished() == TRUE && !sub_8011A9C() && SendBlock(0, sChat->sendMessageBuffer, sizeof(sChat->sendMessageBuffer)))
             sChat->funcState++;
@@ -1869,7 +1867,7 @@ static bool32 ProcessReceivedChatMessage(u8 *dest, u8 *recvMessage)
         return TRUE;
     case CHAT_MESSAGE_DISBAND:
         StringCopy(sChat->hostName, name);
-        // fall through
+        FALLTHROUGH
     case CHAT_MESSAGE_LEAVE:
         if (sChat->multiplayerId != *recvMessage)
         {
@@ -1930,7 +1928,7 @@ static u8 *GetLimitedMessageStartPtr(void)
     for (i = 0; i < numChars; i++)
     {
         if (*str == CHAR_EXTRA_SYMBOL)
-            *str++;
+            (*str)++;
 
         str++;
     }
@@ -2023,7 +2021,7 @@ static void Task_ReceiveChatMessage(u8 taskId)
         }
 
         tState = 1;
-        // fall through
+        FALLTHROUGH
     case 1:
         tLinkPlayerCount = GetLinkPlayerCount();
         if (sChat->linkPlayerCount != tLinkPlayerCount)
@@ -2039,7 +2037,7 @@ static void Task_ReceiveChatMessage(u8 taskId)
 
         tI = 0;
         tState = 3;
-        // fall through
+        FALLTHROUGH
     case 3:
         for (; tI < 5 && ((tBlockReceivedStatus >> tI) & 1) == 0; tI++)
             ;
@@ -2534,13 +2532,13 @@ static bool32 Display_ScrollChat(u8 *state)
             sDisplay->scrollCount = 0;
             (*state)++;
         }
-        // fall through
+        FALLTHROUGH
     case 2:
         ScrollWindow(0, 0, 5, PIXEL_FILL(1));
         CopyWindowToVram(0, 2);
         sDisplay->scrollCount++;
         (*state)++;
-        // fall through
+        FALLTHROUGH
     case 3:
         if (IsDma3ManagerBusyWithBgCopy())
             return TRUE;
@@ -3088,9 +3086,6 @@ static void LoadKeyboardWindow(void)
 static void LoadTextEntryWindow(void)
 {
     int i;
-    u8 unused[2];
-    unused[0] = 0;
-    unused[1] = 0xFF;
 
     for (i = 0; i < MAX_MESSAGE_LENGTH; i++)
         BlitBitmapToWindow(1, sDisplay->unk2128, i * 8, 0, 8, 16);

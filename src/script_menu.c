@@ -234,8 +234,6 @@ static void Task_HandleMultichoiceInput(u8 taskId)
 
 bool8 ScriptMenu_YesNo(u8 left, u8 top)
 {
-    u8 taskId;
-
     if (FuncIsActiveTask(Task_HandleYesNoInput) == TRUE)
     {
         return FALSE;
@@ -244,7 +242,7 @@ bool8 ScriptMenu_YesNo(u8 left, u8 top)
     {
         gSpecialVar_Result = 0xFF;
         DisplayYesNoMenuDefaultYes();
-        taskId = CreateTask(Task_HandleYesNoInput, 0x50);
+        CreateTask(Task_HandleYesNoInput, 0x50);
         return TRUE;
     }
 }
@@ -982,11 +980,11 @@ static const struct ListMenuItem sTutorialNPCOptions[] =
 };
 
 // Table of your multichoice sets.
-struct
+static const struct
 {
     const struct ListMenuItem *set;
     int count;
-} static const sScrollingSets[] =
+} sScrollingSets[] =
 {
     {sTutorialNPCOptions, ARRAY_COUNT(sTutorialNPCOptions)},
 };

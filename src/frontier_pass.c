@@ -323,14 +323,14 @@ static const u8 sTextColors[][3] =
     {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_RED, TEXT_COLOR_LIGHT_RED},
 };
 
-struct
+static struct
 {
     s16 yStart;
     s16 yEnd;
     s16 xStart;
     s16 xEnd;
 }
-static const sPassAreasLayout[CURSOR_AREA_COUNT - 1] =
+const sPassAreasLayout[CURSOR_AREA_COUNT - 1] =
 {
     [CURSOR_AREA_MAP - 1]            = { 28,  76, 132, 220},
     [CURSOR_AREA_CARD - 1]           = { 84, 132, 132, 220},
@@ -533,14 +533,14 @@ static const u8 *const sPassAreaDescriptions[CURSOR_AREA_COUNT + 1] =
     [CURSOR_AREA_COUNT]          = gText_EmptyString7,
 };
 
-struct
+static struct
 {
     const u8 *name;
     const u8 *description;
     s16 x;
     s16 y;
     u8 animNum;
-} static const sMapLandmarks[NUM_FRONTIER_FACILITIES] =
+} const sMapLandmarks[NUM_FRONTIER_FACILITIES] =
 {
     [FRONTIER_FACILITY_TOWER]   = {gText_BattleTower3,   gText_BattleTowerDesc,    89,  40, MAP_INDICATOR_SQUARE},
     [FRONTIER_FACILITY_DOME]    = {gText_BattleDome2,    gText_BattleDomeDesc,     33,  42, MAP_INDICATOR_SQUARE},

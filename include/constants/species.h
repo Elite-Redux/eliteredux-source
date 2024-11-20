@@ -1076,8 +1076,9 @@
 #define SPECIES_KNAIVER 1069
 #define SPECIES_SAGARACAS 1070
 #define SPECIES_LUMINOSITEON 1071
+#define SPECIES_CRAWDAUNTLES 1072
 
-#define LAST_VALID_SPECIES SPECIES_LUMINOSITEON
+#define LAST_VALID_SPECIES SPECIES_CRAWDAUNTLES
 
 #define FORMS_START  1500
 
@@ -1637,7 +1638,7 @@
 #define SPECIES_AMAURA_PARTNER              FORMS_START + 492
 #define SPECIES_AURORUS_PARTNER             FORMS_START + 493
 
-#define LAST_VALID_STANDARD_FORM            SPECIES_SLAKING_MEGA_APE_SHIFT
+#define LAST_VALID_STANDARD_FORM            SPECIES_DURALUDON_PARTNER
 
 // Custom Megas
 #define CUSTOM_MEGA_START                   FORMS_START + 600
@@ -1755,7 +1756,7 @@
 #define SPECIES_MEOWTH_PARTNER_MEGA         CUSTOM_MEGA_START + 110
 #define SPECIES_DURALUDON_PARTNER_MEGA      CUSTOM_MEGA_START + 111
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_MEOWTH_PARTNER_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_DURALUDON_PARTNER_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA

@@ -881,11 +881,11 @@ enum
 // What a weird choice of table termination;
 #define FIELD_MOVE_TERMINATOR MOVE_SWORDS_DANCE
 
-struct
+static struct
 {
     const u8 *text;
     TaskFunc func;
-} static const sCursorOptions[] =
+} const sCursorOptions[] =
 {
     [MENU_SUMMARY]      = {gText_Summary5, CursorCb_Summary},
     [MENU_SUB_MOVES]    = {gText_LearnMoves, CursorCb_LearnMovesSubMenu},
@@ -1016,11 +1016,11 @@ static const u16 sFieldMoves[] =
     MOVE_DIG, MOVE_SECRET_POWER, MOVE_MILK_DRINK, MOVE_SOFT_BOILED, MOVE_SWEET_SCENT, FIELD_MOVE_TERMINATOR
 };
 
-struct
+static struct
 {
     bool8 (*fieldMoveFunc)(void);
     u8 msgId;
-} static const sFieldMoveCursorCallbacks[] =
+} const sFieldMoveCursorCallbacks[] =
 {
     [FIELD_MOVE_CUT]          = {SetUpFieldMove_Cut,         PARTY_MSG_NOTHING_TO_CUT},
     [FIELD_MOVE_FLASH]        = {SetUpFieldMove_Flash,       PARTY_MSG_CANT_USE_HERE},

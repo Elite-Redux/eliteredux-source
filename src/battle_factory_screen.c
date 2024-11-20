@@ -297,7 +297,7 @@ static const struct SpritePalette sSelect_SpritePalettes[] =
     {},
 };
 
-u8 static (* const sSelect_MenuOptionFuncs[])(void) =
+static u8 (* const sSelect_MenuOptionFuncs[])(void) =
 {
     Select_OptionSummary,
     Select_OptionRentDeselect,
@@ -879,7 +879,7 @@ static const struct SpriteTemplate sSpriteTemplate_Swap_MonPicBgAnim =
     .callback = SpriteCallbackDummy
 };
 
-void static (* const sSwap_MenuOptionFuncs[])(u8 taskId) =
+static void (* const sSwap_MenuOptionFuncs[])(u8 taskId) =
 {
     Swap_OptionSummary,
     Swap_OptionSwap,
@@ -3837,6 +3837,7 @@ static void Swap_PrintActionStrings(void)
     {
     case TRUE:
         Swap_PrintActionString(gText_PkmnForSwap, 0, SWAP_WIN_ACTION_FADE);
+        FALLTHROUGH
     case FALSE:
         Swap_PrintActionString(gText_Cancel3, 24, SWAP_WIN_ACTION_FADE);
         break;
@@ -3851,6 +3852,7 @@ static void Swap_PrintActionStrings2(void)
     {
     case TRUE:
         Swap_PrintActionString(gText_PkmnForSwap, 8, SWAP_WIN_OPTIONS);
+        FALLTHROUGH
     case FALSE:
         Swap_PrintActionString(gText_Cancel3, 32, SWAP_WIN_OPTIONS);
         break;

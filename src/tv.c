@@ -108,22 +108,22 @@ static bool8 IsAddingPokeNewsDisallowed(u8);
 static void ClearPokeNewsBySlot(u8);
 static void TranslateRubyShows(TVShow *);
 static void TranslateJapaneseEmeraldShows(TVShow *);
-static void SetMixedTVShows(TVShow *, TVShow *, TVShow *, TVShow *);
+static void SetMixedTVShows(TVShow player1[TV_SHOWS_COUNT], TVShow player2[TV_SHOWS_COUNT], TVShow player3[TV_SHOWS_COUNT], TVShow player4[TV_SHOWS_COUNT]);
 static void DeleteExcessMixedShows(void);
 static void DeactivateShowsWithUnseenSpecies(void);
 static void DeactivateGameCompleteShowsIfNotUnlocked(void);
 static s8 FindInactiveShowInArray(TVShow *);
-static bool8 TryMixTVShow(TVShow *[], TVShow *[], u8);
+static bool8 TryMixTVShow(TVShow *dest[TV_SHOWS_COUNT], TVShow *src[TV_SHOWS_COUNT], u8 idx);
 static bool8 TryMixNormalTVShow(TVShow *, TVShow *, u8);
 static bool8 TryMixRecordMixTVShow(TVShow *, TVShow *, u8);
 static bool8 TryMixOutbreakTVShow(TVShow *, TVShow *, u8);
 static void DeactivateShow(u8 showIdx);
 static void DeactivateShowIfNotSeenSpecies(u16, u8);
-static void SetMixedPokeNews(PokeNews *, PokeNews *, PokeNews *, PokeNews *);
+static void SetMixedPokeNews(PokeNews player1[POKE_NEWS_COUNT], PokeNews player2[POKE_NEWS_COUNT], PokeNews player3[POKE_NEWS_COUNT], PokeNews player4[POKE_NEWS_COUNT]);
 static void ClearInvalidPokeNews(void);
 static void ClearPokeNewsIfGameNotComplete(void);
 static s8 GetPokeNewsSlotIfActive(PokeNews *, u8);
-static void InitTryMixPokeNewsShow(PokeNews *[], PokeNews *[]);
+static void InitTryMixPokeNewsShow(PokeNews *dest[POKE_NEWS_COUNT], PokeNews *src[POKE_NEWS_COUNT]);
 static bool8 TryMixPokeNewsShow(PokeNews *, PokeNews *, s8);
 static void TVShowDone(void);
 static void InterviewAfter_FanClubLetter(void);
@@ -1642,7 +1642,6 @@ static void InterviewAfter_PkmnFanClubOpinions(void)
 
 static void InterviewAfter_Dummy(void)
 {
-    TVShow *show = &gSaveBlock1Ptr->tvShows[sCurTVShowSlot];
 }
 
 static void TryStartRandomMassOutbreak(void)
@@ -4620,6 +4619,7 @@ static void DoTVShowTheNameRaterShow(void)
     case 12:
         state = 18;
         sTVShowState = 18;
+        FALLTHROUGH
     case 18:
         TVShowConvertInternationalString(gStringVar1, show->nameRaterShow.pokemonName, show->nameRaterShow.pokemonNameLanguage);
         TVShowDone();
@@ -6789,6 +6789,7 @@ static void DoTVShowLilycoveContestLady(void)
     case CONTESTLADYLIVE_STATE_WON:
     case CONTESTLADYLIVE_STATE_LOST:
         TVShowConvertInternationalString(gStringVar3, show->contestLady.playerName, show->contestLady.language);
+        FALLTHROUGH
     case CONTESTLADYLIVE_STATE_LOST_BADLY:
         TVShowConvertInternationalString(gStringVar2, show->contestLady.nickname, show->contestLady.pokemonNameLanguage);
         TVShowDone();

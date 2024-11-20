@@ -1444,6 +1444,9 @@ bool8 ScrCmd_multichoicegrid(struct ScriptContext *ctx)
     }
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 bool8 ScrCmd_erasebox(struct ScriptContext *ctx)
 {
     u8 left = ScriptReadByte(ctx);
@@ -2217,6 +2220,7 @@ bool8 ScrCmd_addelevmenuitem(struct ScriptContext *ctx)
     //ScriptAddElevatorMenuItem(v3, v5, v7, v9);
     return FALSE;
 }
+#pragma GCC diagnostic pop
 
 bool8 ScrCmd_showelevmenu(struct ScriptContext *ctx)
 {

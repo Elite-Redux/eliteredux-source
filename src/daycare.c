@@ -250,7 +250,6 @@ static u16 TakeSelectedPokemonFromDaycare(struct DaycareMon *daycareMon)
 {
     u16 species;
     u16 newSpecies;
-    u32 experience;
     struct Pokemon pokemon;
 
     GetBoxMonNickname(&daycareMon->mon, gStringVar1);
@@ -359,7 +358,7 @@ static void Debug_AddDaycareSteps(u16 numSteps)
 
 u8 GetNumLevelsGainedFromDaycare(void)
 {
-    if (GetBoxMonData(&gSaveBlock1Ptr->daycare.mons[gSpecialVar_0x8004], MON_DATA_SPECIES) != 0)
+    if (GetBoxMonData(&gSaveBlock1Ptr->daycare.mons[gSpecialVar_0x8004].mon, MON_DATA_SPECIES) != 0)
         return GetNumLevelsGainedForDaycareMon(&gSaveBlock1Ptr->daycare.mons[gSpecialVar_0x8004]);
 
     return 0;
@@ -466,7 +465,7 @@ static void TryInheritAbility(struct Pokemon *egg, struct DayCare *daycare)
 {
     s32 i;
     s32 parent = -1;
-    u8 femaleCount, abilitySlot = 0;
+    u8 femaleCount = 0, abilitySlot = 0;
 
     // search for female
     for (i = 0; i < DAYCARE_MON_COUNT; i++)
@@ -520,7 +519,7 @@ static void _TriggerPendingDaycareEgg(struct DayCare *daycare)
     // inherit nature
     else
     {
-        u8 wantedNature = GetMonData(&daycare->mons[parent].mon, MON_DATA_NATURE, NULL);
+        u8 wantedNature = GetBoxMonData(&daycare->mons[parent].mon, MON_DATA_NATURE, NULL);
         u32 personality;
 
         do
@@ -849,7 +848,7 @@ static void InheritPokeBall(struct Pokemon *egg, struct DayCare *daycare)
 {
     u16 ball;
     u8 parent, i;
-    u8 femaleCount, abilitySlot = 0;
+    u8 femaleCount = 0;
 
     // search for female
     for (i = 0; i < DAYCARE_MON_COUNT; i++)

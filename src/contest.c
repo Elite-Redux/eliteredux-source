@@ -1241,7 +1241,7 @@ static void Task_TryStartLinkContest(u8 taskId)
             case 0:
                 ContestPrintLinkStandby();
                 gTasks[taskId].data[0]++;
-                // fallthrough
+                FALLTHROUGH
             case 1:
                 if (IsLinkTaskFinished())
                 {
@@ -1408,12 +1408,12 @@ static void Task_RaiseCurtainAtStart(u8 taskId)
         break;
     case 3:
     {
-        u16 bg0Cnt = GetGpuReg(REG_OFFSET_BG0CNT);
-        u16 bg2Cnt = GetGpuReg(REG_OFFSET_BG2CNT);
-        ((struct BgCnt *)&bg0Cnt)->priority = 0;
-        ((struct BgCnt *)&bg2Cnt)->priority = 0;
-        SetGpuReg(REG_OFFSET_BG0CNT, bg0Cnt);
-        SetGpuReg(REG_OFFSET_BG2CNT, bg2Cnt);
+        BgCnt bg0Cnt = { .bits = GetGpuReg(REG_OFFSET_BG0CNT) };
+        BgCnt bg2Cnt = { .bits = GetGpuReg(REG_OFFSET_BG2CNT) };
+        bg0Cnt.priority = 0;
+        bg2Cnt.priority = 0;
+        SetGpuReg(REG_OFFSET_BG0CNT, bg0Cnt.bits);
+        SetGpuReg(REG_OFFSET_BG2CNT, bg2Cnt.bits);
         SlideApplauseMeterIn();
         gTasks[taskId].data[0]++;
         break;

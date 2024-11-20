@@ -878,7 +878,7 @@ static void Task_PlayCryWhenReleasedFromBall(u8 taskId)
             break;
         }
         gTasks[taskId].tCryTaskState++;
-        // fall through
+        FALLTHROUGH
     case 31:
         if (!IsCryPlayingOrClearCrySongs())
         {

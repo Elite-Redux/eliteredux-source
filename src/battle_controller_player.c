@@ -535,16 +535,12 @@ void PrintBattleWindow_ActionPromt(void)
     u8 windowId = B_WIN_ACTION_PROMPT;
     u8 font = FONT_SMALL_NARROW;
     u8 fontColor = FONT_WHITE_2;
-    struct TextPrinterTemplate printerTemplate;
     bool8 isTrainerBattle = (gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_FRONTIER | BATTLE_TYPE_EREADER_TRAINER | BATTLE_TYPE_TRAINER_HILL));
-    bool8 isDoubleBattle  = (gBattleTypeFlags & BATTLE_TYPE_DOUBLE);
     u8 battler = gActiveBattler;
-    u8 speed;
     bool8 canUsePokeball = !isTrainerBattle && CanThrowBall() == 0 && FlagGet(FLAG_SYS_DEXNAV_GET);
     u8 shortcutButton = gSaveBlock2Ptr->shortcutButton;
     bool8 hasShortcutButtonEnabled = (shortcutButton != BATTLE_ACTION_DEBUG || B_ENABLE_DEBUG);
     u8 battleTheme = getBattleInterfaceTheme();
-    u8 dummy = 0;
 
     switch (battleTheme) {
         case THEME_DARK:
@@ -919,12 +915,10 @@ const u8 sText_BattleMenu_Action_You[]            = _("{PLAYER}");
 
 void PrintBattleWindow_ActionPromt_Safari(void)
 {
-    u8 i, x, y, x2, y2, offset;
+    u8 x, y, x2, y2, offset;
     u8 windowId = B_WIN_ACTION_PROMPT;
     u8 font = FONT_SMALL_NARROW;
     u8 fontColor = FONT_WHITE_2;
-    struct TextPrinterTemplate printerTemplate;
-    u8 speed;
 
     switch (getBattleInterfaceTheme()) {
         case THEME_DARK:
@@ -984,6 +978,8 @@ void PrintBattleWindow_ActionPromt_Safari(void)
     x  = 15;
     y  = 1;
     y2 = 0;
+    // Not sure if this is correct, it was unset
+    x2 = 0;
 
     // Fight Button
     switch (getBattleInterfaceTheme()) {
@@ -1303,7 +1299,7 @@ static const u8 sTheme_Light_Can_KO_Mark_Gfx[]   = INCBIN_U8("graphics/ui_menus/
 void PrintBattleWindow_MoveSelection(void)
 {
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleResources->bufferA[gActiveBattler][MAX_MON_MOVES]);
-    u8 i, j, x, y, x2, y2, offset, speed, moveType, effectiveness, extraX;
+    u8 i, x, y, x2, y2, offset, moveType, effectiveness, extraX;
     u16 move, movePower;
     u8 windowId = B_WIN_ACTION_PROMPT;
     u8 font = FONT_SMALL_NARROW;
@@ -1312,10 +1308,8 @@ void PrintBattleWindow_MoveSelection(void)
     u8 target = gMultiUsePlayerCursor;
     u8 battleTheme = getBattleInterfaceTheme();
     int maxDamage;
-    bool32 copyToVram;
     bool8 isStatusMove;
     bool8 isDoubleTypedMove = FALSE;
-    struct TextPrinterTemplate printerTemplate;
     u16 typeEffectivenessMultiplier;
     int ignored, immune;
 
@@ -1343,7 +1337,6 @@ void PrintBattleWindow_MoveSelection(void)
     //Fill the window with the fill value
     MoveIntoBattleBgWindow(windowId);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(TEXT_COLOR_TRANSPARENT));
-    copyToVram = TRUE;
 
     gBattle_BG1_X = 0;
     gBattle_BG1_Y = 0;
@@ -1795,7 +1788,6 @@ void PrintBattleWindow_MoveSelection(void)
                 s16 percentage;
                 u16 targetCurrentHp = gBattleMons[target].hp;
                 u16 minDamage = DoMoveDamageCalcBattleMenu(move, gActiveBattler, target, &moveType, FALSE, MIN_DAMAGE_FACTOR, &typeEffectivenessMultiplier);
-                u8 moveIndex = gMoveSelectionCursor[gActiveBattler];
                 u16 heldItem = gBattleMons[target].item;
 
                 if (immune) minDamage = maxDamage = 0;
@@ -1925,9 +1917,7 @@ void ReshowNewBattleMenuAfterMenu(void) {
 static void HandleInputChooseActionPlayer(void)
 {
     u16 itemId = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
-    bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
     u8 shortcutButton = gSaveBlock2Ptr->shortcutButton;
-    u8 value = 0;
 
     DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
     DoBounceEffect(gActiveBattler, BOUNCE_MON,       7, 1);
@@ -3636,8 +3626,6 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId, u16 moveType, u
 static u8 GetMoveTypeEffectivenessStatus(u16 moveNum, u8 targetId, u8 userId)
 {
     bool8 moveNullified = FALSE;
-    u16 userSpecies = gBattleMons[userId].species;
-    u16 targetSpecies = gBattleMons[targetId].species;
 
     if (BattlerHasAbility(userId, ABILITY_MYCELIUM_MIGHT, TRUE) && gBattleMoves[moveNum].split == SPLIT_STATUS && gBattleMoves[moveNum].target & !MOVE_TARGET_USER) {
         switch (gBattleMoves[moveNum].effect) {
@@ -4765,9 +4753,6 @@ void HandleChooseActionAfterDma3_Player(void)
 
 static void PlayerHandleChooseAction(void)
 {
-    // "What will {x} do?" + "Fight/Pokémon/Bag/Run" menu
-    s32 i;
-    
 	//Reshow Bg
     gBattle_BG1_X = 0;
     gBattle_BG1_Y = 0;
@@ -5300,7 +5285,7 @@ static void PlayerHandleLinkStandbyMsg(void)
     {
     case 0:
         PrintLinkStandbyMsg();
-        // fall through
+        FALLTHROUGH
     case 1:
         EndBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX);
         EndBounceEffect(gActiveBattler, BOUNCE_MON);

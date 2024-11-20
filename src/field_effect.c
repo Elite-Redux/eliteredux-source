@@ -3898,6 +3898,7 @@ static void Task_MoveDeoxysRock(u8 taskId)
             data[6] = SAFE_DIV(data[2] * 16 - data[4], data[8]);
             data[7] = SAFE_DIV(data[3] * 16 - data[5], data[8]);
             data[0]++;
+            FALLTHROUGH
         case 1:
             if (data[8] != 0)
             {

@@ -320,7 +320,7 @@ static void PrintLinkBattleRecord(struct LinkBattleRecord *record, u8 y, s32 lan
 
 void ShowLinkBattleRecords(void)
 {
-    s32 i, x;
+    s32 x;
 
     gRecordsWindowId = AddWindow(&sLinkBattleRecordsWindow);
     DrawStdWindowFrame(gRecordsWindowId, FALSE);

@@ -900,10 +900,10 @@ const u8 gPCText_Evolve[] = _("Evolve");
 const u8 gText_MoveLevelUpDescription[] = _("Level Up to what level?");
 const u8 gText_MoveEvolveDescription[] = _("Evolve into what?");
 
-struct {
+static struct {
     const u8 *text;
     const u8 *desc;
-} static const sMainMenuTexts[OPTIONS_COUNT] =
+} const sMainMenuTexts[OPTIONS_COUNT] =
 {
     [OPTION_WITHDRAW]      = {gText_WithdrawPokemon, gText_WithdrawMonDescription},
     [OPTION_DEPOSIT]       = {gText_DepositPokemon,  gText_DepositMonDescription},
@@ -3008,7 +3008,7 @@ static void Task_ReleaseMon(u8 taskId)
         PrintMessage(MSG_RELEASE_POKE);
         ShowYesNoWindow(1);
         sStorage->state++;
-        // fallthrough
+        FALLTHROUGH
     case 1:
         switch (Menu_ProcessInputNoWrapClearOnChoose())
         {
@@ -3479,6 +3479,7 @@ static void Task_HandleBoxOptions(u8 taskId)
         if (IsMenuLoading())
             return;
         sStorage->state++;
+        FALLTHROUGH
     case 2:
         switch (HandleMenuInput())
         {
@@ -4414,12 +4415,12 @@ static void ShowYesNoWindow(s8 cursorPos)
 static void Task_EvolveMon(u8 taskId)
 {
     struct Pokemon pokemon;
-    u8 newLevel, i;
+    u8 i;
     u8 pos = GetCursorPosition();
     u8 boxId = StorageGetCurrentBox();
     u16 targetSpecies = SPECIES_NONE;
     u8 numEvo = 0;
-    u8 targetNumEvo;
+    u8 targetNumEvo = 0;
 
     switch (sStorage->state)
     {
@@ -4542,11 +4543,8 @@ static void Task_LevelUpMon(u8 taskId)
 void CreateLevelUpMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 paletteNum, u8 initialCursorPos)
 {
     u8 nextlevel, numlevels, i, levelcap, windowId;
-    struct TextPrinterTemplate printer;
-    const u8 gText_YesNo123[] = _("");
 	static const u8 sText_levelCap[] =  _("Level Cap$");
     u8 monlevel = sStorage->displayMonLevel;
-    u16 species = sStorage->displayMonSpecies;
 
     levelcap = GetLevelCap();
 
@@ -4587,7 +4585,7 @@ static void ShowLevelUpWindow(s8 cursorPos)
 void CreateEvolveMenu(const struct WindowTemplate *window, u16 baseTileNum, u8 paletteNum, u8 initialCursorPos)
 {
     struct Pokemon pokemon;
-    u8 i, levelcap, windowId;
+    u8 i, windowId;
     u16 targetSpecies;
     u8 pos = GetCursorPosition();
     u8 boxId = StorageGetCurrentBox();
@@ -5590,6 +5588,7 @@ static bool8 ScrollToBox(void)
     case 0:
         LoadWallpaperGfx(sStorage->scrollToBoxId, sStorage->scrollDirection);
         sStorage->scrollState++;
+        FALLTHROUGH
     case 1:
         if (!WaitForWallpaperGfxLoad())
             return TRUE;
@@ -6808,12 +6807,12 @@ static void TrySetCursorFistAnim(void)
 // they may not release their last Pokémon that knows the specified move.
 // This is to stop the player from softlocking themselves by not having
 // a Pokémon that knows a required field move.
-struct
+static struct
 {
     s8 mapGroup;
     s8 mapNum;
     u16 move;
-} static const sRestrictedReleaseMoves[] =
+} const sRestrictedReleaseMoves[] =
 {
     {MAP_GROUPS_COUNT, 0, MOVE_SURF},
     {MAP_GROUPS_COUNT, 0, MOVE_DIVE},
@@ -7152,7 +7151,7 @@ static void TryRefreshDisplayMon(void)
                 SetDisplayMonData(&gPlayerParty[sCursorPosition], MODE_PARTY);
                 break;
             }
-            // fallthrough
+            FALLTHROUGH
         case CURSOR_AREA_BUTTONS:
         case CURSOR_AREA_BOX_TITLE:
             SetDisplayMonData(NULL, MODE_MOVE);
@@ -7174,11 +7173,10 @@ static void ReshowDisplayMon(void)
 
 void SetArceusFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 species = GetMonData(boxMon, MON_DATA_SPECIES);
+    u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
     u16 forme;
-    u8 abilityNum = GetMonData(boxMon, MON_DATA_ABILITY_NUM);
+    u8 abilityNum = GetBoxMonData(boxMon, MON_DATA_ABILITY_NUM);
     u16 ability = GetAbilityBySpecies(species, abilityNum);
-    u8 level = GetMonData(boxMon, MON_DATA_LEVEL);
 
     if (GET_BASE_SPECIES_ID(species) == SPECIES_ARCEUS && (ability == ABILITY_MULTITYPE  || BoxMonHasInnate(boxMon, ABILITY_MULTITYPE, FALSE)))
     {
@@ -7196,7 +7194,7 @@ void SetArceusFormPSS(struct BoxPokemon *boxMon)
 
 u16 GetArceusFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 item = GetMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
+    u16 item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
 
     switch (item)
     {
@@ -7241,7 +7239,7 @@ u16 GetArceusFormPSS(struct BoxPokemon *boxMon)
 
 u16 GetSilvallyFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 item = GetMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
+    u16 item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
 
     switch (item)
     {
@@ -7286,7 +7284,7 @@ u16 GetSilvallyFormPSS(struct BoxPokemon *boxMon)
 
 u16 GetGiratinaFormPSS(struct BoxPokemon *boxMon)
 {
-    u16 item = GetMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
+    u16 item = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM, NULL);
 
     switch (item)
     {
@@ -7346,7 +7344,6 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
         sStorage->displayMonSpecies = GetBoxMonData(pokemon, MON_DATA_SPECIES2);
         if (sStorage->displayMonSpecies != SPECIES_NONE)
         {
-            u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
             u8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
             sanityIsBadEgg = GetBoxMonData(boxMon, MON_DATA_SANITY_IS_BAD_EGG);
             if (sanityIsBadEgg)
@@ -8044,11 +8041,11 @@ static u8 HandleInput_OnButtons(void)
 
 static u8 HandleInput(void)
 {
-    struct
+    static const struct
     {
         u8 (*func)(void);
         s8 area;
-    } static const inputFuncs[] =
+    } inputFuncs[] =
     {
         {HandleInput_InBox,     CURSOR_AREA_IN_BOX},
         {HandleInput_InParty,   CURSOR_AREA_IN_PARTY},
@@ -9754,6 +9751,7 @@ static void SpriteCB_ItemIcon_ToHand(struct Sprite *sprite)
         sprite->data[4] = 21;
         sprite->data[5] = 0;
         sprite->sState++;
+        FALLTHROUGH
     case 1:
         sprite->data[1] -= sprite->data[3];
         sprite->data[2] -= sprite->data[4];
@@ -9783,6 +9781,7 @@ static void SpriteCB_ItemIcon_ToMon(struct Sprite *sprite)
         sprite->data[4] = 21;
         sprite->data[5] = 0;
         sprite->sState++;
+        FALLTHROUGH
     case 1:
         sprite->data[1] += sprite->data[3];
         sprite->data[2] += sprite->data[4];
@@ -9808,6 +9807,7 @@ static void SpriteCB_ItemIcon_SwapToHand(struct Sprite *sprite)
         sprite->data[4] = 21;
         sprite->data[5] = 0;
         sprite->sState++;
+        FALLTHROUGH
     case 1:
         sprite->data[1] -= sprite->data[3];
         sprite->data[2] -= sprite->data[4];
@@ -9835,6 +9835,7 @@ static void SpriteCB_ItemIcon_SwapToMon(struct Sprite *sprite)
         sprite->data[4] = 21;
         sprite->data[5] = 0;
         sprite->sState++;
+        FALLTHROUGH
     case 1:
         sprite->data[1] += sprite->data[3];
         sprite->data[2] += sprite->data[4];
@@ -10026,7 +10027,7 @@ static void SetBoxWallpaper(u8 boxId, u8 wallpaperId)
 // For moving to the next Pokémon while viewing the summary screen
 s16 AdvanceStorageMonIndex(struct BoxPokemon *boxMons, u8 currIndex, u8 maxIndex, u8 mode)
 {
-    s16 i, j;
+    s16 i, j = 0;
     s16 direction = -1;
 
     if (mode == 0 || mode == 1)
@@ -10301,11 +10302,11 @@ static void TilemapUtil_UpdateAll(void)
     }
 }
 
-struct
+static const struct
 {
     u16 width;
     u16 height;
-} static const sTilemapDimensions[][4] =
+} sTilemapDimensions[][4] =
 {
     {
         { 256,  256},
@@ -10568,7 +10569,6 @@ void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
 {
     u8 pos = GetCursorPosition();
     u16 species = GetBoxMonData(boxMon, MON_DATA_SPECIES);
-    u32 otId = GetBoxMonData(boxMon, MON_DATA_OT_ID);
     u32 pid = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
     u8 isShiny = GetBoxMonData(boxMon, MON_DATA_IS_SHINY);
 
@@ -10586,7 +10586,6 @@ void UpdateSpeciesSpritePSS_Mon(struct Pokemon *mon)
 {
     u8 pos = GetCursorPosition();
     u16 species = GetMonData(mon, MON_DATA_SPECIES);
-    u32 otId = GetMonData(mon, MON_DATA_OT_ID);
     u32 pid = GetMonData(mon, MON_DATA_PERSONALITY);
     u8 isShiny = GetMonData(mon, MON_DATA_IS_SHINY);
 

@@ -470,7 +470,7 @@ static void FortreeBridgePerStepCallback(u8 taskId)
 
             data[6] = 16;
             data[1] = 2;
-            // fallthrough
+            FALLTHROUGH
         case 2:
             data[6]--;
             x2 = data[4];
@@ -846,7 +846,6 @@ static const int mossDeepGymReworkFollowArrowTable[5][9] = {
 
 static void MossDeepGymReworkFollowArrow_DrawTile(s16 x, s16 y, s16 ix, s16 jy) {
     s16 xDelta, yDelta;
-    u16 tile;
     u8  tileColor, tileAngle;
     xDelta = ix - x;
     yDelta = jy - y;

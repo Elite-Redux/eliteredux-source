@@ -252,9 +252,8 @@ u8 ScriptGiveCustomMon(u16 species, u8 level, u16 item, u8 ball, u8 nature, u8 a
     int sentToPc;
     u8 heldItem[2];
     struct Pokemon mon;
-    bool8 isAlpha = FALSE;
     u8 i;
-    u8 evTotal = 0;
+    int evTotal = 0;
 
     if (nature == NUM_NATURES || nature == 0xFF)
         nature = Random() % NUM_NATURES;

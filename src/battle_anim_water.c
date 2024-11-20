@@ -1270,6 +1270,7 @@ static void AnimTask_WaterSpoutLaunch_Step(u8 taskId)
     case 0:
         PrepareEruptAnimTaskData(task, task->data[15], 0x100, 0x100, 0xE0, 0x200, 32);
         task->data[0]++;
+        FALLTHROUGH
     case 1:
         if (++task->data[3] > 1)
         {
@@ -1312,6 +1313,7 @@ static void AnimTask_WaterSpoutLaunch_Step(u8 taskId)
     case 4:
         CreateWaterSpoutLaunchDroplets(task, taskId);
         task->data[0]++;
+        FALLTHROUGH
     case 5:
         if (++task->data[3] > 1)
         {
@@ -1421,6 +1423,7 @@ static void AnimSmallWaterOrb(struct Sprite *sprite)
         sprite->data[4] += (sprite->data[1] % 6) * 3;
         sprite->data[5] += (sprite->data[1] % 3) * 3;
         sprite->data[0]++;
+        FALLTHROUGH
     case 1:
         sprite->data[2] += sprite->data[4];
         sprite->data[3] += sprite->data[5];

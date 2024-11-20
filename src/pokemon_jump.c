@@ -948,7 +948,7 @@ static bool32 GameIntro_Leader(void)
     case 0:
         SetLinkTimeInterval(LINK_INTERVAL_SHORT);
         sPokemonJump->mainState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         if (!DoGameIntro())
         {
@@ -970,7 +970,7 @@ static bool32 GameIntro_Member(void)
         SetLinkTimeInterval(LINK_INTERVAL_NONE);
         sPokemonJump->rngSeed = sPokemonJump->comm.data;
         sPokemonJump->mainState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         return DoGameIntro();
     }
@@ -1008,7 +1008,7 @@ static bool32 WaitRound_Member(void)
         SetLinkTimeInterval(LINK_INTERVAL_NONE);
         sPokemonJump->vineTimer = sPokemonJump->comm.data;
         sPokemonJump->mainState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         if (AreLinkQueuesEmpty())
             return FALSE;
@@ -1121,7 +1121,7 @@ static bool32 AskPlayAgain_Leader(void)
     case 0:
         SetLinkTimeInterval(LINK_INTERVAL_MEDIUM);
         sPokemonJump->mainState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         if (!DoPlayAgainPrompt())
         {
@@ -1155,7 +1155,7 @@ static bool32 AskPlayAgain_Member(void)
     case 0:
         SetLinkTimeInterval(LINK_INTERVAL_NONE);
         sPokemonJump->mainState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         if (!DoPlayAgainPrompt())
         {
@@ -1381,7 +1381,7 @@ static bool32 HandleSwingRound(void)
             sPokemonJump->helperState++;
         else
             break;
-        // fall through
+        FALLTHROUGH
     case 1:
         if (JOY_NEW(A_BUTTON))
         {
@@ -1655,7 +1655,7 @@ static void Task_CommunicateMonInfo(u8 taskId)
             tReceivedPacket(i) = FALSE;
 
         tState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         SendPacket_MonInfo(&jump->monInfo[jump->multiplayerId]);
         for (i = 0; i < MAX_RFU_PLAYERS; i++)
@@ -2259,10 +2259,10 @@ static const u16 sPrizeItems[] = {
     ITEM_IAPAPA_BERRY
 };
 
-struct {
+static struct {
     u32 score;
     u32 quantity;
-} static const sPrizeQuantityData[] =
+} const sPrizeQuantityData[] =
 {
     { .score =  5000, .quantity = 1},
     { .score =  8000, .quantity = 2},
@@ -2915,7 +2915,7 @@ static void SpriteCB_MonIntroBounce(struct Sprite *sprite)
         PlaySE(SE_BIKE_HOP);
         sprite->sHopPos = 0;
         sprite->sState++;
-        // fall through
+        FALLTHROUGH
     case 1:
         sprite->sHopPos += 4;
         if (sprite->sHopPos > 127)
@@ -3121,11 +3121,11 @@ static const struct WindowTemplate sWindowTemplates[] =
     }
 };
 
-struct
+static const struct
 {
     int id;
     void (*func)(void);
-} static const sPokeJumpGfxFuncs[] =
+} sPokeJumpGfxFuncs[] =
 {
     {GFXFUNC_LOAD,                 LoadPokeJumpGfx}, // Element not used, LoadPokeJumpGfx is passed directly to SetUpPokeJumpGfxFunc
     {GFXFUNC_SHOW_NAMES,           PrintPlayerNamesNoHighlight},
@@ -3472,6 +3472,7 @@ static bool32 ResetVineGfx(void)
         UpdateVineSwing(sPokemonJumpGfx->vineState);
         if (sPokemonJumpGfx->vineState != VINE_UPSWING_LOW)
             break;
+        FALLTHROUGH
     case 1:
         return FALSE;
     }
@@ -3543,10 +3544,12 @@ static bool32 DoPrizeMessageAndFanfare(void)
         }
         PlayFanfare(sPokemonJumpGfx->fanfare);
         sPokemonJumpGfx->msgWindowState++;
+        FALLTHROUGH
     case 2:
         if (!IsFanfareTaskInactive())
             break;
         sPokemonJumpGfx->msgWindowState++;
+        FALLTHROUGH
     case 3:
         return FALSE;
     }
@@ -4098,6 +4101,7 @@ static struct PokemonJumpRecords *GetPokeJumpRecords(void)
     #ifndef FREE_POKEMON_JUMP
     return &gSaveBlock2Ptr->pokeJump;
     #endif
+    return NULL;
 }
 
 void ResetPokemonJumpRecords(void)

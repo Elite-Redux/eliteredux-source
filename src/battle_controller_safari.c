@@ -183,10 +183,6 @@ enum optionsButtonMode
 
 static void HandleInputChooseAction(void)
 {
-    u16 itemId = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
-    bool8 isTrainerBattle = (gBattleTypeFlags & BATTLE_TYPE_TRAINER);
-    u8 value = 0;
-
     if (JOY_REPEAT(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
         gPlayerDpadHoldFrames++;
     else
@@ -516,8 +512,6 @@ static void HandleChooseActionAfterDma3Safari(void)
 
 static void SafariHandleChooseAction(void)
 {
-    s32 i;
-    
 	//Reshow Bg
     gBattle_BG1_X = 0;
     gBattle_BG1_Y = 0;

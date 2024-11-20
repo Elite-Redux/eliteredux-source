@@ -104,7 +104,7 @@
 #define ABILITY_SNIPER 97 // Critical hits have a 2.25x dmg multiplier instead of 1.5x.
 #define ABILITY_MAGIC_GUARD 98 // Only damaged by attacks.
 #define ABILITY_NO_GUARD 99 // Attacks used by and on this Pokémon bypass accuracy checks.
-#define ABILITY_STALL 100 // Takes 30% damage if it hasn't moved.
+#define ABILITY_STALL 100 // Takes 30% less damage if it hasn't moved yet.
 #define ABILITY_TECHNICIAN 101 // Moves with 60 BP or less get a 1.5x boost.
 #define ABILITY_LEAF_GUARD 102 // Immune to status conditions if sun is active.
 #define ABILITY_KLUTZ 103 // Own held item has no effect. Mega Stones are unaffected.
@@ -639,7 +639,7 @@
 #define ABILITY_ROCKHARD_WILL 617 // Boosts Rock-type moves by 1.2x, or 1.5x when under 1/3 HP.
 #define ABILITY_FRAGRANT_DAZE 618 // 30% chance to confuse on contact.
 #define ABILITY_LOW_VISIBILITY 619 // Summons Eerie Fog on entry.
-#define ABILITY_OLD_MARINER 620 // Seaweed + Water Absorb.
+#define ABILITY_OLD_MARINER 620 // Seaweed + Water STAB.
 #define ABILITY_ECTOPLASM 621 // Ups highest attacking stat by 1.5x in fog.
 #define ABILITY_BEAUTIFUL_MUSIC 622 // Sound-based moves have 50% chance to infatuate the foe.
 #define ABILITY_SURPRISE 623 // Astonishes enemy priority users in fog.
@@ -770,8 +770,9 @@
 #define ABILITY_ENERGY_SIPHON 748 // Heals the user for 1/4 of the damage they deal.
 #define ABILITY_RESERVOIR 749 // Water Absorb + Storm Drain.
 #define ABILITY_NEUROTOXIN 750 // Inflicting poison also lowers Attack, Defense, and Speed.
+#define ABILITY_ENERGIZED_HORNS 751 // Mighty horn moves become special and deal 30% more damage.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_NEUROTOXIN + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_ENERGIZED_HORNS + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

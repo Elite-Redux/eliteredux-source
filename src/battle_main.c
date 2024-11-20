@@ -721,7 +721,6 @@ static void BufferPartyVsScreenHealth_AtStart(void)
 
 static void SetPlayerBerryDataInBattleStruct(void)
 {
-    s32 i;
     struct BattleStruct *battleStruct = gBattleStruct;
     struct BattleEnigmaBerry *battleBerry = &battleStruct->multiBuffer.linkBattlerHeader.battleEnigmaBerry;
 
@@ -758,7 +757,6 @@ static void SetPlayerBerryDataInBattleStruct(void)
 static void SetAllPlayersBerryData(void)
 {
     s32 i;
-    s32 j;
 
     if (!(gBattleTypeFlags & BATTLE_TYPE_LINK))
     {
@@ -1092,6 +1090,7 @@ static void CB2_HandleStartBattle(void)
     case 13:
         gBattleCommunication[MULTIUSE_STATE]++;
         gBattleCommunication[1] = 1;
+        FALLTHROUGH
     case 6:
     case 10:
     case 14:
@@ -1128,7 +1127,7 @@ static void CB2_HandleStartMultiPartnerBattle(void)
         }
         if (gWirelessCommType)
             LoadWirelessStatusIndicatorSpriteGfx();
-        // fall through
+        FALLTHROUGH
     case 1:
         if (gBattleTypeFlags & BATTLE_TYPE_LINK)
         {
@@ -1595,7 +1594,7 @@ static void CB2_HandleStartMultiBattle(void)
         }
         else
             break;
-        // fall through
+        FALLTHROUGH
     case 3:
         if (IsLinkTaskFinished())
         {
@@ -1858,7 +1857,7 @@ static void sub_8038538(struct Sprite *sprite)
         sprite->data[2] = 0x281;
         sprite->data[3] = 0;
         sprite->data[4] = 1;
-        // fall through
+        FALLTHROUGH
     case 1:
         sprite->data[4]--;
         if (sprite->data[4] == 0)
@@ -3330,7 +3329,7 @@ static void BattleStartClearSetData(void)
 
 void SwitchInClearSetData(void)
 {
-    s32 i, j;
+    s32 i;
     struct VolatileStruct VolatileStructCopy = gVolatileStructs[gActiveBattler];
 
     gActionsByTurnOrder[GetBattlerTurnOrderNum(gActiveBattler)] = B_ACTION_TRY_FINISH;
@@ -3499,7 +3498,7 @@ void SwitchInClearSetData(void)
 
 void FaintClearSetData(void)
 {
-    s32 i, j;
+    s32 i;
 
     for (i = 0; i < NUM_BATTLE_STATS; i++)
         gBattleMons[gActiveBattler].statStages[i] = DEFAULT_STAT_STAGE;
@@ -3813,6 +3812,7 @@ static void DoBattleIntro(void)
         break;
     case 12: // nothing
         (*state)++;
+        FALLTHROUGH
     case 13: // second opponent's mon send out
         if (gBattleTypeFlags & (BATTLE_TYPE_MULTI | BATTLE_TYPE_TWO_OPPONENTS) && !BATTLE_TWO_VS_ONE_OPPONENT)
         {
@@ -3922,7 +3922,7 @@ static void DoBattleIntro(void)
 
 static void TryDoEventsBeforeFirstTurn(void)
 {
-    s32 i, j;
+    s32 i;
     #ifdef DEBUG_BUILD
     if (FlagGet(FLAG_SYS_AUTOWIN)) {
         gBattleOutcome = B_OUTCOME_WON;
@@ -5154,7 +5154,7 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove)
 {
     union SpeedValue speedValue = { 0 };
     int quash = gFieldTimers.quashTimer;
-    int priority = 6;
+    int priority = 7;
 
     if (!quash)
     {
@@ -5182,7 +5182,7 @@ union SpeedValue GetMoveSpeed(int battler, int ignoreChosenMove)
 
 int GetFastestBattler(int ignoreChosenMoves, int except)
 {
-    int i, maxBattler, maxSpeed = 0, dupeCount = 2;
+    int i, maxBattler = 0, maxSpeed = 0, dupeCount = 2;
     for (i = 0; i < gBattlersCount; i++)
     {
         int speed;
@@ -5209,7 +5209,7 @@ int SortBattlersExcept(u8* battlerArray, int ignoreChosenMoves, int except)
     u8 battlers[] = { 0, 1, 2, 3 };
     union SpeedValue speeds[MAX_BATTLERS_COUNT] = { 0 };
     int i, j, temp;
-    int dupeSpeed, dupeCount = 2;
+    int dupeSpeed = 0, dupeCount = 2;
 
     for (i = 0; i < gBattlersCount; i++)
     {
@@ -5265,7 +5265,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
 static void SetActionsAndBattlersTurnOrder(void)
 {
     s32 turnOrderId = 0;
-    s32 i, j;
+    s32 i;
 
     for (i = 0; i < gBattlersCount; i++)
     {
@@ -5383,7 +5383,6 @@ static void TurnValuesCleanUp(bool8 turnPassOnly)
         if (!turnPassOnly)
         {
             ZERO(gRoundStructs[i])
-            ZERO(gVolatileStructs[i].started)
 
             if (gVolatileStructs[i].isFirstTurn)
                 gVolatileStructs[i].isFirstTurn--;
@@ -5406,12 +5405,6 @@ static void TurnValuesCleanUp(bool8 turnPassOnly)
     gSideStatuses[1] &= ~(SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK);
     gSideTimers[0].followmeTimer = 0;
     gSideTimers[1].followmeTimer = 0;
-    
-    if (!turnPassOnly) {
-        ZERO(gSideTimers[0].started)
-        ZERO(gSideTimers[1].started)
-        ZERO(gFieldTimers.started)
-    }
 }
 
 void TurnStructsClear(void)
@@ -5487,8 +5480,7 @@ void RecalculateMoveOrder(int index, int ignoreChosenMove)
 
 static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
 {
-    u32 i;
-
+    int i;
     if (!(gHitMarker & HITMARKER_RUN))
     {
         while (gBattleStruct->focusPunchBattlerId < gBattlersCount)
@@ -5512,6 +5504,15 @@ static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
             }
         }
     }
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        ZERO(gVolatileStructs[i].started)
+    }
+    
+    ZERO(gSideTimers[0].started)
+    ZERO(gSideTimers[1].started)
+    ZERO(gFieldTimers.started)
 
     gBattleMainFunc = CheckQuickClaw_CustapBerryActivation;
     gBattleStruct->quickClawBattlerId = 0;
@@ -5990,7 +5991,7 @@ void RunBattleScriptCommands(void)
 
 #define HAS_ABILITY(abilityToCheck) (MonHasInnate(mon, abilityToCheck, disableRandomizer) || ability == abilityToCheck)
 u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer) {
-    u32 moveType, ateType, tempstuff;
+    u32 moveType, ateType;
     u16 item = GetMonData(mon, MON_DATA_HELD_ITEM, NULL);
     u16 holdEffect = ItemId_GetHoldEffect(item);
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
@@ -6929,7 +6930,6 @@ u16 selectMoves (u16 species, u8 i, u16 atk, u16 spAtk)
     u8 type2 = gBaseStats[species].type2;
     u16 moveTypeArraysID = (type1 * 19) + type2;
     u8 randomMove = Random() % 3;
-    u8 role = getRole(species);
     u8 split = 0;
     u32 caster = 1;
     

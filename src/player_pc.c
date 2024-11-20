@@ -664,6 +664,9 @@ static u8 GetMailboxMailCount(void)
     return 0;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
 static void Mailbox_CompactMailList(void)
 {
     struct MailStruct temp;
@@ -831,6 +834,7 @@ static void Mailbox_HandleConfirmMoveToBag(u8 taskId)
         break;
     case MENU_B_PRESSED:
         PlaySE(SE_SELECT);
+        FALLTHROUGH
     case 1: // No
         Mailbox_CancelMoveToBag(taskId);
         break;
@@ -925,6 +929,8 @@ static void Mailbox_Cancel(u8 taskId)
     ScheduleBgCopyTilemapToVram(0);
     gTasks[taskId].func = Mailbox_ProcessInput;
 }
+
+#pragma GCC diagnostic pop
 
 static void ItemStorage_Init(void)
 {
@@ -1479,7 +1485,6 @@ static void ItemStorage_HandleRemoveItem(u8 taskId)
 
 static void ItemStorage_HandleErrorMessageInput(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
     if (JOY_NEW(A_BUTTON | B_BUTTON))
     {
         ItemStorage_PrintMessage(ItemStorage_GetMessage(gSaveBlock1Ptr->pcItems[gPlayerPCItemPageInfo.itemsAbove + gPlayerPCItemPageInfo.cursorPos].itemId));

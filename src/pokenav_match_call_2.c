@@ -403,7 +403,7 @@ u32 MatchCallListCursorDown(s32 taskState)
                 return 7;
             case 2:
                 PlaySE(SE_SELECT);
-                // fall through
+                FALLTHROUGH
             default:
                 return LT_INC_AND_PAUSE;
         }
@@ -440,7 +440,7 @@ u32 MatchCallListCursorUp(s32 taskState)
                 return 7;
             case 2:
                 PlaySE(SE_SELECT);
-                // fall through
+                FALLTHROUGH
             default:
                 return LT_INC_AND_PAUSE;
         }
@@ -477,7 +477,7 @@ u32 MatchCallListPageDown(s32 taskState)
                 return 7;
             case 2:
                 PlaySE(SE_SELECT);
-                // fall through
+                FALLTHROUGH
             default:
                 return LT_INC_AND_PAUSE;
         }
@@ -514,7 +514,7 @@ u32 MatchCallListPageUp(s32 taskState)
                 return 7;
             case 2:
                 PlaySE(SE_SELECT);
-                // fall through
+                FALLTHROUGH
             default:
                 return LT_INC_AND_PAUSE;
         }

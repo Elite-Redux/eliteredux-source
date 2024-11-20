@@ -813,7 +813,6 @@ static void HealMon(struct Pokemon *mon)
 static bool8 DoesAbilityPreventStatus(struct Pokemon *mon, u32 status)
 {
     u16 ability = GetMonAbility(mon);
-    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     bool8 ret = FALSE;
 
     if (ability == ABILITY_COMATOSE)

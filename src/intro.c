@@ -170,7 +170,6 @@ extern const struct SpriteTemplate gAncientPowerRockSpriteTemplate[];
 #define TIMER_START_LEGENDARIES          43
 
 static EWRAM_DATA u16 sIntroCharacterGender = 0;
-static EWRAM_DATA u16 sUnusedVar = 0;
 static EWRAM_DATA u16 sFlygonYOffset = 0;
 
 u32 gIntroFrameCounter;
@@ -1112,6 +1111,7 @@ static u8 SetUpCopyrightScreen(void)
         SetVBlankCallback(VBlankCB_PretIntro);
         SetSerialCallback(SerialCB_CopyrightScreen);
         GameCubeMultiBoot_Init(&gMultibootProgramStruct);
+        FALLTHROUGH
     default:
         RunTasks();
         UpdatePaletteFade();
@@ -1534,7 +1534,7 @@ static void SpriteCB_Volbeat(struct Sprite *sprite)
         if (++sprite->sStateDelay < 180)
             break;
         sprite->sState++;
-        // fallthrough
+        FALLTHROUGH
     case VOLBEAT_ENTER:
         sprite->x -= 4;
         if (sprite->x == 60)
@@ -1579,7 +1579,7 @@ static void SpriteCB_Volbeat(struct Sprite *sprite)
         sprite->sSinYIdx = 0x80;
         sprite->sFig8Loops = 3;
         sprite->sState++;
-        // fallthrough
+        FALLTHROUGH
     case VOLBEAT_FIGURE_8:
         sprite->x2 = Sin((u8)sprite->sSinXIdx, 0x3C);
         sprite->y2 = Sin((u8)sprite->sSinYIdx, 0x14);
@@ -1723,7 +1723,7 @@ static void SpriteCB_Manectric(struct Sprite *sprite)
         sprite->sSinIdx = 0x80;
         sprite->sCosIdx = 0;
         sprite->sState++;
-        // fallthrough
+        FALLTHROUGH
     case 2:
         if (sprite->x + sprite->x2 <= -32)
         {
@@ -2119,6 +2119,7 @@ static void Task_Scene3_Kyogre(u8 taskId)
         if (--tDelay != 0)
             break;
         tState++;
+        FALLTHROUGH
     case 1:
         tTrigIdx += 4;
         gTasks[taskId].tScreenX = 344 - Sin(tTrigIdx, 0x100);
@@ -2537,6 +2538,7 @@ static void SpriteCB_Lightning(struct Sprite *sprite)
     case 0:
         sprite->sPalIdx = 0x1C2;
         sprite->sState++;
+        FALLTHROUGH
     case 1:
         CpuCopy16(&gIntro3Bg_Pal[sprite->sPalIdx], &gPlttBufferFaded[93], 2);
         sprite->sPalIdx += 2;
@@ -2545,6 +2547,7 @@ static void SpriteCB_Lightning(struct Sprite *sprite)
         sprite->sPalIdx = 0x1CC;
         sprite->sDelay = 4;
         sprite->sState++;
+        FALLTHROUGH
     case 2:
         if (--sprite->sDelay == 0)
         {
@@ -3442,7 +3445,7 @@ static void SpriteCB_RayquazaOrb(struct Sprite *sprite)
         CalcCenterToCornerVec(sprite, SPRITE_SHAPE(64x64), SPRITE_SIZE(64x64), ST_OAM_AFFINE_DOUBLE);
         sprite->data[1] = 0;
         sprite->sState = 1;
-        //fall through
+        FALLTHROUGH
     case 1:
         sprite->data[7]++;
         if (sprite->data[7] & 1)

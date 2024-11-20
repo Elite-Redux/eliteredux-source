@@ -374,6 +374,8 @@ u16 LoadBgTiles(u8 bg, const void* src, u16 size, u16 destOffset)
     u16 tileOffset;
     u8 cursor;
 
+    if (bg >= ARRAY_COUNT(sGpuBgConfigs2)) return -1;
+
     if (GetBgControlAttribute(bg, BG_CTRL_ATTR_PALETTEMODE) == 0)
     {
         tileOffset = (sGpuBgConfigs2[bg].baseTile + destOffset) * 0x20;
@@ -1156,6 +1158,7 @@ u32 GetTileMapIndexFromCoords(s32 x, s32 y, s32 screenSize, u32 screenWidth, u32
     case 3:
         if (y >= 0x20)
             y += 0x20;
+        FALLTHROUGH
     case 1:
         if (x >= 0x20)
         {

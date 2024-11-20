@@ -3462,7 +3462,6 @@ static bool8 PrintBlendingResults(void)
     struct Pokeblock pokeblock;
     u8 flavors[FLAVOR_COUNT + 1];
     u8 text[40];
-    u16 berryIds[4]; // unused
 
     switch (sBerryBlender->mainState)
     {
@@ -3556,8 +3555,6 @@ static bool8 PrintBlendingResults(void)
 
         for (i = 0; i < BLENDER_MAX_PLAYERS; i++)
         {
-            if (sBerryBlender->chosenItemId[i] != 0)
-                berryIds[i] = sBerryBlender->chosenItemId[i] - FIRST_BERRY_INDEX;
             if (sBerryBlender->arrowIdToPlayerId[i] != NO_PLAYER)
             {
                 PutWindowTilemap(i);
@@ -3871,6 +3868,8 @@ static void Blender_AddTextPrinter(u8 windowId, const u8 *string, u8 x, u8 y, s3
         txtColor[1] = TEXT_COLOR_RED;
         txtColor[2] = TEXT_COLOR_LIGHT_RED;
         break;
+    default:
+        return;
     }
 
     if (caseId != 3)

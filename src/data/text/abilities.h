@@ -94,7 +94,7 @@ static const u8 sAbilityNormalizeDescription[] = _("Its moves become Normal-type
 static const u8 sAbilitySniperDescription[] = _("Critical hits have a 2.25x dmg\nmultiplier instead of 1.5x.");
 static const u8 sAbilityMagicGuardDescription[] = _("Only damaged by attacks.");
 static const u8 sAbilityNoGuardDescription[] = _("Attacks used by and on this\nPokémon bypass accuracy checks.");
-static const u8 sAbilityStallDescription[] = _("Takes 30% damage if it hasn't\nmoved.");
+static const u8 sAbilityStallDescription[] = _("Takes 30% less damage if it\nhasn't moved yet.");
 static const u8 sAbilityTechnicianDescription[] = _("Moves with 60 BP or less get\na 1.5x boost.");
 static const u8 sAbilityLeafGuardDescription[] = _("Immune to status conditions if\nsun is active.");
 static const u8 sAbilityKlutzDescription[] = _("Own held item has no effect.\nMega Stones are unaffected.");
@@ -593,7 +593,7 @@ static const u8 sAbilityDemolitionistDescription[] = _("Readied Action + Ignores
 static const u8 sAbilityRockhardWillDescription[] = _("Boosts Rock-type moves by 1.2x,\nor 1.5x when under 1/3 HP.");
 static const u8 sAbilityFragrantDazeDescription[] = _("30% chance to confuse on contact.");
 static const u8 sAbilityLowVisibilityDescription[] = _("Summons Eerie Fog on entry.");
-static const u8 sAbilityOldMarinerDescription[] = _("Seaweed + Water Absorb.");
+static const u8 sAbilityOldMarinerDescription[] = _("Seaweed + Water STAB.");
 static const u8 sAbilityEctoplasmDescription[] = _("Ups highest attacking stat\nby 1.5x in fog.");
 static const u8 sAbilityBeautifulMusicDescription[] = _("Sound-based moves have 50% chance\nto infatuate the foe.");
 static const u8 sAbilitySurpriseDescription[] = _("Astonishes enemy priority users\nin fog.");
@@ -720,6 +720,7 @@ static const u8 sAbilityDaybreakDescription[] = _("Burns the foe on contact.\nAl
 static const u8 sAbilityEnergySiphonDescription[] = _("Heals the user for 1/4\nof the damage they deal.");
 static const u8 sAbilityReservoirDescription[] = _("Water Absorb + Storm Drain.");
 static const u8 sAbilityNeurotoxinDescription[] = _("Inflicting poison also lowers\nAttack, Defense, and Speed.");
+static const u8 sAbilityEnergizedHornsDescription[] = _("Mighty horn moves become special\nand deal 30% more damage.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1474,6 +1475,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ENERGY_SIPHON] = _("Energy Siphon"),
     [ABILITY_RESERVOIR] = _("Reservoir"),
     [ABILITY_NEUROTOXIN] = _("Neurotoxin"),
+    [ABILITY_ENERGIZED_HORNS] = _("Energy Horns"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2229,4 +2231,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_ENERGY_SIPHON] = sAbilityEnergySiphonDescription,
     [ABILITY_RESERVOIR] = sAbilityReservoirDescription,
     [ABILITY_NEUROTOXIN] = sAbilityNeurotoxinDescription,
+    [ABILITY_ENERGIZED_HORNS] = sAbilityEnergizedHornsDescription,
 };
