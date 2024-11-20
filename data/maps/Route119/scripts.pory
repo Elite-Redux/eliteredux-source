@@ -752,14 +752,22 @@ script Route119_EventScript_RivalHelpWaterfall{
     removeobject(LOCALID_RIVAL_HELPING)
     release
 }
-script Route119_EventScript_RivalHelpWaterfall0{
-    lock
-    setvar(VAR_TEMP_2, 1)
-    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_DEFEATED_RIVAL_ROUTE_104) == FALSE ||
-	flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)){
+script Route119_EventScript_RivalHelpWaterfallCheck{
+	if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE && flag(FLAG_DEFEATED_RIVAL_ROUTE_104) == FALSE){
         release
         end
     }
+	if (flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)){
+        release
+        end
+    }
+	return
+}
+
+script Route119_EventScript_RivalHelpWaterfall0{
+    lock
+    setvar(VAR_TEMP_2, 1)
+    call(Route119_EventScript_RivalHelpWaterfallCheck)
     call(Route119_EventScript_RivalApproachWaterfall)
     applymovement(OBJ_EVENT_ID_PLAYER, Route119_Movement_RivalHelpWaterfall0)
     waitmovement(0)
@@ -771,11 +779,7 @@ movement Route119_Movement_RivalHelpWaterfall0{
 script Route119_EventScript_RivalHelpWaterfall1{
     lock
     setvar(VAR_TEMP_2, 1)
-    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_DEFEATED_RIVAL_ROUTE_104) == FALSE ||
-	flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)){
-        release
-        end
-    }
+    call(Route119_EventScript_RivalHelpWaterfallCheck)
     call(Route119_EventScript_RivalApproachWaterfall)
     applymovement(OBJ_EVENT_ID_PLAYER, Route119_Movement_RivalHelpWaterfall1)
     waitmovement(0)
@@ -787,11 +791,7 @@ movement Route119_Movement_RivalHelpWaterfall1{
 script Route119_EventScript_RivalHelpWaterfall2{
     lock
     setvar(VAR_TEMP_2, 1)
-    if (flag(FLAG_DEFEATED_RIVAL_RUSTBORO) == FALSE || flag(FLAG_DEFEATED_RIVAL_ROUTE_104) == FALSE ||
-	flag(FLAG_RIVAL_HELPED_WATERFALL_ROUTE_119)){
-        release
-        end
-    }
+    call(Route119_EventScript_RivalHelpWaterfallCheck)
     call(Route119_EventScript_RivalApproachWaterfall)
     applymovement(OBJ_EVENT_ID_PLAYER, Route119_Movement_RivalHelpWaterfall2)
     waitmovement(0)
