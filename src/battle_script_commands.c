@@ -8994,7 +8994,7 @@ static void Cmd_various(void)
                 REQUIRE(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST
                     || !(gStatuses4[gActiveBattler] & STATUS4_COILED))
                 gStatuses4[gActiveBattler] |= STATUS4_COILED;
-                SetOncePerTurnAbilityCounter(gActiveBattler, ability, TRUE);
+                SetAbilityState(gActiveBattler, ability, TRUE);
                 gBattleScripting.abilityPopupOverwrite = ability;
                 BattleScriptCall(BattleScript_BattlerCoiledUpReturn);
                 break;

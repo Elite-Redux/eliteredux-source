@@ -3548,8 +3548,10 @@ u8 DoBattlerEndTurnEffects(void)
         case ENDTURN_COILED_UP:
             if ((gStatuses4[gActiveBattler] & STATUS4_COILED)
                 && (gBattleMoves[gLastMoves[gActiveBattler]].flags & FLAG_STRONG_JAW_BOOST)
-                && GetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_SIDEWINDER) <= 0)
+                && !GetAbilityState(gActiveBattler, ABILITY_SIDEWINDER))
                 gStatuses4[gActiveBattler] &= ~(STATUS4_COILED);
+            else
+                SetAbilityState(gActiveBattler, ABILITY_SIDEWINDER, FALSE);
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_TAUNT:  // taunt
