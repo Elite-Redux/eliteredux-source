@@ -15046,40 +15046,40 @@ static void Cmd_setroom(void)
     {
     case EFFECT_TRICK_ROOM:
         //Permanent
-        if((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) && gFieldTimers.trickRoomTimer > 10){
+        if ((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) && gFieldTimers.trickRoomTimer > 10) {
             gBattlescriptCurrInstr = ptr;
         }
-        else{
+        else {
             HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, B_MSG_TRICKROOMSTARTS, TRICK_ROOM_DURATION);
             gFieldTimers.started.trickRoom = TRUE;
         }
         break;
     case EFFECT_WONDER_ROOM:
         //Permanent
-        if((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) && gFieldTimers.wonderRoomTimer > 10){
+        if ((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) && gFieldTimers.wonderRoomTimer > 10) {
             gBattlescriptCurrInstr = ptr;
         }
-        else{
+        else {
             HandleRoomMove(STATUS_FIELD_WONDER_ROOM, &gFieldTimers.wonderRoomTimer, B_MSG_WONDERROOMSTARTS, WONDER_ROOM_DURATION);
             gFieldTimers.started.wonderRoom = TRUE;
         }
         break;
     case EFFECT_MAGIC_ROOM:
         //Permanent
-        if((gFieldStatuses & STATUS_FIELD_MAGIC_ROOM) && gFieldTimers.magicRoomTimer > 10){
+        if ((gFieldStatuses & STATUS_FIELD_MAGIC_ROOM) && gFieldTimers.magicRoomTimer > 10) {
             gBattlescriptCurrInstr = ptr;
         }
-        else{
+        else {
             HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, B_MSG_MAGICROOMSTARTS, MAGIC_ROOM_DURATION);
             gFieldTimers.started.magicRoom = TRUE;
         }
         break;
     case EFFECT_INVERSE_ROOM:
         //Permanent
-        if((gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) && gFieldTimers.inverseRoomTimer > 10){
+        if ((gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) && gFieldTimers.inverseRoomTimer > 10) {
             gBattlescriptCurrInstr = ptr;
         }
-        else{
+        else {
             HandleRoomMove(STATUS_FIELD_INVERSE_ROOM, &gFieldTimers.inverseRoomTimer, B_MSG_INVERSEROOMSTARTS, INVERSE_ROOM_DURATION);
             gFieldTimers.started.inverseRoom = TRUE;
         }
