@@ -3112,14 +3112,14 @@ BattleScript_EffectTrickRoom:
 	waitanimation
 	printfromtable gRoomsStringIds
 	waitmessage B_WAIT_TIME_LONG
-	savetarget
+	savetargettostack4
 	setbyte gBattlerTarget, 0
 BattleScript_RoomServiceLoop:
 	copybyte sBATTLER, gBattlerTarget
 	tryroomservice BS_TARGET
 	addbyte gBattlerTarget, 0x1
 	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_RoomServiceLoop
-	restoretarget
+	readtargetfromstack4
 	goto BattleScript_MoveEnd
 	
 BattleScript_EffectInverseRoom:

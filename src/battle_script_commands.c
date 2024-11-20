@@ -15041,12 +15041,13 @@ static void HandleRoomMove(u32 statusFlag, u8 *timer, u8 stringId, u8 duration)
 
 static void Cmd_setroom(void)
 {
+    const u8* ptr = READ_FIRST_PTR_INC;
     switch (gBattleMoves[gCurrentMove].effect)
     {
     case EFFECT_TRICK_ROOM:
         //Permanent
         if((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) && gFieldTimers.trickRoomTimer > 10){
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+            gBattlescriptCurrInstr = ptr;
         }
         else{
             HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, B_MSG_TRICKROOMSTARTS, TRICK_ROOM_DURATION);
@@ -15056,7 +15057,7 @@ static void Cmd_setroom(void)
     case EFFECT_WONDER_ROOM:
         //Permanent
         if((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) && gFieldTimers.wonderRoomTimer > 10){
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+            gBattlescriptCurrInstr = ptr;
         }
         else{
             HandleRoomMove(STATUS_FIELD_WONDER_ROOM, &gFieldTimers.wonderRoomTimer, B_MSG_WONDERROOMSTARTS, WONDER_ROOM_DURATION);
@@ -15066,7 +15067,7 @@ static void Cmd_setroom(void)
     case EFFECT_MAGIC_ROOM:
         //Permanent
         if((gFieldStatuses & STATUS_FIELD_MAGIC_ROOM) && gFieldTimers.magicRoomTimer > 10){
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+            gBattlescriptCurrInstr = ptr;
         }
         else{
             HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, B_MSG_MAGICROOMSTARTS, MAGIC_ROOM_DURATION);
@@ -15076,7 +15077,7 @@ static void Cmd_setroom(void)
     case EFFECT_INVERSE_ROOM:
         //Permanent
         if((gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) && gFieldTimers.inverseRoomTimer > 10){
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+            gBattlescriptCurrInstr = ptr;
         }
         else{
             HandleRoomMove(STATUS_FIELD_INVERSE_ROOM, &gFieldTimers.inverseRoomTimer, B_MSG_INVERSEROOMSTARTS, INVERSE_ROOM_DURATION);
@@ -15087,24 +15088,6 @@ static void Cmd_setroom(void)
         SetActiveMultistringChooser(B_MSG_ROOMEMPTYSTRING);
         break;
     }
-    gBattlescriptCurrInstr++;
-
-    /*
-    u8 side = GetBattlerSide(gBattlerAttacker);
-
-    if (!(gSideStatuses[side] & SIDE_STATUS_TAILWIND))
-    {
-        gSideTimers[side].started.tailwind = TRUE;
-        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
-        gSideTimers[side].tailwindBattlerId = gBattlerAttacker;
-        gSideTimers[side].tailwindTimer = TAILWIND_DURATION;
-        gBattlescriptCurrInstr += 5;
-    }
-    else
-    {
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-    }
-    */
 }
 
 static void Cmd_tryswapabilities(void) // skill swap
