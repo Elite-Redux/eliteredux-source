@@ -176,6 +176,7 @@ extern const u8 BattleScript_SturdyPreventsOHKO[];
 extern const u8 BattleScript_DampStopsExplosion[];
 extern const u8 BattleScript_PPReduce[];
 extern const u8 BattleScript_AttackStringAbilityPopUp[];
+extern const u8 BattleScript_RecoilIfMissCrashed[];
 extern const u8 BattleScript_AfterAbsorbEffect[];
 extern const u8 BattleScript_MoveHPDrain[];
 extern const u8 BattleScript_MonMadeMoveUseless[];

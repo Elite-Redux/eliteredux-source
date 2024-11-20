@@ -5483,7 +5483,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
 
             if (effect)
             {
-                gBattlescriptCurrInstr = BattleScript_AfterAbsorbEffect;
+                if (gBattleMoves[gCurrentMove].effect == EFFECT_RECOIL_IF_MISS)
+                {
+                    gBattlescriptCurrInstr = BattleScript_RecoilIfMissCrashed;
+                }
+                else
+                {
+                    gBattlescriptCurrInstr = BattleScript_AfterAbsorbEffect;
+                }
                 SetActiveAbilityPopupOverride(gBattleScripting.abilityPopupOverwrite);
 
                 if (effect & ABSORB_RESULT_HEAL && !BATTLER_MAX_HP(battler) && !BATTLER_HEALING_BLOCKED(battler)) // Drain Hp ability.
