@@ -573,3 +573,10 @@ gMetatiles_Desert_Area::
 	.align 1
 gMetatileAttributes_Desert_Area::
 	.incbin "data/tilesets/secondary/desert_area/metatile_attributes.bin"
+	.align 1
+gMetatiles_Mossdeep_Ice::
+	.incbin "data/tilesets/secondary/mossdeep_ice/metatiles.bin"
+
+	.align 1
+gMetatileAttributes_Mossdeep_Ice::
+	.incbin "data/tilesets/secondary/mossdeep_ice/metatile_attributes.bin"

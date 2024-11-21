@@ -852,3 +852,14 @@ gTileset_Desert_Area::
 	.4byte gMetatiles_Desert_Area
 	.4byte gMetatileAttributes_Desert_Area
 	.4byte NULL
+
+	.align 2
+gTileset_Mossdeep_Ice::
+	.byte TRUE @ is compressed
+	.byte TRUE @ is secondary
+	.2byte 0 @ padding
+	.4byte gTilesetTiles_Mossdeep_Ice
+	.4byte gTilesetPalettes_Mossdeep_Ice
+	.4byte gMetatiles_Mossdeep_Ice
+	.4byte gMetatileAttributes_Mossdeep_Ice
+	.4byte NULL @ animation callback
