@@ -12490,7 +12490,7 @@ static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int m
     CHECK_DAZZLING_IMMUNITY:
         REQUIRE_NOT(gProcessingExtraAttacks)
         REQUIRE(GetBattlerSide(attacker) != GetBattlerSide(battler))
-        REQUIRE(GetMovePriority(attacker, move, battler))
+        REQUIRE(GetMovePriority(attacker, move, battler) > 0)
         *immunityScript = BattleScript_DazzlingProtected;
         return TRUE;
     
