@@ -1588,7 +1588,8 @@ bool32 ShouldLowerStat(u8 battler, u8 stat)
             return FALSE;*/
 
         if (stat == STAT_SPATK && 
-           (BATTLER_HAS_ABILITY(battler, ABILITY_COMPETITIVE)))
+           (BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER) ||
+            BATTLER_HAS_ABILITY(battler, ABILITY_COMPETITIVE)))
             return FALSE;
             
         return TRUE;
@@ -1714,6 +1715,7 @@ bool32 ShouldLowerSpAtk(u8 battlerAtk, u8 battlerDef)
         return FALSE; // Don't bother lowering stats if can kill enemy.
 
     if (gBattleMons[battlerDef].statStages[STAT_SPATK] > 4
+      && !BATTLER_HAS_ABILITY(battlerDef, ABILITY_HYPER_CUTTER)
       && !LoweringStatsPointlessOrBad(battlerDef))
         return TRUE;
     return FALSE;

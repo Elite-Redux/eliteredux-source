@@ -2135,7 +2135,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                         || GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY))
                     + BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk)
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PERFECTIONIST) > 0 && gBattleMoves[move].power <= 50 && gBattleMoves[move].power > 0)
-                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYPER_CUTTER) > 0)
+                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYPER_CUTTER) && IsMoveMakingContact(move, battlerAtk))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PRECISE_FIST) > 0 && IS_IRON_FIST(battlerAtk, move))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SUPER_LUCK) > 0)
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER) > 0)
@@ -5305,7 +5305,7 @@ static void PlayStatChangeAnimation(int battler, int statsToCheck, int flags, in
 						&& !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY)
 						&& !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER)
 						&& !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER)
-                        && !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && currStat == STAT_ATK && flags & MOVE_EFFECT_AFFECTS_USER)
+                        && !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && (currStat == STAT_ATK || currStat == STAT_SPATK) && flags & MOVE_EFFECT_AFFECTS_USER)
                         && !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LUCKY_HALO) && flags & MOVE_EFFECT_AFFECTS_USER)
                         && GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
                 {
@@ -12308,7 +12308,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         else if (!certain
                 && ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && statId == STAT_ACC && (gBattleScripting.abilityPopupOverwrite = ABILITY_KEEN_EYE))
                 || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && statId == STAT_ACC && (gBattleScripting.abilityPopupOverwrite = ABILITY_MINDS_EYE))
-				|| (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && statId == STAT_ATK && (gBattleScripting.abilityPopupOverwrite = ABILITY_HYPER_CUTTER))))
+				|| (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && (statId == STAT_ATK || statId == STAT_SPATK) && (gBattleScripting.abilityPopupOverwrite = ABILITY_HYPER_CUTTER))))
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {
