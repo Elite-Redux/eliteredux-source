@@ -2135,7 +2135,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
                         || GET_BASE_SPECIES_ID(gBattleMons[gBattlerAttacker].species) == SPECIES_BLISSEY))
                     + BENEFITS_FROM_LEEK(battlerAtk, holdEffectAtk)
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PERFECTIONIST) > 0 && gBattleMoves[move].power <= 50 && gBattleMoves[move].power > 0)
-                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYPER_CUTTER) > 0)
+                    + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYPER_CUTTER) && IsMoveMakingContact(move, battlerAtk))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PRECISE_FIST) > 0 && IS_IRON_FIST(battlerAtk, move))
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SUPER_LUCK) > 0)
                     + (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HEAVEN_ASUNDER) > 0)
@@ -5305,7 +5305,7 @@ static void PlayStatChangeAnimation(int battler, int statsToCheck, int flags, in
 						&& !BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FULL_METAL_BODY)
 						&& !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER)
 						&& !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && currStat == STAT_ACC && flags & MOVE_EFFECT_AFFECTS_USER)
-                        && !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && currStat == STAT_ATK && flags & MOVE_EFFECT_AFFECTS_USER)
+                        && !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && (currStat == STAT_ATK || currStat == STAT_SPATK) && flags & MOVE_EFFECT_AFFECTS_USER)
                         && !(BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_LUCKY_HALO) && flags & MOVE_EFFECT_AFFECTS_USER)
                         && GetBattlerHoldEffect(gActiveBattler, TRUE) != HOLD_EFFECT_CLEAR_AMULET)
                 {
@@ -8994,7 +8994,7 @@ static void Cmd_various(void)
                 REQUIRE(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST
                     || !(gStatuses4[gActiveBattler] & STATUS4_COILED))
                 gStatuses4[gActiveBattler] |= STATUS4_COILED;
-                SetOncePerTurnAbilityCounter(gActiveBattler, ability, TRUE);
+                SetAbilityState(gActiveBattler, ability, TRUE);
                 gBattleScripting.abilityPopupOverwrite = ability;
                 BattleScriptCall(BattleScript_BattlerCoiledUpReturn);
                 break;
@@ -11733,13 +11733,7 @@ static void Cmd_manipulatedamage(void)
         gBattleMoveDamage *= -1;
         break;
     case DMG_RECOIL_FROM_MISS:
-        gBattleMoveDamage /= 2;
-        if (gBattleMoveDamage == 0)
-            gBattleMoveDamage = 1;
-        if (B_RECOIL_IF_MISS_DMG >= GEN_5)
-            gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
-        if ((B_RECOIL_IF_MISS_DMG <= GEN_4) && ((gBattleMons[gBattlerTarget].maxHP / 2) < gBattleMoveDamage))
-            gBattleMoveDamage = gBattleMons[gBattlerTarget].maxHP / 2;
+        gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
 
 		if (BattlerHasAbility(gBattlerAttacker, ABILITY_LIMBER, FALSE))
 			gBattleMoveDamage = gBattleMoveDamage * 0.5;
@@ -12314,7 +12308,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         else if (!certain
                 && ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_KEEN_EYE) && statId == STAT_ACC && (gBattleScripting.abilityPopupOverwrite = ABILITY_KEEN_EYE))
                 || (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MINDS_EYE) && statId == STAT_ACC && (gBattleScripting.abilityPopupOverwrite = ABILITY_MINDS_EYE))
-				|| (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && statId == STAT_ATK && (gBattleScripting.abilityPopupOverwrite = ABILITY_HYPER_CUTTER))))
+				|| (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_HYPER_CUTTER) && (statId == STAT_ATK || statId == STAT_SPATK) && (gBattleScripting.abilityPopupOverwrite = ABILITY_HYPER_CUTTER))))
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {
@@ -15041,44 +15035,45 @@ static void HandleRoomMove(u32 statusFlag, u8 *timer, u8 stringId, u8 duration)
 
 static void Cmd_setroom(void)
 {
+    const u8* ptr = READ_FIRST_PTR_INC;
     switch (gBattleMoves[gCurrentMove].effect)
     {
     case EFFECT_TRICK_ROOM:
         //Permanent
-        if((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) && gFieldTimers.trickRoomTimer > 10){
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        if ((gFieldStatuses & STATUS_FIELD_TRICK_ROOM) && gFieldTimers.trickRoomTimer > 10) {
+            gBattlescriptCurrInstr = ptr;
         }
-        else{
+        else {
             HandleRoomMove(STATUS_FIELD_TRICK_ROOM, &gFieldTimers.trickRoomTimer, B_MSG_TRICKROOMSTARTS, TRICK_ROOM_DURATION);
             gFieldTimers.started.trickRoom = TRUE;
         }
         break;
     case EFFECT_WONDER_ROOM:
         //Permanent
-        if((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) && gFieldTimers.wonderRoomTimer > 10){
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        if ((gFieldStatuses & STATUS_FIELD_WONDER_ROOM) && gFieldTimers.wonderRoomTimer > 10) {
+            gBattlescriptCurrInstr = ptr;
         }
-        else{
+        else {
             HandleRoomMove(STATUS_FIELD_WONDER_ROOM, &gFieldTimers.wonderRoomTimer, B_MSG_WONDERROOMSTARTS, WONDER_ROOM_DURATION);
             gFieldTimers.started.wonderRoom = TRUE;
         }
         break;
     case EFFECT_MAGIC_ROOM:
         //Permanent
-        if((gFieldStatuses & STATUS_FIELD_MAGIC_ROOM) && gFieldTimers.magicRoomTimer > 10){
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        if ((gFieldStatuses & STATUS_FIELD_MAGIC_ROOM) && gFieldTimers.magicRoomTimer > 10) {
+            gBattlescriptCurrInstr = ptr;
         }
-        else{
+        else {
             HandleRoomMove(STATUS_FIELD_MAGIC_ROOM, &gFieldTimers.magicRoomTimer, B_MSG_MAGICROOMSTARTS, MAGIC_ROOM_DURATION);
             gFieldTimers.started.magicRoom = TRUE;
         }
         break;
     case EFFECT_INVERSE_ROOM:
         //Permanent
-        if((gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) && gFieldTimers.inverseRoomTimer > 10){
-            gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+        if ((gFieldStatuses & STATUS_FIELD_INVERSE_ROOM) && gFieldTimers.inverseRoomTimer > 10) {
+            gBattlescriptCurrInstr = ptr;
         }
-        else{
+        else {
             HandleRoomMove(STATUS_FIELD_INVERSE_ROOM, &gFieldTimers.inverseRoomTimer, B_MSG_INVERSEROOMSTARTS, INVERSE_ROOM_DURATION);
             gFieldTimers.started.inverseRoom = TRUE;
         }
@@ -15087,24 +15082,6 @@ static void Cmd_setroom(void)
         SetActiveMultistringChooser(B_MSG_ROOMEMPTYSTRING);
         break;
     }
-    gBattlescriptCurrInstr++;
-
-    /*
-    u8 side = GetBattlerSide(gBattlerAttacker);
-
-    if (!(gSideStatuses[side] & SIDE_STATUS_TAILWIND))
-    {
-        gSideTimers[side].started.tailwind = TRUE;
-        gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
-        gSideTimers[side].tailwindBattlerId = gBattlerAttacker;
-        gSideTimers[side].tailwindTimer = TAILWIND_DURATION;
-        gBattlescriptCurrInstr += 5;
-    }
-    else
-    {
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
-    }
-    */
 }
 
 static void Cmd_tryswapabilities(void) // skill swap

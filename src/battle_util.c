@@ -3548,8 +3548,10 @@ u8 DoBattlerEndTurnEffects(void)
         case ENDTURN_COILED_UP:
             if ((gStatuses4[gActiveBattler] & STATUS4_COILED)
                 && (gBattleMoves[gLastMoves[gActiveBattler]].flags & FLAG_STRONG_JAW_BOOST)
-                && GetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_SIDEWINDER) <= 0)
+                && !GetAbilityState(gActiveBattler, ABILITY_SIDEWINDER))
                 gStatuses4[gActiveBattler] &= ~(STATUS4_COILED);
+            else
+                SetAbilityState(gActiveBattler, ABILITY_SIDEWINDER, FALSE);
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_TAUNT:  // taunt
@@ -5481,7 +5483,14 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
 
             if (effect)
             {
-                gBattlescriptCurrInstr = BattleScript_AfterAbsorbEffect;
+                if (gBattleMoves[gCurrentMove].effect == EFFECT_RECOIL_IF_MISS)
+                {
+                    gBattlescriptCurrInstr = BattleScript_RecoilIfMissCrashed;
+                }
+                else
+                {
+                    gBattlescriptCurrInstr = BattleScript_AfterAbsorbEffect;
+                }
                 SetActiveAbilityPopupOverride(gBattleScripting.abilityPopupOverwrite);
 
                 if (effect & ABSORB_RESULT_HEAL && !BATTLER_MAX_HP(battler) && !BATTLER_HEALING_BLOCKED(battler)) // Drain Hp ability.
@@ -12481,7 +12490,7 @@ static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int m
     CHECK_DAZZLING_IMMUNITY:
         REQUIRE_NOT(gProcessingExtraAttacks)
         REQUIRE(GetBattlerSide(attacker) != GetBattlerSide(battler))
-        REQUIRE(GetMovePriority(attacker, move, battler))
+        REQUIRE(GetMovePriority(attacker, move, battler) > 0)
         *immunityScript = BattleScript_DazzlingProtected;
         return TRUE;
     

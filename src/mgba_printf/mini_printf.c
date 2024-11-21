@@ -96,11 +96,11 @@ static s32 mini_itoa(u32 value, u32 radix, s32 uppercase, bool32 unsig, char *bu
     if (radix > 16)
         return 0;
 
-    if (value < 0 && !unsig)
-    {
-        negative = 1;
-        value = -value;
-    }
+    // if (value < 0 && !unsig)
+    // {
+    //     negative = 1;
+    //     value = -value;
+    // }
 
     /* This builds the string back to front ... */
     do 

@@ -68,6 +68,9 @@ void MPlayFadeOut(struct MusicPlayerInfo *mplayInfo, u16 speed)
     }
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
+
 void m4aSoundInit(void)
 {
     s32 i;
@@ -199,6 +202,8 @@ void m4aMPlayAllContinue(void)
     for (i = 0; i < MAX_POKEMON_CRIES; i++)
         MPlayContinue(&gPokemonCryMusicPlayers[i]);
 }
+
+#pragma GCC diagnostic pop
 
 void m4aMPlayFadeOut(struct MusicPlayerInfo *mplayInfo, u16 speed)
 {
@@ -1524,11 +1529,7 @@ void ply_xxx(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *track)
 
 void ply_xwave(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *track)
 {
-    u32 wav;
-
-#ifdef UBFIX
-    wav = 0;
-#endif
+    u32 wav = 0;
 
     READ_XCMD_BYTE(wav, 0) // UB: uninitialized variable
     READ_XCMD_BYTE(wav, 1)
@@ -1595,11 +1596,7 @@ void ply_xswee(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *track
 
 void ply_xcmd_0C(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *track)
 {
-    u32 unk;
-
-#ifdef UBFIX
-    unk = 0;
-#endif
+    u32 unk = 0;
 
     READ_XCMD_BYTE(unk, 0) // UB: uninitialized variable
     READ_XCMD_BYTE(unk, 1)
@@ -1619,11 +1616,7 @@ void ply_xcmd_0C(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *tra
 
 void ply_xcmd_0D(struct MusicPlayerInfo *mplayInfo, struct MusicPlayerTrack *track)
 {
-    u32 unk;
-
-#ifdef UBFIX
-    unk = 0;
-#endif
+    u32 unk = 0;
 
     READ_XCMD_BYTE(unk, 0) // UB: uninitialized variable
     READ_XCMD_BYTE(unk, 1)

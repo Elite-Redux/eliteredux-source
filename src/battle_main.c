@@ -5383,7 +5383,6 @@ static void TurnValuesCleanUp(bool8 turnPassOnly)
         if (!turnPassOnly)
         {
             ZERO(gRoundStructs[i])
-            ZERO(gVolatileStructs[i].started)
 
             if (gVolatileStructs[i].isFirstTurn)
                 gVolatileStructs[i].isFirstTurn--;
@@ -5406,12 +5405,6 @@ static void TurnValuesCleanUp(bool8 turnPassOnly)
     gSideStatuses[1] &= ~(SIDE_STATUS_WIDE_GUARD | SIDE_STATUS_CRAFTY_SHIELD | SIDE_STATUS_MAT_BLOCK);
     gSideTimers[0].followmeTimer = 0;
     gSideTimers[1].followmeTimer = 0;
-    
-    if (!turnPassOnly) {
-        ZERO(gSideTimers[0].started)
-        ZERO(gSideTimers[1].started)
-        ZERO(gFieldTimers.started)
-    }
 }
 
 void TurnStructsClear(void)
@@ -5487,6 +5480,7 @@ void RecalculateMoveOrder(int index, int ignoreChosenMove)
 
 static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
 {
+    int i;
     if (!(gHitMarker & HITMARKER_RUN))
     {
         while (gBattleStruct->focusPunchBattlerId < gBattlersCount)
@@ -5510,6 +5504,15 @@ static void CheckFocusPunch_ClearVarsBeforeTurnStarts(void)
             }
         }
     }
+
+    for (i = 0; i < gBattlersCount; i++)
+    {
+        ZERO(gVolatileStructs[i].started)
+    }
+    
+    ZERO(gSideTimers[0].started)
+    ZERO(gSideTimers[1].started)
+    ZERO(gFieldTimers.started)
 
     gBattleMainFunc = CheckQuickClaw_CustapBerryActivation;
     gBattleStruct->quickClawBattlerId = 0;
