@@ -10248,7 +10248,7 @@ void SetSwapDamageCategory(int battler, int target, int move)
         
         case USE_HIGHEST_OFFENSE:
             {
-                int isUnaware = IsUnaware(battler);
+                int isUnaware = IsUnaware(target);
                 int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
                 int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
                 if (atk > spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_SPECIAL;
@@ -10262,8 +10262,8 @@ void SetSwapDamageCategory(int battler, int target, int move)
                 int isUnaware = IsUnaware(battler);
                 int isTargetUnaware = IsUnaware(target);
                 // Atk / Def > SpAtk / SpDef is equivalent to Atk * SpDef > SpAtk * Def and doesn't have rounding issues
-                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE) * CalculateStat(target, STAT_SPDEF, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
-                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE) * CalculateStat(target, STAT_DEF, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
+                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isTargetUnaware, FALSE) * CalculateStat(target, STAT_SPDEF, 0, move, TRUE, FALSE, isUnaware, FALSE);
+                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isTargetUnaware, FALSE) * CalculateStat(target, STAT_DEF, 0, move, TRUE, FALSE, isUnaware, FALSE);
                 if (atk > spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_SPECIAL;
                 else if (atk < spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_PHYSICAL;
                 else gSwapDamageCategory = Random() % 2;
