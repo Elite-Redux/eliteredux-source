@@ -10534,6 +10534,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_INFILTRATOR)
         && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MARINE_APEX)
         && !(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        && !(gVolatileStructs[battlerAtk].readiedAction && BattlerHasAbility(battlerAtk, ABILITY_DEMOLITIONIST, FALSE))
         && !isCrit)
     {
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
