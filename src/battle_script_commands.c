@@ -1391,11 +1391,6 @@ static void Cmd_attackcanceler(void)
     s32 i;
     u8 moveType;
 
-    if (gBattleMoves[gCurrentMove].type2)
-    {
-        SetTypeBeforeUsingMove(gCurrentMove, gBattlerAttacker);
-    }
-
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
     if (gBattleMoves[gCurrentMove].type2)
@@ -6031,6 +6026,10 @@ static void Cmd_moveend(void)
 
                 if (IsBattlerAlive(battlerId))
                 {
+                    if (gBattleMoves[gCurrentMove].type2)
+                    {
+                        SetTypeBeforeUsingMove(gCurrentMove, gBattlerAttacker);
+                    }
                     gBattlerTarget = battlerId;
                     gBattleScripting.moveendState = 0;
                     MoveValuesCleanUp();
