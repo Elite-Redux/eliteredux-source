@@ -532,7 +532,7 @@ text RustboroCity_Gym_Text_RoxanneDefeat1{
 	format("Your work was rushed but I could tell you still put in the effort! Full marks, you get an A!")
 }
 text RustboroCity_Gym_Text_RoxanneDefeatAll{
-	format("You dilligently studied and passed top of the class - you deserve an A!")
+	format("You diligently studied and passed top of the class - you deserve an A!")
 }
 script RustboroCity_Gym_EventScript_Roxanne{
     goto_if_set(FLAG_SYS_GAME_CLEAR, RustboroCity_Gym_EventScript_RoxanneRematch)
