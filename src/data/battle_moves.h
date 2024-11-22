@@ -12406,7 +12406,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_BANISHED_POWER] =
     {
-        .effect = EFFECT_SPECIAL_ATTACK_UP_HIT,
+        .effect = EFFECT_ARGUMENT_HIT,
         .power = 70,
         .type = TYPE_DARK,
         .accuracy = 100,
