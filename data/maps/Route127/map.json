@@ -15,13 +15,8 @@
   "connections": [
     {
       "map": "MAP_MOSSDEEP_CITY",
-      "offset": 0,
+      "offset": -39,
       "direction": "up"
-    },
-    {
-      "map": "MAP_ROUTE128",
-      "offset": 0,
-      "direction": "down"
     },
     {
       "map": "MAP_ROUTE126",

@@ -15,7 +15,7 @@
   "connections": [
     {
       "map": "MAP_ROUTE124",
-      "offset": 0,
+      "offset": -40,
       "direction": "up"
     },
     {
@@ -27,6 +27,11 @@
       "map": "MAP_UNDERWATER_ROUTE126",
       "offset": 0,
       "direction": "dive"
+    },
+    {
+      "map": "MAP_MOSSDEEP_CITY",
+      "offset": 0,
+      "direction": "up"
     }
   ],
   "object_events": [

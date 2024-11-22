@@ -54,7 +54,7 @@
     {
       "id": "LAYOUT_LILYCOVE_CITY",
       "name": "LilycoveCity_Layout",
-      "width": 80,
+      "width": 60,
       "height": 40,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Lilycove",
@@ -394,8 +394,8 @@
     {
       "id": "LAYOUT_ROUTE124",
       "name": "Route124_Layout",
-      "width": 80,
-      "height": 80,
+      "width": 60,
+      "height": 40,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Mossdeep",
       "border_filepath": "data/layouts/Route124/border.bin",
@@ -414,18 +414,18 @@
     {
       "id": "LAYOUT_ROUTE126",
       "name": "Route126_Layout",
-      "width": 80,
-      "height": 80,
+      "width": 40,
+      "height": 40,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Mossdeep",
+      "secondary_tileset": "gTileset_Mossdeep_Ice",
       "border_filepath": "data/layouts/Route126/border.bin",
       "blockdata_filepath": "data/layouts/Route126/map.bin"
     },
     {
       "id": "LAYOUT_ROUTE127",
       "name": "Route127_Layout",
-      "width": 80,
-      "height": 80,
+      "width": 40,
+      "height": 40,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Mossdeep_Ice",
       "border_filepath": "data/layouts/Route127/border.bin",
@@ -434,10 +434,10 @@
     {
       "id": "LAYOUT_ROUTE128",
       "name": "Route128_Layout",
-      "width": 120,
+      "width": 60,
       "height": 40,
       "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Mossdeep",
+      "secondary_tileset": "gTileset_Mossdeep_Ice",
       "border_filepath": "data/layouts/Route128/border.bin",
       "blockdata_filepath": "data/layouts/Route128/map.bin"
     },
