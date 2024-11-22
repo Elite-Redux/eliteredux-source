@@ -6334,6 +6334,9 @@ static void Cmd_moveend(void)
                 CancelMultiTurnMoves(gBattlerAttacker); // Cancel it
             #endif
 
+            if (!gProcessingExtraAttacks && gBattleMoves[gCurrentMove].effect != EFFECT_ROLLOUT)
+                gVolatileStructs[gBattlerAttacker].rolloutCounter = 0;
+
             gRoundStructs[gBattlerAttacker].usesBouncedMove = FALSE;
             gRoundStructs[gBattlerAttacker].targetAffected = FALSE;
             gBattleStruct->ateBoost[gBattlerAttacker] = 0;
