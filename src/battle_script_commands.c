@@ -1391,6 +1391,11 @@ static void Cmd_attackcanceler(void)
     s32 i;
     u8 moveType;
 
+    if (gBattleMoves[gCurrentMove].type2)
+    {
+        SetTypeBeforeUsingMove(gCurrentMove, gBattlerAttacker);
+    }
+
     GET_MOVE_TYPE(gCurrentMove, moveType);
 
     if (gBattleMoves[gCurrentMove].type2)
