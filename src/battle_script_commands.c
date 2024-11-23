@@ -13391,7 +13391,7 @@ static void Cmd_trytoapplymoveeffect(void)
 {
     //Set move effect
     bool8 appliedEffect = FALSE;
-    u8 secondaryEffectChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+    int secondaryEffectChance = GetMoveEffectChance(gBattlerAttacker, gCurrentMove, 0, gBattleMoves[gCurrentMove].secondaryEffectChance);
     u8 rand = (Random() % 100);
 
     switch (gBattleMoves[gCurrentMove].effect)
