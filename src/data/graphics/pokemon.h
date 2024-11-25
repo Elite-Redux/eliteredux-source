@@ -8273,6 +8273,18 @@ const u32 gMonPalette_DuraludonPartnerMega[]           = INCBIN_U32("graphics/po
 const u32 gMonShinyPalette_DuraludonPartnerMega[]      = INCBIN_U32("graphics/pokemon/duraludon/partner/mega/shiny.gbapal.lz");
 const u8  gMonIcon_DuraludonPartnerMega[]              = INCBIN_U8("graphics/pokemon/duraludon/partner/mega/icon.4bpp");
 
+const u32 gMonFrontPic_FidoughPartner[]          = INCBIN_U32("graphics/pokemon/fidough/front.4bpp.lz");
+const u32 gMonBackPic_FidoughPartner[]           = INCBIN_U32("graphics/pokemon/fidough/back.4bpp.lz");
+const u32 gMonPalette_FidoughPartner[]           = INCBIN_U32("graphics/pokemon/fidough/normal.gbapal.lz");
+const u32 gMonShinyPalette_FidoughPartner[]      = INCBIN_U32("graphics/pokemon/fidough/shiny.gbapal.lz");
+const u8  gMonIcon_FidoughPartner[]              = INCBIN_U8("graphics/pokemon/fidough/icon.4bpp");
+
+const u32 gMonFrontPic_FidoughPartnerMega[]          = INCBIN_U32("graphics/pokemon/fidough/mega/front.4bpp.lz");
+const u32 gMonBackPic_FidoughPartnerMega[]           = INCBIN_U32("graphics/pokemon/fidough/mega/back.4bpp.lz");
+const u32 gMonPalette_FidoughPartnerMega[]           = INCBIN_U32("graphics/pokemon/fidough/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_FidoughPartnerMega[]      = INCBIN_U32("graphics/pokemon/fidough/mega/shiny.gbapal.lz");
+const u8  gMonIcon_FidoughPartnerMega[]              = INCBIN_U8("graphics/pokemon/fidough/mega/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

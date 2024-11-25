@@ -11370,6 +11370,16 @@ extern const u32 gMonBackPic_Crawdauntles[];
 extern const u32 gMonPalette_Crawdauntles[];
 extern const u32 gMonShinyPalette_Crawdauntles[];
 extern const u8  gMonIcon_Crawdauntles[];
+extern const u32 gMonFrontPic_FidoughPartner[];
+extern const u32 gMonBackPic_FidoughPartner[];
+extern const u32 gMonPalette_FidoughPartner[];
+extern const u32 gMonShinyPalette_FidoughPartner[];
+extern const u8  gMonIcon_FidoughPartner[];
+extern const u32 gMonFrontPic_FidoughPartnerMega[];
+extern const u32 gMonBackPic_FidoughPartnerMega[];
+extern const u32 gMonPalette_FidoughPartnerMega[];
+extern const u32 gMonShinyPalette_FidoughPartnerMega[];
+extern const u8  gMonIcon_FidoughPartnerMega[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

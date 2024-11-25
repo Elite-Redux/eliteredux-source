@@ -22160,6 +22160,22 @@ static const struct LevelUpMove sFidoughLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
+static const struct LevelUpMove sFidoughPartnerLevelUpLearnset[] = {
+    LEVEL_UP_MOVE(1, MOVE_BITE),
+    LEVEL_UP_MOVE(1, MOVE_GROWL),
+    LEVEL_UP_MOVE(1, MOVE_LOVELY_BITE),
+    LEVEL_UP_MOVE(17, MOVE_BODY_SLAM),
+    LEVEL_UP_MOVE(17, MOVE_FIRE_FANG),
+    LEVEL_UP_MOVE(24, MOVE_BATON_PASS),
+    LEVEL_UP_MOVE(24, MOVE_ENCORE),
+    LEVEL_UP_MOVE(24, MOVE_FERTILE_FANGS),
+    LEVEL_UP_MOVE(24, MOVE_GROWTH),
+    LEVEL_UP_MOVE(37, MOVE_CRUNCH),
+    LEVEL_UP_MOVE(37, MOVE_SLACK_OFF),
+    LEVEL_UP_MOVE(46, MOVE_WISH),
+    LEVEL_UP_END
+};
+
 static const struct LevelUpMove sDachsbunLevelUpLearnset[] = {
     LEVEL_UP_MOVE(1, MOVE_BITE),
     LEVEL_UP_MOVE(1, MOVE_GROWL),

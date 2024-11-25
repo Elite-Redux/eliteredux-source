@@ -975,6 +975,12 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_TINKATON_MEGA] = sTinkatonFormSpeciesIdTable,
 
+    [SPECIES_FIDOUGH_PARTNER] = sFidoughFormSpeciesIdTable,
+
+    [SPECIES_FIDOUGH] = sFidoughFormSpeciesIdTable,
+
+    [SPECIES_FIDOUGH_PARTNER_MEGA] = sFidoughFormSpeciesIdTable,
+
     [SPECIES_POLARTIC] = sPolarticFormSpeciesIdTable,
 
     [SPECIES_POLARTIC_BLUEMOON] = sPolarticFormSpeciesIdTable,

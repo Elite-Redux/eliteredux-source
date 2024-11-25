@@ -1902,6 +1902,12 @@ static const u16 sTinkatonFormSpeciesIdTable[] = {
     SPECIES_TINKATON_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sFidoughFormSpeciesIdTable[] = {
+    SPECIES_FIDOUGH,
+    SPECIES_FIDOUGH_PARTNER,
+    SPECIES_FIDOUGH_PARTNER_MEGA,
+    FORM_SPECIES_END,
+};
 static const u16 sGyaradeathFormSpeciesIdTable[] = {
     SPECIES_GYARADEATH,
     SPECIES_GYARADEATH_MEGA_X,
