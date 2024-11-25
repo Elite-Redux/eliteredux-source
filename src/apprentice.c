@@ -525,7 +525,7 @@ static void CreateApprenticeMenu(u8 menu)
     u8 i;
     u8 windowId;
     const u8 *strings[3];
-    u8 count = 2;
+    u8 count;
     u8 width;
     u8 left;
     u8 top;
@@ -534,6 +534,7 @@ static void CreateApprenticeMenu(u8 menu)
     switch (menu)
     {
     case APPRENTICE_ASK_WHICH_LEVEL:
+        count = 2;
         left = 18;
         top = 8;
         strings[0] = gText_Lv50;
@@ -554,6 +555,7 @@ static void CreateApprenticeMenu(u8 menu)
         }
         break;
     case APPRENTICE_ASK_2SPECIES:
+        count = 2;
         left = 18;
         top = 8;
         if (PLAYER_APPRENTICE.questionsAnswered >= NUM_WHICH_MON_QUESTIONS)
@@ -562,24 +564,28 @@ static void CreateApprenticeMenu(u8 menu)
         strings[0] = gSpeciesNames[gApprenticeQuestionData->speciesId];
         break;
     case APPRENTICE_ASK_MOVES:
+        count = 2;
         left = 17;
         top = 8;
         strings[0] = gMoveNames[gApprenticeQuestionData->moveId1];
         strings[1] = gMoveNames[gApprenticeQuestionData->moveId2];
         break;
     case APPRENTICE_ASK_GIVE:
+        count = 2;
         left = 18;
         top = 8;
         strings[0] = gText_Give;
         strings[1] = gText_NoNeed;
         break;
     case APPRENTICE_ASK_YES_NO:
+        count = 2;
         left = 20;
         top = 8;
         strings[0] = gText_Yes;
         strings[1] = gText_No;
         break;
     default:
+        count = 0;
         left = 0;
         top = 0;
         break;
