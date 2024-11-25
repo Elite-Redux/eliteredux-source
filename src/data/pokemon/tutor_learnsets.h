@@ -28555,7 +28555,6 @@ const union TutorUnion gTutorLearnsets[NUM_SPECIES] =
         TUTOR(MOVE_RAIN_DANCE)
         TUTOR(MOVE_REFRESH)
         TUTOR(MOVE_REST)
-        TUTOR(MOVE_RETURN)
         TUTOR(MOVE_SLEEP_TALK)
         TUTOR(MOVE_SOAK)
         TUTOR(MOVE_SPITE)

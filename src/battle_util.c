@@ -1045,13 +1045,9 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_VOLT_ABSORB] = 1,
     [ABILITY_WATER_ABSORB] = 1,
     [ABILITY_WATER_VEIL] = 1,
-    [ABILITY_WHITE_SMOKE] = 1,
     [ABILITY_WONDER_GUARD] = 1,
-    [ABILITY_BIG_PECKS] = 1,
     [ABILITY_CONTRARY] = 1,
     [ABILITY_FRIEND_GUARD] = 1,
-    [ABILITY_HEAVY_METAL] = 1,
-    [ABILITY_LIGHT_METAL] = 1,
     [ABILITY_MAGIC_BOUNCE] = 1,
     [ABILITY_MULTISCALE] = 1,
     [ABILITY_SAP_SIPPER] = 1,
@@ -1076,7 +1072,6 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     // New abilities
     [ABILITY_DUNE_TERROR] = 1,
     [ABILITY_GIFTED_MIND] = 1,
-    [ABILITY_HYDRO_CIRCUIT] = 1,
     [ABILITY_DESERT_CLOAK] = 1,
     [ABILITY_ARCTIC_FUR] = 1,
     [ABILITY_BIG_LEAVES] = 1,
@@ -1140,6 +1135,8 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_TERAFORM_ZERO] = 1,
     [ABILITY_SUPERSWEET_SYRUP] = 1,
     [ABILITY_BREAKWATER] = 1,
+    [ABILITY_AURA_BREAK] = 1,
+    [ABILITY_ARMOR_TAIL] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -4779,7 +4776,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 
     //Darmanitan
     if (gBattleMons[battler].species == SPECIES_DARMANITAN && 
-	    (BATTLER_HAS_ABILITY(battler, ABILITY_ZEN_MODE)) &&
+	    (BattlerHasAbility(battler, ABILITY_ZEN_MODE, FALSE)) &&
 		gBattleMons[battler].hp != 0) {
             gBattleScripting.abilityPopupOverwrite = ABILITY_ZEN_MODE;
             gBattlerAttacker = battler;
@@ -4790,7 +4787,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 
     //Darmanitan Galarian
     if (gBattleMons[battler].species == SPECIES_DARMANITAN_GALARIAN && 
-	    (BATTLER_HAS_ABILITY(battler, ABILITY_ZEN_MODE)) &&
+	    (BattlerHasAbility(battler, ABILITY_ZEN_MODE, FALSE)) &&
 		gBattleMons[battler].hp != 0) {
             gBattleScripting.abilityPopupOverwrite = ABILITY_ZEN_MODE;
             gBattlerAttacker = battler;
@@ -4805,7 +4802,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
          gBattleMons[battler].species == SPECIES_CASTFORM_SUNNY ||
          gBattleMons[battler].species == SPECIES_CASTFORM_SANDY ||
          gBattleMons[battler].species == SPECIES_CASTFORM_SNOWY) && 
-	    BATTLER_HAS_ABILITY(battler, ABILITY_FORECAST) &&
+	    BattlerHasAbility(battler, ABILITY_FORECAST, FALSE) &&
 		gBattleMons[battler].hp != 0) {
 		if (gBattleWeather & (WEATHER_RAIN_ANY) && gBattleMons[battler].species != SPECIES_CASTFORM_RAINY)
         {
@@ -4852,7 +4849,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 
     //Cherrim
     if (gBattleMons[battler].species == SPECIES_CHERRIM && 
-	          BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT) &&
+	          BattlerHasAbility(battler, ABILITY_FLOWER_GIFT, FALSE) &&
 		      gBattleMons[battler].hp != 0) {
 			if (gBattleWeather & (WEATHER_SUN_ANY))
         {
@@ -4864,7 +4861,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 		}
 	}
     else if (gBattleMons[battler].species == SPECIES_CHERRIM_SUNSHINE &&
-	          BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT) &&
+	          BattlerHasAbility(battler, ABILITY_FLOWER_GIFT, FALSE) &&
 		      gBattleMons[battler].hp != 0) {
 			if (!(gBattleWeather & (WEATHER_SUN_ANY)))
         {
@@ -6117,6 +6114,8 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_HUNGER_SWITCH:
     case ABILITY_BLOOD_STAIN:
     case ABILITY_BLOOD_STIGMA:
+    case ABILITY_FLOWER_GIFT:
+    case ABILITY_COMMANDER:
         return TRUE;
     default:
         return FALSE;
@@ -10248,7 +10247,7 @@ void SetSwapDamageCategory(int battler, int target, int move)
         
         case USE_HIGHEST_OFFENSE:
             {
-                int isUnaware = IsUnaware(battler);
+                int isUnaware = IsUnaware(target);
                 int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
                 int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
                 if (atk > spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_SPECIAL;
@@ -10262,8 +10261,8 @@ void SetSwapDamageCategory(int battler, int target, int move)
                 int isUnaware = IsUnaware(battler);
                 int isTargetUnaware = IsUnaware(target);
                 // Atk / Def > SpAtk / SpDef is equivalent to Atk * SpDef > SpAtk * Def and doesn't have rounding issues
-                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE) * CalculateStat(target, STAT_SPDEF, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
-                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE) * CalculateStat(target, STAT_DEF, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
+                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isTargetUnaware, FALSE) * CalculateStat(target, STAT_SPDEF, 0, move, TRUE, FALSE, isUnaware, FALSE);
+                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isTargetUnaware, FALSE) * CalculateStat(target, STAT_DEF, 0, move, TRUE, FALSE, isUnaware, FALSE);
                 if (atk > spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_SPECIAL;
                 else if (atk < spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_PHYSICAL;
                 else gSwapDamageCategory = Random() % 2;
@@ -10534,6 +10533,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
         && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_INFILTRATOR)
         && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MARINE_APEX)
         && !(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        && !(gVolatileStructs[battlerAtk].readiedAction && BattlerHasAbility(battlerAtk, ABILITY_DEMOLITIONIST, FALSE))
         && !isCrit)
     {
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
