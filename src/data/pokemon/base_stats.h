@@ -22014,12 +22014,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_BRAVIARY] =
     {
-    .baseHP        = 100,
-    .baseAttack    = 123,
-    .baseDefense   = 75,
-    .baseSpeed     = 80,
-    .baseSpAttack  = 57,
-    .baseSpDefense = 75,
+    .baseHP         = 100,
+    .baseAttack     = 123,
+    .baseDefense    = 75,
+    .baseSpeed      = 80,
+    .baseSpAttack   = 57,
+    .baseSpDefense  = 75,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_FLYING,
     .catchRate = 255,
