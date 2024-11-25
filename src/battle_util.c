@@ -6115,6 +6115,7 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_BLOOD_STAIN:
     case ABILITY_BLOOD_STIGMA:
     case ABILITY_FLOWER_GIFT:
+    case ABILITY_COMMANDER:
         return TRUE;
     default:
         return FALSE;
