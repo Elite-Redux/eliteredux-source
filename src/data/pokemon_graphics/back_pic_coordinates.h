@@ -4588,7 +4588,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DURALUDON_PARTNER_MEGA] =
     {
         .size = 0x88,
-        .y_offset = 1,
+        .y_offset = 0,
     },
     [SPECIES_DREEPY] =
     {
@@ -5139,7 +5139,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_FIDOUGH_PARTNER_MEGA] =
     {
         .size = 0,
-        .y_offset =  12
+        .y_offset =  0
     },
     [SPECIES_DACHSBUN] =
     {
@@ -7466,6 +7466,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .y_offset = 0,
     },
     [SPECIES_CASTFORM_SNOWY] =
+    {
+        .size = 0x48,
+        .y_offset = 0,
+    },
+    [SPECIES_CASTFORM_FOGGY] =
     {
         .size = 0x48,
         .y_offset = 0,

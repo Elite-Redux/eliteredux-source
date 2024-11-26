@@ -1500,6 +1500,7 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(CASTFORM_SUNNY, gMonFrontPic_CastformSunny),
     SPECIES_SPRITE(CASTFORM_RAINY, gMonFrontPic_CastformRainy),
     SPECIES_SPRITE(CASTFORM_SNOWY, gMonFrontPic_CastformSnowy),
+    SPECIES_SPRITE(CASTFORM_FOGGY, gMonFrontPic_CastformFoggy),
 
     SPECIES_SPRITE(DEOXYS_ATTACK, gMonFrontPic_DeoxysAttack),
     SPECIES_SPRITE(DEOXYS_DEFENSE, gMonFrontPic_DeoxysDefense),

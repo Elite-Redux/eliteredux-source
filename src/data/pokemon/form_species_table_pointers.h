@@ -289,6 +289,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_CASTFORM_SUNNY] = sCastformFormSpeciesIdTable,
     [SPECIES_CASTFORM_RAINY] = sCastformFormSpeciesIdTable,
     [SPECIES_CASTFORM_SNOWY] = sCastformFormSpeciesIdTable,
+    [SPECIES_CASTFORM_FOGGY] = sCastformFormSpeciesIdTable,
     // Deoxys
     [SPECIES_DEOXYS_ATTACK] = sDeoxysFormSpeciesIdTable,
     [SPECIES_DEOXYS_DEFENSE] = sDeoxysFormSpeciesIdTable,
@@ -844,6 +845,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SQUAWKABILLY_WHITE_PLUMAGE] = sSquawkabillyFormSpeciesIdTable,
 
     [SPECIES_TERAPAGOS_STELLAR] = sTerapagosFormSpeciesIdTable,
+    [SPECIES_TERAPAGOS] = sTerapagosFormSpeciesIdTable,
 
     [SPECIES_FLYGON_REDUX_B] = sFlygonFormSpeciesIdTable,
     [SPECIES_FLYGON_MEGA] = sFlygonFormSpeciesIdTable,

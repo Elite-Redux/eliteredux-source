@@ -11380,6 +11380,11 @@ extern const u32 gMonBackPic_FidoughPartnerMega[];
 extern const u32 gMonPalette_FidoughPartnerMega[];
 extern const u32 gMonShinyPalette_FidoughPartnerMega[];
 extern const u8  gMonIcon_FidoughPartnerMega[];
+extern const u32 gMonFrontPic_CastformFoggy[];
+extern const u32 gMonBackPic_CastformFoggy[];
+extern const u32 gMonPalette_CastformFoggy[];
+extern const u32 gMonShinyPalette_CastformFoggy[];
+extern const u8  gMonIcon_CastformFoggy[];
 
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

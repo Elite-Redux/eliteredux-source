@@ -31322,21 +31322,21 @@ static const struct TrainerMonItemCustomMoves sParty_CourtneyMossdeepInsane[] = 
     },
     {
     .lvl = 0,
-    .species = SPECIES_CHARIZARD,
-    .heldItem = ITEM_LIFE_ORB,
-    .ability = 1,
-    .evs = {0, 0, 0, 252, 4, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_HEAT_WAVE, MOVE_SOLAR_BEAM, MOVE_SCORCHING_SANDS, MOVE_DRAGON_PULSE
-    },
-    {
-    .lvl = 0,
     .species = SPECIES_REUNICLUS_REDUX,
-    .heldItem = ITEM_REUNICLUSITE_R,
+    .heldItem = ITEM_HEAVY_DUTY_BOOTS,
     .ability = 1,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
     .moves = MOVE_THUNDER, MOVE_ERUPTION, MOVE_STEAM_ERUPTION, MOVE_MYSTICAL_FIRE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_CHARIZARD,
+    .heldItem = ITEM_CHARIZARDITE_Y,
+    .ability = 1,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_HEAT_WAVE, MOVE_SOLAR_BEAM, MOVE_SCORCHING_SANDS, MOVE_DRAGON_PULSE
     }
 };
 

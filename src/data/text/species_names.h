@@ -1535,6 +1535,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_CASTFORM_SUNNY] = _("Castform"),
     [SPECIES_CASTFORM_RAINY] = _("Castform"),
     [SPECIES_CASTFORM_SNOWY] = _("Castform"),
+    [SPECIES_CASTFORM_FOGGY] = _("Castform"),
     // Deoxys
     [SPECIES_DEOXYS_ATTACK] = _("Deoxys"),
     [SPECIES_DEOXYS_DEFENSE] = _("Deoxys"),

@@ -1501,6 +1501,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(CASTFORM_SUNNY, gMonBackPic_CastformSunny),
     SPECIES_SPRITE(CASTFORM_RAINY, gMonBackPic_CastformRainy),
     SPECIES_SPRITE(CASTFORM_SNOWY, gMonBackPic_CastformSnowy),
+    SPECIES_SPRITE(CASTFORM_FOGGY, gMonBackPic_CastformFoggy),
 
     SPECIES_SPRITE(DEOXYS_ATTACK, gMonBackPic_DeoxysAttack),
     SPECIES_SPRITE(DEOXYS_DEFENSE, gMonBackPic_DeoxysDefense),

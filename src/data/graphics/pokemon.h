@@ -8285,6 +8285,12 @@ const u32 gMonPalette_FidoughPartnerMega[]           = INCBIN_U32("graphics/poke
 const u32 gMonShinyPalette_FidoughPartnerMega[]      = INCBIN_U32("graphics/pokemon/fidough/mega/shiny.gbapal.lz");
 const u8  gMonIcon_FidoughPartnerMega[]              = INCBIN_U8("graphics/pokemon/fidough/mega/icon.4bpp");
 
+const u32 gMonFrontPic_CastformFoggy[]          = INCBIN_U32("graphics/pokemon/castform/foggy/front.4bpp.lz");
+const u32 gMonBackPic_CastformFoggy[]           = INCBIN_U32("graphics/pokemon/castform/foggy/back.4bpp.lz");
+const u32 gMonPalette_CastformFoggy[]           = INCBIN_U32("graphics/pokemon/castform/foggy/normal.gbapal.lz");
+const u32 gMonShinyPalette_CastformFoggy[]      = INCBIN_U32("graphics/pokemon/castform/foggy/shiny.gbapal.lz");
+const u8  gMonIcon_CastformFoggy[]              = INCBIN_U8("graphics/pokemon/castform/foggy/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");
