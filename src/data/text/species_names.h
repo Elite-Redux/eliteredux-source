@@ -1742,7 +1742,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     // Sinistea
     [SPECIES_SINISTEA_ANTIQUE] = _("Sinistea"),
     // Polteageist
-    [SPECIES_POLTEAGEIST_ANTIQUE] = _("Polteageis"),
+    [SPECIES_POLTEAGEIST_ANTIQUE] = _("Polteageist"),
     // Alcremie
     [SPECIES_ALCREMIE_RUBY_CREAM] = _("AlcremieRuby"),
     [SPECIES_ALCREMIE_MATCHA_CREAM] = _("AlcremieMat."),
