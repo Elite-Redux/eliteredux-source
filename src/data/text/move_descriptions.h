@@ -3924,6 +3924,10 @@ static const u8 sMoveTwoLineDescription_MoveInsectImpact[] = _(
     "A punch that may drop the\n"
     "target's defense stat.");
 
+static const u8 sMoveTwoLineDescription_MoveInsectImpact[] = _(
+    "An energy bullet attack\n"
+    "that may paralyze the foe.");
+
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
 {
@@ -4924,6 +4928,7 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_BERSERKER_HORN - 1] = sMoveTwoLineDescription_MoveBerserkerHorn,
     [MOVE_ONI_FIST - 1] = sMoveTwoLineDescription_MoveOniFist,
     [MOVE_INSECT_IMPACT - 1] = sMoveTwoLineDescription_MoveInsectImpact,
+    [MOVE_LIGHTNING_BULLET - 1] = sMoveTwoLineDescription_MoveLightningBullet,
 };
 
 static const u8 sMoveFourLineDescription_MovePound[] = _("A physical attack\ndelivered with a long\ntail or a foreleg, etc.");
@@ -5923,6 +5928,7 @@ static const u8 sMoveFourLineDescription_MoveOneInchPunch[] = _("A powerful punc
 static const u8 sMoveFourLineDescription_MoveBerserkerHorn[] = _("Rotates its body\nlike a drill.\nHigh crit ratio.\nMighty Horn boost.");
 static const u8 sMoveFourLineDescription_MoveOniFist[] = _("A strong punch from\nthe shadows.\nAlways hits.\nIron Fist boost.");
 static const u8 sMoveFourLineDescription_MoveInsectImpact[] = _("A powerful punch. 30%\nchance to drop\ndefense. Iron\nFist boost.");
+static const u8 sMoveFourLineDescription_MoveLightningBullet[] = _("Shoots a strong\nenergy projectile.\n10% paralyze chance\nMega Launcher Boost.");
 
 const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_POUND - 1] = sMoveFourLineDescription_MovePound,
@@ -6922,4 +6928,5 @@ const u8 *const gMoveFourLineDescriptionPointers[MOVES_COUNT - 1] = {
     [MOVE_BERSERKER_HORN - 1] = sMoveFourLineDescription_MoveBerserkerHorn,
     [MOVE_ONI_FIST - 1] = sMoveFourLineDescription_MoveOniFist,
     [MOVE_INSECT_IMPACT - 1] = sMoveFourLineDescription_MoveInsectImpact,
+    [MOVE_LIGHTNING_BULLET - 1] = sMoveFourLineDescription_MoveLightningBullet,
 };
