@@ -8606,11 +8606,11 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         basePower = 10 * (255 - gBattleMons[battlerAtk].friendship) / 25;
         break;
     case EFFECT_FURY_CUTTER:
-        for (i = 1; i < gVolatileStructs[battlerAtk].furyCutterCounter; i++)
-            basePower *= 2;
+        REQUIRE(gVolatileStructs[battlerAtk].furyCutterCounter);
+        basePower = basePower << (gVolatileStructs[battlerAtk].furyCutterCounter - 1);
         break;
     case EFFECT_ROLLOUT:
-        if (gProcessingExtraAttacks || !gVolatileStructs[battlerAtk].rolloutCounter) break;
+        REQUIRE(gVolatileStructs[battlerAtk].rolloutCounter)
         basePower = basePower << (gVolatileStructs[battlerAtk].rolloutCounter - 1);
         break;
     case EFFECT_MAGNITUDE:
@@ -8620,8 +8620,8 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         basePower = gBattleStruct->presentBasePower;
         break;
     case EFFECT_TRIPLE_KICK:
-        if (gTurnStructs[battlerAtk].multiHitCounter)
-            basePower *= 4 - gTurnStructs[battlerAtk].multiHitCounter;
+        REQUIRE(gTurnStructs[battlerAtk].multiHitCounter)
+        basePower *= 4 - gTurnStructs[battlerAtk].multiHitCounter;
         break;
     case EFFECT_SPIT_UP:
         basePower = 100 * gVolatileStructs[battlerAtk].stockpileCounter;
@@ -10221,9 +10221,9 @@ void SetSwapDamageCategory(int battler, int target, int move)
         
         case USE_HIGHEST_OFFENSE:
             {
-                int isUnaware = IsUnaware(target);
-                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
-                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
+                int isTargetUnaware = IsUnaware(target);
+                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
+                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
                 if (atk > spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_SPECIAL;
                 else if (atk < spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_PHYSICAL;
                 else gSwapDamageCategory = Random() % 2;
@@ -10268,8 +10268,10 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
 {
     u8 defStatToUse = 0;
     u32 defStat;
-    u8 noPositiveStatStages = isCrit || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, TRUE));
-    u8 isUnaware = IsUnaware(battlerAtk) || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED;
+    u8 noPositiveStatStages = isCrit
+        || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED
+        || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE));
+    u8 isUnaware = IsUnaware(battlerAtk);
     u16 modifier;
     int i;
 
