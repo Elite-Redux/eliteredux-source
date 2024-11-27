@@ -1478,6 +1478,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ENERGIZED_HORNS] = _("Energy Horns"),
     [ABILITY_CRUST_COAT] = _("Crust Coat"),
     [ABILITY_SPIDER_LAIR_UPGRADE] = _("Rising Dough"),
+    [ABILITY_PUFFY] = _("Puffy"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2236,4 +2237,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_ENERGIZED_HORNS] = sAbilityEnergizedHornsDescription,
     [ABILITY_SPIDER_LAIR_UPGRADE] = sAbilitySpiderLairUpgradeDescription,
     [ABILITY_CRUST_COAT] = sAbilityBattleArmorDescription,
+    [ABILITY_PUFFY] = sAbilityFluffyDescription,
 };

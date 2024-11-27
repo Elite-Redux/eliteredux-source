@@ -773,8 +773,9 @@
 #define ABILITY_ENERGIZED_HORNS 751 // Mighty horn moves become special and deal 30% more damage.
 #define ABILITY_SPIDER_LAIR_UPGRADE 752 // Casts Sticky Web on entry. Lasts 7 turns.
 #define ABILITY_CRUST_COAT 753 // Immune to critical hits. Takes 20% less damage from all attacks.
+#define ABILITY_PUFFY 754 // Takes 1/2 dmg from contact moves but Fire moves hurt it 2x more.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_CRUST_COAT + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_PUFFY + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

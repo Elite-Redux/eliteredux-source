@@ -9409,6 +9409,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         return;
     
     case ABILITY_FLUFFY:
+    case ABILITY_PUFFY:
         if (moveType == TYPE_FIRE) RESISTANCE(2.0);
         if (IsMoveMakingContact(move, battlerAtk)) MUL(0.5);
         return;
