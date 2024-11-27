@@ -8606,11 +8606,11 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         basePower = 10 * (255 - gBattleMons[battlerAtk].friendship) / 25;
         break;
     case EFFECT_FURY_CUTTER:
-        for (i = 1; i < gVolatileStructs[battlerAtk].furyCutterCounter; i++)
-            basePower *= 2;
+        REQUIRE(gVolatileStructs[battlerAtk].furyCutterCounter);
+        basePower = basePower << (gVolatileStructs[battlerAtk].furyCutterCounter - 1);
         break;
     case EFFECT_ROLLOUT:
-        if (gProcessingExtraAttacks || !gVolatileStructs[battlerAtk].rolloutCounter) break;
+        REQUIRE(gVolatileStructs[battlerAtk].rolloutCounter)
         basePower = basePower << (gVolatileStructs[battlerAtk].rolloutCounter - 1);
         break;
     case EFFECT_MAGNITUDE:
@@ -8620,8 +8620,8 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         basePower = gBattleStruct->presentBasePower;
         break;
     case EFFECT_TRIPLE_KICK:
-        if (gTurnStructs[battlerAtk].multiHitCounter)
-            basePower *= 4 - gTurnStructs[battlerAtk].multiHitCounter;
+        REQUIRE(gTurnStructs[battlerAtk].multiHitCounter)
+        basePower *= 4 - gTurnStructs[battlerAtk].multiHitCounter;
         break;
     case EFFECT_SPIT_UP:
         basePower = 100 * gVolatileStructs[battlerAtk].stockpileCounter;
