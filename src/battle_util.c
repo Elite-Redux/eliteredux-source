@@ -4742,6 +4742,7 @@ static const u16 sHpTransformations[][4] =
 bool32 ShouldChangeFormHpBased(u32 battler)
 {
     u32 i;
+    int species = gBattleMons[battler].species;
 
     if (gBattleMons[battler].status2 & STATUS2_TRANSFORMED) return FALSE;
     if (!IsBattlerAlive(battler)) return FALSE;
@@ -4751,7 +4752,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
         if (BattlerHasAbility(battler, sHpTransformations[i][0], FALSE))
         {
             if (sHpTransformations[i][0] == ABILITY_SCHOOLING && gBattleMons[battler].level < 20) continue;
-            if (gBattleMons[battler].species == sHpTransformations[i][2]
+            if (species == sHpTransformations[i][2]
                 && gBattleMons[battler].hp > gBattleMons[battler].maxHP / sHpTransformations[i][3])
             {
                 if (sHpTransformations[i][0] == ABILITY_SHIELDS_DOWN && GetAbilityState(battler, ABILITY_SHIELDS_DOWN))
@@ -4763,7 +4764,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
                 gBattleMons[battler].species = sHpTransformations[i][1];
                 return TRUE;
             }
-            if (gBattleMons[battler].species == sHpTransformations[i][1]
+            if (species == sHpTransformations[i][1]
                 && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / sHpTransformations[i][3])
             {
                 gBattleScripting.abilityPopupOverwrite = sHpTransformations[i][0];
@@ -4775,7 +4776,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
     }
 
     //Darmanitan
-    if (gBattleMons[battler].species == SPECIES_DARMANITAN && 
+    if (species == SPECIES_DARMANITAN && 
 	    (BattlerHasAbility(battler, ABILITY_ZEN_MODE, FALSE)) &&
 		gBattleMons[battler].hp != 0) {
             gBattleScripting.abilityPopupOverwrite = ABILITY_ZEN_MODE;
@@ -4786,7 +4787,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 	}
 
     //Darmanitan Galarian
-    if (gBattleMons[battler].species == SPECIES_DARMANITAN_GALARIAN && 
+    if (species == SPECIES_DARMANITAN_GALARIAN && 
 	    (BattlerHasAbility(battler, ABILITY_ZEN_MODE, FALSE)) &&
 		gBattleMons[battler].hp != 0) {
             gBattleScripting.abilityPopupOverwrite = ABILITY_ZEN_MODE;
@@ -4797,55 +4798,27 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 	}
 
     //Castform
-    if ((gBattleMons[battler].species == SPECIES_CASTFORM       ||
-         gBattleMons[battler].species == SPECIES_CASTFORM_RAINY ||
-         gBattleMons[battler].species == SPECIES_CASTFORM_SUNNY ||
-         gBattleMons[battler].species == SPECIES_CASTFORM_SANDY ||
-         gBattleMons[battler].species == SPECIES_CASTFORM_SNOWY) && 
-	    BattlerHasAbility(battler, ABILITY_FORECAST, FALSE) &&
-		gBattleMons[battler].hp != 0) {
-		if (gBattleWeather & (WEATHER_RAIN_ANY) && gBattleMons[battler].species != SPECIES_CASTFORM_RAINY)
+    if (BattlerHasAbility(battler, ABILITY_FORECAST, FALSE)
+        && IsBattlerAlive(battler)
+        && GET_BASE_SPECIES_ID(species) == SPECIES_CASTFORM)
+    {
+        int newSpecies = SPECIES_NONE;
+        if (!IsWeatherActive(WEATHER_ANY)) newSpecies = SPECIES_CASTFORM;
+        else if (gBattleWeather & WEATHER_RAIN_ANY) newSpecies = SPECIES_CASTFORM_RAINY;
+        else if (gBattleWeather & WEATHER_SUN_ANY) newSpecies = SPECIES_CASTFORM_SUNNY;
+        else if (gBattleWeather & WEATHER_SANDSTORM_ANY) newSpecies = SPECIES_CASTFORM_SANDY;
+        else if (gBattleWeather & WEATHER_FOG_ANY) newSpecies = SPECIES_CASTFORM_FOGGY;
+        else if (gBattleWeather & WEATHER_HAIL_ANY) newSpecies = SPECIES_CASTFORM_SNOWY;
+
+        if (newSpecies && newSpecies != species)
         {
             gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
             gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM_RAINY);
-            gBattleMons[battler].species = SPECIES_CASTFORM_RAINY;
+            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+            gBattleMons[battler].species = newSpecies;
 			return TRUE;
         }
-        else if (gBattleWeather & (WEATHER_SUN_ANY) && gBattleMons[battler].species != SPECIES_CASTFORM_SUNNY)
-        {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
-            gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM_SUNNY);
-            gBattleMons[battler].species = SPECIES_CASTFORM_SUNNY;
-			return TRUE;
-        }
-		else if (gBattleWeather & (WEATHER_HAIL_ANY) && gBattleMons[battler].species != SPECIES_CASTFORM_SNOWY)
-        {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
-            gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM_SNOWY);
-            gBattleMons[battler].species = SPECIES_CASTFORM_SNOWY;
-			return TRUE;
-        }
-		else if (gBattleWeather & (WEATHER_SANDSTORM_ANY) && gBattleMons[battler].species != SPECIES_CASTFORM_SANDY)
-        {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
-            gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM_SANDY);
-            gBattleMons[battler].species = SPECIES_CASTFORM_SANDY;
-			return TRUE;
-        }else if (!(gBattleWeather & (WEATHER_ANY)) && gBattleMons[battler].species != SPECIES_CASTFORM) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
-            gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM);
-            gBattleMons[battler].species = SPECIES_CASTFORM;
-			return TRUE;
-        }
-        else {
-			return FALSE;
-        }
-	}
+    }
 
     //Cherrim
     if (gBattleMons[battler].species == SPECIES_CHERRIM && 
@@ -11359,6 +11332,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_CASTFORM_SNOWY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SUNNY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SANDY,                SPECIES_CASTFORM,               TRUE},
+        {SPECIES_CASTFORM_FOGGY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_LUMBERING_SLOTH_ENGULFED,      SPECIES_LUMBERING_SLOTH,        TRUE},
     };
 
