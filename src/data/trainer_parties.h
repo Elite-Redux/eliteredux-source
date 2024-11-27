@@ -34046,12 +34046,12 @@ static const struct TrainerMonItemCustomMoves sParty_Mitchell[] = { // with Hall
 static const struct TrainerMonItemCustomMoves sParty_Halle[] = { // with Mitchell
     {
     .lvl = 0,
-    .species = SPECIES_VIKAVOLT,
-    .heldItem = ITEM_FOCUS_SASH,
-    .ability = 0,
-    .evs = {4, 0, 0, 252, 0, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_THUNDERBOLT, MOVE_BUG_BUZZ, MOVE_STICKY_WEB, MOVE_SOIL_DRAIN
+    .species = SPECIES_WEEZING_GALARIAN,
+    .heldItem = ITEM_TERRAIN_EXTENDER,
+    .ability = 2,
+    .evs = {252, 0, 0, 192, 64, 0},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_FIRE_BLAST, MOVE_MISTY_EXPLOSION, MOVE_SLUDGE_BOMB, MOVE_STRANGE_STEAM
     },
     {
     .lvl = 0,
@@ -34064,12 +34064,12 @@ static const struct TrainerMonItemCustomMoves sParty_Halle[] = { // with Mitchel
     },
     {
     .lvl = 0,
-    .species = SPECIES_WEEZING_GALARIAN,
-    .heldItem = ITEM_TERRAIN_EXTENDER,
-    .ability = 2,
-    .evs = {252, 0, 0, 192, 64, 0},
-    .nature = NATURE_MODEST,
-    .moves = MOVE_FIRE_BLAST, MOVE_MISTY_EXPLOSION, MOVE_SLUDGE_BOMB, MOVE_STRANGE_STEAM
+    .species = SPECIES_VIKAVOLT,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 0,
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_THUNDERBOLT, MOVE_BUG_BUZZ, MOVE_STICKY_WEB, MOVE_SOIL_DRAIN
     },
     {
     .lvl = 0,
@@ -45243,5 +45243,62 @@ static const struct TrainerMonItemCustomMoves sParty_MonotypeChampFlyingInsane[]
     .evs = {},
     .nature = NATURE_IMPISH,
     .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    }
+};
+
+static const struct TrainerMonItemCustomMoves sParty_Calvin1Insane[] = {
+    {
+    .lvl = 0,
+    .species = SPECIES_TINKATINK,
+    .heldItem = ITEM_EVIOLITE,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_ADAMANT,
+    .moves = MOVE_IRON_HEAD, MOVE_PLAY_ROUGH, MOVE_STEALTH_ROCK, MOVE_U_TURN
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_TANDEMAUS,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 2,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_QUICK_ATTACK, MOVE_POPULATION_BOMB, MOVE_CHARM, MOVE_PURSUIT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_POOCHYENA,
+    .heldItem = ITEM_EVIOLITE,
+    .ability = 0,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_CRUNCH, MOVE_PLAY_ROUGH, MOVE_KNOCK_OFF, MOVE_HOWL
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_SEEL,
+    .heldItem = ITEM_EVIOLITE,
+    .ability = 0,
+    .evs = {252, 0, 0, 4, 252, 0},
+    .nature = NATURE_BOLD,
+    .moves = MOVE_SLACK_OFF, MOVE_SURF, MOVE_ICE_BEAM, MOVE_FLIP_TURN
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_SHEDINJA,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 0,
+    .evs = {252, 4, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_FINAL_GAMBIT, MOVE_FINAL_GAMBIT, MOVE_FINAL_GAMBIT, MOVE_FINAL_GAMBIT
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_DIGLETT_ALOLAN,
+    .heldItem = ITEM_FOCUS_SASH,
+    .ability = 1,
+    .evs = {4, 252, 0, 0, 0, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_EARTHQUAKE, MOVE_CUT, MOVE_ROCK_SLIDE, MOVE_ASTONISH
     }
 };
