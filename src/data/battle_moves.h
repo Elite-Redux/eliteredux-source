@@ -6179,7 +6179,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     },
     [MOVE_CHIP_AWAY] =
     {
-        .effect = EFFECT_HIT,
+        .effect = EFFECT_CHIP_AWAY,
         .power = 75,
         .type = TYPE_NORMAL,
         .accuracy = 100,
