@@ -1029,6 +1029,8 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(TANDEMAUS, gMonBackPic_Tandemaus),
     SPECIES_SPRITE(MAUSHOLD, gMonBackPic_Maushold),
     SPECIES_SPRITE(FIDOUGH, gMonBackPic_Fidough),
+    SPECIES_SPRITE(FIDOUGH_PARTNER, gMonBackPic_Fidough),
+    SPECIES_SPRITE(FIDOUGH_PARTNER_MEGA, gMonBackPic_FidoughPartnerMega),
     SPECIES_SPRITE(DACHSBUN, gMonBackPic_Dachsbun),
     SPECIES_SPRITE(SMOLIV, gMonBackPic_Smoliv),
     SPECIES_SPRITE(DOLLIV, gMonBackPic_Dolliv),
@@ -1499,6 +1501,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(CASTFORM_SUNNY, gMonBackPic_CastformSunny),
     SPECIES_SPRITE(CASTFORM_RAINY, gMonBackPic_CastformRainy),
     SPECIES_SPRITE(CASTFORM_SNOWY, gMonBackPic_CastformSnowy),
+    SPECIES_SPRITE(CASTFORM_FOGGY, gMonBackPic_CastformFoggy),
 
     SPECIES_SPRITE(DEOXYS_ATTACK, gMonBackPic_DeoxysAttack),
     SPECIES_SPRITE(DEOXYS_DEFENSE, gMonBackPic_DeoxysDefense),

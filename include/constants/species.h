@@ -1591,6 +1591,8 @@
 #define SPECIES_MIMIKYU_RAYQUAZA_BUSTED     FORMS_START + 355
 #define SPECIES_SLAKING_MEGA_APE_SHIFT      FORMS_START + 356
 #define SPECIES_DURALUDON_PARTNER           FORMS_START + 357
+#define SPECIES_CASTFORM_FOGGY              FORMS_START + 358
+#define SPECIES_FIDOUGH_PARTNER             FORMS_START + 359
 
 
 
@@ -1638,7 +1640,7 @@
 #define SPECIES_AMAURA_PARTNER              FORMS_START + 492
 #define SPECIES_AURORUS_PARTNER             FORMS_START + 493
 
-#define LAST_VALID_STANDARD_FORM            SPECIES_DURALUDON_PARTNER
+#define LAST_VALID_STANDARD_FORM            SPECIES_FIDOUGH_PARTNER
 
 // Custom Megas
 #define CUSTOM_MEGA_START                   FORMS_START + 600
@@ -1755,8 +1757,9 @@
 #define SPECIES_EEVEE_PARTNER_MEGA          CUSTOM_MEGA_START + 109
 #define SPECIES_MEOWTH_PARTNER_MEGA         CUSTOM_MEGA_START + 110
 #define SPECIES_DURALUDON_PARTNER_MEGA      CUSTOM_MEGA_START + 111
+#define SPECIES_FIDOUGH_PARTNER_MEGA        CUSTOM_MEGA_START + 112
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_DURALUDON_PARTNER_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_FIDOUGH_PARTNER_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA

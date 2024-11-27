@@ -474,6 +474,7 @@ static const u16 sCastformFormSpeciesIdTable[] = {
     SPECIES_CASTFORM_SUNNY,
     SPECIES_CASTFORM_RAINY,
     SPECIES_CASTFORM_SNOWY,
+    SPECIES_CASTFORM_FOGGY,
     FORM_SPECIES_END,
 };
 
@@ -1900,6 +1901,12 @@ static const u16 sKartana_FallenFormSpeciesIdTable[] = {
 static const u16 sTinkatonFormSpeciesIdTable[] = {
     SPECIES_TINKATON,
     SPECIES_TINKATON_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sFidoughFormSpeciesIdTable[] = {
+    SPECIES_FIDOUGH,
+    SPECIES_FIDOUGH_PARTNER,
+    SPECIES_FIDOUGH_PARTNER_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sGyaradeathFormSpeciesIdTable[] = {

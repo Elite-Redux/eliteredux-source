@@ -2991,6 +2991,11 @@ static const u8 sDuraluditeDesc[] = _(
     "DuraludonP. to Mega\n"
     "Evolve in battle.");
 
+static const u8 sFidoughiteDesc[] = _(
+    "This stone enables\n"
+    "FidoughP. to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sAbsoliteDesc[] = _(
     "This stone enables\n"
     "Absol to Mega\n"

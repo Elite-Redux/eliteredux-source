@@ -1787,7 +1787,7 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_ZEPHYR_RUSH] = _("Zephyr Rush"),
     [MOVE_SHOCKING_JAB] = _("Shocking Jab"),
     [MOVE_SHOCKING_EDGE] = _("Shocking Edge"),
-    [MOVE_LIGHTNING_STRIKE] = _("Lighting Strike"),
+    [MOVE_LIGHTNING_STRIKE] = _("Lightning Strike"),
     [MOVE_VOLT_BOLT] = _("Volt Bolt"),
     [MOVE_KINETIC_BARRAGE] = _("Kinetic Barrage"),
     [MOVE_FERTILE_FANGS] = _("Fertile Fangs"),
@@ -2002,4 +2002,5 @@ const u8 gMoveNamesLong[MOVES_COUNT][LONG_MOVE_NAME_LENGTH + 1] =
     [MOVE_BERSERKER_HORN] = _("Berserker Horn"),
     [MOVE_ONI_FIST] = _("Oni Fist"),
     [MOVE_INSECT_IMPACT] = _("Insect Impact"),
+    [MOVE_LIGHTNING_BULLET] = _("Lightning Bullet"),
 };

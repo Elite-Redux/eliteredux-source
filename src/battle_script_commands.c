@@ -1773,17 +1773,17 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState*
     gPotentialItemEffectBattler = battlerDef;
     accStage     = gBattleMons[battlerAtk].statStages[STAT_ACC];
     evasionStage = gBattleMons[battlerDef].statStages[STAT_EVASION];
-    if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED)
-        evasionStage = 6;
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_KEEN_EYE)
-                || IsUnaware(battlerAtk)
-                || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MINDS_EYE))
-        evasionStage = 6;
+    if (gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED
+        || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_KEEN_EYE)
+        || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MINDS_EYE))
+        evasionStage = min(evasionStage, DEFAULT_STAT_STAGE);
+    else if (IsUnaware(battlerAtk))
+        evasionStage = DEFAULT_STAT_STAGE;
 
     if (gBattleMons[battlerDef].status2 & STATUS2_FORESIGHT)
         buff = accStage;
     else
-        buff = accStage + 6 - evasionStage;
+        buff = accStage + DEFAULT_STAT_STAGE - evasionStage;
 
     if (buff < 0)
         buff = 0;

@@ -742,6 +742,21 @@ static const union AnimCmd sAnim_CASTFORM_SANDY_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_CASTFORM_FOGGY_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_FIDOUGH_PARTNER_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+static const union AnimCmd sAnim_FIDOUGH_PARTNER_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_KINGAMBIT_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -1487,6 +1502,16 @@ static const union AnimCmd *const sAnims_LARVITAR_REDUX[] ={
 static const union AnimCmd *const sAnims_CASTFORM_SANDY[] ={
     sAnim_GeneralFrame0,
     sAnim_CASTFORM_SANDY_1,
+};
+
+static const union AnimCmd *const sAnims_CASTFORM_FOGGY[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CASTFORM_FOGGY_1,
+};
+
+static const union AnimCmd *const sAnims_FIDOUGH_PARTNER_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FIDOUGH_PARTNER_MEGA_1,
 };
 
 static const union AnimCmd *const sAnims_KINGAMBIT_REDUX[] ={
@@ -18557,6 +18582,11 @@ static const union AnimCmd *const sAnims_FIDOUGH[] ={
     sAnim_FIDOUGH_1,
 };
 
+static const union AnimCmd *const sAnims_FIDOUGH_PARTNER[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FIDOUGH_1,
+};
+
 static const union AnimCmd *const sAnims_DACHSBUN[] ={
     sAnim_GeneralFrame0,
     sAnim_DACHSBUN_1,
@@ -21220,6 +21250,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(MAUSHOLD),
     ANIM_CMD(MAWILE_MEGA),
     ANIM_CMD(FIDOUGH),
+    ANIM_CMD(FIDOUGH_PARTNER),
+    ANIM_CMD(FIDOUGH_PARTNER_MEGA),
     ANIM_CMD(AGGRON_MEGA),
     ANIM_CMD(DACHSBUN),
     ANIM_CMD(MEDICHAM_MEGA),
@@ -21554,6 +21586,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(PUPITAR_REDUX),
     ANIM_CMD(LARVITAR_REDUX),
     ANIM_CMD(CASTFORM_SANDY),
+    ANIM_CMD(CASTFORM_FOGGY),
     ANIM_CMD(KINGAMBIT_REDUX),
     ANIM_CMD(DIALGA_ORIGIN),
     ANIM_CMD(PALKIA_ORIGIN),

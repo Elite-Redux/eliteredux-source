@@ -955,6 +955,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_TANDEMAUS] = _("Tandemaus"),
     [SPECIES_MAUSHOLD] = _("Maushold"),
     [SPECIES_FIDOUGH] = _("Fidough"),
+    [SPECIES_FIDOUGH_PARTNER] = _("Fidough"),
+    [SPECIES_FIDOUGH_PARTNER_MEGA] = _("Fidough"),
     [SPECIES_DACHSBUN] = _("Dachsbun"),
     [SPECIES_SMOLIV] = _("Smoliv"),
     [SPECIES_DOLLIV] = _("Dolliv"),
@@ -1533,6 +1535,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_CASTFORM_SUNNY] = _("Castform"),
     [SPECIES_CASTFORM_RAINY] = _("Castform"),
     [SPECIES_CASTFORM_SNOWY] = _("Castform"),
+    [SPECIES_CASTFORM_FOGGY] = _("Castform"),
     // Deoxys
     [SPECIES_DEOXYS_ATTACK] = _("Deoxys"),
     [SPECIES_DEOXYS_DEFENSE] = _("Deoxys"),
@@ -1739,7 +1742,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     // Sinistea
     [SPECIES_SINISTEA_ANTIQUE] = _("Sinistea"),
     // Polteageist
-    [SPECIES_POLTEAGEIST_ANTIQUE] = _("Polteageis"),
+    [SPECIES_POLTEAGEIST_ANTIQUE] = _("Polteageist"),
     // Alcremie
     [SPECIES_ALCREMIE_RUBY_CREAM] = _("AlcremieRuby"),
     [SPECIES_ALCREMIE_MATCHA_CREAM] = _("AlcremieMat."),

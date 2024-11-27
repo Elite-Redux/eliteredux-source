@@ -5087,6 +5087,16 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0,
         .y_offset =  12
     },
+    [SPECIES_FIDOUGH_PARTNER] =
+    {
+        .size = 0,
+        .y_offset =  12
+    },
+    [SPECIES_FIDOUGH_PARTNER_MEGA] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_DACHSBUN] =
     {
         .size = 0,
@@ -7382,6 +7392,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .y_offset = 0,
     },
     [SPECIES_CASTFORM_SNOWY] =
+    {
+        .size = 0x34,
+        .y_offset = 0,
+    },
+    [SPECIES_CASTFORM_FOGGY] =
     {
         .size = 0x34,
         .y_offset = 0,

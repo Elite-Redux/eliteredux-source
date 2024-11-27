@@ -1045,13 +1045,9 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_VOLT_ABSORB] = 1,
     [ABILITY_WATER_ABSORB] = 1,
     [ABILITY_WATER_VEIL] = 1,
-    [ABILITY_WHITE_SMOKE] = 1,
     [ABILITY_WONDER_GUARD] = 1,
-    [ABILITY_BIG_PECKS] = 1,
     [ABILITY_CONTRARY] = 1,
     [ABILITY_FRIEND_GUARD] = 1,
-    [ABILITY_HEAVY_METAL] = 1,
-    [ABILITY_LIGHT_METAL] = 1,
     [ABILITY_MAGIC_BOUNCE] = 1,
     [ABILITY_MULTISCALE] = 1,
     [ABILITY_SAP_SIPPER] = 1,
@@ -1076,7 +1072,6 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     // New abilities
     [ABILITY_DUNE_TERROR] = 1,
     [ABILITY_GIFTED_MIND] = 1,
-    [ABILITY_HYDRO_CIRCUIT] = 1,
     [ABILITY_DESERT_CLOAK] = 1,
     [ABILITY_ARCTIC_FUR] = 1,
     [ABILITY_BIG_LEAVES] = 1,
@@ -1140,6 +1135,8 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_TERAFORM_ZERO] = 1,
     [ABILITY_SUPERSWEET_SYRUP] = 1,
     [ABILITY_BREAKWATER] = 1,
+    [ABILITY_AURA_BREAK] = 1,
+    [ABILITY_ARMOR_TAIL] = 1,
     // Intentionally not included: 
     //   Color Change
     //   Prismatic Fur
@@ -4745,6 +4742,7 @@ static const u16 sHpTransformations[][4] =
 bool32 ShouldChangeFormHpBased(u32 battler)
 {
     u32 i;
+    int species = gBattleMons[battler].species;
 
     if (gBattleMons[battler].status2 & STATUS2_TRANSFORMED) return FALSE;
     if (!IsBattlerAlive(battler)) return FALSE;
@@ -4754,7 +4752,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
         if (BattlerHasAbility(battler, sHpTransformations[i][0], FALSE))
         {
             if (sHpTransformations[i][0] == ABILITY_SCHOOLING && gBattleMons[battler].level < 20) continue;
-            if (gBattleMons[battler].species == sHpTransformations[i][2]
+            if (species == sHpTransformations[i][2]
                 && gBattleMons[battler].hp > gBattleMons[battler].maxHP / sHpTransformations[i][3])
             {
                 if (sHpTransformations[i][0] == ABILITY_SHIELDS_DOWN && GetAbilityState(battler, ABILITY_SHIELDS_DOWN))
@@ -4766,7 +4764,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
                 gBattleMons[battler].species = sHpTransformations[i][1];
                 return TRUE;
             }
-            if (gBattleMons[battler].species == sHpTransformations[i][1]
+            if (species == sHpTransformations[i][1]
                 && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / sHpTransformations[i][3])
             {
                 gBattleScripting.abilityPopupOverwrite = sHpTransformations[i][0];
@@ -4778,8 +4776,8 @@ bool32 ShouldChangeFormHpBased(u32 battler)
     }
 
     //Darmanitan
-    if (gBattleMons[battler].species == SPECIES_DARMANITAN && 
-	    (BATTLER_HAS_ABILITY(battler, ABILITY_ZEN_MODE)) &&
+    if (species == SPECIES_DARMANITAN && 
+	    (BattlerHasAbility(battler, ABILITY_ZEN_MODE, FALSE)) &&
 		gBattleMons[battler].hp != 0) {
             gBattleScripting.abilityPopupOverwrite = ABILITY_ZEN_MODE;
             gBattlerAttacker = battler;
@@ -4789,8 +4787,8 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 	}
 
     //Darmanitan Galarian
-    if (gBattleMons[battler].species == SPECIES_DARMANITAN_GALARIAN && 
-	    (BATTLER_HAS_ABILITY(battler, ABILITY_ZEN_MODE)) &&
+    if (species == SPECIES_DARMANITAN_GALARIAN && 
+	    (BattlerHasAbility(battler, ABILITY_ZEN_MODE, FALSE)) &&
 		gBattleMons[battler].hp != 0) {
             gBattleScripting.abilityPopupOverwrite = ABILITY_ZEN_MODE;
             gBattlerAttacker = battler;
@@ -4800,59 +4798,32 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 	}
 
     //Castform
-    if ((gBattleMons[battler].species == SPECIES_CASTFORM       ||
-         gBattleMons[battler].species == SPECIES_CASTFORM_RAINY ||
-         gBattleMons[battler].species == SPECIES_CASTFORM_SUNNY ||
-         gBattleMons[battler].species == SPECIES_CASTFORM_SANDY ||
-         gBattleMons[battler].species == SPECIES_CASTFORM_SNOWY) && 
-	    BATTLER_HAS_ABILITY(battler, ABILITY_FORECAST) &&
-		gBattleMons[battler].hp != 0) {
-		if (gBattleWeather & (WEATHER_RAIN_ANY) && gBattleMons[battler].species != SPECIES_CASTFORM_RAINY)
+    if (BattlerHasAbility(battler, ABILITY_FORECAST, FALSE)
+        && IsBattlerAlive(battler)
+        && GET_BASE_SPECIES_ID(species) == SPECIES_CASTFORM)
+    {
+        int newSpecies = SPECIES_NONE;
+        if (!IsWeatherActive(WEATHER_ANY)) newSpecies = SPECIES_CASTFORM;
+        else if (gBattleWeather & WEATHER_RAIN_ANY) newSpecies = SPECIES_CASTFORM_RAINY;
+        else if (gBattleWeather & WEATHER_SUN_ANY) newSpecies = SPECIES_CASTFORM_SUNNY;
+        else if (gBattleWeather & WEATHER_SANDSTORM_ANY) newSpecies = SPECIES_CASTFORM_SANDY;
+        else if (gBattleWeather & WEATHER_FOG_ANY) newSpecies = SPECIES_CASTFORM_FOGGY;
+        else if (gBattleWeather & WEATHER_HAIL_ANY) newSpecies = SPECIES_CASTFORM_SNOWY;
+        else newSpecies = SPECIES_CASTFORM;
+
+        if (newSpecies && newSpecies != species)
         {
             gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
             gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM_RAINY);
-            gBattleMons[battler].species = SPECIES_CASTFORM_RAINY;
+            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+            gBattleMons[battler].species = newSpecies;
 			return TRUE;
         }
-        else if (gBattleWeather & (WEATHER_SUN_ANY) && gBattleMons[battler].species != SPECIES_CASTFORM_SUNNY)
-        {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
-            gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM_SUNNY);
-            gBattleMons[battler].species = SPECIES_CASTFORM_SUNNY;
-			return TRUE;
-        }
-		else if (gBattleWeather & (WEATHER_HAIL_ANY) && gBattleMons[battler].species != SPECIES_CASTFORM_SNOWY)
-        {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
-            gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM_SNOWY);
-            gBattleMons[battler].species = SPECIES_CASTFORM_SNOWY;
-			return TRUE;
-        }
-		else if (gBattleWeather & (WEATHER_SANDSTORM_ANY) && gBattleMons[battler].species != SPECIES_CASTFORM_SANDY)
-        {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
-            gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM_SANDY);
-            gBattleMons[battler].species = SPECIES_CASTFORM_SANDY;
-			return TRUE;
-        }else if (!(gBattleWeather & (WEATHER_ANY)) && gBattleMons[battler].species != SPECIES_CASTFORM) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_FORECAST;
-            gBattlerAttacker = battler;
-            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_CASTFORM);
-            gBattleMons[battler].species = SPECIES_CASTFORM;
-			return TRUE;
-        }
-        else {
-			return FALSE;
-        }
-	}
+    }
 
     //Cherrim
     if (gBattleMons[battler].species == SPECIES_CHERRIM && 
-	          BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT) &&
+	          BattlerHasAbility(battler, ABILITY_FLOWER_GIFT, FALSE) &&
 		      gBattleMons[battler].hp != 0) {
 			if (gBattleWeather & (WEATHER_SUN_ANY))
         {
@@ -4864,7 +4835,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
 		}
 	}
     else if (gBattleMons[battler].species == SPECIES_CHERRIM_SUNSHINE &&
-	          BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT) &&
+	          BattlerHasAbility(battler, ABILITY_FLOWER_GIFT, FALSE) &&
 		      gBattleMons[battler].hp != 0) {
 			if (!(gBattleWeather & (WEATHER_SUN_ANY)))
         {
@@ -6117,6 +6088,8 @@ bool32 IsUnsuppressableAbility(u32 ability)
     case ABILITY_HUNGER_SWITCH:
     case ABILITY_BLOOD_STAIN:
     case ABILITY_BLOOD_STIGMA:
+    case ABILITY_FLOWER_GIFT:
+    case ABILITY_COMMANDER:
         return TRUE;
     default:
         return FALSE;
@@ -8633,11 +8606,11 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         basePower = 10 * (255 - gBattleMons[battlerAtk].friendship) / 25;
         break;
     case EFFECT_FURY_CUTTER:
-        for (i = 1; i < gVolatileStructs[battlerAtk].furyCutterCounter; i++)
-            basePower *= 2;
+        REQUIRE(gVolatileStructs[battlerAtk].furyCutterCounter);
+        basePower = basePower << (gVolatileStructs[battlerAtk].furyCutterCounter - 1);
         break;
     case EFFECT_ROLLOUT:
-        if (gProcessingExtraAttacks || !gVolatileStructs[battlerAtk].rolloutCounter) break;
+        REQUIRE(gVolatileStructs[battlerAtk].rolloutCounter)
         basePower = basePower << (gVolatileStructs[battlerAtk].rolloutCounter - 1);
         break;
     case EFFECT_MAGNITUDE:
@@ -8647,8 +8620,8 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef)
         basePower = gBattleStruct->presentBasePower;
         break;
     case EFFECT_TRIPLE_KICK:
-        if (gTurnStructs[battlerAtk].multiHitCounter)
-            basePower *= 4 - gTurnStructs[battlerAtk].multiHitCounter;
+        REQUIRE(gTurnStructs[battlerAtk].multiHitCounter)
+        basePower *= 4 - gTurnStructs[battlerAtk].multiHitCounter;
         break;
     case EFFECT_SPIT_UP:
         basePower = 100 * gVolatileStructs[battlerAtk].stockpileCounter;
@@ -10248,9 +10221,9 @@ void SetSwapDamageCategory(int battler, int target, int move)
         
         case USE_HIGHEST_OFFENSE:
             {
-                int isUnaware = IsUnaware(target);
-                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
-                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isUnaware, FALSE);
+                int isTargetUnaware = IsUnaware(target);
+                int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
+                int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, FALSE, isTargetUnaware, FALSE);
                 if (atk > spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_SPECIAL;
                 else if (atk < spAtk) gSwapDamageCategory = gBattleMoves[move].split == SPLIT_PHYSICAL;
                 else gSwapDamageCategory = Random() % 2;
@@ -10295,8 +10268,10 @@ static u32 CalcDefenseStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, 
 {
     u8 defStatToUse = 0;
     u32 defStat;
-    u8 noPositiveStatStages = isCrit || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, TRUE));
-    u8 isUnaware = IsUnaware(battlerAtk) || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED;
+    u8 noPositiveStatStages = isCrit
+        || gBattleMoves[move].flags & FLAG_STAT_STAGES_IGNORED
+        || (gBattleMons[battlerDef].status2 & STATUS2_WRAPPED && BattlerHasAbility(battlerAtk, ABILITY_GRIP_PINCER, FALSE));
+    u8 isUnaware = IsUnaware(battlerAtk);
     u16 modifier;
     int i;
 
@@ -11360,6 +11335,7 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut)
         {SPECIES_CASTFORM_SNOWY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SUNNY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_CASTFORM_SANDY,                SPECIES_CASTFORM,               TRUE},
+        {SPECIES_CASTFORM_FOGGY,                SPECIES_CASTFORM,               TRUE},
         {SPECIES_LUMBERING_SLOTH_ENGULFED,      SPECIES_LUMBERING_SLOTH,        TRUE},
     };
 
