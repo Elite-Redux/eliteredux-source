@@ -2100,6 +2100,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
     //Never Critical
     else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_SHELL_ARMOR) ||
              BATTLER_HAS_ABILITY(battlerDef, ABILITY_BATTLE_ARMOR) ||
+             BATTLER_HAS_ABILITY(battlerDef, ABILITY_CRUST_COAT) ||
              BATTLER_HAS_ABILITY(battlerDef, ABILITY_DREAM_STATE) ||
              IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK))
     {

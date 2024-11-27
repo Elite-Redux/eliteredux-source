@@ -9451,6 +9451,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
     
     case ABILITY_SHELL_ARMOR:
     case ABILITY_BATTLE_ARMOR:
+    case ABILITY_CRUST_COAT:
     case ABILITY_DREAM_STATE:
         MUL(.8);
         return;
@@ -15095,6 +15096,17 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         gSideTimers[side].started.spiderWeb = TRUE;
         gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
         gSideTimers[side].stickyWebTimer = 5;
+        BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);
+        }
+        return TRUE;
+
+    case ABILITY_SPIDER_LAIR_UPGRADE:
+        REQUIRE_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
+        {
+        int side = BATTLE_OPPOSITE(battler);
+        gSideTimers[side].started.spiderWeb = TRUE;
+        gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
+        gSideTimers[side].stickyWebTimer = 7;
         BattleScriptPushCursorAndCallback(BattleScript_SpiderLairActivated);
         }
         return TRUE;
