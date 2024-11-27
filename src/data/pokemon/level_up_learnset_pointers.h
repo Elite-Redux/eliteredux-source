@@ -1388,6 +1388,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_CASTFORM_SUNNY] = sCastformLevelUpLearnset,
     [SPECIES_CASTFORM_RAINY] = sCastformLevelUpLearnset,
     [SPECIES_CASTFORM_SNOWY] = sCastformLevelUpLearnset,
+    [SPECIES_CASTFORM_SANDY] = sCastformLevelUpLearnset,
+    [SPECIES_CASTFORM_FOGGY] = sCastformLevelUpLearnset,
     // Deoxys
     [SPECIES_DEOXYS_ATTACK] = sDeoxysLevelUpLearnset,
     [SPECIES_DEOXYS_DEFENSE] = sDeoxysLevelUpLearnset,
@@ -1628,8 +1630,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_CASCOON_PRIMAL] = sCascoonLevelUpLearnset,
 
     [SPECIES_KINGAMBIT_REDUX] = sKingambit_ReduxLevelUpLearnset,
-    [SPECIES_CASTFORM_SANDY] = sCastformLevelUpLearnset,
-    [SPECIES_CASTFORM_FOGGY] = sCastformLevelUpLearnset,
     [SPECIES_TYRANITAR_MEGA_REDUX] = sTyranitar_Mega_ReduxLevelUpLearnset,
     [SPECIES_URSALUNA_MEGA] = sUrsaluna_MegaLevelUpLearnset,
     [SPECIES_IRON_EXO] = sIron_ExoLevelUpLearnset,
