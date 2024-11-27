@@ -4809,6 +4809,7 @@ bool32 ShouldChangeFormHpBased(u32 battler)
         else if (gBattleWeather & WEATHER_SANDSTORM_ANY) newSpecies = SPECIES_CASTFORM_SANDY;
         else if (gBattleWeather & WEATHER_FOG_ANY) newSpecies = SPECIES_CASTFORM_FOGGY;
         else if (gBattleWeather & WEATHER_HAIL_ANY) newSpecies = SPECIES_CASTFORM_SNOWY;
+        else newSpecies = SPECIES_CASTFORM;
 
         if (newSpecies && newSpecies != species)
         {
