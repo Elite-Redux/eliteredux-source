@@ -12394,25 +12394,24 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
             switch (i)
             {
             case 0:
-                if (HandleImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
-                    return TRUE;
-                break;
+                REQUIRE(HandleImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+
+                *abilityPopup = ability;
+                return TRUE;
             
             case 2:
-                if (HandleAlliedImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
-                {
-                    *overrideBattler = testBattler;
-                    return TRUE;
-                }
-                break;
+                REQUIRE(HandleAlliedImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+
+                *abilityPopup = ability;
+                *overrideBattler = testBattler;
+                return TRUE;
             
             default:
-                if (HandleAnyImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
-                {
-                    *overrideBattler = testBattler;
-                    return TRUE;
-                }
-                break;
+                REQUIRE(HandleAnyImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+                
+                *abilityPopup = ability;
+                *overrideBattler = testBattler;
+                return TRUE;
             }
         }
     }
@@ -12429,7 +12428,7 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     return FALSE;
 }
 
-static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
+static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript)
 {
     switch (ability)
     {
@@ -12488,17 +12487,17 @@ static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int m
     return FALSE;
 }
 
-static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
+static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript)
 {
     switch (ability)
     {
     case ABILITY_RADIANCE:
-        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript, abilityPopup);
+        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript);
     }
     return FALSE;
 }
 
-static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
+static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript)
 {
     switch (ability)
     {
@@ -12508,7 +12507,7 @@ static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker,
     case ABILITY_UNICORN:
     case ABILITY_ARMOR_TAIL:
     case ABILITY_DAZZLING:
-        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript, abilityPopup);
+        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript);
     }
     return FALSE;
 }
