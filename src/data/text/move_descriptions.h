@@ -3472,8 +3472,8 @@ static const u8 sMoveTwoLineDescription_MoveMakeItRain[] = _(
     "Lower's user SPA");
 
 static const u8 sMoveTwoLineDescription_MovePsyblade[] = _(
-    "The user rends the target with an ethereal blade,\n"
-    "stronger in electric terrain");
+    "The user rends the target with an\n"
+    "ethereal blade.");
 
 static const u8 sMoveTwoLineDescription_MoveRuination[] = _(
     "The user summons a ruinous disaster.\n"
@@ -3556,8 +3556,8 @@ static const u8 sMoveTwoLineDescription_MoveThunderclap[] = _(
     "Fails if the target is not readying an attack.");
 
 static const u8 sMoveTwoLineDescription_MoveTachyonCutter[] = _(
-    "Launches particle blades at the target twice in a row.\n"
-    "Never misses.");
+    "Launches particle blades at the\n"
+    "target twice in a row.");
 
 static const u8 sMoveTwoLineDescription_MoveHardPress[] = _(
     "Crushes quicker foes,\n"
