@@ -5136,6 +5136,10 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
 		priority++;
 	}
 
+    if ((gStatuses4[battlerId] & STATUS4_CUTTHROAT) && (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)) {
+		priority++;
+	}
+
     if (move == MOVE_RAZOR_WIND && (gSideStatuses[0] & SIDE_STATUS_TAILWIND || gSideStatuses[1] & SIDE_STATUS_TAILWIND))
         priority++;
     
