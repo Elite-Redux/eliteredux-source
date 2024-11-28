@@ -720,6 +720,7 @@ static const u8 sAbilityEnergySiphonDescription[] = _("Heals the user for 1/4\no
 static const u8 sAbilityReservoirDescription[] = _("Water Absorb + Storm Drain.");
 static const u8 sAbilityNeurotoxinDescription[] = _("Inflicting poison also lowers\nAttack, Defense, and Speed.");
 static const u8 sAbilityEnergizedHornsDescription[] = _("Mighty horn moves become special\nand deal 30% more damage.");
+static const u8 sAbilitySpiderLairUpgradeDescription[] = _("Casts Sticky Web on entry.\nLasts 7 turns.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1475,6 +1476,9 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_RESERVOIR] = _("Reservoir"),
     [ABILITY_NEUROTOXIN] = _("Neurotoxin"),
     [ABILITY_ENERGIZED_HORNS] = _("Energy Horns"),
+    [ABILITY_CRUST_COAT] = _("Crust Coat"),
+    [ABILITY_SPIDER_LAIR_UPGRADE] = _("Rising Dough"),
+    [ABILITY_PUFFY] = _("Puffy"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2231,4 +2235,7 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_RESERVOIR] = sAbilityReservoirDescription,
     [ABILITY_NEUROTOXIN] = sAbilityNeurotoxinDescription,
     [ABILITY_ENERGIZED_HORNS] = sAbilityEnergizedHornsDescription,
+    [ABILITY_SPIDER_LAIR_UPGRADE] = sAbilitySpiderLairUpgradeDescription,
+    [ABILITY_CRUST_COAT] = sAbilityBattleArmorDescription,
+    [ABILITY_PUFFY] = sAbilityFluffyDescription,
 };

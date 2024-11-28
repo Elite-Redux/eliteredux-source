@@ -83,7 +83,7 @@ int ScoreAttackAbility(int ability, int battlerAtk, int battlerDef, int move, in
     case ABILITY_GULP_MISSILE:
         REQUIRE_NOT(gBattleMons[battlerAtk].status2 && STATUS2_TRANSFORMED)
         REQUIRE(gBattleMons[battlerAtk].species == SPECIES_CRAMORANT)
-        REQUIRE(move == MOVE_SURF || move == MOVE_DIVE)
+        REQUIRE(move == MOVE_SURF || move == MOVE_TRIPLE_DIVE || move == MOVE_DIVE)
         // TODO: Half HP calc
         return AI_SCORE_FORM_CHANGE(battlerAtk, SPECIES_CRAMORANT_GORGING);
 

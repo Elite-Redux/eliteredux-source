@@ -2100,6 +2100,7 @@ s32 CalcCritChanceStage(u8 battlerAtk, u8 battlerDef, u32 move, bool32 recordAbi
     //Never Critical
     else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_SHELL_ARMOR) ||
              BATTLER_HAS_ABILITY(battlerDef, ABILITY_BATTLE_ARMOR) ||
+             BATTLER_HAS_ABILITY(battlerDef, ABILITY_CRUST_COAT) ||
              BATTLER_HAS_ABILITY(battlerDef, ABILITY_DREAM_STATE) ||
              IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK))
     {
@@ -10706,6 +10707,7 @@ static void Cmd_various(void)
                 case ITEM_LIGHT_BALL:
                     gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
                     break;
+                case ITEM_BLACK_SLUDGE:
                 case ITEM_POISON_BARB:
                     gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
                     break;
