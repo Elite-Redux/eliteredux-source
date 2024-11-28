@@ -3472,8 +3472,8 @@ static const u8 sMoveTwoLineDescription_MoveMakeItRain[] = _(
     "Lower's user SPA");
 
 static const u8 sMoveTwoLineDescription_MovePsyblade[] = _(
-    "The user rends the target with an ethereal blade,\n"
-    "stronger in electric terrain");
+    "The user rends the target with an\n"
+    "ethereal blade.");
 
 static const u8 sMoveTwoLineDescription_MoveRuination[] = _(
     "The user summons a ruinous disaster.\n"
@@ -3556,8 +3556,8 @@ static const u8 sMoveTwoLineDescription_MoveThunderclap[] = _(
     "Fails if the target is not readying an attack.");
 
 static const u8 sMoveTwoLineDescription_MoveTachyonCutter[] = _(
-    "Launches particle blades at the target twice in a row.\n"
-    "Never misses.");
+    "Launches particle blades at the\n"
+    "target twice in a row.");
 
 static const u8 sMoveTwoLineDescription_MoveHardPress[] = _(
     "Crushes quicker foes,\n"
@@ -3921,12 +3921,12 @@ static const u8 sMoveTwoLineDescription_MoveOniFist[] = _(
     "is thrown from shadows.");
 
 static const u8 sMoveTwoLineDescription_MoveInsectImpact[] = _(
-    "A punch that may drop the\n"
-    "target's defense stat.");
-
-static const u8 sMoveTwoLineDescription_MoveInsectImpact[] = _(
     "An energy bullet attack\n"
     "that may paralyze the foe.");
+
+static const u8 sMoveTwoLineDescription_MoveLightningBullet[] = _(
+    "Shoots a powerful energy\n"
+    "projectile that may paralyze.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -5098,7 +5098,7 @@ static const u8 sMoveFourLineDescription_MoveSubstitute[] = _("The user creates 
 static const u8 sMoveFourLineDescription_MoveStruggle[] = _("An attack that is\nused only if there\nis no PP. It also\nhurts the user.");
 static const u8 sMoveFourLineDescription_MoveSketch[] = _("This move copies\nthe move last used\nby the foe, then\ndisappears.");
 static const u8 sMoveFourLineDescription_MoveTripleKick[] = _("A 3-kick attack.\nMore powerful with\neach successive hit.\nStriker boost.");
-static const u8 sMoveFourLineDescription_MoveThief[] = _("Steals or removes the\nfoe's item. +1 priority\nif the foe has no\nitem.");
+static const u8 sMoveFourLineDescription_MoveThief[] = _("Steals or removes the\nfoe's item. +1 priority\nif the user has no\nitem.");
 static const u8 sMoveFourLineDescription_MoveSpiderWeb[] = _("Ensnares the foe \nwith sticky string\nso it doesn't flee\nor switch out.");
 static const u8 sMoveFourLineDescription_MoveMindReader[] = _("Dodges all attacks\nand lowers the SpDef\nof attackers. May fail\nif used in succession.");
 static const u8 sMoveFourLineDescription_MoveNightmare[] = _("Deals heavy damage\nto a sleeping foe and\nmakes them lose 1/4\nHP each turn.");
@@ -5273,7 +5273,7 @@ static const u8 sMoveFourLineDescription_MoveBulkUp[] = _("The user bulks up\nit
 static const u8 sMoveFourLineDescription_MoveBounce[] = _("The user bounces\non the foe on the\n2nd turn. 30%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveMudShot[] = _("Has a 10% chance\nto drop foe's Speed.\nHas +1 priority.\nMega Launcher boost");
 static const u8 sMoveFourLineDescription_MovePoisonTail[] = _("An attack that forces\nthe target to switch.\n10% poison chance.");
-static const u8 sMoveFourLineDescription_MoveCovet[] = _("Steals or removes the\nfoe's item. +1 priority\nif the foe has no\nitem.");
+static const u8 sMoveFourLineDescription_MoveCovet[] = _("Steals or removes the\nfoe's item. +1 priority\nif the user has no\nitem.");
 static const u8 sMoveFourLineDescription_MoveVoltTackle[] = _("The user throws an\nelectrified tackle.\n25% recoil, 10%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveMagicalLeaf[] = _("Attacks with a\nleaf that can't be\nevaded and deals\nphysical damage.");
 static const u8 sMoveFourLineDescription_MoveWaterSport[] = _("Weakens Fire-type\nattacks while the\nuser is in the\nbattle.");
@@ -5486,7 +5486,7 @@ static const u8 sMoveFourLineDescription_MoveFieryDance[] = _("The user flaps it
 static const u8 sMoveFourLineDescription_MoveFreezeShock[] = _("Paralyzes attackers\nthat make contact\nwhile charging. 30%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveIceBurn[] = _("Burns attackers that\nmake contact while\ncharging. 30% burn\nchance.");
 static const u8 sMoveFourLineDescription_MoveSnarl[] = _("The user yells as\nif it is ranting,\nlowering the Sp.\nAtk of its foe.");
-static const u8 sMoveFourLineDescription_MoveIcicleCrash[] = _("Sharp icicles fall\nonto the foe, with\na 30% flinch\nchance.");
+static const u8 sMoveFourLineDescription_MoveIcicleCrash[] = _("Sharp icicles fall\nonto the foe, with\na 20% flinch\nchance.");
 static const u8 sMoveFourLineDescription_MoveVCreate[] = _("A powerful strike\nthat lowers the\nuser's Defense, Sp.\nDef and Speed.");
 static const u8 sMoveFourLineDescription_MoveFusionFlare[] = _("A giant flame that\ndeals more damage\nwhen joined with\na big thunderbolt.");
 static const u8 sMoveFourLineDescription_MoveFusionBolt[] = _("A giant thunderbolt\nthat deals more\ndamage when joined\nwith a big flame.");

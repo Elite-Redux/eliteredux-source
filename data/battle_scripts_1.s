@@ -2369,6 +2369,7 @@ BattleScript_NoTurningBack::
 	swapbattlerandtargetvia34
 	call BattleScript_AllStatsUp
 	restoreattackerandtargetfrom34
+	return
 
 BattleScript_EffectLastResort:
 	attackcanceler
@@ -12635,9 +12636,13 @@ BattleScript_EffectSharpen_AfterCrit:
 	getbattler BS_ATTACKER
 	printfromtable gCritRaisedStrings
 	waitmessage B_WAIT_TIME_LONG
+BattleScript_EffectSharpen_TryCutthroat:
+	jumpifstatus4 BS_ATTACKER, STATUS4_CUTTHROAT, BattleScript_MoveEnd
+	jumpifability BS_ATTACKER, ABILITY_CUTTHROAT, BattleScript_EffectSharpen_DoCutthroat
+	goto BattleScript_MoveEnd
 BattleScript_EffectSharpen_DoCutthroat:
-	setabilitystate BS_ATTACKER, ABILITY_CUTTHROAT, TRUE, BattleScript_MoveEnd
-BattleScript_EffectSharpen_AfterCutthroat:
+	call BattleScript_AbilityPopUp
+	setstatus4 BS_ATTACKER, STATUS4_CUTTHROAT
 	printstring STRINGID_CUTTHROAT
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
@@ -12647,10 +12652,13 @@ BattleScript_EffectSharpen_CritOnly:
 	waitanimation
 	goto BattleScript_EffectSharpen_AfterCrit
 BattleScript_EffectSharpen_CutthroatOnly:
-	setabilitystate BS_ATTACKER, ABILITY_CUTTHROAT, TRUE, BattleScript_ButItFailed
+	jumpifstatus4 BS_ATTACKER, STATUS4_CUTTHROAT, BattleScript_ButItFailed
+	jumpifability BS_ATTACKER, ABILITY_CUTTHROAT, BattleScript_EffectSharpen_CutthroatOnly_Anim
+	goto BattleScript_ButItFailed
+BattleScript_EffectSharpen_CutthroatOnly_Anim:
 	attackanimation
 	waitanimation
-	goto BattleScript_EffectSharpen_AfterCutthroat
+	goto BattleScript_EffectSharpen_DoCutthroat
 
 
 

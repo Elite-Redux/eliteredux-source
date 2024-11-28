@@ -165,6 +165,7 @@ enum
     STATUS_INFO_ELECTRIFIED,
     STATUS_INFO_PLASMA_FIST,
     STATUS_INFO_COILED,
+    STATUS_INFO_CUTTHROAT,
     STATUS_INFO_PROTOSYNTHESIS,
     STATUS_INFO_QUARK_DRIVE,
     STATUS_INFO_GHASTLY_ECHO,
@@ -878,6 +879,10 @@ void UI_Battle_Menu_Init(MainCallback callback)
                 break;
                 case STATUS_INFO_COILED:
                     if (gStatuses4[j] & STATUS4_COILED)
+                        isExtraInfoShown = TRUE;
+                break;
+                case STATUS_INFO_CUTTHROAT:
+                    if (gStatuses4[j] & STATUS4_CUTTHROAT)
                         isExtraInfoShown = TRUE;
                 break;
                 case STATUS_INFO_PROTOSYNTHESIS:
@@ -2230,7 +2235,11 @@ const u8 sText_Title_Status_Plasma_Fist_Description[]       = _("This Pokémon N
                                                                 "this turn.");
 const u8 sText_Title_Status_Coiled_Up[]                     = _("Coiled Up");
 const u8 sText_Title_Status_Coiled_Up_Description[]         = _("The next biting move used by\n"
-                                                                "this Pokémon will have an\n"
+                                                                "this Pokémon will have\n"
+                                                                "increased priority.");
+const u8 sText_Title_Status_Cutthroat[]                     = _("Cutthroat");
+const u8 sText_Title_Status_Cutthroat_Description[]         = _("The next slicing move used by\n"
+                                                                "this Pokémon will have\n"
                                                                 "increased priority.");
 const u8 sText_Title_Status_Quark_Drive[]                   = _("Quark Drive");
 const u8 sText_Title_Status_Protosynthesis[]                = _("Protosynthesis");
@@ -2833,6 +2842,15 @@ static void PrintStatusTab(void) {
                 
                 //Description
                 StringCopy(gStringVar1, sText_Title_Status_Coiled_Up_Description);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
+                printedInfo = TRUE;
+            break;
+            case STATUS_INFO_CUTTHROAT:
+                StringCopy(gStringVar1, sText_Title_Status_Cutthroat);
+                AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, (y * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_WHITE], 0xFF, gStringVar1);
+                
+                //Description
+                StringCopy(gStringVar1, sText_Title_Status_Cutthroat_Description);
                 AddTextPrinterParameterized4(windowId, FONT_SMALL_NARROW, (x * 8) + x2, ((y + 1) * 8) + y2, 0, 0, sMenuWindowFontColors[FONT_BLACK], 0xFF, gStringVar1);
                 printedInfo = TRUE;
             break;

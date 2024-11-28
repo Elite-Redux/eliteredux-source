@@ -8989,7 +8989,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
         .priority = 4,
-        .flags = FLAG_PROTECTION_MOVE | FLAG_SOUND,
+        .flags = FLAG_SOUND | FLAG_PROTECTION_MOVE,
         .split = SPLIT_STATUS,
     },
     [MOVE_FALSE_SURRENDER] =
@@ -12321,7 +12321,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .accuracy = 85,
         .pp = 10,
         .secondaryEffectChance = 30,
-        .target = MOVE_TARGET_SELECTED,
+        .target = MOVE_TARGET_BOTH,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
         .split = SPLIT_PHYSICAL,
         .airBased = TRUE,

@@ -3549,6 +3549,11 @@ u8 DoBattlerEndTurnEffects(void)
                 gStatuses4[gActiveBattler] &= ~(STATUS4_COILED);
             else
                 SetAbilityState(gActiveBattler, ABILITY_SIDEWINDER, FALSE);
+            
+            if (gStatuses4[gActiveBattler] & STATUS4_CUTTHROAT
+                && gBattleMoves[gLastMoves[gActiveBattler]].flags & FLAG_KEEN_EDGE_BOOST)
+                gStatuses4[gActiveBattler] &= ~STATUS4_CUTTHROAT;
+
             gBattleStruct->turnEffectsTracker++;
             break;
         case ENDTURN_TAUNT:  // taunt
@@ -12389,25 +12394,24 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
             switch (i)
             {
             case 0:
-                if (HandleImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
-                    return TRUE;
-                break;
+                REQUIRE(HandleImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+
+                *abilityPopup = ability;
+                return TRUE;
             
             case 2:
-                if (HandleAlliedImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
-                {
-                    *overrideBattler = testBattler;
-                    return TRUE;
-                }
-                break;
+                REQUIRE(HandleAlliedImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+
+                *abilityPopup = ability;
+                *overrideBattler = testBattler;
+                return TRUE;
             
             default:
-                if (HandleAnyImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
-                {
-                    *overrideBattler = testBattler;
-                    return TRUE;
-                }
-                break;
+                REQUIRE(HandleAnyImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+                
+                *abilityPopup = ability;
+                *overrideBattler = testBattler;
+                return TRUE;
             }
         }
     }
@@ -12424,7 +12428,7 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
     return FALSE;
 }
 
-static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
+static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript)
 {
     switch (ability)
     {
@@ -12483,17 +12487,17 @@ static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int m
     return FALSE;
 }
 
-static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
+static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript)
 {
     switch (ability)
     {
     case ABILITY_RADIANCE:
-        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript, abilityPopup);
+        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript);
     }
     return FALSE;
 }
 
-static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup)
+static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript)
 {
     switch (ability)
     {
@@ -12503,7 +12507,7 @@ static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker,
     case ABILITY_UNICORN:
     case ABILITY_ARMOR_TAIL:
     case ABILITY_DAZZLING:
-        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript, abilityPopup);
+        return HandleImmunityAbilityAs(ability, battler, attacker, move, moveType, immunityScript);
     }
     return FALSE;
 }
@@ -12577,7 +12581,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
     case ABILITY_GULP_MISSILE:
         REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
         REQUIRE(gBattleMons[battler].species == SPECIES_CRAMORANT)
-        REQUIRE((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED)
+        REQUIRE(((gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_TRIPLE_DIVE) && TARGET_TURN_DAMAGED)
             || gStatuses3[battler] & STATUS3_UNDERWATER
             || (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
             
@@ -13892,8 +13896,16 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
         REQUIRE(ShouldChangeFormHpBased(battler))
 
-        BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
-        BattleScriptCall(BattleScript_AbilityPopUp);
+        if (gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
+        {
+            BattleScriptCall(BattleScript_TargetFormChange);
+        }
+        else
+        {
+            gStackBattler1 = battler;
+            BattleScriptCall(BattleScript_ApeShift);
+            BattleScriptCall(BattleScript_AbilityPopUp);
+        }
         return TRUE;
         
     case ABILITY_CROWNED_SWORD:
@@ -14547,6 +14559,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
         REQUIRE(ShouldChangeFormHpBased(battler))
 
+        gStackBattler1 = battler;
         BattleScriptPushCursorAndCallback(BattleScript_End3);
         BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
         BattleScriptCall(BattleScript_AbilityPopUp);
@@ -15568,6 +15581,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
         REQUIRE(ShouldChangeFormHpBased(battler))
 
+        gStackBattler1 = battler;
         BattleScriptPushCursorAndCallback(BattleScript_End3);
         BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
         BattleScriptCall(BattleScript_AbilityPopUp);
@@ -15658,7 +15672,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
     
     case ABILITY_TRUANT:
         if (GetAbilityState(battler, ability)) SetAbilityState(battler, ability, FALSE);
-        else if (!IS_MOVE_STATUS(gChosenMoveByBattler[battler])) SetAbilityState(battler, ability, TRUE);
+        else if (gChosenMoveByBattler[battler] && !IS_MOVE_STATUS(gChosenMoveByBattler[battler])) SetAbilityState(battler, ability, TRUE);
         break;
     
     case ABILITY_BAD_DREAMS:

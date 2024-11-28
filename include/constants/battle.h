@@ -184,6 +184,7 @@
 #define STATUS4_COMMANDED               (1 << 5)
 #define STATUS4_DRAGON_CHEER            (1 << 6)
 #define STATUS4_FEAR                    (1 << 7)
+#define STATUS4_CUTTHROAT               (1 << 8)
 
 #define HITMARKER_x10                   (1 << 4)
 #define HITMARKER_SKIP_DMG_TRACK        (1 << 5)
