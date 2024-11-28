@@ -15658,7 +15658,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
     
     case ABILITY_TRUANT:
         if (GetAbilityState(battler, ability)) SetAbilityState(battler, ability, FALSE);
-        else if (!IS_MOVE_STATUS(gChosenMoveByBattler[battler])) SetAbilityState(battler, ability, TRUE);
+        else if (gChosenMoveByBattler[battler] && !IS_MOVE_STATUS(gChosenMoveByBattler[battler])) SetAbilityState(battler, ability, TRUE);
         break;
     
     case ABILITY_BAD_DREAMS:
