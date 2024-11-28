@@ -10707,6 +10707,7 @@ static void Cmd_various(void)
                 case ITEM_LIGHT_BALL:
                     gBattleScripting.moveEffect = MOVE_EFFECT_PARALYSIS;
                     break;
+                case ITEM_BLACK_SLUDGE:
                 case ITEM_POISON_BARB:
                     gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
                     break;
