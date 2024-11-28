@@ -12577,7 +12577,7 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
     case ABILITY_GULP_MISSILE:
         REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
         REQUIRE(gBattleMons[battler].species == SPECIES_CRAMORANT)
-        REQUIRE((gCurrentMove == MOVE_SURF && TARGET_TURN_DAMAGED)
+        REQUIRE(((gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_TRIPLE_DIVE) && TARGET_TURN_DAMAGED)
             || gStatuses3[battler] & STATUS3_UNDERWATER
             || (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
             
