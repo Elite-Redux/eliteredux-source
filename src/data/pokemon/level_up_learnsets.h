@@ -505,6 +505,7 @@ static const struct LevelUpMove sFearowLevelUpLearnset[] = {
     LEVEL_UP_MOVE(37, MOVE_DOUBLE_EDGE),
     LEVEL_UP_MOVE(37, MOVE_SLASH),
     LEVEL_UP_MOVE(46, MOVE_SKY_ATTACK),
+    LEVEL_UP_MOVE(46, MOVE_SKULL_BASH),
     LEVEL_UP_END
 };
 
