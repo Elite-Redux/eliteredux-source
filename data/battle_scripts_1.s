@@ -2369,6 +2369,7 @@ BattleScript_NoTurningBack::
 	swapbattlerandtargetvia34
 	call BattleScript_AllStatsUp
 	restoreattackerandtargetfrom34
+	return
 
 BattleScript_EffectLastResort:
 	attackcanceler
