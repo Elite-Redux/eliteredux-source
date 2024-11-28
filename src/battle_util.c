@@ -13892,8 +13892,16 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
         REQUIRE(ShouldChangeFormHpBased(battler))
 
-        BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
-        BattleScriptCall(BattleScript_AbilityPopUp);
+        if (gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
+        {
+            BattleScriptCall(BattleScript_TargetFormChange);
+        }
+        else
+        {
+            gStackBattler1 = battler;
+            BattleScriptCall(BattleScript_ApeShift);
+            BattleScriptCall(BattleScript_AbilityPopUp);
+        }
         return TRUE;
         
     case ABILITY_CROWNED_SWORD:
@@ -14547,6 +14555,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
         REQUIRE(ShouldChangeFormHpBased(battler))
 
+        gStackBattler1 = battler;
         BattleScriptPushCursorAndCallback(BattleScript_End3);
         BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
         BattleScriptCall(BattleScript_AbilityPopUp);
@@ -15568,6 +15577,7 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
         REQUIRE(ShouldChangeFormHpBased(battler))
 
+        gStackBattler1 = battler;
         BattleScriptPushCursorAndCallback(BattleScript_End3);
         BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
         BattleScriptCall(BattleScript_AbilityPopUp);
