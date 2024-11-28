@@ -5112,7 +5112,7 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target)
         priority++;
     }
 
-    if (gBattleMoves[move].effect == EFFECT_THIEF && !gBattleMons[target].item)
+    if (gBattleMoves[move].effect == EFFECT_THIEF && !gBattleMons[battlerId].item && gBattleMons[target].item)
         priority++;
     
 	if (BattlerHasAbility(battlerId, ABILITY_TRIAGE, TRUE))
