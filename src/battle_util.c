@@ -12370,9 +12370,9 @@ int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, 
     return 0;
 }
 
-static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup);
-static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup);
-static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u16* abilityPopup);
+static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript);
+static int HandleAlliedImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript);
+static int HandleImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript);
 
 int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType)
 {
@@ -12394,20 +12394,20 @@ int TestImmunityAbilities(int battler, int attacker, int move, int moveType, con
             switch (i)
             {
             case 0:
-                REQUIRE(HandleImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+                REQUIRE(HandleImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript))
 
                 *abilityPopup = ability;
                 return TRUE;
             
             case 2:
-                REQUIRE(HandleAlliedImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+                REQUIRE(HandleAlliedImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript))
 
                 *abilityPopup = ability;
                 *overrideBattler = testBattler;
                 return TRUE;
             
             default:
-                REQUIRE(HandleAnyImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript, abilityPopup))
+                REQUIRE(HandleAnyImmunityAbilityAs(ability, testBattler, attacker, move, moveType, immunityScript))
                 
                 *abilityPopup = ability;
                 *overrideBattler = testBattler;
