@@ -12641,7 +12641,6 @@ BattleScript_EffectSharpen_TryCutthroat:
 	jumpifability BS_ATTACKER, ABILITY_CUTTHROAT, BattleScript_EffectSharpen_DoCutthroat
 	goto BattleScript_MoveEnd
 BattleScript_EffectSharpen_DoCutthroat:
-	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	setstatus4 BS_ATTACKER, STATUS4_CUTTHROAT
 	printstring STRINGID_CUTTHROAT
