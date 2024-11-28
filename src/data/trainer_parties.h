@@ -49199,7 +49199,8 @@ static const struct TrainerMonItemCustomMoves sParty_BiancaInsane[] = {
     .ability = 0,
     .evs = {252, 0, 156, 100, 0, 0},
     .nature = NATURE_BOLD,
-    .moves = MOVE_PARABOLIC_CHARGE, MOVE_HIDDEN_POWER, MOVE_SURF, MOVE_MUD_BOMB
+    .moves = MOVE_PARABOLIC_CHARGE, MOVE_HIDDEN_POWER, MOVE_SURF, MOVE_MUD_BOMB,
+    .hpType = TYPE_ICE,
     },
     {
     .lvl = 0,
