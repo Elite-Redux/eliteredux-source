@@ -8989,7 +8989,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         .secondaryEffectChance = 0,
         .target = MOVE_TARGET_USER,
         .priority = 4,
-        .flags = FLAG_PROTECTION_MOVE | FLAG_SOUND,
+        .flags = FLAG_SOUND | FLAG_PROTECTION_MOVE,
         .split = SPLIT_STATUS,
     },
     [MOVE_FALSE_SURRENDER] =

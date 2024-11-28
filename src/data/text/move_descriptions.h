@@ -3921,12 +3921,12 @@ static const u8 sMoveTwoLineDescription_MoveOniFist[] = _(
     "is thrown from shadows.");
 
 static const u8 sMoveTwoLineDescription_MoveInsectImpact[] = _(
-    "A punch that may drop the\n"
-    "target's defense stat.");
-
-static const u8 sMoveTwoLineDescription_MoveInsectImpact[] = _(
     "An energy bullet attack\n"
     "that may paralyze the foe.");
+
+static const u8 sMoveTwoLineDescription_MoveLightningBullet[] = _(
+    "Shoots a powerful energy\n"
+    "projectile that may paralyze.");
 
 // MOVE_NONE is ignored in this table. Make sure to always subtract 1 before getting the right pointer.
 const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
@@ -5486,7 +5486,7 @@ static const u8 sMoveFourLineDescription_MoveFieryDance[] = _("The user flaps it
 static const u8 sMoveFourLineDescription_MoveFreezeShock[] = _("Paralyzes attackers\nthat make contact\nwhile charging. 30%\nparalyze chance.");
 static const u8 sMoveFourLineDescription_MoveIceBurn[] = _("Burns attackers that\nmake contact while\ncharging. 30% burn\nchance.");
 static const u8 sMoveFourLineDescription_MoveSnarl[] = _("The user yells as\nif it is ranting,\nlowering the Sp.\nAtk of its foe.");
-static const u8 sMoveFourLineDescription_MoveIcicleCrash[] = _("Sharp icicles fall\nonto the foe, with\na 30% flinch\nchance.");
+static const u8 sMoveFourLineDescription_MoveIcicleCrash[] = _("Sharp icicles fall\nonto the foe, with\na 20% flinch\nchance.");
 static const u8 sMoveFourLineDescription_MoveVCreate[] = _("A powerful strike\nthat lowers the\nuser's Defense, Sp.\nDef and Speed.");
 static const u8 sMoveFourLineDescription_MoveFusionFlare[] = _("A giant flame that\ndeals more damage\nwhen joined with\na big thunderbolt.");
 static const u8 sMoveFourLineDescription_MoveFusionBolt[] = _("A giant thunderbolt\nthat deals more\ndamage when joined\nwith a big flame.");

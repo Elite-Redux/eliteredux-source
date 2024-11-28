@@ -1476,8 +1476,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_RESERVOIR] = _("Reservoir"),
     [ABILITY_NEUROTOXIN] = _("Neurotoxin"),
     [ABILITY_ENERGIZED_HORNS] = _("Energy Horns"),
-    [ABILITY_CRUST_COAT] = _("Crust Coat"),
     [ABILITY_SPIDER_LAIR_UPGRADE] = _("Rising Dough"),
+    [ABILITY_CRUST_COAT] = _("Crust Coat"),
     [ABILITY_PUFFY] = _("Puffy"),
 };
 

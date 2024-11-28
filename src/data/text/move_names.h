@@ -998,6 +998,7 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_BERSERKER_HORN] = _("BerserkrHorn"),
     [MOVE_ONI_FIST] = _("Oni Fist"),
     [MOVE_INSECT_IMPACT] = _("InsectImpact"),
+    [MOVE_LIGHTNING_BULLET] = _("LghtngBullet"),
 };
 
 // Second table with longer move names for places where they fit.
