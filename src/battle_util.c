@@ -8227,7 +8227,7 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
 
     // Protective Pads doesn't stop Unseen Fist from bypassing Protect effects, so IsMoveMakingContact() isn't used here.
     // This means extra logic is needed to handle Shell Side Arm.
-    if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
+    if (IS_MOVE_STATUS(move) && !(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
         return FALSE;
     if (gRoundStructs[battlerId].iceBurnCharge && IsMoveMakingContact(move, gBattlerAttacker))
         return TRUE;
@@ -8245,6 +8245,8 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
     else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_DEMOLITIONIST) && gVolatileStructs[gBattlerAttacker].readiedAction)
         return FALSE;
     else if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+        return FALSE;
+    else if (!(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
         return FALSE;
     else if (gBattleMoves[move].effect == MOVE_EFFECT_FEINT)
         return FALSE;
