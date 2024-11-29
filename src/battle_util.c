@@ -1560,12 +1560,6 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         gBattlerAbility = gBattlerTarget;
         BattleScriptCall(BattleScript_CompetitiveActivates);
     }
-    else if (stringId == STRINGID_DEFENDERSSTATFELL && BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_FORT_KNOX))
-    {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_FORT_KNOX;
-        gBattlerAbility = gBattlerTarget;
-        BattleScriptCall(BattleScript_FortKnoxActivates);
-    }
     else if (stringId == STRINGID_DEFENDERSSTATFELL && BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_RUN_AWAY))
     {
         gBattleScripting.abilityPopupOverwrite = ABILITY_RUN_AWAY;
@@ -9618,9 +9612,12 @@ u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int mo
     u16 multiplier = UQ_4_12(1.0);
     int i = 0;
 
-    for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++)
+    if (!BattlerHasAbility(battlerDef, ABILITY_FORT_KNOX, FALSE))
     {
-        CalculateOffensiveAbilityMultiplier(GetAbilityAtIndex(battlerAtk, i, FALSE), battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier);
+        for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++)
+        {
+            CalculateOffensiveAbilityMultiplier(GetAbilityAtIndex(battlerAtk, i, FALSE), battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier);
+        }
     }
     
     for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++)

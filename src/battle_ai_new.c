@@ -155,7 +155,7 @@ void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData)
         FILTER_NOT(IS_MOVE_STATUS(move))
 
         moveContainer->multihitType = GetMultihitType(battlerAtk, move);
-        if (!moveContainer->multihitType) moveContainer->multihitType = GetParentalBondType(battlerAtk, move);
+        // if (!moveContainer->multihitType) moveContainer->multihitType = GetParentalBondType(battlerAtk, battlerDef, move);
     }
 }
 
