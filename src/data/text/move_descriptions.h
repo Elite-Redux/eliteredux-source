@@ -3921,8 +3921,8 @@ static const u8 sMoveTwoLineDescription_MoveOniFist[] = _(
     "is thrown from shadows.");
 
 static const u8 sMoveTwoLineDescription_MoveInsectImpact[] = _(
-    "An energy bullet attack\n"
-    "that may paralyze the foe.");
+    "A punch that may drop the\n"
+    "target's defense stat.");
 
 static const u8 sMoveTwoLineDescription_MoveLightningBullet[] = _(
     "Shoots a powerful energy\n"
