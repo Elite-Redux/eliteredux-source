@@ -6246,8 +6246,32 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag)
 {
     if (!IsTerrainActive(terrainFlag)) return FALSE;
     if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE) return FALSE;
+
+    if (IsBattlerGrounded(battlerId)) return TRUE;
+
+    if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+    {
+        if (BattlerHasAbility(battlerId, ABILITY_HADRON_ENGINE, FALSE)) return TRUE;
+        if (BattlerHasAbility(battlerId, ABILITY_ELECTRIC_SURGE, FALSE)) return TRUE;
+    }
     
-    return IsBattlerGrounded(battlerId);
+    if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
+    {
+        if (BattlerHasAbility(battlerId, ABILITY_GRASSY_SURGE, FALSE)) return TRUE;
+        if (BattlerHasAbility(battlerId, ABILITY_SEED_SOWER, FALSE)) return TRUE;
+    }
+    
+    if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
+    {
+        if (BattlerHasAbility(battlerId, ABILITY_MISTY_SURGE, FALSE)) return TRUE;
+    }
+    
+    if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
+    {
+        if (BattlerHasAbility(battlerId, ABILITY_PSYCHIC_SURGE, FALSE)) return TRUE;
+    }
+    
+    return FALSE;
 }
 
 bool8 IsSleepDisabled(u8 battlerId) {
