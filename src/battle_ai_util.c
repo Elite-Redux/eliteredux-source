@@ -1664,7 +1664,6 @@ bool32 LoweringStatsPointlessOrBad(u8 battlerDef)
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTRARY)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CLEAR_BODY)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_FULL_METAL_BODY)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_FORT_KNOX)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_RUN_AWAY)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_CONTEMPT)) return TRUE;
     if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DEFIANT)) return TRUE;
