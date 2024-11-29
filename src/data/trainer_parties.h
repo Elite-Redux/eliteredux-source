@@ -48579,39 +48579,39 @@ static const struct TrainerMonItemCustomMoves sParty_AustinaInsane[] = {
 static const struct TrainerMonItemCustomMoves sParty_GwenInsane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_SLURPUFF,
-    .heldItem = ITEM_SITRUS_BERRY,
+    .species = SPECIES_LUVDISC,
+    .heldItem = ITEM_FAIRY_FEATHER,
+    .ability = 2,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_LOVELY_KISS, MOVE_TRUMP_CARD, MOVE_DRAINING_KISS, MOVE_ICE_BEAM
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_ALOMOMOLA,
+    .heldItem = ITEM_ROCKY_HELMET,
+    .ability = 2,
+    .evs = {252, 0, 252, 0, 4, 0},
+    .nature = NATURE_IMPISH,
+    .moves = MOVE_FLIP_TURN, MOVE_AQUA_JET, MOVE_TOXIC, MOVE_LIQUIDATION
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_CUFANT,
+    .heldItem = ITEM_EVIOLITE,
+    .ability = 2,
+    .evs = {252, 252, 0, 0, 4, 0},
+    .nature = NATURE_BRAVE,
+    .moves = MOVE_AQUA_FANG, MOVE_IRON_FANGS, MOVE_HIGH_HORSEPOWER, MOVE_STRENGTH
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_PURUGLY,
+    .heldItem = ITEM_LIFE_ORB,
     .ability = 2,
     .evs = {0, 252, 0, 0, 4, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_BELLY_DRUM, MOVE_DRAIN_PUNCH, MOVE_FIRE_PUNCH, MOVE_PLAY_ROUGH
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_WIGGLYTUFF,
-    .heldItem = ITEM_LEFTOVERS,
-    .ability = 1,
-    .evs = {252, 0, 0, 252, 4, 0},
-    .nature = NATURE_BOLD,
-    .moves = MOVE_HYPER_VOICE, MOVE_CALM_MIND, MOVE_MOONBLAST, MOVE_ICE_BEAM
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_DIPPLIN,
-    .heldItem = ITEM_EVIOLITE,
-    .ability = 0,
-    .evs = {252, 0, 252, 4, 0, 0},
-    .nature = NATURE_RELAXED,
-    .moves = MOVE_DRAGON_RAGE, MOVE_LEECH_SEED, MOVE_ENERGY_BALL, MOVE_HIDDEN_POWER
-    },
-    {
-    .lvl = 0,
-    .species = SPECIES_ALTARIA,
-    .heldItem = ITEM_LEFTOVERS,
-    .ability = 1,
-    .evs = {252, 0, 0, 252, 4, 0},
-    .nature = NATURE_JOLLY,
-    .moves = MOVE_DRAGON_DANCE, MOVE_DRAGON_CLAW, MOVE_BRAVE_BIRD, MOVE_REST
+    .moves = MOVE_FAKE_OUT, MOVE_PLAY_ROUGH, MOVE_SLASH, MOVE_SHADOW_CLAW
     }
 };
 
@@ -50605,12 +50605,39 @@ static const struct TrainerMonItemCustomMoves sParty_DillonInsane[] = {
 static const struct TrainerMonItemCustomMoves sParty_SophieInsane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .heldItem = ITEM_NONE,
+    .species = SPECIES_POPCORM,
+    .heldItem = ITEM_FIRE_GEM,
     .ability = 0,
-    .evs = {},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
+    .evs = {0, 252, 0, 0, 4, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_POP_MAYHEM, MOVE_BULLET_SEED, MOVE_VICTORY_DANCE, MOVE_PECK
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_DUDUNSPARCE,
+    .heldItem = ITEM_LEFTOVERS,
+    .ability = 1,
+    .evs = {252, 0, 252, 4, 0, 0},
+    .nature = NATURE_BOLD,
+    .moves = MOVE_QUIVER_DANCE, MOVE_ROOST, MOVE_BOOMBURST, MOVE_FICKLE_BEAM
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_HYDROAR,
+    .heldItem = ITEM_ASSAULT_VEST,
+    .ability = 1,
+    .evs = {144, 252, 0, 0, 0, 112},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_TRIPLE_DIVE, MOVE_CHEAP_SHOT, MOVE_FLIP_TURN, MOVE_VIRAL_STRIKE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_RAICHU,
+    .heldItem = ITEM_LIGHT_BALL,
+    .ability = 0,
+    .evs = {0, 252, 0, 0, 4, 252},
+    .nature = NATURE_JOLLY,
+    .moves = MOVE_MOUNTAIN_CHUNK, MOVE_VOLT_TACKLE, MOVE_UPPER_HAND, MOVE_SPARK
     }
 };
 
