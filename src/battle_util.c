@@ -1560,12 +1560,6 @@ void PrepareStringBattle(u16 stringId, u8 battler)
         gBattlerAbility = gBattlerTarget;
         BattleScriptCall(BattleScript_CompetitiveActivates);
     }
-    else if (stringId == STRINGID_DEFENDERSSTATFELL && BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_FORT_KNOX))
-    {
-        gBattleScripting.abilityPopupOverwrite = ABILITY_FORT_KNOX;
-        gBattlerAbility = gBattlerTarget;
-        BattleScriptCall(BattleScript_FortKnoxActivates);
-    }
     else if (stringId == STRINGID_DEFENDERSSTATFELL && BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_RUN_AWAY))
     {
         gBattleScripting.abilityPopupOverwrite = ABILITY_RUN_AWAY;
@@ -6246,8 +6240,32 @@ bool32 IsBattlerTerrainAffected(u8 battlerId, u32 terrainFlag)
 {
     if (!IsTerrainActive(terrainFlag)) return FALSE;
     if (gStatuses3[battlerId] & STATUS3_SEMI_INVULNERABLE) return FALSE;
+
+    if (IsBattlerGrounded(battlerId)) return TRUE;
+
+    if (gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
+    {
+        if (BattlerHasAbility(battlerId, ABILITY_HADRON_ENGINE, FALSE)) return TRUE;
+        if (BattlerHasAbility(battlerId, ABILITY_ELECTRIC_SURGE, FALSE)) return TRUE;
+    }
     
-    return IsBattlerGrounded(battlerId);
+    if (gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN)
+    {
+        if (BattlerHasAbility(battlerId, ABILITY_GRASSY_SURGE, FALSE)) return TRUE;
+        if (BattlerHasAbility(battlerId, ABILITY_SEED_SOWER, FALSE)) return TRUE;
+    }
+    
+    if (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)
+    {
+        if (BattlerHasAbility(battlerId, ABILITY_MISTY_SURGE, FALSE)) return TRUE;
+    }
+    
+    if (gFieldStatuses & STATUS_FIELD_PSYCHIC_TERRAIN)
+    {
+        if (BattlerHasAbility(battlerId, ABILITY_PSYCHIC_SURGE, FALSE)) return TRUE;
+    }
+    
+    return FALSE;
 }
 
 bool8 IsSleepDisabled(u8 battlerId) {
@@ -8223,19 +8241,12 @@ bool32 IsBattlerProtected(u8 battlerId, u16 move)
 {
     int moveType;
 
-    // Decorate bypasses protect and detect, but not crafty shield
-    if (move == MOVE_DECORATE)
-    {
-        if (gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_CRAFTY_SHIELD)
-            return TRUE;
-        else if (gRoundStructs[battlerId].protected)
-            return FALSE;
-    }
-
     GET_MOVE_TYPE(move, moveType)
 
     // Protective Pads doesn't stop Unseen Fist from bypassing Protect effects, so IsMoveMakingContact() isn't used here.
     // This means extra logic is needed to handle Shell Side Arm.
+    if (IS_MOVE_STATUS(move) && !(gBattleMoves[move].flags & FLAG_PROTECT_AFFECTED))
+        return FALSE;
     if (gRoundStructs[battlerId].iceBurnCharge && IsMoveMakingContact(move, gBattlerAttacker))
         return TRUE;
     if (gRoundStructs[battlerId].freezeShockCharge && IsMoveMakingContact(move, gBattlerAttacker))
@@ -9601,9 +9612,12 @@ u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int mo
     u16 multiplier = UQ_4_12(1.0);
     int i = 0;
 
-    for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++)
+    if (!BattlerHasAbility(battlerDef, ABILITY_FORT_KNOX, FALSE))
     {
-        CalculateOffensiveAbilityMultiplier(GetAbilityAtIndex(battlerAtk, i, FALSE), battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier);
+        for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++)
+        {
+            CalculateOffensiveAbilityMultiplier(GetAbilityAtIndex(battlerAtk, i, FALSE), battlerAtk, battlerDef, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistanceMultiplier, &multiplier);
+        }
     }
     
     for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++)

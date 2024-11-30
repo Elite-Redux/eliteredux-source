@@ -3600,7 +3600,6 @@ static void FillPartnerParty(u16 trainerId)
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
-                u8 hpType;
                 const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.ItemCustomMoves;
 
                 level = GetHighestLevelInPlayerParty(); //+ partyData[i].lvl; Scaling not working as expected, but not needed anyway
@@ -3622,16 +3621,7 @@ static void FillPartnerParty(u16 trainerId)
 
                 SetMonData(&gPlayerParty[i], MON_DATA_SPEED_DOWN, &partyData[i].zeroSpeedIvs);
                 
-                if (partyData[i].hpType) {
-                    SetMonData(&gPlayerParty[i], MON_DATA_HP_TYPE, &partyData[i].hpType);
-                }
-                else {
-                    do {
-                        hpType = Random() % (NUMBER_OF_MON_TYPES - 1); // Ignore Stellar
-                    } while (hpType == TYPE_MYSTERY);
-                    
-                    SetMonData(&gPlayerParty[i], MON_DATA_HP_TYPE, &hpType);
-                }
+                SetMonData(&gPlayerParty[i], MON_DATA_HP_TYPE, &partyData[i].hpType);
 
                 //SetPartnerPokemonData
 

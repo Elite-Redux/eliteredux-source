@@ -360,7 +360,7 @@
 #define ABILITY_SOLENOGLYPHS 338 // Biting moves have a 50% chance to badly poison the target.
 #define ABILITY_SPIDER_LAIR 339 // Casts Sticky Web on entry. Lasts 5 turns.
 #define ABILITY_FATAL_PRECISION 340 // Super-effective moves never miss and get a 1.2x boost.
-#define ABILITY_FORT_KNOX 341 // Boosts Defense by three stages if stats are lowered by an enemy.
+#define ABILITY_FORT_KNOX 341 // Blocks most damage boosting and multihit abilities.
 #define ABILITY_SEAWEED 342 // Takes 1/2 dmg from Fire if Grass, doubles Grass dmg on Fire-types.
 #define ABILITY_PSYCHIC_MIND 343 // Boosts Psychic-type moves by 1.2x, or 1.5x when under 1/3 HP.
 #define ABILITY_POISON_ABSORB 344 // Heals 25% of max HP when hit by a Poison-type move.
