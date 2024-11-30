@@ -292,14 +292,16 @@ static void AnimTask_AttackerFadeToInvisible_Step(u8 taskId)
     {
         blendA++;
         blendB--;
-        gTasks[taskId].data[1] = BLDALPHA_BLEND(blendB, blendA);
-        SetGpuReg(REG_OFFSET_BLDALPHA, gTasks[taskId].data[1]);
-        gTasks[taskId].data[2] = 0;
         if (blendA == 16)
         {
             gSprites[gBattlerSpriteIds[gBattleAnimAttacker]].invisible = TRUE;
+            SetGpuReg(REG_OFFSET_BLDALPHA, 16);
             DestroyAnimVisualTask(taskId);
+            return;
         }
+        gTasks[taskId].data[1] = BLDALPHA_BLEND(blendB, blendA);
+        SetGpuReg(REG_OFFSET_BLDALPHA, gTasks[taskId].data[1]);
+        gTasks[taskId].data[2] = 0;
     }
     else
     {
