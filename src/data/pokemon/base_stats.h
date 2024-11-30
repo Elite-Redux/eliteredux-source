@@ -45528,12 +45528,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_HYDROAR] =
     {
-    .baseHP        = 100,
-    .baseAttack    = 125,
-    .baseDefense   = 85,
-    .baseSpeed     = 77,
-    .baseSpAttack  = 70, // +10
-    .baseSpDefense = 60,
+    .baseHP         = 100,
+    .baseAttack     = 125,
+    .baseDefense    = 85,
+    .baseSpeed      = 87,
+    .baseSpAttack   = 60,
+    .baseSpDefense  = 60,
     .type1 = TYPE_WATER,
     .type2 = TYPE_POISON,
     .catchRate = 255,

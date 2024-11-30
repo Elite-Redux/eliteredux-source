@@ -34776,7 +34776,7 @@ static const struct TrainerMonItemCustomMoves sParty_WallaceInsane[] = {
     .ability = 0,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_MODEST,
-    .moves = MOVE_FLASH_CANNON, MOVE_WATER_PULSE, MOVE_DRAGON_PULSE, MOVE_HURRICANE
+    .moves = MOVE_ICE_BEAM, MOVE_WATER_PULSE, MOVE_DRAGON_PULSE, MOVE_HURRICANE
     }
 };
 
