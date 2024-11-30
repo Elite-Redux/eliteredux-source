@@ -492,7 +492,7 @@
 #define ABILITY_ARCHER 470 // Boosts the power of arrow moves by 1.3x.
 #define ABILITY_COLD_PLASMA 471 // Electric type moves now inflict burn instead of paralysis.
 #define ABILITY_SUPER_SLAMMER 472 // Boosts the power of hammer and slamming moves by 1.3x.
-#define ABILITY_INVERSE_ROOM 473 // Sets up Trick Room on entry, lasts 3 turns.
+#define ABILITY_INVERSE_ROOM 473 // Sets up Inverse Room on entry, lasts 3 turns.
 #define ABILITY_ACCELERATE 474 // Moves that need a charge turn are now used instantly.
 #define ABILITY_FROST_BURN 475 // Triggers 40BP Ice Beam after using a Fire-type move.
 #define ABILITY_ITCHY_DEFENSE 476 // Causes infestation when hit by a contact move.
