@@ -13037,6 +13037,8 @@ const struct Trainer gTrainers[] = {
         //.partySizeInsane = ARRAY_COUNT(sParty_YdaMtPyre),
         //.partyInsane = {.ItemCustomMoves = sParty_YdaMtPyre},
         .trainerFlag = FLAG_TRAINER_YDA_MTPYRE,
+        .partySizeInsane = ARRAY_COUNT(sParty_YdamtpyreInsane),
+        .partyInsane = {.ItemCustomMoves = sParty_YdamtpyreInsane},
     },
 
     [TRAINER_VINEGAR] =
