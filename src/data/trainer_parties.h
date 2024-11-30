@@ -395,7 +395,8 @@ static const struct TrainerMonItemCustomMoves sParty_BrendanRoute103Mudkip[] = {
     .ability = 1,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT
+    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT,
+    .hpType = TYPE_FIRE,
     }
 };
 
@@ -416,7 +417,8 @@ static const struct TrainerMonItemCustomMoves sParty_BrendanRoute103Treecko[] = 
     .ability = 1,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT, MOVE_HIDDEN_POWER
+    .moves = MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT, MOVE_HIDDEN_POWER,
+    .hpType = TYPE_FIRE,
     }
 };
 
@@ -437,7 +439,8 @@ static const struct TrainerMonItemCustomMoves sParty_BrendanRoute103Torchic[] = 
     .ability = 1,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT
+    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT,
+    .hpType = TYPE_FIRE,
     }
 };
 
@@ -1178,7 +1181,8 @@ static const struct TrainerMonItemCustomMoves sParty_MayRoute103Mudkip[] = { // 
     .ability = 1,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT
+    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT,
+    .hpType = TYPE_FIRE,
     }
 };
 
@@ -1199,7 +1203,8 @@ static const struct TrainerMonItemCustomMoves sParty_MayRoute103Treecko[] = { //
     .ability = 1,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT
+    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT,
+    .hpType = TYPE_FIRE,
     }
 };
 
@@ -1220,7 +1225,8 @@ static const struct TrainerMonItemCustomMoves sParty_MayRoute103Torchic[] = { //
     .ability = 1,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT
+    .moves = MOVE_HIDDEN_POWER, MOVE_MEGA_DRAIN, MOVE_WATER_PULSE, MOVE_PROTECT,
+    .hpType = TYPE_FIRE,
     }
 };
 
@@ -47111,7 +47117,8 @@ static const struct TrainerMonItemCustomMoves sParty_Karen1Insane[] = {
     .ability = 0,
     .evs = {252, 0, 0, 252, 4, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_NUZZLE, MOVE_VOLT_SWITCH, MOVE_HIDDEN_POWER, MOVE_SLACK_OFF
+    .moves = MOVE_NUZZLE, MOVE_VOLT_SWITCH, MOVE_HIDDEN_POWER, MOVE_SLACK_OFF,
+    .hpType = TYPE_GRASS,
     },
     {
     .lvl = 0,
