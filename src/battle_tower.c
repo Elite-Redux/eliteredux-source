@@ -3622,16 +3622,7 @@ static void FillPartnerParty(u16 trainerId)
 
                 SetMonData(&gPlayerParty[i], MON_DATA_SPEED_DOWN, &partyData[i].zeroSpeedIvs);
                 
-                if (partyData[i].hpType) {
-                    SetMonData(&gPlayerParty[i], MON_DATA_HP_TYPE, &partyData[i].hpType);
-                }
-                else {
-                    do {
-                        hpType = Random() % (NUMBER_OF_MON_TYPES - 1); // Ignore Stellar
-                    } while (hpType == TYPE_MYSTERY);
-                    
-                    SetMonData(&gPlayerParty[i], MON_DATA_HP_TYPE, &hpType);
-                }
+                SetMonData(&gPlayerParty[i], MON_DATA_HP_TYPE, &partyData[i].hpType);
 
                 //SetPartnerPokemonData
 

@@ -2193,16 +2193,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
 
                 SetMonData(&party[i], MON_DATA_IS_ALPHA, &partyData[i].isAlpha);
                 
-                if (partyData[i].hpType) {
-                    SetMonData(&party[i], MON_DATA_HP_TYPE, &partyData[i].hpType);
-                }
-                else {
-                    do {
-                        hpType = Random() % (NUMBER_OF_MON_TYPES - 1); // Don't include Stellar
-                    } while (hpType == TYPE_MYSTERY);
-                    
-                    SetMonData(&party[i], MON_DATA_HP_TYPE, &hpType);
-                }
+                SetMonData(&party[i], MON_DATA_HP_TYPE, &partyData[i].hpType);
 
                 #ifdef DEBUG_BUILD
                 if (FlagGet(FLAG_SYS_AUTOWIN))
