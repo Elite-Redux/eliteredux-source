@@ -3600,7 +3600,6 @@ static void FillPartnerParty(u16 trainerId)
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
-                u8 hpType;
                 const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerId - TRAINER_CUSTOM_PARTNER].party.ItemCustomMoves;
 
                 level = GetHighestLevelInPlayerParty(); //+ partyData[i].lvl; Scaling not working as expected, but not needed anyway

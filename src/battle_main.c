@@ -2130,7 +2130,6 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
                 const struct TrainerMonItemCustomMoves *partyData;
-                u8 hpType;
                 if (isDoubleBattle && gSaveBlock2Ptr->doubleBattleMode == TRUE) {
                     // In doubles if you are on elite mode the game will try to use a Double Elite Party if there is no exclusive party it uses the 
                     // Elite Single Party if there is Elite Single Party it will try to use Double Normal Party if there is no Normal Double Party it will try to
