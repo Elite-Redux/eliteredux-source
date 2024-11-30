@@ -3551,7 +3551,7 @@ const struct BaseStats gBaseStats[] =
     .baseAttack     = 95,
     .baseDefense    = 70,
     .baseSpeed      = 90,
-    .baseSpAttack   = 95,
+    .baseSpAttack   = 100,
     .baseSpDefense  = 95,
     .type1 = TYPE_WATER,
     .type2 = TYPE_ICE,
@@ -3573,7 +3573,7 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_DEWGONG_MEGA] =
     {
     .baseHP         = 90,
-    .baseAttack     = 125,
+    .baseAttack     = 130,
     .baseDefense    = 110,
     .baseSpeed      = 90,
     .baseSpAttack   = 110,
