@@ -1130,7 +1130,7 @@ static void QueueAnimTiles_Slateport_Balloons(u16 timer)
 
 static void TilesetAnim_MauvilleGym(u16 timer)
 {
-    switch (timer % 125)
+    switch (timer % 1000)
     {
     case 0:
     case 4:
@@ -1153,11 +1153,11 @@ static void TilesetAnim_MauvilleGym(u16 timer)
         break;
     }
 
-    if (timer % 10 == 0) {
-        QueueAnimTiles_MauvilleGym_TrippingFloor(timer / 10);
+    if (timer % 9999 == 0) {
+        QueueAnimTiles_MauvilleGym_TrippingFloor(timer / 9999);
     }
-    if (timer % 8 == 0) {
-        QueueAnimTiles_MauvilleGym_GearsGround(timer / 8);
+    if (timer % 9999 == 0) {
+        QueueAnimTiles_MauvilleGym_GearsGround(timer / 9999);
     }
 }
 

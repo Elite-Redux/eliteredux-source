@@ -13801,6 +13801,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         break;
     
     case ABILITY_INFLATABLE:
+    case ABILITY_BALLOON_BLITZ:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
         REQUIRE(moveType == TYPE_FIRE || moveType == TYPE_FLYING)
@@ -13811,11 +13812,6 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_BALLOON_BOMBER:
         if (HandleDefenderAbilityAs(ABILITY_INFLATABLE, battler, attacker, move, moveType)) return TRUE;
         if (HandleDefenderAbilityAs(ABILITY_AFTERMATH, battler, attacker, move, moveType)) return TRUE;
-        break;
-
-    case ABILITY_BALLOON_BLITZ:
-        if (HandleDefenderAbilityAs(ABILITY_INFLATABLE, battler, attacker, move, moveType)) return TRUE;
-        if (HandleDefenderAbilityAs(ABILITY_HYPER_AGGRESSIVE, battler, attacker, move, moveType)) return TRUE;
         break;
     
     case ABILITY_WATER_COMPACTION:
