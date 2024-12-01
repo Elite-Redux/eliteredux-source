@@ -589,7 +589,6 @@ static const u16 sAdoptionCenterInventory_EightBadges[] = {
     SPECIES_SNORUNT_REDUX, //testing purposes
     SPECIES_MELTAN,
     SPECIES_POIPOLE,
-    SPECIES_KUBFU, //so shifus can be tested
     SPECIES_AZELF_REDUX,
     SPECIES_UXIE_REDUX,
     SPECIES_MESPRIT_REDUX,
