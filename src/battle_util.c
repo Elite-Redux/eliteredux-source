@@ -11727,11 +11727,11 @@ bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock)
         ret = FALSE;
         RecordItemEffectBattle(battlerId, holdEffect);
     }
-	else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SHIELD_DUST))
+	else if (BattlerHasAbility(gActiveBattler, ABILITY_SHIELD_DUST, FALSE))
     {
         ret = FALSE;
     }
-	else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MOUNTAINEER) && stealthRock)
+	else if (stealthRock && BattlerHasAbility(gActiveBattler, ABILITY_MOUNTAINEER, FALSE))
     {
         ret = FALSE;
     }

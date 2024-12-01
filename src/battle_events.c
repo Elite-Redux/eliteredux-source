@@ -302,6 +302,7 @@ u8 BattleEventBeforeFirstTurnExec(struct BattleEvent *battleEvent) {
 
     case BATTLE_EVENT_STEALTH_ROCK:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_STEALTH_ROCK;
+        gSideTimers[B_SIDE_PLAYER].stealthRockType = TYPE_ROCK;
         RUN_BATTLESCRIPT_UNREGISTER(BattleScript_ExtraSkillTerrainStealthRock)
     case BATTLE_EVENT_TOXIC_SPIKES:
         gSideStatuses[B_SIDE_PLAYER] |= SIDE_STATUS_TOXIC_SPIKES;
