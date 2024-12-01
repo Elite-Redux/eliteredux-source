@@ -682,6 +682,11 @@ static const union AnimCmd sAnim_WIGGLYTUFF_MEGA_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_WIGGLYTUFF_MEGA_X_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_ARBOK_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -1442,6 +1447,11 @@ static const union AnimCmd *const sAnims_URSALUNA_MEGA[] ={
 static const union AnimCmd *const sAnims_WIGGLYTUFF_MEGA[] ={
     sAnim_GeneralFrame0,
     sAnim_WIGGLYTUFF_MEGA_1,
+};
+
+static const union AnimCmd *const sAnims_WIGGLYTUFF_MEGA_X[] ={
+    sAnim_GeneralFrame0,
+    sAnim_WIGGLYTUFF_MEGA_X_1,
 };
 
 static const union AnimCmd *const sAnims_ARBOK_MEGA[] ={
@@ -21580,6 +21590,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(IRON_EXO),
     ANIM_CMD(URSALUNA_MEGA),
     ANIM_CMD(WIGGLYTUFF_MEGA),
+    ANIM_CMD(WIGGLYTUFF_MEGA_X),
     ANIM_CMD(LUCARIO_MEGA_Y),
     ANIM_CMD(TYRANITAR_MEGA_REDUX),
     ANIM_CMD(TYRANITAR_REDUX),

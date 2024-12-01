@@ -1758,8 +1758,9 @@
 #define SPECIES_MEOWTH_PARTNER_MEGA         CUSTOM_MEGA_START + 110
 #define SPECIES_DURALUDON_PARTNER_MEGA      CUSTOM_MEGA_START + 111
 #define SPECIES_FIDOUGH_PARTNER_MEGA        CUSTOM_MEGA_START + 112
+#define SPECIES_WIGGLYTUFF_MEGA_X           CUSTOM_MEGA_START + 113
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_FIDOUGH_PARTNER_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_WIGGLYTUFF_MEGA_X  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA

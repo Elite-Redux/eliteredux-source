@@ -4646,6 +4646,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x67,
         .y_offset = 4,
     },
+    [SPECIES_WIGGLYTUFF_MEGA_X] =
+    {
+        .size = 0x67,
+        .y_offset = 4,
+    },
     [SPECIES_LUCARIO_MEGA_Y] =
     {
         .size = 0,

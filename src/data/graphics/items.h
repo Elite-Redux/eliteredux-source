@@ -1559,6 +1559,9 @@ const u32 gItemIconPalette_Froslassite[] = INCBIN_U32("graphics/items/icon_palet
 const u32 gItemIcon_Wigglytuffite[]  = INCBIN_U32("graphics/items/icons/wigglytuffite.4bpp.lz");
 const u32 gItemIconPalette_Wigglytuffite[]  = INCBIN_U32("graphics/items/icon_palettes/wigglytuffite.gbapal.lz");
 
+const u32 gItemIcon_WigglytuffiteX[]  = INCBIN_U32("graphics/items/icons/wigglytuffite.4bpp.lz");
+const u32 gItemIconPalette_WigglytuffiteX[]  = INCBIN_U32("graphics/items/icon_palettes/wigglytuffite.gbapal.lz");
+
 const u32 gItemIcon_Tinkatite[]  = INCBIN_U32("graphics/items/icons/tinkatite.4bpp.lz");
 const u32 gItemIconPalette_Tinkatite[]  = INCBIN_U32("graphics/items/icon_palettes/tinkatite.gbapal.lz");
 

@@ -9667,7 +9667,18 @@ const struct Item gItems[] =
     },
     [ITEM_WIGGLYTUFFITE] = 
     {
-        .name = _("Wigglytuffite"),
+        .name = _("Wigglytuffite Y"),
+        .itemId = ITEM_WIGGLYTUFFITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sWigglytuffiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+    },
+    [ITEM_WIGGLYTUFFITE_X] = 
+    {
+        .name = _("Wigglytuffite X"),
         .itemId = ITEM_WIGGLYTUFFITE,
         .price = 0,
         .holdEffect = HOLD_EFFECT_MEGA_STONE,

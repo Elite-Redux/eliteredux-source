@@ -1700,6 +1700,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_WIGGLYTUFF_MEGA_X] =
+    {
+    .baseHP         = 120,
+    .baseAttack     = 133,
+    .baseDefense    = 45,
+    .baseSpeed      = 135,
+    .baseSpAttack   = 100,
+    .baseSpDefense  = 40,
+    .type1 = TYPE_FIGHTING,
+    .type2 = TYPE_FAIRY,
+    .catchRate = 255,
+    .expYield = 196,
+    .evYield_HP    = 3,
+    .item2 = ITEM_LEFTOVERS,
+    .genderRatio = PERCENT_FEMALE(75),
+    .eggCycles = 10,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_FAIRY,
+    .abilities      = {ABILITY_VIOLENT_RUSH, ABILITY_AVENGER, ABILITY_SCRAPPY},
+    .innates        = {ABILITY_BALLOON_BLITZ, ABILITY_COMBAT_SPECIALIST, ABILITY_DEFIANT},
+    .bodyColor = BODY_COLOR_PINK,
+    .noFlip = TRUE,
+    .tier = 0,
+    },
+
     [SPECIES_WIGGLYTUFF_APEX] =
     {
     .baseHP        = 120,

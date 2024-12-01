@@ -1420,6 +1420,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_KECLEONG]            = _("Kecleong"),
     [SPECIES_LAPRAS_MEGA_X]      = _("Lapras"),
     [SPECIES_WIGGLYTUFF_MEGA]      = _("Wigglytuff"),
+    [SPECIES_WIGGLYTUFF_MEGA_X]      = _("Wigglytuff"),
     [SPECIES_GYARADEATH]      = _("Gyaradeath"),
     [SPECIES_GYARADEATH_MEGA_Y]      = _("Gyaradeath"),
     [SPECIES_GYARADEATH_MEGA_X]      = _("Gyaradeath"),

@@ -1852,6 +1852,7 @@ static const u16 sVictiniFormSpeciesIdTable[] = {
 static const u16 sWigglytuffFormSpeciesIdTable[] = {
     SPECIES_WIGGLYTUFF,
     SPECIES_WIGGLYTUFF_MEGA,
+    SPECIES_WIGGLYTUFF_MEGA_X,
     SPECIES_WIGGLYTUFF_APEX,
     SPECIES_WIGGLYTUFF_PRIMAL,
     FORM_SPECIES_END,
