@@ -4078,6 +4078,8 @@ static void HandleEndTurn_ContinueBattle(void)
 
     if (gBattleControllerExecFlags == 0)
     {
+        gQueuedAttackCount = 0;
+        gCurrentActionFuncId = B_ACTION_FINISHED;
         gBattleMainFunc = BattleTurnPassed;
         for (i = 0; i < BATTLE_COMMUNICATION_ENTRIES_COUNT; i++)
             gBattleCommunication[i] = 0;
@@ -4101,15 +4103,18 @@ void BattleTurnPassed(void)
 {
     s32 i;
 
-    if (gCurrentActionFuncId != B_ACTION_FINISHED && !(gCurrentActionFuncId == B_ACTION_TRY_FINISH && gBattleOutcome))
+    if (gBattleStruct->ranEndTurnEffects)
     {
-        sTurnActionsFuncsTable[gCurrentActionFuncId]();
-        return;
-    }
-    else if (!gBattleOutcome && gQueuedAttackCount)
-    {
-        gCurrentActionFuncId = B_ACTION_TRY_FINISH;
-        return;
+        if (gCurrentActionFuncId != B_ACTION_FINISHED && !(gCurrentActionFuncId == B_ACTION_TRY_FINISH && gBattleOutcome))
+        {
+            sTurnActionsFuncsTable[gCurrentActionFuncId]();
+            return;
+        }
+        else if (!gBattleOutcome && gQueuedAttackCount)
+        {
+            gCurrentActionFuncId = B_ACTION_TRY_FINISH;
+            return;
+        }
     }
 
     TurnValuesCleanUp(TRUE);
