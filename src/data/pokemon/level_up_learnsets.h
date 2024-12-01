@@ -1033,6 +1033,7 @@ static const struct LevelUpMove sWigglytuffLevelUpLearnset[] = {
     LEVEL_UP_MOVE(56, MOVE_TRUMP_CARD),
     LEVEL_UP_MOVE(56, MOVE_STAR_CRASH),
     LEVEL_UP_MOVE(56, MOVE_ROLLING_KICK),
+    LEVEL_UP_MOVE(61, MOVE_HIGH_JUMP_KICK),
     LEVEL_UP_END
 };
 
