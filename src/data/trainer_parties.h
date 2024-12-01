@@ -2214,9 +2214,9 @@ static const struct TrainerMonItemCustomMoves sParty_Archie1Insane[] = { // Slat
     .species = SPECIES_EELEKTROSS,
     .heldItem = ITEM_LEFTOVERS,
     .ability = 0,
-    .evs = {252, 196, 0, 0, 62, 0},
-    .nature = NATURE_ADAMANT,
-    .moves = MOVE_COIL, MOVE_SUPERCELL_SLAM, MOVE_AQUA_FANG, MOVE_DRAIN_PUNCH
+    .evs = {252, 0, 4, 252, 0, 0},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_SLUDGE_WAVE, MOVE_PARABOLIC_CHARGE, MOVE_WATER_PULSE, MOVE_GIGA_DRAIN
     },
     {
     .lvl = 0,
