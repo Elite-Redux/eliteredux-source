@@ -288,7 +288,7 @@
 #define ABILITIES_COUNT_LATEST_GEN (ABILITY_AS_ONE_SHADOW_RIDER + 1)
 
 #define ABILITY_CHLOROPLAST 268 // Weather Ball, Solar Beam/Blade, Growth act as if used in sun.
-#define ABILITY_WHITEOUT 269 // Grants a 1.5x power boost to Ice-type moves under hail.
+#define ABILITY_WHITEOUT 269 // Ups highest attacking stat by 1.5x in hail.
 #define ABILITY_PYROMANCY 270 // Moves inflict burn 5x as often.
 #define ABILITY_KEEN_EDGE 271 // Boosts the power of slashing moves by 1.3x.
 #define ABILITY_PRISM_SCALES 272 // Takes 30% less damage from Special attacks.
@@ -663,7 +663,7 @@
 #define ABILITY_CHUNKY_BASS_LINE 641 // Triggers a 40BP Earthquake after using a sound move.
 #define ABILITY_DUAL_HAMMER 642 // Super Slammer moves hit twice for 70% damage.
 #define ABILITY_DENTING_BLOWS 643 // Hammer moves lower Defense.
-#define ABILITY_ICE_COLD_HUNTER 644 // Hyper Aggressive + Whiteout.
+#define ABILITY_ICE_COLD_HUNTER 644 // Ice-type moves hit twice in hail.
 #define ABILITY_SOUL_CRUSHER 645 // Hammer moves become Special and get a 1.1x power boost.
 #define ABILITY_ARC_FLASH 646 // 50% chance to burn when hit or paralyze when dealing damage.
 #define ABILITY_UNICORN 647 // Mighty Horn + Dazzling.
