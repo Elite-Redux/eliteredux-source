@@ -40402,7 +40402,8 @@ static const struct TrainerMonItemCustomMoves sParty_JodyInsane[] = {
     .ability = 0,
     .evs = {0, 0, 4, 252, 0, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_TECHNO_BLAST, MOVE_ICE_BEAM, MOVE_THUNDERBOLT, MOVE_PSYCHIC
+    .moves = MOVE_TECHNO_BLAST, MOVE_ICE_BEAM, MOVE_THUNDERBOLT, MOVE_PSYCHIC,
+    .hpType = TYPE_NORMAL
     },
     {
     .lvl = 0,
