@@ -3544,7 +3544,8 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt8Insane[] = { // Aqua 
     .ability = 1,
     .evs = {252, 0, 0, 252, 0, 4},
     .nature = NATURE_CALM,
-    .moves = MOVE_SLUDGE_WAVE, MOVE_HYDRO_PUMP, MOVE_HIDDEN_POWER, MOVE_TOXIC_SPIKES
+    .moves = MOVE_SLUDGE_WAVE, MOVE_HYDRO_PUMP, MOVE_HIDDEN_POWER, MOVE_TOXIC_SPIKES,
+    .hpType = TYPE_ICE,
     },
     {
     .lvl = 0,
@@ -3562,7 +3563,8 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt8Insane[] = { // Aqua 
     .ability = 2,
     .evs = {164, 0, 200, 144, 0, 0},
     .nature = NATURE_CALM,
-    .moves = MOVE_HYDRO_PUMP, MOVE_SLUDGE_BOMB, MOVE_RECOVER, MOVE_HIDDEN_POWER
+    .moves = MOVE_HYDRO_PUMP, MOVE_SLUDGE_BOMB, MOVE_RECOVER, MOVE_HIDDEN_POWER,
+    .hpType = TYPE_ICE,
     },
     {
     .lvl = 0,
@@ -45998,7 +46000,7 @@ static const struct TrainerMonItemCustomMoves sParty_LorenzoInsane[] = {
     .species = SPECIES_ZANGOOSE,
     .heldItem = ITEM_TOXIC_ORB,
     .ability = 1,
-    .evs = {0, 252, 0, 0, 0, 252},
+    .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_FACADE, MOVE_PROTECT, MOVE_KNOCK_OFF, MOVE_CLOSE_COMBAT
     }
@@ -46416,17 +46418,6 @@ static const struct TrainerMonItemCustomMoves sParty_AllenInsane[] = {
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
     .moves = MOVE_IRON_HEAD, MOVE_POWER_UP_PUNCH, MOVE_FAKE_OUT, MOVE_U_TURN
-    }
-};
-
-static const struct TrainerMonItemCustomMoves sParty_OldplayerInsane[] = {
-    {
-    .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .ability = 0,
-    .evs = {},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
 };
 
@@ -47679,17 +47670,6 @@ static const struct TrainerMonItemCustomMoves sParty_SimonInsane[] = {
     }
 };
 
-static const struct TrainerMonItemCustomMoves sParty_JohannaInsane[] = {
-    {
-    .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .ability = 0,
-    .evs = {},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
-    }
-};
-
 static const struct TrainerMonItemCustomMoves sParty_ElijahInsane[] = {
     {
     .lvl = 0,
@@ -47774,17 +47754,6 @@ static const struct TrainerMonItemCustomMoves sParty_CarterInsane[] = {
     .evs = {252, 252, 0, 0, 4, 0},
     .nature = NATURE_IMPISH,
     .moves = MOVE_SPIN_OUT, MOVE_POWER_WHIP, MOVE_POLTERGEIST, MOVE_PAIN_SPLIT
-    }
-};
-
-static const struct TrainerMonItemCustomMoves sParty_AliceInsane[] = {
-    {
-    .lvl = 0,
-    .species = SPECIES_BULBASAUR,
-    .ability = 0,
-    .evs = {},
-    .nature = NATURE_IMPISH,
-    .moves = MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE
     }
 };
 
