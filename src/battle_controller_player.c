@@ -1815,7 +1815,7 @@ void PrintBattleWindow_MoveSelection(void)
                         percentage = MAX_PERCENT;
 
                     //Focus Sash Check
-                    if(heldItem == ITEM_FOCUS_SASH && MAX_PERCENT == 100 && targetCurrentHp == gBattleMons[target].maxHP)
+                    if ((heldItem == ITEM_FOCUS_SASH || BattlerHasAbility(target, ABILITY_STURDY, TRUE)) && percentage == MAX_PERCENT && targetCurrentHp == gBattleMons[target].maxHP)
                         percentage = 99;
 
                     ConvertIntToDecimalStringN(gStringVar2, percentage, STR_CONV_MODE_LEFT_ALIGN, 3);

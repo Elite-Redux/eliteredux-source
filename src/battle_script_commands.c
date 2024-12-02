@@ -12330,7 +12330,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
             }
             return 0;
         }
-        else if (!certain
+        else if (!affectsUser
                 && ((BATTLER_HAS_ABILITY(battler, ABILITY_KEEN_EYE) && statId == STAT_ACC && (gBattleScripting.abilityPopupOverwrite = ABILITY_KEEN_EYE))
                 || (BATTLER_HAS_ABILITY(battler, ABILITY_MINDS_EYE) && statId == STAT_ACC && (gBattleScripting.abilityPopupOverwrite = ABILITY_MINDS_EYE))
 				|| (BATTLER_HAS_ABILITY(battler, ABILITY_HYPER_CUTTER) && (statId == STAT_ATK || statId == STAT_SPATK) && (gBattleScripting.abilityPopupOverwrite = ABILITY_HYPER_CUTTER))))
