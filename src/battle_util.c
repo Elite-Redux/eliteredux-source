@@ -15071,7 +15071,7 @@ int HandleSwitchInAbilityAs(int ability, int battler)
     case ABILITY_CUTTHROAT:
         REQUIRE_NOT(GetAbilityState(battler, ability))
 
-        SetAbilityState(battler, ability, TRUE);
+        gStatuses4[battler] |= STATUS4_CUTTHROAT;
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CUTTHROAT;
         BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
         return TRUE;
