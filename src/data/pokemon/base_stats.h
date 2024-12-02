@@ -46730,11 +46730,11 @@ const struct BaseStats gBaseStats[] =
     //3.0 CUTOFF
     [SPECIES_IRON_VOCA] =
     {
-    .baseHP         = 95,
-    .baseAttack     = 55,
+    .baseHP         = 94,
+    .baseAttack     = 56,
     .baseDefense    = 120,
-    .baseSpeed      = 119,
-    .baseSpAttack   = 111,
+    .baseSpeed      = 118,
+    .baseSpAttack   = 112,
     .baseSpDefense  = 70,
     .type1 = TYPE_STEEL,
     .type2 = TYPE_NORMAL,
