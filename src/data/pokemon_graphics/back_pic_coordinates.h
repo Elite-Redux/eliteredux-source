@@ -8448,4 +8448,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x36,
         .y_offset = 10,
     },
+    //3.0 CUTOFFS
+    [SPECIES_IRON_VOCA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+
 };

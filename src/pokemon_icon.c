@@ -1787,6 +1787,9 @@ const u8 *const gMonIconTable[] =
     [SPECIES_KINGDRA_PARTNER_MEGA_B] = gMonIcon_KingdraMega,
     [SPECIES_KINGDRA_PARTNER_MEGA_C] = gMonIcon_KingdraMega,
 
+    //3.0 CUTOFF
+    [SPECIES_IRON_VOCA] = gMonIcon_IronVoca,
+
 };
 
 const u8 *const gMonIconTableFemale[] =
@@ -3458,6 +3461,10 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_HYDROAR] = 3,
     [SPECIES_HYDROAR_F] = 3,
     [SPECIES_EGG] = 1,
+
+    //3.0 CUTOFF
+    [SPECIES_IRON_VOCA] = 0,
+
 };
 
 const u8 gMonIconPaletteIndicesFemale[] =

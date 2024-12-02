@@ -1742,6 +1742,8 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(INFERNAPE_REDUX_B, gMonShinyPalette_InfernapeReduxB),
     SPECIES_SHINY_PAL(LUXRAY_REDUX,    gMonShinyPalette_LuxrayRedux),
     SPECIES_SHINY_PAL(CASCOON_PRIMAL,  gMonShinyPalette_CascoonPrimal),
+    //3.0 CUTOFF
+    SPECIES_SHINY_PAL(IRON_VOCA,  gMonShinyPalette_IronVoca),
 };
 
                                      

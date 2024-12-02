@@ -11387,7 +11387,12 @@ extern const u32 gMonBackPic_CastformFoggy[];
 extern const u32 gMonPalette_CastformFoggy[];
 extern const u32 gMonShinyPalette_CastformFoggy[];
 extern const u8  gMonIcon_CastformFoggy[];
-
+//3.0 CUTOFF
+extern const u32 gMonFrontPic_IronVoca[];
+extern const u32 gMonBackPic_IronVoca[];
+extern const u32 gMonPalette_IronVoca[];
+extern const u32 gMonShinyPalette_IronVoca[];
+extern const u8  gMonIcon_IronVoca[];
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];
 extern const u32 gMonBackPic_Tyranitar_Redux[];

@@ -8296,6 +8296,12 @@ const u32 gMonBackPic_CastformFoggy[]           = INCBIN_U32("graphics/pokemon/c
 const u32 gMonPalette_CastformFoggy[]           = INCBIN_U32("graphics/pokemon/castform/foggy/normal.gbapal.lz");
 const u32 gMonShinyPalette_CastformFoggy[]      = INCBIN_U32("graphics/pokemon/castform/foggy/shiny.gbapal.lz");
 const u8  gMonIcon_CastformFoggy[]              = INCBIN_U8("graphics/pokemon/castform/foggy/icon.4bpp");
+//3.0 CUTOFF
+const u32 gMonFrontPic_IronVoca[]          = INCBIN_U32("graphics/pokemon/iron_voca/front.4bpp.lz");
+const u32 gMonBackPic_IronVoca[]           = INCBIN_U32("graphics/pokemon/iron_voca/back.4bpp.lz");
+const u32 gMonPalette_IronVoca[]           = INCBIN_U32("graphics/pokemon/iron_voca/normal.gbapal.lz");
+const u32 gMonShinyPalette_IronVoca[]      = INCBIN_U32("graphics/pokemon/iron_voca/shiny.gbapal.lz");
+const u8  gMonIcon_IronVoca[]              = INCBIN_U8("graphics/pokemon/iron_voca/icon.4bpp");
 
 //PARTNER POKEMON
 

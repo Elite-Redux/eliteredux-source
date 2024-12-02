@@ -1782,5 +1782,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_SNORLAX_MEGA] = sSnorlaxLevelUpLearnset,
 
     //PARTNER POKEMON
-    
+    //3.0 CUTOFF
+    [SPECIES_IRON_VOCA] = sIronVocaLevelUpLearnset,
 };

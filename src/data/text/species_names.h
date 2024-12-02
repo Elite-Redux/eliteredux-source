@@ -1784,6 +1784,10 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_LUXRAY_REDUX] = _("Luxray"),
     [SPECIES_CASCOON_PRIMAL] = _("Cascoon"),
 
+    //3.0 POKEMON CUTOFF
+    [SPECIES_IRON_VOCA] = _("Iron Voca"),
+
+
     // PARTNER POKEMON
     [SPECIES_PIKACHU_PARTNER] = _("Pikachu"),
     [SPECIES_EEVEE_PARTNER] = _("Eevee"),

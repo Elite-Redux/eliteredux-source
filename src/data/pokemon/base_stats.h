@@ -46727,5 +46727,32 @@ const struct BaseStats gBaseStats[] =
     .noFlip = FALSE,
     .tier = 0,
     },
+    //3.0 CUTOFF
+    [SPECIES_IRON_VOCA] =
+    {
+    .baseHP         = 95,
+    .baseAttack     = 55,
+    .baseDefense    = 120,
+    .baseSpeed      = 119,
+    .baseSpAttack   = 111,
+    .baseSpDefense  = 70,
+    .type1 = TYPE_STEEL,
+    .type2 = TYPE_NORMAL,
+    .catchRate = 255,
+    .expYield = 196,
+    .evYield_HP    = 3,
+    .item2 = ITEM_LEFTOVERS,
+    .genderRatio = MON_GENDERLESS,
+    .eggCycles = 10,
+    .friendship = 70,
+    .growthRate = GROWTH_FAST,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_FAIRY,
+    .abilities = {ABILITY_PUNK_ROCK, ABILITY_PIXIE_POWER, ABILITY_TANGLING_HAIR},
+    .innates = {ABILITY_QUARK_DRIVE, ABILITY_FAIRY_TALE, ABILITY_AMPLIFIER},
+    .bodyColor = BODY_COLOR_PINK,
+    .noFlip = TRUE,
+    .tier = 0,
+    },
 
 };

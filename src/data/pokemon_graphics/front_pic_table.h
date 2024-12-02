@@ -1787,6 +1787,9 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(KINGDRA_PARTNER_B, gMonFrontPic_Kingdra),
     SPECIES_SPRITE(KINGDRA_PARTNER_C, gMonFrontPic_Kingdra),
     SPECIES_SPRITE(KINGDRA_PARTNER_MEGA_C, gMonFrontPic_KingdraMega),
+
+    //3.0 CUTOFFS
+    SPECIES_SPRITE(IRON_VOCA, gMonFrontPic_IronVoca),
     
 };
 

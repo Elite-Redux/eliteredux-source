@@ -20207,6 +20207,18 @@ static const union AnimCmd *const sAnims_FLOETTE_ETERNAL_FLOWER[] ={
     sAnim_FLOETTE_ETERNAL_FLOWER_1,
 };
 
+//3.0 CUTOFF
+static const union AnimCmd sAnim_IRON_VOCA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_IRON_VOCA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_IRON_VOCA_1,
+};
+
 
 
 #define ANIM_CMD(name)             [SPECIES_##name] = sAnims_##name
@@ -21889,8 +21901,9 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD_FULL(CALYREX_ICE_RIDER, sAnims_CALYREX),
     ANIM_CMD_FULL(CALYREX_SHADOW_RIDER, sAnims_CALYREX),
     ANIM_CMD(EGG),
-    // NEWER MONS
     ANIM_CMD(FLOETTE_ETERNAL_FLOWER),
+    //3.0 CUTOFF
+    ANIM_CMD(IRON_VOCA),
 };
 
 #undef ANIM_CMD
