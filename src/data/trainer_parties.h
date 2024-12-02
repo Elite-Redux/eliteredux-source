@@ -3529,8 +3529,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt8Insane[] = { // Aqua 
     .ability = 0,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_DRAKE_MISSILE, MOVE_POLTERGEIST, MOVE_SECRET_POWER, MOVE_U_TURN,
-    .hpType = TYPE_POISON,
+    .moves = MOVE_DRAKE_MISSILE, MOVE_POLTERGEIST, MOVE_SECRET_POWER, MOVE_U_TURN
     },
     {
     .lvl = 0,
@@ -3539,8 +3538,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt8Insane[] = { // Aqua 
     .ability = 1,
     .evs = {252, 0, 0, 252, 0, 4},
     .nature = NATURE_CALM,
-    .moves = MOVE_SLUDGE_WAVE, MOVE_HYDRO_PUMP, MOVE_HIDDEN_POWER, MOVE_TOXIC_SPIKES,
-    .hpType = TYPE_ICE,
+    .moves = MOVE_SLUDGE_WAVE, MOVE_HYDRO_PUMP, MOVE_HIDDEN_POWER, MOVE_TOXIC_SPIKES
     },
     {
     .lvl = 0,
@@ -3558,7 +3556,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt8Insane[] = { // Aqua 
     .ability = 2,
     .evs = {164, 0, 200, 144, 0, 0},
     .nature = NATURE_CALM,
-    .moves = MOVE_HYDRO_PUMP, MOVE_SLUDGE_BOMB, MOVE_RECOVER, MOVE_KNOCK_OFF
+    .moves = MOVE_HYDRO_PUMP, MOVE_SLUDGE_BOMB, MOVE_RECOVER, MOVE_HIDDEN_POWER
     },
     {
     .lvl = 0,
@@ -4450,7 +4448,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt10Insane[] = { // Aqua
     .ability = 2,
     .evs = {252, 252, 4, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_GUNK_SHOT, MOVE_KNOCK_OFF, MOVE_SHADOW_SNEAK, MOVE_FIRE_PUNCH
+    .moves = MOVE_GUNK_SHOT, MOVE_KNOCK_OFF, MOVE_SHADOW_SNEAK, MOVE_FIRST_IMPRESSION
     },
     {
     .lvl = 0,
@@ -4459,7 +4457,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt10Insane[] = { // Aqua
     .ability = 0,
     .evs = {0, 0, 0, 252, 4, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_QUIVER_DANCE, MOVE_SCALD
+    .moves = MOVE_BUG_BUZZ, MOVE_AIR_SLASH, MOVE_QUIVER_DANCE, MOVE_WATER_PULSE
     },
     {
     .lvl = 0,
@@ -4468,7 +4466,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt10Insane[] = { // Aqua
     .ability = 1,
     .evs = {0, 252, 4, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_CRABHAMMER, MOVE_AQUA_JET, MOVE_GUILLOTINE, MOVE_HIGH_HORSEPOWER
+    .moves = MOVE_CRABHAMMER, MOVE_AQUA_JET, MOVE_GUILLOTINE, MOVE_ICE_HAMMER
     }
 };
 
@@ -31259,7 +31257,7 @@ static const struct TrainerMonItemCustomMoves sParty_ArchieInsane[] = { // Seafl
     .ability = 2,
     .evs = {4, 0, 0, 252, 0, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_ELECTRO_SHOT, MOVE_WEATHER_BALL, MOVE_VOLT_SWITCH, MOVE_HIDDEN_POWER
+    .moves = MOVE_ELECTRO_SHOT, MOVE_WEATHER_BALL, MOVE_VOLT_SWITCH, MOVE_AURORA_BEAM
     },
     {
     .lvl = 0,
@@ -40109,7 +40107,7 @@ static const struct TrainerMonItemCustomMoves sParty_RandallInsane[] = {
     .ability = 2,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
-    .moves = MOVE_POPULATION_BOMB, MOVE_SUPER_FANG, MOVE_TIDY_UP, MOVE_U_TURN
+    .moves = MOVE_POPULATION_BOMB, MOVE_SUPER_FANG, MOVE_TIDY_UP, MOVE_QUICK_ATTACK
     },
     {
     .lvl = 0,
@@ -40259,7 +40257,7 @@ static const struct TrainerMonItemCustomMoves sParty_ParkerInsane[] = {
     .ability = 0,
     .evs = {252, 0, 4, 252, 0, 0},
     .nature = NATURE_MODEST,
-    .moves = MOVE_UPROAR, MOVE_MOONBLAST, MOVE_YAWN, MOVE_THUNDERBOLT
+    .moves = MOVE_UPROAR, MOVE_MOONBLAST, MOVE_YAWN, MOVE_ICE_BEAM
     }
 };
 
@@ -46223,7 +46221,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt20Insane[] = {
     .heldItem = ITEM_FAIRY_FEATHER,
     .ability = 2,
     .evs = {252, 0, 0, 252, 4, 0},
-    .nature = NATURE_BOLD,
+    .nature = NATURE_MODEST,
     .moves = MOVE_CALM_MIND, MOVE_ENERGY_WAVE, MOVE_SLUDGE_BOMB, MOVE_PSYCHIC
     },
     {
@@ -46231,8 +46229,8 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt20Insane[] = {
     .species = SPECIES_WEEZING,
     .heldItem = ITEM_FLAME_ORB,
     .ability = 0,
-    .evs = {252, 0, 252, 4, 0, 0},
-    .nature = NATURE_BOLD,
+    .evs = {252, 0, 124, 132, 0, 0},
+    .nature = NATURE_MODEST,
     .moves = MOVE_SLUDGE_BOMB, MOVE_RECOVER, MOVE_FLAMETHROWER, MOVE_HIDDEN_POWER
     },
     {
