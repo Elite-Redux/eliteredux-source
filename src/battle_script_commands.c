@@ -1320,6 +1320,7 @@ MultihitType GetParentalBondType(int battler, int target, int move, int moveType
         case ABILITY_PARENTAL_BOND:
         case ABILITY_HYPER_AGGRESSIVE:
         case ABILITY_RAGING_GODDESS:
+        case ABILITY_BALLOON_BLITZ:
             return PARENTAL_BOND_HYPER_AGGRESSIVE;
         
         case ABILITY_STEEL_BEETLE:
