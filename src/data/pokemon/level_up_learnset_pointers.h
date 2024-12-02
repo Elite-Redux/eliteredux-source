@@ -1784,4 +1784,8 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     //PARTNER POKEMON
     //3.0 CUTOFF
     [SPECIES_IRON_VOCA] = sIronVocaLevelUpLearnset,
+    [SPECIES_WEAVILE_MEGA] = sWeavileLevelUpLearnset,
+    [SPECIES_HAPPINY_REDUX] = sHappinyReduxLevelUpLearnset,
+    [SPECIES_CHANSEY_REDUX] = sChanseyReduxLevelUpLearnset,
+    [SPECIES_BLISSEY_REDUX] = sBlisseyReduxLevelUpLearnset,
 };

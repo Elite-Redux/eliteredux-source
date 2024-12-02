@@ -1169,4 +1169,10 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_POPCORM] = sPopcormFormSpeciesIdTable,
     [SPECIES_POPCORM_MEGA] = sPopcormFormSpeciesIdTable,
+
+    //3.0 CUTOFF
+    [SPECIES_WEAVILE_MEGA] = sWeavileFormSpeciesIdTable,
+    [SPECIES_HAPPINY_REDUX] = sHappinyFormSpeciesIdTable,
+    [SPECIES_CHANSEY_REDUX] = sChanseyFormSpeciesIdTable,
+    [SPECIES_BLISSEY_REDUX] = sBlisseyFormSpeciesIdTable,
 };

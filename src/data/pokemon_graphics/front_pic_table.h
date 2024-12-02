@@ -1790,6 +1790,10 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
 
     //3.0 CUTOFFS
     SPECIES_SPRITE(IRON_VOCA, gMonFrontPic_IronVoca),
+    SPECIES_SPRITE(WEAVILE_MEGA, gMonFrontPic_WeavileMega),
+    SPECIES_SPRITE(HAPPINY_REDUX, gMonFrontPic_HappinyRedux),
+    SPECIES_SPRITE(CHANSEY_REDUX, gMonFrontPic_ChanseyRedux),
+    SPECIES_SPRITE(BLISSEY_REDUX, gMonFrontPic_BlisseyRedux),
     
 };
 

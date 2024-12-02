@@ -20219,6 +20219,50 @@ static const union AnimCmd *const sAnims_IRON_VOCA[] ={
     sAnim_IRON_VOCA_1,
 };
 
+static const union AnimCmd sAnim_WEAVILE_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_WEAVILE_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_WEAVILE_MEGA_1,
+};
+
+static const union AnimCmd sAnim_HAPPINY_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_HAPPINY_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_HAPPINY_REDUX_1,
+};
+
+static const union AnimCmd sAnim_CHANSEY_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_CHANSEY_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CHANSEY_REDUX_1,
+};
+
+static const union AnimCmd sAnim_BLISSEY_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_BLISSEY_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_BLISSEY_REDUX_1,
+};
+
 
 
 #define ANIM_CMD(name)             [SPECIES_##name] = sAnims_##name
@@ -21904,6 +21948,10 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(FLOETTE_ETERNAL_FLOWER),
     //3.0 CUTOFF
     ANIM_CMD(IRON_VOCA),
+    ANIM_CMD(WEAVILE_MEGA),
+    ANIM_CMD(HAPPINY_REDUX),
+    ANIM_CMD(CHANSEY_REDUX),
+    ANIM_CMD(BLISSEY_REDUX),
 };
 
 #undef ANIM_CMD

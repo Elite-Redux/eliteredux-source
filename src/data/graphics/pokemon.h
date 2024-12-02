@@ -8303,6 +8303,30 @@ const u32 gMonPalette_IronVoca[]           = INCBIN_U32("graphics/pokemon/iron_v
 const u32 gMonShinyPalette_IronVoca[]      = INCBIN_U32("graphics/pokemon/iron_voca/shiny.gbapal.lz");
 const u8  gMonIcon_IronVoca[]              = INCBIN_U8("graphics/pokemon/iron_voca/icon.4bpp");
 
+const u32 gMonFrontPic_WeavileMega[]          = INCBIN_U32("graphics/pokemon/weavile/mega/front.4bpp.lz");
+const u32 gMonBackPic_WeavileMega[]           = INCBIN_U32("graphics/pokemon/weavile/mega/back.4bpp.lz");
+const u32 gMonPalette_WeavileMega[]           = INCBIN_U32("graphics/pokemon/weavile/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_WeavileMega[]      = INCBIN_U32("graphics/pokemon/weavile/mega/shiny.gbapal.lz");
+const u8  gMonIcon_WeavileMega[]              = INCBIN_U8("graphics/pokemon/weavile/mega/icon.4bpp");
+
+const u32 gMonFrontPic_HappinyRedux[]          = INCBIN_U32("graphics/pokemon/happiny/redux/front.4bpp.lz");
+const u32 gMonBackPic_HappinyRedux[]           = INCBIN_U32("graphics/pokemon/happiny/redux/back.4bpp.lz");
+const u32 gMonPalette_HappinyRedux[]           = INCBIN_U32("graphics/pokemon/happiny/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_HappinyRedux[]      = INCBIN_U32("graphics/pokemon/happiny/redux/shiny.gbapal.lz");
+const u8  gMonIcon_HappinyRedux[]              = INCBIN_U8("graphics/pokemon/happiny/redux/icon.4bpp");
+
+const u32 gMonFrontPic_ChanseyRedux[]          = INCBIN_U32("graphics/pokemon/chansey/redux/front.4bpp.lz");
+const u32 gMonBackPic_ChanseyRedux[]           = INCBIN_U32("graphics/pokemon/chansey/redux/back.4bpp.lz");
+const u32 gMonPalette_ChanseyRedux[]           = INCBIN_U32("graphics/pokemon/chansey/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_ChanseyRedux[]      = INCBIN_U32("graphics/pokemon/chansey/redux/shiny.gbapal.lz");
+const u8  gMonIcon_ChanseyRedux[]              = INCBIN_U8("graphics/pokemon/chansey/redux/icon.4bpp");
+
+const u32 gMonFrontPic_BlisseyRedux[]          = INCBIN_U32("graphics/pokemon/blissey/redux/front.4bpp.lz");
+const u32 gMonBackPic_BlisseyRedux[]           = INCBIN_U32("graphics/pokemon/blissey/redux/back.4bpp.lz");
+const u32 gMonPalette_BlisseyRedux[]           = INCBIN_U32("graphics/pokemon/blissey/redux/normal.gbapal.lz");
+const u32 gMonShinyPalette_BlisseyRedux[]      = INCBIN_U32("graphics/pokemon/blissey/redux/shiny.gbapal.lz");
+const u8  gMonIcon_BlisseyRedux[]              = INCBIN_U8("graphics/pokemon/blissey/redux/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

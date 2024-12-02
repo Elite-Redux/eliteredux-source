@@ -1760,8 +1760,9 @@
 #define SPECIES_DURALUDON_PARTNER_MEGA      CUSTOM_MEGA_START + 111
 #define SPECIES_FIDOUGH_PARTNER_MEGA        CUSTOM_MEGA_START + 112
 #define SPECIES_WIGGLYTUFF_MEGA_X           CUSTOM_MEGA_START + 113
+#define SPECIES_WEAVILE_MEGA                CUSTOM_MEGA_START + 114
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_WIGGLYTUFF_MEGA_X  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_WEAVILE_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA
@@ -1899,8 +1900,11 @@
 #define SPECIES_DARMANITAN_REDUX            REDUX_FORMS_START + 128
 #define SPECIES_DARMANITAN_REDUX_AURA       REDUX_FORMS_START + 129
 #define SPECIES_DARMANITAN_REDUX_BOND       REDUX_FORMS_START + 130
+#define SPECIES_HAPPINY_REDUX               REDUX_FORMS_START + 131
+#define SPECIES_CHANSEY_REDUX               REDUX_FORMS_START + 132
+#define SPECIES_BLISSEY_REDUX               REDUX_FORMS_START + 133
 
-#define LAST_REDUX_FORM                     SPECIES_DARMANITAN_REDUX_BOND
+#define LAST_REDUX_FORM                     SPECIES_BLISSEY_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

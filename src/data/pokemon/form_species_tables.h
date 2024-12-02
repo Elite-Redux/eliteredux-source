@@ -1861,6 +1861,7 @@ static const u16 sWeavileFormSpeciesIdTable[] = {
     SPECIES_WEAVILE,
     SPECIES_WEAVILE_REDUX_MEGA,
     SPECIES_WEAVILE_REDUX,
+    SPECIES_WEAVILE_MEGA,
     FORM_SPECIES_END,
 };
 
@@ -2112,5 +2113,21 @@ static const u16 sDuraludonFormSpeciesIdTable[] = {
     SPECIES_DURALUDON,
     SPECIES_DURALUDON_PARTNER,
     SPECIES_DURALUDON_PARTNER_MEGA,
+    FORM_SPECIES_END,
+};
+//3.0 CUTOFF
+static const u16 sHappinyFormSpeciesIdTable[] = {
+    SPECIES_HAPPINY,
+    SPECIES_HAPPINY_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sChanseyFormSpeciesIdTable[] = {
+    SPECIES_CHANSEY,
+    SPECIES_CHANSEY_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sBlisseyFormSpeciesIdTable[] = {
+    SPECIES_BLISSEY,
+    SPECIES_BLISSEY_REDUX,
     FORM_SPECIES_END,
 };

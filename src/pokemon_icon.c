@@ -1789,6 +1789,10 @@ const u8 *const gMonIconTable[] =
 
     //3.0 CUTOFF
     [SPECIES_IRON_VOCA] = gMonIcon_IronVoca,
+    [SPECIES_WEAVILE_MEGA] = gMonIcon_WeavileMega,
+    [SPECIES_HAPPINY_REDUX] = gMonIcon_HappinyRedux,
+    [SPECIES_CHANSEY_REDUX] = gMonIcon_ChanseyRedux,
+    [SPECIES_BLISSEY_REDUX] = gMonIcon_BlisseyRedux,
 
 };
 
@@ -3464,6 +3468,10 @@ const u8 gMonIconPaletteIndices[] =
 
     //3.0 CUTOFF
     [SPECIES_IRON_VOCA] = 0,
+    [SPECIES_WEAVILE_MEGA] = 0,
+    [SPECIES_HAPPINY_REDUX] = 0,
+    [SPECIES_CHANSEY_REDUX] = 0,
+    [SPECIES_BLISSEY_REDUX] = 0,
 
 };
 

@@ -1786,6 +1786,10 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 
     //3.0 POKEMON CUTOFF
     [SPECIES_IRON_VOCA] = _("Iron Voca"),
+    [SPECIES_WEAVILE_MEGA] = _("Weavile"),
+    [SPECIES_HAPPINY_REDUX] = _("Happiny"),
+    [SPECIES_CHANSEY_REDUX] = _("Chansey"),
+    [SPECIES_BLISSEY_REDUX] = _("Blissey"),
 
 
     // PARTNER POKEMON
