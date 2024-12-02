@@ -26212,21 +26212,21 @@ static const struct TrainerMonItemCustomMoves sParty_MaxieMagmaHideout[] = {
 static const struct TrainerMonItemCustomMoves sParty_MaxieMagmaHideoutInsane[] = {
     {
     .lvl = 0,
-    .species = SPECIES_CAMERUPT,
-    .heldItem = ITEM_CAMERUPTITE,
-    .ability = 0,
-    .evs = {252, 0, 0, 252, 0, 4},
-    .nature = NATURE_MODEST,
-    .moves = MOVE_SOIL_DRAIN, MOVE_EXPLOSION, MOVE_SOLAR_BEAM, MOVE_SEARING_SHOT
-    },
-    {
-    .lvl = 0,
     .species = SPECIES_NAGANADEL,
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2,
     .evs = {0, 0, 0, 252, 4, 252},
     .nature = NATURE_TIMID,
     .moves = MOVE_SLUDGE_WAVE, MOVE_WYRM_WIND, MOVE_FIRE_BLAST, MOVE_MYSTIC_DANCE
+    },
+    {
+    .lvl = 0,
+    .species = SPECIES_CAMERUPT,
+    .heldItem = ITEM_CAMERUPTITE,
+    .ability = 0,
+    .evs = {252, 0, 0, 252, 0, 4},
+    .nature = NATURE_MODEST,
+    .moves = MOVE_SOIL_DRAIN, MOVE_EXPLOSION, MOVE_SOLAR_BEAM, MOVE_SEARING_SHOT
     },
     {
     .lvl = 0,
@@ -26258,11 +26258,11 @@ static const struct TrainerMonItemCustomMoves sParty_MaxieMagmaHideoutInsane[] =
     {
     .lvl = 0,
     .species = SPECIES_VENUSAUR,
-    .heldItem = ITEM_VENUSAURITE_X,
+    .heldItem = ITEM_VENUSAURITE,
     .ability = 1,
-    .evs = {252, 252, 4, 0, 0, 0},
-    .nature = NATURE_JOLLY,
-    .moves = MOVE_SOLAR_BLADE, MOVE_POISON_JAB, MOVE_EARTHQUAKE, MOVE_SLEEP_POWDER
+    .evs = {4, 0, 0, 252, 0, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_SOLAR_BEAM, MOVE_EARTH_POWER, MOVE_GROWTH, MOVE_SLUDGE_BOMB
     }
 };
 
@@ -37352,21 +37352,21 @@ static const struct TrainerMonItemCustomMoves sParty_StevenGraniteCaveInsane[] =
     },
     {
     .lvl = 0,
-    .species = SPECIES_METANG,
+    .species = SPECIES_METAGROSS,
+    .heldItem = ITEM_ASSAULT_VEST,
     .ability = 2,
-    .evs = {252, 252, 0, 0, 4, 0},
+    .evs = {252, 156, 100, 0, 0, 0},
     .nature = NATURE_ADAMANT,
-    .moves = MOVE_METEOR_MASH, MOVE_ZEN_HEADBUTT, MOVE_BULLET_PUNCH, MOVE_EARTHQUAKE
+    .moves = MOVE_BULLET_PUNCH, MOVE_METEOR_MASH, MOVE_HAMMER_ARM, MOVE_ICE_PUNCH
     },
     {
     .lvl = 0,
     .species = SPECIES_GENESECT,
     .heldItem = ITEM_OCCA_BERRY,
-    .ability = 2,
-    .evs = {252, 0, 0, 252, 4, 0},
-    .nature = NATURE_QUIET,
-    .moves = MOVE_DISCHARGE, MOVE_TECHNO_BLAST, MOVE_MAGNET_BOMB, MOVE_AURORA_BEAM,
-    .hpType = TYPE_BUG,
+    .ability = 0,
+    .evs = {0, 0, 0, 252, 4, 252},
+    .nature = NATURE_TIMID,
+    .moves = MOVE_ZAP_CANNON, MOVE_TECHNO_BLAST, MOVE_STEEL_BEAM, MOVE_HIDDEN_POWER
     },
     {
     .lvl = 0,
@@ -41736,7 +41736,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt31Insane[] = {
     {
     .lvl = 0,
     .species = SPECIES_SKULBERUS,
-    .heldItem = ITEM_CHOICE_BAND,
+    .heldItem = ITEM_LIFE_ORB,
     .ability = 1,
     .evs = {4, 252, 0, 0, 0, 252},
     .nature = NATURE_JOLLY,
