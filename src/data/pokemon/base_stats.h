@@ -5310,12 +5310,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_EEVEE_PARTNER_MEGA] =
     {
-    .baseHP        = 65,
-    .baseAttack    = 125,
-    .baseDefense   = 60,
-    .baseSpeed     = 55,
-    .baseSpAttack  = 120,
-    .baseSpDefense = 110,
+    .baseHP         = 65,
+    .baseAttack     = 125,
+    .baseDefense    = 65,
+    .baseSpeed      = 50,
+    .baseSpAttack   = 120,
+    .baseSpDefense  = 110,
     .type1 = TYPE_NORMAL,
     .type2 = TYPE_NORMAL,
     .catchRate = 255,
