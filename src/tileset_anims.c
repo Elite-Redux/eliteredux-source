@@ -482,17 +482,9 @@ const u16 *const gTilesetAnims_MauvilleGym_ElectricGates[] = {
 
 const u16 tileset_anims_space_12[16] = {};
 const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame0[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/0.4bpp");
-const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame1[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/1.4bpp");
-const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame2[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/2.4bpp");
-const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame3[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/3.4bpp");
-const u16 gTilesetAnims_MauvilleGym_TrippingFloor_Frame4[] = INCBIN_U16("data/tilesets/secondary/mauville_gym/anim/tripping_floor/4.4bpp");
 
 const u16 *const gTilesetAnims_MauvilleGym_TrippingFloor[] = {
     gTilesetAnims_MauvilleGym_TrippingFloor_Frame0,
-    gTilesetAnims_MauvilleGym_TrippingFloor_Frame1,
-    gTilesetAnims_MauvilleGym_TrippingFloor_Frame2,
-    gTilesetAnims_MauvilleGym_TrippingFloor_Frame3,
-    gTilesetAnims_MauvilleGym_TrippingFloor_Frame4,
 };
 
 const u16 tileset_anims_space_13[16] = {};
@@ -1128,36 +1120,38 @@ static void QueueAnimTiles_Slateport_Balloons(u16 timer)
     AppendTilesetAnimToBuffer(gTilesetAnims_Slateport_Balloons[i], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + 224)), 0x80);
 }
 
+#define MAUVILLE_LIGHTNING_PULSE_DURATION 2
+#define MAUVILLE_LIGHTNING_PULSE_2_START 40
+
 static void TilesetAnim_MauvilleGym(u16 timer)
 {
-    switch (timer % 1000)
+    switch (timer % 250)
     {
     case 0:
-    case 4:
-    case 8:
-        QueueAnimTiles_MauvilleGym_ElectricGates(1);
-        break;
-    case 2:
-    case 6:
+    case 2 * MAUVILLE_LIGHTNING_PULSE_DURATION:
         QueueAnimTiles_MauvilleGym_ElectricGates(0);
+        break;
+    case MAUVILLE_LIGHTNING_PULSE_DURATION:
+        QueueAnimTiles_MauvilleGym_ElectricGates(1);
         break;
     
-    case 25:
-    case 29:
-    case 33:
-        QueueAnimTiles_MauvilleGym_ElectricGates(1);
-        break;
-    case 27:
-    case 31:
+    case MAUVILLE_LIGHTNING_PULSE_2_START:
+    case MAUVILLE_LIGHTNING_PULSE_2_START + 2 * MAUVILLE_LIGHTNING_PULSE_DURATION:
+    case MAUVILLE_LIGHTNING_PULSE_2_START + 4 * MAUVILLE_LIGHTNING_PULSE_DURATION:
         QueueAnimTiles_MauvilleGym_ElectricGates(0);
+        break;
+    case MAUVILLE_LIGHTNING_PULSE_2_START + MAUVILLE_LIGHTNING_PULSE_DURATION:
+    case MAUVILLE_LIGHTNING_PULSE_2_START + 3 * MAUVILLE_LIGHTNING_PULSE_DURATION:
+        QueueAnimTiles_MauvilleGym_ElectricGates(1);
         break;
     }
 
-    if (timer % 9999 == 0) {
-        QueueAnimTiles_MauvilleGym_TrippingFloor(timer / 9999);
-    }
-    if (timer % 9999 == 0) {
-        QueueAnimTiles_MauvilleGym_GearsGround(timer / 9999);
+
+
+    QueueAnimTiles_MauvilleGym_TrippingFloor(0);
+
+    if (!timer) {
+        QueueAnimTiles_MauvilleGym_GearsGround(0);
     }
 }
 
