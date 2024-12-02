@@ -20196,6 +20196,19 @@ static const union AnimCmd *const sAnims_PICHU_SPIKY_EARED[] ={
     sAnim_PICHU_SPIKY_EARED_1,
 };
 
+static const union AnimCmd sAnim_FLOETTE_ETERNAL_FLOWER_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_FLOETTE_ETERNAL_FLOWER[] ={
+    sAnim_GeneralFrame0,
+    sAnim_FLOETTE_ETERNAL_FLOWER_1,
+};
+
+
+
 #define ANIM_CMD(name)             [SPECIES_##name] = sAnims_##name
 #define ANIM_CMD_FULL(name, anims) [SPECIES_##name] = anims
 
@@ -21782,7 +21795,6 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD_FULL(FLOETTE_ORANGE_FLOWER, sAnims_FLOETTE),
     ANIM_CMD_FULL(FLOETTE_BLUE_FLOWER, sAnims_FLOETTE),
     ANIM_CMD_FULL(FLOETTE_WHITE_FLOWER, sAnims_FLOETTE),
-    ANIM_CMD_FULL(FLOETTE_ETERNAL_FLOWER, sAnims_FLOETTE),
     ANIM_CMD_FULL(FLORGES_YELLOW_FLOWER, sAnims_FLORGES),
     ANIM_CMD_FULL(FLORGES_ORANGE_FLOWER, sAnims_FLORGES),
     ANIM_CMD_FULL(FLORGES_BLUE_FLOWER, sAnims_FLORGES),
@@ -21877,6 +21889,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD_FULL(CALYREX_ICE_RIDER, sAnims_CALYREX),
     ANIM_CMD_FULL(CALYREX_SHADOW_RIDER, sAnims_CALYREX),
     ANIM_CMD(EGG),
+    // NEWER MONS
+    ANIM_CMD(FLOETTE_ETERNAL_FLOWER),
 };
 
 #undef ANIM_CMD

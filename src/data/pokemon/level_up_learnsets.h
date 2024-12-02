@@ -1033,6 +1033,7 @@ static const struct LevelUpMove sWigglytuffLevelUpLearnset[] = {
     LEVEL_UP_MOVE(56, MOVE_TRUMP_CARD),
     LEVEL_UP_MOVE(56, MOVE_STAR_CRASH),
     LEVEL_UP_MOVE(56, MOVE_ROLLING_KICK),
+    LEVEL_UP_MOVE(61, MOVE_HIGH_JUMP_KICK),
     LEVEL_UP_END
 };
 
@@ -7645,6 +7646,7 @@ static const struct LevelUpMove sAggronLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_SCARY_FACE),
     LEVEL_UP_MOVE(51, MOVE_BEAT_UP),
     LEVEL_UP_MOVE(51, MOVE_STEEL_BEAM),
+    LEVEL_UP_MOVE(100, MOVE_SHORE_UP),
     LEVEL_UP_END
 };
 
@@ -10346,6 +10348,7 @@ static const struct LevelUpMove sBastiodonLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_STEEL_BEAM),
     LEVEL_UP_MOVE(51, MOVE_NO_RETREAT),
     LEVEL_UP_MOVE(51, MOVE_POWER_TRICK),
+    LEVEL_UP_MOVE(100, MOVE_SHORE_UP),
     LEVEL_UP_END
 };
 
@@ -22269,7 +22272,6 @@ static const struct LevelUpMove sArbolivaLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_SOIL_DRAIN),
     LEVEL_UP_MOVE(46, MOVE_SYNTHESIS),
     LEVEL_UP_MOVE(51, MOVE_NATURAL_GIFT),
-    LEVEL_UP_MOVE(51, MOVE_STRENGTH_SAP),
     LEVEL_UP_MOVE(56, MOVE_CHLOROBLAST),
     LEVEL_UP_END
 };

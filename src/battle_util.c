@@ -9307,12 +9307,6 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         if (gVolatileStructs[battlerDef].isFirstTurn == 2) MUL(2.0);
         return;
     
-    case ABILITY_ICE_COLD_HUNTER:
-    case ABILITY_WHITEOUT:
-    case ABILITY_SNOWY_WRATH:
-        if (moveType == TYPE_ICE && IsBattlerWeatherAffected(battlerAtk, WEATHER_HAIL_ANY)) MUL(1.5);
-        return;
-    
     case ABILITY_GUTS:
         if (HasAnyStatusOrAbility(battlerAtk) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
         return;
@@ -9894,6 +9888,12 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
 
             // Fog Power
             if ((BATTLER_HAS_ABILITY(battler, ABILITY_ECTOPLASM))
+                && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
+                && GetHighestAttackingStatId(battler, TRUE) == statEnum)
+                    statBase = statBase * 3 / 2;
+
+            // Fog Power
+            if ((BATTLER_HAS_ABILITY(battler, ABILITY_WHITEOUT) || BATTLER_HAS_ABILITY(battler, ABILITY_SNOWY_WRATH))
                 && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)
                 && GetHighestAttackingStatId(battler, TRUE) == statEnum)
                     statBase = statBase * 3 / 2;
@@ -11727,11 +11727,11 @@ bool32 IsBattlerAffectedByHazards(u8 battlerId, bool32 stealthRock)
         ret = FALSE;
         RecordItemEffectBattle(battlerId, holdEffect);
     }
-	else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_SHIELD_DUST))
+	else if (BattlerHasAbility(gActiveBattler, ABILITY_SHIELD_DUST, FALSE))
     {
         ret = FALSE;
     }
-	else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_MOUNTAINEER) && stealthRock)
+	else if (stealthRock && BattlerHasAbility(gActiveBattler, ABILITY_MOUNTAINEER, FALSE))
     {
         ret = FALSE;
     }
@@ -13801,6 +13801,7 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         break;
     
     case ABILITY_INFLATABLE:
+    case ABILITY_BALLOON_BLITZ:
         REQUIRE(ShouldApplyOnHitAffect(battler))
         REQUIRE(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
         REQUIRE(moveType == TYPE_FIRE || moveType == TYPE_FLYING)
@@ -13811,11 +13812,6 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
     case ABILITY_BALLOON_BOMBER:
         if (HandleDefenderAbilityAs(ABILITY_INFLATABLE, battler, attacker, move, moveType)) return TRUE;
         if (HandleDefenderAbilityAs(ABILITY_AFTERMATH, battler, attacker, move, moveType)) return TRUE;
-        break;
-
-    case ABILITY_BALLOON_BLITZ:
-        if (HandleDefenderAbilityAs(ABILITY_INFLATABLE, battler, attacker, move, moveType)) return TRUE;
-        if (HandleDefenderAbilityAs(ABILITY_HYPER_AGGRESSIVE, battler, attacker, move, moveType)) return TRUE;
         break;
     
     case ABILITY_WATER_COMPACTION:

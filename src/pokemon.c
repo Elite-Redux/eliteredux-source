@@ -9417,6 +9417,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
               randomizedInnate == ABILITY_BAD_COMPANY           ||
               randomizedInnate == ABILITY_ARCHMAGE              ||
               randomizedInnate == ABILITY_APE_SHIFT             ||
+              randomizedInnate == ABILITY_DESOLATE_SUN          || // Not implemented
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedInnate == ABILITY_COMATOSE              ||
               randomizedInnate == ABILITY_TRUANT                ||
@@ -9995,7 +9996,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies) {
     }
     if (gSaveBlock2Ptr->encounterRandomizedMode == TRUE && basespecies != SPECIES_NONE) {
         if (gSaveBlock2Ptr->encounterRandomizedLegendaryMode == FALSE) {
-            //Legendary Mons Enabled
+            //Legendary Mons Disabled
 
             do {
                 species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
@@ -10100,33 +10101,38 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies) {
                 species == SPECIES_ETERNATUS_ETERNAMAX        || //Unfinished
                 species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Unfinished
                 species == SPECIES_ZARUDE_DADA                || //Unfinished|
+                //Unfinished Mons
+                species == SPECIES_INFERNAPE_REDUX_B          ||
+                species == SPECIES_TERAPAGOS_STELLAR          ||
+                species == SPECIES_SCIZOR_REDUX               ||
+                species == SPECIES_LUXRAY_REDUX               ||
+                species == SPECIES_CRAMORANT_GULPING          ||
+                species == SPECIES_CRAMORANT_GORGING          ||
+                species == SPECIES_SINISTEA_ANTIQUE           ||
+                species == SPECIES_POLTEAGEIST_ANTIQUE        ||
+                species == SPECIES_ALCREMIE_RUBY_CREAM        ||
+                species == SPECIES_ALCREMIE_MATCHA_CREAM      ||
+                species == SPECIES_ALCREMIE_MINT_CREAM        ||
+                species == SPECIES_ALCREMIE_LEMON_CREAM       ||
+                species == SPECIES_ALCREMIE_SALTED_CREAM      ||
+                species == SPECIES_ALCREMIE_RUBY_SWIRL        ||
+                species == SPECIES_ALCREMIE_CARAMEL_SWIRL     ||
+                species == SPECIES_ALCREMIE_RAINBOW_SWIRL     ||
+                species == SPECIES_EISCUE_NOICE_FACE          ||
+                species == SPECIES_INDEEDEE_FEMALE            ||
+                species == SPECIES_MORPEKO_HANGRY             ||
                 (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
                 (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
-                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KECLEONG) 
+                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KECLEONG) ||
+                (species >= SPECIES_DRAGONITE_DELIVERY && species <= SPECIES_TINKATON_MEGA)
                 );
         }
         else {
-            //Legendary Mons Disabled
+            //Legendary Mons Enabled
             do {
                 species = RandRangeDeterministic(0, LAST_REDUX_FORM - 1, &rndSeed);
             }
             while (species == SPECIES_NONE                     ||
-                species == SPECIES_ZACIAN                     || //Legendary
-                species == SPECIES_ZAMAZENTA                  || //Legendary
-                species == SPECIES_ETERNATUS                  || //Legendary
-                species == SPECIES_KUBFU                      || //Legendary
-                species == SPECIES_URSHIFU                    || //Legendary
-                species == SPECIES_ZARUDE                     || //Legendary
-                species == SPECIES_REGIELEKI                  || //Legendary
-                species == SPECIES_REGIDRAGO                  || //Legendary
-                species == SPECIES_GLASTRIER                  || //Legendary
-                species == SPECIES_SPECTRIER                  || //Legendary
-                species == SPECIES_CALYREX                    || //Legendary
-                species == SPECIES_ZACIAN_CROWNED_SWORD       || //Legendary
-                species == SPECIES_ZAMAZENTA_CROWNED_SHIELD   || //Legendary
-                species == SPECIES_ETERNATUS_ETERNAMAX        || //Legendary
-                species == SPECIES_URSHIFU_RAPID_STRIKE_STYLE || //Legendary
-                species == SPECIES_ZARUDE_DADA                || //Legendary
                 //Monochamp Mons
                 species == SPECIES_DRACOVISH_MEGA             ||
                 species == SPECIES_WIGGLYTUFF_APEX            ||
@@ -10152,7 +10158,7 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies) {
                 species == SPECIES_MIMIKYU_RAYQUAZA_BUSTED    ||
                 species == SPECIES_VICTINI_PRIMAL             ||
                 //Unfinished Mons
-                species == SPECIES_INFERNAPE_REDUX            ||
+                species == SPECIES_INFERNAPE_REDUX_B          ||
                 species == SPECIES_TERAPAGOS_STELLAR          ||
                 species == SPECIES_SCIZOR_REDUX               ||
                 species == SPECIES_LUXRAY_REDUX               ||
@@ -10173,7 +10179,8 @@ u16 GetRandomPokemonFromSpecies(u16 basespecies) {
                 species == SPECIES_MORPEKO_HANGRY             ||
                 (species > LAST_VALID_SPECIES && species < SPECIES_RATTATA_ALOLAN) || 
                 (species > SPECIES_STUNFISK_GALARIAN && species < SPECIES_QWILFISH_HISUIAN) ||
-                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KECLEONG) 
+                (species > SPECIES_ZOROARK_HISUIAN && species < SPECIES_KECLEONG) ||
+                (species >= SPECIES_DRAGONITE_DELIVERY && species <= SPECIES_TINKATON_MEGA)
                 );
         }
     }

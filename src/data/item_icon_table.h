@@ -549,6 +549,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_SAFETY_GOGGLES] = {gItemIcon_SafetyGoggles, gItemIconPalette_SafetyGoggles},
     //Mega Stones
     [ITEM_GENGARITE]       = {gItemIcon_Gengarite,       gItemIconPalette_Gengarite},
+    [ITEM_GENGARITE_X]       = {gItemIcon_Gengarite,       gItemIconPalette_Gengarite},
     [ITEM_GARDEVOIRITE]    = {gItemIcon_Gardevoirite,    gItemIconPalette_Gardevoirite},
     [ITEM_AMPHAROSITE]     = {gItemIcon_Ampharosite,     gItemIconPalette_Ampharosite},
     [ITEM_VENUSAURITE]     = {gItemIcon_Venusaurite,     gItemIconPalette_Venusaurite},
@@ -616,6 +617,7 @@ const u32 *const gItemIconTable[][2] =
     [ITEM_EMPOLEONITE]     = {gItemIcon_Empoleonite,     gItemIconPalette_Empoleonite},
     [ITEM_FROSLASSITE]     = {gItemIcon_Froslassite,     gItemIconPalette_Froslassite},
     [ITEM_WIGGLYTUFFITE]   = {gItemIcon_Wigglytuffite, gItemIconPalette_Wigglytuffite},
+    [ITEM_WIGGLYTUFFITE_X]   = {gItemIcon_Wigglytuffite, gItemIconPalette_Wigglytuffite},
     [ITEM_TINKATITE]       = {gItemIcon_Tinkatite, gItemIconPalette_Tinkatite},
     [ITEM_GYARADEATHITE_X] = {gItemIcon_Gyaradeathite_X, gItemIconPalette_Gyaradeathite_X},
     [ITEM_GYARADEATHITE_Y] = {gItemIcon_Gyaradeathite_Y, gItemIconPalette_Gyaradeathite_Y},

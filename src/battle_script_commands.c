@@ -1296,7 +1296,7 @@ int ShouldSetMoldBreaker(int battler, int move)
     return FALSE;
 }
 
-MultihitType GetParentalBondType(int battler, int target, int move)
+MultihitType GetParentalBondType(int battler, int target, int move, int moveType)
 {
     int i;
 
@@ -1319,8 +1319,8 @@ MultihitType GetParentalBondType(int battler, int target, int move)
         {
         case ABILITY_PARENTAL_BOND:
         case ABILITY_HYPER_AGGRESSIVE:
-        case ABILITY_ICE_COLD_HUNTER:
         case ABILITY_RAGING_GODDESS:
+        case ABILITY_BALLOON_BLITZ:
             return PARENTAL_BOND_HYPER_AGGRESSIVE;
         
         case ABILITY_STEEL_BEETLE:
@@ -1337,7 +1337,7 @@ MultihitType GetParentalBondType(int battler, int target, int move)
             return PARENTAL_BOND_DUAL_WIELD;
         
         case ABILITY_RAGING_MOTH:
-            REQUIRE(gBattleMoves[move].type == TYPE_FIRE)
+            REQUIRE(moveType == TYPE_FIRE)
             return PARENTAL_BOND_DUAL_WIELD;
         
         case ABILITY_DEVOURER:
@@ -1352,6 +1352,10 @@ MultihitType GetParentalBondType(int battler, int target, int move)
         
         case ABILITY_MINION_CONTROL:
             return PARENTAL_BOND_MINION_CONTROL;
+        
+        case ABILITY_ICE_COLD_HUNTER:
+            REQUIRE(moveType == TYPE_ICE)
+            return PARENTAL_BOND_ICE_COLD_HUNTER;
         }
     }
 
@@ -1365,6 +1369,7 @@ int GetParentalBondCount(int battler, MultihitType parentalBondType)
     case PARENTAL_BOND_HYPER_AGGRESSIVE:
     case PARENTAL_BOND_PRIMAL_MAW:
     case PARENTAL_BOND_DUAL_WIELD:
+    case PARENTAL_BOND_ICE_COLD_HUNTER:
         return 2;
     
     case PARENTAL_BOND_THREE_HEADED:
@@ -1450,7 +1455,7 @@ static void Cmd_attackcanceler(void)
 
     if (!gTurnStructs[gBattlerAttacker].parentalBondOn)
     {
-        gTurnStructs[gBattlerAttacker].parentalBondTrigger = GetParentalBondType(gBattlerAttacker, gBattlerTarget, gCurrentMove);
+        gTurnStructs[gBattlerAttacker].parentalBondTrigger = GetParentalBondType(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType);
         i = GetParentalBondCount(gBattlerAttacker, gTurnStructs[gBattlerAttacker].parentalBondTrigger);
         if (i > 1)
         {
