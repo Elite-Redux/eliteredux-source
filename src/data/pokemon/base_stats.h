@@ -19764,6 +19764,32 @@ const struct BaseStats gBaseStats[] =
     .eggGroup1 = EGG_GROUP_FIELD,
     .eggGroup2 = EGG_GROUP_FIELD,
     .abilities      = {ABILITY_GORILLA_TACTICS, ABILITY_SHEER_FORCE, ABILITY_BATTLE_AURA},
+    .innates        = {ABILITY_EARTH_EATER, ABILITY_IRON_FIST, ABILITY_MOLD_BREAKER},
+    .bodyColor = BODY_COLOR_WHITE,
+    .noFlip = FALSE,
+    .tier = 0,
+    },
+
+[SPECIES_DARMANITAN_REDUX_BOND] =
+    {
+    .baseHP         = 80,
+    .baseAttack     = 140,
+    .baseDefense    = 80,
+    .baseSpeed      = 90,
+    .baseSpAttack   = 50,
+    .baseSpDefense  = 80,
+    .type1          = TYPE_GROUND,
+    .type2          = TYPE_FIGHTING,
+    .catchRate = 255,
+    .expYield = 168,
+    .evYield_Attack    = 2,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_FIELD,
+    .eggGroup2 = EGG_GROUP_FIELD,
+    .abilities      = {ABILITY_GORILLA_TACTICS, ABILITY_SHEER_FORCE, ABILITY_BATTLE_AURA},
     .innates        = {ABILITY_BATTLE_BOND, ABILITY_IRON_FIST, ABILITY_MOLD_BREAKER},
     .bodyColor = BODY_COLOR_WHITE,
     .noFlip = FALSE,
@@ -19796,7 +19822,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
-[SPECIES_DARMANITAN_REDUX_BOND] =
+[SPECIES_DARMANITAN_REDUX_BLUNDER] =
     {
     .baseHP         = 80,
     .baseAttack     = 170,

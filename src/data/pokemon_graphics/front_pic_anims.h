@@ -12884,6 +12884,12 @@ static const union AnimCmd sAnim_DARMANITAN_REDUX_BOND_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_DARMANITAN_REDUX_BLUNDER_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_DARMANITAN_REDUX_AURA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -19977,6 +19983,11 @@ static const union AnimCmd *const sAnims_DARMANITAN_REDUX_BOND[] ={
     sAnim_DARMANITAN_REDUX_BOND_1,
 };
 
+static const union AnimCmd *const sAnims_DARMANITAN_REDUX_BLUNDER[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DARMANITAN_REDUX_BLUNDER_1,
+};
+
 static const union AnimCmd *const sAnims_DARMANITAN_REDUX_AURA[] ={
     sAnim_GeneralFrame0,
     sAnim_DARMANITAN_REDUX_AURA_1,
@@ -20781,6 +20792,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(DARMANITAN_REDUX),
     ANIM_CMD(DARMANITAN_REDUX_AURA),
     ANIM_CMD(DARMANITAN_REDUX_BOND),
+    ANIM_CMD(DARMANITAN_REDUX_BLUNDER),
     ANIM_CMD(MARACTUS),
     ANIM_CMD(SAGARACAS),
     ANIM_CMD(DWEBBLE),

@@ -7224,6 +7224,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 2,
     },
+    [SPECIES_DARMANITAN_REDUX_BLUNDER] =
+    {
+        .size = 0x78,
+        .y_offset = 2,
+    },
     [SPECIES_DARMANITAN_REDUX_BOND] =
     {
         .size = 0x78,
