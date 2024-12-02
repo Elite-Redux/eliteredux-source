@@ -32432,12 +32432,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_HOUNDOOM_REDUX] =
     {
-    .baseHP        =  75,
-    .baseAttack    = 80,
-    .baseDefense   =  50,
-    .baseSpeed     =  105,
-    .baseSpAttack  = 130,
-    .baseSpDefense =  80,
+    .baseHP         = 75,
+    .baseAttack     = 90,
+    .baseDefense    = 50,
+    .baseSpeed      = 105,
+    .baseSpAttack   = 130,
+    .baseSpDefense  = 80,
     .type1 = TYPE_GHOST,
     .type2 = TYPE_GHOST,
     .catchRate = 255,
@@ -32459,7 +32459,7 @@ const struct BaseStats gBaseStats[] =
 [SPECIES_HOUNDOOM_MEGA_REDUX] =
     {
     .baseHP         = 75,
-    .baseAttack     = 105,
+    .baseAttack     = 115,
     .baseDefense    = 60,
     .baseSpeed      = 135,
     .baseSpAttack   = 125,
