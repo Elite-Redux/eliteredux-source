@@ -7160,6 +7160,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
+    [SPECIES_DARMANITAN_REDUX_BLUNDER] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
     [SPECIES_YAMASK_GALARIAN] =
     {
         .size = 0x65,

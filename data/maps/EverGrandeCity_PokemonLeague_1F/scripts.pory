@@ -251,3 +251,47 @@ script EverGrandeCity_PokemonLeague_1F_EventScript_LockedMode{
 	releaseall
 	end
 }
+
+script EverGrandeCity_PokemonLeague_1F_MegaFidough{
+	lockall
+	faceplayer
+	checktrainerflag(TRAINER_MEGA_FIDOUGH)
+	if(var(VAR_RESULT) == FALSE){
+		msgbox(format("Hi I'm Mega Fidough, do you want to fight?"), MSGBOX_YESNO)
+		if(var(VAR_RESULT) == TRUE){
+			msgbox(format("Here I go!"))
+			trainerbattle_no_intro(TRAINER_MEGA_FIDOUGH, format("I was defeated"))
+			msgbox(format("You really are strong..."))
+		}
+		else{
+			msgbox(format("Oh Well..."))
+		}
+	}
+	else{
+		msgbox(format("You should be strong enough to battle the Elite Four."))
+	}
+	releaseall
+	end
+}
+
+script EverGrandeCity_PokemonLeague_1F_Blunder{
+	lockall
+	faceplayer
+	checktrainerflag(TRAINER_BLUNDER)
+	if(var(VAR_RESULT) == FALSE){
+		msgbox(format("Hi I'm Blunder, do you want to fight?"), MSGBOX_YESNO)
+		if(var(VAR_RESULT) == TRUE){
+			msgbox(format("Here I go!"))
+			trainerbattle_no_intro(TRAINER_BLUNDER, format("I was defeated"))
+			msgbox(format("You really are strong..."))
+		}
+		else{
+			msgbox(format("Oh Well..."))
+		}
+	}
+	else{
+		msgbox(format("You should be strong enough to battle the Elite Four."))
+	}
+	releaseall
+	end
+}

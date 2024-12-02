@@ -9091,8 +9091,8 @@ static void Cmd_various(void)
                     newSpecies = SPECIES_GRENINJA_ASH;
                     break;
 
-                case SPECIES_DARMANITAN_REDUX:
-                    newSpecies = SPECIES_DARMANITAN_REDUX_BOND;
+                case SPECIES_DARMANITAN_REDUX_BOND:
+                    newSpecies = SPECIES_DARMANITAN_REDUX_BLUNDER;
                     break;
                 }
 

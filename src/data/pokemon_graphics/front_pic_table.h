@@ -1448,7 +1448,8 @@ const struct CompressedSpriteSheet gMonFrontPicTable[] =
     SPECIES_SPRITE(DARMANITAN_GALARIAN, gMonFrontPic_DarmanitanGalarian),
     SPECIES_SPRITE(DARMANITAN_REDUX, gMonFrontPic_DarmanitanRedux),
     SPECIES_SPRITE(DARMANITAN_REDUX_AURA, gMonFrontPic_DarmanitanReduxAura),
-    SPECIES_SPRITE(DARMANITAN_REDUX_BOND, gMonFrontPic_DarmanitanReduxBond),
+    SPECIES_SPRITE(DARMANITAN_REDUX_BOND, gMonFrontPic_DarmanitanRedux),
+    SPECIES_SPRITE(DARMANITAN_REDUX_BLUNDER, gMonFrontPic_DarmanitanReduxBond),
     SPECIES_SPRITE(YAMASK_GALARIAN, gMonFrontPic_YamaskGalarian),
     SPECIES_SPRITE(STUNFISK_GALARIAN, gMonFrontPic_StunfiskGalarian),
 
