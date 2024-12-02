@@ -39497,7 +39497,8 @@ static const struct TrainerMonItemCustomMoves sParty_KirkInsane[] = {
     .ability = 0,
     .evs = {160, 0, 0, 252, 0, 96},
     .nature = NATURE_MODEST,
-    .moves = MOVE_ZAP_CANNON, MOVE_AURA_SPHERE, MOVE_TECHNO_BLAST, MOVE_ICE_BEAM
+    .moves = MOVE_ZAP_CANNON, MOVE_AURA_SPHERE, MOVE_TECHNO_BLAST, MOVE_ICE_BEAM,
+    .hpType = TYPE_NORMAL,
     },
     {
     .lvl = 0,
@@ -40175,7 +40176,8 @@ static const struct TrainerMonItemCustomMoves sParty_MaryInsane[] = {
     .ability = 1,
     .evs = {0, 0, 4, 252, 0, 252},
     .nature = NATURE_TIMID,
-    .moves = MOVE_TECHNO_BLAST, MOVE_ICE_BEAM, MOVE_ZAP_CANNON, MOVE_PSYCHIC
+    .moves = MOVE_TECHNO_BLAST, MOVE_ICE_BEAM, MOVE_ZAP_CANNON, MOVE_PSYCHIC,
+    .hpType = TYPE_NORMAL,
     },
     {
     .lvl = 0,
@@ -46099,7 +46101,7 @@ static const struct TrainerMonItemCustomMoves sParty_Grunt11Insane[] = {
     .species = SPECIES_BAXCALIBUR,
     .heldItem = ITEM_TACTICAL_VEST,
     .ability = 2,
-    .evs = {0, 0, 4, 0, 0, 252},
+    .evs = {0, 252, 4, 0, 0, 252},
     .nature = NATURE_JOLLY,
     .moves = MOVE_SCALE_SHOT, MOVE_FROST_BRAND, MOVE_DRAGON_CLAW, MOVE_SEISMIC_BLADE
     },
