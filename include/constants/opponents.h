@@ -913,6 +913,8 @@
 #define TRAINER_TERIYAKI                               906
 #define TRAINER_NEW_TRAINER                            907
 #define TRAINER_CINDY_5                                908
+#define TRAINER_MEGA_FIDOUGH                           909
+#define TRAINER_BLUNDER                                910
 #define TRAINERS_COUNT                                 1600
 #define MAX_OLD_TRAINERS_COUNT                         TRAINERS_COUNT + 1
 
