@@ -12247,7 +12247,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS
         }
         else if ((ability = BATTLER_HAS_ABILITY(battler, ABILITY_CLEAR_BODY))
                 || (ability = BATTLER_HAS_ABILITY(battler, ABILITY_FULL_METAL_BODY))
-                || (ability = BATTLER_HAS_ABILITY(battler, ABILITY_LUCKY_HALO)))
+                || ((ability = BattlerHasAbility(battler, ABILITY_LUCKY_HALO, FALSE)) && affectsUser))
         {
             if (flags == STAT_BUFF_ALLOW_PTR)
             {

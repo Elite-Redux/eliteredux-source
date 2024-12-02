@@ -1128,7 +1128,6 @@ static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
     [ABILITY_DREAM_STATE] = 1,
     [ABILITY_FLAME_SHIELD] = 1,
     [ABILITY_HOVER] = 1,
-    [ABILITY_LUCKY_HALO] = 1,
     [ABILITY_DRAGONSLAYER] = 1,
     [ABILITY_STALL] = 1,
     [ABILITY_TERA_SHELL] = 1,
