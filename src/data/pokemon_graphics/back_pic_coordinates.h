@@ -7212,7 +7212,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DARUMAKA_REDUX] =
     {
         .size = 0x76,
-        .y_offset = 11,
+        .y_offset = 14,
     },
     [SPECIES_DARMANITAN_GALARIAN] =
     {
@@ -7237,7 +7237,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_DARMANITAN_REDUX_AURA] =
     {
         .size = 0x78,
-        .y_offset = 2,
+        .y_offset = 11,
     },
     [SPECIES_YAMASK_GALARIAN] =
     {
