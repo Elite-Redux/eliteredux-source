@@ -9378,6 +9378,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
        innate != ABILITY_CROWNED_KING           &&
        innate != ABILITY_ZERO_TO_HERO           &&
        innate != ABILITY_BAD_COMPANY            &&
+       innate != ABILITY_CHEEK_POUCH       &&
        innate != ABILITY_ARCHMAGE               &&
        innate != ABILITY_NEUTRALIZING_GAS       &&
        innate != ABILITY_FLAMMABLE_COAT         &&
@@ -9417,6 +9418,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
               randomizedInnate == ABILITY_BAD_COMPANY           ||
               randomizedInnate == ABILITY_ARCHMAGE              ||
               randomizedInnate == ABILITY_APE_SHIFT             ||
+              randomizedInnate == ABILITY_CHEEK_POUCH           ||
               randomizedInnate == ABILITY_DESOLATE_SUN          || // Not implemented
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedInnate == ABILITY_COMATOSE              ||
@@ -9456,6 +9458,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
        ability != ABILITY_FLOWER_GIFT       &&
        ability != ABILITY_ZERO_TO_HERO      &&
        ability != ABILITY_BAD_COMPANY       &&
+       ability != ABILITY_CHEEK_POUCH       &&
        ability != ABILITY_ARCHMAGE          &&
        ability != ABILITY_APE_SHIFT              &&
        #ifdef BALANCE_RANDOMIZER_ABILITIES
@@ -9492,6 +9495,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
               randomizedAbility == ABILITY_BAD_COMPANY          ||
               randomizedAbility == ABILITY_ARCHMAGE             ||
               randomizedAbility == ABILITY_APE_SHIFT             ||
+              randomizedAbility == ABILITY_CHEEK_POUCH           ||
               
               #ifdef BALANCE_RANDOMIZER_ABILITIES
               randomizedAbility == ABILITY_COMATOSE             ||
