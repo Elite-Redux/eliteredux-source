@@ -723,6 +723,7 @@ static const u8 sAbilityNeurotoxinDescription[] = _("Inflicting poison also lowe
 static const u8 sAbilityEnergizedHornsDescription[] = _("Mighty horn moves become special\nand deal 30% more damage.");
 static const u8 sAbilitySpiderLairUpgradeDescription[] = _("Casts Sticky Web on entry.\nLasts 7 turns.");
 static const u8 sAbilityBalloonBlitzDescription[] = _("Inflatable + Hyper Aggressive.");
+static const u8 sAbilityDoomBlastDescription[] = _("Boosts own Dark moves by 1.35x,\ntakes 10% of dmg dealt as recoil.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1482,6 +1483,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_CRUST_COAT] = _("Crust Coat"),
     [ABILITY_PUFFY] = _("Puffy"),
     [ABILITY_BALLOON_BLITZ] = _("Balloon Blitz"),
+    [ABILITY_DOOM_BLAST] = _("Doom Blast"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2242,4 +2244,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_CRUST_COAT] = sAbilityBattleArmorDescription,
     [ABILITY_PUFFY] = sAbilityFluffyDescription,
     [ABILITY_BALLOON_BLITZ] = sAbilityBalloonBlitzDescription,
+    [ABILITY_DOOM_BLAST] = sAbilityDoomBlastDescription,
 };

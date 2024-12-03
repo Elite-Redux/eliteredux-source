@@ -9362,6 +9362,10 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
     case ABILITY_ELECTRIC_BURST:
         if (moveType == TYPE_ELECTRIC && gBattleMons[battlerAtk].hp > 1) MUL(1.35);
         return;
+
+    case ABILITY_DOOM_BLAST:
+        if (moveType == TYPE_DARK && gBattleMons[battlerAtk].hp > 1) MUL(1.35);
+        return;
     
     case ABILITY_INFERNAL_RAGE:
         if (moveType == TYPE_FIRE && gBattleMons[battlerAtk].hp > 1) MUL(1.35);
