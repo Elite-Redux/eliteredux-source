@@ -20318,6 +20318,29 @@ static const union AnimCmd *const sAnims_SAMUROTT_MEGA[] ={
     sAnim_SAMUROTT_MEGA_1,
 };
 
+static const union AnimCmd sAnim_MORPEKYLL_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_MORPEKYLL[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MORPEKYLL_1,
+};
+
+static const union AnimCmd sAnim_MORPEKYLL_HANGRY_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_MORPEKYLL_HANGRY[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MORPEKYLL_HANGRY_1,
+};
+
+
 
 
 #define ANIM_CMD(name)             [SPECIES_##name] = sAnims_##name
@@ -22014,6 +22037,8 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(SERPERIOR_MEGA),
     ANIM_CMD(EMBOAR_MEGA),
     ANIM_CMD(SAMUROTT_MEGA),
+    ANIM_CMD(MORPEKYLL),
+    ANIM_CMD(MORPEKYLL_HANGRY),
 };
 
 #undef ANIM_CMD

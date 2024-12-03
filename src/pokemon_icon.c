@@ -1800,6 +1800,8 @@ const u8 *const gMonIconTable[] =
     [SPECIES_SERPERIOR_MEGA] = gMonIcon_SerperiorMega,
     [SPECIES_EMBOAR_MEGA] = gMonIcon_EmboarMega,
     [SPECIES_SAMUROTT_MEGA] = gMonIcon_SamurottMega,
+    [SPECIES_MORPEKYLL] = gMonIcon_Morpekyll,
+    [SPECIES_MORPEKYLL_HANGRY] = gMonIcon_MorpekyllHangry,
 
 };
 

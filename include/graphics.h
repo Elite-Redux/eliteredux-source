@@ -11438,6 +11438,16 @@ extern const u32 gMonBackPic_DelphoxSerena[];
 extern const u32 gMonPalette_DelphoxSerena[];
 extern const u32 gMonShinyPalette_DelphoxSerena[];
 extern const u8  gMonIcon_DelphoxSerena[];
+extern const u32 gMonFrontPic_Morpekyll[];
+extern const u32 gMonBackPic_Morpekyll[];
+extern const u32 gMonPalette_Morpekyll[];
+extern const u32 gMonShinyPalette_Morpekyll[];
+extern const u8  gMonIcon_Morpekyll[];
+extern const u32 gMonFrontPic_MorpekyllHangry[];
+extern const u32 gMonBackPic_MorpekyllHangry[];
+extern const u32 gMonPalette_MorpekyllHangry[];
+extern const u32 gMonShinyPalette_MorpekyllHangry[];
+extern const u8  gMonIcon_MorpekyllHangry[];
 //3.0 CUTOFF END
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

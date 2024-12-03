@@ -1797,6 +1797,8 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SERPERIOR_MEGA] = _("Serperior"),
     [SPECIES_EMBOAR_MEGA] = _("Emboar"),
     [SPECIES_SAMUROTT_MEGA] = _("Samurott"),
+    [SPECIES_MORPEKYLL] = _("Morpekyll"),
+    [SPECIES_MORPEKYLL_HANGRY] = _("Morpekyll"),
 
 
     // PARTNER POKEMON

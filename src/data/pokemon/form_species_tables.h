@@ -2154,3 +2154,8 @@ static const u16 sEmboarFormSpeciesIdTable[] = {
     SPECIES_EMBOAR_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sMorpekyllFormSpeciesIdTable[] = {
+    SPECIES_MORPEKYLL,
+    SPECIES_MORPEKYLL_HANGRY,
+    FORM_SPECIES_END,
+};

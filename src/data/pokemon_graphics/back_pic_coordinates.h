@@ -8502,9 +8502,19 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_EMBOAR_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_SAMUROTT_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 6,
+    },
+    [SPECIES_MORPEKYLL] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_MORPEKYLL_HANGRY] =
     {
         .size = 0x78,
         .y_offset = 0,

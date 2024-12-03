@@ -15608,6 +15608,8 @@ int HandleEndTurnAbilityAs(int ability, int battler)
         int species = SPECIES_NONE;
         if (gBattleMons[battler].species == SPECIES_MORPEKO) species = SPECIES_MORPEKO_HANGRY;
         else if (gBattleMons[battler].species == SPECIES_MORPEKO_HANGRY) species = SPECIES_MORPEKO;
+        else if (gBattleMons[battler].species == SPECIES_MORPEKYLL) species = SPECIES_MORPEKYLL_HANGRY;
+        else if (gBattleMons[battler].species == SPECIES_MORPEKYLL_HANGRY) species = SPECIES_MORPEKYLL;
         else break;
 
         UpdateAbilityStateIndicesForNewSpecies(battler, species);
