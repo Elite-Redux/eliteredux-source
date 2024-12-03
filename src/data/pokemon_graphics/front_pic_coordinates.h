@@ -8392,6 +8392,41 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 0,
     },
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] =
+    {
+        .size = 0x45,
+        .y_offset = 4,
+    },
+    [SPECIES_DELPHOX_BATTLE_BOND] =
+    {
+        .size = 0x45,
+        .y_offset = 0,
+    },
+    [SPECIES_CHESNAUGHT_CLEMONT] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_DELPHOX_SERENA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_SERPERIOR_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_EMBOAR_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
+    [SPECIES_SAMUROTT_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 0,
+    },
 
     // Egg
     [SPECIES_EGG] =

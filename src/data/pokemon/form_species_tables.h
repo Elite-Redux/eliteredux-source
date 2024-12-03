@@ -1547,6 +1547,7 @@ static const u16 sSneaselFormSpeciesIdTable[] = {
 };
 static const u16 sSamurottFormSpeciesIdTable[] = {
     SPECIES_SAMUROTT,
+    SPECIES_SAMUROTT_MEGA,
     SPECIES_SAMUROTT_HISUIAN,
     FORM_SPECIES_END,
 };
@@ -2129,5 +2130,27 @@ static const u16 sChanseyFormSpeciesIdTable[] = {
 static const u16 sBlisseyFormSpeciesIdTable[] = {
     SPECIES_BLISSEY,
     SPECIES_BLISSEY_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sChesnaughtFormSpeciesIdTable[] = {
+    SPECIES_CHESNAUGHT,
+    SPECIES_CHESNAUGHT_BATTLE_BOND,
+    SPECIES_CHESNAUGHT_CLEMONT,
+    FORM_SPECIES_END,
+};
+static const u16 sDelphoxFormSpeciesIdTable[] = {
+    SPECIES_DELPHOX,
+    SPECIES_DELPHOX_BATTLE_BOND,
+    SPECIES_DELPHOX_SERENA,
+    FORM_SPECIES_END,
+};
+static const u16 sSerperiorFormSpeciesIdTable[] = {
+    SPECIES_SERPERIOR,
+    SPECIES_SERPERIOR_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sEmboarFormSpeciesIdTable[] = {
+    SPECIES_EMBOAR,
+    SPECIES_EMBOAR_MEGA,
     FORM_SPECIES_END,
 };

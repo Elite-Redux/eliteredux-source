@@ -1788,4 +1788,11 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_HAPPINY_REDUX] = sHappinyReduxLevelUpLearnset,
     [SPECIES_CHANSEY_REDUX] = sChanseyReduxLevelUpLearnset,
     [SPECIES_BLISSEY_REDUX] = sBlisseyReduxLevelUpLearnset,
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] = sChesnaughtLevelUpLearnset,
+    [SPECIES_CHESNAUGHT_CLEMONT] = sChesnaughtLevelUpLearnset,
+    [SPECIES_DELPHOX_BATTLE_BOND] = sChanseyReduxLevelUpLearnset,
+    [SPECIES_DELPHOX_SERENA] = sDelphoxLevelUpLearnset,
+    [SPECIES_SERPERIOR_MEGA] = sSerperiorLevelUpLearnset,
+    [SPECIES_EMBOAR_MEGA] = sEmboarLevelUpLearnset,
+    [SPECIES_SAMUROTT_MEGA] = sSamurottLevelUpLearnset,
 };

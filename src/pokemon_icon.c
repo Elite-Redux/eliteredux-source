@@ -1793,6 +1793,13 @@ const u8 *const gMonIconTable[] =
     [SPECIES_HAPPINY_REDUX] = gMonIcon_HappinyRedux,
     [SPECIES_CHANSEY_REDUX] = gMonIcon_ChanseyRedux,
     [SPECIES_BLISSEY_REDUX] = gMonIcon_BlisseyRedux,
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] = gMonIcon_Chesnaught,
+    [SPECIES_CHESNAUGHT_CLEMONT] = gMonIcon_ChesnaughtClemont,
+    [SPECIES_DELPHOX_BATTLE_BOND] = gMonIcon_Delphox,
+    [SPECIES_DELPHOX_SERENA] = gMonIcon_DelphoxSerena,
+    [SPECIES_SERPERIOR_MEGA] = gMonIcon_SerperiorMega,
+    [SPECIES_EMBOAR_MEGA] = gMonIcon_EmboarMega,
+    [SPECIES_SAMUROTT_MEGA] = gMonIcon_SamurottMega,
 
 };
 
@@ -3472,6 +3479,11 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_HAPPINY_REDUX] = 0,
     [SPECIES_CHANSEY_REDUX] = 0,
     [SPECIES_BLISSEY_REDUX] = 0,
+    [SPECIES_CHESNAUGHT_CLEMONT] = 0,
+    [SPECIES_DELPHOX_SERENA] = 0,
+    [SPECIES_SERPERIOR_MEGA] = 0,
+    [SPECIES_EMBOAR_MEGA] = 0,
+    [SPECIES_SAMUROTT_MEGA] = 0,
 
 };
 

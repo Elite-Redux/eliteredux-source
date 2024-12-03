@@ -1640,8 +1640,14 @@
 #define SPECIES_KINGDRA_PARTNER_MEGA_C      FORMS_START + 491
 #define SPECIES_AMAURA_PARTNER              FORMS_START + 492
 #define SPECIES_AURORUS_PARTNER             FORMS_START + 493
+//3.0 CUTOFF
+#define SPECIES_CHESNAUGHT_BATTLE_BOND      FORMS_START + 360
+#define SPECIES_CHESNAUGHT_CLEMONT          FORMS_START + 361
+#define SPECIES_DELPHOX_BATTLE_BOND         FORMS_START + 362
+#define SPECIES_DELPHOX_SERENA              FORMS_START + 363
 
-#define LAST_VALID_STANDARD_FORM            SPECIES_FIDOUGH_PARTNER
+
+#define LAST_VALID_STANDARD_FORM            SPECIES_DELPHOX_SERENA
 
 // Custom Megas
 #define CUSTOM_MEGA_START                   FORMS_START + 600
@@ -1761,8 +1767,11 @@
 #define SPECIES_FIDOUGH_PARTNER_MEGA        CUSTOM_MEGA_START + 112
 #define SPECIES_WIGGLYTUFF_MEGA_X           CUSTOM_MEGA_START + 113
 #define SPECIES_WEAVILE_MEGA                CUSTOM_MEGA_START + 114
+#define SPECIES_SERPERIOR_MEGA              CUSTOM_MEGA_START + 115
+#define SPECIES_EMBOAR_MEGA                 CUSTOM_MEGA_START + 116
+#define SPECIES_SAMUROTT_MEGA               CUSTOM_MEGA_START + 117
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_WEAVILE_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_SAMUROTT_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA

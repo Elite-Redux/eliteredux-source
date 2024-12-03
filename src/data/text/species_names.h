@@ -1790,6 +1790,13 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_HAPPINY_REDUX] = _("Happiny"),
     [SPECIES_CHANSEY_REDUX] = _("Chansey"),
     [SPECIES_BLISSEY_REDUX] = _("Blissey"),
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] = _("Chesnaught"),
+    [SPECIES_DELPHOX_BATTLE_BOND] = _("Delphox"),
+    [SPECIES_CHESNAUGHT_CLEMONT] = _("Chesnaught"),
+    [SPECIES_DELPHOX_SERENA] = _("Delphox"),
+    [SPECIES_SERPERIOR_MEGA] = _("Serperior"),
+    [SPECIES_EMBOAR_MEGA] = _("Emboar"),
+    [SPECIES_SAMUROTT_MEGA] = _("Samurott"),
 
 
     // PARTNER POKEMON

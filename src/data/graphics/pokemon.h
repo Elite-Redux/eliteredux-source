@@ -8327,6 +8327,36 @@ const u32 gMonPalette_BlisseyRedux[]           = INCBIN_U32("graphics/pokemon/bl
 const u32 gMonShinyPalette_BlisseyRedux[]      = INCBIN_U32("graphics/pokemon/blissey/redux/shiny.gbapal.lz");
 const u8  gMonIcon_BlisseyRedux[]              = INCBIN_U8("graphics/pokemon/blissey/redux/icon.4bpp");
 
+const u32 gMonFrontPic_ChesnaughtClemont[]          = INCBIN_U32("graphics/pokemon/chesnaught/clemont/front.4bpp.lz");
+const u32 gMonBackPic_ChesnaughtClemont[]           = INCBIN_U32("graphics/pokemon/chesnaught/clemont/back.4bpp.lz");
+const u32 gMonPalette_ChesnaughtClemont[]           = INCBIN_U32("graphics/pokemon/chesnaught/clemont/normal.gbapal.lz");
+const u32 gMonShinyPalette_ChesnaughtClemont[]      = INCBIN_U32("graphics/pokemon/chesnaught/clemont/shiny.gbapal.lz");
+const u8  gMonIcon_ChesnaughtClemont[]              = INCBIN_U8("graphics/pokemon/chesnaught/clemont/icon.4bpp");
+
+const u32 gMonFrontPic_DelphoxSerena[]          = INCBIN_U32("graphics/pokemon/delphox/serena/front.4bpp.lz");
+const u32 gMonBackPic_DelphoxSerena[]           = INCBIN_U32("graphics/pokemon/delphox/serena/back.4bpp.lz");
+const u32 gMonPalette_DelphoxSerena[]           = INCBIN_U32("graphics/pokemon/delphox/serena/normal.gbapal.lz");
+const u32 gMonShinyPalette_DelphoxSerena[]      = INCBIN_U32("graphics/pokemon/delphox/serena/shiny.gbapal.lz");
+const u8  gMonIcon_DelphoxSerena[]              = INCBIN_U8("graphics/pokemon/delphox/serena/icon.4bpp");
+
+const u32 gMonFrontPic_SerperiorMega[]          = INCBIN_U32("graphics/pokemon/serperior/mega/front.4bpp.lz");
+const u32 gMonBackPic_SerperiorMega[]           = INCBIN_U32("graphics/pokemon/serperior/mega/back.4bpp.lz");
+const u32 gMonPalette_SerperiorMega[]           = INCBIN_U32("graphics/pokemon/serperior/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_SerperiorMega[]      = INCBIN_U32("graphics/pokemon/serperior/mega/shiny.gbapal.lz");
+const u8  gMonIcon_SerperiorMega[]              = INCBIN_U8("graphics/pokemon/serperior/mega/icon.4bpp");
+
+const u32 gMonFrontPic_EmboarMega[]          = INCBIN_U32("graphics/pokemon/emboar/mega/front.4bpp.lz");
+const u32 gMonBackPic_EmboarMega[]           = INCBIN_U32("graphics/pokemon/emboar/mega/back.4bpp.lz");
+const u32 gMonPalette_EmboarMega[]           = INCBIN_U32("graphics/pokemon/emboar/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_EmboarMega[]      = INCBIN_U32("graphics/pokemon/emboar/mega/shiny.gbapal.lz");
+const u8  gMonIcon_EmboarMega[]              = INCBIN_U8("graphics/pokemon/emboar/mega/icon.4bpp");
+
+const u32 gMonFrontPic_SamurottMega[]          = INCBIN_U32("graphics/pokemon/samurott/mega/front.4bpp.lz");
+const u32 gMonBackPic_SamurottMega[]           = INCBIN_U32("graphics/pokemon/samurott/mega/back.4bpp.lz");
+const u32 gMonPalette_SamurottMega[]           = INCBIN_U32("graphics/pokemon/samurott/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_SamurottMega[]      = INCBIN_U32("graphics/pokemon/samurott/mega/shiny.gbapal.lz");
+const u8  gMonIcon_SamurottMega[]              = INCBIN_U8("graphics/pokemon/samurott/mega/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

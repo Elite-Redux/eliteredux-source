@@ -20263,6 +20263,61 @@ static const union AnimCmd *const sAnims_BLISSEY_REDUX[] ={
     sAnim_BLISSEY_REDUX_1,
 };
 
+static const union AnimCmd sAnim_CHESNAUGHT_CLEMONT_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_CHESNAUGHT_CLEMONT[] ={
+    sAnim_GeneralFrame0,
+    sAnim_CHESNAUGHT_CLEMONT_1,
+};
+
+static const union AnimCmd sAnim_DELPHOX_SERENA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_DELPHOX_SERENA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DELPHOX_SERENA_1,
+};
+
+static const union AnimCmd sAnim_SERPERIOR_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SERPERIOR_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SERPERIOR_MEGA_1,
+};
+
+static const union AnimCmd sAnim_EMBOAR_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_EMBOAR_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_EMBOAR_MEGA_1,
+};
+
+static const union AnimCmd sAnim_SAMUROTT_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SAMUROTT_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SAMUROTT_MEGA_1,
+};
+
 
 
 #define ANIM_CMD(name)             [SPECIES_##name] = sAnims_##name
@@ -21952,6 +22007,13 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(HAPPINY_REDUX),
     ANIM_CMD(CHANSEY_REDUX),
     ANIM_CMD(BLISSEY_REDUX),
+    ANIM_CMD_FULL(CHESNAUGHT_BATTLE_BOND, sAnims_CHESNAUGHT),
+    ANIM_CMD(CHESNAUGHT_CLEMONT),
+    ANIM_CMD_FULL(DELPHOX_BATTLE_BOND, sAnims_DELPHOX),
+    ANIM_CMD(DELPHOX_SERENA),
+    ANIM_CMD(SERPERIOR_MEGA),
+    ANIM_CMD(EMBOAR_MEGA),
+    ANIM_CMD(SAMUROTT_MEGA),
 };
 
 #undef ANIM_CMD

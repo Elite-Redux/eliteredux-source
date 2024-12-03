@@ -1748,6 +1748,13 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(HAPPINY_REDUX, gMonBackPic_HappinyRedux),
     SPECIES_SPRITE(CHANSEY_REDUX, gMonBackPic_ChanseyRedux),
     SPECIES_SPRITE(BLISSEY_REDUX, gMonBackPic_BlisseyRedux),
+    SPECIES_SPRITE(CHESNAUGHT_BATTLE_BOND, gMonBackPic_Chesnaught),
+    SPECIES_SPRITE(CHESNAUGHT_CLEMONT, gMonBackPic_ChesnaughtClemont),
+    SPECIES_SPRITE(DELPHOX_BATTLE_BOND, gMonBackPic_Delphox),
+    SPECIES_SPRITE(DELPHOX_SERENA, gMonBackPic_DelphoxSerena),
+    SPECIES_SPRITE(SERPERIOR_MEGA, gMonBackPic_SerperiorMega),
+    SPECIES_SPRITE(EMBOAR_MEGA, gMonBackPic_EmboarMega),
+    SPECIES_SPRITE(SAMUROTT_MEGA, gMonBackPic_SamurottMega),
 };
 
 const struct CompressedSpriteSheet gMonBackPicTableFemale[] =

@@ -3298,6 +3298,7 @@ static const struct LevelUpMove sPinsirLevelUpLearnset[] = {
     LEVEL_UP_MOVE(51, MOVE_HEADLONG_RUSH),
     LEVEL_UP_MOVE(51, MOVE_VISE_GRIP),
     LEVEL_UP_MOVE(56, MOVE_FIRST_IMPRESSION),
+    LEVEL_UP_MOVE(56, MOVE_BEETLE_BASH),
     LEVEL_UP_END
 };
 
@@ -5435,6 +5436,7 @@ static const struct LevelUpMove sHeracrossLevelUpLearnset[] = {
     LEVEL_UP_MOVE(46, MOVE_REVERSAL),
     LEVEL_UP_MOVE(51, MOVE_HEADLONG_RUSH),
     LEVEL_UP_MOVE(51, MOVE_HORN_DRILL),
+    LEVEL_UP_MOVE(56, MOVE_BEETLE_BASH),
     LEVEL_UP_END
 };
 

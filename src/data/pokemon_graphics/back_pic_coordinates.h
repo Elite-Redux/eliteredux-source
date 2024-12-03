@@ -8457,7 +8457,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_WEAVILE_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_HAPPINY_REDUX] =
     {
@@ -8470,6 +8470,41 @@ const struct MonCoords gMonBackPicCoords[] =
         .y_offset = 0,
     },
     [SPECIES_BLISSEY_REDUX] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] =
+    {
+        .size = 0x78,
+        .y_offset = 10,
+    },
+    [SPECIES_CHESNAUGHT_CLEMONT] =
+    {
+        .size = 0x78,
+        .y_offset = 10,
+    },
+    [SPECIES_DELPHOX_BATTLE_BOND] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_DELPHOX_SERENA] =
+    {
+        .size = 0x78,
+        .y_offset = 3,
+    },
+    [SPECIES_SERPERIOR_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_EMBOAR_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_SAMUROTT_MEGA] =
     {
         .size = 0x78,
         .y_offset = 0,
