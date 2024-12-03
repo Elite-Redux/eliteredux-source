@@ -8365,6 +8365,18 @@ const u32 gMonShinyPalette_UnownRevelation[]      = INCBIN_U32("graphics/pokemon
 const u8  gMonIcon_UnownRevelation[]              = INCBIN_U8("graphics/pokemon/unown/revelation/icon.4bpp");
 
 
+const u32 gMonFrontPic_Morpekyll[]          = INCBIN_U32("graphics/pokemon/morpekyll/front.4bpp.lz");
+const u32 gMonBackPic_Morpekyll[]           = INCBIN_U32("graphics/pokemon/morpekyll/back.4bpp.lz");
+const u32 gMonPalette_Morpekyll[]           = INCBIN_U32("graphics/pokemon/morpekyll/normal.gbapal.lz");
+const u32 gMonShinyPalette_Morpekyll[]      = INCBIN_U32("graphics/pokemon/morpekyll/shiny.gbapal.lz");
+const u8  gMonIcon_Morpekyll[]              = INCBIN_U8("graphics/pokemon/morpekyll/icon.4bpp");
+
+const u32 gMonFrontPic_MorpekyllHangry[]          = INCBIN_U32("graphics/pokemon/morpekyll/hangry/front.4bpp.lz");
+const u32 gMonBackPic_MorpekyllHangry[]           = INCBIN_U32("graphics/pokemon/morpekyll/hangry/back.4bpp.lz");
+const u32 gMonPalette_MorpekyllHangry[]           = INCBIN_U32("graphics/pokemon/morpekyll/hangry/normal.gbapal.lz");
+const u32 gMonShinyPalette_MorpekyllHangry[]      = INCBIN_U32("graphics/pokemon/morpekyll/hangry/shiny.gbapal.lz");
+const u8  gMonIcon_MorpekyllHangry[]              = INCBIN_U8("graphics/pokemon/morpekyll/hangry/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");
