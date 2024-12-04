@@ -11,6 +11,9 @@ typedef struct Ability
     const u8* name;
     const u8* description;
     const AbilityOnSwitchHandler onSwitch;
+    u16 breakable:1;
+    u16 unsuppressable:1;
+    u16 persistent:1;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];

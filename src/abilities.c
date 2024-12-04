@@ -544,6 +544,7 @@ static const Ability Minus = {
 static const Ability Forecast = {
     .name = $("Forecast"),
     .description = $("Changes form with the weather.\nWeather setting triggers attack."),
+    .unsuppressable = TRUE,
     .onSwitch = TryTransformAttacker,
 };
 
@@ -950,6 +951,7 @@ ON_SWITCH {
 static const Ability Anticipation = {
     .name = $("Anticipation"),
     .description = $("Senses Super-effective moves.\nBlocks one Super-effective hit."),
+    .persistent = TRUE,
     CONTEXT_ON_SWITCH, 
 };
 
@@ -1090,6 +1092,7 @@ static const Ability Reckless = {
 static const Ability Multitype = {
     .name = $("Multitype"),
     .description = $("Held Plate item decides holder's\ntype."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -1097,6 +1100,7 @@ static const Ability Multitype = {
 static const Ability FlowerGift = {
     .name = $("Flower Gift"),
     .description = $("Increases the party's SpAtk\nand SpDef by 1.5x in Sun."),
+    .unsuppressable = TRUE,
     .onSwitch = TryTransformAttacker,
 };
 
@@ -1399,6 +1403,7 @@ static const Ability IronBarbs = {
 static const Ability ZenMode = {
     .name = $("Zen Mode"),
     .description = $("Transforms into Zen Mode on\nentry until end of battle."),
+    .unsuppressable = TRUE,
     .onSwitch = TryTransformAttacker,
 };
 
@@ -1513,6 +1518,7 @@ static const Ability SweetVeil = {
 static const Ability StanceChange = {
     .name = $("Stance Change"),
     .description = $("Turns into Blade or Shield form\ndepending on move used."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -1693,6 +1699,7 @@ static const Ability Merciless = {
 static const Ability ShieldsDown = {
     .name = $("Shields Down"),
     .description = $("At 1/2 of max HP or below,\ntransforms into Core form."),
+    .unsuppressable = TRUE,
     .onSwitch = TryTransformAttacker,
 };
 
@@ -1775,6 +1782,7 @@ ON_SWITCH {
 static const Ability Schooling = {
     .name = $("Schooling"),
     .description = $("If Lv. 20 or more: changes into\nSchool form until 1/4 HP or less."),
+    .unsuppressable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -1804,6 +1812,7 @@ static const Ability Disguise = {
 static const Ability BattleBond = {
     .name = $("Battle Bond"),
     .description = $("Transforms into Battle Bond form\nafter dealing a KO."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -1811,6 +1820,7 @@ static const Ability BattleBond = {
 static const Ability PowerConstruct = {
     .name = $("Power Construct"),
     .description = $("At 1/2 of max HP or below,\ntransforms into Complete form."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -1830,6 +1840,7 @@ ON_SWITCH {
 static const Ability Comatose = {
     .name = $("Comatose"),
     .description = $("Can move, but is always asleep.\nImmune to status conditions."),
+    .unsuppressable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -1930,6 +1941,7 @@ static const Ability BeastBoost = {
 static const Ability RksSystem = {
     .name = $("RKS System"),
     .description = $("Held Memory determines its type.\nAlso has Protean + Adaptability."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -2091,6 +2103,7 @@ static const Ability MirrorArmor = {
 static const Ability GulpMissile = {
     .name = $("Gulp Missile"),
     .description = $("Gulps a prey after Dive/Surf.\nIf hit, shoots prey at enemy."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -2150,6 +2163,7 @@ ON_SWITCH {
 static const Ability IceFace = {
     .name = $("Ice Face"),
     .description = $("Protects once against an attack.\nRestores protection under hail."),
+    .unsuppressable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -2221,6 +2235,7 @@ static const Ability GorillaTactics = {
 static const Ability NeutralizingGas = {
     .name = $("Neutralizing Gas"),
     .description = $("All abilities are nullified."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -2247,6 +2262,7 @@ static const Ability PastelVeil = {
 static const Ability HungerSwitch = {
     .name = $("HungerSwitch"),
     .description = $("Changes between Full and Hangry\nforms after each turn."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -2317,6 +2333,7 @@ ON_SWITCH {
 static const Ability AsOneIceRider = {
     .name = $("As One"),
     .description = $("Unnerve + Chilling Neigh."),
+    .unsuppressable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -2325,6 +2342,7 @@ static const Ability AsOneIceRider = {
 static const Ability AsOneShadowRider = {
     .name = $("As One"),
     .description = $("Unnerve + Grim Neigh."),
+    .unsuppressable = TRUE,
     .onSwitch = AsOneIceRider.onSwitch,
 };
 
@@ -3576,6 +3594,7 @@ static const Ability Absorbant = {
 static const Ability Clueless = {
     .name = $("Clueless"),
     .description = $("Negates Weather, Rooms\nand Terrains."),
+    .unsuppressable = TRUE,
     .onSwitch = CloudNine.onSwitch,
 };
 
@@ -3596,6 +3615,7 @@ ON_SWITCH {
 static const Ability CheatingDeath = {
     .name = $("Cheating Death"),
     .description = $("Gets no damage for\nthe first two hits."),
+    .persistent = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -3623,6 +3643,7 @@ ON_SWITCH {
 static const Ability Coward = {
     .name = $("Coward"),
     .description = $("Sets up Protect on switch-in.\nOnly works once."),
+    .persistent = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -4214,6 +4235,7 @@ ON_SWITCH {
 static const Ability Wishmaker = {
     .name = $("Wishmaker"),
     .description = $("Uses Wish on switch-in.\nThree uses per battle."),
+    .persistent = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -4495,6 +4517,7 @@ ON_SWITCH {
 static const Ability CrownedKing = {
     .name = $("Crowned King"),
     .description = $("Unnerve + Grim Neigh +\nChilling Neigh."),
+    .unsuppressable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -4811,6 +4834,7 @@ ON_SWITCH {
 static const Ability ZeroToHero = {
     .name = $("Zero To Hero"),
     .description = $("Changes forms after\nswitching out."),
+    .unsuppressable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -4846,6 +4870,7 @@ static const Ability Costar = {
 static const Ability Commander = {
     .name = $("Commander"),
     .description = $("Hops inside an allied Dondozo.\nBoosts its ally but can't act."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -4853,6 +4878,7 @@ static const Ability Commander = {
 static const Ability EjectPackAbility = {
     .name = $("Tactical Retreat"),
     .description = $("Flees when stats are lowered."),
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -5015,6 +5041,7 @@ ON_SWITCH {
 static const Ability Gallantry = {
     .name = $("Gallantry"),
     .description = $("Gets no damage for\nfirst hit."),
+    .persistent = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -5392,6 +5419,7 @@ static const Ability CuteAntecedence = {
 static const Ability RecurringNightmare = {
     .name = $("Shallow Grave"),
     .description = $("Revives at 25% HP once after\nfainting in fog."),
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -5552,6 +5580,7 @@ static const Ability VenoblazePincers = {
 static const Ability EternalBlessing = {
     .name = $("Eternal Blessing"),
     .description = $("Celestial Blessing + Regenerator."),
+    .persistent = TRUE,
 };
 
 #undef CONTEXT
@@ -5684,6 +5713,7 @@ static const Ability NoTurningBack = {
 static const Ability FlammableCoat = {
     .name = $("Flammable Coat"),
     .description = $("Changes forms when using or\nhit by a Fire-type move."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -5716,6 +5746,7 @@ static const Ability MoshPit = {
 ON_SWITCH {
     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_BLOOD_STAIN;
     BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
+    .unsuppressable = TRUE,
     return TRUE;
 }
 static const Ability BloodStain = {
@@ -5729,6 +5760,7 @@ static const Ability BloodStain = {
 static const Ability BloodStigma = {
     .name = $("Blood Stigma"),
     .description = $("Immune to status. Gets a 50%\nboost vs bleeding foes."),
+    .unsuppressable = TRUE,
 };
 
 #undef CONTEXT
@@ -5901,6 +5933,7 @@ static const Ability Frostmaw = {
 static const Ability Patchwork = {
     .name = $("Patchwork"),
     .description = $("Disguise + curses the opponent\nwhen its Disguise breaks."),
+    .unsuppressable = TRUE,
     .onSwitch = Disguise.onSwitch,
 };
 
@@ -5945,7 +5978,8 @@ static const Ability PinnacleBlade = {
 static const Ability Energized = {
     .name = $("Energized"),
     .description = $("Generator + charges up on KO\nwith an Electric-type move."),
-    Generator.onSwitch,
+    .persistent = TRUE,
+    .onSwitch = Generator.onSwitch,
 };
 
 #undef CONTEXT

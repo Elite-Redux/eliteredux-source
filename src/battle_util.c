@@ -6059,60 +6059,12 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
 
 bool32 IsUnsuppressableAbility(u32 ability)
 {
-    switch (ability)
-    {
-    case ABILITY_FORECAST:
-    case ABILITY_MULTITYPE:
-    case ABILITY_ZEN_MODE:
-    case ABILITY_STANCE_CHANGE:
-    case ABILITY_FLAMMABLE_COAT:
-    case ABILITY_POWER_CONSTRUCT:
-    case ABILITY_SCHOOLING:
-    case ABILITY_RKS_SYSTEM:
-    case ABILITY_ZERO_TO_HERO:
-    case ABILITY_SHIELDS_DOWN:
-    case ABILITY_COMATOSE:
-    case ABILITY_DISGUISE:
-    case ABILITY_PATCHWORK:
-    case ABILITY_GULP_MISSILE:
-    case ABILITY_ICE_FACE:
-    case ABILITY_AS_ONE_ICE_RIDER:
-    case ABILITY_AS_ONE_SHADOW_RIDER:
-    case ABILITY_CROWNED_KING:
-    case ABILITY_CLUELESS:
-    case ABILITY_BATTLE_BOND:
-    case ABILITY_NEUTRALIZING_GAS:
-    case ABILITY_HUNGER_SWITCH:
-    case ABILITY_BLOOD_STAIN:
-    case ABILITY_BLOOD_STIGMA:
-    case ABILITY_FLOWER_GIFT:
-    case ABILITY_COMMANDER:
-        return TRUE;
-    default:
-        return FALSE;
-    }
+    return gAbilities[ability].unsuppressable;
 }
 
 int IsPersistentOrUnsuppressableAbility(int ability)
 {
-    if (IsUnsuppressableAbility(ability)) return TRUE;
-
-    switch (ability)
-    {
-        case ABILITY_EJECT_PACK_ABILITY:
-        case ABILITY_CHEATING_DEATH:
-        case ABILITY_GALLANTRY:
-        case ABILITY_WISHMAKER:
-        case ABILITY_GENERATOR:
-        case ABILITY_RECURRING_NIGHTMARE:
-        case ABILITY_ANTICIPATION:
-        case ABILITY_COWARD:
-        case ABILITY_ENERGIZED:
-            return TRUE;
-        
-        default:
-            return FALSE;
-    }
+    return gAbilities[ability].unsuppressable || gAbilities[ability].persistent;
 }
 
 u32 IsAbilityOnSide(u32 battlerId, u32 ability)
