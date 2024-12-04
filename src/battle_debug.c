@@ -34,6 +34,7 @@
 #include "constants/items.h"
 #include "constants/rgb.h"
 #include "constants/hold_effects.h"
+#include "abilities.h"
 
 #define MAX_MODIFY_DIGITS 4
 
@@ -877,7 +878,7 @@ static void PutAiInfoText(struct BattleDebugMenu *data)
             u16 holdEffect = AI_GetHoldEffect(i);
             u16 item = gBattleMons[i].item;
             u8 x = (i == B_POSITION_PLAYER_LEFT) ? 83 + (i) * 75 : 83 + (i-1) * 75;
-            AddTextPrinterParameterized(data->aiMovesWindowId, 0, gAbilityNames[ability], x, 0, 0, NULL);
+            AddTextPrinterParameterized(data->aiMovesWindowId, 0, gAbilities[ability].name, x, 0, 0, NULL);
             AddTextPrinterParameterized(data->aiMovesWindowId, 0, ItemId_GetName(item), x, 15, 0, NULL);
             AddTextPrinterParameterized(data->aiMovesWindowId, 0, GetHoldEffectName(holdEffect), x, 30, 0, NULL);
         }
@@ -1315,7 +1316,7 @@ static void PrintSecondaryEntries(struct BattleDebugMenu *data)
         }
         break;
     case LIST_ITEM_ABILITY:
-        PadString(gAbilityNames[gBattleMons[data->battlerId].abilities[0]], text);
+        PadString(gAbilities[gBattleMons[data->battlerId].abilities[0]].name, text);
         printer.currentY = printer.y = sSecondaryListTemplate.upText_Y;
         AddTextPrinter(&printer, 0, NULL);
         break;

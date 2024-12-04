@@ -32,6 +32,7 @@
 #include "constants/weather.h"
 #include "mgba_printf/mgba.h"
 #include "mgba_printf/mini_printf.h"
+#include "abilities.h"
 
 struct BattleWindowText
 {
@@ -3758,19 +3759,19 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst)
                 }
                 break;
             case B_TXT_LAST_ABILITY: // last used ability
-                toCpy = gAbilityNames[gBattleScripting.abilityPopupOverwrite];
+                toCpy = gAbilities[gBattleScripting.abilityPopupOverwrite].name;
                 break;
             case B_TXT_ATK_ABILITY: // attacker ability
-                toCpy = gAbilityNames[sBattlerAbilities[gBattlerAttacker]];
+                toCpy = gAbilities[sBattlerAbilities[gBattlerAttacker]].name;
                 break;
             case B_TXT_DEF_ABILITY: // target ability
-                toCpy = gAbilityNames[sBattlerAbilities[gBattlerTarget]];
+                toCpy = gAbilities[sBattlerAbilities[gBattlerTarget]].name;
                 break;
             case B_TXT_SCR_ACTIVE_ABILITY: // scripting active ability
-                toCpy = gAbilityNames[sBattlerAbilities[gBattleScripting.battler]];
+                toCpy = gAbilities[sBattlerAbilities[gBattleScripting.battler]].name;
                 break;
             case B_TXT_EFF_ABILITY: // effect battlerId ability
-                toCpy = gAbilityNames[sBattlerAbilities[gEffectBattler]];
+                toCpy = gAbilities[sBattlerAbilities[gEffectBattler]].name;
                 break;
             case B_TXT_TRAINER1_CLASS: // trainer class name
                 toCpy = BattleStringGetOpponentClassByTrainerId(gTrainerBattleOpponent_A);
@@ -4132,7 +4133,7 @@ static void ExpandBattleTextBuffPlaceholders(const u8 *src, u8 *dst)
             srcID += 2;
             break;
         case B_BUFF_ABILITY: // ability names
-            StringAppend(dst, gAbilityNames[T1_READ_16(&src[srcID + 1])]);
+            StringAppend(dst, gAbilities[T1_READ_16(&src[srcID + 1])].name);
             srcID += 3;
             break;
         case B_BUFF_ITEM: // item name

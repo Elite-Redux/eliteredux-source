@@ -157,6 +157,16 @@ int main(int argc, char **argv)
         } else {
             PreprocCFile(argv[1], false);
         }
+    } else if (extension[0] == 'c' && extension[1] == 'c') {
+        if (argc == 4) {
+            if (argv[3][0] == '-' && argv[3][1] == 'i' && argv[3][2] == '\0') {
+                PreprocCFile(argv[1], true);
+            } else {
+                FATAL_ERROR("unknown argument flag \"%s\".\n", argv[3]);
+            }
+        } else {
+            PreprocCFile(argv[1], false);
+        }
     } else
         FATAL_ERROR("\"%s\" has an unknown file extension of \"%s\".\n", argv[1], extension);
 

@@ -8914,7 +8914,7 @@ static void Cmd_various(void)
         break;
     case VARIOUS_SET_ACTIVE_STAT_CHANGER:
         {
-        union StatChanger statChanger = { .value = READ_8_INC };
+        StatChanger statChanger = { .value = READ_8_INC };
         SetActiveStatChanger(statChanger.statId, GET_STAT_BUFF_VALUE_WITH_SIGN(statChanger));
         }
         break;

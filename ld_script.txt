@@ -726,6 +726,7 @@ SECTIONS {
         src/battle_ai_new.o(.rodata);
         src/battle_ai_attack.o(.rodata);
         src/battle_ai_ability.o(.rodata);
+        src/abilities.o(.rodata);
     } > ROM =0
 
     song_data :
