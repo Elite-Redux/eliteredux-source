@@ -48,6 +48,7 @@ static int AddBattlerType(int battler, int type) {
 static const Ability None = {
     .name = $("-------"),
     .description = $("Empty ability slot."),
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -257,6 +258,7 @@ static const Ability WonderGuard = {
     .name = $("Wonder Guard"),
     .description = $("Is only hit by Super-effective\nattacks or indirect damage."),
     .breakable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -344,6 +346,7 @@ ON_SWITCH {
 static const Ability Trace = {
     .name = $("Trace"),
     .description = $("Copies the foe's ability.\nDoes not copy innates."),
+    .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -569,6 +572,7 @@ static const Ability Forecast = {
     .name = $("Forecast"),
     .description = $("Changes form with the weather.\nWeather setting triggers attack."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
     .onSwitch = TryTransformAttacker,
 };
 
@@ -1133,6 +1137,7 @@ static const Ability Multitype = {
     .name = $("Multitype"),
     .description = $("Held Plate item decides holder's\ntype."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -1142,6 +1147,7 @@ static const Ability FlowerGift = {
     .description = $("Increases the party's SpAtk\nand SpDef by 1.5x in Sun."),
     .unsuppressable = TRUE,
     .breakable = TRUE,
+    .randomizerBanned = TRUE,
     .onSwitch = TryTransformAttacker,
 };
 
@@ -1453,6 +1459,7 @@ static const Ability ZenMode = {
     .name = $("Zen Mode"),
     .description = $("Transforms into Zen Mode on\nentry until end of battle."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
     .onSwitch = TryTransformAttacker,
 };
 
@@ -1506,6 +1513,7 @@ static const Ability FlowerVeil = {
 static const Ability CheekPouch = {
     .name = $("Cheek Pouch"),
     .description = $("This ability has no effect."),
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -1573,6 +1581,7 @@ static const Ability StanceChange = {
     .name = $("Stance Change"),
     .description = $("Turns into Blade or Shield form\ndepending on move used."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -1841,6 +1850,7 @@ static const Ability Schooling = {
     .name = $("Schooling"),
     .description = $("If Lv. 20 or more: changes into\nSchool form until 1/4 HP or less."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -1864,6 +1874,7 @@ static const Ability Disguise = {
     .description = $("Protects once against an attack.\nRestores protection in fog."),
     .unsuppressable = TRUE,
     .breakable = TRUE,
+    .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -1873,6 +1884,7 @@ static const Ability BattleBond = {
     .name = $("Battle Bond"),
     .description = $("Transforms into Battle Bond form\nafter dealing a KO."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -1881,6 +1893,7 @@ static const Ability PowerConstruct = {
     .name = $("Power Construct"),
     .description = $("At 1/2 of max HP or below,\ntransforms into Complete form."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -2005,6 +2018,7 @@ static const Ability RksSystem = {
     .name = $("RKS System"),
     .description = $("Held Memory determines its type.\nAlso has Protean + Adaptability."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -2168,6 +2182,7 @@ static const Ability GulpMissile = {
     .name = $("Gulp Missile"),
     .description = $("Gulps a prey after Dive/Surf.\nIf hit, shoots prey at enemy."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -2231,6 +2246,7 @@ static const Ability IceFace = {
     .description = $("Protects once against an attack.\nRestores protection under hail."),
     .unsuppressable = TRUE,
     .breakable = TRUE,
+    .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -2330,6 +2346,7 @@ static const Ability HungerSwitch = {
     .name = $("HungerSwitch"),
     .description = $("Changes between Full and Hangry\nforms after each turn."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -2401,6 +2418,7 @@ static const Ability AsOneIceRider = {
     .name = $("As One"),
     .description = $("Unnerve + Chilling Neigh."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -2410,6 +2428,7 @@ static const Ability AsOneShadowRider = {
     .name = $("As One"),
     .description = $("Unnerve + Grim Neigh."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
     .onSwitch = AsOneIceRider.onSwitch,
 };
 
@@ -3251,6 +3270,7 @@ static const Ability SightingSystem = {
 static const Ability BadCompany = {
     .name = $("Bad Company"),
     .description = $("Not implemented right now.\nHas no effect."),
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -3953,6 +3973,7 @@ static const Ability AdrenalineRush = {
 static const Ability Archmage = {
     .name = $("Archmage"),
     .description = $("30% chance of adding a type\nrelated effect to each move."),
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -4615,6 +4636,7 @@ static const Ability CrownedKing = {
     .name = $("Crowned King"),
     .description = $("Unnerve + Grim Neigh +\nChilling Neigh."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -4935,6 +4957,7 @@ static const Ability ZeroToHero = {
     .name = $("Zero To Hero"),
     .description = $("Changes forms after\nswitching out."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -4971,6 +4994,7 @@ static const Ability Commander = {
     .name = $("Commander"),
     .description = $("Hops inside an allied Dondozo.\nBoosts its ally but can't act."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -5829,6 +5853,7 @@ static const Ability FlammableCoat = {
     .name = $("Flammable Coat"),
     .description = $("Changes forms when using or\nhit by a Fire-type move."),
     .unsuppressable = TRUE,
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT
@@ -5862,12 +5887,12 @@ static const Ability MoshPit = {
 ON_SWITCH {
     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_BLOOD_STAIN;
     BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
-    .unsuppressable = TRUE,
     return TRUE;
 }
 static const Ability BloodStain = {
     .name = $("Blood Stain"),
     .description = $("Bleeds if not immune. Can't get\nother status. Spreads on contact."),
+    .unsuppressable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -6055,6 +6080,7 @@ static const Ability Patchwork = {
     .description = $("Disguise + curses the opponent\nwhen its Disguise breaks."),
     .unsuppressable = TRUE,
     .breakable = TRUE,
+    .randomizerBanned = TRUE,
     .onSwitch = Disguise.onSwitch,
 };
 
@@ -6411,6 +6437,7 @@ ON_SWITCH {
 static const Ability ApeShift = {
     .name = $("Ape Shift"),
     .description = $("Transforms when below 50% HP,\ncuring status and always critting."),
+    .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -6520,6 +6547,7 @@ static const Ability SandPit = {
 static const Ability DesolateSun = {
     .name = $("Desolate Sun"),
     .description = $("Desolate Land + Earth Eater."),
+    .randomizerBanned = TRUE,
 };
 
 #undef CONTEXT

@@ -14,6 +14,7 @@ typedef struct Ability
     u16 breakable:1;
     u16 unsuppressable:1;
     u16 persistent:1;
+    u16 randomizerBanned:1;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];
