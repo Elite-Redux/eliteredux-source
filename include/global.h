@@ -27,6 +27,8 @@
 #define _(x) x
 #define __(x) x
 
+#define COMPOUND_STRING(str) (const u8[]) _(str)
+
 // Fool CLion IDE
 #define INCBIN(x) {0}
 #define INCBIN_U8 INCBIN
