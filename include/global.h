@@ -27,8 +27,6 @@
 #define _(x) x
 #define __(x) x
 
-#define COMPOUND_STRING(str) (const u8[]) _(str)
-
 // Fool CLion IDE
 #define INCBIN(x) {0}
 #define INCBIN_U8 INCBIN
@@ -38,6 +36,8 @@
 #define INCBIN_S16 INCBIN
 #define INCBIN_S32 INCBIN
 #endif // IDE support
+
+#define $(str) (const u8[]) _(str)
 
 #define ARRAY_COUNT(array) (size_t)(sizeof(array) / sizeof((array)[0]))
 #define STATIC_ASSERT(condition, name) typedef char static_assertion_##name [2 * (condition) - 1];

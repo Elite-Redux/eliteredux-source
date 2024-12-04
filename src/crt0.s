@@ -81,8 +81,6 @@ GPIOPortReadEnable: @ 80000C8
 	.4byte 0x00000000
 
 	.4byte gBaseStats
-	.4byte gAbilityNames
-	.4byte gAbilityDescriptionPointers
 	.4byte gItems
 	.4byte gBattleMoves
 	.4byte gBallSpriteSheets

@@ -62,6 +62,7 @@
 #include "constants/maps.h"
 #include "script_pokemon_util.h"
 #include "tmhm_struct.h"
+#include "abilities.h"
 
 struct SpeciesItem
 {
@@ -9357,36 +9358,7 @@ u16 RandomizeMoves(u16 moves, u16 species, u32 personality) {
 }
 
 u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
-    if (gSaveBlock2Ptr->innaterandomizedMode == 1 && 
-       innate != ABILITY_NONE                   &&
-       innate != ABILITY_ZEN_MODE               &&
-       innate != ABILITY_WONDER_GUARD           &&
-       innate != ABILITY_POWER_CONSTRUCT        &&
-       innate != ABILITY_SCHOOLING              &&
-       innate != ABILITY_MULTITYPE              &&
-       innate != ABILITY_FORECAST               &&
-       innate != ABILITY_STANCE_CHANGE          &&
-       innate != ABILITY_RKS_SYSTEM             &&
-       innate != ABILITY_BATTLE_BOND            &&
-       innate != ABILITY_ICE_FACE               &&
-       innate != ABILITY_GULP_MISSILE           &&
-       innate != ABILITY_DISGUISE               &&
-       innate != ABILITY_PATCHWORK              &&
-       innate != ABILITY_FLOWER_GIFT            &&
-       innate != ABILITY_AS_ONE_ICE_RIDER       &&
-       innate != ABILITY_AS_ONE_SHADOW_RIDER    &&
-       innate != ABILITY_CROWNED_KING           &&
-       innate != ABILITY_ZERO_TO_HERO           &&
-       innate != ABILITY_BAD_COMPANY            &&
-       innate != ABILITY_CHEEK_POUCH       &&
-       innate != ABILITY_ARCHMAGE               &&
-       innate != ABILITY_NEUTRALIZING_GAS       &&
-       innate != ABILITY_FLAMMABLE_COAT         &&
-       innate != ABILITY_APE_SHIFT              &&
-       #ifdef BALANCE_RANDOMIZER_ABILITIES
-       innate != ABILITY_ANGELS_WRATH           &&
-       #endif
-       innate != ABILITY_HUNGER_SWITCH) {
+    if (gSaveBlock2Ptr->innaterandomizedMode == 1 && !gAbilities[innate].randomizerBanned) {
         //Only Randomize if you have the Innate Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
         u32 randomizedInnateSeed = (innate ^ ISO_RANDOMIZE1(species) ^ personality);
@@ -9394,41 +9366,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
         do {
             randomizedInnate = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedInnateSeed);
         }
-        while (randomizedInnate == ABILITY_NONE                  ||
-              randomizedInnate == ABILITY_HUNGER_SWITCH         ||
-              randomizedInnate == ABILITY_ZEN_MODE              ||
-              randomizedInnate == ABILITY_WONDER_GUARD          ||
-              randomizedInnate == ABILITY_POWER_CONSTRUCT       ||
-              randomizedInnate == ABILITY_SCHOOLING             ||
-              randomizedInnate == ABILITY_TRACE                 ||
-              randomizedInnate == ABILITY_MULTITYPE             ||
-              randomizedInnate == ABILITY_FORECAST              ||
-              randomizedInnate == ABILITY_DISGUISE              ||
-              randomizedInnate == ABILITY_PATCHWORK             ||
-              randomizedInnate == ABILITY_STANCE_CHANGE         ||
-              randomizedInnate == ABILITY_FLAMMABLE_COAT        ||
-              randomizedInnate == ABILITY_RKS_SYSTEM            ||
-              randomizedInnate == ABILITY_BATTLE_BOND           ||
-              randomizedInnate == ABILITY_FLOWER_GIFT           ||
-              randomizedInnate == ABILITY_ICE_FACE              ||
-              randomizedInnate == ABILITY_AS_ONE_ICE_RIDER      ||
-              randomizedInnate == ABILITY_AS_ONE_SHADOW_RIDER   ||
-              randomizedInnate == ABILITY_CROWNED_KING          ||
-              randomizedInnate == ABILITY_ZERO_TO_HERO          ||
-              randomizedInnate == ABILITY_BAD_COMPANY           ||
-              randomizedInnate == ABILITY_ARCHMAGE              ||
-              randomizedInnate == ABILITY_APE_SHIFT             ||
-              randomizedInnate == ABILITY_CHEEK_POUCH           ||
-              randomizedInnate == ABILITY_DESOLATE_SUN          || // Not implemented
-              #ifdef BALANCE_RANDOMIZER_ABILITIES
-              randomizedInnate == ABILITY_COMATOSE              ||
-              randomizedInnate == ABILITY_TRUANT                ||
-              randomizedInnate == ABILITY_ANGELS_WRATH          ||
-              randomizedInnate == ABILITY_HUGE_POWER            ||
-              randomizedInnate == ABILITY_PURE_POWER            ||
-              randomizedInnate == ABILITY_FELINE_PROWESS        ||
-              #endif
-              randomizedInnate == ABILITY_GULP_MISSILE);
+        while (gAbilities[randomizedInnate].randomizerBanned);
         return randomizedInnate;
     }
     else
@@ -9438,33 +9376,7 @@ u16 RandomizeInnate(u16 innate, u16 species, u32 personality) {
 //#define BALANCE_RANDOMIZER_ABILITIES
 
 u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
-    if (gSaveBlock2Ptr->abilityRandomizedMode == 1 &&
-       ability != ABILITY_NONE              &&
-       ability != ABILITY_ZEN_MODE          &&
-       ability != ABILITY_WONDER_GUARD      &&
-       ability != ABILITY_POWER_CONSTRUCT   &&
-       ability != ABILITY_SCHOOLING         &&
-       ability != ABILITY_MULTITYPE         &&
-       ability != ABILITY_FORECAST          &&
-       ability != ABILITY_STANCE_CHANGE     &&
-       ability != ABILITY_FLAMMABLE_COAT    &&
-       ability != ABILITY_RKS_SYSTEM        &&
-       ability != ABILITY_BATTLE_BOND       &&
-       ability != ABILITY_POWER_CONSTRUCT   &&
-       ability != ABILITY_ICE_FACE          &&
-       ability != ABILITY_GULP_MISSILE      &&
-       ability != ABILITY_DISGUISE          &&
-       ability != ABILITY_PATCHWORK         &&
-       ability != ABILITY_FLOWER_GIFT       &&
-       ability != ABILITY_ZERO_TO_HERO      &&
-       ability != ABILITY_BAD_COMPANY       &&
-       ability != ABILITY_CHEEK_POUCH       &&
-       ability != ABILITY_ARCHMAGE          &&
-       ability != ABILITY_APE_SHIFT              &&
-       #ifdef BALANCE_RANDOMIZER_ABILITIES
-       ability != ABILITY_ANGELS_WRATH      &&
-       #endif
-       ability != ABILITY_HUNGER_SWITCH) {
+    if (gSaveBlock2Ptr->abilityRandomizedMode == 1 && !gAbilities[ability].randomizerBanned) {
         //Only Randomize if you have the Ability Randomized Mode Enabled
         //Exclude form change abilities from being randomized and other mons can't get them either
         u32 randomizedAbilitySeed = ability ^ ISO_RANDOMIZE1(species) ^ personality;
@@ -9472,41 +9384,7 @@ u16 RandomizeAbility(u16 ability, u16 species, u32 personality) {
         do {
             randomizedAbility = RandRangeDeterministic(1, ABILITIES_COUNT - 1, &randomizedAbilitySeed);
         }
-        while (randomizedAbility == ABILITY_NONE                 ||
-              randomizedAbility == ABILITY_HUNGER_SWITCH        ||
-              randomizedAbility == ABILITY_ZEN_MODE             ||
-              randomizedAbility == ABILITY_POWER_CONSTRUCT      ||
-              randomizedAbility == ABILITY_SCHOOLING            ||
-              randomizedAbility == ABILITY_TRACE                ||
-              randomizedAbility == ABILITY_MULTITYPE            ||
-              randomizedAbility == ABILITY_FORECAST             ||
-              randomizedAbility == ABILITY_DISGUISE             ||
-              randomizedAbility == ABILITY_PATCHWORK            ||
-              randomizedAbility == ABILITY_STANCE_CHANGE        ||
-              randomizedAbility == ABILITY_FLAMMABLE_COAT       ||
-              randomizedAbility == ABILITY_RKS_SYSTEM           ||
-              randomizedAbility == ABILITY_BATTLE_BOND          ||
-              randomizedAbility == ABILITY_FLOWER_GIFT          ||
-              randomizedAbility == ABILITY_ICE_FACE             ||
-              randomizedAbility == ABILITY_AS_ONE_ICE_RIDER     ||
-              randomizedAbility == ABILITY_AS_ONE_SHADOW_RIDER  ||
-              randomizedAbility == ABILITY_CROWNED_KING         ||
-              randomizedAbility == ABILITY_ZERO_TO_HERO         ||
-              randomizedAbility == ABILITY_BAD_COMPANY          ||
-              randomizedAbility == ABILITY_ARCHMAGE             ||
-              randomizedAbility == ABILITY_APE_SHIFT             ||
-              randomizedAbility == ABILITY_CHEEK_POUCH           ||
-              
-              #ifdef BALANCE_RANDOMIZER_ABILITIES
-              randomizedAbility == ABILITY_COMATOSE             ||
-              randomizedAbility == ABILITY_WONDER_GUARD         ||
-              randomizedAbility == ABILITY_TRUANT               ||
-              randomizedAbility == ABILITY_ANGELS_WRATH         ||
-              randomizedAbility == ABILITY_HUGE_POWER           ||
-              randomizedAbility == ABILITY_PURE_POWER           ||
-              randomizedAbility == ABILITY_FELINE_PROWESS       ||
-              #endif
-              randomizedAbility == ABILITY_GULP_MISSILE);
+        while (gAbilities[ability].randomizerBanned);
         return randomizedAbility;
     }
     else

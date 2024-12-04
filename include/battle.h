@@ -806,21 +806,16 @@ struct BattleStruct
 
 #define SET_STAT_BUFF_VALUE(n)((((n) << 3) & 0xF8))
 
-// Fixes standard autocomplete detection
-#ifndef __GNUC__
-#define __attribute__(value)
-#endif
-
-union StatChanger {
+typedef union StatChanger {
     u8 value;
     struct {
         u8 statId:3;
         u8 stage:4;
         u8 goesDown:1;
     } __attribute__((packed));
-} __attribute__((packed));
+} __attribute__((packed)) StatChanger;
 
-STATIC_ASSERT(sizeof(union StatChanger) == 1, statChangerIsSizeOfChar)
+STATIC_ASSERT(sizeof(StatChanger) == 1, statChangerIsSizeOfChar)
 
 #define GET_STAT_BUFF_VALUE_WITH_SIGN(statChanger) (((statChanger).goesDown ? -1 : 1) * ((int) (statChanger).stage))
 
@@ -843,12 +838,12 @@ struct BattleScripting
     u8 animArg1;
     u8 animArg2;
     u8 moveendState;
-    union StatChanger savedStatChanger;
+    StatChanger savedStatChanger;
     u8 shiftSwitched;
     u8 battler;
     u8 animTurn;
     u8 animTargetsHit;
-    union StatChanger statChanger;
+    StatChanger statChanger;
     bool8 statAnimPlayed;
     u8 getexpState;
     u8 drawlvlupboxState;

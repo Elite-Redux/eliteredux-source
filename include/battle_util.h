@@ -403,6 +403,11 @@ int HasChloroplast(int battler);
 int HasStormDrain(int battler);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);
+bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower);
+int UseIntimidateClone(int battler, int abilityToCheck);
+bool32 TryRemoveScreens(u8 battler);
+void DisableSwitchInAbility(u8 battlerId, u16 ability);
+bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer);
 
 MultihitType GetMultihitType(int battler, int move);
 
