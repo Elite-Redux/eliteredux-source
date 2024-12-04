@@ -1237,7 +1237,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DODRIO_REDUX] = _("Dodrio"),
     [SPECIES_DODUO_REDUX]  = _("Doduo"),
 
-    [SPECIES_SCRAFTY_MEGA]  = _("Scraftster"),
+    [SPECIES_SCRAFTY_MEGA]  = _("Scrafster"),
     [SPECIES_FROSLASS_MEGA] = _("Froslass"),
 
     [SPECIES_DEINO_REDUX]     = _("Deino"),
