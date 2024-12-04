@@ -19986,12 +19986,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_SCRAFTY] =
     {
-    .baseHP        = 80,
-    .baseAttack    =  90,
-    .baseDefense   =  115,
-    .baseSpeed     =  73,
-    .baseSpAttack  =  45,
-    .baseSpDefense =  115,
+    .baseHP         = 65,
+    .baseAttack     = 90,
+    .baseDefense    = 115,
+    .baseSpeed      = 73,
+    .baseSpAttack   = 45,
+    .baseSpDefense  = 115,
     .type1 = TYPE_DARK,
     .type2 = TYPE_FIGHTING,
     .catchRate = 255,
@@ -32326,12 +32326,12 @@ const struct BaseStats gBaseStats[] =
 
 [SPECIES_SCRAFTY_MEGA] =
     {
-    .baseHP         = 80,
-    .baseAttack     = 120,
-    .baseDefense    = 130,
+    .baseHP         = 90,
+    .baseAttack     = 115,
+    .baseDefense    = 115,
     .baseSpeed      = 93,
-    .baseSpAttack   = 65,
-    .baseSpDefense  = 130,
+    .baseSpAttack   = 52,
+    .baseSpDefense  = 115,
     .type1 = TYPE_DARK,
     .type2 = TYPE_FIGHTING,
     .catchRate = 255,
@@ -32345,8 +32345,8 @@ const struct BaseStats gBaseStats[] =
     .growthRate = GROWTH_MEDIUM_FAST,
     .eggGroup1 = EGG_GROUP_FIELD,
     .eggGroup2 = EGG_GROUP_DRAGON,
-    .abilities      = {ABILITY_DARK_GALE_WINGS, ABILITY_MOXIE, ABILITY_STALL},
-    .innates = {ABILITY_SHED_SKIN, ABILITY_ROCK_HEAD, ABILITY_RECKLESS},
+    .abilities      = {ABILITY_COMBAT_SPECIALIST, ABILITY_MOXIE, ABILITY_DARK_GALE_WINGS},
+    .innates        = {ABILITY_INTIMIDATE, ABILITY_ROCK_HEAD, ABILITY_RECKLESS},
     .bodyColor = BODY_COLOR_RED,
     .noFlip = FALSE,
     .tier = 0,
