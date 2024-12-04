@@ -1002,148 +1002,6 @@ void HandleAction_ActionFinished(void)
     TryPreemptiveActions();
 }
 
-// rom const data
-
-static const u8 sAbilitiesAffectedByMoldBreaker[ABILITIES_COUNT] =
-{
-    [ABILITY_BATTLE_ARMOR] = 1,
-    [ABILITY_CLEAR_BODY] = 1,
-    // [ABILITY_DAMP] = 1,
-    [ABILITY_DRY_SKIN] = 1,
-    [ABILITY_FILTER] = 1,
-    [ABILITY_FLASH_FIRE] = 1,
-    [ABILITY_FLOWER_GIFT] = 1,
-    [ABILITY_HEATPROOF] = 1,
-    [ABILITY_HYPER_CUTTER] = 1,
-    [ABILITY_IMMUNITY] = 1,
-    [ABILITY_INNER_FOCUS] = 1,
-    [ABILITY_INSOMNIA] = 1,
-    [ABILITY_KEEN_EYE] = 1,
-    [ABILITY_LEAF_GUARD] = 1,
-    [ABILITY_LEVITATE] = 1,
-    [ABILITY_LIGHTNING_ROD] = 1,
-    [ABILITY_LIMBER] = 1,
-    [ABILITY_MAGMA_ARMOR] = 1,
-    [ABILITY_MARVEL_SCALE] = 1,
-    [ABILITY_MOTOR_DRIVE] = 1,
-    [ABILITY_OBLIVIOUS] = 1,
-    [ABILITY_OWN_TEMPO] = 1,
-    [ABILITY_SAND_VEIL] = 1,
-    [ABILITY_SHELL_ARMOR] = 1,
-    [ABILITY_SHIELD_DUST] = 1,
-    [ABILITY_SNOW_CLOAK] = 1,
-    [ABILITY_SOLID_ROCK] = 1,
-    [ABILITY_SOUNDPROOF] = 1,
-    [ABILITY_STICKY_HOLD] = 1,
-    [ABILITY_STORM_DRAIN] = 1,
-    [ABILITY_STURDY] = 1,
-    [ABILITY_SUCTION_CUPS] = 1,
-    [ABILITY_TANGLED_FEET] = 1,
-    [ABILITY_THICK_FAT] = 1,
-    [ABILITY_UNAWARE] = 1,
-    [ABILITY_VITAL_SPIRIT] = 1,
-    [ABILITY_VOLT_ABSORB] = 1,
-    [ABILITY_WATER_ABSORB] = 1,
-    [ABILITY_WATER_VEIL] = 1,
-    [ABILITY_WONDER_GUARD] = 1,
-    [ABILITY_CONTRARY] = 1,
-    [ABILITY_FRIEND_GUARD] = 1,
-    [ABILITY_MAGIC_BOUNCE] = 1,
-    [ABILITY_MULTISCALE] = 1,
-    [ABILITY_SAP_SIPPER] = 1,
-    [ABILITY_TELEPATHY] = 1,
-    [ABILITY_WONDER_SKIN] = 1,
-    [ABILITY_AROMA_VEIL] = 1,
-    [ABILITY_BULLETPROOF] = 1,
-    [ABILITY_FLOWER_VEIL] = 1,
-    [ABILITY_FUR_COAT] = 1,
-    [ABILITY_OVERCOAT] = 1,
-    [ABILITY_SWEET_VEIL] = 1,
-    [ABILITY_DAZZLING] = 1,
-    [ABILITY_DISGUISE] = 1,
-    [ABILITY_FLUFFY] = 1,
-    [ABILITY_QUEENLY_MAJESTY] = 1,
-    [ABILITY_WATER_BUBBLE] = 1,
-    [ABILITY_MIRROR_ARMOR] = 1,
-    [ABILITY_PUNK_ROCK] = 1,
-    [ABILITY_ICE_SCALES] = 1,
-    [ABILITY_ICE_FACE] = 1,
-
-    // New abilities
-    [ABILITY_DUNE_TERROR] = 1,
-    [ABILITY_GIFTED_MIND] = 1,
-    [ABILITY_DESERT_CLOAK] = 1,
-    [ABILITY_ARCTIC_FUR] = 1,
-    [ABILITY_BIG_LEAVES] = 1,
-    [ABILITY_POISON_ABSORB] = 1,
-    [ABILITY_SEAWEED] = 1,
-    [ABILITY_RAW_WOOD] = 1,
-    [ABILITY_BAD_LUCK] = 1,
-    [ABILITY_JUGGERNAUT] = 1,
-    [ABILITY_MOUNTAINEER] = 1,
-    [ABILITY_DRAGONFLY] = 1,
-    [ABILITY_LIQUIFIED] = 1,
-    [ABILITY_FOSSILIZED] = 1,
-    [ABILITY_LEAD_COAT] = 1,
-    [ABILITY_CHRISTMAS_SPIRIT] = 1,
-    [ABILITY_AERODYNAMICS] = 1,
-    [ABILITY_WATER_COMPACTION] = 1,
-    [ABILITY_GRASS_PELT] = 1,
-    [ABILITY_PRIMAL_ARMOR] = 1,
-    [ABILITY_WEATHER_CONTROL] = 1,
-    [ABILITY_ICE_DEW] = 1,
-    [ABILITY_WELL_BAKED_BODY] = 1,
-    [ABILITY_EVAPORATE] = 1,
-    [ABILITY_RADIANCE] = 1,
-    [ABILITY_JUNGLES_GUARD] = 1,
-    [ABILITY_EARTH_EATER] = 1,
-    [ABILITY_SAND_GUARD] = 1,
-    [ABILITY_WIND_RIDER] = 1,
-    [ABILITY_ENLIGHTENED] = 1,
-    [ABILITY_BASS_BOOSTED] = 1,
-    [ABILITY_CHROME_COAT] = 1,
-    [ABILITY_PURIFYING_SALT] = 1,
-    [ABILITY_SUN_BASKING] = 1,
-    [ABILITY_GOOD_AS_GOLD] = 1,
-    [ABILITY_THERMAL_EXCHANGE] = 1,
-    [ABILITY_NOISE_CANCEL] = 1,
-    [ABILITY_PARROTING] = 1,
-    [ABILITY_GALLANTRY] = 1,
-    [ABILITY_ANTICIPATION] = 1,
-    [ABILITY_AERIALIST] = 1,
-    [ABILITY_FIRE_SCALES] = 1,
-    [ABILITY_APPLE_ENLIGHTENMENT] = 1,
-    [ABILITY_OLD_MARINER] = 1,
-    [ABILITY_LAST_STAND] = 1,
-    [ABILITY_BLOOD_BATH] = 1,
-    [ABILITY_BLOODLUST] = 1,
-    [ABILITY_SMOKEY_MANEUVERS] = 1,
-    [ABILITY_BAD_OMEN] = 1,
-    [ABILITY_FLUFFIEST] = 1,
-    [ABILITY_IRON_GIANT] = 1,
-    [ABILITY_WAY_OF_PRECISION] = 1,
-    [ABILITY_HUGE_WINGS] = 1,
-    [ABILITY_PATCHWORK] = 1,
-    [ABILITY_TERASTAL_TREASURE] = 1,
-    [ABILITY_DREAM_STATE] = 1,
-    [ABILITY_FLAME_SHIELD] = 1,
-    [ABILITY_HOVER] = 1,
-    [ABILITY_DRAGONSLAYER] = 1,
-    [ABILITY_STALL] = 1,
-    [ABILITY_TERA_SHELL] = 1,
-    [ABILITY_TERAFORM_ZERO] = 1,
-    [ABILITY_SUPERSWEET_SYRUP] = 1,
-    [ABILITY_BREAKWATER] = 1,
-    [ABILITY_AURA_BREAK] = 1,
-    [ABILITY_ARMOR_TAIL] = 1,
-    // Intentionally not included: 
-    //   Color Change
-    //   Prismatic Fur
-    //   Cheating Death
-    //   Delta Stream
-    //   Unlocked Potential
-};
-
 static const u8 sHoldEffectToType[][2] =
 {
     {HOLD_EFFECT_BUG_POWER, TYPE_BUG},
@@ -14726,7 +14584,7 @@ int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker)
 {
     int ability = gBattleMons[battler].abilities[abilityNumber];
 
-    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && sAbilitiesAffectedByMoldBreaker[ability])
+    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
         || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
     {
         if (!DoesBattlerHaveAbilityShield(battler))
@@ -14764,7 +14622,7 @@ int GetAbilityIndex(int battler, int ability, int checkMoldBreaker)
     
     if (i == TOTAL_ABILITY_COUNT) return TOTAL_ABILITY_COUNT;
 
-    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && sAbilitiesAffectedByMoldBreaker[ability])
+    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
         || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
     {
         if (!DoesBattlerHaveAbilityShield(battler))

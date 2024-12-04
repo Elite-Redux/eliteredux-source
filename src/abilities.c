@@ -90,6 +90,7 @@ static const Ability SpeedBoost = {
 static const Ability BattleArmor = {
     .name = $("Battle Armor"),
     .description = $("Immune to critical hits. Takes\n20% less damage from all attacks."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -97,6 +98,7 @@ static const Ability BattleArmor = {
 static const Ability Sturdy = {
     .name = $("Sturdy"),
     .description = $("At full HP, cannot be KO in one\nhit, stays at 1 HP instead."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -111,6 +113,7 @@ static const Ability Damp = {
 static const Ability Limber = {
     .name = $("Limber"),
     .description = $("Immune to paralysis.\nTakes 50% less recoil damage."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -118,6 +121,7 @@ static const Ability Limber = {
 static const Ability SandVeil = {
     .name = $("Sand Veil"),
     .description = $("Evasion is boosted by 1.25x\nwhile a sandstorm is active."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -132,6 +136,7 @@ static const Ability Static = {
 static const Ability VoltAbsorb = {
     .name = $("Volt Absorb"),
     .description = $("Heals 25% of max HP when hit\nby an Electric-type move."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -139,6 +144,7 @@ static const Ability VoltAbsorb = {
 static const Ability WaterAbsorb = {
     .name = $("Water Absorb"),
     .description = $("Heals 25% of max HP when hit\nby a Water-type move."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -146,6 +152,7 @@ static const Ability WaterAbsorb = {
 static const Ability Oblivious = {
     .name = $("Oblivious"),
     .description = $("Immune to infatuation, Scare,\nIntimidate and Taunt."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -172,6 +179,7 @@ static const Ability CompoundEyes = {
 static const Ability Insomnia = {
     .name = $("Insomnia"),
     .description = $("Cannot fall asleep.\nRest fails if used."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -186,6 +194,7 @@ static const Ability ColorChange = {
 static const Ability Immunity = {
     .name = $("Immunity"),
     .description = $("Cannot be poisoned. Halves\ndamage taken from Poison moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -193,6 +202,7 @@ static const Ability Immunity = {
 static const Ability FlashFire = {
     .name = $("Flash Fire"),
     .description = $("Powers up Fire-type moves by\n1.5x if hit by a Fire-type move."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -200,6 +210,7 @@ static const Ability FlashFire = {
 static const Ability ShieldDust = {
     .name = $("Shield Dust"),
     .description = $("Immune to added move effects and\nall entry hazards."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -207,6 +218,7 @@ static const Ability ShieldDust = {
 static const Ability OwnTempo = {
     .name = $("Own Tempo"),
     .description = $("Immune to confusion, Intimidate\nand Scare."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -214,6 +226,7 @@ static const Ability OwnTempo = {
 static const Ability SuctionCups = {
     .name = $("Suction Cups"),
     .description = $("Cannot be forced to switch out\nby an enemy's move."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -243,6 +256,7 @@ static const Ability RoughSkin = {
 static const Ability WonderGuard = {
     .name = $("Wonder Guard"),
     .description = $("Is only hit by Super-effective\nattacks or indirect damage."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -250,6 +264,7 @@ static const Ability WonderGuard = {
 static const Ability Levitate = {
     .name = $("Levitate"),
     .description = $("Immune to Ground-type moves.\nUps own Flying moves by 1.25x."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -271,6 +286,7 @@ static const Ability Synchronize = {
 static const Ability ClearBody = {
     .name = $("Clear Body"),
     .description = $("Immune to stat drops."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -285,6 +301,7 @@ static const Ability NaturalCure = {
 static const Ability LightningRod = {
     .name = $("Lightning Rod"),
     .description = $("Redirects Electric moves.\nAbsorbs them, ups highest Atk."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -349,6 +366,7 @@ static const Ability PoisonPoint = {
 static const Ability InnerFocus = {
     .name = $("Inner Focus"),
     .description = $("Blocks flinch, Intimidate, Scare.\nFocus Blast never misses."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -356,6 +374,7 @@ static const Ability InnerFocus = {
 static const Ability MagmaArmor = {
     .name = $("Magma Armor"),
     .description = $("Frostbite-immune. Takes 30% less\ndmg from Water/Ice-type moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -370,6 +389,7 @@ ON_SWITCH {
 static const Ability WaterVeil = {
     .name = $("Water Veil"),
     .description = $("Burn-immune.\nCasts Aqua Ring on entry."),
+    .breakable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -385,6 +405,7 @@ static const Ability MagnetPull = {
 static const Ability Soundproof = {
     .name = $("Soundproof"),
     .description = $("Immune to sound-based moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -448,6 +469,7 @@ static const Ability Pressure = {
 static const Ability ThickFat = {
     .name = $("Thick Fat"),
     .description = $("Takes 1/2 damage from Fire-type\nand Ice-type attacks."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -476,6 +498,7 @@ static const Ability RunAway = {
 static const Ability KeenEye = {
     .name = $("Keen Eye"),
     .description = $("Immune to accuracy drops.\nGrants a 1.2x accuracy boost."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -483,6 +506,7 @@ static const Ability KeenEye = {
 static const Ability HyperCutter = {
     .name = $("Hyper Cutter"),
     .description = $("Enemies can't lower Atk/Sp. Atk.\nCrit rate of contact moves: +1."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -553,6 +577,7 @@ static const Ability Forecast = {
 static const Ability StickyHold = {
     .name = $("Sticky Hold"),
     .description = $("Can't lose its item."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -574,6 +599,7 @@ static const Ability Guts = {
 static const Ability MarvelScale = {
     .name = $("Marvel Scale"),
     .description = $("Ups Def by 1.5x if suffering\nfrom a status condition."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -651,6 +677,7 @@ static const Ability ArenaTrap = {
 static const Ability VitalSpirit = {
     .name = $("Vital Spirit"),
     .description = $("Can't fall asleep. Heals status\nafter using Fighting-type moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -684,6 +711,7 @@ static const Ability PurePower = {
 static const Ability ShellArmor = {
     .name = $("Shell Armor"),
     .description = $("Immune to critical hits. Takes\n20% less damage from all attacks."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -699,6 +727,7 @@ static const Ability AirLock = {
 static const Ability TangledFeet = {
     .name = $("Tangled Feet"),
     .description = $("Doubles Evasion when confused."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -706,6 +735,7 @@ static const Ability TangledFeet = {
 static const Ability MotorDrive = {
     .name = $("Motor Drive"),
     .description = $("Boosts Speed instead of being\nhit by Electric-type moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -727,6 +757,7 @@ static const Ability Steadfast = {
 static const Ability SnowCloak = {
     .name = $("Snow Cloak"),
     .description = $("Evasion is boosted by 1.25x\nunder hail."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -755,6 +786,7 @@ static const Ability Unburden = {
 static const Ability Heatproof = {
     .name = $("Heatproof"),
     .description = $("Halves damage taken from Fire-\ntype moves. Takes no burn damage."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -769,6 +801,7 @@ static const Ability Simple = {
 static const Ability DrySkin = {
     .name = $("Dry Skin"),
     .description = $("Water/Rain heals.\nFire/Sun hurts."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -873,6 +906,7 @@ static const Ability NoGuard = {
 static const Ability Stall = {
     .name = $("Stall"),
     .description = $("Takes 30% less damage if it\nhasn't moved yet."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -887,6 +921,7 @@ static const Ability Technician = {
 static const Ability LeafGuard = {
     .name = $("Leaf Guard"),
     .description = $("Immune to status conditions if\nsun is active."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -952,6 +987,7 @@ static const Ability Anticipation = {
     .name = $("Anticipation"),
     .description = $("Senses Super-effective moves.\nBlocks one Super-effective hit."),
     .persistent = TRUE,
+    .breakable = TRUE,
     CONTEXT_ON_SWITCH, 
 };
 
@@ -983,6 +1019,7 @@ static const Ability Forewarn = {
 static const Ability Unaware = {
     .name = $("Unaware"),
     .description = $("Ignores foes' stat changes, both\npositive and negative ones."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -997,6 +1034,7 @@ static const Ability TintedLens = {
 static const Ability Filter = {
     .name = $("Filter"),
     .description = $("Takes 35% less damage from\nSuper-effective moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1025,6 +1063,7 @@ static const Ability Scrappy = {
 static const Ability StormDrain = {
     .name = $("Storm Drain"),
     .description = $("Redirects Water moves.\nAbsorbs them, ups highest Atk."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1039,6 +1078,7 @@ static const Ability IceBody = {
 static const Ability SolidRock = {
     .name = $("Solid Rock"),
     .description = $("Takes 35% less damage from\nSuper-effective moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1101,6 +1141,7 @@ static const Ability FlowerGift = {
     .name = $("Flower Gift"),
     .description = $("Increases the party's SpAtk\nand SpDef by 1.5x in Sun."),
     .unsuppressable = TRUE,
+    .breakable = TRUE,
     .onSwitch = TryTransformAttacker,
 };
 
@@ -1130,6 +1171,7 @@ static const Ability SheerForce = {
 static const Ability Contrary = {
     .name = $("Contrary"),
     .description = $("Stat raises turn into stat drops\nfor this Pokémon and vice versa."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1176,6 +1218,7 @@ static const Ability Healer = {
 static const Ability FriendGuard = {
     .name = $("Friend Guard"),
     .description = $("Reduces damage that ally takes\nby 50% in double battles."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1204,6 +1247,7 @@ static const Ability LightMetal = {
 static const Ability Multiscale = {
     .name = $("Multiscale"),
     .description = $("At full HP, halves damage taken\nfrom attacks"),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1243,6 +1287,7 @@ static const Ability Harvest = {
 static const Ability Telepathy = {
     .name = $("Telepathy"),
     .description = $("Can't be damaged by ally attacks."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1257,6 +1302,7 @@ static const Ability Moody = {
 static const Ability Overcoat = {
     .name = $("Overcoat"),
     .description = $("Blocks weather dmg, powder moves.\n20% Special damage reduction."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1292,6 +1338,7 @@ static const Ability SandRush = {
 static const Ability WonderSkin = {
     .name = $("Wonder Skin"),
     .description = $("Opposing status moves have\ntheir accuracy halved."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1368,6 +1415,7 @@ static const Ability Rattled = {
 static const Ability MagicBounce = {
     .name = $("Magic Bounce"),
     .description = $("Bounces back the effect of\nstatus moves to their user."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1375,6 +1423,7 @@ static const Ability MagicBounce = {
 static const Ability SapSipper = {
     .name = $("Sap Sipper"),
     .description = $("Boosts highest Atk instead of\nbeing hit by Grass-type moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1441,6 +1490,7 @@ static const Ability Teravolt = {
 static const Ability AromaVeil = {
     .name = $("Aroma Veil"),
     .description = $("Immune to Encore, Attract, Taunt,\nTorment, Disable, Heal Block."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1448,6 +1498,7 @@ static const Ability AromaVeil = {
 static const Ability FlowerVeil = {
     .name = $("Flower Veil"),
     .description = $("Grass-types on this Pokémon's\nside are immune to stat drops."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1469,6 +1520,7 @@ static const Ability Protean = {
 static const Ability FurCoat = {
     .name = $("Fur Coat"),
     .description = $("Halves damage taken by Physical\nmoves. Does NOT double Defense."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1483,6 +1535,7 @@ static const Ability Magician = {
 static const Ability Bulletproof = {
     .name = $("Bulletproof"),
     .description = $("Immune to projectile, ball, or\nbomb-based moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1511,6 +1564,7 @@ static const Ability Refrigerate = {
 static const Ability SweetVeil = {
     .name = $("Sweet Veil"),
     .description = $("This Pokémon and its ally are\nimmune to sleep."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1540,6 +1594,7 @@ static const Ability MegaLauncher = {
 static const Ability GrassPelt = {
     .name = $("Grass Pelt"),
     .description = $("This Pokémon's Defense gets a\n1.5x boost in Grassy Terrain."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1614,6 +1669,7 @@ ON_SWITCH {
 static const Ability AuraBreak = {
     .name = $("Aura Break"),
     .description = $("Cancels aura abilities and makes\nthem 25% weaker instead."),
+    .breakable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -1685,6 +1741,7 @@ static const Ability EmergencyExit = {
 static const Ability WaterCompaction = {
     .name = $("Water Compaction"),
     .description = $("Takes 1/2 dmg from Water-type\nmoves. +2 Def when hit by those."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1715,6 +1772,7 @@ static const Ability Stakeout = {
 static const Ability WaterBubble = {
     .name = $("Water Bubble"),
     .description = $("Halves Fire dmg taken, no burns,\ndoubles power of its Water moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1804,6 +1862,8 @@ ON_SWITCH {
 static const Ability Disguise = {
     .name = $("Disguise"),
     .description = $("Protects once against an attack.\nRestores protection in fog."),
+    .unsuppressable = TRUE,
+    .breakable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -1849,6 +1909,7 @@ static const Ability Comatose = {
 static const Ability QueenlyMajesty = {
     .name = $("Queenly Majesty"),
     .description = $("Protects itself and ally from\npriority moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1877,6 +1938,7 @@ static const Ability Battery = {
 static const Ability Fluffy = {
     .name = $("Fluffy"),
     .description = $("Takes 1/2 dmg from contact moves\nbut Fire moves hurt it 2x more."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -1884,6 +1946,7 @@ static const Ability Fluffy = {
 static const Ability Dazzling = {
     .name = $("Dazzling"),
     .description = $("Protects itself and ally from\npriority moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2096,6 +2159,7 @@ static const Ability PropellerTail = {
 static const Ability MirrorArmor = {
     .name = $("Mirror Armor"),
     .description = $("Bounces back any stat drops\ninflicted by an enemy."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2125,6 +2189,7 @@ static const Ability SteamEngine = {
 static const Ability PunkRock = {
     .name = $("Punk Rock"),
     .description = $("Sound moves deal 1.3x more dmg.\nTakes -50% dmg from sound moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2139,6 +2204,7 @@ static const Ability SandSpit = {
 static const Ability IceScales = {
     .name = $("Ice Scales"),
     .description = $("Halves damage taken by Special\nmoves. Does NOT double SpDef."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2164,6 +2230,7 @@ static const Ability IceFace = {
     .name = $("Ice Face"),
     .description = $("Protects once against an attack.\nRestores protection under hail."),
     .unsuppressable = TRUE,
+    .breakable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -2449,6 +2516,7 @@ static const Ability Electrocytes = {
 static const Ability Aerodynamics = {
     .name = $("Aerodynamics"),
     .description = $("Boosts Speed instead of being\nhit by Flying-type moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2456,6 +2524,7 @@ static const Ability Aerodynamics = {
 static const Ability ChristmasSpirit = {
     .name = $("Christmas Spirit"),
     .description = $("Takes 50% less damage if hail is\nactive."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2556,6 +2625,7 @@ static const Ability LoudBang = {
 static const Ability LeadCoat = {
     .name = $("Lead Coat"),
     .description = $("Takes 40% less from Phys. moves.\nThis Pokémon's Speed is 0.9x."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2616,6 +2686,7 @@ static const Ability CoilUp = {
 static const Ability Fossilized = {
     .name = $("Fossilized"),
     .description = $("Halves dmg taken by Rock moves.\nBoosts own Rock moves by 1.2x."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2680,6 +2751,7 @@ static const Ability HalfDrake = {
 static const Ability Liquified = {
     .name = $("Liquified"),
     .description = $("Takes 1/2 dmg from contact moves\nbut Water moves hurt it 2x more."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2687,6 +2759,7 @@ static const Ability Liquified = {
 static const Ability Dragonfly = {
     .name = $("Dragonfly"),
     .description = $("Adds Dragon type to itself.\nAvoids Ground attacks."),
+    .breakable = TRUE,
     .onSwitch = HalfDrake.onSwitch,
 };
 
@@ -2695,6 +2768,7 @@ static const Ability Dragonfly = {
 static const Ability Dragonslayer = {
     .name = $("Dragonslayer"),
     .description = $("Deals 1.5x damage to Dragons.\nTakes .5x damage from Dragons."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2702,6 +2776,7 @@ static const Ability Dragonslayer = {
 static const Ability Mountaineer = {
     .name = $("Mountaineer"),
     .description = $("Immune to Rock-type attacks and\nStealth Rock damage."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2734,6 +2809,7 @@ static const Ability Permafrost = {
 static const Ability PrimalArmor = {
     .name = $("Primal Armor"),
     .description = $("Takes 50% less damage from\nSuper-effective moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2770,6 +2846,7 @@ static const Ability AirBlower = {
 static const Ability Juggernaut = {
     .name = $("Juggernaut"),
     .description = $("Paralysis-immune. Uses 20% of its\nDef when using a contact move."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2873,6 +2950,7 @@ static const Ability SweetDreams = {
 static const Ability BadLuck = {
     .name = $("Bad Luck"),
     .description = $("Foes hit the lowest damage roll,\nhave 5% less acc. and can't crit."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2894,6 +2972,7 @@ static const Ability ElectricBurst = {
 static const Ability RawWood = {
     .name = $("Raw Wood"),
     .description = $("Halves dmg taken by Grass moves.\nBoosts own Grass moves by 1.2x."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2940,6 +3019,7 @@ static const Ability FortKnox = {
 static const Ability Seaweed = {
     .name = $("Seaweed"),
     .description = $("Takes 1/2 dmg from Fire if Grass,\ndoubles Grass dmg on Fire-types."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -2954,6 +3034,7 @@ static const Ability PsychicMind = {
 static const Ability PoisonAbsorb = {
     .name = $("Poison Absorb"),
     .description = $("Heals 25% of max HP when hit\nby a Poison-type move."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3054,6 +3135,7 @@ static const Ability BoneZone = {
 static const Ability WeatherControl = {
     .name = $("Weather Control"),
     .description = $("Negates all weather based\nmoves from enemies."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3204,6 +3286,7 @@ static const Ability GripPincer = {
 static const Ability BigLeaves = {
     .name = $("Big Leaves"),
     .description = $("Chloroplast + Chlorophyll + Leaf\nGuard + Harvest + Solar Power."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3239,6 +3322,7 @@ static const Ability Amplifier = {
 static const Ability IceDew = {
     .name = $("Ice Dew"),
     .description = $("Boosts highest Atk instead of\nbeing hit by Ice-type moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3343,6 +3427,7 @@ static const Ability HardenedSheath = {
 static const Ability ArcticFur = {
     .name = $("Arctic Fur"),
     .description = $("Weakens incoming physical\nand special moves by 35%."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3496,6 +3581,7 @@ static const Ability ToxicSpill = {
 static const Ability DesertCloak = {
     .name = $("Desert Cloak"),
     .description = $("Protects its side from status\nand secondary effects in sand."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3566,6 +3652,7 @@ static const Ability SweepingEdge = {
 static const Ability GiftedMind = {
     .name = $("Gifted Mind"),
     .description = $("Nulls Psychic weakness;\nstatus moves always hit."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3659,6 +3746,7 @@ static const Ability VoltRush = {
 static const Ability DuneTerror = {
     .name = $("Dune Terror"),
     .description = $("Sand reduces damage by 35%.\nBoosts Ground moves by 20%."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3711,6 +3799,7 @@ static const Ability Atlas = {
 static const Ability Radiance = {
     .name = $("Radiance"),
     .description = $("+20% accuracy; Dark moves\nfail when user is present."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3770,6 +3859,7 @@ static const Ability GravityWell = {
 static const Ability Evaporate = {
     .name = $("Evaporate"),
     .description = $("Takes no damage and sets Mist\nif hit by water."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3784,6 +3874,7 @@ static const Ability Lumberjack = {
 static const Ability WellBakedBody = {
     .name = $("Well Baked Body"),
     .description = $("Boosts Defense sharply instead\nof being hit by Fire-type moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3822,6 +3913,7 @@ static const Ability RockyPayload = {
 static const Ability EarthEater = {
     .name = $("Earth Eater"),
     .description = $("Heals 25% of max HP when hit\nby a Ground move."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -3920,6 +4012,7 @@ static const Ability CombatSpecialist = {
 static const Ability JunglesGuard = {
     .name = $("Jungle's Guard"),
     .description = $("Grass-types on user side: immune\nto status/stat drops from enemy."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4090,6 +4183,7 @@ static const Ability Trickster = {
 static const Ability SandGuard = {
     .name = $("Sand Guard"),
     .description = $("Blocks priority and reduces\nspecial damage by 1/2 in sand."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4116,6 +4210,7 @@ ON_SWITCH {
 static const Ability WindRider = {
     .name = $("Wind Rider"),
     .description = $("Increases attack in tailwind or\nwhen hit by wind move."),
+    .breakable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -4174,6 +4269,7 @@ static const Ability TippingPoint = {
 static const Ability Enlightened = {
     .name = $("Enlightened"),
     .description = $("Emanate + Inner Focus."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4460,6 +4556,7 @@ static const Ability Grappler = {
 static const Ability BassBoosted = {
     .name = $("Bass Boosted"),
     .description = $("Amplifier + Punk Rock."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4585,6 +4682,7 @@ static const Ability VoodooPower = {
 static const Ability ChromeCoat = {
     .name = $("Chrome Coat"),
     .description = $("Reduces special damage taken by\n40%, but decreases Speed by 10%."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4636,6 +4734,7 @@ static const Ability Airborne = {
 static const Ability Parroting = {
     .name = $("Parroting"),
     .description = $("Copies sound moves used by\nothers. Immune to sound."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4674,6 +4773,7 @@ static const Ability SaltCircle = {
 static const Ability PurifyingSalt = {
     .name = $("Purifying Salt"),
     .description = $("Immune to status conditions.\nTake 1/2 damage from Ghost."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4900,6 +5000,7 @@ static const Ability CudChew = {
 static const Ability ArmorTail = {
     .name = $("Armor Tail"),
     .description = $("Protects itself and ally from\npriority moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4936,6 +5037,7 @@ static const Ability IllWill = {
 static const Ability FireScales = {
     .name = $("Fire Scales"),
     .description = $("Halves damage taken by Special\nmoves. Does NOT double SpDef."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4979,6 +5081,7 @@ static const Ability DoubleIronBarbs = {
 static const Ability ThermalExchange = {
     .name = $("Thermal Exchange"),
     .description = $("Ups Attack when hit by Fire.\nImmune to burn."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -4986,6 +5089,7 @@ static const Ability ThermalExchange = {
 static const Ability GoodAsGold = {
     .name = $("Good As Gold"),
     .description = $("Immune to all Status moves,\nunless whole field is affected."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5042,6 +5146,7 @@ static const Ability Gallantry = {
     .name = $("Gallantry"),
     .description = $("Gets no damage for\nfirst hit."),
     .persistent = TRUE,
+    .breakable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -5058,6 +5163,7 @@ static const Ability OrichalcumPulse = {
 static const Ability SunBasking = {
     .name = $("Sun Basking"),
     .description = $("Blocks priority and reduces\nphysical damage by 1/2 in sun."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5129,6 +5235,7 @@ static const Ability HauntingFrenzy = {
 static const Ability NoiseCancel = {
     .name = $("Noise Cancel"),
     .description = $("Protects the party from sound-\nbased moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5215,6 +5322,7 @@ static const Ability Contempt = {
 static const Ability Aerialist = {
     .name = $("Aerialist"),
     .description = $("Levitate + Flock."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5222,6 +5330,7 @@ static const Ability Aerialist = {
 static const Ability TeraShell = {
     .name = $("Tera Shell"),
     .description = $("All hits will be not very effective\nwhile at full HP."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5283,6 +5392,7 @@ static const Ability Rejection = {
 static const Ability AppleEnlightenment = {
     .name = $("Apple Enlightenment"),
     .description = $("Fur coat + Magic Guard."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5347,6 +5457,7 @@ static const Ability LowVisibility = {
 static const Ability OldMariner = {
     .name = $("Old Mariner"),
     .description = $("Seaweed + Water STAB."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5456,6 +5567,7 @@ static const Ability IceDownfall = {
 static const Ability LastStand = {
     .name = $("Last Stand"),
     .description = $("Def and SpDef increase as\nHP drops. Max 1.6x."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5470,6 +5582,7 @@ static const Ability PyroclasticFlow = {
 static const Ability BloodBath = {
     .name = $("Blood Bath"),
     .description = $("Immune to bleed. Inflict fear\nwhen inflicting bleed."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5484,6 +5597,7 @@ static const Ability BattleAura = {
 static const Ability Bloodlust = {
     .name = $("Bloodlust"),
     .description = $("Blood Bath + Soul Eater."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5609,6 +5723,7 @@ static const Ability WhiteNoise = {
 static const Ability SmokeyManeuvers = {
     .name = $("Smokey Maneuvers"),
     .description = $("Evasion is boosted by 1.25x\nin fog."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5732,6 +5847,7 @@ static const Ability DracoMorale = {
 static const Ability BadOmen = {
     .name = $("Bad Omen"),
     .description = $("Foes min roll and may miss.\nTakes 1/4 damage from crits."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5809,6 +5925,7 @@ static const Ability Petrify = {
 static const Ability Fluffiest = {
     .name = $("Fluffiest"),
     .description = $("Quarters contact damage taken.\n4x weak to fire."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5816,6 +5933,7 @@ static const Ability Fluffiest = {
 static const Ability WayOfPrecision = {
     .name = $("Way of Precision"),
     .description = $("Inner Focus + Precise Fist."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5837,6 +5955,7 @@ static const Ability AtomicPunch = {
 static const Ability IronGiant = {
     .name = $("Iron Giant"),
     .description = $("Heatproof + Juggernaut."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5898,6 +6017,7 @@ static const Ability VitalityStrike = {
 static const Ability HugeWings = {
     .name = $("Huge Wings"),
     .description = $("Giant Wings + Levitate."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -5934,6 +6054,7 @@ static const Ability Patchwork = {
     .name = $("Patchwork"),
     .description = $("Disguise + curses the opponent\nwhen its Disguise breaks."),
     .unsuppressable = TRUE,
+    .breakable = TRUE,
     .onSwitch = Disguise.onSwitch,
 };
 
@@ -6031,6 +6152,7 @@ static const Ability HotCoals = {
 static const Ability TerastalTreasure = {
     .name = $("Terastal Treasure"),
     .description = $("Reduces damage taken by 40%,\nbut lowers speed by 20%."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6071,6 +6193,7 @@ static const Ability RousedFangs = {
 static const Ability DreamState = {
     .name = $("Dream State"),
     .description = $("Immune to critical hits. Takes\n20% less damage from all attacks."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6096,6 +6219,7 @@ static const Ability LunarAffinity = {
 static const Ability FlameShield = {
     .name = $("Flame Shield"),
     .description = $("Takes 35% less damage from\nSuper-effective moves."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6124,6 +6248,7 @@ ON_SWITCH {
 static const Ability Hover = {
     .name = $("Hover"),
     .description = $("Adds Psychic type to itself.\nAvoids Ground attacks."),
+    .breakable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -6191,6 +6316,7 @@ static const Ability Whiplash = {
 static const Ability SupersweetSyrup = {
     .name = $("Supersweet Syrup"),
     .description = $("Can't lose its item. Disables foe's\nitem for 2 turns on contact."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
@@ -6328,6 +6454,7 @@ ON_SWITCH {
 static const Ability TeraformZero = {
     .name = $("Teraform Zero"),
     .description = $("Tera Shell + clears weather and\nterrain on first entry."),
+    .breakable = TRUE,
     CONTEXT_ON_SWITCH,
 };
 
@@ -6343,6 +6470,7 @@ static const Ability SetAblaze = {
 static const Ability Breakwater = {
     .name = $("Breakwater"),
     .description = $("Swift Swim + Stall."),
+    .breakable = TRUE,
 };
 
 #undef CONTEXT
