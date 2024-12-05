@@ -12,6 +12,9 @@
 #include "constants/items.h"
 #include "item.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic error "-Wunused-function"
+
 #define NO_ANNOUNCE 2
 
 #define CHECK(effect) if (!(effect)) return FALSE;
@@ -1126,6 +1129,7 @@ ON_SWITCH {
 static const Ability Frisk = {
     .name = $("Frisk"),
     .description = $("Checks foes' item and disables\ntheir items for two turns."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -2666,6 +2670,7 @@ ON_SWITCH {
 static const Ability Grounded = {
     .name = $("Grounded"),
     .description = $("Adds Ground type to itself."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -4023,6 +4028,7 @@ ON_SWITCH {
 static const Ability MonkeyBusiness = {
     .name = $("Monkey Business"),
     .description = $("Uses Tickle on entry."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -4261,6 +4267,7 @@ ON_SWITCH {
 static const Ability SoothingAroma = {
     .name = $("Soothing Aroma"),
     .description = $("Cures party status on entry."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -4655,6 +4662,7 @@ ON_SWITCH {
 static const Ability Permanence = {
     .name = $("Permanence"),
     .description = $("Foes can't heal in any way."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -7337,3 +7345,5 @@ const Ability gAbilities[] = {
 [ABILITY_PUFFY] = Puffy,
 [ABILITY_BALLOON_BLITZ] = BalloonBlitz,
 };
+
+#pragma GCC diagnostic pop
