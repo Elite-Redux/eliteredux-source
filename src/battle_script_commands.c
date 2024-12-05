@@ -1453,7 +1453,11 @@ static void Cmd_attackcanceler(void)
     if (AtkCanceller_UnableToUseMove())
         return;
 
-    if (!gTurnStructs[gBattlerAttacker].parentalBondOn)
+    if (gTurnStructs[gBattlerAttacker].multiHitCounter)
+    {
+        gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondTrigger = 0;
+    }
+    else if (!gTurnStructs[gBattlerAttacker].parentalBondOn)
     {
         gTurnStructs[gBattlerAttacker].parentalBondTrigger = GetParentalBondType(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType);
         i = GetParentalBondCount(gBattlerAttacker, gTurnStructs[gBattlerAttacker].parentalBondTrigger);
