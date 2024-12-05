@@ -14115,8 +14115,6 @@ int HandleMiscAbilityMoveEffects(int battler, int opponent, int move)
     return effect;
 }
 
-static int HandleSwitchInAbilityAs(int ability, int battler);
-
 int HandleSwitchInAbility(int abilityNumber, int battler)
 {
     int ability;
@@ -14196,21 +14194,12 @@ int HandleSwitchInAbility(int abilityNumber, int battler)
         return effect;
     }
 
-    ability = GetAbilityAtIndex(battler, abilityNumber, FALSE);
-
-    return HandleSwitchInAbilityAs(ability, battler);
-}
-
-#define ANNOUNCE_SIMPLE_ABILITY(abilityToAnnounce, announceMessage) \
-    case abilityToAnnounce: \
-        gBattleCommunication[MULTISTRING_CHOOSER] = announceMessage; \
-        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg); \
-        return TRUE;
-
-int HandleSwitchInAbilityAs(int ability, int battler)
-{
+    ability = gBattleMons[battler].abilities[abilityNumber];
     AbilityOnSwitchHandler handler = gAbilities[ability].onSwitch;
+    MGBA_PRINT_VALUES(ability, handler);
     if (!handler) return FALSE;
+
+    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
 
     switch (ability)
     {
@@ -14221,11 +14210,22 @@ int HandleSwitchInAbilityAs(int ability, int battler)
             if (!CheckAndSetSwitchInAbility(battler, ability)) return FALSE;
     }
 
+    MGBA_PRINT_VALUES(1);
+
     gBattleScripting.abilityPopupOverwrite = ability;
     gBattlerAbility = gBattleScripting.battler = battler;
 
-    return handler(ability, battler);
+    int result = handler(ability, battler);
+    if (result & 1) BattleScriptCall(BattleScript_AbilityPopUp);
+    MGBA_PRINT_VALUES(result);
+    return result;
 }
+
+#define ANNOUNCE_SIMPLE_ABILITY(abilityToAnnounce, announceMessage) \
+    case abilityToAnnounce: \
+        gBattleCommunication[MULTISTRING_CHOOSER] = announceMessage; \
+        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg); \
+        return TRUE;
 
 static int HandleEndTurnAbilityAs(int ability, int battler);
 
@@ -14588,11 +14588,10 @@ int IsSuppressed(int battler, int ability, int checkMoldBreaker)
     if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
         || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
     {
-        if (!DoesBattlerHaveAbilityShield(battler))
-            return FALSE;
+        return !DoesBattlerHaveAbilityShield(battler);
     }
 
-    return TRUE;
+    return FALSE;
 }
 
 int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker)
