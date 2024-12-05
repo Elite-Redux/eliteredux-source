@@ -1019,6 +1019,7 @@ static const Ability Unaware = {
     .name = $("Unaware"),
     .description = $("Ignores foes' stat changes, both\npositive and negative ones."),
     .breakable = TRUE,
+    .unaware = TRUE,
 };
 
 #undef CONTEXT
@@ -5330,6 +5331,7 @@ static const Ability DesertSpirit = {
 static const Ability Contempt = {
     .name = $("Contempt"),
     .description = $("Ignores opposing stat changes.\nBoosts Attack when stat lowered."),
+    .unaware = TRUE,
 };
 
 #undef CONTEXT
@@ -6015,6 +6017,7 @@ static const Ability HugeWings = {
 static const Ability SwordOfDamnation = {
     .name = $("Sword of Damnation"),
     .description = $("Unaware + Sword of Ruin."),
+    .unaware = TRUE,
 };
 
 #undef CONTEXT

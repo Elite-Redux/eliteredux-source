@@ -12343,9 +12343,7 @@ int IsBloodStainAffected(int battler)
 
 int IsUnaware(int battler)
 {
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_SWORD_OF_DAMNATION)) return TRUE;
+    ON_ABILITY(battler, TRUE, gAbilities[ability].unaware, return TRUE)
     return FALSE;
 }
 

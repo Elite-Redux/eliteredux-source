@@ -258,8 +258,8 @@ int IsSuppressed(int battler, int ability, int checkMoldBreaker);
 for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) { \
     int ability = gBattleMons[battler].abilities[idx]; \
     FILTER(condition) \
-    FILTER(IsSuppressed(battler, ability, checkMoldBreaker)) \
-    callback \
+    FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
+    callback; \
 }
 
 void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
