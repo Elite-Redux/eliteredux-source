@@ -36,7 +36,7 @@ static int TryTransformAttacker(int ability, int battler) {
     CHECK(ShouldChangeFormHpBased(battler))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
     
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
     return TRUE;
 }
 
