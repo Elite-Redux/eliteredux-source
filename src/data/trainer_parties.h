@@ -49792,7 +49792,7 @@ static const struct TrainerMonItemCustomMoves sParty_Lao1Insane[] = {
     .heldItem = ITEM_FOCUS_SASH,
     .ability = 2,
     .evs = {252, 0, 4, 0, 0, 252},
-    .nature = NATURE_HASTY,
+    .nature = NATURE_JOLLY,
     .moves = MOVE_TRANSFORM, MOVE_RETURN, MOVE_SECRET_POWER, MOVE_HELPING_HAND,
     .hpType = TYPE_FIGHTING,
     },
