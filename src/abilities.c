@@ -26,6 +26,9 @@
 #define ON_SWITCH static int COMBINE(OnSwitch, CONTEXT)(int ability, int battler)
 #define CONTEXT_ON_SWITCH .onSwitch = COMBINE(OnSwitch, CONTEXT)
 
+#define ON_ABSORB static int COMBINE(OnAbsorb, CONTEXT)(int battler, int move, int moveType, int *statId)
+#define CONTEXT_ON_ABSORB .onAbsorb = COMBINE(OnAbsorb, CONTEXT)
+
 static int SwitchInAnnounce(int message) {
     gBattleCommunication[MULTISTRING_CHOOSER] = message;
     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
@@ -139,18 +142,28 @@ static const Ability Static = {
 
 #undef CONTEXT
 #define CONTEXT VoltAbsorb
+ON_ABSORB {
+    CHECK(moveType == TYPE_ELECTRIC)
+    return ABSORB_RESULT_HEAL;
+}
 static const Ability VoltAbsorb = {
     .name = $("Volt Absorb"),
     .description = $("Heals 25% of max HP when hit\nby an Electric-type move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
 #define CONTEXT WaterAbsorb
+ON_ABSORB {
+    CHECK(moveType == TYPE_WATER)
+    return ABSORB_RESULT_HEAL;
+}
 static const Ability WaterAbsorb = {
     .name = $("Water Absorb"),
     .description = $("Heals 25% of max HP when hit\nby a Water-type move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -305,10 +318,17 @@ static const Ability NaturalCure = {
 
 #undef CONTEXT
 #define CONTEXT LightningRod
+ON_ABSORB {
+    CHECK(moveType == TYPE_ELECTRIC)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability LightningRod = {
     .name = $("Lightning Rod"),
     .description = $("Redirects Electric moves.\nAbsorbs them, ups highest Atk."),
     .breakable = TRUE,
+    .redirectType = TYPE_ELECTRIC,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -739,10 +759,16 @@ static const Ability TangledFeet = {
 
 #undef CONTEXT
 #define CONTEXT MotorDrive
+ON_ABSORB {
+    CHECK(moveType == TYPE_ELECTRIC)
+    *statId = STAT_SPEED;
+    return ABSORB_RESULT_STAT;
+}
 static const Ability MotorDrive = {
     .name = $("Motor Drive"),
     .description = $("Boosts Speed instead of being\nhit by Electric-type moves."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -809,6 +835,7 @@ static const Ability DrySkin = {
     .name = $("Dry Skin"),
     .description = $("Water/Rain heals.\nFire/Sun hurts."),
     .breakable = TRUE,
+    .onAbsorb = WaterAbsorb.onAbsorb,
 };
 
 #undef CONTEXT
@@ -1064,10 +1091,17 @@ static const Ability Scrappy = {
 
 #undef CONTEXT
 #define CONTEXT StormDrain
+ON_ABSORB {
+    CHECK(moveType == TYPE_WATER)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability StormDrain = {
     .name = $("Storm Drain"),
     .description = $("Redirects Water moves.\nAbsorbs them, ups highest Atk."),
     .breakable = TRUE,
+    .redirectType = TYPE_WATER,
+    CONTEXT_ON_ABSORB
 };
 
 #undef CONTEXT
@@ -1415,9 +1449,15 @@ static const Ability Moxie = {
 
 #undef CONTEXT
 #define CONTEXT Justified
+ON_ABSORB {
+    CHECK(moveType == TYPE_DARK)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability Justified = {
     .name = $("Justified"),
     .description = $("Boosts Attack instead of being\nhit by Dark-type moves."),
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -1437,10 +1477,16 @@ static const Ability MagicBounce = {
 
 #undef CONTEXT
 #define CONTEXT SapSipper
+ON_ABSORB {
+    CHECK(moveType == TYPE_GRASS)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability SapSipper = {
     .name = $("Sap Sipper"),
     .description = $("Boosts highest Atk instead of\nbeing hit by Grass-type moves."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -2543,10 +2589,16 @@ static const Ability Electrocytes = {
 
 #undef CONTEXT
 #define CONTEXT Aerodynamics
+ON_ABSORB {
+    CHECK(moveType == TYPE_FLYING)
+    *statId = STAT_SPEED;
+    return ABSORB_RESULT_STAT;
+}
 static const Ability Aerodynamics = {
     .name = $("Aerodynamics"),
     .description = $("Boosts Speed instead of being\nhit by Flying-type moves."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -3062,10 +3114,15 @@ static const Ability PsychicMind = {
 
 #undef CONTEXT
 #define CONTEXT PoisonAbsorb
+ON_ABSORB {
+    CHECK(moveType == TYPE_POISON)
+    return ABSORB_RESULT_HEAL;
+}
 static const Ability PoisonAbsorb = {
     .name = $("Poison Absorb"),
     .description = $("Heals 25% of max HP when hit\nby a Poison-type move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -3351,10 +3408,16 @@ static const Ability Amplifier = {
 
 #undef CONTEXT
 #define CONTEXT IceDew
+ON_ABSORB {
+    CHECK(moveType == TYPE_ICE)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability IceDew = {
     .name = $("Ice Dew"),
     .description = $("Boosts highest Atk instead of\nbeing hit by Ice-type moves."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -3903,10 +3966,17 @@ static const Ability Lumberjack = {
 
 #undef CONTEXT
 #define CONTEXT WellBakedBody
+ON_ABSORB {
+    CHECK(moveType == TYPE_FIRE)
+    *statId = STAT_DEF;
+    return ABSORB_RESULT_STAT;
+}
 static const Ability WellBakedBody = {
     .name = $("Well Baked Body"),
     .description = $("Boosts Defense sharply instead\nof being hit by Fire-type moves."),
     .breakable = TRUE,
+    .absorbUp2 = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -3942,10 +4012,15 @@ static const Ability RockyPayload = {
 
 #undef CONTEXT
 #define CONTEXT EarthEater
+ON_ABSORB {
+    CHECK(moveType == TYPE_GROUND)
+    return ABSORB_RESULT_HEAL;
+}
 static const Ability EarthEater = {
     .name = $("Earth Eater"),
     .description = $("Heals 25% of max HP when hit\nby a Ground move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -4236,11 +4311,17 @@ ON_SWITCH {
     BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityHighestAttackingStatRaiseOnSwitchIn);
     return TRUE;
 }
+ON_ABSORB {
+    CHECK(gBattleMoves[move].airBased)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability WindRider = {
     .name = $("Wind Rider"),
     .description = $("Increases attack in tailwind or\nwhen hit by wind move."),
     .breakable = TRUE,
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -5819,9 +5900,13 @@ static const Ability FlameBubble = {
 
 #undef CONTEXT
 #define CONTEXT ElementalVortex
+ON_ABSORB {
+    return WaterAbsorb.onAbsorb(battler, move, moveType, statId) | FlashFire.onAbsorb(battler, move, moveType, statId);
+}
 static const Ability ElementalVortex = {
     .name = $("Elemental Vortex"),
     .description = $("Flash Fire + Water Absorb."),
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -6532,9 +6617,16 @@ static const Ability EnergySiphon = {
 
 #undef CONTEXT
 #define CONTEXT Reservoir
+ON_ABSORB {
+    CHECK(moveType == TYPE_WATER)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT | ABSORB_RESULT_HEAL;
+}
 static const Ability Reservoir = {
     .name = $("Reservoir"),
     .description = $("Water Absorb + Storm Drain."),
+    .redirectType = TYPE_WATER,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT

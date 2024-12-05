@@ -409,7 +409,7 @@ void HandleFollowupAttackAbilities(int battler, int target, int move);
 int CheckAndSetOncePerTurnAbility(int battler, int ability);
 int IsStickyHold(int battler);
 int HasChloroplast(int battler);
-int HasStormDrain(int battler);
+int HasRedirectionAbility(int battler, int type);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);
 bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower);

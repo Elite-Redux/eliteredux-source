@@ -1649,16 +1649,10 @@ static void Cmd_attackcanceler(void)
         }
     }
 
-    if (gTurnStructs[gBattlerTarget].lightningRodRedirected)
+    if (gTurnStructs[gBattlerTarget].redirectedAbility)
     {
-        gTurnStructs[gBattlerTarget].lightningRodRedirected = FALSE;
-        gBattleScripting.abilityPopupOverwrite = ABILITY_LIGHTNING_ROD;
-        BattleScriptCall(BattleScript_TookAttack);
-    }
-    else if (gTurnStructs[gBattlerTarget].stormDrainRedirected)
-    {
-        gTurnStructs[gBattlerTarget].stormDrainRedirected = FALSE;
-        gBattleScripting.abilityPopupOverwrite = ABILITY_STORM_DRAIN;
+        gBattleScripting.abilityPopupOverwrite = gTurnStructs[gBattlerTarget].redirectedAbility;
+        gTurnStructs[gBattlerTarget].redirectedAbility = ABILITY_NONE;
         BattleScriptCall(BattleScript_TookAttack);
     }
     else if (IsBattlerProtected(gBattlerTarget, gCurrentMove)
