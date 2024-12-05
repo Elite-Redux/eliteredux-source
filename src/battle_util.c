@@ -14583,7 +14583,7 @@ int HasAnyStatusOrAbility(int battler)
 
 int IsSuppressed(int battler, int ability, int checkMoldBreaker)
 {
-    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
+    if ((checkMoldBreaker && battler != gBattlerAttacker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
         || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
     {
         return !DoesBattlerHaveAbilityShield(battler);
