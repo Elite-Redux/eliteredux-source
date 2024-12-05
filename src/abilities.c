@@ -524,6 +524,7 @@ ON_SWITCH {
     
     gSideStatuses[side] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
     gSideTimers[side].spikesAmount = 0;
+    gSideTimers[side].toxicSpikesAmount = 0;
     gSideTimers[side].hotCoals = FALSE;
     gSideTimers[side].caltrops = FALSE;
     BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
