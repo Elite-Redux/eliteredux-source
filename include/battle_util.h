@@ -252,6 +252,15 @@ int ShouldApplyOnHitAffect(int applyTo);
 void ReplaceAbility(int battler, int ability);
 int HasAbilityIgnoringSuppression(int battler, int ability);
 int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
+int int IsSuppressed(int battler, int ability, int checkMoldBreaker);
+
+#define ON_ABILITY(battler, checkMoldBreaker, condition, callback) \
+for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) { \
+    int ability = gBattleMons[battler].abilities[idx]; \
+    FILTER(condition) \
+    FILTER(IsSuppressed(battler, ability, checkMoldBreaker)) \
+    callback \
+}
 
 void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
 u32 IsAbilityOnSide(u32 battlerId, u32 ability);

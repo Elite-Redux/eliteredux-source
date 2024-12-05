@@ -14196,17 +14196,7 @@ int HandleSwitchInAbility(int abilityNumber, int battler)
         return effect;
     }
 
-    ability = gBattleScripting.abilityPopupOverwrite = GetAbilityAtIndex(battler, abilityNumber, FALSE);
-    gBattlerAbility = gBattleScripting.battler = battler;
-
-    switch (ability)
-    {
-        case ABILITY_TRACE:
-            break;
-        
-        default:
-            if (!CheckAndSetSwitchInAbility(battler, ability)) return FALSE;
-    }
+    ability = GetAbilityAtIndex(battler, abilityNumber, FALSE);
 
     return HandleSwitchInAbilityAs(ability, battler);
 }
@@ -14221,6 +14211,19 @@ int HandleSwitchInAbilityAs(int ability, int battler)
 {
     AbilityOnSwitchHandler handler = gAbilities[ability].onSwitch;
     if (!handler) return FALSE;
+
+    switch (ability)
+    {
+        case ABILITY_TRACE:
+            break;
+        
+        default:
+            if (!CheckAndSetSwitchInAbility(battler, ability)) return FALSE;
+    }
+
+    gBattleScripting.abilityPopupOverwrite = ability;
+    gBattlerAbility = gBattleScripting.battler = battler;
+
     return handler(ability, battler);
 }
 
@@ -14580,16 +14583,23 @@ int HasAnyStatusOrAbility(int battler)
     return FALSE;
 }
 
-int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker)
+int IsSuppressed(int battler, int ability, int checkMoldBreaker)
 {
-    int ability = gBattleMons[battler].abilities[abilityNumber];
-
     if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
         || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
     {
         if (!DoesBattlerHaveAbilityShield(battler))
-            return ABILITY_NONE;
+            return FALSE;
     }
+
+    return TRUE;
+}
+
+int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker)
+{
+    int ability = gBattleMons[battler].abilities[abilityNumber];
+
+    if (IsSuppressed(battler, ability, checkMoldBreaker)) return ABILITY_NONE;
 
     return ability;
 }
@@ -14622,12 +14632,7 @@ int GetAbilityIndex(int battler, int ability, int checkMoldBreaker)
     
     if (i == TOTAL_ABILITY_COUNT) return TOTAL_ABILITY_COUNT;
 
-    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
-        || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
-    {
-        if (!DoesBattlerHaveAbilityShield(battler))
-            return TOTAL_ABILITY_COUNT;
-    }
+    if (IsSuppressed(battler, ability, checkMoldBreaker)) return TOTAL_ABILITY_COUNT;
 
     return i;
 }
