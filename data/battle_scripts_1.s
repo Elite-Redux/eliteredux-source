@@ -3665,6 +3665,7 @@ BattleScript_EffectAbsorb::
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_AbsorbHeal:
+	jumpifbyte CMP_COMMON_BITS, gMoveResultFlags, MOVE_RESULT_NO_EFFECT, BattleScript_MoveEnd
 	manipulatedamage DMG_TO_HP_FROM_MOVE
 	call BattleScript_AbsorbLeech
 	goto BattleScript_MoveEnd
