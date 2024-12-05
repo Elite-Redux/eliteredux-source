@@ -517,13 +517,15 @@ static const Ability HyperCutter = {
 #undef CONTEXT
 #define CONTEXT Pickup
 ON_SWITCH {
-    CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY
-        || gSideTimers[GetBattlerSide(battler)].hotCoals
-        || gSideTimers[GetBattlerSide(battler)].caltrops)
+    int side = GetBattlerSide(battler);
+    CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY
+        || gSideTimers[side].hotCoals
+        || gSideTimers[side].caltrops)
     
-    gSideStatuses[GetBattlerSide(battler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
-    gSideTimers[GetBattlerSide(battler)].hotCoals = FALSE;
-    gSideTimers[GetBattlerSide(battler)].caltrops = FALSE;
+    gSideStatuses[side] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
+    gSideTimers[side].spikesAmount = 0;
+    gSideTimers[side].hotCoals = FALSE;
+    gSideTimers[side].caltrops = FALSE;
     BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
     return TRUE;
 }
