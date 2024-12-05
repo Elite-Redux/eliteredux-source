@@ -11046,7 +11046,9 @@ BattleScript_Entrance::
 	return
 
 BattleScript_PoisonPuppeteer_Internal:
-	swapbattlerandtargetvia34
+	saveattackerandtargetto34
+	copybyte gBattlerAttacker, gStackBattler1
+	copybyte gBattlerTarget, gStackBattler2
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_SAFEGUARD
 	bichalfword gMoveResultFlags, MOVE_RESULT_NO_EFFECT
 	seteffectsecondary
