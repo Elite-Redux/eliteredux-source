@@ -1,26 +1,29 @@
-#include "global.h"
 #include "constants/abilities.h"
+
 #include "abilities.h"
 #include "battle.h"
-#include "battle_scripts.h"
-#include "constants/battle_string_ids.h"
 #include "battle_anim.h"
 #include "battle_controllers.h"
-#include "string_util.h"
+#include "battle_scripts.h"
+#include "constants/battle_string_ids.h"
 #include "constants/hold_effects.h"
 #include "constants/item.h"
 #include "constants/items.h"
+#include "global.h"
 #include "item.h"
+#include "string_util.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic error "-Wunused-function"
 
 #define NO_ANNOUNCE 2
 
-#define CHECK(effect) if (!(effect)) return FALSE;
-#define CHECK_NOT(effect) if (effect) return FALSE;
+#define CHECK(effect) \
+    if (!(effect)) return FALSE;
+#define CHECK_NOT(effect) \
+    if (effect) return FALSE;
 
-#define __COMBINE(val1, val2) val1 ## val2
+#define __COMBINE(val1, val2) val1##val2
 #define COMBINE(val1, val2) __COMBINE(val1, val2)
 
 #define ON_SWITCH static int COMBINE(OnSwitch, CONTEXT)(int ability, int battler)
@@ -28,6 +31,19 @@
 
 #define ON_ABSORB static int COMBINE(OnAbsorb, CONTEXT)(int battler, int move, int moveType, int *statId)
 #define CONTEXT_ON_ABSORB .onAbsorb = COMBINE(OnAbsorb, CONTEXT)
+
+#define ON_IMMUNE static int COMBINE(OnImmune, CONTEXT)(int battler, int attacker, int move, int moveType, const u8 **immunityScript)
+#define CONTEXT_ON_IMMUNE .onImmune = COMBINE(OnImmune, CONTEXT)
+
+int IsApplyOnFlagAppropriate(int applyTo, int from, AbilityApplyOn flag) {
+    if (flag == APPLY_ON_SELF) return applyTo == from;
+    if (applyTo == from) return flag != APPLY_ON_FOE;
+    if (GetBattlerSide(applyTo) == GetBattlerSide(from))
+        return flag & APPLY_ON_ALLY;
+    else
+        return flag & APPLY_ON_FOE;
+    return FALSE;
+}
 
 static int SwitchInAnnounce(int message) {
     gBattleCommunication[MULTISTRING_CHOOSER] = message;
@@ -38,7 +54,7 @@ static int SwitchInAnnounce(int message) {
 static int TryTransformAttacker(int ability, int battler) {
     CHECK(ShouldChangeFormHpBased(battler))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-    
+
     BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
     return TRUE;
 }
@@ -69,13 +85,10 @@ static const Ability Stench = {
 #undef CONTEXT
 #define CONTEXT Drizzle
 ON_SWITCH {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE))
-    {
+    if (TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_DrizzleActivates);
         return TRUE;
-    }
-    else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
-    {
+    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
         return NO_ANNOUNCE;
     }
@@ -430,10 +443,18 @@ static const Ability MagnetPull = {
 
 #undef CONTEXT
 #define CONTEXT Soundproof
+ON_IMMUNE {
+    CHECK(gBattleMoves[move].flags & FLAG_SOUND)
+    CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
+    *immunityScript = BattleScript_SoundproofProtected;
+    return TRUE;
+}
 static const Ability Soundproof = {
     .name = $("Soundproof"),
     .description = $("Immune to sound-based moves."),
     .breakable = TRUE,
+    .isSoundproof = TRUE,
+    CONTEXT_ON_IMMUNE,
 };
 
 #undef CONTEXT
@@ -446,13 +467,10 @@ static const Ability RainDish = {
 #undef CONTEXT
 #define CONTEXT SandStream
 ON_SWITCH {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE))
-    {
+    if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_SandstreamActivates);
         return TRUE;
-    }
-    else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
-    {
+    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
         return NO_ANNOUNCE;
     }
@@ -461,26 +479,24 @@ ON_SWITCH {
 static const Ability SandStream = {
     .name = $("Sand Stream"),
     .description = $("Summons a sandstorm on entry.\nLasts 8 turns."),
-    CONTEXT_ON_SWITCH
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
 #define CONTEXT Pressure
 ON_SWITCH {
     int loweredStats = 0;
-    for (int i = 0; i < gBattlersCount; i++)
-    {
+    for (int i = 0; i < gBattlersCount; i++) {
         if (!IsBattlerAlive(i)) continue;
         loweredStats |= TryResetBattlerStatChanges(i, i == battler ? RESET_STAT_DROPS : RESET_STAT_BUFFS);
     }
 
-    if (loweredStats)
-    {
+    if (loweredStats) {
         BattleScriptPushCursorAndCallback(BattleScript_PressureRemoveStats);
     }
 
     SwitchInAnnounce(B_MSG_SWITCHIN_PRESSURE);
-    
+
     return TRUE;
 }
 static const Ability Pressure = {
@@ -538,10 +554,8 @@ static const Ability HyperCutter = {
 #define CONTEXT Pickup
 ON_SWITCH {
     int side = GetBattlerSide(battler);
-    CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY
-        || gSideTimers[side].hotCoals
-        || gSideTimers[side].caltrops)
-    
+    CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[side].hotCoals || gSideTimers[side].caltrops)
+
     gSideStatuses[side] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
     gSideTimers[side].spikesAmount = 0;
     gSideTimers[side].toxicSpikesAmount = 0;
@@ -676,13 +690,10 @@ static const Ability RockHead = {
 #undef CONTEXT
 #define CONTEXT Drought
 ON_SWITCH {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE))
-    {
+    if (TryChangeBattleWeather(battler, ENUM_WEATHER_SUN, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_DroughtActivates);
         return TRUE;
-    }
-    else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
-    {
+    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
         return NO_ANNOUNCE;
     }
@@ -713,7 +724,7 @@ static const Ability VitalSpirit = {
 #define CONTEXT WhiteSmoke
 ON_SWITCH {
     CHECK_NOT(gSideTimers[GET_BATTLER_SIDE(battler)].smokescreenTimer)
-    
+
     int side = GET_BATTLER_SIDE(battler);
     gSideTimers[side].smokescreenTimer = GetBattlerHoldEffect(battler, TRUE) == ITEM_LIGHT_CLAY ? SCREEN_DURATION : SCREEN_DURATION_SHORT;
     gSideTimers[side].started.smokescreen = TRUE;
@@ -965,9 +976,7 @@ static const Ability Klutz = {
 
 #undef CONTEXT
 #define CONTEXT MoldBreaker
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_MOLDBREAKER); }
 static const Ability MoldBreaker = {
     .name = $("Mold Breaker"),
     .description = $("Moves hit through abilities.\nAlso affects innates."),
@@ -994,16 +1003,12 @@ ON_SWITCH {
     int side = GetBattlerSide(battler);
     int any = FALSE;
 
-    for (int i = 0; i < gBattlersCount; i++)
-    {
-        if (IsBattlerAlive(i) && side != GetBattlerSide(i))
-        {
-            for (int j = 0; j < MAX_MON_MOVES; j++)
-            {
+    for (int i = 0; i < gBattlersCount; i++) {
+        if (IsBattlerAlive(i) && side != GetBattlerSide(i)) {
+            for (int j = 0; j < MAX_MON_MOVES; j++) {
                 int move = gBattleMons[i].moves[j];
                 int moveType = gBattleMoves[move].type;
-                if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0))
-                {
+                if (CalcTypeEffectivenessMultiplier(move, moveType, i, battler, FALSE) >= UQ_4_12(2.0)) {
                     any = TRUE;
                     break;
                 }
@@ -1020,7 +1025,7 @@ static const Ability Anticipation = {
     .description = $("Senses Super-effective moves.\nBlocks one Super-effective hit."),
     .persistent = TRUE,
     .breakable = TRUE,
-    CONTEXT_ON_SWITCH, 
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -1101,7 +1106,7 @@ static const Ability StormDrain = {
     .description = $("Redirects Water moves.\nAbsorbs them, ups highest Atk."),
     .breakable = TRUE,
     .redirectType = TYPE_WATER,
-    CONTEXT_ON_ABSORB
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -1122,13 +1127,10 @@ static const Ability SolidRock = {
 #undef CONTEXT
 #define CONTEXT SnowWarning
 ON_SWITCH {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE))
-    {
+    if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_SnowWarningActivates);
         return TRUE;
-    }
-    else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
-    {
+    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
         return NO_ANNOUNCE;
     }
@@ -1151,8 +1153,7 @@ static const Ability HoneyGather = {
 #define CONTEXT Frisk
 ON_SWITCH {
     int any = FALSE;
-    for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2)
-    {
+    for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
         FILTER(IsBattlerAlive(i))
         FILTER(gBattleMons[i].item)
         any = TRUE;
@@ -1227,9 +1228,7 @@ static const Ability Contrary = {
 
 #undef CONTEXT
 #define CONTEXT Unnerve
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_UNNERVE); }
 static const Ability Unnerve = {
     .name = $("Unnerve"),
     .description = $("Foes can't eat Berries as long\nas this Pokémon is in battle."),
@@ -1416,7 +1415,7 @@ ON_SWITCH {
     CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
     CHECK_NOT(gBattleStruct->illusion[gBattlerTarget].on)
     CHECK_NOT(gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE)
-    
+
     BattleScriptPushCursorAndCallback(BattleScript_ImposterActivates);
     return TRUE;
 }
@@ -1529,9 +1528,7 @@ static const Ability VictoryStar = {
 
 #undef CONTEXT
 #define CONTEXT Turboblaze
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_FIRE);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_FIRE); }
 static const Ability Turboblaze = {
     .name = $("Turboblaze"),
     .description = $("Moves hit through abilities.\nAdds Fire type to itself."),
@@ -1540,9 +1537,7 @@ static const Ability Turboblaze = {
 
 #undef CONTEXT
 #define CONTEXT Teravolt
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_ELECTRIC);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_ELECTRIC); }
 static const Ability Teravolt = {
     .name = $("Teravolt"),
     .description = $("Moves hit through abilities.\nAdds Electric type to itself."),
@@ -1597,10 +1592,17 @@ static const Ability Magician = {
 
 #undef CONTEXT
 #define CONTEXT Bulletproof
+ON_IMMUNE {
+    CHECK(gBattleMoves[move].flags & FLAG_BALLISTIC)
+    CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
+    *immunityScript = BattleScript_SoundproofProtected;
+    return TRUE;
+}
 static const Ability Bulletproof = {
     .name = $("Bulletproof"),
     .description = $("Immune to projectile, ball, or\nbomb-based moves."),
     .breakable = TRUE,
+    CONTEXT_ON_IMMUNE,
 };
 
 #undef CONTEXT
@@ -1707,9 +1709,7 @@ static const Ability ParentalBond = {
 
 #undef CONTEXT
 #define CONTEXT DarkAura
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); }
 static const Ability DarkAura = {
     .name = $("Dark Aura"),
     .description = $("Boosts Dark moves by 1.33x for\nall while this Pokémon is out."),
@@ -1718,9 +1718,7 @@ static const Ability DarkAura = {
 
 #undef CONTEXT
 #define CONTEXT FairyAura
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); }
 static const Ability FairyAura = {
     .name = $("Fairy Aura"),
     .description = $("Boosts Fairy moves by 1.33x for\nall while this Pokémon is out."),
@@ -1729,9 +1727,7 @@ static const Ability FairyAura = {
 
 #undef CONTEXT
 #define CONTEXT AuraBreak
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_AURABREAK); }
 static const Ability AuraBreak = {
     .name = $("Aura Break"),
     .description = $("Cancels aura abilities and makes\nthem 25% weaker instead."),
@@ -1743,7 +1739,7 @@ static const Ability AuraBreak = {
 #define CONTEXT PrimordialSea
 ON_SWITCH {
     CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_RAIN_PRIMAL, TRUE))
-    
+
     BattleScriptPushCursorAndCallback(BattleScript_PrimordialSeaActivates);
     return TRUE;
 }
@@ -1757,7 +1753,7 @@ static const Ability PrimordialSea = {
 #define CONTEXT DesolateLand
 ON_SWITCH {
     CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_SUN_PRIMAL, TRUE))
-    
+
     BattleScriptPushCursorAndCallback(BattleScript_DesolateLandActivates);
     return TRUE;
 }
@@ -1771,14 +1767,21 @@ static const Ability DesolateLand = {
 #define CONTEXT DeltaStream
 ON_SWITCH {
     CHECK(TryChangeBattleWeather(battler, ENUM_WEATHER_STRONG_WINDS, TRUE))
-    
+
     BattleScriptPushCursorAndCallback(BattleScript_DeltaStreamActivates);
+    return TRUE;
+}
+ON_IMMUNE {
+    CHECK(gBattleMoves[move].flags & FLAG_WEATHER_BASED)
+    CHECK_NOT(GetBattlerBattleMoveTargetFlags(move, attacker) & MOVE_TARGET_USER)
+    *immunityScript = BattleScript_SoundproofProtected;
     return TRUE;
 }
 static const Ability DeltaStream = {
     .name = $("Delta Stream"),
     .description = $("Strong Winds until switched out.\nWeather-based moves not usable."),
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_IMMUNE,
 };
 
 #undef CONTEXT
@@ -1919,10 +1922,10 @@ ON_SWITCH {
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
 
     {
-    int newSpecies = gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED ? SPECIES_MIMIKYU : SPECIES_MIMIKYU_RAYQUAZA;
-    UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
-    gBattleMons[battler].species = newSpecies;
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
+        int newSpecies = gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED ? SPECIES_MIMIKYU : SPECIES_MIMIKYU_RAYQUAZA;
+        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+        gBattleMons[battler].species = newSpecies;
+        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
     }
     return TRUE;
 }
@@ -1976,10 +1979,19 @@ static const Ability Comatose = {
 
 #undef CONTEXT
 #define CONTEXT QueenlyMajesty
+ON_IMMUNE {
+    CHECK_NOT(gProcessingExtraAttacks)
+    CHECK(GetBattlerSide(attacker) != GetBattlerSide(battler))
+    CHECK(GetMovePriority(attacker, move, battler) > 0)
+    *immunityScript = BattleScript_DazzlingProtected;
+    return TRUE;
+}
 static const Ability QueenlyMajesty = {
     .name = $("Queenly Majesty"),
     .description = $("Protects itself and ally from\npriority moves."),
     .breakable = TRUE,
+    .onImmuneFor = APPLY_ON_ALLY,
+    CONTEXT_ON_IMMUNE,
 };
 
 #undef CONTEXT
@@ -2017,6 +2029,8 @@ static const Ability Dazzling = {
     .name = $("Dazzling"),
     .description = $("Protects itself and ally from\npriority moves."),
     .breakable = TRUE,
+    .onImmuneFor = APPLY_ON_ALLY,
+    .onImmune = QueenlyMajesty.onImmune,
 };
 
 #undef CONTEXT
@@ -2044,8 +2058,7 @@ static const Ability Receiver = {
 #define CONTEXT PowerOfAlchemy
 ON_SWITCH {
     int any = FALSE;
-    for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2)
-    {
+    for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2) {
         FILTER(IsBattlerAlive(i))
         FILTER(ItemId_GetPocket(GetBattlerHoldEffect(i, FALSE)) == POCKET_BERRIES)
         any = TRUE;
@@ -2082,9 +2095,8 @@ static const Ability RksSystem = {
 #define CONTEXT ElectricSurge
 ON_SWITCH {
     CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
-    
-    for (int i = 0; i < gBattlersCount; i++)
-    {
+
+    for (int i = 0; i < gBattlersCount; i++) {
         DisableSwitchInAbility(i, ABILITY_GENERATOR);
         DisableSwitchInAbility(i, ABILITY_ENERGIZED);
     }
@@ -2101,7 +2113,7 @@ static const Ability ElectricSurge = {
 #define CONTEXT PsychicSurge
 ON_SWITCH {
     CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
-    
+
     BattleScriptPushCursorAndCallback(BattleScript_PsychicSurgeActivates);
     return TRUE;
 }
@@ -2115,7 +2127,7 @@ static const Ability PsychicSurge = {
 #define CONTEXT MistySurge
 ON_SWITCH {
     CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
-    
+
     BattleScriptPushCursorAndCallback(BattleScript_MistySurgeActivates);
     return TRUE;
 }
@@ -2129,7 +2141,7 @@ static const Ability MistySurge = {
 #define CONTEXT GrassySurge
 ON_SWITCH {
     CHECK(TryChangeBattleTerrain(battler, STATUS_FIELD_GRASSY_TERRAIN, &gFieldTimers.terrainTimer))
-    
+
     BattleScriptPushCursorAndCallback(BattleScript_GrassySurgeActivates);
     return TRUE;
 }
@@ -2426,7 +2438,7 @@ ON_SWITCH {
     CHECK(IsDoubleBattle())
     CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
     CHECK(TryResetBattlerStatChanges(BATTLE_PARTNER(battler), RESET_ALL_STATS))
-    
+
     gEffectBattler = BATTLE_PARTNER(battler);
     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CURIOUS_MEDICINE;
     BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
@@ -2468,9 +2480,7 @@ static const Ability GrimNeigh = {
 
 #undef CONTEXT
 #define CONTEXT AsOneIceRider
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); }
 static const Ability AsOneIceRider = {
     .name = $("As One"),
     .description = $("Unnerve + Chilling Neigh."),
@@ -2719,9 +2729,7 @@ static const Ability Amphibious = {
 
 #undef CONTEXT
 #define CONTEXT Grounded
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_GROUND);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_GROUND); }
 static const Ability Grounded = {
     .name = $("Grounded"),
     .description = $("Adds Ground type to itself."),
@@ -2809,9 +2817,7 @@ static const Ability Tectonize = {
 
 #undef CONTEXT
 #define CONTEXT IceAge
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_ICE);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_ICE); }
 static const Ability IceAge = {
     .name = $("Ice Age"),
     .description = $("Adds Ice type to itself."),
@@ -2820,9 +2826,7 @@ static const Ability IceAge = {
 
 #undef CONTEXT
 #define CONTEXT HalfDrake
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_DRAGON);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_DRAGON); }
 static const Ability HalfDrake = {
     .name = $("Half Drake"),
     .description = $("Adds Dragon type to itself."),
@@ -2871,9 +2875,7 @@ static const Ability Hydrate = {
 
 #undef CONTEXT
 #define CONTEXT Metallic
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_STEEL);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_STEEL); }
 static const Ability Metallic = {
     .name = $("Metallic"),
     .description = $("Adds Steel type to itself."),
@@ -2911,7 +2913,7 @@ ON_SWITCH {
     gSideStatuses[side] |= SIDE_STATUS_TAILWIND;
     gSideTimers[side].tailwindBattlerId = battler;
     gSideTimers[side].tailwindTimer = TAILWIND_DURATION_SHORT;
-    
+
     DisableSwitchInAbility(battler, ABILITY_WIND_RIDER);
     DisableSwitchInAbility(BATTLE_PARTNER(battler), ABILITY_WIND_RIDER);
 
@@ -2948,9 +2950,7 @@ static const Ability MajesticBird = {
 
 #undef CONTEXT
 #define CONTEXT Phantom
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_GHOST);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_GHOST); }
 static const Ability Phantom = {
     .name = $("Phantom"),
     .description = $("Adds Ghost type to itself."),
@@ -2997,7 +2997,7 @@ static const Ability Scare = {
 #define CONTEXT MajesticMoth
 ON_SWITCH {
     CHECK(ChangeStatBuffs(battler, 1, GetHighestStatId(battler, TRUE), MOVE_EFFECT_AFFECTS_USER, NULL))
-    
+
     BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
     return TRUE;
 }
@@ -3069,7 +3069,7 @@ static const Ability Solenoglyphs = {
 #define CONTEXT SpiderLair
 ON_SWITCH {
     CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
-    
+
     int side = BATTLE_OPPOSITE(battler);
     gSideTimers[side].started.spiderWeb = TRUE;
     gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
@@ -3136,7 +3136,7 @@ static const Ability Scavenger = {
 #define CONTEXT TwistedDimension
 ON_SWITCH {
     CHECK_NOT(gFieldStatuses & STATUS_FIELD_TRICK_ROOM)
-    
+
     gFieldTimers.started.trickRoom = TRUE;
     gFieldStatuses |= STATUS_FIELD_TRICK_ROOM;
     gFieldTimers.trickRoomTimer = TRICK_ROOM_DURATION_SHORT;
@@ -3160,7 +3160,7 @@ static const Ability MultiHeaded = {
 #define CONTEXT NorthWind
 ON_SWITCH {
     CHECK_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_AURORA_VEIL)
-    
+
     int side = GetBattlerSide(battler);
     gSideTimers[side].started.auroraVeil = TRUE;
     gSideStatuses[side] |= SIDE_STATUS_AURORA_VEIL;
@@ -3224,6 +3224,7 @@ static const Ability WeatherControl = {
     .name = $("Weather Control"),
     .description = $("Negates all weather based\nmoves from enemies."),
     .breakable = TRUE,
+    .onImmune = DeltaStream.onImmune,
 };
 
 #undef CONTEXT
@@ -3459,9 +3460,7 @@ static const Ability ColdRebound = {
 
 #undef CONTEXT
 #define CONTEXT LowBlow
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_FEINT_ATTACK, 40); }
 static const Ability LowBlow = {
     .name = $("Low Blow"),
     .description = $("Attacks with 40BP Feint\nAttack on switch-in."),
@@ -3803,20 +3802,18 @@ static const Ability CheatingDeath = {
 
 #undef CONTEXT
 #define CONTEXT CheapTactics
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_SCRATCH, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_SCRATCH, 0); }
 static const Ability CheapTactics = {
     .name = $("Cheap Tactics"),
     .description = $("Attacks with Scratch\non switch-in."),
-    CONTEXT_ON_SWITCH
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
 #define CONTEXT Coward
 ON_SWITCH {
     CHECK_NOT(GetSingleUseAbilityCounter(battler, ability))
-    
+
     SetSingleUseAbilityCounter(battler, ability, TRUE);
     gRoundStructs[battler].protectedThisTurn = TRUE;
     BattleScriptPushCursorAndCallback(BattleScript_BattlerIsProtectedForThisTurn);
@@ -3876,7 +3873,7 @@ static const Ability Ambush = {
 #define CONTEXT Atlas
 ON_SWITCH {
     CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
-    
+
     gFieldTimers.started.gravity = TRUE;
     gFieldTimers.gravityTimer = GRAVITY_DURATION_EXTENDED;
     gFieldStatuses |= STATUS_FIELD_GRAVITY;
@@ -3891,10 +3888,17 @@ static const Ability Atlas = {
 
 #undef CONTEXT
 #define CONTEXT Radiance
+ON_IMMUNE {
+    CHECK(moveType == TYPE_DARK)
+    *immunityScript = BattleScript_RadianceProtected;
+    return TRUE;
+}
 static const Ability Radiance = {
     .name = $("Radiance"),
     .description = $("+20% accuracy; Dark moves\nfail when user is present."),
     .breakable = TRUE,
+    .onImmuneFor = APPLY_ON_ANY,
+    CONTEXT_ON_IMMUNE,
 };
 
 #undef CONTEXT
@@ -3936,7 +3940,7 @@ static const Ability FaeHunter = {
 #define CONTEXT GravityWell
 ON_SWITCH {
     CHECK_NOT(gFieldStatuses & STATUS_FIELD_GRAVITY)
-    
+
     gFieldTimers.started.gravity = TRUE;
     gFieldTimers.gravityTimer = GRAVITY_DURATION;
     gFieldStatuses |= STATUS_FIELD_GRAVITY;
@@ -4032,9 +4036,7 @@ static const Ability LingeringAroma = {
 
 #undef CONTEXT
 #define CONTEXT FairyTale
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_FAIRY);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_FAIRY); }
 static const Ability FairyTale = {
     .name = $("Fairy Tale"),
     .description = $("Adds Fairy type to itself."),
@@ -4100,9 +4102,7 @@ static const Ability KunoichiBlade = {
 
 #undef CONTEXT
 #define CONTEXT MonkeyBusiness
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_TICKLE, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TICKLE, 0); }
 static const Ability MonkeyBusiness = {
     .name = $("Monkey Business"),
     .description = $("Uses Tickle on entry."),
@@ -4192,7 +4192,7 @@ static const Ability SuperSlammer = {
 #define CONTEXT InverseRoom
 ON_SWITCH {
     CHECK_NOT(gFieldStatuses & STATUS_FIELD_INVERSE_ROOM)
-    
+
     gFieldTimers.started.inverseRoom = TRUE;
     gFieldStatuses |= STATUS_FIELD_INVERSE_ROOM;
     gFieldTimers.inverseRoomTimer = INVERSE_ROOM_DURATION_SHORT;
@@ -4232,13 +4232,10 @@ ON_SWITCH {
     CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
     gStackBattler1 = battler;
-    if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
-    {
+    if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN) {
         BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
         return TRUE;
-    }
-    else if (!GetSingleUseAbilityCounter(battler, ability))
-    {
+    } else if (!GetSingleUseAbilityCounter(battler, ability)) {
         SetSingleUseAbilityCounter(battler, ability, TRUE);
         BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
         return TRUE;
@@ -4260,9 +4257,7 @@ static const Ability MoonSpirit = {
 
 #undef CONTEXT
 #define CONTEXT DustCloud
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_SAND_ATTACK, 0); }
 static const Ability DustCloud = {
     .name = $("Dust Cloud"),
     .description = $("Attacks with Sand Attack\non switch-in."),
@@ -4278,9 +4273,7 @@ static const Ability BerserkerRage = {
 
 #undef CONTEXT
 #define CONTEXT Trickster
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_DISABLE, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_DISABLE, 0); }
 static const Ability Trickster = {
     .name = $("Trickster"),
     .description = $("Uses Disable\non switch-in."),
@@ -4289,10 +4282,15 @@ static const Ability Trickster = {
 
 #undef CONTEXT
 #define CONTEXT SandGuard
+ON_IMMUNE {
+    CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
+    return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
+}
 static const Ability SandGuard = {
     .name = $("Sand Guard"),
     .description = $("Blocks priority and reduces\nspecial damage by 1/2 in sand."),
     .breakable = TRUE,
+    CONTEXT_ON_IMMUNE,
 };
 
 #undef CONTEXT
@@ -4334,7 +4332,7 @@ ON_SWITCH {
         party = gPlayerParty;
     else
         party = gEnemyParty;
-        
+
     for (int i = 0; i < PARTY_SIZE; i++) {
         u32 status1 = GetMonData(&party[i], MON_DATA_STATUS);
         if (status1 & STATUS1_ANY) {
@@ -4420,9 +4418,7 @@ static const Ability ArcaneForce = {
 
 #undef CONTEXT
 #define CONTEXT Doombringer
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_DOOM_DESIRE, 0); }
 static const Ability Doombringer = {
     .name = $("Doombringer"),
     .description = $("Uses Doom Desire\non switch-in."),
@@ -4435,7 +4431,7 @@ ON_SWITCH {
     int counter = GetSingleUseAbilityCounter(battler, ability);
     CHECK(counter < 3)
     CHECK(UseEntryMove(battler, ability, MOVE_WISH, 0))
-    
+
     SetSingleUseAbilityCounter(battler, ability, counter + 1);
     return TRUE;
 }
@@ -4456,9 +4452,7 @@ static const Ability YukiOnna = {
 
 #undef CONTEXT
 #define CONTEXT Suppress
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_TORMENT, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TORMENT, 0); }
 static const Ability Suppress = {
     .name = $("Suppress"),
     .description = $("Casts Torment on entry."),
@@ -4504,9 +4498,7 @@ static const Ability HighTide = {
 
 #undef CONTEXT
 #define CONTEXT ChangeOfHeart
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_HEART_SWAP, 0); }
 static const Ability ChangeOfHeart = {
     .name = $("Change of Heart"),
     .description = $("Uses Heart Swap\non switch-in."),
@@ -4557,9 +4549,7 @@ static const Ability MyceliumMight = {
 
 #undef CONTEXT
 #define CONTEXT Telekinetic
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TELEKINESIS, 0); }
 static const Ability Telekinetic = {
     .name = $("Telekinetic"),
     .description = $("Casts Telekinesis on entry."),
@@ -4582,9 +4572,7 @@ static const Ability PonyPower = {
 
 #undef CONTEXT
 #define CONTEXT PowderBurst
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_POWDER, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_POWDER, 0); }
 static const Ability PowderBurst = {
     .name = $("Powder Burst"),
     .description = $("Casts Powder on entry."),
@@ -4600,9 +4588,7 @@ static const Ability Retriever = {
 
 #undef CONTEXT
 #define CONTEXT MonsterMash
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TRICK_OR_TREAT, 0); }
 static const Ability MonsterMash = {
     .name = $("Monster Mash"),
     .description = $("Casts Trick-or-Treat on entry."),
@@ -4639,9 +4625,7 @@ static const Ability Devourer = {
 
 #undef CONTEXT
 #define CONTEXT PhantomThief
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_SPECTRAL_THIEF, 40); }
 static const Ability PhantomThief = {
     .name = $("Phantom Thief"),
     .description = $("Attacks with 40BP Spectral Thief\non switch-in."),
@@ -4704,12 +4688,12 @@ static const Ability CrownedShield = {
 #define CONTEXT BerserkDna
 ON_SWITCH {
     CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
-    if (CanBeConfused(battler))
-    {
+    if (CanBeConfused(battler)) {
         gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
         BattleScriptPushCursorAndCallback(BattleScript_BerserkDNA);
+    } else {
+        BattleScriptPushCursorAndCallback(BattleScript_BerserkDNANoConfusion);
     }
-    else BattleScriptPushCursorAndCallback(BattleScript_BerserkDNANoConfusion);
     return TRUE;
 }
 static const Ability BerserkDna = {
@@ -4720,9 +4704,7 @@ static const Ability BerserkDna = {
 
 #undef CONTEXT
 #define CONTEXT CrownedKing
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
 static const Ability CrownedKing = {
     .name = $("Crowned King"),
     .description = $("Unnerve + Grim Neigh +\nChilling Neigh."),
@@ -4740,9 +4722,7 @@ static const Ability SnapTrapWhenHit = {
 
 #undef CONTEXT
 #define CONTEXT Permanence
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_PERMANENCE); }
 static const Ability Permanence = {
     .name = $("Permanence"),
     .description = $("Foes can't heal in any way."),
@@ -4808,9 +4788,7 @@ static const Ability Banshee = {
 
 #undef CONTEXT
 #define CONTEXT WebSpinner
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_STRING_SHOT, 0); }
 static const Ability WebSpinner = {
     .name = $("Web Spinner"),
     .description = $("Uses String Shot\non switch-in."),
@@ -4849,6 +4827,8 @@ static const Ability Parroting = {
     .name = $("Parroting"),
     .description = $("Copies sound moves used by\nothers. Immune to sound."),
     .breakable = TRUE,
+    .isSoundproof = TRUE,
+    .onImmune = Soundproof.onImmune,
 };
 
 #undef CONTEXT
@@ -4890,20 +4870,18 @@ static const Ability PurifyingSalt = {
 #undef CONTEXT
 #define CONTEXT Protosynthesis
 ON_SWITCH {
-    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
-    {
-        struct ParadoxBoost boost = { .statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
-        SetAbilityStateAs(battler, ability, (union AbilityStates) { .paradoxBoost = boost });
+    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) {
+        ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE};
+        SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
         BattleScriptPushCursorAndCallback(BattleScript_ParadoxBoostActivates);
         return TRUE;
     }
-    
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY)
-    {
-        struct ParadoxBoost boost = { .statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY };
-        SetAbilityStateAs(battler, ability, (union AbilityStates) { .paradoxBoost = boost });
+
+    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+        ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
+        SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
         RemoveItem(battler);
@@ -4921,20 +4899,18 @@ static const Ability Protosynthesis = {
 #undef CONTEXT
 #define CONTEXT QuarkDrive
 ON_SWITCH {
-    if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
-    {
-        struct ParadoxBoost boost = { .statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
-        SetAbilityStateAs(battler, ability, (union AbilityStates) { .paradoxBoost = boost });
+    if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN) {
+        ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE};
+        SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_TERRAIN;
         BattleScriptPushCursorAndCallback(BattleScript_ParadoxBoostActivates);
         return TRUE;
     }
 
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY)
-    {
-        struct ParadoxBoost boost = { .statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY };
-        SetAbilityStateAs(battler, ability, (union AbilityStates) { .paradoxBoost = boost });
+    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+        ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
+        SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
         RemoveItem(battler);
@@ -5054,12 +5030,10 @@ static const Ability ZeroToHero = {
 #define CONTEXT Costar
 ON_SWITCH {
     CHECK(IsBattlerAlive(BATTLE_PARTNER(battler)))
-    
+
     int anyChanged = FALSE;
-    for (int i = STAT_ATK; i < NUM_BATTLE_STATS; i++)
-    {
-        if (gBattleMons[battler].statStages[i] != gBattleMons[BATTLE_PARTNER(battler)].statStages[i])
-        {
+    for (int i = STAT_ATK; i < NUM_BATTLE_STATS; i++) {
+        if (gBattleMons[battler].statStages[i] != gBattleMons[BATTLE_PARTNER(battler)].statStages[i]) {
             gBattleMons[battler].statStages[i] = gBattleMons[BATTLE_PARTNER(battler)].statStages[i];
             anyChanged = TRUE;
         }
@@ -5111,6 +5085,8 @@ static const Ability ArmorTail = {
     .name = $("Armor Tail"),
     .description = $("Protects itself and ally from\npriority moves."),
     .breakable = TRUE,
+    .onImmuneFor = APPLY_ON_ALLY,
+    .onImmune = QueenlyMajesty.onImmune,
 };
 
 #undef CONTEXT
@@ -5194,10 +5170,17 @@ static const Ability ThermalExchange = {
 
 #undef CONTEXT
 #define CONTEXT GoodAsGold
+ON_IMMUNE {
+    CHECK(battler != attacker)
+    CHECK(IS_MOVE_STATUS(move))
+    *immunityScript = BattleScript_SoundproofProtected;
+    return TRUE;
+}
 static const Ability GoodAsGold = {
     .name = $("Good As Gold"),
     .description = $("Immune to all Status moves,\nunless whole field is affected."),
     .breakable = TRUE,
+    CONTEXT_ON_IMMUNE,
 };
 
 #undef CONTEXT
@@ -5268,10 +5251,15 @@ static const Ability OrichalcumPulse = {
 
 #undef CONTEXT
 #define CONTEXT SunBasking
+ON_IMMUNE {
+    CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
+    return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
+}
 static const Ability SunBasking = {
     .name = $("Sun Basking"),
     .description = $("Blocks priority and reduces\nphysical damage by 1/2 in sun."),
     .breakable = TRUE,
+    CONTEXT_ON_IMMUNE,
 };
 
 #undef CONTEXT
@@ -5344,6 +5332,9 @@ static const Ability NoiseCancel = {
     .name = $("Noise Cancel"),
     .description = $("Protects the party from sound-\nbased moves."),
     .breakable = TRUE,
+    .isSoundproof = TRUE,
+    .onImmuneFor = APPLY_ON_ALLY,
+    .onImmune = Soundproof.onImmune,
 };
 
 #undef CONTEXT
@@ -5453,7 +5444,7 @@ static const Ability ToxicChain = {
 #define CONTEXT ParasiticSpores
 ON_SWITCH {
     CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
-    
+
     gVolatileStructs[battler].parasiticSpores = TRUE;
     return SwitchInAnnounce(B_MSG_SWITCHIN_PARASITIC_SPORES);
 }
@@ -5539,13 +5530,10 @@ static const Ability FragrantDaze = {
 #undef CONTEXT
 #define CONTEXT LowVisibility
 ON_SWITCH {
-    if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE))
-    {
+    if (TryChangeBattleWeather(battler, ENUM_WEATHER_FOG, TRUE)) {
         BattleScriptPushCursorAndCallback(BattleScript_BadOmensActivates);
         return TRUE;
-    }
-    else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
-    {
+    } else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT) {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
         return NO_ANNOUNCE;
     }
@@ -5766,6 +5754,8 @@ static const Ability ArcFlash = {
 static const Ability Unicorn = {
     .name = $("Unicorn"),
     .description = $("Mighty Horn + Dazzling."),
+    .onImmuneFor = APPLY_ON_ALLY,
+    .onImmune = QueenlyMajesty.onImmune,
 };
 
 #undef CONTEXT
@@ -5882,9 +5872,7 @@ static const Ability HigherRank = {
 
 #undef CONTEXT
 #define CONTEXT FuneralPyre
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE); }
 static const Ability FuneralPyre = {
     .name = $("Funeral Pyre"),
     .description = $("Non-Ghost and Dark-types\ntake 1/4 damage every turn."),
@@ -5900,9 +5888,7 @@ static const Ability FlameBubble = {
 
 #undef CONTEXT
 #define CONTEXT ElementalVortex
-ON_ABSORB {
-    return WaterAbsorb.onAbsorb(battler, move, moveType, statId) | FlashFire.onAbsorb(battler, move, moveType, statId);
-}
+ON_ABSORB { return WaterAbsorb.onAbsorb(battler, move, moveType, statId) | FlashFire.onAbsorb(battler, move, moveType, statId); }
 static const Ability ElementalVortex = {
     .name = $("Elemental Vortex"),
     .description = $("Flash Fire + Water Absorb."),
@@ -5941,9 +5927,7 @@ static const Ability FlammableCoat = {
 
 #undef CONTEXT
 #define CONTEXT DracoMorale
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_DRAGON_CHEER, 0); }
 static const Ability DracoMorale = {
     .name = $("Draco Morale"),
     .description = $("Uses Dragon Cheer\non switch-in."),
@@ -5967,9 +5951,7 @@ static const Ability MoshPit = {
 
 #undef CONTEXT
 #define CONTEXT BloodStain
-ON_SWITCH {
-    return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN);
-}
+ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN); }
 static const Ability BloodStain = {
     .name = $("Blood Stain"),
     .description = $("Bleeds if not immune. Can't get\nother status. Spreads on contact."),
@@ -6005,14 +5987,12 @@ static const Ability Sidewinder = {
 ON_SWITCH {
     int loweredStats = 0;
     int intimidated = UseIntimidateClone(battler, ability);
-    for (int i = BATTLE_OPPOSITE(GET_BATTLER_SIDE(battler)); i < gBattlersCount; i += 2)
-    {
+    for (int i = BATTLE_OPPOSITE(GET_BATTLER_SIDE(battler)); i < gBattlersCount; i += 2) {
         if (!IsBattlerAlive(i)) continue;
         loweredStats |= TryResetBattlerStatChanges(i, RESET_STAT_BUFFS);
     }
 
-    if (loweredStats)
-    {
+    if (loweredStats) {
         BattleScriptPushCursorAndCallback(BattleScript_Petrify);
     }
     return intimidated || loweredStats;
@@ -6084,9 +6064,7 @@ static const Ability Hospitality = {
 
 #undef CONTEXT
 #define CONTEXT ButterUp
-ON_SWITCH {
-    return Hospitality.onSwitch(ability, battler) | SoothingAroma.onSwitch(ability, battler);
-}
+ON_SWITCH { return Hospitality.onSwitch(ability, battler) | SoothingAroma.onSwitch(ability, battler); }
 static const Ability ButterUp = {
     .name = $("Butter Up"),
     .description = $("Hospitality + Soothing Aroma"),
@@ -6252,9 +6230,7 @@ static const Ability ShockingMaw = {
 
 #undef CONTEXT
 #define CONTEXT GleamEyes
-ON_SWITCH {
-    return UseIntimidateClone(battler, ability) | Frisk.onSwitch(battler, ability);
-}
+ON_SWITCH { return UseIntimidateClone(battler, ability) | Frisk.onSwitch(battler, ability); }
 static const Ability GleamEyes = {
     .name = $("Gleam Eyes"),
     .description = $("Frisk + Scare."),
@@ -6278,9 +6254,7 @@ static const Ability DreamState = {
 
 #undef CONTEXT
 #define CONTEXT DreamWhimsy
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_YAWN, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_YAWN, 0); }
 static const Ability DreamWhimsy = {
     .name = $("Dream Whimsy"),
     .description = $("Uses Yawn on switch-in."),
@@ -6304,9 +6278,7 @@ static const Ability FlameShield = {
 
 #undef CONTEXT
 #define CONTEXT AquaticDweller
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_WATER);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_WATER); }
 static const Ability AquaticDweller = {
     .name = $("Aquatic Dweller"),
     .description = $("Boosts the power of Water-type\nmoves by 1.5x."),
@@ -6322,9 +6294,7 @@ static const Ability ApplePie = {
 
 #undef CONTEXT
 #define CONTEXT Hover
-ON_SWITCH {
-    return AddBattlerType(battler, TYPE_PSYCHIC);
-}
+ON_SWITCH { return AddBattlerType(battler, TYPE_PSYCHIC); }
 static const Ability Hover = {
     .name = $("Hover"),
     .description = $("Adds Psychic type to itself.\nAvoids Ground attacks."),
@@ -6361,9 +6331,7 @@ static const Ability JumpScare = {
 
 #undef CONTEXT
 #define CONTEXT TarToss
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_TAR_SHOT, 0); }
 static const Ability TarToss = {
     .name = $("Tar Toss"),
     .description = $("Uses Tar Shot on switch-in."),
@@ -6431,9 +6399,7 @@ static const Ability Overwatch = {
 
 #undef CONTEXT
 #define CONTEXT WindRage
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_DEFOG, 0);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_DEFOG, 0); }
 static const Ability WindRage = {
     .name = $("Wind Rage"),
     .description = $("Uses Defog on switch-in. Air-\nbased moves get a 1.3x boost."),
@@ -6584,9 +6550,7 @@ static const Ability SandBender = {
 
 #undef CONTEXT
 #define CONTEXT SandPit
-ON_SWITCH {
-    return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20);
-}
+ON_SWITCH { return UseEntryMove(battler, ability, MOVE_SAND_TOMB, 20); }
 static const Ability SandPit = {
     .name = $("Sand Pit"),
     .description = $("Attacks with 20BP Sand Tomb\non switch-in."),
@@ -6647,7 +6611,7 @@ static const Ability EnergizedHorns = {
 #define CONTEXT SpiderLairUpgrade
 ON_SWITCH {
     CHECK_NOT(gSideStatuses[BATTLE_OPPOSITE(battler)] & SIDE_STATUS_STICKY_WEB)
-    
+
     int side = BATTLE_OPPOSITE(battler);
     gSideTimers[side].started.spiderWeb = TRUE;
     gSideStatuses[side] |= SIDE_STATUS_STICKY_WEB;
@@ -6683,762 +6647,762 @@ static const Ability BalloonBlitz = {
 };
 
 const Ability gAbilities[] = {
-[ABILITY_NONE] = None,
-[ABILITY_STENCH] = Stench,
-[ABILITY_DRIZZLE] = Drizzle,
-[ABILITY_SPEED_BOOST] = SpeedBoost,
-[ABILITY_BATTLE_ARMOR] = BattleArmor,
-[ABILITY_STURDY] = Sturdy,
-[ABILITY_DAMP] = Damp,
-[ABILITY_LIMBER] = Limber,
-[ABILITY_SAND_VEIL] = SandVeil,
-[ABILITY_STATIC] = Static,
-[ABILITY_VOLT_ABSORB] = VoltAbsorb,
-[ABILITY_WATER_ABSORB] = WaterAbsorb,
-[ABILITY_OBLIVIOUS] = Oblivious,
-[ABILITY_CLOUD_NINE] = CloudNine,
-[ABILITY_COMPOUND_EYES] = CompoundEyes,
-[ABILITY_INSOMNIA] = Insomnia,
-[ABILITY_COLOR_CHANGE] = ColorChange,
-[ABILITY_IMMUNITY] = Immunity,
-[ABILITY_FLASH_FIRE] = FlashFire,
-[ABILITY_SHIELD_DUST] = ShieldDust,
-[ABILITY_OWN_TEMPO] = OwnTempo,
-[ABILITY_SUCTION_CUPS] = SuctionCups,
-[ABILITY_INTIMIDATE] = Intimidate,
-[ABILITY_SHADOW_TAG] = ShadowTag,
-[ABILITY_ROUGH_SKIN] = RoughSkin,
-[ABILITY_WONDER_GUARD] = WonderGuard,
-[ABILITY_LEVITATE] = Levitate,
-[ABILITY_EFFECT_SPORE] = EffectSpore,
-[ABILITY_SYNCHRONIZE] = Synchronize,
-[ABILITY_CLEAR_BODY] = ClearBody,
-[ABILITY_NATURAL_CURE] = NaturalCure,
-[ABILITY_LIGHTNING_ROD] = LightningRod,
-[ABILITY_SERENE_GRACE] = SereneGrace,
-[ABILITY_SWIFT_SWIM] = SwiftSwim,
-[ABILITY_CHLOROPHYLL] = Chlorophyll,
-[ABILITY_ILLUMINATE] = Illuminate,
-[ABILITY_TRACE] = Trace,
-[ABILITY_HUGE_POWER] = HugePower,
-[ABILITY_POISON_POINT] = PoisonPoint,
-[ABILITY_INNER_FOCUS] = InnerFocus,
-[ABILITY_MAGMA_ARMOR] = MagmaArmor,
-[ABILITY_WATER_VEIL] = WaterVeil,
-[ABILITY_MAGNET_PULL] = MagnetPull,
-[ABILITY_SOUNDPROOF] = Soundproof,
-[ABILITY_RAIN_DISH] = RainDish,
-[ABILITY_SAND_STREAM] = SandStream,
-[ABILITY_PRESSURE] = Pressure,
-[ABILITY_THICK_FAT] = ThickFat,
-[ABILITY_EARLY_BIRD] = EarlyBird,
-[ABILITY_FLAME_BODY] = FlameBody,
-[ABILITY_RUN_AWAY] = RunAway,
-[ABILITY_KEEN_EYE] = KeenEye,
-[ABILITY_HYPER_CUTTER] = HyperCutter,
-[ABILITY_PICKUP] = Pickup,
-[ABILITY_TRUANT] = Truant,
-[ABILITY_HUSTLE] = Hustle,
-[ABILITY_CUTE_CHARM] = CuteCharm,
-[ABILITY_PLUS] = Plus,
-[ABILITY_MINUS] = Minus,
-[ABILITY_FORECAST] = Forecast,
-[ABILITY_STICKY_HOLD] = StickyHold,
-[ABILITY_SHED_SKIN] = ShedSkin,
-[ABILITY_GUTS] = Guts,
-[ABILITY_MARVEL_SCALE] = MarvelScale,
-[ABILITY_LIQUID_OOZE] = LiquidOoze,
-[ABILITY_OVERGROW] = Overgrow,
-[ABILITY_BLAZE] = Blaze,
-[ABILITY_TORRENT] = Torrent,
-[ABILITY_SWARM] = Swarm,
-[ABILITY_ROCK_HEAD] = RockHead,
-[ABILITY_DROUGHT] = Drought,
-[ABILITY_ARENA_TRAP] = ArenaTrap,
-[ABILITY_VITAL_SPIRIT] = VitalSpirit,
-[ABILITY_WHITE_SMOKE] = WhiteSmoke,
-[ABILITY_PURE_POWER] = PurePower,
-[ABILITY_SHELL_ARMOR] = ShellArmor,
-[ABILITY_AIR_LOCK] = AirLock,
-[ABILITY_TANGLED_FEET] = TangledFeet,
-[ABILITY_MOTOR_DRIVE] = MotorDrive,
-[ABILITY_RIVALRY] = Rivalry,
-[ABILITY_STEADFAST] = Steadfast,
-[ABILITY_SNOW_CLOAK] = SnowCloak,
-[ABILITY_GLUTTONY] = Gluttony,
-[ABILITY_ANGER_POINT] = AngerPoint,
-[ABILITY_UNBURDEN] = Unburden,
-[ABILITY_HEATPROOF] = Heatproof,
-[ABILITY_SIMPLE] = Simple,
-[ABILITY_DRY_SKIN] = DrySkin,
-[ABILITY_DOWNLOAD] = Download,
-[ABILITY_IRON_FIST] = IronFist,
-[ABILITY_POISON_HEAL] = PoisonHeal,
-[ABILITY_ADAPTABILITY] = Adaptability,
-[ABILITY_SKILL_LINK] = SkillLink,
-[ABILITY_HYDRATION] = Hydration,
-[ABILITY_SOLAR_POWER] = SolarPower,
-[ABILITY_QUICK_FEET] = QuickFeet,
-[ABILITY_NORMALIZE] = Normalize,
-[ABILITY_SNIPER] = Sniper,
-[ABILITY_MAGIC_GUARD] = MagicGuard,
-[ABILITY_NO_GUARD] = NoGuard,
-[ABILITY_STALL] = Stall,
-[ABILITY_TECHNICIAN] = Technician,
-[ABILITY_LEAF_GUARD] = LeafGuard,
-[ABILITY_KLUTZ] = Klutz,
-[ABILITY_MOLD_BREAKER] = MoldBreaker,
-[ABILITY_SUPER_LUCK] = SuperLuck,
-[ABILITY_AFTERMATH] = Aftermath,
-[ABILITY_ANTICIPATION] = Anticipation,
-[ABILITY_FOREWARN] = Forewarn,
-[ABILITY_UNAWARE] = Unaware,
-[ABILITY_TINTED_LENS] = TintedLens,
-[ABILITY_FILTER] = Filter,
-[ABILITY_SLOW_START] = SlowStart,
-[ABILITY_SCRAPPY] = Scrappy,
-[ABILITY_STORM_DRAIN] = StormDrain,
-[ABILITY_ICE_BODY] = IceBody,
-[ABILITY_SOLID_ROCK] = SolidRock,
-[ABILITY_SNOW_WARNING] = SnowWarning,
-[ABILITY_HONEY_GATHER] = HoneyGather,
-[ABILITY_FRISK] = Frisk,
-[ABILITY_RECKLESS] = Reckless,
-[ABILITY_MULTITYPE] = Multitype,
-[ABILITY_FLOWER_GIFT] = FlowerGift,
-[ABILITY_BAD_DREAMS] = BadDreams,
-[ABILITY_PICKPOCKET] = Pickpocket,
-[ABILITY_SHEER_FORCE] = SheerForce,
-[ABILITY_CONTRARY] = Contrary,
-[ABILITY_UNNERVE] = Unnerve,
-[ABILITY_DEFIANT] = Defiant,
-[ABILITY_DEFEATIST] = Defeatist,
-[ABILITY_CURSED_BODY] = CursedBody,
-[ABILITY_HEALER] = Healer,
-[ABILITY_FRIEND_GUARD] = FriendGuard,
-[ABILITY_WEAK_ARMOR] = WeakArmor,
-[ABILITY_HEAVY_METAL] = HeavyMetal,
-[ABILITY_LIGHT_METAL] = LightMetal,
-[ABILITY_MULTISCALE] = Multiscale,
-[ABILITY_TOXIC_BOOST] = ToxicBoost,
-[ABILITY_FLARE_BOOST] = FlareBoost,
-[ABILITY_HARVEST] = Harvest,
-[ABILITY_TELEPATHY] = Telepathy,
-[ABILITY_MOODY] = Moody,
-[ABILITY_OVERCOAT] = Overcoat,
-[ABILITY_POISON_TOUCH] = PoisonTouch,
-[ABILITY_REGENERATOR] = Regenerator,
-[ABILITY_BIG_PECKS] = BigPecks,
-[ABILITY_SAND_RUSH] = SandRush,
-[ABILITY_WONDER_SKIN] = WonderSkin,
-[ABILITY_ANALYTIC] = Analytic,
-[ABILITY_ILLUSION] = Illusion,
-[ABILITY_IMPOSTER] = Imposter,
-[ABILITY_INFILTRATOR] = Infiltrator,
-[ABILITY_MUMMY] = Mummy,
-[ABILITY_MOXIE] = Moxie,
-[ABILITY_JUSTIFIED] = Justified,
-[ABILITY_RATTLED] = Rattled,
-[ABILITY_MAGIC_BOUNCE] = MagicBounce,
-[ABILITY_SAP_SIPPER] = SapSipper,
-[ABILITY_PRANKSTER] = Prankster,
-[ABILITY_SAND_FORCE] = SandForce,
-[ABILITY_IRON_BARBS] = IronBarbs,
-[ABILITY_ZEN_MODE] = ZenMode,
-[ABILITY_VICTORY_STAR] = VictoryStar,
-[ABILITY_TURBOBLAZE] = Turboblaze,
-[ABILITY_TERAVOLT] = Teravolt,
-[ABILITY_AROMA_VEIL] = AromaVeil,
-[ABILITY_FLOWER_VEIL] = FlowerVeil,
-[ABILITY_CHEEK_POUCH] = CheekPouch,
-[ABILITY_PROTEAN] = Protean,
-[ABILITY_FUR_COAT] = FurCoat,
-[ABILITY_MAGICIAN] = Magician,
-[ABILITY_BULLETPROOF] = Bulletproof,
-[ABILITY_COMPETITIVE] = Competitive,
-[ABILITY_STRONG_JAW] = StrongJaw,
-[ABILITY_REFRIGERATE] = Refrigerate,
-[ABILITY_SWEET_VEIL] = SweetVeil,
-[ABILITY_STANCE_CHANGE] = StanceChange,
-[ABILITY_GALE_WINGS] = GaleWings,
-[ABILITY_MEGA_LAUNCHER] = MegaLauncher,
-[ABILITY_GRASS_PELT] = GrassPelt,
-[ABILITY_SYMBIOSIS] = Symbiosis,
-[ABILITY_TOUGH_CLAWS] = ToughClaws,
-[ABILITY_PIXILATE] = Pixilate,
-[ABILITY_GOOEY] = Gooey,
-[ABILITY_AERILATE] = Aerilate,
-[ABILITY_PARENTAL_BOND] = ParentalBond,
-[ABILITY_DARK_AURA] = DarkAura,
-[ABILITY_FAIRY_AURA] = FairyAura,
-[ABILITY_AURA_BREAK] = AuraBreak,
-[ABILITY_PRIMORDIAL_SEA] = PrimordialSea,
-[ABILITY_DESOLATE_LAND] = DesolateLand,
-[ABILITY_DELTA_STREAM] = DeltaStream,
-[ABILITY_STAMINA] = Stamina,
-[ABILITY_WIMP_OUT] = WimpOut,
-[ABILITY_EMERGENCY_EXIT] = EmergencyExit,
-[ABILITY_WATER_COMPACTION] = WaterCompaction,
-[ABILITY_MERCILESS] = Merciless,
-[ABILITY_SHIELDS_DOWN] = ShieldsDown,
-[ABILITY_STAKEOUT] = Stakeout,
-[ABILITY_WATER_BUBBLE] = WaterBubble,
-[ABILITY_STEELWORKER] = Steelworker,
-[ABILITY_BERSERK] = Berserk,
-[ABILITY_SLUSH_RUSH] = SlushRush,
-[ABILITY_LONG_REACH] = LongReach,
-[ABILITY_LIQUID_VOICE] = LiquidVoice,
-[ABILITY_TRIAGE] = Triage,
-[ABILITY_GALVANIZE] = Galvanize,
-[ABILITY_SURGE_SURFER] = SurgeSurfer,
-[ABILITY_SCHOOLING] = Schooling,
-[ABILITY_DISGUISE] = Disguise,
-[ABILITY_BATTLE_BOND] = BattleBond,
-[ABILITY_POWER_CONSTRUCT] = PowerConstruct,
-[ABILITY_CORROSION] = Corrosion,
-[ABILITY_COMATOSE] = Comatose,
-[ABILITY_QUEENLY_MAJESTY] = QueenlyMajesty,
-[ABILITY_INNARDS_OUT] = InnardsOut,
-[ABILITY_DANCER] = Dancer,
-[ABILITY_BATTERY] = Battery,
-[ABILITY_FLUFFY] = Fluffy,
-[ABILITY_DAZZLING] = Dazzling,
-[ABILITY_SOUL_HEART] = SoulHeart,
-[ABILITY_TANGLING_HAIR] = TanglingHair,
-[ABILITY_RECEIVER] = Receiver,
-[ABILITY_POWER_OF_ALCHEMY] = PowerOfAlchemy,
-[ABILITY_BEAST_BOOST] = BeastBoost,
-[ABILITY_RKS_SYSTEM] = RksSystem,
-[ABILITY_ELECTRIC_SURGE] = ElectricSurge,
-[ABILITY_PSYCHIC_SURGE] = PsychicSurge,
-[ABILITY_MISTY_SURGE] = MistySurge,
-[ABILITY_GRASSY_SURGE] = GrassySurge,
-[ABILITY_FULL_METAL_BODY] = FullMetalBody,
-[ABILITY_SHADOW_SHIELD] = ShadowShield,
-[ABILITY_PRISM_ARMOR] = PrismArmor,
-[ABILITY_NEUROFORCE] = Neuroforce,
-[ABILITY_INTREPID_SWORD] = IntrepidSword,
-[ABILITY_DAUNTLESS_SHIELD] = DauntlessShield,
-[ABILITY_LIBERO] = Libero,
-[ABILITY_BALL_FETCH] = BallFetch,
-[ABILITY_COTTON_DOWN] = CottonDown,
-[ABILITY_PROPELLER_TAIL] = PropellerTail,
-[ABILITY_MIRROR_ARMOR] = MirrorArmor,
-[ABILITY_GULP_MISSILE] = GulpMissile,
-[ABILITY_STALWART] = Stalwart,
-[ABILITY_STEAM_ENGINE] = SteamEngine,
-[ABILITY_PUNK_ROCK] = PunkRock,
-[ABILITY_SAND_SPIT] = SandSpit,
-[ABILITY_ICE_SCALES] = IceScales,
-[ABILITY_RIPEN] = Ripen,
-[ABILITY_ICE_FACE] = IceFace,
-[ABILITY_POWER_SPOT] = PowerSpot,
-[ABILITY_MIMICRY] = Mimicry,
-[ABILITY_SCREEN_CLEANER] = ScreenCleaner,
-[ABILITY_STEELY_SPIRIT] = SteelySpirit,
-[ABILITY_PERISH_BODY] = PerishBody,
-[ABILITY_WANDERING_SPIRIT] = WanderingSpirit,
-[ABILITY_GORILLA_TACTICS] = GorillaTactics,
-[ABILITY_NEUTRALIZING_GAS] = NeutralizingGas,
-[ABILITY_PASTEL_VEIL] = PastelVeil,
-[ABILITY_HUNGER_SWITCH] = HungerSwitch,
-[ABILITY_QUICK_DRAW] = QuickDraw,
-[ABILITY_UNSEEN_FIST] = UnseenFist,
-[ABILITY_CURIOUS_MEDICINE] = CuriousMedicine,
-[ABILITY_TRANSISTOR] = Transistor,
-[ABILITY_DRAGONS_MAW] = DragonsMaw,
-[ABILITY_CHILLING_NEIGH] = ChillingNeigh,
-[ABILITY_GRIM_NEIGH] = GrimNeigh,
-[ABILITY_AS_ONE_ICE_RIDER] = AsOneIceRider,
-[ABILITY_AS_ONE_SHADOW_RIDER] = AsOneShadowRider,
-[ABILITY_CHLOROPLAST] = Chloroplast,
-[ABILITY_WHITEOUT] = Whiteout,
-[ABILITY_PYROMANCY] = Pyromancy,
-[ABILITY_KEEN_EDGE] = KeenEdge,
-[ABILITY_PRISM_SCALES] = PrismScales,
-[ABILITY_POWER_FISTS] = PowerFists,
-[ABILITY_SAND_SONG] = SandSong,
-[ABILITY_RAMPAGE] = Rampage,
-[ABILITY_VENGEANCE] = Vengeance,
-[ABILITY_BLITZ_BOXER] = BlitzBoxer,
-[ABILITY_ANTARCTIC_BIRD] = AntarcticBird,
-[ABILITY_IMMOLATE] = Immolate,
-[ABILITY_CRYSTALLIZE] = Crystallize,
-[ABILITY_ELECTROCYTES] = Electrocytes,
-[ABILITY_AERODYNAMICS] = Aerodynamics,
-[ABILITY_CHRISTMAS_SPIRIT] = ChristmasSpirit,
-[ABILITY_EXPLOIT_WEAKNESS] = ExploitWeakness,
-[ABILITY_GROUND_SHOCK] = GroundShock,
-[ABILITY_ANCIENT_IDOL] = AncientIdol,
-[ABILITY_MYSTIC_POWER] = MysticPower,
-[ABILITY_PERFECTIONIST] = Perfectionist,
-[ABILITY_GROWING_TOOTH] = GrowingTooth,
-[ABILITY_INFLATABLE] = Inflatable,
-[ABILITY_AURORA_BOREALIS] = AuroraBorealis,
-[ABILITY_AVENGER] = Avenger,
-[ABILITY_LETS_ROLL] = LetsRoll,
-[ABILITY_AQUATIC] = Aquatic,
-[ABILITY_LOUD_BANG] = LoudBang,
-[ABILITY_LEAD_COAT] = LeadCoat,
-[ABILITY_AMPHIBIOUS] = Amphibious,
-[ABILITY_GROUNDED] = Grounded,
-[ABILITY_EARTHBOUND] = Earthbound,
-[ABILITY_FIGHT_SPIRIT] = FightSpirit,
-[ABILITY_FELINE_PROWESS] = FelineProwess,
-[ABILITY_COIL_UP] = CoilUp,
-[ABILITY_FOSSILIZED] = Fossilized,
-[ABILITY_MAGICAL_DUST] = MagicalDust,
-[ABILITY_DREAMCATCHER] = Dreamcatcher,
-[ABILITY_NOCTURNAL] = Nocturnal,
-[ABILITY_SELF_SUFFICIENT] = SelfSufficient,
-[ABILITY_TECTONIZE] = Tectonize,
-[ABILITY_ICE_AGE] = IceAge,
-[ABILITY_HALF_DRAKE] = HalfDrake,
-[ABILITY_LIQUIFIED] = Liquified,
-[ABILITY_DRAGONFLY] = Dragonfly,
-[ABILITY_DRAGONSLAYER] = Dragonslayer,
-[ABILITY_MOUNTAINEER] = Mountaineer,
-[ABILITY_HYDRATE] = Hydrate,
-[ABILITY_METALLIC] = Metallic,
-[ABILITY_PERMAFROST] = Permafrost,
-[ABILITY_PRIMAL_ARMOR] = PrimalArmor,
-[ABILITY_RAGING_BOXER] = RagingBoxer,
-[ABILITY_AIR_BLOWER] = AirBlower,
-[ABILITY_JUGGERNAUT] = Juggernaut,
-[ABILITY_SHORT_CIRCUIT] = ShortCircuit,
-[ABILITY_MAJESTIC_BIRD] = MajesticBird,
-[ABILITY_PHANTOM] = Phantom,
-[ABILITY_INTOXICATE] = Intoxicate,
-[ABILITY_IMPENETRABLE] = Impenetrable,
-[ABILITY_HYPNOTIST] = Hypnotist,
-[ABILITY_OVERWHELM] = Overwhelm,
-[ABILITY_SCARE] = Scare,
-[ABILITY_MAJESTIC_MOTH] = MajesticMoth,
-[ABILITY_SOUL_EATER] = SoulEater,
-[ABILITY_SOUL_LINKER] = SoulLinker,
-[ABILITY_SWEET_DREAMS] = SweetDreams,
-[ABILITY_BAD_LUCK] = BadLuck,
-[ABILITY_HAUNTED_SPIRIT] = HauntedSpirit,
-[ABILITY_ELECTRIC_BURST] = ElectricBurst,
-[ABILITY_RAW_WOOD] = RawWood,
-[ABILITY_SOLENOGLYPHS] = Solenoglyphs,
-[ABILITY_SPIDER_LAIR] = SpiderLair,
-[ABILITY_FATAL_PRECISION] = FatalPrecision,
-[ABILITY_FORT_KNOX] = FortKnox,
-[ABILITY_SEAWEED] = Seaweed,
-[ABILITY_PSYCHIC_MIND] = PsychicMind,
-[ABILITY_POISON_ABSORB] = PoisonAbsorb,
-[ABILITY_SCAVENGER] = Scavenger,
-[ABILITY_TWISTED_DIMENSION] = TwistedDimension,
-[ABILITY_MULTI_HEADED] = MultiHeaded,
-[ABILITY_NORTH_WIND] = NorthWind,
-[ABILITY_OVERCHARGE] = Overcharge,
-[ABILITY_VIOLENT_RUSH] = ViolentRush,
-[ABILITY_FLAMING_SOUL] = FlamingSoul,
-[ABILITY_SAGE_POWER] = SagePower,
-[ABILITY_BONE_ZONE] = BoneZone,
-[ABILITY_WEATHER_CONTROL] = WeatherControl,
-[ABILITY_SPEED_FORCE] = SpeedForce,
-[ABILITY_SEA_GUARDIAN] = SeaGuardian,
-[ABILITY_MOLTEN_DOWN] = MoltenDown,
-[ABILITY_HYPER_AGGRESSIVE] = HyperAggressive,
-[ABILITY_FLOCK] = Flock,
-[ABILITY_FIELD_EXPLORER] = FieldExplorer,
-[ABILITY_STRIKER] = Striker,
-[ABILITY_FROZEN_SOUL] = FrozenSoul,
-[ABILITY_PREDATOR] = Predator,
-[ABILITY_LOOTER] = Looter,
-[ABILITY_LUNAR_ECLIPSE] = LunarEclipse,
-[ABILITY_SOLAR_FLARE] = SolarFlare,
-[ABILITY_POWER_CORE] = PowerCore,
-[ABILITY_SIGHTING_SYSTEM] = SightingSystem,
-[ABILITY_BAD_COMPANY] = BadCompany,
-[ABILITY_OPPORTUNIST] = Opportunist,
-[ABILITY_GIANT_WINGS] = GiantWings,
-[ABILITY_MOMENTUM] = Momentum,
-[ABILITY_GRIP_PINCER] = GripPincer,
-[ABILITY_BIG_LEAVES] = BigLeaves,
-[ABILITY_PRECISE_FIST] = PreciseFist,
-[ABILITY_DEADEYE] = Deadeye,
-[ABILITY_ARTILLERY] = Artillery,
-[ABILITY_AMPLIFIER] = Amplifier,
-[ABILITY_ICE_DEW] = IceDew,
-[ABILITY_SUN_WORSHIP] = SunWorship,
-[ABILITY_POLLINATE] = Pollinate,
-[ABILITY_VOLCANO_RAGE] = VolcanoRage,
-[ABILITY_COLD_REBOUND] = ColdRebound,
-[ABILITY_LOW_BLOW] = LowBlow,
-[ABILITY_NOSFERATU] = Nosferatu,
-[ABILITY_SPECTRAL_SHROUD] = SpectralShroud,
-[ABILITY_DISCIPLINE] = Discipline,
-[ABILITY_THUNDERCALL] = Thundercall,
-[ABILITY_MARINE_APEX] = MarineApex,
-[ABILITY_MIGHTY_HORN] = MightyHorn,
-[ABILITY_HARDENED_SHEATH] = HardenedSheath,
-[ABILITY_ARCTIC_FUR] = ArcticFur,
-[ABILITY_SPECTRALIZE] = Spectralize,
-[ABILITY_LETHARGY] = Lethargy,
-[ABILITY_IRON_BARRAGE] = IronBarrage,
-[ABILITY_STEEL_BARREL] = SteelBarrel,
-[ABILITY_PYRO_SHELLS] = PyroShells,
-[ABILITY_FUNGAL_INFECTION] = FungalInfection,
-[ABILITY_PARRY] = Parry,
-[ABILITY_SCRAPYARD] = Scrapyard,
-[ABILITY_LOOSE_QUILLS] = LooseQuills,
-[ABILITY_TOXIC_DEBRIS] = ToxicDebris,
-[ABILITY_ROUNDHOUSE] = Roundhouse,
-[ABILITY_MINERALIZE] = Mineralize,
-[ABILITY_LOOSE_ROCKS] = LooseRocks,
-[ABILITY_SPINNING_TOP] = SpinningTop,
-[ABILITY_RETRIBUTION_BLOW] = RetributionBlow,
-[ABILITY_FEARMONGER] = Fearmonger,
-[ABILITY_KINGS_WRATH] = KingsWrath,
-[ABILITY_QUEENS_MOURNING] = QueensMourning,
-[ABILITY_TOXIC_SPILL] = ToxicSpill,
-[ABILITY_DESERT_CLOAK] = DesertCloak,
-[ABILITY_DRACONIZE] = Draconize,
-[ABILITY_PRETTY_PRINCESS] = PrettyPrincess,
-[ABILITY_SELF_REPAIR] = SelfRepair,
-[ABILITY_ATOMIC_BURST] = AtomicBurst,
-[ABILITY_HELLBLAZE] = Hellblaze,
-[ABILITY_RIPTIDE] = Riptide,
-[ABILITY_FOREST_RAGE] = ForestRage,
-[ABILITY_PRIMAL_MAW] = PrimalMaw,
-[ABILITY_SWEEPING_EDGE] = SweepingEdge,
-[ABILITY_GIFTED_MIND] = GiftedMind,
-[ABILITY_HYDRO_CIRCUIT] = HydroCircuit,
-[ABILITY_EQUINOX] = Equinox,
-[ABILITY_ABSORBANT] = Absorbant,
-[ABILITY_CLUELESS] = Clueless,
-[ABILITY_CHEATING_DEATH] = CheatingDeath,
-[ABILITY_CHEAP_TACTICS] = CheapTactics,
-[ABILITY_COWARD] = Coward,
-[ABILITY_VOLT_RUSH] = VoltRush,
-[ABILITY_DUNE_TERROR] = DuneTerror,
-[ABILITY_INFERNAL_RAGE] = InfernalRage,
-[ABILITY_DUAL_WIELD] = DualWield,
-[ABILITY_ELEMENTAL_CHARGE] = ElementalCharge,
-[ABILITY_AMBUSH] = Ambush,
-[ABILITY_ATLAS] = Atlas,
-[ABILITY_RADIANCE] = Radiance,
-[ABILITY_JAWS_OF_CARNAGE] = JawsOfCarnage,
-[ABILITY_ANGELS_WRATH] = AngelsWrath,
-[ABILITY_PRISMATIC_FUR] = PrismaticFur,
-[ABILITY_SHOCKING_JAWS] = ShockingJaws,
-[ABILITY_FAE_HUNTER] = FaeHunter,
-[ABILITY_GRAVITY_WELL] = GravityWell,
-[ABILITY_EVAPORATE] = Evaporate,
-[ABILITY_LUMBERJACK] = Lumberjack,
-[ABILITY_WELL_BAKED_BODY] = WellBakedBody,
-[ABILITY_FURNACE] = Furnace,
-[ABILITY_ELECTROMORPHOSIS] = Electromorphosis,
-[ABILITY_ROCKY_PAYLOAD] = RockyPayload,
-[ABILITY_EARTH_EATER] = EarthEater,
-[ABILITY_LINGERING_AROMA] = LingeringAroma,
-[ABILITY_FAIRY_TALE] = FairyTale,
-[ABILITY_RAGING_MOTH] = RagingMoth,
-[ABILITY_ADRENALINE_RUSH] = AdrenalineRush,
-[ABILITY_ARCHMAGE] = Archmage,
-[ABILITY_CRYOMANCY] = Cryomancy,
-[ABILITY_PHANTOM_PAIN] = PhantomPain,
-[ABILITY_PURGATORY] = Purgatory,
-[ABILITY_EMANATE] = Emanate,
-[ABILITY_KUNOICHI_BLADE] = KunoichiBlade,
-[ABILITY_MONKEY_BUSINESS] = MonkeyBusiness,
-[ABILITY_COMBAT_SPECIALIST] = CombatSpecialist,
-[ABILITY_JUNGLES_GUARD] = JunglesGuard,
-[ABILITY_HUNTERS_HORN] = HuntersHorn,
-[ABILITY_PIXIE_POWER] = PixiePower,
-[ABILITY_PLASMA_LAMP] = PlasmaLamp,
-[ABILITY_MAGMA_EATER] = MagmaEater,
-[ABILITY_SUPER_HOT_GOO] = SuperHotGoo,
-[ABILITY_NIKA] = Nika,
-[ABILITY_ARCHER] = Archer,
-[ABILITY_COLD_PLASMA] = ColdPlasma,
-[ABILITY_SUPER_SLAMMER] = SuperSlammer,
-[ABILITY_INVERSE_ROOM] = InverseRoom,
-[ABILITY_ACCELERATE] = Accelerate,
-[ABILITY_FROST_BURN] = FrostBurn,
-[ABILITY_ITCHY_DEFENSE] = ItchyDefense,
-[ABILITY_GENERATOR] = Generator,
-[ABILITY_MOON_SPIRIT] = MoonSpirit,
-[ABILITY_DUST_CLOUD] = DustCloud,
-[ABILITY_BERSERKER_RAGE] = BerserkerRage,
-[ABILITY_TRICKSTER] = Trickster,
-[ABILITY_SAND_GUARD] = SandGuard,
-[ABILITY_NATURAL_RECOVERY] = NaturalRecovery,
-[ABILITY_WIND_RIDER] = WindRider,
-[ABILITY_SOOTHING_AROMA] = SoothingAroma,
-[ABILITY_PRIM_AND_PROPER] = PrimAndProper,
-[ABILITY_SUPER_STRAIN] = SuperStrain,
-[ABILITY_TIPPING_POINT] = TippingPoint,
-[ABILITY_ENLIGHTENED] = Enlightened,
-[ABILITY_PEACEFUL_SLUMBER] = PeacefulSlumber,
-[ABILITY_AFTERSHOCK] = Aftershock,
-[ABILITY_FREEZING_POINT] = FreezingPoint,
-[ABILITY_CRYO_PROFICIENCY] = CryoProficiency,
-[ABILITY_ARCANE_FORCE] = ArcaneForce,
-[ABILITY_DOOMBRINGER] = Doombringer,
-[ABILITY_WISHMAKER] = Wishmaker,
-[ABILITY_YUKI_ONNA] = YukiOnna,
-[ABILITY_SUPPRESS] = Suppress,
-[ABILITY_REFRIGERATOR] = Refrigerator,
-[ABILITY_HEAVEN_ASUNDER] = HeavenAsunder,
-[ABILITY_PURIFYING_WATERS] = PurifyingWaters,
-[ABILITY_SEABORNE] = Seaborne,
-[ABILITY_HIGH_TIDE] = HighTide,
-[ABILITY_CHANGE_OF_HEART] = ChangeOfHeart,
-[ABILITY_MYSTIC_BLADES] = MysticBlades,
-[ABILITY_DETERMINATION] = Determination,
-[ABILITY_FERTILIZE] = Fertilize,
-[ABILITY_PURE_LOVE] = PureLove,
-[ABILITY_FIGHTER] = Fighter,
-[ABILITY_MYCELIUM_MIGHT] = MyceliumMight,
-[ABILITY_TELEKINETIC] = Telekinetic,
-[ABILITY_COMBUSTION] = Combustion,
-[ABILITY_PONY_POWER] = PonyPower,
-[ABILITY_POWDER_BURST] = PowderBurst,
-[ABILITY_RETRIEVER] = Retriever,
-[ABILITY_MONSTER_MASH] = MonsterMash,
-[ABILITY_TWO_STEP] = TwoStep,
-[ABILITY_SPITEFUL] = Spiteful,
-[ABILITY_FORTITUDE] = Fortitude,
-[ABILITY_DEVOURER] = Devourer,
-[ABILITY_PHANTOM_THIEF] = PhantomThief,
-[ABILITY_EARLY_GRAVE] = EarlyGrave,
-[ABILITY_GRAPPLER] = Grappler,
-[ABILITY_BASS_BOOSTED] = BassBoosted,
-[ABILITY_FLAMING_JAWS] = FlamingJaws,
-[ABILITY_MONSTER_HUNTER] = MonsterHunter,
-[ABILITY_CROWNED_SWORD] = CrownedSword,
-[ABILITY_CROWNED_SHIELD] = CrownedShield,
-[ABILITY_BERSERK_DNA] = BerserkDna,
-[ABILITY_CROWNED_KING] = CrownedKing,
-[ABILITY_SNAP_TRAP_WHEN_HIT] = SnapTrapWhenHit,
-[ABILITY_PERMANENCE] = Permanence,
-[ABILITY_HUBRIS] = Hubris,
-[ABILITY_COSMIC_DAZE] = CosmicDaze,
-[ABILITY_MINDS_EYE] = MindsEye,
-[ABILITY_BLOOD_PRICE] = BloodPrice,
-[ABILITY_SPIKE_ARMOR] = SpikeArmor,
-[ABILITY_VOODOO_POWER] = VoodooPower,
-[ABILITY_CHROME_COAT] = ChromeCoat,
-[ABILITY_BANSHEE] = Banshee,
-[ABILITY_WEB_SPINNER] = WebSpinner,
-[ABILITY_SHOWDOWN_MODE] = ShowdownMode,
-[ABILITY_SEED_SOWER] = SeedSower,
-[ABILITY_AIRBORNE] = Airborne,
-[ABILITY_PARROTING] = Parroting,
-[ABILITY_SALT_CIRCLE] = SaltCircle,
-[ABILITY_PURIFYING_SALT] = PurifyingSalt,
-[ABILITY_PROTOSYNTHESIS] = Protosynthesis,
-[ABILITY_QUARK_DRIVE] = QuarkDrive,
-[ABILITY_WIND_POWER] = WindPower,
-[ABILITY_IMPULSE] = Impulse,
-[ABILITY_TERMINAL_VELOCITY] = TerminalVelocity,
-[ABILITY_GUARD_DOG] = GuardDog,
-[ABILITY_ANGER_SHELL] = AngerShell,
-[ABILITY_EGOIST] = Egoist,
-[ABILITY_SUBDUE] = Subdue,
-[ABILITY_READIED_ACTION] = ReadiedAction,
-[ABILITY_DARK_GALE_WINGS] = DarkGaleWings,
-[ABILITY_GUILT_TRIP] = GuiltTrip,
-[ABILITY_WATER_GALE_WINGS] = WaterGaleWings,
-[ABILITY_ZERO_TO_HERO] = ZeroToHero,
-[ABILITY_COSTAR] = Costar,
-[ABILITY_COMMANDER] = Commander,
-[ABILITY_EJECT_PACK_ABILITY] = EjectPackAbility,
-[ABILITY_VENGEFUL_SPIRIT] = VengefulSpirit,
-[ABILITY_CUD_CHEW] = CudChew,
-[ABILITY_ARMOR_TAIL] = ArmorTail,
-[ABILITY_MIND_CRUSH] = MindCrush,
-[ABILITY_SUPREME_OVERLORD] = SupremeOverlord,
-[ABILITY_ILL_WILL] = IllWill,
-[ABILITY_FIRE_SCALES] = FireScales,
-[ABILITY_WATCH_YOUR_STEP] = WatchYourStep,
-[ABILITY_RAPID_RESPONSE] = RapidResponse,
-[ABILITY_DOUBLE_IRON_BARBS] = DoubleIronBarbs,
-[ABILITY_THERMAL_EXCHANGE] = ThermalExchange,
-[ABILITY_GOOD_AS_GOLD] = GoodAsGold,
-[ABILITY_SHARING_IS_CARING] = SharingIsCaring,
-[ABILITY_TABLETS_OF_RUIN] = TabletsOfRuin,
-[ABILITY_SWORD_OF_RUIN] = SwordOfRuin,
-[ABILITY_VESSEL_OF_RUIN] = VesselOfRuin,
-[ABILITY_BEADS_OF_RUIN] = BeadsOfRuin,
-[ABILITY_PERMAFROST_CLONE] = PermafrostClone,
-[ABILITY_GALLANTRY] = Gallantry,
-[ABILITY_ORICHALCUM_PULSE] = OrichalcumPulse,
-[ABILITY_SUN_BASKING] = SunBasking,
-[ABILITY_WINGED_KING] = WingedKing,
-[ABILITY_HADRON_ENGINE] = HadronEngine,
-[ABILITY_IRON_SERPENT] = IronSerpent,
-[ABILITY_WEATHER_DOUBLE_BOOST] = WeatherDoubleBoost,
-[ABILITY_SWEEPING_EDGE_PLUS] = SweepingEdgePlus,
-[ABILITY_CELESTIAL_BLESSING] = CelestialBlessing,
-[ABILITY_MINION_CONTROL] = MinionControl,
-[ABILITY_MOLTEN_BLADES] = MoltenBlades,
-[ABILITY_HAUNTING_FRENZY] = HauntingFrenzy,
-[ABILITY_NOISE_CANCEL] = NoiseCancel,
-[ABILITY_RADIO_JAM] = RadioJam,
-[ABILITY_OLE] = Ole,
-[ABILITY_MALICIOUS] = Malicious,
-[ABILITY_DEAD_POWER] = DeadPower,
-[ABILITY_BRAWLING_WYVERN] = BrawlingWyvern,
-[ABILITY_MYTHICAL_ARROWS] = MythicalArrows,
-[ABILITY_LAWNMOWER] = Lawnmower,
-[ABILITY_FLOURISH] = Flourish,
-[ABILITY_DESERT_SPIRIT] = DesertSpirit,
-[ABILITY_CONTEMPT] = Contempt,
-[ABILITY_AERIALIST] = Aerialist,
-[ABILITY_TERA_SHELL] = TeraShell,
-[ABILITY_TOXIC_CHAIN] = ToxicChain,
-[ABILITY_PARASITIC_SPORES] = ParasiticSpores,
-[ABILITY_POISON_PUPPETEER] = PoisonPuppeteer,
-[ABILITY_ENTRANCE] = Entrance,
-[ABILITY_REJECTION] = Rejection,
-[ABILITY_APPLE_ENLIGHTENMENT] = AppleEnlightenment,
-[ABILITY_BALLOON_BOMBER] = BalloonBomber,
-[ABILITY_FLAMING_MAW] = FlamingMaw,
-[ABILITY_DEMOLITIONIST] = Demolitionist,
-[ABILITY_ROCKHARD_WILL] = RockhardWill,
-[ABILITY_FRAGRANT_DAZE] = FragrantDaze,
-[ABILITY_LOW_VISIBILITY] = LowVisibility,
-[ABILITY_OLD_MARINER] = OldMariner,
-[ABILITY_ECTOPLASM] = Ectoplasm,
-[ABILITY_BEAUTIFUL_MUSIC] = BeautifulMusic,
-[ABILITY_SURPRISE] = Surprise,
-[ABILITY_SNOW_SONG] = SnowSong,
-[ABILITY_GREATER_SPIRIT] = GreaterSpirit,
-[ABILITY_RESONANCE] = Resonance,
-[ABILITY_ETHEREAL_RUSH] = EtherealRush,
-[ABILITY_CUTE_ANTECEDENCE] = CuteAntecedence,
-[ABILITY_RECURRING_NIGHTMARE] = RecurringNightmare,
-[ABILITY_MENACING_SITUATION] = MenacingSituation,
-[ABILITY_SHINY_LIGHTNING] = ShinyLightning,
-[ABILITY_TERRIFY] = Terrify,
-[ABILITY_ICE_DOWNFALL] = IceDownfall,
-[ABILITY_LAST_STAND] = LastStand,
-[ABILITY_PYROCLASTIC_FLOW] = PyroclasticFlow,
-[ABILITY_BLOOD_BATH] = BloodBath,
-[ABILITY_BATTLE_AURA] = BattleAura,
-[ABILITY_BLOODLUST] = Bloodlust,
-[ABILITY_PIERCING_SOLO] = PiercingSolo,
-[ABILITY_RHYTHMIC] = Rhythmic,
-[ABILITY_CHUNKY_BASS_LINE] = ChunkyBassLine,
-[ABILITY_DUAL_HAMMER] = DualHammer,
-[ABILITY_DENTING_BLOWS] = DentingBlows,
-[ABILITY_ICE_COLD_HUNTER] = IceColdHunter,
-[ABILITY_SOUL_CRUSHER] = SoulCrusher,
-[ABILITY_ARC_FLASH] = ArcFlash,
-[ABILITY_UNICORN] = Unicorn,
-[ABILITY_ON_THE_PROWL] = OnTheProwl,
-[ABILITY_PRETENTIOUS] = Pretentious,
-[ABILITY_VENOBLAZE_PINCERS] = VenoblazePincers,
-[ABILITY_ETERNAL_BLESSING] = EternalBlessing,
-[ABILITY_SUGAR_RUSH] = SugarRush,
-[ABILITY_PEACEFUL_REST] = PeacefulRest,
-[ABILITY_WHITE_NOISE] = WhiteNoise,
-[ABILITY_SMOKEY_MANEUVERS] = SmokeyManeuvers,
-[ABILITY_TAG] = Tag,
-[ABILITY_POWER_METAL] = PowerMetal,
-[ABILITY_POWER_EDGE] = PowerEdge,
-[ABILITY_SUPERCONDUCTOR] = Superconductor,
-[ABILITY_ULTRA_INSTINCT] = UltraInstinct,
-[ABILITY_UNLOCKED_POTENTIAL] = UnlockedPotential,
-[ABILITY_HIGHER_RANK] = HigherRank,
-[ABILITY_FUNERAL_PYRE] = FuneralPyre,
-[ABILITY_FLAME_BUBBLE] = FlameBubble,
-[ABILITY_ELEMENTAL_VORTEX] = ElementalVortex,
-[ABILITY_SNOWY_WRATH] = SnowyWrath,
-[ABILITY_PATTERN_CHANGE] = PatternChange,
-[ABILITY_NO_TURNING_BACK] = NoTurningBack,
-[ABILITY_FLAMMABLE_COAT] = FlammableCoat,
-[ABILITY_DRACO_MORALE] = DracoMorale,
-[ABILITY_BAD_OMEN] = BadOmen,
-[ABILITY_MOSH_PIT] = MoshPit,
-[ABILITY_BLOOD_STAIN] = BloodStain,
-[ABILITY_BLOOD_STIGMA] = BloodStigma,
-[ABILITY_MAXIMUM_ACCELERATION] = MaximumAcceleration,
-[ABILITY_SIDEWINDER] = Sidewinder,
-[ABILITY_PETRIFY] = Petrify,
-[ABILITY_FLUFFIEST] = Fluffiest,
-[ABILITY_WAY_OF_PRECISION] = WayOfPrecision,
-[ABILITY_WAY_OF_SWIFTNESS] = WayOfSwiftness,
-[ABILITY_ATOMIC_PUNCH] = AtomicPunch,
-[ABILITY_IRON_GIANT] = IronGiant,
-[ABILITY_MASTER_HAND] = MasterHand,
-[ABILITY_FINAL_BLOW] = FinalBlow,
-[ABILITY_HOSPITALITY] = Hospitality,
-[ABILITY_BUTTER_UP] = ButterUp,
-[ABILITY_VITALITY_STRIKE] = VitalityStrike,
-[ABILITY_HUGE_WINGS] = HugeWings,
-[ABILITY_SWORD_OF_DAMNATION] = SwordOfDamnation,
-[ABILITY_RESTRAINING_ORDER] = RestrainingOrder,
-[ABILITY_ASSASSINS_TOOLS] = AssassinsTools,
-[ABILITY_FROSTMAW] = Frostmaw,
-[ABILITY_PATCHWORK] = Patchwork,
-[ABILITY_BLIND_RAGE] = BlindRage,
-[ABILITY_SLIPSTREAM] = Slipstream,
-[ABILITY_APEX_PREDATOR] = ApexPredator,
-[ABILITY_DRAGONS_RITUAL] = DragonsRitual,
-[ABILITY_PINNACLE_BLADE] = PinnacleBlade,
-[ABILITY_ENERGIZED] = Energized,
-[ABILITY_COLOR_SPECTRUM] = ColorSpectrum,
-[ABILITY_STEEL_BEETLE] = SteelBeetle,
-[ABILITY_FROM_THE_SHADOWS] = FromTheShadows,
-[ABILITY_RAGE_POINT] = RagePoint,
-[ABILITY_HOT_COALS] = HotCoals,
-[ABILITY_TERASTAL_TREASURE] = TerastalTreasure,
-[ABILITY_SHOCKING_MAW] = ShockingMaw,
-[ABILITY_GLEAM_EYES] = GleamEyes,
-[ABILITY_ROUSED_FANGS] = RousedFangs,
-[ABILITY_DREAM_STATE] = DreamState,
-[ABILITY_DREAM_WHIMSY] = DreamWhimsy,
-[ABILITY_LUNAR_AFFINITY] = LunarAffinity,
-[ABILITY_FLAME_SHIELD] = FlameShield,
-[ABILITY_AQUATIC_DWELLER] = AquaticDweller,
-[ABILITY_APPLE_PIE] = ApplePie,
-[ABILITY_HOVER] = Hover,
-[ABILITY_DEPRAVITY] = Depravity,
-[ABILITY_WILDFIRE] = Wildfire,
-[ABILITY_JUMP_SCARE] = JumpScare,
-[ABILITY_TAR_TOSS] = TarToss,
-[ABILITY_STUN_SHOCK] = StunShock,
-[ABILITY_RAGING_GODDESS] = RagingGoddess,
-[ABILITY_WHIPLASH] = Whiplash,
-[ABILITY_SUPERSWEET_SYRUP] = SupersweetSyrup,
-[ABILITY_LUCKY_HALO] = LuckyHalo,
-[ABILITY_TRASH_HEAP] = TrashHeap,
-[ABILITY_SLUDGY_MIX] = SludgyMix,
-[ABILITY_OVERWATCH] = Overwatch,
-[ABILITY_WIND_RAGE] = WindRage,
-[ABILITY_VICTORY_BOMB] = VictoryBomb,
-[ABILITY_RAZOR_SHARP] = RazorSharp,
-[ABILITY_TO_THE_BONE] = ToTheBone,
-[ABILITY_BLADE_DANCE] = BladeDance,
-[ABILITY_TAEKKYEON] = Taekkyeon,
-[ABILITY_APE_SHIFT] = ApeShift,
-[ABILITY_KNOW_YOUR_PLACE] = KnowYourPlace,
-[ABILITY_DEEP_CUTS] = DeepCuts,
-[ABILITY_LIFE_STEAL] = LifeSteal,
-[ABILITY_RUDE_AWAKENING] = RudeAwakening,
-[ABILITY_TERAFORM_ZERO] = TeraformZero,
-[ABILITY_SET_ABLAZE] = SetAblaze,
-[ABILITY_BREAKWATER] = Breakwater,
-[ABILITY_MAGICAL_FISTS] = MagicalFists,
-[ABILITY_CUTTHROAT] = Cutthroat,
-[ABILITY_SAND_BENDER] = SandBender,
-[ABILITY_SAND_PIT] = SandPit,
-[ABILITY_DESOLATE_SUN] = DesolateSun,
-[ABILITY_DAYBREAK] = Daybreak,
-[ABILITY_ENERGY_SIPHON] = EnergySiphon,
-[ABILITY_RESERVOIR] = Reservoir,
-[ABILITY_NEUROTOXIN] = Neurotoxin,
-[ABILITY_ENERGIZED_HORNS] = EnergizedHorns,
-[ABILITY_SPIDER_LAIR_UPGRADE] = SpiderLairUpgrade,
-[ABILITY_CRUST_COAT] = CrustCoat,
-[ABILITY_PUFFY] = Puffy,
-[ABILITY_BALLOON_BLITZ] = BalloonBlitz,
+    [ABILITY_NONE] = None,
+    [ABILITY_STENCH] = Stench,
+    [ABILITY_DRIZZLE] = Drizzle,
+    [ABILITY_SPEED_BOOST] = SpeedBoost,
+    [ABILITY_BATTLE_ARMOR] = BattleArmor,
+    [ABILITY_STURDY] = Sturdy,
+    [ABILITY_DAMP] = Damp,
+    [ABILITY_LIMBER] = Limber,
+    [ABILITY_SAND_VEIL] = SandVeil,
+    [ABILITY_STATIC] = Static,
+    [ABILITY_VOLT_ABSORB] = VoltAbsorb,
+    [ABILITY_WATER_ABSORB] = WaterAbsorb,
+    [ABILITY_OBLIVIOUS] = Oblivious,
+    [ABILITY_CLOUD_NINE] = CloudNine,
+    [ABILITY_COMPOUND_EYES] = CompoundEyes,
+    [ABILITY_INSOMNIA] = Insomnia,
+    [ABILITY_COLOR_CHANGE] = ColorChange,
+    [ABILITY_IMMUNITY] = Immunity,
+    [ABILITY_FLASH_FIRE] = FlashFire,
+    [ABILITY_SHIELD_DUST] = ShieldDust,
+    [ABILITY_OWN_TEMPO] = OwnTempo,
+    [ABILITY_SUCTION_CUPS] = SuctionCups,
+    [ABILITY_INTIMIDATE] = Intimidate,
+    [ABILITY_SHADOW_TAG] = ShadowTag,
+    [ABILITY_ROUGH_SKIN] = RoughSkin,
+    [ABILITY_WONDER_GUARD] = WonderGuard,
+    [ABILITY_LEVITATE] = Levitate,
+    [ABILITY_EFFECT_SPORE] = EffectSpore,
+    [ABILITY_SYNCHRONIZE] = Synchronize,
+    [ABILITY_CLEAR_BODY] = ClearBody,
+    [ABILITY_NATURAL_CURE] = NaturalCure,
+    [ABILITY_LIGHTNING_ROD] = LightningRod,
+    [ABILITY_SERENE_GRACE] = SereneGrace,
+    [ABILITY_SWIFT_SWIM] = SwiftSwim,
+    [ABILITY_CHLOROPHYLL] = Chlorophyll,
+    [ABILITY_ILLUMINATE] = Illuminate,
+    [ABILITY_TRACE] = Trace,
+    [ABILITY_HUGE_POWER] = HugePower,
+    [ABILITY_POISON_POINT] = PoisonPoint,
+    [ABILITY_INNER_FOCUS] = InnerFocus,
+    [ABILITY_MAGMA_ARMOR] = MagmaArmor,
+    [ABILITY_WATER_VEIL] = WaterVeil,
+    [ABILITY_MAGNET_PULL] = MagnetPull,
+    [ABILITY_SOUNDPROOF] = Soundproof,
+    [ABILITY_RAIN_DISH] = RainDish,
+    [ABILITY_SAND_STREAM] = SandStream,
+    [ABILITY_PRESSURE] = Pressure,
+    [ABILITY_THICK_FAT] = ThickFat,
+    [ABILITY_EARLY_BIRD] = EarlyBird,
+    [ABILITY_FLAME_BODY] = FlameBody,
+    [ABILITY_RUN_AWAY] = RunAway,
+    [ABILITY_KEEN_EYE] = KeenEye,
+    [ABILITY_HYPER_CUTTER] = HyperCutter,
+    [ABILITY_PICKUP] = Pickup,
+    [ABILITY_TRUANT] = Truant,
+    [ABILITY_HUSTLE] = Hustle,
+    [ABILITY_CUTE_CHARM] = CuteCharm,
+    [ABILITY_PLUS] = Plus,
+    [ABILITY_MINUS] = Minus,
+    [ABILITY_FORECAST] = Forecast,
+    [ABILITY_STICKY_HOLD] = StickyHold,
+    [ABILITY_SHED_SKIN] = ShedSkin,
+    [ABILITY_GUTS] = Guts,
+    [ABILITY_MARVEL_SCALE] = MarvelScale,
+    [ABILITY_LIQUID_OOZE] = LiquidOoze,
+    [ABILITY_OVERGROW] = Overgrow,
+    [ABILITY_BLAZE] = Blaze,
+    [ABILITY_TORRENT] = Torrent,
+    [ABILITY_SWARM] = Swarm,
+    [ABILITY_ROCK_HEAD] = RockHead,
+    [ABILITY_DROUGHT] = Drought,
+    [ABILITY_ARENA_TRAP] = ArenaTrap,
+    [ABILITY_VITAL_SPIRIT] = VitalSpirit,
+    [ABILITY_WHITE_SMOKE] = WhiteSmoke,
+    [ABILITY_PURE_POWER] = PurePower,
+    [ABILITY_SHELL_ARMOR] = ShellArmor,
+    [ABILITY_AIR_LOCK] = AirLock,
+    [ABILITY_TANGLED_FEET] = TangledFeet,
+    [ABILITY_MOTOR_DRIVE] = MotorDrive,
+    [ABILITY_RIVALRY] = Rivalry,
+    [ABILITY_STEADFAST] = Steadfast,
+    [ABILITY_SNOW_CLOAK] = SnowCloak,
+    [ABILITY_GLUTTONY] = Gluttony,
+    [ABILITY_ANGER_POINT] = AngerPoint,
+    [ABILITY_UNBURDEN] = Unburden,
+    [ABILITY_HEATPROOF] = Heatproof,
+    [ABILITY_SIMPLE] = Simple,
+    [ABILITY_DRY_SKIN] = DrySkin,
+    [ABILITY_DOWNLOAD] = Download,
+    [ABILITY_IRON_FIST] = IronFist,
+    [ABILITY_POISON_HEAL] = PoisonHeal,
+    [ABILITY_ADAPTABILITY] = Adaptability,
+    [ABILITY_SKILL_LINK] = SkillLink,
+    [ABILITY_HYDRATION] = Hydration,
+    [ABILITY_SOLAR_POWER] = SolarPower,
+    [ABILITY_QUICK_FEET] = QuickFeet,
+    [ABILITY_NORMALIZE] = Normalize,
+    [ABILITY_SNIPER] = Sniper,
+    [ABILITY_MAGIC_GUARD] = MagicGuard,
+    [ABILITY_NO_GUARD] = NoGuard,
+    [ABILITY_STALL] = Stall,
+    [ABILITY_TECHNICIAN] = Technician,
+    [ABILITY_LEAF_GUARD] = LeafGuard,
+    [ABILITY_KLUTZ] = Klutz,
+    [ABILITY_MOLD_BREAKER] = MoldBreaker,
+    [ABILITY_SUPER_LUCK] = SuperLuck,
+    [ABILITY_AFTERMATH] = Aftermath,
+    [ABILITY_ANTICIPATION] = Anticipation,
+    [ABILITY_FOREWARN] = Forewarn,
+    [ABILITY_UNAWARE] = Unaware,
+    [ABILITY_TINTED_LENS] = TintedLens,
+    [ABILITY_FILTER] = Filter,
+    [ABILITY_SLOW_START] = SlowStart,
+    [ABILITY_SCRAPPY] = Scrappy,
+    [ABILITY_STORM_DRAIN] = StormDrain,
+    [ABILITY_ICE_BODY] = IceBody,
+    [ABILITY_SOLID_ROCK] = SolidRock,
+    [ABILITY_SNOW_WARNING] = SnowWarning,
+    [ABILITY_HONEY_GATHER] = HoneyGather,
+    [ABILITY_FRISK] = Frisk,
+    [ABILITY_RECKLESS] = Reckless,
+    [ABILITY_MULTITYPE] = Multitype,
+    [ABILITY_FLOWER_GIFT] = FlowerGift,
+    [ABILITY_BAD_DREAMS] = BadDreams,
+    [ABILITY_PICKPOCKET] = Pickpocket,
+    [ABILITY_SHEER_FORCE] = SheerForce,
+    [ABILITY_CONTRARY] = Contrary,
+    [ABILITY_UNNERVE] = Unnerve,
+    [ABILITY_DEFIANT] = Defiant,
+    [ABILITY_DEFEATIST] = Defeatist,
+    [ABILITY_CURSED_BODY] = CursedBody,
+    [ABILITY_HEALER] = Healer,
+    [ABILITY_FRIEND_GUARD] = FriendGuard,
+    [ABILITY_WEAK_ARMOR] = WeakArmor,
+    [ABILITY_HEAVY_METAL] = HeavyMetal,
+    [ABILITY_LIGHT_METAL] = LightMetal,
+    [ABILITY_MULTISCALE] = Multiscale,
+    [ABILITY_TOXIC_BOOST] = ToxicBoost,
+    [ABILITY_FLARE_BOOST] = FlareBoost,
+    [ABILITY_HARVEST] = Harvest,
+    [ABILITY_TELEPATHY] = Telepathy,
+    [ABILITY_MOODY] = Moody,
+    [ABILITY_OVERCOAT] = Overcoat,
+    [ABILITY_POISON_TOUCH] = PoisonTouch,
+    [ABILITY_REGENERATOR] = Regenerator,
+    [ABILITY_BIG_PECKS] = BigPecks,
+    [ABILITY_SAND_RUSH] = SandRush,
+    [ABILITY_WONDER_SKIN] = WonderSkin,
+    [ABILITY_ANALYTIC] = Analytic,
+    [ABILITY_ILLUSION] = Illusion,
+    [ABILITY_IMPOSTER] = Imposter,
+    [ABILITY_INFILTRATOR] = Infiltrator,
+    [ABILITY_MUMMY] = Mummy,
+    [ABILITY_MOXIE] = Moxie,
+    [ABILITY_JUSTIFIED] = Justified,
+    [ABILITY_RATTLED] = Rattled,
+    [ABILITY_MAGIC_BOUNCE] = MagicBounce,
+    [ABILITY_SAP_SIPPER] = SapSipper,
+    [ABILITY_PRANKSTER] = Prankster,
+    [ABILITY_SAND_FORCE] = SandForce,
+    [ABILITY_IRON_BARBS] = IronBarbs,
+    [ABILITY_ZEN_MODE] = ZenMode,
+    [ABILITY_VICTORY_STAR] = VictoryStar,
+    [ABILITY_TURBOBLAZE] = Turboblaze,
+    [ABILITY_TERAVOLT] = Teravolt,
+    [ABILITY_AROMA_VEIL] = AromaVeil,
+    [ABILITY_FLOWER_VEIL] = FlowerVeil,
+    [ABILITY_CHEEK_POUCH] = CheekPouch,
+    [ABILITY_PROTEAN] = Protean,
+    [ABILITY_FUR_COAT] = FurCoat,
+    [ABILITY_MAGICIAN] = Magician,
+    [ABILITY_BULLETPROOF] = Bulletproof,
+    [ABILITY_COMPETITIVE] = Competitive,
+    [ABILITY_STRONG_JAW] = StrongJaw,
+    [ABILITY_REFRIGERATE] = Refrigerate,
+    [ABILITY_SWEET_VEIL] = SweetVeil,
+    [ABILITY_STANCE_CHANGE] = StanceChange,
+    [ABILITY_GALE_WINGS] = GaleWings,
+    [ABILITY_MEGA_LAUNCHER] = MegaLauncher,
+    [ABILITY_GRASS_PELT] = GrassPelt,
+    [ABILITY_SYMBIOSIS] = Symbiosis,
+    [ABILITY_TOUGH_CLAWS] = ToughClaws,
+    [ABILITY_PIXILATE] = Pixilate,
+    [ABILITY_GOOEY] = Gooey,
+    [ABILITY_AERILATE] = Aerilate,
+    [ABILITY_PARENTAL_BOND] = ParentalBond,
+    [ABILITY_DARK_AURA] = DarkAura,
+    [ABILITY_FAIRY_AURA] = FairyAura,
+    [ABILITY_AURA_BREAK] = AuraBreak,
+    [ABILITY_PRIMORDIAL_SEA] = PrimordialSea,
+    [ABILITY_DESOLATE_LAND] = DesolateLand,
+    [ABILITY_DELTA_STREAM] = DeltaStream,
+    [ABILITY_STAMINA] = Stamina,
+    [ABILITY_WIMP_OUT] = WimpOut,
+    [ABILITY_EMERGENCY_EXIT] = EmergencyExit,
+    [ABILITY_WATER_COMPACTION] = WaterCompaction,
+    [ABILITY_MERCILESS] = Merciless,
+    [ABILITY_SHIELDS_DOWN] = ShieldsDown,
+    [ABILITY_STAKEOUT] = Stakeout,
+    [ABILITY_WATER_BUBBLE] = WaterBubble,
+    [ABILITY_STEELWORKER] = Steelworker,
+    [ABILITY_BERSERK] = Berserk,
+    [ABILITY_SLUSH_RUSH] = SlushRush,
+    [ABILITY_LONG_REACH] = LongReach,
+    [ABILITY_LIQUID_VOICE] = LiquidVoice,
+    [ABILITY_TRIAGE] = Triage,
+    [ABILITY_GALVANIZE] = Galvanize,
+    [ABILITY_SURGE_SURFER] = SurgeSurfer,
+    [ABILITY_SCHOOLING] = Schooling,
+    [ABILITY_DISGUISE] = Disguise,
+    [ABILITY_BATTLE_BOND] = BattleBond,
+    [ABILITY_POWER_CONSTRUCT] = PowerConstruct,
+    [ABILITY_CORROSION] = Corrosion,
+    [ABILITY_COMATOSE] = Comatose,
+    [ABILITY_QUEENLY_MAJESTY] = QueenlyMajesty,
+    [ABILITY_INNARDS_OUT] = InnardsOut,
+    [ABILITY_DANCER] = Dancer,
+    [ABILITY_BATTERY] = Battery,
+    [ABILITY_FLUFFY] = Fluffy,
+    [ABILITY_DAZZLING] = Dazzling,
+    [ABILITY_SOUL_HEART] = SoulHeart,
+    [ABILITY_TANGLING_HAIR] = TanglingHair,
+    [ABILITY_RECEIVER] = Receiver,
+    [ABILITY_POWER_OF_ALCHEMY] = PowerOfAlchemy,
+    [ABILITY_BEAST_BOOST] = BeastBoost,
+    [ABILITY_RKS_SYSTEM] = RksSystem,
+    [ABILITY_ELECTRIC_SURGE] = ElectricSurge,
+    [ABILITY_PSYCHIC_SURGE] = PsychicSurge,
+    [ABILITY_MISTY_SURGE] = MistySurge,
+    [ABILITY_GRASSY_SURGE] = GrassySurge,
+    [ABILITY_FULL_METAL_BODY] = FullMetalBody,
+    [ABILITY_SHADOW_SHIELD] = ShadowShield,
+    [ABILITY_PRISM_ARMOR] = PrismArmor,
+    [ABILITY_NEUROFORCE] = Neuroforce,
+    [ABILITY_INTREPID_SWORD] = IntrepidSword,
+    [ABILITY_DAUNTLESS_SHIELD] = DauntlessShield,
+    [ABILITY_LIBERO] = Libero,
+    [ABILITY_BALL_FETCH] = BallFetch,
+    [ABILITY_COTTON_DOWN] = CottonDown,
+    [ABILITY_PROPELLER_TAIL] = PropellerTail,
+    [ABILITY_MIRROR_ARMOR] = MirrorArmor,
+    [ABILITY_GULP_MISSILE] = GulpMissile,
+    [ABILITY_STALWART] = Stalwart,
+    [ABILITY_STEAM_ENGINE] = SteamEngine,
+    [ABILITY_PUNK_ROCK] = PunkRock,
+    [ABILITY_SAND_SPIT] = SandSpit,
+    [ABILITY_ICE_SCALES] = IceScales,
+    [ABILITY_RIPEN] = Ripen,
+    [ABILITY_ICE_FACE] = IceFace,
+    [ABILITY_POWER_SPOT] = PowerSpot,
+    [ABILITY_MIMICRY] = Mimicry,
+    [ABILITY_SCREEN_CLEANER] = ScreenCleaner,
+    [ABILITY_STEELY_SPIRIT] = SteelySpirit,
+    [ABILITY_PERISH_BODY] = PerishBody,
+    [ABILITY_WANDERING_SPIRIT] = WanderingSpirit,
+    [ABILITY_GORILLA_TACTICS] = GorillaTactics,
+    [ABILITY_NEUTRALIZING_GAS] = NeutralizingGas,
+    [ABILITY_PASTEL_VEIL] = PastelVeil,
+    [ABILITY_HUNGER_SWITCH] = HungerSwitch,
+    [ABILITY_QUICK_DRAW] = QuickDraw,
+    [ABILITY_UNSEEN_FIST] = UnseenFist,
+    [ABILITY_CURIOUS_MEDICINE] = CuriousMedicine,
+    [ABILITY_TRANSISTOR] = Transistor,
+    [ABILITY_DRAGONS_MAW] = DragonsMaw,
+    [ABILITY_CHILLING_NEIGH] = ChillingNeigh,
+    [ABILITY_GRIM_NEIGH] = GrimNeigh,
+    [ABILITY_AS_ONE_ICE_RIDER] = AsOneIceRider,
+    [ABILITY_AS_ONE_SHADOW_RIDER] = AsOneShadowRider,
+    [ABILITY_CHLOROPLAST] = Chloroplast,
+    [ABILITY_WHITEOUT] = Whiteout,
+    [ABILITY_PYROMANCY] = Pyromancy,
+    [ABILITY_KEEN_EDGE] = KeenEdge,
+    [ABILITY_PRISM_SCALES] = PrismScales,
+    [ABILITY_POWER_FISTS] = PowerFists,
+    [ABILITY_SAND_SONG] = SandSong,
+    [ABILITY_RAMPAGE] = Rampage,
+    [ABILITY_VENGEANCE] = Vengeance,
+    [ABILITY_BLITZ_BOXER] = BlitzBoxer,
+    [ABILITY_ANTARCTIC_BIRD] = AntarcticBird,
+    [ABILITY_IMMOLATE] = Immolate,
+    [ABILITY_CRYSTALLIZE] = Crystallize,
+    [ABILITY_ELECTROCYTES] = Electrocytes,
+    [ABILITY_AERODYNAMICS] = Aerodynamics,
+    [ABILITY_CHRISTMAS_SPIRIT] = ChristmasSpirit,
+    [ABILITY_EXPLOIT_WEAKNESS] = ExploitWeakness,
+    [ABILITY_GROUND_SHOCK] = GroundShock,
+    [ABILITY_ANCIENT_IDOL] = AncientIdol,
+    [ABILITY_MYSTIC_POWER] = MysticPower,
+    [ABILITY_PERFECTIONIST] = Perfectionist,
+    [ABILITY_GROWING_TOOTH] = GrowingTooth,
+    [ABILITY_INFLATABLE] = Inflatable,
+    [ABILITY_AURORA_BOREALIS] = AuroraBorealis,
+    [ABILITY_AVENGER] = Avenger,
+    [ABILITY_LETS_ROLL] = LetsRoll,
+    [ABILITY_AQUATIC] = Aquatic,
+    [ABILITY_LOUD_BANG] = LoudBang,
+    [ABILITY_LEAD_COAT] = LeadCoat,
+    [ABILITY_AMPHIBIOUS] = Amphibious,
+    [ABILITY_GROUNDED] = Grounded,
+    [ABILITY_EARTHBOUND] = Earthbound,
+    [ABILITY_FIGHT_SPIRIT] = FightSpirit,
+    [ABILITY_FELINE_PROWESS] = FelineProwess,
+    [ABILITY_COIL_UP] = CoilUp,
+    [ABILITY_FOSSILIZED] = Fossilized,
+    [ABILITY_MAGICAL_DUST] = MagicalDust,
+    [ABILITY_DREAMCATCHER] = Dreamcatcher,
+    [ABILITY_NOCTURNAL] = Nocturnal,
+    [ABILITY_SELF_SUFFICIENT] = SelfSufficient,
+    [ABILITY_TECTONIZE] = Tectonize,
+    [ABILITY_ICE_AGE] = IceAge,
+    [ABILITY_HALF_DRAKE] = HalfDrake,
+    [ABILITY_LIQUIFIED] = Liquified,
+    [ABILITY_DRAGONFLY] = Dragonfly,
+    [ABILITY_DRAGONSLAYER] = Dragonslayer,
+    [ABILITY_MOUNTAINEER] = Mountaineer,
+    [ABILITY_HYDRATE] = Hydrate,
+    [ABILITY_METALLIC] = Metallic,
+    [ABILITY_PERMAFROST] = Permafrost,
+    [ABILITY_PRIMAL_ARMOR] = PrimalArmor,
+    [ABILITY_RAGING_BOXER] = RagingBoxer,
+    [ABILITY_AIR_BLOWER] = AirBlower,
+    [ABILITY_JUGGERNAUT] = Juggernaut,
+    [ABILITY_SHORT_CIRCUIT] = ShortCircuit,
+    [ABILITY_MAJESTIC_BIRD] = MajesticBird,
+    [ABILITY_PHANTOM] = Phantom,
+    [ABILITY_INTOXICATE] = Intoxicate,
+    [ABILITY_IMPENETRABLE] = Impenetrable,
+    [ABILITY_HYPNOTIST] = Hypnotist,
+    [ABILITY_OVERWHELM] = Overwhelm,
+    [ABILITY_SCARE] = Scare,
+    [ABILITY_MAJESTIC_MOTH] = MajesticMoth,
+    [ABILITY_SOUL_EATER] = SoulEater,
+    [ABILITY_SOUL_LINKER] = SoulLinker,
+    [ABILITY_SWEET_DREAMS] = SweetDreams,
+    [ABILITY_BAD_LUCK] = BadLuck,
+    [ABILITY_HAUNTED_SPIRIT] = HauntedSpirit,
+    [ABILITY_ELECTRIC_BURST] = ElectricBurst,
+    [ABILITY_RAW_WOOD] = RawWood,
+    [ABILITY_SOLENOGLYPHS] = Solenoglyphs,
+    [ABILITY_SPIDER_LAIR] = SpiderLair,
+    [ABILITY_FATAL_PRECISION] = FatalPrecision,
+    [ABILITY_FORT_KNOX] = FortKnox,
+    [ABILITY_SEAWEED] = Seaweed,
+    [ABILITY_PSYCHIC_MIND] = PsychicMind,
+    [ABILITY_POISON_ABSORB] = PoisonAbsorb,
+    [ABILITY_SCAVENGER] = Scavenger,
+    [ABILITY_TWISTED_DIMENSION] = TwistedDimension,
+    [ABILITY_MULTI_HEADED] = MultiHeaded,
+    [ABILITY_NORTH_WIND] = NorthWind,
+    [ABILITY_OVERCHARGE] = Overcharge,
+    [ABILITY_VIOLENT_RUSH] = ViolentRush,
+    [ABILITY_FLAMING_SOUL] = FlamingSoul,
+    [ABILITY_SAGE_POWER] = SagePower,
+    [ABILITY_BONE_ZONE] = BoneZone,
+    [ABILITY_WEATHER_CONTROL] = WeatherControl,
+    [ABILITY_SPEED_FORCE] = SpeedForce,
+    [ABILITY_SEA_GUARDIAN] = SeaGuardian,
+    [ABILITY_MOLTEN_DOWN] = MoltenDown,
+    [ABILITY_HYPER_AGGRESSIVE] = HyperAggressive,
+    [ABILITY_FLOCK] = Flock,
+    [ABILITY_FIELD_EXPLORER] = FieldExplorer,
+    [ABILITY_STRIKER] = Striker,
+    [ABILITY_FROZEN_SOUL] = FrozenSoul,
+    [ABILITY_PREDATOR] = Predator,
+    [ABILITY_LOOTER] = Looter,
+    [ABILITY_LUNAR_ECLIPSE] = LunarEclipse,
+    [ABILITY_SOLAR_FLARE] = SolarFlare,
+    [ABILITY_POWER_CORE] = PowerCore,
+    [ABILITY_SIGHTING_SYSTEM] = SightingSystem,
+    [ABILITY_BAD_COMPANY] = BadCompany,
+    [ABILITY_OPPORTUNIST] = Opportunist,
+    [ABILITY_GIANT_WINGS] = GiantWings,
+    [ABILITY_MOMENTUM] = Momentum,
+    [ABILITY_GRIP_PINCER] = GripPincer,
+    [ABILITY_BIG_LEAVES] = BigLeaves,
+    [ABILITY_PRECISE_FIST] = PreciseFist,
+    [ABILITY_DEADEYE] = Deadeye,
+    [ABILITY_ARTILLERY] = Artillery,
+    [ABILITY_AMPLIFIER] = Amplifier,
+    [ABILITY_ICE_DEW] = IceDew,
+    [ABILITY_SUN_WORSHIP] = SunWorship,
+    [ABILITY_POLLINATE] = Pollinate,
+    [ABILITY_VOLCANO_RAGE] = VolcanoRage,
+    [ABILITY_COLD_REBOUND] = ColdRebound,
+    [ABILITY_LOW_BLOW] = LowBlow,
+    [ABILITY_NOSFERATU] = Nosferatu,
+    [ABILITY_SPECTRAL_SHROUD] = SpectralShroud,
+    [ABILITY_DISCIPLINE] = Discipline,
+    [ABILITY_THUNDERCALL] = Thundercall,
+    [ABILITY_MARINE_APEX] = MarineApex,
+    [ABILITY_MIGHTY_HORN] = MightyHorn,
+    [ABILITY_HARDENED_SHEATH] = HardenedSheath,
+    [ABILITY_ARCTIC_FUR] = ArcticFur,
+    [ABILITY_SPECTRALIZE] = Spectralize,
+    [ABILITY_LETHARGY] = Lethargy,
+    [ABILITY_IRON_BARRAGE] = IronBarrage,
+    [ABILITY_STEEL_BARREL] = SteelBarrel,
+    [ABILITY_PYRO_SHELLS] = PyroShells,
+    [ABILITY_FUNGAL_INFECTION] = FungalInfection,
+    [ABILITY_PARRY] = Parry,
+    [ABILITY_SCRAPYARD] = Scrapyard,
+    [ABILITY_LOOSE_QUILLS] = LooseQuills,
+    [ABILITY_TOXIC_DEBRIS] = ToxicDebris,
+    [ABILITY_ROUNDHOUSE] = Roundhouse,
+    [ABILITY_MINERALIZE] = Mineralize,
+    [ABILITY_LOOSE_ROCKS] = LooseRocks,
+    [ABILITY_SPINNING_TOP] = SpinningTop,
+    [ABILITY_RETRIBUTION_BLOW] = RetributionBlow,
+    [ABILITY_FEARMONGER] = Fearmonger,
+    [ABILITY_KINGS_WRATH] = KingsWrath,
+    [ABILITY_QUEENS_MOURNING] = QueensMourning,
+    [ABILITY_TOXIC_SPILL] = ToxicSpill,
+    [ABILITY_DESERT_CLOAK] = DesertCloak,
+    [ABILITY_DRACONIZE] = Draconize,
+    [ABILITY_PRETTY_PRINCESS] = PrettyPrincess,
+    [ABILITY_SELF_REPAIR] = SelfRepair,
+    [ABILITY_ATOMIC_BURST] = AtomicBurst,
+    [ABILITY_HELLBLAZE] = Hellblaze,
+    [ABILITY_RIPTIDE] = Riptide,
+    [ABILITY_FOREST_RAGE] = ForestRage,
+    [ABILITY_PRIMAL_MAW] = PrimalMaw,
+    [ABILITY_SWEEPING_EDGE] = SweepingEdge,
+    [ABILITY_GIFTED_MIND] = GiftedMind,
+    [ABILITY_HYDRO_CIRCUIT] = HydroCircuit,
+    [ABILITY_EQUINOX] = Equinox,
+    [ABILITY_ABSORBANT] = Absorbant,
+    [ABILITY_CLUELESS] = Clueless,
+    [ABILITY_CHEATING_DEATH] = CheatingDeath,
+    [ABILITY_CHEAP_TACTICS] = CheapTactics,
+    [ABILITY_COWARD] = Coward,
+    [ABILITY_VOLT_RUSH] = VoltRush,
+    [ABILITY_DUNE_TERROR] = DuneTerror,
+    [ABILITY_INFERNAL_RAGE] = InfernalRage,
+    [ABILITY_DUAL_WIELD] = DualWield,
+    [ABILITY_ELEMENTAL_CHARGE] = ElementalCharge,
+    [ABILITY_AMBUSH] = Ambush,
+    [ABILITY_ATLAS] = Atlas,
+    [ABILITY_RADIANCE] = Radiance,
+    [ABILITY_JAWS_OF_CARNAGE] = JawsOfCarnage,
+    [ABILITY_ANGELS_WRATH] = AngelsWrath,
+    [ABILITY_PRISMATIC_FUR] = PrismaticFur,
+    [ABILITY_SHOCKING_JAWS] = ShockingJaws,
+    [ABILITY_FAE_HUNTER] = FaeHunter,
+    [ABILITY_GRAVITY_WELL] = GravityWell,
+    [ABILITY_EVAPORATE] = Evaporate,
+    [ABILITY_LUMBERJACK] = Lumberjack,
+    [ABILITY_WELL_BAKED_BODY] = WellBakedBody,
+    [ABILITY_FURNACE] = Furnace,
+    [ABILITY_ELECTROMORPHOSIS] = Electromorphosis,
+    [ABILITY_ROCKY_PAYLOAD] = RockyPayload,
+    [ABILITY_EARTH_EATER] = EarthEater,
+    [ABILITY_LINGERING_AROMA] = LingeringAroma,
+    [ABILITY_FAIRY_TALE] = FairyTale,
+    [ABILITY_RAGING_MOTH] = RagingMoth,
+    [ABILITY_ADRENALINE_RUSH] = AdrenalineRush,
+    [ABILITY_ARCHMAGE] = Archmage,
+    [ABILITY_CRYOMANCY] = Cryomancy,
+    [ABILITY_PHANTOM_PAIN] = PhantomPain,
+    [ABILITY_PURGATORY] = Purgatory,
+    [ABILITY_EMANATE] = Emanate,
+    [ABILITY_KUNOICHI_BLADE] = KunoichiBlade,
+    [ABILITY_MONKEY_BUSINESS] = MonkeyBusiness,
+    [ABILITY_COMBAT_SPECIALIST] = CombatSpecialist,
+    [ABILITY_JUNGLES_GUARD] = JunglesGuard,
+    [ABILITY_HUNTERS_HORN] = HuntersHorn,
+    [ABILITY_PIXIE_POWER] = PixiePower,
+    [ABILITY_PLASMA_LAMP] = PlasmaLamp,
+    [ABILITY_MAGMA_EATER] = MagmaEater,
+    [ABILITY_SUPER_HOT_GOO] = SuperHotGoo,
+    [ABILITY_NIKA] = Nika,
+    [ABILITY_ARCHER] = Archer,
+    [ABILITY_COLD_PLASMA] = ColdPlasma,
+    [ABILITY_SUPER_SLAMMER] = SuperSlammer,
+    [ABILITY_INVERSE_ROOM] = InverseRoom,
+    [ABILITY_ACCELERATE] = Accelerate,
+    [ABILITY_FROST_BURN] = FrostBurn,
+    [ABILITY_ITCHY_DEFENSE] = ItchyDefense,
+    [ABILITY_GENERATOR] = Generator,
+    [ABILITY_MOON_SPIRIT] = MoonSpirit,
+    [ABILITY_DUST_CLOUD] = DustCloud,
+    [ABILITY_BERSERKER_RAGE] = BerserkerRage,
+    [ABILITY_TRICKSTER] = Trickster,
+    [ABILITY_SAND_GUARD] = SandGuard,
+    [ABILITY_NATURAL_RECOVERY] = NaturalRecovery,
+    [ABILITY_WIND_RIDER] = WindRider,
+    [ABILITY_SOOTHING_AROMA] = SoothingAroma,
+    [ABILITY_PRIM_AND_PROPER] = PrimAndProper,
+    [ABILITY_SUPER_STRAIN] = SuperStrain,
+    [ABILITY_TIPPING_POINT] = TippingPoint,
+    [ABILITY_ENLIGHTENED] = Enlightened,
+    [ABILITY_PEACEFUL_SLUMBER] = PeacefulSlumber,
+    [ABILITY_AFTERSHOCK] = Aftershock,
+    [ABILITY_FREEZING_POINT] = FreezingPoint,
+    [ABILITY_CRYO_PROFICIENCY] = CryoProficiency,
+    [ABILITY_ARCANE_FORCE] = ArcaneForce,
+    [ABILITY_DOOMBRINGER] = Doombringer,
+    [ABILITY_WISHMAKER] = Wishmaker,
+    [ABILITY_YUKI_ONNA] = YukiOnna,
+    [ABILITY_SUPPRESS] = Suppress,
+    [ABILITY_REFRIGERATOR] = Refrigerator,
+    [ABILITY_HEAVEN_ASUNDER] = HeavenAsunder,
+    [ABILITY_PURIFYING_WATERS] = PurifyingWaters,
+    [ABILITY_SEABORNE] = Seaborne,
+    [ABILITY_HIGH_TIDE] = HighTide,
+    [ABILITY_CHANGE_OF_HEART] = ChangeOfHeart,
+    [ABILITY_MYSTIC_BLADES] = MysticBlades,
+    [ABILITY_DETERMINATION] = Determination,
+    [ABILITY_FERTILIZE] = Fertilize,
+    [ABILITY_PURE_LOVE] = PureLove,
+    [ABILITY_FIGHTER] = Fighter,
+    [ABILITY_MYCELIUM_MIGHT] = MyceliumMight,
+    [ABILITY_TELEKINETIC] = Telekinetic,
+    [ABILITY_COMBUSTION] = Combustion,
+    [ABILITY_PONY_POWER] = PonyPower,
+    [ABILITY_POWDER_BURST] = PowderBurst,
+    [ABILITY_RETRIEVER] = Retriever,
+    [ABILITY_MONSTER_MASH] = MonsterMash,
+    [ABILITY_TWO_STEP] = TwoStep,
+    [ABILITY_SPITEFUL] = Spiteful,
+    [ABILITY_FORTITUDE] = Fortitude,
+    [ABILITY_DEVOURER] = Devourer,
+    [ABILITY_PHANTOM_THIEF] = PhantomThief,
+    [ABILITY_EARLY_GRAVE] = EarlyGrave,
+    [ABILITY_GRAPPLER] = Grappler,
+    [ABILITY_BASS_BOOSTED] = BassBoosted,
+    [ABILITY_FLAMING_JAWS] = FlamingJaws,
+    [ABILITY_MONSTER_HUNTER] = MonsterHunter,
+    [ABILITY_CROWNED_SWORD] = CrownedSword,
+    [ABILITY_CROWNED_SHIELD] = CrownedShield,
+    [ABILITY_BERSERK_DNA] = BerserkDna,
+    [ABILITY_CROWNED_KING] = CrownedKing,
+    [ABILITY_SNAP_TRAP_WHEN_HIT] = SnapTrapWhenHit,
+    [ABILITY_PERMANENCE] = Permanence,
+    [ABILITY_HUBRIS] = Hubris,
+    [ABILITY_COSMIC_DAZE] = CosmicDaze,
+    [ABILITY_MINDS_EYE] = MindsEye,
+    [ABILITY_BLOOD_PRICE] = BloodPrice,
+    [ABILITY_SPIKE_ARMOR] = SpikeArmor,
+    [ABILITY_VOODOO_POWER] = VoodooPower,
+    [ABILITY_CHROME_COAT] = ChromeCoat,
+    [ABILITY_BANSHEE] = Banshee,
+    [ABILITY_WEB_SPINNER] = WebSpinner,
+    [ABILITY_SHOWDOWN_MODE] = ShowdownMode,
+    [ABILITY_SEED_SOWER] = SeedSower,
+    [ABILITY_AIRBORNE] = Airborne,
+    [ABILITY_PARROTING] = Parroting,
+    [ABILITY_SALT_CIRCLE] = SaltCircle,
+    [ABILITY_PURIFYING_SALT] = PurifyingSalt,
+    [ABILITY_PROTOSYNTHESIS] = Protosynthesis,
+    [ABILITY_QUARK_DRIVE] = QuarkDrive,
+    [ABILITY_WIND_POWER] = WindPower,
+    [ABILITY_IMPULSE] = Impulse,
+    [ABILITY_TERMINAL_VELOCITY] = TerminalVelocity,
+    [ABILITY_GUARD_DOG] = GuardDog,
+    [ABILITY_ANGER_SHELL] = AngerShell,
+    [ABILITY_EGOIST] = Egoist,
+    [ABILITY_SUBDUE] = Subdue,
+    [ABILITY_READIED_ACTION] = ReadiedAction,
+    [ABILITY_DARK_GALE_WINGS] = DarkGaleWings,
+    [ABILITY_GUILT_TRIP] = GuiltTrip,
+    [ABILITY_WATER_GALE_WINGS] = WaterGaleWings,
+    [ABILITY_ZERO_TO_HERO] = ZeroToHero,
+    [ABILITY_COSTAR] = Costar,
+    [ABILITY_COMMANDER] = Commander,
+    [ABILITY_EJECT_PACK_ABILITY] = EjectPackAbility,
+    [ABILITY_VENGEFUL_SPIRIT] = VengefulSpirit,
+    [ABILITY_CUD_CHEW] = CudChew,
+    [ABILITY_ARMOR_TAIL] = ArmorTail,
+    [ABILITY_MIND_CRUSH] = MindCrush,
+    [ABILITY_SUPREME_OVERLORD] = SupremeOverlord,
+    [ABILITY_ILL_WILL] = IllWill,
+    [ABILITY_FIRE_SCALES] = FireScales,
+    [ABILITY_WATCH_YOUR_STEP] = WatchYourStep,
+    [ABILITY_RAPID_RESPONSE] = RapidResponse,
+    [ABILITY_DOUBLE_IRON_BARBS] = DoubleIronBarbs,
+    [ABILITY_THERMAL_EXCHANGE] = ThermalExchange,
+    [ABILITY_GOOD_AS_GOLD] = GoodAsGold,
+    [ABILITY_SHARING_IS_CARING] = SharingIsCaring,
+    [ABILITY_TABLETS_OF_RUIN] = TabletsOfRuin,
+    [ABILITY_SWORD_OF_RUIN] = SwordOfRuin,
+    [ABILITY_VESSEL_OF_RUIN] = VesselOfRuin,
+    [ABILITY_BEADS_OF_RUIN] = BeadsOfRuin,
+    [ABILITY_PERMAFROST_CLONE] = PermafrostClone,
+    [ABILITY_GALLANTRY] = Gallantry,
+    [ABILITY_ORICHALCUM_PULSE] = OrichalcumPulse,
+    [ABILITY_SUN_BASKING] = SunBasking,
+    [ABILITY_WINGED_KING] = WingedKing,
+    [ABILITY_HADRON_ENGINE] = HadronEngine,
+    [ABILITY_IRON_SERPENT] = IronSerpent,
+    [ABILITY_WEATHER_DOUBLE_BOOST] = WeatherDoubleBoost,
+    [ABILITY_SWEEPING_EDGE_PLUS] = SweepingEdgePlus,
+    [ABILITY_CELESTIAL_BLESSING] = CelestialBlessing,
+    [ABILITY_MINION_CONTROL] = MinionControl,
+    [ABILITY_MOLTEN_BLADES] = MoltenBlades,
+    [ABILITY_HAUNTING_FRENZY] = HauntingFrenzy,
+    [ABILITY_NOISE_CANCEL] = NoiseCancel,
+    [ABILITY_RADIO_JAM] = RadioJam,
+    [ABILITY_OLE] = Ole,
+    [ABILITY_MALICIOUS] = Malicious,
+    [ABILITY_DEAD_POWER] = DeadPower,
+    [ABILITY_BRAWLING_WYVERN] = BrawlingWyvern,
+    [ABILITY_MYTHICAL_ARROWS] = MythicalArrows,
+    [ABILITY_LAWNMOWER] = Lawnmower,
+    [ABILITY_FLOURISH] = Flourish,
+    [ABILITY_DESERT_SPIRIT] = DesertSpirit,
+    [ABILITY_CONTEMPT] = Contempt,
+    [ABILITY_AERIALIST] = Aerialist,
+    [ABILITY_TERA_SHELL] = TeraShell,
+    [ABILITY_TOXIC_CHAIN] = ToxicChain,
+    [ABILITY_PARASITIC_SPORES] = ParasiticSpores,
+    [ABILITY_POISON_PUPPETEER] = PoisonPuppeteer,
+    [ABILITY_ENTRANCE] = Entrance,
+    [ABILITY_REJECTION] = Rejection,
+    [ABILITY_APPLE_ENLIGHTENMENT] = AppleEnlightenment,
+    [ABILITY_BALLOON_BOMBER] = BalloonBomber,
+    [ABILITY_FLAMING_MAW] = FlamingMaw,
+    [ABILITY_DEMOLITIONIST] = Demolitionist,
+    [ABILITY_ROCKHARD_WILL] = RockhardWill,
+    [ABILITY_FRAGRANT_DAZE] = FragrantDaze,
+    [ABILITY_LOW_VISIBILITY] = LowVisibility,
+    [ABILITY_OLD_MARINER] = OldMariner,
+    [ABILITY_ECTOPLASM] = Ectoplasm,
+    [ABILITY_BEAUTIFUL_MUSIC] = BeautifulMusic,
+    [ABILITY_SURPRISE] = Surprise,
+    [ABILITY_SNOW_SONG] = SnowSong,
+    [ABILITY_GREATER_SPIRIT] = GreaterSpirit,
+    [ABILITY_RESONANCE] = Resonance,
+    [ABILITY_ETHEREAL_RUSH] = EtherealRush,
+    [ABILITY_CUTE_ANTECEDENCE] = CuteAntecedence,
+    [ABILITY_RECURRING_NIGHTMARE] = RecurringNightmare,
+    [ABILITY_MENACING_SITUATION] = MenacingSituation,
+    [ABILITY_SHINY_LIGHTNING] = ShinyLightning,
+    [ABILITY_TERRIFY] = Terrify,
+    [ABILITY_ICE_DOWNFALL] = IceDownfall,
+    [ABILITY_LAST_STAND] = LastStand,
+    [ABILITY_PYROCLASTIC_FLOW] = PyroclasticFlow,
+    [ABILITY_BLOOD_BATH] = BloodBath,
+    [ABILITY_BATTLE_AURA] = BattleAura,
+    [ABILITY_BLOODLUST] = Bloodlust,
+    [ABILITY_PIERCING_SOLO] = PiercingSolo,
+    [ABILITY_RHYTHMIC] = Rhythmic,
+    [ABILITY_CHUNKY_BASS_LINE] = ChunkyBassLine,
+    [ABILITY_DUAL_HAMMER] = DualHammer,
+    [ABILITY_DENTING_BLOWS] = DentingBlows,
+    [ABILITY_ICE_COLD_HUNTER] = IceColdHunter,
+    [ABILITY_SOUL_CRUSHER] = SoulCrusher,
+    [ABILITY_ARC_FLASH] = ArcFlash,
+    [ABILITY_UNICORN] = Unicorn,
+    [ABILITY_ON_THE_PROWL] = OnTheProwl,
+    [ABILITY_PRETENTIOUS] = Pretentious,
+    [ABILITY_VENOBLAZE_PINCERS] = VenoblazePincers,
+    [ABILITY_ETERNAL_BLESSING] = EternalBlessing,
+    [ABILITY_SUGAR_RUSH] = SugarRush,
+    [ABILITY_PEACEFUL_REST] = PeacefulRest,
+    [ABILITY_WHITE_NOISE] = WhiteNoise,
+    [ABILITY_SMOKEY_MANEUVERS] = SmokeyManeuvers,
+    [ABILITY_TAG] = Tag,
+    [ABILITY_POWER_METAL] = PowerMetal,
+    [ABILITY_POWER_EDGE] = PowerEdge,
+    [ABILITY_SUPERCONDUCTOR] = Superconductor,
+    [ABILITY_ULTRA_INSTINCT] = UltraInstinct,
+    [ABILITY_UNLOCKED_POTENTIAL] = UnlockedPotential,
+    [ABILITY_HIGHER_RANK] = HigherRank,
+    [ABILITY_FUNERAL_PYRE] = FuneralPyre,
+    [ABILITY_FLAME_BUBBLE] = FlameBubble,
+    [ABILITY_ELEMENTAL_VORTEX] = ElementalVortex,
+    [ABILITY_SNOWY_WRATH] = SnowyWrath,
+    [ABILITY_PATTERN_CHANGE] = PatternChange,
+    [ABILITY_NO_TURNING_BACK] = NoTurningBack,
+    [ABILITY_FLAMMABLE_COAT] = FlammableCoat,
+    [ABILITY_DRACO_MORALE] = DracoMorale,
+    [ABILITY_BAD_OMEN] = BadOmen,
+    [ABILITY_MOSH_PIT] = MoshPit,
+    [ABILITY_BLOOD_STAIN] = BloodStain,
+    [ABILITY_BLOOD_STIGMA] = BloodStigma,
+    [ABILITY_MAXIMUM_ACCELERATION] = MaximumAcceleration,
+    [ABILITY_SIDEWINDER] = Sidewinder,
+    [ABILITY_PETRIFY] = Petrify,
+    [ABILITY_FLUFFIEST] = Fluffiest,
+    [ABILITY_WAY_OF_PRECISION] = WayOfPrecision,
+    [ABILITY_WAY_OF_SWIFTNESS] = WayOfSwiftness,
+    [ABILITY_ATOMIC_PUNCH] = AtomicPunch,
+    [ABILITY_IRON_GIANT] = IronGiant,
+    [ABILITY_MASTER_HAND] = MasterHand,
+    [ABILITY_FINAL_BLOW] = FinalBlow,
+    [ABILITY_HOSPITALITY] = Hospitality,
+    [ABILITY_BUTTER_UP] = ButterUp,
+    [ABILITY_VITALITY_STRIKE] = VitalityStrike,
+    [ABILITY_HUGE_WINGS] = HugeWings,
+    [ABILITY_SWORD_OF_DAMNATION] = SwordOfDamnation,
+    [ABILITY_RESTRAINING_ORDER] = RestrainingOrder,
+    [ABILITY_ASSASSINS_TOOLS] = AssassinsTools,
+    [ABILITY_FROSTMAW] = Frostmaw,
+    [ABILITY_PATCHWORK] = Patchwork,
+    [ABILITY_BLIND_RAGE] = BlindRage,
+    [ABILITY_SLIPSTREAM] = Slipstream,
+    [ABILITY_APEX_PREDATOR] = ApexPredator,
+    [ABILITY_DRAGONS_RITUAL] = DragonsRitual,
+    [ABILITY_PINNACLE_BLADE] = PinnacleBlade,
+    [ABILITY_ENERGIZED] = Energized,
+    [ABILITY_COLOR_SPECTRUM] = ColorSpectrum,
+    [ABILITY_STEEL_BEETLE] = SteelBeetle,
+    [ABILITY_FROM_THE_SHADOWS] = FromTheShadows,
+    [ABILITY_RAGE_POINT] = RagePoint,
+    [ABILITY_HOT_COALS] = HotCoals,
+    [ABILITY_TERASTAL_TREASURE] = TerastalTreasure,
+    [ABILITY_SHOCKING_MAW] = ShockingMaw,
+    [ABILITY_GLEAM_EYES] = GleamEyes,
+    [ABILITY_ROUSED_FANGS] = RousedFangs,
+    [ABILITY_DREAM_STATE] = DreamState,
+    [ABILITY_DREAM_WHIMSY] = DreamWhimsy,
+    [ABILITY_LUNAR_AFFINITY] = LunarAffinity,
+    [ABILITY_FLAME_SHIELD] = FlameShield,
+    [ABILITY_AQUATIC_DWELLER] = AquaticDweller,
+    [ABILITY_APPLE_PIE] = ApplePie,
+    [ABILITY_HOVER] = Hover,
+    [ABILITY_DEPRAVITY] = Depravity,
+    [ABILITY_WILDFIRE] = Wildfire,
+    [ABILITY_JUMP_SCARE] = JumpScare,
+    [ABILITY_TAR_TOSS] = TarToss,
+    [ABILITY_STUN_SHOCK] = StunShock,
+    [ABILITY_RAGING_GODDESS] = RagingGoddess,
+    [ABILITY_WHIPLASH] = Whiplash,
+    [ABILITY_SUPERSWEET_SYRUP] = SupersweetSyrup,
+    [ABILITY_LUCKY_HALO] = LuckyHalo,
+    [ABILITY_TRASH_HEAP] = TrashHeap,
+    [ABILITY_SLUDGY_MIX] = SludgyMix,
+    [ABILITY_OVERWATCH] = Overwatch,
+    [ABILITY_WIND_RAGE] = WindRage,
+    [ABILITY_VICTORY_BOMB] = VictoryBomb,
+    [ABILITY_RAZOR_SHARP] = RazorSharp,
+    [ABILITY_TO_THE_BONE] = ToTheBone,
+    [ABILITY_BLADE_DANCE] = BladeDance,
+    [ABILITY_TAEKKYEON] = Taekkyeon,
+    [ABILITY_APE_SHIFT] = ApeShift,
+    [ABILITY_KNOW_YOUR_PLACE] = KnowYourPlace,
+    [ABILITY_DEEP_CUTS] = DeepCuts,
+    [ABILITY_LIFE_STEAL] = LifeSteal,
+    [ABILITY_RUDE_AWAKENING] = RudeAwakening,
+    [ABILITY_TERAFORM_ZERO] = TeraformZero,
+    [ABILITY_SET_ABLAZE] = SetAblaze,
+    [ABILITY_BREAKWATER] = Breakwater,
+    [ABILITY_MAGICAL_FISTS] = MagicalFists,
+    [ABILITY_CUTTHROAT] = Cutthroat,
+    [ABILITY_SAND_BENDER] = SandBender,
+    [ABILITY_SAND_PIT] = SandPit,
+    [ABILITY_DESOLATE_SUN] = DesolateSun,
+    [ABILITY_DAYBREAK] = Daybreak,
+    [ABILITY_ENERGY_SIPHON] = EnergySiphon,
+    [ABILITY_RESERVOIR] = Reservoir,
+    [ABILITY_NEUROTOXIN] = Neurotoxin,
+    [ABILITY_ENERGIZED_HORNS] = EnergizedHorns,
+    [ABILITY_SPIDER_LAIR_UPGRADE] = SpiderLairUpgrade,
+    [ABILITY_CRUST_COAT] = CrustCoat,
+    [ABILITY_PUFFY] = Puffy,
+    [ABILITY_BALLOON_BLITZ] = BalloonBlitz,
 };
 
 #pragma GCC diagnostic pop

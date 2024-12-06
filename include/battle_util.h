@@ -3,80 +3,84 @@
 
 #include "battle_ai_new.h"
 
-#define MOVE_LIMITATION_ZEROMOVE                (1 << 0)
-#define MOVE_LIMITATION_PP                      (1 << 1)
-#define MOVE_LIMITATION_DISABLED                (1 << 2)
-#define MOVE_LIMITATION_TORMENTED               (1 << 3)
-#define MOVE_LIMITATION_TAUNT                   (1 << 4)
-#define MOVE_LIMITATION_IMPRISON                (1 << 5)
+#define MOVE_LIMITATION_ZEROMOVE (1 << 0)
+#define MOVE_LIMITATION_PP (1 << 1)
+#define MOVE_LIMITATION_DISABLED (1 << 2)
+#define MOVE_LIMITATION_TORMENTED (1 << 3)
+#define MOVE_LIMITATION_TAUNT (1 << 4)
+#define MOVE_LIMITATION_IMPRISON (1 << 5)
 
-#define ABILITYEFFECT_ON_SWITCHIN                0
-#define ABILITYEFFECT_ENDTURN                    1
-#define ABILITYEFFECT_MOVES_BLOCK                2
-#define ABILITYEFFECT_ABSORBING                  3
-#define ABILITYEFFECT_MOVE_END_ATTACKER          4
-#define ABILITYEFFECT_MOVE_END                   5
-#define ABILITYEFFECT_IMMUNITY                   6
-#define ABILITYEFFECT_FORECAST                   7
-#define ABILITYEFFECT_SYNCHRONIZE                8
-#define ABILITYEFFECT_ATK_SYNCHRONIZE            9
-#define ABILITYEFFECT_INTIMIDATE1                10
-#define ABILITYEFFECT_INTIMIDATE2                11
-#define ABILITYEFFECT_TRACE1                     12
-#define ABILITYEFFECT_TRACE2                     13
-#define ABILITYEFFECT_MOVE_END_OTHER             14
-#define ABILITYEFFECT_NEUTRALIZINGGAS            15
-#define ABILITYEFFECT_AFTER_RECOIL               16
-#define ABILITYEFFECT_REACTIVE                 17
-#define ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE     18
-#define ABILITYEFFECT_MOVE_END_EITHER            19
+#define ABILITYEFFECT_ON_SWITCHIN 0
+#define ABILITYEFFECT_ENDTURN 1
+#define ABILITYEFFECT_MOVES_BLOCK 2
+#define ABILITYEFFECT_ABSORBING 3
+#define ABILITYEFFECT_MOVE_END_ATTACKER 4
+#define ABILITYEFFECT_MOVE_END 5
+#define ABILITYEFFECT_IMMUNITY 6
+#define ABILITYEFFECT_FORECAST 7
+#define ABILITYEFFECT_SYNCHRONIZE 8
+#define ABILITYEFFECT_ATK_SYNCHRONIZE 9
+#define ABILITYEFFECT_INTIMIDATE1 10
+#define ABILITYEFFECT_INTIMIDATE2 11
+#define ABILITYEFFECT_TRACE1 12
+#define ABILITYEFFECT_TRACE2 13
+#define ABILITYEFFECT_MOVE_END_OTHER 14
+#define ABILITYEFFECT_NEUTRALIZINGGAS 15
+#define ABILITYEFFECT_AFTER_RECOIL 16
+#define ABILITYEFFECT_REACTIVE 17
+#define ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE 18
+#define ABILITYEFFECT_MOVE_END_EITHER 19
 // Special cases
-#define ABILITYEFFECT_SWITCH_IN_TERRAIN          0xFE
-#define ABILITYEFFECT_SWITCH_IN_WEATHER          0xFF
+#define ABILITYEFFECT_SWITCH_IN_TERRAIN 0xFE
+#define ABILITYEFFECT_SWITCH_IN_WEATHER 0xFF
 
-#define ITEMEFFECT_ON_SWITCH_IN                 0x0
-#define ITEMEFFECT_MOVE_END                     0x3
-#define ITEMEFFECT_KINGSROCK                    0x4
-#define ITEMEFFECT_TARGET                       0x5
-#define ITEMEFFECT_ORBS                         0x6
-#define ITEMEFFECT_LIFEORB_SHELLBELL            0x7
-#define ITEMEFFECT_BATTLER_MOVE_END             0x8 // move end effects for just the battler, not whole field
+#define ITEMEFFECT_ON_SWITCH_IN 0x0
+#define ITEMEFFECT_MOVE_END 0x3
+#define ITEMEFFECT_KINGSROCK 0x4
+#define ITEMEFFECT_TARGET 0x5
+#define ITEMEFFECT_ORBS 0x6
+#define ITEMEFFECT_LIFEORB_SHELLBELL 0x7
+#define ITEMEFFECT_BATTLER_MOVE_END 0x8  // move end effects for just the battler, not whole field
 
-#define WEATHER_HAS_EFFECT (!gFieldTimers.clearSkiesTimer && !IsAbilityOnField(ABILITY_CLOUD_NINE) && !IsAbilityOnField(ABILITY_AIR_LOCK) && !IsAbilityOnField(ABILITY_CLUELESS))
+#define WEATHER_HAS_EFFECT \
+    (!gFieldTimers.clearSkiesTimer && !IsAbilityOnField(ABILITY_CLOUD_NINE) && !IsAbilityOnField(ABILITY_AIR_LOCK) && !IsAbilityOnField(ABILITY_CLUELESS))
 #define TERRAIN_HAS_EFFECT (!IsAbilityOnField(ABILITY_CLUELESS))
-#define ROOM_HAS_EFFECT    (!IsAbilityOnField(ABILITY_CLUELESS))
+#define ROOM_HAS_EFFECT (!IsAbilityOnField(ABILITY_CLUELESS))
 
-#define BATTLER_NONE       0
-#define BATTLER_ABILITY    1
-#define BATTLER_INNATE     2
+#define BATTLER_NONE 0
+#define BATTLER_ABILITY 1
+#define BATTLER_INNATE 2
 
-#define WEATHER_DURATION                8
-#define WEATHER_DURATION_EXTENDED       12
-#define TERRAIN_DURATION                8
-#define TERRAIN_DURATION_EXTENDED       12
-#define GRAVITY_DURATION                5
-#define GRAVITY_DURATION_EXTENDED       8
-#define TRICK_ROOM_DURATION             5
-#define TRICK_ROOM_DURATION_SHORT       3
-#define WONDER_ROOM_DURATION            5
-#define MAGIC_ROOM_DURATION             5
-#define INVERSE_ROOM_DURATION           5
-#define INVERSE_ROOM_DURATION_SHORT     3
-#define ROOM_DURATION_MAX               255
-#define SCREEN_DURATION                 5
-#define SCREEN_DURATION_EXTENDED        8
-#define SCREEN_DURATION_SHORT           3
-#define TAILWIND_DURATION               3
-#define TAILWIND_DURATION_SHORT         3
-#define PLEDGE_DURATION                 3
-#define SPORT_DURATION                  5
-#define QUASH_DURATION                  5
+#define WEATHER_DURATION 8
+#define WEATHER_DURATION_EXTENDED 12
+#define TERRAIN_DURATION 8
+#define TERRAIN_DURATION_EXTENDED 12
+#define GRAVITY_DURATION 5
+#define GRAVITY_DURATION_EXTENDED 8
+#define TRICK_ROOM_DURATION 5
+#define TRICK_ROOM_DURATION_SHORT 3
+#define WONDER_ROOM_DURATION 5
+#define MAGIC_ROOM_DURATION 5
+#define INVERSE_ROOM_DURATION 5
+#define INVERSE_ROOM_DURATION_SHORT 3
+#define ROOM_DURATION_MAX 255
+#define SCREEN_DURATION 5
+#define SCREEN_DURATION_EXTENDED 8
+#define SCREEN_DURATION_SHORT 3
+#define TAILWIND_DURATION 3
+#define TAILWIND_DURATION_SHORT 3
+#define PLEDGE_DURATION 3
+#define SPORT_DURATION 5
+#define QUASH_DURATION 5
 
-#define IS_WHOLE_SIDE_ALIVE(battler)((IsBattlerAlive(battler) && IsBattlerAlive(BATTLE_PARTNER(battler))))
+#define IS_WHOLE_SIDE_ALIVE(battler) ((IsBattlerAlive(battler) && IsBattlerAlive(BATTLE_PARTNER(battler))))
 #define BATTLER_HAS_ABILITY(battlerId, ability) BattlerHasAbility((battlerId), (ability), TRUE)
-#define BATTLER_HAS_ABILITY_AND_ALIVE(battlerId, ability, checkMoldBreaker) (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, ability, checkMoldBreaker))
+#define BATTLER_HAS_ABILITY_AND_ALIVE(battlerId, ability, checkMoldBreaker) \
+    (IsBattlerAlive(battlerId) && BattlerHasAbility(battlerId, ability, checkMoldBreaker))
 
-#define BATTLER_HEALING_BLOCKED(battlerId) (gStatuses3[battlerId] & STATUS3_HEAL_BLOCK || gBattleMons[battlerId].status1 & STATUS1_BLEED || IsAbilityOnOpposingSide(battlerId, ABILITY_PERMANENCE) || IsBloodStainAffected(battlerId))
+#define BATTLER_HEALING_BLOCKED(battlerId)                                                                                                                     \
+    (gStatuses3[battlerId] & STATUS3_HEAL_BLOCK || gBattleMons[battlerId].status1 & STATUS1_BLEED || IsAbilityOnOpposingSide(battlerId, ABILITY_PERMANENCE) || \
+     IsBloodStainAffected(battlerId))
 
 typedef enum {
     MULTIHIT_SINGLE,
@@ -98,8 +102,7 @@ typedef enum {
     PARENTAL_BOND_ICE_COLD_HUNTER,
 } MultihitType;
 
-enum MiscMoveEffects
-{
+enum MiscMoveEffects {
     MISC_EFFECT_SUPEREFFECTIVE_BOOST = 1,
     MISC_EFFECT_FAINTED_MON_BOOST,
     MISC_EFFECT_ELECTRIC_TERRAIN_BOOST,
@@ -114,69 +117,63 @@ enum MiscMoveEffects
 };
 
 // for Natural Gift and Fling
-struct TypePower
-{
+struct TypePower {
     u8 type;
     u8 power;
     u16 effect;
 };
 
-typedef enum
-{
+typedef enum {
     COMMANDER_NOT_ACTIVE = 0,
     COMMANDER_ACTIVATING,
     COMMANDER_ACTIVE,
     COMMANDER_NEEDS_CANCELLING,
 } CommanderState;
 
-typedef enum
-{
+typedef enum {
     RESTRAINING_ORDER_NOT_TRIGGERED = 0,
     RESTRAINING_ORDER_ACTIVATING,
     RESTRAINING_ORDER_DONE,
 } RestrainingOrderState;
 
-typedef enum
-{
+typedef enum {
     PARADOX_BOOST_NOT_ACTIVE = 0,
     PARADOX_BOOSTER_ENERGY = 1,
     PARADOX_WEATHER_ACTIVE = 2,
 } ParadoxBoostSource;
 
-struct ParadoxBoost
-{
+typedef struct {
     ParadoxBoostSource source:2;
     u8 statId:3;
-};
+} ParadoxBoost;
 
-struct StatCopyState
-{
+typedef struct {
     bool8 inProgress:1;
     u8 battler:3;
     u8 stat:4;
     bool8 announced:1;
-};
+} StatCopyState;
 
-struct CudChewState
-{
+typedef struct {
     u16 itemId;
     bool8 setThisTurn:1;
     bool8 activating:1;
-};
+} CudChewState;
 
-union AbilityStates
-{
-    struct ParadoxBoost paradoxBoost;
-    struct StatCopyState statCopyState;
-    struct CudChewState cudChewState;
+typedef union AbilityStates {
+    ParadoxBoost paradoxBoost;
+    StatCopyState statCopyState;
+    CudChewState cudChewState;
     u32 intValue;
-};
+} AbilityStates;
 
 #define ABILITY_SUPPRESSION_PERSISTENT (1 << 14)
 #define ABILITY_SUPPRESSION_ABILITY (1 << 15)
 #define ABILITY_SUPPRESSION_MASK (ABILITY_SUPPRESSION_ABILITY | ABILITY_SUPPRESSION_PERSISTENT)
 
-#define IS_IRON_FIST(attacker, moveToCheck) (gBattleMoves[moveToCheck].flags & FLAG_IRON_FIST_BOOST || (BATTLER_HAS_ABILITY(attacker, ABILITY_BRAWLING_WYVERN) && IS_MOVE_TYPE(moveToCheck, TYPE_DRAGON)))
+#define IS_IRON_FIST(attacker, moveToCheck)                    \
+    (gBattleMoves[moveToCheck].flags & FLAG_IRON_FIST_BOOST || \
+     (BATTLER_HAS_ABILITY(attacker, ABILITY_BRAWLING_WYVERN) && IS_MOVE_TYPE(moveToCheck, TYPE_DRAGON)))
 
 extern const struct TypePower gNaturalGiftTable[];
 extern const u16 gPercentToModifier[];
@@ -205,7 +202,7 @@ u8 GetBattlerForBattleScript(u8 caseId);
 bool8 IsSleepDisabled(u8 battlerId);
 bool8 IsSleepClauseDisablingMove(u8 battlerId, u16 move);
 u16 GetParentalBondMultiplier(MultihitType parentalBondType, int turn);
-void MarkAllBattlersForControllerExec(void); // unused
+void MarkAllBattlersForControllerExec(void);  // unused
 bool32 IsBattlerMarkedForControllerExec(u8 battlerId);
 void MarkBattlerForControllerExec(u8 battlerId);
 void MarkBattlerReceivedLinkData(u8 arg0);
@@ -254,13 +251,13 @@ int HasAbilityIgnoringSuppression(int battler, int ability);
 int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
 int IsSuppressed(int battler, int ability, int checkMoldBreaker);
 
-#define ON_ABILITY(battler, checkMoldBreaker, condition, callback) \
-for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) { \
-    int ability = gBattleMons[battler].abilities[idx]; \
-    FILTER(condition) \
-    FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
-    callback; \
-}
+#define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
+    for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) {       \
+        int ability = gBattleMons[battler].abilities[idx];           \
+        FILTER(condition)                                            \
+        FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
+        callback;                                                    \
+    }
 
 void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
 u32 IsAbilityOnSide(u32 battlerId, u32 ability);
@@ -269,7 +266,7 @@ u32 IsAbilityOnField(u32 ability);
 u32 IsAbilityOnFieldExcept(u32 battlerId, u32 ability);
 u32 IsAbilityPreventingEscape(u32 battlerId);
 bool32 IsBattlerProtected(u8 battlerId, u16 move);
-bool32 CanBattlerEscape(u32 battlerId); // no ability check
+bool32 CanBattlerEscape(u32 battlerId);  // no ability check
 void BattleScriptExecute(const u8* BS_ptr);
 void BattleScriptPushCursorAndCallback(const u8* BS_ptr);
 u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn);
@@ -285,10 +282,10 @@ bool32 IsMoveMakingContact(u16 move, u8 battlerAtk);
 bool32 IsBattlerGrounded(u8 battlerId);
 bool32 IsBattlerGroundedIgnoreType(u8 battlerId);
 bool32 IsBattlerAlive(u8 battlerId);
-u8 GetBattleMonMoveSlot(struct BattlePokemon *battleMon, u16 move);
+u8 GetBattleMonMoveSlot(struct BattlePokemon* battleMon, u16 move);
 u32 GetBattlerWeight(u8 battlerId);
 s32 CalculateMoveDamage(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags);
-s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, u16 *typeEffectivenessModifier);
+s32 CalculateMoveDamageAndEffectiveness(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, u16* typeEffectivenessModifier);
 u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 battlerDef, u8 moveType, bool32 updateFlags);
 int CalcMoveDamageAi(int move, int battlerAtk, int battlerDef, u8* moveType, int fixedBasePower, struct MoveState* moveState);
 u16 CalcTypeEffectivenessMultiplier(u16 move, u8 moveType, u8 battlerAtk, u8 battlerDef, bool32 recordAbilities);
@@ -304,18 +301,18 @@ void UndoFormChange(u32 monId, u32 side, bool32 isSwitchingOut);
 bool32 DoBattlersShareType(u32 battler1, u32 battler2);
 bool32 CanBattlerGetOrLoseItem(u8 battlerId, u16 itemId);
 bool32 DoesBattlerIgnoreAbilityorInnateChecks(u8 battler);
-struct Pokemon *GetIllusionMonPtr(u32 battlerId);
+struct Pokemon* GetIllusionMonPtr(u32 battlerId);
 void ClearIllusionMon(u32 battlerId);
-bool32 SetIllusionMon(struct Pokemon *mon, u32 battlerId);
+bool32 SetIllusionMon(struct Pokemon* mon, u32 battlerId);
 void TryPreemptiveActions();
 u8 GetBattleMoveSplit(u32 moveId);
 bool32 TestMoveFlags(u16 move, u32 flag);
-struct Pokemon *GetBattlerPartyData(u8 battlerId);
+struct Pokemon* GetBattlerPartyData(u8 battlerId);
 bool32 CanFling(u8 battlerId);
 bool32 IsTelekinesisBannedSpecies(u16 species);
 bool32 IsHealBlockPreventingMove(u8 battler, u32 move);
 bool32 HasEnoughHpToEatBerry(u32 battlerId, u32 hpFraction, u32 itemId);
-void SortBattlersBySpeed(u8 *battlers, bool8 slowToFast);
+void SortBattlersBySpeed(u8* battlers, bool8 slowToFast);
 bool32 TestSheerForceFlag(u8 battler, u16 move);
 void TryRestoreStolenItems(void);
 bool32 CanStealItem(u8 battlerStealing, u8 battlerItem, u16 item);
@@ -355,8 +352,8 @@ void SetSingleUseAbilityCounter(u8 battler, u16 ability, u8 value);
 void IncrementSingleUseAbilityCounter(u8 battler, u16 ability, u8 value);
 u32 GetAbilityState(u8 battler, u16 ability);
 void SetAbilityState(u8 battler, u16 ability, u32 value);
-union AbilityStates GetAbilityStateAs(u8 battler, u16 ability);
-void SetAbilityStateAs(u8 battler, u16 ability, union AbilityStates value);
+AbilityStates GetAbilityStateAs(u8 battler, u16 ability);
+void SetAbilityStateAs(u8 battler, u16 ability, AbilityStates value);
 void IncrementAbilityState(u8 battler, u16 ability, u32 value);
 int GetHighestStatIdExcept(int battlerId, int includeStatStages, int exclude);
 u8 GetHighestStatId(u8 battlerId, u8 includeStatStages);
@@ -389,12 +386,13 @@ int IsMagicGuardProtected(int battler);
 #define ABSORB_RESULT_STAT 1 << 1
 #define ABSORB_RESULT_FLASH_FIRE 1 << 2
 int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType);
-int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability);
-u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
+int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int* statId, u16* ability);
+u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit,
+                                u16* resistanceMultiplier);
 int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType);
-int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8 ** immunityScript, u8* overrideBattler, u16* abilityPopup);
+int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8** immunityScript, u8* overrideBattler, u16* abilityPopup);
 u16 DivideModifier(u16 mod1, u16 mod2);
-void MulModifier(u16 *modifier, u16 val);
+void MulModifier(u16* modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);
 int IsBloodStainAffected(int battler);
 int IsUnaware(int battler);
@@ -416,7 +414,7 @@ bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower);
 int UseIntimidateClone(int battler, int abilityToCheck);
 bool32 TryRemoveScreens(u8 battler);
 void DisableSwitchInAbility(u8 battlerId, u16 ability);
-bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer);
+bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8* timer);
 
 MultihitType GetMultihitType(int battler, int move);
 
@@ -447,12 +445,12 @@ u8 getMonotypeChampType(void);
 bool8 IsTwoStrikesMove(u16 move);
 
 u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u16 typeEffectivenessModifier, bool32 isCrit, bool32 updateFlags);
-void MulByTypeEffectiveness(u16 *modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities);
+void MulByTypeEffectiveness(u16* modifier, u16 move, u8 moveType, u8 battlerDef, u8 defType, u8 battlerAtk, bool32 recordAbilities);
 
 u32 GetIllusionMonSpecies(u32 battlerId);
 s32 DoMoveDamageCalcBattleMenu(u16 move, u8 battlerAtk, u8 battlerDef, u8* moveType, bool32 isCrit, u8 randomFactor, u16* typeEffectivenessModifier);
 
-//Monotype funcs
+// Monotype funcs
 bool8 IsBattlerCursed(u8 battler);
 void MakePlayerTeamAsleep(void);
-#endif // GUARD_BATTLE_UTIL_H
+#endif  // GUARD_BATTLE_UTIL_H

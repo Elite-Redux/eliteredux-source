@@ -7735,14 +7735,14 @@ void SetCudChew(u32 battlerId, u32 itemId)
         && BATTLER_HAS_ABILITY(battlerId, ABILITY_CUD_CHEW)
         && gBattleStruct->ateBerry[GetBattlerSide(battlerId)] & gBitTable[gBattlerPartyIndexes[battlerId]])
     {
-        struct CudChewState state = GetAbilityStateAs(battlerId, ABILITY_CUD_CHEW).cudChewState;
+        CudChewState state = GetAbilityStateAs(battlerId, ABILITY_CUD_CHEW).cudChewState;
         if (state.activating)
         {
-            SetAbilityStateAs(battlerId, ABILITY_CUD_CHEW, (union AbilityStates) { .cudChewState = { 0 }});
+            SetAbilityStateAs(battlerId, ABILITY_CUD_CHEW, (AbilityStates) { .cudChewState = { 0 }});
         }
         else if (!state.itemId)
         {
-            SetAbilityStateAs(battlerId, ABILITY_CUD_CHEW, (union AbilityStates) { .cudChewState = { .itemId = itemId, .setThisTurn = TRUE }});
+            SetAbilityStateAs(battlerId, ABILITY_CUD_CHEW, (AbilityStates) { .cudChewState = { .itemId = itemId, .setThisTurn = TRUE }});
         }
     }
 }
@@ -10342,15 +10342,15 @@ static void Cmd_various(void)
 
         if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PROTOSYNTHESIS))
         {
-            struct ParadoxBoost state = GetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS).paradoxBoost;
+            ParadoxBoost state = GetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS).paradoxBoost;
             if (state.source == PARADOX_WEATHER_ACTIVE && !(WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY))
             {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_PROTOSYNTHESIS;
                 if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY)
                 {
                     // Push this first so it resolves last
-                    struct ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_BOOSTER_ENERGY };
-                    SetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS, (union AbilityStates) { .paradoxBoost = boost });
+                    ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_BOOSTER_ENERGY };
+                    SetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS, (AbilityStates) { .paradoxBoost = boost });
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
                     RemoveItem(gActiveBattler);
                     SetStatChanger(boost.statId, 0);
@@ -10361,9 +10361,9 @@ static void Cmd_various(void)
             }
             else if (state.source == PARADOX_BOOST_NOT_ACTIVE && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY)
             {
-                struct ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
+                ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
                 gBattleScripting.abilityPopupOverwrite = ABILITY_PROTOSYNTHESIS;
-                SetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS, (union AbilityStates) { .paradoxBoost = boost });
+                SetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS, (AbilityStates) { .paradoxBoost = boost });
                 SetStatChanger(boost.statId, 0);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
                 BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
@@ -10410,15 +10410,15 @@ static void Cmd_various(void)
 
         if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_QUARK_DRIVE))
         {
-            struct ParadoxBoost state = GetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE).paradoxBoost;
+            ParadoxBoost state = GetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE).paradoxBoost;
             if (state.source == PARADOX_WEATHER_ACTIVE && !(TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN))
             {
                 gBattleScripting.abilityPopupOverwrite = ABILITY_QUARK_DRIVE;
                 if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY)
                 {
                     // Push this first so it resolves last
-                    struct ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_BOOSTER_ENERGY };
-                    SetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE, (union AbilityStates) { .paradoxBoost = boost });
+                    ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_BOOSTER_ENERGY };
+                    SetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE, (AbilityStates) { .paradoxBoost = boost });
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
                     RemoveItem(gActiveBattler);
                     SetStatChanger(boost.statId, 0);
@@ -10429,9 +10429,9 @@ static void Cmd_various(void)
             }
             else if (state.source == PARADOX_BOOST_NOT_ACTIVE && TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
             {
-                struct ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
+                ParadoxBoost boost = { .statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE };
                 gBattleScripting.abilityPopupOverwrite = ABILITY_QUARK_DRIVE;
-                SetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE, (union AbilityStates) { .paradoxBoost = boost });
+                SetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE, (AbilityStates) { .paradoxBoost = boost });
                 SetStatChanger(boost.statId, 0);
                 gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_TERRAIN;
                 BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
@@ -10471,7 +10471,7 @@ static void Cmd_various(void)
         {
             u8 battler = gBattlerAttacker = gBattlerByTurnOrder[i];
             u8 otherBattler;
-            struct StatCopyState state;
+            StatCopyState state;
             s8 change = 0;
 
             if (!IsBattlerAlive(battler)) continue;
@@ -10504,16 +10504,16 @@ static void Cmd_various(void)
                 }
             }
 
-            if (state.stat >= NUM_BATTLE_STATS) state = (struct StatCopyState) {0};
+            if (state.stat >= NUM_BATTLE_STATS) state = (StatCopyState) {0};
 
-            SetAbilityStateAs(battler, ABILITY_EGOIST, (union AbilityStates) { .statCopyState = state });
+            SetAbilityStateAs(battler, ABILITY_EGOIST, (AbilityStates) { .statCopyState = state });
             return;
         }
 
         gEffectBattler = IsAbilityOnField(ABILITY_SHARING_IS_CARING) - 1;
         if ((s8)gEffectBattler >= 0)
         {
-            struct StatCopyState state = GetAbilityStateAs(gEffectBattler, ABILITY_SHARING_IS_CARING).statCopyState;
+            StatCopyState state = GetAbilityStateAs(gEffectBattler, ABILITY_SHARING_IS_CARING).statCopyState;
             if (state.inProgress)
             {
                 for (; state.battler < gBattlersCount; state.battler++)
@@ -10542,7 +10542,7 @@ static void Cmd_various(void)
                                     BattleScriptCall(BattleScript_AbilityPopUpAndWait);
                                     state.announced = TRUE;
                                 }
-                                SetAbilityStateAs(gEffectBattler, ABILITY_SHARING_IS_CARING, (union AbilityStates) { .statCopyState = state });
+                                SetAbilityStateAs(gEffectBattler, ABILITY_SHARING_IS_CARING, (AbilityStates) { .statCopyState = state });
                                 return;
                             }
                         }
@@ -10550,8 +10550,8 @@ static void Cmd_various(void)
 
                     if (state.stat >= NUM_BATTLE_STATS) state.stat = 0;
                 }
-                if (state.battler >= gBattlersCount) state = (struct StatCopyState) {0};
-                SetAbilityStateAs(gEffectBattler, ABILITY_SHARING_IS_CARING, (union AbilityStates) { .statCopyState = state });
+                if (state.battler >= gBattlersCount) state = (StatCopyState) {0};
+                SetAbilityStateAs(gEffectBattler, ABILITY_SHARING_IS_CARING, (AbilityStates) { .statCopyState = state });
                 return;
             }
         }
