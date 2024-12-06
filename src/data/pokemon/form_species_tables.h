@@ -924,6 +924,7 @@ static const u16 sOricorioFormSpeciesIdTable[] = {
 
 static const u16 sRockruffFormSpeciesIdTable[] = {
     SPECIES_ROCKRUFF,
+    SPECIES_ROCKRUFF_REDUX,
     SPECIES_ROCKRUFF_OWN_TEMPO,
     FORM_SPECIES_END,
 };
