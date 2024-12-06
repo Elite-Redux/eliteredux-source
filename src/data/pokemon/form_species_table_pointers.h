@@ -1194,4 +1194,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_HATTERENE_REDUX_MEGA] = sHattereneFormSpeciesIdTable,
 
+    [SPECIES_WIMPOD_REDUX] = sWimpodFormSpeciesIdTable,
+
 };

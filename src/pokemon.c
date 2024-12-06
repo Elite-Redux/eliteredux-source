@@ -3479,6 +3479,10 @@ static const u8 sMonFrontAnimIdsTable[NUM_SPECIES - 1] =
     [SPECIES_HATTREM_REDUX - 1]                = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_HATTERENE_REDUX - 1]              = ANIM_V_SQUISH_AND_BOUNCE,
     [SPECIES_HATTERENE_REDUX_MEGA - 1]         = ANIM_V_SQUISH_AND_BOUNCE,
+
+    [SPECIES_WIMPOD_REDUX - 1]                 = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_GOLISOPOD_REDUX - 1]              = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_GOLISOPOD_REDUX_MEGA - 1]         = ANIM_V_SQUISH_AND_BOUNCE,
 };
 
 static const u8 sMonAnimationDelayTable[NUM_SPECIES - 1] =

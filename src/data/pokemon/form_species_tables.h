@@ -2171,3 +2171,8 @@ static const u16 sHattremFormSpeciesIdTable[] = {
     SPECIES_HATTREM_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sWimpodFormSpeciesIdTable[] = {
+    SPECIES_WIMPOD,
+    SPECIES_WIMPOD_REDUX,
+    FORM_SPECIES_END,
+};

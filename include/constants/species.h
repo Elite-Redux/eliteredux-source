@@ -1919,8 +1919,11 @@
 #define SPECIES_HATTREM_REDUX               REDUX_FORMS_START + 135
 #define SPECIES_HATTERENE_REDUX             REDUX_FORMS_START + 136
 #define SPECIES_HATTERENE_REDUX_MEGA        REDUX_FORMS_START + 137
+#define SPECIES_WIMPOD_REDUX                REDUX_FORMS_START + 138
+#define SPECIES_GOLISOPOD_REDUX             REDUX_FORMS_START + 139
+#define SPECIES_GOLISOPOD_REDUX_MEGA        REDUX_FORMS_START + 140
 
-#define LAST_REDUX_FORM                     SPECIES_HATTERENE_REDUX_MEGA
+#define LAST_REDUX_FORM                     SPECIES_GOLISOPOD_REDUX_MEGA
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

@@ -1798,6 +1798,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_EMBOAR_MEGA] = _("Emboar"),
     [SPECIES_SAMUROTT_MEGA] = _("Samurott"),
     [SPECIES_MORPEKYLL] = _("Morpekyll"),
+[SPECIES_WIMPOD_REDUX] = _("Wimpod"),
 [SPECIES_HATTERENE_REDUX_MEGA] = _("Hatterene"),
 [SPECIES_HATTERENE_REDUX] = _("Hatterene"),
 [SPECIES_HATTREM_REDUX] = _("Hattrem"),
