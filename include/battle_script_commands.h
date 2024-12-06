@@ -1,21 +1,20 @@
 #ifndef GUARD_BATTLE_SCRIPT_COMMANDS_H
 #define GUARD_BATTLE_SCRIPT_COMMANDS_H
 
-#include "constants/pokemon.h"
 #include "battle_ai_new.h"
 #include "battle_util.h"
+#include "constants/pokemon.h"
 
-#define WINDOW_CLEAR            0x1
-#define WINDOW_x80              0x80
+#define WINDOW_CLEAR 0x1
+#define WINDOW_x80 0x80
 
-struct StatFractions
-{
+struct StatFractions {
     u8 dividend;
     u8 divisor;
 };
 
-//Intimidate Clone Data
-enum{
+// Intimidate Clone Data
+enum {
     I_CLONE_INTIMIDATE,
     I_CLONE_SCARE,
     I_CLONE_FEARMONGER,
@@ -28,11 +27,10 @@ enum{
     NUM_INTIMIDATE_CLONES
 };
 
-struct IntimidateCloneData
-{
+struct IntimidateCloneData {
     u16 ability;
-    u8 statsLowered[3]; //atk, def, speed
-    u8 numStatsLowered:2; //1 - 3
+    u8 statsLowered[3];    // atk, def, speed
+    u8 numStatsLowered:2;  // 1 - 3
     bool8 targetBoth:1;
     u8 statChange:4;
 };
@@ -82,8 +80,8 @@ u32 IsDesertCloakProtected(u32 battler);
 u8 getStatToLowerFromIntimidateClone(u16 ability, u8 num);
 bool8 IsBattlerImmuneToLowerStatsFromIntimidateClone(u8 battler);
 void SetStatChanger(u8 statId, s8 change);
-s8 ChangeStatBuffsImplicit(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
-s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr);
+s8 ChangeStatBuffsImplicit(s8 statValue, u32 statId, u32 flags, const u8* BS_ptr);
+s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS_ptr);
 u8 GetFirstFaintedPartyIndex(u8 battler);
 void SetCudChew(u32 battlerId, u32 itemId);
 void SetBattlerAffectedFlag(int attacker, int target, int ability);
@@ -93,9 +91,10 @@ int ShouldSetMoldBreaker(int battler, int move);
 int EatTargetBerry(int battler, int target);
 void ClearPowerOfAlchemyState(int alchemyBattler, int battler);
 int UpdateBattlerItem(int battler, int newItem);
+int Infiltrates(int battler, int move, InfiltrateType type);
 
-extern void (* const gBattleScriptingCommandsTable[])(void);
+extern void (*const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];
 extern const struct StatFractions gAccuracyStageRatios[];
 
-#endif // GUARD_BATTLE_SCRIPT_COMMANDS_H
+#endif  // GUARD_BATTLE_SCRIPT_COMMANDS_H

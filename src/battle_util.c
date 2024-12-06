@@ -7270,8 +7270,16 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef) {
         MUL_MODIFIER(modifier, val);   \
     }
 
-static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int battlerDef, int move, int moveType, int basePower,
-                                                int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier) {
+static void CalculateOffensiveAbilityMultiplier(int ability,
+                                                int battlerAtk,
+                                                int battlerDef,
+                                                int move,
+                                                int moveType,
+                                                int basePower,
+                                                int typeEffectivenessMultiplier,
+                                                int isCrit,
+                                                u16 *resistance,
+                                                u16 *modifier) {
     switch (ability) {
         case ABILITY_OLD_MARINER:
         case ABILITY_SEAWEED:
@@ -7777,8 +7785,8 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
     }
 }
 
-static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int battlerDef, int move, int moveType, int typeEffectivenessModifier, int isCrit,
-                                                u16 *resistance, u16 *modifier) {
+static void CalculateDefensiveAbilityMultiplier(
+    int ability, int battlerAtk, int battlerDef, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier) {
     switch (ability) {
         case ABILITY_OLD_MARINER:
         case ABILITY_SEAWEED:
@@ -7972,8 +7980,8 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
 #undef MUL
 #undef RESISTANCE
 
-u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit,
-                                u16 *resistanceMultiplier) {
+u16 CalculateAbilityMultipliers(
+    int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistanceMultiplier) {
     u16 multiplier = UQ_4_12(1.0);
     int i = 0;
 
@@ -8799,9 +8807,7 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
     // reflect, light screen, aurora veil
     if (((gSideStatuses[defSide] & SIDE_STATUS_REFLECT && IS_MOVE_PHYSICAL(move)) ||
          (gSideStatuses[defSide] & SIDE_STATUS_LIGHTSCREEN && IS_MOVE_SPECIAL(move)) || (gSideStatuses[defSide] & SIDE_STATUS_AURORA_VEIL)) &&
-        !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_INFILTRATOR) && !BATTLER_HAS_ABILITY(battlerAtk, ABILITY_MARINE_APEX) &&
-        !(BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) &&
-        !(gVolatileStructs[battlerAtk].readiedAction && BattlerHasAbility(battlerAtk, ABILITY_DEMOLITIONIST, FALSE)) && !isCrit) {
+        !Infiltrates(battlerAtk, move, INFILTRATE_SCREENS | INFILTRATE_BREAK_SCREENS) && !isCrit) {
         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
             MulModifier(&finalModifier, UQ_4_12(0.66));
         else
@@ -8870,8 +8876,8 @@ u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, u
     return dmg;
 }
 
-s32 DoMoveDamageCalcInternal(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 updateFlags,
-                             u16 typeEffectivenessModifier) {
+s32 DoMoveDamageCalcInternal(
+    u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, s32 fixedBasePower, bool32 isCrit, bool32 updateFlags, u16 typeEffectivenessModifier) {
     s32 dmg;
 
     // Don't calculate damage if the move has no effect on target.
@@ -8923,7 +8929,14 @@ s32 DoMoveDamageCalcInternal(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType
     return dmg;
 }
 
-static s32 DoMoveDamageCalc(u16 move, u8 battlerAtk, u8 battlerDef, u8 *moveType, s32 fixedBasePower, bool32 isCrit, bool32 randomFactor, bool32 updateFlags,
+static s32 DoMoveDamageCalc(u16 move,
+                            u8 battlerAtk,
+                            u8 battlerDef,
+                            u8 *moveType,
+                            s32 fixedBasePower,
+                            bool32 isCrit,
+                            bool32 randomFactor,
+                            bool32 updateFlags,
                             u16 *typeEffectivenessModifier) {
     s32 dmg;
     SetSwapDamageCategory(battlerAtk, battlerDef, move);

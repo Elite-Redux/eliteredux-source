@@ -9,6 +9,13 @@ typedef int (*AbilityOnAbsorbHandler)(int battler, int move, int moveType, int* 
 typedef int (*AbilityOnImmuneHandler)(int battler, int attacker, int move, int moveType, const u8** immunityScript);
 
 typedef enum {
+    INFILTRATE_SCREENS = 1 << 0,
+    INFILTRATE_SUBSTITUTE = 1 << 1,
+    INFILTRATE_BREAK_SCREENS = 1 << 2,
+} InfiltrateType;
+typedef InfiltrateType (*AbilityOnInfiltrateHandler)(int battler, int move);
+
+typedef enum {
     APPLY_ON_SELF = 0,
     APPLY_ON_ALLY = 1,
     APPLY_ON_FOE = 2,
@@ -21,6 +28,7 @@ typedef struct Ability {
     const AbilityOnSwitchHandler onSwitch;
     const AbilityOnAbsorbHandler onAbsorb;
     const AbilityOnImmuneHandler onImmune;
+    const AbilityOnInfiltrateHandler onInfiltrate;
     u16 breakable:1;
     u16 unsuppressable:1;
     u16 persistent:1;
@@ -29,6 +37,7 @@ typedef struct Ability {
     u16 absorbUp2:1;
     u16 redirectType:5;
     u16 isSoundproof:1;
+    u16 noDamageHits:2;
     AbilityApplyOn onImmuneFor:2;
 } Ability;
 

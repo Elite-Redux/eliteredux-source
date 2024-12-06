@@ -35,6 +35,9 @@
 #define ON_IMMUNE static int COMBINE(OnImmune, CONTEXT)(int battler, int attacker, int move, int moveType, const u8 **immunityScript)
 #define CONTEXT_ON_IMMUNE .onImmune = COMBINE(OnImmune, CONTEXT)
 
+#define ON_INFILTRATE static InfiltrateType COMBINE(onInfiltrate, CONTEXT)(int battler, int move)
+#define CONTEXT_ON_INFILTRATE .onInfiltrate = COMBINE(onInfiltrate, CONTEXT)
+
 int IsApplyOnFlagAppropriate(int applyTo, int from, AbilityApplyOn flag) {
     if (flag == APPLY_ON_SELF) return applyTo == from;
     if (applyTo == from) return flag != APPLY_ON_FOE;
@@ -1427,9 +1430,13 @@ static const Ability Imposter = {
 
 #undef CONTEXT
 #define CONTEXT Infiltrator
+ON_INFILTRATE {
+    return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE;
+}
 static const Ability Infiltrator = {
     .name = $("Infiltrator"),
     .description = $("Own moves bypass Substitutes\nand damage reduction screens."),
+    CONTEXT_ON_INFILTRATE,
 };
 
 #undef CONTEXT
@@ -3500,6 +3507,7 @@ static const Ability Thundercall = {
 static const Ability MarineApex = {
     .name = $("Marine Apex"),
     .description = $("50% more damage to Water-\ntypes + Infiltrator."),
+    .onInfiltrate = Infiltrator.onInfiltrate,
 };
 
 #undef CONTEXT
@@ -3797,6 +3805,7 @@ static const Ability CheatingDeath = {
     .name = $("Cheating Death"),
     .description = $("Gets no damage for\nthe first two hits."),
     .persistent = TRUE,
+    .noDamageHits = 2,
     CONTEXT_ON_SWITCH,
 };
 
@@ -5238,6 +5247,7 @@ static const Ability Gallantry = {
     .description = $("Gets no damage for\nfirst hit."),
     .persistent = TRUE,
     .breakable = TRUE,
+    .noDamageHits = 1,
     CONTEXT_ON_SWITCH,
 };
 
@@ -5507,10 +5517,15 @@ static const Ability FlamingMaw = {
 
 #undef CONTEXT
 #define CONTEXT Demolitionist
+ON_INFILTRATE {
+    if (gVolatileStructs[battler].readiedAction && !IS_MOVE_STATUS(move)) return INFILTRATE_BREAK_SCREENS;
+    return FALSE;
+}
 static const Ability Demolitionist = {
     .name = $("Demolitionist"),
     .description = $("Readied Action + Ignores Protect\n+ screens break on readied turn"),
     .onSwitch = ReadiedAction.onSwitch,
+    CONTEXT_ON_INFILTRATE,
 };
 
 #undef CONTEXT
@@ -6157,9 +6172,13 @@ static const Ability DragonsRitual = {
 
 #undef CONTEXT
 #define CONTEXT PinnacleBlade
+ON_INFILTRATE {
+    return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : 0;
+}
 static const Ability PinnacleBlade = {
     .name = $("Pinnacle Blade"),
     .description = $("Slashing moves always hit and\nbreak protection and barriers."),
+    CONTEXT_ON_INFILTRATE,
 };
 
 #undef CONTEXT

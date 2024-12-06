@@ -1,5 +1,6 @@
 #include "constants/battle_script_commands.h"
 
+#include "abilities.h"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_new.h"
@@ -10030,8 +10031,7 @@ s8 ChangeStatBuffs(u8 battler, s8 statValue, u32 statId, u32 flags, const u8* BS
     if (statValue <= -1)  // Stat decrease.
     {
         if (gSideTimers[GET_BATTLER_SIDE(battler)].mistTimer && !certain && gCurrentMove != MOVE_CURSE &&
-            !(!affectsUser &&
-              (BattlerHasAbility(gBattlerAttacker, ABILITY_INFILTRATOR, FALSE) || BattlerHasAbility(gBattlerAttacker, ABILITY_MARINE_APEX, FALSE)))) {
+            !(!affectsUser && Infiltrates(gBattlerAttacker, gCurrentMove, INFILTRATE_SCREENS))) {
             if (flags == STAT_BUFF_ALLOW_PTR) {
                 if (gTurnStructs[battler].statLowered) {
                     gBattlescriptCurrInstr = BS_ptr;
@@ -12786,37 +12786,33 @@ static void Cmd_settypebasedhalvers(void)  // water and mud sport
         gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
 }
 
+int Infiltrates(int battler, int move, InfiltrateType type) {
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onInfiltrate, if (gAbilities[ability].onInfiltrate(battler, move) == type) return TRUE)
+
+    return FALSE;
+}
+
 bool32 DoesSubstituteBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) {
-    if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE))
-        return FALSE;
-    else if (gBattleMoves[move].flags & FLAG_SOUND && B_SOUND_SUBSTITUTE >= GEN_6)
-        return FALSE;
-    else if (BattlerHasAbility(battlerAtk, ABILITY_INFILTRATOR, TRUE))
-        return FALSE;
-    else if (BattlerHasAbility(battlerAtk, ABILITY_MARINE_APEX, TRUE))
-        return FALSE;
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PINNACLE_BLADE) && gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-        return FALSE;
-    else if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE)
-        return FALSE;
-    else
-        return TRUE;
+    if (!(gBattleMons[battlerDef].status2 & STATUS2_SUBSTITUTE)) return FALSE;
+    if (gBattleMoves[move].flags & FLAG_SOUND && B_SOUND_SUBSTITUTE >= GEN_6) return FALSE;
+    if (gBattleMoves[move].flags & FLAG_HIT_IN_SUBSTITUTE) return FALSE;
+
+    if (Infiltrates(battlerAtk, move, INFILTRATE_SUBSTITUTE)) return FALSE;
+
+    return TRUE;
 }
 
 s8 RemainingNoDamageHits(u8 battler) {
     s8 counts = 0;
 
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_CHEATING_DEATH)) counts += 2 - GetSingleUseAbilityCounter(battler, ABILITY_CHEATING_DEATH);
-
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_GALLANTRY)) counts += 1 - GetSingleUseAbilityCounter(battler, ABILITY_GALLANTRY);
+    ON_ABILITY(battler, TRUE, gAbilities[ability].noDamageHits, counts += gAbilities[ability].noDamageHits - GetSingleUseAbilityCounter(battler, ability))
 
     return counts;
 }
 
-u16 GetNoDamageAbility(u8 batter) {
-    if (BATTLER_HAS_ABILITY(batter, ABILITY_GALLANTRY) && GetSingleUseAbilityCounter(batter, ABILITY_GALLANTRY) < 1) return ABILITY_GALLANTRY;
-
-    if (BATTLER_HAS_ABILITY(batter, ABILITY_CHEATING_DEATH) && GetSingleUseAbilityCounter(batter, ABILITY_CHEATING_DEATH) < 2) return ABILITY_CHEATING_DEATH;
+u16 GetNoDamageAbility(u8 battler) {
+    ON_ABILITY(
+        battler, TRUE, gAbilities[ability].noDamageHits, if (gAbilities[ability].noDamageHits > GetSingleUseAbilityCounter(battler, ability)) return ability)
 
     return ABILITY_NONE;
 }
