@@ -2159,3 +2159,8 @@ static const u16 sMorpekyllFormSpeciesIdTable[] = {
     SPECIES_MORPEKYLL_HANGRY,
     FORM_SPECIES_END,
 };
+static const u16 sHatennaFormSpeciesIdTable[] = {
+    SPECIES_HATENNA,
+    SPECIES_HATENNA_REDUX,
+    FORM_SPECIES_END,
+};

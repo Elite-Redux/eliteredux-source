@@ -1,3 +1,4 @@
+extern const u8 gMonFootprint_Hatenna_Redux[];
 #ifndef GUARD_GRAPHICS_H
 #define GUARD_GRAPHICS_H
 
@@ -11439,10 +11440,15 @@ extern const u32 gMonPalette_DelphoxSerena[];
 extern const u32 gMonShinyPalette_DelphoxSerena[];
 extern const u8  gMonIcon_DelphoxSerena[];
 extern const u32 gMonFrontPic_Morpekyll[];
+extern const u32 gMonFrontPic_Hatenna_Redux[];
 extern const u32 gMonBackPic_Morpekyll[];
+extern const u32 gMonBackPic_Hatenna_Redux[];
 extern const u32 gMonPalette_Morpekyll[];
+extern const u32 gMonPalette_Hatenna_Redux[];
 extern const u32 gMonShinyPalette_Morpekyll[];
+extern const u32 gMonShinyPalette_Hatenna_Redux[];
 extern const u8  gMonIcon_Morpekyll[];
+extern const u8 gMonIcon_Hatenna_Redux[];
 extern const u32 gMonFrontPic_MorpekyllHangry[];
 extern const u32 gMonBackPic_MorpekyllHangry[];
 extern const u32 gMonPalette_MorpekyllHangry[];

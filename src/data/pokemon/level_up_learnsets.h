@@ -30370,3 +30370,10 @@ static const struct LevelUpMove sMorpekyllLevelUpLearnset[] = {
     LEVEL_UP_MOVE(61, MOVE_COLLISION_COURSE),
     LEVEL_UP_END
 };
+
+static const struct LevelUpMove sHatenna_ReduxLevelUpLearnset[] = {
+    LEVEL_UP_MOVE( 1, MOVE_TACKLE),
+    LEVEL_UP_MOVE( 5, MOVE_GROWL),
+    LEVEL_UP_MOVE(10, MOVE_EMBER),
+    LEVEL_UP_END
+};

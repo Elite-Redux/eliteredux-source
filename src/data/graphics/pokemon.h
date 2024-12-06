@@ -8358,10 +8358,15 @@ const u32 gMonShinyPalette_SamurottMega[]      = INCBIN_U32("graphics/pokemon/sa
 const u8  gMonIcon_SamurottMega[]              = INCBIN_U8("graphics/pokemon/samurott/mega/icon.4bpp");
 
 const u32 gMonFrontPic_Morpekyll[]          = INCBIN_U32("graphics/pokemon/morpekyll/front.4bpp.lz");
+const u32 gMonFrontPic_Hatenna_Redux[] = INCBIN_U32("graphics/pokemon/hatenna/redux/front.4bpp.lz");
 const u32 gMonBackPic_Morpekyll[]           = INCBIN_U32("graphics/pokemon/morpekyll/back.4bpp.lz");
+const u32 gMonBackPic_Hatenna_Redux[] = INCBIN_U32("graphics/pokemon/hatenna/redux/back.4bpp.lz");
 const u32 gMonPalette_Morpekyll[]           = INCBIN_U32("graphics/pokemon/morpekyll/normal.gbapal.lz");
+const u32 gMonPalette_Hatenna_Redux[] = INCBIN_U32("graphics/pokemon/hatenna/redux/normal.gbapal.lz");
 const u32 gMonShinyPalette_Morpekyll[]      = INCBIN_U32("graphics/pokemon/morpekyll/shiny.gbapal.lz");
+const u32 gMonShinyPalette_Hatenna_Redux[] = INCBIN_U32("graphics/pokemon/hatenna/redux/shiny.gbapal.lz");
 const u8  gMonIcon_Morpekyll[]              = INCBIN_U8("graphics/pokemon/morpekyll/icon.4bpp");
+const u8 gMonIcon_Hatenna_Redux[] = INCBIN_U8("graphics/pokemon/hatenna/redux/icon.4bpp");
 
 const u32 gMonFrontPic_MorpekyllHangry[]          = INCBIN_U32("graphics/pokemon/morpekyll/hangry/front.4bpp.lz");
 const u32 gMonBackPic_MorpekyllHangry[]           = INCBIN_U32("graphics/pokemon/morpekyll/hangry/back.4bpp.lz");

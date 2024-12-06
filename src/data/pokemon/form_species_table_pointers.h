@@ -1188,4 +1188,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_SAMUROTT_MEGA] = sSamurottFormSpeciesIdTable,
     [SPECIES_MORPEKYLL] = sMorpekyllFormSpeciesIdTable, 
     [SPECIES_MORPEKYLL_HANGRY] = sMorpekyllFormSpeciesIdTable,
+    [SPECIES_HATENNA_REDUX] = sHatennaFormSpeciesIdTable,
+
 };
