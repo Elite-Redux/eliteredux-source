@@ -252,6 +252,15 @@ int ShouldApplyOnHitAffect(int applyTo);
 void ReplaceAbility(int battler, int ability);
 int HasAbilityIgnoringSuppression(int battler, int ability);
 int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
+int IsSuppressed(int battler, int ability, int checkMoldBreaker);
+
+#define ON_ABILITY(battler, checkMoldBreaker, condition, callback) \
+for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) { \
+    int ability = gBattleMons[battler].abilities[idx]; \
+    FILTER(condition) \
+    FILTER_NOT(IsSuppressed(battler, ability, checkMoldBreaker)) \
+    callback; \
+}
 
 void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
 u32 IsAbilityOnSide(u32 battlerId, u32 ability);
@@ -400,7 +409,7 @@ void HandleFollowupAttackAbilities(int battler, int target, int move);
 int CheckAndSetOncePerTurnAbility(int battler, int ability);
 int IsStickyHold(int battler);
 int HasChloroplast(int battler);
-int HasStormDrain(int battler);
+int HasRedirectionAbility(int battler, int type);
 int CanRaiseStat(int battler, int stat);
 int CanLowerStat(int battler, int stat);
 bool8 UseEntryMove(u8 battler, u16 ability, u16 extraMove, u8 movePower);

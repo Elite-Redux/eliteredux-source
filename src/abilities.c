@@ -12,6 +12,11 @@
 #include "constants/items.h"
 #include "item.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic error "-Wunused-function"
+
+#define NO_ANNOUNCE 2
+
 #define CHECK(effect) if (!(effect)) return FALSE;
 #define CHECK_NOT(effect) if (effect) return FALSE;
 
@@ -20,6 +25,9 @@
 
 #define ON_SWITCH static int COMBINE(OnSwitch, CONTEXT)(int ability, int battler)
 #define CONTEXT_ON_SWITCH .onSwitch = COMBINE(OnSwitch, CONTEXT)
+
+#define ON_ABSORB static int COMBINE(OnAbsorb, CONTEXT)(int battler, int move, int moveType, int *statId)
+#define CONTEXT_ON_ABSORB .onAbsorb = COMBINE(OnAbsorb, CONTEXT)
 
 static int SwitchInAnnounce(int message) {
     gBattleCommunication[MULTISTRING_CHOOSER] = message;
@@ -31,7 +39,7 @@ static int TryTransformAttacker(int ability, int battler) {
     CHECK(ShouldChangeFormHpBased(battler))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
     
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
     return TRUE;
 }
 
@@ -69,7 +77,7 @@ ON_SWITCH {
     else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
     {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return TRUE;
+        return NO_ANNOUNCE;
     }
     return FALSE;
 }
@@ -134,18 +142,28 @@ static const Ability Static = {
 
 #undef CONTEXT
 #define CONTEXT VoltAbsorb
+ON_ABSORB {
+    CHECK(moveType == TYPE_ELECTRIC)
+    return ABSORB_RESULT_HEAL;
+}
 static const Ability VoltAbsorb = {
     .name = $("Volt Absorb"),
     .description = $("Heals 25% of max HP when hit\nby an Electric-type move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
 #define CONTEXT WaterAbsorb
+ON_ABSORB {
+    CHECK(moveType == TYPE_WATER)
+    return ABSORB_RESULT_HEAL;
+}
 static const Ability WaterAbsorb = {
     .name = $("Water Absorb"),
     .description = $("Heals 25% of max HP when hit\nby a Water-type move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -300,10 +318,17 @@ static const Ability NaturalCure = {
 
 #undef CONTEXT
 #define CONTEXT LightningRod
+ON_ABSORB {
+    CHECK(moveType == TYPE_ELECTRIC)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability LightningRod = {
     .name = $("Lightning Rod"),
     .description = $("Redirects Electric moves.\nAbsorbs them, ups highest Atk."),
     .breakable = TRUE,
+    .redirectType = TYPE_ELECTRIC,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -429,7 +454,7 @@ ON_SWITCH {
     else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
     {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return TRUE;
+        return NO_ANNOUNCE;
     }
     return FALSE;
 }
@@ -451,14 +476,11 @@ ON_SWITCH {
 
     if (loweredStats)
     {
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PRESSURE;
         BattleScriptPushCursorAndCallback(BattleScript_PressureRemoveStats);
     }
-    else
-    {
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PRESSURE;
-        BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    }
+
+    SwitchInAnnounce(B_MSG_SWITCHIN_PRESSURE);
+    
     return TRUE;
 }
 static const Ability Pressure = {
@@ -515,13 +537,16 @@ static const Ability HyperCutter = {
 #undef CONTEXT
 #define CONTEXT Pickup
 ON_SWITCH {
-    CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY
-        || gSideTimers[GetBattlerSide(battler)].hotCoals
-        || gSideTimers[GetBattlerSide(battler)].caltrops)
+    int side = GetBattlerSide(battler);
+    CHECK(gSideStatuses[side] & SIDE_STATUS_HAZARDS_ANY
+        || gSideTimers[side].hotCoals
+        || gSideTimers[side].caltrops)
     
-    gSideStatuses[GetBattlerSide(battler)] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
-    gSideTimers[GetBattlerSide(battler)].hotCoals = FALSE;
-    gSideTimers[GetBattlerSide(battler)].caltrops = FALSE;
+    gSideStatuses[side] &= ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES | SIDE_STATUS_STICKY_WEB);
+    gSideTimers[side].spikesAmount = 0;
+    gSideTimers[side].toxicSpikesAmount = 0;
+    gSideTimers[side].hotCoals = FALSE;
+    gSideTimers[side].caltrops = FALSE;
     BattleScriptPushCursorAndCallback(BattleScript_PickUpActivate);
     return TRUE;
 }
@@ -659,7 +684,7 @@ ON_SWITCH {
     else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
     {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return TRUE;
+        return NO_ANNOUNCE;
     }
     return FALSE;
 }
@@ -693,9 +718,7 @@ ON_SWITCH {
     gSideTimers[side].smokescreenTimer = GetBattlerHoldEffect(battler, TRUE) == ITEM_LIGHT_CLAY ? SCREEN_DURATION : SCREEN_DURATION_SHORT;
     gSideTimers[side].started.smokescreen = TRUE;
     gSideTimers[side].smokescreenBattler = battler;
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_WHITE_SMOKE;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_WHITE_SMOKE);
 }
 static const Ability WhiteSmoke = {
     .name = $("White Smoke"),
@@ -736,10 +759,16 @@ static const Ability TangledFeet = {
 
 #undef CONTEXT
 #define CONTEXT MotorDrive
+ON_ABSORB {
+    CHECK(moveType == TYPE_ELECTRIC)
+    *statId = STAT_SPEED;
+    return ABSORB_RESULT_STAT;
+}
 static const Ability MotorDrive = {
     .name = $("Motor Drive"),
     .description = $("Boosts Speed instead of being\nhit by Electric-type moves."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -806,6 +835,7 @@ static const Ability DrySkin = {
     .name = $("Dry Skin"),
     .description = $("Water/Rain heals.\nFire/Sun hurts."),
     .breakable = TRUE,
+    .onAbsorb = WaterAbsorb.onAbsorb,
 };
 
 #undef CONTEXT
@@ -815,11 +845,9 @@ ON_SWITCH {
     if (!IsBattlerAlive(battler)) gBattlerTarget = BATTLE_PARTNER(gBattlerTarget);
     CHECK(IsBattlerAlive(battler))
 
-    {
     int stat = GetHighestDefendingStatId(gBattlerTarget, TRUE) == STAT_DEF ? STAT_SPATK : STAT_ATK;
     CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER, NULL))
     BattleScriptPushCursorAndCallback(BattleScript_AttackerAbilityStatRaiseEnd3);
-    }
     return TRUE;
 }
 static const Ability Download = {
@@ -1024,6 +1052,7 @@ static const Ability Unaware = {
     .name = $("Unaware"),
     .description = $("Ignores foes' stat changes, both\npositive and negative ones."),
     .breakable = TRUE,
+    .unaware = TRUE,
 };
 
 #undef CONTEXT
@@ -1045,9 +1074,7 @@ static const Ability Filter = {
 #define CONTEXT SlowStart
 ON_SWITCH {
     gVolatileStructs[battler].slowStartTimer = 5;
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SLOWSTART;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
 }
 static const Ability SlowStart = {
     .name = $("Slow Start"),
@@ -1064,10 +1091,17 @@ static const Ability Scrappy = {
 
 #undef CONTEXT
 #define CONTEXT StormDrain
+ON_ABSORB {
+    CHECK(moveType == TYPE_WATER)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability StormDrain = {
     .name = $("Storm Drain"),
     .description = $("Redirects Water moves.\nAbsorbs them, ups highest Atk."),
     .breakable = TRUE,
+    .redirectType = TYPE_WATER,
+    CONTEXT_ON_ABSORB
 };
 
 #undef CONTEXT
@@ -1096,7 +1130,7 @@ ON_SWITCH {
     else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
     {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return TRUE;
+        return NO_ANNOUNCE;
     }
     return FALSE;
 }
@@ -1116,12 +1150,23 @@ static const Ability HoneyGather = {
 #undef CONTEXT
 #define CONTEXT Frisk
 ON_SWITCH {
+    int any = FALSE;
+    for (int i = GetBattlerSide(BATTLE_OPPOSITE(battler)); i < gBattlersCount; i += 2)
+    {
+        FILTER(IsBattlerAlive(i))
+        FILTER(gBattleMons[i].item)
+        any = TRUE;
+        break;
+    }
+
+    CHECK(any)
     BattleScriptPushCursorAndCallback(BattleScript_FriskActivates);
     return TRUE;
 }
 static const Ability Frisk = {
     .name = $("Frisk"),
     .description = $("Checks foes' item and disables\ntheir items for two turns."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -1404,9 +1449,15 @@ static const Ability Moxie = {
 
 #undef CONTEXT
 #define CONTEXT Justified
+ON_ABSORB {
+    CHECK(moveType == TYPE_DARK)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability Justified = {
     .name = $("Justified"),
     .description = $("Boosts Attack instead of being\nhit by Dark-type moves."),
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -1426,10 +1477,16 @@ static const Ability MagicBounce = {
 
 #undef CONTEXT
 #define CONTEXT SapSipper
+ON_ABSORB {
+    CHECK(moveType == TYPE_GRASS)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability SapSipper = {
     .name = $("Sap Sipper"),
     .description = $("Boosts highest Atk instead of\nbeing hit by Grass-type moves."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -1865,7 +1922,7 @@ ON_SWITCH {
     int newSpecies = gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED ? SPECIES_MIMIKYU : SPECIES_MIMIKYU_RAYQUAZA;
     UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
     gBattleMons[battler].species = newSpecies;
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
     }
     return TRUE;
 }
@@ -1994,7 +2051,7 @@ ON_SWITCH {
         any = TRUE;
         UpdateBattlerItem(i, ITEM_BLACK_SLUDGE);
         BattleScriptPushCursorAndCallback(BattleScript_End3);
-        BattleScriptCall(BattleScript_PowerOfAlchemySludge);
+        BattleScriptCall(BattleScript_PowerOfAlchemySludgeNoPopup);
     }
     CHECK(any)
     return TRUE;
@@ -2238,7 +2295,7 @@ ON_SWITCH {
 
     UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
     gBattleMons[battler].species = SPECIES_EISCUE;
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
     return TRUE;
 }
 static const Ability IceFace = {
@@ -2532,10 +2589,16 @@ static const Ability Electrocytes = {
 
 #undef CONTEXT
 #define CONTEXT Aerodynamics
+ON_ABSORB {
+    CHECK(moveType == TYPE_FLYING)
+    *statId = STAT_SPEED;
+    return ABSORB_RESULT_STAT;
+}
 static const Ability Aerodynamics = {
     .name = $("Aerodynamics"),
     .description = $("Boosts Speed instead of being\nhit by Flying-type moves."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -2662,6 +2725,7 @@ ON_SWITCH {
 static const Ability Grounded = {
     .name = $("Grounded"),
     .description = $("Adds Ground type to itself."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -3050,10 +3114,15 @@ static const Ability PsychicMind = {
 
 #undef CONTEXT
 #define CONTEXT PoisonAbsorb
+ON_ABSORB {
+    CHECK(moveType == TYPE_POISON)
+    return ABSORB_RESULT_HEAL;
+}
 static const Ability PoisonAbsorb = {
     .name = $("Poison Absorb"),
     .description = $("Heals 25% of max HP when hit\nby a Poison-type move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -3339,10 +3408,16 @@ static const Ability Amplifier = {
 
 #undef CONTEXT
 #define CONTEXT IceDew
+ON_ABSORB {
+    CHECK(moveType == TYPE_ICE)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
+}
 static const Ability IceDew = {
     .name = $("Ice Dew"),
     .description = $("Boosts highest Atk instead of\nbeing hit by Ice-type moves."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -3713,7 +3788,7 @@ ON_SWITCH {
 
     if (uses == 1)
         BattleScriptPushCursorAndCallback(BattleScript_BattlerHasASingleNoDamageHit);
-    else {
+    else if (uses > 1) {
         ConvertIntToDecimalStringN(gBattleTextBuff4, uses, STR_CONV_MODE_LEFT_ALIGN, 2);
         BattleScriptPushCursorAndCallback(BattleScript_BattlerHasNoDamageHits);
     }
@@ -3891,10 +3966,17 @@ static const Ability Lumberjack = {
 
 #undef CONTEXT
 #define CONTEXT WellBakedBody
+ON_ABSORB {
+    CHECK(moveType == TYPE_FIRE)
+    *statId = STAT_DEF;
+    return ABSORB_RESULT_STAT;
+}
 static const Ability WellBakedBody = {
     .name = $("Well Baked Body"),
     .description = $("Boosts Defense sharply instead\nof being hit by Fire-type moves."),
     .breakable = TRUE,
+    .absorbUp2 = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -3930,10 +4012,15 @@ static const Ability RockyPayload = {
 
 #undef CONTEXT
 #define CONTEXT EarthEater
+ON_ABSORB {
+    CHECK(moveType == TYPE_GROUND)
+    return ABSORB_RESULT_HEAL;
+}
 static const Ability EarthEater = {
     .name = $("Earth Eater"),
     .description = $("Heals 25% of max HP when hit\nby a Ground move."),
     .breakable = TRUE,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -4019,6 +4106,7 @@ ON_SWITCH {
 static const Ability MonkeyBusiness = {
     .name = $("Monkey Business"),
     .description = $("Uses Tickle on entry."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -4215,24 +4303,25 @@ static const Ability NaturalRecovery = {
 };
 
 #undef CONTEXT
+#define CONTEXT WindRider
 ON_SWITCH {
     CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
+    CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
 
     BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityHighestAttackingStatRaiseOnSwitchIn);
     return TRUE;
 }
-#define CONTEXT WindRider
-ON_SWITCH {
-    CHECK(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_TAILWIND)
-
-    BattleScriptPushCursorAndCallback(BattleScript_BattlerAbilityHighestAttackingStatRaiseOnSwitchIn);
-    return TRUE;
+ON_ABSORB {
+    CHECK(gBattleMoves[move].airBased)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT;
 }
 static const Ability WindRider = {
     .name = $("Wind Rider"),
     .description = $("Increases attack in tailwind or\nwhen hit by wind move."),
     .breakable = TRUE,
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -4262,6 +4351,7 @@ ON_SWITCH {
 static const Ability SoothingAroma = {
     .name = $("Soothing Aroma"),
     .description = $("Cures party status on entry."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -4613,6 +4703,7 @@ static const Ability CrownedShield = {
 #undef CONTEXT
 #define CONTEXT BerserkDna
 ON_SWITCH {
+    CHECK(CanRaiseStat(battler, GetHighestAttackingStatId(battler, TRUE)))
     if (CanBeConfused(battler))
     {
         gBattleMons[battler].status2 |= STATUS2_CONFUSION_TURN(3);
@@ -4655,6 +4746,7 @@ ON_SWITCH {
 static const Ability Permanence = {
     .name = $("Permanence"),
     .description = $("Foes can't heal in any way."),
+    CONTEXT_ON_SWITCH,
 };
 
 #undef CONTEXT
@@ -4779,10 +4871,7 @@ ON_SWITCH {
     }
 
     CHECK(anyBlocked)
-    
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SALT_CIRCLE;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_SALT_CIRCLE);
 }
 static const Ability SaltCircle = {
     .name = $("Salt Circle"),
@@ -4977,10 +5066,7 @@ ON_SWITCH {
     }
 
     CHECK(anyChanged)
-    
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_COSTAR;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_COSTAR);
 }
 static const Ability Costar = {
     .name = $("Costar"),
@@ -5039,9 +5125,7 @@ static const Ability MindCrush = {
 ON_SWITCH {
     CHECK(gFaintedMonCount[GetBattlerSide(battler)])
 
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_SUPREME_OVERLORD;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_SUPREME_OVERLORD);
 }
 static const Ability SupremeOverlord = {
     .name = $("Supreme Overlord"),
@@ -5339,6 +5423,7 @@ static const Ability DesertSpirit = {
 static const Ability Contempt = {
     .name = $("Contempt"),
     .description = $("Ignores opposing stat changes.\nBoosts Attack when stat lowered."),
+    .unaware = TRUE,
 };
 
 #undef CONTEXT
@@ -5370,9 +5455,7 @@ ON_SWITCH {
     CHECK_NOT(gVolatileStructs[battler].parasiticSpores)
     
     gVolatileStructs[battler].parasiticSpores = TRUE;
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_PARASITIC_SPORES;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_PARASITIC_SPORES);
 }
 static const Ability ParasiticSpores = {
     .name = $("Parasitic Spores"),
@@ -5401,9 +5484,7 @@ ON_SWITCH {
 
     gFieldTimers.quashTimer = QUASH_DURATION;
     gFieldTimers.started.quash = TRUE;
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_REJECTION;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_REJECTION);
 }
 static const Ability Rejection = {
     .name = $("Rejection"),
@@ -5466,7 +5547,7 @@ ON_SWITCH {
     else if (gBattleWeather & WEATHER_PRIMAL_ANY && WEATHER_HAS_EFFECT)
     {
         BattleScriptPushCursorAndCallback(BattleScript_BlockedByPrimalWeatherEnd3);
-        return TRUE;
+        return NO_ANNOUNCE;
     }
     return FALSE;
 }
@@ -5802,9 +5883,7 @@ static const Ability HigherRank = {
 #undef CONTEXT
 #define CONTEXT FuneralPyre
 ON_SWITCH {
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_FUNERAL_PYRE;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_FUNERAL_PYRE);
 }
 static const Ability FuneralPyre = {
     .name = $("Funeral Pyre"),
@@ -5821,9 +5900,13 @@ static const Ability FlameBubble = {
 
 #undef CONTEXT
 #define CONTEXT ElementalVortex
+ON_ABSORB {
+    return WaterAbsorb.onAbsorb(battler, move, moveType, statId) | FlashFire.onAbsorb(battler, move, moveType, statId);
+}
 static const Ability ElementalVortex = {
     .name = $("Elemental Vortex"),
     .description = $("Flash Fire + Water Absorb."),
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -5885,9 +5968,7 @@ static const Ability MoshPit = {
 #undef CONTEXT
 #define CONTEXT BloodStain
 ON_SWITCH {
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_BLOOD_STAIN;
-    BattleScriptPushCursorAndCallback(BattleScript_AnnounceStatusAbility);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_BLOOD_STAIN);
 }
 static const Ability BloodStain = {
     .name = $("Blood Stain"),
@@ -5923,6 +6004,7 @@ static const Ability Sidewinder = {
 #define CONTEXT Petrify
 ON_SWITCH {
     int loweredStats = 0;
+    int intimidated = UseIntimidateClone(battler, ability);
     for (int i = BATTLE_OPPOSITE(GET_BATTLER_SIDE(battler)); i < gBattlersCount; i += 2)
     {
         if (!IsBattlerAlive(i)) continue;
@@ -5931,13 +6013,9 @@ ON_SWITCH {
 
     if (loweredStats)
     {
-        BattleScriptPushCursorAndCallback(BattleScript_PetrifyRemoveStats);
-    }
-    else
-    {
         BattleScriptPushCursorAndCallback(BattleScript_Petrify);
     }
-    return TRUE;
+    return intimidated || loweredStats;
 }
 static const Ability Petrify = {
     .name = $("Petrify"),
@@ -6007,22 +6085,7 @@ static const Ability Hospitality = {
 #undef CONTEXT
 #define CONTEXT ButterUp
 ON_SWITCH {
-    int healPartner = FALSE;
-    gBattlerTarget = BATTLE_PARTNER(battler);
-    if (IsBattlerAlive(gBattlerTarget) && !BATTLER_MAX_HP(gBattlerTarget))
-    {
-        healPartner = TRUE;
-        gBattleMoveDamage = -gBattleMons[gBattlerTarget].maxHP / 4;
-        if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-        BattleScriptPushCursorAndCallback(BattleScript_Hospitality);
-    }
-
-    if (SoothingAroma.onSwitch(ability, battler)) return TRUE;
-
-    CHECK(healPartner)
-
-    BattleScriptPushCursorAndCallback(BattleScript_AbilityPopUpEnd3);
-    return TRUE;
+    return Hospitality.onSwitch(ability, battler) | SoothingAroma.onSwitch(ability, battler);
 }
 static const Ability ButterUp = {
     .name = $("Butter Up"),
@@ -6050,6 +6113,7 @@ static const Ability HugeWings = {
 static const Ability SwordOfDamnation = {
     .name = $("Sword of Damnation"),
     .description = $("Unaware + Sword of Ruin."),
+    .unaware = TRUE,
 };
 
 #undef CONTEXT
@@ -6163,9 +6227,7 @@ ON_SWITCH {
     CHECK_NOT(gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals)
 
     gSideTimers[BATTLE_OPPOSITE(battler)].hotCoals = TRUE;
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_HOT_COALS;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_HOT_COALS);
 }
 static const Ability HotCoals = {
     .name = $("Hot Coals"),
@@ -6191,15 +6253,7 @@ static const Ability ShockingMaw = {
 #undef CONTEXT
 #define CONTEXT GleamEyes
 ON_SWITCH {
-    if (UseIntimidateClone(battler, ability))
-    {
-        gBattleStruct->friskedAbility = TRUE;
-    }
-    else
-    {
-        BattleScriptPushCursorAndCallback(BattleScript_FriskActivates);
-    }
-    return TRUE;
+    return UseIntimidateClone(battler, ability) | Frisk.onSwitch(battler, ability);
 }
 static const Ability GleamEyes = {
     .name = $("Gleam Eyes"),
@@ -6431,7 +6485,6 @@ ON_SWITCH {
     gStackBattler1 = battler;
     BattleScriptPushCursorAndCallback(BattleScript_End3);
     BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
-    BattleScriptCall(BattleScript_AbilityPopUp);
     return TRUE;
 }
 static const Ability ApeShift = {
@@ -6513,9 +6566,7 @@ ON_SWITCH {
     CHECK_NOT(GetAbilityState(battler, ability))
 
     gStatuses4[battler] |= STATUS4_CUTTHROAT;
-    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_SWITCHIN_CUTTHROAT;
-    BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg);
-    return TRUE;
+    return SwitchInAnnounce(B_MSG_SWITCHIN_CUTTHROAT);
 }
 static const Ability Cutthroat = {
     .name = $("Cutthroat"),
@@ -6566,9 +6617,16 @@ static const Ability EnergySiphon = {
 
 #undef CONTEXT
 #define CONTEXT Reservoir
+ON_ABSORB {
+    CHECK(moveType == TYPE_WATER)
+    *statId = GetHighestAttackingStatId(battler, TRUE);
+    return ABSORB_RESULT_STAT | ABSORB_RESULT_HEAL;
+}
 static const Ability Reservoir = {
     .name = $("Reservoir"),
     .description = $("Water Absorb + Storm Drain."),
+    .redirectType = TYPE_WATER,
+    CONTEXT_ON_ABSORB,
 };
 
 #undef CONTEXT
@@ -7382,3 +7440,5 @@ const Ability gAbilities[] = {
 [ABILITY_PUFFY] = Puffy,
 [ABILITY_BALLOON_BLITZ] = BalloonBlitz,
 };
+
+#pragma GCC diagnostic pop

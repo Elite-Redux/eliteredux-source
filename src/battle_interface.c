@@ -2166,6 +2166,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_ARBOK_MEGA:
         case SPECIES_PIKACHU_PARTNER_MEGA:
         case SPECIES_WIGGLYTUFF_MEGA:
+        case SPECIES_WIGGLYTUFF_MEGA_X:
         case SPECIES_MEOWTH_PARTNER_MEGA:
         case SPECIES_ARCANINE_MEGA_REDUX:
         case SPECIES_ALAKAZAM_MEGA:
@@ -2193,7 +2194,6 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_URSALUNA_MEGA:
         case SPECIES_HOUNDOOM_MEGA:
         case SPECIES_KINGDRA_MEGA:
-        case SPECIES_KINGDRA_MEGA_Y:
         case SPECIES_TYRANITAR_MEGA:
         case SPECIES_SCEPTILE_MEGA:
         case SPECIES_BLAZIKEN_MEGA:
@@ -2282,6 +2282,7 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_SLOWKING_MEGA:
         case SPECIES_RIBOMBEE_MEGA:
         case SPECIES_TINKATON_MEGA:
+        case SPECIES_FIDOUGH_PARTNER_MEGA:
         case SPECIES_AEGISLASH_REDUX_MEGA:
         case SPECIES_ALAKAZAM_MEGA_REDUX:
         case SPECIES_BEEDRILL_MEGA_REDUX:
@@ -2295,8 +2296,13 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_SABLEYE_MEGA_REDUX:
         case SPECIES_HOUNDOOM_MEGA_REDUX:
         case SPECIES_FROSLASS_MEGA:
-        case SPECIES_SCRAFTY_MEGA:
+        case SPECIES_DIALGA_ORIGIN:
+        case SPECIES_PALKIA_ORIGIN:
+        case SPECIES_GIRATINA_ORIGIN:
+        case SPECIES_ZAMAZENTA_CROWNED_SHIELD:
+        case SPECIES_ZACIAN_CROWNED_SWORD:
         case SPECIES_TYRANITAR_MEGA_REDUX:
+        case SPECIES_DURALUDON_PARTNER_MEGA:
         case SPECIES_TORTERRA_REDUX_MEGA:
         case SPECIES_INFERNAPE_REDUX_MEGA:
         case SPECIES_EMPOLEON_REDUX_MEGA:
@@ -2318,8 +2324,12 @@ static void UpdateNickInHealthbox(u8 healthboxSpriteId, struct Pokemon *mon)
         case SPECIES_DRACOVISH_MEGA:
         case SPECIES_RIBOMBEE_REDUX_MEGA:
         case SPECIES_WEAVILE_REDUX_MEGA:
+        case SPECIES_FLYGON_REDUX_B_MEGA:
         case SPECIES_SNORLAX_MEGA:
+        case SPECIES_SNORLAX_PRIMAL:
+        case SPECIES_VICTINI_PRIMAL:
         case SPECIES_MAWILE_REDUX_B_MEGA:
+        case SPECIES_WIGGLYTUFF_PRIMAL:
         case SPECIES_HITMONCHAN_PARTNER_MEGA:
         case SPECIES_HITMONCHAN_PARTNER_MEGA_B:
         case SPECIES_HITMONCHAN_PARTNER_MEGA_C:

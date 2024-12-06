@@ -1453,7 +1453,11 @@ static void Cmd_attackcanceler(void)
     if (AtkCanceller_UnableToUseMove())
         return;
 
-    if (!gTurnStructs[gBattlerAttacker].parentalBondOn)
+    if (gTurnStructs[gBattlerAttacker].multiHitCounter)
+    {
+        gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondTrigger = 0;
+    }
+    else if (!gTurnStructs[gBattlerAttacker].parentalBondOn)
     {
         gTurnStructs[gBattlerAttacker].parentalBondTrigger = GetParentalBondType(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType);
         i = GetParentalBondCount(gBattlerAttacker, gTurnStructs[gBattlerAttacker].parentalBondTrigger);
@@ -1645,16 +1649,10 @@ static void Cmd_attackcanceler(void)
         }
     }
 
-    if (gTurnStructs[gBattlerTarget].lightningRodRedirected)
+    if (gTurnStructs[gBattlerTarget].redirectedAbility)
     {
-        gTurnStructs[gBattlerTarget].lightningRodRedirected = FALSE;
-        gBattleScripting.abilityPopupOverwrite = ABILITY_LIGHTNING_ROD;
-        BattleScriptCall(BattleScript_TookAttack);
-    }
-    else if (gTurnStructs[gBattlerTarget].stormDrainRedirected)
-    {
-        gTurnStructs[gBattlerTarget].stormDrainRedirected = FALSE;
-        gBattleScripting.abilityPopupOverwrite = ABILITY_STORM_DRAIN;
+        gBattleScripting.abilityPopupOverwrite = gTurnStructs[gBattlerTarget].redirectedAbility;
+        gTurnStructs[gBattlerTarget].redirectedAbility = ABILITY_NONE;
         BattleScriptCall(BattleScript_TookAttack);
     }
     else if (IsBattlerProtected(gBattlerTarget, gCurrentMove)
@@ -8606,17 +8604,8 @@ static void Cmd_various(void)
             {
                 gLastUsedItem = gBattleMons[gBattlerTarget].item;
                 RecordItemEffectBattle(gBattlerTarget, GetBattlerHoldEffect(gBattlerTarget, FALSE));
-                BattleScriptPushCursor();
-                // If Frisk identifies two mons' items, show the pop-up only once.
-                if (gBattleStruct->friskedAbility)
-                {
-                    gBattlescriptCurrInstr = BattleScript_FriskMsg;
-                }
-                else
-                {
-                    gBattleStruct->friskedAbility = TRUE;
-                    gBattlescriptCurrInstr = BattleScript_FriskMsgWithPopup;
-                }
+                BattleScriptPush(runAgain);
+                gBattlescriptCurrInstr = BattleScript_FriskMsg;
 
                 if (!(gStatuses3[gBattlerTarget] & STATUS3_EMBARGO))
                 {

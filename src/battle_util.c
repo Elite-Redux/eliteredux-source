@@ -315,16 +315,18 @@ void HandleAction_UseMove(void)
     else if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
         && gSideTimers[side].followmeTimer == 0
         && (gBattleMoves[gCurrentMove].power != 0 || GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker) != MOVE_TARGET_USER)
-        && ((!BattlerHasAbility(gBattlerTarget, ABILITY_LIGHTNING_ROD, TRUE) && moveType == TYPE_ELECTRIC)
-            || (!HasStormDrain(gBattlerTarget) && moveType == TYPE_WATER)))
+        && !HasRedirectionAbility(gBattlerTarget, moveType))
     {
+        int partner = BATTLE_PARTNER(gBattlerTarget);
+        if (IsBattlerAlive(partner)
+            && HasRedirectionAbility(partner, moveType)
+            )
         side = GetBattlerSide(gBattlerAttacker);
         for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++)
         {
             if (side != GetBattlerSide(gActiveBattler)
                 && gBattlerTarget != gActiveBattler
-                && ((BattlerHasAbility(gActiveBattler, ABILITY_LIGHTNING_ROD, TRUE) && moveType == TYPE_ELECTRIC)
-                 || (HasStormDrain(gActiveBattler) && moveType == TYPE_WATER))
+                && HasRedirectionAbility(gActiveBattler, moveType)
                 && GetBattlerTurnOrderNum(gActiveBattler) < var
                 && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT
                 && !(BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PROPELLER_TAIL)
@@ -366,10 +368,7 @@ void HandleAction_UseMove(void)
         else
         {
             gActiveBattler = gBattlerByTurnOrder[var];
-            if (BattlerHasAbility(gActiveBattler, ABILITY_LIGHTNING_ROD, TRUE))
-                gTurnStructs[gActiveBattler].lightningRodRedirected = TRUE;
-            else if (HasStormDrain(gActiveBattler))
-                gTurnStructs[gActiveBattler].stormDrainRedirected = TRUE;
+            gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gActiveBattler, moveType);
             gBattlerTarget = gActiveBattler;
         }
     }
@@ -5332,8 +5331,8 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                 if (effect & ABSORB_RESULT_STAT && CanRaiseStat(battler, statId)) // Boost Stat ability;
                 {
                     any = TRUE;
-                    SetActiveStatChanger(statId, gBattleScripting.abilityPopupOverwrite == ABILITY_WELL_BAKED_BODY ? 2 : 1);
-                    ChangeStatBuffs(battler, gBattleScripting.abilityPopupOverwrite == ABILITY_WELL_BAKED_BODY ? 2 : 1, statId, MOVE_EFFECT_AFFECTS_USER, NULL);
+                    SetActiveStatChanger(statId, 1 + gAbilities[gBattleScripting.abilityPopupOverwrite].absorbUp2);
+                    ChangeStatBuffs(battler, 1 + gAbilities[gBattleScripting.abilityPopupOverwrite].absorbUp2, statId, MOVE_EFFECT_AFFECTS_USER, NULL);
                     BattleScriptCall(BattleScript_MoveStatDrain);
                 }
                 else if (effect & ABSORB_RESULT_FLASH_FIRE) // Flash Fire special case
@@ -7793,20 +7792,17 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
         else
         {
             targetBattler = SetRandomTarget(gBattlerAttacker);
-            if (gBattleMoves[move].type == TYPE_ELECTRIC
-                && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_LIGHTNING_ROD)
-                && !BATTLER_HAS_ABILITY(targetBattler, ABILITY_LIGHTNING_ROD))
+            if (!HasRedirectionAbility(targetBattler, gBattleMoves[move].type))
             {
-                targetBattler ^= BIT_FLANK;
-                gTurnStructs[targetBattler].lightningRodRedirected = TRUE;
-            }
-            else if (gBattleMoves[move].type == TYPE_WATER
-                && !HasStormDrain(targetBattler)
-                && (IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN)
-                    || IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_RESERVOIR)))
-            {
-                targetBattler ^= BIT_FLANK;
-                gTurnStructs[targetBattler].stormDrainRedirected = TRUE;
+                int opposite = BATTLE_OPPOSITE(gBattlerAttacker);
+                int ability;
+                if (!IsBattlerAlive(opposite) || !(ability = HasRedirectionAbility(opposite, gBattleMoves[move].type)))
+                    opposite = BATTLE_PARTNER(opposite);
+                if (ability || (IsBattlerAlive(opposite) && (ability = HasRedirectionAbility(opposite, gBattleMoves[move].type))))
+                {
+                    targetBattler ^= BIT_FLANK;
+                    gTurnStructs[targetBattler].redirectedAbility = ability;
+                }
             }
         }
         break;
@@ -12100,96 +12096,17 @@ int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int mov
     return TestAbsorbingAbilities(target, gActiveBattler, move, moveType, &ignored, (u16*) &ignored);
 }
 
-int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *ability)
+int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int *statId, u16 *absorbingAbility)
 {
-    int i;
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++)
-    {
-        *ability = GetAbilityAtIndex(battler, i, TRUE);
-        switch (*ability)
+    ON_ABILITY(battler, TRUE, gAbilities[ability].onAbsorb,
+        int result = gAbilities[ability].onAbsorb(battler, move, moveType, statId);
+        if (result)
         {
-        case ABILITY_AERODYNAMICS:
-            REQUIRE(moveType == TYPE_FLYING)
-            *statId = STAT_SPEED;
-            return ABSORB_RESULT_STAT;
-            
-        case ABILITY_VOLT_ABSORB:
-            REQUIRE(moveType == TYPE_ELECTRIC)
-            return ABSORB_RESULT_HEAL;
-
-        case ABILITY_EARTH_EATER:
-            REQUIRE(moveType == TYPE_GROUND)
-            return ABSORB_RESULT_HEAL;
-
-        case ABILITY_WATER_ABSORB:
-        case ABILITY_DRY_SKIN:
-        ABSORB_WATER_ABSORB:
-            REQUIRE(moveType == TYPE_WATER)
-            return ABSORB_RESULT_HEAL;
-            
-        case ABILITY_POISON_ABSORB:
-            REQUIRE(moveType == TYPE_POISON)
-            return ABSORB_RESULT_HEAL;
-            
-        case ABILITY_LIGHTNING_ROD:
-            REQUIRE(moveType == TYPE_ELECTRIC)
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-            
-        case ABILITY_STORM_DRAIN:
-            REQUIRE(moveType == TYPE_WATER)
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-            
-        case ABILITY_RESERVOIR:
-            REQUIRE(moveType == TYPE_WATER)
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT | ABSORB_RESULT_HEAL;
-            
-        case ABILITY_ELEMENTAL_VORTEX:
-            if (moveType == TYPE_WATER) goto ABSORB_WATER_ABSORB;
-            FALLTHROUGH
-        case ABILITY_FLASH_FIRE:
-            REQUIRE(moveType == TYPE_FIRE)
-            return ABSORB_RESULT_FLASH_FIRE;
-        
-        case ABILITY_SAP_SIPPER:
-            REQUIRE(moveType == TYPE_GRASS)
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        
-        case ABILITY_ICE_DEW:
-            REQUIRE(moveType == TYPE_ICE)
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        
-        case ABILITY_JUSTIFIED:
-            REQUIRE(moveType == TYPE_DARK)
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        
-        case ABILITY_WELL_BAKED_BODY:
-            REQUIRE(moveType == TYPE_FIRE)
-            *statId = STAT_DEF;
-            return ABSORB_RESULT_STAT;
-        
-        case ABILITY_MOTOR_DRIVE:
-            REQUIRE(moveType == TYPE_ELECTRIC)
-            *statId = STAT_SPEED;
-            return ABSORB_RESULT_STAT;
-        
-        case ABILITY_WIND_RIDER:
-            REQUIRE(gBattleMoves[move].airBased)
-            *statId = GetHighestAttackingStatId(battler, TRUE);
-            return ABSORB_RESULT_STAT;
-        
-        default:
-            break;
+            *absorbingAbility = ability;
+            return result;
         }
-    }
-    
-    *ability = ABILITY_NONE;
-    return 0;
+    )
+    return FALSE;
 }
 
 static int HandleAnyImmunityAbilityAs(int ability, int battler, int attacker, int move, int moveType, const u8 ** immunityScript);
@@ -12343,9 +12260,7 @@ int IsBloodStainAffected(int battler)
 
 int IsUnaware(int battler)
 {
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_UNAWARE)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_CONTEMPT)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_SWORD_OF_DAMNATION)) return TRUE;
+    ON_ABILITY(battler, TRUE, gAbilities[ability].unaware, return TRUE)
     return FALSE;
 }
 
@@ -14115,8 +14030,6 @@ int HandleMiscAbilityMoveEffects(int battler, int opponent, int move)
     return effect;
 }
 
-static int HandleSwitchInAbilityAs(int ability, int battler);
-
 int HandleSwitchInAbility(int abilityNumber, int battler)
 {
     int ability;
@@ -14196,8 +14109,12 @@ int HandleSwitchInAbility(int abilityNumber, int battler)
         return effect;
     }
 
-    ability = gBattleScripting.abilityPopupOverwrite = GetAbilityAtIndex(battler, abilityNumber, FALSE);
-    gBattlerAbility = gBattleScripting.battler = battler;
+    ability = gBattleMons[battler].abilities[abilityNumber];
+    AbilityOnSwitchHandler handler = gAbilities[ability].onSwitch;
+    MGBA_PRINT_VALUES(ability, handler);
+    if (!handler) return FALSE;
+
+    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
 
     switch (ability)
     {
@@ -14208,7 +14125,15 @@ int HandleSwitchInAbility(int abilityNumber, int battler)
             if (!CheckAndSetSwitchInAbility(battler, ability)) return FALSE;
     }
 
-    return HandleSwitchInAbilityAs(ability, battler);
+    MGBA_PRINT_VALUES(1);
+
+    gBattleScripting.abilityPopupOverwrite = ability;
+    gBattlerAbility = gBattleScripting.battler = battler;
+
+    int result = handler(ability, battler);
+    if (result & 1) BattleScriptCall(BattleScript_AbilityPopUp);
+    MGBA_PRINT_VALUES(result);
+    return result;
 }
 
 #define ANNOUNCE_SIMPLE_ABILITY(abilityToAnnounce, announceMessage) \
@@ -14216,13 +14141,6 @@ int HandleSwitchInAbility(int abilityNumber, int battler)
         gBattleCommunication[MULTISTRING_CHOOSER] = announceMessage; \
         BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg); \
         return TRUE;
-
-int HandleSwitchInAbilityAs(int ability, int battler)
-{
-    AbilityOnSwitchHandler handler = gAbilities[ability].onSwitch;
-    if (!handler) return FALSE;
-    return handler(ability, battler);
-}
 
 static int HandleEndTurnAbilityAs(int ability, int battler);
 
@@ -14580,16 +14498,22 @@ int HasAnyStatusOrAbility(int battler)
     return FALSE;
 }
 
+int IsSuppressed(int battler, int ability, int checkMoldBreaker)
+{
+    if ((checkMoldBreaker && battler != gBattlerAttacker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
+        || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
+    {
+        return !DoesBattlerHaveAbilityShield(battler);
+    }
+
+    return FALSE;
+}
+
 int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker)
 {
     int ability = gBattleMons[battler].abilities[abilityNumber];
 
-    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
-        || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
-    {
-        if (!DoesBattlerHaveAbilityShield(battler))
-            return ABILITY_NONE;
-    }
+    if (IsSuppressed(battler, ability, checkMoldBreaker)) return ABILITY_NONE;
 
     return ability;
 }
@@ -14622,12 +14546,7 @@ int GetAbilityIndex(int battler, int ability, int checkMoldBreaker)
     
     if (i == TOTAL_ABILITY_COUNT) return TOTAL_ABILITY_COUNT;
 
-    if ((checkMoldBreaker && gHitMarker & HITMARKER_MOLD_BREAKER && gAbilities[ability].breakable)
-        || ((gFieldTimers.neutralizingGas || gStatuses3[battler] & STATUS3_GASTRO_ACID) && !IsUnsuppressableAbility(ability)))
-    {
-        if (!DoesBattlerHaveAbilityShield(battler))
-            return TOTAL_ABILITY_COUNT;
-    }
+    if (IsSuppressed(battler, ability, checkMoldBreaker)) return TOTAL_ABILITY_COUNT;
 
     return i;
 }
@@ -14774,10 +14693,10 @@ int HasChloroplast(int battler)
     return FALSE;
 }
 
-int HasStormDrain(int battler)
+int HasRedirectionAbility(int battler, int type)
 {
-    if (BattlerHasAbility(battler, ABILITY_STORM_DRAIN, TRUE)) return ABILITY_STORM_DRAIN;
-    if (BattlerHasAbility(battler, ABILITY_RESERVOIR, TRUE)) return ABILITY_RESERVOIR;
+    if (!type) return FALSE;
+    ON_ABILITY(battler, TRUE, gAbilities[ability].redirectType == type, return TRUE)
     return FALSE;
 }
 

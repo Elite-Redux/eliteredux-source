@@ -220,6 +220,7 @@ struct TurnStruct
     s32 savedDmg;
     u16 parentalBondTrigger; // Ability that triggered parental bond
     u16 flungItem;
+    u16 redirectedAbility;
     bool8 turnAbilityTriggers[NUM_INNATE_PER_SPECIES + 1];
     u8 gemParam;
     u8 physicalBattlerId;
@@ -232,7 +233,6 @@ struct TurnStruct
     u8 parentalBondOn:3;
     u8 parentalBondInitialCount:3;
     u8 statLowered:1;
-    u8 lightningRodRedirected:1;
     u8 restoredBattlerSprite: 1;
     u8 intimidatedMon:1;
     u8 scaredMon:1;
@@ -241,7 +241,6 @@ struct TurnStruct
     u8 focusBanded:1; //8
     u8 focusSashed:1;
     u8 sturdied:1;
-    u8 stormDrainRedirected:1;
     u8 switchInItemDone:1;
     u8 berryReduced:1;
     u8 gemBoost:1;

@@ -3605,10 +3605,7 @@ u8 GetMoveTypeEffectiveness(u16 moveNum, u8 targetId, u8 userId, u16 moveType, u
     if (gBattleMoves[moveNum].split == SPLIT_STATUS)
         return GetMoveTypeEffectivenessStatus(moveNum, targetId, userId);
 
-    if (IsBattlerAlive(BATTLE_PARTNER(targetId)) && moveType == TYPE_ELECTRIC && target == MOVE_TARGET_SELECTED && BattlerHasAbility(BATTLE_PARTNER(targetId), ABILITY_LIGHTNING_ROD, TRUE))
-        abilityNullifiesDamage = TRUE;
-
-    if (IsBattlerAlive(BATTLE_PARTNER(targetId)) && moveType == TYPE_WATER && target == MOVE_TARGET_SELECTED && HasStormDrain(BATTLE_PARTNER(targetId)))
+    if (IsBattlerAlive(BATTLE_PARTNER(targetId)) && target == MOVE_TARGET_SELECTED && HasRedirectionAbility(BATTLE_PARTNER(targetId), moveType))
         abilityNullifiesDamage = TRUE;
     
     if (!abilityNullifiesDamage) CalculateAbilityMultipliers(userId, targetId, moveNum, moveType, 100, typeEffectivenessMultiplier, FALSE, &mod);
