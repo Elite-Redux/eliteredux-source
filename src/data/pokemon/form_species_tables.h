@@ -931,6 +931,7 @@ static const u16 sRockruffFormSpeciesIdTable[] = {
 
 static const u16 sLycanrocFormSpeciesIdTable[] = {
     SPECIES_LYCANROC,
+    SPECIES_LYCANROC_REDUX,
     SPECIES_LYCANROC_MIDNIGHT,
     SPECIES_LYCANROC_DUSK,
     FORM_SPECIES_END,

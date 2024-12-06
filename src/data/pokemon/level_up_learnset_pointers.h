@@ -1804,6 +1804,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_SPIRITOMB_REDUX] = sSpiritomb_ReduxLevelUpLearnset,
     [SPECIES_GOLISOPOD_REDUX_MEGA] = sGolisopod_Redux_MegaLevelUpLearnset,
     [SPECIES_ROCKRUFF_REDUX] = sRockruff_ReduxLevelUpLearnset,
+    [SPECIES_LYCANROC_REDUX] = sLycanroc_ReduxLevelUpLearnset,
     [SPECIES_MORPEKYLL] = sMorpekyllLevelUpLearnset,
     [SPECIES_MORPEKYLL_HANGRY] = sMorpekyllLevelUpLearnset,
 };
