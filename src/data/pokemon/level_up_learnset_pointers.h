@@ -1797,6 +1797,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_SAMUROTT_MEGA] = sSamurottLevelUpLearnset,
     [SPECIES_HATENNA_REDUX] = sHatenna_ReduxLevelUpLearnset,
     [SPECIES_HATTREM_REDUX] = sHattrem_ReduxLevelUpLearnset,
+    [SPECIES_HATTERENE_REDUX] = sHatterene_ReduxLevelUpLearnset,
     [SPECIES_MORPEKYLL] = sMorpekyllLevelUpLearnset,
     [SPECIES_MORPEKYLL_HANGRY] = sMorpekyllLevelUpLearnset,
 };

@@ -2041,6 +2041,7 @@ static const u16 sCopperajahFormSpeciesIdTable[] = {
 };
 static const u16 sHattereneFormSpeciesIdTable[] = {
     SPECIES_HATTERENE,
+    SPECIES_HATTERENE_REDUX,
     SPECIES_HATTERENE_MEGA,
     FORM_SPECIES_END,
 };

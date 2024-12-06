@@ -916,7 +916,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_COPPERAJAH] = sCopperajahFormSpeciesIdTable,
     [SPECIES_COPPERAJAH_MEGA] = sCopperajahFormSpeciesIdTable,
 
-    [SPECIES_HATTERENE] = sHattereneFormSpeciesIdTable,
+    [SPECIES_HATTERENE_REDUX] = sHattereneFormSpeciesIdTable,
     [SPECIES_HATTERENE_MEGA] = sHattereneFormSpeciesIdTable,
 
     [SPECIES_GARBODOR] = sGarbodorFormSpeciesIdTable,
