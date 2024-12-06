@@ -20323,6 +20323,11 @@ static const union AnimCmd sAnim_MORPEKYLL_1[] =
     ANIMCMD_FRAME(0, 1),
     ANIMCMD_END,
 };
+static const union AnimCmd sAnim_GOLISOPOD_REDUX_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
 static const union AnimCmd sAnim_WIMPOD_REDUX_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -20352,6 +20357,11 @@ static const union AnimCmd sAnim_HATENNA_REDUX_1[] =
 static const union AnimCmd *const sAnims_MORPEKYLL[] ={
     sAnim_GeneralFrame0,
     sAnim_MORPEKYLL_1,
+};
+
+static const union AnimCmd *const sAnims_GOLISOPOD_REDUX[] ={
+    sAnim_GeneralFrame0,
+    sAnim_GOLISOPOD_REDUX_1,
 };
 
 static const union AnimCmd *const sAnims_WIMPOD_REDUX[] ={
@@ -22089,6 +22099,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(SAMUROTT_MEGA),
     ANIM_CMD(MORPEKYLL),
     ANIM_CMD(MORPEKYLL_HANGRY),
+    ANIM_CMD(GOLISOPOD_REDUX),
     ANIM_CMD(WIMPOD_REDUX),
     ANIM_CMD(HATTERENE_REDUX_MEGA),
     ANIM_CMD(HATTERENE_REDUX),

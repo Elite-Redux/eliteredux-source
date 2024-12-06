@@ -1164,7 +1164,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_CORMOTH] = sCormothFormSpeciesIdTable,
     [SPECIES_CORMOTH_MEGA] = sCormothFormSpeciesIdTable,
 
-    [SPECIES_GOLISOPOD] = sGolisopodFormSpeciesIdTable,
+    [SPECIES_GOLISOPOD_REDUX] = sGolisopodFormSpeciesIdTable,
     [SPECIES_GOLISOPOD_MEGA] = sGolisopodFormSpeciesIdTable,
 
     [SPECIES_POPCORM] = sPopcormFormSpeciesIdTable,

@@ -2104,6 +2104,7 @@ static const u16 sCormothFormSpeciesIdTable[] = {
 };
 static const u16 sGolisopodFormSpeciesIdTable[] = {
     SPECIES_GOLISOPOD,
+    SPECIES_GOLISOPOD_REDUX,
     SPECIES_GOLISOPOD_MEGA,
     FORM_SPECIES_END,
 };
