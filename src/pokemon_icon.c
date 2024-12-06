@@ -1801,6 +1801,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_EMBOAR_MEGA] = gMonIcon_EmboarMega,
     [SPECIES_SAMUROTT_MEGA] = gMonIcon_SamurottMega,
     [SPECIES_MORPEKYLL] = gMonIcon_Morpekyll,
+    [SPECIES_HATTERENE_REDUX_MEGA] = gMonIcon_Hatterene_Redux_Mega,
     [SPECIES_HATTERENE_REDUX] = gMonIcon_Hatterene_Redux,
     [SPECIES_HATTREM_REDUX] = gMonIcon_Hattrem_Redux,
     [SPECIES_HATENNA_REDUX] = gMonIcon_Hatenna_Redux,
@@ -3493,6 +3494,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_HATENNA_REDUX] = 2,
     [SPECIES_HATTREM_REDUX] = 2,
     [SPECIES_HATTERENE_REDUX] = 2,
+    [SPECIES_HATTERENE_REDUX_MEGA] = 2,
 
 };
 
