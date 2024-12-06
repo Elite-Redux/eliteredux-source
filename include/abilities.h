@@ -7,13 +7,15 @@
 typedef int (*AbilityOnSwitchHandler)(int ability, int battler);
 typedef int (*AbilityOnAbsorbHandler)(int battler, int move, int moveType, int* statId);
 typedef int (*AbilityOnImmuneHandler)(int battler, int attacker, int move, int moveType, const u8** immunityScript);
-
 typedef enum {
     INFILTRATE_SCREENS = 1 << 0,
     INFILTRATE_SUBSTITUTE = 1 << 1,
     INFILTRATE_BREAK_SCREENS = 1 << 2,
 } InfiltrateType;
 typedef InfiltrateType (*AbilityOnInfiltrateHandler)(int battler, int move);
+typedef int (*AbilityOnDisguiseHandler)(int battler, int checkOnly);
+typedef int (*AbilityOnWeatherHandler)(int ability, int battler);
+typedef int (*AbilityOnTerrainHandler)(int ability, int battler);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -29,6 +31,9 @@ typedef struct Ability {
     const AbilityOnAbsorbHandler onAbsorb;
     const AbilityOnImmuneHandler onImmune;
     const AbilityOnInfiltrateHandler onInfiltrate;
+    const AbilityOnDisguiseHandler onDisguise;
+    const AbilityOnWeatherHandler onWeather;
+    const AbilityOnTerrainHandler onTerrain;
     u16 breakable:1;
     u16 unsuppressable:1;
     u16 persistent:1;

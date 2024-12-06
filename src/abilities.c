@@ -5,6 +5,7 @@
 #include "battle_anim.h"
 #include "battle_controllers.h"
 #include "battle_scripts.h"
+#include "battle_util.h"
 #include "constants/battle_string_ids.h"
 #include "constants/hold_effects.h"
 #include "constants/item.h"
@@ -37,6 +38,27 @@
 
 #define ON_INFILTRATE static InfiltrateType COMBINE(onInfiltrate, CONTEXT)(int battler, int move)
 #define CONTEXT_ON_INFILTRATE .onInfiltrate = COMBINE(onInfiltrate, CONTEXT)
+
+#define ON_DISGUISE static int COMBINE(onDisguise, CONTEXT)(int battler, int testOnly)
+#define CONTEXT_ON_DISGUISE .onDisguise = COMBINE(onDisguise, CONTEXT)
+
+#define ON_WEATHER static int COMBINE(onWeather, CONTEXT)(int ability, int battler)
+#define CONTEXT_ON_WEATHER .onWeather = COMBINE(onWeather, CONTEXT)
+
+#define ON_TERRAIN static int COMBINE(onTerrain, CONTEXT)(int ability, int battler)
+#define CONTEXT_ON_TERRAIN .onTerrain = COMBINE(onTerrain, CONTEXT)
+
+static void InsertCorrectEndType(AbilityCallType type) {
+    switch (type) {
+        case ABILITY_BS_EXECUTE:
+            BattleScriptExecute(BattleScript_End2);
+            return;
+
+        case ABILITY_BS_PUSH_CURSOR_AND_CALLBACK:
+            BattleScriptPushCursorAndCallback(BattleScript_End3);
+            return;
+    }
+}
 
 int IsApplyOnFlagAppropriate(int applyTo, int from, AbilityApplyOn flag) {
     if (flag == APPLY_ON_SELF) return applyTo == from;
@@ -1312,20 +1334,24 @@ static const Ability ToxicBoost = {
 
 #undef CONTEXT
 #define CONTEXT FlareBoost
-ON_SWITCH {
+int FlareBoostHandler(int ability, int battler, AbilityCallType callType) {
     CHECK(CanBeBurned(battler))
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
 
+    InsertCorrectEndType(callType);
     gBattleMons[battler].status1 |= STATUS1_BURN;
     BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[battler].status1);
     MarkBattlerForControllerExec(battler);
-    BattleScriptPushCursorAndCallback(BattleScript_FlareBoostEnd3);
+    BattleScriptCall(BattleScript_FlareBoostRet);
     return TRUE;
 }
+ON_SWITCH { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_WEATHER { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability FlareBoost = {
     .name = $("Flare Boost"),
     .description = $("Ups Sp. Atk by 1.5x if burned.\nIgnites in fog."),
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_WEATHER,
 };
 
 #undef CONTEXT
@@ -1430,9 +1456,7 @@ static const Ability Imposter = {
 
 #undef CONTEXT
 #define CONTEXT Infiltrator
-ON_INFILTRATE {
-    return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE;
-}
+ON_INFILTRATE { return INFILTRATE_SCREENS | INFILTRATE_SUBSTITUTE; }
 static const Ability Infiltrator = {
     .name = $("Infiltrator"),
     .description = $("Own moves bypass Substitutes\nand damage reduction screens."),
@@ -1923,19 +1947,31 @@ static const Ability Schooling = {
 
 #undef CONTEXT
 #define CONTEXT Disguise
-ON_SWITCH {
-    CHECK(gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED || gBattleMons[battler].species == SPECIES_MIMIKYU_RAYQUAZA_BUSTED)
+ON_DISGUISE {
+    switch (gBattleMons[battler].species) {
+        case SPECIES_MIMIKYU:
+            return SPECIES_MIMIKYU_BUSTED;
+        case SPECIES_MIMIKYU_RAYQUAZA:
+            return SPECIES_MIMIKYU_RAYQUAZA_BUSTED;
+
+        default:
+            return SPECIES_NONE;
+    }
+}
+int DisguiseReformHandler(int ability, int battler, AbilityCallType callType) {
+    int newSpecies = onDisguiseDisguise(battler, TRUE);
+    CHECK(newSpecies)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
 
-    {
-        int newSpecies = gBattleMons[battler].species == SPECIES_MIMIKYU_BUSTED ? SPECIES_MIMIKYU : SPECIES_MIMIKYU_RAYQUAZA;
-        UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
-        gBattleMons[battler].species = newSpecies;
-        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
-    }
+    InsertCorrectEndType(callType);
+    UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+    gBattleMons[battler].species = newSpecies;
+    BattleScriptCall(BattleScript_AttackerFormChangeNoPopup);
     return TRUE;
 }
+ON_SWITCH { return DisguiseReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_WEATHER { return DisguiseReformHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability Disguise = {
     .name = $("Disguise"),
     .description = $("Protects once against an attack.\nRestores protection in fog."),
@@ -1943,6 +1979,8 @@ static const Ability Disguise = {
     .breakable = TRUE,
     .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_DISGUISE,
+    CONTEXT_ON_WEATHER,
 };
 
 #undef CONTEXT
@@ -2307,16 +2345,21 @@ static const Ability Ripen = {
 
 #undef CONTEXT
 #define CONTEXT IceFace
-ON_SWITCH {
-    CHECK(gBattleMons[battler].species == SPECIES_EISCUE_NOICE_FACE)
+ON_DISGUISE { return gBattleMons[battler].species == SPECIES_EISCUE ? SPECIES_EISCUE_NOICE_FACE : SPECIES_NONE; }
+int IceFaceReformHandler(int ability, int battler, AbilityCallType callType) {
+    int newSpecies = onDisguiseIceFace(battler, TRUE);
+    CHECK(newSpecies)
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
 
-    UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_EISCUE);
-    gBattleMons[battler].species = SPECIES_EISCUE;
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
+    InsertCorrectEndType(callType);
+    UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+    gBattleMons[battler].species = newSpecies;
+    BattleScriptCall(BattleScript_AttackerFormChangeNoPopup);
     return TRUE;
 }
+ON_SWITCH { return IceFaceReformHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_WEATHER { return IceFaceReformHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability IceFace = {
     .name = $("Ice Face"),
     .description = $("Protects once against an attack.\nRestores protection under hail."),
@@ -2324,6 +2367,8 @@ static const Ability IceFace = {
     .breakable = TRUE,
     .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_DISGUISE,
+    CONTEXT_ON_WEATHER,
 };
 
 #undef CONTEXT
@@ -4240,21 +4285,33 @@ static const Ability ItchyDefense = {
 ON_SWITCH {
     CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
 
-    gStackBattler1 = battler;
-    if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN) {
-        BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
-        return TRUE;
+    int any = FALSE;
+    if (IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
+        any = TRUE;
     } else if (!GetSingleUseAbilityCounter(battler, ability)) {
         SetSingleUseAbilityCounter(battler, ability, TRUE);
-        BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
-        return TRUE;
+        any = TRUE;
     }
-    return FALSE;
+
+    CHECK(any)
+
+    gStackBattler1 = battler;
+    BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivates);
+    return TRUE;
+}
+ON_TERRAIN {
+    CHECK_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
+    CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
+
+    gStackBattler1 = battler;
+    BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivatesRet);
+    return TRUE;
 }
 static const Ability Generator = {
     .name = $("Generator"),
     .description = $("Charges up once on entry or\nwhen electric terrain is active."),
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_TERRAIN,
 };
 
 #undef CONTEXT
@@ -4878,60 +4935,106 @@ static const Ability PurifyingSalt = {
 
 #undef CONTEXT
 #define CONTEXT Protosynthesis
-ON_SWITCH {
-    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) {
+int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
+    ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
+
+    if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsWeatherActive(WEATHER_SUN_ANY)) {
+        InsertCorrectEndType(callType);
         ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
-        BattleScriptPushCursorAndCallback(BattleScript_ParadoxBoostActivates);
+        BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
         return TRUE;
     }
 
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+    if (state.source == PARADOX_WEATHER_ACTIVE && !IsWeatherActive(WEATHER_SUN_ANY)) {
+        InsertCorrectEndType(callType);
+        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+            // Push this first so it resolves last
+            ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
+            SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
+            RemoveItem(battler);
+            SetStatChanger(boost.statId, 0);
+            BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
+        } else
+            SetAbilityState(battler, ability, 0);
+        BattleScriptCall(BattleScript_ParadoxBoostEnds);
+        return TRUE;
+    }
+
+    if (state.source == PARADOX_BOOST_NOT_ACTIVE && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+        InsertCorrectEndType(callType);
         ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
         RemoveItem(battler);
-        BattleScriptPushCursorAndCallback(BattleScript_ParadoxBoostActivates);
+        BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
         return TRUE;
     }
     return FALSE;
 }
+ON_SWITCH { return ProtosynthesisHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_WEATHER { return ProtosynthesisHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability Protosynthesis = {
     .name = $("Protosynthesis"),
     .description = $("Boosts highest stat in Sun\nor with Booster Energy."),
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_WEATHER,
 };
 
 #undef CONTEXT
 #define CONTEXT QuarkDrive
-ON_SWITCH {
-    if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN) {
+int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
+    ParadoxBoost state = GetAbilityStateAs(battler, ability).paradoxBoost;
+
+    if (state.source == PARADOX_BOOST_NOT_ACTIVE && IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
+        InsertCorrectEndType(callType);
         ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_TERRAIN;
-        BattleScriptPushCursorAndCallback(BattleScript_ParadoxBoostActivates);
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
+        BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
         return TRUE;
     }
 
-    if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+    if (state.source == PARADOX_WEATHER_ACTIVE && !IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN)) {
+        InsertCorrectEndType(callType);
+        if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+            // Push this first so it resolves last
+            ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
+            SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
+            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
+            RemoveItem(battler);
+            SetStatChanger(boost.statId, 0);
+            BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
+        } else
+            SetAbilityState(battler, ability, 0);
+        BattleScriptCall(BattleScript_ParadoxBoostEnds);
+        return TRUE;
+    }
+
+    if (state.source == PARADOX_BOOST_NOT_ACTIVE && GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
+        InsertCorrectEndType(callType);
         ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
         RemoveItem(battler);
-        BattleScriptPushCursorAndCallback(BattleScript_ParadoxBoostActivates);
+        BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
         return TRUE;
     }
     return FALSE;
 }
+ON_SWITCH { return QuarkDriveHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_TERRAIN { return QuarkDriveHandler(ability, battler, ABILITY_BS_CALL); }
 static const Ability QuarkDrive = {
     .name = $("Quark Drive"),
     .description = $("Boosts highest stat in Electric\nTerrain or with Booster Energy."),
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_TERRAIN,
 };
 
 #undef CONTEXT
@@ -6132,6 +6235,13 @@ static const Ability Frostmaw = {
 
 #undef CONTEXT
 #define CONTEXT Patchwork
+ON_DISGUISE {
+    int species = Disguise.onDisguise(battler, testOnly);
+    if (species && !testOnly) {
+        SetOncePerTurnAbilityCounter(battler, ABILITY_PATCHWORK, gBattlerAttacker);
+    }
+    return species;
+}
 static const Ability Patchwork = {
     .name = $("Patchwork"),
     .description = $("Disguise + curses the opponent\nwhen its Disguise breaks."),
@@ -6139,6 +6249,7 @@ static const Ability Patchwork = {
     .breakable = TRUE,
     .randomizerBanned = TRUE,
     .onSwitch = Disguise.onSwitch,
+    CONTEXT_ON_DISGUISE,
 };
 
 #undef CONTEXT
@@ -6172,9 +6283,7 @@ static const Ability DragonsRitual = {
 
 #undef CONTEXT
 #define CONTEXT PinnacleBlade
-ON_INFILTRATE {
-    return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : 0;
-}
+ON_INFILTRATE { return gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST ? INFILTRATE_BREAK_SCREENS | INFILTRATE_SUBSTITUTE : 0; }
 static const Ability PinnacleBlade = {
     .name = $("Pinnacle Blade"),
     .description = $("Slashing moves always hit and\nbreak protection and barriers."),
@@ -6188,6 +6297,7 @@ static const Ability Energized = {
     .description = $("Generator + charges up on KO\nwith an Electric-type move."),
     .persistent = TRUE,
     .onSwitch = Generator.onSwitch,
+    .onTerrain = Generator.onTerrain,
 };
 
 #undef CONTEXT

@@ -2024,22 +2024,13 @@ static void Cmd_datahpupdate(void) {
                 BattleScriptCall(BattleScript_BattlerCanNoLongerEndureHits);
             }
         } else if (gBattleMoveDamage > 0 && DoesDisguiseBlockMove(gBattlerAttacker, gActiveBattler, gCurrentMove)) {
-            int ability;
-            if ((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PATCHWORK) && (ability = ABILITY_PATCHWORK)) ||
-                (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE) && (ability = ABILITY_DISGUISE))) {
-                int newSpecies = gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU ? SPECIES_MIMIKYU_BUSTED : SPECIES_MIMIKYU_RAYQUAZA_BUSTED;
-                if (ability == ABILITY_PATCHWORK && gBattlerAttacker != gActiveBattler) {
-                    SetOncePerTurnAbilityCounter(gActiveBattler, ABILITY_PATCHWORK, gBattlerAttacker);
-                }
-                gBattleScripting.abilityPopupOverwrite = ability;
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
-                gBattleMons[gActiveBattler].species = newSpecies;
-            } else if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ICE_FACE)) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_ICE_FACE;
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_EISCUE_NOICE_FACE);
-                gBattleMons[gActiveBattler].species = SPECIES_EISCUE_NOICE_FACE;
-            }
-            BattleScriptCall(BattleScript_TargetFormChange);
+            ON_ABILITY(gActiveBattler, TRUE, gAbilities[ability].onDisguise, int newSpecies = gAbilities[ability].onDisguise(gActiveBattler, FALSE);
+                       FILTER(newSpecies);
+                       gBattleScripting.abilityPopupOverwrite = ability;
+                       UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
+                       gBattleMons[gActiveBattler].species = newSpecies;
+                       BattleScriptCall(BattleScript_TargetFormChange);
+                       break;)
         } else {
             gHitMarker &= ~(HITMARKER_IGNORE_SUBSTITUTE);
             if (gBattleMoveDamage < 0)  // hp goes up
@@ -8460,64 +8451,19 @@ static void Cmd_various(void) {
             SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_BLOODLUST);
             break;
         case VARIOUS_HANDLE_WEATHER_CHANGE:
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PROTOSYNTHESIS)) {
-                ParadoxBoost state = GetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS).paradoxBoost;
-                if (state.source == PARADOX_WEATHER_ACTIVE && !(WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY)) {
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_PROTOSYNTHESIS;
-                    if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
-                        // Push this first so it resolves last
-                        ParadoxBoost boost = {.statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
-                        SetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS, (AbilityStates){.paradoxBoost = boost});
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
-                        RemoveItem(gActiveBattler);
-                        SetStatChanger(boost.statId, 0);
-                        BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
-                    } else
-                        SetAbilityState(gActiveBattler, ABILITY_PROTOSYNTHESIS, 0);
-                    BattleScriptCall(BattleScript_ParadoxBoostEnds);
-                } else if (state.source == PARADOX_BOOST_NOT_ACTIVE && WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY) {
-                    ParadoxBoost boost = {.statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE};
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_PROTOSYNTHESIS;
-                    SetAbilityStateAs(gActiveBattler, ABILITY_PROTOSYNTHESIS, (AbilityStates){.paradoxBoost = boost});
-                    SetStatChanger(boost.statId, 0);
-                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
-                    BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
-                }
-            }
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ICE_FACE) && gBattleMons[gActiveBattler].species == SPECIES_EISCUE_NOICE_FACE &&
-                IsBattlerWeatherAffected(gActiveBattler, WEATHER_HAIL_ANY)) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_ICE_FACE;
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, SPECIES_EISCUE);
-                gBattleMons[gActiveBattler].species = SPECIES_EISCUE;
-                BattleScriptCall(BattleScript_AttackerFormChange);
-            }
-
-            {
-                int ability;
-                if (((BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_DISGUISE) && (ability = ABILITY_DISGUISE)) ||
-                     (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_PATCHWORK) && (ability = ABILITY_PATCHWORK))) &&
-                    (gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU_BUSTED || gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU_RAYQUAZA_BUSTED) &&
-                    IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)) {
-                    int newSpecies = gBattleMons[gActiveBattler].species == SPECIES_MIMIKYU_BUSTED ? SPECIES_MIMIKYU : SPECIES_MIMIKYU_RAYQUAZA;
+            ON_ABILITY(
+                gActiveBattler, FALSE, gAbilities[ability].onWeather, if (gAbilities[ability].onWeather(ability, gActiveBattler)) {
                     gBattleScripting.abilityPopupOverwrite = ability;
-                    UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
-                    gBattleMons[gActiveBattler].species = newSpecies;
-                    BattleScriptCall(BattleScript_AttackerFormChange);
-                }
-            }
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_FLARE_BOOST) && CanBeBurned(gActiveBattler) &&
-                IsBattlerWeatherAffected(gActiveBattler, WEATHER_FOG_ANY)) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_FLARE_BOOST;
-                gBattleMons[gActiveBattler].status1 |= STATUS1_BURN;
-                BtlController_EmitSetMonData(0, REQUEST_STATUS_BATTLE, 0, 4, &gBattleMons[gActiveBattler].status1);
-                MarkBattlerForControllerExec(gActiveBattler);
-                BattleScriptCall(BattleScript_FlareBoostRet);
-            }
+                    BattleScriptCall(BattleScript_AbilityPopUp);
+                })
             return;
         case VARIOUS_HANDLE_TERRAIN_CHANGE:
+            ON_ABILITY(
+                gActiveBattler, FALSE, gAbilities[ability].onTerrain, if (gAbilities[ability].onTerrain(ability, gActiveBattler)) {
+                    gBattleScripting.abilityPopupOverwrite = ability;
+                    BattleScriptCall(BattleScript_AbilityPopUp);
+                })
+            return;
 
             if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_QUARK_DRIVE)) {
                 ParadoxBoost state = GetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE).paradoxBoost;
@@ -12818,18 +12764,11 @@ u16 GetNoDamageAbility(u8 battler) {
 }
 
 bool32 DoesDisguiseBlockMove(u8 battlerAtk, u8 battlerDef, u32 move) {
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_DISGUISE) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_PATCHWORK)) {
-        if ((gBattleMons[battlerDef].species == SPECIES_MIMIKYU || gBattleMons[battlerDef].species == SPECIES_MIMIKYU_RAYQUAZA) &&
-            !(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED) && !IS_MOVE_STATUS(move) &&
-            !((gHitMarker & HITMARKER_IGNORE_DISGUISE) && move != MOVE_SUCKER_PUNCH)) {
-            return TRUE;
-        }
-    } else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_ICE_FACE)) {
-        if (gBattleMons[battlerDef].species == SPECIES_EISCUE && !(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED) && !IS_MOVE_STATUS(move) &&
-            !((gHitMarker & HITMARKER_IGNORE_DISGUISE) && move != MOVE_SUCKER_PUNCH)) {
-            return TRUE;
-        }
-    }
+    ON_ABILITY(battlerDef, TRUE, gAbilities[ability].onDisguise, FILTER(gAbilities[ability].onDisguise(battlerDef, TRUE));
+               FILTER_NOT(gBattleMons[battlerDef].status2 & STATUS2_TRANSFORMED);
+               FILTER_NOT(IS_MOVE_STATUS(move));
+               FILTER_NOT(gHitMarker & HITMARKER_IGNORE_DISGUISE && move != MOVE_SUCKER_PUNCH);
+               return TRUE;)
 
     return FALSE;
 }

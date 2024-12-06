@@ -6703,12 +6703,10 @@ BattleScript_EffectChargeString:
 	goto BattleScript_MoveEnd
 
 BattleScript_GeneratorActivates::
-	call BattleScript_GeneratorActivatesRetNoPopup
+	call BattleScript_GeneratorActivatesRet
 	end3
 
 BattleScript_GeneratorActivatesRet::
-	call BattleScript_AbilityPopUp
-BattleScript_GeneratorActivatesRetNoPopup:
 	saveattackertostack3
 	copybyte gBattlerAttacker, gStackBattler1
 	setcharge
@@ -9410,12 +9408,10 @@ BattleScript_MoveEffectBurn::
 	goto BattleScript_UpdateEffectStatusIconRet
 
 BattleScript_FlareBoostEnd3::
-	call BattleScript_FlareBoostRetNoPopup
+	call BattleScript_FlareBoostRet
 	end3
 
 BattleScript_FlareBoostRet::
-	call BattleScript_AbilityPopUp
-BattleScript_FlareBoostRetNoPopup:
 	statusanimation BS_ATTACKER
 	printstring STRINGID_FLARE_BOOST_IGNITES
 	waitmessage B_WAIT_TIME_LONG
@@ -10937,12 +10933,10 @@ BattleScript_PressureRemoveStats::
 	end3
 
 BattleScript_ParadoxBoostActivates::
-	call BattleScript_ParadoxBoostActivatesRetNoPopup
+	call BattleScript_ParadoxBoostActivatesRet
 	end3
 
 BattleScript_ParadoxBoostActivatesRet::
-	call BattleScript_AbilityPopUp
-BattleScript_ParadoxBoostActivatesRetNoPopup:
 	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_PARADOX_BOOST_ITEM, BattleScript_ParadoxBoostActivatesRet_NoItem
 	playanimation BS_ATTACKER, B_ANIM_HELD_ITEM_EFFECT, NULL
 	waitanimation
