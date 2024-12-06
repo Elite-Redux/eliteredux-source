@@ -1916,8 +1916,11 @@
 #define SPECIES_CHANSEY_REDUX               REDUX_FORMS_START + 132
 #define SPECIES_BLISSEY_REDUX               REDUX_FORMS_START + 133
 #define SPECIES_HATENNA_REDUX               REDUX_FORMS_START + 134
+#define SPECIES_HATTREM_REDUX               REDUX_FORMS_START + 135
+#define SPECIES_HATTERENE_REDUX             REDUX_FORMS_START + 136
+#define SPECIES_HATTERENE_REDUX_MEGA        REDUX_FORMS_START + 137
 
-#define LAST_REDUX_FORM                     SPECIES_HATENNA_REDUX
+#define LAST_REDUX_FORM                     SPECIES_HATTERENE_REDUX_MEGA
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1

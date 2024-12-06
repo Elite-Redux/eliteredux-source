@@ -8514,6 +8514,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
+    [SPECIES_HATTREM_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_HATENNA_REDUX] =
     {
         .size = 0,

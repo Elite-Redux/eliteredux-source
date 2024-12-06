@@ -3474,7 +3474,9 @@ static const u8 sMonFrontAnimIdsTable[NUM_SPECIES - 1] =
     [SPECIES_ZYGARDE_50_POWER_CONSTRUCT - 1]   = ANIM_TIP_MOVE_FORWARD,
     [SPECIES_ZYGARDE_COMPLETE - 1]             = ANIM_GROW_VIBRATE,
     [SPECIES_HOOPA_UNBOUND - 1]                = ANIM_GROW_IN_STAGES,
-    [SPECIES_HATENNA_REDUX - 1]  = ANIM_V_SQUISH_AND_BOUNCE,
+    
+    [SPECIES_HATENNA_REDUX - 1]                = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_HATTREM_REDUX - 1]                = ANIM_V_SQUISH_AND_BOUNCE,
 };
 
 static const u8 sMonAnimationDelayTable[NUM_SPECIES - 1] =

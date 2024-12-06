@@ -2164,3 +2164,8 @@ static const u16 sHatennaFormSpeciesIdTable[] = {
     SPECIES_HATENNA_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sHattremFormSpeciesIdTable[] = {
+    SPECIES_HATTREM,
+    SPECIES_HATTREM_REDUX,
+    FORM_SPECIES_END,
+};

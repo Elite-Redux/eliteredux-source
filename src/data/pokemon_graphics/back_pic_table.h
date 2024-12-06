@@ -1756,6 +1756,7 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(EMBOAR_MEGA, gMonBackPic_EmboarMega),
     SPECIES_SPRITE(SAMUROTT_MEGA, gMonBackPic_SamurottMega),
     SPECIES_SPRITE(MORPEKYLL, gMonBackPic_Morpekyll),
+    SPECIES_SPRITE(HATTREM_REDUX, gMonBackPic_Hattrem_Redux),
     SPECIES_SPRITE(HATENNA_REDUX, gMonBackPic_Hatenna_Redux),
     SPECIES_SPRITE(MORPEKYLL_HANGRY, gMonBackPic_MorpekyllHangry),
 };
