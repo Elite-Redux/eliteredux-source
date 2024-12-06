@@ -1196,4 +1196,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_WIMPOD_REDUX] = sWimpodFormSpeciesIdTable,
 
+    [SPECIES_SPIRITOMB_REDUX] = sSpiritombFormSpeciesIdTable,
+
 };

@@ -8432,6 +8432,11 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 0,
     },
+    [SPECIES_SPIRITOMB_REDUX] =
+    {
+        .size = 0,
+        .y_offset =  0
+    },
     [SPECIES_GOLISOPOD_REDUX] =
     {
         .size = 0,

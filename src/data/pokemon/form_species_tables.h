@@ -2177,3 +2177,8 @@ static const u16 sWimpodFormSpeciesIdTable[] = {
     SPECIES_WIMPOD_REDUX,
     FORM_SPECIES_END,
 };
+static const u16 sSpiritombFormSpeciesIdTable[] = {
+    SPECIES_SPIRITOMB,
+    SPECIES_SPIRITOMB_REDUX,
+    FORM_SPECIES_END,
+};

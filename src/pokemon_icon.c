@@ -1801,6 +1801,7 @@ const u8 *const gMonIconTable[] =
     [SPECIES_EMBOAR_MEGA] = gMonIcon_EmboarMega,
     [SPECIES_SAMUROTT_MEGA] = gMonIcon_SamurottMega,
     [SPECIES_MORPEKYLL] = gMonIcon_Morpekyll,
+    [SPECIES_SPIRITOMB_REDUX] = gMonIcon_Spiritomb_Redux,
     [SPECIES_GOLISOPOD_REDUX] = gMonIcon_Golisopod_Redux,
     [SPECIES_WIMPOD_REDUX] = gMonIcon_Wimpod_Redux,
     [SPECIES_HATTERENE_REDUX_MEGA] = gMonIcon_Hatterene_Redux_Mega,
@@ -3500,6 +3501,7 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_WIMPOD_REDUX] = 2,
     [SPECIES_GOLISOPOD_REDUX] = 2,
     [SPECIES_GOLISOPOD_REDUX_MEGA] = 2,
+    [SPECIES_SPIRITOMB_REDUX] = 2,
 };
 
 const u8 gMonIconPaletteIndicesFemale[] =

@@ -1922,8 +1922,9 @@
 #define SPECIES_WIMPOD_REDUX                REDUX_FORMS_START + 138
 #define SPECIES_GOLISOPOD_REDUX             REDUX_FORMS_START + 139
 #define SPECIES_GOLISOPOD_REDUX_MEGA        REDUX_FORMS_START + 140
+#define SPECIES_SPIRITOMB_REDUX             REDUX_FORMS_START + 141
 
-#define LAST_REDUX_FORM                     SPECIES_GOLISOPOD_REDUX_MEGA
+#define LAST_REDUX_FORM                     SPECIES_SPIRITOMB_REDUX
 #define LAST_REDUX_FORM_SPACE               REDUX_FORMS_START + 400 // To make temporary space for anything we need to add in the future
 
 #define SPECIES_EGG                         LAST_REDUX_FORM_SPACE + 1
