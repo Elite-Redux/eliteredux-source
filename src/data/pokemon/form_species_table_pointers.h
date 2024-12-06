@@ -1198,4 +1198,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_SPIRITOMB_REDUX] = sSpiritombFormSpeciesIdTable,
 
+    [SPECIES_GOLISOPOD_REDUX_MEGA] = sGolisopodFormSpeciesIdTable,
+
 };
