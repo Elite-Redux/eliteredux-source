@@ -21,6 +21,7 @@ typedef int (*AbilityOnAttackerHandler)(int ability, int battler, int target, in
 typedef int (*AbilityOnDefenderHandler)(int ability, int battler, int attacker, int move, int moveType);
 typedef int (*AbilityOnRecoilHandler)(int damage, int battler, int moveType);
 typedef int (*AbilityOnReactiveHandler)(int ability, int battler);
+typedef int (*AbilityOnBattlerFaintsHandler)(int ability, int battler, int fainted, int move, int moveType);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -28,6 +29,12 @@ typedef enum {
     APPLY_ON_FOE = 2,
     APPLY_ON_ANY = 3,
 } AbilityApplyOn;
+
+typedef enum {
+    APPLY_ON_ATTACKER = 1 << 2,
+    APPLY_ON_TARGET = 2 << 2,
+    APPLY_ON_ATTACKER_OR_TARGET = APPLY_ON_ATTACKER | APPLY_ON_TARGET,
+} AbilityApplyOnWithTarget;
 
 typedef struct Ability {
     const u8* name;
@@ -44,6 +51,7 @@ typedef struct Ability {
     const AbilityOnDefenderHandler onDefender;
     const AbilityOnRecoilHandler onRecoil;
     const AbilityOnReactiveHandler onReactive;
+    const AbilityOnBattlerFaintsHandler onBattlerFaints;
     u16 breakable:1;
     u16 unsuppressable:1;
     u16 persistent:1;
@@ -57,10 +65,12 @@ typedef struct Ability {
     u16 magicGuard:1;
     u16 noRecoil:1;
     u16 halfRecoil:1;
+    AbilityApplyOnWithTarget onBattlerFaintsFor:4;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];
 
-int IsApplyOnFlagAppropriate(int applyTo, int from, AbilityApplyOn flag);
+int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag);
+int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag);
 
 #endif

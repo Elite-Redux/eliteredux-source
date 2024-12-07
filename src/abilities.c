@@ -7,6 +7,7 @@
 #include "battle_scripts.h"
 #include "battle_util.h"
 #include "constants/battle_move_effects.h"
+#include "constants/battle_script_commands.h"
 #include "constants/battle_string_ids.h"
 #include "constants/hold_effects.h"
 #include "constants/item.h"
@@ -69,6 +70,9 @@
 #define ON_REACTIVE static int COMBINE(onReactive, CONTEXT)(int ability, int battler)
 #define CONTEXT_ON_REACTIVE .onReactive = COMBINE(onReactive, CONTEXT)
 
+#define ON_BATTLER_FAINTS static int COMBINE(onBattlerFaints, CONTEXT)(int ability, int battler, int fainted, int move, int moveType)
+#define CONTEXT_ON_BATTLER_FAINTS .onBattlerFaints = COMBINE(onBattlerFaints, CONTEXT)
+
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
         case ABILITY_BS_EXECUTE:
@@ -81,10 +85,25 @@ static void InsertCorrectEndType(AbilityCallType type) {
     }
 }
 
-int IsApplyOnFlagAppropriate(int applyTo, int from, AbilityApplyOn flag) {
-    if (flag == APPLY_ON_SELF) return applyTo == from;
-    if (applyTo == from) return flag != APPLY_ON_FOE;
-    if (GetBattlerSide(applyTo) == GetBattlerSide(from))
+int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int attacker, int target, AbilityApplyOnWithTarget flag) {
+    switch (flag) {
+        case APPLY_ON_ATTACKER_OR_TARGET:
+            return sourceBattler == attacker || sourceBattler == target;
+
+        case APPLY_ON_ATTACKER:
+            return sourceBattler == attacker;
+
+        case APPLY_ON_TARGET:
+            return sourceBattler == target;
+    }
+
+    return IsApplyOnFlagAppropriate(contextBattler, sourceBattler, (AbilityApplyOn)flag);
+}
+
+int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag) {
+    if (flag == APPLY_ON_SELF) return contextBattler == sourceBattler;
+    if (contextBattler == sourceBattler) return flag != APPLY_ON_FOE;
+    if (GetBattlerSide(contextBattler) == GetBattlerSide(sourceBattler))
         return flag & APPLY_ON_ALLY;
     else
         return flag & APPLY_ON_FOE;
@@ -162,7 +181,14 @@ static int PoisonPuppeteerClone(int ability, int battler, int (*predicate)(int b
 
     gStackBattler1 = battler;
     gBattleScripting.abilityPopupOverwrite = ability;
-    BattleScriptCall(BattleScript_AbilityPopUp);
+    BattleScriptCall(BattleScript_AbilityPopUpStack);
+    return TRUE;
+}
+
+static int MoxieClone(int battler, int stat) {
+    CHECK(HasAttackerFaintedTarget())
+    CHECK(ChangeStatBuffs(battler, 1, battler, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
+    BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
     return TRUE;
 }
 
@@ -557,11 +583,28 @@ static const Ability Illuminate = {
 #undef CONTEXT
 #define CONTEXT Trace
 ON_SWITCH {
-    CHECK_NOT(gTurnStructs[battler].traced)
+    int target = BATTLE_OPPOSITE(battler);
+    int newAbility = GetBattlerAbility(target);
+    if (!IsBattlerAlive(target) || IsRolePlayBannedAbility(newAbility)) {
+        target = BATTLE_PARTNER(target);
+        CHECK(IsBattlerAlive(target))
+        newAbility = GetBattlerAbility(target);
+        CHECK_NOT(IsRolePlayBannedAbility(newAbility))
+    }
 
-    gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_TRACED;
-    gTurnStructs[battler].traced = TRUE;
-    return FALSE;
+    CHECK_NOT(HasAbilityIgnoringSuppression(battler, newAbility))
+
+    int index = GetAbilityIndex(battler, ability, FALSE);
+    CHECK(index < TOTAL_ABILITY_COUNT)
+
+    gBattleMons[battler].abilities[index] = newAbility;
+    gVolatileStructs[battler].switchInAbilityDone[index] = FALSE;
+
+    gStackBattler1 = battler;
+    gStackBattler2 = target;
+    gBattleScripting.abilityPopupOverwrite = newAbility;
+    BattleScriptPushCursorAndCallback(BattleScript_TraceActivatesEnd3);
+    return TRUE;
 }
 static const Ability Trace = {
     .name = $("Trace"),
@@ -1877,9 +1920,12 @@ static const Ability Mummy = {
 
 #undef CONTEXT
 #define CONTEXT Moxie
+ON_BATTLER_FAINTS { return MoxieClone(battler, STAT_ATK); }
 static const Ability Moxie = {
     .name = $("Moxie"),
     .description = $("Dealing a KO raises Attack by\none stage."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -2485,11 +2531,34 @@ static const Ability Disguise = {
 
 #undef CONTEXT
 #define CONTEXT BattleBond
+ON_BATTLER_FAINTS {
+    int newSpecies = 0;
+    switch (gBattleMons[battler].species) {
+        case SPECIES_GRENINJA_BATTLE_BOND:
+            newSpecies = SPECIES_GRENINJA_ASH;
+            break;
+
+        case SPECIES_DARMANITAN_REDUX_BOND:
+            newSpecies = SPECIES_DARMANITAN_REDUX_BLUNDER;
+            break;
+    }
+
+    CHECK(newSpecies)
+
+    PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[battler].species);
+    gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
+    UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+    gBattleMons[battler].species = newSpecies;
+    BattleScriptCall(BattleScript_BattleBondActivatesOnMoveEndAttacker);
+    return TRUE;
+}
 static const Ability BattleBond = {
     .name = $("Battle Bond"),
     .description = $("Transforms into Battle Bond form\nafter dealing a KO."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -2602,9 +2671,17 @@ static const Ability Dazzling = {
 
 #undef CONTEXT
 #define CONTEXT SoulHeart
+ON_BATTLER_FAINTS {
+    CHECK(ChangeStatBuffs(battler, 1, STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
+
+    BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
+    return TRUE;
+}
 static const Ability SoulHeart = {
     .name = $("Soul-Heart"),
     .description = $("KOs dealt anywhere on the field\nraise Sp. Atk by one stage."),
+    .onBattlerFaintsFor = APPLY_ON_ANY,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -2617,9 +2694,25 @@ static const Ability TanglingHair = {
 
 #undef CONTEXT
 #define CONTEXT Receiver
+ON_BATTLER_FAINTS {
+    int allyAbility = GetBattlerAbility(fainted);
+    CHECK_NOT(IsRolePlayBannedAbility(allyAbility))
+    CHECK_NOT(HasAbilityIgnoringSuppression(battler, allyAbility))
+    int index = GetAbilityIndex(battler, ability, FALSE);
+    CHECK(index < TOTAL_ABILITY_COUNT)
+
+    gBattleMons[battler].abilities[index] = allyAbility;
+    gVolatileStructs[battler].switchInAbilityDone[index] = FALSE;
+
+    gBattleScripting.abilityPopupOverwrite = allyAbility;
+    BattleScriptCall(BattleScript_ReceiverActivates);
+    return TRUE;
+}
 static const Ability Receiver = {
     .name = $("Receiver"),
     .description = $("In Double Battles, copies its\nfainting partner's ability."),
+    .onBattlerFaintsFor = APPLY_ON_ALLY,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -2645,9 +2738,12 @@ static const Ability PowerOfAlchemy = {
 
 #undef CONTEXT
 #define CONTEXT BeastBoost
+ON_BATTLER_FAINTS { return MoxieClone(battler, GetHighestStatId(battler, FALSE)); }
 static const Ability BeastBoost = {
     .name = $("Beast Boost"),
     .description = $("Dealing a KO raises highest\ncalculated stat by one stage."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -3168,17 +3264,28 @@ static const Ability DragonsMaw = {
 static const Ability ChillingNeigh = {
     .name = $("ChillngNeigh"),
     .description = $("KOs raise Attack by one stage."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = Moxie.onBattlerFaints,
 };
 
 #undef CONTEXT
 #define CONTEXT GrimNeigh
+ON_BATTLER_FAINTS { return MoxieClone(battler, STAT_SPATK); }
 static const Ability GrimNeigh = {
     .name = $("Grim Neigh"),
     .description = $("KOs raise Sp. Atk by one stage."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
 #define CONTEXT AsOneIceRider
+ON_BATTLER_FAINTS {
+    CHECK(ChillingNeigh.onBattlerFaints(ability, battler, fainted, move, moveType))
+    gBattleScripting.abilityPopupOverwrite = ABILITY_CHILLING_NEIGH;
+    BattleScriptCall(BattleScript_AbilityPopUpStack);
+    return NO_ANNOUNCE;
+}
 ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_ASONE); }
 static const Ability AsOneIceRider = {
     .name = $("As One"),
@@ -3186,16 +3293,26 @@ static const Ability AsOneIceRider = {
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
 #define CONTEXT AsOneShadowRider
+ON_BATTLER_FAINTS {
+    CHECK(GrimNeigh.onBattlerFaints(ability, battler, fainted, move, moveType))
+    gBattleScripting.abilityPopupOverwrite = ABILITY_GRIM_NEIGH;
+    BattleScriptCall(BattleScript_AbilityPopUpStack);
+    return NO_ANNOUNCE;
+}
 static const Ability AsOneShadowRider = {
     .name = $("As One"),
     .description = $("Unnerve + Grim Neigh."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     .onSwitch = AsOneIceRider.onSwitch,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -3249,9 +3366,17 @@ static const Ability SandSong = {
 
 #undef CONTEXT
 #define CONTEXT Rampage
+ON_BATTLER_FAINTS {
+    SetAbilityState(battler, ability, TRUE);
+    gVolatileStructs[battler].rechargeTimer = 0;
+    gBattleMons[battler].status2 &= ~(STATUS2_RECHARGE);
+    return FALSE;
+}
 static const Ability Rampage = {
     .name = $("Rampage"),
     .description = $("No recharge after a KO, if it\nusually would need to recharge."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -3760,9 +3885,17 @@ static const Ability MajesticMoth = {
 
 #undef CONTEXT
 #define CONTEXT SoulEater
+ON_BATTLER_FAINTS {
+    CHECK_NOT(BATTLER_MAX_HP(battler))
+    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+    BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+    return TRUE;
+}
 static const Ability SoulEater = {
     .name = $("Soul Eater"),
     .description = $("Dealing a KO heals 1/4 of this\nPokémon's max HP."),
+    .onBattlerFaintsFor = APPLY_ON_ALLY,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -3930,6 +4063,8 @@ static const Ability PoisonAbsorb = {
 static const Ability Scavenger = {
     .name = $("Scavenger"),
     .description = $("Dealing a KO heals 1/4 of this\nPokémon's max HP."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = SoulEater.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -4098,6 +4233,8 @@ static const Ability FrozenSoul = {
 static const Ability Predator = {
     .name = $("Predator"),
     .description = $("Dealing a KO heals 1/4 of this\nPokémon's max HP."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = SoulEater.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -4105,6 +4242,8 @@ static const Ability Predator = {
 static const Ability Looter = {
     .name = $("Looter"),
     .description = $("Dealing a KO heals 1/4 of this\nPokémon's max HP."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = SoulEater.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -4900,9 +5039,20 @@ static const Ability Radiance = {
 
 #undef CONTEXT
 #define CONTEXT JawsOfCarnage
+ON_BATTLER_FAINTS {
+    CHECK_NOT(BATTLER_MAX_HP(battler))
+    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+    if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
+        BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
+    else
+        BattleScriptCall(BattleScript_HandleSoulEaterEffect);
+    return TRUE;
+}
 static const Ability JawsOfCarnage = {
     .name = $("Jaws of Carnage"),
     .description = $("Devours 1/2 of the foe\nwhen defeating it."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -5170,9 +5320,12 @@ static const Ability RagingMoth = {
 
 #undef CONTEXT
 #define CONTEXT AdrenalineRush
+ON_BATTLER_FAINTS { return MoxieClone(battler, STAT_SPEED); }
 static const Ability AdrenalineRush = {
     .name = $("Adrenaline Rush"),
     .description = $("KOs raise Speed by one stage."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -5384,6 +5537,8 @@ static const Ability JunglesGuard = {
 static const Ability HuntersHorn = {
     .name = $("Hunter's Horn"),
     .description = $("Boost horn moves and heals\n1/4 HP when defeating an enemy."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = SoulEater.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -5406,6 +5561,8 @@ static const Ability PlasmaLamp = {
 static const Ability MagmaEater = {
     .name = $("Magma Eater"),
     .description = $("Predator + Molten Down."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = SoulEater.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -5558,6 +5715,8 @@ static const Ability BerserkerRage = {
     .name = $("Berserker Rage"),
     .description = $("Berserk + Rampage."),
     .onDefender = Berserk.onDefender,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = Rampage.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -5655,10 +5814,17 @@ ON_RECOIL {
     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
     return max(damage / 4, 1);
 }
+ON_BATTLER_FAINTS {
+    CHECK(ChangeStatBuffs(battler, -1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL))
+    BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
+    return TRUE;
+}
 static const Ability SuperStrain = {
     .name = $("Super Strain"),
     .description = $("KOs lower Attack by +1.\nTake 25% recoil damage."),
     CONTEXT_ON_RECOIL,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -6103,12 +6269,18 @@ static const Ability BerserkDna = {
 #undef CONTEXT
 #define CONTEXT CrownedKing
 ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
+ON_BATTLER_FAINTS {
+    return AsOneShadowRider.onBattlerFaints(ability, battler, fainted, move, moveType) |
+           AsOneIceRider.onBattlerFaints(ability, battler, fainted, move, moveType);
+}
 static const Ability CrownedKing = {
     .name = $("Crowned King"),
     .description = $("Unnerve + Grim Neigh +\nChilling Neigh."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -6140,6 +6312,8 @@ static const Ability Permanence = {
 static const Ability Hubris = {
     .name = $("Hubris"),
     .description = $("KOs raise SpAtk by one stage."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = GrimNeigh.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -6570,11 +6744,21 @@ static const Ability Costar = {
 
 #undef CONTEXT
 #define CONTEXT Commander
+ON_BATTLER_FAINTS {
+    CHECK(GetAbilityState(battler, ability))
+    SetAbilityState(battler, ability, COMMANDER_NOT_ACTIVE);
+
+    gStatuses3[battler] &= ~STATUS3_SEMI_INVULNERABLE;
+    BattleScriptCall(BattleScript_CommanderEnds);
+    return TRUE;
+}
 static const Ability Commander = {
     .name = $("Commander"),
     .description = $("Hops inside an allied Dondozo.\nBoosts its ally but can't act."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .onBattlerFaintsFor = APPLY_ON_ALLY,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -6930,6 +7114,8 @@ static const Ability HauntingFrenzy = {
     .name = $("Haunting Frenzy"),
     .description = $("20% chance to flinch the\nopponent. +1 speed on kill."),
     CONTEXT_ON_ATTACKER,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = AdrenalineRush.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -7397,6 +7583,8 @@ static const Ability Bloodlust = {
     .description = $("Blood Bath + Soul Eater."),
     .breakable = TRUE,
     .onReactive = BloodBath.onReactive,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = SoulEater.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -7516,9 +7704,18 @@ static const Ability OnTheProwl = {
 
 #undef CONTEXT
 #define CONTEXT Pretentious
+ON_BATTLER_FAINTS {
+    CHECK(gVolatileStructs[battler].critBoost < 3)
+    gVolatileStructs[battler].critBoost++;
+    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
+    BattleScriptCall(BattleScript_AbilityBoostsCrit);
+    return TRUE;
+}
 static const Ability Pretentious = {
     .name = $("Pretentious"),
     .description = $("Dealing a KO raises Crit by\none stage."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -7810,10 +8007,19 @@ static const Ability MaximumAcceleration = {
 
 #undef CONTEXT
 #define CONTEXT Sidewinder
+ON_BATTLER_FAINTS {
+    CHECK(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST || !(gStatuses4[battler] & STATUS4_COILED))
+    gStatuses4[battler] |= STATUS4_COILED;
+    SetAbilityState(battler, ability, TRUE);
+    BattleScriptCall(BattleScript_BattlerCoiledUpReturnNoPopup);
+    return TRUE;
+}
 static const Ability Sidewinder = {
     .name = $("Sidewinder"),
     .description = $("First biting move each entry gets\n+1 priority. Resets on KO."),
     .onSwitch = CoilUp.onSwitch,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -7858,6 +8064,8 @@ static const Ability WayOfPrecision = {
 static const Ability WayOfSwiftness = {
     .name = $("Way of Swiftness"),
     .description = $("Pretentious + Swift Swim."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = Pretentious.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -7880,6 +8088,8 @@ static const Ability IronGiant = {
 static const Ability MasterHand = {
     .name = $("Master Hand"),
     .description = $("Mega Launcher + Rampage."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = Rampage.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -8054,13 +8264,22 @@ static const Ability Slipstream = {
 static const Ability ApexPredator = {
     .name = $("Apex Predator"),
     .description = $("Tough Claws + Predator."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = SoulEater.onBattlerFaints,
 };
 
 #undef CONTEXT
 #define CONTEXT DragonsRitual
+ON_BATTLER_FAINTS {
+    CHECK(CompareStat(battler, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN) || CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
+    BattleScriptCall(BattleScript_DragonsRitual);
+    return TRUE;
+}
 static const Ability DragonsRitual = {
     .name = $("Dragon's Ritual"),
     .description = $("Dealing a KO raises Attack and\nSpeed by one stage."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -8102,12 +8321,20 @@ static const Ability PinnacleBlade = {
 
 #undef CONTEXT
 #define CONTEXT Energized
+ON_BATTLER_FAINTS {
+    CHECK(moveType == TYPE_ELECTRIC)
+    SetOncePerTurnAbilityCounter(battler, ability, TRUE);
+    BattleScriptCall(BattleScript_GeneratorActivatesRet);
+    return TRUE;
+}
 static const Ability Energized = {
     .name = $("Energized"),
     .description = $("Generator + charges up on KO\nwith an Electric-type move."),
     .persistent = TRUE,
     .onSwitch = Generator.onSwitch,
     .onTerrain = Generator.onTerrain,
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -8121,8 +8348,6 @@ ON_END_TURN {
     gBattleMons[battler].type1 = newType;
     gBattleMons[battler].type2 = newType;
     gBattleMons[battler].type3 = TYPE_MYSTERY;
-    gBattlerAbility = battler;
-    gBattleScripting.abilityPopupOverwrite = ABILITY_COLOR_SPECTRUM;
     PREPARE_TYPE_BUFFER(gBattleTextBuff1, newType);
     BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
     return TRUE;
@@ -8356,6 +8581,8 @@ static const Ability StunShock = {
 static const Ability RagingGoddess = {
     .name = $("Raging Goddess"),
     .description = $("Rampage + Hyper Aggressive."),
+    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
+    .onBattlerFaints = Rampage.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -8386,7 +8613,6 @@ ON_DEFENDER {
     CHECK_NOT(gStatuses3[attacker] & STATUS3_EMBARGO)
     CHECK(gBattleMons[attacker].item)
 
-    gBattleScripting.abilityPopupOverwrite = ABILITY_SUPERSWEET_SYRUP;
     gVolatileStructs[attacker].embargoTimer = 2;
     gStatuses3[attacker] |= STATUS3_EMBARGO;
     gLastUsedItem = gBattleMons[attacker].item;
