@@ -6476,6 +6476,7 @@ bool32 CanBeConfused(u8 battlerId)
     if (BATTLER_HAS_ABILITY(battlerId, ABILITY_OWN_TEMPO)
         || BATTLER_HAS_ABILITY(battlerId, ABILITY_DISCIPLINE)
         || BATTLER_HAS_ABILITY(battlerId, ABILITY_ROCK_HEAD)
+        || BATTLER_HAS_ABILITY(battlerId, ABILITY_BRUTEFORCE)
         || BATTLER_HAS_ABILITY(battlerId, ABILITY_STEEL_BARREL))
         return FALSE;
     return TRUE;
@@ -8914,6 +8915,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         return;
     
     case ABILITY_RECKLESS:
+    case ABILITY_BRUTEFORCE:
         if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
         return;
     
@@ -9465,6 +9467,7 @@ static void CalculateDefensiveAbilityMultiplier(int ability, int battlerAtk, int
         return;
     
     case ABILITY_SHELL_ARMOR:
+    case ABILITY_FARADAYS_CAGE:
     case ABILITY_BATTLE_ARMOR:
     case ABILITY_CRUST_COAT:
     case ABILITY_DREAM_STATE:
@@ -13510,6 +13513,13 @@ int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, in
         REQUIRE(IsMoveMakingContact(move, attacker))
 
         UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICY_WIND, 0);
+        break;
+
+    case ABILITY_FARADAYS_CAGE:
+        REQUIRE(ShouldApplyOnHitAffect(attacker))
+        REQUIRE(IsMoveMakingContact(move, attacker))
+
+        UseOutOfTurnAttack(battler, attacker, ability, MOVE_THUNDER_CAGE, 50);
         break;
 
     case ABILITY_WILDFIRE:

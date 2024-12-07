@@ -776,8 +776,10 @@
 #define ABILITY_PUFFY 754 // Takes 1/2 dmg from contact moves but Fire moves hurt it 2x more.
 #define ABILITY_BALLOON_BLITZ 755 // Inflatable + Hyper Aggressive.
 #define ABILITY_DOOM_BLAST 756 // Boosts own Dark moves by 1.35x, takes 10% of dmg dealt as recoil.
+#define ABILITY_BRUTEFORCE 757 // Rock Head + Reckless
+#define ABILITY_FARADAYS_CAGE 758 // Shell Armor + Thunder Cage when hit by contact.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_DOOM_BLAST + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_FARADAYS_CAGE + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

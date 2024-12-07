@@ -861,7 +861,7 @@ static u32 WhichMoveBetter(u32 move1, u32 move2)
             return 0;
     }
     // Check recoil
-    if (!BattlerHasAbility(sBattler_AI, ABILITY_ROCK_HEAD, FALSE) && !BattlerHasAbility(sBattler_AI, ABILITY_STEEL_BARREL, FALSE))
+    if (!BattlerHasAbility(sBattler_AI, ABILITY_ROCK_HEAD, FALSE) && !BattlerHasAbility(sBattler_AI, ABILITY_STEEL_BARREL, FALSE) && !BattlerHasAbility(sBattler_AI, ABILITY_BRUTEFORCE, FALSE))
     {
         if (((gBattleMoves[move1].effect == EFFECT_RECOIL_25
                 || gBattleMoves[move1].effect == EFFECT_RECOIL_IF_MISS
