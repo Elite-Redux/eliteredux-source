@@ -65,6 +65,7 @@ typedef struct Ability {
     u16 magicGuard:1;
     u16 noRecoil:1;
     u16 halfRecoil:1;
+    u16 chloroplast:1;
     AbilityApplyOnWithTarget onBattlerFaintsFor:4;
 } Ability;
 

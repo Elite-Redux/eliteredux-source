@@ -3228,8 +3228,7 @@ static void Cmd_clearstatusfromeffect(void) {
 
     if (gBattleScripting.moveEffect == MOVE_EFFECT_CHARGING) {
         if (gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM &&
-            (IsBattlerWeatherAffected(gActiveBattler, WEATHER_SUN_ANY) || BattlerHasAbility(gActiveBattler, ABILITY_CHLOROPLAST, FALSE) ||
-             BattlerHasAbility(gActiveBattler, ABILITY_SOLAR_FLARE, FALSE) || BattlerHasAbility(gActiveBattler, ABILITY_BIG_LEAVES, FALSE)))
+            (IsBattlerWeatherAffected(gActiveBattler, WEATHER_SUN_ANY) || HasChloroplast(gActiveBattler)))
             gRoundStructs[gActiveBattler].chargingTurn = FALSE;
         else if (BattlerHasAbility(gActiveBattler, ABILITY_ACCELERATE, FALSE))
             gRoundStructs[gActiveBattler].chargingTurn = FALSE;
@@ -11093,10 +11092,7 @@ static bool8 IsTwoTurnsMove(u16 move) {
 static u8 AttacksThisTurn(u8 battlerId, u16 move)  // Note: returns 1 if it's a charging turn, otherwise 2
 {
     // first argument is unused
-    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM &&
-        (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || BattlerHasAbility(gBattlerAttacker, ABILITY_SOLAR_FLARE, FALSE) ||
-         BattlerHasAbility(gBattlerAttacker, ABILITY_CHLOROPLAST, FALSE) || BattlerHasAbility(gBattlerAttacker, ABILITY_BIG_LEAVES, FALSE)))
-        return 2;
+    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || HasChloroplast(gBattlerAttacker))) return 2;
 
     if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY)) return 2;
 
@@ -11651,8 +11647,7 @@ static void Cmd_recoverbasedonsunlight(void) {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
         } else if (gCurrentMove == MOVE_MOONLIGHT && BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_MOON_SPIRIT)) {
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP * 3 / 4;
-        } else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SOLAR_FLARE) ||
-                   BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_BIG_LEAVES) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CHLOROPLAST)) {
+        } else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) || HasChloroplast(gBattlerAttacker)) {
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP * 2 / 3;
         } else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY))
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
@@ -13512,10 +13507,7 @@ static bool32 CriticalCapture(u32 odds) {
 bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId) {
     if (gBattleMoves[move].split == SPLIT_STATUS) return FALSE;
     if (gBattleMoves[move].parentalBondBanned) return FALSE;
-    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM &&
-        (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || BattlerHasAbility(battlerId, ABILITY_SOLAR_FLARE, FALSE) ||
-         BattlerHasAbility(battlerId, ABILITY_CHLOROPLAST, FALSE) || BattlerHasAbility(battlerId, ABILITY_BIG_LEAVES, FALSE)))
-        return TRUE;
+    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || HasChloroplast(battlerId))) return TRUE;
     if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY)) return TRUE;
     if (gBattleMoves[move].twoTurnMove && !BattlerHasAbility(battlerId, ABILITY_ACCELERATE, FALSE)) return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) {

@@ -7058,7 +7058,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef) {
                 basePower *= 2;
             break;
         case EFFECT_WEATHER_BALL:
-            if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CHLOROPLAST) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BIG_LEAVES))
+            if (HasChloroplast(battlerAtk))
                 basePower *= 2;
             else if (gBattleWeather & WEATHER_ANY && WEATHER_HAS_EFFECT)
                 basePower *= 2;
@@ -8147,8 +8147,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
             break;
         case EFFECT_SOLARBEAM:
             if (IsBattlerWeatherAffected(battlerAtk, (WEATHER_HAIL_ANY | WEATHER_SANDSTORM_ANY | WEATHER_RAIN_ANY | WEATHER_FOG_ANY)) &&
-                !BattlerHasAbility(gBattlerAttacker, ABILITY_SOLAR_FLARE, FALSE) && !BattlerHasAbility(gBattlerAttacker, ABILITY_BIG_LEAVES, FALSE) &&
-                !BattlerHasAbility(gBattlerAttacker, ABILITY_CHLOROPLAST, FALSE))
+                !HasChloroplast(gBattlerAttacker))
                 MulModifier(&modifier, UQ_4_12(0.5));
             break;
         case EFFECT_STOMPING_TANTRUM:
@@ -10746,9 +10745,7 @@ int IsStickyHold(int battler) {
 }
 
 int HasChloroplast(int battler) {
-    if (BattlerHasAbility(battler, ABILITY_CHLOROPLAST, FALSE)) return TRUE;
-    if (BattlerHasAbility(battler, ABILITY_BIG_LEAVES, FALSE)) return TRUE;
-    if (BattlerHasAbility(battler, ABILITY_SOLAR_FLARE, FALSE)) return TRUE;
+    ON_ABILITY(battler, FALSE, gAbilities[ability].chloroplast, return TRUE)
     return FALSE;
 }
 

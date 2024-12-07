@@ -3320,6 +3320,7 @@ static const Ability AsOneShadowRider = {
 static const Ability Chloroplast = {
     .name = $("Chloroplast"),
     .description = $("Weather Ball, Solar Beam/Blade,\nGrowth act as if used in sun."),
+    .chloroplast = TRUE,
 };
 
 #undef CONTEXT
@@ -4258,6 +4259,7 @@ static const Ability LunarEclipse = {
 static const Ability SolarFlare = {
     .name = $("Solar Flare"),
     .description = $("Chloroplast + Immolate.\nFire moves gain STAB."),
+    .chloroplast = TRUE,
 };
 
 #undef CONTEXT
@@ -4335,6 +4337,7 @@ static const Ability BigLeaves = {
     .name = $("Big Leaves"),
     .description = $("Chloroplast + Chlorophyll + Leaf\nGuard + Harvest + Solar Power."),
     .breakable = TRUE,
+    .chloroplast = TRUE,
     .onEndTurn = Harvest.onEndTurn,
 };
 
