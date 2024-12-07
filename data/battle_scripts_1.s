@@ -1490,7 +1490,6 @@ BattleScript_MoveEffectBugBite::
 	return
 
 BattleScript_CudChew::
-	call BattleScript_AbilityPopUp
 	waitmessage B_WAIT_TIME_SHORT
 	setbyte sBERRY_OVERRIDE, TRUE   @ override the requirements for eating berries
 	consumeberry BS_ATTACKER, TRUE  @ consume the berry, then restore the item from changedItems
@@ -8994,10 +8993,6 @@ BattleScript_StackBattlerFormChange::
 	return
 
 BattleScript_AttackerFormChangeEnd3::
-	call BattleScript_AttackerFormChange
-	end3
-
-BattleScript_AttackerFormChangeEnd3NoPopup::
 	call BattleScript_AttackerFormChangeNoPopup
 	end3
 
@@ -9586,7 +9581,6 @@ BattleScript_AbilityPopUp::
 	return
 
 BattleScript_SpeedBoostActivates::
-	call BattleScript_AbilityPopUp
 	setstatchanger STAT_SPEED, 1, FALSE
 	setgraphicalstatchangevalues
 	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
@@ -9729,11 +9723,12 @@ BattleScript_AttackerBecameTheType::
 	return
 
 BattleScript_AttackerBecameTheTypeFullEnd3::
-	call BattleScript_AttackerBecameTheTypeFull
+	call BattleScript_AttackerBecameTheTypeFullNoPopup
 	end3
 
 BattleScript_AttackerBecameTheTypeFull::
 	call BattleScript_AbilityPopUp
+BattleScript_AttackerBecameTheTypeFullNoPopup:
 	printstring STRINGID_ATTACKERTYPECHANGEDTO
 	waitmessage B_WAIT_TIME_LONG
 	return
@@ -9751,8 +9746,6 @@ BattleScript_AttackerBecameInfested::
 	return
 	
 BattleScript_SelfSufficientActivates::
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNSABILITYRESTOREDHPALITTLE
 	waitmessage B_WAIT_TIME_LONG
 	orword gHitMarker, HITMARKER_SKIP_DMG_TRACK | HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_IGNORE_DISGUISE | HITMARKER_PASSIVE_DAMAGE
@@ -9966,7 +9959,6 @@ sZero:
 .byte 0
 	
 BattleScript_MoodyActivates::
-	call BattleScript_AbilityPopUp
 	jumpifbyteequal sSTATCHANGER, sZero, BattleScript_MoodyLower
 	statbuffchange MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_CERTAIN | STAT_BUFF_NOT_PROTECT_AFFECTED, BattleScript_MoodyLower
 	jumpifbyte CMP_GREATER_THAN, cMULTISTRING_CHOOSER, B_MSG_DEFENDER_STAT_ROSE, BattleScript_MoodyLower
@@ -10046,6 +10038,7 @@ BattleScript_ReceiverActivates::
 	
 BattleScript_AbilityHpHeal:
 	call BattleScript_AbilityPopUp
+BattleScript_AbilityHpHeal_NoPopup:
 	printstring STRINGID_PKMNSXRESTOREDHPALITTLE2
 	waitmessage B_WAIT_TIME_LONG
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
@@ -10054,7 +10047,7 @@ BattleScript_AbilityHpHeal:
 	return
 
 BattleScript_RainDishActivates::
-	call BattleScript_AbilityHpHeal
+	call BattleScript_AbilityHpHeal_NoPopup
 	end3
 	
 BattleScript_CheekPouchActivates::
@@ -10065,14 +10058,12 @@ BattleScript_CheekPouchActivates::
 	return
 
 BattleScript_HoneyGatherActivates::
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_HONEYGATHER
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
 BattleScript_HarvestActivates::
 	tryrecycleitem BattleScript_HarvestActivatesEnd
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_HARVESTBERRY
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_HarvestActivatesEnd:
@@ -10080,7 +10071,6 @@ BattleScript_HarvestActivatesEnd:
 
 BattleScript_SolarPowerActivates::
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
-	call BattleScript_AbilityPopUp
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
 	printstring STRINGID_SOLARPOWERHPDROP
@@ -10089,7 +10079,6 @@ BattleScript_SolarPowerActivates::
 	end3
 
 BattleScript_AbilitySelfDamage::
-	call BattleScript_AbilityPopUp
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE | HITMARKER_IGNORE_DISGUISE
 	healthbarupdate BS_ATTACKER
 	datahpupdate BS_ATTACKER
@@ -10099,7 +10088,6 @@ BattleScript_AbilitySelfDamage::
 	end3
 	
 BattleScript_HealerActivates::
-	call BattleScript_AbilityPopUp
 	curestatus BS_ABILITY_PARTNER
 	updatestatusicon BS_ABILITY_PARTNER
 	curestatus BS_ABILITY_BATTLER
@@ -10134,7 +10122,6 @@ BattleScript_CryoProficiencyActivates::
 	return
 
 BattleScript_ShedSkinActivates::
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNSXCUREDYPROBLEM
 	waitmessage B_WAIT_TIME_LONG
 	updatestatusicon BS_ATTACKER
@@ -12112,7 +12099,6 @@ BattleScript_HydroCircuitAbsorbEffect_NothingToHeal:
     return
 
 BattleScript_SweetDreamsActivates::
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_SWEETDREAMSHPUP
 	waitmessage B_WAIT_TIME_LONG
 	recordability BS_ATTACKER

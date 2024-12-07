@@ -250,6 +250,7 @@ void ReplaceAbility(int battler, int ability);
 int HasAbilityIgnoringSuppression(int battler, int ability);
 int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
 int IsSuppressed(int battler, int ability, int checkMoldBreaker);
+int AbilityHealMonStatus(u8 battler, u16 ability);
 
 #define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
     for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) {       \

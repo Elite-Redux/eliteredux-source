@@ -4047,7 +4047,7 @@ static u16 UseAttackerFollowUpMove(u8 battler, int target, u16 ability, u16 extr
     return TRUE;
 }
 
-static int AbilityHealMonStatus(u8 battler, u16 ability) {
+int AbilityHealMonStatus(u8 battler, u16 ability) {
     if (!(gBattleMons[battler].status1 & STATUS1_ANY)) return FALSE;
 
     if (gBattleMons[battler].status1 & (STATUS1_POISON | STATUS1_TOXIC_POISON)) StringCopy(gBattleTextBuff1, gStatusConditionString_PoisonJpn);
@@ -10274,9 +10274,7 @@ void MakePlayerTeamAsleep(void) {
 }
 
 int IsMagicGuardProtected(int battler) {
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_MAGIC_GUARD)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_IMPENETRABLE)) return TRUE;
-    if (BATTLER_HAS_ABILITY(battler, ABILITY_APPLE_ENLIGHTENMENT)) return TRUE;
+    ON_ABILITY(battler, FALSE, gAbilities[ability].magicGuard, return TRUE)
     if (isMagicRoomActive()) return TRUE;
 
     return FALSE;
@@ -10482,7 +10480,8 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
 
         case ABILITY_VITAL_SPIRIT:
             REQUIRE(moveType == TYPE_FIGHTING)
-            if (AbilityHealMonStatus(battler, ability)) return TRUE;
+            REQUIRE(AbilityHealMonStatus(battler, ability))
+            BattleScriptCall(BattleScript_AbilityPopUp);
             break;
 
         case ABILITY_HARDENED_SHEATH:
@@ -12143,8 +12142,6 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
         BattleScriptPushCursorAndCallback(BattleScript_SwitchInAbilityMsg); \
         return TRUE;
 
-static int HandleEndTurnAbilityAs(int ability, int battler);
-
 int HandleEndTurnAbility(int abilityNumber, int battler) {
     int ability;
 
@@ -12160,300 +12157,20 @@ int HandleEndTurnAbility(int abilityNumber, int battler) {
         return FALSE;
     }
 
-    ability = gBattleScripting.abilityPopupOverwrite = GetAbilityAtIndex(battler, abilityNumber, FALSE);
+    ability = GetAbilityAtIndex(battler, abilityNumber, FALSE);
 
-    return HandleEndTurnAbilityAs(ability, battler);
-}
+    if (!gAbilities[ability].onEndTurn) return FALSE;
 
-int HandleEndTurnAbilityAs(int ability, int battler) {
-    int i = 0;
+    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
 
-    switch (ability) {
-        case ABILITY_SCHOOLING:
-            REQUIRE(gBattleMons[battler].level >= 20)
-            FALLTHROUGH
-        case ABILITY_FLOWER_GIFT:
-        case ABILITY_FORECAST:
-        case ABILITY_SHIELDS_DOWN:
-            REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-            REQUIRE(ShouldChangeFormHpBased(battler))
+    int result = gAbilities[ability].onEndTurn(ability, battler);
+    if (!result) return FALSE;
 
-            BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-            return TRUE;
-
-        case ABILITY_POWER_CONSTRUCT:
-            REQUIRE(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
-            REQUIRE(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
-            REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-
-            gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
-            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_ZYGARDE_COMPLETE);
-            gBattleMons[battler].species = SPECIES_ZYGARDE_COMPLETE;
-            BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-            return TRUE;
-
-        case ABILITY_APE_SHIFT:
-            REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
-            REQUIRE(ShouldChangeFormHpBased(battler))
-
-            gStackBattler1 = battler;
-            BattleScriptPushCursorAndCallback(BattleScript_End3);
-            BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
-            BattleScriptCall(BattleScript_AbilityPopUp);
-            return TRUE;
-
-        case ABILITY_HUNGER_SWITCH:
-            REQUIRE_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED) {
-                int species = SPECIES_NONE;
-                if (gBattleMons[battler].species == SPECIES_MORPEKO)
-                    species = SPECIES_MORPEKO_HANGRY;
-                else if (gBattleMons[battler].species == SPECIES_MORPEKO_HANGRY)
-                    species = SPECIES_MORPEKO;
-                else
-                    break;
-
-                UpdateAbilityStateIndicesForNewSpecies(battler, species);
-                gBattleMons[battler].species = species;
-                BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
-            }
-            return TRUE;
-
-        case ABILITY_DRY_SKIN:
-            if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !BATTLER_HAS_MAGIC_GUARD(battler)) {
-                gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-                if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-                BattleScriptPushCursorAndCallback(BattleScript_SolarPowerActivates);
-                return TRUE;
-            } else if (HandleEndTurnAbilityAs(ABILITY_RAIN_DISH, battler))
-                return TRUE;
-            break;
-
-        case ABILITY_PURIFYING_WATERS:
-        case ABILITY_HYDRATION:
-            REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
-
-            if (AbilityHealMonStatus(battler, ability)) return TRUE;
-            break;
-
-        case ABILITY_SHED_SKIN:
-            REQUIRE(Random() % 100 < 30)
-
-            if (AbilityHealMonStatus(battler, ability)) return TRUE;
-            break;
-
-        case ABILITY_SPEED_BOOST:
-            REQUIRE(gVolatileStructs[battler].isFirstTurn != 2)
-            REQUIRE(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
-
-            BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
-            gBattleScripting.battler = battler;
-            return TRUE;
-
-        case ABILITY_MOODY:
-            REQUIRE(gVolatileStructs[battler].isFirstTurn != 2) {
-                int validToRaise = 0, validToLower = 0;
-
-                for (i = STAT_ATK; i < NUM_STATS; i++) {
-                    if (CanLowerStat(battler, i)) validToLower |= 1 << i;
-                    if (CanRaiseStat(battler, i)) validToRaise |= 1 << i;
-                }
-
-                REQUIRE(validToLower || validToRaise)
-
-                if (validToRaise) {
-                    do {
-                        i = (Random() % NUM_STATS - STAT_ATK) + STAT_ATK;
-                    } while (!(validToRaise & (1 << i)));
-                    SetStatChanger(i, 2);
-                    validToLower &= ~(1 << i);
-                }
-                if (validToLower) {
-                    do {
-                        i = (Random() % NUM_STATS - STAT_ATK) + STAT_ATK;
-                    } while (!(validToLower & (1 << i)));
-                    SET_STATCHANGER2(gBattleScripting.savedStatChanger, i, 1, TRUE);
-                }
-                BattleScriptPushCursorAndCallback(BattleScript_MoodyActivates);
-            }
-            return TRUE;
-
-        case ABILITY_TRUANT:
-            if (GetAbilityState(battler, ability))
-                SetAbilityState(battler, ability, FALSE);
-            else if (gChosenMoveByBattler[battler] && !IS_MOVE_STATUS(gChosenMoveByBattler[battler]))
-                SetAbilityState(battler, ability, TRUE);
-            break;
-
-        case ABILITY_BAD_DREAMS:
-            BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
-            return TRUE;
-
-        case ABILITY_SWEET_DREAMS:
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
-
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            gBattleMoveDamage *= -1;
-            BattleScriptPushCursorAndCallback(BattleScript_SweetDreamsActivates);
-            return TRUE;
-
-        case ABILITY_HEALER:
-            REQUIRE(Random() % 100 < 30)
-
-            if (IsBattlerAlive(BATTLE_PARTNER(battler)) && gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY) {
-                gEffectBattler = battler;
-                gBattleScripting.battler = BATTLE_PARTNER(battler);
-                BattleScriptPushCursorAndCallback(BattleScript_HealerActivates);
-                return TRUE;
-            } else if (IsBattlerAlive(battler) && gBattleMons[battler].status1 & STATUS1_ANY) {
-                if (AbilityHealMonStatus(battler, ability)) return TRUE;
-            }
-            break;
-
-        case ABILITY_HONEY_GATHER:
-            REQUIRE_NOT(gBattleMons[battler].item)
-            REQUIRE(Random() % 2)
-
-            gBattleMons[battler].item = gLastUsedItem = ITEM_HONEY;
-            BattleScriptPushCursorAndCallback(BattleScript_HoneyGatherActivates);
-            return TRUE;
-
-        case ABILITY_HARVEST:
-        case ABILITY_BIG_LEAVES:
-            REQUIRE_NOT(gBattleMons[battler].item)
-            REQUIRE_NOT(gBattleStruct->changedItems[battler])
-            REQUIRE(ItemId_GetPocket(GetUsedHeldItem(battler)) == POCKET_BERRIES)
-            REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) || Random() % 2)
-
-            BattleScriptPushCursorAndCallback(BattleScript_HarvestActivates);
-            return TRUE;
-
-        case ABILITY_SELF_REPAIR:
-        case ABILITY_APPLE_PIE:
-        case ABILITY_SELF_SUFFICIENT:
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(gVolatileStructs[battler].isFirstTurn != 2)
-
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            gBattleMoveDamage *= -1;
-            BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
-            return TRUE;
-
-        case ABILITY_CELESTIAL_BLESSING:
-        case ABILITY_ETERNAL_BLESSING:
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(gVolatileStructs[battler].isFirstTurn != 2)
-            REQUIRE(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
-
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 12;
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            gBattleMoveDamage *= -1;
-            BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
-            return TRUE;
-
-        case ABILITY_PEACEFUL_SLUMBER:
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(gVolatileStructs[battler].isFirstTurn != 2)
-
-            i = gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE);
-
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
-
-            if (i) gBattleMoveDamage += gBattleMons[battler].maxHP / 8;
-
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            gBattleMoveDamage *= -1;
-            BattleScriptPushCursorAndCallback(i ? BattleScript_SweetDreamsActivates : BattleScript_SelfSufficientActivates);
-            return TRUE;
-
-        case ABILITY_RAIN_DISH:
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(gVolatileStructs[battler].isFirstTurn != 2)
-            REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
-
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            gBattleMoveDamage *= -1;
-            BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
-            return TRUE;
-
-        case ABILITY_WHITE_NOISE:
-        case ABILITY_PEACEFUL_REST:
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(gVolatileStructs[battler].isFirstTurn != 2)
-            REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
-
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            gBattleMoveDamage *= -1;
-            BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
-            return TRUE;
-
-        case ABILITY_ICE_BODY:
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(gVolatileStructs[battler].isFirstTurn != 2)
-            REQUIRE(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
-
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            gBattleMoveDamage *= -1;
-            BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
-            return TRUE;
-
-        case ABILITY_CUD_CHEW: {
-            CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
-            if (state.setThisTurn) {
-                SetAbilityStateAs(battler, ability, (AbilityStates){.cudChewState = {.itemId = state.itemId}});
-            } else if (state.itemId) {
-                // attacker temporarily gains their item
-                gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
-                gBattleMons[battler].item = state.itemId;
-
-                SetAbilityStateAs(battler, ability, (AbilityStates){.cudChewState = {.activating = TRUE}});
-
-                BattleScriptPushCursorAndCallback(BattleScript_CudChew);
-                return TRUE;
-            }
-        } break;
-
-        case ABILITY_COLOR_SPECTRUM: {
-            int newType;
-            do {
-                newType = Random() % NUMBER_OF_MON_TYPES;
-            } while (newType == TYPE_MYSTERY || newType == TYPE_STELLAR || IS_BATTLER_OF_TYPE(battler, newType));
-
-            gBattleMons[battler].type1 = newType;
-            gBattleMons[battler].type2 = newType;
-            gBattleMons[battler].type3 = TYPE_MYSTERY;
-            gBattlerAbility = battler;
-            gBattleScripting.abilityPopupOverwrite = ABILITY_COLOR_SPECTRUM;
-            PREPARE_TYPE_BUFFER(gBattleTextBuff1, newType);
-            BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
-        }
-            return TRUE;
-
-        case ABILITY_BLOOD_PRICE:
-            REQUIRE_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
-            REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(battler))
-            REQUIRE(IsBattlerAlive(battler))
-
-            gBattleMoveDamage = gBattleMons[battler].maxHP / 10;
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            BattleScriptPushCursorAndCallback(BattleScript_AbilitySelfDamage);
-            return TRUE;
+    if (result & 1) {
+        gBattleScripting.abilityPopupOverwrite = ability;
+        BattleScriptCall(BattleScript_AbilityPopUp);
     }
-
-    return FALSE;
+    return TRUE;
 }
 
 int IsDance(int attacker, int move) {

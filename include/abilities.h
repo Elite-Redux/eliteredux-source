@@ -16,6 +16,7 @@ typedef InfiltrateType (*AbilityOnInfiltrateHandler)(int battler, int move);
 typedef int (*AbilityOnDisguiseHandler)(int battler, int checkOnly);
 typedef int (*AbilityOnWeatherHandler)(int ability, int battler);
 typedef int (*AbilityOnTerrainHandler)(int ability, int battler);
+typedef int (*AbilityOnEndTurnHandler)(int ability, int battler);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -34,6 +35,7 @@ typedef struct Ability {
     const AbilityOnDisguiseHandler onDisguise;
     const AbilityOnWeatherHandler onWeather;
     const AbilityOnTerrainHandler onTerrain;
+    const AbilityOnEndTurnHandler onEndTurn;
     u16 breakable:1;
     u16 unsuppressable:1;
     u16 persistent:1;
@@ -44,6 +46,7 @@ typedef struct Ability {
     u16 isSoundproof:1;
     u16 noDamageHits:2;
     AbilityApplyOn onImmuneFor:2;
+    u16 magicGuard:1;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];

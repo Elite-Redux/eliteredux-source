@@ -12,6 +12,7 @@
 #include "constants/items.h"
 #include "global.h"
 #include "item.h"
+#include "random.h"
 #include "string_util.h"
 
 #pragma GCC diagnostic push
@@ -47,6 +48,9 @@
 
 #define ON_TERRAIN static int COMBINE(onTerrain, CONTEXT)(int ability, int battler)
 #define CONTEXT_ON_TERRAIN .onTerrain = COMBINE(onTerrain, CONTEXT)
+
+#define ON_END_TURN static int COMBINE(onEndTurn, CONTEXT)(int ability, int battler)
+#define CONTEXT_ON_END_TURN .onEndTurn = COMBINE(onEndTurn, CONTEXT)
 
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
@@ -128,9 +132,18 @@ static const Ability Drizzle = {
 
 #undef CONTEXT
 #define CONTEXT SpeedBoost
+ON_END_TURN {
+    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+    CHECK(ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL))
+
+    BattleScriptPushCursorAndCallback(BattleScript_SpeedBoostActivates);
+    gBattleScripting.battler = battler;
+    return TRUE;
+}
 static const Ability SpeedBoost = {
     .name = $("Speed Boost"),
     .description = $("Raises own Speed by one stage\nafter every turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -485,9 +498,22 @@ static const Ability Soundproof = {
 
 #undef CONTEXT
 #define CONTEXT RainDish
+ON_END_TURN {
+    CHECK_NOT(BATTLER_MAX_HP(battler))
+    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+    CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
+
+    gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+    gBattleMoveDamage *= -1;
+    BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+    return TRUE;
+}
 static const Ability RainDish = {
     .name = $("Rain Dish"),
     .description = $("Heals 1/8 of max HP every turn\nif rain is active."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -598,9 +624,17 @@ static const Ability Pickup = {
 
 #undef CONTEXT
 #define CONTEXT Truant
+ON_END_TURN {
+    if (GetAbilityState(battler, ability))
+        SetAbilityState(battler, ability, FALSE);
+    else if (gChosenMoveByBattler[battler] && !IS_MOVE_STATUS(gChosenMoveByBattler[battler]))
+        SetAbilityState(battler, ability, TRUE);
+    return FALSE;
+}
 static const Ability Truant = {
     .name = $("Truant"),
     .description = $("Can only attack every other turn.\nCan use status moves every turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -633,12 +667,9 @@ static const Ability Minus = {
 
 #undef CONTEXT
 #define CONTEXT Forecast
-ON_SWITCH {
-    return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
-}
-ON_WEATHER {
-    return TryTransformAttacker(ability, battler, ABILITY_BS_CALL);
-}
+ON_SWITCH { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
+ON_WEATHER { return TryTransformAttacker(ability, battler, ABILITY_BS_CALL); }
+ON_END_TURN { return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 static const Ability Forecast = {
     .name = $("Forecast"),
     .description = $("Changes form with the weather.\nWeather setting triggers attack."),
@@ -646,6 +677,7 @@ static const Ability Forecast = {
     .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
     CONTEXT_ON_WEATHER,
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -658,9 +690,16 @@ static const Ability StickyHold = {
 
 #undef CONTEXT
 #define CONTEXT ShedSkin
+ON_END_TURN {
+    CHECK(Random() % 100 < 30)
+
+    CHECK(AbilityHealMonStatus(battler, ability))
+    return TRUE;
+}
 static const Ability ShedSkin = {
     .name = $("Shed Skin"),
     .description = $("30% chance to heal its status\ncondition at the end of a turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -875,11 +914,22 @@ static const Ability Simple = {
 
 #undef CONTEXT
 #define CONTEXT DrySkin
+ON_END_TURN {
+    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && !IsMagicGuardProtected(battler)) {
+        gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+        if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+        BattleScriptPushCursorAndCallback(BattleScript_SolarPowerActivates);
+        return TRUE;
+    }
+
+    return RainDish.onEndTurn(ability, battler);
+}
 static const Ability DrySkin = {
     .name = $("Dry Skin"),
     .description = $("Water/Rain heals.\nFire/Sun hurts."),
     .breakable = TRUE,
     .onAbsorb = WaterAbsorb.onAbsorb,
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -930,9 +980,16 @@ static const Ability SkillLink = {
 
 #undef CONTEXT
 #define CONTEXT Hydration
+ON_END_TURN {
+    CHECK(IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY))
+
+    CHECK(AbilityHealMonStatus(battler, ability))
+    return TRUE;
+}
 static const Ability Hydration = {
     .name = $("Hydration"),
     .description = $("Cures own status at the end of\nevery turn in rain."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -968,6 +1025,7 @@ static const Ability Sniper = {
 static const Ability MagicGuard = {
     .name = $("Magic Guard"),
     .description = $("Only damaged by attacks."),
+    .magicGuard = TRUE,
 };
 
 #undef CONTEXT
@@ -1144,9 +1202,22 @@ static const Ability StormDrain = {
 
 #undef CONTEXT
 #define CONTEXT IceBody
+ON_END_TURN {
+    CHECK_NOT(BATTLER_MAX_HP(battler))
+    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+    CHECK(IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY))
+
+    gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+    gBattleMoveDamage *= -1;
+    BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+    return TRUE;
+}
 static const Ability IceBody = {
     .name = $("Ice Body"),
     .description = $("Heals 1/8 of max HP every turn\nin hail."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -1177,9 +1248,18 @@ static const Ability SnowWarning = {
 
 #undef CONTEXT
 #define CONTEXT HoneyGather
+ON_END_TURN {
+    CHECK_NOT(gBattleMons[battler].item)
+    CHECK(Random() % 2)
+
+    gBattleMons[battler].item = gLastUsedItem = ITEM_HONEY;
+    BattleScriptPushCursorAndCallback(BattleScript_HoneyGatherActivates);
+    return TRUE;
+}
 static const Ability HoneyGather = {
     .name = $("Honey Gather"),
     .description = $("Has a 50% chance to find Honey\neach turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -1229,13 +1309,20 @@ static const Ability FlowerGift = {
     .randomizerBanned = TRUE,
     .onSwitch = Forecast.onSwitch,
     .onWeather = Forecast.onWeather,
+    .onEndTurn = Forecast.onEndTurn,
 };
 
 #undef CONTEXT
 #define CONTEXT BadDreams
+ON_END_TURN {
+    gBattleScripting.abilityPopupOverwrite = ability;
+    BattleScriptPushCursorAndCallback(BattleScript_BadDreamsActivates);
+    return NO_ANNOUNCE;
+}
 static const Ability BadDreams = {
     .name = $("Bad Dreams"),
     .description = $("Sleeping Pokémon lose 1/4 of max\nHP at the end of each turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -1292,9 +1379,23 @@ static const Ability CursedBody = {
 
 #undef CONTEXT
 #define CONTEXT Healer
+ON_END_TURN {
+    CHECK(Random() % 100 < 30)
+
+    if (IsBattlerAlive(BATTLE_PARTNER(battler)) && gBattleMons[BATTLE_PARTNER(battler)].status1 & STATUS1_ANY) {
+        gEffectBattler = battler;
+        gBattleScripting.battler = BATTLE_PARTNER(battler);
+        BattleScriptPushCursorAndCallback(BattleScript_HealerActivates);
+        return TRUE;
+    } else if (IsBattlerAlive(battler) && gBattleMons[battler].status1 & STATUS1_ANY) {
+        if (AbilityHealMonStatus(battler, ability)) return TRUE;
+    }
+    return FALSE;
+}
 static const Ability Healer = {
     .name = $("Healer"),
     .description = $("30% chance to heal user or ally's\nstatus at the end of each turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -1365,9 +1466,19 @@ static const Ability FlareBoost = {
 
 #undef CONTEXT
 #define CONTEXT Harvest
+ON_END_TURN {
+    CHECK_NOT(gBattleMons[battler].item)
+    CHECK_NOT(gBattleStruct->changedItems[battler])
+    CHECK(ItemId_GetPocket(GetUsedHeldItem(battler)) == POCKET_BERRIES)
+    CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) || Random() % 2)
+
+    BattleScriptPushCursorAndCallback(BattleScript_HarvestActivates);
+    return TRUE;
+}
 static const Ability Harvest = {
     .name = $("Harvest"),
     .description = $("50% chance to recycle a used\nBerry every turn, 100% in sun."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -1380,9 +1491,38 @@ static const Ability Telepathy = {
 
 #undef CONTEXT
 #define CONTEXT Moody
+ON_END_TURN {
+    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+    int validToRaise = 0, validToLower = 0;
+
+    int i;
+    for (i = STAT_ATK; i < NUM_STATS; i++) {
+        if (CanLowerStat(battler, i)) validToLower |= 1 << i;
+        if (CanRaiseStat(battler, i)) validToRaise |= 1 << i;
+    }
+
+    CHECK(validToLower || validToRaise)
+
+    if (validToRaise) {
+        do {
+            i = (Random() % NUM_STATS - STAT_ATK) + STAT_ATK;
+        } while (!(validToRaise & (1 << i)));
+        SetStatChanger(i, 2);
+        validToLower &= ~(1 << i);
+    }
+    if (validToLower) {
+        do {
+            i = (Random() % NUM_STATS - STAT_ATK) + STAT_ATK;
+        } while (!(validToLower & (1 << i)));
+        SET_STATCHANGER2(gBattleScripting.savedStatChanger, i, 1, TRUE);
+    }
+    BattleScriptPushCursorAndCallback(BattleScript_MoodyActivates);
+    return TRUE;
+}
 static const Ability Moody = {
     .name = $("Moody"),
     .description = $("Lowers a random stat by -1 and\nraises another by +2 every turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -1557,6 +1697,7 @@ static const Ability ZenMode = {
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     .onSwitch = Forecast.onSwitch,
+    .onEndTurn = Forecast.onEndTurn,
 };
 
 #undef CONTEXT
@@ -1867,6 +2008,7 @@ static const Ability ShieldsDown = {
     .description = $("At 1/2 of max HP or below,\ntransforms into Core form."),
     .unsuppressable = TRUE,
     .onSwitch = Forecast.onSwitch,
+    .onEndTurn = Forecast.onEndTurn,
 };
 
 #undef CONTEXT
@@ -1946,12 +2088,17 @@ ON_SWITCH {
     CHECK(gBattleMons[battler].level >= 20)
     return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
 }
+ON_END_TURN {
+    CHECK(gBattleMons[battler].level >= 20)
+    return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+}
 static const Ability Schooling = {
     .name = $("Schooling"),
     .description = $("If Lv. 20 or more: changes into\nSchool form until 1/4 HP or less."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -2003,11 +2150,23 @@ static const Ability BattleBond = {
 
 #undef CONTEXT
 #define CONTEXT PowerConstruct
+ON_END_TURN {
+    CHECK(gBattleMons[battler].species == SPECIES_ZYGARDE || gBattleMons[battler].species == SPECIES_ZYGARDE_10)
+    CHECK(gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2)
+    CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+
+    gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = gBattleMons[battler].species;
+    UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_ZYGARDE_COMPLETE);
+    gBattleMons[battler].species = SPECIES_ZYGARDE_COMPLETE;
+    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+    return TRUE;
+}
 static const Ability PowerConstruct = {
     .name = $("Power Construct"),
     .description = $("At 1/2 of max HP or below,\ntransforms into Complete form."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -2472,11 +2631,32 @@ static const Ability PastelVeil = {
 
 #undef CONTEXT
 #define CONTEXT HungerSwitch
+ON_END_TURN {
+    CHECK_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
+    int newSpecies;
+    switch (gBattleMons[battler].species) {
+        case SPECIES_MORPEKO:
+            newSpecies = SPECIES_MORPEKO_HANGRY;
+            break;
+        case SPECIES_MORPEKO_HANGRY:
+            newSpecies = SPECIES_MORPEKO;
+            break;
+
+        default:
+            return FALSE;
+    }
+
+    UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
+    gBattleMons[battler].species = newSpecies;
+    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
+    return TRUE;
+}
 static const Ability HungerSwitch = {
     .name = $("HungerSwitch"),
     .description = $("Changes between Full and Hangry\nforms after each turn."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -2864,9 +3044,21 @@ static const Ability Nocturnal = {
 
 #undef CONTEXT
 #define CONTEXT SelfSufficient
+ON_END_TURN {
+    CHECK_NOT(BATTLER_MAX_HP(battler))
+    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+
+    gBattleMoveDamage = gBattleMons[battler].maxHP / 16;
+    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+    gBattleMoveDamage *= -1;
+    BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
+    return TRUE;
+}
 static const Ability SelfSufficient = {
     .name = $("Self Sufficient"),
     .description = $("Recovers 1/16 of max HP at the\nend of each turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -3030,6 +3222,7 @@ static const Ability Intoxicate = {
 static const Ability Impenetrable = {
     .name = $("Impenetrable"),
     .description = $("Only damaged by attacks."),
+    .magicGuard = TRUE,
 };
 
 #undef CONTEXT
@@ -3084,9 +3277,21 @@ static const Ability SoulLinker = {
 
 #undef CONTEXT
 #define CONTEXT SweetDreams
+ON_END_TURN {
+    CHECK_NOT(BATTLER_MAX_HP(battler))
+    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+    CHECK(gBattleMons[battler].status1 & STATUS1_SLEEP || BATTLER_HAS_ABILITY(battler, ABILITY_COMATOSE))
+
+    gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+    gBattleMoveDamage *= -1;
+    BattleScriptPushCursorAndCallback(BattleScript_SweetDreamsActivates);
+    return TRUE;
+}
 static const Ability SweetDreams = {
     .name = $("Sweet Dreams"),
     .description = $("Heals 1/8 of max HP every turn\nif asleep. Immune to Bad Dreams."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -3438,6 +3643,7 @@ static const Ability BigLeaves = {
     .name = $("Big Leaves"),
     .description = $("Chloroplast + Chlorophyll + Leaf\nGuard + Harvest + Solar Power."),
     .breakable = TRUE,
+    .onEndTurn = Harvest.onEndTurn,
 };
 
 #undef CONTEXT
@@ -3759,6 +3965,7 @@ static const Ability PrettyPrincess = {
 static const Ability SelfRepair = {
     .name = $("Self Repair"),
     .description = $("Self Sufficient + Natural Cure."),
+    .onEndTurn = SelfSufficient.onEndTurn,
 };
 
 #undef CONTEXT
@@ -4458,9 +4665,15 @@ static const Ability Enlightened = {
 
 #undef CONTEXT
 #define CONTEXT PeacefulSlumber
+ON_END_TURN {
+    if (!SweetDreams.onEndTurn(ability, battler)) return SelfSufficient.onEndTurn(ability, battler);
+    gBattleMoveDamage -= gBattleMons[battler].maxHP / 16;
+    return TRUE;
+}
 static const Ability PeacefulSlumber = {
     .name = $("Peaceful Slumber"),
     .description = $("Sweet Dreams + Self Sufficient."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -4554,6 +4767,7 @@ static const Ability PurifyingWaters = {
     .name = $("Purifying Waters"),
     .description = $("Hydration + Water Veil."),
     .onSwitch = WaterVeil.onSwitch,
+    .onEndTurn = Hydration.onEndTurn,
 };
 
 #undef CONTEXT
@@ -4827,9 +5041,20 @@ static const Ability MindsEye = {
 
 #undef CONTEXT
 #define CONTEXT BloodPrice
+ON_END_TURN {
+    CHECK_NOT(IS_MOVE_STATUS(gLastResultingMoves[battler]))
+    CHECK_NOT(IsMagicGuardProtected(battler))
+    CHECK(IsBattlerAlive(battler))
+
+    gBattleMoveDamage = gBattleMons[battler].maxHP / 10;
+    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+    BattleScriptPushCursorAndCallback(BattleScript_AbilitySelfDamage);
+    return TRUE;
+}
 static const Ability BloodPrice = {
     .name = $("Blood Price"),
     .description = $("Does 30% more damage but\nlose 10% HP when attacking."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -5195,9 +5420,26 @@ static const Ability VengefulSpirit = {
 
 #undef CONTEXT
 #define CONTEXT CudChew
+ON_END_TURN {
+    CudChewState state = GetAbilityStateAs(battler, ability).cudChewState;
+    if (state.setThisTurn) {
+        SetAbilityStateAs(battler, ability, (AbilityStates){.cudChewState = {.itemId = state.itemId}});
+    } else if (state.itemId) {
+        // attacker temporarily gains their item
+        gBattleStruct->changedItems[battler] = gBattleMons[battler].item;
+        gBattleMons[battler].item = state.itemId;
+
+        SetAbilityStateAs(battler, ability, (AbilityStates){.cudChewState = {.activating = TRUE}});
+
+        BattleScriptPushCursorAndCallback(BattleScript_CudChew);
+        return TRUE;
+    }
+    return FALSE;
+}
 static const Ability CudChew = {
     .name = $("Cud Chew"),
     .description = $("Eats berries again at the\nend of the next turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -5422,9 +5664,22 @@ static const Ability SweepingEdgePlus = {
 
 #undef CONTEXT
 #define CONTEXT CelestialBlessing
+ON_END_TURN {
+    CHECK_NOT(BATTLER_MAX_HP(battler))
+    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+    CHECK(IsBattlerTerrainAffected(battler, STATUS_FIELD_MISTY_TERRAIN))
+
+    gBattleMoveDamage = gBattleMons[battler].maxHP / 12;
+    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+    gBattleMoveDamage *= -1;
+    BattleScriptPushCursorAndCallback(BattleScript_SelfSufficientActivates);
+    return TRUE;
+}
 static const Ability CelestialBlessing = {
     .name = $("Celestial Blessing"),
     .description = $("Recovers 1/12 of its health each\nturn under Misty Terrain."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -5611,6 +5866,7 @@ static const Ability AppleEnlightenment = {
     .name = $("Apple Enlightenment"),
     .description = $("Fur coat + Magic Guard."),
     .breakable = TRUE,
+    .magicGuard = TRUE,
 };
 
 #undef CONTEXT
@@ -5917,6 +6173,7 @@ static const Ability EternalBlessing = {
     .name = $("Eternal Blessing"),
     .description = $("Celestial Blessing + Regenerator."),
     .persistent = TRUE,
+    .onEndTurn = CelestialBlessing.onEndTurn,
 };
 
 #undef CONTEXT
@@ -5928,9 +6185,22 @@ static const Ability SugarRush = {
 
 #undef CONTEXT
 #define CONTEXT PeacefulRest
+ON_END_TURN {
+    CHECK_NOT(BATTLER_MAX_HP(battler))
+    CHECK_NOT(BATTLER_HEALING_BLOCKED(battler))
+    CHECK(gVolatileStructs[battler].isFirstTurn != 2)
+    CHECK(IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY))
+
+    gBattleMoveDamage = gBattleMons[battler].maxHP / 8;
+    if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
+    gBattleMoveDamage *= -1;
+    BattleScriptPushCursorAndCallback(BattleScript_RainDishActivates);
+    return TRUE;
+}
 static const Ability PeacefulRest = {
     .name = $("Rest in Peace"),
     .description = $("Heals 1/8 of max HP every turn\nin fog."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -5938,6 +6208,7 @@ static const Ability PeacefulRest = {
 static const Ability WhiteNoise = {
     .name = $("White Noise"),
     .description = $("Static + Rest in Peace."),
+    .onEndTurn = PeacefulRest.onEndTurn,
 };
 
 #undef CONTEXT
@@ -6311,9 +6582,25 @@ static const Ability Energized = {
 
 #undef CONTEXT
 #define CONTEXT ColorSpectrum
+ON_END_TURN {
+    int newType;
+    do {
+        newType = Random() % NUMBER_OF_MON_TYPES;
+    } while (newType == TYPE_MYSTERY || newType == TYPE_STELLAR || IS_BATTLER_OF_TYPE(battler, newType));
+
+    gBattleMons[battler].type1 = newType;
+    gBattleMons[battler].type2 = newType;
+    gBattleMons[battler].type3 = TYPE_MYSTERY;
+    gBattlerAbility = battler;
+    gBattleScripting.abilityPopupOverwrite = ABILITY_COLOR_SPECTRUM;
+    PREPARE_TYPE_BUFFER(gBattleTextBuff1, newType);
+    BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
+    return TRUE;
+}
 static const Ability ColorSpectrum = {
     .name = $("Color Spectrum"),
     .description = $("Same-type attacks get a 1.2x\nboost. Changes type each turn."),
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT
@@ -6428,6 +6715,7 @@ static const Ability AquaticDweller = {
 static const Ability ApplePie = {
     .name = $("Apple Pie"),
     .description = $("Self Sufficient + Ripen."),
+    .onEndTurn = SelfSufficient.onEndTurn,
 };
 
 #undef CONTEXT
@@ -6591,11 +6879,13 @@ ON_SWITCH {
     BattleScriptCall(gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT ? BattleScript_ApeShift : BattleScript_AttackerFormChangeNoPopup);
     return TRUE;
 }
+ON_END_TURN { return OnSwitchApeShift(ability, battler); }
 static const Ability ApeShift = {
     .name = $("Ape Shift"),
     .description = $("Transforms when below 50% HP,\ncuring status and always critting."),
     .randomizerBanned = TRUE,
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_END_TURN,
 };
 
 #undef CONTEXT

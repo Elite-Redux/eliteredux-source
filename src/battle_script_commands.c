@@ -8452,7 +8452,7 @@ static void Cmd_various(void) {
         case VARIOUS_HANDLE_WEATHER_CHANGE:
             ON_ABILITY(
                 gActiveBattler, FALSE, gAbilities[ability].onWeather, if (gAbilities[ability].onWeather(ability, gActiveBattler)) {
-                    gAbilityBattler = gActiveBattler;
+                    gBattlerAbility = gActiveBattler;
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUp);
                 })
@@ -8460,7 +8460,7 @@ static void Cmd_various(void) {
         case VARIOUS_HANDLE_TERRAIN_CHANGE:
             ON_ABILITY(
                 gActiveBattler, FALSE, gAbilities[ability].onTerrain, if (gAbilities[ability].onTerrain(ability, gActiveBattler)) {
-                    gAbilityBattler = gActiveBattler;
+                    gBattlerAbility = gActiveBattler;
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUp);
                 })
@@ -12699,9 +12699,6 @@ static void Cmd_docastformchangeanimation(void) {
 
 static void Cmd_trycastformdatachange(void) {
     gBattlescriptCurrInstr++;
-    if (ShouldChangeFormHpBased(gBattlerAttacker)) {
-        BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3);
-    }
 }
 
 static void Cmd_settypebasedhalvers(void)  // water and mud sport
