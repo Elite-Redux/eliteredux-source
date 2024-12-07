@@ -11895,18 +11895,17 @@ BattleScript_RetrieverExits::
 	return
 
 BattleScript_HandleSoulEaterEffect::
-	tryhealpercenthealth BS_STACK_1, 25, BattleScript_HandleSoulEaterEffect_NothingToHeal
+	tryhealpercenthealth BS_STACK_1, 25, BattleScript_Return
 BattleScript_HandleSoulEaterEffect_AfterHeal:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
 	healthbarupdate BS_STACK_1
 	datahpupdate BS_STACK_1
 	printstring STRINGID_STACKREGAINEDHEALTH
 	waitmessage B_WAIT_TIME_LONG
-BattleScript_HandleSoulEaterEffect_NothingToHeal:
     return
 
 BattleScript_HandleJawsOfCarnageEffect::
-	tryhealpercenthealth BS_STACK_1, 50, BattleScript_HandleJawsOfCarnageEffect_NothingToHeal
+	tryhealpercenthealth BS_STACK_1, 50, BattleScript_Return
 	goto BattleScript_HandleSoulEaterEffect_AfterHeal
 
 BattleScript_AttackerSoulLinker::

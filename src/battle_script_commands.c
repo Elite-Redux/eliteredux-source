@@ -1113,11 +1113,13 @@ static void Cmd_attackcanceler(void) {
 
     if (moveType == TYPE_FIRE && (gBattleWeather & WEATHER_RAIN_PRIMAL) && WEATHER_HAS_EFFECT && gBattleMoves[gCurrentMove].power) {
         BattleScriptCall(BattleScript_PrimordialSeaFizzlesOutFireTypeMoves);
+        CancelMultiTurnMoves(gBattlerAttacker);
         return;
     }
 
     if (moveType == TYPE_WATER && (gBattleWeather & WEATHER_SUN_PRIMAL) && WEATHER_HAS_EFFECT && gBattleMoves[gCurrentMove].power) {
         BattleScriptCall(BattleScript_DesolateLandEvaporatesWaterTypeMoves);
+        CancelMultiTurnMoves(gBattlerAttacker);
         return;
     }
 

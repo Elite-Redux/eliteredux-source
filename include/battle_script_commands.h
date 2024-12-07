@@ -1,10 +1,11 @@
 #ifndef GUARD_BATTLE_SCRIPT_COMMANDS_H
 #define GUARD_BATTLE_SCRIPT_COMMANDS_H
 
+#include "abilities.h"
 #include "battle_ai_new.h"
 #include "battle_util.h"
 #include "constants/pokemon.h"
-#include "abilities.h"
+#include "global.h"
 
 #define WINDOW_CLEAR 0x1
 #define WINDOW_x80 0x80

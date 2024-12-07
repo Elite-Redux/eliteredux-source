@@ -1,6 +1,8 @@
 #ifndef GUARD_BATTLE_GFX_SFX_UTIL_H
 #define GUARD_BATTLE_GFX_SFX_UTIL_H
 
+#include "global.h"
+
 void AllocateBattleSpritesData(void);
 void FreeBattleSpritesData(void);
 u16 ChooseMoveAndTargetInBattlePalace(void);
@@ -49,4 +51,4 @@ void LoadHealthBoxesPalette(void);
 
 u8 getBattleInterfaceTheme(void);
 
-#endif // GUARD_BATTLE_GFX_SFX_UTIL_H
+#endif  // GUARD_BATTLE_GFX_SFX_UTIL_H

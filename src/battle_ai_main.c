@@ -3066,8 +3066,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score) 
                         if (gLastMoves[battlerDef] == predictedMove)
                             score += 3;
                         else */
-                        if (CanMoveFaintBattler(gLastMoves[battlerDef], battlerDef, battlerAtk, 1))
-                            score += 2;
+                        if (CanMoveFaintBattler(gLastMoves[battlerDef], battlerDef, battlerAtk, 1)) score += 2;
                         ;  // Disable move that can kill attacker
                     }
                 } else if (predictedMove != MOVE_NONE && IS_MOVE_STATUS(predictedMove)) {

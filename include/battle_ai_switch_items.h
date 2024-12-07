@@ -1,15 +1,9 @@
 #ifndef GUARD_BATTLE_AI_SWITCH_ITEMS_H
 #define GUARD_BATTLE_AI_SWITCH_ITEMS_H
 
-enum
-{
-    AI_ITEM_FULL_RESTORE = 1,
-    AI_ITEM_HEAL_HP,
-    AI_ITEM_CURE_CONDITION,
-    AI_ITEM_X_STAT,
-    AI_ITEM_GUARD_SPEC,
-    AI_ITEM_NOT_RECOGNIZABLE
-};
+#include "global.h"
+
+enum { AI_ITEM_FULL_RESTORE = 1, AI_ITEM_HEAL_HP, AI_ITEM_CURE_CONDITION, AI_ITEM_X_STAT, AI_ITEM_GUARD_SPEC, AI_ITEM_NOT_RECOGNIZABLE };
 
 enum {
     AI_HEAL_CONFUSION,
@@ -25,9 +19,9 @@ enum {
     AI_X_DEFEND,
     AI_X_SPEED,
     AI_X_SPATK,
-    AI_X_SPDEF, // Unused
+    AI_X_SPDEF,  // Unused
     AI_X_ACCURACY,
-    AI_X_EVASION, // Unused
+    AI_X_EVASION,  // Unused
     AI_DIRE_HIT,
 };
 
@@ -36,4 +30,4 @@ void AI_TrySwitchOrUseItem(void);
 u8 GetMostSuitableMonToSwitchInto(void);
 bool32 ShouldSwitch(void);
 
-#endif // GUARD_BATTLE_AI_SWITCH_ITEMS_H
+#endif  // GUARD_BATTLE_AI_SWITCH_ITEMS_H
