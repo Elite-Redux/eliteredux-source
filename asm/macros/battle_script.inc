@@ -1467,8 +1467,8 @@
 	various \battler, VARIOUS_RESTORE_PP
 	.endm
 
-	.macro tryactivatemoxie battler:req
-	various \battler, VARIOUS_TRY_ACTIVATE_MOXIE
+	.macro onfaintedbyattacker
+	various BS_FAINTED, VARIOUS_ON_FAINTED_BY_ATTACKER
 	.endm
 
 	.macro tryactivatesuperstrain battler:req
@@ -1487,8 +1487,8 @@
 	various \battler, VARIOUS_TRY_ACTIVATE_RECEIVER
 	.endm
 
-	.macro tryactivatesoulheart
-	various BS_ATTACKER, VARIOUS_TRY_ACTIVATE_SOULHEART
+	.macro onfaintedbyother
+	various BS_FAINTED, VARIOUS_ON_FAINTED_BY_OTHER
 	.endm
 
 	.macro tryactivatesouleater battler:req

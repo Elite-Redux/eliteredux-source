@@ -1,8 +1,9 @@
 #ifndef GUARD_BATTLE_BG_H
 #define GUARD_BATTLE_BG_H
 
-struct BattleBackground
-{
+#include "global.h"
+
+struct BattleBackground {
     const void *tileset;
     const void *tilemap;
     const void *entryTileset;
@@ -22,4 +23,4 @@ void DrawTerrainTypeBattleBackground(void);
 void LoadBattleBg(u8 battleBgType, u8 battleTerrain);
 void MoveIntoBattleBgWindow(u8 window);
 
-#endif // GUARD_BATTLE_BG_H
+#endif  // GUARD_BATTLE_BG_H

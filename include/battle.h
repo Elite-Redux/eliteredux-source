@@ -14,6 +14,7 @@
 #include "pokeball.h"
 #include "pokemon.h"
 #include "battle_debug.h"
+#include "global.h"
 
 #define GET_BATTLER_POSITION(battler)     (gBattlerPositions[battler])
 #define GET_BATTLER_SIDE(battler)         (GetBattlerPosition(battler) & BIT_SIDE)

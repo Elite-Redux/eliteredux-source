@@ -374,6 +374,7 @@ PKMN_Center_Mystery_Gift_EventScript_TakeCare::
 	case SPECIES_TING_LU, PKMN_Center_EventScript_SetflagTingLu
 	case SPECIES_ZACIAN, PKMN_Center_EventScript_SetflagZacian
 	case SPECIES_ZAMAZENTA, PKMN_Center_EventScript_SetflagZamazenta
+	case SPECIES_ENAMORUS, PKMN_Center_EventScript_SetflagEnamorus
 	case SPECIES_ETERNATUS, PKMN_Center_EventScript_SetflagEternatus
 	case SPECIES_KELDEO, PKMN_Center_EventScript_SetflagKeldeo
 	case SPECIES_REGIDRAGO, PKMN_Center_EventScript_SetflagRegidrago

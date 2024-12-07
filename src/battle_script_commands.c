@@ -1113,11 +1113,13 @@ static void Cmd_attackcanceler(void) {
 
     if (moveType == TYPE_FIRE && (gBattleWeather & WEATHER_RAIN_PRIMAL) && WEATHER_HAS_EFFECT && gBattleMoves[gCurrentMove].power) {
         BattleScriptCall(BattleScript_PrimordialSeaFizzlesOutFireTypeMoves);
+        CancelMultiTurnMoves(gBattlerAttacker);
         return;
     }
 
     if (moveType == TYPE_WATER && (gBattleWeather & WEATHER_SUN_PRIMAL) && WEATHER_HAS_EFFECT && gBattleMoves[gCurrentMove].power) {
         BattleScriptCall(BattleScript_DesolateLandEvaporatesWaterTypeMoves);
+        CancelMultiTurnMoves(gBattlerAttacker);
         return;
     }
 
@@ -3228,8 +3230,7 @@ static void Cmd_clearstatusfromeffect(void) {
 
     if (gBattleScripting.moveEffect == MOVE_EFFECT_CHARGING) {
         if (gBattleMoves[gCurrentMove].effect == EFFECT_SOLARBEAM &&
-            (IsBattlerWeatherAffected(gActiveBattler, WEATHER_SUN_ANY) || BattlerHasAbility(gActiveBattler, ABILITY_CHLOROPLAST, FALSE) ||
-             BattlerHasAbility(gActiveBattler, ABILITY_SOLAR_FLARE, FALSE) || BattlerHasAbility(gActiveBattler, ABILITY_BIG_LEAVES, FALSE)))
+            (IsBattlerWeatherAffected(gActiveBattler, WEATHER_SUN_ANY) || HasChloroplast(gActiveBattler)))
             gRoundStructs[gActiveBattler].chargingTurn = FALSE;
         else if (BattlerHasAbility(gActiveBattler, ABILITY_ACCELERATE, FALSE))
             gRoundStructs[gActiveBattler].chargingTurn = FALSE;
@@ -6584,7 +6585,7 @@ static void Cmd_useitemonopponent(void) {
     gBattlescriptCurrInstr += 1;
 }
 
-static bool32 HasAttackerFaintedTarget(void) {
+bool32 HasAttackerFaintedTarget(void) {
     if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT) && gBattleMoves[gCurrentMove].power != 0 &&
         (gLastHitBy[gBattlerTarget] == 0xFF || gLastHitBy[gBattlerTarget] == gBattlerAttacker) && gBattlerTarget != gBattlerAttacker &&
         GetTurnBattler() == gBattlerAttacker &&
@@ -7273,148 +7274,21 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_TRY_ACTIVATE_RAMPAGE:
             break;
-        case VARIOUS_TRY_ACTIVATE_MOXIE:  // and variants
-            REQUIRE(IsBattlerAlive(gActiveBattler))
+        case VARIOUS_ON_FAINTED_BY_ATTACKER:
             REQUIRE_NOT(NoAliveMonsForEitherParty())
-            REQUIRE(HasAttackerFaintedTarget()) {
-                int moveType;
-                GET_MOVE_TYPE(gCurrentMove, moveType)
-                gBattlerAbility = gActiveBattler;
-
-                for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-                    int ability = GetAbilityAtIndex(gActiveBattler, i, FALSE);
-                    int stat;
-                    switch (ability) {
-                        case ABILITY_AS_ONE_ICE_RIDER:
-                            ability = ABILITY_CHILLING_NEIGH;
-                            FALLTHROUGH
-                        case ABILITY_CHILLING_NEIGH:
-                        case ABILITY_MOXIE:
-                            stat = STAT_ATK;
-                        HANDLE_MOXIE:
-                            REQUIRE(ChangeStatBuffs(gActiveBattler, 1, stat, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
-                            gBattleScripting.abilityPopupOverwrite = ability;
-                            BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
-                            break;
-
-                        case ABILITY_AS_ONE_SHADOW_RIDER:
-                            ability = ABILITY_GRIM_NEIGH;
-                            FALLTHROUGH
-                        case ABILITY_HUBRIS:
-                        case ABILITY_GRIM_NEIGH:
-                            stat = STAT_SPATK;
-                            goto HANDLE_MOXIE;
-
-                        case ABILITY_HAUNTING_FRENZY:
-                        case ABILITY_ADRENALINE_RUSH:
-                            stat = STAT_SPEED;
-                            goto HANDLE_MOXIE;
-
-                        case ABILITY_BEAST_BOOST:
-                            stat = GetHighestStatId(gActiveBattler, FALSE);
-                            goto HANDLE_MOXIE;
-
-                        case ABILITY_WAY_OF_SWIFTNESS:
-                        case ABILITY_PRETENTIOUS:
-                            REQUIRE(gVolatileStructs[gActiveBattler].critBoost < 3)
-                            gVolatileStructs[gActiveBattler].critBoost++;
-                            gBattleScripting.abilityPopupOverwrite = ability;
-                            gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CRIT_INCREASE_1;
-                            BattleScriptCall(BattleScript_AbilityBoostsCrit);
-                            break;
-
-                        case ABILITY_SIDEWINDER:
-                            REQUIRE(gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST || !(gStatuses4[gActiveBattler] & STATUS4_COILED))
-                            gStatuses4[gActiveBattler] |= STATUS4_COILED;
-                            SetAbilityState(gActiveBattler, ability, TRUE);
-                            gBattleScripting.abilityPopupOverwrite = ability;
-                            BattleScriptCall(BattleScript_BattlerCoiledUpReturn);
-                            break;
-
-                        case ABILITY_DRAGONS_RITUAL:
-                            REQUIRE(CompareStat(gBattlerAttacker, STAT_ATK, MAX_STAT_STAGE, CMP_LESS_THAN) ||
-                                    CompareStat(gBattlerAttacker, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN))
-                            gBattleScripting.abilityPopupOverwrite = ability;
-                            BattleScriptCall(BattleScript_DragonsRitual);
-                            break;
-
-                        case ABILITY_ENERGIZED:
-                            REQUIRE(moveType == TYPE_ELECTRIC)
-                            SetOncePerTurnAbilityCounter(gActiveBattler, ability, TRUE);
-                            gBattleScripting.abilityPopupOverwrite = ability;
-                            gStackBattler1 = gActiveBattler;
-                            BattleScriptCall(BattleScript_GeneratorActivatesRet);
-                            break;
-
-                        case ABILITY_SUPER_STRAIN:
-                            REQUIRE(ChangeStatBuffs(
-                                gActiveBattler, -1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS | MOVE_EFFECT_CERTAIN, NULL))
-                            gBattleScripting.abilityPopupOverwrite = ability;
-                            BattleScriptCall(BattleScript_LowerStatOnFaintingTarget);
-                            break;
-
-                        case ABILITY_CROWNED_KING:
-                            BattleScriptCall(BattleScript_CrownedKing);
-                            break;
-
-                        case ABILITY_JAWS_OF_CARNAGE:
-                            REQUIRE_NOT(BATTLER_MAX_HP(gActiveBattler))
-                            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gActiveBattler))
-                            gBattleScripting.abilityPopupOverwrite = ability;
-                            if (gBattleMoves[gCurrentMove].flags & FLAG_STRONG_JAW_BOOST)
-                                BattleScriptCall(BattleScript_HandleJawsOfCarnageEffect);
-                            else
-                                BattleScriptCall(BattleScript_HandleSoulEaterEffect);
-                            break;
-
-                        case ABILITY_SOUL_EATER:
-                        case ABILITY_BLOODLUST:
-                        case ABILITY_SCAVENGER:
-                        case ABILITY_PREDATOR:
-                        case ABILITY_APEX_PREDATOR:
-                        case ABILITY_HUNTERS_HORN:
-                        case ABILITY_MAGMA_EATER:
-                        case ABILITY_LOOTER:
-                            REQUIRE_NOT(BATTLER_MAX_HP(gActiveBattler))
-                            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(gActiveBattler))
-                            gBattleScripting.abilityPopupOverwrite = ability;
-                            BattleScriptCall(BattleScript_HandleSoulEaterEffect);
-                            break;
-
-                        case ABILITY_RAMPAGE:
-                        case ABILITY_BERSERKER_RAGE:
-                        case ABILITY_MASTER_HAND:
-                        case ABILITY_RAGING_GODDESS:
-                            SetAbilityState(gActiveBattler, ability, TRUE);
-                            gVolatileStructs[gActiveBattler].rechargeTimer = 0;
-                            gBattleMons[gActiveBattler].status2 &= ~(STATUS2_RECHARGE);
-                            break;
-
-                        case ABILITY_BATTLE_BOND: {
-                            int species = gBattleMons[gBattlerAttacker].species;
-                            int newSpecies = 0;
-                            switch (species) {
-                                case SPECIES_GRENINJA_BATTLE_BOND:
-                                    newSpecies = SPECIES_GRENINJA_ASH;
-                                    break;
-
-                                case SPECIES_DARMANITAN_REDUX_BOND:
-                                    newSpecies = SPECIES_DARMANITAN_REDUX_BLUNDER;
-                                    break;
-                            }
-
-                            REQUIRE(newSpecies)
-
-                            PREPARE_SPECIES_BUFFER(gBattleTextBuff1, gBattleMons[gActiveBattler].species);
-                            gBattleStruct->changedSpecies[gBattlerPartyIndexes[gActiveBattler]] = gBattleMons[gActiveBattler].species;
-                            UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, newSpecies);
-                            gBattleMons[gActiveBattler].species = newSpecies;
-                            gBattleScripting.abilityPopupOverwrite = ability;
-                            BattleScriptCall(BattleScript_BattleBondActivatesOnMoveEndAttacker);
-                        } break;
-                    }
-                }
+            int moveType;
+            GET_MOVE_TYPE(gCurrentMove, moveType)
+            for (int i = 0; i < gBattlersCount; i++) {
+                FILTER(IsBattlerAlive(i))
+                ON_ABILITY(i,
+                           FALSE,
+                           gAbilities[ability].onBattlerFaints &&
+                               IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, gBattlerAttacker, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
+                           gStackBattler1 = i;
+                           if (gAbilities[ability].onBattlerFaints(ability, i, gActiveBattler, gCurrentMove, moveType) & 1)
+                               BattleScriptCall(BattleScript_AbilityPopUpStack))
             }
+            ReadActiveScriptInitialStackState();
             break;
         case VARIOUS_TRY_ACTIVATE_SUPER_STRAIN:  // and variants
             break;
@@ -7423,34 +7297,21 @@ static void Cmd_various(void) {
         case VARIOUS_TRY_ACTIVATE_GRIM_NEIGH:
             break;
         case VARIOUS_TRY_ACTIVATE_RECEIVER:  // Partner gets fainted's ally ability
-            gBattlerAbility = BATTLE_PARTNER(gActiveBattler);
-            REQUIRE(IsBattlerAlive(gBattlerAbility))
-            if (IsBattlerAlive(gBattlerAbility) && GetBattlerAbility(gBattlerAbility) == ABILITY_RECEIVER &&
-                !HasAbilityIgnoringSuppression(gBattlerAbility, GetBattlerAbility(gActiveBattler))) {
-                if (!IsRolePlayBannedAbility(GetBattlerAbility(gActiveBattler))) {
-                    gBattleStruct->tracedAbility[gBattlerAbility] = GetBattlerAbility(gActiveBattler);  // re-using the variable for trace
-                    gBattleScripting.battler = gActiveBattler;
-                    BattleScriptCall(BattleScript_ReceiverActivates);
-                    return;
-                }
-            }
             break;
         case VARIOUS_TRY_ACTIVATE_BEAST_BOOST:
             break;
-        case VARIOUS_TRY_ACTIVATE_SOULHEART:
-            while (gBattleStruct->soulheartBattlerId < gBattlersCount) {
-                gStackBattler1 = gBattleStruct->soulheartBattlerId++;
-                if (!IsBattlerAlive(gStackBattler1)) continue;
-                if (BATTLER_HAS_ABILITY(gStackBattler1, ABILITY_SOUL_HEART) && !NoAliveMonsForEitherParty() &&
-                    CompareStat(gBattleScripting.battler, STAT_SPATK, MAX_STAT_STAGE, CMP_LESS_THAN)) {
-                    ChangeStatBuffs(gStackBattler1, 1, STAT_SPATK, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL);
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_SOUL_HEART;
-                    BattleScriptPush(runAgain);
-                    gBattlescriptCurrInstr = BattleScript_ScriptingAbilityStatRaise;
-                    return;
-                }
+        case VARIOUS_ON_FAINTED_BY_OTHER:
+            REQUIRE_NOT(NoAliveMonsForEitherParty())
+            for (int i = 0; i < gBattlersCount; i++) {
+                FILTER(IsBattlerAlive(i))
+                ON_ABILITY(i,
+                           FALSE,
+                           gAbilities[ability].onBattlerFaints &&
+                               IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, MAX_BATTLERS_COUNT, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
+                           gStackBattler1 = i;
+                           if (gAbilities[ability].onBattlerFaints(ability, i, gActiveBattler, 0, 0) & 1) BattleScriptCall(BattleScript_AbilityPopUpStack))
             }
-            gBattleStruct->soulheartBattlerId = 0;
+            ReadActiveScriptInitialStackState();
             break;
         case VARIOUS_TRY_ACTIVATE_FELL_STINGER:
             REQUIRE(IsBattlerAlive(gActiveBattler))
@@ -11233,10 +11094,7 @@ static bool8 IsTwoTurnsMove(u16 move) {
 static u8 AttacksThisTurn(u8 battlerId, u16 move)  // Note: returns 1 if it's a charging turn, otherwise 2
 {
     // first argument is unused
-    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM &&
-        (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || BattlerHasAbility(gBattlerAttacker, ABILITY_SOLAR_FLARE, FALSE) ||
-         BattlerHasAbility(gBattlerAttacker, ABILITY_CHLOROPLAST, FALSE) || BattlerHasAbility(gBattlerAttacker, ABILITY_BIG_LEAVES, FALSE)))
-        return 2;
+    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || HasChloroplast(gBattlerAttacker))) return 2;
 
     if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY)) return 2;
 
@@ -11791,8 +11649,7 @@ static void Cmd_recoverbasedonsunlight(void) {
                 gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 2;
         } else if (gCurrentMove == MOVE_MOONLIGHT && BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_MOON_SPIRIT)) {
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP * 3 / 4;
-        } else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SOLAR_FLARE) ||
-                   BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_BIG_LEAVES) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_CHLOROPLAST)) {
+        } else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_SUN_ANY) || HasChloroplast(gBattlerAttacker)) {
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP * 2 / 3;
         } else if (IsBattlerWeatherAffected(gBattlerAttacker, WEATHER_RAIN_ANY))
             gBattleMoveDamage = gBattleMons[gBattlerAttacker].maxHP / 4;
@@ -13652,10 +13509,7 @@ static bool32 CriticalCapture(u32 odds) {
 bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId) {
     if (gBattleMoves[move].split == SPLIT_STATUS) return FALSE;
     if (gBattleMoves[move].parentalBondBanned) return FALSE;
-    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM &&
-        (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || BattlerHasAbility(battlerId, ABILITY_SOLAR_FLARE, FALSE) ||
-         BattlerHasAbility(battlerId, ABILITY_CHLOROPLAST, FALSE) || BattlerHasAbility(battlerId, ABILITY_BIG_LEAVES, FALSE)))
-        return TRUE;
+    if (gBattleMoves[move].effect == EFFECT_SOLARBEAM && (IsBattlerWeatherAffected(battlerId, WEATHER_SUN_ANY) || HasChloroplast(battlerId))) return TRUE;
     if (gBattleMoves[move].effect == EFFECT_ELECTRO_SHOT && IsBattlerWeatherAffected(battlerId, WEATHER_RAIN_ANY)) return TRUE;
     if (gBattleMoves[move].twoTurnMove && !BattlerHasAbility(battlerId, ABILITY_ACCELERATE, FALSE)) return FALSE;
     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) {

@@ -7278,7 +7278,8 @@ BattleScript_MysticDanceEnd::
 	goto BattleScript_MoveEnd
 
 BattleScript_DragonsRitual::
-	call BattleScript_AbilityPopUp
+	saveattackertostack3
+	copybyte gBattlerAttacker, gStackBattler1
 	playstatchangeanimation BS_ATTACKER, BIT_ATK | BIT_SPEED, 0
 	setstatchanger STAT_ATK, 1, FALSE
 	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_DragonsRitual_Speed
@@ -7287,10 +7288,11 @@ BattleScript_DragonsRitual::
 	waitmessage B_WAIT_TIME_LONG
 BattleScript_DragonsRitual_Speed::
 	setstatchanger STAT_SPEED, 1, FALSE
-	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_Return
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_Return
+	statbuffchange MOVE_EFFECT_AFFECTS_USER, BattleScript_RestoreAttackerReturn
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_RestoreAttackerReturn
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
+	readattackerfromstack3
 	return
 
 BattleScript_EffectDragonDance::
@@ -7368,7 +7370,7 @@ BattleScript_FaintAttacker_NoPopup:
 	printfromtable gFaintMonMessage
 	tryendneutralizinggas BS_ATTACKER
 	cleareffectsonfaint BS_ATTACKER
-	tryactivatesoulheart
+	onfaintedbyother
 	tryactivatereceiver BS_ATTACKER
 	trytrainerslidefirstdownmsg BS_ATTACKER
 	return
@@ -7388,9 +7390,7 @@ BattleScript_FaintTarget_NoPopup:
 	tryendneutralizinggas BS_TARGET
 	cleareffectsonfaint BS_TARGET
 	tryactivatefellstinger BS_ATTACKER
-	tryactivatesoulheart
-	tryactivatereceiver BS_TARGET
-	tryactivatemoxie BS_ATTACKER		@ and chilling neigh, as one ice rider
+	onfaintedbyattacker
 	trytrainerslidefirstdownmsg BS_TARGET
 	readtargetfromstack4
 	return
@@ -9692,7 +9692,7 @@ BattleScript_BattlerCoiledUp::
 
 BattleScript_BattlerCoiledUpReturn::
 	call BattleScript_AbilityPopUp
-BattleScript_BattlerCoiledUpReturnNoPopup:
+BattleScript_BattlerCoiledUpReturnNoPopup::
 	printstring STRINGID_BATTLERCOILEDUP
 	waitmessage B_WAIT_TIME_LONG
 	return
@@ -9780,6 +9780,7 @@ BattleScript_DoWindRider:
 	setgraphicalstatchangevalues
 	playanimation BS_ABILITY_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_BATTLERABILITYRAISEDSTAT
+	waitmessage B_WAIT_TIME_LONG
 BattleScript_Return:
 	return
 	
@@ -9995,12 +9996,12 @@ BattleScript_EmergencyExitWildNoPopUp::
 	return
 
 BattleScript_TraceActivates::
-	pause B_WAIT_TIME_SHORT
-	copybyte gBattlerAbility, gStackBattler1
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_PKMNTRACED
 	waitmessage B_WAIT_TIME_LONG
-	settracedability BS_STACK_1
+	call BattleScript_AbilityPopUp
+	waitmessage B_WAIT_TIME_SHORT
+	destroyabilitypopup
+	waitmessage B_WAIT_TIME_SHORT
 	saveattackerandtargetto34
 	switchinabilities BS_STACK_1
 	return
@@ -10010,10 +10011,14 @@ BattleScript_TraceActivatesEnd3::
 	end3
 
 BattleScript_ReceiverActivates::
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_RECEIVERABILITYTAKEOVER
 	waitmessage B_WAIT_TIME_LONG
-	settracedability BS_ABILITY_BATTLER
+	call BattleScript_AbilityPopUp
+	waitmessage B_WAIT_TIME_SHORT
+	destroyabilitypopup
+	waitmessage B_WAIT_TIME_SHORT
+	saveattackerandtargetto34
+	switchinabilities BS_STACK_1
 	return
 	
 BattleScript_AbilityHpHeal:
@@ -10772,44 +10777,16 @@ BattleScript_WeakArmorActivatesEnd:
 	return
 
 BattleScript_RaiseStatOnFaintingTarget::
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
 	setgraphicalstatchangevalues
-	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
-	waitanimation
-	printstring STRINGID_LASTABILITYRAISEDSTAT
-	waitmessage B_WAIT_TIME_LONG
-	return	
-
-BattleScript_CrownedKing::
-	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPATK, MAX_STAT_STAGE, BattleScript_CrownedKingSpAtkMaxed
-	sethword sABILITY_OVERWRITE, ABILITY_GRIM_NEIGH
-	setstatchanger STAT_SPATK, 1, FALSE
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_CrownedKingSpAtkMaxed
-	call BattleScript_RaiseStatOnFaintingTarget
-BattleScript_CrownedKingSpAtkMaxed:
-	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_ATK, MAX_STAT_STAGE, BattleScript_CrownedKingAtkMaxed
-	sethword sABILITY_OVERWRITE, ABILITY_CHILLING_NEIGH
-	setstatchanger STAT_ATK, 1, FALSE
-	statbuffchange STAT_BUFF_ALLOW_PTR, BattleScript_CrownedKingAtkMaxed
-	call BattleScript_RaiseStatOnFaintingTarget
-BattleScript_CrownedKingAtkMaxed:
-	return
-
-
-	call BattleScript_AbilityPopUp
-	setgraphicalstatchangevalues
-	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	playanimation BS_STACK_1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	printstring STRINGID_LASTABILITYRAISEDSTAT
 	waitmessage B_WAIT_TIME_LONG
 	return	
 
 BattleScript_LowerStatOnFaintingTarget::
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
 	setgraphicalstatchangevalues
-	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	playanimation BS_STACK_1, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	waitanimation
 	printstring STRINGID_LASTABILITYLOWEREDSTAT
 	waitmessage B_WAIT_TIME_LONG
@@ -10865,8 +10842,6 @@ BattleScript_CommanderEndsEnd2::
 	end2
 
 BattleScript_CommanderEnds::
-	copybyte gBattlerAbility, gStackBattler1
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_COMMANDER_ENDS
 	waitmessage B_WAIT_TIME_SHORT
 	makevisible BS_STACK_1
@@ -11076,19 +11051,16 @@ BattleScript_MoveSecondStatusEffect::
 	return
 
 BattleScript_BattleBondActivatesOnMoveEndAttacker::
-	pause 5
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
 	printstring STRINGID_ATTACKERBECAMEFULLYCHARGED
-	handleformchange BS_ATTACKER, 0
-	handleformchange BS_ATTACKER, 1
-	playanimation BS_ATTACKER, B_ANIM_FORM_CHANGE, NULL
+	handleformchange BS_STACK_1, 0
+	handleformchange BS_STACK_1, 1
+	playanimation BS_STACK_1, B_ANIM_FORM_CHANGE, NULL
 	waitanimation
-	handleformchange BS_ATTACKER, 2
+	handleformchange BS_STACK_1, 2
 	printstring STRINGID_ATTACKERBECAMEASHSPECIES
 	waitmessage B_WAIT_TIME_LONG
 	saveattackerandtargetto34
-	switchinabilities BS_ATTACKER
+	switchinabilities BS_STACK_1
 	return
 
 BattleScript_DancerActivates::
@@ -11924,28 +11896,18 @@ BattleScript_RetrieverExits::
 	return
 
 BattleScript_HandleSoulEaterEffect::
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
-	tryhealpercenthealth BS_ATTACKER, 25, BattleScript_HandleSoulEaterEffect_NothingToHeal
+	tryhealpercenthealth BS_STACK_1, 25, BattleScript_Return
+BattleScript_HandleSoulEaterEffect_AfterHeal:
 	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	printstring STRINGID_ATTACKERREGAINEDHEALTH
+	healthbarupdate BS_STACK_1
+	datahpupdate BS_STACK_1
+	printstring STRINGID_STACKREGAINEDHEALTH
 	waitmessage B_WAIT_TIME_LONG
-BattleScript_HandleSoulEaterEffect_NothingToHeal:
     return
 
 BattleScript_HandleJawsOfCarnageEffect::
-	copybyte gBattlerAbility, gBattlerAttacker
-	call BattleScript_AbilityPopUp
-	tryhealpercenthealth BS_ATTACKER, 50, BattleScript_HandleJawsOfCarnageEffect_NothingToHeal
-	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE
-	healthbarupdate BS_ATTACKER
-	datahpupdate BS_ATTACKER
-	printstring STRINGID_ATTACKERREGAINEDHEALTH
-	waitmessage B_WAIT_TIME_LONG
-BattleScript_HandleJawsOfCarnageEffect_NothingToHeal:
-    return
+	tryhealpercenthealth BS_STACK_1, 50, BattleScript_Return
+	goto BattleScript_HandleSoulEaterEffect_AfterHeal
 
 BattleScript_AttackerSoulLinker::
 	call BattleScript_AbilityPopUp
@@ -12832,7 +12794,6 @@ BattleScript_EffectSmokescreen::
 	goto BattleScript_MoveEnd
 
 BattleScript_AbilityBoostsCrit::
-	call BattleScript_AbilityPopUp
 	printfromtable gCritRaisedStrings
 	waitmessage B_WAIT_TIME_LONG
 	return

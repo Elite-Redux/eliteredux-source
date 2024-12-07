@@ -1,20 +1,19 @@
 #ifndef GUARD_BATTLE_MAIN_H
 #define GUARD_BATTLE_MAIN_H
 
-struct TrainerMoney
-{
+#include "global.h"
+
+struct TrainerMoney {
     u8 classId;
     u8 value;
 };
 
-struct TrainerBall
-{
+struct TrainerBall {
     u8 classId;
     u8 Ball;
 };
 
-struct UnknownPokemonStruct4
-{
+struct UnknownPokemonStruct4 {
     /*0x00*/ u16 species;
     /*0x02*/ u16 heldItem;
     /*0x04*/ u8 nickname[POKEMON_NAME_LENGTH + 1];
@@ -44,14 +43,14 @@ union SpeedValue {
 #define ABILITY_NAME_LENGTH 20
 
 // defines for the 'DoBounceEffect' function
-#define BOUNCE_MON          0x0
-#define BOUNCE_HEALTHBOX    0x1
+#define BOUNCE_MON 0x0
+#define BOUNCE_HEALTHBOX 0x1
 
 void CB2_InitBattle(void);
 void BattleMainCB2(void);
 void CB2_QuitRecordedBattle(void);
-void sub_8038528(struct Sprite* sprite);
-void sub_8038A04(void); // unused
+void sub_8038528(struct Sprite *sprite);
+void sub_8038A04(void);  // unused
 void VBlankCB_Battle(void);
 void SpriteCB_VsLetterDummy(struct Sprite *sprite);
 void SpriteCB_VsLetterInit(struct Sprite *sprite);
@@ -91,7 +90,7 @@ u16 IsMyceliumMightActive(u32 battlerId);
 s8 GetChosenMovePriority(u32 battlerId, u32 target);
 s8 GetMovePriority(u32 battlerId, u16 move, u32 target);
 u8 GetWhoStrikesFirst(u8 battlerId1, u8 battlerId2, bool8 ignoreChosenMoves);
-int SortBattlersExcept(u8* battlerArray, int ignoreChosenMoves, int except);
+int SortBattlersExcept(u8 *battlerArray, int ignoreChosenMoves, int except);
 int GetFastestBattler(int ignoreChosenMoves, int except);
 void RunBattleScriptCommands_PopCallbacksStack(void);
 void RunBattleScriptCommands(void);
@@ -101,7 +100,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk);
 u8 GetTypeBeforeUsingMove(u16 move, u8 battlerAtk);
 void ApplyTypeOverrideInformation(int move, int battlerAtk, int moveType, int ateBoost);
 s32 GetHighestLevelInPlayerParty(void);
-u16 selectMoves (u16 species, u8 i, u16 atk, u16 spAtk);
+u16 selectMoves(u16 species, u8 i, u16 atk, u16 spAtk);
 u8 GetMonMoveType(u16 move, struct Pokemon *mon, bool8 disableRandomizer);
 bool32 IsWildMonSmart(void);
 void RecalculateMoveOrder(int from, int ignoreChosenMove);
@@ -126,4 +125,4 @@ extern const u8 gStatusConditionString_BleedJpn[8];
 
 extern const u8 *const gStatusConditionStringsTable[8][2];
 
-#endif // GUARD_BATTLE_MAIN_H
+#endif  // GUARD_BATTLE_MAIN_H

@@ -1,10 +1,11 @@
 #ifndef GUARD_BATTLE_SCRIPT_COMMANDS_H
 #define GUARD_BATTLE_SCRIPT_COMMANDS_H
 
+#include "abilities.h"
 #include "battle_ai_new.h"
 #include "battle_util.h"
 #include "constants/pokemon.h"
-#include "abilities.h"
+#include "global.h"
 
 #define WINDOW_CLEAR 0x1
 #define WINDOW_x80 0x80
@@ -94,6 +95,7 @@ void ClearPowerOfAlchemyState(int alchemyBattler, int battler);
 int UpdateBattlerItem(int battler, int newItem);
 int Infiltrates(int battler, int move, InfiltrateType type);
 int SetEncore(int target);
+bool32 HasAttackerFaintedTarget(void);
 
 extern void (*const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];

@@ -3513,22 +3513,6 @@ void FaintClearSetData(void)
     ZERO(gVolatileStructs[gActiveBattler])
     ZERO(gRoundStructs[gActiveBattler])
 
-    if (IsBattlerAlive(BATTLE_PARTNER(gActiveBattler)))
-    {
-        u8 partner = BATTLE_PARTNER(gActiveBattler);
-        switch (GetAbilityState(partner, ABILITY_COMMANDER))
-        {
-            case COMMANDER_ACTIVATING:
-                SetAbilityState(partner, ABILITY_COMMANDER, COMMANDER_NOT_ACTIVE);
-                gStatuses3[partner] &= ~STATUS3_SEMI_INVULNERABLE;
-                break;
-            case COMMANDER_ACTIVE:
-            case COMMANDER_NEEDS_CANCELLING:
-                SetAbilityState(partner, ABILITY_COMMANDER, COMMANDER_NEEDS_CANCELLING);
-                break;
-        }
-    }
-
     gVolatileStructs[gActiveBattler].isFirstTurn = 2;
 
     gLastMoves[gActiveBattler] = 0;

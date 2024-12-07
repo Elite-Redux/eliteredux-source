@@ -1,9 +1,11 @@
 #ifndef GUARD_BATTLE_AI_UTIL_H
 #define GUARD_BATTLE_AI_UTIL_H
 
+#include "global.h"
+
 // for IsAiFaster
-#define AI_CHECK_FASTER   0       // if_user_faster
-#define AI_CHECK_SLOWER   1       // if_target_faster
+#define AI_CHECK_FASTER 0  // if_user_faster
+#define AI_CHECK_SLOWER 1  // if_target_faster
 
 #define FOE(battler) ((battler ^ BIT_SIDE) & BIT_SIDE)
 
@@ -176,4 +178,4 @@ void IncreaseBurnScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score);
 void IncreaseFrostbiteScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score);
 void IncreaseBleedScore(u8 battlerAtk, u8 battlerDef, u16 move, s16 *score);
 
-#endif //GUARD_BATTLE_AI_UTIL_H
+#endif  // GUARD_BATTLE_AI_UTIL_H

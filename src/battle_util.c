@@ -2541,16 +2541,6 @@ u8 DoBattlerEndTurnEffects(void) {
                 break;
             case ENDTURN_COMMANDER:
                 gBattleStruct->turnEffectsTracker++;
-
-                REQUIRE(IsBattlerAlive(gActiveBattler))
-                REQUIRE(GetAbilityState(gActiveBattler, ABILITY_COMMANDER) == COMMANDER_NEEDS_CANCELLING)
-
-                SetAbilityState(gActiveBattler, ABILITY_COMMANDER, COMMANDER_NOT_ACTIVE);
-                gStatuses3[gActiveBattler] &= ~STATUS3_SEMI_INVULNERABLE;
-                gBattleScripting.abilityPopupOverwrite = ABILITY_COMMANDER;
-                gStackBattler1 = gActiveBattler;
-                BattleScriptExecute(BattleScript_CommanderEndsEnd2);
-                effect++;
                 break;
             case ENDTURN_PARASITIC_SPORES_DAMAGE:
                 if (IsBattlerAlive(gActiveBattler) && gVolatileStructs[gActiveBattler].parasiticSpores && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)) {
@@ -4847,41 +4837,41 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             break;
         case ABILITYEFFECT_TRACE1:
         case ABILITYEFFECT_TRACE2:
-            for (i = 0; i < gBattlersCount; i++) {
-                if (GetBattlerAbility(i) == ABILITY_TRACE && (gBattleResources->flags->flags[i] & RESOURCE_FLAG_TRACED)) {
-                    u8 side = (GetBattlerPosition(i) ^ BIT_SIDE) & BIT_SIDE;  // side of the opposing pokemon
-                    u8 target1 = GetBattlerAtPosition(side);
-                    u8 target2 = GetBattlerAtPosition(side + BIT_FLANK);
+            // for (i = 0; i < gBattlersCount; i++) {
+            //     if (GetBattlerAbility(i) == ABILITY_TRACE && (gBattleResources->flags->flags[i] & RESOURCE_FLAG_TRACED)) {
+            //         u8 side = (GetBattlerPosition(i) ^ BIT_SIDE) & BIT_SIDE;  // side of the opposing pokemon
+            //         u8 target1 = GetBattlerAtPosition(side);
+            //         u8 target2 = GetBattlerAtPosition(side + BIT_FLANK);
 
-                    if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) {
-                        if (!IsRolePlayBannedAbility(GetBattlerAbility(target1)) && gBattleMons[target1].hp != 0 &&
-                            !IsRolePlayBannedAbility(GetBattlerAbility(target2)) && gBattleMons[target2].hp != 0)
-                            gStackBattler2 = GetBattlerAtPosition(((Random() & 1) * 2) | side), effect++;
-                        else if (!IsRolePlayBannedAbility(GetBattlerAbility(target1)) && gBattleMons[target1].hp != 0)
-                            gStackBattler2 = target1, effect++;
-                        else if (!IsRolePlayBannedAbility(GetBattlerAbility(target2)) && gBattleMons[target2].hp != 0)
-                            gStackBattler2 = target2, effect++;
-                    } else {
-                        if (!IsRolePlayBannedAbility(GetBattlerAbility(target1)) && gBattleMons[target1].hp != 0) gStackBattler2 = target1, effect++;
-                    }
+            //         if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) {
+            //             if (!IsRolePlayBannedAbility(GetBattlerAbility(target1)) && gBattleMons[target1].hp != 0 &&
+            //                 !IsRolePlayBannedAbility(GetBattlerAbility(target2)) && gBattleMons[target2].hp != 0)
+            //                 gStackBattler2 = GetBattlerAtPosition(((Random() & 1) * 2) | side), effect++;
+            //             else if (!IsRolePlayBannedAbility(GetBattlerAbility(target1)) && gBattleMons[target1].hp != 0)
+            //                 gStackBattler2 = target1, effect++;
+            //             else if (!IsRolePlayBannedAbility(GetBattlerAbility(target2)) && gBattleMons[target2].hp != 0)
+            //                 gStackBattler2 = target2, effect++;
+            //         } else {
+            //             if (!IsRolePlayBannedAbility(GetBattlerAbility(target1)) && gBattleMons[target1].hp != 0) gStackBattler2 = target1, effect++;
+            //         }
 
-                    if (effect) {
-                        gBattleResources->flags->flags[i] &= ~(RESOURCE_FLAG_TRACED);
-                        gBattleStruct->tracedAbility[i] = GetBattlerAbility(gStackBattler2);
-                        gStackBattler1 = i;
+            //         if (effect) {
+            //             gBattleResources->flags->flags[i] &= ~(RESOURCE_FLAG_TRACED);
+            //             gBattleStruct->tracedAbility[i] = GetBattlerAbility(gStackBattler2);
+            //             gStackBattler1 = i;
 
-                        PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleStruct->tracedAbility[i])
-                        gBattleScripting.abilityPopupOverwrite = ABILITY_TRACE;
+            //             PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gBattleStruct->tracedAbility[i])
+            //             gBattleScripting.abilityPopupOverwrite = ABILITY_TRACE;
 
-                        if (caseID == ABILITYEFFECT_TRACE1) {
-                            BattleScriptPushCursorAndCallback(BattleScript_TraceActivatesEnd3);
-                        } else {
-                            BattleScriptCall(BattleScript_TraceActivates);
-                        }
-                        break;
-                    }
-                }
-            }
+            //             if (caseID == ABILITYEFFECT_TRACE1) {
+            //                 BattleScriptPushCursorAndCallback(BattleScript_TraceActivatesEnd3);
+            //             } else {
+            //                 BattleScriptCall(BattleScript_TraceActivates);
+            //             }
+            //             break;
+            //         }
+            //     }
+            // }
             break;
         case ABILITYEFFECT_NEUTRALIZINGGAS:
             // Prints message only. separate from ABILITYEFFECT_ON_SWITCHIN bc activates before entry hazards
@@ -7068,7 +7058,7 @@ static u16 CalcMoveBasePower(u16 move, u8 battlerAtk, u8 battlerDef) {
                 basePower *= 2;
             break;
         case EFFECT_WEATHER_BALL:
-            if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_CHLOROPLAST) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BIG_LEAVES))
+            if (HasChloroplast(battlerAtk))
                 basePower *= 2;
             else if (gBattleWeather & WEATHER_ANY && WEATHER_HAS_EFFECT)
                 basePower *= 2;
@@ -7611,6 +7601,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability,
         case ABILITY_ROCKHARD_WILL:
             SWARM_LIKE(TYPE_ROCK)
 
+        case ABILITY_VENGEFUL_SPIRIT:
         case ABILITY_VENGEANCE:
             SWARM_LIKE(TYPE_GHOST)
 
@@ -8157,8 +8148,7 @@ u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 fixedPower, u8 battlerAtk, u8 b
             break;
         case EFFECT_SOLARBEAM:
             if (IsBattlerWeatherAffected(battlerAtk, (WEATHER_HAIL_ANY | WEATHER_SANDSTORM_ANY | WEATHER_RAIN_ANY | WEATHER_FOG_ANY)) &&
-                !BattlerHasAbility(gBattlerAttacker, ABILITY_SOLAR_FLARE, FALSE) && !BattlerHasAbility(gBattlerAttacker, ABILITY_BIG_LEAVES, FALSE) &&
-                !BattlerHasAbility(gBattlerAttacker, ABILITY_CHLOROPLAST, FALSE))
+                !HasChloroplast(gBattlerAttacker))
                 MulModifier(&modifier, UQ_4_12(0.5));
             break;
         case EFFECT_STOMPING_TANTRUM:
@@ -10445,18 +10435,6 @@ int HandleMiscAbilityMoveEffects(int battler, int opponent, int move) {
         effect++;
     }
 
-    {
-        u8 commander = IsAbilityOnSide(battler, ABILITY_COMMANDER);
-        if (commander-- && IsBattlerAlive(commander) && GetAbilityState(commander, ABILITY_COMMANDER) == COMMANDER_NEEDS_CANCELLING) {
-            SetAbilityState(commander, ABILITY_COMMANDER, COMMANDER_NOT_ACTIVE);
-            gStatuses3[commander] &= ~STATUS3_SEMI_INVULNERABLE;
-            gBattleScripting.abilityPopupOverwrite = ABILITY_COMMANDER;
-            gStackBattler1 = commander;
-            BattleScriptCall(BattleScript_CommanderEnds);
-            effect++;
-        }
-    }
-
     return effect;
 }
 
@@ -10768,9 +10746,7 @@ int IsStickyHold(int battler) {
 }
 
 int HasChloroplast(int battler) {
-    if (BattlerHasAbility(battler, ABILITY_CHLOROPLAST, FALSE)) return TRUE;
-    if (BattlerHasAbility(battler, ABILITY_BIG_LEAVES, FALSE)) return TRUE;
-    if (BattlerHasAbility(battler, ABILITY_SOLAR_FLARE, FALSE)) return TRUE;
+    ON_ABILITY(battler, FALSE, gAbilities[ability].chloroplast, return TRUE)
     return FALSE;
 }
 

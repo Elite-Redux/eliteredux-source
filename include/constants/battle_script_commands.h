@@ -107,14 +107,14 @@
 #define VARIOUS_SET_ALREADY_STATUS_MOVE_ATTEMPT 23
 #define VARIOUS_SET_TELEPORT_OUTCOME            25
 #define VARIOUS_PLAY_TRAINER_DEFEATED_MUSIC     26
-#define VARIOUS_SET_ACTIVE_STAT_CHANGER                27
+#define VARIOUS_SET_ACTIVE_STAT_CHANGER         27
 #define VARIOUS_SWITCHIN_ABILITIES              28
 #define VARIOUS_SAVE_TARGET                     29
 #define VARIOUS_RESTORE_TARGET                  30
 #define VARIOUS_INSTANT_HP_DROP                 31
 #define VARIOUS_CLEAR_STATUS                    32
 #define VARIOUS_RESTORE_PP                      33
-#define VARIOUS_TRY_ACTIVATE_MOXIE              34
+#define VARIOUS_ON_FAINTED_BY_ATTACKER          34
 #define VARIOUS_TRY_ACTIVATE_FELL_STINGER       35
 #define VARIOUS_PLAY_MOVE_ANIMATION             36
 #define VARIOUS_SET_LUCKY_CHANT                 37
@@ -169,7 +169,7 @@
 #define VARIOUS_GET_STAT_VALUE                  86
 #define VARIOUS_JUMP_IF_FULL_HP                 87
 #define VARIOUS_LOSE_TYPE                       88
-#define VARIOUS_TRY_ACTIVATE_SOULHEART          89
+#define VARIOUS_ON_FAINTED_BY_OTHER             89
 #define VARIOUS_TRY_ACTIVATE_RECEIVER           90
 #define VARIOUS_TRY_ACTIVATE_BEAST_BOOST        91
 #define VARIOUS_TRY_FRISK                       92
