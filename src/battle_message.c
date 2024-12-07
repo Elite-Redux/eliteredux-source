@@ -1072,6 +1072,7 @@ static const u8 sText_Your2[] = _("your");
 static const u8 sText_Opposing2[] = _("the opposing");
 const u8 gText_NoMoreRoomForPokemon[] = _("There's no more room for Pokémon!\pThe Pokémon Boxes are full and\ncan't accept any more!");
 const u8 gText_NicknameThisPokemon[] = _("Do you want to give a nickname to\nthis {STR_VAR_1}?");
+static const u8 sText_StackChangedTypeTo[] = _("{B_STACK_1_NAME_WITH_PREFIX}'s type\nchanged to {B_BUFF1}!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1927,6 +1928,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_RUDE_AWAKENING - 12] = sText_RudeAwakening,
     [STRINGID_CUTTHROAT - 12] = sText_Cutthroat,
     [STRINGID_ITEM_STAT_PROTECTED - 12] = sText_ItemStatProtected,
+    [STRINGID_STACKTYPECHANGEDTO - 12] = sText_StackChangedTypeTo,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

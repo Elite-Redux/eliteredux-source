@@ -93,6 +93,7 @@ int EatTargetBerry(int battler, int target);
 void ClearPowerOfAlchemyState(int alchemyBattler, int battler);
 int UpdateBattlerItem(int battler, int newItem);
 int Infiltrates(int battler, int move, InfiltrateType type);
+int SetEncore(int target);
 
 extern void (*const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];

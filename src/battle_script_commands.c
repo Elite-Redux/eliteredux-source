@@ -979,6 +979,7 @@ static bool32 TryAegiFormChange(void) {
     UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, newSpecies);
     gBattleMons[gBattlerAttacker].species = newSpecies;
     BattleScriptCall(BattleScript_AttackerFormChange);
+    BattleScriptCall(BattleScript_AbilityPopUp);
     return TRUE;
 }
 
@@ -1243,6 +1244,7 @@ static void Cmd_attackcanceler(void) {
         UpdateAbilityStateIndicesForNewSpecies(gBattlerAttacker, SPECIES_LUMBERING_SLOTH_ENGULFED);
         gBattleMons[gBattlerAttacker].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
         BattleScriptCall(BattleScript_AttackerFormChange);
+        BattleScriptCall(BattleScript_AbilityPopUp);
         return;
     }
 
@@ -4530,8 +4532,9 @@ static void Cmd_moveend(void) {
                 if (!gTurnStructs[gBattlerAttacker].savedDmg) break;
                 if (gCurrentMove != MOVE_STRUGGLE) {
                     if (IsMagicGuardProtected(gBattlerAttacker)) break;
-                    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_ROCK_HEAD)) break;
-                    if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STEEL_BARREL)) break;
+                    int blocked = FALSE;
+                    ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].noRecoil, blocked = FALSE; break)
+                    if (blocked) break;
                 }
 
                 switch (gBattleMoves[gCurrentMove].effect) {
@@ -4557,15 +4560,15 @@ static void Cmd_moveend(void) {
                     BattleScriptCall(BattleScript_MoveEffectRecoil);
                 }
 
-                if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_SUPER_STRAIN)) {
-                    if (!gBattleMoveDamage) {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_STRAIN;
-                        BattleScriptCall(BattleScript_MoveEffectRecoil);
-                    }
-                    gBattleMoveDamage = max(1, gBattleMoveDamage + (gTurnStructs[gBattlerAttacker].savedDmg / 4));
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_SUPER_STRAIN;
-                    BattleScriptCall(BattleScript_AbilityPopUp);
-                }
+                ON_ABILITY(gBattlerAttacker,
+                           FALSE,
+                           gAbilities[ability].onRecoil,
+                           int damage = gAbilities[ability].onRecoil(gTurnStructs[gBattlerAttacker].savedDmg, gBattlerAttacker, moveType);
+                           FILTER(damage);
+                           if (!gBattleMoveDamage) BattleScriptCall(BattleScript_MoveEffectRecoil);
+                           gBattleScripting.abilityPopupOverwrite = ability;
+                           BattleScriptCall(BattleScript_AbilityPopUp);
+                           gBattleMoveDamage += damage;)
 
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION) {
                     if (!gBattleMoveDamage) {
@@ -4576,8 +4579,12 @@ static void Cmd_moveend(void) {
                     BattleScriptCall(BattleScript_ConfusionAnimation);
                 }
 
-                if (BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_LIMBER)) gBattleMoveDamage = gBattleMoveDamage * 0.5;
-                effect = gBattleMoveDamage;
+                if (!gBattleMoveDamage) break;
+
+                ON_ABILITY(gBattlerAttacker, FALSE, gAbilities[ability].halfRecoil, gBattleMoveDamage = max(1, gBattleMoveDamage / 2))
+
+                ReadActiveScriptInitialStackState();
+                effect = TRUE;
                 break;
             case MOVEEND_ABILITIES_AFTER_RECOIL:
                 gHpDealt = gTurnStructs[gBattlerAttacker].savedDmg;
@@ -5695,8 +5702,7 @@ static void Cmd_switchineffects(void) {
             if (HandleSwitchInAbility(gBattleScripting.abilityLoopCounter++, gActiveBattler)) return;
         }
 
-        if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gActiveBattler, FALSE) || AbilityBattleEffects(ABILITYEFFECT_TRACE2, 0, 0, 0, 0))
-            return;
+        if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gActiveBattler, FALSE) || AbilityBattleEffects(ABILITYEFFECT_TRACE2, 0, 0, 0, 0)) return;
 
         gSideStatuses[GetBattlerSide(gActiveBattler)] &=
             ~(SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_TOXIC_SPIKES_DAMAGED | SIDE_STATUS_STEALTH_ROCK_DAMAGED | SIDE_STATUS_STICKY_WEB_DAMAGED);
@@ -8385,10 +8391,10 @@ static void Cmd_various(void) {
             return;
         case VARIOUS_TRY_NO_RETREAT:
             ptr = READ_PTR_INC;
-            if (gVolatileStructs[gActiveBattler].noRetreat) {
+            if (gVolatileStructs[gActiveBattler].noRetreat || gBattleMons[gActiveBattler].status2 & STATUS2_ESCAPE_PREVENTION) {
                 gBattlescriptCurrInstr = ptr;
             } else {
-                if (!(gBattleMons[gActiveBattler].status2 & STATUS2_ESCAPE_PREVENTION)) gVolatileStructs[gActiveBattler].noRetreat = TRUE;
+                gVolatileStructs[gActiveBattler].noRetreat = TRUE;
             }
             return;
         case VARIOUS_TRY_TAR_SHOT:
@@ -11082,26 +11088,30 @@ static bool8 DisableLastUsedMove(u8 battler) {
     return FALSE;
 }
 
-static void Cmd_trysetencore(void) {
-    s32 i;
-
+int SetEncore(int target) {
+    int i;
     for (i = 0; i < MAX_MON_MOVES; i++) {
-        if (gBattleMons[gBattlerTarget].moves[i] == gLastMoves[gBattlerTarget]) break;
+        if (gBattleMons[target].moves[i] == gLastMoves[target]) break;
     }
 
-    if (gLastMoves[gBattlerTarget] == MOVE_STRUGGLE || gLastMoves[gBattlerTarget] == MOVE_ENCORE || gLastMoves[gBattlerTarget] == MOVE_MIRROR_MOVE) {
+    if (gLastMoves[target] == MOVE_STRUGGLE || gLastMoves[target] == MOVE_ENCORE || gLastMoves[target] == MOVE_MIRROR_MOVE) {
         i = MAX_MON_MOVES;
     }
 
-    if (gVolatileStructs[gBattlerTarget].encoredMove == 0 && i < MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0) {
-        gVolatileStructs[gBattlerTarget].encoredMove = gBattleMons[gBattlerTarget].moves[i];
-        gVolatileStructs[gBattlerTarget].encoredMovePos = i;
-        gVolatileStructs[gBattlerTarget].encoreTimer = 3;
-        gVolatileStructs[gBattlerTarget].encoreTimerStartValue = gVolatileStructs[gBattlerTarget].encoreTimer;
-        gBattlescriptCurrInstr += 5;
-    } else {
-        gBattlescriptCurrInstr = T1_READ_PTR(gBattlescriptCurrInstr + 1);
+    if (gVolatileStructs[target].encoredMove == 0 && i < MAX_MON_MOVES && gBattleMons[target].pp[i] != 0) {
+        gVolatileStructs[target].encoredMove = gBattleMons[target].moves[i];
+        gVolatileStructs[target].encoredMovePos = i;
+        gVolatileStructs[target].encoreTimer = 3;
+        gVolatileStructs[target].encoreTimerStartValue = gVolatileStructs[target].encoreTimer;
+        return TRUE;
     }
+
+    return FALSE;
+}
+
+static void Cmd_trysetencore(void) {
+    const u8* ptr = READ_FIRST_PTR_INC;
+    if (!SetEncore(gBattlerTarget)) gBattlescriptCurrInstr = ptr;
 }
 
 static void Cmd_painsplitdmgcalc(void) {
@@ -12697,9 +12707,7 @@ static void Cmd_docastformchangeanimation(void) {
     gBattlescriptCurrInstr++;
 }
 
-static void Cmd_trycastformdatachange(void) {
-    gBattlescriptCurrInstr++;
-}
+static void Cmd_trycastformdatachange(void) { gBattlescriptCurrInstr++; }
 
 static void Cmd_settypebasedhalvers(void)  // water and mud sport
 {

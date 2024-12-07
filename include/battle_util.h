@@ -177,6 +177,7 @@ typedef union AbilityStates {
 
 extern const struct TypePower gNaturalGiftTable[];
 extern const u16 gPercentToModifier[];
+extern const u16 gHpTransformations[9][4];
 
 int GetAbilityIndex(int battler, int ability, int checkMoldBreaker);
 s32 CountUsablePartyMons(u8 battlerId);
@@ -245,12 +246,16 @@ int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int 
 int HandleMiscAbilityMoveEffects(int battler, int opponent, int move);
 int HandleSwitchInAbility(int abilityNumber, int battler);
 int HandleEndTurnAbility(int abilityNumber, int battler);
+int WasMoveSuccessful();
+int DidMoveHit();
 int ShouldApplyOnHitAffect(int applyTo);
 void ReplaceAbility(int battler, int ability);
 int HasAbilityIgnoringSuppression(int battler, int ability);
 int GetAbilityAtIndex(int battler, int abilityNumber, int checkMoldBreaker);
 int IsSuppressed(int battler, int ability, int checkMoldBreaker);
 int AbilityHealMonStatus(u8 battler, u16 ability);
+int CheckHalfHpAbility(int battlerDef, int battlerAtk);
+bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePower);
 
 #define ON_ABILITY(battler, checkMoldBreaker, condition, callback)   \
     for (int idx = TOTAL_ABILITY_COUNT - 1; idx >= 0; idx--) {       \
@@ -386,6 +391,7 @@ int IsMagicGuardProtected(int battler);
 #define ABSORB_RESULT_HEAL 1 << 0
 #define ABSORB_RESULT_STAT 1 << 1
 #define ABSORB_RESULT_FLASH_FIRE 1 << 2
+#define ABSORB_RESULT_EVAPORATE 1 << 3
 int TestAbsorbingAbilitiesOnly(int target, int gActiveBattler, int move, int moveType);
 int TestAbsorbingAbilities(int battler, int battlerAtk, int move, int moveType, int* statId, u16* ability);
 u16 CalculateAbilityMultipliers(int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit,

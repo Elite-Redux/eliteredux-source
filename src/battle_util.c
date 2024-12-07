@@ -3827,7 +3827,7 @@ bool32 TryChangeBattleTerrain(u32 battler, u32 statusFlag, u8 *timer) {
 }
 
 // Ability,     form >, form <=, hp divided
-static const u16 sHpTransformations[][4] = {
+const u16 gHpTransformations[][4] = {
     {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR, SPECIES_MINIOR_CORE_RED, 2},
     {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_BLUE, SPECIES_MINIOR_CORE_BLUE, 2},
     {ABILITY_SHIELDS_DOWN, SPECIES_MINIOR_METEOR_GREEN, SPECIES_MINIOR_CORE_GREEN, 2},
@@ -3846,22 +3846,22 @@ bool32 ShouldChangeFormHpBased(u32 battler) {
     if (gBattleMons[battler].status2 & STATUS2_TRANSFORMED) return FALSE;
     if (!IsBattlerAlive(battler)) return FALSE;
 
-    for (i = 0; i < ARRAY_COUNT(sHpTransformations); i++) {
-        if (BattlerHasAbility(battler, sHpTransformations[i][0], FALSE)) {
-            if (sHpTransformations[i][0] == ABILITY_SCHOOLING && gBattleMons[battler].level < 20) continue;
-            if (species == sHpTransformations[i][2] && gBattleMons[battler].hp > gBattleMons[battler].maxHP / sHpTransformations[i][3]) {
-                if (sHpTransformations[i][0] == ABILITY_SHIELDS_DOWN && GetAbilityState(battler, ABILITY_SHIELDS_DOWN)) {
+    for (i = 0; i < ARRAY_COUNT(gHpTransformations); i++) {
+        if (BattlerHasAbility(battler, gHpTransformations[i][0], FALSE)) {
+            if (gHpTransformations[i][0] == ABILITY_SCHOOLING && gBattleMons[battler].level < 20) continue;
+            if (species == gHpTransformations[i][2] && gBattleMons[battler].hp > gBattleMons[battler].maxHP / gHpTransformations[i][3]) {
+                if (gHpTransformations[i][0] == ABILITY_SHIELDS_DOWN && GetAbilityState(battler, ABILITY_SHIELDS_DOWN)) {
                     return FALSE;
                 }
-                gBattleScripting.abilityPopupOverwrite = sHpTransformations[i][0];
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, sHpTransformations[i][1]);
-                gBattleMons[battler].species = sHpTransformations[i][1];
+                gBattleScripting.abilityPopupOverwrite = gHpTransformations[i][0];
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, gHpTransformations[i][1]);
+                gBattleMons[battler].species = gHpTransformations[i][1];
                 return TRUE;
             }
-            if (species == sHpTransformations[i][1] && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / sHpTransformations[i][3]) {
-                gBattleScripting.abilityPopupOverwrite = sHpTransformations[i][0];
-                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, sHpTransformations[i][2]);
-                gBattleMons[battler].species = sHpTransformations[i][2];
+            if (species == gHpTransformations[i][1] && gBattleMons[battler].hp <= gBattleMons[battler].maxHP / gHpTransformations[i][3]) {
+                gBattleScripting.abilityPopupOverwrite = gHpTransformations[i][0];
+                UpdateAbilityStateIndicesForNewSpecies(gActiveBattler, gHpTransformations[i][2]);
+                gBattleMons[battler].species = gHpTransformations[i][2];
                 return TRUE;
             }
         }
@@ -4489,7 +4489,9 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                         SetActiveStatChanger(statId, 1 + gAbilities[gBattleScripting.abilityPopupOverwrite].absorbUp2);
                         ChangeStatBuffs(battler, 1 + gAbilities[gBattleScripting.abilityPopupOverwrite].absorbUp2, statId, MOVE_EFFECT_AFFECTS_USER, NULL);
                         BattleScriptCall(BattleScript_MoveStatDrain);
-                    } else if (effect & ABSORB_RESULT_FLASH_FIRE)  // Flash Fire special case
+                    }
+
+                    if (effect & ABSORB_RESULT_FLASH_FIRE)  // Flash Fire special case
                     {
                         any = TRUE;
                         if (!(gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE))
@@ -4499,6 +4501,16 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
 
                         gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_FLASH_FIRE;
                         BattleScriptCall(BattleScript_FlashFireBoost);
+                    }
+
+                    if (effect & ABSORB_RESULT_EVAPORATE && !gSideTimers[GetBattlerSide(battler)].mistTimer) {
+                        any = TRUE;
+                        int side = GetBattlerSide(battler);
+                        gSideStatuses[side] |= SIDE_STATUS_MIST;
+                        gSideTimers[side].started.mist = TRUE;
+                        gSideTimers[side].mistTimer = SCREEN_DURATION;
+                        gSideTimers[side].mistBattlerId = battler;
+                        BattleScriptCall(BattleScript_SetMist);
                     }
 
                     if (!any) BattleScriptCall(BattleScript_MonMadeMoveUseless);
@@ -4785,15 +4797,15 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
             }
             break;
         case ABILITYEFFECT_FORECAST:  // 6
-            for (battler = 0; battler < gBattlersCount; battler++) {
-                if (BATTLER_HAS_ABILITY(battler, ABILITY_FORECAST) || BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT)) {
-                    if (ShouldChangeFormHpBased(battler)) {
-                        gStackBattler1 = battler;
-                        BattleScriptCall(BattleScript_StackBattlerFormChange);
-                        effect = TRUE;
-                    }
-                }
-            }
+            // for (battler = 0; battler < gBattlersCount; battler++) {
+            //     if (BATTLER_HAS_ABILITY(battler, ABILITY_FORECAST) || BATTLER_HAS_ABILITY(battler, ABILITY_FLOWER_GIFT)) {
+            //         if (ShouldChangeFormHpBased(battler)) {
+            //             gStackBattler1 = battler;
+            //             BattleScriptCall(BattleScript_StackBattlerFormChange);
+            //             effect = TRUE;
+            //         }
+            //     }
+            // }
             break;
         case ABILITYEFFECT_SYNCHRONIZE:
             if (BattlerHasAbility(battler, ABILITY_SYNCHRONIZE, FALSE) && (gHitMarker & HITMARKER_SYNCHRONISE_EFFECT)) {
@@ -4979,6 +4991,10 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 extraArg, u16 mov
                     effect++;
                 }
                 SetAbilityState(i, ABILITY_POWER_OF_ALCHEMY, 0);
+            }
+
+            for (int i = 0; i < gBattlersCount; i++) {
+                ON_ABILITY(i, FALSE, gAbilities[ability].onReactive, effect += gAbilities[ability].onReactive(ability, battler))
             }
             break;
         case ABILITYEFFECT_ATTACKER_FOLLOWUP_MOVE:
@@ -9157,9 +9173,6 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
     } else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_GIFTED_MIND) && (moveType == TYPE_DARK || moveType == TYPE_GHOST || moveType == TYPE_BUG)) {
         modifier = UQ_4_12(0.0);
         immunityAbility = ABILITY_GIFTED_MIND;
-    } else if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_EVAPORATE) && moveType == TYPE_WATER) {
-        modifier = UQ_4_12(0.0);
-        immunityAbility = ABILITY_EVAPORATE;
     }
 
     if (BattlerHasAbility(battlerAtk, ABILITY_BONE_ZONE, TRUE) && gBattleMoves[move].flags & FLAG_BONE_BASED && modifier < UQ_4_12(1.0)) {
@@ -10351,7 +10364,7 @@ int IsUnaware(int battler) {
     SetMoveEffect(FALSE, FALSE);
 
 int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) {
-    int i, ability, moveType;
+    int ability, moveType;
 
     if (abilityNumber > TOTAL_ABILITY_COUNT) return FALSE;
     abilityNumber = TOTAL_ABILITY_COUNT - abilityNumber;
@@ -10363,774 +10376,20 @@ int HandleAttackerAbility(int abilityNumber, int battler, int target, int move) 
         return HandleMiscAbilityMoveEffects(battler, target, move);
     }
 
-    ability = gBattleScripting.abilityPopupOverwrite = GetAbilityAtIndex(battler, abilityNumber, FALSE);
+    ability = gBattleMons[battler].abilities[abilityNumber];
 
-    if (HandleAttackerOrDefenderAbility(ability, battler, target, move)) return TRUE;
+    if (!gAbilities[ability].onAttacker) return FALSE;
 
-    switch (ability) {
-        case ABILITY_SHIELDS_DOWN:
-            REQUIRE(IsBattlerAlive(battler))
-            REQUIRE(gBattleMoves[move].effect == EFFECT_SHELL_SMASH)
-            REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
+    if (IsSuppressed(battler, ability, FALSE)) return FALSE;
 
-            for (i = 0; i < ARRAY_COUNT(sHpTransformations); i++) {
-                if (sHpTransformations[i][0] == ability && gBattleMons[battler].species == sHpTransformations[i][1]) break;
-            }
+    gBattleScripting.abilityPopupOverwrite = ability;
+    int result = gAbilities[ability].onAttacker(ability, battler, target, move, moveType);
 
-            if (i < ARRAY_COUNT(sHpTransformations)) {
-                UpdateAbilityStateIndicesForNewSpecies(battler, sHpTransformations[i][2]);
-                SetAbilityState(battler, ability, TRUE);
-                gBattleMons[battler].species = sHpTransformations[i][2];
-                BattleScriptCall(BattleScript_AttackerFormChange);
-                return TRUE;
-            }
-            break;
-
-        case ABILITY_GULP_MISSILE:
-            REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-            REQUIRE(gBattleMons[battler].species == SPECIES_CRAMORANT)
-            REQUIRE(((gCurrentMove == MOVE_SURF || gCurrentMove == MOVE_TRIPLE_DIVE) && TARGET_TURN_DAMAGED) || gStatuses3[battler] & STATUS3_UNDERWATER ||
-                    (gCurrentMove == MOVE_DIVE && gBattleScripting.acceleratedTwoTurn))
-
-            u16 newSpecies = gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 2 ? SPECIES_CRAMORANT_GORGING : SPECIES_CRAMORANT_GULPING;
-            UpdateAbilityStateIndicesForNewSpecies(battler, newSpecies);
-            gBattleMons[battler].species = newSpecies;
-            BattleScriptCall(BattleScript_AttackerFormChange);
-            return TRUE;
-
-        case ABILITY_ENERGY_SIPHON:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-
-            gBattleMoveDamage = -gHpDealt / 4;
-            if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-            BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-            return TRUE;
-
-        case ABILITY_HYDRO_CIRCUIT:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(moveType == TYPE_WATER)
-
-            gBattleMoveDamage = -gHpDealt / 4;
-            if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-            BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-            return TRUE;
-
-        case ABILITY_VITALITY_STRIKE:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(IS_IRON_FIST(battler, move))
-
-            gBattleMoveDamage = -gHpDealt / 10;
-            if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-            BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-            return TRUE;
-
-        case ABILITY_PURE_LOVE:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE_NOT(BATTLER_MAX_HP(battler))
-            REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-            REQUIRE(gBattleMons[target].status2 & STATUS2_INFATUATION)
-
-            gBattleMoveDamage = -gHpDealt / 4;
-            if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-            BattleScriptCall(BattleScript_HydroCircuitAbsorbEffectActivated);
-            return TRUE;
-
-        case ABILITY_GROWING_TOOTH:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-            REQUIRE(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
-
-            gBattleScripting.battler = battler;
-            BattleScriptCall(BattleScript_AttackBoostActivates);
-            return TRUE;
-
-        case ABILITY_SPINNING_TOP:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(moveType == TYPE_FIGHTING)
-            REQUIRE(CheckAndSetOncePerTurnAbility(battler, ability))
-
-            i = FALSE;
-            if (gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_HAZARDS_ANY || gSideTimers[GetBattlerSide(battler)].hotCoals ||
-                gSideTimers[GetBattlerSide(battler)].caltrops) {
-                gSideStatuses[GetBattlerSide(battler)] &=
-                    ~(SIDE_STATUS_STEALTH_ROCK | SIDE_STATUS_TOXIC_SPIKES | SIDE_STATUS_SPIKES_DAMAGED | SIDE_STATUS_STICKY_WEB);
-                gSideTimers[GetBattlerSide(battler)].hotCoals = TRUE;
-                gSideTimers[GetBattlerSide(battler)].caltrops = TRUE;
-                BattleScriptCall(BattleScript_AnnounceRemovedHazards);
-                gBattleScripting.battler = battler;
-                i = TRUE;
-            }
-            if (ChangeStatBuffs(battler, 1, STAT_SPEED, MOVE_EFFECT_AFFECTS_USER, NULL)) {
-                BattleScriptCall(BattleScript_AnnounceAbilitySpeedBoost);
-                gBattleScripting.battler = battler;
-                i = TRUE;
-            }
-
-            if (i) {
-                BattleScriptCall(BattleScript_AbilityPopUp);
-                return TRUE;
-            }
-            break;
-
-        case ABILITY_VITAL_SPIRIT:
-            REQUIRE(moveType == TYPE_FIGHTING)
-            REQUIRE(AbilityHealMonStatus(battler, ability))
-            BattleScriptCall(BattleScript_AbilityPopUp);
-            break;
-
-        case ABILITY_HARDENED_SHEATH:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(gBattleMoves[move].hornBased)
-            REQUIRE(ChangeStatBuffs(battler, 1, STAT_ATK, MOVE_EFFECT_AFFECTS_USER, NULL))
-
-            BattleScriptCall(BattleScript_AttackBoostActivates);
-            gBattleScripting.battler = battler;
-            return TRUE;
-
-        case ABILITY_LOUD_BANG:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBeConfused(target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-            REQUIRE(Random() % 2)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_CONFUSION)
-            return TRUE;
-
-        case ABILITY_PIERCING_SOLO:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBleed(target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
-            return TRUE;
-
-        case ABILITY_TO_THE_BONE:
-        case ABILITY_RAZOR_SHARP:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBleed(target))
-            REQUIRE(gIsCriticalHit)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
-            return TRUE;
-
-        case ABILITY_KNOW_YOUR_PLACE:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE_NOT(gVolatileStructs[target].dazed)
-            REQUIRE(IsMoveMakingContact(move, battler))
-
-            gVolatileStructs[target].dazed = 5;
-            BattleScriptCall(BattleScript_TargetDazed);
-            break;
-
-        case ABILITY_SUGAR_RUSH:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(IsMoveMakingContact(move, battler))
-            REQUIRE(EatTargetBerry(battler, target))
-            return TRUE;
-
-        case ABILITY_DENTING_BLOWS:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(gBattleMoves[move].hammerBased)
-            REQUIRE(StatLowerableOrMirrorArmor(target, STAT_DEF))
-
-            i = GetOncePerTurnAbilityCounter(battler, ability);
-            REQUIRE_NOT(i & (1 << target))
-
-            SetOncePerTurnAbilityCounter(battler, ability, i | (1 << target));
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_DEF_MINUS_1)
-            return TRUE;
-
-        case ABILITY_WHIPLASH:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(Random() % 2)
-            REQUIRE(IS_MOVE_PHYSICAL(move))
-            REQUIRE(StatLowerableOrMirrorArmor(target, STAT_DEF))
-
-            i = GetOncePerTurnAbilityCounter(battler, ability);
-            REQUIRE_NOT(i & (1 << target))
-
-            SetOncePerTurnAbilityCounter(battler, ability, i | (1 << target));
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_DEF_MINUS_1)
-            return TRUE;
-
-        case ABILITY_BEAUTIFUL_MUSIC:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(Random() % 2)
-            REQUIRE(CanInfatuate(battler, target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-
-            gBattleMons[target].status2 |= STATUS2_INFATUATED_WITH(battler);
-            BattleScriptCall(BattleScript_BeautifulMusicActivates);
-            return TRUE;
-
-        case ABILITY_RESONANCE:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBleed(target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
-            return TRUE;
-
-        case ABILITY_TOXIC_CHAIN:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBePoisoned(battler, target))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
-            return TRUE;
-
-        case ABILITY_ELECTRIC_BURST:
-            REQUIRE(moveType == TYPE_ELECTRIC)
-
-        HANDLE_ABILITY_RECOIL_EFFECT:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(gBattleMons[battler].hp > 1)
-            REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(battler))
-
-            gBattleMoveDamage = gTurnStructs[target].dmg / 10;
-            if (!gBattleMoveDamage)
-                gBattleMoveDamage = 1;
-            else if (gBattleMoveDamage >= gBattleMons[battler].hp)
-                gBattleMoveDamage = gBattleMons[battler].hp - 1;
-            BattleScriptCall(BattleScript_UserGetsReckoilDamaged);
-            return TRUE;
-
-        case ABILITY_INFERNAL_RAGE:
-            REQUIRE(moveType == TYPE_FIRE)
-            goto HANDLE_ABILITY_RECOIL_EFFECT;
-
-        case ABILITY_ARCHMAGE:
-            REQUIRE(DidMoveHit())
-            REQUIRE_NOT(IS_MOVE_STATUS(move))
-            REQUIRE(Random() % 100 < 30)
-
-            switch (moveType) {
-                case TYPE_POISON:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(CanBePoisoned(battler, target))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
-                    return TRUE;
-
-                case TYPE_ICE:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(CanGetFrostbite(target))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_FROSTBITE)
-                    return TRUE;
-
-                case TYPE_WATER:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(CanBeConfused(target))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_CONFUSION)
-                    return TRUE;
-
-                case TYPE_FIRE:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(CanBeBurned(target))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN);
-                    return TRUE;
-
-                case TYPE_ELECTRIC:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(TryChangeBattleTerrain(battler, STATUS_FIELD_ELECTRIC_TERRAIN, &gFieldTimers.terrainTimer))
-
-                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Electric);
-                    return TRUE;
-
-                case TYPE_PSYCHIC:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(TryChangeBattleTerrain(battler, STATUS_FIELD_PSYCHIC_TERRAIN, &gFieldTimers.terrainTimer))
-
-                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Psychic);
-                    return TRUE;
-
-                case TYPE_FAIRY:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
-
-                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Fairy);
-                    return TRUE;
-
-                case TYPE_GRASS:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
-
-                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Fairy);
-                    return TRUE;
-
-                case TYPE_NORMAL:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE_NOT(gVolatileStructs[target].encoreTimer)
-                    REQUIRE_NOT(IsAbilityOnSide(target, ABILITY_AROMA_VEIL))
-                    REQUIRE_NOT(BATTLER_HAS_ABILITY(target, ABILITY_OBLIVIOUS))
-
-                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Normal);
-                    return TRUE;
-
-                case TYPE_ROCK:
-                    REQUIRE_NOT(gSideStatuses[GetBattlerSide(target)] & SIDE_STATUS_STEALTH_ROCK)
-
-                    gSideStatuses[GetBattlerSide(target)] |= (SIDE_STATUS_STEALTH_ROCK);
-                    gSideTimers[GetBattlerSide(target)].stealthRockType = TYPE_ROCK;
-                    BattleScriptCall(BattleScript_Archmage_Effect_Type_Rock);
-                    return TRUE;
-
-                case TYPE_GHOST:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(CanBeDisabled(target))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_DISABLE)
-                    return TRUE;
-
-                case TYPE_DARK:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(CanBleed(target))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
-                    return TRUE;
-
-                case TYPE_FIGHTING:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(CanRaiseStat(battler, STAT_SPATK))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_SP_ATK_PLUS_1 | MOVE_EFFECT_AFFECTS_USER)
-                    return TRUE;
-
-                case TYPE_FLYING:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(CanRaiseStat(battler, STAT_SPEED))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_SPD_PLUS_1 | MOVE_EFFECT_AFFECTS_USER)
-                    return TRUE;
-
-                case TYPE_BUG:
-                    // TODO: Set sticky web
-                    break;
-
-                case TYPE_DRAGON:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(StatLowerableOrMirrorArmor(target, STAT_ATK))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_ATK_MINUS_1)
-                    return TRUE;
-
-                case TYPE_GROUND:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PREVENT_ESCAPE)
-                    return TRUE;
-
-                case TYPE_STEEL:
-                    REQUIRE(IsBattlerAlive(target))
-                    REQUIRE(CanRaiseStat(battler, STAT_DEF))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_DEF_PLUS_1 | MOVE_EFFECT_AFFECTS_USER)
-                    return TRUE;
-            }
-            break;
-
-        case ABILITY_SOLENOGLYPHS:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBePoisoned(battler, target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-            REQUIRE(Random() % 2)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
-            return TRUE;
-
-        case ABILITY_FROSTMAW:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanGetFrostbite(target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-            REQUIRE(Random() % 2)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_FROSTBITE)
-            return TRUE;
-
-        case ABILITY_ASSASSINS_TOOLS:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(IsMoveMakingContact(move, battler))
-
-            switch (Random() % 3) {
-                case 0:
-                    REQUIRE(CanBePoisoned(battler, target))
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_POISON)
-                    return TRUE;
-
-                case 1:
-                    REQUIRE(CanBeParalyzed(battler, target))
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
-                    return TRUE;
-
-                case 2:
-                    REQUIRE(CanBleed(target))
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
-                    return TRUE;
-            }
-            break;
-
-        case ABILITY_DEEP_CUTS:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBleed(target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-            REQUIRE(Random() % 2)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED)
-            return TRUE;
-
-        case ABILITY_FLAMING_JAWS:
-        case ABILITY_FLAMING_MAW:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBeBurned(target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-            REQUIRE(Random() % 2)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
-            return TRUE;
-
-        case ABILITY_ARC_FLASH:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBeParalyzed(battler, target))
-            REQUIRE(Random() % 2)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
-            return TRUE;
-
-        case ABILITY_RADIO_JAM:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBeDisabled(target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_SOUND)
-            REQUIRE(Random() % 100 < 20)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_DISABLE)
-            return TRUE;
-
-        case ABILITY_DEMOLITIONIST:
-            REQUIRE(DidMoveHit())
-            REQUIRE(gVolatileStructs[battler].readiedAction) {
-                int opposingSide = GetBattlerSide(target);
-                REQUIRE(gSideTimers[opposingSide].reflectTimer || gSideTimers[opposingSide].lightscreenTimer || gSideTimers[opposingSide].auroraVeilTimer)
-                BattleScriptCall(BattleScript_AttackerShattersScreens);
-                BattleScriptCall(BattleScript_AbilityPopUp);
-                return TRUE;
-            }
-
-        case ABILITY_PINNACLE_BLADE:
-            REQUIRE(DidMoveHit())
-            REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-
-            {
-                int shouldApply = FALSE;
-                int opposingSide = GetBattlerSide(target);
-
-                if (gVolatileStructs[target].substituteHP) {
-                    gVolatileStructs[target].substituteHP = 0;
-                    BattleScriptCall(BattleScript_AttackerDestroysSubstitute);
-                    shouldApply = TRUE;
-                }
-
-                if (IsBattlerAlive(target)) {
-                    if (gSideTimers[opposingSide].reflectTimer || gSideTimers[opposingSide].lightscreenTimer || gSideTimers[opposingSide].auroraVeilTimer) {
-                        BattleScriptCall(BattleScript_AttackerShattersScreens);
-                        shouldApply = TRUE;
-                    }
-
-                    if (IS_BATTLER_PROTECTED(target)) {
-                        ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FEINT)
-                        shouldApply = TRUE;
-                    }
-                }
-
-                if (shouldApply) {
-                    BattleScriptCall(BattleScript_AbilityPopUp);
-                    return TRUE;
-                }
-            }
-            break;
-
-        case ABILITY_FEARMONGER:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBeParalyzed(battler, target))
-            REQUIRE(IsMoveMakingContact(move, battler))
-            REQUIRE(Random() % 100 < 10)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
-            return TRUE;
-
-        case ABILITY_YUKI_ONNA:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanInfatuate(battler, target))
-            REQUIRE(Random() % 100 < 10)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_ATTRACT)
-            return TRUE;
-
-        case ABILITY_STUN_SHOCK:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(Random() % 100 < 60)
-            switch (Random() % 2) {
-                case 0:
-                    REQUIRE(CanBePoisoned(battler, target))
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_POISON)
-                    return TRUE;
-
-                case 1:
-                    REQUIRE(CanBeParalyzed(battler, target))
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
-                    return TRUE;
-            }
-            break;
-
-        case ABILITY_SHOCKING_JAWS:
-        case ABILITY_SHOCKING_MAW:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBeParalyzed(battler, target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-            REQUIRE(Random() % 2)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
-            return TRUE;
-
-        case ABILITY_VENOBLAZE_PINCERS:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(IS_MOVE_PHYSICAL(move))
-            REQUIRE(Random() % 100 < 20)
-
-            switch (Random() % 2) {
-                case 0:
-                    REQUIRE(CanBeBurned(target))
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
-                    return TRUE;
-
-                case 1:
-                    REQUIRE(CanBePoisoned(battler, target))
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
-                    return TRUE;
-            }
-            break;
-
-        case ABILITY_MOLTEN_BLADES:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBeBurned(target))
-            REQUIRE(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-            REQUIRE(Random() % 100 < 20)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
-            return TRUE;
-
-        case ABILITY_DEAD_POWER:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE_NOT(gBattleMons[target].status2 & STATUS2_CURSED)
-            REQUIRE(IsMoveMakingContact(move, battler))
-            REQUIRE(Random() % 100 < 20)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_CURSE)
-            return TRUE;
-
-        case ABILITY_SPECTRAL_SHROUD:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanBePoisoned(battler, target))
-            REQUIRE(gBattleStruct->ateBoost[battler])
-            REQUIRE(moveType == TYPE_GHOST)
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_TOXIC)
-            return TRUE;
-
-        case ABILITY_ANGELS_WRATH:
-            switch (move) {
-                case MOVE_TACKLE:
-                    REQUIRE(ShouldApplyOnHitAffect(target))
-                    REQUIRE(gVolatileStructs[target].encoreTimer)
-                    REQUIRE(gVolatileStructs[target].disableTimer)
-
-                    gVolatileStructs[target].encoreTimer = 2;
-                    gVolatileStructs[target].encoredMove = gBattleMons[target].moves[0];
-
-                    gVolatileStructs[target].disableTimer = gVolatileStructs[target].disableTimerStartValue = 2;
-                    gVolatileStructs[target].disabledMove = gBattleMons[target].moves[0];
-
-                    BattleScriptCall(BattleScript_AngelsWrath_Effect_Tackle);
-                    return TRUE;
-
-                case MOVE_STRING_SHOT:
-                    REQUIRE(WasMoveSuccessful())
-
-                    i = GetBattlerSide(target);
-                    if (gSideStatuses[i] & SIDE_STATUS_STEALTH_ROCK && gSideStatuses[i] & SIDE_STATUS_TOXIC_SPIKES && gSideStatuses[i] & SIDE_STATUS_SPIKES &&
-                        gSideStatuses[i] & SIDE_STATUS_STICKY_WEB)
-                        break;
-
-                    gSideStatuses[i] |= (SIDE_STATUS_STEALTH_ROCK);
-                    gSideTimers[i].stealthRockType = TYPE_ROCK;
-
-                    gSideStatuses[i] |= (SIDE_STATUS_TOXIC_SPIKES);
-                    gSideTimers[i].toxicSpikesAmount++;
-                    if (gSideTimers[i].toxicSpikesAmount > 2) gSideTimers[i].toxicSpikesAmount = 2;
-
-                    gSideStatuses[i] |= (SIDE_STATUS_SPIKES);
-                    gSideTimers[i].spikesAmount++;
-                    if (gSideTimers[i].spikesAmount > 3) gSideTimers[i].spikesAmount = 3;
-
-                    gSideStatuses[i] |= (SIDE_STATUS_STICKY_WEB);
-
-                    BattleScriptCall(BattleScript_AngelsWrath_Effect_String_Shot);
-                    return TRUE;
-
-                case MOVE_HARDEN:
-                    REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-
-                    {
-                        int activated = FALSE;
-                        for (i = 1; i < NUM_STATS; i++) {
-                            if (i == STAT_DEF) continue;
-                            activated |= ChangeStatBuffs(battler, 1, i, MOVE_EFFECT_AFFECTS_USER, NULL);
-                        }
-
-                        if (activated) {
-                            BattleScriptCall(BattleScript_AngelsWrath_Effect_Harden);
-                            return TRUE;
-                        }
-                    }
-                    break;
-
-                case MOVE_IRON_DEFENSE:
-                    REQUIRE_NOT(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
-
-                    gRoundStructs[battler].angelsWrathProtected = TRUE;
-                    BattleScriptCall(BattleScript_AngelsWrath_Effect_Iron_Defense);
-                    return TRUE;
-
-                case MOVE_ELECTROWEB:
-                    REQUIRE(ShouldApplyOnHitAffect(target))
-                    REQUIRE_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
-                    REQUIRE_NOT(gBattleMons[target].statStages[STAT_SPEED] == MIN_STAT_STAGE)
-
-                    gBattleMons[target].statStages[STAT_SPEED] = MIN_STAT_STAGE;
-                    gBattleMons[target].status2 |= (STATUS2_ESCAPE_PREVENTION);
-                    BattleScriptCall(BattleScript_AngelsWrath_Effect_Electroweb);
-                    return TRUE;
-
-                case MOVE_BUG_BITE:
-                    REQUIRE(ShouldApplyOnHitAffect(battler))
-                    REQUIRE_NOT(BATTLER_MAX_HP(battler))
-                    REQUIRE_NOT(BATTLER_HEALING_BLOCKED(battler))
-
-                    gBattleMoveDamage = -gHpDealt;
-                    if (!gBattleMoveDamage) gBattleMoveDamage = -1;
-                    BattleScriptCall(BattleScript_AngelsWrath_Effect_Bug_Bite_2);
-                    return TRUE;
-            }
-            break;
-
-        case ABILITY_ELEMENTAL_CHARGE:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(Random() % 100 < 20)
-
-            switch (moveType) {
-                case TYPE_ELECTRIC:
-                    REQUIRE(CanBeParalyzed(battler, target))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS)
-                    return TRUE;
-
-                case TYPE_FIRE:
-                    REQUIRE(CanBeBurned(target))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN)
-                    return TRUE;
-
-                case TYPE_ICE:
-                    REQUIRE(CanGetFrostbite(target))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_FROSTBITE)
-                    return TRUE;
-            }
-            break;
-
-        case ABILITY_STENCH:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanMoveHaveExtraFlinchChance(move))
-            REQUIRE(Random() % 100 < 10)
-
-            ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FLINCH)
-            break;
-
-        case ABILITY_HAUNTING_FRENZY:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(CanMoveHaveExtraFlinchChance(move))
-            REQUIRE(Random() % 100 < 20)
-
-            ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FLINCH)
-            break;
-
-        case ABILITY_FROM_THE_SHADOWS:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE(GetBattlerTurnOrderNum(target) >= gCurrentTurnActionNumber)
-
-            if (CanMoveHaveExtraFlinchChance(move) && Random() % 100 < 20) {
-                ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FLINCH)
-            }
-
-            REQUIRE_NOT(gBattleMons[target].status2 & STATUS2_ESCAPE_PREVENTION)
-            gBattleMons[target].status2 |= STATUS2_ESCAPE_PREVENTION;
-            gVolatileStructs[target].battlerPreventingEscape = battler;
-            BattleScriptCall(BattleScript_AnnounceTargetTrapped);
-            return TRUE;
-
-        case ABILITY_ABSORBANT:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
-            REQUIRE_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
-            REQUIRE(gBattleMoves[move].effect == EFFECT_ABSORB || gBattleMoves[move].effect == EFFECT_DREAM_EATER)
-
-            gStatuses3[target] |= battler;
-            gStatuses3[target] |= STATUS3_LEECHSEED;
-            BattleScriptCall(BattleScript_AbsorbantActivated);
-            return TRUE;
-
-        case ABILITY_FUNGAL_INFECTION:
-            REQUIRE(ShouldApplyOnHitAffect(target))
-            REQUIRE_NOT(IS_BATTLER_OF_TYPE(target, TYPE_GRASS))
-            REQUIRE_NOT(gStatuses3[target] & STATUS3_LEECHSEED)
-            REQUIRE(IsMoveMakingContact(move, battler))
-
-            gStatuses3[target] |= battler;
-            gStatuses3[target] |= STATUS3_LEECHSEED;
-            BattleScriptCall(BattleScript_AbsorbantActivated);
-            return TRUE;
-
-        case ABILITY_GRIP_PINCER:
-            REQUIRE(ShouldApplyOnHitAffect(gBattlerTarget))
-            REQUIRE(IsBattlerAlive(battler))
-            REQUIRE(IsMoveMakingContact(move, battler))
-            REQUIRE_NOT(gBattleMons[target].status2 & STATUS2_WRAPPED)
-            REQUIRE(Random() % 2)
-
-            gBattleMons[target].status2 |= STATUS2_WRAPPED;
-            if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
-                gVolatileStructs[target].wrapTurns = 7;
-            else
-                gVolatileStructs[target].wrapTurns = (Random() % 2) + 4;
-
-            gBattleStruct->wrappedMove[target] = gCurrentMove;
-            gBattleStruct->wrappedBy[target] = battler;
-            BattleScriptCall(BattleScript_GripPincerActivated);
-            return TRUE;
+    if (result & 1) {
+        BattleScriptCall(BattleScript_AbilityPopUp);
     }
 
-    return FALSE;
+    return result;
 }
 
 int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
@@ -11140,8 +10399,6 @@ int CheckHalfHpAbility(int battlerDef, int battlerAtk) {
     if (gTurnStructs[battlerAtk].multiHitCounter > 1) return FALSE;
     return TRUE;
 }
-
-static int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, int moveType);
 
 int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move) {
     int ability, moveType;
@@ -11156,858 +10413,22 @@ int HandleDefenderAbility(int abilityNumber, int battler, int attacker, int move
         return HandleMiscAbilityMoveEffects(battler, attacker, move);
     }
 
-    ability = gBattleScripting.abilityPopupOverwrite = GetAbilityAtIndex(battler, abilityNumber, TRUE);
+    ability = gBattleMons[battler].abilities[abilityNumber];
 
-    if (HandleAttackerOrDefenderAbility(ability, battler, attacker, move)) return TRUE;
+    if (!gAbilities[ability].onDefender) return FALSE;
 
-    return HandleDefenderAbilityAs(ability, battler, attacker, move, moveType);
-}
+    if (IsSuppressed(battler, ability, TRUE)) return FALSE;
 
-int HandleDefenderAbilityAs(int ability, int battler, int attacker, int move, int moveType) {
-    switch (ability) {
-        case ABILITY_LINGERING_AROMA:
-        case ABILITY_MUMMY:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE_NOT(BattlerHasAbility(attacker, ability, FALSE))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
-            REQUIRE_NOT(DoesBattlerHaveAbilityShield(attacker))
+    gBattleScripting.abilityPopupOverwrite = ability;
+    int result = gAbilities[ability].onDefender(ability, battler, attacker, move, moveType);
 
-            UpdateAbilityStateIndicesForNewAbility(attacker, ability);
-            ReplaceAbility(attacker, ability);
-            BattleScriptCall(BattleScript_MummyActivates);
-            return TRUE;
+    if (!result) return FALSE;
 
-        case ABILITY_WANDERING_SPIRIT:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(GetBattlerAbility(battler) == ability)
-            REQUIRE_NOT(BattlerHasAbility(attacker, ability, FALSE))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(attacker)))
-            REQUIRE_NOT(DoesBattlerHaveAbilityShield(attacker))
-
-            UpdateAbilityStateIndicesForNewAbility(attacker, GetBattlerAbility(attacker));
-            UpdateAbilityStateIndicesForNewAbility(battler, ability);
-            ReplaceAbility(battler, GetBattlerAbility(attacker));
-            ReplaceAbility(attacker, ability);
-
-            BattleScriptCall(BattleScript_WanderingSpiritActivates);
-
-            gBattleScripting.abilityPopupOverwrite = GetBattlerAbility(attacker);
-            gStackBattler1 = battler;
-            BattleScriptCall(BattleScript_WanderingSpiritSwap);
-
-            gBattleScripting.abilityPopupOverwrite = GetBattlerAbility(battler);
-            gStackBattler1 = attacker;
-            BattleScriptCall(BattleScript_WanderingSpiritSwap);
-            return TRUE;
-
-        case ABILITY_GULP_MISSILE:
-            REQUIRE(ShouldApplyOnHitAffect(attacker)) {
-                int species = gBattleMons[battler].species;
-                REQUIRE(species == SPECIES_CRAMORANT_GORGING || species == SPECIES_CRAMORANT_GULPING)
-                gBattleStruct->changedSpecies[gBattlerPartyIndexes[battler]] = species;
-                UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_CRAMORANT);
-                gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
-                if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-                BattleScriptCall(species == SPECIES_CRAMORANT_GORGING ? BattleScript_GulpMissileGorging : BattleScript_GulpMissileGulping);
-                return TRUE;
-            }
-
-        case ABILITY_ILLUSION:
-            REQUIRE(DidMoveHit())
-            REQUIRE(gBattleStruct->illusion[battler].on)
-            REQUIRE_NOT(gBattleStruct->illusion[battler].broken)
-
-            BattleScriptCall(BattleScript_IllusionOff);
-            return TRUE;
-
-        case ABILITY_EMERGENCY_EXIT:
-        case ABILITY_WIMP_OUT:
-            REQUIRE(CheckHalfHpAbility(battler, attacker))
-            REQUIRE_NOT(TestSheerForceFlag(attacker, gCurrentMove))
-            REQUIRE(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-            REQUIRE_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
-            REQUIRE(CountUsablePartyMons(battler))
-            gBattleResources->flags->flags[battler] |= RESOURCE_FLAG_EMERGENCY_EXIT;
-            break;
-
-        case ABILITY_RESTRAINING_ORDER:
-            REQUIRE(GetAbilityState(battler, ability) == RESTRAINING_ORDER_NOT_TRIGGERED);
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(CanBattlerSwitch(battler) && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-            REQUIRE_NOT(gBattleTypeFlags & BATTLE_TYPE_ARENA)
-            REQUIRE(CountUsablePartyMons(battler))
-
-            SetAbilityState(battler, ability, RESTRAINING_ORDER_ACTIVATING);
-            break;
-
-        case ABILITY_THERMAL_EXCHANGE:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(moveType == TYPE_FIRE)
-            REQUIRE(CanRaiseStat(battler, STAT_ATK))
-
-            SetStatChanger(STAT_ATK, 1);
-            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            return TRUE;
-
-        case ABILITY_FURNACE:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(moveType == TYPE_ROCK)
-            REQUIRE(CanRaiseStat(battler, STAT_SPEED))
-
-            SetStatChanger(STAT_SPEED, 2);
-            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            return TRUE;
-
-        case ABILITY_EVAPORATE:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(moveType == TYPE_WATER)
-            REQUIRE(TryChangeBattleTerrain(battler, STATUS_FIELD_MISTY_TERRAIN, &gFieldTimers.terrainTimer))
-
-            BattleScriptCall(BattleScript_MistySurgeActivatesRet);
-            return TRUE;
-
-        case ABILITY_COLD_REBOUND:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICY_WIND, 0);
-            break;
-
-        case ABILITY_WILDFIRE:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            UseOutOfTurnAttack(battler, attacker, ability, MOVE_FIRE_SPIN, 20);
-            break;
-
-        case ABILITY_SNAP_TRAP_WHEN_HIT:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            UseOutOfTurnAttack(battler, attacker, ability, MOVE_SNAP_TRAP, 50);
-            break;
-
-        case ABILITY_PARRY:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            UseOutOfTurnAttack(battler, attacker, ability, MOVE_MACH_PUNCH, 0);
-            break;
-
-        case ABILITY_VICTORY_BOMB:
-            REQUIRE_NOT(IsBattlerAlive(battler))
-
-            UseOutOfTurnAttack(battler, attacker, ability, MOVE_EXPLOSION, 100);
-            break;
-
-        case ABILITY_ULTRA_INSTINCT:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            UseOutOfTurnAttack(battler, attacker, ability, MOVE_VACUUM_WAVE, 0);
-            break;
-
-        case ABILITY_ICE_DOWNFALL:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            UseOutOfTurnAttack(battler, attacker, ability, MOVE_ICICLE_CRASH, 60);
-            break;
-
-        case ABILITY_ATOMIC_BURST:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(gMoveResultFlags & MOVE_RESULT_SUPER_EFFECTIVE)
-
-            UseOutOfTurnAttack(battler, attacker, ability, MOVE_HYPER_BEAM, 50);
-            break;
-
-        case ABILITY_LOOSE_ROCKS:
-            REQUIRE(DidMoveHit())
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE_NOT(gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_STEALTH_ROCK)
-
-            BattleScriptCall(BattleScript_DefenderSetsStealthRock);
-            return TRUE;
-
-        case ABILITY_WIND_POWER:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(gBattleMoves[move].airBased)
-            REQUIRE_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
-
-            gStatuses3[battler] |= STATUS3_CHARGED_UP;
-            BattleScriptCall(BattleScript_ElectromorphosisActivates);
-            return TRUE;
-
-        case ABILITY_ELECTROMORPHOSIS:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE_NOT(gStatuses3[battler] & STATUS3_CHARGED_UP)
-
-            gStatuses3[battler] |= STATUS3_CHARGED_UP;
-            BattleScriptCall(BattleScript_ElectromorphosisActivates);
-            return TRUE;
-
-        case ABILITY_FLAMMABLE_COAT:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(moveType == TYPE_FIRE)
-            REQUIRE(gBattleMons[battler].species == SPECIES_LUMBERING_SLOTH)
-            REQUIRE_NOT(gBattleMons[battler].status2 & STATUS2_TRANSFORMED)
-
-            UpdateAbilityStateIndicesForNewSpecies(battler, SPECIES_LUMBERING_SLOTH_ENGULFED);
-            gBattleMons[battler].species = SPECIES_LUMBERING_SLOTH_ENGULFED;
-            BattleScriptCall(BattleScript_TargetFormChange);
-            return TRUE;
-
-        case ABILITY_ROUGH_SKIN:
-        case ABILITY_IRON_BARBS:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            gBattleMoveDamage = gBattleMons[attacker].maxHP / 8;
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
-            BattleScriptCall(BattleScript_IronBarbsActivates);
-            return TRUE;
-
-        case ABILITY_DOUBLE_IRON_BARBS:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            gBattleMoveDamage = gBattleMons[attacker].maxHP / 6;
-            if (gBattleMoveDamage == 0) gBattleMoveDamage = 1;
-            PREPARE_ABILITY_BUFFER(gBattleTextBuff1, ability);
-            BattleScriptCall(BattleScript_IronBarbsActivates);
-            return TRUE;
-
-        case ABILITY_RATTLED:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(moveType == TYPE_DARK || moveType == TYPE_BUG || moveType == TYPE_GHOST)
-            REQUIRE(CanRaiseStat(battler, STAT_SPEED))
-
-            SetStatChanger(STAT_SPEED, 1);
-            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            return TRUE;
-
-        case ABILITY_CURSED_BODY:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE_NOT(gVolatileStructs[attacker].disabledMove)
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE_NOT(IsAbilityOnSide(attacker, ABILITY_AROMA_VEIL))
-            REQUIRE(gBattleMons[attacker].pp[gChosenMovePos])
-            REQUIRE(Random() % 100 < 30)
-
-            gVolatileStructs[attacker].disabledMove = gChosenMove;
-            gVolatileStructs[attacker].disableTimer = 4;
-            PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove);
-            BattleScriptCall(BattleScript_CursedBodyActivates);
-            return TRUE;
-
-        case ABILITY_SPITEFUL:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(move != MOVE_STRUGGLE)
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE(gBattleMons[attacker].pp[gChosenMovePos])
-
-            BattleScriptCall(BattleScript_AbilitySpiteful);
-            return TRUE;
-
-        case ABILITY_COTTON_DOWN:
-            REQUIRE(DidMoveHit())
-            gStackBattler1 = BATTLE_OPPOSITE(battler);
-            REQUIRE(IsBattlerAlive(gStackBattler1) || IsBattlerAlive(BATTLE_PARTNER(gStackBattler1)))
-
-            gEffectBattler = battler;
-            BattleScriptCall(BattleScript_CottonDownActivates);
-            return TRUE;
-
-        case ABILITY_STEAM_ENGINE:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(CanRaiseStat(battler, STAT_SPEED))
-            REQUIRE(moveType == TYPE_FIRE || moveType == TYPE_WATER)
-
-            SetStatChanger(STAT_SPEED, 12);
-            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            return TRUE;
-
-        case ABILITY_SAND_SPIT:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE_NOT(gBattleWeather & WEATHER_SANDSTORM_ANY)
-            if (gBattleWeather & WEATHER_PRIMAL_ANY) {
-                BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
-                return TRUE;
-            } else if (TryChangeBattleWeather(battler, ENUM_WEATHER_SANDSTORM, TRUE)) {
-                gBattleScripting.battler = battler;
-                BattleScriptCall(BattleScript_SandSpitActivates);
-                return TRUE;
-            }
-            break;
-
-        case ABILITY_CRYO_PROFICIENCY:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE_NOT(gBattleWeather & WEATHER_HAIL_ANY)
-            if (gBattleWeather & WEATHER_PRIMAL_ANY) {
-                BattleScriptCall(BattleScript_BlockedByPrimalWeatherRet);
-                return TRUE;
-            } else if (TryChangeBattleWeather(battler, ENUM_WEATHER_HAIL, TRUE)) {
-                gBattleScripting.battler = battler;
-                BattleScriptCall(BattleScript_CryoProficiencyActivates);
-                return TRUE;
-            }
-            break;
-
-        case ABILITY_PERISH_BODY:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(IsBattlerAlive(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE_NOT(gStatuses3[attacker] & STATUS3_PERISH_SONG)
-
-            if (!(gStatuses3[battler] & STATUS3_PERISH_SONG)) {
-                gStatuses3[battler] |= STATUS3_PERISH_SONG;
-                gVolatileStructs[battler].perishSongTimer = 3;
-                gVolatileStructs[battler].perishSongTimerStartValue = 3;
-            }
-            gStatuses3[attacker] |= STATUS3_PERISH_SONG;
-            gVolatileStructs[attacker].perishSongTimer = 3;
-            gVolatileStructs[attacker].perishSongTimerStartValue = 3;
-            BattleScriptCall(BattleScript_PerishBodyActivates);
-            return TRUE;
-
-        case ABILITY_GUILT_TRIP:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE_NOT(IsBattlerAlive(battler))
-            REQUIRE(CanLowerStat(attacker, STAT_ATK) || CanLowerStat(attacker, STAT_SPATK))
-
-            BattleScriptCall(BattleScript_GuiltTrip);
-            return TRUE;
-
-        case ABILITY_ILL_WILL:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(move != MOVE_STRUGGLE)
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE(gBattleMons[attacker].pp[gChosenMovePos])
-            REQUIRE_NOT(IsBattlerAlive(battler))
-
-            gBattleMons[attacker].pp[gChosenMovePos] = 0;
-            PREPARE_MOVE_BUFFER(gBattleTextBuff1, gChosenMove)
-            gActiveBattler = battler;
-            BtlController_EmitSetMonData(0, gChosenMovePos + REQUEST_PPMOVE1_BATTLE, 0, 1, &gBattleMons[battler].pp[gChosenMovePos]);
-            BattleScriptCall(BattleScript_IllWillTakesPp);
-            return TRUE;
-
-        case ABILITY_INNARDS_OUT:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE_NOT(IsBattlerAlive(battler))
-            REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(attacker))
-
-            gBattleMoveDamage = gTurnStructs[battler].dmg;
-            BattleScriptCall(BattleScript_AftermathDmg);
-            return TRUE;
-
-        case ABILITY_AFTERMATH:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE_NOT(IsBattlerAlive(battler))
-            REQUIRE_NOT(BATTLER_HAS_MAGIC_GUARD(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            gBattleMoveDamage = gBattleMons[attacker].maxHP / 4;
-            if (!gBattleMoveDamage) gBattleMoveDamage = 1;
-            BattleScriptCall(BattleScript_AftermathDmg);
-            return TRUE;
-
-        case ABILITY_PATCHWORK:
-            REQUIRE(GetSingleUseAbilityCounter(battler, ability))
-            SetSingleUseAbilityCounter(battler, ability, 0);
-
-            REQUIRE(IsBattlerAlive(attacker))
-            REQUIRE_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_CURSE | MOVE_EFFECT_AFFECTS_USER)
-            return TRUE;
-
-        case ABILITY_EFFECT_SPORE:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GRASS))
-            REQUIRE_NOT(BATTLER_HAS_ABILITY(attacker, ABILITY_OVERCOAT))
-            REQUIRE_NOT(BATTLER_HAS_ABILITY(attacker, ABILITY_EFFECT_SPORE))
-            REQUIRE(GetBattlerHoldEffect(attacker, TRUE) != HOLD_EFFECT_SAFETY_GOGGLES)
-            REQUIRE(Random() % 100 < 30)
-
-            switch (Random() % 3) {
-                case 0:
-                    REQUIRE(CanBePoisoned(battler, attacker))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_POISON | MOVE_EFFECT_AFFECTS_USER)
-                    return TRUE;
-
-                case 1:
-                    REQUIRE(CanBeParalyzed(battler, attacker))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS | MOVE_EFFECT_AFFECTS_USER)
-                    return TRUE;
-
-                case 2:
-                    REQUIRE(CanSleep(attacker))
-
-                    ABILITY_STATUS_EFFECT(MOVE_EFFECT_SLEEP | MOVE_EFFECT_AFFECTS_USER)
-                    return TRUE;
-            }
-            break;
-
-        case ABILITY_INFLATABLE:
-        case ABILITY_BALLOON_BLITZ:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(CanRaiseStat(battler, STAT_DEF) || CanRaiseStat(battler, STAT_SPDEF))
-            REQUIRE(moveType == TYPE_FIRE || moveType == TYPE_FLYING)
-            BattleScriptCall(BattleScript_InflatableActivates);
-            gBattleScripting.battler = battler;
-            return TRUE;
-
-        case ABILITY_BALLOON_BOMBER:
-            if (HandleDefenderAbilityAs(ABILITY_INFLATABLE, battler, attacker, move, moveType)) return TRUE;
-            if (HandleDefenderAbilityAs(ABILITY_AFTERMATH, battler, attacker, move, moveType)) return TRUE;
-            break;
-
-        case ABILITY_WATER_COMPACTION:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(moveType == TYPE_WATER)
-            REQUIRE(CanRaiseStat(battler, STAT_DEF))
-
-            SetStatChanger(STAT_DEF, 2);
-            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            return TRUE;
-
-        case ABILITY_VENGEFUL_SPIRIT:
-        case ABILITY_HAUNTED_SPIRIT:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE_NOT(IsBattlerAlive(battler))
-            REQUIRE_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_GHOST))
-            REQUIRE_NOT(gBattleMons[attacker].status2 & STATUS2_CURSED)
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            gBattleMons[attacker].status2 |= STATUS2_CURSED;
-            BattleScriptCall(BattleScript_HauntedSpiritActivated);
-            return TRUE;
-
-        case ABILITY_MAGICAL_DUST:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE_NOT(IS_BATTLER_OF_TYPE(attacker, TYPE_PSYCHIC))
-
-            gBattleMons[attacker].type3 = TYPE_PSYCHIC;
-            PREPARE_TYPE_BUFFER(gBattleTextBuff1, gBattleMons[attacker].type3);
-            BattleScriptCall(BattleScript_AttackerBecameTheType);
-            return TRUE;
-
-        case ABILITY_WEAK_ARMOR:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(IS_MOVE_PHYSICAL(move))
-            REQUIRE(CanRaiseStat(battler, STAT_SPEED) || CanLowerStat(battler, STAT_DEF))
-
-            if (gBattleMoves[move].effect == EFFECT_HIT_ESCAPE && CanBattlerSwitch(attacker))
-                gRoundStructs[battler].disableEjectPack = TRUE;  // Set flag for target
-
-            BattleScriptCall(BattleScript_WeakArmorActivates);
-            return TRUE;
-
-        case ABILITY_ARC_FLASH:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(CanBeBurned(attacker))
-            REQUIRE(Random() % 2)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | MOVE_EFFECT_AFFECTS_USER)
-            return TRUE;
-
-        case ABILITY_CROWNED_SHIELD:
-        case ABILITY_STAMINA:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(CanRaiseStat(battler, STAT_DEF))
-
-            if (gIsCriticalHit) {
-                SetStatChanger(STAT_DEF, 12);
-                BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
-            } else {
-                SetStatChanger(STAT_DEF, 1);
-                BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            }
-            return TRUE;
-
-        case ABILITY_FORTITUDE:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(CanRaiseStat(battler, STAT_SPDEF))
-
-            if (gIsCriticalHit) {
-                SetStatChanger(STAT_SPDEF, 12);
-                BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
-            } else {
-                SetStatChanger(STAT_SPDEF, 1);
-                BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            }
-            return TRUE;
-
-        case ABILITY_RAGE_POINT:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(gIsCriticalHit)
-            REQUIRE(CanRaiseStat(battler, STAT_ATK) || CanRaiseStat(battler, STAT_SPATK))
-
-            BattleScriptCall(BattleScript_RagePointActivates);
-            return TRUE;
-
-        case ABILITY_APE_SHIFT:
-            REQUIRE_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
-            REQUIRE(gBattleMons[battler].species == SPECIES_SLAKING_MEGA || gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT)
-            REQUIRE(ShouldChangeFormHpBased(battler))
-
-            if (gBattleMons[battler].species == SPECIES_SLAKING_MEGA_APE_SHIFT) {
-                BattleScriptCall(BattleScript_TargetFormChange);
-            } else {
-                gStackBattler1 = battler;
-                BattleScriptCall(BattleScript_ApeShift);
-                BattleScriptCall(BattleScript_AbilityPopUp);
-            }
-            return TRUE;
-
-        case ABILITY_CROWNED_SWORD:
-        case ABILITY_ANGER_POINT:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(CanRaiseStat(battler, STAT_ATK))
-
-            if (gIsCriticalHit) {
-                SetStatChanger(STAT_ATK, 12);
-                BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
-            } else {
-                SetStatChanger(STAT_ATK, 1);
-                BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            }
-            return TRUE;
-
-        case ABILITY_TIPPING_POINT:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-            REQUIRE(CanRaiseStat(battler, STAT_SPATK))
-
-            if (gIsCriticalHit) {
-                SetStatChanger(STAT_SPATK, 12);
-                BattleScriptCall(BattleScript_TargetsStatWasMaxedOut);
-            } else {
-                SetStatChanger(STAT_SPATK, 1);
-                BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            }
-            return TRUE;
-
-        case ABILITY_BERSERK:
-        case ABILITY_BERSERKER_RAGE:
-        case ABILITY_UNLOCKED_POTENTIAL:
-            REQUIRE(CheckHalfHpAbility(battler, attacker))
-            REQUIRE_NOT(GetAbilityState(battler, ability))
-            REQUIRE(CanRaiseStat(battler, STAT_SPATK))
-
-            SetAbilityState(battler, ability, TRUE);
-            SetStatChanger(STAT_SPATK, 1);
-            BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
-            return TRUE;
-
-        case ABILITY_ANGER_SHELL:
-            REQUIRE(CheckHalfHpAbility(battler, attacker))
-            REQUIRE_NOT(GetAbilityState(battler, ability))
-
-            SetAbilityState(battler, ability, TRUE);
-            BattleScriptCall(BattleScript_AngerShell);
-            return TRUE;
-
-        case ABILITY_NO_TURNING_BACK:
-            REQUIRE(CheckHalfHpAbility(battler, attacker))
-            REQUIRE_NOT(GetAbilityState(battler, ability))
-
-            SetAbilityState(battler, ability, TRUE);
-            BattleScriptCall(BattleScript_NoTurningBack);
-            return TRUE;
-
-        case ABILITY_ITCHY_DEFENSE:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE_NOT(gBattleMons[attacker].status2 & STATUS2_WRAPPED)
-
-            gBattleMons[attacker].status2 |= STATUS2_WRAPPED;
-            if (GetBattlerHoldEffect(battler, TRUE) == HOLD_EFFECT_GRIP_CLAW)
-                gVolatileStructs[attacker].wrapTurns = 7;
-            else
-                gVolatileStructs[attacker].wrapTurns = (Random() % 2) + 4;
-
-            gBattleStruct->wrappedMove[attacker] = MOVE_INFESTATION;
-            gBattleStruct->wrappedBy[attacker] = battler;
-
-            BattleScriptCall(BattleScript_AttackerBecameInfested);
-            return TRUE;
-
-        case ABILITY_LOOSE_QUILLS:
-        case ABILITY_SCRAPYARD:
-            REQUIRE(DidMoveHit())
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE(gSideTimers[GetBattlerSide(attacker)].spikesAmount < 3)
-
-            BattleScriptCall(BattleScript_DefenderSetsSpikeLayer_Scrapyard);
-            return TRUE;
-
-        case ABILITY_TOXIC_DEBRIS:
-            REQUIRE(DidMoveHit())
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE(gSideTimers[GetBattlerSide(attacker)].toxicSpikesAmount < 2)
-
-            BattleScriptCall(BattleScript_DefenderSetsToxicSpikeLayer);
-            return TRUE;
-
-        case ABILITY_VOODOO_POWER:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IS_MOVE_SPECIAL(move))
-            REQUIRE(CanBleed(attacker))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_AFFECTS_USER | MOVE_EFFECT_BLEED)
-            return TRUE;
-
-        case ABILITY_SEED_SOWER:
-            REQUIRE(ShouldApplyOnHitAffect(battler))
-
-            BattleScriptCall(BattleScript_SeedSower);
-            return TRUE;
-
-        case ABILITY_SUPERSWEET_SYRUP:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE_NOT(gStatuses3[attacker] & STATUS3_EMBARGO)
-            REQUIRE(gBattleMons[attacker].item)
-
-            gBattleScripting.abilityPopupOverwrite = ABILITY_SUPERSWEET_SYRUP;
-            gVolatileStructs[attacker].embargoTimer = 2;
-            gStatuses3[attacker] |= STATUS3_EMBARGO;
-            gLastUsedItem = gBattleMons[attacker].item;
-            BattleScriptCall(BattleScript_AnnounceAttackerItemDisabled);
-            return TRUE;
-
-        case ABILITY_CUTE_CHARM:
-        case ABILITY_PRIM_AND_PROPER:
-        case ABILITY_PURE_LOVE:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-            REQUIRE(CanInfatuate(battler, attacker))
-            REQUIRE(Random() % 100 < 30)
-
-            gBattleMons[attacker].status2 |= STATUS2_INFATUATED_WITH(battler);
-            BattleScriptCall(BattleScript_CuteCharmActivates);
-            return TRUE;
-
-        case ABILITY_GOOEY:
-        case ABILITY_TANGLING_HAIR:
-        case ABILITY_SUPER_HOT_GOO:
-            REQUIRE(ShouldApplyOnHitAffect(attacker))
-            REQUIRE(StatLowerableOrMirrorArmor(attacker, STAT_SPEED))
-            REQUIRE(IsMoveMakingContact(move, attacker))
-
-            gBattleScripting.moveEffect = MOVE_EFFECT_SPD_MINUS_1;
-            BattleScriptCall(BattleScript_GooeyActivates);
-            gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
-            return TRUE;
+    if (result & 1) {
+        BattleScriptCall(BattleScript_AbilityPopUp);
     }
 
-    return FALSE;
-}
-
-int HandleAttackerOrDefenderAbility(int ability, int battler, int opponent, int move) {
-    int effectTargetFlag = opponent == gBattlerAttacker ? MOVE_EFFECT_AFFECTS_USER : 0;
-    int moveType;
-
-    GET_MOVE_TYPE(move, moveType)
-
-    switch (ability) {
-        case ABILITY_BLOOD_STAIN:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_BLOOD_STAIN))
-            REQUIRE_NOT(IsPersistentOrUnsuppressableAbility(GetBattlerAbility(opponent)))
-            REQUIRE_NOT(BattlerHasAbility(battler, ability, FALSE))
-            REQUIRE_NOT(DoesBattlerHaveAbilityShield(opponent))
-
-            UpdateAbilityStateIndicesForNewAbility(opponent, ability);
-            ReplaceAbility(opponent, ability);
-            gStackBattler1 = opponent;
-            BattleScriptCall(BattleScript_BloodStainActivates);
-            DisableSwitchInAbility(opponent, ability);
-            return TRUE;
-
-        case ABILITY_SOUL_LINKER:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(IsBattlerAlive(battler))
-            REQUIRE_NOT(BATTLER_HAS_ABILITY(opponent, ABILITY_SOUL_LINKER))
-            REQUIRE(move != MOVE_PAIN_SPLIT)
-
-            BattleScriptCall(BattleScript_AttackerSoulLinker);
-            return TRUE;
-
-        case ABILITY_DAMP:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE_NOT(IS_BATTLER_OF_TYPE(opponent, TYPE_WATER))
-
-            gBattleMons[opponent].type1 = TYPE_WATER;
-            gBattleMons[opponent].type2 = TYPE_WATER;
-            gBattleMons[opponent].type3 = TYPE_MYSTERY;
-            PREPARE_TYPE_BUFFER(gBattleTextBuff1, TYPE_WATER);
-            BattleScriptCall(opponent == gBattlerAttacker ? BattleScript_AttackerBecameTheTypeFull : BattleScript_DefenderBecameTheTypeFull);
-            return TRUE;
-
-        case ABILITY_WHITE_NOISE:
-        case ABILITY_STATIC:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(CanBeParalyzed(battler, opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_PARALYSIS | effectTargetFlag)
-            return TRUE;
-
-        case ABILITY_SUPER_HOT_GOO:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE(CanBeBurned(opponent))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_BURN | effectTargetFlag)
-
-            if (opponent != gBattlerAttacker || !HandleDefenderAbilityAs(ABILITY_SUPER_HOT_GOO, battler, opponent, move, moveType))
-                BattleScriptCall(BattleScript_AbilityPopUp);
-
-            return TRUE;
-
-        case ABILITY_FLAME_BODY:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(CanBeBurned(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | effectTargetFlag)
-            return TRUE;
-
-        case ABILITY_DAYBREAK:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(CanBeBurned(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BURN | effectTargetFlag)
-            return TRUE;
-
-        case ABILITY_FRAGRANT_DAZE:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(CanBeConfused(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_CONFUSION | effectTargetFlag)
-            return TRUE;
-
-        case ABILITY_POISON_POINT:
-        case ABILITY_POISON_TOUCH:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(CanBePoisoned(battler, opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_POISON | effectTargetFlag)
-            return TRUE;
-
-        case ABILITY_CRYO_PROFICIENCY:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE(CanGetFrostbite(opponent))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT_DIRECT(MOVE_EFFECT_FROSTBITE | effectTargetFlag)
-
-            if (opponent != gBattlerAttacker || !HandleDefenderAbilityAs(ABILITY_CRYO_PROFICIENCY, battler, opponent, move, moveType))
-                BattleScriptCall(BattleScript_AbilityPopUp);
-
-            return TRUE;
-
-        case ABILITY_FREEZING_POINT:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(CanGetFrostbite(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_FROSTBITE | effectTargetFlag)
-            return TRUE;
-
-        case ABILITY_SPIKE_ARMOR:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(CanBleed(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE(Random() % 100 < 30)
-
-            ABILITY_STATUS_EFFECT(MOVE_EFFECT_BLEED | effectTargetFlag)
-            return TRUE;
-
-        case ABILITY_MENACING_SITUATION:
-            REQUIRE(ShouldApplyOnHitAffect(opponent))
-            REQUIRE(IsMoveMakingContact(move, gBattlerAttacker))
-            REQUIRE_NOT(gVolatileStructs[opponent].fear)
-            REQUIRE(Random() % 100 < 30)
-
-            gStackBattler1 = battler;
-            gStackBattler2 = opponent;
-            BattleScriptCall(BattleScript_AbilitySetFear);
-            return TRUE;
-
-#define POISON_PUPPETEER_CLONE(validCheck, effect)                                    \
-    {                                                                                 \
-        int flag = GetAbilityState(battler, ability);                                 \
-        int any = FALSE;                                                              \
-        int realAttacker = gBattlerAttacker;                                          \
-        int realTarget = gBattlerTarget;                                              \
-        gBattlerAttacker = battler;                                                   \
-        SetAbilityState(battler, ability, 0);                                         \
-                                                                                      \
-        for (gBattlerTarget = 0; gBattlerTarget < gBattlersCount; gBattlerTarget++) { \
-            if (!(flag & (1 << gBattlerTarget))) continue;                            \
-            if (!IsBattlerAlive(gBattlerTarget)) continue;                            \
-            if (!(validCheck)) continue;                                              \
-                                                                                      \
-            gStackBattler1 = gBattlerAttacker;                                        \
-            gStackBattler2 = gBattlerTarget;                                          \
-            effect;                                                                   \
-            any = TRUE;                                                               \
-        }                                                                             \
-        gBattlerAttacker = realAttacker;                                              \
-        gBattlerTarget = realTarget;                                                  \
-        if (any) {                                                                    \
-            BattleScriptCall(BattleScript_AbilityPopUp);                              \
-            return TRUE;                                                              \
-        }                                                                             \
-    }                                                                                 \
-    break;
-
-        case ABILITY_ENTRANCE:
-            POISON_PUPPETEER_CLONE(CanInfatuate(battler, gBattlerTarget), BattleScriptCall(BattleScript_Entrance))
-
-        case ABILITY_POISON_PUPPETEER:
-            POISON_PUPPETEER_CLONE(CanBeConfused(gBattlerTarget), BattleScriptCall(BattleScript_PoisonPuppeteer))
-
-        case ABILITY_BLOODLUST:
-        case ABILITY_BLOOD_BATH:
-            POISON_PUPPETEER_CLONE(!gVolatileStructs[gBattlerTarget].fear, BattleScriptCall(BattleScript_Bloodlust))
-
-        case ABILITY_SET_ABLAZE:
-            POISON_PUPPETEER_CLONE(CanBeBurned(gBattlerTarget), BattleScriptCall(BattleScript_Bloodlust))
-
-        case ABILITY_NEUROTOXIN:
-            POISON_PUPPETEER_CLONE(CanLowerStat(gBattlerTarget, STAT_ATK) || CanLowerStat(gBattlerTarget, STAT_DEF) || CanLowerStat(gBattlerTarget, STAT_SPEED),
-                                   BattleScriptCall(BattleScript_Neurotoxin))
-
-#undef POISON_PUPPETEER_CLONE
-    }
-
-    return FALSE;
+    return TRUE;
 }
 
 int HandleMiscAbilityMoveEffects(int battler, int opponent, int move) {
@@ -12112,7 +10533,6 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
 
     ability = gBattleMons[battler].abilities[abilityNumber];
     AbilityOnSwitchHandler handler = gAbilities[ability].onSwitch;
-    MGBA_PRINT_VALUES(ability, handler);
     if (!handler) return FALSE;
 
     if (IsSuppressed(battler, ability, FALSE)) return FALSE;
@@ -12125,14 +10545,11 @@ int HandleSwitchInAbility(int abilityNumber, int battler) {
             if (!CheckAndSetSwitchInAbility(battler, ability)) return FALSE;
     }
 
-    MGBA_PRINT_VALUES(1);
-
     gBattleScripting.abilityPopupOverwrite = ability;
     gBattlerAbility = gBattleScripting.battler = battler;
 
     int result = handler(ability, battler);
     if (result & 1) BattleScriptCall(BattleScript_AbilityPopUp);
-    MGBA_PRINT_VALUES(result);
     return result;
 }
 
@@ -12157,17 +10574,17 @@ int HandleEndTurnAbility(int abilityNumber, int battler) {
         return FALSE;
     }
 
-    ability = GetAbilityAtIndex(battler, abilityNumber, FALSE);
+    ability = gBattleMons[battler].abilities[abilityNumber];
 
     if (!gAbilities[ability].onEndTurn) return FALSE;
 
     if (IsSuppressed(battler, ability, FALSE)) return FALSE;
 
+    gBattleScripting.abilityPopupOverwrite = ability;
     int result = gAbilities[ability].onEndTurn(ability, battler);
     if (!result) return FALSE;
 
     if (result & 1) {
-        gBattleScripting.abilityPopupOverwrite = ability;
         BattleScriptCall(BattleScript_AbilityPopUp);
     }
     return TRUE;

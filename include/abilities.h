@@ -17,6 +17,10 @@ typedef int (*AbilityOnDisguiseHandler)(int battler, int checkOnly);
 typedef int (*AbilityOnWeatherHandler)(int ability, int battler);
 typedef int (*AbilityOnTerrainHandler)(int ability, int battler);
 typedef int (*AbilityOnEndTurnHandler)(int ability, int battler);
+typedef int (*AbilityOnAttackerHandler)(int ability, int battler, int target, int move, int moveType);
+typedef int (*AbilityOnDefenderHandler)(int ability, int battler, int attacker, int move, int moveType);
+typedef int (*AbilityOnRecoilHandler)(int damage, int battler, int moveType);
+typedef int (*AbilityOnReactiveHandler)(int ability, int battler);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -36,6 +40,10 @@ typedef struct Ability {
     const AbilityOnWeatherHandler onWeather;
     const AbilityOnTerrainHandler onTerrain;
     const AbilityOnEndTurnHandler onEndTurn;
+    const AbilityOnAttackerHandler onAttacker;
+    const AbilityOnDefenderHandler onDefender;
+    const AbilityOnRecoilHandler onRecoil;
+    const AbilityOnReactiveHandler onReactive;
     u16 breakable:1;
     u16 unsuppressable:1;
     u16 persistent:1;
@@ -47,6 +55,8 @@ typedef struct Ability {
     u16 noDamageHits:2;
     AbilityApplyOn onImmuneFor:2;
     u16 magicGuard:1;
+    u16 noRecoil:1;
+    u16 halfRecoil:1;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];
