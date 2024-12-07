@@ -41458,12 +41458,12 @@ static const struct TrainerMonItemCustomMoves sParty_Juan5Insane[] = {
     },
     {
     .lvl = 0,
-    .species = SPECIES_LUDICOLO,
-    .heldItem = ITEM_FOCUS_SASH,
+    .species = SPECIES_VOLCANION,
+    .heldItem = ITEM_ASSAULT_VEST,
     .ability = 0,
     .evs = {4, 0, 0, 252, 0, 252},
-    .nature = NATURE_TIMID,
-    .moves = MOVE_QUIVER_DANCE, MOVE_SURF, MOVE_ICE_BEAM, MOVE_GIGA_DRAIN
+    .nature = NATURE_MODEST,
+    .moves = MOVE_SUPERHOT_FLAME, MOVE_FLAME_BURST, MOVE_SCORCHING_SANDS, MOVE_STEAM_ERUPTION
     },
     {
     .lvl = 0,
