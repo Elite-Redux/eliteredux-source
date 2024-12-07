@@ -7601,6 +7601,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability,
         case ABILITY_ROCKHARD_WILL:
             SWARM_LIKE(TYPE_ROCK)
 
+        case ABILITY_VENGEFUL_SPIRIT:
         case ABILITY_VENGEANCE:
             SWARM_LIKE(TYPE_GHOST)
 
