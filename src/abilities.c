@@ -76,11 +76,12 @@ static int SwitchInAnnounce(int message) {
     return TRUE;
 }
 
-static int TryTransformAttacker(int ability, int battler) {
+static int TryTransformAttacker(int ability, int battler, AbilityCallType callType) {
     CHECK(ShouldChangeFormHpBased(battler))
     CHECK_NOT(gBattleMons[battler].status2 && STATUS2_TRANSFORMED)
 
-    BattleScriptPushCursorAndCallback(BattleScript_AttackerFormChangeEnd3NoPopup);
+    InsertCorrectEndType(callType);
+    BattleScriptCall(BattleScript_AttackerFormChangeNoPopup);
     return TRUE;
 }
 
@@ -632,12 +633,19 @@ static const Ability Minus = {
 
 #undef CONTEXT
 #define CONTEXT Forecast
+ON_SWITCH {
+    return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
+}
+ON_WEATHER {
+    return TryTransformAttacker(ability, battler, ABILITY_BS_CALL);
+}
 static const Ability Forecast = {
     .name = $("Forecast"),
     .description = $("Changes form with the weather.\nWeather setting triggers attack."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .onSwitch = TryTransformAttacker,
+    CONTEXT_ON_SWITCH,
+    CONTEXT_ON_WEATHER,
 };
 
 #undef CONTEXT
@@ -1219,7 +1227,8 @@ static const Ability FlowerGift = {
     .unsuppressable = TRUE,
     .breakable = TRUE,
     .randomizerBanned = TRUE,
-    .onSwitch = TryTransformAttacker,
+    .onSwitch = Forecast.onSwitch,
+    .onWeather = Forecast.onWeather,
 };
 
 #undef CONTEXT
@@ -1547,7 +1556,7 @@ static const Ability ZenMode = {
     .description = $("Transforms into Zen Mode on\nentry until end of battle."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
-    .onSwitch = TryTransformAttacker,
+    .onSwitch = Forecast.onSwitch,
 };
 
 #undef CONTEXT
@@ -1857,7 +1866,7 @@ static const Ability ShieldsDown = {
     .name = $("Shields Down"),
     .description = $("At 1/2 of max HP or below,\ntransforms into Core form."),
     .unsuppressable = TRUE,
-    .onSwitch = TryTransformAttacker,
+    .onSwitch = Forecast.onSwitch,
 };
 
 #undef CONTEXT
@@ -1935,7 +1944,7 @@ static const Ability SurgeSurfer = {
 #define CONTEXT Schooling
 ON_SWITCH {
     CHECK(gBattleMons[battler].level >= 20)
-    return TryTransformAttacker(ability, battler);
+    return TryTransformAttacker(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK);
 }
 static const Ability Schooling = {
     .name = $("Schooling"),

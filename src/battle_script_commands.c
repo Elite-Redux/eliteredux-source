@@ -5695,8 +5695,7 @@ static void Cmd_switchineffects(void) {
             if (HandleSwitchInAbility(gBattleScripting.abilityLoopCounter++, gActiveBattler)) return;
         }
 
-        if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gActiveBattler, FALSE) || AbilityBattleEffects(ABILITYEFFECT_TRACE2, 0, 0, 0, 0) ||
-            AbilityBattleEffects(ABILITYEFFECT_FORECAST, 0, 0, 0, 0))
+        if (ItemBattleEffects(ITEMEFFECT_ON_SWITCH_IN, gActiveBattler, FALSE) || AbilityBattleEffects(ABILITYEFFECT_TRACE2, 0, 0, 0, 0))
             return;
 
         gSideStatuses[GetBattlerSide(gActiveBattler)] &=
@@ -8453,6 +8452,7 @@ static void Cmd_various(void) {
         case VARIOUS_HANDLE_WEATHER_CHANGE:
             ON_ABILITY(
                 gActiveBattler, FALSE, gAbilities[ability].onWeather, if (gAbilities[ability].onWeather(ability, gActiveBattler)) {
+                    gAbilityBattler = gActiveBattler;
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUp);
                 })
@@ -8460,6 +8460,7 @@ static void Cmd_various(void) {
         case VARIOUS_HANDLE_TERRAIN_CHANGE:
             ON_ABILITY(
                 gActiveBattler, FALSE, gAbilities[ability].onTerrain, if (gAbilities[ability].onTerrain(ability, gActiveBattler)) {
+                    gAbilityBattler = gActiveBattler;
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUp);
                 })

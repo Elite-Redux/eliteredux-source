@@ -10310,7 +10310,6 @@ BattleScript_OnWeatherChange::
 	saveattackertostack3
 	setbyte gBattlerAttacker, 0
 BattleScript_OnWeatherChangeLoop::
-	trycastformdatachange
 	handleweatherchange BS_ATTACKER
 	addbyte gBattlerAttacker, 1
 	jumpifbytenotequal gBattlerAttacker, gBattlersCount, BattleScript_OnWeatherChangeLoop
