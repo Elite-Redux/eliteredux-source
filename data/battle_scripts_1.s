@@ -9780,6 +9780,7 @@ BattleScript_DoWindRider:
 	setgraphicalstatchangevalues
 	playanimation BS_ABILITY_BATTLER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
 	printstring STRINGID_BATTLERABILITYRAISEDSTAT
+	waitmessage B_WAIT_TIME_LONG
 BattleScript_Return:
 	return
 	
