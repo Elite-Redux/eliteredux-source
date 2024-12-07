@@ -13,6 +13,7 @@
 #include "constants/items.h"
 #include "global.h"
 #include "item.h"
+#include "mgba_printf/mgba.h"
 #include "random.h"
 #include "string_util.h"
 
