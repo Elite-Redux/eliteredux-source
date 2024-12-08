@@ -12989,7 +12989,7 @@ BattleScript_EffectAllySwitch:
 	ppreduce
 	attackanimation
 	waitanimation
-	swapwith BS_TARGET
+	swapwith BS_ATTACKER_PARTNER
 	printstring STRINGID_SWAPWITH
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd

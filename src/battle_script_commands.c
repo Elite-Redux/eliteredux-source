@@ -9027,9 +9027,10 @@ static void Cmd_various(void) {
             break;
         case VARIOUS_SWAP_WITH:
             for (i = 0; i < gBattlersCount; i++) {
-                u8* target = &gBattleStruct->moveTarget[i];
                 if (i == gActiveBattler) continue;
                 if (i == gBattlerAttacker) continue;
+                
+                u8* target = &gBattleStruct->moveTarget[i];
 
                 if (*target == gBattlerAttacker)
                     *target = gActiveBattler;
