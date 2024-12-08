@@ -2673,23 +2673,26 @@ void SetMoveEffect(bool32 primary, u32 certain) {
                     }
                     break;
                 case MOVE_EFFECT_WATER_PLEDGE:
-                    if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY) {
+                    if (IsWeatherActive(WEATHER_SUN_ANY) || HasChloroplast(gBattlerAttacker)) {
                         SET_MOVE_EFFECT_AS(MOVE_EFFECT_RAINBOW | MOVE_EFFECT_AFFECTS_USER)
-                    } else if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN) {
+                    }
+                    if (IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN)) {
                         SET_MOVE_EFFECT_AS(MOVE_EFFECT_SWAMP)
                     }
                     break;
                 case MOVE_EFFECT_FIRE_PLEDGE:
-                    if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_RAIN_ANY) {
+                    if (IsWeatherActive(WEATHER_RAIN_ANY)) {
                         SET_MOVE_EFFECT_AS(MOVE_EFFECT_RAINBOW | MOVE_EFFECT_AFFECTS_USER)
-                    } else if (TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_GRASSY_TERRAIN) {
+                    }
+                    if (IsTerrainActive(STATUS_FIELD_GRASSY_TERRAIN)) {
                         SET_MOVE_EFFECT_AS(MOVE_EFFECT_FIRE_SEA)
                     }
                     break;
                 case MOVE_EFFECT_GRASS_PLEDGE:
-                    if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_SUN_ANY) {
+                    if (IsWeatherActive(WEATHER_SUN_ANY) || HasChloroplast(gBattlerAttacker)) {
                         SET_MOVE_EFFECT_AS(MOVE_EFFECT_FIRE_SEA)
-                    } else if (WEATHER_HAS_EFFECT && gBattleWeather & WEATHER_RAIN_ANY) {
+                    }
+                    if (IsWeatherActive(WEATHER_RAIN_ANY)) {
                         SET_MOVE_EFFECT_AS(MOVE_EFFECT_SWAMP)
                     }
                     break;

@@ -2305,7 +2305,6 @@ enum {
     ENDTURN_PLASMA_FISTS,
     ENDTURN_TOXIC_WASTE_DAMAGE,
     ENDTURN_SEA_OF_FIRE_DAMAGE,
-    ENDTURN_COMMANDER,
     ENDTURN_PARASITIC_SPORES_DAMAGE,
     ENDTURN_FUNERAL_PYRE_DAMAGE,
     ENDTURN_LIFE_STEAL_DAMAGE,
@@ -2538,9 +2537,6 @@ u8 DoBattlerEndTurnEffects(void) {
                 MarkBattlerForControllerExec(gActiveBattler);
                 BattleScriptExecute(BattleScript_HurtByTheSeaOfFire);
                 effect++;
-                break;
-            case ENDTURN_COMMANDER:
-                gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_PARASITIC_SPORES_DAMAGE:
                 if (IsBattlerAlive(gActiveBattler) && gVolatileStructs[gActiveBattler].parasiticSpores && !IS_BATTLER_OF_TYPE(gActiveBattler, TYPE_GHOST)) {
