@@ -379,6 +379,7 @@ u16 CalculateAbilityMultipliers(
     int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistanceMultiplier);
 int TestImmunityAbilitiesOnly(int battler, int attacker, int move, int moveType);
 int TestImmunityAbilities(int battler, int attacker, int move, int moveType, const u8** immunityScript, u8* overrideBattler, u16* abilityPopup);
+#define MUL_MODIFIER(modifier, val) MulModifier(modifier, UQ_4_12(val))
 u16 DivideModifier(u16 mod1, u16 mod2);
 void MulModifier(u16* modifier, u16 val);
 u32 ApplyModifier(u16 modifier, u32 val);

@@ -76,6 +76,23 @@
 #define ON_PARENTAL_BOND static MultihitType COMBINE(onParentalBond, CONTEXT)(int battler, int move, int moveType)
 #define CONTEXT_ON_PARENTAL_BOND .onParentalBond = COMBINE(onParentalBond, CONTEXT)
 
+#define MUL(val) MUL_MODIFIER(modifier, val)
+#define RESISTANCE(val)                \
+    {                                  \
+        MUL_MODIFIER(resistance, val); \
+        MUL_MODIFIER(modifier, val);   \
+    }
+
+#define ON_OFFENSIVE_MULTIPLIER                          \
+    static void COMBINE(onOffensiveMultiplier, CONTEXT)( \
+        int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistance, u16 *modifier)
+#define CONTEXT_ON_OFFENSIVE_MULTIPLIER .onOffensiveMultiplier = COMBINE(onOffensiveMultiplier, CONTEXT)
+
+#define ON_DEFENSIVE_MULTIPLIER                          \
+    static void COMBINE(onDefensiveMultiplier, CONTEXT)( \
+        int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier)
+#define CONTEXT_ON_DEFENSIVE_MULTIPLIER .onDefensiveMultiplier = COMBINE(onDefensiveMultiplier, CONTEXT)
+
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
         case ABILITY_BS_EXECUTE:
@@ -105,7 +122,7 @@ int IsTargettedApplyOnFlagAppropriate(int contextBattler, int sourceBattler, int
 
 int IsApplyOnFlagAppropriate(int contextBattler, int sourceBattler, AbilityApplyOn flag) {
     if (flag == APPLY_ON_SELF) return contextBattler == sourceBattler;
-    if (contextBattler == sourceBattler) return flag != APPLY_ON_FOE;
+    if (contextBattler == sourceBattler) return !(flag & APPLY_IGNORE_SELF);
     if (GetBattlerSide(contextBattler) == GetBattlerSide(sourceBattler))
         return flag & APPLY_ON_ALLY;
     else
@@ -195,6 +212,31 @@ static int MoxieClone(int battler, int stat) {
     return TRUE;
 }
 
+#define ON_ATE_MULTIPLIER(type)                                             \
+    ON_OFFENSIVE_MULTIPLIER {                                               \
+        if (moveType == type && gBattleStruct->ateBoost[battler]) MUL(1.1); \
+    }
+
+#define ON_SWARM_MULTIPLIER(type)                                            \
+    ON_OFFENSIVE_MULTIPLIER {                                                \
+        if (moveType == type) {                                              \
+            if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3)) \
+                MUL(1.5);                                                    \
+            else                                                             \
+                MUL(1.2);                                                    \
+        }                                                                    \
+    }
+
+#define ON_BOOSTED_SWARM_MULTIPLIER(type)                                    \
+    ON_OFFENSIVE_MULTIPLIER {                                                \
+        if (moveType == type) {                                              \
+            if (gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3)) \
+                MUL(1.8);                                                    \
+            else                                                             \
+                MUL(1.3);                                                    \
+        }                                                                    \
+    }
+
 #define CONTEXT None
 static const Ability None = {
     .name = $("-------"),
@@ -253,10 +295,12 @@ static const Ability SpeedBoost = {
 
 #undef CONTEXT
 #define CONTEXT BattleArmor
+ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
 static const Ability BattleArmor = {
     .name = $("Battle Armor"),
     .description = $("Immune to critical hits. Takes\n20% less damage from all attacks."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -391,18 +435,26 @@ static const Ability ColorChange = {
 
 #undef CONTEXT
 #define CONTEXT Immunity
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_POISON) RESISTANCE(.5);
+}
 static const Ability Immunity = {
     .name = $("Immunity"),
     .description = $("Cannot be poisoned. Halves\ndamage taken from Poison moves."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT FlashFire
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE && gBattleResources->flags->flags[battler] & RESOURCE_FLAG_FLASH_FIRE) MUL(1.5);
+}
 static const Ability FlashFire = {
     .name = $("Flash Fire"),
     .description = $("Powers up Fire-type moves by\n1.5x if hit by a Fire-type move."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -474,10 +526,14 @@ static const Ability WonderGuard = {
 
 #undef CONTEXT
 #define CONTEXT Levitate
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FLYING) MUL(1.25);
+}
 static const Ability Levitate = {
     .name = $("Levitate"),
     .description = $("Immune to Ground-type moves.\nUps own Flying moves by 1.25x."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -650,10 +706,14 @@ static const Ability InnerFocus = {
 
 #undef CONTEXT
 #define CONTEXT MagmaArmor
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_WATER || moveType == TYPE_ICE) RESISTANCE(.7);
+}
 static const Ability MagmaArmor = {
     .name = $("Magma Armor"),
     .description = $("Frostbite-immune. Takes 30% less\ndmg from Water/Ice-type moves."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -758,10 +818,14 @@ static const Ability Pressure = {
 
 #undef CONTEXT
 #define CONTEXT ThickFat
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE || moveType == TYPE_ICE) RESISTANCE(.5);
+}
 static const Ability ThickFat = {
     .name = $("Thick Fat"),
     .description = $("Takes 1/2 damage from Fire-type\nand Ice-type attacks."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -848,9 +912,11 @@ static const Ability Truant = {
 
 #undef CONTEXT
 #define CONTEXT Hustle
+ON_OFFENSIVE_MULTIPLIER { MUL(1.4); }
 static const Ability Hustle = {
     .name = $("Hustle"),
-    .description = $("0.9x accuracy.\nRaises Atk & SpAtk by 1.4x."),
+    .description = $("0.9x accuracy.\nBoosts damage by 1.4x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -873,9 +939,15 @@ static const Ability CuteCharm = {
 
 #undef CONTEXT
 #define CONTEXT Plus
+ON_OFFENSIVE_MULTIPLIER {
+    int partner = BATTLE_PARTNER(battler);
+    if (!IsBattlerAlive(partner)) return;
+    if (BattlerHasAbility(partner, ABILITY_PLUS, FALSE) || BattlerHasAbility(partner, ABILITY_MINUS, FALSE)) MUL(2.0);
+}
 static const Ability Plus = {
     .name = $("Plus"),
     .description = $("Deals double damage if an ally\nPokémon has Minus or Plus."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -883,6 +955,7 @@ static const Ability Plus = {
 static const Ability Minus = {
     .name = $("Minus"),
     .description = $("Deals double damage if an ally\nPokémon has Minus or Plus."),
+    .onOffensiveMultiplier = Plus.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -924,9 +997,13 @@ static const Ability ShedSkin = {
 
 #undef CONTEXT
 #define CONTEXT Guts
+ON_OFFENSIVE_MULTIPLIER {
+    if (HasAnyStatusOrAbility(battler) && IS_MOVE_PHYSICAL(move)) MUL(1.5);
+}
 static const Ability Guts = {
     .name = $("Guts"),
     .description = $("Ups Atk by 1.5x if suffering\nfrom a status condition."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -946,30 +1023,38 @@ static const Ability LiquidOoze = {
 
 #undef CONTEXT
 #define CONTEXT Overgrow
+ON_SWARM_MULTIPLIER(TYPE_GRASS)
 static const Ability Overgrow = {
     .name = $("Overgrow"),
     .description = $("Boosts Grass-type moves by 1.2x,\nor 1.5x when under 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Blaze
+ON_SWARM_MULTIPLIER(TYPE_FIRE)
 static const Ability Blaze = {
     .name = $("Blaze"),
     .description = $("Boosts Fire-type moves by 1.2x,\nor 1.5x when under 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Torrent
+ON_SWARM_MULTIPLIER(TYPE_WATER)
 static const Ability Torrent = {
     .name = $("Torrent"),
     .description = $("Boosts Water-type moves by 1.2x,\nor 1.5x when under 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Swarm
+ON_SWARM_MULTIPLIER(TYPE_BUG)
 static const Ability Swarm = {
     .name = $("Swarm"),
     .description = $("Boosts Bug-type moves by 1.2x,\nor 1.5x when under 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1048,6 +1133,7 @@ static const Ability ShellArmor = {
     .name = $("Shell Armor"),
     .description = $("Immune to critical hits. Takes\n20% less damage from all attacks."),
     .breakable = TRUE,
+    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -1082,9 +1168,25 @@ static const Ability MotorDrive = {
 
 #undef CONTEXT
 #define CONTEXT Rivalry
+ON_OFFENSIVE_MULTIPLIER {
+    int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality);
+    if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[target].species, gBattleMons[target].personality)) MUL(1.25);
+}
+ON_DEFENSIVE_MULTIPLIER {
+    int genderAtk = GetGenderFromSpeciesAndPersonality(gBattleMons[attacker].species, gBattleMons[attacker].personality);
+    if (genderAtk == MON_MALE)
+        genderAtk = MON_FEMALE;
+    else if (genderAtk == MON_FEMALE)
+        genderAtk = MON_MALE;
+    if (genderAtk != MON_GENDERLESS && genderAtk == GetGenderFromSpeciesAndPersonality(gBattleMons[battler].species, gBattleMons[battler].personality))
+        MUL(.75);
+}
 static const Ability Rivalry = {
     .name = $("Rivalry"),
     .description = $("Deals 1.25x to same gender.\nTakes .75x from opposite gender."),
+    .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1139,10 +1241,14 @@ static const Ability Unburden = {
 
 #undef CONTEXT
 #define CONTEXT Heatproof
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE) RESISTANCE(.5);
+}
 static const Ability Heatproof = {
     .name = $("Heatproof"),
     .description = $("Halves damage taken from Fire-\ntype moves. Takes no burn damage."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1164,12 +1270,16 @@ ON_END_TURN {
 
     return RainDish.onEndTurn(ability, battler);
 }
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE) RESISTANCE(1.25);
+}
 static const Ability DrySkin = {
     .name = $("Dry Skin"),
     .description = $("Water/Rain heals.\nFire/Sun hurts."),
     .breakable = TRUE,
     .onAbsorb = WaterAbsorb.onAbsorb,
     CONTEXT_ON_END_TURN,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1192,9 +1302,13 @@ static const Ability Download = {
 
 #undef CONTEXT
 #define CONTEXT IronFist
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_IRON_FIST(battler, move)) MUL(1.3);
+}
 static const Ability IronFist = {
     .name = $("Iron Fist"),
     .description = $("Boosts the power of punching\nmoves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1249,16 +1363,22 @@ static const Ability QuickFeet = {
 
 #undef CONTEXT
 #define CONTEXT Normalize
+ON_ATE_MULTIPLIER(TYPE_NORMAL)
 static const Ability Normalize = {
     .name = $("Normalize"),
     .description = $("Its moves become Normal-type,\nget 1.1x boost, ignore resists."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Sniper
+ON_OFFENSIVE_MULTIPLIER {
+    if (isCrit) MUL(1.5);
+}
 static const Ability Sniper = {
     .name = $("Sniper"),
     .description = $("Critical hits have a 2.25x dmg\nmultiplier instead of 1.5x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1278,17 +1398,25 @@ static const Ability NoGuard = {
 
 #undef CONTEXT
 #define CONTEXT Stall
+ON_DEFENSIVE_MULTIPLIER {
+    if (gCurrentTurnActionNumber < GetBattlerTurnOrderNum(battler)) MUL(.7);
+}
 static const Ability Stall = {
     .name = $("Stall"),
     .description = $("Takes 30% less damage if it\nhasn't moved yet."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Technician
+ON_OFFENSIVE_MULTIPLIER {
+    if (basePower <= 60) MUL(1.5);
+}
 static const Ability Technician = {
     .name = $("Technician"),
     .description = $("Moves with 60 BP or less get\na 1.5x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1406,17 +1534,25 @@ static const Ability Unaware = {
 
 #undef CONTEXT
 #define CONTEXT TintedLens
+ON_OFFENSIVE_MULTIPLIER {
+    if (typeEffectivenessMultiplier <= UQ_4_12(.5)) RESISTANCE(2);
+}
 static const Ability TintedLens = {
     .name = $("Tinted Lens"),
     .description = $("Attacks deal double damage if\nresisted."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Filter
+ON_DEFENSIVE_MULTIPLIER {
+    if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.65);
+}
 static const Ability Filter = {
     .name = $("Filter"),
     .description = $("Takes 35% less damage from\nSuper-effective moves."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1479,6 +1615,7 @@ static const Ability SolidRock = {
     .name = $("Solid Rock"),
     .description = $("Takes 35% less damage from\nSuper-effective moves."),
     .breakable = TRUE,
+    .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -1538,9 +1675,13 @@ static const Ability Frisk = {
 
 #undef CONTEXT
 #define CONTEXT Reckless
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST) MUL(1.2);
+}
 static const Ability Reckless = {
     .name = $("Reckless"),
     .description = $("Moves causing recoil damage\ndeal 1.2x more damage."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1587,9 +1728,13 @@ static const Ability Pickpocket = {
 
 #undef CONTEXT
 #define CONTEXT SheerForce
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_SHEER_FORCE_BOOST) MUL(1.3);
+}
 static const Ability SheerForce = {
     .name = $("Sheer Force"),
     .description = $("Exchanges added effects on its\nmoves for 1.3x more power."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1708,17 +1853,25 @@ static const Ability LightMetal = {
 
 #undef CONTEXT
 #define CONTEXT Multiscale
+ON_DEFENSIVE_MULTIPLIER {
+    if (BATTLER_MAX_HP(battler)) MUL(.5);
+}
 static const Ability Multiscale = {
     .name = $("Multiscale"),
     .description = $("At full HP, halves damage taken\nfrom attacks"),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT ToxicBoost
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMons[battler].status1 & STATUS1_PSN_ANY && IS_MOVE_PHYSICAL(move)) MUL(1.5);
+}
 static const Ability ToxicBoost = {
     .name = $("Toxic Boost"),
     .description = $("Ups Atk by 1.5x if poisoned.\nImmune to Poison status damage."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1806,10 +1959,14 @@ static const Ability Moody = {
 
 #undef CONTEXT
 #define CONTEXT Overcoat
+ON_DEFENSIVE_MULTIPLIER {
+    if (IS_MOVE_SPECIAL(move)) MUL(.8);
+}
 static const Ability Overcoat = {
     .name = $("Overcoat"),
     .description = $("Blocks weather dmg, powder moves.\n20% Special damage reduction."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1830,9 +1987,13 @@ static const Ability Regenerator = {
 
 #undef CONTEXT
 #define CONTEXT BigPecks
+ON_OFFENSIVE_MULTIPLIER {
+    if (IsMoveMakingContact(move, battler)) MUL(1.3);
+}
 static const Ability BigPecks = {
     .name = $("Big Pecks"),
     .description = $("Boosts the power of contact\nmoves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1852,9 +2013,13 @@ static const Ability WonderSkin = {
 
 #undef CONTEXT
 #define CONTEXT Analytic
+ON_OFFENSIVE_MULTIPLIER {
+    if (GetBattlerTurnOrderNum(target) < gCurrentTurnActionNumber && move != MOVE_FUTURE_SIGHT && move != MOVE_DOOM_DESIRE) MUL(1.3);
+}
 static const Ability Analytic = {
     .name = $("Analytic"),
     .description = $("Attacks get a 1.3x power boost\nif it moves last."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -1867,10 +2032,14 @@ ON_DEFENDER {
     BattleScriptCall(BattleScript_IllusionOff);
     return TRUE;
 }
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleStruct->illusion[battler].on && !gBattleStruct->illusion[battler].broken) MUL(1.3);
+}
 static const Ability Illusion = {
     .name = $("Illusion"),
     .description = $("Appears as last party slot and\nboosts power by 1.3x until hit."),
     CONTEXT_ON_DEFENDER,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2075,10 +2244,14 @@ static const Ability Protean = {
 
 #undef CONTEXT
 #define CONTEXT FurCoat
+ON_DEFENSIVE_MULTIPLIER {
+    if (IS_MOVE_PHYSICAL(move)) MUL(.5);
+}
 static const Ability FurCoat = {
     .name = $("Fur Coat"),
     .description = $("Halves damage taken by Physical\nmoves. Does NOT double Defense."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2112,16 +2285,22 @@ static const Ability Competitive = {
 
 #undef CONTEXT
 #define CONTEXT StrongJaw
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) MUL(1.3);
+}
 static const Ability StrongJaw = {
     .name = $("Strong Jaw"),
     .description = $("Boosts the power of bite/fang\nmoves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Refrigerate
+ON_ATE_MULTIPLIER(TYPE_ICE)
 static const Ability Refrigerate = {
     .name = $("Refrigerate"),
     .description = $("Normal-type moves become Ice-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2150,9 +2329,13 @@ static const Ability GaleWings = {
 
 #undef CONTEXT
 #define CONTEXT MegaLauncher
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) MUL(1.3);
+}
 static const Ability MegaLauncher = {
     .name = $("Mega Launcher"),
     .description = $("Boosts Beam/Pump/Cannon/Shot/\nGun/Pulse, etc. moves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2175,13 +2358,16 @@ static const Ability Symbiosis = {
 static const Ability ToughClaws = {
     .name = $("Tough Claws"),
     .description = $("Boosts the power of contact\nmoves by 1.3x."),
+    .onOffensiveMultiplier = BigPecks.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
 #define CONTEXT Pixilate
+ON_ATE_MULTIPLIER(TYPE_FAIRY)
 static const Ability Pixilate = {
     .name = $("Pixilate"),
     .description = $("Normal-type moves become Fairy-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2203,9 +2389,11 @@ static const Ability Gooey = {
 
 #undef CONTEXT
 #define CONTEXT Aerilate
+ON_ATE_MULTIPLIER(TYPE_FLYING)
 static const Ability Aerilate = {
     .name = $("Aerilate"),
     .description = $("Normal-type moves become Flying-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2221,19 +2409,37 @@ static const Ability ParentalBond = {
 #undef CONTEXT
 #define CONTEXT DarkAura
 ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_DARKAURA); }
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType != TYPE_DARK) return;
+    if (IsAbilityOnField(ABILITY_AURA_BREAK))
+        MUL(.75);
+    else
+        MUL(1.33);
+}
 static const Ability DarkAura = {
     .name = $("Dark Aura"),
     .description = $("Boosts Dark moves by 1.33x for\nall while this Pokémon is out."),
     CONTEXT_ON_SWITCH,
+    .onOffensiveMultiplierFor = APPLY_ON_ANY,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT FairyAura
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType != TYPE_FAIRY) return;
+    if (IsAbilityOnField(ABILITY_AURA_BREAK))
+        MUL(.75);
+    else
+        MUL(1.33);
+}
 ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_FAIRYAURA); }
 static const Ability FairyAura = {
     .name = $("Fairy Aura"),
     .description = $("Boosts Fairy moves by 1.33x for\nall while this Pokémon is out."),
     CONTEXT_ON_SWITCH,
+    .onOffensiveMultiplierFor = APPLY_ON_ANY,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2352,11 +2558,15 @@ ON_DEFENDER {
     BattleScriptCall(BattleScript_TargetAbilityStatRaiseOnMoveEnd);
     return TRUE;
 }
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_WATER) RESISTANCE(.5);
+}
 static const Ability WaterCompaction = {
     .name = $("Water Compaction"),
     .description = $("Takes 1/2 dmg from Water-type\nmoves. +2 Def when hit by those."),
     .breakable = TRUE,
     CONTEXT_ON_DEFENDER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2399,24 +2609,37 @@ static const Ability ShieldsDown = {
 
 #undef CONTEXT
 #define CONTEXT Stakeout
+ON_OFFENSIVE_MULTIPLIER {
+    if (gVolatileStructs[target].isFirstTurn == 2) MUL(2.0);
+}
 static const Ability Stakeout = {
     .name = $("Stakeout"),
     .description = $("Deals double damage to opponents\nbeing switched in."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT WaterBubble
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_WATER) MUL(2.0);
+}
 static const Ability WaterBubble = {
     .name = $("Water Bubble"),
     .description = $("Halves Fire dmg taken, no burns,\ndoubles power of its Water moves."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
 #define CONTEXT Steelworker
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_STEEL) MUL(1.3);
+}
 static const Ability Steelworker = {
     .name = $("Steelworker"),
     .description = $("Boosts the power of Steel-type\nmoves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2446,16 +2669,24 @@ static const Ability SlushRush = {
 
 #undef CONTEXT
 #define CONTEXT LongReach
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_MOVE_PHYSICAL(move) && !(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) MUL(1.2);
+}
 static const Ability LongReach = {
     .name = $("Long Reach"),
     .description = $("Doesn't make contact. Boosts\nPhys. non-contact moves by 1.2x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT LiquidVoice
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.2);
+}
 static const Ability LiquidVoice = {
     .name = $("Liquid Voice"),
     .description = $("Sound moves get a 1.2x boost\nand become Water if Normal."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2467,9 +2698,11 @@ static const Ability Triage = {
 
 #undef CONTEXT
 #define CONTEXT Galvanize
+ON_ATE_MULTIPLIER(TYPE_ELECTRIC)
 static const Ability Galvanize = {
     .name = $("Galvanize"),
     .description = $("Normal-type moves become Elec.-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2653,17 +2886,27 @@ static const Ability Dancer = {
 
 #undef CONTEXT
 #define CONTEXT Battery
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_MOVE_SPECIAL(move)) MUL(1.3);
+}
 static const Ability Battery = {
     .name = $("Battery"),
     .description = $("Grants a 1.3x power boost to\nally's Special attacks."),
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Fluffy
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE) RESISTANCE(2.0);
+    if (IsMoveMakingContact(move, attacker)) MUL(0.5);
+}
 static const Ability Fluffy = {
     .name = $("Fluffy"),
     .description = $("Takes 1/2 dmg from contact moves\nbut Fire moves hurt it 2x more."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2834,6 +3077,7 @@ static const Ability FullMetalBody = {
 static const Ability ShadowShield = {
     .name = $("Shadow Shield"),
     .description = $("At full HP, halves damage taken\nfrom attacks"),
+    .onDefensiveMultiplier = Multiscale.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -2841,13 +3085,18 @@ static const Ability ShadowShield = {
 static const Ability PrismArmor = {
     .name = $("Prism Armor"),
     .description = $("Takes 35% less damage from\nSuper-effective moves."),
+    .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
 #define CONTEXT Neuroforce
+ON_OFFENSIVE_MULTIPLIER {
+    if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.25);
+}
 static const Ability Neuroforce = {
     .name = $("Neuroforce"),
     .description = $("Grants an additional 1.25x boost\nto Super-effective moves."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -2987,10 +3236,18 @@ static const Ability SteamEngine = {
 
 #undef CONTEXT
 #define CONTEXT PunkRock
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_SOUND) MUL(1.3);
+}
+ON_DEFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_SOUND) MUL(.5);
+}
 static const Ability PunkRock = {
     .name = $("Punk Rock"),
     .description = $("Sound moves deal 1.3x more dmg.\nTakes -50% dmg from sound moves."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3016,10 +3273,14 @@ static const Ability SandSpit = {
 
 #undef CONTEXT
 #define CONTEXT IceScales
+ON_DEFENSIVE_MULTIPLIER {
+    if (IS_MOVE_SPECIAL(move)) MUL(.5);
+}
 static const Ability IceScales = {
     .name = $("Ice Scales"),
     .description = $("Halves damage taken by Special\nmoves. Does NOT double SpDef."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3059,9 +3320,12 @@ static const Ability IceFace = {
 
 #undef CONTEXT
 #define CONTEXT PowerSpot
+ON_OFFENSIVE_MULTIPLIER { MUL(1.3); }
 static const Ability PowerSpot = {
     .name = $("Power Spot"),
     .description = $("Grants a 1.3x boost to ally's\nattacks."),
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3094,9 +3358,14 @@ static const Ability ScreenCleaner = {
 
 #undef CONTEXT
 #define CONTEXT SteelySpirit
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_STEEL) MUL(1.3);
+}
 static const Ability SteelySpirit = {
     .name = $("Steely Spirit"),
     .description = $("Boosts own & ally's Steel-type\nmoves by 1.3x."),
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3158,9 +3427,13 @@ static const Ability WanderingSpirit = {
 
 #undef CONTEXT
 #define CONTEXT GorillaTactics
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_MOVE_PHYSICAL(move)) MUL(1.5);
+}
 static const Ability GorillaTactics = {
     .name = $("Gorilla Tactics"),
     .description = $("Raises own Atk by 1.5x, but can\nonly use the first chosen move."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3254,16 +3527,24 @@ static const Ability CuriousMedicine = {
 
 #undef CONTEXT
 #define CONTEXT Transistor
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_ELECTRIC) MUL(1.5);
+}
 static const Ability Transistor = {
     .name = $("Transistor"),
     .description = $("Boosts the power of Electric-\ntype moves by 1.5x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT DragonsMaw
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_DRAGON) MUL(1.5);
+}
 static const Ability DragonsMaw = {
     .name = $("Dragon's Maw"),
     .description = $("Boosts the power of Dragon-type\nmoves by 1.5x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3346,16 +3627,25 @@ static const Ability Pyromancy = {
 
 #undef CONTEXT
 #define CONTEXT KeenEdge
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) MUL(1.3);
+}
 static const Ability KeenEdge = {
     .name = $("Keen Edge"),
     .description = $("Boosts the power of slashing\nmoves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT PrismScales
+ON_DEFENSIVE_MULTIPLIER {
+    if (IS_MOVE_SPECIAL(move)) MUL(.7);
+}
 static const Ability PrismScales = {
     .name = $("Prism Scales"),
     .description = $("Takes 30% less damage from\nSpecial attacks."),
+    .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3363,6 +3653,7 @@ static const Ability PrismScales = {
 static const Ability PowerFists = {
     .name = $("Power Fists"),
     .description = $("Iron Fist moves target Special\nDefense and get a 1.3x boost."),
+    .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -3370,6 +3661,7 @@ static const Ability PowerFists = {
 static const Ability SandSong = {
     .name = $("Sand Song"),
     .description = $("Sound moves get a 1.2x boost\nand become Ground if Normal."),
+    .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -3389,9 +3681,11 @@ static const Ability Rampage = {
 
 #undef CONTEXT
 #define CONTEXT Vengeance
+ON_SWARM_MULTIPLIER(TYPE_GHOST)
 static const Ability Vengeance = {
     .name = $("Vengeance"),
     .description = $("Boosts Ghost-type moves by 1.2x,\nor 1.5x when below 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3403,30 +3697,42 @@ static const Ability BlitzBoxer = {
 
 #undef CONTEXT
 #define CONTEXT AntarcticBird
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FLYING || moveType == TYPE_ICE) MUL(1.3);
+}
 static const Ability AntarcticBird = {
     .name = $("Antarctic Bird"),
     .description = $("Ice-type and Flying-type moves\nget a 1.3x power boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Immolate
+ON_ATE_MULTIPLIER(TYPE_FIRE)
 static const Ability Immolate = {
     .name = $("Immolate"),
     .description = $("Normal-type moves become Fire-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Crystallize
+ON_ATE_MULTIPLIER(TYPE_ICE)
 static const Ability Crystallize = {
     .name = $("Crystallize"),
     .description = $("Rock-type moves become Ice-type\nmoves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Electrocytes
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_ELECTRIC) MUL(1.25);
+}
 static const Ability Electrocytes = {
     .name = $("Electrocytes"),
     .description = $("Boosts the power of Electric-\ntype moves by 1.25x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3445,17 +3751,25 @@ static const Ability Aerodynamics = {
 
 #undef CONTEXT
 #define CONTEXT ChristmasSpirit
+ON_DEFENSIVE_MULTIPLIER {
+    if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) MUL(.5);
+}
 static const Ability ChristmasSpirit = {
     .name = $("Christmas Spirit"),
     .description = $("Takes 50% less damage if hail is\nactive."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT ExploitWeakness
+ON_OFFENSIVE_MULTIPLIER {
+    if (HasAnyStatusOrAbility(target)) MUL(1.25);
+}
 static const Ability ExploitWeakness = {
     .name = $("Exploit Weakness"),
     .description = $("Moves are 1.25x stronger on foes\naffected by a status condition."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3528,9 +3842,13 @@ static const Ability AuroraBorealis = {
 
 #undef CONTEXT
 #define CONTEXT Avenger
+ON_OFFENSIVE_MULTIPLIER {
+    if (gSideTimers[GET_BATTLER_SIDE(battler)].retaliateTimer) MUL(1.5);
+}
 static const Ability Avenger = {
     .name = $("Avenger"),
     .description = $("If a party Pokémon fainted last\nturn, next move gets 1.5x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3574,10 +3892,14 @@ static const Ability LoudBang = {
 
 #undef CONTEXT
 #define CONTEXT LeadCoat
+ON_DEFENSIVE_MULTIPLIER {
+    if (IS_MOVE_PHYSICAL(move)) MUL(.6);
+}
 static const Ability LeadCoat = {
     .name = $("Lead Coat"),
     .description = $("Takes 40% less from Phys. moves.\nThis Pokémon's Speed is 0.9x."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3598,16 +3920,20 @@ static const Ability Grounded = {
 
 #undef CONTEXT
 #define CONTEXT Earthbound
+ON_SWARM_MULTIPLIER(TYPE_GROUND)
 static const Ability Earthbound = {
     .name = $("Earthbound"),
     .description = $("Boosts Ground-type moves by\n1.2x, or 1.5x when under 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT FightSpirit
+ON_ATE_MULTIPLIER(TYPE_FIGHTING)
 static const Ability FightSpirit = {
     .name = $("Fighting Spirit"),
     .description = $("Normal-type moves become Fight.-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3634,10 +3960,18 @@ static const Ability CoilUp = {
 
 #undef CONTEXT
 #define CONTEXT Fossilized
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_ROCK) MUL(1.2);
+}
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_ROCK) RESISTANCE(.5);
+}
 static const Ability Fossilized = {
     .name = $("Fossilized"),
     .description = $("Halves dmg taken by Rock moves.\nBoosts own Rock moves by 1.2x."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3660,16 +3994,34 @@ static const Ability MagicalDust = {
 
 #undef CONTEXT
 #define CONTEXT Dreamcatcher
+ON_OFFENSIVE_MULTIPLIER {
+    for (int i = 0; i < gBattlersCount; i++) {
+        if (IsBattlerAlive(i) && gBattleMons[i].status1 & STATUS1_SLEEP) {
+            MUL(2.0);
+            return;
+        }
+    }
+}
 static const Ability Dreamcatcher = {
     .name = $("Dreamcatcher"),
     .description = $("Doubles move power if anyone on\nthe field is asleep."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Nocturnal
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_DARK) MUL(1.25);
+}
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_DARK || moveType == TYPE_FAIRY) RESISTANCE(.75);
+}
 static const Ability Nocturnal = {
     .name = $("Nocturnal"),
     .description = $("Boosts own Dark moves by 1.25x.\nTakes -25% dmg from Dark/Fairy."),
+    .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3693,9 +4045,11 @@ static const Ability SelfSufficient = {
 
 #undef CONTEXT
 #define CONTEXT Tectonize
+ON_ATE_MULTIPLIER(TYPE_GROUND)
 static const Ability Tectonize = {
     .name = $("Tectonize"),
     .description = $("Normal-type moves become Ground-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3718,10 +4072,15 @@ static const Ability HalfDrake = {
 
 #undef CONTEXT
 #define CONTEXT Liquified
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_WATER) RESISTANCE(2);
+    if (IsMoveMakingContact(move, attacker)) MUL(0.5);
+}
 static const Ability Liquified = {
     .name = $("Liquified"),
     .description = $("Takes 1/2 dmg from contact moves\nbut Water moves hurt it 2x more."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3735,10 +4094,18 @@ static const Ability Dragonfly = {
 
 #undef CONTEXT
 #define CONTEXT Dragonslayer
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_BATTLER_OF_TYPE(target, TYPE_DRAGON)) RESISTANCE(1.5);
+}
+ON_DEFENSIVE_MULTIPLIER {
+    if (IS_BATTLER_OF_TYPE(attacker, TYPE_DRAGON)) MUL(.5);
+}
 static const Ability Dragonslayer = {
     .name = $("Dragonslayer"),
     .description = $("Deals 1.5x damage to Dragons.\nTakes .5x damage from Dragons."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3751,9 +4118,11 @@ static const Ability Mountaineer = {
 
 #undef CONTEXT
 #define CONTEXT Hydrate
+ON_ATE_MULTIPLIER(TYPE_WATER)
 static const Ability Hydrate = {
     .name = $("Hydrate"),
     .description = $("Normal-type moves become Water-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3767,17 +4136,26 @@ static const Ability Metallic = {
 
 #undef CONTEXT
 #define CONTEXT Permafrost
+ON_DEFENSIVE_MULTIPLIER {
+    if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.75);
+}
 static const Ability Permafrost = {
     .name = $("Permafrost"),
     .description = $("Takes 25% less damage from\nSuper-effective moves."),
+    .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT PrimalArmor
+ON_DEFENSIVE_MULTIPLIER {
+    if (typeEffectivenessModifier >= UQ_4_12(2.0)) MUL(.5);
+}
 static const Ability PrimalArmor = {
     .name = $("Primal Armor"),
     .description = $("Takes 50% less damage from\nSuper-effective moves."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3824,9 +4202,11 @@ static const Ability Juggernaut = {
 
 #undef CONTEXT
 #define CONTEXT ShortCircuit
+ON_SWARM_MULTIPLIER(TYPE_ELECTRIC)
 static const Ability ShortCircuit = {
     .name = $("Short Circuit"),
     .description = $("Boosts Elec.-type moves by 1.2x,\nor 1.5x when below 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3847,9 +4227,11 @@ static const Ability Phantom = {
 
 #undef CONTEXT
 #define CONTEXT Intoxicate
+ON_ATE_MULTIPLIER(TYPE_POISON)
 static const Ability Intoxicate = {
     .name = $("Intoxicate"),
     .description = $("Normal-type moves become Poison-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -3981,18 +4363,30 @@ ON_RECOIL {
     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
     return max(damage / 20, 1);
 }
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_ELECTRIC) MUL(1.35);
+}
 static const Ability ElectricBurst = {
     .name = $("Electric Burst"),
     .description = $("Boosts own Elec. moves by 1.35x,\ntakes 10% of dmg dealt as recoil."),
     CONTEXT_ON_RECOIL,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT RawWood
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_GRASS) MUL(1.2);
+}
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_GRASS) RESISTANCE(.5);
+}
 static const Ability RawWood = {
     .name = $("Raw Wood"),
     .description = $("Halves dmg taken by Grass moves.\nBoosts own Grass moves by 1.2x."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4031,9 +4425,13 @@ static const Ability SpiderLair = {
 
 #undef CONTEXT
 #define CONTEXT FatalPrecision
+ON_OFFENSIVE_MULTIPLIER {
+    if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.2);
+}
 static const Ability FatalPrecision = {
     .name = $("Fatal Precision"),
     .description = $("Super-effective moves never miss\nand get a 1.2x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4046,17 +4444,27 @@ static const Ability FortKnox = {
 
 #undef CONTEXT
 #define CONTEXT Seaweed
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_GRASS && IS_BATTLER_OF_TYPE(target, TYPE_FIRE)) RESISTANCE(2);
+}
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE && IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)) RESISTANCE(0.5);
+}
 static const Ability Seaweed = {
     .name = $("Seaweed"),
     .description = $("Takes 1/2 dmg from Fire if Grass,\ndoubles Grass dmg on Fire-types."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT PsychicMind
+ON_SWARM_MULTIPLIER(TYPE_PSYCHIC)
 static const Ability PsychicMind = {
     .name = $("Psychic Mind"),
     .description = $("Boosts Psychic-type moves by\n1.2x, or 1.5x when under 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4162,9 +4570,13 @@ static const Ability FlamingSoul = {
 
 #undef CONTEXT
 #define CONTEXT SagePower
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_MOVE_SPECIAL(move)) MUL(1.5);
+}
 static const Ability SagePower = {
     .name = $("Sage Power"),
     .description = $("Ups Special Attack by 50%\nand locks move."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4224,23 +4636,33 @@ static const Ability HyperAggressive = {
 
 #undef CONTEXT
 #define CONTEXT Flock
+ON_SWARM_MULTIPLIER(TYPE_FLYING)
 static const Ability Flock = {
     .name = $("Flock"),
     .description = $("Boosts Flying-type moves by 1.2x,\nor 1.5x when below 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT FieldExplorer
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_FIELD_BASED) MUL(1.5);
+}
 static const Ability FieldExplorer = {
     .name = $("Field Explorer"),
     .description = $("Boosts field moves by 50%.\nCut, Surf, Strength etc."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Striker
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_STRIKER_BOOST) MUL(1.3);
+}
 static const Ability Striker = {
     .name = $("Striker"),
     .description = $("Boosts the power of kicking\nmoves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4281,6 +4703,7 @@ static const Ability SolarFlare = {
     .name = $("Solar Flare"),
     .description = $("Chloroplast + Immolate.\nFire moves gain STAB."),
     .chloroplast = TRUE,
+    .onOffensiveMultiplier = Immolate.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -4314,9 +4737,13 @@ static const Ability Opportunist = {
 
 #undef CONTEXT
 #define CONTEXT GiantWings
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].airBased) MUL(1.3);
+}
 static const Ability GiantWings = {
     .name = $("Giant Wings"),
     .description = $("Boosts the power of wing, wind\nor air-based moves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4388,6 +4815,7 @@ static const Ability Artillery = {
 static const Ability Amplifier = {
     .name = $("Amplifier"),
     .description = $("Ups sound moves by 30% and\nmakes them hit both foes."),
+    .onOffensiveMultiplier = PunkRock.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -4422,9 +4850,11 @@ static const Ability SunWorship = {
 
 #undef CONTEXT
 #define CONTEXT Pollinate
+ON_ATE_MULTIPLIER(TYPE_BUG)
 static const Ability Pollinate = {
     .name = $("Pollinate"),
     .description = $("Normal-type moves become Bug-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4466,6 +4896,15 @@ static const Ability Nosferatu = {
 };
 
 #undef CONTEXT
+#define CONTEXT Spectralize
+ON_ATE_MULTIPLIER(TYPE_GHOST)
+static const Ability Spectralize = {
+    .name = $("Spectralize"),
+    .description = $("Normal-type moves become Ghost-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+};
+
+#undef CONTEXT
 #define CONTEXT SpectralShroud
 ON_ATTACKER {
     CHECK(ShouldApplyOnHitAffect(target))
@@ -4480,6 +4919,7 @@ static const Ability SpectralShroud = {
     .name = $("Spectral Shroud"),
     .description = $("Spectralize + 30% chance\nto badly poison the foe."),
     CONTEXT_ON_ATTACKER,
+    .onOffensiveMultiplier = Spectralize.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -4498,17 +4938,25 @@ static const Ability Thundercall = {
 
 #undef CONTEXT
 #define CONTEXT MarineApex
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_BATTLER_OF_TYPE(target, TYPE_WATER)) RESISTANCE(1.5);
+}
 static const Ability MarineApex = {
     .name = $("Marine Apex"),
     .description = $("50% more damage to Water-\ntypes + Infiltrator."),
     .onInfiltrate = Infiltrator.onInfiltrate,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT MightyHorn
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].hornBased) MUL(1.3);
+}
 static const Ability MightyHorn = {
     .name = $("Mighty Horn"),
     .description = $("Boosts the power of horn and\ndrill-based by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4530,17 +4978,12 @@ static const Ability HardenedSheath = {
 
 #undef CONTEXT
 #define CONTEXT ArcticFur
+ON_DEFENSIVE_MULTIPLIER { MUL(.65); }
 static const Ability ArcticFur = {
     .name = $("Arctic Fur"),
     .description = $("Weakens incoming physical\nand special moves by 35%."),
     .breakable = TRUE,
-};
-
-#undef CONTEXT
-#define CONTEXT Spectralize
-static const Ability Spectralize = {
-    .name = $("Spectralize"),
-    .description = $("Normal-type moves become Ghost-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4551,17 +4994,39 @@ ON_SWITCH {
     BattleScriptPushCursorAndCallback(BattleScript_LethargyEnters);
     return TRUE;
 }
+ON_OFFENSIVE_MULTIPLIER {
+    switch (gVolatileStructs[battler].slowStartTimer) {
+        case 0:
+        case 1:
+            MUL(.2);
+            return;
+
+        case 2:
+            MUL(.4);
+            return;
+
+        case 3:
+            MUL(.6);
+            return;
+
+        case 4:
+            MUL(.8);
+            return;
+    }
+}
 static const Ability Lethargy = {
     .name = $("Lethargy"),
     .description = $("Damage drops 20% each turn to 20%.\nResets on switch-in."),
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT IronBarrage
 static const Ability IronBarrage = {
     .name = $("Iron Barrage"),
-    .description = $("COMBINEs Mega Launcher\nwith Sighting System."),
+    .description = $("Mega Launcher + Sighting System."),
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -4606,10 +5071,12 @@ ON_DEFENDER {
     UseOutOfTurnAttack(battler, attacker, ability, MOVE_MACH_PUNCH, 0);
     return FALSE;
 }
+ON_DEFENSIVE_MULTIPLIER { MUL(.8); }
 static const Ability Parry = {
     .name = $("Parry"),
     .description = $("Counters contact with Mach\nPunch. Takes 20% less damage."),
     CONTEXT_ON_DEFENDER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4661,9 +5128,11 @@ static const Ability Roundhouse = {
 
 #undef CONTEXT
 #define CONTEXT Mineralize
+ON_ATE_MULTIPLIER(TYPE_ROCK)
 static const Ability Mineralize = {
     .name = $("Mineralize"),
     .description = $("Normal-type moves become Rock-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4774,16 +5243,22 @@ static const Ability DesertCloak = {
 
 #undef CONTEXT
 #define CONTEXT Draconize
+ON_ATE_MULTIPLIER(TYPE_DRAGON)
 static const Ability Draconize = {
     .name = $("Draconize"),
     .description = $("Normal-type moves become Dragon-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT PrettyPrincess
+ON_OFFENSIVE_MULTIPLIER {
+    if (!IsUnaware(battler) && HasAnyLoweredStat(target)) MUL(1.5);
+}
 static const Ability PrettyPrincess = {
     .name = $("Pretty Princess"),
     .description = $("Does 50% more damage if the\ntarget has any lowered stat."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4811,23 +5286,29 @@ static const Ability AtomicBurst = {
 
 #undef CONTEXT
 #define CONTEXT Hellblaze
+ON_BOOSTED_SWARM_MULTIPLIER(TYPE_FIRE)
 static const Ability Hellblaze = {
     .name = $("Hellblaze"),
     .description = $("Boosts Fire-type moves by 1.3x,\nor 1.8x when below 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Riptide
+ON_BOOSTED_SWARM_MULTIPLIER(TYPE_WATER)
 static const Ability Riptide = {
     .name = $("Riptide"),
     .description = $("Boosts Water-type moves by 1.3x,\nor 1.8x when below 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT ForestRage
+ON_BOOSTED_SWARM_MULTIPLIER(TYPE_GRASS)
 static const Ability ForestRage = {
     .name = $("Forest Rage"),
     .description = $("Boosts Grass-type moves by 1.3x,\nor 1.8x when below 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4874,6 +5355,7 @@ static const Ability HydroCircuit = {
     .name = $("Hydro Circuit"),
     .description = $("Electric moves +50%;\nWater moves siphon 25% damage."),
     CONTEXT_ON_ATTACKER,
+    .onOffensiveMultiplier = Transistor.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -4968,10 +5450,18 @@ static const Ability VoltRush = {
 
 #undef CONTEXT
 #define CONTEXT DuneTerror
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_GROUND) MUL(1.2);
+}
+ON_DEFENSIVE_MULTIPLIER {
+    if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) MUL(.65);
+}
 static const Ability DuneTerror = {
     .name = $("Dune Terror"),
     .description = $("Sand reduces damage by 35%.\nBoosts Ground moves by 20%."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -4981,10 +5471,14 @@ ON_RECOIL {
     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_RECOIL_NORMAL;
     return max(damage / 20, 1);
 }
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE) MUL(1.35);
+}
 static const Ability InfernalRage = {
     .name = $("Infernal Rage"),
     .description = $("Fire-type moves are boosted\nby 35% with 5% recoil."),
     CONTEXT_ON_RECOIL,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5185,9 +5679,11 @@ static const Ability AngelsWrath = {
 
 #undef CONTEXT
 #define CONTEXT PrismaticFur
+ON_DEFENSIVE_MULTIPLIER { MUL(.5); }
 static const Ability PrismaticFur = {
     .name = $("Prismatic Fur"),
     .description = $("Color Change + Protean +\nFur Coat + Ice Scales."),
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5208,9 +5704,13 @@ static const Ability ShockingJaws = {
 
 #undef CONTEXT
 #define CONTEXT FaeHunter
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_BATTLER_OF_TYPE(target, TYPE_FAIRY)) RESISTANCE(1.5);
+}
 static const Ability FaeHunter = {
     .name = $("Fae Hunter"),
     .description = $("Does 50% more damage to\nFairy-types."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5245,9 +5745,13 @@ static const Ability Evaporate = {
 
 #undef CONTEXT
 #define CONTEXT Lumberjack
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_BATTLER_OF_TYPE(target, TYPE_GRASS)) RESISTANCE(1.5);
+}
 static const Ability Lumberjack = {
     .name = $("Lumberjack"),
     .description = $("1.5x damage to Grass types."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5310,9 +5814,13 @@ static const Ability Electromorphosis = {
 
 #undef CONTEXT
 #define CONTEXT RockyPayload
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_ROCK || gBattleMoves[move].throwingBased) MUL(1.5);
+}
 static const Ability RockyPayload = {
     .name = $("Rocky Payload"),
     .description = $("Boosts the power of Rock-type\nand throwing moves by 1.5x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5528,24 +6036,29 @@ static const Ability PhantomPain = {
 
 #undef CONTEXT
 #define CONTEXT Purgatory
+ON_BOOSTED_SWARM_MULTIPLIER(TYPE_GHOST)
 static const Ability Purgatory = {
     .name = $("Purgatory"),
     .description = $("Boosts Ghost-type moves by 1.3x,\nor 1.8x when below 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Emanate
+ON_ATE_MULTIPLIER(TYPE_PSYCHIC)
 static const Ability Emanate = {
     .name = $("Emanate"),
     .description = $("Normal-type moves become Psy.-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT KunoichiBlade
 static const Ability KunoichiBlade = {
     .name = $("Kunoichi's Blade"),
-    .description = $("Boosts weaker moves and increases\nthe frequency of multi-hit moves."),
+    .description = $("Technician + Skill Link."),
     .skillLink = TRUE,
+    .onOffensiveMultiplier = Technician.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -5559,9 +6072,14 @@ static const Ability MonkeyBusiness = {
 
 #undef CONTEXT
 #define CONTEXT CombatSpecialist
+ON_OFFENSIVE_MULTIPLIER {
+    IronFist.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+    Striker.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+}
 static const Ability CombatSpecialist = {
     .name = $("Combat Specialist"),
     .description = $("Boosts the power of punching and\nkicking moves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5579,6 +6097,7 @@ static const Ability HuntersHorn = {
     .description = $("Boost horn moves and heals\n1/4 HP when defeating an enemy."),
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -5587,13 +6106,19 @@ static const Ability PixiePower = {
     .name = $("Pixie Power"),
     .description = $("1.2x accuracy. Boosts Fairy\nmoves by 1.33x for all."),
     .onSwitch = FairyAura.onSwitch,
+    .onOffensiveMultiplierFor = APPLY_ON_ANY,
+    .onOffensiveMultiplier = FairyAura.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
 #define CONTEXT PlasmaLamp
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
+}
 static const Ability PlasmaLamp = {
     .name = $("Plasma Lamp"),
     .description = $("Boost accuracy & power of Fire\n& Electric type moves by 1.2x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5620,13 +6145,18 @@ static const Ability SuperHotGoo = {
 static const Ability Nika = {
     .name = $("Nika"),
     .description = $("Iron fist + Water moves\nfunction normally under sun."),
+    .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
 #define CONTEXT Archer
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].arrowBased) MUL(1.3);
+}
 static const Ability Archer = {
     .name = $("Archer"),
     .description = $("Boosts the power of arrow moves\nby 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5638,9 +6168,13 @@ static const Ability ColdPlasma = {
 
 #undef CONTEXT
 #define CONTEXT SuperSlammer
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].hammerBased) MUL(1.3);
+}
 static const Ability SuperSlammer = {
     .name = $("Super Slammer"),
     .description = $("Boosts the power of hammer and\nslamming moves by 1.3x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5774,11 +6308,15 @@ ON_IMMUNE {
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY))
     return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
 }
+ON_DEFENSIVE_MULTIPLIER {
+    if (IS_MOVE_SPECIAL(move) && IsBattlerWeatherAffected(attacker, WEATHER_SANDSTORM_ANY)) MUL(.5);
+}
 static const Ability SandGuard = {
     .name = $("Sand Guard"),
     .description = $("Blocks priority and reduces\nspecial damage by 1/2 in sand."),
     .breakable = TRUE,
     CONTEXT_ON_IMMUNE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -5894,6 +6432,7 @@ static const Ability Enlightened = {
     .name = $("Enlightened"),
     .description = $("Emanate + Inner Focus."),
     .breakable = TRUE,
+    .onOffensiveMultiplier = Emanate.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -5958,9 +6497,13 @@ static const Ability CryoProficiency = {
 
 #undef CONTEXT
 #define CONTEXT ArcaneForce
+ON_OFFENSIVE_MULTIPLIER {
+    if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.1);
+}
 static const Ability ArcaneForce = {
     .name = $("Arcane Force"),
     .description = $("All moves gain STAB.\nUps “supereffective” by 10%."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6019,6 +6562,7 @@ static const Ability Suppress = {
 static const Ability Refrigerator = {
     .name = $("Refrigerator"),
     .description = $("Refrigerate + Illuminate."),
+    .onOffensiveMultiplier = Refrigerate.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -6066,20 +6610,27 @@ static const Ability ChangeOfHeart = {
 static const Ability MysticBlades = {
     .name = $("Mystic Blades"),
     .description = $("Keen edge moves become special\nand deal 30% more damage."),
+    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
 #define CONTEXT Determination
+ON_OFFENSIVE_MULTIPLIER {
+    if (HasAnyStatusOrAbility(battler) && IS_MOVE_SPECIAL(move)) MUL(1.5);
+}
 static const Ability Determination = {
     .name = $("Determination"),
     .description = $("Ups Special Attack by 50%\nif suffering."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT Fertilize
+ON_ATE_MULTIPLIER(TYPE_GRASS)
 static const Ability Fertilize = {
     .name = $("Fertilize"),
     .description = $("Normal-type moves become Grass-\ntype moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6104,9 +6655,11 @@ static const Ability PureLove = {
 
 #undef CONTEXT
 #define CONTEXT Fighter
+ON_SWARM_MULTIPLIER(TYPE_FIGHTING)
 static const Ability Fighter = {
     .name = $("Fighter"),
     .description = $("Boosts Fight.-type moves by 1.2x,\nor 1.5x when below 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6127,16 +6680,25 @@ static const Ability Telekinetic = {
 
 #undef CONTEXT
 #define CONTEXT Combustion
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE) MUL(1.5);
+}
 static const Ability Combustion = {
     .name = $("Combustion"),
     .description = $("Boosts the power of Fire-type\nmoves by 1.5x."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT PonyPower
+ON_OFFENSIVE_MULTIPLIER {
+    KeenEdge.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+    MysticBlades.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+}
 static const Ability PonyPower = {
     .name = $("Pony Power"),
     .description = $("Keen Edge + Mystic Blades."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6215,6 +6777,7 @@ static const Ability Devourer = {
     .name = $("Devourer"),
     .description = $("Strong Jaw + Primal Maw."),
     .onParentalBond = PrimalMaw.onParentalBond,
+    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -6242,10 +6805,16 @@ static const Ability Grappler = {
 
 #undef CONTEXT
 #define CONTEXT BassBoosted
+ON_OFFENSIVE_MULTIPLIER {
+    Amplifier.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+    PunkRock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+}
 static const Ability BassBoosted = {
     .name = $("Bass Boosted"),
     .description = $("Amplifier + Punk Rock."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onDefensiveMultiplier = PunkRock.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -6359,9 +6928,13 @@ static const Ability Hubris = {
 
 #undef CONTEXT
 #define CONTEXT CosmicDaze
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMons[target].status2 & STATUS2_CONFUSION) MUL(2);
+}
 static const Ability CosmicDaze = {
     .name = $("Cosmic Daze"),
     .description = $("2x damage vs confused. Enemies\ntake 2x confusion damage."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6383,10 +6956,12 @@ ON_END_TURN {
     BattleScriptPushCursorAndCallback(BattleScript_AbilitySelfDamage);
     return TRUE;
 }
+ON_OFFENSIVE_MULTIPLIER { MUL(1.3); }
 static const Ability BloodPrice = {
     .name = $("Blood Price"),
     .description = $("Does 30% more damage but\nlose 10% HP when attacking."),
     CONTEXT_ON_END_TURN,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6425,10 +7000,14 @@ static const Ability VoodooPower = {
 
 #undef CONTEXT
 #define CONTEXT ChromeCoat
+ON_DEFENSIVE_MULTIPLIER {
+    if (IS_MOVE_SPECIAL(move)) MUL(.6);
+}
 static const Ability ChromeCoat = {
     .name = $("Chrome Coat"),
     .description = $("Reduces special damage taken by\n40%, but decreases Speed by 10%."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6436,6 +7015,7 @@ static const Ability ChromeCoat = {
 static const Ability Banshee = {
     .name = $("Banshee"),
     .description = $("Sound moves get a 1.2x boost\nand become Ghost if Normal."),
+    .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -6476,9 +7056,14 @@ static const Ability SeedSower = {
 
 #undef CONTEXT
 #define CONTEXT Airborne
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FLYING) MUL(1.3);
+}
 static const Ability Airborne = {
     .name = $("Airborne"),
     .description = $("Boosts own & ally's Flying-type\nmoves by 1.3x."),
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6521,10 +7106,14 @@ static const Ability SaltCircle = {
 
 #undef CONTEXT
 #define CONTEXT PurifyingSalt
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_GHOST) RESISTANCE(.5);
+}
 static const Ability PurifyingSalt = {
     .name = $("Purifying Salt"),
     .description = $("Immune to status conditions.\nTake 1/2 damage from Ghost."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -6816,6 +7405,7 @@ static const Ability VengefulSpirit = {
     .name = $("Vengeful Spirit"),
     .description = $("Haunted Spirit + Vengeance."),
     .onDefender = HauntedSpirit.onDefender,
+    .onOffensiveMultiplier = Vengeance.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -6857,6 +7447,7 @@ static const Ability ArmorTail = {
 static const Ability MindCrush = {
     .name = $("Mind Crunch"),
     .description = $("Biting moves use SpAtk and\ndeal 30% more damage."),
+    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -6900,6 +7491,7 @@ static const Ability FireScales = {
     .name = $("Fire Scales"),
     .description = $("Halves damage taken by Special\nmoves. Does NOT double SpDef."),
     .breakable = TRUE,
+    .onDefensiveMultiplier = IceScales.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7023,6 +7615,8 @@ static const Ability BeadsOfRuin = {
 static const Ability PermafrostClone = {
     .name = $("Thick Skin"),
     .description = $("Takes 25% less damage from\nSuper-effective moves."),
+    .breakable = TRUE,
+    .onDefensiveMultiplier = Permafrost.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7056,18 +7650,26 @@ ON_IMMUNE {
     CHECK(IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY))
     return QueenlyMajesty.onImmune(battler, attacker, move, moveType, immunityScript);
 }
+ON_DEFENSIVE_MULTIPLIER {
+    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && IS_MOVE_PHYSICAL(move)) MUL(.5);
+}
 static const Ability SunBasking = {
     .name = $("Sun Basking"),
     .description = $("Blocks priority and reduces\nphysical damage by 1/2 in sun."),
     .breakable = TRUE,
     CONTEXT_ON_IMMUNE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT WingedKing
+ON_OFFENSIVE_MULTIPLIER {
+    if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.33);
+}
 static const Ability WingedKing = {
     .name = $("Winged King"),
     .description = $("Ups “supereffective” by 33%."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -7083,6 +7685,7 @@ static const Ability HadronEngine = {
 static const Ability IronSerpent = {
     .name = $("Iron Serpent"),
     .description = $("Ups “supereffective” by 33%."),
+    .onOffensiveMultiplier = WingedKing.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7097,6 +7700,7 @@ static const Ability WeatherDoubleBoost = {
 static const Ability SweepingEdgePlus = {
     .name = $("Blademaster"),
     .description = $("Sweeping Edge + Keen Edge."),
+    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7142,6 +7746,7 @@ static const Ability MoltenBlades = {
     .name = $("Molten Blades"),
     .description = $("Keen Edge + Keen Edge moves\nhave a 20% chance to burn."),
     CONTEXT_ON_ATTACKER,
+    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7231,6 +7836,7 @@ static const Ability BrawlingWyvern = {
 static const Ability MythicalArrows = {
     .name = $("Mythical Arrows"),
     .description = $("Arrow moves become special\nand deal 30% more damage."),
+    .onOffensiveMultiplier = Archer.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7249,9 +7855,13 @@ static const Ability Lawnmower = {
 
 #undef CONTEXT
 #define CONTEXT Flourish
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_GRASS && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) MUL(1.5);
+}
 static const Ability Flourish = {
     .name = $("Flourish"),
     .description = $("Boosts Grass moves by 50% in\ngrassy terrain."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -7272,10 +7882,15 @@ static const Ability Contempt = {
 
 #undef CONTEXT
 #define CONTEXT Aerialist
+ON_OFFENSIVE_MULTIPLIER {
+    Levitate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+    Flock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+}
 static const Ability Aerialist = {
     .name = $("Aerialist"),
     .description = $("Levitate + Flock."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -7356,6 +7971,7 @@ static const Ability AppleEnlightenment = {
     .description = $("Fur coat + Magic Guard."),
     .breakable = TRUE,
     .magicGuard = TRUE,
+    .onDefensiveMultiplier = FurCoat.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7373,6 +7989,7 @@ static const Ability FlamingMaw = {
     .name = $("Flaming Maw"),
     .description = $("Strong Jaw + Flaming Jaws"),
     .onAttacker = FlamingJaws.onAttacker,
+    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7399,9 +8016,11 @@ static const Ability Demolitionist = {
 
 #undef CONTEXT
 #define CONTEXT RockhardWill
+ON_SWARM_MULTIPLIER(TYPE_ROCK)
 static const Ability RockhardWill = {
     .name = $("Rockhard Will"),
     .description = $("Boosts Rock-type moves by 1.2x,\nor 1.5x when under 1/3 HP."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -7445,6 +8064,8 @@ static const Ability OldMariner = {
     .name = $("Old Mariner"),
     .description = $("Seaweed + Water STAB."),
     .breakable = TRUE,
+    .onOffensiveMultiplier = Seaweed.onOffensiveMultiplier,
+    .onDefensiveMultiplier = Seaweed.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7482,6 +8103,7 @@ static const Ability Surprise = {
 static const Ability SnowSong = {
     .name = $("Snow Song"),
     .description = $("Sound moves get a 1.2x boost\nand become Ice if Normal."),
+    .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7648,9 +8270,11 @@ static const Ability PiercingSolo = {
 
 #undef CONTEXT
 #define CONTEXT Rhythmic
+ON_OFFENSIVE_MULTIPLIER { MulModifier(modifier, UQ_4_12(1.0) + 10 * gBattleStruct->sameMoveTurns[battler]); }
 static const Ability Rhythmic = {
     .name = $("Rhythmic"),
     .description = $("Deals 10% more damage for\neach repeated move use."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -7705,9 +8329,13 @@ static const Ability IceColdHunter = {
 
 #undef CONTEXT
 #define CONTEXT SoulCrusher
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].hammerBased) MUL(1.1);
+}
 static const Ability SoulCrusher = {
     .name = $("Soul Crusher"),
     .description = $("Hammer moves become Special\nand get a 1.1x power boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -7741,6 +8369,7 @@ static const Ability Unicorn = {
     .description = $("Mighty Horn + Dazzling."),
     .onImmuneFor = APPLY_ON_ALLY,
     .onImmune = QueenlyMajesty.onImmune,
+    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7791,10 +8420,14 @@ ON_ATTACKER {
     }
     return FALSE;
 }
+ON_OFFENSIVE_MULTIPLIER {
+    if (IS_MOVE_PHYSICAL(move)) MUL(1.2);
+}
 static const Ability VenoblazePincers = {
     .name = $("Venoblaze Pincers"),
     .description = $("1.2x boost to physical moves and\n20% chance to Burn or Poison."),
     CONTEXT_ON_ATTACKER,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -7870,6 +8503,7 @@ static const Ability Tag = {
 static const Ability PowerMetal = {
     .name = $("Power Metal"),
     .description = $("Sound moves get a 1.2x boost\nand become Steel if Normal."),
+    .onOffensiveMultiplier = LiquidVoice.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7877,13 +8511,16 @@ static const Ability PowerMetal = {
 static const Ability PowerEdge = {
     .name = $("Power Edge"),
     .description = $("Keen Edge moves target Special\nDefense and get a 1.3x boost."),
+    .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
 #define CONTEXT Superconductor
+ON_ATE_MULTIPLIER(TYPE_ELECTRIC)
 static const Ability Superconductor = {
     .name = $("Superconductor"),
     .description = $("Steel-type moves become Electric\n-type moves and get a 1.1x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -7899,6 +8536,7 @@ static const Ability UltraInstinct = {
     .name = $("Ultra Instinct"),
     .description = $("Counters contact with Vacuum\nWave. Takes 20% less damage."),
     CONTEXT_ON_DEFENDER,
+    .onDefensiveMultiplier = Parry.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7911,9 +8549,13 @@ static const Ability UnlockedPotential = {
 
 #undef CONTEXT
 #define CONTEXT HigherRank
+ON_OFFENSIVE_MULTIPLIER {
+    if (GetMovePriority(battler, move, target) > 0) MUL(1.2);
+}
 static const Ability HigherRank = {
     .name = $("Higher Rank"),
     .description = $("Priority moves get a 1.2x boost."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -7930,6 +8572,8 @@ static const Ability FuneralPyre = {
 static const Ability FlameBubble = {
     .name = $("Flame Bubble"),
     .description = $("Water Bubble + Flaming Soul."),
+    .onOffensiveMultiplier = WaterBubble.onOffensiveMultiplier,
+    .onDefensiveMultiplier = WaterBubble.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -7939,6 +8583,7 @@ static const Ability ElementalVortex = {
     .name = $("Elemental Vortex"),
     .description = $("Flash Fire + Water Absorb."),
     CONTEXT_ON_ABSORB,
+    .onOffensiveMultiplier = FlashFire.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8004,17 +8649,29 @@ static const Ability DracoMorale = {
 
 #undef CONTEXT
 #define CONTEXT BadOmen
+ON_DEFENSIVE_MULTIPLIER {
+    if (isCrit) MUL(.25);
+}
 static const Ability BadOmen = {
     .name = $("Bad Omen"),
     .description = $("Foes min roll and may miss.\nTakes 1/4 damage from crits."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
 #define CONTEXT MoshPit
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMoves[move].flags & FLAG_RECKLESS_BOOST)
+        MUL(1.25);
+    else
+        MUL(1.5);
+}
 static const Ability MoshPit = {
     .name = $("Mosh Pit"),
     .description = $("Ally's attacks get a 1.25x boost.\n1.5x if attack causes recoil."),
+    .onOffensiveMultiplierFor = APPLY_ON_ALLY_ONLY,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8045,10 +8702,14 @@ static const Ability BloodStain = {
 
 #undef CONTEXT
 #define CONTEXT BloodStigma
+ON_OFFENSIVE_MULTIPLIER {
+    if (gBattleMons[target].status1 & STATUS1_BLEED || IsBloodStainAffected(target)) MUL(1.5);
+}
 static const Ability BloodStigma = {
     .name = $("Blood Stigma"),
     .description = $("Immune to status. Gets a 50%\nboost vs bleeding foes."),
     .unsuppressable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8098,10 +8759,15 @@ static const Ability Petrify = {
 
 #undef CONTEXT
 #define CONTEXT Fluffiest
+ON_DEFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_FIRE) RESISTANCE(2.0);
+    if (IsMoveMakingContact(move, attacker)) MUL(0.5);
+}
 static const Ability Fluffiest = {
     .name = $("Fluffiest"),
     .description = $("Quarters contact damage taken.\n4x weak to fire."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8123,9 +8789,14 @@ static const Ability WayOfSwiftness = {
 
 #undef CONTEXT
 #define CONTEXT AtomicPunch
+ON_OFFENSIVE_MULTIPLIER {
+    IronFist.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+    Steelworker.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+}
 static const Ability AtomicPunch = {
     .name = $("Atomic Punch"),
     .description = $("Iron Fist + Steelworker."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8134,6 +8805,7 @@ static const Ability IronGiant = {
     .name = $("Iron Giant"),
     .description = $("Heatproof + Juggernaut."),
     .breakable = TRUE,
+    .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8143,6 +8815,7 @@ static const Ability MasterHand = {
     .description = $("Mega Launcher + Rampage."),
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = Rampage.onBattlerFaints,
+    .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8150,6 +8823,7 @@ static const Ability MasterHand = {
 static const Ability FinalBlow = {
     .name = $("Final Blow"),
     .description = $("Unseen Fist + Fatal Precision."),
+    .onOffensiveMultiplier = FatalPrecision.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8189,10 +8863,15 @@ static const Ability VitalityStrike = {
 
 #undef CONTEXT
 #define CONTEXT HugeWings
+ON_OFFENSIVE_MULTIPLIER {
+    GiantWings.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+    Levitate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+}
 static const Ability HugeWings = {
     .name = $("Huge Wings"),
     .description = $("Giant Wings + Levitate."),
     .breakable = TRUE,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8319,6 +8998,7 @@ static const Ability ApexPredator = {
     .description = $("Tough Claws + Predator."),
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onOffensiveMultiplier = ToughClaws.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8405,10 +9085,14 @@ ON_END_TURN {
     BattleScriptPushCursorAndCallback(BattleScript_AttackerBecameTheTypeFullEnd3);
     return TRUE;
 }
+ON_OFFENSIVE_MULTIPLIER {
+    if (StabMultiplierInHalves(battler, moveType, move) > 2) MUL(1.2);
+}
 static const Ability ColorSpectrum = {
     .name = $("Color Spectrum"),
     .description = $("Same-type attacks get a 1.2x\nboost. Changes type each turn."),
     CONTEXT_ON_END_TURN,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8417,6 +9101,7 @@ static const Ability SteelBeetle = {
     .name = $("Steel Beetle"),
     .description = $("Raging Boxer + Pollinate."),
     .onParentalBond = RagingBoxer.onParentalBond,
+    .onOffensiveMultiplier = Pollinate.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8451,10 +9136,14 @@ ON_DEFENDER {
     BattleScriptCall(BattleScript_RagePointActivates);
     return TRUE;
 }
+ON_OFFENSIVE_MULTIPLIER {
+    if (HasAnyStatusOrAbility(battler)) MUL(1.5);
+}
 static const Ability RagePoint = {
     .name = $("Rage Point"),
     .description = $("Gets a 1.5x boost while statused.\nRaises offenses when crit."),
     CONTEXT_ON_DEFENDER,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8473,10 +9162,12 @@ static const Ability HotCoals = {
 
 #undef CONTEXT
 #define CONTEXT TerastalTreasure
+ON_DEFENSIVE_MULTIPLIER { MUL(.6); }
 static const Ability TerastalTreasure = {
     .name = $("Terastal Treasure"),
     .description = $("Reduces damage taken by 40%,\nbut lowers speed by 20%."),
     .breakable = TRUE,
+    CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8485,6 +9176,7 @@ static const Ability ShockingMaw = {
     .name = $("Shocking Maw"),
     .description = $("Strong Jaw + Bite moves have\n50% paralysis chance."),
     .onAttacker = ShockingJaws.onAttacker,
+    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8501,6 +9193,7 @@ static const Ability GleamEyes = {
 static const Ability RousedFangs = {
     .name = $("Megabite"),
     .description = $("Biting moves use SpAtk and\ndeal 30% more damage."),
+    .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8509,6 +9202,7 @@ static const Ability DreamState = {
     .name = $("Dream State"),
     .description = $("Immune to critical hits. Takes\n20% less damage from all attacks."),
     .breakable = TRUE,
+    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8533,15 +9227,20 @@ static const Ability FlameShield = {
     .name = $("Flame Shield"),
     .description = $("Takes 35% less damage from\nSuper-effective moves."),
     .breakable = TRUE,
+    .onDefensiveMultiplier = Filter.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
 #define CONTEXT AquaticDweller
 ON_SWITCH { return AddBattlerType(battler, TYPE_WATER); }
+ON_OFFENSIVE_MULTIPLIER {
+    if (moveType == TYPE_WATER) MUL(1.5);
+}
 static const Ability AquaticDweller = {
     .name = $("Aquatic Dweller"),
     .description = $("Boosts the power of Water-type\nmoves by 1.5x."),
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8698,9 +9397,14 @@ static const Ability TrashHeap = {
 
 #undef CONTEXT
 #define CONTEXT SludgyMix
+ON_OFFENSIVE_MULTIPLIER {
+    Intoxicate.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+    PunkRock.onOffensiveMultiplier(battler, target, move, moveType, basePower, typeEffectivenessMultiplier, isCrit, resistance, modifier);
+}
 static const Ability SludgyMix = {
     .name = $("Sludgy Mix"),
     .description = $("Intoxicate + Punk Rock."),
+    CONTEXT_ON_OFFENSIVE_MULTIPLIER,
 };
 
 #undef CONTEXT
@@ -8709,6 +9413,7 @@ static const Ability Overwatch = {
     .name = $("Overwatch"),
     .description = $("On the Prowl + Stakeout."),
     .onSwitch = OnTheProwl.onSwitch,
+    .onOffensiveMultiplier = Stakeout.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8718,6 +9423,7 @@ static const Ability WindRage = {
     .name = $("Wind Rage"),
     .description = $("Uses Defog on switch-in. Air-\nbased moves get a 1.3x boost."),
     CONTEXT_ON_SWITCH,
+    .onOffensiveMultiplier = GiantWings.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8755,6 +9461,7 @@ static const Ability ToTheBone = {
     .name = $("To The Bone"),
     .description = $("Critical hits get a 1.5x boost and\ninflict bleeding."),
     .onAttacker = RazorSharp.onAttacker,
+    .onOffensiveMultiplier = Sniper.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8876,6 +9583,7 @@ static const Ability Breakwater = {
     .name = $("Breakwater"),
     .description = $("Swift Swim + Stall."),
     .breakable = TRUE,
+    .onDefensiveMultiplier = Stall.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8883,6 +9591,7 @@ static const Ability Breakwater = {
 static const Ability MagicalFists = {
     .name = $("Magical Fists"),
     .description = $("Punching moves use Special\nAttack and get a 1.3x boost."),
+    .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -8968,6 +9677,7 @@ ON_ABSORB {
 static const Ability Reservoir = {
     .name = $("Reservoir"),
     .description = $("Water Absorb + Storm Drain."),
+    .breakable = TRUE,
     .redirectType = TYPE_WATER,
     CONTEXT_ON_ABSORB,
 };
@@ -8989,6 +9699,7 @@ static const Ability Neurotoxin = {
 static const Ability EnergizedHorns = {
     .name = $("Energy Horns"),
     .description = $("Mighty horn moves become special\nand deal 30% more damage."),
+    .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -9014,6 +9725,8 @@ static const Ability SpiderLairUpgrade = {
 static const Ability CrustCoat = {
     .name = $("Crust Coat"),
     .description = $("Immune to critical hits. Takes\n20% less damage from all attacks."),
+    .breakable = TRUE,
+    .onDefensiveMultiplier = BattleArmor.onDefensiveMultiplier,
 };
 
 #undef CONTEXT
@@ -9021,6 +9734,8 @@ static const Ability CrustCoat = {
 static const Ability Puffy = {
     .name = $("Puffy"),
     .description = $("Takes 1/2 dmg from contact moves\nbut Fire moves hurt it 2x more."),
+    .breakable = TRUE,
+    .onDefensiveMultiplier = Fluffy.onDefensiveMultiplier,
 };
 
 #undef CONTEXT

@@ -22,7 +22,6 @@ typedef int (*AbilityOnDefenderHandler)(int ability, int battler, int attacker, 
 typedef int (*AbilityOnRecoilHandler)(int damage, int battler, int moveType);
 typedef int (*AbilityOnReactiveHandler)(int ability, int battler);
 typedef int (*AbilityOnBattlerFaintsHandler)(int ability, int battler, int fainted, int move, int moveType);
-
 typedef enum {
     MULTIHIT_SINGLE,
     MULTIHIT_TWO_TO_FIVE,
@@ -43,17 +42,23 @@ typedef enum {
     PARENTAL_BOND_ICE_COLD_HUNTER,
 } MultihitType;
 typedef MultihitType (*AbilityOnParentalBondHandler)(int battler, int move, int moveType);
+typedef void (*AbilityOnOffensiveMultiplierHandler)(
+    int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistance, u16* modifier);
+typedef void (*AbilityOnDefensiveMultiplierHandler)(
+    int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
 
 typedef enum {
     APPLY_ON_SELF = 0,
-    APPLY_ON_ALLY = 1,
-    APPLY_ON_FOE = 2,
-    APPLY_ON_ANY = 3,
+    APPLY_IGNORE_SELF = 1 << 2,
+    APPLY_ON_ALLY = 1 << 0,
+    APPLY_ON_ALLY_ONLY = APPLY_ON_ALLY | APPLY_IGNORE_SELF,
+    APPLY_ON_FOE = 1 << 1 | APPLY_IGNORE_SELF,
+    APPLY_ON_ANY = APPLY_ON_ALLY | APPLY_ON_FOE,
 } AbilityApplyOn;
 
 typedef enum {
-    APPLY_ON_ATTACKER = 1 << 2,
-    APPLY_ON_TARGET = 2 << 2,
+    APPLY_ON_ATTACKER = 1 << 3,
+    APPLY_ON_TARGET = 2 << 3,
     APPLY_ON_ATTACKER_OR_TARGET = APPLY_ON_ATTACKER | APPLY_ON_TARGET,
 } AbilityApplyOnWithTarget;
 
@@ -74,21 +79,24 @@ typedef struct Ability {
     const AbilityOnReactiveHandler onReactive;
     const AbilityOnBattlerFaintsHandler onBattlerFaints;
     const AbilityOnParentalBondHandler onParentalBond;
+    const AbilityOnOffensiveMultiplierHandler onOffensiveMultiplier;
+    const AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
+    u16 redirectType:5;
+    AbilityApplyOn onImmuneFor:3;
+    u16 noDamageHits:2;
     u16 breakable:1;
     u16 unsuppressable:1;
     u16 persistent:1;
     u16 randomizerBanned:1;
     u16 unaware:1;
     u16 absorbUp2:1;
-    u16 redirectType:5;
     u16 isSoundproof:1;
-    u16 noDamageHits:2;
-    AbilityApplyOn onImmuneFor:2;
     u16 magicGuard:1;
     u16 noRecoil:1;
     u16 halfRecoil:1;
     u16 chloroplast:1;
-    AbilityApplyOnWithTarget onBattlerFaintsFor:4;
+    AbilityApplyOnWithTarget onBattlerFaintsFor:5;
+    AbilityApplyOn onOffensiveMultiplierFor:3;
     u16 skillLink:1;
     u16 resistsFortKnox:1;
     u16 fortKnox:1;
