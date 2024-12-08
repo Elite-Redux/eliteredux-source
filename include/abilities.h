@@ -1,8 +1,8 @@
-#include "constants/abilities.h"
-#include "global.h"
-
 #ifndef GUARD_ABILITIES_H
 #define GUARD_ABILITIES_H
+
+#include "constants/abilities.h"
+#include "global.h"
 
 typedef int (*AbilityOnSwitchHandler)(int ability, int battler);
 typedef int (*AbilityOnAbsorbHandler)(int battler, int move, int moveType, int* statId);
