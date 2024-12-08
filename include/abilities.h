@@ -24,6 +24,27 @@ typedef int (*AbilityOnReactiveHandler)(int ability, int battler);
 typedef int (*AbilityOnBattlerFaintsHandler)(int ability, int battler, int fainted, int move, int moveType);
 
 typedef enum {
+    MULTIHIT_SINGLE,
+    MULTIHIT_TWO_TO_FIVE,
+    MULTIHIT_FOUR_OR_FIVE,
+    MULTIHIT_TWO,
+    MULTIHIT_THREE,
+    MULTIHIT_FIVE,
+    MULTIHIT_TRIPLE_KICK,
+    MULTIHIT_TEN_CAN_MISS,
+    MULTIHIT_TEN,
+    MULTIHIT_BEAT_UP,
+    PARENTAL_BOND_START,
+    PARENTAL_BOND_HYPER_AGGRESSIVE = PARENTAL_BOND_START,
+    PARENTAL_BOND_PRIMAL_MAW,
+    PARENTAL_BOND_DUAL_WIELD,
+    PARENTAL_BOND_MINION_CONTROL,
+    PARENTAL_BOND_THREE_HEADED,
+    PARENTAL_BOND_ICE_COLD_HUNTER,
+} MultihitType;
+typedef MultihitType (*AbilityOnParentalBondHandler)(int battler, int move, int moveType);
+
+typedef enum {
     APPLY_ON_SELF = 0,
     APPLY_ON_ALLY = 1,
     APPLY_ON_FOE = 2,
@@ -52,6 +73,7 @@ typedef struct Ability {
     const AbilityOnRecoilHandler onRecoil;
     const AbilityOnReactiveHandler onReactive;
     const AbilityOnBattlerFaintsHandler onBattlerFaints;
+    const AbilityOnParentalBondHandler onParentalBond;
     u16 breakable:1;
     u16 unsuppressable:1;
     u16 persistent:1;
@@ -67,6 +89,9 @@ typedef struct Ability {
     u16 halfRecoil:1;
     u16 chloroplast:1;
     AbilityApplyOnWithTarget onBattlerFaintsFor:4;
+    u16 skillLink:1;
+    u16 resistsFortKnox:1;
+    u16 fortKnox:1;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];

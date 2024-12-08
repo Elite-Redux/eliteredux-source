@@ -96,6 +96,7 @@ int UpdateBattlerItem(int battler, int newItem);
 int Infiltrates(int battler, int move, InfiltrateType type);
 int SetEncore(int target);
 bool32 HasAttackerFaintedTarget(void);
+int HasFortKnox(int battler);
 
 extern void (*const gBattleScriptingCommandsTable[])(void);
 extern const u8 gBattlePalaceNatureToMoveGroupLikelihood[NUM_NATURES][4];

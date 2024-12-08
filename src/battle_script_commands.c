@@ -1004,64 +1004,22 @@ int ShouldSetMoldBreaker(int battler, int move) {
 }
 
 MultihitType GetParentalBondType(int battler, int target, int move, int moveType) {
-    int i;
-
     if (!IsMoveAffectedByParentalBond(move, battler)) return MULTIHIT_SINGLE;
 
-    if (BattlerHasAbility(target, ABILITY_FORT_KNOX, FALSE)) {
-        if (BattlerHasAbility(battler, ABILITY_PARENTAL_BOND, FALSE)) return PARENTAL_BOND_HYPER_AGGRESSIVE;
-        if (BattlerHasAbility(battler, ABILITY_MULTI_HEADED, FALSE)) {
-            if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
-            if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
-        }
-        return MULTIHIT_SINGLE;
-    }
+    int hasFortKnox = HasFortKnox(target);
 
-    for (i = 0; i < TOTAL_ABILITY_COUNT; i++) {
-        switch (GetAbilityAtIndex(battler, i, FALSE)) {
-            case ABILITY_PARENTAL_BOND:
-            case ABILITY_HYPER_AGGRESSIVE:
-            case ABILITY_RAGING_GODDESS:
-            case ABILITY_BALLOON_BLITZ:
-                return PARENTAL_BOND_HYPER_AGGRESSIVE;
-
-            case ABILITY_STEEL_BEETLE:
-            case ABILITY_RAGING_BOXER:
-                REQUIRE(IS_IRON_FIST(battler, move))
-                return PARENTAL_BOND_PRIMAL_MAW;
-
-            case ABILITY_DUAL_WIELD:
-                REQUIRE(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
-                return PARENTAL_BOND_DUAL_WIELD;
-
-            case ABILITY_DUAL_HAMMER:
-                REQUIRE(gBattleMoves[move].hammerBased)
-                return PARENTAL_BOND_DUAL_WIELD;
-
-            case ABILITY_RAGING_MOTH:
-                REQUIRE(moveType == TYPE_FIRE)
-                return PARENTAL_BOND_DUAL_WIELD;
-
-            case ABILITY_DEVOURER:
-            case ABILITY_PRIMAL_MAW:
-                REQUIRE(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
-                return PARENTAL_BOND_PRIMAL_MAW;
-
-            case ABILITY_MULTI_HEADED:
-                if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
-                if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
-                break;
-
-            case ABILITY_MINION_CONTROL:
-                return PARENTAL_BOND_MINION_CONTROL;
-
-            case ABILITY_ICE_COLD_HUNTER:
-                REQUIRE(moveType == TYPE_ICE)
-                return PARENTAL_BOND_ICE_COLD_HUNTER;
-        }
-    }
+    ON_ABILITY(battler,
+               FALSE,
+               gAbilities[ability].onParentalBond && (!hasFortKnox || gAbilities[ability].resistsFortKnox),
+               int result = gAbilities[ability].onParentalBond(battler, move, moveType);
+               if (result) return result)
 
     return ABILITY_NONE;
+}
+
+int HasFortKnox(int battler) {
+    RETURN_TRUE_IF_ABILITY_FLAG(battler, FALSE, fortKnox)
+    return FALSE;
 }
 
 int GetParentalBondCount(int battler, MultihitType parentalBondType) {
@@ -9029,7 +8987,7 @@ static void Cmd_various(void) {
             for (i = 0; i < gBattlersCount; i++) {
                 if (i == gActiveBattler) continue;
                 if (i == gBattlerAttacker) continue;
-                
+
                 u8* target = &gBattleStruct->moveTarget[i];
 
                 if (*target == gBattlerAttacker)

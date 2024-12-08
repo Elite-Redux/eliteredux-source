@@ -73,6 +73,9 @@
 #define ON_BATTLER_FAINTS static int COMBINE(onBattlerFaints, CONTEXT)(int ability, int battler, int fainted, int move, int moveType)
 #define CONTEXT_ON_BATTLER_FAINTS .onBattlerFaints = COMBINE(onBattlerFaints, CONTEXT)
 
+#define ON_PARENTAL_BOND static MultihitType COMBINE(onParentalBond, CONTEXT)(int battler, int move, int moveType)
+#define CONTEXT_ON_PARENTAL_BOND .onParentalBond = COMBINE(onParentalBond, CONTEXT)
+
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
         case ABILITY_BS_EXECUTE:
@@ -1213,6 +1216,7 @@ static const Ability Adaptability = {
 static const Ability SkillLink = {
     .name = $("Skill Link"),
     .description = $("Multi-hit moves always hit the\nmaximum number of times."),
+    .skillLink = TRUE,
 };
 
 #undef CONTEXT
@@ -2206,9 +2210,12 @@ static const Ability Aerilate = {
 
 #undef CONTEXT
 #define CONTEXT ParentalBond
+ON_PARENTAL_BOND { return PARENTAL_BOND_HYPER_AGGRESSIVE; }
 static const Ability ParentalBond = {
     .name = $("Parental Bond"),
     .description = $("Moves hit twice. 1st hit at 100%\npower, 2nd hit at 25%."),
+    .resistsFortKnox = TRUE,
+    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -3775,9 +3782,14 @@ static const Ability PrimalArmor = {
 
 #undef CONTEXT
 #define CONTEXT RagingBoxer
+ON_PARENTAL_BOND {
+    CHECK(IS_IRON_FIST(battler, move))
+    return PARENTAL_BOND_PRIMAL_MAW;
+}
 static const Ability RagingBoxer = {
     .name = $("Raging Boxer"),
     .description = $("Punching moves hit twice. 1st hit\nat 100% power, 2nd hit at 40%."),
+    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -4029,6 +4041,7 @@ static const Ability FatalPrecision = {
 static const Ability FortKnox = {
     .name = $("Fort Knox"),
     .description = $("Blocks most damage boosting\nand multihit abilities."),
+    .fortKnox = TRUE,
 };
 
 #undef CONTEXT
@@ -4087,9 +4100,16 @@ static const Ability TwistedDimension = {
 
 #undef CONTEXT
 #define CONTEXT MultiHeaded
+ON_PARENTAL_BOND {
+    if (gBaseStats[gBattleMons[battler].species].flags & F_TWO_HEADED) return PARENTAL_BOND_HYPER_AGGRESSIVE;
+    if (gBaseStats[gBattleMons[battler].species].flags & F_THREE_HEADED) return PARENTAL_BOND_THREE_HEADED;
+    return MULTIHIT_SINGLE;
+}
 static const Ability MultiHeaded = {
     .name = $("Multi Headed"),
     .description = $("Hits as many times,\nas it has heads."),
+    .resistsFortKnox = TRUE,
+    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -4199,6 +4219,7 @@ static const Ability MoltenDown = {
 static const Ability HyperAggressive = {
     .name = $("Hyper Aggressive"),
     .description = $("Moves hit twice.\nSecond hit does 25% damage."),
+    .onParentalBond = ParentalBond.onParentalBond,
 };
 
 #undef CONTEXT
@@ -4811,9 +4832,14 @@ static const Ability ForestRage = {
 
 #undef CONTEXT
 #define CONTEXT PrimalMaw
+ON_PARENTAL_BOND {
+    CHECK(gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)
+    return PARENTAL_BOND_PRIMAL_MAW;
+}
 static const Ability PrimalMaw = {
     .name = $("Primal Maw"),
     .description = $("Biting moves hit twice.\n2nd hit does 0.4x damage."),
+    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -4963,9 +4989,14 @@ static const Ability InfernalRage = {
 
 #undef CONTEXT
 #define CONTEXT DualWield
+ON_PARENTAL_BOND {
+    CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+    return PARENTAL_BOND_DUAL_WIELD;
+}
 static const Ability DualWield = {
     .name = $("Dual Wield"),
     .description = $("Mega Launcher and Keen Edge\nmoves hit twice for 70% damage."),
+    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -5316,9 +5347,14 @@ static const Ability FairyTale = {
 
 #undef CONTEXT
 #define CONTEXT RagingMoth
+ON_PARENTAL_BOND {
+    CHECK(moveType == TYPE_FIRE)
+    return PARENTAL_BOND_DUAL_WIELD;
+}
 static const Ability RagingMoth = {
     .name = $("Raging Moth"),
     .description = $("Fire moves hits twice,\nboth hits at 70% power."),
+    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -5509,6 +5545,7 @@ static const Ability Emanate = {
 static const Ability KunoichiBlade = {
     .name = $("Kunoichi's Blade"),
     .description = $("Boosts weaker moves and increases\nthe frequency of multi-hit moves."),
+    .skillLink = TRUE,
 };
 
 #undef CONTEXT
@@ -6177,6 +6214,7 @@ static const Ability Fortitude = {
 static const Ability Devourer = {
     .name = $("Devourer"),
     .description = $("Strong Jaw + Primal Maw."),
+    .onParentalBond = PrimalMaw.onParentalBond,
 };
 
 #undef CONTEXT
@@ -7083,9 +7121,11 @@ static const Ability CelestialBlessing = {
 
 #undef CONTEXT
 #define CONTEXT MinionControl
+ON_PARENTAL_BOND { return PARENTAL_BOND_MINION_CONTROL; }
 static const Ability MinionControl = {
     .name = $("Minion Control"),
     .description = $("Moves hit an extra time for\neach healthy party member."),
+    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -7622,9 +7662,14 @@ static const Ability ChunkyBassLine = {
 
 #undef CONTEXT
 #define CONTEXT DualHammer
+ON_PARENTAL_BOND {
+    CHECK(gBattleMoves[move].hammerBased)
+    return PARENTAL_BOND_DUAL_WIELD;
+}
 static const Ability DualHammer = {
     .name = $("Jackhammer"),
     .description = $("Super Slammer moves hit twice\nfor 70% damage."),
+    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -7648,9 +7693,14 @@ static const Ability DentingBlows = {
 
 #undef CONTEXT
 #define CONTEXT IceColdHunter
+ON_PARENTAL_BOND {
+    CHECK(moveType == TYPE_ICE)
+    return PARENTAL_BOND_ICE_COLD_HUNTER;
+}
 static const Ability IceColdHunter = {
     .name = $("Ice Cold Hunter"),
     .description = $("Ice-type moves hit twice in hail."),
+    CONTEXT_ON_PARENTAL_BOND,
 };
 
 #undef CONTEXT
@@ -8366,6 +8416,7 @@ static const Ability ColorSpectrum = {
 static const Ability SteelBeetle = {
     .name = $("Steel Beetle"),
     .description = $("Raging Boxer + Pollinate."),
+    .onParentalBond = RagingBoxer.onParentalBond,
 };
 
 #undef CONTEXT
@@ -8586,6 +8637,7 @@ static const Ability RagingGoddess = {
     .description = $("Rampage + Hyper Aggressive."),
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = Rampage.onBattlerFaints,
+    .onParentalBond = ParentalBond.onParentalBond,
 };
 
 #undef CONTEXT
@@ -8977,6 +9029,7 @@ static const Ability BalloonBlitz = {
     .name = $("Balloon Blitz"),
     .description = $("Inflatable + Hyper Aggressive."),
     .onDefender = Inflatable.onDefender,
+    .onParentalBond = ParentalBond.onParentalBond,
 };
 
 const Ability gAbilities[] = {

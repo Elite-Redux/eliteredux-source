@@ -3564,8 +3564,7 @@ MultihitType GetMultihitType(int battler, int move) {
 
     switch (gBattleMoves[gCurrentMove].effect) {
         case EFFECT_MULTI_HIT:
-            if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_FIVE;
-            if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_FIVE;
+            if (HasSkillLink(battler)) return MULTIHIT_FIVE;
             if (move == MOVE_WATER_SHURIKEN && BattlerHasAbility(battler, ABILITY_BATTLE_BOND, FALSE) && gBattleMons[battler].species == SPECIES_GRENINJA_ASH)
                 return MULTIHIT_THREE;
             if (GetBattlerHoldEffect(battler, FALSE) == HOLD_EFFECT_LOADED_DICE) return MULTIHIT_FOUR_OR_FIVE;
@@ -3576,13 +3575,11 @@ MultihitType GetMultihitType(int battler, int move) {
             return MULTIHIT_TWO;
 
         case EFFECT_TRIPLE_KICK:
-            if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_THREE;
-            if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_THREE;
+            if (HasSkillLink(battler)) return MULTIHIT_THREE;
             return MULTIHIT_TRIPLE_KICK;
 
         case EFFECT_TEN_HITS:
-            if (BattlerHasAbility(battler, ABILITY_SKILL_LINK, FALSE)) return MULTIHIT_TEN;
-            if (BattlerHasAbility(battler, ABILITY_KUNOICHI_BLADE, FALSE)) return MULTIHIT_TEN;
+            if (HasSkillLink(battler)) return MULTIHIT_TEN;
             return MULTIHIT_TEN_CAN_MISS;
 
         case EFFECT_BEAT_UP:
@@ -7991,8 +7988,9 @@ u16 CalculateAbilityMultipliers(
     int battlerAtk, int battlerDef, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16 *resistanceMultiplier) {
     u16 multiplier = UQ_4_12(1.0);
     int i = 0;
+    int hasFortKnox = HasFortKnox(battlerDef);
 
-    if (!BattlerHasAbility(battlerDef, ABILITY_FORT_KNOX, FALSE)) {
+    if (!hasFortKnox) {
         for (i = 0; i < NUM_ABILITY_SLOTS + 1; i++) {
             CalculateOffensiveAbilityMultiplier(GetAbilityAtIndex(battlerAtk, i, FALSE),
                                                 battlerAtk,
@@ -10277,7 +10275,7 @@ void MakePlayerTeamAsleep(void) {
 }
 
 int IsMagicGuardProtected(int battler) {
-    ON_ABILITY(battler, FALSE, gAbilities[ability].magicGuard, return TRUE)
+    RETURN_TRUE_IF_ABILITY_FLAG(battler, FALSE, magicGuard)
     if (isMagicRoomActive()) return TRUE;
 
     return FALSE;
@@ -10339,7 +10337,7 @@ int IsBloodStainAffected(int battler) {
 }
 
 int IsUnaware(int battler) {
-    ON_ABILITY(battler, TRUE, gAbilities[ability].unaware, return TRUE)
+    RETURN_TRUE_IF_ABILITY_FLAG(battler, TRUE, unaware)
     return FALSE;
 }
 
@@ -10746,7 +10744,7 @@ int IsStickyHold(int battler) {
 }
 
 int HasChloroplast(int battler) {
-    ON_ABILITY(battler, FALSE, gAbilities[ability].chloroplast, return TRUE)
+    RETURN_TRUE_IF_ABILITY_FLAG(battler, FALSE, chloroplast)
     return FALSE;
 }
 
@@ -10759,3 +10757,8 @@ int HasRedirectionAbility(int battler, int type) {
 int CanRaiseStat(int battler, int stat) { return CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN); }
 
 int CanLowerStat(int battler, int stat) { return CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN); }
+
+int HasSkillLink(int battler) {
+    RETURN_TRUE_IF_ABILITY_FLAG(battler, FALSE, skillLink)
+    return FALSE;
+}

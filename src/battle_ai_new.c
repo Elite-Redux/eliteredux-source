@@ -1,40 +1,37 @@
-#include "global.h"
-#include "battle.h"
-#include "battle_util.h"
-#include "battle_scripts.h"
-#include "battle_main.h"
-#include "mgba_printf/mgba.h"
-#include "constants/abilities.h"
-#include "constants/species.h"
-#include "constants/battle_move_effects.h"
-#include "constants/items.h"
-#include "item.h"
-#include "constants/moves.h"
-#include "battle_anim.h"
-#include "constants/hold_effects.h"
 #include "battle_ai_new.h"
-#include "battle_ai_scoring.h"
-#include "battle_main.h"
-#include "battle_ai_new_util.h"
+
+#include "abilities.h"
+#include "battle.h"
 #include "battle_ai_attack.h"
+#include "battle_ai_new_util.h"
+#include "battle_ai_scoring.h"
+#include "battle_anim.h"
+#include "battle_main.h"
+#include "battle_scripts.h"
+#include "battle_util.h"
+#include "constants/abilities.h"
+#include "constants/battle_move_effects.h"
+#include "constants/hold_effects.h"
+#include "constants/items.h"
+#include "constants/moves.h"
+#include "constants/species.h"
+#include "global.h"
+#include "item.h"
+#include "mgba_printf/mgba.h"
 
-int ScoreMove(int battlerAtk, int battlerDef, int move, int targets, struct AiData* aiData)
-{
-    return 0;
-}
+int ScoreMove(int battlerAtk, int battlerDef, int move, int targets, struct AiData* aiData) { return 0; }
 
-void ReplaceDisguise(struct DisguiseSimulation* actual)
-{
+void ReplaceDisguise(struct DisguiseSimulation* actual) {}
 
-}
+void RestoreDisguise(struct DisguiseSimulation* actual) {}
 
-void RestoreDisguise(struct DisguiseSimulation* actual)
-{
-
-}
-
-int CalculateAccuracy(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData)
-{
+int CalculateAccuracy(int battlerAtk,
+                      int battlerDef,
+                      int move,
+                      AiProcessingPhase phase,
+                      struct MoveState* moveState,
+                      struct MoveContainer* moveContainer,
+                      struct AiData* aiData) {
     // TODO: Anticipation
     int accuracy = GetTotalAccuracy(battlerAtk, battlerDef, move, moveState);
     if (!accuracy)
@@ -44,43 +41,45 @@ int CalculateAccuracy(int battlerAtk, int battlerDef, int move, AiProcessingPhas
     return 0;
 }
 
-int CalculateBasicMoveInfo(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData)
-{
+int CalculateBasicMoveInfo(int battlerAtk,
+                           int battlerDef,
+                           int move,
+                           AiProcessingPhase phase,
+                           struct MoveState* moveState,
+                           struct MoveContainer* moveContainer,
+                           struct AiData* aiData) {
     moveState->speedValue = AiPerformMoveSpeedCalculation(battlerAtk, battlerDef, move);
-    if (CheckCancelled(battlerAtk, battlerDef, move, moveState, aiData))
-    {
+    if (CheckCancelled(battlerAtk, battlerDef, move, moveState, aiData)) {
         moveState->cancelled = TRUE;
     }
-    
+
     return 0;
 }
 
-static int (* const sPhaseHandlersTable[AI_PHASE_COUNT])(int battlerAtk, int battlerDef, int move, AiProcessingPhase phase, struct MoveState* moveState, struct MoveContainer* moveContainer, struct AiData* aiData) =
-{
+static int (*const sPhaseHandlersTable[AI_PHASE_COUNT])(int battlerAtk,
+                                                        int battlerDef,
+                                                        int move,
+                                                        AiProcessingPhase phase,
+                                                        struct MoveState* moveState,
+                                                        struct MoveContainer* moveContainer,
+                                                        struct AiData* aiData) = {
     [AI_PHASE_BASIC] = CalculateBasicMoveInfo,
     [AI_PHASE_ACCURACY] = CalculateAccuracy,
     [AI_PHASE_DAMAGE] = ScoreMoveDamage,
 };
 
-void SetDamage()
-{
+void SetDamage() {}
 
-}
-
-void IterateForPhase(AiProcessingPhase phase, struct AiData* aiData)
-{
+void IterateForPhase(AiProcessingPhase phase, struct AiData* aiData) {
     int battlerAtk, targetNum, moveNum;
-    for (battlerAtk = 0; battlerAtk < gBattlersCount; battlerAtk++)
-    {
-        for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++)
-        {
+    for (battlerAtk = 0; battlerAtk < gBattlersCount; battlerAtk++) {
+        for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++) {
             struct MoveContainer* container = &aiData->moveState[battlerAtk][moveNum];
             FILTER_NOT(container->unusable)
             gHitMarker &= ~(HITMARKER_MOLD_BREAKER | HITMARKER_MYCELIUM_MIGHT);
             if (ShouldSetMoldBreaker(battlerAtk, container->move)) gHitMarker |= HITMARKER_MOLD_BREAKER;
             if (BattlerHasAbility(battlerAtk, ABILITY_MYCELIUM_MIGHT, FALSE)) gHitMarker |= HITMARKER_MYCELIUM_MIGHT;
-            for (targetNum = 0; targetNum < container->count; targetNum++)
-            {
+            for (targetNum = 0; targetNum < container->count; targetNum++) {
                 struct MoveState* state = &container->targetData[targetNum];
                 FILTER_NOT(state->cancelled)
                 state->score += sPhaseHandlersTable[phase](battlerAtk, state->target, container->move, phase, state, container, aiData);
@@ -89,8 +88,7 @@ void IterateForPhase(AiProcessingPhase phase, struct AiData* aiData)
     }
 }
 
-struct MoveState* SetMoveVs(int battlerAtk, int battlerDef, int moveNum, struct AiData* aiData)
-{
+struct MoveState* SetMoveVs(int battlerAtk, int battlerDef, int moveNum, struct AiData* aiData) {
     int targetCount;
     struct MoveState* moveData;
     if (!IsBattlerAlive(battlerDef)) return NULL;
@@ -100,52 +98,48 @@ struct MoveState* SetMoveVs(int battlerAtk, int battlerDef, int moveNum, struct 
     return moveData;
 }
 
-void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData)
-{
+void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData) {
     int moveNum;
-    for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++)
-    {
+    for (moveNum = 0; moveNum < MAX_MON_MOVES; moveNum++) {
         struct MoveContainer* moveContainer = &aiData->moveState[battlerAtk][moveNum];
         int move = moveContainer->move = gBattleMons[battlerAtk].moves[moveNum];
-        if (move == MOVE_NONE || unusableMoves & (1 << moveNum))
-        {
+        if (move == MOVE_NONE || unusableMoves & (1 << moveNum)) {
             moveContainer->unusable = TRUE;
             continue;
         }
         FILTER(!AlwaysCancelled(battlerAtk, move, moveContainer))
         moveContainer->targetFlags = GetBattlerBattleMoveTargetFlags(move, battlerAtk);
-        switch (moveContainer->targetFlags)
-        {
-        case MOVE_TARGET_ALLY:
-            SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, aiData);
-            break;
-        
-        case MOVE_TARGET_BOTH:
-        case MOVE_TARGET_RANDOM:
-            SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, aiData);
-            SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData);
-            break;
-            
-        case MOVE_TARGET_OPPONENTS_FIELD:
-            if (SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData)) break;
-            SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk))), moveNum, aiData);
-            break;
-        
-        case MOVE_TARGET_USER_OR_SELECTED:
-        case MOVE_TARGET_DEPENDS:
-            // These aren't real
-            break;
-        
-        case MOVE_TARGET_USER:
-            SetMoveVs(battlerAtk, battlerAtk, moveNum, aiData);
-            break;
-        
-        case MOVE_TARGET_SELECTED:
-        case MOVE_TARGET_FOES_AND_ALLY:
-            SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, aiData);
-            SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData);
-            SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, aiData);
-            break;
+        switch (moveContainer->targetFlags) {
+            case MOVE_TARGET_ALLY:
+                SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, aiData);
+                break;
+
+            case MOVE_TARGET_BOTH:
+            case MOVE_TARGET_RANDOM:
+                SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, aiData);
+                SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData);
+                break;
+
+            case MOVE_TARGET_OPPONENTS_FIELD:
+                if (SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData)) break;
+                SetMoveVs(battlerAtk, GetBattlerSide(BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk))), moveNum, aiData);
+                break;
+
+            case MOVE_TARGET_USER_OR_SELECTED:
+            case MOVE_TARGET_DEPENDS:
+                // These aren't real
+                break;
+
+            case MOVE_TARGET_USER:
+                SetMoveVs(battlerAtk, battlerAtk, moveNum, aiData);
+                break;
+
+            case MOVE_TARGET_SELECTED:
+            case MOVE_TARGET_FOES_AND_ALLY:
+                SetMoveVs(battlerAtk, BATTLE_OPPOSITE(battlerAtk), moveNum, aiData);
+                SetMoveVs(battlerAtk, BATTLE_PARTNER(BATTLE_OPPOSITE(battlerAtk)), moveNum, aiData);
+                SetMoveVs(battlerAtk, BATTLE_PARTNER(battlerAtk), moveNum, aiData);
+                break;
         }
 
         FILTER(moveContainer->count)
@@ -159,33 +153,28 @@ void ConfigureMoves(int battlerAtk, int unusableMoves, struct AiData* aiData)
     }
 }
 
-int GetAiDecision(int battler)
-{
-    struct DisguiseSimulation disguise0 = { 0 }, disguise2 = { 0 };
+int GetAiDecision(int battler) {
+    struct DisguiseSimulation disguise0 = {0}, disguise2 = {0};
     int battlerAtk;
-    struct AiData aiData = { 0 };
-    
+    struct AiData aiData = {0};
+
     if (IsBattlerAlive(0)) ReplaceDisguise(&disguise0);
     if (IsBattlerAlive(2)) ReplaceDisguise(&disguise2);
 
-    for (battlerAtk = 0; battlerAtk < gBattlersCount; battlerAtk++)
-    {
+    for (battlerAtk = 0; battlerAtk < gBattlersCount; battlerAtk++) {
         int unusableMoves;
         FILTER(IsBattlerAlive(battlerAtk))
         unusableMoves = CheckMoveLimitations(battler, 0, -1);
         ConfigureMoves(battlerAtk, unusableMoves, &aiData);
     }
-    
+
     if (IsBattlerAlive(0)) RestoreDisguise(&disguise0);
     if (IsBattlerAlive(2)) RestoreDisguise(&disguise2);
 
     return 0;
 }
 
-int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
-{
-    return FALSE;
-}
+int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData) { return FALSE; }
 
 // // Effects which are applied regardless of defender's survival. Calculates KO percent.
 // int ComputeAttackPrimaryScoring(int battlerAtk, int battlerDef, int move, struct AiData* aiData)
@@ -195,12 +184,12 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
 
 // int AdjustStateForMove(int battlerAtk, int battlerUpdated, int move, struct AiData* aiData)
 // {
-    
+
 // }
 
 // int AdjustHpForMove(int battlerAtk, int battlerUpdated, int move, struct AiData* aiData)
 // {
-    
+
 // }
 
 // int SpeedDifference(int battler1, int move1, int battler2, int move2, struct AiData* aiData)
@@ -247,7 +236,8 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
 //     }
 // }
 
-// int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, int doUpdates, AiScoreEvaluationResult* updateState, struct AiData* aiData, struct AiData* aiDataKo)
+// int CalcRelativeMoveScore(int battlerFirst, int moveFirst, int battlerSecond, int moveSecond, int doUpdates, AiScoreEvaluationResult* updateState, struct
+// AiData* aiData, struct AiData* aiDataKo)
 // {
 //     int scoreBefore;
 //     int score = ComputeAttackPrimaryScoring(battlerFirst, battlerSecond, moveFirst, aiData);
@@ -272,7 +262,7 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
 //     }
 //     if (*updateState) return score;
 //     scoreBefore = score;
-    
+
 //     if (doUpdates) AdjustStateForMove(battlerFirst, battlerSecond, moveFirst, aiData);
 //     else AdjustHpForMove(battlerFirst, battlerFirst, moveFirst, aiData);
 //     score -= ComputeAttackPrimaryScoring(battlerSecond, battlerFirst, moveSecond, aiData);
@@ -297,9 +287,10 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
 //         *updateState |= AI_UPDATE_B2_FAINTS_AFTER;
 //         score += AI_SCORE_KO;
 //     }
-    
+
 //     if (aiData->moveState[battlerFirst][moveFirst].koChance)
-//         return ApplyModifier(aiData->moveState[battlerFirst][moveFirst].koChance, scoreBefore) + ApplyModifier(UQ_4_12(1.0) - aiData->moveState[battlerFirst][moveFirst].koChance, score);
+//         return ApplyModifier(aiData->moveState[battlerFirst][moveFirst].koChance, scoreBefore) + ApplyModifier(UQ_4_12(1.0) -
+//         aiData->moveState[battlerFirst][moveFirst].koChance, score);
 //     else
 //         return score;
 // }
@@ -311,7 +302,7 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
 //     int score, endTurnScore, i, maybeKoModifier;
 
 //     STRUCT_COPY(mutableAiData, *aiData)
-    
+
 //     score = CalcRelativeMoveScore(battlerFirst, moveFirst, battlerSecond, moveSecond, TRUE, &updateState, &mutableAiData, &mutableAiDataMaybeKo);
 
 //     switch (updateState)
@@ -325,7 +316,7 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
 //     case AI_UPDATE_B2_FAINTS_ON_ATTACK:
 //         endTurnScore = CalcEndTurnScore(battlerFirst, &mutableAiData);
 //         break;
-    
+
 //     case AI_UPDATE_BOTH:
 //         endTurnScore = CalcEndTurnScore(battlerFirst, &mutableAiData) - CalcEndTurnScore(battlerSecond, &mutableAiData);
 //         break;
@@ -390,7 +381,7 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
 //             evaluated--;
 //             continue;
 //         }
-        
+
 //         playerMoved = MAX_MON_MOVES;
 //         minScore = 2 * AI_SCORE_KO;
 
@@ -434,8 +425,8 @@ int ShouldEvaluateSpecial(int player, int move, struct AiData* aiData)
 //         {
 //             if (ShouldEvaluateSpecial(AI_BATTLER, i, aiData))
 //                 continue;
-            
-//             moveScores[i] = AI_SCORE_FUZZ(ComputeAttackPrimaryScoring(AI_BATTLER, PLAYER_BATTLER, i, aiData)) - faintScore;            
+
+//             moveScores[i] = AI_SCORE_FUZZ(ComputeAttackPrimaryScoring(AI_BATTLER, PLAYER_BATTLER, i, aiData)) - faintScore;
 //         }
 //     }
 // }
