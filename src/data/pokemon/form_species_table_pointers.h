@@ -99,6 +99,7 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_DARMANITAN] = sDarmanitanFormSpeciesIdTable,
     [SPECIES_DARUMAKA_REDUX] = sDarumakaFormSpeciesIdTable,
     [SPECIES_DARMANITAN_REDUX] = sDarmanitanFormSpeciesIdTable,
+    [SPECIES_DARMANITAN_REDUX_BLUNDER] = sDarmanitanFormSpeciesIdTable,
     [SPECIES_DARMANITAN_REDUX_BOND] = sDarmanitanFormSpeciesIdTable,
     [SPECIES_DARMANITAN_REDUX_AURA] = sDarmanitanFormSpeciesIdTable,
     [SPECIES_YAMASK] = sYamaskFormSpeciesIdTable,
@@ -1169,4 +1170,51 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
 
     [SPECIES_POPCORM] = sPopcormFormSpeciesIdTable,
     [SPECIES_POPCORM_MEGA] = sPopcormFormSpeciesIdTable,
+
+    //3.0 CUTOFF
+    [SPECIES_WEAVILE_MEGA] = sWeavileFormSpeciesIdTable,
+    [SPECIES_HAPPINY_REDUX] = sHappinyFormSpeciesIdTable,
+    [SPECIES_CHANSEY_REDUX] = sChanseyFormSpeciesIdTable,
+    [SPECIES_BLISSEY_REDUX] = sBlisseyFormSpeciesIdTable,
+    [SPECIES_CHESNAUGHT] = sChesnaughtFormSpeciesIdTable,
+    [SPECIES_DELPHOX] = sDelphoxFormSpeciesIdTable,
+    [SPECIES_CHESNAUGHT_BATTLE_BOND] = sChesnaughtFormSpeciesIdTable,
+    [SPECIES_DELPHOX_BATTLE_BOND] = sDelphoxFormSpeciesIdTable,
+    [SPECIES_CHESNAUGHT_CLEMONT] = sChesnaughtFormSpeciesIdTable,
+    [SPECIES_DELPHOX_SERENA] = sDelphoxFormSpeciesIdTable,
+    [SPECIES_SERPERIOR] = sSerperiorFormSpeciesIdTable,
+    [SPECIES_EMBOAR] = sEmboarFormSpeciesIdTable,
+    [SPECIES_SERPERIOR_MEGA] = sSerperiorFormSpeciesIdTable,
+    [SPECIES_EMBOAR_MEGA] = sEmboarFormSpeciesIdTable,
+    [SPECIES_SAMUROTT_MEGA] = sSamurottFormSpeciesIdTable,
+    [SPECIES_MORPEKYLL] = sMorpekyllFormSpeciesIdTable, 
+    [SPECIES_MORPEKYLL_HANGRY] = sMorpekyllFormSpeciesIdTable,
+    [SPECIES_HATENNA_REDUX] = sHatennaFormSpeciesIdTable,
+    [SPECIES_DECIDUEYE_MEGA] = sDecidueyeFormSpeciesIdTable,
+    [SPECIES_DECIDUEYE_HISUIAN_MEGA] = sDecidueyeFormSpeciesIdTable,
+    [SPECIES_INCINEROAR_MEGA] = sIncineroarFormSpeciesIdTable,
+    [SPECIES_INCINEROAR] = sIncineroarFormSpeciesIdTable,
+    [SPECIES_MEGANIUM_MEGA_X] = sMeganiumFormSpeciesIdTable,
+    [SPECIES_MEOWSCARADA] = sMeowscaradaFormSpeciesIdTable,
+    [SPECIES_MEOWSCARADA_MEGA] = sMeowscaradaFormSpeciesIdTable,
+    [SPECIES_PRIMARINA] = sPrimarinaFormSpeciesIdTable,
+    [SPECIES_PRIMARINA_MEGA] = sPrimarinaFormSpeciesIdTable,
+    [SPECIES_QUAQUAVAL] = sQuaquavalFormSpeciesIdTable,
+    [SPECIES_QUAQUAVAL_MEGA] = sQuaquavalFormSpeciesIdTable,
+    [SPECIES_SAMUROTT_HISUIAN_MEGA] = sSamurottFormSpeciesIdTable,
+    [SPECIES_SKELEDIRGE] = sSkeledirgeFormSpeciesIdTable,
+    [SPECIES_SKELEDIRGE_MEGA] = sSkeledirgeFormSpeciesIdTable,
+    [SPECIES_TYPHLOSION_HISUIAN_MEGA] = sTyphlosionFormSpeciesIdTable,
+    [SPECIES_UNOWN_REVELATION] = sUnownFormSpeciesIdTable,
+
+    [SPECIES_HATTREM_REDUX] = sHattremFormSpeciesIdTable,
+
+    [SPECIES_HATTERENE_REDUX_MEGA] = sHattereneFormSpeciesIdTable,
+
+    [SPECIES_WIMPOD_REDUX] = sWimpodFormSpeciesIdTable,
+
+    [SPECIES_SPIRITOMB_REDUX] = sSpiritombFormSpeciesIdTable,
+
+    [SPECIES_GOLISOPOD_REDUX_MEGA] = sGolisopodFormSpeciesIdTable,
+
 };
