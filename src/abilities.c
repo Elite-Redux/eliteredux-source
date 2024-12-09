@@ -6366,7 +6366,7 @@ ON_TERRAIN {
     CHECK(IsTerrainActive(STATUS_FIELD_ELECTRIC_TERRAIN))
 
     gStackBattler1 = battler;
-    BattleScriptPushCursorAndCallback(BattleScript_GeneratorActivatesRet);
+    BattleScriptCall(BattleScript_GeneratorActivatesRet);
     return TRUE;
 }
 static const Ability Generator = {
