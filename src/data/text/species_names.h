@@ -562,6 +562,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DARMANITAN] = _("Darmanitan"),
     [SPECIES_DARUMAKA_REDUX] = _("Darumaka"),
     [SPECIES_DARMANITAN_REDUX] = _("Darmanitan"),
+    [SPECIES_DARMANITAN_REDUX_BLUNDER] = _("Darmanitan"),
     [SPECIES_DARMANITAN_REDUX_BOND] = _("Darumaka"),
     [SPECIES_DARMANITAN_REDUX_AURA] = _("Darmanitan"),
     [SPECIES_MARACTUS] = _("Maractus"),
@@ -1808,7 +1809,17 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
 [SPECIES_HATTERENE_REDUX] = _("Hatterene"),
 [SPECIES_HATTREM_REDUX] = _("Hattrem"),
 [SPECIES_HATENNA_REDUX] = _("Hatenna"),
-    [SPECIES_MORPEKYLL_HANGRY] = _("Morpekyll"),
+    [SPECIES_DECIDUEYE_MEGA] = _("Decidueye"),
+    [SPECIES_DECIDUEYE_HISUIAN_MEGA] = _("Decidueye"),
+    [SPECIES_INCINEROAR_MEGA] = _("Incineroar"),
+    [SPECIES_MEGANIUM_MEGA_X] = _("Meganium"),
+    [SPECIES_MEOWSCARADA_MEGA] = _("Meowscarada"),
+    [SPECIES_PRIMARINA_MEGA] = _("Primarina"),
+    [SPECIES_QUAQUAVAL_MEGA] = _("Quaquaval"),
+    [SPECIES_SAMUROTT_HISUIAN_MEGA] = _("Samurott"),
+    [SPECIES_SKELEDIRGE_MEGA] = _("Skeledirge"),
+    [SPECIES_TYPHLOSION_HISUIAN_MEGA] = _("Typhlosion"),
+    [SPECIES_UNOWN_REVELATION] = _("Unown"),
 
 
     // PARTNER POKEMON

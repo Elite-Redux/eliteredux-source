@@ -570,7 +570,8 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(DARMANITAN, gMonBackPic_Darmanitan),
     SPECIES_SPRITE(DARMANITAN_REDUX, gMonBackPic_DarmanitanRedux),
     SPECIES_SPRITE(DARMANITAN_REDUX_AURA, gMonBackPic_DarmanitanReduxAura),
-    SPECIES_SPRITE(DARMANITAN_REDUX_BOND, gMonBackPic_DarmanitanReduxBond),
+    SPECIES_SPRITE(DARMANITAN_REDUX_BOND, gMonBackPic_DarmanitanRedux),
+    SPECIES_SPRITE(DARMANITAN_REDUX_BLUNDER, gMonBackPic_DarmanitanReduxBond),
     SPECIES_SPRITE(MARACTUS, gMonBackPic_Maractus),
     SPECIES_SPRITE(SAGARACAS, gMonBackPic_Sagaracas),
     SPECIES_SPRITE(DWEBBLE, gMonBackPic_Dwebble),
@@ -1767,6 +1768,17 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(HATTREM_REDUX, gMonBackPic_Hattrem_Redux),
     SPECIES_SPRITE(HATENNA_REDUX, gMonBackPic_Hatenna_Redux),
     SPECIES_SPRITE(MORPEKYLL_HANGRY, gMonBackPic_MorpekyllHangry),
+    SPECIES_SPRITE(DECIDUEYE_MEGA, gMonBackPic_DecidueyeMega),
+    SPECIES_SPRITE(DECIDUEYE_HISUIAN_MEGA, gMonBackPic_DecidueyeHisuianMega),
+    SPECIES_SPRITE(INCINEROAR_MEGA, gMonBackPic_IncineroarMega),
+    SPECIES_SPRITE(MEGANIUM_MEGA_X, gMonBackPic_MeganiumMegaX),
+    SPECIES_SPRITE(MEOWSCARADA_MEGA, gMonBackPic_MeowscaradaMega),
+    SPECIES_SPRITE(PRIMARINA_MEGA, gMonBackPic_PrimarinaMega),
+    SPECIES_SPRITE(QUAQUAVAL_MEGA, gMonBackPic_QuaquavalMega),
+    SPECIES_SPRITE(SAMUROTT_HISUIAN_MEGA, gMonBackPic_SamurottHisuianMega),
+    SPECIES_SPRITE(SKELEDIRGE_MEGA, gMonBackPic_SkeledirgeMega),
+    SPECIES_SPRITE(TYPHLOSION_HISUIAN_MEGA, gMonBackPic_TyphlosionHisuianMega),
+    SPECIES_SPRITE(UNOWN_REVELATION, gMonBackPic_UnownRevelation),
 };
 
 const struct CompressedSpriteSheet gMonBackPicTableFemale[] =

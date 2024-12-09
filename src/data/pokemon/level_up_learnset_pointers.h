@@ -1438,6 +1438,7 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_DARUMAKA_REDUX] = sDarumakaReduxLevelUpLearnset,
     [SPECIES_DARMANITAN_REDUX] = sDarmanitanReduxLevelUpLearnset,
     [SPECIES_DARMANITAN_REDUX_BOND] = sDarmanitanReduxLevelUpLearnset,
+    [SPECIES_DARMANITAN_REDUX_BLUNDER] = sDarmanitanReduxLevelUpLearnset,
     [SPECIES_DARMANITAN_REDUX_AURA] = sDarmanitanReduxLevelUpLearnset,
     // Deerling
     [SPECIES_DEERLING_SUMMER] = sDeerlingLevelUpLearnset,
@@ -1807,4 +1808,15 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_LYCANROC_REDUX] = sLycanroc_ReduxLevelUpLearnset,
     [SPECIES_MORPEKYLL] = sMorpekyllLevelUpLearnset,
     [SPECIES_MORPEKYLL_HANGRY] = sMorpekyllLevelUpLearnset,
+    [SPECIES_DECIDUEYE_MEGA] = sDecidueyeLevelUpLearnset,
+    [SPECIES_DECIDUEYE_HISUIAN_MEGA] = sDecidueyeHisuianLevelUpLearnset,
+    [SPECIES_INCINEROAR_MEGA] = sIncineroarLevelUpLearnset,
+    [SPECIES_MEGANIUM_MEGA_X] = sMeganiumLevelUpLearnset,
+    [SPECIES_MEOWSCARADA_MEGA] = sMeowscaradaLevelUpLearnset,
+    [SPECIES_PRIMARINA_MEGA] = sPrimarinaLevelUpLearnset,
+    [SPECIES_SAMUROTT_HISUIAN_MEGA] = sSamurottHisuianLevelUpLearnset,
+    [SPECIES_SKELEDIRGE_MEGA] = sSkeledirgeLevelUpLearnset,
+    [SPECIES_TYPHLOSION_HISUIAN_MEGA] = sTyphlosionHisuianLevelUpLearnset,
+    [SPECIES_QUAQUAVAL_MEGA] = sQuaquavalLevelUpLearnset,
+    [SPECIES_UNOWN_REVELATION] = sUnownLevelUpLearnset,
 };

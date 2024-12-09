@@ -7229,6 +7229,11 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 2,
     },
+    [SPECIES_DARMANITAN_REDUX_BLUNDER] =
+    {
+        .size = 0x78,
+        .y_offset = 2,
+    },
     [SPECIES_DARMANITAN_REDUX_AURA] =
     {
         .size = 0x78,
@@ -8565,6 +8570,61 @@ const struct MonCoords gMonBackPicCoords[] =
         .y_offset =  0
     },
     [SPECIES_MORPEKYLL_HANGRY] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_DECIDUEYE_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_DECIDUEYE_HISUIAN_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_INCINEROAR_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_MEGANIUM_MEGA_X] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_MEOWSCARADA_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_SAMUROTT_HISUIAN_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_PRIMARINA_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_QUAQUAVAL_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_SKELEDIRGE_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_TYPHLOSION_HISUIAN_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_UNOWN_REVELATION] =
     {
         .size = 0x78,
         .y_offset = 0,

@@ -12884,6 +12884,12 @@ static const union AnimCmd sAnim_DARMANITAN_REDUX_BOND_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_DARMANITAN_REDUX_BLUNDER_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_DARMANITAN_REDUX_AURA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -19972,6 +19978,11 @@ static const union AnimCmd *const sAnims_DARMANITAN_REDUX[] ={
     sAnim_DARMANITAN_REDUX_1,
 };
 
+static const union AnimCmd *const sAnims_DARMANITAN_REDUX_BLUNDER[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DARMANITAN_REDUX_BLUNDER_1,
+};
+
 static const union AnimCmd *const sAnims_DARMANITAN_REDUX_BOND[] ={
     sAnim_GeneralFrame0,
     sAnim_DARMANITAN_REDUX_BOND_1,
@@ -20438,6 +20449,127 @@ static const union AnimCmd sAnim_MORPEKYLL_HANGRY_1[] =
 static const union AnimCmd *const sAnims_MORPEKYLL_HANGRY[] ={
     sAnim_GeneralFrame0,
     sAnim_MORPEKYLL_HANGRY_1,
+};
+
+static const union AnimCmd sAnim_DECIDUEYE_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_DECIDUEYE_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DECIDUEYE_MEGA_1,
+};
+
+static const union AnimCmd sAnim_DECIDUEYE_HISUIAN_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_DECIDUEYE_HISUIAN_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_DECIDUEYE_HISUIAN_MEGA_1,
+};
+
+static const union AnimCmd sAnim_INCINEROAR_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_INCINEROAR_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_INCINEROAR_MEGA_1,
+};
+
+static const union AnimCmd sAnim_MEGANIUM_MEGA_X_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_MEGANIUM_MEGA_X[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MEGANIUM_MEGA_X_1,
+};
+
+static const union AnimCmd sAnim_MEOWSCARADA_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_MEOWSCARADA_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_MEOWSCARADA_MEGA_1,
+};
+
+static const union AnimCmd sAnim_PRIMARINA_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_PRIMARINA_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_PRIMARINA_MEGA_1,
+};
+
+static const union AnimCmd sAnim_QUAQUAVAL_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_QUAQUAVAL_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_QUAQUAVAL_MEGA_1,
+};
+
+static const union AnimCmd sAnim_SAMUROTT_HISUIAN_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SAMUROTT_HISUIAN_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SAMUROTT_HISUIAN_MEGA_1,
+};
+
+static const union AnimCmd sAnim_SKELEDIRGE_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_SKELEDIRGE_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_SKELEDIRGE_MEGA_1,
+};
+
+static const union AnimCmd sAnim_TYPHLOSION_HISUIAN_MEGA_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_TYPHLOSION_HISUIAN_MEGA[] ={
+    sAnim_GeneralFrame0,
+    sAnim_TYPHLOSION_HISUIAN_MEGA_1,
+};
+
+static const union AnimCmd sAnim_UNOWN_REVELATION_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sAnims_UNOWN_REVELATION[] ={
+    sAnim_GeneralFrame0,
+    sAnim_UNOWN_REVELATION_1,
 };
 
 
@@ -21015,6 +21147,7 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(DARMANITAN_REDUX),
     ANIM_CMD(DARMANITAN_REDUX_AURA),
     ANIM_CMD(DARMANITAN_REDUX_BOND),
+    ANIM_CMD(DARMANITAN_REDUX_BLUNDER),
     ANIM_CMD(MARACTUS),
     ANIM_CMD(SAGARACAS),
     ANIM_CMD(DWEBBLE),
@@ -22149,6 +22282,17 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(HATTERENE_REDUX),
     ANIM_CMD(HATTREM_REDUX),
     ANIM_CMD(HATENNA_REDUX),
+    ANIM_CMD(DECIDUEYE_MEGA),
+    ANIM_CMD(DECIDUEYE_HISUIAN_MEGA),
+    ANIM_CMD(INCINEROAR_MEGA),
+    ANIM_CMD(MEGANIUM_MEGA_X),
+    ANIM_CMD(MEOWSCARADA_MEGA),
+    ANIM_CMD(PRIMARINA_MEGA),
+    ANIM_CMD(QUAQUAVAL_MEGA),
+    ANIM_CMD(SAMUROTT_HISUIAN_MEGA),
+    ANIM_CMD(SKELEDIRGE_MEGA),
+    ANIM_CMD(TYPHLOSION_HISUIAN_MEGA),
+    ANIM_CMD(UNOWN_REVELATION),
 };
 
 #undef ANIM_CMD

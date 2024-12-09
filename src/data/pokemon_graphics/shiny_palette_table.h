@@ -1449,8 +1449,9 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(DARUMAKA_REDUX, gMonShinyPalette_DarumakaRedux),
     SPECIES_SHINY_PAL(DARMANITAN_GALARIAN, gMonShinyPalette_DarmanitanGalarian),
     SPECIES_SHINY_PAL(DARMANITAN_REDUX, gMonShinyPalette_DarmanitanRedux),
+    SPECIES_SHINY_PAL(DARMANITAN_REDUX_BOND, gMonShinyPalette_DarmanitanRedux),
     SPECIES_SHINY_PAL(DARMANITAN_REDUX_AURA, gMonShinyPalette_DarmanitanReduxAura),
-    SPECIES_SHINY_PAL(DARMANITAN_REDUX_BOND, gMonShinyPalette_DarmanitanReduxBond),
+    SPECIES_SHINY_PAL(DARMANITAN_REDUX_BLUNDER, gMonShinyPalette_DarmanitanReduxBond),
     SPECIES_SHINY_PAL(YAMASK_GALARIAN, gMonShinyPalette_YamaskGalarian),
     SPECIES_SHINY_PAL(STUNFISK_GALARIAN, gMonShinyPalette_StunfiskGalarian),
 
@@ -1767,6 +1768,17 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(HATTREM_REDUX, gMonShinyPalette_Hattrem_Redux),
     SPECIES_SHINY_PAL(HATENNA_REDUX, gMonShinyPalette_Hatenna_Redux),
     SPECIES_SHINY_PAL(MORPEKYLL_HANGRY,  gMonShinyPalette_MorpekyllHangry),
+    SPECIES_SHINY_PAL(DECIDUEYE_MEGA,  gMonShinyPalette_DecidueyeMega),
+    SPECIES_SHINY_PAL(DECIDUEYE_HISUIAN_MEGA,  gMonShinyPalette_DecidueyeHisuianMega),
+    SPECIES_SHINY_PAL(INCINEROAR_MEGA,  gMonShinyPalette_IncineroarMega),
+    SPECIES_SHINY_PAL(MEGANIUM_MEGA_X,  gMonShinyPalette_MeganiumMegaX),
+    SPECIES_SHINY_PAL(MEOWSCARADA_MEGA,  gMonShinyPalette_MeowscaradaMega),
+    SPECIES_SHINY_PAL(PRIMARINA_MEGA,  gMonShinyPalette_PrimarinaMega),
+    SPECIES_SHINY_PAL(QUAQUAVAL_MEGA,  gMonShinyPalette_QuaquavalMega),
+    SPECIES_SHINY_PAL(SAMUROTT_HISUIAN_MEGA,  gMonShinyPalette_SamurottHisuianMega),
+    SPECIES_SHINY_PAL(SKELEDIRGE_MEGA,  gMonShinyPalette_SkeledirgeMega),
+    SPECIES_SHINY_PAL(TYPHLOSION_HISUIAN_MEGA,  gMonShinyPalette_TyphlosionHisuianMega),
+    SPECIES_SHINY_PAL(UNOWN_REVELATION,  gMonShinyPalette_UnownRevelation),
 };
 
                                      

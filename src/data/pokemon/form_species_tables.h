@@ -704,6 +704,7 @@ static const u16 sDarmanitanFormSpeciesIdTable[] = {
     SPECIES_DARMANITAN_REDUX,
     SPECIES_DARMANITAN_REDUX_AURA,
     SPECIES_DARMANITAN_REDUX_BOND,
+    SPECIES_DARMANITAN_REDUX_BLUNDER,
     FORM_SPECIES_END,
 };
 
@@ -1206,6 +1207,7 @@ static const u16 sNidoqueenFormSpeciesIdTable[] = {
 static const u16 sTyphlosionFormSpeciesIdTable[] = {
     SPECIES_TYPHLOSION,
     SPECIES_TYPHLOSION_HISUIAN,
+    SPECIES_TYPHLOSION_HISUIAN_MEGA,
     SPECIES_TYPHLOSION_MEGA,
     FORM_SPECIES_END,
 };
@@ -1213,6 +1215,7 @@ static const u16 sTyphlosionFormSpeciesIdTable[] = {
 static const u16 sMeganiumFormSpeciesIdTable[] = {
     SPECIES_MEGANIUM,
     SPECIES_MEGANIUM_MEGA,
+    SPECIES_MEGANIUM_MEGA_X,
     FORM_SPECIES_END,
 };
 
@@ -1551,6 +1554,7 @@ static const u16 sSamurottFormSpeciesIdTable[] = {
     SPECIES_SAMUROTT,
     SPECIES_SAMUROTT_MEGA,
     SPECIES_SAMUROTT_HISUIAN,
+    SPECIES_SAMUROTT_HISUIAN_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sLilligantFormSpeciesIdTable[] = {
@@ -1585,7 +1589,9 @@ static const u16 sAvaluggFormSpeciesIdTable[] = {
 };
 static const u16 sDecidueyeFormSpeciesIdTable[] = {
     SPECIES_DECIDUEYE,
+    SPECIES_DECIDUEYE_MEGA,
     SPECIES_DECIDUEYE_HISUIAN,
+    SPECIES_DECIDUEYE_HISUIAN_MEGA,
     FORM_SPECIES_END,
 };
 static const u16 sTaurosFormSpeciesIdTable[] = {
@@ -2183,5 +2189,30 @@ static const u16 sWimpodFormSpeciesIdTable[] = {
 static const u16 sSpiritombFormSpeciesIdTable[] = {
     SPECIES_SPIRITOMB,
     SPECIES_SPIRITOMB_REDUX,
+    FORM_SPECIES_END,
+};
+static const u16 sIncineroarFormSpeciesIdTable[] = {
+    SPECIES_INCINEROAR,
+    SPECIES_INCINEROAR_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sMeowscaradaFormSpeciesIdTable[] = {
+    SPECIES_MEOWSCARADA,
+    SPECIES_MEOWSCARADA_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sPrimarinaFormSpeciesIdTable[] = {
+    SPECIES_PRIMARINA,
+    SPECIES_PRIMARINA_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sQuaquavalFormSpeciesIdTable[] = {
+    SPECIES_QUAQUAVAL,
+    SPECIES_QUAQUAVAL_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sSkeledirgeFormSpeciesIdTable[] = {
+    SPECIES_SKELEDIRGE,
+    SPECIES_SKELEDIRGE_MEGA,
     FORM_SPECIES_END,
 };

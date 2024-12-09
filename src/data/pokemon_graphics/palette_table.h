@@ -1446,8 +1446,9 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(DARUMAKA_REDUX, gMonPalette_DarumakaRedux),
     SPECIES_PAL(DARMANITAN_GALARIAN, gMonPalette_DarmanitanGalarian),
     SPECIES_PAL(DARMANITAN_REDUX, gMonPalette_DarmanitanRedux),
+    SPECIES_PAL(DARMANITAN_REDUX_BOND, gMonPalette_DarmanitanRedux),
     SPECIES_PAL(DARMANITAN_REDUX_AURA, gMonPalette_DarmanitanReduxAura),
-    SPECIES_PAL(DARMANITAN_REDUX_BOND, gMonPalette_DarmanitanReduxBond),
+    SPECIES_PAL(DARMANITAN_REDUX_BLUNDER, gMonPalette_DarmanitanReduxBond),
     SPECIES_PAL(YAMASK_GALARIAN, gMonPalette_YamaskGalarian),
     SPECIES_PAL(STUNFISK_GALARIAN, gMonPalette_StunfiskGalarian),
 
@@ -1769,6 +1770,17 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(HATTREM_REDUX, gMonPalette_Hattrem_Redux),
     SPECIES_PAL(HATENNA_REDUX, gMonPalette_Hatenna_Redux),
     SPECIES_PAL(MORPEKYLL_HANGRY,     gMonPalette_MorpekyllHangry),
+    SPECIES_PAL(DECIDUEYE_MEGA,     gMonPalette_DecidueyeMega),
+    SPECIES_PAL(DECIDUEYE_HISUIAN_MEGA,     gMonPalette_DecidueyeHisuianMega),
+    SPECIES_PAL(INCINEROAR_MEGA,     gMonPalette_IncineroarMega),
+    SPECIES_PAL(MEGANIUM_MEGA_X,     gMonPalette_MeganiumMegaX),
+    SPECIES_PAL(MEOWSCARADA_MEGA,     gMonPalette_MeowscaradaMega),
+    SPECIES_PAL(PRIMARINA_MEGA,     gMonPalette_PrimarinaMega),
+    SPECIES_PAL(QUAQUAVAL_MEGA,     gMonPalette_QuaquavalMega),
+    SPECIES_PAL(SAMUROTT_HISUIAN_MEGA,     gMonPalette_SamurottHisuianMega),
+    SPECIES_PAL(SKELEDIRGE_MEGA,     gMonPalette_SkeledirgeMega),
+    SPECIES_PAL(TYPHLOSION_HISUIAN_MEGA,     gMonPalette_TyphlosionHisuianMega),
+    SPECIES_PAL(UNOWN_REVELATION,     gMonPalette_UnownRevelation),
 };
 
 const struct CompressedSpritePalette gMonPaletteTableFemale[] =
