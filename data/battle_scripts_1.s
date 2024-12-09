@@ -10278,7 +10278,7 @@ BattleScript_OnWeatherChange::
 	saveattackertostack3
 	setbyte gBattlerAttacker, 0
 BattleScript_OnWeatherChangeLoop::
-	handleweatherchange BS_ATTACKER
+	onweatherchange BS_ATTACKER
 	addbyte gBattlerAttacker, 1
 	jumpifbytenotequal gBattlerAttacker, gBattlersCount, BattleScript_OnWeatherChangeLoop
 	readattackerfromstack3
@@ -10379,17 +10379,14 @@ BattleScript_SnowWarningActivates::
 	call BattleScript_OnWeatherChange
 	end3
 	
-BattleScript_OnTerrainChanged:	
-	savetarget
-	setbyte gBattlerTarget, 0
-BattleScript_OnTerrainChangedIter:
-	copybyte sBATTLER, gBattlerTarget
-	handleterrainchange BS_TARGET
-	doterrainseed BS_TARGET
-	addbyte gBattlerTarget, 0x1
-	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_OnTerrainChangedIter
-	restoretarget
-	callifabilitypresent ABILITY_MIMICRY, BattleScript_ApplyMimicry
+BattleScript_OnTerrainChanged:
+	saveattackertostack3
+	setbyte gBattlerAttacker, 0
+BattleScript_OnTerrainChangedLoop::
+	onterrainchange BS_ATTACKER
+	addbyte gBattlerAttacker, 1
+	jumpifbytenotequal gBattlerAttacker, gBattlersCount, BattleScript_OnTerrainChangedLoop
+	readattackerfromstack3
 	return
 
 BattleScript_ElectricSurgeActivates::

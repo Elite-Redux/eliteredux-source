@@ -7298,7 +7298,7 @@ int QuarkDriveHandler(int ability, int battler, AbilityCallType callType) {
         ParadoxBoost boost = {.statId = GetHighestStatId(battler, TRUE), .source = PARADOX_WEATHER_ACTIVE};
         SetAbilityStateAs(battler, ability, (AbilityStates){.paradoxBoost = boost});
         SetStatChanger(boost.statId, 0);
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_WEATHER;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_TERRAIN;
         BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
         return TRUE;
     }

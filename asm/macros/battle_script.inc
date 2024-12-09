@@ -2185,12 +2185,12 @@
 	various \battler, VARIOUS_SET_FEAR
 	.endm
 
-	.macro handleweatherchange battler:req
-	various \battler, VARIOUS_HANDLE_WEATHER_CHANGE
+	.macro onweatherchange battler:req
+	various \battler, VARIOUS_ON_WEATHER_CHANGE
 	.endm
 
-	.macro handleterrainchange battler:req
-	various \battler, VARIOUS_HANDLE_TERRAIN_CHANGE
+	.macro onterrainchange battler:req
+	various \battler, VARIOUS_ON_TERRAIN_CHANGE
 	.endm
 
 	.macro getbattler battler:req

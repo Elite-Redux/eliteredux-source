@@ -8277,7 +8277,7 @@ static void Cmd_various(void) {
             SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_BLOOD_BATH);
             SetBattlerAffectedFlag(gBattlerAttacker, gActiveBattler, ABILITY_BLOODLUST);
             break;
-        case VARIOUS_HANDLE_WEATHER_CHANGE:
+        case VARIOUS_ON_WEATHER_CHANGE:
             ON_ABILITY(
                 gActiveBattler, FALSE, gAbilities[ability].onWeather, if (gAbilities[ability].onWeather(ability, gActiveBattler)) {
                     gBattlerAbility = gActiveBattler;
@@ -8285,53 +8285,13 @@ static void Cmd_various(void) {
                     BattleScriptCall(BattleScript_AbilityPopUp);
                 })
             return;
-        case VARIOUS_HANDLE_TERRAIN_CHANGE:
+        case VARIOUS_ON_TERRAIN_CHANGE:
             ON_ABILITY(
                 gActiveBattler, FALSE, gAbilities[ability].onTerrain, if (gAbilities[ability].onTerrain(ability, gActiveBattler)) {
                     gBattlerAbility = gActiveBattler;
                     gBattleScripting.abilityPopupOverwrite = ability;
                     BattleScriptCall(BattleScript_AbilityPopUp);
                 })
-            return;
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_QUARK_DRIVE)) {
-                ParadoxBoost state = GetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE).paradoxBoost;
-                if (state.source == PARADOX_WEATHER_ACTIVE && !(TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)) {
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_QUARK_DRIVE;
-                    if (GetBattlerHoldEffect(gActiveBattler, TRUE) == HOLD_EFFECT_BOOSTER_ENERGY) {
-                        // Push this first so it resolves last
-                        ParadoxBoost boost = {.statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_BOOSTER_ENERGY};
-                        SetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE, (AbilityStates){.paradoxBoost = boost});
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_ITEM;
-                        RemoveItem(gActiveBattler);
-                        SetStatChanger(boost.statId, 0);
-                        BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
-                    } else
-                        SetAbilityState(gActiveBattler, ABILITY_QUARK_DRIVE, 0);
-                    BattleScriptCall(BattleScript_ParadoxBoostEnds);
-                } else if (state.source == PARADOX_BOOST_NOT_ACTIVE && TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN) {
-                    ParadoxBoost boost = {.statId = GetHighestStatId(gActiveBattler, TRUE), .source = PARADOX_WEATHER_ACTIVE};
-                    gBattleScripting.abilityPopupOverwrite = ABILITY_QUARK_DRIVE;
-                    SetAbilityStateAs(gActiveBattler, ABILITY_QUARK_DRIVE, (AbilityStates){.paradoxBoost = boost});
-                    SetStatChanger(boost.statId, 0);
-                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_PARADOX_BOOST_TERRAIN;
-                    BattleScriptCall(BattleScript_ParadoxBoostActivatesRet);
-                }
-            }
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_GENERATOR) && !(gStatuses3[gActiveBattler] & STATUS3_CHARGED_UP) && TERRAIN_HAS_EFFECT &&
-                gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_GENERATOR;
-                gStackBattler1 = gBattlerAbility = gActiveBattler;
-                BattleScriptCall(BattleScript_GeneratorActivatesRet);
-            }
-
-            if (BATTLER_HAS_ABILITY(gActiveBattler, ABILITY_ENERGIZED) && !(gStatuses3[gActiveBattler] & STATUS3_CHARGED_UP) && TERRAIN_HAS_EFFECT &&
-                gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN) {
-                gBattleScripting.abilityPopupOverwrite = ABILITY_ENERGIZED;
-                gStackBattler1 = gBattlerAbility = gActiveBattler;
-                BattleScriptCall(BattleScript_GeneratorActivatesRet);
-            }
             return;
         case VARIOUS_GET_BATTLER:
             gBattleScripting.battler = gActiveBattler;
