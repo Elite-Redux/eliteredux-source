@@ -2418,6 +2418,11 @@
 	various \battler, VARIOUS_DO_INTIMIDATE
 	.endm
 
+	.macro hpfractiontodamage battler:req, fraction:req
+	various \battler, VARIOUS_HP_FRACTION_TO_DAMAGE
+	.byte \fraction
+	.endm
+
 	.macro twoturnmoveacceleratecheck ptr=BattleScript_MoveEnd
 	jumpifability BS_ATTACKER, ABILITY_ACCELERATE, twoturnmoveacceleratecheck_\@
 	jumpifnoholdeffect BS_ATTACKER, HOLD_EFFECT_POWER_HERB, \ptr

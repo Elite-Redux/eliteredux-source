@@ -76,6 +76,9 @@
 #define ON_PARENTAL_BOND static MultihitType COMBINE(onParentalBond, CONTEXT)(int battler, int move, int moveType)
 #define CONTEXT_ON_PARENTAL_BOND .onParentalBond = COMBINE(onParentalBond, CONTEXT)
 
+#define ON_STAT static void COMBINE(onStat, CONTEXT)(int ability, int battler, int statId, u32 *stat, NonStackingState *flags)
+#define CONTEXT_ON_STAT .onStat = COMBINE(onStat, CONTEXT)
+
 #define MUL(val) MUL_MODIFIER(modifier, val)
 #define RESISTANCE(val)                \
     {                                  \
@@ -236,6 +239,14 @@ static int MoxieClone(int battler, int stat) {
                 MUL(1.3);                                                    \
         }                                                                    \
     }
+
+static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStackingState *flags) {
+    if (statId != ruinStat) return;
+    if (*flags & NON_STACKING_RUIN) return;
+    ON_ABILITY(battler, FALSE, gAbilities[ability].ruinsStat, return)
+    *stat = *stat * 3 / 4;
+    *flags |= NON_STACKING_RUIN;
+}
 
 #define CONTEXT None
 static const Ability None = {
@@ -620,16 +631,24 @@ static const Ability SereneGrace = {
 
 #undef CONTEXT
 #define CONTEXT SwiftSwim
+ON_STAT {
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat = *stat * 3 /2 ;
+}
 static const Ability SwiftSwim = {
     .name = $("Swift Swim"),
     .description = $("This Pokémon's Speed gets a\n1.5x boost if rain is active."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT Chlorophyll
+ON_STAT {
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 3 / 2;
+}
 static const Ability Chlorophyll = {
     .name = $("Chlorophyll"),
     .description = $("This Pokémon's Speed gets a\n1.5x boost if sun is active."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -674,9 +693,13 @@ static const Ability Trace = {
 
 #undef CONTEXT
 #define CONTEXT HugePower
+ON_STAT {
+    if (statId == STAT_ATK) *stat *= 2;
+}
 static const Ability HugePower = {
     .name = $("Huge Power"),
     .description = $("Doubles own Attack stat.\nBoosts raw stat, not base stat."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -1008,10 +1031,14 @@ static const Ability Guts = {
 
 #undef CONTEXT
 #define CONTEXT MarvelScale
+ON_STAT {
+    if (statId == STAT_DEF && HasAnyStatusOrAbility(battler)) *stat = *stat * 3 / 2;
+}
 static const Ability MarvelScale = {
     .name = $("Marvel Scale"),
     .description = $("Ups Def by 1.5x if suffering\nfrom a status condition."),
     .breakable = TRUE,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -1125,6 +1152,7 @@ static const Ability WhiteSmoke = {
 static const Ability PurePower = {
     .name = $("Pure Power"),
     .description = $("Doubles own Attack stat.\nBoosts raw stat, not base stat."),
+    .onStat = HugePower.onStat,
 };
 
 #undef CONTEXT
@@ -1234,9 +1262,13 @@ static const Ability AngerPoint = {
 
 #undef CONTEXT
 #define CONTEXT Unburden
+ON_STAT {
+    if (statId == STAT_SPEED && GetAbilityState(battler, ability)) *stat *= 2;
+}
 static const Ability Unburden = {
     .name = $("Unburden"),
     .description = $("Consuming its held item doubles\nSpeed until switched out."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -1349,16 +1381,25 @@ static const Ability Hydration = {
 
 #undef CONTEXT
 #define CONTEXT SolarPower
+ON_STAT {
+    if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 3 / 2;
+}
 static const Ability SolarPower = {
     .name = $("Solar Power"),
     .description = $("Ups highest attacking stat\nby 1.5x in sun."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT QuickFeet
+ON_STAT {
+    if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat = *stat * 3 /2;
+}
 static const Ability QuickFeet = {
     .name = $("Quick Feet"),
     .description = $("Ups Speed by 1.5x if suffering\nfrom a status condition."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -1561,10 +1602,15 @@ ON_SWITCH {
     gVolatileStructs[battler].slowStartTimer = 5;
     return SwitchInAnnounce(B_MSG_SWITCHIN_SLOWSTART);
 }
+ON_STAT {
+    if (statId != STAT_ATK && statId != STAT_SPEED) return;
+    if (gVolatileStructs[battler].slowStartTimer) *stat /= 2;
+}
 static const Ability SlowStart = {
     .name = $("Slow Start"),
     .description = $("Halves Attack and Speed during\nthe first 5 turns out."),
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -1695,6 +1741,10 @@ static const Ability Multitype = {
 
 #undef CONTEXT
 #define CONTEXT FlowerGift
+ON_STAT {
+    if (statId != STAT_SPATK && statId != STAT_SPDEF) return;
+    if (IsWeatherActive(WEATHER_SUN_ANY)) *stat = *stat * 3 / 2;
+}
 static const Ability FlowerGift = {
     .name = $("Flower Gift"),
     .description = $("Increases the party's SpAtk\nand SpDef by 1.5x in Sun."),
@@ -1704,6 +1754,8 @@ static const Ability FlowerGift = {
     .onSwitch = Forecast.onSwitch,
     .onWeather = Forecast.onWeather,
     .onEndTurn = Forecast.onEndTurn,
+    .onStatFor = APPLY_ON_ALLY,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -1763,9 +1815,14 @@ static const Ability Defiant = {
 
 #undef CONTEXT
 #define CONTEXT Defeatist
+ON_STAT {
+    if (statId != STAT_ATK && statId != STAT_SPATK) return;
+    if (gBattleMons[battler].hp <= gBattleMons[battler].maxHP / 3) *stat /= 2;
+}
 static const Ability Defeatist = {
     .name = $("Defeatist"),
     .description = $("Halves Atk and Sp. Atk stats if\nuser is below 1/3 of max HP."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -1846,9 +1903,13 @@ static const Ability HeavyMetal = {
 
 #undef CONTEXT
 #define CONTEXT LightMetal
+ON_STAT {
+    if (statId == STAT_SPEED) *stat = *stat * 13 / 10;
+}
 static const Ability LightMetal = {
     .name = $("Light Metal"),
     .description = $("Boosts Speed by 1.3x and halves\nthis Pokémon's weight."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -1889,11 +1950,16 @@ int FlareBoostHandler(int ability, int battler, AbilityCallType callType) {
 }
 ON_SWITCH { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_WEATHER { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); }
+ON_STAT {
+    if (statId != STAT_SPATK) return;
+    if (gBattleMons[battler].status1 & STATUS1_BURN) *stat = *stat * 3 / 2;
+}
 static const Ability FlareBoost = {
     .name = $("Flare Boost"),
     .description = $("Ups Sp. Atk by 1.5x if burned.\nIgnites in fog."),
     CONTEXT_ON_SWITCH,
     CONTEXT_ON_WEATHER,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -1998,9 +2064,13 @@ static const Ability BigPecks = {
 
 #undef CONTEXT
 #define CONTEXT SandRush
+ON_STAT {
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat = *stat * 3 / 2;
+}
 static const Ability SandRush = {
     .name = $("Sand Rush"),
     .description = $("This Pokémon's Speed gets a\n1.5x boost in a sandstorm."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -2162,9 +2232,14 @@ static const Ability Prankster = {
 
 #undef CONTEXT
 #define CONTEXT SandForce
+ON_STAT {
+    if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+    if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat = *stat * 3 / 2;
+}
 static const Ability SandForce = {
     .name = $("Sand Force"),
     .description = $("Ups highest attacking stat\nby 1.5x in sand."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -2340,10 +2415,14 @@ static const Ability MegaLauncher = {
 
 #undef CONTEXT
 #define CONTEXT GrassPelt
+ON_STAT {
+    if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat = *stat * 3 / 2;
+}
 static const Ability GrassPelt = {
     .name = $("Grass Pelt"),
     .description = $("This Pokémon's Defense gets a\n1.5x boost in Grassy Terrain."),
     .breakable = TRUE,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -2662,9 +2741,13 @@ static const Ability Berserk = {
 
 #undef CONTEXT
 #define CONTEXT SlushRush
+ON_STAT {
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat = *stat * 3 / 2;
+}
 static const Ability SlushRush = {
     .name = $("Slush Rush"),
     .description = $("This Pokémon's Speed gets a\n1.5x boost in hail."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -2707,9 +2790,13 @@ static const Ability Galvanize = {
 
 #undef CONTEXT
 #define CONTEXT SurgeSurfer
+ON_STAT {
+    if (statId == STAT_SPEED && IsWeatherActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 3 / 2;
+}
 static const Ability SurgeSurfer = {
     .name = $("Surge Surfer"),
     .description = $("If Electric Terrain is active,\ngets a 1.5x Speed boost."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -3613,9 +3700,14 @@ static const Ability Chloroplast = {
 
 #undef CONTEXT
 #define CONTEXT Whiteout
+ON_STAT {
+    if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+    if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat = *stat * 3 / 2;
+}
 static const Ability Whiteout = {
     .name = $("Whiteout"),
     .description = $("Ups highest attacking stat\nby 1.5x in hail."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -3895,11 +3987,15 @@ static const Ability LoudBang = {
 ON_DEFENSIVE_MULTIPLIER {
     if (IS_MOVE_PHYSICAL(move)) MUL(.6);
 }
+ON_STAT {
+    if (statId == STAT_SPEED) *stat = *stat * 9 / 10;
+}
 static const Ability LeadCoat = {
     .name = $("Lead Coat"),
     .description = $("Takes 40% less from Phys. moves.\nThis Pokémon's Speed is 0.9x."),
     .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -3938,9 +4034,13 @@ static const Ability FightSpirit = {
 
 #undef CONTEXT
 #define CONTEXT FelineProwess
+ON_STAT {
+    if (statId == STAT_SPATK) *stat *= 2;
+}
 static const Ability FelineProwess = {
     .name = $("Feline Prowess"),
     .description = $("Doubles own Sp. Atk stat.\nBoosts raw stat, not base stat."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -4211,9 +4311,13 @@ static const Ability ShortCircuit = {
 
 #undef CONTEXT
 #define CONTEXT MajesticBird
+ON_STAT {
+    if (statId == STAT_SPATK) *stat = *stat * 3 / 2;
+}
 static const Ability MajesticBird = {
     .name = $("Majestic Bird"),
     .description = $("Boosts own Sp. Atk by 1.5x.\nBoosts raw stat, not base stat."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -4781,12 +4885,17 @@ static const Ability GripPincer = {
 
 #undef CONTEXT
 #define CONTEXT BigLeaves
+ON_STAT {
+    SolarPower.onStat(ability, battler, statId, stat, flags);
+    Chlorophyll.onStat(ability, battler, statId, stat, flags);
+}
 static const Ability BigLeaves = {
     .name = $("Big Leaves"),
     .description = $("Chloroplast + Chlorophyll + Leaf\nGuard + Harvest + Solar Power."),
     .breakable = TRUE,
     .chloroplast = TRUE,
     .onEndTurn = Harvest.onEndTurn,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -6587,6 +6696,7 @@ static const Ability Seaborne = {
     .name = $("Seaborne"),
     .description = $("Drizzle + Swift Swim."),
     .onSwitch = Drizzle.onSwitch,
+    .onStat = SwiftSwim.onStat,
 };
 
 #undef CONTEXT
@@ -7008,6 +7118,7 @@ static const Ability ChromeCoat = {
     .description = $("Reduces special damage taken by\n40%, but decreases Speed by 10%."),
     .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onStat = LeadCoat.onStat,
 };
 
 #undef CONTEXT
@@ -7161,11 +7272,20 @@ int ProtosynthesisHandler(int ability, int battler, AbilityCallType callType) {
 }
 ON_SWITCH { return ProtosynthesisHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AND_CALLBACK); }
 ON_WEATHER { return ProtosynthesisHandler(ability, battler, ABILITY_BS_CALL); }
+ON_STAT {
+    ParadoxBoost boost = GetAbilityStateAs(battler, ability).paradoxBoost;
+    if (!boost.source || boost.statId != statId) return;
+    if (statId == STAT_SPEED)
+        *stat = *stat * 3 / 2;
+    else
+        *stat = *stat * 13 / 10;
+}
 static const Ability Protosynthesis = {
     .name = $("Protosynthesis"),
     .description = $("Boosts highest stat in Sun\nor with Booster Energy."),
     CONTEXT_ON_SWITCH,
     CONTEXT_ON_WEATHER,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -7218,6 +7338,7 @@ static const Ability QuarkDrive = {
     .description = $("Boosts highest stat in Electric\nTerrain or with Booster Energy."),
     CONTEXT_ON_SWITCH,
     CONTEXT_ON_TERRAIN,
+    .onStat = Protosynthesis.onStat,
 };
 
 #undef CONTEXT
@@ -7457,10 +7578,14 @@ ON_SWITCH {
 
     return SwitchInAnnounce(B_MSG_SWITCHIN_SUPREME_OVERLORD);
 }
+ON_STAT {
+    if (statId == STAT_ATK || statId == STAT_SPATK) *stat = *stat * (10 + max(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
+}
 static const Ability SupremeOverlord = {
     .name = $("Supreme Overlord"),
     .description = $("Each fainted ally increases\nAttack and SpAtk by 10%."),
     CONTEXT_ON_SWITCH,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -7584,30 +7709,46 @@ static const Ability SharingIsCaring = {
 
 #undef CONTEXT
 #define CONTEXT TabletsOfRuin
+ON_STAT { RuinEffect(STAT_ATK, battler, statId, stat, flags); }
 static const Ability TabletsOfRuin = {
     .name = $("Tablets Of Ruin"),
     .description = $("Lowers the Attack of\nother Pokemon by 25%."),
+    .onStatFor = APPLY_ON_OTHER,
+    .ruinsStat = TRUE,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT SwordOfRuin
+ON_STAT { RuinEffect(STAT_DEF, battler, statId, stat, flags); }
 static const Ability SwordOfRuin = {
     .name = $("Sword Of Ruin"),
     .description = $("Lowers the Defense of\nother Pokemon by 25%."),
+    .ruinsStat = TRUE,
+    .onStatFor = APPLY_ON_OTHER,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT VesselOfRuin
+ON_STAT { RuinEffect(STAT_SPATK, battler, statId, stat, flags); }
 static const Ability VesselOfRuin = {
     .name = $("Vessel Of Ruin"),
     .description = $("Lowers the Special Attack of\nother Pokemon by 25%."),
+    .ruinsStat = TRUE,
+    .onStatFor = APPLY_ON_OTHER,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT BeadsOfRuin
+ON_STAT { RuinEffect(STAT_DEF, battler, statId, stat, flags); }
 static const Ability BeadsOfRuin = {
     .name = $("Beads Of Ruin"),
     .description = $("Lowers the Special Defense\nof other Pokemon by 25%."),
+    .ruinsStat = TRUE,
+    .onStatFor = APPLY_ON_OTHER,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -7638,10 +7779,15 @@ static const Ability Gallantry = {
 
 #undef CONTEXT
 #define CONTEXT OrichalcumPulse
+ON_STAT {
+    if (statId != STAT_ATK) return;
+    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 4 / 3;
+}
 static const Ability OrichalcumPulse = {
     .name = $("Orichalcum Pulse"),
     .description = $("Summons sun on entry.\nRaises Atk by 1.33x in sun."),
     .onSwitch = Drought.onSwitch,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -7674,10 +7820,14 @@ static const Ability WingedKing = {
 
 #undef CONTEXT
 #define CONTEXT HadronEngine
+ON_STAT {
+    if (statId == STAT_SPATK && IsBattlerTerrainAffected(battler, STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 4 / 3;
+}
 static const Ability HadronEngine = {
     .name = $("Hadron Engine"),
     .description = $("Field becomes Electric.\n+33% SpAtk in Electric Terrain."),
     .onSwitch = ElectricSurge.onSwitch,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -7818,10 +7968,14 @@ ON_ATTACKER {
 
     return AbilityStatusEffect(MOVE_EFFECT_CURSE);
 }
+ON_STAT {
+    if (statId == STAT_ATK) *stat = *stat * 3 / 2;
+}
 static const Ability DeadPower = {
     .name = $("Dead Power"),
     .description = $("1.5x Attack boost. 20% chance\nto curse on contact moves."),
     CONTEXT_ON_ATTACKER,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -8070,9 +8224,14 @@ static const Ability OldMariner = {
 
 #undef CONTEXT
 #define CONTEXT Ectoplasm
+ON_STAT {
+    if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
+    if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat = *stat * 3 / 2;
+}
 static const Ability Ectoplasm = {
     .name = $("Ectoplasm"),
     .description = $("Ups highest attacking stat\nby 1.5x in fog."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -8139,9 +8298,13 @@ static const Ability Resonance = {
 
 #undef CONTEXT
 #define CONTEXT EtherealRush
+ON_STAT {
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat = *stat * 3 / 2;
+}
 static const Ability EtherealRush = {
     .name = $("Ethereal Rush"),
     .description = $("This Pokémon's Speed gets a\n1.5x boost in fog."),
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -8210,10 +8373,15 @@ static const Ability IceDownfall = {
 
 #undef CONTEXT
 #define CONTEXT LastStand
+ON_STAT {
+    if (statId == STAT_DEF || statId == STAT_SPDEF)
+        *stat = *stat + (*stat * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
+}
 static const Ability LastStand = {
     .name = $("Last Stand"),
     .description = $("Def and SpDef increase as\nHP drops. Max 1.6x."),
     .breakable = TRUE,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -8591,6 +8759,7 @@ static const Ability ElementalVortex = {
 static const Ability SnowyWrath = {
     .name = $("Snowy Wrath"),
     .description = $("Snow Warning + Whiteout."),
+    .onStat = Whiteout.onStat,
 };
 
 #undef CONTEXT
@@ -8785,6 +8954,7 @@ static const Ability WayOfSwiftness = {
     .description = $("Pretentious + Swift Swim."),
     .onBattlerFaintsFor = APPLY_ON_ATTACKER,
     .onBattlerFaints = Pretentious.onBattlerFaints,
+    .onStat = SwiftSwim.onStat,
 };
 
 #undef CONTEXT
@@ -8880,6 +9050,9 @@ static const Ability SwordOfDamnation = {
     .name = $("Sword of Damnation"),
     .description = $("Unaware + Sword of Ruin."),
     .unaware = TRUE,
+    .ruinsStat = TRUE,
+    .onStatFor = APPLY_ON_OTHER,
+    .onStat = SwordOfRuin.onStat,
 };
 
 #undef CONTEXT
@@ -9163,11 +9336,15 @@ static const Ability HotCoals = {
 #undef CONTEXT
 #define CONTEXT TerastalTreasure
 ON_DEFENSIVE_MULTIPLIER { MUL(.6); }
+ON_STAT {
+    if (statId == STAT_SPEED) *stat = *stat * 8 / 10;
+}
 static const Ability TerastalTreasure = {
     .name = $("Terastal Treasure"),
     .description = $("Reduces damage taken by 40%,\nbut lowers speed by 20%."),
     .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
@@ -9584,6 +9761,7 @@ static const Ability Breakwater = {
     .description = $("Swift Swim + Stall."),
     .breakable = TRUE,
     .onDefensiveMultiplier = Stall.onDefensiveMultiplier,
+    .onStat = SwiftSwim.onStat,
 };
 
 #undef CONTEXT
@@ -9614,6 +9792,7 @@ static const Ability SandBender = {
     .name = $("Sand Bender"),
     .description = $("Sand Stream + Sand Force."),
     .onSwitch = SandStream.onSwitch,
+    .onStat = SandForce.onStat,
 };
 
 #undef CONTEXT

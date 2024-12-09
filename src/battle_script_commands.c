@@ -9150,6 +9150,10 @@ static void Cmd_various(void) {
                 }
             }
         } break;
+        case VARIOUS_HP_FRACTION_TO_DAMAGE:
+            int fraction = READ_8_INC;
+            gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / fraction;
+            break;
     }  // End of switch (gBattlescriptCurrInstr[2])
 }
 

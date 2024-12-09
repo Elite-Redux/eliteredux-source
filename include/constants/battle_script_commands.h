@@ -271,6 +271,7 @@
 #define VARIOUS_JUMP_IF_ABILITY_STATE           188
 #define VARIOUS_SET_ABILITY_STATE               189
 #define VARIOUS_DO_INTIMIDATE                   190
+#define VARIOUS_HP_FRACTION_TO_DAMAGE           191
 
 #define HAZARD_MODE_SPIKES 0
 #define HAZARD_MODE_ROCKS 1

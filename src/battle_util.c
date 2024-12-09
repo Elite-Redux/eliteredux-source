@@ -7430,30 +7430,20 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
     u32 statBase = 0;
     u8 statStage = gBattleMons[battler].statStages[statEnum];
     u8 extraStatLevel = 0;
-#define RUIN_CHECK(ability) \
-    if (IsAbilityOnFieldExcept(battler, ability) && !BATTLER_HAS_ABILITY(battler, ability)) statBase = statBase * 3 / 4;
+
+    if (isWonderRoomActive()) {
+        if (statEnum == STAT_ATK)
+            statEnum = STAT_SPATK;
+        else if (statEnum == STAT_SPATK)
+            statEnum = STAT_ATK;
+    }
+
     switch (statEnum) {
         case STAT_HP:
             return 0;
         case STAT_ATK:
-            if (isWonderRoomActive()) goto CALCULATE_STAT_SPATK;
-        CALCULATE_STAT_ATK:
             statBase = gBattleMons[battler].attack;
             extraStatLevel = gVolatileStructs[battler].extraAttackLevel;
-            // Tablets of Ruin
-            RUIN_CHECK(ABILITY_TABLETS_OF_RUIN)
-
-            // Huge Power
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_HUGE_POWER)) statBase *= 2;
-
-            // Pure Power
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_PURE_POWER)) statBase *= 2;
-
-            // Dead Power
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_DEAD_POWER)) statBase = statBase * 3 / 2;
-
-            // Slow Start
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_SLOW_START) && gVolatileStructs[battler].slowStartTimer != 0) statBase /= 2;
 
             // Violent Rush
             if (gVolatileStructs[battler].violentRush) statBase = statBase * 6 / 5;
@@ -7464,122 +7454,37 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             // Huge Power on First Turn
             if (gVolatileStructs[battler].readiedAction) statBase *= 2;
 
-            // Hadron Engine
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_ORICHALCUM_PULSE) && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) statBase = statBase * 4 / 3;
-
             // Burn
             if ((gBattleMons[battler].status1 & STATUS1_BURN) && gBattleMoves[move].effect != EFFECT_FACADE &&
                 !BATTLER_HAS_ABILITY(battler, ABILITY_FLARE_BOOST) && !BATTLER_HAS_ABILITY(battler, ABILITY_HEATPROOF) &&
                 !BATTLER_HAS_ABILITY(battler, ABILITY_IRON_GIANT) && !BATTLER_HAS_ABILITY(battler, ABILITY_GUTS))
                 statBase /= 2;
-
-        HANDLE_STAT_CALC_ATK_OR_SPATK:
-            // Big Leaves/Solar Power
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_BIG_LEAVES) || BATTLER_HAS_ABILITY(battler, ABILITY_SOLAR_POWER)) &&
-                IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY) && GetHighestAttackingStatId(battler, TRUE) == statEnum)
-                statBase = statBase * 3 / 2;
-
-            // Sand Force
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_SAND_FORCE) || BATTLER_HAS_ABILITY(battler, ABILITY_SAND_BENDER)) &&
-                IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY) && GetHighestAttackingStatId(battler, TRUE) == statEnum)
-                statBase = statBase * 3 / 2;
-
-            // Fog Power
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_ECTOPLASM)) && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY) &&
-                GetHighestAttackingStatId(battler, TRUE) == statEnum)
-                statBase = statBase * 3 / 2;
-
-            // Fog Power
-            if ((BATTLER_HAS_ABILITY(battler, ABILITY_WHITEOUT) || BATTLER_HAS_ABILITY(battler, ABILITY_SNOWY_WRATH)) &&
-                IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY) && GetHighestAttackingStatId(battler, TRUE) == statEnum)
-                statBase = statBase * 3 / 2;
-
-            // Supreme Overlord
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_SUPREME_OVERLORD)) statBase = statBase * (10 + max(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
-
-            // Defeatist
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_DEFEATIST) && gBattleMons[battler].hp <= (gBattleMons[battler].maxHP / 3)) statBase /= 2;
             break;
+
         case STAT_SPATK:
-            if (isWonderRoomActive()) goto CALCULATE_STAT_ATK;
-        CALCULATE_STAT_SPATK:
             statBase = gBattleMons[battler].spAttack;
             extraStatLevel = gVolatileStructs[battler].extraSpAttackLevel;
-            // Tablets of Ruin
-            RUIN_CHECK(ABILITY_VESSEL_OF_RUIN)
-
-            // Majestic Bird
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_MAJESTIC_BIRD)) statBase = statBase * 3 / 2;
-
-            // Feline Prowess
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_FELINE_PROWESS)) statBase *= 2;
 
             // Special Violent Rush
             if (gVolatileStructs[battler].rapidResponse) statBase = statBase * 6 / 5;
-
-            // Flare Boost
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_FLARE_BOOST) && gBattleMons[battler].status1 & STATUS1_BURN) statBase = statBase * 3 / 2;
-
-            // Flower Gift
-            {
-                int flowerGiftUser;
-                if ((flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)) && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
-                    statBase = statBase * 3 / 2;
-            }
-
-            // Hadron Engine
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_HADRON_ENGINE) && TERRAIN_HAS_EFFECT && gFieldStatuses & STATUS_FIELD_ELECTRIC_TERRAIN)
-                statBase = statBase * 4 / 3;
 
             // Frostbite
             if ((gBattleMons[battler].status1 & STATUS1_FROSTBITE) && gBattleMoves[move].effect != EFFECT_FACADE &&
                 !BATTLER_HAS_ABILITY(battler, ABILITY_DETERMINATION))
                 statBase /= 2;
-
-            goto HANDLE_STAT_CALC_ATK_OR_SPATK;
             break;
+
         case STAT_DEF:
             statBase = gBattleMons[battler].defense;
             extraStatLevel = gVolatileStructs[battler].extraDefenseLevel;
 
-            // Sword of Ruin
-            RUIN_CHECK(ABILITY_SWORD_OF_RUIN)
-
-            // Sword of Damnation
-            RUIN_CHECK(ABILITY_SWORD_OF_DAMNATION)
-
-            // Last Stand
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_LAST_STAND)) {
-                statBase = statBase + (statBase * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
-            }
-
-            // Marvel Scale
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_MARVEL_SCALE) && HasAnyStatusOrAbility(battler)) statBase = statBase * 3 / 2;
-
-            // Grass Pelt
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_GRASS_PELT) && GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN) statBase = statBase * 3 / 2;
-
             // Hail
             if (IS_BATTLER_OF_TYPE(battler, TYPE_ICE) && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) statBase = statBase * 3 / 2;
             break;
+
         case STAT_SPDEF:
             statBase = gBattleMons[battler].spDefense;
             extraStatLevel = gVolatileStructs[battler].extraSpDefenseLevel;
-
-            // Tablets of Ruin
-            RUIN_CHECK(ABILITY_BEADS_OF_RUIN)
-
-            // Last Stand
-            if (BATTLER_HAS_ABILITY(battler, ABILITY_LAST_STAND)) {
-                statBase = statBase + (statBase * 60 * (gBattleMons[battler].maxHP - gBattleMons[battler].hp) / gBattleMons[battler].maxHP / 100);
-            }
-
-            // Flower Gift
-            {
-                int flowerGiftUser;
-                if ((flowerGiftUser = IsAbilityOnSide(battler, ABILITY_FLOWER_GIFT)) && IsBattlerWeatherAffected(flowerGiftUser - 1, WEATHER_SUN_ANY))
-                    statBase = statBase * 3 / 2;
-            }
 
             // Sandstorm
             if (IS_BATTLER_OF_TYPE(battler, TYPE_ROCK) && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) statBase = statBase * 3 / 2;
@@ -7589,11 +7494,15 @@ u32 CalculateStat(u8 battler, u8 statEnum, u8 secondaryStat, u16 move, bool8 isA
             extraStatLevel = gVolatileStructs[battler].extraSpeedLevel;
             break;
     }
-    if (statEnum != STAT_SPEED && GetAbilityStateAs(battler, ABILITY_PROTOSYNTHESIS).paradoxBoost.statId == statEnum) statBase = statBase * 13 / 10;
 
-    if (statEnum != STAT_SPEED && GetAbilityStateAs(battler, ABILITY_QUARK_DRIVE).paradoxBoost.statId == statEnum) statBase = statBase * 13 / 10;
-
-#undef RUIN_CHECK
+    NonStackingState flags = 0;
+    for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
+        FILTER(IsBattlerAlive(sourceBattler))
+        ON_ABILITY(sourceBattler,
+                   TRUE,
+                   gAbilities[ability].onStat && IsApplyOnFlagAppropriate(battler, sourceBattler, gAbilities[ability].onStatFor),
+                   gAbilities[ability].onStat(ability, battler, statEnum, &statBase, &flags))
+    }
 
     if (isUnaware)
         statStage = DEFAULT_STAT_STAGE;

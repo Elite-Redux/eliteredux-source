@@ -46,14 +46,21 @@ typedef void (*AbilityOnOffensiveMultiplierHandler)(
     int battler, int target, int move, int moveType, int basePower, int typeEffectivenessMultiplier, int isCrit, u16* resistance, u16* modifier);
 typedef void (*AbilityOnDefensiveMultiplierHandler)(
     int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16* resistance, u16* modifier);
+typedef enum {
+    NON_STACKING_NONE = 0,
+    NON_STACKING_RUIN = 1 << 0,
+} NonStackingState;
+typedef void (*AbilityOnStatHandler)(int ability, int battler, int statId, u32* stat, NonStackingState* flags);
 
 typedef enum {
     APPLY_ON_SELF = 0,
     APPLY_IGNORE_SELF = 1 << 2,
     APPLY_ON_ALLY = 1 << 0,
     APPLY_ON_ALLY_ONLY = APPLY_ON_ALLY | APPLY_IGNORE_SELF,
-    APPLY_ON_FOE = 1 << 1 | APPLY_IGNORE_SELF,
-    APPLY_ON_ANY = APPLY_ON_ALLY | APPLY_ON_FOE,
+    APPLY_ON_FOE_OR_SELF = 1 << 1,
+    APPLY_ON_FOE = APPLY_ON_FOE_OR_SELF | APPLY_IGNORE_SELF,
+    APPLY_ON_ANY = APPLY_ON_ALLY | APPLY_ON_FOE_OR_SELF,
+    APPLY_ON_OTHER = APPLY_ON_ANY | APPLY_IGNORE_SELF,
 } AbilityApplyOn;
 
 typedef enum {
@@ -81,6 +88,7 @@ typedef struct Ability {
     const AbilityOnParentalBondHandler onParentalBond;
     const AbilityOnOffensiveMultiplierHandler onOffensiveMultiplier;
     const AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
+    const AbilityOnStatHandler onStat;
     u16 redirectType:5;
     AbilityApplyOn onImmuneFor:3;
     u16 noDamageHits:2;
@@ -100,6 +108,8 @@ typedef struct Ability {
     u16 skillLink:1;
     u16 resistsFortKnox:1;
     u16 fortKnox:1;
+    AbilityApplyOn onStatFor:3;
+    u16 ruinsStat:1;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];
