@@ -1215,7 +1215,6 @@ static const u16 sTyphlosionFormSpeciesIdTable[] = {
 static const u16 sMeganiumFormSpeciesIdTable[] = {
     SPECIES_MEGANIUM,
     SPECIES_MEGANIUM_MEGA,
-    SPECIES_MEGANIUM_MEGA_X,
     FORM_SPECIES_END,
 };
 

@@ -4150,3 +4150,79 @@ static const u8 sLoadedDiceDesc[] = _(
     "Rolls high numbers.\n"
     "Multihit strikes\n"
     "hit more times.");
+
+//3.0 CUTOFF
+static const u8 sWeavileiteDesc[] = _(
+    "This stone enables\n"
+    "Weavile to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSerperioriteDesc[] = _(
+    "This stone enables\n"
+    "Serperior to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSamurottiteDesc[] = _(
+    "This stone enables\n"
+    "Samurott to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSamurottiteHDesc[] = _(
+    "This stone enables\n"
+    "Samurott H to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sGolisopoditeRDesc[] = _(
+    "This stone enables\n"
+    "Golisopod R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sHattereniteRDesc[] = _(
+    "This stone enables\n"
+    "Hatterene R to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sDeciduiteDesc[] = _(
+    "This stone enables\n"
+    "Decidueye to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sDeciduiteHDesc[] = _(
+    "This stone enables\n"
+    "Decidueye H to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sPrimariniteDesc[] = _(
+    "This stone enables\n"
+    "Primarina to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sIncineriteDesc[] = _(
+    "This stone enables\n"
+    "Incineroar to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sMeowscaraditeDesc[] = _(
+    "This stone enables\n"
+    "Meowscarada to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sQuaquaviteDesc[] = _(
+    "This stone enables\n"
+    "Quaquaval to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sSkeledirgeiteDesc[] = _(
+    "This stone enables\n"
+    "Skeledirge to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sTyphlosioniteHDesc[] = _(
+    "This stone enables\n"
+    "Typhlosion H to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sEmboariteDesc[] = _(
+    "This stone enables\n"
+    "Emboar to Mega\n"
+    "Evolve in battle.");

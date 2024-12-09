@@ -1812,7 +1812,6 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_DECIDUEYE_MEGA] = _("Decidueye"),
     [SPECIES_DECIDUEYE_HISUIAN_MEGA] = _("Decidueye"),
     [SPECIES_INCINEROAR_MEGA] = _("Incineroar"),
-    [SPECIES_MEGANIUM_MEGA_X] = _("Meganium"),
     [SPECIES_MEOWSCARADA_MEGA] = _("Meowscarada"),
     [SPECIES_PRIMARINA_MEGA] = _("Primarina"),
     [SPECIES_QUAQUAVAL_MEGA] = _("Quaquaval"),

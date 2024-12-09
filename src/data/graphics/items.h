@@ -1707,6 +1707,24 @@ const u32 gItemIconPalette_Eevite[] = INCBIN_U32("graphics/items/icon_palettes/g
 const u32 gItemIconPalette_Meowthite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
 const u32 gItemIconPalette_VenusauriteX[]  = INCBIN_U32("graphics/items/icon_palettes/venusaurite.gbapal.lz");
 const u32 gItemIconPalette_BlastoisiniteX[]  = INCBIN_U32("graphics/items/icon_palettes/blastoisinite.gbapal.lz");
+const u32 gItemIconPalette_Fidoughite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Duraludite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+//3.0 CUTOFFS
+const u32 gItemIconPalette_Weavileite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Samurottite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_SamurottiteH[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Serperiorite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Emboarite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_GolisopoditeR[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_HattereniteR[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Deciduite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_DeciduiteH[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Meowscaradite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Incinerite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Primarinite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Quaquavite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_Skeledirgeite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
+const u32 gItemIconPalette_TyphlosioniteH[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
 
 // Gen 7 Items
 

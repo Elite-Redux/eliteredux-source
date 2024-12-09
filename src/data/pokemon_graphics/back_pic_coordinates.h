@@ -8537,7 +8537,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SPIRITOMB_REDUX] =
     {
         .size = 0,
-        .y_offset =  0
+        .y_offset =  7
     },
     [SPECIES_GOLISOPOD_REDUX] =
     {
@@ -8585,11 +8585,6 @@ const struct MonCoords gMonBackPicCoords[] =
         .y_offset = 0,
     },
     [SPECIES_INCINEROAR_MEGA] =
-    {
-        .size = 0x78,
-        .y_offset = 0,
-    },
-    [SPECIES_MEGANIUM_MEGA_X] =
     {
         .size = 0x78,
         .y_offset = 0,

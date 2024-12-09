@@ -8437,12 +8437,6 @@ const u32 gMonPalette_IncineroarMega[]           = INCBIN_U32("graphics/pokemon/
 const u32 gMonShinyPalette_IncineroarMega[]      = INCBIN_U32("graphics/pokemon/incineroar/mega/shiny.gbapal.lz");
 const u8  gMonIcon_IncineroarMega[]              = INCBIN_U8("graphics/pokemon/incineroar/mega/icon.4bpp");
 
-const u32 gMonFrontPic_MeganiumMegaX[]          = INCBIN_U32("graphics/pokemon/meganium/mega_x/front.4bpp.lz");
-const u32 gMonBackPic_MeganiumMegaX[]           = INCBIN_U32("graphics/pokemon/meganium/mega_x/back.4bpp.lz");
-const u32 gMonPalette_MeganiumMegaX[]           = INCBIN_U32("graphics/pokemon/meganium/mega_x/normal.gbapal.lz");
-const u32 gMonShinyPalette_MeganiumMegaX[]      = INCBIN_U32("graphics/pokemon/meganium/mega_x/shiny.gbapal.lz");
-const u8  gMonIcon_MeganiumMegaX[]              = INCBIN_U8("graphics/pokemon/meganium/mega_x/icon.4bpp");
-
 const u32 gMonFrontPic_MeowscaradaMega[]          = INCBIN_U32("graphics/pokemon/meowscarada/mega/front.4bpp.lz");
 const u32 gMonBackPic_MeowscaradaMega[]           = INCBIN_U32("graphics/pokemon/meowscarada/mega/back.4bpp.lz");
 const u32 gMonPalette_MeowscaradaMega[]           = INCBIN_U32("graphics/pokemon/meowscarada/mega/normal.gbapal.lz");

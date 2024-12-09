@@ -1194,7 +1194,6 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_DECIDUEYE_HISUIAN_MEGA] = sDecidueyeFormSpeciesIdTable,
     [SPECIES_INCINEROAR_MEGA] = sIncineroarFormSpeciesIdTable,
     [SPECIES_INCINEROAR] = sIncineroarFormSpeciesIdTable,
-    [SPECIES_MEGANIUM_MEGA_X] = sMeganiumFormSpeciesIdTable,
     [SPECIES_MEOWSCARADA] = sMeowscaradaFormSpeciesIdTable,
     [SPECIES_MEOWSCARADA_MEGA] = sMeowscaradaFormSpeciesIdTable,
     [SPECIES_PRIMARINA] = sPrimarinaFormSpeciesIdTable,

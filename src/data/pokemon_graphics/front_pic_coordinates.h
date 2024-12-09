@@ -8507,11 +8507,6 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 2,
     },
-    [SPECIES_MEGANIUM_MEGA_X] =
-    {
-        .size = 0x88,
-        .y_offset = 0,
-    },
     [SPECIES_MEOWSCARADA_MEGA] =
     {
         .size = 0x88,

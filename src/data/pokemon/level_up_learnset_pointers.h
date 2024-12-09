@@ -1811,7 +1811,6 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_DECIDUEYE_MEGA] = sDecidueyeLevelUpLearnset,
     [SPECIES_DECIDUEYE_HISUIAN_MEGA] = sDecidueyeHisuianLevelUpLearnset,
     [SPECIES_INCINEROAR_MEGA] = sIncineroarLevelUpLearnset,
-    [SPECIES_MEGANIUM_MEGA_X] = sMeganiumLevelUpLearnset,
     [SPECIES_MEOWSCARADA_MEGA] = sMeowscaradaLevelUpLearnset,
     [SPECIES_PRIMARINA_MEGA] = sPrimarinaLevelUpLearnset,
     [SPECIES_SAMUROTT_HISUIAN_MEGA] = sSamurottHisuianLevelUpLearnset,

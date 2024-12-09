@@ -20484,17 +20484,6 @@ static const union AnimCmd *const sAnims_INCINEROAR_MEGA[] ={
     sAnim_INCINEROAR_MEGA_1,
 };
 
-static const union AnimCmd sAnim_MEGANIUM_MEGA_X_1[] =
-{
-    ANIMCMD_FRAME(0, 1),
-    ANIMCMD_END,
-};
-
-static const union AnimCmd *const sAnims_MEGANIUM_MEGA_X[] ={
-    sAnim_GeneralFrame0,
-    sAnim_MEGANIUM_MEGA_X_1,
-};
-
 static const union AnimCmd sAnim_MEOWSCARADA_MEGA_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -22285,7 +22274,6 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     ANIM_CMD(DECIDUEYE_MEGA),
     ANIM_CMD(DECIDUEYE_HISUIAN_MEGA),
     ANIM_CMD(INCINEROAR_MEGA),
-    ANIM_CMD(MEGANIUM_MEGA_X),
     ANIM_CMD(MEOWSCARADA_MEGA),
     ANIM_CMD(PRIMARINA_MEGA),
     ANIM_CMD(QUAQUAVAL_MEGA),
