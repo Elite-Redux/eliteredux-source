@@ -240,10 +240,10 @@ static int MoxieClone(int battler, int stat) {
         }                                                                    \
     }
 
-static void RuinEffect(int ruinStat, int battler, int statId, u32 *stat, NonStackingState *flags) {
+static void RuinEffect(int ruinStat, const AbilityOnStatHandler dedup, int battler, int statId, u32 *stat, NonStackingState *flags) {
     if (statId != ruinStat) return;
     if (*flags & NON_STACKING_RUIN) return;
-    ON_ABILITY(battler, FALSE, gAbilities[ability].ruinsStat, return)
+    ON_ABILITY(battler, FALSE, gAbilities[ability].onStat == dedup, return)
     *stat = *stat * 3 / 4;
     *flags |= NON_STACKING_RUIN;
 }
@@ -632,7 +632,7 @@ static const Ability SereneGrace = {
 #undef CONTEXT
 #define CONTEXT SwiftSwim
 ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat = *stat * 3 /2 ;
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat = *stat * 3 / 2;
 }
 static const Ability SwiftSwim = {
     .name = $("Swift Swim"),
@@ -1394,7 +1394,7 @@ static const Ability SolarPower = {
 #undef CONTEXT
 #define CONTEXT QuickFeet
 ON_STAT {
-    if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat = *stat * 3 /2;
+    if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat = *stat * 3 / 2;
 }
 static const Ability QuickFeet = {
     .name = $("Quick Feet"),
@@ -7709,44 +7709,40 @@ static const Ability SharingIsCaring = {
 
 #undef CONTEXT
 #define CONTEXT TabletsOfRuin
-ON_STAT { RuinEffect(STAT_ATK, battler, statId, stat, flags); }
+ON_STAT { RuinEffect(STAT_ATK, onStatTabletsOfRuin, battler, statId, stat, flags); }
 static const Ability TabletsOfRuin = {
     .name = $("Tablets Of Ruin"),
     .description = $("Lowers the Attack of\nother Pokemon by 25%."),
     .onStatFor = APPLY_ON_OTHER,
-    .ruinsStat = TRUE,
     CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT SwordOfRuin
-ON_STAT { RuinEffect(STAT_DEF, battler, statId, stat, flags); }
+ON_STAT { RuinEffect(STAT_DEF, onStatSwordOfRuin, battler, statId, stat, flags); }
 static const Ability SwordOfRuin = {
     .name = $("Sword Of Ruin"),
     .description = $("Lowers the Defense of\nother Pokemon by 25%."),
-    .ruinsStat = TRUE,
     .onStatFor = APPLY_ON_OTHER,
     CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT VesselOfRuin
-ON_STAT { RuinEffect(STAT_SPATK, battler, statId, stat, flags); }
+ON_STAT { RuinEffect(STAT_SPATK, onStatVesselOfRuin, battler, statId, stat, flags); }
 static const Ability VesselOfRuin = {
     .name = $("Vessel Of Ruin"),
     .description = $("Lowers the Special Attack of\nother Pokemon by 25%."),
-    .ruinsStat = TRUE,
     .onStatFor = APPLY_ON_OTHER,
     CONTEXT_ON_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT BeadsOfRuin
-ON_STAT { RuinEffect(STAT_DEF, battler, statId, stat, flags); }
+ON_STAT { RuinEffect(STAT_DEF, onStatBeadsOfRuin, battler, statId, stat, flags); }
 static const Ability BeadsOfRuin = {
     .name = $("Beads Of Ruin"),
     .description = $("Lowers the Special Defense\nof other Pokemon by 25%."),
-    .ruinsStat = TRUE,
     .onStatFor = APPLY_ON_OTHER,
     CONTEXT_ON_STAT,
 };
@@ -9050,7 +9046,6 @@ static const Ability SwordOfDamnation = {
     .name = $("Sword of Damnation"),
     .description = $("Unaware + Sword of Ruin."),
     .unaware = TRUE,
-    .ruinsStat = TRUE,
     .onStatFor = APPLY_ON_OTHER,
     .onStat = SwordOfRuin.onStat,
 };
