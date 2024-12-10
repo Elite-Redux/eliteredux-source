@@ -1096,9 +1096,7 @@ static void Cmd_attackcanceler(void) {
 #endif
     if (AtkCanceller_UnableToUseMove()) return;
 
-    if (gTurnStructs[gBattlerAttacker].multiHitCounter) {
-        gTurnStructs[gBattlerAttacker].parentalBondOn = gTurnStructs[gBattlerAttacker].parentalBondTrigger = 0;
-    } else if (!gTurnStructs[gBattlerAttacker].parentalBondOn) {
+    if (!gTurnStructs[gBattlerAttacker].multiHitCounter) {
         gTurnStructs[gBattlerAttacker].parentalBondTrigger = GetParentalBondType(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType);
         i = GetParentalBondCount(gBattlerAttacker, gTurnStructs[gBattlerAttacker].parentalBondTrigger);
         if (i > 1) {
@@ -3119,8 +3117,7 @@ int GetMoveEffectChance(int battler, int move, int moveEffect, int baseChance) {
             break;
 
         case MOVE_EFFECT_FLINCH:
-            if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) baseChance *= 0;
-            break;
+            if (gTurnStructs[gBattlerAttacker].parentalBondOn < gTurnStructs[gBattlerAttacker].parentalBondInitialCount) return 0;
     }
 
     if (BATTLER_HAS_ABILITY(battler, ABILITY_SERENE_GRACE)) baseChance *= 2;
