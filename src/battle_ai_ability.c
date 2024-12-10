@@ -1115,6 +1115,9 @@ int ScoreSwitchInAbility(int ability, int battlerAtk, int battlerDef, int move, 
     
     case ABILITY_WATCH_YOUR_STEP:
         return AI_SCORE_SPIKES(battlerDef) + AI_SCORE_SPIKES(battlerDef);
+
+    case ABILITY_ROSE_GARDEN:
+        return AI_SCORE_TOXIC_SPIKES(battlerDef) + AI_SCORE_TOXIC_SPIKES(battlerDef);
     
     case ABILITY_LAWNMOWER:
         REQUIRE(IsTerrainActive(STATUS_FIELD_TERRAIN_ANY))

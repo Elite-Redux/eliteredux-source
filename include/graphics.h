@@ -11583,6 +11583,11 @@ extern const u32 gMonBackPic_SlowkingGalarianMega[];
 extern const u32 gMonPalette_SlowkingGalarianMega[];
 extern const u32 gMonShinyPalette_SlowkingGalarianMega[];
 extern const u8  gMonIcon_SlowkingGalarianMega[];
+extern const u32 gMonFrontPic_RoseradeMega[];
+extern const u32 gMonBackPic_RoseradeMega[];
+extern const u32 gMonPalette_RoseradeMega[];
+extern const u32 gMonShinyPalette_RoseradeMega[];
+extern const u8  gMonIcon_RoseradeMega[];
 //3.0 CUTOFF END
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

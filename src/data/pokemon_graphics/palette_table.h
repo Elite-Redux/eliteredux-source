@@ -1785,6 +1785,7 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(TOXAPEX_MEGA,     gMonPalette_ToxapexMega),
     SPECIES_PAL(SLOWBRO_MEGA_GALARIAN,     gMonPalette_SlowbroGalarianMega),
     SPECIES_PAL(SLOWKING_MEGA_GALARIAN,     gMonPalette_SlowkingGalarianMega),
+    SPECIES_PAL(ROSERADE_MEGA,     gMonPalette_RoseradeMega),
 };
 
 const struct CompressedSpritePalette gMonPaletteTableFemale[] =

@@ -8649,6 +8649,10 @@ const struct MonCoords gMonBackPicCoords[] =
         .size = 0x78,
         .y_offset = 0,
     },
-
+    [SPECIES_ROSERADE_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 6,
+    },
 
 };

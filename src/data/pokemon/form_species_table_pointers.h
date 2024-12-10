@@ -1211,6 +1211,8 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ARCANINE_MEGA] = sArcanineFormSpeciesIdTable,
     [SPECIES_SLOWBRO_MEGA_GALARIAN] = sSlowbroFormSpeciesIdTable,
     [SPECIES_SLOWKING_MEGA_GALARIAN] = sSlowkingFormSpeciesIdTable,
+    [SPECIES_ROSERADE] = sRoseradeFormSpeciesIdTable,
+    [SPECIES_ROSERADE_MEGA] = sRoseradeFormSpeciesIdTable,
 
     [SPECIES_HATTREM_REDUX] = sHattremFormSpeciesIdTable,
 

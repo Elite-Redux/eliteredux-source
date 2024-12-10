@@ -15430,6 +15430,17 @@ int HandleSwitchInAbilityAs(int ability, int battler)
         BattleScriptPushCursorAndCallback(BattleScript_DoubleSpikesOnEntry);
         }
         return TRUE;
+
+    case ABILITY_ROSE_GARDEN:
+        {
+        u8 targetSide = GetBattlerSide(BATTLE_OPPOSITE(battler));
+        REQUIRE(gSideTimers[targetSide].toxicSpikesAmount < 2)
+
+        gSideTimers[targetSide].toxicSpikesAmount = min(gSideTimers[targetSide].toxicSpikesAmount + 2, 2);
+        gSideStatuses[targetSide] |= SIDE_STATUS_TOXIC_SPIKES;
+        BattleScriptPushCursorAndCallback(BattleScript_DoubleToxicSpikesOnEntry);
+        }
+        return TRUE;
     
     case ABILITY_LAWNMOWER:
         REQUIRE(gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)

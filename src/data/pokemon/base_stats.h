@@ -47832,6 +47832,33 @@ const struct BaseStats gBaseStats[] =
     .tier = 0,
     },
 
+    [SPECIES_ROSERADE_MEGA] =
+    {
+    .baseHP         = 60,
+    .baseAttack     = 145,
+    .baseDefense    = 70,
+    .baseSpeed      = 125,
+    .baseSpAttack   = 145,
+    .baseSpDefense  = 90,
+    .type1 = TYPE_GRASS,
+    .type2 = TYPE_POISON,
+    .catchRate = 255,
+    .expYield = 232,
+    .evYield_SpAttack  = 3,
+    .item2 = ITEM_POISON_BARB,
+    .genderRatio = PERCENT_FEMALE(50),
+    .eggCycles = 20,
+    .friendship = 70,
+    .growthRate = GROWTH_MEDIUM_SLOW,
+    .eggGroup1 = EGG_GROUP_FAIRY,
+    .eggGroup2 = EGG_GROUP_GRASS,
+    .abilities      = {ABILITY_TECHNICIAN, ABILITY_ROSE_GARDEN, ABILITY_CORROSION},
+    .innates        = {ABILITY_EQUINOX, ABILITY_MERCILESS, ABILITY_LONG_REACH},
+    .bodyColor = BODY_COLOR_GREEN,
+    .noFlip = TRUE,
+    .tier = 0,
+    },
+
     [SPECIES_UNOWN_REVELATION] =
     {
     .baseHP         = 48,

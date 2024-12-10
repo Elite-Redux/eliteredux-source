@@ -771,6 +771,7 @@ static const u8 sText_PlayerGotBP[] = _("{B_PLAYER_NAME} got {B_BUFF1} Battle Po
 static const u8 sText_CantUseTwiceInARow[] = _("{B_ACTIVE_NAME_WITH_PREFIX}'s can't use\n{B_CURRENT_MOVE} twice in a row!\p");
 static const u8 sText_AttackerLostElectricType[] = _("{B_ATK_NAME_WITH_PREFIX} used up\nall its electricity!");
 static const u8 sText_HeavySpikesScattered[] = _("Spikes were rain down on\nthe opponent's side!");
+static const u8 sText_LethalSpikesScattered[] = _("Many Toxic Spikes were\nrain down on the opponent's side!");
 static const u8 sText_PkmnAlreadyType[] = _("{B_ATK_NAME_WITH_PREFIX} couldn't\nchange its type!");
 static const u8 sText_PkmnCutHPRaisedStats[] = _("{B_ATK_NAME_WITH_PREFIX} cut its own HP\nand raised its stats!");
 static const u8 sText_PkmnAfflictedBySaltCure[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby Salt Cure!");
@@ -1926,6 +1927,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_RUDE_AWAKENING - 12] = sText_RudeAwakening,
     [STRINGID_CUTTHROAT - 12] = sText_Cutthroat,
     [STRINGID_ITEM_STAT_PROTECTED - 12] = sText_ItemStatProtected,
+    [STRINGID_LETHALSPIKESSCATTERED - 12] = sText_LethalSpikesScattered,
 };
 
 const u16 gMentalHerbCureStringIds[] = 

@@ -9968,6 +9968,15 @@ BattleScript_DoubleSpikesOnEntry::
 	waitmessage B_WAIT_TIME_LONG
 	end3
 
+BattleScript_DoubleToxicSpikesOnEntry::
+	call BattleScript_AbilityPopUp
+	waitmessage B_WAIT_TIME_SHORT
+	playmoveanimation BS_ATTACKER, MOVE_TOXIC_SPIKES
+	waitanimation
+	printstring STRINGID_LETHALSPIKESSCATTERED
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
 BattleScript_DefenderSetsToxicSpikeLayer::
 	swapbattlerandtargetvia34
 	checkcondition CONDITION_TOXIC_SPIKES, BattleScript_DefenderSetsToxicSpikeLayerEnd
