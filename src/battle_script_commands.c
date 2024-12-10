@@ -1018,8 +1018,18 @@ MultihitType GetParentalBondType(int battler, int target, int move, int moveType
 }
 
 int HasFortKnox(int battler) {
-    RETURN_TRUE_IF_ABILITY_FLAG(battler, FALSE, fortKnox)
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, fortKnox)
     return FALSE;
+}
+
+static int HasProtean(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, protean)
+    return ABILITY_NONE;
+}
+
+static int HasColorChange(int battler) {
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, colorChange)
+    return ABILITY_NONE;
 }
 
 int GetParentalBondCount(int battler, MultihitType parentalBondType) {
@@ -1106,73 +1116,35 @@ static void Cmd_attackcanceler(void) {
         }
     }
 
-    // Check Protean activation
-    if ((BattlerHasAbility(gBattlerAttacker, ABILITY_PROTEAN, FALSE) || BattlerHasAbility(gBattlerAttacker, ABILITY_LIBERO, FALSE) ||
-         BattlerHasAbility(gBattlerAttacker, ABILITY_PATTERN_CHANGE, FALSE) || BattlerHasAbility(gBattlerAttacker, ABILITY_RKS_SYSTEM, FALSE)) &&
-        (gBattleMons[gBattlerAttacker].type1 != moveType || gBattleMons[gBattlerAttacker].type2 != moveType ||
-         (gBattleMons[gBattlerAttacker].type3 != moveType && gBattleMons[gBattlerAttacker].type3 != TYPE_MYSTERY)) &&
-        gCurrentMove != MOVE_STRUGGLE) {
-        if (BattlerHasAbility(gBattlerAttacker, ABILITY_PROTEAN, FALSE)) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_PROTEAN;
-        } else if (BattlerHasAbility(gBattlerAttacker, ABILITY_RKS_SYSTEM, FALSE)) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_RKS_SYSTEM;
-        } else if (BattlerHasAbility(gBattlerAttacker, ABILITY_PATTERN_CHANGE, FALSE)) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_PATTERN_CHANGE;
-        } else {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_LIBERO;
-        }
-
-        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
+    int ability;
+    if ((ability = HasProtean(gBattlerAttacker)) && !IS_BATTLER_OF_TYPE(gBattlerAttacker, moveType) && gCurrentMove != MOVE_STRUGGLE) {
+        gBattleScripting.abilityPopupOverwrite = ability;
         SET_BATTLER_TYPE(gBattlerAttacker, moveType);
         gBattlerAbility = gBattlerAttacker;
         BattleScriptCall(BattleScript_ProteanActivates);
         return;
     }
 
-    // Check Prismatic Fur activation
-    if ((BattlerHasAbility(gBattlerAttacker, ABILITY_PRISMATIC_FUR, FALSE)) &&
-        (gBattleMons[gBattlerAttacker].type1 != moveType || gBattleMons[gBattlerAttacker].type2 != moveType ||
-         (gBattleMons[gBattlerAttacker].type3 != moveType && gBattleMons[gBattlerAttacker].type3 != TYPE_MYSTERY)) &&
-        gCurrentMove != MOVE_STRUGGLE) {
-        if (BattlerHasAbility(gBattlerAttacker, ABILITY_PRISMATIC_FUR, FALSE)) {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_PRISMATIC_FUR;
-        } else {
-            gBattleScripting.abilityPopupOverwrite = ABILITY_PRISMATIC_FUR;
+    if ((ability = HasColorChange(gBattlerTarget)) && gBattlerAttacker != gBattlerTarget && CheckAndSetOncePerTurnAbility(gBattlerTarget, ability)) {
+        u32 bestType = gBattleMons[gBattlerTarget].type1;
+        u16 bestModifier = GetTypeModifier(moveType, bestType, gBattlerAttacker, gBattlerTarget);
+
+        for (int currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
+            u16 currentModifier = GetTypeModifier(moveType, currentType, gBattlerAttacker, gBattlerTarget);
+            if (currentModifier < bestModifier) {
+                bestModifier = currentModifier;
+                bestType = currentType;
+            }
+            if (bestModifier == UQ_4_12(0.0)) break;
         }
 
-        PREPARE_TYPE_BUFFER(gBattleTextBuff1, moveType);
-        SET_BATTLER_TYPE(gBattlerAttacker, moveType);
-        gBattlerAbility = gBattlerAttacker;
-        BattleScriptCall(BattleScript_ProteanActivates);
-        return;
-    }
-
-    {
-        int ability;
-        if (((BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_COLOR_CHANGE) && (ability = ABILITY_COLOR_CHANGE)) ||
-             (BATTLER_HAS_ABILITY(gBattlerTarget, ABILITY_PRISMATIC_FUR) && (ability = ABILITY_PRISMATIC_FUR))) &&
-            (gBattlerAttacker != gBattlerTarget) && CheckAndSetOncePerTurnAbility(gBattlerTarget, ability)) {
-            u32 currentType;
-            u32 bestType = gBattleMons[gBattlerTarget].type1;
-            u16 bestModifier = GetTypeModifier(moveType, bestType, gBattlerAttacker, gBattlerTarget);
-
-            for (currentType = TYPE_NORMAL; currentType < NUMBER_OF_MON_TYPES; ++currentType) {
-                u16 currentModifier = GetTypeModifier(moveType, currentType, gBattlerAttacker, gBattlerTarget);
-                if (currentModifier < bestModifier) {
-                    bestModifier = currentModifier;
-                    bestType = currentType;
-                }
-                if (bestModifier == UQ_4_12(0.0)) break;
-            }
-
-            if (gBattleMons[gBattlerTarget].type1 != bestType) {
-                gBattleScripting.abilityPopupOverwrite = ability;
-                SET_BATTLER_TYPE(gBattlerTarget, bestType);
-                PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType);
-                gBattlerAbility = gBattlerTarget;
-                BattleScriptCall(BattleScript_ColorChangeActivates);
-                return;
-            }
+        if (gBattleMons[gBattlerTarget].type1 != bestType) {
+            gBattleScripting.abilityPopupOverwrite = ability;
+            SET_BATTLER_TYPE(gBattlerTarget, bestType);
+            PREPARE_TYPE_BUFFER(gBattleTextBuff1, bestType);
+            gBattlerAbility = gBattlerTarget;
+            BattleScriptCall(BattleScript_ColorChangeActivates);
+            return;
         }
     }
 

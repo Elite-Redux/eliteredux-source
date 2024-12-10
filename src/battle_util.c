@@ -9420,7 +9420,7 @@ void MakePlayerTeamAsleep(void) {
 }
 
 int IsMagicGuardProtected(int battler) {
-    RETURN_TRUE_IF_ABILITY_FLAG(battler, FALSE, magicGuard)
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, magicGuard)
     if (isMagicRoomActive()) return TRUE;
 
     return FALSE;
@@ -9482,7 +9482,7 @@ int IsBloodStainAffected(int battler) {
 }
 
 int IsUnaware(int battler) {
-    RETURN_TRUE_IF_ABILITY_FLAG(battler, TRUE, unaware)
+    RETURN_ABILITY_IF_FLAG(battler, TRUE, unaware)
     return FALSE;
 }
 
@@ -9889,7 +9889,7 @@ int IsStickyHold(int battler) {
 }
 
 int HasChloroplast(int battler) {
-    RETURN_TRUE_IF_ABILITY_FLAG(battler, FALSE, chloroplast)
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, chloroplast)
     return FALSE;
 }
 
@@ -9904,6 +9904,6 @@ int CanRaiseStat(int battler, int stat) { return CompareStat(battler, stat, MAX_
 int CanLowerStat(int battler, int stat) { return CompareStat(battler, stat, MIN_STAT_STAGE, CMP_GREATER_THAN); }
 
 int HasSkillLink(int battler) {
-    RETURN_TRUE_IF_ABILITY_FLAG(battler, FALSE, skillLink)
+    RETURN_ABILITY_IF_FLAG(battler, FALSE, skillLink)
     return FALSE;
 }

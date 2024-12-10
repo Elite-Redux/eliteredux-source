@@ -109,6 +109,8 @@ typedef struct Ability {
     u16 resistsFortKnox:1;
     u16 fortKnox:1;
     AbilityApplyOn onStatFor:3;
+    u16 protean:1;
+    u16 colorChange:1;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];

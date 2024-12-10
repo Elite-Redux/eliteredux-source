@@ -244,7 +244,7 @@ bool8 UseOutOfTurnAttack(u8 battler, u8 target, u16 ability, u16 move, u8 movePo
         callback;                                                    \
     }
 
-#define RETURN_TRUE_IF_ABILITY_FLAG(battler, checkMoldBreaker, flag) ON_ABILITY(battler, checkMoldBreaker, gAbilities[ability].flag, return TRUE)
+#define RETURN_ABILITY_IF_FLAG(battler, checkMoldBreaker, flag) ON_ABILITY(battler, checkMoldBreaker, gAbilities[ability].flag, return ability)
 
 void GetAllBattlerAbilities(u16* abilities, int battler, int battlerAtk);
 u32 IsAbilityOnSide(u32 battlerId, u32 ability);

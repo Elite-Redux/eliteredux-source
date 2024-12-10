@@ -442,6 +442,7 @@ static const Ability Insomnia = {
 static const Ability ColorChange = {
     .name = $("Color Change"),
     .description = $("Changes type to a resist or an\nimmunity before getting hit."),
+    .colorChange = TRUE,
 };
 
 #undef CONTEXT
@@ -2315,6 +2316,7 @@ static const Ability CheekPouch = {
 static const Ability Protean = {
     .name = $("Protean"),
     .description = $("Changes type depending on the\nmove it's about to use."),
+    .protean = TRUE,
 };
 
 #undef CONTEXT
@@ -3090,6 +3092,7 @@ static const Ability RksSystem = {
     .description = $("Held Memory determines its type.\nAlso has Protean + Adaptability."),
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
+    .protean = TRUE,
 };
 
 #undef CONTEXT
@@ -3221,6 +3224,7 @@ static const Ability DauntlessShield = {
 static const Ability Libero = {
     .name = $("Libero"),
     .description = $("Before using a move, changes its\ntype to the move's type."),
+    .protean = TRUE,
 };
 
 #undef CONTEXT
@@ -5792,6 +5796,8 @@ ON_DEFENSIVE_MULTIPLIER { MUL(.5); }
 static const Ability PrismaticFur = {
     .name = $("Prismatic Fur"),
     .description = $("Color Change + Protean +\nFur Coat + Ice Scales."),
+    .protean = TRUE,
+    .colorChange = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
 };
 
@@ -8764,6 +8770,7 @@ static const Ability SnowyWrath = {
 static const Ability PatternChange = {
     .name = $("Pattern Change"),
     .description = $("Changes type depending on the\nmove it's about to use."),
+    .protean = TRUE,
 };
 
 #undef CONTEXT
