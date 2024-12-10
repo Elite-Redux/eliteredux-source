@@ -8437,12 +8437,12 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 0,
     },
-    [SPECIES_LYCANROC_REDUX] =
+    [SPECIES_LYCANROC_ECLIPSE] =
     {
         .size = 0,
         .y_offset =  0
     },
-    [SPECIES_ROCKRUFF_REDUX] =
+    [SPECIES_LYCANROC_TWILIGHT] =
     {
         .size = 0,
         .y_offset =  0

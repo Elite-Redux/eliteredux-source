@@ -30369,14 +30369,14 @@ static const struct LevelUpMove sMorpekyllLevelUpLearnset[] = {
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sLycanroc_ReduxLevelUpLearnset[] = {
+static const struct LevelUpMove sLycanrocEclipseLevelUpLearnset[] = {
     LEVEL_UP_MOVE( 1, MOVE_TACKLE),
     LEVEL_UP_MOVE( 5, MOVE_GROWL),
     LEVEL_UP_MOVE(10, MOVE_EMBER),
     LEVEL_UP_END
 };
 
-static const struct LevelUpMove sRockruff_ReduxLevelUpLearnset[] = {
+static const struct LevelUpMove sLycanrocTwilightLevelUpLearnset[] = {
     LEVEL_UP_MOVE( 1, MOVE_TACKLE),
     LEVEL_UP_MOVE( 5, MOVE_GROWL),
     LEVEL_UP_MOVE(10, MOVE_EMBER),

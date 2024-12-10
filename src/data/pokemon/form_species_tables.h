@@ -927,14 +927,14 @@ static const u16 sOricorioFormSpeciesIdTable[] = {
 
 static const u16 sRockruffFormSpeciesIdTable[] = {
     SPECIES_ROCKRUFF,
-    SPECIES_ROCKRUFF_REDUX,
     SPECIES_ROCKRUFF_OWN_TEMPO,
     FORM_SPECIES_END,
 };
 
 static const u16 sLycanrocFormSpeciesIdTable[] = {
     SPECIES_LYCANROC,
-    SPECIES_LYCANROC_REDUX,
+    SPECIES_LYCANROC_ECLIPSE,
+    SPECIES_LYCANROC_TWILIGHT,
     SPECIES_LYCANROC_MIDNIGHT,
     SPECIES_LYCANROC_DUSK,
     FORM_SPECIES_END,

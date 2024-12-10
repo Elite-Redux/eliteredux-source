@@ -47098,7 +47098,7 @@ const struct BaseStats gBaseStats[] =
     .tier = 3,
     },
 
-    [SPECIES_LYCANROC_REDUX] =
+    [SPECIES_LYCANROC_ECLIPSE] =
     {
         .baseHP        = 110,
         .baseAttack    = 115,
@@ -47130,7 +47130,7 @@ const struct BaseStats gBaseStats[] =
         .noFlip = FALSE,
     },
 
-    [SPECIES_ROCKRUFF_REDUX] =
+    [SPECIES_LYCANROC_TWILIGHT] =
     {
         .baseHP        = 110,
         .baseAttack    = 115,

@@ -3485,8 +3485,8 @@ static const u8 sMonFrontAnimIdsTable[NUM_SPECIES - 1] =
     [SPECIES_GOLISOPOD_REDUX_MEGA - 1]         = ANIM_V_SQUISH_AND_BOUNCE,
 
     [SPECIES_SPIRITOMB_REDUX - 1]              = ANIM_V_SQUISH_AND_BOUNCE,
-    [SPECIES_ROCKRUFF_REDUX - 1]               = ANIM_V_SQUISH_AND_BOUNCE,
-    [SPECIES_LYCANROC_REDUX - 1]               = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_LYCANROC_TWILIGHT - 1]               = ANIM_V_SQUISH_AND_BOUNCE,
+    [SPECIES_LYCANROC_ECLIPSE - 1]               = ANIM_V_SQUISH_AND_BOUNCE,
 };
 
 static const u8 sMonAnimationDelayTable[NUM_SPECIES - 1] =
