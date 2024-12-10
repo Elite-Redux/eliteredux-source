@@ -1290,35 +1290,21 @@ bool8 JumpIfMoveAffectedByProtect(u16 move) {
 }
 
 u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState* moveState) {
-    u32 calc, moveAcc;
+    int moveAcc;
     s8 buff, accStage, evasionStage;
     u8 atkParam = GetBattlerHoldEffectParam(battlerAtk);
     u8 defParam = GetBattlerHoldEffectParam(battlerDef);
     u32 atkHoldEffect = GetBattlerHoldEffect(battlerAtk, TRUE);
     u32 defHoldEffect = GetBattlerHoldEffect(battlerDef, TRUE);
     u8 moveType;
+    AccuracyPriority prio = 0;
 
     GET_MOVE_TYPE(move, moveType)
 
     if (gStatuses3[battlerDef] & STATUS3_ALWAYS_HITS && gVolatileStructs[battlerDef].battlerWithSureHit == battlerAtk) return 101;
-    if (gVolatileStructs[battlerAtk].trepidation && moveType == TYPE_PSYCHIC) {
-        if (moveState && gVolatileStructs[battlerAtk].trepidation == 1)
-            moveState->missesThisTurn = AI_MISSES_THIS_TURN;
-        else
-            return 0;
-    }
     if (gStatuses3[battlerDef] & STATUS3_TELEKINESIS && !IsBattlerGrounded(battlerDef)) return 101;
     if (B_TOXIC_NEVER_MISS >= GEN_6 && gBattleMoves[move].effect == EFFECT_TOXIC && IS_BATTLER_OF_TYPE(battlerAtk, TYPE_POISON)) return 101;
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_NO_GUARD)) return 101;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_NO_GUARD)) return 101;
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_BRAWLING_WYVERN)) return 101;
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_BRAWLING_WYVERN)) return 101;
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GRIP_PINCER) && gBattleMons[battlerDef].status2 & STATUS2_WRAPPED) return 101;
     if (IsMyceliumMightActive(battlerAtk)) return 101;
-    if (move == MOVE_FOCUS_BLAST && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_INNER_FOCUS))) return 101;
-    if (move == MOVE_FOCUS_BLAST && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ENLIGHTENED))) return 101;
-    if (move == MOVE_FOCUS_BLAST && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_UNLOCKED_POTENTIAL))) return 101;
-    if (move == MOVE_FOCUS_BLAST && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_WAY_OF_PRECISION))) return 101;
 
     if ((gStatuses3[battlerDef] & STATUS3_PHANTOM_FORCE) || (!(gBattleMoves[move].flags & FLAG_DMG_IN_AIR) && gStatuses3[battlerDef] & STATUS3_ON_AIR) ||
         (!(gBattleMoves[move].flags & FLAG_DMG_2X_IN_AIR) && gStatuses3[battlerDef] & STATUS3_ON_AIR) ||
@@ -1327,12 +1313,28 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState*
         if (moveState)
             moveState->missesThisTurn = AI_MISSES_THIS_TURN_IF_FIRST;
         else
-            return 0;
+            prio = ACCURACY_ALWAYS_MISSES;
     }
 
-    if (GetAbilityState(battlerDef, ABILITY_COMMANDER) >= COMMANDER_ACTIVE) return 0;
+    if (gVolatileStructs[battlerAtk].trepidation && moveType == TYPE_PSYCHIC) {
+        if (moveState && gVolatileStructs[battlerAtk].trepidation == 1)
+            moveState->missesThisTurn = AI_MISSES_THIS_TURN;
+        else
+            return ACCURACY_ALWAYS_MISSES;
+    }
 
-    GET_MOVE_TYPE(move, moveType)
+    if (prio < ACCURACY_ALWAYS_MISSES) {
+        if (moveAcc == 0)
+            prio = ACCURACY_HITS_IF_POSSIBLE;
+        else if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY) &&
+                 (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
+            prio = ACCURACY_HITS_IF_POSSIBLE;
+        else if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY) &&
+                 (gBattleMoves[move].effect == EFFECT_FREEZE_DRY || gBattleMoves[move].effect == MOVE_SHEER_COLD || move == MOVE_BLIZZARD))
+            prio = ACCURACY_HITS_IF_POSSIBLE;
+        else if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && (move == MOVE_EERIE_SPELL || move == MOVE_VEXING_VOID))
+            prio = ACCURACY_HITS_IF_POSSIBLE;
+    }
 
     gPotentialItemEffectBattler = battlerDef;
     accStage = gBattleMons[battlerAtk].statStages[STAT_ACC];
@@ -1353,127 +1355,51 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState*
 
     moveAcc = gBattleMoves[move].accuracy;
 
-    if (move == MOVE_HYPNOSIS && (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_LUNAR_ECLIPSE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HYPNOTIST))) moveAcc = 90;
-
     // Check Thunder and Hurricane on sunny weather.
     if (IsBattlerWeatherAffected(battlerDef, WEATHER_SUN_ANY) &&
         (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE || move == MOVE_EERIE_SPELL || move == MOVE_VEXING_VOID))
         moveAcc = 50;
 
-    if (moveAcc == 0)
-        return 101;
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SIGHTING_SYSTEM))
-        return 101;
-    else if ((gBattleMoves[move].flags & FLAG_STRIKER_BOOST) && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ROUNDHOUSE))
-        return 101;
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_IRON_BARRAGE))
-        return 101;
-    else if ((gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST) && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ARTILLERY))
-        return 101;
-    else if ((gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST) &&
-             (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SWEEPING_EDGE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SWEEPING_EDGE_PLUS)))
-        return 101;
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEADEYE))
-        return 101;
-    else if (IS_MOVE_STATUS(move) && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GIFTED_MIND))
-        return 101;
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)) {
-        switch (move) {
-            case MOVE_TACKLE:
-            case MOVE_POISON_STING:
-            case MOVE_ELECTROWEB:
-            case MOVE_BUG_BITE:
-                return 101;
-                break;
-        }
-    } else if ((BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FATAL_PRECISION) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_FINAL_BLOW)) && !IS_MOVE_STATUS(move) &&
-               CalcTypeEffectivenessMultiplier(move, moveType, battlerAtk, battlerDef, TRUE) >= UQ_4_12(2.0))
-        return 101;
-    else if (IsBattlerWeatherAffected(battlerDef, WEATHER_RAIN_ANY) &&
-             (gBattleMoves[move].effect == EFFECT_THUNDER || gBattleMoves[move].effect == EFFECT_HURRICANE))
-        return 101;
-    else if (IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY) &&
-             (gBattleMoves[move].effect == EFFECT_FREEZE_DRY || gBattleMoves[move].effect == MOVE_SHEER_COLD || move == MOVE_BLIZZARD))
-        return 101;
-    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SHINY_LIGHTNING) && gBattleMoves[move].effect == EFFECT_THUNDER)
-        return 101;
-    else if (IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY) && (move == MOVE_EERIE_SPELL || move == MOVE_VEXING_VOID))
-        return 101;
+    moveAcc *= gAccuracyStageRatios[buff].dividend;
+    moveAcc /= gAccuracyStageRatios[buff].divisor;
 
-    // Check Wonder Skin.
-    if ((BATTLER_HAS_ABILITY(battlerDef, ABILITY_WONDER_SKIN) || BATTLER_HAS_ABILITY(battlerDef, ABILITY_PRIM_AND_PROPER)) && IS_MOVE_STATUS(move))
-        moveAcc = 50;
+    for (int sourceBattler = 0; sourceBattler < gBattlersCount; sourceBattler++) {
+        ON_ABILITY(sourceBattler,
+                   TRUE,
+                   gAbilities[ability].onAccuracy &&
+                       IsTargettedApplyOnFlagAppropriate(battlerAtk, sourceBattler, battlerAtk, battlerDef, gAbilities[ability].onAccuracyFor),
+                   int result = gAbilities[ability].onAccuracy(ability, battlerAtk, battlerDef, move, moveType, &moveAcc);
+                   prio = max(prio, result))
+    }
+    switch (prio) {
+        case ACCURACY_ALWAYS_HITS:
+        case ACCURACY_HITS_IF_POSSIBLE:
+            return 101;
 
-    calc = gAccuracyStageRatios[buff].dividend * moveAcc;
-    calc /= gAccuracyStageRatios[buff].divisor;
-
-    // Bad Luck Ability lowers accuracy by 5%
-    if (IsAbilityOnSide(battlerDef, ABILITY_BAD_LUCK)) calc = (calc * 95) / 100;
-
-    // Bad Luck Ability lowers accuracy by 5%
-    if (IsAbilityOnSide(battlerDef, ABILITY_BAD_OMEN)) calc = (calc * 95) / 100;
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_COMPOUND_EYES)) calc = (calc * 130) / 100;  // 1.3 compound eyes boost
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_VICTORY_STAR) || BATTLER_HAS_ABILITY(BATTLE_PARTNER(battlerAtk), ABILITY_VICTORY_STAR))
-        calc = (calc * 120) / 100;  // 1.2 victory star boost
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ILLUMINATE) || BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PLASMA_LAMP) ||
-        BATTLER_HAS_ABILITY(battlerAtk, ABILITY_REFRIGERATOR))
-        calc = (calc * 120) / 100;  // 1.2 illuminate boost
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_SHINY_LIGHTNING)) calc = calc * 120 / 100;
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_PIXIE_POWER)) calc = (calc * 120) / 100;  // 1.2 Pixie boost
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_KEEN_EYE)) calc = (calc * 120) / 100;  // 1.2 keen eye boost
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_RADIANCE)) calc = (calc * 120) / 100;  // 1.2 keen eye boost
-
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_SAND_VEIL) && IsBattlerWeatherAffected(battlerDef, WEATHER_SANDSTORM_ANY))
-        calc = (calc * 80) / 100;  // 1.2 sand veil loss
-
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_SMOKEY_MANEUVERS) && IsBattlerWeatherAffected(battlerDef, WEATHER_FOG_ANY))
-        calc = (calc * 80) / 100;  // 1.2 sand veil loss
-
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_SNOW_CLOAK) && IsBattlerWeatherAffected(battlerDef, WEATHER_HAIL_ANY))
-        calc = (calc * 80) / 100;  // 1.2 snow cloak loss
-
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_OLE)) {
-        switch (GetBattlerBattleMoveTargetFlags(move, battlerAtk)) {
-            case MOVE_TARGET_SELECTED:
-            case MOVE_TARGET_USER_OR_SELECTED:
-            case MOVE_TARGET_RANDOM:
-                calc = (calc * 70) / 100;  // 30% Ole! loss
-                break;
-        }
+        case ACCURACY_ALWAYS_MISSES:
+            return 0;
     }
 
-    if (BATTLER_HAS_ABILITY(battlerDef, ABILITY_TANGLED_FEET) && gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
-        calc = (calc * 50) / 100;  // 1.5 tangled feet loss
-
-    if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_HUSTLE)) calc = (calc * 90) / 100;  // 1.1 hustle loss
-
-    if (defHoldEffect == HOLD_EFFECT_EVASION_UP) calc = (calc * (100 - defParam)) / 100;
+    if (defHoldEffect == HOLD_EFFECT_EVASION_UP) moveAcc = (moveAcc * (100 - defParam)) / 100;
 
     if (atkHoldEffect == HOLD_EFFECT_WIDE_LENS)
-        calc = (calc * (100 + atkParam)) / 100;
+        moveAcc = (moveAcc * (100 + atkParam)) / 100;
     else if (atkHoldEffect == HOLD_EFFECT_ZOOM_LENS && GetBattlerTurnOrderNum(battlerAtk) > GetBattlerTurnOrderNum(battlerDef))
-        calc = (calc * (100 + atkParam)) / 100;
+        moveAcc = (moveAcc * (100 + atkParam)) / 100;
 
     if (gRoundStructs[battlerAtk].usedMicleBerry) {
         gRoundStructs[battlerAtk].usedMicleBerry = FALSE;
         if (HasRipenEffect(battlerAtk))
-            calc = (calc * 140) / 100;  // ripen gives 40% acc boost
+            moveAcc = (moveAcc * 140) / 100;  // ripen gives 40% acc boost
         else
-            calc = (calc * 120) / 100;  // 20% acc boost
+            moveAcc = (moveAcc * 120) / 100;  // 20% acc boost
     }
 
-    if (IsGravityActive()) calc = (calc * 5) / 3;  // 1.66 Gravity acc boost
+    if (IsGravityActive()) moveAcc = (moveAcc * 5) / 3;  // 1.66 Gravity acc boost
 
-    if (gSideTimers[GET_BATTLER_SIDE(battlerDef)].smokescreenTimer) calc = (calc * 75) / 100;
+    if (gSideTimers[GET_BATTLER_SIDE(battlerDef)].smokescreenTimer) moveAcc *= .75;
 
-    return min(calc, 100);
+    return min(moveAcc, 100);
 }
 
 static void Cmd_accuracycheck(void) {

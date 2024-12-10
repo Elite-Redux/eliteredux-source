@@ -96,6 +96,9 @@
         int battler, int attacker, int move, int moveType, int typeEffectivenessModifier, int isCrit, u16 *resistance, u16 *modifier)
 #define CONTEXT_ON_DEFENSIVE_MULTIPLIER .onDefensiveMultiplier = COMBINE(onDefensiveMultiplier, CONTEXT)
 
+#define ON_ACCURACY static AccuracyPriority COMBINE(onAccuracy, CONTEXT)(int ability, int battler, int target, int move, int moveType, int *accuracy)
+#define CONTEXT_ON_ACCURACY .onAccuracy = COMBINE(onAccuracy, CONTEXT)
+
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
         case ABILITY_BS_EXECUTE:
@@ -244,7 +247,7 @@ static void RuinEffect(int ruinStat, const AbilityOnStatHandler dedup, int battl
     if (statId != ruinStat) return;
     if (*flags & NON_STACKING_RUIN) return;
     ON_ABILITY(battler, FALSE, gAbilities[ability].onStat == dedup, return)
-    *stat = *stat * 3 / 4;
+    *stat *= .75;
     *flags |= NON_STACKING_RUIN;
 }
 
@@ -353,10 +356,17 @@ static const Ability Limber = {
 
 #undef CONTEXT
 #define CONTEXT SandVeil
+ON_ACCURACY {
+    CHECK(IsBattlerWeatherAffected(target, WEATHER_SANDSTORM_ANY))
+    *accuracy /= 1.25;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability SandVeil = {
     .name = $("Sand Veil"),
     .description = $("Evasion is boosted by 1.25x\nwhile a sandstorm is active."),
     .breakable = TRUE,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -424,9 +434,14 @@ static const Ability CloudNine = {
 
 #undef CONTEXT
 #define CONTEXT CompoundEyes
+ON_ACCURACY {
+    *accuracy *= 1.3;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability CompoundEyes = {
     .name = $("Compound Eyes"),
     .description = $("Grants a 1.3x accuracy boost."),
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -633,7 +648,7 @@ static const Ability SereneGrace = {
 #undef CONTEXT
 #define CONTEXT SwiftSwim
 ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat = *stat * 3 / 2;
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_RAIN_ANY)) *stat *= 1.5;
 }
 static const Ability SwiftSwim = {
     .name = $("Swift Swim"),
@@ -644,7 +659,7 @@ static const Ability SwiftSwim = {
 #undef CONTEXT
 #define CONTEXT Chlorophyll
 ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 3 / 2;
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
 }
 static const Ability Chlorophyll = {
     .name = $("Chlorophyll"),
@@ -654,9 +669,14 @@ static const Ability Chlorophyll = {
 
 #undef CONTEXT
 #define CONTEXT Illuminate
+ON_ACCURACY {
+    *accuracy *= 1.2;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability Illuminate = {
     .name = $("Illuminate"),
     .description = $("Grants a 1.2x accuracy boost."),
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -722,10 +742,15 @@ static const Ability PoisonPoint = {
 
 #undef CONTEXT
 #define CONTEXT InnerFocus
+ON_ACCURACY {
+    CHECK(move == MOVE_FOCUS_BLAST)
+    return ACCURACY_ALWAYS_HITS;
+}
 static const Ability InnerFocus = {
     .name = $("Inner Focus"),
     .description = $("Blocks flinch, Intimidate, Scare.\nFocus Blast never misses."),
     .breakable = TRUE,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -885,10 +910,15 @@ static const Ability RunAway = {
 
 #undef CONTEXT
 #define CONTEXT KeenEye
+ON_ACCURACY {
+    *accuracy *= 1.2;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability KeenEye = {
     .name = $("Keen Eye"),
     .description = $("Immune to accuracy drops.\nGrants a 1.2x accuracy boost."),
     .breakable = TRUE,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -937,10 +967,16 @@ static const Ability Truant = {
 #undef CONTEXT
 #define CONTEXT Hustle
 ON_OFFENSIVE_MULTIPLIER { MUL(1.4); }
+ON_ACCURACY {
+    CHECK_NOT(IS_MOVE_STATUS(move))
+    *accuracy *= .9;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability Hustle = {
     .name = $("Hustle"),
     .description = $("0.9x accuracy.\nBoosts damage by 1.4x."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -1033,7 +1069,7 @@ static const Ability Guts = {
 #undef CONTEXT
 #define CONTEXT MarvelScale
 ON_STAT {
-    if (statId == STAT_DEF && HasAnyStatusOrAbility(battler)) *stat = *stat * 3 / 2;
+    if (statId == STAT_DEF && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
 }
 static const Ability MarvelScale = {
     .name = $("Marvel Scale"),
@@ -1175,10 +1211,17 @@ static const Ability AirLock = {
 
 #undef CONTEXT
 #define CONTEXT TangledFeet
+ON_ACCURACY {
+    CHECK(gBattleMons[target].status2 & STATUS2_CONFUSION)
+    *accuracy /= 2;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability TangledFeet = {
     .name = $("Tangled Feet"),
     .description = $("Doubles Evasion when confused."),
     .breakable = TRUE,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -1227,10 +1270,17 @@ static const Ability Steadfast = {
 
 #undef CONTEXT
 #define CONTEXT SnowCloak
+ON_ACCURACY {
+    CHECK(IsBattlerWeatherAffected(target, WEATHER_HAIL_ANY))
+    *accuracy /= 1.25;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability SnowCloak = {
     .name = $("Snow Cloak"),
     .description = $("Evasion is boosted by 1.25x\nunder hail."),
     .breakable = TRUE,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -1384,7 +1434,7 @@ static const Ability Hydration = {
 #define CONTEXT SolarPower
 ON_STAT {
     if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
-    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat = *stat * 3 / 2;
+    if (IsBattlerWeatherAffected(battler, WEATHER_SUN_ANY)) *stat *= 1.5;
 }
 static const Ability SolarPower = {
     .name = $("Solar Power"),
@@ -1395,7 +1445,7 @@ static const Ability SolarPower = {
 #undef CONTEXT
 #define CONTEXT QuickFeet
 ON_STAT {
-    if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat = *stat * 3 / 2;
+    if (statId == STAT_SPEED && HasAnyStatusOrAbility(battler)) *stat *= 1.5;
 }
 static const Ability QuickFeet = {
     .name = $("Quick Feet"),
@@ -1433,9 +1483,12 @@ static const Ability MagicGuard = {
 
 #undef CONTEXT
 #define CONTEXT NoGuard
+ON_ACCURACY { return ACCURACY_ALWAYS_HITS; }
 static const Ability NoGuard = {
     .name = $("No Guard"),
     .description = $("Attacks used by and on this\nPokémon bypass accuracy checks."),
+    .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -1744,7 +1797,7 @@ static const Ability Multitype = {
 #define CONTEXT FlowerGift
 ON_STAT {
     if (statId != STAT_SPATK && statId != STAT_SPDEF) return;
-    if (IsWeatherActive(WEATHER_SUN_ANY)) *stat = *stat * 3 / 2;
+    if (IsWeatherActive(WEATHER_SUN_ANY)) *stat *= 1.5;
 }
 static const Ability FlowerGift = {
     .name = $("Flower Gift"),
@@ -1905,7 +1958,7 @@ static const Ability HeavyMetal = {
 #undef CONTEXT
 #define CONTEXT LightMetal
 ON_STAT {
-    if (statId == STAT_SPEED) *stat = *stat * 13 / 10;
+    if (statId == STAT_SPEED) *stat *= 1.3;
 }
 static const Ability LightMetal = {
     .name = $("Light Metal"),
@@ -1953,7 +2006,7 @@ ON_SWITCH { return FlareBoostHandler(ability, battler, ABILITY_BS_PUSH_CURSOR_AN
 ON_WEATHER { return FlareBoostHandler(ability, battler, ABILITY_BS_CALL); }
 ON_STAT {
     if (statId != STAT_SPATK) return;
-    if (gBattleMons[battler].status1 & STATUS1_BURN) *stat = *stat * 3 / 2;
+    if (gBattleMons[battler].status1 & STATUS1_BURN) *stat *= 1.5;
 }
 static const Ability FlareBoost = {
     .name = $("Flare Boost"),
@@ -2066,7 +2119,7 @@ static const Ability BigPecks = {
 #undef CONTEXT
 #define CONTEXT SandRush
 ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat = *stat * 3 / 2;
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
 }
 static const Ability SandRush = {
     .name = $("Sand Rush"),
@@ -2076,10 +2129,17 @@ static const Ability SandRush = {
 
 #undef CONTEXT
 #define CONTEXT WonderSkin
+ON_ACCURACY {
+    CHECK(IS_MOVE_STATUS(move))
+    *accuracy /= 2;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability WonderSkin = {
     .name = $("Wonder Skin"),
     .description = $("Opposing status moves have\ntheir accuracy halved."),
     .breakable = TRUE,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -2235,7 +2295,7 @@ static const Ability Prankster = {
 #define CONTEXT SandForce
 ON_STAT {
     if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
-    if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat = *stat * 3 / 2;
+    if (IsBattlerWeatherAffected(battler, WEATHER_SANDSTORM_ANY)) *stat *= 1.5;
 }
 static const Ability SandForce = {
     .name = $("Sand Force"),
@@ -2264,9 +2324,15 @@ static const Ability ZenMode = {
 
 #undef CONTEXT
 #define CONTEXT VictoryStar
+ON_ACCURACY {
+    *accuracy *= 1.2;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability VictoryStar = {
     .name = $("Victory Star"),
     .description = $("Gives 1.2x accuracy boost to\nits own and its allies' moves."),
+    .onAccuracyFor = APPLY_ON_ALLY,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -2418,7 +2484,7 @@ static const Ability MegaLauncher = {
 #undef CONTEXT
 #define CONTEXT GrassPelt
 ON_STAT {
-    if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat = *stat * 3 / 2;
+    if (statId == STAT_DEF && IsBattlerTerrainAffected(battler, STATUS_FIELD_GRASSY_TERRAIN)) *stat *= 1.5;
 }
 static const Ability GrassPelt = {
     .name = $("Grass Pelt"),
@@ -2744,7 +2810,7 @@ static const Ability Berserk = {
 #undef CONTEXT
 #define CONTEXT SlushRush
 ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat = *stat * 3 / 2;
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
 }
 static const Ability SlushRush = {
     .name = $("Slush Rush"),
@@ -2793,7 +2859,7 @@ static const Ability Galvanize = {
 #undef CONTEXT
 #define CONTEXT SurgeSurfer
 ON_STAT {
-    if (statId == STAT_SPEED && IsWeatherActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat = *stat * 3 / 2;
+    if (statId == STAT_SPEED && IsWeatherActive(STATUS_FIELD_ELECTRIC_TERRAIN)) *stat *= 1.5;
 }
 static const Ability SurgeSurfer = {
     .name = $("Surge Surfer"),
@@ -3706,7 +3772,7 @@ static const Ability Chloroplast = {
 #define CONTEXT Whiteout
 ON_STAT {
     if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
-    if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat = *stat * 3 / 2;
+    if (IsBattlerWeatherAffected(battler, WEATHER_HAIL_ANY)) *stat *= 1.5;
 }
 static const Ability Whiteout = {
     .name = $("Whiteout"),
@@ -3992,7 +4058,7 @@ ON_DEFENSIVE_MULTIPLIER {
     if (IS_MOVE_PHYSICAL(move)) MUL(.6);
 }
 ON_STAT {
-    if (statId == STAT_SPEED) *stat = *stat * 9 / 10;
+    if (statId == STAT_SPEED) *stat *= .9;
 }
 static const Ability LeadCoat = {
     .name = $("Lead Coat"),
@@ -4316,7 +4382,7 @@ static const Ability ShortCircuit = {
 #undef CONTEXT
 #define CONTEXT MajesticBird
 ON_STAT {
-    if (statId == STAT_SPATK) *stat = *stat * 3 / 2;
+    if (statId == STAT_SPATK) *stat *= 1.5;
 }
 static const Ability MajesticBird = {
     .name = $("Majestic Bird"),
@@ -4352,9 +4418,15 @@ static const Ability Impenetrable = {
 
 #undef CONTEXT
 #define CONTEXT Hypnotist
+ON_ACCURACY {
+    CHECK(move == MOVE_HYPNOSIS)
+    *accuracy *= 1.5;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability Hypnotist = {
     .name = $("Hypnotist"),
     .description = $("Hypnosis accuracy is 90% when\nused by this Pokémon."),
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -4439,10 +4511,16 @@ static const Ability SweetDreams = {
 
 #undef CONTEXT
 #define CONTEXT BadLuck
+ON_ACCURACY {
+    *accuracy *= .95;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability BadLuck = {
     .name = $("Bad Luck"),
     .description = $("Foes hit the lowest damage roll,\nhave 5% less acc. and can't crit."),
     .breakable = TRUE,
+    .onAccuracyFor = APPLY_ON_FOE,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -4536,10 +4614,16 @@ static const Ability SpiderLair = {
 ON_OFFENSIVE_MULTIPLIER {
     if (typeEffectivenessMultiplier >= UQ_4_12(2.0)) MUL(1.2);
 }
+ON_ACCURACY {
+    CHECK_NOT(IS_MOVE_STATUS(move))
+    CHECK(CalcTypeEffectivenessMultiplier(move, moveType, battler, target, TRUE) >= UQ_4_12(2.0))
+    return ACCURACY_HITS_IF_POSSIBLE;
+}
 static const Ability FatalPrecision = {
     .name = $("Fatal Precision"),
     .description = $("Super-effective moves never miss\nand get a 1.2x boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -4823,9 +4907,11 @@ static const Ability PowerCore = {
 
 #undef CONTEXT
 #define CONTEXT SightingSystem
+ON_ACCURACY { return ACCURACY_HITS_IF_POSSIBLE; }
 static const Ability SightingSystem = {
     .name = $("Sighting System"),
     .description = $("Moves always hit. Moves last\nfor moves less than 80% accuracy."),
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -4881,10 +4967,15 @@ ON_ATTACKER {
     BattleScriptCall(BattleScript_GripPincerActivated);
     return TRUE;
 }
+ON_ACCURACY {
+    CHECK(gBattleMons[target].status2 & STATUS2_WRAPPED)
+    return ACCURACY_ALWAYS_HITS;
+}
 static const Ability GripPincer = {
     .name = $("Grip Pincer"),
     .description = $("50% chance to trap. Then ignores\nDefense & accuracy checks."),
     CONTEXT_ON_ATTACKER,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -4911,16 +5002,23 @@ static const Ability PreciseFist = {
 
 #undef CONTEXT
 #define CONTEXT Deadeye
+ON_ACCURACY { return ACCURACY_HITS_IF_POSSIBLE; }
 static const Ability Deadeye = {
     .name = $("Deadeye"),
     .description = $("Never misses. Arrow and cannon\nmoves hit weakest defense."),
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
 #define CONTEXT Artillery
+ON_ACCURACY {
+    CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST)
+    return ACCURACY_HITS_IF_POSSIBLE;
+}
 static const Ability Artillery = {
     .name = $("Artillery"),
     .description = $("Mega Launcher moves always hit.\nSingle-target now hits both foes."),
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -5140,6 +5238,7 @@ static const Ability IronBarrage = {
     .name = $("Iron Barrage"),
     .description = $("Mega Launcher + Sighting System."),
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
+    .onAccuracy = SightingSystem.onAccuracy,
 };
 
 #undef CONTEXT
@@ -5234,9 +5333,14 @@ static const Ability ToxicDebris = {
 
 #undef CONTEXT
 #define CONTEXT Roundhouse
+ON_ACCURACY {
+    CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+    return ACCURACY_HITS_IF_POSSIBLE;
+}
 static const Ability Roundhouse = {
     .name = $("Roundhouse"),
     .description = $("Kicks always hit.\nDamages foes' weaker defenses."),
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -5438,17 +5542,27 @@ static const Ability PrimalMaw = {
 
 #undef CONTEXT
 #define CONTEXT SweepingEdge
+ON_ACCURACY {
+    CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+    return ACCURACY_HITS_IF_POSSIBLE;
+}
 static const Ability SweepingEdge = {
     .name = $("Sweeping Edge"),
     .description = $("Keen Edge moves always hit.\nSingle-target now hits both foes."),
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
 #define CONTEXT GiftedMind
+ON_ACCURACY {
+    CHECK(IS_MOVE_STATUS(move))
+    return ACCURACY_HITS_IF_POSSIBLE;
+}
 static const Ability GiftedMind = {
     .name = $("Gifted Mind"),
     .description = $("Nulls Psychic weakness;\nstatus moves always hit."),
     .breakable = TRUE,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -5676,6 +5790,7 @@ static const Ability Radiance = {
     .breakable = TRUE,
     .onImmuneFor = APPLY_ON_ANY,
     CONTEXT_ON_IMMUNE,
+    .onAccuracy = Illuminate.onAccuracy,
 };
 
 #undef CONTEXT
@@ -5784,10 +5899,23 @@ ON_ATTACKER {
     }
     return FALSE;
 }
+ON_ACCURACY {
+    switch (move) {
+        case MOVE_TACKLE:
+        case MOVE_POISON_STING:
+        case MOVE_ELECTROWEB:
+        case MOVE_BUG_BITE:
+            return ACCURACY_HITS_IF_POSSIBLE;
+
+        default:
+            return ACCURACY_NO_RESULT;
+    }
+}
 static const Ability AngelsWrath = {
     .name = $("Angel's Wrath"),
     .description = $("Drastically alters all\nof the users moves."),
     CONTEXT_ON_ATTACKER,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -6217,12 +6345,17 @@ static const Ability HuntersHorn = {
 
 #undef CONTEXT
 #define CONTEXT PixiePower
+ON_ACCURACY {
+    *accuracy *= 1.2;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability PixiePower = {
     .name = $("Pixie Power"),
     .description = $("1.2x accuracy. Boosts Fairy\nmoves by 1.33x for all."),
     .onSwitch = FairyAura.onSwitch,
     .onOffensiveMultiplierFor = APPLY_ON_ANY,
     .onOffensiveMultiplier = FairyAura.onOffensiveMultiplier,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -6230,10 +6363,16 @@ static const Ability PixiePower = {
 ON_OFFENSIVE_MULTIPLIER {
     if (moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC) MUL(1.2);
 }
+ON_ACCURACY {
+    CHECK(moveType == TYPE_FIRE || moveType == TYPE_ELECTRIC)
+    *accuracy *= 1.2;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability PlasmaLamp = {
     .name = $("Plasma Lamp"),
     .description = $("Boost accuracy & power of Fire\n& Electric type moves by 1.2x."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -6499,6 +6638,8 @@ static const Ability PrimAndProper = {
     .name = $("Prim and Proper"),
     .description = $("Wonder Skin + Cute Charm."),
     .onDefender = CuteCharm.onDefender,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    .onAccuracy = WonderSkin.onAccuracy,
 };
 
 #undef CONTEXT
@@ -6548,6 +6689,7 @@ static const Ability Enlightened = {
     .description = $("Emanate + Inner Focus."),
     .breakable = TRUE,
     .onOffensiveMultiplier = Emanate.onOffensiveMultiplier,
+    .onAccuracy = InnerFocus.onAccuracy,
 };
 
 #undef CONTEXT
@@ -6678,6 +6820,7 @@ static const Ability Refrigerator = {
     .name = $("Refrigerator"),
     .description = $("Refrigerate + Illuminate."),
     .onOffensiveMultiplier = Refrigerate.onOffensiveMultiplier,
+    .onAccuracy = Illuminate.onAccuracy,
 };
 
 #undef CONTEXT
@@ -7282,9 +7425,9 @@ ON_STAT {
     ParadoxBoost boost = GetAbilityStateAs(battler, ability).paradoxBoost;
     if (!boost.source || boost.statId != statId) return;
     if (statId == STAT_SPEED)
-        *stat = *stat * 3 / 2;
+        *stat *= 1.5;
     else
-        *stat = *stat * 13 / 10;
+        *stat *= 1.3;
 }
 static const Ability Protosynthesis = {
     .name = $("Protosynthesis"),
@@ -7509,6 +7652,10 @@ ON_BATTLER_FAINTS {
     BattleScriptCall(BattleScript_CommanderEnds);
     return TRUE;
 }
+ON_ACCURACY {
+    CHECK(GetAbilityState(target, ability))
+    return ACCURACY_ALWAYS_MISSES;
+}
 static const Ability Commander = {
     .name = $("Commander"),
     .description = $("Hops inside an allied Dondozo.\nBoosts its ally but can't act."),
@@ -7516,6 +7663,8 @@ static const Ability Commander = {
     .randomizerBanned = TRUE,
     .onBattlerFaintsFor = APPLY_ON_ALLY,
     CONTEXT_ON_BATTLER_FAINTS,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -7585,7 +7734,7 @@ ON_SWITCH {
     return SwitchInAnnounce(B_MSG_SWITCHIN_SUPREME_OVERLORD);
 }
 ON_STAT {
-    if (statId == STAT_ATK || statId == STAT_SPATK) *stat = *stat * (10 + max(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
+    if (statId == STAT_ATK || statId == STAT_SPATK) *stat *= *stat * (10 + max(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
 }
 static const Ability SupremeOverlord = {
     .name = $("Supreme Overlord"),
@@ -7853,6 +8002,7 @@ static const Ability SweepingEdgePlus = {
     .name = $("Blademaster"),
     .description = $("Sweeping Edge + Keen Edge."),
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
+    .onAccuracy = SweepingEdge.onAccuracy,
 };
 
 #undef CONTEXT
@@ -7947,9 +8097,23 @@ static const Ability RadioJam = {
 
 #undef CONTEXT
 #define CONTEXT Ole
+ON_ACCURACY {
+    switch (GetBattlerBattleMoveTargetFlags(move, battler)) {
+        case MOVE_TARGET_SELECTED:
+        case MOVE_TARGET_USER_OR_SELECTED:
+        case MOVE_TARGET_RANDOM:
+            *accuracy *= .7;
+            return ACCURACY_MULTIPLICATIVE;
+
+        default:
+            return ACCURACY_NO_RESULT;
+    }
+}
 static const Ability Ole = {
     .name = $("Olé!"),
     .description = $("30% chance to evade single-\ntarget moves."),
+    .onAccuracyFor = APPLY_ON_TARGET,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -7971,7 +8135,7 @@ ON_ATTACKER {
     return AbilityStatusEffect(MOVE_EFFECT_CURSE);
 }
 ON_STAT {
-    if (statId == STAT_ATK) *stat = *stat * 3 / 2;
+    if (statId == STAT_ATK) *stat *= 1.5;
 }
 static const Ability DeadPower = {
     .name = $("Dead Power"),
@@ -7985,6 +8149,8 @@ static const Ability DeadPower = {
 static const Ability BrawlingWyvern = {
     .name = $("Brawling Wyvern"),
     .description = $("No guard + Dragon type\nmoves become punching moves."),
+    .onAccuracyFor = APPLY_ON_ATTACKER_OR_TARGET,
+    .onAccuracy = NoGuard.onAccuracy,
 };
 
 #undef CONTEXT
@@ -8228,7 +8394,7 @@ static const Ability OldMariner = {
 #define CONTEXT Ectoplasm
 ON_STAT {
     if (statId != GetHighestAttackingStatId(battler, TRUE)) return;
-    if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat = *stat * 3 / 2;
+    if (IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
 }
 static const Ability Ectoplasm = {
     .name = $("Ectoplasm"),
@@ -8301,7 +8467,7 @@ static const Ability Resonance = {
 #undef CONTEXT
 #define CONTEXT EtherealRush
 ON_STAT {
-    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat = *stat * 3 / 2;
+    if (statId == STAT_SPEED && IsBattlerWeatherAffected(battler, WEATHER_FOG_ANY)) *stat *= 1.5;
 }
 static const Ability EtherealRush = {
     .name = $("Ethereal Rush"),
@@ -8345,9 +8511,15 @@ static const Ability MenacingSituation = {
 
 #undef CONTEXT
 #define CONTEXT ShinyLightning
+ON_ACCURACY {
+    if (move == MOVE_THUNDER) return ACCURACY_HITS_IF_POSSIBLE;
+    *accuracy *= 1.2;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability ShinyLightning = {
     .name = $("Shiny Lightning"),
     .description = $("Grants a 1.2x accuracy boost.\nThunder never misses."),
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -8655,10 +8827,17 @@ static const Ability WhiteNoise = {
 
 #undef CONTEXT
 #define CONTEXT SmokeyManeuvers
+ON_ACCURACY {
+    CHECK(IsBattlerWeatherAffected(target, WEATHER_FOG_ANY))
+    *accuracy /= 1.25;
+    return ACCURACY_MULTIPLICATIVE;
+}
 static const Ability SmokeyManeuvers = {
     .name = $("Smokey Maneuvers"),
     .description = $("Evasion is boosted by 1.25x\nin fog."),
     .breakable = TRUE,
+    .onAccuracyFor = APPLY_ON_TARGET,
+    CONTEXT_ON_ACCURACY,
 };
 
 #undef CONTEXT
@@ -8715,6 +8894,7 @@ static const Ability UnlockedPotential = {
     .name = $("Unlocked Potential"),
     .description = $("Inner Focus + Berserk."),
     .onDefender = Berserk.onDefender,
+    .onAccuracy = InnerFocus.onAccuracy,
 };
 
 #undef CONTEXT
@@ -8830,6 +9010,8 @@ static const Ability BadOmen = {
     .description = $("Foes min roll and may miss.\nTakes 1/4 damage from crits."),
     .breakable = TRUE,
     CONTEXT_ON_DEFENSIVE_MULTIPLIER,
+    .onAccuracyFor = APPLY_ON_FOE,
+    .onAccuracy = BadLuck.onAccuracy,
 };
 
 #undef CONTEXT
@@ -8949,6 +9131,7 @@ static const Ability WayOfPrecision = {
     .name = $("Way of Precision"),
     .description = $("Inner Focus + Precise Fist."),
     .breakable = TRUE,
+    .onAccuracy = InnerFocus.onAccuracy,
 };
 
 #undef CONTEXT
@@ -8998,6 +9181,7 @@ static const Ability FinalBlow = {
     .name = $("Final Blow"),
     .description = $("Unseen Fist + Fatal Precision."),
     .onOffensiveMultiplier = FatalPrecision.onOffensiveMultiplier,
+    .onAccuracy = FatalPrecision.onAccuracy,
 };
 
 #undef CONTEXT
@@ -9340,7 +9524,7 @@ static const Ability HotCoals = {
 #define CONTEXT TerastalTreasure
 ON_DEFENSIVE_MULTIPLIER { MUL(.6); }
 ON_STAT {
-    if (statId == STAT_SPEED) *stat = *stat * 8 / 10;
+    if (statId == STAT_SPEED) *stat *= .8;
 }
 static const Ability TerastalTreasure = {
     .name = $("Terastal Treasure"),

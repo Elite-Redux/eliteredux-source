@@ -51,6 +51,14 @@ typedef enum {
     NON_STACKING_RUIN = 1 << 0,
 } NonStackingState;
 typedef void (*AbilityOnStatHandler)(int ability, int battler, int statId, u32* stat, NonStackingState* flags);
+typedef enum {
+    ACCURACY_NO_RESULT = 0,
+    ACCURACY_MULTIPLICATIVE,
+    ACCURACY_HITS_IF_POSSIBLE,
+    ACCURACY_ALWAYS_MISSES,
+    ACCURACY_ALWAYS_HITS,
+} AccuracyPriority;
+typedef AccuracyPriority (*AbilityOnAccuracyHandler)(int ability, int battler, int target, int move, int moveType, int* accuracy);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -89,6 +97,7 @@ typedef struct Ability {
     const AbilityOnOffensiveMultiplierHandler onOffensiveMultiplier;
     const AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
     const AbilityOnStatHandler onStat;
+    const AbilityOnAccuracyHandler onAccuracy;
     u16 redirectType:5;
     AbilityApplyOn onImmuneFor:3;
     u16 noDamageHits:2;
@@ -111,6 +120,7 @@ typedef struct Ability {
     AbilityApplyOn onStatFor:3;
     u16 protean:1;
     u16 colorChange:1;
+    AbilityApplyOnWithTarget onAccuracyFor:5;
 } Ability;
 
 extern const Ability gAbilities[ABILITIES_COUNT];
