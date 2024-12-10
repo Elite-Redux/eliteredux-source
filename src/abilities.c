@@ -8756,6 +8756,7 @@ static const Ability SnowyWrath = {
     .name = $("Snowy Wrath"),
     .description = $("Snow Warning + Whiteout."),
     .onStat = Whiteout.onStat,
+    .onSwitch = SnowWarning.onSwitch,
 };
 
 #undef CONTEXT
