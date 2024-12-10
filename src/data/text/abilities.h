@@ -726,6 +726,7 @@ static const u8 sAbilityBalloonBlitzDescription[] = _("Inflatable + Hyper Aggres
 static const u8 sAbilityDoomBlastDescription[] = _("Boosts own Dark moves by 1.35x,\ntakes 10% of dmg dealt as recoil.");
 static const u8 sAbilityBruteforceDescription[] = _("Rock Head + Reckless.");
 static const u8 sAbilityFaradaysCageDescription[] = _("Shell Armor + 50BP Thunder\nCage when hit by contact.");
+static const u8 sAbilityAcidicSlimeDescription[] = _("Corrosion + Poison STAB.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1488,6 +1489,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_DOOM_BLAST] = _("Doom Blast"),
     [ABILITY_BRUTEFORCE] = _("Bruteforce"),
     [ABILITY_FARADAYS_CAGE] = _("Faradays Cage"),
+    [ABILITY_ACIDIC_SLIME] = _("Acidic Slime"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2251,4 +2253,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_DOOM_BLAST] = sAbilityDoomBlastDescription,
     [ABILITY_BRUTEFORCE] = sAbilityBruteforceDescription,
     [ABILITY_FARADAYS_CAGE] = sAbilityFaradaysCageDescription,
+    [ABILITY_ACIDIC_SLIME] = sAbilityAcidicSlimeDescription,
 };

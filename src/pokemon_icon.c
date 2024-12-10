@@ -1822,6 +1822,11 @@ const u8 *const gMonIconTable[] =
     [SPECIES_SKELEDIRGE_MEGA] = gMonIcon_SkeledirgeMega,
     [SPECIES_TYPHLOSION_HISUIAN_MEGA] = gMonIcon_TyphlosionHisuianMega,
     [SPECIES_UNOWN_REVELATION] = gMonIcon_UnownRevelation,
+    [SPECIES_TOXAPEX_MEGA] = gMonIcon_ToxapexMega,
+    [SPECIES_ARCANINE_MEGA] = gMonIcon_ArcanineMega,
+    [SPECIES_GOODRA_MEGA] = gMonIcon_GoodraMega,
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] = gMonIcon_SlowbroGalarianMega,
+    [SPECIES_SLOWKING_MEGA_GALARIAN] = gMonIcon_SlowkingGalarianMega,
 
     [SPECIES_MORPEKYLL_HANGRY] = gMonIcon_MorpekyllHangry,
 
@@ -3529,6 +3534,9 @@ const u8 gMonIconPaletteIndices[] =
     [SPECIES_SKELEDIRGE_MEGA] = 0,
     [SPECIES_TYPHLOSION_HISUIAN_MEGA] = 0,
     [SPECIES_UNOWN_REVELATION] = 0,
+    [SPECIES_TOXAPEX_MEGA] = 1,
+    [SPECIES_GOODRA_MEGA] = 0,
+    [SPECIES_ARCANINE_MEGA] = 0,
 };
 
 const u8 gMonIconPaletteIndicesFemale[] =

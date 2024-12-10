@@ -8542,6 +8542,31 @@ const struct MonCoords gMonFrontPicCoords[] =
         .size = 0x88,
         .y_offset = 0,
     },
+    [SPECIES_GOODRA_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    [SPECIES_ARCANINE_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    [SPECIES_TOXAPEX_MEGA] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
+    [SPECIES_SLOWKING_MEGA_GALARIAN] =
+    {
+        .size = 0x88,
+        .y_offset = 3,
+    },
 
     // Egg
     [SPECIES_EGG] =

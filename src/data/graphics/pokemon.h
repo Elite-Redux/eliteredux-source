@@ -8479,6 +8479,35 @@ const u32 gMonPalette_UnownRevelation[]           = INCBIN_U32("graphics/pokemon
 const u32 gMonShinyPalette_UnownRevelation[]      = INCBIN_U32("graphics/pokemon/unown/revelation/shiny.gbapal.lz");
 const u8  gMonIcon_UnownRevelation[]              = INCBIN_U8("graphics/pokemon/unown/revelation/icon.4bpp");
 
+const u32 gMonFrontPic_ToxapexMega[]          = INCBIN_U32("graphics/pokemon/toxapex/mega/front.4bpp.lz");
+const u32 gMonBackPic_ToxapexMega[]           = INCBIN_U32("graphics/pokemon/toxapex/mega/back.4bpp.lz");
+const u32 gMonPalette_ToxapexMega[]           = INCBIN_U32("graphics/pokemon/toxapex/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_ToxapexMega[]      = INCBIN_U32("graphics/pokemon/toxapex/mega/shiny.gbapal.lz");
+const u8  gMonIcon_ToxapexMega[]              = INCBIN_U8("graphics/pokemon/toxapex/mega/icon.4bpp");
+
+const u32 gMonFrontPic_GoodraMega[]          = INCBIN_U32("graphics/pokemon/goodra/mega/front.4bpp.lz");
+const u32 gMonBackPic_GoodraMega[]           = INCBIN_U32("graphics/pokemon/goodra/mega/back.4bpp.lz");
+const u32 gMonPalette_GoodraMega[]           = INCBIN_U32("graphics/pokemon/goodra/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_GoodraMega[]      = INCBIN_U32("graphics/pokemon/goodra/mega/shiny.gbapal.lz");
+const u8  gMonIcon_GoodraMega[]              = INCBIN_U8("graphics/pokemon/goodra/mega/icon.4bpp");
+
+const u32 gMonFrontPic_ArcanineMega[]          = INCBIN_U32("graphics/pokemon/arcanine/mega/front.4bpp.lz");
+const u32 gMonBackPic_ArcanineMega[]           = INCBIN_U32("graphics/pokemon/arcanine/mega/back.4bpp.lz");
+const u32 gMonPalette_ArcanineMega[]           = INCBIN_U32("graphics/pokemon/arcanine/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_ArcanineMega[]      = INCBIN_U32("graphics/pokemon/arcanine/mega/shiny.gbapal.lz");
+const u8  gMonIcon_ArcanineMega[]              = INCBIN_U8("graphics/pokemon/arcanine/mega/icon.4bpp");
+
+const u32 gMonFrontPic_SlowkingGalarianMega[]          = INCBIN_U32("graphics/pokemon/slowking/mega_galarian/front.4bpp.lz");
+const u32 gMonBackPic_SlowkingGalarianMega[]           = INCBIN_U32("graphics/pokemon/slowking/mega_galarian/back.4bpp.lz");
+const u32 gMonPalette_SlowkingGalarianMega[]           = INCBIN_U32("graphics/pokemon/slowking/mega_galarian/normal.gbapal.lz");
+const u32 gMonShinyPalette_SlowkingGalarianMega[]      = INCBIN_U32("graphics/pokemon/slowking/mega_galarian/shiny.gbapal.lz");
+const u8  gMonIcon_SlowkingGalarianMega[]              = INCBIN_U8("graphics/pokemon/slowking/mega_galarian/icon.4bpp");
+
+const u32 gMonFrontPic_SlowbroGalarianMega[]          = INCBIN_U32("graphics/pokemon/slowbro/mega_galarian/front.4bpp.lz");
+const u32 gMonBackPic_SlowbroGalarianMega[]           = INCBIN_U32("graphics/pokemon/slowbro/mega_galarian/back.4bpp.lz");
+const u32 gMonPalette_SlowbroGalarianMega[]           = INCBIN_U32("graphics/pokemon/slowbro/mega_galarian/normal.gbapal.lz");
+const u32 gMonShinyPalette_SlowbroGalarianMega[]      = INCBIN_U32("graphics/pokemon/slowbro/mega_galarian/shiny.gbapal.lz");
+const u8  gMonIcon_SlowbroGalarianMega[]              = INCBIN_U8("graphics/pokemon/slowbro/mega_galarian/icon.4bpp");
 
 //PARTNER POKEMON
 

@@ -173,6 +173,7 @@ static const u16 sSlowbroFormSpeciesIdTable[] = {
     SPECIES_SLOWBRO,
     SPECIES_SLOWBRO_MEGA,
     SPECIES_SLOWBRO_GALARIAN,
+    SPECIES_SLOWBRO_MEGA_GALARIAN,
     FORM_SPECIES_END,
 };
 
@@ -302,6 +303,7 @@ static const u16 sAmpharosFormSpeciesIdTable[] = {
 static const u16 sSlowkingFormSpeciesIdTable[] = {
     SPECIES_SLOWKING,
     SPECIES_SLOWKING_GALARIAN,
+    SPECIES_SLOWKING_MEGA_GALARIAN,
     SPECIES_SLOWKING_MEGA,
     FORM_SPECIES_END,
 };
@@ -1451,6 +1453,7 @@ static const u16 sGrowlitheFormSpeciesIdTable[] = {
 };
 static const u16 sArcanineFormSpeciesIdTable[] = {
     SPECIES_ARCANINE,
+    SPECIES_ARCANINE_MEGA,
 	SPECIES_ARCANINE_HISUIAN,
 	SPECIES_ARCANINE_REDUX,
     SPECIES_ARCANINE_MEGA_REDUX,
@@ -1578,6 +1581,7 @@ static const u16 sSliggooFormSpeciesIdTable[] = {
 };
 static const u16 sGoodraFormSpeciesIdTable[] = {
     SPECIES_GOODRA,
+    SPECIES_GOODRA_MEGA,
     SPECIES_GOODRA_HISUIAN,
     FORM_SPECIES_END,
 };
@@ -2213,5 +2217,10 @@ static const u16 sQuaquavalFormSpeciesIdTable[] = {
 static const u16 sSkeledirgeFormSpeciesIdTable[] = {
     SPECIES_SKELEDIRGE,
     SPECIES_SKELEDIRGE_MEGA,
+    FORM_SPECIES_END,
+};
+static const u16 sToxapexFormSpeciesIdTable[] = {
+    SPECIES_TOXAPEX,
+    SPECIES_TOXAPEX_MEGA,
     FORM_SPECIES_END,
 };

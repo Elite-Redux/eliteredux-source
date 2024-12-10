@@ -8587,7 +8587,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_INCINEROAR_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_MEOWSCARADA_MEGA] =
     {
@@ -8597,7 +8597,7 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SAMUROTT_HISUIAN_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 4,
     },
     [SPECIES_PRIMARINA_MEGA] =
     {
@@ -8612,14 +8612,39 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_SKELEDIRGE_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 3,
     },
     [SPECIES_TYPHLOSION_HISUIAN_MEGA] =
     {
         .size = 0x78,
-        .y_offset = 0,
+        .y_offset = 2,
     },
     [SPECIES_UNOWN_REVELATION] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_GOODRA_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_TOXAPEX_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_ARCANINE_MEGA] =
+    {
+        .size = 0x78,
+        .y_offset = 4,
+    },
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] =
+    {
+        .size = 0x78,
+        .y_offset = 0,
+    },
+    [SPECIES_SLOWKING_MEGA_GALARIAN] =
     {
         .size = 0x78,
         .y_offset = 0,

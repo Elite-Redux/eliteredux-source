@@ -1819,6 +1819,12 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SKELEDIRGE_MEGA] = _("Skeledirge"),
     [SPECIES_TYPHLOSION_HISUIAN_MEGA] = _("Typhlosion"),
     [SPECIES_UNOWN_REVELATION] = _("Unown"),
+    [SPECIES_TOXAPEX_MEGA] = _("Toxapex"),
+    [SPECIES_ARCANINE_MEGA] = _("Arcanine"),
+    [SPECIES_GOODRA_MEGA] = _("Goodra"),
+    [SPECIES_SLOWBRO_MEGA_GALARIAN] = _("Slowbro"),
+    [SPECIES_SLOWKING_MEGA_GALARIAN] = _("Slowking"),
+    
 
 
     // PARTNER POKEMON
