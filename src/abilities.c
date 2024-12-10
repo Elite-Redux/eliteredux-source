@@ -210,7 +210,7 @@ static int PoisonPuppeteerClone(int ability, int battler, int (*predicate)(int b
 
 static int MoxieClone(int battler, int stat) {
     CHECK(HasAttackerFaintedTarget())
-    CHECK(ChangeStatBuffs(battler, 1, battler, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
+    CHECK(ChangeStatBuffs(battler, 1, stat, MOVE_EFFECT_AFFECTS_USER | STAT_BUFF_DONT_SET_BUFFERS, NULL))
     BattleScriptCall(BattleScript_RaiseStatOnFaintingTarget);
     return TRUE;
 }
