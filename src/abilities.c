@@ -8771,7 +8771,7 @@ static const Ability PatternChange = {
 ON_DEFENDER {
     CHECK(CheckHalfHpAbility(battler, attacker))
     CHECK_NOT(GetAbilityState(battler, ability))
-    CHECK(gVolatileStructs[battler].noRetreat || gBattleMons[battler].status2 & STATUS2_ESCAPE_PREVENTION)
+    CHECK_NOT(gVolatileStructs[battler].noRetreat || gBattleMons[battler].status2 & STATUS2_ESCAPE_PREVENTION)
 
     SetAbilityState(battler, ability, TRUE);
     BattleScriptCall(BattleScript_NoTurningBack);
