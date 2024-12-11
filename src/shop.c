@@ -332,6 +332,10 @@ static const u16 sAdoptionCenterInventory_ZeroBadges[] = {
     SPECIES_PANSAGE_REDUX,
     SPECIES_PANSEAR_REDUX,
     SPECIES_PANPOUR_REDUX,
+    SPECIES_CLEFFA_REDUX, //testing purposes
+    SPECIES_CORM, //testing purposes
+    SPECIES_MARBEEP, //testing purposes
+    SPECIES_NOIBAT_REDUX,
     SPECIES_NONE,
 };
 
