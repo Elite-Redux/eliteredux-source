@@ -70,7 +70,7 @@
 #define ON_REACTIVE static int COMBINE(onReactive, CONTEXT)(int ability, int battler)
 #define CONTEXT_ON_REACTIVE .onReactive = COMBINE(onReactive, CONTEXT)
 
-#define ON_BATTLER_FAINTS static int COMBINE(onBattlerFaints, CONTEXT)(int ability, int battler, int fainted, int move, int moveType)
+#define ON_BATTLER_FAINTS static int COMBINE(onBattlerFaints, CONTEXT)(int ability, int battler, int fainted, int source, int move, int moveType)
 #define CONTEXT_ON_BATTLER_FAINTS .onBattlerFaints = COMBINE(onBattlerFaints, CONTEXT)
 
 #define ON_PARENTAL_BOND static MultihitType COMBINE(onParentalBond, CONTEXT)(int battler, int move, int moveType)
@@ -3135,10 +3135,17 @@ ON_SWITCH {
     CHECK(any)
     return TRUE;
 }
+ON_BATTLER_FAINTS {
+    int state = GetAbilityState(battler, ability);
+    if (state & (3 << fainted)) SetAbilityState(battler, ability, state & ~(3 << fainted));
+    return NO_ANNOUNCE;
+}
 static const Ability PowerOfAlchemy = {
     .name = $("Power of Alchemy"),
     .description = $("Transmutes berries on entry.\nTransmutes items when lost."),
     CONTEXT_ON_SWITCH,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -8256,10 +8263,17 @@ static const Ability ParasiticSpores = {
 #define CONTEXT PoisonPuppeteer
 static int PoisonPuppeteerCondition(int battler, int target) { return CanBeConfused(target); }
 ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, PoisonPuppeteerCondition, BattleScript_PoisonPuppeteer); }
+ON_BATTLER_FAINTS { 
+    int state = GetAbilityState(battler, ability);
+    if (state & (1 << fainted)) SetAbilityState(battler, ability, state ^ (1 << fainted));
+    return NO_ANNOUNCE;
+}
 static const Ability PoisonPuppeteer = {
     .name = $("Poison Puppeteer"),
     .description = $("Poison also inflicts confusion."),
     CONTEXT_ON_REACTIVE,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -8269,6 +8283,8 @@ static const Ability Entrance = {
     .name = $("Entrance"),
     .description = $("Confusion also inflicts\ninfatuation."),
     CONTEXT_ON_REACTIVE,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -8574,6 +8590,8 @@ static const Ability BloodBath = {
     .description = $("Immune to bleed. Inflict fear\nwhen inflicting bleed."),
     .breakable = TRUE,
     CONTEXT_ON_REACTIVE,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -8585,13 +8603,20 @@ static const Ability BattleAura = {
 
 #undef CONTEXT
 #define CONTEXT Bloodlust
+ON_BATTLER_FAINTS {
+    if (battler == source) {
+        return SoulEater.onBattlerFaints(ability, battler, fainted, source, move, moveType);
+    } else {
+        return BloodBath.onBattlerFaints(ability, battler, fainted, source, move, moveType);
+    }
+}
 static const Ability Bloodlust = {
     .name = $("Bloodlust"),
     .description = $("Blood Bath + Soul Eater."),
     .breakable = TRUE,
     .onReactive = BloodBath.onReactive,
-    .onBattlerFaintsFor = APPLY_ON_ATTACKER,
-    .onBattlerFaints = SoulEater.onBattlerFaints,
+    .onBattlerFaintsFor = APPLY_ON_ANY,
+    CONTEXT_ON_BATTLER_FAINTS,
 };
 
 #undef CONTEXT
@@ -9939,6 +9964,8 @@ static const Ability SetAblaze = {
     .name = $("Set Ablaze"),
     .description = $("Inflicting burn also inflicts fear."),
     .onReactive = BloodBath.onReactive,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
 };
 
 #undef CONTEXT
@@ -10058,6 +10085,8 @@ static const Ability Neurotoxin = {
     .name = $("Neurotoxin"),
     .description = $("Inflicting poison also lowers\nAttack, Defense, and Speed."),
     CONTEXT_ON_REACTIVE,
+    .onBattlerFaintsFor = APPLY_ON_OTHER,
+    .onBattlerFaints = PoisonPuppeteer.onBattlerFaints,
 };
 
 #undef CONTEXT

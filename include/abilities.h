@@ -21,7 +21,7 @@ typedef int (*AbilityOnAttackerHandler)(int ability, int battler, int target, in
 typedef int (*AbilityOnDefenderHandler)(int ability, int battler, int attacker, int move, int moveType);
 typedef int (*AbilityOnRecoilHandler)(int damage, int battler, int moveType);
 typedef int (*AbilityOnReactiveHandler)(int ability, int battler);
-typedef int (*AbilityOnBattlerFaintsHandler)(int ability, int battler, int fainted, int move, int moveType);
+typedef int (*AbilityOnBattlerFaintsHandler)(int ability, int battler, int fainted, int source, int move, int moveType);
 typedef enum {
     MULTIHIT_SINGLE,
     MULTIHIT_TWO_TO_FIVE,
