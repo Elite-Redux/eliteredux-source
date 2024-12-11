@@ -70,7 +70,7 @@
 #define ON_REACTIVE static int COMBINE(onReactive, CONTEXT)(int ability, int battler)
 #define CONTEXT_ON_REACTIVE .onReactive = COMBINE(onReactive, CONTEXT)
 
-#define ON_BATTLER_FAINTS static int COMBINE(onBattlerFaints, CONTEXT)(int ability, int battler, int fainted, int source, int move, int moveType)
+#define ON_BATTLER_FAINTS static int COMBINE(onBattlerFaints, CONTEXT)(int ability, int battler, int attacker, int fainted, int move, int moveType)
 #define CONTEXT_ON_BATTLER_FAINTS .onBattlerFaints = COMBINE(onBattlerFaints, CONTEXT)
 
 #define ON_PARENTAL_BOND static MultihitType COMBINE(onParentalBond, CONTEXT)(int battler, int move, int moveType)
@@ -3733,7 +3733,7 @@ static const Ability GrimNeigh = {
 #undef CONTEXT
 #define CONTEXT AsOneIceRider
 ON_BATTLER_FAINTS {
-    CHECK(ChillingNeigh.onBattlerFaints(ability, battler, fainted, move, moveType))
+    CHECK(ChillingNeigh.onBattlerFaints(ability, battler, attacker, fainted, move, moveType))
     gBattleScripting.abilityPopupOverwrite = ABILITY_CHILLING_NEIGH;
     BattleScriptCall(BattleScript_AbilityPopUpStack);
     return NO_ANNOUNCE;
@@ -3752,7 +3752,7 @@ static const Ability AsOneIceRider = {
 #undef CONTEXT
 #define CONTEXT AsOneShadowRider
 ON_BATTLER_FAINTS {
-    CHECK(GrimNeigh.onBattlerFaints(ability, battler, fainted, move, moveType))
+    CHECK(GrimNeigh.onBattlerFaints(ability, battler, attacker, fainted, move, moveType))
     gBattleScripting.abilityPopupOverwrite = ABILITY_GRIM_NEIGH;
     BattleScriptCall(BattleScript_AbilityPopUpStack);
     return NO_ANNOUNCE;
@@ -7146,8 +7146,8 @@ static const Ability BerserkDna = {
 #define CONTEXT CrownedKing
 ON_SWITCH { return SwitchInAnnounce(B_MSG_SWITCHIN_CROWNEDKING); }
 ON_BATTLER_FAINTS {
-    return AsOneShadowRider.onBattlerFaints(ability, battler, fainted, move, moveType) |
-           AsOneIceRider.onBattlerFaints(ability, battler, fainted, move, moveType);
+    return AsOneShadowRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType) |
+           AsOneIceRider.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
 }
 static const Ability CrownedKing = {
     .name = $("Crowned King"),
@@ -8263,7 +8263,7 @@ static const Ability ParasiticSpores = {
 #define CONTEXT PoisonPuppeteer
 static int PoisonPuppeteerCondition(int battler, int target) { return CanBeConfused(target); }
 ON_REACTIVE { return PoisonPuppeteerClone(ability, battler, PoisonPuppeteerCondition, BattleScript_PoisonPuppeteer); }
-ON_BATTLER_FAINTS { 
+ON_BATTLER_FAINTS {
     int state = GetAbilityState(battler, ability);
     if (state & (1 << fainted)) SetAbilityState(battler, ability, state ^ (1 << fainted));
     return NO_ANNOUNCE;
@@ -8604,11 +8604,11 @@ static const Ability BattleAura = {
 #undef CONTEXT
 #define CONTEXT Bloodlust
 ON_BATTLER_FAINTS {
-    if (battler == source) {
-        return SoulEater.onBattlerFaints(ability, battler, fainted, source, move, moveType);
-    } else {
-        return BloodBath.onBattlerFaints(ability, battler, fainted, source, move, moveType);
+    int result = 0;
+    if (battler == attacker) {
+        result |= SoulEater.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
     }
+    return result | BloodBath.onBattlerFaints(ability, battler, attacker, fainted, move, moveType);
 }
 static const Ability Bloodlust = {
     .name = $("Bloodlust"),

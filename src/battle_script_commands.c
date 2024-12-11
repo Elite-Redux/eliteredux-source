@@ -7141,7 +7141,7 @@ static void Cmd_various(void) {
                            gAbilities[ability].onBattlerFaints &&
                                IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, gBattlerAttacker, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
                            gStackBattler1 = i;
-                           if (gAbilities[ability].onBattlerFaints(ability, i, gActiveBattler, gCurrentMove, moveType) & 1)
+                           if (gAbilities[ability].onBattlerFaints(ability, i, gBattlerAttacker, gActiveBattler, gCurrentMove, moveType) & 1)
                                BattleScriptCall(BattleScript_AbilityPopUpStack))
             }
             ReadActiveScriptInitialStackState();
@@ -7165,7 +7165,7 @@ static void Cmd_various(void) {
                            gAbilities[ability].onBattlerFaints &&
                                IsTargettedApplyOnFlagAppropriate(gActiveBattler, i, MAX_BATTLERS_COUNT, gActiveBattler, gAbilities[ability].onBattlerFaintsFor),
                            gStackBattler1 = i;
-                           if (gAbilities[ability].onBattlerFaints(ability, i, gActiveBattler, 0, 0) & 1) BattleScriptCall(BattleScript_AbilityPopUpStack))
+                           if (gAbilities[ability].onBattlerFaints(ability, i, MAX_BATTLERS_COUNT, gActiveBattler, 0, 0) & 1) BattleScriptCall(BattleScript_AbilityPopUpStack))
             }
             ReadActiveScriptInitialStackState();
             break;
