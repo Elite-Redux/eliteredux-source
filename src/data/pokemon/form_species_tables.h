@@ -2229,3 +2229,8 @@ static const u16 sRoseradeFormSpeciesIdTable[] = {
     SPECIES_ROSERADE_MEGA,
     FORM_SPECIES_END,
 };
+static const u16 sMienshaoFormSpeciesIdTable[] = {
+    SPECIES_MIENSHAO,
+    SPECIES_MIENSHAO_MEGA,
+    FORM_SPECIES_END,
+};

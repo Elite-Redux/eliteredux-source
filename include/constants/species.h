@@ -1791,8 +1791,9 @@
 #define SPECIES_SLOWBRO_MEGA_GALARIAN       CUSTOM_MEGA_START + 129
 #define SPECIES_SLOWKING_MEGA_GALARIAN      CUSTOM_MEGA_START + 130
 #define SPECIES_ROSERADE_MEGA               CUSTOM_MEGA_START + 131
+#define SPECIES_MIENSHAO_MEGA               CUSTOM_MEGA_START + 132
 
-#define LAST_VALID_CUSTOM_MEGA              SPECIES_ROSERADE_MEGA  // To check for a valid species in some menus
+#define LAST_VALID_CUSTOM_MEGA              SPECIES_MIENSHAO_MEGA  // To check for a valid species in some menus
 #define LAST_CUSTOM_MEGA                    CUSTOM_MEGA_START + 400       // To make temporary space for anything we need to add in the future
 
 #define REDUX_FORMS_START                   LAST_CUSTOM_MEGA

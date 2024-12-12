@@ -8515,6 +8515,12 @@ const u32 gMonPalette_RoseradeMega[]           = INCBIN_U32("graphics/pokemon/ro
 const u32 gMonShinyPalette_RoseradeMega[]      = INCBIN_U32("graphics/pokemon/roserade/mega/shiny.gbapal.lz");
 const u8  gMonIcon_RoseradeMega[]              = INCBIN_U8("graphics/pokemon/roserade/mega/icon.4bpp");
 
+const u32 gMonFrontPic_MienshaoMega[]          = INCBIN_U32("graphics/pokemon/mienshao/mega/front.4bpp.lz");
+const u32 gMonBackPic_MienshaoMega[]           = INCBIN_U32("graphics/pokemon/mienshao/mega/back.4bpp.lz");
+const u32 gMonPalette_MienshaoMega[]           = INCBIN_U32("graphics/pokemon/mienshao/mega/normal.gbapal.lz");
+const u32 gMonShinyPalette_MienshaoMega[]      = INCBIN_U32("graphics/pokemon/mienshao/mega/shiny.gbapal.lz");
+const u8  gMonIcon_MienshaoMega[]              = INCBIN_U8("graphics/pokemon/mienshao/mega/icon.4bpp");
+
 //PARTNER POKEMON
 
 const u32 gMonFrontPic_AmauraPartner[]          = INCBIN_U32("graphics/pokemon/amaura/front.4bpp.lz");

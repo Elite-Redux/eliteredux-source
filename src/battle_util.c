@@ -223,6 +223,7 @@ void HandleAction_UseMove(void)
     if (!gProcessingExtraAttacks)
     {
         SetAbilityState(gBattlerAttacker, ABILITY_RAMPAGE, FALSE);
+        SetAbilityState(gBattlerAttacker, ABILITY_QIGONG, FALSE);
         SetAbilityState(gBattlerAttacker, ABILITY_MASTER_HAND, FALSE);
         SetAbilityState(gBattlerAttacker, ABILITY_BERSERKER_RAGE, FALSE);
         SetAbilityState(gBattlerAttacker, ABILITY_RAGING_GODDESS, FALSE);
@@ -9077,6 +9078,7 @@ static void CalculateOffensiveAbilityMultiplier(int ability, int battlerAtk, int
         MUL_ATE(TYPE_GHOST)
     
     case ABILITY_FIGHT_SPIRIT:
+    case ABILITY_QIGONG:
         MUL_ATE(TYPE_FIGHTING)
 
     case ABILITY_TECTONIZE:

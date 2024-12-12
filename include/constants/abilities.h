@@ -780,8 +780,9 @@
 #define ABILITY_FARADAYS_CAGE 758 // Shell Armor + Thunder Cage when hit by contact.
 #define ABILITY_ACIDIC_SLIME 759 // Corrosion + Poison STAB.
 #define ABILITY_ROSE_GARDEN 760 // Sets 2 layers of Toxic Spikes on entry.
+#define ABILITY_QIGONG 761 // Can't miss. Fighting Spirit + Rampage.
 
-#define ABILITIES_COUNT_CUSTOM (ABILITY_ROSE_GARDEN + 1)
+#define ABILITIES_COUNT_CUSTOM (ABILITY_QIGONG + 1)
 
 #define ABILITIES_COUNT ABILITIES_COUNT_CUSTOM
 

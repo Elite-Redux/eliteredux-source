@@ -728,6 +728,7 @@ static const u8 sAbilityBruteforceDescription[] = _("Rock Head + Reckless.");
 static const u8 sAbilityFaradaysCageDescription[] = _("Shell Armor + 50BP Thunder\nCage when hit by contact.");
 static const u8 sAbilityAcidicSlimeDescription[] = _("Corrosion + Poison STAB.");
 static const u8 sAbilityRoseGardenDescription[] = _("Sets 2 layers of Toxic\nSpikes on entry.");
+static const u8 sAbilityQigongDescription[] = _("Always hits. Fighting Spirit\n+ Rampage.");
 
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
 {
@@ -1492,6 +1493,7 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_FARADAYS_CAGE] = _("Faradays Cage"),
     [ABILITY_ACIDIC_SLIME] = _("Acidic Slime"),
     [ABILITY_ROSE_GARDEN] = _("Rose Garden"),
+    [ABILITY_QIGONG] = _("Qigong"),
 };
 
 const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
@@ -2257,4 +2259,5 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_FARADAYS_CAGE] = sAbilityFaradaysCageDescription,
     [ABILITY_ACIDIC_SLIME] = sAbilityAcidicSlimeDescription,
     [ABILITY_ROSE_GARDEN] = sAbilityRoseGardenDescription,
+    [ABILITY_QIGONG] = sAbilityQigongDescription,
 };

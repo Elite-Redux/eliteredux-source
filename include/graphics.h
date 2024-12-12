@@ -11588,6 +11588,11 @@ extern const u32 gMonBackPic_RoseradeMega[];
 extern const u32 gMonPalette_RoseradeMega[];
 extern const u32 gMonShinyPalette_RoseradeMega[];
 extern const u8  gMonIcon_RoseradeMega[];
+extern const u32 gMonFrontPic_MienshaoMega[];
+extern const u32 gMonBackPic_MienshaoMega[];
+extern const u32 gMonPalette_MienshaoMega[];
+extern const u32 gMonShinyPalette_MienshaoMega[];
+extern const u8  gMonIcon_MienshaoMega[];
 //3.0 CUTOFF END
 
 extern const u32 gMonBackPic_Tyranitar_Mega_Redux[];

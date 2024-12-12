@@ -1826,6 +1826,7 @@ const u8 gSpeciesNames[][POKEMON_SPECIES_NAME_LENGTH + 1] = {
     [SPECIES_SLOWBRO_MEGA_GALARIAN] = _("Slowbro"),
     [SPECIES_SLOWKING_MEGA_GALARIAN] = _("Slowking"),
     [SPECIES_ROSERADE_MEGA] = _("Roserade"),
+    [SPECIES_MIENSHAO_MEGA] = _("Mienshao"),
     
 
 

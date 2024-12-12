@@ -1830,6 +1830,8 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, struct MoveState*
         return 101;
     else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_DEADEYE))
         return 101;
+    else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_QIGONG))
+        return 101;
     else if (IS_MOVE_STATUS(move) && BATTLER_HAS_ABILITY(battlerAtk, ABILITY_GIFTED_MIND))
         return 101;
     else if (BATTLER_HAS_ABILITY(battlerAtk, ABILITY_ANGELS_WRATH)) {
