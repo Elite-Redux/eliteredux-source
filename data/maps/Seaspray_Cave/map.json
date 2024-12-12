@@ -60,21 +60,21 @@
       "y": 34,
       "elevation": 3,
       "dest_map": "MAP_ROUTE115",
-      "dest_warp_id": 3
+      "dest_warp_id": "3"
     },
     {
       "x": 10,
       "y": 10,
       "elevation": 3,
       "dest_map": "MAP_SEASPRAY_CAVE_B1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 31,
       "y": 29,
       "elevation": 0,
       "dest_map": "MAP_SEASPRAY_CAVE_B1F",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     }
   ],
   "coord_events": [
