@@ -44508,12 +44508,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_ABOMASNOW_SANTA] =
     {
-        .baseHP        = 110,
-        .baseAttack    = 142,
-        .baseDefense   = 105,
-        .baseSpeed     = 30,
-        .baseSpAttack  = 142,
-        .baseSpDefense = 105,
+    .baseHP         = 90,
+    .baseAttack     = 142,
+    .baseDefense    = 105,
+    .baseSpeed      = 30,
+    .baseSpAttack   = 142,
+    .baseSpDefense  = 105,
         .type1 = TYPE_GRASS,
         .type2 = TYPE_ICE,
         .catchRate = 255,
