@@ -392,6 +392,7 @@ static const Ability Limber = {
     .description = $("Immune to paralysis.\n"
                      "Takes 50% less recoil damage."),
     .breakable = TRUE,
+    .halfRecoil = TRUE,
 };
 
 #undef CONTEXT
