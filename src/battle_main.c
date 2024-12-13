@@ -4297,52 +4297,13 @@ s8 GetMovePriority(u32 battlerId, u16 move, u32 target) {
 
     if (gFieldTimers.quashTimer) return min(-4, priority);
 
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_OPPORTUNIST) && gBattleMons[target].hp <= gBattleMons[target].maxHP / 2) priority++;
+    ON_ABILITY(battlerId, FALSE, gAbilities[ability].onPriority, priority += gAbilities[ability].onPriority(battlerId, target, move))
 
-#define GALE_WINGS_CLONE(ability, type)                                                                                                                     \
-    if (BATTLER_HAS_ABILITY(battlerId, ability) && GetTypeBeforeUsingMove(move, battlerId) == type && (B_GALE_WINGS <= GEN_6 || BATTLER_MAX_HP(battlerId))) \
-        priority++;
-
-    GALE_WINGS_CLONE(ABILITY_GALE_WINGS, TYPE_FLYING)
-    GALE_WINGS_CLONE(ABILITY_FLAMING_SOUL, TYPE_FIRE)
-    GALE_WINGS_CLONE(ABILITY_FLAME_BUBBLE, TYPE_FIRE)
-    GALE_WINGS_CLONE(ABILITY_EARLY_GRAVE, TYPE_GHOST)
-    GALE_WINGS_CLONE(ABILITY_FROZEN_SOUL, TYPE_ICE)
-    GALE_WINGS_CLONE(ABILITY_VOLT_RUSH, TYPE_ELECTRIC)
-    GALE_WINGS_CLONE(ABILITY_DARK_GALE_WINGS, TYPE_DARK)
-    GALE_WINGS_CLONE(ABILITY_WATER_GALE_WINGS, TYPE_WATER)
-    GALE_WINGS_CLONE(ABILITY_CUTE_ANTECEDENCE, TYPE_FAIRY)
-
-#undef GALE_WINGS_CLONE
-
-    // Prankster
-    if (BattlerHasAbility(battlerId, ABILITY_PRANKSTER, FALSE) && IS_MOVE_STATUS(move)) priority++;
-
-    // Sighting System
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_SIGHTING_SYSTEM) && gBattleMoves[move].accuracy && gBattleMoves[move].accuracy <= 75) {
-        priority = priority - 3;
-    }
-
-    // Iron Barrage
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_IRON_BARRAGE) && gBattleMoves[move].accuracy && gBattleMoves[move].accuracy <= 75) {
-        priority = priority - 3;
-    }
-
-    if (gBattleMoves[move].effect == EFFECT_GRASSY_GLIDE && GetCurrentTerrain() == STATUS_FIELD_GRASSY_TERRAIN && IsBattlerGrounded(battlerId)) {
+    if (gBattleMoves[move].effect == EFFECT_GRASSY_GLIDE && IsBattlerTerrainAffected(battlerId, STATUS_FIELD_GRASSY_TERRAIN)) {
         priority++;
     }
 
     if (gBattleMoves[move].effect == EFFECT_THIEF && !gBattleMons[battlerId].item && gBattleMons[target].item) priority++;
-
-    if (BattlerHasAbility(battlerId, ABILITY_TRIAGE, TRUE)) {
-        if (IsHealingMoveEffect(gBattleMoves[move].effect)) priority += 3;
-    }
-
-    if (BattlerHasAbility(battlerId, ABILITY_BLITZ_BOXER, FALSE) && IS_IRON_FIST(battlerId, move) && (B_GALE_WINGS <= GEN_6 || BATTLER_MAX_HP(battlerId))) {
-        priority++;
-    }
-
-    if (BATTLER_HAS_ABILITY(battlerId, ABILITY_PERFECTIONIST) && gBattleMoves[move].power <= 25 && gBattleMoves[move].power > 0) priority++;
 
     if ((gStatuses4[battlerId] & STATUS4_COILED) && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)) {
         priority++;

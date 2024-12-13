@@ -99,6 +99,31 @@
 #define ON_ACCURACY static AccuracyPriority COMBINE(onAccuracy, CONTEXT)(int ability, int battler, int target, int move, int moveType, int *accuracy)
 #define CONTEXT_ON_ACCURACY .onAccuracy = COMBINE(onAccuracy, CONTEXT)
 
+#define ON_SWAP_SPLIT static int COMBINE(onSwapSplit, CONTEXT)(int battler, int move)
+#define CONTEXT_ON_SWAP_SPLIT .onSwapSplit = COMBINE(onSwapSplit, CONTEXT)
+
+#define ON_CHOOSE_OFFENSIVE_STAT                         \
+    static void COMBINE(onChooseOffensiveStat, CONTEXT)( \
+        int battler, int move, int ignoreOffensiveStatDrops, int targetUnaware, u8 *atkStatToUse, u8 *secondaryAtkStatToUse)
+#define CONTEXT_ON_CHOOSE_OFFENSIVE_STAT .onChooseOffensiveStat = COMBINE(onChooseOffensiveStat, CONTEXT)
+
+#define ON_CHOOSE_DEFENSIVE_STAT \
+    static int COMBINE(onChooseDefensiveStat, CONTEXT)(int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware)
+#define CONTEXT_ON_CHOOSE_DEFENSIVE_STAT .onChooseDefensiveStat = COMBINE(onChooseDefensiveStat, CONTEXT)
+
+#define ON_STAB static int COMBINE(onStab, CONTEXT)(int moveType)
+#define CONTEXT_ON_STAB .onStab = COMBINE(onStab, CONTEXT)
+
+#define ON_PRIORITY static int COMBINE(onPriority, CONTEXT)(int battler, int target, int move)
+#define CONTEXT_ON_PRIORITY .onPriority = COMBINE(onPriority, CONTEXT)
+
+#define GALE_WINGS_CLONE(type)                               \
+    ON_PRIORITY {                                            \
+        CHECK(GetTypeBeforeUsingMove(move, battler) == type) \
+        CHECK(BATTLER_MAX_HP(battler))                       \
+        return 1;                                            \
+    }
+
 static void InsertCorrectEndType(AbilityCallType type) {
     switch (type) {
         case ABILITY_BS_EXECUTE:
@@ -1406,6 +1431,7 @@ static const Ability PoisonHeal = {
 static const Ability Adaptability = {
     .name = $("Adaptability"),
     .description = $("Increases STAB from 1.5x to 2x."),
+    .adaptability = TRUE,
 };
 
 #undef CONTEXT
@@ -2286,9 +2312,14 @@ static const Ability SapSipper = {
 
 #undef CONTEXT
 #define CONTEXT Prankster
+ON_PRIORITY {
+    CHECK(IS_MOVE_STATUS(move))
+    return 1;
+}
 static const Ability Prankster = {
     .name = $("Prankster"),
     .description = $("Status moves have +1 priority\nbut fail on opposing Dark-types."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -2465,9 +2496,11 @@ static const Ability StanceChange = {
 
 #undef CONTEXT
 #define CONTEXT GaleWings
+GALE_WINGS_CLONE(TYPE_FLYING)
 static const Ability GaleWings = {
     .name = $("Gale Wings"),
     .description = $("At full HP, gives +1 priority to\nthis Pokémon's Flying-type moves."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -2842,9 +2875,14 @@ static const Ability LiquidVoice = {
 
 #undef CONTEXT
 #define CONTEXT Triage
+ON_PRIORITY {
+    CHECK(IsHealingMoveEffect(gBattleMoves[move].effect))
+    return 3;
+}
 static const Ability Triage = {
     .name = $("Triage"),
     .description = $("Moves that have a healing effect\ngain +3 priority."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -3166,6 +3204,7 @@ static const Ability RksSystem = {
     .unsuppressable = TRUE,
     .randomizerBanned = TRUE,
     .protean = TRUE,
+    .adaptability = TRUE,
 };
 
 #undef CONTEXT
@@ -3819,10 +3858,15 @@ static const Ability PrismScales = {
 
 #undef CONTEXT
 #define CONTEXT PowerFists
+ON_CHOOSE_DEFENSIVE_STAT {
+    CHECK(IS_IRON_FIST(battler, move))
+    return STAT_SPDEF;
+}
 static const Ability PowerFists = {
     .name = $("Power Fists"),
     .description = $("Iron Fist moves target Special\nDefense and get a 1.3x boost."),
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
+    CONTEXT_ON_CHOOSE_DEFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -3859,9 +3903,15 @@ static const Ability Vengeance = {
 
 #undef CONTEXT
 #define CONTEXT BlitzBoxer
+ON_PRIORITY {
+    CHECK(IS_IRON_FIST(battler, move))
+    CHECK(BATTLER_MAX_HP(battler))
+    return 1;
+}
 static const Ability BlitzBoxer = {
     .name = $("Blitz Boxer"),
     .description = $("At full HP, gives +1 priority to\nthis Pokémon's punching moves."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -3950,23 +4000,33 @@ static const Ability GroundShock = {
 
 #undef CONTEXT
 #define CONTEXT AncientIdol
+ON_CHOOSE_OFFENSIVE_STAT { *atkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; }
 static const Ability AncientIdol = {
     .name = $("Ancient Idol"),
     .description = $("Uses Def and Sp. Def instead of\nAtk and Sp. Atk when attacking."),
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT MysticPower
+ON_STAB { return TRUE; }
 static const Ability MysticPower = {
     .name = $("Mystic Power"),
     .description = $("All moves gain the 1.5x power\nboost from STAB."),
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
 #define CONTEXT Perfectionist
+ON_PRIORITY {
+    CHECK(gBattleMoves[move].power <= 25)
+    CHECK(gBattleMoves[move].power)
+    return 1;
+}
 static const Ability Perfectionist = {
     .name = $("Perfectionist"),
     .description = $("Move BP < 51 BP: +1 to crit rate.\nMove BP < 26 BP: +1 priority too."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -4004,9 +4064,11 @@ static const Ability Inflatable = {
 
 #undef CONTEXT
 #define CONTEXT AuroraBorealis
+ON_STAB { return moveType == TYPE_ICE; }
 static const Ability AuroraBorealis = {
     .name = $("Aurora Borealis"),
     .description = $("Boosts the power of Ice-type\nmoves by 1.5x (due to STAB)."),
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
@@ -4077,9 +4139,11 @@ static const Ability LeadCoat = {
 
 #undef CONTEXT
 #define CONTEXT Amphibious
+ON_STAB { return moveType == TYPE_WATER; }
 static const Ability Amphibious = {
     .name = $("Amphibious"),
     .description = $("Boosts the power of Water-type\nmoves by 1.5x (due to STAB)."),
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
@@ -4371,10 +4435,14 @@ static const Ability AirBlower = {
 
 #undef CONTEXT
 #define CONTEXT Juggernaut
+ON_CHOOSE_OFFENSIVE_STAT {
+    if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_DEF;
+}
 static const Ability Juggernaut = {
     .name = $("Juggernaut"),
     .description = $("Paralysis-immune. Uses 20% of its\nDef when using a contact move."),
     .breakable = TRUE,
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -4762,9 +4830,11 @@ static const Ability ViolentRush = {
 
 #undef CONTEXT
 #define CONTEXT FlamingSoul
+GALE_WINGS_CLONE(TYPE_FIRE)
 static const Ability FlamingSoul = {
     .name = $("Flaming Soul"),
     .description = $("At full HP, gives +1 priority to\nthis Pokémon's Fire-type moves."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -4796,9 +4866,13 @@ static const Ability WeatherControl = {
 
 #undef CONTEXT
 #define CONTEXT SpeedForce
+ON_CHOOSE_OFFENSIVE_STAT {
+    if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *secondaryAtkStatToUse = STAT_SPEED;
+}
 static const Ability SpeedForce = {
     .name = $("Speed Force"),
     .description = $("Contact moves use 20% of its\nSpeed stat additionally."),
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -4866,9 +4940,11 @@ static const Ability Striker = {
 
 #undef CONTEXT
 #define CONTEXT FrozenSoul
+GALE_WINGS_CLONE(TYPE_ICE)
 static const Ability FrozenSoul = {
     .name = $("Frozen Soul"),
     .description = $("At full HP, gives +1 priority to\nthis Pokémon's Ice-type moves."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -4891,34 +4967,47 @@ static const Ability Looter = {
 
 #undef CONTEXT
 #define CONTEXT LunarEclipse
+ON_STAB { return moveType == TYPE_DARK || moveType == TYPE_FAIRY; }
 static const Ability LunarEclipse = {
     .name = $("Lunar Eclipse"),
     .description = $("Fairy & Dark gains STAB.\nHypnosis has 1.5x accuracy."),
+    .onAccuracy = Hypnotist.onAccuracy,
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
 #define CONTEXT SolarFlare
+ON_STAB { return moveType == TYPE_FIRE; }
 static const Ability SolarFlare = {
     .name = $("Solar Flare"),
     .description = $("Chloroplast + Immolate.\nFire moves gain STAB."),
     .chloroplast = TRUE,
     .onOffensiveMultiplier = Immolate.onOffensiveMultiplier,
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
 #define CONTEXT PowerCore
+ON_CHOOSE_OFFENSIVE_STAT { *secondaryAtkStatToUse = IS_MOVE_PHYSICAL(move) ? STAT_DEF : STAT_SPDEF; }
 static const Ability PowerCore = {
     .name = $("Power Core"),
     .description = $("The Pokémon uses +20% of its\nDefense or SpDef during moves."),
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT SightingSystem
 ON_ACCURACY { return ACCURACY_HITS_IF_POSSIBLE; }
+ON_PRIORITY {
+    CHECK(gBattleMoves[move].accuracy)
+    CHECK(gBattleMoves[move].accuracy < 80)
+    return -3;
+}
 static const Ability SightingSystem = {
     .name = $("Sighting System"),
     .description = $("Moves always hit. Moves last\nfor moves less than 80% accuracy."),
     CONTEXT_ON_ACCURACY,
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -4931,9 +5020,14 @@ static const Ability BadCompany = {
 
 #undef CONTEXT
 #define CONTEXT Opportunist
+ON_PRIORITY {
+    CHECK(gBattleMons[target].hp <= gBattleMons[target].maxHP / 2)
+    return 1;
+}
 static const Ability Opportunist = {
     .name = $("Opportunist"),
     .description = $("If target has less than 1/2 HP,\nsingle-target moves get +1 prio."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -4949,9 +5043,13 @@ static const Ability GiantWings = {
 
 #undef CONTEXT
 #define CONTEXT Momentum
+ON_CHOOSE_OFFENSIVE_STAT {
+    if (gBattleMoves[move].flags & FLAG_MAKES_CONTACT) *atkStatToUse = STAT_SPEED;
+}
 static const Ability Momentum = {
     .name = $("Momentum"),
     .description = $("Contact moves use the Speed stat\nfor damage calculation."),
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -5010,10 +5108,22 @@ static const Ability PreciseFist = {
 #undef CONTEXT
 #define CONTEXT Deadeye
 ON_ACCURACY { return ACCURACY_HITS_IF_POSSIBLE; }
+ON_CHOOSE_DEFENSIVE_STAT {
+    CHECK(gBattleMoves[move].flags & FLAG_MEGA_LAUNCHER_BOOST || gBattleMoves[move].arrowBased)
+    u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+    u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+    if (def < spDef)
+        return STAT_DEF;
+    else if (spDef < def)
+        return STAT_SPDEF;
+    else
+        return 0;
+}
 static const Ability Deadeye = {
     .name = $("Deadeye"),
     .description = $("Never misses. Arrow and cannon\nmoves hit weakest defense."),
     CONTEXT_ON_ACCURACY,
+    CONTEXT_ON_CHOOSE_DEFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -5246,6 +5356,7 @@ static const Ability IronBarrage = {
     .description = $("Mega Launcher + Sighting System."),
     .onOffensiveMultiplier = MegaLauncher.onOffensiveMultiplier,
     .onAccuracy = SightingSystem.onAccuracy,
+    .onPriority = SightingSystem.onPriority,
 };
 
 #undef CONTEXT
@@ -5344,10 +5455,22 @@ ON_ACCURACY {
     CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
     return ACCURACY_HITS_IF_POSSIBLE;
 }
+ON_CHOOSE_DEFENSIVE_STAT {
+    CHECK(gBattleMoves[move].flags & FLAG_STRIKER_BOOST)
+    u32 def = CalculateStat(target, STAT_DEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+    u32 spDef = CalculateStat(target, STAT_SPDEF, 0, move, FALSE, ignoreDefensiveStatBoosts, battlerUnaware, FALSE);
+    if (def < spDef)
+        return STAT_DEF;
+    else if (spDef < def)
+        return STAT_SPDEF;
+    else
+        return 0;
+}
 static const Ability Roundhouse = {
     .name = $("Roundhouse"),
     .description = $("Kicks always hit.\nDamages foes' weaker defenses."),
     CONTEXT_ON_ACCURACY,
+    CONTEXT_ON_CHOOSE_DEFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -5594,9 +5717,18 @@ static const Ability HydroCircuit = {
 
 #undef CONTEXT
 #define CONTEXT Equinox
+ON_CHOOSE_OFFENSIVE_STAT {
+    int atk = CalculateStat(battler, STAT_ATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
+    int spAtk = CalculateStat(battler, STAT_SPATK, 0, move, TRUE, ignoreOffensiveStatDrops, targetUnaware, FALSE);
+    if (atk > spAtk)
+        *atkStatToUse = STAT_ATK;
+    else if (spAtk > atk)
+        *atkStatToUse = STAT_SPATK;
+}
 static const Ability Equinox = {
     .name = $("Equinox"),
     .description = $("Boosts Atk or SpAtk to\nmatch the higher value."),
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -5677,9 +5809,11 @@ static const Ability Coward = {
 
 #undef CONTEXT
 #define CONTEXT VoltRush
+GALE_WINGS_CLONE(TYPE_ELECTRIC)
 static const Ability VoltRush = {
     .name = $("Volt Rush"),
     .description = $("At full HP, gives +1 priority to\nits Electric-type moves."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -6530,9 +6664,11 @@ static const Ability Generator = {
 
 #undef CONTEXT
 #define CONTEXT MoonSpirit
+ON_STAB { return moveType == TYPE_FAIRY || moveType == TYPE_DARK; }
 static const Ability MoonSpirit = {
     .name = $("Moon Spirit"),
     .description = $("Fairy & Dark gains STAB.\nMoonlight recovers 75% HP."),
+    CONTEXT_ON_STAB,
 };
 
 #undef CONTEXT
@@ -6768,6 +6904,7 @@ static const Ability ArcaneForce = {
     .name = $("Arcane Force"),
     .description = $("All moves gain STAB.\nUps “supereffective” by 10%."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onStab = MysticPower.onStab,
 };
 
 #undef CONTEXT
@@ -6873,10 +7010,16 @@ static const Ability ChangeOfHeart = {
 
 #undef CONTEXT
 #define CONTEXT MysticBlades
+ON_SWAP_SPLIT {
+    CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
+    CHECK(gBattleMoves[move].flags & FLAG_KEEN_EDGE_BOOST)
+    return TRUE;
+}
 static const Ability MysticBlades = {
     .name = $("Mystic Blades"),
     .description = $("Keen edge moves become special\nand deal 30% more damage."),
     .onOffensiveMultiplier = KeenEdge.onOffensiveMultiplier,
+    CONTEXT_ON_SWAP_SPLIT,
 };
 
 #undef CONTEXT
@@ -6965,6 +7108,7 @@ static const Ability PonyPower = {
     .name = $("Pony Power"),
     .description = $("Keen Edge + Mystic Blades."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    .onSwapSplit = MysticBlades.onSwapSplit,
 };
 
 #undef CONTEXT
@@ -7057,9 +7201,11 @@ static const Ability PhantomThief = {
 
 #undef CONTEXT
 #define CONTEXT EarlyGrave
+GALE_WINGS_CLONE(TYPE_GHOST)
 static const Ability EarlyGrave = {
     .name = $("Early Grave"),
     .description = $("At full HP, gives +1 priority to\nthis Pokémon's Ghost-type moves."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -7516,16 +7662,24 @@ static const Ability WindPower = {
 
 #undef CONTEXT
 #define CONTEXT Impulse
+ON_CHOOSE_OFFENSIVE_STAT {
+    if (!(gBattleMoves[move].flags & FLAG_MAKES_CONTACT)) *atkStatToUse = STAT_SPEED;
+}
 static const Ability Impulse = {
     .name = $("Impulse"),
     .description = $("Non-contact moves use the\nSpeed stat for damage."),
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
 #define CONTEXT TerminalVelocity
+ON_CHOOSE_OFFENSIVE_STAT {
+    if (IS_MOVE_SPECIAL(move)) *secondaryAtkStatToUse = STAT_SPEED;
+}
 static const Ability TerminalVelocity = {
     .name = $("Terminal Velocity"),
     .description = $("Special moves use 20% of its\nSpeed stat additionally."),
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -7580,9 +7734,11 @@ static const Ability ReadiedAction = {
 
 #undef CONTEXT
 #define CONTEXT DarkGaleWings
+GALE_WINGS_CLONE(TYPE_DARK)
 static const Ability DarkGaleWings = {
     .name = $("Stygian Rush"),
     .description = $("At full HP, gives +1 priority to\nthis Pokémon's Dark-type moves."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -7603,9 +7759,11 @@ static const Ability GuiltTrip = {
 
 #undef CONTEXT
 #define CONTEXT WaterGaleWings
+GALE_WINGS_CLONE(TYPE_WATER)
 static const Ability WaterGaleWings = {
     .name = $("Tidal Rush"),
     .description = $("At full HP, gives +1 priority to\nthis Pokémon's Water-type moves."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -7727,10 +7885,14 @@ static const Ability ArmorTail = {
 
 #undef CONTEXT
 #define CONTEXT MindCrush
+ON_CHOOSE_OFFENSIVE_STAT {
+    if (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST) *atkStatToUse = STAT_SPATK;
+}
 static const Ability MindCrush = {
     .name = $("Mind Crunch"),
     .description = $("Biting moves use SpAtk and\ndeal 30% more damage."),
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -7741,7 +7903,7 @@ ON_SWITCH {
     return SwitchInAnnounce(B_MSG_SWITCHIN_SUPREME_OVERLORD);
 }
 ON_STAT {
-    if (statId == STAT_ATK || statId == STAT_SPATK) *stat *= *stat * (10 + max(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
+    if (statId == STAT_ATK || statId == STAT_SPATK) *stat = *stat * (10 + min(5, gFaintedMonCount[GetBattlerSide(battler)])) / 10;
 }
 static const Ability SupremeOverlord = {
     .name = $("Supreme Overlord"),
@@ -8162,10 +8324,16 @@ static const Ability BrawlingWyvern = {
 
 #undef CONTEXT
 #define CONTEXT MythicalArrows
+ON_SWAP_SPLIT {
+    CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
+    CHECK(gBattleMoves[move].arrowBased)
+    return TRUE;
+}
 static const Ability MythicalArrows = {
     .name = $("Mythical Arrows"),
     .description = $("Arrow moves become special\nand deal 30% more damage."),
     .onOffensiveMultiplier = Archer.onOffensiveMultiplier,
+    CONTEXT_ON_SWAP_SPLIT,
 };
 
 #undef CONTEXT
@@ -8404,6 +8572,7 @@ static const Ability OldMariner = {
     .breakable = TRUE,
     .onOffensiveMultiplier = Seaweed.onOffensiveMultiplier,
     .onDefensiveMultiplier = Seaweed.onDefensiveMultiplier,
+    .onStab = Amphibious.onStab,
 };
 
 #undef CONTEXT
@@ -8493,9 +8662,11 @@ static const Ability EtherealRush = {
 
 #undef CONTEXT
 #define CONTEXT CuteAntecedence
+GALE_WINGS_CLONE(TYPE_FAIRY)
 static const Ability CuteAntecedence = {
     .name = $("Cute Antecedence"),
     .description = $("At full HP, gives +1 priority to\nits Fairy-type moves."),
+    CONTEXT_ON_PRIORITY,
 };
 
 #undef CONTEXT
@@ -8699,10 +8870,15 @@ static const Ability IceColdHunter = {
 ON_OFFENSIVE_MULTIPLIER {
     if (gBattleMoves[move].hammerBased) MUL(1.1);
 }
+ON_CHOOSE_DEFENSIVE_STAT {
+    CHECK(gBattleMoves[move].hammerBased)
+    return STAT_SPDEF;
+}
 static const Ability SoulCrusher = {
     .name = $("Soul Crusher"),
-    .description = $("Hammer moves become Special\nand get a 1.1x power boost."),
+    .description = $("Hammer moves hit SpDef\nand get a 1.1x power boost."),
     CONTEXT_ON_OFFENSIVE_MULTIPLIER,
+    CONTEXT_ON_CHOOSE_DEFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -8949,6 +9125,7 @@ static const Ability FlameBubble = {
     .description = $("Water Bubble + Flaming Soul."),
     .onOffensiveMultiplier = WaterBubble.onOffensiveMultiplier,
     .onDefensiveMultiplier = WaterBubble.onDefensiveMultiplier,
+    .onPriority = FlamingSoul.onPriority,
 };
 
 #undef CONTEXT
@@ -9094,9 +9271,11 @@ static const Ability BloodStigma = {
 
 #undef CONTEXT
 #define CONTEXT MaximumAcceleration
+ON_CHOOSE_OFFENSIVE_STAT { *atkStatToUse = STAT_SPEED; }
 static const Ability MaximumAcceleration = {
     .name = $("Max Acceleration"),
     .description = $("Moves use the Speed stat\nfor damage calculations."),
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -9188,6 +9367,7 @@ static const Ability IronGiant = {
     .description = $("Heatproof + Juggernaut."),
     .breakable = TRUE,
     .onDefensiveMultiplier = Heatproof.onDefensiveMultiplier,
+    .onChooseOffensiveStat = Juggernaut.onChooseOffensiveStat,
 };
 
 #undef CONTEXT
@@ -9371,9 +9551,11 @@ static const Ability BlindRage = {
 
 #undef CONTEXT
 #define CONTEXT Slipstream
+ON_CHOOSE_OFFENSIVE_STAT { *secondaryAtkStatToUse = STAT_SPEED; }
 static const Ability Slipstream = {
     .name = $("Slipstream"),
     .description = $("Moves use 20% of its Speed\nstat additionally."),
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -9583,6 +9765,7 @@ static const Ability RousedFangs = {
     .name = $("Megabite"),
     .description = $("Biting moves use SpAtk and\ndeal 30% more damage."),
     .onOffensiveMultiplier = StrongJaw.onOffensiveMultiplier,
+    .onChooseOffensiveStat = MindCrush.onChooseOffensiveStat,
 };
 
 #undef CONTEXT
@@ -9980,10 +10163,14 @@ static const Ability Breakwater = {
 
 #undef CONTEXT
 #define CONTEXT MagicalFists
+ON_CHOOSE_OFFENSIVE_STAT {
+    if (IS_IRON_FIST(battler, move)) *atkStatToUse = STAT_SPATK;
+}
 static const Ability MagicalFists = {
     .name = $("Magical Fists"),
     .description = $("Punching moves use Special\nAttack and get a 1.3x boost."),
     .onOffensiveMultiplier = IronFist.onOffensiveMultiplier,
+    CONTEXT_ON_CHOOSE_OFFENSIVE_STAT,
 };
 
 #undef CONTEXT
@@ -10091,10 +10278,16 @@ static const Ability Neurotoxin = {
 
 #undef CONTEXT
 #define CONTEXT EnergizedHorns
+ON_SWAP_SPLIT {
+    CHECK(gBattleMoves[move].split == SPLIT_PHYSICAL)
+    CHECK(gBattleMoves[move].hornBased)
+    return TRUE;
+}
 static const Ability EnergizedHorns = {
     .name = $("Energy Horns"),
     .description = $("Mighty horn moves become special\nand deal 30% more damage."),
     .onOffensiveMultiplier = MightyHorn.onOffensiveMultiplier,
+    CONTEXT_ON_SWAP_SPLIT,
 };
 
 #undef CONTEXT
