@@ -1562,7 +1562,7 @@ const u32 gItemIconPalette_Wigglytuffite[]  = INCBIN_U32("graphics/items/icon_pa
 const u32 gItemIcon_WigglytuffiteX[]  = INCBIN_U32("graphics/items/icons/wigglytuffite.4bpp.lz");
 const u32 gItemIconPalette_WigglytuffiteX[]  = INCBIN_U32("graphics/items/icon_palettes/wigglytuffite.gbapal.lz");
 
-const u32 gItemIconPalette_AbomasiteS[]  = INCBIN_U32("graphics/items/icons/abomasite.4bpp.lz");
+const u32 gItemIcon_AbomasiteS[]  = INCBIN_U32("graphics/items/icons/abomasite.4bpp.lz");
 const u32 gItemIconPalette_AbomasiteS[]  = INCBIN_U32("graphics/items/icon_palettes/abomasite.gbapal.lz");
 
 const u32 gItemIcon_Tinkatite[]  = INCBIN_U32("graphics/items/icons/tinkatite.4bpp.lz");
@@ -1710,7 +1710,6 @@ const u32 gItemIconPalette_Eevite[] = INCBIN_U32("graphics/items/icon_palettes/g
 const u32 gItemIconPalette_Meowthite[] = INCBIN_U32("graphics/items/icon_palettes/generic_megastone.gbapal.lz");
 const u32 gItemIconPalette_VenusauriteX[]  = INCBIN_U32("graphics/items/icon_palettes/venusaurite.gbapal.lz");
 const u32 gItemIconPalette_BlastoisiniteX[]  = INCBIN_U32("graphics/items/icon_palettes/blastoisinite.gbapal.lz");
-const u32 gItemIconPalette_AbomasiteS[]  = INCBIN_U32("graphics/items/icon_palettes/abomasite.gbapal.lz");
 
 // Gen 7 Items
 
