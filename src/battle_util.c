@@ -171,7 +171,7 @@ u8 GetBattlerBattleMoveTargetFlags(u16 moveId, u8 battler) {
 
 // Functions
 void HandleAction_UseMove(void) {
-    u32 i, side, moveType, var = 4;
+    u32 i, side, moveType;
 
     gBattlerAttacker = GetTurnBattler();
     if (gBattleStruct->field_91 & 1 << gBattlerAttacker ||
@@ -256,17 +256,12 @@ void HandleAction_UseMove(void) {
         gBattlerTarget = gSideTimers[side].followmeTarget;
     } else if ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE) && gSideTimers[side].followmeTimer == 0 &&
                (gBattleMoves[gCurrentMove].power != 0 || GetBattlerBattleMoveTargetFlags(gCurrentMove, gBattlerAttacker) != MOVE_TARGET_USER) &&
-               !HasRedirectionAbility(gBattlerTarget, moveType)) {
+               !HasRedirectionAbility(gBattlerAttacker, gBattlerTarget, gCurrentMove, moveType)) {
         int partner = BATTLE_PARTNER(gBattlerTarget);
-        if (IsBattlerAlive(partner) && HasRedirectionAbility(partner, moveType)) side = GetBattlerSide(gBattlerAttacker);
-        for (gActiveBattler = 0; gActiveBattler < gBattlersCount; gActiveBattler++) {
-            if (side != GetBattlerSide(gActiveBattler) && gBattlerTarget != gActiveBattler && HasRedirectionAbility(gActiveBattler, moveType) &&
-                GetBattlerTurnOrderNum(gActiveBattler) < var && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT &&
-                !(BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_PROPELLER_TAIL) || BATTLER_HAS_ABILITY(gBattlerAttacker, ABILITY_STALWART))) {
-                var = GetBattlerTurnOrderNum(gActiveBattler);
-            }
-        }
-        if (var == 4) {
+        if (IsBattlerAlive(partner) &&
+            (gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gBattlerAttacker, partner, gCurrentMove, moveType))) {
+            gBattlerTarget = gActiveBattler = partner;
+        } else {
             if (GetBattlerBattleMoveTargetFlags(gChosenMove, gBattlerAttacker) & MOVE_TARGET_RANDOM) {
                 if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER) {
                     if (Random() & 1)
@@ -285,10 +280,6 @@ void HandleAction_UseMove(void) {
                     if (IsBattlerAlive(gBattlerTarget)) break;
                 }
             }
-        } else {
-            gActiveBattler = gBattlerByTurnOrder[var];
-            gTurnStructs[gActiveBattler].redirectedAbility = HasRedirectionAbility(gActiveBattler, moveType);
-            gBattlerTarget = gActiveBattler;
         }
     } else if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE && GetBattlerBattleMoveTargetFlags(gChosenMove, gBattlerAttacker) & MOVE_TARGET_RANDOM) {
         if (GetBattlerSide(gBattlerAttacker) == B_SIDE_PLAYER) {
@@ -6544,11 +6535,12 @@ u32 GetMoveTarget(u16 move, u8 setTarget) {
                 targetBattler = gSideTimers[side].followmeTarget;
             } else {
                 targetBattler = SetRandomTarget(gBattlerAttacker);
-                if (!HasRedirectionAbility(targetBattler, gBattleMoves[move].type)) {
+                if (!HasRedirectionAbility(gBattlerAttacker, targetBattler, move, gBattleMoves[move].type)) {
                     int opposite = BATTLE_OPPOSITE(gBattlerAttacker);
-                    int ability;
-                    if (!IsBattlerAlive(opposite) || !(ability = HasRedirectionAbility(opposite, gBattleMoves[move].type))) opposite = BATTLE_PARTNER(opposite);
-                    if (ability || (IsBattlerAlive(opposite) && (ability = HasRedirectionAbility(opposite, gBattleMoves[move].type)))) {
+                    int ability = 0;
+                    if (!IsBattlerAlive(opposite) || !(ability = HasRedirectionAbility(gBattlerAttacker, opposite, move, gBattleMoves[move].type)))
+                        opposite = BATTLE_PARTNER(opposite);
+                    if (ability || (IsBattlerAlive(opposite) && (ability = HasRedirectionAbility(gBattlerAttacker, opposite, move, gBattleMoves[move].type)))) {
                         targetBattler ^= BIT_FLANK;
                         gTurnStructs[targetBattler].redirectedAbility = ability;
                     }
@@ -9782,10 +9774,12 @@ int HasChloroplast(int battler) {
     return FALSE;
 }
 
-int HasRedirectionAbility(int battler, int type) {
-    if (!type) return FALSE;
-    ON_ABILITY(battler, TRUE, gAbilities[ability].redirectType == type, return TRUE)
-    return FALSE;
+int HasRedirectionAbility(int battlerAtk, int battlerDef, int move, int type) {
+    if (!type) return ABILITY_NONE;
+    if (gBattleMoves[move].effect == EFFECT_SNIPE_SHOT) return ABILITY_NONE;
+    if (BattlerHasAbility(battlerAtk, ABILITY_PROPELLER_TAIL, FALSE) || BattlerHasAbility(battlerAtk, ABILITY_STALWART, FALSE)) return ABILITY_NONE;
+    RETURN_ABILITY_IF_FLAG(battlerDef, TRUE, redirectType == type)
+    return ABILITY_NONE;
 }
 
 int CanRaiseStat(int battler, int stat) { return CompareStat(battler, stat, MAX_STAT_STAGE, CMP_LESS_THAN); }
