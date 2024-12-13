@@ -59,6 +59,9 @@ typedef enum {
     ACCURACY_ALWAYS_HITS,
 } AccuracyPriority;
 typedef AccuracyPriority (*AbilityOnAccuracyHandler)(int ability, int battler, int target, int move, int moveType, int* accuracy);
+typedef int (*AbilityOnSwapSplitHandler)(int battler, int move);
+typedef void (*AbilityOnChooseOffensiveStat)(int battler, int move, int ignoreOffensiveStatDrops, int targetUnaware, u8* atkStatToUse, u8* secondaryAtkStatToUse);
+typedef int (*AbilityOnChooseDefensiveStat)(int battler, int target, int move, int ignoreDefensiveStatBoosts, int battlerUnaware);
 
 typedef enum {
     APPLY_ON_SELF = 0,
@@ -98,6 +101,9 @@ typedef struct Ability {
     const AbilityOnDefensiveMultiplierHandler onDefensiveMultiplier;
     const AbilityOnStatHandler onStat;
     const AbilityOnAccuracyHandler onAccuracy;
+    const AbilityOnSwapSplitHandler onSwapSplit;
+    const AbilityOnChooseOffensiveStat onChooseOffensiveStat;
+    const AbilityOnChooseDefensiveStat onChooseDefensiveStat;
     u16 redirectType:5;
     AbilityApplyOn onImmuneFor:3;
     u16 noDamageHits:2;
